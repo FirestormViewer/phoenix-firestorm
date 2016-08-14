@@ -54,6 +54,7 @@ public:
 
 	bool			inEdit();
 	bool			canEdit();
+	bool 			buildEnabledOrActive();
     bool            canAccessMarketplace();
 // [RLVa:KB] - Checked: 2012-04-26 (RLVa-1.4.6) | Added: RLVa-1.4.6 | Ansa: Changed because of FIRE-5552
 	void			toggleBuildMode(const LLSD& sdname = LLSD());

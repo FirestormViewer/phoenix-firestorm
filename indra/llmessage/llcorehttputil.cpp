@@ -1345,5 +1345,3 @@ void HttpCoroutineAdapter::trivialPostCoro(std::string url, LLCore::HttpRequest:
 
 
 } // end namespace LLCoreHttpUtil
-
-#include "fscorehttputil.cpp"

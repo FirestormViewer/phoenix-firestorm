@@ -99,15 +99,8 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node, bool dae)
 				{
 					if (dae)
 					{
-						const LLSD* mesh_header_ptr = gMeshRepo.getMeshHeader(sculpt_params->getSculptTexture());
-						if (mesh_header_ptr)
-						{
-							exportable = (*mesh_header_ptr)["creator"].asUUID() == gAgentID;
-						}
-						else
-						{
-							exportable = false;
-						}
+						LLSD mesh_header = gMeshRepo.getMeshHeader(sculpt_params->getSculptTexture());
+						exportable = mesh_header["creator"].asUUID() == gAgentID;
 					}
 					else
 					{

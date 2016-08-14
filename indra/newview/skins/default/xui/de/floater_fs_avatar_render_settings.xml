@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatarrendersettings" title="Avatar-Anzeigeeinstellungen">
+	<floater.string name="av_render_never">
+		Niemals
+	</floater.string>
+	<floater.string name="av_render_always">
+		Komplett
+	</floater.string>
+	<name_list name="avatar_list">
+		<name_list.columns label="Name" name="name"/>
+		<name_list.columns label="Anzeigeeinstellung" name="render_setting" width="125"/>
+	</name_list>
+	<button name="close_btn" label="Schließen"/>
+</floater>

@@ -1846,24 +1846,49 @@ support@secondlife.com にお問い合わせください。
 	<string name="ATTACHMENT_NOT_ATTACHED">
 		エラー：オブジェクトは現在のアウトフィット内にありますが、添付されていません
 	</string>
+	
+	<!-- Avatar age computation, see LLDateUtil::ageFromDate -->
 	<string name="YearsMonthsOld">
 		[AGEYEARS] [AGEMONTHS]
 	</string>
 	<string name="YearsOld">
-		[AGEYEARS]
+		[AGEYEARS] 歳
 	</string>
 	<string name="MonthsOld">
-		[AGEMONTHS]
+		[AGEMONTHS] か月
 	</string>
 	<string name="WeeksOld">
-		[AGEWEEKS]
+		[AGEWEEKS] 週
 	</string>
 	<string name="DaysOld">
-		[AGEDAYS]
+		[AGEDAYS] 日
 	</string>
 	<string name="TodayOld">
 		今日参加
 	</string>
+	
+	<!-- Avatar complexity rendering messages, see llavatarrendernotifier. -->
+	<string name="av_render_everyone_now">
+		あなたは今、周りのみんなから見えます。
+	</string>
+	<string name="av_render_not_everyone">
+		周りのみんながあなたを表示できているとは限りません。
+	</string>
+	<string name="av_render_over_half">
+		あなたの周りの半数はあなたを表示できていない可能性があります。
+	</string>
+	<string name="av_render_most_of">
+		あなたの周りの殆どの人があなたを表示できていない可能性があります。
+	</string>
+	<string name="av_render_anyone">
+		周りの誰もがあなたを表示できるとは限りません。
+	</string>
+
+	<!-- AgeYearsA = singular,
+		AgeYearsB = plural,
+		AgeYearsC = plural for non-English languages like Russian
+		For example, LLTrans::getCountString("AgeYears", 3) is plural form B
+		in English and form C in Russian -->
 	<string name="AgeYearsA">
 		[COUNT] 年
 	</string>
@@ -5576,6 +5601,21 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="loading_chat_logs">
 		ロード中...
 	</string>
+	
+	<!-- Presets graphic/camera -->
+	<string name="preset_combo_label">
+		- リストなし -
+	</string>
+	<string name="Default">
+		デフォルト
+	</string>
+	<string name="none_paren_cap">
+		（なし）
+	</string>
+	<string name="no_limit">
+		無制限
+	</string>
+	
 	<string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">
 		この物理シェイプに含まれる三角形は小さすぎます。物理モデルを簡略化して下さい。
 	</string>
@@ -5832,10 +5872,18 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Reqsysinfo_Chat_Information_sent">情報が送信されました。：[DATA]</string>
 	<string name="Reqsysinfo_Chat_Request_Denied">要求は拒否されました。</string>
 	<string name="Reqsysinfo_Reason">理由：[REASON]</string>
+	
+	<!-- Titles for inventory finder floater -->
 	<string name="All Items">すべて</string>
 	<string name="Recent Items">最新</string>
 	<string name="Worn Items">装着中</string>
 
 	<string name="InvOfferGroupNoticeName">グループメンバー [NAME]</string>
 	<string name="CallingCardOnlineLabelSuffix">（オンライン）</string>
+	
+	<string name="Pie_av_render_normally">通常</string>
+	<string name="Pie_av_render_never">不完全</string>
+	<string name="Pie_av_render_fully">完全</string>
+
+	<string name="Nametag_Complexity_Label">表示の複雑さ: [COMPLEXITY]</string>
 </strings>

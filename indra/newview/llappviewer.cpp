@@ -1417,6 +1417,8 @@ bool LLAppViewer::init()
 	// <FS:Ansariel> Init debug rects
 	LLView::sDebugRects = gSavedSettings.getBOOL("DebugViews");
 
+	showReleaseNotesIfRequired();
+
 	return true;
 }
 
@@ -4139,6 +4141,11 @@ std::string LLAppViewer::getViewerInfoString() const
 		support << '\n' << LLTrans::getString("AboutTraffic", args);
 	}
 
+	// SLT timestamp
+	LLSD substitution;
+	substitution["datetime"] = (S32)time(NULL);//(S32)time_corrected();
+	support << "\n" << LLTrans::getString("AboutTime", substitution);
+
 	return support.str();
 }
 
@@ -6729,6 +6736,18 @@ void LLAppViewer::launchUpdater()
 	// LLAppViewer::instance()->forceQuit();
 }
 
+/**
+* Check if user is running a new version of the viewer.
+* Display the Release Notes if it's not overriden by the "UpdaterShowReleaseNotes" setting.
+*/
+void LLAppViewer::showReleaseNotesIfRequired()
+{
+	if (LLVersionInfo::getChannelAndVersion() != gLastRunVersion && gSavedSettings.getBOOL("UpdaterShowReleaseNotes"))
+	{
+		LLSD info(getViewerInfo());
+		LLWeb::loadURLInternal(info["VIEWER_RELEASE_NOTES_URL"]);
+	}
+}
 
 //virtual
 void LLAppViewer::setMasterSystemAudioMute(bool mute)

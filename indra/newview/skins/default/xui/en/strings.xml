@@ -80,6 +80,7 @@ Texture memory: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 VFS (cache) creation time (UTC): [VFS_DATE]
   </string>
   <string name="AboutTraffic">Packets Lost: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)</string>
+	<string name="AboutTime">[month, datetime, slt] [day, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt]</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">Error fetching server release notes URL.</string>
 	<string name="BuildConfiguration">Build Configuration</string>
 	

@@ -92,8 +92,10 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	mRlvCheckShowNames(false),
 // [/RLVa:KB]
 	mShowPermissions(false),
+	mShowCompleteName(false),
 	mHovered(false),
 	mAvatarNameCacheConnection(),
+	mGreyOutUsername(""),
 	mShowVoiceVolume(false),
 	mShowDisplayName(true),
 	mShowUsername(true)
@@ -574,14 +576,31 @@ void LLAvatarListItem::updateAvatarName()
 
 void LLAvatarListItem::setNameInternal(const std::string& name, const std::string& highlight)
 {
+	// <FS:Ansariel> Commented out because horrible LL implementation - we control it via global display name settings!
+    //if(mShowCompleteName && highlight.empty())
+    //{
+    //    LLTextUtil::textboxSetGreyedVal(mAvatarName, mAvatarNameStyle, name, mGreyOutUsername);
+    //}
+    //else
+    //{
+    //    LLTextUtil::textboxSetHighlightedVal(mAvatarName, mAvatarNameStyle, name, highlight);
+    //}
 	LLTextUtil::textboxSetHighlightedVal(mAvatarName, mAvatarNameStyle, name, highlight);
+	// </FS:Ansariel>
 }
 
 void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 {
 	mAvatarNameCacheConnection.disconnect();
-//	setAvatarName(av_name.getDisplayName());
-//	setAvatarToolTip(av_name.getUserName());
+	//mGreyOutUsername = "";
+	//std::string name_string = mShowCompleteName? av_name.getCompleteName(false) : av_name.getDisplayName();
+	//if(av_name.getCompleteName() != av_name.getUserName())
+	//{
+	//    mGreyOutUsername = "[ " + av_name.getUserName(true) + " ]";
+	//    LLStringUtil::toLower(mGreyOutUsername);
+	//}
+	//setAvatarName(name_string);
+	//setAvatarToolTip(av_name.getUserName());
 // [RLVa:KB] - Checked: RLVa-1.2.2
 	// <FS:Ansa> Centralized in LLAvatarList::getNameForDisplay!
 	bool fRlvCanShowName = (!mRlvCheckShowNames) || (RlvActions::canShowName(RlvActions::SNC_DEFAULT, mAvatarId));

@@ -199,6 +199,7 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 :	LLUICtrl(p, LLTextViewModelPtr(new LLTextViewModel)),
 	mURLClickSignal(NULL),
 	mIsFriendSignal(NULL),
+	mIsObjectBlockedSignal(NULL),
 	mMaxTextByteLength( p.max_text_length ),
 	mFont(p.font),
 	mFontShadow(p.font_shadow),
@@ -298,9 +299,8 @@ LLTextBase::~LLTextBase()
 {
 	mSegments.clear();
 	delete mURLClickSignal;
-	// <FS:Ansariel> Properly free the signals
 	delete mIsFriendSignal;
-	// </FS:Ansariel>
+	delete mIsObjectBlockedSignal;
 }
 
 void LLTextBase::initFromParams(const LLTextBase::Params& p)
@@ -2064,6 +2064,7 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 	registrar.add("Url.OpenExternal", boost::bind(&LLUrlAction::openURLExternal, url));
 	registrar.add("Url.Execute", boost::bind(&LLUrlAction::executeSLURL, url, true));
 	registrar.add("Url.Block", boost::bind(&LLUrlAction::blockObject, url));
+	registrar.add("Url.Unblock", boost::bind(&LLUrlAction::unblockObject, url));
 	registrar.add("Url.Teleport", boost::bind(&LLUrlAction::teleportToLocation, url));
 	registrar.add("Url.ShowProfile", boost::bind(&LLUrlAction::showProfile, url));
 	registrar.add("Url.AddFriend", boost::bind(&LLUrlAction::addFriend, url));
@@ -2117,6 +2118,19 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 		{
 			addFriendButton->setEnabled(!isFriend);
 			removeFriendButton->setEnabled(isFriend);
+		}
+	}
+
+	if (mIsObjectBlockedSignal)
+	{
+		bool is_blocked = *(*mIsObjectBlockedSignal)(LLUUID(LLUrlAction::getObjectId(url)), LLUrlAction::getObjectName(url));
+		LLView* blockButton = mPopupMenu->getChild<LLView>("block_object");
+		LLView* unblockButton = mPopupMenu->getChild<LLView>("unblock_object");
+
+		if (blockButton && unblockButton)
+		{
+			blockButton->setVisible(!is_blocked);
+			unblockButton->setVisible(is_blocked);
 		}
 	}
 	
@@ -3255,6 +3269,15 @@ boost::signals2::connection LLTextBase::setIsFriendCallback(const is_friend_sign
 		mIsFriendSignal = new is_friend_signal_t();
 	}
 	return mIsFriendSignal->connect(cb);
+}
+
+boost::signals2::connection LLTextBase::setIsObjectBlockedCallback(const is_blocked_signal_t::slot_type& cb)
+{
+    if (!mIsObjectBlockedSignal)
+    {
+        mIsObjectBlockedSignal = new is_blocked_signal_t();
+    }
+    return mIsObjectBlockedSignal->connect(cb);
 }
 
 //

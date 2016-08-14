@@ -19,6 +19,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "fscorehttputil.h"
 #include "llbufferstream.h"
 #include "lluri.h"
 #include "llxmltree.h"

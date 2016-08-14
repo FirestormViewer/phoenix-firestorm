@@ -3424,14 +3424,14 @@ Dış görünümünüzün kaydedilmesi [TIME] saniye sonra tamamlandı.
 &apos;[NAME]&apos; adlı avatar görünüm modundan çıktı.
 	</notification>
 	<notification name="NoConnect">
-		[PROTOCOL] [HOSTID] kullanarak bağlantı kurma konusunda sorun yaşıyoruz.
+		[PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt; kullanarak bağlantı kurma konusunda sorun yaşıyoruz.
 Lütfen ağ ve güvenlik duvarı ayarlarınızı kontrol edin.
 		<usetemplate name="okbutton" yestext="Tamam"/>
 	</notification>
 	<notification name="NoVoiceConnect">
 		Ses sunucunuz ile bağlantı kurma konusunda sorun yaşıyoruz.
 
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
 Ses bağlantıları kullanılamayacak.
 Lütfen ağ ve güvenlik duvarı ayarlarınızı kontrol edin.

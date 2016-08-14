@@ -157,7 +157,7 @@
     follows="left|top|right"
     height="32"
     left="5"
-    max_length_bytes="16"
+    max_length_chars="16"
     text_pad_left="8"
     text_pad_right="8"
     name="password_edit"

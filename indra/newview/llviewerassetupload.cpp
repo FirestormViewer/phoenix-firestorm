@@ -52,6 +52,7 @@
 #include "llcoproceduremanager.h"
 
 #include "llviewernetwork.h"
+#include "llviewercontrol.h"
 
 void dialog_refresh_all();
 
@@ -758,9 +759,14 @@ void LLViewerAssetUpload::AssetInventoryUploadCoproc(LLCoreHttpUtil::HttpCorouti
             // and display something saying that it cost L$
             LLStatusBar::sendMoneyBalanceRequest();
 
+            // <FS:Ansariel> FIRE-10628 - Option to supress upload cost notification
+            if (gSavedSettings.getBOOL("FSShowUploadPaymentToast"))
+            {
             LLSD args;
             args["AMOUNT"] = llformat("%d", uploadPrice);
             LLNotificationsUtil::add("UploadPayment", args);
+            }
+            // </FS:Ansariel>
         }
     }
     else
@@ -853,6 +859,13 @@ void LLViewerAssetUpload::HandleUploadError(LLCore::HttpStatus status, LLSD &res
             errors.append(LLTrans::getString("UploadFailed") + reason);
             preview->callbackLSLCompileFailed(errors);
         }
+    }
+
+    // Let the Snapshot floater know we have failed uploading.
+    LLFloater* floater_snapshot = LLFloaterReg::findInstance("snapshot");
+    if (uploadInfo->getAssetType() == LLAssetType::AT_TEXTURE && floater_snapshot)
+    {
+        floater_snapshot->notify(LLSD().with("set-finished", LLSD().with("ok", false).with("msg", "inventory")));
     }
 
 }
