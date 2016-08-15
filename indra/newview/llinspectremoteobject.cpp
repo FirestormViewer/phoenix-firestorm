@@ -197,7 +197,7 @@ void LLInspectRemoteObject::update()
 	getChild<LLUICtrl>("map_btn")->setEnabled(! mSLurl.empty());
 
 	// disable the Block button if we don't have the object ID (will this ever happen?)
-	getChild<LLUICtrl>("block_btn")->setEnabled(! mObjectID.isNull());
+	getChild<LLUICtrl>("block_btn")->setEnabled(!mObjectID.isNull() && !LLMuteList::getInstance()->isMuted(mObjectID));
 
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 	if ( (rlv_handler_t::isEnabled()) && (RlvStrings::getString(RLV_STRING_HIDDEN_REGION) == mSLurl) )

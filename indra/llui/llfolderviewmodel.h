@@ -83,8 +83,6 @@ public:
 	// +-------------------------------------------------------------------+
 	virtual bool 				check(const LLFolderViewModelItem* item) = 0;
 	virtual bool				checkFolder(const LLFolderViewModelItem* folder) const = 0;
-	// <FS:Ansariel> For clipboard highlighting
-	virtual bool				checkClipboard(const LLFolderViewModelItem* item) = 0;
 
 	virtual void 				setEmptyLookupMessage(const std::string& message) = 0;
 	virtual std::string			getEmptyLookupMessage() const = 0;
@@ -191,6 +189,7 @@ public:
 	virtual BOOL isItemCopyable() const = 0;
 	virtual BOOL copyToClipboard() const = 0;
 	virtual BOOL cutToClipboard() = 0;
+	virtual bool isCutToClipboard() { return false; };
 
 	virtual BOOL isClipboardPasteable() const = 0;
 	virtual void pasteFromClipboard() = 0;

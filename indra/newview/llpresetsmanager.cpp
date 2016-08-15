@@ -38,6 +38,7 @@
 #include "llviewercontrol.h"
 #include "llfloaterpreference.h"
 #include "llfloaterreg.h"
+#include "llfeaturemanager.h"
 #include "quickprefs.h"
 
 LLPresetsManager::LLPresetsManager()
@@ -71,7 +72,7 @@ void LLPresetsManager::createMissingDefault()
 		LL_INFOS() << "No default preset found -- creating one at " << default_file << LL_ENDL;
 
 		// Write current graphic settings as the default
-		savePreset(PRESETS_GRAPHIC, PRESETS_DEFAULT);
+        savePreset(PRESETS_GRAPHIC, PRESETS_DEFAULT, true);
 	}
     else
     {
@@ -150,7 +151,7 @@ void LLPresetsManager::loadPresetNamesFromDir(const std::string& dir, preset_nam
 	presets = mPresetNames;
 }
 
-bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string name)
+bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string name, bool createDefault)
 {
 	if (LLTrans::getString(PRESETS_DEFAULT) == name)
 	{
@@ -162,12 +163,11 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
 
 	if(PRESETS_GRAPHIC == subdirectory)
 	{
-		gSavedSettings.setString("PresetGraphicActive", name);
-
 		// <FS:Ansariel> Graphic preset controls independent from XUI
 		//LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
-		//if (instance)
+		//if (instance && !createDefault)
 		//{
+        //    gSavedSettings.setString("PresetGraphicActive", name);
 		//	instance->getControlNames(name_list);
         //    LL_DEBUGS() << "saving preset '" << name << "'; " << name_list.size() << " names" << LL_ENDL;
 		//	name_list.push_back("PresetGraphicActive");
@@ -176,7 +176,11 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
         //{
         //    LL_WARNS() << "preferences floater instance not found" << LL_ENDL;
         //}
-		name_list = mGraphicPresetControls;
+		if (!createDefault)
+		{
+			gSavedSettings.setString("PresetGraphicActive", name);
+			name_list = mGraphicPresetControls;
+		}
 		// </FS:Ansariel>
 	}
     else if(PRESETS_CAMERA == subdirectory)
@@ -189,23 +193,58 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
         LL_ERRS() << "Invalid presets directory '" << subdirectory << "'" << LL_ENDL;
     }
     
-    if (name_list.size() > 1) // if the active preset name is the only thing in the list, don't save the list
+    if (name_list.size() > 1 // if the active preset name is the only thing in the list, don't save the list
+        || (createDefault && name == PRESETS_DEFAULT && subdirectory == PRESETS_GRAPHIC)) // or create a default graphics preset from hw recommended settings 
     {
         // make an empty llsd
         LLSD paramsData(LLSD::emptyMap());
 
-        for (std::vector<std::string>::iterator it = name_list.begin(); it != name_list.end(); ++it)
+        if (createDefault)
         {
-            std::string ctrl_name = *it;
-            LLControlVariable* ctrl = gSavedSettings.getControl(ctrl_name).get();
-            std::string comment = ctrl->getComment();
-            std::string type = LLControlGroup::typeEnumToString(ctrl->type());
-            LLSD value = ctrl->getValue();
+            paramsData = LLFeatureManager::getInstance()->getRecommendedSettingsMap();
+            if (gSavedSettings.getU32("RenderAvatarMaxComplexity") == 0)
+            {
+				mIsLoadingPreset = true; // <FS:Ansariel> Graphic preset controls independent from XUI
+                // use the recommended setting as an initial one (MAINT-6435)
+                gSavedSettings.setU32("RenderAvatarMaxComplexity", paramsData["RenderAvatarMaxComplexity"]["Value"].asInteger());
+				mIsLoadingPreset = false; // <FS:Ansariel> Graphic preset controls independent from XUI
+            }
 
-            paramsData[ctrl_name]["Comment"] =  comment;
-            paramsData[ctrl_name]["Persist"] = 1;
-            paramsData[ctrl_name]["Type"] = type;
-            paramsData[ctrl_name]["Value"] = value;
+			// <FS:Ansariel> Graphic preset controls independent from XUI
+			// Add the controls not in feature table to the default preset with their current value
+			for (std::vector<std::string>::iterator it = mGraphicPresetControls.begin(); it != mGraphicPresetControls.end(); ++it)
+			{
+				std::string ctrl_name = *it;
+				if (!paramsData.has(ctrl_name))
+				{
+					LLControlVariable* ctrl = gSavedSettings.getControl(ctrl_name).get();
+					std::string comment = ctrl->getComment();
+					std::string type = LLControlGroup::typeEnumToString(ctrl->type());
+					LLSD value = ctrl->getValue();
+
+					paramsData[ctrl_name]["Comment"] = comment;
+					paramsData[ctrl_name]["Persist"] = 1;
+					paramsData[ctrl_name]["Type"] = type;
+					paramsData[ctrl_name]["Value"] = value;
+				}
+			}
+			// </FS:Ansariel>
+        }
+        else
+        {
+            for (std::vector<std::string>::iterator it = name_list.begin(); it != name_list.end(); ++it)
+            {
+                std::string ctrl_name = *it;
+                LLControlVariable* ctrl = gSavedSettings.getControl(ctrl_name).get();
+                std::string comment = ctrl->getComment();
+                std::string type = LLControlGroup::typeEnumToString(ctrl->type());
+                LLSD value = ctrl->getValue();
+
+                paramsData[ctrl_name]["Comment"] = comment;
+                paramsData[ctrl_name]["Persist"] = 1;
+                paramsData[ctrl_name]["Type"] = type;
+                paramsData[ctrl_name]["Value"] = value;
+            }
         }
 
         std::string pathName(getPresetsDir(subdirectory) + gDirUtilp->getDirDelimiter() + LLURI::escape(name) + ".xml");
@@ -222,10 +261,12 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
             
             LL_DEBUGS() << "saved preset '" << name << "'; " << paramsData.size() << " parameters" << LL_ENDL;
 
-            gSavedSettings.setString("PresetGraphicActive", name);
-
-            // signal interested parties
-            triggerChangeSignal();
+            if (!createDefault)
+            {
+                gSavedSettings.setString("PresetGraphicActive", name);
+                // signal interested parties
+                triggerChangeSignal();
+            }
         }
         else
         {

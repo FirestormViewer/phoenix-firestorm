@@ -477,10 +477,7 @@ void LLVivoxVoiceClient::connectorCreate()
 
 void LLVivoxVoiceClient::connectorShutdown()
 {
-	// <FS:Ansariel> Voice fix
-	//if(!mConnectorEstablished)
 	if(mConnectorEstablished)
-	// </FS:Ansariel>
 	{
 		std::ostringstream stream;
 		stream
@@ -6858,8 +6855,6 @@ void LLVivoxProtocolParser::EndTag(const char *tag)
 {
 	const std::string& string = textBuffer;
 
-	std::cerr << tag << ": " << textBuffer << std::endl;
-	
 	responseDepth--;
 	
 	if (ignoringTags)

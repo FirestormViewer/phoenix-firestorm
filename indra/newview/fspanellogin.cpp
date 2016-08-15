@@ -1026,7 +1026,7 @@ void FSPanelLogin::updateServer()
 			loadLoginPage();
 
 #ifdef OPENSIM
-			sInstance->getChild<LLLineEditor>("password_edit")->setMaxTextLength(LLGridManager::getInstance()->isInSecondLife() ? MAX_PASSWORD_SL : MAX_PASSWORD_OPENSIM);
+			sInstance->getChild<LLLineEditor>("password_edit")->setMaxTextChars(LLGridManager::getInstance()->isInSecondLife() ? MAX_PASSWORD_SL : MAX_PASSWORD_OPENSIM);
 #endif
 		}
 		catch (LLInvalidGridName ex)

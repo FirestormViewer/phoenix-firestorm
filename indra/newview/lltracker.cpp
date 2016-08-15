@@ -198,11 +198,11 @@ void LLTracker::render3D()
 		if (dist < DESTINATION_REACHED_RADIUS)
 		{
 			// <FS:Ansariel> Disable stop tracking when closing in
-			//instance()->stopTrackingLocation();
+			//instance()->stopTrackingLocation(FALSE,TRUE);
 			// Always disable tracker if we're not using the avatar tracker of the radar
 			if (fsDisableTrackerAtCloseIn || instance()->mTrackingLocationType != LLTracker::LOCATION_AVATAR)
 			{
-				instance()->stopTrackingLocation();
+				instance()->stopTrackingLocation(FALSE,TRUE);
 			}
 			else
 			{
@@ -725,13 +725,13 @@ void LLTracker::stopTrackingLandmark(BOOL clear_ui)
 }
 
 
-void LLTracker::stopTrackingLocation(BOOL clear_ui)
+void LLTracker::stopTrackingLocation(BOOL clear_ui, BOOL dest_reached)
 {
 	purgeBeaconText();
 	mTrackedLocationName.assign("");
 	mIsTrackingLocation = FALSE;
 	mTrackedPositionGlobal.zeroVec();
-	gFloaterWorldMap->clearLocationSelection(clear_ui);
+	gFloaterWorldMap->clearLocationSelection(clear_ui, dest_reached);
 	mTrackingStatus = TRACKING_NOTHING;
 	mTrackingLocationType = LOCATION_NOTHING;
 }

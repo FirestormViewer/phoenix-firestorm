@@ -83,6 +83,7 @@ public:
 	static void addFriend(std::string url);
 	static void removeFriend(std::string url);
 	static void blockObject(std::string url);
+	static void unblockObject(std::string url);
 
 	// <FS:Ansariel> FSSlurlCommand support
 	static LLUUID extractUuidFromSlurl(const std::string& url);

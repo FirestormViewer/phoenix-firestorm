@@ -245,8 +245,6 @@ public:
 	// +-------------------------------------------------------------------+
 	bool				check(const LLFolderViewModelItem* listener);
 	bool				check(const LLInventoryItem* item);
-	// <FS:Ansariel> For clipboard highlighting
-	bool				checkClipboard(const LLFolderViewModelItem* item);
 	bool				checkFolder(const LLFolderViewModelItem* listener) const;
 	bool				checkFolder(const LLUUID& folder_id) const;
 

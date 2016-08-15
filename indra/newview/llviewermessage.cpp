@@ -9598,6 +9598,15 @@ void process_covenant_reply(LLMessageSystem* msg, void**)
 		panel->updateEstateOwnerName(owner_name);
 	}
 
+	// <FS:Ansariel> Standalone location profile floater
+	FSFloaterPlaceDetails* fs_floater = LLFloaterReg::findTypedInstance<FSFloaterPlaceDetails>("fs_placedetails", LLSD().with("type", "agent"));
+	if (fs_floater)
+	{
+		fs_floater->updateEstateName(estate_name);
+		fs_floater->updateEstateOwnerName(owner_name);
+	}
+	// </FS:Ansariel>
+
 	// standard message, not from system
 	std::string last_modified;
 	if (covenant_timestamp == 0)
@@ -9728,6 +9737,14 @@ void onCovenantLoadComplete(LLVFS *vfs,
 	{
 		panel->updateCovenantText(covenant_text);
 	}
+
+	// <FS:Ansariel> Standalone location profile floater
+	FSFloaterPlaceDetails* fs_floater = LLFloaterReg::findTypedInstance<FSFloaterPlaceDetails>("fs_placedetails", LLSD().with("type", "agent"));
+	if (fs_floater)
+	{
+		fs_floater->updateCovenantText(covenant_text);
+	}
+	// </FS:Ansariel>
 }
 
 

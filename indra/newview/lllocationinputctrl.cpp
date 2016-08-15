@@ -76,6 +76,9 @@
 // </FS:CR>
 #include "fsfloaterplacedetails.h"
 
+#include "llmenuoptionpathfindingrebakenavmesh.h"
+#include "llpathfindingmanager.h"
+
 //============================================================================
 /*
  * "ADD LANDMARK" BUTTON UPDATING LOGIC
@@ -1280,6 +1283,18 @@ bool LLLocationInputCtrl::onLocationContextMenuItemEnabled(const LLSD& userdata)
 	return false;
 }
 
+void LLLocationInputCtrl::callbackRebakeRegion(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option == 0) // OK
+	{
+		if (LLPathfindingManager::getInstance() != NULL)
+		{
+			LLMenuOptionPathfindingRebakeNavmesh::getInstance()->sendRequestRebakeNavmesh();
+		}
+	}
+}
+
 void LLLocationInputCtrl::onParcelIconClick(EParcelIcon icon)
 {
 	switch (icon)
@@ -1298,6 +1313,16 @@ void LLLocationInputCtrl::onParcelIconClick(EParcelIcon icon)
 		break;
 	case PATHFINDING_DIRTY_ICON:
 		// <FS:Zi> Pathfinding rebake functions
+		//if (LLPathfindingManager::getInstance() != NULL)
+		//{
+		//	LLMenuOptionPathfindingRebakeNavmesh *rebakeInstance = LLMenuOptionPathfindingRebakeNavmesh::getInstance();
+		//	if (rebakeInstance && rebakeInstance->canRebakeRegion() && (rebakeInstance->getMode() == LLMenuOptionPathfindingRebakeNavmesh::kRebakeNavMesh_Available))
+		//	{
+		//		LLNotificationsUtil::add("PathfindingDirtyRebake", LLSD(), LLSD(),
+		//								 boost::bind(&LLLocationInputCtrl::callbackRebakeRegion, this, _1, _2));
+		//		break;
+		//	}
+		//}
 		// LLNotificationsUtil::add("PathfindingDirty");
 		LLNotificationsUtil::add("PathfindingDirty",LLSD(),LLSD(),boost::bind(&LLLocationInputCtrl::rebakeRegionCallback,this,_1,_2));
 		// </FS:Zi>
