@@ -145,6 +145,8 @@ public:
 	// </FS:ND>
 
 	joint_map_t			mJointMap;
+
+    S32					mNextJointNum;
 	
 	void		computeBodySize();
 
