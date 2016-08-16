@@ -187,19 +187,22 @@ LLPanelSnapshotInventory::~LLPanelSnapshotInventory()
 
 void LLPanelSnapshotInventoryBase::onSend()
 {
-    if (mSnapshotFloater)
+    S32 expected_upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+    if (can_afford_transaction(expected_upload_cost))
     {
-        S32 expected_upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
-        if (can_afford_transaction(expected_upload_cost))
+        if (mSnapshotFloater)
         {
             mSnapshotFloater->saveTexture();
             mSnapshotFloater->postSave();
         }
-        else
+    }
+    else
+    {
+        LLSD args;
+        args["COST"] = llformat("%d", expected_upload_cost);
+        LLNotificationsUtil::add("ErrorPhotoCannotAfford", args);
+        if (mSnapshotFloater)
         {
-            LLSD args;
-            args["COST"] = llformat("%d", expected_upload_cost);
-            LLNotificationsUtil::add("ErrorPhotoCannotAfford", args);
             mSnapshotFloater->inventorySaveFailed();
         }
     }
