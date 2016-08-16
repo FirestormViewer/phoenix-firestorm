@@ -214,6 +214,7 @@ BOOL LLPanelMainInventory::postBuild()
 	LLInventoryPanel* recent_items_panel = getChild<LLInventoryPanel>("Recent Items");
 	if (recent_items_panel)
 	{
+		// assign default values until we will be sure that we have setting to restore
 		recent_items_panel->setSinceLogoff(TRUE);
 		// <FS:Zi> Recent items panel should save sort order
 		// recent_items_panel->setSortOrder(LLInventoryFilter::SO_DATE);
@@ -278,6 +279,8 @@ BOOL LLPanelMainInventory::postBuild()
 				//recent_items_panel->getFilter().fromParams(p);
 				recent_items_panel->getFilter().fromParams(p.filter);
 				// </FS:Ansariel>
+				// <FS:Ansariel> We do that earlier already
+				//recent_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::RECENTITEMS_SORT_ORDER));
 
 				// </FS:Ansariel> Recent items panel doesn't filter empty folders until filter floater has been opened
 				LLInventoryFilter& recent_filter = recent_items_panel->getFilter();
@@ -503,7 +506,14 @@ void LLPanelMainInventory::setSortBy(const LLSD& userdata)
 
 	getActivePanel()->setSortOrder(sort_order_mask);
 	// <FS:Zi> Recent items panel should save sort order
-	// gSavedSettings.setU32("InventorySortOrder", sort_order_mask);
+    //if ("Recent Items" == getActivePanel()->getName())
+    //{
+    //    gSavedSettings.setU32("RecentItemsSortOrder", sort_order_mask);
+    //}
+    //else
+    //{
+    //    gSavedSettings.setU32("InventorySortOrder", sort_order_mask);
+    //}
 	gSavedSettings.setU32(getActivePanel()->mSortOrderSetting, sort_order_mask);
 	// </FS:Zi>
 }
@@ -1528,6 +1538,15 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 		LLFloaterReg::showInstance("fs_linkreplace", params);
 	}
 	// </FS:Ansariel>
+}
+
+void LLPanelMainInventory::onVisibilityChange( BOOL new_visibility )
+{
+	if(!new_visibility)
+	{
+		mMenuAdd->setVisible(FALSE);
+		getActivePanel()->getRootFolder()->finishRenamingItem();
+	}
 }
 
 bool LLPanelMainInventory::isSaveTextureEnabled(const LLSD& userdata)

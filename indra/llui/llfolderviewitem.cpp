@@ -138,6 +138,8 @@ LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
 	mIsSelected( FALSE ),
 	mIsCurSelection( FALSE ),
 	mSelectPending(FALSE),
+	mIsItemCut(false),
+	mCutGeneration(0),
 	mLabelStyle( LLFontGL::NORMAL ),
 	mHasVisibleChildren(FALSE),
 	mIsFolderComplete(true),
@@ -761,6 +763,19 @@ void LLFolderViewItem::drawOpenFolderArrow(const Params& default_params, const L
 	return mIsCurSelection;
 }
 
+/*virtual*/ bool LLFolderViewItem::isFadeItem()
+{
+    LLClipboard& clipboard = LLClipboard::instance();
+    if (mCutGeneration != clipboard.getGeneration())
+    {
+        mCutGeneration = clipboard.getGeneration();
+        mIsItemCut = clipboard.isCutMode()
+                     && ((getParentFolder() && getParentFolder()->isFadeItem())
+                        || getViewModelItem()->isCutToClipboard());
+    }
+    return mIsItemCut;
+}
+
 void LLFolderViewItem::drawHighlight(const BOOL showContent, const BOOL hasKeyboardFocus, const LLUIColor &selectColor, const LLUIColor &flashColor,  
                                                         const LLUIColor &focusOutlineColor, const LLUIColor &mouseOverColor)
 {
@@ -942,14 +957,12 @@ void LLFolderViewItem::draw()
     }
 
     LLColor4 color = (mIsSelected && filled) ? mFontHighlightColor : mFontColor;
-	// <FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
-	// Don't hide cut items in inventory
-	if (!getRoot()->getFolderViewModel()->getFilter().checkClipboard(getViewModelItem()))
-	{
-		// Fade out item color to indicate it's being cut
-		color.mV[VALPHA] *= 0.5f;
-	}
-	// </FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
+
+    if (isFadeItem())
+    {
+         // Fade out item color to indicate it's being cut
+         color.mV[VALPHA] *= 0.5f;
+    }
     drawLabel(font, text_left, y, color, right_x);
 
 	// <FS:Ansariel> Special for protected items
@@ -967,7 +980,7 @@ void LLFolderViewItem::draw()
 	//
 	if (!mLabelSuffix.empty())
 	{
-		font->renderUTF8( mLabelSuffix, 0, right_x, y, sSuffixColor,
+		font->renderUTF8( mLabelSuffix, 0, right_x, y, isFadeItem() ? color : (LLColor4)sSuffixColor,
 						  LLFontGL::LEFT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW,
 						  S32_MAX, S32_MAX, &right_x, FALSE );
 	}

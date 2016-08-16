@@ -139,6 +139,7 @@ set(viewer_SOURCE_FILES
     fsdroptarget.cpp
     fsexportperms.cpp
     fsfloateraddtocontactset.cpp
+    fsfloateravatarrendersettings.cpp
     fsfloaterblocklist.cpp
     fsfloatercontacts.cpp
     fsfloatercontactsetconfiguration.cpp
@@ -880,6 +881,7 @@ set(viewer_HEADER_FILES
     fsdroptarget.h
     fsexportperms.h
     fsfloateraddtocontactset.h
+    fsfloateravatarrendersettings.h
     fsfloaterblocklist.h
     fsfloatercontacts.h
     fsfloatercontactsetconfiguration.h
@@ -1596,13 +1598,10 @@ list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/fsversionvalues.h)
 
 source_group("CMake Rules" FILES ViewerInstall.cmake)
 
+#summary.json creation moved to viewer_manifest.py MAINT-6413
 # the viewer_version.txt file created here is for passing to viewer_manifest and autobuild
-# the summary.json file is created for the benefit of the TeamCity builds, where
-#   it is used to provide descriptive information to the build results page
 file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt"
            "${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}\n")
-file(WRITE "${CMAKE_BINARY_DIR}/summary.json"
-           "{\"Type\":\"viewer\",\"Version\":\"${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}\"}\n")
 
 set_source_files_properties(
    llversioninfo.cpp tests/llversioninfo_test.cpp 

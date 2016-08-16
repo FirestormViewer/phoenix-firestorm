@@ -40,6 +40,8 @@
 #include "llcorehttputil.h"
 #include "lleventfilter.h"
 
+#include "boost/make_shared.hpp"
+
 #include "llsdutil.h" // <FS:ND/> for ll_pretty_print_sd
 
 #include "boost/make_shared.hpp"

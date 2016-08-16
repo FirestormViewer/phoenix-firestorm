@@ -3974,7 +3974,7 @@ LLSD& LLMeshRepoThread::getMeshHeader(const LLUUID& mesh_id)
 	{
 		LLMutexLock lock(mHeaderMutex);
 		mesh_header_map::iterator iter = mMeshHeader.find(mesh_id);
-		if (iter != mMeshHeader.end())
+		if (iter != mMeshHeader.end() && mMeshHeaderSize[mesh_id] > 0)
 		{
 			return iter->second;
 		}
@@ -4863,9 +4863,14 @@ void on_new_single_inventory_upload_complete(
         // and display something saying that it cost L$
         LLStatusBar::sendMoneyBalanceRequest();
 
+        // <FS:Ansariel> FIRE-10628 - Option to supress upload cost notification
+        if (gSavedSettings.getBOOL("FSShowUploadPaymentToast"))
+        {
         LLSD args;
         args["AMOUNT"] = llformat("%d", upload_price);
         LLNotificationsUtil::add("UploadPayment", args);
+        }
+        // </FS:Ansariel>
     }
 
     if (item_folder_id.notNull())

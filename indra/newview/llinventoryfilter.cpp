@@ -117,18 +117,12 @@ bool LLInventoryFilter::check(const LLFolderViewModelItem* item)
 {
 	const LLFolderViewModelItemInventory* listener = dynamic_cast<const LLFolderViewModelItemInventory*>(item);
 
-	// Clipboard cut items are *always* filtered so we need this value upfront
-	// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
-	// Don't hide cut items in inventory
-	//const BOOL passed_clipboard = (listener ? checkAgainstClipboard(listener->getUUID()) : TRUE);
-	const BOOL passed_clipboard = TRUE;
-	// </FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
 
 	// If it's a folder and we're showing all folders, return automatically.
 	const BOOL is_folder = listener->getInventoryType() == LLInventoryType::IT_CATEGORY;
 	if (is_folder && (mFilterOps.mShowFolderState == LLInventoryFilter::SHOW_ALL_FOLDERS))
 	{
-		return passed_clipboard;
+		return true;
 	}
 	
 	// <FS:Zi> Multi-substring inventory search
@@ -190,7 +184,6 @@ bool LLInventoryFilter::check(const LLFolderViewModelItem* item)
 	passed = passed && checkAgainstFilterType(listener);
 	passed = passed && checkAgainstPermissions(listener);
 	passed = passed && checkAgainstFilterLinks(listener);
-	passed = passed && passed_clipboard;
 
 	return passed;
 }
@@ -200,13 +193,8 @@ bool LLInventoryFilter::check(const LLInventoryItem* item)
 	const bool passed_string = (mFilterSubString.size() ? item->getName().find(mFilterSubString) != std::string::npos : true);
 	const bool passed_filtertype = checkAgainstFilterType(item);
 	const bool passed_permissions = checkAgainstPermissions(item);
-	// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
-	// Don't hide cut items in inventory
-	//const bool passed_clipboard = checkAgainstClipboard(item->getUUID());
-	const bool passed_clipboard = true;
-	// </FS:Ansariel> Don't filter cut items
 
-	return passed_filtertype && passed_permissions && passed_clipboard && passed_string;
+	return passed_filtertype && passed_permissions && passed_string;
 }
 
 bool LLInventoryFilter::checkFolder(const LLFolderViewModelItem* item) const
@@ -225,17 +213,10 @@ bool LLInventoryFilter::checkFolder(const LLFolderViewModelItem* item) const
 
 bool LLInventoryFilter::checkFolder(const LLUUID& folder_id) const
 {
-	// Always check against the clipboard
-	// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
-	// Don't hide cut items in inventory
-	//const BOOL passed_clipboard = checkAgainstClipboard(folder_id);
-	const BOOL passed_clipboard = TRUE;
-	// </FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
-	
 	// we're showing all folders, overriding filter
 	if (mFilterOps.mShowFolderState == LLInventoryFilter::SHOW_ALL_FOLDERS)
 	{
-		return passed_clipboard;
+		return true;
 	}
 
 	// when applying a filter, matching folders get their contents downloaded first
@@ -301,7 +282,7 @@ bool LLInventoryFilter::checkFolder(const LLUUID& folder_id) const
 	LLViewerInventoryItem* item = gInventory.getItem(folder_id);
 	if (item && item->getActualType() == LLAssetType::AT_LINK_FOLDER)
 	{
-		return passed_clipboard;
+		return true;
 	}
 
 	if (mFilterOps.mFilterTypes & FILTERTYPE_CATEGORY)
@@ -316,7 +297,7 @@ bool LLInventoryFilter::checkFolder(const LLUUID& folder_id) const
 			return false;
 	}
 
-	return passed_clipboard;
+	return true;
 }
 
 bool LLInventoryFilter::checkAgainstFilterType(const LLFolderViewModelItemInventory* listener) const
@@ -540,19 +521,6 @@ bool LLInventoryFilter::checkAgainstClipboard(const LLUUID& object_id) const
 	}
 	return true;
 }
-
-// <FS:Ansariel> For clipboard highlighting
-bool LLInventoryFilter::checkClipboard(const LLFolderViewModelItem* item)
-{
-	const LLFolderViewModelItemInventory* listener = dynamic_cast<const LLFolderViewModelItemInventory*>(item);
-	if (!listener)
-	{
-		return true;
-	}
-
-	return checkAgainstClipboard(listener->getUUID());
-}
-// </FS:Ansariel>
 
 bool LLInventoryFilter::checkAgainstPermissions(const LLFolderViewModelItemInventory* listener) const
 {

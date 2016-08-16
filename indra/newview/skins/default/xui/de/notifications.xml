@@ -464,6 +464,12 @@ Um Medien nur auf einer Fläche einzufügen, wählen Sie „Oberfläche auswähl
 	<notification name="ErrorEncodingSnapshot">
 		Fehler beim Erstellen des Fotos!
 	</notification>
+	<notification name="ErrorPhotoCannotAfford">
+		Sie benötigten [COST] L$ um ein Foto in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
+	</notification>
+	<notification name="ErrorTextureCannotAfford">
+		Sie benötigten [COST] L$ um eine Textur in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
+	</notification>
 	<notification name="ErrorUploadingPostcard">
 		Ein Foto konnte aus folgendem Grund nicht gesendet werden: [REASON]
 	</notification>
@@ -1494,6 +1500,10 @@ Wählen Sie ein einzelnes Objekt aus und versuchen Sie es erneut.
 	<notification name="KickUsersFromRegion">
 		Alle Einwohner in dieser Region nach Hause teleportieren?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="ChangeObjectBonusFactor">
+		Das Verringern des Objekt-Bonus nachdem bereits in einer Region gebaut wurde kann zur Folge haben, dass Objekte zurückgeschickt oder gelöscht werden. Sind Sie sicher, dass Sie den Onjekt-Bonus ändern möchten?
+		<usetemplate ignoretext="Bestätigen, wenn der Okjekt-Bonus geändert wird" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="EstateObjectReturn">
 		Möchten Sie wirklich alle Objekte zurückgeben, die [USER_NAME] gehören?
@@ -2891,6 +2901,12 @@ Fliegen ist hier nicht möglich.
 			yestext="Region neu formen"
 			notext="Schließen"/>
 	</notification>
+	<notification name="PathfindingDirtyRebake">
+		Diese Region weist ausstehende Pathfinding-Änderungen auf. Wenn Sie Baurechte besitzen, können Sie die Region durch Klicken auf die Schaltfläche „Region neu formen“ neu formen.
+		<usetemplate
+			name="okbutton"
+			yestext="Region neu formen"/>
+	</notification>
 	<notification name="DynamicPathfindingDisabled">
 		Dynamisches Pathfinding ist in dieser Region nicht aktiviert. Geskriptete Objekte, die Pathfinding-LSL-Aufrufe verwenden, funktionieren in dieser Region u. U. nicht wie erwartet.
 	</notification>
@@ -4085,6 +4101,10 @@ Sie ist voll oder startet in Kürze neu.
 	</notification>
 	<notification name="NoPermModifyObject">
 		Ihnen fehlt die Berechtigung zum Modifizieren dieses Objekts.
+	</notification>
+	<notification name="TooMuchObjectInventorySelected">
+		Es sind zu viele Objekte mit großem Inhalt ausgewählt. Bitte wählen Sie weniger Objekte aus und versuchen Sie es erneut.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="CantEnablePhysObjContributesToNav">
 		Physik kann nicht für ein Objekt aktiviert werden, das zum Navmesh beiträgt.

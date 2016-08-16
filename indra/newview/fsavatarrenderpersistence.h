@@ -43,6 +43,15 @@ public:
 	LLVOAvatar::VisualMuteSettings getAvatarRenderSettings(const LLUUID& avatar_id);
 	void setAvatarRenderSettings(const LLUUID& avatar_id, LLVOAvatar::VisualMuteSettings render_settings);
 
+	typedef std::map<LLUUID, LLVOAvatar::VisualMuteSettings> avatar_render_setting_t;
+	avatar_render_setting_t getAvatarRenderMap() const { return mAvatarRenderMap; }
+
+	typedef boost::signals2::signal<void(const LLUUID& avatar_id, LLVOAvatar::VisualMuteSettings render_setting)> render_setting_changed_callback_t;
+	boost::signals2::connection setAvatarRenderSettingChangedCallback(const render_setting_changed_callback_t::slot_type& cb)
+	{
+		return mAvatarRenderSettingChangedCallback.connect(cb);
+	}
+
 private:
 	FSAvatarRenderPersistence();
 	virtual ~FSAvatarRenderPersistence();
@@ -50,8 +59,8 @@ private:
 	void loadAvatarRenderSettings();
 	void saveAvatarRenderSettings();
 
-	typedef std::map<LLUUID, LLVOAvatar::VisualMuteSettings> avatar_render_setting_t;
 	avatar_render_setting_t mAvatarRenderMap;
-};
 
+	render_setting_changed_callback_t mAvatarRenderSettingChangedCallback;
+};
 #endif // FS_AVATARRENDERPERSISTENCE_H

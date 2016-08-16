@@ -89,6 +89,7 @@ LLToolMgr::LLToolMgr()
 // [RLVa:KB] - Checked: 2010-09-11 (RLVa-1.2.1d) | Added: RLVa-1.2.1d | Ansa: Changed because of FIRE-5552
 	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Build.Enabled", boost::bind(&RlvUIEnabler::isBuildEnabled));
 // [/RLVa:KB]
+	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Build.EnabledOrActive", boost::bind(&LLToolMgr::buildEnabledOrActive, this));
 	LLUICtrl::CommitCallbackRegistry::currentRegistrar().add("Build.Toggle", boost::bind(&LLToolMgr::toggleBuildMode, this, _2));
 	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Marketplace.Enabled", boost::bind(&LLToolMgr::canAccessMarketplace, this));
 	LLUICtrl::CommitCallbackRegistry::currentRegistrar().add("Marketplace.Toggle", boost::bind(&LLToolMgr::toggleMarketplace, this, _2));
@@ -270,17 +271,17 @@ bool LLToolMgr::canEdit()
 	return LLViewerParcelMgr::getInstance()->allowAgentBuild();
 }
 
+bool LLToolMgr::buildEnabledOrActive()
+{
+	// <FS:Ansariel> RLVa check
+	//return inEdit() || canEdit();
+	return inEdit() || RlvUIEnabler::isBuildEnabled();
+	// </FS:Ansariel>
+}
+
 void LLToolMgr::toggleBuildMode(const LLSD& sdname)
 {
 	const std::string& param = sdname.asString();
-
-// [RLVa:KB] - Checked: 2012-04-26 (RLVa-1.4.6) | Added: RLVa-1.4.6 | Ansa: Changed because of FIRE-5552
-	//if (param == "build" && !canEdit())
-	if (param == "build" && !RlvUIEnabler::isBuildEnabled())
-// [/RLVa:KB]
-	{
-		return;
-	}
 
 	// <FS:Ansariel> FIRE-15653: Prevent cheating around @editobj restriction
 	//LLFloaterReg::toggleInstanceOrBringToFront("build");
@@ -293,6 +294,13 @@ void LLToolMgr::toggleBuildMode(const LLSD& sdname)
 		LLFloaterReg::toggleInstanceOrBringToFront("build");
 	}
 	// </FS:Ansariel>
+// [RLVa:KB] - Checked: 2012-04-26 (RLVa-1.4.6) | Added: RLVa-1.4.6 | Ansa: Changed because of FIRE-5552
+	//if (param == "build" && !canEdit())
+	if (param == "build" && !RlvUIEnabler::isBuildEnabled())
+// [/RLVa:KB]
+	{
+		return;
+	}
 
 	bool build_visible = LLFloaterReg::instanceVisible("build");
 	if (build_visible)
