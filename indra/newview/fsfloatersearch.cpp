@@ -892,7 +892,7 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocksFast(_PREHASH_QueryReplies);
-	if (num_new_rows == 0)
+	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("people_edit")->getValue().asString();
@@ -1181,7 +1181,7 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocksFast(_PREHASH_QueryReplies);
-	if (num_new_rows == 0)
+	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("groups_edit")->getValue().asString();
@@ -1240,6 +1240,7 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
+		self->onSelectItem();
 	}
 }
 
@@ -1502,7 +1503,7 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
-	if (num_new_rows == 0)
+	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("places_edit")->getValue().asString();
@@ -1575,6 +1576,7 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
+		self->onSelectItem();
 	}
 }
 
@@ -1811,7 +1813,7 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
-	if (num_new_rows == 0)
+	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
@@ -1926,6 +1928,7 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
+		self->onSelectItem();
 	}
 }
 
@@ -2175,7 +2178,7 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
-	if (num_new_rows == 0)
+	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("classifieds_edit")->getValue().asString();
@@ -2231,6 +2234,7 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
+		self->onSelectItem();
 	}
 }
 
@@ -2551,7 +2555,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 	}
 	
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
-	if (num_new_rows == 0)
+	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
@@ -2647,6 +2651,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
+		self->onSelectItem();
 	}
 }
 
