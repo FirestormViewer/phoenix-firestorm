@@ -6194,15 +6194,6 @@ support@secondlife.com.
 	<string name="render_quality_unknown">
 		Неизвестное, за пределами нормального диапазона, проверьте настройки отладки RenderQualityPerformance
 	</string>
-	<string name="qtool_busy">
-		Пожалуйста, подождите, выравниванивающий инструмент занят.
-	</string>
-	<string name="qtool_still_busy">
-		Пожалуйста, подождите, выравниванивающий инструмент все еще занят.
-	</string>
-	<string name="qtool_done">
-		Выравнивание завершено.
-	</string>
 	<string name="fsbridge_cant_create_disabled">
 		Firestorm не может создать мост LSL если "Включить LSL-Клиент мост" отключено в настройках.
 	</string>

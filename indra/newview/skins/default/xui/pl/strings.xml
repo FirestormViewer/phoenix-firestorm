@@ -5647,15 +5647,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="render_quality_unknown">
 		Nieznana, poza normalnym zakresem, sprawdź ustawienie debugowania RenderQualityPerformance
 	</string>
-	<string name="qtool_busy">
-		Poczekaj, narzędzie wyrównywania jest zajęte.
-	</string>
-	<string name="qtool_still_busy">
-		Poczekaj jeszcze chwilę, narzędzie wyrównywania jest ciągle zajęte.
-	</string>
-	<string name="qtool_done">
-		Narzędzie wyrównywania zakończyło pracę.
-	</string>
 	<string name="fsbridge_cant_create_disabled">
 		Firestorm nie może utworzyć Mostu LSL, jeśli "Włącz Most w LScript Language" jest wyłączone w Ustawieniach.
 	</string>
