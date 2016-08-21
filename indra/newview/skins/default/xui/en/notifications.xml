@@ -1675,14 +1675,14 @@ Visit [_URL] for more information?
 
   <notification
    icon="alertmodal.tga"
-   name="IntelOldDriver"
+   name="OldGPUDriver"
    type="alertmodal">
      There is likely a newer driver for your graphics chip.  Updating graphics drivers can substantially improve performance.
 
-    Visit [_URL] to check for driver updates?
+    Visit [URL] to check for driver updates?
     <tag>confirm</tag>
     <url option="0" name="url">
-      http://www.intel.com/p/en_US/support/detect/graphics
+    [URL]
     </url>
     <usetemplate
      ignoretext="My graphics driver is out of date"
@@ -1691,45 +1691,6 @@ Visit [_URL] for more information?
      yestext="Yes"/>
     <tag>fail</tag>
   </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="AMDOldDriver"
-   type="alertmodal">
-    There is likely a newer driver for your graphics chip.  Updating graphics drivers can substantially improve performance.
-
-    Visit [_URL] to check for driver updates?
-    <tag>confirm</tag>
-    <url option="0" name="url">
-      http://support.amd.com/us/Pages/AMDSupportHub.aspx
-    </url>
-    <usetemplate
-     ignoretext="My graphics driver is out of date"
-     name="okcancelignore"
-     notext="No"
-     yestext="Yes"/>
-    <tag>fail</tag>
-  </notification>
-
-  <notification
- icon="alertmodal.tga"
- name="NVIDIAOldDriver"
- type="alertmodal">
-    There is likely a newer driver for your graphics chip.  Updating graphics drivers can substantially improve performance.
-
-    Visit [_URL] to check for driver updates?
-    <tag>confirm</tag>
-    <url option="0" name="url">
-      http://www.nvidia.com/Download/index.aspx?lang=en-us
-    </url>
-    <usetemplate
-     ignoretext="My graphics driver is out of date"
-     name="okcancelignore"
-     notext="No"
-     yestext="Yes"/>
-    <tag>fail</tag>
-  </notification>
-
 
   <notification
    icon="alertmodal.tga"
@@ -3472,6 +3433,23 @@ Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Renderin
      <context>AgentComplexityNotice</context>
    </unique>
 Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 avatar complexity] is [AGENT_COMPLEXITY].
+    <usetemplate
+     ignoretext="Warn me about my avatar complexity changes"
+     name="notifyignore"/>
+  </notification>
+
+  <notification
+   icon = "notifytip.tga"
+   name = "HUDComplexityWarning"
+   type = "notifytip"
+   log_to_chat = "false">
+    <unique combine = "cancel_old">
+      <context>HUDComplexityWarning</context>
+    </unique>
+    [HUD_REASON], it is likely to negatively affect your performance.
+    <usetemplate
+     ignoretext="Warn me when my HUD complexity is too high"
+     name="notifyignore"/>
   </notification>
 
   <notification
