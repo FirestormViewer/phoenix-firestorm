@@ -3966,10 +3966,7 @@ BOOL LLWindowWin32::handleImeRequests(WPARAM request, LPARAM param, LRESULT *res
 	return FALSE;
 }
 
-// <FS:Ansariel> Determine scaling of the display we show the viewer
-//F32 LLWindowWin32::getSystemUISize()
-F32 LLWindowWin32::getSystemUISize(S32 x, S32 y)
-// </FS:Ansariel>
+F32 LLWindowWin32::getSystemUISize()
 {
 	// <FS:Ansariel> Type fix
 	//float scale_value = 0;
@@ -3996,30 +3993,15 @@ F32 LLWindowWin32::getSystemUISize(S32 x, S32 y)
 			HRESULT  hr = E_FAIL;
 
 			// Get the DPI for the main monitor, and set the scaling factor
-			// <FS:Ansariel> Determine scaling of the display we show the viewer
-			//pt.x = 1;
-			//pt.y = 1;
-			pt.x = x;
-			pt.y = y;
+			pt.x = 1;
+			pt.y = 1;
+			// <FS:Ansariel> Get scaling for primary display, assuming that's where we open the viewer
+			//hMonitor = MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST);
+			hMonitor = MonitorFromPoint(pt, MONITOR_DEFAULTTOPRIMARY);
 			// </FS:Ansariel>
-			hMonitor = MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST);
 			hr = pGDFM(hMonitor, MDT_EFFECTIVE_DPI, &dpix, &dpiy);
-			// <FS:Ansariel> Check result before using it
-			//scale_value = dpix / 96.0f;
-			if (hr == S_OK)
-			{
-				scale_value = dpix / 96.0f;
-			}
-			else
-			{
-				LL_WARNS() << "Could not determine DPI for monitor. Defaulting to 100 %" << LL_ENDL;
-				scale_value = 1.0f;
-			}
-			// </FS:Ansariel>
+			scale_value = dpix / 96.0f;
 		}
-
-		// <FS:Ansariel> Free library early - not needed anymore
-		FreeLibrary(hShcore);
 	}
 	else
 	{
