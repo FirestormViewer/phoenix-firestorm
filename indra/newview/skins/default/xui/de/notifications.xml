@@ -656,30 +656,12 @@ Weitere Informationen finden Sie auf [_URL].
 		</url>
 		<usetemplate ignoretext="Meine Hardware wird nicht unterstützt" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
-	<notification name="IntelOldDriver">
+	<notification name="OldGPUDriver">
 		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip. Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
 
-    Unter [_URL] nach aktualisierten Treibern suchen?
+    Unter [URL] nach aktualisierten Treibern suchen?
 		<url name="url">
-			http://www.intel.com/p/de_DE/support/detect/graphics
-		</url>
-		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
-	</notification>
-	<notification name="AMDOldDriver">
-		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip. Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
-
-    Unter [_URL] nach aktualisierten Treibern suchen?
-		<url name="url">
-			http://support.amd.com/de/Pages/AMDSupportHub.aspx
-		</url>
-		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
-	</notification>
-	<notification name="NVIDIAOldDriver">
-		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip. Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
-
-    Unter [_URL] nach aktualisierten Treibern suchen?
-		<url name="url">
-			http://www.nvidia.com/Download/index.aspx?lang=de-de
+			[URL]
 		</url>
 		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
@@ -1412,6 +1394,11 @@ Sie können [APP_NAME] normal verwenden. Andere Benutzer können Sie korrekt dar
 	</notification>
 	<notification name="AgentComplexity">
 		Ihre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 Avatar-Komplexität] ist [AGENT_COMPLEXITY].
+		<usetemplate ignoretext="Warnen, wnen sich meine Avatar-Komplexität ändert" name="notifyignore"/>
+	</notification>
+	<notification name="HUDComplexityWarning">
+		[HUD_REASON], es wird wahrscheinlich die Performance negativ beeinflussen.
+		<usetemplate ignoretext="Warnen, falls meine HUD-Komplexität zu hoch ist" name="notifyignore"/>
 	</notification>
 	<notification name="FirstRun">
 		Installation von [APP_NAME] vollständig abgeschlossen.
