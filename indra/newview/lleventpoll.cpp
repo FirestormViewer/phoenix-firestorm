@@ -44,8 +44,6 @@
 
 #include "llsdutil.h" // <FS:ND/> for ll_pretty_print_sd
 
-#include "boost/make_shared.hpp"
-
 namespace LLEventPolling
 {
 namespace Details

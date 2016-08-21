@@ -6281,15 +6281,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="render_quality_unknown">
 		Unbekannt; Bitte die Debugeinstellung RenderQualityPerformance prüfen!
 	</string>
-	<string name="qtool_busy">
-		Bitte warten, das Ausrichtungstool ist aktiv.
-	</string>
-	<string name="qtool_still_busy">
-		Bitte warten, das Ausrichtungstool ist weiterhin aktiv.
-	</string>
-	<string name="qtool_done">
-		Die Ausrichtung ist beendet.
-	</string>
 	<string name="fsbridge_cant_create_disabled">
 		Firestorm kann die LSL-Brücke nicht erstellen, wenn „LSL-Client-Brücke aktivieren“ in den Einstellungen deaktiviert ist.
 	</string>

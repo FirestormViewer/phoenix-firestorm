@@ -186,8 +186,11 @@ bool LLLocalBitmap::updateSelf(EUpdateType optional_firstupdate)
 
 			// const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(mFilename));
 
-			std::string strFName = nd::aprhelper::ndConvertFilename( mFilename );
-			const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path( strFName ) );
+#ifndef LL_WINDOWS
+			const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(mFilename));
+#else
+			const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path( utf8str_to_utf16str( mFilename ) ) );
+#endif
 
 			// </FS:ND>
 

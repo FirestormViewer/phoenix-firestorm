@@ -6855,8 +6855,6 @@ void LLVivoxProtocolParser::EndTag(const char *tag)
 {
 	const std::string& string = textBuffer;
 
-	std::cerr << tag << ": " << textBuffer << std::endl;
-	
 	responseDepth--;
 	
 	if (ignoringTags)

@@ -65,6 +65,10 @@ public:
 
 	static void showPlaceDetails(const LLSD& key);
 
+	void updateEstateName(const std::string& name);
+	void updateEstateOwnerName(const std::string& name);
+	void updateCovenantText(const std::string &text);
+
 private:
 	enum ePlaceDisplayInfo
 	{
