@@ -71,10 +71,16 @@ const S32	MAX_MESSAGE_PER_UPDATE = 20;
 const S32	BITS_PER_PIXEL = 32;
 const S32	MAX_NUM_RESOLUTIONS = 32;
 const F32	ICON_FLASH_TIME = 0.5f;
-const F32	DEFAULT_DPI = 96.0f;
+// <FS:Ansariel> Use default screen DPI defined in WinUser.h
+//const F32	DEFAULT_DPI = 96.0f;
+const F32	DEFAULT_DPI = F32(USER_DEFAULT_SCREEN_DPI);
+// </FS:Ansariel>
 
 #ifndef WM_DPICHANGED                   
-const S32	WM_DPICHANGED = 0x02E0;
+// <FS:Ansariel> Define as per WinUser.h
+//const S32	WM_DPICHANGED = 0x02E0;
+#define WM_DPICHANGED 0x02E0
+// </FS:Ansariel>
 #endif
 
 extern BOOL gDebugWindowProc;
@@ -2652,7 +2658,10 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 		case WM_DPICHANGED:
 			{
 				LPRECT lprc_new_scale;
-				F32 new_scale = LOWORD(w_param) / 96.0f;
+				// <FS:Ansariel> Use constant
+				//F32 new_scale = LOWORD(w_param) / 96.0f;
+				F32 new_scale = LOWORD(w_param) / DEFAULT_DPI;
+				// </FS:Ansariel>
 				lprc_new_scale = (LPRECT)l_param;
 				S32 new_width = lprc_new_scale->right - lprc_new_scale->left;
 				S32 new_height = lprc_new_scale->bottom - lprc_new_scale->top;
