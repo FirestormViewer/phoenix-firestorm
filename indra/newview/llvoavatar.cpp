@@ -3280,7 +3280,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		   (!isSelf() && (!show_too_complex_only_arw_tag || isTooComplex()))))
 		{
 			std::string complexity_string;
-			LLLocale locale(LLLocale::USER_LOCALE);
+			LLLocale locale("");
 			LLResMgr::getInstance()->getIntegerString(complexity_string, complexity);
 
 			LLStringUtil::format_map_t label_args;
@@ -8190,7 +8190,7 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	// No backsies zone - if we get here, the message should be valid and usable, will be processed.
     LL_INFOS("Avatar") << "Processing appearance message version " << thisAppearanceVersion << LL_ENDL;
 
-    if (isSelf())
+    //if (isSelf()) // <FS:Ansariel> FIRE-19851: [BUG-37637] DebugAvatarAppearanceMessage incorrectly reports all avatars received COF version as -1
     {
         // Note:
         // locally the COF is maintained via LLInventoryModel::accountForUpdate

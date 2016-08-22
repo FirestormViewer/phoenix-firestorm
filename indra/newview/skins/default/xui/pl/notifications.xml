@@ -389,6 +389,12 @@ W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z narzędzia 
 	<notification name="ErrorEncodingSnapshot">
 		Błąd w kodowaniu zdjęcia.
 	</notification>
+	<notification name="ErrorPhotoCannotAfford">
+		Potrzebujesz [COST]L$ aby zapisać zdjęcie do swojej Szafy. Możesz zamiast tego kupić L$ lub zapisać zdjęcie na swoim komputerze.
+	</notification>
+	<notification name="ErrorTextureCannotAfford">
+		Potrzebujesz [COST]L$ aby zapisać teksturę do swojej Szafy. Możesz zamiast tego kupić L$ lub zapisać teksturę na swoim komputerze.
+	</notification>
 	<notification name="ErrorUploadingPostcard">
 		W trakcie ładowania zdjęcia pojawił się problem z następującego powodu: [REASON]
 	</notification>
@@ -1400,6 +1406,10 @@ Wybierz pojedynczy obiekt i spróbuj jeszcze raz.
 	<notification name="KickUsersFromRegion">
 		Teleportować wszystkich Rezydentów z tego regionu do ich miejsc startu?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
+	<notification name="ChangeObjectBonusFactor">
+		Obniżenie limitu obiektów bonusowych po tym, gdy konstrukcje zostały już poustawiane w regionie może spowodować, że część z nich może zostać zwrócona lub usunięta. Na pewno chcesz zmienić tą wartość?
+		<usetemplate ignoretext="Potwierdź zmianę mnożnika obiektów bonusowych" name="okcancelignore" notext="Anuluj"/>
 	</notification>
 	<notification name="EstateObjectReturn">
 		Na pewno chcesz odesłać wszystkie obiekty należące do [USER_NAME]?
@@ -2783,6 +2793,10 @@ Nie możesz tutaj latać.
 		W tym regionie są oczekujące zmiany w odnajdywaniu ścieżek. Jeśli posiadasz prawa budowania możesz odświeżyć region klikając na przycisk “Odśwież region”.
 		<usetemplate name="okcancelbuttons" yestext="Odśwież" notext="Zamknij"/>
 	</notification>
+	<notification name="PathfindingDirtyRebake">
+		W tym regionie są oczekujące zmiany w odnajdywaniu ścieżek. Jeśli posiadasz prawa budowania możesz odświeżyć region klikając na przycisk “Odśwież region”.
+		<usetemplate name="okbutton" yestext="Odśwież" />
+	</notification>
 	<notification name="DynamicPathfindingDisabled">
 		Dynamiczne odnajdywanie ścieżek nie jest włączone w tym regionie. Oskryptowane obiekty używające odwołań LSL wykorzystujących odnajdywanie ścieżek mogą nie działać zgodnie z oczekiwaniami.
 	</notification>
@@ -4161,6 +4175,9 @@ Spróbuj ponownie za minutę.
 	</notification>
 	<notification name="NoPermModifyObject">
 		Nie masz uprawnień do modyfikowania tego obiektu
+	</notification>
+	<notification name="TooMuchObjectInventorySelected">
+		Zbyt wiele obiektów z dużą zawartością zostało zaznaczonych. Zaznacz mniej obiektów i spróbuj ponownie.
 	</notification>
 	<notification name="CantEnablePhysObjContributesToNav">
 		Nie można włączyć fizyki dla obiektu, który ma wpływ na Navmesh.

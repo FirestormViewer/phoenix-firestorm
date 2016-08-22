@@ -17,18 +17,13 @@
 #include "llcylinder.h"
 #include "llfloatertools.h"
 #include "llselectmgr.h"
-#include "lltrans.h"
 #include "llviewercamera.h"
 #include "llviewerobject.h"
 #include "llviewerwindow.h"
-#include "lleventtimer.h"
-#include "fscommon.h"
 
 const F32 MANIPULATOR_SIZE = 5.0f;
 const F32 MANIPULATOR_SELECT_SIZE = 20.0f;
 const F32 FUDGE = 0.001f;  // because of SL precision/rounding
-
-AlignThread* AlignThread::sInstance = NULL;
 
 QToolAlign::QToolAlign()
 :	LLTool(std::string("Align"))
@@ -85,7 +80,7 @@ void QToolAlign::pickCallback(const LLPickInfo& pick_info)
 	}
 	else
 	{
-		if (!(pick_info.mKeyMask == MASK_SHIFT))
+		if (pick_info.mKeyMask != MASK_SHIFT)
 		{
 			LLSelectMgr::getInstance()->deselectAll();
 		}
@@ -98,7 +93,7 @@ void QToolAlign::handleSelect()
 {
 	// no parts, please
 
-	LL_WARNS() << "in select" << LL_ENDL;
+	LL_WARNS("ToolAlign") << "in select" << LL_ENDL;
 	LLSelectMgr::getInstance()->promoteSelectionToRoot();
 }
 
@@ -111,6 +106,8 @@ BOOL QToolAlign::findSelectedManipulator(S32 x, S32 y)
 	mHighlightedAxis = -1;
 	mHighlightedDirection = 0;
 
+	LLViewerCamera* camera = LLViewerCamera::getInstance();
+
 	LLMatrix4 transform;
 	if (LLSelectMgr::getInstance()->getSelection()->getSelectType() == SELECT_TYPE_HUD)
 	{
@@ -120,7 +117,7 @@ BOOL QToolAlign::findSelectedManipulator(S32 x, S32 y)
 		transform *= cfr;
 		LLMatrix4 window_scale;
 		F32 zoom_level = 2.f * gAgentCamera.mHUDCurZoom;
-		window_scale.initAll(LLVector3(zoom_level / LLViewerCamera::getInstance()->getAspect(), zoom_level, 0.f),
+		window_scale.initAll(LLVector3(zoom_level / camera->getAspect(), zoom_level, 0.f),
 							 LLQuaternion::DEFAULT,
 							 LLVector3::zero);
 		transform *= window_scale;
@@ -129,8 +126,8 @@ BOOL QToolAlign::findSelectedManipulator(S32 x, S32 y)
 	{
 		transform.initAll(LLVector3(1.f, 1.f, 1.f), mBBox.getRotation(), mBBox.getCenterAgent());
 
-		LLMatrix4 projection_matrix = LLViewerCamera::getInstance()->getProjection();
-		LLMatrix4 model_matrix = LLViewerCamera::getInstance()->getModelview();
+		LLMatrix4 projection_matrix = camera->getProjection();
+		LLMatrix4 model_matrix = camera->getModelview();
 
 		transform *= model_matrix;
 		transform *= projection_matrix;
@@ -176,16 +173,13 @@ BOOL QToolAlign::findSelectedManipulator(S32 x, S32 y)
 
 BOOL QToolAlign::handleHover(S32 x, S32 y, MASK mask)
 {
-	if(!AlignThread::sInstance)
+	if (mask & MASK_SHIFT)
 	{
-		if (mask & MASK_SHIFT)
-		{
-			mForce = FALSE;
-		}
-		else
-		{
-			mForce = TRUE;
-		}
+		mForce = FALSE;
+	}
+	else
+	{
+		mForce = TRUE;
 	}
 	
 	gViewerWindow->setCursor(UI_CURSOR_ARROW);
@@ -268,9 +262,11 @@ LLBBox get_selection_axis_aligned_bbox()
 
 void QToolAlign::computeManipulatorSize()
 {
+	LLViewerCamera* camera = LLViewerCamera::getInstance();
+
 	if (LLSelectMgr::getInstance()->getSelection()->getSelectType() == SELECT_TYPE_HUD)
 	{
-		mManipulatorSize = MANIPULATOR_SIZE / (LLViewerCamera::getInstance()->getViewHeightInPixels() *
+		mManipulatorSize = MANIPULATOR_SIZE / (camera->getViewHeightInPixels() *
 											   gAgentCamera.mHUDCurZoom);
 	}
 	else
@@ -280,8 +276,8 @@ void QToolAlign::computeManipulatorSize()
 		if (distance > FUDGE)
 		{
 			// range != zero
-			F32 fraction_of_fov = MANIPULATOR_SIZE /LLViewerCamera::getInstance()->getViewHeightInPixels();
-			F32 apparent_angle = fraction_of_fov * LLViewerCamera::getInstance()->getView();  // radians
+			F32 fraction_of_fov = MANIPULATOR_SIZE / camera->getViewHeightInPixels();
+			F32 apparent_angle = fraction_of_fov * camera->getView();  // radians
 			mManipulatorSize = MANIPULATOR_SIZE * distance * tan(apparent_angle);
 		}
 		else
@@ -369,7 +365,7 @@ BOOL QToolAlign::canAffectSelection()
 
 void QToolAlign::render()
 {
-	if(canAffectSelection() && !AlignThread::sInstance)
+	if(canAffectSelection())
 	{
 		mBBox = get_selection_axis_aligned_bbox();
 
@@ -427,57 +423,6 @@ public:
 
 void QToolAlign::align()
 {
-	if(AlignThread::sInstance)
-	{
-		report_to_nearby_chat(LLTrans::getString("qtool_still_busy"));
-	}
-	else
-	{
-		report_to_nearby_chat(LLTrans::getString("qtool_busy"));
-		AlignThread::sInstance = new AlignThread();
-		AlignThread::sInstance->start();
-	}
-}
-
-class LOAlignCleanup: public LLEventTimer
-{
-public:
-	LOAlignCleanup() : LLEventTimer(0.2f) //async, cross thread, timer to distroy thread
-	{
-	}
-	~LOAlignCleanup()
-	{
-	}
-	BOOL tick()
-	{
-		if (!AlignThread::sInstance->isStopped())
-		{
-			return FALSE;
-		}
-
-		delete AlignThread::sInstance;
-		AlignThread::sInstance = NULL;
-		LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_POSITION);
-		report_to_nearby_chat(LLTrans::getString("qtool_done"));
-		return TRUE;
-	}
-};
-
-void QToolAlign::aligndone()
-{
-	new LOAlignCleanup();
-}
-
-AlignThread::AlignThread() : LLThread("Align tool thread")
-{
-}
-
-AlignThread::~AlignThread()
-{
-}
-
-void AlignThread::run()
-{
 	// no linkset parts, please
 	LLSelectMgr::getInstance()->promoteSelectionToRoot();
 	
@@ -518,8 +463,8 @@ void AlignThread::run()
 		}
 	}
 
-	S32 axis = QToolAlign::getInstance()->mHighlightedAxis;
-	F32 direction = QToolAlign::getInstance()->mHighlightedDirection;
+	S32 axis = mHighlightedAxis;
+	F32 direction = mHighlightedDirection;
 
 	// sort them into positional order for proper packing
 	BBoxCompare compare(axis, direction, original_bboxes);
@@ -531,7 +476,7 @@ void AlignThread::run()
 	// find new positions
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		LLBBox target_bbox = QToolAlign::getInstance()->mBBox;
+		LLBBox target_bbox = mBBox;
 		LLVector3 target_corner = target_bbox.getCenterAgent() - 
 			direction * target_bbox.getExtentLocal() / 2.0f;
 	
@@ -562,12 +507,9 @@ void AlignThread::run()
 			// check to see if it overlaps the previously placed objects
 			BOOL overlap = FALSE;
 
-			if((i % 50 == 0) && (j % 100 == 0))
-			{
-				LL_WARNS() << "i=" << i << " j=" << j << LL_ENDL;
-			}
+			//LL_DEBUGS("ToolAlign") << "i=" << i << " j=" << j << LL_ENDL;
 			
-			if (!QToolAlign::getInstance()->mForce) // well, don't check if in force mode
+			if (!mForce) // well, don't check if in force mode
 			{
 				for (size_t k = 0; k < i; k++)
 				{
@@ -576,11 +518,11 @@ void AlignThread::run()
 
 					BOOL overlaps_this = bbox_overlap(other_bbox, new_bbox);
 
-					if (overlaps_this)
-					{
-						//LL_WARNS() << "overlap" << new_bbox.getCenterAgent() << other_bbox.getCenterAgent() << LL_ENDL;
-						//LL_WARNS() << "extent" << new_bbox.getExtentLocal() << other_bbox.getExtentLocal() << LL_ENDL;
-					}
+					//if (overlaps_this)
+					//{
+					//	LL_WARNS("ToolAlign") << "overlap" << new_bbox.getCenterAgent() << other_bbox.getCenterAgent() << LL_ENDL;
+					//	LL_WARNS("ToolAlign") << "extent" << new_bbox.getExtentLocal() << other_bbox.getExtentLocal() << LL_ENDL;
+					//}
 
 					overlap = (overlap || overlaps_this);
 				}
@@ -625,6 +567,6 @@ void AlignThread::run()
 		object->setPosition(new_position);
 	}
 	
-	QToolAlign::getInstance()->aligndone();
+	
+	LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_POSITION);
 }
-

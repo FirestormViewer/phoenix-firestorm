@@ -904,7 +904,10 @@ void LLPanelMainInventory::updateItemcountText()
 	{
 		mItemCount = gInventory.getItemCount();
 		mItemCountString = "";
-		LLLocale locale(LLLocale::USER_LOCALE);
+		// <FS:Ansariel> Use user-default locale from operating system
+		//LLLocale locale(LLLocale::USER_LOCALE);
+		LLLocale locale("");
+		// </FS:Ansariel>
 		LLResMgr::getInstance()->getIntegerString(mItemCountString, mItemCount);
 	}
 

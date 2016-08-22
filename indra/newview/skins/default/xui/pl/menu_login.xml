@@ -23,7 +23,6 @@
 	<menu_item_check label="Pokaż menu debugowania" name="Show Debug Menu"/>
 	<menu label="Debugowanie" name="Debug">
 		<menu_item_call label="Pokaż ustawienia debugowania" name="Debug Settings"/>
-		<menu_item_call label="Ustawienia kolorów/interfejsu" name="UI/Color Settings"/>
 		<menu_item_call label="Narzędzie podglądu XUI" name="UI Preview Tool"/>
 		<menu label="Testy interfejsu" name="UI Tests"/>
 		<menu_item_call label="Ustaw rozmiar okna..." name="Set Window Size..."/>

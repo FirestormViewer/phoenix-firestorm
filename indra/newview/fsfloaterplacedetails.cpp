@@ -916,4 +916,26 @@ void FSFloaterPlaceDetails::changedParcelSelection()
 	updateVerbs();
 }
 
+void FSFloaterPlaceDetails::updateEstateName(const std::string& name)
+{
+	if (mPanelPlaceInfo)
+	{
+		mPanelPlaceInfo->updateEstateName(name);
+	}
+}
 
+void FSFloaterPlaceDetails::updateEstateOwnerName(const std::string& name)
+{
+	if (mPanelPlaceInfo)
+	{
+		mPanelPlaceInfo->updateEstateOwnerName(name);
+	}
+}
+
+void FSFloaterPlaceDetails::updateCovenantText(const std::string &text)
+{
+	if (mPanelPlaceInfo)
+	{
+		mPanelPlaceInfo->updateCovenantText(text);
+	}
+}

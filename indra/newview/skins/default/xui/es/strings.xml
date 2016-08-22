@@ -5791,9 +5791,6 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="render_quality_highultra">Alta-Ultra (6/7)</string>
 	<string name="render_quality_ultra">Ultra (7/7)</string>
 	<string name="render_quality_unknown">Desconocida, por encima del rango normal, comprueba la configuración del depurador RenderQualityPerformance</string>
-	<string name="qtool_busy">Espera, por favor. La herramienta de alineación está trabajando.</string>
-	<string name="qtool_still_busy">Por favor, continúa esperando. La herramienta de alineación aún está trabajando.</string>
-	<string name="qtool_done">La herramienta de alineación ha finalizado.</string>
 	<string name="fsbridge_cant_create_disabled">Firestorm no puede crear el LSL bridge si "Activar el LSL-Client Bridge" está desactivado en Preferencias.</string>
 	<string name="fsbridge_no_library">Firestorm no ha podido crear un LSL bridge. Por favor, activa tu librería y vuelve a iniciar sesión.</string>
 	<string name="fsbridge_already_creating">Creación del bridge en curso, no se puede iniciar otra. Por favor espera unos minutos antes de volverlo a intentar.</string>

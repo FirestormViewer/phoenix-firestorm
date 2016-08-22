@@ -2,6 +2,7 @@
 <context_menu name="Url Popup">
 	<menu_item_call label="Profil obiektu..." name="show_object"/>
 	<menu_item_call label="Zablokuj" name="block_object"/>
+	<menu_item_call label="Odblokuj" name="unblock_object"/>
 	<menu_item_call label="Pokaż na mapie" name="show_on_map"/>
 	<menu_item_call label="Teleportuj do miejsca obiektu" name="teleport_to_object"/>
 	<menu_item_call label="Kopiuj nazwę obiektu do schowka" name="url_copy_label"/>
