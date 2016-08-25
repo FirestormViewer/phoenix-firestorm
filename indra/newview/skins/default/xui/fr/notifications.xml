@@ -341,6 +341,9 @@ Impossible de porter l'objet.
 Vous avez atteint le nombre ([MAX_ATTACHMENTS]) maximum d'objets attachés. Veuillez en retirer quelques-uns au préalable.
 	</notification>
 	<notification name="CannotWearInfoNotComplete">You cannot wear this item because it has not yet loaded. Please try again in a minute.</notification>
+	<notification name="MustEnterPasswordToLogIn">
+		Veuillez saisir votre mot de passe pour vous connecter.
+	</notification>
 	<notification name="MustHaveAccountToLogIn">
 Veuillez saisir votre nom d'utilisateur.
 Vous devez posséder un compte pour entrer dans [CURRENT_GRID]. Souhaitez-vous crée un compte maintenant ?
@@ -391,6 +394,9 @@ Note: This will also clear the cache.
 	</notification>
 	<notification name="SoundCacheWillBeMoved">L'emplacement du cache audio sera déplacé après le redémarrage de [APP_NAME].</notification>
 	<notification name="ChangeConnectionPort">La modification du port de connexion sera appliquée après le redémarrage de [APP_NAME].</notification>
+	<notification name="ChangeDeferredDebugSetting">
+		Le changement de paramètre de débogage sera effectué au redémarrage de [APP_NAME].
+	</notification>
 	<notification name="ChangeSkin">
 Le nouveau thème sera appliqué après le redémarrage de [APP_NAME].
 		<usetemplate name="okcancelbuttons" notext="OK" yestext="Restart"/>
@@ -1054,6 +1060,14 @@ Vos vêtements sont toujours en cours de téléchargement.
 Vous pouvez utiliser [APP_NAME] normalement, les autres personnes vous verront correctement.
 		<form name="form"><ignore name="ignore" text="Les vêtements mettent du temps à télécharger"/></form>
 	</notification>
+	<notification name="AgentComplexityWithVisibility">
+		Votre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 complexité de l&apos;avatar] est [AGENT_COMPLEXITY].
+[OVERLIMIT_MSG]
+		<usetemplate ignoretext="M&apos;avertir si la complexité de l&apos;avatar est trop élevée" name="notifyignore"/>
+	</notification>
+	<notification name="AgentComplexity">
+		Votre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 complexité de l&apos;avatar] est [AGENT_COMPLEXITY].
+	</notification>
 	<notification name="FirstRun">
 L'installation de [APP_NAME] est terminée.
 Si c'est votre première connexion à [CURRENT_GRID], vous aurez besoin d'un compte avant de vous connecter.
@@ -1142,8 +1156,16 @@ Replace texture [TEXTURE_NUM] with a 24-bit 1024x1024 or smaller image then clic
 Do you really want to bake the current terrain, make it the center for terrain raise/lower limits, and the default for the 'Revert' tool?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
-	<notification name="MaxAllowedAgentOnRegion">You can only have [MAX_AGENTS] allowed residents.</notification>
-	<notification name="MaxBannedAgentsOnRegion">You can only have [MAX_BANNED] banned residents.</notification>
+	<notification name="ConfirmTextureHeights">
+		Vous vous apprêtez à utiliser des valeurs plus élevées que les limites d&apos;élévation supérieures. Continuer ?
+		<usetemplate canceltext="Ne pas demander" name="yesnocancelbuttons" notext="Annuler" yestext="OK"/>
+	</notification>
+	<notification name="MaxAllowedAgentOnRegion">
+		Vous ne pouvez pas autoriser plus de [MAX_AGENTS] résidents.
+	</notification>
+	<notification name="MaxBannedAgentsOnRegion">
+		Vous ne pouvez pas bannir plus de [MAX_BANNED] résidents.
+	</notification>
 	<notification name="MaxAgentOnRegionBatch">
 Failure while attempting to add [NUM_ADDED] agents:
 Exceeds the [MAX_AGENTS] [LIST_TYPE] limit by [NUM_EXCESS].
@@ -1351,9 +1373,6 @@ Quitter le groupe ?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">Impossible de quitter le groupe. Vous ne pouvez quitter le groupe étant donné que vous êtes le dernier propriétaire de celui-ci. Veuillez assigner un membre au rôle Propriétaire en premier lieu.</notification>
-	<notification name="GroupDepartError">
-Impossible de quitter le groupe : [reason].
-	</notification>
 	<notification name="GroupDepart">Vous avez quitté le groupe [group_name].</notification>
 	<notification name="ConfirmKick">
 Do you REALLY want to kick all residents off the grid?
@@ -1956,6 +1975,10 @@ Le dossier '[FOLDERNAME]' est un dossier système. Le supprimer peut provoquer p
 	<notification name="ConfirmEmptyTrash">
 Êtes-vous sur de vouloir supprimer définitivement tous les éléments présents dans la corbeille ?
 		<usetemplate ignoretext="Confirmer avant de vider la corbeille" name="okcancelignore" notext="Annuler" yestext="OK"/>
+	</notification>
+	<notification name="TrashIsFull">
+		Votre corbeille déborde. Cela risque de provoquer des problèmes lors de la connexion.
+		<usetemplate name="okcancelbuttons" notext="Je viderai la corbeille plus tard" yestext="Vider la corbeille"/>
 	</notification>
 	<notification name="ConfirmClearBrowserCache">
 Are you sure you want to delete your travel, web, and search history?
@@ -2681,7 +2704,16 @@ Are you sure you want to close all IMs?
 		<usetemplate name="okcancelignore" notext="Annuler" yestext="OK" ignoretext="Confirmer avant de fermer tous les IMs"/>
 	</notification>
 	<notification name="AttachmentSaved">Pièce-jointe enregistrée.</notification>
-	<notification name="UnableToFindHelpTopic">Unable to find the help topic for this element.</notification>
+	<notification name="AppearanceToXMLSaved">
+		L&apos;apparence a été enregistrée en XML vers [PATH]
+	</notification>
+	<notification name="AppearanceToXMLFailed">
+		Échec d&apos;enregistrement de l&apos;apparence en XML.
+Erreur de suppression du préréglage [NAME].
+	</notification>
+	<notification name="UnableToFindHelpTopic">
+		Impossible de trouver l&apos;aide.
+	</notification>
 	<notification name="ObjectMediaFailure">
 Server Error: Media update or get failed.
 '[ERROR]'
@@ -3324,6 +3356,9 @@ You have been teleported by the object '[OBJECT_NAME]' on the parcel '[PARCEL_NA
 	<notification name="CantBuildOverflowParcel">You cannot build objects here because doing so would overflow the parcel.</notification>
 	<notification name="SelectedMultipleOwnedLand">You selected land with different owners. Please select a smaller area and try again.</notification>
 	<notification name="CantJoinTooFewLeasedParcels">Not enough leased parcels in selection to join.</notification>
+	</notification>
+	<notification name="IllegalAttachment">
+		La pièce jointe a demandé un point non existant sur l&apos;avatar. Il a été fixé sur la poitrine.
 	<notification name="CantDivideLandMultipleParcelsSelected">
 Can't divide land.
 There is more than one parcel selected.

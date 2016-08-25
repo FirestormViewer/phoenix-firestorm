@@ -38,6 +38,9 @@
 	<string name="AboutCompiler">
 		Kompiliert mit [COMPILER], Version [COMPILER_VERSION]
 	</string>
+	<string name="BuildConfig">
+		Build-Konfiguration [BUILD_CONFIG]
+	</string>
 	<string name="AboutPosition">
 		Sie befinden sich an [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] in [REGION] auf &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
 SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
@@ -90,7 +93,9 @@ VFS (Cache) Erstellungszeit: [VFS_DATE]
 	<string name="ErrorFetchingServerReleaseNotesURL">
 		Fehler beim Abrufen der URL für die Server-Versionshinweise.
 	</string>
-	
+	<string name="BuildConfiguration">
+		Build-Konfiguration
+	</string>
 	<string name="ProgressRestoring">
 		Wird wiederhergestellt...
 	</string>
@@ -2041,37 +2046,37 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Avatar-Mitte
 	</string>
 	<string name="Left Ring Finger">
-		Linker Ring-Finger
+		Linker Ringfinger
 	</string>
 	<string name="Right Ring Finger">
-		Rechter Ring-Finger
+		Rechter Ringfinger
 	</string>
 	<string name="Tail Base">
-		Schwanz-Basis
+		Schwanzansatz
 	</string>
 	<string name="Tail Tip">
-		Schwanz-Spitze
+		Schwanzspitze
 	</string>
 	<string name="Left Wing">
 		Linker Flügel
 	</string>
-    <string name="Right Wing">
+	<string name="Right Wing">
 		Rechter Flügel
 	</string>
-    <string name="Jaw">
+	<string name="Jaw">
 		Kiefer
 	</string>
 	<string name="Alt Left Ear">
-		Alt. Linkes Ohr
+		Alt. linkes Ohr
 	</string>
 	<string name="Alt Right Ear">
-		Alt. Rechtes Ohr
+		Alt. rechtes Ohr
 	</string>
 	<string name="Alt Left Eye">
-		Alt. Linkes Auge
+		Alt. linkes Auge
 	</string>
 	<string name="Alt Right Eye">
-		Alt. Rechtes Auge
+		Alt. rechtes Auge
 	</string>
 	<string name="Tongue">
 		Zunge
@@ -2507,7 +2512,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Linke Brust
 	</string>
 	<string name="ATTACH_RIGHT_PEC">
-		Rechts
+		Rechte Brust
 	</string>
 	<string name="ATTACH_HUD_CENTER_2">
 		HUD Mitte 2
@@ -2540,16 +2545,16 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Avatar-Mitte
 	</string>
 	<string name="ATTACH_LHAND_RING1">
-		Linker Ring-Finger
+		Linker Ringfinger
 	</string>
 	<string name="ATTACH_RHAND_RING1">
-		Rechter Ring-Finger
+		Rechter Ringfinger
 	</string>
 	<string name="ATTACH_TAIL_BASE">
-		Schwanz-Basis
+		Schwanzansatz
 	</string>
 	<string name="ATTACH_TAIL_TIP">
-		Schwanz-Spitze
+		Schwanzspitze
 	</string>
 	<string name="ATTACH_LWING">
 		Linker Flügel
@@ -2561,16 +2566,16 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Kiefer
 	</string>
 	<string name="ATTACH_FACE_LEAR">
-		Alt. Linkes Ohr
+		Alt. linkes Ohr
 	</string>
 	<string name="ATTACH_FACE_REAR">
-		Alt. Rechtes Ohr
+		Alt. rechtes Ohr
 	</string>
 	<string name="ATTACH_FACE_LEYE">
-		Alt. Linkes Auge
+		Alt. linkes Auge
 	</string>
 	<string name="ATTACH_FACE_REYE">
-		Alt. Rechtes Auge
+		Alt. rechtes Auge
 	</string>
 	<string name="ATTACH_FACE_TONGUE">
 		Zunge
@@ -4627,10 +4632,10 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		offline
 	</string>
 	<string name="not_online_msg">
-		Anwender nicht online - Nachricht wird gespeichert und später zugestellt.
+		Benutzer nicht online - Nachricht wird gespeichert und später zugestellt.
 	</string>
 	<string name="not_online_inventory">
-		Anwender nicht online - Inventarangebot wurde gespeichert.
+		Benutzer nicht online - Inventar gespeichert.
 	</string>
 	<string name="answered_call">
 		Ihr Anruf wurde entgegengenommen

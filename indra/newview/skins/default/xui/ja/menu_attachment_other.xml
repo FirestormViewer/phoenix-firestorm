@@ -8,7 +8,7 @@
 	<menu_item_call label="コーリングカードを送る" name="Give Calling Card" />
 	<menu_item_call label="コール" name="Call"/>
 	<menu_item_call label="グループに招待" name="Invite..."/>
-	<menu_item_separator />
+	<menu_item_call label="スケルトンをリセット" name="Reset Skeleton"/>
 	<context_menu label="迷惑行為対応" name="Annoyance">
 		<menu_item_call label="ブロック" name="Avatar Mute" />
 		<!-- <FS:Zi> Add unblock menu entry since renaming the context menu item doesn't seem to work -->

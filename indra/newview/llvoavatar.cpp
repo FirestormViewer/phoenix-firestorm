@@ -1516,12 +1516,15 @@ void LLVOAvatar::renderBones()
 	avatar_joint_list_t::iterator iter = mSkeleton.begin();
 	avatar_joint_list_t::iterator end  = mSkeleton.end();
 
-    static LLVector3 BASE_COLOR_OCCLUDED(1.0f, 0.0f, 0.0f);
-    static LLVector3 BASE_COLOR_VISIBLE(0.5f, 0.5f, 0.5f);
-    static LLVector3 EXTENDED_COLOR_OCCLUDED(0.0f, 1.0f, 0.0f);
-    static LLVector3 EXTENDED_COLOR_VISIBLE(0.5f, 0.5f, 0.5f);
+    // For bones with position overrides defined
+    static LLVector3 OVERRIDE_COLOR_OCCLUDED(1.0f, 0.0f, 0.0f);
+    static LLVector3 OVERRIDE_COLOR_VISIBLE(0.5f, 0.5f, 0.5f);
+    // For bones which are rigged to by at least one attachment
     static LLVector3 RIGGED_COLOR_OCCLUDED(0.0f, 1.0f, 1.0f);
     static LLVector3 RIGGED_COLOR_VISIBLE(0.5f, 0.5f, 0.5f);
+    // For bones not otherwise colored
+    static LLVector3 OTHER_COLOR_OCCLUDED(0.0f, 1.0f, 0.0f);
+    static LLVector3 OTHER_COLOR_VISIBLE(0.5f, 0.5f, 0.5f);
     
     static F32 SPHERE_SCALEF = 0.001f;
 
@@ -1534,25 +1537,27 @@ void LLVOAvatar::renderBones()
 		}
 
 		jointp->updateWorldMatrix();
-        LLJoint::SupportCategory sc = jointp->getSupport();
+
         LLVector3 occ_color, visible_color;
 
-        if (jointIsRiggedTo(jointp->getName()))
+        LLVector3 pos;
+        LLUUID mesh_id;
+        if (jointp->hasAttachmentPosOverride(pos,mesh_id))
         {
-            occ_color = RIGGED_COLOR_OCCLUDED;
-            visible_color = RIGGED_COLOR_VISIBLE;
+            occ_color = OVERRIDE_COLOR_OCCLUDED;
+            visible_color = OVERRIDE_COLOR_VISIBLE;
         }
         else
         {
-            if (sc == LLJoint::SUPPORT_BASE)
+            if (jointIsRiggedTo(jointp->getName()))
             {
-                occ_color = BASE_COLOR_OCCLUDED;
-                visible_color = BASE_COLOR_VISIBLE;
+                occ_color = RIGGED_COLOR_OCCLUDED;
+                visible_color = RIGGED_COLOR_VISIBLE;
             }
             else
             {
-                occ_color = EXTENDED_COLOR_OCCLUDED;
-                visible_color = EXTENDED_COLOR_VISIBLE;
+                occ_color = OTHER_COLOR_OCCLUDED;
+                visible_color = OTHER_COLOR_VISIBLE;
             }
         }
         LLVector3 begin_pos(0,0,0);
@@ -4153,7 +4158,8 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
         // that affect the body size calculation, computed body size
         // can get stale much more easily. Simplest fix is to update
         // it frequently.
-        computeBodySize();
+        // SL-427: this appears to be too frequent, moving to only do on animation state change.
+        // computeBodySize();
     
 		// correct for the fact that the pelvis is not necessarily the center 
 		// of the agent's physical representation
@@ -5682,6 +5688,12 @@ void LLVOAvatar::processAnimationStateChanges()
 //-----------------------------------------------------------------------------
 BOOL LLVOAvatar::processSingleAnimationStateChange( const LLUUID& anim_id, BOOL start )
 {
+    // SL-402, SL-427 - we need to update body size often enough to
+    // keep appearances in sync, but not so often that animations
+    // cause constant jiggling of the body or camera. Possible
+    // compromise is to do it on animation changes:
+    computeBodySize();
+    
 	BOOL result = FALSE;
 
 	if ( start ) // start animation

@@ -462,6 +462,9 @@ Se ha superado el límite máximo de [MAX_ATTACHMENTS] accesorios. Por favor, qu
 	<notification name="CannotWearInfoNotComplete">
 		No puedes vestirte este ítem porque aún no se ha cargado. Por favor, inténtalo de nuevo en un minuto.
 	</notification>
+	<notification name="MustEnterPasswordToLogIn">
+		Escribe la contraseña para poder iniciar sesión.
+	</notification>
 	<notification name="MustHaveAccountToLogIn">
 		Lo sentimos. Se ha quedado algún campo en blanco.
 Tienes que volver a introducir el nombre de usuario de tu avatar.
@@ -543,6 +546,9 @@ Nota: esto vaciará la caché.
 	</notification>
 	<notification name="ChangeConnectionPort">
 		La configuración del puerto tendrá efecto cuando reinicies [APP_NAME].
+	</notification>
+	<notification name="ChangeDeferredDebugSetting">
+		El cambio de configuración del depurador se activará cuando reinicies [APP_NAME].
 	</notification>
 	<notification name="ChangeSkin">
 		La nueva skin se aplicará tras reiniciar [APP_NAME].
@@ -1408,6 +1414,14 @@ Puedes usar [CURRENT_GRID] de forma normal; los demás residentes te verán corr
 			<ignore name="ignore" text="La ropa está tardando mucho en descargarse"/>
 		</form>
 	</notification>
+	<notification name="AgentComplexityWithVisibility">
+		La [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 complejidad de tu avatar] es [AGENT_COMPLEXITY]. 
+[OVERLIMIT_MSG]
+		<usetemplate ignoretext="Avisarme si la complejidad de mi avatar puede ser excesiva" name="notifyignore"/>
+	</notification>
+	<notification name="AgentComplexity">
+		La [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 complejidad de tu avatar] es [AGENT_COMPLEXITY].
+	</notification>
 	<notification name="FirstRun">
 		Se ha completado la instalación de [APP_NAME].
 
@@ -1522,6 +1536,10 @@ Cambia la textura [TEXTURE_NUM] por una imagen de 24 bits y 1024x1024 o menor, y
 	<notification name="ConfirmBakeTerrain">
 		¿Realmente quieres predeterminar el terreno actual, convirtiéndolo en el centro de los limites para elevarlo y rebajarlo, y en el terreno por defecto para la herramienta &apos;Revertir&apos;?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="ConfirmTextureHeights">
+		Vas a usar valores inferiores más grandes que los de Intervalos de elevación. ¿Quieres continuar?
+		<usetemplate canceltext="No preguntar" name="yesnocancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="MaxAllowedAgentOnRegion">
 		Sólo puedes tener [MAX_AGENTS] residentes autorizados.
@@ -1741,14 +1759,6 @@ visita [[INFO_URL] detalles sobre esta actualización]
 	<notification name="OwnerCannotLeaveGroup">
 		No puedes abandonar el grupo porque eres el último propietario del mismo. Por favor, asigna el rol de propietario a otro usuario antes de abandonar el grupo.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
-	</notification>
-	<notification name="GroupDepartError">
-		No se puede abandonar el grupo: [reason].
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="GroupDepart">
-		Has abandonado el grupo [group_name].
-		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmKick">
 		¿Realmente quieres expulsar a todos los residentes fuera de la red de simuladores?
@@ -2474,6 +2484,10 @@ Linden Lab
 	<notification name="ConfirmEmptyTrash">
 		¿Estás seguro de que quieres borrar de forma permanente el contenido de la Papelera?
 		<usetemplate ignoretext="Confirmar antes de vaciar la Papelera del inventario" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="TrashIsFull">
+		La papelera está completamente llena. Esto puede causar problemas a la hora de iniciar sesión.
+		<usetemplate name="okcancelbuttons" notext="Vaciaré la papelera más adelante" yestext="Vaciar la papelera"/>
 	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		¿Estás seguro de que quieres borrar tu historial web, de viajes y de búsquedas?
@@ -3228,7 +3242,7 @@ Si permaneces en esta región serás desconectado.
 
 [MESSAGE]
 
-Del objeto: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, propietario: [NAME_SLURL]
+De objeto: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, propietario: [NAME_SLURL]
 		<form name="form">
 			<button name="Gotopage" text="Cargar"/>
 			<button name="Cancel" text="Cancelar"/>
@@ -3500,6 +3514,18 @@ Por tu seguridad, serán bloqueadas durante unos segundos.
 	</notification>
 	<notification name="AttachmentSaved">
 		Se ha guardado el adjunto.
+	</notification>
+	<notification name="PresetNotSaved">
+		Error al guardar el valor predefinido [NAME].
+	</notification>
+	<notification name="PresetNotDeleted">
+		Error al eliminar el valor predefinido [NAME].
+	</notification>
+	<notification name="AppearanceToXMLSaved">
+		El aspecto se ha guardado como XML en [PATH]
+	</notification>
+	<notification name="AppearanceToXMLFailed">
+		Error al guardar el aspecto como XML.
 	</notification>
 	<notification name="UnableToFindHelpTopic">
 		No se ha podido encontrar un tema de ayuda para este elemento.
@@ -4379,6 +4405,9 @@ Prueba otra vez dentro de un minuto.
 	</notification>
 	<notification name="CantAttachNotEnoughScriptResources">
 		No hay suficientes recursos de script disponibles para anexar el objeto
+	</notification>
+	<notification name="IllegalAttachment">
+		El anexo ha solicitado un punto que no existe en el avatar. Por tanto, se ha anexado al pecho.
 	</notification>
 	<notification name="CantDropItemTrialUser">
 		No se pueden soltar objetos aquí; inténtalo en la zona de prueba gratuita.

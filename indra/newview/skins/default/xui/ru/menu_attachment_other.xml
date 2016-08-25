@@ -7,6 +7,7 @@
 	<menu_item_call label="Дать визитную карточку" name="Give Calling Card"/>
 	<menu_item_call label="Звонок" name="Call"/>
 	<menu_item_call label="Пригласить в группу" name="Invite..."/>
+	<menu_item_call label="Сброс скелета" name="Reset Skeleton"/>
 	<context_menu label="Управление" name="Annoyance">
 		<menu_item_call label="Заблокировать" name="Avatar Mute"/>
 		<menu_item_call label="Разблокировать" name="Avatar Unmute"/>
