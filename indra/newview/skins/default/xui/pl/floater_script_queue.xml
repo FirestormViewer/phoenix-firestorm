@@ -15,8 +15,26 @@
 	<floater.string name="NotRunning">
 		Wyłączanie
 	</floater.string>
+	<floater.string name="Timeout">
+		Limit czasu: [OBJECT_NAME]
+	</floater.string>
+	<floater.string name="LoadingObjInv">
+		Ładowanie zawartości dla: [OBJECT_NAME]
+	</floater.string>
 	<floater.string name="Deleting">
 		Usuwanie
+	</floater.string>
+	<floater.string name="SkippingPermissions">
+		Pomijanie: [OBJECT_NAME] (zezwolenia)
+	</floater.string>
+	<floater.string name="Compiling">
+		Kompilowanie "[OBJECT_NAME]"...
+	</floater.string>
+	<floater.string name="CompileSuccess">
+		Kompilacja "[OBJECT_NAME]" powiodła się
+	</floater.string>
+	<floater.string name="CompileFailure">
+		Kompilacja "[OBJECT_NAME]" nie powiodła się:
 	</floater.string>
 	<button label="Zamknij" label_selected="Zamknij" name="close"/>
 </floater>

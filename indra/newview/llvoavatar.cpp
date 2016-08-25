@@ -3450,7 +3450,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		   (!isSelf() && (!show_too_complex_only_arw_tag || isTooComplex()))))
 		{
 			std::string complexity_string;
-			LLLocale locale(LLLocale::USER_LOCALE);
+			LLLocale locale("");
 			LLResMgr::getInstance()->getIntegerString(complexity_string, complexity);
 
 			LLStringUtil::format_map_t label_args;

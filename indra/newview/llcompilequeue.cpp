@@ -532,7 +532,7 @@ bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloat
 		if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 		{
 			// Need to dump some stuff into an LLScriptQueueData struct for the LSL PreProc.
-			LLScriptQueueData* datap = new LLScriptQueueData(hfloater.get()->getKey().asUUID(), object->getID(), item);
+			LLScriptQueueData* datap = new LLScriptQueueData(hfloater.get()->getKey().asUUID(), object->getID(), experienceId, item);
 			userData = HandleScriptUserData(pump.getName(), datap);
 		}
 		else
@@ -1155,11 +1155,18 @@ void LLFloaterCompileQueue::scriptPreprocComplete(const LLUUID& asset_id, LLScri
 				LLBufferedAssetUploadInfo::taskUploadFinish_f proc = boost::bind(&LLFloaterCompileQueue::finishLSLUpload, _1, _2, _3, _4, 
 					scriptName, data->mQueueID);
 				
-				LLResourceUploadInfo::ptr_t uploadInfo( new LLScriptAssetUploadWithId(	data->mTaskId, data->mItem->getUUID(),
-						(queue->mMono) ? LLScriptAssetUpload::MONO : LLScriptAssetUpload::LSL2,
-						is_running, scriptName, data->mQueueID, data->mExperienceId, script_text, proc));
+				LLResourceUploadInfo::ptr_t uploadInfo( new LLScriptAssetUploadWithId(
+					data->mTaskId,
+					data->mItem->getUUID(),
+					(queue->mMono) ? LLScriptAssetUpload::MONO : LLScriptAssetUpload::LSL2,
+					is_running,
+					scriptName,
+					data->mQueueID,
+					data->mExperienceId,
+					script_text,
+					proc));
 
-	            LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
+				LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
 			}
 			else
 			{

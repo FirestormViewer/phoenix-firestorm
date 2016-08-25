@@ -3180,7 +3180,7 @@ void LLAvatarComplexityControls::setText(U32 value, LLTextBox* text_box)
 		// <FS:Ansariel> Proper number formatting with delimiter
 		//text_box->setText(llformat("%d", value));
 		std::string output_string;
-		LLLocale locale(LLLocale::USER_LOCALE);
+		LLLocale locale("");
 		LLResMgr::getInstance()->getIntegerString(output_string, value);
 		text_box->setText(output_string);
 	}

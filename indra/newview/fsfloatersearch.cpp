@@ -72,6 +72,7 @@
 #include <boost/algorithm/string.hpp>
 
 static const S32 MIN_SEARCH_STRING_SIZE = 2;
+static const S32 RESULT_PAGE_SIZE = 100;
 
 std::string filterShortWords(std::string query_string);
 void fillSearchComboBox(LLSearchComboBox* search_combo);
@@ -784,7 +785,7 @@ void FSPanelSearchPeople::onBtnFind()
 
 void FSPanelSearchPeople::onBtnNext()
 {
-	mStartSearch += 100;
+	mStartSearch += RESULT_PAGE_SIZE;
 	getChildView("people_back")->setEnabled(TRUE);
 	
 	find();
@@ -792,7 +793,7 @@ void FSPanelSearchPeople::onBtnNext()
 
 void FSPanelSearchPeople::onBtnBack()
 {
-	mStartSearch -= 100;
+	mStartSearch -= RESULT_PAGE_SIZE;
 	getChildView("people_back")->setEnabled(mStartSearch > 0);
 	
 	find();
@@ -807,11 +808,11 @@ void FSPanelSearchPeople::resetSearch()
 
 S32 FSPanelSearchPeople::showNextButton(S32 rows)
 {
-	bool show_next_button = (mResultsReceived > 100);
+	bool show_next_button = (mResultsReceived > RESULT_PAGE_SIZE);
 	getChildView("people_next")->setEnabled(show_next_button);
 	if (show_next_button)
 	{
-		rows -= (mResultsReceived - 100);
+		rows -= (mResultsReceived - RESULT_PAGE_SIZE);
 	}
 	return rows;
 }
@@ -892,7 +893,7 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocksFast(_PREHASH_QueryReplies);
-	if (num_new_rows == 0)
+	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("people_edit")->getValue().asString();
@@ -1070,7 +1071,7 @@ void FSPanelSearchGroups::onBtnFind()
 
 void FSPanelSearchGroups::onBtnNext()
 {
-	mStartSearch += 100;
+	mStartSearch += RESULT_PAGE_SIZE;
 	getChildView("groups_back")->setEnabled(TRUE);
 	
 	find();
@@ -1078,7 +1079,7 @@ void FSPanelSearchGroups::onBtnNext()
 
 void FSPanelSearchGroups::onBtnBack()
 {
-	mStartSearch -= 100;
+	mStartSearch -= RESULT_PAGE_SIZE;
 	getChildView("groups_back")->setEnabled(mStartSearch > 0);
 	
 	find();
@@ -1093,11 +1094,11 @@ void FSPanelSearchGroups::resetSearch()
 
 S32 FSPanelSearchGroups::showNextButton(S32 rows)
 {
-	bool show_next_button = (mResultsReceived > 100);
+	bool show_next_button = (mResultsReceived > RESULT_PAGE_SIZE);
 	getChildView("groups_next")->setEnabled(show_next_button);
 	if (show_next_button)
 	{
-		rows -= (mResultsReceived - 100);
+		rows -= (mResultsReceived - RESULT_PAGE_SIZE);
 	}
 	return rows;
 }
@@ -1181,7 +1182,7 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocksFast(_PREHASH_QueryReplies);
-	if (num_new_rows == 0)
+	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("groups_edit")->getValue().asString();
@@ -1240,6 +1241,7 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
+		self->onSelectItem();
 	}
 }
 
@@ -1384,7 +1386,7 @@ void FSPanelSearchPlaces::onBtnFind()
 
 void FSPanelSearchPlaces::onBtnNext()
 {
-	mStartSearch += 100;
+	mStartSearch += RESULT_PAGE_SIZE;
 	getChildView("places_back")->setEnabled(TRUE);
 	
 	find();
@@ -1392,7 +1394,7 @@ void FSPanelSearchPlaces::onBtnNext()
 
 void FSPanelSearchPlaces::onBtnBack()
 {
-	mStartSearch -= 100;
+	mStartSearch -= RESULT_PAGE_SIZE;
 	getChildView("places_back")->setEnabled(mStartSearch > 0);
 	
 	find();
@@ -1407,11 +1409,11 @@ void FSPanelSearchPlaces::resetSearch()
 
 S32 FSPanelSearchPlaces::showNextButton(S32 rows)
 {
-	bool show_next_button = (mResultsReceived > 100);
+	bool show_next_button = (mResultsReceived > RESULT_PAGE_SIZE);
 	getChildView("places_next")->setEnabled(show_next_button);
 	if (show_next_button)
 	{
-		rows -= (mResultsReceived - 100);
+		rows -= (mResultsReceived - RESULT_PAGE_SIZE);
 	}
 	return rows;
 }
@@ -1502,7 +1504,7 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
-	if (num_new_rows == 0)
+	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("places_edit")->getValue().asString();
@@ -1575,6 +1577,7 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
+		self->onSelectItem();
 	}
 }
 
@@ -1725,7 +1728,7 @@ void FSPanelSearchLand::onBtnFind()
 
 void FSPanelSearchLand::onBtnNext()
 {
-	mStartSearch += 100;
+	mStartSearch += RESULT_PAGE_SIZE;
 	getChildView("land_back")->setEnabled(TRUE);
 	
 	find();
@@ -1733,7 +1736,7 @@ void FSPanelSearchLand::onBtnNext()
 
 void FSPanelSearchLand::onBtnBack()
 {
-	mStartSearch -= 100;
+	mStartSearch -= RESULT_PAGE_SIZE;
 	getChildView("land_back")->setEnabled(mStartSearch > 0);
 	
 	find();
@@ -1748,11 +1751,11 @@ void FSPanelSearchLand::resetSearch()
 
 S32 FSPanelSearchLand::showNextButton(S32 rows)
 {
-	bool show_next_button = (mResultsReceived > 100);
+	bool show_next_button = (mResultsReceived > RESULT_PAGE_SIZE);
 	getChildView("land_next")->setEnabled(show_next_button);
 	if (show_next_button)
 	{
-		rows -= (mResultsReceived - 100);
+		rows -= (mResultsReceived - RESULT_PAGE_SIZE);
 	}
 	return rows;
 }
@@ -1811,7 +1814,7 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
-	if (num_new_rows == 0)
+	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
@@ -1926,6 +1929,7 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
+		self->onSelectItem();
 	}
 }
 
@@ -2053,7 +2057,7 @@ void FSPanelSearchClassifieds::onBtnFind()
 
 void FSPanelSearchClassifieds::onBtnNext()
 {
-	mStartSearch += 100;
+	mStartSearch += RESULT_PAGE_SIZE;
 	getChildView("classifieds_back")->setEnabled(TRUE);
 	
 	find();
@@ -2061,7 +2065,7 @@ void FSPanelSearchClassifieds::onBtnNext()
 
 void FSPanelSearchClassifieds::onBtnBack()
 {
-	mStartSearch -= 100;
+	mStartSearch -= RESULT_PAGE_SIZE;
 	getChildView("classifieds_back")->setEnabled(mStartSearch > 0);
 	
 	find();
@@ -2076,11 +2080,11 @@ void FSPanelSearchClassifieds::resetSearch()
 
 S32 FSPanelSearchClassifieds::showNextButton(S32 rows)
 {
-	bool show_next_button = (mResultsReceived > 100);
+	bool show_next_button = (mResultsReceived > RESULT_PAGE_SIZE);
 	getChildView("classifieds_next")->setEnabled(show_next_button);
 	if (show_next_button)
 	{
-		rows -= (mResultsReceived - 100);
+		rows -= (mResultsReceived - RESULT_PAGE_SIZE);
 	}
 	return rows;
 }
@@ -2175,7 +2179,7 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
-	if (num_new_rows == 0)
+	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("classifieds_edit")->getValue().asString();
@@ -2231,6 +2235,7 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
+		self->onSelectItem();
 	}
 }
 
@@ -2372,7 +2377,7 @@ void FSPanelSearchEvents::onBtnFind()
 
 void FSPanelSearchEvents::onBtnNext()
 {
-	mStartSearch += 100;
+	mStartSearch += RESULT_PAGE_SIZE;
 	getChildView("events_back")->setEnabled(TRUE);
 	
 	find();
@@ -2380,7 +2385,7 @@ void FSPanelSearchEvents::onBtnNext()
 
 void FSPanelSearchEvents::onBtnBack()
 {
-	mStartSearch -= 100;
+	mStartSearch -= RESULT_PAGE_SIZE;
 	getChildView("events_back")->setEnabled(mStartSearch > 0);
 	
 	find();
@@ -2447,11 +2452,11 @@ void FSPanelSearchEvents::setDay(S32 day)
 
 S32 FSPanelSearchEvents::showNextButton(S32 rows)
 {
-	bool show_next_button = (mResultsReceived > 100);
+	bool show_next_button = (mResultsReceived > RESULT_PAGE_SIZE);
 	getChildView("events_next")->setEnabled(show_next_button);
 	if (show_next_button)
 	{
-		rows -= (mResultsReceived - 100);
+		rows -= (mResultsReceived - RESULT_PAGE_SIZE);
 	}
 	return rows;
 }
@@ -2551,7 +2556,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 	}
 	
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
-	if (num_new_rows == 0)
+	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
@@ -2647,6 +2652,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
+		self->onSelectItem();
 	}
 }
 

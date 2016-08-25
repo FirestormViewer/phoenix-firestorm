@@ -15,4 +15,6 @@
 	<menu_item_call label="Udostępnij przedmiot" name="share"/>
 	<menu_item_call label="Zapłać" name="pay"/>
 	<menu_item_check label="Zablokuj/Odblokuj" name="block_unblock"/>
+	<menu_item_call label="Unieruchom" name="freeze"/>
+	<menu_item_call label="Wyrzuć" name="eject"/>
 </context_menu>
