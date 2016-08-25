@@ -2870,39 +2870,36 @@ void derenderObject(bool permanent)
 		if ( (objp) && (gAgentID != objp->getID()) && ((!rlv_handler_t::isEnabled()) || (!objp->isAttachment()) || (!objp->permYouOwner())) )
 // [/RLVa:KB]
 		{
-			if (permanent)
-			{
-				std::string entry_name = "";
-				std::string region_name;
-				LLAssetType::EType asset_type;
+			std::string entry_name = "";
+			std::string region_name;
+			LLAssetType::EType asset_type;
 
-				if (objp->isAvatar())
-				{
-					LLNameValue* firstname = objp->getNVPair("FirstName");
-					LLNameValue* lastname = objp->getNVPair("LastName");
-					entry_name = llformat("%s %s", firstname->getString(), lastname->getString());
-					asset_type = LLAssetType::AT_PERSON;
-				}
-				else
-				{
-					LLSelectNode* nodep = select_mgr->getSelection()->getFirstRootNode();
-					if (nodep)
-					{
-						if (!nodep->mName.empty())
-						{
-							entry_name = nodep->mName;
-						}
-					}
-					LLViewerRegion* region = objp->getRegion();
-					if (region)
-					{
-						region_name = region->getName();
-					}
-					asset_type = LLAssetType::AT_OBJECT;
-				}
-			
-				FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, asset_type);
+			if (objp->isAvatar())
+			{
+				LLNameValue* firstname = objp->getNVPair("FirstName");
+				LLNameValue* lastname = objp->getNVPair("LastName");
+				entry_name = llformat("%s %s", firstname->getString(), lastname->getString());
+				asset_type = LLAssetType::AT_PERSON;
 			}
+			else
+			{
+				LLSelectNode* nodep = select_mgr->getSelection()->getFirstRootNode();
+				if (nodep)
+				{
+					if (!nodep->mName.empty())
+					{
+						entry_name = nodep->mName;
+					}
+				}
+				LLViewerRegion* region = objp->getRegion();
+				if (region)
+				{
+					region_name = region->getName();
+				}
+				asset_type = LLAssetType::AT_OBJECT;
+			}
+			
+			FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, asset_type, permanent, permanent);
 
 			select_mgr->deselectObjectOnly(objp);
 

@@ -12,33 +12,29 @@
  can_minimize="true"
  can_close="true"
  can_drag_on_left="false">
-<floater.string
-		name="asset_object">
-Object
+	<floater.string name="asset_object">
+		Object
 	</floater.string>
-	<floater.string
-		name="asset_texture">
-Texture
+	<floater.string name="asset_texture">
+		Texture
 	</floater.string>
-	<floater.string
-		name="asset_sound">
-Sound
+	<floater.string name="asset_sound">
+		Sound
 	</floater.string>
-	<floater.string
-		name="asset_resident">
-Resident
+	<floater.string name="asset_resident">
+		Resident
 	</floater.string>
-	<floater.string
-		name="asset_unknown">
-Unknown
+	<floater.string name="asset_unknown">
+		Unknown
 	</floater.string>
-	<floater.string
-		name="unknown_object">
-Unknown object
+	<floater.string name="unknown_object">
+		Unknown object
 	</floater.string>
-	<floater.string
-		name="unknown_region">
-Unknown region
+	<floater.string name="unknown_region">
+		Unknown region
+	</floater.string>
+	<floater.string name="asset_permanent">
+		&#x2714;
 	</floater.string>
 	<scroll_list
 	 name="result_list"
@@ -51,8 +47,7 @@ Unknown region
 	 draw_heading="true"
 	 multi_select="true"
 	 search_column="0"
-	 sort_column="2"
-	 >
+	 sort_column="2">
 		<scroll_list.columns
 		 name="name"
 		 label="Name"
@@ -63,28 +58,30 @@ Unknown region
 		 label="Region"
 		 width="100"
 		 />
-    	<scroll_list.columns
+		<scroll_list.columns
 		 name="type"
 		 label="Type"
 		 width="60"
 		 />
-    	<scroll_list.columns
+		<scroll_list.columns
 		 name="date"
 		 label="Date"
 		 width="120"
 		 />
-		 
-      <row>
-          <column column="name">[UNKNOWN] Template item</column>
-          <column column="region">[UNKNOWN] Template item</column>
-          <column column="type">Unknown</column>
-          <column column="date">2012-12-11 13:37:00</column>
-      </row>
-		 
-	</scroll_list>	
-	
-	
-		<button
+		<scroll_list.columns
+		 name="permanent"
+		 label="Permanent"
+		 width="80"
+		 />
+		<row>
+			<column column="name">[UNKNOWN] Template item</column>
+			<column column="region">[UNKNOWN] Template item</column>
+			<column column="type">Unknown</column>
+			<column column="date">2012-12-11 13:37:00</column>
+			<column column="permanent">&#x2714;</column>
+		</row>
+	</scroll_list>
+	<button
 	 name="remove_btn"
 	 label="Remove selected items from blacklist"
 	 font="SansSerif"

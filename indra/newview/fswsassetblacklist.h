@@ -43,7 +43,7 @@ class FSWSAssetBlacklist : public LLSingleton<FSWSAssetBlacklist>
 public:
 	void init();
 	bool isBlacklisted(const LLUUID& id, LLAssetType::EType type);
-	void addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool save = true);
+	void addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool permanent = true, bool save = true);
 	void addNewItemToBlacklistData(const LLUUID& id, const LLSD& data, bool save = true);
 	void removeItemFromBlacklist(const LLUUID& id);
 

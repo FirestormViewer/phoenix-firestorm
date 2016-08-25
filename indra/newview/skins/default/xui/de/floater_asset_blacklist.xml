@@ -26,6 +26,7 @@
 		<scroll_list.columns name="region" label="Region"/>
 		<scroll_list.columns name="type" label="Typ"/>
 		<scroll_list.columns name="date" label="Datum"/>
+		<scroll_list.columns name="permanent" label="Permanent"/>
 	</scroll_list>	
 	<button name="remove_btn" label="Ausgewählte Objekte von Blacklist entfernen" width="290"/>
 </floater>

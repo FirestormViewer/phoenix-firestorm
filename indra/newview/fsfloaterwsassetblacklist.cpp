@@ -91,6 +91,10 @@ void FSFloaterWSAssetBlacklist::addElementToList(const LLUUID& id, const LLSD& d
 	element["columns"][3]["column"] = "date";
 	element["columns"][3]["type"] = "text";
 	element["columns"][3]["value"] = data["asset_date"].asString();
+	element["columns"][4]["column"] = "permanent";
+	element["columns"][4]["type"] = "text";
+	element["columns"][4]["halign"] = "center";
+	element["columns"][4]["value"] = data["asset_permanent"].asBoolean() ? getString("asset_permanent") : LLStringUtil::null;
 
 	mResultList->addElement(element, ADD_BOTTOM);
 }
@@ -99,7 +103,6 @@ void FSFloaterWSAssetBlacklist::removeElementFromList(const LLUUID& id)
 {
 	mResultList->deleteSingleItem(mResultList->getItemIndex(id));
 }
-
 
 void FSFloaterWSAssetBlacklist::onOpen(const LLSD& key)
 {

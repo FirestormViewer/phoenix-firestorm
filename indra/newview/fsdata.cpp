@@ -471,6 +471,7 @@ void FSData::processAssets(const LLSD& assets)
 		LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
 		cipher.decrypt(uid.mData, UUID_BYTES);
 		LLSD data = itr->second;
+		data["asset_permanent"] = false; // Don't save these locally!
 		if (uid.isNull())
 		{
 			continue;
