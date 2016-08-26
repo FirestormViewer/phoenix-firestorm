@@ -109,7 +109,7 @@ void FSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string
 	addNewItemToBlacklistData(id, data, save);
 }
 
-void FSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
+void FSAssetBlacklist::removeItem(const LLUUID& id)
 {
 	gObjectList.removeDerenderedItem(id);
 
@@ -126,7 +126,20 @@ void FSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
 
 	mBlacklistTypeContainer[type].erase(id);
 	mBlacklistData.erase(it);
+}
 
+void FSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
+{
+	removeItem(id);
+	saveBlacklist();
+}
+
+void FSAssetBlacklist::removeItemsFromBlacklist(const uuid_vec_t& ids)
+{
+	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
+	{
+		removeItem(*it);
+	}
 	saveBlacklist();
 }
 

@@ -2859,6 +2859,7 @@ void cleanup_menus()
 // <FS:Ansariel> FIRE-6970/FIRE-6998: Optional permanent derendering of multiple objects
 void derenderObject(bool permanent)
 {
+	bool need_save = false;
 	LLViewerObject* objp;
 	LLSelectMgr* select_mgr = LLSelectMgr::getInstance();
 
@@ -2883,6 +2884,7 @@ void derenderObject(bool permanent)
 			}
 			else
 			{
+				bool next_object = false;
 				LLViewerObject::child_list_t object_children = objp->getChildren();
 				for (LLViewerObject::child_list_t::const_iterator it = object_children.begin(); it != object_children.end(); it++)
 				{
@@ -2893,14 +2895,19 @@ void derenderObject(bool permanent)
 						{
 							// RLVa: Prevent cheating out of sitting by derendering the object
 							select_mgr->deselectObjectOnly(objp);
-							return;
+							next_object = true;
 						}
 						else
 						{
 							gAgent.standUp();
-							break;
 						}
+						break;
 					}
+				}
+
+				if (next_object)
+				{
+					continue;
 				}
 
 				LLSelectNode* nodep = select_mgr->getSelection()->getFirstRootNode();
@@ -2919,21 +2926,27 @@ void derenderObject(bool permanent)
 				asset_type = LLAssetType::AT_OBJECT;
 			}
 			
-			FSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, asset_type, permanent, permanent);
+			FSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, asset_type, permanent, false);
+			
+			if (permanent)
+			{
+				need_save = true;
+			}
 
 			select_mgr->deselectObjectOnly(objp);
-
-			// <FS:ND> Pass true to make sure this object stays dead.
-			// gObjectList.killObject(objp);
-			gObjectList.addDerenderedItem( objp->getID(), permanent );
+			gObjectList.addDerenderedItem(objp->getID(), permanent);
 			gObjectList.killObject(objp);
-			// </FS:ND>
 		}
 		else if( (objp) && (gAgentID != objp->getID()) && ((rlv_handler_t::isEnabled()) || (objp->isAttachment()) || (objp->permYouOwner())) )
 		{
 			select_mgr->deselectObjectOnly(objp);
 			return;
 		}
+	}
+
+	if (need_save)
+	{
+		FSAssetBlacklist::getInstance()->saveBlacklist();
 	}
 }
 

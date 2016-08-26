@@ -141,14 +141,15 @@ void FSFloaterAssetBlacklist::addElementToList(const LLUUID& id, const LLSD& dat
 
 void FSFloaterAssetBlacklist::removeElements()
 {
+	uuid_vec_t items;
 	std::vector<LLScrollListItem*> list = mResultList->getAllSelected();
 
-	FSAssetBlacklist& instance = FSAssetBlacklist::instance();
 	for (std::vector<LLScrollListItem*>::const_iterator it = list.begin(); it != list.end(); ++it)
 	{
-		instance.removeItemFromBlacklist((*it)->getUUID());
+		items.push_back((*it)->getUUID());
 	}
-	
+
+	FSAssetBlacklist::instance().removeItemsFromBlacklist(items);
 	mResultList->deleteSelectedItems();
 }
 

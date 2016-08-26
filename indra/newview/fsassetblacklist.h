@@ -46,12 +46,14 @@ public:
 	void addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool permanent = true, bool save = true);
 	void addNewItemToBlacklistData(const LLUUID& id, const LLSD& data, bool save = true);
 	void removeItemFromBlacklist(const LLUUID& id);
+	void removeItemsFromBlacklist(const uuid_vec_t& ids);
+	void saveBlacklist();
 
 	blacklist_data_t getBlacklistData() const { return mBlacklistData; };
 
 private:
 	void loadBlacklist();
-	void saveBlacklist();
+	void removeItem(const LLUUID& id);
 	bool addEntryToBlacklistMap(const LLUUID& id, LLAssetType::EType type);
 	
 	std::string				mBlacklistFileName;
