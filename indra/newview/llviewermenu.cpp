@@ -2883,6 +2883,26 @@ void derenderObject(bool permanent)
 			}
 			else
 			{
+				LLViewerObject::child_list_t object_children = objp->getChildren();
+				for (LLViewerObject::child_list_t::const_iterator it = object_children.begin(); it != object_children.end(); it++)
+				{
+					LLViewerObject* child = *it;
+					if (child->isAvatar() && child->asAvatar()->isSelf())
+					{
+						if (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT))
+						{
+							// RLVa: Prevent cheating out of sitting by derendering the object
+							select_mgr->deselectObjectOnly(objp);
+							return;
+						}
+						else
+						{
+							gAgent.standUp();
+							break;
+						}
+					}
+				}
+
 				LLSelectNode* nodep = select_mgr->getSelection()->getFirstRootNode();
 				if (nodep)
 				{
