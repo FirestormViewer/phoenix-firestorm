@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="ws_asset_blacklist" title="Asset-Blacklist">
+<floater name="fs_asset_blacklist" title="Asset-Blacklist">
 	<floater.string name="asset_object">
 		Objekt
 	</floater.string>
@@ -21,12 +21,17 @@
 	<floater.string name="unknown_region">
 		Unbekannte Region
 	</floater.string>
-	<scroll_list name="result_list">
-		<scroll_list.columns name="name" label="Name"/>
-		<scroll_list.columns name="region" label="Region"/>
-		<scroll_list.columns name="type" label="Typ"/>
-		<scroll_list.columns name="date" label="Datum"/>
-		<scroll_list.columns name="permanent" label="Permanent"/>
-	</scroll_list>	
+	<floater.string name="DateFormatString">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</floater.string>
+	<filter_editor label="Asset-Blacklist filtern" name="filter_input"/>
+	<fs_scroll_list name="result_list">
+		<columns name="name" label="Name"/>
+		<columns name="region" label="Region"/>
+		<columns name="type" label="Typ"/>
+		<columns name="date" label="Datum"/>
+		<columns name="permanent" label="Permanent"/>
+	</fs_scroll_list>
 	<button name="remove_btn" label="Ausgewählte Objekte von Blacklist entfernen" width="290"/>
+	<button name="close_btn" label="Schließen"/>
 </floater>

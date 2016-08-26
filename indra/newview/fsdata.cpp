@@ -33,7 +33,7 @@
 #include "fsdata.h"
 #include "fscommon.h"
 #include "fscorehttputil.h"
-#include "fswsassetblacklist.h"
+#include "fsassetblacklist.h"
 
 /* boost: will not compile unless equivalent is undef'd, beware. */
 #include "fix_macros.h"
@@ -476,7 +476,7 @@ void FSData::processAssets(const LLSD& assets)
 		{
 			continue;
 		}
-		FSWSAssetBlacklist::instance().addNewItemToBlacklistData(uid, data, false);
+		FSAssetBlacklist::instance().addNewItemToBlacklistData(uid, data, false);
 		LL_DEBUGS("fsdata") << "Added " << uid << " to assets list." << LL_ENDL;
 	}
 }

@@ -141,13 +141,13 @@
 // [/RLVa:KB]
 
 // Firestorm includes
+#include "fsassetblacklist.h"
 #include "fsdata.h"
 #include "fslslbridge.h"
 #include "fscommon.h"
 #include "fsfloaterexport.h"
 #include "fsfloatercontacts.h"	// <FS:Zi> Display group list in contacts floater
 #include "fspose.h"	// <FS:CR> FIRE-4345: Undeform
-#include "fswsassetblacklist.h"
 #include "lfsimfeaturehandler.h"
 #include "llavatarpropertiesprocessor.h"	// ## Zi: Texture Refresh
 #include "llsdserialize.h"
@@ -2899,7 +2899,7 @@ void derenderObject(bool permanent)
 				asset_type = LLAssetType::AT_OBJECT;
 			}
 			
-			FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, asset_type, permanent, permanent);
+			FSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, asset_type, permanent, permanent);
 
 			select_mgr->deselectObjectOnly(objp);
 

@@ -36,11 +36,11 @@
 #include "lleventtimer.h"
 
 // newview
+#include "fsassetblacklist.h"
 #include "fscommon.h"
 #include "fskeywords.h"
 #include "fslslbridge.h"
 #include "fslslbridgerequest.h"
-#include "fswsassetblacklist.h"
 #include "lggcontactsets.h"
 #include "lfsimfeaturehandler.h"
 #include "llagent.h"
@@ -176,7 +176,7 @@ void FSRadar::updateRadarList()
 	//Configuration
 	LLWorld* world = LLWorld::getInstance();
 	LLMuteList* mutelist = LLMuteList::getInstance();
-	FSWSAssetBlacklist* blacklist = FSWSAssetBlacklist::getInstance();
+	FSAssetBlacklist* blacklist = FSAssetBlacklist::getInstance();
 
 	const F32 chat_range_say = LFSimFeatureHandler::getInstance()->sayRange();
 	const F32 chat_range_shout = LFSimFeatureHandler::getInstance()->shoutRange();

@@ -138,6 +138,7 @@
 // Firestorm inclues
 #include "animationexplorer.h"		// <FS:Zi> Animation Explorer
 #include "fsareasearch.h"
+#include "fsassetblacklist.h"
 #include "fscommon.h"
 #include "fsdata.h"
 #include "fsfloaterplacedetails.h"
@@ -146,7 +147,6 @@
 #include "fslightshare.h" // <FS:CR> FIRE-5118 - Lightshare support
 #include "fslslbridge.h"
 #include "fsmoneytracker.h"
-#include "fswsassetblacklist.h"
 #include "llfloaterbump.h"
 #include "llfloaterreg.h"
 #include "llfriendcard.h"
@@ -6088,7 +6088,7 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	// </FS:ND>
 
 	// <FS> Asset blacklist
-	if (FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id, LLAssetType::AT_SOUND))
+	if (FSAssetBlacklist::getInstance()->isBlacklisted(sound_id, LLAssetType::AT_SOUND))
 	{
 		return;
 	}
@@ -6188,7 +6188,7 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_OwnerID, owner_id);
 
 	// <FS> Asset blacklist
-	if (FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id, LLAssetType::AT_SOUND))
+	if (FSAssetBlacklist::getInstance()->isBlacklisted(sound_id, LLAssetType::AT_SOUND))
 	{
 		return;
 	}
@@ -6245,7 +6245,7 @@ void process_attached_sound(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_OwnerID, owner_id);
 
 	// <FS> Asset blacklist
-	if (FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id, LLAssetType::AT_SOUND))
+	if (FSAssetBlacklist::getInstance()->isBlacklisted(sound_id, LLAssetType::AT_SOUND))
 	{
 		return;
 	}

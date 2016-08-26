@@ -1,5 +1,5 @@
 /**
- * @file fswsassetblacklist.h
+ * @file fsassetblacklist.h
  * @brief Asset Blacklist and Derender
  *
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
@@ -25,8 +25,8 @@
  * $/LicenseInfo$
  */
 
-#ifndef FS_WSASSETBLACKLIST_H
-#define FS_WSASSETBLACKLIST_H
+#ifndef FS_ASSETBLACKLIST_H
+#define FS_ASSETBLACKLIST_H
 
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
@@ -38,7 +38,7 @@ typedef boost::unordered_set<LLUUID, FSUUIDHash> blacklisted_uuid_container_t;
 typedef std::map<LLAssetType::EType, blacklisted_uuid_container_t> blacklist_type_map_t;
 typedef boost::unordered_map<LLUUID, LLSD, FSUUIDHash> blacklist_data_t;
 
-class FSWSAssetBlacklist : public LLSingleton<FSWSAssetBlacklist>
+class FSAssetBlacklist : public LLSingleton<FSAssetBlacklist>
 {
 public:
 	void init();
@@ -59,4 +59,4 @@ private:
 	blacklist_data_t		mBlacklistData;
 };
 
-#endif // FS_WSASSETBLACKLIST_H
+#endif // FS_ASSETBLACKLIST_H

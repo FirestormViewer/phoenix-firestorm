@@ -1,5 +1,5 @@
 /**
- * @file fswsassetblacklist.cpp
+ * @file fsassetblacklist.cpp
  * @brief Asset Blacklist and Derender
  *
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
@@ -27,9 +27,9 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "fswsassetblacklist.h"
+#include "fsassetblacklist.h"
 
-#include "fsfloaterwsassetblacklist.h"
+#include "fsfloaterassetblacklist.h"
 #include "llaudioengine.h"
 #include "llfloaterreg.h"
 #include "llsdserialize.h"
@@ -62,13 +62,13 @@ LLAssetType::EType S32toAssetType(S32 assetindex)
 	return type;
 }
 
-void FSWSAssetBlacklist::init()
+void FSAssetBlacklist::init()
 {
 	mBlacklistFileName = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "asset_blacklist.xml");
 	loadBlacklist();
 }
 
-bool FSWSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type)
+bool FSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type)
 {
 	if (mBlacklistData.empty())
 	{
@@ -87,7 +87,7 @@ bool FSWSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type
 	return (uuids.find(id) != uuids.end());
 }
 
-void FSWSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool permanent /*= true*/, bool save /*= true*/)
+void FSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool permanent /*= true*/, bool save /*= true*/)
 {
 	if (isBlacklisted(id, type))
 	{
@@ -109,7 +109,7 @@ void FSWSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::stri
 	addNewItemToBlacklistData(id, data, save);
 }
 
-void FSWSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
+void FSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
 {
 	gObjectList.removeDerenderedItem(id);
 
@@ -130,7 +130,7 @@ void FSWSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
 	saveBlacklist();
 }
 
-void FSWSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD& data, bool save)
+void FSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD& data, bool save)
 {
 	LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
 
@@ -157,14 +157,14 @@ void FSWSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD&
 		saveBlacklist();
 	}
 
-	FSFloaterWSAssetBlacklist* floater = LLFloaterReg::findTypedInstance<FSFloaterWSAssetBlacklist>("ws_asset_blacklist");
+	FSFloaterAssetBlacklist* floater = LLFloaterReg::findTypedInstance<FSFloaterAssetBlacklist>("fs_asset_blacklist");
 	if (floater)
 	{
 		floater->addElementToList(id, data);
 	}
 }
 
-bool FSWSAssetBlacklist::addEntryToBlacklistMap(const LLUUID& id, LLAssetType::EType type)
+bool FSAssetBlacklist::addEntryToBlacklistMap(const LLUUID& id, LLAssetType::EType type)
 {
 	if (id.isNull())
 	{
@@ -187,7 +187,7 @@ bool FSWSAssetBlacklist::addEntryToBlacklistMap(const LLUUID& id, LLAssetType::E
 	return true;
 }
 
-void FSWSAssetBlacklist::loadBlacklist()
+void FSAssetBlacklist::loadBlacklist()
 {
 	if (gDirUtilp->fileExists(mBlacklistFileName))
 	{
@@ -263,7 +263,7 @@ void FSWSAssetBlacklist::loadBlacklist()
 	}
 }
 
-void FSWSAssetBlacklist::saveBlacklist()
+void FSAssetBlacklist::saveBlacklist()
 {
 	llofstream save_file(mBlacklistFileName.c_str());
 	LLSD savedata;

@@ -82,7 +82,7 @@
 
 #include <algorithm>
 #include <iterator>
-#include "fswsassetblacklist.h"
+#include "fsassetblacklist.h"
 #include "fsfloaterimport.h"
 #include "fscommon.h"
 #include "llfloaterreg.h"
@@ -638,9 +638,9 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 
 
 			
-			if(FSWSAssetBlacklist::getInstance()->isBlacklisted(fullid,LLAssetType::AT_OBJECT))
+			if (FSAssetBlacklist::getInstance()->isBlacklisted(fullid, LLAssetType::AT_OBJECT))
 			{
-				LL_INFOS() << "Blacklisted object blocked." << LL_ENDL; 
+				LL_INFOS() << "Blacklisted object blocked." << LL_ENDL;
 				continue;
 			}
 
