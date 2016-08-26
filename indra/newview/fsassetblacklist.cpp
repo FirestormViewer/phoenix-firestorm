@@ -149,7 +149,6 @@ void FSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD& d
 
 	addEntryToBlacklistMap(id, type);
 	mBlacklistData[id] = data;
-	gObjectList.addDerenderedItem(id, true);
 
 	if (type == LLAssetType::AT_SOUND)
 	{
@@ -227,6 +226,10 @@ void FSAssetBlacklist::loadBlacklist()
 					{
 						continue;
 					}
+					else if (type == LLAssetType::AT_OBJECT)
+					{
+						gObjectList.addDerenderedItem(uid, true);
+					}
 					
 					addNewItemToBlacklistData(uid, entry_data, false);
 				}
@@ -255,7 +258,11 @@ void FSAssetBlacklist::loadBlacklist()
 						continue;
 					}
 					LLAssetType::EType type = S32toAssetType(data["entry_type"].asInteger());
-					
+					if (type == LLAssetType::AT_OBJECT)
+					{
+						gObjectList.addDerenderedItem(uid, true);
+					}
+
 					LLSD newdata;
 					newdata["asset_name"] = "[PHOENIX] " + data["entry_name"].asString();
 					newdata["asset_type"] = type;

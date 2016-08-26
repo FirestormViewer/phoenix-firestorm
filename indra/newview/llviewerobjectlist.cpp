@@ -350,6 +350,13 @@ LLViewerObject* LLViewerObjectList::processObjectUpdateFromCache(LLVOCacheEntry*
 	cached_dpp->unpackU32(local_id, "LocalID");
 	cached_dpp->unpackU8(pcode, "PCode");
 
+	// <FS:Ansariel> Don't process derendered objects
+	if (mDerendered.end() != mDerendered.find(fullid))
+	{
+		return NULL;
+	}
+	// </FS:Ansariel>
+
 	objectp = findObject(fullid);
 
 	if (objectp)
@@ -636,8 +643,6 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 			}
 #endif
 
-
-			
 			if (FSAssetBlacklist::getInstance()->isBlacklisted(fullid, LLAssetType::AT_OBJECT))
 			{
 				LL_INFOS() << "Blacklisted object blocked." << LL_ENDL;
@@ -2143,17 +2148,18 @@ LLViewerObject *LLViewerObjectList::createObjectFromCache(const LLPCode pcode, L
 	
 	updateActive(objectp);
 
-	// <FS:ND> We might have killed this object earlier, but it might get resurrected from fastcache. Kill it again to make sure it stays dead.
-	if( mDerendered.end() != mDerendered.find( uuid ) )
-		killObject( objectp );
-	// </FS:ND>
-
 	return objectp;
 }
 
 LLViewerObject *LLViewerObjectList::createObject(const LLPCode pcode, LLViewerRegion *regionp,
 												 const LLUUID &uuid, const U32 local_id, const LLHost &sender)
 {
+	// <FS:Ansariel> Don't create derendered objects
+	if (mDerendered.end() != mDerendered.find(uuid))
+	{
+		return NULL;
+	}
+	// </FS:Ansariel>
 	
 	LLUUID fullid;
 	if (uuid == LLUUID::null)
@@ -2185,11 +2191,6 @@ LLViewerObject *LLViewerObjectList::createObject(const LLPCode pcode, LLViewerRe
 	mObjects.push_back(objectp);
 
 	updateActive(objectp);
-
-	// <FS:ND> We might have killed this object earlier, but it might get resurrected from fastcache. Kill it again to make sure it stays dead.
-	if( mDerendered.end() != mDerendered.find( uuid ) )
-		killObject( objectp );
-	// </FS:ND>
 
 	return objectp;
 }

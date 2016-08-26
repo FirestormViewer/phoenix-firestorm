@@ -2871,6 +2871,7 @@ void derenderObject(bool permanent)
 		if ( (objp) && (gAgentID != objp->getID()) && ((!rlv_handler_t::isEnabled()) || (!objp->isAttachment()) || (!objp->permYouOwner())) )
 // [/RLVa:KB]
 		{
+			LLUUID id = objp->getID();
 			std::string entry_name = "";
 			std::string region_name;
 			LLAssetType::EType asset_type;
@@ -2926,7 +2927,7 @@ void derenderObject(bool permanent)
 				asset_type = LLAssetType::AT_OBJECT;
 			}
 			
-			FSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, asset_type, permanent, false);
+			FSAssetBlacklist::getInstance()->addNewItemToBlacklist(id, entry_name, region_name, asset_type, permanent, false);
 			
 			if (permanent)
 			{
@@ -2934,8 +2935,20 @@ void derenderObject(bool permanent)
 			}
 
 			select_mgr->deselectObjectOnly(objp);
-			gObjectList.addDerenderedItem(objp->getID(), permanent);
+			gObjectList.addDerenderedItem(id, permanent);
 			gObjectList.killObject(objp);
+			if (LLViewerRegion::sVOCacheCullingEnabled && objp->getRegion())
+			{
+				objp->getRegion()->killCacheEntry(objp->getLocalID());
+			}
+
+			LLTool* tool = LLToolMgr::getInstance()->getCurrentTool();
+			LLViewerObject* tool_editing_object = tool->getEditingObject();
+			if (tool_editing_object && tool_editing_object->mID == id)
+			{
+				tool->stopEditing();
+			}
+
 		}
 		else if( (objp) && (gAgentID != objp->getID()) && ((rlv_handler_t::isEnabled()) || (objp->isAttachment()) || (objp->permYouOwner())) )
 		{
