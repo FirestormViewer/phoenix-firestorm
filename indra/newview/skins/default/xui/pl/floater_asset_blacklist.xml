@@ -25,6 +25,7 @@
 		<scroll_list.columns name="name" label="Nazwa" />
 		<scroll_list.columns name="type" label="Typ" />
 		<scroll_list.columns name="date" label="Data" />
+		<scroll_list.columns name="permanent" label="Permanentne" />
 	</scroll_list>
 	<button name="remove_btn" label="Usuń zaznaczone z czarnej listy" />
 </floater>
