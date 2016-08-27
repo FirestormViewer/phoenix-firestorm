@@ -2422,16 +2422,25 @@ LLDebugBeacon::~LLDebugBeacon()
 }
 
 // <FS:ND> Helper function to purge the internal list of derendered objects on teleport.
-
 void LLViewerObjectList::resetDerenderList()
 {
 	std::map< LLUUID, bool > oDerendered;
+	uuid_vec_t removed_ids;
 
-	for( std::map< LLUUID, bool >::iterator itr = mDerendered.begin(); itr != mDerendered.end(); ++itr )
-		if( itr->second )
-			oDerendered[ itr->first ] = itr->second;
+	for (std::map< LLUUID, bool >::iterator itr = mDerendered.begin(); itr != mDerendered.end(); ++itr)
+	{
+		if (itr->second)
+		{
+			oDerendered[itr->first] = itr->second;
+		}
+		else
+		{
+			removed_ids.push_back(itr->first);
+		}
+	}
 
 	mDerendered.swap( oDerendered );
+	FSAssetBlacklist::instance().removeItemsFromBlacklist(removed_ids);
 }
 
 // <FS:ND> Helper function to add items from global blacklist after teleport.
