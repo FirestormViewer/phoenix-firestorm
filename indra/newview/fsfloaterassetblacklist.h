@@ -29,6 +29,7 @@
 #ifndef FS_FLOATERASSETBLACKLIST_H
 #define FS_FLOATERASSETBLACKLIST_H
 
+#include "fsassetblacklist.h"
 #include "llfloater.h"
 #include "lllistcontextmenu.h"
 
@@ -52,6 +53,7 @@ protected:
 	void onRemoveBtn();
 	void onCloseBtn();
 	void onFilterEdit(const std::string& search_string);
+	void onBlacklistChanged(const LLSD& data, FSAssetBlacklist::eBlacklistOperation op);
 
 	void buildBlacklist();
 	std::string getTypeString(S32 type);
@@ -61,6 +63,8 @@ private:
 
 	std::string			mFilterSubString;
 	std::string			mFilterSubStringOrig;
+
+	boost::signals2::connection mBlacklistCallbackConnection;
 };
 
 namespace FSFloaterAssetBlacklistMenu

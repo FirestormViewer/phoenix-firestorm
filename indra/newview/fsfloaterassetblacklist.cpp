@@ -31,7 +31,6 @@
 #include "fsfloaterassetblacklist.h"
 
 #include "fsscrolllistctrl.h"
-#include "fsassetblacklist.h"
 #include "llfiltereditor.h"
 #include "llfloaterreg.h"
 #include "llviewercontrol.h"
@@ -41,12 +40,17 @@ FSFloaterAssetBlacklist::FSFloaterAssetBlacklist(const LLSD& key)
  : LLFloater(key),
    mResultList(NULL),
    mFilterSubString(LLStringUtil::null),
-   mFilterSubStringOrig(LLStringUtil::null)
+   mFilterSubStringOrig(LLStringUtil::null),
+   mBlacklistCallbackConnection()
 {
 }
 
 FSFloaterAssetBlacklist::~FSFloaterAssetBlacklist()
 {
+	if (mBlacklistCallbackConnection.connected())
+	{
+		mBlacklistCallbackConnection.disconnect();
+	}
 }
 
 BOOL FSFloaterAssetBlacklist::postBuild()
@@ -59,6 +63,8 @@ BOOL FSFloaterAssetBlacklist::postBuild()
 	childSetAction("close_btn", boost::bind(&FSFloaterAssetBlacklist::onCloseBtn, this));
 
 	getChild<LLFilterEditor>("filter_input")->setCommitCallback(boost::bind(&FSFloaterAssetBlacklist::onFilterEdit, this, _2));
+
+	mBlacklistCallbackConnection = FSAssetBlacklist::getInstance()->setBlacklistChangedCallback(boost::bind(&FSFloaterAssetBlacklist::onBlacklistChanged, this, _1, _2));
 
 	return TRUE;
 }
@@ -150,7 +156,33 @@ void FSFloaterAssetBlacklist::removeElements()
 	}
 
 	FSAssetBlacklist::instance().removeItemsFromBlacklist(items);
-	mResultList->deleteSelectedItems();
+}
+
+void FSFloaterAssetBlacklist::onBlacklistChanged(const LLSD& data, FSAssetBlacklist::eBlacklistOperation op)
+{
+	if (op == FSAssetBlacklist::BLACKLIST_ADD)
+	{
+		bool need_sort = mResultList->isSorted();
+		mResultList->setNeedsSort(false);
+		
+		for (LLSD::map_const_iterator it = data.beginMap(); it != data.endMap(); ++it)
+		{
+			LLUUID id = LLUUID(it->first);
+			LLSD insert_data = it->second;
+			addElementToList(id, insert_data);
+		}
+
+		mResultList->setNeedsSort(need_sort);
+		mResultList->updateSort();
+	}
+	else
+	{
+		for (LLSD::array_const_iterator it = data.beginArray(); it != data.endArray(); ++it)
+		{
+			mResultList->deleteItems(*it);
+			mResultList->updateLayout();
+		}
+	}
 }
 
 void FSFloaterAssetBlacklist::onRemoveBtn()

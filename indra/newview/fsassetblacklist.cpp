@@ -5,6 +5,7 @@
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
  * Copyright (C) 2012, Wolfspirit Magic
+ * Copyright (C) 2016, Ansariel Hiller
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -130,17 +131,26 @@ void FSAssetBlacklist::removeItem(const LLUUID& id)
 
 void FSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
 {
-	removeItem(id);
-	saveBlacklist();
+	uuid_vec_t ids;
+	ids.push_back(id);
+	removeItemsFromBlacklist(ids);
 }
 
 void FSAssetBlacklist::removeItemsFromBlacklist(const uuid_vec_t& ids)
 {
+	LLSD data;
+
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
 		removeItem(*it);
+		data.append((*it).asString());
 	}
 	saveBlacklist();
+
+	if (!mBlacklistChangedCallback.empty())
+	{
+		mBlacklistChangedCallback(data, BLACKLIST_REMOVE);
+	}
 }
 
 void FSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD& data, bool save)
@@ -169,10 +179,9 @@ void FSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD& d
 		saveBlacklist();
 	}
 
-	FSFloaterAssetBlacklist* floater = LLFloaterReg::findTypedInstance<FSFloaterAssetBlacklist>("fs_asset_blacklist");
-	if (floater)
+	if (!mBlacklistChangedCallback.empty())
 	{
-		floater->addElementToList(id, data);
+		mBlacklistChangedCallback(LLSD().with(id.asString(), data), BLACKLIST_ADD);
 	}
 }
 

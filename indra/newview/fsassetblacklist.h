@@ -5,6 +5,7 @@
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
  * Copyright (C) 2012, Wolfspirit Magic
+ * Copyright (C) 2016, Ansariel Hiller
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -51,6 +52,18 @@ public:
 
 	blacklist_data_t getBlacklistData() const { return mBlacklistData; };
 
+	enum eBlacklistOperation
+	{
+		BLACKLIST_ADD,
+		BLACKLIST_REMOVE
+	};
+
+	typedef boost::signals2::signal<void(const LLSD& data, eBlacklistOperation op)> blacklist_changed_callback_t;
+	boost::signals2::connection setBlacklistChangedCallback(const blacklist_changed_callback_t::slot_type& cb)
+	{
+		return mBlacklistChangedCallback.connect(cb);
+	}
+
 private:
 	void loadBlacklist();
 	void removeItem(const LLUUID& id);
@@ -59,6 +72,8 @@ private:
 	std::string				mBlacklistFileName;
 	blacklist_type_map_t	mBlacklistTypeContainer;
 	blacklist_data_t		mBlacklistData;
+
+	blacklist_changed_callback_t mBlacklistChangedCallback;
 };
 
 #endif // FS_ASSETBLACKLIST_H
