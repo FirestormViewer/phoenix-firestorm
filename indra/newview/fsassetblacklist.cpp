@@ -138,18 +138,22 @@ void FSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
 
 void FSAssetBlacklist::removeItemsFromBlacklist(const uuid_vec_t& ids)
 {
-	LLSD data;
-
-	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
+	if (!ids.empty())
 	{
-		removeItem(*it);
-		data.append((*it).asString());
-	}
-	saveBlacklist();
+		LLSD data;
 
-	if (!mBlacklistChangedCallback.empty())
-	{
-		mBlacklistChangedCallback(data, BLACKLIST_REMOVE);
+		for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
+		{
+			removeItem(*it);
+			data.append((*it).asString());
+		}
+
+		saveBlacklist();
+
+		if (!mBlacklistChangedCallback.empty())
+		{
+			mBlacklistChangedCallback(data, BLACKLIST_REMOVE);
+		}
 	}
 }
 
