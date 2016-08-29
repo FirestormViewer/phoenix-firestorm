@@ -66,7 +66,7 @@ public:
 
 private:
 	void loadBlacklist();
-	void removeItem(const LLUUID& id);
+	bool removeItem(const LLUUID& id);
 	bool addEntryToBlacklistMap(const LLUUID& id, LLAssetType::EType type);
 	
 	std::string				mBlacklistFileName;
