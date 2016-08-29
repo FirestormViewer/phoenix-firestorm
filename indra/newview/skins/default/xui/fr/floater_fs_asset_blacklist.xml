@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="ws_asset_blacklist" title="Éléments Blacklistés">
+<floater name="fs_asset_blacklist" title="Éléments Blacklistés">
 	<floater.string name="asset_object">Objet</floater.string>
 	<floater.string name="asset_texture">Texture</floater.string>
 	<floater.string name="asset_sound">Son</floater.string>
@@ -7,17 +7,11 @@
 	<floater.string name="asset_unknown">Inconnu</floater.string>
 	<floater.string name="unknown_object">Objet inconnu</floater.string>
 	<floater.string name="unknown_region">Région inconnue</floater.string>
-	<scroll_list name="result_list">
-		<scroll_list.columns name="name" label="Nom"/>
-		<scroll_list.columns name="region" label="Région"/>
-		<scroll_list.columns name="type" label="Type"/>
-		<scroll_list.columns name="date" label="Date"/>
-		<row>
-			<column>[INCONNU] Template item</column>
-			<column>[INCONNU] Template item</column>
-			<column>INCONNU</column>
-			<column>2012-12-11 13:37:00</column>
-		</row>
-	</scroll_list>
+	<fs_scroll_list name="result_list">
+		<columns name="name" label="Nom"/>
+		<columns name="region" label="Région"/>
+		<columns name="type" label="Type"/>
+		<columns name="date" label="Date"/>
+	</fs_scroll_list>
 	<button name="remove_btn" label="Supprimer la sélection des éléments blacklistés" height="23" width="320"/>
 </floater>

@@ -46,22 +46,6 @@ const F32 PARCEL_WL_CHECK_TIME  = 5.f;
 const S32 PARCEL_WL_MIN_ALT_CHANGE = 3;
 const std::string PARCEL_WL_DEFAULT = "Default";
 
-class KCWindlightInterface::LLParcelChangeObserver : public LLParcelObserver
-{
-public:
-	LLParcelChangeObserver(KCWindlightInterface* windlightInterface) : mKCWindlightInterface(windlightInterface) {}
-
-private:
-	/*virtual*/ void changed()
-	{
-		if (mKCWindlightInterface)
-		{
-			mKCWindlightInterface->ParcelChange();
-		}
-	}
-
-	KCWindlightInterface* mKCWindlightInterface;
-};
 
 KCWindlightInterface::KCWindlightInterface() :
 	LLEventTimer(PARCEL_WL_CHECK_TIME),
@@ -71,17 +55,16 @@ KCWindlightInterface::KCWindlightInterface() :
 	mLastParcelID(-1),
 	mLastRegion(NULL),
 	mRegionOverride(false),
-	mHaveRegionSettings(false)
+	mHaveRegionSettings(false),
+	mDisabled(false)
 {
-	if (!gSavedSettings.getBOOL("FSWLParcelEnabled") ||
-	!gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways"))
+	if (!gSavedSettings.getBOOL("FSWLParcelEnabled") || !gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways"))
 	{
 		mEventTimer.stop();
 		mDisabled = true;
 	}
 	
-	mParcelMgrConnection = gAgent.addParcelChangedCallback(
-			boost::bind(&KCWindlightInterface::onAgentParcelChange, this));
+	mParcelMgrConnection = gAgent.addParcelChangedCallback(boost::bind(&KCWindlightInterface::parcelChange, this));
 }
 
 KCWindlightInterface::~KCWindlightInterface()
@@ -92,17 +75,19 @@ KCWindlightInterface::~KCWindlightInterface()
 	}
 }
 
-void KCWindlightInterface::ParcelChange()
+void KCWindlightInterface::parcelChange()
 {
 	if (checkSettings())
+	{
 		return;
-	
+	}
+
 	mDisabled = false;
 
 	S32 this_parcel_id = 0;
 	std::string desc;
 
- 	LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+	LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 
 	// Since we cannot depend on the order in which the EnvironmentSettings cap and parcel info
 	// will come in, we must check if the other has set something before this one for the current region.
@@ -151,16 +136,13 @@ void KCWindlightInterface::ParcelChange()
 	}
 }
 
-void KCWindlightInterface::onAgentParcelChange()
-{
-	ParcelChange();
-}
-
 
 BOOL KCWindlightInterface::tick()
 {
 	if ((LLStartUp::getStartupState() < STATE_STARTED) || checkSettings())
+	{
 		return FALSE;
+	}
 	
 	//TODO: there has to be a better way of doing this...
 	if (mCurrentSettings.has("sky"))
@@ -170,7 +152,7 @@ BOOL KCWindlightInterface::tick()
 		if (llabs(z - mLastZ) >= PARCEL_WL_MIN_ALT_CHANGE)
 		{
 			mLastZ = z;
-			ApplySkySettings(mCurrentSettings);
+			applySkySettings(mCurrentSettings);
 		}
 		return FALSE;
 	}
@@ -179,7 +161,7 @@ BOOL KCWindlightInterface::tick()
 
 	if (parcel)
 	{
-		if (!LoadFromParcel(parcel) || !mCurrentSettings.has("sky"))
+		if (!loadFromParcel(parcel) || !mCurrentSettings.has("sky"))
 		{
 			mEventTimer.stop();
 		}
@@ -189,16 +171,16 @@ BOOL KCWindlightInterface::tick()
 }
 
 
-void KCWindlightInterface::ApplySettings(const LLSD& settings)
+void KCWindlightInterface::applySettings(const LLSD& settings)
 {
-	LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+	LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 	if (!settings.has("local_id") || (settings["local_id"].asInteger() == parcel->getLocalID()) )
 	{
 		mCurrentSettings = settings;
 		
 		mRegionOverride = settings.has("region_override");
 
-		bool non_region_default_applied = ApplySkySettings(settings);
+		bool non_region_default_applied = applySkySettings(settings);
 
 		// We can only apply a water preset if we didn't set region WL default previously
 		// or there will be unpredictable behavior where the region WL defaults will be
@@ -220,7 +202,7 @@ void KCWindlightInterface::ApplySettings(const LLSD& settings)
 	}
 }
 
-bool KCWindlightInterface::ApplySkySettings(const LLSD& settings)
+bool KCWindlightInterface::applySkySettings(const LLSD& settings)
 {
 	if (settings.has("sky"))
 	{
@@ -241,7 +223,7 @@ bool KCWindlightInterface::ApplySkySettings(const LLSD& settings)
 				{
 					mCurrentSpace = lower; //use lower as an id
 					LL_DEBUGS() << "Applying WL sky set: " << (*space_it)["preset"].asString() << LL_ENDL;
-					ApplyWindLightPreset((*space_it)["preset"].asString());
+					applyWindlightPreset((*space_it)["preset"].asString());
 				}
 				return true;
 			}
@@ -255,12 +237,12 @@ bool KCWindlightInterface::ApplySkySettings(const LLSD& settings)
 		if (settings.has("sky_default") && (!mHaveRegionSettings || mRegionOverride))
 		{
 			LL_DEBUGS() << "Applying WL sky set: " << settings["sky_default"] << " (Parcel WL Default)" << LL_ENDL;
-			ApplyWindLightPreset(settings["sky_default"].asString());
+			applyWindlightPreset(settings["sky_default"].asString());
 		}
 		else //reset to default
 		{
 			LL_DEBUGS() << "Applying WL sky set: Region Default" << LL_ENDL;
-			ApplyWindLightPreset(PARCEL_WL_DEFAULT);
+			applyWindlightPreset(PARCEL_WL_DEFAULT);
 			return false;
 		}
 	}
@@ -268,10 +250,12 @@ bool KCWindlightInterface::ApplySkySettings(const LLSD& settings)
 	return true;
 }
 
-void KCWindlightInterface::ApplyWindLightPreset(const std::string& preset)
+void KCWindlightInterface::applyWindlightPreset(const std::string& preset)
 {
 	if (rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV))
+	{
 		return;
+	}
 
 	LLWLParamManager* wlprammgr = LLWLParamManager::getInstance();
 	LLWLParamKey key(preset, LLEnvKey::SCOPE_LOCAL);
@@ -292,21 +276,23 @@ void KCWindlightInterface::ApplyWindLightPreset(const std::string& preset)
 	}
 }
 
-void KCWindlightInterface::ResetToRegion(bool force)
+void KCWindlightInterface::resetToRegion(bool force)
 {
 	if (rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV))
+	{
 		return;
+	}
 
 	//TODO: clear per parcel
 	if (mWeChangedIt || force) //dont reset anything if we didnt do it
 	{
-		ApplyWindLightPreset(PARCEL_WL_DEFAULT);
+		applyWindlightPreset(PARCEL_WL_DEFAULT);
 	}
 }
 
 //KC: Disabling this for now
 #if 0
-bool KCWindlightInterface::ChatCommand(std::string message, std::string from_name, LLUUID source_id, LLUUID owner_id)
+bool KCWindlightInterface::chatCommand(std::string message, std::string from_name, LLUUID source_id, LLUUID owner_id)
 {
 	boost::cmatch match;
 	const boost::regex prefix_exp("^\\)\\*\\((.*)");
@@ -373,19 +359,21 @@ bool KCWindlightInterface::ChatCommand(std::string message, std::string from_nam
 }
 #endif
 
-bool KCWindlightInterface::LoadFromParcel(LLParcel *parcel)
+bool KCWindlightInterface::loadFromParcel(LLParcel *parcel)
 {
 	if (!parcel)
+	{
 		return false;
+	}
 
 	LLSD payload;
-	if (ParseParcelForWLSettings(parcel->getDesc(), payload))
+	if (parseParcelForWLSettings(parcel->getDesc(), payload))
 	{
 		const LLUUID owner_id = getOwnerID(parcel);
 		//basic auth for now
-		if (AllowedLandOwners(owner_id))
+		if (allowedLandOwners(owner_id))
 		{
-			ApplySettings(payload);
+			applySettings(payload);
 		}
 		else
 		{
@@ -402,12 +390,12 @@ bool KCWindlightInterface::LoadFromParcel(LLParcel *parcel)
 	}
 	
 	//if nothing defined, reset to region settings
-	ResetToRegion();
+	resetToRegion();
 
 	return false;
 }
 
-bool KCWindlightInterface::ParseParcelForWLSettings(const std::string& desc, LLSD& settings)
+bool KCWindlightInterface::parseParcelForWLSettings(const std::string& desc, LLSD& settings)
 {
 	bool found_settings = false;
 	try
@@ -415,7 +403,7 @@ bool KCWindlightInterface::ParseParcelForWLSettings(const std::string& desc, LLS
 		boost::smatch mat_block;
 		//parcel desc /*[data goes here]*/
 		const boost::regex Parcel_exp("(?i)\\/\\*(?:Windlight)?([\\s\\S]*?)\\*\\/");
-		if(boost::regex_search(desc, mat_block, Parcel_exp))
+		if (boost::regex_search(desc, mat_block, Parcel_exp))
 		{
 			//std::string data1(mat_block[1].first, mat_block[1].second);
 			//LL_INFOS() << "found parcel flags block: " << mat_block[1] << LL_ENDL;
@@ -532,11 +520,11 @@ bool KCWindlightInterface::callbackParcelWL(const LLSD& notification, const LLSD
 	{
 		mAllowedLand.insert(notification["payload"]["land_owner"].asUUID());
 		
-		ApplySettings(notification["payload"]);
+		applySettings(notification["payload"]);
 	}
 	else
 	{
-		ResetToRegion();
+		resetToRegion();
 	}
 	return false;
 }
@@ -544,18 +532,17 @@ bool KCWindlightInterface::callbackParcelWL(const LLSD& notification, const LLSD
 bool KCWindlightInterface::callbackParcelWLClear(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotification::getSelectedOption(notification, response);
-
 	if (option == 0)
 	{
 		LLUUID owner_id = notification["payload"]["land_owner"].asUUID();
 
 		mAllowedLand.erase(owner_id);
-		ResetToRegion();
+		resetToRegion();
 	}
 	return false;
 }
 
-bool KCWindlightInterface::AllowedLandOwners(const LLUUID& owner_id)
+bool KCWindlightInterface::allowedLandOwners(const LLUUID& owner_id)
 {
 	if ( gSavedSettings.getBOOL("FSWLWhitelistAll") ||	// auto all
 		(owner_id == gAgent.getID()) ||						// land is owned by agent
@@ -568,7 +555,7 @@ bool KCWindlightInterface::AllowedLandOwners(const LLUUID& owner_id)
 	return false;
 }
 
-LLUUID KCWindlightInterface::getOwnerID(LLParcel *parcel)
+LLUUID KCWindlightInterface::getOwnerID(LLParcel* parcel)
 {
 	if (parcel->getIsGroupOwned())
 	{
@@ -577,7 +564,7 @@ LLUUID KCWindlightInterface::getOwnerID(LLParcel *parcel)
 	return parcel->getOwnerID();
 }
 
-std::string KCWindlightInterface::getOwnerName(LLParcel *parcel)
+std::string KCWindlightInterface::getOwnerName(LLParcel* parcel)
 {
 	std::string owner = "";
 	if (parcel->getIsGroupOwned())
@@ -624,7 +611,7 @@ bool KCWindlightInterface::haveParcelOverride(const LLEnvironmentSettings& new_s
 		mCurrentSettings.clear();
 		mLastRegion = gAgent.getRegion();
 	}
-	
+
 	//*ASSUMPTION: if region day cycle is empty, its set to default
 	mHaveRegionSettings = new_settings.getWLDayCycle().size() > 0;
 	

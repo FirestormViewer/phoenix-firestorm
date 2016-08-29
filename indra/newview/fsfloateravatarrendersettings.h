@@ -46,6 +46,7 @@ public:
 
 private:
 	void onCloseBtn();
+	void onFilterEdit(const std::string& search_string);
 	void onAvatarRenderSettingChanged(const LLUUID& avatar_id, LLVOAvatar::VisualMuteSettings render_setting);
 
 	void loadInitialList();
@@ -54,6 +55,9 @@ private:
 	LLNameListCtrl* mAvatarList;
 
 	boost::signals2::connection mRenderSettingChangedCallbackConnection;
+
+	std::string mFilterSubString;
+	std::string mFilterSubStringOrig;
 };
 
 

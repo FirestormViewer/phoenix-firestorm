@@ -86,7 +86,7 @@
 #include "fsfloaterprofile.h"
 #include "fslslbridge.h"
 #include "fsradar.h"
-#include "fswsassetblacklist.h"
+#include "fsassetblacklist.h"
 #include "llfloaterregioninfo.h"
 #include "llfloaterreporter.h"
 #include "llparcel.h"
@@ -2324,10 +2324,7 @@ void LLAvatarActions::derenderMultiple(const uuid_vec_t& agent_ids, bool permane
 //static
 void LLAvatarActions::onDerenderAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, bool permanent)
 {
-	if (permanent)
-	{
-		FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(agent_id, av_name.getUserName(), "", LLAssetType::AT_PERSON);
-	}
+	FSAssetBlacklist::getInstance()->addNewItemToBlacklist(agent_id, av_name.getUserName(), "", LLAssetType::AT_PERSON, permanent, permanent);
 
 	LLViewerObject* av_obj = gObjectList.findObject(agent_id);
 	if (av_obj)

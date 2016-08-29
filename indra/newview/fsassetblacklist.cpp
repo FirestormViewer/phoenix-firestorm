@@ -1,10 +1,11 @@
 /**
- * @file fswsassetblacklist.cpp
+ * @file fsassetblacklist.cpp
  * @brief Asset Blacklist and Derender
  *
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
  * Copyright (C) 2012, Wolfspirit Magic
+ * Copyright (C) 2016, Ansariel Hiller
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,9 +28,9 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "fswsassetblacklist.h"
+#include "fsassetblacklist.h"
 
-#include "fsfloaterwsassetblacklist.h"
+#include "fsfloaterassetblacklist.h"
 #include "llaudioengine.h"
 #include "llfloaterreg.h"
 #include "llsdserialize.h"
@@ -62,13 +63,13 @@ LLAssetType::EType S32toAssetType(S32 assetindex)
 	return type;
 }
 
-void FSWSAssetBlacklist::init()
+void FSAssetBlacklist::init()
 {
 	mBlacklistFileName = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "asset_blacklist.xml");
 	loadBlacklist();
 }
 
-bool FSWSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type)
+bool FSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type)
 {
 	if (mBlacklistData.empty())
 	{
@@ -76,7 +77,7 @@ bool FSWSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type
 	}
 
 	blacklist_type_map_t::iterator it;
-	it = mBlacklistTypeContainer.find(type);	
+	it = mBlacklistTypeContainer.find(type);
 	
 	if (it == mBlacklistTypeContainer.end())
 	{
@@ -87,7 +88,7 @@ bool FSWSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type
 	return (uuids.find(id) != uuids.end());
 }
 
-void FSWSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool save)
+void FSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool permanent /*= true*/, bool save /*= true*/)
 {
 	if (isBlacklisted(id, type))
 	{
@@ -104,20 +105,21 @@ void FSWSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::stri
 	data["asset_region"] = region;
 	data["asset_type"] = type;
 	data["asset_date"] = input_date;
+	data["asset_permanent"] = permanent;
 
 	addNewItemToBlacklistData(id, data, save);
 }
 
-void FSWSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
+bool FSAssetBlacklist::removeItem(const LLUUID& id)
 {
-	gObjectList.removeDerenderedItem( id );
+	gObjectList.removeDerenderedItem(id);
 
 	blacklist_data_t::iterator it;
 	it = mBlacklistData.find(id);
 
 	if (it == mBlacklistData.end())
 	{
-		return;
+		return false;
 	}
 
 	LLSD data = it->second;
@@ -126,16 +128,50 @@ void FSWSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
 	mBlacklistTypeContainer[type].erase(id);
 	mBlacklistData.erase(it);
 
-	saveBlacklist();	
+	return data["asset_permanent"].asBoolean();
 }
 
-void FSWSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD& data, bool save)
+void FSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
+{
+	uuid_vec_t ids;
+	ids.push_back(id);
+	removeItemsFromBlacklist(ids);
+}
+
+void FSAssetBlacklist::removeItemsFromBlacklist(const uuid_vec_t& ids)
+{
+	if (!ids.empty())
+	{
+		bool need_save = false;
+		LLSD data;
+
+		for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
+		{
+			if (removeItem(*it))
+			{
+				need_save = true;
+			}
+			data.append((*it).asString());
+		}
+
+		if (need_save)
+		{
+			saveBlacklist();
+		}
+
+		if (!mBlacklistChangedCallback.empty())
+		{
+			mBlacklistChangedCallback(data, BLACKLIST_REMOVE);
+		}
+	}
+}
+
+void FSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD& data, bool save)
 {
 	LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
 
 	addEntryToBlacklistMap(id, type);
 	mBlacklistData[id] = data;
-	gObjectList.addDerenderedItem( id, true );
 
 	if (type == LLAssetType::AT_SOUND)
 	{
@@ -156,14 +192,13 @@ void FSWSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD&
 		saveBlacklist();
 	}
 
-	FSFloaterWSAssetBlacklist* floater = LLFloaterReg::getTypedInstance<FSFloaterWSAssetBlacklist>("ws_asset_blacklist");
-	if (floater)
+	if (!mBlacklistChangedCallback.empty())
 	{
-		floater->addElementToList(id, data);
+		mBlacklistChangedCallback(LLSD().with(id.asString(), data), BLACKLIST_ADD);
 	}
 }
 
-bool FSWSAssetBlacklist::addEntryToBlacklistMap(const LLUUID& id, LLAssetType::EType type)
+bool FSAssetBlacklist::addEntryToBlacklistMap(const LLUUID& id, LLAssetType::EType type)
 {
 	if (id.isNull())
 	{
@@ -186,7 +221,7 @@ bool FSWSAssetBlacklist::addEntryToBlacklistMap(const LLUUID& id, LLAssetType::E
 	return true;
 }
 
-void FSWSAssetBlacklist::loadBlacklist()
+void FSAssetBlacklist::loadBlacklist()
 {
 	if (gDirUtilp->fileExists(mBlacklistFileName))
 	{
@@ -202,6 +237,7 @@ void FSWSAssetBlacklist::loadBlacklist()
 					LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
 					cipher.decrypt(uid.mData, UUID_BYTES);
 					LLSD entry_data = itr->second;
+					entry_data["asset_permanent"] = true; // For conversion of old data
 					if (uid.isNull())
 					{
 						continue;
@@ -211,6 +247,10 @@ void FSWSAssetBlacklist::loadBlacklist()
 					if (type == LLAssetType::AT_NONE)
 					{
 						continue;
+					}
+					else if (type == LLAssetType::AT_OBJECT)
+					{
+						gObjectList.addDerenderedItem(uid, true);
 					}
 					
 					addNewItemToBlacklistData(uid, entry_data, false);
@@ -240,17 +280,17 @@ void FSWSAssetBlacklist::loadBlacklist()
 						continue;
 					}
 					LLAssetType::EType type = S32toAssetType(data["entry_type"].asInteger());
-					
+					if (type == LLAssetType::AT_OBJECT)
+					{
+						gObjectList.addDerenderedItem(uid, true);
+					}
+
 					LLSD newdata;
 					newdata["asset_name"] = "[PHOENIX] " + data["entry_name"].asString();
 					newdata["asset_type"] = type;
 					newdata["asset_date"] = data["entry_date"].asString();
+					newdata["asset_permanent"] = true; // For conversion of old data
 
-					//if (!data["ID_hashed"].asBoolean())
-					//{
-					//	uid = LLUUID::generateNewID(uid.asString() + "hash");
-					//}
-					
 					addNewItemToBlacklistData(uid, newdata, false);
 				}
 			}
@@ -265,20 +305,22 @@ void FSWSAssetBlacklist::loadBlacklist()
 	}
 }
 
-void FSWSAssetBlacklist::saveBlacklist()
+void FSAssetBlacklist::saveBlacklist()
 {
 	llofstream save_file(mBlacklistFileName.c_str());
 	LLSD savedata;
 
 	for (blacklist_data_t::const_iterator itr = mBlacklistData.begin(); itr != mBlacklistData.end(); ++itr)
 	{
-		// <FS:CR> Apply "cheesy encryption" to obfuscate these to the user.
-		LLUUID shadow_id(itr->first);
-		LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
-		cipher.encrypt(shadow_id.mData, UUID_BYTES);
-		savedata[shadow_id.asString()] = itr->second;
+		if (itr->second["asset_permanent"].asBoolean())
+		{
+			LLUUID shadow_id(itr->first);
+			LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
+			cipher.encrypt(shadow_id.mData, UUID_BYTES);
+			savedata[shadow_id.asString()] = itr->second;
+		}
 	}
 
-	LLSDSerialize::toPrettyXML(savedata, save_file);	
+	LLSDSerialize::toPrettyXML(savedata, save_file);
 	save_file.close();
 }

@@ -64,7 +64,7 @@
 #include "llcorehttputil.h"
 
 #include "llhttpretrypolicy.h"
-#include "fswsassetblacklist.h" //For Asset blacklist
+#include "fsassetblacklist.h" //For Asset blacklist
 #include "llviewermenu.h"
 
 bool LLTextureFetchDebugger::sDebuggerEnabled = false ;
@@ -1177,14 +1177,14 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
 	if (mState == INIT)
 	{		
-		//asset blacklist
-		if(FSWSAssetBlacklist::getInstance()->isBlacklisted(mID,LLAssetType::AT_TEXTURE))
+		// <FS> Asset Blacklist
+		if (FSAssetBlacklist::getInstance()->isBlacklisted(mID, LLAssetType::AT_TEXTURE))
 		{
-			LL_INFOS() << "Blacklisted texture asset blocked." << LL_ENDL; 
+			LL_INFOS() << "Blacklisted texture asset blocked." << LL_ENDL;
 			mState = DONE;
 			return true;
 		}
-		//end asset blacklist
+		// </FS> Asset Blacklist
 
 		mRawImage = NULL ;
 		mRequestedDiscard = -1;

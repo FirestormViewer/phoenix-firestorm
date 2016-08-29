@@ -29,6 +29,7 @@
 
 #include "fsfloateravatarrendersettings.h"
 
+#include "llfiltereditor.h"
 #include "llnamelistctrl.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"
@@ -39,7 +40,9 @@
 FSFloaterAvatarRenderSettings::FSFloaterAvatarRenderSettings(const LLSD& key)
  : LLFloater(key),
  mAvatarList(NULL),
- mRenderSettingChangedCallbackConnection()
+ mRenderSettingChangedCallbackConnection(),
+ mFilterSubString(LLStringUtil::null),
+ mFilterSubStringOrig(LLStringUtil::null)
 {
 }
 
@@ -75,8 +78,11 @@ BOOL FSFloaterAvatarRenderSettings::postBuild()
 {
 	mAvatarList = getChild<LLNameListCtrl>("avatar_list");
 	mAvatarList->setContextMenu(&FSFloaterAvatarRenderPersistenceMenu::gFSAvatarRenderPersistenceMenu);
+	mAvatarList->setFilterColumn(0);
 
 	childSetAction("close_btn", boost::bind(&FSFloaterAvatarRenderSettings::onCloseBtn, this));
+
+	getChild<LLFilterEditor>("filter_input")->setCommitCallback(boost::bind(&FSFloaterAvatarRenderSettings::onFilterEdit, this, _2));
 
 	mRenderSettingChangedCallbackConnection = FSAvatarRenderPersistence::instance().setAvatarRenderSettingChangedCallback(boost::bind(&FSFloaterAvatarRenderSettings::onAvatarRenderSettingChanged, this, _1, _2));
 
@@ -108,7 +114,28 @@ void FSFloaterAvatarRenderSettings::onAvatarRenderSettingChanged(const LLUUID& a
 	}
 }
 
+void FSFloaterAvatarRenderSettings::onFilterEdit(const std::string& search_string)
+{
+	mFilterSubStringOrig = search_string;
+	LLStringUtil::trimHead(mFilterSubStringOrig);
+	// Searches are case-insensitive
+	std::string search_upper = mFilterSubStringOrig;
+	LLStringUtil::toUpper(search_upper);
 
+	if (mFilterSubString == search_upper)
+	{
+		return;
+	}
+
+	mFilterSubString = search_upper;
+
+	// Apply new filter.
+	mAvatarList->setFilterString(mFilterSubStringOrig);
+}
+
+//---------------------------------------------------------------------------
+// Context menu
+//---------------------------------------------------------------------------
 namespace FSFloaterAvatarRenderPersistenceMenu
 {
 

@@ -170,6 +170,7 @@
 #include "floatermedialists.h"
 #include "fsareasearch.h"
 #include "fsfloateraddtocontactset.h"
+#include "fsfloaterassetblacklist.h"
 #include "fsfloateravatarrendersettings.h"
 #include "fsfloatercontacts.h"
 #include "fsfloatercontactsetconfiguration.h"
@@ -190,7 +191,6 @@
 #include "fsfloatervoicecontrols.h"
 #include "fsfloatervolumecontrols.h"
 #include "fsfloatervramusage.h"
-#include "fsfloaterwsassetblacklist.h"
 #include "fsmoneytracker.h"
 #include "fspanelclassified.h"
 #include "lggbeamcolormapfloater.h"
@@ -442,6 +442,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("export_collada", "floater_export_collada.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<ColladaExportFloater>);
 	LLFloaterReg::add("delete_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterDeleteQueue>);
 	LLFloaterReg::add("floater_profile", "floater_profile_view.xml",&LLFloaterReg::build<FSFloaterProfile>);
+	LLFloaterReg::add("fs_asset_blacklist", "floater_fs_asset_blacklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAssetBlacklist>);
 	LLFloaterReg::add("fs_avatar_render_settings", "floater_fs_avatar_render_settings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAvatarRenderSettings>);
 	LLFloaterReg::add("fs_blocklist", "floater_fs_blocklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterBlocklist>);
 	LLFloaterReg::add("fs_add_contact", "floater_fs_contact_add.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAddToContactSet>);
@@ -473,7 +474,6 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("script_recover", "floater_script_recover.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterScriptRecover>);
 	LLFloaterReg::add("sound_explorer", "floater_NACL_explore_sounds.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<NACLFloaterExploreSounds>);
 	LLFloaterReg::add("vram_usage", "floater_fs_vram_usage.xml", static_cast<LLFloaterBuildFunc>( &LLFloaterReg::build< FSFloaterVRAMUsage >) );
-	LLFloaterReg::add("ws_asset_blacklist", "floater_asset_blacklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterWSAssetBlacklist>);
 
 	LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }

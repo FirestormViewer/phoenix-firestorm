@@ -127,6 +127,7 @@ set(viewer_SOURCE_FILES
     floatermedialists.cpp
     fsareasearch.cpp
     fsareasearchmenu.cpp
+    fsassetblacklist.cpp
     fsavatarrenderpersistence.cpp
     fsavatarsearchmenu.cpp
     fsblocklistmenu.cpp
@@ -139,6 +140,7 @@ set(viewer_SOURCE_FILES
     fsdroptarget.cpp
     fsexportperms.cpp
     fsfloateraddtocontactset.cpp
+    fsfloaterassetblacklist.cpp
     fsfloateravatarrendersettings.cpp
     fsfloaterblocklist.cpp
     fsfloatercontacts.cpp
@@ -160,7 +162,6 @@ set(viewer_SOURCE_FILES
     fsfloatervoicecontrols.cpp
     fsfloatervolumecontrols.cpp
     fsfloatervramusage.cpp
-    fsfloaterwsassetblacklist.cpp
     fskeywords.cpp
     fslightshare.cpp
     fslslbridge.cpp
@@ -191,7 +192,6 @@ set(viewer_SOURCE_FILES
     fsscrolllistctrl.cpp
     fssearchableui.cpp
     fsslurlcommand.cpp
-    fswsassetblacklist.cpp
     groupchatlistener.cpp
     kcwlinterface.cpp
     lggbeamcolormapfloater.cpp
@@ -868,6 +868,7 @@ set(viewer_HEADER_FILES
     floatermedialists.h
     fsareasearch.h
     fsareasearchmenu.h
+    fsassetblacklist.h
     fsavatarrenderpersistence.h
     fsavatarsearchmenu.h
     fsblocklistmenu.h
@@ -881,6 +882,7 @@ set(viewer_HEADER_FILES
     fsdroptarget.h
     fsexportperms.h
     fsfloateraddtocontactset.h
+    fsfloaterassetblacklist.h
     fsfloateravatarrendersettings.h
     fsfloaterblocklist.h
     fsfloatercontacts.h
@@ -902,7 +904,6 @@ set(viewer_HEADER_FILES
     fsfloatervoicecontrols.h
     fsfloatervolumecontrols.h
     fsfloatervramusage.h
-    fsfloaterwsassetblacklist.h
     fsgridhandler.h
     fskeywords.h
     fslightshare.h
@@ -935,7 +936,6 @@ set(viewer_HEADER_FILES
     fssearchableui.h
     fsslurl.h
     fsslurlcommand.h
-    fswsassetblacklist.h
     groupchatlistener.h
     llaccountingcost.h
     kcwlinterface.h
