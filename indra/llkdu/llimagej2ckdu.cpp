@@ -316,10 +316,13 @@ void LLImageJ2CKDU::setupCodeStream(LLImageJ2C &base, bool keep_codestream, ECod
 		{
 			// This method is only called from methods that catch KDUError.
 			// We want to fail the image load, not crash the viewer.
-			throw KDUError(STRINGIZE("Component " << idx << " dimensions "
-									 << other_dims
-									 << " do not match component 0 dimensions "
-									 << dims << "!"));
+			// <FS:Ansariel> Can't use operator << with kdu_core::kdu_dims
+			//throw KDUError(STRINGIZE("Component " << idx << " dimensions "
+			//						 << other_dims
+			//						 << " do not match component 0 dimensions "
+			//						 << dims << "!"));
+			throw KDUError("Components don't have matching dimensions!");
+			// </FS:Ansariel>
 		}
 	}
 
