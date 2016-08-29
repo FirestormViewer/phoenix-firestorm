@@ -2422,10 +2422,10 @@ LLDebugBeacon::~LLDebugBeacon()
 }
 
 // <FS:ND> Helper function to purge the internal list of derendered objects on teleport.
-void LLViewerObjectList::resetDerenderList()
+void LLViewerObjectList::resetDerenderList(bool force /*= false*/)
 {
 	static LLCachedControl<bool> fsTempDerenderUntilTeleport(gSavedSettings, "FSTempDerenderUntilTeleport");
-	if (!fsTempDerenderUntilTeleport)
+	if (!fsTempDerenderUntilTeleport && !force)
 	{
 		return;
 	}

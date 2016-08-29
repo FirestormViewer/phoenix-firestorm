@@ -51,6 +51,7 @@ public:
 
 protected:
 	void onRemoveBtn();
+	void onRemoveAllTemporaryBtn();
 	void onCloseBtn();
 	void onFilterEdit(const std::string& search_string);
 	void onBlacklistChanged(const LLSD& data, FSAssetBlacklist::eBlacklistOperation op);

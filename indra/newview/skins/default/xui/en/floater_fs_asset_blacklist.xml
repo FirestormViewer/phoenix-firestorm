@@ -104,11 +104,20 @@
 	</fs_scroll_list>
 	<button
 	 name="remove_btn"
-	 label="Remove selected items from blacklist"
+	 label="Remove selected"
 	 font="SansSerif"
 	 height="24"
-	 width="280"
+	 width="150"
 	 left="4"
+	 bottom="-6"
+	 follows="left|bottom"/>
+	<button
+	 name="remove_temp_btn"
+	 label="Clear temporary"
+	 font="SansSerif"
+	 height="24"
+	 width="150"
+	 left_pad="10"
 	 bottom="-6"
 	 follows="left|bottom"/>
 	<button

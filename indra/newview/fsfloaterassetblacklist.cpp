@@ -34,6 +34,7 @@
 #include "llfiltereditor.h"
 #include "llfloaterreg.h"
 #include "llviewercontrol.h"
+#include "llviewerobjectlist.h"
 
 
 FSFloaterAssetBlacklist::FSFloaterAssetBlacklist(const LLSD& key)
@@ -60,6 +61,7 @@ BOOL FSFloaterAssetBlacklist::postBuild()
 	mResultList->setFilterColumn(0);
 
 	childSetAction("remove_btn", boost::bind(&FSFloaterAssetBlacklist::onRemoveBtn, this));
+	childSetAction("remove_temp_btn", boost::bind(&FSFloaterAssetBlacklist::onRemoveAllTemporaryBtn, this));
 	childSetAction("close_btn", boost::bind(&FSFloaterAssetBlacklist::onCloseBtn, this));
 
 	getChild<LLFilterEditor>("filter_input")->setCommitCallback(boost::bind(&FSFloaterAssetBlacklist::onFilterEdit, this, _2));
@@ -180,14 +182,19 @@ void FSFloaterAssetBlacklist::onBlacklistChanged(const LLSD& data, FSAssetBlackl
 		for (LLSD::array_const_iterator it = data.beginArray(); it != data.endArray(); ++it)
 		{
 			mResultList->deleteItems(*it);
-			mResultList->updateLayout();
 		}
+		mResultList->updateLayout();
 	}
 }
 
 void FSFloaterAssetBlacklist::onRemoveBtn()
 {
 	removeElements();
+}
+
+void FSFloaterAssetBlacklist::onRemoveAllTemporaryBtn()
+{
+	gObjectList.resetDerenderList(true);
 }
 
 void FSFloaterAssetBlacklist::onCloseBtn()

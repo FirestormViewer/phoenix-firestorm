@@ -32,6 +32,7 @@
 		<columns name="date" label="Datum"/>
 		<columns name="permanent" label="Permanent"/>
 	</fs_scroll_list>
-	<button name="remove_btn" label="Ausgewählte Objekte von Blacklist entfernen" width="290"/>
+	<button name="remove_btn" label="Ausgewählte Objekte entfernen" width="210"/>
+	<button name="remove_temp_btn" label="Alle Temporären entfernen" width="180"/>
 	<button name="close_btn" label="Schließen"/>
 </floater>
