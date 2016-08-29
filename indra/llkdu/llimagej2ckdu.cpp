@@ -49,12 +49,14 @@ struct KDUError: public std::runtime_error
 
 // stream kdu_dims to std::ostream
 // Turns out this must NOT be in the anonymous namespace!
+namespace kdu_core { // <FS:Ansariel> KDU >= 7.5 fix
 inline
 std::ostream& operator<<(std::ostream& out, const kdu_dims& dims)
 {
 	return out << "(" << dims.pos.x << "," << dims.pos.y << "),"
 				  "[" << dims.size.x << "x" << dims.size.y << "]";
 }
+} // <FS:Ansariel> KDU >= 7.5 fix
 
 class kdc_flow_control {
 	
@@ -316,13 +318,10 @@ void LLImageJ2CKDU::setupCodeStream(LLImageJ2C &base, bool keep_codestream, ECod
 		{
 			// This method is only called from methods that catch KDUError.
 			// We want to fail the image load, not crash the viewer.
-			// <FS:Ansariel> Can't use operator << with kdu_core::kdu_dims
-			//throw KDUError(STRINGIZE("Component " << idx << " dimensions "
-			//						 << other_dims
-			//						 << " do not match component 0 dimensions "
-			//						 << dims << "!"));
-			throw KDUError("Components don't have matching dimensions!");
-			// </FS:Ansariel>
+			throw KDUError(STRINGIZE("Component " << idx << " dimensions "
+									 << other_dims
+									 << " do not match component 0 dimensions "
+									 << dims << "!"));
 		}
 	}
 
