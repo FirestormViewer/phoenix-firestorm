@@ -2424,6 +2424,12 @@ LLDebugBeacon::~LLDebugBeacon()
 // <FS:ND> Helper function to purge the internal list of derendered objects on teleport.
 void LLViewerObjectList::resetDerenderList()
 {
+	static LLCachedControl<bool> fsTempDerenderUntilTeleport(gSavedSettings, "FSTempDerenderUntilTeleport");
+	if (!fsTempDerenderUntilTeleport)
+	{
+		return;
+	}
+
 	std::map< LLUUID, bool > oDerendered;
 	uuid_vec_t removed_ids;
 
