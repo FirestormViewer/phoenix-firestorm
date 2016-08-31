@@ -46,14 +46,17 @@ public:
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& sdKey);
 	/*virtual*/ void onClose(bool fQuiting);
+	void			 setCanReplace(bool can_replace);
 
 	/*
 	 * Member functions
 	 */
 public:
-	static void   show(LLTextEditor* pEditor);
-protected:
+	static LLFloaterSearchReplace* show(LLTextEditor* pEditor);
+	static LLFloaterSearchReplace* findInstance();
 	LLTextEditor* getEditor() const;
+
+protected:
 	void          refreshHighlight();
 	void          onSearchClick();
 	void          onSearchKeystroke();

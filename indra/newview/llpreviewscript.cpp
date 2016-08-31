@@ -98,6 +98,7 @@
 
 // NaCl - LSL Preprocessor
 #include "fslslpreproc.h"
+#include "fslslpreprocviewer.h"
 // NaCl End
 #ifdef OPENSIM
 #include "llviewernetwork.h"	// for Grid manager
@@ -423,6 +424,8 @@ LLScriptEdCore::LLScriptEdCore(
 	// <FS:CR> FIRE-10606, patch by Sei Lisa
 	mLSLProc(NULL),
 	mPostEditor(NULL),
+	mCurrentEditor(NULL),
+	mPreprocTab(NULL),
 	// </FS:CR>
 	mCompiling(false), //<FS:KC> Compile indicators, recompile button
 	mHasScriptData(FALSE)
@@ -547,18 +550,18 @@ BOOL LLScriptEdCore::postBuild()
 	mEditor = getChild<LLScriptEditor>("Script Editor");
 
 	// NaCl - LSL Preprocessor
+	mCurrentEditor = mEditor;
 	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 	{
-		mPostEditor = getChild<LLScriptEditor>("Post Editor");
-		if (mPostEditor)
-		{
-			mPostEditor->setFollowsAll();
-			mPostEditor->setEnabled(TRUE);
-		}
+		mPostEditor = getChild<FSLSLPreProcViewer>("Post Editor");
+		mPostEditor->setFollowsAll();
+		mPostEditor->setEnabled(TRUE);
+
+		mPreprocTab = getChild<LLTabContainer>("Tabset");
+		mPreprocTab->setCommitCallback(boost::bind(&LLScriptEdCore::onPreprocTabChanged, this, _2));
 	}
 	// FIRE-16042: Warn when preproc is toggled.
-	mTogglePreprocConnection = gSavedSettings.getControl("_NACL_LSLPreprocessor")->getSignal()
-		->connect(boost::bind(&LLScriptEdCore::onToggleProc, this));
+	mTogglePreprocConnection = gSavedSettings.getControl("_NACL_LSLPreprocessor")->getSignal()->connect(boost::bind(&LLScriptEdCore::onToggleProc, this));
 	// NaCl End
 
 	childSetCommitCallback("lsl errors", &LLScriptEdCore::onErrorList, this);
@@ -693,41 +696,73 @@ void LLScriptEdCore::initMenu()
 	menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::hasChanged, this));
 	
 	menuItem = getChild<LLMenuItemCallGL>("Revert All Changes");
-	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::onBtnUndoChanges, this));
-	menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::hasChanged, this));
+	// <FS:Ansariel> LSL Preprocessor
+	//menuItem->setClickCallback(boost::bind(&LLScriptEdCore::onBtnUndoChanges, this));
+	//menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::hasChanged, this));
+	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::performAction, this, "Revert All Changes"));
+	menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::enableAction, this, "Revert All Changes"));
+	// </FS:Ansariel>
 
 	menuItem = getChild<LLMenuItemCallGL>("Undo");
-	menuItem->setClickCallback(boost::bind(&LLTextEditor::undo, mEditor));
-	menuItem->setEnableCallback(boost::bind(&LLTextEditor::canUndo, mEditor));
+	// <FS:Ansariel> LSL Preprocessor
+	//menuItem->setClickCallback(boost::bind(&LLTextEditor::undo, mEditor));
+	//menuItem->setEnableCallback(boost::bind(&LLTextEditor::canUndo, mEditor));
+	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::performAction, this, "Undo"));
+	menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::enableAction, this, "Undo"));
+	// </FS:Ansariel>
 
 	menuItem = getChild<LLMenuItemCallGL>("Redo");
-	menuItem->setClickCallback(boost::bind(&LLTextEditor::redo, mEditor));
-	menuItem->setEnableCallback(boost::bind(&LLTextEditor::canRedo, mEditor));
+	// <FS:Ansariel> LSL Preprocessor
+	//menuItem->setClickCallback(boost::bind(&LLTextEditor::redo, mEditor));
+	//menuItem->setEnableCallback(boost::bind(&LLTextEditor::canRedo, mEditor));
+	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::performAction, this, "Redo"));
+	menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::enableAction, this, "Redo"));
+	// </FS:Ansariel>
 
 	menuItem = getChild<LLMenuItemCallGL>("Cut");
-	menuItem->setClickCallback(boost::bind(&LLTextEditor::cut, mEditor));
-	menuItem->setEnableCallback(boost::bind(&LLTextEditor::canCut, mEditor));
+	// <FS:Ansariel> LSL Preprocessor
+	//menuItem->setClickCallback(boost::bind(&LLTextEditor::cut, mEditor));
+	//menuItem->setEnableCallback(boost::bind(&LLTextEditor::canCut, mEditor));
+	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::performAction, this, "Cut"));
+	menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::enableAction, this, "Cut"));
+	// </FS:Ansariel>
 
 	menuItem = getChild<LLMenuItemCallGL>("Copy");
-	menuItem->setClickCallback(boost::bind(&LLTextEditor::copy, mEditor));
-	menuItem->setEnableCallback(boost::bind(&LLTextEditor::canCopy, mEditor));
+	// <FS:Ansariel> LSL Preprocessor
+	//menuItem->setClickCallback(boost::bind(&LLTextEditor::copy, mEditor));
+	//menuItem->setEnableCallback(boost::bind(&LLTextEditor::canCopy, mEditor));
+	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::performAction, this, "Copy"));
+	menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::enableAction, this, "Copy"));
+	// </FS:Ansariel>
 
 	menuItem = getChild<LLMenuItemCallGL>("Paste");
-	menuItem->setClickCallback(boost::bind(&LLTextEditor::paste, mEditor));
-	menuItem->setEnableCallback(boost::bind(&LLTextEditor::canPaste, mEditor));
+	// <FS:Ansariel> LSL Preprocessor
+	//menuItem->setClickCallback(boost::bind(&LLTextEditor::paste, mEditor));
+	//menuItem->setEnableCallback(boost::bind(&LLTextEditor::canPaste, mEditor));
+	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::performAction, this, "Paste"));
+	menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::enableAction, this, "Paste"));
+	// </FS:Ansariel>
 
 	menuItem = getChild<LLMenuItemCallGL>("Select All");
-	menuItem->setClickCallback(boost::bind(&LLTextEditor::selectAll, mEditor));
-	menuItem->setEnableCallback(boost::bind(&LLTextEditor::canSelectAll, mEditor));
+	// <FS:Ansariel> LSL Preprocessor
+	//menuItem->setClickCallback(boost::bind(&LLTextEditor::selectAll, mEditor));
+	//menuItem->setEnableCallback(boost::bind(&LLTextEditor::canSelectAll, mEditor));
+	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::performAction, this, "Select All"));
+	menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::enableAction, this, "Select All"));
+	// </FS:Ansariel>
 
 	menuItem = getChild<LLMenuItemCallGL>("Deselect");
-	menuItem->setClickCallback(boost::bind(&LLTextEditor::deselect, mEditor));
-	menuItem->setEnableCallback(boost::bind(&LLTextEditor::canDeselect, mEditor));
+	// <FS:Ansariel> LSL Preprocessor
+	//menuItem->setClickCallback(boost::bind(&LLTextEditor::deselect, mEditor));
+	//menuItem->setEnableCallback(boost::bind(&LLTextEditor::canDeselect, mEditor));
+	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::performAction, this, "Deselect"));
+	menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::enableAction, this, "Deselect"));
+	// </FS:Ansariel>
 
 	menuItem = getChild<LLMenuItemCallGL>("Search / Replace...");
 //	menuItem->setClickCallback(boost::bind(&LLFloaterScriptSearch::show, this));
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-26 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-	menuItem->setClickCallback(boost::bind(&LLFloaterSearchReplace::show, mEditor));
+	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::performAction, this, "Search"));
 // [/SL:KB]
 
 	menuItem = getChild<LLMenuItemCallGL>("Go to line...");
@@ -756,25 +791,24 @@ void LLScriptEdCore::initButtonBar()
 {
 	mSaveBtn->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE, true));
 	mSaveBtn2->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE, true));	// <FS:Zi> support extra save button
-	mCutBtn->setClickedCallback(boost::bind(&LLTextEditor::cut, mEditor));
-	mCopyBtn->setClickedCallback(boost::bind(&LLTextEditor::copy, mEditor));
-	mPasteBtn->setClickedCallback(boost::bind(&LLTextEditor::paste, mEditor));
-	mUndoBtn->setClickedCallback(boost::bind(&LLTextEditor::undo, mEditor));
-	mRedoBtn->setClickedCallback(boost::bind(&LLTextEditor::redo, mEditor));
+	mCutBtn->setClickedCallback(boost::bind(&LLScriptEdCore::performAction, this, "Cut"));
+	mCopyBtn->setClickedCallback(boost::bind(&LLScriptEdCore::performAction, this, "Copy"));
+	mPasteBtn->setClickedCallback(boost::bind(&LLScriptEdCore::performAction, this, "Paste"));
+	mUndoBtn->setClickedCallback(boost::bind(&LLScriptEdCore::performAction, this, "Undo"));
+	mRedoBtn->setClickedCallback(boost::bind(&LLScriptEdCore::performAction, this, "Redo"));
 	mSaveToDiskBtn->setClickedCallback(boost::bind(&LLScriptEdCore::onBtnSaveToFile, this));
 	mLoadFromDiskBtn->setClickedCallback(boost::bind(&LLScriptEdCore::onBtnLoadFromFile, this));
-	mSearchBtn->setClickedCallback(boost::bind(&LLFloaterSearchReplace::show, mEditor));
+	mSearchBtn->setClickedCallback(boost::bind(&LLScriptEdCore::performAction, this, "Search"));
 }
 
 void LLScriptEdCore::updateButtonBar()
 {
 	mSaveBtn->setEnabled(hasChanged());
-	// mSaveBtn2->setEnabled(hasChanged());	// <FS:Zi> support extra save button
-	mCutBtn->setEnabled(mEditor->canCut());
-	mCopyBtn->setEnabled(mEditor->canCopy());
-	mPasteBtn->setEnabled(mEditor->canPaste());
-	mUndoBtn->setEnabled(mEditor->canUndo());
-	mRedoBtn->setEnabled(mEditor->canRedo());
+	mCutBtn->setEnabled(mCurrentEditor->canCut());
+	mCopyBtn->setEnabled(mCurrentEditor->canCopy());
+	mPasteBtn->setEnabled(mCurrentEditor->canPaste());
+	mUndoBtn->setEnabled(mCurrentEditor->canUndo());
+	mRedoBtn->setEnabled(mCurrentEditor->canRedo());
 	mSaveToDiskBtn->setEnabled(mEditor->canLoadOrSaveToFile());
 	mLoadFromDiskBtn->setEnabled(mEditor->canLoadOrSaveToFile());
 	//<FS:Kadah> Recompile button
@@ -818,6 +852,96 @@ void LLScriptEdCore::onToggleProc()
 	mErrorList->setCommentText(LLTrans::getString("preproc_toggle_warning"));
 	mErrorList->deleteAllItems(); // Make it visible
 	updateButtonBar(); // Update the save button in particular (FIRE-10173)
+}
+
+void LLScriptEdCore::onPreprocTabChanged(const std::string& tab_name)
+{
+	mCurrentEditor = (tab_name == "Preprocessed" ? mPostEditor : mEditor);
+	LLFloaterSearchReplace* search_floater = LLFloaterSearchReplace::findInstance();
+	if (search_floater && (search_floater->getEditor() == mEditor || search_floater->getEditor() == mPostEditor))
+	{
+		search_floater->setCanReplace(mCurrentEditor == mEditor);
+	}
+	childSetEnabled("Insert...", mCurrentEditor == mEditor);
+}
+
+void LLScriptEdCore::performAction(const std::string& action)
+{
+	if (action == "Revert All Changes")
+	{
+		onBtnUndoChanges();
+	}
+	else if (action == "Undo")
+	{
+		mCurrentEditor->undo();
+	}
+	else if (action == "Redo")
+	{
+		mCurrentEditor->redo();
+	}
+	else if (action == "Cut")
+	{
+		mCurrentEditor->cut();
+	}
+	else if (action == "Copy")
+	{
+		mCurrentEditor->copy();
+	}
+	else if (action == "Paste")
+	{
+		mCurrentEditor->paste();
+	}
+	else if (action == "Select All")
+	{
+		mCurrentEditor->selectAll();
+	}
+	else if (action == "Deselect")
+	{
+		mCurrentEditor->deselect();
+	}
+	else if (action == "Search")
+	{
+		LLFloaterSearchReplace* floater = LLFloaterSearchReplace::show(mCurrentEditor);
+		floater->setCanReplace(mCurrentEditor == mEditor);
+	}
+}
+
+bool LLScriptEdCore::enableAction(const std::string& action)
+{
+	if (action == "Revert All Changes")
+	{
+		return (mCurrentEditor == mEditor && hasChanged());
+	}
+	else if (action == "Undo")
+	{
+		return mCurrentEditor->canUndo();
+	}
+	else if (action == "Redo")
+	{
+		return mCurrentEditor->canRedo();
+	}
+	else if (action == "Cut")
+	{
+		return mCurrentEditor->canCut();
+	}
+	else if (action == "Copy")
+	{
+		return mCurrentEditor->canCopy();
+	}
+	else if (action == "Paste")
+	{
+		return mCurrentEditor->canPaste();
+	}
+	else if (action == "Select All")
+	{
+		return mCurrentEditor->canSelectAll();
+	}
+	else if (action == "Deselect")
+	{
+		return mCurrentEditor->canDeselect();
+	}
+
+	return false;
 }
 // NaCl End
 
@@ -973,6 +1097,20 @@ void LLScriptEdCore::draw()
 		cursor_pos = LLTrans::getString("CursorPos", args);
 		mLineCol->setValue(cursor_pos);
 	}
+	// <FS:Ansariel> LSL Preprocessor
+	else if (mPostEditor && mPostEditor->hasFocus())
+	{
+		S32 line = 0;
+		S32 column = 0;
+		mPostEditor->getCurrentLineAndColumn( &line, &column, FALSE );  // don't include wordwrap
+		LLStringUtil::format_map_t args;
+		std::string cursor_pos;
+		args["[LINE]"] = llformat ("%d", line);
+		args["[COLUMN]"] = llformat ("%d", column);
+		cursor_pos = LLTrans::getString("CursorPos", args);
+		mLineCol->setValue(cursor_pos);
+	}
+	// </FS:Ansariel>
 	else
 	{
 		mLineCol->setValue(LLStringUtil::null);
@@ -1429,27 +1567,17 @@ void LLScriptEdCore::onErrorList(LLUICtrl*, void* user_data)
 		//LL_INFOS() << "LLScriptEdCore::onErrorList() - " << row << ", "
 		//<< column << LL_ENDL;
 		// NaCl - LSL Preprocessor
-		if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && self->mPostEditor)
+		if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && self->mPostEditor && self->mPreprocTab)
 		{
-			LLPanel* tab = self->getChild<LLPanel>("Preprocessed");
-			LLTabContainer* tabset = self->getChild<LLTabContainer>("Tabset");
-
-			if(tabset)
-				tabset->selectTabByName("Preprocessed");
-
-			if(tab)
-				tab->setFocus(TRUE);
-
-			if( self->mPostEditor )
-			{
-				self->mPostEditor->setFocus(TRUE);
-				self->mPostEditor->setCursor(row, column);
-			}
+			self->mPreprocTab->selectTabByName("Preprocessed");
+			self->getChild<LLPanel>("Preprocessed")->setFocus(TRUE);
+			self->mPostEditor->setFocus(TRUE);
+			self->mPostEditor->setCursor(row, column);
 		}
 		else
 		{
-		  self->mEditor->setCursor(row, column);
-		  self->mEditor->setFocus(TRUE);
+			self->mEditor->setCursor(row, column);
+			self->mEditor->setFocus(TRUE);
 		}
 		// NaCl End
 	}
@@ -2090,7 +2218,8 @@ void LLPreviewLSL::onSearchReplace(void* userdata)
 	LLScriptEdCore* sec = self->mScriptEd; 
 //	LLFloaterScriptSearch::show(sec);
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-26 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-	LLFloaterSearchReplace::show(sec->mEditor);
+	LLFloaterSearchReplace* floater = LLFloaterSearchReplace::show(sec->mCurrentEditor);
+	floater->setCanReplace(sec->mCurrentEditor == sec->mEditor);
 // [/SL:KB]
 }
 
@@ -2703,7 +2832,8 @@ void LLLiveLSLEditor::onSearchReplace(void* userdata)
 	LLScriptEdCore* sec = self->mScriptEd; 
 //	LLFloaterScriptSearch::show(sec);
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-26 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-	LLFloaterSearchReplace::show(sec->mEditor);
+	LLFloaterSearchReplace* floater = LLFloaterSearchReplace::show(sec->mCurrentEditor);
+	floater->setCanReplace(sec->mCurrentEditor == sec->mEditor);
 // [/SL:KB]
 }
 
