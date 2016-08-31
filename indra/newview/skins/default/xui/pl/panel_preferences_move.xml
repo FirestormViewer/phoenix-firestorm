@@ -25,6 +25,7 @@
 			</text>
 			<check_box label="Pokazuj standardowe, małe okienko sterowania kamerą zawsze jako nieprzezroczyste" name="FSAlwaysOpaqueCameraControls"/>
 			<check_box label="Zablokowane awatary jako chmury cząsteczek" name="ShowMutedAvatarsAsCloud" tool_tip="Zablokowane awatary będą renderowane jako chmury cząsteczek o specjalnym kolorze."/>
+			<check_box label="Po teleportacji pokaż ponownie tymczasowo zderenderowane obiekty" name="FSTempDerenderUntilTeleport" tool_tip="Gdy włączysz tą opcję, to tymczasowo zderenderowane obiekty pozostaną niewidoczne do momentu teleportacji. Gdy ją wyłączysz, to pozostaną niewidoczne do końca sesji lub do momentu, gdy zostaną ręcznie zrenderowane ponownie przez okno czarnej listy zasobów danych." />
 		</panel>
 		<panel label="Widok pierwszoosobowy" name="tab-mouselook">
 			<check_box label="Włącz funkcjonalność widoku pierwszoosobowego" name="EnableMouselook" tool_tip="Zezwól przeglądarce na używanie perspektywy pierwszej osoby oraz sterowanie w niej kamerą za pomocą myszy"/>
