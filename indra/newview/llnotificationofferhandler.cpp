@@ -100,17 +100,21 @@ bool LLOfferHandler::processNotification(const LLNotificationPtr& notification)
 			LLUUID from_id = notification->getPayload()["from_id"];
 
 			//Will not play a notification sound for inventory and teleport offer based upon chat preference
+			// <FS:Ansariel> Notification sounds
+			//bool playSound = (!notification->isDND()
+			//				  && ((notification->getName() == "UserGiveItem"
+			//                  && gSavedSettings.getBOOL("PlaySoundInventoryOffer"))
+			//                  || (notification->getName() == "TeleportOffered"
+			//                  && gSavedSettings.getBOOL("PlaySoundTeleportOffer"))));
+			const std::string notif_name = notification->getName();
 			bool playSound = (!notification->isDND()
-							  && ((notification->getName() == "UserGiveItem"
-			                  // <FS:PP> UI Sounds support
-			                  // && gSavedSettings.getBOOL("PlaySoundInventoryOffer"))
-			                  && gSavedSettings.getBOOL("PlayModeUISndInventoryOffer"))
-			                  // </FS:PP>
-			                  || (notification->getName() == "TeleportOffered"
-			                  // <FS:PP> UI Sounds support
-			                  // && gSavedSettings.getBOOL("PlaySoundTeleportOffer"))));
-			                  && gSavedSettings.getBOOL("PlayModeUISndTeleportOffer"))));
-			                  // </FS:PP>
+								&& ((notif_name == "UserGiveItem"
+								&& gSavedSettings.getBOOL("PlayModeUISndInventoryOffer"))
+								|| ((notif_name == "TeleportOffered" || notif_name == "TeleportOffered_SLUrl" ||
+									notif_name == "TeleportOffered_MaturityExceeded" || notif_name == "TeleportOffered_MaturityExceeded_SLUrl" ||
+									notif_name == "TeleportOffered_MaturityBlocked" || notif_name == "TeleportOffered_MaturityBlocked_SLUrl")
+								&& gSavedSettings.getBOOL("PlayModeUISndTeleportOffer"))));
+			// </FS:Ansariel>
 
 			            if(playSound)
 			            {
