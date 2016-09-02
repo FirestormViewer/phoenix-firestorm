@@ -451,9 +451,16 @@ void LLGroupActions::show(const LLUUID& group_id)
 		}
 	}
 
-	if (floater && floater->isMinimized())
+	if (floater)
 	{
-		floater->setMinimized(FALSE);
+		if (floater->isMinimized())
+		{
+			floater->setMinimized(FALSE);
+		}
+		if (!floater->hasFocus())
+		{
+			floater->setFocus(TRUE);
+		}
 	}
 	// </FS:Ansariel>
 }
