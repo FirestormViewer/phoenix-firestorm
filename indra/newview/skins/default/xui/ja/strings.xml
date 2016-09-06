@@ -5746,16 +5746,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		不明：通常の範囲を超えています。デバッグ設定で「RenderQualityPerformance」を確認して下さい。
 	</string>
 	
-	<string name="qtool_busy">
-		お待ち下さい。整列ツールが稼働中です。
-	</string>
-	<string name="qtool_still_busy">
-		もう暫くお待ち下さい。整列ツールは引き続き稼働中です。
-	</string>
-	<string name="qtool_done">
-		整列ツールの処理が終わりました。
-	</string>
-	
 	<string name="fsbridge_no_library">
 		Firestorm は LSL ブリッジを作成できませんでした。ライブラリを有効にしてリログして下さい。
 	</string>

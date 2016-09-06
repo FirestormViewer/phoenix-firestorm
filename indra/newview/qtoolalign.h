@@ -7,21 +7,11 @@
 #define Q_QTOOLALIGN_H
 
 #include "lltool.h"
-#include "llthread.h"
 #include "llbbox.h"
 
 class LLViewerObject;
 class LLPickInfo;
 class LLToolSelectRect;
-
-class AlignThread : public LLThread
-{
-public:
-	AlignThread(void);
-	~AlignThread();
-	/*virtual*/ void run(void);
-	static AlignThread* sInstance;
-};
 
 class QToolAlign
 :	public LLTool, public LLSingleton<QToolAlign>
@@ -37,20 +27,19 @@ public:
 	virtual void	render();
 	virtual BOOL	canAffectSelection();
 
-	static void		pickCallback(const LLPickInfo& pick_info);
-	static void		aligndone();
-
-	LLBBox			mBBox;
-	F32				mManipulatorSize;
-	S32				mHighlightedAxis;
-	F32				mHighlightedDirection;
-	BOOL			mForce;
+	static void pickCallback(const LLPickInfo& pick_info);
 
 private:
-	void			align();
-	void			computeManipulatorSize();
-	void			renderManipulators();
-	BOOL			findSelectedManipulator(S32 x, S32 y);
+	void            align();
+	void            computeManipulatorSize();
+	void            renderManipulators();
+	BOOL            findSelectedManipulator(S32 x, S32 y);
+	
+	LLBBox          mBBox;
+	F32             mManipulatorSize;
+	S32             mHighlightedAxis;
+	F32             mHighlightedDirection;
+	BOOL            mForce;
 };
 
 #endif // Q_QTOOLALIGN_H

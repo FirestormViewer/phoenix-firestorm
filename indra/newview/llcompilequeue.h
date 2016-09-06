@@ -47,11 +47,15 @@ struct LLScriptQueueData
 	LLUUID mQueueID;
 	LLUUID mTaskId;
 	LLPointer<LLInventoryItem> mItem;
-	LLHost mHost;
 	LLUUID mExperienceId;
 	std::string mExperiencename;
-	LLScriptQueueData(const LLUUID& q_id, const LLUUID& task_id, LLInventoryItem* item) :
-		mQueueID(q_id), mTaskId(task_id), mItem(new LLInventoryItem(item)) {}
+
+	LLScriptQueueData(const LLUUID& q_id, const LLUUID& task_id, const LLUUID& experience_id, LLInventoryItem* item) :
+		mQueueID(q_id),
+		mTaskId(task_id),
+		mExperienceId(experience_id),
+		mItem(new LLInventoryItem(item))
+	{ }
 
 };
 // </FS:KC>

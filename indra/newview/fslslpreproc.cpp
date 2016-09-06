@@ -35,10 +35,10 @@
 
 #include "fslslpreproc.h"
 
+#include "fslslpreprocviewer.h"
 #include "llagent.h"
 #include "llappviewer.h"
 #include "llinventoryfunctions.h"
-#include "llscripteditor.h"
 #include "lltrans.h"
 #include "llvfile.h"
 #include "llviewercontrol.h"
@@ -1558,7 +1558,7 @@ void FSLSLPreprocessor::start_process()
 		}
 		else
 		{
-			LLTextEditor* outfield = mCore->mPostEditor;
+			FSLSLPreProcViewer* outfield = mCore->mPostEditor;
 			if (outfield)
 			{
 				outfield->setText(LLStringExplicit(output));
@@ -1603,7 +1603,7 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& uuid, LLAs
 
 void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 {
-	LLTextEditor* outfield = mCore->mPostEditor;
+	FSLSLPreProcViewer* outfield = mCore->mPostEditor;
 	if (outfield)
 	{
 		outfield->setText(LLStringExplicit(mCore->mEditor->getText()));

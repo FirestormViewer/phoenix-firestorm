@@ -20,14 +20,24 @@
 	<floater.string name="av_render_always">
 		Fully
 	</floater.string>
+	<filter_editor
+	 follows="left|top|right"
+	 height="23"
+	 layout="topleft"
+	 left="4"
+	 label="Filter Avatars"
+	 max_length_chars="300"
+	 name="filter_input"
+	 top="4"
+	 right="-4" />
 	<name_list
 	 column_padding="0"
 	 draw_heading="true"
 	 follows="all"
 	 layout="topleft"
-	 left="10"
-	 right="-10"
-	 top="10"
+	 left="4"
+	 right="-4"
+	 top="30"
 	 bottom="-32"
 	 name="avatar_list"
 	 name_column="name"
