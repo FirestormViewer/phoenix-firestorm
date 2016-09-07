@@ -118,6 +118,10 @@ public:
 	virtual EStatus getStatus() const { return mStatus; }
 	virtual void setNeedRefresh(bool need);
 
+	static BOOL updatePreviewList(bool initialized);
+
+	void setAdvanced(bool advanced) { mAdvanced = advanced; }
+
 	virtual LLSnapshotModel::ESnapshotLayerType getLayerType(LLFloaterSnapshotBase* floater) = 0;
 	virtual void checkAutoSnapshot(LLSnapshotLivePreview* floater, BOOL update_thumbnail = FALSE);
 	void setWorking(bool working);
@@ -131,6 +135,7 @@ public:
 	LLHandle<LLView> mPreviewHandle;
 	bool mAspectRatioCheckOff;
 	bool mNeedRefresh;
+	bool mAdvanced;
 	EStatus mStatus;
 };
 
@@ -148,6 +153,8 @@ public:
 	/*virtual*/ S32 notify(const LLSD& info);
 	
 	static void update();
+
+	void onExtendFloater();
 
 	static LLFloaterSnapshot* getInstance();
 	static LLFloaterSnapshot* findInstance();

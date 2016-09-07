@@ -168,8 +168,6 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
 {
 	LLSnapshotLivePreview* previewp = getPreviewView();
 
-	BOOL advanced = gSavedSettings.getBOOL("AdvanceSnapshot");
-
 	//BD - Automatically calculate the size of our snapshot window to enlarge
 	//     the snapshot preview to its maximum size, this is especially helpfull
 	//     for pretty much every aspect ratio other than 1:1.
@@ -185,14 +183,14 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
 	}
 
 	S32 floater_width = 224;
-	if(advanced)
+	if(mAdvanced)
 	{
 		floater_width = floater_width + panel_width;
 	}
 
 	// <FS:Ansariel> Show miniature thumbnail on collapsed snapshot panel
 	//LLUICtrl* thumbnail_placeholder = floaterp->getChild<LLUICtrl>("thumbnail_placeholder");
-	//thumbnail_placeholder->setVisible(advanced);
+	//thumbnail_placeholder->setVisible(mAdvanced);
 	//thumbnail_placeholder->reshape(panel_width, thumbnail_placeholder->getRect().getHeight());
 	//floaterp->getChild<LLUICtrl>("image_res_text")->setVisible(advanced);
 	//floaterp->getChild<LLUICtrl>("file_size_label")->setVisible(advanced);
@@ -203,12 +201,12 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
 
 	previewp->setFixedThumbnailSize(panel_width, 400);
 	LLUICtrl* thumbnail_placeholder = floaterp->getChild<LLUICtrl>("thumbnail_placeholder");
-	floaterp->getChild<LLUICtrl>("image_res_text")->setVisible(advanced);
-	floaterp->getChild<LLUICtrl>("file_size_label")->setVisible(advanced);
+	floaterp->getChild<LLUICtrl>("image_res_text")->setVisible(mAdvanced);
+	floaterp->getChild<LLUICtrl>("file_size_label")->setVisible(mAdvanced);
 	if(!floaterp->isMinimized())
 	{
 		LLView* controls_container = floaterp->getChild<LLView>("controls_container");
-		if (advanced)
+		if (mAdvanced)
 		{
 			LLRect cc_rect = controls_container->getRect();
 
@@ -1123,7 +1121,9 @@ BOOL LLFloaterSnapshot::postBuild()
 
 	getChild<LLUICtrl>("auto_snapshot_check")->setValue(gSavedSettings.getBOOL("AutoSnapshot"));
 	childSetCommitCallback("auto_snapshot_check", ImplBase::onClickAutoSnap, this);
-    
+
+    getChild<LLButton>("retract_btn")->setCommitCallback(boost::bind(&LLFloaterSnapshot::onExtendFloater, this));
+    getChild<LLButton>("extend_btn")->setCommitCallback(boost::bind(&LLFloaterSnapshot::onExtendFloater, this));
 
 	// Filters
 	LLComboBox* filterbox = getChild<LLComboBox>("filters_combobox");
@@ -1167,6 +1167,7 @@ BOOL LLFloaterSnapshot::postBuild()
 	impl->mPreviewHandle = previewp->getHandle();
     previewp->setContainer(this);
 	impl->updateControls(this);
+	impl->setAdvanced(gSavedSettings.getBOOL("AdvanceSnapshot"));
 	impl->updateLayout(this);
 	
 
@@ -1239,6 +1240,7 @@ void LLFloaterSnapshot::onOpen(const LLSD& key)
 	gSnapshotFloaterView->adjustToFitScreen(this, FALSE);
 
 	impl->updateControls(this);
+	impl->setAdvanced(gSavedSettings.getBOOL("AdvanceSnapshot"));
 	impl->updateLayout(this);
 
 	// <FS:Ansariel> FIRE-16145: CTRL-SHIFT-S doesn't update the snapshot anymore
@@ -1286,6 +1288,11 @@ void LLFloaterSnapshot::onOpen(const LLSD& key)
 	}
 #endif // OPENSIM
 // </FS:CR>
+}
+
+void LLFloaterSnapshot::onExtendFloater()
+{
+	impl->setAdvanced(gSavedSettings.getBOOL("AdvanceSnapshot"));
 }
 
 // <FS:Ansariel> FIRE-16043: Remember last used snapshot option
@@ -1414,14 +1421,14 @@ S32 LLFloaterSnapshot::notify(const LLSD& info)
 	return 0;
 }
 
-void LLFloaterSnapshotBase::ImplBase::updateLivePreview()
+BOOL LLFloaterSnapshotBase::ImplBase::updatePreviewList(bool initialized)
 {
 	LLFloaterFacebook* floater_facebook = LLFloaterReg::findTypedInstance<LLFloaterFacebook>("facebook");
 	LLFloaterFlickr* floater_flickr = LLFloaterReg::findTypedInstance<LLFloaterFlickr>("flickr");
 	LLFloaterTwitter* floater_twitter = LLFloaterReg::findTypedInstance<LLFloaterTwitter>("twitter");
 
-	if (!mFloater && !floater_facebook && !floater_flickr && !floater_twitter)
-		return;
+	if (!initialized && !floater_facebook && !floater_flickr && !floater_twitter)
+		return FALSE;
 
 	BOOL changed = FALSE;
 	LL_DEBUGS() << "npreviews: " << LLSnapshotLivePreview::sList.size() << LL_ENDL;
@@ -1430,8 +1437,13 @@ void LLFloaterSnapshotBase::ImplBase::updateLivePreview()
 	{
 		changed |= LLSnapshotLivePreview::onIdle(*iter);
 	}
+	return changed;
+}
 
-	if (mFloater && changed)
+
+void LLFloaterSnapshotBase::ImplBase::updateLivePreview()
+{
+	if (ImplBase::updatePreviewList(true) && mFloater)
 	{
 		LL_DEBUGS() << "changed" << LL_ENDL;
 		updateControls(mFloater);
@@ -1445,6 +1457,10 @@ void LLFloaterSnapshot::update()
 	if (inst != NULL)
 	{
 		inst->impl->updateLivePreview();
+	}
+	else
+	{
+		ImplBase::updatePreviewList(false);
 	}
 }
 
