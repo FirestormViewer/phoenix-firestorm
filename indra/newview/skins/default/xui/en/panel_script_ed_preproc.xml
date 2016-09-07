@@ -396,7 +396,7 @@
 	 name="Preprocessed"
 	 label="Preprocessed"
 	 width="487">
-		<script_editor
+		<fs_lsl_preproc_viewer
 		 left="0"
 		 top="0"
 		 type="string"
@@ -420,7 +420,7 @@
 		 word_wrap="true"
 		 show_context_menu="true">
 			Loading...
-		</script_editor>
+		</fs_lsl_preproc_viewer>
 	</panel>
 	</tab_container>
     <scroll_list

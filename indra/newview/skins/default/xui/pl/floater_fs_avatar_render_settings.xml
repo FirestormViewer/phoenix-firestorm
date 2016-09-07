@@ -6,6 +6,7 @@
 	<floater.string name="av_render_always">
 		Zawsze
 	</floater.string>
+	<filter_editor label="Filtruj awatary" name="filter_input" />
 	<name_list name="avatar_list">
 		<name_list.columns label="Imię" name="name" />
 		<name_list.columns label="Renderowanie" name="render_setting" />
