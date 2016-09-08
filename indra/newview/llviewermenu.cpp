@@ -7552,7 +7552,12 @@ void handle_viewer_disable_message_log(void*)
 void handle_customize_avatar()
 {
 	// <FS:Ansariel> FIRE-19614: Make CTRL-O toggle the appearance floater
-	if (LLFloaterReg::instanceVisible("appearance"))
+	LLFloater* floater = LLFloaterReg::findInstance("appearance");
+	if (floater && floater->isMinimized())
+	{
+		floater->setMinimized(FALSE);
+	}
+	else if (LLFloater::isShown(floater))
 	{
 		LLFloaterReg::hideInstance("appearance");
 	}
@@ -10682,7 +10687,12 @@ void toggleTeleportHistory()
 	}
 	else
 	{
-		if (LLFloaterReg::instanceVisible("places"))
+		LLFloater* floater = LLFloaterReg::findInstance("places");
+		if (floater && floater->isMinimized())
+		{
+			floater->setMinimized(FALSE);
+		}
+		else if (LLFloater::isShown(floater))
 		{
 			LLFloaterReg::hideInstance("places");
 		}
