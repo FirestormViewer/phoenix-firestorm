@@ -84,6 +84,9 @@
    left="5"
    multi_select="true"
    draw_heading="true"
+   persist_sort_order="true"
+   primary_sort_only="true"
+   sort_column="0"
    column_padding="0"
    search_column="0">
    <scroll_list.columns
