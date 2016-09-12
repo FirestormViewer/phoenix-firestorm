@@ -6172,8 +6172,7 @@ You cannot undo this action.
    type="alertmodal">
    <unique/>
 Thank you for taking the time to inform us of this issue. 
-We will review your report for possible violations and take
-the appropriate action.
+We will review your report for possible violations and take the appropriate action.
     <usetemplate
      name="okbutton"
      yestext="OK"/>

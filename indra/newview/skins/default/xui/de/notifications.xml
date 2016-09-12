@@ -2460,6 +2460,10 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 		Soll das ausgewählte Objekt wirklich getrennt werden?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Trennen"/>
 	</notification>
+	<notification name="HelpReportAbuseConfirm">
+		Vielen Dank, dass Sie sich die Zeit genommen haben, uns über den Vorfall zu informieren.
+Wir werden Ihre Meldung auf mögliche Verstöße untersuchen und angemessene Aktionen ergreifen.
+	</notification>
 	<notification name="HelpReportAbuseSelectCategory">
 		Wählen Sie eine Missbrauchskategorie aus.
 Die Angabe einer Kategorie hilft uns bei der Bearbeitung des Berichts.
