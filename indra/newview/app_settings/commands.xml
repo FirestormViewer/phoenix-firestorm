@@ -420,9 +420,9 @@
            label_ref="Command_Asset_Blacklist_Label"
            tooltip_ref="Command_Asset_Blacklist_Tooltip"
            execute_function="Floater.Toggle"
-           execute_parameters="ws_asset_blacklist"
+           execute_parameters="fs_asset_blacklist"
            is_running_function="Floater.IsOpen"
-           is_running_parameters="ws_asset_blacklist"
+           is_running_parameters="fs_asset_blacklist"
            />
 		   
   <command name="phototools"

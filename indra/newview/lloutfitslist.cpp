@@ -499,7 +499,7 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 	// <FS:Ansariel> FIRE-12939: Add outfit count to outfits list
 	{
 		std::string count_string;
-		LLLocale locale(LLLocale::USER_LOCALE);
+		LLLocale locale("");
 		LLResMgr::getInstance()->getIntegerString(count_string, (S32)cat_array.size());
 		getChild<LLTextBox>("OutfitcountText")->setTextArg("COUNT", count_string);
 	}
@@ -1243,7 +1243,7 @@ bool is_tab_header_clicked(LLAccordionCtrlTab* tab, S32 y)
 void LLOutfitsList::updateAvatarComplexity(U32 complexity)
 {
 	std::string complexity_string;
-	LLLocale locale(LLLocale::USER_LOCALE);
+	LLLocale locale("");
 	LLResMgr::getInstance()->getIntegerString(complexity_string, complexity);
 
 	mAvatarComplexityLabel->setTextArg("[WEIGHT]", complexity_string);

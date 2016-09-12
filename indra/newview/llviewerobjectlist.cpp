@@ -82,7 +82,7 @@
 
 #include <algorithm>
 #include <iterator>
-#include "fswsassetblacklist.h"
+#include "fsassetblacklist.h"
 #include "fsfloaterimport.h"
 #include "fscommon.h"
 #include "llfloaterreg.h"
@@ -349,6 +349,13 @@ LLViewerObject* LLViewerObjectList::processObjectUpdateFromCache(LLVOCacheEntry*
 	cached_dpp->unpackUUID(fullid, "ID");
 	cached_dpp->unpackU32(local_id, "LocalID");
 	cached_dpp->unpackU8(pcode, "PCode");
+
+	// <FS:Ansariel> Don't process derendered objects
+	if (mDerendered.end() != mDerendered.find(fullid))
+	{
+		return NULL;
+	}
+	// </FS:Ansariel>
 
 	objectp = findObject(fullid);
 
@@ -636,11 +643,9 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 			}
 #endif
 
-
-			
-			if(FSWSAssetBlacklist::getInstance()->isBlacklisted(fullid,LLAssetType::AT_OBJECT))
+			if (FSAssetBlacklist::getInstance()->isBlacklisted(fullid, LLAssetType::AT_OBJECT))
 			{
-				LL_INFOS() << "Blacklisted object blocked." << LL_ENDL; 
+				LL_INFOS() << "Blacklisted object blocked." << LL_ENDL;
 				continue;
 			}
 
@@ -2143,17 +2148,18 @@ LLViewerObject *LLViewerObjectList::createObjectFromCache(const LLPCode pcode, L
 	
 	updateActive(objectp);
 
-	// <FS:ND> We might have killed this object earlier, but it might get resurrected from fastcache. Kill it again to make sure it stays dead.
-	if( mDerendered.end() != mDerendered.find( uuid ) )
-		killObject( objectp );
-	// </FS:ND>
-
 	return objectp;
 }
 
 LLViewerObject *LLViewerObjectList::createObject(const LLPCode pcode, LLViewerRegion *regionp,
 												 const LLUUID &uuid, const U32 local_id, const LLHost &sender)
 {
+	// <FS:Ansariel> Don't create derendered objects
+	if (mDerendered.end() != mDerendered.find(uuid))
+	{
+		return NULL;
+	}
+	// </FS:Ansariel>
 	
 	LLUUID fullid;
 	if (uuid == LLUUID::null)
@@ -2185,11 +2191,6 @@ LLViewerObject *LLViewerObjectList::createObject(const LLPCode pcode, LLViewerRe
 	mObjects.push_back(objectp);
 
 	updateActive(objectp);
-
-	// <FS:ND> We might have killed this object earlier, but it might get resurrected from fastcache. Kill it again to make sure it stays dead.
-	if( mDerendered.end() != mDerendered.find( uuid ) )
-		killObject( objectp );
-	// </FS:ND>
 
 	return objectp;
 }
@@ -2421,16 +2422,31 @@ LLDebugBeacon::~LLDebugBeacon()
 }
 
 // <FS:ND> Helper function to purge the internal list of derendered objects on teleport.
-
-void LLViewerObjectList::resetDerenderList()
+void LLViewerObjectList::resetDerenderList(bool force /*= false*/)
 {
-	std::map< LLUUID, bool > oDerendered;
+	static LLCachedControl<bool> fsTempDerenderUntilTeleport(gSavedSettings, "FSTempDerenderUntilTeleport");
+	if (!fsTempDerenderUntilTeleport && !force)
+	{
+		return;
+	}
 
-	for( std::map< LLUUID, bool >::iterator itr = mDerendered.begin(); itr != mDerendered.end(); ++itr )
-		if( itr->second )
-			oDerendered[ itr->first ] = itr->second;
+	std::map< LLUUID, bool > oDerendered;
+	uuid_vec_t removed_ids;
+
+	for (std::map< LLUUID, bool >::iterator itr = mDerendered.begin(); itr != mDerendered.end(); ++itr)
+	{
+		if (itr->second)
+		{
+			oDerendered[itr->first] = itr->second;
+		}
+		else
+		{
+			removed_ids.push_back(itr->first);
+		}
+	}
 
 	mDerendered.swap( oDerendered );
+	FSAssetBlacklist::instance().removeItemsFromBlacklist(removed_ids);
 }
 
 // <FS:ND> Helper function to add items from global blacklist after teleport.

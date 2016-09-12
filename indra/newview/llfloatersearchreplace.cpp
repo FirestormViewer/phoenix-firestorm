@@ -136,11 +136,11 @@ BOOL LLFloaterSearchReplace::handleKeyHere(KEY key, MASK mask)
 }
 
 //static 
-void LLFloaterSearchReplace::show(LLTextEditor* pEditor)
+LLFloaterSearchReplace* LLFloaterSearchReplace::show(LLTextEditor* pEditor)
 {
 	LLFloaterSearchReplace* pSelf = LLFloaterReg::getTypedInstance<LLFloaterSearchReplace>("search_replace");
 	if ( (!pSelf) || (!pEditor) )
-		return;
+		return NULL;
 
 	LLFloater *pDependeeNew = NULL, *pDependeeOld = pSelf->getDependee();
 	LLView* pView = pEditor->getParent();
@@ -170,6 +170,14 @@ void LLFloaterSearchReplace::show(LLTextEditor* pEditor)
 
 	pSelf->m_EditorHandle = pEditor->getHandle();
 	pSelf->openFloater();
+
+	return pSelf;
+}
+
+//static
+LLFloaterSearchReplace* LLFloaterSearchReplace::findInstance()
+{
+	return LLFloaterReg::findTypedInstance<LLFloaterSearchReplace>("search_replace");
 }
 
 LLTextEditor* LLFloaterSearchReplace::getEditor() const
@@ -213,4 +221,10 @@ void LLFloaterSearchReplace::onReplaceAllClick()
 	}
 }
 
+void LLFloaterSearchReplace::setCanReplace(bool can_replace)
+{
+	m_pReplaceEditor->setEnabled(can_replace);
+	getChild<LLButton>("replace_btn")->setEnabled(can_replace);
+	getChild<LLButton>("replace_all_btn")->setEnabled(can_replace);
+}
 // ============================================================================

@@ -45,6 +45,7 @@
 #include "llagentcamera.h"
 // associated header
 #include "llavatarrendernotifier.h"
+#include "llresmgr.h"
 
 // when change exceeds this ration, notification is shown
 static const F32 RENDER_ALLOWED_CHANGE_PCT = 0.1f;
@@ -116,7 +117,15 @@ void LLAvatarRenderNotifier::displayNotification(bool show_over_limit)
 
 	LLDate expire_date(LLDate::now().secondsSinceEpoch() + expire_delay);
 	LLSD args;
-	args["AGENT_COMPLEXITY"] = LLSD::Integer(mLatestAgentComplexity);
+	// <FS:Ansariel> FIRE-19958: Add digit group separators to avatar complexity notification
+	//args["AGENT_COMPLEXITY"] = LLSD::Integer(mLatestAgentComplexity);
+	{
+		LLLocale locale("");
+		std::string complexity_string;
+		LLResMgr::getInstance()->getIntegerString(complexity_string, mLatestAgentComplexity);
+		args["AGENT_COMPLEXITY"] = complexity_string;
+	}
+	// </FS:Ansariel>
 	std::string notification_name;
     if (mShowOverLimitAgents)
     {

@@ -141,13 +141,13 @@
 // [/RLVa:KB]
 
 // Firestorm includes
+#include "fsassetblacklist.h"
 #include "fsdata.h"
 #include "fslslbridge.h"
 #include "fscommon.h"
 #include "fsfloaterexport.h"
 #include "fsfloatercontacts.h"	// <FS:Zi> Display group list in contacts floater
 #include "fspose.h"	// <FS:CR> FIRE-4345: Undeform
-#include "fswsassetblacklist.h"
 #include "lfsimfeaturehandler.h"
 #include "llavatarpropertiesprocessor.h"	// ## Zi: Texture Refresh
 #include "llsdserialize.h"
@@ -2861,6 +2861,7 @@ void cleanup_menus()
 // <FS:Ansariel> FIRE-6970/FIRE-6998: Optional permanent derendering of multiple objects
 void derenderObject(bool permanent)
 {
+	bool need_save = false;
 	LLViewerObject* objp;
 	LLSelectMgr* select_mgr = LLSelectMgr::getInstance();
 
@@ -2872,53 +2873,95 @@ void derenderObject(bool permanent)
 		if ( (objp) && (gAgentID != objp->getID()) && ((!rlv_handler_t::isEnabled()) || (!objp->isAttachment()) || (!objp->permYouOwner())) )
 // [/RLVa:KB]
 		{
+			LLUUID id = objp->getID();
+			std::string entry_name = "";
+			std::string region_name;
+			LLAssetType::EType asset_type;
+
+			if (objp->isAvatar())
+			{
+				LLNameValue* firstname = objp->getNVPair("FirstName");
+				LLNameValue* lastname = objp->getNVPair("LastName");
+				entry_name = llformat("%s %s", firstname->getString(), lastname->getString());
+				asset_type = LLAssetType::AT_PERSON;
+			}
+			else
+			{
+				bool next_object = false;
+				LLViewerObject::child_list_t object_children = objp->getChildren();
+				for (LLViewerObject::child_list_t::const_iterator it = object_children.begin(); it != object_children.end(); it++)
+				{
+					LLViewerObject* child = *it;
+					if (child->isAvatar() && child->asAvatar()->isSelf())
+					{
+						if (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT))
+						{
+							// RLVa: Prevent cheating out of sitting by derendering the object
+							select_mgr->deselectObjectOnly(objp);
+							next_object = true;
+						}
+						else
+						{
+							gAgent.standUp();
+						}
+						break;
+					}
+				}
+
+				if (next_object)
+				{
+					continue;
+				}
+
+				LLSelectNode* nodep = select_mgr->getSelection()->getFirstRootNode();
+				if (nodep)
+				{
+					if (!nodep->mName.empty())
+					{
+						entry_name = nodep->mName;
+					}
+				}
+				LLViewerRegion* region = objp->getRegion();
+				if (region)
+				{
+					region_name = region->getName();
+				}
+				asset_type = LLAssetType::AT_OBJECT;
+			}
+			
+			FSAssetBlacklist::getInstance()->addNewItemToBlacklist(id, entry_name, region_name, asset_type, permanent, false);
+			
 			if (permanent)
 			{
-				std::string entry_name = "";
-				std::string region_name;
-				LLAssetType::EType asset_type;
-
-				if (objp->isAvatar())
-				{
-					LLNameValue* firstname = objp->getNVPair("FirstName");
-					LLNameValue* lastname = objp->getNVPair("LastName");
-					entry_name = llformat("%s %s", firstname->getString(), lastname->getString());
-					asset_type = LLAssetType::AT_PERSON;
-				}
-				else
-				{
-					LLSelectNode* nodep = select_mgr->getSelection()->getFirstRootNode();
-					if (nodep)
-					{
-						if (!nodep->mName.empty())
-						{
-							entry_name = nodep->mName;
-						}
-					}
-					LLViewerRegion* region = objp->getRegion();
-					if (region)
-					{
-						region_name = region->getName();
-					}
-					asset_type = LLAssetType::AT_OBJECT;
-				}
-			
-				FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, asset_type);
+				need_save = true;
 			}
 
 			select_mgr->deselectObjectOnly(objp);
-
-			// <FS:ND> Pass true to make sure this object stays dead.
-			// gObjectList.killObject(objp);
-			gObjectList.addDerenderedItem( objp->getID(), permanent );
+			gObjectList.addDerenderedItem(id, permanent);
 			gObjectList.killObject(objp);
-			// </FS:ND>
+			if (LLViewerRegion::sVOCacheCullingEnabled && objp->getRegion())
+			{
+				objp->getRegion()->killCacheEntry(objp->getLocalID());
+			}
+
+			LLTool* tool = LLToolMgr::getInstance()->getCurrentTool();
+			LLViewerObject* tool_editing_object = tool->getEditingObject();
+			if (tool_editing_object && tool_editing_object->mID == id)
+			{
+				tool->stopEditing();
+			}
+
 		}
 		else if( (objp) && (gAgentID != objp->getID()) && ((rlv_handler_t::isEnabled()) || (objp->isAttachment()) || (objp->permYouOwner())) )
 		{
 			select_mgr->deselectObjectOnly(objp);
 			return;
 		}
+	}
+
+	if (need_save)
+	{
+		FSAssetBlacklist::getInstance()->saveBlacklist();
 	}
 }
 
@@ -7511,7 +7554,12 @@ void handle_viewer_disable_message_log(void*)
 void handle_customize_avatar()
 {
 	// <FS:Ansariel> FIRE-19614: Make CTRL-O toggle the appearance floater
-	if (LLFloaterReg::instanceVisible("appearance"))
+	LLFloater* floater = LLFloaterReg::findInstance("appearance");
+	if (floater && floater->isMinimized())
+	{
+		floater->setMinimized(FALSE);
+	}
+	else if (LLFloater::isShown(floater))
 	{
 		LLFloaterReg::hideInstance("appearance");
 	}
@@ -10641,7 +10689,12 @@ void toggleTeleportHistory()
 	}
 	else
 	{
-		if (LLFloaterReg::instanceVisible("places"))
+		LLFloater* floater = LLFloaterReg::findInstance("places");
+		if (floater && floater->isMinimized())
+		{
+			floater->setMinimized(FALSE);
+		}
+		else if (LLFloater::isShown(floater))
 		{
 			LLFloaterReg::hideInstance("places");
 		}

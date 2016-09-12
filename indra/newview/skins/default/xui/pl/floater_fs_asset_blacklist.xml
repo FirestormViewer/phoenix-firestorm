@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_asset_blacklist" title="Czarna lista zasobów danych">
+	<floater.string name="asset_object">
+		Obiekt
+	</floater.string>
+	<floater.string name="asset_texture">
+		Tekstura
+	</floater.string>
+	<floater.string name="asset_sound">
+		Dźwięk
+	</floater.string>
+	<floater.string name="asset_resident">
+		Rezydent
+	</floater.string>
+	<floater.string name="asset_unknown">
+		Nieznany
+	</floater.string>
+	<floater.string name="unknown_object">
+		Nieznany obiekt
+	</floater.string>
+	<floater.string name="unknown_region">
+		Nieznany region
+	</floater.string>
+	<floater.string name="DateFormatString">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</floater.string>
+	<filter_editor label="Filtruj czarną listę" name="filter_input" />
+	<fs_scroll_list name="result_list">
+		<columns name="name" label="Nazwa" />
+		<columns name="type" label="Typ" />
+		<columns name="date" label="Data" />
+		<columns name="permanent" label="Permanentne" />
+	</fs_scroll_list>
+	<button name="remove_btn" label="Usuń zaznaczone" />
+	<button name="remove_temp_btn" label="Usuń tymczasowe" />
+	<button name="close_btn" label="Zamknij" />
+</floater>

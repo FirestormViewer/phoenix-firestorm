@@ -58,6 +58,7 @@ class LLEventTimer;
 // [/SL:KB]
 // NaCl - LSL Preprocessor
 class FSLSLPreprocessor;
+class FSLSLPreProcViewer;
 // NaCl End
 
 // Inner, implementation class.  LLPreviewScript and LLLiveLSLEditor each own one of these.
@@ -146,6 +147,10 @@ private:
 	// NaCl - LSL Preprocessor
 	void		onToggleProc();
 	boost::signals2::connection	mTogglePreprocConnection;
+
+	void		onPreprocTabChanged(const std::string& tab_name);
+	void		performAction(const std::string& action);
+	bool		enableAction(const std::string& action);
 	// NaCl End
 	void		onBtnHelp();
 	void		onBtnDynamicHelp();
@@ -217,9 +222,11 @@ private:
 	LLButton*		mSearchBtn;
 // </FS:CR>
 	// NaCl - LSL Preprocessor
-	FSLSLPreprocessor* mLSLProc;
-	LLScriptEditor*	mPostEditor;
-	std::string		mPostScript;
+	FSLSLPreprocessor*	mLSLProc;
+	FSLSLPreProcViewer*	mPostEditor;
+	LLScriptEditor*		mCurrentEditor;
+	LLTabContainer*		mPreprocTab;
+	std::string			mPostScript;
 	// NaCl End
 
 	LLScriptEdContainer* mContainer; // parent view

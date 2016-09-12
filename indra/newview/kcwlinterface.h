@@ -33,7 +33,6 @@
 class LLParcel;
 class LLViewerRegion;
 class LLEnvironmentSettings;
-class LLParcelChangeObserver;
 
 class KCWindlightInterface : public LLSingleton<KCWindlightInterface>, LLEventTimer
 {
@@ -42,15 +41,18 @@ class KCWindlightInterface : public LLSingleton<KCWindlightInterface>, LLEventTi
 public:
 	KCWindlightInterface();
 	~KCWindlightInterface();
-	void ParcelChange();
-	virtual BOOL tick();
-	void ApplySettings(const LLSD& settings);
-	bool ApplySkySettings(const LLSD& settings);
-	void ApplyWindLightPreset(const std::string& preset);
-	void ResetToRegion(bool force = false);
-	//bool ChatCommand(std::string message, std::string from_name, LLUUID source_id, LLUUID owner_id);
-	bool LoadFromParcel(LLParcel *parcel);
-	bool ParseParcelForWLSettings(const std::string& desc, LLSD& settings);
+
+	void parcelChange();
+	/*virtual*/ BOOL tick(); // From LLEventTime
+
+	void applySettings(const LLSD& settings);
+	bool applySkySettings(const LLSD& settings);
+	void applyWindlightPreset(const std::string& preset);
+	void resetToRegion(bool force = false);
+
+	//bool chatCommand(std::string message, std::string from_name, LLUUID source_id, LLUUID owner_id);
+	bool loadFromParcel(LLParcel *parcel);
+	bool parseParcelForWLSettings(const std::string& desc, LLSD& settings);
 	void onClickWLStatusButton();
 	void setTPing(bool value) { mTPing = value; }
 	bool haveParcelOverride(const LLEnvironmentSettings& new_settings);
@@ -58,22 +60,19 @@ public:
 	bool getWLset() { return mWLset; }
 	
 private:
-	class LLParcelChangeObserver;
-	friend class LLParcelChangeObserver;
-	boost::signals2::connection	mParcelMgrConnection;
-	void onAgentParcelChange();
+	boost::signals2::connection mParcelMgrConnection;
 	
 	bool callbackParcelWL(const LLSD& notification, const LLSD& response);
 	bool callbackParcelWLClear(const LLSD& notification, const LLSD& response);
-	bool AllowedLandOwners(const LLUUID& agent_id);
-	LLUUID getOwnerID(LLParcel *parcel);
-	std::string getOwnerName(LLParcel *parcel);
+	bool allowedLandOwners(const LLUUID& agent_id);
+	LLUUID getOwnerID(LLParcel* parcel);
+	std::string getOwnerName(LLParcel* parcel);
 	void setWL_Status(bool pwl_status);
 	bool checkSettings();
 
 protected:
 	bool mWLset; //display the status bar icon?
-	std::set<LLUUID> mAllowedLand;
+	uuid_set_t mAllowedLand;
 	LLNotificationPtr mSetWLNotification;
 	LLNotificationPtr mClearWLNotification;
 	S32 mLastParcelID;

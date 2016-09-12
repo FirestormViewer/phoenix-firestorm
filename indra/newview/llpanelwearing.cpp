@@ -623,7 +623,7 @@ void LLPanelWearing::copyToClipboard()
 void LLPanelWearing::updateAvatarComplexity(U32 complexity)
 {
 	std::string complexity_string;
-	LLLocale locale(LLLocale::USER_LOCALE);
+	LLLocale locale("");
 	LLResMgr::getInstance()->getIntegerString(complexity_string, complexity);
 
 	mAvatarComplexityLabel->setTextArg("[WEIGHT]", complexity_string);

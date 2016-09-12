@@ -107,7 +107,7 @@
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
-#include "fswsassetblacklist.h"
+#include "fsassetblacklist.h"
 
 // <FS:Ansariel> [Legacy Bake]
 #ifdef OPENSIM
@@ -5421,7 +5421,7 @@ void LLViewerObject::setAttachedSound(const LLUUID &audio_uuid, const LLUUID& ow
 	}
 
 	// <FS:Ansariel> Asset blacklist
-	if (FSWSAssetBlacklist::getInstance()->isBlacklisted(audio_uuid, LLAssetType::AT_SOUND))
+	if (FSAssetBlacklist::getInstance()->isBlacklisted(audio_uuid, LLAssetType::AT_SOUND))
 	{
 		return;
 	}
