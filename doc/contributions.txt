@@ -202,6 +202,7 @@ Ansariel Hiller
 	MAINT-6511
 	MAINT-6612
 	MAINT-6637
+	MAINT-6636
 Aralara Rajal
 Arare Chantilly
 	CHUIBUG-191
@@ -1035,6 +1036,7 @@ Nicky Dasmijn
 	OPEN-187
     STORM-2010
 	STORM-2082
+	MAINT-6665
 Nicky Perian
 	OPEN-1
 	STORM-1087

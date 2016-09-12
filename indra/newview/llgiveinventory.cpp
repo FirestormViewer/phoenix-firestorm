@@ -255,7 +255,7 @@ bool LLGiveInventory::doGiveInventoryCategory(const LLUUID& to_agent,
 	gInventory.collectDescendentsIf (cat->getUUID(),
 		cats,
 		items,
-		LLInventoryModel::INCLUDE_TRASH,
+		LLInventoryModel::EXCLUDE_TRASH,
 		giveable);
 	S32 count = cats.size();
 	bool complete = true;
@@ -552,7 +552,7 @@ bool LLGiveInventory::commitGiveInventoryCategory(const LLUUID& to_agent,
 	gInventory.collectDescendentsIf (cat->getUUID(),
 		cats,
 		items,
-		LLInventoryModel::INCLUDE_TRASH,
+		LLInventoryModel::EXCLUDE_TRASH,
 		giveable);
 
 	bool give_successful = true;

@@ -1120,10 +1120,7 @@ bool LLDAELoader::OpenFile(const std::string& filename)
 std::string LLDAELoader::preprocessDAE(std::string filename)
 {
 	// Open a DAE file for some preprocessing (like removing space characters in IDs), see MAINT-5678
-	// <FS:Ansariel> FIRE-19806: Mesh upload from a folder with Unicode characters in the name fails
-	//std::ifstream inFile;
 	llifstream inFile;
-	// </FS:Ansariel>
 	inFile.open(filename.c_str(), std::ios_base::in);
 	std::stringstream strStream;
 	strStream << inFile.rdbuf();
