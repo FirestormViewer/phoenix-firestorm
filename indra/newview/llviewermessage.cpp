@@ -8112,41 +8112,36 @@ void process_frozen_message(LLMessageSystem *msgsystem, void **user_data)
 void process_economy_data(LLMessageSystem *msg, void** /*user_data*/)
 {
 	LLGlobalEconomy::processEconomyData(msg, LLGlobalEconomy::Singleton::getInstance());
+	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 // <FS:AW opensim currency support> 
 // AW: from this point anything is bogus because it's all replaced by the LLUploadCostCalculator in llviewermenu
-//	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 //	LL_INFOS_ONCE("Messaging") << "EconomyData message arrived; upload cost is L$" << upload_cost << LL_ENDL;
 // 	gMenuHolder->getChild<LLUICtrl>("Upload Image")->setLabelArg("[COST]", llformat("%d", upload_cost));
 // 	gMenuHolder->getChild<LLUICtrl>("Upload Sound")->setLabelArg("[COST]", llformat("%d", upload_cost));
 // 	gMenuHolder->getChild<LLUICtrl>("Upload Animation")->setLabelArg("[COST]", llformat("%d", upload_cost));
 // 	gMenuHolder->getChild<LLUICtrl>("Bulk Upload")->setLabelArg("[COST]", llformat("%d", upload_cost));
+	std::string cost_str;
+#ifdef OPENSIM
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		cost_str = upload_cost > 0 ? llformat("%s%d", "L$", upload_cost) : LLTrans::getString("free");
+	}
+	else
+#endif
+	{
+		cost_str = "L$" + (upload_cost > 0 ? llformat("%d", upload_cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost")));
+	}
+
+	LL_INFOS_ONCE("Messaging") << Tea::wrapCurrency("EconomyData message arrived; upload cost is L$") << cost_str << LL_ENDL;
+
+	gMenuHolder->getChild<LLUICtrl>("Upload Image")->setLabelArg("[COST]",  cost_str);
+	gMenuHolder->getChild<LLUICtrl>("Upload Sound")->setLabelArg("[COST]",  cost_str);
+	gMenuHolder->getChild<LLUICtrl>("Upload Animation")->setLabelArg("[COST]", cost_str);
+	gMenuHolder->getChild<LLUICtrl>("Bulk Upload")->setLabelArg("[COST]", cost_str);
+// <FS:AW opensim currency support>
 
 	// update L$ substitution for "Buy and Sell L$", it was set before we knew the currency
 	gMenuHolder->getChild<LLUICtrl>("Buy and Sell L$")->setLabelArg("L$", LLStringExplicit("L$"));
-
-	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
-	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
-	std::string upload_cost;
-#ifdef OPENSIM // <FS:AW optional opensim support>
-	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
-	if(in_opensim)
-	{
-		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
-	}
-	else
-#endif // OPENSIM // <FS:AW optional opensim support>
-	{
-		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
-	}
-
-	LL_INFOS_ONCE("Messaging") << Tea::wrapCurrency("EconomyData message arrived; upload cost is L$") << upload_cost << LL_ENDL;
-
-	gMenuHolder->getChild<LLUICtrl>("Upload Image")->setLabelArg("[COST]",  upload_cost);
-	gMenuHolder->getChild<LLUICtrl>("Upload Sound")->setLabelArg("[COST]",  upload_cost);
-	gMenuHolder->getChild<LLUICtrl>("Upload Animation")->setLabelArg("[COST]", upload_cost);
-	gMenuHolder->getChild<LLUICtrl>("Bulk Upload")->setLabelArg("[COST]", upload_cost);
-// <FS:AW opensim currency support>
-
 }
 
 void notify_cautioned_script_question(const LLSD& notification, const LLSD& response, S32 orig_questions, BOOL granted)
