@@ -39,9 +39,10 @@
 	     layout="topleft"
 	     multi_select="false"
 	     name="behaviour_list"
+		 sort_column="0"
 	     tool_tip="List of current RLVa restrictions."
 	     top_pad="0" >
-        <scroll_list.columns label="Restriction" name="behaviour" width="70" />
+        <scroll_list.columns label="Restriction" name="behaviour" width="80" />
         <scroll_list.columns label="Object Name" name="issuer" />
       </scroll_list>
     </panel>
@@ -60,9 +61,10 @@
 	     layout="topleft"
 	     multi_select="false"
 	     name="exception_list"
+		 sort_column="0"
 	     tool_tip="List of current RLVa exceptions."
 	     top_pad="0" >
-        <scroll_list.columns label="Exception" name="behaviour" width="70" />
+        <scroll_list.columns label="Exception" name="behaviour" width="80" />
         <scroll_list.columns label="Source" name="option" width="105" />
         <scroll_list.columns label="Object Name" name="issuer" />
       </scroll_list>
@@ -82,6 +84,7 @@
        layout="topleft"
        multi_select="false"
        name="modifier_list"
+       sort_column="0"
        tool_tip="List of current RLVa modifiers."
        top_pad="0" >
         <scroll_list.columns label="Modifier" name="modifier" width="105" />

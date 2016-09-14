@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="ws_asset_blacklist" title="非表示アイテムリスト">
+<floater name="fs_asset_blacklist" title="非表示アイテムリスト">
 	<floater.string name="asset_object">
 		オブジェクト
 	</floater.string>
@@ -21,20 +21,11 @@
 	<floater.string name="unknown_region">
 		不明の地域
 	</floater.string>
-	<scroll_list name="result_list">
-		<scroll_list.columns name="name" label="名前" />
-		<scroll_list.columns name="region" label="地域" />
-		<scroll_list.columns name="type" label="種類" />
-		<scroll_list.columns name="date" label="日時" />
-		
-		<row>
-			<column column="name">[UNKNOWN] 項目</column>
-			<column column="region">[UNKNOWN] 地域</column>
-			<column column="type">不明</column>
-			<column column="date">2012-12-11 13:37:00</column>
-		</row>
-		
-	</scroll_list>	
-	
+	<fs_scroll_list name="result_list">
+		<columns name="name" label="名前" />
+		<columns name="region" label="地域" />
+		<columns name="type" label="種類" />
+		<columns name="date" label="日時" />
+	</fs_scroll_list>
 	<button name="remove_btn" label="選択した項目をリストから除外" />
 </floater>

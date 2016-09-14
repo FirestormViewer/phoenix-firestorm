@@ -1,10 +1,11 @@
 /**
- * @file fsfloaterwsassetblacklist.h
+ * @file fsfloaterassetblacklist.h
  * @brief Floater for Asset Blacklist and Derender
  *
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
  * Copyright (C) 2012, Wolfspirit Magic
+ * Copyright (C) 2016, Ansariel Hiller
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,34 +26,61 @@
  * $/LicenseInfo$
  */
 
-#ifndef FS_FLOATERWSASSETBLACKLIST_H
-#define FS_FLOATERWSASSETBLACKLIST_H
+#ifndef FS_FLOATERASSETBLACKLIST_H
+#define FS_FLOATERASSETBLACKLIST_H
 
+#include "fsassetblacklist.h"
 #include "llfloater.h"
+#include "lllistcontextmenu.h"
 
-class LLScrollListCtrl;
+class FSScrollListCtrl;
 
-class FSFloaterWSAssetBlacklist : public LLFloater
+class FSFloaterAssetBlacklist : public LLFloater
 {
-	LOG_CLASS(FSFloaterWSAssetBlacklist);
+	LOG_CLASS(FSFloaterAssetBlacklist);
+
 public:
-	FSFloaterWSAssetBlacklist(const LLSD& key);
-	virtual ~FSFloaterWSAssetBlacklist();
+	FSFloaterAssetBlacklist(const LLSD& key);
+	virtual ~FSFloaterAssetBlacklist();
 
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ BOOL postBuild();
 
-	std::string getTypeString(S32 type);
-	void buildBlacklist();
 	void addElementToList(const LLUUID& id, const LLSD& data);
-	void removeElementFromList(const LLUUID& id);
+	void removeElements();
 
 protected:
 	void onRemoveBtn();
-	void onCancelBtn();
+	void onRemoveAllTemporaryBtn();
+	void onCloseBtn();
+	void onFilterEdit(const std::string& search_string);
+	void onBlacklistChanged(const LLSD& data, FSAssetBlacklist::eBlacklistOperation op);
+
+	void buildBlacklist();
+	std::string getTypeString(S32 type);
 
 private:
-	LLScrollListCtrl* mResultList;
+	FSScrollListCtrl*	mResultList;
+
+	std::string			mFilterSubString;
+	std::string			mFilterSubStringOrig;
+
+	boost::signals2::connection mBlacklistCallbackConnection;
 };
+
+namespace FSFloaterAssetBlacklistMenu
+{
+
+	class FSAssetBlacklistMenu : public LLListContextMenu
+	{
+	public:
+		/*virtual*/ LLContextMenu* createMenu();
+	private:
+		void onContextMenuItemClick(const LLSD& param);
+	};
+
+	extern FSAssetBlacklistMenu gFSAssetBlacklistMenu;
+
+} // namespace FSFloaterAssetBlacklistMenu
 
 #endif // FS_FLOATERWSASSETBLACKLIST_H

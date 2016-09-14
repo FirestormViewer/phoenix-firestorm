@@ -218,6 +218,7 @@
 #include "growlmanager.h"
 #endif
 
+#include "fsassetblacklist.h"
 #include "fsavatarrenderpersistence.h"
 #include "fscommon.h"
 #include "fscorehttputil.h"
@@ -230,7 +231,6 @@
 #include "fsradar.h"
 #include "fsregistrarutils.h"
 #include "fsscriptlibrary.h"
-#include "fswsassetblacklist.h"
 #include "lfsimfeaturehandler.h"
 #include "lggcontactsets.h"
 #include "llfloatersearch.h"
@@ -1344,7 +1344,7 @@ bool idle_startup()
 		LLFile::mkdir(user_windlight_days_path_name.c_str());
 
 		// <FS:WS> Initalize Account based asset_blacklist
-		FSWSAssetBlacklist::getInstance()->init();
+		FSAssetBlacklist::getInstance()->init();
 
 		// <FS:Techwolf Lupindo> load per grid data
 		FSData::instance().downloadAgents();

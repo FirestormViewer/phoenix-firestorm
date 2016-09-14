@@ -252,7 +252,7 @@ private:
 private:
 	std::map< LLUUID, bool > mDerendered;
 public:
-	void resetDerenderList();
+	void resetDerenderList(bool force = false);
 	void addDerenderedItem( LLUUID const &, bool );
 	void removeDerenderedItem( LLUUID const & );
 // </FS:ND>

@@ -33,7 +33,7 @@
 #include "fsdata.h"
 #include "fscommon.h"
 #include "fscorehttputil.h"
-#include "fswsassetblacklist.h"
+#include "fsassetblacklist.h"
 
 /* boost: will not compile unless equivalent is undef'd, beware. */
 #include "fix_macros.h"
@@ -471,11 +471,12 @@ void FSData::processAssets(const LLSD& assets)
 		LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
 		cipher.decrypt(uid.mData, UUID_BYTES);
 		LLSD data = itr->second;
+		data["asset_permanent"] = false; // Don't save these locally!
 		if (uid.isNull())
 		{
 			continue;
 		}
-		FSWSAssetBlacklist::instance().addNewItemToBlacklistData(uid, data, false);
+		FSAssetBlacklist::instance().addNewItemToBlacklistData(uid, data, false);
 		LL_DEBUGS("fsdata") << "Added " << uid << " to assets list." << LL_ENDL;
 	}
 }

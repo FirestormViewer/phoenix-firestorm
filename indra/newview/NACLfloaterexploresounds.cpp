@@ -12,7 +12,7 @@
 #include "llavatarnamecache.h"
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
-#include "fswsassetblacklist.h"
+#include "fsassetblacklist.h"
 #include "fscommon.h"
 
 static const size_t num_collision_sounds = 28;
@@ -431,6 +431,6 @@ void NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback(const LLUUID& 
 		}
 		mBlacklistAvatarNameCacheConnections.erase(it);
 	}
-	FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(asset_id, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND, true);
+	FSAssetBlacklist::getInstance()->addNewItemToBlacklist(asset_id, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND);
 }
 

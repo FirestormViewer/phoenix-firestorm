@@ -53,9 +53,9 @@
 			</script_editor>
 		</panel>
 		<panel name="Preprocessed" label="Précompilé">
-			<script_editor name="Post Editor">
+			<fs_lsl_preproc_viewer name="Post Editor">
  			Chargement...
-			</script_editor>
+			</fs_lsl_preproc_viewer>
 		</panel>
 	</tab_container>
 	<combo_box label="Insérer..." name="Insert..."/>

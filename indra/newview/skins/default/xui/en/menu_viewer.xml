@@ -1195,7 +1195,7 @@
         name="asset_blacklist">
         <menu_item_call.on_click
           function="Floater.Toggle"
-          parameter="ws_asset_blacklist" />
+          parameter="fs_asset_blacklist" />
       </menu_item_call>
       <menu_item_call
         label="Avatar Render Settings"
