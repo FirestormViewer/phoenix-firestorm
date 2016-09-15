@@ -1099,5 +1099,14 @@
     <color
      name="CurrencyColor"
      reference="LabelTextColor" />
+  <color
+    name="OutfitGalleryItemSelected"
+    reference="EmphasisColor" />
+  <color
+    name="OutfitGalleryItemWorn"
+    reference="EmphasisColor" />
+  <color
+    name="OutfitGalleryItemUnselected"
+    value="0.4 0.4 0.4 1" />
 </colors>
 

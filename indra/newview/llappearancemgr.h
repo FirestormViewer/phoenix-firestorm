@@ -66,6 +66,7 @@ public:
 	void changeOutfit(bool proceed, const LLUUID& category, bool append);
 	void replaceCurrentOutfit(const LLUUID& new_outfit);
 	void renameOutfit(const LLUUID& outfit_id);
+	void removeOutfitPhoto(const LLUUID& outfit_id);
 	void takeOffOutfit(const LLUUID& cat_id);
 	void addCategoryToCurrentOutfit(const LLUUID& cat_id);
 	S32 findExcessOrDuplicateItems(const LLUUID& cat_id,
@@ -195,6 +196,9 @@ public:
 	
 	void wearBaseOutfit();
 
+	void setOutfitImage(const LLUUID& image_id) {mCOFImageID = image_id;}
+	LLUUID getOutfitImage() {return mCOFImageID;}
+
 	// Overrides the base outfit with the content from COF
 	// @return false if there is no base outfit
 	bool updateBaseOutfit();
@@ -298,6 +302,8 @@ private:
 	static bool mActive;
 
 	attachments_changed_signal_t		mAttachmentsChangeSignal;
+
+	LLUUID mCOFImageID;
 
 	std::auto_ptr<LLOutfitUnLockTimer> mUnlockOutfitTimer;
 

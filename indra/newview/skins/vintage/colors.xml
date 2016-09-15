@@ -296,4 +296,13 @@
   <color
       name="MoneyTrackerDecrease"
       value="0.4 0.0 0.0 1" />
+  <color
+    name="OutfitGalleryItemSelected"
+    reference="EmphasisColor" />
+  <color
+    name="OutfitGalleryItemWorn"
+    reference="EmphasisColor" />
+  <color
+    name="OutfitGalleryItemUnselected"
+    value="0.4 0.4 0.4 1" />
 </colors>

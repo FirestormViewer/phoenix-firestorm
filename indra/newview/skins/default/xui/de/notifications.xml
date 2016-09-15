@@ -4595,6 +4595,10 @@ Wählen Sie eine kleinere Landfläche aus.
 		Chatverlaufsdatei ist noch mit vorheriger Operation beschäftigt. Versuchen Sie es in ein paar Minuten noch einmal oder chatten Sie mit einer anderen Person.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="OutfitPhotoLoadError">
+		[REASON]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 
   <notification name="FSWL" label="Windlight-Umgebungseinstellungen anpassen">
 „[PARCEL_NAME]“, im Besitz von [OWNER_NAME], möchte deine visuellen Windlight-Umgebungseinstellungen ändern.
