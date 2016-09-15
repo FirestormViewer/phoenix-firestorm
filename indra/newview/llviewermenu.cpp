@@ -633,16 +633,15 @@ void init_menus()
 	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
 	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 	std::string upload_cost;
-#ifdef OPENSIM // <FS:AW optional opensim support>
-	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
-	if(in_opensim)
+#ifdef OPENSIM
+	if (LLGridManager::getInstance()->isInOpenSim())
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
 	}
 	else
-#endif // OPENSIM // <FS:AW optional opensim support>
+#endif
 	{
-		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
+		upload_cost = "L$" + (cost > 0 ? llformat("%d", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost")));
 	}
 // </FS:AW opensim currency support>
 	gMenuHolder->childSetLabelArg("Upload Image", "[COST]", upload_cost);
@@ -7552,7 +7551,12 @@ void handle_viewer_disable_message_log(void*)
 void handle_customize_avatar()
 {
 	// <FS:Ansariel> FIRE-19614: Make CTRL-O toggle the appearance floater
-	if (LLFloaterReg::instanceVisible("appearance"))
+	LLFloater* floater = LLFloaterReg::findInstance("appearance");
+	if (floater && floater->isMinimized())
+	{
+		floater->setMinimized(FALSE);
+	}
+	else if (LLFloater::isShown(floater))
 	{
 		LLFloaterReg::hideInstance("appearance");
 	}
@@ -10579,10 +10583,10 @@ class LLToggleUIHints : public view_listener_t
 
 void LLUploadCostCalculator::calculateCost()
 {
+ 	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+ 
+ 	// getPriceUpload() returns -1 if no data available yet.
 // <FS:AW opensim currency support>
-// 	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
-// 
-// 	// getPriceUpload() returns -1 if no data available yet.
 // 	if(upload_cost >= 0)
 // 	{
 // 		mCostStr = llformat("%d", upload_cost);
@@ -10591,23 +10595,16 @@ void LLUploadCostCalculator::calculateCost()
 // 	{
 // 		mCostStr = llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
 // 	}
-
-	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
-	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
-	std::string upload_cost;
 #ifdef OPENSIM // <FS:AW optional opensim support>
-	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
-	if(in_opensim)
+	if (LLGridManager::getInstance()->isInOpenSim())
 	{
-		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
+		mCostStr = upload_cost > 0 ? llformat("%s%d", "L$", upload_cost) : LLTrans::getString("free");
 	}
 	else
 #endif // OPENSIM // <FS:AW optional opensim support>
 	{
-		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
+		mCostStr = "L$" + (upload_cost > 0 ? llformat("%d", upload_cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost")));
 	}
-
-	mCostStr = upload_cost;
 // </FS:AW opensim currency support>
 }
 
@@ -10682,7 +10679,12 @@ void toggleTeleportHistory()
 	}
 	else
 	{
-		if (LLFloaterReg::instanceVisible("places"))
+		LLFloater* floater = LLFloaterReg::findInstance("places");
+		if (floater && floater->isMinimized())
+		{
+			floater->setMinimized(FALSE);
+		}
+		else if (LLFloater::isShown(floater))
 		{
 			LLFloaterReg::hideInstance("places");
 		}
