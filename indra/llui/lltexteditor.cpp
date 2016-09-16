@@ -2633,7 +2633,10 @@ void LLTextEditor::updateLinkSegments()
 			// if the link's label (what the user can edit) is a valid Url,
 			// then update the link's HREF to be the same as the label text.
 			// This lets users edit Urls in-place.
-			if (LLUrlRegistry::instance().hasUrl(url_label))
+			// <FS:Ansariel> FIRE-20054: Only update link's HREF to label text if the user can edit the text
+			//if (LLUrlRegistry::instance().hasUrl(url_label))
+			if (LLUrlRegistry::instance().hasUrl(url_label) && !getReadOnly())
+			// </FS:Ansariel>
 			{
 				std::string new_url = wstring_to_utf8str(url_label);
 				LLStringUtil::trim(new_url);

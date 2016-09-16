@@ -79,7 +79,7 @@
  	 name="local_failed_str">
  	    Failed to save to computer.
  	</string>
-	<panel
+	<view
 	 name="controls_container"
 	 layout="topleft"
 	 follows="left|top"
@@ -417,7 +417,7 @@
        width="130">
           Refresh to save.
       </text>
-	</panel>
+	</view>
   <ui_ctrl 
     layout="topleft"
     name="thumbnail_placeholder"

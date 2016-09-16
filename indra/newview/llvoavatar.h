@@ -201,8 +201,12 @@ public:
 	void					startDefaultMotions();
 	void					dumpAnimationState();
 
-	virtual LLJoint*		getJoint(const std::string &name);
-	
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+	//virtual LLJoint*		getJoint( const std::string &name );
+	virtual LLJoint*		getJoint( const JointKey &name );
+	LLJoint* getJoint( const std::string &name ) { return getJoint( JointKey::construct( name ) ); }
+// </FS:ND>
+
 	void 					addAttachmentPosOverridesForObject(LLViewerObject *vo);
 	void					resetJointPositionsOnDetach(const LLUUID& mesh_id);
 	void					resetJointPositionsOnDetach(LLViewerObject *vo);

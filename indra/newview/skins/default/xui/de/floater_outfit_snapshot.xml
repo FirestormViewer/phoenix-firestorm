@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="outfit_snapshot" title="Outfit-Foto">
+	<floater.string name="unknown">
+		unbekannt
+	</floater.string>
+	<string name="inventory_progress_str">
+		Speichern im Inventar
+	</string>
+	<string name="inventory_succeeded_str">
+		Im Inventar gespeichert!
+	</string>
+	<string name="inventory_failed_str">
+		Fehler beim Speichern im Inventar.
+	</string>
+	<view name="controls_container">
+	<button name="new_snapshot_btn" label="Aktualisieren"/>
+	<panel name="advanced_options_panel">
+		<text name="layer_type_label">
+			Aufnehmen:
+		</text>
+		<combo_box label="Bildebenen" name="layer_types">
+			<combo_box.item label="Farben" name="Colors"/>
+			<combo_box.item label="Tiefe" name="Depth"/>
+			<combo_box.item label="Tiefe (24 Bit)" name="Depth24"/>
+		</combo_box>
+		<check_box label="Benutzeroberfläche" name="ui_check"/>
+		<check_box label="L$-Kontostand" name="currency_check"/>
+		<check_box label="HUDs" name="hud_check"/>
+		<check_box label="Standbild (Vollbild)" name="freeze_frame_check"/>
+		<check_box label="Automatisch aktualisieren" name="auto_snapshot_check"/>
+		<combo_box label="Filter" name="filters_combobox" tool_tip="Bildfilter">
+			<combo_box.item label="Kein Filter" name="NoFilter"/>
+		</combo_box>
+	</panel>
+	<panel name="succeeded_panel">
+		<text name="succeeded_lbl">
+			Erfolgreich
+		</text>
+	</panel>
+	<panel name="failed_panel">
+		<text name="failed_lbl">
+			Fehlgeschlagen
+		</text>
+	</panel>
+	<text name="working_lbl">
+		Bitte warten
+	</text>
+	<text name="refresh_lbl">
+		Zum Speichern aktualisieren
+	</text>
+	</view>
+	<text name="image_res_text">
+		[WIDTH]px (Breite) x [HEIGHT]px (Höhe)
+	</text>
+	<text name="file_size_label">
+		[SIZE] KB
+	</text>
+</floater>

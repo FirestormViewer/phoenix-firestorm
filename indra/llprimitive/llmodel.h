@@ -33,6 +33,8 @@
 #include "m4math.h"
 #include <queue>
 
+#include "lljoint.h"
+
 class daeElement;
 class domMesh;
 
@@ -43,7 +45,11 @@ class LLMeshSkinInfo
 {
 public:
 	LLUUID mMeshID;
-	std::vector<std::string> mJointNames;
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//	std::vector<std::string> mJointNames;
+	std::vector< JointKey > mJointNames;
+// </FS:ND>
+
 	std::vector<LLMatrix4> mInvBindMatrix;
 	std::vector<LLMatrix4> mAlternateBindMatrix;
 	std::map<std::string, U32> mJointMap;

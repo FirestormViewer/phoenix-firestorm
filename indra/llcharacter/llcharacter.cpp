@@ -111,6 +111,14 @@ LLJoint *LLCharacter::getJoint( const std::string &name )
 	return joint;
 }
 
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+// Default fallback is string.
+LLJoint *LLCharacter::getJoint( const JointKey &name )
+{
+	return getJoint( name.mName );
+}
+// </FS:ND>
+
 //-----------------------------------------------------------------------------
 // registerMotion()
 //-----------------------------------------------------------------------------

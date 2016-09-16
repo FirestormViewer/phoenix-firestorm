@@ -118,7 +118,7 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	  mSavedFolderState(NULL),
 	  mFilterText(""),
 	  mMenuGearDefault(NULL),
-	  mMenuAdd(NULL),
+	  mMenuAddHandle(),
 	  mNeedUploadCost(true)
 {
 	// Menu Callbacks (non contex menus)
@@ -307,26 +307,29 @@ BOOL LLPanelMainInventory::postBuild()
 // <FS:AW opensim currency support>
 //	// *TODO:Get the cost info from the server
 //	const std::string upload_cost("10");
-	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
 	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 	std::string upload_cost;
-#ifdef OPENSIM // <FS:AW optional opensim support>
-	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
-	if(in_opensim)
+#ifdef OPENSIM
+	if (LLGridManager::getInstance()->isInOpenSim())
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
 	}
 	else
-#endif // OPENSIM // <FS:AW optional opensim support>
+#endif
 	{
-		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
+		upload_cost = "L$" + (cost > 0 ? llformat("%d", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost")));
 	}
 // </FS:AW opensim currency support>
 
-	mMenuAdd->getChild<LLMenuItemGL>("Upload Image")->setLabelArg("[COST]", upload_cost);
-	mMenuAdd->getChild<LLMenuItemGL>("Upload Sound")->setLabelArg("[COST]", upload_cost);
-	mMenuAdd->getChild<LLMenuItemGL>("Upload Animation")->setLabelArg("[COST]", upload_cost);
-	mMenuAdd->getChild<LLMenuItemGL>("Bulk Upload")->setLabelArg("[COST]", upload_cost);
+
+	LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
+	if (menu)
+	{
+		menu->getChild<LLMenuItemGL>("Upload Image")->setLabelArg("[COST]", upload_cost);
+		menu->getChild<LLMenuItemGL>("Upload Sound")->setLabelArg("[COST]", upload_cost);
+		menu->getChild<LLMenuItemGL>("Upload Animation")->setLabelArg("[COST]", upload_cost);
+		menu->getChild<LLMenuItemGL>("Bulk Upload")->setLabelArg("[COST]", upload_cost);
+	}
 
 	// Trigger callback for focus received so we can deselect items in inbox/outbox
 	LLFocusableElement::setFocusReceivedCallback(boost::bind(&LLPanelMainInventory::onFocusReceived, this));
@@ -1344,7 +1347,8 @@ void LLPanelMainInventory::initListCommandsHandlers()
 	mEnableCallbackRegistrar.add("Inventory.GearDefault.Enable", boost::bind(&LLPanelMainInventory::isActionEnabled, this, _2));
 	mMenuGearDefault = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_inventory_gear_default.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	mGearMenuButton->setMenu(mMenuGearDefault);
-	mMenuAdd = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_inventory_add.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	LLMenuGL* menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_inventory_add.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	mMenuAddHandle = menu->getHandle();
 
 	// Update the trash button when selected item(s) get worn or taken off.
 	LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&LLPanelMainInventory::updateListCommands, this));
@@ -1362,11 +1366,15 @@ void LLPanelMainInventory::onAddButtonClick()
 // Gray out the "New Folder" option when the Recent tab is active as new folders will not be displayed
 // unless "Always show folders" is checked in the filter options.
 	bool recent_active = ("Recent Items" == mActivePanel->getName());
-	mMenuAdd->getChild<LLMenuItemGL>("New Folder")->setEnabled(!recent_active);
+	LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
+	if (menu)
+	{
+		menu->getChild<LLMenuItemGL>("New Folder")->setEnabled(!recent_active);
 
-	setUploadCostIfNeeded();
+		setUploadCostIfNeeded();
 
-	showActionMenu(mMenuAdd,"add_btn");
+		showActionMenu(menu,"add_btn");
+	}
 }
 
 void LLPanelMainInventory::showActionMenu(LLMenuGL* menu, std::string spawning_view_name)
@@ -1547,7 +1555,11 @@ void LLPanelMainInventory::onVisibilityChange( BOOL new_visibility )
 {
 	if(!new_visibility)
 	{
-		mMenuAdd->setVisible(FALSE);
+		LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
+		if (menu)
+		{
+			menu->setVisible(FALSE);
+		}
 		getActivePanel()->getRootFolder()->finishRenamingItem();
 	}
 }
@@ -1776,16 +1788,17 @@ void LLPanelMainInventory::setUploadCostIfNeeded()
 	// have two instances of Inventory panel at the moment(and two instances of context menu),
 	// call to gMenuHolder->childSetLabelArg() sets upload cost only for one of the instances.
 
-	if(mNeedUploadCost && mMenuAdd)
+	LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
+	if(mNeedUploadCost && menu)
 	{
-		LLMenuItemBranchGL* upload_menu = mMenuAdd->findChild<LLMenuItemBranchGL>("upload");
+		LLMenuItemBranchGL* upload_menu = menu->findChild<LLMenuItemBranchGL>("upload");
 		if(upload_menu)
 		{
+			S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+			std::string cost_str;
+
+			// getPriceUpload() returns -1 if no data available yet.
 // <FS:AW opensim currency support>
-//			S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
-//			std::string cost_str;
-//
-//			// getPriceUpload() returns -1 if no data available yet.
 //			if(upload_cost >= 0)
 //			{
 //				mNeedUploadCost = false;
@@ -1795,31 +1808,21 @@ void LLPanelMainInventory::setUploadCostIfNeeded()
 //			{
 //				cost_str = llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
 //			}
-//			upload_menu->getChild<LLView>("Upload Image")->setLabelArg("[COST]", cost_str);
-//			upload_menu->getChild<LLView>("Upload Sound")->setLabelArg("[COST]", cost_str);
-//			upload_menu->getChild<LLView>("Upload Animation")->setLabelArg("[COST]", cost_str);
-//			upload_menu->getChild<LLView>("Bulk Upload")->setLabelArg("[COST]", cost_str);
-
-			// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
-			S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
-			std::string upload_cost;
-#ifdef OPENSIM // <FS:AW optional opensim support>
-			bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
-			if(in_opensim)
+#ifdef OPENSIM
+			if (LLGridManager::getInstance()->isInOpenSim())
 			{
-				upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
+				cost_str = upload_cost > 0 ? llformat("%s%d", "L$", upload_cost) : LLTrans::getString("free");
 			}
 			else
-#endif // OPENSIM // <FS:AW optional opensim support>
+#endif
 			{
-				upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
+				cost_str = "L$" + (upload_cost > 0 ? llformat("%d", upload_cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost")));
 			}
-
-			upload_menu->getChild<LLView>("Upload Image")->setLabelArg("[COST]", upload_cost);
-			upload_menu->getChild<LLView>("Upload Sound")->setLabelArg("[COST]", upload_cost);
-			upload_menu->getChild<LLView>("Upload Animation")->setLabelArg("[COST]", upload_cost);
-			upload_menu->getChild<LLView>("Bulk Upload")->setLabelArg("[COST]", upload_cost);
 // </FS:AW opensim currency support>
+			upload_menu->getChild<LLView>("Upload Image")->setLabelArg("[COST]", cost_str);
+			upload_menu->getChild<LLView>("Upload Sound")->setLabelArg("[COST]", cost_str);
+			upload_menu->getChild<LLView>("Upload Animation")->setLabelArg("[COST]", cost_str);
+			upload_menu->getChild<LLView>("Bulk Upload")->setLabelArg("[COST]", cost_str);
 		}
 	}
 }

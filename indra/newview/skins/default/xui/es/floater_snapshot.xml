@@ -40,7 +40,7 @@
 		Error al guardar en el equipo.
 	</string>
 	<button label="ACTUALIZAR" name="new_snapshot_btn"/>
-	<panel name="controls_container">
+	<view name="controls_container">
 	<panel name="advanced_options_panel">
 		<text name="layer_type_label">
 			Captura:
@@ -61,7 +61,7 @@
 			<combo_box.item label="Sin filtro" name="NoFilter"/>
 		</combo_box>
 	</panel>
-	</panel>
+	</view>
 	<text name="image_res_text">
 		[WIDTH] px (ancho) × [HEIGHT] px (alto)
 	</text>

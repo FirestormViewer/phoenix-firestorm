@@ -287,6 +287,9 @@ public:
 	// <FS:Techwolf Lupindo> texture comment metadata reader
 	std::string mComment;
 	// </FS:Techwolf Lupindo>
+
+private:
+	bool validateSrcAndDst(std::string func, LLImageRaw* src, LLImageRaw* dst);
 };
 
 // Compressed representation of image.

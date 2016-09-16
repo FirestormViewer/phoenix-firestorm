@@ -190,6 +190,7 @@ void LLFlickrConnect::flickrShareImageCoro(LLPointer<LLImageFormatted> image, st
 
     httpOpts->setWantHeaders(true);
     httpOpts->setFollowRedirects(false);
+	httpOpts->setRetries(0); // <FS:Ansariel> FIRE-20026: Pictures might get uploaded multiple times after a timeout occurs
 
     std::string imageFormat;
     if (dynamic_cast<LLImagePNG*>(image.get()))

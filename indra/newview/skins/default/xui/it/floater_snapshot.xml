@@ -40,7 +40,7 @@
 		Non salvato sul computer.
 	</string>
 	<button label="AGGIORNA" name="new_snapshot_btn"/>
-	<panel name="controls_container">
+	<view name="controls_container">
 	<panel name="advanced_options_panel">
 		<text name="layer_type_label">
 			Cattura:
@@ -60,7 +60,7 @@
 			<combo_box.item label="Nessun filtro" name="NoFilter"/>
 		</combo_box>
 	</panel>
-	</panel>
+	</view>
 	<text name="image_res_text">
 		[WIDTH] px (larghezza) x [HEIGHT] px (altezza)
 	</text>

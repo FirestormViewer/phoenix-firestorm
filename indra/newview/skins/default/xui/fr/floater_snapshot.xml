@@ -16,7 +16,7 @@
 	<string name="postcard_failed_str">Erreur lors de l'envoi du mail.</string>
 	<string name="inventory_failed_str">Erreur lors de l'enregistrement dans l'inventaire.</string>
 	<string name="local_failed_str">Erreur lors de l'enregistrement sur le disque.</string>
-	<panel name="controls_container">
+	<view name="controls_container">
 		<button label="Actualiser" name="new_snapshot_btn"/>
 		<panel name="advanced_options_panel">
 			<text name="layer_type_label">Capturer :</text>
@@ -41,7 +41,7 @@
 		</panel>
 		<text name="working_lbl">En cours</text>
 		<text name="refresh_lbl">Actualisez pour sauvegarder.</text>
-	</panel>
+	</view>
 	<text name="image_res_text">[WIDTH]px (Largeur) x [HEIGHT]px (Hauteur)</text>
 	<text name="file_size_label">[SIZE] Ko</text>
 </floater>
