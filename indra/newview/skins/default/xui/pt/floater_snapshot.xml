@@ -40,7 +40,7 @@
 		Falha ao salvar no computador.
 	</string>
 	<button label="ATUALIZAR" name="new_snapshot_btn"/>
-	<panel name="controls_container">
+	<view name="controls_container">
 	<panel name="advanced_options_panel">
 		<text name="layer_type_label">
 			Capturar:
@@ -60,7 +60,7 @@
 			<combo_box.item label="Sem filtro" name="NoFilter"/>
 		</combo_box>
 	</panel>
-	</panel>
+	</view>
 	<text name="image_res_text">
 		[WIDTH]px (largura) x [HEIGHT]px (altura)
 	</text>

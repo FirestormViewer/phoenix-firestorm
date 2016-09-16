@@ -278,7 +278,7 @@ public:
 
 	void			setReplaceNewlinesWithSpaces(BOOL replace);
 
-	void			setContextMenu(LLContextMenu* new_context_menu);
+	void			resetContextMenu() { setContextMenu(NULL); };
 
 	// <FS:Ansariel> Make these protected
 	void			removeChar();
@@ -321,6 +321,8 @@ private:
 	virtual BOOL	getPreeditLocation(S32 query_position, LLCoordGL *coord, LLRect *bounds, LLRect *control) const;
 	virtual S32		getPreeditFontSize() const;
 	virtual LLWString getPreeditString() const { return getWText(); }
+
+	void			setContextMenu(LLContextMenu* new_context_menu);
 
 protected:
 	LLUIString		mText;					// The string being edited.
