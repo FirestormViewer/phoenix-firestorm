@@ -1747,11 +1747,17 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(LLVOAvatar* avatar, LLFace* 
 			LLJoint* joint = avatar->getJoint(skin->mJointNames[j]);
 			if (!joint)
 			{
-				joint = avatar->getJoint("mPelvis");
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//				joint = avatar->getJoint( "mPelvis" );
+				joint = avatar->getJoint( JointKey::construct( "mPelvis" ) );
+// </FS:ND>
 			}
 			if (!joint)
 			{
-				LL_DEBUGS("Avatar") << "Failed to find " << skin->mJointNames[j] << LL_ENDL;
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//				LL_DEBUGS( "Avatar" ) << "Failed to find " << skin->mJointNames[ j ] << LL_ENDL;
+				LL_DEBUGS( "Avatar" ) << "Failed to find " << skin->mJointNames[ j ].mName << LL_ENDL;
+// </FS:ND>
 			}
 			if (joint)
 			{
@@ -1906,8 +1912,11 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 					LLJoint* joint = avatar->getJoint(skin->mJointNames[i]);
                     if (!joint)
                     {
-                        joint = avatar->getJoint("mPelvis");
-                    }
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//						joint = avatar->getJoint( "mPelvis" );
+						joint = avatar->getJoint( JointKey::construct( "mPelvis" ) );
+// </FS>ND>
+					}
 					if (joint)
 					{
 						mat[i] = skin->mInvBindMatrix[i];

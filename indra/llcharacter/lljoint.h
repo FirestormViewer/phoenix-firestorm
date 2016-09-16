@@ -39,6 +39,16 @@
 #include "llquaternion.h"
 #include "xform.h"
 
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+struct JointKey
+{
+	std::string mName;
+	U32 mKey;
+
+	static JointKey construct( std::string aName );
+};
+// </FS:ND>
+
 const S32 LL_CHARACTER_MAX_JOINTS_PER_MESH = 15;
 const U32 LL_CHARACTER_MAX_JOINTS = 32; // must be divisible by 4!
 const U32 LL_HAND_JOINT_NUM = 31;

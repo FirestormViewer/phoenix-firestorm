@@ -1262,11 +1262,15 @@ void LLPanelEditWearable::showWearable(LLViewerWearable* wearable, BOOL show, BO
                         value_map_t sorted_params;
                         getSortedParams(sorted_params, edit_group);
 
-                        LLJoint* jointp = gAgentAvatarp->getJoint( subpart_entry->mTargetJoint );
-                        if (!jointp)
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//						LLJoint* jointp = gAgentAvatarp->getJoint( subpart_entry->mTargetJoint );
+						LLJoint* jointp = gAgentAvatarp->getJoint( JointKey::construct( subpart_entry->mTargetJoint ) );
+						if( !jointp )
                         {
-                                jointp = gAgentAvatarp->getJoint("mHead");
-                        }
+//							jointp = gAgentAvatarp->getJoint( "mHead" );
+							jointp = gAgentAvatarp->getJoint( JointKey::construct( "mHead" ) );
+						}
+// </FS:ND>
 
                         buildParamList(panel_list, sorted_params, tab, jointp);
         
@@ -1334,7 +1338,11 @@ void LLPanelEditWearable::changeCamera(U8 subpart)
         }
 
         // Update the camera
-        gMorphView->setCameraTargetJoint( gAgentAvatarp->getJoint( subpart_entry->mTargetJoint ) );
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+		//gMorphView->setCameraTargetJoint( gAgentAvatarp->getJoint( subpart_entry->mTargetJoint ) );
+		gMorphView->setCameraTargetJoint( gAgentAvatarp->getJoint( JointKey::construct( subpart_entry->mTargetJoint ) ) );
+// </FS>ND>
+
         gMorphView->setCameraTargetOffset( subpart_entry->mTargetOffset );
         gMorphView->setCameraOffset( subpart_entry->mCameraOffset );
         if (gSavedSettings.getBOOL("AppearanceCameraMovement"))
