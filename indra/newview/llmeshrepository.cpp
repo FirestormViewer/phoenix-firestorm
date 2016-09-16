@@ -1612,7 +1612,6 @@ bool LLMeshRepoThread::fetchMeshLOD(const LLVolumeParams& mesh_params, S32 lod)
 
 	if (header_size > 0)
 	{
-		x
 		S32 version = mMeshHeader[mesh_id]["version"].asInteger();
 		S32 offset = header_size + mMeshHeader[mesh_id][header_lod[lod]]["offset"].asInteger();
 		S32 size = mMeshHeader[mesh_id][header_lod[lod]]["size"].asInteger();
