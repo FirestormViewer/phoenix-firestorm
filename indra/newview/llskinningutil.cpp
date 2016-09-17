@@ -36,10 +36,16 @@ bool LLSkinningUtil::sIncludeEnhancedSkeleton = true;
 
 namespace {
 
-bool get_name_index(const std::string& name, std::vector<std::string>& names, U32& result)
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//bool get_name_index( const std::string& name, std::vector<std::string>& names, U32& result )
+bool get_name_index( const JointKey& name, std::vector<JointKey>& names, U32& result )
+//</FS:ND>
 {
-    std::vector<std::string>::const_iterator find_it =
-        std::find(names.begin(), names.end(), name);
+	//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+	// std::vector<std::string>::const_iterator find_it =
+	std::vector<JointKey>::const_iterator find_it =
+	// </FS:ND>
+		std::find( names.begin(), names.end(), name );
     if (find_it != names.end())
     {
         result = find_it - names.begin();
@@ -54,15 +60,21 @@ bool get_name_index(const std::string& name, std::vector<std::string>& names, U3
 // Find a name table index that is also a valid joint on the
 // avatar. Order of preference is: requested name, mPelvis, first
 // valid match in names table.
-U32 get_valid_joint_index(const std::string& name, LLVOAvatar *avatar, std::vector<std::string>& joint_names)
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//U32 get_valid_joint_index( const std::string& name, LLVOAvatar *avatar, std::vector<std::string>& joint_names )
+U32 get_valid_joint_index( const JointKey& name, LLVOAvatar *avatar, std::vector<JointKey>& joint_names )
+//</FS:ND>
 {
     U32 result;
     if (avatar->getJoint(name) && get_name_index(name,joint_names,result))
     {
         return result;
     }
-    if (get_name_index("mPelvis",joint_names,result))
-    {
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//	if( get_name_index( "mPelvis", joint_names, result ) )
+	if( get_name_index( JointKey::construct( "mPelvis" ), joint_names, result ) )
+// </FS:ND>
+	{
         return result;
     }
     for (U32 j=0; j<joint_names.size(); j++)
@@ -78,7 +90,10 @@ U32 get_valid_joint_index(const std::string& name, LLVOAvatar *avatar, std::vect
 }
 
 // Which joint will stand in for this joint? 
-U32 get_proxy_joint_index(U32 joint_index, LLVOAvatar *avatar, std::vector<std::string>& joint_names)
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//U32 get_proxy_joint_index( U32 joint_index, LLVOAvatar *avatar, std::vector<std::string>& joint_names )
+U32 get_proxy_joint_index( U32 joint_index, LLVOAvatar *avatar, std::vector<JointKey>& joint_names )
+//</FS:ND>
 {
 	bool include_enhanced = LLSkinningUtil::sIncludeEnhancedSkeleton;
     U32 j_proxy = get_valid_joint_index(joint_names[joint_index], avatar, joint_names);
@@ -95,8 +110,11 @@ U32 get_proxy_joint_index(U32 joint_index, LLVOAvatar *avatar, std::vector<std::
         LLJoint *parent = joint->getParent();
         if (!parent)
             break;
-        if (!get_name_index(parent->getName(), joint_names, j_proxy))
-        {
+		//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+		// if( !get_name_index( parent->getName(), joint_names, j_proxy ) )
+		if( !get_name_index( JointKey::construct( parent->getName() ), joint_names, j_proxy ) )
+		// </FS:ND>
+		{
             break;
         }
         joint = parent;
@@ -167,8 +185,11 @@ void LLSkinningUtil::remapSkinInfoJoints(LLVOAvatar *avatar, LLMeshSkinInfo* ski
         // needed for handling of any legacy bad data.
         if (!avatar->getJoint(skin->mJointNames[j]))
         {
-            skin->mJointNames[j] = "mPelvis";
-        }
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//			skin->mJointNames[ j ] = "mPelvis";
+			skin->mJointNames[ j ] = JointKey::construct( "mPelvis" );
+//</FS:ND>
+		}
     }
     std::vector<U32> j_proxy(skin->mJointNames.size());
     for (U32 j = 0; j < skin->mJointNames.size(); ++j)
@@ -202,8 +223,11 @@ void LLSkinningUtil::remapSkinInfoJoints(LLVOAvatar *avatar, LLMeshSkinInfo* ski
     
     
     // Apply the remap to mJointNames, mInvBindMatrix, and mAlternateBindMatrix
-    std::vector<std::string> new_joint_names;
-    std::vector<LLMatrix4> new_inv_bind_matrix;
+	//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+	// std::vector<std::string> new_joint_names;
+	std::vector< JointKey > new_joint_names;
+	// </FS:ND>
+	std::vector<LLMatrix4> new_inv_bind_matrix;
     std::vector<LLMatrix4> new_alternate_bind_matrix;
 
     for (U32 j = 0; j < skin->mJointNames.size(); ++j)

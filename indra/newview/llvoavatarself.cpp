@@ -926,11 +926,17 @@ void LLVOAvatarSelf::idleUpdate(LLAgent &agent, const F64 &time)
 }
 
 // virtual
-LLJoint *LLVOAvatarSelf::getJoint(const std::string &name)
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//LLJoint *LLVOAvatarSelf::getJoint( const std::string &name )
+LLJoint *LLVOAvatarSelf::getJoint( const JointKey &name )
+// </FS:ND>
 {
 	if (mScreenp)
 	{
-		LLJoint* jointp = mScreenp->findJoint(name);
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//		LLJoint* jointp = mScreenp->findJoint( name );
+		LLJoint* jointp = mScreenp->findJoint( name.mName );
+// </FS:ND>
 		if (jointp) return jointp;
 	}
 	return LLVOAvatar::getJoint(name);

@@ -90,8 +90,12 @@ public:
 	/*virtual*/ bool 		hasMotionFromSource(const LLUUID& source_id);
 	/*virtual*/ void 		stopMotionFromSource(const LLUUID& source_id);
 	/*virtual*/ void 		requestStopMotion(LLMotion* motion);
-	/*virtual*/ LLJoint*	getJoint(const std::string &name);
-	
+
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//	/*virtual*/ LLJoint*	getJoint( const std::string &name );
+	/*virtual*/ LLJoint*	getJoint( const JointKey &name );
+// </FS:ND>
+
 	// <FS:Ansariel> [Legacy Bake]
 	///*virtual*/ BOOL setVisualParamWeight(const LLVisualParam *which_param, F32 weight);
 	///*virtual*/ BOOL setVisualParamWeight(const char* param_name, F32 weight);

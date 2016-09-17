@@ -3550,7 +3550,10 @@ LLJoint* LLModelPreview::lookupJointByName(const std::string& str, void* opaque)
 	LLModelPreview* pPreview = static_cast< LLModelPreview* >(opaque);
 	if (pPreview)
 	{
-		return pPreview->getPreviewAvatar()->getJoint(str);
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//		return pPreview->getPreviewAvatar()->getJoint( str );
+		return pPreview->getPreviewAvatar()->getJoint( JointKey::construct( str ) );
+// <FS:ND>
 	}
 	return NULL;
 }
