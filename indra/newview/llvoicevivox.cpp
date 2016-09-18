@@ -969,7 +969,7 @@ bool LLVivoxVoiceClient::breakVoiceConnection(bool corowait)
     else
     {   // If we are not doing a corowait then we must sleep until the connector has responded
         // otherwise we may very well close the socket too early.
-#if LL_WINDOWSx
+#if LL_WINDOWS
         int count = 0;
         while (!mShutdownComplete && 10 > count++)
         {   // Rider: This comes out to a max wait time of 10 seconds.  
