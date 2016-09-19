@@ -1121,7 +1121,10 @@ void LLVivoxVoiceClient::logoutOfVivox(bool wait)
     if (wait)
     {
         LLEventPump &voicePump = LLEventPumps::instance().obtain("vivoxClientPump");
-        LLSD timeoutResult(LLSDMap("lougout", "timeout"));
+        // <FS:Ansariel> Typo fix
+        //LLSD timeoutResult(LLSDMap("lougout", "timeout"));
+        LLSD timeoutResult(LLSDMap("logout", "timeout"));
+        // </FS:Ansariel>
 
         LLSD result = llcoro::suspendUntilEventOnWithTimeout(voicePump, LOGIN_ATTEMPT_TIMEOUT, timeoutResult);
 
