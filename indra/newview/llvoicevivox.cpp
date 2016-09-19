@@ -491,6 +491,12 @@ void LLVivoxVoiceClient::connectorShutdown()
 		
 		writeString(stream.str());
 	}
+	// <FS:Ansariel> Cut down wait on logout
+	else
+	{
+		mShutdownComplete = true;
+	}
+	// </FS:Ansariel>
 }
 
 void LLVivoxVoiceClient::userAuthorized(const std::string& user_id, const LLUUID &agentID)
@@ -969,10 +975,7 @@ bool LLVivoxVoiceClient::breakVoiceConnection(bool corowait)
     else
     {   // If we are not doing a corowait then we must sleep until the connector has responded
         // otherwise we may very well close the socket too early.
-		
-// <FS:ND/> Slow shutdown. The viewer waits up to 10 seconds on exit for voice, tentatively disable this for a test for
-// any side effects
-#if LL_WINDOWS_FS_DISABLED
+#if LL_WINDOWS
         int count = 0;
         while (!mShutdownComplete && 10 > count++)
         {   // Rider: This comes out to a max wait time of 10 seconds.  
@@ -980,6 +983,15 @@ bool LLVivoxVoiceClient::breakVoiceConnection(bool corowait)
             // and so the viewer is attempting to go away.  Don't slow it down 
             // longer than this.
             _sleep(1000);
+            // <FS:Ansariel> Cut down wait on logout
+            // Need to check messages on the service pump for the connector shutdown response
+            // which sets mShutdownComplete to true!
+            while (gMessageSystem->checkAllMessages(gFrameCount, gServicePump))
+            {
+                // Do nothing - just check messages
+            }
+            gMessageSystem->processAcks();
+            // </FS:Ansariel>
         }
 #endif
     }
@@ -1455,10 +1467,12 @@ bool LLVivoxVoiceClient::terminateAudioSession(bool wait)
                 LL_WARNS("Voice") << "called with no session handle" << LL_ENDL;
             }
         }
-        else
-        {
-            LL_WARNS("Voice") << "Session " << mAudioSession->mHandle << " already terminated by logout." << LL_ENDL;
-        }
+        // <FS:Ansariel> This is usually the case because ::terminate() is logging us out beforehand
+        //else
+        //{
+        //    LL_WARNS("Voice") << "Session " << mAudioSession->mHandle << " already terminated by logout." << LL_ENDL;
+        //}
+        // </FS:Ansariel>
 
         sessionStatePtr_t oldSession = mAudioSession;
 
@@ -3169,6 +3183,7 @@ void LLVivoxVoiceClient::connectorShutdownResponse(int statusCode, std::string &
 	}
 	
 	mConnected = false;
+	mShutdownComplete = true; // <FS:Ansariel> Cut down wait on logout
 	
     LLSD vivoxevent(LLSDMap("connector", LLSD::Boolean(false)));
 
