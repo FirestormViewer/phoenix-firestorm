@@ -898,6 +898,10 @@ void FSPanelProfileWeb::onAvatarNameCache(const LLUUID& agent_id, const LLAvatar
 	{
 		username = LLCacheName::buildUsername(av_name.getDisplayName());
 	}
+	else
+	{
+		LLStringUtil::replaceChar(username, ' ', '.');
+	}
 
 	mURLWebProfile = getProfileURL(username);
 	if (mURLWebProfile.empty())
