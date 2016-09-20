@@ -421,6 +421,13 @@ void LLGridManager::gridInfoResponderCB(GridEntry* grid_entry)
 			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_WEB_PROFILE_VALUE] << LL_ENDL;
 			continue;
 		}
+		check = "profileuri";
+		if (node->hasName(check))
+		{
+			grid_entry->grid[GRID_WEB_PROFILE_VALUE] = node->getTextContents();
+			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_WEB_PROFILE_VALUE] << LL_ENDL;
+			continue;
+		}
 		check = "SendGridInfoToViewerOnLogin";
 		if (node->hasName(check))
 		{
