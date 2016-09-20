@@ -1831,7 +1831,10 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	F32 system_scale_factor = mWindow->getSystemUISize();
 	if (p.first_run || gSavedSettings.getF32("LastSystemUIScaleFactor") != system_scale_factor)
 	{
-		mSystemUIScaleFactorChanged = true;
+		// <FS:Ansariel> BUG-40548: Don't bug user with DPI scaling changed on first run after clean install
+		//mSystemUIScaleFactorChanged = true;
+		mSystemUIScaleFactorChanged = !p.first_run;
+		// </FS:Ansariel>
 		gSavedSettings.setF32("LastSystemUIScaleFactor", system_scale_factor);
 		gSavedSettings.setF32("UIScaleFactor", system_scale_factor);
 	}
