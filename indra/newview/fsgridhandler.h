@@ -56,7 +56,7 @@ const std::string GRID_FORGOT_PASSWORD		= "password";
 const std::string GRID_HELP					= "help";
 const std::string GRID_ABOUT				= "about";
 const std::string GRID_SEARCH				= "search";
-const std::string GRID_PROFILE_URI_VALUE	= "profileuri";
+const std::string GRID_WEB_PROFILE_VALUE	= "web_profile_url";
 const std::string GRID_SENDGRIDINFO			= "SendGridInfoToViewerOnLogin";
 const std::string GRID_DIRECTORY_FEE		= "DirectoryFee";
 const std::string GRID_PLATFORM				= "platform";
@@ -200,6 +200,14 @@ public:
 	// get app slurl base for the given region within the selected grid
 	std::string getAppSLURLBase(const std::string& grid);
 	std::string getAppSLURLBase() { return getAppSLURLBase(mGrid); }
+
+	/// Return the url of the resident profile web site for the given grid
+	std::string getWebProfileURL(const std::string& grid);
+
+	/// Return the url of the resident profile web site for the selected grid
+	std::string getWebProfileURL() { return getWebProfileURL(mGrid); }
+
+	void setWebProfileUrl(const std::string& url) { mGridList[mGrid][GRID_WEB_PROFILE_VALUE] = url; }
 
 	bool hasGrid(const std::string& grid){ return mGridList.has(grid); }
 	bool isTemporary(){ return mGridList[mGrid].has("FLAG_TEMPORARY"); }

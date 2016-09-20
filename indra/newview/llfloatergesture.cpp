@@ -345,7 +345,7 @@ void LLFloaterGesture::addGesture(const LLUUID& item_id , LLMultiGesture* gestur
 		element["columns"][0]["font"]["name"] = "SANSSERIF";
 		element["columns"][0]["font"]["style"] = font_style;
 
-		std::string key_string = LLKeyboard::stringFromKey(gesture->mKey);
+		std::string key_string;
 		std::string buffer;
 
 		if (gesture->mKey == KEY_NONE)
@@ -355,6 +355,7 @@ void LLFloaterGesture::addGesture(const LLUUID& item_id , LLMultiGesture* gestur
 		}
 		else
 		{
+			key_string = LLKeyboard::stringFromKey(gesture->mKey);
 			buffer = LLKeyboard::stringFromAccelerator(gesture->mMask,
 					gesture->mKey);
 		}

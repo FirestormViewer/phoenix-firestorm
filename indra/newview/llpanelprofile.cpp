@@ -44,48 +44,38 @@ static const std::string PANEL_PICKS = "panel_picks";
 
 std::string getProfileURL(const std::string& agent_name)
 {
+	// <FS:Ansariel> OpenSim support
+	//std::string url = "[WEB_PROFILE_URL][AGENT_NAME]";
+	//LLSD subs;
+	//subs["WEB_PROFILE_URL"] = LLGridManager::getInstance()->getWebProfileURL();
 	std::string url;
+	LLSD subs;
 
-	if (LLGridManager::getInstance()->isInSLMain())
-	{
-		url = gSavedSettings.getString("WebProfileURL");
-	}
-	else if (LLGridManager::getInstance()->isInSLBeta())
-	{
-		url = gSavedSettings.getString("WebProfileNonProductionURL");
-	}
-	else
-	{
 #ifdef OPENSIM
-// <FS:CR> FIRE-8063: Web profiles for aurora, opensim, and osgrid
-		std::string match = "?name=[AGENT_NAME]";
-		if (LLGridManager::getInstance()->isInAuroraSim()) {
-			url = gSavedSettings.getString("WebProfileURL");
-		}
-		else if(LLGridManager::getInstance()->getGridId() == "osgrid") {
-			url = "http://my.osgrid.org/?name=[AGENT_NAME]";
-		}
-		else {
-			LLSD grid_info;
-			LLGridManager::getInstance()->getGridData(grid_info);
-			url = grid_info[GRID_PROFILE_URI_VALUE].asString();
-			
-			if (url.empty())
-				url = gSavedSettings.getString("WebProfileURL");
+	if (LLGridManager::instance().isInOpenSim())
+	{
+		url = LLGridManager::getInstance()->getWebProfileURL();
+		if (url.empty())
+		{
+			return LLStringUtil::null;
 		}
 
-		if(std::string::npos == url.find(match))
+		std::string match = "?name=[AGENT_NAME]";
+		if (url.find(match) == std::string::npos)
 		{
 			url += match;
 		}
-		gSavedSettings.setString("WebProfileURL", url);
-// </FS:CR> 
-#endif
 	}
+	else
+#endif
+	{
+		url = "[WEB_PROFILE_URL][AGENT_NAME]";
+		subs["WEB_PROFILE_URL"] = LLGridManager::getInstance()->getWebProfileURL();
+	}
+	// </FS:Ansariel>
 
-	LLSD subs;
 	subs["AGENT_NAME"] = agent_name;
-	url = LLWeb::expandURLSubstitutions(url,subs);
+	url = LLWeb::expandURLSubstitutions(url, subs);
 	LLStringUtil::toLower(url);
 	return url;
 }

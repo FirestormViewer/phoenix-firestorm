@@ -490,11 +490,11 @@ void LLGridManager::gridInfoResponderCB(GridEntry* grid_entry)
 			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_SEARCH] << LL_ENDL;
 			continue;
 		}
-		check = "profileuri";
+		check = "web_profile_url";
 		if (node->hasName(check))
 		{
-			grid_entry->grid[GRID_PROFILE_URI_VALUE] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_PROFILE_URI_VALUE] << LL_ENDL;
+			grid_entry->grid[GRID_WEB_PROFILE_VALUE] = node->getTextContents();
+			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_WEB_PROFILE_VALUE] << LL_ENDL;
 			continue;
 		}
 		check = "SendGridInfoToViewerOnLogin";
@@ -1241,6 +1241,21 @@ std::string LLGridManager::getLoginPage()
 	}	
 	
 	return mGridList[mGrid][GRID_LOGIN_PAGE_VALUE];
+}
+
+std::string LLGridManager::getWebProfileURL(const std::string& grid)
+{
+	std::string web_profile_url;
+	std::string grid_name = getGrid(grid);
+	if (!grid_name.empty())
+	{
+		web_profile_url = mGridList[grid_name][GRID_WEB_PROFILE_VALUE].asString();
+	}
+	else
+	{
+		LL_WARNS("GridManager")<<"invalid grid '"<<grid<<"'"<<LL_ENDL;
+	}
+	return web_profile_url;
 }
 
 // <AW opensim>
