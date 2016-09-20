@@ -834,7 +834,10 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				LLVector3 targetPos(agentPos.mV[VX],agentPos.mV[VY], LLWorld::getInstance()->resolveLandHeightAgent(agentPos));
 				LLVector3d pos_global = from_region_handle(agentRegion);
 				pos_global += LLVector3d((F64)targetPos.mV[VX], (F64)targetPos.mV[VY], (F64)targetPos.mV[VZ]);
-				gAgent.teleportViaLocation(pos_global);
+				if (RlvActions::canTeleportToLocal(pos_global))
+				{
+					gAgent.teleportViaLocation(pos_global);
+				}
 				return false;
 			}
 			else if (command == sFSCmdLineHeight())
@@ -847,7 +850,10 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					LLVector3 targetPos(agentPos.mV[VX], agentPos.mV[VY], z);
 					LLVector3d pos_global = from_region_handle(agentRegion);
 					pos_global += LLVector3d((F64)targetPos.mV[VX], (F64)targetPos.mV[VY], (F64)targetPos.mV[VZ]);
-					gAgent.teleportViaLocation(pos_global);
+					if (RlvActions::canTeleportToLocal(pos_global))
+					{
+						gAgent.teleportViaLocation(pos_global);
+					}
 					return false;
 				}
 			}
