@@ -7945,7 +7945,8 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
    name="TeleportOffered_MaturityExceeded"
    log_to_im="true"
    log_to_chat="false"
-   type="offer">
+   type="offer"
+   sound="UISndTeleportOffer">
 [NAME_SLURL] has offered to teleport you to their location:
 
 [MESSAGE]
@@ -7970,7 +7971,8 @@ This region contains [REGION_CONTENT_MATURITY] content, but your current prefere
    name="TeleportOffered_MaturityBlocked"
    log_to_im="true"
    log_to_chat="false"
-   type="notifytip">
+   type="notifytip"
+   sound="UISndTeleportOffer">
 [NAME_SLURL] has offered to teleport you to their location:
 
 [MESSAGE]
@@ -8010,7 +8012,8 @@ However, this region contains content accessible to adults only.
    name="TeleportOffered_MaturityExceeded_SLUrl"
    log_to_im="true"
    log_to_chat="false"
-   type="offer">
+   type="offer"
+   sound="UISndTeleportOffer">
 [NAME_SLURL] has offered to teleport you to their location ([POS_SLURL]):
 
 [MESSAGE]
@@ -8035,7 +8038,8 @@ This region contains [REGION_CONTENT_MATURITY] content, but your current prefere
    name="TeleportOffered_MaturityBlocked_SLUrl"
    log_to_im="true"
    log_to_chat="false"
-   type="notifytip">
+   type="notifytip"
+   sound="UISndTeleportOffer">
 [NAME_SLURL] has offered to teleport you to their location ([POS_SLURL]):
 
 [MESSAGE]

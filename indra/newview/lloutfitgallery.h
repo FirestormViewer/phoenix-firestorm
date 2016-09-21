@@ -273,7 +273,7 @@ private:
     LLTextBox* mOutfitNameText;
     LLTextBox* mOutfitWornText;
     LLPanel* mTextBgPanel;
-    LLPanel* mFotoBgPanel;
+    //LLPanel* mFotoBgPanel; // <FS:Ansariel> Does not exist
     bool     mSelected;
     bool     mWorn;
     bool     mDefaultImage;
