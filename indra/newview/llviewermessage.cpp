@@ -5973,6 +5973,7 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 					objectp->permYouOwner())
 				{
 					// Simply ignore the request and don't kill the object - this should work...
+					report_to_nearby_chat("Sim tried to kill attachment: " + objectp->getAttachmentItemName());
 					continue;
 				}
 				// </FS:Ansariel>
