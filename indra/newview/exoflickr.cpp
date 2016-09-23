@@ -41,22 +41,24 @@
 
 #include "exoflickr.h"
 
+const std::string UPLOAD_URL = "https://up.flickr.com/services/upload/";
+const std::string API_URL = "https://api.flickr.com/services/rest/";
 
 void exoFlickrUploadResponse( LLSD const &aData, exoFlickr::response_callback_t aCallback )
 {
 	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
-    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
+	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
 
-	LL_INFOS() << "Status " << status.getType() << " aData " << ll_pretty_print_sd( aData ) << LL_ENDL;
+	LL_INFOS("FlickrAPI") << "Status " << status.getType() << " aData " << ll_pretty_print_sd( aData ) << LL_ENDL;
 
 	if( !aData.has( LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW ) )
 	{
-		LL_WARNS() << "No content data included in response" << LL_ENDL;
+		LL_WARNS("FlickrAPI") << "No content data included in response" << LL_ENDL;
 		aCallback(false, LLSD());
 		return;
 	}
 	
-    const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
+	const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
 	std::string result;
 	result.assign( rawData.begin(), rawData.end() );
 
@@ -189,9 +191,9 @@ void exoFlickr::request(const std::string& method, const LLSD& args, response_ca
 	params["format"] = "json";
 	params["method"] = method;
 	params["nojsoncallback"] = 1;
-	signRequest(params, "GET", "https://api.flickr.com/services/rest/");
+	signRequest(params, "GET", API_URL);
 	
-	std::string url = LLURI::buildHTTP( "https://api.flickr.com/services/rest/", LLSD::emptyArray(), params ).asString();
+	std::string url = LLURI::buildHTTP( API_URL, LLSD::emptyArray(), params ).asString();
 	FSCoreHttpUtil::callbackHttpGetRaw( url, boost::bind( exoFlickrResponse, _1, callback ) );
 }
 
@@ -215,7 +217,7 @@ void exoFlickr::signRequest(LLSD& params, std::string method, std::string url)
 void exoFlickr::uploadPhoto(const LLSD& args, LLImageFormatted *image, response_callback_t callback)
 {
 	LLSD params(args);
-	signRequest(params, "POST", "https://up.flickr.com/services/upload/");
+	signRequest(params, "POST", UPLOAD_URL);
 
 	// It would be nice if there was an easy way to do multipart form data. Oh well.
 	const std::string boundary = "------------abcdefgh012345";
@@ -256,17 +258,13 @@ void exoFlickr::uploadPhoto(const LLSD& args, LLImageFormatted *image, response_
 	post_data.append( post_tail.c_str(), post_tail.size() );
 
 	// We have a post body! Now we can go about building the actual request...
-	// <FS:TS> Patch from Exodus:
-	// The default timeout (one minute) isn't enough for a large picture.
-	// 10 minutes is arbitrary, but should be long enough.
-
 	LLCore::HttpHeaders::ptr_t pHeader( new LLCore::HttpHeaders() );
+	LLCore::HttpOptions::ptr_t options(new LLCore::HttpOptions());
 	pHeader->append( "Content-Type", "multipart/form-data; boundary=" + boundary );
-	FSCoreHttpUtil::callbackHttpPostRaw( "https://up.flickr.com/services/upload/", post_data, boost::bind( exoFlickrUploadResponse, _1, callback ), boost::bind( exoFlickrUploadResponse, _1, callback ), pHeader );
-
-	// </FS:TS>
-	// The HTTP client takes ownership of our post_data array,
-	// and will delete it when it's done.
+	options->setWantHeaders(true);
+	options->setRetries(0);
+	options->setTimeout(300);
+	FSCoreHttpUtil::callbackHttpPostRaw(UPLOAD_URL, post_data, boost::bind( exoFlickrUploadResponse, _1, callback ), boost::bind( exoFlickrUploadResponse, _1, callback ), pHeader, options );
 }
 
 //static
@@ -300,5 +298,3 @@ std::string exoFlickr::getSignatureForCall(const LLSD& parameters, std::string u
 	std::string signature = LLBase64::encode((U8*)data, length);
 	return signature;
 }
-
-
