@@ -234,11 +234,11 @@ void exoFlickr::uploadPhoto(const LLSD& args, LLImageFormatted *image, response_
 	post_stream << "\r\nContent-Disposition: form-data; name=\"photo\"; filename=\"snapshot." << image->getExtension() << "\"";
 	post_stream << "\r\nContent-Type: ";
 	// Apparently LLImageFormatted doesn't know what mimetype it has.
-	if(image->getExtension() == "jpg")
+	if (image->getExtension() == "jpg")
 	{
 		post_stream << "image/jpeg";
 	}
-	else if(image->getExtension() == "png")
+	else if (image->getExtension() == "png")
 	{
 		post_stream << "image/png";
 	}
@@ -254,13 +254,23 @@ void exoFlickr::uploadPhoto(const LLSD& args, LLImageFormatted *image, response_
 	std::string post_tail = "\r\n--" + boundary + "--";
 
 	std::string post_data = post_str;
-	post_data.append( reinterpret_cast< char const* >( image->getData() ), image->getDataSize() );
-	post_data.append( post_tail.c_str(), post_tail.size() );
+	// check that we have enough capacity in the string to append the data
+	S32 image_data_len = image->getDataSize();
+	if (image_data_len <= post_data.max_size() - post_data.size() - post_tail.size())
+	{
+		post_data.append(reinterpret_cast<char const*>(image->getData()), image->getDataSize());
+		post_data.append(post_tail.c_str(), post_tail.size());
+	}
+	else
+	{
+		LL_WARNS("FlickrAPI") << "Image data too large. Malformed post body produced." << LL_ENDL;
+		callback(false, LLSD());
+	}
 
 	// We have a post body! Now we can go about building the actual request...
-	LLCore::HttpHeaders::ptr_t pHeader( new LLCore::HttpHeaders() );
+	LLCore::HttpHeaders::ptr_t pHeader(new LLCore::HttpHeaders());
 	LLCore::HttpOptions::ptr_t options(new LLCore::HttpOptions());
-	pHeader->append( "Content-Type", "multipart/form-data; boundary=" + boundary );
+	pHeader->append("Content-Type", "multipart/form-data; boundary=" + boundary);
 	options->setWantHeaders(true);
 	options->setRetries(0);
 	options->setTimeout(300);
