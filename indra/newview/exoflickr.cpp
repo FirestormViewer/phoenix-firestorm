@@ -19,6 +19,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "exoflickr.h"
 #include "fscorehttputil.h"
 #include "llbufferstream.h"
 #include "lluri.h"
@@ -39,7 +40,6 @@
 #include <openssl/hmac.h>
 #include <openssl/evp.h>
 
-#include "exoflickr.h"
 
 const std::string UPLOAD_URL = "https://up.flickr.com/services/upload/";
 const std::string API_URL = "https://api.flickr.com/services/rest/";
@@ -51,10 +51,13 @@ void exoFlickrUploadResponse( LLSD const &aData, exoFlickr::response_callback_t 
 
 	LL_INFOS("FlickrAPI") << "Status " << status.getType() << " aData " << ll_pretty_print_sd( aData ) << LL_ENDL;
 
-	if( !aData.has( LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW ) )
+	if (!aData.has( LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW ) )
 	{
 		LL_WARNS("FlickrAPI") << "No content data included in response" << LL_ENDL;
-		aCallback(false, LLSD());
+		if (aCallback)
+		{
+			aCallback(false, LLSD());
+		}
 		return;
 	}
 	
@@ -66,27 +69,33 @@ void exoFlickrUploadResponse( LLSD const &aData, exoFlickr::response_callback_t 
 	bool success;
 
 	LLXmlTree tree;
-	if(!tree.parseString(result))
+	if (!tree.parseString(result))
 	{
 		LL_WARNS("FlickrAPI") << "Couldn't parse flickr response(" << status.getType() << "): " << result << LL_ENDL;
-		aCallback(false, LLSD());
+		if (aCallback)
+		{
+			aCallback(false, LLSD());
+		}
 		return;
 	}
 	LLXmlTreeNode* root = tree.getRoot();
-	if(!root->hasName("rsp"))
+	if (!root->hasName("rsp"))
 	{
 		LL_WARNS("FlickrAPI") << "Bad root node: " << root->getName() << LL_ENDL;
-		aCallback(false, LLSD());
+		if (aCallback)
+		{
+			aCallback(false, LLSD());
+		}
 		return;
 	}
 	std::string stat;
 	root->getAttributeString("stat", stat);
 	output["stat"] = stat;
-	if(stat == "ok")
+	if (stat == "ok")
 	{
 		success = true;
 		LLXmlTreeNode* photoid_node = root->getChildByName("photoid");
-		if(photoid_node)
+		if (photoid_node)
 		{
 			output["photoid"] = photoid_node->getContents();
 		}
@@ -95,7 +104,7 @@ void exoFlickrUploadResponse( LLSD const &aData, exoFlickr::response_callback_t 
 	{
 		success = false;
 		LLXmlTreeNode* err_node = root->getChildByName("err");
-		if(err_node)
+		if (err_node)
 		{
 			S32 code;
 			std::string msg;
@@ -105,12 +114,16 @@ void exoFlickrUploadResponse( LLSD const &aData, exoFlickr::response_callback_t 
 			output["msg"] = msg;
 		}
 	}
-	aCallback(success, output);
+
+	if (aCallback)
+	{
+		aCallback(success, output);
+	}
 }
 
 static void JsonToLLSD(const Json::Value &root, LLSD &output)
 {
-	if(root.isObject())
+	if (root.isObject())
 	{
 		Json::Value::Members keys = root.getMemberNames();
 		for(Json::Value::Members::const_iterator itr = keys.begin(); itr != keys.end(); ++itr)
@@ -120,7 +133,7 @@ static void JsonToLLSD(const Json::Value &root, LLSD &output)
 			output[*itr] = elem;
 		}
 	}
-	else if(root.isArray())
+	else if (root.isArray())
 	{
 		for(Json::Value::const_iterator itr = root.begin(); itr != root.end(); ++itr)
 		{
@@ -131,7 +144,7 @@ static void JsonToLLSD(const Json::Value &root, LLSD &output)
 	}
 	else
 	{
-		switch(root.type())
+		switch (root.type())
 		{
 			case Json::intValue:
 				output = root.asInt();
@@ -155,14 +168,12 @@ static void JsonToLLSD(const Json::Value &root, LLSD &output)
 	}
 }
 
-
-
 void exoFlickrResponse( LLSD const &aData, exoFlickr::response_callback_t aCallback )
 {
 	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
-    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
+	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
 
-    const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
+	const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
 	std::string result;
 	result.assign( rawData.begin(), rawData.end() );
 
@@ -172,7 +183,10 @@ void exoFlickrResponse( LLSD const &aData, exoFlickr::response_callback_t aCallb
 	bool success = reader.parse(result, root);
 	if(!success)
 	{
-		aCallback(false, LLSD());
+		if (aCallback)
+		{
+			aCallback(false, LLSD());
+		}
 		return;
 	}
 	else
@@ -180,7 +194,10 @@ void exoFlickrResponse( LLSD const &aData, exoFlickr::response_callback_t aCallb
 		LL_INFOS("FlickrAPI") << "Got response string: " << result << LL_ENDL;
 		LLSD response;
 		JsonToLLSD(root, response);
-		aCallback( (status.getType() >= 200 && status.getType() < 300 ), response);
+		if (aCallback)
+		{
+			aCallback((status.getType() >= 200 && status.getType() < 300), response);
+		}
 	}
 }
 
@@ -264,7 +281,10 @@ void exoFlickr::uploadPhoto(const LLSD& args, LLImageFormatted *image, response_
 	else
 	{
 		LL_WARNS("FlickrAPI") << "Image data too large. Malformed post body produced." << LL_ENDL;
-		callback(false, LLSD());
+		if (callback)
+		{
+			callback(false, LLSD());
+		}
 	}
 
 	// We have a post body! Now we can go about building the actual request...
