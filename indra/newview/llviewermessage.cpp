@@ -5966,6 +5966,17 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 			LLViewerObject *objectp = gObjectList.findObject(id);
 			if (objectp)
 			{
+				// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
+				if (isAgentAvatarValid() &&
+					gAgent.getTeleportState() != LLAgent::TELEPORT_NONE && 
+					(objectp->isAttachment() || objectp->isTempAttachment()) &&
+					objectp->permYouOwner())
+				{
+					// Simply ignore the request and don't kill the object - this should work...
+					continue;
+				}
+				// </FS:Ansariel>
+
 				// Display green bubble on kill
 				if ( gShowObjectUpdates )
 				{
