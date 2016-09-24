@@ -83,6 +83,7 @@
 #include "netdb.h"
 #endif
 
+#include "llviewernetwork.h"
 
 // Purpose
 //
@@ -2796,7 +2797,10 @@ S32 LLMeshRepository::getActualMeshLOD(LLSD& header, S32 lod)
 {
 	lod = llclamp(lod, 0, 3);
 
-	S32 version = header["version"];
+	// <FS:Ansariel> OpenSim mesh fix
+	//S32 version = header["version"];
+	S32 version = header["version"].asInteger();
+	// </FS:Ansariel>
 
 	if (header.has("404") || version > MAX_MESH_VERSION)
 	{
@@ -3035,7 +3039,10 @@ void LLMeshHeaderHandler::processData(LLCore::BufferArray * /* body */, S32 /* b
 
 		if (header_bytes > 0
 			&& !header.has("404")
-			&& header.has("version")
+			// <FS:Ansariel> OpenSim mesh fix
+			//&& header.has("version")
+			&& (header.has("version") || !LLGridManager::instance().isInSecondLife())
+			// </FS:Ansariel>
 			&& header["version"].asInteger() <= MAX_MESH_VERSION)
 		{
 			std::stringstream str;
@@ -4117,7 +4124,10 @@ F32 LLMeshRepository::getStreamingCost(LLSD& header, F32 radius, S32* bytes, S32
 {
 	if (header.has("404")
 		|| !header.has("lowest_lod")
-		|| (header.has("version") && header["version"].asInteger() > MAX_MESH_VERSION))
+		// <FS:Ansariel> OpenSim mesh fix
+		//|| (header.has("version") && header["version"].asInteger() > MAX_MESH_VERSION))
+		|| ((header.has("version") || !LLGridManager::instance().isInSecondLife()) && header["version"].asInteger() > MAX_MESH_VERSION))
+		// </FS:Ansariel>
 	{
 		return 0.f;
 	}
