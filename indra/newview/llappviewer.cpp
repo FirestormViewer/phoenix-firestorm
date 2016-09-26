@@ -143,7 +143,7 @@
 #if LL_WINDOWS
 #include "vlc/libvlc_version.h"
 #endif // LL_WINDOWS
-#endif
+//#endif
 //#endif // LL_LINUX
 
 // Third party library includes
@@ -151,6 +151,7 @@
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
+#include <boost/throw_exception.hpp>
 
 #if LL_WINDOWS
 #	include <share.h> // For _SH_DENYWR in processMarkerFiles
@@ -1344,7 +1345,7 @@ bool LLAppViewer::init()
 	catch (LLProtectedDataException ex)
 	{
 		// <FS:Ansariel> Write exception message to log
-		LL_WARNS() << "Error initializing SecHandlers: " << ex.getMessage() << LL_ENDL;
+      LL_WARNS() << "Error initializing SecHandlers: " << ex.what() << LL_ENDL;
 	  LLNotificationsUtil::add("CorruptedProtectedDataStore");
 	}
 
@@ -1429,7 +1430,8 @@ bool LLAppViewer::init()
 
 	LLVoiceChannel::initClass();
 	LLVoiceClient::getInstance()->init(gServicePump);
-	LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLFloaterIMContainer::onCurrentChannelChanged, _1), true);
+	// LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLFloaterIMContainer::onCurrentChannelChanged, _1), true);
+	LLVoiceChannel::setCurrentVoiceChannelChangedCallback( boost::bind( &FSFloaterVoiceControls::sOnCurrentChannelChanged, _1 ), true );
 
 	joystick = LLViewerJoystick::getInstance();
 	joystick->setNeedsReset(true);
