@@ -2621,6 +2621,19 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 			{
 				LL_INFOS("Window") << "WINDOWPROC SetFocus" << LL_ENDL;
 			}
+
+			// <FS:Ansariel> Stop flashing when we gain focus
+			if (window_imp->mWindowHandle)
+			{
+				FLASHWINFO flash_info;
+
+				flash_info.cbSize = sizeof(FLASHWINFO);
+				flash_info.hwnd = window_imp->mWindowHandle;
+				flash_info.dwFlags = FLASHW_STOP;
+				FlashWindowEx(&flash_info);
+			}
+			// </FS:Ansariel>
+
 			window_imp->mCallbacks->handleFocus(window_imp);
 			return 0;
 
@@ -2888,7 +2901,7 @@ BOOL LLWindowWin32::getClientRectInScreenSpace( RECT* rectp )
 
 void LLWindowWin32::flashIcon(F32 seconds)
 {
-	if (mWindowHandle && GetFocus() != mWindowHandle) // <FS:CR> Moved this here from llviewermessage.cpp
+	if (mWindowHandle && (GetFocus() != mWindowHandle || GetForegroundWindow() != mWindowHandle))
 	{
 		FLASHWINFO flash_info;
 
