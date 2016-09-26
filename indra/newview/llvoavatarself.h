@@ -160,11 +160,18 @@ public:
 	// Region state
 	//--------------------------------------------------------------------
 	void			resetRegionCrossingTimer()	{ mRegionCrossingTimer.reset();	}
+	// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
+	void			setIsCrossingRegion(bool is_crossing) { mIsCrossingRegion = is_crossing; }
+	bool			isCrossingRegion() const { return mIsCrossingRegion; }
+	// </FS:Ansariel>
 
 private:
 	U64				mLastRegionHandle;
 	LLFrameTimer	mRegionCrossingTimer;
 	S32				mRegionCrossingCount;
+
+	// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
+	bool			mIsCrossingRegion;
 	
 /**                    State
  **                                                                            **

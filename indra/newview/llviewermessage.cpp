@@ -5555,6 +5555,7 @@ void process_crossed_region(LLMessageSystem* msg, void**)
 	}
 	LL_INFOS("Messaging") << "process_crossed_region()" << LL_ENDL;
 	gAgentAvatarp->resetRegionCrossingTimer();
+	gAgentAvatarp->setIsCrossingRegion(true); // <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
 
 	U32 sim_ip;
 	msg->getIPAddrFast(_PREHASH_RegionData, _PREHASH_SimIP, sim_ip);
@@ -5968,7 +5969,7 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 			{
 				// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
 				if (isAgentAvatarValid() &&
-					gAgent.getTeleportState() != LLAgent::TELEPORT_NONE && 
+					(gAgent.getTeleportState() != LLAgent::TELEPORT_NONE || gAgentAvatarp->isCrossingRegion()) && 
 					(objectp->isAttachment() || objectp->isTempAttachment()) &&
 					objectp->permYouOwner())
 				{
@@ -7709,6 +7710,16 @@ static void process_special_alert_messages(const std::string & message)
 		snap_filename += SCREEN_HOME_FILENAME;
 		gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
 	}
+	// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
+	else if (message == "expired_region_handoff" || message == "invalid_region_handoff")
+	{
+		LL_INFOS("Messaging") << "Region crossing failed. Resetting region crossing state." << LL_ENDL;
+		if (isAgentAvatarValid())
+		{
+			gAgentAvatarp->setIsCrossingRegion(false);
+		}
+	}
+	// </FS:Ansariel>
 }
 
 

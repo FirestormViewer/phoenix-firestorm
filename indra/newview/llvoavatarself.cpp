@@ -190,6 +190,7 @@ LLVOAvatarSelf::LLVOAvatarSelf(const LLUUID& id,
 	mScreenp(NULL),
 	mLastRegionHandle(0),
 	mRegionCrossingCount(0),
+	mIsCrossingRegion(false), // <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
 	// Value outside legal range, so will always be a mismatch the
 	// first time through.
 	mLastHoverOffsetSent(LLVector3(0.0f, 0.0f, -999.0f)),
@@ -1161,6 +1162,7 @@ void LLVOAvatarSelf::updateRegion(LLViewerRegion *regionp)
 	}
 	mRegionCrossingTimer.reset();
 	LLViewerObject::updateRegion(regionp);
+	setIsCrossingRegion(false); // <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
 }
 
 //--------------------------------------------------------------------
