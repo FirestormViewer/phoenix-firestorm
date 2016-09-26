@@ -557,6 +557,11 @@ class Windows_i686_Manifest(ViewerManifest):
             self.path("media_plugin_gstreamer10.dll")
             self.end_prefix()
 
+        # Media plugins - LibVLC
+        if self.prefix(src='../media_plugins/libvlc/%s' % self.args['configuration'], dst="llplugin"):
+            self.path("media_plugin_libvlc.dll")
+            self.end_prefix()
+
         # winmm.dll shim
         if self.prefix(src='../media_plugins/winmmshim/%s' % self.args['configuration'], dst=""):
             self.path("winmm.dll")
@@ -1368,6 +1373,15 @@ class LinuxManifest(ViewerManifest):
             self.path( "libvlc*.so*" )
             self.end_prefix()
 
+        if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
+            self.path( "plugins.dat" )
+            self.path( "*/*.so" )
+            self.end_prefix()
+
+        if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib' ), dst="lib"):
+            self.path( "libvlc*.so*" )
+            self.end_prefix()
+
         # CEF files 
         if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release'), dst="lib"):
             self.path( "libcef.so" )
@@ -1588,7 +1602,7 @@ class LinuxManifest(ViewerManifest):
     def strip_binaries(self):
         if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
             print "* Going strip-crazy on the packaged binaries, since this is a RELEASE build"
-            self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name update_install \! -name *.pak \! -name *.dat \! -name *.bin \! -name core \! -path '*win32*' | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
+            self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name update_install | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
 
 class Linux_i686_Manifest(LinuxManifest):
     def construct(self):
