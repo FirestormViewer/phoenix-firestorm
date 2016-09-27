@@ -7106,40 +7106,28 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		{
 			if (dest_id.notNull())
 			{
-				// <FS:Ansariel> FIRE-6901: Payment notifications show wrong message
-				//message = LLTrans::getString("you_paid_ldollars", args);
 				message = success ? LLTrans::getString("you_paid_ldollars", args) :
 									LLTrans::getString("you_paid_failure_ldollars", args);
-				// </FS:Ansariel>
 			}
 			else
 			{
 				// transaction fee to the system, eg, to create a group
-				// <FS:Ansariel> FIRE-6901: Payment notifications show wrong message
-				//message = LLTrans::getString("you_paid_ldollars_no_name", args);
 				message = success ? LLTrans::getString("you_paid_ldollars_no_name", args) :
 									LLTrans::getString("you_paid_failure_ldollars_no_name", args);
-				// </FS:Ansariel>
 			}
 		}
 		else
 		{
 			if (dest_id.notNull())
 			{
-				// <FS:Ansariel> FIRE-6901: Payment notifications show wrong message
-				//message = LLTrans::getString("you_paid_ldollars_no_reason", args);
 				message = success ? LLTrans::getString("you_paid_ldollars_no_reason", args) :
 									LLTrans::getString("you_paid_failure_ldollars_no_reason", args);
-				// </FS:Ansariel>
 			}
 			else
 			{
 				// no target, no reason, you just paid money
-				// <FS:Ansariel> FIRE-6901: Payment notifications show wrong message
-				//message = LLTrans::getString("you_paid_ldollars_no_info", args);
 				message = success ? LLTrans::getString("you_paid_ldollars_no_info", args) :
 									LLTrans::getString("you_paid_failure_ldollars_no_info", args);
-				// </FS:Ansariel>
 			}
 		}
 		
