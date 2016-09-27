@@ -59,7 +59,7 @@
 		<key>blocked_groupchange</key>
 		<map>
 			<key>value</key>
-			<string>Unable to change your active group due to an RLV restriction; switching back to [GROUP_SLURL]</string>
+			<string>Unable to change your active group due to an RLV restriction; switching back to "[GROUP_SLURL]"</string>
 		</map>
 		<key>blocked_nearby</key>
 		<map>
@@ -74,7 +74,7 @@
 		<key>blocked_permteleport</key>
 		<map>
 			<key>value</key>
-			<string>[OBJECT]' was denied permission to teleport you due to RLV restrictions</string>
+			<string>'[OBJECT]' was denied permission to teleport you due to RLV restrictions</string>
 		</map>
 		<key>blocked_startim</key>
 		<map>
