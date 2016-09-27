@@ -481,6 +481,14 @@ ERlvCmdRet RlvHandler::processClearCommand(const RlvCommand& rlvCmd)
 
 bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& sdUserdata)
 {
+	// Ansariel: We really only want to handle "new group" events here. Registering for this event
+	//           will still get us the custom "update grouptitle list" Firestorm events, sending us
+	//           into a toggle-loop!
+	if ("new group" != event->desc())
+	{
+		return false;
+	}
+
 	// NOTE: we'll fire once for every group the user belongs to so we need to manually keep track of pending changes
 	static LLUUID s_idLastAgentGroup = LLUUID::null;
 	static bool s_fGroupChanging = false;
@@ -492,7 +500,7 @@ bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& 
 	}
 
 	// If the user managed to change their active group (= newly joined or created group) we need to reactivate the previous one
-	if ( (!RlvActions::canChangeActiveGroup()) && ("new group" == event->desc()) && (m_idAgentGroup != gAgent.getGroupID()) )
+	if ( (!RlvActions::canChangeActiveGroup()) /*&& ("new group" == event->desc())*/ && (m_idAgentGroup != gAgent.getGroupID()) )
 	{
 		// Make sure they still belong to the group
 		if ( (m_idAgentGroup.notNull()) && (!gAgent.isInGroup(m_idAgentGroup)) )
