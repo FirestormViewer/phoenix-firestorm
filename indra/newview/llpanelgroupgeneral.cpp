@@ -57,6 +57,7 @@
 #include "exogroupmutelist.h"
 #include "llclipboard.h"
 #include "lleconomy.h" // <FS:AW FIRE-7091 group creation cost inaccurate on opensim>
+#include "llurlaction.h"
 #include "llviewermenu.h"
 
 static LLPanelInjector<LLPanelGroupGeneral> t_panel_group_general("panel_group_general");
@@ -990,15 +991,13 @@ void LLPanelGroupGeneral::setGroupID(const LLUUID& id)
 // Copy URI button callback
 void LLPanelGroupGeneral::onCopyURI()
 {
-    std::string name = "secondlife:///app/group/"+getChild<LLUICtrl>("group_key")->getValue().asString()+"/about";
-    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(name), 0, name.size() );
+	LLUrlAction::copyURLToClipboard(LLSLURL("group", getGroupID(), "about").getSLURLString());
 }
 
 void LLPanelGroupGeneral::onCopyName()
 {
-    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(mGroupName), 0, mGroupName.size() );
+	getWindow()->copyTextToClipboard(utf8str_to_wstring(mGroupName));
 }
-
 // </FS> Copy button handlers
 
 // <FS:Ansariel> Re-add group member list on general panel
