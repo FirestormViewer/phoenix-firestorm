@@ -57,6 +57,7 @@
 #include "exogroupmutelist.h"
 #include "llclipboard.h"
 #include "lleconomy.h" // <FS:AW FIRE-7091 group creation cost inaccurate on opensim>
+#include "llviewermenu.h"
 
 static LLPanelInjector<LLPanelGroupGeneral> t_panel_group_general("panel_group_general");
 
@@ -1155,6 +1156,16 @@ S32 LLPanelGroupGeneral::sortMembersList(S32 col_idx,const LLScrollListItem* i1,
 	}
 
 	return LLStringUtil::compareDict(cell1->getValue().asString(), cell2->getValue().asString());
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> FIRE-20149: Refresh insignia texture when clicking the refresh button
+void LLPanelGroupGeneral::refreshInsigniaTexture()
+{
+	if (mInsignia)
+	{
+		destroy_texture(mInsignia->getTexture()->getID());
+	}
 }
 // </FS:Ansariel>
 

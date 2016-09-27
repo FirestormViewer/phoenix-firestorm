@@ -68,6 +68,9 @@ public:
 	// <FS:Ansariel> Re-add group member list on general panel
 	void onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name, const LLUUID& av_id);
 
+	// <FS:Ansariel> FIRE-20149: Refresh insignia texture when clicking the refresh button
+	void refreshInsigniaTexture();
+
 // <FS> Copy button callbacks
 protected:
 	void onCopyURI();
