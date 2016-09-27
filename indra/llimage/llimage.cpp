@@ -1452,6 +1452,12 @@ bool LLImageRaw::scale( S32 new_width, S32 new_height, bool scale_image_data )
         return false;
     }
 
+	if (isBufferInvalid())
+	{
+		LL_WARNS() << "Invalid image buffer" << LL_ENDL;
+		return false;
+	}
+
 	S32 old_width = getWidth();
 	S32 old_height = getHeight();
 	

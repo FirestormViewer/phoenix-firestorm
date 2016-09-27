@@ -1513,11 +1513,6 @@ LLTrace::BlockTimerStatHandle FTM_FRAME("Frame");
 
 bool LLAppViewer::frame()
 {
-		// <FS:Ansariel> [FS communication UI]
-		//LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLFloaterIMContainer::onCurrentChannelChanged, _1), true);
-		LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&FSFloaterVoiceControls::sOnCurrentChannelChanged, _1), true);
-		// </FS:Ansariel> [FS communication UI]
-	
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
 	LLSD newFrame;
 
@@ -1638,7 +1633,7 @@ bool LLAppViewer::frame()
 				if (fsCrouchToggle && fsCrouchToggleStatus)
 				{
 					gAgent.moveUp(-1);
-				}
+			}
 				// </FS:Ansariel>
 			}
 
