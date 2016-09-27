@@ -34,8 +34,6 @@
     Searching...
   </text> 
   <scroll_container
-   border="true"
-   bevel_style="none"
    follows="all"
    height="395"
    right="310"

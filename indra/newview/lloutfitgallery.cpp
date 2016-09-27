@@ -643,7 +643,7 @@ BOOL LLOutfitGalleryItem::postBuild()
 
     mOutfitNameText = getChild<LLTextBox>("outfit_name");
     mOutfitWornText = getChild<LLTextBox>("outfit_worn_text");
-    mFotoBgPanel = getChild<LLPanel>("foto_bg_panel");
+    //mFotoBgPanel = getChild<LLPanel>("foto_bg_panel"); // <FS:Ansariel> Does not exist
     mTextBgPanel = getChild<LLPanel>("text_bg_panel");
     setOutfitWorn(false);
     mHidden = false;
