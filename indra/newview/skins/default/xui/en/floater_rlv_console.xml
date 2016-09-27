@@ -34,7 +34,7 @@
      font="SansSerif"
      height="19"
      layout="topleft"
-     max_length="127"
+     max_length_chars="127"
      name="console_input"
      top_delta="0"
      width="576"
