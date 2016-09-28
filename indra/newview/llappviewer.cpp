@@ -4721,7 +4721,7 @@ void LLAppViewer::removeMarkerFiles()
 		}
 		else
 		{
-			LL_WARNS("MarkerFile") << "marker '"<<mMarkerFileName<<"' not open"<< LL_ENDL;
+			LL_DEBUGS("MarkerFile") << "marker '"<<mMarkerFileName<<"' not open"<< LL_ENDL;
  		}
 
 		if (mLogoutMarkerFile.getFileHandle())
@@ -4732,7 +4732,7 @@ void LLAppViewer::removeMarkerFiles()
 		}
 		else
 		{
-			LL_WARNS("MarkerFile") << "logout marker '"<<mLogoutMarkerFileName<<"' not open"<< LL_ENDL;
+			LL_DEBUGS("MarkerFile") << "logout marker '"<<mLogoutMarkerFileName<<"' not open"<< LL_ENDL;
 		}
 	}
 	else

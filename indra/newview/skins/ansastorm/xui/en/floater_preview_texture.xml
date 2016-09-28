@@ -237,11 +237,20 @@
 		<button
 		 follows="left|bottom"
 		 height="22"
-		 label="OK"
+		 image_overlay="Refresh_Off"
 		 layout="topleft"
 		 left="6"
-		 name="Keep"
 		 bottom="-10"
+		 name="btn_refresh"
+		 width="22" />
+		<button
+		 follows="left|bottom"
+		 height="22"
+		 label="OK"
+		 layout="topleft"
+		 left_pad="5"
+		 name="Keep"
+		 top_delta="0"
 		 width="110" />
 		<button
 		 follows="left|bottom"

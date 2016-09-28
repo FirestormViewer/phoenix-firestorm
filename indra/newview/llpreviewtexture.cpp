@@ -59,6 +59,7 @@
 #include "llimagepng.h"
 
 #include "fscommon.h"
+#include "llviewermenu.h"
 
 const S32 CLIENT_RECT_VPAD = 4;
 
@@ -230,6 +231,9 @@ BOOL LLPreviewTexture::postBuild()
 
 	// <FS:Ansariel> Performance improvement
 	mDimensionsCtrl = getChild<LLUICtrl>("dimensions");
+
+	// <FS:Ansariel> FIRE-20150: Add refresh button to texture preview
+	getChild<LLButton>("btn_refresh")->setClickedCallback(boost::bind(&LLPreviewTexture::onButtonRefresh, this));
 
 	return LLPreview::postBuild();
 }
@@ -700,6 +704,7 @@ void LLPreviewTexture::updateDimensions()
 		dimensions_panel->setVisible(TRUE);
 		if (!getChildView("Keep")->getVisible() &&
 			!getChildView("Discard")->getVisible() &&
+			!getChildView("btn_refresh")->getVisible() && // <FS:Ansariel> FIRE-20150: Add refresh button to texture preview
 			!getChildView("save_tex_btn")->getVisible())
 		{
 			button_panel->setVisible(FALSE);
@@ -1091,3 +1096,10 @@ void LLPreviewTexture::setObjectID(const LLUUID& object_id)
 	}
 	refreshFromItem();
 }
+
+// <FS:Ansariel> FIRE-20150: Add refresh button to texture preview
+void LLPreviewTexture::onButtonRefresh()
+{
+	destroy_texture(mImageID);
+}
+// </FS:Ansariel>

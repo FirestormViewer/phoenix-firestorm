@@ -4674,6 +4674,14 @@ void LLAgent::teleportViaLandmark(const LLUUID& landmark_asset_id)
 	}
 // [/RLVa:KB]
 
+	// <FS:Ansariel> FIRE-7273: Typing does not stop after using Cmd Line tph
+	if (landmark_asset_id.isNull())
+	{
+		// This might mean a local TP, so pro-actively stop typing
+		gAgent.stopTyping();
+	}
+	// </FS:Ansariel>
+
 	mTeleportRequest = LLTeleportRequestPtr(new LLTeleportRequestViaLandmark(landmark_asset_id));
 	startTeleportRequest();
 }

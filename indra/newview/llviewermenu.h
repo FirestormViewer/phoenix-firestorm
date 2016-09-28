@@ -176,6 +176,9 @@ bool use_http_textures();
 // <FS:Ansariel> Avatar render more check for pie menu
 bool check_avatar_render_mode(U32 mode);
 
+// <FS:Ansariel> Texture refresh
+void destroy_texture(const LLUUID& id);
+
 class LLViewerMenuHolderGL : public LLMenuHolderGL
 {
 public:

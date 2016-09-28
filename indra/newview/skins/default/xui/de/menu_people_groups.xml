@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_group_plus">
 	<menu_item_call label="Info anzeigen" name="View Info"/>
+	<menu_item_call label="SLurl in die Zwischenablage kopieren" name="Copy SLurl to clipboard"/>
 	<menu_item_call label="Chat" name="Chat"/>
 	<menu_item_call label="Voice-Anruf" name="Call"/>
 	<menu_item_call label="Aktivieren" name="Activate"/>

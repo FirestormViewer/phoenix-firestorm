@@ -4768,11 +4768,17 @@ Falls die Nachricht nicht innerhalb der nächsten Minuten erscheint, wurde sie v
 	<string name="paid_you_ldollars">
 		[NAME] hat Ihnen [REASON] [AMOUNT] L$ bezahlt.
 	</string>
+	<string name="paid_you_ldollars_gift">
+		[NAME] hat Ihnen [AMOUNT] L$ bezahlt: [REASON]
+	</string>
 	<string name="paid_you_ldollars_no_reason">
 		[NAME] hat Ihnen [AMOUNT] L$ bezahlt.
 	</string>
 	<string name="you_paid_ldollars">
 		Sie haben [REASON] [AMOUNT] L$ an [NAME] bezahlt.
+	</string>
+	<string name="you_paid_ldollars_gift">
+		Sie haben [AMOUNT] L$ an [NAME] bezahlt: [REASON]
 	</string>
 	<string name="you_paid_ldollars_no_info">
 		Sie haben [AMOUNT] L$ bezahlt.
@@ -4785,6 +4791,9 @@ Falls die Nachricht nicht innerhalb der nächsten Minuten erscheint, wurde sie v
 	</string>
 	<string name="you_paid_failure_ldollars">
 		Sie haben [NAME] [AMOUNT] L$ [REASON] nicht bezahlt.
+	</string>
+	<string name="you_paid_failure_ldollars_gift">
+		Sie haben [NAME] [AMOUNT] L$ nicht bezahlt: [REASON]
 	</string>
 	<string name="you_paid_failure_ldollars_no_info">
 		Sie haben [AMOUNT] L$ nicht bezahlt.

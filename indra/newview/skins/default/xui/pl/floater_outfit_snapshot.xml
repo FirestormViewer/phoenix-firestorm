@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="outfit_snapshot" title="Zdjęcie stroju">
+	<floater.string name="unknown">
+		nieznany
+	</floater.string>
+	<string name="inventory_progress_str">
+		Zapisywanie do Szafy
+	</string>
+	<string name="inventory_succeeded_str">
+		Zapisano do Szafy!
+	</string>
+	<string name="inventory_failed_str">
+		Zapis do Szafy nieudany.
+	</string>
+	<view name="controls_container">
+		<button label="Odśwież" name="new_snapshot_btn" />
+		<panel name="advanced_options_panel">
+			<text name="layer_type_label">
+				Uchwyć:
+			</text>
+			<combo_box label="Warstwy obrazu" name="layer_types">
+				<combo_box.item label="Kolory" name="Colors" />
+				<combo_box.item label="Głębia" name="Depth" />
+				<combo_box.item label="Głębia (24 bity)" name="Depth24" />
+			</combo_box>
+			<check_box label="Interfejs" name="ui_check" />
+			<check_box label="Stan L$" name="currency_check" />
+			<check_box label="Obiekty HUD" name="hud_check" />
+			<check_box label="Wstrzymaj (pełny ekran)" name="freeze_frame_check" />
+			<check_box label="Autoodświeżanie" name="auto_snapshot_check" />
+			<text name="filter_list_label">
+				Filter:
+			</text>
+			<combo_box name="filters_combobox" tool_tip="Filtry obrazu">
+				<combo_box.item label="Brak filtra" name="NoFilter" />
+			</combo_box>
+		</panel>
+		<panel name="succeeded_panel">
+			<text name="succeeded_lbl">
+				Powodzenie
+			</text>
+		</panel>
+		<panel name="failed_panel">
+			<text name="failed_lbl">
+				Niepowodzenie
+			</text>
+		</panel>
+		<text name="working_lbl">
+			Pracuję
+		</text>
+		<text name="refresh_lbl">
+			Zrób na nowo
+		</text>
+	</view>
+	<text name="image_res_text">
+		[WIDTH]px (szerokość) x [HEIGHT]px (wysokość)
+	</text>
+</floater>

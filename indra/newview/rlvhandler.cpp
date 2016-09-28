@@ -481,6 +481,14 @@ ERlvCmdRet RlvHandler::processClearCommand(const RlvCommand& rlvCmd)
 
 bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& sdUserdata)
 {
+	// Ansariel: We really only want to handle "new group" events here. Registering for this event
+	//           will still get us the custom "update grouptitle list" Firestorm events, sending us
+	//           into a toggle-loop!
+	if ("new group" != event->desc())
+	{
+		return false;
+	}
+
 	// NOTE: we'll fire once for every group the user belongs to so we need to manually keep track of pending changes
 	static LLUUID s_idLastAgentGroup = LLUUID::null;
 	static bool s_fGroupChanging = false;
@@ -492,7 +500,7 @@ bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& 
 	}
 
 	// If the user managed to change their active group (= newly joined or created group) we need to reactivate the previous one
-	if ( (!RlvActions::canChangeActiveGroup()) && ("new group" == event->desc()) && (m_idAgentGroup != gAgent.getGroupID()) )
+	if ( (!RlvActions::canChangeActiveGroup()) /*&& ("new group" == event->desc())*/ && (m_idAgentGroup != gAgent.getGroupID()) )
 	{
 		// Make sure they still belong to the group
 		if ( (m_idAgentGroup.notNull()) && (!gAgent.isInGroup(m_idAgentGroup)) )
@@ -1186,15 +1194,20 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 	//            * removed from the RlvObject (which still exists at this point even if this is the last restriction)
 	//       - the object's UUID may or may not exist in gObjectList (see handling of @detach=n|y)
 
+	ERlvBehaviour eBhvr = rlvCmd.getBehaviourType(); ERlvParamType eType = rlvCmd.getParamType();
+
 	// Try a command processor first
 	ERlvCmdRet eRet = rlvCmd.processCommand();
 	if (RLV_RET_NO_PROCESSOR != eRet)
 	{
+		m_OnBehaviour(eBhvr, eType);
+		if ( ((RLV_TYPE_ADD == eType) && (1 == m_Behaviours[eBhvr])) || ((RLV_TYPE_REMOVE == eType) && (0 == m_Behaviours[eBhvr])) )
+			m_OnBehaviourToggle(eBhvr, eType);
+
 		return eRet;
 	}
 
 	// Process the command the legacy way
-	ERlvBehaviour eBhvr = rlvCmd.getBehaviourType(); ERlvParamType eType = rlvCmd.getParamType();
 	
 	eRet = RLV_RET_SUCCESS; bool fRefCount = false; const std::string& strOption = rlvCmd.getOption();
 	switch (eBhvr)
@@ -1915,7 +1928,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour
 	}
 }
 
-// Handles: @edit=n|y toggles
+// Handles: @setenv=n|y toggles
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
@@ -1968,7 +1981,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvComma
 	return RLV_RET_SUCCESS;
 }
 
-// Handles: @edit=n|y toggles
+// Handles: @showinv=n|y toggles
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {

@@ -59,7 +59,7 @@
 		<key>blocked_groupchange</key>
 		<map>
 			<key>value</key>
-			<string>Die aktive Gruppe kann aufgrund von RLV-Einschränkungen nicht geändert werden. Setze zurück auf „[GROUP_SLURL]“.</string>
+			<string>Die aktive Gruppe kann aufgrund von RLV-Einschränkungen nicht geändert werden. Setze zurück auf "[GROUP_SLURL]".</string>
 		</map>
 		<key>blocked_nearby</key>
 		<map>
@@ -69,12 +69,12 @@
 		<key>blocked_permattach</key>
 		<map>
 			<key>value</key>
-			<string>Der Versuch „[OBJECT]“ anzuhängen wurde aufgrund von RLV-Einschränkungen verweigert.</string>
+			<string>Der Versuch "[OBJECT]" anzuhängen wurde aufgrund von RLV-Einschränkungen verweigert.</string>
 		</map>
 		<key>blocked_permteleport</key>
 		<map>
 			<key>value</key>
-			<string>„[OBJECT]“ wurde aufgrund von RLV-Einschränkungen verweigert, dich zu teleportieren.</string>
+			<string>"[OBJECT]" wurde aufgrund von RLV-Einschränkungen verweigert, dich zu teleportieren.</string>
 		</map>
 		<key>blocked_startim</key>
 		<map>

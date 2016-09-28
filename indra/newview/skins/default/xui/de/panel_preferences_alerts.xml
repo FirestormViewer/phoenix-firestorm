@@ -15,6 +15,7 @@
 		<!-- People -->
 		<panel label="Leute" name="tab-people">
 			<check_box label="Anwendungsicon blinkt bei neuen Nachrichten, wenn [APP_NAME] keinen Fokus besitzt" name="FSFlashOnMessage"/>
+			<check_box label="Anwendungsicon blinkt auch bei empfangenen Instant Messages von Objekten" name="FSFlashOnObjectIM"/>
 			<check_box label="Benachrichtigen, wenn jemand seinen Displaynamen ändert" name="FSShowDisplayNameUpdateNotification"/>
 			<check_box label="Benachrichtigen, wenn ich jemanden blockiere oder freischalte" name="FSReportBlockToNearbyChat"/>
 			<text name="friends_logon_label">

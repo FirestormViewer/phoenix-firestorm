@@ -200,7 +200,7 @@ namespace Details
                 else if (status == LLCore::HttpStatus(HTTP_BAD_GATEWAY))
                 {   // Pre-coro says this is the default answer for timeouts and it can happen
                     // frequently on OpenSim - assume this is normal and issue a new request immediately
-                    LL_INFOS("LLEventPollImpl") << "Received HTTP 502 - start new request." << LL_ENDL;
+                    LL_DEBUGS("LLEventPollImpl") << "Received HTTP 502 - start new request." << LL_ENDL;
                     errorCount = 0;
                     continue;
                 }

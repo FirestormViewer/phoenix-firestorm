@@ -156,7 +156,12 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   #set(XCODE_VERSION 6.0)
   set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
   #set(CMAKE_OSX_SYSROOT macosx10.9)
-  if(IS_DIRECTORY "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk")
+  if(IS_DIRECTORY "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk")
+    # Assume Xcode 7 if Sierra SDK is present
+    set(XCODE_VERSION 7.3)
+    set(CMAKE_OSX_SYSROOT macosx10.12)
+    message(STATUS "OS X SDK 10.12 found.")
+  elseif(IS_DIRECTORY "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk")
     # Assume Xcode 7 if El Capitan SDK is present
     set(XCODE_VERSION 7.3)
     set(CMAKE_OSX_SYSROOT macosx10.11)
