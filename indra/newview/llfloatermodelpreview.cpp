@@ -308,6 +308,7 @@ BOOL LLFloaterModelPreview::postBuild()
 
 	childSetCommitCallback("upload_skin", boost::bind(&LLFloaterModelPreview::toggleCalculateButton, this), NULL);
 	childSetCommitCallback("upload_joints", boost::bind(&LLFloaterModelPreview::toggleCalculateButton, this), NULL);
+	childSetCommitCallback("lock_scale_if_joint_position", boost::bind(&LLFloaterModelPreview::toggleCalculateButton, this), NULL);
 	childSetCommitCallback("upload_textures", boost::bind(&LLFloaterModelPreview::toggleCalculateButton, this), NULL);
 
 	childSetTextArg("status", "[STATUS]", getString("status_idle"));
@@ -321,6 +322,7 @@ BOOL LLFloaterModelPreview::postBuild()
 
 	childSetCommitCallback("upload_skin", onUploadSkinCommit, this);
 	childSetCommitCallback("upload_joints", onUploadJointsCommit, this);
+	childSetCommitCallback("lock_scale_if_joint_position", onUploadJointsCommit, this);
 
 	childSetCommitCallback("import_scale", onImportScaleCommit, this);
 	childSetCommitCallback("pelvis_offset", onPelvisOffsetCommit, this);
@@ -333,6 +335,7 @@ BOOL LLFloaterModelPreview::postBuild()
 
 	childDisable("upload_skin");
 	childDisable("upload_joints");
+	childDisable("lock_scale_if_joint_position");
 
 	initDecompControls();
 
@@ -543,18 +546,20 @@ void LLFloaterModelPreview::onClickCalculateBtn()
 
 	bool upload_skinweights = childGetValue("upload_skin").asBoolean();
 	bool upload_joint_positions = childGetValue("upload_joints").asBoolean();
+    bool lock_scale_if_joint_position = childGetValue("lock_scale_if_joint_position").asBoolean();
 
     if (upload_joint_positions)
     {
         // Diagnostic message showing list of joints for which joint offsets are defined.
         // FIXME - given time, would be much better to put this in the UI, in updateStatusMessages().
-		mModelPreview->getPreviewAvatar()->showAttachmentPosOverrides();
+		mModelPreview->getPreviewAvatar()->showAttachmentOverrides();
     }
 
 	mUploadModelUrl.clear();
 
 	gMeshRepo.uploadModel(mModelPreview->mUploadData, mModelPreview->mPreviewScale,
-                          childGetValue("upload_textures").asBoolean(), upload_skinweights, upload_joint_positions,
+                          childGetValue("upload_textures").asBoolean(), 
+                          upload_skinweights, upload_joint_positions, lock_scale_if_joint_position,
                           mUploadModelUrl, false,
 						  getWholeModelFeeObserverHandle());
 
@@ -1383,9 +1388,10 @@ U32 LLModelPreview::calcResourceCost()
 					   decomp,
 					   mFMP->childGetValue("upload_skin").asBoolean(),
 					   mFMP->childGetValue("upload_joints").asBoolean(),
+					   mFMP->childGetValue("lock_scale_if_joint_position").asBoolean(),
 					   TRUE,
-						FALSE,
-						instance.mModel->mSubmodelID);
+					   FALSE,
+					   instance.mModel->mSubmodelID);
 			
 			num_hulls += decomp.mHull.size();
 			for (U32 i = 0; i < decomp.mHull.size(); ++i)
@@ -1720,7 +1726,7 @@ void LLModelPreview::rebuildUploadData()
 
 }
 
-void LLModelPreview::saveUploadData(bool save_skinweights, bool save_joint_positions)
+void LLModelPreview::saveUploadData(bool save_skinweights, bool save_joint_positions, bool lock_scale_if_joint_position)
 {
 	if (!mLODFile[LLModel::LOD_HIGH].empty())
 	{
@@ -1729,12 +1735,13 @@ void LLModelPreview::saveUploadData(bool save_skinweights, bool save_joint_posit
 
         if (LLModelLoader::getSLMFilename(filename, slm_filename))
         {
-			saveUploadData(slm_filename, save_skinweights, save_joint_positions);
+			saveUploadData(slm_filename, save_skinweights, save_joint_positions, lock_scale_if_joint_position);
 		}
 	}
 }
 
-void LLModelPreview::saveUploadData(const std::string& filename, bool save_skinweights, bool save_joint_positions)
+void LLModelPreview::saveUploadData(const std::string& filename, 
+                                    bool save_skinweights, bool save_joint_positions, bool lock_scale_if_joint_position)
 {
 
 	std::set<LLPointer<LLModel> > meshes;
@@ -1775,7 +1782,9 @@ void LLModelPreview::saveUploadData(const std::string& filename, bool save_skinw
 				instance.mLOD[LLModel::LOD_LOW], 
 				instance.mLOD[LLModel::LOD_IMPOSTOR], 
 				decomp, 
-				save_skinweights, save_joint_positions,
+				save_skinweights, 
+                save_joint_positions,
+                lock_scale_if_joint_position,
                 FALSE, TRUE, instance.mModel->mSubmodelID);
 			
 			data["mesh"][instance.mModel->mLocalID] = str.str();
@@ -2015,6 +2024,7 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
 
 		bool skin_weights = false;
 		bool joint_positions = false;
+		bool lock_scale_if_joint_position = false;
 
 		for (S32 lod = 0; lod < LLModel::NUM_LODS; ++lod)
 		{ //for each LoD
@@ -2062,6 +2072,10 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
 							{
 								joint_positions = true;
 							}
+							if (list_iter->mModel->mSkinInfo.mLockScaleIfJointPosition)
+							{
+								lock_scale_if_joint_position = true;
+							}
 						}
 					}
 				}
@@ -2084,6 +2098,13 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
 				fmp->enableViewOption("show_joint_positions");
 				mViewOption["show_joint_positions"] = true;
 				fmp->childSetValue("upload_joints", true);
+			}
+
+			if (lock_scale_if_joint_position)
+			{
+				fmp->enableViewOption("lock_scale_if_joint_position");
+				mViewOption["lock_scale_if_joint_position"] = true;
+				fmp->childSetValue("lock_scale_if_joint_position", true);
 			}
 		}
 
@@ -3741,7 +3762,17 @@ BOOL LLModelPreview::render()
 		mFMP->childSetValue("upload_joints", false);
 		upload_joints = false;		
 	}	
-		
+
+    if (upload_skin && upload_joints)
+    {
+        mFMP->childEnable("lock_scale_if_joint_position");
+    }
+    else
+    {
+        mFMP->childDisable("lock_scale_if_joint_position");
+        mFMP->childSetValue("lock_scale_if_joint_position", false);
+    }
+    
 	//Only enable joint offsets if it passed the earlier critiquing
 	if ( isRigValidForJointPositionUpload() )  
 	{
@@ -4347,15 +4378,17 @@ void LLFloaterModelPreview::onUpload(void* user_data)
 
 	bool upload_skinweights = mp->childGetValue("upload_skin").asBoolean();
 	bool upload_joint_positions = mp->childGetValue("upload_joints").asBoolean();
-
+    bool lock_scale_if_joint_position = mp->childGetValue("lock_scale_if_joint_position").asBoolean();
 
 	if (gSavedSettings.getBOOL("MeshImportUseSLM"))
 	{
-        mp->mModelPreview->saveUploadData(upload_skinweights, upload_joint_positions);
+        mp->mModelPreview->saveUploadData(upload_skinweights, upload_joint_positions, lock_scale_if_joint_position);
     }
 
 	gMeshRepo.uploadModel(mp->mModelPreview->mUploadData, mp->mModelPreview->mPreviewScale,
-						  mp->childGetValue("upload_textures").asBoolean(), upload_skinweights, upload_joint_positions, mp->mUploadModelUrl,
+						  mp->childGetValue("upload_textures").asBoolean(), 
+                          upload_skinweights, upload_joint_positions, lock_scale_if_joint_position, 
+                          mp->mUploadModelUrl,
 						  true, LLHandle<LLWholeModelFeeObserver>(), mp->getWholeModelUploadObserverHandle());
 }
 

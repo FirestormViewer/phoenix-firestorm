@@ -870,7 +870,7 @@ void LLWearableHoldingPattern::onAllComplete()
 //		// attachments, even those that are not being removed. This is
 //		// needed to get joint positions all slammed down to their
 //		// pre-attachment states.
-//		gAgentAvatarp->clearAttachmentPosOverrides();
+//		gAgentAvatarp->clearAttachmentOverrides();
 //
 //		if (objects_to_remove.size() || items_to_add.size())
 //		{
@@ -893,7 +893,7 @@ void LLWearableHoldingPattern::onAllComplete()
 //			 ++it)
 //		{
 //			LLViewerObject *objectp = *it;
-//			gAgentAvatarp->addAttachmentPosOverridesForObject(objectp);
+//			gAgentAvatarp->addAttachmentOverridesForObject(objectp);
 //		}
 		
 //		// Add new attachments to match those requested.
@@ -2686,7 +2686,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 		// attachments, even those that are not being removed. This is
 		// needed to get joint positions all slammed down to their
 		// pre-attachment states.
-		gAgentAvatarp->clearAttachmentPosOverrides();
+		gAgentAvatarp->clearAttachmentOverrides();
 
 		// Take off the attachments that will no longer be in the outfit.
 		// (but don't remove attachments until avatar is fully loaded - should reduce random attaching/detaching/reattaching at log-on)
@@ -2700,7 +2700,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 		for (LLAgentWearables::llvo_vec_t::iterator it = objects_to_retain.begin(); it != objects_to_retain.end(); ++it)
 		{
 			LLViewerObject *objectp = *it;
-			gAgentAvatarp->addAttachmentPosOverridesForObject(objectp);
+			gAgentAvatarp->addAttachmentOverridesForObject(objectp);
 		}
 		
 		// Add new attachments to match those requested.

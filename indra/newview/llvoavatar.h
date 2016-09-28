@@ -205,15 +205,16 @@ public:
 	LLJoint* getJoint( const std::string &name ) { return getJoint( JointKey::construct( name ) ); }
 // </FS:ND>
 
-	void 					addAttachmentPosOverridesForObject(LLViewerObject *vo);
-	void					resetJointPositionsOnDetach(const LLUUID& mesh_id);
-	void					resetJointPositionsOnDetach(LLViewerObject *vo);
+	void 					addAttachmentOverridesForObject(LLViewerObject *vo);
+	void					resetJointsOnDetach(const LLUUID& mesh_id);
+	void					resetJointsOnDetach(LLViewerObject *vo);
     bool					jointIsRiggedTo(const std::string& joint_name);
     bool					jointIsRiggedTo(const std::string& joint_name, const LLViewerObject *vo);
-	void					clearAttachmentPosOverrides();
-	void					rebuildAttachmentPosOverrides();
-    void                    showAttachmentPosOverrides(bool verbose = false) const;
-    void                    getAttachmentOverrideNames(std::set<std::string>& names) const;
+	void					clearAttachmentOverrides();
+	void					rebuildAttachmentOverrides();
+    void                    showAttachmentOverrides(bool verbose = false) const;
+    void                    getAttachmentOverrideNames(std::set<std::string>& pos_names, 
+                                                       std::set<std::string>& scale_names) const;
 	
 	/*virtual*/ const LLUUID&	getID() const;
 	/*virtual*/ void			addDebugText(const std::string& text);

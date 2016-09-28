@@ -44,6 +44,11 @@ class domMesh;
 class LLMeshSkinInfo 
 {
 public:
+	LLMeshSkinInfo() { }
+	LLMeshSkinInfo(LLSD& data);
+	void fromLLSD(LLSD& data);
+	LLSD asLLSD(bool include_joints, bool lock_scale_if_joint_position) const;
+
 	LLUUID mMeshID;
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
 //	std::vector<std::string> mJointNames;
@@ -54,12 +59,9 @@ public:
 	std::vector<LLMatrix4> mAlternateBindMatrix;
     std::vector<U32> mJointRemap;
 
-	LLMeshSkinInfo() { }
-	LLMeshSkinInfo(LLSD& data);
-	void fromLLSD(LLSD& data);
-	LLSD asLLSD(bool include_joints) const;
 	LLMatrix4 mBindShapeMatrix;
 	float mPelvisOffset;
+    bool mLockScaleIfJointPosition;
 };
 
 class LLModel : public LLVolume
@@ -144,6 +146,7 @@ public:
 		const LLModel::Decomposition& decomp,
 		BOOL upload_skin,
 		BOOL upload_joints,
+        BOOL lock_scale_if_joint_position,
 		BOOL nowrite = FALSE,
 		BOOL as_slm = FALSE,
 		int submodel_id = 0);
