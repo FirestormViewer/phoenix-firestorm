@@ -1908,7 +1908,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour
 	}
 }
 
-// Handles: @edit=n|y toggles
+// Handles: @setenv=n|y toggles
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
@@ -1961,7 +1961,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvComma
 	return RLV_RET_SUCCESS;
 }
 
-// Handles: @edit=n|y toggles
+// Handles: @showinv=n|y toggles
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
