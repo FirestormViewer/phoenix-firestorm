@@ -4503,11 +4503,17 @@ Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pom
 	<string name="paid_you_ldollars">
 		[NAME] zapłacił/a Tobie [AMOUNT]L$ [REASON].
 	</string>
+	<string name="paid_you_ldollars_gift">
+		[NAME] zapłacił/a Tobie [AMOUNT]L$: [REASON]
+	</string>
 	<string name="paid_you_ldollars_no_reason">
 		[NAME] zapłacił/a Tobie [AMOUNT]L$.
 	</string>
 	<string name="you_paid_ldollars">
 		Zapłacono [NAME] [AMOUNT]L$ [REASON].
+	</string>
+	<string name="you_paid_ldollars_gift">
+		Zapłacono [NAME] [AMOUNT]L$: [REASON]
 	</string>
 	<string name="you_paid_ldollars_no_info">
 		Zapłacono [AMOUNT]L$.
@@ -4520,6 +4526,9 @@ Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pom
 	</string>
 	<string name="you_paid_failure_ldollars">
 		Nie udało się zapłacić [NAME] [AMOUNT]L$ [REASON].
+	</string>
+	<string name="you_paid_failure_ldollars_gift">
+		Nie udało się zapłacić [NAME] [AMOUNT]L$: [REASON]
 	</string>
 	<string name="you_paid_failure_ldollars_no_info">
 		Nie udało się zapłacić [AMOUNT]L$.
