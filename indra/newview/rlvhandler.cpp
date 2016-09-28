@@ -1194,15 +1194,20 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 	//            * removed from the RlvObject (which still exists at this point even if this is the last restriction)
 	//       - the object's UUID may or may not exist in gObjectList (see handling of @detach=n|y)
 
+	ERlvBehaviour eBhvr = rlvCmd.getBehaviourType(); ERlvParamType eType = rlvCmd.getParamType();
+
 	// Try a command processor first
 	ERlvCmdRet eRet = rlvCmd.processCommand();
 	if (RLV_RET_NO_PROCESSOR != eRet)
 	{
+		m_OnBehaviour(eBhvr, eType);
+		if ( ((RLV_TYPE_ADD == eType) && (1 == m_Behaviours[eBhvr])) || ((RLV_TYPE_REMOVE == eType) && (0 == m_Behaviours[eBhvr])) )
+			m_OnBehaviourToggle(eBhvr, eType);
+
 		return eRet;
 	}
 
 	// Process the command the legacy way
-	ERlvBehaviour eBhvr = rlvCmd.getBehaviourType(); ERlvParamType eType = rlvCmd.getParamType();
 	
 	eRet = RLV_RET_SUCCESS; bool fRefCount = false; const std::string& strOption = rlvCmd.getOption();
 	switch (eBhvr)
