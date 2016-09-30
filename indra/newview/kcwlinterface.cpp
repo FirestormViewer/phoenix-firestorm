@@ -46,7 +46,7 @@ const F32 PARCEL_WL_CHECK_TIME  = 5.f;
 const S32 PARCEL_WL_MIN_ALT_CHANGE = 3;
 const std::string PARCEL_WL_DEFAULT = "Default";
 
-const S32 USING_DEFAULT = -1; // Parcel WL is using default sky or region defaults
+const S32 NO_ZONES = -1; // Parcel WL is using default sky or region defaults
 const S32 NO_SETTINGS = -2; // We didn't receive any parcel WL settings yet
 
 KCWindlightInterface::KCWindlightInterface() :
@@ -232,9 +232,9 @@ bool KCWindlightInterface::applySkySettings(const LLSD& settings)
 		}
 	}
 
-	if (mCurrentSpace != USING_DEFAULT)
+	if (mCurrentSpace != NO_ZONES)
 	{
-		mCurrentSpace = USING_DEFAULT;
+		mCurrentSpace = NO_ZONES;
 		// set notes on KCWindlightInterface::haveParcelOverride
 		if (settings.has("sky_default") && (!mHaveRegionSettings || mHasRegionOverride))
 		{
@@ -250,7 +250,7 @@ bool KCWindlightInterface::applySkySettings(const LLSD& settings)
 			}
 			else if (mHaveRegionSettings && !mHasRegionOverride)
 			{
-				reason = "Region has custom WL set and \"RegionOverride\" parameter was not set";
+				reason = "No zone defined, region has custom WL and \"RegionOverride\" parameter was not set";
 			}
 
 			LL_INFOS() << "Applying WL sky set \"Region Default\": " << reason << LL_ENDL;
@@ -627,7 +627,7 @@ bool KCWindlightInterface::haveParcelOverride(const LLEnvironmentSettings& new_s
 	//*ASSUMPTION: if region day cycle is empty, its set to default
 	mHaveRegionSettings = new_settings.getWLDayCycle().size() > 0;
 
-	bool has_override = mHasRegionOverride || mCurrentSpace > USING_DEFAULT;
+	bool has_override = mHasRegionOverride || (mCurrentSpace != NO_SETTINGS && mCurrentSpace != NO_ZONES);
 
 	if (!has_override)
 	{
