@@ -4944,6 +4944,12 @@ void LLAgent::setTeleportState(ETeleportState state)
 	{
 		case TELEPORT_NONE:
 			mbTeleportKeepsLookAt = false;
+			// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
+			if (isAgentAvatarValid())
+			{
+				gAgentAvatarp->setIsCrossingRegion(false);
+			}
+			// </FS:Ansariel>
 			break;
 
 		case TELEPORT_MOVING:
