@@ -99,27 +99,30 @@ bool LLOfferHandler::processNotification(const LLNotificationPtr& notification)
 
 			LLUUID from_id = notification->getPayload()["from_id"];
 
-			//Will not play a notification sound for inventory and teleport offer based upon chat preference
-			// <FS:Ansariel> Notification sounds
-			//bool playSound = (!notification->isDND()
-			//				  && ((notification->getName() == "UserGiveItem"
-			//                  && gSavedSettings.getBOOL("PlaySoundInventoryOffer"))
-			//                  || (notification->getName() == "TeleportOffered"
-			//                  && gSavedSettings.getBOOL("PlaySoundTeleportOffer"))));
-			const std::string notif_name = notification->getName();
-			bool playSound = (!notification->isDND()
-								&& ((notif_name == "UserGiveItem"
+			if (!notification->isDND())
+			{
+				//Will not play a notification sound for inventory and teleport offer based upon chat preference
+				// <FS:Ansariel> Notification sounds
+				//bool playSound = (notification->getName() == "UserGiveItem"
+				//				  && gSavedSettings.getBOOL("PlaySoundInventoryOffer"))
+				//				 || ((notification->getName() == "TeleportOffered"
+				//				     || notification->getName() == "TeleportOffered_MaturityExceeded"
+				//				     || notification->getName() == "TeleportOffered_MaturityBlocked")
+				//				    && gSavedSettings.getBOOL("PlaySoundTeleportOffer"));
+				const std::string notif_name = notification->getName();
+				bool playSound = (notif_name == "UserGiveItem"
 								&& gSavedSettings.getBOOL("PlayModeUISndInventoryOffer"))
 								|| ((notif_name == "TeleportOffered" || notif_name == "TeleportOffered_SLUrl" ||
 									notif_name == "TeleportOffered_MaturityExceeded" || notif_name == "TeleportOffered_MaturityExceeded_SLUrl" ||
 									notif_name == "TeleportOffered_MaturityBlocked" || notif_name == "TeleportOffered_MaturityBlocked_SLUrl")
-								&& gSavedSettings.getBOOL("PlayModeUISndTeleportOffer"))));
-			// </FS:Ansariel>
+								&& gSavedSettings.getBOOL("PlayModeUISndTeleportOffer"));
+				// </FS:Ansariel>
 
-			            if(playSound)
-			            {
-			                notification->playSound();
-			            }
+				if (playSound)
+				{
+					notification->playSound();
+				}
+			}
 
 // [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
 			// Don't spawn an IM session for non-chat related events

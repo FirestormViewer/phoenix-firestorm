@@ -2207,15 +2207,7 @@ void LLKeyframeMotion::onLoadComplete(LLVFS *vfs,
 	LLCharacter* character = *char_iter;
 
 	// look for an existing instance of this motion
-
-	// <FS:ND> FIRE-14972/FIRE-14589 there can be more than just LLKeyframeMotion instances, in which way the c-cast will create
-	// a pointer to an invalid object. That quickly causes memory corruption.
-	
-	// LLKeyframeMotion* motionp = (LLKeyframeMotion*) character->findMotion(asset_uuid);
-	LLKeyframeMotion* motionp = dynamic_cast< LLKeyframeMotion* >( character->findMotion(asset_uuid) );
-
-	// </FS:ND>
-	
+	LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*> (character->findMotion(asset_uuid));
 	if (motionp)
 	{
 		if (0 == status)
