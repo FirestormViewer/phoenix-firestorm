@@ -136,6 +136,7 @@
 #include "fsavatarrenderpersistence.h"
 #include "fsdroptarget.h"
 #include "fsfloaterimcontainer.h"
+#include "fssearchableui.h"
 #include "growlmanager.h"
 #include "lfsimfeaturehandler.h"
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
@@ -154,8 +155,9 @@
 #include "llwlparammanager.h"
 #include "NACLantispam.h"
 #include "../llcrashlogger/llcrashlogger.h"
-
-#include "fssearchableui.h"
+#if LL_WINDOWS
+#include <VersionHelpers.h>
+#endif
 
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 //const F32 BANDWIDTH_UPDATER_TIMEOUT = 0.5f;
@@ -770,6 +772,19 @@ BOOL LLFloaterPreference::postBuild()
 	gSavedSettings.getControl("AvatarNameTagMode")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
 	gSavedSettings.getControl("FSTagShowARW")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
 	onAvatarTagSettingsChanged();
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> Set max. UI scaling factor depending on max. supported OS scaling factor
+#if LL_WINDOWS
+	if (IsWindowsVersionOrGreater(10, 0, 0))
+	{
+		getChild<LLSliderCtrl>("ui_scale_slider")->setMaxValue(4.5f);
+	}
+	else if (IsWindows8Point1OrGreater())
+	{
+		getChild<LLSliderCtrl>("ui_scale_slider")->setMaxValue(2.5f);
+	}
+#endif
 	// </FS:Ansariel>
 
 	return TRUE;
