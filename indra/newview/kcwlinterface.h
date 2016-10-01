@@ -83,7 +83,7 @@ protected:
 	bool mWeChangedIt; //dont reset anything if we didnt do it
 	bool mTPing; //agent just TP'd (hack, might be better way)
 	LLViewerRegion* mLastRegion;
-	bool mRegionOverride;
+	bool mHasRegionOverride;
 	bool mHaveRegionSettings;
 	bool mDisabled; // control bool to clear all states after being disabled
 };

@@ -4292,8 +4292,11 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
         {
             // Fall back to a point inside the avatar if mesh is
             // rigged to an unknown joint.
-            joint = avatar->getJoint("mPelvis");
-        }
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//			joint = avatar->getJoint( "mPelvis" );
+			joint = avatar->getJoint( JointKey::construct( "mPelvis" ) );
+// </FS:ND>
+		}
 		if (joint)
 		{
 			mat[j] = skin->mInvBindMatrix[j];

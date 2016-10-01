@@ -1897,6 +1897,9 @@ bool LLAppViewer::mainLoop()
 			}
 		}
 		
+		// <FS:Ansariel> Cut down wait on logout; Need to terminate voice here because we need gServicePump!
+		LLVoiceClient::getInstance()->terminate();
+
 		delete gServicePump;
 		
 		destroyMainloopTimeout();
@@ -1997,7 +2000,8 @@ bool LLAppViewer::cleanup()
     // Give any remaining SLPlugin instances a chance to exit cleanly.
     LLPluginProcessParent::shutdown();
 
-	LLVoiceClient::getInstance()->terminate();
+	// <FS:Ansariel> Cut down wait on logout; Need to terminate voice earlier because we need gServicePump!
+	//LLVoiceClient::getInstance()->terminate();
 	
 	disconnectViewer();
 
@@ -4727,7 +4731,7 @@ void LLAppViewer::removeMarkerFiles()
 		}
 		else
 		{
-			LL_WARNS("MarkerFile") << "marker '"<<mMarkerFileName<<"' not open"<< LL_ENDL;
+			LL_DEBUGS("MarkerFile") << "marker '"<<mMarkerFileName<<"' not open"<< LL_ENDL;
  		}
 
 		if (mLogoutMarkerFile.getFileHandle())
@@ -4738,7 +4742,7 @@ void LLAppViewer::removeMarkerFiles()
 		}
 		else
 		{
-			LL_WARNS("MarkerFile") << "logout marker '"<<mLogoutMarkerFileName<<"' not open"<< LL_ENDL;
+			LL_DEBUGS("MarkerFile") << "logout marker '"<<mLogoutMarkerFileName<<"' not open"<< LL_ENDL;
 		}
 	}
 	else

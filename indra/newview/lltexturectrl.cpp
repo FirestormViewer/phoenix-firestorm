@@ -81,8 +81,6 @@ static const S32 LOCAL_TRACKING_ID_COLUMN = 1;
 //static const char WHITE_IMAGE_NAME[] = "Blank Texture";
 //static const char NO_IMAGE_NAME[] = "None";
 
-	static void		onBtnTransparent( void* userdata ); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
-	LLUUID				mTransparentImageAssetID; // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 LLFloaterTexturePicker::LLFloaterTexturePicker(	
 	LLView* owner,
 	LLUUID image_asset_id,

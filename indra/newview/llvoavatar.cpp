@@ -5689,21 +5689,40 @@ const LLUUID& LLVOAvatar::getID() const
 // getJoint()
 //-----------------------------------------------------------------------------
 // RN: avatar joints are multi-rooted to include screen-based attachments
-LLJoint *LLVOAvatar::getJoint( const std::string &name )
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//LLJoint *LLVOAvatar::getJoint( const std::string &name )
+LLJoint *LLVOAvatar::getJoint( const JointKey &name )
+// </FS:ND>
 {
-	joint_map_t::iterator iter = mJointMap.find(name);
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+	//joint_map_t::iterator iter = mJointMap.find( name );
+
+	//LLJoint* jointp = NULL;
+
+	//if( iter == mJointMap.end() || iter->second == NULL )
+	//{ //search for joint and cache found joint in lookup table
+	//	jointp = mRoot->findJoint( name );
+	//	mJointMap[ name ] = jointp;
+	//}
+	//else
+	//{ //return cached pointer
+	//	jointp = iter->second;
+	//}
+
+	joint_map_t::iterator iter = mJointMap.find( name.mKey );
 
 	LLJoint* jointp = NULL;
 
-	if (iter == mJointMap.end() || iter->second == NULL)
+	if( iter == mJointMap.end() || iter->second == NULL )
 	{ //search for joint and cache found joint in lookup table
-		jointp = mRoot->findJoint(name);
-		mJointMap[name] = jointp;
+		jointp = mRoot->findJoint( name.mName );
+		mJointMap[ name.mKey ] = jointp;
 	}
 	else
 	{ //return cached pointer
 		jointp = iter->second;
 	}
+// </FS:ND>
 
 	return jointp;
 }
@@ -5799,7 +5818,11 @@ void LLVOAvatar::addAttachmentPosOverridesForObject(LLViewerObject *vo)
 			{								
 				for ( int i=0; i<jointCnt; ++i )
 				{
-					std::string lookingForJoint = pSkinData->mJointNames[i].c_str();
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//					std::string lookingForJoint = pSkinData->mJointNames[ i ].c_str();
+					JointKey lookingForJoint  = pSkinData->mJointNames[ i ];
+// </FS:ND>
+
 					LLJoint* pJoint = getJoint( lookingForJoint );
 					if ( pJoint && pJoint->getId() != currentId )
 					{   									
@@ -5809,7 +5832,10 @@ void LLVOAvatar::addAttachmentPosOverridesForObject(LLViewerObject *vo)
 						pJoint->addAttachmentPosOverride( jointPos, mesh_id, avString() );
 									
 						//If joint is a pelvis then handle old/new pelvis to foot values
-						if ( lookingForJoint == "mPelvis" )
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//						if( lookingForJoint == "mPelvis" )
+						if( lookingForJoint.mName == "mPelvis" )
+// </FS:ND>
 						{	
 							pelvisGotSet = true;											
 						}										
@@ -5868,8 +5894,11 @@ void LLVOAvatar::resetJointPositionsOnDetach(const LLUUID& mesh_id)
 	avatar_joint_list_t::iterator iter = mSkeleton.begin();
 	avatar_joint_list_t::iterator end  = mSkeleton.end();
 
-	LLJoint* pJointPelvis = getJoint("mPelvis");
-	
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//	LLJoint* pJointPelvis = getJoint( "mPelvis" );
+	LLJoint* pJointPelvis = getJoint( JointKey::construct( "mPelvis" ) );
+// </FS:ND>
+
 	for (; iter != end; ++iter)
 	{
 		LLJoint* pJoint = (*iter);
@@ -6029,8 +6058,13 @@ BOOL LLVOAvatar::loadSkeletonNode ()
 			LLViewerJointAttachment* attachment = new LLViewerJointAttachment();
 
 			attachment->setName(info->mName);
-			LLJoint *parentJoint = getJoint(info->mJointName);
-			if (!parentJoint)
+
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+//			LLJoint *parentJoint = getJoint( info->mJointName );
+			LLJoint *parentJoint = getJoint( JointKey::construct( info->mJointName ) );
+// </FS:ND>
+
+			if( !parentJoint )
 			{
 				LL_WARNS() << "No parent joint by name " << info->mJointName << " found for attachment point " << info->mName << LL_ENDL;
 				delete attachment;

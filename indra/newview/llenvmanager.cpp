@@ -504,7 +504,7 @@ void LLEnvManagerNew::onRegionSettingsResponse(const LLSD& content)
 	LLWLParamManager::instance().refreshRegionPresets();
 
 	//<FS:KC> Use the region settings if parcel settings didnt override it already
-	if (KCWindlightInterface::instance().haveParcelOverride(new_settings))
+	if (!KCWindlightInterface::instance().haveParcelOverride(new_settings))
 	{
 		// If using server settings, update managers.
 //	if (getUseRegionSettings())

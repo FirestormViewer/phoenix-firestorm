@@ -6946,9 +6946,15 @@ static std::string reason_from_transaction_type(S32 transaction_type,
 		case TRANS_CLASSIFIED_CHARGE:
 			return LLTrans::getString("to publish a classified ad");
 			
+		// <FS:Ansariel> FIRE-16827: Display custom payment message
+		case TRANS_GIFT:
+			// Simulator returns "Payment" if no custom description has been entered
+			return (item_desc == "Payment" ? std::string() : item_desc);
+		// </FS:Ansariel>
+
 		// These have no reason to display, but are expected and should not
 		// generate warnings
-		case TRANS_GIFT:
+		//case TRANS_GIFT: // <FS:Ansariel> FIRE-16827: Display custom payment message
 		case TRANS_PAY_OBJECT:
 		case TRANS_OBJECT_PAYS:
 			return std::string();
@@ -7097,6 +7103,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 	LLSD payload;
 	
 	bool you_paid_someone = (source_id == gAgentID);
+	std::string gift_suffix = (transaction_type == TRANS_GIFT ? "_gift" : ""); // <FS:Ansariel> FIRE-16827: Display custom payment message
 	if (you_paid_someone)
 	{
 		if(!gSavedSettings.getBOOL("NotifyMoneySpend"))
@@ -7110,40 +7117,28 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		{
 			if (dest_id.notNull())
 			{
-				// <FS:Ansariel> FIRE-6901: Payment notifications show wrong message
-				//message = LLTrans::getString("you_paid_ldollars", args);
-				message = success ? LLTrans::getString("you_paid_ldollars", args) :
+				message = success ? LLTrans::getString("you_paid_ldollars" + gift_suffix, args) : // <FS:Ansariel> FIRE-16827: Display custom payment message
 									LLTrans::getString("you_paid_failure_ldollars", args);
-				// </FS:Ansariel>
 			}
 			else
 			{
 				// transaction fee to the system, eg, to create a group
-				// <FS:Ansariel> FIRE-6901: Payment notifications show wrong message
-				//message = LLTrans::getString("you_paid_ldollars_no_name", args);
 				message = success ? LLTrans::getString("you_paid_ldollars_no_name", args) :
 									LLTrans::getString("you_paid_failure_ldollars_no_name", args);
-				// </FS:Ansariel>
 			}
 		}
 		else
 		{
 			if (dest_id.notNull())
 			{
-				// <FS:Ansariel> FIRE-6901: Payment notifications show wrong message
-				//message = LLTrans::getString("you_paid_ldollars_no_reason", args);
 				message = success ? LLTrans::getString("you_paid_ldollars_no_reason", args) :
 									LLTrans::getString("you_paid_failure_ldollars_no_reason", args);
-				// </FS:Ansariel>
 			}
 			else
 			{
 				// no target, no reason, you just paid money
-				// <FS:Ansariel> FIRE-6901: Payment notifications show wrong message
-				//message = LLTrans::getString("you_paid_ldollars_no_info", args);
 				message = success ? LLTrans::getString("you_paid_ldollars_no_info", args) :
 									LLTrans::getString("you_paid_failure_ldollars_no_info", args);
-				// </FS:Ansariel>
 			}
 		}
 		
@@ -7160,7 +7155,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		{
 			if (dest_id.notNull())
 			{
-				message = success ? LLTrans::getString("you_paid_ldollars", args) :
+				message = success ? LLTrans::getString("you_paid_ldollars" + gift_suffix, args) :
 									LLTrans::getString("you_paid_failure_ldollars", args);
 			}
 			else
@@ -7192,7 +7187,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		{
 			if (dest_id.notNull())
 			{
-				message_notification_well = success ? LLTrans::getString("you_paid_ldollars", args) :
+				message_notification_well = success ? LLTrans::getString("you_paid_ldollars" + gift_suffix, args) :
 													  LLTrans::getString("you_paid_failure_ldollars", args);
 			}
 			else
@@ -7229,7 +7224,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		name_id = source_id;
 		if (!reason.empty())
 		{
-			message = LLTrans::getString("paid_you_ldollars", args);
+			message = LLTrans::getString("paid_you_ldollars" + gift_suffix, args);  // <FS:Ansariel> FIRE-16827: Display custom payment message
 		}
 		else 
 		{

@@ -337,6 +337,14 @@ void LLPanelGroup::onBtnRefresh(void* user_data)
 {
 	LLPanelGroup* self = static_cast<LLPanelGroup*>(user_data);
 	self->refreshData();
+
+	// <FS:Ansariel> FIRE-20149: Refresh insignia texture when clicking the refresh button
+	LLPanelGroupGeneral* panel_general = self->findChild<LLPanelGroupGeneral>("group_general_tab_panel");
+	if (panel_general)
+	{
+		panel_general->refreshInsigniaTexture();
+	}
+	// </FS:Ansariel>
 }
 
 void LLPanelGroup::onBtnApply(void* user_data)

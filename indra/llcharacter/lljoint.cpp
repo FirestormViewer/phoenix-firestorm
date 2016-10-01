@@ -33,6 +33,28 @@
 
 #include "llmath.h"
 
+//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+#include <boost/unordered_map.hpp>
+
+boost::unordered_map< std::string, U32 > mpStringToKeys;
+
+JointKey JointKey::construct( std::string aName )
+{
+	boost::unordered_map< std::string, U32 >::iterator itr = mpStringToKeys.find( aName );
+
+	if( mpStringToKeys.end() == itr )
+	{
+		U32 size = mpStringToKeys.size() + 1;
+		JointKey key{ aName, size };
+		mpStringToKeys[ aName ] = size;
+		return key;
+	}
+
+	return JointKey{ aName, itr->second };
+
+}
+// </FS:ND>
+
 S32 LLJoint::sNumUpdates = 0;
 S32 LLJoint::sNumTouches = 0;
 
