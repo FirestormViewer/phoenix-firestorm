@@ -208,6 +208,8 @@ bool KCWindlightInterface::applySkySettings(const LLSD& settings)
 {
 	if (settings.has("sky"))
 	{
+		LL_DEBUGS() << "Checking if agent is in a defined zone" << LL_ENDL;
+
 		//TODO: there has to be a better way of doing this...
 		mEventTimer.reset();
 		mEventTimer.start();
@@ -224,12 +226,14 @@ bool KCWindlightInterface::applySkySettings(const LLSD& settings)
 				if (lower != mCurrentSpace) //workaround: only apply once
 				{
 					mCurrentSpace = lower; //use lower as an id
-					LL_INFOS() << "Applying WL sky set: " << (*space_it)["preset"].asString() << LL_ENDL;
+					LL_INFOS() << "Applying WL sky set: " << (*space_it)["preset"].asString() << " (agent in zone " << lower << " to " << upper << ")" << LL_ENDL;
 					applyWindlightPreset((*space_it)["preset"].asString());
 				}
 				return true;
 			}
 		}
+
+		LL_DEBUGS() << "Agent is not within a defined zone. Trying default now" << LL_ENDL;
 	}
 
 	if (mCurrentSpace != NO_ZONES)
@@ -246,11 +250,11 @@ bool KCWindlightInterface::applySkySettings(const LLSD& settings)
 			std::string reason;
 			if (!settings.has("sky_default"))
 			{
-				reason = "No zone and no default sky defined";
+				reason = "No zone or not in a defined zone and no default sky defined";
 			}
 			else if (mHaveRegionSettings && !mHasRegionOverride)
 			{
-				reason = "No zone defined, region has custom WL and \"RegionOverride\" parameter was not set";
+				reason = "No zone defined or not in a defined zone, region has custom WL and \"RegionOverride\" parameter was not set";
 			}
 
 			LL_INFOS() << "Applying WL sky set \"Region Default\": " << reason << LL_ENDL;
