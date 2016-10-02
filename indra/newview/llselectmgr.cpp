@@ -2501,7 +2501,7 @@ void LLSelectMgr::logNoOp(LLSelectNode* node, void *)
 // static
 void LLSelectMgr::logAttachmentRequest(LLSelectNode* node, void *)
 {
-    LLAttachmentsMgr::instance().onAttachmentRequested(node->mItemID);
+//    LLAttachmentsMgr::instance().onAttachmentRequested(node->mItemID);
 }
 
 // static
