@@ -63,6 +63,11 @@
 #include "pipeline.h"
 #include "llspatialpartition.h"
 #include "llviewershadermgr.h"
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e)
+#include "rlvactions.h"
+#include "rlvhandler.h"
+#include "rlvhelper.h"
+// [/RLVa:KB]
 
 // Height of the yellow selection highlight posts for land
 const F32 PARCEL_POST_HEIGHT = 0.666f;
@@ -70,6 +75,18 @@ const F32 PARCEL_POST_HEIGHT = 0.666f;
 // Returns true if you got at least one object
 void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 {
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+	// Block rectangle selection if:
+	//   - prevented from editing and no exceptions are set (see below for the case where exceptions are set)
+	//   - prevented from interacting at all
+	if ( (rlv_handler_t::isEnabled()) && 
+		 ( ((gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) && (!gRlvHandler.hasException(RLV_BHVR_EDIT))) || 
+		   (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) ) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	LLVector3 av_pos = gAgent.getPositionAgent();
 	F32 select_dist_squared = gSavedSettings.getF32("MaxSelectDistance");
 	select_dist_squared = select_dist_squared * select_dist_squared;
@@ -134,6 +151,29 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 		LLViewerCamera::getInstance()->setFar(new_far);
 		LLViewerCamera::getInstance()->setNear(new_near);
 	}
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.0.0g
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH))
+	{
+		static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
+
+		// We'll allow drag selection under fartouch, but only within the fartouch range
+		// (just copy/paste the code above us to make that work, thank you Lindens!)
+		LLVector3 relative_av_pos = av_pos;
+		relative_av_pos -= LLViewerCamera::getInstance()->getOrigin();
+
+		F32 new_far = relative_av_pos * LLViewerCamera::getInstance()->getAtAxis() + s_nFartouchDist;
+		F32 new_near = relative_av_pos * LLViewerCamera::getInstance()->getAtAxis() - s_nFartouchDist;
+
+		new_near = llmax(new_near, 0.1f);
+
+		LLViewerCamera::getInstance()->setFar(new_far);
+		LLViewerCamera::getInstance()->setNear(new_near);
+
+		// Usurp these two
+		limit_select_distance = TRUE;
+		select_dist_squared = s_nFartouchDist * s_nFartouchDist;
+	}
+// [/RLVa:KB]
 	LLViewerCamera::getInstance()->setPerspective(FOR_SELECTION, 
 							center_x-width/2, center_y-height/2, width, height, 
 							limit_select_distance);
@@ -207,6 +247,13 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 			{
 				continue;
 			}
+
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
+			if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canEdit(vobjp)) )
+			{
+				continue;
+			}
+// [/RLVa:KB]
 
 			S32 result = LLViewerCamera::getInstance()->sphereInFrustum(drawable->getPositionAgent(), drawable->getRadius());
 			if (result)

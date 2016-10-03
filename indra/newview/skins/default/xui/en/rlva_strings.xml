@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<llsd>
+<map>
+
+	<key>strings</key>
+	<map>
+		<!-- Primarily used when @showloc restricted -->
+		<key>hidden_generic</key>
+		<map>
+			<key>value</key>
+			<string>(Hidden)</string>
+		</map>
+		<key>hidden_parcel</key>
+		<map>
+			<key>value</key>
+			<string>(Hidden parcel)</string>
+		</map>
+		<key>hidden_region</key>
+		<map>
+			<key>value</key>
+			<string>(Hidden region)</string>
+		</map>
+
+		<!-- Received/sent IMs will be replaced by the matching string when @recvim/sendim restricted -->
+		<key>blocked_recvim</key>
+		<map>
+			<key>value</key>
+			<string>*** IM blocked by your viewer</string>
+			<key>description</key>
+			<string>Shown in place of the original message when an incoming IM is blocked</string>
+			<key>label</key>
+			<string>Blocked incoming IM message (local)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_sendim</key>
+		<map>
+			<key>value</key>
+			<string>*** IM blocked by sender's viewer</string>
+			<key>description</key>
+			<string>Shown (and sent to the remote party) when an outgoing IM is blocked</string>
+			<key>label</key>
+			<string>Blocked outgoing IM message (local + remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- Shown as notifications -->
+		<key>blocked_autopilot</key>
+		<map>
+			<key>value</key>
+			<string>Unable to use the autopilot due to RLV restrictions</string>
+		</map>
+		<key>blocked_generic</key>
+		<map>
+			<key>value</key>
+			<string>Unable to perform action due to RLV restrictions</string>
+		</map>
+		<key>blocked_groupchange</key>
+		<map>
+			<key>value</key>
+			<string>Unable to change your active group due to an RLV restriction; switching back to [GROUP_SLURL]</string>
+		</map>
+		<key>blocked_nearby</key>
+		<map>
+			<key>value</key>
+			<string>Unable to see the presence of nearby avatars due to RLV restrictions</string>
+		</map>
+		<key>blocked_permattach</key>
+		<map>
+			<key>value</key>
+			<string>Attempt to attach '[OBJECT]' was denied due to RLV restrictions</string>
+		</map>
+		<key>blocked_permteleport</key>
+		<map>
+			<key>value</key>
+			<string>[OBJECT]' was denied permission to teleport you due to RLV restrictions</string>
+		</map>
+		<key>blocked_startim</key>
+		<map>
+			<key>value</key>
+			<string>Unable to start IM session with [RECIPIENT] due to RLV restrictions</string>
+		</map>
+		<key>blocked_startconf</key>
+		<map>
+			<key>value</key>
+			<string>Unable to start conference with [RECIPIENT] due to RLV restrictions</string>
+		</map>
+		<key>blocked_teleport</key>
+		<map>
+			<key>value</key>
+			<string>Unable to initiate teleport due to RLV restrictions</string>
+		</map>
+		<key>blocked_teleport_offer</key>
+		<map>
+			<key>value</key>
+			<string>Unable to offer teleport due to RLV restrictions</string>
+		</map>
+		<key>blocked_viewxxx</key>
+		<map>
+			<key>value</key>
+			<string>Unable to open [TYPE] due to RLV restrictions</string>
+		</map>
+		<key>blocked_wireframe</key>
+		<map>
+			<key>value</key>
+			<string>Unable to enable wireframe mode due to RLV restrictions</string>
+		</map>
+
+		<!-- Sent as "Busy" messages to the remote party -->
+		<key>blocked_recvim_remote</key>
+		<map>
+			<key>value</key>
+			<string>The Resident you messaged is currently prevented from reading your instant messages at the moment, please try again later.</string>
+			<key>description</key>
+			<string>Sent to the remote party when their IM was blocked</string>
+			<key>label</key>
+			<string>Blocked incoming IM message (remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_tplurerequest_remote</key>
+		<map>
+			<key>value</key>
+			<string>The Resident is currently prevented from accepting. Please try again later.</string>
+			<key>description</key>
+			<string>Sent to the remote party when their teleport offer or request was blocked</string>
+			<key>label</key>
+			<string>Blocked teleport offer/request (remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+	</map>
+
+	<!-- Generic names used to replace resident names when @shownames restricted -->
+	<key>anonyms</key>
+	<array>
+		<string>A resident</string>
+		<string>This resident</string>
+		<string>That resident</string>
+		<string>An individual</string>
+		<string>This individual</string>
+		<string>That individual</string>
+		<string>A person</string>
+		<string>This person</string>
+		<string>That person</string>
+		<string>A stranger</string>
+		<string>This stranger</string>
+		<string>That stranger</string>
+		<string>A being</string>
+		<string>This being</string>
+		<string>That being</string>
+		<string>An agent</string>
+		<string>This agent</string>
+		<string>That agent</string>
+		<string>A soul</string>
+		<string>This soul</string>
+		<string>That soul</string>
+		<string>Somebody</string>
+		<string>Some people</string>
+		<string>Someone</string>
+		<string>Mysterious one</string>
+		<string>An unknown being</string>
+		<string>Unidentified one</string>
+		<string>An unknown person</string>
+	</array>
+
+</map>
+</llsd>

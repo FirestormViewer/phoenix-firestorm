@@ -723,6 +723,29 @@ void LLViewerObjectList::dirtyAllObjectInventory()
 	}
 }
 
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+void LLViewerObjectList::setAllObjectDefaultTextures(U32 nChannel, bool fShowDefault)
+{
+	LLPipeline::sRenderTextures = !fShowDefault;
+
+	for (LLViewerObject* pObj : mObjects)
+	{
+		LLDrawable* pDrawable = pObj->mDrawable;
+		if ( (pDrawable) && (!pDrawable->isDead()) )
+		{
+			for (int idxFace = 0, cntFace = pDrawable->getNumFaces(); idxFace < cntFace; idxFace++)
+			{
+				if (LLFace* pFace = pDrawable->getFace(idxFace))
+					pFace->setDefaultTexture(nChannel, fShowDefault);
+			}
+
+			if (LLVOVolume* pVoVolume = pDrawable->getVOVolume())
+				pVoVolume->markForUpdate(true);
+		}
+	}
+}
+// [/SL:KB]
+
 void LLViewerObjectList::updateApparentAngles(LLAgent &agent)
 {
 	S32 i;

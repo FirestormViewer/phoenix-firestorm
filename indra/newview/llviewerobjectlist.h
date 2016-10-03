@@ -123,6 +123,9 @@ public:
 	void resetObjectBeacons();
 
 	void dirtyAllObjectInventory();
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+	void setAllObjectDefaultTextures(U32 nChannel, bool fShowDefault);
+// [/SL:KB]
 
 	void removeFromActiveList(LLViewerObject* objectp);
 	void updateActive(LLViewerObject *objectp);

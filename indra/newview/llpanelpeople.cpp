@@ -74,6 +74,10 @@
 
 #include "llagentui.h"
 #include "llslurl.h"
+// [RLVa:KB] - Checked: RLVa-1.2.2
+#include "rlvactions.h"
+// [/RLVa:KB]
+
 
 #define FRIEND_LIST_UPDATE_TIMEOUT	0.5
 #define NEARBY_LIST_UPDATE_INTERVAL 1
@@ -625,6 +629,9 @@ BOOL LLPanelPeople::postBuild()
 	mNearbyList->setNoFilteredItemsMsg(getString("no_one_filtered_near"));
 	mNearbyList->setShowIcons("NearbyListShowIcons");
 	mNearbyList->setShowCompleteName(!gSavedSettings.getBOOL("NearbyListHideUsernames"));
+// [RLVa:KB] - Checked: RLVa-1.2.0
+	mNearbyList->setRlvCheckShowNames(true);
+// [/RLVa:KB]
 	mMiniMap = (LLNetMap*)getChildView("Net Map",true);
 	mMiniMap->setToolTipMsg(gSavedSettings.getBOOL("DoubleClickTeleport") ? 
 		getString("AltMiniMapToolTipMsg") :	getString("MiniMapToolTipMsg"));
@@ -830,7 +837,18 @@ void LLPanelPeople::updateNearbyList()
 
 	std::vector<LLVector3d> positions;
 
-	LLWorld::getInstance()->getAvatars(&mNearbyList->getIDs(), &positions, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
+// [RLVa:KB] - Checked: RLVa-2.0.3
+	if (RlvActions::canShowNearbyAgents())
+	{
+// [/RLVa:KB]
+		LLWorld::getInstance()->getAvatars(&mNearbyList->getIDs(), &positions, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
+// [RLVa:KB] - Checked: RLVa-2.0.3
+	}
+	else
+	{
+		mNearbyList->getIDs().clear();
+	}
+// [/RLVa:KB]
 	mNearbyList->setDirty();
 
 	DISTANCE_COMPARATOR.updateAvatarsPositions(positions, mNearbyList->getIDs());
@@ -894,6 +912,9 @@ void LLPanelPeople::updateFacebookList(bool visible)
 void LLPanelPeople::updateButtons()
 {
 	std::string cur_tab		= getActiveTabName();
+// [RLVa:KB] - Checked: RLVa-1.4.9
+	bool nearby_tab_active = (cur_tab == NEARBY_TAB_NAME);
+// [/RLVa:KB]
 	bool friends_tab_active = (cur_tab == FRIENDS_TAB_NAME);
 	bool group_tab_active	= (cur_tab == GROUP_TAB_NAME);
 	//bool recent_tab_active	= (cur_tab == RECENT_TAB_NAME);
@@ -934,8 +955,12 @@ void LLPanelPeople::updateButtons()
 		LLPanel* cur_panel = mTabContainer->getCurrentPanel();
 		if (cur_panel)
 		{
+// [RLVa:KB] - Checked: RLVa-1.2.0
 			if (cur_panel->hasChild("add_friend_btn", TRUE))
-				cur_panel->getChildView("add_friend_btn")->setEnabled(item_selected && !is_friend && !is_self);
+				cur_panel->getChildView("add_friend_btn")->setEnabled(item_selected && !is_friend && !is_self && ((!nearby_tab_active) || (RlvActions::canShowName(RlvActions::SNC_DEFAULT, selected_id))));
+// [/RLBa:KB]
+//			if (cur_panel->hasChild("add_friend_btn", TRUE))
+//				cur_panel->getChildView("add_friend_btn")->setEnabled(item_selected && !is_friend && !is_self);
 
 			if (friends_tab_active)
 			{
@@ -948,6 +973,16 @@ void LLPanelPeople::updateButtons()
 			}
 		}
 	}
+
+// [RLVa:KB] - Checked: RLVa-1.2.0
+	if ( (nearby_tab_active) && (RlvActions::isRlvEnabled()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) )
+	{
+		bool fCanShowNames = true;
+		std::for_each(selected_uuids.begin(), selected_uuids.end(), [&fCanShowNames](const LLUUID& idAgent) { fCanShowNames &= RlvActions::canShowName(RlvActions::SNC_DEFAULT, idAgent); });
+		if (!fCanShowNames)
+			item_selected = multiple_selected = false;
+	}
+// [/RLBa:KB]
 }
 
 std::string LLPanelPeople::getActiveTabName() const
@@ -1158,6 +1193,13 @@ void LLPanelPeople::onAvatarListDoubleClicked(LLUICtrl* ctrl)
 		return;
 	}
 	
+// [RLVa:KB] - Checked: RLVa-2.0.1
+	if ( (RlvActions::isRlvEnabled()) && (NEARBY_TAB_NAME == getActiveTabName()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, clicked_id)) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 #if 0 // SJB: Useful for testing, but not currently functional or to spec
 	LLAvatarActions::showProfile(clicked_id);
 #else // spec says open IM window
@@ -1273,6 +1315,15 @@ void LLPanelPeople::onImButtonClicked()
 {
 	uuid_vec_t selected_uuids;
 	getCurrentItemIDs(selected_uuids);
+// [RLVa:KB] - Checked: RLVa-2.0.1
+	if ( (RlvActions::isRlvEnabled()) && (NEARBY_TAB_NAME == getActiveTabName()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) )
+	{
+		bool fCanShowNames = true;
+		std::for_each(selected_uuids.begin(), selected_uuids.end(), [&fCanShowNames](const LLUUID& idAgent) { fCanShowNames &= RlvActions::canShowName(RlvActions::SNC_DEFAULT, idAgent); });
+		if (!fCanShowNames)
+			return;
+	}
+// [/RLVa:KB]
 	if ( selected_uuids.size() == 1 )
 	{
 		// if selected only one person then start up IM

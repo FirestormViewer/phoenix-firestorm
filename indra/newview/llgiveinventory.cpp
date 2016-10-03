@@ -46,6 +46,12 @@
 #include "llrecentpeople.h"
 #include "llviewerobjectlist.h"
 #include "llvoavatarself.h"
+// [RLVa:KB] - Checked: RLVa-1.2.2
+#include "llavatarnamecache.h"
+#include "rlvactions.h"
+#include "rlvcommon.h"
+#include "rlvui.h"
+// [/RLVa:KB]
 
 // MAX ITEMS is based on (sizeof(uuid)+2) * count must be < MTUBYTES
 // or 18 * count < 1200 => count < 1200/18 => 66. I've cut it down a
@@ -317,6 +323,19 @@ void LLGiveInventory::logInventoryOffer(const LLUUID& to_agent, const LLUUID &im
 	{
 		gIMMgr->addSystemMessage(im_session_id, "inventory_item_offered", args);
 	}
+// [RLVa:KB] - Checked: RLVa-1.2.0
+	else if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, to_agent)) && (RlvUtil::isNearbyAgent(to_agent)) && (!RlvUIEnabler::hasOpenProfile(to_agent)) )
+	{
+		// Log to chat history if the user didn't drop on an IM session or a profile to avoid revealing the name of the recipient
+		std::string strMsgName = "inventory_item_offered-im"; LLSD args; LLAvatarName avName;
+		if (LLAvatarNameCache::get(to_agent, &avName))
+		{
+			args["NAME"] = RlvStrings::getAnonym(avName);
+			strMsgName = "inventory_item_offered_rlv";
+		}
+		gIMMgr->addSystemMessage(LLUUID::null, strMsgName, args);
+	}
+// [/RLVa:KB]
 	// If this item was given by drag-and-drop on avatar while IM panel was open, log this action in the IM panel chat.
 	else if (LLIMModel::getInstance()->findIMSession(session_id))
 	{
@@ -424,7 +443,15 @@ void LLGiveInventory::commitGiveInventoryItem(const LLUUID& to_agent,
 	logInventoryOffer(to_agent, im_session_id);
 
 	// add buddy to recent people list
-	LLRecentPeople::instance().add(to_agent);
+//	LLRecentPeople::instance().add(to_agent);
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	// Block the recent activity update if this was an in-world drop on an avatar (as opposed to a drop on an IM session or on a profile)
+	if ( (!RlvActions::isRlvEnabled()) ||
+	     (RlvActions::canShowName(RlvActions::SNC_DEFAULT, to_agent)) || (im_session_id.notNull()) || (!RlvUtil::isNearbyAgent(to_agent)) || (RlvUIEnabler::hasOpenProfile(to_agent)) )
+	{
+		LLRecentPeople::instance().add(to_agent);
+	}
+// [/RLVa:KB]
 }
 
 // static
@@ -490,7 +517,15 @@ bool LLGiveInventory::commitGiveInventoryCategory(const LLUUID& to_agent,
 		<< cat->getUUID() << LL_ENDL;
 
 	// add buddy to recent people list
-	LLRecentPeople::instance().add(to_agent);
+//	LLRecentPeople::instance().add(to_agent);
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	// Block the recent activity update if this was an in-world drop on an avatar (as opposed to a drop on an IM session or on a profile)
+	if ( (!RlvActions::isRlvEnabled()) ||
+	     (RlvActions::canShowName(RlvActions::SNC_DEFAULT, to_agent)) || (im_session_id.notNull()) || (!RlvUtil::isNearbyAgent(to_agent)) || (RlvUIEnabler::hasOpenProfile(to_agent)) )
+	{
+		LLRecentPeople::instance().add(to_agent);
+	}
+// [/RLVa:KB]
 
 	// Test out how many items are being given.
 	LLViewerInventoryCategory::cat_array_t cats;

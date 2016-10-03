@@ -172,6 +172,12 @@ BOOL LLViewerJointAttachment::addObject(LLViewerObject* object)
 	if (isObjectAttached(object))
 	{
 		LL_INFOS() << "(same object re-attached)" << LL_ENDL;
+// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
+		if ( (object->permYouOwner()) && (gAgentAvatarp) )
+		{
+			gAgentAvatarp->removePendingDetach(object->getID());
+		}
+// [/SL:KB]
 		removeObject(object);
 		// Pass through anyway to let setupDrawable()
 		// re-connect object to the joint correctly

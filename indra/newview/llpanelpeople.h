@@ -59,6 +59,11 @@ public:
 
     bool mTryToConnectToFacebook;
 
+// [RLVa:KB] - Checked: RLVa-1.2.0
+	LLAvatarList* getNearbyList() { return mNearbyList; }
+	void          updateNearbyList();
+// [/RLVa:KB]
+
 	// internals
 	class Updater;
 
@@ -78,7 +83,7 @@ private:
 	void					updateFriendListHelpText();
 	void					updateFriendList();
 	bool					updateSuggestedFriendList();
-	void					updateNearbyList();
+//	void					updateNearbyList();
 	void					updateRecentList();
 	void					updateFacebookList(bool visible);
 

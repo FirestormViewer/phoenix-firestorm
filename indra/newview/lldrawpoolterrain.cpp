@@ -308,10 +308,16 @@ void LLDrawPoolTerrain::renderFullShader()
 	// Hack! Get the region that this draw pool is rendering from!
 	LLViewerRegion *regionp = mDrawFace[0]->getDrawable()->getVObj()->getRegion();
 	LLVLComposition *compp = regionp->getComposition();
-	LLViewerTexture *detail_texture0p = compp->mDetailTextures[0];
-	LLViewerTexture *detail_texture1p = compp->mDetailTextures[1];
-	LLViewerTexture *detail_texture2p = compp->mDetailTextures[2];
-	LLViewerTexture *detail_texture3p = compp->mDetailTextures[3];
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+	LLViewerTexture *detail_texture0p = (LLPipeline::sRenderTextures) ? compp->mDetailTextures[0] : LLViewerFetchedTexture::sDefaultDiffuseImagep;
+	LLViewerTexture *detail_texture1p = (LLPipeline::sRenderTextures) ? compp->mDetailTextures[1] : LLViewerFetchedTexture::sDefaultDiffuseImagep;
+	LLViewerTexture *detail_texture2p = (LLPipeline::sRenderTextures) ? compp->mDetailTextures[2] : LLViewerFetchedTexture::sDefaultDiffuseImagep;
+	LLViewerTexture *detail_texture3p = (LLPipeline::sRenderTextures) ? compp->mDetailTextures[3] : LLViewerFetchedTexture::sDefaultDiffuseImagep;
+// [/SL:KB]
+//	LLViewerTexture *detail_texture0p = compp->mDetailTextures[0];
+//	LLViewerTexture *detail_texture1p = compp->mDetailTextures[1];
+//	LLViewerTexture *detail_texture2p = compp->mDetailTextures[2];
+//	LLViewerTexture *detail_texture3p = compp->mDetailTextures[3];
 
 	LLVector3d region_origin_global = gAgent.getRegion()->getOriginGlobal();
 	F32 offset_x = (F32)fmod(region_origin_global.mdV[VX], 1.0/(F64)sDetailScale)*sDetailScale;
@@ -459,10 +465,16 @@ void LLDrawPoolTerrain::renderFull4TU()
 	// Hack! Get the region that this draw pool is rendering from!
 	LLViewerRegion *regionp = mDrawFace[0]->getDrawable()->getVObj()->getRegion();
 	LLVLComposition *compp = regionp->getComposition();
-	LLViewerTexture *detail_texture0p = compp->mDetailTextures[0];
-	LLViewerTexture *detail_texture1p = compp->mDetailTextures[1];
-	LLViewerTexture *detail_texture2p = compp->mDetailTextures[2];
-	LLViewerTexture *detail_texture3p = compp->mDetailTextures[3];
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+	LLViewerTexture *detail_texture0p = (LLPipeline::sRenderTextures) ? compp->mDetailTextures[0] : LLViewerFetchedTexture::sDefaultDiffuseImagep;
+	LLViewerTexture *detail_texture1p = (LLPipeline::sRenderTextures) ? compp->mDetailTextures[1] : LLViewerFetchedTexture::sDefaultDiffuseImagep;
+	LLViewerTexture *detail_texture2p = (LLPipeline::sRenderTextures) ? compp->mDetailTextures[2] : LLViewerFetchedTexture::sDefaultDiffuseImagep;
+	LLViewerTexture *detail_texture3p = (LLPipeline::sRenderTextures) ? compp->mDetailTextures[3] : LLViewerFetchedTexture::sDefaultDiffuseImagep;
+// [/SL:KB]
+//	LLViewerTexture *detail_texture0p = compp->mDetailTextures[0];
+//	LLViewerTexture *detail_texture1p = compp->mDetailTextures[1];
+//	LLViewerTexture *detail_texture2p = compp->mDetailTextures[2];
+//	LLViewerTexture *detail_texture3p = compp->mDetailTextures[3];
 
 	LLVector3d region_origin_global = gAgent.getRegion()->getOriginGlobal();
 	F32 offset_x = (F32)fmod(region_origin_global.mdV[VX], 1.0/(F64)sDetailScale)*sDetailScale;
@@ -661,10 +673,16 @@ void LLDrawPoolTerrain::renderFull2TU()
 	// Hack! Get the region that this draw pool is rendering from!
 	LLViewerRegion *regionp = mDrawFace[0]->getDrawable()->getVObj()->getRegion();
 	LLVLComposition *compp = regionp->getComposition();
-	LLViewerTexture *detail_texture0p = compp->mDetailTextures[0];
-	LLViewerTexture *detail_texture1p = compp->mDetailTextures[1];
-	LLViewerTexture *detail_texture2p = compp->mDetailTextures[2];
-	LLViewerTexture *detail_texture3p = compp->mDetailTextures[3];
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+	LLViewerTexture *detail_texture0p = (LLPipeline::sRenderTextures) ? compp->mDetailTextures[0] : LLViewerFetchedTexture::sDefaultDiffuseImagep;
+	LLViewerTexture *detail_texture1p = (LLPipeline::sRenderTextures) ? compp->mDetailTextures[1] : LLViewerFetchedTexture::sDefaultDiffuseImagep;
+	LLViewerTexture *detail_texture2p = (LLPipeline::sRenderTextures) ? compp->mDetailTextures[2] : LLViewerFetchedTexture::sDefaultDiffuseImagep;
+	LLViewerTexture *detail_texture3p = (LLPipeline::sRenderTextures) ? compp->mDetailTextures[3] : LLViewerFetchedTexture::sDefaultDiffuseImagep;
+// [/SL:KB]
+//	LLViewerTexture *detail_texture0p = compp->mDetailTextures[0];
+//	LLViewerTexture *detail_texture1p = compp->mDetailTextures[1];
+//	LLViewerTexture *detail_texture2p = compp->mDetailTextures[2];
+//	LLViewerTexture *detail_texture3p = compp->mDetailTextures[3];
 
 	LLVector3d region_origin_global = gAgent.getRegion()->getOriginGlobal();
 	F32 offset_x = (F32)fmod(region_origin_global.mdV[VX], 1.0/(F64)sDetailScale)*sDetailScale;
