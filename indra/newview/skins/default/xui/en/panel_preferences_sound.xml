@@ -1804,9 +1804,9 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played on incoming conference instant message. This setting is shared with Chat &gt; Notifications &gt; 'When receiving AdHoc Instant Messages'."
+         tool_tip="Sound UUID played on incoming conference instant message. This setting is shared with Chat &gt; Notifications &gt; 'When receiving ad-hoc Instant Messages'."
          name="textFSNewConferenceIncomingIMSession">
-            AdHoc Instant Message:
+            Ad-hoc Instant Message:
         </text>
         <line_editor
          follows="left|top"
