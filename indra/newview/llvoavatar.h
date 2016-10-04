@@ -204,6 +204,7 @@ public:
 	virtual LLJoint*		getJoint( const JointKey &name );
 	LLJoint* getJoint( const std::string &name ) { return getJoint( JointKey::construct( name ) ); }
 // </FS:ND>
+	LLJoint*		        getJoint(S32 num);
 
 	void 					addAttachmentOverridesForObject(LLViewerObject *vo);
 	void					resetJointsOnDetach(const LLUUID& mesh_id);

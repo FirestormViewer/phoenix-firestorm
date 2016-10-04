@@ -1415,6 +1415,7 @@ void LLMeshSkinInfo::fromLLSD(LLSD& skin)
 //			mJointNames.push_back( skin[ "joint_names" ][ i ] );
 			mJointNames.push_back( JointKey::construct( skin[ "joint_names" ][ i ] ) );
 // </FS>ND>
+            mJointNums.push_back(-1);
 		}
 	}
 

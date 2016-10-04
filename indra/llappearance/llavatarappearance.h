@@ -146,8 +146,6 @@ public:
 
 	joint_map_t			mJointMap;
 
-    S32					mNextJointNum;
-
     typedef std::map<std::string, LLVector3> joint_state_map_t;
     joint_state_map_t mLastBodySizeState;
     joint_state_map_t mCurrBodySizeState;
@@ -371,6 +369,7 @@ protected:
 	// Collision volumes
 	//--------------------------------------------------------------------
 public:
+    S32			mNumBones;
   	S32			mNumCollisionVolumes;
 	LLAvatarJointCollisionVolume* mCollisionVolumes;
 protected:

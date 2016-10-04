@@ -931,16 +931,29 @@ void LLVOAvatarSelf::idleUpdate(LLAgent &agent, const F64 &time)
 LLJoint *LLVOAvatarSelf::getJoint( const JointKey &name )
 // </FS:ND>
 {
-	if (mScreenp)
+    LLJoint *jointp = NULL;
+    jointp = LLVOAvatar::getJoint(name);
+	if (!jointp && mScreenp)
 	{
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//		LLJoint* jointp = mScreenp->findJoint( name );
-		LLJoint* jointp = mScreenp->findJoint( name.mName );
-// </FS:ND>
-		if (jointp) return jointp;
+		//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+		//jointp = mScreenp->findJoint(name);
+		jointp = mScreenp->findJoint(name.mName);
+		// </FS:ND>
+        if (jointp)
+        {
+            //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+            //mJointMap[name] = jointp;
+            mJointMap[name.mKey] = jointp;
+            // </FS:ND>
+        }
 	}
-	return LLVOAvatar::getJoint(name);
+    if (jointp && jointp != mScreenp && jointp != mRoot)
+    {
+        llassert(LLVOAvatar::getJoint((S32)jointp->getJointNum())==jointp);
+    }
+    return jointp;
 }
+
 // virtual
 // <FS:Ansariel> [Legacy Bake]
 //BOOL LLVOAvatarSelf::setVisualParamWeight(const LLVisualParam *which_param, F32 weight)

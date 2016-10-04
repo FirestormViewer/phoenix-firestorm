@@ -54,6 +54,7 @@ public:
 //	std::vector<std::string> mJointNames;
 	std::vector< JointKey > mJointNames;
 // </FS:ND>
+    mutable std::vector<S32> mJointNums;
 
 	std::vector<LLMatrix4> mInvBindMatrix;
 	std::vector<LLMatrix4> mAlternateBindMatrix;
