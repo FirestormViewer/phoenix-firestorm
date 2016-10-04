@@ -28,6 +28,7 @@
 #include "llbutton.h"
 #include "llnotifications.h"
 #include "lltoastscriptquestion.h"
+#include "llviewercontrol.h"
 
 const int LEFT_PAD = 10;
 const int BUTTON_HEIGHT = 27;
@@ -132,7 +133,10 @@ void LLToastScriptQuestion::createButtons()
 
 			buttons_width += rect.getWidth() + LEFT_PAD;
 
-			if (form_element.has("default") && form_element["default"].asBoolean())
+			// <FS:Ansariel> FIRE-20064: Option to restore debit permission default to allow
+			//if (form_element.has("default") && form_element["default"].asBoolean())
+			if (form_element.has("default") && form_element["default"].asBoolean() && (mNotification->getName() != "ScriptQuestionCaution" || gSavedSettings.getBOOL("FSPermissionDebitDefaultDeny")))
+			// </FS:Ansariel>
 			{
 				button->setFocus(TRUE);
 				setDefaultBtn(button);
