@@ -418,3 +418,39 @@ void LLSkinningUtil::getPerVertexSkinMatrix(
     llassert(valid_weights);
 }
 
+namespace FSSkinningUtil
+{
+    void getPerVertexSkinMatrixSSE( LLVector4a const &weights, LLMatrix4a* mat, bool handle_bad_scale, LLMatrix4a& final_mat, U32 max_joints )
+    {
+        final_mat.clear();
+        
+        llassert_always( !handle_bad_scale );
+    
+        LL_ALIGN_16( S32 idx[4] );
+        LL_ALIGN_16( F32 wght[4] );
+
+        __m128i _mMaxIdx = _mm_set_epi16( max_joints-1, max_joints-1, max_joints-1, max_joints-1, max_joints-1, max_joints-1, max_joints-1, max_joints-1 );
+        __m128i _mIdx = _mm_cvttps_epi32( (__m128)weights );
+        __m128 _mWeight = _mm_sub_ps( (__m128)weights, _mm_cvtepi32_ps( _mIdx ) );
+
+        _mIdx = _mm_min_epi16( _mIdx, _mMaxIdx );
+        _mm_store_si128( (__m128i*)idx, _mIdx );
+            
+        __m128 _mScale = _mm_add_ps( _mWeight, _mm_movehl_ps( _mWeight, _mWeight ));
+        _mScale = _mm_add_ss( _mScale, _mm_shuffle_ps( _mScale, _mScale, 1) );
+        _mScale = _mm_shuffle_ps( _mScale, _mScale, 0 );
+        
+        _mWeight = _mm_div_ps( _mWeight, _mScale );
+        _mm_store_ps( wght, _mWeight );
+        
+        for (U32 k = 0; k < 4; k++)
+        {
+            F32 w = wght[k];
+            
+            LLMatrix4a src;
+            src.setMul(mat[idx[k]], w);
+            
+            final_mat.add(src);
+        }
+    }
+}
