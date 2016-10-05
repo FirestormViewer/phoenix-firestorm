@@ -193,6 +193,12 @@ void LLGridManager::initGrids()
 	{
 		initCmdLineGrids();
 	}
+
+	// <FS:ND> FIRE-20112 in case grid was set bt settings/cmd line, set it now
+	if( mStartupGrid.size() )
+		setGridChoice( mStartupGrid );
+	mStartupGrid = "";
+	// </FS:ND>
 }
 
 
@@ -1051,6 +1057,14 @@ void LLGridManager::setGridChoice(const std::string& grid)
 	{
 		return;
 	}
+
+	// <FS:ND> FIRE-20112 viewer is not properly initialized yet, store grid choice and call this method again later.
+	if( mGridList.size() == 0 )
+	{
+		mStartupGrid = grid;
+		return;
+	}
+	// </FS:ND>
 
 	// Set the grid choice based on a string.
 	// The string can be:
