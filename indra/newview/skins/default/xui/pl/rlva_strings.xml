@@ -53,7 +53,7 @@
 			<key>blocked_groupchange</key>
 			<map>
 				<key>value</key>
-				<string>Nie można zmienić aktywnej grupy ze względu na ograniczenia RLV; Zmieniam z powrotem na [GROUP_SLURL]</string>
+				<string>Nie można zmienić aktywnej grupy ze względu na ograniczenia RLV; Zmieniam z powrotem na "[GROUP_SLURL]"</string>
 			</map>
 			<key>blocked_nearby</key>
 			<map>

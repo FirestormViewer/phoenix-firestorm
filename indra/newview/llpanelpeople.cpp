@@ -1084,7 +1084,7 @@ void LLPanelPeople::updateButtons()
 
 			// <FS:Ansariel> Fix warning about missing gear button on blocklist panel
 			//if (!group_tab_active)
-			if (!group_tab_active && cur_tab != BLOCKED_TAB_NAME)
+			if (!group_tab_active && !nearby_tab_active && cur_tab != BLOCKED_TAB_NAME)
 			// </FS:Ansariel>
 			{
 				cur_panel->getChildView("gear_btn")->setEnabled(multiple_selected);

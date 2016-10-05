@@ -95,6 +95,9 @@ public:
 	// <FS:Ansariel> For requesting dimensions update
 	void setUpdateDimensions(BOOL update) { mUpdateDimensions = update; }
 	
+	// <FS:Ansariel> FIRE-20150: Add refresh button to texture preview
+	void onButtonRefresh();
+
 protected:
 	void				init();
 	/* virtual */ BOOL	postBuild();

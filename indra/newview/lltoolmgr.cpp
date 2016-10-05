@@ -274,8 +274,8 @@ bool LLToolMgr::canEdit()
 bool LLToolMgr::buildEnabledOrActive()
 {
 	// <FS:Ansariel> RLVa check
-	//return inEdit() || canEdit();
-	return inEdit() || RlvUIEnabler::isBuildEnabled();
+	//return LLFloaterReg::instanceVisible("build") || canEdit();
+	return LLFloaterReg::instanceVisible("build") || RlvUIEnabler::isBuildEnabled();
 	// </FS:Ansariel>
 }
 

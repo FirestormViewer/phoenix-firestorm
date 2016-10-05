@@ -42,6 +42,7 @@
 #include "llpanelwearing.h"
 #include "llsaveoutfitcombobtn.h"
 #include "llsidepanelappearance.h"
+#include "llviewercontrol.h"
 #include "llviewerfoldertype.h"
 
 static const std::string OUTFITS_TAB_NAME = "outfitslist_tab";
@@ -70,6 +71,11 @@ LLPanelOutfitsInventory::LLPanelOutfitsInventory() :
 
 LLPanelOutfitsInventory::~LLPanelOutfitsInventory()
 {
+	if (mAppearanceTabs)
+	{
+		gSavedSettings.setS32("LastAppearanceTab", mAppearanceTabs->getCurrentPanelIndex());
+	}
+
 	// <FS:Ansariel> FIRE-17626: Attachment count in appearance floater
 	if (gInventory.containsObserver(mCategoriesObserver))
 	{
@@ -96,6 +102,9 @@ BOOL LLPanelOutfitsInventory::postBuild()
 	}
 	
 	mSaveComboBtn.reset(new LLSaveOutfitComboBtn(this, true));
+
+	if (!mAppearanceTabs->selectTab(gSavedSettings.getS32("LastAppearanceTab")))
+		mAppearanceTabs->selectFirstTab();
 
 	return TRUE;
 }

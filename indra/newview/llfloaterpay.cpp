@@ -430,8 +430,6 @@ void LLFloaterPay::payDirectly(money_callback callback,
 	floater->getChildView("amount")->setVisible(TRUE);
 	floater->getChildView("pay btn")->setVisible(TRUE);
 	floater->getChildView("amount text")->setVisible(TRUE);
-	floater->getChildView("payment_message_label")->setVisible(TRUE);
-	floater->getChildView("payment_message")->setVisible(TRUE);
 
 	// <FS:Ansariel> Control doesn't exist as of 2015-01-27
 	//floater->getChildView("fastpay text")->setVisible(TRUE);
