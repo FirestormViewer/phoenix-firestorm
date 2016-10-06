@@ -106,7 +106,11 @@ BOOL LLOutfitGallery::postBuild()
 {
     BOOL rv = LLOutfitListBase::postBuild();
     mScrollPanel = getChild<LLScrollContainer>("gallery_scroll_panel");
-    mGalleryPanel = getChild<LLPanel>("gallery_panel");
+    // <FS:Ansariel> Don't parse XML to create a LLPanel manually
+    //mGalleryPanel = getChild<LLPanel>("gallery_panel");
+    LLPanel::Params params = LLPanel::getDefaultParams();
+    mGalleryPanel = LLUICtrlFactory::create<LLPanel>(params);
+    // </FS>
     mMessageTextBox = getChild<LLTextBox>("no_outfits_txt");
     mOutfitGalleryMenu = new LLOutfitGalleryContextMenu(this);
     return rv;
