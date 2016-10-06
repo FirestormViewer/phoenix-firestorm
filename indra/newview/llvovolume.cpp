@@ -318,7 +318,7 @@ inline void LLVOVolume::overrideProfileForMesh(LLVolumeParams& vp)
 	// By doing this we ensure that nothing is made worse by this change.
 	// Arguably, however, setting this to PROFILE_SQUARE and PATH_LINE thus a <0.5,0.5,0.5> bias is more aligned to the published LOD algorithm
 	// but given all viewers including the Lab viewer set LOD Factor >1 by default, that seems naive.
-	LL_DEBUGS("BEQ") << "Object:" << this->getID().asString() << "overriding PATH and PROFILE to match 2-face mesh" << LL_ENDL;
+	LL_DEBUGS() << "Object:" << this->getID().asString() << "overriding PATH and PROFILE to match 2-face mesh" << LL_ENDL;
 	vp.getProfileParams().setCurveType(LL_PCODE_PROFILE_CIRCLE_HALF);
 	vp.getPathParams().setCurveType(LL_PCODE_PATH_CIRCLE);
 }
