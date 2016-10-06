@@ -309,11 +309,32 @@ void LLVOVolume::cleanupClass()
     sObjectMediaNavigateClient = NULL;
 }
 
+// <FS> FIRE-20192 / STORM-2138 FIX: Radius calculation is wrong in viewers
+// <*BEQ*> function to encapsulate the profile override to fix Mesh LOD silliness from asset server.
+// https://jira.secondlife.com/browse/STORM-2138
+inline void LLVOVolume::overrideProfileForMesh(LLVolumeParams& vp)
+{
+	// Note: We are overriding to the 2-material face mesh because it and the 1 face have the best Bias (i.e. <0.6, 0.6, 0.6>) 
+	// By doing this we ensure that nothing is made worse by this change.
+	// Arguably, however, setting this to PROFILE_SQUARE and PATH_LINE thus a <0.5,0.5,0.5> bias is more aligned to the published LOD algorithm
+	// but given all viewers including the Lab viewer set LOD Factor >1 by default, that seems naive.
+	LL_DEBUGS("BEQ") << "Object:" << this->getID().asString() << "overriding PATH and PROFILE to match 2-face mesh" << LL_ENDL;
+	vp.getProfileParams().setCurveType(LL_PCODE_PROFILE_CIRCLE_HALF);
+	vp.getPathParams().setCurveType(LL_PCODE_PATH_CIRCLE);
+}
+// </FS>
+
 U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 										  void **user_data,
 										  U32 block_num, EObjectUpdateType update_type,
 										  LLDataPacker *dp)
 {
+	// <FS> FIRE-20192 / STORM-2138 FIX: Radius calculation is wrong in viewers
+	// <*BEQ*> Add new control to allow revert to old behaviour
+	// https://jira.secondlife.com/browse/STORM-2138
+	static LLCachedControl<bool> useLegacyMeshProfile(gSavedSettings, "UseLegacyMeshProfile");
+	// </FS>
+
 	LLColor4U color;
 	const S32 teDirtyBits = (TEM_CHANGE_TEXTURE|TEM_CHANGE_COLOR|TEM_CHANGE_MEDIA);
 
@@ -372,6 +393,18 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 			LLVolumeParams volume_params;
 			LLVolumeMessage::unpackVolumeParams(&volume_params, mesgsys, _PREHASH_ObjectData, block_num);
 			volume_params.setSculptID(sculpt_id, sculpt_type);
+			// <FS> FIRE-20192 / STORM-2138 FIX: Radius calculation is wrong in viewers
+			// <*BEQ*> If it's a mesh & we are overriding legacy weirdness
+			if (isSculpted() && sculpt_type == LL_SCULPT_TYPE_MESH &&
+				!useLegacyMeshProfile)
+			{
+				// In an ideal world we would be doing this in llviewerobjectlist as part of processObjectUpdate and thus before a new object hits the cache
+				// However as volume_params etc are not known at that point we do it here. 
+				// Annoyingly this means we dupe the code in the section below
+				// on the plus side it means that Mesh objects will repair themselves without the user clearing pre-existing cache.
+				overrideProfileForMesh(volume_params);
+			}
+			// </FS>
 
 			if (setVolume(volume_params, 0))
 			{
@@ -408,6 +441,17 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 			}
 
 			volume_params.setSculptID(sculpt_id, sculpt_type);
+
+			// <FS> FIRE-20192 / STORM-2138 FIX: Radius calculation is wrong in viewers
+			// <*BEQ*> If it's a mesh & we are overriding legacy weirdness
+			if (isSculpted() && sculpt_type == LL_SCULPT_TYPE_MESH &&
+				!useLegacyMeshProfile)
+			{
+				// Yes this is duped from above, but then again much of this section is. 
+				// see comment on previous section as to why we do it as part of this function
+				overrideProfileForMesh(volume_params);
+			}
+			// </FS>
 
 			if (setVolume(volume_params, 0))
 			{
