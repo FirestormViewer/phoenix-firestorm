@@ -16827,17 +16827,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <array/>
     </map>
-    <key>UseLegacyMeshProfile</key>
-    <map>
-      <key>Comment</key>
-      <string>Use the legacy PROFILE and PATH attributes for Mesh that impact LOD radius</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>UseLSLBridge</key>
     <map>
       <key>Comment</key>

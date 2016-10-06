@@ -165,7 +165,6 @@ public:
 
 	/*virtual*/ void	onShift(const LLVector4a &shift_vector); // Called when the drawable shifts
 
-				void	overrideProfileForMesh(LLVolumeParams & vp); // <FS> FIRE-20192 / STORM-2138 FIX: Radius calculation is wrong in viewers
 	/*virtual*/ void	parameterChanged(U16 param_type, bool local_origin);
 	/*virtual*/ void	parameterChanged(U16 param_type, LLNetworkData* data, BOOL in_use, bool local_origin);
 
