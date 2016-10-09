@@ -63,6 +63,7 @@
             <pie_slice
                 label="テクスチャ更新"
                 name="Texture Refresh"/>
+                	<pie_separator/>
 			<pie_menu
 				name="ExportMenu"
 				label="別名で保存 &gt;">
@@ -72,9 +73,29 @@
 				<pie_slice
 					label="メッシュ"
 					name="Collada" />
+				<pie_separator/>
+				<pie_separator/>
+				<pie_separator/>
+				<pie_separator/>
 				<pie_slice
 					label="XMLをダンプ"
 					name="Dump XML" />
+			</pie_menu>
+			<pie_menu
+				name="RenderMenu"
+				label="レンダリング &gt;">
+				<pie_slice
+					name="RenderNormally"
+					label="通常表示">
+				</pie_slice>
+				<pie_slice
+					name="DoNotRender"
+					label="表示しない">
+				</pie_slice>
+				<pie_slice
+					name="AlwaysRenderFully"
+					label="完全表示">
+				</pie_slice>
 			</pie_menu>
         </pie_menu>
         <pie_slice

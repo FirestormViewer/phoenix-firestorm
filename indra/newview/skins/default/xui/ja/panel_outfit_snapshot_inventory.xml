@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_outfit_snapshot_inventory">
+	<icon name="title_icon" />
+	<text name="title">
+		インベントリ
+	</text>
+	<view_border  name="hr" />
+	<text name="hint_lbl">
+		画像を１件インベントリにアップロードするのに L$[UPLOAD_COST] かかります。
+	</text>
+	<button label="取り消し" name="cancel_btn" />
+	<button label="保存" name="save_btn" />
+</panel>

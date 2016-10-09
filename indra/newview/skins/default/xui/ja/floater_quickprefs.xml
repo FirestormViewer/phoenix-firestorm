@@ -21,6 +21,13 @@
 				最大帯域幅:
 			</text>
 			<slider name="max_bandwidth" />
+			<text name="Maximum complexity" tool_tip="表示の複雑なアバターをゼリー人形のように表示し始める値を設定します。">
+				複雑さの最大値:
+			</text>
+			<slider name="IndirectMaxComplexity" />
+			<text name="IndirectMaxComplexityText">
+				無制限
+			</text>
 			<!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
 			<check_box label="地域の設定を使用" name="UseRegionWindlight" />
 			<text name="WL Sky" tool_tip="WindLightの空の事前設定です。">

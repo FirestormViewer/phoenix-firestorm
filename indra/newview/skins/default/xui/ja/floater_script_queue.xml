@@ -15,5 +15,26 @@
 	<floater.string name="NotRunning">
 		実行されていません
 	</floater.string>
+	<floater.string name="Timeout">
+		タイムアウト: [OBJECT_NAME]
+	</floater.string>
+	<floater.string name="LoadingObjInv">
+		[OBJECT_NAME] のためにインベントリをローディング中
+	</floater.string>
+	<floater.string name="Deleting">
+		削除しています
+	</floater.string>
+	<floater.string name="SkippingPermissions">
+		[OBJECT_NAME] (権限) をスキップ中
+	</floater.string>
+	<floater.string name="Compiling">
+		"[OBJECT_NAME]" をコンパイル中...
+	</floater.string>
+	<floater.string name="CompileSuccess">
+		"[OBJECT_NAME]" のコンパイル成功
+	</floater.string>
+	<floater.string name="CompileFailure">
+		"[OBJECT_NAME]" のコンパイル失敗:
+	</floater.string>
 	<button label="閉じる" label_selected="閉じる" name="close"/>
 </floater>
