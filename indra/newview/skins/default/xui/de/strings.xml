@@ -1255,6 +1255,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ChangeYourDefaultAnimations">
 		Ihre Standardanimationen ändern
 	</string>
+	<string name="ForceSitAvatar">
+		Ihren Avatar zwingen zu sitzen
+	</string>
 	<string name="SnapshotSavedToDisk">
 		Schnappschuss gespeichert: [FILENAME]
 	</string>
