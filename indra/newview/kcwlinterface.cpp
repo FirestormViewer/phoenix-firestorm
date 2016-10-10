@@ -647,21 +647,26 @@ bool KCWindlightInterface::haveParcelOverride(const LLEnvironmentSettings& new_s
 	//*ASSUMPTION: if region day cycle is empty, its set to default
 	mHaveRegionSettings = new_settings.getWLDayCycle().size() > 0;
 
+	// If no parcel WL default sky is defined, we are going to use region defaults
+	// (mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault == false).
+	// In that case, we do NOT override so we update the WL with what we received
+	// from the region.
 	bool has_override = (mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault && mHasRegionOverride) ||	// Using a default parcel WL sky and "RegionOverride" parameter set
-						(mCurrentSpace == NO_ZONES && !mHaveRegionSettings) ||								// Custom parcel WL default sky and region default WL (no custom region default WL!)
-						(mCurrentSpace != NO_SETTINGS && mCurrentSpace != NO_ZONES);						// Height-mapped parcel WL
+						(mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault && !mHaveRegionSettings) ||	// Custom parcel WL default sky and region default WL (no custom region default WL!)
+						(mCurrentSpace != NO_SETTINGS && mCurrentSpace != NO_ZONES);						// Height-mapped parcel WL (always override region WL)
+
+	LL_DEBUGS() << "mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault && mHasRegionOverride = " << ((mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault && mHasRegionOverride) ? "true" : "false") << " - "
+		<< "mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault && !mHaveRegionSettings = " << ((mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault && !mHaveRegionSettings) ? "true" : "false") << " - "
+		<< "mCurrentSpace != NO_SETTINGS && mCurrentSpace != NO_ZONES = " << ((mCurrentSpace != NO_SETTINGS && mCurrentSpace != NO_ZONES) ? "true" : "false")
+		<< LL_ENDL;
 
 	if (!has_override)
 	{
-		LL_INFOS() << "Region environment settings received. Parcel WL settings will be overridden. Reason: No \"RegionOverride\", region not using default WL and no zones defined or Parcel WL settings received - Region settings taking precedence" << LL_ENDL;
+		LL_INFOS() << "Region environment settings received. Parcel WL settings will be overridden." << LL_ENDL;
 	}
 	else
 	{
 		LL_INFOS() << "Parcel WL override active" << LL_ENDL;
-		LL_DEBUGS() << "mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault && mHasRegionOverride = " << ((mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault && mHasRegionOverride) ? "true" : "false") << " - "
-			<< "mCurrentSpace == NO_ZONES && !mHaveRegionSettings = " << ((mCurrentSpace == NO_ZONES && !mHaveRegionSettings) ? "true" : "false") << " - "
-			<< "mCurrentSpace != NO_SETTINGS && mCurrentSpace != NO_ZONES = " << ((mCurrentSpace != NO_SETTINGS && mCurrentSpace != NO_ZONES) ? "true" : "false")
-			<< LL_ENDL;
 	}
 
 	return has_override;
