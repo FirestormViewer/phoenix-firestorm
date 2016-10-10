@@ -199,6 +199,12 @@ void KCWindlightInterface::applySettings(const LLSD& settings)
 				LLEnvManagerNew::instance().setUseWaterPreset(settings["water"].asString(), gSavedSettings.getBOOL("FSInterpolateParcelWL"));
 				setWL_Status(true);
 			}
+			else
+			{
+				LL_INFOS() << "Applying region default WL water set" << LL_ENDL;
+				LLWLParamManager::getInstance()->mAnimator.stopInterpolation(); // Not nice to not interpolate, but these 2836724 methods of changing a WL setting will nicely screw up each other
+				LLEnvManagerNew::instance().useRegionWater();
+			}
 		}
 		else
 		{

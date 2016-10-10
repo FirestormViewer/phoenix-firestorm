@@ -703,7 +703,7 @@ bool LLEnvManagerNew::useRegionWater()
 	FloaterQuickPrefs::updateParam(QP_PARAM_WATER, LLSD(PRESET_NAME_REGION_DEFAULT));
 
 	// Otherwise apply region water.
-	LL_DEBUGS("Windlight") << "Applying region sky" << LL_ENDL;
+	LL_DEBUGS("Windlight") << "Applying region water" << LL_ENDL;
 	return useWaterParams(region_water);
 }
 
