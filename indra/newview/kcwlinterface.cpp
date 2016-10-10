@@ -196,7 +196,8 @@ void KCWindlightInterface::applySettings(const LLSD& settings)
 			if (settings.has("water") && (!mHaveRegionSettings || mHasRegionOverride))
 			{
 				LL_INFOS() << "Applying WL water set: " << settings["water"].asString() << LL_ENDL;
-				LLEnvManagerNew::instance().setUseWaterPreset(settings["water"].asString(), gSavedSettings.getBOOL("FSInterpolateParcelWL"));
+				LLWLParamManager::getInstance()->mAnimator.stopInterpolation();
+				LLEnvManagerNew::instance().setUseWaterPreset(settings["water"].asString());
 				setWL_Status(true);
 			}
 			else
@@ -287,11 +288,12 @@ void KCWindlightInterface::applyWindlightPreset(const std::string& preset)
 		return;
 	}
 
+	LLWLParamManager::getInstance()->mAnimator.stopInterpolation();
 	LLWLParamManager* wlprammgr = LLWLParamManager::getInstance();
 	LLWLParamKey key(preset, LLEnvKey::SCOPE_LOCAL);
 	if ( (preset != PARCEL_WL_DEFAULT) && (wlprammgr->hasParamSet(key)) )
 	{
-		LLEnvManagerNew::instance().setUseSkyPreset(preset, gSavedSettings.getBOOL("FSInterpolateParcelWL"));
+		LLEnvManagerNew::instance().setUseSkyPreset(preset);
 		setWL_Status(true);
 		mWeChangedIt = true;
 	}
@@ -299,7 +301,7 @@ void KCWindlightInterface::applyWindlightPreset(const std::string& preset)
 	{
 		if (!LLEnvManagerNew::instance().getUseRegionSettings())
 		{
-			LLEnvManagerNew::instance().setUseRegionSettings(true, gSavedSettings.getBOOL("FSInterpolateParcelWL"));
+			LLEnvManagerNew::instance().setUseRegionSettings(true);
 		}
 		setWL_Status(false);
 		mWeChangedIt = false;

@@ -900,16 +900,6 @@
          height="16"
          name="FSWLWhitelistAll"
          width="256" />
-        <check_box
-         top_pad="5"
-         label="Crossfade region environment changes for Parcel WL"
-         control_name="FSInterpolateParcelWL"
-         enabled_control="FSWLParcelEnabled"
-         follows="left|top"
-         height="16"
-         name="FSInterpolateParcelWL"
-         width="256"
-         tool_tip="Same as above options for Interpolation but for the ParcelWL." />
 
         <text
          top_pad="10"
