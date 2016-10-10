@@ -19849,7 +19849,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>3</integer>
     </map>
-
     <key>UseEnvironmentFromRegionAlways</key>
     <map>
       <key>Comment</key>
@@ -19861,7 +19860,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-
     <key>FSInterpolateSky</key>
     <map>
       <key>Comment</key>
@@ -19873,23 +19871,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-
     <key>FSInterpolateWater</key>
     <map>
       <key>Comment</key>
       <string>FSInterpolateWater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-
-    <key>FSInterpolateParcelWL</key>
-    <map>
-      <key>Comment</key>
-      <string>FSInterpolateParcelWL</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -19908,7 +19893,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>3.0</real>
     </map>
-
   <key>_NACL_MLFovValues</key>
   <map>
     <key>Comment</key>
@@ -24163,6 +24147,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+  <key>FSMaxPendingIMMessages</key>
+  <map>
+    <key>Comment</key>
+    <string>Maximum number of pending IM or group messages before a minimized or not visible chat window will be updated</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>25</integer>
+  </map>
   </map>
 </llsd>
 

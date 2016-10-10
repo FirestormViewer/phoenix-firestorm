@@ -87,6 +87,7 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 	mControlPanel(NULL),
 	mSessionID(session_id),
 	mLastMessageIndex(-1),
+	mPendingMessages(0),
 	mDialog(IM_NOTHING_SPECIAL),
 	mChatHistory(NULL),
 	mInputEditor(NULL),
@@ -301,8 +302,10 @@ void FSFloaterIM::newIMCallback(const LLSD& data){
 		FSFloaterIM* floater = LLFloaterReg::findTypedInstance<FSFloaterIM>("fs_impanel", session_id);
 		if (floater == NULL) return;
 
-		// update if visible, otherwise will be updated when opened
-		if (floater->getVisible())
+		// update if visible or max pending messages exceeded, otherwise will be updated when opened
+		static LLCachedControl<S32> fsMaxPendingIMMessages(gSavedSettings, "FSMaxPendingIMMessages");
+		floater->mPendingMessages++;
+		if (floater->getVisible() || floater->mPendingMessages > fsMaxPendingIMMessages)
 		{
 			floater->updateMessages();
 		}
@@ -1355,7 +1358,7 @@ void FSFloaterIM::updateMessages()
 	std::list<LLSD> messages;
 
 	// we shouldn't reset unread message counters if IM floater doesn't have focus
-    LLIMModel::instance().getMessages(mSessionID, messages, mLastMessageIndex + 1, hasFocus());
+	LLIMModel::instance().getMessages(mSessionID, messages, mLastMessageIndex + 1, hasFocus());
 
 	if (messages.size())
 	{
@@ -1447,6 +1450,8 @@ void FSFloaterIM::updateMessages()
 			}
 		}
 	}
+
+	mPendingMessages = 0;
 }
 
 void FSFloaterIM::reloadMessages(bool clean_messages/* = false*/)

@@ -118,7 +118,6 @@
         <check_box label="Automatycznie stosuj ustawienia WL na działkach znajomych" name="FSWLWhitelistFriends" />
         <check_box label="Automatycznie stosuj ustawienia WL na działkach moich grup" name="FSWLWhitelistGroups" />
         <check_box label="Automatycznie stosuj ustawienia WL na wszystkich działkach" name="FSWLWhitelistAll" />
-        <check_box label="Automatycznie zmieniaj środowisko dla WL działek" name="FSInterpolateParcelWL" tool_tip="To samo, co dla opcji przenikania powyżej, ale dla WL działek." />
         <text name="wl_crossfade_label">
          Czas przenikania (w sekundach):
          </text>

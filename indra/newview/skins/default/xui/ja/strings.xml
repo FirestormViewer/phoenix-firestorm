@@ -4507,11 +4507,16 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="paid_you_ldollars">
 		[NAME] は [REASON] のために L$[AMOUNT] を支払いました。
 	</string>
+	<string name="paid_you_ldollars_gift">
+		[NAME] はあなたに L$[AMOUNT] を支払いました：[REASON]</string>
 	<string name="paid_you_ldollars_no_reason">
 		[NAME] は L$[AMOUNT] を支払いました。
 	</string>
 	<string name="you_paid_ldollars">
-		[NAME] に L$ [AMOUNT] を支払いました：[REASON]
+		[NAME] に [REASON] のために L$ [AMOUNT] を支払いました。
+	</string>
+	<string name="you_paid_ldollars_gift">
+		[NAME] に L$[AMOUNT] を支払いました：[REASON]
 	</string>
 	<string name="you_paid_ldollars_no_info">
 		L$ [AMOUNT] を支払いました。
@@ -4524,6 +4529,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="you_paid_failure_ldollars">
 		[NAME] に [REASON] の代金 L$ [AMOUNT] を支払えませんでした。
+	</string>
+	<string name="you_paid_failure_ldollars_gift">
+		[NAME] に L$[AMOUNT] を支払えませんでした：[REASON]
 	</string>
 	<string name="you_paid_failure_ldollars_no_info">
 		L$ [AMOUNT] を支払えませんでした。
@@ -4850,6 +4858,15 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="texture_load_dimensions_error">
 		[WIDTH]*[HEIGHT] 以上の画像は読み込めません
+	</string>
+	<string name="outfit_photo_load_dimensions_error">
+		アウトフィット写真の最大サイズは [WIDTH]*[HEIGHT] です。サイズを変更するか、他の画像を使用して下さい。
+	</string>
+	<string name="outfit_photo_select_dimensions_error">
+		アウトフィット写真の最大サイズは [WIDTH]*[HEIGHT] です。他のテクスチャを使用して下さい。
+	</string>
+	<string name="outfit_photo_verify_dimensions_error">
+		写真の大きさが検証できません。写真サイズがピッカーに表示されるまでお待ち下さい。
 	</string>
 	<string name="words_separator" value=","/>
 	<string name="server_is_down">

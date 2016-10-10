@@ -163,7 +163,6 @@
         <check_box label="フレンドの土地のWindlight設定を自動的に適用する" name="FSWLWhitelistFriends"/>
         <check_box label="グループの土地のWindlight設定を自動的に適用する" name="FSWLWhitelistGroups" />
         <check_box label="どんな土地区画のWindlight設定も自動的に適用する" name="FSWLWhitelistAll" />
-        <check_box label="土地区画に設定された環境設定に現在の設定から徐々に変化させる" name="FSInterpolateParcelWL" tool_tip="上にある地域／不動産の場合と同じ効果ですが、こちらは土地区画に設定されたWindlightに対する効果となります。" />
 		<text name="wl_crossfade_label">
            クロスフェードする時間 (秒):
         </text>

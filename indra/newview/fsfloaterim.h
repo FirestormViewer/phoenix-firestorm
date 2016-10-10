@@ -239,6 +239,7 @@ private:
 	FSPanelChatControlPanel* mControlPanel;
 	LLUUID mSessionID;
 	S32 mLastMessageIndex;
+	S32 mPendingMessages;
 
 	EInstantMessage mDialog;
 	LLUUID mOtherParticipantUUID;

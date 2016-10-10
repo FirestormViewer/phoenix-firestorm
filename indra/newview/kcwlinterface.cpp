@@ -58,7 +58,8 @@ KCWindlightInterface::KCWindlightInterface() :
 	mLastRegion(NULL),
 	mHasRegionOverride(false),
 	mHaveRegionSettings(false),
-	mDisabled(false)
+	mDisabled(false),
+	mUsingParcelWLSkyDefault(false)
 {
 	if (!gSavedSettings.getBOOL("FSWLParcelEnabled") || !gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways"))
 	{
@@ -95,10 +96,12 @@ void KCWindlightInterface::parcelChange()
 	// will come in, we must check if the other has set something before this one for the current region.
 	if (gAgent.getRegion() != mLastRegion)
 	{
-		mHasRegionOverride = false;
 		mHaveRegionSettings = false;
 		mLastRegion = gAgent.getRegion();
+		mCurrentSpace = NO_SETTINGS;
 	}
+	mHasRegionOverride = false;
+	mUsingParcelWLSkyDefault = false;
 
 	if (parcel)
 	{
@@ -193,8 +196,18 @@ void KCWindlightInterface::applySettings(const LLSD& settings)
 			if (settings.has("water") && (!mHaveRegionSettings || mHasRegionOverride))
 			{
 				LL_INFOS() << "Applying WL water set: " << settings["water"].asString() << LL_ENDL;
-				LLEnvManagerNew::instance().setUseWaterPreset(settings["water"].asString(), gSavedSettings.getBOOL("FSInterpolateParcelWL"));
+				LLWLParamManager::getInstance()->mAnimator.stopInterpolation();
+				LLEnvManagerNew::instance().setUseWaterPreset(settings["water"].asString());
 				setWL_Status(true);
+			}
+			else
+			{
+				LL_INFOS() << "Applying region default WL water set" << LL_ENDL;
+				// Not nice to not interpolate, but these 2836724 methods of changing a WL
+				// setting will nicely screw up each other and this will most likely happen
+				// if calling useRegionWater() because it doesn't even interpolate at all.
+				LLWLParamManager::getInstance()->mAnimator.stopInterpolation();
+				LLEnvManagerNew::instance().useRegionWater();
 			}
 		}
 		else
@@ -243,10 +256,12 @@ bool KCWindlightInterface::applySkySettings(const LLSD& settings)
 		if (settings.has("sky_default") && (!mHaveRegionSettings || mHasRegionOverride))
 		{
 			LL_INFOS() << "Applying WL sky set: " << settings["sky_default"] << " (Parcel WL Default)" << LL_ENDL;
+			mUsingParcelWLSkyDefault = true;
 			applyWindlightPreset(settings["sky_default"].asString());
 		}
 		else //reset to default
 		{
+			mUsingParcelWLSkyDefault = false;
 			std::string reason;
 			if (!settings.has("sky_default"))
 			{
@@ -273,11 +288,12 @@ void KCWindlightInterface::applyWindlightPreset(const std::string& preset)
 		return;
 	}
 
+	LLWLParamManager::getInstance()->mAnimator.stopInterpolation();
 	LLWLParamManager* wlprammgr = LLWLParamManager::getInstance();
 	LLWLParamKey key(preset, LLEnvKey::SCOPE_LOCAL);
 	if ( (preset != PARCEL_WL_DEFAULT) && (wlprammgr->hasParamSet(key)) )
 	{
-		LLEnvManagerNew::instance().setUseSkyPreset(preset, gSavedSettings.getBOOL("FSInterpolateParcelWL"));
+		LLEnvManagerNew::instance().setUseSkyPreset(preset);
 		setWL_Status(true);
 		mWeChangedIt = true;
 	}
@@ -285,7 +301,7 @@ void KCWindlightInterface::applyWindlightPreset(const std::string& preset)
 	{
 		if (!LLEnvManagerNew::instance().getUseRegionSettings())
 		{
-			LLEnvManagerNew::instance().setUseRegionSettings(true, gSavedSettings.getBOOL("FSInterpolateParcelWL"));
+			LLEnvManagerNew::instance().setUseRegionSettings(true);
 		}
 		setWL_Status(false);
 		mWeChangedIt = false;
@@ -624,20 +640,35 @@ bool KCWindlightInterface::haveParcelOverride(const LLEnvironmentSettings& new_s
 	if (gAgent.getRegion() != mLastRegion)
 	{
 		mHasRegionOverride = false;
+		mUsingParcelWLSkyDefault = false;
 		mCurrentSettings.clear();
 		mLastRegion = gAgent.getRegion();
+		mCurrentSpace = NO_SETTINGS;
 	}
 
 	//*ASSUMPTION: if region day cycle is empty, its set to default
 	mHaveRegionSettings = new_settings.getWLDayCycle().size() > 0;
 
-	bool has_override = mHasRegionOverride ||											// "RegionOverride" parameter set
-						(mCurrentSpace == NO_ZONES && !mHaveRegionSettings) ||			// Custom parcel WL default sky and region default WL (no custom region default WL!)
-						(mCurrentSpace != NO_SETTINGS && mCurrentSpace != NO_ZONES);	// Height-mapped parcel WL
+	// If no parcel WL default sky is defined, we are going to use region defaults
+	// (mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault == false).
+	// In that case, we do NOT override so we update the WL with what we received
+	// from the region.
+	bool has_override = (mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault && mHasRegionOverride) ||	// Using a default parcel WL sky and "RegionOverride" parameter set
+						(mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault && !mHaveRegionSettings) ||	// Custom parcel WL default sky and region default WL (no custom region default WL!)
+						(mCurrentSpace != NO_SETTINGS && mCurrentSpace != NO_ZONES);						// Height-mapped parcel WL (always override region WL)
+
+	LL_DEBUGS() << "mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault && mHasRegionOverride = " << ((mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault && mHasRegionOverride) ? "true" : "false") << " - "
+		<< "mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault && !mHaveRegionSettings = " << ((mCurrentSpace == NO_ZONES && mUsingParcelWLSkyDefault && !mHaveRegionSettings) ? "true" : "false") << " - "
+		<< "mCurrentSpace != NO_SETTINGS && mCurrentSpace != NO_ZONES = " << ((mCurrentSpace != NO_SETTINGS && mCurrentSpace != NO_ZONES) ? "true" : "false")
+		<< LL_ENDL;
 
 	if (!has_override)
 	{
-		LL_INFOS() << "Region environment settings received. Parcel WL settings will be overridden. Reason: No \"RegionOverride\", region not using default WL and no zones defined or Parcel WL settings received - Region settings taking precedence" << LL_ENDL;
+		LL_INFOS() << "Region environment settings received. Parcel WL settings will be overridden." << LL_ENDL;
+	}
+	else
+	{
+		LL_INFOS() << "Parcel WL override active" << LL_ENDL;
 	}
 
 	return has_override;
@@ -669,6 +700,7 @@ bool KCWindlightInterface::checkSettings()
 			mEventTimer.stop();
 			setWL_Status(false);
 			mDisabled = true;
+			mUsingParcelWLSkyDefault = false;
 		}
 		return true;
 	}

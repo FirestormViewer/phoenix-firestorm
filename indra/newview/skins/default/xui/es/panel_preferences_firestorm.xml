@@ -96,7 +96,6 @@
 			<check_box label="Autoaplicar las configuraciones WL de los terrenos de mis amigos" name="FSWLWhitelistFriends"/>
 			<check_box label="Autoaplicar las configuraciones WL de los terrenos de mis grupos" name="FSWLWhitelistGroups"/>
 			<check_box label="Autoaplicar las configuraciones WL de cualquier parcela" name="FSWLWhitelistAll"/>
-			<check_box label="Interpolar los cambios de entorno de la región con el WL de la parcela" name="FSInterpolateParcelWL" tool_tip="Igual que las opciones anteriores sobre transiciones, pero para la configuración WL de la parcela"/>
 			<text name="wl_crossfade_label" width="230">
 				Duración de la transición (en segundos):
 			</text>

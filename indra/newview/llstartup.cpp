@@ -4175,7 +4175,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	
 	// <FS:Techwolf Lupindo> fsdata opensim MOTD support
 #ifdef OPENSIM
-	if (!LLGridManager::getInstance()->isInSLMain() && !FSData::instance().getOpenSimMOTD().empty())
+	if (LLGridManager::getInstance()->isInOpenSim() && !FSData::instance().getOpenSimMOTD().empty())
 	{
 		gAgent.mMOTD.assign(FSData::instance().getOpenSimMOTD());
 	}

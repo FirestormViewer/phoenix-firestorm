@@ -290,6 +290,7 @@ protected:
 	
 	std::string mGrid;
 	std::string mGridFile;
+	std::string mStartupGrid;
 	LLSD mGridList;
 // <AW opensim>
 	LLSD mConnectedGrid;

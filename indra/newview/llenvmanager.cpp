@@ -512,6 +512,8 @@ void LLEnvManagerNew::onRegionSettingsResponse(const LLSD& content)
 	if ( (getUseRegionSettings()) && (LLWLParamManager::getInstance()->mAnimator.getIsRunning()) )
 // [/RLVa:KB]
 		{
+			LL_DEBUGS("Windlight") << "Updating WL managers from prefs" << LL_ENDL;
+			LLWLParamManager::getInstance()->mAnimator.stopInterpolation();
 			updateManagersFromPrefs(mInterpNextChangeMessage);
 		}
 		//bit of a hacky override since I've repurposed many of the settings and methods here -KC
@@ -520,6 +522,8 @@ void LLEnvManagerNew::onRegionSettingsResponse(const LLSD& content)
 			&& !(rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)))
 		{
 			// reset all environmental settings to track the region defaults, make this reset 'sticky' like the other sun settings.
+			LL_DEBUGS("Windlight") << "Resetting user prefs" << LL_ENDL;
+			LLWLParamManager::getInstance()->mAnimator.stopInterpolation();
 			setUserPrefs(getWaterPresetName(), getSkyPresetName(), getDayCycleName(), false, true, mInterpNextChangeMessage);
 		}
 	}
@@ -701,7 +705,7 @@ bool LLEnvManagerNew::useRegionWater()
 	FloaterQuickPrefs::updateParam(QP_PARAM_WATER, LLSD(PRESET_NAME_REGION_DEFAULT));
 
 	// Otherwise apply region water.
-	LL_DEBUGS("Windlight") << "Applying region sky" << LL_ENDL;
+	LL_DEBUGS("Windlight") << "Applying region water" << LL_ENDL;
 	return useWaterParams(region_water);
 }
 
