@@ -81,7 +81,6 @@
 			<check_box label="Appliquer automatiquement les paramètres WL des terrains de mes amis" name="FSWLWhitelistFriends"/>
 			<check_box label="Appliquer automatiquement les paramètres WL des terrains de de mes groupes" name="FSWLWhitelistGroups"/>
 			<check_box label="Appliquer automatiquement les paramètres WL de tous les terrains" name="FSWLWhitelistAll"/>
-			<check_box label="Transition des WL lors d'un changement de région &amp; de terrain" name="FSInterpolateParcelWL" tool_tip="Comme ci-desssus, mais pour les paramètres environnementaux du terrain."/>
 			<text name="wl_crossfade_label" width="245">Durée des transitions (secondes) :</text>
 			<spinner name="FSWindlightInterpolateTime" tool_tip="La durée en secondes d'une transition entre deux préréglages (3 par défaut)"/>
 			<text name="could_texture_text" width="240">Texture des nuages (Redémarrage requis) :</text>

@@ -117,7 +117,6 @@
         <check_box label="Автоматически применять настройки окружающей среды от друзей" name="FSWLWhitelistFriends" />
         <check_box label="Автоматически применять настройки окружающей среды от групп" name="FSWLWhitelistGroups" />
         <check_box label="Автоматически применять настройки окружающей среды от любого участка" name="FSWLWhitelistAll" />
-        <check_box label="Плавный переход из ОС региона в ОС участка" name="FSInterpolateParcelWL" tool_tip="Плавный переход из ОС региона в ОС участка" />
         <text name="wl_crossfade_label">
          Продолжительность перехода:
          </text>

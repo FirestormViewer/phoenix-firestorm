@@ -274,6 +274,7 @@ protected:
 	
 	std::string mGrid;
 	std::string mGridFile;
+	std::string mStartupGrid;
 	LLSD mGridList;
 	LLSD mConnectedGrid;
 	int mResponderCount;

@@ -134,7 +134,6 @@
 		<check_box label="WL-Einstellungen von Freunden automatisch übernehmen" name="FSWLWhitelistFriends"/>
 		<check_box label="WL-Einstellungen von Land im Besitz meiner Gruppen automatisch übernehmen" name="FSWLWhitelistGroups"/>
 		<check_box label="WL-Einstellungen von allen Parzellen automatisch übernehmen" name="FSWLWhitelistAll"/>
-		<check_box label="Wechsel der Umgebungseinstellungen interpolieren" name="FSInterpolateParcelWL" tool_tip="Aktiviert einen Überblendeffekt bei Änderungen an den Umgebungseinstellungen beim Windlight-Sharing für Parzellen."/>
 		<text name="wl_crossfade_label">
 			Interpolationsdauer (Sekunden):
 		</text>

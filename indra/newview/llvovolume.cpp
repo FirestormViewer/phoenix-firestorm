@@ -1346,13 +1346,20 @@ BOOL LLVOVolume::calcLOD()
 									lod_factor);
 
 
-	if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_LOD_INFO) &&
-		mDrawable->getFace(0))
-	{
-		//setDebugText(llformat("%.2f:%.2f, %d", mDrawable->mDistanceWRTCamera, radius, cur_detail));
+	// <FS> FIRE-20191 / STORM-2139 Render Metadata->LOD Info is broken on all "recent" viewer versions
+	//if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_LOD_INFO) &&
+	//	mDrawable->getFace(0))
+	//{
+	//	//setDebugText(llformat("%.2f:%.2f, %d", mDrawable->mDistanceWRTCamera, radius, cur_detail));
 
-		setDebugText(llformat("%d", mDrawable->getFace(0)->getTextureIndex()));
+	//	setDebugText(llformat("%d", mDrawable->getFace(0)->getTextureIndex()));
+	//}
+	if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_LOD_INFO))
+	{
+		// New LOD_INFO debug setting. Shows Distance to object the Biased Radius and the visual Radius
+		setDebugText(llformat("Dist=%.2f:\nBiasedR=%.2f\nVisualR=%.2f\nLOD=%d", distance, radius, getScale().length(), cur_detail));
 	}
+	// </FS>
 
 	if (cur_detail != mLOD)
 	{
