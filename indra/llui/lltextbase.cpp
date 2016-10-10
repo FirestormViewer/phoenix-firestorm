@@ -2590,7 +2590,13 @@ void LLTextBase::replaceUrl(const std::string &url,
 	if (modified)
 	{
 		getViewModel()->setDisplay(text);
-		deselect();
+		// <FS:Ansariel> FIRE-20214: Text gets deselected upon avatar/group name received callback
+		//deselect();
+		// Make sure we're still within limits
+		S32 text_length = getLength();
+		mSelectionStart = llmin(mSelectionStart, text_length);
+		mSelectionEnd = llmin(mSelectionEnd, text_length);
+		// </FS:Ansariel>
 		setCursorPos(mCursorPos);
 		needsReflow();
 	}
