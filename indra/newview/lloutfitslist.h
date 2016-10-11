@@ -85,6 +85,7 @@ public:
     virtual void updateRemovedCategory(LLUUID cat_id) = 0;
     virtual void updateChangedCategoryName(LLViewerInventoryCategory *cat, std::string name) = 0;
     virtual void sortOutfits();
+    virtual void arrange() {} // <FS:Ansariel> Arrange accordions after all have been added
 
     void removeSelected();
     void setSelectedOutfitByUUID(const LLUUID& outfit_uuid);
@@ -275,6 +276,7 @@ private:
     /*virtual*/ void updateChangedCategoryName(LLViewerInventoryCategory *cat, std::string name);
 
     /*virtual*/ void sortOutfits();
+    /*virtual*/ void arrange(); // <FS:Ansariel> Arrange accordions after all have been added
 
     /*virtual*/ void onSetSelectedOutfitByUUID(const LLUUID& outfit_uuid);
 
