@@ -316,7 +316,7 @@
         name="Phoenix"
         value="settings_phoenix.xml" />
       <combo_box.item
-        label="Viewer 3"
+        label="Viewer 4"
         name="V3"
         value="settings_v3.xml" />
       <combo_box.item
