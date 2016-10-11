@@ -94,7 +94,6 @@
         <check_box label="Applica automaticamente le impostazioni WL nelle sim di amici" name="FSWLWhitelistFriends" />
         <check_box label="Applica automaticamente le impostazioni WL nelle land dei miei Gruppi" name="FSWLWhitelistGroups" />
         <check_box label="Applica automaticamente le impostazioni WL ovunque" name="FSWLWhitelistAll" />
-        <check_box label="Cambiare gradualmente le impostazioni al cambio sim del WL" name="FSInterpolateParcelWL" tool_tip="Questa opzione cambierà le impostazioni dell'ambiente gradualmente, questo provocherà rallentamenti poichè richiede un'utilizzo di FPS. Disabilitarla per cambiare instantaniamente le impostazioni dell'ambiente" />
     </panel>
 	<!--Costruzione-->
     <panel label="Costr. 1" name="BuildTab">

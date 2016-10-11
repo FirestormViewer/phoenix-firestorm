@@ -476,6 +476,12 @@ L$ が不足しているのでこのグループに参加することができ�
 	<notification name="ErrorEncodingSnapshot">
 		スナップショットのエンコード化でエラーが出ました！
 	</notification>
+	<notification name="ErrorPhotoCannotAfford">
+		写真をインベントリに保存するのに L$[COST] 必要です。リンデンドルを購入するか、代わりに写真をコンピュータに保存することもできます。
+	</notification>
+	<notification name="ErrorTextureCannotAfford">
+		テクスチャをインベントリに保存するのに L$[COST] 必要です。リンデンドルを購入するか、代わりに写真をコンピュータに保存することもできます。
+	</notification>
 	<notification name="ErrorUploadingPostcard">
 		次の理由で、スナップショットの送信時に問題が起こりました： [REASON]
 	</notification>
@@ -1515,6 +1521,10 @@ SHA1 フィンガープリント： [MD5_DIGEST]
 	<notification name="KickUsersFromRegion">
 		このリージョンにいる全ての住人をホームにテレポートしますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
+	</notification>
+	<notification name="ChangeObjectBonusFactor">
+		地域（リージョン）に製作物が置かれたあとにオブジェクト・ボーナスの値を下げると、オブジェクトが返却されたり削除されてしまう可能性があります。それでも本当にオブジェクト・ボーナスの値を変更しますか？
+		<usetemplate ignoretext="オブジェクト・ボーナスの値を変更する時に確認" name="okcancelignore" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="EstateObjectReturn">
 		[USER_NAME] が所有しているオブジェクトを返却しますか？
@@ -2974,6 +2984,10 @@ URL: [MOAPURL]
 	<notification name="PathfindingDirty">
 		この値域（リージョン）には、保留中のパスファインディングの変更があります。制作権がある場合は、「地域の再構築」ボタンをクリックして、地域（リージョン）を再構築できます。
 	</notification>
+	<notification name="PathfindingDirtyRebake">
+		この地域（リージョン）には、保留中のパスファインディングの変更があります。ビルドの権限があれば、「リージョンをリベーク」ボタンを押して地域（リージョン）のリベークをすることができます。
+		<usetemplate name="okbutton" yestext="リージョンをリベーク" />
+	</notification>
 	<notification name="DynamicPathfindingDisabled">
 		この地域（リージョン）でダイナミックパスファインディングが有効になっていません。パスファインディング LSL 呼び出しを使用するスクリプト化されたオブジェクトがこの地域（リージョン）では動作できません。
 	</notification>
@@ -3154,6 +3168,36 @@ URL: [MOAPURL]
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
+		[NAME_SLURL] はテレポートであなたを呼んでいます。
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+ただし、この地域（リージョン）には成人のみアクセスできるコンテンツが含まれています。
+	</notification>
+	<notification name="TeleportOffered_SLUrl" label="[NAME_LABEL] からのテレポート・オファー">
+[NAME_SLURL] はテレポートであなたを呼んでいます。 ([POS_SLURL]):
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+		<form name="form">
+			<button name="Teleport" text="テレポート"/>
+			<button name="Cancel" text="取り消し"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityExceeded_SLUrl">
+		[NAME_SLURL] はテレポートであなたを呼んでいます。 ([POS_SLURL]):
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+この地域（リージョン）には [REGION_CONTENT_MATURITY] コンテンツが含まれていますが、現在の環境設定は [REGION_CONTENT_MATURITY] コンテンツを除外するように設定されています。環境設定を変更してテレポートを続けるか、このテレポートを取り消すことができます。
+		<form name="form">
+			<button name="Teleport" text="設定を変更して続ける"/>
+			<button name="Cancel" text="取り消し"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityBlocked_SLUrl">
 		[NAME_SLURL] はテレポートであなたを呼んでいます。
 
 “[MESSAGE]”
@@ -4147,6 +4191,10 @@ M キーを押して変更します。
 	<notification name="NoPermModifyObject">
 		そのオブジェクトを変更する権限がありません
 	</notification>
+	<notification name="TooMuchObjectInventorySelected">
+		大きなインベントリで余りにもたくさんのオブジェクトが選択されています。選択する数を減らしてもう一度試してみて下さい。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="CantEnablePhysObjContributesToNav">
 		ナビメッシュに貢献するオブジェクトに対して物理を有効にできません。
 	</notification>
@@ -4600,6 +4648,10 @@ M キーを押して変更します。
 	</notification>
 	<notification name="DefaultObjectPermissions">
 		デフォルトのオブジェクト権限を保存するときに問題が発生しました: [REASON]。後でデフォルトの権限を設定してください。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OutfitPhotoLoadError">
+		[REASON]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ChatHistoryIsBusyAlert">
