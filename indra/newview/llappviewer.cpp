@@ -1546,30 +1546,30 @@ bool LLAppViewer::frame()
 
 	try
 	{
-			// <FS:Ansariel> MaxFPS Viewer-Chui merge error
-			// Check if we need to restore rendering masks.
-			if (restore_rendering_masks)
-			{
-				gPipeline.popRenderDebugFeatureMask();
-				gPipeline.popRenderTypeMask();
-			}
-			// Check if we need to temporarily enable rendering.
-			//F32 periodic_rendering = gSavedSettings.getF32("ForcePeriodicRenderingTime");
-			static LLCachedControl<F32> periodic_rendering(gSavedSettings, "ForcePeriodicRenderingTime");
-			if (periodic_rendering > F_APPROXIMATELY_ZERO && periodicRenderingTimer.getElapsedTimeF64() > periodic_rendering)
-			{
-				periodicRenderingTimer.reset();
-				restore_rendering_masks = TRUE;
-				gPipeline.pushRenderTypeMask();
-				gPipeline.pushRenderDebugFeatureMask();
-				gPipeline.setAllRenderTypes();
-				gPipeline.setAllRenderDebugFeatures();
-			}
-			else
-			{
-				restore_rendering_masks = FALSE;
-			}
-			// </FS:Ansariel> MaxFPS Viewer-Chui merge error
+		// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+		// Check if we need to restore rendering masks.
+		if (restore_rendering_masks)
+		{
+			gPipeline.popRenderDebugFeatureMask();
+			gPipeline.popRenderTypeMask();
+		}
+		// Check if we need to temporarily enable rendering.
+		//F32 periodic_rendering = gSavedSettings.getF32("ForcePeriodicRenderingTime");
+		static LLCachedControl<F32> periodic_rendering(gSavedSettings, "ForcePeriodicRenderingTime");
+		if (periodic_rendering > F_APPROXIMATELY_ZERO && periodicRenderingTimer.getElapsedTimeF64() > periodic_rendering)
+		{
+			periodicRenderingTimer.reset();
+			restore_rendering_masks = TRUE;
+			gPipeline.pushRenderTypeMask();
+			gPipeline.pushRenderDebugFeatureMask();
+			gPipeline.setAllRenderTypes();
+			gPipeline.setAllRenderDebugFeatures();
+		}
+		else
+		{
+			restore_rendering_masks = FALSE;
+		}
+		// </FS:Ansariel> MaxFPS Viewer-Chui merge error
 
 		pingMainloopTimeout("Main:MiscNativeWindowEvents");
 
