@@ -59,6 +59,10 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
+	// <FS:Ansariel> CTRL-F focusses local search editor
+	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool hasAccelerators() const { return true; }
+	// </FS:Ansariel>
 
 	// Called on parcel selection change to update place information.
 	void changedParcelSelection();

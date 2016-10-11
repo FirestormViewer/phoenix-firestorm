@@ -66,6 +66,10 @@ public:
 	// Implements LLVoiceClientStatusObserver::onChange() to enable call buttons
 	// when voice is available
 	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
+	// <FS:Ansariel> CTRL-F focusses local search editor
+	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool hasAccelerators() const { return true; }
+	// </FS:Ansariel>
 
     bool mTryToConnectToFacebook;
 

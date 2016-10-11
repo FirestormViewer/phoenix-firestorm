@@ -31,6 +31,7 @@
 
 #include "fspanelblocklist.h"
 
+#include "fscommon.h"
 #include "fsblocklistmenu.h"
 #include "fsscrolllistctrl.h"
 #include "llavataractions.h"
@@ -114,6 +115,17 @@ void FSPanelBlockList::onOpen(const LLSD& key)
 	{
 		selectBlocked(key[BLOCKED_PARAM_NAME].asUUID());
 	}
+}
+
+BOOL FSPanelBlockList::handleKeyHere(KEY key, MASK mask)
+{
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
+	{
+		getChild<LLFilterEditor>("blocked_filter_input")->setFocus(TRUE);
+		return TRUE;
+	}
+
+	return LLPanel::handleKeyHere(key, mask);
 }
 
 void FSPanelBlockList::selectBlocked(const LLUUID& mute_id)

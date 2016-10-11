@@ -43,6 +43,8 @@ public:
 	virtual ~FSFloaterAvatarRenderSettings();
 
 	/*virtual*/ BOOL postBuild();
+	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool hasAccelerators() const { return true; }
 
 private:
 	void onCloseBtn();

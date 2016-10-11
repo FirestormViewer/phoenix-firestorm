@@ -40,6 +40,8 @@ public:
 	virtual ~FSFloaterTeleportHistory();
 
 	BOOL postBuild();
+	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool hasAccelerators() const { return true; }
 
 	void resetFilter();
 

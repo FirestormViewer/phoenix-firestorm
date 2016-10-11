@@ -74,6 +74,7 @@
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
 #include "fsfloaterplacedetails.h"
+#include "fscommon.h"
 
 // Constants
 static const F32 PLACE_INFO_UPDATE_INTERVAL = 3.0;
@@ -1248,6 +1249,19 @@ void LLPanelPlaces::resetFilter()
 {
 	mFilterEditor->clear();
 	onFilterEdit("", true);
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> CTRL-F focusses local search editor
+BOOL LLPanelPlaces::handleKeyHere(KEY key, MASK mask)
+{
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
+	{
+		mFilterEditor->setFocus(TRUE);
+		return TRUE;
+	}
+
+	return LLPanel::handleKeyHere(key, mask);
 }
 // </FS:Ansariel>
 

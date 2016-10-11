@@ -62,6 +62,7 @@
 #include "lltrans.h"
 #include "llviewernetwork.h"
 // </FS:AW opensim currency support>
+#include "fscommon.h"
 
 // <FS:Ansariel> FIRE-12808: Don't save filters during settings restore
 bool LLPanelMainInventory::sSaveFilters = true;
@@ -403,6 +404,14 @@ void LLPanelMainInventory::startSearch()
 
 BOOL LLPanelMainInventory::handleKeyHere(KEY key, MASK mask)
 {
+	// <FS:Ansariel> CTRL-F focusses local search editor
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
+	{
+		mFilterEditor->setFocus(TRUE);
+		return TRUE;
+	}
+	// </FS:Ansariel>
+
 	LLFolderView* root_folder = mActivePanel ? mActivePanel->getRootFolder() : NULL;
 	if (root_folder)
 	{
