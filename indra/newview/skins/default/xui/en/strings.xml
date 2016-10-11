@@ -2982,4 +2982,22 @@ Try enclosing path to the editor with double quotes.
   <string name="Pie_av_render_fully">Fully</string>
 
   <string name="Nametag_Complexity_Label">Complexity: [COMPLEXITY]</string>
+
+  <string name="font_unknown">Unknown Font</string>
+  <string name="font_fonts.xml">Deja Vu</string>
+  <string name="font_fonts_ubuntu.xml">Ubuntu Font Family</string>
+  <string name="font_fonts_liberation.xml">Liberation</string>
+  <string name="font_fonts_droid.xml">Droid Sans</string>
+  <string name="font_fonts_mobi.xml">Mobi Sans</string>
+  <string name="font_fonts_roboto.xml">Roboto</string>
+  <string name="font_fonts_dyslexia.xml">OpenDyslexic</string>
+  <string name="font_fonts_deja_vu_all_caps.xml">Deja Vu All Caps</string>
+  <string name="font_fonts_noto.xml">Noto Sans</string>
+  <string name="mode_unknown">Unknown Mode</string>
+  <string name="mode_settings_firestorm.xml">Firestorm</string>
+  <string name="mode_settings_phoenix.xml">Phoenix</string>
+  <string name="mode_settings_v3.xml">Viewer 3</string>
+  <string name="mode_settings_hybrid.xml">Hybrid</string>
+  <string name="mode_settings_latency.xml">Latency</string>
+  <string name="mode_settings_text.xml">Text</string>
 </strings>

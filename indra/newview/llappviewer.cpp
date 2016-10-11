@@ -3845,18 +3845,16 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["THEME"] = gSavedSettings.getString("FSInternalSkinCurrentTheme");
 
 	//[FIRE 3113 : SJ] Added Font and fontsize to info
-	info["FONT"] = "Unknown Font";
+	std::string font_name;
 	std::string fsInternalFontSettingsFile = gSavedSettings.getString("FSInternalFontSettingsFile");
-	if (fsInternalFontSettingsFile == "fonts.xml") info["FONT"] = "Deja Vu";
-	else if (fsInternalFontSettingsFile == "fonts_ubuntu.xml") info["FONT"] = "Ubuntu Font Family";
-	else if (fsInternalFontSettingsFile == "fonts_liberation.xml") info["FONT"] = "Liberation";
-	else if (fsInternalFontSettingsFile == "fonts_droid.xml") info["FONT"] = "Droid Sans";
-	else if (fsInternalFontSettingsFile == "fonts_mobi.xml") info["FONT"] = "Mobi Sans";
-	else if (fsInternalFontSettingsFile == "fonts_roboto.xml") info["FONT"] = "Roboto";
-	else if (fsInternalFontSettingsFile == "fonts_dyslexia.xml") info["FONT"] = "OpenDyslexic";
-	else if (fsInternalFontSettingsFile == "fonts_deja_vu_all_caps.xml") info["FONT"] = "Deja Vu All Caps";
-	else if (fsInternalFontSettingsFile == "fonts_noto.xml") info["FONT"] = "Noto Sans";
-	
+	if (LLTrans::findString(font_name, "font_" + fsInternalFontSettingsFile))
+	{
+		info["FONT"] = font_name;
+	}
+	else
+	{
+		info["FONT"] = LLTrans::getString("font_unknown");
+	}
 	info["FONT_SIZE"] = gSavedSettings.getF32("FSFontSizeAdjustment");
 	info["FONT_SCREEN_DPI"] = gSavedSettings.getF32("FontScreenDPI");
 
@@ -3869,14 +3867,16 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["LOD"] = gSavedSettings.getF32("RenderVolumeLODFactor");
 
 	//[FIRE 3113 : SJ] Added Settingsfile to info
-	info["MODE"] = "Unknown Mode";
+	std::string mode_name;
 	std::string sessionSettingsFile = gSavedSettings.getString("SessionSettingsFile");
-	if (sessionSettingsFile == "settings_firestorm.xml") info["MODE"] = "Firestorm";
-	else if (sessionSettingsFile == "settings_phoenix.xml") info["MODE"] = "Phoenix";
-	else if (sessionSettingsFile == "settings_v3.xml") info["MODE"] = "Viewer 3";
-	else if (sessionSettingsFile == "settings_hybrid.xml") info["MODE"] = "Hybrid";
-	else if (sessionSettingsFile == "settings_latency.xml") info["MODE"] = "Latency";
-	else if (sessionSettingsFile == "settings_text.xml") info["MODE"] = "Text";
+	if (LLTrans::findString(mode_name, "mode_" + sessionSettingsFile))
+	{
+		info["MODE"] = mode_name;
+	}
+	else
+	{
+		info["MODE"] = LLTrans::getString("mode_unknown");
+	}
 
 	// return a URL to the release notes for this viewer, such as:
 	// http://wiki.secondlife.com/wiki/Release_Notes/Second Life Beta Viewer/2.1.0.123456

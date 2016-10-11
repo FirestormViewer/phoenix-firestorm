@@ -6665,4 +6665,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Nametag_Complexity_Label">
 		Komplexität: [COMPLEXITY]
 	</string>
+	<string name="font_unknown">
+		Unbekannte Schriftart
+	</string>
+	<string name="mode_unknown">
+		Unbekannter Modus
+	</string>
 </strings>
