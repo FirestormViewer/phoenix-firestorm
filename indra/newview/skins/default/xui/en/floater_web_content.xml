@@ -196,7 +196,7 @@
         height="22"
         layout="topleft"
         left="27"
-        name="VLC Plugin Test"
+        name="VLC Plugin Test MPEG4"
         top="0"
         width="22">
         <button.commit_callback
@@ -216,7 +216,7 @@
         height="22"
         layout="topleft"
         left="51"
-        name="VLC Plugin Test"
+        name="VLC Plugin Test MKV"
         top="0"
         width="22">
         <button.commit_callback
@@ -236,7 +236,7 @@
         height="22"
         layout="topleft"
         left="75"
-        name="VLC Plugin Test"
+        name="VLC Plugin Test WebM"
         top="0"
         width="22">
         <button.commit_callback
@@ -256,7 +256,7 @@
         height="22"
         layout="topleft"
         left="99"
-        name="VLC Plugin Test"
+        name="VLC Plugin Test MP3"
         top="0"
         width="22">
         <button.commit_callback
@@ -276,7 +276,7 @@
         height="22"
         layout="topleft"
         left="123"
-        name="VLC Plugin Test"
+        name="VLC Plugin Test FLV"
         top="0"
         width="22">
         <button.commit_callback

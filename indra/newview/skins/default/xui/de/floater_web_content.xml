@@ -10,6 +10,14 @@
 			<icon name="media_secure_lock_flag" tool_tip="Sicheres Browsen"/>
 			<button name="popexternal" tool_tip="Aktuelle URL im Desktop-Browser öffnen"/>
 		</layout_panel>
+		<layout_panel name="debug_controls">
+			<button tool_tip="Web-Tests-Homepage" name="web_test_home_page"/>
+			<button tool_tip="MPEG4 Video-Test" name="VLC Plugin Test MPEG4"/>
+			<button tool_tip="MKV Video-Test" name="VLC Plugin Test MKV"/>
+			<button tool_tip="WebM Video-Test" name="VLC Plugin Test WebM"/>
+			<button tool_tip="MP3 Audio-Test" name="VLC Plugin Test MP3"/>
+			<button tool_tip="FLV Test" name="VLC Plugin Test FLV"/>
+		</layout_panel>
 		<layout_panel name="external_controls">
 			<text name="plugin_fail_text">
 Das Web-Browser-Plugin lädt gerade.
