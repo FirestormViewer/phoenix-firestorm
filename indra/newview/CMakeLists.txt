@@ -2132,17 +2132,15 @@ if (WINDOWS)
       SLPlugin
       media_plugin_quicktime
       media_plugin_cef
+      media_plugin_libvlc
       media_plugin_gstreamer10
       winmm_shim
       windows-crash-logger
       )
 
     if( ND_BUILD64BIT_ARCH )
-      if( PACKAGE AND NOT FS_UPGRADECODES )
-        message( FATAL_ERROR "No Upgradecodes specified")
-      endif( PACKAGE AND NOT FS_UPGRADECODES )
       set( VIEWERMANIFEST_FLAGS --m64 --copy_artwork )
-      set( VIEWERMANIFEST_PACKAGE_FLAGS --m64 --upgradecodes="${FS_UPGRADECODES}")
+      set( VIEWERMANIFEST_PACKAGE_FLAGS --m64 )
     else( ND_BUILD64BIT_ARCH )
       set( VIEWERMANIFEST_FLAGS "" )
       set( VIEWERMANIFEST_PACKAGE_FLAGS )
@@ -2374,6 +2372,7 @@ if (NOT ENABLE_MEDIA_PLUGINS)
     SLPlugin
     media_plugin_cef
     media_plugin_gstreamer010
+    media_plugin_libvlc
     llcommon
     )
 else (NOT ENABLE_MEDIA_PLUGINS)
@@ -2497,7 +2496,7 @@ if (DARWIN)
 
   # <FS:TS> Allow disabling media plugins for 64-bit building
   if (ENABLE_MEDIA_PLUGINS)
-      add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_quicktime media_plugin_cef mac-crash-logger)
+      add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_quicktime media_plugin_libvlc media_plugin_cef mac-crash-logger)
   else (ENABLE_MEDIA_PLUGINS)
       add_dependencies(${VIEWER_BINARY_NAME} SLPlugin mac-crash-logger)
   endif (ENABLE_MEDIA_PLUGINS)

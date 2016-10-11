@@ -43,6 +43,11 @@ public:
 
 	void onFilterEdit(const std::string& search_string);
 
+	// <FS:Ansariel> CTRL-F focusses local search editor
+	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool hasAccelerators() const { return true; }
+	// </FS:Ansariel>
+
 private:
 
 	void onCustomAction (const LLSD& userdata);

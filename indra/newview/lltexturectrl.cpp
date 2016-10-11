@@ -71,6 +71,8 @@
 #include "lllocalbitmaps.h"
 #include "llerror.h"
 
+#include "fscommon.h"
+
 static const F32 CONTEXT_CONE_IN_ALPHA = 0.0f;
 static const F32 CONTEXT_CONE_OUT_ALPHA = 1.f;
 static const F32 CONTEXT_FADE_TIME = 0.08f;
@@ -272,6 +274,14 @@ BOOL LLFloaterTexturePicker::handleDragAndDrop(
 
 BOOL LLFloaterTexturePicker::handleKeyHere(KEY key, MASK mask)
 {
+	// <FS:Ansariel> CTRL-F focusses local search editor
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
+	{
+		mFilterEdit->setFocus(TRUE);
+		return TRUE;
+	}
+	// </FS:Ansariel>
+
 	LLFolderView* root_folder = mInventoryPanel->getRootFolder();
 
 	if (root_folder && mFilterEdit)

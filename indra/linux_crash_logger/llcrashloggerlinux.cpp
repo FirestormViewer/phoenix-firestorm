@@ -131,7 +131,7 @@ void LLCrashLoggerLinux::gatherPlatformSpecificFiles()
 {
 }
 
-bool LLCrashLoggerLinux::mainLoop()
+bool LLCrashLoggerLinux::frame()
 {
 	// <FS:ND> Get around the crash logger popping up all the time.
 	// Right now there seems to be no easy way to test if there's logs from a real crash to send. Which

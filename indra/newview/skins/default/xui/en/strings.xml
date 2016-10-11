@@ -62,6 +62,7 @@ libcurl Version: [LIBCURL_VERSION]
 J2C Decoder Version: [J2C_VERSION]
 Audio Driver Version: [AUDIO_DRIVER_VERSION]
 LLCEFLib/CEF Version: [LLCEFLIB_VERSION]
+LibVLC Version: [LIBVLC_VERSION]
 Voice Server Version: [VOICE_VERSION]
 	</string>
   <string name="AboutSettings">
@@ -82,7 +83,7 @@ VFS (cache) creation time (UTC): [VFS_DATE]
 	<string name="AboutTime">[month, datetime, slt] [day, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt]</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">Error fetching server release notes URL.</string>
 	<string name="BuildConfiguration">Build Configuration</string>
-
+	
 	<!--  progress -->
 	<string name="ProgressRestoring">Restoring...</string>
 	<string name="ProgressChangingResolution">Changing resolution...</string>
@@ -2997,4 +2998,22 @@ Try enclosing path to the editor with double quotes.
   <string name="Pie_av_render_fully">Fully</string>
 
   <string name="Nametag_Complexity_Label">Complexity: [COMPLEXITY]</string>
+
+  <string name="font_unknown">Unknown Font</string>
+  <string name="font_fonts.xml">Deja Vu</string>
+  <string name="font_fonts_ubuntu.xml">Ubuntu Font Family</string>
+  <string name="font_fonts_liberation.xml">Liberation</string>
+  <string name="font_fonts_droid.xml">Droid Sans</string>
+  <string name="font_fonts_mobi.xml">Mobi Sans</string>
+  <string name="font_fonts_roboto.xml">Roboto</string>
+  <string name="font_fonts_dyslexia.xml">OpenDyslexic</string>
+  <string name="font_fonts_deja_vu_all_caps.xml">Deja Vu All Caps</string>
+  <string name="font_fonts_noto.xml">Noto Sans</string>
+  <string name="mode_unknown">Unknown Mode</string>
+  <string name="mode_settings_firestorm.xml">Firestorm</string>
+  <string name="mode_settings_phoenix.xml">Phoenix</string>
+  <string name="mode_settings_v3.xml">Viewer 4</string>
+  <string name="mode_settings_hybrid.xml">Hybrid</string>
+  <string name="mode_settings_latency.xml">Latency</string>
+  <string name="mode_settings_text.xml">Text</string>
 </strings>

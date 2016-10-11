@@ -60,6 +60,7 @@
 #include "fsfloatergroup.h"
 #include "llviewercontrol.h"
 // </FS:Ansariel>
+#include "fscommon.h"
 
 static LLPanelInjector<LLPanelGroup> t_panel_group("panel_group_info_sidetray");
 
@@ -846,4 +847,32 @@ void LLPanelGroup::showNotice(const std::string& subject,
 
 }
 
+// <FS:Ansariel> CTRL-F focusses local search editor
+BOOL LLPanelGroup::handleKeyHere(KEY key, MASK mask)
+{
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
+	{
+		if (mIsUsingTabContainer)
+		{
+			LLPanelGroupRoles* panel = dynamic_cast<LLPanelGroupRoles*>(getChild<LLTabContainer>("groups_accordion")->getCurrentPanel());
+			if (panel)
+			{
+				panel->getCurrentTab()->setSearchFilterFocus(TRUE);
+				return TRUE;
+			}
+		}
+		else
+		{
+			LLAccordionCtrlTab* tab = getChild<LLAccordionCtrl>("groups_accordion")->getSelectedTab();
+			if (tab && tab->getName() == "group_roles_tab")
+			{
+				tab->findChild<LLPanelGroupRoles>("group_roles_tab_panel")->getCurrentTab()->setSearchFilterFocus(TRUE);
+				return TRUE;
+			}
+		}
+	}
+
+	return LLPanel::handleKeyHere(key, mask);
+}
+// </FS:Ansariel>
 

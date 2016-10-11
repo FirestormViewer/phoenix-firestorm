@@ -52,6 +52,8 @@ public:
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ void draw();
 	/*virtual*/ BOOL tick();
+	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool hasAccelerators() const { return true; }
 
 	// LLFriendObserver implementation
 	/*virtual*/ void changed(U32 changed_mask);

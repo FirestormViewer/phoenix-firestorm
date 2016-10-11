@@ -45,6 +45,8 @@ public:
 
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ BOOL postBuild();
+	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool hasAccelerators() const { return true; }
 
 	void addElementToList(const LLUUID& id, const LLSD& data);
 	void removeElements();

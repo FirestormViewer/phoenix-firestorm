@@ -80,6 +80,9 @@ public:
 
 	virtual void setGroupID(const LLUUID& id);
 
+	// <FS:Ansariel> CTRL-F focusses local search editor
+	LLPanelGroupSubTab* getCurrentTab() const;
+
 protected:
 	LLPanelGroupTab*		mCurrentTab;
 	LLPanelGroupTab*		mRequestedTab;
@@ -114,6 +117,10 @@ public:
 	void setFooterEnabled(BOOL enable);
 
 	virtual void setGroupID(const LLUUID& id);
+
+	// <FS:Ansariel> CTRL-F focusses local search editor
+	void setSearchFilterFocus(BOOL focus);
+
 protected:
 	void buildActionsList(LLScrollListCtrl* ctrl,
 								 U64 allowed_by_some,

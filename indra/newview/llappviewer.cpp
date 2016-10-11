@@ -137,15 +137,21 @@
 #include "llleap.h"
 #include "stringize.h"
 #include "llcoros.h"
+#include "llexception.h"
 //#if !LL_LINUX
 #include "cef/llceflib.h"
+#if LL_WINDOWS
+#include "vlc/libvlc_version.h"
+#endif // LL_WINDOWS
 //#endif
+//#endif // LL_LINUX
 
 // Third party library includes
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
+#include <boost/throw_exception.hpp>
 
 #if LL_WINDOWS
 #	include <share.h> // For _SH_DENYWR in processMarkerFiles
@@ -251,7 +257,6 @@
 #if HAS_GROWL
 #include "growlmanager.h"
 #endif
-
 // *FIX: These extern globals should be cleaned up.
 // The globals either represent state/config/resource-storage of either 
 // this app, or another 'component' of the viewer. App globals should be 
@@ -867,9 +872,6 @@ bool LLAppViewer::init()
 	//
 	// Start of the application
 	//
-#ifdef LL_DARWIN
-	mMainLoopInitialized = false;
-#endif
 
 	// initialize LLWearableType translation bridge.
 	// Memory will be cleaned up in ::cleanupClass()
@@ -1105,7 +1107,7 @@ bool LLAppViewer::init()
 	
 	// Provide the text fields with callbacks for opening Urls
 	LLUrlAction::setOpenURLCallback(boost::bind(&LLWeb::loadURL, _1, LLStringUtil::null, LLStringUtil::null));
-	LLUrlAction::setOpenURLInternalCallback(boost::bind(&LLWeb::loadURLInternal, _1, LLStringUtil::null, LLStringUtil::null));
+	LLUrlAction::setOpenURLInternalCallback(boost::bind(&LLWeb::loadURLInternal, _1, LLStringUtil::null, LLStringUtil::null, false));
 	LLUrlAction::setOpenURLExternalCallback(boost::bind(&LLWeb::loadURLExternal, _1, true, LLStringUtil::null));
 	LLUrlAction::setExecuteSLURLCallback(&LLURLDispatcher::dispatchFromTextEditor);
 
@@ -1351,7 +1353,7 @@ bool LLAppViewer::init()
 	catch (LLProtectedDataException ex)
 	{
 		// <FS:Ansariel> Write exception message to log
-		LL_WARNS() << "Error initializing SecHandlers: " << ex.getMessage() << LL_ENDL;
+      LL_WARNS() << "Error initializing SecHandlers: " << ex.what() << LL_ENDL;
 	  LLNotificationsUtil::add("CorruptedProtectedDataStore");
 	}
 
@@ -1424,6 +1426,24 @@ bool LLAppViewer::init()
 	LLView::sDebugRects = gSavedSettings.getBOOL("DebugViews");
 
 	showReleaseNotesIfRequired();
+
+	/*----------------------------------------------------------------------*/
+	// nat 2016-06-29 moved the following here from the former mainLoop().
+	mMainloopTimeout = new LLWatchdogTimeout();
+
+	// Create IO Pump to use for HTTP Requests.
+	gServicePump = new LLPumpIO(gAPRPoolp);
+
+	// Note: this is where gLocalSpeakerMgr and gActiveSpeakerMgr used to be instantiated.
+
+	LLVoiceChannel::initClass();
+	LLVoiceClient::getInstance()->init(gServicePump);
+	// LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLFloaterIMContainer::onCurrentChannelChanged, _1), true);
+	LLVoiceChannel::setCurrentVoiceChannelChangedCallback( boost::bind( &FSFloaterVoiceControls::sOnCurrentChannelChanged, _1 ), true );
+
+	joystick = LLViewerJoystick::getInstance();
+	joystick->setNeedsReset(true);
+	/*----------------------------------------------------------------------*/
 
 	return true;
 }
@@ -1499,54 +1519,17 @@ static LLTrace::BlockTimerStatHandle FTM_AGENT_UPDATE("Update");
 // externally visible timers
 LLTrace::BlockTimerStatHandle FTM_FRAME("Frame");
 
-bool LLAppViewer::mainLoop()
+bool LLAppViewer::frame()
 {
-#ifdef LL_DARWIN
-	if (!mMainLoopInitialized)
-#endif
-	{
-        LL_INFOS() << "Entering main_loop" << LL_ENDL;
-		mMainloopTimeout = new LLWatchdogTimeout();
-		
-		//-------------------------------------------
-		// Run main loop until time to quit
-		//-------------------------------------------
-		
-		// Create IO Pump to use for HTTP Requests.
-		gServicePump = new LLPumpIO(gAPRPoolp);
-		
-		// Note: this is where gLocalSpeakerMgr and gActiveSpeakerMgr used to be instantiated.
-		
-		LLVoiceChannel::initClass();
-		LLVoiceClient::getInstance()->init(gServicePump);
-		// <FS:Ansariel> [FS communication UI]
-		//LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLFloaterIMContainer::onCurrentChannelChanged, _1), true);
-		LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&FSFloaterVoiceControls::sOnCurrentChannelChanged, _1), true);
-		// </FS:Ansariel> [FS communication UI]
-		joystick = LLViewerJoystick::getInstance();
-		joystick->setNeedsReset(true);
-		
-#ifdef LL_DARWIN
-		// Ensure that this section of code never gets called again on OS X.
-		mMainLoopInitialized = true;
-#endif
-	}
-	
-	// As we do not (yet) send data on the mainloop LLEventPump that varies
-	// with each frame, no need to instantiate a new LLSD event object each
-	// time. Obviously, if that changes, just instantiate the LLSD at the
-	// point of posting.
-	
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
-	
-    LLSD newFrame;
-	
+	LLSD newFrame;
+
 	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
 	//LLTimer frameTimer,idleTimer;
 	LLTimer frameTimer,idleTimer,periodicRenderingTimer;
 	// </FS:Ansariel> MaxFPS Viewer-Chui merge error
 	LLTimer debugTime;
-	
+
 	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
 	BOOL restore_rendering_masks = FALSE;
 
@@ -1554,324 +1537,324 @@ bool LLAppViewer::mainLoop()
 	//LLPrivateMemoryPoolTester::getInstance()->run(true) ;
 	//LLPrivateMemoryPoolTester::destroy() ;
 
-	// Handle messages
-#ifdef LL_DARWIN
-	if (!LLApp::isExiting())
-#else
-	while (!LLApp::isExiting())
-#endif
+	nd::etw::logFrame(); // <FS:ND> Write the start of each frame. Even if our Provider (Firestorm) would be enabled, this has only light impact. Does nothing on OSX and Linux.
+
+	LL_RECORD_BLOCK_TIME(FTM_FRAME);
+	LLTrace::BlockTimer::processTimes();
+	LLTrace::get_frame_recording().nextPeriod();
+	LLTrace::BlockTimer::logStats();
+
+	LLTrace::get_thread_recorder()->pullFromChildren();
+
+	//clear call stack records
+	LL_CLEAR_CALLSTACKS();
+
+	//check memory availability information
+	checkMemory() ;
+
+	try
 	{
-		nd::etw::logFrame(); // <FS:ND> Write the start of each frame. Even if our Provider (Firestorm) would be enabled, this has only light impact. Does nothing on OSX and Linux.
-
-		LL_RECORD_BLOCK_TIME(FTM_FRAME);
-		LLTrace::BlockTimer::processTimes();
-		LLTrace::get_frame_recording().nextPeriod();
-		LLTrace::BlockTimer::logStats();
-
-		LLTrace::get_thread_recorder()->pullFromChildren();
-
-		//clear call stack records
-		LL_CLEAR_CALLSTACKS();
-
-		//check memory availability information
-		checkMemory() ;
-		
-		try
+		// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+		// Check if we need to restore rendering masks.
+		if (restore_rendering_masks)
 		{
+			gPipeline.popRenderDebugFeatureMask();
+			gPipeline.popRenderTypeMask();
+		}
+		// Check if we need to temporarily enable rendering.
+		//F32 periodic_rendering = gSavedSettings.getF32("ForcePeriodicRenderingTime");
+		static LLCachedControl<F32> periodic_rendering(gSavedSettings, "ForcePeriodicRenderingTime");
+		if (periodic_rendering > F_APPROXIMATELY_ZERO && periodicRenderingTimer.getElapsedTimeF64() > periodic_rendering)
+		{
+			periodicRenderingTimer.reset();
+			restore_rendering_masks = TRUE;
+			gPipeline.pushRenderTypeMask();
+			gPipeline.pushRenderDebugFeatureMask();
+			gPipeline.setAllRenderTypes();
+			gPipeline.setAllRenderDebugFeatures();
+		}
+		else
+		{
+			restore_rendering_masks = FALSE;
+		}
+		// </FS:Ansariel> MaxFPS Viewer-Chui merge error
+
+		pingMainloopTimeout("Main:MiscNativeWindowEvents");
+
+		if (gViewerWindow)
+		{
+			LL_RECORD_BLOCK_TIME(FTM_MESSAGES);
+			gViewerWindow->getWindow()->processMiscNativeEvents();
+		}
+
+		pingMainloopTimeout("Main:GatherInput");
+
+		if (gViewerWindow)
+		{
+			LL_RECORD_BLOCK_TIME(FTM_MESSAGES);
+			if (!restoreErrorTrap())
+			{
+				LL_WARNS() << " Someone took over my signal/exception handler (post messagehandling)!" << LL_ENDL;
+			}
+
+			gViewerWindow->getWindow()->gatherInput();
+		}
+
+#if 1 && !LL_RELEASE_FOR_DOWNLOAD
+		// once per second debug info
+		if (debugTime.getElapsedTimeF32() > 1.f)
+		{
+			debugTime.reset();
+		}
+		
+#endif
+		//memory leaking simulation
+		LLFloaterMemLeak* mem_leak_instance =
+			LLFloaterReg::findTypedInstance<LLFloaterMemLeak>("mem_leaking");
+		if(mem_leak_instance)
+		{
+			mem_leak_instance->idle() ;				
+		}							
+
+		// canonical per-frame event
+		mainloop.post(newFrame);
+
+		if (!LLApp::isExiting())
+		{
+			pingMainloopTimeout("Main:JoystickKeyboard");
+
+			// Scan keyboard for movement keys.  Command keys and typing
+			// are handled by windows callbacks.  Don't do this until we're
+			// done initializing.  JC
+			if ((gHeadlessClient || gViewerWindow->getWindow()->getVisible())
+				&& gViewerWindow->getActive()
+				&& !gViewerWindow->getWindow()->getMinimized()
+				&& LLStartUp::getStartupState() == STATE_STARTED
+				&& (gHeadlessClient || !gViewerWindow->getShowProgress())
+				&& !gFocusMgr.focusLocked())
+			{
+				joystick->scanJoystick();
+				gKeyboard->scanKeyboard();
+				// <FS:Ansariel> Chalice Yao's crouch toggle
+				static LLCachedControl<bool> fsCrouchToggle(gSavedPerAccountSettings, "FSCrouchToggle");
+				static LLCachedControl<bool> fsCrouchToggleStatus(gSavedPerAccountSettings, "FSCrouchToggleStatus");
+				if (fsCrouchToggle && fsCrouchToggleStatus)
+				{
+					gAgent.moveUp(-1);
+			}
+				// </FS:Ansariel>
+			}
+
+			// Update state based on messages, user input, object idle.
+			{
+				pauseMainloopTimeout(); // *TODO: Remove. Messages shouldn't be stalling for 20+ seconds!
+				
+				LL_RECORD_BLOCK_TIME(FTM_IDLE);
+				idle();
+
+				resumeMainloopTimeout();
+			}
+
+			if (gDoDisconnect && (LLStartUp::getStartupState() == STATE_STARTED))
+			{
+				pauseMainloopTimeout();
+				saveFinalSnapshot();
+				disconnectViewer();
+				resumeMainloopTimeout();
+			}
+
+			// Render scene.
+			// *TODO: Should we run display() even during gHeadlessClient?  DK 2011-02-18
+			if (!LLApp::isExiting() && !gHeadlessClient)
+			{
+				pingMainloopTimeout("Main:Display");
+				gGLActive = TRUE;
+				display();
+				pingMainloopTimeout("Main:Snapshot");
+				LLFloaterSnapshot::update(); // take snapshots
+				LLFloaterOutfitSnapshot::update();
+				gGLActive = FALSE;
+			}
+		}
+			
+		pingMainloopTimeout("Main:Sleep");
+
+		pauseMainloopTimeout();
+
+		// Sleep and run background threads
+		{
+			LL_RECORD_BLOCK_TIME(FTM_SLEEP);
+			
+			// yield some time to the os based on command line option
 			// <FS:Ansariel> MaxFPS Viewer-Chui merge error
-			// Check if we need to restore rendering masks.
-			if (restore_rendering_masks)
+			//if(mYieldTime >= 0)
+			//{
+			//	LLFastTimer t(FTM_YIELD);
+			//	ms_sleep(mYieldTime);
+			//}
+			//S32 yield_time = gSavedSettings.getS32("YieldTime");
+			static LLCachedControl<S32> yield_time(gSavedSettings, "YieldTime");
+			if(yield_time >= 0)
 			{
-				gPipeline.popRenderDebugFeatureMask();
-				gPipeline.popRenderTypeMask();
-			}
-			// Check if we need to temporarily enable rendering.
-			//F32 periodic_rendering = gSavedSettings.getF32("ForcePeriodicRenderingTime");
-			static LLCachedControl<F32> periodic_rendering(gSavedSettings, "ForcePeriodicRenderingTime");
-			if (periodic_rendering > F_APPROXIMATELY_ZERO && periodicRenderingTimer.getElapsedTimeF64() > periodic_rendering)
-			{
-				periodicRenderingTimer.reset();
-				restore_rendering_masks = TRUE;
-				gPipeline.pushRenderTypeMask();
-				gPipeline.pushRenderDebugFeatureMask();
-				gPipeline.setAllRenderTypes();
-				gPipeline.setAllRenderDebugFeatures();
-			}
-			else
-			{
-				restore_rendering_masks = FALSE;
+				LL_RECORD_BLOCK_TIME(FTM_YIELD);
+				ms_sleep(yield_time);
 			}
 			// </FS:Ansariel> MaxFPS Viewer-Chui merge error
 
-			pingMainloopTimeout("Main:MiscNativeWindowEvents");
-
-			if (gViewerWindow)
+			// yield cooperatively when not running as foreground window
+			if (   (gViewerWindow && !gViewerWindow->getWindow()->getVisible())
+					|| !gFocusMgr.getAppHasFocus())
 			{
-				LL_RECORD_BLOCK_TIME(FTM_MESSAGES);
-				gViewerWindow->getWindow()->processMiscNativeEvents();
-			}
-		
-			pingMainloopTimeout("Main:GatherInput");
-			
-			if (gViewerWindow)
-			{
-				LL_RECORD_BLOCK_TIME(FTM_MESSAGES);
-				if (!restoreErrorTrap())
+				// Sleep if we're not rendering, or the window is minimized.
+				S32 milliseconds_to_sleep = llclamp(gSavedSettings.getS32("BackgroundYieldTime"), 0, 1000);
+				// don't sleep when BackgroundYieldTime set to 0, since this will still yield to other threads
+				// of equal priority on Windows
+				if (milliseconds_to_sleep > 0)
 				{
-					LL_WARNS() << " Someone took over my signal/exception handler (post messagehandling)!" << LL_ENDL;
-				}
-
-				gViewerWindow->getWindow()->gatherInput();
-			}
-
-#if 1 && !LL_RELEASE_FOR_DOWNLOAD
-			// once per second debug info
-			if (debugTime.getElapsedTimeF32() > 1.f)
-			{
-				debugTime.reset();
-			}
-			
-#endif
-			//memory leaking simulation
-			LLFloaterMemLeak* mem_leak_instance =
-				LLFloaterReg::findTypedInstance<LLFloaterMemLeak>("mem_leaking");
-			if(mem_leak_instance)
-			{
-				mem_leak_instance->idle() ;				
-			}							
-
-            // canonical per-frame event
-            mainloop.post(newFrame);
-
-			if (!LLApp::isExiting())
-			{
-				pingMainloopTimeout("Main:JoystickKeyboard");
-				
-				// Scan keyboard for movement keys.  Command keys and typing
-				// are handled by windows callbacks.  Don't do this until we're
-				// done initializing.  JC
-				if ((gHeadlessClient || gViewerWindow->getWindow()->getVisible())
-					&& gViewerWindow->getActive()
-					&& !gViewerWindow->getWindow()->getMinimized()
-					&& LLStartUp::getStartupState() == STATE_STARTED
-					&& (gHeadlessClient || !gViewerWindow->getShowProgress())
-					&& !gFocusMgr.focusLocked())
-				{
-					joystick->scanJoystick();
-					gKeyboard->scanKeyboard();
-					// <FS:Ansariel> Chalice Yao's crouch toggle
-					static LLCachedControl<bool> fsCrouchToggle(gSavedPerAccountSettings, "FSCrouchToggle");
-					static LLCachedControl<bool> fsCrouchToggleStatus(gSavedPerAccountSettings, "FSCrouchToggleStatus");
-					if (fsCrouchToggle && fsCrouchToggleStatus)
-					{
-						gAgent.moveUp(-1);
-					}
-					// </FS:Ansariel>
-				}
-
-				// Update state based on messages, user input, object idle.
-				{
-					pauseMainloopTimeout(); // *TODO: Remove. Messages shouldn't be stalling for 20+ seconds!
-					
-					LL_RECORD_BLOCK_TIME(FTM_IDLE);
-					idle();
-
-					resumeMainloopTimeout();
-				}
- 
-				if (gDoDisconnect && (LLStartUp::getStartupState() == STATE_STARTED))
-				{
-					pauseMainloopTimeout();
-					saveFinalSnapshot();
-					disconnectViewer();
-					resumeMainloopTimeout();
-				}
-
-				// Render scene.
-				// *TODO: Should we run display() even during gHeadlessClient?  DK 2011-02-18
-				if (!LLApp::isExiting() && !gHeadlessClient)
-				{
-					pingMainloopTimeout("Main:Display");
-					gGLActive = TRUE;
-					display();
-					pingMainloopTimeout("Main:Snapshot");
-					LLFloaterSnapshot::update(); // take snapshots
-					LLFloaterOutfitSnapshot::update();
-					gGLActive = FALSE;
-				}
-			}
-			
-			pingMainloopTimeout("Main:Sleep");
-			
-			pauseMainloopTimeout();
-
-			// Sleep and run background threads
-			{
-				LL_RECORD_BLOCK_TIME(FTM_SLEEP);
-				
-				// yield some time to the os based on command line option
-				// <FS:Ansariel> MaxFPS Viewer-Chui merge error
-				//if(mYieldTime >= 0)
-				//{
-				//	LLFastTimer t(FTM_YIELD);
-				//	ms_sleep(mYieldTime);
-				//}
-				//S32 yield_time = gSavedSettings.getS32("YieldTime");
-				static LLCachedControl<S32> yield_time(gSavedSettings, "YieldTime");
-				if(yield_time >= 0)
-				{
-					LL_RECORD_BLOCK_TIME(FTM_YIELD);
-					ms_sleep(yield_time);
-				}
-				// </FS:Ansariel> MaxFPS Viewer-Chui merge error
-
-				// yield cooperatively when not running as foreground window
-				if (   (gViewerWindow && !gViewerWindow->getWindow()->getVisible())
-						|| !gFocusMgr.getAppHasFocus())
-				{
-					// Sleep if we're not rendering, or the window is minimized.
-					S32 milliseconds_to_sleep = llclamp(gSavedSettings.getS32("BackgroundYieldTime"), 0, 1000);
-					// don't sleep when BackgroundYieldTime set to 0, since this will still yield to other threads
-					// of equal priority on Windows
-					if (milliseconds_to_sleep > 0)
-					{
-						ms_sleep(milliseconds_to_sleep);
-						// also pause worker threads during this wait period
-						LLAppViewer::getTextureCache()->pause();
-						LLAppViewer::getImageDecodeThread()->pause();
-					}
-				}
-				
-				if (mRandomizeFramerate)
-				{
-					ms_sleep(rand() % 200);
-				}
-
-				if (mPeriodicSlowFrame
-					&& (gFrameCount % 10 == 0))
-				{
-					LL_INFOS() << "Periodic slow frame - sleeping 500 ms" << LL_ENDL;
-					ms_sleep(500);
-				}
-
-				const F64Milliseconds max_idle_time = llmin(.005f*10.f*(F32Milliseconds)gFrameTimeSeconds, F32Milliseconds(5)); // 5 ms a second
-				idleTimer.reset();
-				S32 total_work_pending = 0;
-				S32 total_io_pending = 0;	
-				while(1)
-				{
-					S32 work_pending = 0;
-					S32 io_pending = 0;
-					F32 max_time = llmin(gFrameIntervalSeconds.value() *10.f, 1.f);
-
-					work_pending += updateTextureThreads(max_time);
-
-					{
-						LL_RECORD_BLOCK_TIME(FTM_VFS);
-	 					io_pending += LLVFSThread::updateClass(1);
-					}
-					{
-						LL_RECORD_BLOCK_TIME(FTM_LFS);
-	 					io_pending += LLLFSThread::updateClass(1);
-					}
-
-					if (io_pending > 1000)
-					{
-						ms_sleep(llmin(io_pending/100,100)); // give the vfs some time to catch up
-					}
-
-					total_work_pending += work_pending ;
-					total_io_pending += io_pending ;
-					
-					if (!work_pending || idleTimer.getElapsedTimeF64() >= max_idle_time)
-					{
-						break;
-					}
-				}
-				gMeshRepo.update() ;
-				
-				if(!total_work_pending) //pause texture fetching threads if nothing to process.
-				{
+					ms_sleep(milliseconds_to_sleep);
+					// also pause worker threads during this wait period
 					LLAppViewer::getTextureCache()->pause();
 					LLAppViewer::getImageDecodeThread()->pause();
-					LLAppViewer::getTextureFetch()->pause(); 
 				}
-				if(!total_io_pending) //pause file threads if nothing to process.
-				{
-					LLVFSThread::sLocal->pause(); 
-					LLLFSThread::sLocal->pause(); 
-				}									
-
-				//texture fetching debugger
-				if(LLTextureFetchDebugger::isEnabled())
-				{
-					LLFloaterTextureFetchDebugger* tex_fetch_debugger_instance =
-						LLFloaterReg::findTypedInstance<LLFloaterTextureFetchDebugger>("tex_fetch_debugger");
-					if(tex_fetch_debugger_instance)
-					{
-						tex_fetch_debugger_instance->idle() ;				
-					}
-				}
-
-				if ((LLStartUp::getStartupState() >= STATE_CLEANUP) &&
-					(frameTimer.getElapsedTimeF64() > FRAME_STALL_THRESHOLD))
-				{
-					gFrameStalls++;
-				}
-
-				// <FS:Ansariel> MaxFPS Viewer-Chui merge error
-				// Limit FPS
-				//F32 max_fps = gSavedSettings.getF32("MaxFPS");
-				static LLCachedControl<F32> max_fps(gSavedSettings, "MaxFPS");
-				// Only limit FPS when we are actually rendering something.  Otherwise
-				// logins, logouts and teleports take much longer to complete.
-				// <FS:Ansariel> FIRE-11804: Expose MaxFPS
-				//if (max_fps > F_APPROXIMATELY_ZERO && 
-				static LLCachedControl<bool> fsLimitFramerate(gSavedSettings, "FSLimitFramerate");
-				if (fsLimitFramerate && max_fps > F_APPROXIMATELY_ZERO && 
-				// </FS:Ansariel>
-					LLStartUp::getStartupState() == STATE_STARTED &&
-					!gTeleportDisplay &&
-					!logoutRequestSent())
-				{
-					// Sleep a while to limit frame rate.
-					F32 min_frame_time = 1.f / max_fps;
-					S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
-					if (milliseconds_to_sleep > 0)
-					{
-						LL_RECORD_BLOCK_TIME(FTM_YIELD);
-						ms_sleep(milliseconds_to_sleep);
-					}
-				}
-				// </FS:Ansariel> MaxFPS Viewer-Chui merge error
-
-				frameTimer.reset();
-
-				resumeMainloopTimeout();
-	
-				pingMainloopTimeout("Main:End");
-			}	
-		}
-		catch(std::bad_alloc)
-		{			
-			LLMemory::logMemoryInfo(TRUE) ;
-
-			//stop memory leaking simulation
-			LLFloaterMemLeak* mem_leak_instance =
-				LLFloaterReg::findTypedInstance<LLFloaterMemLeak>("mem_leaking");
-			if(mem_leak_instance)
-			{
-				mem_leak_instance->stop() ;				
-				LL_WARNS() << "Bad memory allocation in LLAppViewer::mainLoop()!" << LL_ENDL ;
 			}
-			else
+			
+			if (mRandomizeFramerate)
 			{
-				//output possible call stacks to log file.
-				LLError::LLCallStacks::print() ;
-
-				LL_ERRS() << "Bad memory allocation in LLAppViewer::mainLoop()!" << LL_ENDL ;
+				ms_sleep(rand() % 200);
 			}
+
+			if (mPeriodicSlowFrame
+				&& (gFrameCount % 10 == 0))
+			{
+				LL_INFOS() << "Periodic slow frame - sleeping 500 ms" << LL_ENDL;
+				ms_sleep(500);
+			}
+
+			const F64Milliseconds max_idle_time = llmin(.005f*10.f*(F32Milliseconds)gFrameTimeSeconds, F32Milliseconds(5)); // 5 ms a second
+			idleTimer.reset();
+			S32 total_work_pending = 0;
+			S32 total_io_pending = 0;	
+			while(1)
+			{
+				S32 work_pending = 0;
+				S32 io_pending = 0;
+				F32 max_time = llmin(gFrameIntervalSeconds.value() *10.f, 1.f);
+
+				work_pending += updateTextureThreads(max_time);
+
+				{
+					LL_RECORD_BLOCK_TIME(FTM_VFS);
+ 					io_pending += LLVFSThread::updateClass(1);
+				}
+				{
+					LL_RECORD_BLOCK_TIME(FTM_LFS);
+ 					io_pending += LLLFSThread::updateClass(1);
+				}
+
+				if (io_pending > 1000)
+				{
+					ms_sleep(llmin(io_pending/100,100)); // give the vfs some time to catch up
+				}
+
+				total_work_pending += work_pending ;
+				total_io_pending += io_pending ;
+				
+				if (!work_pending || idleTimer.getElapsedTimeF64() >= max_idle_time)
+				{
+					break;
+				}
+			}
+			gMeshRepo.update() ;
+			
+			if(!total_work_pending) //pause texture fetching threads if nothing to process.
+			{
+				LLAppViewer::getTextureCache()->pause();
+				LLAppViewer::getImageDecodeThread()->pause();
+				LLAppViewer::getTextureFetch()->pause(); 
+			}
+			if(!total_io_pending) //pause file threads if nothing to process.
+			{
+				LLVFSThread::sLocal->pause(); 
+				LLLFSThread::sLocal->pause(); 
+			}									
+
+			//texture fetching debugger
+			if(LLTextureFetchDebugger::isEnabled())
+			{
+				LLFloaterTextureFetchDebugger* tex_fetch_debugger_instance =
+					LLFloaterReg::findTypedInstance<LLFloaterTextureFetchDebugger>("tex_fetch_debugger");
+				if(tex_fetch_debugger_instance)
+				{
+					tex_fetch_debugger_instance->idle() ;				
+				}
+			}
+
+			if ((LLStartUp::getStartupState() >= STATE_CLEANUP) &&
+				(frameTimer.getElapsedTimeF64() > FRAME_STALL_THRESHOLD))
+			{
+				gFrameStalls++;
+			}
+
+			// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+			// Limit FPS
+			//F32 max_fps = gSavedSettings.getF32("MaxFPS");
+			static LLCachedControl<F32> max_fps(gSavedSettings, "MaxFPS");
+			// Only limit FPS when we are actually rendering something.  Otherwise
+			// logins, logouts and teleports take much longer to complete.
+			// <FS:Ansariel> FIRE-11804: Expose MaxFPS
+			//if (max_fps > F_APPROXIMATELY_ZERO && 
+			static LLCachedControl<bool> fsLimitFramerate(gSavedSettings, "FSLimitFramerate");
+			if (fsLimitFramerate && max_fps > F_APPROXIMATELY_ZERO && 
+			// </FS:Ansariel>
+				LLStartUp::getStartupState() == STATE_STARTED &&
+				!gTeleportDisplay &&
+				!logoutRequestSent())
+			{
+				// Sleep a while to limit frame rate.
+				F32 min_frame_time = 1.f / max_fps;
+				S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
+				if (milliseconds_to_sleep > 0)
+				{
+					LL_RECORD_BLOCK_TIME(FTM_YIELD);
+					ms_sleep(milliseconds_to_sleep);
+				}
+			}
+			// </FS:Ansariel> MaxFPS Viewer-Chui merge error
+
+			frameTimer.reset();
+
+			resumeMainloopTimeout();
+
+			pingMainloopTimeout("Main:End");
 		}
+	}
+	catch (const LLContinueError&)
+	{
+		LOG_UNHANDLED_EXCEPTION("");
+	}
+	catch(std::bad_alloc)
+	{
+		LLMemory::logMemoryInfo(TRUE) ;
+
+		//stop memory leaking simulation
+		LLFloaterMemLeak* mem_leak_instance =
+			LLFloaterReg::findTypedInstance<LLFloaterMemLeak>("mem_leaking");
+		if(mem_leak_instance)
+		{
+			mem_leak_instance->stop() ;
+			LL_WARNS() << "Bad memory allocation in LLAppViewer::frame()!" << LL_ENDL ;
+		}
+		else
+		{
+			//output possible call stacks to log file.
+			LLError::LLCallStacks::print() ;
+
+			LL_ERRS() << "Bad memory allocation in LLAppViewer::frame()!" << LL_ENDL ;
+		}
+	}
+	catch (...)
+	{
+		CRASH_ON_UNHANDLED_EXCEPTION("");
 	}
 
 	if (LLApp::isExiting())
@@ -1886,7 +1869,7 @@ bool LLAppViewer::mainLoop()
 			catch(std::bad_alloc)
 			{
 				LL_WARNS() << "Bad memory allocation when saveFinalSnapshot() is called!" << LL_ENDL ;
-				
+
 				//stop memory leaking simulation
 				LLFloaterMemLeak* mem_leak_instance =
 				LLFloaterReg::findTypedInstance<LLFloaterMemLeak>("mem_leaking");
@@ -1895,19 +1878,23 @@ bool LLAppViewer::mainLoop()
 					mem_leak_instance->stop() ;
 				}
 			}
+			catch (...)
+			{
+				CRASH_ON_UNHANDLED_EXCEPTION("saveFinalSnapshot()");
+			}
 		}
-		
+
 		// <FS:Ansariel> Cut down wait on logout; Need to terminate voice here because we need gServicePump!
 		LLVoiceClient::getInstance()->terminate();
 
 		delete gServicePump;
-		
+
 		destroyMainloopTimeout();
-		
+
 		LL_INFOS() << "Exiting main_loop" << LL_ENDL;
 	}
 
-	return LLApp::isExiting();
+	return ! LLApp::isRunning();
 }
 
 S32 LLAppViewer::updateTextureThreads(F32 max_time)
@@ -3859,17 +3846,16 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["THEME"] = gSavedSettings.getString("FSInternalSkinCurrentTheme");
 
 	//[FIRE 3113 : SJ] Added Font and fontsize to info
-	info["FONT"] = "Unknown Font";
+	std::string font_name;
 	std::string fsInternalFontSettingsFile = gSavedSettings.getString("FSInternalFontSettingsFile");
-	if (fsInternalFontSettingsFile == "fonts.xml") info["FONT"] = "Deja Vu";
-	else if (fsInternalFontSettingsFile == "fonts_ubuntu.xml") info["FONT"] = "Ubuntu Font Family";
-	else if (fsInternalFontSettingsFile == "fonts_liberation.xml") info["FONT"] = "Liberation";
-	else if (fsInternalFontSettingsFile == "fonts_droid.xml") info["FONT"] = "Droid Sans";
-	else if (fsInternalFontSettingsFile == "fonts_mobi.xml") info["FONT"] = "Mobi Sans";
-	else if (fsInternalFontSettingsFile == "fonts_roboto.xml") info["FONT"] = "Roboto";
-	else if (fsInternalFontSettingsFile == "fonts_dyslexia.xml") info["FONT"] = "OpenDyslexic";
-	else if (fsInternalFontSettingsFile == "fonts_deja_vu_all_caps.xml") info["FONT"] = "Deja Vu All Caps";
-	
+	if (LLTrans::findString(font_name, "font_" + fsInternalFontSettingsFile))
+	{
+		info["FONT"] = font_name;
+	}
+	else
+	{
+		info["FONT"] = LLTrans::getString("font_unknown");
+	}
 	info["FONT_SIZE"] = gSavedSettings.getF32("FSFontSizeAdjustment");
 	info["FONT_SCREEN_DPI"] = gSavedSettings.getF32("FontScreenDPI");
 
@@ -3882,14 +3868,16 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["LOD"] = gSavedSettings.getF32("RenderVolumeLODFactor");
 
 	//[FIRE 3113 : SJ] Added Settingsfile to info
-	info["MODE"] = "Unknown Mode";
+	std::string mode_name;
 	std::string sessionSettingsFile = gSavedSettings.getString("SessionSettingsFile");
-	if (sessionSettingsFile == "settings_firestorm.xml") info["MODE"] = "Firestorm";
-	else if (sessionSettingsFile == "settings_phoenix.xml") info["MODE"] = "Phoenix";
-	else if (sessionSettingsFile == "settings_v3.xml") info["MODE"] = "Viewer 3";
-	else if (sessionSettingsFile == "settings_hybrid.xml") info["MODE"] = "Hybrid";
-	else if (sessionSettingsFile == "settings_latency.xml") info["MODE"] = "Latency";
-	else if (sessionSettingsFile == "settings_text.xml") info["MODE"] = "Text";
+	if (LLTrans::findString(mode_name, "mode_" + sessionSettingsFile))
+	{
+		info["MODE"] = mode_name;
+	}
+	else
+	{
+		info["MODE"] = LLTrans::getString("mode_unknown");
+	}
 
 	// return a URL to the release notes for this viewer, such as:
 	// http://wiki.secondlife.com/wiki/Release_Notes/Second Life Beta Viewer/2.1.0.123456
@@ -3978,29 +3966,33 @@ LLSD LLAppViewer::getViewerInfo() const
 	{
 		info["VOICE_VERSION"] = LLTrans::getString("NotConnected");
 	}
+
 //#if !LL_LINUX
 	info["LLCEFLIB_VERSION"] = LLCEFLIB_VERSION;
 //#else
 //	info["LLCEFLIB_VERSION"] = "Undefined";
+//
 //#endif
 
-	
-	// <FS:ND> Use the total accumulated samples.
-	//S32 packets_in = LLViewerStats::instance().getRecording().getSum(LLStatViewer::PACKETS_IN);
-	//if (packets_in > 0)
-	//{
-	//	info["PACKETS_LOST"] = LLViewerStats::instance().getRecording().getSum(LLStatViewer::PACKETS_LOST);
-	//	info["PACKETS_IN"] = packets_in;
-	//	info["PACKETS_PCT"] = 100.f*info["PACKETS_LOST"].asReal() / info["PACKETS_IN"].asReal();
-	//}
-	if (gPacketsIn > 0)
-	{
-		info["PACKETS_LOST"] = S32(LLStatViewer::PACKETS_LOST.getTotalSamples());
-		info["PACKETS_IN"] = S32(LLStatViewer::PACKETS_IN.getTotalSamples());
+#if LL_WINDOWS
+	std::ostringstream ver_codec;
+	ver_codec << LIBVLC_VERSION_MAJOR;
+	ver_codec << ".";
+	ver_codec << LIBVLC_VERSION_MINOR;
+	ver_codec << ".";
+	ver_codec << LIBVLC_VERSION_REVISION;
+	info["LIBVLC_VERSION"] = ver_codec.str();
+#else
+	info["LIBVLC_VERSION"] = "Undefined";
+#endif
 
+	S32 packets_in = LLViewerStats::instance().getRecording().getSum(LLStatViewer::PACKETS_IN);
+	if (packets_in > 0)
+	{
+		info["PACKETS_LOST"] = LLViewerStats::instance().getRecording().getSum(LLStatViewer::PACKETS_LOST);
+		info["PACKETS_IN"] = packets_in;
 		info["PACKETS_PCT"] = 100.f*info["PACKETS_LOST"].asReal() / info["PACKETS_IN"].asReal();
 	}
-	// </FS:ND>
 
 	if (mServerReleaseNotesURL.empty())
 	{
@@ -6421,8 +6413,7 @@ void LLAppViewer::forceErrorInfiniteLoop()
 void LLAppViewer::forceErrorSoftwareException()
 {
    	LL_WARNS() << "Forcing a deliberate exception" << LL_ENDL;
-    // *FIX: Any way to insure it won't be handled?
-    throw; 
+    LLTHROW(LLException("User selected Force Software Exception"));
 }
 
 void LLAppViewer::forceErrorDriverCrash()

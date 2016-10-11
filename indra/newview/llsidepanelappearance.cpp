@@ -48,6 +48,7 @@
 #include "llviewerregion.h"
 #include "llvoavatarself.h"
 #include "llviewerwearable.h"
+#include "fscommon.h"
 
 static LLPanelInjector<LLSidepanelAppearance> t_appearance("sidepanel_appearance");
 
@@ -571,5 +572,26 @@ void LLSidepanelAppearance::updateAvatarComplexity(U32 complexity)
 		instance->mOutfitEdit->updateAvatarComplexity(complexity);
 	}
 	instance->mLastAvatarComplexity = complexity;
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> CTRL-F focusses local search editor
+BOOL LLSidepanelAppearance::handleKeyHere(KEY key, MASK mask)
+{
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
+	{
+		if (mFilterEditor->getVisible())
+		{
+			mFilterEditor->setFocus(TRUE);
+			return TRUE;
+		}
+		else if (isOutfitEditPanelVisible() && getChildView("filter_panel")->getVisible())
+		{
+			getChild<LLFilterEditor>("look_item_filter")->setFocus(TRUE);
+			return TRUE;
+		}
+	}
+
+	return LLPanel::handleKeyHere(key, mask);
 }
 // </FS:Ansariel>

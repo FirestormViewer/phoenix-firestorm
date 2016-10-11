@@ -34,6 +34,7 @@
 #include "llviewercontrol.h"
 #include "llavataractions.h"
 // </FS:CR>
+#include "fscommon.h"
 
 LLFloaterConversationLog::LLFloaterConversationLog(const LLSD& key)
 :	LLFloater(key),
@@ -135,3 +136,16 @@ bool LLFloaterConversationLog::isActionChecked(const LLSD& userdata)
 
 	return false;
 }
+
+// <FS:Ansariel> CTRL-F focusses local search editor
+BOOL LLFloaterConversationLog::handleKeyHere(KEY key, MASK mask)
+{
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
+	{
+		getChild<LLFilterEditor>("people_filter_input")->setFocus(TRUE);
+		return TRUE;
+	}
+
+	return LLFloater::handleKeyHere(key, mask);
+}
+// </FS:Ansariel>

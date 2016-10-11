@@ -494,7 +494,7 @@ void LLCrashLoggerWindows::gatherPlatformSpecificFiles()
 	//mDebugLog["DisplayDeviceInfo"] = gDXHardware.getDisplayInfo();  //Not initialized.
 }
 
-bool LLCrashLoggerWindows::mainLoop()
+bool LLCrashLoggerWindows::frame()
 {	
 	// <FS:ND> Only show crashlogger if we really crashed.
 	if( !mMinidumpWritten )
@@ -547,14 +547,14 @@ bool LLCrashLoggerWindows::mainLoop()
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		return msg.wParam;
+		return true; // msg.wParam;
 	}
 	else
 	{
 		LL_WARNS() << "Unknown crash behavior " << mCrashBehavior << LL_ENDL;
-		return 1;
+		return true; // 1;
 	}
-	return 0;
+	return true; // 0;
 }
 
 void LLCrashLoggerWindows::updateApplication(const std::string& message)

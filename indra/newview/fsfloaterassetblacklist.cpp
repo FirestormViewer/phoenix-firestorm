@@ -30,6 +30,7 @@
 
 #include "fsfloaterassetblacklist.h"
 
+#include "fscommon.h"
 #include "fsscrolllistctrl.h"
 #include "llfiltereditor.h"
 #include "llfloaterreg.h"
@@ -219,6 +220,17 @@ void FSFloaterAssetBlacklist::onFilterEdit(const std::string& search_string)
 
 	// Apply new filter.
 	mResultList->setFilterString(mFilterSubStringOrig);
+}
+
+BOOL FSFloaterAssetBlacklist::handleKeyHere(KEY key, MASK mask)
+{
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
+	{
+		getChild<LLFilterEditor>("filter_input")->setFocus(TRUE);
+		return TRUE;
+	}
+
+	return LLFloater::handleKeyHere(key, mask);
 }
 
 //---------------------------------------------------------------------------
