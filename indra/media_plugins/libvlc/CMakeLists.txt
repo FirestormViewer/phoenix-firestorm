@@ -66,7 +66,9 @@ if (WINDOWS)
   set_target_properties(
     media_plugin_libvlc
     PROPERTIES
-    LINK_FLAGS "/MANIFEST:NO /SAFESEH:NO /LTCG /NODEFAULTLIB:LIBCMT"
+    # <FS:Ansariel> Remove linker warning about LTCG switch to improve linker performance
+    #LINK_FLAGS "/MANIFEST:NO /SAFESEH:NO /LTCG /NODEFAULTLIB:LIBCMT"
+    LINK_FLAGS "/MANIFEST:NO /SAFESEH:NO /NODEFAULTLIB:LIBCMT"
     )
 endif (WINDOWS)
 
