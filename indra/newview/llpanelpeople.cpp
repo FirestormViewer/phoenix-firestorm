@@ -2095,4 +2095,31 @@ bool LLPanelPeople::onEnableColumnVisibilityChecked(const LLSD& userdata)
 }
 // </FS:Ansariel>
 
+// <FS:Ansariel> CTRL-F focusses local search editor
+BOOL LLPanelPeople::handleKeyHere(KEY key, MASK mask)
+{
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
+	{
+		std::string cur_tab = getActiveTabName();
+
+		if (cur_tab == FRIENDS_TAB_NAME)
+		{
+			getChild<LLFilterEditor>("friends_filter_input")->setFocus(TRUE);
+			return TRUE;
+		}
+		else if (cur_tab == GROUP_TAB_NAME)
+		{
+			getChild<LLFilterEditor>("groups_filter_input")->setFocus(TRUE);
+			return TRUE;
+		}
+		else if (cur_tab == RECENT_TAB_NAME)
+		{
+			getChild<LLFilterEditor>("recent_filter_input")->setFocus(TRUE);
+			return TRUE;
+		}
+	}
+
+	return LLPanel::handleKeyHere(key, mask);
+}
+// </FS:Ansariel>
 // EOF

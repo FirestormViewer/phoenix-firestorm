@@ -84,6 +84,8 @@ namespace FSCommon
 	bool isDefaultTexture(const LLUUID& asset_id);
 
 	bool isLegacySkin();
+
+	bool isFilterEditorKeyCombo(KEY key, MASK mask);
 };
 
 #endif // FS_COMMON_H

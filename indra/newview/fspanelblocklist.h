@@ -48,6 +48,8 @@ public:
 
 	virtual BOOL postBuild();
 	virtual void onOpen(const LLSD& key);
+	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool hasAccelerators() const { return true; }
 	
 	void selectBlocked(const LLUUID& id);
 

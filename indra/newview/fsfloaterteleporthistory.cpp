@@ -29,6 +29,7 @@
 
 #include "fsfloaterteleporthistory.h"
 
+#include "fscommon.h"
 #include "llpanelteleporthistory.h"
 #include "llbutton.h"
 #include "llfiltereditor.h"
@@ -104,4 +105,15 @@ void FSFloaterTeleportHistory::resetFilter()
 {
 	mFilterEditor->clear();
 	onFilterEdit("", true);
+}
+
+BOOL FSFloaterTeleportHistory::handleKeyHere(KEY key, MASK mask)
+{
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
+	{
+		mFilterEditor->setFocus(TRUE);
+		return TRUE;
+	}
+
+	return LLFloater::handleKeyHere(key, mask);
 }

@@ -431,6 +431,12 @@ void LLPanelGroupRoles::setGroupID(const LLUUID& id)
 	activate();
 }
 
+// <FS:Ansariel> CTRL-F focusses local search editor
+LLPanelGroupSubTab* LLPanelGroupRoles::getCurrentTab() const
+{
+	return dynamic_cast<LLPanelGroupSubTab*>(mSubTabContainer->getCurrentPanel());
+}
+// </FS:Ansariel>
 
 // LLPanelGroupSubTab ////////////////////////////////////////////////////
 LLPanelGroupSubTab::LLPanelGroupSubTab()
@@ -789,6 +795,12 @@ void LLPanelGroupSubTab::setFooterEnabled(BOOL enable)
 	}
 }
 
+// <FS:Ansariel> CTRL-F focusses local search editor
+void LLPanelGroupSubTab::setSearchFilterFocus(BOOL focus)
+{
+	mSearchEditor->setFocus(focus);
+}
+// </FS:Ansariel>
 
 // LLPanelGroupMembersSubTab /////////////////////////////////////////////
 static LLPanelInjector<LLPanelGroupMembersSubTab> t_panel_group_members_subtab("panel_group_members_subtab");

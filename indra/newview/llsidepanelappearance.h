@@ -48,6 +48,10 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);	
+	// <FS:Ansariel> CTRL-F focusses local search editor
+	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool hasAccelerators() const { return true; }
+	// </FS:Ansariel>
 
 	void refreshCurrentOutfitName(const std::string& name = "");
 

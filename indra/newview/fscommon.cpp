@@ -421,3 +421,8 @@ bool FSCommon::isLegacySkin()
 	std::string current_skin = gSavedSettings.getString("FSInternalSkinCurrent");
 	return (current_skin == "Vintage" || current_skin == "Latency");
 }
+
+bool FSCommon::isFilterEditorKeyCombo(KEY key, MASK mask)
+{
+	return (mask == MASK_CONTROL && key == 'F' && gSavedSettings.getBOOL("FSSelectLocalSearchEditorOnShortcut"));
+}

@@ -43,6 +43,7 @@
 #include "llsidepaneliteminfo.h"
 #include "lltextbox.h"
 #include "lltrans.h"
+#include "fscommon.h"
 
 ///----------------------------------------------------------------------------
 /// LLPanelMarketplaceListings
@@ -672,6 +673,19 @@ void LLFloaterMarketplaceListings::onChanged()
         mRootFolderId.setNull();
     }
 }
+
+// <FS:Ansariel> CTRL-F focusses local search editor
+BOOL LLFloaterMarketplaceListings::handleKeyHere(KEY key, MASK mask)
+{
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
+	{
+		getChild<LLFilterEditor>("filter_editor")->setFocus(TRUE);
+		return TRUE;
+	}
+
+	return LLFloater::handleKeyHere(key, mask);
+}
+// </FS:Ansariel>
 
 //-----------------------------------------------------------------------------
 // LLFloaterAssociateListing

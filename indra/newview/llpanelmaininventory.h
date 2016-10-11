@@ -75,6 +75,8 @@ public:
 	/*virtual*/ void changed(U32);
 	/*virtual*/ void draw();
 	/*virtual*/ void 	onVisibilityChange ( BOOL new_visibility );
+	// <FS:Ansariel> CTRL-F focusses local search editor
+	/*virtual*/ bool hasAccelerators() const { return true; }
 
 	LLInventoryPanel* getPanel() { return mActivePanel; }
 	LLInventoryPanel* getActivePanel() { return mActivePanel; }

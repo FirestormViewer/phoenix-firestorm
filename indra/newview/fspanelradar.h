@@ -49,6 +49,8 @@ public:
 	virtual ~FSPanelRadar();
 
 	/*virtual*/ BOOL 	postBuild();
+	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool hasAccelerators() const { return true; }
 
 	void					requestUpdate();
 	LLUUID					getCurrentItemID() const;
@@ -86,6 +88,7 @@ private:
 	LLButton*				mRadarGearButton;
 	LLButton*				mAddFriendButton;
 	LLMenuButton*			mOptionsButton;
+	LLFilterEditor*			mFilterEditor;
 
 	LLHandle<LLView>		mOptionsMenuHandle;
 
