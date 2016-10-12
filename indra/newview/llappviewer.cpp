@@ -1430,8 +1430,10 @@ bool LLAppViewer::init()
 
 	LLVoiceChannel::initClass();
 	LLVoiceClient::getInstance()->init(gServicePump);
+	// <FS:Ansariel> [FS communication UI]
 	// LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLFloaterIMContainer::onCurrentChannelChanged, _1), true);
 	LLVoiceChannel::setCurrentVoiceChannelChangedCallback( boost::bind( &FSFloaterVoiceControls::sOnCurrentChannelChanged, _1 ), true );
+	// </FS:Ansariel> [FS communication UI]
 
 	joystick = LLViewerJoystick::getInstance();
 	joystick->setNeedsReset(true);
