@@ -1,19 +1,12 @@
 # -*- cmake -*-
 
 if (WINDOWS)
-  find_path(DIRECTX_INCLUDE_DIR dxdiag.h
-            "$ENV{DXSDK_DIR}/Include"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (June 2010)/Include"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (August 2009)/Include"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (March 2009)/Include"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (August 2008)/Include"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (June 2008)/Include"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (March 2008)/Include"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (November 2007)/Include"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (August 2007)/Include"
-            "C:/DX90SDK/Include"
-            "$ENV{PROGRAMFILES}/DX90SDK/Include"
-            )
+  include(FindWindowsSDK)
+
+  get_windowssdk_include_dirs(${WINDOWSSDK_PREFERRED_DIR} WINDOWSSDK_INCLUDE_DIRS)
+  find_path(DIRECTX_INCLUDE_DIR
+      NAMES dxdiag.h
+      PATHS ${WINDOWSSDK_INCLUDE_DIRS})
   if (DIRECTX_INCLUDE_DIR)
     include_directories(${DIRECTX_INCLUDE_DIR})
     if (DIRECTX_FIND_QUIETLY)
@@ -24,19 +17,10 @@ if (WINDOWS)
   endif (DIRECTX_INCLUDE_DIR)
 
 
-  find_path(DIRECTX_LIBRARY_DIR dxguid.lib
-            "$ENV{DXSDK_DIR}/Lib/x86"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (June 2010)/Lib/x86"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (August 2009)/Lib/x86"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (March 2009)/Lib/x86"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (August 2008)/Lib/x86"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (June 2008)/Lib/x86"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (March 2008)/Lib/x86"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (November 2007)/Lib/x86"
-            "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (August 2007)/Lib/x86"
-            "C:/DX90SDK/Lib"
-            "$ENV{PROGRAMFILES}/DX90SDK/Lib"
-            )
+  get_windowssdk_library_dirs(${WINDOWSSDK_PREFERRED_DIR} WINDOWSSDK_LIBRARY_DIRS)
+  find_path(DIRECTX_LIBRARY_DIR
+      NAMES dxguid.lib
+      PATHS ${WINDOWSSDK_LIBRARY_DIRS})
   if (DIRECTX_LIBRARY_DIR)
     if (DIRECTX_FIND_QUIETLY)
       message(STATUS "Found DirectX include: ${DIRECTX_LIBRARY_DIR}")
