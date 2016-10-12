@@ -71,6 +71,7 @@ libcurl-Version: [LIBCURL_VERSION]
 J2C-Decoderversion: [J2C_VERSION]
 Audio-Treiberversion: [AUDIO_DRIVER_VERSION]
 LLCEFLib/CEF-Version: [LLCEFLIB_VERSION]
+LibVLC-Version: [LIBVLC_VERSION]
 Voice-Serverversion: [VOICE_VERSION]
 	</string>
 	<string name="AboutSettings">
@@ -6762,5 +6763,11 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Nametag_Complexity_Label">
 		Komplexität: [COMPLEXITY]
+	</string>
+	<string name="font_unknown">
+		Unbekannte Schriftart
+	</string>
+	<string name="mode_unknown">
+		Unbekannter Modus
 	</string>
 </strings>

@@ -152,7 +152,7 @@ MediaPluginBase(host_send_func, host_user_data)
 //
 MediaPluginCEF::~MediaPluginCEF()
 {
-	delete [] mPopupBuffer; // <FS:ND> Buffer for a popup image to be rendered as an overlay
+	delete[] mPopupBuffer;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -205,9 +205,7 @@ void MediaPluginCEF::onPageChangedCallback(unsigned char* pixels, int x, int y, 
 			{
 				memcpy(mPixels, pixels, mWidth * mHeight * mDepth);
 			}
-
-			// <FS:ND> If we have a popup, draw on top. Note: No alpha blending, this needs to be added it a popup can be transparent
-			if( mPopupBuffer && mPopupH && mPopupW  )
+			if( mPopupBuffer && mPopupH && mPopupW )
 			{
 				U32 bufferSize = mWidth * mHeight * mDepth;
 				U32 popupStride = mPopupW * mDepth;
@@ -224,7 +222,7 @@ void MediaPluginCEF::onPageChangedCallback(unsigned char* pixels, int x, int y, 
 					dst += bufferStride;
 				}
 			}
-			// </FS:ND>
+
 		}
 		setDirty(0, 0, mWidth, mHeight);
 	}

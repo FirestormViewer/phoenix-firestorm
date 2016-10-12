@@ -480,13 +480,6 @@ void LLPluginProcessParent::idle(void)
 				
 				    // Only argument to the launcher is the port number we're listening on
 				    mProcessParams.args.add(stringize(mBoundPort));
-#if LL_LINUX
-					if( mPluginFile.find( "cef" ) != std::string::npos && getenv( "FS_CEF_PRELOAD" ) )
-					{
-						mProcessParams.preload = getenv( "FS_CEF_PRELOAD" );
-						LL_INFOS( "Plugin" ) << "Forcing LD_PRELOAD for " << (std::string)mProcessParams.executable << " with a value of " << (std::string)mProcessParams.preload  << LL_ENDL;
-					}
-#endif
 					
 				    if (! (mProcess = LLProcess::create(mProcessParams)))
 				    {

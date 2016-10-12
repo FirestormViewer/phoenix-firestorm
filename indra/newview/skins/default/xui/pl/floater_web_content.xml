@@ -10,6 +10,14 @@
 			<icon name="media_secure_lock_flag" tool_tip="Bezpieczne przeglądanie (Secured Browsing)"/>
 			<button name="popexternal" tool_tip="Otwórz obecny URL w Twojej zewnętrznej przeglądarce internetowej"/>
 		</layout_panel>
+		<layout_panel name="debug_controls">
+			<button tool_tip="Strona główna testów przeglądarki internetowej" name="web_test_home_page" />
+			<button tool_tip="Test wideo w formacie MPEG4" name="VLC Plugin Test MPEG4" />
+			<button tool_tip="Test wideo w formacie MKV" name="VLC Plugin Test MKV" />
+			<button tool_tip="Test wideo w formacie WebM" name="VLC Plugin Test WebM" />
+			<button tool_tip="Test audio w formacie MP3" name="VLC Plugin Test MP3" />
+			<button tool_tip="Test formatu FLV" name="VLC Plugin Test FLV" />
+		</layout_panel>
 		<layout_panel name="external_controls">
 			<text name="plugin_fail_text">
 Wygląda na to, że wtyczka przeglądarki długo się otwiera.

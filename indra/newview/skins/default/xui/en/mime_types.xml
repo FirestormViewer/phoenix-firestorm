@@ -452,7 +452,18 @@
 			media_plugin_streaming
 		</impl>
 	</mimetype>
-	<mimetype menu="1" name="video/quicktime">
+  <mimetype name="application/octet-stream">
+    <label name="video/octet-stream">
+      Movie
+    </label>
+    <widgettype>
+      movie
+    </widgettype>
+    <impl>
+      media_plugin_streaming
+    </impl>
+  </mimetype>
+  <mimetype menu="1" name="video/quicktime">
 		<label name="video/quicktime_label">
 			Movie (QuickTime)
 		</label>

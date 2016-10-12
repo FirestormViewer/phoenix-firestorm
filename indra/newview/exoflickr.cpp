@@ -293,7 +293,7 @@ void exoFlickr::uploadPhoto(const LLSD& args, LLImageFormatted *image, response_
 	pHeader->append("Content-Type", "multipart/form-data; boundary=" + boundary);
 	options->setWantHeaders(true);
 	options->setRetries(0);
-	options->setTimeout(300);
+	options->setTimeout(600);
 	FSCoreHttpUtil::callbackHttpPostRaw(UPLOAD_URL, post_data, boost::bind( exoFlickrUploadResponse, _1, callback ), boost::bind( exoFlickrUploadResponse, _1, callback ), pHeader, options );
 }
 

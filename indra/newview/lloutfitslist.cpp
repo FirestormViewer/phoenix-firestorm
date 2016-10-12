@@ -164,10 +164,10 @@ void LLOutfitsList::updateAddedCategory(LLUUID cat_id)
     // *TODO: LLUICtrlFactory::defaultBuilder does not use "display_children" from xml. Should be investigated.
     tab->setDisplayChildren(false);
 
-	// <FS:ND> Calling this when there's a lot of outfits causes horrible perfomance and disconnects, due to arrange eating so many cpu cycles.
-	// mAccordion->addCollapsibleCtrl(tab);
-	mAccordion->addCollapsibleCtrl(tab, false );
-	// </FS:ND>	
+    // <FS:ND> Calling this when there's a lot of outfits causes horrible perfomance and disconnects, due to arrange eating so many cpu cycles.
+    // mAccordion->addCollapsibleCtrl(tab);
+    mAccordion->addCollapsibleCtrl(tab, false);
+    // </FS:ND>
 
     // Start observing the new outfit category.
     LLWearableItemsList* list = tab->getChild<LLWearableItemsList>("wearable_items_list");
@@ -225,10 +225,6 @@ void LLOutfitsList::updateAddedCategory(LLUUID cat_id)
 
         list->setFilterSubString(sFilterSubString);
     }
-
-	// <FS:ND> We called mAccordion->addCollapsibleCtrl with false as second paramter and did not let it arrange itself each time. Do this here after all is said and done.
-	mAccordion->arrange();
-	// </FS:ND>
 }
 
 void LLOutfitsList::updateRemovedCategory(LLUUID cat_id)
@@ -259,6 +255,17 @@ void LLOutfitsList::updateRemovedCategory(LLUUID cat_id)
     	}
     }
 }
+
+// <FS:Ansariel> Arrange accordions after all have been added
+//virtual
+void LLOutfitsList::arrange()
+{
+	if (mAccordion)
+	{
+		mAccordion->arrange();
+	}
+}
+// </FS:Ansariel>
 
 //virtual
 void LLOutfitsList::onHighlightBaseOutfit(LLUUID base_id, LLUUID prev_id)
@@ -299,7 +306,6 @@ void LLOutfitListBase::performAction(std::string action)
 	}
 	if ("replaceitems" == action)
 	{
-		LL_INFOS() << "replaceitems" << LL_ENDL;
 		LLAppearanceMgr::instance().wearInventoryCategory( cat, FALSE, TRUE );
 	}
 	else if ("addtooutfit" == action)
@@ -920,6 +926,9 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
         const LLUUID cat_id = (*iter);
         updateAddedCategory(cat_id);
     }
+
+    // <FS:ND> We called mAccordion->addCollapsibleCtrl with false as second paramter and did not let it arrange itself each time. Do this here after all is said and done.
+    arrange();
 
     // Handle removed tabs.
     for (uuid_vec_t::const_iterator iter = vremoved.begin(); iter != vremoved.end(); ++iter)

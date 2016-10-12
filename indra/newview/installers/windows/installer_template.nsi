@@ -94,8 +94,10 @@ SetOverwrite on							# Overwrite files by default
 # <FS:Ansariel> Don't auto-close so we can check details
 #AutoCloseWindow true					# After all files install, close window
 
-InstallDir "$PROGRAMFILES\${INSTNAME}"
-InstallDirRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\${INSTNAME}" ""
+;;InstallDir "$PROGRAMFILES\${INSTNAME}"
+;;InstallDirRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\${INSTNAME}" ""
+InstallDir "$%%INSTALL_DIR%%\${INSTNAME}"
+InstallDirRegKey HKEY_LOCAL_MACHINE "%%INSTALL_DIR_REGKEY%%" ""
 UninstallText $(UninstallTextMsg)
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
 
@@ -128,6 +130,7 @@ Var NO_STARTMENU        # <FS:Ansariel> Optional start menu entry
 !insertmacro GetParameters
 !insertmacro GetOptions
 !include WinVer.nsh			# For OS and SP detection
+!include "x64.nsh"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Pre-directory page callback
@@ -163,6 +166,13 @@ FunctionEnd
 Function .onInit
 Call CheckCPUFlags							# Make sure we have SSE2 support
 Call CheckWindowsVersion					# Don't install On unsupported systems
+
+    ${If} ${RunningX64}
+	${AndIf} ${FS64BIT} == "1"
+       ${DisableX64FSRedirection}
+       SetRegView 64
+	${EndIf}
+	
     Push $0
     ${GetParameters} $COMMANDLINE			# Get our command line
 
@@ -230,6 +240,11 @@ FunctionEnd
 ;; Prep Uninstaller Section
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function un.onInit
+    ${If} ${RunningX64}
+	${AndIf} ${FS64BIT} == "1"
+       ${DisableX64FSRedirection}
+	${EndIf}
+
 # Read language from registry and set for uninstaller. Key will be removed on successful uninstall
 	ReadRegStr $0 HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\${INSTNAME}" "InstallerLanguage"
     IfErrors lbl_end

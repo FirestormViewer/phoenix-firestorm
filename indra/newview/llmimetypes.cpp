@@ -182,7 +182,7 @@ std::string LLMIMETypes::widgetType(const std::string& mime_type)
 std::string getStreamingPlugin()
 {
 #if defined( LL_LINUX ) || defined( LL_WINDOWS )
-    return "media_plugin_gstreamer10";
+    return "media_plugin_libvlc";
 #else
     llassert_always( false );
 #endif

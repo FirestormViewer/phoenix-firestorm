@@ -29,6 +29,7 @@
 
 #include "fsfloateravatarrendersettings.h"
 
+#include "fscommon.h"
 #include "llfiltereditor.h"
 #include "llnamelistctrl.h"
 #include "lltrans.h"
@@ -132,6 +133,18 @@ void FSFloaterAvatarRenderSettings::onFilterEdit(const std::string& search_strin
 	// Apply new filter.
 	mAvatarList->setFilterString(mFilterSubStringOrig);
 }
+
+BOOL FSFloaterAvatarRenderSettings::handleKeyHere(KEY key, MASK mask)
+{
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
+	{
+		getChild<LLFilterEditor>("filter_input")->setFocus(TRUE);
+		return TRUE;
+	}
+
+	return LLFloater::handleKeyHere(key, mask);
+}
+
 
 //---------------------------------------------------------------------------
 // Context menu

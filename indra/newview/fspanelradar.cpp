@@ -36,6 +36,7 @@
 #include "lltoggleablemenu.h"
 
 // newview
+#include "fscommon.h"
 #include "fsradarmenu.h"
 #include "llavataractions.h"
 #include "llnetmap.h"
@@ -132,7 +133,8 @@ BOOL FSPanelRadar::postBuild()
 	mMiniMap = getChild<LLNetMap>("Net Map");
 	mAddFriendButton = getChild<LLButton>("add_friend_btn");
 
-	getChild<LLFilterEditor>("nearby_filter_input")->setCommitCallback(boost::bind(&FSPanelRadar::onFilterEdit, this, _2));
+	mFilterEditor = getChild<LLFilterEditor>("nearby_filter_input");
+	mFilterEditor->setCommitCallback(boost::bind(&FSPanelRadar::onFilterEdit, this, _2));
 
 	// Create menus.
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
@@ -167,6 +169,17 @@ BOOL FSPanelRadar::postBuild()
 	updateButtons();
 
 	return TRUE;
+}
+
+BOOL FSPanelRadar::handleKeyHere(KEY key, MASK mask)
+{
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
+	{
+		mFilterEditor->setFocus(TRUE);
+		return TRUE;
+	}
+
+	return LLPanel::handleKeyHere(key, mask);
 }
 
 void FSPanelRadar::updateButtons()

@@ -190,6 +190,17 @@ BOOL FSFloaterContacts::tick()
 	return FALSE;
 }
 
+BOOL FSFloaterContacts::handleKeyHere(KEY key, MASK mask)
+{
+	if (FSCommon::isFilterEditorKeyCombo(key, mask) && getActiveTabName() == FRIENDS_TAB_NAME && gSavedSettings.getBOOL("FSContactListShowSearch"))
+	{
+		mFriendFilter->setFocus(TRUE);
+		return TRUE;
+	}
+
+	return LLFloater::handleKeyHere(key, mask);
+}
+
 void FSFloaterContacts::updateGroupButtons()
 {
 	LLUUID groupId = getCurrentItemID();

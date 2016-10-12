@@ -278,6 +278,8 @@ public:
 		std::string& tooltip_msg);
 	/*virtual*/ void	draw();
 	/*virtual*/ BOOL	handleKeyHere(KEY key, MASK mask);
+	// <FS:Ansariel> CTRL-F focusses local search editor
+	/*virtual*/ bool	hasAccelerators() const { return true; }
 
 	// LLFloater overrides
 	/*virtual*/ BOOL    postBuild();
