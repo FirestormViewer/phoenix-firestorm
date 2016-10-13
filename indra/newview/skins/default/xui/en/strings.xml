@@ -1206,6 +1206,8 @@ This feature is currently in Beta. Please add your name to this [http://goo.gl/f
 	<!-- FS:Ansariel: Removed nolink-tags for console -->
 	<string name="InvOfferDecline">You decline [DESC] from [NAME].</string>
 	<string name="InvOfferFrom">from</string>
+	<string name="InvOfferAutoAcceptObject">An object named [OBJECT_NAME] gave you this [OBJECT_TYPE]: [DESC]</string>
+	<string name="InvOfferAutoAcceptUser">[USER_NAME] gave you this [OBJECT_TYPE]: [DESC]</string>
 
 	<!-- group money -->
 	<string name="GroupMoneyTotal">Total</string>

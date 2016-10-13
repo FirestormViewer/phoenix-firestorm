@@ -3025,7 +3025,7 @@ Versuchen Sie es in einigen Minuten erneut.
 		</form>
 	</notification>
 	<notification name="UserGiveItem">
-		[NAME_SLURL] hat Ihnen folgendes [OBJECTTYPE] übergeben:
+		[NAME_SLURL] hat Ihnen folgende/n/s [OBJECTTYPE] übergeben:
 [ITEM_SLURL]
 		<form name="form">
 			<button name="Show" text="Anzeigen"/>
@@ -3035,7 +3035,7 @@ Versuchen Sie es in einigen Minuten erneut.
 		</form>
 	</notification>
 	<notification name="UserGiveItemLegacy">
-		[NAME_SLURL] hat Ihnen folgendes [OBJECTTYPE] übergeben:
+		[NAME_SLURL] hat Ihnen folgende/n/s [OBJECTTYPE] übergeben:
 [ITEM_SLURL]
 		<form name="form">
 			<button name="Show" text="Anzeigen"/>
