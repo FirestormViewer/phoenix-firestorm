@@ -36,7 +36,6 @@ FSAvatarRenderPersistence::FSAvatarRenderPersistence()
 
 FSAvatarRenderPersistence::~FSAvatarRenderPersistence()
 {
-	saveAvatarRenderSettings();
 }
 
 void FSAvatarRenderPersistence::init()
