@@ -30,7 +30,7 @@
     <attachment_point
      id="3"
      group="3"
-     pie_slice="3"
+     pie_slice="0"
      name="Left Shoulder"
      joint="mCollarLeft"
      location="ATTACH_LSHOULDER"
@@ -41,7 +41,7 @@
     <attachment_point
      id="4"
      group="1"
-     pie_slice="1"
+     pie_slice="0"
      name="Right Shoulder"
      joint="mCollarRight"
      location="ATTACH_RSHOULDER"
@@ -51,7 +51,8 @@
 
     <attachment_point
      id="5"
-     group="4"
+     group="3"
+     pie_slice="3"
      name="Left Hand"
      joint="mWristLeft"
      location="ATTACH_LHAND"
@@ -62,7 +63,8 @@
 
     <attachment_point
      id="6"
-     group="0"
+     group="1"
+     pie_slice="3"
      name="Right Hand"
      joint="mWristRight"
      location="ATTACH_RHAND"
@@ -74,7 +76,7 @@
     <attachment_point
      id="7"
      group="5"
-     pie_slice="6"
+     pie_slice="3"
      name="Left Foot"
      joint="mFootLeft"
      location="ATTACH_LFOOT"
@@ -85,7 +87,7 @@
     <attachment_point
      id="8"
      group="7"
-     pie_slice="6"
+     pie_slice="3"
      name="Right Foot"
      joint="mFootRight"
      location="ATTACH_RFOOT"
@@ -195,7 +197,7 @@
     <attachment_point
      id="18"
      group="1"
-     pie_slice="0"
+     pie_slice="1"
      name="R Upper Arm"
      joint="mShoulderRight"
      location="ATTACH_RUARM"
@@ -206,7 +208,7 @@
     <attachment_point
      id="19"
      group="1"
-     pie_slice="7"
+     pie_slice="2"
      name="R Forearm"
      joint="mElbowRight"
      location="ATTACH_RLARM"
@@ -217,7 +219,7 @@
     <attachment_point
      id="20"
      group="3"
-     pie_slice="4"
+     pie_slice="1"
      name="L Upper Arm"
      joint="mShoulderLeft"
      location="ATTACH_LUARM"
@@ -228,7 +230,7 @@
     <attachment_point
      id="21"
      group="3"
-     pie_slice="5"
+     pie_slice="2"
      name="L Forearm"
      joint="mElbowLeft"
      location="ATTACH_LLARM"
@@ -239,7 +241,7 @@
     <attachment_point
      id="22"
      group="7"
-     pie_slice="1"
+     pie_slice="0"
      name="Right Hip"
      joint="mHipRight"
      location="ATTACH_RHIP"
@@ -250,7 +252,7 @@
     <attachment_point
      id="23"
      group="7"
-     pie_slice="0"
+     pie_slice="1"
      name="R Upper Leg"
      joint="mHipRight"
      location="ATTACH_RULEG"
@@ -261,7 +263,7 @@
     <attachment_point
      id="24"
      group="7"
-     pie_slice="7"
+     pie_slice="2"
      name="R Lower Leg"
      joint="mKneeRight"
      location="ATTACH_RLLEG"
@@ -272,7 +274,7 @@
     <attachment_point
      id="25"
      group="5"
-     pie_slice="3"
+     pie_slice="0"
      name="Left Hip"
      joint="mHipLeft"
      location="ATTACH_LHIP"
@@ -283,7 +285,7 @@
     <attachment_point
      id="26"
      group="5"
-     pie_slice="4"
+     pie_slice="1"
      name="L Upper Leg"
      joint="mHipLeft"
      location="ATTACH_LULEG"
@@ -294,7 +296,7 @@
     <attachment_point
      id="27"
      group="5"
-     pie_slice="5"
+     pie_slice="2"
      name="L Lower Leg"
      joint="mKneeLeft"
      location="ATTACH_LLLEG"
