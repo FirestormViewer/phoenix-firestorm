@@ -62,11 +62,11 @@ target_link_libraries(media_plugin_gstreamer10
   ${GSTREAMER10_LIBRARIES}
 )
 
-add_dependencies(media_plugin_gstreamer10
-  ${LLPLUGIN_LIBRARIES}
-  ${MEDIA_PLUGIN_BASE_LIBRARIES}
-  ${LLCOMMON_LIBRARIES}
-)
+#add_dependencies(media_plugin_gstreamer10
+#  ${LLPLUGIN_LIBRARIES}
+#  ${MEDIA_PLUGIN_BASE_LIBRARIES}
+#  ${LLCOMMON_LIBRARIES}
+#)
 
 if (WINDOWS)
   set_target_properties(
