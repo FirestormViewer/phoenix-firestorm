@@ -3618,7 +3618,6 @@
                 <array>
                   <string>--fmodex</string>
                   <string>--kdu</string>
-                  <string>--quicktime</string>
                   <string>--version</string>
                   <string>--platform win32</string>
                 </array>
@@ -3655,7 +3654,6 @@
                 <array>
                   <string>--fmodex</string>
                   <string>--kdu</string>
-                  <string>--quicktime</string>
                   <string>--version</string>
                   <string>--platform win32</string>
                 </array>
@@ -3692,7 +3690,6 @@
                 <array>
                   <string>--fmodex</string>
                   <string>--kdu</string>
-                  <string>--quicktime</string>
                   <string>--version</string>
                   <string>--platform win32</string>
                 </array>
