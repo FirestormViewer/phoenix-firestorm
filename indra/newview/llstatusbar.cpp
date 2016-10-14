@@ -190,7 +190,7 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mSquareMetersCredit(0),
 	mSquareMetersCommitted(0),
 	mPathfindingFlashOn(TRUE),	// <FS:Zi> Pathfinding rebake functions
-	mAudioStreamEnabled(FALSE),	// ## Zi: Media/Stream separation
+	mAudioStreamEnabled(FALSE),	// <FS:Zi> Media/Stream separation
 	mRebakeStuck(FALSE),		// <FS:LO> FIRE-7639 - Stop the blinking after a while
 	mNearbyIcons(FALSE),		// <FS:Ansariel> Script debug
 	mSearchData(NULL),			// <FS:ND/> Hook up and init for filtering
@@ -481,14 +481,6 @@ BOOL LLStatusBar::postBuild()
 		updateNetstatVisibility(LLSD(FALSE));
 	}
 
-	// <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
-	mVolumeIconsWidth = mBtnVolume->getRect().getWidth() + mStreamToggle->getRect().getWidth() + mMediaToggle->getRect().getWidth();
-	if (!gSavedSettings.getBOOL("FSEnableVolumeControls"))
-	{
-		updateVolumeControlsVisibility(LLSD(FALSE));
-	}
-	// </FS:PP>
-
 	// <FS:ND> Hook up and init for filtering
 	mFilterEdit = getChild<LLSearchEditor>("search_menu_edit");
 	mSearchPanel = getChild<LLPanel>("menu_search_panel");
@@ -499,6 +491,23 @@ BOOL LLStatusBar::postBuild()
 	gSavedSettings.getControl("FSMenuSearch")->getCommitSignal()->connect(boost::bind(&LLStatusBar::updateMenuSearchVisibility, this, _2));
 	// </FS:ND>
 
+	// <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
+	mVolumeIconsWidth = mBtnVolume->getRect().getWidth() + mStreamToggle->getRect().getWidth() + mMediaToggle->getRect().getWidth();
+	if (!gSavedSettings.getBOOL("FSEnableVolumeControls"))
+	{
+		updateVolumeControlsVisibility(LLSD(FALSE));
+	}
+	// </FS:PP>
+
+	// <FS:Ansariel> FIRE-14482: Show FPS in status bar
+	mFPSText = getChild<LLTextBox>("FPSText");
+	gSavedSettings.getControl("FSStatusBarShowFPS")->getSignal()->connect(boost::bind(&LLStatusBar::onShowFPSChanged, this, _2));
+	if (!gSavedSettings.getBOOL("FSStatusBarShowFPS"))
+	{
+		onShowFPSChanged(LLSD(FALSE));
+	}
+	// </FS:Ansariel>
+
 	return TRUE;
 }
 
@@ -508,8 +517,14 @@ void LLStatusBar::refresh()
 	static LLCachedControl<bool> show_net_stats(gSavedSettings, "ShowNetStats", false);
 	bool net_stats_visible = show_net_stats;
 
-	if (net_stats_visible)
+	// <FS:Ansariel> Less frequent update of net stats
+	//if (net_stats_visible)
+	//{
+	if (net_stats_visible && mNetStatUpdateTimer.getElapsedTimeF32() > 0.5f)
 	{
+		mNetStatUpdateTimer.reset();
+	// </FS:Ansariel>
+
 		// Adding Net Stat Meter back in
 		F32 bwtotal = gViewerThrottle.getMaxBandwidth() / 1000.f;
 		mSGBandwidth->setMin(0.f);
@@ -519,6 +534,15 @@ void LLStatusBar::refresh()
 		//mSGBandwidth->setThreshold(2, bwtotal);
 	}
 	
+	// <FS:Ansariel> FIRE-14482: Show FPS in status bar
+	static LLCachedControl<bool> fsStatusBarShowFPS(gSavedSettings, "FSStatusBarShowFPS");
+	if (fsStatusBarShowFPS && mFPSUpdateTimer.getElapsedTimeF32() > 0.5f)
+	{
+		mFPSUpdateTimer.reset();
+		mFPSText->setText(llformat("%.1f", LLTrace::get_frame_recording().getPeriodMeanPerSec(LLStatViewer::FPS)));
+	}
+	// </FS:Ansariel>
+
 	// update clock every 10 seconds
 	if(mClockUpdateTimer.getElapsedTimeF32() > 10.f)
 	{
@@ -1533,13 +1557,40 @@ void LLStatusBar::updateVolumeControlsVisibility(const LLSD& data)
 
 	LLRect rect = mTimeMediaPanel->getRect();
 	rect.translate(cVolumeIconsWidth * translateFactor, 0);
+	rect.mRight -= cVolumeIconsWidth * translateFactor;
 	mTimeMediaPanel->setRect(rect);
+
+	mFPSText->translate(-(cVolumeIconsWidth * translateFactor), 0);
 
 	rect = mBalancePanel->getRect();
 	rect.translate(cVolumeIconsWidth * translateFactor, 0);
 	mBalancePanel->setRect(rect);
+
+	mSearchPanel->translate(cVolumeIconsWidth * translateFactor, 0);
 }
 // </FS:PP>
+
+// <FS:Ansariel> FIRE-14482: Show FPS in status bar
+void LLStatusBar::onShowFPSChanged(const LLSD& newvalue)
+{
+	const S32 text_width = mFPSText->getRect().getWidth() + 4; // left_pad = 4
+	BOOL show_fps = newvalue.asBoolean();
+	S32 translateFactor = (show_fps ? -1 : 1);
+
+	mFPSText->setVisible(show_fps);
+
+	LLRect rect = mTimeMediaPanel->getRect();
+	rect.translate(text_width * translateFactor, 0);
+	rect.mRight -= text_width * translateFactor;
+	mTimeMediaPanel->setRect(rect);
+
+	rect = mBalancePanel->getRect();
+	rect.translate(text_width * translateFactor, 0);
+	mBalancePanel->setRect(rect);
+
+	mSearchPanel->translate(text_width * translateFactor, 0);
+}
+// </FS:Ansariel>
 
 // <FS:Zi> Pathfinding rebake functions
 BOOL LLStatusBar::rebakeRegionCallback(const LLSD& notification, const LLSD& response)
@@ -1649,3 +1700,4 @@ void LLStatusBar::onPopupRolloverChanged(const LLSD& newvalue)
 		mMouseEnterNearbyMediaConnection = mMediaToggle->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterNearbyMedia, this));
 	}
 }
+// </FS:Ansariel>
