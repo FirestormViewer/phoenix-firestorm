@@ -60,19 +60,6 @@
 #include "llviewertexlayer.h"
 #include "llviewerwearable.h"
 #include "llappearancemgr.h"
-// <FS:Zi> Pie menu
-#include "piemenu.h"
-#include "pieslice.h"
-#include "pieseparator.h"
-// </FS:Zi> Pie menu
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
-#include "rlvhandler.h"
-#include "rlvlocks.h"
-// [/RLVa:KB]
-// <FS:TT> Client LSL Bridge
-#include "fslslbridge.h"
-// </FS:TT>
-#include "lggbeammaps.h"
 #include "llmeshrepository.h"
 #include "llvovolume.h"
 #include "llsdutil.h"
@@ -80,11 +67,19 @@
 #include "llsdserialize.h"
 #include "llcallstack.h"
 #include "llcorehttputil.h"
+
+// Firestorm includes
+#include "fslslbridge.h"
+#include "lggbeammaps.h"
+#include "piemenu.h"
+#include "pieslice.h"
+#include "pieseparator.h"
 // [RLVa:KB] - Checked: RLVa-2.0.2
 #include "rlvhandler.h"
 #include "rlvhelper.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+
 // [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
 #include "llviewerparcelmgr.h"
 extern BOOL gTeleportDisplay;
@@ -577,6 +572,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 					gAttachPieMenu->addChild(item);
 
 					break;
+
 				}
 			}
 		}
