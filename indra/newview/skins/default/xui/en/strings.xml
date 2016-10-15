@@ -34,6 +34,11 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 [SERVER_VERSION]
 [SERVER_RELEASE_NOTES_URL]
 	</string>
+	<string name="AboutPositionRLVShowLoc">
+You are in [REGION]
+[SERVER_VERSION]
+[SERVER_RELEASE_NOTES_URL]
+	</string>
 	<!-- *NOTE: Do not translate text like GPU, Graphics Card, etc -
        Most PC users who know what these mean will be used to the English versions,
        and this info sometimes gets sent to support. -->
@@ -48,6 +53,7 @@ Graphics Card: [GRAPHICS_CARD]
 	<string name="AboutLibs">
 OpenGL Version: [OPENGL_VERSION]
 
+RestrainedLove API: [RLV_VERSION]
 J2C Decoder Version: [J2C_VERSION]
 Audio Driver Version: [AUDIO_DRIVER_VERSION]
 LLCEFLib/CEF Version: [LLCEFLIB_VERSION]
@@ -3571,6 +3577,9 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
   <string name="inventory_item_offered-im">
     Inventory item offered
   </string>
+  <string name="inventory_item_offered_rlv">
+    Inventory item offered to [NAME]
+  </string>
   <string name="share_alert">
     Drag items from inventory here
   </string>
@@ -4092,6 +4101,12 @@ Try enclosing path to the editor with double quotes.
   <!-- Spell check settings floater -->
   <string name="UserDictionary">[User]</string>
   
+  <!-- RLVa -->
+  <string name="RLVaPendingRestart"> (pending restart)</string>
+  <string name="RLVaToggleMessage">RestrainedLove Support will be %s after you restart</string>
+  <string name="RLVaToggleEnabled">enabled</string>
+  <string name="RLVaToggleDisabled">disabled</string>
+   
   <!-- Experience Tools strings -->
   <string name="experience_tools_experience">Experience</string>
   <string name="ExperienceNameNull">(no experience)</string>

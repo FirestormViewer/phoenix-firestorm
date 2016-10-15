@@ -35,6 +35,10 @@
 #include "llviewerinventory.h"
 #include "llviewerregion.h"
 #include "message.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 const F32 COF_LINK_BATCH_TIME = 5.0F;
 const F32 MAX_ATTACHMENT_REQUEST_LIFETIME = 30.0F;
@@ -72,9 +76,14 @@ LLAttachmentsMgr::~LLAttachmentsMgr()
 {
 }
 
+//void LLAttachmentsMgr::addAttachmentRequest(const LLUUID& item_id,
+//                                            const U8 attachment_pt,
+//                                            const BOOL add)
+// [RLVa:KB] - Checked: 2010-09-13 (RLVa-1.2.1)
 void LLAttachmentsMgr::addAttachmentRequest(const LLUUID& item_id,
                                             const U8 attachment_pt,
-                                            const BOOL add)
+                                            const BOOL add, const BOOL fRlvForce /*=FALSE*/)
+// [/RLVa:KB]
 {
 	LLViewerInventoryItem *item = gInventory.getItem(item_id);
 
@@ -92,6 +101,26 @@ void LLAttachmentsMgr::addAttachmentRequest(const LLUUID& item_id,
 	attachment.mItemID = item_id;
 	attachment.mAttachmentPt = attachment_pt;
 	attachment.mAdd = add;
+
+// [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1)
+	if ( (rlv_handler_t::isEnabled()) && (!fRlvForce) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) && (gAgentWearables.areInitialAttachmentsRequested()) )
+	{
+		const LLInventoryItem* pItem = gInventory.getItem(item_id); 
+		if (!pItem)
+			return;
+
+		LLViewerJointAttachment* pAttachPt = NULL;
+		ERlvWearMask eWearMask = gRlvAttachmentLocks.canAttach(pItem, &pAttachPt);
+		if ( ((add) && ((RLV_WEAR_ADD & eWearMask) == 0)) || ((!add) && ((RLV_WEAR_REPLACE & eWearMask) == 0)) )
+			return;
+
+		if ( (0 == attachment_pt) && (NULL != pAttachPt) )
+			attachment.mAttachmentPt = RlvAttachPtLookup::getAttachPointIndex(pAttachPt);
+		RlvAttachmentLockWatchdog::instance().onWearAttachment(pItem, (add) ? RLV_WEAR_ADD : RLV_WEAR_REPLACE);
+		attachment.mAdd = true;
+	}
+// [/RLVa:KB]
+
 	mPendingAttachments.push_back(attachment);
 
     mAttachmentRequests.addTime(item_id);

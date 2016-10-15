@@ -38,6 +38,10 @@
 
 #include "lltoastalertpanel.h"
 
+// [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
+#include "rlvactions.h"
+// [/RLVa:KB]
+
 using namespace LLNotificationsUI;
 
 //--------------------------------------------------------------------------
@@ -88,8 +92,19 @@ bool LLAlertHandler::processNotification(const LLNotificationPtr& notification)
 
 		LLUUID from_id = notification->getPayload()["from_id"];
 
-		// firstly create session...
-		LLHandlerUtil::spawnIMSession(name, from_id);
+// [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
+		// Don't spawn an IM session for non-chat related events:
+		//   - LLHandlerUtil::logToIMP2P() below will still be called with to_file_only == false
+		//   - LLHandlerUtil::logToIM() will eventually be called as a result and without an open IM session it will log the
+		//     same message as it would for an open session whereas to_file_only == true would take a different code path
+		if (RlvActions::canStartIM(from_id))
+		{
+// [/RLVa:KB]
+			// firstly create session...
+			LLHandlerUtil::spawnIMSession(name, from_id);
+// [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
+		}
+// [/RLVa:KB]
 
 		// ...then log message to have IM Well notified about new message
 		LLHandlerUtil::logToIMP2P(notification);

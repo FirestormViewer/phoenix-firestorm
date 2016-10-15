@@ -36,6 +36,9 @@
 #include "llsingleton.h"
 #include "llsyswellwindow.h"
 #include "llfloaternotificationstabbed.h"
+// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+#include "llchannelmanager.h"
+// [/SL:KB]
 
 static LLDefaultChildRegistry::Register<LLChicletPanel> t1("chiclet_panel");
 static LLDefaultChildRegistry::Register<LLNotificationChiclet> t2("chiclet_notification");
@@ -237,6 +240,15 @@ bool LLNotificationChiclet::ChicletNotificationChannel::filterNotification( LLNo
 	{
 		displayNotification = true;
 	}
+// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+	else if ("offer" == notification->getType())
+	{
+		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
+		/*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
+		/*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification->getID()) : NULL;
+		displayNotification = (pToast) && (pToast->getCanBeStored());
+	}
+// [/SL:KB]
 	else
 	{
 		displayNotification = false;

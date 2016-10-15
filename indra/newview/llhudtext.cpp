@@ -46,6 +46,10 @@
 #include "llstatusbar.h"
 #include "llmenugl.h"
 #include "pipeline.h"
+// [RLVa:KB] - Checked: RLVa-1.4.0
+#include "rlvactions.h"
+#include "rlvhandler.h"
+// [/RLVa:KB]
 #include <boost/tokenizer.hpp>
 
 const F32 HORIZONTAL_PADDING = 15.f;
@@ -241,7 +245,32 @@ void LLHUDText::renderText()
 void LLHUDText::setString(const std::string &text_utf8)
 {
 	mTextSegments.clear();
-	addLine(text_utf8, mColor);
+//	addLine(text_utf8, mColor);
+// [RLVa:KB] - Checked: RLVa-2.0.3
+	// NOTE: setString() is called for debug and map beacons as well
+	if (RlvActions::isRlvEnabled())
+	{
+		std::string text(text_utf8);
+		if (gRlvHandler.canShowHoverText(mSourceObject))
+		{
+			if (!RlvActions::canShowLocation())
+				RlvUtil::filterLocation(text);
+
+			bool fCanShowNearby = RlvActions::canShowNearbyAgents();
+			if ( (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) || (!fCanShowNearby) )
+				RlvUtil::filterNames(text, true, !fCanShowNearby);
+		}
+		else
+		{
+			text = "";
+		}
+		addLine(text, mColor);
+	}
+	else
+	{
+		addLine(text_utf8, mColor);
+	}
+// [/RLVa:KB]
 }
 
 void LLHUDText::clearString()
@@ -630,3 +659,17 @@ F32 LLHUDText::LLHUDTextSegment::getWidth(const LLFontGL* font)
 		return width;
 	}
 }
+
+// [RLVa:KB] - Checked: RLVa-2.0.3
+void LLHUDText::refreshAllObjectText(EObjectTextFilter eObjFilter)
+{
+	for (LLHUDText* pText : sTextObjects)
+	{
+		if ((pText) && (!pText->mObjText.empty()) && (pText->mSourceObject) && (LL_PCODE_VOLUME == pText->mSourceObject->getPCode()) &&
+			((OTF_NONE == eObjFilter) || ((OTF_HUD_ATTACHMENTS == eObjFilter) && (pText->mSourceObject->isHUDAttachment()))))
+		{
+			pText->setString(pText->mObjText);
+		}
+	}
+}
+// [/RLVa:KB]

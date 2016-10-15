@@ -67,6 +67,10 @@
 #include "llviewerchat.h"
 #include "lltranslate.h"
 #include "llautoreplace.h"
+// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b)
+#include "rlvhandler.h"
+#include "rlvactions.h"
+// [/RLVa:KB]
 
 S32 LLFloaterIMNearbyChat::sLastSpecialChatChannel = 0;
 
@@ -75,7 +79,10 @@ const S32 COLLAPSED_HEIGHT = 60;
 const S32 EXPANDED_MIN_HEIGHT = 150;
 
 // legacy callback glue
-void send_chat_from_viewer(const std::string& utf8_out_text, EChatType type, S32 channel);
+//void send_chat_from_viewer(const std::string& utf8_out_text, EChatType type, S32 channel);
+// [RLVa:KB] - Checked: 2010-02-27 (RLVa-0.2.2)
+void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel);
+// [/RLVa:KB]
 
 struct LLChatTypeTrigger {
 	std::string name;
@@ -835,8 +842,57 @@ LLWString LLFloaterIMNearbyChat::stripChannelNumber(const LLWString &mesg, S32* 
 	}
 }
 
-void send_chat_from_viewer(const std::string& utf8_out_text, EChatType type, S32 channel)
+//void send_chat_from_viewer(const std::string& utf8_out_text, EChatType type, S32 channel)
+// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b) | Modified: RLVa-0.2.2a
+void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel)
+// [/RLVa:KB]
 {
+// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0a
+	// Only process chat messages (ie not CHAT_TYPE_START, CHAT_TYPE_STOP, etc)
+	if ( (rlv_handler_t::isEnabled()) && ( (CHAT_TYPE_WHISPER == type) || (CHAT_TYPE_NORMAL == type) || (CHAT_TYPE_SHOUT == type) ) )
+	{
+		if (0 == channel)
+		{
+			// (We already did this before, but LLChatHandler::handle() calls this directly)
+			if ( ((CHAT_TYPE_SHOUT == type) || (CHAT_TYPE_NORMAL == type)) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATNORMAL)) )
+				type = CHAT_TYPE_WHISPER;
+			else if ( (CHAT_TYPE_SHOUT == type) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATSHOUT)) )
+				type = CHAT_TYPE_NORMAL;
+			else if ( (CHAT_TYPE_WHISPER == type) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATWHISPER)) )
+				type = CHAT_TYPE_NORMAL;
+
+			// Redirect chat if needed
+			if ( ( (gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT) || (gRlvHandler.hasBehaviour(RLV_BHVR_REDIREMOTE)) ) && 
+				 (gRlvHandler.redirectChatOrEmote(utf8_out_text)) ) )
+			{
+				return;
+			}
+
+			// Filter public chat if sendchat restricted
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SENDCHAT))
+				gRlvHandler.filterChat(utf8_out_text, true);
+		}
+		else
+		{
+			// Don't allow chat on a non-public channel if sendchannel restricted (unless the channel is an exception)
+			if (!RlvActions::canSendChannel(channel))
+				return;
+
+			// Don't allow chat on debug channel if @sendchat, @redirchat or @rediremote restricted (shows as public chat on viewers)
+			if (CHAT_CHANNEL_DEBUG == channel)
+			{
+				bool fIsEmote = RlvUtil::isEmote(utf8_out_text);
+				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SENDCHAT)) || 
+					 ((!fIsEmote) && (gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT))) || 
+					 ((fIsEmote) && (gRlvHandler.hasBehaviour(RLV_BHVR_REDIREMOTE))) )
+				{
+					return;
+				}
+			}
+		}
+	}
+// [/RLVa:KB]
+
 	LLMessageSystem* msg = gMessageSystem;
 	msg->newMessageFast(_PREHASH_ChatFromViewer);
 	msg->nextBlockFast(_PREHASH_AgentData);

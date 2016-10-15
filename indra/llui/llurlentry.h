@@ -295,6 +295,21 @@ private:
 	/*virtual*/ std::string getName(const LLAvatarName& avatar_name);
 };
 
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+///
+/// LLUrlEntryAgentRLVAnonymizedName Describes an RLV anonymized agent name Url, e.g.,
+/// secondlife:///app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/rlvanonym
+/// that diplays an anonym (based on the display name) for an avatar
+/// such as "An individual"
+class LLUrlEntryAgentRLVAnonymizedName : public LLUrlEntryAgentName
+{
+public:
+	LLUrlEntryAgentRLVAnonymizedName();
+private:
+	/*virtual*/ std::string getName(const LLAvatarName& avatar_name);
+};
+// [/RLVa:KB]
+
 ///
 /// LLUrlEntryExperienceProfile Describes a Second Life experience profile Url, e.g.,
 /// secondlife:///app/experience/0e346d8b-4433-4d66-a6b0-fd37083abc4c/profile

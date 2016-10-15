@@ -182,6 +182,30 @@
 		<menu_item_call label="INFO ÜBER [APP_NAME]" name="About Second Life"/>
 		<menu_item_call label="Nach Updates suchen" name="Check for Updates"/>
 	</menu>
+    
+    <menu label="RLVa" name="RLVa Main">
+      <menu label="Entwickler" name="Debug">
+        <menu_item_check label="RLVa Menü in der Leiste anzeigen" name="Show Top-level RLVa Menu" />
+        <menu_item_check label="Debug Nachrichten anzeigen" name="Show Debug Messages" />
+        <menu_item_check label="Hide Unset or Duplicate Messages" name="Hide Unset or Duplicate Messages" />
+        <menu_item_check label="Fehlermeldungen anzeigen" name="Show Assertion Failures" />
+        <menu_item_check label="Gesperrte Layer verstecken" name="Hide Locked Layers" />
+        <menu_item_check label="Gesperrte Teile verstecken" name="Hide Locked Attachments" />
+        <menu_item_check label="Enable Legacy Naming" name="Enable Legacy Naming" />
+        <menu_item_check label="Shared Wear einschalten" name="Enable Shared Wear" />
+        <menu_item_check label="Objekte beim anziehen umbenennen" name="Rename Shared Items on Wear" />
+        <menu_item_check label="Sperren..." name="Locks" />
+      </menu>
+
+      <menu_item_check label="OOC Chat erlauben" name="Allow OOC Chat" />
+      <menu_item_check label="Senden an #RLV verbieten" name="Forbid Give to #RLV" />
+      <menu_item_check label="Gefilterten Chat anzeigen" name="Show Filtered Chat" />
+      <menu_item_check label="Namensschilder anzeigen" name="Show Name Tags" />
+      <menu_item_check label="Anziehen ersetzt unverschlossenes" name="Wear Replaces Unlocked" />
+      <menu_item_check label="Einschränkungen..." name="Restrictions" />
+      <menu_item_check label="Nachrichten..." name="Strings" />
+    </menu>
+    
 	<menu label="Erweitert" name="Advanced">
 		<menu_item_call label="Textur neu laden" name="Rebake Texture"/>
 		<menu_item_call label="UI-Größe auf Standard setzen" name="Set UI Size to Default"/>

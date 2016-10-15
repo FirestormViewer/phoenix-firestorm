@@ -61,6 +61,12 @@ public:
 
 	boost::signals2::connection setResizeCallback( const resize_signal_t::slot_type& cb );
 
+// [RLVa:KB] - Checked: 2014-03-23 (RLVa-1.4.10)
+	/**
+	 * Shorthand to call updateParcelInfoText() and updateParcelIcons().
+	 */
+	void update();
+// [/RLV:KB]
 private:
 	class LLParcelChangeObserver;
 
@@ -110,10 +116,10 @@ private:
 	 */
 	void onNavBarShowParcelPropertiesCtrlChanged();
 
-	/**
-	 * Shorthand to call updateParcelInfoText() and updateParcelIcons().
-	 */
-	void update();
+//	/**
+//	 * Shorthand to call updateParcelInfoText() and updateParcelIcons().
+//	 */
+//	void update();
 
 	/**
 	 * Updates parcel info text (mParcelInfoText).

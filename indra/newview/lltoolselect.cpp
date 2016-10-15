@@ -47,6 +47,11 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llworld.h"
+// [RLVa:KB] - Checked: RLVa-2.0.0
+#include "rlvactions.h"
+#include "rlvhelper.h"
+#include "llfloaterreg.h"
+// [/RLVa:KB]
 
 // Globals
 //extern BOOL gAllowSelectAvatar;
@@ -80,6 +85,36 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 	{
 		object = object->getRootEdit();
 	}
+
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+	if ( (object) && (RlvActions::isRlvEnabled()) )
+	{
+		if (!RlvActions::canEdit(object))
+		{
+			if (!temp_select)
+				return LLSelectMgr::getInstance()->getSelection();
+			else if (LLToolMgr::instance().inBuildMode())
+				LLToolMgr::instance().toggleBuildMode();
+		}
+
+		if ( (RlvActions::hasBehaviour(RLV_BHVR_FARTOUCH)) && ((!object->isAttachment()) || (!object->permYouOwner())) )
+		{
+			static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
+			float nFartouchDistSq = s_nFartouchDist * s_nFartouchDist;
+			// NOTE: recheck why we did it this way, might be able to simplify
+			if ( (dist_vec_squared(gAgent.getPositionAgent(), object->getPositionRegion()) > nFartouchDistSq) &&
+			     (dist_vec_squared(gAgent.getPositionAgent(), pick.mIntersection) > nFartouchDistSq) )
+			{
+				if ( (LLFloaterReg::instanceVisible("build")) && (pick.mKeyMask != MASK_SHIFT) && (pick.mKeyMask != MASK_CONTROL) )
+					LLSelectMgr::getInstance()->deselectAll();
+				return LLSelectMgr::getInstance()->getSelection();
+			}
+			else if (LLToolMgr::instance().inBuildMode())
+				LLToolMgr::instance().toggleBuildMode();
+		}
+	}
+// [/RLVa:KB]
+
 	BOOL select_owned = gSavedSettings.getBOOL("SelectOwnedOnly");
 	BOOL select_movable = gSavedSettings.getBOOL("SelectMovableOnly");
 	

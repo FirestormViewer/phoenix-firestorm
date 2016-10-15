@@ -7256,6 +7256,7 @@ Your object named &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; has given you th
   <notification
    icon="notify.tga"
    name="UserGiveItem"
+   label="Inventory offer from [NAME_LABEL]"
    log_to_im ="true"
    type="offer"
    sound="UISndNewIncomingIMSession">
@@ -7313,6 +7314,7 @@ Your object named &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; has given you th
   <notification
    icon="notify.tga"
    name="TeleportOffered"
+   label="Teleport offer from [NAME_LABEL]"
    log_to_im="true"
    log_to_chat="false"
    type="offer"
@@ -7428,6 +7430,7 @@ Offer a teleport?
   <notification
    icon="notify.tga"
    name="OfferFriendship"
+   label="Friendship offer from [NAME_LABEL]"
    log_to_im="true"
    type="offer">
     <tag>friendship</tag>
@@ -7461,6 +7464,7 @@ Offer a teleport?
   <notification
    icon="notify.tga"
    name="OfferFriendshipNoMessage"
+   label="Friendship offer from [NAME_LABEL]"
    persist="true"
    type="notify">
     <tag>friendship</tag>
@@ -11008,6 +11012,13 @@ An internal error prevented us from properly updating your viewer.  The L$ balan
    type="notify">
    <tag>fail</tag>
 Cannot create large prims that intersect other players.  Please re-try when other players have moved.
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="RLVChangeStrings"
+   type="alertmodal">
+Changes won't take effect until after you restart [APP_NAME].
   </notification>
   
   <notification

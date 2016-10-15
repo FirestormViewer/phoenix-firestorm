@@ -2992,7 +2992,10 @@ void LLViewerMediaImpl::updateImagesMediaStreams()
 //////////////////////////////////////////////////////////////////////////////////////////
 LLViewerMediaTexture* LLViewerMediaImpl::updatePlaceholderImage()
 {
-	if(mTextureId.isNull())
+//	if(mTextureId.isNull())
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+	if ( (mTextureId.isNull()) || ((LLViewerFetchedTexture::sDefaultDiffuseImagep.notNull()) && (LLViewerFetchedTexture::sDefaultDiffuseImagep->getID() == mTextureId)) )
+// [/SL:KB]
 	{
 		// The code that created this instance will read from the plugin's bits.
 		return NULL;

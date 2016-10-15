@@ -469,6 +469,9 @@ public:
 
 	// *WORKAROUND: two methods to overload appropriate Params due to localization issue:
 	// no_items_msg & no_filtered_items_msg attributes are not defined as translatable in VLT. See EXT-5931
+// [RLVa:KB] - Checked: RLVa-2.0.3
+	const std::string& getNoItemsMsg() const { return mNoItemsMsg; }
+// [/RLVa:KB]
 	void setNoItemsMsg(const std::string& msg) { mNoItemsMsg = msg; }
 	void setNoFilteredItemsMsg(const std::string& msg) { mNoFilteredItemsMsg = msg; }
 

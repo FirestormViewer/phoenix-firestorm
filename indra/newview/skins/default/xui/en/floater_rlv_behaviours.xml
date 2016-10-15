@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+  open_positioning="cascading"
+  can_close="true"
+  can_minimize="true"
+  can_resize="true"
+  height="300"
+  min_height="300"
+  min_width="450"
+  name="rlv_behaviours"
+  save_rect="true"
+  save_visibility="false"
+  single_instance="true"
+  title="ACTIVE RLV RESTRICTIONS"
+  width="450">
+  <tab_container
+    follows="all"
+    layout="topleft"
+    left="8"
+    name="behaviour_tab"
+    height="266"
+    right="-8"
+    tab_height="23"
+    tab_min_width="120"
+    tab_position="top"
+    top="0" >
+    <panel
+      follows="all"  height="265"
+      label="RESTRICTIONS"
+      layout="topleft"
+      name="behaviour_panel"
+      top="0">
+      <scroll_list
+	     draw_border="false"
+	     draw_heading="true"
+	     draw_stripes="true"
+	     follows="all"
+	     height="266"
+	     layout="topleft"
+	     multi_select="false"
+	     name="behaviour_list"
+	     tool_tip="List of current RLVa restrictions."
+	     top_pad="0" >
+        <scroll_list.columns label="Restriction" name="behaviour" width="70" />
+        <scroll_list.columns label="Object Name" name="issuer" />
+      </scroll_list>
+    </panel>
+    <panel
+      follows="all"  height="265"
+      label="EXCEPTIONS"
+      layout="topleft"
+      name="exception_panel"
+      top="0"> 
+      <scroll_list
+	     draw_border="false"
+	     draw_heading="true"
+	     draw_stripes="true"
+	     follows="all"
+	     height="266"
+	     layout="topleft"
+	     multi_select="false"
+	     name="exception_list"
+	     tool_tip="List of current RLVa exceptions."
+	     top_pad="0" >
+        <scroll_list.columns label="Exception" name="behaviour" width="70" />
+        <scroll_list.columns label="Source" name="option" width="105" />
+        <scroll_list.columns label="Object Name" name="issuer" />
+      </scroll_list>
+    </panel>
+    <panel
+      follows="all"  height="265"
+      label="MODIFIERS"
+      layout="topleft"
+      name="modifier_panel"
+      top="0">
+      <scroll_list
+       draw_border="false"
+       draw_heading="true"
+       draw_stripes="true"
+       follows="all"
+       height="266"
+       layout="topleft"
+       multi_select="false"
+       name="modifier_list"
+       tool_tip="List of current RLVa modifiers."
+       top_pad="0" >
+        <scroll_list.columns label="Modifier" name="modifier" width="105" />
+        <scroll_list.columns label="Value" name="value" width="105" />
+        <scroll_list.columns label="Primary Object" name="primary" />
+      </scroll_list>
+    </panel>
+  </tab_container>
+  <panel
+   background_visible="false"
+   follows="left|right|bottom"
+   height="25"
+   label="bottom_panel"
+   layout="topleft"
+   name="bottom_panel"
+   top_pad="0">
+    <button
+     image_hover_unselected="Toolbar_Left_Over"
+     image_overlay="Copy"
+     image_overlay_alignment="left"
+     image_selected="Toolbar_Left_Selected"
+     image_unselected="Toolbar_Left_Off"
+     label="Copy to Clipboard"
+     left="0"
+     name="copy_btn"
+     top="1"
+     width="150" />
+    <icon
+     follows="left|right"
+     image_name="Toolbar_Right_Off"
+     left_pad="1"
+     name="dummy_icon"
+     top="1"
+     right="-1" />
+  </panel>
+</floater>

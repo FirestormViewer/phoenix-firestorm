@@ -53,6 +53,9 @@
 #include "llviewershadermgr.h"
 #include "llviewertexture.h"
 #include "llvoavatar.h"
+// [RLVa:KB] - Checked: RLVa-2.0.0
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 #if LL_LINUX
 // Work-around spurious used before init warning on Vector4a
@@ -166,6 +169,10 @@ void LLFace::init(LLDrawable* drawablep, LLViewerObject* objp)
 	mBoundingSphereRadius = 0.0f ;
 
 	mHasMedia = FALSE ;
+
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+	mShowDiffTexture = true;
+// [/SL:KB]
 }
 
 void LLFace::destroy()
@@ -281,6 +288,15 @@ void LLFace::setTexture(U32 ch, LLViewerTexture* tex)
 	{
 		return ;
 	}
+
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+	if ( (LLRender::DIFFUSE_MAP == ch) && (!mShowDiffTexture) )
+	{
+		mOrigDiffTexture = tex;
+		if (LLViewerFetchedTexture::sDefaultDiffuseImagep.get() == mTexture[ch].get())
+			return;
+	}
+// [/SL:KB]
 
 	if(mTexture[ch].notNull())
 	{
@@ -2644,8 +2660,59 @@ LLViewerTexture* LLFace::getTexture(U32 ch) const
 {
 	llassert(ch < LLRender::NUM_TEXTURE_CHANNELS);
 
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+	// Check whether the diffuse texture needs to be obscured or restored
+	if (mShowDiffTexture != LLPipeline::sRenderTextures)
+		setDefaultTexture(LLRender::DIFFUSE_MAP, !LLPipeline::sRenderTextures);
+// [/SL:KB]
+
 	return mTexture[ch] ;
 }
+
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+void LLFace::setDefaultTexture(U32 nChannel, bool fShowDefault) const
+{
+	bool fUpdated = false;
+	if ( (LLRender::DIFFUSE_MAP == nChannel) && (mVObjp) && (!mVObjp->isDead()) && ((LL_PCODE_VOLUME == mVObjp->getPCode()) || (LLViewerObject::LL_VO_PART_GROUP == mVObjp->getPCode())) )
+	{
+		if ( ((mShowDiffTexture) && (fShowDefault)) ||
+		     ((!mShowDiffTexture) && (fShowDefault) && (mOrigDiffTexture.notNull()) && (mTexture[nChannel]) && (mTexture[nChannel]->getID() != LLViewerFetchedTexture::sDefaultDiffuseImagep->getID())) )
+		{
+			if (mOrigDiffTexture.notNull())
+				mShowDiffTexture = true;				// Swap out the default texture
+			else
+				mOrigDiffTexture = mTexture[nChannel];	// Cache the original texture
+
+			if ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_TEXTURES)) || (!mVObjp->isAttachment()) )
+			{
+				if (LL_PCODE_VOLUME == mVObjp->getPCode())
+					const_cast<LLFace*>(this)->switchTexture(nChannel, LLViewerFetchedTexture::sDefaultDiffuseImagep);
+				else
+					const_cast<LLFace*>(this)->setTexture(nChannel, LLViewerFetchedTexture::sDefaultDiffuseImagep);
+			}
+			mShowDiffTexture = false; fUpdated = true;
+		}
+		else if ( (!mShowDiffTexture) && (!fShowDefault) && (mOrigDiffTexture.notNull()) )
+		{
+			mShowDiffTexture = true;
+			if (LL_PCODE_VOLUME == mVObjp->getPCode())
+				const_cast<LLFace*>(this)->switchTexture(nChannel, mOrigDiffTexture);
+			else
+				const_cast<LLFace*>(this)->setTexture(nChannel, mOrigDiffTexture);
+			mOrigDiffTexture = nullptr; fUpdated = true;
+		}
+
+		if ((fUpdated) && (mDrawablep))
+		{
+			gPipeline.markTextured(mDrawablep);
+			const_cast<LLDrawable*>(mDrawablep.get())->updateTexture();
+		}
+	}
+
+	// Always flip the flag even if we didn't obscure so we don't keep wasting cycles with negative checks
+	mShowDiffTexture = !fShowDefault;
+}
+// [/SL:KB]
 
 void LLFace::setVertexBuffer(LLVertexBuffer* buffer)
 {

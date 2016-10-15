@@ -265,15 +265,15 @@ void LLHandlerUtil::updateIMFLoaterMesages(const LLUUID& session_id)
 	}
 }
 
-// static
-void LLHandlerUtil::updateVisibleIMFLoaterMesages(const LLNotificationPtr& notification)
-{
-	const std::string name = LLHandlerUtil::getSubstitutionName(notification);
-	LLUUID from_id = notification->getPayload()["from_id"];
-	LLUUID session_id = spawnIMSession(name, from_id);
-
-	updateIMFLoaterMesages(session_id);
-}
+//// static
+//void LLHandlerUtil::updateVisibleIMFLoaterMesages(const LLNotificationPtr& notification)
+//{
+//	const std::string name = LLHandlerUtil::getSubstitutionName(notification);
+//	LLUUID from_id = notification->getPayload()["from_id"];
+//	LLUUID session_id = spawnIMSession(name, from_id);
+//
+//	updateIMFLoaterMesages(session_id);
+//}
 
 // static
 void LLHandlerUtil::decIMMesageCounter(const LLNotificationPtr& notification)

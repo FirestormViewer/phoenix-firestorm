@@ -525,6 +525,9 @@ public:
 	static LLPointer<LLViewerFetchedTexture> sDefaultImagep; // "Default" texture for error cases, the only case of fetched texture which is generated in local.
 	static LLPointer<LLViewerFetchedTexture> sSmokeImagep; // Old "Default" translucent texture
 	static LLPointer<LLViewerFetchedTexture> sFlatNormalImagep; // Flat normal map denoting no bumpiness on a surface
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+	static LLPointer<LLViewerFetchedTexture> sDefaultDiffuseImagep;
+// [/SL:KB]
 };
 
 //

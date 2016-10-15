@@ -81,6 +81,10 @@ public:
 	typedef boost::signals2::signal<void (const LLVector3d&, const bool&)> teleport_finished_signal_t;
 	typedef boost::function<void()> teleport_failed_callback_t;
 	typedef boost::signals2::signal<void()> teleport_failed_signal_t;
+// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
+	typedef boost::function<void()> teleport_done_callback_t;
+	typedef boost::signals2::signal<void()> teleport_done_signal_t;
+// [/SL:KB]
 
 	LLViewerParcelMgr();
 	~LLViewerParcelMgr();
@@ -284,8 +288,14 @@ public:
 
 	boost::signals2::connection setTeleportFinishedCallback(teleport_finished_callback_t cb);
 	boost::signals2::connection setTeleportFailedCallback(teleport_failed_callback_t cb);
+// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
+	boost::signals2::connection setTeleportDoneCallback(teleport_done_callback_t cb);
+// [/SL:KB]
 	void onTeleportFinished(bool local, const LLVector3d& new_pos);
 	void onTeleportFailed();
+// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
+	void onTeleportDone();
+// [/SL:KB]
 
 	static BOOL isParcelOwnedByAgent(const LLParcel* parcelp, U64 group_proxy_power);
 	static BOOL isParcelModifiableByAgent(const LLParcel* parcelp, U64 group_proxy_power);
@@ -340,6 +350,9 @@ private:
 	LLVector3d					mTeleportInProgressPosition;
 	teleport_finished_signal_t	mTeleportFinishedSignal;
 	teleport_failed_signal_t	mTeleportFailedSignal;
+// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
+	teleport_done_signal_t		mTeleportDoneSignal;
+// [/SL:KB]
 
 	// Array of pieces of parcel edges to potentially draw
 	// Has (parcels_per_edge + 1) * (parcels_per_edge + 1) elements so

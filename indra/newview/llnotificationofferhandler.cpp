@@ -36,6 +36,9 @@
 #include "llscriptfloater.h"
 #include "llimview.h"
 #include "llnotificationsutil.h"
+// [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
+#include "rlvactions.h"
+// [/RLVa:KB]
 
 using namespace LLNotificationsUI;
 
@@ -108,9 +111,21 @@ bool LLOfferHandler::processNotification(const LLNotificationPtr& notification)
 			                notification->playSound();
 			            }
 
-			LLHandlerUtil::spawnIMSession(name, from_id);
-			LLHandlerUtil::addNotifPanelToIM(notification);
-
+// [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
+			// Don't spawn an IM session for non-chat related events
+			if (RlvActions::canStartIM(from_id))
+			{
+// [/RLVa:KB]
+				LLHandlerUtil::spawnIMSession(name, from_id);
+				LLHandlerUtil::addNotifPanelToIM(notification);
+// [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
+			}
+			else
+			{
+				// Since we didn't add this notification to an IM session we want it to get routed to the notification syswell
+				add_notif_to_im = false;
+			}
+// [/RLVa:KB]
 		}
 
 		if (!notification->canShowToast())
@@ -177,9 +192,18 @@ bool LLOfferHandler::processNotification(const LLNotificationPtr& notification)
 	}
 	else
 	{
-		if (notification->canLogToIM() 
-			&& notification->hasFormElements()
-			&& !LLHandlerUtil::isIMFloaterOpened(notification))
+//		if (notification->canLogToIM() 
+//			&& notification->hasFormElements()
+//			&& !LLHandlerUtil::isIMFloaterOpened(notification))
+// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+		// The above test won't necessarily tell us whether the notification went into an IM or to the notification syswell
+		//   -> the one and only time we need to decrease the unread IM count is when we've clicked any of the buttons on the *toast*
+		//   -> since LLIMFloater::updateMessages() hides the toast when we open the IM (which resets the unread count to 0) we should 
+		//      *only* decrease the unread IM count if there's a visible toast since the unread count will be at 0 otherwise anyway
+		LLScreenChannel* pChannel = dynamic_cast<LLScreenChannel*>(mChannel.get());
+		LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification->getID()) : NULL;
+		if ( (pToast) && (!pToast->getCanBeStored()) )
+// [/SL:KB]
 		{
 			LLHandlerUtil::decIMMesageCounter(notification);
 		}

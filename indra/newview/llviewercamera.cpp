@@ -41,6 +41,10 @@
 #include "llworld.h"
 #include "lltoolmgr.h"
 #include "llviewerjoystick.h"
+// [RLVa:KB] - RLVa-2.0.0
+#include "rlvactions.h"
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 // Linden library includes
 #include "lldrawable.h"
@@ -359,6 +363,11 @@ void LLViewerCamera::setPerspective(BOOL for_selection,
 		{
 			z_far = gAgentCamera.mDrawDistance;
 		}
+
+// [RLVa:KB] - Checked: RLVa-2.0.0
+		if (RlvActions::hasBehaviour(RLV_BHVR_FARTOUCH))
+			z_far = RlvActions::getModifierValue<float>(RLV_MODIFIER_FARTOUCHDIST);
+// [/RLVa:KB]
 	}
 	else
 	{
@@ -876,6 +885,12 @@ BOOL LLViewerCamera::areVertsVisible(LLViewerObject* volumep, BOOL all_verts)
 
 void LLViewerCamera::setDefaultFOV(F32 vertical_fov_rads) 
 {
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	F32 nCamFOVMin, nCamFOVMax;
+	if ( (RlvActions::isRlvEnabled()) && (RlvActions::getCameraFOVLimits(nCamFOVMin, nCamFOVMax)) )
+		vertical_fov_rads = llclamp(vertical_fov_rads, nCamFOVMin, nCamFOVMax);
+// [/RLVa:KB]
+
 	vertical_fov_rads = llclamp(vertical_fov_rads, getMinView(), getMaxView());
 	setView(vertical_fov_rads);
 	mCameraFOVDefault = vertical_fov_rads; 

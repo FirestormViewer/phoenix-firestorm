@@ -114,6 +114,12 @@
 #include "llpanelplaceprofile.h"
 #include "llviewerregion.h"
 #include "llfloaterregionrestarting.h"
+// [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0a)
+#include "rlvactions.h"
+#include "rlvhandler.h"
+#include "rlvinventory.h"
+#include "rlvui.h"
+// [/RLVa:KB]
 
 #include <boost/algorithm/string/split.hpp> //
 #include <boost/regex.hpp>
@@ -237,7 +243,18 @@ bool friendship_offer_callback(const LLSD& notification, const LLSD& response)
 	    // modified_form->setElementEnabled("Accept", false);
 	    // modified_form->setElementEnabled("Decline", false);
 	    // notification_ptr->updateForm(modified_form);
-	    // notification_ptr->repost();
+// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+//		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
+//		/*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
+//		/*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification["id"].asUUID()) : NULL;
+//		if ( (!pToast) || (!pToast->getCanBeStored()) )
+//		{
+// [/SL:KB]
+//			notification_ptr->repost();
+// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+//		}
+// [/SL:KB]
+
     }
 
 	return false;
@@ -1493,7 +1510,14 @@ void LLOfferInfo::send_auto_receive_response(void)
 	if(IM_INVENTORY_OFFERED == mIM)
 	{
 		// add buddy to recent people list
-		LLRecentPeople::instance().add(mFromID);
+//		LLRecentPeople::instance().add(mFromID);
+// [RLVa:KB] - Checked: RLVa-2.0.1
+		// RELEASE-RLVa: [RLVa-2.0.1] Make sure this stays in sync with the condition in inventory_offer_handler()
+		bool fRlvCanShowName = (!RlvActions::isRlvEnabled()) ||
+			(RlvActions::canShowName(RlvActions::SNC_DEFAULT, mFromID)) || (!RlvUtil::isNearbyAgent(mFromID)) || (RlvUIEnabler::hasOpenIM(mFromID)) || (RlvUIEnabler::hasOpenProfile(mFromID));
+		if (fRlvCanShowName)
+			LLRecentPeople::instance().add(mFromID);
+// [/RLVa:KB]
 	}
 }
 
@@ -1563,6 +1587,18 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 				// This is an offer from an agent. In this case, the back
 				// end has already copied the items into your inventory,
 				// so we can fetch it out of our inventory.
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0)
+				if ( (rlv_handler_t::isEnabled()) && (!RlvSettings::getForbidGiveToRLV()) && (LLAssetType::AT_CATEGORY == mType) && (mDesc.find(RLV_PUTINV_PREFIX) == 0) )
+				{
+					RlvGiveToRLVAgentOffer* pOfferObserver = new RlvGiveToRLVAgentOffer(mObjectID);
+					pOfferObserver->startFetch();
+					if (pOfferObserver->isFinished())
+						pOfferObserver->done();
+					else
+						gInventory.addObserver(pOfferObserver);
+				}
+// [/RLVa:KB]
+
 				if (gSavedSettings.getBOOL("ShowOfferedInventory"))
 				{
 					LLOpenAgentOffer* open_agent_offer = new LLOpenAgentOffer(mObjectID, from_string);
@@ -1744,6 +1780,7 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 		}
 		else
 		{
+/*
 			std::string full_name;
 			if (gCacheName->getFullName(mFromID, full_name))
 			{
@@ -1757,6 +1794,22 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 				+ mFromName + LLTrans::getString("'")+" " + LLTrans::getString("InvOfferOwnedByUnknownUser");
 				chatHistory_string = mFromName + " " + LLTrans::getString("InvOfferOwnedByUnknownUser");
 			}
+*/
+// [SL:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+			std::string name_slurl = LLSLURL("agent", mFromID, "about").getSLURLString();
+
+// [RLVa:KB] - Checked: RLVa-2.0.1
+			// RELEASE-RLVa: [RLVa-2.0.1] Make sure this stays in sync with the condition in inventory_offer_handler()
+			bool fRlvCanShowName = (!RlvActions::isRlvEnabled()) ||
+				(RlvActions::canShowName(RlvActions::SNC_DEFAULT, mFromID)) || (!RlvUtil::isNearbyAgent(mFromID)) || (RlvUIEnabler::hasOpenIM(mFromID)) || (RlvUIEnabler::hasOpenProfile(mFromID));
+			if (!fRlvCanShowName)
+				name_slurl = LLSLURL("agent", mFromID, "rlvanonym").getSLURLString();
+// [/RLVa:KB]
+
+			from_string = LLTrans::getString("InvOfferAnObjectNamed") + " "+ LLTrans::getString("'") + mFromName 
+				+ LLTrans::getString("'")+" " + LLTrans::getString("InvOfferOwnedBy") + name_slurl;
+			chatHistory_string = mFromName + " " + LLTrans::getString("InvOfferOwnedBy") + " " + name_slurl;
+// [/SL:KB]
 		}
 	}
 	else
@@ -1766,12 +1819,38 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 	
 	bool is_do_not_disturb = gAgent.isDoNotDisturb();
 	
+// [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1)
+	bool fRlvNotifyAccepted = false;
+// [/RLVa:KB]
 	switch(button)
 	{
 		case IOR_ACCEPT:
 			// ACCEPT. The math for the dialog works, because the accept
 			// for inventory_offered, task_inventory_offer or
 			// group_notice_inventory is 1 greater than the offer integer value.
+
+// [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1)
+			// Only treat the offer as 'Give to #RLV' if:
+			//   - the user has enabled the feature
+			//   - the inventory offer came from a script (and specifies a folder)
+			//   - the name starts with the prefix - mDesc format: '[OBJECTNAME]'  ( http://slurl.com/... )
+			if ( (rlv_handler_t::isEnabled()) && (IM_TASK_INVENTORY_OFFERED == mIM) && (LLAssetType::AT_CATEGORY == mType) && (mDesc.find(RLV_PUTINV_PREFIX) == 1) )
+			{
+				fRlvNotifyAccepted = true;
+				if (!RlvSettings::getForbidGiveToRLV())
+				{
+					const LLUUID& idRlvRoot = RlvInventory::instance().getSharedRootID();
+					if (idRlvRoot.notNull())
+						mFolderID = idRlvRoot;
+
+					fRlvNotifyAccepted = false;		// "accepted_in_rlv" is sent from RlvGiveToRLVTaskOffer *after* we have the folder
+
+					RlvGiveToRLVTaskOffer* pOfferObserver = new RlvGiveToRLVTaskOffer(mTransactionID);
+					gInventory.addObserver(pOfferObserver);
+				}
+			}
+// [/RLVa:KB]
+
 			// Generates IM_INVENTORY_ACCEPTED, IM_TASK_INVENTORY_ACCEPTED, 
 			// or IM_GROUP_NOTICE_INVENTORY_ACCEPTED
 			msg->addU8Fast(_PREHASH_Dialog, (U8)(mIM + 1));
@@ -1780,6 +1859,15 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 			// send the message
 			msg->sendReliable(mHost);
 			
+// [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1)
+			if (fRlvNotifyAccepted)
+			{
+				std::string::size_type idxToken = mDesc.find("'  ( http://");
+				if (std::string::npos != idxToken)
+					RlvBehaviourNotifyHandler::sendNotification("accepted_in_inv inv_offer " + mDesc.substr(1, idxToken - 1));
+			}
+// [/RLVa:KB]
+
 			//don't spam them if they are getting flooded
 			if (check_offer_throttle(mFromName, true))
 			{
@@ -1824,6 +1912,16 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 			msg->addBinaryDataFast(_PREHASH_BinaryBucket, EMPTY_BINARY_BUCKET, EMPTY_BINARY_BUCKET_SIZE);
 			// send the message
 			msg->sendReliable(mHost);
+			
+// [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1e) | Added: RLVa-1.2.1e
+			if ( (rlv_handler_t::isEnabled()) && 
+				 (IM_TASK_INVENTORY_OFFERED == mIM) && (LLAssetType::AT_CATEGORY == mType) && (mDesc.find(RLV_PUTINV_PREFIX) == 1) )
+			{
+				std::string::size_type idxToken = mDesc.find("'  ( http://");
+				if (std::string::npos != idxToken)
+					RlvBehaviourNotifyHandler::sendNotification("declined inv_offer " + mDesc.substr(1, idxToken - 1));
+			}
+// [/RLVa:KB]
 
 			if (gSavedSettings.getBOOL("LogInventoryDecline"))
 			{
@@ -1831,6 +1929,7 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 				log_message_args["DESC"] = mDesc;
 				log_message_args["NAME"] = mFromName;
 				log_message = LLTrans::getString("InvOfferDecline", log_message_args);
+
 
 				LLSD args;
 				args["MESSAGE"] = log_message;
@@ -1959,6 +2058,9 @@ void inventory_offer_handler(LLOfferInfo* info)
 	}
 	else
 	{
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+		args["NAME_LABEL"] = LLSLURL("agent", info->mFromID, "completename").getSLURLString();
+// [/SL:KB]
 		args["NAME_SLURL"] = LLSLURL("agent", info->mFromID, "about").getSLURLString();
 	}
 	std::string verb = "select?name=" + LLURI::escape(msg);
@@ -1969,6 +2071,15 @@ void inventory_offer_handler(LLOfferInfo* info)
 	// Object -> Agent Inventory Offer
 	if (info->mFromObject && !bAutoAccept)
 	{
+// [RLVa:KB] - Checked: RLVa-1.2.2
+		// Only filter if the object owner is a nearby agent
+		if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, info->mFromID)) && (RlvUtil::isNearbyAgent(info->mFromID)) )
+		{
+			payload["rlv_shownames"] = TRUE;
+			args["NAME_SLURL"] = LLSLURL("agent", info->mFromID, "rlvanonym").getSLURLString();
+		}
+// [/RLVa:KB]
+
 		// Inventory Slurls don't currently work for non agent transfers, so only display the object name.
 		args["ITEM_SLURL"] = msg;
 		// Note: sets inventory_task_offer_callback as the callback
@@ -1983,6 +2094,18 @@ void inventory_offer_handler(LLOfferInfo* info)
 	}
 	else // Agent -> Agent Inventory Offer
 	{
+// [RLVa:KB] - Checked: RLVa-2.0.1
+		// Only filter if the offer is from a nearby agent and if there's no open IM session (doesn't necessarily have to be focused)
+		bool fRlvCanShowName = (!RlvActions::isRlvEnabled()) ||
+			(RlvActions::canShowName(RlvActions::SNC_DEFAULT, info->mFromID)) || (!RlvUtil::isNearbyAgent(info->mFromID)) || (RlvUIEnabler::hasOpenIM(info->mFromID)) || (RlvUIEnabler::hasOpenProfile(info->mFromID));
+		if (!fRlvCanShowName)
+		{
+			payload["rlv_shownames"] = TRUE;
+			args["NAME"] = RlvStrings::getAnonym(info->mFromName);
+			args["NAME_SLURL"] = LLSLURL("agent", info->mFromID, "rlvanonym").getSLURLString();
+		}
+// [/RLVa:KB]
+
 		p.responder = info;
 		// Note: sets inventory_offer_callback as the callback
 		// *TODO fix memory leak
@@ -2067,7 +2190,18 @@ bool lure_callback(const LLSD& notification, const LLSD& response)
 		modified_form->setElementEnabled("Teleport", false);
 		modified_form->setElementEnabled("Cancel", false);
 		notification_ptr->updateForm(modified_form);
-		notification_ptr->repost();
+
+// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
+		/*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
+		/*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification["id"].asUUID()) : NULL;
+		if ( (!pToast) || (!pToast->getCanBeStored()) )
+		{
+// [/SL:KB]
+			notification_ptr->repost();
+// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+		}
+// [/SL:KB]
 	}
 
 	return false;
@@ -2439,10 +2573,23 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			// do nothing -- don't distract newbies in
 			// Prelude with global IMs
 		}
+// [RLVa:KB] - Checked: RLVa-2.0.3
+		else if ( (RlvActions::isRlvEnabled()) && (RlvSettings::getEnableIMQuery()) && (offline == IM_ONLINE) && ("@version" == message) && (!is_muted) && ((!accept_im_from_only_friend) || (is_friend)) )
+		{
+			RlvUtil::sendBusyMessage(from_id, RlvStrings::getVersion(LLUUID::null), session_id);
+		}
+// [/RLVa:KB]
+//		else if (offline == IM_ONLINE 
+//					&& is_do_not_disturb
+//					&& from_id.notNull() //not a system message
+//					&& to_id.notNull()) //not global message
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0)
 		else if (offline == IM_ONLINE 
 					&& is_do_not_disturb
 					&& from_id.notNull() //not a system message
-					&& to_id.notNull()) //not global message
+					&& to_id.notNull() //not global message
+					&& RlvActions::canReceiveIM(from_id))
+// [/RLVa:KB]
 		{
 
 			// now store incoming IM in chat history
@@ -2512,6 +2659,17 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 				mute_im = true;
 			}
+
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0)
+			// Don't block offline IMs, or IMs from Lindens
+			if ( (rlv_handler_t::isEnabled()) && (offline != IM_OFFLINE) && (!RlvActions::canReceiveIM(from_id)) && (!LLMuteList::getInstance()->isLinden(original_name) ))
+			{
+				if (!mute_im)
+					RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM_REMOTE), session_id);
+				buffer = RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM);
+			}
+// [/RLVa:KB]
+
 			if (!mute_im) 
 			{
 				gIMMgr->addMessage(
@@ -2812,7 +2970,13 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 	case IM_INVENTORY_ACCEPTED:
 	{
-		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();;
+//		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();;
+// [RLVa:KB] - Checked: RLVa-1.2.2
+		// Only anonymize the name if the agent is nearby, there isn't an open IM session to them and their profile isn't open
+		bool fRlvCanShowName = (!RlvActions::isRlvEnabled()) ||
+			(RlvActions::canShowName(RlvActions::SNC_DEFAULT, from_id)) || (!RlvUtil::isNearbyAgent(from_id)) || (RlvUIEnabler::hasOpenProfile(from_id)) || (RlvUIEnabler::hasOpenIM(from_id));
+		args["NAME"] = LLSLURL("agent", from_id, (fRlvCanShowName) ? "completename" : "rlvanonym").getSLURLString();;
+// [/RLVa:KB]
 		LLSD payload;
 		payload["from_id"] = from_id;
 		// Passing the "SESSION_NAME" to use it for IM notification logging
@@ -2823,7 +2987,13 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	}
 	case IM_INVENTORY_DECLINED:
 	{
-		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();;
+//		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();;
+// [RLVa:KB] - Checked: RLVa-1.2.2
+		// Only anonymize the name if the agent is nearby, there isn't an open IM session to them and their profile isn't open
+		bool fRlvCanShowName = (!RlvActions::isRlvEnabled()) ||
+			(RlvActions::canShowName(RlvActions::SNC_DEFAULT, from_id)) || (!RlvUtil::isNearbyAgent(from_id)) || (RlvUIEnabler::hasOpenProfile(from_id)) || (RlvUIEnabler::hasOpenIM(from_id));
+		args["NAME"] = LLSLURL("agent", from_id, (fRlvCanShowName) ? "completename" : "rlvanonym").getSLURLString();;
+// [/RLVa:KB]
 		LLSD payload;
 		payload["from_id"] = from_id;
 		LLNotificationsUtil::add("InventoryDeclined", args, payload);
@@ -2885,6 +3055,25 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			LLSD query_string;
 			query_string["owner"] = from_id;
+// [RLVa:KB] - Checked: RLVa-1.2.0
+			if (RlvActions::isRlvEnabled())
+			{
+				// NOTE: the chat message itself will be filtered in LLNearbyChatHandler::processChat()
+				if ( (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) && (!from_group) && (RlvUtil::isNearbyAgent(from_id)) )
+				{
+					query_string["rlv_shownames"] = TRUE;
+
+					RlvUtil::filterNames(name);
+					chat.mFromName = name;
+				}
+				if (!RlvActions::canShowLocation())
+				{
+					std::string::size_type idxPos = location.find('/');
+					if ( (std::string::npos != idxPos) && (RlvUtil::isNearbyRegion(location.substr(0, idxPos))) )
+						location = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+				}
+			}
+// [/RLVa:KB]
 			query_string["slurl"] = location;
 			query_string["name"] = name;
 			if (from_group)
@@ -2892,7 +3081,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				query_string["groupowned"] = "true";
 			}	
 
-			chat.mURL = LLSLURL("objectim", session_id, "").getSLURLString();
+//			chat.mURL = LLSLURL("objectim", session_id, "").getSLURLString();
+// [SL:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+			chat.mURL = LLSLURL("objectim", session_id, LLURI::mapToQueryString(query_string)).getSLURLString();
+// [/SL:KB]
 			chat.mText = message;
 
 			// Note: lie to Nearby Chat, pretending that this is NOT an IM, because
@@ -3034,11 +3226,21 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	case IM_LURE_USER:
 	case IM_TELEPORT_REQUEST:
 		{
+// [RLVa:KB] - Checked: RLVa-1.4.9
+			// If we auto-accept the offer/request then this will override DnD status (but we'll still let the other party know later)
+			bool fRlvAutoAccept = (rlv_handler_t::isEnabled()) &&
+				( ((IM_LURE_USER == dialog) && (RlvActions::autoAcceptTeleportOffer(from_id))) ||
+				  ((IM_TELEPORT_REQUEST == dialog) && (RlvActions::autoAcceptTeleportRequest(from_id))) );
+// [/RLVa:KB]
+
 			if (is_muted)
 			{ 
 				return;
 			}
-			else if (is_do_not_disturb) 
+//			else if (is_do_not_disturb) 
+// [RLVa:KB] - Checked: RLVa-1.4.9
+			else if ( (is_do_not_disturb) && (!fRlvAutoAccept) )
+// [/RLVa:KB]
 			{
 				send_do_not_disturb_message(msg, from_id);
 			}
@@ -3101,8 +3303,32 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					}
 				}
 
+// [RLVa:KB] - Checked: RLVa-1.4.9
+				if (rlv_handler_t::isEnabled())
+				{
+					if ( ((IM_LURE_USER == dialog) && (!RlvActions::canAcceptTpOffer(from_id))) ||
+					     ((IM_TELEPORT_REQUEST == dialog) && (!RlvActions::canAcceptTpRequest(from_id))) )
+					{
+						RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RLV_STRING_BLOCKED_TPLUREREQ_REMOTE));
+						if (is_do_not_disturb)
+							send_do_not_disturb_message(msg, from_id);
+						return;
+					}
+
+					// Censor message if: 1) restricted from receiving IMs from the sender, or 2) teleport offer/request and @showloc=n restricted
+					if ( (!RlvActions::canReceiveIM(from_id)) || 
+						 ((gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (IM_LURE_USER == dialog || IM_TELEPORT_REQUEST == dialog)) )
+					{
+						message = RlvStrings::getString(RLV_STRING_HIDDEN);
+					}
+				}
+// [/RLVa:KB]
+
 				LLSD args;
 				// *TODO: Translate -> [FIRST] [LAST] (maybe)
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+				args["NAME_LABEL"] = LLSLURL("agent", from_id, "completename").getSLURLString();
+// [/SL:KB]
 				args["NAME_SLURL"] = LLSLURL("agent", from_id, "about").getSLURLString();
 				args["MESSAGE"] = message;
 				args["MATURITY_STR"] = region_access_str;
@@ -3144,10 +3370,25 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 						params.functor.name = "TeleportRequest";
 					}
 
-			    params.substitutions = args;
-			    params.payload = payload;
-			    LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
-			}
+					params.substitutions = args;
+					params.payload = payload;
+
+// [RLVa:KB] - Checked: RLVa-1.4.9
+					if (fRlvAutoAccept)
+					{
+						if (IM_LURE_USER == dialog)
+							gRlvHandler.setCanCancelTp(false);
+						if (is_do_not_disturb)
+							send_do_not_disturb_message(msg, from_id);
+						LLNotifications::instance().forceResponse(LLNotification::Params(params.name).payload(payload), 0);
+					}
+					else
+					{
+						LLPostponedNotification::add<LLPostponedOfferNotification>(params, from_id, false);
+					}
+// [/RLVa:KB]
+//					LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
+				}
 			}
 		}
 		break;
@@ -3299,6 +3540,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				{
 					send_do_not_disturb_message(msg, from_id);
 				}
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+				args["NAME_LABEL"] = LLSLURL("agent", from_id, "completename").getSLURLString();
+// [/SL:KB]
 				args["NAME_SLURL"] = LLSLURL("agent", from_id, "about").getSLURLString();
 
 				if (add_notification)
@@ -3581,9 +3825,14 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		chat.mPosAgent = chatter->getPositionAgent();
 
 		// Make swirly things only for talking objects. (not script debug messages, though)
-		if (chat.mSourceType == CHAT_SOURCE_OBJECT 
-			&& chat.mChatType != CHAT_TYPE_DEBUG_MSG
-			&& gSavedSettings.getBOOL("EffectScriptChatParticles") )
+//		if (chat.mSourceType == CHAT_SOURCE_OBJECT 
+//			&& chat.mChatType != CHAT_TYPE_DEBUG_MSG
+//			&& gSavedSettings.getBOOL("EffectScriptChatParticles") )
+// [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0b) | Modified: RLVa-1.0.0g
+		if ( ((chat.mSourceType == CHAT_SOURCE_OBJECT) && (chat.mChatType != CHAT_TYPE_DEBUG_MSG)) && 
+			 (gSavedSettings.getBOOL("EffectScriptChatParticles")) &&
+			 ((!rlv_handler_t::isEnabled()) || (CHAT_TYPE_OWNER != chat.mChatType)) )
+// [/RLVa:KB]
 		{
 			LLPointer<LLViewerPartSourceChat> psc = new LLViewerPartSourceChat(chatter->getPositionAgent());
 			psc->setSourceObject(chatter);
@@ -3612,6 +3861,75 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 
 		color.setVec(1.f,1.f,1.f,1.f);
 		msg->getStringFast(_PREHASH_ChatData, _PREHASH_Message, mesg);
+
+// [RLVa:KB] - Checked: 2010-04-23 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+		if ( (rlv_handler_t::isEnabled()) && (CHAT_TYPE_START != chat.mChatType) && (CHAT_TYPE_STOP != chat.mChatType) )
+		{
+			// NOTE: chatter can be NULL (may not have rezzed yet, or could be another avie's HUD attachment)
+			BOOL is_attachment = (chatter) ? chatter->isAttachment() : FALSE;
+			BOOL is_owned_by_me = (chatter) ? chatter->permYouOwner() : FALSE;
+
+			// Filtering "rules":
+			//   avatar  => filter all avie text (unless it's this avie or they're an exemption)
+			//   objects => filter everything except attachments this avie owns (never filter llOwnerSay or llRegionSayTo chat)
+			if ( ( (CHAT_SOURCE_AGENT == chat.mSourceType) && (from_id != gAgent.getID()) ) || 
+				 ( (CHAT_SOURCE_OBJECT == chat.mSourceType) && ((!is_owned_by_me) || (!is_attachment)) && 
+				   (CHAT_TYPE_OWNER != chat.mChatType) && (CHAT_TYPE_DIRECT != chat.mChatType) ) )
+			{
+				bool fIsEmote = RlvUtil::isEmote(mesg);
+				if ((!fIsEmote) &&
+					(((gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHAT)) && (!gRlvHandler.isException(RLV_BHVR_RECVCHAT, from_id))) ||
+					 ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHATFROM)) && (gRlvHandler.isException(RLV_BHVR_RECVCHATFROM, from_id))) ))
+				{
+					if ( (gRlvHandler.filterChat(mesg, false)) && (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis")) )
+						return;
+				}
+				else if ((fIsEmote) &&
+					     (((gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTE)) && (!gRlvHandler.isException(RLV_BHVR_RECVEMOTE, from_id))) ||
+					      ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTEFROM)) && (gRlvHandler.isException(RLV_BHVR_RECVEMOTEFROM, from_id))) ))
+ 				{
+					if (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis"))
+						return;
+					mesg = "/me ...";
+				}
+			}
+
+			// Filtering "rules":
+			//   avatar => filter only their name (unless it's this avie)
+			//   other  => filter everything
+			if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT))
+			{
+				if (CHAT_SOURCE_AGENT != chat.mSourceType)
+				{
+					RlvUtil::filterNames(chat.mFromName);
+				}
+				else if (chat.mFromID != gAgent.getID())
+				{
+					chat.mFromName = RlvStrings::getAnonym(chat.mFromName);
+					chat.mRlvNamesFiltered = TRUE;
+				}
+			}
+
+			// Create an "objectim" URL for objects if we're either @shownames or @showloc restricted
+			// (we need to do this now because we won't be have enough information to do it later on)
+			if ( (CHAT_SOURCE_OBJECT == chat.mSourceType) &&
+			     ( (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) || (!RlvActions::canShowLocation()) ) )
+			{
+				LLSD sdQuery;
+				sdQuery["name"] = chat.mFromName;
+				sdQuery["owner"] = owner_id;
+
+				if ( (!RlvActions::canShowName(RlvActions::SNC_COUNT, owner_id)) && (!is_owned_by_me) )
+					sdQuery["rlv_shownames"] = true;
+
+				const LLViewerRegion* pRegion = LLWorld::getInstance()->getRegionFromPosAgent(chat.mPosAgent);
+				if (pRegion)
+					sdQuery["slurl"] = LLSLURL(pRegion->getName(), chat.mPosAgent).getLocationString();
+
+				chat.mURL = LLSLURL("objectim", from_id, LLURI::mapToQueryString(sdQuery)).getSLURLString();
+			}
+		}
+// [/RLVa:KB]
 
 		BOOL ircstyle = FALSE;
 
@@ -3663,8 +3981,100 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			case CHAT_TYPE_WHISPER:
 				chat.mText = LLTrans::getString("whisper") + " ";
 				break;
-			case CHAT_TYPE_DEBUG_MSG:
 			case CHAT_TYPE_OWNER:
+// [RLVa:KB] - Checked: 2010-02-XX (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
+				// TODO-RLVa: [RLVa-1.2.0] consider rewriting this before a RLVa-1.2.0 release
+				if ( (rlv_handler_t::isEnabled()) && (mesg.length() > 3) && (RLV_CMD_PREFIX == mesg[0]) && (CHAT_TYPE_OWNER == chat.mChatType) &&
+					 ((!chatter) || (!chatter->isAttachment()) || (!chatter->isTempAttachment()) || (RlvSettings::getEnableTemporaryAttachments())) )
+				{
+					mesg.erase(0, 1);
+					LLStringUtil::toLower(mesg);
+
+					std::string strExecuted, strFailed, strRetained, *pstr;
+
+					boost_tokenizer tokens(mesg, boost::char_separator<char>(",", "", boost::drop_empty_tokens));
+					for (boost_tokenizer::iterator itToken = tokens.begin(); itToken != tokens.end(); ++itToken)
+					{
+						std::string strCmd = *itToken;
+
+						ERlvCmdRet eRet = gRlvHandler.processCommand(from_id, strCmd, true);
+						if ( (RlvSettings::getDebug()) &&
+							 ( (!RlvSettings::getDebugHideUnsetDup()) || 
+							   ((RLV_RET_SUCCESS_UNSET != eRet) && (RLV_RET_SUCCESS_DUPLICATE != eRet)) ) )
+						{
+							if ( RLV_RET_SUCCESS == (eRet & RLV_RET_SUCCESS) )	
+								pstr = &strExecuted;
+							else if ( RLV_RET_FAILED == (eRet & RLV_RET_FAILED) )
+								pstr = &strFailed;
+							else if (RLV_RET_RETAINED == eRet)
+								pstr = &strRetained;
+							else
+							{
+								RLV_ASSERT(false);
+								pstr = &strFailed;
+							}
+
+							const char* pstrSuffix = RlvStrings::getStringFromReturnCode(eRet);
+							if (pstrSuffix)
+								strCmd.append(" (").append(pstrSuffix).append(")");
+
+							if (!pstr->empty())
+								pstr->push_back(',');
+							pstr->append(strCmd);
+						}
+					}
+
+					if (RlvForceWear::instanceExists())
+						RlvForceWear::instance().done();
+
+					if ( (!RlvSettings::getDebug()) || ((strExecuted.empty()) && (strFailed.empty()) && (strRetained.empty())) )
+						return;
+
+					// Silly people want comprehensive debug messages, blah :p
+					if ( (!strExecuted.empty()) && (strFailed.empty()) && (strRetained.empty()) )
+					{
+						chat.mText = " executes: @";
+						mesg = strExecuted;
+					}
+					else if ( (strExecuted.empty()) && (!strFailed.empty()) && (strRetained.empty()) )
+					{
+						chat.mText = " failed: @";
+						mesg = strFailed;
+					}
+					else if ( (strExecuted.empty()) && (strFailed.empty()) && (!strRetained.empty()) )
+					{
+						chat.mText = " retained: @";
+						mesg = strRetained;
+					}
+					else
+					{
+						chat.mText = ": @";
+						if (!strExecuted.empty())
+							mesg += "\n    - executed: @" + strExecuted;
+						if (!strFailed.empty())
+							mesg += "\n    - failed: @" + strFailed;
+						if (!strRetained.empty())
+							mesg += "\n    - retained: @" + strRetained;
+					}
+
+					break;
+				}
+// [/RLVa:KB]
+// [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0b) | Modified: RLVa-1.0.0g
+				// Copy/paste from above
+				if  ( (rlv_handler_t::isEnabled()) && (chatter) && (chat.mSourceType == CHAT_SOURCE_OBJECT) &&
+					  (gSavedSettings.getBOOL("EffectScriptChatParticles")) )
+				{
+					LLPointer<LLViewerPartSourceChat> psc = new LLViewerPartSourceChat(chatter->getPositionAgent());
+					psc->setSourceObject(chatter);
+					psc->setColor(color);
+					//We set the particles to be owned by the object's owner, 
+					//just in case they should be muted by the mute list
+					psc->setOwnerUUID(owner_id);
+					LLViewerPartSim::getInstance()->addPartSource(psc);
+				}
+// [/RLVa:KB]
+			case CHAT_TYPE_DEBUG_MSG:
 			case CHAT_TYPE_NORMAL:
 			case CHAT_TYPE_DIRECT:
 				break;
@@ -3783,7 +4193,10 @@ void process_teleport_start(LLMessageSystem *msg, void**)
 	// *NOTE: The server sends two StartTeleport packets when you are teleporting to a LM
 	LLViewerMessage::getInstance()->mTeleportStartedSignal();
 
-	if (teleport_flags & TELEPORT_FLAGS_DISABLE_CANCEL)
+//	if (teleport_flags & TELEPORT_FLAGS_DISABLE_CANCEL)
+// [RLVa:KB] - Checked: 2010-04-07 (RLVa-1.2.0d) | Added: RLVa-0.2.0b
+	if ( (teleport_flags & TELEPORT_FLAGS_DISABLE_CANCEL) || (!gRlvHandler.getCanCancelTp()) )
+// [/RLVa:KB]
 	{
 		gViewerWindow->setProgressCancelButtonVisible(FALSE);
 	}
@@ -3825,7 +4238,10 @@ void process_teleport_progress(LLMessageSystem* msg, void**)
 	}
 	U32 teleport_flags = 0x0;
 	msg->getU32("Info", "TeleportFlags", teleport_flags);
-	if (teleport_flags & TELEPORT_FLAGS_DISABLE_CANCEL)
+//	if (teleport_flags & TELEPORT_FLAGS_DISABLE_CANCEL)
+// [RLVa:KB] - Checked: 2010-04-07 (RLVa-1.2.0d) | Added: RLVa-0.2.0b
+	if ( (teleport_flags & TELEPORT_FLAGS_DISABLE_CANCEL) || (!gRlvHandler.getCanCancelTp()) )
+// [/RLVa:KB]
 	{
 		gViewerWindow->setProgressCancelButtonVisible(FALSE);
 	}
@@ -4246,7 +4662,10 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 	}
 	
 	// send walk-vs-run status
-	gAgent.sendWalkRun(gAgent.getRunning() || gAgent.getAlwaysRun());
+//	gAgent.sendWalkRun(gAgent.getRunning() || gAgent.getAlwaysRun());
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+	gAgent.sendWalkRun();
+// [/RLVa:KB]
 
 	// If the server version has changed, display an info box and offer
 	// to display the release notes, unless this is the initial log in.
@@ -4660,6 +5079,14 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 			LLViewerObject *objectp = gObjectList.findObject(id);
 			if (objectp)
 			{
+// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
+				if ( (objectp->isAttachment()) && (gAgentAvatarp) && (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE) && (objectp->permYouOwner()) )
+				{
+					gAgentAvatarp->addPendingDetach(objectp->getRootEdit()->getID());
+					continue;
+				}
+// [/SL:KB]
+
 				// Display green bubble on kill
 				if ( gShowObjectUpdates )
 				{
@@ -6135,6 +6562,15 @@ void process_alert_core(const std::string& message, BOOL modal)
 		}
 
 			std::string new_msg =LLNotifications::instance().getGlobalString(text);
+// [RLVa:KB] - Checked: RLVa-1.4.5
+			if ( (new_msg == text) && (RlvActions::isRlvEnabled()) )
+			{
+				if (!RlvActions::canShowLocation())
+					RlvUtil::filterLocation(new_msg);
+				if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT))
+					RlvUtil::filterNames(new_msg);
+			}
+// [/RLVa:KB]
 			args["MESSAGE"] = new_msg;
 			LLNotificationsUtil::add("SystemMessage", args);
 		}
@@ -6142,6 +6578,15 @@ void process_alert_core(const std::string& message, BOOL modal)
 	{
 		LLSD args;
 		std::string new_msg =LLNotifications::instance().getGlobalString(message);
+// [RLVa:KB] - Checked: RLVa-1.4.5
+		if ( (new_msg == message) && (RlvActions::isRlvEnabled()) )
+		{
+			if (!RlvActions::canShowLocation())
+				RlvUtil::filterLocation(new_msg);
+			if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT))
+				RlvUtil::filterNames(new_msg);
+		}
+// [/RLVa:KB]
 		args["ERROR_MESSAGE"] = new_msg;
 		LLNotificationsUtil::add("ErrorMessage", args);
 	}
@@ -6156,6 +6601,16 @@ void process_alert_core(const std::string& message, BOOL modal)
 
 			std::string localized_msg;
 			bool is_message_localized = LLTrans::findString(localized_msg, new_msg);
+
+// [RLVa:KB] - Checked: RLVa-1.4.5
+			if ( (new_msg == message) && (RlvActions::isRlvEnabled()) )
+			{
+				if (!RlvActions::canShowLocation())
+					RlvUtil::filterLocation(new_msg);
+				if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT))
+					RlvUtil::filterNames(new_msg);
+			}
+// [/RLVa:KB]
 
 			args["MESSAGE"] = is_message_localized ? localized_msg : new_msg;
 			LLNotificationsUtil::add("SystemMessageTip", args);
@@ -6317,7 +6772,7 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 			if (viewregion)
 			{
 				// got the region, so include the region and 3d coordinates of the object
-				notice.setArg("[REGIONNAME]", viewregion->getName());				
+				notice.setArg("[REGIONNAME]", viewregion->getName());
 				std::string formatpos = llformat("%.1f, %.1f,%.1f", objpos[VX], objpos[VY], objpos[VZ]);
 				notice.setArg("[REGIONPOS]", formatpos);
 
@@ -6325,7 +6780,15 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 			}
 		}
 
-		if (!foundpos)
+// [RLVa:KB] - Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.0.0a
+		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+		{
+			notice.setArg("[REGIONNAME]", RlvStrings::getString(RLV_STRING_HIDDEN_REGION));
+			notice.setArg("[REGIONPOS]", RlvStrings::getString(RLV_STRING_HIDDEN));
+		}
+		else if (!foundpos)
+// [/RLVa:KB]
+//		if (!foundpos)
 		{
 			// unable to determine location of the object
 			notice.setArg("[REGIONNAME]", "(unknown region)");
@@ -6339,8 +6802,12 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 		std::string perms;
 		BOOST_FOREACH(script_perm_t script_perm, SCRIPT_PERMISSIONS)
 		{
-			if ((orig_questions & script_perm.permbit)
-				&& script_perm.caution)
+//			if ((orig_questions & script_perm.permbit)
+//				&& script_perm.caution)
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+			if ( (orig_questions & script_perm.permbit) &&
+ 				 ((script_perm.caution) || (notification["payload"]["rlv_notify"].asBoolean())) )
+// [/RLVa:KB]
 			{
 				count++;
 				caution = TRUE;
@@ -6360,11 +6827,25 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 
 		// log a chat message as long as at least one requested permission
 		// is a caution permission
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
 		if (caution)
 		{
-			LLChat chat(notice.getString());
-	//		LLFloaterChat::addChat(chat, FALSE, FALSE);
+			LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+			if(nearby_chat)
+			{
+				LLChat chat_msg(notice.getString());
+				chat_msg.mFromName = SYSTEM_FROM;
+				chat_msg.mFromID = LLUUID::null;
+				chat_msg.mSourceType = CHAT_SOURCE_SYSTEM;
+				nearby_chat->addMessage(chat_msg);
+			}
 		}
+// [/RLVa:KB]
+//		if (caution)
+//		{
+//			LLChat chat(notice.getString());
+//	//		LLFloaterChat::addChat(chat, FALSE, FALSE);
+//		}
 	}
 }
 
@@ -6439,11 +6920,21 @@ bool script_question_cb(const LLSD& notification, const LLSD& response)
 	msg->sendReliable(LLHost(notification["payload"]["sender"].asString()));
 
 	// only log a chat message if caution prompts are enabled
-	if (gSavedSettings.getBOOL("PermissionsCautionEnabled"))
+//	if (gSavedSettings.getBOOL("PermissionsCautionEnabled"))
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+	if ( (gSavedSettings.getBOOL("PermissionsCautionEnabled")) || (notification["payload"]["rlv_notify"].asBoolean()) )
+// [/RLVa:KB]
 	{
 		// log a chat message, if appropriate
 		notify_cautioned_script_question(notification, response, orig, allowed);
 	}
+
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+	if ( (allowed) && (notification["payload"].has("rlv_blocked")) )
+	{
+		RlvUtil::notifyBlocked(notification["payload"]["rlv_blocked"], LLSD().with("OBJECT", notification["payload"]["object_name"]));
+	}
+// [/RLVa:KB]
 
 	if ( response["Mute"] ) // mute
 	{
@@ -6627,6 +7118,38 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 			payload["questions"] = known_questions;
 			payload["object_name"] = object_name;
 			payload["owner_name"] = owner_name;
+
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+			if (rlv_handler_t::isEnabled())
+			{
+				RlvUtil::filterScriptQuestions(questions, payload);
+
+				if ( (questions) && (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTPERMISSION)) )
+				{
+					const LLViewerObject* pObj = gObjectList.findObject(taskid);
+					if (pObj)
+					{
+						if ( (pObj->permYouOwner()) && (!pObj->isAttachment()) )
+						{
+ 							questions &= ~(SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_TAKE_CONTROLS].permbit | 
+ 								SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_ATTACH].permbit);
+						}
+						else
+						{
+							questions &= ~(SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_TAKE_CONTROLS].permbit);
+						}
+						payload["rlv_notify"] = !pObj->permYouOwner();
+					}
+				}
+			}
+
+			if ( (!caution) && (!questions) )
+			{
+				LLNotifications::instance().forceResponse(
+					LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 0/*YES*/);
+				return;
+			}
+// [/RLVa:KB]
 
 			// check whether cautions are even enabled or not
 			const char* notification = "ScriptQuestion";
@@ -6992,6 +7515,16 @@ void send_lures(const LLSD& notification, const LLSD& response)
 	LLAgentUI::buildSLURL(slurl);
 	text.append("\r\n").append(slurl.getSLURLString());
 
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	// Filter the lure message if any of the recipients are IM-blocked
+	const LLSD& sdRecipients = notification["payload"]["ids"];
+	if ( (gRlvHandler.isEnabled()) && 
+	     (std::any_of(sdRecipients.beginArray(), sdRecipients.endArray(), [](const LLSD& id) { return !RlvActions::canStartIM(id.asUUID()) || !RlvActions::canSendIM(id.asUUID()); })) )
+	{
+		text = RlvStrings::getString(RLV_STRING_HIDDEN);
+	}
+// [/RLVa:KB]
+
 	LLMessageSystem* msg = gMessageSystem;
 	msg->newMessageFast(_PREHASH_StartLure);
 	msg->nextBlockFast(_PREHASH_AgentData);
@@ -7011,10 +7544,16 @@ void send_lures(const LLSD& notification, const LLSD& response)
 
 		// Record the offer.
 		{
+// [RLVa:KB] - Checked: RLVa-2.0.1
+			bool fRlvCanShowName = (!notification["payload"].has("rlv_shownames")) ? true : !notification["payload"]["rlv_shownames"].asBoolean();
+// [/RLVa:KB]
 			std::string target_name;
 			gCacheName->getFullName(target_id, target_name);  // for im log filenames
 			LLSD args;
-			args["TO_NAME"] = LLSLURL("agent", target_id, "displayname").getSLURLString();;
+// [RLVa:KB] - Checked: RLVa-2.0.1
+			args["TO_NAME"] = LLSLURL("agent", target_id, (fRlvCanShowName) ? "displayname" : "rlvanonym").getSLURLString();;
+// [/RLVa:KB]
+//			args["TO_NAME"] = LLSLURL("agent", target_id, "displayname").getSLURLString();;
 	
 			LLSD payload;
 				
@@ -7024,7 +7563,11 @@ void send_lures(const LLSD& notification, const LLSD& response)
 			LLNotificationsUtil::add("TeleportOfferSent", args, payload);
 
 			// Add the recepient to the recent people list.
-			LLRecentPeople::instance().add(target_id);
+// [RLVa:KB] - Checked: RLVa-2.0.1
+			if (fRlvCanShowName)
+				LLRecentPeople::instance().add(target_id);
+// [/RLVa:KB]
+//			LLRecentPeople::instance().add(target_id);
 		}
 	}
 	gAgent.sendReliableMessage();
@@ -7069,15 +7612,38 @@ void handle_lure(const uuid_vec_t& ids)
 	if (!gAgent.getRegion()) return;
 
 	LLSD edit_args;
-	edit_args["REGION"] = gAgent.getRegion()->getName();
+// [RLVa:KB] - Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.0a
+	edit_args["REGION"] = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? gAgent.getRegion()->getName() : RlvStrings::getString(RLV_STRING_HIDDEN);
+// [/RLVa:KB]
+//	edit_args["REGION"] = gAgent.getRegion()->getName();
 
 	LLSD payload;
-	for (std::vector<LLUUID>::const_iterator it = ids.begin();
-		it != ids.end();
-		++it)
+// [RLVa:KB] - Checked: RLVa-2.0.1
+	bool fRlvShouldHideNames = false;
+	for (const LLUUID& idAgent : ids)
 	{
-		payload["ids"].append(*it);
+		// Only allow offering teleports if everyone is a @tplure exception or able to map this avie under @showloc=n
+		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+		{
+			const LLRelationship* pBuddyInfo = LLAvatarTracker::instance().getBuddyInfo(idAgent);
+			if ( (!gRlvHandler.isException(RLV_BHVR_TPLURE, idAgent, RLV_CHECK_PERMISSIVE)) &&
+				 ((!pBuddyInfo) || (!pBuddyInfo->isOnline()) || (!pBuddyInfo->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION))) )
+			{
+				RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT_OFFER);
+				return;
+			}
+		}
+		fRlvShouldHideNames |= !RlvActions::canShowName(RlvActions::SNC_TELEPORTOFFER, idAgent);
+		payload["ids"].append(idAgent);
 	}
+	payload["rlv_shownames"] = fRlvShouldHideNames;
+// [/RLVa:KB]
+// 	for (std::vector<LLUUID>::const_iterator it = ids.begin();
+// 		it != ids.end();
+// 		++it)
+// 	{
+// 		payload["ids"].append(*it);
+// 	}
 	if (gAgent.isGodlike())
 	{
 		LLNotificationsUtil::add("OfferTeleportFromGod", edit_args, payload, handle_lure_callback);
