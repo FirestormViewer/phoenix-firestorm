@@ -35,6 +35,9 @@
 
 class LLEventPump;
 
+// <FS:Ansariel> Connection/upload timeout for Flickr
+const U32 FLICKR_CONNECT_TIMEOUT = 600;
+
 /**
  * @class LLFlickrConnect
  *

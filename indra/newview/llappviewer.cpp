@@ -258,6 +258,8 @@
 #if HAS_GROWL
 #include "growlmanager.h"
 #endif
+#include "fsavatarrenderpersistence.h"
+
 // *FIX: These extern globals should be cleaned up.
 // The globals either represent state/config/resource-storage of either 
 // this app, or another 'component' of the viewer. App globals should be 
@@ -1434,8 +1436,10 @@ bool LLAppViewer::init()
 
 	LLVoiceChannel::initClass();
 	LLVoiceClient::getInstance()->init(gServicePump);
+	// <FS:Ansariel> [FS communication UI]
 	// LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLFloaterIMContainer::onCurrentChannelChanged, _1), true);
 	LLVoiceChannel::setCurrentVoiceChannelChangedCallback( boost::bind( &FSFloaterVoiceControls::sOnCurrentChannelChanged, _1 ), true );
+	// </FS:Ansariel> [FS communication UI]
 
 	joystick = LLViewerJoystick::getInstance();
 	joystick->setNeedsReset(true);
@@ -2041,6 +2045,12 @@ bool LLAppViewer::cleanup()
 	// shut down Havok
 	LLPhysicsExtensions::quitSystem();
 #endif // </FS:ND>
+
+	// <FS:ND> FIRE-20152; save avatar render settings during cleanup, not in the dtor of the static instance.
+	// Otherwise the save will happen during crt termination when most of the viewers infrastructure is in a non deterministic state
+	if( FSAvatarRenderPersistence::instanceExists() )
+		FSAvatarRenderPersistence::getInstance()->saveAvatarRenderSettings();
+	// </FS:ND>
 
 	// Must clean up texture references before viewer window is destroyed.
 	if(LLHUDManager::instanceExists())

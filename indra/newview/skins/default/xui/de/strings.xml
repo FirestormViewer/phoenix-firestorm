@@ -2722,6 +2722,11 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="InvOfferDecline">
 		Sie lehnen [DESC] von [NAME] ab.
 	</string>
+	<string name="InvOfferAutoAcceptObject">
+		Ein Objekt namens [OBJECT_NAME] hat Ihnen folgende/n/s [OBJECT_TYPE] übergeben: [DESC]</string>
+	<string name="InvOfferAutoAcceptUser">
+		[USER_NAME] hat Ihnen folgende/n/s [OBJECT_TYPE] übergeben: [DESC]
+	</string>
 	<string name="GroupMoneyTotal">
 		Gesamtbetrag
 	</string>

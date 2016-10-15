@@ -29,6 +29,7 @@
 #include "llbase64.h"
 #include "llcorehttputil.h"
 #include "llsdutil.h"
+#include "llflickrconnect.h"
 
 // third-party
 #if LL_USESYSTEMLIBS
@@ -293,7 +294,7 @@ void exoFlickr::uploadPhoto(const LLSD& args, LLImageFormatted *image, response_
 	pHeader->append("Content-Type", "multipart/form-data; boundary=" + boundary);
 	options->setWantHeaders(true);
 	options->setRetries(0);
-	options->setTimeout(600);
+	options->setTimeout(FLICKR_CONNECT_TIMEOUT);
 	FSCoreHttpUtil::callbackHttpPostRaw(UPLOAD_URL, post_data, boost::bind( exoFlickrUploadResponse, _1, callback ), boost::bind( exoFlickrUploadResponse, _1, callback ), pHeader, options );
 }
 

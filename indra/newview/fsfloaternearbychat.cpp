@@ -243,7 +243,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 			LLAvatarName av_name;
 			LLAvatarNameCache::get(chat.mFromID, &av_name);
 
-			if (!av_name.isDisplayNameDefault())
+			if (!av_name.isDisplayNameDefault() && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES) || chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP))
 			{
 				from_name = av_name.getCompleteName();
 			}
