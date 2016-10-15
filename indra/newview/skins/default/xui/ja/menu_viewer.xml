@@ -206,6 +206,7 @@
 		<menu_item_call label="サウンドエクスプローラ" name="Sound Explorer"/>
 		<menu_item_call label="アニメーションエクスプローラ" name="Animation Explorer" />
 		<menu_item_call label="非表示アイテムリスト" name="asset_blacklist"/>
+		<menu_item_call label="アバターの表示設定" name="Avatar Render Settings" />
 	</menu>
 	
 	<!-- 製作メニュー -->

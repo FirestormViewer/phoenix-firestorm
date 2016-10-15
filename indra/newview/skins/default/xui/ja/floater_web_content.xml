@@ -10,5 +10,32 @@
 			<icon name="media_secure_lock_flag" tool_tip="安全な閲覧"/>
 			<button name="popexternal" tool_tip="この URL をブラウザで開く"/>
 		</layout_panel>
+		<layout_panel name="debug_controls">
+			<button tool_tip="Webテストのホームページ" name="web_test_home_page" />
+			<button tool_tip="MPEG4 ビデオのテスト" name="VLC Plugin Test MPEG4" />
+			<button tool_tip="MKV ビデオのテスト" name="VLC Plugin Test MKV" />
+			<button tool_tip="WebM ビデオのテスト" name="VLC Plugin Test WebM" />
+			<button tool_tip="MP3 音声のテスト" name="VLC Plugin Test MP3" />
+			<button tool_tip="FLV のテスト" name="VLC Plugin Test FLV" />
+		</layout_panel>
+		<layout_panel name="external_controls">
+			<text name="plugin_fail_text">
+Webブラウザのプラグインが開くのに時間がかかっています。
+プラグインが全く読み込まれないようであれば、次のページを参考にしてみて下さい。
+
+http://wiki.phoenixviewer.com/fs_search_issues
+
+または
+
+http://wiki.phoenixviewer.com/fs_media
+
+この問題を解決する有効な手順を探してみて下さい。
+			</text>
+			<web_browser name="webbrowser" />
+		</layout_panel>
+		<layout_panel name="status_bar" >
+			<text name="statusbartext" />
+			<progress_bar name="statusbarprogress" />
+		</layout_panel>
 	</layout_stack>
 </floater>

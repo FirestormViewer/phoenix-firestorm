@@ -2451,6 +2451,8 @@ support@secondlife.com にお問い合わせください。
 	<string name="MultiPropertiesTitle">
 		プロパティ
 	</string>
+	
+	<!-- inventory offer -->
 	<string name="InvOfferAnObjectNamed">
 		オブジェクト名
 	</string>
@@ -2472,6 +2474,11 @@ support@secondlife.com にお問い合わせください。
 	<string name="InvOfferDecline">
 		[NAME] からの [DESC] を拒否しました。
 	</string>
+	<string name="InvOfferFrom">からの</string>
+	<string name="InvOfferAutoAcceptObject">[OBJECT_NAME] というオブジェクトがあなたにこの [OBJECT_TYPE] を渡しました：[DESC]</string>
+	<string name="InvOfferAutoAcceptUser">[USER_NAME] があなたにこの [OBJECT_TYPE] を渡しました：[DESC]</string>
+	
+	<!-- group money -->
 	<string name="GroupMoneyTotal">
 		合計
 	</string>
@@ -4504,6 +4511,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="voice_morphing_url">
 		http://secondlife.com/landing/voicemorphing
 	</string>
+	
+	<!-- Financial operations strings -->
 	<string name="paid_you_ldollars">
 		[NAME] は [REASON] のために L$[AMOUNT] を支払いました。
 	</string>
@@ -5990,9 +5999,14 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="InvOfferGroupNoticeName">グループメンバー [NAME]</string>
 	<string name="CallingCardOnlineLabelSuffix">（オンライン）</string>
 	
-	<string name="Pie_av_render_normally">通常</string>
-	<string name="Pie_av_render_never">不完全</string>
-	<string name="Pie_av_render_fully">完全</string>
+	<string name="Pie_av_render_normally">通常表示</string>
+	<string name="Pie_av_render_never">表示しない</string>
+	<string name="Pie_av_render_fully">完全表示</string>
 
 	<string name="Nametag_Complexity_Label">表示の複雑さ: [COMPLEXITY]</string>
+	
+	<string name="font_unknown">不明なフォント</string>
+	<string name="mode_unknown">不明なモード</string>
+	<string name="mode_settings_hybrid.xml">ハイブリッド</string>
+	<string name="mode_settings_text.xml">テキスト</string>
 </strings>

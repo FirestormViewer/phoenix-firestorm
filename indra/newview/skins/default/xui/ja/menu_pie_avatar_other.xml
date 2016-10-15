@@ -41,7 +41,7 @@
             name="Freeze..."/>
         <pie_slice
             label="カードを贈る"
-            name="Add Calling Card"/>
+            name="Give Calling Card"/>
         <pie_slice
             label="グループ招待"
             name="Group Invite..."/>
@@ -56,7 +56,7 @@
                 label="テクスチャ"
                 name="Debug..."/>
             <pie_slice
-	            label="Script Info"
+	            label="スクリプト情報"
 	            name="ScriptInfo"/>
             <pie_slice
                 label="呼びかける"
@@ -76,22 +76,19 @@
 			label="レンダリング &gt;">
 			<pie_slice
 				name="RenderNormally"
-				label="通常表示">
-			</pie_slice>
+				label="通常表示" />
 			<pie_slice
 				name="DoNotRender"
-				label="表示しない">
-			</pie_slice>
+				label="表示しない" />
 			<pie_slice
 				name="AlwaysRenderFully"
-				label="完全表示">
-			</pie_slice>
+				label="完全表示" />
 		</pie_menu>
 	</pie_menu>
         <pie_separator />
         <pie_menu
             label="表示しない &gt;"
-            name="DerenderMenu"/>
+            name="DerenderMenu">
 			<pie_separator />
 			<pie_separator />
 			<pie_separator />
