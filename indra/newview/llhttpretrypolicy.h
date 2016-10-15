@@ -55,6 +55,9 @@ public:
 	virtual bool shouldRetry(F32& seconds_to_wait) const = 0;
 
 	virtual void reset() = 0;
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-06-27 (Catznip-3.7)
+	virtual void cancelRetry() = 0;
+// [/SL:KB]
 };
 
 // Very general policy with geometric back-off after failures,
@@ -68,6 +71,9 @@ public:
 	void onSuccess();
 
 	void reset();
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-06-27 (Catznip-3.7)
+	/*virtual*/ void cancelRetry();
+// [/SL:KB]
 	
 	// virtual
 	void onFailure(S32 status, const LLSD& headers);
