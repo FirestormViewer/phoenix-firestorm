@@ -165,8 +165,8 @@ void LLOutfitsList::updateAddedCategory(LLUUID cat_id)
     tab->setDisplayChildren(false);
 
     // <FS:ND> Calling this when there's a lot of outfits causes horrible perfomance and disconnects, due to arrange eating so many cpu cycles.
-    // mAccordion->addCollapsibleCtrl(tab);
-    mAccordion->addCollapsibleCtrl(tab, false);
+     mAccordion->addCollapsibleCtrl(tab);
+    //mAccordion->addCollapsibleCtrl(tab, false);
     // </FS:ND>
 
     // Start observing the new outfit category.
@@ -928,7 +928,7 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
     }
 
     // <FS:ND> We called mAccordion->addCollapsibleCtrl with false as second paramter and did not let it arrange itself each time. Do this here after all is said and done.
-    arrange();
+    //arrange();
 
     // Handle removed tabs.
     for (uuid_vec_t::const_iterator iter = vremoved.begin(); iter != vremoved.end(); ++iter)
