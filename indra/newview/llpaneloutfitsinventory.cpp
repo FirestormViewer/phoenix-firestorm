@@ -103,8 +103,9 @@ BOOL LLPanelOutfitsInventory::postBuild()
 	
 	mSaveComboBtn.reset(new LLSaveOutfitComboBtn(this, true));
 
-	if (!mAppearanceTabs->selectTab(gSavedSettings.getS32("LastAppearanceTab")))
-		mAppearanceTabs->selectFirstTab();
+	// <FS:Ansariel> FIRE-20180: Select last tab when actually opening the appearance floater for the first time
+	//if (!mAppearanceTabs->selectTab(gSavedSettings.getS32("LastAppearanceTab")))
+	//	mAppearanceTabs->selectFirstTab();
 
 	return TRUE;
 }
@@ -127,6 +128,10 @@ void LLPanelOutfitsInventory::onOpen(const LLSD& key)
 		mCategoriesObserver->addCategory(LLAppearanceMgr::instance().getCOF(), boost::bind(&LLPanelOutfitsInventory::onCOFChanged, this));
 		onCOFChanged();
 		// </FS:Ansariel>
+
+		// <FS:Ansariel> FIRE-20180: Select last tab when actually opening the appearance floater for the first time
+		if (!mAppearanceTabs->selectTab(gSavedSettings.getS32("LastAppearanceTab")))
+			mAppearanceTabs->selectFirstTab();
 
 		mInitialized = true;
 	}
