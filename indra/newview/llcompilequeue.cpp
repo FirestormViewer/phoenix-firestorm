@@ -995,15 +995,14 @@ void LLFloaterScriptQueue::objectScriptProcessingQueueCoro(std::string action, L
             }
         }
 
-        floater->addStringMessage("Done");
-        floater->getChildView("close")->setEnabled(TRUE);
-    }
-    catch (LLCheckedHandleBase::Stale &)
-    {
         // <FS:Ansariel> Translation fixes
         //floater->addStringMessage("Done");
         floater->addStringMessage(floater->getString("Done"));
         // </FS:Ansariel>
+        floater->getChildView("close")->setEnabled(TRUE);
+    }
+    catch (LLCheckedHandleBase::Stale &)
+    {
         // processing was completed.
         LL_DEBUGS("SCRIPTQ") << "LLExeceptionStaleHandle caught! Floater has most likely been closed." << LL_ENDL;
     }
