@@ -1003,6 +1003,7 @@ void LLFloaterScriptQueue::objectScriptProcessingQueueCoro(std::string action, L
     }
     catch (LLCheckedHandleBase::Stale &)
     {
+        // This is expected.  It means that floater has been closed before 
         // processing was completed.
         LL_DEBUGS("SCRIPTQ") << "LLExeceptionStaleHandle caught! Floater has most likely been closed." << LL_ENDL;
     }
