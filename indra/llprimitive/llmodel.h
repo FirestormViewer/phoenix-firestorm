@@ -58,7 +58,6 @@ public:
 
 	std::vector<LLMatrix4> mInvBindMatrix;
 	std::vector<LLMatrix4> mAlternateBindMatrix;
-    std::vector<U32> mJointRemap;
 
 	LLMatrix4 mBindShapeMatrix;
 	float mPelvisOffset;
