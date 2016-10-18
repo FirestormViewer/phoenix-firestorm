@@ -140,7 +140,7 @@
 #include "llexception.h"
 //#if !LL_LINUX
 #include "cef/llceflib.h"
-#if LL_WINDOWS
+#if defined(LL_WINDOWS) || defined(LL_LINUX)
 #include "vlc/libvlc_version.h"
 #endif // LL_WINDOWS
 //#endif
@@ -3970,7 +3970,7 @@ LLSD LLAppViewer::getViewerInfo() const
 //
 //#endif
 
-#if LL_WINDOWS
+#if defined(LL_WINDOWS) || defined(LL_LINUX)
 	std::ostringstream ver_codec;
 	ver_codec << LIBVLC_VERSION_MAJOR;
 	ver_codec << ".";

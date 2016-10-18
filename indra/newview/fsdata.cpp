@@ -940,7 +940,9 @@ LLSD FSData::getSystemInfo()
 	sysinfo2 += llformat("libcurl Version: %s\n", info["LIBCURL_VERSION"].asString().c_str());
 	sysinfo2 += llformat("J2C Decoder Version: %s\n", info["J2C_VERSION"].asString().c_str());
 	sysinfo2 += llformat("Audio Driver Version: %s\n", info["AUDIO_DRIVER_VERSION"].asString().c_str());
-	sysinfo2 += llformat("Qt Webkit Version: %s\n", info["QT_WEBKIT_VERSION"].asString().c_str());
+	sysinfo2 += llformat("CEF Version: %s\n", info["LLCEFLIB_VERSION"].asString().c_str());
+	sysinfo2 += llformat("LibVLC Version: %s\n", info["LIBVLC_VERSION"].asString().c_str());
+
 	sysinfo2 += llformat("Vivox Version: %s\n", info["VOICE_VERSION"].asString().c_str());
 	sysinfo2 += llformat("Packets Lost: %.0f/%.0f (%.1f%%)\n\n", info["PACKETS_LOST"].asReal(), info["PACKETS_IN"].asReal(), info["PACKETS_PCT"].asReal());
 
