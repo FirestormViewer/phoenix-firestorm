@@ -492,7 +492,7 @@ BOOL LLStatusBar::postBuild()
 	// </FS:ND>
 
 	// <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
-	mVolumeIconsWidth = mBtnVolume->getRect().getWidth() + mStreamToggle->getRect().getWidth() + mMediaToggle->getRect().getWidth();
+	mVolumeIconsWidth = mBtnVolume->getRect().mRight - mStreamToggle->getRect().mLeft;
 	if (!gSavedSettings.getBOOL("FSEnableVolumeControls"))
 	{
 		updateVolumeControlsVisibility(LLSD(FALSE));
