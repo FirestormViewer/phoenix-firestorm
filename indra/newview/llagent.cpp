@@ -4351,9 +4351,12 @@ BOOL LLAgent::anyControlGrabbed() const
 
 BOOL LLAgent::isControlGrabbed(S32 control_index) const
 {
-    if (gAgent.mControlsTakenCount[control_index] > 0)
-        return TRUE;
-    return gAgent.mControlsTakenPassedOnCount[control_index] > 0;
+	// <FS:Ansariel> FIRE-19357: Re-revert MAINT-4488 again to fix FPS weapons
+    //if (gAgent.mControlsTakenCount[control_index] > 0)
+    //    return TRUE;
+    //return gAgent.mControlsTakenPassedOnCount[control_index] > 0;
+	return mControlsTakenCount[control_index] > 0;
+	// </FS:Ansariel>
 }
 
 BOOL LLAgent::isControlBlocked(S32 control_index) const

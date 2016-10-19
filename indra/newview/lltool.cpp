@@ -85,14 +85,17 @@ BOOL LLTool::handleMouseDown(S32 x, S32 y, MASK mask)
 	}
 	// by default, didn't handle it
 	// LL_INFOS() << "LLTool::handleMouseDown" << LL_ENDL;
-    if (gAgentCamera.cameraMouselook())
-    {
-        gAgent.setControlFlags(AGENT_CONTROL_ML_LBUTTON_DOWN);
-    }
-    else
-    {
-        gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_DOWN);
-    }
+	// <FS:Ansariel> FIRE-19357: Re-revert MAINT-4488 again to fix FPS weapons
+    //if (gAgentCamera.cameraMouselook())
+    //{
+    //    gAgent.setControlFlags(AGENT_CONTROL_ML_LBUTTON_DOWN);
+    //}
+    //else
+    //{
+    //    gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_DOWN);
+    //}
+	gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_DOWN);
+	// </FS:Ansariel>
 	return TRUE;
 }
 
@@ -104,14 +107,17 @@ BOOL LLTool::handleMouseUp(S32 x, S32 y, MASK mask)
 	}
 	// by default, didn't handle it
     // LL_INFOS() << "LLTool::handleMouseUp" << LL_ENDL;
-    if (gAgentCamera.cameraMouselook())
-    {
-        gAgent.setControlFlags(AGENT_CONTROL_ML_LBUTTON_UP);
-    }
-    else
-    {
-        gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_UP);
-    }
+	// <FS:Ansariel> FIRE-19357: Re-revert MAINT-4488 again to fix FPS weapons
+    //if (gAgentCamera.cameraMouselook())
+    //{
+    //    gAgent.setControlFlags(AGENT_CONTROL_ML_LBUTTON_UP);
+    //}
+    //else
+    //{
+    //    gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_UP);
+    //}
+	gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_UP);
+	// </FS:Ansariel>
 	return TRUE;
 }
 
