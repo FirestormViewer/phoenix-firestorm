@@ -2903,9 +2903,6 @@ Fliegen ist hier nicht möglich.
 	<notification name="NoBuild">
 		In diesem Bereich ist das Bauen deaktiviert. Sie können keine Objekte bauen oder rezzen.
 	</notification>
-	<notification name="AutopilotCanceled">
-		Autopilot gestoppt
-	</notification>
 	<notification name="PathfindingDirty">
 		Diese Region weist ausstehende Pathfinding-Änderungen auf. Wenn Sie Baurechte besitzen, können Sie die Region durch Klicken auf die Schaltfläche „Region neu formen“ neu formen.
 		<usetemplate
@@ -4254,6 +4251,12 @@ Sie ist voll oder startet in Kürze neu.
 	</notification>
 	<notification name="TeleportedByObjectUnknownUser">
 		Sie wurden von Objekt „[OBJECT_NAME]“, das einem unbekannten Benutzer gehört, teleportiert.
+	</notification>
+	<notification name="StandDeniedByObject">
+		Objekt „[OBJECT_NAME]“ erlaubt Ihnen momentan nicht aufzustehen.
+	</notification>
+	<notification name="ResitDeniedByObject">
+		Objekt „[OBJECT_NAME]“ erlaubt Ihnen momentan nicht, den Sitz zu wechseln.
 	</notification>
 	<notification name="CantCreateObjectRegionFull">
 		Angefordertes Objekt kann nicht erstellt werden. Die Region ist voll.
