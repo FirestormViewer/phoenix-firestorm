@@ -7503,15 +7503,6 @@ This area has building disabled. You can&apos;t build or rez objects here.
   </notification>
 
   <notification
-   icon="notify.tga"
-   name="AutopilotCanceled"
-   persist="true"
-   type="notify">
-    <unique/>
-Autopilot canceled
-  </notification>
-
-  <notification
      icon="alertmodal.tga"
      name="PathfindingDirty"
      persist="true"
@@ -11492,6 +11483,22 @@ You have been teleported by the object '[OBJECT_NAME]' owned by [OWNER_ID]
    type="notify">
    <tag>fail</tag>
 You have been teleported by the object '[OBJECT_NAME]' owned by an unknown user.
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="StandDeniedByObject"
+   type="notify">
+    <tag>fail</tag>
+'[OBJECT_NAME]' will not allow you to stand at this time.
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ResitDeniedByObject"
+   type="notify">
+    <tag>fail</tag>
+'[OBJECT_NAME]' will not allow you to change your seat at this time.
   </notification>
 
   <notification

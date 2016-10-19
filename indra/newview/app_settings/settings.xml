@@ -12768,16 +12768,16 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>6</integer>
   </map>
-  <key>RenderHUDTexturesVirtualMemoryWarning</key>
+  <key>RenderHUDTexturesMemoryWarning</key>
   <map>
     <key>Comment</key>
-    <string>Viewer will warn user about HUD textures using memory above this value (Virtual memory, in pixels)</string>
+    <string>Viewer will warn user about HUD textures using memory above this value (in bytes)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>10000000</integer>
+    <integer>32000000</integer>
   </map>
   <key>RenderAutoMuteSurfaceAreaLimit</key>
   <map>
@@ -12920,7 +12920,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>6.5</real>
+      <real>7.5</real>
     </map>
     <key>RenderWater</key>
     <map>

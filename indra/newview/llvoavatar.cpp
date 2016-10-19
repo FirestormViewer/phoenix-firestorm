@@ -9237,7 +9237,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 	{
 		U32 cost = VISUAL_COMPLEXITY_UNKNOWN;
 		LLVOVolume::texture_cost_t textures;
-		LLHUDComplexity hud_complexity;
+		hud_complexity_list_t hud_complexity_list;
 
 		for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
 		{
@@ -9325,6 +9325,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
                 if (isSelf()
                     && attached_object
                     && attached_object->isHUDAttachment()
+                    && !attached_object->isTempAttachment()
                     && attached_object->mDrawable)
                 {
                     textures.clear();
@@ -9332,9 +9333,15 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
                     const LLVOVolume* volume = attached_object->mDrawable->getVOVolume();
                     if (volume)
                     {
+                        LLHUDComplexity hud_object_complexity;
+                        hud_object_complexity.objectName = attached_object->getAttachmentItemName();
+                        hud_object_complexity.objectId = attached_object->getAttachmentItemID();
+                        std::string joint_name;
+                        gAgentAvatarp->getAttachedPointName(attached_object->getAttachmentItemID(), joint_name);
+                        hud_object_complexity.jointName = joint_name;
                         // get cost and individual textures
-                        hud_complexity.objectsCost += volume->getRenderCost(textures);
-                        hud_complexity.objectsCount++;
+                        hud_object_complexity.objectsCost += volume->getRenderCost(textures);
+                        hud_object_complexity.objectsCount++;
 
                         LLViewerObject::const_child_list_t& child_list = attached_object->getChildren();
                         for (LLViewerObject::child_list_t::const_iterator iter = child_list.begin();
@@ -9345,30 +9352,31 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
                             if (chld_volume)
                             {
                                 // get cost and individual textures
-                                hud_complexity.objectsCost += chld_volume->getRenderCost(textures);
-                                hud_complexity.objectsCount++;
+                                hud_object_complexity.objectsCost += chld_volume->getRenderCost(textures);
+                                hud_object_complexity.objectsCount++;
                             }
                         }
 
-                        hud_complexity.texturesCount += textures.size();
+                        hud_object_complexity.texturesCount += textures.size();
 
                         for (LLVOVolume::texture_cost_t::iterator volume_texture = textures.begin();
                             volume_texture != textures.end();
                             ++volume_texture)
                         {
                             // add the cost of each individual texture (ignores duplicates)
-                            hud_complexity.texturesCost += volume_texture->second;
+                            hud_object_complexity.texturesCost += volume_texture->second;
                             LLViewerFetchedTexture *tex = LLViewerTextureManager::getFetchedTexture(volume_texture->first);
                             if (tex)
                             {
-                                F64 size = tex->getMaxVirtualSize(); // in pixels
-                                hud_complexity.texturesSizeTotal += size;
-                                if (size >= HUD_OVERSIZED_TEXTURE_DATA_SIZE)
+                                // Note: Texture memory might be incorect since texture might be still loading.
+                                hud_object_complexity.texturesMemoryTotal += tex->getTextureMemory();
+                                if (tex->getOriginalHeight() * tex->getOriginalWidth() >= HUD_OVERSIZED_TEXTURE_DATA_SIZE)
                                 {
-                                    hud_complexity.largeTexturesCount++;
+                                    hud_object_complexity.largeTexturesCount++;
                                 }
                             }
                         }
+                        hud_complexity_list.push_back(hud_object_complexity);
                     }
                 }
 			}
@@ -9440,7 +9448,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
             LLAvatarRenderNotifier::getInstance()->updateNotificationAgent(mVisualComplexity);
 
             // HUD complexity
-            LLHUDRenderNotifier::getInstance()->updateNotificationHUD(hud_complexity);
+            LLHUDRenderNotifier::getInstance()->updateNotificationHUD(hud_complexity_list);
         }
 
 		// <FS:Ansariel> Show avatar complexity in appearance floater
