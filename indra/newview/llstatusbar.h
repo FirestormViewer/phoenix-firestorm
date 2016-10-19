@@ -265,6 +265,9 @@ private:
 	// <FS:Ansariel> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
 	void onPopupRolloverChanged(const LLSD& newvalue);
 
+	// <FS:Ansariel> FIRE-14482: Show FPS in status bar
+	void onShowFPSChanged(const LLSD& newvalue);
+
 public:
 
 	/**
@@ -316,6 +319,7 @@ private:
 	LLTextBox	*mTextBalance;
 	LLTextBox	*mTextHealth;
 	LLTextBox	*mTextTime;
+	LLTextBox	*mFPSText; // <FS:Ansariel> FIRE-14482: Show FPS in status bar
 
 	LLTextBox*	mTextParcelName;
 
@@ -334,6 +338,8 @@ private:
 	LLIconCtrl	*mScriptOut;
 	// </FS:Ansariel> Script debug
 	LLFrameTimer	mClockUpdateTimer;
+	LLFrameTimer	mFPSUpdateTimer; // <FS:Ansariel> FIRE-14482: Show FPS in status bar
+	LLFrameTimer	mNetStatUpdateTimer; // <FS:Ansariel> Less frequent update of net stats
 
 	S32				mVolumeIconsWidth; // <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
 	S32				mBalance;
@@ -385,7 +391,6 @@ private:
 	bool	mRebakeStuck; // <FS:LO> FIRE-7639 - Stop the blinking after a while
 
 // <FS:Zi> Make hovering over parcel info actually work
-private:
 	void	onMouseEnterParcelInfo();
 	void	onMouseLeaveParcelInfo();
 // </FS:Zi>

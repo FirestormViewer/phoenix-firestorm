@@ -60,6 +60,7 @@ Wersja libcurl: [LIBCURL_VERSION]
 Wersja dekodera J2C: [J2C_VERSION]
 Wersja sterownika dźwięku (Audio Driver): [AUDIO_DRIVER_VERSION]
 Wersja LLCEFLib/CEF: [LLCEFLIB_VERSION]
+Wersja LibVLC: [LIBVLC_VERSION]
 Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 	</string>
 	<string name="AboutSettings">
@@ -6030,5 +6031,17 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Nametag_Complexity_Label">
 		Złożoność: [COMPLEXITY]
+	</string>
+	<string name="font_unknown">
+		Nieznana czcionka
+	</string>
+	<string name="mode_unknown">
+		Nieznany tryb
+	</string>
+	<string name="mode_settings_hybrid.xml">
+		Hybrydowy
+	</string>
+	<string name="mode_settings_text.xml">
+		Tekstowy
 	</string>
 </strings>

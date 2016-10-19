@@ -165,7 +165,7 @@ void LLOutfitsList::updateAddedCategory(LLUUID cat_id)
     tab->setDisplayChildren(false);
 
     // <FS:ND> Calling this when there's a lot of outfits causes horrible perfomance and disconnects, due to arrange eating so many cpu cycles.
-    // mAccordion->addCollapsibleCtrl(tab);
+    //mAccordion->addCollapsibleCtrl(tab);
     mAccordion->addCollapsibleCtrl(tab, false);
     // </FS:ND>
 

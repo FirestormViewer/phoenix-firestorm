@@ -36,6 +36,7 @@
 #include <map>
 #include <boost/tokenizer.hpp>
 #include <boost/concept_check.hpp>
+#include "../newview/llviewernetwork.h" // <FS:Ansariel> Log getting spammed with experience requests from other grids; Yes, it IS ugly!
 
 //=========================================================================
 namespace LLExperienceCacheImpl
@@ -98,7 +99,12 @@ LLExperienceCache::~LLExperienceCache()
 
 void LLExperienceCache::initSingleton()
 {
-    mCacheFileName = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "experience_cache.xml");
+    // <FS:Ansariel> Log getting spammed with experience requests from other grids
+    //mCacheFileName = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "experience_cache.xml");
+    const std::string grid_id_str = LLDir::getScrubbedFileName(LLGridManager::getInstance()->getGridId());
+    const std::string& grid_id_lower = utf8str_tolower(grid_id_str);
+    mCacheFileName = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "experience_cache." + grid_id_lower + ".xml");
+    // </FS:Ansariel>
 
     LL_INFOS("ExperienceCache") << "Loading " << mCacheFileName << LL_ENDL;
     llifstream cache_stream(mCacheFileName.c_str());

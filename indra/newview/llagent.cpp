@@ -3581,6 +3581,12 @@ void LLAgent::sendAnimationRequests(const std::vector<LLUUID> &anim_ids, EAnimRe
 	{
 		sendReliableMessage();
 	}
+	// <FS> Crash fix by Henri Beauchamp
+	else
+	{
+		msg->clearMessage();
+	}
+	// </FS>
 }
 
 void LLAgent::sendAnimationRequest(const LLUUID &anim_id, EAnimRequest request)

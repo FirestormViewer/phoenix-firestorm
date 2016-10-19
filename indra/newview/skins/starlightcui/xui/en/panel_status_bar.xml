@@ -257,7 +257,7 @@
 
   <panel
     height="18"
-    left="-405"
+    left="-430"
     width="90"
     top="0"
     follows="right|top"
@@ -304,7 +304,7 @@
   <panel
     height="18"
     left_pad="7"
-    width="278"
+    width="303"
     top="0"
     follows="right|top"
     name="time_and_media_bg"
@@ -405,5 +405,19 @@
      name="volume_btn"
      tool_tip="Global Volume Control"
      width="16" />
+    <text
+     name="FPSText"
+     type="string"
+     follows="right|top"
+     top="0"
+     left_pad="4"
+     height="16"
+     width="42"
+     v_pad="4"
+     halign="center"
+     tool_tip="Frames per second"
+     wrap="false">
+        200.0
+    </text>
   </panel>
 </panel>

@@ -98,4 +98,15 @@
              function="CheckControl"
              parameter="FSShowCurrencyBalanceInStatusbar" />
     </menu_item_check>
+    <menu_item_check
+         label="Show Frames per Second"
+         layout="topleft"
+         name="FSStatusBarShowFPS">
+           <on_click
+             function="ToggleControl"
+             parameter="FSStatusBarShowFPS" /> 
+             <on_check
+             function="CheckControl"
+             parameter="FSStatusBarShowFPS" />
+    </menu_item_check>
 </menu>

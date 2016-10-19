@@ -8,4 +8,5 @@
 	<menu_item_check label="Simulator-Version in Menüleiste anzeigen" name="FSStatusbarShowSimulatorVersion"/>
 	<menu_item_check label="Menüsuche anzeigen" name="FSMenuSearch"/>
 	<menu_item_check label="Kontostand anzeigen" name="FSShowCurrencyBalanceInStatusbar"/>
+	<menu_item_check label="Bilder pro Sekunde anzeigen" name="FSStatusBarShowFPS"/>
 </menu>

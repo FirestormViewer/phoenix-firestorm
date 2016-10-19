@@ -107,28 +107,28 @@ namespace
     class HandleScriptUserData
     {
     public:
-		// <FS:Ansariel> [LSL PreProc]
+        // <FS:Ansariel> [LSL PreProc]
         //HandleScriptUserData(const std::string &pumpname) :
         //    mPumpname(pumpname)
         //{ }
         HandleScriptUserData(const std::string &pumpname, LLScriptQueueData* data) :
             mPumpname(pumpname),
-			mData(data)
+            mData(data)
         { }
-		HandleScriptUserData()
-		{ }
-		// </FS:Ansariel>
+        HandleScriptUserData()
+        { }
+        // </FS:Ansariel>
 
         const std::string &getPumpName() const { return mPumpname; }
 
-		// <FS:Ansariel> [LSL PreProc]
-		LLScriptQueueData* getData() const { return mData; }
+        // <FS:Ansariel> [LSL PreProc]
+        LLScriptQueueData* getData() const { return mData; }
 
     private:
         std::string mPumpname;
 
-		// <FS:Ansariel> [LSL PreProc]
-		LLScriptQueueData* mData;
+        // <FS:Ansariel> [LSL PreProc]
+        LLScriptQueueData* mData;
     };
 
 
@@ -374,34 +374,34 @@ void LLFloaterCompileQueue::handleScriptRetrieval(LLVFS *vfs, const LLUUID& asse
             result["message"] = LLTrans::getString("CompileQueueUnknownFailure");
         }
 
-		// <FS:Ansariel> [LSL PreProc]
-		// LSL PreProc error case
-		delete ((HandleScriptUserData *)userData)->getData();
+        // <FS:Ansariel> [LSL PreProc]
+        // LSL PreProc error case
+        delete ((HandleScriptUserData *)userData)->getData();
     }
-	// <FS:KC> [LSL PreProc]
-	else if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
-	{
-		LLScriptQueueData* data = ((HandleScriptUserData *)userData)->getData();
-		LLFloaterCompileQueue* queue = LLFloaterReg::findTypedInstance<LLFloaterCompileQueue>("compile_queue", data->mQueueID);
+    // <FS:KC> [LSL PreProc]
+    else if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
+    {
+        LLScriptQueueData* data = ((HandleScriptUserData *)userData)->getData();
+        LLFloaterCompileQueue* queue = LLFloaterReg::findTypedInstance<LLFloaterCompileQueue>("compile_queue", data->mQueueID);
 
-		if (queue && queue->mLSLProc)
-		{
-			LLVFile file(vfs, assetId, type);
-			S32 file_length = file.getSize();
-			std::vector<char> script_data(file_length + 1);
-			file.read((U8*)&script_data[0], file_length);
-			// put a EOS at the end
-			script_data[file_length] = 0;
+        if (queue && queue->mLSLProc)
+        {
+            LLVFile file(vfs, assetId, type);
+            S32 file_length = file.getSize();
+            std::vector<char> script_data(file_length + 1);
+            file.read((U8*)&script_data[0], file_length);
+            // put a EOS at the end
+            script_data[file_length] = 0;
 
-			LLStringUtil::format_map_t args;
-			args["SCRIPT"] = data->mItem->getName();
-			LLFloaterCompileQueue::scriptLogMessage(data, LLTrans::getString("CompileQueuePreprocessing", args));
+            LLStringUtil::format_map_t args;
+            args["SCRIPT"] = data->mItem->getName();
+            LLFloaterCompileQueue::scriptLogMessage(data, LLTrans::getString("CompileQueuePreprocessing", args));
 
-			queue->mLSLProc->preprocess_script(assetId, data, type, LLStringExplicit(&script_data[0]));
-		}
-		result["preproc"] = true;
-	}
-	// </FS:KC> LSL Preprocessor
+            queue->mLSLProc->preprocess_script(assetId, data, type, LLStringExplicit(&script_data[0]));
+        }
+        result["preproc"] = true;
+    }
+    // </FS:KC> LSL Preprocessor
 
     LLEventPumps::instance().post(((HandleScriptUserData *)userData)->getPumpName(), result);
 
@@ -470,25 +470,25 @@ bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloat
     // Attempt to retrieve the experience
     LLUUID experienceId;
     {
-		// <FS:Ansariel> FIRE-17688: Recompile scripts not working on OpenSim
+        // <FS:Ansariel> FIRE-17688: Recompile scripts not working on OpenSim
         //LLExperienceCache::instance().fetchAssociatedExperience(inventory->getParentUUID(), inventory->getUUID(),
         //    boost::bind(&LLFloaterCompileQueue::handleHTTPResponse, pump.getName(), _1));
 
         //result = llcoro::suspendUntilEventOnWithTimeout(pump, fetch_timeout, 
-        //    LLSD().with("timeout", LLSD::Boolean(true)));
-		if (object->getRegion() && object->getRegion()->isCapabilityAvailable("GetMetadata"))
-		{
-			LLExperienceCache::instance().fetchAssociatedExperience(inventory->getParentUUID(), inventory->getUUID(),
-				boost::bind(&LLFloaterCompileQueue::handleHTTPResponse, pump.getName(), _1));
+        //    LLSDMap("timeout", LLSD::Boolean(true)));
+        if (object->getRegion() && object->getRegion()->isCapabilityAvailable("GetMetadata"))
+        {
+            LLExperienceCache::instance().fetchAssociatedExperience(inventory->getParentUUID(), inventory->getUUID(),
+                boost::bind(&LLFloaterCompileQueue::handleHTTPResponse, pump.getName(), _1));
 
-			result = llcoro::suspendUntilEventOnWithTimeout(pump, fetch_timeout, 
+            result = llcoro::suspendUntilEventOnWithTimeout(pump, fetch_timeout, 
             LLSDMap("timeout", LLSD::Boolean(true)));
-		}
-		else
-		{
-			result = LLSD();
-		}
-		// </FS:Ansariel>
+        }
+        else
+        {
+            result = LLSD();
+        }
+        // </FS:Ansariel>
 
         if (result.has("timeout"))
         {   // A timeout filed in the result will always be true if present.
@@ -514,21 +514,20 @@ bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloat
     }
 
     {
-		// <FS:Ansariel> [LSL PreProc]
+        // <FS:Ansariel> [LSL PreProc]
         //HandleScriptUserData    userData(pump.getName());
-		HandleScriptUserData userData;
-		if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
-		{
-			// Need to dump some stuff into an LLScriptQueueData struct for the LSL PreProc.
-			LLScriptQueueData* datap = new LLScriptQueueData(hfloater.get()->getKey().asUUID(), object->getID(), experienceId, item);
-			userData = HandleScriptUserData(pump.getName(), datap);
-		}
-		else
-		{
-			userData = HandleScriptUserData(pump.getName(), NULL);
-		}
-		// </FS:Ansariel>
-
+        HandleScriptUserData userData;
+        if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
+        {
+            // Need to dump some stuff into an LLScriptQueueData struct for the LSL PreProc.
+            LLScriptQueueData* datap = new LLScriptQueueData(hfloater.get()->getKey().asUUID(), object->getID(), experienceId, item);
+            userData = HandleScriptUserData(pump.getName(), datap);
+        }
+        else
+        {
+            userData = HandleScriptUserData(pump.getName(), NULL);
+        }
+        // </FS:Ansariel>
 
         // request the asset
         gAssetStorage->getInvItemAsset(LLHost(),
@@ -570,13 +569,13 @@ bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloat
         return true;
     }
 
-	// <FS:Ansariel> [LSL PreProc]
-	if (result.has("preproc"))
-	{
-		// LSL Preprocessor handles it from here on
-		return true;
-	}
-	// </FS:Ansariel>
+    // <FS:Ansariel> [LSL PreProc]
+    if (result.has("preproc"))
+    {
+        // LSL Preprocessor handles it from here on
+        return true;
+    }
+    // </FS:Ansariel>
 
     LLUUID assetId = result["asset_id"];
 
@@ -617,7 +616,7 @@ bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloat
         // <FS:Ansariel> Translation fixes
         LLStringUtil::format_map_t args;
         args["OBJECT_NAME"] = inventory->getName();
-		floater->addStringMessage( floater->getString( "CompileSuccess", args ) );
+        floater->addStringMessage( floater->getString( "CompileSuccess", args ) );
         // </FS:Ansariel>
     }
     else
@@ -627,7 +626,7 @@ bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloat
         //std::string buffer = std::string("Compilation of \"") + inventory->getName() + std::string("\" failed:");
         LLStringUtil::format_map_t args;
         args["OBJECT_NAME"] = inventory->getName();
-		std::string buffer = floater->getString( "CompileFailure", args );
+        std::string buffer = floater->getString( "CompileFailure", args );
         // </FS:Ansariel>
         floater->addStringMessage(buffer);
         for (LLSD::array_const_iterator line = compile_errors.beginArray();
@@ -996,15 +995,15 @@ void LLFloaterScriptQueue::objectScriptProcessingQueueCoro(std::string action, L
             }
         }
 
-        floater->addStringMessage("Done");
-        floater->getChildView("close")->setEnabled(TRUE);
-    }
-    catch (LLCheckedHandleBase::Stale &)
-    {
         // <FS:Ansariel> Translation fixes
         //floater->addStringMessage("Done");
         floater->addStringMessage(floater->getString("Done"));
         // </FS:Ansariel>
+        floater->getChildView("close")->setEnabled(TRUE);
+    }
+    catch (LLCheckedHandleBase::Stale &)
+    {
+        // This is expected.  It means that floater has been closed before 
         // processing was completed.
         LL_DEBUGS("SCRIPTQ") << "LLExeceptionStaleHandle caught! Floater has most likely been closed." << LL_ENDL;
     }
