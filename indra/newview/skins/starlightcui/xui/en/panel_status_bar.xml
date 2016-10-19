@@ -145,6 +145,19 @@
     top="2"
     tool_tip="Parcel has WL settings" 
     width="16"/>
+   <button
+    follows="right|top"
+    height="16"
+    hover_glow_amount="0.15"
+    image_disabled="Icon_Lightshare"
+    image_disabled_selected="Icon_Lightshare"
+    image_selected="Icon_Lightshare"
+    image_unselected="Icon_Lightshare"
+    left="208"
+    name="status_lightshare_btn"
+    top="2"
+    tool_tip="Lightshare settings"
+    width="16"/>
   <icon
     follows="right|top"
     height="13"
@@ -163,7 +176,7 @@
     height="18"
     name="damage_text"
     value="100%"
-    top="5"
+    top="4"
     left="238"
     visible="true"
     width="35"
@@ -188,7 +201,7 @@
        left="291"
        length="1"
        name="parcel_info_text"
-       top="5"
+       top="3"
        value="(loading...)"
        type="string"
        width="100"/>
@@ -218,7 +231,7 @@
 	<panel
 	 height="18"
 	 left_pad="12"
-	 top="1"
+	 top="0"
 	 width="110"
 	 follows="right|top"
 	 name="menu_search_panel"
@@ -257,8 +270,8 @@
 
   <panel
     height="18"
-    left="-430"
-    width="90"
+    left="-429"
+    width="77"
     top="0"
     follows="right|top"
     name="balance_bg"
@@ -276,8 +289,7 @@
      text_color="CurrencyColor"
      text_readonly_color="CurrencyColor"
      tool_tip="Click to refresh your L$ balance"
-     v_pad="4"
-     top="0"
+     top="4"
      wrap="false"
      value="L$???"
      width="35" />
@@ -289,22 +301,22 @@
      image_hover_unselected="buy_over"
      image_unselected="buy_off"
      image_pressed="buy_press"
-     height="18"
+     height="17"
      label="BUY L$"
      label_color="White"
      left_pad="2"
      label_shadow="true"
      name="buyL"
      pad_right="2"
-     pad_bottom="1"
      tool_tip="Click to buy more L$"
      top="2"
      width="40" />
   </panel>
+  
   <panel
     height="18"
-    left_pad="7"
-    width="303"
+    left_pad="5"
+    width="326"
     top="0"
     follows="right|top"
     name="time_and_media_bg"
@@ -348,12 +360,12 @@
      follows="right|top"
      halign="right"
      height="16"
-     top="5"
+     top="4"
      layout="topleft"
-     left="135"
+     left_pad="5"
      name="TimeText"
      tool_tip="Current time (Pacific)"
-     width="50">
+     width="70">
         24:00 AM PST
     </text>
     <button
@@ -361,7 +373,7 @@
      height="16"
      image_unselected="Presets_Icon"
      image_pressed="Presets_Icon"
-     left_delta="55"
+     left_pad="5"
      top="2"
      name="presets_icon"
      width="18" />
@@ -409,11 +421,10 @@
      name="FPSText"
      type="string"
      follows="right|top"
-     top="0"
+     top="4"
      left_pad="4"
      height="16"
      width="42"
-     v_pad="4"
      halign="center"
      tool_tip="Frames per second"
      wrap="false">
