@@ -174,10 +174,16 @@ bool FSConsoleUtils::ProcessInstantMessage(const LLUUID& session_id, const LLUUI
 	}
 
 	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(session_id);
+	if (!session)
+	{
+		return false;
+	}
+
 	if (!fsLogGroupImToChatConsole && session->isGroupSessionType())
 	{
 		return false;
 	}
+
 	if (!fsLogImToChatConsole && !session->isGroupSessionType())
 	{
 		return false;
@@ -190,13 +196,10 @@ bool FSConsoleUtils::ProcessInstantMessage(const LLUUID& session_id, const LLUUI
 
 	// Replacing the "IM" in front of group chat messages with the actual group name
 	std::string group;
-	if (session)
+	S32 groupNameLength = gSavedSettings.getS32("FSShowGroupNameLength");
+	if (groupNameLength != 0 && session->isGroupSessionType())
 	{
-		S32 groupNameLength = gSavedSettings.getS32("FSShowGroupNameLength");
-		if (groupNameLength != 0 && session->isGroupSessionType())
-		{
-			group = session->mName.substr(0, groupNameLength);
-		}
+		group = session->mName.substr(0, groupNameLength);
 	}
 
 	LLAvatarNameCache::get(from_id, boost::bind(&FSConsoleUtils::onProccessInstantMessageNameLookup, _1, _2, message, group, session_id));
