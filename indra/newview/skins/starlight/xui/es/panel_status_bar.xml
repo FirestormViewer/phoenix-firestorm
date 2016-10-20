@@ -12,19 +12,19 @@
 		Ancho de banda
 	</panel.string>
 	<panel.string name="time">
-		[hour24, datetime, slt]:[min, datetime, slt] [timezone,datetime, slt]
+		[hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone,datetime, slt]
 	</panel.string>
 	<panel.string name="buycurrencylabel">
 		[AMT] L$
 	</panel.string>
-	<panel name="balance_bg">
+	<panel name="balance_bg" left="-431">
 		<text name="balance" tool_tip="Haz clic para actualizar tu saldo en L$"/>
 		<button label="COMPRAR L$" name="buyL" tool_tip="Pulsa para comprar más L$" left_pad="-15"/>
 	</panel>
-	<panel name="time_and_media_bg">
+	<panel name="time_and_media_bg" width="328">
 		<icon name="dd_icon" tool_tip="Distancia de dibujo"/>
 		<slider tool_tip="Distancia máxima desde la cámara, en metros a la que se dibujarán objetos" name="drawdistance"/>
-		<text name="TimeText" tool_tip="Hora actual (Costa Pacífico de EEUU)"/>
+		<text name="TimeText" tool_tip="Hora actual (costa del Pacífico de EEUU)" width="78">24:00:00 PST</text>
 		<button name="stream_toggle_btn" tool_tip="Inicia/detiene el flujo de audio de la parcela"/>
 		<button name="media_toggle_btn" tool_tip="Inicia/detiene todos los medios (música, vídeo, páginas web)"/>
 		<button name="volume_btn" tool_tip="Control general de volumen"/>

@@ -544,7 +544,10 @@ void LLStatusBar::refresh()
 	// </FS:Ansariel>
 
 	// update clock every 10 seconds
-	if(mClockUpdateTimer.getElapsedTimeF32() > 10.f)
+	// <FS:Ansariel> Add seconds to clock
+	//if(mClockUpdateTimer.getElapsedTimeF32() > 10.f)
+	if(mClockUpdateTimer.getElapsedTimeF32() > 1.f)
+	// </FS:Ansariel>
 	{
 		mClockUpdateTimer.reset();
 
@@ -553,14 +556,22 @@ void LLStatusBar::refresh()
 		time_t utc_time;
 		utc_time = time_corrected();
 
-		std::string timeStr = getString("time");
+		// <FS:Ansariel> Add seconds to clock
+		//std::string timeStr = getString("time");
+		static const std::string time_template = getString("time");
+		std::string timeStr = time_template;
+		// </FS:Ansariel>
 		LLSD substitution;
 		substitution["datetime"] = (S32) utc_time;
 		LLStringUtil::format (timeStr, substitution);
 		mTextTime->setText(timeStr);
 
 		// set the tooltip to have the date
-		std::string dtStr = getString("timeTooltip");
+		// <FS:Ansariel> Add seconds to clock
+		//std::string dtStr = getString("timeTooltip");
+		static const std::string tooltip_template = getString("timeTooltip");
+		std::string dtStr = tooltip_template;
+		// </FS:Ansariel>
 		LLStringUtil::format (dtStr, substitution);
 		mTextTime->setToolTip (dtStr);
 	}

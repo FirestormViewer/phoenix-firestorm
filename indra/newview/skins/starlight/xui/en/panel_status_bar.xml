@@ -218,7 +218,7 @@
     </panel.string>
     <panel.string
      name="time">
-        [hour12, datetime, slt]:[min, datetime, slt] [ampm, datetime, slt] [timezone,datetime, slt]
+        [hour12, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [ampm, datetime, slt] [timezone,datetime, slt]
     </panel.string>
     <panel.string
      name="timeTooltip">
@@ -272,7 +272,7 @@
 
   <panel
     height="18"
-    left="-429"
+    left="-449"
     width="77"
     top="0"
     follows="right|top"
@@ -319,7 +319,7 @@
   <panel
     height="18"
     left_pad="5"
-    width="326"
+    width="346"
     top="0"
     follows="right|top"
     name="time_and_media_bg"
@@ -362,15 +362,16 @@
      font="SansSerifSmall"
      text_color="TimeTextColor"
      follows="right|top"
-     halign="right"
+     halign="left"
      height="16"
+     h_pad="2"
      top="4"
      layout="topleft"
-     left_pad="5"
+     left_pad="7"
      name="TimeText"
      tool_tip="Current time (Pacific)"
-     width="70">
-        24:00 AM PST
+     width="98">
+        24:00:00 AM PST
     </text>
     <button
      follows="right|top"
