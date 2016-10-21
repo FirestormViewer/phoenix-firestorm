@@ -2745,6 +2745,11 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
 	mWebBrowser->navigateTo(url, HTTP_CONTENT_TEXT_HTML);
 }
 
+void FSPanelSearchWeb::focusDefaultElement()
+{
+	mWebBrowser->setFocus(TRUE);
+}
+
 ////////////////////////////////////////
 //           Local functions          //
 ////////////////////////////////////////
