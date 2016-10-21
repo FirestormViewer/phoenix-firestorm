@@ -30,32 +30,33 @@
              function="CheckControl"
              parameter="ShowNavbarFavoritesPanel" />
     </menu_item_check>
-	<menu_item_check
-		 label="Show Search Bar"
-		 layout="topleft"
-		 name="ShowSearchTopBar">
-		   <on_click
-			 function="ToggleControl"
-			 parameter="ShowSearchTopBar" /> 
-			 <on_check
-			 function="CheckControl"
-			 parameter="ShowSearchTopBar" />
+    <menu_item_check
+         label="Show Search Bar"
+         layout="topleft"
+         name="ShowSearchTopBar">
+           <on_click
+             function="ToggleControl"
+             parameter="ShowSearchTopBar" /> 
+             <on_check
+             function="CheckControl"
+             parameter="ShowSearchTopBar" />
     </menu_item_check>
     <!-- AO - remove this option, problematic
-		<menu_item_check
-			 label="Show Mini-Location Bar"
-			 layout="topleft"
-			 name="ShowMiniLocationPanel">
-			   <on_click
-				 function="ToggleControl"
-				 parameter="ShowMiniLocationPanel" />
-				 <on_check
-				 function="CheckControl"
-				 parameter="ShowMiniLocationPanel" />
-		</menu_item_check>
-	-->
     <menu_item_check
-         label="Show Location in Top Menu"
+         label="Show Mini-Location Bar"
+         layout="topleft"
+         name="ShowMiniLocationPanel">
+           <on_click
+             function="ToggleControl"
+             parameter="ShowMiniLocationPanel" />
+             <on_check
+             function="CheckControl"
+             parameter="ShowMiniLocationPanel" />
+    </menu_item_check>
+    -->
+    <menu_item_separator/>
+    <menu_item_check
+         label="Show Location"
          layout="topleft"
          name="ShowMenuBarLocation">
            <on_click
@@ -66,7 +67,7 @@
              parameter="ShowMenuBarLocation" />
     </menu_item_check>
     <menu_item_check
-         label="Show Simulator Version in Top Menu"
+         label="Show Simulator Version"
          layout="topleft"
          name="FSStatusbarShowSimulatorVersion">
            <on_click
@@ -75,6 +76,9 @@
              <on_check
              function="CheckControl"
              parameter="FSStatusbarShowSimulatorVersion" />
+             <on_enable
+             function="CheckControl"
+             parameter="ShowMenuBarLocation" />
     </menu_item_check>
     <menu_item_check
          label="Show Menu Search"
@@ -108,5 +112,16 @@
              <on_check
              function="CheckControl"
              parameter="FSStatusBarShowFPS" />
+    </menu_item_check>
+    <menu_item_check
+         label="Show Status Indicator"
+         layout="topleft"
+         name="ShowNetStats">
+           <on_click
+             function="ToggleControl"
+             parameter="ShowNetStats" /> 
+             <on_check
+             function="CheckControl"
+             parameter="ShowNetStats" />
     </menu_item_check>
 </menu>
