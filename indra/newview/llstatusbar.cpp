@@ -741,13 +741,7 @@ void LLStatusBar::setBalance(S32 balance)
 	// FS:ND> If the search panel is shown, move this according to the new balance width. Parcel text will reshape itself in setParcelInfoText
 	if (mSearchPanel && mSearchPanel->getVisible())
 	{
-		S32 HPAD = 12;
-		LLRect balanceRect = getChildView("balance_bg")->getRect();
-		LLRect searchRect = mSearchPanel->getRect();
-		S32 w = searchRect.getWidth();
-		searchRect.mLeft = balanceRect.mLeft - w - HPAD;
-		searchRect.mRight = searchRect.mLeft + w;
-		mSearchPanel->setShape( searchRect );
+		updateMenuSearchPosition();
 	}
 	// </FS:ND>
 
@@ -1553,6 +1547,9 @@ void LLStatusBar::updateNetstatVisibility(const LLSD& data)
 	rect = mBalancePanel->getRect();
 	rect.translate(NETSTAT_WIDTH * translateFactor, 0);
 	mBalancePanel->setRect(rect);
+
+	updateMenuSearchPosition();
+	update();
 }
 
 // <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
@@ -1577,7 +1574,8 @@ void LLStatusBar::updateVolumeControlsVisibility(const LLSD& data)
 	rect.translate(cVolumeIconsWidth * translateFactor, 0);
 	mBalancePanel->setRect(rect);
 
-	mSearchPanel->translate(cVolumeIconsWidth * translateFactor, 0);
+	updateMenuSearchPosition();
+	update();
 }
 // </FS:PP>
 
@@ -1599,7 +1597,8 @@ void LLStatusBar::onShowFPSChanged(const LLSD& newvalue)
 	rect.translate(text_width * translateFactor, 0);
 	mBalancePanel->setRect(rect);
 
-	mSearchPanel->translate(text_width * translateFactor, 0);
+	updateMenuSearchPosition();
+	update();
 }
 // </FS:Ansariel>
 
@@ -1683,7 +1682,22 @@ void LLStatusBar::updateMenuSearchVisibility(const LLSD& data)
 		mFilterEdit->setText(LLStringUtil::null);
 		onUpdateFilterTerm();
 	}
+	else
+	{
+		updateMenuSearchPosition();
+	}
 	update();
+}
+
+void LLStatusBar::updateMenuSearchPosition()
+{
+	const S32 HPAD = 12;
+	LLRect balanceRect = getChildView("balance_bg")->getRect();
+	LLRect searchRect = mSearchPanel->getRect();
+	S32 w = searchRect.getWidth();
+	searchRect.mLeft = balanceRect.mLeft - w - HPAD;
+	searchRect.mRight = searchRect.mLeft + w;
+	mSearchPanel->setShape( searchRect );
 }
 
 // <FS:Ansariel> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over

@@ -233,7 +233,7 @@
 
 	<panel
 	 height="18"
-	 left_pad="12"
+	 left="-458"
 	 top="0"
 	 width="120"
 	 follows="right|top"

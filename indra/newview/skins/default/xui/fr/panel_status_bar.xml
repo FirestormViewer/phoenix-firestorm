@@ -11,7 +11,9 @@
 	<panel.string name="time">[hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [ampm, datetime, slt] [timezone,datetime, slt]</panel.string>
 	<panel.string name="timeTooltip">[weekday, datetime, slt] [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]</panel.string>
 	<panel.string name="buycurrencylabel">[AMT] L$</panel.string>
-	<panel name="menu_search_panel" width="160"><search_editor label="Rech. dans les menus" name="search_menu_edit" tool_tip="Saisissez vos critères de recherche ici."/></panel>
+	<panel name="menu_search_panel" width="160" left="-498">
+		<search_editor label="Rech. dans les menus" name="search_menu_edit" tool_tip="Saisissez vos critères de recherche ici."/>
+	</panel>
 	<panel name="balance_bg">
 		<text name="balance" tool_tip="Cliquez pour actualiser votre solde de L$"/>
 		<button label="PLUS DE L$" name="buyL" tool_tip="Cliquez pour acheter plus de L$"/>
