@@ -67,7 +67,7 @@
              parameter="ShowMenuBarLocation" />
     </menu_item_check>
     <menu_item_check
-         label="Show Simulator Version"
+         label="Show Simulator Channel"
          layout="topleft"
          name="FSStatusbarShowSimulatorVersion">
            <on_click
@@ -103,6 +103,17 @@
              parameter="FSShowCurrencyBalanceInStatusbar" />
     </menu_item_check>
     <menu_item_check
+         label="Show Media Controls"
+         layout="topleft"
+         name="FSEnableVolumeControls">
+           <on_click
+             function="ToggleControl"
+             parameter="FSEnableVolumeControls" /> 
+             <on_check
+             function="CheckControl"
+             parameter="FSEnableVolumeControls" />
+    </menu_item_check>
+    <menu_item_check
          label="Show Frames per Second"
          layout="topleft"
          name="FSStatusBarShowFPS">
@@ -114,7 +125,7 @@
              parameter="FSStatusBarShowFPS" />
     </menu_item_check>
     <menu_item_check
-         label="Show Status Indicator"
+         label="Show Traffic Indicator"
          layout="topleft"
          name="ShowNetStats">
            <on_click

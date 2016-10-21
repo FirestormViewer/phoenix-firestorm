@@ -5,9 +5,10 @@
 	<menu_item_check label="Mini-Standortleiste anzeigen" name="ShowMiniLocationPanel"/>
 	<menu_item_check label="Suchleiste anzeigen" name="ShowSearchTopBar"/>
 	<menu_item_check label="Position anzeigen" name="ShowMenuBarLocation"/>
-	<menu_item_check label="Simulator-Version anzeigen" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Simulator-Kanal anzeigen" name="FSStatusbarShowSimulatorVersion"/>
 	<menu_item_check label="Menüsuche anzeigen" name="FSMenuSearch"/>
 	<menu_item_check label="Kontostand anzeigen" name="FSShowCurrencyBalanceInStatusbar"/>
+	<menu_item_check label="Mediensteuerung anzeigen" name="FSEnableVolumeControls"/>
 	<menu_item_check label="Bilder pro Sekunde anzeigen" name="FSStatusBarShowFPS"/>
-	<menu_item_check label="Status-Indikator anzeigen" name="ShowNetStats"/>
+	<menu_item_check label="Datentransfer-Indikator anzeigen" name="ShowNetStats"/>
 </menu>
