@@ -10,7 +10,6 @@
  width="128">
     <menu_item_check
          label="Show Navigation and Search Bar"
-         layout="topleft"
          name="ShowNavbarNavigationPanel">
            <on_click
              function="ToggleControl"
@@ -21,7 +20,6 @@
     </menu_item_check>
     <menu_item_check
          label="Show Favorites Bar"
-         layout="topleft"
          name="ShowNavbarFavoritesPanel">
            <on_click
              function="ToggleControl"
@@ -32,7 +30,6 @@
     </menu_item_check>
     <menu_item_check
          label="Show Search Bar"
-         layout="topleft"
          name="ShowSearchTopBar">
            <on_click
              function="ToggleControl"
@@ -57,7 +54,6 @@
     <menu_item_separator/>
     <menu_item_check
          label="Show Location"
-         layout="topleft"
          name="ShowMenuBarLocation">
            <on_click
              function="ToggleControl"
@@ -68,7 +64,6 @@
     </menu_item_check>
     <menu_item_check
          label="Show Simulator Channel"
-         layout="topleft"
          name="FSStatusbarShowSimulatorVersion">
            <on_click
              function="ToggleControl"
@@ -82,7 +77,6 @@
     </menu_item_check>
     <menu_item_check
          label="Show Menu Search"
-         layout="topleft"
          name="FSMenuSearch">
            <on_click
              function="ToggleControl"
@@ -93,7 +87,6 @@
     </menu_item_check>
     <menu_item_check
          label="Show Currency Balance"
-         layout="topleft"
          name="FSShowCurrencyBalanceInStatusbar">
            <on_click
              function="ToggleControl"
@@ -104,7 +97,6 @@
     </menu_item_check>
     <menu_item_check
          label="Show Media Controls"
-         layout="topleft"
          name="FSEnableVolumeControls">
            <on_click
              function="ToggleControl"
@@ -115,7 +107,6 @@
     </menu_item_check>
     <menu_item_check
          label="Show Frames per Second"
-         layout="topleft"
          name="FSStatusBarShowFPS">
            <on_click
              function="ToggleControl"
@@ -126,7 +117,6 @@
     </menu_item_check>
     <menu_item_check
          label="Show Traffic Indicator"
-         layout="topleft"
          name="ShowNetStats">
            <on_click
              function="ToggleControl"
@@ -134,5 +124,15 @@
              <on_check
              function="CheckControl"
              parameter="ShowNetStats" />
+    </menu_item_check>
+    <menu_item_separator/>
+    <menu_item_check
+         label="Show Parcel Permissions"
+         name="Parcel Properties">
+           <on_click
+             function="ToggleControl"
+             parameter="NavBarShowParcelProperties" />
+             <on_check
+              control="NavBarShowParcelProperties" />
     </menu_item_check>
 </menu>

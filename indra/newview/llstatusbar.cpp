@@ -200,7 +200,8 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mMediaToggle(NULL),
 	mMouseEnterPresetsConnection(),
 	mMouseEnterVolumeConnection(),
-	mMouseEnterNearbyMediaConnection()
+	mMouseEnterNearbyMediaConnection(),
+	mCurrentLocationString()
 {
 	setRect(rect);
 	
@@ -1106,7 +1107,8 @@ void LLStatusBar::handleLoginComplete()
 
 void LLStatusBar::onNavBarShowParcelPropertiesCtrlChanged()
 {
-	mShowParcelIcons=gSavedSettings.getBOOL("NavBarShowParcelProperties");
+	mShowParcelIcons = gSavedSettings.getBOOL("NavBarShowParcelProperties");
+	mCurrentLocationString = ""; // Need to do this to force an update of the text and panel width calculation as result of calling update()
 	update();
 }
 
@@ -1145,11 +1147,10 @@ void LLStatusBar::setParcelInfoText(const std::string& new_text)
 	//<FS:TS> Avoid processing the parcel string every frame if it
 	// hasn't changed.
 	//mParcelInfoText->setText(new_text);
-	static std::string old_text = "";
-	if (new_text != old_text)
+	if (new_text != mCurrentLocationString)
 	{
 		mParcelInfoText->setText(new_text);
-		old_text = new_text;
+		mCurrentLocationString = new_text;
 	}
 	//</FS:TS>
 

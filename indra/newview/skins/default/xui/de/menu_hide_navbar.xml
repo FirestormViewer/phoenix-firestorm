@@ -11,4 +11,5 @@
 	<menu_item_check label="Mediensteuerung anzeigen" name="FSEnableVolumeControls"/>
 	<menu_item_check label="Bilder pro Sekunde anzeigen" name="FSStatusBarShowFPS"/>
 	<menu_item_check label="Datentransfer-Indikator anzeigen" name="ShowNetStats"/>
+	<menu_item_check label="Parzelleneigenschaften anzeigen" name="Parcel Properties"/>
 </menu>

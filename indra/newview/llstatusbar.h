@@ -405,6 +405,8 @@ private:
 	void updateMenuSearchVisibility(const LLSD& data);
 	void updateMenuSearchPosition();
 	// </FS:ND>
+
+	std::string mCurrentLocationString;
 };
 
 // *HACK: Status bar owns your cached money balance. JC
