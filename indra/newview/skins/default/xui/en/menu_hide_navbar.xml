@@ -19,16 +19,6 @@
              parameter="ShowNavbarNavigationPanel" />
     </menu_item_check>
     <menu_item_check
-         label="Show Favorites Bar"
-         name="ShowNavbarFavoritesPanel">
-           <on_click
-             function="ToggleControl"
-             parameter="ShowNavbarFavoritesPanel" /> 
-             <on_check
-             function="CheckControl"
-             parameter="ShowNavbarFavoritesPanel" />
-    </menu_item_check>
-    <menu_item_check
          label="Show Search Bar"
          name="ShowSearchTopBar">
            <on_click
@@ -37,6 +27,19 @@
              <on_check
              function="CheckControl"
              parameter="ShowSearchTopBar" />
+             <on_enable
+             function="CheckControl"
+             parameter="ShowNavbarNavigationPanel" />
+    </menu_item_check>
+    <menu_item_check
+         label="Show Favorites Bar"
+         name="ShowNavbarFavoritesPanel">
+           <on_click
+             function="ToggleControl"
+             parameter="ShowNavbarFavoritesPanel" /> 
+             <on_check
+             function="CheckControl"
+             parameter="ShowNavbarFavoritesPanel" />
     </menu_item_check>
     <!-- AO - remove this option, problematic
     <menu_item_check
@@ -126,6 +129,15 @@
              parameter="ShowNetStats" />
     </menu_item_check>
     <menu_item_separator/>
+    <menu_item_check
+         label="Show Coordinates"
+         name="Coordinates">
+           <on_click
+             function="ToggleControl"
+             parameter="NavBarShowCoordinates" />
+             <on_check
+              control="NavBarShowCoordinates" />
+    </menu_item_check>
     <menu_item_check
          label="Show Parcel Permissions"
          name="Parcel Properties">

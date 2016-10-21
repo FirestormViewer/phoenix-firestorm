@@ -1130,7 +1130,8 @@ void LLStatusBar::buildLocationString(std::string& loc_str, bool show_coords)
 	//               rating and at the end the parcel description.
 	//LLAgentUI::ELocationFormat format =
 	//	(show_coords ? LLAgentUI::LOCATION_FORMAT_FULL : LLAgentUI::LOCATION_FORMAT_NO_COORDS);
-	LLAgentUI::ELocationFormat format = LLAgentUI::LOCATION_FORMAT_V1_STATUSBAR;
+	LLAgentUI::ELocationFormat format =
+		(show_coords ? LLAgentUI::LOCATION_FORMAT_V1 : LLAgentUI::LOCATION_FORMAT_V1_NO_COORDS);
 
 	if (!LLAgentUI::buildLocationString(loc_str, format))
 	{
