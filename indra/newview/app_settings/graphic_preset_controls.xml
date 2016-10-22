@@ -53,6 +53,7 @@
 		<string>RenderUseStreamVBO</string>
 		<string>RenderVBOEnable</string>
 		<string>RenderVolumeLODFactor</string>
+		<string>RenderWaterRefResolution</string>
 		<string>TextureDiscardLevel</string>
 		<string>TextureMemory</string>
 		<string>VertexShaderEnable</string>
