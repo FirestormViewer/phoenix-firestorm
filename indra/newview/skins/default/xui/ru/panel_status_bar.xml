@@ -8,7 +8,7 @@
 	</panel>
 	<panel.string name="packet_loss_tooltip">Потеря пакетов</panel.string>
 	<panel.string name="bandwidth_tooltip">Ширина полосы</panel.string>
-	<panel.string name="time">[hour, datetime, slt]:[min, datetime, slt] [timezone,datetime, slt]</panel.string>
+	<panel.string name="time">[hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone,datetime, slt]</panel.string>
 	<panel.string name="buycurrencylabel">[AMT] L$</panel.string>
 	<panel name="menu_search_panel">
 		<search_editor label="Поиск в меню" name="search_menu_edit" tool_tip="Начните вводить название меню, которое вас интересует" />

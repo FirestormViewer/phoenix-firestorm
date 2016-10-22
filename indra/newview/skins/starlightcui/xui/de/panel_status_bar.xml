@@ -11,14 +11,16 @@
 		<button name="status_lightshare_btn" tool_tip="Lightshare-Einstellungen"/>
 		<text name="parcel_info_text" value="(laden)" tool_tip="Name der Parzelle, auf der du dich befindest. Klicken öffnet die Land-Informationen."/>
 	</panel>
-	<panel name="menu_search_panel" left="-440">
+	<panel name="menu_search_panel" left="-563">
 		<search_editor label="Menü durchs." name="search_menu_edit" tool_tip="Den Suchbegriff hier eingeben. Ergebnisse werden für Treffer im Namen eines Menüeintrags angezeigt."/>
 	</panel>
-	<panel name="balance_bg" left="-308">
+	<panel name="balance_bg" left="-431">
 		<text name="balance" tool_tip="Klicken, um L$-Guthaben zu aktualisieren" value="?? L$"/>
 		<button label="L$-Kauf" name="buyL" tool_tip="Hier klicken, um mehr L$ zu kaufen"/>
 	</panel>
-	<panel name="time_and_media_bg" width="206">
+	<panel name="time_and_media_bg" width="328">
+		<icon name="dd_icon" tool_tip="Draw Distance"/>
+		<slider tool_tip="Maximale Distanz von der Kamera, die angezeigt werden soll (in Meter)" name="drawdistance"/>
 		<text name="TimeText" tool_tip="Aktuelle Zeit (Pazifik)" width="78">24:00:00 PST</text>
 		<button name="stream_toggle_btn" tool_tip="Audiostream der Parzelle starten/stoppen"/>
 		<button name="media_toggle_btn" tool_tip="Alle Medien starten/stoppen (Musik, Video, Webseiten)"/>

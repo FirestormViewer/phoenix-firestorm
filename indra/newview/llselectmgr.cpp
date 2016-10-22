@@ -6448,6 +6448,9 @@ void pushWireframe(LLDrawable* drawable)
 
 void LLSelectNode::renderOneWireframe(const LLColor4& color) 
 {
+	//Need to because crash on ATI 3800 (and similar cards) MAINT-5018 
+	LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
+
 	LLViewerObject* objectp = getObject();
 	if (!objectp)
 	{
@@ -7505,7 +7508,9 @@ U32 LLObjectSelection::getSelectedObjectTriangleCount(S32* vcount)
 		
 		if (object)
 		{
-			count += object->getTriangleCount(vcount);
+			S32 vt = 0;
+			count += object->getTriangleCount(&vt);
+			*vcount += vt;
 		}
 	}
 

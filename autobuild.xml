@@ -36,26 +36,6 @@
           </map>
         </map>
       </map>
-      <key>wix</key>
-      <map>
-        <key>license</key>
-        <string>MS-RL</string>
-        <key>license_file</key>
-        <string>LICENSES/wix.txt</string>
-        <key>name</key>
-        <string>wix</string>
-        <key>platforms</key>
-        <map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-        </map>
-      </map>
       <key>ndPhysicsStub</key>
       <map>
         <key>license</key>

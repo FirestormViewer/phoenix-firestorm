@@ -137,7 +137,7 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 		region_name = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
 		if (LOCATION_FORMAT_NO_MATURITY == fmt)
 			fmt = LOCATION_FORMAT_LANDMARK;
-		else if (LOCATION_FORMAT_FULL == fmt || LOCATION_FORMAT_V1_STATUSBAR == fmt)
+		else if (LOCATION_FORMAT_FULL == fmt || LOCATION_FORMAT_V1 == fmt || LOCATION_FORMAT_V1_NO_COORDS == fmt)
 			fmt = LOCATION_FORMAT_NO_COORDS;
 	}
 // [/RLVa:KB]
@@ -178,7 +178,7 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 				sim_access_string.c_str());
 			break;
 		// <FS:Ansariel> V1 format statusbar
-		case LOCATION_FORMAT_V1_STATUSBAR:
+		case LOCATION_FORMAT_V1:
 			if (fsStatusbarShowSimulatorVersion && !simulator_channel.empty())
 			{
 				buffer = llformat("%s - %s - (%d, %d, %d)%s%s",
@@ -193,6 +193,23 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 				buffer = llformat("%s (%d, %d, %d)%s%s",
 					region_name.c_str(),
 					pos_x, pos_y, pos_z,
+					sim_access_string.empty() ? "" : " - ",
+					sim_access_string.c_str());
+			}
+			break;
+		case LOCATION_FORMAT_V1_NO_COORDS:
+			if (fsStatusbarShowSimulatorVersion && !simulator_channel.empty())
+			{
+				buffer = llformat("%s - %s%s%s",
+					region_name.c_str(),
+					simulator_channel.c_str(),
+					sim_access_string.empty() ? "" : " - ",
+					sim_access_string.c_str());
+			}
+			else
+			{
+				buffer = llformat("%s%s%s",
+					region_name.c_str(),
 					sim_access_string.empty() ? "" : " - ",
 					sim_access_string.c_str());
 			}
@@ -238,7 +255,7 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 				sim_access_string.c_str());
 			break;
 		// <FS:Ansariel> V1 format statusbar
-		case LOCATION_FORMAT_V1_STATUSBAR:
+		case LOCATION_FORMAT_V1:
 			if (fsStatusbarShowSimulatorVersion && !simulator_channel.empty())
 			{
 				buffer = llformat("%s - %s - (%d, %d, %d)%s%s - %s",
@@ -254,6 +271,25 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 				buffer = llformat("%s (%d, %d, %d)%s%s - %s",
 					region_name.c_str(),
 					pos_x, pos_y, pos_z,
+					sim_access_string.empty() ? "" : " - ",
+					sim_access_string.c_str(),
+					parcel_name.c_str());
+			}
+			break;
+		case LOCATION_FORMAT_V1_NO_COORDS:
+			if (fsStatusbarShowSimulatorVersion && !simulator_channel.empty())
+			{
+				buffer = llformat("%s - %s%s%s - %s",
+					region_name.c_str(),
+					simulator_channel.c_str(),
+					sim_access_string.empty() ? "" : " - ",
+					sim_access_string.c_str(),
+					parcel_name.c_str());
+			}
+			else
+			{
+				buffer = llformat("%s%s%s - %s",
+					region_name.c_str(),
 					sim_access_string.empty() ? "" : " - ",
 					sim_access_string.c_str(),
 					parcel_name.c_str());

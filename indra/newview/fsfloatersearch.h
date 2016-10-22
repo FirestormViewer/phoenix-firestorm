@@ -306,6 +306,7 @@ public:
 	FSPanelSearchWeb();
 	/*virtual*/ BOOL postBuild();
 	void loadURL(const SearchQuery &query);
+	/*virtual*/ void focusDefaultElement();
 
 private:
 	virtual ~FSPanelSearchWeb() {};

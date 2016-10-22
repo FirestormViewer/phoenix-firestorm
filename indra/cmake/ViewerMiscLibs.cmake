@@ -11,11 +11,9 @@ if (NOT USESYSTEMLIBS)
 #  use_prebuilt_binary(libidn)
 
   if( ND_BUILD64BIT_ARCH )
-    if( WINDOWS )
-      use_prebuilt_binary( wix )
-    elseif( DARWIN )
+    if( DARWIN )
       use_prebuilt_binary( slplugin_x86 )
-    endif()
+    endif( DARWIN )
   endif( ND_BUILD64BIT_ARCH )
 endif(NOT USESYSTEMLIBS)
 

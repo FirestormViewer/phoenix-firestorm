@@ -898,6 +898,8 @@ bool LLDAELoader::OpenFile(const std::string& filename)
 	boost::replace_all(tmp_file, "#", "%23");
 	// </FS:Ansariel>
 
+	setLoadState( READING_FILE );
+
 	//no suitable slm exists, load from the .dae file
 	DAE dae;
 	domCOLLADA* dom;

@@ -40,7 +40,8 @@ public:
 		LOCATION_FORMAT_NO_MATURITY,	// Parcel, Region (x, y, z)
 		LOCATION_FORMAT_NO_COORDS,		// Parcel, Region - Maturity
 		LOCATION_FORMAT_FULL,			// Parcel, Region (x, y, z) - Maturity
-		LOCATION_FORMAT_V1_STATUSBAR,   // <FS:Ansariel> V1 mode for status bar: Region (x, y, z) - Maturity - Parcel
+		LOCATION_FORMAT_V1,				// <FS:Ansariel> V1 mode for status bar: Region (x, y, z) - Maturity - Parcel
+		LOCATION_FORMAT_V1_NO_COORDS	// <FS:Ansariel> V1 mode for status bar: Region - Maturity - Parcel
 	};
 
 	static void buildFullname(std::string &name);

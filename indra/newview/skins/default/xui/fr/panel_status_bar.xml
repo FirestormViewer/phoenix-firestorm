@@ -8,16 +8,18 @@
 	</panel>
 	<panel.string name="packet_loss_tooltip">Paquet perdu</panel.string>
 	<panel.string name="bandwidth_tooltip">Bande passante</panel.string>
-	<panel.string name="time">[hour, datetime, slt]:[min, datetime, slt] [timezone,datetime, slt]</panel.string>
+	<panel.string name="time">[hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [ampm, datetime, slt] [timezone,datetime, slt]</panel.string>
 	<panel.string name="timeTooltip">[weekday, datetime, slt] [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]</panel.string>
 	<panel.string name="buycurrencylabel">[AMT] L$</panel.string>
-	<panel name="menu_search_panel" width="160"><search_editor label="Rech. dans les menus" name="search_menu_edit" tool_tip="Saisissez vos critères de recherche ici."/></panel>
+	<panel name="menu_search_panel" width="160" left="-498">
+		<search_editor label="Rech. dans les menus" name="search_menu_edit" tool_tip="Saisissez vos critères de recherche ici."/>
+	</panel>
 	<panel name="balance_bg">
 		<text name="balance" tool_tip="Cliquez pour actualiser votre solde de L$"/>
 		<button label="PLUS DE L$" name="buyL" tool_tip="Cliquez pour acheter plus de L$"/>
 	</panel>
 	<panel name="time_and_media_bg">
-		<text name="TimeText" tool_tip="Heure actuelle (Pacifique)">24:00 AM PST</text>
+		<text name="TimeText" tool_tip="Heure actuelle (Pacifique)">24:00:00 AM PST</text>
 		<button name="stream_toggle_btn" tool_tip="Jouer/Arrêter la musique du terrain"/>
 		<button name="media_toggle_btn" tool_tip="Jouer/Arrêter tous les médias (Musique, Vidéos, Pages Web)"/>
 	</panel>
