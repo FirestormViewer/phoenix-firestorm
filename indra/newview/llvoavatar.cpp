@@ -6186,8 +6186,15 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo)
 		LL_WARNS("Avatar") << "called with invalid avatar" << LL_ENDL;
 	}
 
-    LLScopedContextString str("addAttachmentOverridesForObject " + av->getFullname());
-    
+	// <FS:ND> FIRE-20227; Do not use av name if av is not valid
+	// LLScopedContextString str("addAttachmentOverridesForObject " + av->getFullname());
+	std::unique_ptr< LLScopedContextString > str;
+	if( av )
+		str.reset( new LLScopedContextString( "addAttachmentOverridesForObject " + av->getFullname()) );
+	else
+		str.reset( new LLScopedContextString( "addAttachmentOverridesForObject invalid avi" ) );
+	// </FS:ND>
+	
 	// Process all children
 	LLViewerObject::const_child_list_t& children = vo->getChildren();
 	for (LLViewerObject::const_child_list_t::const_iterator it = children.begin();
