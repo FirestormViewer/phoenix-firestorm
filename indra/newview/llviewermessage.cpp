@@ -5555,7 +5555,10 @@ void process_crossed_region(LLMessageSystem* msg, void**)
 	}
 	LL_INFOS("Messaging") << "process_crossed_region()" << LL_ENDL;
 	gAgentAvatarp->resetRegionCrossingTimer();
-	gAgentAvatarp->setIsCrossingRegion(true); // <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
+	// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP; this is apparently the place to
+	//               hook in for region crossings - we get an info from the simulator that we
+	//               crossed a region and then the viewer starts the handover process
+	gAgentAvatarp->setIsCrossingRegion(true);
 
 	U32 sim_ip;
 	msg->getIPAddrFast(_PREHASH_RegionData, _PREHASH_SimIP, sim_ip);
@@ -7535,6 +7538,20 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			return false;
 		}
 
+		// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP; Not clear if these messages are actually
+		//               used if a region crossing timeout happens and if this is the correct place to handle
+		//               them, but it seems the most likely way it would probably happen and I don't have a
+		//               borked region at hand for testing.
+		if (notificationID == "expired_region_handoff" || notificationID == "invalid_region_handoff")
+		{
+			LL_WARNS("Messaging") << "Region crossing failed. Resetting region crossing state." << LL_ENDL;
+			if (isAgentAvatarValid())
+			{
+				gAgentAvatarp->setIsCrossingRegion(false);
+			}
+		}
+		// </FS:Ansariel>
+
 		std::string llsdRaw;
 		LLSD llsdBlock;
 		// <FS:Ansariel> Remove dupe call
@@ -7710,16 +7727,6 @@ static void process_special_alert_messages(const std::string & message)
 		snap_filename += SCREEN_HOME_FILENAME;
 		gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
 	}
-	// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
-	else if (message == "expired_region_handoff" || message == "invalid_region_handoff")
-	{
-		LL_INFOS("Messaging") << "Region crossing failed. Resetting region crossing state." << LL_ENDL;
-		if (isAgentAvatarValid())
-		{
-			gAgentAvatarp->setIsCrossingRegion(false);
-		}
-	}
-	// </FS:Ansariel>
 }
 
 
