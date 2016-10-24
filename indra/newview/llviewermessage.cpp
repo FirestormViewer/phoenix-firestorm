@@ -5973,13 +5973,18 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 			if (objectp)
 			{
 				// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
-				if (isAgentAvatarValid() &&
+				static LLCachedControl<bool> fsExperimentalLostAttachmentsFix(gSavedSettings, "FSExperimentalLostAttachmentsFix");
+				if (fsExperimentalLostAttachmentsFix &&
+					isAgentAvatarValid() &&
 					(gAgent.getTeleportState() != LLAgent::TELEPORT_NONE || gAgentAvatarp->isCrossingRegion()) && 
 					(objectp->isAttachment() || objectp->isTempAttachment()) &&
 					objectp->permYouOwner())
 				{
 					// Simply ignore the request and don't kill the object - this should work...
-					report_to_nearby_chat("Sim tried to kill attachment: " + objectp->getAttachmentItemName());
+					if (gSavedSettings.getBOOL("FSExperimentalLostAttachmentsFixReport"))
+					{
+						report_to_nearby_chat("Sim tried to kill attachment: " + objectp->getAttachmentItemName() + " (" + (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE ? "tp" : "crossing") + ")");
+					}
 					continue;
 				}
 				// </FS:Ansariel>
