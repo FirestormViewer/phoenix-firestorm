@@ -5557,7 +5557,9 @@ void process_crossed_region(LLMessageSystem* msg, void**)
 	gAgentAvatarp->resetRegionCrossingTimer();
 	// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP; this is apparently the place to
 	//               hook in for region crossings - we get an info from the simulator that we
-	//               crossed a region and then the viewer starts the handover process
+	//               crossed a region and then the viewer starts the handover process. We only
+	//               receive this message if we can actually cross the region and aren't blocked
+	//               for some reason (e.g. banned, group access...)
 	gAgentAvatarp->setIsCrossingRegion(true);
 
 	U32 sim_ip;
