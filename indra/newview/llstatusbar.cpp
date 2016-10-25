@@ -488,14 +488,6 @@ BOOL LLStatusBar::postBuild()
 	gSavedSettings.getControl("FSMenuSearch")->getCommitSignal()->connect(boost::bind(&LLStatusBar::updateMenuSearchVisibility, this, _2));
 	// </FS:ND>
 
-	// <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
-	mVolumeIconsWidth = mBtnVolume->getRect().mRight - mStreamToggle->getRect().mLeft;
-	if (!gSavedSettings.getBOOL("FSEnableVolumeControls"))
-	{
-		updateVolumeControlsVisibility(LLSD(FALSE));
-	}
-	// </FS:PP>
-
 	// <FS:Ansariel> FIRE-14482: Show FPS in status bar
 	mFPSText = getChild<LLTextBox>("FPSText");
 	gSavedSettings.getControl("FSStatusBarShowFPS")->getSignal()->connect(boost::bind(&LLStatusBar::onShowFPSChanged, this, _2));
@@ -504,6 +496,14 @@ BOOL LLStatusBar::postBuild()
 		onShowFPSChanged(LLSD(FALSE));
 	}
 	// </FS:Ansariel>
+
+	// <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
+	mVolumeIconsWidth = mBtnVolume->getRect().mRight - mStreamToggle->getRect().mLeft;
+	if (!gSavedSettings.getBOOL("FSEnableVolumeControls"))
+	{
+		updateVolumeControlsVisibility(LLSD(FALSE));
+	}
+	// </FS:PP>
 
 	return TRUE;
 }
