@@ -15769,17 +15769,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>67cc2844-00f3-2b3c-b991-6418d01e1bb7</string>
     </map>
-    <key>UISndFSKeywordSound</key>
-    <map>
-      <key>Comment</key>
-      <string>UUID of sound to play on keyword alert.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>a3f48b85-c29f-1f97-ebb6-644b7c053512</string>
-    </map>
     <key>UISndMoneyChangeDown</key>
     <map>
       <key>Comment</key>
@@ -20940,17 +20929,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndInventoryOffer.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>PlayModeUISndFSKeywordSound</key>
-    <map>
-      <key>Comment</key>
-      <string>Play a sound when a keyword is found.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

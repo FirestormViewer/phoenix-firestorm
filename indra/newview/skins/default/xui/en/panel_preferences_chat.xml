@@ -1918,7 +1918,7 @@
 		 width="17"
 		 tool_tip="Reset to the default UUID.">
 			 <button.commit_callback
-			  function="ResetControl"
+			  function="ResetPerAccountControl"
 			  parameter="UISndFSKeywordSound"/>
 		</button>
 		 
