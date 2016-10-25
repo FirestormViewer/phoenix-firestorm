@@ -1744,6 +1744,7 @@
 	 name="ChatKeywordAlerts">
 
 		<check_box
+		 enabled="false"
 		 layout="topleft"
 		 follows="left|top"
 		 top="5"
@@ -1754,6 +1755,7 @@
 		 name="FSKeywordOn"
 		 label="Enable Keyword Alerts"/>
 		<check_box
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
 		 follows="left|top"
@@ -1765,6 +1767,7 @@
 		 name="FSKeywordInChat"
 		 label="Look for Keywords In Local Chat"/>
 		<check_box
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
 		 follows="left|top"
@@ -1776,6 +1779,7 @@
 		 name="FSKeywordInIM"
 		 label="Look for Keywords In IMs and Group Chat"/>
 		<check_box
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
 		 follows="left|top"
@@ -1787,6 +1791,7 @@
 		 name="FSKeywordSpeakersName"
 		 label="Check sender's name for keywords"/>
 		<check_box
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
 		 follows="left|top"
@@ -1798,6 +1803,7 @@
 		 name="FSKeywordCaseSensitive"
 		 label="All Keywords are case-sensitive"/>
 		<check_box
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
 		 follows="left|top"
@@ -1819,6 +1825,7 @@
 		  Keywords (separated by commas):
 		</text>
 		<text_editor
+		 enabled="false"
 		 border_visible="true"
 		 bg_readonly_color="MouseGray"
 		 enabled_control="FSKeywordOn"
@@ -1836,6 +1843,7 @@
 		 word_wrap="true"/>
 
 		<check_box
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
 		 follows="left|top"
@@ -1848,6 +1856,7 @@
 		 label="Enable Color Alert"/>
 
 		<color_swatch
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 control_name="FSKeywordColor"
 		 border.border_thickness="0"
@@ -1862,6 +1871,7 @@
 		 tool_tip="Click to open color picker"/>
 
 		<check_box
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
 		 follows="left|top"
@@ -1884,6 +1894,7 @@
 		  Alert Sound UUID:
 		</text>
 		<line_editor
+		 enabled="false"
 		 enabled_control="PlayModeUISndFSKeywordSound"
 		 follows="left|top"
 		 left_pad="5"
@@ -1893,6 +1904,7 @@
 		 control_name="UISndFSKeywordSound"
 		 width="250"/>
 		<button
+		 enabled="false"
 		 enabled_control="PlayModeUISndFSKeywordSound"
 		 follows="left|top"
 		 name="Prev_UISndFSKeywordSound"
@@ -1908,6 +1920,7 @@
 			  parameter="UISndFSKeywordSound"/>
 		</button>
 		<button
+		 enabled="false"
 		 enabled_control="PlayModeUISndFSKeywordSound"
 		 follows="left|top"
 		 name="Def_UISndFSKeywordSound"

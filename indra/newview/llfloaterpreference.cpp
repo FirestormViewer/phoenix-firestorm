@@ -1081,6 +1081,18 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 
 		// <FS:Ansariel> FIRE-17630: Properly disable per-account settings backup list
 		getChildView("restore_per_account_disable_cover")->setVisible(FALSE);
+
+		// <FS:Ansariel> Keyword settings are per-account; enable after logging in
+		LLPanel* keyword_panel = getChild<LLPanel>("ChatKeywordAlerts");
+		for (child_list_t::const_iterator iter = keyword_panel->getChildList()->begin();
+			 iter != keyword_panel->getChildList()->end(); ++iter)
+		{
+			LLUICtrl* child = static_cast<LLUICtrl*>(*iter);
+			LLControlVariable* enabled_control = child->getEnabledControlVariable();
+			BOOL enabled = !enabled_control || enabled_control->getValue().asBoolean();
+			child->setEnabled(enabled);
+		}
+		// </FS:Ansariel>
 	}
 	gAgent.sendAgentUserInfoRequest();
 

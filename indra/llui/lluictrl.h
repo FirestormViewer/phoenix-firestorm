@@ -186,6 +186,12 @@ public:
 	virtual void setControlName(const std::string& control, LLView *context = NULL);
 	
 	LLControlVariable* getControlVariable() { return mControlVariable; } 
+	// <FS:Ansariel> Accessors for other ControlVariables
+	LLControlVariable* getEnabledControlVariable() { return mEnabledControlVariable; }
+	LLControlVariable* getDisabledControlVariable() { return mDisabledControlVariable; }
+	LLControlVariable* getMakeVisibleControlVariable() { return mMakeVisibleControlVariable; }
+	LLControlVariable* getMakeInvisibleControlVariable() { return mMakeInvisibleControlVariable; }
+	// </FS:Ansariel>
 	
 	void setEnabledControlVariable(LLControlVariable* control);
 	void setDisabledControlVariable(LLControlVariable* control);
