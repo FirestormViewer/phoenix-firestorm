@@ -2045,7 +2045,7 @@ bool LLAppViewer::cleanup()
 	// <FS:ND> FIRE-20152; save avatar render settings during cleanup, not in the dtor of the static instance.
 	// Otherwise the save will happen during crt termination when most of the viewers infrastructure is in a non deterministic state
 	if( FSAvatarRenderPersistence::instanceExists() )
-		FSAvatarRenderPersistence::getInstance()->saveAvatarRenderSettings();
+		FSAvatarRenderPersistence::getInstance()->deleteSingleton();
 	// </FS:ND>
 
 	// Must clean up texture references before viewer window is destroyed.
