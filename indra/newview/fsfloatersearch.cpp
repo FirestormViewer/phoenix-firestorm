@@ -315,16 +315,22 @@ BOOL FSFloaterSearch::postBuild()
 	mDetailMaturity =	getChild<LLIconCtrl>("maturity_icon");
 	mTabContainer =		getChild<LLTabContainer>("ls_tabs");
 	if (mTabContainer)
+	{
 		mTabContainer->setCommitCallback(boost::bind(&FSFloaterSearch::onTabChange, this));
+	}
 
 	flushDetails();
 	
 	if (mDetailsPanel)
+	{
 		mDetailsPanel->setVisible(false);
+	}
 	mHasSelection = false;
 	
 	if (!mTabContainer->selectTab(gSavedSettings.getS32("FSLastSearchTab")))
+	{
 		mTabContainer->selectFirstTab();
+	}
 	
 	return TRUE;
 }
@@ -333,9 +339,10 @@ void FSFloaterSearch::onTabChange()
 {
 	LLPanel* active_panel = mTabContainer->getCurrentPanel();
 	
-	if(active_panel == mPanelWeb)
+	if (active_panel == mPanelWeb)
 	{
 		mDetailsPanel->setVisible(false);
+		mPanelWeb->resetFocusOnLoad();
 	}
 	else
 	{
@@ -2664,6 +2671,7 @@ static LLPanelInjector<FSPanelSearchWeb> t_panel_fs_search_web("panel_ls_web");
 
 FSPanelSearchWeb::FSPanelSearchWeb() : FSSearchPanelBase()
 , mWebBrowser(NULL)
+, mResetFocusOnLoad(false)
 {
 	// declare a map that transforms a category name into
 	// the URL suffix that is used to search that category
@@ -2681,8 +2689,7 @@ FSPanelSearchWeb::FSPanelSearchWeb() : FSSearchPanelBase()
 BOOL FSPanelSearchWeb::postBuild()
 {
 	mWebBrowser = getChild<LLMediaCtrl>("search_browser");
-	if (mWebBrowser) mWebBrowser->addObserver(this);
-    return TRUE;
+	return TRUE;
 }
 
 void FSPanelSearchWeb::loadURL(const SearchQuery &p)
@@ -2748,6 +2755,17 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
 void FSPanelSearchWeb::focusDefaultElement()
 {
 	mWebBrowser->setFocus(TRUE);
+}
+
+void FSPanelSearchWeb::draw()
+{
+	if (mResetFocusOnLoad)
+	{
+		focusDefaultElement();
+		mResetFocusOnLoad = false;
+	}
+
+	FSSearchPanelBase::draw();
 }
 
 ////////////////////////////////////////
