@@ -58,20 +58,20 @@ S32 LLViewerParcelMedia::sMediaParcelLocalID = 0;
 LLUUID LLViewerParcelMedia::sMediaRegionID;
 viewer_media_t LLViewerParcelMedia::sMediaImpl;
 LLSD LLViewerParcelMedia::sMediaFilterList;
-bool LLViewerParcelMedia::sMediaLastActionPlay = FALSE;
+bool LLViewerParcelMedia::sMediaLastActionPlay = false;
 std::string LLViewerParcelMedia::sMediaLastURL = "";
-bool LLViewerParcelMedia::sAudioLastActionPlay = FALSE;
+bool LLViewerParcelMedia::sAudioLastActionPlay = false;
 std::string LLViewerParcelMedia::sAudioLastURL = "";
-bool LLViewerParcelMedia::sMediaReFilter = FALSE;
+bool LLViewerParcelMedia::sMediaReFilter = false;
 
-bool LLViewerParcelMedia::sMediaFilterAlertActive = FALSE;
+bool LLViewerParcelMedia::sMediaFilterAlertActive = false;
 std::string LLViewerParcelMedia::sQueuedMusic = "";
 std::string LLViewerParcelMedia::sCurrentMusic = "";
 LLParcel LLViewerParcelMedia::sQueuedMedia;
 LLParcel LLViewerParcelMedia::sCurrentMedia;
 LLParcel LLViewerParcelMedia::sCurrentAlertMedia;
-bool LLViewerParcelMedia::sMediaQueueEmpty = TRUE;
-bool LLViewerParcelMedia::sMusicQueueEmpty = TRUE;
+bool LLViewerParcelMedia::sMediaQueueEmpty = true;
+bool LLViewerParcelMedia::sMusicQueueEmpty = true;
 U32 LLViewerParcelMedia::sMediaCommandQueue = 0;
 F32 LLViewerParcelMedia::sMediaCommandTime = 0;
 
@@ -410,7 +410,7 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 		// stop
 		if( command == PARCEL_MEDIA_COMMAND_STOP )
 		{
-			if (LLViewerParcelMedia::sMediaFilterAlertActive == false)
+			if (!LLViewerParcelMedia::sMediaFilterAlertActive)
 			{
 				stop();
 			}
@@ -424,7 +424,7 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 		// pause
 		if( command == PARCEL_MEDIA_COMMAND_PAUSE )
 		{
-			if (LLViewerParcelMedia::sMediaFilterAlertActive == false)
+			if (!LLViewerParcelMedia::sMediaFilterAlertActive)
 			{
 				pause();
 			}
@@ -469,7 +469,7 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 		// unload
 		if( command == PARCEL_MEDIA_COMMAND_UNLOAD )
 		{
-			if (LLViewerParcelMedia::sMediaFilterAlertActive == false)
+			if (!LLViewerParcelMedia::sMediaFilterAlertActive)
 			{
 				stop();
 			}
@@ -504,7 +504,7 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 				}
 			}
 		}
-		if (LLViewerParcelMedia::sMediaFilterAlertActive == false)
+		if (!LLViewerParcelMedia::sMediaFilterAlertActive)
 		{
 			seek(time);
 		}
@@ -940,11 +940,11 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 		LLParcel* pParcel = &LLViewerParcelMedia::sCurrentAlertMedia;
 		if (gSavedSettings.getBOOL("MediaFilterSinglePrompt"))
 		{
-			LLNotifications::instance().add("MediaAlertSingle", args,LLSD(),boost::bind(callback_media_alert_single, _1, _2, pParcel));
+			LLNotifications::instance().add("MediaAlertSingle", args, LLSD(), boost::bind(callback_media_alert_single, _1, _2, pParcel));
 		}
 		else
 		{
-			LLNotifications::instance().add("MediaAlert", args,LLSD(),boost::bind(callback_media_alert, _1, _2, pParcel));
+			LLNotifications::instance().add("MediaAlert", args, LLSD(), boost::bind(callback_media_alert, _1, _2, pParcel));
 		}
 	}
 
@@ -976,7 +976,7 @@ void callback_media_alert(const LLSD &notification, const LLSD &response, LLParc
 	}
 	args["MEDIAURL"] = media_url;
 	args["MEDIADOMAIN"] = domain;
-	LLNotifications::instance().add("MediaAlert2", args,LLSD(),boost::bind(callback_media_alert2, _1, _2, parcel, allow));
+	LLNotifications::instance().add("MediaAlert2", args, LLSD(), boost::bind(callback_media_alert2, _1, _2, parcel, allow));
 }
 
 void callback_media_alert2(const LLSD &notification, const LLSD &response, LLParcel* parcel, bool allow)
@@ -1094,8 +1094,6 @@ void callback_media_alert2(const LLSD &notification, const LLSD &response, LLPar
 		}
 		LLViewerParcelMedia::sMediaCommandQueue = 0;
 	}
-
-	
 }
 
 void callback_media_alert_single(const LLSD &notification, const LLSD &response, LLParcel* parcel)
@@ -1185,8 +1183,6 @@ void callback_media_alert_single(const LLSD &notification, const LLSD &response,
 		}
 		LLViewerParcelMedia::sMediaCommandQueue = 0;
 	}
-
-	
 }
 
 bool callback_enable_audio_filter(const LLSD& notification, const LLSD& response, std::string media_url)
@@ -1200,7 +1196,7 @@ bool callback_enable_audio_filter(const LLSD& notification, const LLSD& response
 	else // option == 1
 	{
 		gSavedSettings.setBOOL("MediaEnableFilter", FALSE);
-		if (gAudiop != NULL)
+		if (gAudiop)
 		{
 			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
 		}
@@ -1222,12 +1218,11 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 	//  queue empty.
 	if (!LLViewerParcelMedia::sMediaFilterAlertActive)
 	{
-		if ((media_url == sCurrentMusic) && 
-			(!sMediaReFilter))
+		if (media_url == sCurrentMusic && !sMediaReFilter)
 		{
 			LL_INFOS() << "Audio URL filter: no active alert, same URL as previous: " + media_url << LL_ENDL;
 			// The music hasn't changed, so keep playing if we were.
-			if ((gAudiop != NULL) && sAudioLastActionPlay)
+			if (gAudiop && sAudioLastActionPlay)
 			{
 				LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
 			}
@@ -1272,7 +1267,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 	if (media_url.empty())
 	{
 		// Treat it as allowed; it'll get stopped elsewhere
-		if (gAudiop != NULL)
+		if (gAudiop)
 		{
 			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
 		}
@@ -1285,7 +1280,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 	{
 		if (sAudioLastActionPlay)
 		{
-			if (gAudiop != NULL)
+			if (gAudiop)
 			{
 				LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
 			}
@@ -1323,7 +1318,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 	}
 	if (media_action == "allow")
 	{
-		if (gAudiop != NULL)
+		if (gAudiop)
 		{
 			LL_INFOS("MediaFilter") << "Audio filter: URL allowed by whitelist" << LL_ENDL;
 			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
@@ -1346,11 +1341,11 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 		LLViewerParcelMedia::sMediaFilterAlertActive = true;
 		if (gSavedSettings.getBOOL("MediaFilterSinglePrompt"))
 		{
-			LLNotifications::instance().add("AudioAlertSingle", args,LLSD(),boost::bind(callback_audio_alert_single, _1, _2, media_url));
+			LLNotifications::instance().add("AudioAlertSingle", args, LLSD(), boost::bind(callback_audio_alert_single, _1, _2, media_url));
 		}
 		else
 		{
-			LLNotifications::instance().add("AudioAlert", args,LLSD(),boost::bind(callback_audio_alert, _1, _2, media_url));
+			LLNotifications::instance().add("AudioAlert", args, LLSD(), boost::bind(callback_audio_alert, _1, _2, media_url));
 		}
 	}
 
@@ -1381,7 +1376,7 @@ void callback_audio_alert(const LLSD &notification, const LLSD &response, std::s
 	}
 	args["AUDIOURL"] = media_url;
 	args["AUDIODOMAIN"] = domain;
-	LLNotifications::instance().add("AudioAlert2", args,LLSD(),boost::bind(callback_audio_alert2, _1, _2, media_url, allow));
+	LLNotifications::instance().add("AudioAlert2", args, LLSD(), boost::bind(callback_audio_alert2, _1, _2, media_url, allow));
 }
 
 void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::string media_url, bool allow)
@@ -1392,7 +1387,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 
 	if ((option == 0) && allow) // allow now
 	{
-		if (gAudiop != NULL)
+		if (gAudiop)
 		{
 			LLViewerParcelMedia::sCurrentMusic = media_url;
 			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
@@ -1401,7 +1396,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 	}
 	else if ((option == 0) && !allow) //deny now
 	{
-		if (gAudiop != NULL)
+		if (gAudiop)
 		{
 			LLViewerParcelMedia::sCurrentMusic = "";
 			LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
@@ -1418,7 +1413,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		LLStringUtil::format_map_t format_args;
 		format_args["[DOMAIN]"] = domain;
 		report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentDomainAlwaysAllowed", format_args));
-		if (gAudiop != NULL)
+		if (gAudiop)
 		{
 			LLViewerParcelMedia::sCurrentMusic = media_url;
 			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
@@ -1435,7 +1430,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		LLStringUtil::format_map_t format_args;
 		format_args["[DOMAIN]"] = domain;
 		report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentDomainAlwaysBlocked", format_args));
-		if (gAudiop != NULL)
+		if (gAudiop)
 		{
 			LLViewerParcelMedia::sCurrentMusic = "";
 			LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
@@ -1452,7 +1447,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		LLStringUtil::format_map_t format_args;
 		format_args["[MEDIAURL]"] = media_url;
 		report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentUrlAlwaysAllowed", format_args));
-		if (gAudiop != NULL)
+		if (gAudiop)
 		{
 			LLViewerParcelMedia::sCurrentMusic = media_url;
 			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
@@ -1469,7 +1464,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		LLStringUtil::format_map_t format_args;
 		format_args["[MEDIAURL]"] = media_url;
 		report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentUrlAlwaysBlocked", format_args));
-		if (gAudiop != NULL)
+		if (gAudiop)
 		{
 			LLViewerParcelMedia::sCurrentMusic = "";
 			LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
@@ -1523,7 +1518,7 @@ void callback_audio_alert_single(const LLSD &notification, const LLSD &response,
 
 	if (option == 0) // allow now
 	{
-		if (gAudiop != NULL)
+		if (gAudiop)
 		{
 			LLViewerParcelMedia::sCurrentMusic = media_url;
 			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
@@ -1532,7 +1527,7 @@ void callback_audio_alert_single(const LLSD &notification, const LLSD &response,
 	}
 	else if (option == 1) //deny now
 	{
-		if (gAudiop != NULL)
+		if (gAudiop)
 		{
 			LLViewerParcelMedia::sCurrentMusic = "";
 			LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
@@ -1549,7 +1544,7 @@ void callback_audio_alert_single(const LLSD &notification, const LLSD &response,
 		LLStringUtil::format_map_t format_args;
 		format_args["[DOMAIN]"] = domain;
 		report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentDomainAlwaysAllowed", format_args));
-		if (gAudiop != NULL)
+		if (gAudiop)
 		{
 			LLViewerParcelMedia::sCurrentMusic = media_url;
 			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
@@ -1566,7 +1561,7 @@ void callback_audio_alert_single(const LLSD &notification, const LLSD &response,
 		LLStringUtil::format_map_t format_args;
 		format_args["[DOMAIN]"] = domain;
 		report_to_nearby_chat(LLTrans::getString("MediaFilterAudioContentDomainAlwaysBlocked", format_args));
-		if (gAudiop != NULL)
+		if (gAudiop)
 		{
 			LLViewerParcelMedia::sCurrentMusic = "";
 			LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
@@ -1611,7 +1606,6 @@ void callback_audio_alert_single(const LLSD &notification, const LLSD &response,
 		LLViewerParcelMedia::sMediaCommandQueue = 0;
 	}
 }
-
 
 void LLViewerParcelMedia::saveDomainFilterList()
 {
