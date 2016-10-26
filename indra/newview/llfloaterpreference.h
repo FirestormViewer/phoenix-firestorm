@@ -139,8 +139,6 @@ protected:
 	void onVertexShaderEnable();
 	// callback for when client turns on impostors
 	void onAvatarImpostorsEnable();
-    // callback for when enhanced skeleton support checkbox toggled.
-    void onEnhancedSkeletonEnable(LLUICtrl *ctrl);
 	// <FS:AO> callback for local lights toggle
 	void onLocalLightsEnable();
 

@@ -511,7 +511,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.AvatarImpostorsEnable",	boost::bind(&LLFloaterPreference::onAvatarImpostorsEnable, this));
 	mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxComplexity",	boost::bind(&LLFloaterPreference::updateMaxComplexity, this));
 	mCommitCallbackRegistrar.add("Pref.VertexShaderEnable",		boost::bind(&LLFloaterPreference::onVertexShaderEnable, this));
-	mCommitCallbackRegistrar.add("Pref.EnhancedSkeletonEnable",	boost::bind(&LLFloaterPreference::onEnhancedSkeletonEnable, this, _1));
 	mCommitCallbackRegistrar.add("Pref.LocalLightsEnable",		boost::bind(&LLFloaterPreference::onLocalLightsEnable, this));
 	mCommitCallbackRegistrar.add("Pref.WindowedMod",			boost::bind(&LLFloaterPreference::onCommitWindowedMode, this));
 	mCommitCallbackRegistrar.add("Pref.UpdateSliderText",		boost::bind(&LLFloaterPreference::refreshUI,this));
@@ -1255,16 +1254,6 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledGraphics()
 void LLFloaterPreference::onAvatarImpostorsEnable()
 {
 	refreshEnabledGraphics();
-}
-
-void LLFloaterPreference::onEnhancedSkeletonEnable(LLUICtrl *ctrl)
-{
-    bool enabled = ctrl->getValue().asBoolean();
-    bool curr_enabled = gSavedSettings.getBOOL("IncludeEnhancedSkeleton"); 
-    if (enabled != curr_enabled)
-    {
-        gSavedSettings.setBOOL("IncludeEnhancedSkeleton",enabled);
-    }
 }
 
 // <FS:AO> toggle lighting detail availability in response to local light rendering, to avoid confusion
@@ -2168,7 +2157,7 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
 	LLCheckBoxCtrl* bumpshiny_ctrl = getChild<LLCheckBoxCtrl>("BumpShiny");
 	bool bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump");
 	bumpshiny_ctrl->setEnabled(bumpshiny ? TRUE : FALSE);
-	
+    
 	// Avatar Mode
 	// Enable Avatar Shaders
 	LLCheckBoxCtrl* ctrl_avatar_vp = getChild<LLCheckBoxCtrl>("AvatarVertexProgram");
