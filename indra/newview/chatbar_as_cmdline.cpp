@@ -1714,7 +1714,7 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 	msg->nextBlockFast(_PREHASH_AgentData);
 	msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
 	msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
-	msg->addUUIDFast(_PREHASH_GroupID, gAgent.getGroupID());
+	msg->addUUIDFast(_PREHASH_GroupID, FSCommon::getGroupForRezzing());
 	msg->nextBlockFast(_PREHASH_ObjectData);
 	msg->addU8Fast(_PREHASH_PCode, LL_PCODE_VOLUME);
 	msg->addU8Fast(_PREHASH_Material, LL_MCODE_METAL);
