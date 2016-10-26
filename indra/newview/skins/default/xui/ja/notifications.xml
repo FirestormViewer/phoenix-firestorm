@@ -2706,30 +2706,6 @@ URL: [AUDIOURL]
 			<button index="3" name="WhitelistDomain" text="ホワイトリスト"/>
 		</form>
 	</notification>
-	
-	<notification name="MOAPAlert"> 
-次の共有メディアが設定されているオブジェクトがあります。
-
-ドメイン: [MOAPDOMAIN]
-URL: [MOAPURL]
-		<form name="form">
-			<button name="Allow" text="許可"/>
-			<button name="Deny" text="拒否"/>
-		</form>
-	</notification>
-	
-	<notification name="MOAPAlert2"> 
-あなたが選択したものを記憶させて、この配信元からの共有メディアを[LCONDITION]許可するようにしたいですか？
-
-Domain: [MOAPDOMAIN]
-URL: [MOAPURL]
-		<form name="form">
-			<button name="Do Now" text="今回のみ[ACTION]"/>
-			<button name="RememberDomain" text="このドメインは[CONDITION]許可"/>
-			<button name="RememberURL" text="このURLは[CONDITION]許可"/>
-		</form>
-	</notification>
-  
 	<notification name="SystemMessageTip">
 		[MESSAGE]
 	</notification>

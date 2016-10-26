@@ -15791,17 +15791,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>67cc2844-00f3-2b3c-b991-6418d01e1bb7</string>
     </map>
-    <key>UISndFSKeywordSound</key>
-    <map>
-      <key>Comment</key>
-      <string>UUID of sound to play on keyword alert.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>a3f48b85-c29f-1f97-ebb6-644b7c053512</string>
-    </map>
     <key>UISndMoneyChangeDown</key>
     <map>
       <key>Comment</key>
@@ -20980,17 +20969,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>PlayModeUISndFSKeywordSound</key>
-    <map>
-      <key>Comment</key>
-      <string>Play a sound when a keyword is found.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>PlayModeUISndMoneyChangeDown</key>
     <map>
       <key>Comment</key>
@@ -24184,6 +24162,28 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>If enabled, shows the current FPS in the main menu bar</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSExperimentalLostAttachmentsFix</key>
+    <map>
+      <key>Comment</key>
+      <string>Enables the experimental fix for attachments getting detached on teleports and region crossings.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSExperimentalLostAttachmentsFixReport</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, reports attachments that were attempted to get detached during a teleport or region crossing to nearby chat.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

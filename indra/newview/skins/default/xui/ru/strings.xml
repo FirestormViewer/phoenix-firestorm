@@ -6035,21 +6035,6 @@ support@secondlife.com.
 	<string name="MediaFilterAudioContentUrlAlwaysBlocked">
 		Аудио для URL [MEDIAURL] никогда не будет воспроизводится.
 	</string>
-	<string name="MediaFilterSharedMediaContentBlocked">
-		Медиа для домена [DOMAIN] было заблокировано.
-	</string>
-	<string name="MediaFilterSharedMediaContentDomainAlwaysAllowed">
-		Медиа для домена [DOMAIN] всегда будет воспроизводится.
-	</string>
-	<string name="MediaFilterSharedMediaContentDomainAlwaysBlocked">
-		Медиа для домена [DOMAIN] никогда не будет воспроизводится.
-	</string>
-	<string name="MediaFilterSharedMediaContentUrlAlwaysAllowed">
-		Медиа для the URL [MEDIAURL] всегда будет воспроизводится.
-	</string>
-	<string name="MediaFilterSharedMediaContentUrlAlwaysBlocked">
-		Медиа для the URL [MEDIAURL] никогда не будет воспроизводится.
-	</string>
 	<string name="MediaFilterBlacklist">
 		Черный список
 	</string>

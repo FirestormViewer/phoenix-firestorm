@@ -400,7 +400,6 @@ public:
 		{}
     
     void navigate(LLMediaDataClientObject *object, U8 texture_index, const std::string &url);
-    void doNavigate(LLMediaDataClientObject *object, U8 texture_index, const std::string &url);
 
 	// Puts the request into the appropriate queue
     virtual void enqueue(Request::ptr_t);

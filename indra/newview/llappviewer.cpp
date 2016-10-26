@@ -1506,6 +1506,7 @@ static LLTrace::BlockTimerStatHandle FTM_YIELD("Yield");
 
 static LLTrace::BlockTimerStatHandle FTM_TEXTURE_CACHE("Texture Cache");
 static LLTrace::BlockTimerStatHandle FTM_DECODE("Image Decode");
+static LLTrace::BlockTimerStatHandle FTM_TEXTURE_FETCH("Texture Fetch");
 static LLTrace::BlockTimerStatHandle FTM_VFS("VFS Thread");
 static LLTrace::BlockTimerStatHandle FTM_LFS("LFS Thread");
 static LLTrace::BlockTimerStatHandle FTM_PAUSE_THREADS("Pause Threads");
@@ -1909,7 +1910,7 @@ S32 LLAppViewer::updateTextureThreads(F32 max_time)
 	 	work_pending += LLAppViewer::getImageDecodeThread()->update(max_time); // unpauses the image thread
 	}
 	{
-		LL_RECORD_BLOCK_TIME(FTM_DECODE);
+		LL_RECORD_BLOCK_TIME(FTM_TEXTURE_FETCH);
 	 	work_pending += LLAppViewer::getTextureFetch()->update(max_time); // unpauses the texture fetch thread
 	}
 	return work_pending;
@@ -2049,7 +2050,7 @@ bool LLAppViewer::cleanup()
 	// <FS:ND> FIRE-20152; save avatar render settings during cleanup, not in the dtor of the static instance.
 	// Otherwise the save will happen during crt termination when most of the viewers infrastructure is in a non deterministic state
 	if( FSAvatarRenderPersistence::instanceExists() )
-		FSAvatarRenderPersistence::getInstance()->saveAvatarRenderSettings();
+		FSAvatarRenderPersistence::getInstance()->deleteSingleton();
 	// </FS:ND>
 
 	// Must clean up texture references before viewer window is destroyed.

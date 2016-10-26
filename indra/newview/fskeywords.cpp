@@ -146,10 +146,10 @@ void FSKeywords::notify(const LLChat& chat)
 	{
 		if (!chat.mMuted && !LLMuteList::getInstance()->isMuted(chat.mFromID))
 		{
-			static LLCachedControl<bool> PlayModeUISndFSKeywordSound(gSavedSettings, "PlayModeUISndFSKeywordSound");
+			static LLCachedControl<bool> PlayModeUISndFSKeywordSound(gSavedPerAccountSettings, "PlayModeUISndFSKeywordSound");
 			if (PlayModeUISndFSKeywordSound)
 			{
-				LLUI::sAudioCallback(LLUUID(gSavedSettings.getString("UISndFSKeywordSound")));
+				LLUI::sAudioCallback(LLUUID(gSavedPerAccountSettings.getString("UISndFSKeywordSound")));
 			}
 
 			static LLCachedControl<bool> FSEnableGrowl(gSavedSettings, "FSEnableGrowl");

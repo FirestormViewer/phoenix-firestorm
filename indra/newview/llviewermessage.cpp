@@ -5592,6 +5592,12 @@ void process_crossed_region(LLMessageSystem* msg, void**)
 	}
 	LL_INFOS("Messaging") << "process_crossed_region()" << LL_ENDL;
 	gAgentAvatarp->resetRegionCrossingTimer();
+	// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP; this is apparently the place to
+	//               hook in for region crossings - we get an info from the simulator that we
+	//               crossed a region and then the viewer starts the handover process. We only
+	//               receive this message if we can actually cross the region and aren't blocked
+	//               for some reason (e.g. banned, group access...)
+	gAgentAvatarp->setIsCrossingRegion(true);
 
 	U32 sim_ip;
 	msg->getIPAddrFast(_PREHASH_RegionData, _PREHASH_SimIP, sim_ip);
@@ -6003,13 +6009,22 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 			LLViewerObject *objectp = gObjectList.findObject(id);
 			if (objectp)
 			{
-// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
-//				if ( (objectp->isAttachment()) && (gAgentAvatarp) && (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE) && (objectp->permYouOwner()) )
-//				{
-//					gAgentAvatarp->addPendingDetach(objectp->getRootEdit()->getID());
-//					continue;
-//				}
-// [/SL:KB]
+				// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
+				static LLCachedControl<bool> fsExperimentalLostAttachmentsFix(gSavedSettings, "FSExperimentalLostAttachmentsFix");
+				if (fsExperimentalLostAttachmentsFix &&
+					isAgentAvatarValid() &&
+					(gAgent.getTeleportState() != LLAgent::TELEPORT_NONE || gAgentAvatarp->isCrossingRegion()) && 
+					(objectp->isAttachment() || objectp->isTempAttachment()) &&
+					objectp->permYouOwner())
+				{
+					// Simply ignore the request and don't kill the object - this should work...
+					if (gSavedSettings.getBOOL("FSExperimentalLostAttachmentsFixReport"))
+					{
+						report_to_nearby_chat("Sim tried to kill attachment: " + objectp->getAttachmentItemName() + " (" + (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE ? "tp" : "crossing") + ")");
+					}
+					continue;
+				}
+				// </FS:Ansariel>
 
 				// Display green bubble on kill
 				if ( gShowObjectUpdates )
@@ -7562,6 +7577,20 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			return false;
 		}
 
+		// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP; Not clear if these messages are actually
+		//               used if a region crossing timeout happens and if this is the correct place to handle
+		//               them, but it seems the most likely way it would probably happen and I don't have a
+		//               borked region at hand for testing.
+		if (notificationID == "expired_region_handoff" || notificationID == "invalid_region_handoff")
+		{
+			LL_WARNS("Messaging") << "Region crossing failed. Resetting region crossing state." << LL_ENDL;
+			if (isAgentAvatarValid())
+			{
+				gAgentAvatarp->setIsCrossingRegion(false);
+			}
+		}
+		// </FS:Ansariel>
+
 		std::string llsdRaw;
 		LLSD llsdBlock;
 		// <FS:Ansariel> Remove dupe call
@@ -8304,6 +8333,16 @@ bool unknown_script_question_cb(const LLSD& notification, const LLSD& response)
 	return false;
 }
 
+void experiencePermissionBlock(LLUUID experience, LLSD result)
+{
+    LLSD permission;
+    LLSD data;
+    permission["permission"] = "Block";
+    data[experience.asString()] = permission;
+    data["experience"] = experience;
+    LLEventPumps::instance().obtain("experience_permission").post(data);
+}
+
 bool script_question_cb(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
@@ -8390,14 +8429,8 @@ bool script_question_cb(const LLSD& notification, const LLSD& response)
 			if (!region)
 			    return false;
 
-            LLExperienceCache::instance().setExperiencePermission(experience, std::string("Block"), LLExperienceCache::ExperienceGetFn_t());
+            LLExperienceCache::instance().setExperiencePermission(experience, std::string("Block"), boost::bind(&experiencePermissionBlock, experience, _1));
 
-            LLSD permission;
-            LLSD data;
-            permission["permission"] = "Block";
-            data[experience.asString()] = permission;
-            data["experience"] = experience;
-            LLEventPumps::instance().obtain("experience_permission").post(data);
 		}
 }
 	return false;

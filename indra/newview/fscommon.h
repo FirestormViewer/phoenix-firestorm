@@ -32,6 +32,7 @@
 
 class LLAvatarName;
 class LLViewerObject;
+class LLViewerParcelMgr;
 
 const F64 AVATAR_UNKNOWN_Z_OFFSET = -1.0; // Const value for avatars at unknown height
 const F32 AVATAR_UNKNOWN_RANGE = -1.f;
@@ -86,6 +87,8 @@ namespace FSCommon
 	bool isLegacySkin();
 
 	bool isFilterEditorKeyCombo(KEY key, MASK mask);
+
+	LLUUID getGroupForRezzing();
 };
 
 #endif // FS_COMMON_H
