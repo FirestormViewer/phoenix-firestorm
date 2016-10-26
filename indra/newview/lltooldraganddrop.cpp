@@ -1329,20 +1329,7 @@ void LLToolDragAndDrop::dropObject(LLViewerObject* raycast_target,
 	msg->nextBlockFast(_PREHASH_AgentData);
 	msg->addUUIDFast(_PREHASH_AgentID,  gAgent.getID());
 	msg->addUUIDFast(_PREHASH_SessionID,  gAgent.getSessionID());
-	LLUUID group_id = gAgent.getGroupID();
-	if (gSavedSettings.getBOOL("RezUnderLandGroup"))
-	{
-		LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
-		if (gAgent.isInGroup(parcel->getGroupID()))
-		{
-			group_id = parcel->getGroupID();
-		}
-		else if (gAgent.isInGroup(parcel->getOwnerID()))
-		{
-			group_id = parcel->getOwnerID();
-		}
-	}
-	msg->addUUIDFast(_PREHASH_GroupID, group_id);
+	msg->addUUIDFast(_PREHASH_GroupID, FSCommon::getGroupForRezzing());
 
 	msg->nextBlock("RezData");
 	// if it's being rezzed from task inventory, we need to enable

@@ -37,11 +37,13 @@
 #include "lllogchat.h"
 #include "llmutelist.h"
 #include "llnotificationmanager.h"
+#include "llparcel.h"
 #include "lltooldraganddrop.h"
 #include "lltrans.h"
 #include "llviewerinventory.h"
 #include "llviewernetwork.h"
 #include "llviewerobject.h"
+#include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
@@ -425,4 +427,24 @@ bool FSCommon::isLegacySkin()
 bool FSCommon::isFilterEditorKeyCombo(KEY key, MASK mask)
 {
 	return (mask == MASK_CONTROL && key == 'F' && gSavedSettings.getBOOL("FSSelectLocalSearchEditorOnShortcut"));
+}
+
+LLUUID FSCommon::getGroupForRezzing()
+{
+	LLUUID group_id = gAgent.getGroupID();
+	LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+
+	if (parcel && gSavedSettings.getBOOL("RezUnderLandGroup"))
+	{
+		// In both cases, group-owned or not, the group ID is the same;
+		// No need to query the parcel owner ID as it will be either
+		// the group ID if the parcel is group-owned or the ID of an
+		// avatar.
+		if (parcel->getGroupID().notNull() && gAgent.isInGroup(parcel->getGroupID()))
+		{
+			group_id = parcel->getGroupID();
+		}
+	}
+
+	return group_id;
 }

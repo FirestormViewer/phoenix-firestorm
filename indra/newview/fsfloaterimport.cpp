@@ -28,6 +28,7 @@
 #include "llviewerprecompiledheaders.h"
 #include "fsfloaterimport.h"
 
+#include "fscommon.h"
 #include "llagent.h"
 #include "llappviewer.h"
 #include "llbuycurrencyhtml.h"
@@ -656,23 +657,9 @@ void FSFloaterImport::createPrim()
 
 	gMessageSystem->newMessageFast(_PREHASH_ObjectAdd);
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-
-	LLUUID group_id = gAgent.getGroupID();
-	LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
-	if (gSavedSettings.getBOOL("RezUnderLandGroup"))
-	{
-		if (gAgent.isInGroup(parcel->getGroupID()))
-		{
-			group_id = parcel->getGroupID();
-		}
-		else if (gAgent.isInGroup(parcel->getOwnerID()))
-		{
-			group_id = parcel->getOwnerID();
-		}
-	}
-	gMessageSystem->addUUIDFast(_PREHASH_GroupID, group_id);
+	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
+	gMessageSystem->addUUIDFast(_PREHASH_GroupID, FSCommon::getGroupForRezzing());
 
 	gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 	gMessageSystem->addU8Fast(_PREHASH_Material, (U8)prim["material"].asInteger());
