@@ -2628,27 +2628,6 @@ URL: [MEDIAURL]
 			<button name="WhitelistDomain" text="Белый список"/>
 		</form>
 	</notification>
-	<notification name="MOAPAlert">
-		Объект предоставляет медиа из:
-
-Домен: [MEDIADOMAIN]
-URL: [MEDIAURL]
-		<form name="form">
-			<button name="Allow" text="Разрешить"/>
-			<button name="Deny" text="Запретить"/>
-		</form>
-	</notification>
-	<notification name="MOAPAlert2">
-		Вы хотите запомнить ваш выбор и [LCONDITION] позволить медиа из этого источника?
-
-Домен: [MEDIADOMAIN]
-URL: [MEDIAURL]
-		<form name="form">
-			<button name="Do Now" text="[ACTION] Сейчас"/>
-			<button name="RememberDomain" text="[CONDITION] Разрешить этому домену"/>
-			<button name="RememberURL" text="[CONDITION] Разрешить этому URL"/>
-		</form>
-	</notification>
 	<notification name="SystemMessageTip">
 		[MESSAGE]
 	</notification>

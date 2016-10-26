@@ -2537,27 +2537,6 @@ URL: [AUDIOURL]
 			<button name="WhitelistDomain" text="Biała lista"/>
 		</form>
 	</notification>
-	<notification name="MOAPAlert">
-		Obiekt dostarcza współdzielone media z:
-
-Domena: [MOAPDOMAIN]
-URL: [MOAPURL]
-		<form name="form">
-			<button name="Allow" text="Zezwól"/>
-			<button name="Deny" text="Odmów"/>
-		</form>
-	</notification>
-	<notification name="MOAPAlert2">
-		Chcesz zapamiętać swój wybór i zezwalać [LCONDITION] na współdzielone media z tego źródła?
-
-Domena: [MOAPDOMAIN]
-URL: [MOAPURL]
-		<form name="form">
-			<button name="Do Now" text="[ACTION] Teraz"/>
-			<button name="RememberDomain" text="[CONDITION] Zezwól tej domenie"/>
-			<button name="RememberURL" text="[CONDITION] Zezwól temu URL"/>
-		</form>
-	</notification>
 	<notification name="Cancelled">
 		Anulowane.
 	</notification>

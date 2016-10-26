@@ -43,9 +43,6 @@
 #include "llviewerregion.h"
 #include "llcorehttputil.h"
 
-#include "llviewercontrol.h"
-#include "llviewerparcelmedia.h"
-
 //
 // When making a request
 // - obtain the "overall interest score" of the object.	 
@@ -1027,15 +1024,9 @@ void LLObjectMediaNavigateClient::enqueue(Request::ptr_t request)
 
 void LLObjectMediaNavigateClient::navigate(LLMediaDataClientObject *object, U8 texture_index, const std::string &url)
 {
-	LL_INFOS("LLMediaDataClient") << "navigate() initiated: url='" << url << "', object=" << object->getID() << LL_ENDL;
 
-	// Create a get request and put it in the queue.
-	enqueue(Request::ptr_t(new RequestNavigate(object, this, texture_index, url)));
-}
-
-// called if the media filter passes the request
-void LLObjectMediaNavigateClient::doNavigate(LLMediaDataClientObject *object, U8 texture_index, const std::string &url)
-{
+//	LL_INFOS("LLMediaDataClient") << "navigate() initiated: " << ll_print_sd(sd_payload) << LL_ENDL;
+	
 	// Create a get request and put it in the queue.
 	enqueue(Request::ptr_t(new RequestNavigate(object, this, texture_index, url)));
 }

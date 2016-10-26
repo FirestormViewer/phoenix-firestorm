@@ -32,8 +32,7 @@
 class LLMessageSystem;
 class LLParcel;
 class LLViewerParcelMediaNavigationObserver;
-class LLMediaDataClientObject;
-class LLObjectMediaNavigateClient;
+
 
 // This class understands land parcels, network traffic, LSL media
 // transport commands, and talks to the LLViewerMedia class to actually
@@ -54,8 +53,6 @@ class LLViewerParcelMedia : public LLViewerMediaObserver
 		static void filterMediaUrl(LLParcel* parcel);
 			// user has media filter enabled and play requested
 		static void filterAudioUrl(std::string media_url);
-			// user has media filter enabled and play requested
-		static void filterMOAPUrl(LLMediaDataClientObject *object, LLObjectMediaNavigateClient *nav_object, U8 texture_index, std::string media_url);
 			// user has media filter enabled and play requested
 		static std::string extractDomain(std::string url);
 			// helper function to extract domain from url and conve
@@ -97,25 +94,17 @@ class LLViewerParcelMedia : public LLViewerMediaObserver
 		static bool sMediaLastActionPlay;
 		static std::string sAudioLastURL;
 		static bool sAudioLastActionPlay;
-		static std::string sMOAPLastURL;
-		static bool sMOAPLastActionPlay;
 		static bool sMediaReFilter;
 
 		static bool sMediaFilterAlertActive;
 
 		static LLParcel sQueuedMedia;
 		static std::string sQueuedMusic;
-		static std::string sQueuedMOAPUrl;
-		static LLMediaDataClientObject *sQueuedMOAPObject;
-		static LLObjectMediaNavigateClient *sQueuedMOAPNavObject;
-		static U8 sQueuedMOAPTextureIndex;
-		static std::string sCurrentMOAP;
 		static LLParcel sCurrentMedia;
 		static LLParcel sCurrentAlertMedia;
 		static std::string sCurrentMusic;
 		static bool sMediaQueueEmpty;
 		static bool sMusicQueueEmpty;
-		static bool sMOAPQueueEmpty;
 		static U32 sMediaCommandQueue;
 		static F32 sMediaCommandTime;
 };

@@ -5369,21 +5369,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="MediaFilterAudioContentUrlAlwaysBlocked">
 		Audio z URL [MEDIAURL] zawsze będzie blokowane.
 	</string>
-	<string name="MediaFilterSharedMediaContentBlocked">
-		Współdzielone Media z domeny [DOMAIN] zostały zablokowane.
-	</string>
-	<string name="MediaFilterSharedMediaContentDomainAlwaysAllowed">
-		Współdzielone Media z domeny [DOMAIN] zawsze będą odtwarzane.
-	</string>
-	<string name="MediaFilterSharedMediaContentDomainAlwaysBlocked">
-		Współdzielone Media z domeny [DOMAIN] zawsze będą blokowane.
-	</string>
-	<string name="MediaFilterSharedMediaContentUrlAlwaysAllowed">
-		Współdzielone Media z URL [MEDIAURL] zawsze będą odtwarzane.
-	</string>
-	<string name="MediaFilterSharedMediaContentUrlAlwaysBlocked">
-		Współdzielone Media z URL [MEDIAURL] zawsze będą blokowane.
-	</string>
 	<string name="MediaFilterBlacklist">
 		czarnej listy
 	</string>
