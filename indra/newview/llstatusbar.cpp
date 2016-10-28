@@ -450,6 +450,11 @@ BOOL LLStatusBar::postBuild()
 	mBalancePanel = getChild<LLPanel>("balance_bg");
 	mTimeMediaPanel = getChild<LLPanel>("time_and_media_bg");
 
+	mFilterEdit = getChild<LLSearchEditor>("search_menu_edit");
+	mSearchPanel = getChild<LLPanel>("menu_search_panel");
+	mFPSText = getChild<LLTextBox>("FPSText");
+	mVolumeIconsWidth = mBtnVolume->getRect().mRight - mStreamToggle->getRect().mLeft;
+
 	initParcelIcons();
 
 	mParcelChangedObserver = new LLParcelChangeObserver(this);
@@ -479,8 +484,6 @@ BOOL LLStatusBar::postBuild()
 	}
 
 	// <FS:ND> Hook up and init for filtering
-	mFilterEdit = getChild<LLSearchEditor>("search_menu_edit");
-	mSearchPanel = getChild<LLPanel>("menu_search_panel");
 	mSearchPanel->setVisible(gSavedSettings.getBOOL("FSMenuSearch"));
 	mFilterEdit->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
 	mFilterEdit->setCommitCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
@@ -489,7 +492,6 @@ BOOL LLStatusBar::postBuild()
 	// </FS:ND>
 
 	// <FS:Ansariel> FIRE-14482: Show FPS in status bar
-	mFPSText = getChild<LLTextBox>("FPSText");
 	gSavedSettings.getControl("FSStatusBarShowFPS")->getSignal()->connect(boost::bind(&LLStatusBar::onShowFPSChanged, this, _2));
 	if (!gSavedSettings.getBOOL("FSStatusBarShowFPS"))
 	{
@@ -498,7 +500,6 @@ BOOL LLStatusBar::postBuild()
 	// </FS:Ansariel>
 
 	// <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
-	mVolumeIconsWidth = mBtnVolume->getRect().mRight - mStreamToggle->getRect().mLeft;
 	if (!gSavedSettings.getBOOL("FSEnableVolumeControls"))
 	{
 		updateVolumeControlsVisibility(LLSD(FALSE));
