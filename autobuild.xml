@@ -1693,11 +1693,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>85d8896ca1cec09affc48122aeea22d2</string>
+              <string>0f8170db50edda729816c943487480d2</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/llceflib-1.5.3.201606212155-r177-darwin-201606212155-r177.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.5.3.201610292046-r200-darwin-201610292046-r200.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
