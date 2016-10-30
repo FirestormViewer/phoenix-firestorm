@@ -27,9 +27,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>47638329878c5f559e78b1b71587716f</string>
+              <string>4c3728f376711663c22d32b6d71689df</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/slplugin_x86-4.7.10.50754-darwin-201608180707-r5.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/slplugin_x86-4.7.10.51243-darwin-201610300350-r5.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1693,11 +1693,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>85d8896ca1cec09affc48122aeea22d2</string>
+              <string>0f8170db50edda729816c943487480d2</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/llceflib-1.5.3.201606212155-r177-darwin-201606212155-r177.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.5.3.201610292046-r200-darwin-201610292046-r200.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>

@@ -913,16 +913,19 @@ static void subst_lazy_references(std::string& script, std::string retype, std::
 static std::string reformat_lazy_lists(std::string script)
 {
 	script = boost::regex_replace(script, boost::regex(rDOT_MATCHES_NEWLINE
-		rCMNT_OR_STR "|"
+		rCMNT_OR_STR
+		// exclude some keywords as possible identifiers that can
+		// be followed by an opening square bracket (FIRE-20278)
+		"|(?:return|do|else)(?![A-Za-z0-9_])"
 		// group 1: identifier
-		"([a-zA-Z_][a-zA-Z0-9_]*+)" rOPT_SPC
+		"|([a-zA-Z_][a-zA-Z0-9_]*+)" rOPT_SPC
 		// group 2: expression within brackets
 		"\\[((?:" rCMNT_OR_STR
 		// group 3: recursive bracketed expression
 		"|(\\[(?:" rCMNT_OR_STR "|[^][]|(?3))*+\\])" // recursive bracketed expression (e.g. []!=[])
 		"|[^][]" // or anything else
-		")+?)\\]" rOPT_SPC // non-greedy
-		"=" rOPT_SPC
+		")++)\\]" rOPT_SPC
+		"=(?!=)" rOPT_SPC // = but not ==
 		// group 4: right-hand side expression
 		"((?:" rCMNT_OR_STR
 			// group 5: recursive parenthesized expression

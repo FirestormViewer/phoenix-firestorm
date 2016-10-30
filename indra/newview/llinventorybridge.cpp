@@ -6937,7 +6937,7 @@ void LLWearableBridge::openItem()
 	performAction(getInventoryModel(),
 			      // <FS:Ansariel> FIRE-17166: Add Clothes on Double Click
 			      //get_is_item_worn(mUUID) ? "take_off" : "wear");
-			      get_is_item_worn(mUUID) ? "take_off" : (mAssetType == LLAssetType::AT_BODYPART || !gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing") ? "wear" : "wear_add"));
+			      get_is_item_worn(mUUID) ? "take_off" : (mAssetType == LLAssetType::AT_BODYPART || (mAssetType == LLAssetType::AT_CLOTHING && mWearableType == LLWearableType::WT_PHYSICS) || !gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing") ? "wear" : "wear_add"));
 			      // </FS:Ansariel>
 }
 
