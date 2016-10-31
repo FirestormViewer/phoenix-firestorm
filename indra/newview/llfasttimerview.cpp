@@ -243,7 +243,7 @@ BOOL LLFastTimerView::handleHover(S32 x, S32 y, MASK mask)
 		{
 			return TRUE;
 		}
-		else if (mHoverBarIndex == -1)
+		else if (mHoverBarIndex < 0)
 		{
 			mHoverBarIndex = 0;
 		}
@@ -283,7 +283,7 @@ BOOL LLFastTimerView::handleHover(S32 x, S32 y, MASK mask)
 			{
 				hover_bar = &bar;
 				if (bar.mTimeBlock->getTreeNode().mCollapsed)
-		{
+				{
 					// stop on first collapsed BlockTimerStatHandle, since we can't select any children
 					break;
 				}
