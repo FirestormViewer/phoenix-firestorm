@@ -1708,6 +1708,9 @@ bool idle_startup()
 		}
 		// </FS:Ansariel>
 
+		// <FS:Ansariel> Restore original LLMessageSystem HTTP options for OpenSim
+		gMessageSystem->setIsInSecondLife(LLGridManager::getInstance()->isInSecondLife());
+
 		// Finish agent initialization.  (Requires gSavedSettings, builds camera)
 		gAgent.init();
 		display_startup();

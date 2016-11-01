@@ -737,6 +737,9 @@ public:
 	// This will cause all trust queries to return true until the next message
 	// is read: use with caution!
 	void receivedMessageFromTrustedSender();
+
+	// <FS:Ansariel> Restore original LLMessageSystem HTTP options for OpenSim
+	void setIsInSecondLife(bool in_second_life) { mIsInSecondLife = in_second_life; }
 	
 private:
     typedef boost::function<void(S32)>  UntrustedCallback_t;
@@ -828,6 +831,9 @@ private:
 
 	/** Find, create or revive circuit for host as needed */
 	LLCircuitData* findCircuit(const LLHost& host, bool resetPacketId);
+
+	// <FS:Ansariel> Restore original LLMessageSystem HTTP options for OpenSim
+	bool mIsInSecondLife;
 };
 
 
