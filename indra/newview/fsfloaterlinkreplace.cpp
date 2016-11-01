@@ -223,14 +223,15 @@ void FSFloaterLinkReplace::linkCreatedCallback(const LLUUID& old_item_id,
 		// *after* the original link has been removed. LLAppearanceMgr abuses the actual link
 		// description to store the clothing ordering information it. We will have to update
 		// the clothing ordering information or the outfit will be in dirty state when worn.
-		remove_inventory_object(old_item_id, new LLBoostFuncInventoryCallback(boost::bind(&LLAppearanceMgr::updateClothingOrderingInfo,
+		LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(&LLAppearanceMgr::updateClothingOrderingInfo,
 																												LLAppearanceMgr::getInstance(),
 																												outfit_folder_id,
-																												LLPointer<LLInventoryCallback>(NULL))));
+																												LLPointer<LLInventoryCallback>(NULL))); 
+		remove_inventory_object(old_item_id, cb);
 	}
 	else
 	{
-		remove_inventory_object(old_item_id, NULL);
+		remove_inventory_object(old_item_id, LLPointer<LLInventoryCallback>(NULL));
 	}
 
 	if (mInstance)
@@ -306,15 +307,14 @@ void FSFloaterLinkReplace::processBatch(LLInventoryModel::item_array_t items)
 
 			LLInventoryObject::const_object_list_t obj_array;
 			obj_array.push_back(LLConstPointer<LLInventoryObject>(target_item));
-			link_inventory_array(source_item->getParentUUID(),
-									obj_array,
-									new LLBoostFuncInventoryCallback(boost::bind(&FSFloaterLinkReplace::linkCreatedCallback,
+			LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(&FSFloaterLinkReplace::linkCreatedCallback,
 																											this,
 																											source_item->getUUID(),
 																											target_item->getUUID(),
 																											needs_wearable_ordering_update,
 																											needs_description_update,
-																											(is_outfit_folder ? source_item->getParentUUID() : LLUUID::null) )));
+																											(is_outfit_folder ? source_item->getParentUUID() : LLUUID::null) ));
+			link_inventory_array(source_item->getParentUUID(), obj_array, cb);
 		}
 		else
 		{
