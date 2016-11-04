@@ -9725,6 +9725,12 @@ void process_covenant_reply(LLMessageSystem* msg, void**)
 		{
 			panel->updateCovenantText(covenant_text);
 		}
+		// <FS:Ansariel> Standalone location profile floater
+		if (fs_floater)
+		{
+			fs_floater->updateCovenantText(covenant_text);
+		}
+		// </FS:Ansariel>
 	}
 }
 
