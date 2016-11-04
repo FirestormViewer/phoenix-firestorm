@@ -262,6 +262,16 @@ bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decod
 	raw_image.resize(width, height, channels);
 	U8 *rawp = raw_image.getData();
 
+	// <FS:Ansariel> Port fix for MAINT-4327/MAINT-6584 to OpenJPEG decoder
+	if (!rawp)
+	{
+		base.setLastError("Memory error");
+		base.decodeFailed();
+		opj_image_destroy(image);
+		return true; // done
+	}
+	// <FS:Ansariel>
+
 	// first_channel is what channel to start copying from
 	// dest is what channel to copy to.  first_channel comes from the
 	// argument, dest always starts writing at channel zero.

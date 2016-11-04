@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="hide_navbar_menu">
 	<menu_item_check label="Pokaż pasek nawigacji i wyszukiwarki" name="ShowNavbarNavigationPanel"/>
-	<menu_item_check label="Pokaż pasek ulubionych" name="ShowNavbarFavoritesPanel"/>
 	<menu_item_check label="Pokaż pasek wyszukiwarki" name="ShowSearchTopBar"/>
-	<menu_item_check label="Pokaż lokalizację w menu na górze" name="ShowMenuBarLocation"/>
-	<menu_item_check label="Pokazuj kanał symulatora w pasku statusu" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Pokaż pasek ulubionych" name="ShowNavbarFavoritesPanel"/>
+	<menu_item_check label="Pokaż lokalizację" name="ShowMenuBarLocation"/>
+	<menu_item_check label="Pokaż kanał symulatora" name="FSStatusbarShowSimulatorVersion"/>
 	<menu_item_check label="Pokaż wyszukiwarkę pozycji w menu" name="FSMenuSearch"/>
 	<menu_item_check label="Pokaż stan konta" name="FSShowCurrencyBalanceInStatusbar"/>
+	<menu_item_check label="Pokaż kontrolki mediów" name="FSEnableVolumeControls"/>
 	<menu_item_check label="Pokaż klatki na sekundę (FPS)" name="FSStatusBarShowFPS"/>
+	<menu_item_check label="Pokaż wskaźnik ruchu sieciowego" name="ShowNetStats"/>
+	<menu_item_check label="Pokaż współrzędne" name="Coordinates"/>
+	<menu_item_check label="Pokaż właściwości działki" name="Parcel Properties"/>
 </menu>

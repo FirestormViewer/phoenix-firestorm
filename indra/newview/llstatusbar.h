@@ -164,6 +164,8 @@ private:
 
 	static void onClickStreamToggle(void* data);		// ## Zi: Media/Stream separation
 	static void onClickMediaToggle(void* data);
+
+	static void onClickBalance(void* data);
 	
 	class LLParcelChangeObserver;
 
@@ -179,10 +181,8 @@ private:
 		BUILD_ICON,
 		SCRIPTS_ICON,
 		SEE_AVATARS_ICON,
-		// <FS:Ansariel> Pathfinding support
 		PATHFINDING_DIRTY_ICON,
 		PATHFINDING_DISABLED_ICON,
-		// </FS:Ansariel> Pathfinding support
 		DAMAGE_ICON,
 		ICON_COUNT
 	};
@@ -268,23 +268,10 @@ private:
 	// <FS:Ansariel> FIRE-14482: Show FPS in status bar
 	void onShowFPSChanged(const LLSD& newvalue);
 
-public:
-
 	/**
 	 * Updates parcel panel pos (mParcelPanel).
 	 */
 	void updateParcelPanel();
-
-	/**
-	 * Updates parcel icons (mParcelIcon[]).
-	 */
-	void updateParcelIcons();
-
-	static void onClickBalance(void* data);
-
-	void setRebakeStuck(bool stuck) { mRebakeStuck = stuck;} // <FS:LO> FIRE-7639 - Stop the blinking after a while
-
-private:
 
 	/**
 	 * Updates health information (mDamageText).
@@ -314,6 +301,15 @@ private:
 
 	void updateNetstatVisibility(const LLSD& data);
 	void updateVolumeControlsVisibility(const LLSD& data); // <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
+
+public:
+
+	/**
+	 * Updates parcel icons (mParcelIcon[]).
+	 */
+	void updateParcelIcons();
+
+	void setRebakeStuck(bool stuck) { mRebakeStuck = stuck;} // <FS:LO> FIRE-7639 - Stop the blinking after a while
 
 private:
 	LLTextBox	*mTextBalance;
@@ -403,7 +399,10 @@ private:
 	nd::statusbar::SearchData *mSearchData;
 	void collectSearchableItems();
 	void updateMenuSearchVisibility(const LLSD& data);
+	void updateMenuSearchPosition();
 	// </FS:ND>
+
+	std::string mCurrentLocationString;
 };
 
 // *HACK: Status bar owns your cached money balance. JC

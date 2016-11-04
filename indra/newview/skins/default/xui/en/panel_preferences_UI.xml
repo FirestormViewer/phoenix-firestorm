@@ -554,7 +554,7 @@
 		<check_box
 		 control_name="ShowNetStats"
 		 height="16"
-		 tool_tip="Show traffic indicator in the Status Overlay"
+		 tool_tip="Show traffic indicator in top menu"
 		 label="Show traffic indicator in upper right corner of the screen"
 		 layout="topleft"
 		 name="ShowNetStats"
@@ -596,16 +596,7 @@
 		 top_pad="4"
 		 follows="left|top"
 		 height="16"
-		 label="Show simulator channel in status bar"
-		 name="FSStatusbarShowSimulatorVersion"
-		 width="270"
-		 control_name="FSStatusbarShowSimulatorVersion"
-		 tool_tip="Shows the current simulator channel (RC Magnum, RC Le Tigre, RC BlueSteel etc.) in the V1-like status bar."/>
-		<check_box
-		 top_pad="4"
-		 follows="left|top"
-		 height="16"
-		 label="Show Location in Top Menu"
+		 label="Show location in top menu"
 		 name="ShowMenuBarLocation"
 		 width="270"
 		 left="10"
@@ -614,7 +605,19 @@
 		 top_pad="4"
 		 follows="left|top"
 		 height="16"
-		 label="Show Menu Search"
+		 label="Show simulator channel in top menu"
+		 left="20"
+		 name="FSStatusbarShowSimulatorVersion"
+		 enabled_control="ShowMenuBarLocation"
+		 width="270"
+		 control_name="FSStatusbarShowSimulatorVersion"
+		 tool_tip="Shows the current simulator channel (RC Magnum, RC Le Tigre, RC BlueSteel etc.) in the V1-like status bar."/>
+		<check_box
+		 top_pad="4"
+		 follows="left|top"
+		 height="16"
+		 label="Show menu search"
+		 left="10"
 		 name="show_search_menu_check"
 		 width="270"
 		 control_name="FSMenuSearch"/>
@@ -622,7 +625,7 @@
 		 top_pad="4"
 		 follows="left|top"
 		 height="16"
-		 label="Show Currency Balance"
+		 label="Show currency balance"
 		 name="FSShowCurrencyBalanceInStatusbar"
 		 width="270"
 		 control_name="FSShowCurrencyBalanceInStatusbar"/>

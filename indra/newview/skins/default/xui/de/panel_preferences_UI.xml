@@ -82,15 +82,15 @@
 		<text name="statusbar_textbox">
 			Status-Leiste:
 		</text>
-		<check_box name="ShowNetStats" label="Laganzeige aktivieren" tool_tip="Aktiviert die Laganzeige in der Statuszeile"/>
-		<check_box label="Periodischen Mittelwert für Laganzeige verwenden" name="FSStatbarLegacyMeanPerSec" tool_tip="Falls aktiviert, verwendet Firestorm für die Laganzeige die ursprüngliche Berechnung und zeigt den periodischen Mittelwert anstelle des aktuell gemessenen Wertes."/>
-		<check_box name="FSUseStatsInsteadOfLagMeter" label="Klick auf Laganzeige öffnet Statistik-Fenster anstatt Lag-Meter"/>
+		<check_box name="ShowNetStats" label="Datentransfer-Indikator aktivieren" tool_tip="Aktiviert den Datentransfer-Indikator in der Menüleiste"/>
+		<check_box label="Periodischen Mittelwert für Datentransfer-Indikator verwenden" name="FSStatbarLegacyMeanPerSec" tool_tip="Falls aktiviert, verwendet Firestorm für den Datentransfer-Indikator die ursprüngliche Berechnung und zeigt den periodischen Mittelwert anstelle des aktuell gemessenen Wertes."/>
+		<check_box name="FSUseStatsInsteadOfLagMeter" label="Klick auf Datentransfer-Indikator öffnet Statistik-Fenster anstatt Lag-Meter"/>
 		<check_box label="Mediensteuerung in Menüleiste anzeigen" name="FSEnableVolumeControls" tool_tip="Falls aktiviert, werden in der oberen rechte Ecke des Bildschirms in der Menüleiste die Icons zur Mediensteuerung angezeigt. Nützlich, wenn das Oberflächendesign bereits eigene Icons zur Mediensteuerung besitzt."/>
-		<check_box label="Simulator-Kanal in der Statusleiste anzeigen" name="FSStatusbarShowSimulatorVersion" tool_tip="Zeigt den Kanal des Simulators an (RC Magnum, RC Le Tigre, RC BlueSteel usw.), auf dem die aktuelle Region läuft."/>
 		<check_box label="Position in Menüleiste anzeigen" name="ShowMenuBarLocation" />
+		<check_box label="Simulator-Kanal in der Menüleiste anzeigen" name="FSStatusbarShowSimulatorVersion" tool_tip="Zeigt den Kanal des Simulators an (RC Magnum, RC Le Tigre, RC BlueSteel usw.), auf dem die aktuelle Region läuft."/>
 		<check_box label="Menüsuche anzeigen" name="show_search_menu_check"/>
 		<check_box label="Kontostand anzeigen" name="FSShowCurrencyBalanceInStatusbar"/>
-		<check_box label="Popup-Fenster beim Überfahren der Icons mit der Maus in der Statusleiste aktivieren" name="FSStatusBarMenuButtonPopupOnRollover"/>
+		<check_box label="Popup-Fenster beim Überfahren der Icons mit der Maus in der Menüleiste aktivieren" name="FSStatusBarMenuButtonPopupOnRollover"/>
 		<text name="navfav_textbox">
 			Navigations- und Favoriten-Leiste:
 		</text>

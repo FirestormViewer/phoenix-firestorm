@@ -5,11 +5,11 @@
 	<panel.string name="time">[hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]</panel.string>
 	<panel.string name="timeTooltip">[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]</panel.string>
 	<panel.string name="buycurrencylabel">[AMT] L$</panel.string>
-	<panel name="balance_bg" left="-308">
+	<panel name="balance_bg" left="-431">
 		<text name="balance" tool_tip="Clicca per aggiornare il tuo saldo in L$" value="L$ ??"/>
 		<button label="Compra L$" name="buyL" tool_tip="Clicca per acquistare più L$"/>
 	</panel>
-	<panel name="time_and_media_bg" width="206">
+	<panel name="time_and_media_bg" width="328">
 		<text name="TimeText" tool_tip="Orario attuale (Pacifico)" width="78">24:00:00 PST</text>
 		<button name="stream_toggle_btn" tool_tip="Attiva/Ferma musica nella parcella"/>
 		<button name="media_toggle_btn" tool_tip="Attiva/Ferma tutti i media (musica, video, pagine Web)"/>

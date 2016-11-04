@@ -109,16 +109,26 @@ LLUUID find_ui_sound(const char * namep, bool force_sound)
 {
 	std::string name = ll_safe_string(namep);
 	LLUUID uuid = LLUUID(NULL);
-	if (!LLUI::sSettingGroups["config"]->controlExists(name))
+	// <FS:Ansariel> Per-account sounds
+	//if (!LLUI::sSettingGroups["config"]->controlExists(name))
+	if (!LLUI::sSettingGroups["config"]->controlExists(name) && !LLUI::sSettingGroups["account"]->controlExists(name))
+	// </FS:Ansariel>
 	{
 		LL_WARNS() << "tried to make UI sound for unknown sound name: " << name << LL_ENDL;	
 	}
 	else
 	{
-		uuid = LLUUID(LLUI::sSettingGroups["config"]->getString(name));
+		// <FS:Ansariel> Per-account sounds
+		//uuid = LLUUID(LLUI::sSettingGroups["config"]->getString(name));
+		std::string group_name = LLUI::sSettingGroups["config"]->controlExists(name) ? "config" : "account";
+		uuid = LLUUID(LLUI::sSettingGroups[group_name]->getString(name));
+		// </FS:Ansariel>
 		if (uuid.isNull())
 		{
-			if (LLUI::sSettingGroups["config"]->getString(name) == LLUUID::null.asString())
+			// <FS:Ansariel> Per-account sounds
+			//if (LLUI::sSettingGroups["config"]->getString(name) == LLUUID::null.asString())
+			if (LLUI::sSettingGroups[group_name]->getString(name) == LLUUID::null.asString())
+			// </FS:Ansariel>
 			{
 				if (LLUI::sSettingGroups["config"]->getBOOL("UISndDebugSpamToggle"))
 				{
@@ -135,7 +145,7 @@ LLUUID find_ui_sound(const char * namep, bool force_sound)
 			// <FS:PP> Silencer for FIRE-7556: Configurable User Interface sounds
 			if (name != "UISndTrackerBeacon" && name != "UISndNewIncomingIMSession" && name != "UISndNewIncomingGroupIMSession" && name != "UISndNewIncomingConfIMSession") // There is no need to process these here, checks are already elsewhere
 			{
-				if (!force_sound && ( (name != "UISndSnapshot" && !LLUI::sSettingGroups["config"]->getBOOL("PlayMode"+name)) || (name == "UISndSnapshot" && LLUI::sSettingGroups["config"]->getBOOL("PlayModeUISndSnapshot")) ) )
+				if (!force_sound && ( (name != "UISndSnapshot" && !LLUI::sSettingGroups[group_name]->getBOOL("PlayMode"+name)) || (name == "UISndSnapshot" && LLUI::sSettingGroups["config"]->getBOOL("PlayModeUISndSnapshot")) ) )
 					return LLUUID(NULL);
 			}
 			// </FS:PP>

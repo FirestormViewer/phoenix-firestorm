@@ -1443,12 +1443,24 @@ void update_inventory_item(
     if (updates.has("asset_id"))
     {
         updates.erase("asset_id");
-        updates["hash_id"] = update_item->getTransactionID();
+        // <FS:Ansariel> Check for non-null UUID as in LLViewerInventoryItem::updateServer
+        //updates["hash_id"] = update_item->getTransactionID();
+        if(update_item->getTransactionID().notNull())
+        {
+            updates["hash_id"] = update_item->getTransactionID();
+        }
+        // </FS:Ansariel>
     }
     if (updates.has("shadow_id"))
     {
         updates.erase("shadow_id");
-        updates["hash_id"] = update_item->getTransactionID();
+        // <FS:Ansariel> Check for non-null UUID as in LLViewerInventoryItem::updateServer
+        //updates["hash_id"] = update_item->getTransactionID();
+        if(update_item->getTransactionID().notNull())
+        {
+            updates["hash_id"] = update_item->getTransactionID();
+        }
+        // </FS:Ansariel>
     }
     AISAPI::completion_t cr = boost::bind(&doInventoryCb, cb, _1);
     AISAPI::UpdateItem(item_id, updates, cr);

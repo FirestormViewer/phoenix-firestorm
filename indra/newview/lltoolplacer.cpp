@@ -305,20 +305,7 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
 	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-	LLUUID group_id = gAgent.getGroupID();
-	LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
-	if (gSavedSettings.getBOOL("RezUnderLandGroup"))
-	{
-		if (gAgent.isInGroup(parcel->getGroupID()))
-		{
-			group_id = parcel->getGroupID();
-		}
-		else if (gAgent.isInGroup(parcel->getOwnerID()))
-		{
-			group_id = parcel->getOwnerID();
-		}
-	}
-	gMessageSystem->addUUIDFast(_PREHASH_GroupID, group_id);
+	gMessageSystem->addUUIDFast(_PREHASH_GroupID, FSCommon::getGroupForRezzing());
 	gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 	gMessageSystem->addU8Fast(_PREHASH_Material,	material);
 

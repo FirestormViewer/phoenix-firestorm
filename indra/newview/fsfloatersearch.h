@@ -299,19 +299,24 @@ private:
 	LLRadioGroup*		mEventsMode;
 };
 
-class FSPanelSearchWeb : public FSSearchPanelBase, public LLViewerMediaObserver
+class FSPanelSearchWeb : public FSSearchPanelBase
 {
 	LOG_CLASS(FSFloaterSearch);
 public:
 	FSPanelSearchWeb();
 	/*virtual*/ BOOL postBuild();
 	void loadURL(const SearchQuery &query);
+	/*virtual*/ void focusDefaultElement();
+	/*virtual*/ void draw();
+	void resetFocusOnLoad() { mResetFocusOnLoad = true; }
 
 private:
 	virtual ~FSPanelSearchWeb() {};
 	
 	LLMediaCtrl*	mWebBrowser;
 	LLSD			mCategoryPaths;
+
+	bool			mResetFocusOnLoad;
 };
 
 class FSFloaterSearch : public LLFloater

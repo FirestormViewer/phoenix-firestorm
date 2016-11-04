@@ -1744,6 +1744,7 @@
 	 name="ChatKeywordAlerts">
 
 		<check_box
+		 enabled="false"
 		 layout="topleft"
 		 follows="left|top"
 		 top="5"
@@ -1754,6 +1755,7 @@
 		 name="FSKeywordOn"
 		 label="Enable Keyword Alerts"/>
 		<check_box
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
 		 follows="left|top"
@@ -1765,6 +1767,7 @@
 		 name="FSKeywordInChat"
 		 label="Look for Keywords In Local Chat"/>
 		<check_box
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
 		 follows="left|top"
@@ -1776,6 +1779,7 @@
 		 name="FSKeywordInIM"
 		 label="Look for Keywords In IMs and Group Chat"/>
 		<check_box
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
 		 follows="left|top"
@@ -1787,6 +1791,7 @@
 		 name="FSKeywordSpeakersName"
 		 label="Check sender's name for keywords"/>
 		<check_box
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
 		 follows="left|top"
@@ -1798,6 +1803,7 @@
 		 name="FSKeywordCaseSensitive"
 		 label="All Keywords are case-sensitive"/>
 		<check_box
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
 		 follows="left|top"
@@ -1818,21 +1824,30 @@
 		 name="textFSKeywords">
 		  Keywords (separated by commas):
 		</text>
-		<line_editor
+		<text_editor
+		 enabled="false"
+		 border_visible="true"
+		 bg_readonly_color="MouseGray"
 		 enabled_control="FSKeywordOn"
+		 commit_on_focus_lost="true"
 		 follows="left|top"
 		 top_delta="25"
+		 layout="topleft"
 		 left="20"
-		 height="20"
+		 max_length="20480"
+		 height="55"
 		 name="FSKeywords"
 		 control_name="FSKeywords"
-		 width="450"/>
+		 right="-10"
+		 use_ellipses="false"
+		 word_wrap="true"/>
 
 		<check_box
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
 		 follows="left|top"
-		 top_delta="25"
+		 top_pad="10"
 		 left="20"
 		 width="50"
 		 height="20"
@@ -1841,13 +1856,14 @@
 		 label="Enable Color Alert"/>
 
 		<color_swatch
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 control_name="FSKeywordColor"
 		 border.border_thickness="0"
 		 label_height="0"
 		 layout="topleft"
 		 follows="left|top"
-		 top_delta="0"
+		 top_delta="2"
 		 left="150"
 		 height="15"
 		 width="15"
@@ -1855,10 +1871,11 @@
 		 tool_tip="Click to open color picker"/>
 
 		<check_box
+		 enabled="false"
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
 		 follows="left|top"
-		 top_delta="25"
+		 top_delta="23"
 		 left="20"
 		 width="50"
 		 height="20"
@@ -1877,6 +1894,7 @@
 		  Alert Sound UUID:
 		</text>
 		<line_editor
+		 enabled="false"
 		 enabled_control="PlayModeUISndFSKeywordSound"
 		 follows="left|top"
 		 left_pad="5"
@@ -1886,6 +1904,7 @@
 		 control_name="UISndFSKeywordSound"
 		 width="250"/>
 		<button
+		 enabled="false"
 		 enabled_control="PlayModeUISndFSKeywordSound"
 		 follows="left|top"
 		 name="Prev_UISndFSKeywordSound"
@@ -1901,6 +1920,7 @@
 			  parameter="UISndFSKeywordSound"/>
 		</button>
 		<button
+		 enabled="false"
 		 enabled_control="PlayModeUISndFSKeywordSound"
 		 follows="left|top"
 		 name="Def_UISndFSKeywordSound"
@@ -1911,7 +1931,7 @@
 		 width="17"
 		 tool_tip="Reset to the default UUID.">
 			 <button.commit_callback
-			  function="ResetControl"
+			  function="ResetPerAccountControl"
 			  parameter="UISndFSKeywordSound"/>
 		</button>
 		 

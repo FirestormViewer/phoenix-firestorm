@@ -6807,50 +6807,6 @@ URL: [AUDIOURL]
   </notification>
 
   <notification
-   icon="alert.tga"  
-   name="MOAPAlert"
-   type="alert"> 
-An object provides shared media from:
-
-Domain: [MOAPDOMAIN]
-URL: [MOAPURL]
-   <form name="form">
-    <button
-         index="0"
-         name="Allow"
-         text="Allow"/>
-        <button
-         index="1"
-         name="Deny"
-         text="Deny"/>
-   </form>
-  </notification>
-
-  <notification
-   icon="alert.tga"  
-   name="MOAPAlert2"
-   type="alert"> 
-Do you want to remember your choice and [LCONDITION] allow shared media from this source?
-
-Domain: [MOAPDOMAIN]
-URL: [MOAPURL]
-   <form name="form">
-    <button
-         index="0"
-         name="Do Now"
-         text="[ACTION] Now"/>
-        <button
-         index="1"   
-         name="RememberDomain"
-         text="[CONDITION] Allow This Domain"/>
-        <button
-         index="2"
-         name="RememberURL"
-         text="[CONDITION] Allow This URL"/>
-   </form>
-  </notification>
-
-  <notification
    icon="notifytip.tga"
    name="SystemMessageTip"
    type="notifytip">

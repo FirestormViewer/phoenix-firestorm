@@ -2865,6 +2865,15 @@ void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool 
 {
 	if(!category) return;
 
+	// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP; assume we're not changing outfits
+	//               during a region crossing and set no region crossing state as a way to unstuck
+	//               a stucked region crossing by changing outfits
+	if (isAgentAvatarValid())
+	{
+		gAgentAvatarp->setIsCrossingRegion(false);
+	}
+	// </FS:Ansariel>
+
 	selfClearPhases();
 	selfStartPhase("wear_inventory_category");
 

@@ -2697,12 +2697,6 @@ Try enclosing path to the editor with double quotes.
   <string name="MediaFilterAudioContentUrlAlwaysAllowed">Audio from the URL [MEDIAURL] will always be played.</string>
   <string name="MediaFilterAudioContentUrlAlwaysBlocked">Audio from the URL [MEDIAURL] will never be played.</string>
 
-  <string name="MediaFilterSharedMediaContentBlocked">Shared Media from the domain [DOMAIN] has been blocked.</string>
-  <string name="MediaFilterSharedMediaContentDomainAlwaysAllowed">Shared Media from the domain [DOMAIN] will always be played.</string>
-  <string name="MediaFilterSharedMediaContentDomainAlwaysBlocked">Shared Media from the domain [DOMAIN] will never be played.</string>
-  <string name="MediaFilterSharedMediaContentUrlAlwaysAllowed">Shared Media from the URL [MEDIAURL] will always be played.</string>
-  <string name="MediaFilterSharedMediaContentUrlAlwaysBlocked">Shared Media from the URL [MEDIAURL] will never be played.</string>
-
   <string name="MediaFilterBlacklist">blacklist</string>
   <string name="MediaFilterWhitelist">whitelist</string>
 

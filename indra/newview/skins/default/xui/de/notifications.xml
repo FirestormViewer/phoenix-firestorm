@@ -4930,29 +4930,6 @@ URL: [AUDIOURL]
 		</form>
 	</notification>
 
-	<notification name="MOAPAlert">
-Ein Objekt enthält Geteilte Medien von:
-
-Domain: [MOAPDOMAIN]
-URL: [MOAPURL]
-		<form name="form">
-			<button name="Allow" text="Erlauben"/>
-			<button name="Deny" text="Verbieten"/>
-		</form>
-	</notification>
-
-	<notification name="MOAPAlert2">
-Auswahl merken und [LCONDITION] Geteilte Medien von dieser Quelle erlauben?
-
-Domain: [MOAPDOMAIN]
-URL: [MOAPURL]
-		<form name="form">
-			<button name="Do Now" text="Jetzt [ACTION]"/>
-			<button name="RememberDomain" text="[CONDITION] diese Domain erlauben"/>
-			<button name="RememberURL" text="[CONDITION] diese URL erlauben"/>
-		</form>
-	</notification>
-
 	<notification name="FirstJoinSupportGroup">
 Willkommen in der Phoenix/Firestorm Viewer Support-Gruppe!
 

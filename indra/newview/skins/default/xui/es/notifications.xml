@@ -2654,27 +2654,6 @@ URL: [AUDIOURL]
 			<button name="WhitelistDomain" text="Lista blanca"/>
 		</form>
 	</notification>
-	<notification name="MOAPAlert">
-		Un objeto proporciona medios compartidos de:
-		
-		Dominio: [MOAPDOMAIN]
-		URL: [MOAPURL]
-		<form name="form">
-			<button name="Allow" text="Permitir"/>
-			<button name="Deny" text="Denegar"/>
-		</form>
-	</notification>
-	<notification name="MOAPAlert2">
-		¿Deseas recordar tu decisión y [LCONDITION] permitir medios compartidos de esta fuente?
-		
-		Dominio: [MOAPDOMAIN]
-		URL: [MOAPURL]
-		<form name="form">
-			<button name="Do Now" text="[ACTION] Ahora"/>
-			<button name="RememberDomain" text="[CONDITION] Permitir Este Dominio"/>
-			<button name="RememberURL" text="[CONDITION] Permitir Esta URL"/>
-		</form>
-	</notification>
 	<notification name="SystemMessageTip">
 		[MESSAGE]
 	</notification>

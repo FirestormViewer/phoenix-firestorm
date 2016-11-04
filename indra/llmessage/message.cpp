@@ -202,6 +202,7 @@ LLMessageSystem::LLMessageSystem(const std::string& filename, U32 port,
 								 const F32 circuit_heartbeat_interval, const F32 circuit_timeout) :
 	mCircuitInfo(F32Seconds(circuit_heartbeat_interval), F32Seconds(circuit_timeout)),
 	mLastMessageFromTrustedMessageService(false)
+	,mIsInSecondLife(true) // <FS:Ansariel> Restore original LLMessageSystem HTTP options for OpenSim
 {
 	init();
 
@@ -4021,6 +4022,14 @@ void LLMessageSystem::sendUntrustedSimulatorMessageCoro(std::string url, std::st
     LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
     LLCore::HttpOptions::ptr_t httpOpts = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
 
+    // <FS:Ansariel> Restore original LLMessageSystem HTTP options for OpenSim
+    if (!mIsInSecondLife)
+    {
+        httpOpts->setRetries(0);
+        httpOpts->setTimeout(60);
+        httpOpts->setTransferTimeout(60);
+    }
+    // </FS:Ansariel>
 
     if (url.empty())
     {

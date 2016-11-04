@@ -578,10 +578,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	// <FS:Ansariel> FIRE-2912: Reset voice button
 	mCommitCallbackRegistrar.add("Pref.ResetVoice",						boost::bind(&LLFloaterPreference::onClickResetVoice, this));
-	
-	// <FS: KC> FIRE-18250: Option to disable default eye movement
-	mCommitCallbackRegistrar.add("Pref.StaticEyes",						boost::bind(&LLFloaterPreference::onClickStaticEyes, this));
-	// </Firestorm callbacks>
 
 	mCommitCallbackRegistrar.add("UpdateFilter", boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this, false)); // <FS:ND/> Hook up for filtering
 }
@@ -1096,6 +1092,18 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 
 		// <FS:Ansariel> FIRE-17630: Properly disable per-account settings backup list
 		getChildView("restore_per_account_disable_cover")->setVisible(FALSE);
+
+		// <FS:Ansariel> Keyword settings are per-account; enable after logging in
+		LLPanel* keyword_panel = getChild<LLPanel>("ChatKeywordAlerts");
+		for (child_list_t::const_iterator iter = keyword_panel->getChildList()->begin();
+			 iter != keyword_panel->getChildList()->end(); ++iter)
+		{
+			LLUICtrl* child = static_cast<LLUICtrl*>(*iter);
+			LLControlVariable* enabled_control = child->getEnabledControlVariable();
+			BOOL enabled = !enabled_control || enabled_control->getValue().asBoolean();
+			child->setEnabled(enabled);
+		}
+		// </FS:Ansariel>
 	}
 	gAgent.sendAgentUserInfoRequest();
 
@@ -5358,7 +5366,7 @@ void LLFloaterPreference::loadFontPresetsFromDir(const std::string& dir, LLCombo
 void LLFloaterPreference::populateFontSelectionCombo()
 {
 	LLComboBox* font_selection_combo = getChild<LLComboBox>("Fontsettingsfile");
-	if(font_selection_combo)
+	if (font_selection_combo)
 	{
 		const std::string fontDir(gDirUtilp->getExpandedFilename(LL_PATH_FONTS, "", ""));
 		const std::string userfontDir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "fonts", ""));
@@ -5366,28 +5374,11 @@ void LLFloaterPreference::populateFontSelectionCombo()
 		// Load fonts.xmls from the install dir first then user_settings
 		loadFontPresetsFromDir(fontDir, font_selection_combo);
 		loadFontPresetsFromDir(userfontDir, font_selection_combo);
-        
+
 		font_selection_combo->setValue(gSavedSettings.getString("FSFontSettingsFile"));
 	}
 }
 // </FS:Kadah>
-
-// <FS:KC> FIRE-18250: Option to disable default eye movement
-void LLFloaterPreference::onClickStaticEyes()
-{
-	LLUUID anim_id(gSavedSettings.getString("FSStaticEyesUUID"));
-	if (gSavedPerAccountSettings.getBOOL("FSStaticEyes"))
-	{
-		gAgentAvatarp->startMotion(anim_id);
-		gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_START);
-	}
-	else
-	{
-		gAgentAvatarp->stopMotion(anim_id);
-		gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_STOP);
-	}
-}
-// </FS:KC>
 
 // <FS:AW optional opensim support>
 #ifdef OPENSIM

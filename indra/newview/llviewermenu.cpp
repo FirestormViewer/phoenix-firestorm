@@ -9982,6 +9982,7 @@ void handle_rebake_textures(void*)
 //		LLAppearanceMgr::instance().requestServerAppearanceUpdate();
 		avatar_tex_refresh();	// <FS:CR> FIRE-11800 - Refresh the textures too
 	}
+	gAgentAvatarp->setIsCrossingRegion(false); // <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
 }
 
 void toggle_visibility(void* user_data)

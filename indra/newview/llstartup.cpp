@@ -1712,6 +1712,9 @@ bool idle_startup()
 		}
 		// </FS:Ansariel>
 
+		// <FS:Ansariel> Restore original LLMessageSystem HTTP options for OpenSim
+		gMessageSystem->setIsInSecondLife(LLGridManager::getInstance()->isInSecondLife());
+
 		// Finish agent initialization.  (Requires gSavedSettings, builds camera)
 		gAgent.init();
 		display_startup();
@@ -1967,9 +1970,9 @@ bool idle_startup()
 		display_startup();
 		// </FS:Ansariel> [FS communication UI]
 
-        // <FS:KC> FIRE-18250: Option to disable default eye movement
-        gAgent.addRegionChangedCallback(boost::bind(&update_static_eyes));
-        update_static_eyes();
+		// <FS:KC> FIRE-18250: Option to disable default eye movement
+		gAgent.addRegionChangedCallback(boost::bind(&update_static_eyes));
+		update_static_eyes();
 		// </FS:KC>
 
 		// *Note: this is where gWorldMap used to be initialized.
@@ -4499,11 +4502,12 @@ void transition_back_to_login_panel(const std::string& emsg)
 
 // <FS:KC> FIRE-18250: Option to disable default eye movement
 //static
-void update_static_eyes() {
-    if (gSavedPerAccountSettings.getBOOL("FSStaticEyes"))
-    {
-        LLUUID anim_id(gSavedSettings.getString("FSStaticEyesUUID"));
-        gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_START);
-    }
+void update_static_eyes()
+{
+	if (gSavedPerAccountSettings.getBOOL("FSStaticEyes"))
+	{
+		LLUUID anim_id(gSavedSettings.getString("FSStaticEyesUUID"));
+		gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_START);
+	}
 }
 // </FS:KC>
