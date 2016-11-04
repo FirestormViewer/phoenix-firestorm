@@ -12911,16 +12911,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>SanityComment</key>
       <string>Values higher than 8 are meaningless and give no improvement. You should set this to no higher than 4. Setting this too high also seriously lowers your graphics performance.</string>
     </map>
-    <key>RenderRiggedFactorMultiplier</key>
+    <key>RenderRiggedLodCompensation</key>
     <map>
       <key>Comment</key>
-      <string>Affects level of detail for worn rigged meshes</string>
+      <string>Affects visibility range of worn rigged meshes to compensate for missing LODs (limited by avatars own visibility)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>7.5</real>
+      <real>6.5</real>
     </map>
     <key>RenderWater</key>
     <map>
