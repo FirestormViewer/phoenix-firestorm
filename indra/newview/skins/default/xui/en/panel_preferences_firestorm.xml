@@ -556,10 +556,7 @@
          left="15"
          name="FSStaticEyes"
          width="250"
-         control_name="FSStaticEyes">
-            <check_box.commit_callback
-             function="Pref.StaticEyes" />
-        </check_box>
+         control_name="FSStaticEyes"/>
 
         <!-- LGG Color Beams -->
         <text
