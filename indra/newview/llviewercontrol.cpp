@@ -898,6 +898,11 @@ void handleLogThrottleChanged(const LLSD& newvalue)
 // <FS:Ansariel> FIRE-18250: Option to disable default eye movement
 void handleStaticEyesChanged()
 {
+	if (!isAgentAvatarValid())
+	{
+		return;
+	}
+
 	LLUUID anim_id(gSavedSettings.getString("FSStaticEyesUUID"));
 	if (gSavedPerAccountSettings.getBOOL("FSStaticEyes"))
 	{
