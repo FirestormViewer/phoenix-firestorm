@@ -57,9 +57,9 @@
 #include "llviewerjoystick.h"
 #include "llviewermenu.h"
 #include "llviewerparcelmgr.h"
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e)
-#include "rlvhandler.h"
-#include "rlvui.h"
+// [RLVa:KB] - Checked: RLVa-2.1.0
+#include "llfloatertools.h"
+#include "rlvactions.h"
 // [/RLVa:KB]
 
 // Used when app not active to avoid processing hover.
@@ -85,14 +85,9 @@ LLToolMgr::LLToolMgr()
 {
 	// Not a panel, register these callbacks globally.
 	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Build.Active", boost::bind(&LLToolMgr::inEdit, this));
-//	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Build.Enabled", boost::bind(&LLToolMgr::canEdit, this));
-//	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Build.EnabledOrActive", boost::bind(&LLToolMgr::buildEnabledOrActive, this));
-//	LLUICtrl::CommitCallbackRegistry::currentRegistrar().add("Build.Toggle", boost::bind(&LLToolMgr::toggleBuildMode, this, _2));
-// [RLVa:KB] - Checked: 2010-09-11 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
-	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Build.Enabled", boost::bind(&RlvUIEnabler::isBuildEnabled));
-	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Build.EnabledOrActive", boost::bind(&RlvUIEnabler::isBuildEnabledOrActive));
-	LLUICtrl::CommitCallbackRegistry::currentRegistrar().add("Build.Toggle", boost::bind(&LLToolMgr::toggleBuildMode, this));
-// [/RLVa:KB]
+	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Build.Enabled", boost::bind(&LLToolMgr::canEdit, this));
+	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Build.EnabledOrActive", boost::bind(&LLToolMgr::buildEnabledOrActive, this));
+	LLUICtrl::CommitCallbackRegistry::currentRegistrar().add("Build.Toggle", boost::bind(&LLToolMgr::toggleBuildMode, this, _2));
 	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Marketplace.Enabled", boost::bind(&LLToolMgr::canAccessMarketplace, this));
 	LLUICtrl::CommitCallbackRegistry::currentRegistrar().add("Marketplace.Toggle", boost::bind(&LLToolMgr::toggleMarketplace, this, _2));
 	
@@ -270,18 +265,18 @@ bool LLToolMgr::inEdit()
 
 bool LLToolMgr::canEdit()
 {
-	return LLViewerParcelMgr::getInstance()->allowAgentBuild();
+// [RLVa:KB] - Patch: RLVa-2.1.0
+	return LLViewerParcelMgr::getInstance()->allowAgentBuild() && RlvActions::canBuild();
+// [/RLVa:KB]
+//	return LLViewerParcelMgr::getInstance()->allowAgentBuild();
 }
 
-//bool LLToolMgr::buildEnabledOrActive()
-//{
-//	return inEdit() || canEdit();
-//}
+bool LLToolMgr::buildEnabledOrActive()
+{
+	return inEdit() || canEdit();
+}
 
-//void LLToolMgr::toggleBuildMode(const LLSD& sdname)
-// [RLVa:KB] - Checked: 2012-04-26 (RLVa-1.4.6) | Added: RLVa-1.4.6
-void LLToolMgr::toggleBuildMode()
-// [/RLVa:KB]
+void LLToolMgr::toggleBuildMode(const LLSD& sdname)
 {
 //	const std::string& param = sdname.asString();
 //
@@ -290,10 +285,36 @@ void LLToolMgr::toggleBuildMode()
 //	{
 //		return;
 //	}
-
-	bool build_visible = LLFloaterReg::instanceVisible("build");
-	if (build_visible)
+//
+//	bool build_visible = LLFloaterReg::instanceVisible("build");
+//	if (build_visible)
+//	{
+// [RLVa:KB] - Checked: RLVa-2.1.0
+	if (gFloaterTools)
 	{
+		if (gFloaterTools->isShown())
+			leaveBuildMode();
+		else
+			enterBuildMode("build" == sdname.asString());
+	}
+}
+
+void LLToolMgr::enterBuildMode(bool verify_canedit /*=false*/)
+{
+	if (!gFloaterTools)
+		return;
+	if (!gFloaterTools->isShown())
+		gFloaterTools->openFloater();
+	if (!gFloaterTools->isFrontmost())
+		gFloaterTools->setVisibleAndFrontmost(true);
+
+	if (verify_canedit && !canEdit())
+	{
+		return;
+	}
+
+	{
+// [/RLVa:KB]
 		ECameraMode camMode = gAgentCamera.getCameraMode();
 		if (CAMERA_MODE_MOUSELOOK == camMode ||	CAMERA_MODE_CUSTOMIZE_AVATAR == camMode)
 		{
@@ -332,7 +353,20 @@ void LLToolMgr::toggleBuildMode()
 		LLViewerJoystick::getInstance()->setNeedsReset();
 
 	}
-	else
+// [RLVa:KB] - Checked: RLVa-2.1.0
+}
+// [/RLVa:KB]
+//	else
+// [RLVa:KB] - Checked: RLVa-2.1.0
+void LLToolMgr::leaveBuildMode()
+{
+	if ( (!gFloaterTools) || (!gFloaterTools->getVisible()) )
+	{
+		return;
+	}
+
+	gFloaterTools->closeFloater();
+// [/RLVa:KB]
 	{
 		if (gSavedSettings.getBOOL("EditCameraMovement"))
 		{

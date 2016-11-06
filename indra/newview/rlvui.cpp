@@ -427,15 +427,4 @@ bool RlvUIEnabler::hasOpenProfile(const LLUUID& idAgent)
 	return LLAvatarActions::profileVisible(idAgent);
 }
 
-// Checked: 2010-09-11 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
-bool RlvUIEnabler::isBuildEnabled()
-{
-	return (gAgent.canEditParcel()) && ((!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ)));
-}
-
-bool RlvUIEnabler::isBuildEnabledOrActive()
-{
-	return LLToolMgr::instance().inEdit() || isBuildEnabled();
-}
-
 // ============================================================================

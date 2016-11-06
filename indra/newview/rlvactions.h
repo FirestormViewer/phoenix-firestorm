@@ -172,9 +172,24 @@ public:
 	// =================
 public:
 	/*
+	 * Returns true if the user can build (= access the build tools)
+	 */
+	static bool canBuild();
+
+	/*
+	 * Returns true if the user can edit existing objects (generic check not based on specific object type)
+	 */
+	static bool canEdit();
+
+	/*
 	 * Returns true if the user can edit the specified object
 	 */
 	static bool canEdit(const LLViewerObject* pObj);
+
+	/*
+	 * Returns true if the user can rez new objects (from inventory or through the create tool)
+	 */
+	static bool canRez();
 
 	/*
 	 * Returns true if the user can sit up on the specified object

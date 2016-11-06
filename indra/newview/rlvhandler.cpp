@@ -1623,9 +1623,8 @@ void RlvBehaviourToggleHandler<RLV_BHVR_EDIT>::onCommandToggle(ERlvBehaviour eBh
 		if (LLFloaterReg::instanceVisible("beacons"))
 			LLFloaterReg::hideInstance("beacons");
 
-		// Hide the build floater if it's currently visible
-		if (LLFloaterReg::instanceVisible("build"))
-			LLToolMgr::instance().toggleBuildMode();
+		// Hide the build floater
+		LLToolMgr::instance().leaveBuildMode();
 	}
 
 	// Start or stop filtering opening the beacons floater

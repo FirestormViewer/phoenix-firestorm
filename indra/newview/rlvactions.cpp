@@ -282,6 +282,21 @@ bool RlvActions::isLocalTp(const LLVector3d& posGlobal)
 // World interaction
 //
 
+bool RlvActions::canBuild()
+{
+	// User can access the build floater if:
+	//    - allowed to edit existing objects OR
+	//    - allowed to rez/create objects
+	return
+		(!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) ||
+		(!gRlvHandler.hasBehaviour(RLV_BHVR_REZ));
+}
+
+bool RlvActions::canEdit()
+{
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT));
+}
+
 bool RlvActions::canEdit(const LLViewerObject* pObj)
 {
 	// User can edit the specified object if:
@@ -293,6 +308,10 @@ bool RlvActions::canEdit(const LLViewerObject* pObj)
 		((!hasBehaviour(RLV_BHVR_EDITOBJ)) || (!gRlvHandler.isException(RLV_BHVR_EDITOBJ, pObj->getRootEdit()->getID())));
 }
 
+bool RlvActions::canRez()
+{
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ));
+}
 
 bool RlvActions::canSit(const LLViewerObject* pObj, const LLVector3& posOffset /*= LLVector3::zero*/)
 {
