@@ -1349,6 +1349,7 @@ ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(const RlvC
 			gRlvHandler.m_Behaviours[eBhvr]--;
 		}
 
+		gRlvHandler.m_OnBehaviour(eBhvr, rlvCmd.getParamType());
 		if (fHasBhvr != gRlvHandler.hasBehaviour(eBhvr))
 		{
 			if (pToggleHandlerFunc)
