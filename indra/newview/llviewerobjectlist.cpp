@@ -643,9 +643,9 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 			}
 #endif
 
-			if (FSAssetBlacklist::getInstance()->isBlacklisted(fullid, LLAssetType::AT_OBJECT))
+			if (FSAssetBlacklist::getInstance()->isBlacklisted(fullid, (pcode == LL_PCODE_LEGACY_AVATAR ? LLAssetType::AT_PERSON : LLAssetType::AT_OBJECT)))
 			{
-				LL_INFOS() << "Blacklisted object blocked." << LL_ENDL;
+				LL_INFOS() << "Blacklisted " << (pcode == LL_PCODE_LEGACY_AVATAR ? "avatar" : "object") << " blocked." << LL_ENDL;
 				continue;
 			}
 
