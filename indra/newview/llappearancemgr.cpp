@@ -1501,10 +1501,12 @@ void LLAppearanceMgr::wearItemsOnAvatar(const uuid_vec_t& item_ids_to_wear,
         }
 
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-		if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanWearItem(item_to_wear, (replace) ? RLV_WEAR_REPLACE : RLV_WEAR_ADD)) )
-		{
-			continue;
-		}
+        if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanWearItem(item_to_wear, (item_to_wear->getType() == LLAssetType::AT_BODYPART || replace) ? RLV_WEAR_REPLACE : RLV_WEAR_ADD)) )
+        {
+            LL_DEBUGS("Avatar") << "inventory item cannot be worn because of RLV restriction, skipping "
+                                << item_to_wear->getName() << " id " << item_id_to_wear << LL_ENDL;
+            continue;
+        }
 // [/RLVa:KB]
 
         switch (item_to_wear->getType())
@@ -1524,9 +1526,9 @@ void LLAppearanceMgr::wearItemsOnAvatar(const uuid_vec_t& item_ids_to_wear,
                         LLUUID item_id = gAgentWearables.getWearableItemID(item_to_wear->getWearableType(),
                                                                            wearable_count-1);
 // [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-05-02 (Catznip-3.7)
-						removeCOFItemLinks(item_id, NULL, true);
+                        removeCOFItemLinks(item_id, NULL, true);
 // [/SL:KB]
-//						removeCOFItemLinks(item_id, cb);
+//                      removeCOFItemLinks(item_id, cb);
                     }
                     
                     items_to_link.push_back(item_to_wear);
