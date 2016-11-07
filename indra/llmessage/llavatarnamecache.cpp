@@ -265,6 +265,18 @@ void LLAvatarNameCache::handleAvNameCacheSuccess(const LLSD &data, const LLSD &h
         LLUUID agent_id = row["id"].asUUID();
 
         LLAvatarName av_name;
+        // <FS> Contact sets alias
+        if (LGGContactSets::getInstance()->hasPseudonym(agent_id))
+        {
+            LLSD info(row);
+            info["is_display_name_default"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id);
+            info["display_name"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id)
+                ? (info["legacy_first_name"].asString() + " " + info["legacy_last_name"].asString())
+                : LGGContactSets::getInstance()->getPseudonym(agent_id);
+            av_name.fromLLSD(info);
+        }
+        else
+        // </FS> Contact sets alias
         av_name.fromLLSD(row);
 
         // Use expiration time from header
@@ -668,7 +680,8 @@ bool LLAvatarNameCache::get(const LLUUID& agent_id, LLAvatarName *av_name)
 		if (it != sCache.end())
 		{
 			*av_name = it->second;
-			if(LGGContactSets::getInstance()->hasPseudonym(agent_id))
+			// <FS> Contact sets alias
+			if (LGGContactSets::getInstance()->hasPseudonym(agent_id))
 			{
 				LLSD info = av_name->asLLSD();
 				info["is_display_name_default"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id);
@@ -677,6 +690,7 @@ bool LLAvatarNameCache::get(const LLUUID& agent_id, LLAvatarName *av_name)
 					: LGGContactSets::getInstance()->getPseudonym(agent_id);
 				av_name->fromLLSD(info);
 			}
+			// <FS/> Contact sets alias
 
 			// re-request name if entry is expired
 			if (av_name->mExpires < LLFrameTimer::getTotalSeconds())
@@ -723,8 +737,9 @@ LLAvatarNameCache::callback_connection_t LLAvatarNameCache::get(const LLUUID& ag
 		{
 			LLAvatarName& av_name = it->second;
 			LLSD test = av_name.asLLSD();
-			
-			if(LGGContactSets::getInstance()->hasPseudonym(agent_id))
+
+			// <FS> Contact sets alias
+			if (LGGContactSets::getInstance()->hasPseudonym(agent_id))
 			{
 				LL_DEBUGS("AvNameCache") << "DN cache hit via alias " << agent_id << LL_ENDL;
 				LLSD info = av_name.asLLSD();
@@ -734,7 +749,8 @@ LLAvatarNameCache::callback_connection_t LLAvatarNameCache::get(const LLUUID& ag
 					: LGGContactSets::getInstance()->getPseudonym(agent_id);
 				av_name.fromLLSD(info);
 			}
-			
+			// </FS> Contact sets alias
+
 			if (av_name.mExpires > LLFrameTimer::getTotalSeconds())
 			{
 				// ...name already exists in cache, fire callback now
