@@ -333,7 +333,6 @@ bool FSFloaterIMContainer::hasFloater(LLFloater* floaterp)
 void FSFloaterIMContainer::onCloseFloater(LLUUID& id)
 {
 	mSessions.erase(id);
-	setFocus(TRUE);
 }
 
 void FSFloaterIMContainer::onNewMessageReceived(const LLSD& data)
