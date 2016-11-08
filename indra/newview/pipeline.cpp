@@ -11728,7 +11728,10 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 
 	avatar->setImpostorDim(tdim);
 
-	LLVOAvatar::sUseImpostors = true; // @TODO ???
+	// <FS:Ansariel> FIRE-20333: Set back to correct value depending on sMaxNonImpostors
+	//LLVOAvatar::sUseImpostors = true; // @TODO ???
+	LLVOAvatar::sUseImpostors = (0 != LLVOAvatar::sMaxNonImpostors);
+	// </FS:Ansariel>
 	sUseOcclusion = occlusion;
 	sReflectionRender = FALSE;
 	sImpostorRender = FALSE;
