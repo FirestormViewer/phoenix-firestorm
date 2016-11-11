@@ -241,6 +241,7 @@ void LLOutfitGallery::removeLastRow()
 {
     mRowCount--;
     mGalleryPanel->removeChild(mLastRowPanel);
+    mUnusedRowPanels.push_back(mLastRowPanel);
     mRowPanels.pop_back();
     mLastRowPanel = mRowPanels.back();
 }
@@ -342,6 +343,7 @@ void LLOutfitGallery::removeFromLastRow(LLOutfitGalleryItem* item)
 {
     mItemPanels.back()->removeChild(item);
     mLastRowPanel->removeChild(mItemPanels.back());
+    mUnusedItemPanels.push_back(mItemPanels.back());
     mItemPanels.pop_back();
 }
 
@@ -381,7 +383,16 @@ LLPanel* LLOutfitGallery::buildItemPanel(int left)
 {
     LLPanel::Params lpparams;
     int top = 0;
-    LLPanel* lpanel = LLUICtrlFactory::create<LLPanel>(lpparams);
+    LLPanel* lpanel = NULL;
+    if(mUnusedItemPanels.empty())
+    {
+        lpanel = LLUICtrlFactory::create<LLPanel>(lpparams);
+    }
+    else
+    {
+        lpanel = mUnusedItemPanels.back();
+        mUnusedItemPanels.pop_back();
+    }
     LLRect rect = LLRect(left, top + mItemHeight, left + mItemWidth + mItemHorizontalGap, top);
     lpanel->setRect(rect);
     lpanel->reshape(mItemWidth + mItemHorizontalGap, mItemHeight);
@@ -394,7 +405,16 @@ LLPanel* LLOutfitGallery::buildItemPanel(int left)
 LLPanel* LLOutfitGallery::buildRowPanel(int left, int bottom)
 {
     LLPanel::Params sparams;
-    LLPanel* stack = LLUICtrlFactory::create<LLPanel>(sparams);
+    LLPanel* stack = NULL;
+    if(mUnusedRowPanels.empty())
+    {
+        stack = LLUICtrlFactory::create<LLPanel>(sparams);
+    }
+    else
+    {
+        stack = mUnusedRowPanels.back();
+        mUnusedRowPanels.pop_back();
+    }
     moveRowPanel(stack, left, bottom);
     return stack;
 }
@@ -424,6 +444,19 @@ LLOutfitGallery::~LLOutfitGallery()
         gInventory.removeObserver(mOutfitsObserver);
     }
     delete mOutfitsObserver;
+
+    while (!mUnusedRowPanels.empty())
+    {
+        LLPanel* panelp = mUnusedRowPanels.back();
+        mUnusedRowPanels.pop_back();
+        panelp->die();
+    }
+    while (!mUnusedItemPanels.empty())
+    {
+        LLPanel* panelp = mUnusedItemPanels.back();
+        mUnusedItemPanels.pop_back();
+        panelp->die();
+    }
 }
 
 void LLOutfitGallery::setFilterSubString(const std::string& string)
@@ -504,7 +537,7 @@ void LLOutfitGallery::updateAddedCategory(LLUUID cat_id)
 
     // Start observing changes in "My Outfits" category.
     mOutfitsObserver->addCategory(cat_id,
-        boost::bind(&LLOutfitGallery::refreshOutfit, this, cat_id));
+        boost::bind(&LLOutfitGallery::refreshOutfit, this, cat_id), true);
 
     outfit_category->fetch();
     refreshOutfit(cat_id);

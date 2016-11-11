@@ -709,12 +709,10 @@ void LLViewerPartSim::updateSimulation()
 			BOOL upd = TRUE;
 			LLViewerObject* vobj = mViewerPartSources[i]->mSourceObjectp;
 
-			// <FS:Ansariel> Partially undo MAINT-5700: Draw imposter for muted avatars
-			//if (vobj && vobj->isAvatar() && ((LLVOAvatar*)vobj)->isInMuteList())
-			//{
-			//	upd = FALSE;
-			//}
-			// </FS:Ansariel>
+			if (vobj && vobj->isAvatar() && ((LLVOAvatar*)vobj)->isInMuteList())
+			{
+				upd = FALSE;
+			}
 
 			if (upd && vobj && (vobj->getPCode() == LL_PCODE_VOLUME))
 			{

@@ -180,9 +180,6 @@ public:
 	// <FS:Ansariel> FIRE-2912: Reset voice button
 	void onClickResetVoice();
 
-	// <FS:KC> FIRE-18250: Option to disable default eye movement
-	void onClickStaticEyes();
-
 	void onClickSetCache();
 	void onClickBrowseCache();
 	void onClickBrowseCrashLogs();
