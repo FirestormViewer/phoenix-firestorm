@@ -9436,15 +9436,14 @@ class FSToolsUndeform : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
-		if (avatar)
+		if (isAgentAvatarValid())
 		{
-			avatar->resetSkeleton(true);
+			gAgentAvatarp->resetSkeleton(true);
+
+			FSPose::getInstance()->setPose(gSavedSettings.getString("FSUndeformUUID"), false);
+			gAgentAvatarp->updateVisualParams();
 		}
 
-		FSPose::getInstance()->setPose(gSavedSettings.getString("FSUndeformUUID"), false);
-		gAgentAvatarp->updateVisualParams();
-		
 		return true;
 	}
 };
