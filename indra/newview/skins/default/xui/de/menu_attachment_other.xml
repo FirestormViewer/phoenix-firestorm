@@ -9,6 +9,7 @@
 	<menu_item_call label="Anrufen" name="Call"/>
 	<menu_item_call label="In Gruppe einladen" name="Invite..."/>
 	<menu_item_call label="Skelett zurücksetzen" name="Reset Skeleton"/>
+	<menu_item_call label="Skelett &amp; Animationen zurücksetzen" name="Reset Skeleton And Animations"/>
 	<context_menu label="Belästigung" name="Annoyance">
 		<menu_item_call label="Ignorieren" name="Avatar Mute"/>
 		<menu_item_call label="Freischalten" name="Avatar Unmute"/>
