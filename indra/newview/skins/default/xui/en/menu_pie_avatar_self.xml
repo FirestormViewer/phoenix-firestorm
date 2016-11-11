@@ -404,12 +404,22 @@
            <pie_slice.on_enable
                function="Edit.EnableEditShape" />
         </pie_slice>
-		<pie_slice
-			label="Reset Skeleton"
-			name="Reset Skeleton">
-			<pie_slice.on_click
-				function="Avatar.ResetSkeleton" />
-		</pie_slice>
+		<pie_menu
+			name="ResetMenu"
+			label="Reset &gt;">
+			<pie_slice
+				label="Skel. &amp; Anim."
+				name="Reset Skeleton And Animations">
+				<pie_slice.on_click
+					function="Avatar.ResetSkeletonAndAnimations" />
+			</pie_slice>
+			<pie_slice
+				label="Skeleton"
+				name="Reset Skeleton">
+				<pie_slice.on_click
+					function="Avatar.ResetSkeleton" />
+			</pie_slice>
+		</pie_menu>
         <pie_slice
             enabled="true"
             label="Tex Refresh"
