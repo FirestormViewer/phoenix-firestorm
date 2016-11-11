@@ -20,6 +20,13 @@
 #include "rlvdefines.h"
 
 // ============================================================================
+// Forward declarations
+//
+
+class LLInventoryCategory;
+class LLInventoryItem;
+
+// ============================================================================
 // RlvActions class declaration - developer-friendly non-RLVa code facing class, use in lieu of RlvHandler whenever possible
 //
 
@@ -121,6 +128,16 @@ public:
 protected:
 	// Backwards logic so that we can initialize to 0 and it won't block when we forget to/don't check if RLVa is disabled
 	static bool s_BlockNamesContexts[SNC_COUNT];
+
+	// =========
+	// Inventory
+	// =========
+public:
+	/*
+	 * Returns true if the user is allowed to paste the specified inventory object (item/folder) into the specified destination category (within user inventory)
+	 */
+	static bool canPaste(const LLInventoryCategory* pSourceCat, const LLInventoryCategory* pDestCat);
+	static bool canPaste(const LLInventoryItem* pSourceItem, const LLInventoryCategory* pDestCat);
 
 	// ========
 	// Movement
@@ -232,6 +249,11 @@ public:
 	 * Convenience function to check if RLVa is enabled without having to include rlvhandler.h
 	 */
 	static bool isRlvEnabled();
+
+	/*
+	 * Shows one of the blocked toast notifications (see rlva_strings.xml)
+	 */
+	static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD());
 };
 
 // ============================================================================
