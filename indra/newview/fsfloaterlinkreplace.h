@@ -35,7 +35,6 @@
 class FSInventoryLinkReplaceDropTarget;
 class LLButton;
 class LLTextBox;
-class LLInventoryCallback;
 
 class FSFloaterLinkReplace : public LLFloater, LLEventTimer
 {
