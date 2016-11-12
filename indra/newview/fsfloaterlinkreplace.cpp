@@ -216,6 +216,7 @@ void FSFloaterLinkReplace::linkCreatedCallback(const LLUUID& old_item_id,
 		}
 	}
 
+	LLUUID outfit_update_folder = LLUUID::null;
 	if (needs_wearable_ordering_update && outfit_folder_id.notNull())
 	{
 		// If a wearable item was involved in the link replace operation and replaced
@@ -223,15 +224,18 @@ void FSFloaterLinkReplace::linkCreatedCallback(const LLUUID& old_item_id,
 		// *after* the original link has been removed. LLAppearanceMgr abuses the actual link
 		// description to store the clothing ordering information it. We will have to update
 		// the clothing ordering information or the outfit will be in dirty state when worn.
-		LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(&LLAppearanceMgr::updateClothingOrderingInfo,
-																												LLAppearanceMgr::getInstance(),
-																												outfit_folder_id,
-																												LLPointer<LLInventoryCallback>(NULL))); 
-		remove_inventory_object(old_item_id, cb);
+		outfit_update_folder = outfit_folder_id;
 	}
-	else
+
+	LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(&FSFloaterLinkReplace::itemRemovedCallback, this, outfit_update_folder));
+	remove_inventory_object(old_item_id, cb);
+}
+
+void FSFloaterLinkReplace::itemRemovedCallback(const LLUUID& outfit_folder_id)
+{
+	if (outfit_folder_id.notNull())
 	{
-		remove_inventory_object(old_item_id, LLPointer<LLInventoryCallback>(NULL));
+		LLAppearanceMgr::getInstance()->updateClothingOrderingInfo(outfit_folder_id);
 	}
 
 	if (mInstance)

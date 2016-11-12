@@ -35,6 +35,7 @@
 class FSInventoryLinkReplaceDropTarget;
 class LLButton;
 class LLTextBox;
+class LLInventoryCallback;
 
 class FSFloaterLinkReplace : public LLFloater, LLEventTimer
 {
@@ -61,6 +62,7 @@ private:
 								bool needs_wearable_ordering_update,
 								bool needs_description_update,
 								const LLUUID& outfit_folder_id);
+	void itemRemovedCallback(const LLUUID& outfit_folder_id);
 
 	void onSourceItemDrop(const LLUUID& source_item_id);
 	void onTargetItemDrop(const LLUUID& target_item_id);
