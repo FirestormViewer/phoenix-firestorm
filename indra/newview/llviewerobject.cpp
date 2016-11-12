@@ -169,15 +169,10 @@ LLViewerObject *LLViewerObject::createObject(const LLUUID &id, const LLPCode pco
 				gAgentAvatarp->initInstance();
 // <FS:Ansariel> [Legacy Bake]
 				//gAgentWearables.setAvatarObject(gAgentAvatarp);
-#ifdef OPENSIM
 				if (LLGridManager::getInstance()->isInSecondLife())
 				{
 					gAgentWearables.setAvatarObject(gAgentAvatarp);
-
 				}
-#else
-				gAgentWearables.setAvatarObject(gAgentAvatarp);
-#endif
 // </FS:Ansariel> [Legacy Bake]
 			}
 			else 
