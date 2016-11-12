@@ -2965,9 +2965,11 @@ ERlvCmdRet RlvHandler::onGetInv(const RlvCommand& rlvCmd, std::string& strReply)
 		//   - aren't hidden
 		//   - aren't a folded folder (only really matters when "Enable Legacy Naming" is enabled - see related blog post)
 		//     (we can skip checking for .<composite> folders since the ones we'll want to hide start with '.' anyway)
+		//   - don't have any invalid characters
 		const std::string& strFolder = pFolders->at(idxFolder)->getName();
-		if ( (!strFolder.empty()) && (RLV_FOLDER_PREFIX_HIDDEN != strFolder[0]) && 
-			 (!RlvInventory::isFoldedFolder(pFolders->at(idxFolder).get(), false)) )
+		if ( (!strFolder.empty()) && (RLV_FOLDER_PREFIX_HIDDEN != strFolder[0]) &&
+			 (!RlvInventory::isFoldedFolder(pFolders->at(idxFolder).get(), false)) && 
+			 (std::string::npos == strFolder.find_first_of(RLV_FOLDER_INVALID_CHARS)) )
 		{
 			if (!strReply.empty())
 				strReply.push_back(',');
