@@ -86,7 +86,7 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 		object = object->getRootEdit();
 	}
 
-// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+// [RLVa:KB] - Checked: RLVa-2.1.0
 	if ( (object) && (RlvActions::isRlvEnabled()) )
 	{
 		if (!RlvActions::canEdit(object))
@@ -94,23 +94,31 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 			if (!temp_select)
 				return LLSelectMgr::getInstance()->getSelection();
 			else if (LLToolMgr::instance().inBuildMode())
-				LLToolMgr::instance().toggleBuildMode();
+				LLToolMgr::instance().leaveBuildMode();
 		}
 
-		if ( (RlvActions::hasBehaviour(RLV_BHVR_FARTOUCH)) && ((!object->isAttachment()) || (!object->permYouOwner())) )
+		if ( (RlvActions::hasBehaviour(RLV_BHVR_FARTOUCH)) && ( (!object->isAttachment()) || (!object->permYouOwner())) )
 		{
 			static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
 			float nFartouchDistSq = s_nFartouchDist * s_nFartouchDist;
-			// NOTE: recheck why we did it this way, might be able to simplify
-			if ( (dist_vec_squared(gAgent.getPositionAgent(), object->getPositionRegion()) > nFartouchDistSq) &&
-			     (dist_vec_squared(gAgent.getPositionAgent(), pick.mIntersection) > nFartouchDistSq) )
+
+			// User is allowed to edit/select this object if it's within their current fartouch distance
+			if (dist_vec_squared(gAgent.getPositionAgent(), object->getPositionRegion()) > nFartouchDistSq)
 			{
-				if ( (LLFloaterReg::instanceVisible("build")) && (pick.mKeyMask != MASK_SHIFT) && (pick.mKeyMask != MASK_CONTROL) )
-					LLSelectMgr::getInstance()->deselectAll();
-				return LLSelectMgr::getInstance()->getSelection();
+				// The object is out of range but we'll still allow them a temporary select (e.g. context menu) if the surface point is within range
+				if (dist_vec_squared(gAgent.getPositionAgent(), pick.mIntersection) > 1.5f * 1.5f)
+				{
+					// Even the surface point is out of range so deny them the hit
+					if ( (LLFloaterReg::instanceVisible("build")) && (pick.mKeyMask != MASK_SHIFT) && (pick.mKeyMask != MASK_CONTROL) )
+						LLSelectMgr::getInstance()->deselectAll();
+					return LLSelectMgr::getInstance()->getSelection();
+				}
+				else if (LLToolMgr::instance().inBuildMode())
+				{
+					// Allow the selection but keep it temporary by pulling them out of build mode when they click too far
+					LLToolMgr::instance().leaveBuildMode();
+				}
 			}
-			else if (LLToolMgr::instance().inBuildMode())
-				LLToolMgr::instance().toggleBuildMode();
 		}
 	}
 // [/RLVa:KB]

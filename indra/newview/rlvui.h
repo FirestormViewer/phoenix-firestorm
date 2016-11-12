@@ -79,8 +79,6 @@ public:
 	static bool canViewRegionProperties();								// showloc
 	static bool hasOpenIM(const LLUUID& idAgent);						// shownames
 	static bool hasOpenProfile(const LLUUID& idAgent);					// shownames
-	static bool isBuildEnabled();										// edit and rez
-	static bool isBuildEnabledOrActive();								// edit and rez
 
 	/*
 	 * Member variables

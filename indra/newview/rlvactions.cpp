@@ -23,6 +23,7 @@
 #include "rlvactions.h"
 #include "rlvhelper.h"
 #include "rlvhandler.h"
+#include "rlvinventory.h"
 
 // ============================================================================
 // Camera
@@ -217,6 +218,26 @@ bool RlvActions::canShowNearbyAgents()
 }
 
 // ============================================================================
+// Inventory
+//
+
+bool RlvActions::canPaste(const LLInventoryCategory* pSourceCat, const LLInventoryCategory* pDestCat)
+{
+	// The user can paste the specified object into the destination if:
+	//   - the source and destination are subject to the same lock type (or none at all) => NOTE: this happens to be the same logic we use for moving
+	return (isRlvEnabled()) && (pSourceCat) && (pDestCat) &&
+		((!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().canMoveFolder(pSourceCat->getUUID(), pDestCat->getUUID())));
+}
+
+bool RlvActions::canPaste(const LLInventoryItem* pSourceItem, const LLInventoryCategory* pDestCat)
+{
+	// The user can paste the specified object into the destination if:
+	//   - the source and destination are subject to the same lock type (or none at all) => NOTE: this happens to be the same logic we use for moving
+	return (isRlvEnabled()) && (pSourceItem) && (pDestCat) &&
+		((!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().canMoveItem(pSourceItem->getUUID(), pDestCat->getUUID())));
+}
+
+// ============================================================================
 // Movement
 //
 
@@ -282,6 +303,21 @@ bool RlvActions::isLocalTp(const LLVector3d& posGlobal)
 // World interaction
 //
 
+bool RlvActions::canBuild()
+{
+	// User can access the build floater if:
+	//    - allowed to edit existing objects OR
+	//    - allowed to rez/create objects
+	return
+		(!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) ||
+		(!gRlvHandler.hasBehaviour(RLV_BHVR_REZ));
+}
+
+bool RlvActions::canEdit()
+{
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT));
+}
+
 bool RlvActions::canEdit(const LLViewerObject* pObj)
 {
 	// User can edit the specified object if:
@@ -293,6 +329,10 @@ bool RlvActions::canEdit(const LLViewerObject* pObj)
 		((!hasBehaviour(RLV_BHVR_EDITOBJ)) || (!gRlvHandler.isException(RLV_BHVR_EDITOBJ, pObj->getRootEdit()->getID())));
 }
 
+bool RlvActions::canRez()
+{
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ));
+}
 
 bool RlvActions::canSit(const LLViewerObject* pObj, const LLVector3& posOffset /*= LLVector3::zero*/)
 {
@@ -365,6 +405,11 @@ bool RlvActions::hasOpenGroupSession(const LLUUID& idGroup)
 bool RlvActions::isRlvEnabled()
 {
 	return RlvHandler::isEnabled();
+}
+
+void RlvActions::notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs)
+{
+	RlvUtil::notifyBlocked(strNotifcation, sdArgs);
 }
 
 // ============================================================================

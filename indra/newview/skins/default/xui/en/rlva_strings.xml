@@ -61,6 +61,11 @@
 			<key>value</key>
 			<string>Unable to change your active group due to an RLV restriction; switching back to "[GROUP_SLURL]"</string>
 		</map>
+		<key>blocked_invfolder</key>
+		<map>
+			<key>value</key>
+			<string>Unable to perform the requested inventory action due to an RLV locked folder.</string>
+		</map>
 		<key>blocked_nearby</key>
 		<map>
 			<key>value</key>

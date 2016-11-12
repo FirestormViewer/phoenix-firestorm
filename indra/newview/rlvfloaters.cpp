@@ -810,6 +810,9 @@ void RlvFloaterConsole::onInput(LLUICtrl* pCtrl, const LLSD& sdParam)
 			m_pOutputText->appendText("ERR: @" + strFailed, true);
 		if (!strRetained.empty())
 			m_pOutputText->appendText("RET: @" + strRetained, true);
+
+		if (RlvForceWear::instanceExists())
+			RlvForceWear::instance().done();
 	}
 
 	m_pOutputText->appendText(s_strRlvConsolePrompt, true);
