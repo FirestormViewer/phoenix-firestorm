@@ -88,6 +88,7 @@
 #include "llfloaterreg.h"
 
 #include "fsareasearch.h" // <FS:Cron> Added to provide the ability to update the impact costs in area search. </FS:Cron>
+#include "llavataractions.h"
 
 extern F32 gMinObjectDistance;
 extern BOOL gAnimateTextures;
@@ -352,6 +353,13 @@ LLViewerObject* LLViewerObjectList::processObjectUpdateFromCache(LLVOCacheEntry*
 
 	// <FS:Ansariel> Don't process derendered objects
 	if (mDerendered.end() != mDerendered.find(fullid))
+	{
+		return NULL;
+	}
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> FIRE-20288: Option to render friends only
+	if (isNonFriendDerendered(fullid, pcode))
 	{
 		return NULL;
 	}
@@ -648,6 +656,14 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 				LL_INFOS() << "Blacklisted " << (pcode == LL_PCODE_LEGACY_AVATAR ? "avatar" : "object") << " blocked." << LL_ENDL;
 				continue;
 			}
+
+			// <FS:Ansariel> FIRE-20288: Option to render friends only
+			if (isNonFriendDerendered(fullid, pcode))
+			{
+				LL_INFOS() << "Not rendering avatar " << fullid.asString() << " because it is not on the friend list" << LL_ENDL;
+				continue;
+			}
+			// </FS:Ansariel>
 
 			objectp = createObject(pcode, regionp, fullid, local_id, gMessageSystem->getSender());
 			if (!objectp)
@@ -2160,6 +2176,13 @@ LLViewerObject *LLViewerObjectList::createObject(const LLPCode pcode, LLViewerRe
 		return NULL;
 	}
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> FIRE-20288: Option to render friends only
+	if (isNonFriendDerendered(uuid, pcode))
+	{
+		return NULL;
+	}
+	// </FS:Ansariel>
 	
 	LLUUID fullid;
 	if (uuid == LLUUID::null)
@@ -2458,5 +2481,12 @@ void LLViewerObjectList::removeDerenderedItem( LLUUID const &aId )
 {
 	mDerendered.erase( aId );
 }
-
 // </FS:ND>
+
+// <FS:Ansariel> FIRE-20288: Option to render friends only
+bool LLViewerObjectList::isNonFriendDerendered(const LLUUID& id, LLPCode pcode)
+{
+	static LLCachedControl<bool> fsRenderFriendsOnly(gSavedPerAccountSettings, "FSRenderFriendsOnly");
+	return (pcode == LL_PCODE_LEGACY_AVATAR && fsRenderFriendsOnly && id != gAgentID && !LLAvatarActions::isFriend(id));
+}
+// </FS:Ansariel>
