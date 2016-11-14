@@ -11386,7 +11386,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new FSResetPerAccountControl(), "ResetPerAccountControl");
 	// </FS:Ansariel> Control enhancements
 
-	commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
+	// <FS:Ansariel> Disabled; LLFloaterInventory is unused (and dangerous) legacy code! See LLPanelMainInventory instead
+	//commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
 
 	enable.add("EnablePayObject", boost::bind(&enable_pay_object));
 	enable.add("EnablePayAvatar", boost::bind(&enable_pay_avatar));
