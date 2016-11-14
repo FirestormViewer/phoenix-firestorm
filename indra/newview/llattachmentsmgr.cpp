@@ -41,7 +41,7 @@ const F32 MAX_ATTACHMENT_REQUEST_LIFETIME = 30.0F;
 const F32 MIN_RETRY_REQUEST_TIME = 5.0F;
 const F32 MAX_BAD_COF_TIME = 30.0F;
 
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-06-24 (Catznip-3.7)
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-3.7
 class LLRegisterAttachmentCallback : public LLRequestServerAppearanceUpdateOnDestroy
 {
 public:
@@ -50,13 +50,14 @@ public:
 	{
 	}
 
-	/*virtual*/ ~LLRegisterAttachmentCallback()
+	~LLRegisterAttachmentCallback() override
 	{
 	}
 
-	/*virtual*/ void fire(const LLUUID& idItem)
+	void fire(const LLUUID& idItem) override
 	{
 		LLAttachmentsMgr::instance().onRegisterAttachmentComplete(idItem);
+		LLRequestServerAppearanceUpdateOnDestroy::fire(idItem);
 	}
 };
 // [/SL:KB]
@@ -99,7 +100,7 @@ void LLAttachmentsMgr::addAttachmentRequest(const LLUUID& item_id,
 
 void LLAttachmentsMgr::onAttachmentRequested(const LLUUID& item_id)
 {
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-06-24 (Catznip-3.7)
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-3.7
 	if (item_id.isNull())
 		return;
 // [/SL:KB]
@@ -246,7 +247,7 @@ void LLAttachmentsMgr::linkRecentlyArrivedAttachments()
 {
     if (mRecentlyArrivedAttachments.size())
     {
- // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-06-24 (Catznip-3.7)
+ // [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-3.7
 		if (!LLAppearanceMgr::instance().getAttachmentInvLinkEnable())
 		{
 			return;
@@ -291,7 +292,7 @@ void LLAttachmentsMgr::linkRecentlyArrivedAttachments()
         }
         if (ids_to_link.size())
         {
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-06-24 (Catznip-3.7)
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-3.7
 			LLPointer<LLInventoryCallback> cb = new LLRegisterAttachmentCallback();
 			for (const LLUUID& idAttach : ids_to_link)
 			{
@@ -313,7 +314,7 @@ void LLAttachmentsMgr::linkRecentlyArrivedAttachments()
     }
 }
 
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.2)
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-2.2
 bool LLAttachmentsMgr::getPendingAttachments(std::set<LLUUID>& ids) const
 {
 	ids.clear();
@@ -476,7 +477,7 @@ void LLAttachmentsMgr::onDetachRequested(const LLUUID& inv_item_id)
 
 void LLAttachmentsMgr::onDetachCompleted(const LLUUID& inv_item_id)
 {
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-10-05 (Catznip-2.2)
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-2.2
 	// (mRecentlyArrivedAttachments doesn't need pruning since it'll check the attachment is actually worn before linking)
 	clearPendingAttachmentLink(inv_item_id);
 // [/SL:KB]
@@ -506,11 +507,12 @@ void LLAttachmentsMgr::onDetachCompleted(const LLUUID& inv_item_id)
 
 bool LLAttachmentsMgr::isAttachmentStateComplete() const
 {
-// [SL:KB] - Patch: Appearance-Misc | Checked: Catznip-4.
+// [SL:KB] - Patch: Appearance-Misc | Checked: Catznip-4.3
 	return  mPendingAttachments.empty()
 		&& mAttachmentRequests.empty()
 		&& mDetachRequests.empty()
-		&& mRecentlyArrivedAttachments.empty();
+		&& mRecentlyArrivedAttachments.empty()
+		&& mPendingAttachLinks.empty();
 // [/SL:KB]
 //    return  mPendingAttachments.empty()
 //        && mAttachmentRequests.empty()
