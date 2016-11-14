@@ -59,6 +59,9 @@ public:
 	static bool canShowPanel(const std::string& floater_name, const LLSD& key);
 	static bool canShowPanel(const std::string& floater_name, const std::string& panel_name, const LLSD& key);
 // [/RLVa:KB]
+
+	// <FS:Ansariel> Clean up inventory windows on shutdown
+	void cleanup() { destroy(); }
 	
 	static void showPanel(const std::string& floater_name, const LLSD& key);
 
