@@ -784,40 +784,52 @@ void show_item_profile(const LLUUID& item_uuid)
 
 void show_item_original(const LLUUID& item_uuid)
 {
-	LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
-	if (!floater_inventory)
-	{
-		LL_WARNS() << "Could not find My Inventory floater" << LL_ENDL;
-		return;
-	}
+	// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
+	//LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+	//if (!floater_inventory)
+	//{
+	//	LL_WARNS() << "Could not find My Inventory floater" << LL_ENDL;
+	//	return;
+	//}
 
-	//sidetray inventory panel
-	LLSidepanelInventory *sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+	////sidetray inventory panel
+	//LLSidepanelInventory *sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
 
-	bool do_reset_inventory_filter = !floater_inventory->isInVisibleChain();
+	//bool do_reset_inventory_filter = !floater_inventory->isInVisibleChain();
 
-	LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel();
-	if (!active_panel) 
-	{
-		//this may happen when there is no floatera and other panel is active in inventory tab
+	//LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel();
+	//if (!active_panel) 
+	//{
+	//	//this may happen when there is no floatera and other panel is active in inventory tab
 
-		if	(sidepanel_inventory)
-		{
-			sidepanel_inventory->showInventoryPanel();
-		}
-	}
-	
-	active_panel = LLInventoryPanel::getActiveInventoryPanel();
-	if (!active_panel) 
-	{
-		return;
-	}
-	active_panel->setSelection(gInventory.getLinkedItemID(item_uuid), TAKE_FOCUS_YES);
-	
-	if(do_reset_inventory_filter)
-	{
-		reset_inventory_filter();
-	}
+	//	if	(sidepanel_inventory)
+	//	{
+	//		sidepanel_inventory->showInventoryPanel();
+	//	}
+	//}
+	//
+	//active_panel = LLInventoryPanel::getActiveInventoryPanel();
+	//if (!active_panel) 
+	//{
+	//	return;
+	//}
+	//active_panel->setSelection(gInventory.getLinkedItemID(item_uuid), TAKE_FOCUS_YES);
+	//
+	//if(do_reset_inventory_filter)
+	//{
+	//	reset_inventory_filter();
+	//}
+
+	LLFloaterReg::showInstance("inventory");
+	LLSidepanelInventory* sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+	sidepanel_inventory->showInventoryPanel();
+	LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
+	main_inventory->showAllItemsPanel();
+	main_inventory->resetFilters();
+	main_inventory->onFilterEdit("");
+	main_inventory->getActivePanel()->setFilterLinks(LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
+	main_inventory->getActivePanel()->setSelection(gInventory.getLinkedItemID(item_uuid), TAKE_FOCUS_YES);
+	// </FS:Ansariel>
 }
 
 

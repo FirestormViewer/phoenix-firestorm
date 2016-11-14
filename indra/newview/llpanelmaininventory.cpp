@@ -1336,6 +1336,13 @@ void LLPanelMainInventory::onExpandButtonClicked()
 }
 // </FS:Zi> Inventory Collapse and Expand Buttons
 
+// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
+void LLPanelMainInventory::showAllItemsPanel()
+{
+	mFilterTabs->selectTabByName("All Items");
+}
+// </FS:Ansariel>
+
 //////////////////////////////////////////////////////////////////////////////////
 // List Commands                                                                //
 
