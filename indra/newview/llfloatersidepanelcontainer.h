@@ -53,15 +53,15 @@ public:
 
 	/*virtual*/ void closeFloater(bool app_quitting = false);
 
+	// <FS:Ansariel> Clean up inventory windows on shutdown
+	void cleanup() { destroy(); }
+
 	LLPanel* openChildPanel(const std::string& panel_name, const LLSD& params);
 
 // [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
 	static bool canShowPanel(const std::string& floater_name, const LLSD& key);
 	static bool canShowPanel(const std::string& floater_name, const std::string& panel_name, const LLSD& key);
 // [/RLVa:KB]
-
-	// <FS:Ansariel> Clean up inventory windows on shutdown
-	void cleanup() { destroy(); }
 	
 	static void showPanel(const std::string& floater_name, const LLSD& key);
 
