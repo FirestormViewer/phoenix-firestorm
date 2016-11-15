@@ -624,7 +624,10 @@ BOOL LLPanelStandStopFlying::postBuild()
 void LLPanelStandStopFlying::setVisible(BOOL visible)
 {
 	//we dont need to show the panel if these buttons are not activated
-	if (gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK) visible = false;
+	// <FS:Ansariel> Stand/Fly button not showing if sitting/flying in mouselook with FSShowInterfaceInMouselook = TRUE
+	//if (gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK) visible = false;
+	if (gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK && !gSavedSettings.getBOOL("FSShowInterfaceInMouselook")) visible = false;
+	// </FS:Ansariel>
 
 	if (visible)
 	{

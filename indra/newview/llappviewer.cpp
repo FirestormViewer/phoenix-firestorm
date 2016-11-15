@@ -225,7 +225,8 @@
 #include "llfloaterreg.h"
 #include "llfloateroutfitsnapshot.h"
 #include "llfloatersnapshot.h"
-#include "llfloaterinventory.h"
+//#include "llfloaterinventory.h"
+#include "llsidepanelinventory.h"
 
 // includes for idle() idleShutdown()
 #include "llviewercontrol.h"
@@ -6358,7 +6359,10 @@ void LLAppViewer::disconnectViewer()
         expCache->cleanup();
 
 	// close inventory interface, close all windows
-	LLFloaterInventory::cleanup();
+	// <FS:Ansariel> Clean up inventory windows on shutdown
+	//LLFloaterInventory::cleanup();
+	LLSidepanelInventory::cleanup();
+	// </FS:Ansariel>
 
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2013-02-12 (Catznip-3.4)
 	// Destroying all objects below will trigger attachment detaching code and attempt to remove the COF links for them

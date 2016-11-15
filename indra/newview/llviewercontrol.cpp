@@ -90,6 +90,7 @@
 #include "fsfloaterteleporthistory.h"
 #include "fslslbridge.h"
 #include "fsradar.h"
+#include "llavataractions.h"
 #include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llhudtext.h"
@@ -97,9 +98,10 @@
 #include "llnotificationsutil.h"
 #include "llpanelplaces.h"
 #include "llstatusbar.h"
-#include "NACLantispam.h"
 #include "llviewerkeyboard.h"
+#include "llviewerobjectlist.h"
 #include "llviewerregion.h"
+#include "NACLantispam.h"
 #include "nd/ndlogthrottle.h"
 
 // Third party library includes
@@ -904,6 +906,11 @@ void handleLogThrottleChanged(const LLSD& newvalue)
 // <FS:Ansariel> FIRE-18250: Option to disable default eye movement
 void handleStaticEyesChanged()
 {
+	if (!isAgentAvatarValid())
+	{
+		return;
+	}
+
 	LLUUID anim_id(gSavedSettings.getString("FSStaticEyesUUID"));
 	if (gSavedPerAccountSettings.getBOOL("FSStaticEyes"))
 	{
@@ -914,6 +921,29 @@ void handleStaticEyesChanged()
 	{
 		gAgentAvatarp->stopMotion(anim_id);
 		gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_STOP);
+	}
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> FIRE-20288: Option to render friends only
+void handleRenderFriendsOnlyChanged(const LLSD& newvalue)
+{
+	if (newvalue.asBoolean())
+	{
+		for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
+			iter != LLCharacter::sInstances.end(); ++iter)
+		{
+			LLVOAvatar* avatar = (LLVOAvatar*)*iter;
+
+			if (avatar->getID() != gAgentID && !LLAvatarActions::isFriend(avatar->getID()))
+			{
+				gObjectList.killObject(avatar);
+				if (LLViewerRegion::sVOCacheCullingEnabled && avatar->getRegion())
+				{
+					avatar->getRegion()->killCacheEntry(avatar->getLocalID());
+				}
+			}
+		}
 	}
 }
 // </FS:Ansariel>
@@ -1139,6 +1169,9 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("FSStaticEyesUUID")->getSignal()->connect(boost::bind(&handleStaticEyesChanged));
 	gSavedPerAccountSettings.getControl("FSStaticEyes")->getSignal()->connect(boost::bind(&handleStaticEyesChanged));
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> FIRE-20288: Option to render friends only
+	gSavedPerAccountSettings.getControl("FSRenderFriendsOnly")->getSignal()->connect(boost::bind(&handleRenderFriendsOnlyChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL

@@ -1542,7 +1542,7 @@ std::string LLUrlEntryJira::getUrl(const std::string &string) const
 LLUrlEntryEmail::LLUrlEntryEmail()
 	: LLUrlEntryBase()
 {
-	mPattern = boost::regex("(mailto:)?[\\w\\.\\-]+@[\\w\\.\\-]+\\.[a-z]{2,6}",
+	mPattern = boost::regex("(mailto:)?[\\w\\.\\-]+@[\\w\\.\\-]+\\.[a-z]{2,63}",
 							boost::regex::perl | boost::regex::icase);
 	mMenuName = "menu_url_email.xml";
 	mTooltip = LLTrans::getString("TooltipEmail");

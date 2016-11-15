@@ -1204,6 +1204,16 @@
           function="Floater.Toggle"
           parameter="fs_avatar_render_settings" />
       </menu_item_call>
+      <menu_item_check
+        label="Show Friends only"
+        name="Render Friends Only">
+        <menu_item_check.on_click
+          function="TogglePerAccountControl"
+          parameter="FSRenderFriendsOnly"/>
+        <menu_item_check.on_check
+          function="CheckPerAccountControl"
+          parameter="FSRenderFriendsOnly"/>
+      </menu_item_check>
     </menu>
     <menu
      create_jump_keys="true"

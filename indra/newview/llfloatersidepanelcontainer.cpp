@@ -84,6 +84,13 @@ void LLFloaterSidePanelContainer::closeFloater(bool app_quitting)
 	}
 	
 	LLFloater::closeFloater(app_quitting);
+
+	// <FS:Ansariel> FIRE-7063: Memory is not released when closing secondary inventory floaters
+	if ((getInstanceName() == "inventory" && !getKey().isUndefined()) || getInstanceName() == "secondary_inventory")
+	{
+		destroy();
+	}
+	// </FS:Ansariel>
 }
 
 LLPanel* LLFloaterSidePanelContainer::openChildPanel(const std::string& panel_name, const LLSD& params)
