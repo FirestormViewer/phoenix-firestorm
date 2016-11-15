@@ -131,6 +131,7 @@
 		<menu_item_call label="Eksplorator animacji" name="Animation Explorer"/>
 		<menu_item_call label="Czarna lista zasobów danych (assetów)" name="asset_blacklist"/>
 		<menu_item_call label="Ustawienia renderowania awatarów" name="Avatar Render Settings"/>
+		<menu_item_check label="Renderuj tylko znajomych" name="Render Friends Only"/>
 	</menu>
 	<menu label="Buduj" name="BuildTools">
 		<menu_item_check label="Pokaż narzędzia budowania" name="Show Build Tools"/>
