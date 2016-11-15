@@ -166,6 +166,11 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 {
 	llassert( mMaxLengthBytes > 0 );
 
+	// <FS:Ansariel> Enabling LLLineEditor via XUI breaks enabled-state
+	LLUICtrl::setEnabled(TRUE);
+	setEnabled(p.enabled);
+	// </FS:Ansariel>
+
 	mScrollTimer.reset();
 	mTripleClickTimer.reset();
 	setText(p.default_text());
@@ -352,7 +357,6 @@ void LLLineEditor::reshape(S32 width, S32 height, BOOL called_from_parent)
 
 void LLLineEditor::setEnabled(BOOL enabled)
 {
-	LLUICtrl::setEnabled(enabled); // <FS:Ansariel> Enabling LLLineEditor via XUI breaks enabled-state
 	mReadOnly = !enabled;
 	setTabStop(!mReadOnly);
 	updateAllowingLanguageInput();

@@ -55,7 +55,7 @@ public:
 
 	virtual BOOL postBuild()
 	{
-		mReadOnly = TRUE;
+		setEnabled(FALSE);
 		return LLLineEditor::postBuild();
 	}
 
@@ -91,7 +91,7 @@ public:
 
 	virtual BOOL postBuild()
 	{
-		mReadOnly = TRUE;
+		setEnabled(FALSE);
 		return LLLineEditor::postBuild();
 	}
 
