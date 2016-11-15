@@ -74,6 +74,8 @@ void LLFloaterDestinations::onOpen(const LLSD& key)
 	{
 		mDestinationGuideUrlChangedSignal = LFSimFeatureHandler::instance().setDestinationGuideCallback(boost::bind(&LLFloaterDestinations::handleUrlChanged, this));
 	}
+
+	handleUrlChanged();
 }
 
 void LLFloaterDestinations::handleUrlChanged()
