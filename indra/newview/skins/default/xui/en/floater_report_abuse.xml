@@ -324,7 +324,7 @@
      height="23"
      layout="topleft"
      left="10"
-     max_length="256"
+     max_length_bytes="256"
      name="abuse_location_edit"
      top_pad="0"
      width="313" />
