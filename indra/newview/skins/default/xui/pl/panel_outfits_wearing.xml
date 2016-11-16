@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="Wearing">
+	<panel.string name="no_attachments">
+		Brak dodatków.
+	</panel.string>
+	<accordion name="wearables_accordion">
+		<accordion_tab name="tab_wearables" title="Galanteria" />
+		<accordion_tab name="tab_temp_attachments" title="Dodatki tymczasowe" />
+	</accordion>
 	<panel name="bottom_panel">
 		<menu_button name="options_gear_btn" tool_tip="Pokaż dodatkowe opcje"/>
 		<text name="avatar_complexity_label">

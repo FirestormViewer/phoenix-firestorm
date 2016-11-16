@@ -1217,6 +1217,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="ChangeYourDefaultAnimations">
 		Zmieniać Twoje domyślne animacje
 	</string>
+	<string name="ForceSitAvatar">
+		Zmuszać Twojego awatara do siadania
+	</string>
 	<string name="SnapshotSavedToDisk">
 		Zdjęcie zapisane: [FILENAME]
 	</string>
@@ -1985,6 +1988,27 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="av_render_anyone">
 		Wszystkie osoby znajdujące się wokół Ciebie nie mogą Cię widzieć.
 	</string>
+	<string name="hud_description_total">
+		Twój HUD
+	</string>
+	<string name="hud_name_with_joint">
+		[OBJ_NAME] (założone na [JNT_NAME])
+	</string>
+	<string name="hud_render_memory_warning">
+		[HUD_DETAILS] używa dużo pamięci tekstur
+	</string>
+	<string name="hud_render_cost_warning">
+		[HUD_DETAILS] zawiera dużo obiektów i tekstur, jakie są ciężkie w renderowaniu
+	</string>
+	<string name="hud_render_heavy_textures_warning">
+		[HUD_DETAILS] zawiera dużo tekstur w wielkich rozmiarach
+	</string>
+	<string name="hud_render_cramped_warning">
+		[HUD_DETAILS] zawiera zbyt dużo obiektów
+	</string>
+	<string name="hud_render_textures_warning">
+		[HUD_DETAILS] zawiera zbyt dużo tekstur
+	</string>
 	<string name="AgeYearsA">
 		[COUNT] rok
 	</string>
@@ -2158,6 +2182,9 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="ObjectOutOfRange">
 		Skrypt (obiekt poza zasięgiem)
+	</string>
+	<string name="ScriptWasDeleted">
+		Skrypt (usunięty z zawartości obiektu)
 	</string>
 	<string name="GodToolsObjectOwnedBy">
 		Obiekt [OBJECT] należący do [OWNER]
