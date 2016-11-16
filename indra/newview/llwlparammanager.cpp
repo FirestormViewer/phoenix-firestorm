@@ -719,6 +719,12 @@ boost::signals2::connection LLWLParamManager::setPresetListChangeCallback(const 
 // virtual static
 void LLWLParamManager::initSingleton()
 {
+// <FS:Ansariel> Remove circular dependency of LLWLParamManager & LLWaterParamManager singletons
+}
+
+void LLWLParamManager::init()
+{
+// </FS:Ansariel>
 	LL_DEBUGS("Windlight") << "Initializing sky" << LL_ENDL;
 
 	loadAllPresets();

@@ -232,6 +232,10 @@
 #include "exopostprocess.h"	// <FS:Ansariel> Exodus Vignette
 #include "llnetmap.h"
 #include "lggcontactsets.h"
+// <FS:Ansariel> Remove circular dependency of LLWLParamManager & LLWaterParamManager singletons
+#include "llwlparammanager.h"
+#include "llwaterparammanager.h"
+// </FS:Ansariel>
 
 #include "lltracerecording.h"
 
@@ -2307,6 +2311,13 @@ void LLViewerWindow::initWorldUI()
 	panel_ssf_container->setVisible(TRUE);
 
 	LLMenuOptionPathfindingRebakeNavmesh::getInstance()->initialize();
+
+	// <FS:Ansariel> Remove circular dependency of LLWLParamManager & LLWaterParamManager singletons
+	// LLWLParamManager & LLWaterParamManager instances will be created as part of the toolbars
+	// because of the quick prefs floater, so do it right before the toolbars get created
+	LLWLParamManager::instance().init();
+	LLWaterParamManager::instance().init();
+	// </FS:Ansariel>
 
 	// Load and make the toolbars visible
 	// Note: we need to load the toolbars only *after* the user is logged in and IW
