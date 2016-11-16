@@ -1475,7 +1475,10 @@ void LLFloaterTools::getMediaState()
 		  &&first_object->permModify() 
 	      ))
 	{
-		getChildView("Add_Media")->setEnabled(FALSE);
+		// <FS:Ansariel> Doesn't exist as of 2016-11-16
+		//getChildView("Add_Media")->setEnabled(FALSE);
+		getChildView("add_media")->setEnabled(FALSE);
+		// </FS:Ansariel>
 		media_info->clear();
 		clearMediaSettings();
 		return;
@@ -1486,7 +1489,10 @@ void LLFloaterTools::getMediaState()
 	
 	if(!has_media_capability)
 	{
-		getChildView("Add_Media")->setEnabled(FALSE);
+		// <FS:Ansariel> Doesn't exist as of 2016-11-16
+		//getChildView("Add_Media")->setEnabled(FALSE);
+		getChildView("add_media")->setEnabled(FALSE);
+		// </FS:Ansariel>
 		LL_WARNS("LLFloaterTools: media") << "Media not enabled (no capability) in this region!" << LL_ENDL;
 		clearMediaSettings();
 		return;
@@ -1582,7 +1588,7 @@ void LLFloaterTools::getMediaState()
 	// update UI depending on whether "object" (prim or face) has media
 	// and whether or not you are allowed to edit it.
 	
-	getChildView("Add_Media")->setEnabled(editable);
+	//getChildView("Add_Media")->setEnabled(editable); // <FS:Ansariel> Doesn't exist as of 2016-11-16
 	// IF all the faces have media (or all dont have media)
 	if ( LLFloaterMediaSettings::getInstance()->mIdenticalHasMediaInfo )
 	{
