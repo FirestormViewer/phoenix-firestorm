@@ -64,6 +64,10 @@ void LLPresetsManager::triggerChangeSignal()
 void LLPresetsManager::createMissingDefault()
 {
 	// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
+	//if(gDirUtilp->getLindenUserDir().empty())
+	//{
+	//	return;
+	//}
 	//std::string default_file = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_GRAPHIC, PRESETS_DEFAULT + ".xml");
 	std::string default_file = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR, PRESETS_GRAPHIC, PRESETS_DEFAULT + ".xml");
 	// </FS:Ansariel>

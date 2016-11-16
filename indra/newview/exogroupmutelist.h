@@ -24,8 +24,9 @@
 
 class exoGroupMuteList : public LLSingleton<exoGroupMuteList>
 {
+	LLSINGLETON(exoGroupMuteList);
+
 public:
-	exoGroupMuteList();
 	bool isMuted(const LLUUID &group) const;
 	void add(const LLUUID &group);
 	void remove(const LLUUID &group);

@@ -33,7 +33,9 @@
 
 // PieChildRegistry contains a list of allowed child types for the XUI definition
 struct PieChildRegistry : public LLChildRegistry<PieChildRegistry>
-{};
+{
+	LLSINGLETON_EMPTY_CTOR(PieChildRegistry);
+};
 
 class PieMenu : public LLMenuGL
 {

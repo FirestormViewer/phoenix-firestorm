@@ -26,19 +26,15 @@
 
 class LLControlVariable;
 
-class SanityCheck
-:	public LLSingleton<SanityCheck>
+class SanityCheck : public LLSingleton<SanityCheck>
 {
-	friend class LLSingleton<SanityCheck>;
+	LLSINGLETON_EMPTY_CTOR(SanityCheck);
+	~SanityCheck() { };
 
-	private:
-		SanityCheck();
-		~SanityCheck();
+public:
+	void init();
 
-	public:
-		void init();
-
-		static void onSanity(LLControlVariable* controlp);
+	static void onSanity(LLControlVariable* controlp);
 };
 
 #endif // SANITYCHECK_H

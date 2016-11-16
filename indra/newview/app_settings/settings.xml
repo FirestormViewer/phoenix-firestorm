@@ -8991,6 +8991,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>MuteListLimit</key>
+    <map>
+      <key>Comment</key>
+      <string>Maximum number of entries in the mute list</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>1000</integer>
+    </map>
     <key>NearMeRange</key>
     <map>
       <key>Comment</key>

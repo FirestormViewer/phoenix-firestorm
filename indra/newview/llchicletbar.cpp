@@ -42,7 +42,7 @@ namespace
 	const std::string& PANEL_CHICLET_NAME	= "chiclet_list_panel";
 }
 
-LLChicletBar::LLChicletBar(const LLSD&)
+LLChicletBar::LLChicletBar()
 :	mChicletPanel(NULL),
 	mToolbarStack(NULL)
 {
@@ -58,7 +58,7 @@ LLChicletBar::LLChicletBar(const LLSD&)
 // <FS:Ansariel> [FS communication UI]
 LLChicletBar::~LLChicletBar()
 {
-	if (!LLSingleton<LLIMMgr>::destroyed())
+	if (LLIMMgr::instanceExists())
 	{
 		LLIMMgr::getInstance()->removeSessionObserver(this);
 	}

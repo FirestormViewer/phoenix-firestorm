@@ -486,6 +486,17 @@
         <key>Value</key>
         <integer>0</integer>
       </map>
+    <key>PreviousScreenshotForReport</key>
+    <map>
+      <key>Comment</key>
+      <string>Use Previous Screenshot for Abuse report</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <!-- Settings below are for back compatibility only.
     They are not used in current viewer anymore. But they can't be removed to avoid
     influence on previous versions of the viewer in case of settings are not used or default value
@@ -511,7 +522,7 @@
     <key>LogChat</key>
         <map>
         <key>Comment</key>
-            <string>Log Chat</string>
+            <string>Obsolete - this setting is no longer used and has no effect.</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>
@@ -522,7 +533,7 @@
     <key>LogChatIM</key>
         <map>
         <key>Comment</key>
-            <string>Log Incoming Instant Messages with Chat</string>
+            <string>Obsolete - this setting is no longer used and has no effect.</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>
@@ -533,7 +544,7 @@
     <key>LogChatTimestamp</key>
         <map>
         <key>Comment</key>
-            <string>Log Timestamp of Chat</string>
+            <string>Obsolete - this setting is no longer used and has no effect.</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>
@@ -541,6 +552,7 @@
         <key>Value</key>
             <integer>0</integer>
         </map>
+    <!-- End of back compatibility settings -->
     <key>TranslatingEnabled</key>
         <map>
         <key>Comment</key>
@@ -596,7 +608,6 @@
         <key>Value</key>
              <integer>1</integer>
         </map>
-    <!-- End of back compatibility settings -->
     
     <!-- Firestorm settings -->
     <key>DebugLookAt</key>

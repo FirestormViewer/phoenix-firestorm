@@ -64,7 +64,7 @@ FSFloaterIMContainer::~FSFloaterIMContainer()
 	mNewMessageConnection.disconnect();
 	LLTransientFloaterMgr::getInstance()->removeControlView(LLTransientFloaterMgr::IM, this);
 
-	if (!LLSingleton<LLIMMgr>::destroyed())
+	if (LLIMMgr::instanceExists())
 	{
 		LLIMMgr::getInstance()->removeSessionObserver(this);
 	}

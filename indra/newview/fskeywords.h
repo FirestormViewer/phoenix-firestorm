@@ -33,10 +33,10 @@ class LLChat;
 
 class FSKeywords : public LLSingleton<FSKeywords>
 {
-public:
-	FSKeywords();
+	LLSINGLETON(FSKeywords);
 	virtual ~FSKeywords();
 
+public:
 	void updateKeywords();
 	bool chatContainsKeyword(const LLChat& chat, bool is_local);
 	void static notify(const LLChat& chat); // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground

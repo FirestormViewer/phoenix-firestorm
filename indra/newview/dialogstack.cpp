@@ -28,15 +28,6 @@
 
 #include "llviewercontrol.h"
 
-DialogStack::DialogStack() :
-	LLSingleton<DialogStack>()
-{
-}
-
-DialogStack::~DialogStack()
-{
-}
-
 void DialogStack::update()
 {
 	// show dialog stack browse icon when more than one dialog is on the screen

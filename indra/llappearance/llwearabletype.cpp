@@ -71,8 +71,7 @@ struct WearableEntry : public LLDictionaryEntry
 class LLWearableDictionary : public LLSingleton<LLWearableDictionary>,
 							 public LLDictionary<LLWearableType::EType, WearableEntry>
 {
-public:
-	LLWearableDictionary();
+	LLSINGLETON(LLWearableDictionary);
 
 // [RLVa:KB] - Checked: 2010-03-03 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
 protected:

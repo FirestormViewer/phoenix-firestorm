@@ -44,8 +44,10 @@ const std::string CS_PSEUDONYM = "--- ---";
 
 class LGGContactSets : public LLSingleton<LGGContactSets>
 {
-	friend class LLSingleton<LGGContactSets>;
 	LOG_CLASS(LGGContactSets);
+
+	LLSINGLETON(LGGContactSets);
+	~LGGContactSets();
 
 public:
 	typedef std::vector<std::string> string_vec_t;
@@ -136,9 +138,6 @@ public:
 	// [/FS:CR]
 	
 private:
-	LGGContactSets();
-	~LGGContactSets();
-
 	void toneDownColor(LLColor4& color) const;
 	uuid_vec_t getFriendsInSet(const std::string& set_name);
 	uuid_vec_t getFriendsInAnySet();

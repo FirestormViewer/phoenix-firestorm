@@ -27,15 +27,6 @@
 #include "llviewercontrol.h"
 #include "sanitycheck.h"
 
-SanityCheck::SanityCheck()
-:	LLSingleton<SanityCheck>()
-{
-}
-
-SanityCheck::~SanityCheck()
-{
-}
-
 void SanityCheck::init()
 {
 	struct f : public LLControlGroup::ApplyFunctor

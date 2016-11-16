@@ -28,9 +28,9 @@
 
 class RlvUIEnabler : public LLSingleton<RlvUIEnabler>
 {
+	LLSINGLETON(RlvUIEnabler);
+
 protected:
-	RlvUIEnabler();
-	friend class LLSingleton<RlvUIEnabler>;
 	friend class RlvHandler;
 
 	/*

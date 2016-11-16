@@ -150,14 +150,14 @@ BOOL LLPanelSnapshotInventory::postBuild()
 // virtual
 void LLPanelSnapshotInventory::onOpen(const LLSD& key)
 {
-	getChild<LLUICtrl>("hint_lbl")->setTextArg("[UPLOAD_COST]", llformat("%d", LLGlobalEconomy::Singleton::getInstance()->getPriceUpload()));
+	getChild<LLUICtrl>("hint_lbl")->setTextArg("[UPLOAD_COST]", llformat("%d", LLGlobalEconomy::getInstance()->getPriceUpload()));
 	// <FS:CR> FIRE-10537 - Temp texture uploads aren't functional on SSB regions
-	if (LLGlobalEconomy::Singleton::getInstance()->getPriceUpload() == 0
+	if (LLGlobalEconomy::getInstance()->getPriceUpload() == 0
 		|| gAgent.getRegion()->getCentralBakeVersion() > 0)
 	{
 		gSavedSettings.setBOOL("TemporaryUpload", FALSE);
 	}
-	getChild<LLCheckBoxCtrl>("inventory_temp_upload")->setVisible(LLGlobalEconomy::Singleton::getInstance()->getPriceUpload() > 0 && gAgent.getRegion()->getCentralBakeVersion() == 0);
+	getChild<LLCheckBoxCtrl>("inventory_temp_upload")->setVisible(LLGlobalEconomy::getInstance()->getPriceUpload() > 0 && gAgent.getRegion()->getCentralBakeVersion() == 0);
 	// </FS:CR>
 	LLPanelSnapshot::onOpen(key);
 }
@@ -187,7 +187,7 @@ LLPanelSnapshotInventory::~LLPanelSnapshotInventory()
 
 void LLPanelSnapshotInventoryBase::onSend()
 {
-    S32 expected_upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+    S32 expected_upload_cost = LLGlobalEconomy::getInstance()->getPriceUpload();
     if (can_afford_transaction(expected_upload_cost))
     {
         if (mSnapshotFloater)
@@ -223,7 +223,7 @@ BOOL LLPanelOutfitSnapshotInventory::postBuild()
 // virtual
 void LLPanelOutfitSnapshotInventory::onOpen(const LLSD& key)
 {
-    getChild<LLUICtrl>("hint_lbl")->setTextArg("[UPLOAD_COST]", llformat("%d", LLGlobalEconomy::Singleton::getInstance()->getPriceUpload()));
+    getChild<LLUICtrl>("hint_lbl")->setTextArg("[UPLOAD_COST]", llformat("%d", LLGlobalEconomy::getInstance()->getPriceUpload()));
     LLPanelSnapshot::onOpen(key);
 }
 

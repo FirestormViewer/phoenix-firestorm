@@ -50,10 +50,10 @@ class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLVOInventoryListene
 	friend class FSLSLBridgeReAttachTimer;
 	friend class FSLSLBridgeStartCreationTimer;
 
-public:
-	FSLSLBridge();
+	LLSINGLETON(FSLSLBridge);
 	~FSLSLBridge();
 
+public:
 	typedef boost::function<void(const LLSD &)> tCallback;
 
 	bool lslToViewer(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID);

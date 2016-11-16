@@ -8,6 +8,7 @@
  width="610"
  height="435"
  save_rect="true"
+ single_instance="true"
  can_resize="true"
  can_minimize="true"
  can_close="true"

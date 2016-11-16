@@ -97,6 +97,7 @@ target_link_libraries(
   ${OPENSSL_LIBRARIES}
   ${CRYPTO_LIBRARIES}
   ${BOOST_THREAD_LIBRARY}
+  ${BOOST_SYSTEM_LIBRARY}
   )
 
 # tests
@@ -133,8 +134,8 @@ if (LL_TESTS)
       ${CURL_LIBRARIES}
       ${OPENSSL_LIBRARIES}
       ${CRYPTO_LIBRARIES}
-      ${BOOST_SYSTEM_LIBRARY}
       ${BOOST_THREAD_LIBRARY}
+      ${BOOST_SYSTEM_LIBRARY}
       )
 
   # If http_proxy is in the current environment (e.g. to fetch s3-proxy
@@ -201,8 +202,8 @@ endif (DARWIN)
       ${CURL_LIBRARIES}
       ${OPENSSL_LIBRARIES}
       ${CRYPTO_LIBRARIES}
-      ${BOOST_SYSTEM_LIBRARY}
       ${BOOST_THREAD_LIBRARY}
+      ${BOOST_SYSTEM_LIBRARY}
       )
 
   add_executable(http_texture_load

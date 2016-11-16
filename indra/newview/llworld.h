@@ -61,8 +61,8 @@ class LLVOAvatar;
 
 class LLWorld : public LLSingleton<LLWorld>
 {
+	LLSINGLETON(LLWorld);
 public:
-	LLWorld();
 	void destroyClass();
 
 	void refreshLimits();// <AW: opensim-limits>

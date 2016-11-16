@@ -33,6 +33,7 @@
 
 #include "lllogchat.h"
 #include "llvoicechannel.h"
+#include "llinitdestroyclass.h"
 
 #include "llcoros.h"
 #include "lleventcoro.h"
@@ -61,6 +62,7 @@ private:
  */
 class LLIMModel :  public LLSingleton<LLIMModel>
 {
+	LLSINGLETON(LLIMModel);
 public:
 
 	struct LLIMSession : public boost::signals2::trackable
@@ -166,7 +168,6 @@ public:
 	};
 	
 
-	LLIMModel();
 
 	// <FS:Ansariel> [FS communication UI] Re-added to not toast if our IM floater is active
 	//we should control the currently active session
@@ -351,6 +352,7 @@ public:
 
 class LLIMMgr : public LLSingleton<LLIMMgr>
 {
+	LLSINGLETON(LLIMMgr);
 	friend class LLIMModel;
 
 public:
@@ -361,8 +363,6 @@ public:
 		INVITATION_TYPE_IMMEDIATE = 2
 	};
 
-	LLIMMgr();
-	virtual ~LLIMMgr() {};
 
 	// Add a message to a session. The session can keyed to sesion id
 	// or agent id.

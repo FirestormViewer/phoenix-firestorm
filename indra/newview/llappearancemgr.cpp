@@ -4504,7 +4504,6 @@ LLAppearanceMgr::LLAppearanceMgr():
 	mAttachmentInvLinkEnabled(false),
 	mOutfitIsDirty(false),
 	mOutfitLocked(false),
-	mInFlightCounter(0),
 	mInFlightTimer(),
 	mIsInUpdateAppearanceFromCOF(false),
     mOutstandingAppearanceBakeRequest(false),

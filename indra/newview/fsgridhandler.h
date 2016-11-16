@@ -101,6 +101,11 @@ protected:
  **/
 class LLGridManager : public LLSingleton<LLGridManager>
 {
+	// when the grid manager is instantiated, the default grids are automatically
+	// loaded, and the grids favorites list is loaded from the xml file.
+	LLSINGLETON(LLGridManager);
+	~LLGridManager();
+
 public:
 	typedef enum 
 	{
@@ -115,19 +120,14 @@ public:
 		FAIL,
 		REMOVE
 	} AddState;
-	
-	// when the grid manager is instantiated, the default grids are automatically
-	// loaded, and the grids favorites list is loaded from the xml file.
-	LLGridManager();
-	~LLGridManager();
-	
+
 	void initGrids();
 	void initSystemGrids();
 	void initGridList(std::string grid_file, AddState state);
 	void initCmdLineGrids();
 	void resetGrids();
 	// grid list management
- 	bool isReadyToLogin(){return mReadyToLogin;}
+	bool isReadyToLogin(){return mReadyToLogin;}
 
 	// add a grid to the list of grids
 	void addGrid(const std::string& loginuri);

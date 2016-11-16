@@ -33,10 +33,11 @@
 
 class FSData : public LLSingleton<FSData>
 {
-	friend class LLSingleton<FSData>;
 	LOG_CLASS(FSData);
+
+	LLSINGLETON(FSData);
+
 public:
-	FSData();
 
 	void startDownload();
 	void downloadAgents();

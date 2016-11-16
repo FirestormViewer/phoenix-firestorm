@@ -36,10 +36,7 @@ class LLUICtrl;
 
 class FSNearbyChat : public LLSingleton<FSNearbyChat>
 {
-	friend class LLSingleton<FSNearbyChat>;
-
-private:
-	FSNearbyChat();
+	LLSINGLETON(FSNearbyChat);
 	~FSNearbyChat();
 
 	void sendMsg();

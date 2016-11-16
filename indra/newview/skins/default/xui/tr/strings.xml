@@ -68,6 +68,7 @@ libcurl Sürümü: [LIBCURL_VERSION]
 J2C Kod Çözücü Sürümü: [J2C_VERSION]
 Ses Sürücüsü Sürümü: [AUDIO_DRIVER_VERSION]
 LLCEFLib/CEF Sürümü: [LLCEFLIB_VERSION]
+LibVLC Sürümü: [LIBVLC_VERSION]
 Ses Sunucusu Sürümü: [VOICE_VERSION]
 	</string>
 	<string name="AboutTraffic">

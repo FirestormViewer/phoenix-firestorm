@@ -135,6 +135,7 @@
 #include "llpathfindingmanager.h"
 #include "llstartup.h"
 #include "boost/unordered_map.hpp"
+#include "llcleanup.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
 #include "rlvhandler.h"
@@ -634,7 +635,7 @@ void init_menus()
 //	// *TODO:Also fix cost in llfolderview.cpp for Inventory menus
 //	const std::string upload_cost("10");
 	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
-	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+	S32 cost = LLGlobalEconomy::getInstance()->getPriceUpload();
 	std::string upload_cost;
 #ifdef OPENSIM
 	if (LLGridManager::getInstance()->isInOpenSim())
@@ -10537,7 +10538,7 @@ class LLWorldPostProcess : public view_listener_t
 void handle_flush_name_caches()
 {
 	// <FS:Ansariel> Crash fix
-	//LLAvatarNameCache::cleanupClass();
+	//SUBSYSTEM_CLEANUP(LLAvatarNameCache);
 	LLAvatarNameCache::clearCache();
 	// </FS:Ansariel>
 	if (gCacheName) gCacheName->clear();
@@ -10587,7 +10588,7 @@ class LLToggleUIHints : public view_listener_t
 
 void LLUploadCostCalculator::calculateCost()
 {
- 	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+	S32 upload_cost = LLGlobalEconomy::getInstance()->getPriceUpload();
  
  	// getPriceUpload() returns -1 if no data available yet.
 // <FS:AW opensim currency support>

@@ -91,7 +91,8 @@ private:
 
 class NACLAntiSpamRegistry : public LLSingleton<NACLAntiSpamRegistry>
 {
-	friend class LLSingleton<NACLAntiSpamRegistry>;
+	LLSINGLETON(NACLAntiSpamRegistry);
+	~NACLAntiSpamRegistry();
 
 public:
 	void setGlobalQueue(bool value);
@@ -117,9 +118,6 @@ public:
 	void processObjectPropertiesFamily(LLMessageSystem* msg);
 
 private:
-	NACLAntiSpamRegistry();
-	~NACLAntiSpamRegistry();
-
 	const char* getQueueName(EAntispamQueue queue);
 
 	void blockGlobalEntry(const LLUUID& source);

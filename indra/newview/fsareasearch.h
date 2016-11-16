@@ -29,7 +29,6 @@
 #define FS_AREASEARCH_H
 
 #include "llfloater.h"
-#include "llsingleton.h"
 #include "llframetimer.h"
 #include "llsaleinfo.h"
 #include "llcategory.h"
@@ -102,7 +101,7 @@ struct FSObjectProperties
 // Main class for area search
 // holds the search engine and main floater
 // --------------------------------------------------------------------
-class FSAreaSearch : public LLSingleton<FSAreaSearch>, public LLFloater
+class FSAreaSearch : public LLFloater
 {
 	LOG_CLASS(FSAreaSearch);
 public:
