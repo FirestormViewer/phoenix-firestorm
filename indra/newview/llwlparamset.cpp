@@ -306,13 +306,11 @@ void LLWLParamSet::mix(LLWLParamSet& src, LLWLParamSet& dest, F32 weight)
 
 	// keep cloud positions and coverage the same
 	/// TODO masking will do this later
-	// <FS:Ansariel> FIRE-8633: Do not ignore cloud coverage and position values when doing windlight param set mixing; Fix by Drake Arconis
-	//F32 cloudPos1X = (F32) mParamValues["cloud_pos_density1"][0].asReal();
-	//F32 cloudPos1Y = (F32) mParamValues["cloud_pos_density1"][1].asReal();
-	//F32 cloudPos2X = (F32) mParamValues["cloud_pos_density2"][0].asReal();
-	//F32 cloudPos2Y = (F32) mParamValues["cloud_pos_density2"][1].asReal();
-	//F32 cloudCover = (F32) mParamValues["cloud_shadow"][0].asReal();
-	// </FS:Ansariel>
+	F32 cloudPos1X = (F32) mParamValues["cloud_pos_density1"][0].asReal();
+	F32 cloudPos1Y = (F32) mParamValues["cloud_pos_density1"][1].asReal();
+	F32 cloudPos2X = (F32) mParamValues["cloud_pos_density2"][0].asReal();
+	F32 cloudPos2Y = (F32) mParamValues["cloud_pos_density2"][1].asReal();
+	F32 cloudCover = (F32) mParamValues["cloud_shadow"][0].asReal();
 
 	LLSD srcVal;
 	LLSD destVal;
@@ -401,13 +399,11 @@ void LLWLParamSet::mix(LLWLParamSet& src, LLWLParamSet& dest, F32 weight)
 	// now setup the sun properly
 
 	// reset those cloud positions
-	// <FS:Ansariel> FIRE-8633: Do not ignore cloud coverage and position values when doing windlight param set mixing; Fix by Drake Arconis
-	//mParamValues["cloud_pos_density1"][0] = cloudPos1X;
-	//mParamValues["cloud_pos_density1"][1] = cloudPos1Y;
-	//mParamValues["cloud_pos_density2"][0] = cloudPos2X;
-	//mParamValues["cloud_pos_density2"][1] = cloudPos2Y;
-	//mParamValues["cloud_shadow"][0] = cloudCover;
-	// </FS:Ansariel>
+	mParamValues["cloud_pos_density1"][0] = cloudPos1X;
+	mParamValues["cloud_pos_density1"][1] = cloudPos1Y;
+	mParamValues["cloud_pos_density2"][0] = cloudPos2X;
+	mParamValues["cloud_pos_density2"][1] = cloudPos2Y;
+	mParamValues["cloud_shadow"][0] = cloudCover;
 }
 
 void LLWLParamSet::updateCloudScrolling(void) 

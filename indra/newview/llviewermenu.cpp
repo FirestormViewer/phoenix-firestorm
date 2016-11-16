@@ -63,7 +63,7 @@
 #include "llfloaterbuycontents.h"
 #include "llbuycurrencyhtml.h"
 #include "llfloatergodtools.h"
-#include "llfloaterinventory.h"
+//#include "llfloaterinventory.h"
 #include "llfloaterimcontainer.h"
 #include "llfloaterland.h"
 #include "llfloaterimnearbychat.h"
@@ -90,6 +90,7 @@
 #include "llinventoryfunctions.h"
 #include "llpanellogin.h"
 #include "llpanelblockedlist.h"
+#include "llpanelmaininventory.h"
 #include "llmarketplacefunctions.h"
 #include "llmenuoptionpathfindingrebakenavmesh.h"
 #include "llmoveview.h"
@@ -466,7 +467,7 @@ void set_merchant_SLM_menu()
 	gToolBarView->enableCommand(command->id(), true);
 }
 
-void check_merchant_status()
+void check_merchant_status(bool force)
 {
 	// <FS:Ansariel> Don't show merchant outbox or SL Marketplace stuff outside SL
 	if (!LLGridManager::getInstance()->isInSecondLife())
@@ -478,9 +479,11 @@ void check_merchant_status()
 
     if (!gSavedSettings.getBOOL("InventoryOutboxDisplayBoth"))
     {
-        // Reset the SLM status: we actually want to check again, that's the point of calling check_merchant_status()
-        LLMarketplaceData::instance().setSLMStatus(MarketplaceStatusCodes::MARKET_PLACE_NOT_INITIALIZED);
-        
+        if (force)
+        {
+            // Reset the SLM status: we actually want to check again, that's the point of calling check_merchant_status()
+            LLMarketplaceData::instance().setSLMStatus(MarketplaceStatusCodes::MARKET_PLACE_NOT_INITIALIZED);
+        }
         // Hide SLM related menu item
         gMenuHolder->getChild<LLView>("MarketplaceListings")->setVisible(FALSE);
         
@@ -11440,7 +11443,9 @@ void initialize_menus()
 	view_listener_t::addMenu(new FSResetPerAccountControl(), "ResetPerAccountControl");
 	// </FS:Ansariel> Control enhancements
 
-	commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
+	// <FS:Ansariel> LLFloaterInventory is unused (and dangerous) legacy code! See LLPanelMainInventory instead
+	//commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
+	commit.add("Inventory.NewWindow", boost::bind(&LLPanelMainInventory::newWindow));
 
 	enable.add("EnablePayObject", boost::bind(&enable_pay_object));
 	enable.add("EnablePayAvatar", boost::bind(&enable_pay_avatar));

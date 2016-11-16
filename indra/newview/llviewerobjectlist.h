@@ -248,6 +248,9 @@ private:
     static void reportPhysicsFlagFailure(LLSD &obejectList);
     void fetchPhisicsFlagsCoro(std::string url);
 
+	// <FS:Ansariel> FIRE-20288: Option to render friends only
+	bool isNonFriendDerendered(const LLUUID& id, LLPCode pcode);
+
 // <FS:ND> Remember objects we did derender. We might get object updates for them that create new instances. In those cases we kill them again.
 private:
 	std::map< LLUUID, bool > mDerendered;

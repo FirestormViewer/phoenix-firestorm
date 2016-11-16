@@ -242,6 +242,7 @@ set(viewer_SOURCE_FILES
     llbuycurrencyhtml.cpp
     llcallingcard.cpp
     llchannelmanager.cpp
+    llchatbar.cpp
     llchathistory.cpp
     llchatitemscontainerctrl.cpp
     llchatmsgbox.cpp
@@ -990,6 +991,7 @@ set(viewer_HEADER_FILES
     llcallingcard.h
     llcapabilityprovider.h
     llchannelmanager.h
+    llchatbar.h
     llchathistory.h
     llchatitemscontainerctrl.h
     llchatmsgbox.h
@@ -1922,7 +1924,7 @@ set(viewer_APPSETTINGS_FILES
     app_settings/foldertypes.xml
     app_settings/graphic_preset_controls.xml
     app_settings/grass.xml
-    app_settings/grids.fallback.xml
+    app_settings/grids.xml
     app_settings/growl_notifications.xml
     app_settings/high_graphics.xml
     app_settings/ignorable_dialogs.xml

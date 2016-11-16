@@ -428,7 +428,8 @@ LLScriptEdCore::LLScriptEdCore(
 	mPreprocTab(NULL),
 	// </FS:CR>
 	mCompiling(false), //<FS:KC> Compile indicators, recompile button
-	mHasScriptData(FALSE)
+	mHasScriptData(FALSE),
+	mScriptRemoved(FALSE)
 {
 	setFollowsAll();
 	setBorderVisible(FALSE);
@@ -803,7 +804,7 @@ void LLScriptEdCore::initButtonBar()
 
 void LLScriptEdCore::updateButtonBar()
 {
-	mSaveBtn->setEnabled(hasChanged());
+	mSaveBtn->setEnabled(hasChanged() && !mScriptRemoved);
 	mCutBtn->setEnabled(mCurrentEditor->canCut());
 	mCopyBtn->setEnabled(mCurrentEditor->canCopy());
 	mPasteBtn->setEnabled(mCurrentEditor->canPaste());
@@ -813,7 +814,7 @@ void LLScriptEdCore::updateButtonBar()
 	mLoadFromDiskBtn->setEnabled(mEditor->canLoadOrSaveToFile());
 	//<FS:Kadah> Recompile button
 	static LLCachedControl<bool> FSScriptEditorRecompileButton(gSavedSettings, "FSScriptEditorRecompileButton");
-	mSaveBtn2->setEnabled(hasChanged() || (mLSLProc && FSScriptEditorRecompileButton && !mCompiling));
+	mSaveBtn2->setEnabled((hasChanged() && !mScriptRemoved) || (mLSLProc && FSScriptEditorRecompileButton && !mCompiling));
 	mSaveBtn2->setLabel((!mLSLProc || !FSScriptEditorRecompileButton || hasChanged()) ? LLTrans::getString("save_file_verb") : LLTrans::getString("recompile_script_verb"));
 	//</FS:Kadah>
 }
@@ -1081,7 +1082,7 @@ void LLScriptEdCore::draw()
 {
 // <FS:CR> Advanced Script Editor
 	//BOOL script_changed	= hasChanged();
-	//mSaveBtn->setEnabled(script_changed);
+	//mSaveBtn->setEnabled(script_changed && !mScriptRemoved);
 	updateButtonBar();
 // </FS:CR>
 
@@ -1271,7 +1272,7 @@ void LLScriptEdCore::addHelpItemToHistory(const std::string& help_string)
 
 BOOL LLScriptEdCore::canClose()
 {
-	if(mForceClose || !hasChanged())
+	if(mForceClose || !hasChanged() || mScriptRemoved)
 	{
 		return TRUE;
 	}
@@ -2084,6 +2085,17 @@ BOOL LLPreviewLSL::postBuild()
 	return LLPreview::postBuild();
 }
 
+void LLPreviewLSL::draw()
+{
+	const LLInventoryItem* item = getItem();
+	if(!item)
+	{
+		setTitle(LLTrans::getString("ScriptWasDeleted"));
+		mScriptEd->setItemRemoved(TRUE);
+	}
+
+	LLPreview::draw();
+}
 // virtual
 void LLPreviewLSL::callbackLSLCompileSucceeded()
 {

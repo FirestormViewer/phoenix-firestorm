@@ -17,7 +17,7 @@
 		<panel label="通知" name="msgs"/>
 		<panel label="プライバシー" name="im"/>
 		<panel label="アドバンス" name="advanced1"/>
-		<panel label="UI" name="starlightUI1"/>
+		<panel label="UI" name="ui"/>
 		<panel label="スキン" name="skins"/>
 		<panel label="レポート" name="crashreports"/>
 		<panel label="Firestorm" name="firestorm"/>

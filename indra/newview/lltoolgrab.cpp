@@ -146,7 +146,10 @@ BOOL LLToolGrab::handleMouseDown(S32 x, S32 y, MASK mask)
 	// call the base class to propogate info to sim
 	LLTool::handleMouseDown(x, y, mask);
 	
+	// <FS:Ansariel> FIRE-19357: Re-revert MAINT-4488 again to fix FPS weapons
+	//if (!gAgent.leftButtonBlocked())
 	if (!gAgent.leftButtonGrabbed())
+	// </FS:Ansariel>
 	{
 		// can grab transparent objects (how touch event propagates, scripters rely on this)
 		gViewerWindow->pickAsync(x, y, mask, pickCallback, /*BOOL pick_transparent*/ TRUE);

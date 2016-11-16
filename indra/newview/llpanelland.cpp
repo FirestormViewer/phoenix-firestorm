@@ -127,7 +127,7 @@ void LLPanelLandInfo::refresh()
 		getChildView("label_area")->setVisible(false);
 
 		//mTextPrice->setText(LLStringUtil::null);
-		getChild<LLUICtrl>("textbox price")->setValue(LLStringUtil::null);
+		//getChild<LLUICtrl>("textbox price")->setValue(LLStringUtil::null); // <FS:Ansariel> Doesn't exist as of 2016-11-16
 
 		getChildView("button buy land")->setEnabled(FALSE);
 		getChildView("button abandon land")->setEnabled(FALSE);

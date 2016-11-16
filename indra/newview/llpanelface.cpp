@@ -1507,8 +1507,10 @@ void LLPanelFace::updateUI()
 			mColorSwatch->setValid(FALSE);
 		}
 		getChildView("color trans")->setEnabled(FALSE);
-		getChildView("rpt")->setEnabled(FALSE);
-		getChildView("tex offset")->setEnabled(FALSE);
+		// <FS:Ansariel> Doesn't exist as of 2016-11-16
+		//getChildView("rpt")->setEnabled(FALSE);
+		//getChildView("tex offset")->setEnabled(FALSE);
+		// </FS:Ansariel>
 		getChildView("tex gen")->setEnabled(FALSE);
 		getChildView("label shininess")->setEnabled(FALSE);
 		getChildView("label bumpiness")->setEnabled(FALSE);

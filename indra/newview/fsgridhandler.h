@@ -49,14 +49,13 @@ const std::string GRID_IS_SYSTEM_GRID_VALUE		= "system_grid";
 const std::string GRID_IS_FAVORITE_VALUE		= "favorite";
 const std::string GRID_LOGIN_IDENTIFIER_TYPES	= "login_identifier_types";
 
-// <Opensim/Aurora consts>
 const std::string GRID_NICK_VALUE			= "gridnick";
 const std::string GRID_REGISTER_NEW_ACCOUNT = "register";
 const std::string GRID_FORGOT_PASSWORD		= "password";
 const std::string GRID_HELP					= "help";
 const std::string GRID_ABOUT				= "about";
 const std::string GRID_SEARCH				= "search";
-const std::string GRID_PROFILE_URI_VALUE	= "profileuri";
+const std::string GRID_WEB_PROFILE_VALUE	= "web_profile_url";
 const std::string GRID_SENDGRIDINFO			= "SendGridInfoToViewerOnLogin";
 const std::string GRID_DIRECTORY_FEE		= "DirectoryFee";
 const std::string GRID_PLATFORM				= "platform";
@@ -68,14 +67,12 @@ const std::string GRID_MESSAGE				= "message";
 // forms.
 const std::string GRID_SLURL_BASE		= "slurl_base";
 const std::string GRID_APP_SLURL_BASE	= "app_slurl_base";
-// </Opensim>
 
 // Inworldz special
 #define INWORLDZ_URI "inworldz.com:8002"
 
 class GridInfoRequestResponder;
 
-// <AW opensim>
 struct GridEntry
 {
 	LLSD grid;
@@ -83,7 +80,6 @@ struct GridEntry
 	bool set_current;
 	std::string last_http_error;
 };
-// </AW opensim>
 
 class LLInvalidGridName
 {
@@ -106,7 +102,6 @@ protected:
 class LLGridManager : public LLSingleton<LLGridManager>
 {
 public:
-	// <AW opensim>
 	typedef enum 
 	{
 		FETCH,
@@ -126,7 +121,6 @@ public:
 	LLGridManager();
 	~LLGridManager();
 	
-// <AW opensim>
 	void initGrids();
 	void initSystemGrids();
 	void initGridList(std::string grid_file, AddState state);
@@ -136,12 +130,10 @@ public:
  	bool isReadyToLogin(){return mReadyToLogin;}
 
 	// add a grid to the list of grids
-// <FS:AW  grid management>
 	void addGrid(const std::string& loginuri);
 	void removeGrid(const std::string& grid);
 	void reFetchGrid() { reFetchGrid(mGrid, true); }
 	void reFetchGrid(const std::string& grid, bool set_current = false);
-// </FS:AW  grid management>
 
 	/// Retrieve a map of grid-name -> label
 	std::map<std::string, std::string> getKnownGrids();
@@ -149,8 +141,6 @@ public:
 	// this was getGridInfo - renamed to avoid ambiguity with the OpenSim grid_info
 	void getGridData(const std::string& grid, LLSD &grid_info);
 	void getGridData(LLSD &grid_info) { getGridData(mGrid, grid_info); }
-
-// </AW opensim>	
 
 	// current grid management
 
@@ -179,12 +169,13 @@ public:
 	
 	/// Get the uri of  the selected grid; example: "login.agni.lindenlab.com"
 	std::string getGrid() const { return mGrid; }
-// <FS:AW  grid management>
+
 	// get the first (and very probably only) login URI of a specified grid
 	std::string getLoginURI(const std::string& grid);
-// </FS:AW  grid management>
+
 	// get the Login URIs of the current grid
 	void getLoginURIs(std::vector<std::string>& uris);
+
 	std::string getHelperURI();
 	std::string getLoginPage();
 	std::string getGridLoginID() { return mGridList[mGrid][GRID_ID_VALUE]; }	
@@ -201,6 +192,14 @@ public:
 	std::string getAppSLURLBase(const std::string& grid);
 	std::string getAppSLURLBase() { return getAppSLURLBase(mGrid); }
 
+	/// Return the url of the resident profile web site for the given grid
+	std::string getWebProfileURL(const std::string& grid);
+
+	/// Return the url of the resident profile web site for the selected grid
+	std::string getWebProfileURL() { return getWebProfileURL(mGrid); }
+
+	void setWebProfileUrl(const std::string& url) { mGridList[mGrid][GRID_WEB_PROFILE_VALUE] = url; }
+
 	bool hasGrid(const std::string& grid){ return mGridList.has(grid); }
 	bool isTemporary(){ return mGridList[mGrid].has("FLAG_TEMPORARY"); }
 	bool isTemporary(const std::string& grid){ return mGridList[grid].has("FLAG_TEMPORARY"); }
@@ -214,12 +213,11 @@ public:
 	
 	std::string getGridByLabel( const std::string &grid_label, bool case_sensitive = false);
 
-// <AW opensim>
 	std::string getGridByProbing( const std::string &probe_for, bool case_sensitive = false);
 	std::string getGridByGridNick( const std::string &grid_nick, bool case_sensitive = false);
 	std::string getGridByHostName( const std::string &host_name, bool case_sensitive = false);
 	std::string getGridByAttribute(const std::string &attribute, const std::string &attribute_value, bool case_sensitive );
-// </AW opensim>
+
 	bool isSystemGrid(const std::string& grid) 
 	{ 
 		return mGridList.has(grid) &&
@@ -227,39 +225,25 @@ public:
 	           mGridList[grid][GRID_IS_SYSTEM_GRID_VALUE].asBoolean(); 
 	}
 	bool isSystemGrid() { return isSystemGrid(mGrid); }
-	// Mark this grid as a favorite that should be persisited on 'save'
-	// this is currently used to persist a grid after a successful login
-// <AW: opensim>
-	// Not used anymore, keeping commented as reminder for merge conflicts
-	//void setFavorite() { mGridList[mGrid][GRID_IS_FAVORITE_VALUE] = TRUE; }
-// </AW opensim>
-// <FS:AW  grid management>
+
 	typedef boost::function<void(bool success)> grid_list_changed_callback_t;
 	typedef boost::signals2::signal<void(bool success)> grid_list_changed_signal_t;
 
 	boost::signals2::connection addGridListChangedCallback(grid_list_changed_callback_t cb);
 	grid_list_changed_signal_t	mGridListChangedSignal;
-// <FS:AW  grid management>
-// <AW opensim>
 	bool isInSecondLife();
 	bool isInSLMain();
 	bool isInSLBeta();
 	bool isInOpenSim();
-// <FS:CR> Aurora Sim
 	bool isInAuroraSim();
-// </FS:CR> Aurora Sim
 	void saveGridList();
-// </AW opensim>
 	void clearFavorites();
 	void addGrid(GridEntry* grid_info, AddState state);
 	
-	// <FS:CR> FIRE-10567 - Variable classified fee
 	void setClassifiedFee(const S32 classified_fee) { sClassifiedFee = classified_fee; }
 	S32 getClassifiedFee() { return sClassifiedFee; }
-	// <FS:CR> Variable parcel listing fee
 	void setDirectoryFee(const S32 directory_fee) { sDirectoryFee = directory_fee; }
 	S32 getDirectoryFee() { return sDirectoryFee; }
-	// </FS:CR>
 
 private:
 	friend class GridInfoRequestResponder;
@@ -272,8 +256,8 @@ private:
 	void gridInfoResponderCB(GridEntry* grid_data);
 
 	void setGridData(const LLSD &grid_info) { mGridList[mGrid]=grid_info; }
-	S32 sClassifiedFee;	// <FS:CR> FIRE-10567 - Variable classified fee
-	S32 sDirectoryFee; // <FS:CR> Variable directory listing fee
+	S32 sClassifiedFee;
+	S32 sDirectoryFee;
 
 protected:
 
@@ -292,14 +276,11 @@ protected:
 	std::string mGridFile;
 	std::string mStartupGrid;
 	LLSD mGridList;
-// <AW opensim>
 	LLSD mConnectedGrid;
 	int mResponderCount;
 	bool mReadyToLogin;
 	bool mCommandLineDone;
-// </AW opensim>
-	
-	// <FS:CR> OpenSim
+
 	enum e_grid_platform
 	{
 		GP_NOTSET,
@@ -308,7 +289,6 @@ protected:
 		GP_OPENSIM,
 		GP_AURORA
 	} EGridPlatform;
-	// </FS:CR>
 };
 
 #endif // FS_GRIDHANDLER_H

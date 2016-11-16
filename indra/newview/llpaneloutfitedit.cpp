@@ -1074,11 +1074,6 @@ void LLPanelOutfitEdit::filterWearablesBySelectedItem(void)
 		case LLAssetType::AT_BODYPART:
 			applyListViewFilter(LVIT_BODYPART);
 			break;
-		// <FS:Ansariel> FIRE-19480 / BUG-20032: Selected wearable type in Edit Outfit -> Add more is off by 1
-		//case LLAssetType::AT_GESTURE:
-		//	applyListViewFilter(LVIT_GESTURES);
-		//	break;
-		// </FS:Ansariel>
 		case LLAssetType::AT_CLOTHING:
 		default:
 			applyListViewFilter(LVIT_CLOTHING);

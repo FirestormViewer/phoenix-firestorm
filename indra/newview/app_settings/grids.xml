@@ -523,6 +523,8 @@
             <string>http://www.osgrid.org/</string>
         <key>slurl_base</key>
             <string>hop://login.osgrid.org/</string>
+        <key>web_profile_url</key>
+            <string>http://my.osgrid.org/?name=[AGENT_NAME]</string>
         </map>
     <key>login.ufsgrid.com:8002</key>
         <map>
@@ -637,6 +639,8 @@
             <string>secondlife://util.aditi.lindenlab.com/secondlife/</string>
         <key>system_grid</key>
             <integer>1</integer>
+        <key>web_profile_url</key>
+            <string>https://my.aditi.lindenlab.com/</string>
         </map>
     <key>util.agni.lindenlab.com</key>
         <map>
@@ -668,6 +672,8 @@
             <string>http://maps.secondlife.com/secondlife/</string>
         <key>system_grid</key>
             <integer>1</integer>
+        <key>web_profile_url</key>
+            <string>https://my.secondlife.com/</string>
         </map>
     </map>
 </llsd>

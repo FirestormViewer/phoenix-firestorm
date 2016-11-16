@@ -57,17 +57,18 @@
 #include "llavatarpropertiesprocessor.h"
 #include "llcallingcard.h"
 #include "llfloaterreg.h"
+#include "llfloaterworldmap.h"
 #include "llfirstuse.h"
-#include "llnotificationsutil.h"
-#include "lltrans.h"
-#include "llvoiceclient.h"
 #include "llgroupactions.h"
+#include "llnotificationsutil.h"
+#include "llpanelprofile.h"
+#include "llparcel.h"
+#include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llviewernetwork.h" //LLGridManager
-#include "llfloaterworldmap.h"
-#include "llparcel.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
+#include "llvoiceclient.h"
 
 static LLPanelInjector<FSPanelProfileSecondLife> t_panel_profile_secondlife("panel_profile_secondlife");
 static LLPanelInjector<FSPanelProfileWeb> t_panel_web("panel_profile_web");
@@ -892,34 +893,21 @@ void FSPanelProfileWeb::updateData()
 
 void FSPanelProfileWeb::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
-	//[ADD: FIRE-2266: SJ] make sure username is always filled even when Displaynames are not enabled
 	std::string username = av_name.getAccountName();
 	if (username.empty())
 	{
 		username = LLCacheName::buildUsername(av_name.getDisplayName());
 	}
-	//[ADD: FIRE-2266: SJ] Adding link to webprofiles on profile which opens Web Profiles in browser
-	std::string url;
-	if (LLGridManager::getInstance()->isInSLMain())
-	{
-		url = gSavedSettings.getString("WebProfileURL");
-	}
-	else if (LLGridManager::getInstance()->isInSLBeta())
-	{
-		url = gSavedSettings.getString("WebProfileNonProductionURL");
-	}
 	else
 	{
-		//OpenSimFIXME: get from grid - but how?
-		// possibilities:     * grid_info  (profiles accessible outside the grid)
-		//             * login message (profiles only within the grid)
-		//            * capability (better for decentaliced environment)
+		LLStringUtil::replaceChar(username, ' ', '.');
+	}
+
+	mURLWebProfile = getProfileURL(username);
+	if (mURLWebProfile.empty())
+	{
 		return;
 	}
-	LLSD subs;
-	subs["AGENT_NAME"] = username;
-	mURLWebProfile = LLWeb::expandURLSubstitutions(url,subs);
-
 	mWebProfileButton->setEnabled(TRUE);
 	
 	if (getIsLoading()) //if the tab was opened before name was resolved, load the panel now

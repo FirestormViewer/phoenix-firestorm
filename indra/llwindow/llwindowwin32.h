@@ -111,13 +111,16 @@ public:
 	/*virtual*/ void spawnWebBrowser(const std::string& escaped_url, bool async);
 				void openFile(const std::string& file_name);
 
-//-TT Window Title Access
+	/*virtual*/ F32 getSystemUISize();
+
+	// <FS:TT> Window Title Access
 	/*virtual*/ void setTitle(const std::string& win_title);
-//-TT
+	// </FS:TT>
+
 	LLWindowCallbacks::DragNDropResult completeDragNDropRequest( const LLCoordGL gl_coord, const MASK mask, LLWindowCallbacks::DragNDropAction action, const std::string url );
 
 	static std::vector<std::string> getDynamicFallbackFontList();
-
+	static void setDPIAwareness();
 protected:
 	LLWindowWin32(LLWindowCallbacks* callbacks,
 		const std::string& title, const std::string& name, int x, int y, int width, int height, U32 flags, 

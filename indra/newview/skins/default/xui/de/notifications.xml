@@ -336,6 +336,9 @@ Wenn diese Rolle nicht mehr diese Fähigkeiten haben soll, deaktivieren Sie sie 
 		Sie sind dabei, [COUNT] Mitglieder aus der Gruppe zu verbannen.
 		<usetemplate ignoretext="Verbannen mehrerer Gruppenmitglieder bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Verbannen"/>
 	</notification>
+	<notification name="GroupBanUserOnBanlist">
+		Einigen Einwohnern wurde keine Einladung geschickt, da sie aus der Gruppe verbannt wurden.
+	</notification>
 	<notification name="AttachmentDrop">
 		Sie möchten Ihren Anhang wirklich fallen lassen?
 Möchten Sie fortfahren?
@@ -656,30 +659,12 @@ Weitere Informationen finden Sie auf [_URL].
 		</url>
 		<usetemplate ignoretext="Meine Hardware wird nicht unterstützt" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
-	<notification name="IntelOldDriver">
+	<notification name="OldGPUDriver">
 		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip. Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
 
-    Unter [_URL] nach aktualisierten Treibern suchen?
+    Unter [URL] nach aktualisierten Treibern suchen?
 		<url name="url">
-			http://www.intel.com/p/de_DE/support/detect/graphics
-		</url>
-		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
-	</notification>
-	<notification name="AMDOldDriver">
-		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip. Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
-
-    Unter [_URL] nach aktualisierten Treibern suchen?
-		<url name="url">
-			http://support.amd.com/de/Pages/AMDSupportHub.aspx
-		</url>
-		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
-	</notification>
-	<notification name="NVIDIAOldDriver">
-		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip. Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
-
-    Unter [_URL] nach aktualisierten Treibern suchen?
-		<url name="url">
-			http://www.nvidia.com/Download/index.aspx?lang=de-de
+			[URL]
 		</url>
 		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
@@ -1412,6 +1397,11 @@ Sie können [APP_NAME] normal verwenden. Andere Benutzer können Sie korrekt dar
 	</notification>
 	<notification name="AgentComplexity">
 		Ihre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 Avatarkomplexität] ist [AGENT_COMPLEXITY].
+		<usetemplate ignoretext="Warnen, wnen sich meine Avatar-Komplexität ändert" name="notifyignore"/>
+	</notification>
+	<notification name="HUDComplexityWarning">
+		[HUD_REASON], es wird wahrscheinlich die Performance negativ beeinflussen.
+		<usetemplate ignoretext="Warnen, falls meine HUD-Komplexität zu hoch ist" name="notifyignore"/>
 	</notification>
 	<notification name="FirstRun">
 		Installation von [APP_NAME] vollständig abgeschlossen.
@@ -1554,6 +1544,9 @@ Ersetzen Sie die Textur [TEXTURE_NUM] mit einer Bilddatei von maximal 1024x1024 
 	</notification>
 	<notification name="OwnerCanNotBeDenied">
 		Der Eigentümer des Grundbesitzes kann nicht zur Liste der „Verbannten Einwohner“ hinzugefügt werden.
+	</notification>
+	<notification name="ProblemAddingEstateManagerBanned">
+		Verbannter Einwohner kann nicht zur Liste der Grundbesitzverwalter hinzugefügt werden.
 	</notification>
 	<notification name="CanNotChangeAppearanceUntilLoaded">
 		Das Aussehen lässt sich erst ändern, wenn Kleider und Form/Gestalt geladen sind.
@@ -1726,6 +1719,10 @@ Wenn Sie die neuesten Features und Fixes ausprobieren möchten, gehen Sie zur Se
 		Möchten Sie Ihren Internetbrowser öffnen, um diesen Inhalt anzuzeigen?
 		<usetemplate ignoretext="Meinen Browser starten, um eine Webseite anzuzeigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="SystemUIScaleFactorChanged">
+		Die Bildschirmskalierung des Betriebssystems hat sich seit dem letzten Start geändert. Möchten Sie die Einstellungsseite für die UI-Skalierung öffnen?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
 	<notification name="WebLaunchJoinNow">
 		Möchten Sie Ihre [http://secondlife.com/account/ Startseite] aufrufen, um Ihr Konto zu verwalten?
 		<usetemplate ignoretext="Meinen Browser starten, um mein Konto zu verwalten" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
@@ -1765,6 +1762,10 @@ Wenn Sie die neuesten Features und Fixes ausprobieren möchten, gehen Sie zur Se
 Diese Gruppe verlassen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="GroupDepart">
+		Sie haben die Gruppe „[group_name]“ verlassen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="GroupLeaveConfirmMemberWithFee">
 		Sie sind gegenwärtig Mitglied der Gruppe &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Erneutes Beitreten kostet [AMOUNT] L$.
 Diese Gruppe verlassen?
@@ -1772,6 +1773,10 @@ Diese Gruppe verlassen?
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">
 		Sie können die Gruppe nicht verlassen, da Sie der letzte Besitzer der Gruppe sind. Weisen Sie die Besitzerrolle zuerst einem anderen Mitglied zu.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GroupDepartError">
+		Verlassen der Gruppe nicht möglich.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmKick">
@@ -2243,7 +2248,11 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 		</form>
 	</notification>
 	<notification name="TooManyPrimsSelected">
-		Zu viele Prims wurden ausgewählt.  Bitte wählen Sie höchstens [MAX_PRIM_COUNT] Prims aus und versuchen Sie es erneut.
+		Zu viele Primitive wurden ausgewählt. Bitte wählen Sie höchstens [MAX_PRIM_COUNT] Primitive aus und versuchen Sie es erneut.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="TooManyScriptsSelected">
+		Zu viele Skripte in den ausgewählten Primitiven. Bitte wählen Sie weniger Primitive aus und versuchen Sie es erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ProblemImportingEstateCovenant">
@@ -2251,13 +2260,13 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ProblemAddingEstateManager">
-		Es gibt Probleme beim Hinzufügen eines neuen Grundbesitzverwalters.  Bei mindestens einem Grundbesitz ist die Verwalterliste voll.
+		Es gibt Probleme beim Hinzufügen eines neuen Grundbesitzverwalters. Bei mindestens einem Grundbesitz ist die Verwalterliste voll.
 	</notification>
 	<notification name="ProblemAddingEstateBanManager">
 		Grundbesitzer oder Grundstücksverwalter kann nicht auf die Bannliste gesetzt werden.
 	</notification>
 	<notification name="ProblemAddingEstateGeneric">
-		Problem beim Hinzufügen zu dieser Grundbesitzliste.  Bei mindestens einem Grundbesitz ist die Liste voll.
+		Problem beim Hinzufügen zu dieser Grundbesitzliste. Bei mindestens einem Grundbesitz ist die Liste voll.
 	</notification>
 	<notification name="UnableToLoadNotecardAsset">
 		Notizkarten-Asset konnte nicht geladen werden.
@@ -2415,6 +2424,10 @@ Inventarobjekt(e) verschieben?
 		Zahlung fehlgeschlagen: Objekt nicht gefunden.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="PaymentBlockedButtonMismatch">
+		Zahlung gestoppt: Der gezahlte Preis stimmt mit keinem der Bezahlen-Buttons für dieses Objekt überein.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="OpenObjectCannotCopy">
 		Sie haben keine Berechtigung zum Kopieren von Elementen in diesem Objekt.
 	</notification>
@@ -2449,6 +2462,10 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 	<notification name="ConfirmUnlink">
 		Soll das ausgewählte Objekt wirklich getrennt werden?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Trennen"/>
+	</notification>
+	<notification name="HelpReportAbuseConfirm">
+		Vielen Dank, dass Sie sich die Zeit genommen haben, uns über den Vorfall zu informieren.
+Wir werden Ihre Meldung auf mögliche Verstöße untersuchen und angemessene Aktionen ergreifen.
 	</notification>
 	<notification name="HelpReportAbuseSelectCategory">
 		Wählen Sie eine Missbrauchskategorie aus.
@@ -4082,6 +4099,9 @@ Sie ist voll oder startet in Kürze neu.
 		Objekt „[OBJECT_NAME]“ kann nicht nach
 [OBJ_POSITION] in Region [REGION_NAME] verschoben werden, da nicht genügend Ressourcen für dieses Objekt auf dieser Parzelle vorhanden sind.
 	</notification>
+	<notification name="NoParcelPermsNoObject">
+		Kopieren fehlgeschlagen, da Sie keinen Zugang zu dieser Parzelle haben.
+	</notification>
 	<notification name="CantMoveObjectRegionVersion">
 		Objekt „[OBJECT_NAME]“ kann nicht nach
 [OBJ_POSITION] in Region [REGION_NAME] verschoben werden, da die andere Region eine ältere Version verwendet, die das Empfangen dieses Objekts per Regionswechsel nicht unterstützt.
@@ -4136,6 +4156,12 @@ Sie ist voll oder startet in Kürze neu.
 	</notification>
 	<notification name="CantSaveModifyAttachment">
 		Kein Speichern in Objektinhalt möglich: Dadurch würden die Anhängeberechtigungen geändert.
+	</notification>
+	<notification name="AttachmentHasTooMuchInventory">
+		Ihre Anhänge haben zu viel Inhalt, um mehr hinzuzufügen.
+	</notification>
+	<notification name="IllegalAttachment">
+		Der Anhang hat einen nicht existierenden Punkt am Avatar angefordert. Er wurde stattdessen zur Brust hinzugefügt.
 	</notification>
 	<notification name="TooManyScripts">
 		Zu viele Skripts.
@@ -4228,6 +4254,12 @@ Sie ist voll oder startet in Kürze neu.
 	</notification>
 	<notification name="TeleportedByObjectUnknownUser">
 		Sie wurden von Objekt „[OBJECT_NAME]“, das einem unbekannten Benutzer gehört, teleportiert.
+	</notification>
+	<notification name="StandDeniedByObject">
+		Objekt „[OBJECT_NAME]“ erlaubt Ihnen momentan nicht aufzustehen.
+	</notification>
+	<notification name="ResitDeniedByObject">
+		Objekt „[OBJECT_NAME]“ erlaubt Ihnen momentan nicht, den Sitz zu wechseln.
 	</notification>
 	<notification name="CantCreateObjectRegionFull">
 		Angefordertes Objekt kann nicht erstellt werden. Die Region ist voll.
@@ -4533,6 +4565,9 @@ Wählen Sie eine kleinere Landfläche aus.
 	</notification>
 	<notification name="CantTransfterMoneyRegionDisabled">
 		Geldüberweisungen an Objekte sind in dieser Region gegenwärtig deaktiviert.
+	</notification>
+	<notification name="DroppedMoneyTransferRequest">
+		Überweisung kann aufgrund von Systemauslastung nicht durchgeführt werden.
 	</notification>
 	<notification name="CantPayNoAgent">
 		Nicht ersichtlich, wer bezahlt werden muss.

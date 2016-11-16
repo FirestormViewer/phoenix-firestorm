@@ -81,6 +81,10 @@ public:
 	LLInventoryPanel* getPanel() { return mActivePanel; }
 	LLInventoryPanel* getActivePanel() { return mActivePanel; }
 	const LLInventoryPanel* getActivePanel() const { return mActivePanel; }
+	// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
+	void showAllItemsPanel();
+	void resetFilters();
+	// </FS:Ansariel>
 
 	const std::string& getFilterText() const { return mFilterText; }
 	
@@ -89,6 +93,8 @@ public:
 	void onFilterEdit(const std::string& search_string );
 
 	void setFocusFilterEditor();
+
+	static void newWindow(); // <FS:Ansariel> Changed to public static
 
 	// <FS:Zi> Filter dropdown
 	void onFilterTypeSelected(const std::string& filter_type_name);
@@ -122,9 +128,10 @@ protected:
 	// menu callbacks
 	void doToSelected(const LLSD& userdata);
 	void closeAllFolders();
-	void newWindow();
+	//void newWindow(); // <FS:Ansariel> Changed to public static
 	void doCreate(const LLSD& userdata);
-	void resetFilters();
+	// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
+	//void resetFilters(); // Moved to public
 
 	// <FS:Zi> Sort By menu handlers
 	void setSortBy(const LLSD& userdata);

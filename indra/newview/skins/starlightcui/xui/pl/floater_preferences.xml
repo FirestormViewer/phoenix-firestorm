@@ -20,7 +20,7 @@
 		<panel label="Powiadomienia" name="msgs"/>
 		<panel label="Prywatność" name="im"/>
 		<panel label="Zaawansowane" name="advanced1"/>
-		<panel label="Interfejs" name="starlightUI1"/>
+		<panel label="Interfejs" name="ui"/>
 		<panel label="Skórki" name="skins"/>
 		<panel label="Błędy" name="crashreports"/>
 		<panel label="Firestorm" name="firestorm"/>

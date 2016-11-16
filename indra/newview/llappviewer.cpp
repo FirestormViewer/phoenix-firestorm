@@ -226,7 +226,8 @@
 #include "llfloaterreg.h"
 #include "llfloateroutfitsnapshot.h"
 #include "llfloatersnapshot.h"
-#include "llfloaterinventory.h"
+//#include "llfloaterinventory.h"
+#include "llsidepanelinventory.h"
 
 // includes for idle() idleShutdown()
 #include "llviewercontrol.h"
@@ -775,8 +776,9 @@ LLAppViewer::LLAppViewer()
 	mPeriodicSlowFrame(LLCachedControl<bool>(gSavedSettings,"Periodic Slow Frame", FALSE)),
 	mFastTimerLogThread(NULL),
 	mUpdater(new LLUpdaterService()),
-	mSaveSettingsOnExit(true),		// <FS:Zi> Backup Settings
 	mSettingsLocationList(NULL),
+	mIsFirstRun(false),
+	mSaveSettingsOnExit(true),		// <FS:Zi> Backup Settings
 	mPurgeTextures(false) // <FS:Ansariel> FIRE-13066
 {
 	if(NULL != sInstance)
@@ -1317,17 +1319,23 @@ bool LLAppViewer::init()
 #if LL_WINDOWS
 	if (gGLManager.mGLVersion < LLFeatureManager::getInstance()->getExpectedGLVersion())
 	{
+		std::string url;
 		if (gGLManager.mIsIntel)
 		{
-			LLNotificationsUtil::add("IntelOldDriver");
+			url = LLTrans::getString("IntelDriverPage");
 		}
 		else if (gGLManager.mIsNVIDIA)
 		{
-			LLNotificationsUtil::add("NVIDIAOldDriver");
+			url = LLTrans::getString("NvidiaDriverPage");
 		}
 		else if (gGLManager.mIsATI)
 		{
-			LLNotificationsUtil::add("AMDOldDriver");
+			url = LLTrans::getString("AMDDriverPage");
+		}
+
+		if (!url.empty())
+		{
+			LLNotificationsUtil::add("OldGPUDriver", LLSD().with("URL", url));
 		}
 	}
 #endif
@@ -2929,10 +2937,16 @@ bool LLAppViewer::initConfiguration()
 
 	if (gSavedSettings.getBOOL("FirstRunThisInstall"))
 	{
+		// Set firstrun flag to indicate that some further init actiona should be taken 
+		// like determining screen DPI value and so on
+		mIsFirstRun = true;
+
+		// <FS>
 		if (gSavedSettings.getString("SessionSettingsFile").empty())
-        {
-            gSavedSettings.setString("SessionSettingsFile", "settings_firestorm.xml");
-        }
+		{
+			gSavedSettings.setString("SessionSettingsFile", "settings_firestorm.xml");
+		}
+		// </FS>
 		
 // <FS:CR> Set ForceShowGrid to TRUE on first run if we're on an OpenSim build
 #ifdef OPENSIM
@@ -2941,7 +2955,6 @@ bool LLAppViewer::initConfiguration()
 #endif // OPENSIM
 // </FS:CR>
 		
-		// Note that the "FirstRunThisInstall" settings is currently unused.
 		gSavedSettings.setBOOL("FirstRunThisInstall", FALSE);
 	}
 	
@@ -3688,7 +3701,8 @@ bool LLAppViewer::initWindow()
 		.fullscreen(false)
 #endif // !LL_DARWIN
 // </FS:CR>
-		.ignore_pixel_depth(ignorePixelDepth);
+		.ignore_pixel_depth(ignorePixelDepth)
+		.first_run(mIsFirstRun);
 
 	gViewerWindow = new LLViewerWindow(window_params);
 
@@ -6348,7 +6362,10 @@ void LLAppViewer::disconnectViewer()
         expCache->cleanup();
 
 	// close inventory interface, close all windows
-	LLFloaterInventory::cleanup();
+	// <FS:Ansariel> Clean up inventory windows on shutdown
+	//LLFloaterInventory::cleanup();
+	LLSidepanelInventory::cleanup();
+	// </FS:Ansariel>
 
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2013-02-12 (Catznip-3.4)
 	// Destroying all objects below will trigger attachment detaching code and attempt to remove the COF links for them
@@ -6586,7 +6603,7 @@ void LLAppViewer::handleLoginComplete()
 	}
 	if (!full_name.empty())
 	{
-		gWindowTitle += std::string("- ") + full_name;
+		gWindowTitle += std::string(" - ") + full_name;
 		LLStringUtil::truncate(gWindowTitle, 255);
 		gViewerWindow->getWindow()->setTitle(gWindowTitle);
 	}
@@ -6752,7 +6769,9 @@ void LLAppViewer::launchUpdater()
 */
 void LLAppViewer::showReleaseNotesIfRequired()
 {
-	if (LLVersionInfo::getChannelAndVersion() != gLastRunVersion && gSavedSettings.getBOOL("UpdaterShowReleaseNotes"))
+	if (LLVersionInfo::getChannelAndVersion() != gLastRunVersion
+		&& gSavedSettings.getBOOL("UpdaterShowReleaseNotes")
+		&& !gSavedSettings.getBOOL("FirstLoginThisInstall"))
 	{
 		LLSD info(getViewerInfo());
 		LLWeb::loadURLInternal(info["VIEWER_RELEASE_NOTES_URL"]);

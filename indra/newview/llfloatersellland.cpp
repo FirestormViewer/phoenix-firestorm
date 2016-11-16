@@ -259,7 +259,6 @@ void LLFloaterSellLandUI::setBadge(const char* id, Badge badge)
 	static std::string badgeOK("badge_ok.j2c");
 	static std::string badgeNote("badge_note.j2c");
 	static std::string badgeWarn("badge_warn.j2c");
-	static std::string badgeError("badge_error.j2c");
 	
 	std::string badgeName;
 	switch (badge)
@@ -268,7 +267,7 @@ void LLFloaterSellLandUI::setBadge(const char* id, Badge badge)
 		case BADGE_OK:		badgeName = badgeOK;	break;
 		case BADGE_NOTE:	badgeName = badgeNote;	break;
 		case BADGE_WARN:	badgeName = badgeWarn;	break;
-		case BADGE_ERROR:	badgeName = badgeError;	break;
+		case BADGE_ERROR:	badgeName = badgeWarn;	break;
 	}
 	
 	getChild<LLUICtrl>(id)->setValue(badgeName);

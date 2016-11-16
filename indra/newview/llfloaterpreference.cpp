@@ -136,6 +136,7 @@
 #include "fsavatarrenderpersistence.h"
 #include "fsdroptarget.h"
 #include "fsfloaterimcontainer.h"
+#include "fssearchableui.h"
 #include "growlmanager.h"
 #include "lfsimfeaturehandler.h"
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
@@ -154,8 +155,9 @@
 #include "llwlparammanager.h"
 #include "NACLantispam.h"
 #include "../llcrashlogger/llcrashlogger.h"
-
-#include "fssearchableui.h"
+#if LL_WINDOWS
+#include <VersionHelpers.h>
+#endif
 
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 //const F32 BANDWIDTH_UPDATER_TIMEOUT = 0.5f;
@@ -766,6 +768,19 @@ BOOL LLFloaterPreference::postBuild()
 	gSavedSettings.getControl("AvatarNameTagMode")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
 	gSavedSettings.getControl("FSTagShowARW")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
 	onAvatarTagSettingsChanged();
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> Set max. UI scaling factor depending on max. supported OS scaling factor
+#if LL_WINDOWS
+	if (IsWindowsVersionOrGreater(10, 0, 0))
+	{
+		getChild<LLSliderCtrl>("ui_scale_slider")->setMaxValue(4.5f);
+	}
+	else if (IsWindows8Point1OrGreater())
+	{
+		getChild<LLSliderCtrl>("ui_scale_slider")->setMaxValue(2.5f);
+	}
+#endif
 	// </FS:Ansariel>
 
 	return TRUE;
@@ -2134,6 +2149,7 @@ void LLFloaterPreference::refreshEnabledState()
 	getChildView("block_list")->setEnabled(LLLoginInstance::getInstance()->authSuccess());
 
 	// Cannot have floater active until caps have been received
+	//getChild<LLButton>("default_creation_permissions")->setEnabled(LLStartUp::getStartupState() < STATE_STARTED ? false : true);
 	getChild<LLButton>("fs_default_creation_permissions")->setEnabled(LLStartUp::getStartupState() < STATE_STARTED ? false : true);
 }
 
@@ -2284,9 +2300,6 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
 	disableUnavailableSettings();
 
 	getChildView("block_list")->setEnabled(LLLoginInstance::getInstance()->authSuccess());
-
-	// Cannot have floater active until caps have been received
-	getChild<LLButton>("default_creation_permissions")->setEnabled(LLStartUp::getStartupState() < STATE_STARTED ? false : true);
 }
 
 
@@ -2327,10 +2340,7 @@ void LLAvatarComplexityControls::setIndirectMaxArc()
 	else
 	{
 		// This is the inverse of the calculation in updateMaxComplexity
-		// <FS:Ansariel> Fix math rounding error
-		//indirect_max_arc = (U32)((log(max_arc) - MIN_ARC_LOG) / ARC_LIMIT_MAP_SCALE) + MIN_INDIRECT_ARC_LIMIT;
 		indirect_max_arc = (U32)ll_round(((log(F32(max_arc)) - MIN_ARC_LOG) / ARC_LIMIT_MAP_SCALE)) + MIN_INDIRECT_ARC_LIMIT;
-		// </FS:Ansariel>
 	}
 	gSavedSettings.setU32("IndirectMaxComplexity", indirect_max_arc);
 }
@@ -3156,10 +3166,7 @@ void LLAvatarComplexityControls::updateMax(LLSliderCtrl* slider, LLTextBox* valu
 	{
 		// if this is changed, the inverse calculation in setIndirectMaxArc
 		// must be changed to match
-		// <FS:Ansariel> Fix math rounding error
-		//max_arc = (U32)exp(MIN_ARC_LOG + (ARC_LIMIT_MAP_SCALE * (indirect_value - MIN_INDIRECT_ARC_LIMIT)));
 		max_arc = (U32)ll_round(exp(MIN_ARC_LOG + (ARC_LIMIT_MAP_SCALE * (indirect_value - MIN_INDIRECT_ARC_LIMIT))));
-		// </FS:Ansariel>
 	}
 
 	gSavedSettings.setU32("RenderAvatarMaxComplexity", (U32)max_arc);

@@ -1103,7 +1103,11 @@ bool idle_startup()
 					LL_DEBUGS("AppInit") << "FirstLoginThisInstall off" << LL_ENDL;
 				}
 			}
-
+			display_startup();
+			if (gViewerWindow->getSystemUIScaleFactorChanged())
+			{
+				LLViewerWindow::showSystemUIScaleFactorChanged();
+			}
 			LLStartUp::setStartupState( STATE_LOGIN_WAIT );		// Wait for user input
 		}
 		else
@@ -4265,18 +4269,11 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 // <FS:CR> FIRE-8063: Read Aurora web profile url from login data
 #ifdef OPENSIM
 	std::string web_profile_url = response["web_profile_url"];
-	if(!web_profile_url.empty())
+	if (!web_profile_url.empty())
 	{
 		// We got an answer from the grid -> use that for map for the current session
-		gSavedSettings.setString("WebProfileURL", web_profile_url); 
+		LLGridManager::instance().setWebProfileUrl(web_profile_url);
 		LL_INFOS("LLStartup") << "web-profile-url : we got an answer from the grid : " << web_profile_url << LL_ENDL;
-	}
-	else
-	{
-		// No answer from the grid -> use the default setting for current session 
-		web_profile_url = "https://my.secondlife.com/[AGENT_NAME]";
-		gSavedSettings.setString("WebProfileURL", web_profile_url); 
-		LL_INFOS("LLStartup") << "web-profile-url : no web_profile_url answer, we use the default setting for the web : " << web_profile_url << LL_ENDL;
 	}
 // <FS:CR> FIRE-10567 - Set classified fee, if it's available.
 	if (response.has("classified_fee"))
@@ -4298,7 +4295,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	{
 		LLGridManager::getInstance()->setDirectoryFee(0);
 	}
-	#endif // OPENSIM
+#endif // OPENSIM
 // </FS:CR>
 	// Default male and female avatars allowing the user to choose their avatar on first login.
 	// These may be passed up by SLE to allow choice of enterprise avatars instead of the standard

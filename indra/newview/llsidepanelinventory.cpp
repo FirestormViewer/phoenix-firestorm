@@ -34,6 +34,7 @@
 #include "llbutton.h"
 #include "lldate.h"
 #include "llfirstuse.h"
+#include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llfoldertype.h"
 #include "llfolderview.h"
@@ -781,3 +782,28 @@ std::set<LLFolderViewItem*> LLSidepanelInventory::getInboxSelectionList()
 	
 	return inventory_selected_uuids;
 }
+
+// <FS:Ansariel> Clean up inventory windows on shutdown
+void LLSidepanelInventory::cleanup()
+{
+	LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("inventory");
+	for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin(); iter != inst_list.end();)
+	{
+		LLFloaterSidePanelContainer* iv = dynamic_cast<LLFloaterSidePanelContainer*>(*iter++);
+		if (iv)
+		{
+			iv->cleanup();
+		}
+	}
+
+	LLFloaterReg::const_instance_list_t& secondary_inst_list = LLFloaterReg::getFloaterList("secondary_inventory");
+	for (LLFloaterReg::const_instance_list_t::const_iterator iter = secondary_inst_list.begin(); iter != secondary_inst_list.end();)
+	{
+		LLFloaterSidePanelContainer* iv = dynamic_cast<LLFloaterSidePanelContainer*>(*iter++);
+		if (iv)
+		{
+			iv->cleanup();
+		}
+	}
+}
+// </FS:Ansariel>

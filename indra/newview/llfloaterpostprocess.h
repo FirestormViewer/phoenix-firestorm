@@ -29,16 +29,16 @@
 
 #include "llfloater.h"
 
-class LLButton;
+//class LLButton;
 class LLComboBox;
 class LLLineEditor;
-class LLSliderCtrl;
-class LLTabContainer;
-class LLPanelPermissions;
-class LLPanelObject;
-class LLPanelVolume;
-class LLPanelContents;
-class LLPanelFace;
+//class LLSliderCtrl;
+//class LLTabContainer;
+//class LLPanelPermissions;
+//class LLPanelObject;
+//class LLPanelVolume;
+//class LLPanelContents;
+//class LLPanelFace;
 
 /**
  * Menu for adjusting the post process settings of the world

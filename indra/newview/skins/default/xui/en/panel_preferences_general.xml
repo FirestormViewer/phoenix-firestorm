@@ -455,7 +455,7 @@
      width="140"
      top_pad="3"
      name="FSTagShowTooComplexOnlyARW"
-     tool_tip="If enabled, the nametag will show the current avatar complexity only if the avatar is too complex and shown as a jelly doll."/>
+     tool_tip="If enabled, the nametag will show the current avatar complexity only if the avatar is too complex and shown as a JellyDoll."/>
    <check_box
      control_name="FSTagShowOwnARW"
      height="16"
