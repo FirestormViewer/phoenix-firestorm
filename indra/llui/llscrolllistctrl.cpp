@@ -3397,6 +3397,7 @@ void LLScrollListCtrl::setFilterString(const std::string& str)
 	mFilterString = str;
 	std::transform(mFilterString.begin(), mFilterString.end(), mFilterString.begin(), ::tolower);
 	mIsFiltered = (mFilterColumn > -1 && !mFilterString.empty());
+	updateLayout();
 }
 
 bool LLScrollListCtrl::isFiltered(const LLScrollListItem* item) const
