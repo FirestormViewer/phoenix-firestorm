@@ -874,7 +874,9 @@ BOOL LLVOAvatarSelf::updateCharacter(LLAgent &agent)
 // virtual
 BOOL LLVOAvatarSelf::isValid() const
 {
-	return ((getRegion() != NULL) && !isDead());
+	// <FS:Ansariel> Skip unregistering attachments during shutdown
+	//return ((getRegion() != NULL) && !isDead());
+	return ((getRegion() != NULL) && !isDead() && !LLApp::isExiting());
 }
 
 // virtual
