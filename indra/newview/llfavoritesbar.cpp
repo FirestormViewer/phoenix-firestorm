@@ -301,7 +301,7 @@ public:
 		else
 		{
 			LLToolTip::Params params;
-			params.message = region_name;
+			params.message = llformat("%s\n%s (%d, %d)", getLabel().c_str(), region_name.c_str());
 			params.sticky_rect = calcScreenRect();
 			LLToolTipMgr::instance().show(params);
 		}
