@@ -71,7 +71,9 @@ class LLLandmarkInfoGetter
 public:
 	LLLandmarkInfoGetter()
 	:	mLandmarkID(LLUUID::null),
-		mName("(Loading...)"),
+		// <FS:Ansariel> Localization fix in LLLandmarkInfoGetter
+		//mName("(Loading...)"),
+		mName(LLTrans::getString("LoadingData")),
 		mPosX(0),
 		mPosY(0),
 		mPosZ(0),
