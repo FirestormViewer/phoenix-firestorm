@@ -1400,7 +1400,7 @@ Sie können [APP_NAME] normal verwenden. Andere Benutzer können Sie korrekt dar
 		<usetemplate ignoretext="Warnen, wnen sich meine Avatar-Komplexität ändert" name="notifyignore"/>
 	</notification>
 	<notification name="HUDComplexityWarning">
-		[HUD_REASON], es wird wahrscheinlich die Performance negativ beeinflussen.
+		[HUD_REASON]. Es wird wahrscheinlich die Performance negativ beeinflussen.
 		<usetemplate ignoretext="Warnen, falls meine HUD-Komplexität zu hoch ist" name="notifyignore"/>
 	</notification>
 	<notification name="FirstRun">
