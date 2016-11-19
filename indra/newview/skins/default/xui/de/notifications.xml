@@ -757,7 +757,7 @@ Verschieben Sie alle betreffenden Objekte in dieselbe Region.
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="MuteLimitReached">
-		Neuer Eintrag konnte nicht zur Liste ignorierter Einwohner / Objekte hinzugefügt werden, da das Limit von [MUTE_LIMIT] Einträgen erreicht wurde.
+		Neuer Eintrag konnte nicht zur Blockierliste hinzugefügt werden, da das Limit von [MUTE_LIMIT] Einträgen erreicht wurde.
 	</notification>
 	<notification name="UnableToLinkObjects">
 		Verknüpfung dieser [COUNT] Objekte nicht möglich.
