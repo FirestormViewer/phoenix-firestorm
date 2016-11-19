@@ -40,7 +40,7 @@
 #include "llviewerobjectlist.h"	// to select the requested object
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0c)
 #include "rlvactions.h"
-#include "rlvhandler.h"
+#include "rlvcommon.h"
 #include "lltoolpie.h"
 // [/RLVa:KB]
 
@@ -364,8 +364,8 @@ void LLInspectObject::updateButtons(LLSelectNode* nodep)
 	{
 		getChild<LLUICtrl>("touch_btn")->setVisible(true);
 // [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.1g) | Added: RLVa-1.2.1g
-		if (rlv_handler_t::isEnabled())
-			getChild<LLUICtrl>("touch_btn")->setEnabled(gRlvHandler.canTouch(object));
+		if (RlvActions::isRlvEnabled())
+			getChild<LLUICtrl>("touch_btn")->setEnabled(RlvActions::canTouch(object));
 // [/RLVa:KB]
 		updateTouchLabel(nodep);
 	}
@@ -399,7 +399,7 @@ void LLInspectObject::updateSitLabel(LLSelectNode* nodep)
 
 // [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
 	// RELEASE-RLVa: [SL-2.0.0] Make sure we're examining the same object that handle_sit_or_stand() will request a sit for
-	if (rlv_handler_t::isEnabled())
+	if (RlvActions::isRlvEnabled())
 	{
 		const LLPickInfo& pick = LLToolPie::getInstance()->getPick();
 		sit_btn->setEnabled( (pick.mObjectID.notNull()) && (RlvActions::canSit(pick.getObject(), pick.mObjectOffset)) );

@@ -2622,12 +2622,12 @@ void handle_object_touch()
 	LLPickInfo pick = LLToolPie::getInstance()->getPick();
 
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
-		// NOTE: fallback code since we really shouldn't be getting an active selection if we can't touch this
-		if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canTouch(object, pick.mObjectOffset)) )
-		{
-			RLV_ASSERT(false);
-			return;
-		}
+	// NOTE: fallback code since we really shouldn't be getting an active selection if we can't touch this
+	if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canTouch(object, pick.mObjectOffset)) )
+	{
+		RLV_ASSERT(false);
+		return;
+	}
 // [/RLVa:KB]
 
 	// *NOTE: Hope the packets arrive safely and in order or else
@@ -2678,10 +2678,10 @@ bool enable_object_touch(LLUICtrl* ctrl)
 	}
 
 // [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.1g) | Added: RLVa-1.2.1g
-	if ( (rlv_handler_t::isEnabled()) && (new_value) )
+	if ( (RlvActions::isRlvEnabled()) && (new_value) )
 	{
 		// RELEASE-RLVa: [RLVa-1.2.1] Make sure this stays in sync with handle_object_touch()
-		new_value = gRlvHandler.canTouch(obj, LLToolPie::getInstance()->getPick().mObjectOffset);
+		new_value = RlvActions::canTouch(obj, LLToolPie::getInstance()->getPick().mObjectOffset);
 	}
 // [/RLVa:KB]
 
@@ -3720,7 +3720,7 @@ class LLSelfStandUp : public view_listener_t
 bool enable_standup_self()
 {
 // [RLVa:KB] - Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-1.0.0g
-	return isAgentAvatarValid() && gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT);
+	return isAgentAvatarValid() && gAgentAvatarp->isSitting() && !RlvActions::canStand();
 // [/RLVa:KB]
 //	return isAgentAvatarValid() && gAgentAvatarp->isSitting();
 }

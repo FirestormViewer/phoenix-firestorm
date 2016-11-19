@@ -1,17 +1,17 @@
-/** 
+/**
  *
  * Copyright (c) 2009-2016, Kitty Barnett
- * 
- * The source code in this file is provided to you under the terms of the 
+ *
+ * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt
  * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
- * 
+ *
  * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
+ * you have read and understood your obligations described above, and agree to
  * abide by those obligations.
- * 
+ *
  */
 
 // Generic includes
@@ -693,9 +693,9 @@ void RlvHandler::onIdleStartup(void* pParam)
 		// We don't want to run this *too* often
 		if ( (LLStartUp::getStartupState() >= STATE_MISC) && (pTimer->getElapsedTimeF32() >= 2.0) )
 		{
-			gRlvHandler.processRetainedCommands(RLV_BHVR_VERSION, RLV_TYPE_REPLY);
-			gRlvHandler.processRetainedCommands(RLV_BHVR_VERSIONNEW, RLV_TYPE_REPLY);
-			gRlvHandler.processRetainedCommands(RLV_BHVR_VERSIONNUM, RLV_TYPE_REPLY);
+			RlvHandler::instance().processRetainedCommands(RLV_BHVR_VERSION, RLV_TYPE_REPLY);
+			RlvHandler::instance().processRetainedCommands(RLV_BHVR_VERSIONNEW, RLV_TYPE_REPLY);
+			RlvHandler::instance().processRetainedCommands(RLV_BHVR_VERSIONNUM, RLV_TYPE_REPLY);
 			pTimer->reset();
 		}
 	}
@@ -735,45 +735,6 @@ void RlvHandler::onTeleportFinished(const LLVector3d& posArrival)
 // ============================================================================
 // String/chat censoring functions
 //
-
-// Checked: 2010-04-11 (RLVa-1.3.0h) | Modified: RLVa-1.3.0h
-bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/) const
-{
-	const LLUUID& idRoot = (pObj) ? pObj->getRootEdit()->getID() : LLUUID::null;
-	bool fCanTouch = (idRoot.notNull()) && ((pObj->isHUDAttachment()) || (!hasBehaviour(RLV_BHVR_TOUCHALL))) &&
-		((!hasBehaviour(RLV_BHVR_TOUCHTHIS)) || (!isException(RLV_BHVR_TOUCHTHIS, idRoot, RLV_CHECK_PERMISSIVE)));
-
-	static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
-	if (fCanTouch)
-	{
-		if ( (!pObj->isAttachment()) || (!pObj->permYouOwner()) )
-		{
-			// User can touch an object (that's isn't one of their own attachments) if:
-			//   - it's an in-world object and they're not prevented from touching it (or the object is an exception)
-			//   - it's an attachment and they're not prevented from touching (another avatar's) attachments (or the attachment is an exception)
-			//   - not fartouch restricted (or the object is within the currently enforced fartouch distance)
-			fCanTouch =
-				( (!pObj->isAttachment()) ? (!hasBehaviour(RLV_BHVR_TOUCHWORLD)) || (isException(RLV_BHVR_TOUCHWORLD, idRoot, RLV_CHECK_PERMISSIVE))
-				                          : ((!hasBehaviour(RLV_BHVR_TOUCHATTACH)) && (!hasBehaviour(RLV_BHVR_TOUCHATTACHOTHER))) || (isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE)) ) &&
-				( (!hasBehaviour(RLV_BHVR_FARTOUCH)) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist) );
-		}
-		else if (!pObj->isHUDAttachment())
-		{
-			// Regular attachment worn by this avie
-			fCanTouch =
-				((!hasBehaviour(RLV_BHVR_TOUCHATTACH)) || (isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE))) &&
-				((!hasBehaviour(RLV_BHVR_TOUCHATTACHSELF)) || (isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE)));
-		}
-		else
-		{
-			// HUD attachment
-			fCanTouch = (!hasBehaviour(RLV_BHVR_TOUCHHUD)) || (isException(RLV_BHVR_TOUCHHUD, idRoot, RLV_CHECK_PERMISSIVE));
-		}
-	}
-	if ( (!fCanTouch) && (hasBehaviour(RLV_BHVR_TOUCHME)) )
-		fCanTouch = hasBehaviourRoot(idRoot, RLV_BHVR_TOUCHME);
-	return fCanTouch;
-}
 
 size_t utf8str_strlen(const std::string& utf8)
 {
@@ -1099,13 +1060,13 @@ BOOL RlvHandler::setEnabled(BOOL fEnable)
 		RlvSettings::initClass();
 		RlvStrings::initClass();
 
-		gRlvHandler.addCommandHandler(new RlvExtGetSet());
+		RlvHandler::instance().addCommandHandler(new RlvExtGetSet());
 
 		// Make sure we get notified when login is successful
 		if (LLStartUp::getStartupState() < STATE_STARTED)
-			LLAppViewer::instance()->setOnLoginCompletedCallback(boost::bind(&RlvHandler::onLoginComplete, &gRlvHandler));
+			LLAppViewer::instance()->setOnLoginCompletedCallback(boost::bind(&RlvHandler::onLoginComplete, RlvHandler::getInstance()));
 		else
-			gRlvHandler.onLoginComplete();
+			RlvHandler::instance().onLoginComplete();
 
 		// Set up RlvUIEnabler
 		RlvUIEnabler::getInstance();

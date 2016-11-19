@@ -1,17 +1,17 @@
-/** 
+/**
  *
  * Copyright (c) 2009-2016, Kitty Barnett
- * 
- * The source code in this file is provided to you under the terms of the 
+ *
+ * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt
  * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
- * 
+ *
  * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
+ * you have read and understood your obligations described above, and agree to
  * abide by those obligations.
- * 
+ *
  */
 
 #ifndef RLV_HANDLER_H
@@ -20,14 +20,17 @@
 #include <stack>
 
 #include "rlvcommon.h"
-#if LL_GNUC
-#include "rlvhelper.h"		// Needed to make GCC happy
-#endif // LL_GNUC
+#include "rlvhelper.h"
 
 // ============================================================================
 
 class RlvHandler : public LLOldEvents::LLSimpleListener
 {
+	// Temporary LLSingleton look-alike
+public:
+	static RlvHandler& instance();
+	static RlvHandler* getInstance();
+
 public:
 	RlvHandler();
 	~RlvHandler();
@@ -60,7 +63,7 @@ public:
 	// Adds or removes an exception for the specified behaviour
 	void addException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption);
 	void removeException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption);
-	// Returns TRUE if the specified behaviour has an added exception 
+	// Returns TRUE if the specified behaviour has an added exception
 	bool hasException(ERlvBehaviour eBhvr) const;
 	// Returns TRUE if the specified option was added as an exception for the specified behaviour
 	bool isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varOption, ERlvExceptionCheck typeCheck = RLV_CHECK_DEFAULT) const;
@@ -87,7 +90,7 @@ public:
 	// --------------------------------
 
 	/*
-	 * Helper functions 
+	 * Helper functions
 	 */
 public:
 	// Accessors
@@ -98,8 +101,6 @@ public:
 	void              setSitSource(const LLVector3d& posSource)	{ m_posSitSource = posSource; }	// @standtp
 
 	// Command specific helper functions
-	bool canShowHoverText(const LLViewerObject* pObj) const;									// @showhovertext* command family
-	bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;	// @touch
 	bool filterChat(std::string& strUTF8Text, bool fFilterEmote) const;							// @sendchat, @recvchat and @redirchat
 	bool redirectChatOrEmote(const std::string& strUTF8Test) const;								// @redirchat and @rediremote
 
@@ -230,14 +231,14 @@ extern rlv_handler_t gRlvHandler;
 // Inlined member functions
 //
 
-// Checked: 2010-03-27 (RLVa-1.4.0a) | Modified: RLVa-1.0.0f
-inline bool RlvHandler::canShowHoverText(const LLViewerObject *pObj) const
+inline RlvHandler& RlvHandler::instance()
 {
-	return ( (!pObj) || (LL_PCODE_VOLUME != pObj->getPCode()) ||
-		    !( (hasBehaviour(RLV_BHVR_SHOWHOVERTEXTALL)) ||
-			   ( (hasBehaviour(RLV_BHVR_SHOWHOVERTEXTWORLD)) && (!pObj->isHUDAttachment()) ) ||
-			   ( (hasBehaviour(RLV_BHVR_SHOWHOVERTEXTHUD)) && (pObj->isHUDAttachment()) ) ||
-			   (isException(RLV_BHVR_SHOWHOVERTEXT, pObj->getID(), RLV_CHECK_PERMISSIVE)) ) );
+	return gRlvHandler;
+}
+
+inline RlvHandler* RlvHandler::getInstance()
+{
+	return &gRlvHandler;
 }
 
 inline bool RlvHandler::hasBehaviour(ERlvBehaviour eBhvr, const std::string& strOption) const

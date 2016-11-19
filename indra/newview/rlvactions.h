@@ -214,6 +214,16 @@ public:
 	static bool canSit(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
 
 	/*
+	 * Returns true if the user can see the hovertext associated with the specified object
+	 */
+	static bool canShowHoverText(const LLViewerObject* pObj);
+
+	/*
+	 * Returns true if the user can touch the specified object (with an optional offset relative to its center)
+	 */
+	static bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
+
+	/*
 	 * Returns true if the user can stand up (returns true if the user isn't currently sitting)
 	 */
 	static bool canStand();

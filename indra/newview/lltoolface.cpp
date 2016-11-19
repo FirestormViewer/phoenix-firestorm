@@ -95,9 +95,9 @@ void LLToolFace::pickCallback(const LLPickInfo& pick_info)
 		}
 
 // [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
-		if ( (rlv_handler_t::isEnabled()) &&
+		if ( (RlvActions::isRlvEnabled()) &&
 			 ( (!RlvActions::canEdit(hit_obj)) || 
-			   ((gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && (!gRlvHandler.canTouch(hit_obj, pick_info.mObjectOffset))) ) )
+			   ((gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && (!RlvActions::canTouch(hit_obj, pick_info.mObjectOffset))) ) )
 		{
 			return;
 		}

@@ -208,8 +208,8 @@ BOOL LLToolPie::handleLeftClickPick()
 	{
 // [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
 		// Block left-click special actions when fartouch restricted
-		if ( (rlv_handler_t::isEnabled()) && 
-			 (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && (!gRlvHandler.canTouch(object, mPick.mObjectOffset)) )
+		if ( (RlvActions::isRlvEnabled()) && 
+			 (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && (!RlvActions::canTouch(object, mPick.mObjectOffset)) )
 		{
 			return TRUE;
 		}
@@ -338,7 +338,7 @@ BOOL LLToolPie::handleLeftClickPick()
 	{
 // [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
 		// Triggered by left-clicking on a touchable object
-		if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canTouch(object, mPick.mObjectOffset)) )
+		if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canTouch(object, mPick.mObjectOffset)) )
 		{
 			return LLTool::handleMouseDown(x, y, mask);
 		}
@@ -584,8 +584,8 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 	// Block all special click action cursors when:
 	//   - @fartouch=n restricted and the object is out of range
 	//   - @interact=n restricted and the object isn't a HUD attachment
-	if ( (object) && (rlv_handler_t::isEnabled()) && 
-		( ((gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH))) && (!gRlvHandler.canTouch(object, mHoverPick.mObjectOffset)) || 
+	if ( (object) && (RlvActions::isRlvEnabled()) && 
+		( ((gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH))) && (!RlvActions::canTouch(object, mHoverPick.mObjectOffset)) || 
 		  ((gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) && (!object->isHUDAttachment())) ) )
 	{
 		gViewerWindow->setCursor(UI_CURSOR_ARROW);
@@ -648,7 +648,7 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 			LL_DEBUGS("UserInput") << "hover handled by LLToolPie (inactive)" << LL_ENDL;
 		}
 // [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Added: RLVa-1.1.0l
-		else if ( (object) && (rlv_handler_t::isEnabled()) && (!gRlvHandler.canTouch(object)) )
+		else if ( (object) && (RlvActions::isRlvEnabled()) && (!RlvActions::canTouch(object)) )
 		{
 			// Block showing the "grab" or "touch" cursor if we can't touch the object (@fartouch=n is handled above)
 			gViewerWindow->setCursor(UI_CURSOR_ARROW);
@@ -1135,8 +1135,8 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			// *HACK: We may select this object, so pretend it was clicked
 			mPick = mHoverPick;
 // [RLVa:KB] - Checked: RLVa-1.2.0
-			if ( (!rlv_handler_t::isEnabled()) || 
-			     ( (gRlvHandler.canTouch(hover_object, mHoverPick.mObjectOffset)) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, hover_object->getID())) ) )
+			if ( (!RlvActions::isRlvEnabled()) || 
+			     ( (RlvActions::canTouch(hover_object, mHoverPick.mObjectOffset)) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, hover_object->getID())) ) )
 			{
 // [/RLVa:KB]
 				LLInspector::Params p;
@@ -1260,8 +1260,8 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				// We may select this object, so pretend it was clicked
 				mPick = mHoverPick;
 // [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.1g) | Modified: RLVa-1.2.1g
-				if ( (!rlv_handler_t::isEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) ||
-					 (gRlvHandler.canTouch(hover_object, mHoverPick.mObjectOffset)) )
+				if ( (!RlvActions::isRlvEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) ||
+					 (RlvActions::canTouch(hover_object, mHoverPick.mObjectOffset)) )
 				{
 // [/RLVa:KB]
 					LLInspector::Params p;
