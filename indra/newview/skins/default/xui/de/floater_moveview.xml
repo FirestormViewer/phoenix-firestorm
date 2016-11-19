@@ -55,18 +55,50 @@
 	<string name="fly_title">
 	</string>
 	<panel name="panel_actions">
-		<button label="" label_selected="" name="turn left btn" tool_tip="Nach links (Links-Pfeil oder A drücken)"/>
-		<joystick_slide name="move left btn" tool_tip="Nach links gehen (Umschalt + Links-Pfeil oder A drücken)"/>
-		<button label="" label_selected="" name="turn right btn" tool_tip="Nach rechts (Rechts-Pfeil oder D drücken)"/>
-		<joystick_slide name="move right btn" tool_tip="Nach rechts fliegen (Umschalt + Rechts-Pfeil oder D drücken)"/>
-		<joystick_turn name="forward btn" tool_tip="Vorwärts gehen (Nach-oben-Pfeil oder W drücken)"/>
-		<joystick_turn name="backward btn" tool_tip="Rückwärts gehen (Nach-Unten-Pfeil oder S drücken)"/>
-		<button label="" label_selected="" name="move up btn" tool_tip="Nach oben fliegen, „E&quot; drücken"/>
-		<button label="" label_selected="" name="move down btn" tool_tip="Nach unten fliegen, „C&quot; drücken"/>
-	</panel>
-	<panel name="panel_modes">
-		<button label="" name="mode_walk_btn" tool_tip="Gehen"/>
-		<button label="" name="mode_run_btn" tool_tip="Rennen"/>
-		<button label="" name="mode_fly_btn" tool_tip="Fliegen"/>
+		<layout_stack name="ls_vertical">
+			<layout_panel name="lp_row1">
+				<layout_stack name="ls_horizontal1">
+					<layout_panel name="lp_col1_1">
+						<button name="turn left btn" tool_tip="Nach links (Links-Pfeil oder A drücken)"/>
+					</layout_panel>
+					<layout_panel name="lp_col1_2">
+						<joystick_turn name="forward btn" tool_tip="Vorwärts gehen (Nach-oben-Pfeil oder W drücken)"/>
+					</layout_panel>
+					<layout_panel name="lp_col1_3">
+						<button name="turn right btn" tool_tip="Nach rechts (Rechts-Pfeil oder D drücken)"/>
+					</layout_panel>
+					<layout_panel name="lp_col1_4">
+						<button name="move up btn" tool_tip="Nach oben fliegen, „E&quot; drücken"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="lp_row2">
+				<layout_stack name="ls_horizontal2">
+					<layout_panel name="lp_col2_1">
+						<joystick_slide name="move left btn" tool_tip="Nach links gehen (Umschalt + Links-Pfeil oder A drücken)"/>
+					</layout_panel>
+					<layout_panel name="lp_col2_2">
+						<joystick_turn name="backward btn" tool_tip="Rückwärts gehen (Nach-Unten-Pfeil oder S drücken)"/>
+					</layout_panel>
+					<layout_panel name="lp_col2_3">
+						<joystick_slide name="move right btn" tool_tip="Nach rechts fliegen (Umschalt + Rechts-Pfeil oder D drücken)"/>
+					</layout_panel>
+					<layout_panel name="lp_col2_4">
+						<button name="move down btn" tool_tip="Nach unten fliegen, „C&quot; drücken"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="lp_row3">
+				<layout_stack name="ls_horizontal3">
+					<layout_panel name="modes_container">
+						<panel name="panel_modes">
+							<button name="mode_walk_btn" tool_tip="Gehen"/>
+							<button name="mode_run_btn" tool_tip="Rennen"/>
+							<button name="mode_fly_btn" tool_tip="Fliegen"/>
+						</panel>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>
 	</panel>
 </floater>
