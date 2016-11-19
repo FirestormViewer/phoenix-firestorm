@@ -240,6 +240,15 @@ LLLineEditor::~LLLineEditor()
 	gFocusMgr.releaseFocusIfNeeded( this );
 }
 
+// <FS:Ansariel> Enabling LLLineEditor via XUI breaks enabled-state
+void LLLineEditor::initFromParams(const LLLineEditor::Params& params)
+{
+	LLUICtrl::initFromParams(params);
+	LLUICtrl::setEnabled(TRUE);
+	setEnabled(params.enabled);
+}
+// </FS:Ansariel>
+
 void LLLineEditor::onFocusReceived()
 {
 	gEditMenuHandler = this;

@@ -304,7 +304,8 @@ int APIENTRY WINMAIN(HINSTANCE hInstance,
 	DWORD heap_enable_lfh_error[MAX_HEAPS];
 	S32 num_heaps = 0;
 	
-	LLWindowWin32::setDPIAwareness();
+	// <FS:Ansariel> Set via manifest
+	//LLWindowWin32::setDPIAwareness();
 
 #if WINDOWS_CRT_MEM_CHECKS && !INCLUDE_VLD
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); // dump memory leaks on exit
@@ -642,7 +643,7 @@ bool LLAppViewerWin32::initHardwareTest()
 	// Do driver verification and initialization based on DirectX
 	// hardware polling and driver versions
 	//
-	if (TRUE == gSavedSettings.getBOOL("ProbeHardwareOnStartup") && FALSE == gSavedSettings.getBOOL("NoHardwareProbe"))
+	if (/*TRUE == gSavedSettings.getBOOL("ProbeHardwareOnStartup") &&*/ FALSE == gSavedSettings.getBOOL("NoHardwareProbe")) // <FS:Ansariel> FIRE-20378 / FIRE-20382: Breaks memory detection an 4K monitor workaround
 	{
 		// per DEV-11631 - disable hardware probing for everything
 		// but vram.
@@ -673,7 +674,7 @@ bool LLAppViewerWin32::initHardwareTest()
 			if (OSBTN_NO== button)
 			{
 				LL_INFOS("AppInit") << "User quitting after failed DirectX 9 detection" << LL_ENDL;
-				LLWeb::loadURLExternal("http://secondlife.com/support/", false);
+				LLWeb::loadURLExternal("http://www.firestormviewer.org/support", false);
 				return false;
 			}
 			gWarningSettings.setBOOL("AboutDirectX9", FALSE);
