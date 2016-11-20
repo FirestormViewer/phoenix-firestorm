@@ -3,14 +3,16 @@
     <key>RLVaLoginLastLocation</key>
         <map>
         <key>Comment</key>
-            <string>Determines whether the next login will be forced to the last logoff location (set by the viewer)</string>
+        <string>Determines whether the next login will be forced to the last logoff location (set by RLVa)</string>
         <key>Persist</key>
         <integer>1</integer>
+        <key>HideFromEditor</key>
+        <integer>1</integer>
         <key>Type</key>
-            <string>Boolean</string>
+        <string>Boolean</string>
         <key>Value</key>
-            <boolean>1</boolean>
-        </map>
+        <boolean>1</boolean>
+    </map>
     <key>AvatarHoverOffsetZ</key>
     <map>
       <key>Comment</key>

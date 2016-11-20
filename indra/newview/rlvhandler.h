@@ -114,11 +114,10 @@ public:
 	const LLUUID&     getCurrentObject() const	{ return (!m_CurObjectStack.empty()) ? m_CurObjectStack.top() : LLUUID::null; }
 
 	// Initialization
-	static BOOL canDisable();
-	static BOOL isEnabled()	{ return m_fEnabled; }
-	static BOOL setEnabled(BOOL fEnable);
+	static bool canEnable();
+	static bool isEnabled()	{ return m_fEnabled; }
+	static bool setEnabled(bool fEnable);
 protected:
-	void clearState();
 
 	// --------------------------------
 
@@ -202,7 +201,7 @@ protected:
 	rlv_command_signal_t   m_OnCommand;
 	mutable std::list<RlvExtCommandHandler*> m_CommandHandlers;
 
-	static BOOL			  m_fEnabled;				// Use setEnabled() to toggle this
+	static bool         m_fEnabled;					// Use setEnabled() to toggle this
 
 	bool				m_fCanCancelTp;				// @accepttp=n and @tpto=force
 	mutable LLVector3d	m_posSitSource;				// @standtp=n (mutable because onForceXXX handles are all declared as const)

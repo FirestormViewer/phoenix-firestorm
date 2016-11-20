@@ -64,7 +64,7 @@
 // Static variable initialization
 //
 
-BOOL RlvHandler::m_fEnabled = FALSE;
+bool RlvHandler::m_fEnabled = false;
 
 rlv_handler_t gRlvHandler;
 
@@ -1044,17 +1044,20 @@ bool RlvHandler::redirectChatOrEmote(const std::string& strUTF8Text) const
 // Initialization helper functions
 //
 
-// Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-BOOL RlvHandler::setEnabled(BOOL fEnable)
+bool RlvHandler::canEnable()
 {
-	// TODO-RLVa: [RLVa-1.2.1] Allow toggling at runtime if we haven't seen any llOwnerSay("@....");
+	return LLStartUp::getStartupState() <= STATE_LOGIN_CLEANUP;
+}
+
+bool RlvHandler::setEnabled(bool fEnable)
+{
 	if (m_fEnabled == fEnable)
 		return fEnable;
 
-	if (fEnable)
+	if ( (fEnable) && (canEnable()) )
 	{
 		RLV_INFOS << "Enabling Restrained Love API support - " << RlvStrings::getVersionAbout() << RLV_ENDL;
-		m_fEnabled = TRUE;
+		m_fEnabled = true;
 
 		// Initialize static classes
 		RlvSettings::initClass();
@@ -1077,51 +1080,6 @@ BOOL RlvHandler::setEnabled(BOOL fEnable)
 	}
 
 	return m_fEnabled;
-}
-
-BOOL RlvHandler::canDisable()
-{
-	return FALSE;
-}
-
-void RlvHandler::clearState()
-{
-/*
-	// TODO-RLVa: should restore all RLV controlled debug variables to their defaults
-
-	// Issue @clear on behalf of every object that has a currently active RLV restriction (even if it's just an exception)
-	LLUUID idObj; LLViewerObject* pObj; bool fDetachable;
-	while (m_Objects.size())
-	{
-		idObj = m_Objects.begin()->first; // Need a copy since after @clear the data it points to will no longer exist
-		fDetachable = ((pObj = gObjectList.findObject(idObj)) != NULL) ? isLockedAttachment(pObj, RLV_LOCK_REMOVE) : true;
-
-		processCommand(idObj, "clear", false);
-		if (!fDetachable)
-			processCommand(idObj, "detachme=force", false);
-	}
-
-	// Sanity check - these should all be empty after we issue @clear on the last object
-	if ( (!m_Objects.empty()) || !(m_Exceptions.empty()) || (!m_AttachAdd.empty()) || (!m_AttachRem.empty()) )
-	{
-		RLV_ERRS << "Object, exception or attachment map not empty after clearing state!" << LL_ENDL;
-		m_Objects.clear();
-		m_Exceptions.clear();
-		m_AttachAdd.clear();
-		m_AttachRem.clear();
-	}
-
-	// These all need manual clearing
-	memset(m_LayersAdd, 0, sizeof(S16) * WT_COUNT);
-	memset(m_LayersRem, 0, sizeof(S16) * WT_COUNT);
-	memset(m_Behaviours, 0, sizeof(S16) * RLV_BHVR_COUNT);
-	m_Retained.clear();
-	clearCommandHandlers(); // <- calls delete on all registered command handlers
-
-	// Clear dynamically allocated memory
-	delete m_pGCTimer;
-	m_pGCTimer = NULL;
-*/
 }
 
 // ============================================================================

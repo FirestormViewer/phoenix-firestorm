@@ -152,17 +152,14 @@ bool RlvSettings::onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting)
 	return true;
 }
 
-// Checked: 2015-05-25 (RLVa-1.5.0)
 void RlvSettings::onChangedSettingMain(const LLSD& sdValue)
 {
-	if (sdValue.asBoolean() != (bool)rlv_handler_t::isEnabled())
-	{
-		LLNotificationsUtil::add(
-			"GenericAlert",
-			LLSD().with("MESSAGE", llformat(LLTrans::getString("RLVaToggleMessage").c_str(), 
-				(sdValue.asBoolean()) ? LLTrans::getString("RLVaToggleEnabled").c_str()
-				                      : LLTrans::getString("RLVaToggleDisabled").c_str())));
-	}
+	LLStringUtil::format_map_t args;
+	args["[STATE]"] = LLTrans::getString( (sdValue.asBoolean()) ? "RLVaToggleEnabled" : "RLVaToggleDisabled");
+
+	// As long as RLVa hasn't been enabled but >can< be enabled all toggles are instant (everything else will require a restart)
+	bool fQuickToggle = (!RlvHandler::isEnabled()) && (RlvHandler::canEnable());
+	LLNotificationsUtil::add("GenericAlert", LLSD().with("MESSAGE", LLTrans::getString((fQuickToggle) ? "RLVaToggleMessageLogin" : "RLVaToggleMessageRestart", args)));
 }
 
 void RlvSettings::initCompatibilityMode(std::string strCompatList)
@@ -629,7 +626,7 @@ bool rlvMenuMainToggleVisible(LLUICtrl* pMenuCtrl)
 	if (pMenuItem)
 	{
 		static std::string strLabel = pMenuItem->getLabel();
-		if (gSavedSettings.getBOOL(RLV_SETTING_MAIN) == rlv_handler_t::isEnabled())
+		if ((bool)gSavedSettings.getBOOL(RLV_SETTING_MAIN) == rlv_handler_t::isEnabled())
 			pMenuItem->setLabel(strLabel);
 		else
 			pMenuItem->setLabel(strLabel + " " + LLTrans::getString("RLVaPendingRestart"));

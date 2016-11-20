@@ -4102,8 +4102,9 @@ Try enclosing path to the editor with double quotes.
   <string name="UserDictionary">[User]</string>
   
   <!-- RLVa -->
-  <string name="RLVaPendingRestart"> (pending restart)</string>
-  <string name="RLVaToggleMessage">RestrainedLove Support will be %s after you restart</string>
+  <string name="RLVaPendingRestart">(pending restart)</string>
+  <string name="RLVaToggleMessageLogin">RLVa has been [STATE] (no restart required)</string>
+  <string name="RLVaToggleMessageRestart">RLVa will be [STATE] after you restart</string>
   <string name="RLVaToggleEnabled">enabled</string>
   <string name="RLVaToggleDisabled">disabled</string>
    
