@@ -68,8 +68,9 @@
 #include "lltranslate.h"
 #include "llautoreplace.h"
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b)
-#include "rlvhandler.h"
 #include "rlvactions.h"
+#include "rlvcommon.h"
+#include "rlvhandler.h"
 // [/RLVa:KB]
 
 S32 LLFloaterIMNearbyChat::sLastSpecialChatChannel = 0;
@@ -849,17 +850,12 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 {
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0a
 	// Only process chat messages (ie not CHAT_TYPE_START, CHAT_TYPE_STOP, etc)
-	if ( (rlv_handler_t::isEnabled()) && ( (CHAT_TYPE_WHISPER == type) || (CHAT_TYPE_NORMAL == type) || (CHAT_TYPE_SHOUT == type) ) )
+	if ( (RlvActions::isRlvEnabled()) && ( (CHAT_TYPE_WHISPER == type) || (CHAT_TYPE_NORMAL == type) || (CHAT_TYPE_SHOUT == type) ) )
 	{
 		if (0 == channel)
 		{
-			// (We already did this before, but LLChatHandler::handle() calls this directly)
-			if ( ((CHAT_TYPE_SHOUT == type) || (CHAT_TYPE_NORMAL == type)) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATNORMAL)) )
-				type = CHAT_TYPE_WHISPER;
-			else if ( (CHAT_TYPE_SHOUT == type) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATSHOUT)) )
-				type = CHAT_TYPE_NORMAL;
-			else if ( (CHAT_TYPE_WHISPER == type) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATWHISPER)) )
-				type = CHAT_TYPE_NORMAL;
+			// Clamp the volume of the chat if needed
+			type = RlvActions::checkChatVolume(type);
 
 			// Redirect chat if needed
 			if ( ( (gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT) || (gRlvHandler.hasBehaviour(RLV_BHVR_REDIREMOTE)) ) && 

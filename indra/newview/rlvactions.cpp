@@ -217,6 +217,25 @@ bool RlvActions::canShowNearbyAgents()
 	return !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNEARBY);
 }
 
+// Handles: @chatwhisper, @chatnormal and @chatshout
+EChatType RlvActions::checkChatVolume(EChatType chatType)
+{
+	// In vs Bhvr | whisper |  normal |  shout  | n+w     |   n+s   |  s+w   |  s+n+w  |
+	// ---------------------------------------------------------------------------------
+	// whisper    | normal  | -       | -       | normal  | -       | normal | normal  |
+	// normal     | -       | whisper | -       | whisper | whisper | -      | whisper |
+	// shout      | -       | whisper | normal  | whisper | whisper | normal | whisper |
+
+	RlvHandler& rlvHandler = RlvHandler::instance();
+	if ( ((CHAT_TYPE_SHOUT == chatType) || (CHAT_TYPE_NORMAL == chatType)) && (rlvHandler.hasBehaviour(RLV_BHVR_CHATNORMAL)) )
+		chatType = CHAT_TYPE_WHISPER;
+	else if ( (CHAT_TYPE_SHOUT == chatType) && (rlvHandler.hasBehaviour(RLV_BHVR_CHATSHOUT)) )
+		chatType = CHAT_TYPE_NORMAL;
+	else if ( (CHAT_TYPE_WHISPER == chatType) && (rlvHandler.hasBehaviour(RLV_BHVR_CHATWHISPER)) )
+		chatType = CHAT_TYPE_NORMAL;
+	return chatType;
+}
+
 // ============================================================================
 // Inventory
 //

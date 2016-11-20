@@ -17,6 +17,7 @@
 #ifndef RLV_ACTIONS_H
 #define RLV_ACTIONS_H
 
+#include "llchat.h"
 #include "rlvdefines.h"
 
 // ============================================================================
@@ -86,6 +87,7 @@ public:
 	 */
 	static bool canChangeActiveGroup(const LLUUID& idRlvObject = LLUUID::null);
 
+
 	/*
 	 * Returns true if the user is allowed to receive IMs from the specified sender (can be an avatar or a group)
 	 */
@@ -124,6 +126,11 @@ public:
 	 * Returns true if the user is allowed to see the presence of nearby avatars in UI elements (anonymized or otherwise)
 	 */
 	static bool canShowNearbyAgents();
+
+	/*
+	 * Checks if the user is allowed to use the specified volume in (main) chat and returns the appropriate chat volume type
+	 */
+	static EChatType checkChatVolume(EChatType chatType);
 
 protected:
 	// Backwards logic so that we can initialize to 0 and it won't block when we forget to/don't check if RLVa is disabled

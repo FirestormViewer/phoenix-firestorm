@@ -60,7 +60,8 @@
 #include "llviewermenu.h"
 #include "lluictrlfactory.h"
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b)
-#include "rlvhandler.h"
+#include "rlvactions.h"
+#include "rlvcommon.h"
 // [/RLVa:KB]
 
 //
@@ -480,7 +481,7 @@ void LLChatBar::onInputEditorKeystroke( LLLineEditor* caller, void* userdata )
 //	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
 // [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.0d
 	// RELEASE-RLVa: [SL-2.0.0] This entire class appears to be dead/non-functional?
-	if ( (length > 0) && (raw_text[0] != '/') && (!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT)) )
+	if ( (length > 0) && (raw_text[0] != '/') && (!RlvActions::hasBehaviour(RLV_BHVR_REDIRCHAT)) )
 // [/RLVa:KB]
 	{
 		gAgent.startTyping();
@@ -595,17 +596,11 @@ void LLChatBar::sendChatFromViewer(const LLWString &wtext, EChatType type, BOOL 
 
 // [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0b
 	// RELEASE-RLVa: [SL-2.0.0] This entire class appears to be dead/non-functional?
-	if ( (0 == channel) && (rlv_handler_t::isEnabled()) )
+	if ( (0 == channel) && (RlvActions::isRlvEnabled()) )
 	{
 		// Adjust the (public) chat "volume" on chat and gestures (also takes care of playing the proper animation)
-		if ( ((CHAT_TYPE_SHOUT == type) || (CHAT_TYPE_NORMAL == type)) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATNORMAL)) )
-			type = CHAT_TYPE_WHISPER;
-		else if ( (CHAT_TYPE_SHOUT == type) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATSHOUT)) )
-			type = CHAT_TYPE_NORMAL;
-		else if ( (CHAT_TYPE_WHISPER == type) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATWHISPER)) )
-			type = CHAT_TYPE_NORMAL;
-
-		animate &= !gRlvHandler.hasBehaviour( (!RlvUtil::isEmote(utf8_text)) ? RLV_BHVR_REDIRCHAT : RLV_BHVR_REDIREMOTE );
+		type = RlvActions::checkChatVolume(type);
+		animate &= !RlvActions::hasBehaviour( (!RlvUtil::isEmote(utf8_text)) ? RLV_BHVR_REDIRCHAT : RLV_BHVR_REDIREMOTE );
 	}
 // [/RLVa:KB]
 

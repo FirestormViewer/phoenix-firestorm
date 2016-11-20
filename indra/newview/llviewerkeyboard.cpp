@@ -42,9 +42,6 @@
 #include "llvoavatarself.h"
 #include "llfloatercamera.h"
 #include "llinitparam.h"
-// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 //
 // Constants

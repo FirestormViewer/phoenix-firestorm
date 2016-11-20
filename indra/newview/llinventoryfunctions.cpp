@@ -87,7 +87,7 @@
 #include "llvoavatarself.h"
 #include "llwearablelist.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
-#include "rlvhandler.h"
+#include "rlvactions.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
 
@@ -633,7 +633,7 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 	}
 
 // [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
-	if ( (rlv_handler_t::isEnabled()) && 
+	if ( (RlvActions::isRlvEnabled()) && 
 		 (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) && (!RlvFolderLocks::instance().canRemoveItem(id)) )
 	{
 		return FALSE;
@@ -669,7 +669,7 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 	}
 
 // [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
-	if ( ((rlv_handler_t::isEnabled()) && 
+	if ( ((RlvActions::isRlvEnabled()) && 
 		 (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) && (!RlvFolderLocks::instance().canRemoveFolder(id))) )
 	{
 		return FALSE;
@@ -712,7 +712,7 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 	}
 
 // [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
-	if ( (rlv_handler_t::isEnabled()) && (model == &gInventory) && (!RlvFolderLocks::instance().canRenameFolder(id)) )
+	if ( (RlvActions::isRlvEnabled()) && (model == &gInventory) && (!RlvFolderLocks::instance().canRenameFolder(id)) )
 	{
 		return FALSE;
 	}

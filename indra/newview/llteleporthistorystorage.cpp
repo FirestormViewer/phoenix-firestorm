@@ -34,7 +34,7 @@
 #include "llteleporthistory.h"
 #include "llagent.h"
 // [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1b)
-#include "rlvhandler.h"
+#include "rlvactions.h"
 // [/RLVa:KB]
 
 // Max offset for two global positions to consider them as equal
@@ -127,7 +127,7 @@ bool LLTeleportHistoryStorage::compareByTitleAndGlobalPos(const LLTeleportHistor
 void LLTeleportHistoryStorage::addItem(const std::string title, const LLVector3d& global_pos, const LLDate& date)
 {
 // [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
-	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+	if (!RlvActions::canShowLocation())
 	{
 		return;
 	}

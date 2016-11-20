@@ -36,7 +36,7 @@
 #include "llviewerregion.h"
 #include "message.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
-#include "rlvhandler.h"
+#include "rlvactions.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
 
@@ -104,7 +104,7 @@ void LLAttachmentsMgr::addAttachmentRequest(const LLUUID& item_id,
 	attachment.mAdd = add;
 
 // [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1)
-	if ( (rlv_handler_t::isEnabled()) && (!fRlvForce) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) && (gAgentWearables.areInitialAttachmentsRequested()) )
+	if ( (RlvActions::isRlvEnabled()) && (!fRlvForce) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) && (gAgentWearables.areInitialAttachmentsRequested()) )
 	{
 		const LLInventoryItem* pItem = gInventory.getItem(item_id); 
 		if (!pItem)

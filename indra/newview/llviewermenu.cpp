@@ -3720,7 +3720,7 @@ class LLSelfStandUp : public view_listener_t
 bool enable_standup_self()
 {
 // [RLVa:KB] - Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-1.0.0g
-	return isAgentAvatarValid() && gAgentAvatarp->isSitting() && !RlvActions::canStand();
+	return isAgentAvatarValid() && gAgentAvatarp->isSitting() && RlvActions::canStand();
 // [/RLVa:KB]
 //	return isAgentAvatarValid() && gAgentAvatarp->isSitting();
 }
