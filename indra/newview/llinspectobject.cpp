@@ -363,7 +363,7 @@ void LLInspectObject::updateButtons(LLSelectNode* nodep)
 		|| (parent && parent->flagHandleTouch()))
 	{
 		getChild<LLUICtrl>("touch_btn")->setVisible(true);
-// [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.1g) | Added: RLVa-1.2.1g
+// [RLVa:KB] - Checked: RLVa-1.2.1
 		if (RlvActions::isRlvEnabled())
 			getChild<LLUICtrl>("touch_btn")->setEnabled(RlvActions::canTouch(object));
 // [/RLVa:KB]

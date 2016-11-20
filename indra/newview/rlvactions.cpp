@@ -332,20 +332,34 @@ bool RlvActions::canBuild()
 		(!gRlvHandler.hasBehaviour(RLV_BHVR_REZ));
 }
 
-bool RlvActions::canEdit()
-{
-	return (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT));
-}
-
+// Handles: @edit and @editobj
 bool RlvActions::canEdit(const LLViewerObject* pObj)
 {
 	// User can edit the specified object if:
 	//   - not generally restricted from editing (or the object's root is an exception)
 	//   - not specifically restricted from editing this object's root
+
+	// NOTE-RLVa: edit checks should *never* be subject to @fartouch distance checks since we don't have the pick offset so
+	//            instead just implicitly rely on the presence of a (transient) selection
 	return
 		(pObj) &&
-		((!hasBehaviour(RLV_BHVR_EDIT)) || (gRlvHandler.isException(RLV_BHVR_EDIT, pObj->getRootEdit()->getID()))) &&
-		((!hasBehaviour(RLV_BHVR_EDITOBJ)) || (!gRlvHandler.isException(RLV_BHVR_EDITOBJ, pObj->getRootEdit()->getID())));
+		( (!RlvHandler::instance().hasBehaviour(RLV_BHVR_EDIT)) || (RlvHandler::instance().isException(RLV_BHVR_EDIT, pObj->getRootEdit()->getID())) ) &&
+		( (!RlvHandler::instance().hasBehaviour(RLV_BHVR_EDITOBJ)) || (!RlvHandler::instance().isException(RLV_BHVR_EDITOBJ, pObj->getRootEdit()->getID())) );
+}
+
+// Handles: @fartouch and @interact
+bool RlvActions::canInteract(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/)
+{
+	static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
+
+	// User can interact with the specified object if:
+	//   - not interaction restricted (or the specified object is a HUD attachment)
+	//   - not prevented from touching faraway objects (or the object's center + pick offset is within range)
+	RlvHandler& rlvHandler = RlvHandler::instance();
+	return
+		(!pObj) ||
+		( ( (!rlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) || (pObj->isHUDAttachment())) &&
+		  ( (!rlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) || (pObj->isHUDAttachment()) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist)) );
 }
 
 bool RlvActions::canRez()
@@ -353,7 +367,7 @@ bool RlvActions::canRez()
 	return (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ));
 }
 
-bool RlvActions::canSit(const LLViewerObject* pObj, const LLVector3& posOffset /*= LLVector3::zero*/)
+bool RlvActions::canSit(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/)
 {
 	// User can sit on the specified object if:
 	//   - not prevented from sitting
@@ -401,21 +415,21 @@ bool RlvActions::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset
 	//        - a) not prevented from touching any object
 	//        - b) not specifically prevented from touching that object
 	//        - c) not prevented from touching world objects (or the object is an exception)
-	//        - h) not prevented from touching faraway objects (or the object's root + pick offset is within range)
+	//        - h) not prevented from touching faraway objects (or the object's center + pick offset is within range)
 	//        - i) specifically allowed to touch that object (overrides all restrictions)
 	//  (2) Attachment (on another avatar)
 	//        - a) not prevented from touching any object
 	//        - b) not specifically prevented from touching that object
 	//        - d) not prevented from touching attachments (or the attachment is an exception)
 	//        - e) not prevented from touching other avatar's attachments (or the attachment is an exception)
-	//        - h) not prevented from touching faraway objects (or the attachment's root + pick offset is within range)
+	//        - h) not prevented from touching faraway objects (or the attachment's center + pick offset is within range)
 	//        - i) specifically allowed to touch that object (overrides all restrictions)
 	//  (3) Attachment (on own avatar)
 	//        - a) not prevented from touching any object
 	//        - b) not specifically prevented from touching that object
 	//        - d) not prevented from touching attachments (or the attachment is an exception)
 	//        - f) not prevented from touching their own avatar's attachments (or the attachment is an exception)
-	//        - h) not prevented from touching faraway objects (or the attachment's root + pick offset is within range)
+	//        - h) not prevented from touching faraway objects (or the attachment's center + pick offset is within range)
 	//        - i) specifically allowed to touch that object (overrides all restrictions)
 	//  (4) Attachment (on HUD)
 	//        - b) not specifically prevented from touching that object

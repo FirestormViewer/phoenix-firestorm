@@ -39,9 +39,8 @@
 #include "llviewerobject.h"
 #include "llviewerwindow.h"
 #include "llfloatertools.h"
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e)
+// [RLVa:KB] - Checked: RLVa-2.1.0
 #include "rlvactions.h"
-#include "rlvhandler.h"
 // [/RLVa:KB]
 
 //
@@ -94,10 +93,8 @@ void LLToolFace::pickCallback(const LLPickInfo& pick_info)
 			return;
 		}
 
-// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
-		if ( (RlvActions::isRlvEnabled()) &&
-			 ( (!RlvActions::canEdit(hit_obj)) || 
-			   ((gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && (!RlvActions::canTouch(hit_obj, pick_info.mObjectOffset))) ) )
+// [RLVa:KB] - Checked: RLVa-1.3.0
+		if ( (RlvActions::isRlvEnabled()) && ((!RlvActions::canEdit(hit_obj)) || (!RlvActions::canInteract(hit_obj, pick_info.mObjectOffset))) )
 		{
 			return;
 		}

@@ -206,10 +206,9 @@ BOOL LLToolPie::handleLeftClickPick()
 	// If it's a left-click, and we have a special action, do it.
 	if (useClickAction(mask, object, parent))
 	{
-// [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
-		// Block left-click special actions when fartouch restricted
-		if ( (RlvActions::isRlvEnabled()) && 
-			 (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && (!RlvActions::canTouch(object, mPick.mObjectOffset)) )
+// [RLVa:KB] - Checked: RLVa-1.1.0
+		// Blanket block all left-click special actions on objects the user can't interact with
+		if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canInteract(object, mPick.mObjectOffset)) )
 		{
 			return TRUE;
 		}
@@ -336,7 +335,7 @@ BOOL LLToolPie::handleLeftClickPick()
 		((object->flagUsePhysics() || (parent && !parent->isAvatar() && parent->flagUsePhysics())) || touchable) 
 		)
 	{
-// [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
+// [RLVa:KB] - Checked: RLVa-1.1.0
 		// Triggered by left-clicking on a touchable object
 		if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canTouch(object, mPick.mObjectOffset)) )
 		{
@@ -580,20 +579,15 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE, FALSE);
 	LLViewerObject *parent = NULL;
 	LLViewerObject *object = mHoverPick.getObject();
-// [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
-	// Block all special click action cursors when:
-	//   - @fartouch=n restricted and the object is out of range
-	//   - @interact=n restricted and the object isn't a HUD attachment
-	if ( (object) && (RlvActions::isRlvEnabled()) && 
-		( ((gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH))) && (!RlvActions::canTouch(object, mHoverPick.mObjectOffset)) || 
-		  ((gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) && (!object->isHUDAttachment())) ) )
+// [RLVa:KB] - Checked: RLVa-1.1.0
+	// Blanket block all left-click special actions on objects the user can't interact with
+	if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canInteract(object, mHoverPick.mObjectOffset)) )
 	{
 		gViewerWindow->setCursor(UI_CURSOR_ARROW);
 		return TRUE;
 	}
 // [/RLVa:KB]
 	LLSelectMgr::getInstance()->setHoverObject(object, mHoverPick.mObjectFace);
-
 	if (object)
 	{
 		parent = object->getRootEdit();
@@ -647,10 +641,10 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 			gViewerWindow->setCursor(cursor);
 			LL_DEBUGS("UserInput") << "hover handled by LLToolPie (inactive)" << LL_ENDL;
 		}
-// [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Added: RLVa-1.1.0l
-		else if ( (object) && (RlvActions::isRlvEnabled()) && (!RlvActions::canTouch(object)) )
+// [RLVa:KB] - Checked: RLVa-1.1.0
+		else if ( (object) && (RlvActions::isRlvEnabled()) && (!RlvActions::canTouch(object, mHoverPick.mObjectOffset)) )
 		{
-			// Block showing the "grab" or "touch" cursor if we can't touch the object (@fartouch=n is handled above)
+			// Block showing the "grab" or "touch" cursor if we can't touch/grab the object
 			gViewerWindow->setCursor(UI_CURSOR_ARROW);
 		}
 // [/RLVa:KB]
@@ -1122,10 +1116,10 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			LLAvatarName av_name;
 			if (LLAvatarNameCache::get(hover_object->getID(), &av_name))
 			{
-//				final_name = av_name.getCompleteName();
 // [RLVa:KB] - Checked: RLVa-1.2.2
 				final_name = (RlvActions::canShowName(RlvActions::SNC_DEFAULT, hover_object->getID())) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
 // [/RLVa:KB]
+//				final_name = av_name.getCompleteName();
 			}
 			else
 			{
@@ -1135,8 +1129,8 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			// *HACK: We may select this object, so pretend it was clicked
 			mPick = mHoverPick;
 // [RLVa:KB] - Checked: RLVa-1.2.0
-			if ( (!RlvActions::isRlvEnabled()) || 
-			     ( (RlvActions::canTouch(hover_object, mHoverPick.mObjectOffset)) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, hover_object->getID())) ) )
+			if ( (!RlvActions::isRlvEnabled()) ||
+			     ( (RlvActions::canInteract(hover_object, mHoverPick.mObjectOffset)) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, hover_object->getID())) ) )
 			{
 // [/RLVa:KB]
 				LLInspector::Params p;
@@ -1150,7 +1144,7 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				p.wrap(false);
 				
 				LLToolTipMgr::instance().show(p);
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.2a) | Added: RLVa-1.2.0e
+// [RLVa:KB] - Checked: RLVa-1.2.0
 			}
 			else
 			{
@@ -1259,9 +1253,8 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			{
 				// We may select this object, so pretend it was clicked
 				mPick = mHoverPick;
-// [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.1g) | Modified: RLVa-1.2.1g
-				if ( (!RlvActions::isRlvEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) ||
-					 (RlvActions::canTouch(hover_object, mHoverPick.mObjectOffset)) )
+// [RLVa:KB] - Checked: RLVa-1.2.1
+				if ( (!RlvActions::isRlvEnabled()) || (RlvActions::canInteract(hover_object, mHoverPick.mObjectOffset)) )
 				{
 // [/RLVa:KB]
 					LLInspector::Params p;
@@ -1280,7 +1273,7 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 					p.wrap(false);
 					
 					LLToolTipMgr::instance().show(p);
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
+// [RLVa:KB] - Checked: RLVa-1.2.0
 				}
 				else
 				{

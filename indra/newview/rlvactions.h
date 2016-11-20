@@ -194,6 +194,12 @@ public:
 	// =================
 	// World interaction
 	// =================
+	// Terminology:
+	//   - build    : <todo>
+	//   - edit     : ability to get access an object from the build floater, or being able to look at its contents (i.e. open)
+	//   - interact : ability to interact with an object/avatar in any way or shape (i.e. touch, edit, click, grab, move, ...)
+	//   - rez      : ability to rez new objects (from either inventory or through the create tool)
+	//   - touch    : singularly refers to the ability to either invoke the scripted touch handler, or perform a physical grab
 public:
 	/*
 	 * Returns true if the user can build (= access the build tools)
@@ -201,24 +207,20 @@ public:
 	static bool canBuild();
 
 	/*
-	 * Returns true if the user can edit existing objects (generic check not based on specific object type)
-	 */
-	static bool canEdit();
-
-	/*
-	 * Returns true if the user can edit the specified object
+	 * Returns true if the user can edit the specified object (with an optional relative offset)
 	 */
 	static bool canEdit(const LLViewerObject* pObj);
+
+	/*
+	 * Returns true if the user can interact with the specified object (with an optional relative offset)
+	 * (returns true if pObj == nullptr to not short circuit calling code)
+	 */
+	static bool canInteract(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
 
 	/*
 	 * Returns true if the user can rez new objects (from inventory or through the create tool)
 	 */
 	static bool canRez();
-
-	/*
-	 * Returns true if the user can sit up on the specified object
-	 */
-	static bool canSit(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
 
 	/*
 	 * Returns true if the user can see the hovertext associated with the specified object
@@ -231,15 +233,20 @@ public:
 	static bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
 
 	/*
+	 * Returns true if the user can see their in-world location
+	 */
+	static bool canShowLocation();
+
+	/*
+	 * Returns true if the user can sit up on the specified object
+	 */
+	static bool canSit(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
+
+	/*
 	 * Returns true if the user can stand up (returns true if the user isn't currently sitting)
 	 */
 	static bool canStand();
 	static bool canStand(const LLUUID& idRlvObjExcept);
-
-	/*
-	 * Returns true if the user can see their in-world location
-	 */
-	static bool canShowLocation();
 
 	// ================
 	// Helper functions
