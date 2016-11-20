@@ -18,6 +18,8 @@
 #include "llagent.h"
 #include "llagentui.h"
 #include "llavatarnamecache.h"
+#include "llcallingcard.h"
+#include "llimview.h"
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
 #include "llregionhandle.h"
@@ -27,6 +29,7 @@
 #include "llversioninfo.h"
 #include "llviewerparcelmgr.h"
 #include "llviewermenu.h"
+#include "llviewermessage.h"
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
 #include "llworld.h"
@@ -601,6 +604,55 @@ bool RlvUtil::sendChatReply(S32 nChannel, const std::string& strUTF8Text)
 	add(LLStatViewer::CHAT_COUNT, 1);
 
 	return true;
+}
+
+void RlvUtil::sendIMMessage(const LLUUID& idRecipient, const std::string& strMsg, char chSplit)
+{
+	const LLUUID idSession = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL, idRecipient);
+	const LLRelationship* pBuddyInfo = LLAvatarTracker::instance().getBuddyInfo(idRecipient);
+	std::string strAgentName;
+	LLAgentUI::buildFullname(strAgentName);
+
+	std::string::size_type lenMsg = strMsg.length(), lenIt = 0;
+
+	const char* pstrIt = strMsg.c_str(); std::string strTemp;
+	while (lenIt < lenMsg)
+	{
+		if (lenIt + MAX_MSG_STR_LEN < lenMsg)
+		{
+			// Find the last split character
+			const char* pstrTemp = pstrIt + MAX_MSG_STR_LEN;
+			while ( (pstrTemp > pstrIt) && (*pstrTemp != chSplit) )
+				pstrTemp--;
+
+			if (pstrTemp > pstrIt)
+				strTemp = strMsg.substr(lenIt, pstrTemp - pstrIt);
+			else
+				strTemp = utf8str_substr(strMsg, lenIt, MAX_MSG_STR_LEN);
+		}
+		else
+		{
+			strTemp = strMsg.substr(lenIt, std::string::npos);
+		}
+
+		pack_instant_message(
+			gMessageSystem,
+			gAgent.getID(),
+			false,
+			gAgent.getSessionID(),
+			idRecipient,
+			strAgentName.c_str(),
+			strTemp.c_str(),
+			( (!pBuddyInfo) || (pBuddyInfo->isOnline()) ) ? IM_ONLINE : IM_OFFLINE,
+			IM_NOTHING_SPECIAL,
+			idSession);
+		gAgent.sendReliableMessage();
+
+		lenIt += strTemp.length();
+		pstrIt = strMsg.c_str() + lenIt;
+		if (*pstrIt == chSplit)
+			lenIt++;
+	}
 }
 
 void RlvUtil::teleportCallback(U64 hRegion, const LLVector3& posRegion, const LLVector3& vecLookAt)

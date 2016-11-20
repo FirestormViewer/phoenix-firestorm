@@ -11016,11 +11016,32 @@ Cannot create large prims that intersect other players.  Please re-try when othe
 
   <notification
    icon="alertmodal.tga"
-   name="RLVChangeStrings"
+   name="RLVaChangeStrings"
    type="alertmodal">
 Changes won't take effect until after you restart [APP_NAME].
   </notification>
-  
+
+  <notification
+   icon="notify.tga"
+   name="RLVaListRequested"
+   label="Restriction request from [NAME_LABEL]"
+   log_to_im="true"
+   log_to_chat="false"
+   type="offer">
+[NAME_SLURL] has requested to be sent a list of your currently active RLV restrictions.
+    <tag>confirm</tag>
+    <form name="form">
+      <button
+       index="0"
+       name="Allow"
+       text="Allow"/>
+      <button
+       index="1"
+       name="Deny"
+       text="Deny"/>
+    </form>
+  </notification>
+
   <notification
    icon="alertmodal.tga"
    name="PreferenceChatClearLog"

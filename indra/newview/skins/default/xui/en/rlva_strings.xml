@@ -45,6 +45,48 @@
 			<boolean>1</boolean>
 		</map>
 
+		<!-- Sent to the remote party when they issue @list as an IM query (if enabled) -->
+		<key>imquery_list_deny</key>
+		<map>
+			<key>value</key>
+			<string>*** The other party respectfully requests you mind your own business (bunnies made me do it!)</string>
+			<key>description</key>
+			<string>Sent to the remote party when you deny their request to list your active RLV restrictions)</string>
+			<key>label</key>
+			<string>@list command (remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- Sent to the remote party when they issue @stopim as an IM query (if enabled) -->
+		<key>stopim_nosession</key>
+		<map>
+			<key>value</key>
+			<string>*** The other party is not under a @startim restriction</string>
+			<key>description</key>
+			<string>Sent to the remote party when they attempt to forcefully close your IM conversation with them (and no such session exists)</string>
+			<key>label</key>
+			<string>@stopim command with no session (remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>stopim_endsession_remote</key>
+		<map>
+			<key>value</key>
+			<string>*** Session has been ended for the other party</string>
+			<key>description</key>
+			<string>Sent to the remote party when they attempt to forcefully close the IM conversation (and it exists)</string>
+			<key>label</key>
+			<string>@stopim command with an active session (remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>stopim_endsession_local</key>
+		<map>
+			<key>value</key>
+			<string>[NAME] has remotely closed the IM conversation with @stopim</string>
+		</map>
+
 		<!-- Shown as notifications -->
 		<key>blocked_autopilot</key>
 		<map>

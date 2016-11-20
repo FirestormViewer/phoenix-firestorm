@@ -388,6 +388,9 @@ enum ERlvAttachGroupType
 #define RLV_STRING_BLOCKED_TPLUREREQ_REMOTE	"blocked_tplurerequest_remote"
 #define RLV_STRING_BLOCKED_VIEWXXX			"blocked_viewxxx"
 #define RLV_STRING_BLOCKED_WIREFRAME		"blocked_wireframe"
+#define RLV_STRING_STOPIM_NOSESSION         "stopim_nosession"
+#define RLV_STRING_STOPIM_ENDSESSION_REMOTE "stopim_endsession_remote"
+#define RLV_STRING_STOPIM_ENDSESSION_LOCAL  "stopim_endsession_local"
 
 // ============================================================================
 

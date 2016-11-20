@@ -548,7 +548,7 @@ public:
 	const LLUUID& getObjectID() const	{ return m_idObj; }
 	const LLUUID& getRootID() const		{ return m_idRoot; }
 	bool          hasLookup() const     { return m_fLookup; }
-	const rlv_command_list_t* getCommandList() const { return &m_Commands; }
+	const rlv_command_list_t& getCommandList() const { return m_Commands; }
 
 	/*
 	 * Member variables

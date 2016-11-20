@@ -107,6 +107,7 @@ public:
 	// Command processing helper functions
 	ERlvCmdRet processCommand(const LLUUID& idObj, const std::string& strCommand, bool fFromObj);
 	void       processRetainedCommands(ERlvBehaviour eBhvrFilter = RLV_BHVR_UNKNOWN, ERlvParamType eTypeFilter = RLV_TYPE_UNKNOWN);
+	bool       processIMQuery(const LLUUID& idSender, const std::string& strCommand);
 
 	// Returns a pointer to the currently executing command (do *not* save this pointer)
 	const RlvCommand* getCurrentCommand() const { return (!m_CurCommandStack.empty()) ? m_CurCommandStack.top() : NULL; }
@@ -118,6 +119,7 @@ public:
 	static bool isEnabled()	{ return m_fEnabled; }
 	static bool setEnabled(bool fEnable);
 protected:
+	void onIMQueryListResponse(const LLSD& sdNotification, const LLSD sdResponse);
 
 	// --------------------------------
 
@@ -216,11 +218,10 @@ protected:
 	// --------------------------------
 
 	/*
-	 * Internal access functions used by unit tests
+	 * Internal access functions
 	 */
 public:
-	const rlv_object_map_t*    getObjectMap() const		{ return &m_Objects; }
-	//const rlv_exception_map_t* getExceptionMap() const	{ return &m_Exceptions; }
+	const rlv_object_map_t& getObjectMap() const { return m_Objects; }
 };
 
 typedef RlvHandler rlv_handler_t;

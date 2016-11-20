@@ -229,23 +229,20 @@ void RlvFloaterBehaviours::onAvatarNameLookup(const LLUUID& idAgent, const LLAva
 		refreshAll();
 }
 
-// Checked: 2011-05-26 (RLVa-1.3.1c) | Added: RLVa-1.3.1c
-void RlvFloaterBehaviours::onBtnCopyToClipboard()
+// static
+const std::string RlvFloaterBehaviours::getFormattedBehaviourString()
 {
 	std::ostringstream strRestrictions;
 
 	strRestrictions << RlvStrings::getVersion(LLUUID::null) << "\n";
 
-	const RlvHandler::rlv_object_map_t* pObjects = gRlvHandler.getObjectMap();
-	for (RlvHandler::rlv_object_map_t::const_iterator itObj = pObjects->begin(), endObj = pObjects->end(); itObj != endObj; ++itObj)
+	for (const auto& rlvObjectEntry : RlvHandler::instance().getObjectMap())
 	{
-		strRestrictions << "\n" << rlvGetItemNameFromObjID(itObj->first) << ":\n";
-
-		const rlv_command_list_t* pCommands = itObj->second.getCommandList();
-		for (rlv_command_list_t::const_iterator itCmd = pCommands->begin(), endCmd = pCommands->end(); itCmd != endCmd; ++itCmd)
+		strRestrictions << "\n" << rlvGetItemNameFromObjID(rlvObjectEntry.first) << ":\n";
+		for (const RlvCommand& rlvCmd : rlvObjectEntry.second.getCommandList())
 		{
 			std::string strOption; LLUUID idOption;
-			if ( (itCmd->hasOption()) && (idOption.set(itCmd->getOption(), FALSE)) && (idOption.notNull()) )
+			if ( (rlvCmd.hasOption()) && (idOption.set(rlvCmd.getOption(), FALSE)) && (idOption.notNull()) )
 			{
 				LLAvatarName avName;
 				if (gObjectList.findObject(idOption))
@@ -253,17 +250,23 @@ void RlvFloaterBehaviours::onBtnCopyToClipboard()
 				else if (LLAvatarNameCache::get(idOption, &avName))
 					strOption = (!avName.getAccountName().empty()) ? avName.getAccountName() : avName.getDisplayName();
 				else if (!gCacheName->getGroupName(idOption, strOption))
-					strOption = itCmd->getOption();
+					strOption = rlvCmd.getOption();
 			}
 
-			strRestrictions << "  -> " << itCmd->asString();
-			if ( (!strOption.empty()) && (strOption != itCmd->getOption()) )
+			strRestrictions << "  -> " << rlvCmd.asString();
+			if ((!strOption.empty()) && (strOption != rlvCmd.getOption()))
 				strRestrictions << "  [" << strOption << "]";
 			strRestrictions << "\n";
 		}
 	}
 
-	LLWString wstrRestrictions = utf8str_to_wstring(strRestrictions.str());
+	return strRestrictions.str() + strRestrictions.str() + strRestrictions.str() + strRestrictions.str() + strRestrictions.str();
+}
+
+// Checked: 2011-05-26 (RLVa-1.3.1c) | Added: RLVa-1.3.1c
+void RlvFloaterBehaviours::onBtnCopyToClipboard()
+{
+	LLWString wstrRestrictions = utf8str_to_wstring(getFormattedBehaviourString());
 	LLClipboard::instance().copyToClipboard(wstrRestrictions, 0, wstrRestrictions.length());
 }
 
@@ -315,16 +318,14 @@ void RlvFloaterBehaviours::refreshAll()
 	//
 	// List behaviours
 	//
-	const RlvHandler::rlv_object_map_t* pObjects = gRlvHandler.getObjectMap();
-	for (RlvHandler::rlv_object_map_t::const_iterator itObj = pObjects->begin(), endObj = pObjects->end(); itObj != endObj; ++itObj)
+	for (const auto& rlvObjectEntry : RlvHandler::instance().getObjectMap())
 	{
-		const std::string strIssuer = rlvGetItemNameFromObjID(itObj->first);
+		const std::string strIssuer = rlvGetItemNameFromObjID(rlvObjectEntry.first);
 
-		const rlv_command_list_t* pCommands = itObj->second.getCommandList();
-		for (rlv_command_list_t::const_iterator itCmd = pCommands->begin(), endCmd = pCommands->end(); itCmd != endCmd; ++itCmd)
+		for (const RlvCommand& rlvCmd : rlvObjectEntry.second.getCommandList())
 		{
 			std::string strOption; LLUUID idOption;
-			if ( (itCmd->hasOption()) && (idOption.set(itCmd->getOption(), FALSE)) && (idOption.notNull()) )
+			if ( (rlvCmd.hasOption()) && (idOption.set(rlvCmd.getOption(), FALSE)) && (idOption.notNull()) )
 			{
 				LLAvatarName avName;
 				if (gObjectList.findObject(idOption))
@@ -342,15 +343,15 @@ void RlvFloaterBehaviours::refreshAll()
 						LLAvatarNameCache::get(idOption, boost::bind(&RlvFloaterBehaviours::onAvatarNameLookup, this, _1, _2));
 						m_PendingLookup.push_back(idOption);
 					}
-					strOption = itCmd->getOption();
+					strOption = rlvCmd.getOption();
 				}
 			}
 
-			if ( (itCmd->hasOption()) && (rlvGetShowException(itCmd->getBehaviourType())) )
+			if ( (rlvCmd.hasOption()) && (rlvGetShowException(rlvCmd.getBehaviourType())) )
 			{
 				// List under the "Exception" tab
-				sdExceptRow["enabled"] = gRlvHandler.isException(itCmd->getBehaviourType(), idOption);
-				sdExceptColumns[0]["value"] = itCmd->getBehaviour();
+				sdExceptRow["enabled"] = gRlvHandler.isException(rlvCmd.getBehaviourType(), idOption);
+				sdExceptColumns[0]["value"] = rlvCmd.getBehaviour();
 				sdExceptColumns[1]["value"] = strOption;
 				sdExceptColumns[2]["value"] = strIssuer;
 				pExceptList->addElement(sdExceptRow, ADD_BOTTOM);
@@ -358,7 +359,7 @@ void RlvFloaterBehaviours::refreshAll()
 			else
 			{
 				// List under the "Restrictions" tab
-				sdBhvrColumns[0]["value"] = (strOption.empty()) ? itCmd->asString() : itCmd->getBehaviour() + ":" + strOption;
+				sdBhvrColumns[0]["value"] = (strOption.empty()) ? rlvCmd.asString() : rlvCmd.getBehaviour() + ":" + strOption;
 				sdBhvrColumns[1]["value"] = strIssuer;
 				pBhvrList->addElement(sdBhvrRow, ADD_BOTTOM);
 			}
@@ -660,7 +661,7 @@ void RlvFloaterStrings::onClose(bool fQuitting)
 		RlvStrings::saveToFile(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, RLV_STRINGS_FILE));
 
 		// Remind the user their changes require a relog to take effect
-		LLNotificationsUtil::add("RLVChangeStrings");
+		LLNotificationsUtil::add("RLVaChangeStrings");
 	}
 }
 

@@ -22,6 +22,7 @@
 #include "llgroupactions.h"
 #include "llhudtext.h"
 #include "llmoveview.h"
+#include "llslurl.h"
 #include "llstartup.h"
 #include "llviewermessage.h"
 #include "llviewermenu.h"
@@ -31,10 +32,13 @@
 
 // Command specific includes
 #include "llagentcamera.h"				// @setcam and related
+#include "llavataractions.h"            // @stopim IM query
 #include "llavatarnamecache.h"			// @shownames
 #include "llavatarlist.h"				// @shownames
 #include "llenvmanager.h"				// @setenv
 #include "llfloatersidepanelcontainer.h"// @shownames
+#include "llnotifications.h"			// @list IM query
+#include "llnotificationsutil.h"
 #include "lloutfitslist.h"				// @showinv - "Appearance / My Outfits" panel
 #include "llpaneloutfitsinventory.h"	// @showinv - "Appearance" floater
 #include "llpanelpeople.h"				// @shownames
@@ -466,6 +470,70 @@ ERlvCmdRet RlvHandler::processClearCommand(const RlvCommand& rlvCmd)
 	notifyCommandHandlers(&RlvExtCommandHandler::onClearCommand, rlvCmd, eRet, true);
 
 	return RLV_RET_SUCCESS; // Don't fail clear commands even if the object didn't exist since it confuses people
+}
+
+bool RlvHandler::processIMQuery(const LLUUID& idSender, const std::string& strMessage)
+{
+	if ("@stopim" == strMessage)
+	{
+		// If the user can't start an IM session and one is open terminate it - always notify the sender in this case
+		if ( (!RlvActions::canStartIM(idSender)) && (RlvActions::hasOpenP2PSession(idSender)) )
+		{
+			RlvUtil::sendBusyMessage(idSender, RlvStrings::getString(RLV_STRING_STOPIM_ENDSESSION_REMOTE));
+			LLAvatarActions::endIM(idSender);
+			RlvUtil::notifyBlocked(RLV_STRING_STOPIM_ENDSESSION_LOCAL, LLSD().with("NAME", LLSLURL("agent", idSender, "about").getSLURLString()));
+			return true;
+		}
+
+		// User can start an IM session (or one isn't open) so we do nothing - notify and hide it from the user only if IM queries are enabled
+		if (!RlvSettings::getEnableIMQuery())
+			return false;
+		RlvUtil::sendBusyMessage(idSender, RlvStrings::getString(RLV_STRING_STOPIM_NOSESSION));
+		return true;
+	}
+	else if (RlvSettings::getEnableIMQuery())
+	{
+		if ("@version" == strMessage)
+		{
+			RlvUtil::sendBusyMessage(idSender, RlvStrings::getVersion(LLUUID::null));
+			return true;
+		}
+		else if ("@list" == strMessage)
+		{
+			LLNotification::Params params;
+			params.name = "RLVaListRequested";
+			params.functor.function(boost::bind(&RlvHandler::onIMQueryListResponse, this, _1, _2));
+			params.substitutions = LLSD().with("NAME_LABEL", LLSLURL("agent", idSender, "completename").getSLURLString()).with("NAME_SLURL", LLSLURL("agent", idSender, "about").getSLURLString());
+			params.payload = LLSD().with("from_id", idSender);
+
+			class RlvPostponedOfferNotification : public LLPostponedNotification
+			{
+			protected:
+				void modifyNotificationParams() override
+				{
+					LLSD substitutions = mParams.substitutions;
+					substitutions["NAME"] = mName;
+					mParams.substitutions = substitutions;
+				}
+			};
+			LLPostponedNotification::add<RlvPostponedOfferNotification>(params, idSender, false);
+			return true;
+		}
+	}
+	return false;
+}
+
+void RlvHandler::onIMQueryListResponse(const LLSD& sdNotification, const LLSD sdResponse)
+{
+	const LLUUID idRequester = sdNotification["payload"]["from_id"].asUUID();
+	if (LLNotificationsUtil::getSelectedOption(sdNotification, sdResponse) == 0)
+	{
+		RlvUtil::sendIMMessage(idRequester, RlvFloaterBehaviours::getFormattedBehaviourString(), '\n');
+	}
+	else
+	{
+		RlvUtil::sendBusyMessage(idRequester, RlvStrings::getString("imquery_list_deny"));
+	}
 }
 
 // ============================================================================
