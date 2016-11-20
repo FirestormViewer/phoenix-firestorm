@@ -5068,6 +5068,10 @@ Diese Aktion setzt die Schnelleinstellungen direkt auf die Standardkonfiguration
 Diese Aktion kann nicht rückgängig gemacht werden.
 		<usetemplate ignoretext="Bestätigen, wenn Schnelleinstellungen zurückgesetzt werden sollen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="QuickPrefsDuplicateControl">
+		Einstellung wurde bereits hinzugefügt. Bitte eine andere Einstellung wählen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 
 	<notification name="ExportFinished">
 Export nach [FILENAME] beendet.

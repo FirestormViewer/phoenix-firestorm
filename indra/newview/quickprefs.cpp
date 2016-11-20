@@ -1575,6 +1575,13 @@ void FloaterQuickPrefs::onValuesChanged()
 	// if we changed the control's variable, rebuild the user interface
 	if (!new_control_name.empty() && old_control_name != new_control_name)
 	{
+		if (mControlsList.find(new_control_name) != mControlsList.end())
+		{
+			LL_WARNS() << "Selected control has already been added" << LL_ENDL;
+			LLNotificationsUtil::add("QuickPrefsDuplicateControl");
+			return;
+		}
+
 		// remember the old control parameters so we can restore them later
 		ControlEntry old_parameters = mControlsList[mSelectedControl];
 		// disable selection so the border doesn't cause a crash
