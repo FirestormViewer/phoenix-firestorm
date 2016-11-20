@@ -795,6 +795,10 @@ bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem)
 				return gRlvAttachmentLocks.canDetach(pItem);
 			case LLAssetType::AT_GESTURE:
 				return true;
+			case LLAssetType::AT_LINK:
+			case LLAssetType::AT_LINK_FOLDER:
+				// Broken links can always be removed since they don't represent a worn item
+				return true;
 			default:
 				RLV_ASSERT(!RlvForceWear::isWearableItem(pItem));
 		}
