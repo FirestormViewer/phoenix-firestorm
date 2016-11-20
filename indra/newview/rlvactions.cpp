@@ -132,12 +132,20 @@ bool RlvActions::canChangeActiveGroup(const LLUUID& idRlvObject)
 // Little helper function to check the IM exclusion range for @recvim, @sendim and @startim (returns: min_dist <= (pos user - pos target) <= max_dist)
 static bool rlvCheckAvatarIMDistance(const LLUUID& idAvatar, ERlvBehaviourModifier eModDistMin, ERlvBehaviourModifier eModDistMax)
 {
-	LLVector3d posAgent;
+	//                      | no limits | minimum set | min+max set |       !fHasMin | !fHasMax = INF | fHasMax
+	// --------------------------------------------------------------       ------------------------------------
+	// dist <= min  <= max  | block     | block       | block       |           F    |  F             |    F
+	// min  <= dist <= max  | block     | allow       | allow       |           F    |  T             |    T
+	// min  <= max  <= dist | block     | allow       | block       |           F    |  ^ (see above) |    F
+	// off-region           | block     | allow       | block       |           F    |  ^ (see above) |    F
+
 	const RlvBehaviourModifier *pBhvrModDistMin = RlvBehaviourDictionary::instance().getModifier(eModDistMin), *pBhvrModDistMax = RlvBehaviourDictionary::instance().getModifier(eModDistMax);
-	if ( ((pBhvrModDistMin->hasValue()) || (pBhvrModDistMax->hasValue())) && (LLWorld::getInstance()->getAvatar(idAvatar, posAgent)) )
+	if (pBhvrModDistMin->hasValue())
 	{
-		float nDist = llabs(dist_vec_squared(gAgent.getPositionGlobal(), posAgent));
-		return (nDist >= pBhvrModDistMin->getValue<float>()) && (nDist <= pBhvrModDistMax->getValue<float>());
+		LLVector3d posAgent; bool fHasMax = pBhvrModDistMax->hasValue();
+		float nMinDist = pBhvrModDistMin->getValue<float>(), nMaxDist = (fHasMax) ? pBhvrModDistMax->getValue<float>() : std::numeric_limits<float>::max();
+		float nDist = (LLWorld::getInstance()->getAvatar(idAvatar, posAgent)) ? llabs(dist_vec_squared(gAgent.getPositionGlobal(), posAgent)) : std::numeric_limits<float>::max();
+		return (nMinDist < nMaxDist) && (nMinDist <= nDist) && (nDist <= nMaxDist);
 	}
 	return false;
 }

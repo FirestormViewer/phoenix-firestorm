@@ -87,7 +87,6 @@ public:
 	 */
 	static bool canChangeActiveGroup(const LLUUID& idRlvObject = LLUUID::null);
 
-
 	/*
 	 * Returns true if the user is allowed to receive IMs from the specified sender (can be an avatar or a group)
 	 */
