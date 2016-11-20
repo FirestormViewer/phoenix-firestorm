@@ -817,18 +817,18 @@ BOOL LLVOWLSky::updateStarGeometry(LLDrawable *drawable)
 		up *= sc;
 
 		*(verticesp++)  = mStarVertices[vtx];
-		*(verticesp++) = mStarVertices[vtx]+left;
-		*(verticesp++) = mStarVertices[vtx]+left+up;
-		*(verticesp++) = mStarVertices[vtx]+left;
-		*(verticesp++) = mStarVertices[vtx]+left+up;
 		*(verticesp++) = mStarVertices[vtx]+up;
+		*(verticesp++) = mStarVertices[vtx]+left+up;
+		*(verticesp++)  = mStarVertices[vtx];
+		*(verticesp++) = mStarVertices[vtx]+left+up;
+		*(verticesp++) = mStarVertices[vtx]+left;
 
-		*(texcoordsp++) = LLVector2(0,0);
-		*(texcoordsp++) = LLVector2(0,1);
-		*(texcoordsp++) = LLVector2(1,1);
-		*(texcoordsp++) = LLVector2(0,1);
-		*(texcoordsp++) = LLVector2(1,1);
 		*(texcoordsp++) = LLVector2(1,0);
+		*(texcoordsp++) = LLVector2(1,1);
+		*(texcoordsp++) = LLVector2(0,1);
+		*(texcoordsp++) = LLVector2(1,0);
+		*(texcoordsp++) = LLVector2(0,1);
+		*(texcoordsp++) = LLVector2(0,0);
 
 		// <FS:ND> Only convert to LLColour4U once
 
