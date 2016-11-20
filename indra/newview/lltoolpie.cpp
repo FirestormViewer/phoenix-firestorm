@@ -1146,10 +1146,10 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				LLToolTipMgr::instance().show(p);
 // [RLVa:KB] - Checked: RLVa-1.2.0
 			}
-			else
-			{
-				LLToolTipMgr::instance().show(final_name);
-			}
+//			else
+//			{
+//				LLToolTipMgr::instance().show(final_name);
+//			}
 // [/RLVa:KB]
 		}
 	}
@@ -1273,12 +1273,12 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 					p.wrap(false);
 					
 					LLToolTipMgr::instance().show(p);
-// [RLVa:KB] - Checked: RLVa-1.2.0
+// [RLVa:KB] - Checked: RLVa-2.1.0
 				}
-				else
-				{
-					LLToolTipMgr::instance().show(tooltip_msg);
-				}
+//				else
+//				{
+//					LLToolTipMgr::instance().show(tooltip_msg);
+//				}
 // [/RLVa:KB]
 			}
 		}
@@ -1294,9 +1294,9 @@ BOOL LLToolPie::handleToolTip(S32 local_x, S32 local_y, MASK mask)
 
 	LLViewerObject* hover_object = mHoverPick.getObject();
 
-// [RLVa:KB] - Checked: RLVa-1.2.0
-	// NOTE: handleTooltipObject() will block HUD tooltips anyway but technically interact should only interfere with world interaction
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) && (hover_object) && (!hover_object->isHUDAttachment()) )
+// [RLVa:KB] - Checked: RLVa-2.1.0
+	// Block the tooltip of anything the user can't interact with
+	if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canInteract(hover_object, mHoverPick.mObjectOffset)) )
 	{
 		return TRUE;
 	}
