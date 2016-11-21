@@ -152,7 +152,8 @@ const LLColor4 SIM_WARN_COLOR(1.f, 1.f, 0.f, 1.f);
 const LLColor4 SIM_FULL_COLOR(1.f, 0.f, 0.f, 1.f);
 const F32 ICON_TIMER_EXPIRY		= 3.f; // How long the balance and health icons should flash after a change.
 
-static void onClickVolume(void*);
+// <FS:Ansariel> Open popup panels on click if FSStatusBarMenuButtonPopupOnRollover is disabled
+//static void onClickVolume(void*);
 
 class LLStatusBar::LLParcelChangeObserver : public LLParcelObserver
 {
@@ -924,11 +925,25 @@ void LLStatusBar::onMouseEnterNearbyMedia()
 }
 
 
-static void onClickVolume(void* data)
+// <FS:Ansariel> Open popup panels on click if FSStatusBarMenuButtonPopupOnRollover is disabled
+//static void onClickVolume(void* data)
+void LLStatusBar::onClickVolume(void* data)
+// </FS:Ansariel>
 {
+	// <FS:Ansariel> Open popup panels on click if FSStatusBarMenuButtonPopupOnRollover is disabled
+	if (gSavedSettings.getBOOL("FSStatusBarMenuButtonPopupOnRollover"))
+	{
+	// </FS:Ansariel>
 	// toggle the master mute setting
 	bool mute_audio = LLAppViewer::instance()->getMasterSystemAudioMute();
 	LLAppViewer::instance()->setMasterSystemAudioMute(!mute_audio);	
+	// <FS:Ansariel> Open popup panels on click if FSStatusBarMenuButtonPopupOnRollover is disabled
+	}
+	else
+	{
+		((LLStatusBar*)data)->onMouseEnterVolume();
+	}
+	// </FS:Ansariel>
 }
 
 //static 
@@ -949,7 +964,18 @@ void LLStatusBar::onClickMediaToggle(void* data)
 // <FS:Zi> Split up handling here to allow external controls to switch media on/off
 // 	LLViewerMedia::setAllMediaEnabled(enable);
 // }
+	// <FS:Ansariel> Open popup panels on click if FSStatusBarMenuButtonPopupOnRollover is disabled
+	if (gSavedSettings.getBOOL("FSStatusBarMenuButtonPopupOnRollover"))
+	{
+	// </FS:Ansariel>
 	status_bar->toggleMedia(enable);
+	// <FS:Ansariel> Open popup panels on click if FSStatusBarMenuButtonPopupOnRollover is disabled
+	}
+	else
+	{
+		status_bar->onMouseEnterNearbyMedia();
+	}
+	// </FS:Ansariel>
 }
 
 void LLStatusBar::toggleMedia(bool enable)

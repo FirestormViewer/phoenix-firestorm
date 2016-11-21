@@ -162,8 +162,9 @@ private:
 	void onMouseEnterNearbyMedia();
 	void onClickScreen(S32 x, S32 y);
 
-	static void onClickStreamToggle(void* data);		// ## Zi: Media/Stream separation
+	static void onClickStreamToggle(void* data);		// <FS:Zi> Media/Stream separation
 	static void onClickMediaToggle(void* data);
+	static void onClickVolume(void* data); // <FS:Ansariel> Open popup panels on click if FSStatusBarMenuButtonPopupOnRollover is disabled
 
 	static void onClickBalance(void* data);
 	
