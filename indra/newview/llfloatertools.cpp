@@ -664,7 +664,18 @@ void LLFloaterTools::refresh()
 			if (selected_object)
 			{
 				// Select a parcel at the currently selected object's position.
-				LLViewerParcelMgr::getInstance()->selectParcelAt(selected_object->getPositionGlobal());
+				// <FS:Ansariel> FIRE-20387: Editing HUD attachment shows [CAPACITY_STRING] in tools floater
+				//LLViewerParcelMgr::getInstance()->selectParcelAt(selected_object->getPositionGlobal());
+				if (!selected_object->isAttachment())
+				{
+					LLViewerParcelMgr::getInstance()->selectParcelAt(selected_object->getPositionGlobal());
+				}
+				else
+				{
+					const LLStringExplicit empty_str("");
+					childSetTextArg("remaining_capacity", "[CAPACITY_STRING]", empty_str);
+				}
+				// </FS:Ansariel>
 			}
 			else
 			{

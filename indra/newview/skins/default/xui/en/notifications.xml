@@ -12558,6 +12558,17 @@ You cannot undo this action.
      notext="Cancel"
      yestext="OK"/>
     </notification>
+
+    <notification
+     icon="alertmodal.tga"
+     name="QuickPrefsDuplicateControl"
+     type="alertmodal">
+     <tag>fail</tag>
+Setting has already been added. Please select a different one.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+    </notification>
     
     <notification
      icon="alertmodal.tga"
