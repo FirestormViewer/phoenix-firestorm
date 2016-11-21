@@ -2042,9 +2042,11 @@ void LLFloaterPreference::refreshEnabledState()
 	bool bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump");
 	bumpshiny_ctrl->setEnabled(bumpshiny ? TRUE : FALSE);
 	
-    LLCheckBoxCtrl* ctrl_enhanced_skel = getChild<LLCheckBoxCtrl>("AvatarEnhancedSkeleton");
-    bool enhanced_skel_enabled = gSavedSettings.getBOOL("IncludeEnhancedSkeleton");
-    ctrl_enhanced_skel->setValue(enhanced_skel_enabled);
+	// <FS:Ansariel> Does not exist
+    //LLCheckBoxCtrl* ctrl_enhanced_skel = getChild<LLCheckBoxCtrl>("AvatarEnhancedSkeleton");
+    //bool enhanced_skel_enabled = gSavedSettings.getBOOL("IncludeEnhancedSkeleton");
+    //ctrl_enhanced_skel->setValue(enhanced_skel_enabled);
+	// </FS:Ansariel>
     
 	// Avatar Mode
 	// Enable Avatar Shaders
