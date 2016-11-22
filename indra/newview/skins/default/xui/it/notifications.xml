@@ -794,7 +794,7 @@ Attese [VALIDS]
 	<notification name="ProblemWithFile">
 		Problemi con il file [FILE]:
 
-[ERROR]
+[REASON]
 	</notification>
 	<notification name="CannotOpenTemporarySoundFile">
 		Impossibile aprire in scrittura il file temporaneamente compresso: [FILE]

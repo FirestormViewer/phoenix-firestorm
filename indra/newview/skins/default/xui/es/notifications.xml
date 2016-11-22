@@ -833,7 +833,7 @@ Se admiten [VALIDS]
 	<notification name="ProblemWithFile">
 		Problemas con el archivo [FILE]:
 
-[ERROR]
+[REASON]
 	</notification>
 	<notification name="CannotOpenTemporarySoundFile">
 		No se ha podido abrir para su escritura el archivo comprimido de sonido: [FILE]

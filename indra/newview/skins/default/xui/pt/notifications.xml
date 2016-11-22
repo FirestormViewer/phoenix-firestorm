@@ -790,7 +790,7 @@ Esperada [VALIDS]
 	<notification name="ProblemWithFile">
 		Problemas com o arquivo [FILE]:
 
-[ERROR]
+[REASON]
 	</notification>
 	<notification name="CannotOpenTemporarySoundFile">
 		Não pode abrir o arquivo temporário de som comprimido, para leitura: [FILE]

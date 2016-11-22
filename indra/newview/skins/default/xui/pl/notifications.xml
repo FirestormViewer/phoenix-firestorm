@@ -750,7 +750,7 @@ Oczekiwane: [VALIDS]
 	<notification name="ProblemWithFile">
 		Problem z plikiem [FILE]:
 
-[ERROR]
+[REASON]
 	</notification>
 	<notification name="CannotOpenTemporarySoundFile">
 		Nie można otworzyć tymczasowego skompresowanego pliku dźwiękowego w celu zapisu: [FILE]
