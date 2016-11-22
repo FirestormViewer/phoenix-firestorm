@@ -6701,4 +6701,8 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="mode_unknown">
 		Unbekannter Modus
 	</string>
+	<string name="Asset_Uploading">Hochladen...
+
+[ASSET_NAME]
+	</string>
 </strings>

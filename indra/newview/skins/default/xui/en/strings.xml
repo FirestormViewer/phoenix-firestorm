@@ -3014,4 +3014,9 @@ Try enclosing path to the editor with double quotes.
   <string name="mode_settings_hybrid.xml">Hybrid</string>
   <string name="mode_settings_latency.xml">Latency</string>
   <string name="mode_settings_text.xml">Text</string>
+
+  <string name="Asset_Uploading">Uploading...
+
+[ASSET_NAME]
+  </string>
 </strings>

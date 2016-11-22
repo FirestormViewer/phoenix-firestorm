@@ -712,8 +712,13 @@ void LLViewerAssetUpload::AssetInventoryUploadCoproc(LLCoreHttpUtil::HttpCorouti
 
     if (uploadInfo->showUploadDialog())
     {
-        std::string uploadMessage = "Uploading...\n\n";
-        uploadMessage.append(uploadInfo->getDisplayName());
+        // <FS:Ansariel> Localization fix
+        //std::string uploadMessage = "Uploading...\n\n";
+        //uploadMessage.append(uploadInfo->getDisplayName());
+        LLStringUtil::format_map_t args;
+        args["ASSET_NAME"] = uploadInfo->getDisplayName();
+        std::string uploadMessage = LLTrans::getString("Asset_Uploading", args);
+        // </FS:Ansariel>
         LLUploadDialog::modalUploadDialog(uploadMessage);
     }
 
