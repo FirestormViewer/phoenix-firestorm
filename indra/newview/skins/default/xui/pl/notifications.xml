@@ -1315,7 +1315,7 @@ Możesz normalnie używać [APP_NAME], inni użytkownicy będą Cię widzieli po
 		<usetemplate ignoretext="Ostrzegaj mnie, gdy zmienia się stopień złożoności mojego awatara" name="notifyignore"/>
 	</notification>
 	<notification name="HUDComplexityWarning">
-		[HUD_REASON] - bardzo prawdopodobne, że wpłynie to negatywnie na Twoją wydajność.
+		[HUD_REASON]. Bardzo prawdopodobne, że wpłynie to negatywnie na Twoją wydajność.
 		<usetemplate ignoretext="Ostrzegaj mnie, gdy stopień złożoności moich dodatków HUD jest zbyt wysoki" name="notifyignore"/>
 	</notification>
 	<notification name="FirstRun">
@@ -4720,6 +4720,9 @@ Kontynuowanie spowoduje, że kontrolki Szybkiego Strojenia zostaną przywrócone
 
 Nie można tego cofnąć.
 		<usetemplate ignoretext="Przywrócenie domyślnych kontrolek Szybkiego Strojenia" name="okcancelignore" notext="Anuluj" />
+	</notification>
+	<notification name="QuickPrefsDuplicateControl">
+		Takie ustawienie zostało już wcześniej dodane. Wybierz inne.
 	</notification>
 	<notification name="ExportFinished">
 		Wyeksportowano i zapisano do [FILENAME].

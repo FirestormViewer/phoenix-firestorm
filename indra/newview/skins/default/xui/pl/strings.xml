@@ -81,7 +81,7 @@ Czas utworzenia VFS (cache) w UTC: [VFS_DATE]
 		Pakiety utracone: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
 	</string>
 	<string name="AboutTime">
-		[day, datetime, slt] [month, datetime, slt] [year, datetime, slt], [hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt]
+		[day, datetime, slt] [month, datetime, slt] [year, datetime, slt], [hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] SLT
 	</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">
 		Błąd podczas pobierania informacji o wydaniu.
