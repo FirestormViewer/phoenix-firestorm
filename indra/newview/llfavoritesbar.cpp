@@ -156,13 +156,14 @@ public:
 		if (mRetries <= MAX_LANDMARK_REQUEST_RETRIES)
 		{
 			requestNameAndPos();
-			return FALSE;
 		}
 		else
 		{
 			mIsFailed = true;
-			return TRUE;
+			mEventTimer.stop();
 		}
+
+		return FALSE;
 	}
 	// </FS:Ansariel>
 
