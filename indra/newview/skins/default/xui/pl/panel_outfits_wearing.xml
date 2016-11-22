@@ -4,7 +4,7 @@
 		Brak dodatków.
 	</panel.string>
 	<accordion name="wearables_accordion">
-		<accordion_tab name="tab_wearables" title="Galanteria" />
+		<accordion_tab name="tab_wearables" title="Rzeczy, jakie mam na sobie" />
 		<accordion_tab name="tab_temp_attachments" title="Dodatki tymczasowe" />
 	</accordion>
 	<panel name="bottom_panel">
