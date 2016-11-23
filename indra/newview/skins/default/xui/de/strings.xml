@@ -1864,20 +1864,11 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="InvFolder Gestures">
 		Gesten
 	</string>
-	<string name="InvFolder favorite">
-		Favoriten
-	</string>
-	<string name="InvFolder Favorites">
-		Favoriten
-	</string>
 	<string name="InvFolder favorites">
 		Favoriten
 	</string>
 	<string name="InvFolder Favorites">
-		Meine Favoriten
-	</string>
-	<string name="InvFolder favorites">
-		Meine Favoriten
+		Favoriten
 	</string>
 	<string name="InvFolder Current Outfit">
 		Aktuelles Outfit
