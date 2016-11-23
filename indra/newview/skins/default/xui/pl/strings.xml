@@ -1778,9 +1778,6 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="InvFolder Gestures">
 		Gesty
 	</string>
-	<string name="InvFolder Favorite">
-		Ulubione
-	</string>
 	<string name="InvFolder Favorites">
 		Ulubione
 	</string>
@@ -6055,5 +6052,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="mode_settings_text.xml">
 		Tekstowy
+	</string>
+	<string name="Asset_Uploading">
+		Ładowanie na serwer...
+
+[ASSET_NAME]
 	</string>
 </strings>
