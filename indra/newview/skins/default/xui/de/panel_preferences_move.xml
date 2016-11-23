@@ -38,6 +38,7 @@
 			<check_box label="Kontextmenüs im Mouselook aktivieren" name="FSEnableRightclickMenuInMouselook" tool_tip="Öffnet das Pie-/Kontextmenü im Mouselook-Modus beim drücken von ALT + rechter Maustaste."/>
 			<check_box label="Mouselook mit Scrollrad verlassen" name="FSScrollWheelExitsMouselook" tool_tip="Falls aktiviert, kann der Mouselook durch das Drehen des Scrollrads nach unten verlassen werden."/>
 			<check_box label="Zeige Mouselook-Hilfestellungen" name="mouselook_instructions_visible" tool_tip="Zeigt Hilfestellungen zum Mouselook-Modus an."/>
+			<check_box label="Ursprüngliches Verhalten für Klicks in Mouselook" name="FSLegacyMouseTakeControl" tool_tip="Falls aktiviert, verwendet der Viewer das ursprüngliche Verhalten für Anhänge, die die llTakeControls-Skriptfunktion nutzen. Dadurch funktioniert der Großteil der verfügbaren Waffen wieder korrekt, allerdings entstehen dadurch andere Probleme, z.B. ist kein direktes Interagieren mit anderen Objekten während des Mouselooks möglich."/>
 			<check_box label="Zeige Fadenkreuz im Mouselook" name="ShowCrosshairs" tool_tip="Aktiviert die Fadenkreuz-Funktion innerhalb des Mouselook-Modus."/>
 			<check_box label="Combat-Funktionen aktivieren" name="FSMouselookCombatFeatures"/>
 			<check_box label="Ziel-Markierungen aktivieren" name="ExodusMouselookIFF"/>

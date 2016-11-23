@@ -148,7 +148,8 @@ BOOL LLToolGrab::handleMouseDown(S32 x, S32 y, MASK mask)
 	
 	// <FS:Ansariel> FIRE-19357: Re-revert MAINT-4488 again to fix FPS weapons
 	//if (!gAgent.leftButtonBlocked())
-	if (!gAgent.leftButtonGrabbed())
+	static LLCachedControl<bool> fsLegacyMouseTakeControl(gSavedSettings, "FSLegacyMouseTakeControl");
+	if ((fsLegacyMouseTakeControl && !gAgent.leftButtonGrabbed()) || (!fsLegacyMouseTakeControl && !gAgent.leftButtonBlocked()))
 	// </FS:Ansariel>
 	{
 		// can grab transparent objects (how touch event propagates, scripters rely on this)
