@@ -29,6 +29,7 @@
 			</text>
 			<check_box label="デフォルトのカメラコントロールのミニウィンドウを常に不透明で表示" name="FSAlwaysOpaqueCameraControls" />
 			<check_box label="ブロックしているアバターをパーティクルの雲で表示" name="ShowMutedAvatarsAsCloud" tool_tip="ブロックしているアバターは特別な色のパーティクルの雲で表示されるようになります。" />
+			<check_box label="一時的に非表示にしたオブジェクトをテレポート後には再表示するようにする" name="FSTempDerenderUntilTeleport" tool_tip="ここにチェックを入れると、一時的に非表示にしたオブジェクトはテレポートすると再表示されるようになります。チェックを外すと、次回ログインするまで、または「非表示アイテムリスト」を手動で表示するように変更するまでは非表示のままとなります。" />
 
 		</panel>
 

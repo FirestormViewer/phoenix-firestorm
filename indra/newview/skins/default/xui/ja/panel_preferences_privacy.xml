@@ -21,6 +21,7 @@
 			<check_box label="スクリプトの入ったオブジェクトは現在の私の言語設定を確認できる" name="LanguageIsPublic" />
 			<check_box label="ログイン時にお気に入りのランドマークを表示（「開始地点」ドロップダウンメニュー経由）" name="favorites_on_login_check"/>
 			<check_box label="新しく持ち物に送られて来たものを自動的に受け取る" name="Auto_Accept_New_Inventory" />
+			<check_box label="自動的に受け取ったインベントリ・アイテムを周辺チャットにログとして表示する" name="FSLogAutoAcceptInventoryToChat" />
 			<check_box label="V1形式の持ち物の受け取り／拒否のメッセージを使用する" name="FSUseLegacyInventoryAcceptMessages" tool_tip="このオプションをオンにした場合、ビューワは受け取りまたは拒否のボタンを押したあとに受け取り／拒否のメッセ時を送信します。オフの場合は、送られて来たものを受け取るとすぐに受け取りましたというメッセージが自動的に送信されます。このオプションは、送られてきたものを自動的に受領するかどうかには全く影響しません。" />
 			<check_box label="新しくものを受け取ると、自動的に持ち物フォルダを開いて表示する" name="Show_In_Inventory" />
 			<check_box label="ノートカード、画像、ランドマークは、受け取ったらすぐに表示する" name="Show_New_Inventory" />

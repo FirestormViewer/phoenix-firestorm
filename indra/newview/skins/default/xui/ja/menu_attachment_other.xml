@@ -8,7 +8,8 @@
 	<menu_item_call label="コーリングカードを送る" name="Give Calling Card" />
 	<menu_item_call label="コール" name="Call"/>
 	<menu_item_call label="グループに招待" name="Invite..."/>
-	<menu_item_call label="スケルトンをリセット" name="Reset Skeleton"/>
+	<menu_item_call label="スケルトンをリセット" name="Reset Skeleton" />
+	<menu_item_call label="スケルトンとアニメーションをリセット" name="Reset Skeleton And Animations" />
 	<context_menu label="迷惑行為対応" name="Annoyance">
 		<menu_item_call label="ブロック" name="Avatar Mute" />
 		<!-- <FS:Zi> Add unblock menu entry since renaming the context menu item doesn't seem to work -->
@@ -26,4 +27,14 @@
 	<menu_item_check label="表示しない" name="DoNotRender"/>
 	<menu_item_check label="完全表示" name="AlwaysRenderFully"/>
 	<menu_item_call label="パーティクル所有者をブロック" name="Mute Particle"/>
+	<menu_item_call label="検査" name="Object_Inspect_Floater" />
+	<menu_item_call  label="スクリプト情報" name="ScriptInfo" />
+	<menu_item_call label="非表示にする" name="Derender" />
+	<menu_item_call label="非表示にしてブラックリストに追加" name="DerenderPermanent" />
+	<menu_item_call label="テクスチャ表示" name="Debug..." />
+	<menu_item_call label="テクスチャ更新" name="Texture Refresh" />
+	<context_menu label="別名で保存" name="Export Menu">
+		<menu_item_call label="バックアップ" name="Backup" />
+		<menu_item_call label="メッシュ" name="Collada" />
+	</context_menu>
 </context_menu>
