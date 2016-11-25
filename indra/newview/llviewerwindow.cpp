@@ -1670,17 +1670,30 @@ BOOL LLViewerWindow::handleDeviceChange(LLWindow *window)
 	return FALSE;
 }
 
-void LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height)
+// <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
+//void LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height)
+BOOL LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height)
+// </FS:Ansariel>
 {
+    // <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
+    if (!gSavedSettings.getBOOL("FSEnableAutomaticUIScaling"))
+    {
+        return FALSE;
+    }
+    // </FS:Ansariel>
+
     if (ui_scale_factor >= MIN_UI_SCALE && ui_scale_factor <= MAX_UI_SCALE)
     {
+        gSavedSettings.setF32("LastSystemUIScaleFactor", ui_scale_factor); // <FS:Ansariel> Remember last used system UI scale factor
         gSavedSettings.setF32("UIScaleFactor", ui_scale_factor);
         LLViewerWindow::reshape(window_width, window_height);
         mResDirty = true;
+        return TRUE; // <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
     }
     else
     {
         LL_WARNS() << "DPI change caused UI scale to go out of bounds: " << ui_scale_factor << LL_ENDL;
+        return FALSE; // <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
     }
 }
 
@@ -1847,7 +1860,10 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 		// reset to default;
 		system_scale_factor = 1.f;
 	}
-	if (p.first_run || gSavedSettings.getF32("LastSystemUIScaleFactor") != system_scale_factor)
+	// <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
+	//if (p.first_run || gSavedSettings.getF32("LastSystemUIScaleFactor") != system_scale_factor)
+	if (p.first_run || (gSavedSettings.getBOOL("FSEnableAutomaticUIScaling") && gSavedSettings.getF32("LastSystemUIScaleFactor") != system_scale_factor))
+	// </FS:Ansariel>
 	{
 		mSystemUIScaleFactorChanged = !p.first_run;
 		gSavedSettings.setF32("LastSystemUIScaleFactor", system_scale_factor);

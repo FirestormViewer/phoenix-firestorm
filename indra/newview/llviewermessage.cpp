@@ -9660,7 +9660,10 @@ void process_covenant_reply(LLMessageSystem* msg, void**)
 	LLPanelEstateInfo::updateEstateOwnerName(owner_name);
 	LLFloaterBuyLand::updateEstateOwnerName(owner_name);
 
-	LLPanelPlaceProfile* panel = LLFloaterSidePanelContainer::getPanel<LLPanelPlaceProfile>("places", "panel_place_profile");
+	// <FS:Ansariel> Don't create places floater if we don't need it
+	//LLPanelPlaceProfile* panel = LLFloaterSidePanelContainer::getPanel<LLPanelPlaceProfile>("places", "panel_place_profile");
+	LLPanelPlaceProfile* panel = LLFloaterSidePanelContainer::findPanel<LLPanelPlaceProfile>("places", "panel_place_profile");
+	// </FS:Ansariel>
 	if (panel)
 	{
 		panel->updateEstateName(estate_name);

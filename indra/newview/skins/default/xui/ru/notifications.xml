@@ -840,7 +840,7 @@
 	<notification name="ProblemWithFile">
 		Проблема с файлом [FILE]:
 
-[ERROR]
+[REASON]
 	</notification>
 	<notification name="CannotOpenTemporarySoundFile">
 		Не удалось открыть для записи временно сжатый звуковой файл: [FILE]

@@ -81,7 +81,7 @@ Czas utworzenia VFS (cache) w UTC: [VFS_DATE]
 		Pakiety utracone: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
 	</string>
 	<string name="AboutTime">
-		[day, datetime, slt] [month, datetime, slt] [year, datetime, slt], [hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt]
+		[day, datetime, slt] [month, datetime, slt] [year, datetime, slt], [hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] SLT
 	</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">
 		Błąd podczas pobierania informacji o wydaniu.
@@ -1777,9 +1777,6 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="InvFolder Gestures">
 		Gesty
-	</string>
-	<string name="InvFolder Favorite">
-		Ulubione
 	</string>
 	<string name="InvFolder Favorites">
 		Ulubione
@@ -6055,5 +6052,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="mode_settings_text.xml">
 		Tekstowy
+	</string>
+	<string name="Asset_Uploading">
+		Ładowanie na serwer...
+
+[ASSET_NAME]
 	</string>
 </strings>

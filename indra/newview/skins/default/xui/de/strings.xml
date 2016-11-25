@@ -1872,20 +1872,14 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="InvFolder Gestures">
 		Gesten
 	</string>
+	<string name="InvFolder Favorites">
+		Favoriten
+	</string>
 	<string name="InvFolder favorite">
 		Favoriten
 	</string>
-	<string name="InvFolder Favorites">
-		Favoriten
-	</string>
 	<string name="InvFolder favorites">
 		Favoriten
-	</string>
-	<string name="InvFolder Favorites">
-		Meine Favoriten
-	</string>
-	<string name="InvFolder favorites">
-		Meine Favoriten
 	</string>
 	<string name="InvFolder Current Outfit">
 		Aktuelles Outfit
@@ -6798,5 +6792,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="mode_unknown">
 		Unbekannter Modus
+	</string>
+	<string name="Asset_Uploading">Hochladen...
+
+[ASSET_NAME]
 	</string>
 </strings>

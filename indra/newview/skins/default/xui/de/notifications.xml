@@ -824,7 +824,7 @@ Erwartet wurde [VALIDS]
 	<notification name="ProblemWithFile">
 		Problem mit Datei [FILE]:
 
-[ERROR]
+[REASON]
 	</notification>
 	<notification name="CannotOpenTemporarySoundFile">
 		Temporäre komprimierte Sounddatei konnte nicht geöffnet werden: [FILE]

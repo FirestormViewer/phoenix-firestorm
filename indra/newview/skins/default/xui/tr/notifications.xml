@@ -818,7 +818,7 @@ Beklenen [VALIDS]
 	<notification name="ProblemWithFile">
 		[FILE] dosyasında sorun oluştu:
 
-[ERROR]
+[REASON]
 	</notification>
 	<notification name="CannotOpenTemporarySoundFile">
 		Geçici sıkıştırılmış ses dosyası yazma için açılamadı: [FILE]

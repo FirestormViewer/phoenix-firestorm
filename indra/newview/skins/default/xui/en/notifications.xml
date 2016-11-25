@@ -2115,7 +2115,7 @@ Audio file is too long ([MAX_LENGTH] second maximum):
    type="alertmodal">
 Problem with file [FILE]:
 
-[ERROR]
+[REASON]
   <tag>fail</tag>
   </notification>
 

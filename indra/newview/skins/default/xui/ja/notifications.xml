@@ -848,7 +848,7 @@ L$ が不足しているのでこのグループに参加することができ�
 	<notification name="ProblemWithFile">
 		「 [FILE] 」に問題があります。
 
-[ERROR]
+[REASON]
 	</notification>
 	<notification name="CannotOpenTemporarySoundFile">
 		書き込み用の一時圧縮サウンドファイルを開くことができません：[FILE]

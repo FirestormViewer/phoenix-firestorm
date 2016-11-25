@@ -244,7 +244,6 @@
      follows="all"
      label="2D Overlay"
      name="ui-2d-overlay" >
-
         <text
          type="string"
          length="1"
@@ -254,8 +253,8 @@
          left="10"
          name="UI Size:"
          top_pad="8"
-         width="200">
-            UI Scaling (may cause side effects):
+         width="60">
+            UI Scaling:
         </text>
         <slider
          control_name="UIScaleFactor"
@@ -270,7 +269,18 @@
          min_val="0.75"
          name="ui_scale_slider"
          top_pad="-14"
-         width="250" />
+         width="390" />
+
+        <check_box
+         control_name="FSEnableAutomaticUIScaling"
+         height="16"
+         label="Automatically detect UI scaling factor"
+         layout="topleft"
+         left="10"
+         name="FSEnableAutomaticUIScaling"
+         tool_tip="If enabled, the viewer will try to detect the correct factor based on the scaling set in the operating system. This feature is currently only available on Windows."
+         top_pad="5"
+         width="256" />
 
       <text
        type="string"

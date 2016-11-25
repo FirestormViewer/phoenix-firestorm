@@ -783,6 +783,12 @@ BOOL LLFloaterPreference::postBuild()
 #endif
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> FIRE-20416: Option only available on Windows
+#ifndef LL_WINDOWS
+	childSetEnabled("FSEnableAutomaticUIScaling", FALSE);
+#endif
+	// </FS:Ansariel>
+
 	return TRUE;
 }
 
