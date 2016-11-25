@@ -2651,7 +2651,10 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 				lprc_new_scale = (LPRECT)l_param;
 				S32 new_width = lprc_new_scale->right - lprc_new_scale->left;
 				S32 new_height = lprc_new_scale->bottom - lprc_new_scale->top;
-				window_imp->mCallbacks->handleDPIChanged(window_imp, new_scale, new_width, new_height);
+				// <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
+				//window_imp->mCallbacks->handleDPIChanged(window_imp, new_scale, new_width, new_height);
+				if (window_imp->mCallbacks->handleDPIChanged(window_imp, new_scale, new_width, new_height))
+				// </FS:Ansariel>
 				SetWindowPos(h_wnd,
 					HWND_TOP,
 					lprc_new_scale->left,
