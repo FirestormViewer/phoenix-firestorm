@@ -612,6 +612,7 @@ void LLViewerShaderMgr::setShaders()
 
 					if (gSavedSettings.getBOOL("RenderAvatarVP"))
 					{
+						LL_WARNS() << "Couldn't load object shaders - Deferred rendering disabled" << LL_ENDL; // FS:Ansariel> FIRE-20305: Debug output
 						gSavedSettings.setBOOL("RenderDeferred", FALSE);
 						gSavedSettings.setBOOL("RenderAvatarCloth", FALSE);
 						gSavedSettings.setBOOL("RenderAvatarVP", FALSE);
@@ -644,6 +645,7 @@ void LLViewerShaderMgr::setShaders()
 
 			if (loaded && !loadShadersDeferred())
 			{ //everything else succeeded but deferred failed, disable deferred and try again
+				LL_WARNS() << "Couldn't load deferred shaders - Deferred rendering disabled" << LL_ENDL; // FS:Ansariel> FIRE-20305: Debug output
 				gSavedSettings.setBOOL("RenderDeferred", FALSE);
 				reentrance = false;
 				setShaders();
