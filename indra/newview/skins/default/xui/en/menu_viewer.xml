@@ -1460,6 +1460,12 @@
              function="Advanced.RebakeTextures" />
         </menu_item_call>
         <menu_item_call
+         label="Refresh Attachments"
+         name="Refresh Attachments">
+            <menu_item_call.on_click
+             function="Advanced.RefreshAttachments" />
+        </menu_item_call>
+        <menu_item_call
            label="Set UI Size to Default"
            name="Set UI Size to Default">
           <menu_item_call.on_click
