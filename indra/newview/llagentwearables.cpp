@@ -57,6 +57,9 @@
 LLAgentWearables gAgentWearables;
 
 BOOL LLAgentWearables::mInitialWearablesUpdateReceived = FALSE;
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1)
+bool LLAgentWearables::mInitialWearablesLoaded = false;
+// [/SL:KB]
 
 using namespace LLAvatarAppearanceDefines;
 
@@ -1134,6 +1137,13 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 	// Start rendering & update the server
 	mWearablesLoaded = TRUE; 
 
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-09-22 (Catznip-2.2)
+	if (!mInitialWearablesLoaded)
+	{
+		mInitialWearablesLoaded = true;
+		mInitialWearablesLoadedSignal();
+	}
+// [/SL:KB]
 	notifyLoadingFinished();
 
 	// Copy wearable params to avatar.
@@ -1634,6 +1644,13 @@ bool LLAgentWearables::changeInProgress() const
 {
 	return mCOFChangeInProgress;
 }
+
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1)
+boost::signals2::connection LLAgentWearables::addInitialWearablesLoadedCallback(const loaded_callback_t& cb)
+{
+	return mInitialWearablesLoadedSignal.connect(cb);
+}
+// [/SL:KB]
 
 void LLAgentWearables::notifyLoadingStarted()
 {

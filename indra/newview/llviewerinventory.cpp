@@ -982,7 +982,10 @@ void LLInventoryCallbackManager::fire(U32 callback_id, const LLUUID& item_id)
 	}
 }
 
-void rez_attachment_cb(const LLUUID& inv_item, LLViewerJointAttachment *attachmentp)
+//void rez_attachment_cb(const LLUUID& inv_item, LLViewerJointAttachment *attachmentp)
+// [SL:KB] - Patch: Appearance-DnDWear | Checked: 2010-09-28 (Catznip-3.4)
+void rez_attachment_cb(const LLUUID& inv_item, LLViewerJointAttachment *attachmentp, bool replace)
+// [/SL:KB]
 {
 	if (inv_item.isNull())
 		return;
@@ -990,7 +993,10 @@ void rez_attachment_cb(const LLUUID& inv_item, LLViewerJointAttachment *attachme
 	LLViewerInventoryItem *item = gInventory.getItem(inv_item);
 	if (item)
 	{
-		rez_attachment(item, attachmentp);
+// [SL:KB] - Patch: Appearance-DnDWear | Checked: 2010-09-28 (Catznip-3.4)
+		rez_attachment(item, attachmentp, replace);
+// [/SL:KB]
+//		rez_attachment(item, attachmentp);
 	}
 }
 
