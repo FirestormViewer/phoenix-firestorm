@@ -971,9 +971,9 @@ namespace
 				message_stream << site.mLevelString << " ";
             }
 				
-			if (show_tags && r->wantsTags())
+			if (show_tags && r->wantsTags() && !site.mTagString.empty())
 			{
-				message_stream << site.mTagString;
+				message_stream << site.mTagString << " ";
 			}
 
             if (show_location && (r->wantsLocation() || level == LLError::LEVEL_ERROR || s->mPrintLocation))
