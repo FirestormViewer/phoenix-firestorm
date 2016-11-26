@@ -331,7 +331,7 @@ public:
 		MM_TEXTURE2,
 		MM_TEXTURE3,
 		NUM_MATRIX_MODES,
-		MM_TEXTURE,
+		MM_TEXTURE
 	} eMatrixMode;
 
 	LLRender();
