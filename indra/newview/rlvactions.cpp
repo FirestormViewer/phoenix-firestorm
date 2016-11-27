@@ -252,16 +252,16 @@ bool RlvActions::canPaste(const LLInventoryCategory* pSourceCat, const LLInvento
 {
 	// The user can paste the specified object into the destination if:
 	//   - the source and destination are subject to the same lock type (or none at all) => NOTE: this happens to be the same logic we use for moving
-	return (isRlvEnabled()) && (pSourceCat) && (pDestCat) &&
-		((!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().canMoveFolder(pSourceCat->getUUID(), pDestCat->getUUID())));
+	return (!isRlvEnabled()) ||
+		( (pSourceCat) && (pDestCat) && ((!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().canMoveFolder(pSourceCat->getUUID(), pDestCat->getUUID()))) );
 }
 
 bool RlvActions::canPaste(const LLInventoryItem* pSourceItem, const LLInventoryCategory* pDestCat)
 {
 	// The user can paste the specified object into the destination if:
 	//   - the source and destination are subject to the same lock type (or none at all) => NOTE: this happens to be the same logic we use for moving
-	return (isRlvEnabled()) && (pSourceItem) && (pDestCat) &&
-		((!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().canMoveItem(pSourceItem->getUUID(), pDestCat->getUUID())));
+	return (!isRlvEnabled()) ||
+		( (pSourceItem) && (pDestCat) && ((!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().canMoveItem(pSourceItem->getUUID(), pDestCat->getUUID()))) );
 }
 
 // ============================================================================
