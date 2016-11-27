@@ -2848,6 +2848,21 @@ bool LLAppViewer::initConfiguration()
 		LLEventPumps::instance().obtain("LLControlGroup").post(LLSDMap("init", *ki));
 	}
 
+// [RLVa:KB] - Patch: RLVa-2.1.0
+	if (LLControlVariable* pControl = gSavedSettings.getControl(RLV_SETTING_MAIN))
+	{
+		if ( (pControl->getValue().asBoolean()) && (pControl->hasUnsavedValue()) )
+		{
+			pControl->resetToDefault();
+			pControl->setValue(false);
+
+			std::ostringstream msg;
+			msg << LLTrans::getString("RLVaToggleMessageLogin", LLSD().with("[STATE]", LLTrans::getString("RLVaToggleDisabled")));
+			OSMessageBox(msg.str(), LLStringUtil::null, OSMB_OK);
+		}
+	}
+// [/RLVa:KB]
+
 	return true; // Config was successful.
 }
 
