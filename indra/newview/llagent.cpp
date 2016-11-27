@@ -1187,14 +1187,12 @@ LLVector3d LLAgent::getPosGlobalFromAgent(const LLVector3 &pos_agent) const
 
 void LLAgent::sitDown()
 {
-//	setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
-// [RLVa:KB] - Checked: 2010-08-28 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
-	// RELEASE-RLVa: [SL-2.0.0] Check this function's callers since usually they require explicit blocking
-	if ( (!rlv_handler_t::isEnabled()) || ((RlvActions::canStand()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SIT))) )
-	{
-		setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
-	}
+// [RLVa:KB] - Checked: RLVa-1.2.1
+	if (!RlvActions::canGroundSit())
+		return;
 // [/RLVa:KB]
+
+	setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
 }
 
 

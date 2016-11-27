@@ -211,6 +211,11 @@ public:
 	static bool canEdit(const LLViewerObject* pObj);
 
 	/*
+	 * Returns true if the user can sit on the ground
+	 */
+	static bool canGroundSit();
+
+	/*
 	 * Returns true if the user can interact with the specified object (with an optional relative offset)
 	 * (returns true if pObj == nullptr to not short circuit calling code)
 	 */
@@ -237,7 +242,7 @@ public:
 	static bool canShowLocation();
 
 	/*
-	 * Returns true if the user can sit up on the specified object
+	 * Returns true if the user can sit on the specified object (see canGroundSit() for sitting on land)
 	 */
 	static bool canSit(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
 

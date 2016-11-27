@@ -375,6 +375,14 @@ bool RlvActions::canRez()
 	return (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ));
 }
 
+bool RlvActions::canGroundSit()
+{
+	// User can sit on the ground if:
+	//   - not prevented from sitting
+	//   - not prevented from standing up or not currently sitting
+	return (!hasBehaviour(RLV_BHVR_SIT)) && (canStand());
+}
+
 bool RlvActions::canSit(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/)
 {
 	// User can sit on the specified object if:
