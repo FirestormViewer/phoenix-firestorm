@@ -2103,7 +2103,7 @@
              name="Grid Status">
             <menu_item_call.on_click
              function="Advanced.ShowURL"
-             parameter="https://community.secondlife.com/t5/Status-Grid/bg-p/status-blog" />
+             parameter="http://status.secondlifegrid.net" />
             <menu_item_call.on_visible
              function="GridCheck"
              parameter="secondlife"/>
