@@ -879,6 +879,11 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	// <FS:PP> FIRE-14493: Buttons to cycle through linkset
 	mBtnPrevPart->setVisible(edit_visible);
 	mBtnNextPart->setVisible(edit_visible);
+
+	bool select_btn_enabled = (!LLSelectMgr::getInstance()->getSelection()->isEmpty()
+								&& (linked_parts || LLToolFace::getInstance() == LLToolMgr::getInstance()->getCurrentTool()));
+	mBtnPrevPart->setEnabled(select_btn_enabled);
+	mBtnNextPart->setEnabled(select_btn_enabled);
 	// </FS:PP>
 
 	if (mCheckSelectIndividual)

@@ -282,7 +282,6 @@
 	</check_box>
 
    <button
-     enabled_control="EditLinkedParts"
      follows="left|top"
      height="20"
      image_overlay="BackArrow_Off"
@@ -296,7 +295,6 @@
 	     parameter="previous" />
     </button>
    <button
-     enabled_control="EditLinkedParts"
      follows="left|top"
      height="20"
      image_overlay="ForwardArrow_Off"
