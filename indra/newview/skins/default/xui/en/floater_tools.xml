@@ -282,28 +282,26 @@
 	</check_box>
 
    <button
-     enabled_control="EditLinkedParts"
      follows="left|top"
      height="20"
      image_overlay="BackArrow_Off"
      top_pad="0"
      layout="topleft"
      name="prev_part_btn"
-     tool_tip="Select previous linked part"
+     tool_tip="Select previous linked part or face"
      width="12">
 	  <button.commit_callback
 	     function="Tools.SelectNextPart"
 	     parameter="previous" />
     </button>
    <button
-     enabled_control="EditLinkedParts"
      follows="left|top"
      height="20"
      image_overlay="ForwardArrow_Off"
      left_pad="0"
      layout="topleft"
      name="next_part_btn"
-     tool_tip="Select next linked part"
+     tool_tip="Select next linked part or face"
      width="12">
 	  <button.commit_callback
 	     function="Tools.SelectNextPart"

@@ -29,9 +29,10 @@
         <slider label_width="330" label="Tekst unoszący się nad primami ma całkiem zniknąć po (m):" tool_tip="Odległość, podczas której tekst unoszący się nad primami stanie się całkiem niewidzialny po tym, jak zacznie zanikać" name="FSHudTextFadeRange" />
     </panel>
     <panel label="Nakładka 2D" name="ui-2d-overlay">
-        <text name="UI Size:">
-            Skalowanie interfejsu (ostrożnie):
+        <text name="UI Size:" width="120">
+            Skalowanie interfejsu:
         </text>
+        <check_box label="Autodetekcja mnożnika skalowania interfejsu" name="FSEnableAutomaticUIScaling" tool_tip="Gdy włączysz tą opcję, to przeglądarka będzie starała się wykryć poprawny mnożnik bazując na skalowaniu ustawionym w systemie operacyjnym. Obecnie ta funkcjonalność jest dostępna tylko w Windows." />
         <text name="ScriptDialogsPerObjectLabel" width="185">
             Komunikatów skryptów na obiekt:
         </text>

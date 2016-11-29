@@ -339,6 +339,7 @@ Please try logging in again in a minute.</string>
 	<string name="TooltipObjectIMUrl">Click to view this object's description</string>
 	<string name="TooltipMapUrl">Click to view this location on a map</string>
 	<string name="TooltipSLAPP">Click to run the secondlife:// command</string>
+	<string name="TooltipFSHelpDebugSLUrl">Click to open the debug settings window for this setting</string>
 	<string name="CurrentURL" value=" CurrentURL: [CurrentURL]" />
 	<string name="TooltipEmail">Click to compose an email</string>
 

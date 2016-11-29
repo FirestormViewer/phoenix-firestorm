@@ -30,6 +30,7 @@
 #include "llagent.h"
 #include "llavataractions.h"
 #include "llcommandhandler.h"
+#include "llfloatersettingsdebug.h"
 #include "lllogchat.h"
 #include "llnotificationsutil.h"
 
@@ -140,3 +141,30 @@ public:
 
 // Creating the object registers with the dispatcher.
 FSSlurlCommandHandler gFSSlurlHandler;
+
+class FSHelpSlurlCommandHandler : public LLCommandHandler
+{
+public:
+	// not allowed from outside the app
+	FSHelpSlurlCommandHandler() : LLCommandHandler("fshelp", UNTRUSTED_THROTTLE) { }
+
+	bool handle(const LLSD& params, const LLSD& query_map, LLMediaCtrl* web)
+	{
+		if (params.size() < 2)
+		{
+			return false;
+		}
+
+		if (params[0].asString() == "showdebug")
+		{
+			std::string setting_name = params[1].asString();
+			LLFloaterSettingsDebug::showControl(setting_name);
+			return true;
+		}
+
+		return false;
+	}
+};
+
+// Creating the object registers with the dispatcher.
+FSHelpSlurlCommandHandler gFSHelpSlurlCommandHandler;

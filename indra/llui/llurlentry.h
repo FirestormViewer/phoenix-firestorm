@@ -490,6 +490,19 @@ public:
 	/*virtual*/ std::string getLocation(const std::string &url) const;
 };
 
+// <FS:Ansariel> FS Help SLUrl
+///
+/// FSHelpDebugUrlEntrySL Describes a Firestorm Help SLURL, e.g.
+/// secondlife://app/fshelp/showdebug/DisplayIM
+///
+class FSHelpDebugUrlEntrySL : public LLUrlEntryBase
+{
+public:
+	FSHelpDebugUrlEntrySL();
+	/*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
+};
+// </FS:Ansariel>
+
 ///
 /// LLUrlEntrySL Describes a generic SLURL, e.g., a Url that starts
 /// with secondlife:// (used as a catch-all for cases not matched above)

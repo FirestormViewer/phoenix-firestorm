@@ -49,6 +49,7 @@
 // [/RLVa:KB]
 #include "llnotificationsutil.h"
 #include "llwindow.h"
+#include "llfloaterreg.h"
 
 LLFloaterSettingsDebug::LLFloaterSettingsDebug(const LLSD& key) 
 :	LLFloater(key)
@@ -597,4 +598,11 @@ void LLFloaterSettingsDebug::updateControl()
 			break;
 		}
 	}
+}
+
+void LLFloaterSettingsDebug::showControl(const std::string& control)
+{
+	LLFloaterSettingsDebug* instance = LLFloaterReg::showTypedInstance<LLFloaterSettingsDebug>("settings_debug", "all", TRUE);
+	instance->mSearchSettingsInput->setText(control);
+	instance->onUpdateFilter();
 }

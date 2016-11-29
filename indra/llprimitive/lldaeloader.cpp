@@ -1052,6 +1052,11 @@ bool LLDAELoader::OpenFile(const std::string& filename)
 
 	std::sort(mModelList.begin(), mModelList.end(), ModelSort());
 
+	if (!mNoNormalize)
+	{
+		LLModel::normalizeModels(mModelList);
+	}
+
 	model_list::iterator model_iter = mModelList.begin();
 	while (model_iter != mModelList.end())
 	{
@@ -2537,8 +2542,6 @@ bool LLDAELoader::loadModelsFromDomMesh(domMesh* mesh, std::vector<LLModel*>& mo
 	//
 	ret->sortVolumeFacesByMaterialName();
 
-	bool normalized = false;
-
     int submodelID = 0;
 
 	// remove all faces that definitely won't fit into one model and submodel limit
@@ -2553,12 +2556,6 @@ bool LLDAELoader::loadModelsFromDomMesh(domMesh* mesh, std::vector<LLModel*>& mo
 	{
 		// Insure we do this once with the whole gang and not per-model
 		//
-		if (!normalized && !mNoNormalize)
-		{			
-			normalized = true;
-			ret->normalizeVolumeFaces();
-		}
-
 		ret->trimVolumeFacesToSize(LL_SCULPT_MESH_MAX_FACES, &remainder);
 
 		if (!mNoOptimize)
