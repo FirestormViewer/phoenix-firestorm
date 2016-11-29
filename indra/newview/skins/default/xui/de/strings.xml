@@ -697,6 +697,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TooltipSLAPP">
 		Anklicken, um Befehl secondlife:// auszuführen
 	</string>
+	<string name="TooltipFSHelpDebugSLUrl">
+		Anklicken, um das Fenster mit Debug-Einstellungen für diese Einstellung zu öffnen
+	</string>
 	<string name="CurrentURL" value=" CurrentURL: [CurrentURL]"/>
 	<string name="TooltipEmail">
 		Klicken, um eine E-Mail zu verfassen

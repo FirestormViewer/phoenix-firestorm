@@ -60,6 +60,7 @@ public:
 	void onClickDefault();
 	void onCopyToClipboard();
 	void onSanityCheck();
+	static void showControl(const std::string& control);
 
 private:
 	// key - selects which settings to show, one of:

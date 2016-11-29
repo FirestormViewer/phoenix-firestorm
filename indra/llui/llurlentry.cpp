@@ -1349,6 +1349,26 @@ std::string LLUrlEntrySL::getLabel(const std::string &url, const LLUrlLabelCallb
 	return unescapeUrl(url);
 }
 
+// <FS:Ansariel> FS Help SLUrl
+///
+/// FSHelpDebugUrlEntrySL Describes a Firestorm Help SLURL, e.g.
+/// secondlife://app/fshelp/showdebug/DisplayIM
+///
+FSHelpDebugUrlEntrySL::FSHelpDebugUrlEntrySL()
+{
+	mPattern = boost::regex("(hop|secondlife|inworldz|iw):///app/fshelp/showdebug/\\S+",
+							boost::regex::perl|boost::regex::icase);
+	mMenuName = "menu_url_slapp.xml";
+	mTooltip = LLTrans::getString("TooltipFSHelpDebugSLUrl");
+}
+
+std::string FSHelpDebugUrlEntrySL::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
+{
+	std::string::size_type pos = url.find("showdebug/") + 10;
+	return url.substr(pos);
+}
+// </FS:Ansariel>
+
 //
 // LLUrlEntrySLLabel Describes a generic SLURL, e.g., a Url that starts
 /// with secondlife:// with the ability to specify a custom label.
