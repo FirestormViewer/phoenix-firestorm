@@ -783,7 +783,6 @@ std::set<LLFolderViewItem*> LLSidepanelInventory::getInboxSelectionList()
 	return inventory_selected_uuids;
 }
 
-// <FS:Ansariel> Clean up inventory windows on shutdown
 void LLSidepanelInventory::cleanup()
 {
 	LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("inventory");
@@ -796,6 +795,7 @@ void LLSidepanelInventory::cleanup()
 		}
 	}
 
+	// <FS:Ansariel> Secondary inventory floaters
 	LLFloaterReg::const_instance_list_t& secondary_inst_list = LLFloaterReg::getFloaterList("secondary_inventory");
 	for (LLFloaterReg::const_instance_list_t::const_iterator iter = secondary_inst_list.begin(); iter != secondary_inst_list.end();)
 	{
@@ -805,5 +805,5 @@ void LLSidepanelInventory::cleanup()
 			iv->cleanup();
 		}
 	}
+	// </FS:Ansariel>
 }
-// </FS:Ansariel>

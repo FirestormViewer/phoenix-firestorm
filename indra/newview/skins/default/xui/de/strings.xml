@@ -60,20 +60,13 @@ Grafikkarte: [GRAPHICS_CARD]
 	<string name="AboutDriver">
 		Windows-Grafiktreiberversion: [GRAPHICS_DRIVER_VERSION]
 	</string>
-	<string name="AboutLibs">
+	<string name="AboutOGL">
 		OpenGL-Version: [OPENGL_VERSION]
-
-RestrainedLove API: [RLV_VERSION]
-libcurl-Version: [LIBCURL_VERSION]
-J2C-Decoderversion: [J2C_VERSION]
-Audio-Treiberversion: [AUDIO_DRIVER_VERSION]
-LLCEFLib/CEF-Version: [LLCEFLIB_VERSION]
-LibVLC-Version: [LIBVLC_VERSION]
-Voice-Serverversion: [VOICE_VERSION]
 	</string>
 	<string name="AboutSettings">
 Modus: [MODE]
 Oberflächendesign: [SKIN] ([THEME])
+Fenstergröße: [WINDOW_WIDTH]x[WINDOW_HEIGHT] px
 Schriftart: [FONT] ([FONT_SCREEN_DPI] dpi)
 Schriftart Größenanpassung: [FONT_SIZE] pt
 UI-Skalierung: [UI_SCALE_FACTOR]
@@ -84,6 +77,15 @@ Darstellungsqualität: [RENDERQUALITY]
 Erweitertes Beleuchtungsmodell: [ALMSTATUS]
 Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 VFS (Cache) Erstellungszeit: [VFS_DATE]
+	</string>
+	<string name="AboutLibs">
+RestrainedLove API: [RLV_VERSION]
+libcurl-Version: [LIBCURL_VERSION]
+J2C-Decoderversion: [J2C_VERSION]
+Audio-Treiberversion: [AUDIO_DRIVER_VERSION]
+LLCEFLib/CEF-Version: [LLCEFLIB_VERSION]
+LibVLC-Version: [LIBVLC_VERSION]
+Voice-Serverversion: [VOICE_VERSION]
 	</string>
 	<string name="AboutTraffic">
 		Paketverlust: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)

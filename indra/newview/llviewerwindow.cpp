@@ -1675,10 +1675,7 @@ BOOL LLViewerWindow::handleDeviceChange(LLWindow *window)
 	return FALSE;
 }
 
-// <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
-//void LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height)
 BOOL LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height)
-// </FS:Ansariel>
 {
     // <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
     if (!gSavedSettings.getBOOL("FSEnableAutomaticUIScaling"))
@@ -1689,16 +1686,16 @@ BOOL LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32
 
     if (ui_scale_factor >= MIN_UI_SCALE && ui_scale_factor <= MAX_UI_SCALE)
     {
-        gSavedSettings.setF32("LastSystemUIScaleFactor", ui_scale_factor); // <FS:Ansariel> Remember last used system UI scale factor
+        gSavedSettings.setF32("LastSystemUIScaleFactor", ui_scale_factor);
         gSavedSettings.setF32("UIScaleFactor", ui_scale_factor);
         LLViewerWindow::reshape(window_width, window_height);
         mResDirty = true;
-        return TRUE; // <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
+        return TRUE;
     }
     else
     {
         LL_WARNS() << "DPI change caused UI scale to go out of bounds: " << ui_scale_factor << LL_ENDL;
-        return FALSE; // <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
+        return FALSE;
     }
 }
 

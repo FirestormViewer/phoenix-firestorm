@@ -52,9 +52,10 @@ Karta graficzna (Graphics Card): [GRAPHICS_CARD]
 	<string name="AboutDriver">
 		Sterownik karty graficznej Windows (Driver Version): [GRAPHICS_DRIVER_VERSION]
 	</string>
-	<string name="AboutLibs">
+	<string name="AboutOGL">
 Wersja OpenGL: [OPENGL_VERSION]
-
+	</string>
+	<string name="AboutLibs">
 RestrainedLove API: [RLV_VERSION]
 Wersja libcurl: [LIBCURL_VERSION]
 Wersja dekodera J2C: [J2C_VERSION]

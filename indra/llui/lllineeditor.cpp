@@ -166,10 +166,8 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 {
 	llassert( mMaxLengthBytes > 0 );
 
-	// <FS:Ansariel> Enabling LLLineEditor via XUI breaks enabled-state
 	LLUICtrl::setEnabled(TRUE);
 	setEnabled(p.enabled);
-	// </FS:Ansariel>
 
 	mScrollTimer.reset();
 	mTripleClickTimer.reset();
@@ -240,14 +238,12 @@ LLLineEditor::~LLLineEditor()
 	gFocusMgr.releaseFocusIfNeeded( this );
 }
 
-// <FS:Ansariel> Enabling LLLineEditor via XUI breaks enabled-state
 void LLLineEditor::initFromParams(const LLLineEditor::Params& params)
 {
 	LLUICtrl::initFromParams(params);
 	LLUICtrl::setEnabled(TRUE);
 	setEnabled(params.enabled);
 }
-// </FS:Ansariel>
 
 void LLLineEditor::onFocusReceived()
 {

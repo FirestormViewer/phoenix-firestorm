@@ -225,7 +225,6 @@
 #include "llfloaterreg.h"
 #include "llfloateroutfitsnapshot.h"
 #include "llfloatersnapshot.h"
-//#include "llfloaterinventory.h"
 #include "llsidepanelinventory.h"
 
 // includes for idle() idleShutdown()
@@ -3993,6 +3992,28 @@ LLSD LLAppViewer::getViewerInfo() const
 // [/RLVa:KB]
 	info["OPENGL_VERSION"] = (const char*)(glGetString(GL_VERSION));
 	info["LIBCURL_VERSION"] = LLCore::LLHttp::getCURLVersion();
+    // Settings
+
+    LLRect window_rect = gViewerWindow->getWindowRectRaw();
+    info["WINDOW_WIDTH"] = window_rect.getWidth();
+    info["WINDOW_HEIGHT"] = window_rect.getHeight();
+	// <FS> Custom sysinfo
+    //info["FONT_SIZE_ADJUSTMENT"] = gSavedSettings.getF32("FontScreenDPI");
+    //info["UI_SCALE"] = gSavedSettings.getF32("UIScaleFactor");
+    //info["DRAW_DISTANCE"] = gSavedSettings.getF32("RenderFarClip");
+    //info["NET_BANDWITH"] = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+    //info["LOD_FACTOR"] = gSavedSettings.getF32("RenderVolumeLODFactor");
+    //info["RENDER_QUALITY"] = (F32)gSavedSettings.getU32("RenderQualityPerformance");
+    //info["GPU_SHADERS"] = gSavedSettings.getBOOL("RenderDeferred") ? "Enabled" : "Disabled";
+    //info["TEXTURE_MEMORY"] = gSavedSettings.getS32("TextureMemory");
+
+    //LLSD substitution;
+    //substitution["datetime"] = (S32)(gVFS ? gVFS->creationTime() : 0);
+    //info["VFS_TIME"] = LLTrans::getString("AboutTime", substitution);
+	// </FS>
+
+	// Libraries
+
 	info["J2C_VERSION"] = LLImageJ2C::getEngineInfo();
 	bool want_fullname = true;
 	info["AUDIO_DRIVER_VERSION"] = gAudiop ? LLSD(gAudiop->getDriverName(want_fullname)) : LLSD();
@@ -4178,11 +4199,15 @@ std::string LLAppViewer::getViewerInfoString() const
 	{
 		support << "\n" << LLTrans::getString("AboutDriver", args);
 	}
-	support << "\n" << LLTrans::getString("AboutLibs", args);
+	support << "\n" << LLTrans::getString("AboutOGL", args);
+	//support << "\n\n" << LLTrans::getString("AboutSettings", args); // <FS> Custom sysinfo
+	support << "\n\n" << LLTrans::getString("AboutLibs", args);
+	// <FS> Custom sysinfo
 	if (info.has("BANDWIDTH")) //For added info in help floater
 	{
 		support << "\n" << LLTrans::getString("AboutSettings", args);
 	}
+	// </FS>
 	if (info.has("COMPILER"))
 	{
 		support << "\n" << LLTrans::getString("AboutCompiler", args);
@@ -6391,10 +6416,7 @@ void LLAppViewer::disconnectViewer()
 	}
 
 	// close inventory interface, close all windows
-	// <FS:Ansariel> Clean up inventory windows on shutdown
-	//LLFloaterInventory::cleanup();
 	LLSidepanelInventory::cleanup();
-	// </FS:Ansariel>
 
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2013-02-12 (Catznip-3.4)
 	// Destroying all objects below will trigger attachment detaching code and attempt to remove the COF links for them

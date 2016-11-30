@@ -65,10 +65,7 @@ public:
 	virtual void handleDataCopy(LLWindow *window, S32 data_type, void *data);
 	virtual BOOL handleTimerEvent(LLWindow *window);
 	virtual BOOL handleDeviceChange(LLWindow *window);
-	// <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
-	//virtual void handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height);
 	virtual BOOL handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height);
-	// </FS:Ansariel>
 
 	enum DragNDropAction {
 		DNDA_START_TRACKING = 0,// Start tracking an incoming drag

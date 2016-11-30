@@ -63,7 +63,6 @@
 #include "llfloaterbuycontents.h"
 #include "llbuycurrencyhtml.h"
 #include "llfloatergodtools.h"
-//#include "llfloaterinventory.h"
 #include "llfloaterimcontainer.h"
 #include "llfloaterland.h"
 #include "llfloaterimnearbychat.h"
@@ -1385,14 +1384,15 @@ void set_use_wireframe(BOOL useWireframe)
 		gUseWireframe = useWireframe;
 // [/RLVa:KB]
 //		gUseWireframe = !(gUseWireframe);
+		gWindowResized = TRUE;
+
+		LLPipeline::updateRenderDeferred();
 
 		if (gUseWireframe)
 		{
 			gInitialDeferredModeForWireframe = LLPipeline::sRenderDeferred;
 		}
 
-		gWindowResized = TRUE;
-		LLPipeline::updateRenderDeferred();
 		gPipeline.resetVertexBuffers();
 
 		if (!gUseWireframe && !gInitialDeferredModeForWireframe && LLPipeline::sRenderDeferred != gInitialDeferredModeForWireframe && gPipeline.isInit())
@@ -11462,8 +11462,6 @@ void initialize_menus()
 	view_listener_t::addMenu(new FSResetPerAccountControl(), "ResetPerAccountControl");
 	// </FS:Ansariel> Control enhancements
 
-	// <FS:Ansariel> LLFloaterInventory is unused (and dangerous) legacy code! See LLPanelMainInventory instead
-	//commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
 	commit.add("Inventory.NewWindow", boost::bind(&LLPanelMainInventory::newWindow));
 
 	enable.add("EnablePayObject", boost::bind(&enable_pay_object));

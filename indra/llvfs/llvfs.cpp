@@ -2134,6 +2134,17 @@ void LLVFS::dumpFiles()
 	LL_INFOS() << "Extracted " << files_extracted << " files out of " << mFileBlocks.size() << LL_ENDL;
 }
 
+time_t LLVFS::creationTime()
+{
+    llstat data_file_stat;
+    int errors = LLFile::stat(mDataFilename, &data_file_stat);
+    if (0 == errors)
+    {
+        return data_file_stat.st_ctime;
+    }
+    return 0;
+}
+
 //============================================================================
 // protected
 //============================================================================

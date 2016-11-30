@@ -53,7 +53,6 @@ public:
 
 	/*virtual*/ void closeFloater(bool app_quitting = false);
 
-	// <FS:Ansariel> Clean up inventory windows on shutdown
 	void cleanup() { destroy(); }
 
 	LLPanel* openChildPanel(const std::string& panel_name, const LLSD& params);

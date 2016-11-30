@@ -85,7 +85,6 @@ public:
 
 	void updateVerbs();
 
-	// <FS:Ansariel> Clean up inventory windows on shutdown
 	static void cleanup();
 
 protected:
