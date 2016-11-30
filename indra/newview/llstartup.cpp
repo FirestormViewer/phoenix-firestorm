@@ -483,8 +483,51 @@ void downloadGridlistError( LLSD const &aData, std::string const &aURL )
 		LL_WARNS("SLGridStatusResponder") << "Error - output without </item>" << LL_ENDL;
 	}
 }
-
 // </FS:PP>
+
+// <FS:Ansariel> Check for test build expiration
+bool is_testbuild_expired()
+{
+#if TESTBUILD
+	std::string datestr = __DATE__;
+
+	std::istringstream iss_date(datestr);
+	std::string str_month;
+	S32 day;
+	S32 year;
+	S32 month = 1;
+	iss_date >> str_month >> day >> year;
+
+	if (str_month == "Jan") month = 1;
+	else if (str_month == "Feb") month = 2;
+	else if (str_month == "Mar") month = 3;
+	else if (str_month == "Apr") month = 4;
+	else if (str_month == "May") month = 5;
+	else if (str_month == "Jun") month = 6;
+	else if (str_month == "Jul") month = 7;
+	else if (str_month == "Aug") month = 8;
+	else if (str_month == "Sep") month = 9;
+	else if (str_month == "Oct") month = 10;
+	else if (str_month == "Nov") month = 11;
+	else if (str_month == "Dec") month = 12;
+
+	tm t = {0};
+	t.tm_mon = month - 1;
+	t.tm_mday = day;
+	t.tm_year = year - 1900;
+	t.tm_hour = 0;
+	t.tm_min = 0;
+	t.tm_sec = 0;
+
+	time_t expiry_time = mktime(&t) + (S32(TESTBUILDPERIOD) + 1) * 24 * 60 * 60;
+	time_t current_time = time(NULL);
+
+	return current_time > expiry_time;
+#else
+	return false;
+#endif
+}
+// </FS:Ansariel>
 
 void update_texture_fetch()
 {
@@ -1160,6 +1203,17 @@ bool idle_startup()
 
 	if (STATE_LOGIN_CLEANUP == LLStartUp::getStartupState())
 	{
+		// <FS:Ansariel> Check for test build expiration
+		if (is_testbuild_expired())
+		{
+			LL_INFOS() << "This test version has expired and cannot be used any further." << LL_ENDL;
+			LLNotificationsUtil::add("TestversionExpired", LLSD(), LLSD(), login_alert_done);
+			LLStartUp::setStartupState(STATE_LOGIN_CONFIRM_NOTIFICATON);
+			show_connect_box = true;
+			return FALSE;
+		}
+		// </FS:Ansariel>
+
 		// <FS:Ansariel> Login block
 		LLSD blocked = FSData::instance().allowedLogin();
 		if (blocked.isMap()) //hack for testing for an empty LLSD
