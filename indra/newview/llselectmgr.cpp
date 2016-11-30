@@ -6186,6 +6186,11 @@ S32 LLSelectNode::getLastSelectedTE()
 	return mLastTESelected;
 }
 
+S32 LLSelectNode::getLastOperatedTE()
+{
+	return mLastTESelected;
+}
+
 LLViewerObject* LLSelectNode::getObject()
 {
 	if (!mObject)
