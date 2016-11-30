@@ -1494,11 +1494,17 @@ BOOL LLViewerFetchedTexture::createTexture(S32 usename/*= 0*/)
 		destroyRawImage();
 		return FALSE;
 	}
-	mNeedsCreateTexture	= FALSE;
+	mNeedsCreateTexture = FALSE;
 	if (mRawImage.isNull())
 	{
 		LL_WARNS() << "LLViewerTexture trying to create texture with no Raw Image" << LL_ENDL;
 		setIsMissingAsset();
+		return FALSE;
+	}
+	if (mRawImage->isBufferInvalid())
+	{
+		LL_WARNS() << "Can't create a texture: invalid image data" << LL_ENDL;
+		destroyRawImage();
 		return FALSE;
 	}
 // 	LL_INFOS() << llformat("IMAGE Creating (%d) [%d x %d] Bytes: %d ",

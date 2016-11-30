@@ -370,9 +370,11 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
         std::string shortName = gDirUtilp->getBaseFileName(filename);
 
         // No extension
-        errorMessage = llformat(
-            "No file extension for the file: '%s'\nPlease make sure the file has a correct file extension",
-            shortName.c_str());
+        // <FS:Ansariel> Duplicate error message output
+        //errorMessage = llformat(
+        //    "No file extension for the file: '%s'\nPlease make sure the file has a correct file extension",
+        //    shortName.c_str());
+        // </FS:Ansariel>
         errorLabel = "NoFileExtension";
         error = true;
     }
@@ -382,8 +384,11 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
         assetType = LLAssetType::AT_TEXTURE;
         if (!LLViewerTextureList::createUploadFile(getFileName(), filename, codec))
         {
-            errorMessage = llformat("Problem with file %s:\n\n%s\n",
-                getFileName().c_str(), LLImage::getLastError().c_str());
+            // <FS:Ansariel> Duplicate error message output
+            //errorMessage = llformat("Problem with file %s:\n\n%s\n",
+            //    getFileName().c_str(), LLImage::getLastError().c_str());
+            errorMessage = LLImage::getLastError();
+            // </FS:Ansariel>
             errorLabel = "ProblemWithFile";
             error = true;
         }
@@ -405,12 +410,12 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
             switch (encodeResult)
             {
             case LLVORBISENC_DEST_OPEN_ERR:
-                errorMessage = llformat("Couldn't open temporary compressed sound file for writing: %s\n", filename.c_str());
+                //errorMessage = llformat("Couldn't open temporary compressed sound file for writing: %s\n", filename.c_str()); // <FS:Ansariel> Duplicate error message output
                 errorLabel = "CannotOpenTemporarySoundFile";
                 break;
 
             default:
-                errorMessage = llformat("Unknown vorbis encode failure on: %s\n", getFileName().c_str());
+                //errorMessage = llformat("Unknown vorbis encode failure on: %s\n", getFileName().c_str()); // <FS:Ansariel> Duplicate error message output
                 errorLabel = "UnknownVorbisEncodeFailure";
                 break;
             }
@@ -419,7 +424,7 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
     }
     else if (exten == "bvh")
     {
-        errorMessage = llformat("We do not currently support bulk upload of animation files\n");
+        //errorMessage = llformat("We do not currently support bulk upload of animation files\n"); // <FS:Ansariel> Duplicate error message output
         errorLabel = "DoNotSupportBulkAnimationUpload";
         error = true;
     }
@@ -451,6 +456,8 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
         LLSD errorResult(LLSD::emptyMap());
 
         errorResult["error"] = LLSD::Binary(true);
+        // <FS:Ansariel> Duplicate error message output
+        if (!errorMessage.empty())
         errorResult["message"] = errorMessage;
         errorResult["label"] = errorLabel;
         return errorResult;
@@ -712,8 +719,13 @@ void LLViewerAssetUpload::AssetInventoryUploadCoproc(LLCoreHttpUtil::HttpCorouti
 
     if (uploadInfo->showUploadDialog())
     {
-        std::string uploadMessage = "Uploading...\n\n";
-        uploadMessage.append(uploadInfo->getDisplayName());
+        // <FS:Ansariel> Localization fix
+        //std::string uploadMessage = "Uploading...\n\n";
+        //uploadMessage.append(uploadInfo->getDisplayName());
+        LLStringUtil::format_map_t args;
+        args["ASSET_NAME"] = uploadInfo->getDisplayName();
+        std::string uploadMessage = LLTrans::getString("Asset_Uploading", args);
+        // </FS:Ansariel>
         LLUploadDialog::modalUploadDialog(uploadMessage);
     }
 

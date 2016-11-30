@@ -895,6 +895,7 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY)
 		// disabled on future sessions
 		if (LLPipeline::sRenderDeferred)
 		{
+			LL_WARNS() << "Couldn't allocate screen buffer - Deferred rendering disabled" << LL_ENDL; // FS:Ansariel> FIRE-20305: Debug output
 			gSavedSettings.setBOOL("RenderDeferred", FALSE);
 			LLPipeline::refreshCachedSettings();
 		}

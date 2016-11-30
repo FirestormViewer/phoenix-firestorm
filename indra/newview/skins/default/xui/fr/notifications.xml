@@ -811,7 +811,7 @@ Assurez-vous que le fichier a l&apos;extension correcte.
 	<notification name="ProblemWithFile">
 		Problème avec le fichier [FILE] :
 
-[ERROR]
+[REASON]
 	</notification>
 	<notification name="CannotOpenTemporarySoundFile">
 		Impossible d&apos;ouvrir le fichier son compressé temporaire : [FILE]

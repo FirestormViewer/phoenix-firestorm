@@ -29,7 +29,8 @@ out vec4 frag_color;
 #define frag_color gl_FragColor
 #endif
 
-#extension GL_ARB_texture_rectangle : enable
+// <FS> Fix GLSL compatibility
+//#extension GL_ARB_texture_rectangle : enable
 
 uniform sampler2D glowMap;
 uniform sampler2DRect screenMap;

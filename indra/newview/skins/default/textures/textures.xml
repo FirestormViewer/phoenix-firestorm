@@ -62,6 +62,7 @@ with the same filename but different name
 
   <texture name="Audio_Off" file_name="icons/Audio_Off.png" preload="false" />
   <texture name="Audio_Press" file_name="icons/Audio_Press.png" preload="false" />
+  <texture name="AudioMute_Press" file_name="icons/AudioMute_Press.png" preload="false" />
 
   <texture name="Avaline_Icon" file_name="icons/avaline_default_icon.jpg" preload="true" />
 

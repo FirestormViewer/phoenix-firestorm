@@ -796,7 +796,7 @@
 	<notification name="ProblemWithFile">
 		檔案 [FILE] 有問題：
 
-[ERROR]
+[REASON]
 	</notification>
 	<notification name="CannotOpenTemporarySoundFile">
 		無法開啟並寫入暫時壓縮音頻檔：[FILE]

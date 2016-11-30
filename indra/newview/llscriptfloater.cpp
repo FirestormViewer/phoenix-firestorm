@@ -76,7 +76,8 @@ LLScriptFloater::LLScriptFloater(const LLSD& key)
 {
 	setMouseDownCallback(boost::bind(&LLScriptFloater::onMouseDown, this));
 	setOverlapsScreenChannel(true);
-	mIsDockedStateForcedCallback = boost::bind(&LLAgentCamera::cameraMouselook, &gAgentCamera);
+	// <FS:Ansariel> FIRE-13459: Script dialogs ignore opening position in mouselook
+	//mIsDockedStateForcedCallback = boost::bind(&LLAgentCamera::cameraMouselook, &gAgentCamera);
 	mNoTransparency = gSavedSettings.getBOOL("FSScriptDialogNoTransparency");
 }
 

@@ -108,6 +108,10 @@ public:
 		
 		Params();
 	};
+
+	// <FS:Ansariel> Enabling LLLineEditor via XUI breaks enabled-state
+	void initFromParams(const LLLineEditor::Params& params);
+
 protected:
 	LLLineEditor(const Params&);
 	friend class LLUICtrlFactory;

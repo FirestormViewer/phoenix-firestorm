@@ -2130,7 +2130,7 @@ Audio file is too long ([MAX_LENGTH] second maximum):
    type="alertmodal">
 Problem with file [FILE]:
 
-[ERROR]
+[REASON]
   <tag>fail</tag>
   </notification>
 
@@ -3469,7 +3469,7 @@ Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Renderin
     <unique combine = "cancel_old">
       <context>HUDComplexityWarning</context>
     </unique>
-    [HUD_REASON], it is likely to negatively affect your performance.
+    [HUD_REASON]. It is likely to negatively affect your performance.
     <usetemplate
      ignoretext="Warn me when my HUD complexity is too high"
      name="notifyignore"/>
@@ -6476,6 +6476,7 @@ Link to this from a web page to give others easy access to this location, or try
    icon="alertmodal.tga"
    name="WLSavePresetAlert"
    type="alertmodal">
+   <unique/>
 Do you wish to overwrite the saved preset?
     <tag>confirm</tag>
     <usetemplate
@@ -12563,6 +12564,17 @@ You cannot undo this action.
      ignoretext="Confirm restore quick prefs defaults"
      name="okcancelignore"
      notext="Cancel"
+     yestext="OK"/>
+    </notification>
+
+    <notification
+     icon="alertmodal.tga"
+     name="QuickPrefsDuplicateControl"
+     type="alertmodal">
+     <tag>fail</tag>
+Setting has already been added. Please select a different one.
+    <usetemplate
+     name="okbutton"
      yestext="OK"/>
     </notification>
     

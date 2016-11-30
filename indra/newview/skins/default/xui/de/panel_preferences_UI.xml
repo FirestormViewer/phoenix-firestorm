@@ -33,9 +33,10 @@
 
 	<!--2D Overlay-->
 	<panel label="2D-Overlay" name="ui-2d-overlay">
-		<text name="UI Size:" width="220">
-			UI-Skalierung (Nebeneffekte möglich):
+		<text name="UI Size:" width="80">
+			UI-Skalierung:
 		</text>
+		<check_box label="Automatisch UI-Skalierungsfaktor ermitteln" name="FSEnableAutomaticUIScaling" tool_tip="Falls aktiviert, wird der Viewer versuchen, den korrekten Faktor anhand der Skaling des Betriebssystems zu ermitteln. Diese Funktion ist aktuell nur unter Windows verfügbar."/>
 		<text name="ScriptDialogsPerObjectLabel">
 			Skriptdialoge pro Objekt:
 		</text>

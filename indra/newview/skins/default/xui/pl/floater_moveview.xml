@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="move_floater">
 	<string name="walk_forward_tooltip">
 		Idź w przód (Strzałka w górę lub W)
@@ -49,18 +49,50 @@
 		Kucaj (Klawisz C)
 	</string>
 	<panel name="panel_actions">
-		<button name="turn left btn" tool_tip="Obróć w lewo (Strzałka w lewo lub A)"/>
-		<joystick_slide name="move left btn" tool_tip="Idź w lewo (Shift + strzałka w lewo lub A)"/>
-		<button name="turn right btn" tool_tip="Obróć w prawo (Strzałka w prawo lub D)"/>
-		<joystick_slide name="move right btn" tool_tip="Idź w prawo (Shift + strzałka w prawo lub D)"/>
-		<joystick_turn name="forward btn" tool_tip="Idź w przód (Strzałka w górę lub W)"/>
-		<joystick_turn name="backward btn" tool_tip="Idź do tyłu (Strzałka w dół lub S)"/>
-		<button name="move up btn" tool_tip="Leć do góry (Klawisz E)"/>
-		<button name="move down btn" tool_tip="Leć w dół (Klawisz C)"/>
-	</panel>
-	<panel name="panel_modes">
-		<button name="mode_walk_btn" tool_tip="Tryb chodzenia"/>
-		<button name="mode_run_btn" tool_tip="Tryb biegu"/>
-		<button name="mode_fly_btn" tool_tip="Tryb latania"/>
+		<layout_stack name="ls_vertical">
+			<layout_panel name="lp_row1">
+				<layout_stack name="ls_horizontal1">
+					<layout_panel name="lp_col1_1">
+						<button name="turn left btn" tool_tip="Obróć w lewo (Strzałka w lewo lub A)" />
+					</layout_panel>
+					<layout_panel name="lp_col1_2">
+						<joystick_turn name="forward btn" tool_tip="Idź w przód (Strzałka w górę lub W)" />
+					</layout_panel>
+					<layout_panel name="lp_col1_3">
+						<button name="turn right btn" tool_tip="Obróć w prawo (Strzałka w prawo lub D)" />
+					</layout_panel>
+					<layout_panel name="lp_col1_4">
+						<button name="move up btn" tool_tip="Leć do góry (Klawisz E)" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="lp_row2">
+				<layout_stack name="ls_horizontal2">
+					<layout_panel name="lp_col2_1">
+						<joystick_slide name="move left btn" tool_tip="Idź w lewo (Shift + strzałka w lewo lub A)" />
+					</layout_panel>
+					<layout_panel name="lp_col2_2">
+						<joystick_turn name="backward btn" tool_tip="Idź do tyłu (Strzałka w dół lub S)" />
+					</layout_panel>
+					<layout_panel name="lp_col2_3">
+						<joystick_slide name="move right btn" tool_tip="Idź w prawo (Shift + strzałka w prawo lub D)" />
+					</layout_panel>
+					<layout_panel name="lp_col2_4">
+						<button name="move down btn" tool_tip="Leć w dół (Klawisz C)" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="lp_row3">
+				<layout_stack name="ls_horizontal3">
+					<layout_panel name="modes_container">
+						<panel name="panel_modes">
+							<button name="mode_walk_btn" tool_tip="Tryb chodzenia" />
+							<button name="mode_run_btn" tool_tip="Tryb biegu" />
+							<button name="mode_fly_btn" tool_tip="Tryb latania" />
+						</panel>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>
 	</panel>
 </floater>

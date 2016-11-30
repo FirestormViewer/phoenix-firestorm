@@ -664,7 +664,18 @@ void LLFloaterTools::refresh()
 			if (selected_object)
 			{
 				// Select a parcel at the currently selected object's position.
-				LLViewerParcelMgr::getInstance()->selectParcelAt(selected_object->getPositionGlobal());
+				// <FS:Ansariel> FIRE-20387: Editing HUD attachment shows [CAPACITY_STRING] in tools floater
+				//LLViewerParcelMgr::getInstance()->selectParcelAt(selected_object->getPositionGlobal());
+				if (!selected_object->isAttachment())
+				{
+					LLViewerParcelMgr::getInstance()->selectParcelAt(selected_object->getPositionGlobal());
+				}
+				else
+				{
+					const LLStringExplicit empty_str("");
+					childSetTextArg("remaining_capacity", "[CAPACITY_STRING]", empty_str);
+				}
+				// </FS:Ansariel>
 			}
 			else
 			{
@@ -868,6 +879,11 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	// <FS:PP> FIRE-14493: Buttons to cycle through linkset
 	mBtnPrevPart->setVisible(edit_visible);
 	mBtnNextPart->setVisible(edit_visible);
+
+	bool select_btn_enabled = (!LLSelectMgr::getInstance()->getSelection()->isEmpty()
+								&& (linked_parts || LLToolFace::getInstance() == LLToolMgr::getInstance()->getCurrentTool()));
+	mBtnPrevPart->setEnabled(select_btn_enabled);
+	mBtnNextPart->setEnabled(select_btn_enabled);
 	// </FS:PP>
 
 	if (mCheckSelectIndividual)
@@ -1475,7 +1491,10 @@ void LLFloaterTools::getMediaState()
 		  &&first_object->permModify() 
 	      ))
 	{
-		getChildView("Add_Media")->setEnabled(FALSE);
+		// <FS:Ansariel> Doesn't exist as of 2016-11-16
+		//getChildView("Add_Media")->setEnabled(FALSE);
+		getChildView("add_media")->setEnabled(FALSE);
+		// </FS:Ansariel>
 		media_info->clear();
 		clearMediaSettings();
 		return;
@@ -1486,7 +1505,10 @@ void LLFloaterTools::getMediaState()
 	
 	if(!has_media_capability)
 	{
-		getChildView("Add_Media")->setEnabled(FALSE);
+		// <FS:Ansariel> Doesn't exist as of 2016-11-16
+		//getChildView("Add_Media")->setEnabled(FALSE);
+		getChildView("add_media")->setEnabled(FALSE);
+		// </FS:Ansariel>
 		LL_WARNS("LLFloaterTools: media") << "Media not enabled (no capability) in this region!" << LL_ENDL;
 		clearMediaSettings();
 		return;
@@ -1582,7 +1604,7 @@ void LLFloaterTools::getMediaState()
 	// update UI depending on whether "object" (prim or face) has media
 	// and whether or not you are allowed to edit it.
 	
-	getChildView("Add_Media")->setEnabled(editable);
+	//getChildView("Add_Media")->setEnabled(editable); // <FS:Ansariel> Doesn't exist as of 2016-11-16
 	// IF all the faces have media (or all dont have media)
 	if ( LLFloaterMediaSettings::getInstance()->mIdenticalHasMediaInfo )
 	{

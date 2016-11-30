@@ -768,10 +768,23 @@ BOOL LLToolCompGun::handleMouseDown(S32 x, S32 y, MASK mask)
     //    gAgent.setControlFlags(AGENT_CONTROL_ML_LBUTTON_DOWN);
     //    return FALSE;
     //}
-	if (gAgent.leftButtonGrabbed())
+	static LLCachedControl<bool> fsLegacyMouseTakeControl(gSavedSettings, "FSLegacyMouseTakeControl");
+	if (fsLegacyMouseTakeControl)
 	{
-		gAgent.setControlFlags(AGENT_CONTROL_ML_LBUTTON_DOWN);
-		return FALSE;
+		if (gAgent.leftButtonGrabbed())
+		{
+			gAgent.setControlFlags(AGENT_CONTROL_ML_LBUTTON_DOWN);
+			return FALSE;
+		}
+	}
+	else
+	{
+		if (gAgent.leftButtonBlocked())
+		{
+			// in case of "grabbed" control flag will be set later
+			gAgent.setControlFlags(AGENT_CONTROL_ML_LBUTTON_DOWN);
+			return FALSE;
+		}
 	}
 	// </FS:Ansariel>
 
@@ -793,10 +806,23 @@ BOOL LLToolCompGun::handleDoubleClick(S32 x, S32 y, MASK mask)
     //    gAgent.setControlFlags(AGENT_CONTROL_ML_LBUTTON_DOWN);
     //    return FALSE;
     //}
-	if (gAgent.leftButtonGrabbed())
+	static LLCachedControl<bool> fsLegacyMouseTakeControl(gSavedSettings, "FSLegacyMouseTakeControl");
+	if (fsLegacyMouseTakeControl)
 	{
-		gAgent.setControlFlags(AGENT_CONTROL_ML_LBUTTON_DOWN);
-		return FALSE;
+		if (gAgent.leftButtonGrabbed())
+		{
+			gAgent.setControlFlags(AGENT_CONTROL_ML_LBUTTON_DOWN);
+			return FALSE;
+		}
+	}
+	else
+	{
+		if (gAgent.leftButtonBlocked())
+		{
+			// in case of "grabbed" control flag will be set later
+			gAgent.setControlFlags(AGENT_CONTROL_ML_LBUTTON_DOWN);
+			return FALSE;
+		}
 	}
 	// </FS:Ansariel>
 

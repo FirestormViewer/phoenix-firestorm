@@ -530,7 +530,7 @@ void LLPanelVolume::refresh()
 
 	BOOL visible = LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_DEFERRED) > 0 ? TRUE : FALSE;
 
-	getChildView("label texture")->setVisible( visible);
+	//getChildView("label texture")->setVisible( visible); // <FS:Ansariel> Doesn't exist as of 2016-11-16
 	getChildView("Light FOV")->setVisible( visible);
 	getChildView("Light Focus")->setVisible( visible);
 	getChildView("Light Ambiance")->setVisible( visible);

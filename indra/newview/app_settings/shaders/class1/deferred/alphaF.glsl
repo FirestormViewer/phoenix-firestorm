@@ -23,7 +23,8 @@
  * $/LicenseInfo$
  */
  
-#extension GL_ARB_texture_rectangle : enable
+// <FS> Fix GLSL compatibility
+//#extension GL_ARB_texture_rectangle : enable
 
 #define INDEXED 1
 #define NON_INDEXED 2

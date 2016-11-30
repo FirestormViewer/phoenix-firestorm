@@ -251,7 +251,7 @@ void LLPanelPermissions::disableAll()
 	getChild<LLUICtrl>("Object Description")->setValue(LLStringUtil::null);
 	getChildView("Object Description")->setEnabled(FALSE);
 
-	getChildView("Permissions:")->setEnabled(FALSE);
+	//getChildView("Permissions:")->setEnabled(FALSE); // <FS:Ansariel> Doesn't exist as of 2016-11-16 (gone since 2009)
 		
 	getChild<LLUICtrl>("checkbox share with group")->setValue(FALSE);
 	getChildView("checkbox share with group")->setEnabled(FALSE);
@@ -288,8 +288,10 @@ void LLPanelPermissions::disableAll()
 	combo_sale_type->setValue(LLSaleInfo::FS_COPY);
 	combo_sale_type->setEnabled(FALSE);
 		
-	getChildView("Cost")->setEnabled(FALSE);
-	getChild<LLUICtrl>("Cost")->setValue(getString("Cost Default"));
+	// <FS:Ansariel> Doesn't exist as of 2016-11-16 (gone since 2009)
+	//getChildView("Cost")->setEnabled(FALSE);
+	//getChild<LLUICtrl>("Cost")->setValue(getString("Cost Default"));
+	// </FS:Ansariel>
 	getChild<LLUICtrl>("Edit Cost")->setValue(LLStringUtil::null);
 	getChildView("Edit Cost")->setEnabled(FALSE);
 		
@@ -414,7 +416,7 @@ void LLPanelPermissions::refresh()
 	getChildView("pathfinding_attributes_value")->setEnabled(TRUE);
 	getChild<LLUICtrl>("pathfinding_attributes_value")->setValue(LLTrans::getString(pfAttrName));
 
-	getChildView("Permissions:")->setEnabled(TRUE);
+	//getChildView("Permissions:")->setEnabled(TRUE); // <FS:Ansariel> Doesn't exist as of 2016-11-16 (gone since 2009)
 	
 	// Update creator text field
 	getChildView("Creator:")->setEnabled(TRUE);
@@ -606,7 +608,7 @@ void LLPanelPermissions::refresh()
 
 	if (!owners_identical)
 	{
-		getChildView("Cost")->setEnabled(FALSE);
+		//getChildView("Cost")->setEnabled(FALSE); // <FS:Ansariel> Doesn't exist as of 2016-11-16 (gone since 2009)
 		getChild<LLUICtrl>("Edit Cost")->setValue(LLStringUtil::null);
 		getChildView("Edit Cost")->setEnabled(FALSE);
 	}
@@ -614,19 +616,21 @@ void LLPanelPermissions::refresh()
 	else if (self_owned || (group_owned && gAgent.hasPowerInGroup(group_id,GP_OBJECT_SET_SALE)))
 	{
 		// If there are multiple items for sale then set text to PRICE PER UNIT.
-		if (num_for_sale > 1)
-		{
-			getChild<LLUICtrl>("Cost")->setValue(getString("Cost Per Unit"));
-		}
-		else
-		{
-			getChild<LLUICtrl>("Cost")->setValue(getString("Cost Default"));
-		}
+		// <FS:Ansariel> Doesn't exist as of 2016-11-16 (gone since 2009)
+		//if (num_for_sale > 1)
+		//{
+		//	getChild<LLUICtrl>("Cost")->setValue(getString("Cost Per Unit"));
+		//}
+		//else
+		//{
+		//	getChild<LLUICtrl>("Cost")->setValue(getString("Cost Default"));
+		//}
+		// </FS:Ansariel>
 		// The edit fields are only enabled if you can sell this object
 		// and the sale price is not mixed.
 		//BOOL enable_edit = (num_for_sale && can_transfer) ? !is_for_sale_mixed : FALSE;
 		BOOL enable_edit = can_transfer ? !is_for_sale_mixed : FALSE;
-		getChildView("Cost")->setEnabled(enable_edit);
+		//getChildView("Cost")->setEnabled(enable_edit); // <FS:Ansariel> Doesn't exist as of 2016-11-16 (gone since 2009)
 		
 		// Dont update and clear the price if change is pending
 		if (update_sale_info)
@@ -655,7 +659,7 @@ void LLPanelPermissions::refresh()
 	// Someone, not you, owns these objects.
 	else if (!public_owned)
 	{
-		getChildView("Cost")->setEnabled(FALSE);
+		//getChildView("Cost")->setEnabled(FALSE); // <FS:Ansariel> Doesn't exist as of 2016-11-16 (gone since 2009)
 		getChildView("Edit Cost")->setEnabled(FALSE);
 		
 		// Don't show a price if none of the items are for sale.
@@ -665,16 +669,20 @@ void LLPanelPermissions::refresh()
 			getChild<LLUICtrl>("Edit Cost")->setValue(LLStringUtil::null);
 
 		// If multiple items are for sale, set text to TOTAL PRICE.
-		if (num_for_sale > 1)
-			getChild<LLUICtrl>("Cost")->setValue(getString("Cost Total"));
-		else
-			getChild<LLUICtrl>("Cost")->setValue(getString("Cost Default"));
+		// <FS:Ansariel> Doesn't exist as of 2016-11-16 (gone since 2009)
+		//if (num_for_sale > 1)
+		//	getChild<LLUICtrl>("Cost")->setValue(getString("Cost Total"));
+		//else
+		//	getChild<LLUICtrl>("Cost")->setValue(getString("Cost Default"));
+		// </FS:Ansariel>
 	}
 	// This is a public object.
 	else
 	{
-		getChildView("Cost")->setEnabled(FALSE);
-		getChild<LLUICtrl>("Cost")->setValue(getString("Cost Default"));
+		// <FS:Ansariel> Doesn't exist as of 2016-11-16 (gone since 2009)
+		//getChildView("Cost")->setEnabled(FALSE);
+		//getChild<LLUICtrl>("Cost")->setValue(getString("Cost Default"));
+		// </FS:Ansariel>
 		
 		getChild<LLUICtrl>("Edit Cost")->setValue(LLStringUtil::null);
 		getChildView("Edit Cost")->setEnabled(FALSE);

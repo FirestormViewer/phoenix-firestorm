@@ -4686,7 +4686,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				sdQuery["name"] = chat.mFromName;
 				sdQuery["owner"] = owner_id;
 
-				if ( (!RlvActions::canShowName(RlvActions::SNC_COUNT, owner_id)) && (!is_owned_by_me) )
+				if ( (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, owner_id)) && (!is_owned_by_me) )
 					sdQuery["rlv_shownames"] = true;
 
 				const LLViewerRegion* pRegion = LLWorld::getInstance()->getRegionFromPosAgent(chat.mPosAgent);
@@ -9657,7 +9657,10 @@ void process_covenant_reply(LLMessageSystem* msg, void**)
 	LLPanelEstateInfo::updateEstateOwnerName(owner_name);
 	LLFloaterBuyLand::updateEstateOwnerName(owner_name);
 
-	LLPanelPlaceProfile* panel = LLFloaterSidePanelContainer::getPanel<LLPanelPlaceProfile>("places", "panel_place_profile");
+	// <FS:Ansariel> Don't create places floater if we don't need it
+	//LLPanelPlaceProfile* panel = LLFloaterSidePanelContainer::getPanel<LLPanelPlaceProfile>("places", "panel_place_profile");
+	LLPanelPlaceProfile* panel = LLFloaterSidePanelContainer::findPanel<LLPanelPlaceProfile>("places", "panel_place_profile");
+	// </FS:Ansariel>
 	if (panel)
 	{
 		panel->updateEstateName(estate_name);

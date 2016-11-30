@@ -88,6 +88,9 @@ VFS (Cache) Erstellungszeit: [VFS_DATE]
 	<string name="AboutTraffic">
 		Paketverlust: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
 	</string>
+	<string name="AboutTime">
+		[day, datetime, slt]. [month, datetime, slt] [year, datetime, slt] [hour24, datetime, slt]:[min, datetime, slt]:[second,datetime,slt] SLT
+	</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">
 		Fehler beim Abrufen der URL für die Server-Versionshinweise.
 	</string>
@@ -693,6 +696,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="TooltipSLAPP">
 		Anklicken, um Befehl secondlife:// auszuführen
+	</string>
+	<string name="TooltipFSHelpDebugSLUrl">
+		Anklicken, um das Fenster mit Debug-Einstellungen für diese Einstellung zu öffnen
 	</string>
 	<string name="CurrentURL" value=" CurrentURL: [CurrentURL]"/>
 	<string name="TooltipEmail">
@@ -1861,20 +1867,14 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="InvFolder Gestures">
 		Gesten
 	</string>
+	<string name="InvFolder Favorites">
+		Favoriten
+	</string>
 	<string name="InvFolder favorite">
 		Favoriten
 	</string>
-	<string name="InvFolder Favorites">
-		Favoriten
-	</string>
 	<string name="InvFolder favorites">
 		Favoriten
-	</string>
-	<string name="InvFolder Favorites">
-		Meine Favoriten
-	</string>
-	<string name="InvFolder favorites">
-		Meine Favoriten
 	</string>
 	<string name="InvFolder Current Outfit">
 		Aktuelles Outfit
@@ -6703,5 +6703,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="mode_unknown">
 		Unbekannter Modus
+	</string>
+	<string name="Asset_Uploading">Hochladen...
+
+[ASSET_NAME]
 	</string>
 </strings>

@@ -25,7 +25,8 @@
  
 //class 1, no shadow, no SSAO, should never be called
 
-#extension GL_ARB_texture_rectangle : enable
+// <FS> Fix GLSL compatibility
+//#extension GL_ARB_texture_rectangle : enable
 
 #ifdef DEFINE_GL_FRAGCOLOR
 out vec4 frag_color;

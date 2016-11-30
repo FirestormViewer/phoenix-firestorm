@@ -262,6 +262,9 @@ Jeśli nie chcesz, aby te przywileje były dłużej przypisane do tej roli, to w
 		Zamierzasz zbanować [COUNT] osób z grupy.
 		<usetemplate ignoretext="Potwierdź przed zbanowaniem z grupy kilku osób na raz" name="okcancelignore" notext="Anuluj" yestext="Banuj" />
 	</notification>
+	<notification name="GroupBanUserOnBanlist">
+		Niektórzy rezydenci nie dostali zaproszenia, ponieważ są zbanowani w grupie.
+	</notification>
 	<notification name="AttachmentDrop">
 		Wybrałeś/aś opcję upuszczenia swojego dodatku.
 Czy chcesz kontynuować?
@@ -569,22 +572,10 @@ Obiekt może znajdować się zbyt daleko albo został usunięty.
 Odwiedzić [_URL], aby uzyskać więcej informacji?
 		<usetemplate ignoretext="Sprzęt w moim komputerze nie jest wspierany" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
-	<notification name="IntelOldDriver">
+	<notification name="OldGPUDriver">
 		Prawdopodobnie istnieje nowszy sterownik dla Twojej karty graficznej. Aktualizacja sterowników graficznych może znacznie zwiększyć wydajność.
 
-Odwiedzić [_URL] aby sprawdzić, czy są nowsze sterowniki?
-		<usetemplate ignoretext="Moje sterowniki grafiki są przestarzałe" name="okcancelignore" notext="Nie" yestext="Tak"/>
-	</notification>
-	<notification name="AMDOldDriver">
-		Prawdopodobnie istnieje nowszy sterownik dla Twojej karty graficznej. Aktualizacja sterowników graficznych może znacznie zwiększyć wydajność.
-
-Odwiedzić [_URL] aby sprawdzić, czy są nowsze sterowniki?
-		<usetemplate ignoretext="Moje sterowniki grafiki są przestarzałe" name="okcancelignore" notext="Nie" yestext="Tak"/>
-	</notification>
-	<notification name="NVIDIAOldDriver">
-		Prawdopodobnie istnieje nowszy sterownik dla Twojej karty graficznej. Aktualizacja sterowników graficznych może znacznie zwiększyć wydajność.
-
-Odwiedzić [_URL] aby sprawdzić, czy są nowsze sterowniki?
+Odwiedzić [URL] aby sprawdzić, czy są nowsze sterowniki?
 		<usetemplate ignoretext="Moje sterowniki grafiki są przestarzałe" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
 	<notification name="UnknownGPU">
@@ -759,7 +750,7 @@ Oczekiwane: [VALIDS]
 	<notification name="ProblemWithFile">
 		Problem z plikiem [FILE]:
 
-[ERROR]
+[REASON]
 	</notification>
 	<notification name="CannotOpenTemporarySoundFile">
 		Nie można otworzyć tymczasowego skompresowanego pliku dźwiękowego w celu zapisu: [FILE]
@@ -1321,6 +1312,11 @@ Możesz normalnie używać [APP_NAME], inni użytkownicy będą Cię widzieli po
 	</notification>
 	<notification name="AgentComplexity">
 		Twój [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 stopień złożoności awatara] to [AGENT_COMPLEXITY].
+		<usetemplate ignoretext="Ostrzegaj mnie, gdy zmienia się stopień złożoności mojego awatara" name="notifyignore"/>
+	</notification>
+	<notification name="HUDComplexityWarning">
+		[HUD_REASON]. Bardzo prawdopodobne, że wpłynie to negatywnie na Twoją wydajność.
+		<usetemplate ignoretext="Ostrzegaj mnie, gdy stopień złożoności moich dodatków HUD jest zbyt wysoki" name="notifyignore"/>
 	</notification>
 	<notification name="FirstRun">
 		Instalacja [APP_NAME] zakończona.
@@ -1456,7 +1452,10 @@ Zamień teksturę [TEXTURE_NUM] na 24-bitową teksturę o wymiarze 1024x1024 lub
 		Możesz mieć maksymalnie [MAX_MANAGER] zarządców Majątku.
 	</notification>
 	<notification name="OwnerCanNotBeDenied">
-		Nie możesz dodać właściciela majątku do listy &apos;Niepożądanych Rezydentów (banów)&apos; majątku.
+		Nie możesz dodać właściciela Majątku do listy &apos;Niepożądanych Rezydentów (banów)&apos; Majątku.
+	</notification>
+	<notification name="ProblemAddingEstateManagerBanned">
+		Nie możesz dodać zbanowanego rezydenta do listy zarządców Majątku.
 	</notification>
 	<notification name="CanNotChangeAppearanceUntilLoaded">
 		Nie możesz zmienić wyglądu podczas ładowania ubrań i kształtu.
@@ -1622,6 +1621,10 @@ Jeśli ciągle nie możesz się doczekać, aby wypróbować najnowsze funkcje i 
 Otwieranie stron internetowych z nieznanego źródła może narazić Twój komputer na niebezpieczeństwo.
 		<usetemplate ignoretext="Uruchom przeglądarkę internetową by zobaczyć stronę" name="okcancelignore" notext="Anuluj" />
 	</notification>
+	<notification name="SystemUIScaleFactorChanged">
+		Mnożnik systemowego skalowania interfejsu uległ zmianie od ostatniego uruchomienia. Czy chcesz otworzyć ustawienia i skorygować skalowanie interfejsu w przeglądarce?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
 	<notification name="WebLaunchJoinNow">
 		By dokonać zmian i aktualizacji swojego konta, odwiedź [http://secondlife.com/account/ Tablicę].
 		<usetemplate ignoretext="Uruchom przeglądarkę internetową by dokonać zmian w konfiguracji mojego konta" name="okcancelignore" notext="Anuluj" />
@@ -1661,6 +1664,9 @@ Otwieranie stron internetowych z nieznanego źródła może narazić Twój kompu
 Chcesz ją opuścić?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
+	<notification name="GroupDepart">
+		Opuściłeś/aś grupę &apos;[group_name]&apos;.
+	</notification>
 	<notification name="GroupLeaveConfirmMemberWithFee">
 		Jesteś członkiem grupy &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Ponowne dołączenie będzie kosztować [AMOUNT] L$.
 Chcesz ją opuścić?
@@ -1668,6 +1674,9 @@ Chcesz ją opuścić?
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">
 		Nie możesz opuścić tej grupy, ponieważ jesteś ostatnim z jej właścicieli. Przydziel najpierw innemu użytkownikowi rolę właściciela.
+	</notification>
+	<notification name="GroupDepartError">
+		Nie możesz opuścić tej grupy.
 	</notification>
 	<notification name="ConfirmKick">
 		Na pewno chcesz wyrzucić wszystkich Rezydentów z siatki?
@@ -2100,6 +2109,9 @@ Kontynuować?
 	<notification name="TooManyPrimsSelected">
 		Zbyt wiele wybranych obiektów. Wybierz [MAX_PRIM_COUNT] lub mniej i spróbuj ponownie
 	</notification>
+	<notification name="TooManyScriptsSelected">
+		Zbyt wiele skryptów w wybranych obiektach. Wybierz mniej obiektów i spróbuj ponownie
+	</notification>
 	<notification name="ProblemImportingEstateCovenant">
 		Problem z importem umowy majątku.
 	</notification>
@@ -2255,6 +2267,9 @@ Przenieść obiekty szafy?
 	<notification name="PayObjectFailed">
 		Płatność nie powiodła się: nie można znaleźć obiektu.
 	</notification>
+	<notification name="PaymentBlockedButtonMismatch">
+		Płatność nie powiodła się: zapłacona suma nie pasuje do żadnego z przycisków płatności dla tego obiektu.
+	</notification>
 	<notification name="OpenObjectCannotCopy">
 		W tym obiekcie nie ma elementów które możesz skopiować.
 	</notification>
@@ -2289,6 +2304,10 @@ Nie możesz tego cofnąć.
 	<notification name="ConfirmUnlink">
 		Na pewno chcesz rozłączyć zaznaczony obiekt?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Rozłącz"/>
+	</notification>
+	<notification name="HelpReportAbuseConfirm">
+		Dziękujemy za poświęcenie czasu na poinformowanie nas o tym problemie.
+Przejrzymy Twoje zgłoszenie pod kątem ewentualnych nadużyć i podejmiemy odpowiednią akcję.
 	</notification>
 	<notification name="HelpReportAbuseSelectCategory">
 		Wybierz kategorię dla tego raportu o nadużyciu.
@@ -3559,13 +3578,6 @@ Kliknij i przeciągnij gdziekolwiek aby obrócić widok.
 	<notification name="ForceQuitDueToLowMemory">
 		SL zostanie wyłączone za 30 sekund, brak pamięci.
 	</notification>
-	<notification name="PopupAttempt">
-		Wyskakujące okienko zostało zablokowane.
-		<form name="form">
-			<ignore name="ignore" text="Zezwól na wyskakujące okienka"/>
-			<button name="open" text="Otwórz wyskakujące okno"/>
-		</form>
-	</notification>
 	<notification name="SOCKS_NOT_PERMITTED">
 		Serwer proxy SOCKS 5 "[HOST]:[PORT]" odmawia połączenia, brak dostępu na podstawie zestawu reguł.
 	</notification>
@@ -4140,6 +4152,9 @@ Spróbuj ponownie za minutę.
 		Nie można przesunąć obiektu '[OBJECT_NAME]' do
 [OBJ_POSITION] w regionie [REGION_NAME], ponieważ nie ma wystarczającej ilości zasobów na tej działce.
 	</notification>
+	<notification name="NoParcelPermsNoObject">
+		Kopiowanie nie powiodło się, ponieważ nie masz dostępu do tej działki.
+	</notification>
 	<notification name="CantMoveObjectRegionVersion">
 		Nie można przesunąć obiektu '[OBJECT_NAME]' do
 [OBJ_POSITION] w regionie [REGION_NAME], ponieważ the region działa na starszej wersji symulatora, która nie obsługuje otrzymywania obiektów przez granice działek.
@@ -4193,6 +4208,12 @@ Spróbuj ponownie za minutę.
 	</notification>
 	<notification name="CantSaveModifyAttachment">
 		Nie można zapisać do zawartości obiektu: To zmodyfikowałoby prawa dodatku.
+	</notification>
+	<notification name="AttachmentHasTooMuchInventory">
+		Twoje dodatki zawierają w sobie zbyt dużo obiektów, aby dodać więcej.
+	</notification>
+	<notification name="IllegalAttachment">
+		Dodatek chciał się doczepić do punktu, jaki nie istnieje na awatarze. Został on zamiast tego dołączony do klatki piersiowej.
 	</notification>
 	<notification name="TooManyScripts">
 		Za dużo skryptów.
@@ -4285,6 +4306,12 @@ Spróbuj ponownie za minutę.
 	</notification>
 	<notification name="TeleportedByObjectUnknownUser">
 		Zostałeś/aś teleportowany/a przez obiekt '[OBJECT_NAME]' należący do nieznanej osoby.
+	</notification>
+	<notification name="StandDeniedByObject">
+		'[OBJECT_NAME]' nie pozwala Ci w tej chwili stać.
+	</notification>
+	<notification name="ResitDeniedByObject">
+		'[OBJECT_NAME]' nie pozwala Ci w tej chwili zmieniać siedzeń.
 	</notification>
 	<notification name="CantCreateObjectRegionFull">
 		Nie można utworzyć żądanego obiektu. Region jest pełny.
@@ -4586,6 +4613,9 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 	<notification name="CantTransfterMoneyRegionDisabled">
 		Transfery pieniędzy do obiektów są obecnie wyłączone w tym regionie.
 	</notification>
+	<notification name="DroppedMoneyTransferRequest">
+		Nie udało się dokonać płatności ze względu na obciążenie systemu.
+	</notification>
 	<notification name="CantPayNoAgent">
 		Nie udało się ustalić, komu zapłacić.
 	</notification>
@@ -4690,6 +4720,9 @@ Kontynuowanie spowoduje, że kontrolki Szybkiego Strojenia zostaną przywrócone
 
 Nie można tego cofnąć.
 		<usetemplate ignoretext="Przywrócenie domyślnych kontrolek Szybkiego Strojenia" name="okcancelignore" notext="Anuluj" />
+	</notification>
+	<notification name="QuickPrefsDuplicateControl">
+		Takie ustawienie zostało już wcześniej dodane. Wybierz inne.
 	</notification>
 	<notification name="ExportFinished">
 		Wyeksportowano i zapisano do [FILENAME].

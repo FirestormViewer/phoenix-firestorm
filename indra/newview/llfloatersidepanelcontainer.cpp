@@ -166,3 +166,17 @@ LLPanel* LLFloaterSidePanelContainer::getPanel(const std::string& floater_name, 
 
 	return NULL;
 }
+
+// <FS:Ansariel> Convenience method
+LLPanel* LLFloaterSidePanelContainer::findPanel(const std::string& floater_name, const std::string& panel_name)
+{
+	LLFloaterSidePanelContainer* floaterp = LLFloaterReg::findTypedInstance<LLFloaterSidePanelContainer>(floater_name);
+
+	if (floaterp)
+	{
+		return floaterp->findChild<LLPanel>(panel_name, true);
+	}
+
+	return NULL;
+}
+// </FS:Ansariel>

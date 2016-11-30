@@ -80,7 +80,7 @@ Texture memory: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 VFS (cache) creation time (UTC): [VFS_DATE]
   </string>
   <string name="AboutTraffic">Packets Lost: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)</string>
-	<string name="AboutTime">[month, datetime, slt] [day, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt]</string>
+	<string name="AboutTime">[month, datetime, slt] [day, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt] SLT</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">Error fetching server release notes URL.</string>
 	<string name="BuildConfiguration">Build Configuration</string>
 	
@@ -339,6 +339,7 @@ Please try logging in again in a minute.</string>
 	<string name="TooltipObjectIMUrl">Click to view this object's description</string>
 	<string name="TooltipMapUrl">Click to view this location on a map</string>
 	<string name="TooltipSLAPP">Click to run the secondlife:// command</string>
+	<string name="TooltipFSHelpDebugSLUrl">Click to open the debug settings window for this setting</string>
 	<string name="CurrentURL" value=" CurrentURL: [CurrentURL]" />
 	<string name="TooltipEmail">Click to compose an email</string>
 
@@ -3016,4 +3017,9 @@ Try enclosing path to the editor with double quotes.
   <string name="mode_settings_hybrid.xml">Hybrid</string>
   <string name="mode_settings_latency.xml">Latency</string>
   <string name="mode_settings_text.xml">Text</string>
+
+  <string name="Asset_Uploading">Uploading...
+
+[ASSET_NAME]
+  </string>
 </strings>

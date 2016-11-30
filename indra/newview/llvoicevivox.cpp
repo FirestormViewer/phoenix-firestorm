@@ -1548,7 +1548,10 @@ bool LLVivoxVoiceClient::waitForChannel()
             {
                 recordingAndPlaybackMode();
             }
-            else if (checkParcelChanged() || (mNextAudioSession == NULL))
+            // <FS:Ansariel> FIRE-20371: Viewer spams region with ParcelVoiceInfoRequest if voice is disabled on parcel
+            //else if (checkParcelChanged() || (mNextAudioSession == NULL))
+            else if ((checkParcelChanged() || (mNextAudioSession == NULL)) && LLViewerParcelMgr::instance().allowAgentVoice())
+            // </FS:Ansariel>
             {
                 // the parcel is changed, or we have no pending audio sessions,
                 // so try to request the parcel voice info

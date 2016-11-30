@@ -84,8 +84,8 @@
 		<radio_item label="Ausrichten" name="radio align"/>
 	</radio_group>
 	<check_box label="Teile bearbeiten" name="checkbox edit linked parts"/>
-	<button name="prev_part_btn" tool_tip="Vorheriges verknüpftes Teil auswählen"/>
-	<button name="next_part_btn" tool_tip="Nächstes verknüpftes Teil auswählen"/>
+	<button name="prev_part_btn" tool_tip="Vorheriges verknüpftes Teil oder Fläche auswählen"/>
+	<button name="next_part_btn" tool_tip="Nächstes verknüpftes Teil oder Fläche auswählen"/>
 	<button label="Verkn." name="link_btn" width="50"/>
 	<button label="Trennen" name="unlink_btn" width="55"/>
 	<text name="RenderingCost" tool_tip="Zeigt die errechneten Wiedergabekosten für dieses Objekt">

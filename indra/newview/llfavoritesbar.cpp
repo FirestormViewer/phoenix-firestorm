@@ -56,28 +56,43 @@
 
 #include "llviewernetwork.h"	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml - getGrid()
 #include "fsfloaterplacedetails.h"
+#include "lleventtimer.h"
 
 static LLDefaultChildRegistry::Register<LLFavoritesBarCtrl> r("favorites_bar");
 
 const S32 DROP_DOWN_MENU_WIDTH = 250;
 const S32 DROP_DOWN_MENU_TOP_PAD = 13;
 
+// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+const S32 MAX_LANDMARK_REQUEST_RETRIES = 10;
+
 /**
  * Helper for LLFavoriteLandmarkButton and LLFavoriteLandmarkMenuItem.
  * Performing requests for SLURL for given Landmark ID
  */
-class LLLandmarkInfoGetter
+// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+//class LLLandmarkInfoGetter
+class LLLandmarkInfoGetter : public LLEventTimer
 {
 public:
 	LLLandmarkInfoGetter()
-	:	mLandmarkID(LLUUID::null),
-		mName("(Loading...)"),
+	: LLEventTimer(1.f),
+		mLandmarkID(LLUUID::null),
+		// <FS:Ansariel> Localization fix in LLLandmarkInfoGetter
+		//mName("(Loading...)"),
+		mName(LLTrans::getString("LoadingData")),
 		mPosX(0),
 		mPosY(0),
 		mPosZ(0),
+		// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+		mIsLoading(false),
+		mIsFailed(false),
+		mRetries(0),
+		// </FS:Ansariel>
 		mLoaded(false) 
 	{
 		mHandle.bind(this);
+		mEventTimer.stop(); // <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
 	}
 
 	void setLandmarkID(const LLUUID& id) { mLandmarkID = id; }
@@ -85,7 +100,10 @@ public:
 
 	const std::string& getName()
 	{
-		if(!mLoaded)
+		// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+		//if(!mLoaded)
+		if (!mLoaded && !mIsLoading && !mIsFailed)
+		// </FS:Ansariel>
 			requestNameAndPos();
 
 		return mName;
@@ -93,24 +111,61 @@ public:
 
 	S32 getPosX()
 	{
-		if (!mLoaded)
+		// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+		//if (!mLoaded)
+		if (!mLoaded && !mIsLoading && !mIsFailed)
+		// </FS:Ansariel>
 			requestNameAndPos();
 		return mPosX;
 	}
 
 	S32 getPosY()
 	{
-		if (!mLoaded)
+		// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+		//if (!mLoaded)
+		if (!mLoaded && !mIsLoading && !mIsFailed)
+		// </FS:Ansariel>
 			requestNameAndPos();
 		return mPosY;
 	}
 
 	S32 getPosZ()
 	{
-		if (!mLoaded)
+		// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+		//if (!mLoaded)
+		if (!mLoaded && !mIsLoading && !mIsFailed)
+		// </FS:Ansariel>
 			requestNameAndPos();
 		return mPosZ;
 	}
+
+	// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+	bool isLoaded() const
+	{
+		return mLoaded;
+	}
+
+	bool isFailed() const
+	{
+		return mIsFailed;
+	}
+
+	/*virtual */ BOOL tick()
+	{
+		mRetries++;
+		if (mRetries <= MAX_LANDMARK_REQUEST_RETRIES)
+		{
+			requestNameAndPos();
+		}
+		else
+		{
+			mIsFailed = true;
+			mEventTimer.stop();
+		}
+
+		return FALSE;
+	}
+	// </FS:Ansariel>
 
 private:
 	/**
@@ -124,9 +179,20 @@ private:
 		LLVector3d g_pos;
 		if(LLLandmarkActions::getLandmarkGlobalPos(mLandmarkID, g_pos))
 		{
+			// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+			mIsLoading = true;
+			mEventTimer.start();
+			// </FS:Ansariel>
 			LLLandmarkActions::getRegionNameAndCoordsFromPosGlobal(g_pos,
 				boost::bind(&LLLandmarkInfoGetter::landmarkNameCallback, static_cast<LLHandle<LLLandmarkInfoGetter> >(mHandle), _1, _2, _3, _4));
 		}
+		// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+		else
+		{
+			mIsFailed = true;
+			mEventTimer.stop();
+		}
+		// </FS:Ansariel>
 	}
 
 	static void landmarkNameCallback(LLHandle<LLLandmarkInfoGetter> handle, const std::string& name, S32 x, S32 y, S32 z)
@@ -139,6 +205,11 @@ private:
 			getter->mPosZ = z;
 			getter->mName = name;
 			getter->mLoaded = true;
+			// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+			getter->mIsLoading = false;
+			getter->mIsFailed = false;
+			getter->mEventTimer.stop();
+			// </FS:Ansariel>
 		}
 	}
 
@@ -148,6 +219,11 @@ private:
 	S32 mPosY;
 	S32 mPosZ;
 	bool mLoaded;
+	// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+	bool mIsLoading;
+	bool mIsFailed;
+	S32 mRetries;
+	// </FS:Ansariel>
 	LLRootHandle<LLLandmarkInfoGetter> mHandle;
 };
 
@@ -166,18 +242,46 @@ public:
 	{
 		std::string region_name = mLandmarkInfoGetter.getName();
 		
-		if (!region_name.empty())
+		// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+		//if (!region_name.empty())
+		//{
+		//	std::string extra_message = llformat("%s (%d, %d, %d)", region_name.c_str(), 
+		//		mLandmarkInfoGetter.getPosX(), mLandmarkInfoGetter.getPosY(), mLandmarkInfoGetter.getPosZ());
+
+		//	LLToolTip::Params params;
+		//	params.message = llformat("%s\n%s", getLabelSelected().c_str(), extra_message.c_str());
+		//	params.max_width = 1000;			
+		//	params.sticky_rect = calcScreenRect(); 
+
+		//	LLToolTipMgr::instance().show(params);
+		//}
+		if (!mLandmarkInfoGetter.isFailed())
 		{
-			std::string extra_message = llformat("%s (%d, %d, %d)", region_name.c_str(), 
-				mLandmarkInfoGetter.getPosX(), mLandmarkInfoGetter.getPosY(), mLandmarkInfoGetter.getPosZ());
+			std::string extra_message = region_name;
+			if (mLandmarkInfoGetter.isLoaded())
+			{
+				extra_message = llformat("%s (%d, %d, %d)", region_name.c_str(),
+					mLandmarkInfoGetter.getPosX(), mLandmarkInfoGetter.getPosY(), mLandmarkInfoGetter.getPosZ());
+			}
 
 			LLToolTip::Params params;
 			params.message = llformat("%s\n%s", getLabelSelected().c_str(), extra_message.c_str());
-			params.max_width = 1000;			
-			params.sticky_rect = calcScreenRect(); 
+			params.max_width = 1000;
+			params.sticky_rect = calcScreenRect();
 
 			LLToolTipMgr::instance().show(params);
 		}
+		else
+		{
+			LLToolTip::Params params;
+			params.message = getLabelSelected();
+			params.max_width = 1000;
+			params.sticky_rect = calcScreenRect();
+
+			LLToolTipMgr::instance().show(params);
+		}
+		// </FS:Ansariel>
+
 		return TRUE;
 	}
 
@@ -229,13 +333,32 @@ public:
 	BOOL handleToolTip(S32 x, S32 y, MASK mask)
 	{
 		std::string region_name = mLandmarkInfoGetter.getName();
-		if (!region_name.empty())
+		// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+		//if (!region_name.empty())
+		if (mLandmarkInfoGetter.isLoaded())
+		// </FS:Ansariel>
 		{
 			LLToolTip::Params params;
 			params.message = llformat("%s\n%s (%d, %d)", getLabel().c_str(), region_name.c_str(), mLandmarkInfoGetter.getPosX(), mLandmarkInfoGetter.getPosY());
 			params.sticky_rect = calcScreenRect();
 			LLToolTipMgr::instance().show(params);
 		}
+		// <FS:Ansariel> FIRE-20370: Viewer sends multiple map block requests when hovering over favorites bar button
+		else if (mLandmarkInfoGetter.isFailed())
+		{
+			LLToolTip::Params params;
+			params.message = getLabel();
+			params.sticky_rect = calcScreenRect();
+			LLToolTipMgr::instance().show(params);
+		}
+		else
+		{
+			LLToolTip::Params params;
+			params.message = llformat("%s\n%s", getLabel().c_str(), region_name.c_str());
+			params.sticky_rect = calcScreenRect();
+			LLToolTipMgr::instance().show(params);
+		}
+		// </FS:Ansariel>
 		return TRUE;
 	}
 	
