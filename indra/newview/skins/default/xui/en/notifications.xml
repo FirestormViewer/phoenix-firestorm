@@ -10275,6 +10275,16 @@ This will send the following information to the current IM session:
 
   <notification
    icon="alertmodal.tga"
+   name="TestversionExpired"
+   type="alertmodal">
+    This test version of [APP_NAME] has expired and cannot be used any further.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="FireStormReqInfo"
    type="alertmodal">
     [NAME] is requesting that you send them information about your [APP_NAME] setup.

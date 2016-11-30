@@ -24,7 +24,6 @@
 				(перезапуск)
 			</text>
 			<check_box label="Показывать стандартное окно управления камерой всегда прозрачным" name="FSAlwaysOpaqueCameraControls"/>
-			<check_box label="Показывать заблокированных аватаров как облако частиц" name="ShowMutedAvatarsAsCloud" tool_tip="Заблокированные аватары будут отображаться как облако частиц специального цвета"/>
 		</panel>
 		<panel label="От первого лица" name="tab-mouselook">
 			<check_box label="Включить функциональность вида от первого лица (Mouselook)" name="EnableMouselook" tool_tip="Разрешить вид от первого лица и контроль камеры мышью"/>
