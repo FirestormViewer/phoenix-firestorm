@@ -696,7 +696,6 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mTyping(FALSE),
 	mMeshValid(FALSE),
 	mVisible(FALSE),
-	mMutedAsCloud(false), // <FS:Ansariel> Show muted avatars as cloud
 	mWindFreq(0.f),
 	mRipplePhase( 0.f ),
 	mBelowWater(FALSE),
@@ -1191,7 +1190,6 @@ void LLVOAvatar::cleanupClass()
 }
 
 LLPartSysData LLVOAvatar::sCloud;
-LLPartSysData LLVOAvatar::sCloudMuted;
 void LLVOAvatar::initCloud()
 {
 	// fancy particle cloud designed by Brent
@@ -1229,11 +1227,6 @@ void LLVOAvatar::initCloud()
 	// llifstream in_file_muted(filename);
 	llifstream in_file_muted(filename.c_str());
 	// </FS:ND>
-
-	LLSDSerialize::fromXMLDocument(cloud_muted, in_file_muted);
-	sCloudMuted.fromLLSD(cloud_muted);
-	LLViewerTexture* cloud_muted_texture = LLViewerTextureManager::getFetchedTextureFromFile("cloud-particle.j2c");
-	sCloudMuted.mPartImageID = cloud_muted_texture->getID();
 }
 
 void LLVOAvatar::initInstance(void)
@@ -2248,11 +2241,6 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 	// attach objects that were waiting for a drawable
 	lazyAttach();
 
-	// <FS:Ansariel> Show muted avatars as cloud
-	static LLUICachedControl<bool> showMutedAvatarsAsCloud("ShowMutedAvatarsAsCloud", false);
-	mMutedAsCloud = !isSelf() && showMutedAvatarsAsCloud && isInMuteList();
-	// </FS:Ansariel>
-	
 	// animate the character
 	// store off last frame's root position to be consistent with camera position
 	mLastRootPos = mRoot->getWorldPosition();
@@ -2714,14 +2702,7 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 			// Firestorm Clouds
 			if (!isTooComplex()) // do not generate particles for overly-complex avatars
 			{
-				if (mMutedAsCloud)
-				{
-					setParticleSource(sCloudMuted, getID());
-				}
-				else
-				{
-					setParticleSource(sCloud, getID());
-				}
+				setParticleSource(sCloud, getID());
 			}
 		}
 // </FS>
@@ -7034,9 +7015,6 @@ bool LLVOAvatar::getIsCloud() const
 				|| !isTextureDefined(TEX_UPPER_BAKED)
 				|| !isTextureDefined(TEX_HEAD_BAKED)
 				)
-			// <FS> Show muted avatars as cloud
-			|| mMutedAsCloud
-			// </FS>
 			);
 }
 
@@ -7061,10 +7039,7 @@ void LLVOAvatar::updateRezzedStatusTimers()
 				startPhase("first_load_" + LLVOAvatar::rezStatusToString(i));
 			}
 		}
-		// <FS:Ansariel> Show muted avatars as cloud
-		//if (rez_status < mLastRezzedStatus)
-		if (rez_status < mLastRezzedStatus && !mMutedAsCloud)
-		// </FS:Ansariel>
+		if (rez_status < mLastRezzedStatus)
 		{
 			// load level has decreased. start phase timers for higher load levels.
 			for (S32 i = rez_status+1; i <= mLastRezzedStatus; i++)
@@ -7230,10 +7205,7 @@ BOOL LLVOAvatar::updateIsFullyLoaded()
 
 void LLVOAvatar::updateRuthTimer(bool loading)
 {
-	// <FS:Ansariel> Show muted avatars as cloud
-	//if (isSelf() || !loading) 
-	if (isSelf() || !loading || !mMutedAsCloud) 
-	// </FS:Ansariel>
+	if (isSelf() || !loading) 
 	{
 		return;
 	}
@@ -7301,8 +7273,7 @@ BOOL LLVOAvatar::isFullyLoaded() const
 //	return (mRenderUnloadedAvatar || mFullyLoaded);
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.2)
 	// Changes to LLAppearanceMgr::updateAppearanceFromCOF() expect this function to actually return mFullyLoaded for gAgentAvatarp
-	//return (mRenderUnloadedAvatar && !isSelf()) ||(mFullyLoaded);
-	return (mRenderUnloadedAvatar && !isSelf() && !mMutedAsCloud) ||(mFullyLoaded); // Particle clouds!
+	return (mRenderUnloadedAvatar && !isSelf()) ||(mFullyLoaded);
 // [/SL:KB]
 }
 

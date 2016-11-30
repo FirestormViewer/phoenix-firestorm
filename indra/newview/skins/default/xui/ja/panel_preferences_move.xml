@@ -28,7 +28,6 @@
 				（再起動が必要）
 			</text>
 			<check_box label="デフォルトのカメラコントロールのミニウィンドウを常に不透明で表示" name="FSAlwaysOpaqueCameraControls" />
-			<check_box label="ブロックしているアバターをパーティクルの雲で表示" name="ShowMutedAvatarsAsCloud" tool_tip="ブロックしているアバターは特別な色のパーティクルの雲で表示されるようになります。" />
 
 		</panel>
 

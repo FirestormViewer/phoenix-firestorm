@@ -20,7 +20,6 @@
 			<check_box label="Permettre à la caméra de traverser les objets" name="ignorecameraconstraints" tool_tip="Ignore les déplacements de caméra que le simulateur effectue lorsque celle-ci s'approche trop près des objets."/>
 			<text name="ignorecameraconstraints_requires_restart">(Redémarrage requis)</text>
 			<check_box label="Toujours afficher la fenêtre de contrôles de la caméra de façon opaque" name="FSAlwaysOpaqueCameraControls"/>
-			<check_box label="Afficher les avatars ignorés en tant que nuage" name="ShowMutedAvatarsAsCloud" tool_tip="Les avatars ignorés seront affichés en tant que petit nuage vert."/>
 		</panel>
 		<panel label="Vue subjective" name="tab-mouselook">
 			<check_box label="Activer la vue subjective" name="EnableMouselook" tool_tip="Permettre une vue à la première personne et un contrôle de la caméra à la souris"/>

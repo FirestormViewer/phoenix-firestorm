@@ -25,7 +25,6 @@
 				(Erfordert Neustart)
 			</text>
 			<check_box label="Kamera-Kontrollen auf undurchsichtigem Hintergrund anzeigen" name="FSAlwaysOpaqueCameraControls"/>
-			<check_box label="Blockierte Avatare als Partikelwolke darstellen" name="ShowMutedAvatarsAsCloud" tool_tip="Blockierte Avatare werden als Partikelwolke in einer speziellen Farbe dargestellt."/>
 			<check_box label="Temporär nicht-angezeigte Objekte nach Teleport wieder darstellen" name="FSTempDerenderUntilTeleport" tool_tip="Falls aktiviert, werden temporär nicht-angezeigte Objekte nach einem Teleport wieder dargestellt. Falls deaktiviert, werden diese bis zum Ende der Sitzung nicht dargestellt, sofern sie nicht manuell mit Hilfe des Asset-Blacklist-Fensters wieder dargestellt werden sollen."/>
 		</panel>
 
