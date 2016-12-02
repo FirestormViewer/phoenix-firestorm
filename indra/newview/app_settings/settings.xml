@@ -24201,6 +24201,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSEnableAutomaticUIScaling</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, the viewer will try to detect the correct factor based on the scaling set in the operating system. This feature is currently only available on Windows.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -24208,10 +24212,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>FSEnableAutomaticUIScaling</key>
-    <map>
-      <key>Comment</key>
-      <string>If enabled, the viewer will try to detect the correct factor based on the scaling set in the operating system. This feature is currently only available on Windows.</string>
   </map>
 </llsd>
 
