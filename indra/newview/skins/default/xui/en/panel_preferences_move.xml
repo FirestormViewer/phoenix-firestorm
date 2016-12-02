@@ -375,17 +375,6 @@
          top_pad="5"
          width="256" />
         <check_box
-         control_name="FSLegacyMouseTakeControl"
-         follows="left|top"
-         enabled_control="EnableMouselook"
-         height="16"
-         label="Legacy behavior for clicks in Mouselook"
-         layout="topleft"
-         name="FSLegacyMouseTakeControl"
-         tool_tip="If enabled, the viewer will use the legacy behavior for attachments using the llTakeControl script function. This will fix the majority of currently available weapons, but create other issues, e.g. not being able to interact with objects directly while in mouselook."
-         top_pad="5"
-         width="256" />
-        <check_box
          control_name="ShowCrosshairs"
          follows="left|top"
          enabled_control="EnableMouselook"

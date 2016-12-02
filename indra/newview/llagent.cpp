@@ -4355,16 +4355,7 @@ BOOL LLAgent::isControlGrabbed(S32 control_index) const
     //if (gAgent.mControlsTakenCount[control_index] > 0)
     //    return TRUE;
     //return gAgent.mControlsTakenPassedOnCount[control_index] > 0;
-	if (gSavedSettings.getBOOL("FSLegacyMouseTakeControl"))
-	{
-		return mControlsTakenCount[control_index] > 0;
-	}
-	else
-	{
-		if (gAgent.mControlsTakenCount[control_index] > 0)
-			return TRUE;
-		return gAgent.mControlsTakenPassedOnCount[control_index] > 0;
-	}
+	return mControlsTakenCount[control_index] > 0;
 	// </FS:Ansariel>
 }
 
