@@ -3849,6 +3849,9 @@ Nazwa może zawierać tylko znaki ASCII, za wyjątkiem ":" oraz "|".
 [SYSINFO]
 		<usetemplate name="okcancelbuttons" yestext="Wyślij" notext="Anuluj" />
 	</notification>
+	<notification name="TestversionExpired">
+		Ta wersja testowa programu [APP_NAME] wygasła i nie można jej już dalej używać.
+	</notification>
 	<notification name="FireStormReqInfo">
 		[NAME] prosi o wysłanie jej/mu informacji o Twojej instalacji przeglądarki [APP_NAME].
 (To dokładnie to samo, co możesz znaleźć w Pomoc -> Informacje o [APP_NAME])
