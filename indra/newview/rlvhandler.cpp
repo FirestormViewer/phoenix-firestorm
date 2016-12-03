@@ -2503,30 +2503,43 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCm
 template<> template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
 {
-	LLViewerObject* pObj = NULL; LLUUID idTarget(rlvCmd.getOption());
-	// Sanity checking - we need to know about the object and it should identify a prim/linkset
-	if ( (idTarget.isNull()) || ((pObj = gObjectList.findObject(idTarget)) == NULL) || (LL_PCODE_VOLUME != pObj->getPCode()) )
+	LLUUID idTarget;
+	if (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), idTarget))
 		return RLV_RET_FAILED_OPTION;
 
-	if (!RlvActions::canSit(pObj))
-		return RLV_RET_FAILED_LOCK;
-	else if ( (gRlvHandler.hasBehaviour(RLV_BHVR_STANDTP)) && (isAgentAvatarValid()) )
+	LLViewerObject* pObj = NULL;
+	if (idTarget.isNull())
 	{
-		if (gAgentAvatarp->isSitting())
+		if (!RlvActions::canGroundSit())
 			return RLV_RET_FAILED_LOCK;
-		gRlvHandler.m_posSitSource = gAgent.getPositionGlobal();
+		gAgent.sitDown();
 	}
+	else if ( ((pObj = gObjectList.findObject(idTarget)) != NULL) && (LL_PCODE_VOLUME == pObj->getPCode()))
+	{
+		if (!RlvActions::canSit(pObj))
+			return RLV_RET_FAILED_LOCK;
 
-	// Copy/paste from handle_sit_or_stand()
-	gMessageSystem->newMessageFast(_PREHASH_AgentRequestSit);
-	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-	gMessageSystem->nextBlockFast(_PREHASH_TargetObject);
-	gMessageSystem->addUUIDFast(_PREHASH_TargetID, pObj->mID);
-	gMessageSystem->addVector3Fast(_PREHASH_Offset, LLVector3::zero);
-	pObj->getRegion()->sendReliableMessage();
+		if ((gRlvHandler.hasBehaviour(RLV_BHVR_STANDTP)) && (isAgentAvatarValid()))
+		{
+			if (gAgentAvatarp->isSitting())
+				return RLV_RET_FAILED_LOCK;
+			gRlvHandler.m_posSitSource = gAgent.getPositionGlobal();
+		}
 
+		// Copy/paste from handle_sit_or_stand()
+		gMessageSystem->newMessageFast(_PREHASH_AgentRequestSit);
+		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
+		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		gMessageSystem->nextBlockFast(_PREHASH_TargetObject);
+		gMessageSystem->addUUIDFast(_PREHASH_TargetID, pObj->mID);
+		gMessageSystem->addVector3Fast(_PREHASH_Offset, LLVector3::zero);
+		pObj->getRegion()->sendReliableMessage();
+	}
+	else
+	{
+		return RLV_RET_FAILED_OPTION;
+	}
 	return RLV_RET_SUCCESS;
 }
 

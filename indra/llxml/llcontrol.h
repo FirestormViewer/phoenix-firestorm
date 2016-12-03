@@ -134,6 +134,9 @@ public:
 	commit_signal_t* getCommitSignal() { return &mCommitSignal; }
 	validate_signal_t* getValidateSignal() { return &mValidateSignal; }
 
+// [RLVa:KB] - Patch: RLVa-2.1.0
+	bool hasUnsavedValue() { return mValues.size() >= 2; }
+// [/RLVa:KB]
 	bool isDefault() { return (mValues.size() == 1); }
 	bool shouldSave(bool nondefault_only);
 	bool isPersisted() { return mPersist != PERSIST_NO; }

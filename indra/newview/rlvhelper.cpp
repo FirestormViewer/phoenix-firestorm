@@ -606,8 +606,7 @@ bool RlvCommand::parseCommand(const std::string& strCommand, std::string& strBeh
 template<>
 bool RlvCommandOptionHelper::parseOption<LLUUID>(const std::string& strOption, LLUUID& idOption)
 {
-	idOption.set(strOption);
-	return idOption.notNull();
+	return idOption.set(strOption);
 }
 
 template<>
