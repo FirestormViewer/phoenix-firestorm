@@ -1,17 +1,17 @@
-/** 
+/**
  *
  * Copyright (c) 2009-2016, Kitty Barnett
- * 
- * The source code in this file is provided to you under the terms of the 
+ *
+ * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt
  * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
- * 
+ *
  * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
+ * you have read and understood your obligations described above, and agree to
  * abide by those obligations.
- * 
+ *
  */
 
 // Generic includes
@@ -32,10 +32,13 @@
 
 // Command specific includes
 #include "llagentcamera.h"				// @setcam and related
+#include "llavataractions.h"            // @stopim IM query
 #include "llavatarnamecache.h"			// @shownames
 #include "llavatarlist.h"				// @shownames
 #include "llenvmanager.h"				// @setenv
 #include "llfloatersidepanelcontainer.h"// @shownames
+#include "llnotifications.h"			// @list IM query
+#include "llnotificationsutil.h"
 #include "lloutfitslist.h"				// @showinv - "Appearance / My Outfits" panel
 #include "llpaneloutfitsinventory.h"	// @showinv - "Appearance" floater
 #include "llpanelpeople.h"				// @shownames
@@ -71,7 +74,7 @@
 // Static variable initialization
 //
 
-BOOL RlvHandler::m_fEnabled = FALSE;
+bool RlvHandler::m_fEnabled = false;
 
 rlv_handler_t gRlvHandler;
 
@@ -475,6 +478,70 @@ ERlvCmdRet RlvHandler::processClearCommand(const RlvCommand& rlvCmd)
 	return RLV_RET_SUCCESS; // Don't fail clear commands even if the object didn't exist since it confuses people
 }
 
+bool RlvHandler::processIMQuery(const LLUUID& idSender, const std::string& strMessage)
+{
+	if ("@stopim" == strMessage)
+	{
+		// If the user can't start an IM session and one is open terminate it - always notify the sender in this case
+		if ( (!RlvActions::canStartIM(idSender)) && (RlvActions::hasOpenP2PSession(idSender)) )
+		{
+			RlvUtil::sendBusyMessage(idSender, RlvStrings::getString(RLV_STRING_STOPIM_ENDSESSION_REMOTE));
+			LLAvatarActions::endIM(idSender);
+			RlvUtil::notifyBlocked(RLV_STRING_STOPIM_ENDSESSION_LOCAL, LLSD().with("NAME", LLSLURL("agent", idSender, "about").getSLURLString()));
+			return true;
+		}
+
+		// User can start an IM session (or one isn't open) so we do nothing - notify and hide it from the user only if IM queries are enabled
+		if (!RlvSettings::getEnableIMQuery())
+			return false;
+		RlvUtil::sendBusyMessage(idSender, RlvStrings::getString(RLV_STRING_STOPIM_NOSESSION));
+		return true;
+	}
+	else if (RlvSettings::getEnableIMQuery())
+	{
+		if ("@version" == strMessage)
+		{
+			RlvUtil::sendBusyMessage(idSender, RlvStrings::getVersion(LLUUID::null));
+			return true;
+		}
+		else if ("@list" == strMessage)
+		{
+			LLNotification::Params params;
+			params.name = "RLVaListRequested";
+			params.functor.function(boost::bind(&RlvHandler::onIMQueryListResponse, this, _1, _2));
+			params.substitutions = LLSD().with("NAME_LABEL", LLSLURL("agent", idSender, "completename").getSLURLString()).with("NAME_SLURL", LLSLURL("agent", idSender, "about").getSLURLString());
+			params.payload = LLSD().with("from_id", idSender);
+
+			class RlvPostponedOfferNotification : public LLPostponedNotification
+			{
+			protected:
+				void modifyNotificationParams() override
+				{
+					LLSD substitutions = mParams.substitutions;
+					substitutions["NAME"] = mName;
+					mParams.substitutions = substitutions;
+				}
+			};
+			LLPostponedNotification::add<RlvPostponedOfferNotification>(params, idSender, false);
+			return true;
+		}
+	}
+	return false;
+}
+
+void RlvHandler::onIMQueryListResponse(const LLSD& sdNotification, const LLSD sdResponse)
+{
+	const LLUUID idRequester = sdNotification["payload"]["from_id"].asUUID();
+	if (LLNotificationsUtil::getSelectedOption(sdNotification, sdResponse) == 0)
+	{
+		RlvUtil::sendIMMessage(idRequester, RlvFloaterBehaviours::getFormattedBehaviourString(), '\n');
+	}
+	else
+	{
+		RlvUtil::sendBusyMessage(idRequester, RlvStrings::getString("imquery_list_deny"));
+	}
+}
+
 // ============================================================================
 // Externally invoked event handlers
 //
@@ -709,9 +776,9 @@ void RlvHandler::onIdleStartup(void* pParam)
 		// We don't want to run this *too* often
 		if ( (LLStartUp::getStartupState() >= STATE_MISC) && (pTimer->getElapsedTimeF32() >= 2.0) )
 		{
-			gRlvHandler.processRetainedCommands(RLV_BHVR_VERSION, RLV_TYPE_REPLY);
-			gRlvHandler.processRetainedCommands(RLV_BHVR_VERSIONNEW, RLV_TYPE_REPLY);
-			gRlvHandler.processRetainedCommands(RLV_BHVR_VERSIONNUM, RLV_TYPE_REPLY);
+			RlvHandler::instance().processRetainedCommands(RLV_BHVR_VERSION, RLV_TYPE_REPLY);
+			RlvHandler::instance().processRetainedCommands(RLV_BHVR_VERSIONNEW, RLV_TYPE_REPLY);
+			RlvHandler::instance().processRetainedCommands(RLV_BHVR_VERSIONNUM, RLV_TYPE_REPLY);
 			pTimer->reset();
 		}
 	}
@@ -751,45 +818,6 @@ void RlvHandler::onTeleportFinished(const LLVector3d& posArrival)
 // ============================================================================
 // String/chat censoring functions
 //
-
-// Checked: 2010-04-11 (RLVa-1.3.0h) | Modified: RLVa-1.3.0h
-bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/) const
-{
-	const LLUUID& idRoot = (pObj) ? pObj->getRootEdit()->getID() : LLUUID::null;
-	bool fCanTouch = (idRoot.notNull()) && ((pObj->isHUDAttachment()) || (!hasBehaviour(RLV_BHVR_TOUCHALL))) &&
-		((!hasBehaviour(RLV_BHVR_TOUCHTHIS)) || (!isException(RLV_BHVR_TOUCHTHIS, idRoot, RLV_CHECK_PERMISSIVE)));
-
-	static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
-	if (fCanTouch)
-	{
-		if ( (!pObj->isAttachment()) || (!pObj->permYouOwner()) )
-		{
-			// User can touch an object (that's isn't one of their own attachments) if:
-			//   - it's an in-world object and they're not prevented from touching it (or the object is an exception)
-			//   - it's an attachment and they're not prevented from touching (another avatar's) attachments (or the attachment is an exception)
-			//   - not fartouch restricted (or the object is within the currently enforced fartouch distance)
-			fCanTouch =
-				( (!pObj->isAttachment()) ? (!hasBehaviour(RLV_BHVR_TOUCHWORLD)) || (isException(RLV_BHVR_TOUCHWORLD, idRoot, RLV_CHECK_PERMISSIVE))
-				                          : ((!hasBehaviour(RLV_BHVR_TOUCHATTACH)) && (!hasBehaviour(RLV_BHVR_TOUCHATTACHOTHER))) || (isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE)) ) &&
-				( (!hasBehaviour(RLV_BHVR_FARTOUCH)) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist) );
-		}
-		else if (!pObj->isHUDAttachment())
-		{
-			// Regular attachment worn by this avie
-			fCanTouch =
-				((!hasBehaviour(RLV_BHVR_TOUCHATTACH)) || (isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE))) &&
-				((!hasBehaviour(RLV_BHVR_TOUCHATTACHSELF)) || (isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE)));
-		}
-		else
-		{
-			// HUD attachment
-			fCanTouch = (!hasBehaviour(RLV_BHVR_TOUCHHUD)) || (isException(RLV_BHVR_TOUCHHUD, idRoot, RLV_CHECK_PERMISSIVE));
-		}
-	}
-	if ( (!fCanTouch) && (hasBehaviour(RLV_BHVR_TOUCHME)) )
-		fCanTouch = hasBehaviourRoot(idRoot, RLV_BHVR_TOUCHME);
-	return fCanTouch;
-}
 
 size_t utf8str_strlen(const std::string& utf8)
 {
@@ -1099,29 +1127,32 @@ bool RlvHandler::redirectChatOrEmote(const std::string& strUTF8Text) const
 // Initialization helper functions
 //
 
-// Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-BOOL RlvHandler::setEnabled(BOOL fEnable)
+bool RlvHandler::canEnable()
 {
-	// TODO-RLVa: [RLVa-1.2.1] Allow toggling at runtime if we haven't seen any llOwnerSay("@....");
+	return LLStartUp::getStartupState() <= STATE_LOGIN_CLEANUP;
+}
+
+bool RlvHandler::setEnabled(bool fEnable)
+{
 	if (m_fEnabled == fEnable)
 		return fEnable;
 
-	if (fEnable)
+	if ( (fEnable) && (canEnable()) )
 	{
 		RLV_INFOS << "Enabling Restrained Love API support - " << RlvStrings::getVersionAbout() << RLV_ENDL;
-		m_fEnabled = TRUE;
+		m_fEnabled = true;
 
 		// Initialize static classes
 		RlvSettings::initClass();
 		RlvStrings::initClass();
 
-		gRlvHandler.addCommandHandler(new RlvExtGetSet());
+		RlvHandler::instance().addCommandHandler(new RlvExtGetSet());
 
 		// Make sure we get notified when login is successful
 		if (LLStartUp::getStartupState() < STATE_STARTED)
-			LLAppViewer::instance()->setOnLoginCompletedCallback(boost::bind(&RlvHandler::onLoginComplete, &gRlvHandler));
+			LLAppViewer::instance()->setOnLoginCompletedCallback(boost::bind(&RlvHandler::onLoginComplete, RlvHandler::getInstance()));
 		else
-			gRlvHandler.onLoginComplete();
+			RlvHandler::instance().onLoginComplete();
 
 		// Set up RlvUIEnabler
 		RlvUIEnabler::getInstance();
@@ -1132,51 +1163,6 @@ BOOL RlvHandler::setEnabled(BOOL fEnable)
 	}
 
 	return m_fEnabled;
-}
-
-BOOL RlvHandler::canDisable()
-{
-	return FALSE;
-}
-
-void RlvHandler::clearState()
-{
-/*
-	// TODO-RLVa: should restore all RLV controlled debug variables to their defaults
-
-	// Issue @clear on behalf of every object that has a currently active RLV restriction (even if it's just an exception)
-	LLUUID idObj; LLViewerObject* pObj; bool fDetachable;
-	while (m_Objects.size())
-	{
-		idObj = m_Objects.begin()->first; // Need a copy since after @clear the data it points to will no longer exist
-		fDetachable = ((pObj = gObjectList.findObject(idObj)) != NULL) ? isLockedAttachment(pObj, RLV_LOCK_REMOVE) : true;
-
-		processCommand(idObj, "clear", false);
-		if (!fDetachable)
-			processCommand(idObj, "detachme=force", false);
-	}
-
-	// Sanity check - these should all be empty after we issue @clear on the last object
-	if ( (!m_Objects.empty()) || !(m_Exceptions.empty()) || (!m_AttachAdd.empty()) || (!m_AttachRem.empty()) )
-	{
-		RLV_ERRS << "Object, exception or attachment map not empty after clearing state!" << LL_ENDL;
-		m_Objects.clear();
-		m_Exceptions.clear();
-		m_AttachAdd.clear();
-		m_AttachRem.clear();
-	}
-
-	// These all need manual clearing
-	memset(m_LayersAdd, 0, sizeof(S16) * WT_COUNT);
-	memset(m_LayersRem, 0, sizeof(S16) * WT_COUNT);
-	memset(m_Behaviours, 0, sizeof(S16) * RLV_BHVR_COUNT);
-	m_Retained.clear();
-	clearCommandHandlers(); // <- calls delete on all registered command handlers
-
-	// Clear dynamically allocated memory
-	delete m_pGCTimer;
-	m_pGCTimer = NULL;
-*/
 }
 
 // ============================================================================
@@ -1370,6 +1356,7 @@ ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(const RlvC
 			gRlvHandler.m_Behaviours[eBhvr]--;
 		}
 
+		gRlvHandler.m_OnBehaviour(eBhvr, rlvCmd.getParamType());
 		if (fHasBhvr != gRlvHandler.hasBehaviour(eBhvr))
 		{
 			if (pToggleHandlerFunc)
@@ -1644,9 +1631,8 @@ void RlvBehaviourToggleHandler<RLV_BHVR_EDIT>::onCommandToggle(ERlvBehaviour eBh
 		if (LLFloaterReg::instanceVisible("beacons"))
 			LLFloaterReg::hideInstance("beacons");
 
-		// Hide the build floater if it's currently visible
-		if (LLFloaterReg::instanceVisible("build"))
-			LLToolMgr::instance().toggleBuildMode("toggleonly");
+		// Hide the build floater
+		LLToolMgr::instance().leaveBuildMode();
 	}
 
 	// Start or stop filtering opening the beacons floater
@@ -2542,21 +2528,33 @@ template<> template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCmd)
 {
 	if (!RlvActions::canChangeActiveGroup(rlvCmd.getObjectID()))
-	{
 		return RLV_RET_FAILED_LOCK;
-	}
 
 	LLUUID idGroup; bool fValid = false;
-	if (idGroup.set(rlvCmd.getOption()))
+	if ("none" == rlvCmd.getOption())
+	{
+		idGroup.setNull();
+		fValid = true;
+	}
+	else if (idGroup.set(rlvCmd.getOption()))
 	{
 		fValid = (idGroup.isNull()) || (gAgent.isInGroup(idGroup, true));
 	}
 	else
 	{
-		for (S32 idxGroup = 0, cntGroup = gAgent.mGroups.size(); (idxGroup < cntGroup) && (idGroup.isNull()); idxGroup++)
-			if (boost::iequals(gAgent.mGroups.at(idxGroup).mName, rlvCmd.getOption()))
-				idGroup = gAgent.mGroups.at(idxGroup).mID;
-		fValid = (idGroup.notNull()) || ("none" == rlvCmd.getOption());
+		bool fExactMatch = false;
+		for (const auto& groupData : gAgent.mGroups)
+		{
+			// NOTE: exact matches take precedence over partial matches; in case of partial matches the last match wins
+			if (boost::istarts_with(groupData.mName, rlvCmd.getOption()))
+			{
+				idGroup = groupData.mID;
+				fExactMatch = groupData.mName.length() == rlvCmd.getOption().length();
+				if (fExactMatch)
+					break;
+			}
+		}
+		fValid = idGroup.notNull();
 	}
 
 	if (fValid)
@@ -3040,9 +3038,11 @@ ERlvCmdRet RlvHandler::onGetInv(const RlvCommand& rlvCmd, std::string& strReply)
 		//   - aren't hidden
 		//   - aren't a folded folder (only really matters when "Enable Legacy Naming" is enabled - see related blog post)
 		//     (we can skip checking for .<composite> folders since the ones we'll want to hide start with '.' anyway)
+		//   - don't have any invalid characters
 		const std::string& strFolder = pFolders->at(idxFolder)->getName();
-		if ( (!strFolder.empty()) && (RLV_FOLDER_PREFIX_HIDDEN != strFolder[0]) && 
-			 (!RlvInventory::isFoldedFolder(pFolders->at(idxFolder).get(), false)) )
+		if ( (!strFolder.empty()) && (RLV_FOLDER_PREFIX_HIDDEN != strFolder[0]) &&
+			 (!RlvInventory::isFoldedFolder(pFolders->at(idxFolder).get(), false)) && 
+			 (std::string::npos == strFolder.find_first_of(RLV_FOLDER_INVALID_CHARS)) )
 		{
 			if (!strReply.empty())
 				strReply.push_back(',');

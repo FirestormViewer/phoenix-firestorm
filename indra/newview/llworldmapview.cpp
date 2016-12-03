@@ -56,7 +56,8 @@
 #include "llviewerwindow.h"
 #include "lltrans.h"
 // [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f)
-#include "rlvhandler.h"
+#include "rlvactions.h"
+#include "rlvcommon.h"
 // [/RLVa:KB]
 #include "llslurl.h"
 #include "llurlaction.h"
@@ -534,7 +535,7 @@ void LLWorldMapView::draw()
 			}
 //			if (!mesg.empty())
 // [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
-			if ( (!mesg.empty()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) )
+			if ( (!mesg.empty()) && (RlvActions::canShowLocation()) )
 // [/RLVa:KB]
 			{
 				font->renderUTF8(
@@ -1090,7 +1091,7 @@ void LLWorldMapView::drawTracking(const LLVector3d& pos_global, const LLColor4& 
 
 //	if (label != "")
 // [RLVa:KB] - Checked: 2009-07-04 (RLVa-1.4.5) | Added: RLVa-1.0.0
-	if ( (label != "") && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) )
+	if ( (label != "") && (RlvActions::canShowLocation()) )
 // [/RLVa:KB]
 	{
 		font->renderUTF8(
@@ -1153,7 +1154,7 @@ BOOL LLWorldMapView::handleToolTip( S32 x, S32 y, MASK mask )
 
 // [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.4.5) | Modified: RLVa-1.4.5
 		std::string message = llformat("%s (%s)", 
-			(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? info->getName().c_str() : RlvStrings::getString(RLV_STRING_HIDDEN_REGION).c_str(), 
+			(RlvActions::canShowLocation()) ? info->getName().c_str() : RlvStrings::getString(RLV_STRING_HIDDEN_REGION).c_str(), 
 			info->getAccessString().c_str());
 // [/RLVa:KB]
 //		std::string message = llformat("%s (%s)", info->getName().c_str(), info->getAccessString().c_str());

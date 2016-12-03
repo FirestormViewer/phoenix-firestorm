@@ -63,8 +63,8 @@
 
 
 // [RLVa:KB] - Checked by TM: 2013-11-10 (RLVa-1.4.9)
-#include "rlvhandler.h"
 #include "rlvactions.h"
+#include "rlvcommon.h"
 // [/RLVa:KB]
 
 std::vector<U32> cmd_line_mPackagerToTake;
@@ -703,7 +703,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				{
 					std::string object_name;
 					gCacheName->getFullName(target_key, object_name);
-					if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+					if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, target_key))
 					{
 						object_name = RlvStrings::getAnonym(object_name);
 					}
@@ -724,7 +724,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						return false;
 					}
 
-					if ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canTouch(myObject)))
+					if ( (!RlvActions::isRlvEnabled()) || (RlvActions::canTouch(myObject)) )
 					{
 						LLMessageSystem* msg = gMessageSystem;
 						msg->newMessageFast(_PREHASH_ObjectGrab);
@@ -796,7 +796,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 			}
 			else if (command == "/standup")
 			{
-				if ((!rlv_handler_t::isEnabled()) || (RlvActions::canStand()))
+				if ( (!RlvActions::isRlvEnabled()) || (RlvActions::canStand()) )
 				{
 					gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 					report_to_nearby_chat(std::string("Standing up"));
@@ -864,7 +864,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 			}
 			else if (command == sFSCmdLineRezPlatform())
 			{
-				if (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ))
+				if (RlvActions::canRez())
 				{
 					F32 width;
 					if (i >> width)

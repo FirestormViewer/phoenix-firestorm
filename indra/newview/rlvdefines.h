@@ -83,7 +83,8 @@ const S32 RLVa_VERSION_PATCH = 3;
 
 #define RLV_FOLDER_FLAG_NOSTRIP			"nostrip"
 #define RLV_FOLDER_PREFIX_HIDDEN		'.'
-#define RLV_FOLDER_PREFIX_PUTINV    	'~'
+#define RLV_FOLDER_PREFIX_PUTINV		'~'
+#define RLV_FOLDER_INVALID_CHARS		"/"
 
 // ============================================================================
 // Enumeration declarations
@@ -374,6 +375,7 @@ enum ERlvAttachGroupType
 #define RLV_STRING_BLOCKED_AUTOPILOT		"blocked_autopilot"
 #define RLV_STRING_BLOCKED_GENERIC			"blocked_generic"
 #define RLV_STRING_BLOCKED_GROUPCHANGE		"blocked_groupchange"
+#define RLV_STRING_BLOCKED_INVFOLDER		"blocked_invfolder"
 #define RLV_STRING_BLOCKED_PERMATTACH		"blocked_permattach"
 #define RLV_STRING_BLOCKED_PERMTELEPORT		"blocked_permteleport"
 #define RLV_STRING_BLOCKED_RECVIM			"blocked_recvim"
@@ -386,6 +388,9 @@ enum ERlvAttachGroupType
 #define RLV_STRING_BLOCKED_TPLUREREQ_REMOTE	"blocked_tplurerequest_remote"
 #define RLV_STRING_BLOCKED_VIEWXXX			"blocked_viewxxx"
 #define RLV_STRING_BLOCKED_WIREFRAME		"blocked_wireframe"
+#define RLV_STRING_STOPIM_NOSESSION         "stopim_nosession"
+#define RLV_STRING_STOPIM_ENDSESSION_REMOTE "stopim_endsession_remote"
+#define RLV_STRING_STOPIM_ENDSESSION_LOCAL  "stopim_endsession_local"
 
 // ============================================================================
 
