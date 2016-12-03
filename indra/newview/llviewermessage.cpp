@@ -3920,7 +3920,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				sdQuery["name"] = chat.mFromName;
 				sdQuery["owner"] = owner_id;
 
-				if ( (!RlvActions::canShowName(RlvActions::SNC_COUNT, owner_id)) && (!is_owned_by_me) )
+				if ( (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, owner_id)) && (!is_owned_by_me) )
 					sdQuery["rlv_shownames"] = true;
 
 				const LLViewerRegion* pRegion = LLWorld::getInstance()->getRegionFromPosAgent(chat.mPosAgent);
