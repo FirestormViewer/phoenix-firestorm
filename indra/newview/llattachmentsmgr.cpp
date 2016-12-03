@@ -648,3 +648,28 @@ void LLAttachmentsMgr::spamStatusInfo()
     }
 #endif
 }
+
+// [SL:KB] - Patch: Appearance-PhantomAttach | Checked: Catznip-5.0
+void LLAttachmentsMgr::refreshAttachments()
+{
+	if (!isAgentAvatarValid())
+		return;
+
+	for (const auto& kvpAttachPt : gAgentAvatarp->mAttachmentPoints)
+	{
+		for (const LLViewerObject* pAttachObj : kvpAttachPt.second->mAttachedObjects)
+		{
+			const LLUUID& idItem = pAttachObj->getAttachmentItemID();
+			if ( (mAttachmentRequests.wasRequestedRecently(idItem)) || (pAttachObj->isTempAttachment()) )
+				continue;
+
+			AttachmentsInfo attachment;
+			attachment.mItemID = idItem;
+			attachment.mAttachmentPt = kvpAttachPt.first;
+			attachment.mAdd = true;
+			mPendingAttachments.push_back(attachment);
+			mAttachmentRequests.addTime(idItem);
+		}
+	}
+}
+// [/SL:KB]

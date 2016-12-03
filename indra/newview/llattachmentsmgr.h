@@ -98,6 +98,7 @@ public:
 public:
 	void clearPendingAttachmentLink(const LLUUID& idItem);
 	bool getPendingAttachments(std::set<LLUUID>& ids) const;
+	void refreshAttachments();
 protected:
 	void onRegisterAttachmentComplete(const LLUUID& idAttachLink);
 	friend class LLRegisterAttachmentCallback;

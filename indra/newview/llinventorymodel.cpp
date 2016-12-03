@@ -586,7 +586,7 @@ LLUUID LLInventoryModel::createNewCategory(const LLUUID& parent_id,
 	// Add the category to the internal representation
 	LLPointer<LLViewerInventoryCategory> cat =
 		new LLViewerInventoryCategory(id, parent_id, preferred_type, name, gAgent.getID());
-	cat->setVersion(LLViewerInventoryCategory::VERSION_INITIAL);
+	cat->setVersion(LLViewerInventoryCategory::VERSION_INITIAL - 1); // accountForUpdate() will icrease version by 1
 	cat->setDescendentCount(0);
 	LLCategoryUpdate update(cat->getParentUUID(), 1);
 	accountForUpdate(update);
@@ -644,7 +644,7 @@ void LLInventoryModel::createNewCategoryCoro(std::string url, LLSD postData, inv
         result["parent_id"].asUUID(), (LLFolderType::EType)result["type"].asInteger(),
         result["name"].asString(), gAgent.getID());
 
-    cat->setVersion(LLViewerInventoryCategory::VERSION_INITIAL);
+    cat->setVersion(LLViewerInventoryCategory::VERSION_INITIAL - 1); // accountForUpdate() will icrease version by 1
     cat->setDescendentCount(0);
     LLInventoryModel::LLCategoryUpdate update(cat->getParentUUID(), 1);
     
@@ -967,8 +967,11 @@ U32 LLInventoryModel::updateItem(const LLViewerInventoryItem* item, U32 mask)
 			item_array_t* item_array = get_ptr_in_map(mParentChildItemTree, category_id);
 			if( item_array )
 			{
+				LLInventoryModel::LLCategoryUpdate update(category_id, 1);
+				gInventory.accountForUpdate(update);
+
 				// *FIX: bit of a hack to call update server from here...
-				new_item->updateServer(TRUE);
+				new_item->updateParentOnServer(FALSE);
 				item_array->push_back(new_item);
 			}
 			else
@@ -1009,9 +1012,11 @@ U32 LLInventoryModel::updateItem(const LLViewerInventoryItem* item, U32 mask)
 				item_array = get_ptr_in_map(mParentChildItemTree, parent_id);
 				if(item_array)
 				{
+					LLInventoryModel::LLCategoryUpdate update(parent_id, 1);
+					gInventory.accountForUpdate(update);
 					// *FIX: bit of a hack to call update server from
 					// here...
-					new_item->updateServer(TRUE);
+					new_item->updateParentOnServer(FALSE);
 					item_array->push_back(new_item);
 				}
 				else
@@ -1098,7 +1103,6 @@ void LLInventoryModel::updateCategory(const LLViewerInventoryCategory* cat, U32 
 	if(old_cat)
 	{
 		// We already have an old category, modify its values
-		U32 mask = LLInventoryObserver::NONE;
 		LLUUID old_parent_id = old_cat->getParentUUID();
 		LLUUID new_parent_id = cat->getParentUUID();
 		if(old_parent_id != new_parent_id)
@@ -1153,7 +1157,8 @@ void LLInventoryModel::updateCategory(const LLViewerInventoryCategory* cat, U32 
 		item_array_t* itemsp = new item_array_t;
 		mParentChildCategoryTree[new_cat->getUUID()] = catsp;
 		mParentChildItemTree[new_cat->getUUID()] = itemsp;
-		addChangedMask(LLInventoryObserver::ADD, cat->getUUID());
+		mask |= LLInventoryObserver::ADD;
+		addChangedMask(mask, cat->getUUID());
 	}
 }
 
@@ -1443,7 +1448,11 @@ void LLInventoryModel::onObjectDeletedFromServer(const LLUUID& object_id, bool f
 		}
 
 		// From purgeObject()
-		LLPreview::hide(object_id);
+		LLViewerInventoryItem *item = getItem(object_id);
+		if (item && (item->getType() != LLAssetType::AT_LSL_TEXT))
+		{
+			LLPreview::hide(object_id, TRUE);
+		}
 		deleteObject(object_id, fix_broken_links, do_notify_observers);
 	}
 }
