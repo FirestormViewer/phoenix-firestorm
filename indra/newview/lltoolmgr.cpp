@@ -273,7 +273,7 @@ bool LLToolMgr::canEdit()
 
 bool LLToolMgr::buildEnabledOrActive()
 {
-	return inEdit() || canEdit();
+	return LLFloaterReg::instanceVisible("build") || canEdit();
 }
 
 void LLToolMgr::toggleBuildMode(const LLSD& sdname)
