@@ -783,9 +783,10 @@ BOOL LLFloaterPreference::postBuild()
 #endif
 	// </FS:Ansariel>
 
-	// <FS:Ansariel> FIRE-20416: Option only available on Windows
+	// <FS:Ansariel> Disable options only available on Windows on other platforms
 #ifndef LL_WINDOWS
 	childSetEnabled("FSEnableAutomaticUIScaling", FALSE);
+	childSetEnabled("FSDisableWMIProbing", FALSE);
 #endif
 	// </FS:Ansariel>
 
@@ -3350,11 +3351,6 @@ void LLFloaterPreference::updateUISoundsControls()
 	bool mute_all_sounds = gSavedSettings.getBOOL("MuteAudio");
 	getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!(mute_sound_effects || mute_all_sounds));
 	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!(mute_sound_effects || mute_all_sounds));
-
-#if !LL_WINDOWS
-	getChild<LLCheckBoxCtrl>("FSDisableWMIProbing")->setEnabled(FALSE); // VRAM detection via WMI probing on Windows systems
-#endif
-
 }
 // </FS:PP>
 
