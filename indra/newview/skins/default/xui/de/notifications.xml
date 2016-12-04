@@ -4578,6 +4578,13 @@ Wählen Sie eine kleinere Landfläche aus.
 	<notification name="RLVaChangeStrings">
 		Änderungen werden erst nach einem Neustart von [APP_NAME] aktiv.
 	</notification>
+	<notification name="RLVaListRequested" label="Änderung einer Restriktion wurde von [NAME_LABEL] angefragt">
+		[NAME_SLURL] hat das Senden einer Liste aller aktuell aktiven RLV-Restriktionen angefragt.
+		<form name="form">
+			<button name="Allow" text="Erlauben"/>
+			<button name="Deny" text="Verbieten"/>
+		</form>
+	</notification>
 	<notification name="PreferenceChatClearLog">
 		Dadurch werden die Protokolle vorheriger Unterhaltungen und alle Backups dieser Datei gelöscht.
 		<usetemplate ignoretext="Löschen des Protokolls vorheriger Unterhaltungen bestätigen." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
