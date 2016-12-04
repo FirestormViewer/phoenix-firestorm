@@ -135,7 +135,7 @@ public:
 	validate_signal_t* getValidateSignal() { return &mValidateSignal; }
 
 // [RLVa:KB] - Patch: RLVa-2.1.0
-	bool hasUnsavedValue() { return mValues.size() >= 2; }
+	bool hasUnsavedValue() { return mValues.size() > 2; }
 // [/RLVa:KB]
 	bool isDefault() { return (mValues.size() == 1); }
 	bool shouldSave(bool nondefault_only);
