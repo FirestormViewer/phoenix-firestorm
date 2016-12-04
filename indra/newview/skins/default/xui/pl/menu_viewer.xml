@@ -27,6 +27,7 @@
 			<menu_item_call label="Zatrzymaj animacje i cofnij zezwolenia do animowania" name="Stop Animating My Avatar With Revoke"/>
 			<menu_item_call label="Usuń deformacje awatara" name="undeform_avatar"/>
 			<menu_item_call label="Wymuś aktualizację wyglądu (rebake)" name="Rebake Texture"/>
+			<menu_item_call label="Odśwież dodatki" name="Refresh Attachments"/>
 			<menu_item_call label="Resetuj do domyślnego męskiego awatara (Character Test)" name="ResetDefaultAvM"/>
 			<menu_item_call label="Resetuj do domyślnego żeńskiego awatara (Character Test)" name="ResetDefaultAvF"/>
 			<menu_item_check label="Stopień złożoności awatarów" name="Avatar Draw Info"/>
@@ -272,6 +273,7 @@
 	</menu>
 	<menu label="Zaawansowane" name="Advanced">
 		<menu_item_call label="Odśwież tekstury (rebake)" name="Rebake Texture"/>
+		<menu_item_call label="Odśwież dodatki" name="Refresh Attachments"/>
 		<menu_item_call label="Domyślne ustawienia rozmiaru interfejsu" name="Set UI Size to Default"/>
 		<menu_item_call label="Ustaw rozmiar okna..." name="Set Window Size..."/>
 		<menu_item_check label="Ogranicz dystans selekcji" name="Limit Select Distance"/>

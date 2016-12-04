@@ -5453,8 +5453,11 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="RLVaPendingRestart">
 		(oczekuje restartu)
 	</string>
-	<string name="RLVaToggleMessage">
-		Wsparcie dla RestrainedLove zostanie %s po restarcie
+	<string name="RLVaToggleMessageLogin">
+		RLVa zostało [STATE] (restart nie jest potrzebny)
+	</string>
+	<string name="RLVaToggleMessageRestart">
+		RLVa będzie [STATE] po restarcie
 	</string>
 	<string name="RLVaToggleEnabled">
 		włączone

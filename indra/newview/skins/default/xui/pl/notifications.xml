@@ -4637,6 +4637,13 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 	<notification name="RLVaChangeStrings">
 		Zmiany nie odniosą skutku, dopóki nie zrestartujesz [APP_NAME].
 	</notification>
+	<notification name="RLVaListRequested" label="Żądanie ograniczeń RLV od [NAME_LABEL]">
+		[NAME_SLURL] zażądał, aby mu wysłać listę Twoich aktywnych ograniczeń RLV.
+		<form name="form">
+			<button name="Allow" text="Zezwól"/>
+			<button name="Deny" text="Odmów"/>
+		</form>
+	</notification>
 	<notification name="PreferenceChatClearLog">
 		Ta opcja usunie dzienniki poprzednich rozmów i wszelkie kopie zapasowe tego pliku.
 		<usetemplate ignoretext="Potwierdź, zanim usunę dzienniki poprzednich rozmów." name="okcancelignore" notext="Anuluj" />
