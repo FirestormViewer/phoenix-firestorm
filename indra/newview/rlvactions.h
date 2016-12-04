@@ -17,7 +17,15 @@
 #ifndef RLV_ACTIONS_H
 #define RLV_ACTIONS_H
 
+#include "llchat.h"
 #include "rlvdefines.h"
+
+// ============================================================================
+// Forward declarations
+//
+
+class LLInventoryCategory;
+class LLInventoryItem;
 
 // ============================================================================
 // RlvActions class declaration - developer-friendly non-RLVa code facing class, use in lieu of RlvHandler whenever possible
@@ -118,9 +126,24 @@ public:
 	 */
 	static bool canShowNearbyAgents();
 
+	/*
+	 * Checks if the user is allowed to use the specified volume in (main) chat and returns the appropriate chat volume type
+	 */
+	static EChatType checkChatVolume(EChatType chatType);
+
 protected:
 	// Backwards logic so that we can initialize to 0 and it won't block when we forget to/don't check if RLVa is disabled
 	static bool s_BlockNamesContexts[SNC_COUNT];
+
+	// =========
+	// Inventory
+	// =========
+public:
+	/*
+	 * Returns true if the user is allowed to paste the specified inventory object (item/folder) into the specified destination category (within user inventory)
+	 */
+	static bool canPaste(const LLInventoryCategory* pSourceCat, const LLInventoryCategory* pDestCat);
+	static bool canPaste(const LLInventoryItem* pSourceItem, const LLInventoryCategory* pDestCat);
 
 	// ========
 	// Movement
@@ -170,14 +193,56 @@ public:
 	// =================
 	// World interaction
 	// =================
+	// Terminology:
+	//   - build    : <todo>
+	//   - edit     : ability to get access an object from the build floater, or being able to look at its contents (i.e. open)
+	//   - interact : ability to interact with an object/avatar in any way or shape (i.e. touch, edit, click, grab, move, ...)
+	//   - rez      : ability to rez new objects (from either inventory or through the create tool)
+	//   - touch    : singularly refers to the ability to either invoke the scripted touch handler, or perform a physical grab
 public:
 	/*
-	 * Returns true if the user can edit the specified object
+	 * Returns true if the user can build (= access the build tools)
+	 */
+	static bool canBuild();
+
+	/*
+	 * Returns true if the user can edit the specified object (with an optional relative offset)
 	 */
 	static bool canEdit(const LLViewerObject* pObj);
 
 	/*
-	 * Returns true if the user can sit up on the specified object
+	 * Returns true if the user can sit on the ground
+	 */
+	static bool canGroundSit();
+
+	/*
+	 * Returns true if the user can interact with the specified object (with an optional relative offset)
+	 * (returns true if pObj == nullptr to not short circuit calling code)
+	 */
+	static bool canInteract(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
+
+	/*
+	 * Returns true if the user can rez new objects (from inventory or through the create tool)
+	 */
+	static bool canRez();
+
+	/*
+	 * Returns true if the user can see the hovertext associated with the specified object
+	 */
+	static bool canShowHoverText(const LLViewerObject* pObj);
+
+	/*
+	 * Returns true if the user can touch the specified object (with an optional offset relative to its center)
+	 */
+	static bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
+
+	/*
+	 * Returns true if the user can see their in-world location
+	 */
+	static bool canShowLocation();
+
+	/*
+	 * Returns true if the user can sit on the specified object (see canGroundSit() for sitting on land)
 	 */
 	static bool canSit(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
 
@@ -186,11 +251,6 @@ public:
 	 */
 	static bool canStand();
 	static bool canStand(const LLUUID& idRlvObjExcept);
-
-	/*
-	 * Returns true if the user can see their in-world location
-	 */
-	static bool canShowLocation();
 
 	// ================
 	// Helper functions
@@ -217,6 +277,11 @@ public:
 	 * Convenience function to check if RLVa is enabled without having to include rlvhandler.h
 	 */
 	static bool isRlvEnabled();
+
+	/*
+	 * Shows one of the blocked toast notifications (see rlva_strings.xml)
+	 */
+	static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD());
 };
 
 // ============================================================================

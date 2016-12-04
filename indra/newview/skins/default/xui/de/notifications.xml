@@ -4582,8 +4582,15 @@ Wählen Sie eine kleinere Landfläche aus.
 	<notification name="LargePrimAgentIntersect">
 		Große Prims, die sich mit anderen Spielern überschneiden, können nicht erstellt werden.  Bitte erneut versuchen, wenn sich die anderen Spieler bewegt haben.
 	</notification>
-	<notification name="RLVChangeStrings">
+	<notification name="RLVaChangeStrings">
 		Änderungen werden erst nach einem Neustart von [APP_NAME] aktiv.
+	</notification>
+	<notification name="RLVaListRequested" label="Änderung einer Restriktion wurde von [NAME_LABEL] angefragt">
+		[NAME_SLURL] hat das Senden einer Liste aller aktuell aktiven RLV-Restriktionen angefragt.
+		<form name="form">
+			<button name="Allow" text="Erlauben"/>
+			<button name="Deny" text="Verbieten"/>
+		</form>
 	</notification>
 	<notification name="PreferenceChatClearLog">
 		Dadurch werden die Protokolle vorheriger Unterhaltungen und alle Backups dieser Datei gelöscht.
@@ -4736,6 +4743,12 @@ Dieses wird die folgenden Informationen an die aktuelle IM-Sitzung senden:
 <!-- fsdata -->
   <notification name="BlockLoginInfo">
     [REASON]
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+  <notification name="TestversionExpired">
+    Diese Testversion von [APP_NAME] is abgelaufen und kann nicht weiter verwendet werden.
     <usetemplate
      name="okbutton"
      yestext="OK"/>

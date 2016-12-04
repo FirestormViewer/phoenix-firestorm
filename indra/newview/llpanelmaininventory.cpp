@@ -462,7 +462,10 @@ void LLPanelMainInventory::newWindow()
 
 void LLPanelMainInventory::doCreate(const LLSD& userdata)
 {
-	reset_inventory_filter();
+	// <FS:Ansariel> FIRE-20108: Can't create new folder in secondary inventory if view is filtered
+	//reset_inventory_filter();
+	onFilterEdit("");
+	// </FS:Ansariel>
 	menu_create_inventory_item(getPanel(), NULL, userdata);
 }
 

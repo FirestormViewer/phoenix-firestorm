@@ -105,7 +105,7 @@
 #include "llcleanup.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
-#include "rlvhandler.h"
+#include "rlvcommon.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
 #include "fsassetblacklist.h"
@@ -713,7 +713,7 @@ bool LLViewerObject::isReturnable()
 	}
 		
 // [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
-	if ( (rlv_handler_t::isEnabled()) && (!rlvCanDeleteOrReturn(this)) )
+	if ( (RlvActions::isRlvEnabled()) && (!rlvCanDeleteOrReturn(this)) )
 	{
 		return false;
 	}
@@ -1461,7 +1461,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					mText->setColor(LLColor4(coloru));
 					mText->setString(temp_string);
 // [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.0.0f
-					if (rlv_handler_t::isEnabled())
+					if (RlvActions::isRlvEnabled())
 					{
 						mText->setObjectText(temp_string);
 					}
@@ -1849,7 +1849,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					mText->setColor(LLColor4(coloru));
 					mText->setString(temp_string);
 // [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.0.0f
-					if (rlv_handler_t::isEnabled())
+					if (RlvActions::isRlvEnabled())
 					{
 						mText->setObjectText(temp_string);
 					}
@@ -2047,7 +2047,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 								return retval;
 							}
 // [RLVa:KB] - Checked: 2010-03-16 (RLVa-1.1.0k) | Added: RLVa-1.1.0k
-							if ( (rlv_handler_t::isEnabled()) && (sent_parentp->isAvatar()) && (sent_parentp->getID() == gAgent.getID()) )
+							if ( (RlvActions::isRlvEnabled()) && (sent_parentp->isAvatar()) && (sent_parentp->getID() == gAgent.getID()) )
 							{
 								// Rezzed object that's being worn as an attachment (we're assuming this will be due to llAttachToAvatar())
 								S32 idxAttachPt = ATTACHMENT_ID_FROM_STATE(getState());

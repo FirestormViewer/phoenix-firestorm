@@ -23,6 +23,7 @@
 #include "rlvactions.h"
 #include "rlvhelper.h"
 #include "rlvhandler.h"
+#include "rlvinventory.h"
 
 // ============================================================================
 // Camera
@@ -131,12 +132,20 @@ bool RlvActions::canChangeActiveGroup(const LLUUID& idRlvObject)
 // Little helper function to check the IM exclusion range for @recvim, @sendim and @startim (returns: min_dist <= (pos user - pos target) <= max_dist)
 static bool rlvCheckAvatarIMDistance(const LLUUID& idAvatar, ERlvBehaviourModifier eModDistMin, ERlvBehaviourModifier eModDistMax)
 {
-	LLVector3d posAgent;
+	//                      | no limits | minimum set | min+max set |       !fHasMin | !fHasMax = INF | fHasMax
+	// --------------------------------------------------------------       ------------------------------------
+	// dist <= min  <= max  | block     | block       | block       |           F    |  F             |    F
+	// min  <= dist <= max  | block     | allow       | allow       |           F    |  T             |    T
+	// min  <= max  <= dist | block     | allow       | block       |           F    |  ^ (see above) |    F
+	// off-region           | block     | allow       | block       |           F    |  ^ (see above) |    F
+
 	const RlvBehaviourModifier *pBhvrModDistMin = RlvBehaviourDictionary::instance().getModifier(eModDistMin), *pBhvrModDistMax = RlvBehaviourDictionary::instance().getModifier(eModDistMax);
-	if ( ((pBhvrModDistMin->hasValue()) || (pBhvrModDistMax->hasValue())) && (LLWorld::getInstance()->getAvatar(idAvatar, posAgent)) )
+	if (pBhvrModDistMin->hasValue())
 	{
-		float nDist = llabs(dist_vec_squared(gAgent.getPositionGlobal(), posAgent));
-		return (nDist >= pBhvrModDistMin->getValue<float>()) && (nDist <= pBhvrModDistMax->getValue<float>());
+		LLVector3d posAgent; bool fHasMax = pBhvrModDistMax->hasValue();
+		float nMinDist = pBhvrModDistMin->getValue<float>(), nMaxDist = (fHasMax) ? pBhvrModDistMax->getValue<float>() : std::numeric_limits<float>::max();
+		float nDist = (LLWorld::getInstance()->getAvatar(idAvatar, posAgent)) ? llabs(dist_vec_squared(gAgent.getPositionGlobal(), posAgent)) : std::numeric_limits<float>::max();
+		return (nMinDist < nMaxDist) && (nMinDist <= nDist) && (nDist <= nMaxDist);
 	}
 	return false;
 }
@@ -218,6 +227,45 @@ bool RlvActions::canShowNearbyAgents()
 	return !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNEARBY);
 }
 
+// Handles: @chatwhisper, @chatnormal and @chatshout
+EChatType RlvActions::checkChatVolume(EChatType chatType)
+{
+	// In vs Bhvr | whisper |  normal |  shout  | n+w     |   n+s   |  s+w   |  s+n+w  |
+	// ---------------------------------------------------------------------------------
+	// whisper    | normal  | -       | -       | normal  | -       | normal | normal  |
+	// normal     | -       | whisper | -       | whisper | whisper | -      | whisper |
+	// shout      | -       | whisper | normal  | whisper | whisper | normal | whisper |
+
+	RlvHandler& rlvHandler = RlvHandler::instance();
+	if ( ((CHAT_TYPE_SHOUT == chatType) || (CHAT_TYPE_NORMAL == chatType)) && (rlvHandler.hasBehaviour(RLV_BHVR_CHATNORMAL)) )
+		chatType = CHAT_TYPE_WHISPER;
+	else if ( (CHAT_TYPE_SHOUT == chatType) && (rlvHandler.hasBehaviour(RLV_BHVR_CHATSHOUT)) )
+		chatType = CHAT_TYPE_NORMAL;
+	else if ( (CHAT_TYPE_WHISPER == chatType) && (rlvHandler.hasBehaviour(RLV_BHVR_CHATWHISPER)) )
+		chatType = CHAT_TYPE_NORMAL;
+	return chatType;
+}
+
+// ============================================================================
+// Inventory
+//
+
+bool RlvActions::canPaste(const LLInventoryCategory* pSourceCat, const LLInventoryCategory* pDestCat)
+{
+	// The user can paste the specified object into the destination if:
+	//   - the source and destination are subject to the same lock type (or none at all) => NOTE: this happens to be the same logic we use for moving
+	return (!isRlvEnabled()) ||
+		( (pSourceCat) && (pDestCat) && ((!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().canMoveFolder(pSourceCat->getUUID(), pDestCat->getUUID()))) );
+}
+
+bool RlvActions::canPaste(const LLInventoryItem* pSourceItem, const LLInventoryCategory* pDestCat)
+{
+	// The user can paste the specified object into the destination if:
+	//   - the source and destination are subject to the same lock type (or none at all) => NOTE: this happens to be the same logic we use for moving
+	return (!isRlvEnabled()) ||
+		( (pSourceItem) && (pDestCat) && ((!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().canMoveItem(pSourceItem->getUUID(), pDestCat->getUUID()))) );
+}
+
 // ============================================================================
 // Movement
 //
@@ -284,19 +332,60 @@ bool RlvActions::isLocalTp(const LLVector3d& posGlobal)
 // World interaction
 //
 
+bool RlvActions::canBuild()
+{
+	// User can access the build floater if:
+	//    - allowed to edit existing objects OR
+	//    - allowed to rez/create objects
+	return
+		(!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) ||
+		(!gRlvHandler.hasBehaviour(RLV_BHVR_REZ));
+}
+
+// Handles: @edit and @editobj
 bool RlvActions::canEdit(const LLViewerObject* pObj)
 {
 	// User can edit the specified object if:
 	//   - not generally restricted from editing (or the object's root is an exception)
 	//   - not specifically restricted from editing this object's root
+
+	// NOTE-RLVa: edit checks should *never* be subject to @fartouch distance checks since we don't have the pick offset so
+	//            instead just implicitly rely on the presence of a (transient) selection
 	return
 		(pObj) &&
-		((!hasBehaviour(RLV_BHVR_EDIT)) || (gRlvHandler.isException(RLV_BHVR_EDIT, pObj->getRootEdit()->getID()))) &&
-		((!hasBehaviour(RLV_BHVR_EDITOBJ)) || (!gRlvHandler.isException(RLV_BHVR_EDITOBJ, pObj->getRootEdit()->getID())));
+		( (!RlvHandler::instance().hasBehaviour(RLV_BHVR_EDIT)) || (RlvHandler::instance().isException(RLV_BHVR_EDIT, pObj->getRootEdit()->getID())) ) &&
+		( (!RlvHandler::instance().hasBehaviour(RLV_BHVR_EDITOBJ)) || (!RlvHandler::instance().isException(RLV_BHVR_EDITOBJ, pObj->getRootEdit()->getID())) );
 }
 
+// Handles: @fartouch and @interact
+bool RlvActions::canInteract(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/)
+{
+	static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
 
-bool RlvActions::canSit(const LLViewerObject* pObj, const LLVector3& posOffset /*= LLVector3::zero*/)
+	// User can interact with the specified object if:
+	//   - not interaction restricted (or the specified object is a HUD attachment)
+	//   - not prevented from touching faraway objects (or the object's center + pick offset is within range)
+	RlvHandler& rlvHandler = RlvHandler::instance();
+	return
+		(!pObj) ||
+		( ( (!rlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) || (pObj->isHUDAttachment())) &&
+		  ( (!rlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) || (pObj->isHUDAttachment()) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist)) );
+}
+
+bool RlvActions::canRez()
+{
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ));
+}
+
+bool RlvActions::canGroundSit()
+{
+	// User can sit on the ground if:
+	//   - not prevented from sitting
+	//   - not prevented from standing up or not currently sitting
+	return (!hasBehaviour(RLV_BHVR_SIT)) && (canStand());
+}
+
+bool RlvActions::canSit(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/)
 {
 	// User can sit on the specified object if:
 	//   - not prevented from sitting
@@ -314,6 +403,98 @@ bool RlvActions::canSit(const LLViewerObject* pObj, const LLVector3& posOffset /
 		( ( (NULL != gRlvHandler.getCurrentCommand()) && (RLV_BHVR_SIT == gRlvHandler.getCurrentCommand()->getBehaviourType()) ) ||
 		  ( ((!hasBehaviour(RLV_BHVR_SITTP)) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) < s_nSitTpDist * s_nSitTpDist)) &&
 		    ((!hasBehaviour(RLV_BHVR_FARTOUCH)) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) < s_nFarTouchDist * s_nFarTouchDist)) ) );
+}
+
+// Handles: @showhovertextall, @showhovertextworld, @showhovertexthud and @showhovertext
+bool RlvActions::canShowHoverText(const LLViewerObject *pObj)
+{
+	// User cannot see this object's hover text if:
+	//   - prevented from seeing any hover text
+	//   - prevented from seeing hover text on world objects (= non-HUD attachments)
+	//   - prevented from seeing hover text on HUD objects
+	//   - specifically prevented from seeing that object's hover text)
+	//       -> NOTE-RLVa: this is object-specific (as opposed to touch restricts which are linkset-wide)
+	RlvHandler& rlvHandler = RlvHandler::instance();
+	return
+		( (!pObj) || (LL_PCODE_VOLUME != pObj->getPCode()) ||
+		  !( (rlvHandler.hasBehaviour(RLV_BHVR_SHOWHOVERTEXTALL)) ||
+		     ( (rlvHandler.hasBehaviour(RLV_BHVR_SHOWHOVERTEXTWORLD)) && (!pObj->isHUDAttachment()) ) ||
+		     ( (rlvHandler.hasBehaviour(RLV_BHVR_SHOWHOVERTEXTHUD)) && (pObj->isHUDAttachment()) ) ||
+		     (rlvHandler.isException(RLV_BHVR_SHOWHOVERTEXT, pObj->getID(), RLV_CHECK_PERMISSIVE)) ) );
+}
+
+// Handles: @touchall, @touchthis, @touchworld, @touchattach, @touchattachself, @touchattachother, @touchhud, @touchme and @fartouch
+bool RlvActions::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/)
+{
+	static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
+
+	// User can touch a
+	//  (1) World object if
+	//        - a) not prevented from touching any object
+	//        - b) not specifically prevented from touching that object
+	//        - c) not prevented from touching world objects (or the object is an exception)
+	//        - h) not prevented from touching faraway objects (or the object's center + pick offset is within range)
+	//        - i) specifically allowed to touch that object (overrides all restrictions)
+	//  (2) Attachment (on another avatar)
+	//        - a) not prevented from touching any object
+	//        - b) not specifically prevented from touching that object
+	//        - d) not prevented from touching attachments (or the attachment is an exception)
+	//        - e) not prevented from touching other avatar's attachments (or the attachment is an exception)
+	//        - h) not prevented from touching faraway objects (or the attachment's center + pick offset is within range)
+	//        - i) specifically allowed to touch that object (overrides all restrictions)
+	//  (3) Attachment (on own avatar)
+	//        - a) not prevented from touching any object
+	//        - b) not specifically prevented from touching that object
+	//        - d) not prevented from touching attachments (or the attachment is an exception)
+	//        - f) not prevented from touching their own avatar's attachments (or the attachment is an exception)
+	//        - h) not prevented from touching faraway objects (or the attachment's center + pick offset is within range)
+	//        - i) specifically allowed to touch that object (overrides all restrictions)
+	//  (4) Attachment (on HUD)
+	//        - b) not specifically prevented from touching that object
+	//        - g) not prevented from touching their own HUD attachments (or the attachment is an exception)
+	//        - i) specifically allowed to touch that object (overrides all restrictions)
+
+	// NOTE-RLVa: * touch restrictions apply linkset-wide (as opposed to, for instance, hover text which is object-specific) but only the root object's restrictions are tested
+	//            * @touchall affects world objects and world attachments (self and others') but >not< HUD attachments
+	//            * @fartouch distance matches against the specified object + pick offset (so >not< the linkset root)
+	//            * @touchattachother exceptions are only checked under the general @touchattach exceptions
+	//            * @touchattachself exceptions are only checked under the general @touchattach exceptions
+	//            * @touchme in any object of a linkset affects that entire linkset (= if you can specifically touch one prim in a linkset you can touch that entire linkset)
+	const LLUUID& idRoot = (pObj) ? pObj->getRootEdit()->getID() : LLUUID::null;
+
+	RlvHandler& rlvHandler = RlvHandler::instance();
+	// Short circuit test for (1/2/3/4.a) and (1/2/3/4.b)
+	bool fCanTouch =
+		(idRoot.notNull()) &&
+		( (pObj->isHUDAttachment()) || (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHALL)) ) &&
+		( (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHTHIS)) || (!rlvHandler.isException(RLV_BHVR_TOUCHTHIS, idRoot, RLV_CHECK_PERMISSIVE)) );
+	if (fCanTouch)
+	{
+		if ( (!pObj->isAttachment()) || (!pObj->permYouOwner()) )
+		{
+			// Rezzed or attachment worn by other - test for (1.c), (2.d), (2.e) and (1/2.h)
+			fCanTouch =
+				( (!pObj->isAttachment()) ? (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHWORLD)) || (rlvHandler.isException(RLV_BHVR_TOUCHWORLD, idRoot, RLV_CHECK_PERMISSIVE))
+				                          : ((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH)) && (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHOTHER))) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE)) ) &&
+				( (!rlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist) );
+		}
+		else if (!pObj->isHUDAttachment())
+		{
+			// Regular attachment worn by this avie - test for (3.d), (3.e) and (3.h)
+			fCanTouch =
+				((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH)) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE))) &&
+				((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHSELF)) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE)));
+		}
+		else
+		{
+			// HUD attachment - test for (4.g)
+			fCanTouch = (!hasBehaviour(RLV_BHVR_TOUCHHUD)) || (rlvHandler.isException(RLV_BHVR_TOUCHHUD, idRoot, RLV_CHECK_PERMISSIVE));
+		}
+	}
+	// Post-check for (1/2/3/4i)
+	if ( (!fCanTouch) && (hasBehaviour(RLV_BHVR_TOUCHME)) )
+		fCanTouch = rlvHandler.hasBehaviourRoot(idRoot, RLV_BHVR_TOUCHME);
+	return fCanTouch;
 }
 
 bool RlvActions::canStand()
@@ -367,6 +548,11 @@ bool RlvActions::hasOpenGroupSession(const LLUUID& idGroup)
 bool RlvActions::isRlvEnabled()
 {
 	return RlvHandler::isEnabled();
+}
+
+void RlvActions::notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs)
+{
+	RlvUtil::notifyBlocked(strNotifcation, sdArgs);
 }
 
 // ============================================================================

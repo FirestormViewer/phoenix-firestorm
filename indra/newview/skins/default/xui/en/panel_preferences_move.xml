@@ -268,17 +268,6 @@
          top_pad="3"
          follows="left|top"
          height="16"
-         label="Render blocked avatars as particle cloud"
-         layout="topleft"
-         left="20"
-         name="ShowMutedAvatarsAsCloud"
-         width="350"
-         tool_tip="Blocked avatars will be rendered as a particle cloud in special color."
-         control_name="ShowMutedAvatarsAsCloud"/>
-        <check_box
-         top_pad="3"
-         follows="left|top"
-         height="16"
          label="Re-render temporary derendered objects after teleport"
          layout="topleft"
          left="20"
@@ -383,17 +372,6 @@
          layout="topleft"
          name="mouselook_instructions_visible"
          tool_tip="Show Mouselook Instructions"
-         top_pad="5"
-         width="256" />
-        <check_box
-         control_name="FSLegacyMouseTakeControl"
-         follows="left|top"
-         enabled_control="EnableMouselook"
-         height="16"
-         label="Legacy behavior for clicks in Mouselook"
-         layout="topleft"
-         name="FSLegacyMouseTakeControl"
-         tool_tip="If enabled, the viewer will use the legacy behavior for attachments using the llTakeControl script function. This will fix the majority of currently available weapons, but create other issues, e.g. not being able to interact with objects directly while in mouselook."
          top_pad="5"
          width="256" />
         <check_box

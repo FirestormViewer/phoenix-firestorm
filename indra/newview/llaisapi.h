@@ -89,8 +89,7 @@ public:
 	void parseUpdate(const LLSD& update);
 	void parseMeta(const LLSD& update);
 	void parseContent(const LLSD& update);
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-06-24 (Catznip-3.7)
-	// Ideally this would go into a helper class but this changes the least LL code
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-3.7
 	static void parseUUIDArray(const LLSD& content, const std::string& name, uuid_list_t& ids);
 // [/SL:KB]
 //	void parseUUIDArray(const LLSD& content, const std::string& name, uuid_list_t& ids);

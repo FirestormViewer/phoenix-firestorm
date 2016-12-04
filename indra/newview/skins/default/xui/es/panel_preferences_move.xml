@@ -24,7 +24,6 @@
 				(requiere reiniciar)
 			</text>
 			<check_box label="Muestra los controles de cámara por defecto siempre opacos" name="FSAlwaysOpaqueCameraControls"/>
-			<check_box label="Representar avatares bloqueados como nubes de partículas" name="ShowMutedAvatarsAsCloud" tool_tip="Los avatares bloqueados se mostrarán como nubes de partículas de un color especial"/>
 		</panel>
 		<panel label="Vista subjetiva" name="tab-mouselook">
 			<check_box label="Activar la funcionalidad de vista subjetiva" name="EnableMouselook" tool_tip="Permite una perspectiva de primera persona y el contról de la cámara con el ratón"/>

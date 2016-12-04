@@ -3841,6 +3841,15 @@ void LLFolderBridge::perform_pasteFromClipboard()
                     LLNotificationsUtil::add("StockPasteFailed", subs);
                     return;
                 }
+
+// [RLVa:KB] - Checked: RLVa-2.1.0
+				if ( ((item) && (!RlvActions::canPaste(item, dest_folder))) || ((cat) && (!RlvActions::canPaste(cat, dest_folder))) )
+				{
+					RlvActions::notifyBlocked(RLV_STRING_BLOCKED_INVFOLDER);
+					return;
+				}
+// [/RLVa:KB]
+
             }
         }
         
@@ -6436,7 +6445,7 @@ bool enable_attachment_touch(const LLUUID& idItem)
 	if ( (isAgentAvatarValid()) && (pItem) && (LLAssetType::AT_OBJECT == pItem->getType()) )
 	{
 		const LLViewerObject* pAttachObj = gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID());
-		return (pAttachObj) && (pAttachObj->flagHandleTouch()) && ( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canTouch(gAgentAvatarp->getWornAttachment(idItem))) );
+		return (pAttachObj) && (pAttachObj->flagHandleTouch()) && ( (!RlvActions::isRlvEnabled()) || (RlvActions::canTouch(gAgentAvatarp->getWornAttachment(idItem))) );
 	}
 	return false;
 }

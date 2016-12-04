@@ -4741,7 +4741,7 @@ URL: [MEDIAURL]
 	<notification name="LargePrimAgentIntersect">
 		Нельзя создавать большие примитивы, которые пересекаются с другими игроками.  Повторите попытку, когда другие игроки уйдут.
 	</notification>
-	<notification name="RLVChangeStrings">
+	<notification name="RLVaChangeStrings">
 		Изменения вступят в силу после перезагрузки [APP_NAME].
 	</notification>
 	<notification name="PreferenceChatClearLog">

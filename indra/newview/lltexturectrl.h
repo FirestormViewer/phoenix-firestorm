@@ -333,6 +333,7 @@ public:
 	static void		onBtnRemove(void* userdata);
 	static void		onBtnUpload(void* userdata);
 	static void		onLocalScrollCommit(LLUICtrl* ctrl, void* userdata);
+	void			onLocalBitmapsAddedCallback(); // <FS:Ansariel> Threaded filepickers
 
 	void 			setLocalTextureEnabled(BOOL enabled);
 
@@ -382,6 +383,8 @@ private:
 	floater_commit_callback mOnFloaterCommitCallback;
 	set_image_asset_id_callback mSetImageAssetIDCallback;
 	set_on_update_image_stats_callback mOnUpdateImageStatsCallback;
+
+	boost::signals2::connection mLocalBitmapsAddedCallbackConnection; // <FS:Ansariel> Threaded filepickers
 };
 
 #endif  // LL_LLTEXTURECTRL_H

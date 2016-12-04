@@ -576,6 +576,43 @@ std::string utf8str_truncate(const std::string& utf8str, const S32 max_len)
 	}
 }
 
+// [RLVa:KB] - Checked: RLVa-2.1.0
+std::string utf8str_substr(const std::string& utf8str, const S32 index, const S32 max_len)
+{
+	if (0 == max_len)
+	{
+		return std::string();
+	}
+	if (utf8str.length() - index  <= max_len)
+	{
+		return utf8str.substr(index, max_len);
+	}
+	else
+	{
+		S32 cur_char = max_len;
+
+		// If we're ASCII, we don't need to do anything
+		if ((U8)utf8str[index + cur_char] > 0x7f)
+		{
+			// If first two bits are (10), it's the tail end of a multibyte char.  We need to shift back
+			// to the first character
+			while (0x80 == (0xc0 & utf8str[index + cur_char]))
+			{
+				cur_char--;
+				// Keep moving forward until we hit the first char;
+				if (cur_char == 0)
+				{
+					// Make sure we don't trash memory if we've got a bogus string.
+					break;
+				}
+			}
+		}
+		// The byte index we're on is one we want to get rid of, so we only want to copy up to (cur_char-1) chars
+		return utf8str.substr(index, cur_char);
+	}
+}
+// [/RLVa:KB]
+
 std::string utf8str_symbol_truncate(const std::string& utf8str, const S32 symbol_len)
 {
     if (0 == symbol_len)

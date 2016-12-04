@@ -44,6 +44,7 @@
 #include "llviewerkeyboard.h"
 #include "llviewerstats.h"
 #include "llworld.h"
+#include "rlvactions.h"
 #include "rlvhandler.h"
 
 static const U32 NAME_PREDICTION_MINIMUM_LENGTH = 3;
@@ -129,7 +130,7 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 		else
 		{
 			// Don't allow chat on a non-public channel if sendchannel restricted (unless the channel is an exception)
-			if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SENDCHANNEL)) && (!gRlvHandler.isException(RLV_BHVR_SENDCHANNEL, channel)) )
+			if (!RlvActions::canSendChannel(channel))
 				return;
 
 			// Don't allow chat on debug channel if @sendchat, @redirchat or @rediremote restricted (shows as public chat on viewers)

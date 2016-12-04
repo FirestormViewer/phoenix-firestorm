@@ -191,8 +191,7 @@
 #include "llavatariconctrl.h"
 #include "llvoicechannel.h"
 #include "llpathfindingmanager.h"
-
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a)
+// [RLVa:KB] - Checked: RLVa-1.2.0
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -484,8 +483,51 @@ void downloadGridlistError( LLSD const &aData, std::string const &aURL )
 		LL_WARNS("SLGridStatusResponder") << "Error - output without </item>" << LL_ENDL;
 	}
 }
-
 // </FS:PP>
+
+// <FS:Ansariel> Check for test build expiration
+bool is_testbuild_expired()
+{
+#if TESTBUILD
+	std::string datestr = __DATE__;
+
+	std::istringstream iss_date(datestr);
+	std::string str_month;
+	S32 day;
+	S32 year;
+	S32 month = 1;
+	iss_date >> str_month >> day >> year;
+
+	if (str_month == "Jan") month = 1;
+	else if (str_month == "Feb") month = 2;
+	else if (str_month == "Mar") month = 3;
+	else if (str_month == "Apr") month = 4;
+	else if (str_month == "May") month = 5;
+	else if (str_month == "Jun") month = 6;
+	else if (str_month == "Jul") month = 7;
+	else if (str_month == "Aug") month = 8;
+	else if (str_month == "Sep") month = 9;
+	else if (str_month == "Oct") month = 10;
+	else if (str_month == "Nov") month = 11;
+	else if (str_month == "Dec") month = 12;
+
+	tm t = {0};
+	t.tm_mon = month - 1;
+	t.tm_mday = day;
+	t.tm_year = year - 1900;
+	t.tm_hour = 0;
+	t.tm_min = 0;
+	t.tm_sec = 0;
+
+	time_t expiry_time = mktime(&t) + (S32(TESTBUILDPERIOD) + 1) * 24 * 60 * 60;
+	time_t current_time = time(NULL);
+
+	return current_time > expiry_time;
+#else
+	return false;
+#endif
+}
+// </FS:Ansariel>
 
 void update_texture_fetch()
 {
@@ -581,13 +623,6 @@ bool idle_startup()
 		std::string lastGPU = gSavedSettings.getString("LastGPUString");
 		std::string thisGPU = LLFeatureManager::getInstance()->getGPUString();
 		
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-0.2.1d
-		if ( (gSavedSettings.controlExists(RLV_SETTING_MAIN)) && (gSavedSettings.getBOOL(RLV_SETTING_MAIN)) )
-		{
-			rlv_handler_t::setEnabled(TRUE);
-		}
-// [/RLVa:KB]
-
 #if HAS_GROWL
 		GrowlManager::initiateManager();
 #endif
@@ -1161,6 +1196,17 @@ bool idle_startup()
 
 	if (STATE_LOGIN_CLEANUP == LLStartUp::getStartupState())
 	{
+		// <FS:Ansariel> Check for test build expiration
+		if (is_testbuild_expired())
+		{
+			LL_INFOS() << "This test version has expired and cannot be used any further." << LL_ENDL;
+			LLNotificationsUtil::add("TestversionExpired", LLSD(), LLSD(), login_alert_done);
+			LLStartUp::setStartupState(STATE_LOGIN_CONFIRM_NOTIFICATON);
+			show_connect_box = true;
+			return FALSE;
+		}
+		// </FS:Ansariel>
+
 		// <FS:Ansariel> Login block
 		LLSD blocked = FSData::instance().allowedLogin();
 		if (blocked.isMap()) //hack for testing for an empty LLSD
@@ -1185,6 +1231,13 @@ bool idle_startup()
 			LLStartUp::setStartupState(STATE_LOGIN_SHOW);
 			return FALSE;
 		}
+
+// [RLVa:KB] - Checked: RLVa-0.2.1
+		if (gSavedSettings.getBOOL(RLV_SETTING_MAIN))
+		{
+			RlvHandler::setEnabled(true);
+		}
+// [/RLVa:KB]
 
 		// reset the values that could have come in from a slurl
 		// DEV-42215: Make sure they're not empty -- gUserCredential
@@ -1383,8 +1436,8 @@ bool idle_startup()
 		// their last location, or some URL "-url //sim/x/y[/z]"
 		// All accounts have both a home and a last location, and we don't support
 		// more locations than that.  Choose the appropriate one.  JC
-// [RLVa:KB] - Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.1d
-		if ( (rlv_handler_t::isEnabled()) && (RlvSettings::getLoginLastLocation()) )
+// [RLVa:KB] - Checked: RLVa-0.2.1
+		if ( (RlvHandler::isEnabled()) && (RlvSettings::getLoginLastLocation()) )
 		{
 			// Force login at the last location
 			LLStartUp::setStartSLURL(LLSLURL(LLSLURL::SIM_LOCATION_LAST));
@@ -2407,8 +2460,8 @@ bool idle_startup()
 		LLFloaterReg::getInstance("inventory");
 		//display_startup();
 
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.1.0f
-		if (rlv_handler_t::isEnabled())
+// [RLVa:KB] - Checked: RLVa-1.1.0
+		if (RlvHandler::isEnabled())
 		{
 			// Regularly process a select subset of retained commands during logon
 			gIdleCallbacks.addFunction(RlvHandler::onIdleStartup, new LLTimer());

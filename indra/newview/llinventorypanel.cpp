@@ -49,6 +49,7 @@
 #include "llviewerattachmenu.h"
 #include "llviewerfoldertype.h"
 #include "llvoavatarself.h"
+#include "llpanelmaininventory.h"
 // [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
 #include "rlvactions.h"
 #include "rlvcommon.h"
@@ -1178,7 +1179,14 @@ void LLInventoryPanel::onSelectionChange(const std::deque<LLFolderViewItem*>& it
 
 void LLInventoryPanel::doCreate(const LLSD& userdata)
 {
-	reset_inventory_filter();
+	// <FS:Ansariel> FIRE-20108: Can't create new folder in secondary inventory if view is filtered
+	//reset_inventory_filter();
+	LLPanelMainInventory* main_panel = getParentByType<LLPanelMainInventory>();
+	if (main_panel)
+	{
+		main_panel->onFilterEdit("");
+	}
+	// </FS:Ansariel>
 	menu_create_inventory_item(this, LLFolderBridge::sSelf.get(), userdata);
 }
 

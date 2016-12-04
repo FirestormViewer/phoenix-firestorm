@@ -35,6 +35,14 @@ else (OPENSIM)
 endif (OPENSIM)
 #</FS:AW optional opensim support>
 
+#<FS:Ansariel> Support for test builds
+option(TESTBUILD "Generating test build" OFF)
+if(TESTBUILD AND TESTBUILDPERIOD)
+  add_definitions(-DTESTBUILD=1 -DTESTBUILDPERIOD=${TESTBUILDPERIOD})
+  message("creating test build version; test period: ${TESTBUILDPERIOD} days")
+endif(TESTBUILD AND TESTBUILDPERIOD)
+#</FS:Ansariel>
+
 # <FS:Ansariel> [AVX Optimization]
 option(USE_AVX_OPTIMIZATION "AVX optimization support" OFF)
 option(USE_AVX2_OPTIMIZATION "AVX2 optimization support" OFF)

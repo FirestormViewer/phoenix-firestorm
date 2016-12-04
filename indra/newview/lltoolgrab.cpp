@@ -57,8 +57,8 @@
 #include "llvoavatarself.h"
 #include "llworld.h"
 #include "llmenugl.h"
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e)
-#include "rlvhandler.h"
+// [RLVa:KB] - Checked: RLVa-2.1.0
+#include "rlvactions.h"
 // [/RLVa:KB]
 
 const S32 SLOP_DIST_SQ = 4;
@@ -148,8 +148,7 @@ BOOL LLToolGrabBase::handleMouseDown(S32 x, S32 y, MASK mask)
 	
 	// <FS:Ansariel> FIRE-19357: Re-revert MAINT-4488 again to fix FPS weapons
 	//if (!gAgent.leftButtonBlocked())
-	static LLCachedControl<bool> fsLegacyMouseTakeControl(gSavedSettings, "FSLegacyMouseTakeControl");
-	if ((fsLegacyMouseTakeControl && !gAgent.leftButtonGrabbed()) || (!fsLegacyMouseTakeControl && !gAgent.leftButtonBlocked()))
+	if (!gAgent.leftButtonGrabbed())
 	// </FS:Ansariel>
 	{
 		// can grab transparent objects (how touch event propagates, scripters rely on this)
@@ -178,9 +177,9 @@ void LLToolGrabBase::pickCallback(const LLPickInfo& pick_info)
 
 	// if not over object, do nothing
 //	if (!objectp)
-// [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Added: RLVa-1.1.0l
+// [RLVa:KB] - Checked: RLVa-1.1.0
 	// Block initiating a drag operation on an object that can't be touched
-	if ( (!objectp) || ((rlv_handler_t::isEnabled()) && (!gRlvHandler.canTouch(objectp, pick_info.mObjectOffset))) )
+	if ( (!objectp) || ((RlvActions::isRlvEnabled()) && (!RlvActions::canTouch(objectp, pick_info.mObjectOffset))) )
 // [/RLVa:KB]
 	{
 		LLToolGrab::getInstance()->setMouseCapture(TRUE);
@@ -442,10 +441,9 @@ BOOL LLToolGrabBase::handleHover(S32 x, S32 y, MASK mask)
 		return TRUE;
 	}
 
-// [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
-	// Block dragging an object beyond touch range when @fartouch=n restricted
-	if ( (rlv_handler_t::isEnabled()) && (GRAB_INACTIVE != mMode) && (GRAB_NOOBJECT != mMode) && (hasMouseCapture()) &&
-		 (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && (!gRlvHandler.canTouch(mGrabPick.getObject(), mGrabPick.mObjectOffset)) )
+// [RLVa:KB] - Checked: RLVa-1.1.0
+	// Block dragging an object beyond touch range
+	if ( (RlvActions::isRlvEnabled()) && (GRAB_INACTIVE != mMode) && (GRAB_NOOBJECT != mMode) && (hasMouseCapture()) && (!RlvActions::canTouch(mGrabPick.getObject(), mGrabPick.mObjectOffset)) )
 	{
 		if (gGrabTransientTool)
 		{

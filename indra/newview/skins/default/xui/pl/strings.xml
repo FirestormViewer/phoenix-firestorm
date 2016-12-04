@@ -677,6 +677,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TooltipSLAPP">
 		Kliknij aby uruchomić komendę secondlife://
 	</string>
+	<string name="TooltipFSHelpDebugSLUrl">
+		Kliknij aby otworzyć ustawienia debugowania dla tej opcji
+	</string>
 	<string name="CurrentURL" value=" Obecny URL: [CurrentURL]"/>
 	<string name="TooltipEmail">
 		Kliknij aby utworzyć wiadomość e-mail

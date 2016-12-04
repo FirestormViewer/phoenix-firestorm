@@ -94,22 +94,7 @@ BOOL LLTool::handleMouseDown(S32 x, S32 y, MASK mask)
     //{
     //    gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_DOWN);
     //}
-	static LLCachedControl<bool> fsLegacyMouseTakeControl(gSavedSettings, "FSLegacyMouseTakeControl");
-	if (fsLegacyMouseTakeControl)
-	{
-		gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_DOWN);
-	}
-	else
-	{
-		if (gAgentCamera.cameraMouselook())
-		{
-			gAgent.setControlFlags(AGENT_CONTROL_ML_LBUTTON_DOWN);
-		}
-		else
-		{
-			gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_DOWN);
-		}
-	}
+	gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_DOWN);
 	// </FS:Ansariel>
 	return TRUE;
 }
@@ -131,22 +116,7 @@ BOOL LLTool::handleMouseUp(S32 x, S32 y, MASK mask)
     //{
     //    gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_UP);
     //}
-	static LLCachedControl<bool> fsLegacyMouseTakeControl(gSavedSettings, "FSLegacyMouseTakeControl");
-	if (fsLegacyMouseTakeControl)
-	{
-		gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_UP);
-	}
-	else
-	{
-		if (gAgentCamera.cameraMouselook())
-		{
-			gAgent.setControlFlags(AGENT_CONTROL_ML_LBUTTON_UP);
-		}
-		else
-		{
-			gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_UP);
-		}
-	}
+	gAgent.setControlFlags(AGENT_CONTROL_LBUTTON_UP);
 	// </FS:Ansariel>
 	return TRUE;
 }

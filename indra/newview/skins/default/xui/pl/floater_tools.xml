@@ -77,8 +77,8 @@
 		<radio_item label="Wyrównywanie" name="radio align"/>
 	</radio_group>
 	<check_box label="Edytuj połączone części" name="checkbox edit linked parts"/>
-	<button name="prev_part_btn" tool_tip="Wybierz poprzednią połączoną część"/>
-	<button name="next_part_btn" tool_tip="Wybierz następną połączoną część"/>
+	<button name="prev_part_btn" tool_tip="Wybierz poprzednią połączoną część lub stronę"/>
+	<button name="next_part_btn" tool_tip="Wybierz następną połączoną część lub stronę"/>
 	<button label="Scalaj" name="link_btn"/>
 	<button label="Rozłącz" name="unlink_btn"/>
 	<combo_box name="combobox grid mode" tool_tip="Wybierz rodzaj linijki siatki dla pozycjonowania obiektu">

@@ -43,7 +43,6 @@
 #include "llviewerjoystick.h"
 // [RLVa:KB] - RLVa-2.0.0
 #include "rlvactions.h"
-#include "rlvhandler.h"
 // [/RLVa:KB]
 
 // Linden library includes
