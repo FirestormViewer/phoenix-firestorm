@@ -6033,8 +6033,11 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="RLVaPendingRestart">
 		(Neustart ausstehend)
 	</string>
-	<string name="RLVaToggleMessage">
-		RestrainedLove-Support wird nach einem Neustart %s.
+	<string name="RLVaToggleMessageLogin">
+		RestrainedLove-Support wurde [STATE] (kein Neustart erforderlich).
+	</string>
+	<string name="RLVaToggleMessageRestart">
+		RestrainedLove-Support ist nach einem Neustart [STATE].
 	</string>
 	<string name="RLVaToggleEnabled">
 		aktiviert

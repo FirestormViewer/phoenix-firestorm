@@ -1990,7 +1990,7 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 //
 //				isConstrained = TRUE;
 //			}
-	
+	}
 
 // [RLVa:KB] - Checked: RLVa-2.0.0
 	if ( (CAMERA_MODE_THIRD_PERSON == mCameraMode) && (RlvActions::isRlvEnabled()) && (RlvActions::isCameraDistanceClamped()) )
@@ -2040,7 +2040,7 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 		camera_position_global.mdV[VZ] = camera_land_height + camera_min_off_ground;
 		isConstrained = TRUE;
 	}
-	}
+
 
 	if (hit_limit)
 	{

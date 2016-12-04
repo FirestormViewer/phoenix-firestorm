@@ -203,8 +203,9 @@ public:
 		LLStringUtil::toLower(strFolderName);
 
 		// NOTE: hidden or "give to #RLV" folders can never be a match
-		if ( (strFolderName.empty()) ||	
-			 (RLV_FOLDER_PREFIX_HIDDEN == strFolderName[0]) || (RLV_FOLDER_PREFIX_PUTINV == strFolderName[0]) )
+		if ( (strFolderName.empty()) ||
+			 (RLV_FOLDER_PREFIX_HIDDEN == strFolderName[0]) || (RLV_FOLDER_PREFIX_PUTINV == strFolderName[0]) ||
+			 (std::string::npos != strFolderName.find_first_of(RLV_FOLDER_INVALID_CHARS)) )
 		{
 			return false;
 		}

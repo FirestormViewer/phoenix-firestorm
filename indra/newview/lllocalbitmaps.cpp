@@ -65,6 +65,7 @@
 #include "llviewercontrol.h"
 #include "lltrans.h"
 #include "llviewerdisplay.h"
+#include "llviewermenufile.h"
 
 /*=======================================*/
 /*  Formal declarations, constants, etc. */
@@ -72,6 +73,8 @@
 std::list<LLLocalBitmap*>   LLLocalBitmapMgr::sBitmapList;
 LLLocalBitmapTimer          LLLocalBitmapMgr::sTimer;
 bool                        LLLocalBitmapMgr::sNeedsRebake;
+boost::signals2::signal<void ()> LLLocalBitmapMgr::sBitmapsAddedSignal; // <FS:Ansariel> Threaded filepickers
+
 
 static const F32 LL_LOCAL_TIMER_HEARTBEAT   = 3.0;
 static const BOOL LL_LOCAL_USE_MIPMAPS      = true;
@@ -850,54 +853,106 @@ void LLLocalBitmapMgr::cleanupClass()
 {
 	std::for_each(sBitmapList.begin(), sBitmapList.end(), DeletePointer());
 	sBitmapList.clear();
+
+	sBitmapsAddedSignal.disconnect_all_slots(); // <FS:Ansariel> Threaded filepickers
 }
 
-bool LLLocalBitmapMgr::addUnit()
+// <FS:Ansariel> Threaded filepickers
+//bool LLLocalBitmapMgr::addUnit()
+//{
+//	bool add_successful = false;
+//
+//	LLFilePicker& picker = LLFilePicker::instance();
+//	if (picker.getMultipleOpenFiles(LLFilePicker::FFLOAD_IMAGE))
+//	{
+//		sTimer.stopTimer();
+//
+//		std::string filename = picker.getFirstFile();
+//		while(!filename.empty())
+//		{
+//			if(!checkTextureDimensions(filename))
+//			{
+//				filename = picker.getNextFile();
+//				continue;
+//			}
+//
+//			LLLocalBitmap* unit = new LLLocalBitmap(filename);
+//
+//			if (unit->getValid())
+//			{
+//				sBitmapList.push_back(unit);
+//				add_successful = true;
+//			}
+//			else
+//			{
+//				LL_WARNS() << "Attempted to add invalid or unreadable image file, attempt cancelled.\n"
+//					    << "Filename: " << filename << LL_ENDL;
+//
+//				LLSD notif_args;
+//				notif_args["FNAME"] = filename;
+//				LLNotificationsUtil::add("LocalBitmapsVerifyFail", notif_args);
+//
+//				delete unit;
+//				unit = NULL;
+//			}
+//
+//			filename = picker.getNextFile();
+//		}
+//		
+//		sTimer.startTimer();
+//	}
+//
+//	return add_successful;
+//}
+
+void LLLocalBitmapMgr::addUnit()
+{
+	(new LLGenericLoadMultipleFilePicker(LLFilePicker::FFLOAD_IMAGE, boost::bind(&LLLocalBitmapMgr::filePickerCallback, _1)))->getFiles();
+}
+
+void LLLocalBitmapMgr::filePickerCallback(std::list<std::string> filenames)
 {
 	bool add_successful = false;
+	sTimer.stopTimer();
 
-	LLFilePicker& picker = LLFilePicker::instance();
-	if (picker.getMultipleOpenFiles(LLFilePicker::FFLOAD_IMAGE))
+	for (std::list<std::string>::iterator it = filenames.begin(); it != filenames.end(); ++it)
 	{
-		sTimer.stopTimer();
+		std::string filename = *it;
 
-		std::string filename = picker.getFirstFile();
-		while(!filename.empty())
+		if(!checkTextureDimensions(filename))
 		{
-			if(!checkTextureDimensions(filename))
-			{
-				filename = picker.getNextFile();
-				continue;
-			}
-
-			LLLocalBitmap* unit = new LLLocalBitmap(filename);
-
-			if (unit->getValid())
-			{
-				sBitmapList.push_back(unit);
-				add_successful = true;
-			}
-			else
-			{
-				LL_WARNS() << "Attempted to add invalid or unreadable image file, attempt cancelled.\n"
-					    << "Filename: " << filename << LL_ENDL;
-
-				LLSD notif_args;
-				notif_args["FNAME"] = filename;
-				LLNotificationsUtil::add("LocalBitmapsVerifyFail", notif_args);
-
-				delete unit;
-				unit = NULL;
-			}
-
-			filename = picker.getNextFile();
+			continue;
 		}
-		
-		sTimer.startTimer();
+
+		LLLocalBitmap* unit = new LLLocalBitmap(filename);
+
+		if (unit->getValid())
+		{
+			sBitmapList.push_back(unit);
+			add_successful = true;
+		}
+		else
+		{
+			LL_WARNS() << "Attempted to add invalid or unreadable image file, attempt cancelled.\n"
+				    << "Filename: " << filename << LL_ENDL;
+
+			LLSD notif_args;
+			notif_args["FNAME"] = filename;
+			LLNotificationsUtil::add("LocalBitmapsVerifyFail", notif_args);
+
+			delete unit;
+			unit = NULL;
+		}
 	}
 
-	return add_successful;
+	sTimer.startTimer();
+
+	if (add_successful && !sBitmapsAddedSignal.empty())
+	{
+		sBitmapsAddedSignal();
+	}
 }
+// </FS:Ansariel>
 
 bool LLLocalBitmapMgr::checkTextureDimensions(std::string filename)
 {

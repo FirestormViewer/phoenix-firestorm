@@ -49,6 +49,7 @@ public:
 	/*
 	 * Member functions
 	 */
+	static const std::string getFormattedBehaviourString();
 protected:
 	void onAvatarNameLookup(const LLUUID& idAgent, const LLAvatarName& avName);
 	void onBtnCopyToClipboard();

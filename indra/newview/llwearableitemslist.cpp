@@ -43,7 +43,7 @@
 // [/SL:KB]
 #include "llvoavatarself.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
-#include "rlvhandler.h"
+#include "rlvactions.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
 
@@ -884,9 +884,9 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
 
 // [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
 	// We'll enable a menu option if at least one item in the selection is wearable/removable
-	bool rlvCanWearReplace = !rlv_handler_t::isEnabled();
-	bool rlvCanWearAdd = !rlv_handler_t::isEnabled();
-	bool rlvCanRemove = !rlv_handler_t::isEnabled();
+	bool rlvCanWearReplace = !RlvActions::isRlvEnabled();
+	bool rlvCanWearAdd = !RlvActions::isRlvEnabled();
+	bool rlvCanRemove = !RlvActions::isRlvEnabled();
 // [/RLVa:KB]
 
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
@@ -935,7 +935,7 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
 		}
 
 // [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
-		if (rlv_handler_t::isEnabled())
+		if (RlvActions::isRlvEnabled())
 		{
 			ERlvWearMask eWearMask = RLV_WEAR_LOCKED;
 			switch (item->getType())

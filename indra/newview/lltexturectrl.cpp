@@ -122,15 +122,25 @@ LLFloaterTexturePicker::LLFloaterTexturePicker(
 	mOnFloaterCommitCallback(NULL),
 	mOnFloaterCloseCallback(NULL),
 	mSetImageAssetIDCallback(NULL),
-	mOnUpdateImageStatsCallback(NULL)
+	mOnUpdateImageStatsCallback(NULL),
+	mLocalBitmapsAddedCallbackConnection() // <FS:Ansariel> Threaded filepickers
 {
 	buildFromFile("floater_texture_ctrl.xml");
 	mCanApplyImmediately = can_apply_immediately;
 	setCanMinimize(FALSE);
+
+	// <FS:Ansariel> Threaded filepickers
+	mLocalBitmapsAddedCallbackConnection = LLLocalBitmapMgr::setBitmapsAddedCallback(boost::bind(&LLFloaterTexturePicker::onLocalBitmapsAddedCallback, this));
 }
 
 LLFloaterTexturePicker::~LLFloaterTexturePicker()
 {
+	// <FS:Ansariel> Threaded filepickers
+	if (mLocalBitmapsAddedCallbackConnection.connected())
+	{
+		mLocalBitmapsAddedCallbackConnection.disconnect();
+	}
+	// </FS:Ansariel>
 }
 
 void LLFloaterTexturePicker::setImageID(const LLUUID& image_id, bool set_selection /*=true*/)
@@ -815,12 +825,22 @@ void LLFloaterTexturePicker::onModeSelect(LLUICtrl* ctrl, void *userdata)
 // static
 void LLFloaterTexturePicker::onBtnAdd(void* userdata)
 {
-	if (LLLocalBitmapMgr::addUnit() == true)
-	{
-		LLFloaterTexturePicker* self = (LLFloaterTexturePicker*) userdata;
-		LLLocalBitmapMgr::feedScrollList(self->mLocalScrollCtrl);
-	}
+	// <FS:Ansariel> Threaded filepickers
+	//if (LLLocalBitmapMgr::addUnit() == true)
+	//{
+	//	LLFloaterTexturePicker* self = (LLFloaterTexturePicker*) userdata;
+	//	LLLocalBitmapMgr::feedScrollList(self->mLocalScrollCtrl);
+	//}
+	LLLocalBitmapMgr::addUnit();
+	// </FS:Ansariel>
 }
+
+// <FS:Ansariel> Threaded filepickers
+void LLFloaterTexturePicker::onLocalBitmapsAddedCallback()
+{
+	LLLocalBitmapMgr::feedScrollList(mLocalScrollCtrl);
+}
+// </FS:Ansariel>
 
 // static
 void LLFloaterTexturePicker::onBtnRemove(void* userdata)

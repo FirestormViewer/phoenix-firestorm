@@ -4634,7 +4634,7 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 	<notification name="LargePrimAgentIntersect">
 		Nie można utworzyć wielkich prim, które nachodzą na innych rezydentów. Spróbuj jeszcze raz, gdy przesuną się oni.
 	</notification>
-	<notification name="RLVChangeStrings">
+	<notification name="RLVaChangeStrings">
 		Zmiany nie odniosą skutku, dopóki nie zrestartujesz [APP_NAME].
 	</notification>
 	<notification name="PreferenceChatClearLog">

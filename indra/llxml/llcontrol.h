@@ -165,6 +165,9 @@ public:
 	validate_signal_t* getValidateSignal() { return &mValidateSignal; }
 	sanity_signal_t* getSanitySignal() { return &mSanitySignal; }
 
+// [RLVa:KB] - Patch: RLVa-2.1.0
+	bool hasUnsavedValue() { return mValues.size() > 2; }
+// [/RLVa:KB]
 	bool isDefault() { return (mValues.size() == 1); }
 	bool isSane();
 	bool shouldSave(bool nondefault_only);

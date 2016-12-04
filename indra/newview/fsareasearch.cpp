@@ -58,7 +58,7 @@
 #include "llagentcamera.h" // gAgentCamera
 #include "llviewerjoystick.h" // For disabling/re-enabling when requested to look at an object.
 #include "llmoveview.h" // For LLPanelStandStopFlying::clearStandStopFlyingMode
-#include "rlvhandler.h"
+#include "rlvactions.h"
 #include "fsareasearchmenu.h"
 #include "fsscrolllistctrl.h"
 #include "llviewermediafocus.h"
@@ -1614,7 +1614,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 //				if (objectp)
 // [RLVa:KB] - Checked: RLVa-2.0.0 | FS-specific
 				// Don't allow derendering of own attachments when RLVa is enabled
-				if ( (objectp) && (gAgentID != objectp->getID()) && ((!rlv_handler_t::isEnabled()) || (!objectp->isAttachment()) || (!objectp->permYouOwner())) )
+				if ( (objectp) && (gAgentID != objectp->getID()) && ((!RlvActions::isRlvEnabled()) || (!objectp->isAttachment()) || (!objectp->permYouOwner())) )
 // [/RLVa:KB]
 				{
 					std::string region_name;
@@ -1840,7 +1840,7 @@ void FSPanelAreaSearchList::touchObject(LLViewerObject* objectp)
 {
 	// *NOTE: Hope the packets arrive safely and in order or else
 	// there will be some problems.
-	if (gRlvHandler.canTouch(objectp))
+	if ( (!RlvActions::isRlvEnabled()) || (RlvActions::canTouch(objectp)) )
 	{
 		LLPickInfo pick; // default constructor will set sane values.
 		send_ObjectGrab_message(objectp, pick, LLVector3::zero);
