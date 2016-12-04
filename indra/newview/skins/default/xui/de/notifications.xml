@@ -4160,9 +4160,9 @@ Sie ist voll oder startet in Kürze neu.
 	<notification name="AttachmentHasTooMuchInventory">
 		Ihre Anhänge haben zu viel Inhalt, um mehr hinzuzufügen.
 	</notification>
-	<notification name="IllegalAttachment">
+	<!--<notification name="IllegalAttachment">
 		Der Anhang hat einen nicht existierenden Punkt am Avatar angefordert. Er wurde stattdessen zur Brust hinzugefügt.
-	</notification>
+	</notification>-->
 	<notification name="TooManyScripts">
 		Zu viele Skripts.
 	</notification>
@@ -4341,9 +4341,6 @@ Sie ist voll oder startet in Kürze neu.
 	</notification>
 	<notification name="CantAttachNotEnoughScriptResources">
 		Nicht genügend Skriptressourcen verfügbar, um Objekt anzuhängen.
-	</notification>
-	<notification name="IllegalAttachment">
-		Der Anhang hat einen nicht vorhandenen Punkt auf dem Avatar angefordert. Der Anhang wurde stattdessen auf der Brust angebracht.
 	</notification>
 	<notification name="CantAttachObjectBeingRemoved">
 		Objekten kann nicht hinzugefügt werden, da es bereits entfernt wird.
