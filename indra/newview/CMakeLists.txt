@@ -1916,7 +1916,6 @@ set(viewer_APPSETTINGS_FILES
     app_settings/autoreplace.xml
     app_settings/client_list_v2.xml
     app_settings/cloud.xml
-    app_settings/cloud_muted.xml
     app_settings/cmd_line.xml
     app_settings/commands.xml
     app_settings/foldertypes.xml

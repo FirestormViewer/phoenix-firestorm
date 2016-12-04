@@ -333,6 +333,14 @@ bool FSFloaterIMContainer::hasFloater(LLFloater* floaterp)
 void FSFloaterIMContainer::onCloseFloater(LLUUID& id)
 {
 	mSessions.erase(id);
+	if (isShown())
+	{
+		setFocus(TRUE);
+	}
+	else if (isMinimized())
+	{
+		setMinimized(TRUE); // Make sure console output that needs to be shown is still doing so 
+	}
 }
 
 void FSFloaterIMContainer::onNewMessageReceived(const LLSD& data)

@@ -118,7 +118,10 @@ class LLLocalBitmapMgr
 
 	public:
 		static void			cleanupClass();
-		static bool         addUnit();
+		// <FS:Ansariel> Threaded filepickers
+		//static bool         addUnit();
+		static void         addUnit();
+		// </FS:Ansariel>
 		static void         delUnit(LLUUID tracking_id);
 		static bool 		checkTextureDimensions(std::string filename);
 
@@ -129,12 +132,23 @@ class LLLocalBitmapMgr
 		static void         doUpdates();
 		static void         setNeedsRebake();
 		static void         doRebake();
+
+		// <FS:Ansariel> Threaded filepickers
+		static void         filePickerCallback(std::list<std::string> filenames);
+		static boost::signals2::connection setBitmapsAddedCallback(const boost::signals2::signal<void ()>::slot_type& cb)
+		{
+			return sBitmapsAddedSignal.connect(cb);
+		}
+		// </FS:Ansariel>
 		
 	private:
 		static std::list<LLLocalBitmap*>    sBitmapList;
 		static LLLocalBitmapTimer           sTimer;
 		static bool                         sNeedsRebake;
 		typedef std::list<LLLocalBitmap*>::iterator local_list_iter;
+
+		// <FS:Ansariel> Threaded filepickers
+		static boost::signals2::signal<void ()> sBitmapsAddedSignal;
 };
 
 #endif

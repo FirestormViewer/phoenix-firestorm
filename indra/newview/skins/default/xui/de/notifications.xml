@@ -4733,6 +4733,12 @@ Dieses wird die folgenden Informationen an die aktuelle IM-Sitzung senden:
      name="okbutton"
      yestext="OK"/>
   </notification>
+  <notification name="TestversionExpired">
+    Diese Testversion von [APP_NAME] is abgelaufen und kann nicht weiter verwendet werden.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
 
   <notification name="FireStormReqInfo">
 [NAME] hat die eine Anfrage geschickt, Informationen über Ihre [APP_NAME]-Konfiguration zu übermitteln.

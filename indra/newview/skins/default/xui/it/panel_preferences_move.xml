@@ -22,7 +22,6 @@
 			<text name="ignorecameraconstraints_requires_restart">
 				(Richiesto riavvio)
 			</text>
-			<check_box label="Gli avatar bloccati saranno visualizati come nuvole" name="ShowMutedAvatarsAsCloud" tool_tip="Gli avatar Bloccati saranno visualizati come nuvole di un colore speciale." />
 		</panel>
 		<!--Mouselook-->
 		<panel name="tab-mouselook" label="Mouselook">
