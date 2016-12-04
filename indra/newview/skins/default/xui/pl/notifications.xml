@@ -497,6 +497,9 @@ Pamiętaj: Opcja ta wyczyszcza bufor danych.
 	<notification name="ChangeConnectionPort">
 		Ustawienia portu zostają zaktualizowane po restarcie aplikacji [APP_NAME].
 	</notification>
+	<notification name="ChangeDeferredDebugSetting">
+		To ustawienie debugowania zostanie zaktualizowane po restarcie aplikacji [APP_NAME].
+	</notification>
 	<notification name="ChangeSkin">
 		Nowa skórka pojawi się po restarcie aplikacji [APP_NAME].
 		<usetemplate name="okcancelbuttons" yestext="Restartuj"/>

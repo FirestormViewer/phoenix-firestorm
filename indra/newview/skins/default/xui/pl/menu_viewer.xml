@@ -542,6 +542,7 @@
 			<menu_item_check label="Wyłącz poziomy detali (LOD)" name="Disable LOD"/>
 			<menu_item_check label="Debuguj VIs postaci" name="Debug Character Vis"/>
 			<menu_item_check label="Pokaż szkielet kolizji" name="Show Collision Skeleton"/>
+			<menu_item_check label="Pokaż kości" name="Show Bones"/>
 			<menu_item_check label="Wyświetl cel Agenta" name="Display Agent Target"/>
 			<menu_item_call label="Zrzut przyłączonych dodatków" name="Dump Attachments"/>
 			<menu_item_call label="Debugowanie tekstur awatara" name="Debug Avatar Textures" shortcut=""/>
