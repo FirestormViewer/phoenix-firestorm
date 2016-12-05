@@ -408,15 +408,15 @@ private:
 	void					debugTimingLocalTexLoaded(BOOL success, LLViewerFetchedTexture *src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, BOOL final, void* userdata);
 
 // [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
-public:
-	void addPendingDetach(const LLUUID& idObject);
-	bool isPendingDetach(const LLUUID& idObject) const;
-	void removePendingDetach(const LLUUID& idObject);
-	void checkPendingDetach();
-	void onTeleportDone();
-protected:
-	std::list<LLUUID>           mPendingObjectDetach;
-	boost::signals2::connection mTeleportDoneConn;
+//public:
+//	void addPendingDetach(const LLUUID& idObject);
+//	bool isPendingDetach(const LLUUID& idObject) const;
+//	void removePendingDetach(const LLUUID& idObject);
+//	void checkPendingDetach();
+//	void onTeleportDone();
+//protected:
+//	std::list<LLUUID>           mPendingObjectDetach;
+//	boost::signals2::connection mTeleportDoneConn;
 // [/SL:KB]
 
     void                    appearanceChangeMetricsCoro(std::string url);

@@ -4137,7 +4137,7 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 		}
 
 // [RLVa:KB] - Checked: RLVa-1.2.0
-		if ( (found) && ((gTeleportDisplay) || ((rlv_handler_t::isEnabled()) && (found) && (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)))) )
+		if ( (found) && ((gTeleportDisplay) || ((rlv_handler_t::isEnabled()) && (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)))) )
 		{
 			// Allow picking if:
 			//   - the drag-and-drop tool is active (allows inventory offers)

@@ -2939,56 +2939,56 @@ void LLVOAvatarSelf::dumpWearableInfo(LLAPRFile& outfile)
 	apr_file_printf( file, "\n</wearable_info>\n" );
 }
 
-// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
-void LLVOAvatarSelf::addPendingDetach(const LLUUID& idObject)
-{
-	if (mPendingObjectDetach.end() == std::find(mPendingObjectDetach.begin(), mPendingObjectDetach.end(), idObject))
-		mPendingObjectDetach.push_back(idObject);
-
-	if ((!mPendingObjectDetach.empty()) && (!mTeleportDoneConn.connected()))
-		mTeleportDoneConn = LLViewerParcelMgr::instance().setTeleportDoneCallback(boost::bind(&LLVOAvatarSelf::onTeleportDone, this));
-}
-
-bool LLVOAvatarSelf::isPendingDetach(const LLUUID& idObject) const
-{
-	return mPendingObjectDetach.end() != std::find(mPendingObjectDetach.begin(), mPendingObjectDetach.end(), idObject);
-}
-
-void LLVOAvatarSelf::removePendingDetach(const LLUUID& idObject)
-{
-	auto itPendingDetach = std::find(mPendingObjectDetach.begin(), mPendingObjectDetach.end(), idObject);
-	if (mPendingObjectDetach.end() != itPendingDetach)
-		mPendingObjectDetach.erase(itPendingDetach);
-
-	if (mPendingObjectDetach.empty())
-		mTeleportDoneConn.disconnect();
-}
-
-void LLVOAvatarSelf::onTeleportDone()
-{
-	mTeleportDoneConn.disconnect();
-	doAfterInterval(boost::bind(&LLVOAvatarSelf::checkPendingDetach, this), 30.f);
-}
-
-void LLVOAvatarSelf::checkPendingDetach()
-{
-	if (gTeleportDisplay)
-		return;
-
-	for (const LLUUID& idObj : mPendingObjectDetach)
-	{
-		LLViewerObject* pObject = gObjectList.findObject(idObj);
-		if (pObject)
-		{
-			gObjectList.killObject(pObject);
-			if (gShowObjectUpdates)
-			{
-				LLColor4 color(0.f, 1.f, 0.f, 1.f);
-				gPipeline.addDebugBlip(pObject->getPositionAgent(), color);
-			}
-			LLSelectMgr::getInstance()->removeObjectFromSelections(idObj);
-		}
-	}
-	mPendingObjectDetach.clear();
-}
-// [/SL:KB]
+//// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
+//void LLVOAvatarSelf::addPendingDetach(const LLUUID& idObject)
+//{
+//	if (mPendingObjectDetach.end() == std::find(mPendingObjectDetach.begin(), mPendingObjectDetach.end(), idObject))
+//		mPendingObjectDetach.push_back(idObject);
+//
+//	if ((!mPendingObjectDetach.empty()) && (!mTeleportDoneConn.connected()))
+//		mTeleportDoneConn = LLViewerParcelMgr::instance().setTeleportDoneCallback(boost::bind(&LLVOAvatarSelf::onTeleportDone, this));
+//}
+//
+//bool LLVOAvatarSelf::isPendingDetach(const LLUUID& idObject) const
+//{
+//	return mPendingObjectDetach.end() != std::find(mPendingObjectDetach.begin(), mPendingObjectDetach.end(), idObject);
+//}
+//
+//void LLVOAvatarSelf::removePendingDetach(const LLUUID& idObject)
+//{
+//	auto itPendingDetach = std::find(mPendingObjectDetach.begin(), mPendingObjectDetach.end(), idObject);
+//	if (mPendingObjectDetach.end() != itPendingDetach)
+//		mPendingObjectDetach.erase(itPendingDetach);
+//
+//	if (mPendingObjectDetach.empty())
+//		mTeleportDoneConn.disconnect();
+//}
+//
+//void LLVOAvatarSelf::onTeleportDone()
+//{
+//	mTeleportDoneConn.disconnect();
+//	doAfterInterval(boost::bind(&LLVOAvatarSelf::checkPendingDetach, this), 30.f);
+//}
+//
+//void LLVOAvatarSelf::checkPendingDetach()
+//{
+//	if (gTeleportDisplay)
+//		return;
+//
+//	for (const LLUUID& idObj : mPendingObjectDetach)
+//	{
+//		LLViewerObject* pObject = gObjectList.findObject(idObj);
+//		if (pObject)
+//		{
+//			gObjectList.killObject(pObject);
+//			if (gShowObjectUpdates)
+//			{
+//				LLColor4 color(0.f, 1.f, 0.f, 1.f);
+//				gPipeline.addDebugBlip(pObject->getPositionAgent(), color);
+//			}
+//			LLSelectMgr::getInstance()->removeObjectFromSelections(idObj);
+//		}
+//	}
+//	mPendingObjectDetach.clear();
+//}
+//// [/SL:KB]
