@@ -3784,19 +3784,12 @@ void LLAgent::initOriginGlobal(const LLVector3d &origin_global)
 }
 
 BOOL LLAgent::leftButtonGrabbed() const	
-{
+{ 
 	const BOOL camera_mouse_look = gAgentCamera.cameraMouselook();
 	return (!camera_mouse_look && mControlsTakenCount[CONTROL_LBUTTON_DOWN_INDEX] > 0) 
 		|| (camera_mouse_look && mControlsTakenCount[CONTROL_ML_LBUTTON_DOWN_INDEX] > 0)
 		|| (!camera_mouse_look && mControlsTakenPassedOnCount[CONTROL_LBUTTON_DOWN_INDEX] > 0)
 		|| (camera_mouse_look && mControlsTakenPassedOnCount[CONTROL_ML_LBUTTON_DOWN_INDEX] > 0);
-}
-
-BOOL LLAgent::leftButtonBlocked() const
-{
-    const BOOL camera_mouse_look = gAgentCamera.cameraMouselook();
-    return (!camera_mouse_look && mControlsTakenCount[CONTROL_LBUTTON_DOWN_INDEX] > 0)
-        || (camera_mouse_look && mControlsTakenCount[CONTROL_ML_LBUTTON_DOWN_INDEX] > 0);
 }
 
 BOOL LLAgent::rotateGrabbed() const		
@@ -4349,17 +4342,7 @@ BOOL LLAgent::anyControlGrabbed() const
 
 BOOL LLAgent::isControlGrabbed(S32 control_index) const
 {
-	// <FS:Ansariel> FIRE-19357: Re-revert MAINT-4488 again to fix FPS weapons
-    //if (gAgent.mControlsTakenCount[control_index] > 0)
-    //    return TRUE;
-    //return gAgent.mControlsTakenPassedOnCount[control_index] > 0;
 	return mControlsTakenCount[control_index] > 0;
-	// </FS:Ansariel>
-}
-
-BOOL LLAgent::isControlBlocked(S32 control_index) const
-{
-    return mControlsTakenCount[control_index] > 0;
 }
 
 void LLAgent::forceReleaseControls()

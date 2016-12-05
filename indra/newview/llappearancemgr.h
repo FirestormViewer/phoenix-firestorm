@@ -243,6 +243,7 @@ public:
 
 	bool isInUpdateAppearanceFromCOF() { return mIsInUpdateAppearanceFromCOF; }
 
+	static void onIdle(void *);
 	void requestServerAppearanceUpdate();
 
 	void setAppearanceServiceURL(const std::string& url) { mAppearanceServiceURL = url; }
@@ -255,7 +256,6 @@ public:
 // [SL:KB] - Patch: Appearance-Misc
 	void syncCofVersionAndRefresh();
 // [/SL:KB]
-
 
 private:
     void serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &httpAdapter);
