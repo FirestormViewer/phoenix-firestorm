@@ -49,7 +49,7 @@
 							<combo_box tool_tip="基本設定を適切に行うために、一番慣れているビューワのタイプを選択して下さい。" name="mode_combo">
 								<combo_box.item label="Firestorm" name="Firestorm" />
 								<combo_box.item label="Phoenix" name="Phoenix" />
-								<combo_box.item label="Viewer 4" name="V3" />
+								<combo_box.item label="Viewer 5" name="V3" />
 								<combo_box.item label="ハイブリッド" name="Hybrid" />
 								<combo_box.item label="Latency" name="Latency" />
 								<combo_box.item label="テキスト" name="Text" />

@@ -295,7 +295,7 @@ tool_tip="The account name you chose when you registered, like bobsmith420 or St
             name="Phoenix"
             value="settings_phoenix.xml" />
            <combo_box.item
-            label="Viewer 4"
+            label="Viewer 5"
             name="V3"
             value="settings_v3.xml" />
            <combo_box.item
