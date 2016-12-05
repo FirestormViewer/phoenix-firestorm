@@ -162,6 +162,12 @@ public:
 		mSignal.connect(notify_slot);
 	}
 	virtual void notify(const std::string& filename);
+
+	static void open(LLFilePicker::ELoadFilter filter, boost::function<void (const std::string&)> notify_slot)
+	{
+		(new LLGenericLoadFilePicker(filter, notify_slot))->getFile();
+	}
+
 protected:
 	boost::signals2::signal<void (const std::string&)> mSignal;
 };
@@ -175,6 +181,12 @@ public:
 		mSignal.connect(notify_slot);
 	}
 	virtual void notify(const std::string& filename);
+
+	static void open(LLFilePicker::ESaveFilter filter, const std::string& default_name, boost::function<void (const std::string&)> notify_slot)
+	{
+		(new LLGenericSaveFilePicker(filter, default_name, notify_slot))->getFile();
+	}
+
 protected:
 	boost::signals2::signal<void (const std::string&)> mSignal;
 };
@@ -208,6 +220,12 @@ public:
 		mSignal.connect(notify_slot);
 	}
 	virtual void notify(std::list<std::string> filenames);
+
+	static void open(LLFilePicker::ELoadFilter filter, boost::function<void (std::list<std::string> filenames)> notify_slot)
+	{
+		(new LLGenericLoadMultipleFilePicker(filter, notify_slot))->getFiles();
+	}
+
 protected:
 	boost::signals2::signal<void (std::list<std::string> filenames)> mSignal;
 };

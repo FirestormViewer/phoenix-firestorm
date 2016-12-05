@@ -178,6 +178,7 @@
              <radio_item label="Kobieta" name="1"/>
              <radio_item label="Mężczyzna - chudy" name="2"/>
            </radio_group>
+           <check_box label="Blokuj skalowanie gdy stawy ustawione" name="lock_scale_if_joint_position" />
            <text name="pelvis_offset_label">
              Przesunięcie Z (podnieś/obniż awatara):
            </text>

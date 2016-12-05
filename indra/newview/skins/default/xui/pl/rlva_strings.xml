@@ -40,6 +40,44 @@
 				<key>customizable</key>
 				<boolean>1</boolean>
 			</map>
+			<key>imquery_list_deny</key>
+			<map>
+				<key>value</key>
+				<string>*** Druga strona grzecznie prosi o zajęcie się własnymi sprawami</string>
+				<key>description</key>
+				<string>Wysyłane do drugiej osoby, gdy odmówisz dostępu do aktywnych ograniczeń RLV.</string>
+				<key>label</key>
+				<string>Komenda @list (zdalna)</string>
+				<key>customizable</key>
+				<boolean>1</boolean>
+			</map>
+			<key>stopim_nosession</key>
+			<map>
+				<key>value</key>
+				<string>*** Druga strona nie jest ograniczona za pomocą @startim</string>
+				<key>description</key>
+				<string>Wysyłane do drugiej osoby, gdy próbuje siłą zamknąć konwersację IM z Tobą (a sesja nie istnieje)</string>
+				<key>label</key>
+				<string>Komenda @stopim bez sesji (zdalna)</string>
+				<key>customizable</key>
+				<boolean>1</boolean>
+			</map>
+			<key>stopim_endsession_remote</key>
+			<map>
+				<key>value</key>
+				<string>*** Sesja została zakończona dla drugiej osoby</string>
+				<key>description</key>
+				<string>Wysyłane do drugiej osoby, gdy próbuje siłą zamknąć konwersację IM z Tobą (a sesja istnieje)</string>
+				<key>label</key>
+				<string>Komenda @stopim z aktywną sesją (zdalna)</string>
+				<key>customizable</key>
+				<boolean>1</boolean>
+			</map>
+			<key>stopim_endsession_local</key>
+			<map>
+				<key>value</key>
+				<string>[NAME] zdalnie zakończył sesję IM za pomocą @stopim</string>
+			</map>
 			<key>blocked_autopilot</key>
 			<map>
 				<key>value</key>
@@ -54,6 +92,11 @@
 			<map>
 				<key>value</key>
 				<string>Nie można zmienić aktywnej grupy ze względu na ograniczenia RLV; Zmieniam z powrotem na "[GROUP_SLURL]"</string>
+			</map>
+			<key>blocked_invfolder</key>
+			<map>
+				<key>value</key>
+				<string>Nie można wykonać operacji na obiektach ze względu na ograniczenia RLV nałożone na folder.</string>
 			</map>
 			<key>blocked_nearby</key>
 			<map>
