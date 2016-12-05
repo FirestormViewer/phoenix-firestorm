@@ -8,6 +8,8 @@
 	<menu_item_call label="IM" name="Send IM..."/>
 	<menu_item_call label="コール" name="Call"/>
 	<menu_item_call label="グループに招待" name="Invite..."/>
+	<menu_item_call label="スケルトンをリセット" name="Reset Skeleton"/>
+	<menu_item_call label="スケルトンとアニメーションをリセット" name="Reset Skeleton And Animations" />
 	<context_menu label="迷惑行為対応" name="Remove">
 		<menu_item_call label="ブロック" name="Avatar Mute" />
 		<!-- <FS:Zi> Add unblock menu entry since renaming the context menu item doesn't seem to work -->
@@ -21,6 +23,12 @@
 	<menu_item_call label="ダンプ XML" name="Dump XML"/>
 	<menu_item_call label="ズームイン" name="Zoom In"/>
 	<menu_item_call label="支払う" name="Pay..."/>
+	<menu_item_call  label="非表示にする" name="Derender" />
+	<menu_item_call label="非表示にしてブラックリストに追加" name="DerenderPermanent" />
+	<menu_item_call  label="スクリプト情報" name="ScriptInfo" />
+	<menu_item_call label="テクスチャ表示" name="Debug..." />
+	<menu_item_call label="テクスチャ更新" name="Texture Refresh" />
+	<menu_item_separator />
 	<menu_item_check label="通常表示" name="RenderNormally"/>
 	<menu_item_check label="表示しない" name="DoNotRender"/>
 	<menu_item_check label="完全表示" name="AlwaysRenderFully"/>

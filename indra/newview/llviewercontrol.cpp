@@ -67,6 +67,7 @@
 #include "llvowlsky.h"
 #include "llrender.h"
 #include "llnavigationbar.h"
+#include "llnotificationsutil.h"
 #include "llfloatertools.h"
 #include "llpaneloutfitsinventory.h"
 // <FS:Ansariel> [FS Login Panel]
@@ -187,6 +188,13 @@ static bool handleTerrainDetailChanged(const LLSD& newvalue)
 	return true;
 }
 
+
+static bool handleDebugAvatarJointsChanged(const LLSD& newvalue)
+{
+    std::string new_string = newvalue.asString();
+    LLJoint::setDebugJointNames(new_string);
+    return true;
+}
 
 // <FS:Ansariel> Expose handleSetShaderChanged()
 //static bool handleSetShaderChanged(const LLSD& newvalue)
@@ -1100,6 +1108,8 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("LoginLocation")->getSignal()->connect(boost::bind(&handleLoginLocationChanged));
+    gSavedSettings.getControl("DebugAvatarJoints")->getCommitSignal()->connect(boost::bind(&handleDebugAvatarJointsChanged, _2));
+
 // [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
 	gSavedSettings.getControl("RestrainedLove")->getSignal()->connect(boost::bind(&RlvSettings::onChangedSettingMain, _2));
 // [/RLVa:KB]

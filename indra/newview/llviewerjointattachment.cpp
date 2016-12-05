@@ -378,6 +378,7 @@ void LLViewerJointAttachment::setAttachmentVisibility(BOOL visible)
 void LLViewerJointAttachment::setOriginalPosition(LLVector3& position)
 {
 	mOriginalPos = position;
+	// SL-315
 	setPosition(position);
 }
 

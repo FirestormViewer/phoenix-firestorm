@@ -783,9 +783,10 @@ BOOL LLFloaterPreference::postBuild()
 #endif
 	// </FS:Ansariel>
 
-	// <FS:Ansariel> FIRE-20416: Option only available on Windows
+	// <FS:Ansariel> Disable options only available on Windows on other platforms
 #ifndef LL_WINDOWS
 	childSetEnabled("FSEnableAutomaticUIScaling", FALSE);
+	childSetEnabled("FSDisableWMIProbing", FALSE);
 #endif
 	// </FS:Ansariel>
 
@@ -2048,6 +2049,12 @@ void LLFloaterPreference::refreshEnabledState()
 	bool bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump");
 	bumpshiny_ctrl->setEnabled(bumpshiny ? TRUE : FALSE);
 	
+	// <FS:Ansariel> Does not exist
+    //LLCheckBoxCtrl* ctrl_enhanced_skel = getChild<LLCheckBoxCtrl>("AvatarEnhancedSkeleton");
+    //bool enhanced_skel_enabled = gSavedSettings.getBOOL("IncludeEnhancedSkeleton");
+    //ctrl_enhanced_skel->setValue(enhanced_skel_enabled);
+	// </FS:Ansariel>
+    
 	// Avatar Mode
 	// Enable Avatar Shaders
 	LLCheckBoxCtrl* ctrl_avatar_vp = getChild<LLCheckBoxCtrl>("AvatarVertexProgram");
@@ -2171,7 +2178,7 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
 	LLCheckBoxCtrl* bumpshiny_ctrl = getChild<LLCheckBoxCtrl>("BumpShiny");
 	bool bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump");
 	bumpshiny_ctrl->setEnabled(bumpshiny ? TRUE : FALSE);
-	
+    
 	// Avatar Mode
 	// Enable Avatar Shaders
 	LLCheckBoxCtrl* ctrl_avatar_vp = getChild<LLCheckBoxCtrl>("AvatarVertexProgram");
@@ -3253,7 +3260,7 @@ void LLFloaterPreference::onClickAutoReplace()
 
 void LLFloaterPreference::onClickSpellChecker()
 {
-		LLFloaterReg::showInstance("prefs_spellchecker");
+    LLFloaterReg::showInstance("prefs_spellchecker");
 }
 
 void LLFloaterPreference::onClickAdvanced()
@@ -3350,11 +3357,6 @@ void LLFloaterPreference::updateUISoundsControls()
 	bool mute_all_sounds = gSavedSettings.getBOOL("MuteAudio");
 	getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!(mute_sound_effects || mute_all_sounds));
 	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!(mute_sound_effects || mute_all_sounds));
-
-#if !LL_WINDOWS
-	getChild<LLCheckBoxCtrl>("FSDisableWMIProbing")->setEnabled(FALSE); // VRAM detection via WMI probing on Windows systems
-#endif
-
 }
 // </FS:PP>
 

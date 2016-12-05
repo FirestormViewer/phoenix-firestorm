@@ -564,7 +564,7 @@ class LLFileUploadImage : public view_listener_t
 		//{
 		//	LLFloaterReg::showInstance("upload_image", LLSD(filename));
 		//}
-		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_IMAGE, boost::bind(&show_floater_callback, "upload_image", _1, LLFilePicker::FFLOAD_IMAGE)))->getFile();
+		LLGenericLoadFilePicker::open(LLFilePicker::FFLOAD_IMAGE, boost::bind(&show_floater_callback, "upload_image", _1, LLFilePicker::FFLOAD_IMAGE));
 // </FS:CR Threaded Filepickers>
 		return TRUE;
 	}
@@ -594,7 +594,7 @@ class LLFileUploadSound : public view_listener_t
 		//{
 		//	LLFloaterReg::showInstance("upload_sound", LLSD(filename));
 		//}
-		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_WAV, boost::bind(&show_floater_callback, "upload_sound", _1, LLFilePicker::FFLOAD_WAV)))->getFile();
+		LLGenericLoadFilePicker::open(LLFilePicker::FFLOAD_WAV, boost::bind(&show_floater_callback, "upload_sound", _1, LLFilePicker::FFLOAD_WAV));
 // </FS:CR Threaded Filepickers>
 		return true;
 	}
@@ -620,7 +620,7 @@ class LLFileUploadAnim : public view_listener_t
 		//		LLFloaterReg::showInstance("upload_anim_bvh", LLSD(filename));
 		//	}
 		//}
-		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_ANIM, boost::bind(&show_floater_anim_callback,_1)))->getFile();
+		LLGenericLoadFilePicker::open(LLFilePicker::FFLOAD_ANIM, boost::bind(&show_floater_anim_callback, _1));
 // </FS:CR Threaded Filepickers>
 		return true;
 	}
@@ -713,7 +713,7 @@ class LLFileUploadBulk : public view_listener_t
 		//	LL_INFOS() << "Couldn't import objects from file" << LL_ENDL;
 		//}
 		// </FS:Ansariel>
-		(new LLGenericLoadMultipleFilePicker(LLFilePicker::FFLOAD_ALL, boost::bind(&upload_bulk_callback, _1)))->getFiles();
+		LLGenericLoadMultipleFilePicker::open(LLFilePicker::FFLOAD_ALL, boost::bind(&upload_bulk_callback, _1));
 		return true;
 	}
 };
@@ -723,7 +723,7 @@ class FSFileImportLinkset : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_IMPORT, boost::bind(&show_floater_callback, "fs_import", _1, LLFilePicker::FFLOAD_IMPORT)))->getFile();
+		LLGenericLoadFilePicker::open(LLFilePicker::FFLOAD_IMPORT, boost::bind(&show_floater_callback, "fs_import", _1, LLFilePicker::FFLOAD_IMPORT));
 		return TRUE;
 	}
 };

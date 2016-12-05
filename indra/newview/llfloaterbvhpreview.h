@@ -124,11 +124,13 @@ public:
 	// </FS:Sei>
 private:
 	void setAnimCallbacks() ;
+    std::map <std::string, std::string> getJointAliases();
+
 	// <FS> Reload animation from disk
 	BOOL loadBVH();
 	void unloadMotion();
 	// </FS>
-	
+
 protected:
 	void			draw();
 	void			resetMotion();

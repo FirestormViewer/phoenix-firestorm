@@ -6,6 +6,7 @@
 	<menu_item_call label="Crear tarjeta" name="Add Calling Card"/>
 	<menu_item_call label="Llamar" name="Call"/>
 	<menu_item_call label="Invitar a grupo" name="Invite..."/>
+	<menu_item_call label="Restablecer esqueleto" name="Reset Skeleton"/>
 	<context_menu label="Molestia" name="Annoyance">
 		<menu_item_call label="Bloquear" name="Avatar Mute"/>
 		<menu_item_call label="Desbloquear" name="Avatar Unmute"/>

@@ -7,6 +7,7 @@
 	<menu_item_call label="Donner ma carte de visite" name="Give Calling Card"/>
 	<menu_item_call label="Appel vocal" name="Call"/>
 	<menu_item_call label="Inviter dans un groupe" name="Invite..."/>
+	<menu_item_call label="Réinitialiser le squelette" name="Reset Skeleton"/>
 	<context_menu label="Dérangement" name="Annoyance">
 		<menu_item_call label="Ignorer" name="Avatar Mute"/>
 		<menu_item_call label="Cesser d'ignorer" name="Avatar Unmute"/>

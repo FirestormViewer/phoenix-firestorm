@@ -66,7 +66,8 @@ public:
 	LLAvatarAppearance(LLWearableData* wearable_data);
 	virtual ~LLAvatarAppearance();
 
-	static void			initClass(); // initializes static members
+	static void			initClass(const std::string& avatar_file_name, const std::string& skeleton_file_name); // initializes static members
+	static void			initClass();
 	static void			cleanupClass();	// Cleanup data that's only init'd once per class.
 	virtual void 		initInstance(); // Called after construction to initialize the instance.
 	virtual BOOL		loadSkeletonNode();
@@ -126,8 +127,11 @@ public:
 
 protected:
 	virtual LLAvatarJoint*	createAvatarJoint() = 0;
-	virtual LLAvatarJoint*	createAvatarJoint(S32 joint_num) = 0;
+    virtual LLAvatarJoint*  createAvatarJoint(S32 joint_num) = 0;
 	virtual LLAvatarJointMesh*	createAvatarJointMesh() = 0;
+    void makeJointAliases(LLAvatarBoneInfo *bone_info);
+
+
 public:
 	F32					getPelvisToFoot() const { return mPelvisToFoot; }
 	/*virtual*/ LLJoint*	getRootJoint() { return mRoot; }
@@ -141,8 +145,19 @@ public:
 	// </FS:ND>
 
 	joint_map_t			mJointMap;
-	
+
+    typedef std::map<std::string, LLVector3> joint_state_map_t;
+    joint_state_map_t mLastBodySizeState;
+    joint_state_map_t mCurrBodySizeState;
+    void compareJointStateMaps(joint_state_map_t& last_state,
+                               joint_state_map_t& curr_state);
 	void		computeBodySize();
+
+public:
+	typedef std::vector<LLAvatarJoint*> avatar_joint_list_t;
+    const avatar_joint_list_t& getSkeleton() { return mSkeleton; }
+    typedef std::map<std::string, std::string> joint_alias_map_t;
+    const joint_alias_map_t& getJointAliases();
 
 
 protected:
@@ -158,12 +173,12 @@ protected:
 	BOOL				setupBone(const LLAvatarBoneInfo* info, LLJoint* parent, S32 &current_volume_num, S32 &current_joint_num);
 	BOOL				allocateCharacterJoints(S32 num);
 	BOOL				buildSkeleton(const LLAvatarSkeletonInfo *info);
-protected:
+
 	void				clearSkeleton();
 	BOOL				mIsBuilt; // state of deferred character building
-	typedef std::vector<LLAvatarJoint*> avatar_joint_list_t;
 	avatar_joint_list_t	mSkeleton;
-	LLPosOverrideMap	mPelvisFixups;
+	LLVector3OverrideMap	mPelvisFixups;
+    joint_alias_map_t   mJointAliasMap;
 
 	//--------------------------------------------------------------------
 	// Pelvis height adjustment members.
@@ -354,6 +369,7 @@ protected:
 	// Collision volumes
 	//--------------------------------------------------------------------
 public:
+    S32			mNumBones;
   	S32			mNumCollisionVolumes;
 	LLAvatarJointCollisionVolume* mCollisionVolumes;
 protected:

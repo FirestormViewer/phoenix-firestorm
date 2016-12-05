@@ -38,6 +38,9 @@
 	<string name="AboutCompiler">
 		Kompiliert mit [COMPILER], Version [COMPILER_VERSION]
 	</string>
+	<string name="BuildConfig">
+		Build-Konfiguration [BUILD_CONFIG]
+	</string>
 	<string name="AboutPosition">
 		Sie befinden sich an [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] in [REGION] auf &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
 SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
@@ -96,7 +99,9 @@ Voice-Serverversion: [VOICE_VERSION]
 	<string name="ErrorFetchingServerReleaseNotesURL">
 		Fehler beim Abrufen der URL für die Server-Versionshinweise.
 	</string>
-	
+	<string name="BuildConfiguration">
+		Build-Konfiguration
+	</string>
 	<string name="ProgressRestoring">
 		Wird wiederhergestellt...
 	</string>
@@ -1597,6 +1602,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="BodyPartsRightLeg">
 		Rechtes Bein
 	</string>
+	<string name="BodyPartsEnhancedSkeleton">
+		Erweitertes Skelett
+	</string>
 	<string name="GraphicsQualityLow">
 		Niedrig
 	</string>
@@ -2043,6 +2051,51 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="Avatar Center">
 		Avatar-Mitte
 	</string>
+	<string name="Left Ring Finger">
+		Linker Ringfinger
+	</string>
+	<string name="Right Ring Finger">
+		Rechter Ringfinger
+	</string>
+	<string name="Tail Base">
+		Schwanzansatz
+	</string>
+	<string name="Tail Tip">
+		Schwanzspitze
+	</string>
+	<string name="Left Wing">
+		Linker Flügel
+	</string>
+	<string name="Right Wing">
+		Rechter Flügel
+	</string>
+	<string name="Jaw">
+		Kiefer
+	</string>
+	<string name="Alt Left Ear">
+		Alt. linkes Ohr
+	</string>
+	<string name="Alt Right Ear">
+		Alt. rechtes Ohr
+	</string>
+	<string name="Alt Left Eye">
+		Alt. linkes Auge
+	</string>
+	<string name="Alt Right Eye">
+		Alt. rechtes Auge
+	</string>
+	<string name="Tongue">
+		Zunge
+	</string>
+	<string name="Groin">
+		Leiste
+	</string>
+	<string name="Left Hind Foot">
+		Linker Hinterfuß
+	</string>
+	<string name="Right Hind Foot">
+		Rechter Hinterfuß
+	</string>
 	<string name="Invalid Attachment">
 		Ungültige Stelle für Anhang
 	</string>
@@ -2485,11 +2538,11 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ATTACH_BELLY">
 		Bauch
 	</string>
-	<string name="ATTACH_RPEC">
-		Rechts
-	</string>
-	<string name="ATTACH_LPEC">
+	<string name="ATTACH_LEFT_PEC">
 		Linke Brust
+	</string>
+	<string name="ATTACH_RIGHT_PEC">
+		Rechte Brust
 	</string>
 	<string name="ATTACH_HUD_CENTER_2">
 		HUD Mitte 2
@@ -2520,6 +2573,51 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="ATTACH_AVATAR_CENTER">
 		Avatar-Mitte
+	</string>
+	<string name="ATTACH_LHAND_RING1">
+		Linker Ringfinger
+	</string>
+	<string name="ATTACH_RHAND_RING1">
+		Rechter Ringfinger
+	</string>
+	<string name="ATTACH_TAIL_BASE">
+		Schwanzansatz
+	</string>
+	<string name="ATTACH_TAIL_TIP">
+		Schwanzspitze
+	</string>
+	<string name="ATTACH_LWING">
+		Linker Flügel
+	</string>
+	<string name="ATTACH_RWING">
+		Rechter Flügel
+	</string>
+	<string name="ATTACH_FACE_JAW">
+		Kiefer
+	</string>
+	<string name="ATTACH_FACE_LEAR">
+		Alt. linkes Ohr
+	</string>
+	<string name="ATTACH_FACE_REAR">
+		Alt. rechtes Ohr
+	</string>
+	<string name="ATTACH_FACE_LEYE">
+		Alt. linkes Auge
+	</string>
+	<string name="ATTACH_FACE_REYE">
+		Alt. rechtes Auge
+	</string>
+	<string name="ATTACH_FACE_TONGUE">
+		Zunge
+	</string>
+	<string name="ATTACH_GROIN">
+		Leiste
+	</string>
+	<string name="ATTACH_HIND_LFOOT">
+		Linker Hinterfuß
+	</string>
+	<string name="ATTACH_HIND_RFOOT">
+		Rechter Hinterfuß
 	</string>
 	<string name="CursorPos">
 		Zeile [LINE], Spalte [COLUMN]
@@ -4578,10 +4676,10 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		offline
 	</string>
 	<string name="not_online_msg">
-		Anwender nicht online - Nachricht wird gespeichert und später zugestellt.
+		Benutzer nicht online - Nachricht wird gespeichert und später zugestellt.
 	</string>
 	<string name="not_online_inventory">
-		Anwender nicht online - Inventarangebot wurde gespeichert.
+		Benutzer nicht online - Inventar gespeichert.
 	</string>
 	<string name="answered_call">
 		Ihr Anruf wurde entgegengenommen

@@ -907,7 +907,7 @@ void LLLocalBitmapMgr::cleanupClass()
 
 void LLLocalBitmapMgr::addUnit()
 {
-	(new LLGenericLoadMultipleFilePicker(LLFilePicker::FFLOAD_IMAGE, boost::bind(&LLLocalBitmapMgr::filePickerCallback, _1)))->getFiles();
+	LLGenericLoadMultipleFilePicker::open(LLFilePicker::FFLOAD_IMAGE, boost::bind(&LLLocalBitmapMgr::filePickerCallback, _1));
 }
 
 void LLLocalBitmapMgr::filePickerCallback(std::list<std::string> filenames)

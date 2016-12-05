@@ -133,6 +133,10 @@ public:
 	S32								getDrivenParamsCount() const;
 	const LLViewerVisualParam*		getDrivenParam(S32 index) const;
 
+	typedef std::vector<LLDrivenEntry> entry_list_t;
+    entry_list_t&                   getDrivenList() { return mDriven; }
+    void                            setDrivenList(entry_list_t& driven_list) { mDriven = driven_list; }
+
 protected:
 	LLDriverParam(const LLDriverParam& pOther);
 	F32 getDrivenWeight(const LLDrivenEntry* driven, F32 input_weight);
@@ -143,7 +147,6 @@ protected:
 
 
 	LL_ALIGN_16(LLVector4a	mDefaultVec); // temp holder
-	typedef std::vector<LLDrivenEntry> entry_list_t;
 	entry_list_t mDriven;
 	LLViewerVisualParam* mCurrentDistortionParam;
 	// Backlink only; don't make this an LLPointer.

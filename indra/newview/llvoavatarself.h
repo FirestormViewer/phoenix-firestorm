@@ -122,17 +122,6 @@ private:
 	//BOOL setParamWeight(const LLViewerVisualParam *param, F32 weight);
 	BOOL setParamWeight(const LLViewerVisualParam *param, F32 weight, BOOL upload_bake = FALSE);
 
-
-
-/**                    Initialization
- **                                                                            **
- *******************************************************************************/
-
-private:
-	LLUUID mInitialBakeIDs[6];
-	//bool mInitialBakesLoaded;
-
-
 /********************************************************************************
  **                                                                            **
  **                    STATE

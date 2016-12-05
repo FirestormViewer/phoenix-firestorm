@@ -422,6 +422,7 @@
 			<menu_item_check label="Informazioni sull&apos;animazione" name="Animation Info"/>
 			<menu_item_check label="Disabilita livello di dettaglio" name="Disable LOD"/>
 			<menu_item_check label="Mostra schemi collisione" name="Show Collision Skeleton"/>
+			<menu_item_check label="Mostra ossa" name="Show Bones"/>
 			<menu_item_check label="Mostra bersaglio" name="Display Agent Target"/>
 			<menu_item_call label="Debug texture dell&apos;avatar" name="Debug Avatar Textures"/>
 		</menu>

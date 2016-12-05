@@ -497,7 +497,7 @@ Der Outfit-Ordner enthält keine Kleidung, Körperteile oder Anhänge.
 		Sie können das Objekt nicht anziehen, weil es noch nicht geladen wurde. Warten Sie kurz und versuchen Sie es dann noch einmal.
 	</notification>
 	<notification name="MustEnterPasswordToLogIn">
-		Sie müssen Ihr Passwort eingeben, um sich anmelden zu können.
+		Bitte geben Sie zur Anmeldung Ihr Kennwort ein.
 	</notification>
 	<notification name="MustHaveAccountToLogIn">
 		Sie haben ein Feld leer gelassen.
@@ -573,6 +573,9 @@ Hinweis: Der Cache wird dabei gelöscht/geleert.
 	</notification>
 	<notification name="ChangeConnectionPort">
 		Die Port-Einstellungen werden nach einem Neustart von [APP_NAME] wirksam.
+	</notification>
+	<notification name="ChangeDeferredDebugSetting">
+		Die Einstellung tritt nach Neustart von [APP_NAME] in Kraft.
 	</notification>
 	<notification name="ChangeSkin">
 		Das neue Oberflächendesign wird nach einem Neustart von [APP_NAME] angezeigt.
@@ -1395,12 +1398,12 @@ Sie können [APP_NAME] normal verwenden. Andere Benutzer können Sie korrekt dar
 		</form>
 	</notification>
 	<notification name="AgentComplexityWithVisibility">
-		Ihre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 Avatar-Komplexität] ist [AGENT_COMPLEXITY].
+		Ihre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 Avatarkomplexität] ist [AGENT_COMPLEXITY].
 [OVERLIMIT_MSG]
-		<usetemplate ignoretext="Warnen, falls meine Avatar-Komplexität für andere zu hoch sein könnte" name="notifyignore"/>
+		<usetemplate ignoretext="Warnen, falls Avatarkomplexität zu hoch ist" name="notifyignore"/>
 	</notification>
 	<notification name="AgentComplexity">
-		Ihre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 Avatar-Komplexität] ist [AGENT_COMPLEXITY].
+		Ihre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 Avatarkomplexität] ist [AGENT_COMPLEXITY].
 		<usetemplate ignoretext="Warnen, wnen sich meine Avatar-Komplexität ändert" name="notifyignore"/>
 	</notification>
 	<notification name="HUDComplexityWarning">
@@ -1526,8 +1529,8 @@ Ersetzen Sie die Textur [TEXTURE_NUM] mit einer Bilddatei von maximal 1024x1024 
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmTextureHeights">
-		Sie sind dabei, Werte für den tiefsten Punkt des Geländes zu verwenden, die größer sind als die Werte für den höchsten Punkt. Möchten Sie fortfahren?
-		<usetemplate name="yesnocancelbuttons" yestext="OK" notext="Abbrechen" canceltext="Nicht mehr fragen"/>
+		Sie sind dabei, für Höhenbereiche untere Werte anzugeben, die größer sind als die oberen Werte. Fortfahren?
+		<usetemplate canceltext="Nicht mehr fragen" name="yesnocancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="MaxAllowedAgentOnRegion">
 		Es sind maximal [MAX_AGENTS] zulässige Einwohner erlaubt.
@@ -2541,8 +2544,8 @@ Möchten Sie den Nicht-stören-Modus deaktivieren, bevor Sie diese Transaktion a
 		<usetemplate ignoretext="Bestätigen, bevor der Ordner Papierkorb im Inventar geleert wird" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="TrashIsFull">
-		Ihr Papierkorb läuft über. Dies kann zu Problemen beim Login führen.
-		<usetemplate name="okcancelbuttons" notext="Ich leere den Papierkorb später" yestext="Papierkorb jetzt leeren"/>
+		Ihr Papierkorb läuft über. Dies kann zu Anmeldeproblemen führen.
+		<usetemplate name="okcancelbuttons" notext="Papierkorb später leeren" yestext="Papierkorb jetzt leeren"/>
 	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		Sind Sie sicher, dass Sie Ihren Reise-, Internet- und Suchverlauf löschen möchten?
@@ -3498,10 +3501,10 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 		Fehler beim Löschen der Voreinstellung [NAME].
 	</notification>
 	<notification name="AppearanceToXMLSaved">
-		Aussehen erfolgreich als XML nach [PATH] exportiert.
+		Erscheinungsbild als XML in [PATH] gespeichert
 	</notification>
 	<notification name="AppearanceToXMLFailed">
-		Aussehen konnte nicht gespeichert werden.
+		Fehler beim Speichern des Erscheinungsbilds als XML.
 	</notification>
 	<notification name="UnableToFindHelpTopic">
 		Hilfethema für dieses Element wurde nicht gefunden.
@@ -4164,9 +4167,9 @@ Sie ist voll oder startet in Kürze neu.
 	<notification name="AttachmentHasTooMuchInventory">
 		Ihre Anhänge haben zu viel Inhalt, um mehr hinzuzufügen.
 	</notification>
-	<notification name="IllegalAttachment">
+	<!--<notification name="IllegalAttachment">
 		Der Anhang hat einen nicht existierenden Punkt am Avatar angefordert. Er wurde stattdessen zur Brust hinzugefügt.
-	</notification>
+	</notification>-->
 	<notification name="TooManyScripts">
 		Zu viele Skripts.
 	</notification>
@@ -4348,6 +4351,9 @@ Sie ist voll oder startet in Kürze neu.
 	</notification>
 	<notification name="CantAttachObjectBeingRemoved">
 		Objekten kann nicht hinzugefügt werden, da es bereits entfernt wird.
+	</notification>
+	<notification name="IllegalAttachment">
+		Der Anhang hat einen nicht-existierenden Punkt am Avatar angefordert. Es wurde stattdessen zur Brust hinzugefügt.
 	</notification>
 	<notification name="CantDropItemTrialUser">
 		Ablegen von Objekten hier nicht möglich; versuchen Sie es mit dem kostenlosen Testbereich.

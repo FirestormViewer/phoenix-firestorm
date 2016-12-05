@@ -413,6 +413,7 @@
 			<menu_item_check label="停用細節層次" name="Disable LOD"/>
 			<menu_item_check label="除錯字元可見性" name="Debug Character Vis"/>
 			<menu_item_check label="顯示碰撞骨架" name="Show Collision Skeleton"/>
+			<menu_item_check label="顯示骨頭" name="Show Bones"/>
 			<menu_item_check label="顯示用戶目標" name="Display Agent Target"/>
 			--&gt;
 			<menu_item_call label="傾印附件" name="Dump Attachments"/>

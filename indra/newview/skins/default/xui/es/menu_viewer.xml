@@ -530,6 +530,7 @@
 			<menu_item_check label="Desactivar nivel de detalle (LOD)" name="Disable LOD"/>
 			<menu_item_check label="Depurar visibilidad del personaje" name="Debug Character Vis"/>
 			<menu_item_check label="Mostrar armazón de colisión" name="Show Collision Skeleton"/>
+			<menu_item_check label="Mostrar los huesos" name="Show Bones"/>
 			<menu_item_check label="Mostrar objetivo del avatar" name="Display Agent Target"/>
 			<menu_item_call label="Volcar objetos anexados" name="Dump Attachments"/>
 			<menu_item_call label="Depurar texturas del avatar" name="Debug Avatar Textures"/>

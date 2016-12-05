@@ -184,7 +184,166 @@
 
         <pie_menu
             label="Detach &gt;"
-            name="Pie Object Detach" />
+            name="Pie Object Detach">
+            <pie_menu
+             label="Ext. Skeleton &gt;"
+             name="Enhanced Skeleton">
+                <pie_slice
+                 label="Right Wing"
+                 name="Right Wing">
+                    <pie_slice.on_click
+                     function="Attachment.Detach"
+                     parameter="46"/>
+                    <pie_slice.on_enable
+                     function="Attachment.EnableDetach"
+                     parameter="46"/>
+                </pie_slice>
+                <pie_slice
+                 label="Groin"
+                 name="Groin">
+                    <pie_slice.on_click
+                     function="Attachment.Detach"
+                     parameter="53"/>
+                    <pie_slice.on_enable
+                     function="Attachment.EnableDetach"
+                     parameter="53"/>
+                </pie_slice>
+                <pie_slice
+                 label="Tail Base"
+                 name="Tail Base">
+                    <pie_slice.on_click
+                     function="Attachment.Detach"
+                     parameter="43"/>
+                    <pie_slice.on_enable
+                     function="Attachment.EnableDetach"
+                     parameter="43"/>
+                </pie_slice>
+                <pie_slice
+                 label="Tail Tip"
+                 name="Tail Tip">
+                    <pie_slice.on_click
+                     function="Attachment.Detach"
+                     parameter="44"/>
+                    <pie_slice.on_enable
+                     function="Attachment.EnableDetach"
+                     parameter="44"/>
+                </pie_slice>
+                <pie_slice
+                 label="Left Wing"
+                 name="Left Wing">
+                    <pie_slice.on_click
+                     function="Attachment.Detach"
+                     parameter="45"/>
+                    <pie_slice.on_enable
+                     function="Attachment.EnableDetach"
+                     parameter="45"/>
+                </pie_slice>
+                <pie_slice
+                 label="L Hind Foot"
+                 name="Left Hind Foot">
+                    <pie_slice.on_click
+                     function="Attachment.Detach"
+                     parameter="54"/>
+                    <pie_slice.on_enable
+                     function="Attachment.EnableDetach"
+                     parameter="54"/>
+                </pie_slice>
+                <pie_menu
+                 label="More &gt;"
+                 name="Enhanced Skeleton More">
+                    <pie_slice
+                     label="Alt R Ear"
+                     name="Alt Right Ear">
+                        <pie_slice.on_click
+                         function="Attachment.Detach"
+                         parameter="49"/>
+                        <pie_slice.on_enable
+                         function="Attachment.EnableDetach"
+                         parameter="49"/>
+                    </pie_slice>
+                    <pie_slice
+                     label="Alt R Eye"
+                     name="Alt Right Eye">
+                        <pie_slice.on_click
+                         function="Attachment.Detach"
+                         parameter="51"/>
+                        <pie_slice.on_enable
+                         function="Attachment.EnableDetach"
+                         parameter="51"/>
+                    </pie_slice>
+                    <pie_slice
+                     label="Tongue"
+                     name="Tongue">
+                        <pie_slice.on_click
+                         function="Attachment.Detach"
+                         parameter="52"/>
+                        <pie_slice.on_enable
+                         function="Attachment.EnableDetach"
+                         parameter="52"/>
+                    </pie_slice>
+                    <pie_slice
+                     label="Alt L Eye"
+                     name="Alt Left Eye">
+                        <pie_slice.on_click
+                         function="Attachment.Detach"
+                         parameter="50"/>
+                        <pie_slice.on_enable
+                         function="Attachment.EnableDetach"
+                         parameter="50"/>
+                    </pie_slice>
+                    <pie_slice
+                     label="Alt L Ear"
+                     name="Alt Left Ear">
+                        <pie_slice.on_click
+                         function="Attachment.Detach"
+                         parameter="48"/>
+                        <pie_slice.on_enable
+                         function="Attachment.EnableDetach"
+                         parameter="48"/>
+                    </pie_slice>
+                    <pie_slice
+                     label="L Ring Finger"
+                     name="Left Ring Finger">
+                        <pie_slice.on_click
+                         function="Attachment.Detach"
+                         parameter="41"/>
+                        <pie_slice.on_enable
+                         function="Attachment.EnableDetach"
+                         parameter="41"/>
+                    </pie_slice>
+                    <pie_slice
+                     label="Jaw"
+                     name="Jaw">
+                        <pie_slice.on_click
+                         function="Attachment.Detach"
+                         parameter="47"/>
+                        <pie_slice.on_enable
+                         function="Attachment.EnableDetach"
+                         parameter="47"/>
+                    </pie_slice>
+                    <pie_slice
+                     label="R Ring Finger"
+                     name="Right Ring Finger">
+                        <pie_slice.on_click
+                         function="Attachment.Detach"
+                         parameter="42"/>
+                        <pie_slice.on_enable
+                         function="Attachment.EnableDetach"
+                         parameter="42"/>
+                    </pie_slice>
+                </pie_menu>
+                <pie_slice
+                 label="R Hind Foot"
+                 name="Right Hind Foot">
+                    <pie_slice.on_click
+                     function="Attachment.Detach"
+                     parameter="55"/>
+                    <pie_slice.on_enable
+                     function="Attachment.EnableDetach"
+                     parameter="55"/>
+                </pie_slice>
+            </pie_menu>
+        </pie_menu>
 
         <pie_separator />
 
@@ -245,9 +404,22 @@
            <pie_slice.on_enable
                function="Edit.EnableEditShape" />
         </pie_slice>
-
-        <pie_separator />
-
+		<pie_menu
+			name="ResetMenu"
+			label="Reset &gt;">
+			<pie_slice
+				label="Skel. &amp; Anim."
+				name="Reset Skeleton And Animations">
+				<pie_slice.on_click
+					function="Avatar.ResetSkeletonAndAnimations" />
+			</pie_slice>
+			<pie_slice
+				label="Skeleton"
+				name="Reset Skeleton">
+				<pie_slice.on_click
+					function="Avatar.ResetSkeleton" />
+			</pie_slice>
+		</pie_menu>
         <pie_slice
             enabled="true"
             label="Tex Refresh"

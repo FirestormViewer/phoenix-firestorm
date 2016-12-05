@@ -554,6 +554,7 @@
 			<menu_item_check label="LOD deaktiveren" name="Disable LOD"/>
 			<menu_item_check label="Sichtbare Agenten debuggen" name="Debug Character Vis"/>
 			<menu_item_check label="Gelenkpunkte anzeigen" name="Show Collision Skeleton"/>
+			<menu_item_check label="Knochen anzeigen" name="Show Bones"/>
 			<menu_item_check label="Agent-Ziel anzeigen" name="Display Agent Target"/>
 			<menu_item_call label="Anhänge ausgeben" name="Dump Attachments"/>
 			<menu_item_call label="Avatar-Texturen debuggen" name="Debug Avatar Textures"/>

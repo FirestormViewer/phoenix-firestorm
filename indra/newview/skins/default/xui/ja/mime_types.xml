@@ -207,6 +207,11 @@
 			ムービー (MP4)
 		</label>
 	</mimetype>
+	<mimetype name="application/octet-stream">
+		<label name="video/octet-stream">
+			ムービー
+		</label>
+	</mimetype>
 	<mimetype menu="1" name="video/quicktime">
 		<label name="video/quicktime_label">
 			ムービー (QuickTime)

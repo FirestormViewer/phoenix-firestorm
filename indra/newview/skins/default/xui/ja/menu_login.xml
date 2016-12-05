@@ -6,20 +6,17 @@
 	</menu>
 	<menu label="ヘルプ" name="Help">
 		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki" />
-		<menu_item_separator />
-		<!-- Deleted Aug.28, 2012
-		<menu_item_call label="[APP_NAME] ヘルプ" name="Second Life Help"/>
-		-->
+		<menu_item_call label="不具合の解決" name="Troubleshooting" />
+		<menu_item_call label="バグの報告" name="Report Bug" />
+		<menu_item_separator/>
 		<menu_item_call label="[APP_NAME] について" name="About Second Life"/>
 		<menu_item_separator name="grid_help_seperator_login"/>
 		<menu_item_call label="[CURRENT_GRID] ヘルプ" name="current_grid_help_login" />
-        <menu_item_call label="[CURRENT_GRID] について" name="current_grid_about_login" />
-		<menu_item_separator/>
+		<menu_item_call label="[CURRENT_GRID] について" name="current_grid_about_login" />
 	</menu>
 	<menu_item_check label="デバッグメニューを表示する" name="Show Debug Menu"/>
 	<menu label="デバッグ" name="Debug">
 		<menu_item_call label="デバッグ設定を表示" name="Debug Settings"/>
-		<menu_item_call label="UI/色の設定" name="UI/Color Settings"/>
 		<menu_item_call label="XUI プレビューツール" name="UI Preview Tool"/>
 		<menu label="UI テスト" name="UI Tests">
 			<menu_item_call label="テキストボックス" name="Textbox" />
@@ -30,7 +27,7 @@
 		<menu_item_call label="ウィンドウのサイズを設定..." name="Set Window Size..."/>
 		<menu_item_call label="利用規約を表示" name="TOS"/>
 		<menu_item_call label="クリティカルメッセージを表示" name="Critical"/>
-		<menu_item_call label="Web コンテンツフローターのデバッグテスト" name="Web Content Floater Debug Test"/>
+		<menu_item_call label="メディア・ブラウザ" name="Media Browser"/>
 		<menu label="ログレベルを設定" name="Set Logging Level">
 			<menu_item_check label="デバッグ" name="Debug"/>
 			<menu_item_check label="情報" name="Info"/>

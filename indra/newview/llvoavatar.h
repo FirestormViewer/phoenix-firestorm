@@ -68,12 +68,10 @@ class LLVoiceVisualizer;
 class LLHUDNameTag;
 class LLHUDEffectSpiral;
 class LLTexGlobalColor;
-struct LLVOAvatarBoneInfo;
-struct LLVOAvatarChildJoint;
-//class LLViewerJoint;
+
 struct LLAppearanceMessageContents;
-struct LLVOAvatarSkeletonInfo;
 class LLViewerJointMesh;
+
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // LLVOAvatar
@@ -206,11 +204,18 @@ public:
 	virtual LLJoint*		getJoint( const JointKey &name );
 	LLJoint* getJoint( const std::string &name ) { return getJoint( JointKey::construct( name ) ); }
 // </FS:ND>
+	LLJoint*		        getJoint(S32 num);
 
-	void 					addAttachmentPosOverridesForObject(LLViewerObject *vo);
-	void					resetJointPositionsOnDetach(const LLUUID& mesh_id);
-	void					resetJointPositionsOnDetach(LLViewerObject *vo);
-	void					clearAttachmentPosOverrides();
+	void 					addAttachmentOverridesForObject(LLViewerObject *vo);
+	void					resetJointsOnDetach(const LLUUID& mesh_id);
+	void					resetJointsOnDetach(LLViewerObject *vo);
+    bool					jointIsRiggedTo(const std::string& joint_name);
+    bool					jointIsRiggedTo(const std::string& joint_name, const LLViewerObject *vo);
+	void					clearAttachmentOverrides();
+	void					rebuildAttachmentOverrides();
+    void                    showAttachmentOverrides(bool verbose = false) const;
+    void                    getAttachmentOverrideNames(std::set<std::string>& pos_names, 
+                                                       std::set<std::string>& scale_names) const;
 	
 	/*virtual*/ const LLUUID&	getID() const;
 	/*virtual*/ void			addDebugText(const std::string& text);
@@ -376,10 +381,14 @@ protected:
 	/*virtual*/ LLAvatarJointMesh*	createAvatarJointMesh(); // Returns LLViewerJointMesh
 public:
 	void				updateHeadOffset();
+    void				debugBodySize() const;
 	void				postPelvisSetRecalc( void );
 
 	/*virtual*/ BOOL	loadSkeletonNode();
+    void                initAttachmentPoints(bool ignore_hud_joints = false);
 	/*virtual*/ void	buildCharacter();
+    void                resetVisualParams();
+    void				resetSkeleton(bool reset_animations);
 
 	LLVector3			mCurRootToHeadOffset;
 	LLVector3			mTargetRootToHeadOffset;
@@ -416,6 +425,7 @@ public:
 	F32			getLastSkinTime() { return mLastSkinTime; }
 	U32 		renderTransparent(BOOL first_pass);
 	void 		renderCollisionVolumes();
+	void		renderBones();
 	void		renderJoints();
 	static void	deleteCachedImages(bool clearAll=true);
 	static void	destroyGL();
@@ -686,9 +696,12 @@ protected:
  **                    APPEARANCE
  **/
 
+    LLPointer<LLAppearanceMessageContents> 	mLastProcessedAppearance;
+    
 public:
 	void 			parseAppearanceMessage(LLMessageSystem* mesgsys, LLAppearanceMessageContents& msg);
 	void 			processAvatarAppearance(LLMessageSystem* mesgsys);
+    void            applyParsedAppearanceMessage(LLAppearanceMessageContents& contents, bool slam_params);
 	void 			hideSkirt();
 	void			startAppearanceAnimation();
 	// <FS:Ansariel> [Legacy Bake]
@@ -1015,6 +1028,7 @@ private:
 	// General
 	//--------------------------------------------------------------------
 public:
+    void                getSortedJointNames(S32 joint_type, std::vector<std::string>& result) const;
 	void				dumpArchetypeXML(const std::string& prefix, bool group_by_wearables = false);
 	void 				dumpAppearanceMsgParams( const std::string& dump_prefix,
 												 const LLAppearanceMessageContents& contents);

@@ -53,6 +53,8 @@ const F32 PIE_POPUP_FACTOR = 1.7f;			// pie menu size factor on popup
 const F32 PIE_POPUP_TIME = 0.25f;			// time to shrink from popup size to regular size
 const S32 PIE_OUTER_SIZE = 96;				// radius of the outer pie circle
 const F32 PIE_OUTER_SHADE_FACTOR = 1.09f;	// size factor of the outer shading ring
+const F32 PIE_SLICE_DIVIDER_WIDTH = 0.04f;	// width of a slice divider in radians
+const F32 PIE_MAX_SLICES_F = F32(PIE_MAX_SLICES);
 
 PieMenu::PieMenu(const LLMenuGL::Params& p) :
 	LLMenuGL(p),
@@ -138,10 +140,10 @@ BOOL PieMenu::handleHover(S32 x, S32 y, MASK mask)
 			angle = F_PI * 2.f - angle;
 		}
 		// rotate the angle slightly so the slices' centers are aligned correctly
-		angle += F_PI / 8.f;
+		angle += F_PI / PIE_MAX_SLICES_F;
 
 		// calculate slice number from the angle
-		mCurrentSegment = (S32) (8.f * angle / (F_PI * 2.f)) % 8;
+		mCurrentSegment = (S32) (PIE_MAX_SLICES_F * angle / (F_PI * 2.f)) % PIE_MAX_SLICES;
 	}
 
 	return TRUE;
@@ -324,7 +326,7 @@ void PieMenu::draw()
 
 		// clear the label and set up the starting angle to draw in
 		std::string label("");
-		F32 segmentStart = F_PI / 4.f * (F32)num - F_PI / 8.f;
+		F32 segmentStart = F_PI / (PIE_MAX_SLICES_F / 2.f) * (F32)num - F_PI / PIE_MAX_SLICES_F;
 
 		// iterate through the list of slices
 		if (cur_item_iter != mSlices->end())
@@ -413,7 +415,7 @@ void PieMenu::draw()
 				label = currentSubmenu->getLabel();
 				if (sPieMenuOuterRingShade)
 				{
-					gl_washer_segment_2d(PIE_OUTER_SIZE * PIE_OUTER_SHADE_FACTOR * factor, PIE_OUTER_SIZE * factor, segmentStart + 0.02f, segmentStart + F_PI / 4.f - 0.02f, steps / 8, selectedColor, selectedColor);
+					gl_washer_segment_2d(PIE_OUTER_SIZE * PIE_OUTER_SHADE_FACTOR * factor, PIE_OUTER_SIZE * factor, segmentStart + PIE_SLICE_DIVIDER_WIDTH / 2.f, segmentStart + F_PI / (PIE_MAX_SLICES_F / 2.f) - PIE_SLICE_DIVIDER_WIDTH / 2.f, steps / 8, selectedColor, selectedColor);
 				}
 			}
 
@@ -426,21 +428,19 @@ void PieMenu::draw()
 				if (mOldSlice != mSlice)
 				{
 					// get the appropriate UI sound and play it
-					char soundNum = '0' + num;
-					std::string soundName = "UISndPieMenuSliceHighlight";
-					soundName += soundNum;
-
+					std::string soundName = llformat("UISndPieMenuSliceHighlight%d", num);
 					make_ui_sound(soundName.c_str());
+
 					// remember which slice we highlighted last, so we only play the sound once
 					mOldSlice = mSlice;
 				}
 
 				// draw the currently highlighted pie slice
-				gl_washer_segment_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, segmentStart + 0.02f, segmentStart + F_PI / 4.f - 0.02f, steps / 8, selectedColor, borderColor);
+				gl_washer_segment_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, segmentStart + PIE_SLICE_DIVIDER_WIDTH / 2.f, segmentStart + F_PI / (PIE_MAX_SLICES_F / 2.f) - PIE_SLICE_DIVIDER_WIDTH / 2.f, steps / 8, selectedColor, borderColor);
 			}
 		}
 		// draw the divider line for this slice
-		gl_washer_segment_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, segmentStart - 0.02f, segmentStart + 0.02f, steps / 8, lineColor, borderColor);
+		gl_washer_segment_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, segmentStart - PIE_SLICE_DIVIDER_WIDTH / 2.f, segmentStart + PIE_SLICE_DIVIDER_WIDTH / 2.f, steps / 8, lineColor, borderColor);
 
 		// draw the slice labels around the center
 		mFont->renderUTF8(label,
@@ -455,7 +455,7 @@ void PieMenu::draw()
 		// next slice
 		num++;
 	}
-	while (num < 8);	// do this until the menu is full
+	while (num < PIE_MAX_SLICES);	// do this until the menu is full
 
 	// draw inner and outer circle, outer only if it was not the first click
 	if (!mFirstClick)

@@ -1530,6 +1530,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="BodyPartsRightLeg">
 		Prawa noga
 	</string>
+	<string name="BodyPartsEnhancedSkeleton">
+		Rozszerzony szkielet
+	</string>
 	<string name="GraphicsQualityLow">
 		Niska
 	</string>
@@ -1885,7 +1888,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Usta
 	</string>
 	<string name="Chin">
-		Szczęka
+		Podbródek
 	</string>
 	<string name="Left Ear">
 		Lewe ucho
@@ -1946,6 +1949,51 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="Avatar Center">
 		Środek awatara
+	</string>
+	<string name="Left Ring Finger">
+		Lewy palec serdeczny
+	</string>
+	<string name="Right Ring Finger">
+		Prawy palec serdeczny
+	</string>
+	<string name="Tail Base">
+		Podstawa ogona
+	</string>
+	<string name="Tail Tip">
+		Koniec ogona
+	</string>
+	<string name="Left Wing">
+		Lewe skrzydło
+	</string>
+	<string name="Right Wing">
+		Prawe skrzydło
+	</string>
+	<string name="Jaw">
+		Szczęka
+	</string>
+	<string name="Alt Left Ear">
+		Lewe ucho 2
+	</string>
+	<string name="Alt Right Ear">
+		Prawe ucho 2
+	</string>
+	<string name="Alt Left Eye">
+		Lewe oko 2
+	</string>
+	<string name="Alt Right Eye">
+		Prawe oko 2
+	</string>
+	<string name="Tongue">
+		Język
+	</string>
+	<string name="Groin">
+		Krocze
+	</string>
+	<string name="Left Hind Foot">
+		Lewa tylna stopa
+	</string>
+	<string name="Right Hind Foot">
+		Prawa tylna stopa
 	</string>
 	<string name="Invalid Attachment">
 		Nieprawidłowy punkt dodatku
@@ -2381,11 +2429,11 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="ATTACH_BELLY">
 		Brzuch
 	</string>
-	<string name="ATTACH_RPEC">
-		Prawa pierś
-	</string>
-	<string name="ATTACH_LPEC">
+	<string name="ATTACH_LEFT_PEC">
 		Lewa pierś
+	</string>
+	<string name="ATTACH_RIGHT_PEC">
+		Prawa pierś
 	</string>
 	<string name="ATTACH_HUD_CENTER_2">
 		HUD środek 2
@@ -2416,6 +2464,51 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="ATTACH_AVATAR_CENTER">
 		Środek awatara
+	</string>
+	<string name="ATTACH_LHAND_RING1">
+		Lewy palec serdeczny
+	</string>
+	<string name="ATTACH_RHAND_RING1">
+		Prawy palec serdeczny
+	</string>
+	<string name="ATTACH_TAIL_BASE">
+		Podstawa ogona
+	</string>
+	<string name="ATTACH_TAIL_TIP">
+		Koniec ogona
+	</string>
+	<string name="ATTACH_LWING">
+		Lewe skrzydło
+	</string>
+	<string name="ATTACH_RWING">
+		Prawe skrzydło
+	</string>
+	<string name="ATTACH_FACE_JAW">
+		Szczęka
+	</string>
+	<string name="ATTACH_FACE_LEAR">
+		Lewe ucho 2
+	</string>
+	<string name="ATTACH_FACE_REAR">
+		Prawe ucho 2
+	</string>
+	<string name="ATTACH_FACE_LEYE">
+		Lewe oko 2
+	</string>
+	<string name="ATTACH_FACE_REYE">
+		Prawe oko 2
+	</string>
+	<string name="ATTACH_FACE_TONGUE">
+		Język
+	</string>
+	<string name="ATTACH_GROIN">
+		Krocze
+	</string>
+	<string name="ATTACH_HIND_LFOOT">
+		Lewa tylna stopa
+	</string>
+	<string name="ATTACH_HIND_RFOOT">
+		Prawa tylna stopa
 	</string>
 	<string name="CursorPos">
 		Linia [LINE], Kolumna [COLUMN]
@@ -5454,8 +5547,11 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="RLVaPendingRestart">
 		(oczekuje restartu)
 	</string>
-	<string name="RLVaToggleMessage">
-		Wsparcie dla RestrainedLove zostanie %s po restarcie
+	<string name="RLVaToggleMessageLogin">
+		RLVa zostało [STATE] (restart nie jest potrzebny)
+	</string>
+	<string name="RLVaToggleMessageRestart">
+		RLVa będzie [STATE] po restarcie
 	</string>
 	<string name="RLVaToggleEnabled">
 		włączone

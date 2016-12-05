@@ -13,7 +13,27 @@
 		<pie_slice label="Załóż" name="Wear"/>
 		<pie_slice label="Weź kopię" name="Take Copy"/>
 		<pie_menu label="Dołącz HUD &gt;" name="Pie Object Attach HUD"/>
-		<pie_menu label="Dołącz &gt;" name="Pie Object Attach"/>
+		<pie_menu label="Dołącz &gt;" name="Pie Object Attach">
+			<pie_menu label="Roz. szkielet &gt;" name="Enhanced Skeleton">
+				<pie_slice label="Prawe skrzydło" name="Right Wing"/>
+				<pie_slice label="Krocze" name="Groin"/>
+				<pie_slice label="Podstawa ogona" name="Tail Base"/>
+				<pie_slice label="Koniec ogona" name="Tail Tip"/>
+				<pie_slice label="Lewe skrzydło" name="Left Wing"/>
+				<pie_slice label="Lewa tylna stopa" name="Left Hind Foot"/>
+				<pie_menu label="Więcej &gt;" name="Enhanced Skeleton More">
+					<pie_slice label="Prawe ucho 2" name="Alt Right Ear"/>
+					<pie_slice label="Prawe oko 2" name="Alt Right Eye"/>
+					<pie_slice label="Język" name="Tongue"/>
+					<pie_slice label="Lewe oko 2" name="Alt Left Eye"/>
+					<pie_slice label="Lewe ucho 2" name="Alt Left Ear"/>
+					<pie_slice label="Lewy palec serdeczny" name="Left Ring Finger"/>
+					<pie_slice label="Szczęka" name="Jaw"/>
+					<pie_slice label="Prawy palec serdeczny" name="Right Ring Finger"/>
+				</pie_menu>
+				<pie_slice label="Prawa tylna stopa" name="Right Hind Foot"/>
+			</pie_menu>
+		</pie_menu>
 		<pie_slice label="Zwróć" name="Return..."/>
 		<pie_menu label="Więcej &gt;" name="Object Pie More 2">
 			<pie_slice label="Odśwież tekstury" name="Texture Refresh"/>

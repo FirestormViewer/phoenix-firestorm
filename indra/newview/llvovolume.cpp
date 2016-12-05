@@ -54,6 +54,7 @@
 #include "llspatialpartition.h"
 #include "llhudmanager.h"
 #include "llflexibleobject.h"
+#include "llskinningutil.h"
 #include "llsky.h"
 #include "lltexturefetch.h"
 #include "llvector4a.h"
@@ -84,7 +85,7 @@
 
 const F32 FORCE_SIMPLE_RENDER_AREA = 512.f;
 const F32 FORCE_CULL_AREA = 8.f;
-U32 JOINT_COUNT_REQUIRED_FOR_FULLRIG = 20;
+U32 JOINT_COUNT_REQUIRED_FOR_FULLRIG = 1;
 
 BOOL gAnimateTextures = TRUE;
 //extern BOOL gHideSelectedObjects;
@@ -4271,30 +4272,11 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 	}
 
 	//build matrix palette
-	static const size_t kMaxJoints = 52;
+	static const size_t kMaxJoints = LL_MAX_JOINTS_PER_MESH_OBJECT;
 
-	LLMatrix4a mp[kMaxJoints];
-	LLMatrix4* mat = (LLMatrix4*) mp;
-	
-	U32 maxJoints = llmin(skin->mJointNames.size(), kMaxJoints);
-	for (U32 j = 0; j < maxJoints; ++j)
-	{
-		LLJoint* joint = avatar->getJoint(skin->mJointNames[j]);
-        if (!joint)
-        {
-            // Fall back to a point inside the avatar if mesh is
-            // rigged to an unknown joint.
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//			joint = avatar->getJoint( "mPelvis" );
-			joint = avatar->getJoint( JointKey::construct( "mPelvis" ) );
-// </FS:ND>
-		}
-		if (joint)
-		{
-			mat[j] = skin->mInvBindMatrix[j];
-			mat[j] *= joint->getWorldMatrix();
-		}
-	}
+	LLMatrix4a mat[kMaxJoints];
+	U32 maxJoints = LLSkinningUtil::getMeshJointCount(skin);
+    LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, maxJoints, skin, avatar);
 
 	for (S32 i = 0; i < volume->getNumVolumeFaces(); ++i)
 	{
@@ -4306,6 +4288,7 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 
 		if ( weight )
 		{
+            LLSkinningUtil::checkSkinWeights(weight, dst_face.mNumVertices, skin);
 			LLMatrix4a bind_shape_matrix;
 			bind_shape_matrix.loadu(skin->mBindShapeMatrix);
 
@@ -4315,60 +4298,16 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 			{
 				LL_RECORD_BLOCK_TIME(FTM_SKIN_RIGGED);
 
+                U32 max_joints = LLSkinningUtil::getMaxJointCount();
 				for (U32 j = 0; j < dst_face.mNumVertices; ++j)
 				{
 					LLMatrix4a final_mat;
-					final_mat.clear();
-
-					// <FS:ND> Avoid the 8 floorf by using SSE2.
-					// Using _mm_cvttps_epi32 (truncate) under the assumption that the index can never be negative.
 					
-					// S32 idx[4];
-					// 
-					// LLVector4 wght;
-					// 
-					// F32 scale = 0.f;
-					// for (U32 k = 0; k < 4; k++)
-					// {
-					// 	F32 w = weight[j][k];
-					// 
-					// 	idx[k] = (S32) floorf(w);
-					// 	wght[k] = w - floorf(w);
-					// 	scale += wght[k];
-					// }
-                    //// This is enforced  in unpackVolumeFaces()
-                    //llassert(scale>0.f);
-                    //wght *= 1.f / scale;
+                    // <FS:ND> Use the SSE2 version
+                    // LLSkinningUtil::getPerVertexSkinMatrix( weight[ j ].getF32ptr(), mat, false, final_mat, max_joints );
+                    FSSkinningUtil::getPerVertexSkinMatrixSSE( weight[ j ], mat, false, final_mat, max_joints );
+                    // </FS:ND>
 
-					LL_ALIGN_16( S32 idx[4] );
-					LL_ALIGN_16( F32 wght[4] );
-
-					__m128i _mIdx = _mm_cvttps_epi32( weight[j] );
-					__m128 _mWeight = _mm_sub_ps( weight[j], _mm_cvtepi32_ps( _mIdx ) );
-
-					_mm_store_si128( (__m128i*)idx, _mIdx );
-
-					__m128 _mScale = _mm_add_ps( _mWeight, _mm_movehl_ps( _mWeight, _mWeight ));
-					_mScale = _mm_add_ss( _mScale, _mm_shuffle_ps( _mScale, _mScale, 1) );
-					_mScale = _mm_shuffle_ps( _mScale, _mScale, 0 );
-
-					_mWeight = _mm_div_ps( _mWeight, _mScale );
-					_mm_store_ps( wght, _mWeight );
-					// </FS:ND>
-					
-					for (U32 k = 0; k < 4; k++)
-					{
-						F32 w = wght[k];
-
-						LLMatrix4a src;
-						// Insure ref'd bone is in our clamped array of mats
-						// clamp idx to maxJoints to avoid reading garbage off stack in release
-                        S32 index = llclamp((S32)idx[k],(S32)0,(S32)kMaxJoints-1);
-						src.setMul(mp[index], w);
-						final_mat.add(src);
-					}
-
-				
 					LLVector4a& v = vol_face.mPositions[j];
 					LLVector4a t;
 					LLVector4a dst;
@@ -4992,12 +4931,22 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 			drawablep->clearState(LLDrawable::HAS_ALPHA);
 
 			bool rigged = vobj->isAttachment() && 
-						vobj->isMesh() && 
-						gMeshRepo.getSkinInfo(vobj->getVolume()->getParams().getSculptID(), vobj);
+                          vobj->isMesh() && 
+						  gMeshRepo.getSkinInfo(vobj->getVolume()->getParams().getSculptID(), vobj);
 
 			bool bake_sunlight = LLPipeline::sBakeSunlight && drawablep->isStatic();
 
 			bool is_rigged = false;
+
+            if (rigged && pAvatarVO)
+            {
+                pAvatarVO->addAttachmentOverridesForObject(vobj);
+				if (!LLApp::isExiting() && pAvatarVO->isSelf() && debugLoggingEnabled("AvatarAttachments"))
+                {
+                    bool verbose = true;
+					pAvatarVO->showAttachmentOverrides(verbose);
+				}
+            }
 
 			//for each face
 			for (S32 i = 0; i < drawablep->getNumFaces(); i++)
@@ -5015,8 +4964,6 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 				//sum up face verts and indices
 				drawablep->updateFaceSize(i);
 			
-			
-
 				if (rigged) 
 				{
 					if (!facep->isState(LLFace::RIGGED))
@@ -5030,13 +4977,6 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 					//get drawpool of avatar with rigged face
 					LLDrawPoolAvatar* pool = get_avatar_drawpool(vobj);				
 					
-					// FIXME should this be inside the face loop?
-					// doesn't seem to depend on any per-face state.
-					if ( pAvatarVO )
-					{
-						pAvatarVO->addAttachmentPosOverridesForObject(vobj);
-					}
-
 					// <FS:ND> need an texture entry, or we crash
 					// if (pool)
 					if (pool && facep->getTextureEntry() )

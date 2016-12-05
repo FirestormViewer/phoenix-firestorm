@@ -160,7 +160,6 @@
 #include "lllogininstance.h"	// <FS:AW  opensim destinations and avatar picker>
 #include "llvovolume.h"
 #include "particleeditor.h"
-#include "piemenu.h"	// ## Zi: Pie Menu
 #include "llfloaterpreference.h"	//<FS:KC> Volume controls prefs
 #include "llcheckboxctrl.h"			//<FS:KC> Volume controls prefs
 #include "llscenemonitor.h"
@@ -212,7 +211,7 @@ LLContextMenu	*gMenuAttachmentOther = NULL;
 LLContextMenu	*gMenuLand	= NULL;
 LLContextMenu	*gMenuMuteParticle = NULL;
 
-// ## Zi: Pie menu
+// <FS:Zi> Pie menu
 // Pie menus
 PieMenu		*gPieMenuAvatarSelf	= NULL;
 PieMenu		*gPieMenuAvatarOther = NULL;
@@ -221,7 +220,7 @@ PieMenu		*gPieMenuAttachmentSelf = NULL;
 PieMenu		*gPieMenuAttachmentOther = NULL;
 PieMenu		*gPieMenuLand	= NULL;
 PieMenu		*gPieMenuMuteParticle = NULL;
-// ## Zi: Pie menu
+// <FS:Zi> Pie menu
 
 const std::string SAVE_INTO_TASK_INVENTORY("Save Object Back to Object Contents");
 
@@ -230,19 +229,19 @@ LLMenuGL* gDetachSubMenu = NULL;
 LLMenuGL* gTakeOffClothes = NULL;
 LLContextMenu* gAttachScreenPieMenu = NULL;
 LLContextMenu* gAttachPieMenu = NULL;
-LLContextMenu* gAttachBodyPartPieMenus[8];
+LLContextMenu* gAttachBodyPartPieMenus[9];
 LLContextMenu* gDetachPieMenu = NULL;
 LLContextMenu* gDetachScreenPieMenu = NULL;
-LLContextMenu* gDetachBodyPartPieMenus[8];
+LLContextMenu* gDetachBodyPartPieMenus[9];
 
-// ## Zi: Pie menu
+// <FS:Zi> Pie menu
 PieMenu* gPieAttachScreenMenu = NULL;
 PieMenu* gPieAttachMenu = NULL;
-PieMenu* gPieAttachBodyPartMenus[8];
+PieMenu* gPieAttachBodyPartMenus[PIE_MAX_SLICES];
 PieMenu* gPieDetachMenu = NULL;
 PieMenu* gPieDetachScreenMenu = NULL;
-PieMenu* gPieDetachBodyPartMenus[8];
-// ## Zi: Pie menu
+PieMenu* gPieDetachBodyPartMenus[PIE_MAX_SLICES];
+// <FS:Zi> Pie menu
 
 LLMenuItemCallGL* gAutorespondMenu = NULL;
 LLMenuItemCallGL* gAutorespondNonFriendsMenu = NULL;
@@ -550,7 +549,7 @@ void init_menus()
 	gMenuMuteParticle = LLUICtrlFactory::createFromFile<LLContextMenu>(
 		"menu_mute_particle.xml", gMenuHolder, registry);
 
-// ## Zi: Pie menu
+// <FS:Zi> Pie menu
 	gPieMenuAvatarSelf = LLUICtrlFactory::createFromFile<PieMenu>(
 		"menu_pie_avatar_self.xml", gMenuHolder, registry);
 	gPieMenuAvatarOther = LLUICtrlFactory::createFromFile<PieMenu>(
@@ -577,7 +576,7 @@ void init_menus()
 
 	gPieMenuMuteParticle = LLUICtrlFactory::createFromFile<PieMenu>(
 		"menu_pie_mute_particle.xml", gMenuHolder, registry);
-// ## Zi: Pie menu
+// </FS:Zi> Pie menu
 
 	///
 	/// set up the colors
@@ -2855,6 +2854,29 @@ void cleanup_menus()
 
 	delete gMenuMuteParticle;
 	gMenuMuteParticle = NULL;
+
+	// <FS:Ansariel> Pie menu
+	delete gPieMenuAvatarSelf;
+	gPieMenuAvatarSelf = NULL;
+
+	delete gPieMenuAvatarOther;
+	gPieMenuAvatarOther = NULL;
+
+	delete gPieMenuObject;
+	gPieMenuObject = NULL;
+
+	delete gPieMenuAttachmentSelf;
+	gPieMenuAttachmentSelf = NULL;
+
+	delete gPieMenuAttachmentOther;
+	gPieMenuAttachmentOther = NULL;
+
+	delete gPieMenuLand;
+	gPieMenuLand = NULL;
+
+	delete gPieMenuMuteParticle;
+	gPieMenuMuteParticle = NULL;
+	// </FS:Ansariel>
 
 	delete gMenuBarView;
 	gMenuBarView = NULL;
@@ -7479,6 +7501,31 @@ class LLAvatarToggleMyProfile : public view_listener_t
 	}
 };
 
+class LLAvatarResetSkeleton: public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+		LLVOAvatar* avatar = find_avatar_from_object( LLSelectMgr::getInstance()->getSelection()->getPrimaryObject() );
+		if(avatar)
+        {
+            avatar->resetSkeleton(false);
+        }
+        return true;
+    }
+};
+
+class LLAvatarResetSkeletonAndAnimations : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+		if (avatar)
+		{
+			avatar->resetSkeleton(true);
+		}
+		return true;
+	}
+};
 
 class LLAvatarAddContact : public view_listener_t
 {
@@ -9484,9 +9531,14 @@ class FSToolsUndeform : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		FSPose::getInstance()->setPose(gSavedSettings.getString("FSUndeformUUID"), false);
-		gAgentAvatarp->updateVisualParams();
-		
+		if (isAgentAvatarValid())
+		{
+			gAgentAvatarp->resetSkeleton(true);
+
+			FSPose::getInstance()->setPose(gSavedSettings.getString("FSUndeformUUID"), false);
+			gAgentAvatarp->updateVisualParams();
+		}
+
 		return true;
 	}
 };
@@ -11388,6 +11440,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAvatarTexRefresh(), "Avatar.TexRefresh");	// ## Zi: Texture Refresh
 
 	view_listener_t::addMenu(new LLAvatarToggleMyProfile(), "Avatar.ToggleMyProfile");
+	view_listener_t::addMenu(new LLAvatarResetSkeleton(), "Avatar.ResetSkeleton");
+	view_listener_t::addMenu(new LLAvatarResetSkeletonAndAnimations(), "Avatar.ResetSkeletonAndAnimations");
 	enable.add("Avatar.IsMyProfileOpen", boost::bind(&my_profile_visible));
 
 	commit.add("Avatar.OpenMarketplace", boost::bind(&LLWeb::loadURLExternal, gSavedSettings.getString("MarketplaceURL")));

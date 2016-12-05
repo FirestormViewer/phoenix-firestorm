@@ -13,7 +13,27 @@
 		<pie_slice label="Anziehen" name="Wear"/>
 		<pie_slice label="Kopie nehmen" name="Take Copy"/>
 		<pie_menu label="HUD anhängen &gt;" name="Pie Object Attach HUD"/>
-		<pie_menu label="Anhängen &gt;" name="Pie Object Attach"/>
+		<pie_menu label="Anhängen &gt;" name="Pie Object Attach">
+			<pie_menu label="Erw. Skelett &gt;" name="Enhanced Skeleton">
+				<pie_slice label="Rechter Flügel" name="Right Wing"/>
+				<pie_slice label="Leiste" name="Groin"/>
+				<pie_slice label="Schwanzansatz" name="Tail Base"/>
+				<pie_slice label="Schwanzspitze" name="Tail Tip"/>
+				<pie_slice label="Linker Flügel" name="Left Wing"/>
+				<pie_slice label="L Hinterfuß" name="Left Hind Foot"/>
+				<pie_menu label="Mehr &gt;" name="Enhanced Skeleton More">
+					<pie_slice label="Alt. R Ohr" name="Alt Right Ear"/>
+					<pie_slice label="Alt. R Auge" name="Alt Right Eye"/>
+					<pie_slice label="Zunge" name="Tongue"/>
+					<pie_slice label="Alt. L Auge" name="Alt Left Eye"/>
+					<pie_slice label="Alt. L Ohr" name="Alt Left Ear"/>
+					<pie_slice label="L Ringfinger" name="Left Ring Finger"/>
+					<pie_slice label="Kiefer" name="Jaw"/>
+					<pie_slice label="R Ringfinger" name="Right Ring Finger"/>
+				</pie_menu>
+				<pie_slice label="R Hinterfuß" name="Right Hind Foot"/>
+			</pie_menu>
+		</pie_menu>
 		<pie_slice label="Zurückgeben" name="Return..."/>
 		<pie_menu label="Mehr &gt;" name="Object Pie More 2">
 			<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">

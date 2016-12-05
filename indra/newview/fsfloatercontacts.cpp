@@ -198,6 +198,12 @@ BOOL FSFloaterContacts::handleKeyHere(KEY key, MASK mask)
 		return TRUE;
 	}
 
+	if (mask == MASK_CONTROL && key == 'W' && getHost())
+	{
+		getHost()->closeFloater();
+		return TRUE;
+	}
+
 	return LLFloater::handleKeyHere(key, mask);
 }
 

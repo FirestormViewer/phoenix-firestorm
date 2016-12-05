@@ -28,6 +28,9 @@
 	<string name="StartupRequireDriverUpdate">
 		グラフィックを初期化できませんでした。グラフィックドライバを更新してください。
 	</string>
+	<string name="BuildConfiguration">
+		ビルド構成
+	</string>
 	<string name="ProgressRestoring">
 		復元中です...
 	</string>
@@ -1386,6 +1389,9 @@ support@secondlife.com にお問い合わせください。
 	<string name="BodyPartsRightLeg">
 		右脚
 	</string>
+	<string name="BodyPartsEnhancedSkeleton">
+		拡張スケルトン
+	</string>
 	<string name="GraphicsQualityLow">
 		低
 	</string>
@@ -1834,6 +1840,51 @@ support@secondlife.com にお問い合わせください。
 	<string name="Avatar Center">
 		アバターの中央
 	</string>
+	<string name="Left Ring Finger">
+		左薬指
+	</string>
+	<string name="Right Ring Finger">
+		右薬指
+	</string>
+	<string name="Tail Base">
+		しっぽのベース
+	</string>
+	<string name="Tail Tip">
+		しっぽの先
+	</string>
+	<string name="Left Wing">
+		左の翼
+	</string>
+	<string name="Right Wing">
+		右の翼
+	</string>
+	<string name="Jaw">
+		顎
+	</string>
+	<string name="Alt Left Ear">
+		代わりの左耳
+	</string>
+	<string name="Alt Right Ear">
+		代わりの右耳
+	</string>
+	<string name="Alt Left Eye">
+		代わりの左目
+	</string>
+	<string name="Alt Right Eye">
+		代わりの右目
+	</string>
+	<string name="Tongue">
+		舌
+	</string>
+	<string name="Groin">
+		脚の付け根
+	</string>
+	<string name="Left Hind Foot">
+		左後足
+	</string>
+	<string name="Right Hind Foot">
+		右後足
+	</string>
 	<string name="Invalid Attachment">
 		装着先が正しくありません
 	</string>
@@ -2233,11 +2284,11 @@ support@secondlife.com にお問い合わせください。
 	<string name="ATTACH_BELLY">
 		お腹
 	</string>
-	<string name="ATTACH_RPEC">
-		右胸筋
-	</string>
-	<string name="ATTACH_LPEC">
+	<string name="ATTACH_LEFT_PEC">
 		左胸筋
+	</string>
+	<string name="ATTACH_RIGHT_PEC">
+		右胸筋
 	</string>
 	<string name="ATTACH_HUD_CENTER_2">
 		HUD（中央 2）
@@ -2268,6 +2319,51 @@ support@secondlife.com にお問い合わせください。
 	</string>
 	<string name="ATTACH_AVATAR_CENTER">
 		アバターの中央
+	</string>
+	<string name="ATTACH_LHAND_RING1">
+		左薬指
+	</string>
+	<string name="ATTACH_RHAND_RING1">
+		右薬指
+	</string>
+	<string name="ATTACH_TAIL_BASE">
+		しっぽのベース
+	</string>
+	<string name="ATTACH_TAIL_TIP">
+		しっぽの先
+	</string>
+	<string name="ATTACH_LWING">
+		左の翼
+	</string>
+	<string name="ATTACH_RWING">
+		右の翼
+	</string>
+	<string name="ATTACH_FACE_JAW">
+		顎
+	</string>
+	<string name="ATTACH_FACE_LEAR">
+		代わりの左耳
+	</string>
+	<string name="ATTACH_FACE_REAR">
+		代わりの右耳
+	</string>
+	<string name="ATTACH_FACE_LEYE">
+		代わりの左目
+	</string>
+	<string name="ATTACH_FACE_REYE">
+		代わりの右目
+	</string>
+	<string name="ATTACH_FACE_TONGUE">
+		舌
+	</string>
+	<string name="ATTACH_GROIN">
+		脚の付け根
+	</string>
+	<string name="ATTACH_HIND_LFOOT">
+		左後足
+	</string>
+	<string name="ATTACH_HIND_RFOOT">
+		右後足
 	</string>
 	<string name="CursorPos">
 		[LINE] 行目、[COLUMN] 列目
@@ -2355,6 +2451,8 @@ support@secondlife.com にお問い合わせください。
 	<string name="MultiPropertiesTitle">
 		プロパティ
 	</string>
+	
+	<!-- inventory offer -->
 	<string name="InvOfferAnObjectNamed">
 		オブジェクト名
 	</string>
@@ -2376,6 +2474,11 @@ support@secondlife.com にお問い合わせください。
 	<string name="InvOfferDecline">
 		[NAME] からの [DESC] を拒否しました。
 	</string>
+	<string name="InvOfferFrom">からの</string>
+	<string name="InvOfferAutoAcceptObject">[OBJECT_NAME] というオブジェクトがあなたにこの [OBJECT_TYPE] を渡しました：[DESC]</string>
+	<string name="InvOfferAutoAcceptUser">[USER_NAME] があなたにこの [OBJECT_TYPE] を渡しました：[DESC]</string>
+	
+	<!-- group money -->
 	<string name="GroupMoneyTotal">
 		合計
 	</string>
@@ -4272,6 +4375,12 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		オフライン
 	</string>
 	<string name="not_online_msg">
+		ユーザーがオンラインでありません - メッセージは保存され、後で配信されます。
+	</string>
+	<string name="not_online_inventory">
+		ユーザーがオンラインでありません - インベントリが保存されました。
+	</string>
+	<string name="not_online_msg">
 		相手ユーザーはオンラインではありません。メッセージは保存され、後ほど配達されます。
 	</string>
 	<string name="not_online_inventory">
@@ -4402,6 +4511,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="voice_morphing_url">
 		http://secondlife.com/landing/voicemorphing
 	</string>
+	
+	<!-- Financial operations strings -->
 	<string name="paid_you_ldollars">
 		[NAME] は [REASON] のために L$[AMOUNT] を支払いました。
 	</string>
@@ -5888,9 +5999,14 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="InvOfferGroupNoticeName">グループメンバー [NAME]</string>
 	<string name="CallingCardOnlineLabelSuffix">（オンライン）</string>
 	
-	<string name="Pie_av_render_normally">通常</string>
-	<string name="Pie_av_render_never">不完全</string>
-	<string name="Pie_av_render_fully">完全</string>
+	<string name="Pie_av_render_normally">通常表示</string>
+	<string name="Pie_av_render_never">表示しない</string>
+	<string name="Pie_av_render_fully">完全表示</string>
 
 	<string name="Nametag_Complexity_Label">表示の複雑さ: [COMPLEXITY]</string>
+	
+	<string name="font_unknown">不明なフォント</string>
+	<string name="mode_unknown">不明なモード</string>
+	<string name="mode_settings_hybrid.xml">ハイブリッド</string>
+	<string name="mode_settings_text.xml">テキスト</string>
 </strings>

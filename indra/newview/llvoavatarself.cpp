@@ -60,29 +60,26 @@
 #include "llviewertexlayer.h"
 #include "llviewerwearable.h"
 #include "llappearancemgr.h"
-// ## Zi: Pie menu
-#include "piemenu.h"
-#include "pieslice.h"
-// ## Zi: Pie menu
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
-#include "rlvhandler.h"
-#include "rlvlocks.h"
-// [/RLVa:KB]
-//-TT Client LSL Bridge
-#include "fslslbridge.h"
-//-TT
-#include "lggbeammaps.h"
 #include "llmeshrepository.h"
 #include "llvovolume.h"
 #include "llsdutil.h"
 #include "llstartup.h"
 #include "llsdserialize.h"
+#include "llcallstack.h"
 #include "llcorehttputil.h"
+
+// Firestorm includes
+#include "fslslbridge.h"
+#include "lggbeammaps.h"
+#include "piemenu.h"
+#include "pieslice.h"
+#include "pieseparator.h"
 // [RLVa:KB] - Checked: RLVa-2.0.2
 #include "rlvhandler.h"
 #include "rlvhelper.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+
 
 // <FS:Ansariel> [Legacy Bake]
 #ifdef OPENSIM
@@ -228,6 +225,7 @@ bool update_avatar_rez_metrics()
 		return true;
 	
 	gAgentAvatarp->updateAvatarRezMetrics(false);
+
 	return false;
 }
 
@@ -266,7 +264,6 @@ void LLVOAvatarSelf::initInstance()
 	{
 		mDebugBakedTextureTimes[i][0] = -1.0f;
 		mDebugBakedTextureTimes[i][1] = -1.0f;
-		mInitialBakeIDs[i] = LLUUID::null;
 	}
 
 // [RLVa:KB] - Checked: 2010-12-12 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
@@ -393,6 +390,7 @@ BOOL LLVOAvatarSelf::buildSkeletonSelf(const LLAvatarSkeletonInfo *info)
 	F32 aspect = LLViewerCamera::getInstance()->getAspect();
 	LLVector3 scale(1.f, aspect, 1.f);
 	mScreenp->setScale(scale);
+	// SL-315
 	mScreenp->setWorldPosition(LLVector3::zero);
 	// need to update screen agressively when sidebar opens/closes, for example
 	mScreenp->mUpdateXform = TRUE;
@@ -434,6 +432,10 @@ BOOL LLVOAvatarSelf::buildMenus()
 	params.name(params.label);
 	gAttachBodyPartPieMenus[7] = LLUICtrlFactory::create<LLContextMenu> (params);
 
+	params.label(LLTrans::getString("BodyPartsEnhancedSkeleton"));
+	params.name(params.label);
+	gAttachBodyPartPieMenus[8] = LLUICtrlFactory::create<LLContextMenu>(params);
+
 	gDetachBodyPartPieMenus[0] = NULL;
 
 	params.label(LLTrans::getString("BodyPartsRightArm"));
@@ -462,16 +464,21 @@ BOOL LLVOAvatarSelf::buildMenus()
 	params.name(params.label);
 	gDetachBodyPartPieMenus[7] = LLUICtrlFactory::create<LLContextMenu> (params);
 
-// ## Zi: Pie menu
+	params.label(LLTrans::getString("BodyPartsEnhancedSkeleton"));
+	params.name(params.label);
+	gDetachBodyPartPieMenus[8] = LLUICtrlFactory::create<LLContextMenu>(params);
+
+// <FS:Zi> Pie menu
 	//-------------------------------------------------------------------------
 	// build the attach and detach pie menus
 	//-------------------------------------------------------------------------
+	PieMenu::Params pieParams;
+	pieParams.visible(false);
+
 	gPieAttachBodyPartMenus[0] = NULL;
 
-	PieMenu::Params pieParams;
 	pieParams.label(LLTrans::getString("BodyPartsRightArm"));
 	pieParams.name(pieParams.label);
-	pieParams.visible(false);
 	gPieAttachBodyPartMenus[1] = LLUICtrlFactory::create<PieMenu> (pieParams);
 
 	pieParams.label(LLTrans::getString("BodyPartsHead"));
@@ -523,14 +530,13 @@ BOOL LLVOAvatarSelf::buildMenus()
 	pieParams.label(LLTrans::getString("BodyPartsRightLeg"));
 	pieParams.name(pieParams.label);
 	gPieDetachBodyPartMenus[7] = LLUICtrlFactory::create<PieMenu> (pieParams);
-// ## Zi: Pie menu
+// </FS:Zi> Pie menu
 
-	for (S32 i = 0; i < 8; i++)
+	for (S32 i = 0; i < 9; i++)
 	{
 		if (gAttachBodyPartPieMenus[i])
 		{
 			gAttachPieMenu->appendContextSubMenu( gAttachBodyPartPieMenus[i] );
-			gPieAttachMenu->appendContextSubMenu( gPieAttachBodyPartMenus[i] ); // ## Zi: Pie menu
 		}
 		else
 		{
@@ -542,18 +548,15 @@ BOOL LLVOAvatarSelf::buildMenus()
 				if (attachment && attachment->getGroup() == i)
 				{
 					LLMenuItemCallGL::Params item_params;
-					PieSlice::Params slice_params;	// ## Zi: Pie menu
 
 					std::string sub_piemenu_name = attachment->getName();
 					if (LLTrans::getString(sub_piemenu_name) != "")
 					{
 						item_params.label = LLTrans::getString(sub_piemenu_name);
-						slice_params.label = LLTrans::getString(sub_piemenu_name);	// ## Zi: Pie menu
 					}
 					else
 					{
 						item_params.label = sub_piemenu_name;
-						slice_params.label = sub_piemenu_name;	// ## Zi: Pie menu
 					}
 					item_params.name =(item_params.label );
 					item_params.on_click.function_name = "Object.AttachToAvatar";
@@ -565,17 +568,6 @@ BOOL LLVOAvatarSelf::buildMenus()
 
 					gAttachPieMenu->addChild(item);
 
-					// ## Zi: Pie menu
-					slice_params.name =(slice_params.label );
-					slice_params.on_click.function_name = "Object.AttachToAvatar";
-					slice_params.on_click.parameter = iter->first;
-					slice_params.on_enable.function_name = "Object.EnableWear";
-					slice_params.on_enable.parameter = iter->first;
-					PieSlice* slice = LLUICtrlFactory::create<PieSlice>(slice_params);
-
-					gPieAttachMenu->addChild(slice);
-					// ## Zi: Pie menu
-
 					break;
 
 				}
@@ -585,7 +577,6 @@ BOOL LLVOAvatarSelf::buildMenus()
 		if (gDetachBodyPartPieMenus[i])
 		{
 			gDetachPieMenu->appendContextSubMenu( gDetachBodyPartPieMenus[i] );
-			gPieDetachMenu->appendContextSubMenu( gPieDetachBodyPartMenus[i] );	// ## Zi: Pie menu
 		}
 		else
 		{
@@ -597,17 +588,14 @@ BOOL LLVOAvatarSelf::buildMenus()
 				if (attachment && attachment->getGroup() == i)
 				{
 					LLMenuItemCallGL::Params item_params;
-					PieSlice::Params slice_params;	// ## Zi: Pie menu
 					std::string sub_piemenu_name = attachment->getName();
 					if (LLTrans::getString(sub_piemenu_name) != "")
 					{
 						item_params.label = LLTrans::getString(sub_piemenu_name);
-						slice_params.label = LLTrans::getString(sub_piemenu_name);	// ## Zi: Pie menu
 					}
 					else
 					{
 						item_params.label = sub_piemenu_name;
-						slice_params.label = sub_piemenu_name;	// ## Zi: Pie menu
 					}
 					item_params.name =(item_params.label );
 					item_params.on_click.function_name = "Attachment.DetachFromPoint";
@@ -618,8 +606,97 @@ BOOL LLVOAvatarSelf::buildMenus()
 
 					gDetachPieMenu->addChild(item);
 
-					// ## Zi: Pie menu
-					slice_params.name =(slice_params.label );
+					break;
+				}
+			}
+		}
+	}
+
+	// <FS:Zi> Pie menu
+	for (S32 i = 0; i < PIE_MAX_SLICES; i++)
+	{
+		// Skip former slices of left and right hand that have been moved into the
+		// corresponding Left/Right arm groups;
+		// 0 is Bento enhanced skeleton now, manually added in menu_pie_avatar_self.xml
+		// and menu_pie_object.xml
+		if (i == 0)
+		{
+			continue;
+		}
+		else if (i == 4)
+		{
+			PieSeparator::Params pie_sep_params;
+			pieParams.name("AttachSlot4Separator");
+			gPieAttachMenu->addChild(LLUICtrlFactory::create<PieSeparator>(pie_sep_params));
+			pieParams.name("DetachSlot4Separator");
+			gPieDetachMenu->addChild(LLUICtrlFactory::create<PieSeparator>(pie_sep_params));
+			continue;
+		}
+
+		if (gPieAttachBodyPartMenus[i])
+		{
+			gPieAttachMenu->appendContextSubMenu(gPieAttachBodyPartMenus[i]);
+		}
+		else
+		{
+			for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
+				 iter != mAttachmentPoints.end();
+				 ++iter)
+			{
+				LLViewerJointAttachment* attachment = iter->second;
+				if (attachment && attachment->getGroup() == i)
+				{
+					PieSlice::Params slice_params;
+
+					std::string sub_piemenu_name = attachment->getName();
+					if (LLTrans::getString(sub_piemenu_name) != "")
+					{
+						slice_params.label = LLTrans::getString(sub_piemenu_name);
+					}
+					else
+					{
+						slice_params.label = sub_piemenu_name;
+					}
+
+					slice_params.name = (slice_params.label);
+					slice_params.on_click.function_name = "Object.AttachToAvatar";
+					slice_params.on_click.parameter = iter->first;
+					slice_params.on_enable.function_name = "Object.EnableWear";
+					slice_params.on_enable.parameter = iter->first;
+					PieSlice* slice = LLUICtrlFactory::create<PieSlice>(slice_params);
+
+					gPieAttachMenu->addChild(slice);
+
+					break;
+				}
+			}
+		}
+
+		if (gPieDetachBodyPartMenus[i])
+		{
+			gPieDetachMenu->appendContextSubMenu(gPieDetachBodyPartMenus[i]);
+		}
+		else
+		{
+			for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
+				 iter != mAttachmentPoints.end();
+				 ++iter)
+			{
+				LLViewerJointAttachment* attachment = iter->second;
+				if (attachment && attachment->getGroup() == i)
+				{
+					PieSlice::Params slice_params;
+					std::string sub_piemenu_name = attachment->getName();
+					if (LLTrans::getString(sub_piemenu_name) != "")
+					{
+						slice_params.label = LLTrans::getString(sub_piemenu_name);
+					}
+					else
+					{
+						slice_params.label = sub_piemenu_name;
+					}
+
+					slice_params.name = (slice_params.label);
 					slice_params.on_click.function_name = "Attachment.DetachFromPoint";
 					slice_params.on_click.parameter = iter->first;
 					slice_params.on_enable.function_name = "Attachment.PointFilled";
@@ -627,13 +704,13 @@ BOOL LLVOAvatarSelf::buildMenus()
 					PieSlice* slice = LLUICtrlFactory::create<PieSlice>(slice_params);
 
 					gPieDetachMenu->addChild(slice);
-					// ## Zi: Pie menu
 
 					break;
 				}
 			}
 		}
 	}
+	// </FS:Zi> Pie menu
 
 	// add screen attachments
 	for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
@@ -641,20 +718,20 @@ BOOL LLVOAvatarSelf::buildMenus()
 		 ++iter)
 	{
 		LLViewerJointAttachment* attachment = iter->second;
-		if (attachment && attachment->getGroup() == 8)
+		if (attachment && attachment->getGroup() == 9)
 		{
 			LLMenuItemCallGL::Params item_params;
-			PieSlice::Params slice_params;	// ## Zi: Pie menu
+			PieSlice::Params slice_params;	// <FS:Zi> Pie menu
 			std::string sub_piemenu_name = attachment->getName();
 			if (LLTrans::getString(sub_piemenu_name) != "")
 			{
 				item_params.label = LLTrans::getString(sub_piemenu_name);
-				slice_params.label = LLTrans::getString(sub_piemenu_name);	// ## Zi: Pie menu
+				slice_params.label = LLTrans::getString(sub_piemenu_name);	// <FS:Zi> Pie menu
 			}
 			else
 			{
 				item_params.label = sub_piemenu_name;
-				slice_params.label = sub_piemenu_name;	// ## Zi: Pie menu
+				slice_params.label = sub_piemenu_name;	// <FS:Zi> Pie menu
 			}
 			item_params.name =(item_params.label );
 			item_params.on_click.function_name = "Object.AttachToAvatar";
@@ -672,7 +749,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 			item = LLUICtrlFactory::create<LLMenuItemCallGL>(item_params);
 			gDetachScreenPieMenu->addChild(item);
 
-			// ## Zi: Pie menu
+			// <FS:Zi> Pie menu
 			slice_params.name =(slice_params.label );
 			slice_params.on_click.function_name = "Object.AttachToAvatar";
 			slice_params.on_click.parameter = iter->first;
@@ -687,7 +764,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 			slice_params.on_enable.parameter = iter->first;
 			slice = LLUICtrlFactory::create<PieSlice>(slice_params);
 			gPieDetachScreenMenu->addChild(slice);
-			// ## Zi: Pie menu
+			// </FS:Zi> Pie menu
 		}
 	}
 
@@ -749,7 +826,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 		}
 	}
 
-	for (S32 group = 0; group < 8; group++)
+	for (S32 group = 0; group < 9; group++)
 	{
 		// skip over groups that don't have sub menus
 		if (!gAttachBodyPartPieMenus[group] || !gDetachBodyPartPieMenus[group])
@@ -757,7 +834,8 @@ BOOL LLVOAvatarSelf::buildMenus()
 			continue;
 		}
 
-		std::multimap<S32, S32> attachment_pie_menu_map;		// ## Zi: Pie menu
+		std::multimap<S32, S32> attachment_pie_menu_map;
+
 		// gather up all attachment points assigned to this group, and throw into map sorted by pie slice number
 		for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
 			 iter != mAttachmentPoints.end();
@@ -806,8 +884,51 @@ BOOL LLVOAvatarSelf::buildMenus()
 				item_params.on_enable.parameter = attach_index;
 				item = LLUICtrlFactory::create<LLMenuItemCallGL>(item_params);
 				gDetachBodyPartPieMenus[group]->addChild(item);
+			}
+		}
+	}
 
-				// ## Zi: Pie menu
+	// <FS:Zi> Pie menu
+	for (S32 group = 0; group < PIE_MAX_SLICES; group++)
+	{
+		// skip over groups that don't have sub menus
+		if (!gPieAttachBodyPartMenus[group] || !gPieDetachBodyPartMenus[group])
+		{
+			continue;
+		}
+
+		std::multimap<S32, S32> attachment_pie_menu_map;
+
+		// gather up all attachment points assigned to this group, and throw into map sorted by pie slice number
+		for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
+			 iter != mAttachmentPoints.end();
+			 ++iter)
+		{
+			LLViewerJointAttachment* attachment = iter->second;
+			if(attachment && attachment->getGroup() == group)
+			{
+				// use multimap to provide a partial order off of the pie slice key
+				S32 pie_index = attachment->getPieSlice();
+				attachment_pie_menu_map.insert(std::make_pair(pie_index, iter->first));
+			}
+		}
+
+		// add in requested order to pie menu, inserting separators as necessary
+		for (std::multimap<S32, S32>::iterator attach_it = attachment_pie_menu_map.begin();
+			 attach_it != attachment_pie_menu_map.end(); ++attach_it)
+		{
+			S32 attach_index = attach_it->second;
+
+			// <FS:Ansariel> Skip bridge attachment spot
+			if (attach_index == 127)
+			{
+				continue;
+			}
+			// </FS:Ansariel>
+
+			LLViewerJointAttachment* attachment = get_if_there(mAttachmentPoints, attach_index, (LLViewerJointAttachment*)NULL);
+			if (attachment)
+			{
 				PieSlice::Params slice_params;
 				slice_params.name = attachment->getName();
 				slice_params.label = LLTrans::getString(attachment->getName());
@@ -825,10 +946,11 @@ BOOL LLVOAvatarSelf::buildMenus()
 				slice_params.on_enable.parameter = attach_index;
 				slice = LLUICtrlFactory::create<PieSlice>(slice_params);
 				gPieDetachBodyPartMenus[group]->addChild(slice);
-				// ## Zi: Pie menu
 			}
 		}
 	}
+	// </FS:Zi> Pie menu
+
 	return TRUE;
 }
 
@@ -895,16 +1017,29 @@ void LLVOAvatarSelf::idleUpdate(LLAgent &agent, const F64 &time)
 LLJoint *LLVOAvatarSelf::getJoint( const JointKey &name )
 // </FS:ND>
 {
-	if (mScreenp)
+    LLJoint *jointp = NULL;
+    jointp = LLVOAvatar::getJoint(name);
+	if (!jointp && mScreenp)
 	{
-//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-//		LLJoint* jointp = mScreenp->findJoint( name );
-		LLJoint* jointp = mScreenp->findJoint( name.mName );
-// </FS:ND>
-		if (jointp) return jointp;
+		//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+		//jointp = mScreenp->findJoint(name);
+		jointp = mScreenp->findJoint(name.mName);
+		// </FS:ND>
+        if (jointp)
+        {
+            //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+            //mJointMap[name] = jointp;
+            mJointMap[name.mKey] = jointp;
+            // </FS:ND>
+        }
 	}
-	return LLVOAvatar::getJoint(name);
+    if (jointp && jointp != mScreenp && jointp != mRoot)
+    {
+        llassert(LLVOAvatar::getJoint((S32)jointp->getJointNum())==jointp);
+    }
+    return jointp;
 }
+
 // virtual
 // <FS:Ansariel> [Legacy Bake]
 //BOOL LLVOAvatarSelf::setVisualParamWeight(const LLVisualParam *which_param, F32 weight)
@@ -3319,44 +3454,6 @@ U32  LLVOAvatarSelf::processUpdateMessage(LLMessageSystem *mesgsys,
 {
 	U32 retval = LLVOAvatar::processUpdateMessage(mesgsys,user_data,block_num,update_type,dp);
 
-#if 0
-	// DRANO - it's not clear this does anything useful. If we wait
-	// until an appearance message has been received, we already have
-	// the texture ids. If we don't wait, we don't yet know where to
-	// look for baked textures, because we haven't received the
-	// appearance version data from the appearance message. This looks
-	// like an old optimization that's incompatible with server-side
-	// texture baking.
-	
-	// FIXME DRANO - skipping in the case of !mFirstAppearanceMessageReceived prevents us from trying to
-	// load textures before we know where they come from (ie, from baking service or not);
-	// unknown impact on performance.
-	if (mInitialBakesLoaded == false && retval == 0x0 && mFirstAppearanceMessageReceived)
-	{
-		// call update textures to force the images to be created
-		updateMeshTextures();
-
-		// unpack the texture UUIDs to the texture slots
-		if(mesgsys != NULL)
-		{
-		retval = unpackTEMessage(mesgsys, _PREHASH_ObjectData, (S32) block_num);
-		}
-
-		// need to trigger a few operations to get the avatar to use the new bakes
-		for (U32 i = 0; i < mBakedTextureDatas.size(); i++)
-		{
-			const LLAvatarAppearanceDefines::ETextureIndex te = mBakedTextureDatas[i].mTextureIndex;
-			LLUUID texture_id = getTEImage(te)->getID();
-			setNewBakedTexture(te, texture_id);
-			mInitialBakeIDs[i] = texture_id;
-		}
-
-		onFirstTEMessageReceived();
-
-		mInitialBakesLoaded = true;
-	}
-#endif
-
 	return retval;
 }
 
@@ -3540,18 +3637,6 @@ void LLVOAvatarSelf::setCachedBakedTexture( ETextureIndex te, const LLUUID& uuid
 		LLViewerTexLayerSet *layerset = getTexLayerSet(i);
 		if ( mBakedTextureDatas[i].mTextureIndex == te && layerset)
 		{
-			if (mInitialBakeIDs[i] != LLUUID::null)
-			{
-				if (mInitialBakeIDs[i] == uuid)
-				{
-					LL_INFOS() << "baked texture correctly loaded at login! " << i << LL_ENDL;
-				}
-				else
-				{
-					LL_WARNS() << "baked texture does not match id loaded at login!" << i << LL_ENDL;
-				}
-				mInitialBakeIDs[i] = LLUUID::null;
-			}
 			layerset->cancelUpload();
 		}
 	}
