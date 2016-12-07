@@ -613,28 +613,10 @@ void RlvUtil::sendIMMessage(const LLUUID& idRecipient, const std::string& strMsg
 	std::string strAgentName;
 	LLAgentUI::buildFullname(strAgentName);
 
-	std::string::size_type lenMsg = strMsg.length(), lenIt = 0;
-
-	const char* pstrIt = strMsg.c_str(); std::string strTemp;
-	while (lenIt < lenMsg)
+	std::list<std::string> msgList;
+	utf8str_split(msgList, strMsg, MAX_MSG_STR_LEN, chSplit);
+	for (const std::string& strMsg : msgList)
 	{
-		if (lenIt + MAX_MSG_STR_LEN < lenMsg)
-		{
-			// Find the last split character
-			const char* pstrTemp = pstrIt + MAX_MSG_STR_LEN;
-			while ( (pstrTemp > pstrIt) && (*pstrTemp != chSplit) )
-				pstrTemp--;
-
-			if (pstrTemp > pstrIt)
-				strTemp = strMsg.substr(lenIt, pstrTemp - pstrIt);
-			else
-				strTemp = utf8str_substr(strMsg, lenIt, MAX_MSG_STR_LEN);
-		}
-		else
-		{
-			strTemp = strMsg.substr(lenIt, std::string::npos);
-		}
-
 		pack_instant_message(
 			gMessageSystem,
 			gAgent.getID(),
@@ -642,16 +624,11 @@ void RlvUtil::sendIMMessage(const LLUUID& idRecipient, const std::string& strMsg
 			gAgent.getSessionID(),
 			idRecipient,
 			strAgentName.c_str(),
-			strTemp.c_str(),
-			( (!pBuddyInfo) || (pBuddyInfo->isOnline()) ) ? IM_ONLINE : IM_OFFLINE,
+			strMsg.c_str(),
+			((!pBuddyInfo) || (pBuddyInfo->isOnline())) ? IM_ONLINE : IM_OFFLINE,
 			IM_NOTHING_SPECIAL,
 			idSession);
 		gAgent.sendReliableMessage();
-
-		lenIt += strTemp.length();
-		pstrIt = strMsg.c_str() + lenIt;
-		if (*pstrIt == chSplit)
-			lenIt++;
 	}
 }
 
