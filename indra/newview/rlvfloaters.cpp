@@ -260,7 +260,7 @@ const std::string RlvFloaterBehaviours::getFormattedBehaviourString()
 		}
 	}
 
-	return strRestrictions.str() + strRestrictions.str() + strRestrictions.str() + strRestrictions.str() + strRestrictions.str();
+	return strRestrictions.str();
 }
 
 // Checked: 2011-05-26 (RLVa-1.3.1c) | Added: RLVa-1.3.1c
