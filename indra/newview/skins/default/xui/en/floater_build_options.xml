@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- height="185"
+ height="205"
  layout="topleft"
  name="build options floater"
  help_topic="build_options_floater"
@@ -54,6 +54,22 @@
      name="DecimalPrecision"
      top_pad="0"
      width="242" />
+    <spinner
+     control_name="RotationStep"
+     decimal_digits="2"
+     follows="left|top"
+     height="23"
+     increment="0.01"
+     label="Angle (degrees)"
+     label_width="172"
+     layout="topleft"
+     left_delta="0"
+     max_val="359.99"
+     min_val="0.01"
+     name="RotationStep"
+     top_pad="0"
+     width="242"
+	 tool_tip="All rotations via rotation tool are constrained to multiples of this unit [Default: 1.0]"/>
     <check_box
      control_name="GridSubUnit"
      height="16"
