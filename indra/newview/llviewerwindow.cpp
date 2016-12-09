@@ -1862,6 +1862,9 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	}
 	// <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
 	//if (p.first_run || gSavedSettings.getF32("LastSystemUIScaleFactor") != system_scale_factor)
+#if !LL_WINDOWS
+	gSavedSettings.setBOOL("FSEnableAutomaticUIScaling", FALSE); // Always disable on non-Windows systems for now
+#endif
 	if (p.first_run || (gSavedSettings.getBOOL("FSEnableAutomaticUIScaling") && gSavedSettings.getF32("LastSystemUIScaleFactor") != system_scale_factor))
 	// </FS:Ansariel>
 	{
