@@ -161,6 +161,11 @@ Settings groups to be restored (backup will always save all):
             <column name="restore_global_files_label">Quick Preferences</column>
             <column name="value">quick_preferences.xml</column>
         </row>
+        <row name="restore_global_row_favorites">
+            <column type="checkbox" name="restore_global_files_check" value="true" />
+            <column name="restore_global_files_label">Favorites</column>
+            <column name="value">stored_favorites.xml</column>
+        </row>
     </scroll_list>
 
     </layout_panel>
@@ -202,11 +207,6 @@ Settings groups to be restored (backup will always save all):
             <column type="checkbox" name="restore_per_account_files_check" value="true" />
             <column name="restore_per_account_files_label">Inventory Filters</column>
             <column name="value">filters.xml</column>
-        </row>
-        <row name="restore_per_account_row_favsort">
-            <column type="checkbox" name="restore_per_account_files_check" value="true" />
-            <column name="restore_per_account_files_label">Favorites Sort Order</column>
-            <column name="value">landmarks_sorting.xml</column>
         </row>
         <row name="restore_per_account_row_medialists">
             <column type="checkbox" name="restore_per_account_files_check" value="true" />
