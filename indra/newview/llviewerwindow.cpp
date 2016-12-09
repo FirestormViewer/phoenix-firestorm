@@ -1865,7 +1865,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 #if !LL_WINDOWS
 	gSavedSettings.setBOOL("FSEnableAutomaticUIScaling", FALSE); // Always disable on non-Windows systems for now
 #endif
-	if (p.first_run || (gSavedSettings.getBOOL("FSEnableAutomaticUIScaling") && gSavedSettings.getF32("LastSystemUIScaleFactor") != system_scale_factor))
+	if (gSavedSettings.getBOOL("FSEnableAutomaticUIScaling") && (p.first_run || gSavedSettings.getF32("LastSystemUIScaleFactor") != system_scale_factor))
 	// </FS:Ansariel>
 	{
 		mSystemUIScaleFactorChanged = !p.first_run;
