@@ -154,24 +154,28 @@ void LLFloaterLagMeter::determineClient()
 	if (!gFocusMgr.getAppHasFocus())
 	{
 		mClientButton->setImageUnselected(LLUI::getUIImage(LAG_GOOD_IMAGE_NAME));
+		mClientButton->setImagePressed(LLUI::getUIImage(LAG_GOOD_IMAGE_NAME)); // <FS:Ansariel> FIRE-20484: Wrong texture shown on click
 		mClientText->setText( getString("client_frame_time_window_bg_msg", mStringArgs) );
 		mClientCause->setText( LLStringUtil::null );
 	}
 	else if(client_frame_time >= mClientFrameTimeCritical)
 	{
 		mClientButton->setImageUnselected(LLUI::getUIImage(LAG_CRITICAL_IMAGE_NAME));
+		mClientButton->setImagePressed(LLUI::getUIImage(LAG_CRITICAL_IMAGE_NAME)); // <FS:Ansariel> FIRE-20484: Wrong texture shown on click
 		mClientText->setText( getString("client_frame_time_critical_msg", mStringArgs) );
 		find_cause = true;
 	}
 	else if(client_frame_time >= mClientFrameTimeWarning)
 	{
 		mClientButton->setImageUnselected(LLUI::getUIImage(LAG_WARNING_IMAGE_NAME));
+		mClientButton->setImagePressed(LLUI::getUIImage(LAG_WARNING_IMAGE_NAME)); // <FS:Ansariel> FIRE-20484: Wrong texture shown on click
 		mClientText->setText( getString("client_frame_time_warning_msg", mStringArgs) );
 		find_cause = true;
 	}
 	else
 	{
 		mClientButton->setImageUnselected(LLUI::getUIImage(LAG_GOOD_IMAGE_NAME));
+		mClientButton->setImagePressed(LLUI::getUIImage(LAG_GOOD_IMAGE_NAME)); // <FS:Ansariel> FIRE-20484: Wrong texture shown on click
 		mClientText->setText( getString("client_frame_time_normal_msg", mStringArgs) );
 		mClientCause->setText( LLStringUtil::null );
 	}	
@@ -214,12 +218,14 @@ void LLFloaterLagMeter::determineNetwork()
 	if(packet_loss >= mNetworkPacketLossCritical)
 	{
 		mNetworkButton->setImageUnselected(LLUI::getUIImage(LAG_CRITICAL_IMAGE_NAME));
+		mNetworkButton->setImagePressed(LLUI::getUIImage(LAG_CRITICAL_IMAGE_NAME)); // <FS:Ansariel> FIRE-20484: Wrong texture shown on click
 		mNetworkText->setText( getString("network_packet_loss_critical_msg", mStringArgs) );
 		find_cause_loss = true;
 	}
 	else if(ping_time >= mNetworkPingCritical)
 	{
 		mNetworkButton->setImageUnselected(LLUI::getUIImage(LAG_CRITICAL_IMAGE_NAME));
+		mNetworkButton->setImagePressed(LLUI::getUIImage(LAG_CRITICAL_IMAGE_NAME)); // <FS:Ansariel> FIRE-20484: Wrong texture shown on click
 		if (client_frame_time < mNetworkPingCritical)
 		{
 			mNetworkText->setText( getString("network_ping_critical_msg", mStringArgs) );
@@ -229,12 +235,14 @@ void LLFloaterLagMeter::determineNetwork()
 	else if(packet_loss >= mNetworkPacketLossWarning)
 	{
 		mNetworkButton->setImageUnselected(LLUI::getUIImage(LAG_WARNING_IMAGE_NAME));
+		mNetworkButton->setImagePressed(LLUI::getUIImage(LAG_WARNING_IMAGE_NAME)); // <FS:Ansariel> FIRE-20484: Wrong texture shown on click
 		mNetworkText->setText( getString("network_packet_loss_warning_msg", mStringArgs) );
 		find_cause_loss = true;
 	}
 	else if(ping_time >= mNetworkPingWarning)
 	{
 		mNetworkButton->setImageUnselected(LLUI::getUIImage(LAG_WARNING_IMAGE_NAME));
+		mNetworkButton->setImagePressed(LLUI::getUIImage(LAG_WARNING_IMAGE_NAME)); // <FS:Ansariel> FIRE-20484: Wrong texture shown on click
 		if (client_frame_time < mNetworkPingWarning)
 		{
 			mNetworkText->setText( getString("network_ping_warning_msg", mStringArgs) );
@@ -244,6 +252,7 @@ void LLFloaterLagMeter::determineNetwork()
 	else
 	{
 		mNetworkButton->setImageUnselected(LLUI::getUIImage(LAG_GOOD_IMAGE_NAME));
+		mNetworkButton->setImagePressed(LLUI::getUIImage(LAG_GOOD_IMAGE_NAME)); // <FS:Ansariel> FIRE-20484: Wrong texture shown on click
 		mNetworkText->setText( getString("network_performance_normal_msg", mStringArgs) );
 	}
 
@@ -274,18 +283,21 @@ void LLFloaterLagMeter::determineServer()
 	if(sim_frame_time >= mServerFrameTimeCritical)
 	{
 		mServerButton->setImageUnselected(LLUI::getUIImage(LAG_CRITICAL_IMAGE_NAME));
+		mServerButton->setImagePressed(LLUI::getUIImage(LAG_CRITICAL_IMAGE_NAME)); // <FS:Ansariel> FIRE-20484: Wrong texture shown on click
 		mServerText->setText( getString("server_frame_time_critical_msg", mStringArgs) );
 		find_cause = true;
 	}
 	else if(sim_frame_time >= mServerFrameTimeWarning)
 	{
 		mServerButton->setImageUnselected(LLUI::getUIImage(LAG_WARNING_IMAGE_NAME));
+		mServerButton->setImagePressed(LLUI::getUIImage(LAG_WARNING_IMAGE_NAME)); // <FS:Ansariel> FIRE-20484: Wrong texture shown on click
 		mServerText->setText( getString("server_frame_time_warning_msg", mStringArgs) );
 		find_cause = true;
 	}
 	else
 	{
 		mServerButton->setImageUnselected(LLUI::getUIImage(LAG_GOOD_IMAGE_NAME));
+		mServerButton->setImagePressed(LLUI::getUIImage(LAG_GOOD_IMAGE_NAME)); // <FS:Ansariel> FIRE-20484: Wrong texture shown on click
 		mServerText->setText( getString("server_frame_time_normal_msg", mStringArgs) );
 		mServerCause->setText( LLStringUtil::null );
 	}	
