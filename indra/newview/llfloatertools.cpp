@@ -1435,7 +1435,10 @@ bool LLFloaterTools::selectedMediaEditable()
 		
 		if ( ( owner_mask_on & PERM_MODIFY ) ||
 			( group_mask_on & PERM_MODIFY ) || 
-			( group_mask_on & PERM_MODIFY ) )
+			// <FS> Copy & paste error
+			//( group_mask_on & PERM_MODIFY ) )
+			( everyone_mask_on & PERM_MODIFY ) )
+			// </FS>
 		{
 			selected_Media_editable = true;
 		}
