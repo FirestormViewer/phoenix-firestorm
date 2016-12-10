@@ -5298,7 +5298,7 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 					// <FS:Ansariel> FIRE-15667: 24bit depth maps
 					else if (type == LLSnapshotModel::SNAPSHOT_TYPE_DEPTH24)
 					{
-						LLPointer<LLImageRaw> depth_line_buffer = new LLImageRaw(read_width, 1, sizeof(GL_FLOAT)); // need to store floating point values
+						LLPointer<LLImageRaw> depth_line_buffer = new LLImageRaw(read_width, 1, sizeof(GLfloat)); // need to store floating point values
 						glReadPixels(
 									 subimage_x_offset, out_y + subimage_y_offset,
 									 read_width, 1,
@@ -5329,7 +5329,10 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 					// </FS:Ansariel>
 					else // LLSnapshotModel::SNAPSHOT_TYPE_DEPTH
 					{
-						LLPointer<LLImageRaw> depth_line_buffer = new LLImageRaw(read_width, 1, sizeof(GL_FLOAT)); // need to store floating point values
+						// <FS> Fix buffer creation using the wrong type
+						//LLPointer<LLImageRaw> depth_line_buffer = new LLImageRaw(read_width, 1, sizeof(GL_FLOAT)); // need to store floating point values
+						LLPointer<LLImageRaw> depth_line_buffer = new LLImageRaw(read_width, 1, sizeof(GLfloat)); // need to store floating point values
+						// </FS>
 						glReadPixels(
 									 subimage_x_offset, out_y + subimage_y_offset,
 									 read_width, 1,
