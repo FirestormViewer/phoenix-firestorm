@@ -3103,7 +3103,10 @@ void LLViewerObject::processTaskInvFile(void** user_data, S32 error_code, LLExtS
 				LLViewerInventoryItem* item = dynamic_cast<LLViewerInventoryItem*>(it->get());
 				if(item && item->getType() != LLAssetType::AT_CATEGORY)
 				{
-					std::list<LLUUID>::iterator id_it = std::find(pending_lst.begin(), pending_lst.begin(), item->getAssetUUID());
+					// <FS> Copy & paste error
+					//std::list<LLUUID>::iterator id_it = std::find(pending_lst.begin(), pending_lst.begin(), item->getAssetUUID());
+					std::list<LLUUID>::iterator id_it = std::find(pending_lst.begin(), pending_lst.end(), item->getAssetUUID());
+					// </FS>
 					if (id_it != pending_lst.end())
 					{
 						pending_lst.erase(id_it);
