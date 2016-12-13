@@ -243,6 +243,7 @@ Function un.onInit
     ${If} ${RunningX64}
 	${AndIf} ${FS64BIT} == "1"
        ${DisableX64FSRedirection}
+       SetRegView 64
 	${EndIf}
 
 # Read language from registry and set for uninstaller. Key will be removed on successful uninstall
