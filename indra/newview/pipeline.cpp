@@ -11733,7 +11733,7 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 
 	avatar->setImpostorDim(tdim);
 
-	LLVOAvatar::sUseImpostors = true; // @TODO ???
+	LLVOAvatar::sUseImpostors = (0 != LLVOAvatar::sMaxNonImpostors);
 	sUseOcclusion = occlusion;
 	sReflectionRender = FALSE;
 	sImpostorRender = FALSE;
