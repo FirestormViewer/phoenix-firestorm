@@ -3,6 +3,7 @@
 	<spinner label="Einheiten (m)" name="GridResolution"/>
 	<spinner label="Rastergröße (m)" name="GridDrawSize"/>
 	<spinner label="Nachkommastellen" name="DecimalPrecision"/>
+	<spinner label="Winkel (Grad)" name="RotationStep" tool_tip="Alle Drehungen durch das Rotations-Werkzeug sind Vielfache dieses Wertes (Standard: 1.0)"/>
 	<check_box label="An Untereinheiten ausrichten" name="GridSubUnit"/>
 	<check_box label="Überschneidungen anzeigen" name="GridCrossSection"/>
 	<text name="Snap on">

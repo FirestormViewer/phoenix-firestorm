@@ -60,6 +60,7 @@
 #ifdef OPENSIM
 #include "llviewernetwork.h"
 #endif // OPENSIM
+#include "fspanelclassified.h"
 
 const S32 MINIMUM_PRICE_FOR_LISTING = 50;	// L$
 
@@ -253,6 +254,14 @@ void LLPanelClassifiedInfo::handleSearchStatResponse(LLUUID classifiedId, LLSD r
         map + search_map,
         profile + search_profile,
         true);
+
+    // <FS:Ansariel> FIRE-8787: Also update legacy profiles
+    FSPanelClassifiedInfo::setClickThrough(classifiedId,
+        teleport + search_teleport,
+        map + search_map,
+        profile + search_profile,
+        true);
+    // </FS:Ansariel>
 }
 
 void LLPanelClassifiedInfo::processProperties(void* data, EAvatarProcessorType type)

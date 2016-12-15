@@ -4218,9 +4218,6 @@ Spróbuj ponownie za minutę.
 	<notification name="AttachmentHasTooMuchInventory">
 		Twoje dodatki zawierają w sobie zbyt dużo obiektów, aby dodać więcej.
 	</notification>
-	<notification name="IllegalAttachment">
-		Dodatek chciał się doczepić do punktu, jaki nie istnieje na awatarze. Został on zamiast tego dołączony do klatki piersiowej.
-	</notification>
 	<notification name="TooManyScripts">
 		Za dużo skryptów.
 	</notification>
@@ -4402,6 +4399,9 @@ Spróbuj ponownie za minutę.
 	</notification>
 	<notification name="CantAttachObjectBeingRemoved">
 		Nie możesz odłączyć dodatku, ponieważ jest on już odłączony.
+	</notification>
+	<notification name="IllegalAttachment">
+		Dodatek chciał się doczepić do punktu, jaki nie istnieje na awatarze. Został on zamiast tego dołączony do klatki piersiowej.
 	</notification>
 	<notification name="CantDropItemTrialUser">
 		Nie możesz tutaj upuszczać obiektów; spróbuj w strefie Darmowej Próby.

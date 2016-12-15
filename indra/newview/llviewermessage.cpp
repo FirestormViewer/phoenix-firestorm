@@ -7318,7 +7318,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 
 	// <FS:Ansariel> TipTracker Support
 	FSMoneyTracker* tipTracker = LLFloaterReg::getTypedInstance<FSMoneyTracker>("money_tracker");
-	if ((tipTracker->isShown() || tipTracker->isMinimized()) || gSavedSettings.getBOOL("FSAlwaysTrackPayments"))
+	if (success && ((tipTracker->isShown() || tipTracker->isMinimized()) || gSavedSettings.getBOOL("FSAlwaysTrackPayments")))
 	{
 		tipTracker->addPayment(name_id, is_name_group, amount, !you_paid_someone);
 	}

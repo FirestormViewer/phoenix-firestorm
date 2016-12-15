@@ -38,6 +38,7 @@
 			<menu_item_call label="アニメーションを停止してパーミッションを破棄する" name="Stop Animating My Avatar With Revoke" />
 			<menu_item_call label="アバターのシェイプを回復" name="undeform_avatar" />
 			<menu_item_call label="テクスチャのリベークをする" name="Rebake Texture"/>
+			<menu_item_call label="アタッチメントを更新" name="Refresh Attachments" />
 			<menu_item_call label="アバターを男性のデフォルトにリセット" name="ResetDefaultAvM"/>
 			<menu_item_call label="アバターを女性のデフォルトにリセット" name="ResetDefaultAvF"/>
 			<menu_item_check label="アバター表示の複雑さ情報を表示" name="Avatar Draw Info" />
@@ -207,6 +208,7 @@
 		<menu_item_call label="アニメーションエクスプローラ" name="Animation Explorer" />
 		<menu_item_call label="非表示アイテムリスト" name="asset_blacklist"/>
 		<menu_item_call label="アバターの表示設定" name="Avatar Render Settings" />
+		<menu_item_check label="フレンドのみ表示" name="Render Friends Only" />
 	</menu>
 	
 	<!-- 製作メニュー -->
@@ -223,11 +225,11 @@
 		<menu_item_call label="リンク" name="Link"/>
 		<menu_item_call label="リンクを外す" name="Unlink"/>
 		<menu_item_check label="リンクした部分を編集" name="Edit Linked Parts"/>
-		<menu label="リンクした部分を選択する" name="Select Linked Parts">
-			<menu_item_call label="次の部分を選択する" name="Select Next Part"/>
-			<menu_item_call label="前回の部分を選択する" name="Select Previous Part"/>
-			<menu_item_call label="次の部分を含める" name="Include Next Part"/>
-			<menu_item_call label="前回の部分を含める" name="Include Previous Part"/>
+		<menu label="要素をを選択する" name="Select Elements">
+			<menu_item_call label="次の部分／面を選択する" name="Select Next Part or Face"/>
+			<menu_item_call label="前回の部分／面を選択する" name="Select Previous Part or Face"/>
+			<menu_item_call label="次の部分／面を含める" name="Include Next Part or Face"/>
+			<menu_item_call label="前回の部分／面を含める" name="Include Previous Part or Face"/>
 		</menu>
 		<menu_item_call label="リンクセット..." name="pathfinding_linkset_menu_item"/>
 		<menu_item_call label="選択したものに焦点を合わせる" name="Focus on Selection"/>
@@ -349,6 +351,7 @@
 	
 	<menu label="アドバンス" name="Advanced">
 		<menu_item_call label="テクスチャのリベークをする" name="Rebake Texture"/>
+		<menu_item_call label="アタッチメントを更新する" name="Refresh Attachments" />
 		<menu_item_call label="UI のサイズをデフォルトに設定する" name="Set UI Size to Default"/>
 		<menu_item_call label="ウィンドウのサイズを設定する" name="Set Window Size..."/>
 		<menu_item_check label="遠くのオブジェクトを選択しない" name="Limit Select Distance"/>

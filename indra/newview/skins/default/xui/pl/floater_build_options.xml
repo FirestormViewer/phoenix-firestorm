@@ -3,6 +3,7 @@
 	<spinner label="Jednostki siatki (metry)" name="GridResolution"/>
 	<spinner label="Rozmiary siatki (metry)" name="GridDrawSize"/>
 	<spinner label="Dokładn. dziesiętna" name="DecimalPrecision"/>
+	<spinner label="Kąt (stopnie)" name="RotationStep" tool_tip="Wszystkie akcje dokonywane poprzez narzędzie obracania będą używać wielokrotności ustawionej tutaj jednostki [Domyślnie: 1.0]"/>
 	<check_box label="Przyciągaj do podjednostek" name="GridSubUnit"/>
 	<check_box label="Pokaż przekroje" name="GridCrossSection"/>
 	<text name="grid_opacity_label" tool_tip="Nieprzezroczystość siatki">

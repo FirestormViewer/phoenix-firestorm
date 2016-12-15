@@ -5194,6 +5194,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 		FSAvatarRenderPersistence::instance().loadAvatarRenderSettings();
 
 		LLPanelMainInventory::sSaveFilters = false;
+		LLFavoritesOrderStorage::mSaveOnExit = false;
 	}
 
 	// Get scroll list control that holds the list of global folders
