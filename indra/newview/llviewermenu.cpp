@@ -11562,7 +11562,7 @@ void initialize_menus()
 
 // [RLVa:KB] - Checked: RLVa-2.0.0
 	enable.add("RLV.MainToggleVisible", boost::bind(&rlvMenuMainToggleVisible, _1));
-	if (RlvActions::isRlvEnabled())
+	//if (RlvActions::isRlvEnabled()) // <FS:Ansariel> FIRE-20539: Toolbar buttons don't show disabled state anymore
 	{
 		enable.add("RLV.CanShowName", boost::bind(&rlvMenuCanShowName));
 		enable.add("RLV.EnableIfNot", boost::bind(&rlvMenuEnableIfNot, _2));
