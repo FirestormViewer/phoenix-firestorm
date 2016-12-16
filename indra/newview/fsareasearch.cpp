@@ -62,6 +62,7 @@
 #include "fsareasearchmenu.h"
 #include "fsscrolllistctrl.h"
 #include "llviewermediafocus.h"
+#include "lltoolmgr.h"
 
 // max number of objects that can be (de-)selected in a single packet.
 const S32 MAX_OBJECTS_PER_PACKET = 255;
@@ -1624,7 +1625,22 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 						region_name = objectp->getRegion()->getName();
 					}
 					FSAssetBlacklist::getInstance()->addNewItemToBlacklist(object_id, mFSAreaSearch->mObjectDetails[object_id].name, region_name, LLAssetType::AT_OBJECT);
+
+					mFSAreaSearch->mObjectDetails.erase(object_id);
+					LLSelectMgr::getInstance()->deselectObjectOnly(objectp);
+					gObjectList.addDerenderedItem(object_id, true);
 					gObjectList.killObject(objectp);
+					if (LLViewerRegion::sVOCacheCullingEnabled && region)
+					{
+						region->killCacheEntry(objectp->getLocalID());
+					}
+
+					LLTool* tool = LLToolMgr::getInstance()->getCurrentTool();
+					LLViewerObject* tool_editing_object = tool->getEditingObject();
+					if (tool_editing_object && tool_editing_object->mID == object_id)
+					{
+						tool->stopEditing();
+					}
 				}
 			}
 				break;
