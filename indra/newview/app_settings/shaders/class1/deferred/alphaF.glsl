@@ -452,9 +452,6 @@ vec3 fullbrightScaleSoftClip(vec3 light)
 
 void main() 
 {
-	vec2 frag = vary_fragcoord.xy/vary_fragcoord.z*0.5+0.5;
-	frag *= screen_res;
-	
 	vec4 pos = vec4(vary_position, 1.0);
 	
 	float shadow = 1.0;
@@ -531,18 +528,14 @@ void main()
 #else
 	vec4 diff = texture2D(diffuseMap,vary_texcoord0.xy);
 #endif
-
-#ifdef FOR_IMPOSTOR
-	vec4 color;
-	color.rgb = diff.rgb;
-	color.a = 1.0;
-
 #ifdef USE_VERTEX_COLOR
 	float final_alpha = diff.a * vertex_color.a;
 	diff.rgb *= vertex_color.rgb;
 #else
 	float final_alpha = diff.a;
 #endif
+#ifdef FOR_IMPOSTOR
+	vec4 color = vec4(diff.rgb,final_alpha);
 	
 	// Insure we don't pollute depth with invis pixels in impostor rendering
 	//
@@ -551,14 +544,6 @@ void main()
 		discard;
 	}
 #else
-	
-#ifdef USE_VERTEX_COLOR
-	float final_alpha = diff.a * vertex_color.a;
-	diff.rgb *= vertex_color.rgb;
-#else
-	float final_alpha = diff.a;
-#endif
-
 
 	vec4 gamma_diff = diff;	
 	diff.rgb = srgb_to_linear(diff.rgb);
