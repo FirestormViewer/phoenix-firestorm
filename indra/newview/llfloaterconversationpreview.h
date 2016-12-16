@@ -50,6 +50,10 @@ public:
 	virtual void draw();
 	virtual void onOpen(const LLSD& key);
 	virtual void onClose(bool app_quitting);
+	// <FS:Ansariel> CTRL-F for search history
+	virtual BOOL handleKeyHere(KEY key, MASK mask);
+	virtual bool hasAccelerators() const { return true; }
+	// </FS:Ansariel>
 
 private:
 	void onMoreHistoryBtnClick();
