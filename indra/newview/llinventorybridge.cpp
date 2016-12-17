@@ -373,10 +373,7 @@ void LLInvFVBridge::showProperties()
     }
     else
     {
-	// <FS:TT> Old, standalone properties floater
-	//show_item_profile(mUUID);
-	LLFloaterReg::showInstance("properties", LLSD().with("item_id", mUUID));
-	// </FS:TT>
+        show_item_profile(mUUID);
     }
 }
 
