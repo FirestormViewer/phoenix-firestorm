@@ -743,7 +743,7 @@
 		 top_pad="2"
 		 follows="left|top"
 		 height="16"
-		 label="Use lagacy object properties"
+		 label="Use legacy object properties"
 		 name="FSUseLegacyObjectProperties"
 		 width="270"
 		 control_name="FSUseLegacyObjectProperties"
