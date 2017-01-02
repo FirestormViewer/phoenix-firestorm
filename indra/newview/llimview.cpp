@@ -2638,11 +2638,13 @@ void LLIncomingCallDialog::onOpen(const LLSD& key)
 {
 	LLCallDialog::onOpen(key);
 
-	if (gSavedSettings.getBOOL("PlaySoundIncomingVoiceCall"))
-	{
-		// play a sound for incoming voice call if respective property is set
-		make_ui_sound("UISndStartIM");
-	}
+	// <FS:Ansariel> FIRE-7556: Configurable User Interface sounds; This is done in LLFloater::openFloater
+	//if (gSavedSettings.getBOOL("PlaySoundIncomingVoiceCall"))
+	//{
+	//	// play a sound for incoming voice call if respective property is set
+	//	make_ui_sound("UISndStartIM");
+	//}
+	// </FS:Ansariel>
 
 	LLStringUtil::format_map_t args;
 	LLGroupData data;
