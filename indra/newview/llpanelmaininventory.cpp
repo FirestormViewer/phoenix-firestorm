@@ -1607,20 +1607,22 @@ bool LLPanelMainInventory::isSaveTextureEnabled(const LLSD& userdata)
 BOOL LLPanelMainInventory::isActionEnabled(const LLSD& userdata)
 {
 	const std::string command_name = userdata.asString();
-	if (command_name == "not_empty")
-	{
-		BOOL status = FALSE;
-		LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
-		if (current_item)
-		{
-			const LLUUID& item_id = static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->getUUID();
-			LLInventoryModel::cat_array_t* cat_array;
-			LLInventoryModel::item_array_t* item_array;
-			gInventory.getDirectDescendentsOf(item_id, cat_array, item_array);
-			status = (0 == cat_array->size() && 0 == item_array->size());
-		}
-		return status;
-	}
+	// <FS:Ansariel> Unused changes from STORM-2091 that has been fixed by LL differently in the meantime
+	//if (command_name == "not_empty")
+	//{
+	//	BOOL status = FALSE;
+	//	LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
+	//	if (current_item)
+	//	{
+	//		const LLUUID& item_id = static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->getUUID();
+	//		LLInventoryModel::cat_array_t* cat_array;
+	//		LLInventoryModel::item_array_t* item_array;
+	//		gInventory.getDirectDescendentsOf(item_id, cat_array, item_array);
+	//		status = (0 == cat_array->size() && 0 == item_array->size());
+	//	}
+	//	return status;
+	//}
+	// </FS:Ansariel>
 	if (command_name == "delete")
 	{
 		return getActivePanel()->isSelectionRemovable();
