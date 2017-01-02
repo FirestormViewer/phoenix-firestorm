@@ -8,8 +8,8 @@
  name="scriptlimits"
  save_rect="true"
  title="Script Information"
- min_width="480"
- width="480">
+ min_width="620"
+ width="620">
     <tab_container
      bottom="555"
      follows="left|right|top|bottom"
