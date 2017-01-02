@@ -25,7 +25,7 @@
 	<text name="ShadersText">
 		Sprzętowe
 	</text>
-	<slider label="Bufor pamięci tekstur (MB):" name="GraphicsCardTextureMemory" tool_tip="Ilość pamięci przeznaczona na tekstury. Domyślnie jest to maksymalna wielkość pamięci karty graficznej, ale nie więcej niż 512 MB. Zmniejszenie tej wartości może spowodować wzrost wydajności, ale tekstury będą bardziej rozmazane. Zwiększanie tej wartości ponad 512 MB nie jest wskazane nawet, jeśli Twoja karta to obsługuje - ogólna wydajność Przeglądarki związana z pamięcią operacyjną widocznie spadnie." />
+	<slider label="Bufor pamięci tekstur (MB):" name="GraphicsCardTextureMemory" tool_tip="Ilość pamięci przeznaczona na tekstury. Domyślnie jest to maksymalna wielkość pamięci karty graficznej, ale nie więcej niż 512 MB na systemach 32 bitowych lub 2048 MB na 64 bitowych. Zmniejszenie tej wartości może spowodować wzrost wydajności, ale tekstury będą bardziej rozmazane." />
 	<slider label="Stosunek odległości dla mgły:" name="fog" />
 	<text name="(brightness, lower is brighter)">
 		(0 = domyślna jasność, niżej = jaśniej)

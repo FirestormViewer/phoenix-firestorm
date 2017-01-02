@@ -300,3 +300,16 @@ void LLFloaterConversationPreview::onClickSearch()
 {
 	LLFloaterSearchReplace::show(mChatHistory);
 }
+
+// <FS:Ansariel> CTRL-F for search history
+BOOL LLFloaterConversationPreview::handleKeyHere(KEY key, MASK mask)
+{
+	if (mask == MASK_CONTROL && key == 'F')
+	{
+		LLFloaterSearchReplace::show(mChatHistory);
+		return TRUE;
+	}
+
+	return LLFloater::handleKeyHere(key, mask);
+}
+// </FS:Ansariel>

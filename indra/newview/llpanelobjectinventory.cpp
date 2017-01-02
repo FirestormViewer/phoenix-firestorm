@@ -197,9 +197,7 @@ LLInventoryItem* LLTaskInvFVBridge::findItem() const
 
 void LLTaskInvFVBridge::showProperties()
 {
-	//show_task_item_profile(mUUID, mPanel->getTaskUUID());
-	//-TT Experiment.
-	LLFloaterReg::showInstance("properties", LLSD().with("item_id", mUUID).with("object_id", mPanel->getTaskUUID()));
+	show_task_item_profile(mUUID, mPanel->getTaskUUID());
 }
 
 struct LLBuyInvItemData

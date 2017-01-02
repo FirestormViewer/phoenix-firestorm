@@ -734,11 +734,20 @@
 		 top_pad="2"
 		 follows="left|top"
 		 height="16"
-		 label="'Friends' and 'Groups' in 'Comm' menu opens the V3 based windows"
+		 label="'Friends' and 'Groups' in 'Comm' menu opens the V5 based windows"
 		 name="FSUseV2Friends"
 		 width="270"
 		 control_name="FSUseV2Friends"
 		 tool_tip="If enabled, Friends / Groups will open through the People panel - otherwise they will open in the Contacts panel."/>
+		<check_box
+		 top_pad="2"
+		 follows="left|top"
+		 height="16"
+		 label="Use legacy object properties"
+		 name="FSUseLegacyObjectProperties"
+		 width="270"
+		 control_name="FSUseLegacyObjectProperties"
+		 tool_tip="If enabled, the legacy object profile window will be used when opening object properties."/>
 
 		<text
 		type="string"
@@ -748,7 +757,7 @@
 		layout="topleft"
 		name="standalone_textbox"
 		left="10"
-		top_pad="10"
+		top_pad="7"
 		width="200">
 		Use stand-alone windows for:
 		</text>
@@ -792,7 +801,7 @@
 		tool_tip="If enabled, landmarks, place details and teleport history details will open in separate windows."/>
 
 		<text
-		 top_pad="10"
+		 top_pad="7"
 		 left="10"
 		 layout="topleft"
 		 follows="left|top"
@@ -824,7 +833,7 @@
 		tool_tip="If enabled, the date and time of the teleport will be shown in the teleport history."/>
 
 		<text
-		 top_pad="10"
+		 top_pad="7"
 		 left="10"
 		 layout="topleft"
 		 follows="left|top"
@@ -973,7 +982,7 @@
 		</check_box>
 
 		<text
-		 top_pad="10"
+		 top_pad="7"
 		 left="10"
 		 layout="topleft"
 		 follows="left|top"

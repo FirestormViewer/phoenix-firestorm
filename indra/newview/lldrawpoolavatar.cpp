@@ -1402,11 +1402,18 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		{
 			if (LLPipeline::sRenderDeferred && !LLPipeline::sReflectionRender && avatarp->mImpostor.isComplete()) 
 			{
-				if (normal_channel > -1)
+				// <FS:Ansariel> FIRE-9179: Crash fix
+				//if (normal_channel > -1)
+				U32 num_tex = avatarp->mImpostor.getNumTextures();
+				if (normal_channel > -1 && num_tex >= 3)
+				// </FS:Ansariel>
 				{
 					avatarp->mImpostor.bindTexture(2, normal_channel);
 				}
-				if (specular_channel > -1)
+				// <FS:Ansariel> FIRE-9179: Crash fix
+				//if (specular_channel > -1)
+				if (specular_channel > -1 && num_tex >= 2)
+				// </FS:Ansariel>
 				{
 					avatarp->mImpostor.bindTexture(1, specular_channel);
 				}

@@ -3782,8 +3782,10 @@ Durch Ausblenden der Schaltfläche „Sprechen“ wird die Sprechfunktion deakti
 		</form>
 	</notification>
 	<notification label="" name="ModeChange">
-		Die Änderung des Modus wird nach einem Neustart von Firestorm wirksam.
-		<usetemplate name="okcancelbuttons" notext="Nicht beenden" yestext="Beenden"/>
+		Die Änderung des Modus wird nach einem Neustart wirksam.
+
+Modus ändern und beenden?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification label="" name="NoClassifieds">
 		Die Erstellung und Bearbeitung von Anzeigen ist nur im Modus „Erweitert“ möglich. Möchten Sie das Programm beenden und den Modus wechseln? Die Modusauswahl ist auf dem Anmeldebildschirm zu finden.

@@ -105,7 +105,8 @@
 		<check_box label="Beim Klicken auf Avatarnamen direkt Profil öffnen" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Falls aktiviert, wird bei einem Klick auf den Namenslink eines Avatars direkt dessen komplettes Profil geöffnet."/>
 		<check_box name="FSUseWebProfiles" label="Webprofile als Standard nutzen" tool_tip="Zeigt profile als Webseite anstelle des Profilfensters im Viewer-1-Stil"/>
 		<check_box label="Deaktiviere automatisches Öffnen der Blockierliste" name="FSDisableBlockListAutoOpen" tool_tip="Deaktiviert das automatische Öffnen der Blockierliste, wenn Avatare oder Objekte geblockt werden."/>
-		<check_box label="„Freunde“ und „Gruppen“ im Menü „Unterhalten“ öffnen die V3-Version" name="FSUseV2Friends" tool_tip="Falls aktiviert, werden Freunde bzw. Gruppen im „Leute“-Fenster geöffnet - ansonsten im Fenster „Kontakte“."/>
+		<check_box label="„Freunde“ und „Gruppen“ im Menü „Unterhalten“ öffnen die V5-Version" name="FSUseV2Friends" tool_tip="Falls aktiviert, werden Freunde bzw. Gruppen im „Leute“-Fenster geöffnet - ansonsten im Fenster „Kontakte“."/>
+		<check_box label="Ursprüngliche Version des Objekteigenschaften-Fensters verwenden" name="FSUseLegacyObjectProperties" tool_tip="Falls aktiviert, wird die ursprüngliche Version im Viewer-1-Stil des Eigenschaften-Fensters für Objekte verwendet."/>
 		<text name="standalone_textbox">
 			Eigene Fenster verwenden für:
 		</text>

@@ -772,13 +772,33 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 
 void show_task_item_profile(const LLUUID& item_uuid, const LLUUID& object_id)
 {
-	LLFloaterSidePanelContainer::showPanel("inventory", LLSD().with("id", item_uuid).with("object", object_id));
+	// <FS:Ansariel> Optional legacy object properties
+	//LLFloaterSidePanelContainer::showPanel("inventory", LLSD().with("id", item_uuid).with("object", object_id));
+	if (gSavedSettings.getBOOL("FSUseLegacyObjectProperties"))
+	{
+		LLFloaterReg::showInstance("properties", LLSD().with("item_id", item_uuid).with("object_id", object_id));
+	}
+	else
+	{
+		LLFloaterSidePanelContainer::showPanel("inventory", LLSD().with("id", item_uuid).with("object", object_id));
+	}
+	// </FS:Ansariel>
 }
 
 void show_item_profile(const LLUUID& item_uuid)
 {
 	LLUUID linked_uuid = gInventory.getLinkedItemID(item_uuid);
-	LLFloaterSidePanelContainer::showPanel("inventory", LLSD().with("id", linked_uuid));
+	// <FS:Ansariel> Optional legacy object properties
+	//LLFloaterSidePanelContainer::showPanel("inventory", LLSD().with("id", linked_uuid));
+	if (gSavedSettings.getBOOL("FSUseLegacyObjectProperties"))
+	{
+		LLFloaterReg::showInstance("properties", LLSD().with("item_id", linked_uuid));
+	}
+	else
+	{
+		LLFloaterSidePanelContainer::showPanel("inventory", LLSD().with("id", linked_uuid));
+	}
+	// </FS:Ansariel>
 }
 
 void show_item_original(const LLUUID& item_uuid)
