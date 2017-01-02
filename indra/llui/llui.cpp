@@ -146,7 +146,7 @@ LLUUID find_ui_sound(const char * namep, bool force_sound)
 			// <FS:PP> Silencer for FIRE-7556: Configurable User Interface sounds
 			if (name != "UISndTrackerBeacon" && name != "UISndNewIncomingIMSession" && name != "UISndNewIncomingGroupIMSession" && name != "UISndNewIncomingConfIMSession") // There is no need to process these here, checks are already elsewhere
 			{
-				if (!force_sound && ( (name != "UISndSnapshot" && !LLUI::sSettingGroups[group_name]->getBOOL("PlayMode"+name)) || (name == "UISndSnapshot" && LLUI::sSettingGroups["config"]->getBOOL("PlayModeUISndSnapshot")) ) )
+				if (!force_sound && ( (name != "UISndSnapshot" && !LLUI::sSettingGroups[group_name]->getBOOL("PlayMode" + name)) || (name == "UISndSnapshot" && LLUI::sSettingGroups["config"]->getBOOL("PlayModeUISndSnapshot")) ) )
 					return LLUUID(NULL);
 			}
 			// </FS:PP>
