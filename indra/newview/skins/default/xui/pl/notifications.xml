@@ -3628,7 +3628,9 @@ Kliknij i przeciągnij gdziekolwiek aby obrócić widok.
 	</notification>
 	<notification name="ModeChange">
 		Zmiana trybu wymaga zamknięcia i ponownego uruchomienia aplikacji.
-		<usetemplate name="okcancelbuttons" yestext="Zamknij" notext="Nie zamykaj"/>
+
+Zmienić tryb i wyłączyć program?
+		<usetemplate name="okcancelbuttons" notext="Anuluj"/>
 	</notification>
 	<notification name="NoClassifieds">
 		Tworzenie i edycja reklam jest możliwa tylko w trybie zaawansowanym. Czy chcesz wylogować się i zmienić tryb? Opcja wyboru trybu życia jest widoczna na ekranie logowania.
