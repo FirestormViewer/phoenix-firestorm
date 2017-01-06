@@ -7,7 +7,7 @@
 //
 
     // Bridge platform
-    string BRIDGE_VERSION = "2.20"; // This should match fslslbridge.cpp
+    string BRIDGE_VERSION = "2.21"; // This should match fslslbridge.cpp
     string gLatestURL;
     integer gViewerIsFirestorm;
     integer gTryHandshakeOnce = TRUE;
@@ -404,6 +404,7 @@ default
         else if (Method == URL_REQUEST_DENIED)
         {
             // No URLs free! Keep trying?
+            llOwnerSay("<bridgeRequestError/>");
             llSleep(5);
             requestBridgeURL();
         }
