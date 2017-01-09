@@ -4,7 +4,7 @@
  *
  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
- * Copyright (C) 2011-2015, The Phoenix Firestorm Project, Inc.
+ * Copyright (C) 2011-2017, The Phoenix Firestorm Project, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -52,7 +52,7 @@
 static const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
 static const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
 static const U32 FS_BRIDGE_MAJOR_VERSION = 2;
-static const U32 FS_BRIDGE_MINOR_VERSION = 20;
+static const U32 FS_BRIDGE_MINOR_VERSION = 21;
 static const U32 FS_MAX_MINOR_VERSION = 99;
 static const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 static const std::string FS_STATE_ATTRIBUTE = "state=";
@@ -139,7 +139,6 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	bool status = false;
 	if (tag == "<bridgeURL>")
 	{
-
 		if (!bridgeIsEnabled)
 		{
 			// Hide handshake message if bridge is disabled in viewer settings but the bridge itself sent it, then quit - don't reply to the handshake
@@ -255,6 +254,11 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 		}
 		// </FS:PP>
 
+		return true;
+	}
+	else if (tag == "<bridgeRequestError/>")
+	{
+		LL_WARNS("FSLSLBridge") << "Could not obtain URL for LSL bridge." << LL_ENDL;
 		return true;
 	}
 	
@@ -418,7 +422,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 bool FSLSLBridge::canUseBridge()
 {
 	static LLCachedControl<bool> sUseLSLBridge(gSavedSettings, "UseLSLBridge");
-	return (isBridgeValid() && sUseLSLBridge);
+	return (isBridgeValid() && sUseLSLBridge && !mCurrentURL.empty());
 }
 
 bool FSLSLBridge::viewerToLSL(const std::string& message, tCallback aCallback )
@@ -434,7 +438,7 @@ bool FSLSLBridge::viewerToLSL(const std::string& message, tCallback aCallback )
 	if( !pCallback )
 		pCallback = FSLSLBridgeRequest_Success;
 
-    LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(mCurrentURL, LLSD(message), pCallback, FSLSLBridgeRequest_Failure );
+	LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(mCurrentURL, LLSD(message), pCallback, FSLSLBridgeRequest_Failure );
 
 	return true;
 }
@@ -573,6 +577,7 @@ void FSLSLBridge::finishCleanUpPreCreation()
 
 	// clear the stored bridge ID - we are starting over.
 	mpBridge = NULL; //the object itself will get cleaned up when new one is created.
+	mCurrentURL = "";
 
 	setBridgeCreating(true);
 	mFinishCreation = false;
@@ -649,7 +654,6 @@ void FSLSLBridge::startCreation()
 
 	//if bridge object doesn't exist - create and attach it, update script.
 	const LLUUID catID = findFSCategory();
-
 	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID);
 
 	//detach everything else
@@ -686,7 +690,7 @@ void FSLSLBridge::startCreation()
 
 				//Is this a valid bridge - wear it.
 				LLAttachmentsMgr::instance().addAttachmentRequest(mpBridge->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
-				//from here, the attach shoould report to ProcessAttach and make sure bridge is valid.
+				//from here, the attach should report to ProcessAttach and make sure bridge is valid.
 			}
 			else
 			{
