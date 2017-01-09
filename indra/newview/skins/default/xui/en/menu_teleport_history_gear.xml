@@ -26,7 +26,41 @@
          function="TeleportHistory.GearMenu.Enable"
          parameter="collapse_all" />
     </menu_item_call>
-    <menu_item_separator layout="topleft" />
+  <!-- FS:Beq [timezone support for teleport history] -->
+  <menu name="TPHistoryTimeZone" label="Select Timezone...">
+    <menu_item_check
+    name="teleport_history_tz_utc"
+    label="UTC">
+      <on_click
+        function="TeleportHistory.TimeZone.Set"
+        parameter="utc" />
+      <on_check
+        function="TeleportHistory.TimeZone.Check"
+        parameter="utc" />
+    </menu_item_check>
+    <menu_item_check
+        name="teleport_history_tz_slt"
+        label="SLT">
+      <on_click
+        function="TeleportHistory.TimeZone.Set"
+        parameter="slt" />
+      <on_check
+        function="TeleportHistory.TimeZone.Check"
+        parameter="slt" />
+    </menu_item_check>
+    <menu_item_check
+        name="teleport_history_tz_local"
+        label="Local">
+      <on_click
+        function="TeleportHistory.TimeZone.Set"
+        parameter="local" />
+      <on_check
+        function="TeleportHistory.TimeZone.Check"
+        parameter="local" />
+    </menu_item_check>
+  </menu>
+    <!-- /FS:Beq [timezone support for teleport history] -->
+  <menu_item_separator layout="topleft" />
     <menu_item_call
      label="Clear Teleport History"
      name="Clear Teleport History">
