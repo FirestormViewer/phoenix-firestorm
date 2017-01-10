@@ -859,9 +859,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>93257fce19120c01751362775a01b925</string>
+              <string>cba1feed7f6bb671d791a517fddf205a</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/1545/3481/fmodex-4.44.64.501533-darwin64-501533.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-44461-darwin-201601300040-r23.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -871,9 +871,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b847ec838da1ad1dd646df9d74e9b395</string>
+              <string>9b090869508fabee82dc53cae977fb99</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/p64_3p-fmodex/rev/314207/arch/Linux/installer/fmodex-4.44.61.314207-linux-314207.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-44461-linux-201601282301-r23.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -883,9 +883,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>89a75d8719f7b2cbe1e54cd8407bb992</string>
+              <string>9b090869508fabee82dc53cae977fb99</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/1544/3476/fmodex-4.44.64.501533-linux64-501533.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-44461-linux-201601282301-r23.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -895,9 +895,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>601c2fc41a18812a45678ef9a87ef772</string>
+              <string>5b1b5ce866afd2a74e445af1fffe6a8b</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/1546/3486/fmodex-4.44.64.501533-windows-501533.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodex-44461-windows-201601282252-r23.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -907,9 +907,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e5cde35ae26ebfa256cfe670986e152e</string>
+              <string>5b1b5ce866afd2a74e445af1fffe6a8b</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/1547/3487/fmodex-4.44.64.501533-windows64-501533.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodex-44461-windows-201601282252-r23.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -1789,9 +1789,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c2a8811ab2ff1e60a8afc6268c5b44c1</string>
+              <string>e5a811fa7c9e5641869b58cd58a3e1c6</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/1119/2596/kdu-7.8.501106-darwin-501106.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.8.0-darwin-201604022336-r52.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1801,9 +1801,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a13540f797be940fc9fd6d9299633a1a</string>
+              <string>e5a811fa7c9e5641869b58cd58a3e1c6</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/1118/2591/kdu-7.8.501106-darwin64-501106.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.8.0-darwin-201604022336-r52.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1825,9 +1825,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c4e560a31c009ad3e62b79daf2cc8628</string>
+              <string>06e6ada281c0cf37ced1aad58c3e9bb4</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/958/2200/kdu-7.8.500948-linux64-500948.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.8.0-linux-201604022334-r52.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1837,9 +1837,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f25f1b6e36c571d5ddb5625ac5fe1633</string>
+              <string>15da99a3c7dbe2b56a19baced0f9bd54</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/1123/2612/kdu-7.8.501106-windows-501106.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.8.0-windows-201604022251-r52.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1849,9 +1849,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fc706eaebd1a81b8f6e95acb6e06cc28</string>
+              <string>15da99a3c7dbe2b56a19baced0f9bd54</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/1122/2609/kdu-7.8.501106-windows64-501106.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.8.0-windows-201604022251-r52.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
