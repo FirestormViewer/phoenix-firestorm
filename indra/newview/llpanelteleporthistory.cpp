@@ -1201,18 +1201,16 @@ void LLTeleportHistoryPanel::onCollapseAllFolders()
 // <FS:Beq> [timezone support for teleport history]
 void LLTeleportHistoryPanel::onTimeZoneChecked(const LLSD& userdata)
 {
-	static LLCachedControl<std::string> sFSTPHistoryTZ(gSavedSettings, "FSTPHistoryTZ");
 	gSavedSettings.setString("FSTPHistoryTZ", userdata.asString());
 	onTeleportHistoryChange(-1); // force recreate all
 }
-
 
 bool LLTeleportHistoryPanel::isTimeZoneChecked(const LLSD& userdata)
 {
 	static LLCachedControl<std::string> sFSTPHistoryTZ(gSavedSettings, "FSTPHistoryTZ");
 
 	const std::string zone_string = userdata.asString();
-	return ( sFSTPHistoryTZ() == zone_string);
+	return (sFSTPHistoryTZ() == zone_string);
 }
 // </FS:Beq>
 
