@@ -47,11 +47,6 @@
 #      define LL_X86 1
 #elif LL_MSVC && _M_IX86
 #      define LL_X86 1
-#elif LL_CLANG && ( defined(__amd64__) || defined(__x86_64__) )
-#      define LL_X86_64 1
-#      define LL_X86 1
-#elif LL_CLANG && ( defined(__i386__) )
-#      define LL_X86 1
 #elif LL_GNUC && ( defined(__amd64__) || defined(__x86_64__) )
 #      define LL_X86_64 1
 #      define LL_X86 1
@@ -402,7 +397,6 @@ static F64 calculate_cpu_frequency(U32 measure_msecs)
 	HANDLE hThread = GetCurrentThread();
 	unsigned long dwCurPriorityClass = GetPriorityClass(hProcess);
 	int iCurThreadPriority = GetThreadPriority(hThread);
-	// unsigned long dwProcessMask, dwSystemMask, dwNewMask = 1;
 	DWORD_PTR dwProcessMask, dwSystemMask, dwNewMask = 1;
 	GetProcessAffinityMask(hProcess, &dwProcessMask, &dwSystemMask);
 

@@ -3309,7 +3309,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			// The group notice packet does not have an AgentID.  Obtain one from the name cache.
 			// If last name is "Resident" strip it out so the cache name lookup works.
-			size_t index = original_name.find(" Resident");
+			std::string::size_type index = original_name.find(" Resident");
 			if (index != std::string::npos)
 			{
 				original_name = original_name.substr(0, index);
@@ -5504,7 +5504,7 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 		LLVector3 beacon_dir(agent_pos.mV[VX] - (F32)fmod(beacon_pos.mdV[VX], 256.0), agent_pos.mV[VY] - (F32)fmod(beacon_pos.mdV[VY], 256.0), 0);
 		if (beacon_dir.magVecSquared() < 25.f)
 		{
-			LLTracker::stopTracking(NULL);
+			LLTracker::stopTracking(false);
 		}
 		else if ( is_teleport && !gAgent.getTeleportKeepsLookAt() && look_at.isExactlyZero())
 		{

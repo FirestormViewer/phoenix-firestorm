@@ -63,10 +63,7 @@ void set_thread_name( DWORD dwThreadID, const char* threadName)
 
 	__try
 	{
-		// <FS:ND> Proper arguments for RaiseException
-		// ::RaiseException( MS_VC_EXCEPTION, 0, sizeof(info)/sizeof(DWORD), (DWORD*)&info );
 		::RaiseException( MS_VC_EXCEPTION, 0, sizeof(info)/sizeof(DWORD), (ULONG_PTR*)&info );
-		// </FS:ND>
 	}
 	__except(EXCEPTION_CONTINUE_EXECUTION)
 	{

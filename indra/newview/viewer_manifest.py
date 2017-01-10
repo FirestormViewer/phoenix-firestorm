@@ -50,10 +50,7 @@ viewer_dir = os.path.dirname(__file__)
 # indra.util.llmanifest under their system Python!
 sys.path.insert(0, os.path.join(viewer_dir, os.pardir, "lib", "python"))
 from indra.util.llmanifest import LLManifest, main, path_ancestors, CHANNEL_VENDOR_BASE, RELEASE_CHANNEL, ManifestError
-try:
-    from llbase import llsd
-except ImportError:
-    from indra.base import llsd
+from llbase import llsd
 
 class ViewerManifest(LLManifest,FSViewerManifest):
     def is_packaging_viewer(self):
@@ -364,7 +361,8 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         random.shuffle(names)
         return ', '.join(names)
 
-class Windows_i686_Manifest(ViewerManifest):
+
+class WindowsManifest(ViewerManifest):
     def final_exe(self):
         return self.app_name_oneword()+".exe"
 
@@ -415,7 +413,7 @@ class Windows_i686_Manifest(ViewerManifest):
             print "Doesn't exist:", src
         
     def construct(self):
-        super(Windows_i686_Manifest, self).construct()
+        super(WindowsManifest, self).construct()
 
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
         relpkgdir = os.path.join(pkgdir, "lib", "release")
@@ -456,29 +454,16 @@ class Windows_i686_Manifest(ViewerManifest):
 
             # Get fmodex dll, continue if missing
             try:
-                if self.args['configuration'].lower() == 'debug':
-                    self.path("fmodexL.dll")
-                    self.path("fmodexL64.dll")
+                if(self.args['arch'].lower() == 'x86_64'):
+                    self.path("fmodex64.dll")
                 else:
                     self.path("fmodex.dll")
-                    self.path("fmodex64.dll")
             except:
                 print "Skipping fmodex audio library(assuming other audio engine)"
 			
-            # Get Leap Motion SDK
-            try:
-                if self.args['configuration'].lower() == 'debug':
-                    self.path("Leapd.dll")
-                else:
-                    self.path("Leap.dll")
-            except:
-                print "Leap Motion library was not found"
 
             # For textures
-            if self.args['configuration'].lower() == 'debug':
-                self.path("openjpegd.dll")
-            else:
-                self.path("openjpeg.dll")
+            self.path("openjpeg.dll")
             self.path("openjp2.dll") # <FS:ND/> OpenJPEG2 if used
 
             # These need to be installed as a SxS assembly, currently a 'private' assembly.
@@ -533,11 +518,6 @@ class Windows_i686_Manifest(ViewerManifest):
         self.path("featuretable.txt")
         self.path("VivoxAUP.txt")
 
-        # Media plugins - QuickTime
-        if self.prefix(src='../media_plugins/quicktime/%s' % self.args['configuration'], dst="llplugin"):
-            self.path("media_plugin_quicktime.dll")
-            self.end_prefix()
-
         # Media plugins - CEF
         if self.prefix(src='../media_plugins/cef/%s' % self.args['configuration'], dst="llplugin"):
             self.path("media_plugin_cef.dll")
@@ -556,11 +536,6 @@ class Windows_i686_Manifest(ViewerManifest):
         # Media plugins - LibVLC
         if self.prefix(src='../media_plugins/libvlc/%s' % self.args['configuration'], dst="llplugin"):
             self.path("media_plugin_libvlc.dll")
-            self.end_prefix()
-
-        # winmm.dll shim
-        if self.prefix(src='../media_plugins/winmmshim/%s' % self.args['configuration'], dst=""):
-            self.path("winmm.dll")
             self.end_prefix()
 
         # CEF runtime files - debug
@@ -852,6 +827,16 @@ class Windows_i686_Manifest(ViewerManifest):
         self.package_file = installer_file
 
 
+class Windows_i686_Manifest(WindowsManifest):
+    # specialize when we must
+    pass
+
+
+class Windows_x86_64_Manifest(WindowsManifest):
+    # specialize when we must
+    pass
+
+
 class DarwinManifest(ViewerManifest):
     def is_packaging_viewer(self):
         # darwin requires full app bundle packaging even for debugging.
@@ -949,7 +934,7 @@ class DarwinManifest(ViewerManifest):
                                 "libapr-1.0.dylib",
                                 "libaprutil-1.0.dylib",
                                 "libcollada14dom.dylib",
-                                "libexpat.1.5.2.dylib",
+                                "libexpat.1.dylib",
                                 "libexception_handler.dylib",
                                 "libGLOD.dylib",
                                 "libgrowl.dylib",
@@ -1024,6 +1009,16 @@ class DarwinManifest(ViewerManifest):
                         self.path2basename(relpkgdir, helperappfile)
 
                     pluginframeworkpath = self.dst_path_of('Chromium Embedded Framework.framework');
+                    # Putting a Frameworks directory under Contents/MacOS
+                    # isn't canonical, but the path baked into LLCefLib
+                    # Helper.app/Contents/MacOS/LLCefLib Helper is:
+                    # @executable_path/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework
+                    # (notice, not @executable_path/../Frameworks/etc.)
+                    # So we'll create a symlink (below) from there back to the
+                    # Frameworks directory nested under SLPlugin.app.
+                    helperframeworkpath = \
+                        self.dst_path_of('LLCefLib Helper.app/Contents/MacOS/'
+                                         'Frameworks/Chromium Embedded Framework.framework')
 
                     self.end_prefix()
 
@@ -1057,16 +1052,36 @@ class DarwinManifest(ViewerManifest):
                 # this symlink, Second Life web media can't possibly work.
                 # Real Framework folder:
                 #   Second Life.app/Contents/Frameworks/Chromium Embedded Framework.framework/
-                # Location of symlink and why it'ds relative 
+                # Location of symlink and why it's relative 
                 #   Second Life.app/Contents/Resources/SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework/
                 # Real Frameworks folder, with the symlink inside the bundled SLPlugin.app (and why it's relative)
                 #   <top level>.app/Contents/Frameworks/Chromium Embedded Framework.framework/
                 #   <top level>.app/Contents/Resources/SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework ->
-                frameworkpath = os.path.join(os.pardir, os.pardir, os.pardir, os.pardir, "Frameworks", "Chromium Embedded Framework.framework")
+                # It might seem simpler just to create a symlink Frameworks to
+                # the parent of Chromimum Embedded Framework.framework. But
+                # that would create a symlink cycle, which breaks our
+                # packaging step. So make a symlink from Chromium Embedded
+                # Framework.framework to the directory of the same name, which
+                # is NOT an ancestor of the symlink.
+                frameworkpath = os.path.join(os.pardir, os.pardir, os.pardir,
+                                             os.pardir, "Frameworks",
+                                             "Chromium Embedded Framework.framework")
                 try:
-                    symlinkf(frameworkpath, pluginframeworkpath)
+                    # from SLPlugin.app/Contents/Frameworks/Chromium Embedded
+                    # Framework.framework back to Second
+                    # Life.app/Contents/Frameworks/Chromium Embedded Framework.framework
+                    origin, target = pluginframeworkpath, frameworkpath
+                    symlinkf(target, origin)
+                    # from SLPlugin.app/Contents/Frameworks/LLCefLib
+                    # Helper.app/Contents/MacOS/Frameworks/Chromium Embedded
+                    # Framework.framework back to
+                    # SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework
+                    self.cmakedirs(os.path.dirname(helperframeworkpath))
+                    origin = helperframeworkpath
+                    target = os.path.join(os.pardir, frameworkpath)
+                    symlinkf(target, origin)
                 except OSError as err:
-                    print "Can't symlink %s -> %s: %s" % (frameworkpath, pluginframeworkpath, err)
+                    print "Can't symlink %s -> %s: %s" % (origin, target, err)
                     raise
 
             self.end_prefix("Contents")
@@ -1267,41 +1282,16 @@ class DarwinManifest(ViewerManifest):
 
 
 class Darwin_i386_Manifest(DarwinManifest):
-    def construct(self):
-        super(Darwin_i386_Manifest, self).construct()
+    pass
 
 
-class Darwin_universal_Manifest(DarwinManifest):
-    def construct(self):
-        super(Darwin_universal_Manifest, self).construct()
-
-        if(self.prefix(src="../packages/bin_x86", dst="Contents/Resources/")):
-            self.path("SLPlugin.app")
-			
-            if self.prefix(src = "llplugin", dst="llplugin"):
-                self.path("media_plugin_quicktime.dylib")
-                self.path("media_plugin_cef.dylib")
-            self.end_prefix("llplugin")
-
-        self.end_prefix("../packages/bin_x86");
+class Darwin_i686_Manifest(DarwinManifest):
+    """alias in case arch is passed as i686 instead of i386"""
+    pass
 
 
 class Darwin_x86_64_Manifest(DarwinManifest):
-    def construct(self):
-        super(Darwin_x86_64_Manifest, self).construct()
-
-        #<FS:TS> This had to be moved to the main manifest routine because
-        # there's too much that depends on having these files in there before
-        # this point is ever reached.
-        #if(self.prefix("../packages/bin_x86", dst="Contents/Resources/")):
-        #    self.path("SLPlugin.app", "SLPlugin.app")
-        #
-        #    if self.prefix(src = "llplugin", dst="llplugin"):
-        #        self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
-        #        self.path("media_plugin_cef.dylib", "media_plugin_cef.dylib")
-        #    self.end_prefix("llplugin")
-
-        #self.end_prefix("../packages/bin_x86");
+    pass
 
 
 class LinuxManifest(ViewerManifest):

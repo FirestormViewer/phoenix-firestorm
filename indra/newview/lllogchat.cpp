@@ -1111,11 +1111,7 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im, const LLSD& parse_params
 	//possibly a case of complex object names consisting of 3+ words
 	if (!has_name)
 	{
-		// <FS:ND> FIRE-11832; using U32 truncates results for npos from 0xFFFFFFFF'FFFFFFFF to 0x00000000'FFFFFFFF
- 		// U32 divider_pos = stuff.find(NAME_TEXT_DIVIDER);
 		std::string::size_type divider_pos = stuff.find(NAME_TEXT_DIVIDER);
-		// </FS:ND>
-
 		if (divider_pos != std::string::npos && divider_pos < (stuff.length() - NAME_TEXT_DIVIDER.length()))
 		{
 			im[LL_IM_FROM] = stuff.substr(0, divider_pos);

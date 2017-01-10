@@ -273,6 +273,7 @@ function getopt()
 ###  Main Logic
 ###
 
+
 getArgs $*
 if [ ! -d `dirname "$LOG"` ] ; then
         mkdir -p `dirname "$LOG"`
@@ -429,35 +430,18 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 
     if [ $PLATFORM == "darwin" ] ; then
         TARGET="Xcode"
-        if [ "${ND_AUTOBUILD_ARCH}" == "x64" ]
-        then
-          TARGET_ARCH="x64"
-          WORD_SIZE=64
-        fi
     elif [ \( $PLATFORM == "linux32" \) -o \( $PLATFORM == "linux64" \) ] ; then
 		if [ $WANTS_NINJA -eq $TRUE ] ; then
 			TARGET="Ninja"
 		else
 			TARGET="Unix Makefiles"
 		fi
-        if [ "${ND_AUTOBUILD_ARCH}" == "x64" ]
-        then
-          TARGET_ARCH="x64"
-          WORD_SIZE=64
-        fi
     elif [ \( $PLATFORM == "win32" \) ] ; then
-        if [ "${ND_AUTOBUILD_ARCH}" == "x64" ]
-        then
-          TARGET="Visual Studio 12 Win64"
-          TARGET_ARCH="x64"
-          WORD_SIZE=64
-        else
-          TARGET="Visual Studio 12"
-        fi
+    	TARGET="${AUTOBUILD_WIN_CMAKE_GEN}"
         UNATTENDED="-DUNATTENDED=ON"
     fi
 
-    cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $KDU $OPENSIM $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TESTBUILD $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=$WORD_SIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
+    cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $KDU $OPENSIM $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TESTBUILD $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
           -DNDTARGET_ARCH:STRING="${TARGET_ARCH}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
     if [ $PLATFORM == "win32" ] ; then

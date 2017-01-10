@@ -46,15 +46,8 @@ static const U32 LENGTHOFCOLOR4U = 4;
 class LLColor4U
 {
 public:
-	//64bit compile fix - Do not put pointers into the LLColor4U union. FS:ND
-	//	union
-	//	{
-		U8         mV[LENGTHOFCOLOR4U];
-	//		U32        mAll;
-	//		LLColor4*  mSources;
-	//		LLColor4U* mSourcesU;
-	//	};
 
+	U8 mV[LENGTHOFCOLOR4U];
 
 	LLColor4U();						// Initializes LLColor4U to (0, 0, 0, 1)
 	LLColor4U(U8 r, U8 g, U8 b);		// Initializes LLColor4U to (r, g, b, 1)
@@ -82,9 +75,6 @@ public:
 		ret[3] = mV[3];
 		return ret;
 	}
-
-	U32 asRGBA() const;
-	void fromRGBA( U32 aVal );
 
 	const LLColor4U&	setToBlack();						// zero LLColor4U to (0, 0, 0, 1)
 	const LLColor4U&	setToWhite();						// zero LLColor4U to (0, 0, 0, 1)
@@ -130,14 +120,13 @@ public:
 	static BOOL parseColor4U(const std::string& buf, LLColor4U* value);
 
 	// conversion
-#ifdef LL_DARWIN
-	operator /*const*/ LLColor4() const
-#else
 	operator const LLColor4() const
-#endif
 	{
 		return LLColor4(*this);
 	}
+
+	U32 asRGBA() const;
+	void fromRGBA( U32 aVal );
 
 	static LLColor4U white;
 	static LLColor4U black;
@@ -570,6 +559,26 @@ void LLColor4U::setVecScaleClamp(const LLColor3& color)
 	mV[2] = b;
 
 	mV[3] = 255;
+}
+
+inline U32 LLColor4U::asRGBA() const
+{
+	// Little endian: values are swapped in memory. The original code access the array like a U32, so we need to swap here
+
+	return (mV[3] << 24) | (mV[2] << 16) | (mV[1] << 8) | mV[0];
+}
+
+inline void LLColor4U::fromRGBA( U32 aVal )
+{
+	// Little endian: values are swapped in memory. The original code access the array like a U32, so we need to swap here
+
+	mV[ 0 ] = aVal & 0xFF;
+	aVal >>= 8;
+	mV[ 1 ] = aVal & 0xFF;
+	aVal >>= 8;
+	mV[ 2 ] = aVal & 0xFF;
+	aVal >>= 8;
+	mV[ 3 ] = aVal & 0xFF;
 }
 
 

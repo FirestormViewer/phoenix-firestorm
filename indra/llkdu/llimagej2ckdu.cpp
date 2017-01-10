@@ -25,20 +25,36 @@
  */
 
 #include "linden_common.h"
+
 #include "llimagej2ckdu.h"
 
 #include "lltimer.h"
 #include "llpointer.h"
 #include "llmath.h"
 #include "llkdumem.h"
-#include "stringize.h"
 
-#include "kdu_block_coding.h"
+#define kdu_xxxx "kdu_block_coding.h"
+#include "include_kdu_xxxx.h"
+
+// Avoid ubiquitous necessity of kdu_core:: qualification
+using namespace kdu_core;
 
 #include "llexception.h"
 #include <boost/exception/diagnostic_information.hpp>
 #include <sstream>
 #include <iomanip>
+
+// stream kdu_dims to std::ostream
+// Turns out this must NOT be in the anonymous namespace!
+// It must also precede #include "stringize.h".
+inline
+std::ostream& operator<<(std::ostream& out, const kdu_dims& dims)
+{
+	return out << "(" << dims.pos.x << "," << dims.pos.y << "),"
+				  "[" << dims.size.x << "x" << dims.size.y << "]";
+}
+
+#include "stringize.h"
 
 namespace {
 // Failure to load an image shouldn't crash the whole viewer.
@@ -82,21 +98,10 @@ std::string report_kdu_exception(kdu_exception mb)
 }
 } // anonymous namespace
 
-// stream kdu_dims to std::ostream
-// Turns out this must NOT be in the anonymous namespace!
-namespace kdu_core { // <FS:Ansariel> KDU >= 7.5 fix
-inline
-std::ostream& operator<<(std::ostream& out, const kdu_dims& dims)
-{
-	return out << "(" << dims.pos.x << "," << dims.pos.y << "),"
-				  "[" << dims.size.x << "x" << dims.size.y << "]";
-}
-} // <FS:Ansariel> KDU >= 7.5 fix
-
 class kdc_flow_control {
 	
 public:
-	kdc_flow_control(kdu_image_in_base *img_in, kdu_codestream codestream);
+	kdc_flow_control(kdu_supp::kdu_image_in_base *img_in, kdu_codestream codestream);
 	~kdc_flow_control();
 	bool advance_components();
 	void process_components();
@@ -105,7 +110,7 @@ private:
 	
 	struct kdc_component_flow_control {
 	public:
-		kdu_image_in_base *reader;
+		kdu_supp::kdu_image_in_base *reader;
 		int vert_subsampling;
 		int ratio_counter;  /*  Initialized to 0, decremented by `count_delta';
                                 when < 0, a new line must be processed, after
@@ -148,11 +153,8 @@ std::string LLImageJ2CKDU::getEngineInfo() const
 class LLKDUDecodeState
 {
 public:
-	// <FS:ND> KDU 7.3.2 upgrade
-	// LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap);
-	LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap, kdu_codestream &aStream );
-	// </FS:ND>
-
+	LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap,
+					 kdu_codestream* codestreamp);
 	~LLKDUDecodeState();
 	bool processTileDecode(F32 decode_time, bool limit_time = true);
 
@@ -354,9 +356,9 @@ void LLImageJ2CKDU::setupCodeStream(LLImageJ2C &base, bool keep_codestream, ECod
 			// This method is only called from methods that catch KDUError.
 			// We want to fail the image load, not crash the viewer.
 			LLTHROW(KDUError(STRINGIZE("Component " << idx << " dimensions "
-									 << other_dims
-									 << " do not match component 0 dimensions "
-									 << dims << "!")));
+									   << stringize(other_dims)
+									   << " do not match component 0 dimensions "
+									   << stringize(dims) << "!")));
 		}
 	}
 
@@ -577,12 +579,8 @@ bool LLImageJ2CKDU::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 deco
 					kdu_coords offset = tile_dims.pos - dims.pos;
 					int row_gap = channels*dims.size.x; // inter-row separation
 					kdu_byte *buf = buffer + offset.y*row_gap + offset.x*channels;
-					
-					// <FS:ND> KDU 7.3.2 upgrade
-					// mDecodeState.reset(new LLKDUDecodeState(tile, buf, row_gap));
-					mDecodeState.reset(new LLKDUDecodeState(tile, buf, row_gap, mCodeStreamp.get()));
-					// </FS:ND>
-
+					mDecodeState.reset(new LLKDUDecodeState(tile, buf, row_gap,
+															mCodeStreamp.get()));
 				}
 				// Do the actual processing
 				F32 remaining_time = decode_time - decode_timer.getElapsedTimeF32();
@@ -1272,10 +1270,8 @@ all necessary level shifting, type conversion, rounding and truncation. */
 	}
 }
 
-// <FS:ND> KDU 7.3.2 upgrade
-// LLKDUDecodeState::LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap)
-LLKDUDecodeState::LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap, kdu_codestream &aStream )
-// </FS:ND>
+LLKDUDecodeState::LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap,
+								   kdu_codestream* codestreamp)
 {
 	S32 c;
 
@@ -1321,12 +1317,7 @@ LLKDUDecodeState::LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap, kd
 			mEngines[c] = kdu_synthesis(res,&mAllocator,use_shorts);
 		}
 	}
-
-	// <FS:ND> KDU 7.3.2 upgrade
-	// mAllocator.finalize(); // Actually creates buffering resources
-	mAllocator.finalize( aStream ); // Actually creates buffering resources
-	// </FS:ND>
-
+	mAllocator.finalize(*codestreamp); // Actually creates buffering resources
 	for (c = 0; c < mNumComponents; c++)
 	{
 		mLines[c].create(); // Grabs resources from the allocator.
@@ -1384,7 +1375,7 @@ separation between consecutive rows in the real buffer. */
 
 // kdc_flow_control 
 
-kdc_flow_control::kdc_flow_control (kdu_image_in_base *img_in, kdu_codestream codestream)
+kdc_flow_control::kdc_flow_control (kdu_supp::kdu_image_in_base *img_in, kdu_codestream codestream)
 {
 	int n;
 	

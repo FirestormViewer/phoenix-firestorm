@@ -30,18 +30,6 @@ if(WINDOWS)
     #*******************************
     # Misc shared libs 
 
-    set(debug_src_dir "${ARCH_PREBUILT_DIRS_DEBUG}")
-    set(debug_files
-        #openjpegd.dll
-        libapr-1.dll
-        libaprutil-1.dll
-        libapriconv-1.dll
-        ssleay32.dll
-        libeay32.dll
-        glod.dll    
-        libhunspell.dll
-        )
-
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     set(release_files
         #openjpeg.dll
@@ -55,29 +43,19 @@ if(WINDOWS)
         )
 
     if( NOT ND_USE_OPENJPEG2 )
-      set(debug_files ${debug_files} openjpegd.dll )
       set(release_files ${release_files} openjpeg.dll )
 	else()
-      set(debug_files ${debug_files} openjp2.dll )
       set(release_files ${release_files} openjp2.dll )
     endif( NOT ND_USE_OPENJPEG2 ) 
     
-    set(debug_files ${debug_files} growl++.dll growl.dll )
     set(release_files ${release_files} growl++.dll growl.dll )
-
-    if(USE_TCMALLOC)
-      set(debug_files ${debug_files} libtcmalloc_minimal-debug.dll)
-      set(release_files ${release_files} libtcmalloc_minimal.dll)
-    endif(USE_TCMALLOC)
-
     if (FMODEX)
-      if( NOT ND_BUILD64BIT_ARCH )
-        set(debug_files ${debug_files} fmodexL.dll)
-        set(release_files ${release_files} fmodex.dll)
-      else( NOT ND_BUILD64BIT_ARCH )
-        set(debug_files ${debug_files} fmodexL64.dll)
-        set(release_files ${release_files} fmodex64.dll)
-      endif( NOT ND_BUILD64BIT_ARCH )
+
+        if(ADDRESS_SIZE EQUAL 32)
+            set(release_files ${release_files} fmodex.dll)
+        else(ADDRESS_SIZE EQUAL 32)
+            set(release_files ${release_files} fmodex64.dll)
+        endif(ADDRESS_SIZE EQUAL 32)
     endif (FMODEX)
 
     #*******************************
@@ -180,10 +158,8 @@ elseif(DARWIN)
         libaprutil-1.0.dylib
         libaprutil-1.dylib
         libexception_handler.dylib
-        libexpat.1.5.2.dylib
-        libexpat.dylib
+        ${EXPAT_COPY}
         libGLOD.dylib
-        libhunspell-1.3.0.dylib
         libndofdev.dylib
 	libgrowl.dylib
         libgrowl++.dylib
@@ -221,14 +197,13 @@ elseif(LINUX)
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     # *FIX - figure out what to do with duplicate libalut.so here -brad
     set(release_files
-        #libapr-1.so.0
-        #libaprutil-1.so.0
+        libapr-1.so.0
+        libaprutil-1.so.0
         libatk-1.0.so
-        #libdb-5.1.so
-        libexpat.so
-        libexpat.so.1
-        #libfreetype.so.6.6.2
-        #libfreetype.so.6
+        libdb-5.1.so
+        ${EXPAT_COPY}
+        libfreetype.so.6.6.2
+        libfreetype.so.6
         libGLOD.so
         libgmodule-2.0.so
         libgobject-2.0.so
@@ -240,23 +215,9 @@ elseif(LINUX)
         libfontconfig.so.1.8.0
         libfontconfig.so.1
        )
-    if( NOT ND_BUILD64BIT_ARCH )
-      set(release_files ${release_files}
-          libapr-1.so.0
-          libaprutil-1.so.0
-          libdb-5.1.so
-          libfreetype.so.6.6.2
-          libfreetype.so.6
-		 )
-    endif( NOT ND_BUILD64BIT_ARCH )
     if( NOT ND_USE_OPENJPEG2 )
       set(release_files ${release_files} libopenjpeg.so )
     endif( NOT ND_USE_OPENJPEG2 ) 
-
-
-    if (USE_TCMALLOC)
-      set(release_files ${release_files} "libtcmalloc_minimal.so")
-    endif (USE_TCMALLOC)
 
     if (FMODEX)
       set(debug_files ${debug_files} "libfmodexL.so")
@@ -314,13 +275,13 @@ set(third_party_targets ${third_party_targets} ${out_targets})
 
 
 
-copy_if_different(
-    ${debug_src_dir}
-    "${SHARED_LIB_STAGING_DIR_DEBUG}"
-    out_targets
-    ${debug_files}
-    )
-set(third_party_targets ${third_party_targets} ${out_targets})
+#copy_if_different(
+#    ${debug_src_dir}
+#    "${SHARED_LIB_STAGING_DIR_DEBUG}"
+#    out_targets
+#    ${debug_files}
+#    )
+#set(third_party_targets ${third_party_targets} ${out_targets})
 
 copy_if_different(
     ${release_src_dir}

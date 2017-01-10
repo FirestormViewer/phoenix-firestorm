@@ -103,11 +103,11 @@ public:
 		/**
 		 * Allows std::list sorting
 		 */
-		bool operator > (const LLSearchHistory::LLSearchHistoryItem& right);
+		bool operator > (const LLSearchHistory::LLSearchHistoryItem& right) const;
 
-		bool operator==(const LLSearchHistoryItem& right);
+		bool operator==(const LLSearchHistoryItem& right) const;
 
-		bool operator==(const std::string& right);
+		bool operator==(const std::string& right) const;
 
 		/**
 		 * Serializes search history item to LLSD

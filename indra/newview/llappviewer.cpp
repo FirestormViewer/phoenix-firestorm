@@ -3859,6 +3859,7 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["BUILD_DATE"] = __DATE__;
 	info["BUILD_TIME"] = __TIME__;
 	info["CHANNEL"] = LLVersionInfo::getChannel();
+    info["ADDRESS_SIZE"] = ADDRESS_SIZE;
     //std::string build_config = LLVersionInfo::getBuildConfig();
     //if (build_config != "Release")
     //{

@@ -260,7 +260,7 @@ bool LLAppViewerMacOSX::restoreErrorTrap()
 	unsigned int reset_count = 0;
 	
 #define SET_SIG(S) 	sigaction(SIGABRT, &act, &old_act); \
-					if((uintptr_t)act.sa_sigaction != (uintptr_t) old_act.sa_sigaction) \
+					if(act.sa_sigaction != old_act.sa_sigaction) \
 						++reset_count;
 	// Synchronous signals
 	SET_SIG(SIGABRT)

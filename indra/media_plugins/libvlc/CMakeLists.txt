@@ -33,11 +33,13 @@ include_directories(SYSTEM
 
 ### media_plugin_libvlc
 
-if(NOT WORD_SIZE EQUAL 32)
-  if(NOT WINDOWS)
+if(NOT ADDRESS_SIZE EQUAL 32)
+  if(WINDOWS)
+    ##add_definitions(/FIXED:NO)
+  else(WINDOWS) # not windows therefore gcc LINUX and DARWIN
     add_definitions(-fPIC)
-  endif(NOT WINDOWS)
-endif(NOT WORD_SIZE EQUAL 32)
+  endif(WINDOWS)
+endif(NOT ADDRESS_SIZE EQUAL 32)
 
 set(media_plugin_libvlc_SOURCE_FILES
     media_plugin_libvlc.cpp
@@ -56,11 +58,21 @@ target_link_libraries(media_plugin_libvlc
   ${PLUGIN_API_WINDOWS_LIBRARIES}
 )
 
-#add_dependencies(media_plugin_libvlc
-#  ${LLPLUGIN_LIBRARIES}
-#  ${MEDIA_PLUGIN_BASE_LIBRARIES}
-#  ${LLCOMMON_LIBRARIES}
-#)
+add_dependencies(media_plugin_libvlc
+  ${LLPLUGIN_LIBRARIES}
+  ${MEDIA_PLUGIN_BASE_LIBRARIES}
+##${LLCOMMON_LIBRARIES}
+  # Just say 'llcommon' here. LLCOMMON_LIBRARIES is specified for use in
+  # target_link_libraries: it includes several Boost libraries, which are
+  # absolutely NOT dependencies in the sense intended here. Those Boost
+  # library macros, in turn, specify 'debug' and 'optimized' and a different
+  # library name for each, producing several wordy errors:
+  # Policy CMP0046 is not set: Error on non-existent dependency in
+  # add_dependencies.
+  # Really, the only dependency we should mention from LLCOMMON_LIBRARIES is
+  # llcommon itself.
+  llcommon
+)
 
 if (WINDOWS)
   set_target_properties(

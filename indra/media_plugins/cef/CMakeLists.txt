@@ -39,11 +39,13 @@ include_directories(SYSTEM
 
 ### media_plugin_cef
 
-if(NOT WORD_SIZE EQUAL 32)
-  if( NOT WINDOWS) # not windows therefore gcc LINUX and DARWIN
+if(NOT ADDRESS_SIZE EQUAL 32)
+  if(WINDOWS)
+    ##add_definitions(/FIXED:NO)
+  else(WINDOWS) # not windows therefore gcc LINUX and DARWIN
     add_definitions(-fPIC)
-  endif(NOT WINDOWS)
-endif(NOT WORD_SIZE EQUAL 32)
+  endif(WINDOWS)
+endif(NOT ADDRESS_SIZE EQUAL 32)
 
 set(media_plugin_cef_SOURCE_FILES
     media_plugin_cef.cpp
@@ -108,8 +110,8 @@ if (WINDOWS)
   set_target_properties(
     media_plugin_cef
     PROPERTIES
-    LINK_FLAGS "/MANIFEST:NO /SAFESEH:NO /NODEFAULTLIB:LIBCMT"
-    LINK_FLAGS_DEBUG "/MANIFEST:NO /SAFESEH:NO /NODEFAULTLIB:LIBCMTD"
+    LINK_FLAGS "/MANIFEST:NO /SAFESEH:NO /LTCG /NODEFAULTLIB:LIBCMT /IGNORE:4099"
+    LINK_FLAGS_DEBUG "/MANIFEST:NO /SAFESEH:NO /NODEFAULTLIB:LIBCMTD /IGNORE:4099"
     )
 endif (WINDOWS)
 

@@ -113,8 +113,7 @@ class LLDragDropWin32Target:
 					PVOID data = GlobalLock( stgmed.hGlobal );
 					mDropUrl = std::string( (char*)data );
 					// XXX MAJOR MAJOR HACK!
-					// LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLong(mAppWindowHandle, GWL_USERDATA);
-					LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLongPtr(mAppWindowHandle, GWLP_USERDATA);
+					LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLongPtr( mAppWindowHandle, GWLP_USERDATA );
 					if (NULL != window_imp)
 					{
 						LLCoordGL gl_coord( 0, 0 );
@@ -169,8 +168,7 @@ class LLDragDropWin32Target:
 			if ( mAllowDrop )
 			{
 				// XXX MAJOR MAJOR HACK!
-				// LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLong(mAppWindowHandle, GWL_USERDATA);
-				LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLongPtr(mAppWindowHandle, GWLP_USERDATA);
+				LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLongPtr( mAppWindowHandle, GWLP_USERDATA );
 				if (NULL != window_imp)
 				{
 					LLCoordGL gl_coord( 0, 0 );
@@ -217,8 +215,7 @@ class LLDragDropWin32Target:
 		HRESULT __stdcall DragLeave( void )
 		{
 			// XXX MAJOR MAJOR HACK!
-			// LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLong(mAppWindowHandle, GWL_USERDATA);
-			LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLongPtr(mAppWindowHandle, GWLP_USERDATA);
+			LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLongPtr( mAppWindowHandle, GWLP_USERDATA );
 			if (NULL != window_imp)
 			{
 				LLCoordGL gl_coord( 0, 0 );
@@ -235,7 +232,6 @@ class LLDragDropWin32Target:
 			if ( mAllowDrop )
 			{
 				// window impl stored in Window data (neat!)
-				// LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLong( mAppWindowHandle, GWL_USERDATA );
 				LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLongPtr( mAppWindowHandle, GWLP_USERDATA );
 				if ( NULL != window_imp )
 				{
