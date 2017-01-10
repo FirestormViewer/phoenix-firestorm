@@ -405,6 +405,18 @@ void LLToast::setVisible(BOOL show)
 		{
 			mTimer->start();
 		}
+
+		// <FS:Ansariel> FIRE-17834: Local chat toasts sit above chat floater
+		if ((!mNotification.get() ||
+			(mNotification->getName() != "ScriptQuestion" &&
+			 mNotification->getName() != "ScriptQuestionCaution" &&
+			 mNotification->getName() != "ScriptQuestionExperience" &&
+			 mNotification->getName() != "UnknownScriptQuestion")) &&
+			 !getVisible())
+		{
+			LLModalDialog::setFrontmost(FALSE);
+		}
+		// </FS:Ansariel>
 	}
 	else
 	{
