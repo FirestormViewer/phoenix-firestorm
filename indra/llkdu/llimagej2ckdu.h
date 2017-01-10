@@ -34,10 +34,6 @@
 //
 #define KDU_NO_THREADS
 
-// <FS:ND> Some magic to make KDU and the viewer agree with internal alignments
-#define KDU_X86_INTRINSICS
-// </FS:ND>
-
 #include "kdu_elementary.h"
 #include "kdu_messaging.h"
 #include "kdu_params.h"
