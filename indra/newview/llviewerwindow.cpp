@@ -789,7 +789,7 @@ public:
 			ypos += y_inc;
 		}
 		// <FS:LO> pull the text saying if particles are hidden out from beacons
-		if (LLPipeline::toggleRenderTypeControlNegated((void*)LLPipeline::RENDER_TYPE_PARTICLES))
+		if (LLPipeline::toggleRenderTypeControlNegated(LLPipeline::RENDER_TYPE_PARTICLES))
 		{
 			addText(xpos, ypos, particle_hiding);
 			ypos += y_inc;
@@ -801,7 +801,7 @@ public:
 		// <FS:Ansa> ...and if we want to see it
 		//if (LLPipeline::getRenderBeacons(NULL) && LLFloaterReg::instanceVisible("beacons"))
 		static LLCachedControl<bool> fsRenderBeaconText(gSavedSettings, "FSRenderBeaconText");
-		if (LLPipeline::getRenderBeacons(NULL) && fsRenderBeaconText)
+		if (LLPipeline::getRenderBeacons() && fsRenderBeaconText)
 		// </FS:Ansa>
 		{
 			if (LLPipeline::getRenderMOAPBeacons())
@@ -812,13 +812,11 @@ public:
 				ypos += y_inc;
 			}
 
-			// <FS:LO> pull the text saying if particles are hidden out from beacons
 			if (LLPipeline::toggleRenderTypeControlNegated(LLPipeline::RENDER_TYPE_PARTICLES))
 			{
 				addText(xpos, ypos, particle_hiding);
 				ypos += y_inc;
-			}*/
-			// </FS:LO>
+			}
 
 			if (LLPipeline::getRenderParticleBeacons())
 			{
