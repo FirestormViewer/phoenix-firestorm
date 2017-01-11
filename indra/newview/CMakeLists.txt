@@ -1878,9 +1878,9 @@ if (WINDOWS)
     endif (INTEL_MEMOPS_LIBRARY)
 
     # <FS:Ansariel> Build 32bit Windows with LTCG linker flag because of OpenJPG
-    if (NOT ND_BUILD64BIT_ARCH)
+    if ( ADDRESS_SIZE EQUAL 32 )
         SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LTCG")
-    endif (NOT ND_BUILD64BIT_ARCH)
+    endif ( )
     # </FS:Ansariel>
 endif (WINDOWS)
 
@@ -2126,14 +2126,6 @@ if (WINDOWS)
       windows-crash-logger
       )
 
-    if( ND_BUILD64BIT_ARCH )
-      set( VIEWERMANIFEST_FLAGS --m64 --copy_artwork )
-      set( VIEWERMANIFEST_PACKAGE_FLAGS --m64 )
-    else( ND_BUILD64BIT_ARCH )
-      set( VIEWERMANIFEST_FLAGS "" )
-      set( VIEWERMANIFEST_PACKAGE_FLAGS )
-    endif( ND_BUILD64BIT_ARCH )
-
     if (FMODEX)
       list(APPEND COPY_INPUT_DEPENDENCIES
            ${SHARED_LIB_STAGING_DIR}/Release/fmodex.dll
@@ -2149,7 +2141,6 @@ if (WINDOWS)
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
         --actions=copy
         --arch=${ARCH}
-        ${VIEWERMANIFEST_FLAGS}
         --artwork=${ARTWORK_DIR}
         --build=${CMAKE_CURRENT_BINARY_DIR}
         --buildtype=${CMAKE_BUILD_TYPE}
@@ -2216,7 +2207,6 @@ if (WINDOWS)
         ARGS
           ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
           --arch=${ARCH}
-          ${VIEWERMANIFEST_PACKAGE_FLAGS}
           --artwork=${ARTWORK_DIR}
           --build=${CMAKE_CURRENT_BINARY_DIR}
           --buildtype=${CMAKE_BUILD_TYPE}

@@ -793,8 +793,8 @@ LLAppViewer::LLAppViewer()
 	// <FS:ND> Init our custom directories, not from SecondLife
 
 	// gDirUtilp->initAppDirs("SecondLife");
-#ifdef ND_BUILD64BIT_ARCH
-	gDirUtilp->initAppDirs(APP_NAME + "_x64");
+#if ADDRESS_SIZE == 64
+	gDirUtilp->initAppDirs( APP_NAME + "_x64" );
 #else
 	gDirUtilp->initAppDirs(APP_NAME);
 #endif
@@ -5376,8 +5376,8 @@ void LLAppViewer::purgeCacheImmediate()
 
 std::string LLAppViewer::getSecondLifeTitle() const
 {
-#ifdef ND_BUILD64BIT_ARCH
-	return LLTrans::getString("APP_NAME") + "_x64";
+#if ADDRESS_SIZE == 64
+	return LLTrans::getString( "APP_NAME" ) + "_x64";
 #else
 	return LLTrans::getString("APP_NAME");
 #endif

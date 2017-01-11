@@ -99,13 +99,6 @@ if (WINDOWS)
   if (NOT VS_DISABLE_FATAL_WARNINGS)
     add_definitions(/WX)
   endif (NOT VS_DISABLE_FATAL_WARNINGS)
-
-  if( ND_BUILD64BIT_ARCH )
-   add_definitions("/wd4267 /DND_BUILD64BIT_ARCH" )
-  else( ND_BUILD64BIT_ARCH )
-   add_definitions("/fp:fast" )
-  endif( ND_BUILD64BIT_ARCH )
- 
 endif (WINDOWS)
 
 

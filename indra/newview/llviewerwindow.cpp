@@ -1936,7 +1936,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	// memory and up to 2GB texture memory on cards with 4GB video memory. Check
 	// is performed against a lower limit as not exactly 2 or 4GB might not be
 	// returned.
-#ifdef ND_BUILD64BIT_ARCH
+#if ADDRESS_SIZE == 64
 	LL_INFOS() << "GLManager detected " << gGLManager.mVRAM << " MB VRAM" << LL_ENDL;
 
 	if (gGLManager.mVRAM > 3584)

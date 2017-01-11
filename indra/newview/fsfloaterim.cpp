@@ -380,7 +380,7 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 					}
 					// </FS:PP>
 
-#if !defined(ND_BUILD64BIT_ARCH)
+#if ADDRESS_SIZE == 32
 					std::string strFSTag = "(FS ";
 #else
 					std::string strFSTag = "(FS64 ";

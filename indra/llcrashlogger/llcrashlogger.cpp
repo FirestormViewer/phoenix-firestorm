@@ -699,8 +699,8 @@ bool LLCrashLogger::init()
     LLCore::LLHttp::initialize();
 
 	// We assume that all the logs we're looking for reside on the current drive
-#ifdef ND_BUILD64BIT_ARCH
-	gDirUtilp->initAppDirs("Firestorm_x64");
+#if ADDRESS_SIZE == 64
+	gDirUtilp->initAppDirs( "Firestorm_x64" );
 #else
 	gDirUtilp->initAppDirs("Firestorm");
 #endif

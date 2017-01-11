@@ -1480,8 +1480,8 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32Megabytes mem)
 	
 // <FS:Ansariel> Texture memory management
 	//mMaxTotalTextureMemInMegaBytes = mMaxResidentTexMemInMegaBytes * 2;
-#ifndef ND_BUILD64BIT_ARCH
-// </FS:Ansariel>
+#if ADDRESS_SIZE == 32
+	// </FS:Ansariel>
 	mMaxTotalTextureMemInMegaBytes = mMaxResidentTexMemInMegaBytes * 2;
 
 	if (mMaxResidentTexMemInMegaBytes > (S32Megabytes)640)
