@@ -286,6 +286,10 @@ void QToolAlign::computeManipulatorSize()
 			mManipulatorSize = MANIPULATOR_SIZE;
 		}
 	}
+
+	//Assume that UI scale factor is equivalent for X and Y axi
+	F32 ui_scale_factor = LLUI::getScaleFactor().mV[VX];
+	mManipulatorSize *= ui_scale_factor;
 }
 
 
