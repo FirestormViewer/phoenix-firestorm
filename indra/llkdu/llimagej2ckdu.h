@@ -45,12 +45,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
-// <FS:ND> KDU >= 7.5.0 uses namespaces for nicer encapsulation. To avoid cluttering this all over LLs source we're going with this.
-#if KDU_MAJOR_VERSION >= 7 && KDU_MINOR_VERSION >= 5
- using namespace kdu_core;
-#endif
-// </FS:ND>
-
 class LLKDUDecodeState;
 class LLKDUMemSource;
 
