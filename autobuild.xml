@@ -70,6 +70,18 @@
             <key>name</key>
             <string>linux</string>
           </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>2709f7a5cf499ea77481dd1fce796d61</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201505150224-r74-linux-x64-201505150224-r74.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -78,6 +90,18 @@
               <string>7ffe5a6165e6808e0674754b56545034</string>
               <key>url</key>
               <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-windows-201505061845-r74.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>a2baf97f950cc16af9fe5cf316b7fa4d</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201412081952-windows-x64-201412081952.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -126,6 +150,16 @@
               <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows-201601022248-r16.tar.bz2</uri>
             </map>
           </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>5b1d8e9d3f4fd4fcc6b090d2e9bfd23d</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows-x64-201601022251-r16.tar.bz2</string>
+            </map>
+		  </map>
         </map>
       </map>
       <key>openjpeg2</key>
