@@ -983,9 +983,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e2419d56960c160670051fbb055fb729</string>
+              <string>79b8fdf859eaa2c095ddba6a58054e29</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-fontconfig/rev/314281/arch/Linux/installer/fontconfig-2.11.0-linux64-314281.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/fontconfig-2.11.0-linux64-201701161537.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2366,6 +2366,20 @@
               <string>md5</string>
               <key>url</key>
               <string>http://downloads.phoenixviewer.com/llceflib-1.0-linux-201611192300.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>164f7d78bea7d5e3f13f4dd3c99b8a58</string>
+              <key>hash_algorithm</key>
+              <string>md5</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.0-linux64-201701121623.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
