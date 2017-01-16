@@ -215,9 +215,6 @@ elseif(LINUX)
         libfontconfig.so.1.8.0
         libfontconfig.so.1
        )
-    if( NOT ND_USE_OPENJPEG2 )
-      set(release_files ${release_files} libopenjpeg.so )
-    endif( NOT ND_USE_OPENJPEG2 ) 
 
     if (FMODEX)
       set(debug_files ${debug_files} "libfmodexL.so")
