@@ -3907,7 +3907,7 @@
         <key>linux</key>
         <map>
           <key>build_directory</key>
-          <string>build-linux-i686</string>
+          <string>build-linux-$AUTOBUILD_CONFIGURE_ARCH</string>
           <key>configurations</key>
           <map>
             <key>Doxygen</key>
