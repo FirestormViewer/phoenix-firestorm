@@ -200,7 +200,7 @@ elseif(LINUX)
         libapr-1.so.0
         libaprutil-1.so.0
         libatk-1.0.so
-        libdb-5.1.so
+        #libdb-5.1.so
         ${EXPAT_COPY}
         libfreetype.so.6.6.2
         libfreetype.so.6
