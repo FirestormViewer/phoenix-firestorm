@@ -51,9 +51,9 @@ else (USESYSTEMLIBS)
         pangoft2-1.0
         pangox-1.0
         #pangoxft-1.0
-        gio-2.0
-        pangocairo-1.0
-        ffi
+#        gio-2.0
+#        pangocairo-1.0
+#        ffi
         )
 
     foreach(libname ${UI_LIB_NAMES})
