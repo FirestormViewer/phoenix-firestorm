@@ -37,12 +37,14 @@ ATTRIBUTE vec4 weight;
 VARYING vec3 vary_normal;
 VARYING vec2 vary_texcoord0;
 
+// <FS> Fix avatar cloth failing to work in deferred
 uniform vec4 gWindDir;
 uniform vec4 gSinWaveParams;
 uniform vec4 gGravity;
 
 const vec4 gMinMaxConstants = vec4(1.0, 0.166666, 0.0083143, .00018542);	 // #minimax-generated coefficients
 const vec4 gPiConstants	= vec4(0.159154943, 6.28318530, 3.141592653, 1.5707963); //	# {1/2PI, 2PI, PI, PI/2}
+// </FS>
 
 void main()
 {
@@ -53,12 +55,19 @@ void main()
 	
 	vec4 pos_in = vec4(position.xyz, 1.0);
 	mat4 trans = getSkinnedTransform();
+	// <FS> Fix avatar cloth failing to work in deferred
+	//pos.x = dot(trans[0], pos_in);
+	//pos.y = dot(trans[1], pos_in);
+	//pos.z = dot(trans[2], pos_in);
+	//pos.w = 1.0;
+	// </FS>
 	
 	norm.x = dot(trans[0].xyz, normal);
 	norm.y = dot(trans[1].xyz, normal);
 	norm.z = dot(trans[2].xyz, normal);
 	norm = normalize(norm);
 	
+// <FS> Fix avatar cloth failing to work in deferred
 #if AVATAR_CLOTH
 	//wind
 	vec4 windEffect;
@@ -124,6 +133,7 @@ void main()
 	pos.z = dot(trans[2], pos_in);
 	pos.w = 1.0;
 #endif
+// </FS>
 
 	vary_normal = norm;
 	
