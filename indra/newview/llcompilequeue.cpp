@@ -659,8 +659,14 @@ bool LLFloaterCompileQueue::startQueue()
 
             LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet(lookup_url,
                 success, failure);
-            return TRUE;
+            return true;
         }
+        // <FS:Ansariel> FIRE-20765: Recompile scripts not working on OpenSim
+        else
+        {
+            processExperienceIdResults(LLSD(), getKey().asUUID());
+        }
+        // </FS:Ansariel>
     }
 
     return true;
