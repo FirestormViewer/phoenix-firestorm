@@ -341,6 +341,9 @@
 	<notification name="GroupBanUserOnBanlist">
 		グループ出入禁止になっている何人かの住人には招待が送られていません。
 	</notification>
+	<notification name="GroupBanUserOnBanlist">
+		一部の住人がグループから追放されたため、招待状が送られませんでした。
+	</notification>
 	<notification name="AttachmentDrop">
 		アタッチメントを下に置こうとしています。
 続けますか？
@@ -480,10 +483,10 @@ L$ が不足しているのでこのグループに参加することができ�
 		スナップショットのエンコード化でエラーが出ました！
 	</notification>
 	<notification name="ErrorPhotoCannotAfford">
-		写真をインベントリに保存するのに L$[COST] 必要です。リンデンドルを購入するか、代わりに写真をコンピュータに保存することもできます。
+		インベントリに写真を保存するには L$[COST] が必要です。L$ を購入するか、代わりに写真をっコンピュータに保存できます。
 	</notification>
 	<notification name="ErrorTextureCannotAfford">
-		テクスチャをインベントリに保存するのに L$[COST] 必要です。リンデンドルを購入するか、代わりに写真をコンピュータに保存することもできます。
+		インベントリにテクスチャを保存するには L$[COST] が必要です。L$ を購入するか、代わりに写真をコンピュータに保存できます。
 	</notification>
 	<notification name="ErrorUploadingPostcard">
 		次の理由で、スナップショットの送信時に問題が起こりました： [REASON]
@@ -616,6 +619,10 @@ L$ が不足しているのでこのグループに参加することができ�
 		ノートカードを削除しますか?
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
+	<notification name="LoadPreviousReportScreenshot">
+		以前のスクリーンショットをレポートに使用しますか?
+		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
+	</notification>
 	<notification name="GestureSaveFailedTooManySteps">
 		ジェスチャーの保存に失敗しました。
 ステップが多すぎます。
@@ -677,13 +684,13 @@ L$ が不足しているのでこのグループに参加することができ�
 		<usetemplate ignoretext="使用中のコンピューターのハードウェアがサポートされていないとき" name="okcancelignore" notext="いいえ" yestext="はい"/>
 	</notification>
 	<notification name="OldGPUDriver">
-		おそらくお使いのグラフィックチップ用の新しいドライバが入手可能です。グラフィックドライバを更新することにより、パフォーマンスが大幅に向上する場合があります。
+		グラフィックスチップに最新のドライバがある可能性があります。グラフィックドライバを更新することにより、大幅にパフォーマンスが向上します。
 
-[_URL] にアクセスして更新版のドライバがあるかどうかを確認しますか？
+    ドライバの更新を確認するために [URL] にアクセスしますか?
 		<url name="url">
 			[URL]
 		</url>
-		<usetemplate ignoretext="使用しているグラフィックドライバが古い場合" name="okcancelignore" notext="いいえ" yestext="はい"/>
+		<usetemplate ignoretext="使用中のグラフィックドライバが古くなっています" name="okcancelignore" notext="いいえ" yestext="はい"/>
 	</notification>
 	<notification name="UnknownGPU">
 		お使いのシステムには、[APP_NAME] が認識できないグラフィックカードが搭載されています。
@@ -791,6 +798,9 @@ L$ が不足しているのでこのグループに参加することができ�
 			http://secondlife.com/app/currency/?lang=ja-JP
 		</url>
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
+	</notification>
+	<notification name="MuteLimitReached">
+		[MUTE_LIMIT] エントリの制限に達したため、ブロックリストに新しいエントリを追加できません。
 	</notification>
 	<notification name="UnableToLinkObjects">
 		[COUNT] 個のオブジェクトをリンクできません。
@@ -1452,11 +1462,11 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries を参照してく
 
 	<notification name="AgentComplexity">
 		あなたの [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 avatar complexity] は [AGENT_COMPLEXITY] です。
-		<usetemplate ignoretext="自分のアバターの複雑さが変わった時に警告" name="notifyignore"/>
+		<usetemplate ignoretext="アバターの複雑さの変更について警告する" name="notifyignore"/>
 	</notification>
 	<notification name="HUDComplexityWarning">
-		[HUD_REASON]. 性能にネガティブな影響を及ぼす可能性があります。
-		<usetemplate ignoretext="HUDの複雑さが極めて高い時に警告" name="notifyignore"/>
+		[HUD_REASON]. 、パフォーマンスに悪影響を与える恐れがあります。
+		<usetemplate ignoretext="HUD が複雑すぎる場合はお知らせください" name="notifyignore"/>
 	</notification>
 	<notification name="FirstRun">
 		[APP_NAME] のインストールが完了しました。
@@ -1551,8 +1561,8 @@ SHA1 フィンガープリント： [MD5_DIGEST]
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="ChangeObjectBonusFactor">
-		地域（リージョン）に製作物が置かれたあとにオブジェクト・ボーナスの値を下げると、オブジェクトが返却されたり削除されてしまう可能性があります。それでも本当にオブジェクト・ボーナスの値を変更しますか？
-		<usetemplate ignoretext="オブジェクト・ボーナスの値を変更する時に確認" name="okcancelignore" notext="取り消し" yestext="OK"/>
+		地域（リージョン）内でビルドが確立された後にオブジェクトボーナスを下げると、オブジェクトが返されたり、削除されたりします。本当にオブジェクトボーナスを変更しますか?
+		<usetemplate ignoretext="オブジェクトボーナス係数の変更を確認" name="okcancelignore" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="EstateObjectReturn">
 		[USER_NAME] が所有しているオブジェクトを返却しますか？
@@ -1603,7 +1613,7 @@ SHA1 フィンガープリント： [MD5_DIGEST]
 		不動産オーナーを不動産の「禁止住人」リストに追加できません。
 	</notification>
 	<notification name="ProblemAddingEstateManagerBanned">
-		禁止住人を不動産の管理者リストに追加できません。
+		追放された住人を不動産管理者リストに追加できません。
 	</notification>
 	<notification name="CanNotChangeAppearanceUntilLoaded">
 		衣類およびシェイプが読み込まれるまでは、容姿の変更はできません。
@@ -1780,8 +1790,8 @@ http://secondlife.com/download から最新バージョンをダウンロード�
 		<usetemplate ignoretext="ブラウザを起動して Web ページを見るとき" name="okcancelignore" notext="キャンセル" yestext="OK"/>
 	</notification>
 	<notification name="SystemUIScaleFactorChanged">
-		システムUIのサイズ要素が前回起動した時から変更されています。UIサイズ調整を設定するページを開きますか？
-		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="OK"/>
+		前回実行時からシステム UI サイズ係数が変更されています。UI サイズ調整設定ページを開きますか?
+		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">
 		[http://jp.secondlife.com/account/ マイアカウント] ページに移動してアカウントを管理しますか？
@@ -1825,7 +1835,7 @@ http://secondlife.com/download から最新バージョンをダウンロード�
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="GroupDepart">
-		グループ &apos;[group_name]&apos; を退会しました。
+		グループ &apos;[group_name]&apos; を抜けました。
 	</notification>
 	<notification name="GroupLeaveConfirmMemberWithFee">
 現在、あなたは &lt;nolink&gt;[GROUP]&lt;/nolink&gt; グループのメンバーです。再度入会する場合は L$[AMOUNT] の費用がかかります。
@@ -2313,7 +2323,7 @@ http://wiki.secondlife.com/wiki/Setting_your_display_name を参照してくだ�
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="TooManyScriptsSelected">
-		選択したスクリプトが多すぎます。選択するスクリプトの数を減らしてもう一度お試し下さい。
+		スクリプト内で選択されたオブジェクトが多すぎます。選択するオブジェクトを減らして、もう一度やり直してください。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ProblemImportingEstateCovenant">
@@ -2492,6 +2502,10 @@ L$ [AMOUNT] で、このクラシファイド広告を今すぐ公開します�
 		支払を中止しました。金額がこのオブジェクトに設定されているどのボタンとも一致していません。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="PaymentBlockedButtonMismatch">
+		支払いが停止されました： 支払われた価格がこのオブジェクトに設定された支払いボタンのどれとも一致しません。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="OpenObjectCannotCopy">
 		このオブジェクトには、あなたがコピーできるアイテムはありません。
 	</notification>
@@ -2537,6 +2551,12 @@ L$ [AMOUNT] で、このクラシファイド広告を今すぐ公開します�
 	<notification name="HelpReportAbuseConfirm">
 本件につきご報告頂き、ありがとうございます。
 権利の侵害に関するあなたの報告を精査し、適切な対応をとるように致します。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="HelpReportAbuseConfirm">
+		この問題のご報告にお時間を割いていただきありがとうございます。 
+お知らせいただいた内容について違反がないか確認し、適切に
+対処いたします。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="HelpReportAbuseSelectCategory">
@@ -3078,8 +3098,8 @@ URL: [AUDIOURL]
 		この値域（リージョン）には、保留中のパスファインディングの変更があります。制作権がある場合は、「地域の再構築」ボタンをクリックして、地域（リージョン）を再構築できます。
 	</notification>
 	<notification name="PathfindingDirtyRebake">
-		この地域（リージョン）には、保留中のパスファインディングの変更があります。ビルドの権限があれば、「リージョンをリベーク」ボタンを押して地域（リージョン）のリベークをすることができます。
-		<usetemplate name="okbutton" yestext="リージョンをリベーク" />
+		この値域（リージョン）には、保留中のパスファインディングの変更があります。制作権がある場合は、「地域の再構築」ボタンをクリックして、地域（リージョン）を再構築できます。
+		<usetemplate name="okbutton" yestext="地域の再構築"/>
 	</notification>
 	<notification name="DynamicPathfindingDisabled">
 		この地域（リージョン）でダイナミックパスファインディングが有効になっていません。パスファインディング LSL 呼び出しを使用するスクリプト化されたオブジェクトがこの地域（リージョン）では動作できません。
@@ -3689,15 +3709,12 @@ M キーを押して変更します。
 	<notification name="AppearanceToXMLFailed">
 		容姿のXMLファイルへの保存が失敗しました
 	</notification>
-	
 	<notification name="PresetNotSaved">
-事前設定 [NAME] の保存時にエラーが発生しました。
+		プリセット [NAME] の保存エラー。
 	</notification>
-
 	<notification name="PresetNotDeleted">
-事前設定 [NAME] の削除時にエラーが発生しました。
+		プリセット [NAME] の削除エラー。
 	</notification>
-
 	<notification name="UnableToFindHelpTopic">
 		ヘルプトピックが見つかりませんでした。
 	</notification>
@@ -4545,7 +4562,7 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 		この区画でこのオブジェクトのリソースが不足しているため、オブジェクト &apos;[OBJECT_NAME]&apos; をリージョン [REGION_NAME] 内の [OBJ_POSITION] に移動できません。
 	</notification>
 	<notification name="NoParcelPermsNoObject">
-		コピーが失敗しました。その区画へのアクセス権がないためです。
+		その区画へのアクセス権がないため、コピーが失敗しました。
 	</notification>
 	<notification name="CantMoveObjectRegionVersion">
 		オブジェクト &apos;[OBJECT_NAME]&apos; をリージョン [REGION_NAME] 内の [OBJ_POSITION] に移動することはできません。他のリージョンでは、リージョンの境界をまたいだこのオブジェクトを受信することができない古いバージョンを実行しているためです。
@@ -4561,7 +4578,7 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 		そのオブジェクトを変更する権限がありません
 	</notification>
 	<notification name="TooMuchObjectInventorySelected">
-		大きなインベントリで余りにもたくさんのオブジェクトが選択されています。選択する数を減らしてもう一度試してみて下さい。
+		大きなインベントリを持つオブジェクトの選択が多すぎます。選択するオブジェクトを減らして、もう一度やり直してください。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="CantEnablePhysObjContributesToNav">
@@ -4601,10 +4618,10 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 		オブジェクトのコンテンツに保存できません。このため、アタッチメントの権限が変更されます。
 	</notification>
 	<notification name="AttachmentHasTooMuchInventory">
-		アタッチメントのインベントリにアイテムが多すぎるため、これ以上追加できません。
+		ご使用のアタッチメントに含まれるインベントリが多すぎるため、インベントリを追加できません。
 	</notification>
 	<notification name="IllegalAttachment">
-		アタッチメントがアバターの存在しない場所を要求しました。代わりに、このアタッチメントは胸に装着されます。
+		添付ファイルはアバターの存在しない点を要求しました。代わりに胸に添付されていました。
 	</notification>
 	<notification name="TooManyScripts">
 		スクリプトが多すぎます。
@@ -4699,10 +4716,10 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 		不明なユーザーが所有しているオブジェクト &apos;[OBJECT_NAME]&apos; によって、あなたはテレポートされています。
 	</notification>
 	<notification name="StandDeniedByObject">
-		'[OBJECT_NAME]' は現在その上に立つことを許可していません。
+		&apos;[OBJECT_NAME]&apos; はこの時点であなたが立つことを許可しません。
 	</notification>
 	<notification name="ResitDeniedByObject">
-		'[OBJECT_NAME]' は現在座り直すことを許可していません。
+		&apos;[OBJECT_NAME]&apos; はこの時点であなたが席を変更することを許可しません。
 	</notification>
 	<notification name="CantCreateObjectRegionFull">
 		リクエストされたオブジェクトを作成できません。リージョンが埋まっています。
@@ -4784,9 +4801,6 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 	</notification>
 	<notification name="CantAttachNotEnoughScriptResources">
 		オブジェクトの着用に使用できるスクリプトリソースが足りません。
-	</notification>
-	<notification name="IllegalAttachment">
-		添付ファイルはアバターの存在しない点を要求しました。代わりに胸に添付されていました。
 	</notification>
 	<notification name="CantAttachObjectBeingRemoved">
 		既に削除されたオブジェクトを装着することはできません。
@@ -5007,7 +5021,7 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 		オブジェクトへの送金は、このリージョンでは現在無効にされています。
 	</notification>
 	<notification name="DroppedMoneyTransferRequest">
-		システム負荷が高いため、支払を完了することができませんでした。
+		システムロードにより、支払いを実行できません。
 	</notification>
 	<notification name="CantPayNoAgent">
 		支払いの相手を把握できませんでした。
@@ -5043,6 +5057,9 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 	<notification name="OutfitPhotoLoadError">
 		[REASON]
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OutfitPhotoLoadError">
+		[REASON]
 	</notification>
 	
 	<!-- <FS:Zi> Add float LSL color entry widgets -->

@@ -19,7 +19,7 @@
 		Zeitüberschreitung: [OBJECT_NAME]
 	</floater.string>
 	<floater.string name="LoadingObjInv">
-		Lade Inhalt von: [OBJECT_NAME]
+		Inventar wird geladen für: [OBJECT_NAME]
 	</floater.string>
 	<floater.string name="Deleting">
 		Wird gelöscht

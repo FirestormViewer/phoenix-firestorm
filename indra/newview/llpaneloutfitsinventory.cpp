@@ -103,10 +103,6 @@ BOOL LLPanelOutfitsInventory::postBuild()
 	
 	mSaveComboBtn.reset(new LLSaveOutfitComboBtn(this, true));
 
-	// <FS:Ansariel> FIRE-20180: Select last tab when actually opening the appearance floater for the first time
-	//if (!mAppearanceTabs->selectTab(gSavedSettings.getS32("LastAppearanceTab")))
-	//	mAppearanceTabs->selectFirstTab();
-
 	return TRUE;
 }
 
@@ -129,7 +125,6 @@ void LLPanelOutfitsInventory::onOpen(const LLSD& key)
 		onCOFChanged();
 		// </FS:Ansariel>
 
-		// <FS:Ansariel> FIRE-20180: Select last tab when actually opening the appearance floater for the first time
 		if (!mAppearanceTabs->selectTab(gSavedSettings.getS32("LastAppearanceTab")))
 			mAppearanceTabs->selectFirstTab();
 

@@ -10,7 +10,7 @@
 		装着中 ([COUNT]/[MAX])
 	</panel.string>
 	<tab_container name="appearance_tabs">
-		<panel name="outfit_gallery_tab" label="アウトフィット・ギャラリー" />
+		<panel label="アウトフィットギャラリー" name="outfit_gallery_tab"/>
 		<panel label="マイ アウトフィット" name="outfitslist_tab"/>
 		<panel label="着用中" name="cof_tab"/>
 	</tab_container>

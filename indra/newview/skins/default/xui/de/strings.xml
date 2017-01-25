@@ -96,6 +96,9 @@ Voice-Serverversion: [VOICE_VERSION]
 	<string name="AboutTime">
 		[day, datetime, slt]. [month, datetime, slt] [year, datetime, slt] [hour24, datetime, slt]:[min, datetime, slt]:[second,datetime,slt] SLT
 	</string>
+	<string name="AboutTime">
+		[month, datetime, slt] [day, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt]
+	</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">
 		Fehler beim Abrufen der URL für die Server-Versionshinweise.
 	</string>
@@ -1256,6 +1259,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TeleportYourAgent">
 		Sie teleportieren
 	</string>
+	<string name="ForceSitAvatar">
+		Ihren Avatar zwingen, sich zu setzen
+	</string>
 	<string name="NotConnected">
 		Nicht verbunden
 	</string>
@@ -1268,9 +1274,6 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="ChangeYourDefaultAnimations">
 		Ihre Standardanimationen ändern
-	</string>
-	<string name="ForceSitAvatar">
-		Ihren Avatar zwingen zu sitzen
 	</string>
 	<string name="SnapshotSavedToDisk">
 		Schnappschuss gespeichert: [FILENAME]
@@ -2145,22 +2148,22 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Ihr HUD
 	</string>
 	<string name="hud_name_with_joint">
-		[OBJ_NAME] (getragen an [JNT_NAME])
+		[OBJ_NAME] (getragen von [JNT_NAME])
 	</string>
 	<string name="hud_render_memory_warning">
-		[HUD_DETAILS] verwendet viel Texturspeicher.
+		[HUD_DETAILS] beansprucht viel Texturspeicher
 	</string>
 	<string name="hud_render_cost_warning">
-		[HUD_DETAILS] enthält viele aufwendiger Objekte und Texturen.
+		[HUD_DETAILS] enthält zu viele ressourcenintensive Objekte und Texturen
 	</string>
 	<string name="hud_render_heavy_textures_warning">
-		[HUD_DETAILS] enthält viele große Texturen.
+		[HUD_DETAILS] enthält viele große Texturen
 	</string>
 	<string name="hud_render_cramped_warning">
-		[HUD_DETAILS] enthält zu viele Objekte.
+		[HUD_DETAILS] enthält zu viele Objekte
 	</string>
 	<string name="hud_render_textures_warning">
-		[HUD_DETAILS] enthält zu viele Texturen.
+		[HUD_DETAILS] enthält zu viele Texturen
 	</string>
 	<string name="AgeYearsA">
 		[COUNT] Jahr
@@ -4813,7 +4816,7 @@ Falls die Nachricht nicht innerhalb der nächsten Minuten erscheint, wurde sie v
 		[NAME] hat Ihnen [REASON] [AMOUNT] L$ bezahlt.
 	</string>
 	<string name="paid_you_ldollars_gift">
-		[NAME] hat Ihnen [AMOUNT] L$ bezahlt: [REASON]
+		[NAME] hat Ihnen [AMOUNT] L$ bezahlt: [REASON]
 	</string>
 	<string name="paid_you_ldollars_no_reason">
 		[NAME] hat Ihnen [AMOUNT] L$ bezahlt.
@@ -4822,7 +4825,7 @@ Falls die Nachricht nicht innerhalb der nächsten Minuten erscheint, wurde sie v
 		Sie haben [REASON] [AMOUNT] L$ an [NAME] bezahlt.
 	</string>
 	<string name="you_paid_ldollars_gift">
-		Sie haben [AMOUNT] L$ an [NAME] bezahlt: [REASON]
+		Sie haben [NAME] [AMOUNT] L$ bezahlt: [REASON]
 	</string>
 	<string name="you_paid_ldollars_no_info">
 		Sie haben [AMOUNT] L$ bezahlt.
@@ -5863,6 +5866,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Profile_Tooltip">
 		Ihr Profil bearbeiten oder anzeigen
+	</string>
+	<string name="Command_Report_Abuse_Tooltip">
+		Missbrauch melden
 	</string>
 	<string name="Command_Report_Abuse_Tooltip">
 		Missbrauch melden

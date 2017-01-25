@@ -16,10 +16,10 @@
 		実行されていません
 	</floater.string>
 	<floater.string name="Timeout">
-		タイムアウト: [OBJECT_NAME]
+		タイムアウト： [OBJECT_NAME]
 	</floater.string>
 	<floater.string name="LoadingObjInv">
-		[OBJECT_NAME] のためにインベントリをローディング中
+		次のインベントリをロード中： [OBJECT_NAME]
 	</floater.string>
 	<floater.string name="Deleting">
 		削除しています

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_group_plus">
 	<menu_item_check label="Сортировать по последнему говорившему" name="sort_by_recent_speakers" />
 	<menu_item_check label="Сортировать по имени" name="sort_name" />

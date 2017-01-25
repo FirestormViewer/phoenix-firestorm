@@ -144,11 +144,11 @@
 		<menu_item_call label="Enlazar" name="Link"/>
 		<menu_item_call label="Desenlazar" name="Unlink"/>
 		<menu_item_check label="Editar las partes enlazadas" name="Edit Linked Parts"/>
-		<menu label="Seleccionar partes enlazadas" name="Select Linked Parts">
-			<menu_item_call label="Seleccionar la parte siguiente" name="Select Next Part"/>
-			<menu_item_call label="Seleccionar la parte previa" name="Select Previous Part"/>
-			<menu_item_call label="Incluir la parte siguiente" name="Include Next Part"/>
-			<menu_item_call label="Incluir la parte previa" name="Include Previous Part"/>
+		<menu label="Seleccionar elementos" name="Select Elements">
+			<menu_item_call label="Seleccionar la parte o cara siguiente" name="Select Next Part or Face"/>
+			<menu_item_call label="Seleccionar la parte o cara anterior" name="Select Previous Part or Face"/>
+			<menu_item_call label="Incluir la parte o cara siguiente" name="Include Next Part or Face"/>
+			<menu_item_call label="Incluir la parte o cara anterior" name="Include Previous Part or Face"/>
 		</menu>
 		<menu_item_call label="Enfocar lo seleccionado" name="Focus on Selection"/>
 		<menu_item_call label="Zoom en lo seleccionado" name="Zoom to Selection"/>
@@ -472,8 +472,7 @@
 			<menu_item_call label="Volcar caché de objetos de la región" name="Dump Region Object Cache"/>
 		</menu>
 		<menu label="Interfaz de Usuario" name="UI">
-			<menu_item_call label="Prueba de navegador de medios" name="Web Browser Test"/>
-			<menu_item_call label="Navegador de contenido web" name="Web Content Browser"/>
+			<menu_item_call label="Navegador de medios" name="Media Browser"/>
 			<menu_item_call label="Volcar SelectMgr" name="Dump SelectMgr"/>
 			<menu_item_call label="Volcar inventario" name="Dump Inventory"/>
 			<menu_item_call label="Volcar temporizadores" name="Dump Timers"/>
