@@ -1743,7 +1743,7 @@ bool LLAppViewer::frame()
 			idleTimer.reset();
 			S32 total_work_pending = 0;
 			S32 total_io_pending = 0;	
-			while(1)
+			//while(1)
 			{
 				S32 work_pending = 0;
 				S32 io_pending = 0;
@@ -1767,11 +1767,15 @@ bool LLAppViewer::frame()
 
 				total_work_pending += work_pending ;
 				total_io_pending += io_pending ;
-				
-				if (!work_pending || idleTimer.getElapsedTimeF64() >= max_idle_time)
-				{
-					break;
-				}
+
+                if (work_pending)
+                {
+                    LL_WARNS("Idle") << "Work pending in texture thread: " << work_pending << LL_ENDL;
+                }
+// 				if (!work_pending || idleTimer.getElapsedTimeF64() >= max_idle_time)
+// 				{
+// 					break;
+// 				}
 			}
 			gMeshRepo.update() ;
 			
