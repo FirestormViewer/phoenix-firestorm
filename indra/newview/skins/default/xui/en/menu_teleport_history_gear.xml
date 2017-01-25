@@ -26,6 +26,62 @@
          function="TeleportHistory.GearMenu.Enable"
          parameter="collapse_all" />
     </menu_item_call>
+  <!-- FS:Beq [timezone support for teleport history] -->
+  <menu name="TPHistoryTimeZone" label="Select Timezone...">
+    <menu_item_check
+    name="teleport_history_tz_utc"
+    label="UTC">
+      <on_click
+        function="TeleportHistory.TimeZone.Set"
+        parameter="utc" />
+      <on_check
+        function="TeleportHistory.TimeZone.Check"
+        parameter="utc" />
+    </menu_item_check>
+    <menu_item_check
+        name="teleport_history_tz_slt"
+        label="SLT">
+      <on_click
+        function="TeleportHistory.TimeZone.Set"
+        parameter="slt" />
+      <on_check
+        function="TeleportHistory.TimeZone.Check"
+        parameter="slt" />
+    </menu_item_check>
+    <menu_item_check
+        name="teleport_history_tz_local"
+        label="Local">
+      <on_click
+        function="TeleportHistory.TimeZone.Set"
+        parameter="local" />
+      <on_check
+        function="TeleportHistory.TimeZone.Check"
+        parameter="local" />
+    </menu_item_check>
+  </menu>
+    <!-- /FS:Beq [timezone support for teleport history] -->
+    <menu name="Show Menu" label="Show...">
+        <menu_item_check
+         name="Show Position"
+         label="Position">
+            <on_click
+             function="ToggleControl"
+             parameter="FSTeleportHistoryShowPosition" />
+            <on_check
+             function="CheckControl"
+             parameter="FSTeleportHistoryShowPosition" />
+        </menu_item_check>
+        <menu_item_check
+         name="Show Date"
+         label="Date">
+            <on_click
+             function="ToggleControl"
+             parameter="FSTeleportHistoryShowDate" />
+            <on_check
+             function="CheckControl"
+             parameter="FSTeleportHistoryShowDate" />
+        </menu_item_check>
+    </menu>
     <menu_item_separator layout="topleft" />
     <menu_item_call
      label="Clear Teleport History"

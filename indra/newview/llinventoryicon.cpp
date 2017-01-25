@@ -135,7 +135,10 @@ const std::string& LLInventoryIcon::getIconName(LLAssetType::EType asset_type,
 			idx = (misc_flag != 0) ? LLInventoryType::ICONNAME_CALLINGCARD_ONLINE : LLInventoryType::ICONNAME_CALLINGCARD_OFFLINE;
 			break;
 		case LLAssetType::AT_LANDMARK:
-			idx = (misc_flag != 0) ? LLInventoryType::ICONNAME_LANDMARK_VISITED : LLInventoryType::ICONNAME_LANDMARK;
+			// <FS:Ansariel> FIRE-20693: Get rid of visited landmark icon that hasnn't been working anymore for ages
+			//idx = (misc_flag != 0) ? LLInventoryType::ICONNAME_LANDMARK_VISITED : LLInventoryType::ICONNAME_LANDMARK;
+			idx = LLInventoryType::ICONNAME_LANDMARK;
+			// </FS:Ansariel>
 			break;
 		case LLAssetType::AT_SCRIPT:
 		case LLAssetType::AT_LSL_TEXT:

@@ -2,5 +2,12 @@
 <menu name="Teleport History Gear Context Menu">
 	<menu_item_call label="Rozwiń wszystkie foldery" name="Expand all folders"/>
 	<menu_item_call label="Zwiń wszystkie foldery" name="Collapse all folders"/>
+	<menu name="TPHistoryTimeZone" label="Strefa czasowa...">
+		<menu_item_check name="teleport_history_tz_local" label="Czas lokalny" />
+	</menu>
+	<menu name="Show Menu" label="Pokaż...">
+		<menu_item_check name="Show Position" label="Pozycję" />
+		<menu_item_check name="Show Date" label="Datę" />
+	</menu>
 	<menu_item_call label="Wyczyść historię teleportacji" name="Clear Teleport History"/>
 </menu>

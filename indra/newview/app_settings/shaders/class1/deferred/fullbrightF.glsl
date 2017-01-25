@@ -40,6 +40,10 @@ VARYING vec3 vary_position;
 VARYING vec4 vertex_color;
 VARYING vec2 vary_texcoord0;
 
+// <FS> Fix fullbright fog failing
+vec3 fullbrightAtmosTransport(vec3 light);
+vec3 fullbrightScaleSoftClip(vec3 light);
+// </FS>
 
 vec3 srgb_to_linear(vec3 cs)
 {
@@ -78,16 +82,18 @@ vec3 linear_to_srgb(vec3 cl)
 
 }
 
-vec3 fullbrightAtmosTransportDeferred(vec3 light)
-{
-	return light;
-}
+// <FS> Fix fullbright fog failing
+//vec3 fullbrightAtmosTransportDeferred(vec3 light)
+//{
+//	return light;
+//}
 
-vec3 fullbrightScaleSoftClipDeferred(vec3 light)
-{
-	//soft clip effect:
-	return light;
-}
+//vec3 fullbrightScaleSoftClipDeferred(vec3 light)
+//{
+//	//soft clip effect:
+//	return light;
+//}
+// </FS>
 
 #ifdef HAS_ALPHA_MASK
 uniform float minimum_alpha;
@@ -157,22 +163,32 @@ void main()
 #endif
 
 	color.rgb *= vertex_color.rgb;
-	color.rgb = srgb_to_linear(color.rgb);
-	color.rgb = fullbrightAtmosTransportDeferred(color.rgb);
-	color.rgb = fullbrightScaleSoftClipDeferred(color.rgb);
+	// <FS> Fix fullbright fog failing
+	//color.rgb = srgb_to_linear(color.rgb);
+	//color.rgb = fullbrightAtmosTransportDeferred(color.rgb);
+	//color.rgb = fullbrightScaleSoftClipDeferred(color.rgb);
 	
-	color.rgb = linear_to_srgb(color.rgb);
+	//color.rgb = linear_to_srgb(color.rgb);
+	color.rgb = fullbrightAtmosTransport(color.rgb);
+	color.rgb = fullbrightScaleSoftClip(color.rgb);
+	// </FS>
 
 #ifdef WATER_FOG
 	vec3 pos = vary_position;
-	vec4 fogged = applyWaterFogDeferred(pos, vec4(color.rgb, final_alpha));
-	color.rgb = fogged.rgb;
-	color.a   = fogged.a;
+	// <FS> Fix fullbright fog failing
+	//vec4 fogged = applyWaterFogDeferred(pos, vec4(color.rgb, final_alpha));
+	//color.rgb = fogged.rgb;
+	//color.a   = fogged.a;
+	color = applyWaterFogDeferred(pos, vec4(color.rgb, final_alpha));
+	// </FS>
 #else
 	color.a   = final_alpha;
 #endif
 
-	frag_color.rgb = color.rgb;
-	frag_color.a   = color.a;
+	// <FS> Fix fullbright fog failing
+	//frag_color.rgb = color.rgb;
+	//frag_color.a   = color.a;
+	frag_color = color;
+	// </FS>
 }
 

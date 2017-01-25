@@ -46,7 +46,9 @@
 #include "lllandmarkactions.h"
 #include "llclipboard.h"
 #include "lltrans.h"
-
+//<FS:Beq [timezone support for teleport history]>
+#include <boost/algorithm/string/replace.hpp>
+//</FS:Beq>
 #include "llviewercontrol.h"
 
 #include "fsfloaterplacedetails.h"
@@ -256,6 +258,13 @@ std::string LLTeleportHistoryFlatItem::getTimestamp()
 	LLSD args;
 	args["datetime"] = date.secondsSinceEpoch();
 	timestamp = getString("DateFmt");
+	//<FS:Beq [timezone support for teleport history]>
+	// Check whether we have an override for the timezone
+	static const std::string xml_timezone = "utc"; // In case we decide to change the XML default !
+	static LLCachedControl<std::string> sFSTPHistoryTZ(gSavedSettings, "FSTPHistoryTZ");
+	boost::replace_all(timestamp, xml_timezone, sFSTPHistoryTZ());
+	LL_DEBUGS() << "Replacement DateFmt: " << timestamp << LL_ENDL;
+	//</FS:Beq>
 	LLStringUtil::format(timestamp, args);
 	// </FS:Ansariel>
 
@@ -512,6 +521,10 @@ LLTeleportHistoryPanel::LLTeleportHistoryPanel()
 		mIsStandAlone(false)
 		// </FS:Ansariel>
 {
+	// <FS:Beq> [timezone support for teleport history] 
+	mCommitCallbackRegistrar.add("TeleportHistory.TimeZone.Set", boost::bind(&LLTeleportHistoryPanel::onTimeZoneChecked, this, _2));
+	mEnableCallbackRegistrar.add("TeleportHistory.TimeZone.Check", boost::bind(&LLTeleportHistoryPanel::isTimeZoneChecked, this, _2));
+	// </FS:Beq>
 	buildFromFile( "panel_teleport_history.xml");
 }
 
@@ -583,7 +596,6 @@ BOOL LLTeleportHistoryPanel::postBuild()
 	registrar.add("TeleportHistory.CollapseAllFolders",  boost::bind(&LLTeleportHistoryPanel::onCollapseAllFolders,  this));
 	registrar.add("TeleportHistory.ClearTeleportHistory",  boost::bind(&LLTeleportHistoryPanel::onClearTeleportHistory,  this));
 	mEnableCallbackRegistrar.add("TeleportHistory.GearMenu.Enable", boost::bind(&LLTeleportHistoryPanel::isActionEnabled, this, _2));
-
 //	mMenuGearButton = getChild<LLMenuButton>("gear_btn");
 
 //	LLToggleableMenu* gear_menu  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_teleport_history_gear.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());;
@@ -725,14 +737,50 @@ void LLTeleportHistoryPanel::updateVerbs()
 void LLTeleportHistoryPanel::getNextTab(const LLDate& item_date, S32& tab_idx, LLDate& tab_date)
 {
 	const U32 seconds_in_day = 24 * 60 * 60;
-
+	//<FS:Beq [timezone support for teleport history]>
+	static LLCachedControl<std::string> sFSTPHistoryTZ(gSavedSettings, "FSTPHistoryTZ");
+	//</FS:Beq>
 	S32 tabs_cnt = mItemContainers.size();
 	S32 curr_year = 0, curr_month = 0, curr_day = 0;
 
-	tab_date = LLDate::now();
+	tab_date = LLDate::now(); 
+	//<FS:Beq [timezone support for teleport history]>
+	// 1) Tab_date is now() which is UTC so we need to onvert that to timezoen by dedcuting the offset
+	// before we flatten to current day
+	// Given currrent date/time in UTC (tab_date) apply the offset for the users selected preference
+	// Must be done before the split and adjust to get midnight today
+	if (sFSTPHistoryTZ() == "local")   // local
+	{
+		tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() - LLStringOps::getLocalTimeOffset());
+	}
+	else if (sFSTPHistoryTZ() != "utc") // slt
+	{
+		// note that SLT is a +ve offset
+		tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() - LLStringOps::getPacificTimeOffset());
+	}
+	// we now have the adjusted date time which maybe a different day to the UTC day
+	//</FS:Beq>
 	tab_date.split(&curr_year, &curr_month, &curr_day);
 	tab_date.fromYMDHMS(curr_year, curr_month, curr_day); // Set hour, min, and sec to 0
 	tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() + seconds_in_day);
+	//<FS:Beq [timezone support for teleport history]>
+	// 2) Tab_date is cutrrently last second of the selected TZ current day. Adjust back
+	// Given date/time in midnight UTC (tab_date) apply the offset for the users selected preference
+	// (add offset).
+	if (sFSTPHistoryTZ() == "local")   // local
+	{
+		tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() + LLStringOps::getLocalTimeOffset());
+	}
+	else if (sFSTPHistoryTZ() != "utc") // slt
+	{
+		// note that SLT is a +ve offset
+		tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() + LLStringOps::getPacificTimeOffset());
+	}
+	// we now have the adjusted date time which maybe a different day to the UTC day
+	// Note that the existing logic below is "slightly" broken. Adding "seconds_in_day" to establish "next 23:59" will be wrong for leapseconds
+	// however fixing it is more risky than the change warrants.
+	// Other edge cases can feasibily occur due to change of time during list build. not important
+	//</FS:Beq>
 
 	tab_idx = -1;
 
@@ -1108,6 +1156,7 @@ void LLTeleportHistoryPanel::onAccordionTabRightClick(LLView *view, S32 x, S32 y
 	mAccordionTabMenu->setItemVisible("TabOpen", !tab->isExpanded() ? true : false);
 	mAccordionTabMenu->setItemVisible("TabClose", tab->isExpanded() ? true : false);
 
+
 	mAccordionTabMenu->show(x, y);
 	LLMenuGL::showPopup(tab, mAccordionTabMenu, x, y);
 }
@@ -1150,6 +1199,22 @@ void LLTeleportHistoryPanel::onCollapseAllFolders()
 		mLastSelectedFlatlList->resetSelection();
 	}
 }
+
+// <FS:Beq> [timezone support for teleport history]
+void LLTeleportHistoryPanel::onTimeZoneChecked(const LLSD& userdata)
+{
+	gSavedSettings.setString("FSTPHistoryTZ", userdata.asString());
+	onTeleportHistoryChange(-1); // force recreate all
+}
+
+bool LLTeleportHistoryPanel::isTimeZoneChecked(const LLSD& userdata)
+{
+	static LLCachedControl<std::string> sFSTPHistoryTZ(gSavedSettings, "FSTPHistoryTZ");
+
+	const std::string zone_string = userdata.asString();
+	return (sFSTPHistoryTZ() == zone_string);
+}
+// </FS:Beq>
 
 void LLTeleportHistoryPanel::onClearTeleportHistory()
 {

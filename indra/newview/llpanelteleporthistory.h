@@ -92,6 +92,10 @@ private:
 	void onAccordionTabClose(LLAccordionCtrlTab *tab);
 	void onExpandAllFolders();
 	void onCollapseAllFolders();
+// <FS:Beq> [timezone support for teleport history]
+	void onTimeZoneChecked(const LLSD& userdata);
+	bool isTimeZoneChecked(const LLSD& userdata);
+// </FS:Beq>
 	void onClearTeleportHistory();
 	bool onClearTeleportHistoryDialog(const LLSD& notification, const LLSD& response);
 

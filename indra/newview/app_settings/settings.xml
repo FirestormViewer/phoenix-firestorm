@@ -353,6 +353,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSTPHistoryTZ</key>
+  <map>
+    <key>Comment</key>
+    <string>Select the timezone to be used with Teleport History. ('utc' = default, 'slt' = Second Life Time, 'local' = the local timezone of the client)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>utc</string>
+  </map>
   <key>ShowStreamMetadata</key>
   <map>
     <key>Comment</key>

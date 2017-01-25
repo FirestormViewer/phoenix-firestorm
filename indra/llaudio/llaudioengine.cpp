@@ -1238,7 +1238,7 @@ void LLAudioEngine::startNextTransfer()
 
 	if (asset_id.notNull())
 	{
-		LL_INFOS() << "Getting asset data for: " << asset_id << LL_ENDL;
+		//LL_INFOS() << "Getting asset data for: " << asset_id << LL_ENDL;
 		mCurrentTransfer = asset_id;
 		mCurrentTransferTimer.reset();
 		gAssetStorage->getAssetData(asset_id, LLAssetType::AT_SOUND,
