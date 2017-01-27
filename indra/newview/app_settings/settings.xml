@@ -3091,18 +3091,6 @@
     <real>60.0</real>
   </map>
 
-  <key>CameraAspectRatio</key>
-  <map>
-    <key>Comment</key>
-    <string>Camera aspect ratio for DoF effect</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <real>1.5</real>
-  </map>
-
   <key>CertStore</key>
     <map>
       <key>Comment</key>
@@ -7616,7 +7604,7 @@
     <key>LeftClickShowMenu</key>
     <map>
       <key>Comment</key>
-      <string>Left click opens pie menu (FALSE = left click touches or grabs object)</string>
+      <string>Unused obsolete setting</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -14437,6 +14425,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>75</integer>
+    </map>
+    <key>AbuseReportScreenshotDelay</key>
+    <map>
+      <key>Comment</key>
+      <string>Time delay before taking screenshot to avoid UI artifacts.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.3</real>
     </map>
     <key>SpeedTest</key>
     <map>

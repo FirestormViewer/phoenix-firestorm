@@ -485,7 +485,7 @@ Mídia:
 			<spinner label="Horas de acesso:" name="HoursSpin"/>
 			<panel name="Allowed_layout_panel">
 				<text label="Always Allow" name="AllowedText">
-					Residentes permitidos ([LISTED]/[MAX])
+					Residentes permitidos ([COUNT]/[MAX])
 				</text>
 				<name_list name="AccessList" tool_tip="(Total [LISTED], máx de [MAX])"/>
 				<button label="Adicionar" name="add_allowed"/>
@@ -493,7 +493,7 @@ Mídia:
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="Ban" name="BanCheck">
-					Residentes banidos ([LISTED]/[MAX])
+					Residentes banidos ([COUNT]/[MAX])
 				</text>
 				<name_list name="BannedList" tool_tip="(Total [LISTED], máx de [MAX])"/>
 				<button label="Adicionar" name="add_banned"/>

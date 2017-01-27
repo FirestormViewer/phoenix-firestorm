@@ -34,6 +34,7 @@
 #include "llrect.h"
 #include "llerror.h"
 #include "llstring.h"
+#include "llvoavatarself.h"
 #include "message.h"
 #include "lltrans.h"
 
@@ -132,7 +133,14 @@ void LLFloaterScriptDebug::addScriptLine(const LLChat& chat)
 		// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
 		if (chat.mChatType == CHAT_TYPE_DEBUG_MSG)
 		{
-			objectp->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
+			if(objectp->isHUDAttachment())
+			{
+				((LLViewerObject*)gAgentAvatarp)->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
+			}
+			else
+			{
+				objectp->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
+			}
 			// <FS:Ansariel> Mark script error icons
 			objectp->getIcon()->setScriptError();
 			// </FS:Ansariel> Mark script error icons

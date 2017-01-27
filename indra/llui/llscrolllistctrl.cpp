@@ -737,7 +737,7 @@ bool LLScrollListCtrl::updateColumnWidths()
 		S32 new_width = 0;
 		if (column->mRelWidth >= 0)
 		{
-			new_width = (S32)ll_round(column->mRelWidth*mItemListRect.getWidth());
+			new_width = (S32)ll_round(column->mRelWidth * (mItemListRect.getWidth() - mTotalStaticColumnWidth - mTotalColumnPadding));
 		}
 		else if (column->mDynamicWidth)
 		{
@@ -2935,7 +2935,7 @@ void LLScrollListCtrl::addColumn(const LLScrollListColumn::Params& column_params
 			}
 			if (new_column->mRelWidth >= 0)
 			{
-				new_column->setWidth((S32)ll_round(new_column->mRelWidth*mItemListRect.getWidth()));
+				new_column->setWidth((S32)ll_round(new_column->mRelWidth * (mItemListRect.getWidth() - mTotalStaticColumnWidth - mTotalColumnPadding)));
 			}
 			else if(new_column->mDynamicWidth)
 			{

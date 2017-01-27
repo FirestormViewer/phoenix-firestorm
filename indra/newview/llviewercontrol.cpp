@@ -619,8 +619,8 @@ bool handleAvatarZOffsetChanged(const LLSD& sdValue)
 bool handleForceShowGrid(const LLSD& newvalue)
 {
 	// <FS:Ansariel> [FS Login Panel]
-	//LLPanelLogin::updateServer( );
-	FSPanelLogin::updateServer( );
+	//LLPanelLogin::updateLocationSelectorsVisibility( );
+	FSPanelLogin::updateLocationSelectorsVisibility( );
 	// </FS:Ansariel> [FS Login Panel]
 	return true;
 }

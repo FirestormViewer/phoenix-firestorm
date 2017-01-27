@@ -865,7 +865,7 @@ LLUrlEntryAgentCompleteName::LLUrlEntryAgentCompleteName()
 
 std::string LLUrlEntryAgentCompleteName::getName(const LLAvatarName& avatar_name)
 {
-	return avatar_name.getCompleteName();
+	return avatar_name.getCompleteName(true, true);
 }
 
 //
@@ -881,7 +881,7 @@ LLUrlEntryAgentDisplayName::LLUrlEntryAgentDisplayName()
 
 std::string LLUrlEntryAgentDisplayName::getName(const LLAvatarName& avatar_name)
 {
-	return avatar_name.getDisplayName();
+	return avatar_name.getDisplayName(true);
 }
 
 //

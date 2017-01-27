@@ -35,6 +35,7 @@
 #include "llassetstorage.h"
 #include "llavatarnamecache.h"
 #include "llcachename.h"
+#include "llcallbacklist.h"
 #include "llcheckboxctrl.h"
 #include "llfontgl.h"
 #include "llimagebmp.h"
@@ -211,7 +212,7 @@ BOOL LLFloaterReporter::postBuild()
 	// grab the user's name
 	std::string reporter = LLSLURL("agent", gAgent.getID(), "inspect").getSLURLString();
 	getChild<LLUICtrl>("reporter_field")->setValue(reporter);
-	
+
 	// <FS:Ansariel> FIRE-15218: Refresh screenshot button
 	getChild<LLButton>("refresh_screenshot")->setCommitCallback(boost::bind(&LLFloaterReporter::onUpdateScreenshot, this));
 
@@ -849,8 +850,9 @@ void LLFloaterReporter::takeScreenshot(bool use_prev_screenshot)
 	}
 }
 
-void LLFloaterReporter::onOpen(const LLSD& key)
+void LLFloaterReporter::takeNewSnapshot()
 {
+	childSetEnabled("send_btn", true);
 	mImageRaw = new LLImageRaw;
 	const S32 IMAGE_WIDTH = 1024;
 	const S32 IMAGE_HEIGHT = 768;
@@ -879,8 +881,16 @@ void LLFloaterReporter::onOpen(const LLSD& key)
 			}
 		}
 	}
-
 	takeScreenshot();
+}
+
+
+void LLFloaterReporter::onOpen(const LLSD& key)
+{
+	childSetEnabled("send_btn", false);
+	//Time delay to avoid UI artifacts. MAINT-7067
+	doAfterInterval(boost::bind(&LLFloaterReporter::takeNewSnapshot,this), gSavedSettings.getF32("AbuseReportScreenshotDelay"));
+
 }
 
 void LLFloaterReporter::onLoadScreenshotDialog(const LLSD& notification, const LLSD& response)

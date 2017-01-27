@@ -161,7 +161,7 @@ void LLSpellChecker::refreshDictionaryMap()
 	}
 
 	// Load user installed dictionary information
-	user_filename = user_path + DICT_FILE_USER; // <FS:Ansariel> FIRE-20725: Import of custom spellcheck dictionary doesn't work
+	user_filename = user_path + DICT_FILE_USER;
 	llifstream custom_file(user_filename.c_str(), std::ios::binary);
 	if (custom_file.is_open())
 	{
