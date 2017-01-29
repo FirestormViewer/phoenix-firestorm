@@ -5858,24 +5858,29 @@ void handle_take()
 			if(category_id.isNull())
 			{
 				category_id = node->mFolderID;
+				LL_DEBUGS("HandleTake") << "Node destination folder ID = " << category_id.asString() << LL_ENDL;
 			}
 			else if(category_id != node->mFolderID)
 			{
 				// we have found two potential destinations. break out
 				// now and send to the default location.
 				category_id.setNull();
+				LL_DEBUGS("HandleTake") << "Conflicting node destination folders - setting to null UUID" << LL_ENDL;
 				break;
 			}
 		}
 	}
 	if(category_id.notNull())
 	{
+		LL_DEBUGS("HandleTake") << "Selected destination folder ID: " << category_id.asString() << " - checking if category exists in inventory model" << LL_ENDL;
+
 		// there is an unambiguous destination. See if this agent has
 		// such a location and it is not in the trash or library
 		if(!gInventory.getCategory(category_id))
 		{
 			// nope, set to NULL.
 			category_id.setNull();
+			LL_DEBUGS("HandleTake") << "Destination folder not found in inventory model - setting to null UUID" << LL_ENDL;
 		}
 		if(category_id.notNull())
 		{
@@ -5884,12 +5889,14 @@ void handle_take()
 			if(category_id == trash || gInventory.isObjectDescendentOf(category_id, trash))
 			{
 				category_id.setNull();
+				LL_DEBUGS("HandleTake") << "Destination folder is descendent of trash folder - setting to null UUID" << LL_ENDL;
 			}
 
 			// check library
 			if(gInventory.isObjectDescendentOf(category_id, gInventory.getLibraryRootFolderID()))
 			{
 				category_id.setNull();
+				LL_DEBUGS("HandleTake") << "Destination folder is descendent of library folder - setting to null UUID" << LL_ENDL;
 			}
 
 		}
@@ -5897,9 +5904,11 @@ void handle_take()
 	if(category_id.isNull())
 	{
 		category_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_OBJECT);
+		LL_DEBUGS("HandleTake") << "Destination folder = null UUID - determined default category: " << category_id.asString() << LL_ENDL;
 	}
 	LLSD payload;
 	payload["folder_id"] = category_id;
+	LL_DEBUGS("HandleTake") << "Final destination folder UUID being sent to sim: " << category_id.asString() << LL_ENDL;
 
 	LLNotification::Params params("ConfirmObjectTakeLock");
 	params.payload(payload);
