@@ -179,6 +179,7 @@ LLInventoryPanel::LLInventoryPanel(const LLInventoryPanel::Params& p) :
 	mCommitCallbackRegistrar.add("Inventory.AttachObject", boost::bind(&LLInventoryPanel::attachObject, this, _2));
 	mCommitCallbackRegistrar.add("Inventory.BeginIMSession", boost::bind(&LLInventoryPanel::beginIMSession, this));
 	mCommitCallbackRegistrar.add("Inventory.Share",  boost::bind(&LLAvatarActions::shareWithAvatars, this));
+	mCommitCallbackRegistrar.add("Inventory.CustomAction", boost::bind(&LLInventoryPanel::onCustomAction, this, _2)); // <FS:Ansariel> Prevent warning "No callback found for: 'Inventory.CustomAction' in control: Find Links"
 
 }
 
@@ -1607,6 +1608,17 @@ void LLInventoryPanel::doToSelected(const LLSD& userdata)
 
 	return;
 }
+
+// <FS:Ansariel> Prevent warning "No callback found for: 'Inventory.CustomAction' in control: Find Links"
+void LLInventoryPanel::onCustomAction(const LLSD& userdata)
+{
+	LLPanelMainInventory* main_panel = getParentByType<LLPanelMainInventory>();
+	if (main_panel)
+	{
+		main_panel->doCustomAction(userdata);
+	}
+}
+// </FS:Ansariel>
 
 BOOL LLInventoryPanel::handleKeyHere( KEY key, MASK mask )
 {
