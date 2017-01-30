@@ -489,6 +489,7 @@ void init_default_trans_args()
 	// files. We really only want to have to maintain a single copy of it.
 	default_trans_args.insert("create_account_url");
 	default_trans_args.insert("DOWNLOAD_URL"); //<FS:CR> Viewer download url
+	default_trans_args.insert("VIEWER_GENERATION"); // <FS:Ansariel> Viewer generation (major version number)
 }
 
 //----------------------------------------------------------------------------
