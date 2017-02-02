@@ -13,6 +13,7 @@
 	<string name="SUPPORT_SITE">Second Life Support Portal</string>
 	<string name="DOWNLOAD_URL">http://www.firestormviewer.org/downloads</string>
 	<string name="CURRENT_GRID"/> <!-- Will be set in fsgridhandler.cpp / llviewernetwork.cpp -->
+	<string name="VIEWER_GENERATION">Viewer 5</string>
 
 	<!-- starting up -->
 	<string name="StartupDetectingHardware">Detecting hardware...</string>
@@ -3048,7 +3049,7 @@ Try enclosing path to the editor with double quotes.
   <string name="mode_unknown">Unknown Mode</string>
   <string name="mode_settings_firestorm.xml">Firestorm</string>
   <string name="mode_settings_phoenix.xml">Phoenix</string>
-  <string name="mode_settings_v3.xml">Viewer 5</string>
+  <string name="mode_settings_v3.xml">[VIEWER_GENERATION]</string>
   <string name="mode_settings_hybrid.xml">Hybrid</string>
   <string name="mode_settings_latency.xml">Latency</string>
   <string name="mode_settings_text.xml">Text</string>

@@ -207,6 +207,7 @@ public:
 
 	// Callbacks
 	void doToSelected(const LLSD& userdata);
+	void onCustomAction(const LLSD& userdata); // <FS:Ansariel> Prevent warning "No callback found for: 'Inventory.CustomAction' in control: Find Links"
 	void doCreate(const LLSD& userdata);
 	bool beginIMSession();
 	bool attachObject(const LLSD& userdata);

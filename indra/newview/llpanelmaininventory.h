@@ -101,6 +101,8 @@ public:
 	void updateFilterDropdown(const LLInventoryFilter* filter);
 	// </FS:Zi> Filter dropdown
 
+	void doCustomAction(const LLSD& userdata) { onCustomAction(userdata); } // <FS:Ansariel> Prevent warning "No callback found for: 'Inventory.CustomAction' in control: Find Links"
+
 	// <FS:Ansariel> FIRE-12808: Don't save filters during settings restore
 	static bool sSaveFilters;
 
