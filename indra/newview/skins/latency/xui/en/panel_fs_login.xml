@@ -311,7 +311,7 @@
                 />
                 <combo_box.item
                  name="V3"
-                 label="Viewer 5"
+                 label="[VIEWER_GENERATION]"
                  value="settings_v3.xml"
                 />
                 <combo_box.item
