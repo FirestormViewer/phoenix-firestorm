@@ -3242,29 +3242,19 @@ void LLFloaterPreference::onChangeMaturity()
 std::string get_category_path(LLUUID cat_id)
 {
     LLViewerInventoryCategory* cat = gInventory.getCategory(cat_id);
+    std::string localized_cat_name;
+    if (!LLTrans::findString(localized_cat_name, "InvFolder " + cat->getName()))
+    {
+        localized_cat_name = cat->getName();
+    }
+
     if (cat->getParentUUID().notNull())
     {
-        // <FS:Ansariel> Fix folder name localization
-        //return get_category_path(cat->getParentUUID()) + " > " + cat->getName();
-        std::string localized_name;
-        if (!LLTrans::findString(localized_name, "InvFolder " + cat->getName()))
-        {
-            localized_name = cat->getName();
-        }
-        return get_category_path(cat->getParentUUID()) + " > " + localized_name;
-        // </FS:Ansariel>
+        return get_category_path(cat->getParentUUID()) + " > " + localized_cat_name;
     }
     else
     {
-        // <FS:Ansariel> Fix folder name localization
-        //return cat->getName();
-        std::string localized_name;
-        if (!LLTrans::findString(localized_name, "InvFolder " + cat->getName()))
-        {
-            localized_name = cat->getName();
-        }
-        return localized_name;
-        // </FS:Ansariel>
+        return localized_cat_name;
     }
 }
 
