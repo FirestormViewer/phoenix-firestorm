@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <multi_floater
  single_instance="true"
- reuse_instance="true"
  can_resize="true"
  height="233"
  layout="topleft"
@@ -9,6 +8,7 @@
  help_topic="script_debug_floater"
  save_rect="true"
  title="Script Warning/Error/Debug"
+ reuse_instance="true"
  width="450">
     <tab_container
      background_visible="false"

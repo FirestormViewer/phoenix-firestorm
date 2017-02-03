@@ -1655,6 +1655,7 @@ LLPanelObjectInventory::LLPanelObjectInventory(const LLPanelObjectInventory::Par
 	mCommitCallbackRegistrar.add("Inventory.AttachObject", boost::bind(&do_nothing));
 	mCommitCallbackRegistrar.add("Inventory.BeginIMSession", boost::bind(&do_nothing));
 	mCommitCallbackRegistrar.add("Inventory.Share",  boost::bind(&LLAvatarActions::shareWithAvatars, this));
+	mCommitCallbackRegistrar.add("Inventory.FileUploadLocation", boost::bind(&do_nothing));
 	mCommitCallbackRegistrar.add("Inventory.CustomAction", boost::bind(&do_nothing)); // <FS:Ansariel> Prevent warning "No callback found for: 'Inventory.CustomAction' in control: Find Links"
 }
 
@@ -2000,6 +2001,7 @@ void LLPanelObjectInventory::refresh()
 			if(mTaskUUID != object->mID)
 			{
 				mTaskUUID = object->mID;
+				mAttachmentUUID = object->getAttachmentItemID();
 				make_request = TRUE;
 
 				// This is a new object so pre-emptively clear the contents
@@ -2008,6 +2010,16 @@ void LLPanelObjectInventory::refresh()
 
 				// Register for updates from this object,
 				registerVOInventoryListener(object,NULL);
+			}
+			else if (mAttachmentUUID != object->getAttachmentItemID())
+			{
+				mAttachmentUUID = object->getAttachmentItemID();
+				if (mAttachmentUUID.notNull())
+				{
+					// Server unsubsribes viewer (deselects object) from property
+					// updates after "ObjectAttach" so we need to resubscribe
+					LLSelectMgr::getInstance()->sendSelect();
+				}
 			}
 
 			// Based on the node information, we may need to dirty the
@@ -2039,6 +2051,7 @@ void LLPanelObjectInventory::refresh()
 void LLPanelObjectInventory::clearInventoryTask()
 {
 	mTaskUUID = LLUUID::null;
+	mAttachmentUUID = LLUUID::null;
 	removeVOInventoryListener();
 	clearContents();
 }

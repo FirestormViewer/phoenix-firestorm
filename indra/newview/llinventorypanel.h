@@ -210,6 +210,7 @@ public:
 	void onCustomAction(const LLSD& userdata); // <FS:Ansariel> Prevent warning "No callback found for: 'Inventory.CustomAction' in control: Find Links"
 	void doCreate(const LLSD& userdata);
 	bool beginIMSession();
+	void fileUploadLocation(const LLSD& userdata);
 	bool attachObject(const LLSD& userdata);
 	static void idle(void* user_data);
 
