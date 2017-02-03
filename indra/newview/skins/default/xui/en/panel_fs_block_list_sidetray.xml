@@ -88,13 +88,26 @@
           top_delta="0"
           width="31"/>
      </panel>
+     <text
+          type="string"
+          length="1"
+          follows="left|top|right"
+          height="14"
+          layout="topleft"
+          right="-10"
+          top_pad="4"
+          left="4"
+          use_ellipses="true"
+          name="block_limit">
+          Blocked entries: [COUNT] ([LIMIT] max.)
+      </text>
 	<fs_scroll_list
 	 draw_heading="true"
 	 follows="all"
 	 bottom="-4"
 	 layout="topleft"
 	 left="4"
-	 top="30"
+	 top="47"
 	 sort_column="0"
 	 sort_ascending="true"
 	 name="block_list"
