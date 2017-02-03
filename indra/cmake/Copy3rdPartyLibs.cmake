@@ -197,13 +197,13 @@ elseif(LINUX)
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     # *FIX - figure out what to do with duplicate libalut.so here -brad
     set(release_files
-        libapr-1.so.0
-        libaprutil-1.so.0
+        #libapr-1.so.0
+        #libaprutil-1.so.0
         libatk-1.0.so
         #libdb-5.1.so
         ${EXPAT_COPY}
-        libfreetype.so.6.6.2
-        libfreetype.so.6
+        #libfreetype.so.6.6.2
+        #libfreetype.so.6
         libGLOD.so
         libgmodule-2.0.so
         libgobject-2.0.so
