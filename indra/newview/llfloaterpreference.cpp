@@ -3244,11 +3244,27 @@ std::string get_category_path(LLUUID cat_id)
     LLViewerInventoryCategory* cat = gInventory.getCategory(cat_id);
     if (cat->getParentUUID().notNull())
     {
-        return get_category_path(cat->getParentUUID()) + " > " + cat->getName();
+        // <FS:Ansariel> Fix folder name localization
+        //return get_category_path(cat->getParentUUID()) + " > " + cat->getName();
+        std::string localized_name;
+        if (!LLTrans::findString(localized_name, "InvFolder " + cat->getName()))
+        {
+            localized_name = cat->getName();
+        }
+        return get_category_path(cat->getParentUUID()) + " > " + localized_name;
+        // </FS:Ansariel>
     }
     else
     {
-        return cat->getName();
+        // <FS:Ansariel> Fix folder name localization
+        //return cat->getName();
+        std::string localized_name;
+        if (!LLTrans::findString(localized_name, "InvFolder " + cat->getName()))
+        {
+            localized_name = cat->getName();
+        }
+        return localized_name;
+        // </FS:Ansariel>
     }
 }
 
