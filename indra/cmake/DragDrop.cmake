@@ -12,9 +12,9 @@
       add_definitions(-DLL_OS_DRAGDROP_ENABLED=1)
     endif (DARWIN)
 
-    if (LINUX)
-      add_definitions(-DLL_OS_DRAGDROP_ENABLED=0)
-    endif (LINUX)
+    #if (LINUX)
+    #  add_definitions(-DLL_OS_DRAGDROP_ENABLED=0)
+    #endif (LINUX)
 
   endif (OS_DRAG_DROP)
 
