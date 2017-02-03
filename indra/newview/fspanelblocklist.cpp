@@ -185,6 +185,10 @@ void FSPanelBlockList::refreshBlockedList()
 		mBlockedList->addRow(item_p, ADD_BOTTOM);
 	}
 	mBlockedList->refreshLineHeight();
+
+	LLUICtrl* block_limit = getChild<LLUICtrl>("block_limit");
+	block_limit->setTextArg("[COUNT]", llformat("%d", LLMuteList::getInstance()->getMutes().size()));
+	block_limit->setTextArg("[LIMIT]", llformat("%d", gSavedSettings.getS32("MuteListLimit")));
 }
 
 void FSPanelBlockList::updateButtons()
