@@ -1671,7 +1671,7 @@
        height="12"
        layout="topleft"
        left="10"
-       name="title_models"
+       name="title_images"
        top_pad="17"
        width="100">
         Images
@@ -1719,7 +1719,7 @@
        height="12"
        layout="topleft"
        left="10"
-       name="title_animation"
+       name="title_animations"
        top_pad="7"
        width="100">
         Animations
@@ -1743,7 +1743,7 @@
        height="12"
        layout="topleft"
        left="10"
-       name="title_animation"
+       name="title_models"
        top_pad="7"
        width="100">
         Models
@@ -1770,7 +1770,7 @@
        left="10"
        name="upload_help"
        top_pad="6"
-       width="387">
+       width="475">
         To change a destination folder, right click on it in inventory and choose
      "Use as default for"
       </text>
