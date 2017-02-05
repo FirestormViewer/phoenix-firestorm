@@ -4338,14 +4338,14 @@
                 <key>options</key>
                 <array>
                   <string>/p:Configuration=RelWithDebInfo</string>
-                  <string>/flp:LogFile=logs\FirestormBuild_win32.log</string>
-                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win32.err</string>
-                  <string>/p:Platform=Win32</string>
+                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
+                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
+                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
                   <string>/t:Build</string>
                   <string>/p:useenv=true</string>
                   <string>/verbosity:normal</string>
                   <string>/toolsversion:12.0</string>
-                  <string>/p:"VCBuildAdditionalOptions= /incremental"</string>
+                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
                 </array>
               </map>
               <key>configure</key>
@@ -4377,14 +4377,14 @@
                 <key>options</key>
                 <array>
                   <string>/p:Configuration=RelWithDebInfo</string>
-                  <string>/flp:LogFile=logs\FirestormBuild_win32.log</string>
-                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win32.err</string>
-                  <string>/p:Platform=Win32</string>
+                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
+                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
+                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
                   <string>/t:Build</string>
                   <string>/p:useenv=true</string>
                   <string>/verbosity:normal</string>
                   <string>/toolsversion:12.0</string>
-                  <string>/p:"VCBuildAdditionalOptions= /incremental"</string>
+                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
                 </array>
               </map>
               <key>configure</key>
@@ -4412,14 +4412,14 @@
                 <key>options</key>
                 <array>
                   <string>/p:Configuration=Release</string>
-                  <string>/flp:LogFile=logs\FirestormBuild_win32.log</string>
-                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win32.err</string>
-                  <string>/p:Platform=Win32</string>
+                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
+                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
+                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
                   <string>/t:Build</string>
                   <string>/p:useenv=true</string>
                   <string>/verbosity:normal</string>
                   <string>/toolsversion:12.0</string>
-                  <string>/p:"VCBuildAdditionalOptions= /incremental"</string>
+                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
                 </array>
               </map>
               <key>configure</key>
@@ -4448,14 +4448,14 @@
                 <key>options</key>
                 <array>
                   <string>/p:Configuration=Release</string>
-                  <string>/flp:LogFile=logs\FirestormBuild_win32.log</string>
-                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win32.err</string>
-                  <string>/p:Platform=Win32</string>
+                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
+                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
+                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
                   <string>/t:Build</string>
                   <string>/p:useenv=true</string>
                   <string>/verbosity:minimal</string>
                   <string>/toolsversion:12.0</string>
-                  <string>/p:"VCBuildAdditionalOptions= /incremental"</string>
+                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
                 </array>
               </map>
               <key>configure</key>

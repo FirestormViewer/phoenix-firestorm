@@ -328,22 +328,12 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
         mkdir -p build-darwin-i386/logs
 
     elif [ $PLATFORM == "win32" ] ; then
-        if [ "${ND_AUTOBUILD_ARCH}" == "x64" ]
-        then
-           rm -rf build-vc120_x64/ipch
-           rm -rf build-vc120_x64/llcommon
-           rm -rf build-vc120_x64/newview/firestorm-bin.dir 
-           rm -rf build-vc120_x64/packages/include
-           rm -rf build-vc120_x64/*
-           mkdir -p build-vc120_x64/logs
-         else
-           rm -rf build-vc120/* 
-           mkdir -p build-vc120/logs
-        fi
+		rm -rf build-vc120-${AUTOBUILD_ADDRSIZE}
+        mkdir -p build-vc120-${AUTOBUILD_ADDRSIZE}/logs
  
 
     elif [ $PLATFORM == "linux32" ] ; then
-        if [ "${ND_AUTOBUILD_ARCH}" == "x64" ]
+        if [ "${AUTOBUILD_ADDRSIZE}" == "64" ]
         then
            rm -rf build-linux-x86_64/*
            mkdir -p build-linux-x86_64/logs
@@ -470,7 +460,7 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
 		fi
     elif [ $PLATFORM == "win32" ] ; then
         SLN_PLATFORM="Win32"
-        if [ "${ND_AUTOBUILD_ARCH}" == "x64" ]
+        if [ "${AUTOBUILD_ADDRSIZE}" == "64" ]
         then
           SLN_PLATFORM="x64"
         fi
