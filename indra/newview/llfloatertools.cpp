@@ -1634,8 +1634,10 @@ void LLFloaterTools::getMediaState()
 			mNeedMediaTitle = false;
 		}
 		
-		getChildView("media_tex")->setEnabled(bool_has_media && editable);
-		getChildView("edit_media")->setEnabled(bool_has_media && LLFloaterMediaSettings::getInstance()->mIdenticalHasMediaInfo && editable );
+		// <FS:Ansariel> Don't exist as of 30-01-2017
+		//getChildView("media_tex")->setEnabled(bool_has_media && editable);
+		//getChildView("edit_media")->setEnabled(bool_has_media && LLFloaterMediaSettings::getInstance()->mIdenticalHasMediaInfo && editable );
+		// </FS:Ansariel>
 		getChildView("delete_media")->setEnabled(bool_has_media && editable );
 		getChildView("add_media")->setEnabled(editable);
 			// TODO: display a list of all media on the face - use 'identical' flag
@@ -1664,8 +1666,10 @@ void LLFloaterTools::getMediaState()
 			}
 		}
 		
-		getChildView("media_tex")->setEnabled(TRUE);
-		getChildView("edit_media")->setEnabled(LLFloaterMediaSettings::getInstance()->mIdenticalHasMediaInfo);
+		// <FS:Ansariel> Don't exist as of 30-01-2017
+		//getChildView("media_tex")->setEnabled(TRUE);
+		//getChildView("edit_media")->setEnabled(LLFloaterMediaSettings::getInstance()->mIdenticalHasMediaInfo);
+		// </FS:Ansariel>
 		getChildView("delete_media")->setEnabled(TRUE);
 		getChildView("add_media")->setEnabled(editable);
 	}
