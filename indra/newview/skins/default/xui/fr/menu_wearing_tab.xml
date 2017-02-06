@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Wearing">
-	<menu_item_call label="Modifier" name="edit_item"/>
 	<menu_item_call label="Retirer" name="take_off"/>
 	<menu_item_call label="Détacher" name="detach"/>
 	<menu_item_call label="Retirer / Détacher" name="take_off_or_detach"/>
