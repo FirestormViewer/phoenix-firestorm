@@ -713,7 +713,7 @@ class LLFileUploadBulk : public view_listener_t
 		//	LL_INFOS() << "Couldn't import objects from file" << LL_ENDL;
 		//}
 		// </FS:Ansariel>
-		(new LLGenericLoadMultipleFilePicker(LLFilePicker::FFLOAD_ALL, boost::bind(&upload_bulk_callback, _1)))->getFiles();
+		LLGenericLoadMultipleFilePicker::open(LLFilePicker::FFLOAD_ALL, boost::bind(&upload_bulk_callback, _1));
 		return true;
 	}
 };

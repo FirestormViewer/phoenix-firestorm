@@ -65,7 +65,7 @@ Grafik Kartı: [GRAPHICS_CARD]
 		Windows Grafik Sürücüsü Sürümü: [GRAPHICS_DRIVER_VERSION]
 	</string>
 	<string name="AboutOGL">
-		OpenGL Sürümü: [OPENGL_VERSION]
+		OpenGL Sürümü [OPENGL_VERSION]
 	</string>
 	<string name="AboutLibs">
 libcurl Sürümü: [LIBCURL_VERSION]
