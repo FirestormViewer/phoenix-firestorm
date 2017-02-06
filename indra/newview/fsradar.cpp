@@ -978,7 +978,7 @@ void FSRadar::updateTracking()
 	}
 	else
 	{
-		LLTracker::stopTracking(NULL);
+		LLTracker::stopTracking(false);
 	}
 }
 
