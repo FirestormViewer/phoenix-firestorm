@@ -12,5 +12,5 @@
 		<scroll_list.columns label="Objektname" name="name"/>
 		<scroll_list.columns label="Ort" name="location"/>
 	</scroll_list>
-	<button label="Liste aktualisieren" name="refresh_list_btn"/>
+	<button label="Liste aktualisieren" name="refresh_list_btn" width="110"/>
 </panel>

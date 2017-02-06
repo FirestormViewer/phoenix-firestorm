@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="queue" title="Réinitialiser l'avancement">
-	<floater.string name="Starting">Lancement de [START] sur [COUNT] objets.</floater.string>
-	<floater.string name="Done">Terminé.</floater.string>
-	<floater.string name="Resetting">Réinitialisation</floater.string>
-	<floater.string name="Running">Exécution en cours</floater.string>
-	<floater.string name="NotRunning">Non lancé</floater.string>
-	<floater.string name="Deleting">Suppression</floater.string>
+<floater name="queue" title="RÉINITIALISER LES PROGRÈS">
+	<floater.string name="Starting">
+		Lancement de [START] sur [COUNT] objets.
+	</floater.string>
+	<floater.string name="Done">
+		Fini.
+	</floater.string>
+	<floater.string name="Resetting">
+		Réinitialisation
+	</floater.string>
+	<floater.string name="Running">
+		Exécution en cours
+	</floater.string>
+	<floater.string name="NotRunning">
+		Arrêt
+	</floater.string>
+	<floater.string name="Timeout">
+		Délai : [OBJECT_NAME]
+	</floater.string>
+	<floater.string name="LoadingObjInv">
+		Chargement de l’inventaire pour : [OBJECT_NAME]
+	</floater.string>
 	<button label="Fermer" label_selected="Fermer" name="close"/>
 </floater>

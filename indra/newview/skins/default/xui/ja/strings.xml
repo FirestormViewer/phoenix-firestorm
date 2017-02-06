@@ -28,6 +28,9 @@
 	<string name="StartupRequireDriverUpdate">
 		グラフィックを初期化できませんでした。グラフィックドライバを更新してください。
 	</string>
+	<string name="AboutTime">
+		[month, datetime, slt] [day, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt]
+	</string>
 	<string name="BuildConfiguration">
 		ビルド構成
 	</string>
@@ -1045,29 +1048,22 @@ support@secondlife.com にお問い合わせください。
 	<string name="ControlYourCamera">
 		カメラのコントロール
 	</string>
-	
-	<!-- added Jun.30, 2013 -->
-	<string name="SilentlyManageEstateAccess">
-		不動産のアクセスリスト管理中は通知を抑止
+	<string name="TeleportYourAgent">
+		あなたをテレポート
 	</string>
-	<string name="OverrideYourAnimations">
-		デフォルトのアニメーションを置き換える
+	<string name="ForceSitAvatar">
+		アバターを強制的に座らせる
 	</string>
-	<string name="ScriptReturnObjects">
-		あなたに代わってオブジェクトを返却
-	</string>
-	<!-- added Jun.30, 2013 -->
-	
 	<string name="NotConnected">
 		接続されていません
 	</string>
 	<string name="AgentNameSubst">
 		(あなた)
-	</string> <!-- Substitution for agent name -->
+	</string>
 	<string name="TeleportYourAgent">
 		あなたをテレポート
 	</string>
-	<string name="JoinAnExperience"/><!-- intentionally blank -->
+	<string name="JoinAnExperience"/>
 	<string name="SilentlyManageEstateAccess">
 		土地のアクセスリストを管理するときにアラートを表示しない
 	</string>
@@ -1934,12 +1930,27 @@ support@secondlife.com にお問い合わせください。
 	<string name="av_render_anyone">
 		周りの誰もがあなたを表示できるとは限りません。
 	</string>
-
-	<!-- AgeYearsA = singular,
-		AgeYearsB = plural,
-		AgeYearsC = plural for non-English languages like Russian
-		For example, LLTrans::getCountString("AgeYears", 3) is plural form B
-		in English and form C in Russian -->
+	<string name="hud_description_total">
+		ご利用の HUD
+	</string>
+	<string name="hud_name_with_joint">
+		[OBJ_NAME]（[JNT_NAME] に装着中）
+	</string>
+	<string name="hud_render_memory_warning">
+		[HUD_DETAILS] はたくさんのテクスチャメモリを使用します
+	</string>
+	<string name="hud_render_cost_warning">
+		[HUD_DETAILS] には高価なオブジェクトやテクスチャがたくさん含まれています
+	</string>
+	<string name="hud_render_heavy_textures_warning">
+		[HUD_DETAILS] は大きなテクスチャがたくさん含まれています
+	</string>
+	<string name="hud_render_cramped_warning">
+		[HUD_DETAILS] に含まれるオブジェクトが多すぎます
+	</string>
+	<string name="hud_render_textures_warning">
+		[HUD_DETAILS] に含まれるテクスチャが多すぎます
+	</string>
 	<string name="AgeYearsA">
 		[COUNT] 年
 	</string>
@@ -2095,6 +2106,9 @@ support@secondlife.com にお問い合わせください。
 	</string>
 	<string name="ObjectOutOfRange">
 		スクリプト（オブジェクトが範囲外にあります）
+	</string>
+	<string name="ScriptWasDeleted">
+		スクリプト（インベントリから削除済み）
 	</string>
 	<string name="GodToolsObjectOwnedBy">
 		[OWNER] 所有のオブジェクト「[OBJECT]」
@@ -2730,6 +2744,15 @@ support@secondlife.com にお問い合わせください。
 	</string>
 	<string name="Play Media">
 		メディアを再生/一時停止
+	</string>
+	<string name="IntelDriverPage">
+		http://www.intel.com/p/en_US/support/detect/graphics
+	</string>
+	<string name="NvidiaDriverPage">
+		http://www.nvidia.com/Download/index.aspx?lang=en-us
+	</string>
+	<string name="AMDDriverPage">
+		http://support.amd.com/us/Pages/AMDSupportHub.aspx
 	</string>
 	<string name="MBCmdLineError">
 		コマンドラインにエラーが見つかりました。
@@ -4517,7 +4540,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		[NAME] は [REASON] のために L$[AMOUNT] を支払いました。
 	</string>
 	<string name="paid_you_ldollars_gift">
-		[NAME] はあなたに L$[AMOUNT] を支払いました：[REASON]</string>
+		[NAME] は L$[AMOUNT] 支払いました：[REASON]
+	</string>
 	<string name="paid_you_ldollars_no_reason">
 		[NAME] は L$[AMOUNT] を支払いました。
 	</string>
@@ -4526,6 +4550,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="you_paid_ldollars_gift">
 		[NAME] に L$[AMOUNT] を支払いました：[REASON]
+	</string>
+	<string name="you_paid_ldollars_gift">
+		[NAME] に L$ [AMOUNT] を支払いました：[REASON]
 	</string>
 	<string name="you_paid_ldollars_no_info">
 		L$ [AMOUNT] を支払いました。
@@ -4540,7 +4567,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		[NAME] に [REASON] の代金 L$ [AMOUNT] を支払えませんでした。
 	</string>
 	<string name="you_paid_failure_ldollars_gift">
-		[NAME] に L$[AMOUNT] を支払えませんでした：[REASON]
+		[NAME] に L$ [AMOUNT] を支払えませんでした：[REASON]
 	</string>
 	<string name="you_paid_failure_ldollars_no_info">
 		L$ [AMOUNT] を支払えませんでした。
@@ -5381,6 +5408,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Profile_Label">
 		プロフィール
 	</string>
+	<string name="Command_Report_Abuse_Label">
+		嫌がらせの報告
+	</string>
 	<string name="Command_Search_Label">
 		検索
 	</string>
@@ -5505,6 +5535,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Command_Profile_Tooltip">
 		プロフィールを編集・表示
+	</string>
+	<string name="Command_Report_Abuse_Tooltip">
+		嫌がらせの報告
 	</string>
 	<string name="Command_Search_Tooltip">
 		場所、イベント、人を検索

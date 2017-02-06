@@ -65,6 +65,9 @@ Versão do servidor de voz: [VOICE_VERSION]
 	<string name="AboutTraffic">
 		Packets Lost: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
 	</string>
+	<string name="AboutTime">
+		[month, datetime, slt] [day, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt]
+	</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">
 		Erro ao obter URL de notas de versão do servidor.
 	</string>
@@ -1036,6 +1039,9 @@ Pessoas com contas gratuitas não poderão acessar o Second Life no momento para
 	<string name="TeleportYourAgent">
 		Teletransportá-lo
 	</string>
+	<string name="ForceSitAvatar">
+		Forçar o avatar a sentar
+	</string>
 	<string name="AgentNameSubst">
 		(Você)
 	</string>
@@ -1860,6 +1866,27 @@ Pessoas com contas gratuitas não poderão acessar o Second Life no momento para
 	<string name="TodayOld">
 		Cadastrado hoje
 	</string>
+	<string name="hud_description_total">
+		Seu HUD
+	</string>
+	<string name="hud_name_with_joint">
+		[OBJ_NAME] (vestido em [JNT_NAME])
+	</string>
+	<string name="hud_render_memory_warning">
+		[HUD_DETAILS] usa muita memória de textura
+	</string>
+	<string name="hud_render_cost_warning">
+		[HUD_DETAILS] contém muitos objetos e texturas que utilizam o máximo de recursos
+	</string>
+	<string name="hud_render_heavy_textures_warning">
+		[HUD_DETAILS] contém muitas texturas grandes
+	</string>
+	<string name="hud_render_cramped_warning">
+		[HUD_DETAILS] contém muitos objetos
+	</string>
+	<string name="hud_render_textures_warning">
+		[HUD_DETAILS] contém muitas texturas
+	</string>
 	<string name="AgeYearsA">
 		[COUNT] ano
 	</string>
@@ -2015,6 +2042,9 @@ Pessoas com contas gratuitas não poderão acessar o Second Life no momento para
 	</string>
 	<string name="ObjectOutOfRange">
 		Script (objeto fora de alcance)
+	</string>
+	<string name="ScriptWasDeleted">
+		Script (excluído do inventário)
 	</string>
 	<string name="GodToolsObjectOwnedBy">
 		Objeto [OBJECT] de propriedade de [OWNER]
@@ -2590,6 +2620,15 @@ Expected .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	</string>
 	<string name="Play Media">
 		Tocar/Pausar mídia
+	</string>
+	<string name="IntelDriverPage">
+		http://www.intel.com/p/en_US/support/detect/graphics
+	</string>
+	<string name="NvidiaDriverPage">
+		http://www.nvidia.com.br/Download/index.aspx?lang=br
+	</string>
+	<string name="AMDDriverPage">
+		http://support.amd.com/us/Pages/AMDSupportHub.aspx
 	</string>
 	<string name="MBCmdLineError">
 		Um erro foi encontrado analisando a linha de comando.
@@ -4338,11 +4377,17 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
 	<string name="paid_you_ldollars">
 		[NAME] lhe pagou L$ [AMOUNT] [REASON].
 	</string>
+	<string name="paid_you_ldollars_gift">
+		[NAME] lhe pagou L$ [AMOUNT]: [REASON]
+	</string>
 	<string name="paid_you_ldollars_no_reason">
 		[NAME] lhe pagou L$ [AMOUNT]
 	</string>
 	<string name="you_paid_ldollars">
 		Você pagou L$[AMOUNT] por [REASON] a [NAME].
+	</string>
+	<string name="you_paid_ldollars_gift">
+		Você pagou L$[AMOUNT] a [NAME]: [REASON]
 	</string>
 	<string name="you_paid_ldollars_no_info">
 		Você acaba de pagar L$[AMOUNT].
@@ -4355,6 +4400,9 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
 	</string>
 	<string name="you_paid_failure_ldollars">
 		Você não pagou L$[AMOUNT] a [NAME] referentes a [REASON].
+	</string>
+	<string name="you_paid_failure_ldollars_gift">
+		Você não pagou L$[AMOUNT] a [NAME]: [REASON]
 	</string>
 	<string name="you_paid_failure_ldollars_no_info">
 		Você não pagou L$[AMOUNT].
@@ -4681,6 +4729,15 @@ Denunciar abuso
 	</string>
 	<string name="texture_load_dimensions_error">
 		A imagem excede o limite [WIDTH]*[HEIGHT]
+	</string>
+	<string name="outfit_photo_load_dimensions_error">
+		O tamanho máx. do look é [WIDTH]*[HEIGHT]. Redimensione ou use outra imagem
+	</string>
+	<string name="outfit_photo_select_dimensions_error">
+		O tamanho máx. do look é [WIDTH]*[HEIGHT]. Selecione outra textura
+	</string>
+	<string name="outfit_photo_verify_dimensions_error">
+		Não foi possível confirmar as dimensões da foto. Aguarde até que o tamanho da foto seja exibido no seletor
 	</string>
 	<string name="words_separator" value=","/>
 	<string name="server_is_down">
@@ -5186,6 +5243,9 @@ Tente colocar o caminho do editor entre aspas.
 	<string name="Command_Profile_Label">
 		Perfil
 	</string>
+	<string name="Command_Report_Abuse_Label">
+		Relatar abuso
+	</string>
 	<string name="Command_Search_Label">
 		Buscar
 	</string>
@@ -5275,6 +5335,9 @@ Tente colocar o caminho do editor entre aspas.
 	</string>
 	<string name="Command_Profile_Tooltip">
 		Edite ou visualize seu perfil
+	</string>
+	<string name="Command_Report_Abuse_Tooltip">
+		Relatar abuso
 	</string>
 	<string name="Command_Search_Tooltip">
 		Encontre lugares, eventos, pessoas

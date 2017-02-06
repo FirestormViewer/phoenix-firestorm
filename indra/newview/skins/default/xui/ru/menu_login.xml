@@ -23,13 +23,12 @@
 	<menu_item_check label="Показать меню отладки" name="Show Debug Menu"/>
 	<menu label="Отладка" name="Debug">
 		<menu_item_call label="Показать настройки отладки" name="Debug Settings"/>
-		<menu_item_call label="Настройки цветов/интерфейса" name="UI/Color Settings"/>
 		<menu_item_call label="Инструменты просмотра XUI" name="UI Preview Tool"/>
 		<menu label="Тесты интерфейса" name="UI Tests"/>
 		<menu_item_call label="Установить размер окна..." name="Set Window Size..."/>
 		<menu_item_call label="Показать условия использования (ТОS)" name="TOS"/>
 		<menu_item_call label="Показать критические сообщения" name="Critical"/>
-		<menu_item_call label="Тест отладки окна web содержимого" name="Web Content Floater Debug Test"/>
+		<menu_item_call label="Медиа-браузер" name="Media Browser"/>
 		<menu_item_check label="Показать выбор сетки" name="Show Grid Picker"/>
 		<menu_item_call label="Показать консольь уведомлений" name="Show Notifications Console"/>
 		<menu label="Задать уровень журнала" name="Set Logging Level">

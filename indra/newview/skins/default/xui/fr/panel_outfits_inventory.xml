@@ -3,6 +3,7 @@
 	<panel.string name="wear_outfit_tooltip">Porter la tenue sélectionnée</panel.string>
 	<panel.string name="wear_items_tooltip">Porter les objets sélectionnés</panel.string>
 	<tab_container name="appearance_tabs">
+		<panel label="Galerie des tenues" name="outfit_gallery_tab"/>
 		<panel name="outfitslist_tab" label="Tenues"/>
 		<panel label="Porté" name="cof_tab"/>
 	</tab_container>

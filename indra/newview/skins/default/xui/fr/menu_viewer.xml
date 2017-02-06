@@ -146,11 +146,11 @@
 		<menu_item_call label="Lier" name="Link"/>
 		<menu_item_call label="Annuler le lien" name="Unlink"/>
 		<menu_item_check label="Editer les parties liées" name="Edit Linked Parts"/>
-		<menu label="Sélectionner les parties liées" name="Select Linked Parts">
-			<menu_item_call label="Sélectionner la partie suivante" name="Select Next Part"/>
-			<menu_item_call label="Sélectionner la partie précédente" name="Select Previous Part"/>
-			<menu_item_call label="Inclure la partie suivante" name="Include Next Part"/>
-			<menu_item_call label="Inclure la partie précédente" name="Include Previous Part"/>
+		<menu label="Sélectionner des éléments" name="Select Elements">
+			<menu_item_call label="Sélectionner la partie suivante ou le visage" name="Select Next Part or Face"/>
+			<menu_item_call label="Sélectionner la partie précédente ou le visage" name="Select Previous Part or Face"/>
+			<menu_item_call label="Inclure la partie suivante ou le visage" name="Include Next Part or Face"/>
+			<menu_item_call label="Inclure la partie précédente ou le visage" name="Include Previous Part or Face"/>
 		</menu>
 		<menu_item_call label="Centrer sur la sélection" name="Focus on Selection"/>
 		<menu_item_call label="Zoomer sur la sélection" name="Zoom to Selection"/>
@@ -474,7 +474,7 @@
 			<menu_item_call label="Dump Simulator Features to Nearby Chat" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="UI" name="UI">
-			<menu_item_call label="Media Browser Test" name="Web Browser Test"/>
+			<menu_item_call label="Navigateur de médias" name="Media Browser"/>
 			<menu_item_check label="Region Restart Test..." name="Region Restart Test"/>
 			<menu_item_call label="Web Content Browser" name="Web Content Browser"/>
 			<menu_item_call label="FB Connect Test" name="FB Connect Test"/>

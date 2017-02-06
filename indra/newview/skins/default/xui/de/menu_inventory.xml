@@ -61,6 +61,7 @@
 	<menu_item_call label="Zum aktuellen Outfit hinzufügen" name="Add To Outfit"/>
     <menu_item_call label="Objekte anziehen" name="Wear Items"/>
 	<menu_item_call label="Vom aktuellen Outfit entfernen" name="Remove From Outfit"/>
+	<menu_item_call label="Outfitliste in Zwischenablage kopieren" name="Copy outfit list to clipboard"/>
 	<menu_item_call label="Original suchen" name="Find Original"/>
 	<menu_item_call label="Objekt löschen" name="Purge Item"/>
 	<menu_item_call label="Objekt wiederherstellen" name="Restore Item"/>

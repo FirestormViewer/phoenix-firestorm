@@ -26,6 +26,7 @@
 	<menu_item_call label="Править форму" name="Edit My Shape"/>
 	<menu_item_call label="Высота" name="Hover Height"/>
 	<menu_item_call label="Сброс скелета" name="Reset Skeleton"/>
+	<menu_item_call label="Восстановить скелет и анимации" name="Reset Skeleton And Animations"/>
 	<menu_item_call label="Друзья" name="Friends..."/>
 	<menu_item_call label="Группы" name="Groups..."/>
 	<menu_item_call label="Профиль" name="Profile..."/>

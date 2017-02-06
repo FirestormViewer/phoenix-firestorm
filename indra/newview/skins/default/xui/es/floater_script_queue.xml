@@ -18,5 +18,11 @@
 	<floater.string name="Deleting">
 		Eliminando
 	</floater.string>
+	<floater.string name="Timeout">
+		Tiempo de espera: [OBJECT_NAME]
+	</floater.string>
+	<floater.string name="LoadingObjInv">
+		Cargando inventario de: [OBJECT_NAME]
+	</floater.string>
 	<button label="Cerrar" label_selected="Cerrar" name="close"/>
 </floater>

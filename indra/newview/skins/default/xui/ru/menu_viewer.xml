@@ -141,11 +141,11 @@
 	<menu label="Строить" name="BuildTools">
 		<menu_item_check label="Строить" name="Show Build Tools"/>
 		<menu label="Выбор инструмента строительства" name="Select Tool">
-			<menu_item_call label="Инструменты фокуса" name="Focus"/>
-			<menu_item_call label="Инструменты движения" name="Move"/>
-			<menu_item_call label="Инструменты правки" name="Edit"/>
-			<menu_item_call label="Инструменты создания" name="Create"/>
-			<menu_item_call label="Инструменты земли" name="Land"/>
+		<menu label="Выберите элементы" name="Select Elements">
+			<menu_item_call label="Выбрать следующую часть или лицо" name="Select Next Part or Face"/>
+			<menu_item_call label="Выбрать предыдущую часть или лицо" name="Select Previous Part or Face"/>
+			<menu_item_call label="Включить следующую часть или лицо" name="Include Next Part or Face"/>
+			<menu_item_call label="Включить предыдущую часть или лицо" name="Include Previous Part or Face"/>
 		</menu>
 		<menu_item_call label="Соеденить" name="Link"/>
 		<menu_item_call label="Разделить" name="Unlink"/>
@@ -487,7 +487,7 @@
 			<menu_item_call label="Дамп возможностей симулятора в общий чат" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="Интерфейс пользователя" name="UI">
-			<menu_item_call label="Тест медиа браузера" name="Web Browser Test"/>
+			<menu_item_call label="Браузер для просмотра медиа" name="Media Browser"/>
 			<menu_item_check label="Тест перезапуска региона..." name="Region Restart Test"/>
 			<menu_item_call label="Браузер Web содержимого" name="Web Content Browser"/>
 			<menu_item_call label="Тест соединения с Facebook" name="FB Connect Test"/>

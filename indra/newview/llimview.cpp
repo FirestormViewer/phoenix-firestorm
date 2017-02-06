@@ -2637,7 +2637,15 @@ void LLIncomingCallDialog::onAvatarNameCache(const LLUUID& agent_id,
 void LLIncomingCallDialog::onOpen(const LLSD& key)
 {
 	LLCallDialog::onOpen(key);
-	make_ui_sound("UISndStartIM");
+
+	// <FS:Ansariel> FIRE-7556: Configurable User Interface sounds; This is done in LLFloater::openFloater
+	//if (gSavedSettings.getBOOL("PlaySoundIncomingVoiceCall"))
+	//{
+	//	// play a sound for incoming voice call if respective property is set
+	//	make_ui_sound("UISndStartIM");
+	//}
+	// </FS:Ansariel>
+
 	LLStringUtil::format_map_t args;
 	LLGroupData data;
 	// if it's a group call, retrieve group name to use it in question

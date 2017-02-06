@@ -9,7 +9,7 @@
 	<menu_item_call label="Anrufen" name="Call"/>
 	<menu_item_call label="In Gruppe einladen" name="Invite..."/>
 	<menu_item_call label="Skelett zurücksetzen" name="Reset Skeleton"/>
-	<menu_item_call label="Skelett &amp; Animationen zurücksetzen" name="Reset Skeleton And Animations"/>
+	<menu_item_call label="Skelett und Animationen zurücksetzen" name="Reset Skeleton And Animations"/>
 	<context_menu label="Belästigung" name="Annoyance">
 		<menu_item_call label="Ignorieren" name="Avatar Mute"/>
 		<menu_item_call label="Freischalten" name="Avatar Unmute"/>
@@ -28,7 +28,7 @@
 	<menu_item_call label="Untersuchen" name="Object_Inspect_Floater"/>
 	<menu_item_call label="Skript-Info" name="ScriptInfo"/>
 	<menu_item_call label="Nicht anzeigen" name="Derender"/>
-	<menu_item_call label="Nicht anzeigen + Blacklist" name="DerenderPermanent"/>
+	<menu_item_call label="Nicht anzeigen &amp; Blacklist" name="DerenderPermanent"/>
 	<menu_item_call label="Texturen anzeigen" name="Debug..."/>
 	<menu_item_call label="Texturen aktualisieren" name="Texture Refresh"/>
 	<context_menu label="Speichern als" name="Export Menu">

@@ -337,7 +337,7 @@ Wenn diese Rolle nicht mehr diese Fähigkeiten haben soll, deaktivieren Sie sie 
 		<usetemplate ignoretext="Verbannen mehrerer Gruppenmitglieder bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Verbannen"/>
 	</notification>
 	<notification name="GroupBanUserOnBanlist">
-		Einigen Einwohnern wurde keine Einladung geschickt, da sie aus der Gruppe verbannt wurden.
+		Manchen Einwohnern wurde keine Einladung gesendet, weil sie aus der Gruppe ausgeschlossen sind.
 	</notification>
 	<notification name="AttachmentDrop">
 		Sie möchten Ihren Anhang wirklich fallen lassen?
@@ -468,10 +468,10 @@ Um Medien nur auf einer Fläche einzufügen, wählen Sie „Oberfläche auswähl
 		Fehler beim Erstellen des Fotos!
 	</notification>
 	<notification name="ErrorPhotoCannotAfford">
-		Sie benötigten [COST] L$ um ein Foto in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
+		Es kostet L$[COST], um ein Foto in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
 	</notification>
 	<notification name="ErrorTextureCannotAfford">
-		Sie benötigten [COST] L$ um eine Textur in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
+		Es kostet L$[COST], um eine Textur in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
 	</notification>
 	<notification name="ErrorUploadingPostcard">
 		Ein Foto konnte aus folgendem Grund nicht gesendet werden: [REASON]
@@ -760,7 +760,7 @@ Verschieben Sie alle betreffenden Objekte in dieselbe Region.
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="MuteLimitReached">
-		Neuer Eintrag konnte nicht zur Blockierliste hinzugefügt werden, da das Limit von [MUTE_LIMIT] Einträgen erreicht wurde.
+		Sie können keinen weiteren Eintrag zur Blockierliste hinzufügen, weil der Höchstwert ([MUTE_LIMIT] Einträge) erreicht ist.
 	</notification>
 	<notification name="UnableToLinkObjects">
 		Verknüpfung dieser [COUNT] Objekte nicht möglich.
@@ -1404,11 +1404,11 @@ Sie können [APP_NAME] normal verwenden. Andere Benutzer können Sie korrekt dar
 	</notification>
 	<notification name="AgentComplexity">
 		Ihre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 Avatarkomplexität] ist [AGENT_COMPLEXITY].
-		<usetemplate ignoretext="Warnen, wnen sich meine Avatar-Komplexität ändert" name="notifyignore"/>
+		<usetemplate ignoretext="Warnung anzeigen, wenn sich die Komplexität meines Avatars ändert" name="notifyignore"/>
 	</notification>
 	<notification name="HUDComplexityWarning">
-		[HUD_REASON]. Es wird wahrscheinlich die Performance negativ beeinflussen.
-		<usetemplate ignoretext="Warnen, falls meine HUD-Komplexität zu hoch ist" name="notifyignore"/>
+		[HUD_REASON]. Dieses wirkt sich wahrscheinlich negativ auf die Leistung aus.
+		<usetemplate ignoretext="Warnung anzeigen, wenn die Komplexität meines HUD zu hoch ist" name="notifyignore"/>
 	</notification>
 	<notification name="FirstRun">
 		Installation von [APP_NAME] vollständig abgeschlossen.
@@ -1502,8 +1502,8 @@ Wählen Sie ein einzelnes Objekt aus und versuchen Sie es erneut.
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ChangeObjectBonusFactor">
-		Das Verringern des Objekt-Bonus nachdem bereits in einer Region gebaut wurde kann zur Folge haben, dass Objekte zurückgeschickt oder gelöscht werden. Sind Sie sicher, dass Sie den Onjekt-Bonus ändern möchten?
-		<usetemplate ignoretext="Bestätigen, wenn der Okjekt-Bonus geändert wird" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+		Wenn Sie den Objektbonus heruntersetzen, nachdem in einer Region Bauwerke errichtet wurden, können Objekte möglicherweise zurückgegeben oder gelöscht werden. Möchten Sie den Objektbonus wirklich ändern?
+		<usetemplate ignoretext="Änderung des Objektbonusfaktors bestätigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="EstateObjectReturn">
 		Möchten Sie wirklich alle Objekte zurückgeben, die [USER_NAME] gehören?
@@ -1553,7 +1553,7 @@ Ersetzen Sie die Textur [TEXTURE_NUM] mit einer Bilddatei von maximal 1024x1024 
 		Der Eigentümer des Grundbesitzes kann nicht zur Liste der „Verbannten Einwohner“ hinzugefügt werden.
 	</notification>
 	<notification name="ProblemAddingEstateManagerBanned">
-		Verbannter Einwohner kann nicht zur Liste der Grundbesitzverwalter hinzugefügt werden.
+		Verbannter Einwohner kann nicht zur Grundbesitzverwalterliste hinzugefügt werden.
 	</notification>
 	<notification name="CanNotChangeAppearanceUntilLoaded">
 		Das Aussehen lässt sich erst ändern, wenn Kleider und Form/Gestalt geladen sind.
@@ -1727,7 +1727,7 @@ Wenn Sie die neuesten Features und Fixes ausprobieren möchten, gehen Sie zur Se
 		<usetemplate ignoretext="Meinen Browser starten, um eine Webseite anzuzeigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="SystemUIScaleFactorChanged">
-		Die Bildschirmskalierung des Betriebssystems hat sich seit dem letzten Start geändert. Möchten Sie die Einstellungsseite für die UI-Skalierung öffnen?
+		Der UI-Größenfaktor des Systems hat sich seit der letzten Ausführung geändert. Möchten Sie die Seite mit den UI-Größeneinstellungen öffnen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">
@@ -1783,7 +1783,7 @@ Diese Gruppe verlassen?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GroupDepartError">
-		Verlassen der Gruppe nicht möglich.
+		Sie können die Gruppe nicht verlassen,
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmKick">
@@ -2259,7 +2259,7 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="TooManyScriptsSelected">
-		Zu viele Skripte in den ausgewählten Primitiven. Bitte wählen Sie weniger Primitive aus und versuchen Sie es erneut.
+		Zu viele Skripts in den Objekten ausgewählt. Bitte wählen Sie weniger Objekte aus und versuchen Sie es erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ProblemImportingEstateCovenant">
@@ -2432,7 +2432,7 @@ Inventarobjekt(e) verschieben?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PaymentBlockedButtonMismatch">
-		Zahlung gestoppt: Der gezahlte Preis stimmt mit keinem der Bezahlen-Buttons für dieses Objekt überein.
+		Zahlung gestoppt: Der bezahlte Preis stimmt nicht mit den für dieses Objekt definierten Zahlungsschaltflächen überein.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OpenObjectCannotCopy">
@@ -2471,8 +2471,9 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Trennen"/>
 	</notification>
 	<notification name="HelpReportAbuseConfirm">
-		Vielen Dank, dass Sie sich die Zeit genommen haben, uns über den Vorfall zu informieren.
-Wir werden Ihre Meldung auf mögliche Verstöße untersuchen und angemessene Aktionen ergreifen.
+		Vielen Dank, dass Sie uns über dieses Problem informiert haben. 
+Wir untersuchen Ihre Meldung, um zu bestimmen, ob ein Missbrauch vorliegt, und werden dann die entsprechende Maßnahme ergreifen.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="HelpReportAbuseSelectCategory">
 		Wählen Sie eine Missbrauchskategorie aus.
@@ -2921,10 +2922,8 @@ Fliegen ist hier nicht möglich.
 			notext="Schließen"/>
 	</notification>
 	<notification name="PathfindingDirtyRebake">
-		Diese Region weist ausstehende Pathfinding-Änderungen auf. Wenn Sie Baurechte besitzen, können Sie die Region durch Klicken auf die Schaltfläche „Region neu formen“ neu formen.
-		<usetemplate
-			name="okbutton"
-			yestext="Region neu formen"/>
+		Diese Region weist ausstehende Pathfinding-Änderungen auf.  Wenn Sie Baurechte besitzen, können Sie die Region durch Klicken auf die Schaltfläche „Region neu formen“ neu formen.
+		<usetemplate name="okbutton" yestext="Region neu formen"/>
 	</notification>
 	<notification name="DynamicPathfindingDisabled">
 		Dynamisches Pathfinding ist in dieser Region nicht aktiviert. Geskriptete Objekte, die Pathfinding-LSL-Aufrufe verwenden, funktionieren in dieser Region u. U. nicht wie erwartet.
@@ -3494,17 +3493,17 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 	<notification name="AttachmentSaved">
 		Der Anhang wurde gespeichert.
 	</notification>
-	<notification name="PresetNotSaved">
-		Fehler beim Speichern der Voreinstellung [NAME].
-	</notification>
-	<notification name="PresetNotDeleted">
-		Fehler beim Löschen der Voreinstellung [NAME].
-	</notification>
 	<notification name="AppearanceToXMLSaved">
 		Erscheinungsbild als XML in [PATH] gespeichert
 	</notification>
 	<notification name="AppearanceToXMLFailed">
 		Fehler beim Speichern des Erscheinungsbilds als XML.
+	</notification>
+	<notification name="PresetNotSaved">
+		Fehler beim Speichern der Voreinstellung [NAME].
+	</notification>
+	<notification name="PresetNotDeleted">
+		Fehler beim Löschen der Voreinstellung [NAME].
 	</notification>
 	<notification name="UnableToFindHelpTopic">
 		Hilfethema für dieses Element wurde nicht gefunden.
@@ -3716,13 +3715,6 @@ Durch Ausblenden der Schaltfläche „Sprechen“ wird die Sprechfunktion deakti
 	</notification>
 	<notification name="ForceQuitDueToLowMemory">
 		SL wird wegen Speichermangel in 30 Sekunden beendet.
-	</notification>
-	<notification name="PopupAttempt">
-		Ein Popup konnte nicht geöffnet werden.
-		<form name="form">
-			<ignore name="ignore" text="Alle Popups aktivieren"/>
-			<button name="open" text="Popup-Fenster öffnen"/>
-		</form>
 	</notification>
 	<notification name="SOCKS_NOT_PERMITTED">
 		SOCKS 5-Proxy „[HOST]:[PORT]“ hat Verbindungsverbindung abgewiesen, da laut Regelsatz nicht zulässig.
@@ -4109,7 +4101,7 @@ Sie ist voll oder startet in Kürze neu.
 [OBJ_POSITION] in Region [REGION_NAME] verschoben werden, da nicht genügend Ressourcen für dieses Objekt auf dieser Parzelle vorhanden sind.
 	</notification>
 	<notification name="NoParcelPermsNoObject">
-		Kopieren fehlgeschlagen, da Sie keinen Zugang zu dieser Parzelle haben.
+		Kopiervorgang fehlgeschlagen, da Sie keinen Zugriff auf diese Parzelle haben.
 	</notification>
 	<notification name="CantMoveObjectRegionVersion">
 		Objekt „[OBJECT_NAME]“ kann nicht nach
@@ -4127,7 +4119,7 @@ Sie ist voll oder startet in Kürze neu.
 		Ihnen fehlt die Berechtigung zum Modifizieren dieses Objekts.
 	</notification>
 	<notification name="TooMuchObjectInventorySelected">
-		Es sind zu viele Objekte mit großem Inhalt ausgewählt. Bitte wählen Sie weniger Objekte aus und versuchen Sie es erneut.
+		Zu viele Objekte mit umfangreichem Inventar ausgewählt. Bitte wählen Sie weniger Objekte aus und versuchen Sie es erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="CantEnablePhysObjContributesToNav">
@@ -4167,11 +4159,11 @@ Sie ist voll oder startet in Kürze neu.
 		Kein Speichern in Objektinhalt möglich: Dadurch würden die Anhängeberechtigungen geändert.
 	</notification>
 	<notification name="AttachmentHasTooMuchInventory">
-		Ihre Anhänge haben zu viel Inhalt, um mehr hinzuzufügen.
+		Ihre Anhänge enthalten zu viele Inventarobjekte. Sie können keine weiteren hinzufügen.
 	</notification>
-	<!--<notification name="IllegalAttachment">
-		Der Anhang hat einen nicht existierenden Punkt am Avatar angefordert. Er wurde stattdessen zur Brust hinzugefügt.
-	</notification>-->
+	<notification name="IllegalAttachment">
+		Der Anhang hat einen nicht vorhandenen Punkt auf dem Avatar angefordert. Der Anhang wurde stattdessen auf der Brust angebracht.
+	</notification>
 	<notification name="TooManyScripts">
 		Zu viele Skripts.
 	</notification>
@@ -4265,10 +4257,10 @@ Sie ist voll oder startet in Kürze neu.
 		Sie wurden von Objekt „[OBJECT_NAME]“, das einem unbekannten Benutzer gehört, teleportiert.
 	</notification>
 	<notification name="StandDeniedByObject">
-		Objekt „[OBJECT_NAME]“ erlaubt Ihnen momentan nicht aufzustehen.
+		„[OBJECT_NAME]“ lässt zur Zeit nicht zu, dass Sie stehen.
 	</notification>
 	<notification name="ResitDeniedByObject">
-		Objekt „[OBJECT_NAME]“ erlaubt Ihnen momentan nicht, den Sitz zu wechseln.
+		„[OBJECT_NAME]“ lässt zur Zeit nicht zu, dass Sie sich woanders hinsetzen.
 	</notification>
 	<notification name="CantCreateObjectRegionFull">
 		Angefordertes Objekt kann nicht erstellt werden. Die Region ist voll.
@@ -4353,9 +4345,6 @@ Sie ist voll oder startet in Kürze neu.
 	</notification>
 	<notification name="CantAttachObjectBeingRemoved">
 		Objekten kann nicht hinzugefügt werden, da es bereits entfernt wird.
-	</notification>
-	<notification name="IllegalAttachment">
-		Der Anhang hat einen nicht-existierenden Punkt am Avatar angefordert. Es wurde stattdessen zur Brust hinzugefügt.
 	</notification>
 	<notification name="CantDropItemTrialUser">
 		Ablegen von Objekten hier nicht möglich; versuchen Sie es mit dem kostenlosen Testbereich.
@@ -4573,7 +4562,7 @@ Wählen Sie eine kleinere Landfläche aus.
 		Geldüberweisungen an Objekte sind in dieser Region gegenwärtig deaktiviert.
 	</notification>
 	<notification name="DroppedMoneyTransferRequest">
-		Überweisung kann aufgrund von Systemauslastung nicht durchgeführt werden.
+		Zahlung konnte aufgrund der Systembelastung nicht durchgeführt werden.
 	</notification>
 	<notification name="CantPayNoAgent">
 		Nicht ersichtlich, wer bezahlt werden muss.

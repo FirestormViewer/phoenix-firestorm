@@ -244,6 +244,7 @@
 				</text>
 				<check_box label="Incluir el peso de la piel" name="upload_skin"/>
 				<check_box label="Incluir posturas de las articulaciones" name="upload_joints"/>
+				<check_box label="Bloquear la escala si está definida la posición de la articulación" name="lock_scale_if_joint_position"/>
 				<check_box label="Adaptar a la forma del avatar" name="deform"/>
 				<radio_group name="deform_base">
 					<radio_item label="Masculino" name="0"/>

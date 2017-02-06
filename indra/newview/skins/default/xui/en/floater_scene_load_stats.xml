@@ -7,16 +7,7 @@
          save_rect="true"
          save_visibility="true"
          title="Scene Load Statistics"
-         width="260">
-<!--
-    <button follows="top|left"
-            top="20"
-            bottom="60"
-            left="10"
-            width="100"
-            label="Pause"
-            name="playpause"/>
--->
+         width="400">
     <scroll_container follows="top|left|bottom|right"
                       bottom="400"
                       layout="topleft"
@@ -24,14 +15,14 @@
                       name="statistics_scroll"
                       reserve_scroll_corner="true"
                       top="20"
-                      width="260">
+                      width="395">
       <container_view follows="top|left|bottom|right"
                       height="378"
                       layout="topleft"
                       left="2"
                       name="statistics_view"
                       top="20"
-                      width="245" >
+                      width="380" >
 <!--Basic Section-->
 		  <stat_view name="basic"
                  label="Basic"
