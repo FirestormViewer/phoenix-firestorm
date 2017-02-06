@@ -305,7 +305,7 @@ BOOL LLConversationViewSession::handleMouseUp( S32 x, S32 y, MASK mask )
 		LLConversationItem* item = dynamic_cast<LLConversationItem *>(getViewModelItem());
 		LLUUID session_id = item? item->getUUID() : LLUUID();
 		LLFloaterIMSessionTab* session_floater = LLFloaterIMSessionTab::findConversation(session_id);
-		if(!session_floater->hasFocus())
+		if(session_floater && !session_floater->hasFocus())
 		{
 			session_floater->setFocus(true);
 		}
@@ -460,6 +460,11 @@ void LLConversationViewSession::refresh()
 			}
 		}
 	}
+    
+    if (mSpeakingIndicator)
+    {
+        mSpeakingIndicator->setShowParticipantsSpeaking(mIsInActiveVoiceChannel);
+    }
 	requestArrange();
 	// Do the regular upstream refresh
 	LLFolderViewFolder::refresh();

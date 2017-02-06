@@ -37,6 +37,7 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 //class LLNameBox;
+class LLViewerInventoryItem;
 class LLViewerObject;
 
 class LLPanelPermissions : public LLPanel
@@ -78,6 +79,8 @@ protected:
 
 	static void	onCommitClickAction(LLUICtrl* ctrl, void*);
 	static void onCommitIncludeInSearch(LLUICtrl* ctrl, void*);
+
+	static LLViewerInventoryItem* findItem(LLUUID &object_id);
 	
 	static void onCommitExport(LLUICtrl* ctrl, void* data);	// <FS:CR> OpenSim export permissions
 

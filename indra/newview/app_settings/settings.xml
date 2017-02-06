@@ -8659,6 +8659,19 @@
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>MemProfiling</key>
+    <map>
+      <key>Comment</key>
+      <string>You want to use tcmalloc's memory profiling options.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+      <key>Backup</key>
+      <integer>0</integer>
+    </map>
     <key>MenuAccessKeyTime</key>
     <map>
       <key>Comment</key>
@@ -24258,6 +24271,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>If enabled, the viewer will try to detect the correct factor based on the scaling set in the operating system. This feature is currently only available on Windows.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSUseLegacyObjectProperties</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, the legacy object profile floater will be used when opening object properties.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
