@@ -215,6 +215,7 @@ LLVivoxVoiceClient::LLVivoxVoiceClient() :
 	mSpeakerMuteDirty(true),
 	mMicVolume(0),
 	mMicVolumeDirty(true),
+	mHidden(false), // <FS:Ansariel> Initialize...
 
 	mVoiceEnabled(false),
 	mWriteInProgress(false),
