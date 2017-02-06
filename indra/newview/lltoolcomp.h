@@ -106,9 +106,9 @@ public:
 
 class LLToolCompInspect : public LLToolComposite, public LLSingleton<LLToolCompInspect>
 {
-public:
-	LLToolCompInspect();
+	LLSINGLETON(LLToolCompInspect);
 	virtual ~LLToolCompInspect();
+public:
 
 	// Overridden from LLToolComposite
     virtual BOOL		handleMouseDown(S32 x, S32 y, MASK mask);
@@ -131,9 +131,9 @@ private:
 
 class LLToolCompTranslate : public LLToolComposite, public LLSingleton<LLToolCompTranslate>
 {
-public:
-	LLToolCompTranslate();
+	LLSINGLETON(LLToolCompTranslate);
 	virtual ~LLToolCompTranslate();
+public:
 
 	// Overridden from LLToolComposite
 	virtual BOOL		handleMouseDown(S32 x, S32 y, MASK mask);
@@ -152,9 +152,9 @@ public:
 
 class LLToolCompScale : public LLToolComposite, public LLSingleton<LLToolCompScale>
 {
-public:
-	LLToolCompScale();
+	LLSINGLETON(LLToolCompScale);
 	virtual ~LLToolCompScale();
+public:
 
 	// Overridden from LLToolComposite
     virtual BOOL		handleMouseDown(S32 x, S32 y, MASK mask);
@@ -179,9 +179,9 @@ public:
 
 class LLToolCompRotate : public LLToolComposite, public LLSingleton<LLToolCompRotate>
 {
-public:
-	LLToolCompRotate();
+	LLSINGLETON(LLToolCompRotate);
 	virtual ~LLToolCompRotate();
+public:
 
 	// Overridden from LLToolComposite
     virtual BOOL		handleMouseDown(S32 x, S32 y, MASK mask);
@@ -202,9 +202,9 @@ protected:
 
 class LLToolCompCreate : public LLToolComposite, public LLSingleton<LLToolCompCreate>
 {
-public:
-	LLToolCompCreate();
+	LLSINGLETON(LLToolCompCreate);
 	virtual ~LLToolCompCreate();
+public:
 
 	// Overridden from LLToolComposite
     virtual BOOL		handleMouseDown(S32 x, S32 y, MASK mask);
@@ -222,14 +222,14 @@ protected:
 // LLToolCompGun
 
 class LLToolGun;
-class LLToolGrab;
+class LLToolGrabBase;
 class LLToolSelect;
 
 class LLToolCompGun : public LLToolComposite, public LLSingleton<LLToolCompGun>
 {
-public:
-	LLToolCompGun();
+	LLSINGLETON(LLToolCompGun);
 	virtual ~LLToolCompGun();
+public:
 
 	// Overridden from LLToolComposite
     virtual BOOL			handleHover(S32 x, S32 y, MASK mask);
@@ -248,7 +248,7 @@ public:
 
 protected:
 	LLToolGun*			mGun;
-	LLToolGrab*			mGrab;
+	LLToolGrabBase*		mGrab;
 	LLTool*				mNull;
 };
 

@@ -114,6 +114,7 @@
 #include "llpathfindingpathtool.h"
 #include "llscenemonitor.h"
 #include "llprogressview.h"
+#include "llcleanup.h"
 // [RLVa:KB] - Checked: RLVa-2.0.0
 #include "rlvactions.h"
 #include "rlvlocks.h"
@@ -7479,7 +7480,7 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 	}
 	LLVOPartGroup::destroyGL();
 
-	LLVertexBuffer::cleanupClass();
+	SUBSYSTEM_CLEANUP(LLVertexBuffer);
 	
 	//delete all name pool caches
 	LLGLNamePool::cleanupPools();
@@ -11725,10 +11726,7 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 
 	avatar->setImpostorDim(tdim);
 
-	// <FS:Ansariel> FIRE-20333: Set back to correct value depending on sMaxNonImpostors
-	//LLVOAvatar::sUseImpostors = true; // @TODO ???
 	LLVOAvatar::sUseImpostors = (0 != LLVOAvatar::sMaxNonImpostors);
-	// </FS:Ansariel>
 	sUseOcclusion = occlusion;
 	sReflectionRender = false;
 	sImpostorRender = false;

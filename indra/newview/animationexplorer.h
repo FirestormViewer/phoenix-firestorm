@@ -43,24 +43,21 @@ class AnimationExplorer;
 class RecentAnimationList
 :	public LLSingleton<RecentAnimationList>
 {
-	friend class LLSingleton<RecentAnimationList>;
+	LLSINGLETON(RecentAnimationList);
+	~RecentAnimationList();
 
-	private:
-		RecentAnimationList();
-		~RecentAnimationList();
+public:
+	struct AnimationEntry
+	{
+		LLUUID animationID;		// asset ID of the animation
+		LLUUID playedBy;		// object/agent who played this animation
+		F64 time;				// time in seconds since viewer start when the animation started
+	};
 
-	public:
-		struct AnimationEntry
-		{
-			LLUUID animationID;		// asset ID of the animation
-			LLUUID playedBy;		// object/agent who played this animation
-			F64 time;				// time in seconds since viewer start when the animation started
-		};
+	std::deque<AnimationEntry> mAnimationList;
 
-		std::deque<AnimationEntry> mAnimationList;
-
-		void addAnimation(const LLUUID& id, const LLUUID& playedBy);		// called in llviewermessage.cpp
-		void requestList(AnimationExplorer* explorer);					// request animation list
+	void addAnimation(const LLUUID& id, const LLUUID& playedBy);		// called in llviewermessage.cpp
+	void requestList(AnimationExplorer* explorer);					// request animation list
 };
 
 // --------------------------------------------------------------------------

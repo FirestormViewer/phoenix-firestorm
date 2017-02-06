@@ -126,7 +126,7 @@ FSFloaterImport::~FSFloaterImport()
 
 BOOL FSFloaterImport::postBuild()
 {
-	if (LLGlobalEconomy::Singleton::getInstance()->getPriceUpload() == 0 
+	if (LLGlobalEconomy::getInstance()->getPriceUpload() == 0 
 		|| gAgent.getRegion()->getCentralBakeVersion() > 0)
 	{
 		getChild<LLCheckBoxCtrl>("temp_asset")->setVisible(FALSE);   
@@ -520,7 +520,7 @@ void FSFloaterImport::onClickBtnImport()
 		
 		if (!getChild<LLCheckBoxCtrl>("temp_asset")->get())
 		{
-			U32 expected_upload_cost = mTexturesTotal * (U32)LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+			U32 expected_upload_cost = mTexturesTotal * (U32)LLGlobalEconomy::getInstance()->getPriceUpload();
 			if(!(can_afford_transaction(expected_upload_cost)))
 			{
 				LLStringUtil::format_map_t args;
@@ -590,7 +590,7 @@ void FSFloaterImport::onClickCheckBoxUploadAsset()
 	{
 		getChild<LLCheckBoxCtrl>("temp_asset")->setEnabled(TRUE);
 		LLUIString stats = getString("upload_cost");
-		stats.setArg("[COST]", llformat("%u", (mTexturesTotal + mSoundsTotal + mAnimsTotal) * (U32)LLGlobalEconomy::Singleton::getInstance()->getPriceUpload()));
+		stats.setArg("[COST]", llformat("%u", (mTexturesTotal + mSoundsTotal + mAnimsTotal) * (U32)LLGlobalEconomy::getInstance()->getPriceUpload()));
 		getChild<LLTextBox>("file_status_text")->setText(stats.getString());
 	}
 	else
@@ -613,7 +613,7 @@ void FSFloaterImport::onClickCheckBoxTempAsset()
 	else
 	{
 		LLUIString stats = getString("upload_cost");
-		stats.setArg("[COST]", llformat("%u", (mTexturesTotal + mSoundsTotal + mAnimsTotal) * (U32)LLGlobalEconomy::Singleton::getInstance()->getPriceUpload()));
+		stats.setArg("[COST]", llformat("%u", (mTexturesTotal + mSoundsTotal + mAnimsTotal) * (U32)LLGlobalEconomy::getInstance()->getPriceUpload()));
 		getChild<LLTextBox>("file_status_text")->setText(stats.getString());
 	}
 }
@@ -1468,7 +1468,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 	data->mAssetInfo.mCreatorID = gAgentID;
 	data->mInventoryType = inventory_type;
 	data->mNextOwnerPerm = LLFloaterPerms::getNextOwnerPerms(perms_prefix);
-	data->mExpectedUploadCost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+	data->mExpectedUploadCost = LLGlobalEconomy::getInstance()->getPriceUpload();
 	FSResourceData* fs_data = new FSResourceData;
 	fs_data->uuid = asset_id;
 	fs_data->mFloater = this;
@@ -1960,7 +1960,7 @@ void uploadCoroutine( LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &a_httpAdapter
 		{
 			LLAssetType::EType asset_type = LLAssetType::lookup( aBody[ "asset_type" ].asString() );
 			LLInventoryType::EType inventory_type = LLInventoryType::lookup( aBody[ "inventory_type" ].asString() );
-			S32 upload_price = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+			S32 upload_price = LLGlobalEconomy::getInstance()->getPriceUpload();
 
 			const std::string inventory_type_string = aBody[ "asset_type" ].asString();
 			const LLUUID& item_folder_id = aBody[ "folder_id" ].asUUID();

@@ -32,6 +32,7 @@
 // </FS:Zi>
 #include "llbutton.h"
 #include "lllayoutstack.h"
+#include "llinitdestroyclass.h"
 
 class LLLocationInputCtrl;
 class LLMenuGL;
@@ -89,12 +90,12 @@ class LLNavigationBar
 	:	public LLSingleton<LLNavigationBar>
 // </FS:Zi>
 {
+	LLSINGLETON(LLNavigationBar);
+	virtual ~LLNavigationBar();
 	LOG_CLASS(LLNavigationBar);
 	friend class LLDestroyClass<LLNavigationBar>;
-	
+
 public:
-	LLNavigationBar();
-	virtual ~LLNavigationBar();
 	
 	// <FS:Zi> Make navigation bar part of the UI
 	// /*virtual*/ void	draw();

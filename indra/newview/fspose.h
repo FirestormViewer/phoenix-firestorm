@@ -17,14 +17,15 @@
 
 class FSPose : public LLSingleton<FSPose>
 {
-	friend class LLSingleton<FSPose>;
 	LOG_CLASS(FSPose);
+
+	LLSINGLETON(FSPose);
+	~FSPose();
+
 public:
 	void setPose(const std::string& new_pose, bool save_state = true);
 	void stopPose();
-protected:
-	FSPose();
-	~FSPose();
+
 private:
 	LLUUID	mCurrentPose;
 };

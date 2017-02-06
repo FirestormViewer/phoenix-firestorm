@@ -35,8 +35,10 @@ class FSAvatarRenderPersistence
 {
 	LOG_CLASS(FSAvatarRenderPersistence);
 
-friend class LLSingleton<FSAvatarRenderPersistence>;
 friend class FSPanelPreferenceBackup;
+
+	LLSINGLETON(FSAvatarRenderPersistence);
+	virtual ~FSAvatarRenderPersistence();
 
 public:
 	void init();
@@ -54,9 +56,6 @@ public:
 	}
 
 private:
-	FSAvatarRenderPersistence();
-	virtual ~FSAvatarRenderPersistence();
-
 	void loadAvatarRenderSettings();
 	void saveAvatarRenderSettings();
 

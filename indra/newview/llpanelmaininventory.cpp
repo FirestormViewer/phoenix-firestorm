@@ -308,7 +308,7 @@ BOOL LLPanelMainInventory::postBuild()
 // <FS:AW opensim currency support>
 //	// *TODO:Get the cost info from the server
 //	const std::string upload_cost("10");
-	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+	S32 cost = LLGlobalEconomy::getInstance()->getPriceUpload();
 	std::string upload_cost;
 #ifdef OPENSIM
 	if (LLGridManager::getInstance()->isInOpenSim())
@@ -1820,7 +1820,7 @@ void LLPanelMainInventory::setUploadCostIfNeeded()
 		LLMenuItemBranchGL* upload_menu = menu->findChild<LLMenuItemBranchGL>("upload");
 		if(upload_menu)
 		{
-			S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+			S32 upload_cost = LLGlobalEconomy::getInstance()->getPriceUpload();
 			std::string cost_str;
 
 			// getPriceUpload() returns -1 if no data available yet.

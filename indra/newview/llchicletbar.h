@@ -41,8 +41,9 @@ class LLChicletBar
 	// <FS:Ansariel> [FS communication UI]
 	, public LLIMSessionObserver
 {
+	LLSINGLETON(LLChicletBar);
 	LOG_CLASS(LLChicletBar);
-	friend class LLSingleton<LLChicletBar>;
+
 public:
 	// <FS:Ansariel> [FS communication UI]
 	~LLChicletBar();
@@ -105,8 +106,6 @@ private:
 	void fitWithTopInfoBar();
 
 protected:
-	LLChicletBar(const LLSD& key = LLSD());
-
 	LLChicletPanel* 	mChicletPanel;
 	LLLayoutStack*		mToolbarStack;
 };

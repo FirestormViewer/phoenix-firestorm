@@ -36,11 +36,10 @@ class LLOfferInfo;
 
 class RlvInventory : public LLSingleton<RlvInventory>, public LLInventoryObserver
 {
-protected:
-	RlvInventory();
-public:
+	LLSINGLETON(RlvInventory);
 	~RlvInventory();
 
+public:
 	// LLInventoryObserver override
 	/*virtual*/ void changed(U32 mask);
 
@@ -103,7 +102,6 @@ protected:
 private:
 	static const std::string cstrSharedRoot;
 	friend class RlvSharedInventoryFetcher;
-	friend class LLSingleton<RlvInventory>;
 };
 
 // ============================================================================

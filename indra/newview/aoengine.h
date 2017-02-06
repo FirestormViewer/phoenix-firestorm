@@ -87,11 +87,8 @@ class LLVFS;
 class AOEngine
 :	public LLSingleton<AOEngine>
 {
-	friend class LLSingleton<AOEngine>;
-
-	private:
-		AOEngine();
-		~AOEngine();
+	LLSINGLETON(AOEngine);
+	~AOEngine();
 
 	public:
 		enum eCycleMode

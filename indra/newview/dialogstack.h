@@ -30,11 +30,8 @@
 class DialogStack
 :	public LLSingleton<DialogStack>
 {
-friend class LLSingleton<DialogStack>;
-
-private:
-	DialogStack();
-	~DialogStack();
+	LLSINGLETON_EMPTY_CTOR(DialogStack);
+	~DialogStack() {}
 
 protected:
 	void update();

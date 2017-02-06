@@ -549,9 +549,9 @@ void FSFloaterSearch::displayEventDetails(U32 eventId, F64 eventEpoch, const std
 	S32 region_x;
 	S32 region_y;
 	S32 region_z;
-	region_x = ll_round(eventGlobalPos.mdV[VX]) % REGION_WIDTH_UNITS;
-	region_y = ll_round(eventGlobalPos.mdV[VY]) % REGION_WIDTH_UNITS;
-	region_z = ll_round(eventGlobalPos.mdV[VZ]);
+	region_x = (S64)ll_round(eventGlobalPos.mdV[VX]) % REGION_WIDTH_UNITS;
+	region_y = (S64)ll_round(eventGlobalPos.mdV[VY]) % REGION_WIDTH_UNITS;
+	region_z = (S32)ll_round(eventGlobalPos.mdV[VZ]);
 	LLStringUtil::format_map_t map;
 	map["DURATION"] = llformat("%d:%.2d", eventDuration / 60, eventDuration % 60);
 	map["LOCATION"] = llformat("%s (%d, %d, %d)", simName.c_str(), region_x, region_y, region_z);

@@ -158,10 +158,7 @@ F32 clamp_precision(F32 value, S32 decimal_precision)
 	for (S32 i = 0; i < decimal_precision; i++)
 		clamped_value *= 10.0;
 
-	// <FS:Ansariel> FIRE-5630: Round with additional precision because of small numbers
-	//clamped_value = ll_round((F32)clamped_value);
-	clamped_value = floor(clamped_value + 0.5);
-	// </FS:Ansariel>
+	clamped_value = ll_round(clamped_value);
 
 	for (S32 i = 0; i < decimal_precision; i++)
 		clamped_value /= 10.0;

@@ -41,6 +41,9 @@ class LLScriptFloaterManager : public LLSingleton<LLScriptFloaterManager>
 	// *TODO
 	// LLScriptFloaterManager and LLScriptFloater will need some refactoring after we 
 	// know how script notifications should look like.
+	// <FS:Zi> script dialogs position
+	//LLSINGLETON_EMPTY_CTOR(LLScriptFloaterManager);
+	LLSINGLETON(LLScriptFloaterManager);
 public:
 
 	typedef enum e_object_type
@@ -125,10 +128,6 @@ private:
 	floater_position_map_t mFloaterPositions;
 
 // <FS:Zi> script dialogs position
-private:
-	LLScriptFloaterManager();
-	friend class LLSingleton<LLScriptFloaterManager>;
-
 public:
 	S32 mNavigationPanelPad;
 	S32 mFavoritesPanelPad;

@@ -102,6 +102,7 @@
 #include "llmediaentry.h"
 #include "llfloaterperms.h"
 #include "llvocache.h"
+#include "llcleanup.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
 #include "rlvcommon.h"
@@ -548,11 +549,11 @@ void LLViewerObject::initVOClasses()
 
 void LLViewerObject::cleanupVOClasses()
 {
-	LLVOGrass::cleanupClass();
-	LLVOWater::cleanupClass();
-	LLVOTree::cleanupClass();
-	LLVOAvatar::cleanupClass();
-	LLVOVolume::cleanupClass();
+	SUBSYSTEM_CLEANUP(LLVOGrass);
+	SUBSYSTEM_CLEANUP(LLVOWater);
+	SUBSYSTEM_CLEANUP(LLVOTree);
+	SUBSYSTEM_CLEANUP(LLVOAvatar);
+	SUBSYSTEM_CLEANUP(LLVOVolume);
 
 	sObjectDataMap.clear();
 }

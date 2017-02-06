@@ -46,6 +46,8 @@ const U32 FLICKR_CONNECT_TIMEOUT = 600;
  */
 class LLFlickrConnect : public LLSingleton<LLFlickrConnect>
 {
+	LLSINGLETON(LLFlickrConnect);
+	~LLFlickrConnect() {};
 	LOG_CLASS(LLFlickrConnect);
 public:
     enum EConnectionState
@@ -83,10 +85,7 @@ public:
     void openFlickrWeb(std::string url);
 
 private:
-	friend class LLSingleton<LLFlickrConnect>;
 
-	LLFlickrConnect();
-	~LLFlickrConnect() {};
  	std::string getFlickrConnectURL(const std::string& route = "", bool include_read_from_master = false);
 
     EConnectionState mConnectionState;

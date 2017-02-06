@@ -1850,8 +1850,8 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
 			// this is the initial file picking. Close the whole floater
 			// if we don't have a base model to show for high LOD.
 			mFMP->closeFloater(false);
-			mLoading = false;
 		}
+		mLoading = false;
 		return;
 	}
 
@@ -2239,14 +2239,11 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
 		if (!mBaseModel.empty())
 		{
 			const std::string& model_name = mBaseModel[0]->getName();
-			// <FS:Ansariel> FIRE-20309: Mesh model name gets overwritten when selecting LOD/Physics file
-			//mFMP->getChild<LLUICtrl>("description_form")->setValue(model_name);
 			LLLineEditor* description_form = mFMP->getChild<LLLineEditor>("description_form");
 			if (description_form->getText().empty())
 			{
 				description_form->setText(model_name);
 			}
-			// </FS:Ansariel>
 		}
 	}
 	refresh();
@@ -4668,4 +4665,12 @@ void LLFloaterModelPreview::setPermissonsErrorStatus(S32 status, const std::stri
 	LLNotificationsUtil::add("MeshUploadPermError");
 }
 
+bool LLFloaterModelPreview::isModelLoading()
+{
+	if(mModelPreview)
+	{
+		return mModelPreview->mLoading;
+	}
+	return false;
+}
 

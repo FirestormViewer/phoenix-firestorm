@@ -38,9 +38,9 @@ class fetchKeywordsFileResponder;
 
 class LLSyntaxIdLSL : public LLSingleton<LLSyntaxIdLSL>
 {
-	friend class LLSingleton<LLSyntaxIdLSL>;
+	LLSINGLETON(LLSyntaxIdLSL);
 	friend class fetchKeywordsFileResponder;
-	
+
 private:
     std::set<std::string> mInflightFetches;
 	typedef boost::signals2::signal<void()> syntax_id_changed_signal_t;
@@ -68,7 +68,6 @@ private:
 	bool 			mInitialized;
 	
 public:
-	LLSyntaxIdLSL();
 	void initialize();
 	bool keywordFetchInProgress();
 	LLSD getKeywordsXML() const { return mKeywordsXml; };

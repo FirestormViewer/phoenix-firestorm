@@ -34,11 +34,8 @@ class UtilityBar
 :	public LLSingleton<UtilityBar>,
 	public LLEventTimer
 {
-	friend class LLSingleton<UtilityBar>;
-
-	private:
-		UtilityBar();
-		~UtilityBar();
+	LLSINGLETON(UtilityBar);
+	~UtilityBar();
 
 	public:
 		void init();

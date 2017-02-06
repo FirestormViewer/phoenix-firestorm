@@ -90,10 +90,9 @@ protected:
 
 class RlvBehaviourDictionary : public LLSingleton<RlvBehaviourDictionary>
 {
-	friend class LLSingleton<RlvBehaviourDictionary>;
 	friend class RlvFloaterBehaviours;
-protected:
-	RlvBehaviourDictionary();
+
+	LLSINGLETON(RlvBehaviourDictionary);
 	~RlvBehaviourDictionary();
 public:
 	void addEntry(const RlvBehaviourInfo* pEntry);
@@ -570,8 +569,7 @@ protected:
 
 class RlvForceWear : public LLSingleton<RlvForceWear>
 {
-protected:
-	RlvForceWear() {}
+	LLSINGLETON_EMPTY_CTOR(RlvForceWear);
 
 public:
 	// Folders
@@ -663,9 +661,6 @@ protected:
 
 	typedef std::map<LLUUID, U8> pendingattachments_map_t;
 	pendingattachments_map_t         m_pendingAttachments;
-
-private:
-	friend class LLSingleton<RlvForceWear>;
 };
 
 // ============================================================================
@@ -674,9 +669,7 @@ private:
 
 class RlvBehaviourNotifyHandler : public LLSingleton<RlvBehaviourNotifyHandler>
 {
-	friend class LLSingleton<RlvBehaviourNotifyHandler>;
-protected:
-	RlvBehaviourNotifyHandler();
+	LLSINGLETON(RlvBehaviourNotifyHandler);
 	virtual ~RlvBehaviourNotifyHandler() { if (m_ConnCommand.connected()) m_ConnCommand.disconnect(); }
 
 public:

@@ -64,8 +64,7 @@ struct InventoryEntry : public LLDictionaryEntry
 class LLInventoryDictionary : public LLSingleton<LLInventoryDictionary>,
 							  public LLDictionary<LLInventoryType::EType, InventoryEntry>
 {
-public:
-	LLInventoryDictionary();
+	LLSINGLETON(LLInventoryDictionary);
 };
 
 LLInventoryDictionary::LLInventoryDictionary()

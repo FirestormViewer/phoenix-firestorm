@@ -31,6 +31,8 @@
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llsdserialize.h"
+#include "lluicolor.h"
+#include "lluicolortable.h"
 #include "llviewercontrol.h"
 #include "llvoavatar.h"
 #include "fsdata.h"
@@ -321,13 +323,13 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 		{
 			case LGG_CS_CHAT:
 			case LGG_CS_IM:
-				color = LLUIColorTable::instance().getColor("UserChatColor", LLColor4::white);
+				color = LLUIColorTable::instance().getColor("UserChatColor", LLColor4::white).get();
 				break;
 			case LGG_CS_TAG:
-				color = LLUIColorTable::instance().getColor("NameTagSelf", LLColor4::white);
+				color = LLUIColorTable::instance().getColor("NameTagSelf", LLColor4::white).get();
 				break;
 			case LGG_CS_MINIMAP:
-				color = LLUIColorTable::instance().getColor("MapAvatarSelfColor", LLColor4::white);
+				color = LLUIColorTable::instance().getColor("MapAvatarSelfColor", LLColor4::white).get();
 				break;
 			case LGG_CS_RADAR:
 			default:
@@ -341,28 +343,28 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 		{
 			case LGG_CS_CHAT:
 				if (!rlv_shownames)
-					color = LLUIColorTable::instance().getColor("FriendsChatColor", LLColor4::white);
+					color = LLUIColorTable::instance().getColor("FriendsChatColor", LLColor4::white).get();
 				break;
 			case LGG_CS_IM:
-				color = LLUIColorTable::instance().getColor("FriendsChatColor", LLColor4::white);
+				color = LLUIColorTable::instance().getColor("FriendsChatColor", LLColor4::white).get();
 				break;
 			case LGG_CS_TAG:
 			{
 				// This is optional per prefs.
-				static LLUICachedControl<bool> color_friends("NameTagShowFriends");
+				static LLCachedControl<bool> color_friends(gSavedSettings, "NameTagShowFriends");
 				if (color_friends && !rlv_shownames)
 				{
-					color = LLUIColorTable::instance().getColor("NameTagFriend", LLColor4::white);
+					color = LLUIColorTable::instance().getColor("NameTagFriend", LLColor4::white).get();
 				}
 			}
 				break;
 			case LGG_CS_MINIMAP:
 				if (!rlv_shownames)
-					color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white);
+					color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white).get();
 				break;
 			case LGG_CS_RADAR:
 				if (legacy_radar_friend && !rlv_shownames)
-					color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white);
+					color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white).get();
 				break;
 			default:
 				LL_DEBUGS("ContactSets") << "Unhandled colorize case!" << LL_ENDL;
@@ -379,13 +381,13 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 		{
 			case LGG_CS_CHAT:
 			case LGG_CS_IM:
-				color = LLUIColorTable::instance().getColor("MutedChatColor", LLColor4::grey3);
+				color = LLUIColorTable::instance().getColor("MutedChatColor", LLColor4::grey3).get();
 				break;
 			case LGG_CS_TAG:
-				color = LLUIColorTable::instance().getColor("NameTagMuted", LLColor4::grey3);
+				color = LLUIColorTable::instance().getColor("NameTagMuted", LLColor4::grey3).get();
 				break;
 			case LGG_CS_MINIMAP:
-				color = LLUIColorTable::instance().getColor("MapAvatarMutedColor", LLColor4::grey3);
+				color = LLUIColorTable::instance().getColor("MapAvatarMutedColor", LLColor4::grey3).get();
 				break;
 			case LGG_CS_RADAR:
 			default:
@@ -399,13 +401,13 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 		{
 			case LGG_CS_CHAT:
 			case LGG_CS_IM:
-				color = LLUIColorTable::instance().getColor("FirestormChatColor", LLColor4::red);
+				color = LLUIColorTable::instance().getColor("FirestormChatColor", LLColor4::red).get();
 				break;
 			case LGG_CS_TAG:
-				color = LLUIColorTable::instance().getColor("NameTagFirestorm", LLColor4::red);
+				color = LLUIColorTable::instance().getColor("NameTagFirestorm", LLColor4::red).get();
 				break;
 			case LGG_CS_MINIMAP:
-				color = LLUIColorTable::instance().getColor("MapAvatarFirestormColor", LLColor4::red);
+				color = LLUIColorTable::instance().getColor("MapAvatarFirestormColor", LLColor4::red).get();
 				break;
 			case LGG_CS_RADAR:
 			default:
@@ -422,17 +424,17 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 			{
 				case LGG_CS_CHAT:
 				case LGG_CS_IM:
-					color = LLUIColorTable::instance().getColor("LindenChatColor", LLColor4::blue);
+					color = LLUIColorTable::instance().getColor("LindenChatColor", LLColor4::blue).get();
 					break;
 				case LGG_CS_TAG:
-					color = LLUIColorTable::instance().getColor("NameTagLinden", LLColor4::blue);
+					color = LLUIColorTable::instance().getColor("NameTagLinden", LLColor4::blue).get();
 					break;
 				case LGG_CS_MINIMAP:
-					color = LLUIColorTable::instance().getColor("MapAvatarLindenColor", LLColor4::blue);
+					color = LLUIColorTable::instance().getColor("MapAvatarLindenColor", LLColor4::blue).get();
 					break;
 				case LGG_CS_RADAR:
 					if (legacy_radar_linden)
-						color = LLUIColorTable::instance().getColor("MapAvatarLindenColor", LLColor4::blue);
+						color = LLUIColorTable::instance().getColor("MapAvatarLindenColor", LLColor4::blue).get();
 					break;
 				default:
 					LL_DEBUGS("ContactSets") << "Unhandled colorize case!" << LL_ENDL;

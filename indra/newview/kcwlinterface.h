@@ -38,9 +38,10 @@ class KCWindlightInterface : public LLSingleton<KCWindlightInterface>, LLEventTi
 {
 	LOG_CLASS(KCWindlightInterface);
 
-public:
-	KCWindlightInterface();
+	LLSINGLETON(KCWindlightInterface);
 	~KCWindlightInterface();
+
+public:
 
 	void parcelChange();
 	/*virtual*/ BOOL tick(); // From LLEventTime

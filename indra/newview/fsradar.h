@@ -59,7 +59,8 @@ class FSRadar
 {
 	LOG_CLASS(FSRadar);
 
-friend class LLSingleton<FSRadar>;
+	LLSINGLETON(FSRadar);
+	virtual ~FSRadar();
 
 public:
 	typedef boost::unordered_map<const LLUUID, FSRadarEntry*, FSUUIDHash> entry_map_t;
@@ -108,9 +109,6 @@ public:
 	}
 
 private:
-	FSRadar();
-	virtual ~FSRadar();
-
 	void					updateRadarList();
 	void					updateTracking();
 	void					checkTracking();

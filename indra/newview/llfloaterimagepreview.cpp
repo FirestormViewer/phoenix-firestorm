@@ -123,7 +123,7 @@ BOOL LLFloaterImagePreview::postBuild()
 			getChildView("lossless_check")->setEnabled(TRUE);
 		
 // <FS:CR> Temporary texture uploads
-		BOOL enable_temp_uploads = (LLGlobalEconomy::Singleton::getInstance()->getPriceUpload() != 0
+		BOOL enable_temp_uploads = (LLGlobalEconomy::getInstance()->getPriceUpload() != 0
 									&& gAgent.getRegion()->getCentralBakeVersion() == 0);
 		if (!enable_temp_uploads)
 		{

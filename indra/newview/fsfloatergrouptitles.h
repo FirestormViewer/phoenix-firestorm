@@ -27,8 +27,6 @@
 #ifndef FS_FLOATERGROUPTITLES_H
 #define FS_FLOATERGROUPTITLES_H
 
-#include "llsingleton.h"
-
 #include "llfloater.h"
 
 #include "llagent.h"
@@ -51,7 +49,7 @@ protected:
 	LLGroupData		mGroupData;
 };
 
-class FSFloaterGroupTitles : public LLSingleton<FSFloaterGroupTitles>, public LLFloater, public LLGroupMgrObserver, public LLOldEvents::LLSimpleListener
+class FSFloaterGroupTitles : public LLFloater, public LLGroupMgrObserver, public LLOldEvents::LLSimpleListener
 {
 
 public:

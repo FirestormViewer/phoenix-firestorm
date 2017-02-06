@@ -6999,15 +6999,12 @@ static std::string reason_from_transaction_type(S32 transaction_type,
 		case TRANS_CLASSIFIED_CHARGE:
 			return LLTrans::getString("to publish a classified ad");
 			
-		// <FS:Ansariel> FIRE-16827: Display custom payment message
 		case TRANS_GIFT:
 			// Simulator returns "Payment" if no custom description has been entered
 			return (item_desc == "Payment" ? std::string() : item_desc);
-		// </FS:Ansariel>
 
 		// These have no reason to display, but are expected and should not
 		// generate warnings
-		//case TRANS_GIFT: // <FS:Ansariel> FIRE-16827: Display custom payment message
 		case TRANS_PAY_OBJECT:
 		case TRANS_OBJECT_PAYS:
 			return std::string();
@@ -7156,7 +7153,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 	LLSD payload;
 	
 	bool you_paid_someone = (source_id == gAgentID);
-	std::string gift_suffix = (transaction_type == TRANS_GIFT ? "_gift" : ""); // <FS:Ansariel> FIRE-16827: Display custom payment message
+	std::string gift_suffix = (transaction_type == TRANS_GIFT ? "_gift" : "");
 	if (you_paid_someone)
 	{
 		if(!gSavedSettings.getBOOL("NotifyMoneySpend"))
@@ -7170,8 +7167,8 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		{
 			if (dest_id.notNull())
 			{
-				message = success ? LLTrans::getString("you_paid_ldollars" + gift_suffix, args) : // <FS:Ansariel> FIRE-16827: Display custom payment message
-									LLTrans::getString("you_paid_failure_ldollars", args);
+				message = success ? LLTrans::getString("you_paid_ldollars" + gift_suffix, args) :
+									LLTrans::getString("you_paid_failure_ldollars" + gift_suffix, args);
 			}
 			else
 			{
@@ -7209,7 +7206,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 			if (dest_id.notNull())
 			{
 				message = success ? LLTrans::getString("you_paid_ldollars" + gift_suffix, args) :
-									LLTrans::getString("you_paid_failure_ldollars", args);
+									LLTrans::getString("you_paid_failure_ldollars" + gift_suffix, args);
 			}
 			else
 			{
@@ -7241,7 +7238,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 			if (dest_id.notNull())
 			{
 				message_notification_well = success ? LLTrans::getString("you_paid_ldollars" + gift_suffix, args) :
-													  LLTrans::getString("you_paid_failure_ldollars", args);
+													  LLTrans::getString("you_paid_failure_ldollars" + gift_suffix, args);
 			}
 			else
 			{
@@ -7277,9 +7274,9 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		name_id = source_id;
 		if (!reason.empty())
 		{
-			message = LLTrans::getString("paid_you_ldollars" + gift_suffix, args);  // <FS:Ansariel> FIRE-16827: Display custom payment message
+			message = LLTrans::getString("paid_you_ldollars" + gift_suffix, args);
 		}
-		else 
+		else
 		{
 			message = LLTrans::getString("paid_you_ldollars_no_reason", args);
 		}
@@ -8177,8 +8174,8 @@ void process_frozen_message(LLMessageSystem *msgsystem, void **user_data)
 // do some extra stuff once we get our economy data
 void process_economy_data(LLMessageSystem *msg, void** /*user_data*/)
 {
-	LLGlobalEconomy::processEconomyData(msg, LLGlobalEconomy::Singleton::getInstance());
-	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+	LLGlobalEconomy::processEconomyData(msg, LLGlobalEconomy::getInstance());
+	S32 upload_cost = LLGlobalEconomy::getInstance()->getPriceUpload();
 // <FS:AW opensim currency support> 
 // AW: from this point anything is bogus because it's all replaced by the LLUploadCostCalculator in llviewermenu
 //	LL_INFOS_ONCE("Messaging") << "EconomyData message arrived; upload cost is L$" << upload_cost << LL_ENDL;
