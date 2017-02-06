@@ -6687,6 +6687,17 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>IgnoreFOVZoomForLODs</key>
+    <map>
+      <key>Comment</key>
+      <string>Ignore zoom effect(CTRL+0) when calculating lods.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>IgnoreAllNotifications</key>
     <map>
       <key>Comment</key>
@@ -24242,39 +24253,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-    <key>FSEnableAutomaticUIScaling</key>
-    <map>
-      <key>Comment</key>
-      <string>If enabled, the viewer will try to detect the correct factor based on the scaling set in the operating system. This feature is currently only available on Windows.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>FSUseLegacyObjectProperties</key>
-    <map>
-      <key>Comment</key>
-      <string>If enabled, the legacy object profile floater will be used when opening object properties.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>FSLegacyMouseTakeControl</key>
-    <map>
-      <key>Comment</key>
-      <string>If enabled, the viewer will use the legacy behavior for clicks in mouselook. If disabled, it will use the new default behavior.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
     </map>
     <key>FSEnableAutomaticUIScaling</key>
     <map>

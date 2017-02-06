@@ -67,8 +67,10 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	<string name="AboutDriver">
 		Версия графического драйвера Windows: [GRAPHICS_DRIVER_VERSION]
 	</string>
-	<string name="AboutLibs">
+	<string name="AboutOGL">
 		Версия OpenGL: [OPENGL_VERSION]
+	</string>
+	<string name="AboutLibs">
 Контроль скриптами (RLVa): [RLV_VERSION]
 Версия libcurl: [LIBCURL_VERSION]
 Версия декодера J2C: [J2C_VERSION]

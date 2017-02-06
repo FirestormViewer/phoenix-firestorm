@@ -64,9 +64,10 @@ Grafik Kartı: [GRAPHICS_CARD]
 	<string name="AboutDriver">
 		Windows Grafik Sürücüsü Sürümü: [GRAPHICS_DRIVER_VERSION]
 	</string>
+	<string name="AboutOGL">
+		OpenGL Sürümü: [OPENGL_VERSION]
+	</string>
 	<string name="AboutLibs">
-		OpenGL Sürümü [OPENGL_VERSION]
-
 libcurl Sürümü: [LIBCURL_VERSION]
 J2C Kod Çözücü Sürümü: [J2C_VERSION]
 Ses Sürücüsü Sürümü: [AUDIO_DRIVER_VERSION]

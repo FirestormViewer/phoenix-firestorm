@@ -47,7 +47,6 @@
 #include "llglheaders.h"
 #include "llagent.h"
 #include "llavatariconctrl.h"
-#include "llfloaterinventory.h"
 #include "llinventorytype.h"
 
 #include "llgroupactions.h"

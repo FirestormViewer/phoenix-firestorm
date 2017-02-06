@@ -52,9 +52,10 @@ Scheda grafica: [GRAPHICS_CARD]
 	<string name="AboutDriver">
 		Versione driver Windows per grafica: [GRAPHICS_DRIVER_VERSION]
 	</string>
-	<string name="AboutLibs">
+	<string name="AboutOGL">
 		Versione OpenGL: [OPENGL_VERSION]
-
+	</string>
+	<string name="AboutSettings">
 Versione libcurl: [LIBCURL_VERSION]
 Versione J2C Decoder: [J2C_VERSION]
 Versione Driver audio: [AUDIO_DRIVER_VERSION]

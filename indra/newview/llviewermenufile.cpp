@@ -626,6 +626,38 @@ class LLFileUploadAnim : public view_listener_t
 	}
 };
 
+// <FS:Ansariel> Threaded file pickers
+void upload_bulk_callback(std::list<std::string> filenames)
+{
+	S32 expected_upload_cost = LLGlobalEconomy::getInstance()->getPriceUpload();
+
+	for (std::list<std::string>::iterator it = filenames.begin(); it != filenames.end(); ++it)
+	{
+		std::string filename = *it;
+
+		std::string name = gDirUtilp->getBaseFileName(filename, true);
+
+		std::string asset_name = name;
+		LLStringUtil::replaceNonstandardASCII( asset_name, '?' );
+		LLStringUtil::replaceChar(asset_name, '|', '?');
+		LLStringUtil::stripNonprintable(asset_name);
+		LLStringUtil::trim(asset_name);
+
+		LLResourceUploadInfo::ptr_t uploadInfo(new LLNewFileResourceUploadInfo(
+			filename,
+			asset_name,
+			asset_name, 0,
+			LLFolderType::FT_NONE, LLInventoryType::IT_NONE,
+			LLFloaterPerms::getNextOwnerPerms("Uploads"),
+			LLFloaterPerms::getGroupPerms("Uploads"),
+			LLFloaterPerms::getEveryonePerms("Uploads"),
+			expected_upload_cost));
+
+		upload_new_resource(uploadInfo, NULL, NULL);
+	}
+}
+// </FS:Ansariel>
+
 class LLFileUploadBulk : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -644,41 +676,44 @@ class LLFileUploadBulk : public view_listener_t
 		//
 		// Also fix single upload to charge first, then refund
 
-		LLFilePicker& picker = LLFilePicker::instance();
-		if (picker.getMultipleOpenFiles())
-		{
-            std::string filename = picker.getFirstFile();
-            S32 expected_upload_cost = LLGlobalEconomy::getInstance()->getPriceUpload();
+		// <FS:Ansariel> Threaded filepickers
+		//LLFilePicker& picker = LLFilePicker::instance();
+		//if (picker.getMultipleOpenFiles())
+		//{
+  //          std::string filename = picker.getFirstFile();
+  //          S32 expected_upload_cost = LLGlobalEconomy::getInstance()->getPriceUpload();
 
-            while (!filename.empty())
-            {
-                std::string name = gDirUtilp->getBaseFileName(filename, true);
+  //          while (!filename.empty())
+  //          {
+  //              std::string name = gDirUtilp->getBaseFileName(filename, true);
 
-                std::string asset_name = name;
-                LLStringUtil::replaceNonstandardASCII( asset_name, '?' );
-                LLStringUtil::replaceChar(asset_name, '|', '?');
-                LLStringUtil::stripNonprintable(asset_name);
-                LLStringUtil::trim(asset_name);
+  //              std::string asset_name = name;
+  //              LLStringUtil::replaceNonstandardASCII( asset_name, '?' );
+  //              LLStringUtil::replaceChar(asset_name, '|', '?');
+  //              LLStringUtil::stripNonprintable(asset_name);
+  //              LLStringUtil::trim(asset_name);
 
-                LLResourceUploadInfo::ptr_t uploadInfo(new LLNewFileResourceUploadInfo(
-                    filename,
-                    asset_name,
-                    asset_name, 0,
-                    LLFolderType::FT_NONE, LLInventoryType::IT_NONE,
-                    LLFloaterPerms::getNextOwnerPerms("Uploads"),
-                    LLFloaterPerms::getGroupPerms("Uploads"),
-                    LLFloaterPerms::getEveryonePerms("Uploads"),
-                    expected_upload_cost));
+  //              LLResourceUploadInfo::ptr_t uploadInfo(new LLNewFileResourceUploadInfo(
+  //                  filename,
+  //                  asset_name,
+  //                  asset_name, 0,
+  //                  LLFolderType::FT_NONE, LLInventoryType::IT_NONE,
+  //                  LLFloaterPerms::getNextOwnerPerms("Uploads"),
+  //                  LLFloaterPerms::getGroupPerms("Uploads"),
+  //                  LLFloaterPerms::getEveryonePerms("Uploads"),
+  //                  expected_upload_cost));
 
-                upload_new_resource(uploadInfo, NULL, NULL);
+  //              upload_new_resource(uploadInfo, NULL, NULL);
 
-                filename = picker.getNextFile();
-            }
-		}
-		else
-		{
-			LL_INFOS() << "Couldn't import objects from file" << LL_ENDL;
-		}
+  //              filename = picker.getNextFile();
+  //          }
+		//}
+		//else
+		//{
+		//	LL_INFOS() << "Couldn't import objects from file" << LL_ENDL;
+		//}
+		// </FS:Ansariel>
+		(new LLGenericLoadMultipleFilePicker(LLFilePicker::FFLOAD_ALL, boost::bind(&upload_bulk_callback, _1)))->getFiles();
 		return true;
 	}
 };

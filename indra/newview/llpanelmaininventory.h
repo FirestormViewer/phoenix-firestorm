@@ -94,7 +94,7 @@ public:
 
 	void setFocusFilterEditor();
 
-	static void newWindow(); // <FS:Ansariel> Changed to public static
+	static void newWindow();
 
 	// <FS:Zi> Filter dropdown
 	void onFilterTypeSelected(const std::string& filter_type_name);
@@ -130,7 +130,6 @@ protected:
 	// menu callbacks
 	void doToSelected(const LLSD& userdata);
 	void closeAllFolders();
-	//void newWindow(); // <FS:Ansariel> Changed to public static
 	void doCreate(const LLSD& userdata);
 	// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
 	//void resetFilters(); // Moved to public

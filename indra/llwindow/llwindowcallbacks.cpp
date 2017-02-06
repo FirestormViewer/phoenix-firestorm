@@ -175,16 +175,10 @@ BOOL LLWindowCallbacks::handleDeviceChange(LLWindow *window)
 	return FALSE;
 }
 
-// <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
-//void LLWindowCallbacks::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height)
-//{
-
-//}
 BOOL LLWindowCallbacks::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height)
 {
-	return TRUE;
+	return FALSE;
 }
-// </FS:Ansariel>
 
 void LLWindowCallbacks::handlePingWatchdog(LLWindow *window, const char * msg)
 {

@@ -64,9 +64,10 @@
 	<string name="AboutDriver">
 		Windows 顯示驅動程式版本：[GRAPHICS_DRIVER_VERSION]
 	</string>
-	<string name="AboutLibs">
+	<string name="AboutOGL">
 		OpenGL 版本：[OPENGL_VERSION]
-
+	</string>
+	<string name="AboutLibs">
 libcurl 版本： [LIBCURL_VERSION]
 J2C 解碼器版本： [J2C_VERSION]
 音效驅動程式版本： [AUDIO_DRIVER_VERSION]

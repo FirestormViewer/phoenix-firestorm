@@ -55,20 +55,11 @@ Graphics Card Vendor: [GRAPHICS_CARD_VENDOR]
 Graphics Card: [GRAPHICS_CARD]
 	</string>
 	<string name="AboutDriver">Windows Graphics Driver Version: [GRAPHICS_DRIVER_VERSION]</string>
-	<string name="AboutLibs">
-OpenGL Version: [OPENGL_VERSION]
-
-RestrainedLove API: [RLV_VERSION]
-libcurl Version: [LIBCURL_VERSION]
-J2C Decoder Version: [J2C_VERSION]
-Audio Driver Version: [AUDIO_DRIVER_VERSION]
-LLCEFLib/CEF Version: [LLCEFLIB_VERSION]
-LibVLC Version: [LIBVLC_VERSION]
-Voice Server Version: [VOICE_VERSION]
-	</string>
-  <string name="AboutSettings">
+	<string name="AboutOGL">OpenGL Version: [OPENGL_VERSION]</string>
+	<string name="AboutSettings">
 Settings mode: [MODE]
 Viewer Skin: [SKIN] ([THEME])
+Window size: [WINDOW_WIDTH]x[WINDOW_HEIGHT] px
 Font Used: [FONT] ([FONT_SCREEN_DPI] dpi)
 Font Size Adjustment: [FONT_SIZE] pt
 UI Scaling: [UI_SCALE_FACTOR]
@@ -79,8 +70,17 @@ Render quality: [RENDERQUALITY]
 Advanced Lighting Model: [ALMSTATUS]
 Texture memory: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 VFS (cache) creation time (UTC): [VFS_DATE]
-  </string>
-  <string name="AboutTraffic">Packets Lost: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)</string>
+	</string>
+	<string name="AboutLibs">
+RestrainedLove API: [RLV_VERSION]
+libcurl Version: [LIBCURL_VERSION]
+J2C Decoder Version: [J2C_VERSION]
+Audio Driver Version: [AUDIO_DRIVER_VERSION]
+LLCEFLib/CEF Version: [LLCEFLIB_VERSION]
+LibVLC Version: [LIBVLC_VERSION]
+Voice Server Version: [VOICE_VERSION]
+	</string>
+	<string name="AboutTraffic">Packets Lost: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)</string>
 	<string name="AboutTime">[month, datetime, slt] [day, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt] SLT</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">Error fetching server release notes URL.</string>
 	<string name="BuildConfiguration">Build Configuration</string>
