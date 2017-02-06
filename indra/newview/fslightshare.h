@@ -142,7 +142,6 @@ public:
 	bool getState() { return mLightshareState; };
 
 private:
-	friend class LLSingleton<FSLightshare>;
 	static void processWater(LightsharePacket* ls_packet);
 	static void processSky(LightsharePacket* ls_packet);
 	void setState(bool has_lightshare);

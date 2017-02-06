@@ -2105,17 +2105,18 @@ LLVector3 LLAgentCamera::getCameraOffsetInitial()
 //-----------------------------------------------------------------------------
 void LLAgentCamera::handleScrollWheel(S32 clicks)
 {
-
 	// <FS:PP> Option to disable mouse wheel for camera zooming in/out
 	static LLCachedControl<bool> FSDisableMouseWheelCameraZoom(gSavedSettings, "FSDisableMouseWheelCameraZoom");
-	if(FSDisableMouseWheelCameraZoom)
-	{
-		return;
-	}
-	// </FS:PP>
 
 	if (mCameraMode == CAMERA_MODE_FOLLOW && getFocusOnAvatar())
 	{
+		// <FS:Ansariel> Option to disable mouse wheel for camera zooming in/out
+		if (FSDisableMouseWheelCameraZoom)
+		{
+			return;
+		}
+		// </FS:Ansariel>
+
 		if (!mFollowCam.getPositionLocked()) // not if the followCam position is locked in place
 		{
 			mFollowCam.zoom(clicks); 
@@ -2141,6 +2142,12 @@ void LLAgentCamera::handleScrollWheel(S32 clicks)
 			F32 zoom_factor = (F32)pow(0.8, -clicks);
 			cameraZoomIn(zoom_factor);
 		}
+		// <FS:Ansariel> Option to disable mouse wheel for camera zooming in/out
+		else if (FSDisableMouseWheelCameraZoom)
+		{
+			return;
+		}
+		// </FS:Ansariel>
 		else if (mFocusOnAvatar && (mCameraMode == CAMERA_MODE_THIRD_PERSON))
 		{
 			// <FS:Zi> Camera focus and offset with CTRL/SHIFT + Scroll wheel

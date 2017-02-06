@@ -1823,9 +1823,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e5a811fa7c9e5641869b58cd58a3e1c6</string>
+              <string>88ab0fb55e82f8cd3a75ee636def785a</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.8.0-darwin-201604022336-r52.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.9.0-darwin-201702032052-r58.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
