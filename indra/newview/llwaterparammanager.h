@@ -282,6 +282,9 @@ public:
 
 	void setDensitySliderValue(F32 val);
 
+	// <FS:Ansariel> Remove circular dependency of LLWLParamManager & LLWaterParamManager singletons
+	void init();
+
 	/// getters for all the different things water param manager maintains
 	LLUUID getNormalMapID(void);
 	LLVector2 getWave1Dir(void);

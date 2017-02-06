@@ -597,7 +597,11 @@ Hinweis: Der Cache wird dabei gelöscht/geleert.
 	</notification>
 	<notification name="DeleteNotecard">
 		Notizkarte wirklich löschen?
-		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Ok" ignoretext="Bestätigen, wenn eine Notizkarte gelöscht wird"/>
+		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="OK" ignoretext="Bestätigen, wenn eine Notizkarte gelöscht wird"/>
+	</notification>
+	<notification name="LoadPreviousReportScreenshot">
+		Möchten Sie den vorherigen Screenshot für den Report verwenden?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="GestureSaveFailedTooManySteps">
 		Speichern der Geste fehlgeschlagen.
@@ -754,6 +758,9 @@ Verschieben Sie alle betreffenden Objekte in dieselbe Region.
 			http://secondlife.com/app/currency/?lang=de-DE
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="MuteLimitReached">
+		Neuer Eintrag konnte nicht zur Liste ignorierter Einwohner / Objekte hinzugefügt werden, da das Limit von [MUTE_LIMIT] Einträgen erreicht wurde.
 	</notification>
 	<notification name="UnableToLinkObjects">
 		Verknüpfung dieser [COUNT] Objekte nicht möglich.

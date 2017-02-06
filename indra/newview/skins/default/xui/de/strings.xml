@@ -5681,6 +5681,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Profile_Label">
 		Profil
 	</string>
+	<string name="Command_Report_Abuse_Label">
+		Missbrauch melden
+	</string>
 	<string name="Command_Search_Label">
 		Suchen
 	</string>
@@ -5858,6 +5861,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Profile_Tooltip">
 		Ihr Profil bearbeiten oder anzeigen
+	</string>
+	<string name="Command_Report_Abuse_Tooltip">
+		Missbrauch melden
 	</string>
 	<string name="Command_Search_Tooltip">
 		Orte, Veranstaltungen, Leute finden (Strg+F)
