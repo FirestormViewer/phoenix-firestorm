@@ -3516,7 +3516,6 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
 	if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD)
 	{
 		LLSpatialGroup* last_group = NULL;
-		BOOL fov_changed = LLViewerCamera::getInstance()->isDefaultFOVChanged();
 		for (LLCullResult::bridge_iterator i = sCull->beginVisibleBridge(); i != sCull->endVisibleBridge(); ++i)
 		{
 			LLCullResult::bridge_iterator cur_iter = i;
@@ -3530,7 +3529,7 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
 
 			if (!bridge->isDead() && group && !group->isOcclusionState(LLSpatialGroup::OCCLUDED))
 			{
-				stateSort(bridge, camera, fov_changed);
+				stateSort(bridge, camera);
 			}
 
 			if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD &&
@@ -3602,9 +3601,9 @@ void LLPipeline::stateSort(LLSpatialGroup* group, LLCamera& camera)
 
 }
 
-void LLPipeline::stateSort(LLSpatialBridge* bridge, LLCamera& camera, BOOL fov_changed)
+void LLPipeline::stateSort(LLSpatialBridge* bridge, LLCamera& camera)
 {
-	if (bridge->getSpatialGroup()->changeLOD() || fov_changed)
+	if (bridge->getSpatialGroup()->changeLOD())
 	{
 		bool force_update = false;
 		bridge->updateDistance(camera, force_update);

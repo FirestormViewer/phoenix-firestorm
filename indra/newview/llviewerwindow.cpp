@@ -817,11 +817,13 @@ public:
 				ypos += y_inc;
 			}
 
-			if (LLPipeline::toggleRenderTypeControlNegated(LLPipeline::RENDER_TYPE_PARTICLES))
+			// <FS:LO> pull the text saying if particles are hidden out from beacons
+			/*if (LLPipeline::toggleRenderTypeControlNegated((void*)LLPipeline::RENDER_TYPE_PARTICLES))
 			{
 				addText(xpos, ypos, particle_hiding);
 				ypos += y_inc;
-			}
+			}*/
+			// </FS:LO>
 
 			if (LLPipeline::getRenderParticleBeacons())
 			{

@@ -1859,9 +1859,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>06e6ada281c0cf37ced1aad58c3e9bb4</string>
+              <string>96d11160278115f6d468171f67aa7a4e</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.8.0-linux-201604022334-r52.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.9.0-linux-201701222135-r58.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1883,9 +1883,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>15da99a3c7dbe2b56a19baced0f9bd54</string>
+              <string>26cc3fbe6a3b9885d697aa639d17a20a</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.8.0-windows-201604022251-r52.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.9.0-windows-201701221929-r58.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>

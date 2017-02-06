@@ -101,31 +101,33 @@ void LLFloaterBeacons::onClickUICheck(LLUICtrl *ctrl)
 	else if(name == "highlights")
 	{
 		LLPipeline::toggleRenderHighlights();
+		// FS:LO Allow beacons to be turned off fully by unchecking both boxes
 		// Don't allow both to be OFF at the same time. Toggle the other one on if both now off.
-		if (
-			!LLPipeline::getRenderBeacons() &&
-			!LLPipeline::getRenderHighlights() )
-		{
-			LLPipeline::setRenderBeacons(true);
-			getChild<LLCheckBoxCtrl>("beacons")->setControlValue(LLSD(TRUE));
-			getChild<LLCheckBoxCtrl>("beacons")->setValue(TRUE);
-			getChild<LLCheckBoxCtrl>("highlights")->setControlValue(LLSD(FALSE)); // just to be sure it's in sync with llpipeline
-			getChild<LLCheckBoxCtrl>("highlights")->setValue(FALSE); 
-		}
+		// if (
+		// 	!LLPipeline::getRenderBeacons() &&
+		// 	!LLPipeline::getRenderHighlights() )
+		// {
+		// 	LLPipeline::setRenderBeacons(true);
+		// 	getChild<LLCheckBoxCtrl>("beacons")->setControlValue(LLSD(TRUE));
+		// 	getChild<LLCheckBoxCtrl>("beacons")->setValue(TRUE);
+		// 	getChild<LLCheckBoxCtrl>("highlights")->setControlValue(LLSD(FALSE)); // just to be sure it's in sync with llpipeline
+		// 	getChild<LLCheckBoxCtrl>("highlights")->setValue(FALSE); 
+		// }
 	}
 	else if(name == "beacons")
 	{
 		LLPipeline::toggleRenderBeacons();
+		// FS:LO Allow beacons to be turned off fully by unchecking both boxes
 		// Don't allow both to be OFF at the same time. Toggle the other one on if both now off.
-		if (
-			!LLPipeline::getRenderBeacons() &&
-			!LLPipeline::getRenderHighlights() )
-		{
-			LLPipeline::setRenderHighlights(true);
-			getChild<LLCheckBoxCtrl>("highlights")->setControlValue(LLSD(TRUE));
-			getChild<LLCheckBoxCtrl>("highlights")->setValue(TRUE);
-			getChild<LLCheckBoxCtrl>("beacons")->setControlValue(LLSD(FALSE)); // just to be sure it's in sync with llpipeline
-			getChild<LLCheckBoxCtrl>("beacons")->setValue(FALSE); 
-		}
+		// if (
+		// 	!LLPipeline::getRenderBeacons() &&
+		// 	!LLPipeline::getRenderHighlights() )
+		// {
+		// 	LLPipeline::setRenderHighlights(true);
+		// 	getChild<LLCheckBoxCtrl>("highlights")->setControlValue(LLSD(TRUE));
+		// 	getChild<LLCheckBoxCtrl>("highlights")->setValue(TRUE);
+		// 	getChild<LLCheckBoxCtrl>("beacons")->setControlValue(LLSD(FALSE)); // just to be sure it's in sync with llpipeline
+		// 	getChild<LLCheckBoxCtrl>("beacons")->setValue(FALSE); 
+		// }
 	}
 }
