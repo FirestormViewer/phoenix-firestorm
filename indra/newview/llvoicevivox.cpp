@@ -2692,10 +2692,6 @@ void LLVivoxVoiceClient::sendPositionAndVolumeUpdate(void)
 		LLVector3	earVelocity;
 		LLMatrix3	earRot;
 		
-		// <FS:Ansariel> Equal voice volume; by Tigh MacFanatic
-		if (mEarLocation != earLocSpeaker)
-		{
-		// </FS:Ansariel>
 		switch(mEarLocation)
 		{
 			case earLocCamera:
@@ -2728,9 +2724,6 @@ void LLVivoxVoiceClient::sendPositionAndVolumeUpdate(void)
 //		LL_DEBUGS("Voice") << "Sending listener position " << earPosition << LL_ENDL;
 		
 		oldSDKTransform(l, u, a, pos, vel);
-		// <FS:Ansariel> Equal voice volume; by Tigh MacFanatic
-		}
-		// </FS:Ansariel>
 		
         if (mHidden)
         {
@@ -4256,7 +4249,7 @@ bool LLVivoxVoiceClient::checkParcelChanged(bool update)
 				{
 					mCurrentParcelLocalID = parcelLocalID;
 					mCurrentRegionName = regionName;
-					mAreaVoiceDisabled = false;
+					mAreaVoiceDisabled = false; // <FS> Stop slamming the sim with ParcelVoiceInfo requests if voice is disabled at the parcel level
 				}
 				return true;
 			}

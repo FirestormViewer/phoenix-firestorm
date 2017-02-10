@@ -55,7 +55,6 @@
 			<radio_group name="ear_location">
 				<radio_item label="Entendre à partir de la position de la caméra" name="0"/>
 				<radio_item label="Entendre à partir de la position de l'avatar" name="1"/>
-				<radio_item label="Entendre avec un volume égal pour tout le monde" name="2"/>
 			</radio_group>
 			<check_box label="Bouger les lèvres de l'avatar lorsque je parle" name="enable_lip_sync"/>
 			<check_box label="Afficher les indicateurs de voix au-dessus des avatars" tool_tip="Afficher un indicateur signifiant un chat vocal actif au-dessus des avatars" name="FSShowVoiceVisualizer"/>

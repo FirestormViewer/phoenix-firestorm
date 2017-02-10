@@ -705,7 +705,7 @@ private:
 
 	S32 mCurrentParcelLocalID;			// Used to detect parcel boundary crossings
 	std::string mCurrentRegionName;		// Used to detect parcel boundary crossings
-	bool mRegionHasVoice;
+	
     bool mConnectorEstablished; // set by "Create Connector" response
     bool mAccountLoggedIn;		// set by login message		
 	int  mNumberOfAliases;
@@ -795,9 +795,6 @@ private:
 	{
 		earLocCamera = 0,		// ear at camera
 		earLocAvatar,			// ear at avatar
-		// <FS:Ansariel> Equal voice volume; by Tigh MacFanatic
-		earLocSpeaker,			// ear at speaker, speakers not affected by position
-		// </FS:Ansariel>
 		earLocMixed				// ear at avatar location/camera direction
 	};
 	

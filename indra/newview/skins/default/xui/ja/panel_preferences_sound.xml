@@ -93,7 +93,6 @@
 		<radio_group name="ear_location">
 			<radio_item label="カメラの位置から聞く" name="0"/>
 			<radio_item label="アバターの位置から聞く" name="1"/>
-			<radio_item label="誰の位置からも同じように聞く" name="2" />
 		</radio_group>
 		<check_box label="話すときにアバターの口を動かす" name="enable_lip_sync"/>
         <check_box label="アバターの頭上にボイスビジュアライザーを表示" name="FSShowVoiceVisualizer" tool_tip="アバターの頭上にボイス・インジケータ（白い点）を表示します。" />
