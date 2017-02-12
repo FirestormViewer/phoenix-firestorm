@@ -21,6 +21,7 @@
 			<check_box name="FSMarkObjects" label="Objektename als (namenlos) anzeigen, um Vortäuschungen zu unterbinden"/>
 			<check_box label="llOwnerSay durch Skript-Debug-Fenster routen" name="FSllOwnerSayToScriptDebugWindow_checkbox"/>
 			<check_box label="Blasen-Chat" name="bubble_text_chat"/>
+			<check_box label="Chat in der Nähe in Konsole und Toasts nicht anzeigen" name="FSBubblesHideConsoleAndToasts"/>
 			<check_box label="Eingabe-Indikator in Blase oberhalb eines Avatars anzeigen" name="bubble_text_typing"/> 
 			<check_box label="Eingabe-Indikator in Avatarnamen oberhalb eines Avatars anzeigen" name="FSShowTypingStateInNameTag"/> 
 			<check_box label="Sekunden in Zeitstempel anzeigen [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
