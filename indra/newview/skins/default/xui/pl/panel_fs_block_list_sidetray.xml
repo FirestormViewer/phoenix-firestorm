@@ -7,6 +7,9 @@
 		<menu_button name="plus_btn" tool_tip="Wybierz Rezydenta lub obiekt do zablokowania" />
 		<button name="unblock_btn" tool_tip="Usuń Rezydenta lub obiekt z listy zablokowanych" />
 	</panel>
+	<text name="block_limit">
+		Zablokowano: [COUNT] ([LIMIT] maks.)
+	</text>
 	<fs_scroll_list name="block_list">
 		<fs_scroll_list.columns name="item_name" label="Nazwa" />
 		<fs_scroll_list.columns name="item_type" label="Typ" />

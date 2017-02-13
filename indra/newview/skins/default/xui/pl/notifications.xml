@@ -519,6 +519,10 @@ Pamiętaj: Opcja ta wyczyszcza bufor danych.
 		Czy na pewno chcesz usunąć tą notkę?
 		<usetemplate ignoretext="Potwierdź usuwanie notki" name="okcancelignore" notext="Anuluj" />
 	</notification>
+	<notification name="LoadPreviousReportScreenshot">
+		Czy chcesz użyć poprzedniego zrzutu ekranu dla swojego zgłoszenia?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
 	<notification name="GestureSaveFailedTooManySteps">
 		Nie można zapisać gestu.
 Ten gest ma zbyt wiele etapów.
@@ -684,6 +688,9 @@ Przemieść wszystkie otrzymywane obiekty do jednego regionu.
 
 Odwiedzić [_URL] po więcej informacji na temat zakupu L$?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
+	<notification name="MuteLimitReached">
+		Nie można dodać kolejnego wpisu do listy zablokowanych, ponieważ limit [MUTE_LIMIT] rekordów został osiągnięty.
 	</notification>
 	<notification name="UnableToLinkObjects">
 		Nie można połączyć [COUNT] obiektów.

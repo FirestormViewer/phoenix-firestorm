@@ -19,6 +19,7 @@
 			<check_box name="FSMarkObjects" label="Oznaczaj obiekty frazą (bez nazwy) gdy wysyłają coś na czat, by zapobiec oszustwom"/>
 			<check_box name="FSllOwnerSayToScriptDebugWindow_checkbox" label="Kieruj llOwnerSay do okna debugowania skryptów" />
 			<check_box label="Pokaż czat w chmurkach ponad awatarami" name="bubble_text_chat"/>
+			<check_box label="Nie pokazuj czatu w konsoli Czatu Lokalnego i tostach" name="FSBubblesHideConsoleAndToasts" />
 			<check_box label="Pokaż wskaźnik pisania w chmurkach ponad awatarami" name="bubble_text_typing"/>
 			<check_box label="Pokaż wskaźnik pisania w tagach imion ponad awatarami" name="FSShowTypingStateInNameTag" />
 			<check_box label="Pokazuj sekundy w logach [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
