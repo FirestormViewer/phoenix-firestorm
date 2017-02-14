@@ -99,7 +99,7 @@ const F32 SKEW_MAX	=  0.95f;
 const F32 SCULPT_MIN_AREA = 0.002f;
 const S32 SCULPT_MIN_AREA_DETAIL = 1;
 
-extern BOOL gDebugGL;
+BOOL gDebugGL = FALSE;
 
 // <FS:ND> Cache for Triangles/LOD estimation
 struct TrianglesPerLODCache

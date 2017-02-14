@@ -40,7 +40,6 @@ MACRO(LL_ADD_PROJECT_UNIT_TESTS project sources)
     ${APRUTIL_LIBRARIES}
     ${APR_LIBRARIES}
     llcommon
-    llcorehttp
     )
   IF(NOT "${project}" STREQUAL "llmath")
     # add llmath as a dep unless the tested module *is* llmath!

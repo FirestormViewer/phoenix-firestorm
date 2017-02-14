@@ -2116,7 +2116,6 @@ if (WINDOWS)
       ${ARCH_PREBUILT_DIRS_DEBUG}/ssleay32.dll
       ${ARCH_PREBUILT_DIRS_RELEASE}/growl.dll
       SLPlugin
-      media_plugin_quicktime
       media_plugin_cef
       media_plugin_libvlc
       media_plugin_gstreamer10
@@ -2469,12 +2468,8 @@ if (DARWIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
     )
 
-  # <FS:TS> Allow disabling media plugins for 64-bit building
-  if (ENABLE_MEDIA_PLUGINS)
-      add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_quicktime media_plugin_libvlc media_plugin_cef mac-crash-logger)
-  else (ENABLE_MEDIA_PLUGINS)
-      add_dependencies(${VIEWER_BINARY_NAME} SLPlugin mac-crash-logger)
-  endif (ENABLE_MEDIA_PLUGINS)
+  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_libvlc media_plugin_cef mac-crash-logger)
+  add_dependencies(${VIEWER_BINARY_NAME} mac-crash-logger)
 
   if (ENABLE_SIGNING)
       set(SIGNING_SETTING "--signature=${SIGNING_IDENTITY}")
@@ -2531,7 +2526,6 @@ if (PACKAGE)
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/llplugin/slplugin/${CMAKE_CFG_INTDIR}")
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/mac_crash_logger/${CMAKE_CFG_INTDIR}")
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/gstreamer010/${CMAKE_CFG_INTDIR}")
-    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/quicktime/${CMAKE_CFG_INTDIR}")
     set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-symbols-darwin-$ENV{AUTOBUILD_ADDRSIZE}.tar.bz2")
 ##  set(VIEWER_EXE_GLOBS "'Second Life' SLPlugin mac-crash-logger")
     set(VIEWER_EXE_GLOBS "'Firestorm' mac-crash-logger")
