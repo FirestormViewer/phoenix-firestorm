@@ -72,7 +72,6 @@
 			<radio_group name="ear_location">
 				<radio_item label="Слышать голос из положения камеры" name="0"/>
 				<radio_item label="Слышать голос из положения аватара" name="1"/>
-				<radio_item label="Слышать голос одинаково отовсюду" name="2"/>
 			</radio_group>
 			<check_box label="Двигать губами аватара во время разговора" name="enable_lip_sync"/>
 			<check_box label="Показать голосовой индикатор над аватарами" tool_tip="Показывает голосовой индикатор (белую точку) над аватарами" name="FSShowVoiceVisualizer"/>

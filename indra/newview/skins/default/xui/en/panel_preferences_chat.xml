@@ -156,11 +156,23 @@
              name="bubble_text_chat"
              width="150" />
             <check_box
+             control_name="FSBubblesHideConsoleAndToasts"
+             enabled_control="UseChatBubbles"
+             follows="left|top"
+             height="16"
+             label="Don't show chat in Nearby Chat console and toasts"
+             layout="topleft"
+             left="30"
+             top_pad="1"
+             name="FSBubblesHideConsoleAndToasts"
+             width="150" />
+            <check_box
              control_name="UseTypingBubbles"
              follows="left|top"
              height="16"
              label="Show typing indicator in bubbles above avatars"
              layout="topleft"
+             left="20"
              top_pad="1"
              name="bubble_text_typing"
              width="150" />

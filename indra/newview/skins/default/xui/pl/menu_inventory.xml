@@ -61,6 +61,7 @@
 	<menu_item_call label="Dodaj do stroju" name="Add To Outfit"/>
 	<menu_item_call label="Załóż przedmioty" name="Wear Items"/>
 	<menu_item_call label="Usuń ze stroju" name="Remove From Outfit"/>
+	<menu_item_call label="Kopiuj listę stroju do schowka" name="Copy outfit list to clipboard" />
 	<menu_item_call label="Znajdź oryginał" name="Find Original"/>
 	<menu_item_call label="Usuń obiekt" name="Purge Item"/>
 	<menu_item_call label="Przywróć obiekt" name="Restore Item"/>

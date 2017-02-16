@@ -822,7 +822,7 @@
          layout="topleft"
          left="25"
          width="400"
-         height="60"
+         height="40"
          top_pad="0"
          name="ear_location">
             <radio_item
@@ -838,14 +838,6 @@
              label="Hear Voice from Avatar position"
              layout="topleft"
              name="1"
-             top_pad="-2"
-             width="150" />
-            <radio_item
-             height="19"
-             follows="left|top"
-             label="Hear Voice equally from everyone"
-             layout="topleft"
-             name="2"
              top_pad="-2"
              width="150" />
         </radio_group>

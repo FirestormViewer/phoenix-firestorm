@@ -15,6 +15,6 @@
 		<scroll_list.columns label="Lokalizacja" name="location"/>
 	</scroll_list>
 	<button label="Odśwież listę" name="refresh_list_btn"/>
-	<button label="Podświetl" name="highlight_btn"/>
 	<button label="Zwróć" name="return_btn"/>
+	<button label="Podświetl" name="highlight_btn"/>
 </panel>
