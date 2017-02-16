@@ -895,15 +895,6 @@ void LLFloaterReporter::onOpen(const LLSD& key)
 {
 	childSetEnabled("send_btn", false);
 	//Time delay to avoid UI artifacts. MAINT-7067
-	doAfterInterval(boost::bind(&LLFloaterReporter::takeNewSnapshot,this), gSavedSettings.getF32("AbuseReportScreenshotDelay"));
-
-}
-
-
-void LLFloaterReporter::onOpen(const LLSD& key)
-{
-	childSetEnabled("send_btn", false);
-	//Time delay to avoid UI artifacts. MAINT-7067
 	// <FS:Ansariel> Refresh screenshot button
 	//doAfterInterval(boost::bind(&LLFloaterReporter::takeNewSnapshot,this), gSavedSettings.getF32("AbuseReportScreenshotDelay"));
 	doAfterInterval(boost::bind(&LLFloaterReporter::takeNewSnapshot,this, false), gSavedSettings.getF32("AbuseReportScreenshotDelay"));
