@@ -1817,7 +1817,6 @@ Diese Gruppe verlassen?
 		Nicht-stören-Modus ist aktiviert:  Sie erhalten keine Benachrichtigung über eingehende Kommunikation.
 
 - Andere Einwohner erhalten Ihre Nicht-stören-Antwort (festgelegt in Einstellungen &gt; Privatsphäre &gt; Automatische Antwort).
-- Teleport-Angebote werden abgelehnt.
 - Voice-Anrufe werden abgelehnt.
 		<usetemplate ignoretext="Ich ändere meinen Status zu „Nicht stören“" name="okignore" yestext="OK"/>
 	</notification>
