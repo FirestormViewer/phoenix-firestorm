@@ -743,9 +743,7 @@ bool DAESaver::saveDAE(std::string filename)
 	up_axis->setCharData("Z_UP");
 
 	// File creator
-	std::string author = "Unknown";
-	if (gCacheName)
-		gCacheName->getFullName(gAgentID, author);
+	std::string author = gAgentUsername;
 	
 	daeElement* contributor = asset->add("contributor");
 	contributor->add("author")->setCharData(author);

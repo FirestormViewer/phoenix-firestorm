@@ -29,6 +29,7 @@
 
 #include "fsareasearch.h"
 
+#include "llavatarnamecache.h"
 #include "llscrolllistctrl.h"
 #include "lllineeditor.h"
 #include "lltextbox.h"
@@ -1076,17 +1077,41 @@ void FSAreaSearch::updateObjectCosts(const LLUUID& object_id, F32 object_cost, F
 
 void FSAreaSearch::getNameFromUUID(LLUUID& id, std::string& name, BOOL group, bool& name_requested)
 {
-	BOOL is_group;
-	
-	if(!gCacheName->getIfThere(id, name, is_group))
+	if (group)
 	{
-		if(std::find(mNamesRequested.begin(), mNamesRequested.end(), id) == mNamesRequested.end())
+		BOOL is_group;
+		if(!gCacheName->getIfThere(id, name, is_group))
 		{
-			mNamesRequested.push_back(id);
-			gCacheName->get(id, group, boost::bind(&FSAreaSearch::callbackLoadFullName, this, _1, _2));
+			if(std::find(mNamesRequested.begin(), mNamesRequested.end(), id) == mNamesRequested.end())
+			{
+				mNamesRequested.push_back(id);
+				gCacheName->get(id, group, boost::bind(&FSAreaSearch::callbackLoadFullName, this, _1, _2));
+			}
+			name_requested = true;
 		}
-		name_requested = true;
 	}
+	else
+	{
+		LLAvatarName av_name;
+		if (LLAvatarNameCache::get(id, &av_name))
+		{
+			name = av_name.getUserName();
+		}
+		else
+		{
+			if(std::find(mNamesRequested.begin(), mNamesRequested.end(), id) == mNamesRequested.end())
+			{
+				mNamesRequested.push_back(id);
+				LLAvatarNameCache::get(id, boost::bind(&FSAreaSearch::avatarNameCacheCallback, this, _1, _2));
+			}
+			name_requested = true;
+		}
+	}
+}
+
+void FSAreaSearch::avatarNameCacheCallback(const LLUUID& id, const LLAvatarName& av_name)
+{
+	callbackLoadFullName(id, av_name.getUserName());
 }
 
 void FSAreaSearch::callbackLoadFullName(const LLUUID& id, const std::string& full_name)

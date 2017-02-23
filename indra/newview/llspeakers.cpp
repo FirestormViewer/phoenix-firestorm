@@ -78,6 +78,10 @@ void LLSpeaker::lookupName()
 {
 	if (mDisplayName.empty())
 	{
+		// <FS:Zi> Crash fix on login
+		if(!gCacheName)
+			return;
+		// </FS:Zi>
 		LLAvatarNameCache::get(mID, boost::bind(&LLSpeaker::onNameCache, this, _1, _2)); // todo: can be group???
 	}
 }

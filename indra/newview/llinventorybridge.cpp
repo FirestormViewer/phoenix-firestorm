@@ -7997,8 +7997,12 @@ std::string LLInvFVBridge::getSearchableCreator( void ) const
 	std::string strCreator;
 	if(pItem)
 	{
-		if( gCacheName->getFullName( pItem->getCreatorUUID(), strCreator ) )
+		LLAvatarName av_name;
+		if (LLAvatarNameCache::get(pItem->getCreatorUUID(), &av_name))
+		{
+			strCreator =  av_name.getUserName();
 			LLStringUtil::toUpper( strCreator );
+		}
 	}
 
 	return strCreator;
