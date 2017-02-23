@@ -299,7 +299,9 @@ bool FSFloaterObjectExport::exportSelection()
 	mAssetRequests.clear();
 	mTextureChecked.clear();
 	
-	std::string author = gAgentUsername;
+	std::string author = "Unknown";
+	if (!gAgentUsername.empty())
+		author = gAgentUsername;
 
 	time_t rawtime;
 	time(&rawtime);
