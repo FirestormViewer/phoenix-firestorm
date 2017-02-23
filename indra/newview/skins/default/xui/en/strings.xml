@@ -2112,7 +2112,10 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
     Conference with [AGENT_NAME]
   </string>
   <string name="inventory_item_offered-im">
-    Inventory item offered
+    Inventory item '[ITEM_NAME]' offered
+  </string>
+  <string name="inventory_folder_offered-im">
+    Inventory folder '[ITEM_NAME]' offered
   </string>
   <string name="inventory_item_offered_rlv">
     Inventory item offered to [NAME]
@@ -2225,7 +2228,8 @@ If the message does not appear in the next few minutes, it may have been dropped
 
   <string name="Home position set.">Home position set.</string>
 
-  <string name="voice_morphing_url">http://secondlife.com/landing/voicemorphing</string>
+  <string name="voice_morphing_url">https://secondlife.com/destination/voice-island</string>
+  <string name="premium_voice_morphing_url">https://secondlife.com/destination/voice-morphing-premium</string>
 
   <!-- Financial operations strings -->
   <string name="paid_you_ldollars">[NAME] paid you L$[AMOUNT] [REASON].</string>
@@ -2562,6 +2566,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Facebook_Label">Facebook</string>
   <string name="Command_Flickr_Label">Flickr</string>
   <string name="Command_Gestures_Label">Gestures</string>
+  <string name="Command_Grid_Status_Label">Grid status</string>
   <string name="Command_HowTo_Label">How to</string>
   <string name="Command_Inventory_Label">Inventory</string>
   <string name="Command_Map_Label">Map</string>
@@ -2624,6 +2629,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Facebook_Tooltip">Post to Facebook</string>
   <string name="Command_Flickr_Tooltip">Upload to Flickr</string>
   <string name="Command_Gestures_Tooltip">Gestures for your avatar (CTRL+G)</string>
+  <string name="Command_Grid_Status_Tooltip">Show current Grid status</string>
   <string name="Command_HowTo_Tooltip">How to do common tasks</string>
   <string name="Command_Inventory_Tooltip">View and use your belongings (CTRL+I)</string>
   <string name="Command_Map_Tooltip">Map of the world (CTRL+M)</string>

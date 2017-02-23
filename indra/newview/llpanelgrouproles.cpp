@@ -1212,11 +1212,11 @@ void LLPanelGroupMembersSubTab::confirmEjectMembers()
 	{
 		LLSD args;
 		// <FS:Ansariel> FIRE-19529: Group eject dialog doesn't show avatar name
-		//std::string fullname;
-		//gCacheName->getFullName(mMembersList->getValue(), fullname);
-		std::string fullname = LLSLURL("agent", mMembersList->getValue().asUUID(), "completename").getSLURLString();
+		//LLAvatarName av_name;
+		//LLAvatarNameCache::get(mMembersList->getValue(), &av_name);
+		//args["AVATAR_NAME"] = av_name.getUserName();
+		args["AVATAR_NAME"] = LLSLURL("agent", mMembersList->getValue().asUUID(), "completename").getSLURLString();
 		// <FS:Ansariel>
-		args["AVATAR_NAME"] = fullname;
 		LLSD payload;
 		LLNotificationsUtil::add("EjectGroupMemberWarning",
 				 	 	 	 	 args,
@@ -1277,8 +1277,6 @@ void LLPanelGroupMembersSubTab::sendEjectNotifications(const LLUUID& group_id, c
 		for (uuid_vec_t::const_iterator i = selected_members.begin(); i != selected_members.end(); ++i)
 		{
 			LLSD args;
-			// <FS:Ansariel> Always show complete name in rights confirmation dialogs
-			//args["AVATAR_NAME"] = LLSLURL("agent", *i, "displayname").getSLURLString();
 			args["AVATAR_NAME"] = LLSLURL("agent", *i, "completename").getSLURLString();
 			args["GROUP_NAME"] = group_data->mName;
 			
@@ -1927,9 +1925,9 @@ void LLPanelGroupMembersSubTab::confirmBanMembers()
 	if (selection_count == 1)
 	{
 		LLSD args;
-		std::string fullname;
-		gCacheName->getFullName(mMembersList->getValue(), fullname);
-		args["AVATAR_NAME"] = fullname;
+		LLAvatarName av_name;
+		LLAvatarNameCache::get(mMembersList->getValue(), &av_name);
+		args["AVATAR_NAME"] = av_name.getUserName();
 		LLSD payload;
 		LLNotificationsUtil::add("BanGroupMemberWarning",
 				 	 	 	 	 args,

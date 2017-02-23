@@ -591,6 +591,12 @@
                 <menu_item_call.on_click
                  function="Communicate.VoiceMorphing.Subscribe" />
             </menu_item_call>
+            <menu_item_call
+             label="Premium perk..."
+             name="PremiumPerk">
+                <menu_item_call.on_click
+                 function="Communicate.VoiceMorphing.PremiumPerk" />
+            </menu_item_call>
         </menu>
         <menu_item_check
          name="Conversation Log..."
