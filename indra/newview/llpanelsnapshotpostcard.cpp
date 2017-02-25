@@ -113,6 +113,16 @@ BOOL LLPanelSnapshotPostcard::postBuild()
 // virtual
 void LLPanelSnapshotPostcard::onOpen(const LLSD& key)
 {
+	// <FS:Ansariel> Fill "From" field
+	LLLineEditor* from = getChild<LLLineEditor>("name_form");
+	if (from->getText().empty())
+	{
+		std::string name_string;
+		LLAgentUI::buildFullname(name_string);
+		from->setText(name_string);
+	}
+	// </FS:Ansariel>
+
 	LLPanelSnapshot::onOpen(key);
 }
 
