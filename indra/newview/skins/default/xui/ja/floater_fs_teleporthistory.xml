@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_tphistory" title="Teleport History">
+<floater name="floater_tphistory" title="テレポート履歴">
 	<filter_editor label="土地をフィルター" name="Filter" />
+
 	<panel name="history_placeholder" />
+ 
 	<panel name="button_panel">
 		<layout_stack name="bottom_bar_ls0">
+
 			<layout_panel name="show_lm_panel">
+
 				<layout_stack name="bottom_bar_ls1">
 					<layout_panel name="teleport_btn_lp">
 						<button label="テレポート" name="teleport_btn" tool_tip="選択した地域にテレポートします。" />
 					</layout_panel>
+
 					<layout_panel name="chat_btn_lp">
 						<button label="地図" name="map_btn" tool_tip="該当する地域を世界地図上に表示します。"/>
 					</layout_panel>
+
 					<layout_panel name="chat_btn_lp">
 						<button label="プロフィールを表示" name="profile_btn" tool_tip="この場所のプロフィールを表示します。" />
 					</layout_panel>

@@ -695,11 +695,13 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 	// </FS:Ansariel>
 
 	static LLCachedControl<bool> useChatBubbles(gSavedSettings, "UseChatBubbles");
+	static LLCachedControl<bool> fsBubblesHideConsoleAndToasts(gSavedSettings, "FSBubblesHideConsoleAndToasts");
 	// <FS:Ansariel> [FS communication UI]
 	//if((  ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
+	//		&& useChatBubbles )
 	if(  ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
+			&& useChatBubbles && fsBubblesHideConsoleAndToasts )
 	// </FS:Ansariel> [FS communication UI]
-			&& useChatBubbles )
 		|| mChannel.isDead()
 		|| !mChannel.get()->getShowToasts() )
 	// <FS:Ansariel> [FS communication UI]

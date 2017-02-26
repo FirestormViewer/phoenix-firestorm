@@ -127,10 +127,9 @@ protected:
 	{
 		LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 
-//		registrar.add("Wearing.Edit", boost::bind(&edit_outfit));
+		registrar.add("Wearing.Edit", boost::bind(&edit_outfit));
 // [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
 		registrar.add("Wearing.EditItem", boost::bind(handleMultiple, edit_item, mUUIDs));
-		registrar.add("Wearing.EditOutfit", boost::bind(&edit_outfit));
 // [/SL:KB]
 		registrar.add("Wearing.ShowOriginal", boost::bind(show_item_original, mUUIDs.front()));
 		registrar.add("Wearing.TakeOff",
@@ -196,10 +195,6 @@ protected:
 		bool allow_detach = !bp_selected && !clothes_selected && attachments_selected;
 		bool allow_take_off = !bp_selected && clothes_selected && !attachments_selected;
 
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-		menu->setItemVisible("edit_item",	bp_selected || clothes_selected || attachments_selected);
-		menu->setItemEnabled("edit_item",	1 == mUUIDs.size());
-// [/SL:KB]
 		menu->setItemVisible("take_off",	allow_take_off);
 		menu->setItemVisible("detach",		allow_detach);
 // [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
@@ -211,7 +206,11 @@ protected:
 // [/RLVa:KB]
 		menu->setItemVisible("edit_outfit_separator", allow_take_off || allow_detach);
 		menu->setItemVisible("show_original", mUUIDs.size() == 1);
-		menu->setItemVisible("edit_item", FALSE);
+//		menu->setItemVisible("edit_item", FALSE);
+// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+		menu->setItemVisible("edit_item",	bp_selected || clothes_selected || attachments_selected);
+		menu->setItemEnabled("edit_item",	1 == mUUIDs.size());
+// [/SL:KB]
 	}
 };
 
@@ -241,6 +240,9 @@ protected:
 	{
 		menu->setItemVisible("take_off", FALSE);
 		menu->setItemVisible("detach", TRUE);
+// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+		menu->setItemVisible("take_off_or_detach", FALSE);
+// [/SL:KB]
 		menu->setItemVisible("edit_outfit_separator", TRUE);
 		menu->setItemVisible("show_original", FALSE);
 		menu->setItemVisible("edit_item", TRUE);

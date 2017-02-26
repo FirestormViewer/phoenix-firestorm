@@ -184,6 +184,8 @@
 		 layout="topleft"
 		 left="0"
 		 name="search_results_events"
+		 sort_ascending="true"
+		 sort_column="3"
 		 top="0"
 		 width="410">
 			<columns
@@ -197,6 +199,7 @@
 			<columns
 			 label="Date/Time"
 			 name="date"
+			 sort_column="time"
 			 relwidth="0.28" />
 			<columns
 			 label="Time"

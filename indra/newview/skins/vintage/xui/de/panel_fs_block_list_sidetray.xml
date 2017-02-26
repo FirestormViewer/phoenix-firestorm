@@ -4,6 +4,9 @@
 		<fs_scroll_list.columns name="item_name" label="Name"/>
 		<fs_scroll_list.columns name="item_type" label="Typ"/>
 	</fs_scroll_list>
+	<text name="block_limit">
+		Blockierte Einträge: [COUNT] ([LIMIT] max.)
+	</text>
 	<layout_stack name="block_list_sidetray_main">
 		<layout_panel name="back_button_container">
 			<button tool_tip="Zurück zu Leute" name="back"/>

@@ -72,7 +72,6 @@
 			<radio_group name="ear_location">
 				<radio_item label="Odtwarzaj głos z pozycji kamery" name="0"/>
 				<radio_item label="Odtwarzaj głos z pozycji mojego awatara" name="1"/>
-				<radio_item label="Odtwarzaj głos jednakowo od wszystkich" name="2"/>
 			</radio_group>
 			<check_box label="Poruszaj ustami awatara podczas mówienia" name="enable_lip_sync"/>
 			<check_box label="Pokazuj wskaźniki dźwięku ponad awatarami" tool_tip="Pokazuj wskaźniki dźwięku (białe kropki) ponad awatarami" name="FSShowVoiceVisualizer"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
 	follows="left|top|right|bottom"
-	height="100"
+	height="150"
 	layout="topleft"
 	name="block_list_panel"
 	help_topic="blocked_list"
@@ -9,7 +9,7 @@
 
 	<fs_scroll_list
 	 draw_heading="true"
-	 height="70"
+	 height="108"
 	 left="0"
 	 top="0"
 	 width="304"
@@ -35,11 +35,25 @@
 		 width="-1" />
 	</fs_scroll_list>
 
+	<text
+	 type="string"
+	 length="1"
+	 follows="left|bottom|right"
+	 height="14"
+	 layout="topleft"
+	 right="-10"
+	 top_pad="4"
+	 left="4"
+	 use_ellipses="true"
+	 name="block_limit">
+	 Blocked entries: [COUNT] ([LIMIT] max.)
+	</text>
+
 	<layout_stack
 		name="block_list_sidetray_main"
 		layout="topleft"
 		follows="bottom|left|right"
-		top_pad="4"
+		top_pad="2"
 		left="0"
 		width="300"
 		height="20"

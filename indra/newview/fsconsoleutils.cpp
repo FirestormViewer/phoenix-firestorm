@@ -43,6 +43,7 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
 {
 	static LLCachedControl<bool> fsUseNearbyChatConsole(gSavedSettings, "FSUseNearbyChatConsole");
 	static LLCachedControl<bool> useChatBubbles(gSavedSettings, "UseChatBubbles");
+	static LLCachedControl<bool> fsBubblesHideConsoleAndToasts(gSavedSettings, "FSBubblesHideConsoleAndToasts");
 
 	if (!fsUseNearbyChatConsole)
 	{
@@ -51,7 +52,7 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
 
 	// Don't write to console if avatar chat and user wants
 	// bubble chat or if the user is busy.
-	if ( (chat_msg.mSourceType == CHAT_SOURCE_AGENT && useChatBubbles)
+	if ( (chat_msg.mSourceType == CHAT_SOURCE_AGENT && useChatBubbles && fsBubblesHideConsoleAndToasts)
 		|| gAgent.isDoNotDisturb() )
 	{
 		return true;

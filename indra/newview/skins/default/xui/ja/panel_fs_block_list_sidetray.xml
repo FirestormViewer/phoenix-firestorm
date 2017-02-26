@@ -7,6 +7,9 @@
 		<menu_button name="plus_btn" />
 		<button name="unblock_btn" tool_tip="住人やオブジェクトをブロックリストから除外します" />
 	</panel>
+	<text name="block_limit">
+		ブロック件数: [COUNT] (最大 [LIMIT])
+	</text>
 	<fs_scroll_list name="block_list">
 		<fs_scroll_list.columns name="item_name" label="名前" />
 		<fs_scroll_list.columns name="item_type" label="種類" />
