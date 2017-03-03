@@ -3981,8 +3981,10 @@ M キーを押して変更します。
 		</form>
 	</notification>
 	<notification name="ModeChange" label="">
-		モードの変更にはビューワの終了と再起動が必要です。
-		<usetemplate name="okcancelbuttons" yestext="終了する" notext="終了しない"/>
+モードの変更にはビューワの終了と再起動が必要です。
+
+モードを変更して終了しますか？
+		<usetemplate name="okcancelbuttons" yestext="OK" notext="取り消し"/>
 	</notification>
 	<notification label="" name="NoClassifieds">
 		クラシファイド広告の作成と編集はアドバンスモードでのみ利用できます。終了してモードを変更しますか？モードはログイン画面で選択できます。

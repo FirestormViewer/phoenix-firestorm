@@ -61,6 +61,7 @@
 	<menu_item_call label="着用中のアウトフィットに追加する" name="Add To Outfit"/>
 	<menu_item_call label="アイテムを装着" name="Wear Items" />
 	<menu_item_call label="着用中のアウトフィットから取り除く" name="Remove From Outfit"/>
+	<menu_item_call label="アウトフィットリストをクリップボードにコピー" name="Copy outfit list to clipboard" />
 	<menu_item_call label="オリジナルを探す" name="Find Original"/>
 	<menu_item_call label="アイテムを除外する" name="Purge Item"/>
 	<menu_item_call label="アイテムを復元する" name="Restore Item"/>
