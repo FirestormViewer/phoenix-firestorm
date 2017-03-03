@@ -65,6 +65,7 @@ FSPanelBlockList::FSPanelBlockList()
 	mCommitCallbackRegistrar.add("Block.Action",	boost::bind(&FSPanelBlockList::onCustomAction,  this, _2));
 	mEnableCallbackRegistrar.add("Block.Check",		boost::bind(&FSPanelBlockList::isActionChecked, this, _2));
 	mEnableCallbackRegistrar.add("Block.Enable",	boost::bind(&FSPanelBlockList::isActionEnabled, this, _2));
+	mEnableCallbackRegistrar.add("Block.Visible",	boost::bind(&FSPanelBlockList::isActionVisible, this, _2));
 }
 
 void FSPanelBlockList::removePicker()
@@ -273,28 +274,70 @@ void FSPanelBlockList::onCustomAction(const LLSD& userdata)
 	{
 		showProfile();
 	}
+	else if ("block_voice" == command_name)
+	{
+		toggleMute(LLMute::flagVoiceChat);
+	}
+	else if ("block_text" == command_name)
+	{
+		toggleMute(LLMute::flagTextChat);
+	}
+	else if ("block_particles" == command_name)
+	{
+		toggleMute(LLMute::flagParticles);
+	}
+	else if ("block_obj_sounds" == command_name)
+	{
+		toggleMute(LLMute::flagObjectSounds);
+	}
 }
 
 bool FSPanelBlockList::isActionChecked(const LLSD& userdata)
 {
-	std::string item = userdata.asString();
+	std::string command_name = userdata.asString();
 	U32 sort_order = gSavedSettings.getU32("BlockPeopleSortOrder");
 
-	if ("sort_by_name" == item)
+	if ("sort_by_name" == command_name)
 	{
 		return E_SORT_BY_NAME_ASC == sort_order;
 	}
-	else if ("sort_by_type" == item)
+	else if ("sort_by_type" == command_name)
 	{
 		return E_SORT_BY_TYPE_ASC == sort_order;
 	}
-	else if ("sort_by_name_desc" == item)
+	else if ("sort_by_name_desc" == command_name)
 	{
 		return E_SORT_BY_NAME_DESC == sort_order;
 	}
-	else if ("sort_by_type_desc" == item)
+	else if ("sort_by_type_desc" == command_name)
 	{
 		return E_SORT_BY_TYPE_DESC == sort_order;
+	}
+	else
+	{
+		if (!mBlockedList->getFirstSelected())
+		{
+			return false;
+		}
+
+		LLUUID blocked_id = mBlockedList->getFirstSelected()->getColumn(3)->getValue().asUUID();
+
+		if ("block_voice" == command_name)
+		{
+			return LLMuteList::getInstance()->isMuted(blocked_id, LLMute::flagVoiceChat);
+		}
+		else if ("block_text" == command_name)
+		{
+			return LLMuteList::getInstance()->isMuted(blocked_id, LLMute::flagTextChat);
+		}
+		else if ("block_particles" == command_name)
+		{
+			return LLMuteList::getInstance()->isMuted(blocked_id, LLMute::flagParticles);
+		}
+		else if ("block_obj_sounds" == command_name)
+		{
+			return LLMuteList::getInstance()->isMuted(blocked_id, LLMute::flagObjectSounds);
+		}
 	}
 
 	return false;
@@ -302,12 +345,16 @@ bool FSPanelBlockList::isActionChecked(const LLSD& userdata)
 
 bool FSPanelBlockList::isActionEnabled(const LLSD& userdata)
 {
-	std::string item = userdata.asString();
-	if ("unblock_item" == item)
+	std::string command_name = userdata.asString();
+	if ("unblock_item" == command_name)
 	{
 		return (mBlockedList->getNumSelected() > 0);
 	}
-	else if ("profile_item" == item)
+	else if ("profile_item" == command_name 
+		|| "block_voice" == command_name
+		|| "block_text" == command_name
+		|| "block_particles" == command_name
+		|| "block_obj_sounds" == command_name)
 	{
 		return (mBlockedList->getNumSelected() == 1 &&
 				(LLMute::EType)mBlockedList->getFirstSelected()->getColumn(2)->getValue().asInteger() == LLMute::AGENT);
@@ -316,6 +363,40 @@ bool FSPanelBlockList::isActionEnabled(const LLSD& userdata)
 	return false;
 }
 
+bool FSPanelBlockList::isActionVisible(const LLSD& userdata)
+{
+	const std::string command_name = userdata.asString();
+
+	if ("block_voice" == command_name
+		|| "block_text" == command_name
+		|| "block_particles" == command_name
+		|| "block_obj_sounds" == command_name)
+	{
+		return mBlockedList->getNumSelected() == 1 && (LLMute::AGENT == (LLMute::EType)mBlockedList->getFirstSelected()->getColumn(2)->getValue().asInteger());
+	}
+
+	return false;
+}
+
+void FSPanelBlockList::toggleMute(U32 flags)
+{
+	LLScrollListItem* item = mBlockedList->getFirstSelected();
+	if (!item)
+	{
+		return;
+	}
+
+	LLMute mute(item->getColumn(3)->getValue().asUUID(), item->getColumn(0)->getValue().asString(), (LLMute::EType)item->getColumn(2)->getValue().asInteger());
+
+	if (!LLMuteList::getInstance()->isMuted(item->getColumn(3)->getValue().asUUID(), flags))
+	{
+		LLMuteList::getInstance()->add(mute, flags);
+	}
+	else
+	{
+		LLMuteList::getInstance()->remove(mute, flags);
+	}
+}
 
 void FSPanelBlockList::blockResidentByName()
 {

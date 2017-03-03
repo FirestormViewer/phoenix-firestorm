@@ -82,6 +82,7 @@ private:
 	void blockResidentByName();
 	void blockObjectByName();
 	void showProfile();
+	void toggleMute(U32 flags);
 
 	void onSelectionChanged();
 	void onFilterEdit(std::string search_string);
@@ -90,6 +91,7 @@ private:
 	void onCustomAction(const LLSD& userdata);
 	bool isActionChecked(const LLSD& userdata);
 	bool isActionEnabled(const LLSD& userdata);
+	bool isActionVisible(const LLSD& userdata);
 
 	void callbackBlockPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
 	void callbackBlockByName(const std::string& text);

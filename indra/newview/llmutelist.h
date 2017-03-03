@@ -123,7 +123,10 @@ private:
 	void notifyObservers();
 	void notifyObserversDetailed(const LLMute &mute);
 
-	void updateAdd(const LLMute& mute);
+	// <FS:Ansariel> FIRE-15746: Show block report in nearby chat
+	//void updateAdd(const LLMute& mute);
+	void updateAdd(const LLMute& mute, bool show_message = true);
+	// </FS:Ansariel>
 	void updateRemove(const LLMute& mute);
 
 	// TODO: NULL out mute_id in database
