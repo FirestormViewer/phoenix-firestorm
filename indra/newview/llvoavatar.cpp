@@ -709,9 +709,6 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mMeshTexturesDirty = FALSE;
 	mHeadp = NULL;
 
-	// <FS:Ansariel> Load persisted avatar render settings
-	mVisuallyMuteSetting = FSAvatarRenderPersistence::instance().getAvatarRenderSettings(id);
-
 	// set up animation variables
 	mSpeed = 0.f;
 	setAnimationData("Speed", &mSpeed);
@@ -757,6 +754,10 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	{
 	    LLSceneMonitor::getInstance()->freezeAvatar((LLCharacter*)this);
 	}
+
+	// <FS:Ansariel> Load persisted avatar render settings
+	//mVisuallyMuteSetting = getSavedVisualMuteSettings();
+	mVisuallyMuteSetting = FSAvatarRenderPersistence::instance().getAvatarRenderSettings(id);
 }
 
 std::string LLVOAvatar::avString() const
@@ -10124,14 +10125,31 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
     }
 }
 
+//static
+// <FS:Ansariel> Load persisted avatar render settings
+//std::map<LLUUID, LLVOAvatar::VisualMuteSettings> LLVOAvatar::sVisuallyMuteSettingsMap;
+
 void LLVOAvatar::setVisualMuteSettings(VisualMuteSettings set)
 {
     mVisuallyMuteSetting = set;
     mNeedsImpostorUpdate = TRUE;
-	// <FS:Ansariel> Load persisted avatar render settings
-	FSAvatarRenderPersistence::instance().setAvatarRenderSettings(getID(), set);
+    // <FS:Ansariel> Load persisted avatar render settings
+    //sVisuallyMuteSettingsMap[getID()] = set;
+    FSAvatarRenderPersistence::instance().setAvatarRenderSettings(getID(), set);
 }
 
+// <FS:Ansariel> Load persisted avatar render settings
+//LLVOAvatar::VisualMuteSettings LLVOAvatar::getSavedVisualMuteSettings()
+//{
+//    std::map<LLUUID, VisualMuteSettings>::iterator iter = sVisuallyMuteSettingsMap.find(getID());
+//    if (iter != sVisuallyMuteSettingsMap.end())
+//    {
+//        return iter->second;
+//    }
+//
+//    return AV_RENDER_NORMALLY;
+//}
+// </FS:Ansariel>
 
 void LLVOAvatar::calcMutedAVColor()
 {

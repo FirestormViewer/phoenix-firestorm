@@ -6809,7 +6809,7 @@ void LLSelectMgr::updateSelectionCenter()
 		mSelectedObjects->mSelectType = getSelectTypeForObject(object);
 
 		// <FS:Ansariel> Chalice Yao's pause agent on attachment selection
-		//if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT && isAgentAvatarValid())
+		//if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT && isAgentAvatarValid() && object->getParent() != NULL)
 		//{
 		//	mPauseRequest = gAgentAvatarp->requestPause();
 		//}
