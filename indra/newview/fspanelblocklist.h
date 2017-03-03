@@ -65,12 +65,23 @@ public:
 	/* virtual */ void onChange() {	refreshBlockedList();}
 	
 private:
-	typedef enum e_sort_oder{
+	typedef enum e_sort_oder
+	{
 		E_SORT_BY_NAME_ASC = 0,
 		E_SORT_BY_TYPE_ASC = 1,
 		E_SORT_BY_NAME_DESC = 2,
 		E_SORT_BY_TYPE_DESC = 3
 	} ESortOrder;
+
+	
+	typedef enum e_column_names
+	{
+		COL_NAME = 0,
+		COL_TYPENAME,
+		COL_TYPE,
+		COL_UUID
+	} EColumnNames;
+
 
 	void refreshBlockedList();
 	void updateButtons();

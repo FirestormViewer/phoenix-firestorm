@@ -93,7 +93,7 @@ BOOL FSPanelBlockList::postBuild()
 	mBlockedList->setDoubleClickCallback(boost::bind(&FSPanelBlockList::showProfile, this));
 	mBlockedList->setSearchColumn(mBlockedList->getColumn("item_name")->mIndex);
 	mBlockedList->setContextMenu(&gFSBlockListMenu);
-	mBlockedList->setFilterColumn(0);
+	mBlockedList->setFilterColumn(COL_NAME);
 	mBlockedList->setSortChangedCallback(boost::bind(&FSPanelBlockList::onSortChanged, this));
 
 	getChild<LLButton>("unblock_btn")->setCommitCallback(boost::bind(&FSPanelBlockList::removeMutes, this));
@@ -211,8 +211,8 @@ void FSPanelBlockList::removeMutes()
 	std::vector<LLScrollListItem*> selected_items = mBlockedList->getAllSelected();
 	for (std::vector<LLScrollListItem*>::iterator it = selected_items.begin(); it != selected_items.end(); it++)
 	{
-		std::string name = (*it)->getColumn(0)->getValue().asString();
-		LLUUID id = (*it)->getColumn(3)->getValue().asUUID();
+		std::string name = (*it)->getColumn(COL_NAME)->getValue().asString();
+		LLUUID id = (*it)->getColumn(COL_UUID)->getValue().asUUID();
 		LLMute mute(id, name);
 		LLMuteList::getInstance()->remove(mute);
 	}
@@ -320,7 +320,7 @@ bool FSPanelBlockList::isActionChecked(const LLSD& userdata)
 			return false;
 		}
 
-		LLUUID blocked_id = mBlockedList->getFirstSelected()->getColumn(3)->getValue().asUUID();
+		LLUUID blocked_id = mBlockedList->getFirstSelected()->getColumn(COL_UUID)->getValue().asUUID();
 
 		if ("block_voice" == command_name)
 		{
@@ -357,7 +357,7 @@ bool FSPanelBlockList::isActionEnabled(const LLSD& userdata)
 		|| "block_obj_sounds" == command_name)
 	{
 		return (mBlockedList->getNumSelected() == 1 &&
-				(LLMute::EType)mBlockedList->getFirstSelected()->getColumn(2)->getValue().asInteger() == LLMute::AGENT);
+				(LLMute::EType)mBlockedList->getFirstSelected()->getColumn(COL_TYPE)->getValue().asInteger() == LLMute::AGENT);
 	}
 
 	return false;
@@ -372,7 +372,7 @@ bool FSPanelBlockList::isActionVisible(const LLSD& userdata)
 		|| "block_particles" == command_name
 		|| "block_obj_sounds" == command_name)
 	{
-		return mBlockedList->getNumSelected() == 1 && (LLMute::AGENT == (LLMute::EType)mBlockedList->getFirstSelected()->getColumn(2)->getValue().asInteger());
+		return mBlockedList->getNumSelected() == 1 && (LLMute::AGENT == (LLMute::EType)mBlockedList->getFirstSelected()->getColumn(COL_TYPE)->getValue().asInteger());
 	}
 
 	return false;
@@ -386,9 +386,9 @@ void FSPanelBlockList::toggleMute(U32 flags)
 		return;
 	}
 
-	LLMute mute(item->getColumn(3)->getValue().asUUID(), item->getColumn(0)->getValue().asString(), (LLMute::EType)item->getColumn(2)->getValue().asInteger());
+	LLMute mute(item->getColumn(COL_UUID)->getValue().asUUID(), item->getColumn(COL_NAME)->getValue().asString(), (LLMute::EType)item->getColumn(COL_TYPE)->getValue().asInteger());
 
-	if (!LLMuteList::getInstance()->isMuted(item->getColumn(3)->getValue().asUUID(), flags))
+	if (!LLMuteList::getInstance()->isMuted(item->getColumn(COL_UUID)->getValue().asUUID(), flags))
 	{
 		LLMuteList::getInstance()->add(mute, flags);
 	}
@@ -431,9 +431,9 @@ void FSPanelBlockList::onSelectionChanged()
 void FSPanelBlockList::showProfile()
 {
 	if (mBlockedList->getNumSelected() == 1 &&
-		(LLMute::EType)mBlockedList->getFirstSelected()->getColumn(2)->getValue().asInteger() == LLMute::AGENT)
+		(LLMute::EType)mBlockedList->getFirstSelected()->getColumn(COL_TYPE)->getValue().asInteger() == LLMute::AGENT)
 	{
-		LLAvatarActions::showProfile(mBlockedList->getFirstSelected()->getColumn(3)->getValue().asUUID());
+		LLAvatarActions::showProfile(mBlockedList->getFirstSelected()->getColumn(COL_UUID)->getValue().asUUID());
 	}
 }
 
