@@ -11710,12 +11710,25 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 		}
 
 		{
-		gGL.begin(LLRender::QUADS);
-		gGL.vertex3f(-1, -1, clip_plane);
-		gGL.vertex3f(1, -1, clip_plane);
-		gGL.vertex3f(1, 1, clip_plane);
-		gGL.vertex3f(-1, 1, clip_plane);
+		// <FS:Ansariel> Remove QUADS rendering mode
+		//gGL.begin(LLRender::QUADS);
+		//gGL.vertex3f(-1, -1, clip_plane);
+		//gGL.vertex3f(1, -1, clip_plane);
+		//gGL.vertex3f(1, 1, clip_plane);
+		//gGL.vertex3f(-1, 1, clip_plane);
+		//gGL.end();
+		gGL.begin(LLRender::TRIANGLES);
+		{
+			gGL.vertex3f(-1, -1, clip_plane);
+			gGL.vertex3f(1, -1, clip_plane);
+			gGL.vertex3f(1, 1, clip_plane);
+
+			gGL.vertex3f(1, 1, clip_plane);
+			gGL.vertex3f(-1, -1, clip_plane);
+			gGL.vertex3f(-1, 1, clip_plane);
+		}
 		gGL.end();
+		// </FS:Ansariel>
 		gGL.flush();
 		}
 

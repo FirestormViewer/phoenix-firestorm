@@ -506,37 +506,63 @@ void LLFloaterColorPicker::draw()
 	{
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 		LLGLEnable(GL_CULL_FACE);
-		gGL.begin(LLRender::QUADS);
+		// <FS:Ansariel> Remove QUADS rendering mode
+		//gGL.begin(LLRender::QUADS);
+		//{
+		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
+		//	gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mTop);
+		//	gGL.vertex2i(swatch_rect.mRight, swatch_rect.mTop);
+		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
+		//	gGL.vertex2i(local_rect.mRight, local_rect.mTop);
+		//	gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
+
+		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
+		//	gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
+		//	gGL.vertex2i(local_rect.mLeft, local_rect.mBottom);
+		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
+		//	gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mBottom);
+		//	gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mTop);
+
+		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
+		//	gGL.vertex2i(local_rect.mRight, local_rect.mBottom);
+		//	gGL.vertex2i(local_rect.mRight, local_rect.mTop);
+		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
+		//	gGL.vertex2i(swatch_rect.mRight, swatch_rect.mTop);
+		//	gGL.vertex2i(swatch_rect.mRight, swatch_rect.mBottom);
+
+		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
+		//	gGL.vertex2i(local_rect.mLeft, local_rect.mBottom);
+		//	gGL.vertex2i(local_rect.mRight, local_rect.mBottom);
+		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
+		//	gGL.vertex2i(swatch_rect.mRight, swatch_rect.mBottom);
+		//	gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mBottom);
+		//}
+		//gGL.end();
+		gGL.begin(LLRender::TRIANGLE_STRIP);
 		{
 			gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
 			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mTop);
+			gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
+			gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
+			gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
 			gGL.vertex2i(swatch_rect.mRight, swatch_rect.mTop);
 			gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
 			gGL.vertex2i(local_rect.mRight, local_rect.mTop);
-			gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
-
+			gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
+			gGL.vertex2i(swatch_rect.mRight, swatch_rect.mBottom);
 			gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
-			gGL.vertex2i(local_rect.mLeft, local_rect.mBottom);
+			gGL.vertex2i(local_rect.mRight, local_rect.mBottom);
 			gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
 			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mBottom);
+			gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
+			gGL.vertex2i(local_rect.mLeft, local_rect.mBottom);
+			gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
 			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mTop);
-
 			gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mRight, local_rect.mBottom);
-			gGL.vertex2i(local_rect.mRight, local_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mRight, swatch_rect.mTop);
-			gGL.vertex2i(swatch_rect.mRight, swatch_rect.mBottom);
-
-			gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mLeft, local_rect.mBottom);
-			gGL.vertex2i(local_rect.mRight, local_rect.mBottom);
-			gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mRight, swatch_rect.mBottom);
-			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mBottom);
+			gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
 		}
 		gGL.end();
+		// </FS:Ansariel>
 	}
 
 	if (gFocusMgr.childHasMouseCapture(getDragHandle()))

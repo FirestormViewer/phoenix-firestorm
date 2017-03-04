@@ -409,29 +409,45 @@ void LLViewerParcelMgr::renderRect(const LLVector3d &west_south_bottom_global,
 	gGL.end();
 
 	gGL.color4f(1.f, 1.f, 0.f, 0.2f);
-	gGL.begin(LLRender::QUADS);
+	// <FS:Ansariel> Remove QUADS rendering mode
+	//gGL.begin(LLRender::QUADS);
 
-	gGL.vertex3f(west, north, nw_bottom);
-	gGL.vertex3f(west, north, nw_top);
-	gGL.vertex3f(east, north, ne_top);
-	gGL.vertex3f(east, north, ne_bottom);
+	//gGL.vertex3f(west, north, nw_bottom);
+	//gGL.vertex3f(west, north, nw_top);
+	//gGL.vertex3f(east, north, ne_top);
+	//gGL.vertex3f(east, north, ne_bottom);
 
-	gGL.vertex3f(east, north, ne_bottom);
-	gGL.vertex3f(east, north, ne_top);
-	gGL.vertex3f(east, south, se_top);
-	gGL.vertex3f(east, south, se_bottom);
+	//gGL.vertex3f(east, north, ne_bottom);
+	//gGL.vertex3f(east, north, ne_top);
+	//gGL.vertex3f(east, south, se_top);
+	//gGL.vertex3f(east, south, se_bottom);
 
-	gGL.vertex3f(east, south, se_bottom);
-	gGL.vertex3f(east, south, se_top);
-	gGL.vertex3f(west, south, sw_top);
-	gGL.vertex3f(west, south, sw_bottom);
+	//gGL.vertex3f(east, south, se_bottom);
+	//gGL.vertex3f(east, south, se_top);
+	//gGL.vertex3f(west, south, sw_top);
+	//gGL.vertex3f(west, south, sw_bottom);
 
-	gGL.vertex3f(west, south, sw_bottom);
-	gGL.vertex3f(west, south, sw_top);
-	gGL.vertex3f(west, north, nw_top);
-	gGL.vertex3f(west, north, nw_bottom);
+	//gGL.vertex3f(west, south, sw_bottom);
+	//gGL.vertex3f(west, south, sw_top);
+	//gGL.vertex3f(west, north, nw_top);
+	//gGL.vertex3f(west, north, nw_bottom);
 
+	//gGL.end();
+	gGL.begin(LLRender::TRIANGLE_STRIP);
+	{
+		gGL.vertex3f(west, north, nw_bottom);
+		gGL.vertex3f(west, north, nw_top);
+		gGL.vertex3f(east, north, ne_bottom);
+		gGL.vertex3f(east, north, ne_top);
+		gGL.vertex3f(east, south, se_bottom);
+		gGL.vertex3f(east, south, se_top);
+		gGL.vertex3f(west, south, sw_top);
+		gGL.vertex3f(west, south, sw_bottom);
+		gGL.vertex3f(west, north, nw_top);
+		gGL.vertex3f(west, north, nw_bottom);
+	}
 	gGL.end();
+	// </FS:Ansariel>
 
 	LLUI::setLineWidth(1.f);
 }
@@ -573,6 +589,11 @@ void LLViewerParcelMgr::renderOneSegment(F32 x1, F32 y1, F32 x2, F32 y2, F32 hei
 
 		gGL.vertex3f(x2, y2, z2);
 
+		// <FS:Ansariel> Remove QUADS rendering mode
+		gGL.vertex3f(x2, y2, z2);
+		gGL.vertex3f(x1, y1, z);
+		// </FS:Ansariel>
+
 		// <FS:Ansariel> FIRE-10546: Show parcel boundary up to max. build level
 		//z = z2+height;
 		z = absolute_height ? height : z2+height;
@@ -619,6 +640,14 @@ void LLViewerParcelMgr::renderOneSegment(F32 x1, F32 y1, F32 x2, F32 y2, F32 hei
 		// </FS:Ansariel>
 		gGL.texCoord2f(tex_coord2*0.5f+0.5f, z*0.5f);
 		gGL.vertex3f(x2, y2, z);
+
+		// <FS:Ansariel> Remove QUADS rendering mode
+		gGL.texCoord2f(tex_coord2*0.5f+0.5f, z*0.5f);
+		gGL.vertex3f(x2, y2, z);
+
+		gGL.texCoord2f(tex_coord1*0.5f+0.5f, z1*0.5f);
+		gGL.vertex3f(x1, y1, z1);
+		// </FS:Ansariel>
 
 		gGL.texCoord2f(tex_coord1*0.5f+0.5f, z*0.5f);
 		gGL.vertex3f(x1, y1, z);
@@ -668,7 +697,10 @@ void LLViewerParcelMgr::renderHighlightSegments(const U8* segments, LLViewerRegi
 				if (!has_segments)
 				{
 					has_segments = true;
-					gGL.begin(LLRender::QUADS);
+					// <FS:Ansariel> Remove QUADS rendering mode
+					//gGL.begin(LLRender::QUADS);
+					gGL.begin(LLRender::TRIANGLES);
+					// </FS:Ansariel>
 				}
 				// <FS:Ansariel> FIRE-10546: Show parcel boundary up to max. build level
 				//renderOneSegment(x1, y1, x2, y2, PARCEL_POST_HEIGHT, SOUTH_MASK, regionp);
@@ -687,7 +719,10 @@ void LLViewerParcelMgr::renderHighlightSegments(const U8* segments, LLViewerRegi
 				if (!has_segments)
 				{
 					has_segments = true;
-					gGL.begin(LLRender::QUADS);
+					// <FS:Ansariel> Remove QUADS rendering mode
+					//gGL.begin(LLRender::QUADS);
+					gGL.begin(LLRender::TRIANGLES);
+					// </FS:Ansariel>
 				}
 				// <FS:Ansariel> FIRE-10546: Show parcel boundary up to max. build level
 				//renderOneSegment(x1, y1, x2, y2, PARCEL_POST_HEIGHT, WEST_MASK, regionp);
@@ -746,7 +781,10 @@ void LLViewerParcelMgr::renderCollisionSegments(U8* segments, BOOL use_pass, LLV
 		gGL.getTexUnit(0)->bind(mBlockedImage);
 	}
 
-	gGL.begin(LLRender::QUADS);
+	// <FS:Ansariel> Remove QUADS rendering mode
+	//gGL.begin(LLRender::QUADS);
+	gGL.begin(LLRender::TRIANGLES);
+	// </FS:Ansariel>
 
 	for (y = 0; y < STRIDE; y++)
 	{

@@ -529,7 +529,20 @@ void LLFloaterBvhPreview::draw()
 		// </FS>
 		gGL.color3f(1.f, 1.f, 1.f); 
 		gGL.getTexUnit(0)->bind(mAnimPreview); 
-		gGL.begin( LLRender::QUADS ); 
+		// <FS:Ansariel> Remove QUADS rendering mode
+		//gGL.begin( LLRender::QUADS ); 
+		//{ 
+		//	gGL.texCoord2f(0.f, 1.f); 
+		//	gGL.vertex2i(PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT); 
+		//	gGL.texCoord2f(0.f, 0.f); 
+		//	gGL.vertex2i(PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD); 
+		//	gGL.texCoord2f(1.f, 0.f); 
+		//	gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD); 
+		//	gGL.texCoord2f(1.f, 1.f); 
+		//	gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT); 
+		//} 
+		//gGL.end(); 
+		gGL.begin( LLRender::TRIANGLES ); 
 		{ 
 			gGL.texCoord2f(0.f, 1.f); 
 			gGL.vertex2i(PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT); 
@@ -537,10 +550,16 @@ void LLFloaterBvhPreview::draw()
 			gGL.vertex2i(PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD); 
 			gGL.texCoord2f(1.f, 0.f); 
 			gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD); 
+
+			gGL.texCoord2f(1.f, 0.f); 
+			gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD); 
+			gGL.texCoord2f(0.f, 1.f); 
+			gGL.vertex2i(PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT); 
 			gGL.texCoord2f(1.f, 1.f); 
 			gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT); 
 		} 
 		gGL.end(); 
+		// </FS:Ansariel>
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE); 
 		// <FS> Preview on own avatar
 		//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();

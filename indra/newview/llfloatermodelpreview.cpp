@@ -757,7 +757,20 @@ void LLFloaterModelPreview::draw()
 			mPreviewRect = preview_panel->getRect();
 		}
 
-		gGL.begin( LLRender::QUADS );
+		// <FS:Ansariel> Remove QUADS rendering mode
+		//gGL.begin( LLRender::QUADS );
+		//{
+		//	gGL.texCoord2f(0.f, 1.f);
+		//	gGL.vertex2i(mPreviewRect.mLeft, mPreviewRect.mTop-1);
+		//	gGL.texCoord2f(0.f, 0.f);
+		//	gGL.vertex2i(mPreviewRect.mLeft, mPreviewRect.mBottom);
+		//	gGL.texCoord2f(1.f, 0.f);
+		//	gGL.vertex2i(mPreviewRect.mRight-1, mPreviewRect.mBottom);
+		//	gGL.texCoord2f(1.f, 1.f);
+		//	gGL.vertex2i(mPreviewRect.mRight-1, mPreviewRect.mTop-1);
+		//}
+		//gGL.end();
+		gGL.begin( LLRender::TRIANGLES );
 		{
 			gGL.texCoord2f(0.f, 1.f);
 			gGL.vertex2i(mPreviewRect.mLeft, mPreviewRect.mTop-1);
@@ -765,10 +778,16 @@ void LLFloaterModelPreview::draw()
 			gGL.vertex2i(mPreviewRect.mLeft, mPreviewRect.mBottom);
 			gGL.texCoord2f(1.f, 0.f);
 			gGL.vertex2i(mPreviewRect.mRight-1, mPreviewRect.mBottom);
+
+			gGL.texCoord2f(1.f, 0.f);
+			gGL.vertex2i(mPreviewRect.mRight-1, mPreviewRect.mBottom);
+			gGL.texCoord2f(0.f, 1.f);
+			gGL.vertex2i(mPreviewRect.mLeft, mPreviewRect.mTop-1);
 			gGL.texCoord2f(1.f, 1.f);
 			gGL.vertex2i(mPreviewRect.mRight-1, mPreviewRect.mTop-1);
 		}
 		gGL.end();
+		// </FS:Ansariel>
 
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 	}
