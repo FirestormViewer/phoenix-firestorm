@@ -53,12 +53,16 @@ private:
 class LLPostcardUploadInfo : public LLBufferedAssetUploadInfo
 {
 public:
-    LLPostcardUploadInfo(std::string nameFrom, std::string emailTo,
+    // <FS:Ansariel> For OpenSim compatibility
+    //LLPostcardUploadInfo(std::string nameFrom, std::string emailTo,
+    LLPostcardUploadInfo(std::string emailFrom, std::string nameFrom, std::string emailTo,
+    // </FS:Ansariel>
         std::string subject, std::string message, LLVector3d globalPosition,
         LLPointer<LLImageFormatted> image, invnUploadFinish_f finish);
 
     virtual LLSD generatePostBody();
 private:
+    std::string mEmailFrom; // <FS:Ansariel> For OpenSim compatibility
     std::string mNameFrom;
     std::string mEmailTo;
     std::string mSubject;
