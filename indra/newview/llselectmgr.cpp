@@ -5967,7 +5967,8 @@ void LLSelectMgr::renderSilhouettes(BOOL for_hud)
 		}
 
 		LLUUID focus_item_id = LLViewerMediaFocus::getInstance()->getFocusedObjectID();
-		for (S32 pass = 0; pass < 2; pass++)
+		// <FS:Ansariel> Improve selection silhouette rendering speed by Drake Arconis
+		//for (S32 pass = 0; pass < 2; pass++)
 		{
 			for (LLObjectSelection::iterator iter = mSelectedObjects->begin();
 				 iter != mSelectedObjects->end(); iter++)
