@@ -44,7 +44,6 @@
 				Posición de los diálogos de script:
 			</text>
 			<combo_box name="ScriptDialogsPositionDropdown" tool_tip="Selecciona dónde deben aparecer los diálogos de script en tu pantalla.">
-				<combo_box.item label="Valor anterior" name="ScriptDialogPositionOption_0"/>
 				<combo_box.item label="Acoplado a los chiclets" name="ScriptDialogPositionOption_1"/>
 				<combo_box.item label="Arriba a la izquerda" name="ScriptDialogPositionOption_2"/>
 				<combo_box.item label="Arriba a la derecha" name="ScriptDialogPositionOption_3"/>

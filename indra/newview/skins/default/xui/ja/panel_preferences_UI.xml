@@ -61,7 +61,6 @@
 			スクリプトダイアログの表示位置:
 		</text>
 		<combo_box name="ScriptDialogsPositionDropdown" tool_tip="スクリプトダイアログ（メニュー）を表示したい場所を選択して下さい。">
-			<combo_box.item label="前回の値を引き継ぐ" name="ScriptDialogPositionOption_0"/>
 			<combo_box.item label="ミニアイコンにドッキング" name="ScriptDialogPositionOption_1"/>
 			<combo_box.item label="左上" name="ScriptDialogPositionOption_2"/>
 			<combo_box.item label="右上" name="ScriptDialogPositionOption_3"/>
