@@ -2265,9 +2265,12 @@ void LLVertexBuffer::setBuffer(U32 data_mask)
 			{
 				
 				U32 unsatisfied_mask = (required_mask & ~data_mask);
-				U32 i = 0;
+				// <FS:Ansariel> Infinite loop fix by Drake Arconis
+				//U32 i = 0;
 
-				while (i < TYPE_MAX)
+				//while (i < TYPE_MAX)
+				for (U32 i = 0; i < TYPE_MAX; i++)
+				// </FS:Ansariel>
 				{
                     U32 unsatisfied_flag = unsatisfied_mask & (1 << i);
 					switch (unsatisfied_flag)
