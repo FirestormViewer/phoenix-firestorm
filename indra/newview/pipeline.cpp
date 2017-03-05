@@ -11719,13 +11719,13 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 		//gGL.end();
 		gGL.begin(LLRender::TRIANGLES);
 		{
-			gGL.vertex3f(-1, -1, clip_plane);
-			gGL.vertex3f(1, -1, clip_plane);
-			gGL.vertex3f(1, 1, clip_plane);
+			gGL.vertex3f(-1.f, -1.f, clip_plane);
+			gGL.vertex3f(1.f, -1.f, clip_plane);
+			gGL.vertex3f(1.f, 1.f, clip_plane);
 
-			gGL.vertex3f(1, 1, clip_plane);
-			gGL.vertex3f(-1, -1, clip_plane);
-			gGL.vertex3f(-1, 1, clip_plane);
+			gGL.vertex3f(1.f, 1.f, clip_plane);
+			gGL.vertex3f(-1.f, -1.f, clip_plane);
+			gGL.vertex3f(-1.f, 1.f, clip_plane);
 		}
 		gGL.end();
 		// </FS:Ansariel>
