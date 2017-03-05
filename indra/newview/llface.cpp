@@ -503,7 +503,10 @@ U16 LLFace::getGeometryAvatar(
 						LLStrider<LLVector3> &normals,
 						LLStrider<LLVector2> &tex_coords,
 						LLStrider<F32>		 &vertex_weights,
-						LLStrider<LLVector4> &clothing_weights)
+						// <FS:Ansariel> Vectorized Weight4Strider and ClothWeightStrider by Drake Arconis
+						//LLStrider<LLVector4> &clothing_weights)
+						LLStrider<LLVector4a> &clothing_weights)
+						// </FS:Ansariel>
 {
 	if (mVertexBuffer.notNull())
 	{
@@ -1189,11 +1192,15 @@ void LLFace::cacheFaceInVRAM(const LLVolumeFace& vf)
 
 	if (vf.mWeights)
 	{
-		LLStrider<LLVector4> f_wght;
+		// <FS:Ansariel> Vectorized Weight4Strider and ClothWeightStrider by Drake Arconis
+		//LLStrider<LLVector4> f_wght;
+		LLStrider<LLVector4a> f_wght;
 		buff->getWeight4Strider(f_wght);
 		for (U32 i = 0; i < vf.mNumVertices; ++i)
 		{
-			(*f_wght++).set(vf.mWeights[i].getF32ptr());
+			// <FS:Ansariel> Vectorized Weight4Strider and ClothWeightStrider by Drake Arconis
+			//(*f_wght++).set(vf.mWeights[i].getF32ptr());
+			(*f_wght++) = vf.mWeights[i];
 		}
 	}
 
@@ -1316,7 +1323,9 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 	LLStrider<LLColor4U> colors;
 	LLStrider<LLVector3> tangent;
 	LLStrider<U16> indicesp;
-	LLStrider<LLVector4> wght;
+	// <FS:Ansariel> Vectorized Weight4Strider and ClothWeightStrider by Drake Arconis
+	//LLStrider<LLVector4> wght;
+	LLStrider<LLVector4a> wght;
 
 	BOOL full_rebuild = force_rebuild || mDrawablep->isState(LLDrawable::REBUILD_VOLUME);
 	
@@ -2185,8 +2194,14 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		{
 			LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_WEIGHTS);
 			mVertexBuffer->getWeight4Strider(wght, mGeomIndex, mGeomCount, map_range);
-			F32* weights = (F32*) wght.get();
-			LLVector4a::memcpyNonAliased16(weights, (F32*) vf.mWeights, num_vertices*4*sizeof(F32));
+			// <FS:Ansariel> Vectorized Weight4Strider and ClothWeightStrider by Drake Arconis
+			//F32* weights = (F32*) wght.get();
+			//LLVector4a::memcpyNonAliased16(weights, (F32*) vf.mWeights, num_vertices*4*sizeof(F32));
+			for (S32 i = 0; i < num_vertices; ++i)
+			{
+				*(wght++) = vf.mWeights[i];
+			}
+			// </FS:Ansariel>
 			if (map_range)
 			{
 				mVertexBuffer->flush();
