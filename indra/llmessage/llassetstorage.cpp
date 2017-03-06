@@ -195,7 +195,8 @@ LLAssetRequest::LLAssetRequest(const LLUUID &uuid, const LLAssetType::EType type
         mInfoCallback( NULL ),
         mIsLocal(FALSE),
         mIsUserWaiting(FALSE),
-        mTimeout(LL_ASSET_STORAGE_TIMEOUT)
+        mTimeout(LL_ASSET_STORAGE_TIMEOUT),
+        mBytesFetched(0)
 {
 }
 
@@ -544,10 +545,45 @@ void LLAssetStorage::getAssetData(const LLUUID uuid,
                                       << "." << LLAssetType::lookup(type) << LL_ENDL;
         }
         
-        // This can be overridden by subclasses
         _queueDataRequest(uuid, type, callback, user_data, duplicate, is_priority);     
     }
+}
 
+// static
+void LLAssetStorage::removeAndCallbackPendingDownloads(const LLUUID& file_id, LLAssetType::EType file_type,
+                                                       const LLUUID& callback_id, LLAssetType::EType callback_type,
+                                                       S32 result_code, LLExtStat ext_status)
+{
+    // find and callback ALL pending requests for this UUID
+    // SJB: We process the callbacks in reverse order, I do not know if this is important,
+    //      but I didn't want to mess with it.
+    request_list_t requests;
+    for (request_list_t::iterator iter = gAssetStorage->mPendingDownloads.begin();
+         iter != gAssetStorage->mPendingDownloads.end();  )
+    {
+        request_list_t::iterator curiter = iter++;
+        LLAssetRequest* tmp = *curiter;
+        if ((tmp->getUUID() == file_id) && (tmp->getType()== file_type))
+        {
+            requests.push_front(tmp);
+            iter = gAssetStorage->mPendingDownloads.erase(curiter);
+        }
+    }
+    for (request_list_t::iterator iter = requests.begin();
+         iter != requests.end();  )
+    {
+        request_list_t::iterator curiter = iter++;
+        LLAssetRequest* tmp = *curiter;
+        if (tmp->mDownCallback)
+        {
+            if (result_code!= LL_ERR_NOERR)
+            {
+                add(sFailedDownloadCount, 1);
+            }
+            tmp->mDownCallback(gAssetStorage->mVFS, callback_id, callback_type, tmp->mUserData, result_code, ext_status);
+        }
+        delete tmp;
+    }
 }
 
 void LLAssetStorage::downloadCompleteCallback(
@@ -606,38 +642,23 @@ void LLAssetStorage::downloadCompleteCallback(
             result = LL_ERR_ASSET_REQUEST_NOT_IN_DATABASE;
             vfile.remove();
         }
+        else
+        {
+#if 1
+            for (request_list_t::iterator iter = gAssetStorage->mPendingDownloads.begin();
+                 iter != gAssetStorage->mPendingDownloads.end(); ++iter  )
+            {
+                LLAssetRequest* dlreq = *iter;
+                if ((dlreq->getUUID() == file_id) && (dlreq->getType()== file_type))
+                {
+                    dlreq->mBytesFetched = vfile.getSize();
+                }
+            }
+#endif
+        }
     }
 
-    // find and callback ALL pending requests for this UUID
-    // SJB: We process the callbacks in reverse order, I do not know if this is important,
-    //      but I didn't want to mess with it.
-    request_list_t requests;
-    for (request_list_t::iterator iter = gAssetStorage->mPendingDownloads.begin();
-         iter != gAssetStorage->mPendingDownloads.end();  )
-    {
-        request_list_t::iterator curiter = iter++;
-        LLAssetRequest* tmp = *curiter;
-        if ((tmp->getUUID() == file_id) && (tmp->getType()== file_type))
-        {
-            requests.push_front(tmp);
-            iter = gAssetStorage->mPendingDownloads.erase(curiter);
-        }
-    }
-    for (request_list_t::iterator iter = requests.begin();
-         iter != requests.end();  )
-    {
-        request_list_t::iterator curiter = iter++;
-        LLAssetRequest* tmp = *curiter;
-        if (tmp->mDownCallback)
-        {
-            if (result != LL_ERR_NOERR)
-            {
-                add(sFailedDownloadCount, 1);
-            }
-            tmp->mDownCallback(gAssetStorage->mVFS, callback_id, callback_type, tmp->mUserData, result, ext_status);
-        }
-        delete tmp;
-    }
+    removeAndCallbackPendingDownloads(file_id, file_type, callback_id, callback_type, ext_status, result);
 }
 
 void LLAssetStorage::getEstateAsset(
@@ -799,19 +820,6 @@ void LLAssetStorage::getInvItemAsset(
 {
     LL_DEBUGS() << "LLAssetStorage::getInvItemAsset() - " << asset_id << "," << LLAssetType::lookup(atype) << LL_ENDL;
 
-    //
-    // Probably will get rid of this early out?
-    //
-    //if (asset_id.isNull())
-    //{
-    //  // Special case early out for NULL uuid
-    //  if (callback)
-    //  {
-    //      callback(mVFS, asset_id, atype, user_data, LL_ERR_ASSET_REQUEST_NOT_IN_DATABASE);
-    //  }
-    //  return;
-    //}
-
     bool exists = false; 
     U32 size = 0;
 
@@ -872,6 +880,8 @@ void LLAssetStorage::getInvItemAsset(
             spi.setInvItem(owner_id, task_id, item_id);
             spi.setAsset(asset_id, atype);
 
+            LL_DEBUGS("ViewerAsset") << "requesting inv item id " << item_id << " asset_id " << asset_id << " type " << LLAssetType::lookup(atype) << LL_ENDL;
+            
             // Set our destination file, and the completion callback.
             LLTransferTargetParamsVFile tpvf;
             tpvf.setAsset(asset_id, atype);

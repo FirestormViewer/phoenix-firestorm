@@ -138,6 +138,7 @@ public:
 	BOOL	mIsUserWaiting;		// We don't want to try forever if a user is waiting for a result.
 	F64Seconds		mTimeout;			// Amount of time before timing out.
 	LLUUID	mRequestingAgentID;	// Only valid for uploads from an agent
+    F64	mBytesFetched;
 
 	virtual LLSD getTerseDetails() const;
 	virtual LLSD getFullDetails() const;
@@ -319,6 +320,10 @@ public:
                               const LLUUID& asset_id);
 
 
+    static void removeAndCallbackPendingDownloads(const LLUUID& file_id, LLAssetType::EType file_type,
+                                                  const LLUUID& callback_id, LLAssetType::EType callback_type,
+                                                  S32 result_code, LLExtStat ext_status);
+    
 	// download process callbacks
 	static void downloadCompleteCallback(
 		S32 result,

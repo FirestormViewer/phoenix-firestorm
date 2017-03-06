@@ -33,12 +33,14 @@
 #include "message.h"
 
 #include "llagent.h"
+#include "llviewerregion.h"
 
-// FIXME asset-http: We are the only customer for gTransferManager - the
-// whole class can be yanked once everything is http-ified.
 #include "lltransfersourceasset.h"
 #include "lltransfertargetvfile.h"
 #include "llviewerassetstats.h"
+#include "llcoros.h"
+#include "lleventcoro.h"
+#include "llsdutil.h"
 
 ///----------------------------------------------------------------------------
 /// LLViewerAssetRequest
@@ -54,9 +56,10 @@
 class LLViewerAssetRequest : public LLAssetRequest
 {
 public:
-    LLViewerAssetRequest(const LLUUID &uuid, const LLAssetType::EType type)
+    LLViewerAssetRequest(const LLUUID &uuid, const LLAssetType::EType type, bool with_http)
         : LLAssetRequest(uuid, type),
-          mMetricsStartTime(0)
+          mMetricsStartTime(0),
+          mWithHTTP(with_http)
     {
     }
     
@@ -76,16 +79,18 @@ protected:
         {
             // Okay, it appears this request was used for useful things.  Record
             // the expected dequeue and duration of request processing.
-            LLViewerAssetStatsFF::record_dequeue(mType, false, false);
-            LLViewerAssetStatsFF::record_response(mType, false, false,
+            LLViewerAssetStatsFF::record_dequeue(mType, mWithHTTP, false);
+            LLViewerAssetStatsFF::record_response(mType, mWithHTTP, false,
                                                   (LLViewerAssetStatsFF::get_timestamp()
-                                                   - mMetricsStartTime));
+                                                   - mMetricsStartTime),
+                                                  mBytesFetched);
             mMetricsStartTime = (U32Seconds)0;
         }
     }
     
 public:
     LLViewerAssetStats::duration_t      mMetricsStartTime;
+    bool mWithHTTP;
 };
 
 ///----------------------------------------------------------------------------
@@ -345,10 +350,31 @@ void LLViewerAssetStorage::_queueDataRequest(
     BOOL duplicate,
     BOOL is_priority)
 {
+    if (LLAssetType::lookupFetchWithVACap(atype))
+    {
+        queueRequestHttp(uuid, atype, callback, user_data, duplicate, is_priority);
+    }
+    else
+    {
+        queueRequestUDP(uuid, atype, callback, user_data, duplicate, is_priority);
+    }
+}
+
+void LLViewerAssetStorage::queueRequestUDP(
+    const LLUUID& uuid,
+    LLAssetType::EType atype,
+    LLGetAssetCallback callback,
+    void *user_data,
+    BOOL duplicate,
+    BOOL is_priority)
+{
+    LL_DEBUGS("ViewerAsset") << "Request asset via UDP " << uuid << " type " << LLAssetType::lookup(atype) << LL_ENDL;
+
     if (mUpstreamHost.isOk())
     {
         // stash the callback info so we can find it after we get the response message
-        LLViewerAssetRequest *req = new LLViewerAssetRequest(uuid, atype);
+		bool with_http = false;
+        LLViewerAssetRequest *req = new LLViewerAssetRequest(uuid, atype, with_http);
         req->mDownCallback = callback;
         req->mUserData = user_data;
         req->mIsPriority = is_priority;
@@ -377,7 +403,9 @@ void LLViewerAssetStorage::_queueDataRequest(
             LLTransferTargetChannel *ttcp = gTransferManager.getTargetChannel(mUpstreamHost, LLTCT_ASSET);
             ttcp->requestTransfer(spa, tpvf, 100.f + (is_priority ? 1.f : 0.f));
 
-            LLViewerAssetStatsFF::record_enqueue(atype, false, false);
+            bool with_http = false;
+            bool is_temp = false;
+            LLViewerAssetStatsFF::record_enqueue(atype, with_http, is_temp);
         }
     }
     else
@@ -391,3 +419,128 @@ void LLViewerAssetStorage::_queueDataRequest(
     }
 }
 
+void LLViewerAssetStorage::queueRequestHttp(
+    const LLUUID& uuid,
+    LLAssetType::EType atype,
+    LLGetAssetCallback callback,
+    void *user_data,
+    BOOL duplicate,
+    BOOL is_priority)
+{
+    LL_DEBUGS("ViewerAsset") << "Request asset via HTTP " << uuid << " type " << LLAssetType::lookup(atype) << LL_ENDL;
+    std::string cap_url = gAgent.getRegion()->getCapability("ViewerAsset");
+    if (cap_url.empty())
+    {
+        LL_WARNS() << "No ViewerAsset cap found, fetch fails" << LL_ENDL;
+        // TODO asset-http: handle waiting for caps? Other failure mechanism?
+        return;
+    }
+    else
+    {
+        LL_DEBUGS("ViewerAsset") << "Will fetch via ViewerAsset cap " << cap_url << LL_ENDL;
+
+        bool with_http = true;
+        LLViewerAssetRequest *req = new LLViewerAssetRequest(uuid, atype, with_http);
+        req->mDownCallback = callback;
+        req->mUserData = user_data;
+        req->mIsPriority = is_priority;
+        if (!duplicate)
+        {
+            // Only collect metrics for non-duplicate requests.  Others 
+            // are piggy-backing and will artificially lower averages.
+            req->mMetricsStartTime = LLViewerAssetStatsFF::get_timestamp();
+        }
+        mPendingDownloads.push_back(req);
+
+        // This is the same as the current UDP logic - don't re-request a duplicate.
+        if (!duplicate)
+        {
+            bool with_http = true;
+            bool is_temp = false;
+            LLViewerAssetStatsFF::record_enqueue(atype, with_http, is_temp);
+
+            LLCoros::instance().launch("LLViewerAssetStorage::assetRequestCoro",
+                                       boost::bind(&LLViewerAssetStorage::assetRequestCoro, this, req, uuid, atype, callback, user_data));
+        }
+    }
+}
+
+void LLViewerAssetStorage::assetRequestCoro(
+    LLViewerAssetRequest *req,
+    const LLUUID& uuid,
+    LLAssetType::EType atype,
+    LLGetAssetCallback callback,
+    void *user_data)
+{
+    std::string url = getAssetURL(uuid,atype);
+    LL_DEBUGS("ViewerAsset") << "request url: " << url << LL_ENDL;
+
+    LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
+    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
+        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("assetRequestCoro", httpPolicy));
+    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+    LLCore::HttpOptions::ptr_t httpOpts = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
+
+    LLSD result = httpAdapter->getRawAndSuspend(httpRequest, url, httpOpts);
+
+    S32 result_code = LL_ERR_NOERR;
+    LLExtStat ext_status = LL_EXSTAT_NONE;
+    
+    LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+    if (!status)
+    {
+        // TODO asset-http: handle failures
+        LL_DEBUGS("ViewerAsset") << "request failed, status " << status.toTerseString() << ", now what?" << LL_ENDL;
+        result_code = LL_ERR_ASSET_REQUEST_FAILED;
+        ext_status = LL_EXSTAT_NONE;
+    }
+    else
+    {
+        LL_DEBUGS("ViewerAsset") << "request succeeded, url " << url << LL_ENDL;
+
+        const LLSD::Binary &raw = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
+
+        S32 size = raw.size();
+        if (size > 0)
+        {
+			// This create-then-rename flow is modeled on LLTransferTargetVFile, which is what's used in the UDP case.
+            LLUUID temp_id;
+            temp_id.generate();
+            LLVFile vf(gAssetStorage->mVFS, temp_id, atype, LLVFile::WRITE);
+            vf.setMaxSize(size);
+            req->mBytesFetched = size;
+            if (!vf.write(raw.data(),size))
+            {
+                // TODO asset-http: handle error
+                LL_WARNS() << "Failure in vf.write()" << LL_ENDL;
+                result_code = LL_ERR_ASSET_REQUEST_FAILED;
+                ext_status = LL_EXSTAT_VFS_CORRUPT;
+            }
+            if (!vf.rename(uuid, atype))
+            {
+                LL_WARNS() << "rename failed" << LL_ENDL;
+                result_code = LL_ERR_ASSET_REQUEST_FAILED;
+                ext_status = LL_EXSTAT_VFS_CORRUPT;
+            }
+        }
+        else
+        {
+            // TODO asset-http: handle invalid size case
+			LL_WARNS() << "bad size" << LL_ENDL;
+            result_code = LL_ERR_ASSET_REQUEST_FAILED;
+            ext_status = LL_EXSTAT_NONE;
+        }
+    }
+
+    // Clean up pending downloads and trigger callbacks
+    removeAndCallbackPendingDownloads(uuid, atype, uuid, atype, result_code, ext_status);
+}
+
+std::string LLViewerAssetStorage::getAssetURL(const LLUUID& uuid, LLAssetType::EType atype)
+{
+	std::string cap_url = gAgent.getRegion()->getViewerAssetUrl();
+    std::string type_name = LLAssetType::lookup(atype);
+    std::string url = cap_url + "/?" + type_name + "_id=" + uuid.asString();
+    return url;
+}
