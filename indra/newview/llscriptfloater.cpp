@@ -127,47 +127,9 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	//LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
 	floater->setAutoFocus(FALSE);
 
-	LLScriptFloaterManager::e_object_type floaterType=LLScriptFloaterManager::getObjectType(notification_id);
-
-	// for some reason an inventory offer comes back as OBJ_UNKNOWN -Zi
-	if(floaterType==LLScriptFloaterManager::OBJ_UNKNOWN ||
-	   floaterType==LLScriptFloaterManager::OBJ_SCRIPT)
+	if(LLScriptFloaterManager::OBJ_SCRIPT == LLScriptFloaterManager::getObjectType(notification_id))
 	{
 		floater->setSavePosition(true);
-		if(gSavedSettings.getBOOL("ShowScriptDialogsTopRight") ||
-		   gSavedSettings.getBOOL("FSDisableIMChiclets")
-		)
-		{
-			// undock the dialog
-			floater->setDocked(false,true);
-			LLRect pos=floater->getRect();
-
-			S32 width=pos.getWidth();
-			S32 height=pos.getHeight();
-			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width,
-								 gViewerWindow->getWorldViewHeightScaled()-height,
-								 width,height);
-			floater->setRect(pos);
-			floater->savePosition();
-		}
-		// do this only for inventory offers -Zi
-		else if(floaterType==LLScriptFloaterManager::OBJ_UNKNOWN)
-		{
-			// undock the dialog
-			floater->setDocked(false,true);
-			LLRect pos=floater->getRect();
-
-			S32 width=pos.getWidth();
-			S32 height=pos.getHeight();
-
-			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width,
-								 gViewerWindow->getWorldViewHeightScaled()-height,
-								 width,height);
-
-			floater->setRect(pos);
-			floater->savePosition();
-		}
-
 		floater->restorePosition();
 	}
 	else
@@ -891,16 +853,6 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	// </FS:PP>
 	{
 		eDialogPosition dialog_position = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
-
-		if (dialog_position == POS_LEGACY)
-		{
-			dialog_position = POS_TOP_RIGHT;
-			if (!gSavedSettings.getBOOL("ShowScriptDialogsTopRight"))
-			{
-				dialog_position = POS_DOCKED;
-			}
-			gSavedSettings.setS32("ScriptDialogsPosition", (S32)dialog_position);
-		}
 
 		if (dialog_position == POS_DOCKED && chicletsDisabled)
 		{

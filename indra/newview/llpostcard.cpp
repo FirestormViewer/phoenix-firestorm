@@ -38,12 +38,17 @@
 #include "llassetstorage.h"
 #include "llviewerassetupload.h"
 
+#include "llviewernetwork.h"
 ///////////////////////////////////////////////////////////////////////////////
 
-LLPostcardUploadInfo::LLPostcardUploadInfo(std::string nameFrom, std::string emailTo,
+// <FS:Ansariel> For OpenSim compatibility
+//LLPostcardUploadInfo::LLPostcardUploadInfo(std::string nameFrom, std::string emailTo,
+LLPostcardUploadInfo::LLPostcardUploadInfo(std::string emailFrom, std::string nameFrom, std::string emailTo,
+// </FS:Ansariel>
         std::string subject, std::string message, LLVector3d globalPosition,
         LLPointer<LLImageFormatted> image, invnUploadFinish_f finish) :
     LLBufferedAssetUploadInfo(LLUUID::null, image, finish),
+    mEmailFrom(emailFrom), // <FS:Ansariel> For OpenSim compatibility
     mNameFrom(nameFrom),
     mEmailTo(emailTo),
     mSubject(subject),
@@ -57,6 +62,12 @@ LLSD LLPostcardUploadInfo::generatePostBody()
     LLSD postcard = LLSD::emptyMap();
     postcard["pos-global"] = mGlobalPosition.getValue();
     postcard["to"] = mEmailTo;
+    // <FS:Ansariel> For OpenSim compatibility
+    if (!LLGridManager::instance().isInSecondLife())
+    {
+        postcard["from"] = mEmailFrom;
+    }
+    // </FS:Ansariel>
     postcard["name"] = mNameFrom;
     postcard["subject"] = mSubject;
     postcard["msg"] = mMessage;

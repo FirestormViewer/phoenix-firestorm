@@ -50,7 +50,6 @@
 			Skriptdialog-Position:
 		</text>
 		<combo_box name="ScriptDialogsPositionDropdown" tool_tip="Auswählen, wo Skriptdialoge (Menüs) auf dem Bildschirm erscheinen sollen.">
-			<combo_box.item label="Import alter Wert" name="ScriptDialogPositionOption_0"/>
 			<combo_box.item label="Am Chiclet angedockt" name="ScriptDialogPositionOption_1"/>
 			<combo_box.item label="Oben links" name="ScriptDialogPositionOption_2"/>
 			<combo_box.item label="Oben rechts" name="ScriptDialogPositionOption_3"/>
