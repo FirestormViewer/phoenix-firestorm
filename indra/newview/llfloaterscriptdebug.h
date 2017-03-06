@@ -39,7 +39,10 @@ public:
 	LLFloaterScriptDebug(const LLSD& key);
 	virtual ~LLFloaterScriptDebug();
 	virtual BOOL postBuild();
+	//virtual void setVisible(BOOL visible); // <FS:Ansariel> Improved script debug floater
 	static void show(const LLUUID& object_id);
+
+    /*virtual*/ //void closeFloater(bool app_quitting = false); // <FS:Ansariel> Improved script debug floater
 	// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
 	// static void addScriptLine(const std::string &utf8mesg, const std::string &user_name, const LLColor4& color, const LLUUID& source_id);
 	static void addScriptLine(const LLChat& chat);

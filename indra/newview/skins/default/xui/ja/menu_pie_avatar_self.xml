@@ -88,7 +88,10 @@
         name="Appearance &gt;">
         <pie_slice label="シェイプを編集"
            name="Edit My Shape"/>
-        <pie_separator />
+        <pie_menu name="ResetMenu" label="リセット &gt;">
+			<pie_slice label="スケルトンとアニメ" name="Reset Skeleton And Animations" />
+			<pie_slice label="スケルトン" name="Reset Skeleton" />
+		</pie_menu>
         <pie_slice
             label="テクスチャ更新"
             name="Texture Refresh"/>

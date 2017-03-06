@@ -6745,10 +6745,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Die Region, in der Sie sich gerade befinden, ist dabei neu zu starten. Falls Sie in dieser Region bleiben, werden Sie ausgeloggt.
 	</string>
 	<string name="Mute_Add">
-		„[NAME]“ has been added to the blocklist.
+		„[NAME]“ wurde zur Blockierliste hinzugefügt.
 	</string>
 	<string name="Mute_Remove">
-		„[NAME]“ has been removed from the blocklist.
+		„[NAME]“ wurde von der Blockierliste entfernt.
 	</string>
 	<string name="Reqsysinfo_Chat_NoReason">
 		Ich frage Informationen über Ihr System ab.

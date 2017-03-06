@@ -61,7 +61,6 @@
 			スクリプトダイアログの表示位置:
 		</text>
 		<combo_box name="ScriptDialogsPositionDropdown" tool_tip="スクリプトダイアログ（メニュー）を表示したい場所を選択して下さい。">
-			<combo_box.item label="前回の値を引き継ぐ" name="ScriptDialogPositionOption_0"/>
 			<combo_box.item label="ミニアイコンにドッキング" name="ScriptDialogPositionOption_1"/>
 			<combo_box.item label="左上" name="ScriptDialogPositionOption_2"/>
 			<combo_box.item label="右上" name="ScriptDialogPositionOption_3"/>
@@ -123,7 +122,8 @@
 		<check_box label="名前をクリックするとアバターのプロフィールをすぐに表示" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Iここにチェックを入れると、名前の表示されているリンクをクリックすると Firestorm はそのアバターのプロフィールを表示します。" />
 		<check_box label="Webのプロフィールをデフォルトで使用" name="FSUseWebProfiles" tool_tip="プロフィールを表示するのに、V1形式のパネルではなく、Webページのプロフィールを使用します。"/>
 		<check_box label="無視リストが自動的に開かないようにする" name="FSDisableBlockListAutoOpen" tool_tip="アバターやオブジェクトをブロックする時に、無視リストが自動的に開かないようにします。" />
-		<check_box label="「コミュニケーション」メニューの「フレンド」と「所属グループ」をV3形式のウィンドウで開く" name="FSUseV2Friends" tool_tip="ここにチェックを入れると、「フレンド」や「所属グループ」を「人」パネルで開くようになります。チェックを入れない場合は、「連絡先」パネルで開きます。"/>
+		<check_box label="「コミュニケーション」メニューの「フレンド」と「所属グループ」をV5形式のウィンドウで開く" name="FSUseV2Friends" tool_tip="ここにチェックを入れると、「フレンド」や「所属グループ」を「人」パネルで開くようになります。チェックを入れない場合は、「連絡先」パネルで開きます。"/>
+		<check_box label="古いタイプのオブジェクト・プロパティを使用" name="FSUseLegacyObjectProperties" tool_tip="ここにチェックを入れると、オブジェクトのプロパティを開く時に、古いタイプのオブジェクト・プロパティが使用されます。"/>
 		<text name="standalone_textbox">
 			次の項目に独立したウィンドウを使用:
 		</text>

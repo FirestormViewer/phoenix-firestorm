@@ -59,6 +59,7 @@
 #include "llwindow.h"
 
 #include "llnotificationsutil.h"		// <FS:Zi> Add float LSL color entry widgets
+#include <boost/algorithm/string_regex.hpp>
 
 // System includes
 #include <sstream>
@@ -744,7 +745,7 @@ void LLFloaterColorPicker::updateTextEntry ()
 	getChild<LLUICtrl>("gspin_lsl")->setValue(( getCurG () ) );
 	getChild<LLUICtrl>("bspin_lsl")->setValue(( getCurB () ) );
 
-	getChild<LLUICtrl>("hex_value")->setValue(llformat("%02x%02x%02x",(S32) (getCurR()*255.0),(S32) (getCurG()*255.0),(S32) (getCurB()*255.0)));
+	getChild<LLUICtrl>("hex_value")->setValue(llformat("%02x%02x%02x", (S32)(getCurR() * 255.f), (S32)(getCurG() * 255.f), (S32)(getCurB() * 255.f)));
 	// </FS:Zi>
 }
 
@@ -805,7 +806,7 @@ void LLFloaterColorPicker::onTextEntryChanged ( LLUICtrl* ctrl )
 		}
 
 		// update current RGB (and implicitly HSL)
-		setCurRgb ( rVal, gVal, bVal );
+		selectCurRgb ( rVal, gVal, bVal );
 
 		updateTextEntry ();
 	}
@@ -816,24 +817,23 @@ void LLFloaterColorPicker::onTextEntryChanged ( LLUICtrl* ctrl )
 		F32 rVal, gVal, bVal;
 		getCurRgb ( rVal, gVal, bVal );
 
-		std::string hex_string=ctrl->getValue().asString();
+		std::string hex_string = ctrl->getValue().asString();
 
-		if(hex_string.length()!=6)
+		std::string reg_ex("[[:xdigit:]]{6}");
+		boost::regex pattern(reg_ex.c_str());
+		if (!boost::regex_match(hex_string, pattern))
+		{
 			return;
+		}
 
-		LLStringUtil::toLower(hex_string);
+		sscanf(hex_string.c_str(), "%02x%02x%02x", &r, &g, &b);
 
-		if(hex_string.find_first_not_of("0123456789abcdef")!=std::string::npos)
-			return;
-
-		sscanf(hex_string.c_str(),"%02x%02x%02x", &r,&g,&b);
-
-		rVal=(F32) r/255.0;
-		gVal=(F32) g/255.0;
-		bVal=(F32) b/255.0;
+		rVal = F32(r) / 255.f;
+		gVal = F32(g) / 255.f;
+		bVal = F32(b) / 255.f;
 
 		// update current RGB (and implicitly HSL)
-		setCurRgb ( rVal, gVal, bVal );
+		selectCurRgb ( rVal, gVal, bVal );
 
 		updateTextEntry ();
 	}
@@ -1217,11 +1217,11 @@ void LLFloaterColorPicker::onClickCopyLSL ( void* data )
 {
 	if (data)
 	{
-		LLFloaterColorPicker* self = ( LLFloaterColorPicker* )data;
+		LLFloaterColorPicker* self = (LLFloaterColorPicker*)data;
 
-		if ( self )
+		if (self)
 		{
-			getWindow()->copyTextToClipboard(utf8str_to_wstring(llformat("<%.3f, %.3f, %.3f>",self->getCurR(),self->getCurG(),self->getCurB())));
+			getWindow()->copyTextToClipboard(utf8str_to_wstring(llformat("<%.3f, %.3f, %.3f>", self->getCurR(), self->getCurG(), self->getCurB())));
 			LLNotificationsUtil::add("LSLColorCopiedToClipboard");
 		}
 	}

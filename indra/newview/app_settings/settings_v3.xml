@@ -183,16 +183,16 @@
     <integer>0</integer>
   </map>
 
-  <key>ShowScriptDialogsTopRight</key>
+  <key>ScriptDialogsPosition</key>
   <map>
     <key>Comment</key>
-    <string>Show script llDialog floaters always in the top right corner of the screen.</string>
+    <string>Holds the position where script llDialog floaters will show up. 1 = docked to chiclet, 2 = top left, 3 = top right, 4 = bottom left, 5 = bottom right</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
-    <string>Boolean</string>
+    <string>S32</string>
     <key>Value</key>
-    <integer>0</integer>
+    <integer>1</integer>
   </map>
 
   <key>EnableGroupChatPopups</key>

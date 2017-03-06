@@ -45,6 +45,8 @@
 
 #include <boost/regex.hpp>
 
+#include "llviewernetwork.h"
+
 /**
  * Sends postcard via email.
  */
@@ -58,7 +60,7 @@ public:
 	/*virtual*/ ~LLPanelSnapshotPostcard(); // <FS:Ansariel> Store settings at logout
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
-	/*virtual*/ S32	notify(const LLSD& info);
+	/*virtual*/ S32	notify(const LLSD& info); // <FS:Ansariel> For OpenSim compatibility
 
 private:
 	/*virtual*/ std::string getWidthSpinnerName() const		{ return "postcard_snapshot_width"; }
@@ -80,7 +82,7 @@ private:
 	void onSend();
 
 	bool mHasFirstMsgFocus;
-	std::string mAgentEmail;
+	std::string mAgentEmail; // <FS:Ansariel> For OpenSim compatibility
 };
 
 static LLPanelInjector<LLPanelSnapshotPostcard> panel_class("llpanelsnapshotpostcard");
@@ -115,19 +117,28 @@ BOOL LLPanelSnapshotPostcard::postBuild()
 // virtual
 void LLPanelSnapshotPostcard::onOpen(const LLSD& key)
 {
+	// <FS:Ansariel> Fill "From" field
+	LLLineEditor* from = getChild<LLLineEditor>("name_form");
+	if (from->getText().empty())
+	{
+		std::string name_string;
+		LLAgentUI::buildFullname(name_string);
+		from->setText(name_string);
+	}
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> For OpenSim compatibility
 	// pick up the user's up-to-date email address
 	if (mAgentEmail.empty())
 	{
 		gAgent.sendAgentUserInfoRequest();
-
-		std::string name_string;
-		LLAgentUI::buildFullname(name_string);
-		getChild<LLUICtrl>("name_form")->setValue(LLSD(name_string));
 	}
+	// </FS:Ansariel>
 
 	LLPanelSnapshot::onOpen(key);
 }
 
+// <FS:Ansariel> For OpenSim compatibility
 // virtual
 S32 LLPanelSnapshotPostcard::notify(const LLSD& info)
 {
@@ -144,6 +155,7 @@ S32 LLPanelSnapshotPostcard::notify(const LLSD& info)
 
 	return 1;
 }
+// </FS:Ansariel>
 
 // virtual
 void LLPanelSnapshotPostcard::updateControls(const LLSD& info)
@@ -197,7 +209,7 @@ void LLPanelSnapshotPostcard::sendPostcard()
     if (!url.empty())
     {
         LLResourceUploadInfo::ptr_t uploadInfo(new LLPostcardUploadInfo(
-            mAgentEmail,
+            mAgentEmail, // <FS:Ansariel> For OpenSim compatibility; LLResourceUploadInfo will omit this in case of SL
             getChild<LLUICtrl>("name_form")->getValue().asString(),
             getChild<LLUICtrl>("to_form")->getValue().asString(),
             getChild<LLUICtrl>("subject_form")->getValue().asString(),
@@ -260,11 +272,13 @@ void LLPanelSnapshotPostcard::onSend()
 		return;
 	}
 
-	if (mAgentEmail.empty() || !boost::regex_match(mAgentEmail, email_format))
+	// <FS:Ansariel> For OpenSim compatibility
+	if (!LLGridManager::instance().isInSecondLife() && (mAgentEmail.empty() || !boost::regex_match(mAgentEmail, email_format)))
 	{
 		LLNotificationsUtil::add("PromptSelfEmail");
 		return;
 	}
+	// </FS:Ansariel>
 
 	std::string subject(getChild<LLUICtrl>("subject_form")->getValue().asString());
 	if(subject.empty() || !mHasFirstMsgFocus)

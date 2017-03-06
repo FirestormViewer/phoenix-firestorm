@@ -1485,24 +1485,6 @@
          width="468"/>
         <slider
          enabled_control="RenderDepthOfField"
-         control_name="CameraAspectRatio"
-         decimal_digits="2"
-         follows="left|top"
-         height="16"
-         increment="0.05"
-         initial_value="1.5"
-         label="Camera Aspect Ratio:"
-         label_width="160"
-         layout="topleft"
-         left_delta="0"
-         max_val="5"
-         min_val="0"
-         name="CameraAspectRatio"
-         tool_tip="Camera aspect ratio for DoF effect"
-         top_pad="5"
-         width="471"/>
-        <slider
-         enabled_control="RenderDepthOfField"
          control_name="CameraFocusTransitionTime"
          decimal_digits="2"
          follows="left|top"

@@ -235,8 +235,7 @@ public:
 // <FS:Zi> script dialogs position
 	enum eDialogPosition
 	{
-		POS_LEGACY,			//	Use ShowScriptDialogsTopRight once and convert to one of these
-		POS_DOCKED,
+		POS_DOCKED = 1,
 		POS_TOP_LEFT,
 		POS_TOP_RIGHT,
 		POS_BOTTOM_LEFT,
