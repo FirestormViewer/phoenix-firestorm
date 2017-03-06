@@ -2484,6 +2484,12 @@ void LLAgent::endAnimationUpdateUI()
 			{
 				skip_list.insert(LLFloaterReg::findInstance("mini_map"));
 			}
+			// <FS:Ansariel> Beacons floater doesn't need to be open for us to show beacons
+			//if (LLFloaterReg::findInstance("beacons"))
+			//{
+			//	skip_list.insert(LLFloaterReg::findInstance("beacons"));
+			//}
+			// </FS:Ansariel>
 			if(gSavedSettings.getBOOL("FSShowStatsBarInMouselook"))
 			{
 				skip_list.insert(LLFloaterReg::findInstance("stats"));
@@ -2656,6 +2662,8 @@ void LLAgent::endAnimationUpdateUI()
 #else // Use this for now
 		LLFloaterView::skip_list_t skip_list;
 		skip_list.insert(LLFloaterReg::findInstance("mini_map"));
+		// <FS:Ansariel> Beacons floater doesn't need to be open for us to show beacon
+		//skip_list.insert(LLFloaterReg::findInstance("beacons"));
 		if(gSavedSettings.getBOOL("FSShowStatsBarInMouselook"))
 		{
 			skip_list.insert(LLFloaterReg::findInstance("stats"));

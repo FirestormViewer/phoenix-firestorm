@@ -424,7 +424,7 @@ teksturę:
 			<spinner label="Godziny dostępu:" name="HoursSpin"/>
 			<panel name="Allowed_layout_panel">
 				<text label="Zawsze Zezwalaj" name="AllowedText">
-					Dozwoleni Rezydenci ([LISTED]/[MAX])
+					Dozwoleni Rezydenci ([COUNT]/[MAX])
 				</text>
 				<name_list name="AccessList" tool_tip="([LISTED] na liście, [MAX] maksimum)"/>
 				<button label="Dodaj" name="add_allowed"/>
@@ -432,7 +432,7 @@ teksturę:
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="Banuj" name="BanCheck">
-					Zbanowani Rezydenci ([LISTED]/[MAX])
+					Zbanowani Rezydenci ([COUNT]/[MAX])
 				</text>
 				<name_list name="BannedList" tool_tip="([LISTED] na liście, [MAX] maksimum)"/>
 				<button label="Dodaj" name="add_banned"/>

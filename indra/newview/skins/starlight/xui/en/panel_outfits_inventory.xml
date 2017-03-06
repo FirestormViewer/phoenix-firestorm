@@ -34,6 +34,7 @@
      tab_height="23"
      tab_position="top"
      halign="center"
+     hide_scroll_arrows="true"
      top="8"
      width="315">
          <panel

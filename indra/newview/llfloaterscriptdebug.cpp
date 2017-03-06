@@ -34,6 +34,7 @@
 #include "llrect.h"
 #include "llerror.h"
 #include "llstring.h"
+#include "llvoavatarself.h"
 #include "message.h"
 #include "lltrans.h"
 
@@ -89,6 +90,38 @@ BOOL LLFloaterScriptDebug::postBuild()
 	return FALSE;
 }
 
+// <FS:Ansariel> Improved script debug floater
+//void LLFloaterScriptDebug::setVisible(BOOL visible)
+//{
+//	if(visible)
+//	{
+//		LLFloaterScriptDebugOutput* floater_output = LLFloaterReg::findTypedInstance<LLFloaterScriptDebugOutput>("script_debug_output", LLUUID::null);
+//		if (floater_output == NULL)
+//		{
+//			floater_output = dynamic_cast<LLFloaterScriptDebugOutput*>(LLFloaterReg::showInstance("script_debug_output", LLUUID::null, FALSE));
+//			if (floater_output)
+//			{
+//				addFloater(floater_output, false);
+//			}
+//		}
+
+//	}
+//	LLMultiFloater::setVisible(visible);
+//}
+
+//void LLFloaterScriptDebug::closeFloater(bool app_quitting/* = false*/)
+//{
+//	if(app_quitting)
+//	{
+//		LLMultiFloater::closeFloater(app_quitting);
+//	}
+//	else
+//	{
+//		setVisible(false);
+//	}
+//}
+// </FS:Ansariel>
+
 // <FS:Ansariel> Script debug icon
 //LLFloater* LLFloaterScriptDebug::addOutputWindow(const LLUUID &object_id)
 LLFloater* LLFloaterScriptDebug::addOutputWindow(const LLUUID& object_id, bool show /* = false */)
@@ -132,7 +165,14 @@ void LLFloaterScriptDebug::addScriptLine(const LLChat& chat)
 		// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
 		if (chat.mChatType == CHAT_TYPE_DEBUG_MSG)
 		{
-			objectp->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
+			if(objectp->isHUDAttachment())
+			{
+				((LLViewerObject*)gAgentAvatarp)->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
+			}
+			else
+			{
+				objectp->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
+			}
 			// <FS:Ansariel> Mark script error icons
 			objectp->getIcon()->setScriptError();
 			// </FS:Ansariel> Mark script error icons
@@ -153,7 +193,7 @@ void LLFloaterScriptDebug::addScriptLine(const LLChat& chat)
 		floater_label = chat.mFromName;
 	}
 
-	addOutputWindow(LLUUID::null);
+	addOutputWindow(LLUUID::null); // <FS:Ansariel> Improved script debug floater
 	// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
 	// addOutputWindow(source_id);
 	static LLCachedControl<U32> FSllOwnerSayRouting(gSavedSettings, "FSllOwnerSayToScriptDebugWindowRouting");

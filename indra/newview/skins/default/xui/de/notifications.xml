@@ -4088,32 +4088,32 @@ Sie ist voll oder startet in Kürze neu.
 	<notification name="AvatarEjectFailed">
 		Hinauswerfen fehlgeschlagen, da Sie keine Admin-Berechtigung für diese Parzelle haben.
 	</notification>
-	<notification name="CantMoveObjectParcelFull">
-		Objekt „[OBJECT_NAME]“ kann nicht nach
-[OBJ_POSITION] in Region [REGION_NAME] verschoben werden, da die Parzelle voll ist.
+	<notification name="CMOParcelFull">
+		Objekt „[O]“ kann nicht nach
+[P] in Region [R] verschoben werden, da die Parzelle voll ist.
 	</notification>
-	<notification name="CantMoveObjectParcelPerms">
-		Objekt „[OBJECT_NAME]“ kann nicht nach
-[OBJ_POSITION] in Region [REGION_NAME] verschoben werden, da Ihre Objekte auf dieser Parzelle nicht gestattet sind.
+	<notification name="CMOParcelPerms">
+		Objekt „[O]“ kann nicht nach
+[P] in Region [R] verschoben werden, da Ihre Objekte auf dieser Parzelle nicht gestattet sind.
 	</notification>
-	<notification name="CantMoveObjectParcelResources">
-		Objekt „[OBJECT_NAME]“ kann nicht nach
-[OBJ_POSITION] in Region [REGION_NAME] verschoben werden, da nicht genügend Ressourcen für dieses Objekt auf dieser Parzelle vorhanden sind.
+	<notification name="CMOParcelResources">
+		Objekt „[O]“ kann nicht nach
+[P] in Region [R] verschoben werden, da nicht genügend Ressourcen für dieses Objekt auf dieser Parzelle vorhanden sind.
 	</notification>
 	<notification name="NoParcelPermsNoObject">
 		Kopiervorgang fehlgeschlagen, da Sie keinen Zugriff auf diese Parzelle haben.
 	</notification>
-	<notification name="CantMoveObjectRegionVersion">
-		Objekt „[OBJECT_NAME]“ kann nicht nach
-[OBJ_POSITION] in Region [REGION_NAME] verschoben werden, da die andere Region eine ältere Version verwendet, die das Empfangen dieses Objekts per Regionswechsel nicht unterstützt.
+	<notification name="CMORegionVersion">
+		Objekt „[O]“ kann nicht nach
+[P] in Region [R] verschoben werden, da die andere Region eine ältere Version verwendet, die das Empfangen dieses Objekts per Regionswechsel nicht unterstützt.
 	</notification>
-	<notification name="CantMoveObjectNavMesh">
-		Objekt „[OBJECT_NAME]“ kann nicht nach
-[OBJ_POSITION] in Region [REGION_NAME] verschoben werden, da Sie das Navmesh nicht regionsübergreifend modifizieren können.
+	<notification name="CMONavMesh">
+		Objekt „[O]“ kann nicht nach
+[P] in Region [R] verschoben werden, da Sie das Navmesh nicht regionsübergreifend modifizieren können.
 	</notification>
-	<notification name="CantMoveObjectWTF">
-		Objekt „[OBJECT_NAME]“ kann nicht nach
-[OBJ_POSITION] in Region [REGION_NAME] verschoben werden, da ein unbekannter Fehler vorliegt. ([FAILURE_TYPE])
+	<notification name="CMOWTF">
+		Objekt „[O]“ kann nicht nach
+[P] in Region [R] verschoben werden, da ein unbekannter Fehler vorliegt. ([FAILURE_TYPE])
 	</notification>
 	<notification name="NoPermModifyObject">
 		Ihnen fehlt die Berechtigung zum Modifizieren dieses Objekts.

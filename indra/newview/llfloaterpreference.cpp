@@ -658,6 +658,11 @@ BOOL LLFloaterPreference::postBuild()
 
 	gSavedSettings.getControl("PreferredMaturity")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeMaturity, this));
 
+	gSavedPerAccountSettings.getControl("ModelUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeModelFolder, this));
+	gSavedPerAccountSettings.getControl("TextureUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeTextureFolder, this));
+	gSavedPerAccountSettings.getControl("SoundUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeSoundFolder, this));
+	gSavedPerAccountSettings.getControl("AnimationUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeAnimationFolder, this));
+
 	LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
 	if (!tabcontainer->selectTab(gSavedSettings.getS32("LastPrefTab")))
 		tabcontainer->selectFirstTab();
@@ -769,6 +774,10 @@ BOOL LLFloaterPreference::postBuild()
 	gSavedSettings.getControl("FSTagShowARW")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
 	onAvatarTagSettingsChanged();
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> Correct enabled state of Animated Script Dialogs option
+	gSavedSettings.getControl("ScriptDialogsPosition")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateAnimatedScriptDialogs, this));
+	updateAnimatedScriptDialogs();
 
 	// <FS:Ansariel> Set max. UI scaling factor depending on max. supported OS scaling factor
 #if LL_WINDOWS
@@ -1149,7 +1158,12 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 
 	// Display selected maturity icons.
 	onChangeMaturity();
-	
+
+	onChangeModelFolder();
+	onChangeTextureFolder();
+	onChangeSoundFolder();
+	onChangeAnimationFolder();
+
 	// Load (double-)click to walk/teleport settings.
 	updateClickActionControls();
 	
@@ -3229,6 +3243,63 @@ void LLFloaterPreference::onChangeMaturity()
 	getChild<LLIconCtrl>("rating_icon_adult")->setVisible(sim_access == SIM_ACCESS_ADULT);
 }
 
+std::string get_category_path(LLUUID cat_id)
+{
+    LLViewerInventoryCategory* cat = gInventory.getCategory(cat_id);
+    std::string localized_cat_name;
+    if (!LLTrans::findString(localized_cat_name, "InvFolder " + cat->getName()))
+    {
+        localized_cat_name = cat->getName();
+    }
+
+    if (cat->getParentUUID().notNull())
+    {
+        return get_category_path(cat->getParentUUID()) + " > " + localized_cat_name;
+    }
+    else
+    {
+        return localized_cat_name;
+    }
+}
+
+std::string get_category_path(LLFolderType::EType cat_type)
+{
+    LLUUID cat_id = gInventory.findUserDefinedCategoryUUIDForType(cat_type);
+    return get_category_path(cat_id);
+}
+
+void LLFloaterPreference::onChangeModelFolder()
+{
+    if (gInventory.isInventoryUsable())
+    {
+        getChild<LLTextBox>("upload_models")->setText(get_category_path(LLFolderType::FT_OBJECT));
+    }
+}
+
+void LLFloaterPreference::onChangeTextureFolder()
+{
+    if (gInventory.isInventoryUsable())
+    {
+        getChild<LLTextBox>("upload_textures")->setText(get_category_path(LLFolderType::FT_TEXTURE));
+    }
+}
+
+void LLFloaterPreference::onChangeSoundFolder()
+{
+    if (gInventory.isInventoryUsable())
+    {
+        getChild<LLTextBox>("upload_sounds")->setText(get_category_path(LLFolderType::FT_SOUND));
+    }
+}
+
+void LLFloaterPreference::onChangeAnimationFolder()
+{
+    if (gInventory.isInventoryUsable())
+    {
+        getChild<LLTextBox>("upload_animation")->setText(get_category_path(LLFolderType::FT_ANIMATION));
+    }
+}
+
 // FIXME: this will stop you from spawning the sidetray from preferences dialog on login screen
 // but the UI for this will still be enabled
 void LLFloaterPreference::onClickBlockList()
@@ -3437,6 +3508,14 @@ void LLFloaterPreference::onAvatarTagSettingsChanged()
 	bool arw_options_enabled = gSavedSettings.getBOOL("FSTagShowARW") && gSavedSettings.getS32("AvatarNameTagMode") > 0;
 	childSetEnabled("FSTagShowTooComplexOnlyARW", arw_options_enabled);
 	childSetEnabled("FSTagShowOwnARW", arw_options_enabled);
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Correct enabled state of Animated Script Dialogs option
+void LLFloaterPreference::updateAnimatedScriptDialogs()
+{
+	S32 position = gSavedSettings.getS32("ScriptDialogsPosition");
+	childSetEnabled("FSAnimatedScriptDialogs", position == 2 || position == 3);
 }
 // </FS:Ansariel>
 

@@ -1,7 +1,6 @@
 <llsd>
 	<array>
 		<string>AgentPause</string>
-		<string>CameraAspectRatio</string>
 		<string>CameraDoFResScale</string>
 		<string>CameraFieldOfView</string>
 		<string>CameraFocalLength</string>

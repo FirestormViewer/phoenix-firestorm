@@ -4134,6 +4134,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 		disabled_items.push_back(std::string("New Gesture"));
 		disabled_items.push_back(std::string("New Clothes"));
 		disabled_items.push_back(std::string("New Body Parts"));
+		disabled_items.push_back(std::string("upload_def"));
 	}
 	if (favorites == mUUID)
 	{
@@ -4160,6 +4161,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 		disabled_items.push_back(std::string("New Gesture"));
 		disabled_items.push_back(std::string("New Clothes"));
 		disabled_items.push_back(std::string("New Body Parts"));
+		disabled_items.push_back(std::string("upload_def"));
     }
     if (marketplace_listings_id == mUUID)
     {
@@ -4213,6 +4215,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                     items.push_back(std::string("New Gesture"));
                     items.push_back(std::string("New Clothes"));
                     items.push_back(std::string("New Body Parts"));
+                    items.push_back(std::string("upload_def"));
                 }
 			}
 			getClipboardEntries(false, items, disabled_items, flags);
