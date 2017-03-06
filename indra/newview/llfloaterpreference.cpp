@@ -775,6 +775,10 @@ BOOL LLFloaterPreference::postBuild()
 	onAvatarTagSettingsChanged();
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> Correct enabled state of Animated Script Dialogs option
+	gSavedSettings.getControl("ScriptDialogsPosition")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateAnimatedScriptDialogs, this));
+	updateAnimatedScriptDialogs();
+
 	// <FS:Ansariel> Set max. UI scaling factor depending on max. supported OS scaling factor
 #if LL_WINDOWS
 	if (IsWindowsVersionOrGreater(10, 0, 0))
@@ -3504,6 +3508,14 @@ void LLFloaterPreference::onAvatarTagSettingsChanged()
 	bool arw_options_enabled = gSavedSettings.getBOOL("FSTagShowARW") && gSavedSettings.getS32("AvatarNameTagMode") > 0;
 	childSetEnabled("FSTagShowTooComplexOnlyARW", arw_options_enabled);
 	childSetEnabled("FSTagShowOwnARW", arw_options_enabled);
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Correct enabled state of Animated Script Dialogs option
+void LLFloaterPreference::updateAnimatedScriptDialogs()
+{
+	S32 position = gSavedSettings.getS32("ScriptDialogsPosition");
+	childSetEnabled("FSAnimatedScriptDialogs", position == 2 || position == 3);
 }
 // </FS:Ansariel>
 

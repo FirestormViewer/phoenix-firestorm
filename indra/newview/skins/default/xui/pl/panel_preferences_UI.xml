@@ -46,7 +46,6 @@
             Pozycja komunikatów skryptów:
         </text>
         <combo_box name="ScriptDialogsPositionDropdown" tool_tip="Wybierz, w którym miejscu na ekranie mają się pojawiać komunikaty skryptów.">
-            <combo_box.item label="Importuj starą wartość" name="ScriptDialogPositionOption_0" />
             <combo_box.item label="Przyczepione do ikonek powiadomień" name="ScriptDialogPositionOption_1" />
             <combo_box.item label="Lewy górny róg ekranu" name="ScriptDialogPositionOption_2" />
             <combo_box.item label="Prawy górny róg ekranu" name="ScriptDialogPositionOption_3" />

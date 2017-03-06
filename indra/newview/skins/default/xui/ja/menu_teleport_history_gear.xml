@@ -2,5 +2,16 @@
 <menu name="Teleport History Gear Context Menu">
 	<menu_item_call label="フォルダをすべて開く" name="Expand all folders"/>
 	<menu_item_call label="フォルダをすべて閉じる" name="Collapse all folders"/>
+	<!-- FS:Beq [timezone support for teleport history] -->
+	<menu name="TPHistoryTimeZone" label="タイムゾーン選択...">
+		<menu_item_check name="teleport_history_tz_utc" label="UTC" />
+		<menu_item_check name="teleport_history_tz_slt" label="SLT" />
+		<menu_item_check name="teleport_history_tz_local" label="ローカル" />
+	</menu>
+	<!-- /FS:Beq [timezone support for teleport history] -->
+	<menu name="Show Menu" label="表示内容...">
+		<menu_item_check name="Show Position" label="位置" />
+		<menu_item_check name="Show Date" label="日付" />
+	</menu>
 	<menu_item_call label="テレポートの履歴をクリア" name="Clear Teleport History"/>
 </menu>

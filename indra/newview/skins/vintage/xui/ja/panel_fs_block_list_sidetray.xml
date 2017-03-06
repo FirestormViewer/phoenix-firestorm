@@ -5,6 +5,11 @@
 		<fs_scroll_list.columns name="item_type" label="種類" />
 		<fs_scroll_list.columns name="item_mute_type" />
 	</fs_scroll_list>
+	
+	<text name="block_limit">
+		ブロック件数: [COUNT] (最大 [LIMIT])
+	</text>
+
 	<layout_stack name="block_list_sidetray_main">
 	<!-- will be shown or hidden in code, depending on whether this
 	     is a sub tab or standalone panel -Zi -->

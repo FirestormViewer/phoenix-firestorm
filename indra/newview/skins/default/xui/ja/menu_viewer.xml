@@ -575,8 +575,9 @@
 			<menu_item_call label="SIMの仕様を周辺チャットに書き出す" name="DumpSimFeaturesToChat" />
 		</menu>
 		<menu label="UI" name="UI">
-			<menu_item_call label="メディアブラウザ" name="Media Browser"/>
+			<menu_item_call label="メディアブラウザのテスト" name="Web Browser Test" />
 			<menu_item_check label="地域再起動のテスト..." name="Region Restart Test" />
+			<menu_item_call label="Web コンテンツブラウザ" name="Web Content Browser" shortcut="control|shift|Z" />
 			<menu_item_call label="FB 接続テスト" name="FB Connect Test" />
 			<menu_item_call label="SelectMgr をダンプ" name="Dump SelectMgr"/>
 			<menu_item_call label="持ち物の出力" name="Dump Inventory"/>

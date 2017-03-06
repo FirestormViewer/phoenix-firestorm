@@ -347,10 +347,6 @@
          width="180">
 
         <combo_box.item
-         label="Importing old Value"
-         name="ScriptDialogPositionOption_0"
-         value="0"/>
-        <combo_box.item
          label="Docked to Chiclet"
          name="ScriptDialogPositionOption_1"
          value="1"/>
@@ -374,7 +370,6 @@
         </combo_box>
         <check_box
          control_name="FSAnimatedScriptDialogs"
-         enabled_control="ShowScriptDialogsTopRight"
          height="16"
          initial_value="true"
          label="Animate Script Dialogs"

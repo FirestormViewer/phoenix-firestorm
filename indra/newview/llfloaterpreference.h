@@ -164,6 +164,9 @@ protected:
 	// <FS:Ansariel> Properly disable avatar tag setting
 	void onAvatarTagSettingsChanged();
 
+	// <FS:Ansariel> Correct enabled state of Animated Script Dialogs option
+	void updateAnimatedScriptDialogs();
+
 public:
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.	
