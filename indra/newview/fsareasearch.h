@@ -37,6 +37,7 @@
 #include <boost/regex.hpp>
 #include "llscrolllistcolumn.h"
 
+class LLAvatarName;
 class LLTextBox;
 class LLViewerRegion;
 class LLCheckBoxCtrl;
@@ -112,6 +113,7 @@ public:
 	virtual void draw();
 	virtual void onOpen(const LLSD& key);
 
+	void avatarNameCacheCallback(const LLUUID& id, const LLAvatarName& av_name);
 	void callbackLoadFullName(const LLUUID& id, const std::string& full_name);
 	void processObjectProperties(LLMessageSystem* msg);
 	void updateObjectCosts(const LLUUID& object_id, F32 object_cost, F32 link_cost, F32 physics_cost, F32 link_physics_cost);

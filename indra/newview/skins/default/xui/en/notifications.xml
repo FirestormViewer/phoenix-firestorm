@@ -4457,7 +4457,6 @@ Cannot offer friendship at this time. Please try again in a moment.
 Unavailable mode is on.  You will not be notified of incoming communications.
 
 - Other residents will receive your Unavailable mode response (set in Preferences &gt; Privacy &gt; Autoresponse).
-- Teleportation offers will be declined.
 - Voice calls will be rejected.
     <usetemplate
      ignoretext="I change my status to unavailable"

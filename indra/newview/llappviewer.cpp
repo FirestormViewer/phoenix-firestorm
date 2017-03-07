@@ -3941,7 +3941,12 @@ LLSD LLAppViewer::getViewerInfo() const
 	//                           http://wiki.phoenixviewer.com/firestorm_change_log_x.y.z.rev
 	//if (! LLStringUtil::endsWith(url, "/"))
 	//	url += "/";
-	//url += LLURI::escape(LLVersionInfo::getChannel()) + "/";
+	//std::string channel = LLVersionInfo::getChannel();
+	//if (LLStringUtil::endsWith(boost::to_lower_copy(channel), " edu")) // Release Notes url shouldn't include the EDU parameter
+	//{
+	//	boost::erase_tail(channel, 4);
+	//}
+	//url += LLURI::escape(channel) + "/";
 	// </FS:Ansariel>
 	url += LLURI::escape(LLVersionInfo::getVersion());
 

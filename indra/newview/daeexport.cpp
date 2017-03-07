@@ -744,8 +744,8 @@ bool DAESaver::saveDAE(std::string filename)
 
 	// File creator
 	std::string author = "Unknown";
-	if (gCacheName)
-		gCacheName->getFullName(gAgentID, author);
+	if (!gAgentUsername.empty())
+		author = gAgentUsername;
 	
 	daeElement* contributor = asset->add("contributor");
 	contributor->add("author")->setCharData(author);

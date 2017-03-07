@@ -53,6 +53,7 @@
 #include "llxfermanager.h"
 
 #include "llagent.h"
+#include "llavatarnamecache.h"
 #include "llviewergenericmessage.h"	// for gGenericDispatcher
 #include "llworld.h" //for particle system banning
 #include "llimview.h"
@@ -276,6 +277,9 @@ BOOL LLMuteList::add(const LLMute& mute, U32 flags)
 	}
 	else
 	{
+		// <FS:Ansariel> FIRE-15746: Show block report in nearby chat
+		bool show_message = false;
+
 		// Need a local (non-const) copy to set up flags properly.
 		LLMute localmute = mute;
 		
@@ -288,11 +292,17 @@ BOOL LLMuteList::add(const LLMute& mute, U32 flags)
 			
 			mMutes.erase(it);
 			// Don't need to call notifyObservers() here, since it will happen after the entry has been re-added below.
+
+			// <FS:Ansariel> FIRE-15746: Show block report in nearby chat
+			show_message = false;
 		}
 		else
 		{
 			// There was no entry in the list previously.  Fake things up by making it look like the previous entry had all properties unmuted.
 			localmute.mFlags = LLMute::flagAll;
+
+			// <FS:Ansariel> FIRE-15746: Show block report in nearby chat
+			show_message = true;
 		}
 
 		if(flags)
@@ -312,7 +322,10 @@ BOOL LLMuteList::add(const LLMute& mute, U32 flags)
 			if (result.second)
 			{
 				LL_INFOS() << "Muting " << localmute.mName << " id " << localmute.mID << " flags " << localmute.mFlags << LL_ENDL;
-				updateAdd(localmute);
+				// <FS:Ansariel> FIRE-15746: Show block report in nearby chat
+				//updateAdd(localmute);
+				updateAdd(localmute, show_message);
+				// </FS:Ansariel>
 				notifyObservers();
 				notifyObserversDetailed(localmute);
 				if(!(localmute.mFlags & LLMute::flagParticles))
@@ -343,7 +356,10 @@ BOOL LLMuteList::add(const LLMute& mute, U32 flags)
 	return FALSE;
 }
 
-void LLMuteList::updateAdd(const LLMute& mute)
+// <FS:Ansariel> FIRE-15746: Show block report in nearby chat
+//void LLMuteList::updateAdd(const LLMute& mute)
+void LLMuteList::updateAdd(const LLMute& mute, bool show_message /* = true */)
+// </FS:Ansariel>
 {
 	// External mutes (e.g. Avaline callers) are local only, don't send them to the server.
 	if (mute.mType == LLMute::EXTERNAL)
@@ -367,7 +383,7 @@ void LLMuteList::updateAdd(const LLMute& mute)
 	mIsLoaded = TRUE; // why is this here? -MG
 
 	// <FS:Ansariel> FIRE-15746: Show block report in nearby chat
-	if (gSavedSettings.getBOOL("FSReportBlockToNearbyChat"))
+	if (show_message && gSavedSettings.getBOOL("FSReportBlockToNearbyChat"))
 	{
 		LLStringUtil::format_map_t args;
 		args["NAME"] = mute.mName;
@@ -421,7 +437,10 @@ BOOL LLMuteList::remove(const LLMute& mute, U32 flags)
 		{
 			// Flags were updated, the mute entry needs to be retransmitted to the server and re-added to the list.
 			mMutes.insert(localmute);
-			updateAdd(localmute);
+			// <FS:Ansariel> FIRE-15746: Show block report in nearby chat
+			////updateAdd(localmute);
+			updateAdd(localmute, false);
+			// </FS:Ansariel>
 			LL_INFOS() << "Updating mute entry " << localmute.mName << " id " << localmute.mID << " flags " << localmute.mFlags << LL_ENDL;
 		}
 		
@@ -483,7 +502,7 @@ void LLMuteList::updateRemove(const LLMute& mute)
 	// </FS:Ansariel>
 }
 
-void notify_automute_callback(const LLUUID& agent_id, const std::string& full_name, bool is_group, LLMuteList::EAutoReason reason)
+void notify_automute_callback(const LLUUID& agent_id, const LLAvatarName& full_name, LLMuteList::EAutoReason reason)
 {
 	std::string notif_name;
 	switch (reason)
@@ -501,7 +520,7 @@ void notify_automute_callback(const LLUUID& agent_id, const std::string& full_na
 	}
 
 	LLSD args;
-	args["NAME"] = full_name;
+	args["NAME"] = full_name.getUserName();
     
 	LLNotificationPtr notif_ptr = LLNotifications::instance().add(notif_name, args, LLSD());
 	if (notif_ptr)
@@ -526,17 +545,17 @@ BOOL LLMuteList::autoRemove(const LLUUID& agent_id, const EAutoReason reason)
 		removed = TRUE;
 		remove(automute);
 
-		std::string full_name;
-		if (gCacheName->getFullName(agent_id, full_name))
-			{
-				// name in cache, call callback directly
-			notify_automute_callback(agent_id, full_name, false, reason);
-			}
-			else
-			{
-				// not in cache, lookup name from cache
-			gCacheName->get(agent_id, false,
-				boost::bind(&notify_automute_callback, _1, _2, _3, reason));
+		LLAvatarName av_name;
+		if (LLAvatarNameCache::get(agent_id, &av_name))
+		{
+			// name in cache, call callback directly
+			notify_automute_callback(agent_id, av_name, reason);
+		}
+		else
+		{
+			// not in cache, lookup name from cache
+			LLAvatarNameCache::get(agent_id,
+				boost::bind(&notify_automute_callback, _1, _2, reason));
 		}
 	}
 

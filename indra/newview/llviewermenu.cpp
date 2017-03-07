@@ -8094,7 +8094,7 @@ class LLMuteParticle : public view_listener_t
 	// <FS:Ansariel> Blocklist sometimes shows "(waiting)" as avatar name when blocking particle owners
 	void onAvatarNameCache(const LLUUID& av_id, const LLAvatarName& av_name)
 	{
-		LLMute mute(av_id, av_name.getLegacyName(), LLMute::AGENT);
+		LLMute mute(av_id, av_name.getUserName(), LLMute::AGENT);
 		if (LLMuteList::getInstance()->isMuted(mute.mID))
 		{
 			LLMuteList::getInstance()->remove(mute);
@@ -8114,10 +8114,10 @@ class LLMuteParticle : public view_listener_t
 		if (id.notNull())
 		{
 			// <FS:Ansariel> Blocklist sometimes shows "(waiting)" as avatar name when blocking particle owners
-			//std::string name;
-			//gCacheName->getFullName(id, name);
+			//LLAvatarName av_name;
+			//LLAvatarNameCache::get(id, &av_name);
 
-			//LLMute mute(id, name, LLMute::AGENT);
+			//LLMute mute(id, av_name.getUserName(), LLMute::AGENT);
 			//if (LLMuteList::getInstance()->isMuted(mute.mID))
 			//{
 			//	LLMuteList::getInstance()->remove(mute);
@@ -10493,6 +10493,15 @@ class LLToolsSelectTool : public view_listener_t
 		{
 			LLToolMgr::getInstance()->getCurrentToolset()->selectToolByIndex(5);
 		}
+
+		// Note: if floater is not visible LLViewerWindow::updateLayout() will
+		// attempt to open it, but it won't bring it to front or de-minimize.
+		if (gFloaterTools && (gFloaterTools->isMinimized() || !gFloaterTools->isShown() || !gFloaterTools->isFrontmost()))
+		{
+			gFloaterTools->setMinimized(FALSE);
+			gFloaterTools->openFloater();
+			gFloaterTools->setVisibleAndFrontmost(TRUE);
+		}
 		return true;
 	}
 };
@@ -10721,7 +10730,12 @@ public:
 
 void handle_voice_morphing_subscribe()
 {
-	LLWeb::loadURLExternal(LLTrans::getString("voice_morphing_url"));
+	LLWeb::loadURL(LLTrans::getString("voice_morphing_url"));
+}
+
+void handle_premium_voice_morphing_subscribe()
+{
+	LLWeb::loadURL(LLTrans::getString("premium_voice_morphing_url"));
 }
 
 class LLToggleUIHints : public view_listener_t
@@ -11111,6 +11125,8 @@ void initialize_menus()
 
 	// Communicate > Voice morphing > Subscribe...
 	commit.add("Communicate.VoiceMorphing.Subscribe", boost::bind(&handle_voice_morphing_subscribe));
+	// Communicate > Voice morphing > Premium perk...
+	commit.add("Communicate.VoiceMorphing.PremiumPerk", boost::bind(&handle_premium_voice_morphing_subscribe));
 	LLVivoxVoiceClient * voice_clientp = LLVivoxVoiceClient::getInstance();
 	enable.add("Communicate.VoiceMorphing.NoVoiceMorphing.Check"
 		, boost::bind(&LLVivoxVoiceClient::onCheckVoiceEffect, voice_clientp, "NoVoiceMorphing"));

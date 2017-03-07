@@ -30,12 +30,14 @@
 
 #include "llinstantmessage.h"
 #include "llsingleton.h"
+#include "llavatarnamecache.h"
 
 class FSData : public LLSingleton<FSData>
 {
 	LOG_CLASS(FSData);
 
 	LLSINGLETON(FSData);
+	virtual ~FSData();
 
 public:
 
@@ -90,6 +92,7 @@ private:
 	void processData(const LLSD& fs_data);
 	void processClientTags(const LLSD& tags);
 	void updateClientTagsLocal();
+	void onNameCache(const LLUUID& av_id, const LLAvatarName& av_name);
 
 	std::map<LLUUID, S32> mSupportAgents;
 	std::map<std::string, LLSD> mBlockedVersions;
@@ -114,6 +117,9 @@ private:
 	bool mLegacySearch;
 	bool mFSDataDone;
 	bool mAgentsDone;
+
+	typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
+	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
 };
 
 #endif // FS_DATA_H
