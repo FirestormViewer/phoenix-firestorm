@@ -214,5 +214,26 @@
         <check_box label="Przesuwaj / skaluj tekstury budując, gdy trzymany jest przycisk myszy oraz klawisz caps-lock" tool_tip="Gdy zaznaczysz tą opcję, to będziesz mógł/mogła przesuwać lub skalować strony tekstur trzymając przycisk myszy (wraz z klawiszem caps-lock) w trybie budowania. Ta funkcja jest eksperymentalna i powinna być używana ostrożnie." name="FSExperimentalDragTexture" />
         <check_box label="Podgląd animacji na własnym awatarze podczas ładowania ich na serwer" tool_tip="Gdy zaznaczysz tą opcję, to będziesz w stanie oglądać animacje na swoim własnym awatarze podczas ładowania ich na serwer" name="FSUploadAnimationOnOwnAvatar" />
 	</panel>
+	<panel label="Nowe pliki" name="UploadsTab">
+		<text name="title">
+			Obecne lokalizacje dla nowych plików:
+		</text>
+		<text name="title_images">
+			Obrazy
+		</text>
+		<text name="title_sounds">
+			Dźwięki
+		</text>
+		<text name="title_animations">
+			Animacje
+		</text>
+		<text name="title_models">
+			Modele
+		</text>
+		<text name="upload_help">
+			Aby zmienić folder docelowy kliknij na nim prawym przyciskiem myszy w Szafie
+i użyj opcji "ustaw jako domyślne dla"
+		</text>
+	</panel>
 </tab_container>
 </panel>
