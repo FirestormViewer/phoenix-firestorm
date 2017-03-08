@@ -533,6 +533,7 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	mColoName("unknown"),
 	mProductSKU("unknown"),
 	mProductName("unknown"),
+	mHttpUrl(""), // <FS:Ansariel> [UDP Assets]
 	mViewerAssetUrl(""),
 	mCacheLoaded(FALSE),
 	mCacheDirty(FALSE),
@@ -3036,9 +3037,14 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("IsExperienceAdmin");
 	capabilityNames.append("IsExperienceContributor");
 	capabilityNames.append("RegionExperiences");
+	// <FS:Ansariel> [UDP Assets]
+	capabilityNames.append("GetMesh");
+	capabilityNames.append("GetMesh2");
+	// </FS:Ansariel> [UDP Assets]
 	capabilityNames.append("GetMetadata");
 	capabilityNames.append("GetObjectCost");
 	capabilityNames.append("GetObjectPhysicsData");
+	capabilityNames.append("GetTexture"); // <FS:Ansariel> [UDP Assets]
 	capabilityNames.append("GroupAPIv1");
 	capabilityNames.append("GroupMemberData");
 	capabilityNames.append("GroupProposalBallot");
@@ -3156,6 +3162,12 @@ void LLViewerRegion::setCapability(const std::string& name, const std::string& u
 		{
 			mViewerAssetUrl = url;
 		}
+		// <FS:Ansariel> [UDP Assets]
+		else if (name == "GetTexure")
+		{
+			mHttpUrl = url;
+		}
+		// </FS:Ansariel> [UDP Assets]
 	}
 }
 
@@ -3169,6 +3181,12 @@ void LLViewerRegion::setCapabilityDebug(const std::string& name, const std::stri
 		{
 			mViewerAssetUrl = url;
 		}
+		// <FS:Ansariel> [UDP Assets]
+		else if (name == "GetTexure")
+		{
+			mHttpUrl = url;
+		}
+		// </FS:Ansariel> [UDP Assets]
 	}
 }
 
