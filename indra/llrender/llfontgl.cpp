@@ -1254,13 +1254,13 @@ void LLFontGL::renderTriangle(LLVector3* vertex_out, LLVector2* uv_out, LLColor4
 	index++;
 
 
-	vertex_out[index] = LLVector3(screen_rect.mLeft, screen_rect.mBottom, 0.f);
-	uv_out[index] = LLVector2(uv_rect.mLeft, uv_rect.mBottom);
+	vertex_out[index] = LLVector3(screen_rect.mRight, screen_rect.mTop, 0.f);
+	uv_out[index] = LLVector2(uv_rect.mRight, uv_rect.mTop);
 	colors_out[index] = color;
 	index++;
 
-	vertex_out[index] = LLVector3(screen_rect.mRight, screen_rect.mTop, 0.f);
-	uv_out[index] = LLVector2(uv_rect.mRight, uv_rect.mTop);
+	vertex_out[index] = LLVector3(screen_rect.mLeft, screen_rect.mBottom, 0.f);
+	uv_out[index] = LLVector2(uv_rect.mLeft, uv_rect.mBottom);
 	colors_out[index] = color;
 	index++;
 

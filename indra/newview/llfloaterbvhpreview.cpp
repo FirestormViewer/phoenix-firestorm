@@ -551,10 +551,10 @@ void LLFloaterBvhPreview::draw()
 			gGL.texCoord2f(1.f, 0.f); 
 			gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD); 
 
-			gGL.texCoord2f(1.f, 0.f); 
-			gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD); 
 			gGL.texCoord2f(0.f, 1.f); 
 			gGL.vertex2i(PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT); 
+			gGL.texCoord2f(1.f, 0.f); 
+			gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD); 
 			gGL.texCoord2f(1.f, 1.f); 
 			gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT); 
 		} 

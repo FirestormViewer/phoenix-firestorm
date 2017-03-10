@@ -617,11 +617,11 @@ void LLJoystickCameraRotate::drawRotatedImage( LLPointer<LLUIImage> image, S32 r
 		gGL.vertex2i(0, 0);
 
 
-		gGL.texCoord2fv( uv[ (rotations + 2) % 4]);
-		gGL.vertex2i(0, 0);
-
 		gGL.texCoord2fv( uv[ (rotations + 0) % 4]);
 		gGL.vertex2i(scaledWidth, scaledHeight );
+
+		gGL.texCoord2fv( uv[ (rotations + 2) % 4]);
+		gGL.vertex2i(0, 0);
 
 		gGL.texCoord2fv( uv[ (rotations + 3) % 4]);
 	    gGL.vertex2i(scaledWidth, 0);

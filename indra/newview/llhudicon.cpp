@@ -190,10 +190,10 @@ void LLHUDIcon::renderIcon(BOOL for_select)
 		gGL.texCoord2f(1.f, 0.f);
 		gGL.vertex3fv(lower_right.mV);
 
-		gGL.texCoord2f(1.f, 0.f);
-		gGL.vertex3fv(lower_right.mV);
 		gGL.texCoord2f(0.f, 1.f);
 		gGL.vertex3fv(upper_left.mV);
+		gGL.texCoord2f(1.f, 0.f);
+		gGL.vertex3fv(lower_right.mV);
 		gGL.texCoord2f(1.f, 1.f);
 		gGL.vertex3fv(upper_right.mV);
 	}

@@ -104,8 +104,8 @@ U32 LLViewerJointAttachment::drawShape( F32 pixelArea, BOOL first_pass, BOOL is_
 			gGL.vertex3f(-0.1f, -0.1f, 0.f);
 			gGL.vertex3f(0.1f, -0.1f, 0.f);
 
-			gGL.vertex3f(0.1f, -0.1f, 0.f);
 			gGL.vertex3f(-0.1f, 0.1f, 0.f);
+			gGL.vertex3f(0.1f, -0.1f, 0.f);
 			gGL.vertex3f(0.1f, 0.1f, 0.f);
 		}
 		gGL.end();

@@ -571,8 +571,8 @@ void LLStatBar::draw()
 						gGL.vertex2f((F32)bar_rect.mRight - offset, min);
 						gGL.vertex2f((F32)bar_rect.mRight - offset - 1, min);
 
-						gGL.vertex2f((F32)bar_rect.mRight - offset - 1, min);
 						gGL.vertex2f((F32)bar_rect.mRight - offset, max);
+						gGL.vertex2f((F32)bar_rect.mRight - offset - 1, min);
 						gGL.vertex2f((F32)bar_rect.mRight - offset - 1, max);
 						// </FS:Ansariel>
 					}
@@ -587,8 +587,8 @@ void LLStatBar::draw()
 						gGL.vertex2f(min, (F32)bar_rect.mBottom + offset);
 						gGL.vertex2f(max, (F32)bar_rect.mBottom + offset);
 
-						gGL.vertex2f(max, (F32)bar_rect.mBottom + offset);
 						gGL.vertex2f(min, (F32)bar_rect.mBottom + offset + 1);
+						gGL.vertex2f(max, (F32)bar_rect.mBottom + offset);
 						gGL.vertex2f(max, (F32)bar_rect.mBottom + offset + 1 );
 						// </FS:Ansariel>
 					}

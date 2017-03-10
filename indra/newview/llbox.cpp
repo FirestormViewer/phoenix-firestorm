@@ -98,10 +98,10 @@ void LLBox::renderface(S32 which_face)
 		gGL.texCoord2f(0.f, 1.f);
 		gGL.vertex3fv(&mVertex[ faces[which_face][2] ][0]);
 
-		gGL.texCoord2f(0.f, 1.f);
-		gGL.vertex3fv(&mVertex[ faces[which_face][2] ][0]);
 		gGL.texCoord2f(1.f, 0.f);
 		gGL.vertex3fv(&mVertex[ faces[which_face][0] ][0]);
+		gGL.texCoord2f(0.f, 1.f);
+		gGL.vertex3fv(&mVertex[ faces[which_face][2] ][0]);
 		gGL.texCoord2f(0.f, 0.f);
 		gGL.vertex3fv(&mVertex[ faces[which_face][3] ][0]);
 	}

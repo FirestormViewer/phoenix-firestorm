@@ -326,11 +326,11 @@ void LLSnapshotLivePreview::draw()
 				gGL.vertex2i(0, 0);
 
 
-				gGL.texCoord2f(0.f, 0.f);
-				gGL.vertex2i(0, 0);
-
 				gGL.texCoord2f(uv_width, uv_height);
 				gGL.vertex2i(rect.getWidth(), rect.getHeight() );
+
+				gGL.texCoord2f(0.f, 0.f);
+				gGL.vertex2i(0, 0);
 
 				gGL.texCoord2f(uv_width, 0.f);
 				gGL.vertex2i(rect.getWidth(), 0);
@@ -409,10 +409,11 @@ void LLSnapshotLivePreview::draw()
 					gGL.color4f(1.f, 1.f, 1.f, SHINE_OPACITY);
 					gGL.vertex2i(x2 + gViewerWindow->getWindowWidthScaled(), y2);
 
-					gGL.vertex2i(x2 + gViewerWindow->getWindowWidthScaled(), y2);
-					gGL.vertex2i(x2, y1);
 					gGL.color4f(1.f, 1.f, 1.f, 0.f);
 					gGL.vertex2i(x1, y1);
+					gGL.color4f(1.f, 1.f, 1.f, SHINE_OPACITY);
+					gGL.vertex2i(x2 + gViewerWindow->getWindowWidthScaled(), y2);
+					gGL.vertex2i(x2, y1);
 
 
 					gGL.color4f(1.f, 1.f, 1.f, SHINE_OPACITY);
@@ -421,10 +422,11 @@ void LLSnapshotLivePreview::draw()
 					gGL.color4f(1.f, 1.f, 1.f, 0.f);
 					gGL.vertex2i(x3 + gViewerWindow->getWindowWidthScaled(), y2);
 
-					gGL.vertex2i(x3 + gViewerWindow->getWindowWidthScaled(), y2);
-					gGL.vertex2i(x3, y1);
 					gGL.color4f(1.f, 1.f, 1.f, SHINE_OPACITY);
 					gGL.vertex2i(x2, y1);
+					gGL.color4f(1.f, 1.f, 1.f, 0.f);
+					gGL.vertex2i(x3 + gViewerWindow->getWindowWidthScaled(), y2);
+					gGL.vertex2i(x3, y1);
 				}
 				gGL.end();
 				// </FS:Ansariel>
@@ -533,11 +535,11 @@ void LLSnapshotLivePreview::draw()
 					gGL.texCoord2f(0.f, 0.f);
 					gGL.vertex2i(0, 0);
 
-					gGL.texCoord2f(0.f, 0.f);
-					gGL.vertex2i(0, 0);
-
 					gGL.texCoord2f(uv_width, uv_height);
 					gGL.vertex2i(rect.getWidth(), rect.getHeight() );
+
+					gGL.texCoord2f(0.f, 0.f);
+					gGL.vertex2i(0, 0);
 
 					gGL.texCoord2f(uv_width, 0.f);
 					gGL.vertex2i(rect.getWidth(), 0);

@@ -5101,10 +5101,10 @@ U32 LLVOAvatar::renderImpostor(LLColor4U color, S32 diffuse_channel)
 		gGL.texCoord2f(1.f, 1.f);
 		gGL.vertex3fv((pos - left + up).mV);
 
-		gGL.texCoord2f(1.f, 1.f);
-		gGL.vertex3fv((pos - left + up).mV);
 		gGL.texCoord2f(0.f, 0.f);
 		gGL.vertex3fv((pos + left - up).mV);
+		gGL.texCoord2f(1.f, 1.f);
+		gGL.vertex3fv((pos - left + up).mV);
 		gGL.texCoord2f(0.f, 1.f);
 		gGL.vertex3fv((pos + left + up).mV);
 	}

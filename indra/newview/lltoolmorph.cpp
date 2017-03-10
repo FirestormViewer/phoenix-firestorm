@@ -302,10 +302,10 @@ void LLVisualParamHint::draw(F32 alpha)
 		gGL.texCoord2i(1, 0);
 		gGL.vertex2i(mFullWidth, 0);
 
-		gGL.texCoord2i(1, 0);
-		gGL.vertex2i(mFullWidth, 0);
 		gGL.texCoord2i(0, 1);
 		gGL.vertex2i(0, mFullHeight);
+		gGL.texCoord2i(1, 0);
+		gGL.vertex2i(mFullWidth, 0);
 		gGL.texCoord2i(1, 1);
 		gGL.vertex2i(mFullWidth, mFullHeight);
 	}

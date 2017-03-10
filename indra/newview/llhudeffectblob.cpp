@@ -98,10 +98,10 @@ void LLHUDEffectBlob::render()
 			gGL.texCoord2f(1.f, 0.f);
 			gGL.vertex3fv((-v_scale + u_scale).mV);
 
-			gGL.texCoord2f(1.f, 0.f);
-			gGL.vertex3fv((-v_scale + u_scale).mV);
 			gGL.texCoord2f(0.f, 1.f);
 			gGL.vertex3fv((v_scale - u_scale).mV);
+			gGL.texCoord2f(1.f, 0.f);
+			gGL.vertex3fv((-v_scale + u_scale).mV);
 			gGL.texCoord2f(1.f, 1.f);
 			gGL.vertex3fv((v_scale + u_scale).mV);
 		}

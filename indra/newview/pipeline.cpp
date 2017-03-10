@@ -11766,8 +11766,8 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 			gGL.vertex3f(1.f, -1.f, clip_plane);
 			gGL.vertex3f(1.f, 1.f, clip_plane);
 
-			gGL.vertex3f(1.f, 1.f, clip_plane);
 			gGL.vertex3f(-1.f, -1.f, clip_plane);
+			gGL.vertex3f(1.f, 1.f, clip_plane);
 			gGL.vertex3f(-1.f, 1.f, clip_plane);
 		}
 		gGL.end();

@@ -896,11 +896,11 @@ void LLMediaCtrl::draw()
 				gGL.vertex2i( x_offset, y_offset );
 
 				// <FS:Ansariel> Remove QUADS rendering mode
-				gGL.texCoord2f( 0.f, max_v );
-				gGL.vertex2i( x_offset, y_offset );
-
 				gGL.texCoord2f( max_u, 0.f );
 				gGL.vertex2i( x_offset + width, y_offset + height );
+
+				gGL.texCoord2f( 0.f, max_v );
+				gGL.vertex2i( x_offset, y_offset );
 				// </FS:Ansariel>
 
 				gGL.texCoord2f( max_u, max_v );
@@ -919,11 +919,11 @@ void LLMediaCtrl::draw()
 				gGL.vertex2i( x_offset, y_offset );
 
 				// <FS:Ansariel> Remove QUADS rendering mode
-				gGL.texCoord2f( 0.f, 0.f );
-				gGL.vertex2i( x_offset, y_offset );
-
 				gGL.texCoord2f( max_u, max_v );
 				gGL.vertex2i( x_offset + width, y_offset + height );
+
+				gGL.texCoord2f( 0.f, 0.f );
+				gGL.vertex2i( x_offset, y_offset );
 				// </FS:Ansariel>
 
 				gGL.texCoord2f( max_u, 0.f );

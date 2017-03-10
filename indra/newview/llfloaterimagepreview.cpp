@@ -305,10 +305,10 @@ void LLFloaterImagePreview::draw()
 				gGL.texCoord2f(mPreviewImageRect.mRight, mPreviewImageRect.mBottom);
 				gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD);
 
-				gGL.texCoord2f(mPreviewImageRect.mRight, mPreviewImageRect.mBottom);
-				gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD);
 				gGL.texCoord2f(mPreviewImageRect.mLeft, mPreviewImageRect.mTop);
 				gGL.vertex2i(PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT + PREVIEW_VPAD);
+				gGL.texCoord2f(mPreviewImageRect.mRight, mPreviewImageRect.mBottom);
+				gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD);
 				gGL.texCoord2f(mPreviewImageRect.mRight, mPreviewImageRect.mTop);
 				gGL.vertex2i(r.getWidth() - PREVIEW_HPAD, PREVIEW_TEXTURE_HEIGHT + PREVIEW_VPAD);
 			}

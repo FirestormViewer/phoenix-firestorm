@@ -439,8 +439,8 @@ void LLWorldMapView::draw()
 				gGL.vertex2f(left, bottom);
 				gGL.vertex2f(right, bottom);
 
-				gGL.vertex2f(right, bottom);
 				gGL.vertex2f(left, top);
+				gGL.vertex2f(right, bottom);
 				gGL.vertex2f(right, top);
 			}
 			gGL.end();
@@ -513,10 +513,10 @@ void LLWorldMapView::draw()
 						gGL.texCoord2f(1.f, 0.f);
 						gGL.vertex3f(right, bottom, -0.5f);
 
-						gGL.texCoord2f(1.f, 0.f);
-						gGL.vertex3f(right, bottom, -0.5f);
 						gGL.texCoord2f(0.f, 1.f);
 						gGL.vertex3f(left, top, -0.5f);
+						gGL.texCoord2f(1.f, 0.f);
+						gGL.vertex3f(right, bottom, -0.5f);
 						gGL.texCoord2f(1.f, 1.f);
 						gGL.vertex3f(right, top, -0.5f);
 					}
@@ -828,10 +828,10 @@ bool LLWorldMapView::drawMipmapLevel(S32 width, S32 height, S32 level, bool load
 						gGL.texCoord2f(1.f, 0.f);
 						gGL.vertex3f(right, bottom, 0.f);
 
-						gGL.texCoord2f(1.f, 0.f);
-						gGL.vertex3f(right, bottom, 0.f);
 						gGL.texCoord2f(0.f, 1.f);
 						gGL.vertex3f(left, top, 0.f);
+						gGL.texCoord2f(1.f, 0.f);
+						gGL.vertex3f(right, bottom, 0.f);
 						gGL.texCoord2f(1.f, 1.f);
 						gGL.vertex3f(right, top, 0.f);
 					}
