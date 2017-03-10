@@ -88,7 +88,6 @@
 // <AW: opensim-limits>
 #include "llworld.h"
 // </AW: opensim-limits>
-#include "nd/ndboolswitch.h" // <FS:ND/> To toggle LLRender::sGLCoreProfile 
 
 #include "glod/glod.h"
 #include <boost/algorithm/string.hpp>
@@ -3693,19 +3692,20 @@ void LLModelPreview::addEmptyFace( LLModel* pTarget )
 {
 	U32 type_mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0;
 	
-	// <FS:ND> Make sure LLRender::sGLCoreProfile is off, so we get a buffer we can pass into GLOD
-	nd::utils::boolSwitch switchCoreProfile ( &LLRender::sGLCoreProfile, false );
-	// </FS:ND>
-
 	LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask, 0);
 	
-	// <FS:ND> And reset LLRender::sGLCoreProfile again
-	switchCoreProfile.reset();
-	// </FS:ND>
-
 	buff->allocateBuffer(1, 3, true);
 	memset( (U8*) buff->getMappedData(), 0, buff->getSize() );
-	memset( (U8*) buff->getIndicesPointer(), 0, buff->getIndicesSize() );
+
+	// <FS:ND> Fix when running with opengl core profile
+	{
+	LLStrider< U16 > index_strider;
+	buff->getIndexStrider( index_strider );
+
+	memset( (U8*)index_strider.get(), 0, buff->getIndicesSize() );
+	}
+	//memset( (U8*) buff->getIndicesPointer(), 0, buff->getIndicesSize() );
+	// </FS:ND>
 		
 	buff->validateRange( 0, buff->getNumVerts()-1, buff->getNumIndices(), 0 );
 		
