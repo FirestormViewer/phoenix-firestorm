@@ -2526,7 +2526,43 @@ void LLModelPreview::genLODs(S32 which_lod, U32 decimation, bool enforce_tri_lim
 				U32 num_indices = mVertexBuffer[5][mdl][i]->getNumIndices();
 				if (num_indices > 2)
 				{
-					glodInsertElements(mObject[mdl], i, GL_TRIANGLES, num_indices, GL_UNSIGNED_SHORT, (U8*) mVertexBuffer[5][mdl][i]->getIndicesPointer(), 0, 0.f);
+					// <FS:ND> Fix glod so it works when just using the opengl core profile
+					LLStrider<LLVector3> vertex_strider;
+					LLStrider<LLVector3> normal_strider;
+					LLStrider<LLVector2> tc_strider;
+
+					LLStrider< U16 > index_strider;
+					buff->getIndexStrider( index_strider );
+
+					glodVBO vbo = {};
+
+					if( buff->hasDataType( LLVertexBuffer::TYPE_VERTEX ) )
+					{
+						buff->getVertexStrider( vertex_strider );
+						vbo.mV.p = vertex_strider.get();
+						vbo.mV.size = 3;
+						vbo.mV.stride = LLVertexBuffer::sTypeSize[ LLVertexBuffer::TYPE_VERTEX ];
+						vbo.mV.type = GL_FLOAT;
+					}
+					if( buff->hasDataType( LLVertexBuffer::TYPE_NORMAL ) )
+					{
+						buff->getNormalStrider( normal_strider );
+						vbo.mN.p = normal_strider.get();
+						vbo.mN.stride = LLVertexBuffer::sTypeSize[ LLVertexBuffer::TYPE_NORMAL ];
+						vbo.mN.type = GL_FLOAT;
+					}
+					if( buff->hasDataType( LLVertexBuffer::TYPE_TEXCOORD0 ) )
+					{
+						buff->getTexCoord0Strider( tc_strider );
+						vbo.mT.p = tc_strider.get();
+						vbo.mT.size = 2;
+						vbo.mT.stride = LLVertexBuffer::sTypeSize[ LLVertexBuffer::TYPE_TEXCOORD0 ];
+						vbo.mT.type = GL_FLOAT;
+					}
+
+					glodInsertElements( mObject[ mdl ], i, GL_TRIANGLES, num_indices, GL_UNSIGNED_SHORT, (U8*)index_strider.get(), 0, 0.f, &vbo );
+					// glodInsertElements( mObject[ mdl ], i, GL_TRIANGLES, num_indices, GL_UNSIGNED_SHORT, (U8*)mVertexBuffer[ 5 ][ mdl ][ i ]->getIndicesPointer(), 0, 0.f );
+					// </FS:ND>
 				}
 				tri_count += num_indices/3;
 				stop_gloderror();
@@ -2648,28 +2684,65 @@ void LLModelPreview::genLODs(S32 which_lod, U32 decimation, bool enforce_tri_lim
 			{
 				type_mask = mVertexBuffer[5][base][i]->getTypeMask();
 
-				// <FS:ND> Make sure LLRender::sGLCoreProfile is off, so we get a buffer we can pass into GLOD
-				nd::utils::boolSwitch switchCoreProfile ( &LLRender::sGLCoreProfile, false );
-				// </FS:	ND>
-
 				LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask, 0);
-
-				// <FS:ND> And reset LLRender::sGLCoreProfile again
-				switchCoreProfile.reset();
-				// </FS:	ND>
 
 				if (sizes[i*2+1] > 0 && sizes[i*2] > 0)
 				{
 					buff->allocateBuffer(sizes[i*2+1], sizes[i*2], true);
 					buff->setBuffer(type_mask);
-					glodFillElements(mObject[base], names[i], GL_UNSIGNED_SHORT, (U8*) buff->getIndicesPointer());
+
+					// <FS:ND> Fix glod so it works when just using the opengl core profile
+					LLStrider<LLVector3> vertex_strider;
+					LLStrider<LLVector3> normal_strider;
+					LLStrider<LLVector2> tc_strider;
+
+					LLStrider< U16 > index_strider;
+					buff->getIndexStrider( index_strider );
+
+					glodVBO vbo = {};
+
+					if( buff->hasDataType( LLVertexBuffer::TYPE_VERTEX ) )
+					{
+						buff->getVertexStrider( vertex_strider );
+						vbo.mV.p = vertex_strider.get();
+						vbo.mV.size = 3;
+						vbo.mV.stride = LLVertexBuffer::sTypeSize[ LLVertexBuffer::TYPE_VERTEX ];
+						vbo.mV.type = GL_FLOAT;
+					}
+					if( buff->hasDataType( LLVertexBuffer::TYPE_NORMAL ) )
+					{
+						buff->getNormalStrider( normal_strider );
+						vbo.mN.p = normal_strider.get();
+						vbo.mN.stride = LLVertexBuffer::sTypeSize[ LLVertexBuffer::TYPE_NORMAL ];
+						vbo.mN.type = GL_FLOAT;
+					}
+					if( buff->hasDataType( LLVertexBuffer::TYPE_TEXCOORD0 ) )
+					{
+						buff->getTexCoord0Strider( tc_strider );
+						vbo.mT.p = tc_strider.get();
+						vbo.mT.size = 2;
+						vbo.mT.stride = LLVertexBuffer::sTypeSize[ LLVertexBuffer::TYPE_TEXCOORD0 ];
+						vbo.mT.type = GL_FLOAT;
+					}
+
+					glodFillElements( mObject[ base ], names[ i ], GL_UNSIGNED_SHORT, (U8*)index_strider.get(), &vbo );
+					// glodFillElements(mObject[base], names[i], GL_UNSIGNED_SHORT, (U8*) buff->getIndicesPointer());
+					// </FS:ND>
+
 					stop_gloderror();
 				}
 				else
 				{ //this face was eliminated, create a dummy triangle (one vertex, 3 indices, all 0)
 					buff->allocateBuffer(1, 3, true);
 					memset((U8*) buff->getMappedData(), 0, buff->getSize());
-					memset((U8*) buff->getIndicesPointer(), 0, buff->getIndicesSize());
+
+					// <FS:ND> Fix when running with opengl core profile
+					LLStrider< U16 > index_strider;
+					buff->getIndexStrider( index_strider );
+
+					memset( (U8*)index_strider.get(), 0, buff->getIndicesSize() );
+					// memset( (U8*)buff->getIndicesPointer(), 0, buff->getIndicesSize() );
+					// </FS:ND>
 				}
 
 				buff->validateRange(0, buff->getNumVerts()-1, buff->getNumIndices(), 0);
@@ -3412,16 +3485,8 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
 				mask |= LLVertexBuffer::MAP_WEIGHT4;
 			}
 
-			// <FS:ND> Make sure LLRender::sGLCoreProfile is off, so we get a buffer we can pass into GLOD
-			nd::utils::boolSwitch switchCoreProfile ( &LLRender::sGLCoreProfile, false );
-			// </FS:ND>
-
 			vb = new LLVertexBuffer(mask, 0);
 			
-			// <FS:ND> And reset LLRender::sGLCoreProfile again
-			switchCoreProfile.reset();
-			// </FS:ND>
-
 			vb->allocateBuffer(num_vertices, num_indices, TRUE);
 
 			LLStrider<LLVector3> vertex_strider;
