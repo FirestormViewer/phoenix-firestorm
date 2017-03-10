@@ -2824,6 +2824,7 @@ void LLModelPreview::genLODs(S32 which_lod, U32 decimation, bool enforce_tri_lim
 	{
 		shader->bind();
 	}
+	refresh(); // <FS:ND/> refresh once to make sure render gets called with the updated vbos
 }
 
 void LLModelPreview::updateStatusMessages()
