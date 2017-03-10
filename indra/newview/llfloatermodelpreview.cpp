@@ -781,10 +781,10 @@ void LLFloaterModelPreview::draw()
 
 			gGL.texCoord2f(1.f, 0.f);
 			gGL.vertex2i(mPreviewRect.mRight-1, mPreviewRect.mBottom);
-			gGL.texCoord2f(0.f, 1.f);
+			gGL.texCoord2f( 1.f, 1.f );
+			gGL.vertex2i( mPreviewRect.mRight - 1, mPreviewRect.mTop - 1 );
+			gGL.texCoord2f( 0.f, 1.f );
 			gGL.vertex2i(mPreviewRect.mLeft, mPreviewRect.mTop-1);
-			gGL.texCoord2f(1.f, 1.f);
-			gGL.vertex2i(mPreviewRect.mRight-1, mPreviewRect.mTop-1);
 		}
 		gGL.end();
 		// </FS:Ansariel>
