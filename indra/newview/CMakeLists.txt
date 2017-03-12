@@ -248,7 +248,6 @@ set(viewer_SOURCE_FILES
     llfloaterimsession.cpp
     llfloaterimcontainer.cpp
     llfloaterinspect.cpp
-    llfloaterinventory.cpp
     llfloaterjoystick.cpp
     llfloaterlagmeter.cpp
     llfloaterland.cpp
@@ -262,7 +261,8 @@ set(viewer_SOURCE_FILES
     llfloatermodeluploadbase.cpp
     llfloaternamedesc.cpp
     llfloaternotificationsconsole.cpp
-    llfloaternotificationstabbed.cpp 
+    llfloaternotificationstabbed.cpp
+    llfloateroutfitphotopreview.cpp 
     llfloateroutfitsnapshot.cpp
     llfloaterobjectweights.cpp
     llfloateropenobject.cpp
@@ -535,6 +535,7 @@ set(viewer_SOURCE_FILES
     llsidepaneliteminfo.cpp
     llsidepaneltaskinfo.cpp
     llsidetraypanelcontainer.cpp
+    llskinningutil.cpp
     llsky.cpp
     llslurl.cpp
     llsnapshotlivepreview.cpp
@@ -866,7 +867,6 @@ set(viewer_HEADER_FILES
     llfloaterimsession.h
     llfloaterimcontainer.h
     llfloaterinspect.h
-    llfloaterinventory.h
     llfloaterjoystick.h
     llfloaterlagmeter.h
     llfloaterland.h
@@ -880,7 +880,8 @@ set(viewer_HEADER_FILES
     llfloatermodeluploadbase.h
     llfloaternamedesc.h
     llfloaternotificationsconsole.h
-    llfloaternotificationstabbed.h 
+    llfloaternotificationstabbed.h
+    llfloateroutfitphotopreview.h
     llfloateroutfitsnapshot.h
     llfloaterobjectweights.h
     llfloateropenobject.h
@@ -1141,6 +1142,7 @@ set(viewer_HEADER_FILES
     llsidepaneliteminfo.h
     llsidepaneltaskinfo.h
     llsidetraypanelcontainer.h
+    llskinningutil.h
     llsky.h
     llslurl.h
     llsnapshotlivepreview.h

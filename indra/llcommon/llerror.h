@@ -190,6 +190,7 @@ namespace LLError
 		static std::ostringstream* out();
 		static void flush(std::ostringstream* out, char* message);
 		static void flush(std::ostringstream*, const CallSite&);
+		static std::string demangle(const char* mangled);
 	};
 	
 	struct LL_COMMON_API CallSite
@@ -419,5 +420,8 @@ typedef LLError::NoClassInfo _LL_CLASS_TO_LOG;
 		/* selected CallSite *must* be named _site for LL_ENDL */       \
 		LLError::CallSite& _site(_sites[which]);                        \
 		lllog_test_()
+
+// Check at run-time whether logging is enabled, without generating output
+bool debugLoggingEnabled(const std::string& tag);
 
 #endif // LL_LLERROR_H

@@ -12,6 +12,7 @@ Able Whitman
 Adam Marker
 	VWR-2755
 Adeon Writer
+	MAINT-1211
 Aeonix Aeon
 Agathos Frascati
 	CT-246
@@ -203,6 +204,16 @@ Ansariel Hiller
 	MAINT-6636
 	MAINT-6744
 	MAINT-6752
+	MAINT-6773
+	MAINT-6906
+	MAINT-6911
+	STORM-2140
+	MAINT-6912
+	MAINT-6929
+	STORM-2141
+	MAINT-6953
+	MAINT-7028
+	MAINT-7059
 Aralara Rajal
 Arare Chantilly
 	CHUIBUG-191
@@ -317,6 +328,7 @@ Catherine Pfeffer
 	VWR-1282
 	VWR-8624
 	VWR-10854
+Cathy Foil
 Cayu Cluny
 Celierra Darling
 	VWR-1274
@@ -749,6 +761,11 @@ Jonathan Yap
 	STORM-2088
 	STORM-2094
 	STORM-2099
+	STORM-2091
+	STORM-2092
+	STORM-2100
+	STORM-2104
+	STORM-2142
 Kadah Coba
 	STORM-1060
     STORM-1843
@@ -870,6 +887,7 @@ MartinRJ Fayray
     STORM-1845
     STORM-1911
     STORM-1934
+Matrice Laville
 Matthew Anthony
 Matthew Dowd
 	VWR-1344
@@ -1244,6 +1262,8 @@ Shnurui Troughton
 Shyotl Kuhr
 	MAINT-1138
 	MAINT-2334
+	MAINT-6913
+	STORM-2143
 Siana Gearz
 	STORM-960
 	STORM-1088
@@ -1277,6 +1297,8 @@ Sovereign Engineer
     MAINT-6107
     STORM-2107
     MAINT-6218
+    MAINT-6913
+    STORM-2143
 SpacedOut Frye
 	VWR-34
 	VWR-45

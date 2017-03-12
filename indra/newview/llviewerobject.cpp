@@ -102,6 +102,7 @@
 #include "llmediaentry.h"
 #include "llfloaterperms.h"
 #include "llvocache.h"
+#include "llcleanup.h"
 
 //#define DEBUG_UPDATE_TYPE
 
@@ -371,7 +372,7 @@ void LLViewerObject::markDead()
 		if (av && LLVOAvatar::getRiggedMeshID(this,mesh_id))
 		{
 			// This case is needed for indirectly attached mesh objects.
-			av->resetJointPositionsOnDetach(mesh_id);
+			av->resetJointsOnDetach(mesh_id);
 		}
 
 		// Mark itself as dead
@@ -530,11 +531,11 @@ void LLViewerObject::initVOClasses()
 
 void LLViewerObject::cleanupVOClasses()
 {
-	LLVOGrass::cleanupClass();
-	LLVOWater::cleanupClass();
-	LLVOTree::cleanupClass();
-	LLVOAvatar::cleanupClass();
-	LLVOVolume::cleanupClass();
+	SUBSYSTEM_CLEANUP(LLVOGrass);
+	SUBSYSTEM_CLEANUP(LLVOWater);
+	SUBSYSTEM_CLEANUP(LLVOTree);
+	SUBSYSTEM_CLEANUP(LLVOAvatar);
+	SUBSYSTEM_CLEANUP(LLVOVolume);
 
 	sObjectDataMap.clear();
 }

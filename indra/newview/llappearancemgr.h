@@ -42,9 +42,10 @@ class LLOutfitUnLockTimer;
 
 class LLAppearanceMgr: public LLSingleton<LLAppearanceMgr>
 {
+	LLSINGLETON(LLAppearanceMgr);
+	~LLAppearanceMgr();
 	LOG_CLASS(LLAppearanceMgr);
 
-	friend class LLSingleton<LLAppearanceMgr>;
 	friend class LLOutfitUnLockTimer;
 	
 public:
@@ -237,6 +238,7 @@ public:
 
 	bool isInUpdateAppearanceFromCOF() { return mIsInUpdateAppearanceFromCOF; }
 
+	static void onIdle(void *);
 	void requestServerAppearanceUpdate();
 
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2015-06-27 (Catznip-3.7)
@@ -250,17 +252,12 @@ public:
 	boost::signals2::connection setAttachmentsChangedCallback(attachments_changed_callback_t cb);
 
 
-
 private:
     void serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &httpAdapter);
 
     static void debugAppearanceUpdateCOF(const LLSD& content);
 
 	std::string		mAppearanceServiceURL;
-	
-protected:
-	LLAppearanceMgr();
-	~LLAppearanceMgr();
 
 private:
 
@@ -288,7 +285,6 @@ private:
 	 * to avoid unsynchronized outfit state or performing duplicate operations.
 	 */
 	bool mOutfitLocked;
-	S32  mInFlightCounter;
 	LLTimer mInFlightTimer;
 	static bool mActive;
 
