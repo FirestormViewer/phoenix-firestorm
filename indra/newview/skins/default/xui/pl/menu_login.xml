@@ -2,6 +2,7 @@
 <menu_bar name="Login Menu">
 	<menu label="Przeglądarka" name="File">
 		<menu_item_call label="Preferencje..." name="Preferences..."/>
+		<menu_item_check label="Pokaż wybór siatki" name="Show Grid Picker"/>
 		<menu_item_call label="Wyłącz [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Pomoc" name="Help">
@@ -29,7 +30,6 @@
 		<menu_item_call label="Pokaż warunki użytkowania" name="TOS"/>
 		<menu_item_call label="Pokaż wiadomość krytyczną" name="Critical"/>
 		<menu_item_call label="Przeglądarka mediów" name="Media Browser"/>
-		<menu_item_check label="Pokaż wybór siatki" name="Show Grid Picker"/>
 		<menu_item_call label="Pokaż konsolę powiadomień" name="Show Notifications Console"/>
 		<menu label="Ustaw poziom logowania" name="Set Logging Level">
 			<menu_item_check label="Debugowanie" name="Debug"/>

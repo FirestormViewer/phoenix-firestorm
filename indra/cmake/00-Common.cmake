@@ -337,7 +337,9 @@ if (DARWIN)
 	set(CMAKE_C_FLAGS_RELEASE "-O3 -msse3 ${CMAKE_C_FLAGS_RELEASE}")
   endif (USE_AVX_OPTIMIZATION)
     set(ENABLE_SIGNING TRUE)
-    set(SIGNING_IDENTITY "Developer ID Application: Linden Research, Inc.")
+    # <FS:TS> Sign with our identity, not LL's...
+    # set(SIGNING_IDENTITY "Developer ID Application: Linden Research, Inc.")
+    set(SIGNING_IDENTITY "Developer ID Application: Phoenix Firestorm Project, Inc., The")
   # <FS:ND> Build without frame pointer if requested. Otherwise profiling might not work reliable. N.B. Win32 uses FP based calling by default.
   if( NO_OMIT_FRAMEPOINTER )
     set(CMAKE_CXX_FLAGS_RELEASE "-fno-omit-frame-pointer ${CMAKE_CXX_FLAGS_RELEASE}")

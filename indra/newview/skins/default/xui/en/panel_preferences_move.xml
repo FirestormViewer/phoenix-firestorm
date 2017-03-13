@@ -542,11 +542,11 @@
          top_pad="0"
          follows="left|top"
          height="20"
-         label="Disable avatar turning to face camera locally when walking backwards"
+         label="Allow avatars to walk backwards on your screen (SL default, local only)"
          name="FSDisableTurningAroundWhenWalkingBackwards"
          width="270"
          control_name="FSDisableTurningAroundWhenWalkingBackwards"
-         tool_tip="Disables your avatar turning around to face the camera when you are walking backwards. This option affects only your local view and does not work with scripted AOs."/>
+         tool_tip="When checked, this option allows avatars that are moving backwards to be seen on your screen as walking backwards. This setting only affects what your viewer shows, not what the avatar actually does. This is the default behavior in the Second Life viewer. The avatar's AO may override this behavior and force turning the avatar around instead."/>
         <check_box
          top_pad="0"
          follows="left|top"

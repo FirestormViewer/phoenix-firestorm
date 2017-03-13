@@ -220,10 +220,6 @@
 					Rozdzielcz.
 				</text>
 				<button name="Reset_Resolution" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Aspect_Ratio" tool_tip="Tutaj możesz zmienić współczynnik proporcji dla ustawianej kamery - na przykład kamera 35mm ma współczynnik proporcji 3:2 (1.5). Przeglądarka będzie wykorzystać tą wartość jako punkt odniesienia dla tego, jak należy dostosować pole widzenia i długość ogniskowej w zależności od rozmiaru okna. WYDAJE SIĘ JEDNAK NIE MIEĆ ŻADNEGO WPŁYWU NA OBRAZ!">
-					Proporcje
-				</text>
-				<button name="Reset_Aspect_Ratio" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 			</panel>
 			<panel name="P_Glow_Settings">
 				<text name="T_Glow_Settings">
