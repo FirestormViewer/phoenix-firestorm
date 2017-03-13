@@ -174,7 +174,6 @@
 			<slider label="Wartość F kamery:" name="CameraFNum" tool_tip="Wartość F kamery dla głębi ostrości"/>
 			<slider label="Ogniskowa (mm):" name="CameraFocal" tool_tip="Ogniskowa dla głębi ostrości (w milimetrach)"/>
 			<slider label="Pole widzenia (°):" name="Camera FOV" tool_tip="Pionowy kąt pola widzenia kamery dla głębi ostrości (w stopniach)"/>
-			<slider label="Proporcje:" name="CameraAspectRatio" tool_tip="Proporcje dla głębi ostrości"/>
 			<slider label="Czas przejścia:" name="CameraFocusTrans" tool_tip="Czas potrzebny na dostosowanie skupienia kamery podczas zmiany z jednego punktu widzenia na drugi"/>
 			<slider label="Jakość renderowania:" name="CameraDoFResScale" tool_tip="Wpływa na jakość rozmywania oraz wydajność renderowania (więcej = lepsza jakość, mniej = lepsza wydajność)"/>
 		</panel>
