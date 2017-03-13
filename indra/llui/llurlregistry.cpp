@@ -60,6 +60,7 @@ LLUrlRegistry::LLUrlRegistry()
 	mUrlEntryHTTPLabel = new LLUrlEntryHTTPLabel();
 	registerUrl(mUrlEntryHTTPLabel);
 	registerUrl(new LLUrlEntryAgentCompleteName());
+	registerUrl(new LLUrlEntryAgentLegacyName());
 	registerUrl(new LLUrlEntryAgentDisplayName());
 	registerUrl(new LLUrlEntryAgentUserName());
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a

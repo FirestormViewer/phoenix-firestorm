@@ -1901,7 +1901,8 @@ bool LLMeshRepoThread::physicsShapeReceived(const LLUUID& mesh_id, U8* data, S32
 }
 
 LLMeshUploadThread::LLMeshUploadThread(LLMeshUploadThread::instance_list& data, LLVector3& scale, bool upload_textures,
-									   bool upload_skin, bool upload_joints, const std::string & upload_url, bool do_upload,
+									   bool upload_skin, bool upload_joints, bool lock_scale_if_joint_position,
+                                       const std::string & upload_url, bool do_upload,
 									   LLHandle<LLWholeModelFeeObserver> fee_observer,
 									   LLHandle<LLWholeModelUploadObserver> upload_observer)
   : LLThread("mesh upload"),
@@ -1916,6 +1917,7 @@ LLMeshUploadThread::LLMeshUploadThread(LLMeshUploadThread::instance_list& data, 
 	mUploadTextures = upload_textures;
 	mUploadSkin = upload_skin;
 	mUploadJoints = upload_joints;
+    mLockScaleIfJointPosition = lock_scale_if_joint_position;
 	mMutex = new LLMutex(NULL);
 	mPendingUploads = 0;
 	mFinished = false;
@@ -2028,8 +2030,8 @@ void LLMeshUploadThread::wholeModelToLLSD(LLSD& dest, bool include_textures)
 	LLSD result;
 
 	LLSD res;
-	result["folder_id"] = gInventory.findCategoryUUIDForType(LLFolderType::FT_OBJECT);
-	result["texture_folder_id"] = gInventory.findCategoryUUIDForType(LLFolderType::FT_TEXTURE);
+	result["folder_id"] = gInventory.findUserDefinedCategoryUUIDForType(LLFolderType::FT_OBJECT);
+	result["texture_folder_id"] = gInventory.findUserDefinedCategoryUUIDForType(LLFolderType::FT_TEXTURE);
 	result["asset_type"] = "mesh";
 	result["inventory_type"] = "object";
 	result["description"] = "(No Description)";
@@ -2102,6 +2104,7 @@ void LLMeshUploadThread::wholeModelToLLSD(LLSD& dest, bool include_textures)
 				decomp,
 				mUploadSkin,
 				mUploadJoints,
+                mLockScaleIfJointPosition,
 				FALSE,
 				FALSE,
 				data.mBaseModel->mSubmodelID);
@@ -2260,6 +2263,7 @@ void LLMeshUploadThread::wholeModelToLLSD(LLSD& dest, bool include_textures)
 				decomp,
 				mUploadSkin,
 				mUploadJoints,
+                mLockScaleIfJointPosition,
 				FALSE,
 				FALSE,
 				data.mBaseModel->mSubmodelID);
@@ -3532,11 +3536,11 @@ void LLMeshRepository::notifyLoadedMeshes()
 			// Handle addition of texture, if any.
 			if ( data.mResponse.has("new_texture_folder_id") )
 			{
-				const LLUUID& folder_id = data.mResponse["new_texture_folder_id"].asUUID();
+				const LLUUID& new_folder_id = data.mResponse["new_texture_folder_id"].asUUID();
 
-				if ( folder_id.notNull() )
+				if ( new_folder_id.notNull() )
 				{
-					LLUUID parent_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TEXTURE);
+					LLUUID parent_id = gInventory.findUserDefinedCategoryUUIDForType(LLFolderType::FT_TEXTURE);
 
 					std::string name;
 					// Check if the server built a different name for the texture folder
@@ -3551,7 +3555,7 @@ void LLMeshRepository::notifyLoadedMeshes()
 
 					// Add the category to the internal representation
 					LLPointer<LLViewerInventoryCategory> cat = 
-						new LLViewerInventoryCategory(folder_id, parent_id, 
+						new LLViewerInventoryCategory(new_folder_id, parent_id, 
 							LLFolderType::FT_NONE, name, gAgent.getID());
 					cat->setVersion(LLViewerInventoryCategory::VERSION_UNKNOWN);
 
@@ -3973,11 +3977,13 @@ LLSD& LLMeshRepoThread::getMeshHeader(const LLUUID& mesh_id)
 
 
 void LLMeshRepository::uploadModel(std::vector<LLModelInstance>& data, LLVector3& scale, bool upload_textures,
-								   bool upload_skin, bool upload_joints, std::string upload_url, bool do_upload,
+								   bool upload_skin, bool upload_joints, bool lock_scale_if_joint_position,
+                                   std::string upload_url, bool do_upload,
 								   LLHandle<LLWholeModelFeeObserver> fee_observer, LLHandle<LLWholeModelUploadObserver> upload_observer)
 {
-	LLMeshUploadThread* thread = new LLMeshUploadThread(data, scale, upload_textures, upload_skin, upload_joints, upload_url, 
-														do_upload, fee_observer, upload_observer);
+	LLMeshUploadThread* thread = new LLMeshUploadThread(data, scale, upload_textures,
+                                                        upload_skin, upload_joints, lock_scale_if_joint_position, 
+                                                        upload_url, do_upload, fee_observer, upload_observer);
 	mUploadWaitList.push_back(thread);
 }
 

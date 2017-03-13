@@ -67,6 +67,7 @@
 #include "llvowlsky.h"
 #include "llrender.h"
 #include "llnavigationbar.h"
+#include "llnotificationsutil.h"
 #include "llfloatertools.h"
 #include "llpaneloutfitsinventory.h"
 #include "llpanellogin.h"
@@ -121,6 +122,13 @@ static bool handleTerrainDetailChanged(const LLSD& newvalue)
 	return true;
 }
 
+
+static bool handleDebugAvatarJointsChanged(const LLSD& newvalue)
+{
+    std::string new_string = newvalue.asString();
+    LLJoint::setDebugJointNames(new_string);
+    return true;
+}
 
 static bool handleSetShaderChanged(const LLSD& newvalue)
 {
@@ -502,7 +510,7 @@ bool handleVelocityInterpolate(const LLSD& newvalue)
 
 bool handleForceShowGrid(const LLSD& newvalue)
 {
-	LLPanelLogin::updateServer( );
+	LLPanelLogin::updateLocationSelectorsVisibility();
 	return true;
 }
 
@@ -744,6 +752,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("LoginLocation")->getSignal()->connect(boost::bind(&handleLoginLocationChanged));
+    gSavedSettings.getControl("DebugAvatarJoints")->getCommitSignal()->connect(boost::bind(&handleDebugAvatarJointsChanged, _2));
 // [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
 	gSavedSettings.getControl("RestrainedLove")->getSignal()->connect(boost::bind(&RlvSettings::onChangedSettingMain, _2));
 // [/RLVa:KB]

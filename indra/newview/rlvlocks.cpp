@@ -434,6 +434,10 @@ bool RlvAttachmentLocks::verifyAttachmentLocks()
 // RlvAttachmentLockWatchdog member functions
 //
 
+RlvAttachmentLockWatchdog::RlvAttachmentLockWatchdog()
+{
+}
+
 // Checked: 2010-09-23 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
 bool RlvAttachmentLockWatchdog::RlvWearInfo::isAddLockedAttachPt(S32 idxAttachPt) const
 {

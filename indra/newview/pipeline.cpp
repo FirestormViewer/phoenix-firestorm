@@ -114,6 +114,7 @@
 #include "llpathfindingpathtool.h"
 #include "llscenemonitor.h"
 #include "llprogressview.h"
+#include "llcleanup.h"
 // [RLVa:KB] - Checked: RLVa-2.0.0
 #include "rlvactions.h"
 #include "rlvlocks.h"
@@ -7409,7 +7410,7 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 	}
 	LLVOPartGroup::destroyGL();
 
-	LLVertexBuffer::cleanupClass();
+	SUBSYSTEM_CLEANUP(LLVertexBuffer);
 	
 	//delete all name pool caches
 	LLGLNamePool::cleanupPools();
@@ -7796,12 +7797,10 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 			F32 fov = LLViewerCamera::getInstance()->getView();
 		
 			const F32 default_fov = CameraFieldOfView * F_PI/180.f;
-			//const F32 default_aspect_ratio = gSavedSettings.getF32("CameraAspectRatio");
 		
 			//F32 aspect_ratio = (F32) mScreen.getWidth()/(F32)mScreen.getHeight();
 		
 			F32 dv = 2.f*default_focal_length * tanf(default_fov/2.f);
-			//F32 dh = 2.f*default_focal_length * tanf(default_fov*default_aspect_ratio/2.f);
 
 			F32 focal_length = dv/(2*tanf(fov/2.f));
 		 

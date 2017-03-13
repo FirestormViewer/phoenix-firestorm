@@ -970,6 +970,10 @@ std::string RlvObject::getStatusString(const std::string& strFilter, const std::
 // RlvForceWear
 //
 
+RlvForceWear::RlvForceWear()
+{
+}
+
 // Checked: 2010-04-05 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
 bool RlvForceWear::isWearingItem(const LLInventoryItem* pItem)
 {

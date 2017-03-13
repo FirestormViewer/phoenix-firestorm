@@ -140,9 +140,8 @@ extern RlvAttachmentLocks gRlvAttachmentLocks;
 // TODO-RLVa: [RLVa-1.2.1] This class really looks rather cluttered so look into cleaning it up/simplifying it a bit
 class RlvAttachmentLockWatchdog : public LLSingleton<RlvAttachmentLockWatchdog>
 {
-	friend class LLSingleton<RlvAttachmentLockWatchdog>;
+	LLSINGLETON(RlvAttachmentLockWatchdog);
 protected:
-	RlvAttachmentLockWatchdog() : m_pTimer(NULL) {}
 	~RlvAttachmentLockWatchdog() { delete m_pTimer; }
 
 	/*
@@ -214,7 +213,7 @@ protected:
 		virtual ~RlvAttachmentLockWatchdogTimer() { m_pWatchdog->m_pTimer = NULL; }
 		virtual BOOL tick() { return m_pWatchdog->onTimer(); }
 		RlvAttachmentLockWatchdog* m_pWatchdog;
-	} *m_pTimer;
+	} *m_pTimer = nullptr;
 };
 
 // ============================================================================
@@ -283,12 +282,11 @@ extern RlvWearableLocks gRlvWearableLocks;
 class RlvFolderLocks : public LLSingleton<RlvFolderLocks>
 {
 	friend class RlvLockedDescendentsCollector;
+	LLSINGLETON(RlvFolderLocks);
 public:
-	RlvFolderLocks();
-
 	// Specifies the source of a folder lock
 	enum ELockSourceType
-	{ 
+	{
 		ST_ATTACHMENT = 0x01, ST_ATTACHMENTPOINT = 0x02, ST_FOLDER = 0x04, ST_ROOTFOLDER = 0x08,
 		ST_SHAREDPATH = 0x10, ST_WEARABLETYPE = 0x20, ST_NONE= 0x00, ST_MASK_ANY = 0xFF
 	};

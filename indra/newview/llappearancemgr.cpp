@@ -868,7 +868,7 @@ void LLWearableHoldingPattern::onAllComplete()
 //		// attachments, even those that are not being removed. This is
 //		// needed to get joint positions all slammed down to their
 //		// pre-attachment states.
-//		gAgentAvatarp->clearAttachmentPosOverrides();
+//		gAgentAvatarp->clearAttachmentOverrides();
 //
 //		if (objects_to_remove.size() || items_to_add.size())
 //		{
@@ -891,7 +891,7 @@ void LLWearableHoldingPattern::onAllComplete()
 //			 ++it)
 //		{
 //			LLViewerObject *objectp = *it;
-//			gAgentAvatarp->addAttachmentPosOverridesForObject(objectp);
+//			gAgentAvatarp->addAttachmentOverridesForObject(objectp);
 //		}
 //		
 //		// Add new attachments to match those requested.
@@ -1268,11 +1268,12 @@ void LLWearableHoldingPattern::onWearableAssetFetch(LLViewerWearable *wearable)
 		return;
 	}
 
+	U32 use_count = 0;
 	for (LLWearableHoldingPattern::found_list_t::iterator iter = getFoundList().begin();
-		 iter != getFoundList().end(); ++iter)
+		iter != getFoundList().end(); ++iter)
 	{
 		LLFoundData& data = *iter;
-		if(wearable->getAssetID() == data.mAssetID)
+		if (wearable->getAssetID() == data.mAssetID)
 		{
 			// Failing this means inventory or asset server are corrupted in a way we don't handle.
 			if ((data.mWearableType >= LLWearableType::WT_COUNT) || (wearable->getType() != data.mWearableType))
@@ -1281,8 +1282,47 @@ void LLWearableHoldingPattern::onWearableAssetFetch(LLViewerWearable *wearable)
 				break;
 			}
 
-			data.mWearable = wearable;
+			if (use_count == 0)
+			{
+				data.mWearable = wearable;
+				use_count++;
+			}
+			else
+			{
+				LLViewerInventoryItem* wearable_item = gInventory.getItem(data.mItemID);
+				if (wearable_item && wearable_item->isFinished() && wearable_item->getPermissions().allowModifyBy(gAgentID))
+				{
+					// We can't edit and do some other interactions with same asset twice, copy it
+					// Note: can't update incomplete items. Usually attached from previous viewer build, but
+					// consider adding fetch and completion callback
+					LLViewerWearable* new_wearable = LLWearableList::instance().createCopy(wearable, wearable->getName());
+					data.mWearable = new_wearable;
+					data.mAssetID = new_wearable->getAssetID();
+
+					// Update existing inventory item
+					wearable_item->setAssetUUID(new_wearable->getAssetID());
+					wearable_item->setTransactionID(new_wearable->getTransactionID());
+					gInventory.updateItem(wearable_item, LLInventoryObserver::INTERNAL);
+					wearable_item->updateServer(FALSE);
+
+					use_count++;
+				}
+				else
+				{
+					// Note: technically a bug, LLViewerWearable can identify only one item id at a time,
+					// yet we are tying it to multiple items here.
+					// LLViewerWearable need to support more then one item.
+					LL_WARNS() << "Same LLViewerWearable is used by multiple items! " << wearable->getAssetID() << LL_ENDL;
+					data.mWearable = wearable;
+				}
+			}
 		}
+	}
+
+	if (use_count > 1)
+	{
+		LL_WARNS() << "Copying wearable, multiple asset id uses! " << wearable->getAssetID() << LL_ENDL;
+		gInventory.notifyObservers();
 	}
 }
 
@@ -2648,7 +2688,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 		// attachments, even those that are not being removed. This is
 		// needed to get joint positions all slammed down to their
 		// pre-attachment states.
-		gAgentAvatarp->clearAttachmentPosOverrides();
+		gAgentAvatarp->clearAttachmentOverrides();
 		// (End of LL code)
 
 		// Take off the attachments that will no longer be in the outfit.
@@ -2664,7 +2704,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 		for (LLAgentWearables::llvo_vec_t::iterator it = objects_to_retain.begin(); it != objects_to_retain.end(); ++it)
 		{
 			LLViewerObject *objectp = *it;
-			gAgentAvatarp->addAttachmentPosOverridesForObject(objectp);
+			gAgentAvatarp->addAttachmentOverridesForObject(objectp);
 		}
 
 		// Add new attachments to match those requested.
@@ -3765,9 +3805,21 @@ LLSD LLAppearanceMgr::dumpCOF() const
 	return result;
 }
 
+// static
+void LLAppearanceMgr::onIdle(void *)
+{
+    LLAppearanceMgr* mgr = LLAppearanceMgr::getInstance();
+    if (mgr->mRerequestAppearanceBake)
+    {
+        mgr->requestServerAppearanceUpdate();
+    }
+}
+
 void LLAppearanceMgr::requestServerAppearanceUpdate()
 {
-    if (!mOutstandingAppearanceBakeRequest)
+    // Workaround: we shouldn't request update from server prior to uploading all attachments, but it is
+    // complicated to check for pending attachment uploads, so we are just waiting for uploads to complete
+    if (!mOutstandingAppearanceBakeRequest && gAssetStorage->getNumPendingUploads() == 0)
     {
         mRerequestAppearanceBake = false;
         LLCoprocedureManager::CoProcedure_t proc = boost::bind(&LLAppearanceMgr::serverAppearanceUpdateCoro, this, _1);
@@ -3775,13 +3827,14 @@ void LLAppearanceMgr::requestServerAppearanceUpdate()
     }
     else
     {
+        // Shedule update
         mRerequestAppearanceBake = true;
     }
 }
 
 void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &httpAdapter)
 {
-    mRerequestAppearanceBake = false;
+    BoolSetter outstanding(mOutstandingAppearanceBakeRequest);
     if (!gAgent.getRegion())
     {
         LL_WARNS("Avatar") << "Region not set, cannot request server appearance update" << LL_ENDL;
@@ -3813,8 +3866,6 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAd
     bool bRetry;
     do
     {
-        BoolSetter outstanding(mOutstandingAppearanceBakeRequest);
-        
         // If we have already received an update for this or higher cof version, 
         // put a warning in the log and cancel the request.
         S32 cofVersion = getCOFVersion();
@@ -3926,12 +3977,6 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAd
         }
 
     } while (bRetry);
-
-    if (mRerequestAppearanceBake)
-    {   // A bake request came in while this one was still outstanding.  
-        // Requeue ourself for a later request.
-        requestServerAppearanceUpdate();
-    }
 }
 
 /*static*/
@@ -4337,7 +4382,6 @@ LLAppearanceMgr::LLAppearanceMgr():
 	mAttachmentInvLinkEnabled(false),
 	mOutfitIsDirty(false),
 	mOutfitLocked(false),
-	mInFlightCounter(0),
 	mInFlightTimer(),
 	mIsInUpdateAppearanceFromCOF(false),
     mOutstandingAppearanceBakeRequest(false),
@@ -4352,6 +4396,7 @@ LLAppearanceMgr::LLAppearanceMgr():
 			"OutfitOperationsTimeout")));
 
 	gIdleCallbacks.addFunction(&LLAttachmentsMgr::onIdle, NULL);
+	gIdleCallbacks.addFunction(&LLAppearanceMgr::onIdle, NULL); //sheduling appearance update requests
 }
 
 LLAppearanceMgr::~LLAppearanceMgr()

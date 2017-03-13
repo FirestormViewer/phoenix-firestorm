@@ -90,10 +90,9 @@ protected:
 
 class RlvBehaviourDictionary : public LLSingleton<RlvBehaviourDictionary>
 {
-	friend class LLSingleton<RlvBehaviourDictionary>;
 	friend class RlvFloaterBehaviours;
+	LLSINGLETON(RlvBehaviourDictionary);
 protected:
-	RlvBehaviourDictionary();
 	~RlvBehaviourDictionary();
 public:
 	void addEntry(const RlvBehaviourInfo* pEntry);
@@ -570,9 +569,7 @@ protected:
 
 class RlvForceWear : public LLSingleton<RlvForceWear>
 {
-protected:
-	RlvForceWear() {}
-
+	LLSINGLETON(RlvForceWear);
 public:
 	// Folders
 	enum EWearAction { ACTION_WEAR_REPLACE, ACTION_WEAR_ADD, ACTION_REMOVE };
@@ -674,9 +671,8 @@ private:
 
 class RlvBehaviourNotifyHandler : public LLSingleton<RlvBehaviourNotifyHandler>
 {
-	friend class LLSingleton<RlvBehaviourNotifyHandler>;
+	LLSINGLETON(RlvBehaviourNotifyHandler);
 protected:
-	RlvBehaviourNotifyHandler();
 	virtual ~RlvBehaviourNotifyHandler() { if (m_ConnCommand.connected()) m_ConnCommand.disconnect(); }
 
 public:
