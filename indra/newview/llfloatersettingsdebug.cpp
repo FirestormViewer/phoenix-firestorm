@@ -30,6 +30,9 @@
 #include "lluictrlfactory.h"
 //#include "llfirstuse.h"
 #include "llcombobox.h"
+// [RLVa:KB] - Patch: RLVa-2.1.0
+#include "llsdserialize.h"
+// [/RLVa:KB]
 #include "llspinctrl.h"
 #include "llcolorswatch.h"
 #include "llviewercontrol.h"
@@ -444,6 +447,15 @@ void LLFloaterSettingsDebug::updateControl(LLControlVariable* controlp)
 			color_swatch->setValue(sd);
 			break;
 		  }
+// [RLVa:KB] - Patch: RLVa-2.1.0
+		  case TYPE_LLSD:
+			  {
+				  std::ostringstream strLLSD;
+				  LLSDSerialize::toPrettyNotation(sd, strLLSD);
+				  mComment->setText(strLLSD.str());
+			  }
+			  break;
+// [/RLVa:KB]
 		  default:
 			mComment->setText(std::string("unknown"));
 			break;
