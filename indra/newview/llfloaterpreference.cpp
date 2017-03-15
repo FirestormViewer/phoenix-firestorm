@@ -1238,9 +1238,9 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	// <FS:Ansariel> Fix resetting graphics preset on cancel
 	saveGraphicsPreset(gSavedSettings.getString("PresetGraphicActive"));
 
-	bool started = (LLStartUp::getStartupState() == STATE_STARTED);
-
 	// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
+	//bool started = (LLStartUp::getStartupState() == STATE_STARTED);
+
 	//LLButton* load_btn = findChild<LLButton>("PrefLoadButton");
 	//LLButton* save_btn = findChild<LLButton>("PrefSaveButton");
 	//LLButton* delete_btn = findChild<LLButton>("PrefDeleteButton");
@@ -1250,8 +1250,6 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	//save_btn->setEnabled(started);
 	//delete_btn->setEnabled(started);
 	//exceptions_btn->setEnabled(started);
-	LLButton* exceptions_btn = findChild<LLButton>("RenderExceptionsButton");
-	exceptions_btn->setEnabled(started);
 	// </FS:Ansariel>
 
 	// <FS:ND> Hook up and init for filtering
