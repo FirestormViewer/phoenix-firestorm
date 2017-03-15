@@ -777,6 +777,9 @@ Stellen Sie sicher, dass kein Objekt gesperrt ist und alle Objekte Ihnen gehöre
 	<notification name="CannotLinkPermanent">
 		Objekte können nicht über Regionsgrenzen hinweg verknüpft werden.
 	</notification>
+	<notification name="CannotLinkAcrossRegions">
+		Objekte können nicht über Regionsgrenzen hinweg verknüpft werden.
+	</notification>
 	<notification name="CannotLinkDifferentOwners">
 		Verknüpfung nicht möglich, da nicht alle Objekte denselben Eigentümer haben.
 

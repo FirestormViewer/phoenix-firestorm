@@ -138,6 +138,7 @@
 		<menu_item_call label="Animation-Explorer" name="Animation Explorer"/>
 		<menu_item_call label="Asset-Blacklist" name="asset_blacklist"/>
 		<menu_item_call label="Avatar-Anzeigeeinstellungen" name="Avatar Render Settings"/>
+		<menu_item_check label="Freunde immer normal anzeigen" name="Always show Friends normally"/>
 		<menu_item_check label="Nur Freunde anzeigen" name="Render Friends Only"/>
 	</menu>
 	<menu label="Bauen" name="BuildTools">
