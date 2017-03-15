@@ -1443,6 +1443,9 @@ bool idle_startup()
 		// Load media plugin cookies
 		LLViewerMedia::loadCookieFile();
 
+		// <FS:Ansariel> [FS Persisted Avatar Render Settings]
+		//LLRenderMuteList::getInstance()->loadFromFile();
+
 		//-------------------------------------------------
 		// Handle startup progress screen
 		//-------------------------------------------------

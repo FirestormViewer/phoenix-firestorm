@@ -311,6 +311,7 @@ set(viewer_SOURCE_FILES
     llfloaterautoreplacesettings.cpp
     llfloateravatar.cpp
     llfloateravatarpicker.cpp
+    llfloateravatarrendersettings.cpp
     llfloateravatartextures.cpp
     llfloaterbeacons.cpp
     llfloaterbigpreview.cpp
@@ -1060,6 +1061,7 @@ set(viewer_HEADER_FILES
     llfloaterautoreplacesettings.h
     llfloateravatar.h
     llfloateravatarpicker.h
+    llfloateravatarrendersettings.h
     llfloateravatartextures.h
     llfloaterbeacons.h
     llfloaterbigpreview.h

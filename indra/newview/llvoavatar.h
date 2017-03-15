@@ -419,8 +419,6 @@ public:
 	};
 	void		setVisualMuteSettings(VisualMuteSettings set);
 	VisualMuteSettings  getVisualMuteSettings()						{ return mVisuallyMuteSetting;	};
-	// <FS:Ansariel> Load persisted avatar render settings
-	//VisualMuteSettings  getSavedVisualMuteSettings();
 
 	U32 		renderRigid();
 	U32 		renderSkinned();
@@ -454,8 +452,6 @@ public:
 
 	VisualMuteSettings		mVisuallyMuteSetting;			// Always or never visually mute this AV
 
-	// <FS:Ansariel> Load persisted avatar render settings
-	//static std::map<LLUUID, VisualMuteSettings> sVisuallyMuteSettingsMap;
 	//--------------------------------------------------------------------
 	// Morph masks
 	//--------------------------------------------------------------------

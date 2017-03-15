@@ -755,8 +755,8 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	    LLSceneMonitor::getInstance()->freezeAvatar((LLCharacter*)this);
 	}
 
-	// <FS:Ansariel> Load persisted avatar render settings
-	//mVisuallyMuteSetting = getSavedVisualMuteSettings();
+	// <FS:Ansariel> [FS Persisted Avatar Render Settings]
+	//mVisuallyMuteSetting = LLVOAvatar::VisualMuteSettings(LLRenderMuteList::getInstance()->getSavedVisualMuteSetting(getID()));
 	mVisuallyMuteSetting = FSAvatarRenderPersistence::instance().getAvatarRenderSettings(id);
 }
 
@@ -7864,7 +7864,9 @@ BOOL LLVOAvatar::isFullyLoaded() const
 bool LLVOAvatar::isTooComplex() const
 {
 	bool too_complex;
-	if (isSelf() || mVisuallyMuteSetting == AV_ALWAYS_RENDER)
+	bool render_friend =  (LLAvatarTracker::instance().isBuddy(getID()) && gSavedSettings.getBOOL("AlwaysRenderFriends"));
+
+	if (isSelf() || render_friend || mVisuallyMuteSetting == AV_ALWAYS_RENDER)
 	{
 		too_complex = false;
 	}
@@ -10144,31 +10146,14 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
     }
 }
 
-//static
-// <FS:Ansariel> Load persisted avatar render settings
-//std::map<LLUUID, LLVOAvatar::VisualMuteSettings> LLVOAvatar::sVisuallyMuteSettingsMap;
-
 void LLVOAvatar::setVisualMuteSettings(VisualMuteSettings set)
 {
     mVisuallyMuteSetting = set;
     mNeedsImpostorUpdate = TRUE;
-    // <FS:Ansariel> Load persisted avatar render settings
-    //sVisuallyMuteSettingsMap[getID()] = set;
+    // <FS:Ansariel> [FS Persisted Avatar Render Settings]
+    //LLRenderMuteList::getInstance()->saveVisualMuteSetting(getID(), S32(set));
     FSAvatarRenderPersistence::instance().setAvatarRenderSettings(getID(), set);
 }
-
-// <FS:Ansariel> Load persisted avatar render settings
-//LLVOAvatar::VisualMuteSettings LLVOAvatar::getSavedVisualMuteSettings()
-//{
-//    std::map<LLUUID, VisualMuteSettings>::iterator iter = sVisuallyMuteSettingsMap.find(getID());
-//    if (iter != sVisuallyMuteSettingsMap.end())
-//    {
-//        return iter->second;
-//    }
-//
-//    return AV_RENDER_NORMALLY;
-//}
-// </FS:Ansariel>
 
 void LLVOAvatar::calcMutedAVColor()
 {
