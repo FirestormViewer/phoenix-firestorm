@@ -1304,7 +1304,6 @@ void gl_rect_2d_simple( S32 width, S32 height )
 		gGL.vertex2i(width, height);
 		gGL.vertex2i(0, 0);
 		gGL.vertex2i(width, 0);
-		gGL.vertex2i( width, height );
 	}
 	gGL.end();
 	// </FS:Ansariel>
