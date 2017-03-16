@@ -29,6 +29,21 @@
 	 max_length_chars="300"
 	 name="filter_input"
 	 top="4"
+	 right="-35" />
+	<menu_button
+	 follows="top|right"
+	 height="23"
+	 image_hover_unselected="Toolbar_Middle_Over"
+	 image_overlay="AddItem_Off"
+	 image_selected="Toolbar_Middle_Selected"
+	 image_unselected="Toolbar_Middle_Off"
+	 layout="topleft"
+	 left_pad="2"
+	 menu_filename="menu_avatar_rendering_settings_add.xml"
+	 menu_position="bottomleft"
+	 name="plus_btn"
+	 tool_tip="Add new person to the list"
+	 top="4"
 	 right="-4" />
 	<name_list
 	 column_padding="0"
