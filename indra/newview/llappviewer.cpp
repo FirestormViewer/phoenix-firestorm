@@ -664,7 +664,10 @@ static void settings_to_globals()
 	LLSurface::setTextureSize(gSavedSettings.getU32("RegionTextureSize"));
 	
 	LLRender::sGLCoreProfile = gSavedSettings.getBOOL("RenderGLCoreProfile");
-	LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
+	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
+	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
+	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO");
+	// </FS:Ansariel>
 	LLImageGL::sGlobalUseAnisotropic	= gSavedSettings.getBOOL("RenderAnisotropic");
 	LLImageGL::sCompressTextures		= gSavedSettings.getBOOL("RenderCompressTextures");
 	LLVOVolume::sLODFactor				= gSavedSettings.getF32("RenderVolumeLODFactor");

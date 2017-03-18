@@ -495,7 +495,10 @@ void LLPipeline::init()
 	sRenderBump = gSavedSettings.getBOOL("RenderObjectBump");
 	sUseTriStrips = gSavedSettings.getBOOL("RenderUseTriStrips");
 	LLVertexBuffer::sUseStreamDraw = gSavedSettings.getBOOL("RenderUseStreamVBO");
-	LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
+	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
+	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
+	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO");
+	// </FS:Ansariel>
 	LLVertexBuffer::sPreferStreamDraw = gSavedSettings.getBOOL("RenderPreferStreamDraw");
 	sRenderAttachedLights = gSavedSettings.getBOOL("RenderAttachedLights");
 	sRenderAttachedParticles = gSavedSettings.getBOOL("RenderAttachedParticles");
@@ -7521,7 +7524,10 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 
 	sUseTriStrips = gSavedSettings.getBOOL("RenderUseTriStrips");
 	LLVertexBuffer::sUseStreamDraw = gSavedSettings.getBOOL("RenderUseStreamVBO");
-	LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
+	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
+	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
+	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO");
+	// </FS:Ansariel>
 	LLVertexBuffer::sPreferStreamDraw = gSavedSettings.getBOOL("RenderPreferStreamDraw");
 	LLVertexBuffer::sEnableVBOs = gSavedSettings.getBOOL("RenderVBOEnable");
 	LLVertexBuffer::sDisableVBOMapping = LLVertexBuffer::sEnableVBOs && gSavedSettings.getBOOL("RenderVBOMappingDisable") ;
