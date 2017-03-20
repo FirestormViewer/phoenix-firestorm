@@ -168,14 +168,15 @@ void LLFloaterScriptDebug::addScriptLine(const LLChat& chat)
 			if(objectp->isHUDAttachment())
 			{
 				((LLViewerObject*)gAgentAvatarp)->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
+				// <FS:Ansariel> Mark script error icons
+				((LLViewerObject*)gAgentAvatarp)->getIcon()->setScriptError();
 			}
 			else
 			{
 				objectp->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
+				// <FS:Ansariel> Mark script error icons
+				objectp->getIcon()->setScriptError();
 			}
-			// <FS:Ansariel> Mark script error icons
-			objectp->getIcon()->setScriptError();
-			// </FS:Ansariel> Mark script error icons
 		}
 		// </FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
 		floater_label = llformat("%s (%.0f, %.0f, %.0f)",

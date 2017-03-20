@@ -21976,7 +21976,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1.0</real>
+      <real>0.0</real>
       <key>SanityCheckType</key>
       <string>LessThanEquals</string>
       <key>SanityValue</key>
@@ -21995,7 +21995,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1.0</real>
+      <real>2.0</real>
     </map>
     <key>FSRenderVignette</key>
     <map>

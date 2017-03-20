@@ -31,6 +31,7 @@
 
 #include "fscommon.h"
 #include "llfiltereditor.h"
+#include "llfloateravatarpicker.h"
 #include "llnamelistctrl.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"
@@ -45,6 +46,7 @@ FSFloaterAvatarRenderSettings::FSFloaterAvatarRenderSettings(const LLSD& key)
  mFilterSubString(LLStringUtil::null),
  mFilterSubStringOrig(LLStringUtil::null)
 {
+	mCommitCallbackRegistrar.add("Settings.AddNewEntry", boost::bind(&FSFloaterAvatarRenderSettings::onClickAdd, this, _2));
 }
 
 FSFloaterAvatarRenderSettings::~FSFloaterAvatarRenderSettings()
@@ -87,9 +89,19 @@ BOOL FSFloaterAvatarRenderSettings::postBuild()
 
 	mRenderSettingChangedCallbackConnection = FSAvatarRenderPersistence::instance().setAvatarRenderSettingChangedCallback(boost::bind(&FSFloaterAvatarRenderSettings::onAvatarRenderSettingChanged, this, _1, _2));
 
+	this->setVisibleCallback(boost::bind(&FSFloaterAvatarRenderSettings::removePicker, this));
+	
 	loadInitialList();
 
 	return TRUE;
+}
+
+void FSFloaterAvatarRenderSettings::removePicker()
+{
+	if (mPicker.get())
+	{
+		mPicker.get()->closeFloater();
+	}
 }
 
 void FSFloaterAvatarRenderSettings::onCloseBtn()
@@ -143,6 +155,50 @@ BOOL FSFloaterAvatarRenderSettings::handleKeyHere(KEY key, MASK mask)
 	}
 
 	return LLFloater::handleKeyHere(key, mask);
+}
+
+void FSFloaterAvatarRenderSettings::onClickAdd(const LLSD& userdata)
+{
+	const std::string command_name = userdata.asString();
+	LLVOAvatar::VisualMuteSettings render_setting = LLVOAvatar::AV_RENDER_NORMALLY;
+	if ("never" == command_name)
+	{
+		render_setting = LLVOAvatar::AV_DO_NOT_RENDER;
+	}
+	else if ("always" == command_name)
+	{
+		render_setting = LLVOAvatar::AV_ALWAYS_RENDER;
+	}
+
+	LLView* button = findChild<LLButton>("plus_btn", TRUE);
+	LLFloater* root_floater = gFloaterView->getParentFloater(this);
+	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSFloaterAvatarRenderSettings::callbackAvatarPicked, this, _1, render_setting),
+																	TRUE, TRUE, TRUE, root_floater->getName(), button);
+
+	if (root_floater)
+	{
+		root_floater->addDependentFloater(picker);
+	}
+
+	mPicker = picker->getHandle();
+}
+
+void FSFloaterAvatarRenderSettings::callbackAvatarPicked(const uuid_vec_t& ids, LLVOAvatar::VisualMuteSettings render_setting)
+{
+	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
+	{
+		LLUUID avatar_id = *it;
+
+		LLVOAvatar *avatarp = dynamic_cast<LLVOAvatar*>(gObjectList.findObject(avatar_id));
+		if (avatarp)
+		{
+			avatarp->setVisualMuteSettings(render_setting);
+		}
+		else
+		{
+			FSAvatarRenderPersistence::instance().setAvatarRenderSettings(avatar_id, render_setting);
+		}
+	}
 }
 
 

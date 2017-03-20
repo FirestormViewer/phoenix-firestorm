@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
 	<block_list name="blocked" tool_tip="Lista zablokowanych osób" />
+	<text name="block_limit">
+		Zablokowano: [COUNT] ([LIMIT] maks.)
+	</text>
 	<layout_stack name="block_list_sidetray_main">
 		<layout_panel name="back_button_container">
 			<button tool_tip="Wróć do Ludzi" name="back"/>

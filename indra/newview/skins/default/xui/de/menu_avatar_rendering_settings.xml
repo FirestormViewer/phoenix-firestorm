@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu>
+	<menu_item_call label="Einwohner komplett anzeigen..." name="add_avatar_always_render"/>
+	<menu_item_call label="Einwohner niemals anzeigen..." name="add_avatar_never_render"/>
+</toggleable_menu>
