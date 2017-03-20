@@ -344,10 +344,12 @@ LLMeshRepository gMeshRepo;
 
 const S32 MESH_HEADER_SIZE = 4096;                      // Important:  assumption is that headers fit in this space
 
+// <FS:Ansariel> [UDP Assets]
 const S32 REQUEST_HIGH_WATER_MIN = 32;					// Limits for GetMesh regions
 const S32 REQUEST_HIGH_WATER_MAX = 150;					// Should remain under 2X throttle
 const S32 REQUEST_LOW_WATER_MIN = 16;
 const S32 REQUEST_LOW_WATER_MAX = 75;
+// </FS:Ansariel> [UDP Assets]
 
 const S32 REQUEST2_HIGH_WATER_MIN = 32;					// Limits for GetMesh2 regions
 const S32 REQUEST2_HIGH_WATER_MAX = 100;

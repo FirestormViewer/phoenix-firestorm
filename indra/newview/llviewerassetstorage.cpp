@@ -33,6 +33,7 @@
 #include "message.h"
 
 #include "llagent.h"
+#include "llappcorehttp.h"
 #include "llviewerregion.h"
 
 #include "lltransfersourceasset.h"
@@ -428,6 +429,11 @@ void LLViewerAssetStorage::queueRequestHttp(
     BOOL is_priority)
 {
     LL_DEBUGS("ViewerAsset") << "Request asset via HTTP " << uuid << " type " << LLAssetType::lookup(atype) << LL_ENDL;
+    if (!gAgent.getRegion())
+    {
+        LL_WARNS() << "No region, fetch fails" << LL_ENDL;
+		return;
+    }
     std::string cap_url = gAgent.getRegion()->getCapability("ViewerAsset");
     if (cap_url.empty())
     {
@@ -475,7 +481,7 @@ void LLViewerAssetStorage::assetRequestCoro(
     std::string url = getAssetURL(uuid,atype);
     LL_DEBUGS("ViewerAsset") << "request url: " << url << LL_ENDL;
 
-    LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
+    LLCore::HttpRequest::policy_t httpPolicy(LLAppCoreHttp::AP_TEXTURE);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
         httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("assetRequestCoro", httpPolicy));
     LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
