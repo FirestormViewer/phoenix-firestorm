@@ -2475,8 +2475,9 @@ void LLVertexBuffer::setBuffer(U32 data_mask)
 			sGLRenderIndices = mGLIndices;
 		}
 	}
-
-	if (!mGLArray)
+	// <FS:ND> Need to setup (activate/deactivate) client arrays with VAOs too
+	// if( !mGLArray )
+	// </FS:ND>
 	{
 		setupClientArrays(data_mask);
 	}
