@@ -78,6 +78,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
             if self.prefix(src=pkgdir,dst=""):
                 self.path("dictionaries")
+                self.path("ca-bundle.crt")
                 self.end_prefix(pkgdir)
             self.end_prefix("app_settings")
         # </FS:LO>
@@ -86,7 +87,6 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             if self.prefix(src="app_settings"):
                 self.exclude("logcontrol.xml")
                 self.exclude("logcontrol-dev.xml")
-                self.path("*.pem")
                 self.path("*.ini")
                 self.path("*.xml")
                 self.path("*.db2")
@@ -104,20 +104,22 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 # ... and the entire image filters directory
                 self.path("filters")
             
+                # ... and the included spell checking dictionaries
                 # <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
                 # ... and the included spell checking dictionaries
 #                pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
 #                if self.prefix(src=pkgdir,dst=""):
 #                    self.path("dictionaries")
+#                    self.path("ca-bundle.crt")
 #                    self.end_prefix(pkgdir)
                 # </FS:LO>
+
                 # include the entire beams directory
                 self.path("beams")
                 self.path("beamsColors")
 
                 # include the extracted packages information (see BuildPackagesInfo.cmake)
                 self.path(src=os.path.join(self.args['build'],"packages-info.txt"), dst="packages-info.txt")
-
                 # CHOP-955: If we have "sourceid" or "viewer_channel" in the
                 # build process environment, generate it into
                 # settings_install.xml.
@@ -496,7 +498,6 @@ class Windows_i686_Manifest(ViewerManifest):
             self.path("ortp.dll")
             self.path("libsndfile-1.dll")
             self.path("vivoxoal.dll")
-            self.path("ca-bundle.crt")
             
             # Security
             self.path("ssleay32.dll")
@@ -967,7 +968,6 @@ class DarwinManifest(ViewerManifest):
                                 'libvivoxoal.dylib',
                                 'libvivoxsdk.dylib',
                                 'libvivoxplatform.dylib',
-                                'ca-bundle.crt',
                                 'SLVoice',
                                 ):
                      self.path2basename(relpkgdir, libfile)

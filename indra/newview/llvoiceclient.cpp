@@ -217,7 +217,10 @@ void LLVoiceClient::updateSettings()
 
 	updateMicMuteLogic();
 
-	if (mVoiceModule) mVoiceModule->updateSettings();
+	if (mVoiceModule)
+    {
+        mVoiceModule->updateSettings();
+    }
 }
 
 //--------------------------------------------------
@@ -542,7 +545,10 @@ bool LLVoiceClient::voiceEnabled(bool no_cache)
 
 void LLVoiceClient::setVoiceEnabled(bool enabled)
 {
-	if (mVoiceModule) mVoiceModule->setVoiceEnabled(enabled);
+	if (mVoiceModule)
+    {
+        mVoiceModule->setVoiceEnabled(enabled);
+    }
 }
 
 void LLVoiceClient::updateMicMuteLogic()

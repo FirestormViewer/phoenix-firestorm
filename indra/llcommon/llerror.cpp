@@ -317,7 +317,7 @@ namespace
 		LOG_CLASS(LogControlFile);
 	
 	public:
-		static LogControlFile& fromDirectory(const std::string& dir);
+		static LogControlFile& fromDirectory(const std::string& user_dir, const std::string& app_dir);
 		
 		virtual bool loadFile();
 		
@@ -327,13 +327,12 @@ namespace
 			{ }
 	};
 
-	LogControlFile& LogControlFile::fromDirectory(const std::string& dir)
+	LogControlFile& LogControlFile::fromDirectory(const std::string& user_dir, const std::string& app_dir)
 	{
-		std::string dirBase = dir + "/";
-			// NB: We have no abstraction in llcommon  for the "proper"
-			// delimiter but it turns out that "/" works on all three platforms
+        // NB: We have no abstraction in llcommon  for the "proper"
+        // delimiter but it turns out that "/" works on all three platforms
 			
-		std::string file = dirBase + "logcontrol-dev.xml";
+		std::string file = user_dir + "/logcontrol-dev.xml";
 		
 		llstat stat_info;
 		if (LLFile::stat(file, &stat_info)) {
@@ -341,7 +340,7 @@ namespace
 			// if it doesn't exist.  LLFile has no better abstraction for 
 			// testing for file existence.
 			
-			file = dirBase + "logcontrol.xml";
+			file = app_dir + "/logcontrol.xml";
 		}
 		return * new LogControlFile(file);
 			// NB: This instance is never freed
@@ -368,7 +367,7 @@ namespace
 		}
 		
 		LLError::configure(configuration);
-		LL_INFOS() << "logging reconfigured from " << filename() << LL_ENDL;
+		LL_INFOS("LogControlFile") << "logging reconfigured from " << filename() << LL_ENDL;
 		return true;
 	}
 
@@ -578,17 +577,15 @@ namespace LLError
 		for (size_t i = 0; i < mTagCount; i++)
 		{
 			// <FS:ND> Tags can be 0, so work around that.
-
-			// mTagString += std::string("#") + mTags[i] + ((i == mTagCount - 1) ? "" : ",");
-
+			//mTagString.append(mTags[i]);
 			char const *pTag = mTags[i];
 			if( !pTag )
 				pTag = "<NULL>";
-
-			mTagString += std::string("#") + pTag + ((i == mTagCount - 1) ? "" : ",");
-
+			mTagString.append(pTag);
 			// </FS:ND>
+            mTagString.append((i == mTagCount - 1) ? "" : ",");
 		}
+        mTagString.append("#");
 	}
 
 #ifdef LL_LINUX
@@ -655,7 +652,7 @@ namespace
 	}
 	
 	
-	void commonInit(const std::string& dir, bool log_to_stderr = true)
+	void commonInit(const std::string& user_dir, const std::string& app_dir, bool log_to_stderr = true)
 	{
 		LLError::Settings::getInstance()->reset();
 		
@@ -675,7 +672,7 @@ namespace
 		LLError::addRecorder(recordToWinDebug);
 #endif
 
-		LogControlFile& e = LogControlFile::fromDirectory(dir);
+		LogControlFile& e = LogControlFile::fromDirectory(user_dir, app_dir);
 
 		// NOTE: We want to explicitly load the file before we add it to the event timer
 		// that checks for changes to the file.  Else, we're not actually loading the file yet,
@@ -691,23 +688,9 @@ namespace
 
 namespace LLError
 {
-	void initForServer(const std::string& identity)
+	void initForApplication(const std::string& user_dir, const std::string& app_dir, bool log_to_stderr)
 	{
-		std::string dir = "/opt/linden/etc";
-		if (LLApp::instance())
-		{
-			dir = LLApp::instance()->getOption("configdir").asString();
-		}
-		commonInit(dir);
-#if !LL_WINDOWS
-		LLError::RecorderPtr recordToSyslog(new RecordToSyslog(identity));
-		addRecorder(recordToSyslog);
-#endif
-	}
-
-	void initForApplication(const std::string& dir, bool log_to_stderr)
-	{
-		commonInit(dir, log_to_stderr);
+		commonInit(user_dir, app_dir, log_to_stderr);
 	}
 
 	void setPrintLocation(bool print)
