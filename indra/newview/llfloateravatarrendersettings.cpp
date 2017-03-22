@@ -30,6 +30,7 @@
 #include "llfloateravatarrendersettings.h"
 
 #include "llavatarnamecache.h"
+#include "llfloateravatarpicker.h"
 #include "llfiltereditor.h"
 #include "llfloaterreg.h"
 #include "llnamelistctrl.h"
@@ -73,6 +74,7 @@ LLFloaterAvatarRenderSettings::LLFloaterAvatarRenderSettings(const LLSD& key)
 {
     mContextMenu = new LLSettingsContextMenu(this);
     LLRenderMuteList::getInstance()->addObserver(&sAvatarRenderMuteListObserver);
+    mCommitCallbackRegistrar.add("Settings.AddNewEntry", boost::bind(&LLFloaterAvatarRenderSettings::onClickAdd, this, _2));
 }
 
 LLFloaterAvatarRenderSettings::~LLFloaterAvatarRenderSettings()
@@ -86,10 +88,18 @@ BOOL LLFloaterAvatarRenderSettings::postBuild()
     LLFloater::postBuild();
     mAvatarSettingsList = getChild<LLNameListCtrl>("render_settings_list");
     mAvatarSettingsList->setRightMouseDownCallback(boost::bind(&LLFloaterAvatarRenderSettings::onAvatarListRightClick, this, _1, _2, _3));
-
+    this->setVisibleCallback(boost::bind(&LLFloaterAvatarRenderSettings::removePicker, this));
     getChild<LLFilterEditor>("people_filter_input")->setCommitCallback(boost::bind(&LLFloaterAvatarRenderSettings::onFilterEdit, this, _2));
 
 	return TRUE;
+}
+
+void LLFloaterAvatarRenderSettings::removePicker()
+{
+    if(mPicker.get())
+    {
+        mPicker.get()->closeFloater();
+    }
 }
 
 void LLFloaterAvatarRenderSettings::draw()
@@ -187,15 +197,15 @@ void LLFloaterAvatarRenderSettings::onCustomAction (const LLSD& userdata, const 
     if ("default" == command_name)
     {
         new_setting = S32(LLVOAvatar::AV_RENDER_NORMALLY);
-	}
+    }
     else if ("never" == command_name)
-	{
+    {
         new_setting = S32(LLVOAvatar::AV_DO_NOT_RENDER);
     }
     else if ("always" == command_name)
-	{
+    {
         new_setting = S32(LLVOAvatar::AV_ALWAYS_RENDER);
-	}
+    }
 
     LLVOAvatar *avatarp = find_avatar(av_id);
     if (avatarp)
@@ -234,5 +244,46 @@ void LLFloaterAvatarRenderSettings::setNeedsUpdate()
     LLFloaterAvatarRenderSettings* instance = LLFloaterReg::getTypedInstance<LLFloaterAvatarRenderSettings>("avatar_render_settings");
     if(!instance) return;
     instance->mNeedsUpdate = true;
+}
+
+void LLFloaterAvatarRenderSettings::onClickAdd(const LLSD& userdata)
+{
+    const std::string command_name = userdata.asString();
+    S32 visual_setting = 0;
+    if ("never" == command_name)
+    {
+        visual_setting = S32(LLVOAvatar::AV_DO_NOT_RENDER);
+    }
+    else if ("always" == command_name)
+    {
+        visual_setting = S32(LLVOAvatar::AV_ALWAYS_RENDER);
+    }
+
+    LLView * button = findChild<LLButton>("plus_btn", TRUE);
+    LLFloater* root_floater = gFloaterView->getParentFloater(this);
+    LLFloaterAvatarPicker * picker = LLFloaterAvatarPicker::show(boost::bind(&LLFloaterAvatarRenderSettings::callbackAvatarPicked, this, _1, visual_setting),
+                                                                    FALSE, TRUE, FALSE, root_floater->getName(), button);
+
+    if (root_floater)
+    {
+        root_floater->addDependentFloater(picker);
+    }
+
+    mPicker = picker->getHandle();
+}
+
+void LLFloaterAvatarRenderSettings::callbackAvatarPicked(const uuid_vec_t& ids, S32 visual_setting)
+{
+    if (ids.empty()) return;
+
+    LLVOAvatar *avatarp = find_avatar(ids[0]);
+    if (avatarp)
+    {
+        avatarp->setVisualMuteSettings(LLVOAvatar::VisualMuteSettings(visual_setting));
+    }
+    else
+    {
+        LLRenderMuteList::getInstance()->saveVisualMuteSetting(ids[0], visual_setting);
+    }
 }
 #endif
