@@ -7,6 +7,7 @@
 		Zawsze
 	</floater.string>
 	<filter_editor label="Filtruj awatary" name="filter_input" />
+	<menu_button name="plus_btn" tool_tip="Dodaj nową osobę do listy" />
 	<name_list name="avatar_list">
 		<name_list.columns label="Imię" name="name" />
 		<name_list.columns label="Renderowanie" name="render_setting" />
