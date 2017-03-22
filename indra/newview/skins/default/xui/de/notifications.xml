@@ -144,8 +144,7 @@ Marktplatzinitialisierung aufgrund eines System- oder Netzwerkfehlers fehlgeschl
 	<notification name="MerchantTransactionFailed">
 		Marktplatztransaktion fehlgeschlagen mit Fehler:
         
-        Grund: „[ERROR_REASON]“
-        [ERROR_DESCRIPTION]
+        [ERROR_REASON][ERROR_DESCRIPTION]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="MerchantUnprocessableEntity">
