@@ -3628,8 +3628,14 @@ Bitte überprüfen Sie Ihre Netzwerk- und Firewalleinstellungen.
 
 &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
+Folgende Ports müssen für Voice freigegeben werden:
+:TCP: 80, 443
+:UDP: 3478, 3479, 5060, 5062, 6250, 12000-32000
+
+Bitte prüfen Sie Ihre Netzwerk- und Firewall-Konfiguration.
+Deaktivieren Sie alle SIP ALG-Funktionen in Ihrem Router. 
+
 Voice-Kommunikation ist leider nicht verfügbar.
-Bitte überprüfen Sie Ihr Netzwerk- und Firewall-Setup.
 		<usetemplate name="okignore" yestext="OK" ignoretext="Warnen, wenn keine Verbindung zum Voice-Server hergestellt werden kann."/>
 	</notification>
 	<notification name="AvatarRezLeftNotification">
