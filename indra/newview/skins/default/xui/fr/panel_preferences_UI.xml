@@ -30,7 +30,6 @@
 			<check_box label="Supprimer le bouton 'Ignorer'" name="FSRemoveScriptBlockButton"/>
 			<text name="ScriptDialogsPositionLabel" width="180">Position des dialogues de scripts :</text>
 			<combo_box name="ScriptDialogsPositionDropdown" width="150" tool_tip="Sélectionnez où les dialogues de scripts s'affichent à l'écran.">
-				<combo_box.item label="Ancienne configuration" name="ScriptDialogPositionOption_0"/>
 				<combo_box.item label="Liés aux Chiclets" name="ScriptDialogPositionOption_1"/>
 				<combo_box.item label="En haut à gauche" name="ScriptDialogPositionOption_2"/>
 				<combo_box.item label="En haut à droite" name="ScriptDialogPositionOption_3"/>

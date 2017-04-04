@@ -229,13 +229,13 @@
 			<spinner label="Prix en L$ :" name="PriceSpin"/>
 			<spinner label="Durée de l'accès :" name="HoursSpin"/>
 			<panel name="Allowed_layout_panel">
-				<text label="Toujours autoriser" name="AllowedText">Résidents autorisés ([LISTED]/[MAX])</text>
+				<text label="Toujours autoriser" name="AllowedText">Résidents autorisés ([COUNT]/[MAX])</text>
 				<name_list name="AccessList" tool_tip="([LISTED] définis, [MAX] max)"/>
 				<button label="Ajouter" name="add_allowed"/>
 				<button label="Supprimer" label_selected="Supprimer" name="remove_allowed"/>
 			</panel>
 			<panel name="Banned_layout_panel">
-				<text label="Bannir" name="BanCheck">Résidents bannis ([LISTED]/[MAX])</text>
+				<text label="Bannir" name="BanCheck">Résidents bannis ([COUNT]/[MAX])</text>
 				<name_list name="BannedList" tool_tip="([LISTED] définis, [MAX] max)"/>
 				<button label="Ajouter" name="add_banned"/>
 				<button label="Supprimer" label_selected="Supprimer" name="remove_banned"/>

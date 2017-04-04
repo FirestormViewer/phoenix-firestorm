@@ -209,7 +209,7 @@
 		</text>
 		<button label="Durchsuchen" label_selected="Durchsuchen" name="SetPreprocInclude"/>
 	</panel>
-	
+
 	<!--Build 2-->
 	<panel label="Bauen 2" name="BuildTab2">
 		<check_box label="Ausgewählte Primitive hervorheben" tool_tip="Deaktivieren, um die gelben und blauen Grundrisse nicht anzuzeigen. Verbessert die Performanz, wenn eine Vielzahl an Primitiven ausgewählt wird." name="FSBuildPrefsRenderHighlight_toggle"/>
@@ -236,6 +236,29 @@
 		<check_box label="Vom Inventar aus bearbeitete Skripte als Mono speichern" tool_tip="Speichert Skripte, die direkt vom Inventar aus bearbeitet werden, als Mono anstatt LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 		<check_box label="Texturen standardmäßig im PNG-Format anstelle von TGA speichern" tool_tip="Falls aktiviert, werden Texturen in der Vorschau standardmäßig im PNG-Format gespeichert" name="FSTextureDefaultSaveAsFormat"/>
 		<check_box label="Vorschau von Animation beim Upload am eigenen Avatar" tool_tip="Falls aktiviert, werden Animationen in der Vorschau am eigenen Avatar abgespielt" name="FSUploadAnimationOnOwnAvatar"/>
+	</panel>
+
+	<!--Uploads-->
+	<panel label="Uploads" name="UploadsTab">
+		<text name="title">
+			Aktuelle Zielordner für Uploads:
+		</text>
+		<text name="title_images">
+			Bilder
+		</text>
+		<text name="title_sounds">
+			Sounds
+		</text>
+		<text name="title_animations">
+			Animationen
+		</text>
+		<text name="title_models">
+			Models
+		</text>
+		<text name="upload_help">
+			Um einen Zielordner zu ändern, im Inventar auf den gewünschten Ordner rechts-klicken und
+„Als Standard nutzen für“ auswählen.
+		</text>
 	</panel>
 </tab_container>
 </panel>

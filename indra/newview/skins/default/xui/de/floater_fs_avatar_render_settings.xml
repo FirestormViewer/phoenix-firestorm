@@ -7,6 +7,7 @@
 		Komplett
 	</floater.string>
 	<filter_editor label="Avatare filtern" name="filter_input"/>
+	<menu_button name="plus_btn" tool_tip="Person zur Liste hinzufügen"/>
 	<name_list name="avatar_list">
 		<name_list.columns label="Name" name="name"/>
 		<name_list.columns label="Anzeigeeinstellung" name="render_setting" width="125"/>

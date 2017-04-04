@@ -32,6 +32,7 @@
      name="appearance_tabs"
      tab_position="top"
      halign="center"
+     hide_scroll_arrows="true"
      top="8"
      right="-1">
          <panel

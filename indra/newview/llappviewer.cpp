@@ -1433,7 +1433,8 @@ bool LLAppViewer::init()
 	// <FS:Ansariel> Init debug rects
 	LLView::sDebugRects = gSavedSettings.getBOOL("DebugViews");
 
-	showReleaseNotesIfRequired();
+	// TODO: consider moving proxy initialization here or LLCopocedureManager after proxy initialization, may be implement
+	// some other protection to make sure we don't use network before initializng proxy
 
 	/*----------------------------------------------------------------------*/
 	// nat 2016-06-29 moved the following here from the former mainLoop().
@@ -6827,21 +6828,6 @@ void LLAppViewer::launchUpdater()
 
 	// *REMOVE:Mani - Saving for reference...
 	// LLAppViewer::instance()->forceQuit();
-}
-
-/**
-* Check if user is running a new version of the viewer.
-* Display the Release Notes if it's not overriden by the "UpdaterShowReleaseNotes" setting.
-*/
-void LLAppViewer::showReleaseNotesIfRequired()
-{
-	if (LLVersionInfo::getChannelAndVersion() != gLastRunVersion
-		&& gSavedSettings.getBOOL("UpdaterShowReleaseNotes")
-		&& !gSavedSettings.getBOOL("FirstLoginThisInstall"))
-	{
-		LLSD info(getViewerInfo());
-		LLWeb::loadURLInternal(info["VIEWER_RELEASE_NOTES_URL"]);
-	}
 }
 
 //virtual

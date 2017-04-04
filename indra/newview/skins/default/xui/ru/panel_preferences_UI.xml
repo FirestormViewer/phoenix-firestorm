@@ -44,7 +44,6 @@
             Размещение диалогов скрипта:
         </text>
         <combo_box name="ScriptDialogsPositionDropdown" tool_tip="Выберите в какой части экрана будет отображаться окно диалогового меню скрипта">
-            <combo_box.item label="Импортировать старое значение" name="ScriptDialogPositionOption_0" />
             <combo_box.item label="Пристыкован в поле иконок" name="ScriptDialogPositionOption_1" />
             <combo_box.item label="Сверху слева" name="ScriptDialogPositionOption_2" />
             <combo_box.item label="Сверху справа" name="ScriptDialogPositionOption_3" />

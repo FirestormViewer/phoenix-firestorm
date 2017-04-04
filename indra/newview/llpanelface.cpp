@@ -750,7 +750,7 @@ void LLPanelFace::getState()
 	updateUI();
 }
 
-void LLPanelFace::updateUI()
+void LLPanelFace::updateUI(bool force_set_values /*false*/)
 { //set state of UI to match state of texture entry(ies)  (calls setEnabled, setValue, etc, but NOT setVisible)
 	LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
 
@@ -1146,7 +1146,14 @@ void LLPanelFace::updateUI()
 			mCtrlBumpyScaleV->setEnabled(editable && normmap_id.notNull()
 										 && enable_material_controls); // <FS:CR> Materials alignment
 
-			mCtrlTexScaleV->setValue(diff_scale_t);
+			if (force_set_values)
+			{
+				mCtrlTexScaleV->forceSetValue(diff_scale_t);
+			}
+			else
+			{
+				mCtrlTexScaleV->setValue(diff_scale_t);
+			}
 			mCtrlShinyScaleV->setValue(norm_scale_t);
 			mCtrlBumpyScaleV->setValue(spec_scale_t);
 
@@ -1366,9 +1373,18 @@ void LLPanelFace::updateUI()
 				BOOL repeats_tentative = !identical_repeats;
 
 				mCtrlRpt->setEnabled(identical_planar_texgen ? FALSE : enabled);
-				mCtrlRpt->setValue(editable ? repeats : 1.0f);
+				//LLSpinCtrl* rpt_ctrl = getChild<LLSpinCtrl>("rptctrl");
+				if (force_set_values)
+				{
+					//onCommit, previosly edited element updates related ones
+					mCtrlRpt->forceSetValue(editable ? repeats : 1.0f);
+				}
+				else
+				{
+					mCtrlRpt->setValue(editable ? repeats : 1.0f);
+				}
 				mCtrlRpt->setTentative(LLSD(repeats_tentative));
-				
+
 				// <FS:CR> FIRE-11407 - Flip buttons
 				getChildView("flipTextureScaleU")->setEnabled(enabled);
 				getChildView("flipTextureScaleV")->setEnabled(enabled);
@@ -2115,6 +2131,8 @@ void LLPanelFace::onCommitTextureInfo( LLUICtrl* ctrl, void* userdata )
 {
 	LLPanelFace* self = (LLPanelFace*) userdata;
 	self->sendTextureInfo();
+	// vertical scale and repeats per meter depends on each other, so force set on changes
+	self->updateUI(true);
 	// <FS:CR> Materials alignment
 	if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
 	{
@@ -2185,6 +2203,8 @@ void LLPanelFace::onCommitRepeatsPerMeter(LLUICtrl* ctrl, void* userdata)
 			llassert(false);
 		break;
 	}
+	// vertical scale and repeats per meter depends on each other, so force set on changes
+	self->updateUI(true);
 }
 
 struct LLPanelFaceSetMediaFunctor : public LLSelectedTEFunctor

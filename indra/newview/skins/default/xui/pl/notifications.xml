@@ -4155,32 +4155,32 @@ Spróbuj ponownie za minutę.
 	<notification name="AvatarEjectFailed">
 		Wyrzucenie nie powiodło się, ponieważ nie masz uprawnień administratora na tej działce.
 	</notification>
-	<notification name="CantMoveObjectParcelFull">
-		Nie można przesunąć obiektu '[OBJECT_NAME]' do
-[OBJ_POSITION] w regionie [REGION_NAME], ponieważ działka jest zbyt pełna.
+	<notification name="CMOParcelFull">
+		Nie można przesunąć obiektu '[O]' do
+[P] w regionie [R], ponieważ działka jest zbyt pełna.
 	</notification>
-	<notification name="CantMoveObjectParcelPerms">
-		Nie można przesunąć obiektu '[OBJECT_NAME]' do
-[OBJ_POSITION] w regionie [REGION_NAME], ponieważ Twoje obiekty nie są dozwolone na tej działce.
+	<notification name="CMOParcelPerms">
+		Nie można przesunąć obiektu '[O]' do
+[P] w regionie [R], ponieważ Twoje obiekty nie są dozwolone na tej działce.
 	</notification>
-	<notification name="CantMoveObjectParcelResources">
-		Nie można przesunąć obiektu '[OBJECT_NAME]' do
-[OBJ_POSITION] w regionie [REGION_NAME], ponieważ nie ma wystarczającej ilości zasobów na tej działce.
+	<notification name="CMOParcelResources">
+		Nie można przesunąć obiektu '[O]' do
+[P] w regionie [R], ponieważ nie ma wystarczającej ilości zasobów na tej działce.
 	</notification>
 	<notification name="NoParcelPermsNoObject">
 		Kopiowanie nie powiodło się, ponieważ nie masz dostępu do tej działki.
 	</notification>
-	<notification name="CantMoveObjectRegionVersion">
-		Nie można przesunąć obiektu '[OBJECT_NAME]' do
-[OBJ_POSITION] w regionie [REGION_NAME], ponieważ the region działa na starszej wersji symulatora, która nie obsługuje otrzymywania obiektów przez granice działek.
+	<notification name="CMORegionVersion">
+		Nie można przesunąć obiektu '[O]' do
+[P] w regionie [R], ponieważ the region działa na starszej wersji symulatora, która nie obsługuje otrzymywania obiektów przez granice działek.
 	</notification>
-	<notification name="CantMoveObjectNavMesh">
-		Nie można przesunąć obiektu '[OBJECT_NAME]' do
-[OBJ_POSITION] w regionie [REGION_NAME], ponieważ nie możesz modyfikować Navmesha przez granice regionów.
+	<notification name="CMONavMesh">
+		Nie można przesunąć obiektu '[O]' do
+[P] w regionie [R], ponieważ nie możesz modyfikować Navmesha przez granice regionów.
 	</notification>
-	<notification name="CantMoveObjectWTF">
-		Nie można przesunąć obiektu '[OBJECT_NAME]' do
-[OBJ_POSITION] w regionie [REGION_NAME] ze względu na nieznany powód. ([FAILURE_TYPE])
+	<notification name="CMOWTF">
+		Nie można przesunąć obiektu '[O]' do
+[P] w regionie [R] ze względu na nieznany powód. ([F])
 	</notification>
 	<notification name="NoPermModifyObject">
 		Nie masz uprawnień do modyfikowania tego obiektu

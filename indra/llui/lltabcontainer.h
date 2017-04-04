@@ -89,6 +89,7 @@ public:
 											label_pad_left;
 
 		Optional<bool>						hide_tabs;
+		Optional<bool>						hide_scroll_arrows;
 // [SL:KB] - Patch: UI-TabRearrange | Checked: 2010-06-05 (Catznip-3.3)
 		Optional<bool>						tab_allow_rearrange;
 // [/SL:KB]
@@ -290,6 +291,7 @@ private:
 	
 	S32								mCurrentTabIdx;
 	BOOL							mTabsHidden;
+	BOOL							mHideScrollArrows;
 // [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3)
 	bool							mAllowRearrange;
 	tab_rearrange_signal_t*			mRearrangeSignal;

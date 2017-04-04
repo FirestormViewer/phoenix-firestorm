@@ -1881,55 +1881,6 @@
 					 function="ResetControl"
 					 parameter="CameraDoFResScale"/>
 				</button>
-
-				<text
-				 name="T_Aspect_Ratio"
-				 follows="top|left"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip="This is supposed to be aspect ratio of the camera you're modelling. For example, a 35mm camera has an aspect ratio of 3:2 (1.5). The viewer will use this as a frame of reference for how field of view and focal length must be adjusted depending on window size. IT SEEMS TO HAVE NO EFFECT!"
-				 width="80">
-					Aspect Ratio
-				</text>
-				<slider_bar
-				 name="SB_Aspect_Ratio"
-				 control_name="CameraAspectRatio"
-				 follows="left|right"
-				 height="16"
-				 increment="0.01"
-				 layout="topleft"
-				 left_pad="-20"
-				 min_val="0"
-				 max_val="5"
-				 top_delta="-2"
-				 width="127"/>
-				<spinner
-				 name="S_Aspect_Ratio"
-				 control_name="CameraAspectRatio"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="2"
-				 follows="top|left"
-				 max_val="5"
-				 min_val="0"
-				 width="53"
-				 increment="0.01"/>
-				<button
-				 follows="left|top"
-				 name="Reset_Aspect_Ratio"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="CameraAspectRatio"/>
-				</button>
 			</panel>
 
 			<panel
