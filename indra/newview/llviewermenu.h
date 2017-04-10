@@ -40,7 +40,7 @@ class LLObjectSelection;
 class LLSelectNode;
 
 // [RLVa:KB] - Checked: RLVa-2.0.0
-void set_use_wireframe(BOOL useWireframe);
+void set_use_wireframe(bool useWireframe);
 // [/RLVa:KB]
 
 void initialize_edit_menu();

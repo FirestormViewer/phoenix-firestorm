@@ -1376,7 +1376,7 @@ class LLAdvancedToggleWireframe : public view_listener_t
 };
 
 // Called from rlvhandler.cpp
-void set_use_wireframe(BOOL useWireframe)
+void set_use_wireframe(bool useWireframe)
 	{
 		if (gUseWireframe == useWireframe)
 			return;
