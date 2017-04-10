@@ -823,10 +823,7 @@ LLAppViewer::LLAppViewer()
 LLAppViewer::~LLAppViewer()
 {
 	delete mSettingsLocationList;
-	LLViewerEventRecorder::deleteSingleton();
 
-	LLLoginInstance::instance().setUpdaterService(0);
-	
 	destroyMainloopTimeout();
     
 	// If we got to this destructor somehow, the app didn't hang.
@@ -2489,6 +2486,10 @@ bool LLAppViewer::cleanup()
 	// realtime, or might throw an exception.
 	LLSingletonBase::cleanupAll();
 
+	// The logging subsystem depends on an LLSingleton. Any logging after
+	// LLSingletonBase::deleteAll() won't be recorded.
+	LL_INFOS() << "Goodbye!" << LL_ENDL;
+
 	// This calls every remaining LLSingleton's deleteSingleton() method.
 	// No class destructor should perform any cleanup that might take
 	// significant realtime, or throw an exception.
@@ -2500,9 +2501,6 @@ bool LLAppViewer::cleanup()
 	// their respective cleanup methods in computed dependency order, it's
 	// probably useful to be able to log that order.
 	LLSingletonBase::deleteAll();
-
-	// <FS:Ansariel> Can't log after all singletons got destroyed
-	// LL_INFOS() << "Goodbye!" << LL_ENDL;
 
 	removeDumpDir();
 
@@ -4048,8 +4046,13 @@ LLSD LLAppViewer::getViewerInfo() const
 	cef_ver_codec << DULLAHAN_VERSION_MINOR;
 	cef_ver_codec << ".";
 	cef_ver_codec << DULLAHAN_VERSION_BUILD;
-	cef_ver_codec << " - CEF: ";
+
+	cef_ver_codec << " / CEF: ";
 	cef_ver_codec << CEF_VERSION;
+
+	cef_ver_codec << " / Chrome: ";
+	cef_ver_codec << CHROME_VERSION_MAJOR;
+
 	info["LIBCEF_VERSION"] = cef_ver_codec.str();
 //#else
 //	info["LIBCEF_VERSION"] = "Undefined";

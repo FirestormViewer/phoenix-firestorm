@@ -2555,7 +2555,6 @@ void sanitize_corners(const LLVector3d &corner1,
 
 void LLViewerParcelMgr::cleanupGlobals()
 {
-	LLParcelSelection::sNullSelection = NULL;
 }
 
 LLViewerTexture* LLViewerParcelMgr::getBlockedImage() const

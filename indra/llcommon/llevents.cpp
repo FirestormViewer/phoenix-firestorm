@@ -282,7 +282,8 @@ const std::string LLEventPump::ANONYMOUS = std::string();
 
 LLEventPump::LLEventPump(const std::string& name, bool tweak):
     // Register every new instance with LLEventPumps
-    mName(LLEventPumps::instance().registerNew(*this, name, tweak)),
+    mRegistry(LLEventPumps::instance().getHandle()),
+    mName(mRegistry.get()->registerNew(*this, name, tweak)),
     mSignal(new LLStandardSignal()),
     mEnabled(true)
 {}
@@ -293,8 +294,13 @@ LLEventPump::LLEventPump(const std::string& name, bool tweak):
 
 LLEventPump::~LLEventPump()
 {
-    // Unregister this doomed instance from LLEventPumps
-    LLEventPumps::instance().unregister(*this);
+    // Unregister this doomed instance from LLEventPumps -- but only if
+    // LLEventPumps is still around!
+    LLEventPumps* registry = mRegistry.get();
+    if (registry)
+    {
+        registry->unregister(*this);
+    }
 }
 
 // static data member

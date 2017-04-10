@@ -769,9 +769,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>66ba275f79d3dfcb6943a9cbe5dd6d94</string>
+              <string>1517ca15cd1209b0910a8f6720c65cb4</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/3188/7675/dullahan-1.0.620_3.2704.1434.gec3e9ed-darwin64-503177.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/3408/8552/dullahan-1.1.636_3.2987.1591.gd3e47f5-darwin64-503397.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -781,9 +781,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fe07cd0dc8d706975850be45e3c1e752</string>
+              <string>5dc1349abce3ccb04c6ac79a0ff19d59</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/3190/7682/dullahan-1.0.620_3.2704.1434.gec3e9ed-windows-503177.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/3410/8559/dullahan-1.1.636_3.2987.1591.gd3e47f5-windows-503397.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -793,16 +793,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2385864496065bac20ee35d0afddb84f</string>
+              <string>928db398436823aa804046de91339177</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/3191/7687/dullahan-1.0.620_3.2704.1434.gec3e9ed-windows64-503177.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/3409/8562/dullahan-1.1.636_3.2987.1591.gd3e47f5-windows64-503397.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.0.620_3.2704.1434.gec3e9ed</string>
+        <string>1.1.636_3.2987.1591.gd3e47f5</string>
       </map>
       <key>elfio</key>
       <map>
@@ -1889,9 +1889,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e5a811fa7c9e5641869b58cd58a3e1c6</string>
+              <string>88ab0fb55e82f8cd3a75ee636def785a</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.8.0-darwin-201604022336-r52.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.9.0-darwin-201702032052-r58.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1913,9 +1913,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>96d11160278115f6d468171f67aa7a4e</string>
+              <string>1c4e11f6ca7cdc2a3e5158eda7a432be</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.9.0-linux-201701222135-r58.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.9.1-linux-201703182157.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1937,16 +1937,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>26cc3fbe6a3b9885d697aa639d17a20a</string>
+              <string>adeb9db4d4435a65c44a72f981a18b33</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.9.0-windows-201701221929-r58.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.9.1-windows-201703182143-r61.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>7.9.502436</string>
+        <string>7.9.1.504041</string>
       </map>
       <key>libhunspell</key>
       <map>
@@ -3706,7 +3706,6 @@
                 </array>
                 <key>options</key>
                 <array>
-                  <string>-quiet</string>
                   <string>-configuration</string>
                   <string>RelWithDebInfo</string>
                   <string>-project</string>
@@ -3737,7 +3736,6 @@
                 <string>xcodebuild</string>
                 <key>options</key>
                 <array>
-                  <string>-quiet</string>
                   <string>-configuration</string>
                   <string>RelWithDebInfo</string>
                   <string>-project</string>
@@ -3768,7 +3766,6 @@
                 </array>
                 <key>options</key>
                 <array>
-                  <string>-quiet</string>
                   <string>-configuration</string>
                   <string>Release</string>
                   <string>-project</string>
@@ -3795,7 +3792,6 @@
                 <string>xcodebuild</string>
                 <key>options</key>
                 <array>
-                  <string>-quiet</string>
                   <string>-configuration</string>
                   <string>Release</string>
                   <string>-project</string>

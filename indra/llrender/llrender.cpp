@@ -1850,48 +1850,6 @@ void LLRender::flush()
 {
 	if (mCount > 0)
 	{
-#if 0
-		if (!glIsEnabled(GL_VERTEX_ARRAY))
-		{
-			LL_ERRS() << "foo 1" << LL_ENDL;
-		}
-
-		if (!glIsEnabled(GL_COLOR_ARRAY))
-		{
-			LL_ERRS() << "foo 2" << LL_ENDL;
-		}
-
-		if (!glIsEnabled(GL_TEXTURE_COORD_ARRAY))
-		{
-			LL_ERRS() << "foo 3" << LL_ENDL;
-		}
-
-		if (glIsEnabled(GL_NORMAL_ARRAY))
-		{
-			LL_ERRS() << "foo 7" << LL_ENDL;
-		}
-
-		GLvoid* pointer;
-
-		glGetPointerv(GL_VERTEX_ARRAY_POINTER, &pointer);
-		if (pointer != &(mBuffer[0].v))
-		{
-			LL_ERRS() << "foo 4" << LL_ENDL;
-		}
-
-		glGetPointerv(GL_COLOR_ARRAY_POINTER, &pointer);
-		if (pointer != &(mBuffer[0].c))
-		{
-			LL_ERRS() << "foo 5" << LL_ENDL;
-		}
-
-		glGetPointerv(GL_TEXTURE_COORD_ARRAY_POINTER, &pointer);
-		if (pointer != &(mBuffer[0].uv))
-		{
-			LL_ERRS() << "foo 6" << LL_ENDL;
-		}
-#endif
-				
 		if (!mUIOffset.empty())
 		{
 			sUICalls++;
@@ -2125,14 +2083,10 @@ void LLRender::vertexBatchPreTransformed(LLVector3* verts, LLVector2* uvs, S32 v
 		}
 	}
 
-	// Often happens with LLFontGL::render(), especially in LLScrollListText::draw()
-	// Can be observed by opening the V1 style friends list for example
-	if (mCount == 0)
-		LL_DEBUGS() << "Vertex count was 0, prevented crashing." << LL_ENDL;
-	else
+	if (mCount > 0)
 	{
-		mVerticesp[mCount] = mVerticesp[mCount-1];
-		mTexcoordsp[mCount] = mTexcoordsp[mCount-1];
+		mVerticesp[mCount] = mVerticesp[mCount - 1];
+		mTexcoordsp[mCount] = mTexcoordsp[mCount - 1];
 	}
 }
 
