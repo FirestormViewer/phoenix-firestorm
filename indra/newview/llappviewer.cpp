@@ -372,10 +372,10 @@ BOOL				gDisconnected = FALSE;
 // used to restore texture state after a mode switch
 LLFrameTimer	gRestoreGLTimer;
 BOOL			gRestoreGL = FALSE;
-BOOL			gUseWireframe = FALSE;
+bool			gUseWireframe = FALSE;
 
 //use for remember deferred mode in wireframe switch
-BOOL			gInitialDeferredModeForWireframe = FALSE;
+bool			gInitialDeferredModeForWireframe = FALSE;
 
 // VFS globals - see llappviewer.h
 LLVFS* gStaticVFS = NULL;
@@ -2505,7 +2505,7 @@ bool LLAppViewer::cleanup()
 	LLSingletonBase::deleteAll();
 
 	// <FS:Ansariel> Can't log after all singletons got destroyed
-	//LL_INFOS() << "Goodbye!" << LL_ENDL;
+	// LL_INFOS() << "Goodbye!" << LL_ENDL;
 
 	removeDumpDir();
 
@@ -4003,9 +4003,6 @@ LLSD LLAppViewer::getViewerInfo() const
 	}
 #endif
 
-// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0)
-	info["RLV_VERSION"] = (rlv_handler_t::isEnabled()) ? RlvStrings::getVersionAbout() : "(disabled)";
-// [/RLVa:KB]
 	info["OPENGL_VERSION"] = (const char*)(glGetString(GL_VERSION));
 	info["LIBCURL_VERSION"] = LLCore::LLHttp::getCURLVersion();
     // Settings
@@ -4013,6 +4010,7 @@ LLSD LLAppViewer::getViewerInfo() const
     LLRect window_rect = gViewerWindow->getWindowRectRaw();
     info["WINDOW_WIDTH"] = window_rect.getWidth();
     info["WINDOW_HEIGHT"] = window_rect.getHeight();
+
 	// <FS> Custom sysinfo
     //info["FONT_SIZE_ADJUSTMENT"] = gSavedSettings.getF32("FontScreenDPI");
     //info["UI_SCALE"] = gSavedSettings.getF32("UIScaleFactor");
