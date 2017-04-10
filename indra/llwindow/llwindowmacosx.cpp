@@ -1811,7 +1811,7 @@ void LLWindowMacOSX::openFile(const std::string& file_name )
 LLSD LLWindowMacOSX::getNativeKeyData()
 {
 	LLSD result = LLSD::emptyMap();
-#if 1
+
 	if(mRawKeyEvent)
 	{
         result["event_type"] = LLSD::Integer(mRawKeyEvent->mEventType);
@@ -1821,7 +1821,6 @@ LLSD LLWindowMacOSX::getNativeKeyData()
         result["event_umodchars"] = (mRawKeyEvent->mEventUnmodChars) ? LLSD(LLSD::Integer(mRawKeyEvent->mEventUnmodChars)) : LLSD();
         result["event_isrepeat"] = LLSD::Boolean(mRawKeyEvent->mEventRepeat);
 	}
-#endif
 
 	LL_DEBUGS() << "native key data is: " << result << LL_ENDL;
 

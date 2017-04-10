@@ -140,11 +140,8 @@
 #include "llcoros.h"
 #include "llexception.h"
 //#if !LL_LINUX
-#include "cef/llceflib.h"
-#if defined(LL_WINDOWS) || defined(LL_LINUX)
+#include "cef/dullahan.h"
 #include "vlc/libvlc_version.h"
-#endif // LL_WINDOWS
-//#endif
 //#endif // LL_LINUX
 
 // Third party library includes
@@ -4044,23 +4041,31 @@ LLSD LLAppViewer::getViewerInfo() const
 	}
 
 //#if !LL_LINUX
-	info["LLCEFLIB_VERSION"] = LLCEFLIB_VERSION;
+	std::ostringstream cef_ver_codec;
+	cef_ver_codec << "Dullahan: ";
+	cef_ver_codec << DULLAHAN_VERSION_MAJOR;
+	cef_ver_codec << ".";
+	cef_ver_codec << DULLAHAN_VERSION_MINOR;
+	cef_ver_codec << ".";
+	cef_ver_codec << DULLAHAN_VERSION_BUILD;
+	cef_ver_codec << " - CEF: ";
+	cef_ver_codec << CEF_VERSION;
+	info["LIBCEF_VERSION"] = cef_ver_codec.str();
 //#else
-//	info["LLCEFLIB_VERSION"] = "Undefined";
-//
+//	info["LIBCEF_VERSION"] = "Undefined";
 //#endif
 
-#if defined(LL_WINDOWS) || defined(LL_LINUX)
-	std::ostringstream ver_codec;
-	ver_codec << LIBVLC_VERSION_MAJOR;
-	ver_codec << ".";
-	ver_codec << LIBVLC_VERSION_MINOR;
-	ver_codec << ".";
-	ver_codec << LIBVLC_VERSION_REVISION;
-	info["LIBVLC_VERSION"] = ver_codec.str();
-#else
-	info["LIBVLC_VERSION"] = "Undefined";
-#endif
+//#if !LL_LINUX
+	std::ostringstream vlc_ver_codec;
+	vlc_ver_codec << LIBVLC_VERSION_MAJOR;
+	vlc_ver_codec << ".";
+	vlc_ver_codec << LIBVLC_VERSION_MINOR;
+	vlc_ver_codec << ".";
+	vlc_ver_codec << LIBVLC_VERSION_REVISION;
+	info["LIBVLC_VERSION"] = vlc_ver_codec.str();
+//#else
+//	info["LIBVLC_VERSION"] = "Undefined";
+//#endif
 
 	S32 packets_in = LLViewerStats::instance().getRecording().getSum(LLStatViewer::PACKETS_IN);
 	if (packets_in > 0)

@@ -96,7 +96,7 @@ SetOverwrite on							# Overwrite files by default
 
 ;;InstallDir "$PROGRAMFILES\${INSTNAME}"
 ;;InstallDirRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\${INSTNAME}" ""
-InstallDir "$%%INSTALL_DIR%%\${INSTNAME}"
+InstallDir "%%$PROGRAMFILES%%\${INSTNAME}"
 InstallDirRegKey HKEY_LOCAL_MACHINE "%%INSTALL_DIR_REGKEY%%" ""
 UninstallText $(UninstallTextMsg)
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
@@ -164,15 +164,9 @@ FunctionEnd
 ;; entry to the language ID selector below
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function .onInit
+%%ENGAGEREGISTRY%%
 Call CheckCPUFlags							# Make sure we have SSE2 support
 Call CheckWindowsVersion					# Don't install On unsupported systems
-
-    ${If} ${RunningX64}
-	${AndIf} ${FS64BIT} == "1"
-       ${DisableX64FSRedirection}
-       SetRegView 64
-	${EndIf}
-	
     Push $0
     ${GetParameters} $COMMANDLINE			# Get our command line
 
@@ -240,12 +234,7 @@ FunctionEnd
 ;; Prep Uninstaller Section
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function un.onInit
-    ${If} ${RunningX64}
-	${AndIf} ${FS64BIT} == "1"
-       ${DisableX64FSRedirection}
-       SetRegView 64
-	${EndIf}
-
+%%ENGAGEREGISTRY%%
 # Read language from registry and set for uninstaller. Key will be removed on successful uninstall
 	ReadRegStr $0 HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\${INSTNAME}" "InstallerLanguage"
     IfErrors lbl_end
