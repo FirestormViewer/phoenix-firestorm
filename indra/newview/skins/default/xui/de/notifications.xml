@@ -2669,9 +2669,6 @@ Von einer Webseite zu diesem Formular linken, um anderen leichten Zugang zu dies
 	<notification name="Cancelled">
 		Abgebrochen
 	</notification>
-	<notification name="CancelledSit">
-		Sitzen beendet
-	</notification>
 	<notification name="CancelledAttach">
 		Anhängen abgebrochen
 	</notification>

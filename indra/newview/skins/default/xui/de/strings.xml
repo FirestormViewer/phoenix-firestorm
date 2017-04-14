@@ -1680,7 +1680,8 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Der [[MARKETPLACE_CREATE_STORE_URL] Marktplatz-Laden] gibt Fehler zurück.
 	</string>
 	<string name="InventoryMarketplaceError">
-		Diese Funktion befindet sich in der Betaphase. Wenn Sie teilnehmen möchten, tragen Sie sich in dieses [http://goo.gl/forms/FCQ7UXkakz Google-Formular] ein.
+		Es ist ein Fehler beim Öffnen der Marktplatz-Auflistungen aufgetreten.
+Falls dieser Fehler weiterhin auftritt, kontaktieren Sie bitte den Second Life Support: http://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Ihr Ordner mit Marktplatz-Auflistungen ist leer.
