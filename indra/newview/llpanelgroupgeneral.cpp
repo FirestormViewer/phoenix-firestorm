@@ -1161,7 +1161,7 @@ S32 LLPanelGroupGeneral::sortMembersList(S32 col_idx,const LLScrollListItem* i1,
 // <FS:Ansariel> FIRE-20149: Refresh insignia texture when clicking the refresh button
 void LLPanelGroupGeneral::refreshInsigniaTexture()
 {
-	if (mInsignia)
+	if (mInsignia && mInsignia->getTexture())
 	{
 		destroy_texture(mInsignia->getTexture()->getID());
 	}
