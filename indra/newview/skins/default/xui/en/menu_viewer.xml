@@ -1447,9 +1447,9 @@
              name="Duplicate"
              shortcut="control|D">
             <menu_item_call.on_click
-               function="Edit.Duplicate" />
+               function="Object.Duplicate" />
             <menu_item_call.on_enable
-               function="Edit.EnableDuplicate" />
+               function="Object.EnableDuplicate" />
           </menu_item_call>
 
           <menu_item_call
