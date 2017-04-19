@@ -526,7 +526,7 @@ void LLVivoxVoiceClient::connectorCreate()
 {
 	std::ostringstream stream;
 	// <FS:Ansariel> Set custom Vivox log path everywhere necessary
-	//std::string logpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
+	//std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
 	std::string logdir = gSavedSettings.getString("VivoxLogDirectory");
 	if (logdir.empty())
 	{
