@@ -294,7 +294,7 @@
         Script Dialogs per Object:
       </text>
       <combo_box
-       control_name="ScriptDialogPerObject"
+       control_name="ScriptDialogLimitations"
        height="23"
        layout="topleft"
        left_pad="10"
@@ -306,13 +306,21 @@
          name="ScriptDialogOption_0"
          value="0"/>
         <combo_box.item
-         label="One per Object &amp; Channel"
+         label="One per Channel"
          name="ScriptDialogOption_1"
          value="1"/>
         <combo_box.item
-         label="Unconstrained"
+         label="One per Channel for Attachments"
          name="ScriptDialogOption_2"
          value="2"/>
+        <combo_box.item
+         label="One per Channel for HUDs"
+         name="ScriptDialogOption_3"
+         value="3"/>
+        <combo_box.item
+         label="Unconstrained"
+         name="ScriptDialogOption_4"
+         value="5"/>
       </combo_box>
         <check_box
          control_name="FSRemoveScriptBlockButton"
