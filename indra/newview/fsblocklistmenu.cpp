@@ -39,7 +39,9 @@ LLContextMenu* FSBlockListMenu::createMenu()
 	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
 
 	registrar.add("Block.Action",			boost::bind(&FSBlockListMenu::onContextMenuItemClick,  this, _2));
+	enable_registrar.add("Block.Check",		boost::bind(&FSBlockListMenu::onContextMenuItemCheck, this, _2));
 	enable_registrar.add("Block.Enable",	boost::bind(&FSBlockListMenu::onContextMenuItemEnable, this, _2));
+	enable_registrar.add("Block.Visible",	boost::bind(&FSBlockListMenu::onContextMenuItemVisible, this, _2));
 
 	return createFromFile("menu_fs_block_list.xml");
 }
@@ -62,6 +64,20 @@ void FSBlockListMenu::onContextMenuItemClick(const LLSD& userdata)
 	}
 }
 
+bool FSBlockListMenu::onContextMenuItemCheck(const LLSD& userdata)
+{
+	if (mSpawningCtrl)
+	{
+		FSPanelBlockList* blocklist = mSpawningCtrl->getParentByType<FSPanelBlockList>();
+		if (blocklist)
+		{
+			return blocklist->isActionChecked(userdata);
+		}
+	}
+
+	return false;
+}
+
 bool FSBlockListMenu::onContextMenuItemEnable(const LLSD& userdata)
 {
 	if (mSpawningCtrl)
@@ -70,6 +86,20 @@ bool FSBlockListMenu::onContextMenuItemEnable(const LLSD& userdata)
 		if (blocklist)
 		{
 			return blocklist->isActionEnabled(userdata);
+		}
+	}
+
+	return false;
+}
+
+bool FSBlockListMenu::onContextMenuItemVisible(const LLSD& userdata)
+{
+	if (mSpawningCtrl)
+	{
+		FSPanelBlockList* blocklist = mSpawningCtrl->getParentByType<FSPanelBlockList>();
+		if (blocklist)
+		{
+			return blocklist->isActionVisible(userdata);
 		}
 	}
 

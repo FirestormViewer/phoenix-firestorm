@@ -35,6 +35,7 @@
 #include "fsnearbychatcontrol.h"
 #include "llagent.h" 			// gAgent
 #include "llanimationstates.h"	// ANIM_AGENT_WHISPER, ANIM_AGENT_TALK, ANIM_AGENT_SHOUT
+#include "llavatarnamecache.h"
 #include "llchatentry.h"
 #include "llcommandhandler.h"
 #include "llgesturemgr.h"
@@ -752,8 +753,10 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
 				// Look for a match
 				while (iter != avatar_ids.end() && !found)
 				{
-					if (gCacheName->getFullName(*iter++, name))
+					LLAvatarName av_name;
+					if (LLAvatarNameCache::get(*iter++, &av_name))
 					{
+						name = av_name.getUserName();
 						if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 						{
 							name = RlvStrings::getAnonym(name);
@@ -778,8 +781,10 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
 				// Look for a match
 				while (iter != avatar_ids.end() && !found)
 				{
-					if (gCacheName->getFullName(*iter++, name))
+					LLAvatarName av_name;
+					if (LLAvatarNameCache::get(*iter++, &av_name))
 					{
+						name = av_name.getUserName();
 						if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 						{
 							name = RlvStrings::getAnonym(name);
@@ -794,7 +799,16 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
 			if (found)
 			{
 				std::string first_name, last_name;
-				gCacheName->getFirstLastName(*(iter - 1), first_name, last_name);
+				LLAvatarName av_name;
+				LLAvatarNameCache::get(*(iter - 1), &av_name);
+				std::string username = av_name.getLegacyName();
+				size_t delim_pos = username.find(' ');
+				first_name = username.substr(0, delim_pos);
+				if (delim_pos + 1 < username.length())
+				{
+					last_name = username.substr(delim_pos + 1, std::string::npos);
+				}
+
 				std::string rest_of_match;
 				std::string replaced_text;
 				if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))

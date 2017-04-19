@@ -86,6 +86,18 @@ FSData::FSData() :
 	mFSDataURL = mBaseURL + "/" + "data.xml";
 }
 
+FSData::~FSData()
+{
+	for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+	}
+	mAvatarNameCacheConnections.clear();
+}
+
 void FSData::processResponder(const LLSD& content, const std::string& url, bool save_to_file, const LLDate& last_modified)
 {
 	if (url == mFSDataURL)
@@ -783,6 +795,21 @@ bool FSData::isAgentFlag(const LLUUID& agent_id, flags_t flag)
 	return (iter->second & flag);
 }
 
+void FSData::onNameCache(const LLUUID& av_id, const LLAvatarName& av_name)
+{
+	avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(av_id);
+	if (it != mAvatarNameCacheConnections.end())
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+		mAvatarNameCacheConnections.erase(it);
+	}
+	LLMute mute(av_id, av_name.getUserName(), LLMute::EXTERNAL);
+	LLMuteList::getInstance()->add(mute);
+}
+
 // this is called in two different places due to can recieved .xml before gCacheName is created and vice versa.
 void FSData::addAgents()
 {
@@ -796,10 +823,18 @@ void FSData::addAgents()
 		if (iter->second & NO_SPAM)
 		{
 			LLUUID id = iter->first;
-			std::string name;
-			gCacheName->getFullName(id, name);
-			LLMute mute(id, name, LLMute::EXTERNAL);
-			LLMuteList::getInstance()->add(mute);
+			avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(id);
+			if (it != mAvatarNameCacheConnections.end())
+			{
+				if (it->second.connected())
+				{
+					it->second.disconnect();
+				}
+				mAvatarNameCacheConnections.erase(it);
+			}
+
+			LLAvatarNameCache::callback_connection_t cb = LLAvatarNameCache::get(id, boost::bind(&FSData::onNameCache, this, _1, _2));
+			mAvatarNameCacheConnections.insert(std::make_pair(id, cb));
 		}
 	}
 }

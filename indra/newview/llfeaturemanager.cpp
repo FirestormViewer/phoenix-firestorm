@@ -766,10 +766,10 @@ void LLFeatureManager::applyBaseMasks()
 	{
 		maskFeatures("MapBufferRange");
 	}
-	//if (gGLManager.mVRAM > 512)
-	//{
-	//	maskFeatures("VRAMGT512");
-	//}
+	if (gGLManager.mVRAM > 512)
+	{
+		maskFeatures("VRAMGT512");
+	}
 
 #if LL_DARWIN
 	const LLOSInfo& osInfo = LLAppViewer::instance()->getOSInfo();

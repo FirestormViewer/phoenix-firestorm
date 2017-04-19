@@ -44,7 +44,9 @@ public:
 
 private:
 	void onContextMenuItemClick(const LLSD& userdata);
+	bool onContextMenuItemCheck(const LLSD& userdata);
 	bool onContextMenuItemEnable(const LLSD& userdata);
+	bool onContextMenuItemVisible(const LLSD& userdata);
 
 	LLView* mSpawningCtrl;
 };

@@ -70,6 +70,7 @@
 			<menu_item_check label="Kein Voice-Morphing" name="NoVoiceMorphing"/>
 			<menu_item_check label="Vorschau..." name="Preview"/>
 			<menu_item_call label="Abonnieren..." name="Subscribe"/>
+			<menu_item_call label="Premium-Vorteil..." name="PremiumPerk"/>
 		</menu>
 		<menu_item_check label="Unterhaltungsprotokoll..." name="Conversation Log..."/>
 		<menu_item_check label="Stimmen in der Nähe" name="Nearby Voice"/>
@@ -137,6 +138,7 @@
 		<menu_item_call label="Animation-Explorer" name="Animation Explorer"/>
 		<menu_item_call label="Asset-Blacklist" name="asset_blacklist"/>
 		<menu_item_call label="Avatar-Anzeigeeinstellungen" name="Avatar Render Settings"/>
+		<menu_item_check label="Freunde immer normal anzeigen" name="Always show Friends normally"/>
 		<menu_item_check label="Nur Freunde anzeigen" name="Render Friends Only"/>
 	</menu>
 	<menu label="Bauen" name="BuildTools">

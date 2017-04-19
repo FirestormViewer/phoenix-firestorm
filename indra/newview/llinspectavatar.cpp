@@ -50,6 +50,7 @@
 
 // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
 #include "llagentdata.h"
+#include "llavatarnamecache.h"
 #include "llcallingcard.h"
 #include "llfloaterreporter.h"
 #include "llfloaterworldmap.h"
@@ -798,8 +799,9 @@ void LLInspectAvatar::onClickKick()
 
 void LLInspectAvatar::onClickCSR()
 {
-	std::string name;
-	gCacheName->getFullName(mAvatarID, name);
+	LLAvatarName av_name;
+	LLAvatarNameCache::get(mAvatarID, &av_name);
+	std::string name = av_name.getUserName();
 	LLAvatarActions::csr(mAvatarID, name);
 	closeFloater();
 }

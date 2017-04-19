@@ -6,7 +6,6 @@
 	<menu_item_call label="Kopieren" name="Copy"/>
 	<menu_item_call label="Einfügen" name="Paste"/>
 	<menu_item_call label="Löschen" name="Delete"/>
-	<menu_item_call label="Duplizieren" name="Duplicate"/>
 	<menu_item_call label="Alle auswählen" name="Select All"/>
 	<menu_item_call label="Auswahl aufheben" name="Deselect"/>
 </menu>

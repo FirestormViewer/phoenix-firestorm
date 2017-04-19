@@ -240,12 +240,17 @@ void AnimationExplorer::draw()
 
 		gGL.color3f(1.0f, 1.0f, 1.0f);
 		gGL.getTexUnit(0)->bind(mAnimationPreview);
-		gGL.begin(LLRender::QUADS);
+		gGL.begin(LLRender::TRIANGLES);
 		{
 			gGL.texCoord2f(0.0f, 1.0f);
 			gGL.vertex2i(r.mLeft, r.mTop);
 			gGL.texCoord2f(0.0f, 0.0f);
 			gGL.vertex2i(r.mLeft, r.mBottom);
+			gGL.texCoord2f(1.0f, 0.0f);
+			gGL.vertex2i(r.mRight, r.mBottom);
+
+			gGL.texCoord2f(0.0f, 1.0f);
+			gGL.vertex2i(r.mLeft, r.mTop);
 			gGL.texCoord2f(1.0f, 0.0f);
 			gGL.vertex2i(r.mRight, r.mBottom);
 			gGL.texCoord2f(1.0f, 1.0f);

@@ -168,7 +168,20 @@ void LLHUDIcon::renderIcon(BOOL for_select)
 		gGL.getTexUnit(0)->bind(mImagep);
 	}
 
-	gGL.begin(LLRender::QUADS);
+	// <FS:Ansariel> Remove QUADS rendering mode
+	//gGL.begin(LLRender::QUADS);
+	//{
+	//	gGL.texCoord2f(0.f, 1.f);
+	//	gGL.vertex3fv(upper_left.mV);
+	//	gGL.texCoord2f(0.f, 0.f);
+	//	gGL.vertex3fv(lower_left.mV);
+	//	gGL.texCoord2f(1.f, 0.f);
+	//	gGL.vertex3fv(lower_right.mV);
+	//	gGL.texCoord2f(1.f, 1.f);
+	//	gGL.vertex3fv(upper_right.mV);
+	//}
+	//gGL.end();
+	gGL.begin(LLRender::TRIANGLES);
 	{
 		gGL.texCoord2f(0.f, 1.f);
 		gGL.vertex3fv(upper_left.mV);
@@ -176,10 +189,16 @@ void LLHUDIcon::renderIcon(BOOL for_select)
 		gGL.vertex3fv(lower_left.mV);
 		gGL.texCoord2f(1.f, 0.f);
 		gGL.vertex3fv(lower_right.mV);
+
+		gGL.texCoord2f(0.f, 1.f);
+		gGL.vertex3fv(upper_left.mV);
+		gGL.texCoord2f(1.f, 0.f);
+		gGL.vertex3fv(lower_right.mV);
 		gGL.texCoord2f(1.f, 1.f);
 		gGL.vertex3fv(upper_right.mV);
 	}
 	gGL.end();
+	// </FS:Ansariel>
 }
 
 void LLHUDIcon::setImage(LLViewerTexture* imagep)

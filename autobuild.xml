@@ -855,11 +855,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fffd130f17cbbe2b93cc241b27262647</string>
+              <string>2cd288133b26b6fea734345560562e5b</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/glod_3p-update-glod/rev/296895/arch/Linux/installer/glod-1.0pre4.296895-linux-296895.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201703101233-linux-201703101233.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -869,11 +869,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b0b32155319c6441997c034bdae28a22</string>
+              <string>e3659aa7b670a8fbdfb1b820254abb44</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/glod_3p-update-glod/rev/296895/arch/CYGWIN/installer/glod-1.0pre4.296895-windows-296895.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201703081158-windows-201703081158.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>

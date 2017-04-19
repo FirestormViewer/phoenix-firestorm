@@ -49,6 +49,7 @@
 
 #include "llappviewer.h"
 #include "llagent.h"
+#include "llavatarnamecache.h"
 #include "llui.h"
 #include "message.h"
 #include "roles_constants.h"
@@ -838,9 +839,9 @@ void LLGroupMgrGroupData::banMemberById(const LLUUID& participant_uuid)
 	LLGroupMgr::getInstance()->sendGroupMemberEjects(mID, ids);
 	LLGroupMgr::getInstance()->sendGroupMembersRequest(mID);
 	LLSD args;
-	std::string name;
-	gCacheName->getFullName(participant_uuid, name);
-	args["AVATAR_NAME"] = name;
+	LLAvatarName av_name;
+	LLAvatarNameCache::get(participant_uuid, &av_name);
+	args["AVATAR_NAME"] = av_name.getUserName();
 	args["GROUP_NAME"] = mName;
 	LLNotifications::instance().add(LLNotification::Params("EjectAvatarFromGroup").substitutions(args));
 }
