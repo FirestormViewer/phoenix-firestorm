@@ -149,7 +149,7 @@ void LLViewerAssetStorage::storeAssetData(
             if (asset_size < 1)
             {
                 // This can happen if there's a bug in our code or if the VFS has been corrupted.
-                LL_WARNS() << "LLViewerAssetStorage::storeAssetData()  Data _should_ already be in the VFS, but it's not! " << asset_id << LL_ENDL;
+                LL_WARNS("AssetStorage") << "LLViewerAssetStorage::storeAssetData()  Data _should_ already be in the VFS, but it's not! " << asset_id << LL_ENDL;
                 // LLAssetStorage metric: Zero size VFS
                 reportMetric( asset_id, asset_type, LLStringUtil::null, LLUUID::null, 0, MR_ZERO_SIZE, __FILE__, __LINE__, "The file didn't exist or was zero length (VFS - can't tell which)" );
 
@@ -190,7 +190,7 @@ void LLViewerAssetStorage::storeAssetData(
                 }
                 else
                 {
-                    LL_WARNS() << "Probable corruption in VFS file, aborting store asset data" << LL_ENDL;
+                    LL_WARNS("AssetStorage") << "Probable corruption in VFS file, aborting store asset data" << LL_ENDL;
 
                     // LLAssetStorage metric: VFS corrupt - bogus size
                     reportMetric( asset_id, asset_type, LLStringUtil::null, LLUUID::null, asset_size, MR_VFS_CORRUPTION, __FILE__, __LINE__, "VFS corruption" );
@@ -219,7 +219,7 @@ void LLViewerAssetStorage::storeAssetData(
         }
         else
         {
-            LL_WARNS() << "AssetStorage: attempt to upload non-existent vfile " << asset_id << ":" << LLAssetType::lookup(asset_type) << LL_ENDL;
+            LL_WARNS("AssetStorage") << "AssetStorage: attempt to upload non-existent vfile " << asset_id << ":" << LLAssetType::lookup(asset_type) << LL_ENDL;
             // LLAssetStorage metric: Zero size VFS
             reportMetric( asset_id, asset_type, LLStringUtil::null, LLUUID::null, 0, MR_ZERO_SIZE, __FILE__, __LINE__, "The file didn't exist or was zero length (VFS - can't tell which)" );
             if (callback)
@@ -230,7 +230,7 @@ void LLViewerAssetStorage::storeAssetData(
     }
     else
     {
-        LL_WARNS() << "Attempt to move asset store request upstream w/o valid upstream provider" << LL_ENDL;
+        LL_WARNS("AssetStorage") << "Attempt to move asset store request upstream w/o valid upstream provider" << LL_ENDL;
         // LLAssetStorage metric: Upstream provider dead
         reportMetric( asset_id, asset_type, LLStringUtil::null, LLUUID::null, 0, MR_NO_UPSTREAM, __FILE__, __LINE__, "No upstream provider" );
         if (callback)
@@ -397,7 +397,14 @@ void LLViewerAssetStorage::queueRequestHttp(
 void LLViewerAssetStorage::capsRecvForRegion(const LLUUID& region_id, std::string pumpname)
 {
     LLViewerRegion *regionp = LLWorld::instance().getRegionFromID(region_id);
-    mViewerAssetUrl = regionp->getViewerAssetUrl();
+    if (!regionp)
+    {
+        LL_WARNS("AssetStorage") << "region not found for region_id " << region_id << LL_ENDL;
+    }
+    else
+    {
+        mViewerAssetUrl = regionp->getViewerAssetUrl();
+    }
 
     LLEventPumps::instance().obtain(pumpname).post(LLSD());
 }
@@ -414,7 +421,7 @@ void LLViewerAssetStorage::assetRequestCoro(
 
     if (!gAgent.getRegion())
     {
-        LL_WARNS_ONCE() << "Asset request fails: no region set" << LL_ENDL;
+        LL_WARNS_ONCE("AssetStorage") << "Asset request fails: no region set" << LL_ENDL;
         result_code = LL_ERR_ASSET_REQUEST_FAILED;
         ext_status = LL_EXSTAT_NONE;
         removeAndCallbackPendingDownloads(uuid, atype, uuid, atype, result_code, ext_status);
@@ -422,19 +429,20 @@ void LLViewerAssetStorage::assetRequestCoro(
     }
     else if (!gAgent.getRegion()->capabilitiesReceived())
     {
+        LL_WARNS_ONCE("AssetStorage") << "Waiting for capabilities" << LL_ENDL;
+
         LLEventStream capsRecv("waitForCaps", true);
 
         gAgent.getRegion()->setCapabilitiesReceivedCallback(
             boost::bind(&LLViewerAssetStorage::capsRecvForRegion, this, _1, capsRecv.getName()));
         
         llcoro::suspendUntilEventOn(capsRecv);
+        LL_WARNS_ONCE("AssetStorage") << "capsRecv got event" << LL_ENDL;
+        LL_WARNS_ONCE("AssetStorage") << "region " << gAgent.getRegion() << " mViewerAssetUrl " << mViewerAssetUrl << LL_ENDL;
     }
-    else
+    if (mViewerAssetUrl.empty() && gAgent.getRegion())
     {
-        if (mViewerAssetUrl.empty())
-        {
-            mViewerAssetUrl = gAgent.getRegion()->getViewerAssetUrl();
-        }
+        mViewerAssetUrl = gAgent.getRegion()->getViewerAssetUrl();
     }
     if (mViewerAssetUrl.empty())
     {
@@ -464,7 +472,7 @@ void LLViewerAssetStorage::assetRequestCoro(
         else
         {
         // <FS:Ansariel> [UDP Assets]
-        LL_WARNS_ONCE() << "asset request fails: caps received but no viewer asset cap found" << LL_ENDL;
+        LL_WARNS_ONCE("AssetStorage") << "asset request fails: caps received but no viewer asset cap found" << LL_ENDL;
         result_code = LL_ERR_ASSET_REQUEST_FAILED;
         ext_status = LL_EXSTAT_NONE;
         removeAndCallbackPendingDownloads(uuid, atype, uuid, atype, result_code, ext_status);
@@ -495,8 +503,7 @@ void LLViewerAssetStorage::assetRequestCoro(
     LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
     if (!status)
     {
-        // TODO asset-http: handle failures
-        LL_DEBUGS("ViewerAsset") << "request failed, status " << status.toTerseString() << ", now what?" << LL_ENDL;
+        LL_DEBUGS("ViewerAsset") << "request failed, status " << status.toTerseString() << LL_ENDL;
         result_code = LL_ERR_ASSET_REQUEST_FAILED;
         ext_status = LL_EXSTAT_NONE;
     }
@@ -509,7 +516,9 @@ void LLViewerAssetStorage::assetRequestCoro(
         S32 size = raw.size();
         if (size > 0)
         {
-			// This create-then-rename flow is modeled on LLTransferTargetVFile, which is what's used in the UDP case.
+			// This create-then-rename flow is modeled on
+			// LLTransferTargetVFile, which is what's used in the UDP
+			// case.
             LLUUID temp_id;
             temp_id.generate();
             LLVFile vf(gAssetStorage->mVFS, temp_id, atype, LLVFile::WRITE);
@@ -518,13 +527,13 @@ void LLViewerAssetStorage::assetRequestCoro(
             if (!vf.write(raw.data(),size))
             {
                 // TODO asset-http: handle error
-                LL_WARNS() << "Failure in vf.write()" << LL_ENDL;
+                LL_WARNS("AssetStorage") << "Failure in vf.write()" << LL_ENDL;
                 result_code = LL_ERR_ASSET_REQUEST_FAILED;
                 ext_status = LL_EXSTAT_VFS_CORRUPT;
             }
             if (!vf.rename(uuid, atype))
             {
-                LL_WARNS() << "rename failed" << LL_ENDL;
+                LL_WARNS("AssetStorage") << "rename failed" << LL_ENDL;
                 result_code = LL_ERR_ASSET_REQUEST_FAILED;
                 ext_status = LL_EXSTAT_VFS_CORRUPT;
             }
@@ -532,7 +541,7 @@ void LLViewerAssetStorage::assetRequestCoro(
         else
         {
             // TODO asset-http: handle invalid size case
-			LL_WARNS() << "bad size" << LL_ENDL;
+			LL_WARNS("AssetStorage") << "bad size" << LL_ENDL;
             result_code = LL_ERR_ASSET_REQUEST_FAILED;
             ext_status = LL_EXSTAT_NONE;
         }

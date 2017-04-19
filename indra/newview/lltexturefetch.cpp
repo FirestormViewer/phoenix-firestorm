@@ -30,8 +30,6 @@
 #include <map>
 #include <algorithm>
 
-#include "llstl.h"
-
 #include "lltexturefetch.h"
 
 #include "lldir.h"
@@ -4041,15 +4039,16 @@ TFReqSendMetrics::doWork(LLTextureFetch * fetcher)
 	// In mStatsSD, we have a copy we own of the LLSD representation
 	// of the asset stats. Add some additional fields and ship it off.
 
+    static const S32 metrics_data_version = 2;
+    
 	bool initial_report = !reporting_started;
 	mStatsSD["session_id"] = mSessionID;
 	mStatsSD["agent_id"] = mAgentID;
 	mStatsSD["message"] = "ViewerAssetMetrics";
 	mStatsSD["sequence"] = report_sequence;
 	mStatsSD["initial"] = initial_report;
+	mStatsSD["version"] = metrics_data_version;
 	mStatsSD["break"] = static_cast<bool>(LLTextureFetch::svMetricsDataBreak);
-
-    LL_INFOS(LOG_TXT) << "ViewerAssetMetrics after fields added\n" << ll_pretty_print_sd(mStatsSD) << LL_ENDL;
 		
 	// Update sequence number
 	if (S32_MAX == ++report_sequence)
@@ -4062,6 +4061,11 @@ TFReqSendMetrics::doWork(LLTextureFetch * fetcher)
 	
 	mStatsSD["truncated"] = truncate_viewer_metrics(10, mStatsSD);
 
+    if (gSavedSettings.getBOOL("QAModeMetrics"))
+    {
+        dump_sequential_xml("metric_asset_stats",mStatsSD);
+    }
+            
 	if (! mCapsURL.empty())
 	{
 		// Don't care about handle, this is a fire-and-forget operation.  
