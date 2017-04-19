@@ -363,6 +363,40 @@ Gruppen müssen mehr als ein Mitglied haben oder sie werden gelöscht.
 Bitte laden Sie innerhalb von 48 Stunden Mitglieder in Ihre Gruppe ein.
 		<usetemplate canceltext="Abbrechen" name="okcancelbuttons" notext="Abbrechen" yestext="Gruppe für [COST] L$ erstellen"/>
 	</notification>
+	<notification name="JoinGroupInaccessible">
+		Sie haben keine Zugriff auf diese Gruppe.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="JoinGroupError">
+		Fehler bei der Verarbeitung Ihrer Gruppenmitglied-Anfrage.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="JoinGroupError">
+		Gruppe kann nicht beigetreten werden: [reason]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="JoinGroupTrialUser">
+		Entschuldigung, Benutzer auf Probe können keiner Gruppe beitreten.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="JoinGroupMaxGroups">
+		Sie können der Gruppe [group_name] nicht beitreten:
+Sie sind bereits Mitglied in [group_count] Gruppen, das erlaubte Limit sind [max_groups].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="JoinGroupClosedEnrollment">
+		Sie können der Gruppe [group_name] nicht beitreten:
+Die Gruppe besitzt keine öffentliche Anmeldung mehr.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="JoinGroupSuccess">
+		Sie sind der Gruppe beigetreten.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="JoinGroupInsufficientFunds">
+		Die benötigte Gebühr L$ [membership_fee] für die Mitgliedschaft konnte nicht übertragen werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="LandBuyPass">
 		Sie können dieses Land („[PARCEL_NAME]“) für [COST] L$
 [TIME] Stunden lang betreten.  Pass kaufen?
@@ -3534,10 +3568,16 @@ Die Schaltfläche wird angezeigt, wenn genügend Platz vorhanden ist.
 	<notification name="ShareNotification">
 		Wählen Sie Einwohner aus, für die Sie das Objekt freigeben möchten.
 	</notification>
-	<notification name="MeshUploadError">
+	<notification name="MeshUploadErrorDetails">
 		[LABEL] konnte nicht hochgeladen werden: [MESSAGE] [IDENTIFIER] 
 
 [DETAILS] Siehe Firestorm.log für Details.
+	</notification>
+	<notification name="MeshUploadError">
+		[LABEL] konnte nicht hochgeladen werden: [MESSAGE]
+[IDENTIFIER] 
+
+Siehe Firestorm.log für Details.
 	</notification>
 	<notification name="MeshUploadPermError">
 		Fehler beim Anfordern der Berechtigungen zum Hochladen des Netzes
