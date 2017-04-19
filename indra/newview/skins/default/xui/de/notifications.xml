@@ -4111,7 +4111,7 @@ Sie ist voll oder startet in Kürze neu.
 	</notification>
 	<notification name="CMOWTF">
 		Objekt „[O]“ kann nicht nach
-[P] in Region [R] verschoben werden, da ein unbekannter Fehler vorliegt. ([FAILURE_TYPE])
+[P] in Region [R] verschoben werden, da ein unbekannter Fehler vorliegt. ([F])
 	</notification>
 	<notification name="NoPermModifyObject">
 		Ihnen fehlt die Berechtigung zum Modifizieren dieses Objekts.

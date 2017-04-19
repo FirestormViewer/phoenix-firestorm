@@ -70,7 +70,7 @@
 			<menu_item_check label="Kein Voice-Morphing" name="NoVoiceMorphing"/>
 			<menu_item_check label="Vorschau..." name="Preview"/>
 			<menu_item_call label="Abonnieren..." name="Subscribe"/>
-			<menu_item_call label="Premium-Bonus..." name="PremiumPerk"/>
+			<menu_item_call label="Premium-Vorteil..." name="PremiumPerk"/>
 		</menu>
 		<menu_item_check label="Unterhaltungsprotokoll..." name="Conversation Log..."/>
 		<menu_item_check label="Stimmen in der Nähe" name="Nearby Voice"/>

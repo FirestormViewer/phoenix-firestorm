@@ -1680,8 +1680,8 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Der [[MARKETPLACE_CREATE_STORE_URL] Marktplatz-Laden] gibt Fehler zurück.
 	</string>
 	<string name="InventoryMarketplaceError">
-		Es ist ein Fehler beim Öffnen der Marktplatz-Auflistungen aufgetreten.
-Falls dieser Fehler weiterhin auftritt, kontaktieren Sie bitte den Second Life Support: http://support.secondlife.com
+		Beim Öffnen der Marktplatz-Auflistungen ist ein Fehler aufgetreten.
+Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://support.secondlife.com an den Support von Second Life.
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Ihr Ordner mit Marktplatz-Auflistungen ist leer.
@@ -5188,7 +5188,7 @@ Missbrauchsbericht
 	<string name="server_is_down">
 		Trotz all unserer Bemühungen ist ein unerwarteter Fehler aufgetreten.
 
-Bitte überprüfen Sie http://status.secondlifegrid.net um festzustellen, ob ein bekanntes Problem besteht.
+Bitte überprüfen Sie http://status.secondlifegrid.net, um herauszufinden, ob ein Problem mit dem Service vorliegt.
 Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und Firewalleinstellungen.
 	</string>
 	<string name="dateTimeWeekdaysNames">
@@ -5839,7 +5839,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Gesten für Ihren Avatar (Strg+G)
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
-		Den aktuellen Grid-Status anzeigen
+		Aktuellen Grid-Status anzeigen
 	</string>
 	<string name="Command_HowTo_Tooltip">
 		Wie führe ich gängige Aufgaben aus?
@@ -6164,6 +6164,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="loading_chat_logs">
 		Laden...
+	</string>
+	<string name="na">
+		Nicht zutreffend
 	</string>
 	<string name="preset_combo_label">
 		-Leere Liste-
