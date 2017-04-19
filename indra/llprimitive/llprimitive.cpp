@@ -180,10 +180,7 @@ LLPrimitive::~LLPrimitive()
 {
 	clearTextureList();
 	// Cleanup handled by volume manager
-
-	// <FS:ND/> During shutdown sVolumeManager can be 0
-	//	if (mVolumep)
-	if ( mVolumep && sVolumeManager )
+	if (mVolumep && sVolumeManager)
 	{
 		sVolumeManager->unrefVolume(mVolumep);
 	}

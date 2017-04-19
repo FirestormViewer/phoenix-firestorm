@@ -291,7 +291,7 @@
            top_pad="5"
            left="10"
            height="23"
-           label="Upload"
+           label="Share"
            name="post_photo_btn"
            width="100">
             <button.commit_callback

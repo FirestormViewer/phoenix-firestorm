@@ -14,20 +14,19 @@
      name="message_max_lines_count"
      value="30" />
   <panel
-   bevel_style="none"
-   follows="left|right|top"
-   height="185"
-   label="info_panel"
-   layout="topleft"
-   left="0"
-   name="info_panel"
-   top="0"
-   width="305">    
-    <text_editor
+     bevel_style="none"
+     follows="all"
+     height="120"
+     label="info_panel"
+     layout="topleft"
+     left="0"
+     name="info_panel"
+     top="0"
+     width="305">
+    <text
      bg_readonly_color="ScriptDialog"
-	 border_visible="false"
-     enabled="false"
-     follows="left|right|top|bottom"
+     border_visible="false"
+     follows="all"
      font="SansSerif"
      height="110" 
      layout="topleft"
@@ -37,31 +36,42 @@
      read_only="true"
      text_color="ScriptDialogFg"
      text_readonly_color="ScriptDialogFg"
-     top="10"
+     top="0"
      value="informational text"
      width="285"
      wrap="true"
      parse_highlights="true"
      parse_urls="true"/>
-    <text_editor
-	 border_visible="true"
-     parse_urls="true"
-     enabled="true"
-     follows="all"
-     height="50"
+  </panel> 
+  <panel
+     bevel_style="none"
+     follows="left|right|bottom"
+     height="55"
+     label="info_panel"
      layout="topleft"
-     left="10"
-     max_length="250"
-     name="message"
-     parse_highlights="true"
-     read_only="false"
-     top_pad="10"
-     type="string"
-     use_ellipses="true"
-     value="message"
-     width="285"
-     word_wrap="true">
-    </text_editor>
+     left="0"
+     name="textbox_panel"
+     top_pad="5"
+     width="305">  
+     <text_editor
+	 border_visible="true"
+      parse_urls="true"
+      enabled="true"
+      follows="all"
+      height="50"
+      layout="topleft"
+      left="10"
+      max_length="250"
+      name="message"
+      parse_highlights="true"
+      read_only="false"
+      top ="0"
+      type="string"
+      use_ellipses="true"
+      value="message"
+      width="285"
+      word_wrap="true">
+     </text_editor>
   </panel>
   <panel
      background_visible="false"
@@ -103,7 +113,7 @@
    name="DialogStackButton"
    visibility_control="DialogStackIconVisible"
    image_selected="Icon_DialogStack"
-   image_unselected="Icon_DialogStack"   
+   image_unselected="Icon_DialogStack"
    width="24"
    height="14"
    right="-2"

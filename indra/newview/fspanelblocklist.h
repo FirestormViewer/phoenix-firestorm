@@ -65,12 +65,23 @@ public:
 	/* virtual */ void onChange() {	refreshBlockedList();}
 	
 private:
-	typedef enum e_sort_oder{
+	typedef enum e_sort_oder
+	{
 		E_SORT_BY_NAME_ASC = 0,
 		E_SORT_BY_TYPE_ASC = 1,
 		E_SORT_BY_NAME_DESC = 2,
 		E_SORT_BY_TYPE_DESC = 3
 	} ESortOrder;
+
+	
+	typedef enum e_column_names
+	{
+		COL_NAME = 0,
+		COL_TYPENAME,
+		COL_TYPE,
+		COL_UUID
+	} EColumnNames;
+
 
 	void refreshBlockedList();
 	void updateButtons();
@@ -82,6 +93,7 @@ private:
 	void blockResidentByName();
 	void blockObjectByName();
 	void showProfile();
+	void toggleMute(U32 flags);
 
 	void onSelectionChanged();
 	void onFilterEdit(std::string search_string);
@@ -90,6 +102,7 @@ private:
 	void onCustomAction(const LLSD& userdata);
 	bool isActionChecked(const LLSD& userdata);
 	bool isActionEnabled(const LLSD& userdata);
+	bool isActionVisible(const LLSD& userdata);
 
 	void callbackBlockPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
 	void callbackBlockByName(const std::string& text);

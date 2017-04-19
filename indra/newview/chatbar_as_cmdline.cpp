@@ -526,6 +526,16 @@ void invrepair()
 	gInventory.collectDescendents(gInventory.getRootFolderID(), cats, items, FALSE);
 }
 
+void key_to_name_callback(const LLUUID& id, const LLAvatarName& av_name)
+{
+	std::string name = av_name.getCompleteName();
+	if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, id))
+	{
+		name = RlvStrings::getAnonym(name);
+	}
+	report_to_nearby_chat(llformat("%s: (%s)", id.asString().c_str(), name.c_str()));
+}
+
 bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_gesture)
 {
 	static LLCachedControl<bool> sFSCmdLine(gSavedSettings, "FSCmdLine");
@@ -701,13 +711,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				LLUUID target_key;
 				if (i >> target_key)
 				{
-					std::string object_name;
-					gCacheName->getFullName(target_key, object_name);
-					if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, target_key))
-					{
-						object_name = RlvStrings::getAnonym(object_name);
-					}
-					report_to_nearby_chat(llformat("%s: (%s)", target_key.asString().c_str(), object_name.c_str()));
+					LLAvatarNameCache::get(target_key, boost::bind(&key_to_name_callback, _1, _2));
 				}
 				return false;
 			}

@@ -352,6 +352,11 @@ void LLGLSLShader::unloadInternal()
         for (GLsizei i = 0; i < count; i++)
         {
             glDetachObjectARB(mProgramObject, obj[i]);
+// <FS:Ansariel> OpenGL error: glDeleteObjectARB - GL_INVALID_VALUE
+#if !LL_DARWIN
+            if (glIsProgramARB(obj[i]))
+#endif
+// </FS:Ansariel>
                 glDeleteObjectARB(obj[i]);
             }
 

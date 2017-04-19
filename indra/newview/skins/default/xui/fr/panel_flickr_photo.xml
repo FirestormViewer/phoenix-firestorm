@@ -18,6 +18,6 @@
 		<combo_box.item label="Classification Flickr Modérée" name="ModerateRating"/>
 		<combo_box.item label="Classification Flickr Restreinte" name="RestrictedRating"/>
 	</combo_box>
-	<button label="Envoyer" name="post_photo_btn"/>
+	<button label="Partager" name="post_photo_btn"/>
 	<button label="Annuler" name="cancel_photo_btn"/>
 </panel>

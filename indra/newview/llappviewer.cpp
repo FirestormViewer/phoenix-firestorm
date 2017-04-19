@@ -664,7 +664,10 @@ static void settings_to_globals()
 	LLSurface::setTextureSize(gSavedSettings.getU32("RegionTextureSize"));
 	
 	LLRender::sGLCoreProfile = gSavedSettings.getBOOL("RenderGLCoreProfile");
-	LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
+	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
+	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
+	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO");
+	// </FS:Ansariel>
 	LLImageGL::sGlobalUseAnisotropic	= gSavedSettings.getBOOL("RenderAnisotropic");
 	LLImageGL::sCompressTextures		= gSavedSettings.getBOOL("RenderCompressTextures");
 	LLVOVolume::sLODFactor				= gSavedSettings.getF32("RenderVolumeLODFactor");
@@ -3942,7 +3945,12 @@ LLSD LLAppViewer::getViewerInfo() const
 	//                           http://wiki.phoenixviewer.com/firestorm_change_log_x.y.z.rev
 	//if (! LLStringUtil::endsWith(url, "/"))
 	//	url += "/";
-	//url += LLURI::escape(LLVersionInfo::getChannel()) + "/";
+	//std::string channel = LLVersionInfo::getChannel();
+	//if (LLStringUtil::endsWith(boost::to_lower_copy(channel), " edu")) // Release Notes url shouldn't include the EDU parameter
+	//{
+	//	boost::erase_tail(channel, 4);
+	//}
+	//url += LLURI::escape(channel) + "/";
 	// </FS:Ansariel>
 	url += LLURI::escape(LLVersionInfo::getVersion());
 
@@ -6473,6 +6481,8 @@ void LLAppViewer::forceErrorBreakpoint()
    	LL_WARNS() << "Forcing a deliberate breakpoint" << LL_ENDL;
 #ifdef LL_WINDOWS
     DebugBreak();
+#else
+    asm ("int $3");
 #endif
     return;
 }

@@ -162,11 +162,11 @@ void LLHandlerUtil::logToIM(const EInstantMessage& session_type,
 	}
 }
 
-void log_name_callback(const std::string& full_name, const std::string& from_name, 
+void log_name_callback(const LLAvatarName& av_name, const std::string& from_name, 
 					   const std::string& message, const LLUUID& from_id)
 
 {
-	LLHandlerUtil::logToIM(IM_NOTHING_SPECIAL, full_name, from_name, message,
+	LLHandlerUtil::logToIM(IM_NOTHING_SPECIAL, av_name.getUserName(), from_name, message,
 					from_id, LLUUID());
 }
 
@@ -189,11 +189,11 @@ void LLHandlerUtil::logToIMP2P(const LLNotificationPtr& notification, bool to_fi
 
 	if(to_file_only)
 	{
-		gCacheName->get(from_id, false, boost::bind(&log_name_callback, _2, "", notification->getMessage(), LLUUID()));
+		LLAvatarNameCache::get(from_id, boost::bind(&log_name_callback, _2, "", notification->getMessage(), LLUUID()));
 	}
 	else
 	{
-		gCacheName->get(from_id, false, boost::bind(&log_name_callback, _2, INTERACTIVE_SYSTEM_FROM, notification->getMessage(), from_id));
+		LLAvatarNameCache::get(from_id, boost::bind(&log_name_callback, _2, INTERACTIVE_SYSTEM_FROM, notification->getMessage(), from_id));
 	}
 }
 
@@ -222,9 +222,18 @@ void LLHandlerUtil::logGroupNoticeToIMGroup(
 	const std::string group_name = groupData.mName;
 	const std::string sender_name = payload["sender_name"].asString();
 
-	// we can't retrieve sender id from group notice system message, so try to lookup it from cache
 	LLUUID sender_id;
-	gCacheName->getUUID(sender_name, sender_id);
+	if (payload.has("sender_id"))
+	{
+		sender_id = payload["sender_id"].asUUID();
+	}
+	
+	if (sender_id.notNull())
+	{
+		// Legacy support and fallback method
+		// if we can't retrieve sender id from group notice system message, try to lookup it from cache
+		sender_id = LLAvatarNameCache::findIdByName(sender_name);
+	}
 
 	// <FS:KC> Better group notices to IM log
 	if (gSavedSettings.getBOOL("FSBetterGroupNoticesToIMLog"))
@@ -303,7 +312,12 @@ std::string LLHandlerUtil::getSubstitutionName(const LLNotificationPtr& notifica
 		{
 			from_id = notification->getPayload()["from_id"];
 		}
-		if(!gCacheName->getFullName(from_id, res))
+		LLAvatarName av_name;
+		if(LLAvatarNameCache::get(from_id, &av_name))
+		{
+			res = av_name.getUserName();
+		}
+		else
 		{
 			res = "";
 		}

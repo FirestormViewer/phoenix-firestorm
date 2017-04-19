@@ -564,8 +564,8 @@ void FSFloaterNearbyChat::loadHistory()
 			}
 
 			std::string legacy_name = gCacheName->buildLegacyName(from);
- 			gCacheName->getUUID(legacy_name, from_id);
- 		}
+			from_id = LLAvatarNameCache::findIdByName(legacy_name);
+		}
 
 		LLChat chat;
 		chat.mFromName = from;
