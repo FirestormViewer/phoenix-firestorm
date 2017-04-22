@@ -2194,7 +2194,7 @@ void errorCallback(const std::string &error_string)
 	gLLErrorActivated = true;
 	
 //	LLError::crashAndLoop(error_string);
-// [SL:KB] - Patch: Viewer-Build | Checked: 2010-12-04 (Catznip-2.4)
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-2.4
 #if !LL_RELEASE_FOR_DOWNLOAD && LL_WINDOWS
 	DebugBreak();
 #else

@@ -41,7 +41,7 @@ LLImageJ2CImpl* fallbackCreateLLImageJ2CImpl()
 
 std::string LLImageJ2COJ::getEngineInfo() const
 {
-// [SL:KB] - Patch: Viewer-Build | Checked: 2016-02-07 (Catznip-4.0)
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-4.0
 	return std::string("OpenJPEG: ") + opj_version();
 // [/SL:KB]
 //	return std::string("OpenJPEG: " OPENJPEG_VERSION ", Runtime: ")
