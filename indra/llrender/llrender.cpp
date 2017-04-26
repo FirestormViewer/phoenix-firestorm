@@ -1088,11 +1088,14 @@ void LLRender::init()
 
 	llassert_always(mBuffer.isNull()) ;
 	stop_glerror();
-	mBuffer = new LLVertexBuffer(immediate_mask, 0);
-	mBuffer->allocateBuffer(4096, 0, TRUE);
-	mBuffer->getVertexStrider(mVerticesp);
-	mBuffer->getTexCoord0Strider(mTexcoordsp);
-	mBuffer->getColorStrider(mColorsp);
+	// <FS:Ansariel> Reset VB during TP
+	//mBuffer = new LLVertexBuffer(immediate_mask, 0);
+	//mBuffer->allocateBuffer(4096, 0, TRUE);
+	//mBuffer->getVertexStrider(mVerticesp);
+	//mBuffer->getTexCoord0Strider(mTexcoordsp);
+	//mBuffer->getColorStrider(mColorsp);
+	initVB();
+	// </FS:Ansariel>
 	stop_glerror();
 }
 
@@ -1111,8 +1114,28 @@ void LLRender::shutdown()
 		delete mLightState[i];
 	}
 	mLightState.clear();
-	mBuffer = NULL ;
+	// <FS:Ansariel> Reset VB during TP
+	//mBuffer = NULL ;
+	destroyVB();
+	// </FS:Ansariel>
 }
+
+// <FS:Ansariel> Reset VB during TP
+void LLRender::initVB()
+{
+	mBuffer = new LLVertexBuffer(immediate_mask, 0);
+	mBuffer->allocateBuffer(4096, 0, TRUE);
+	mBuffer->getVertexStrider(mVerticesp);
+	mBuffer->getTexCoord0Strider(mTexcoordsp);
+	mBuffer->getColorStrider(mColorsp);
+}
+
+void LLRender::destroyVB()
+{
+	mBuffer = NULL;
+}
+// </FS:Ansariel>
+
 
 void LLRender::refreshState(void)
 {

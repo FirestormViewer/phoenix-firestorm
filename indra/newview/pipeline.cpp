@@ -587,19 +587,15 @@ void LLPipeline::init()
 		mCubeVB = ll_create_cube_vb(LLVertexBuffer::MAP_VERTEX, GL_STATIC_DRAW_ARB);
 	}
 
-	mDeferredVB = new LLVertexBuffer(DEFERRED_VB_MASK, 0);
-	mDeferredVB->allocateBuffer(8, 0, true);
+	// <FS:Ansariel> Reset VB during TP
+	//mDeferredVB = new LLVertexBuffer(DEFERRED_VB_MASK, 0);
+	//mDeferredVB->allocateBuffer(8, 0, true);
+	initDeferredVB();
+	// </FS:Ansariel>
 	setLightingDetail(-1);
 
 	// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
-	mAuxiliaryVB = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_COLOR, 0);
-	mAuxiliaryVB->allocateBuffer(3, 0, true);
-
-	LLStrider<LLVector3> verts;
-	mAuxiliaryVB->getVertexStrider(verts);
-	verts[0].set(-1.f, -1.f, 0.f);
-	verts[1].set(-1.f, 3.f, 0.f);
-	verts[2].set(3.f, -1.f, 0.f);
+	initAuxiliaryVB();
 	// </FS:Ansariel>
 
 	
@@ -7472,6 +7468,11 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 
 	mCubeVB = NULL;
 
+	mDeferredVB = NULL;
+	mAuxiliaryVB = NULL;
+	exoPostProcess::instance().destroyVB(); // Will be re-created via updateRenderDeferred()
+	gGL.destroyVB();
+
 	for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin(); 
 			iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
 	{
@@ -7520,7 +7521,7 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 	LLVertexBuffer::unbind();	
 	
 	updateRenderBump();
-	updateRenderDeferred();
+	//updateRenderDeferred(); // <FS:Ansariel> Moved further down because of exoPostProcess creating a new VB
 
 	sUseTriStrips = gSavedSettings.getBOOL("RenderUseTriStrips");
 	LLVertexBuffer::sUseStreamDraw = gSavedSettings.getBOOL("RenderUseStreamVBO");
@@ -7538,6 +7539,15 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 	LLVertexBuffer::initClass(LLVertexBuffer::sEnableVBOs, LLVertexBuffer::sDisableVBOMapping);
 
 	LLVOPartGroup::restoreGL();
+
+	// <FS:Ansariel> Reset VB during TP
+	updateRenderDeferred(); // Moved further down because of exoPostProcess creating a new VB
+
+	gGL.initVB();
+
+	initDeferredVB();
+	initAuxiliaryVB();
+	// </FS:Ansariel>
 }
 
 void LLPipeline::renderObjects(U32 type, U32 mask, BOOL texture, BOOL batch_texture)
@@ -12138,7 +12148,27 @@ void LLPipeline::disableDeferredOnLowMemory()
 }
 // </FS:ND>
 
+// <FS:Ansariel> Reset VB during TP
+void LLPipeline::initDeferredVB()
+{
+	mDeferredVB = new LLVertexBuffer(DEFERRED_VB_MASK, 0);
+	mDeferredVB->allocateBuffer(8, 0, true);
+}
+// </FS:Ansariel>
+
 // <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+void LLPipeline::initAuxiliaryVB()
+{
+	mAuxiliaryVB = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_COLOR, 0);
+	mAuxiliaryVB->allocateBuffer(3, 0, true);
+
+	LLStrider<LLVector3> verts;
+	mAuxiliaryVB->getVertexStrider(verts);
+	verts[0].set(-1.f, -1.f, 0.f);
+	verts[1].set(-1.f, 3.f, 0.f);
+	verts[2].set(3.f, -1.f, 0.f);
+}
+
 void LLPipeline::drawAuxiliaryVB(U32 mask /*= 0*/)
 {
 	mAuxiliaryVB->setBuffer(LLVertexBuffer::MAP_VERTEX | mask);

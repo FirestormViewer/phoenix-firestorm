@@ -53,6 +53,8 @@
 #include "lltextureatlas.h"
 #include "llviewershadermgr.h"
 
+#include "llvotree.h"
+
 static LLTrace::BlockTimerStatHandle FTM_FRUSTUM_CULL("Frustum Culling");
 static LLTrace::BlockTimerStatHandle FTM_CULL_REBOUND("Cull Rebound Partition");
 
@@ -891,6 +893,9 @@ void LLSpatialGroup::handleChildAddition(const OctreeNode* parent, OctreeNode* c
 
 void LLSpatialGroup::destroyGL(bool keep_occlusion) 
 {
+	// <FS:Ansariel> Reset VB during TP
+	bool is_tree_group = getSpatialPartition()->mPartitionType == LLViewerRegion::PARTITION_TREE;
+
 	setState(LLSpatialGroup::GEOM_DIRTY | LLSpatialGroup::IMAGE_DIRTY);
 
 	if (!keep_occlusion)
@@ -909,7 +914,6 @@ void LLSpatialGroup::destroyGL(bool keep_occlusion)
 		releaseOcclusionQueryObjectNames();
 	}
 
-
 	for (LLSpatialGroup::element_iter i = getDataBegin(); i != getDataEnd(); ++i)
 	{
 		LLDrawable* drawable = (LLDrawable*)(*i)->getDrawable();
@@ -925,6 +929,13 @@ void LLSpatialGroup::destroyGL(bool keep_occlusion)
 				facep->clearVertexBuffer();
 			}
 		}
+
+		// <FS:Ansariel> Reset VB during TP
+		if (is_tree_group && drawable->getVObj())
+		{
+			((LLVOTree*)drawable->getVObj().get())->destroyVB();
+		}
+		// </FS:Ansariel>
 	}
 }
 
