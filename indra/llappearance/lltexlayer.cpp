@@ -1583,7 +1583,7 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 			glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, alpha_buffer);
 			for (S32 i = 0; i < width * height; ++i)
 			{
-				alpha_data[i] = alpha_buffer[i * 4];
+				alpha_data[i] = alpha_buffer[i * 4 + 3];
 			}
 			delete[] alpha_buffer;
 			// </FS:Ansariel>
