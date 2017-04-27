@@ -1577,7 +1577,16 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 			}
 			alpha_data = new U8[width * height];
 			mAlphaCache[cache_index] = alpha_data;
-			glReadPixels(x, y, width, height, GL_ALPHA, GL_UNSIGNED_BYTE, alpha_data);
+			// <FS:Ansariel> Format GL_ALPHA is invalid for glReadPixels
+			//glReadPixels(x, y, width, height, GL_ALPHA, GL_UNSIGNED_BYTE, alpha_data);
+			U8* alpha_buffer = new U8[width * height * 4];
+			glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, alpha_buffer);
+			for (S32 i = 0; i < width * height; ++i)
+			{
+				alpha_data[i] = alpha_buffer[i * 4];
+			}
+			delete[] alpha_buffer;
+			// </FS:Ansariel>
 		}
 		
 		getTexLayerSet()->getAvatarAppearance()->dirtyMesh();
