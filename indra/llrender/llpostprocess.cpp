@@ -391,7 +391,10 @@ void LLPostProcess::doEffects(void)
 void LLPostProcess::copyFrameBuffer(U32 & texture, unsigned int width, unsigned int height)
 {
 	gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_RECT_TEXTURE, texture);
-	glCopyTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, 0, 0, width, height, 0);
+	// <FS:Ansariel> Replace GL_TEXTURE_RECTANGLE_ARB with GL_TEXTURE_RECTANGLE
+	//glCopyTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, 0, 0, width, height, 0);
+	glCopyTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA, 0, 0, width, height, 0);
+	// </FS:Ansariel>
 }
 
 void LLPostProcess::drawOrthoQuad(unsigned int width, unsigned int height, QuadType type)
@@ -503,7 +506,10 @@ void LLPostProcess::createTexture(LLPointer<LLImageGL>& texture, unsigned int wi
 	if(texture->createGLTexture())
 	{
 		gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_RECT_TEXTURE, texture->getTexName());
-		glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, 4, width, height, 0,
+		// <FS:Ansariel> Replace GL_TEXTURE_RECTANGLE_ARB with GL_TEXTURE_RECTANGLE
+		//glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, 4, width, height, 0,
+		glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 4, width, height, 0,
+		// </FS:Ansariel>
 			GL_RGBA, GL_UNSIGNED_BYTE, &data[0]);
 		gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_BILINEAR);
 		gGL.getTexUnit(0)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
