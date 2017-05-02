@@ -1753,8 +1753,9 @@ bool LLVivoxVoiceClient::runSession(const sessionStatePtr_t &session)
         notifyStatusObservers(LLVoiceClientStatusObserver::ERROR_UNKNOWN);
 
         if (mSessionTerminateRequested)
+        {
             terminateAudioSession(true);
-
+        }
         // if a relog has been requested then addAndJoineSession 
         // failed in a spectacular way and we need to back out.
         // If this is not the case then we were simply trying to
@@ -2767,9 +2768,16 @@ static void oldSDKTransform (LLVector3 &left, LLVector3 &up, LLVector3 &at, LLVe
 void LLVivoxVoiceClient::setHidden(bool hidden)
 {
     mHidden = hidden;
-    
-    sendPositionAndVolumeUpdate();
-    return;
+
+    if (mHidden && inSpatialChannel())
+    {
+        // get out of the channel entirely 
+        leaveAudioSession();
+    }
+    else
+    {
+        sendPositionAndVolumeUpdate();
+    }
 }
 
 void LLVivoxVoiceClient::sendPositionAndVolumeUpdate(void)
@@ -2985,7 +2993,7 @@ void LLVivoxVoiceClient::sendPositionAndVolumeUpdate(void)
 			}
 		}
 	}
-			
+
 	//sendLocalAudioUpdates();  obsolete, used to send volume setting on position updates
     std::string update(stream.str());
 	if(!update.empty())
@@ -4912,8 +4920,10 @@ bool LLVivoxVoiceClient::inSpatialChannel(void)
 	bool result = false;
 	
 	if(mAudioSession)
+    {
 		result = mAudioSession->mIsSpatial;
-		
+    }
+    
 	return result;
 }
 
