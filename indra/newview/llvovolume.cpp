@@ -105,11 +105,13 @@ static LLTrace::BlockTimerStatHandle FTM_VOLUME_TEXTURES("Volume Textures");
 
 extern BOOL gGLDebugLoggingEnabled;
 
+// NaCl - Graphics crasher protection
 static bool enableVolumeSAPProtection()
 {
-	static LLCachedControl<bool> protect(gSavedSettings,"RenderVolumeSAProtection");
+	static LLCachedControl<bool> protect(gSavedSettings, "RenderVolumeSAProtection");
 	return protect;
 }
+// NaCl End
 
 // Implementation class of LLMediaDataClientObject.  See llmediadataclient.h
 class LLMediaDataClientObjectImpl : public LLMediaDataClientObject
@@ -216,7 +218,7 @@ LLVOVolume::LLVOVolume(const LLUUID &id, const LLPCode pcode, LLViewerRegion *re
 	: LLViewerObject(id, pcode, regionp),
 	// NaCl - Graphics crasher protection
 	  mVolumeImpl(NULL),
-	  mVolumeSurfaceArea(-1.0)
+	  mVolumeSurfaceArea(-1.f)
 	// NaCl End
 {
 	mTexAnimMode = 0;
@@ -1769,8 +1771,10 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 			res = mVolumeImpl->doUpdateGeometry(drawable);
 		}
 		// NaCl - Graphics crasher protection
-		if( enableVolumeSAPProtection() )
+		if (enableVolumeSAPProtection())
+		{
 			mVolumeSurfaceArea = getVolume()->getSurfaceArea();
+		}
 		// NaCl End
 		updateFaceFlags();
 		return res;
@@ -1831,8 +1835,10 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 		genBBoxes(FALSE);
 	}
 	// NaCl - Graphics crasher protection
-	if( enableVolumeSAPProtection() )
+	if (enableVolumeSAPProtection())
+	{
 		mVolumeSurfaceArea = getVolume()->getSurfaceArea();
+	}
 	// NaCl End
 	// Update face flags
 	updateFaceFlags();
@@ -4897,26 +4903,24 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 			llassert_always(vobj);
 
-		// AO:  Z's protection auto-derender code
-		if (enableVolumeSAPProtection())
-		{
-			// NaCl - Graphics crasher protection
-	   		static LLCachedControl<F32> volume_sa_thresh(gSavedSettings,"RenderVolumeSAThreshold");
-			static LLCachedControl<F32> sculpt_sa_thresh(gSavedSettings, "RenderSculptSAThreshold");
-			static LLCachedControl<F32> volume_sa_max_frame(gSavedSettings, "RenderVolumeSAFrameMax");
-			F32 max_for_this_vol = (vobj->isSculpted()) ? sculpt_sa_thresh : volume_sa_thresh;
-
-			if (vobj->mVolumeSurfaceArea > max_for_this_vol)
+			// <FS:AO> Z's protection auto-derender code
+			if (enableVolumeSAPProtection())
 			{
-				LLPipeline::sVolumeSAFrame += vobj->mVolumeSurfaceArea;
-				if(LLPipeline::sVolumeSAFrame > volume_sa_max_frame)
+				static LLCachedControl<F32> volume_sa_thresh(gSavedSettings, "RenderVolumeSAThreshold");
+				static LLCachedControl<F32> sculpt_sa_thresh(gSavedSettings, "RenderSculptSAThreshold");
+				static LLCachedControl<F32> volume_sa_max_frame(gSavedSettings, "RenderVolumeSAFrameMax");
+				F32 max_for_this_vol = (vobj->isSculpted()) ? sculpt_sa_thresh : volume_sa_thresh;
+
+				if (vobj->mVolumeSurfaceArea > max_for_this_vol)
 				{
-					continue;
+					LLPipeline::sVolumeSAFrame += vobj->mVolumeSurfaceArea;
+					if (LLPipeline::sVolumeSAFrame > volume_sa_max_frame)
+					{
+						continue;
+					}
 				}
 			}
-			// NaCl End
-		}
-		// </AO>
+			// </FS:AO>
 
 			vobj->updateTextureVirtualSize(true);
 			vobj->preRebuild();

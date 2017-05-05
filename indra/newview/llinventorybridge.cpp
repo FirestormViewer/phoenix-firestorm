@@ -742,41 +742,6 @@ void hide_context_entries(LLMenuGL& menu,
 	}
 }
 
-// <FS:Ansariel> Inventory Links Replace
-void LLInvFVBridge::checkInventoryLinkReplace(menuentry_vec_t& items, menuentry_vec_t& disables_items)
-{
-	const LLInventoryObject* obj = getInventoryObject();
-
-	if (isAgentInventory() && obj && obj->getType() != LLAssetType::AT_CATEGORY && obj->getType() != LLAssetType::AT_LINK_FOLDER)
-	{
-		items.push_back(std::string("Replace Links"));
-
-		if (mRoot->getSelectedCount() != 1)
-		{
-			disables_items.push_back(std::string("Replace Links"));
-		}
-	}
-}
-// </FS:Ansariel>
-
-// <FS:Ansariel> Move to default folder
-void LLInvFVBridge::checkMoveToDefaultFolder(menuentry_vec_t& items, menuentry_vec_t& disables_items)
-{
-	const LLInventoryObject* obj = getInventoryObject();
-
-	if (isAgentInventory() && !isProtectedFolder(true) && obj &&
-		obj->getActualType() != LLAssetType::AT_CATEGORY &&
-		obj->getActualType() != LLAssetType::AT_LINK_FOLDER &&
-		obj->getActualType() != LLAssetType::AT_LINK &&
-		(!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY) || 
-			RlvFolderLocks::instance().canMoveItem(obj->getUUID(), getInventoryModel()->findCategoryUUIDForType(LLFolderType::assetTypeToFolderType(obj->getActualType()) ) ))
-		)
-	{
-		items.push_back(std::string("Move to Default Folder"));
-	}
-}
-// </FS:Ansariel>
-
 // Helper for commonly-used entries
 void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 										menuentry_vec_t &items,
@@ -962,10 +927,10 @@ void LLInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	}
 
 	// <FS:Ansariel> Inventory Links Replace
-	checkInventoryLinkReplace(items, disabled_items);
+	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
-	checkMoveToDefaultFolder(items, disabled_items);
+	addMoveToDefaultFolderMenuOption(items);
 
 	hide_context_entries(menu, items, disabled_items);
 }
@@ -1167,6 +1132,40 @@ void LLInvFVBridge::addMarketplaceContextMenuOptions(U32 flags,
     items.push_back(std::string("Marketplace Listings Separator"));
 }
 
+// <FS:Ansariel> Inventory Links Replace
+void LLInvFVBridge::addLinkReplaceMenuOption(menuentry_vec_t& items, menuentry_vec_t& disabled_items)
+{
+	const LLInventoryObject* obj = getInventoryObject();
+
+	if (isAgentInventory() && obj && obj->getType() != LLAssetType::AT_CATEGORY && obj->getType() != LLAssetType::AT_LINK_FOLDER)
+	{
+		items.push_back(std::string("Replace Links"));
+
+		if (mRoot->getSelectedCount() != 1)
+		{
+			disabled_items.push_back(std::string("Replace Links"));
+		}
+	}
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Move to default folder
+void LLInvFVBridge::addMoveToDefaultFolderMenuOption(menuentry_vec_t& items)
+{
+	const LLInventoryObject* obj = getInventoryObject();
+
+	if (isAgentInventory() && !isProtectedFolder(true) && obj &&
+		obj->getActualType() != LLAssetType::AT_CATEGORY &&
+		obj->getActualType() != LLAssetType::AT_LINK_FOLDER &&
+		obj->getActualType() != LLAssetType::AT_LINK &&
+		(!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY) || 
+			RlvFolderLocks::instance().canMoveItem(obj->getUUID(), getInventoryModel()->findCategoryUUIDForType(LLFolderType::assetTypeToFolderType(obj->getActualType()) ) ))
+		)
+	{
+		items.push_back(std::string("Move to Default Folder"));
+	}
+}
+// </FS:Ansariel>
 
 // *TODO: remove this
 BOOL LLInvFVBridge::startDrag(EDragAndDropType* type, LLUUID* id) const
@@ -1294,14 +1293,14 @@ BOOL LLInvFVBridge::isProtectedFolder(bool ignore_setting /*= false*/) const
 		return FALSE;
 	}
 
-	if ((mUUID ==  FSLSLBridge::instance().getBridgeFolder()
+	if ((mUUID == FSLSLBridge::instance().getBridgeFolder()
 		|| model->isObjectDescendentOf(mUUID, FSLSLBridge::instance().getBridgeFolder()))
 		&& (gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder") || ignore_setting))
 	{
 		return TRUE;
 	}
 
-	if ((mUUID == AOEngine::instance().getAOFolder() 
+	if ((mUUID == AOEngine::instance().getAOFolder()
 		|| model->isObjectDescendentOf(mUUID, AOEngine::instance().getAOFolder()))
 		&& (gSavedPerAccountSettings.getBOOL("ProtectAOFolders") || ignore_setting))
 	{
@@ -5649,10 +5648,10 @@ void LLTextureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	}
 
 	// <FS:Ansariel> Inventory Links Replace
-	checkInventoryLinkReplace(items, disabled_items);
+	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
-	checkMoveToDefaultFolder(items, disabled_items);
+	addMoveToDefaultFolderMenuOption(items);
 
 	hide_context_entries(menu, items, disabled_items);	
 }
@@ -5727,10 +5726,10 @@ void LLSoundBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	}
 
 	// <FS:Ansariel> Inventory Links Replace
-	checkInventoryLinkReplace(items, disabled_items);
+	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
-	checkMoveToDefaultFolder(items, disabled_items);
+	addMoveToDefaultFolderMenuOption(items);
 
 	hide_context_entries(menu, items, disabled_items);
 }
@@ -5821,10 +5820,10 @@ void LLLandmarkBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	}
 
 	// <FS:Ansariel> Inventory Links Replace
-	checkInventoryLinkReplace(items, disabled_items);
+	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
-	checkMoveToDefaultFolder(items, disabled_items);
+	addMoveToDefaultFolderMenuOption(items);
 
 	hide_context_entries(menu, items, disabled_items);
 }
@@ -6149,10 +6148,10 @@ void LLCallingCardBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	}
 
 	// <FS:Ansariel> Inventory Links Replace
-	checkInventoryLinkReplace(items, disabled_items);
+	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
-	checkMoveToDefaultFolder(items, disabled_items);
+	addMoveToDefaultFolderMenuOption(items);
 
 	hide_context_entries(menu, items, disabled_items);
 }
@@ -6425,10 +6424,10 @@ void LLGestureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	}
 
 	// <FS:Ansariel> Inventory Links Replace
-	checkInventoryLinkReplace(items, disabled_items);
+	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
-	checkMoveToDefaultFolder(items, disabled_items);
+	addMoveToDefaultFolderMenuOption(items);
 
 	hide_context_entries(menu, items, disabled_items);
 }
@@ -6488,10 +6487,10 @@ void LLAnimationBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	}
 
 	// <FS:Ansariel> Inventory Links Replace
-	checkInventoryLinkReplace(items, disabled_items);
+	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
-	checkMoveToDefaultFolder(items, disabled_items);
+	addMoveToDefaultFolderMenuOption(items);
 
 	hide_context_entries(menu, items, disabled_items);
 }
@@ -6951,10 +6950,10 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	}
 
 	// <FS:Ansariel> Inventory Links Replace
-	checkInventoryLinkReplace(items, disabled_items);
+	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
-	checkMoveToDefaultFolder(items, disabled_items);
+	addMoveToDefaultFolderMenuOption(items);
 
 	hide_context_entries(menu, items, disabled_items);
 }
@@ -7219,10 +7218,10 @@ void LLWearableBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	}
 
 	// <FS:Ansariel> Inventory Links Replace
-	checkInventoryLinkReplace(items, disabled_items);
+	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
-	checkMoveToDefaultFolder(items, disabled_items);
+	addMoveToDefaultFolderMenuOption(items);
 
 	hide_context_entries(menu, items, disabled_items);
 }
@@ -7397,7 +7396,7 @@ void LLLinkItemBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	}
 
 	// <FS:Ansariel> Inventory Links Replace
-	checkInventoryLinkReplace(items, disabled_items);
+	addLinkReplaceMenuOption(items, disabled_items);
 
 	hide_context_entries(menu, items, disabled_items);
 }
@@ -7451,10 +7450,10 @@ void LLMeshBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	}
 
 	// <FS:Ansariel> Inventory Links Replace
-	checkInventoryLinkReplace(items, disabled_items);
+	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
-	checkMoveToDefaultFolder(items, disabled_items);
+	addMoveToDefaultFolderMenuOption(items);
 
 	hide_context_entries(menu, items, disabled_items);
 }

@@ -85,8 +85,7 @@ Inicjalizacja Marketplace nieudana z powodu błędu sieci lub systemu. Spróbuj 
 	<notification name="MerchantTransactionFailed">
 		Transakcja z Marketplace nie powiodła się:
 
-        Powód: &apos;[ERROR_REASON]&apos;
-        [ERROR_DESCRIPTION]
+[ERROR_REASON][ERROR_DESCRIPTION]
 	</notification>
 	<notification name="MerchantUnprocessableEntity">
 		Wylistowanie tej rzeczy lub aktywowanie folderu z wersją nie było możliwe. Zazwyczaj jest to spowodowane brakującymi informacjami w formularzu z opisem przedmiotu, ale może to również wynikać z błędów w strukturze folderów. Zmień opis przedmiotu lub sprawdź foldery, aby znaleźć błędy.
@@ -705,6 +704,9 @@ Maksymalnie można połączyć [MAX] obiektów.
 Upewnij się, że żaden z obiektów nie jest zablokowany i wszystkie należą do Ciebie.
 	</notification>
 	<notification name="CannotLinkPermanent">
+		Nie możesz łączyć obiektów przez granice regionów.
+	</notification>
+	<notification name="CannotLinkAcrossRegions">
 		Nie możesz łączyć obiektów przez granice regionów.
 	</notification>
 	<notification name="CannotLinkDifferentOwners">
@@ -1715,7 +1717,6 @@ Chcesz ją opuścić?
 		Tryb Zajętości jest włączony. Nie będziesz powiadamiany/a o nadchodzących rozmowach.
 
 - Inni Rezydenci będą otrzymywać Twoją wiadomość Trybu Zajętości (Ustawienia &gt; Prywatność &gt; Autoodpowiedzi).
-- Propozycje teleportacji będą odrzucane.
 - Propozycje rozmów głosowych będą odrzucane.
 		<usetemplate ignoretext="Status zmieniony na Tryb Zajętości" name="okignore" />
 	</notification>
@@ -2568,9 +2569,6 @@ URL: [AUDIOURL]
 	</notification>
 	<notification name="Cancelled">
 		Anulowane.
-	</notification>
-	<notification name="CancelledSit">
-		Siadanie anulowane.
 	</notification>
 	<notification name="CancelledAttach">
 		Dołączanie anulowane.

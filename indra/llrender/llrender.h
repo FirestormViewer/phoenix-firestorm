@@ -339,6 +339,10 @@ public:
 	~LLRender();
 	void init() ;
 	void shutdown();
+	// <FS:Ansariel> Reset VB during TP
+	void initVB();
+	void destroyVB();
+	// </FS:Ansariel>
 	
 	// Refreshes renderer state to the cached values
 	// Needed when the render context has changed and invalidated the current state

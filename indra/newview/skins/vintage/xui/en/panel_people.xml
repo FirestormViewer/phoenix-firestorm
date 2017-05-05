@@ -172,7 +172,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 						left="0"
 						top_pad="2"
 						name="RadarReportDrawRangeLeaving"
-						control_name="RadarReportDrawRangeLeaving"
+						control_name="RadarReportDrawRangeLeave"
 						right="-1"
 						height="16"
 						layout="topleft"
