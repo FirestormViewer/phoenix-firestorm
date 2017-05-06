@@ -740,9 +740,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>601c2fc41a18812a45678ef9a87ef772</string>
+              <string>2038da4ab71da8dc086738007c0acdd3</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/1546/3486/fmodex-4.44.64.501533-windows-501533.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/packages/fmodex-4.44.61-windows-171261212.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -752,9 +752,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e5cde35ae26ebfa256cfe670986e152e</string>
+              <string>b4b73cd64bfd72e7ae84aad429d69cf6</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/1547/3487/fmodex-4.44.64.501533-windows64-501533.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/packages/fmodex-4.44.61-windows64-171261211.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
