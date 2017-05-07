@@ -614,6 +614,7 @@ void LLVertexBuffer::drawArrays(U32 mode, const std::vector<LLVector3>& pos, con
 	if (!sUtilityBuffer)
 	{
 		sUtilityBuffer = new LLVertexBuffer(MAP_VERTEX | MAP_NORMAL | MAP_TEXCOORD0, GL_STREAM_DRAW);
+		sUtilityBuffer->allocateBuffer(count, count, true);
 	}
 	if (sUtilityBuffer->getNumVerts() < (S32) count)
 	{
@@ -665,6 +666,7 @@ void LLVertexBuffer::drawElements(U32 mode, const S32 num_vertices, const LLVect
 	if (!sUtilityBuffer)
 	{
 		sUtilityBuffer = new LLVertexBuffer(MAP_VERTEX | MAP_NORMAL | MAP_TEXCOORD0, GL_STREAM_DRAW);
+		sUtilityBuffer->allocateBuffer(num_vertices, num_indices, true);
 	}
 	if (sUtilityBuffer->getNumVerts() < num_vertices || sUtilityBuffer->getNumIndices() < num_indices)
 	{
@@ -2477,6 +2479,7 @@ void LLVertexBuffer::setBuffer(U32 data_mask)
 	}
 	// <FS:ND> Need to setup (activate/deactivate) client arrays with VAOs too
 	// if( !mGLArray )
+	if (!sUseVAO && !mGLArray)
 	// </FS:ND>
 	{
 		setupClientArrays(data_mask);

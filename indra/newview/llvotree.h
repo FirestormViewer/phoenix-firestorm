@@ -77,6 +77,8 @@ public:
 
 	void updateMesh();
 
+	void destroyVB() { mReferenceBuffer = NULL; }
+
 	void appendMesh(LLStrider<LLVector3>& vertices, 
 						 LLStrider<LLVector3>& normals, 
 						 LLStrider<LLVector2>& tex_coords, 

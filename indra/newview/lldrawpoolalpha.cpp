@@ -623,6 +623,10 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 					gGL.blendFunc(LLRender::BF_ZERO, LLRender::BF_ONE, // don't touch color
 						      LLRender::BF_ONE, LLRender::BF_ONE); // add to alpha (glow)
 
+					// <FS:Ansariel> Performance fix when not using OpenGL core profile
+					if (LLRender::sGLCoreProfile)
+					{
+					// </FS:Ansariel>
 					emissive_shader->bind();
 
 					params.mVertexBuffer->setBuffer((mask & ~LLVertexBuffer::MAP_COLOR) | LLVertexBuffer::MAP_EMISSIVE);
@@ -635,6 +639,17 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 					gGL.blendFunc(mColorSFactor, mColorDFactor, mAlphaSFactor, mAlphaDFactor);
 
 					current_shader->bind();
+					// <FS:Ansariel> Performance fix when not using OpenGL core profile
+					}
+					else
+					{
+						params.mVertexBuffer->setBuffer(mask | LLVertexBuffer::MAP_EMISSIVE);
+					
+						// do the actual drawing, again
+						params.mVertexBuffer->drawRange(params.mDrawMode, params.mStart, params.mEnd, params.mCount, params.mOffset);
+						gPipeline.addTrianglesDrawn(params.mCount, params.mDrawMode);
+					}
+					// </FS:Ansariel>
 				}
 			
 				if (tex_setup)

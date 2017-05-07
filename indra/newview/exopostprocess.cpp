@@ -71,10 +71,15 @@ void exoPostProcess::ExodusRenderPostUpdate()
 	etc1.setVec(0.f, 0.f);
 	etc2.setVec((F32) gPipeline.mScreen.getWidth(),
 				(F32) gPipeline.mScreen.getHeight());
+	initVB();
+}
+
+void exoPostProcess::initVB()
+{
 	if (!gPipeline.sRenderDeferred)
 	{
 		// Destroy our old buffer, and create a new vertex buffer for the screen (shamelessly ganked from pipeline.cpp).
-		mExoPostBuffer = NULL;
+		destroyVB();
 		mExoPostBuffer = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_TEXCOORD1, 0);
 		mExoPostBuffer->allocateBuffer(3,0,TRUE);
 
@@ -102,7 +107,7 @@ void exoPostProcess::ExodusRenderPostUpdate()
 	}
 	else
 	{
-		mExoPostBuffer = NULL;
+		destroyVB();
 		mExoPostBuffer = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_TEXCOORD1, 0);
 		mExoPostBuffer->allocateBuffer(8, 0, true);
 
@@ -117,6 +122,11 @@ void exoPostProcess::ExodusRenderPostUpdate()
 		vert[1].set(-1.f, -3.f, 0.f);
 		vert[2].set(3.f, 1.f, 0.f);
 	}
+}
+
+void exoPostProcess::destroyVB()
+{
+	mExoPostBuffer = NULL;
 }
 
 void exoPostProcess::ExodusRenderPost(LLRenderTarget* src, LLRenderTarget* dst, S32 type)
@@ -188,3 +198,4 @@ void exoShader::BindRenderTarget(LLRenderTarget* tgt, LLGLSLShader* shader, S32 
 	}
 	shader->uniform2f(sScreen_Res, tgt->getWidth(), tgt->getHeight());
 }
+
