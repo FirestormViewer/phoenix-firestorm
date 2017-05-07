@@ -324,9 +324,6 @@ public:
 	// <FS:Ansariel> Get list of all ParamSets
 	const std::map<LLWLParamKey, LLWLParamSet>& getParamList() const { return mParamList; };
 
-	// <FS:Ansariel> Remove circular dependency of LLWLParamManager & LLWaterParamManager singletons
-	void init();
-
 	// helper variables
 	LLWLAnimator mAnimator;
 

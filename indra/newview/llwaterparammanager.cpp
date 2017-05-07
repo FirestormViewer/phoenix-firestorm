@@ -434,12 +434,6 @@ F32 LLWaterParamManager::getFogDensity(void)
 // virtual static
 void LLWaterParamManager::initSingleton()
 {
-// <FS:Ansariel> Remove circular dependency of LLWLParamManager & LLWaterParamManager singletons
-}
-
-void LLWaterParamManager::init()
-{
-// </FS:Ansariel>
 	LL_DEBUGS("Windlight") << "Initializing water" << LL_ENDL;
 	loadAllPresets();
 	LLEnvManagerNew::instance().usePrefs();
