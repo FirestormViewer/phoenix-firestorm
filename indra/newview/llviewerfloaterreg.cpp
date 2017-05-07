@@ -185,7 +185,6 @@
 #include "fsfloaterimport.h"
 #include "fsfloaterim.h"
 #include "fsfloaterimcontainer.h"
-#include "fsfloaterlinkreplace.h"
 #include "fsfloaterplacedetails.h"
 #include "fsfloaterposestand.h"
 #include "fsfloaterprofile.h"
@@ -461,7 +460,6 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("fs_group_titles", "floater_fs_group_titles.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterGroupTitles>);
 	LLFloaterReg::add("fs_export", "floater_fs_export.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterObjectExport>);
 	LLFloaterReg::add("fs_import", "floater_fs_import.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterImport>);
-	LLFloaterReg::add("fs_linkreplace", "floater_fs_linkreplace.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterLinkReplace>);
 	LLFloaterReg::add("fs_posestand", "floater_fs_posestand.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPoseStand>);
 	LLFloaterReg::add("fs_placedetails", "floater_fs_placedetails.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPlaceDetails>);
 	LLFloaterReg::add("fs_radar", "floater_fs_radar.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterRadar>);

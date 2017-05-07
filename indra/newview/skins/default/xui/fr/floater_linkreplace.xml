@@ -7,9 +7,9 @@
 	<string name="ItemsRemaining">Liens restants : [NUM]</string>
 	<string name="ReplaceFinished">Modification des liens de l'inventaire terminée.</string>
 	<text name="source_label">Original :</text>
-	<fs_inventory_link_replace_drop_target name="source_uuid_editor" tool_tip="Faites glisser l'objet original ici."/>
+	<inventory_link_replace_drop_target name="source_uuid_editor" tool_tip="Faites glisser l'objet original ici."/>
 	<text name="target_label">Remplaçant :</text>
-	<fs_inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="Faites glisser l'objet remplaçant ici."/>
+	<inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="Faites glisser l'objet remplaçant ici."/>
 	<text name="status_text">Prêt...</text>
 	<button name="btn_refresh" label="Actualiser"/>
 	<button name="btn_start" label="Démarrer"/>
