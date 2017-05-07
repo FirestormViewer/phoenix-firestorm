@@ -1112,8 +1112,8 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="RegionInfoAllowedGroups">Groups always allowed: ([ALLOWEDGROUPS], max [MAXACCESS])</string>
 	<string name="RegionInfoEstateManagers">Estate Managers: ([ESTATEMANAGERS], max [MAXMANAGERS])</string>
 	<string name="RegionInfoBannedResidents">Always banned: ([BANNEDAGENTS], max [MAXBANNED])</string>
-	<string name="RegionInfoListTypeAllowedAgents">Always allowed</string>
-	<string name="RegionInfoListTypeBannedAgents">Always banned</string>
+	<string name="RegionInfoListTypeAllowedAgents">always allowed residents</string>
+	<string name="RegionInfoListTypeBannedAgents">always banned residents</string>
 
 	<!-- script limits floater -->
 	<string name="ScriptLimitsParcelScriptMemory">Parcel Script Memory</string>

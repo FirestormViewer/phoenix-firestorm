@@ -86,8 +86,7 @@
      layout="topleft"
      left="6"
      top_pad="5"
-     width="505"
-     name="wb1"/>
+     width="500" />
     <radio_group
      height="32"
      layout="topleft"
@@ -170,7 +169,7 @@
      layout="topleft"
      name="estate_manager_label"
      top_pad="25"
-     left="10"
+     left="6"
      width="200">
         Estate Managers:
     </text>
@@ -180,7 +179,7 @@
      follows="left|top"
      height="20"
      layout="topleft"
-     left="280"
+     left="270"
      name="allow_resident_label"
      top_delta="0"
      width="200">
@@ -195,8 +194,7 @@
      layout="topleft"
      left="6"
      top_pad="-5"
-     width="235"
-     name="wb2"/>
+     width="235" />
     <name_list
      follows="left|top"
      height="71"
@@ -213,10 +211,9 @@
      follows="top|left"
      height="71"
      layout="topleft"
-     left="275"
+     left="270"
      top_delta="0"
-     width="235"
-     name="wb3"/>
+     width="235" />
     <name_list
      follows="left|top"
      height="71"
@@ -250,7 +247,7 @@
     <button
      follows="left|top"
      height="23"
-     left="275"
+     left="270"
      label="Add..."
      layout="topleft"
      name="add_allowed_avatar_btn"
@@ -272,7 +269,7 @@
      follows="left|top"
      height="20"
      layout="topleft"
-     left="10"
+     left="6"
      name="allow_group_label"
      top_pad="10"
      width="200">
@@ -284,7 +281,7 @@
      follows="left|top"
      height="20"
      layout="topleft"
-     left="280"
+     left="270"
      name="ban_resident_label"
      top_delta="0"
      width="200">
@@ -299,8 +296,7 @@
      layout="topleft"
      left="6"
      top_pad="-5"
-     width="235"
-     name="wb4"/>
+     width="235" />
     <name_list
      follows="left|top"
      height="71"
@@ -317,10 +313,9 @@
      follows="top|left"
      height="71"
      layout="topleft"
-     left="275"
+     left="270"
      top_delta="0"
-     width="235"
-     name="wb5"/>
+     width="235" />
     <name_list
      follows="left|top"
      height="71"
@@ -357,7 +352,7 @@
      height="23"
      label="Add..."
      layout="topleft"
-     left="275"
+     left="270"
      name="add_banned_avatar_btn"
      top_delta="0"
      width="114" />

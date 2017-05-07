@@ -9,7 +9,7 @@
  min_width="310"
  name="floater_preview_trash"
  save_rect="true"
- title="TRASH"
+ title="Trash"
  single_instance="true"
  reuse_instance="true"
  can_minimize="false">
