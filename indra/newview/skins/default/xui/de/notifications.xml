@@ -2158,6 +2158,11 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 		Möchten Sie den Grundbesitzvertrag wirklich ändern?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
+
+	<notification name="EstateParcelAccessOverride">
+		Deaktivieren dieser Einstellung kann Einschränkungen von Parzellen-Eigentümer aufheben, um Griefing zu verhindern, die Privatsphäre sicherzustellen oder minderjährige Einwohner vor Über-18-Material zu schützen. Bitte besprechen Sie dieses Vorgehen mit den Parzellen-Eigentümern, falls notwendig.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="RegionEntryAccessBlocked">
 		Die Region, die Sie besuchen möchten, enthält Inhalte, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -2575,9 +2580,13 @@ Möchten Sie den Nicht-stören-Modus deaktivieren, bevor Sie diese Transaktion a
 		Der Ordner „[FOLDERNAME]“ ist ein Systemordner. Das Löschen von Systemordnern kann zu instabiler Leistung führen.  Möchten Sie fortfahren?
 		<usetemplate ignoretext="Bestätigen, bevor ich einen Systemordner lösche." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="PurgeSelectedItems">
+		[COUNT] Objekt(e) werden permanent gelöscht. Sind Sie sicher, dass Sie die ausgewählten Objekte permanent aus dem Papierkorb löschen möchten?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmEmptyTrash">
-		Sind Sie sicher, dass Sie den Inhalt Ihres Papierkorbs löschen möchten?
-		<usetemplate ignoretext="Bestätigen, bevor der Ordner Papierkorb im Inventar geleert wird" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+		[COUNT] Objekt(e) werden permanent gelöscht. Sind Sie sicher, dass Sie den Inhalt des Papierkorbs permanent löschen möchten?
+		<usetemplate ignoretext="Bestätigen, bevor der Ordner Papierkorb im Inventar geleert wird" name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="TrashIsFull">
 		Ihr Papierkorb läuft über. Dies kann zu Anmeldeproblemen führen.
