@@ -168,90 +168,56 @@ BOOL	LLPanelFace::postBuild()
 	childSetAction("pastetextures",&LLPanelFace::onClickPaste,this);
 	
 	mCtrlTexScaleU = getChild<LLSpinCtrl>("TexScaleU");
-	if (mCtrlTexScaleU)
-	{
-		mCtrlTexScaleU->setCommitCallback(&LLPanelFace::onCommitTextureScaleX, this);
-	}
+	mCtrlTexScaleU->setCommitCallback(&LLPanelFace::onCommitTextureScaleX, this);
+
 	mCtrlTexScaleV = getChild<LLSpinCtrl>("TexScaleV");
-	if (mCtrlTexScaleV)
-	{
-		mCtrlTexScaleV->setCommitCallback(&LLPanelFace::onCommitTextureScaleY, this);
-	}
+	mCtrlTexScaleV->setCommitCallback(&LLPanelFace::onCommitTextureScaleY, this);
+
 	mCtrlBumpyScaleU = getChild<LLSpinCtrl>("bumpyScaleU");
-	if (mCtrlBumpyScaleU)
-	{
-		mCtrlBumpyScaleU->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyScaleX, this);
-	}
+	mCtrlBumpyScaleU->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyScaleX, this);
+
 	mCtrlBumpyScaleV = getChild<LLSpinCtrl>("bumpyScaleV");
-	if (mCtrlBumpyScaleV)
-	{
-		mCtrlBumpyScaleV->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyScaleY, this);
-	}
+	mCtrlBumpyScaleV->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyScaleY, this);
+
 	mCtrlShinyScaleU = getChild<LLSpinCtrl>("shinyScaleU");
-	if (mCtrlShinyScaleU)
-	{
-		mCtrlShinyScaleU->setCommitCallback(&LLPanelFace::onCommitMaterialShinyScaleX, this);
-	}
+	mCtrlShinyScaleU->setCommitCallback(&LLPanelFace::onCommitMaterialShinyScaleX, this);
+
 	mCtrlShinyScaleV = getChild<LLSpinCtrl>("shinyScaleV");
-	if (mCtrlShinyScaleV)
-	{
-		mCtrlShinyScaleV->setCommitCallback(&LLPanelFace::onCommitMaterialShinyScaleY, this);
-	}	
+	mCtrlShinyScaleV->setCommitCallback(&LLPanelFace::onCommitMaterialShinyScaleY, this);
+
 	mCtrlTexOffsetU = getChild<LLSpinCtrl>("TexOffsetU");
-	if (mCtrlTexOffsetU)
-	{
-		mCtrlTexOffsetU->setCommitCallback(&LLPanelFace::onCommitTextureOffsetX, this);
-	}
+	mCtrlTexOffsetU->setCommitCallback(&LLPanelFace::onCommitTextureOffsetX, this);
+
 	mCtrlTexOffsetV = getChild<LLSpinCtrl>("TexOffsetV");
-	if (mCtrlTexOffsetV)
-	{
-		mCtrlTexOffsetV->setCommitCallback(&LLPanelFace::onCommitTextureOffsetY, this);
-	}
+	mCtrlTexOffsetV->setCommitCallback(&LLPanelFace::onCommitTextureOffsetY, this);
+
 	mCtrlBumpyOffsetU = getChild<LLSpinCtrl>("bumpyOffsetU");
-	if (mCtrlBumpyOffsetU)
-	{
-		mCtrlBumpyOffsetU->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyOffsetX, this);
-	}
+	mCtrlBumpyOffsetU->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyOffsetX, this);
+
 	mCtrlBumpyOffsetV = getChild<LLSpinCtrl>("bumpyOffsetV");
-	if (mCtrlBumpyOffsetV)
-	{
-		mCtrlBumpyOffsetV->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyOffsetY, this);
-	}
+	mCtrlBumpyOffsetV->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyOffsetY, this);
+
 	mCtrlShinyOffsetU = getChild<LLSpinCtrl>("shinyOffsetU");
-	if (mCtrlShinyOffsetU)
-	{
-		mCtrlShinyOffsetU->setCommitCallback(&LLPanelFace::onCommitMaterialShinyOffsetX, this);
-	}
+	mCtrlShinyOffsetU->setCommitCallback(&LLPanelFace::onCommitMaterialShinyOffsetX, this);
+
 	mCtrlShinyOffsetV = getChild<LLSpinCtrl>("shinyOffsetV");
-	if (mCtrlShinyOffsetV)
-	{
-		mCtrlShinyOffsetV->setCommitCallback(&LLPanelFace::onCommitMaterialShinyOffsetY, this);
-	}
+	mCtrlShinyOffsetV->setCommitCallback(&LLPanelFace::onCommitMaterialShinyOffsetY, this);
+
 	mCtrlTexRot = getChild<LLSpinCtrl>("TexRot");
-	if (mCtrlTexRot)
-	{
-		mCtrlTexRot->setCommitCallback(&LLPanelFace::onCommitTextureRot, this);
-	}
+	mCtrlTexRot->setCommitCallback(&LLPanelFace::onCommitTextureRot, this);
+
 	mCtrlBumpyRot = getChild<LLSpinCtrl>("bumpyRot");
-	if (mCtrlBumpyRot)
-	{
-		mCtrlBumpyRot->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyRot, this);
-	}
+	mCtrlBumpyRot->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyRot, this);
+
 	mCtrlShinyRot = getChild<LLSpinCtrl>("shinyRot");
-	if (mCtrlShinyRot)
-	{
-		mCtrlShinyRot->setCommitCallback(&LLPanelFace::onCommitMaterialShinyRot, this);
-	}
+	mCtrlShinyRot->setCommitCallback(&LLPanelFace::onCommitMaterialShinyRot, this);
+
 	mCtrlRpt = getChild<LLSpinCtrl>("rptctrl");
-	if (mCtrlRpt)
-	{
-		mCtrlRpt->setCommitCallback(LLPanelFace::onCommitRepeatsPerMeter, this);
-	}
+	mCtrlRpt->setCommitCallback(LLPanelFace::onCommitRepeatsPerMeter, this);
 	
 	changePrecision(gSavedSettings.getS32("FSBuildToolDecimalPrecision"));
 	// </FS>
-	
-	
+
 	childSetAction("button align",&LLPanelFace::onClickAutoFix,this);
 
 	// <FS:CR> Moved to the header so other functions can use them too.
@@ -801,8 +767,10 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 		}
 
 		mRadioMatType->setEnabled(editable);
-		getChildView("checkbox_sync_settings")->setEnabled(editable);
-		childSetValue("checkbox_sync_settings", gSavedSettings.getBOOL("SyncMaterialSettings"));
+		// <FS:Ansariel> Commented out because we already had this
+		//getChildView("checkbox_sync_settings")->setEnabled(editable);
+		//childSetValue("checkbox_sync_settings", gSavedSettings.getBOOL("SyncMaterialSettings"));
+		// </FS:Ansariel>
 		updateVisibility();
 
 		bool identical			= true;	// true because it is anded below

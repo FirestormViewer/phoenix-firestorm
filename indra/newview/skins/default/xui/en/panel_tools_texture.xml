@@ -148,6 +148,7 @@
                 top_pad="1"
                 value="2"/>
             </radio_group> 
+            <!-- FS:Ansariel: Commented out because we already had this
             <check_box
              control_name="SyncMaterialSettings"
              follows="top|left"
@@ -160,6 +161,7 @@
              tool_tip="Adjust all maps repeats simultaneously"
              top_pad="-16"
              width="160" />
+            -->
             <texture_picker
              can_apply_immediately="true"
              default_image_name="Default"
