@@ -40,6 +40,7 @@
 #include "lltransfertargetvfile.h"
 #include "llviewerassetstats.h"
 #include "llcoros.h"
+#include "llcoproceduremanager.h"
 #include "lleventcoro.h"
 #include "llsdutil.h"
 #include "llworld.h"
@@ -101,17 +102,30 @@ public:
 /// LLViewerAssetStorage
 ///----------------------------------------------------------------------------
 
+// Unused?
 LLViewerAssetStorage::LLViewerAssetStorage(LLMessageSystem *msg, LLXferManager *xfer,
                                            LLVFS *vfs, LLVFS *static_vfs, 
                                            const LLHost &upstream_host)
-    : LLAssetStorage(msg, xfer, vfs, static_vfs, upstream_host)
+    : LLAssetStorage(msg, xfer, vfs, static_vfs, upstream_host),
+      mAssetCoroCount(0),
+      mCountRequests(0),
+      mCountStarted(0),
+      mCountCompleted(0),
+      mCountSucceeded(0),
+      mTotalBytesFetched(0)
 {
 }
 
 
 LLViewerAssetStorage::LLViewerAssetStorage(LLMessageSystem *msg, LLXferManager *xfer,
                                            LLVFS *vfs, LLVFS *static_vfs)
-    : LLAssetStorage(msg, xfer, vfs, static_vfs)
+    : LLAssetStorage(msg, xfer, vfs, static_vfs),
+      mAssetCoroCount(0),
+      mCountRequests(0),
+      mCountStarted(0),
+      mCountCompleted(0),
+      mCountSucceeded(0),
+      mTotalBytesFetched(0)
 {
 }
 
@@ -354,6 +368,7 @@ void LLViewerAssetStorage::_queueDataRequest(
     BOOL duplicate,
     BOOL is_priority)
 {
+    mCountRequests++;
     queueRequestHttp(uuid, atype, callback, user_data, duplicate, is_priority);
 }
 
@@ -389,8 +404,8 @@ void LLViewerAssetStorage::queueRequestHttp(
         //LLViewerAssetStatsFF::record_enqueue(atype, with_http, is_temp);
         // <FS:Ansariel> [UDP Assets]
 
-        LLCoros::instance().launch("LLViewerAssetStorage::assetRequestCoro",
-                                   boost::bind(&LLViewerAssetStorage::assetRequestCoro, this, req, uuid, atype, callback, user_data));
+        LLCoprocedureManager::instance().enqueueCoprocedure("AssetStorage","LLViewerAssetStorage::assetRequestCoro",
+            boost::bind(&LLViewerAssetStorage::assetRequestCoro, this, req, uuid, atype, callback, user_data));
     }
 }
 
@@ -409,13 +424,30 @@ void LLViewerAssetStorage::capsRecvForRegion(const LLUUID& region_id, std::strin
     LLEventPumps::instance().obtain(pumpname).post(LLSD());
 }
 
+struct LLScopedIncrement
+{
+    LLScopedIncrement(S32& counter):
+        mCounter(counter)
+    {
+        ++mCounter;
+    }
+    ~LLScopedIncrement()
+    {
+        --mCounter;
+    }
+    S32& mCounter;
+};
+
 void LLViewerAssetStorage::assetRequestCoro(
     LLViewerAssetRequest *req,
-    const LLUUID& uuid,
+    const LLUUID uuid,
     LLAssetType::EType atype,
     LLGetAssetCallback callback,
     void *user_data)
 {
+    LLScopedIncrement coro_count_boost(mAssetCoroCount);
+    mCountStarted++;
+    
     S32 result_code = LL_ERR_NOERR;
     LLExtStat ext_status = LL_EXSTAT_NONE;
 
@@ -499,6 +531,14 @@ void LLViewerAssetStorage::assetRequestCoro(
 
     LLSD result = httpAdapter->getRawAndSuspend(httpRequest, url, httpOpts);
 
+    if (LLApp::isQuitting())
+    {
+        // Bail out if result arrives after shutdown has been started.
+        return;
+    }
+
+    mCountCompleted++;
+    
     LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
     LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
     if (!status)
@@ -516,6 +556,8 @@ void LLViewerAssetStorage::assetRequestCoro(
         S32 size = raw.size();
         if (size > 0)
         {
+            mTotalBytesFetched += size;
+            
 			// This create-then-rename flow is modeled on
 			// LLTransferTargetVFile, which is what's used in the UDP
 			// case.
@@ -537,6 +579,7 @@ void LLViewerAssetStorage::assetRequestCoro(
                 result_code = LL_ERR_ASSET_REQUEST_FAILED;
                 ext_status = LL_EXSTAT_VFS_CORRUPT;
             }
+            mCountSucceeded++;
         }
         else
         {
@@ -556,4 +599,15 @@ std::string LLViewerAssetStorage::getAssetURL(const std::string& cap_url, const 
     std::string type_name = LLAssetType::lookup(atype);
     std::string url = cap_url + "/?" + type_name + "_id=" + uuid.asString();
     return url;
+}
+
+void LLViewerAssetStorage::logAssetStorageInfo()
+{
+    LLMemory::logMemoryInfo(true);
+    LL_INFOS("AssetStorage") << "Active coros " << mAssetCoroCount << LL_ENDL;
+    LL_INFOS("AssetStorage") << "mPendingDownloads size " << mPendingDownloads.size() << LL_ENDL;
+    LL_INFOS("AssetStorage") << "mCountStarted " << mCountStarted << LL_ENDL;
+    LL_INFOS("AssetStorage") << "mCountCompleted " << mCountCompleted << LL_ENDL;
+    LL_INFOS("AssetStorage") << "mCountSucceeded " << mCountSucceeded << LL_ENDL;
+    LL_INFOS("AssetStorage") << "mTotalBytesFetched " << mTotalBytesFetched << LL_ENDL;
 }
