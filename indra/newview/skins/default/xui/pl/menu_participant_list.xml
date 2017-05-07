@@ -11,8 +11,8 @@
 	<menu_item_check label="Sortuj według imienia" name="SortByName"/>
 	<menu_item_check label="Sortuj według ostatniego mówcy" name="SortByRecentSpeakers"/>
 	<menu_item_check label="Pokazuj ikonki" name="View Icons"/>
-	<menu_item_check label="Zablokuj głos" name="Block/Unblock"/>
-	<menu_item_check label="Zablokuj tekst" name="MuteText"/>
+	<menu_item_check label="Wycisz głos" name="Block/Unblock"/>
+	<menu_item_check label="Wycisz tekst" name="MuteText"/>
 	<context_menu label="Opcje Moderatora" name="Moderator Options">
 		<menu_item_call label="Wyrzuć z grupy" name="EjectSelected"/>
 		<menu_item_check label="Czat tekstowy dozwolony" name="AllowTextChat"/>
