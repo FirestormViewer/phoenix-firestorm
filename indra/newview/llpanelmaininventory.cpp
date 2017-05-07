@@ -131,6 +131,7 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	mCommitCallbackRegistrar.add("Inventory.ResetFilters", boost::bind(&LLPanelMainInventory::resetFilters, this));
 	//mCommitCallbackRegistrar.add("Inventory.SetSortBy", boost::bind(&LLPanelMainInventory::setSortBy, this, _2)); // <FS:Zi> Sort By menu handlers
 	mCommitCallbackRegistrar.add("Inventory.Share",  boost::bind(&LLAvatarActions::shareWithAvatars, this));
+	mCommitCallbackRegistrar.add("Inventory.Purge",  boost::bind(&LLAvatarActions::purgeSelectedItems));
 
 	// <FS:Zi> Filter Links Menu
 	mCommitCallbackRegistrar.add("Inventory.FilterLinks.Set", boost::bind(&LLPanelMainInventory::onFilterLinksChecked, this, _2));
@@ -1543,6 +1544,26 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 
 		mFilterEditor->setText(item_name);
 		mFilterEditor->setFocus(TRUE);
+	}
+
+	if (command_name == "replace_links")
+	{
+		LLSD params;
+		LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
+		if (current_item)
+		{
+			LLInvFVBridge* bridge = (LLInvFVBridge*)current_item->getViewModelItem();
+
+			if (bridge)
+			{
+				LLInventoryObject* obj = bridge->getInventoryObject();
+				if (obj && obj->getType() != LLAssetType::AT_CATEGORY && obj->getActualType() != LLAssetType::AT_LINK_FOLDER)
+				{
+					params = LLSD(obj->getUUID());
+				}
+			}
+		}
+		LLFloaterReg::showInstance("linkreplace", params);
 	}
 
 	// <FS:Ansariel> Inventory Links Replace

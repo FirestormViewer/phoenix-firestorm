@@ -148,6 +148,18 @@
                 top_pad="1"
                 value="2"/>
             </radio_group> 
+            <check_box
+             control_name="SyncMaterialSettings"
+             follows="top|left"
+             height="20"
+             initial_value="false"
+             label="Lock repeat"
+             layout="topleft"
+             left="8"
+             name="checkbox_sync_settings"
+             tool_tip="Adjust all maps repeats simultaneously"
+             top_pad="-16"
+             width="160" />
             <texture_picker
              can_apply_immediately="true"
              default_image_name="Default"

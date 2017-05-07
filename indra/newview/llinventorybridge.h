@@ -151,9 +151,9 @@ protected:
 	virtual void addMarketplaceContextMenuOptions(U32 flags,
 											 menuentry_vec_t &items,
 											 menuentry_vec_t &disabled_items);
-	// <FS:Ansariel> Inventory Links Replace
 	virtual void addLinkReplaceMenuOption(menuentry_vec_t& items,
 										  menuentry_vec_t& disabled_items);
+
 	// <FS:Ansariel> Move to default folder
 	virtual void addMoveToDefaultFolderMenuOption(menuentry_vec_t& items);
 

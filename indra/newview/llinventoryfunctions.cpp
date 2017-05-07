@@ -2438,7 +2438,6 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 		// Clear the clipboard before we start adding things on it
 		LLClipboard::instance().reset();
 	}
-	// <FS:Ansariel> Inventory Links Replace
 	if ("replace_links" == action)
 	{
 		LLSD params;
@@ -2456,10 +2455,9 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 				}
 			}
 		}
-		LLFloaterReg::showInstance("fs_linkreplace", params);
+		LLFloaterReg::showInstance("linkreplace", params);
 		return;
 	}
-	// </FS:Ansariel>
 	// <FS:Ansariel> Move to default folder
 	if ("move_to_default_folder" == action)
 	{

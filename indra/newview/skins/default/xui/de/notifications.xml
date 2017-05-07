@@ -371,7 +371,7 @@ Bitte laden Sie innerhalb von 48 Stunden Mitglieder in Ihre Gruppe ein.
 		Fehler bei der Verarbeitung Ihrer Gruppenmitglied-Anfrage.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="JoinGroupError">
+	<notification name="JoinGroupErrorReason">
 		Gruppe kann nicht beigetreten werden: [reason]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
@@ -2581,7 +2581,7 @@ Möchten Sie den Nicht-stören-Modus deaktivieren, bevor Sie diese Transaktion a
 	</notification>
 	<notification name="TrashIsFull">
 		Ihr Papierkorb läuft über. Dies kann zu Anmeldeproblemen führen.
-		<usetemplate name="okcancelbuttons" notext="Papierkorb später leeren" yestext="Papierkorb jetzt leeren"/>
+		<usetemplate name="okcancelbuttons" notext="Papierkorb später leeren" yestext="Papierkorb überprüfen"/>
 	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		Sind Sie sicher, dass Sie Ihren Reise-, Internet- und Suchverlauf löschen möchten?

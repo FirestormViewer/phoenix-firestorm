@@ -2212,7 +2212,9 @@ BOOL LLPanelObjectInventory::handleKeyHere( KEY key, MASK mask )
 		break;
 // </FS:Ansariel> Fix broken return key in task inventory
 	case KEY_DELETE:
+#if LL_DARWIN
 	case KEY_BACKSPACE:
+#endif
 		// Delete selected items if delete or backspace key hit on the inventory panel
 		// Note: on Mac laptop keyboards, backspace and delete are one and the same
 		if (isSelectionRemovable() && mask == MASK_NONE)

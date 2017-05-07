@@ -1800,7 +1800,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.5</real>
+      <real>0.3</real>
     </map>
     <key>AudioLevelMic</key>
     <map>
@@ -7666,6 +7666,28 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>LinkReplaceBatchSize</key>
+    <map>
+      <key>Comment</key>
+      <string>The maximum size of a batch in a link replace operation</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>25</integer>
+    </map>
+    <key>LinkReplaceBatchPauseTime</key>
+    <map>
+      <key>Comment</key>
+      <string>The time in seconds between two batches in a link replace operation</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1.0</real>
     </map>
     <key>LipSyncAah</key>
     <map>
@@ -14465,6 +14487,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>1</integer>
       <key>Type</key>
       <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>SyncMaterialSettings</key>
+    <map>
+      <key>Comment</key>
+      <string>SyncMaterialSettings</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
     </map>
