@@ -43,6 +43,7 @@
 #include "llviewermenu.h"
 #include "llviewerobjectlist.h"
 
+#include "llavatarnamecache.h"
 #include "fsradar.h"
 #include "fsscrolllistctrl.h"
 #include "llclipboard.h"
@@ -417,8 +418,9 @@ bool FSBumpListMenu::onContextMenuItemEnable(const LLSD& userdata)
 	{
 		if (!gMeanCollisionList.empty() && mUUIDs.size() == 1)
 		{
-			std::string name;
-			gCacheName->getFullName(mUUIDs.front(), name);
+			LLAvatarName av_name;
+			LLAvatarNameCache::get(mUUIDs.front(), &av_name);
+			std::string name = av_name.getUserName();
 			return LLMuteList::getInstance()->isMuted(mUUIDs.front(), name);
 		}
 		else

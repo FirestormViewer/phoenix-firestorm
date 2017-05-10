@@ -1008,6 +1008,13 @@ void LLVOAvatarSelf::idleUpdate(LLAgent &agent, const F64 &time)
 	{
 		LLVOAvatar::idleUpdate(agent, time);
 		idleUpdateTractorBeam();
+
+		// <FS:Ansariel> Make sure to definitely stop typing
+		if ((gAgent.getTypingTime() > LLAgent::TYPING_TIMEOUT_SECS) && (gAgent.getRenderState() & AGENT_STATE_TYPING))
+		{
+			gAgent.stopTyping();
+		}
+		// </FS:Ansariel>
 	}
 }
 

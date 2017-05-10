@@ -66,6 +66,7 @@
 			<menu_item_check label="Bez przekształcania" name="NoVoiceMorphing"/>
 			<menu_item_check label="Podgląd..." name="Preview"/>
 			<menu_item_call label="Subskrybuj..." name="Subscribe"/>
+			<menu_item_call label="Korzyści premium..." name="PremiumPerk" />
 		</menu>
 		<menu_item_check name="Conversation Log..." label="Dziennik rozmów..."/>
 		<menu_item_check label="Głos w pobliżu" name="Nearby Voice"/>
@@ -133,6 +134,7 @@
 		<menu_item_call label="Eksplorator animacji" name="Animation Explorer"/>
 		<menu_item_call label="Czarna lista zasobów danych (assetów)" name="asset_blacklist"/>
 		<menu_item_call label="Ustawienia renderowania awatarów" name="Avatar Render Settings"/>
+		<menu_item_check label="Zawsze renderuj znajomych normalnie" name="Always show Friends normally"/>
 		<menu_item_check label="Renderuj tylko znajomych" name="Render Friends Only"/>
 	</menu>
 	<menu label="Buduj" name="BuildTools">
@@ -243,7 +245,7 @@
 		<menu_item_call label="Portal wsparcia" name="Support portal"/>
 		<menu_item_call label="Newsy: [SECOND_LIFE]" name="Second Life News"/>
 		<menu_item_call label="Blogi: [SECOND_LIFE]" name="Second Life Blogs"/> -->
-		<menu_item_call label="Sprawdź stan świata (Siatki)" name="Grid Status"/>
+		<menu_item_check label="Sprawdź stan świata (Siatki)" name="Grid Status"/>
 		<menu_item_call label="Zgłoś nadużycie" name="Report Abuse"/>
 		<menu_item_call label="Zgłoś błędy klienta" name="Report Bug"/>
 		<menu_item_call label="Zderzenia, popchnięcia i uderzenia" name="Bumps, Pushes &amp;amp; Hits"/>

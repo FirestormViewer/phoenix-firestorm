@@ -591,6 +591,12 @@
                 <menu_item_call.on_click
                  function="Communicate.VoiceMorphing.Subscribe" />
             </menu_item_call>
+            <menu_item_call
+             label="Premium perk..."
+             name="PremiumPerk">
+                <menu_item_call.on_click
+                 function="Communicate.VoiceMorphing.PremiumPerk" />
+            </menu_item_call>
         </menu>
         <menu_item_check
          name="Conversation Log..."
@@ -1210,6 +1216,7 @@
           function="Floater.Toggle"
           parameter="fs_asset_blacklist" />
       </menu_item_call>
+      <menu_item_separator/>
       <menu_item_call
         label="Avatar Render Settings"
         name="Avatar Render Settings">
@@ -1217,6 +1224,16 @@
           function="Floater.Toggle"
           parameter="fs_avatar_render_settings" />
       </menu_item_call>
+      <menu_item_check
+        label="Always show Friends normally"
+        name="Always show Friends normally">
+        <menu_item_check.on_click
+          function="ToggleControl"
+          parameter="AlwaysRenderFriends"/>
+        <menu_item_check.on_check
+          function="CheckControl"
+          parameter="AlwaysRenderFriends"/>
+      </menu_item_check>
       <menu_item_check
         label="Show Friends only"
         name="Render Friends Only">
@@ -1430,9 +1447,9 @@
              name="Duplicate"
              shortcut="control|D">
             <menu_item_call.on_click
-               function="Edit.Duplicate" />
+               function="Object.Duplicate" />
             <menu_item_call.on_enable
-               function="Edit.EnableDuplicate" />
+               function="Object.EnableDuplicate" />
           </menu_item_call>
 
           <menu_item_call
@@ -2111,16 +2128,19 @@
                  parameter="http://community.secondlife.com/t5/Blogs/ct-p/Blogs"/>
         </menu_item_call>-->
         <menu_item_separator/>
-        <menu_item_call
+        <menu_item_check
              label="Check Grid status"
              name="Grid Status">
-            <menu_item_call.on_click
-             function="Advanced.ShowURL"
-             parameter="http://status.secondlifegrid.net" />
-            <menu_item_call.on_visible
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="grid_status" />
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="grid_status" />
+            <menu_item_check.on_visible
              function="GridCheck"
              parameter="secondlife"/>
-        </menu_item_call>
+        </menu_item_check>
         <menu_item_call
              label="Report Abuse"
              name="Report Abuse">

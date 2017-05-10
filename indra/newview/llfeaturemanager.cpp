@@ -409,7 +409,16 @@ F32 gpu_benchmark();
 bool LLFeatureManager::loadGPUClass()
 {
 	//get memory bandwidth from benchmark
-	F32 gbps = gpu_benchmark();
+
+	// <FS:ND> Allow to skip gpu_benchmark with -noprobe.
+	// This can make sense for some Intel GPUs which can take 15+ Minutes or crash during gpu_benchmark
+
+	// F32 gbps = gpu_benchmark();
+	F32 gbps = -1.0f;
+	if( !gSavedSettings.getBOOL( "NoHardwareProbe" ) )
+		gbps = gpu_benchmark();
+
+	// </FS:ND>
 
 	if (gbps < 0.f)
 	{ //couldn't bench, use GLVersion
@@ -766,10 +775,10 @@ void LLFeatureManager::applyBaseMasks()
 	{
 		maskFeatures("MapBufferRange");
 	}
-	//if (gGLManager.mVRAM > 512)
-	//{
-	//	maskFeatures("VRAMGT512");
-	//}
+	if (gGLManager.mVRAM > 512)
+	{
+		maskFeatures("VRAMGT512");
+	}
 
 #if LL_DARWIN
 	const LLOSInfo& osInfo = LLAppViewer::instance()->getOSInfo();

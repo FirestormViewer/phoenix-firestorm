@@ -118,7 +118,8 @@ bool LLVertexBuffer::sMapped = false;
 bool LLVertexBuffer::sUseStreamDraw = true;
 bool LLVertexBuffer::sUseVAO = false;
 bool LLVertexBuffer::sPreferStreamDraw = false;
-
+// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
+LLVertexBuffer* LLVertexBuffer::sUtilityBuffer = NULL;
 
 U32 LLVBOPool::genBuffer()
 {
@@ -368,7 +369,7 @@ U32 LLVertexBuffer::sGLMode[LLRender::NUM_MODES] =
 	GL_POINTS,
 	GL_LINES,
 	GL_LINE_STRIP,
-	GL_QUADS,
+	//GL_QUADS, // <FS:Ansariel> Remove QUADS rendering mode
 	GL_LINE_LOOP,
 };
 
@@ -582,41 +583,76 @@ void LLVertexBuffer::drawArrays(U32 mode, const std::vector<LLVector3>& pos, con
 		return;
 	}
 
-	unbind();
-	
-	setupClientArrays(MAP_VERTEX | MAP_NORMAL);
+	// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
+	//unbind();
+	//
+	//setupClientArrays(MAP_VERTEX | MAP_NORMAL);
 
-	LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
+	//LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
 
-	if (shader)
+	//if (shader)
+	//{
+	//	S32 loc = LLVertexBuffer::TYPE_VERTEX;
+	//	if (loc > -1)
+	//	{
+	//		glVertexAttribPointerARB(loc, 3, GL_FLOAT, GL_FALSE, 0, pos[0].mV);
+	//	}
+	//	loc = LLVertexBuffer::TYPE_NORMAL;
+	//	if (loc > -1)
+	//	{
+	//		glVertexAttribPointerARB(loc, 3, GL_FLOAT, GL_FALSE, 0, norm[0].mV);
+	//	}
+	//}
+	//else
+	//{
+	//	glVertexPointer(3, GL_FLOAT, 0, pos[0].mV);
+	//	glNormalPointer(GL_FLOAT, 0, norm[0].mV);
+	//}
+	//LLGLSLShader::startProfile();
+	//glDrawArrays(sGLMode[mode], 0, count);
+	//LLGLSLShader::stopProfile(count, mode);
+	if (!sUtilityBuffer)
 	{
-		S32 loc = LLVertexBuffer::TYPE_VERTEX;
-		if (loc > -1)
-		{
-			glVertexAttribPointerARB(loc, 3, GL_FLOAT, GL_FALSE, 0, pos[0].mV);
-		}
-		loc = LLVertexBuffer::TYPE_NORMAL;
-		if (loc > -1)
-		{
-			glVertexAttribPointerARB(loc, 3, GL_FLOAT, GL_FALSE, 0, norm[0].mV);
-		}
+		sUtilityBuffer = new LLVertexBuffer(MAP_VERTEX | MAP_NORMAL | MAP_TEXCOORD0, GL_STREAM_DRAW);
+		sUtilityBuffer->allocateBuffer(count, count, true);
 	}
-	else
+	if (sUtilityBuffer->getNumVerts() < (S32) count)
 	{
-		glVertexPointer(3, GL_FLOAT, 0, pos[0].mV);
-		glNormalPointer(GL_FLOAT, 0, norm[0].mV);
+		sUtilityBuffer->resizeBuffer(count, count);
 	}
+
+	LLStrider<LLVector3> vertex_strider;
+	LLStrider<LLVector3> normal_strider;
+	sUtilityBuffer->getVertexStrider(vertex_strider);
+	sUtilityBuffer->getNormalStrider(normal_strider);
+	for (U32 i = 0; i < count; ++i)
+	{
+		*(vertex_strider++) = pos[i];
+		*(normal_strider++) = norm[i];
+	}
+
+	sUtilityBuffer->setBuffer(MAP_VERTEX | MAP_NORMAL);
 	LLGLSLShader::startProfile();
-	glDrawArrays(sGLMode[mode], 0, count);
+	sUtilityBuffer->drawArrays(mode, 0, pos.size());
 	LLGLSLShader::stopProfile(count, mode);
+	// </FS:Ansariel>
 }
 
 //static
-void LLVertexBuffer::drawElements(U32 mode, const LLVector4a* pos, const LLVector2* tc, S32 num_indices, const U16* indicesp)
+// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
+//void LLVertexBuffer::drawElements(U32 mode, const LLVector4a* pos, const LLVector2* tc, S32 num_indices, const U16* indicesp)
+void LLVertexBuffer::drawElements(U32 mode, const S32 num_vertices, const LLVector4a* pos, const LLVector2* tc, S32 num_indices, const U16* indicesp)
+// </FS:Ansariel>
 {
 	llassert(!LLGLSLShader::sNoFixedFunction || LLGLSLShader::sCurBoundShaderPtr != NULL);
 
 	// <FS:Ansariel> Crash fix due to invalid calls to drawElements by Drake Arconis
+	if (num_vertices <= 0)
+	{
+		LL_WARNS() << "Called drawElements with 0 vertices" << LL_ENDL;
+		return;
+	}
+
 	if (num_indices <= 0)
 	{
 		LL_WARNS() << "Called drawElements with 0 indices" << LL_ENDL;
@@ -626,36 +662,70 @@ void LLVertexBuffer::drawElements(U32 mode, const LLVector4a* pos, const LLVecto
 
 	gGL.syncMatrices();
 
+	// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
+	if (!sUtilityBuffer)
+	{
+		sUtilityBuffer = new LLVertexBuffer(MAP_VERTEX | MAP_NORMAL | MAP_TEXCOORD0, GL_STREAM_DRAW);
+		sUtilityBuffer->allocateBuffer(num_vertices, num_indices, true);
+	}
+	if (sUtilityBuffer->getNumVerts() < num_vertices || sUtilityBuffer->getNumIndices() < num_indices)
+	{
+		sUtilityBuffer->resizeBuffer(llmax(sUtilityBuffer->getNumVerts(), num_vertices), llmax(sUtilityBuffer->getNumIndices(), num_indices));
+	}
+	// </FS:Ansariel>
+
 	U32 mask = LLVertexBuffer::MAP_VERTEX;
+	// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
+	LLStrider<U16> index_strider;
+	LLStrider<LLVector3> vertex_strider;
+	sUtilityBuffer->getIndexStrider(index_strider);
+	sUtilityBuffer->getVertexStrider(vertex_strider);
+	const S32 index_size = ((num_indices * sizeof(U16)) + 0xF) & ~0xF;
+	const S32 vertex_size = ((num_vertices * 4 * sizeof(F32)) + 0xF) & ~0xF;
+	LLVector4a::memcpyNonAliased16((F32*)index_strider.get(), (F32*)indicesp, index_size);
+	LLVector4a::memcpyNonAliased16((F32*)vertex_strider.get(), (F32*)pos, vertex_size);
+	// </FS:Ansariel>
 	if (tc)
 	{
 		mask = mask | LLVertexBuffer::MAP_TEXCOORD0;
+		// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
+		LLStrider<LLVector2> tc_strider;
+		sUtilityBuffer->getTexCoord0Strider(tc_strider);
+		const S32 tc_size = ((num_vertices * 2 * sizeof(F32)) + 0xF) & ~0xF;
+		LLVector4a::memcpyNonAliased16((F32*)tc_strider.get(), (F32*)tc, tc_size);
+		// </FS:Ansariel>
 	}
 
-	unbind();
-	
-	setupClientArrays(mask);
+	// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
+	//unbind();
+	//
+	//setupClientArrays(mask);
 
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		S32 loc = LLVertexBuffer::TYPE_VERTEX;
-		glVertexAttribPointerARB(loc, 3, GL_FLOAT, GL_FALSE, 16, pos);
+	//if (LLGLSLShader::sNoFixedFunction)
+	//{
+	//	S32 loc = LLVertexBuffer::TYPE_VERTEX;
+	//	glVertexAttribPointerARB(loc, 3, GL_FLOAT, GL_FALSE, 16, pos);
 
-		if (tc)
-		{
-			loc = LLVertexBuffer::TYPE_TEXCOORD0;
-			glVertexAttribPointerARB(loc, 2, GL_FLOAT, GL_FALSE, 0, tc);
-		}
-	}
-	else
-	{
-		glTexCoordPointer(2, GL_FLOAT, 0, tc);
-		glVertexPointer(3, GL_FLOAT, 16, pos);
-	}
+	//	if (tc)
+	//	{
+	//		loc = LLVertexBuffer::TYPE_TEXCOORD0;
+	//		glVertexAttribPointerARB(loc, 2, GL_FLOAT, GL_FALSE, 0, tc);
+	//	}
+	//}
+	//else
+	//{
+	//	glTexCoordPointer(2, GL_FLOAT, 0, tc);
+	//	glVertexPointer(3, GL_FLOAT, 16, pos);
+	//}
 
+	//LLGLSLShader::startProfile();
+	//glDrawElements(sGLMode[mode], num_indices, GL_UNSIGNED_SHORT, indicesp);
+	//LLGLSLShader::stopProfile(num_indices, mode);
+	sUtilityBuffer->setBuffer(mask);
 	LLGLSLShader::startProfile();
-	glDrawElements(sGLMode[mode], num_indices, GL_UNSIGNED_SHORT, indicesp);
+	sUtilityBuffer->draw(mode, num_indices, 0);
 	LLGLSLShader::stopProfile(num_indices, mode);
+	// </FS:Ansariel>
 }
 
 void LLVertexBuffer::validateRange(U32 start, U32 end, U32 count, U32 indices_offset) const
@@ -916,6 +986,11 @@ void LLVertexBuffer::cleanupClass()
 	sStreamVBOPool.cleanup();
 	sDynamicVBOPool.cleanup();
 	sDynamicCopyVBOPool.cleanup();
+
+	// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
+	delete sUtilityBuffer;
+	sUtilityBuffer = NULL;
+	// </FS:Ansariel>
 
 	if(sPrivatePoolp)
 	{
@@ -2137,15 +2212,26 @@ bool LLVertexBuffer::getWeightStrider(LLStrider<F32>& strider, S32 index, S32 co
 	return VertexBufferStrider<F32,TYPE_WEIGHT>::get(*this, strider, index, count, map_range);
 }
 
-bool LLVertexBuffer::getWeight4Strider(LLStrider<LLVector4>& strider, S32 index, S32 count, bool map_range)
+// <FS:Ansariel> Vectorized Weight4Strider and ClothWeightStrider by Drake Arconis
+//bool LLVertexBuffer::getWeight4Strider(LLStrider<LLVector4>& strider, S32 index, S32 count, bool map_range)
+//{
+//	return VertexBufferStrider<LLVector4,TYPE_WEIGHT4>::get(*this, strider, index, count, map_range);
+//}
+//
+//bool LLVertexBuffer::getClothWeightStrider(LLStrider<LLVector4>& strider, S32 index, S32 count, bool map_range)
+//{
+//	return VertexBufferStrider<LLVector4,TYPE_CLOTHWEIGHT>::get(*this, strider, index, count, map_range);
+//}
+bool LLVertexBuffer::getWeight4Strider(LLStrider<LLVector4a>& strider, S32 index, S32 count, bool map_range)
 {
-	return VertexBufferStrider<LLVector4,TYPE_WEIGHT4>::get(*this, strider, index, count, map_range);
+	return VertexBufferStrider<LLVector4a,TYPE_WEIGHT4>::get(*this, strider, index, count, map_range);
 }
 
-bool LLVertexBuffer::getClothWeightStrider(LLStrider<LLVector4>& strider, S32 index, S32 count, bool map_range)
+bool LLVertexBuffer::getClothWeightStrider(LLStrider<LLVector4a>& strider, S32 index, S32 count, bool map_range)
 {
-	return VertexBufferStrider<LLVector4,TYPE_CLOTHWEIGHT>::get(*this, strider, index, count, map_range);
+	return VertexBufferStrider<LLVector4a,TYPE_CLOTHWEIGHT>::get(*this, strider, index, count, map_range);
 }
+// </FS:Ansariel>
 
 //----------------------------------------------------------------------------
 
@@ -2274,9 +2360,12 @@ void LLVertexBuffer::setBuffer(U32 data_mask)
 			{
 				
 				U32 unsatisfied_mask = (required_mask & ~data_mask);
-				U32 i = 0;
+				// <FS:Ansariel> Infinite loop fix by Drake Arconis
+				//U32 i = 0;
 
-				while (i < TYPE_MAX)
+				//while (i < TYPE_MAX)
+				for (U32 i = 0; i < TYPE_MAX; i++)
+				// </FS:Ansariel>
 				{
                     U32 unsatisfied_flag = unsatisfied_mask & (1 << i);
 					switch (unsatisfied_flag)
@@ -2397,8 +2486,10 @@ void LLVertexBuffer::setBuffer(U32 data_mask)
 			sGLRenderIndices = mGLIndices;
 		}
 	}
-
-	if (!mGLArray)
+	// <FS:ND> Need to setup (activate/deactivate) client arrays with VAOs too
+	// if( !mGLArray )
+	if (!sUseVAO && !mGLArray)
+	// </FS:ND>
 	{
 		setupClientArrays(data_mask);
 	}

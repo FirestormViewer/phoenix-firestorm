@@ -1595,7 +1595,8 @@ Spróbuj zalogować się ponownie za minutę.
 		[[MARKETPLACE_CREATE_STORE_URL] Sklep na Marketplace] zwraca błędy.
 	</string>
 	<string name="InventoryMarketplaceError">
-		Ta funkcjonalność jest obecnie w fazie Beta. Dodaj proszę swoje imię do tego [http://goo.gl/forms/FCQ7UXkakz formularza Google] (w języku angielskim), jeśli chcesz wziąć udział w programie Beta i pomóc.
+		Wystapił błąd podczas otwierania listy rzeczy z Marketplace.
+Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Twój folder rzeczy na Marketplace jest pusty.
@@ -4529,7 +4530,10 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Konferencja z [AGENT_NAME]
 	</string>
 	<string name="inventory_item_offered-im">
-		Zaoferowano przedmiot
+		Zaoferowano przedmiot: '[ITEM_NAME]'
+	</string>
+	<string name="inventory_folder_offered-im">
+		Zaoferowano folder: '[ITEM_NAME]'
 	</string>
 	<string name="inventory_item_offered_rlv">
 		Zaoferowano przedmiot dla [NAME]
@@ -4910,7 +4914,7 @@ Raport o Nadużyciu
 	<string name="server_is_down">
 		Pomimo naszych najlepszych starań wystąpił niespodziewany problem.
 
-Proszę sprawdzić czy na stronie status.secondlifegrid.net nie zostały umieszczone informacje o rozpoznanych problemach serwera.
+Proszę sprawdzić czy na http://status.secondlifegrid.net nie zostały umieszczone informacje o rozpoznanych problemach serwera.
 Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia firewall.
 	</string>
 	<string name="dateTimeWeekdaysNames">
@@ -5061,6 +5065,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Gestures_Label">
 		Gesty
+	</string>
+	<string name="Command_Grid_Status_Label">
+		Status świata
 	</string>
 	<string name="Command_HowTo_Label">
 		Samouczek
@@ -5226,6 +5233,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Gestures_Tooltip">
 		Gesty Twojego awatara (CTRL+G)
+	</string>
+	<string name="Command_Grid_Status_Tooltip">
+		Pokaż obecny status świata (siatki)
 	</string>
 	<string name="Command_HowTo_Tooltip">
 		Jak wykonywać zwyczajne rzeczy

@@ -280,7 +280,20 @@ void LLVisualParamHint::draw(F32 alpha)
 	gGL.color4f(1.f, 1.f, 1.f, alpha);
 
 	LLGLSUIDefault gls_ui;
-	gGL.begin(LLRender::QUADS);
+	// <FS:Ansariel> Remove QUADS rendering mode
+	//gGL.begin(LLRender::QUADS);
+	//{
+	//	gGL.texCoord2i(0, 1);
+	//	gGL.vertex2i(0, mFullHeight);
+	//	gGL.texCoord2i(0, 0);
+	//	gGL.vertex2i(0, 0);
+	//	gGL.texCoord2i(1, 0);
+	//	gGL.vertex2i(mFullWidth, 0);
+	//	gGL.texCoord2i(1, 1);
+	//	gGL.vertex2i(mFullWidth, mFullHeight);
+	//}
+	//gGL.end();
+	gGL.begin(LLRender::TRIANGLES);
 	{
 		gGL.texCoord2i(0, 1);
 		gGL.vertex2i(0, mFullHeight);
@@ -288,10 +301,16 @@ void LLVisualParamHint::draw(F32 alpha)
 		gGL.vertex2i(0, 0);
 		gGL.texCoord2i(1, 0);
 		gGL.vertex2i(mFullWidth, 0);
+
+		gGL.texCoord2i(0, 1);
+		gGL.vertex2i(0, mFullHeight);
+		gGL.texCoord2i(1, 0);
+		gGL.vertex2i(mFullWidth, 0);
 		gGL.texCoord2i(1, 1);
 		gGL.vertex2i(mFullWidth, mFullHeight);
 	}
 	gGL.end();
+	// </FS:Ansariel>
 
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 }

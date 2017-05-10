@@ -310,6 +310,7 @@ set(viewer_SOURCE_FILES
     llfloaterautoreplacesettings.cpp
     llfloateravatar.cpp
     llfloateravatarpicker.cpp
+    llfloateravatarrendersettings.cpp
     llfloateravatartextures.cpp
     llfloaterbeacons.cpp
     llfloaterbigpreview.cpp
@@ -343,6 +344,7 @@ set(viewer_SOURCE_FILES
     llfloatergesture.cpp
     llfloatergodtools.cpp
     llfloatergotoline.cpp
+    llfloatergridstatus.cpp
     llfloatergroupbulkban.cpp
     llfloatergroupinvite.cpp
     llfloatergroups.cpp
@@ -1058,6 +1060,7 @@ set(viewer_HEADER_FILES
     llfloaterautoreplacesettings.h
     llfloateravatar.h
     llfloateravatarpicker.h
+    llfloateravatarrendersettings.h
     llfloateravatartextures.h
     llfloaterbeacons.h
     llfloaterbigpreview.h
@@ -1091,6 +1094,7 @@ set(viewer_HEADER_FILES
     llfloatergesture.h
     llfloatergodtools.h
     llfloatergotoline.h
+    llfloatergridstatus.h
     llfloatergroupbulkban.h
     llfloatergroupinvite.h
     llfloatergroups.h

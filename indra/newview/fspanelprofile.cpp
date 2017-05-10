@@ -589,8 +589,9 @@ void FSPanelProfileSecondLife::unfreeze()
 
 void FSPanelProfileSecondLife::csr()
 {
-	std::string name;
-	gCacheName->getFullName(getAvatarId(), name);
+	LLAvatarName av_name;
+	LLAvatarNameCache::get(getAvatarId(), &av_name);
+	std::string name = av_name.getUserName();
 	LLAvatarActions::csr(getAvatarId(), name);
 }
 

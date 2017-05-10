@@ -1275,11 +1275,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c79d090128279a73822ad894cb3448f6</string>
+              <string>94fc457c46e1fb94b31251bd4747d10f</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre4.201505182056-r82-darwin-201505182056-r82.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.171101143-darwin64-171101143.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1289,9 +1289,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>017ef34ddf14293099a90c6eaa3615ca</string>
+              <string>f62e7cff14feb646babaa19b7ea14ed3</string>
+              <key>hash_algorithm</key>
+              <string>md5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/1626/3627/glod-1.0pre3.501614-darwin64-501614.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201704302344-linux-201704302344.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1301,11 +1303,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>58113bcbbacbaeb2d278f745867ae6f0</string>
+              <string>e3659aa7b670a8fbdfb1b820254abb44</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-glod/rev/314201/arch/Linux/installer/glod-1.0pre4.314201-linux-314201.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201703081158-windows-201703081158.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1315,9 +1317,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>30a8b171ddc22acdc01488a4611b8abf</string>
+              <string>fea16abf8c2b7f38fc33a2142bfbfe18</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre4.201505150221-r81-linux-x64-201505150221-r81.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201704302331-linux64-201704302331.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

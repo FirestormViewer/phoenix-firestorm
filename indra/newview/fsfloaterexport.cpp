@@ -300,8 +300,9 @@ bool FSFloaterObjectExport::exportSelection()
 	mTextureChecked.clear();
 	
 	std::string author = "Unknown";
-	if (gCacheName)
-		gCacheName->getFullName(gAgentID, author);
+	if (!gAgentUsername.empty())
+		author = gAgentUsername;
+
 	time_t rawtime;
 	time(&rawtime);
 	struct tm* utc_time = gmtime(&rawtime);

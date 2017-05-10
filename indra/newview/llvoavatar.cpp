@@ -709,9 +709,6 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mMeshTexturesDirty = FALSE;
 	mHeadp = NULL;
 
-	// <FS:Ansariel> Load persisted avatar render settings
-	mVisuallyMuteSetting = FSAvatarRenderPersistence::instance().getAvatarRenderSettings(id);
-
 	// set up animation variables
 	mSpeed = 0.f;
 	setAnimationData("Speed", &mSpeed);
@@ -757,6 +754,10 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	{
 	    LLSceneMonitor::getInstance()->freezeAvatar((LLCharacter*)this);
 	}
+
+	// <FS:Ansariel> [FS Persisted Avatar Render Settings]
+	//mVisuallyMuteSetting = LLVOAvatar::VisualMuteSettings(LLRenderMuteList::getInstance()->getSavedVisualMuteSetting(getID()));
+	mVisuallyMuteSetting = FSAvatarRenderPersistence::instance().getAvatarRenderSettings(id);
 }
 
 std::string LLVOAvatar::avString() const
@@ -5080,16 +5081,35 @@ U32 LLVOAvatar::renderImpostor(LLColor4U color, S32 diffuse_channel)
 
 	gGL.color4ubv(color.mV);
 	gGL.getTexUnit(diffuse_channel)->bind(&mImpostor);
-	gGL.begin(LLRender::QUADS);
-	gGL.texCoord2f(0,0);
-	gGL.vertex3fv((pos+left-up).mV);
-	gGL.texCoord2f(1,0);
-	gGL.vertex3fv((pos-left-up).mV);
-	gGL.texCoord2f(1,1);
-	gGL.vertex3fv((pos-left+up).mV);
-	gGL.texCoord2f(0,1);
-	gGL.vertex3fv((pos+left+up).mV);
+	// <FS:Ansariel> Remove QUADS rendering mode
+	//gGL.begin(LLRender::QUADS);
+	//gGL.texCoord2f(0,0);
+	//gGL.vertex3fv((pos+left-up).mV);
+	//gGL.texCoord2f(1,0);
+	//gGL.vertex3fv((pos-left-up).mV);
+	//gGL.texCoord2f(1,1);
+	//gGL.vertex3fv((pos-left+up).mV);
+	//gGL.texCoord2f(0,1);
+	//gGL.vertex3fv((pos+left+up).mV);
+	//gGL.end();
+	gGL.begin(LLRender::TRIANGLES);
+	{
+		gGL.texCoord2f(0.f, 0.f);
+		gGL.vertex3fv((pos + left - up).mV);
+		gGL.texCoord2f(1.f, 0.f);
+		gGL.vertex3fv((pos - left - up).mV);
+		gGL.texCoord2f(1.f, 1.f);
+		gGL.vertex3fv((pos - left + up).mV);
+
+		gGL.texCoord2f(0.f, 0.f);
+		gGL.vertex3fv((pos + left - up).mV);
+		gGL.texCoord2f(1.f, 1.f);
+		gGL.vertex3fv((pos - left + up).mV);
+		gGL.texCoord2f(0.f, 1.f);
+		gGL.vertex3fv((pos + left + up).mV);
+	}
 	gGL.end();
+	// </FS:Ansariel>
 	gGL.flush();
 
 	return 6;
@@ -7844,7 +7864,13 @@ BOOL LLVOAvatar::isFullyLoaded() const
 bool LLVOAvatar::isTooComplex() const
 {
 	bool too_complex;
-	if (isSelf() || mVisuallyMuteSetting == AV_ALWAYS_RENDER)
+	// <FS:Ansariel> Performance improvement
+	//bool render_friend =  (LLAvatarTracker::instance().isBuddy(getID()) && gSavedSettings.getBOOL("AlwaysRenderFriends"));
+	static LLCachedControl<bool> alwaysRenderFriends(gSavedSettings, "AlwaysRenderFriends");
+	bool render_friend =  (LLAvatarTracker::instance().isBuddy(getID()) && alwaysRenderFriends);
+	// </FS:Ansariel>
+
+	if (isSelf() || render_friend || mVisuallyMuteSetting == AV_ALWAYS_RENDER)
 	{
 		too_complex = false;
 	}
@@ -10128,10 +10154,10 @@ void LLVOAvatar::setVisualMuteSettings(VisualMuteSettings set)
 {
     mVisuallyMuteSetting = set;
     mNeedsImpostorUpdate = TRUE;
-	// <FS:Ansariel> Load persisted avatar render settings
-	FSAvatarRenderPersistence::instance().setAvatarRenderSettings(getID(), set);
+    // <FS:Ansariel> [FS Persisted Avatar Render Settings]
+    //LLRenderMuteList::getInstance()->saveVisualMuteSetting(getID(), S32(set));
+    FSAvatarRenderPersistence::instance().setAvatarRenderSettings(getID(), set);
 }
-
 
 void LLVOAvatar::calcMutedAVColor()
 {

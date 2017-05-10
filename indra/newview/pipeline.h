@@ -424,6 +424,16 @@ private:
 	void connectRefreshCachedSettingsSafe(const std::string name);
 	void hideDrawable( LLDrawable *pDrawable );
 	void unhideDrawable( LLDrawable *pDrawable );
+
+	// <FS:Ansariel> Reset VB during TP
+	void initDeferredVB();
+
+	// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+	void initAuxiliaryVB();
+	void drawAuxiliaryVB(U32 mask = 0);
+	void drawAuxiliaryVB(const LLVector2& tc1, const LLVector2& tc2, U32 mask = 0);
+	void drawAuxiliaryVB(const LLVector2& tc1, const LLVector2& tc2, const LLColor4& color);
+
 public:
 	enum {GPU_CLASS_MAX = 3 };
 
@@ -617,6 +627,9 @@ public:
 
 	//utility buffer for rendering cubes, 8 vertices are corners of a cube [-1, 1]
 	LLPointer<LLVertexBuffer> mCubeVB;
+
+	// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+	LLPointer<LLVertexBuffer> mAuxiliaryVB;
 
 	//sun shadow map
 	LLRenderTarget			mShadow[6];

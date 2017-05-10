@@ -405,7 +405,9 @@ void LLViewerJointMesh::updateFaceData(LLFace *face, F32 pixel_area, BOOL damp_w
 	LLStrider<LLVector3> normalsp;
 	LLStrider<LLVector2> tex_coordsp;
 	LLStrider<F32>		 vertex_weightsp;
-	LLStrider<LLVector4> clothing_weightsp;
+	// <FS:Ansariel> Vectorized Weight4Strider and ClothWeightStrider by Drake Arconis
+	//LLStrider<LLVector4> clothing_weightsp;
+	LLStrider<LLVector4a> clothing_weightsp;
 	LLStrider<U16> indicesp;
 
 	// Copy data into the faces from the polymesh data.

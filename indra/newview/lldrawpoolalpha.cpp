@@ -617,29 +617,38 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 					(!params.mParticle || params.mHasGlow))
 					// </FS:Ansariel>
 				{
-					// <FS:Ansariel> LL materials support merge error
 					LL_RECORD_BLOCK_TIME(FTM_RENDER_ALPHA_GLOW);
 
 					// install glow-accumulating blend mode
 					gGL.blendFunc(LLRender::BF_ZERO, LLRender::BF_ONE, // don't touch color
 						      LLRender::BF_ONE, LLRender::BF_ONE); // add to alpha (glow)
 
-					// <FS:Ansariel> LL materials support merge error
-					//emissive_shader->bind();
-					//
-					//params.mVertexBuffer->setBuffer((mask & ~LLVertexBuffer::MAP_COLOR) | LLVertexBuffer::MAP_EMISSIVE);
-					params.mVertexBuffer->setBuffer(mask | LLVertexBuffer::MAP_EMISSIVE);
+					// <FS:Ansariel> Performance fix when not using OpenGL core profile
+					if (LLRender::sGLCoreProfile)
+					{
 					// </FS:Ansariel>
+					emissive_shader->bind();
+
+					params.mVertexBuffer->setBuffer((mask & ~LLVertexBuffer::MAP_COLOR) | LLVertexBuffer::MAP_EMISSIVE);
 					
 					// do the actual drawing, again
 					params.mVertexBuffer->drawRange(params.mDrawMode, params.mStart, params.mEnd, params.mCount, params.mOffset);
 					gPipeline.addTrianglesDrawn(params.mCount, params.mDrawMode);
 
 					// restore our alpha blend mode
-					// <FS:Ansariel> LL materials support merge error
-					//gGL.blendFunc(mColorSFactor, mColorDFactor, mAlphaSFactor, mAlphaDFactor);
+					gGL.blendFunc(mColorSFactor, mColorDFactor, mAlphaSFactor, mAlphaDFactor);
 
-					//current_shader->bind();
+					current_shader->bind();
+					// <FS:Ansariel> Performance fix when not using OpenGL core profile
+					}
+					else
+					{
+						params.mVertexBuffer->setBuffer(mask | LLVertexBuffer::MAP_EMISSIVE);
+					
+						// do the actual drawing, again
+						params.mVertexBuffer->drawRange(params.mDrawMode, params.mStart, params.mEnd, params.mCount, params.mOffset);
+						gPipeline.addTrianglesDrawn(params.mCount, params.mDrawMode);
+					}
 					// </FS:Ansariel>
 				}
 			

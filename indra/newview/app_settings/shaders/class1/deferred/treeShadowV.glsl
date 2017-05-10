@@ -29,7 +29,9 @@ uniform mat4 modelview_projection_matrix;
 ATTRIBUTE vec3 position;
 ATTRIBUTE vec2 texcoord0;
 
+#if !DEPTH_CLAMP // <FS> Fix void and region water flickr by Drake Arconis (Alchemy viewer)
 VARYING vec4 post_pos;
+#endif // <FS> Fix void and region water flickr by Drake Arconis (Alchemy viewer)
 VARYING vec2 vary_texcoord0;
 
 void main()
@@ -37,9 +39,15 @@ void main()
 	//transform vertex
 	vec4 pos = modelview_projection_matrix*vec4(position.xyz, 1.0);
 	
+#if !DEPTH_CLAMP // <FS> Fix void and region water flickr by Drake Arconis (Alchemy viewer)
 	post_pos = pos;
 	
 	gl_Position = vec4(pos.x, pos.y, pos.w*0.5, pos.w);
+// <FS> Fix void and region water flickr by Drake Arconis (Alchemy viewer)
+#else
+	gl_Position = pos;
+#endif
+// </FS> Fix void and region water flickr by Drake Arconis (Alchemy viewer)
 	
 	vary_texcoord0 = (texture_matrix0 * vec4(texcoord0,0,1)).xy;
 }

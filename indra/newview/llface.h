@@ -174,7 +174,9 @@ public:
 									LLStrider<LLVector3> &normals,
 								    LLStrider<LLVector2> &texCoords,
 									LLStrider<F32>		 &vertex_weights,
-									LLStrider<LLVector4> &clothing_weights);
+									// <FS:Ansariel> Vectorized Weight4Strider and ClothWeightStrider by Drake Arconis
+									//LLStrider<LLVector4> &clothing_weights);
+									LLStrider<LLVector4a> &clothing_weights);
 
 	// For volumes, etc.
 	U16				getGeometry(LLStrider<LLVector3> &vertices,  

@@ -8,16 +8,16 @@
 			<button label="Im Inventar speich. (L$[AMOUNT])" name="save_to_inventory_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_profile">
-			<button label="Ins Profil hochladen" name="save_to_profile_btn"/>
+			<button label="Auf Profil teilen" name="save_to_profile_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_facebook">
-			<button label="Auf Facebook hochladen" name="send_to_facebook_btn"/>
+			<button label="Auf Facebook teilen" name="send_to_facebook_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_twitter">
-			<button label="Auf Twitter hochladen" name="send_to_twitter_btn"/>
+			<button label="Auf Twitter teilen" name="send_to_twitter_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_flickr">
-			<button label="Auf Flickr hochladen" name="send_to_flickr_btn"/>
+			<button label="Auf Flickr teilen" name="send_to_flickr_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_email">
 			<button label="Per E-Mail senden" name="save_to_email_btn"/>

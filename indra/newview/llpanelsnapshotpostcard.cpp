@@ -117,15 +117,13 @@ BOOL LLPanelSnapshotPostcard::postBuild()
 // virtual
 void LLPanelSnapshotPostcard::onOpen(const LLSD& key)
 {
-	// <FS:Ansariel> Fill "From" field
-	LLLineEditor* from = getChild<LLLineEditor>("name_form");
-	if (from->getText().empty())
+	LLUICtrl* name_form = getChild<LLUICtrl>("name_form");
+	if (name_form && name_form->getValue().asString().empty())
 	{
 		std::string name_string;
 		LLAgentUI::buildFullname(name_string);
-		from->setText(name_string);
+		getChild<LLUICtrl>("name_form")->setValue(LLSD(name_string));
 	}
-	// </FS:Ansariel>
 
 	// <FS:Ansariel> For OpenSim compatibility
 	// pick up the user's up-to-date email address

@@ -151,6 +151,12 @@ protected:
 	virtual void addMarketplaceContextMenuOptions(U32 flags,
 											 menuentry_vec_t &items,
 											 menuentry_vec_t &disabled_items);
+	// <FS:Ansariel> Inventory Links Replace
+	virtual void addLinkReplaceMenuOption(menuentry_vec_t& items,
+										  menuentry_vec_t& disabled_items);
+	// <FS:Ansariel> Move to default folder
+	virtual void addMoveToDefaultFolderMenuOption(menuentry_vec_t& items);
+
 protected:
 	LLInvFVBridge(LLInventoryPanel* inventory, LLFolderView* root, const LLUUID& uuid);
 
@@ -161,22 +167,18 @@ protected:
 	BOOL isLinkedObjectMissing() const; // Is this a linked obj whose baseobj is not in inventory?
 
 	BOOL isAgentInventory() const; // false if lost or in the inventory library
+	BOOL isCOFFolder() const;       // true if COF or descendant of
+	BOOL isInboxFolder() const;     // true if COF or descendant of   marketplace inbox
+
+	BOOL isMarketplaceListingsFolder() const;     // true if descendant of Marketplace listings folder
+
 // [SL:KB] - Patch: Inventory-Misc | Checked: 2011-05-28 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
 	BOOL isLibraryInventory() const;
 	BOOL isLostInventory() const;
 // [/SL:KB]
-	BOOL isCOFFolder() const; // true if COF or descendent of
 // <FS:TT> Client LSL Bridge
 	BOOL isProtectedFolder(bool ignore_setting = false) const;
 // </FS:TT>
-	BOOL isInboxFolder() const; // true if COF or descendent of marketplace inbox
-	BOOL isMarketplaceListingsFolder() const;     // true if descendant of Marketplace listings folder
-
-	// <FS:Ansariel> Inventory Links Replace
-	void checkInventoryLinkReplace(menuentry_vec_t& items, menuentry_vec_t& disables_items);
-
-	// <FS:Ansariel> Move to default folder
-	void checkMoveToDefaultFolder(menuentry_vec_t& items, menuentry_vec_t& disables_items);
 
 	virtual BOOL isItemPermissive() const;
 	static void changeItemParent(LLInventoryModel* model,

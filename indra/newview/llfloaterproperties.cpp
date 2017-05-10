@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <functional>
 #include "llcachename.h"
+#include "llavatarnamecache.h"
 #include "lldbstrings.h"
 #include "llfloaterreg.h"
 
@@ -302,12 +303,13 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 
 	if (item->getCreatorUUID().notNull())
 	{
-		std::string name;
-		gCacheName->getFullName(item->getCreatorUUID(), name);
+		LLAvatarName av_name;
+		LLAvatarNameCache::get(item->getCreatorUUID(), &av_name);
 		getChildView("BtnCreator")->setEnabled(TRUE);
 		getChildView("LabelCreatorTitle")->setEnabled(TRUE);
 		getChildView("LabelCreatorName")->setEnabled(TRUE);
 // [RLVa:KB] - Checked: RLVa-2.0.1
+		std::string name = av_name.getUserName();
 		// If the object creator matches the object owner we need to anonymize the creator field as well
 		if ( (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, item->getCreatorUUID())) &&
 		     ( ((perm.isOwned()) && (!perm.isGroupOwned()) && (perm.getOwner() == item->getCreatorUUID()) ) || (RlvUtil::isNearbyAgent(item->getCreatorUUID())) ) )
@@ -315,8 +317,9 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 			childSetEnabled("BtnCreator", FALSE);
 			name = RlvStrings::getAnonym(name);
 		}
-// [/RLVa:KB]
 		getChild<LLUICtrl>("LabelCreatorName")->setValue(name);
+// [/RLVa:KB]
+//		getChild<LLUICtrl>("LabelCreatorName")->setValue(av_name.getUserName());
 	}
 	else
 	{
@@ -341,7 +344,9 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		}
 		else
 		{
-			gCacheName->getFullName(perm.getOwner(), name);
+			LLAvatarName av_name;
+			LLAvatarNameCache::get(perm.getOwner(), &av_name);
+			name = av_name.getUserName();
 // [RLVa:KB] - Checked: RLVa-2.0.1
 			if (RlvActions::isRlvEnabled())
 			{

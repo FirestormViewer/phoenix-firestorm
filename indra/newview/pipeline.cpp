@@ -495,7 +495,10 @@ void LLPipeline::init()
 	sRenderBump = gSavedSettings.getBOOL("RenderObjectBump");
 	sUseTriStrips = gSavedSettings.getBOOL("RenderUseTriStrips");
 	LLVertexBuffer::sUseStreamDraw = gSavedSettings.getBOOL("RenderUseStreamVBO");
-	LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
+	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
+	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
+	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO");
+	// </FS:Ansariel>
 	LLVertexBuffer::sPreferStreamDraw = gSavedSettings.getBOOL("RenderPreferStreamDraw");
 	sRenderAttachedLights = gSavedSettings.getBOOL("RenderAttachedLights");
 	sRenderAttachedParticles = gSavedSettings.getBOOL("RenderAttachedParticles");
@@ -584,9 +587,17 @@ void LLPipeline::init()
 		mCubeVB = ll_create_cube_vb(LLVertexBuffer::MAP_VERTEX, GL_STATIC_DRAW_ARB);
 	}
 
-	mDeferredVB = new LLVertexBuffer(DEFERRED_VB_MASK, 0);
-	mDeferredVB->allocateBuffer(8, 0, true);
+	// <FS:Ansariel> Reset VB during TP
+	//mDeferredVB = new LLVertexBuffer(DEFERRED_VB_MASK, 0);
+	//mDeferredVB->allocateBuffer(8, 0, true);
+	initDeferredVB();
+	// </FS:Ansariel>
 	setLightingDetail(-1);
+
+	// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+	initAuxiliaryVB();
+	// </FS:Ansariel>
+
 	
 	//
 	// Update all settings to trigger a cached settings refresh
@@ -758,6 +769,9 @@ void LLPipeline::cleanup()
 	mMovedBridge.clear();
 
 	mInitialized = false;
+
+	// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+	mAuxiliaryVB = NULL;
 
 	mDeferredVB = NULL;
 
@@ -7447,6 +7461,11 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 
 	mCubeVB = NULL;
 
+	mDeferredVB = NULL;
+	mAuxiliaryVB = NULL;
+	exoPostProcess::instance().destroyVB(); // Will be re-created via updateRenderDeferred()
+	gGL.destroyVB();
+
 	for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin(); 
 			iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
 	{
@@ -7495,11 +7514,14 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 	LLVertexBuffer::unbind();	
 	
 	updateRenderBump();
-	updateRenderDeferred();
+	//updateRenderDeferred(); // <FS:Ansariel> Moved further down because of exoPostProcess creating a new VB
 
 	sUseTriStrips = gSavedSettings.getBOOL("RenderUseTriStrips");
 	LLVertexBuffer::sUseStreamDraw = gSavedSettings.getBOOL("RenderUseStreamVBO");
-	LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
+	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
+	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
+	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO");
+	// </FS:Ansariel>
 	LLVertexBuffer::sPreferStreamDraw = gSavedSettings.getBOOL("RenderPreferStreamDraw");
 	LLVertexBuffer::sEnableVBOs = gSavedSettings.getBOOL("RenderVBOEnable");
 	LLVertexBuffer::sDisableVBOMapping = LLVertexBuffer::sEnableVBOs && gSavedSettings.getBOOL("RenderVBOMappingDisable") ;
@@ -7510,6 +7532,15 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 	LLVertexBuffer::initClass(LLVertexBuffer::sEnableVBOs, LLVertexBuffer::sDisableVBOMapping);
 
 	LLVOPartGroup::restoreGL();
+
+	// <FS:Ansariel> Reset VB during TP
+	updateRenderDeferred(); // Moved further down because of exoPostProcess creating a new VB
+
+	gGL.initVB();
+
+	initDeferredVB();
+	initAuxiliaryVB();
+	// </FS:Ansariel>
 }
 
 void LLPipeline::renderObjects(U32 type, U32 mask, bool texture, bool batch_texture)
@@ -7668,17 +7699,20 @@ void LLPipeline::renderBloom(bool for_snapshot, F32 zoom_factor, int subfield)
 		
 		gGL.color4f(1,1,1,1);
 		gPipeline.enableLightsFullbright(LLColor4(1,1,1,1));
-		gGL.begin(LLRender::TRIANGLE_STRIP);
-		gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
-		gGL.vertex2f(-1,-1);
-		
-		gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
-		gGL.vertex2f(-1,3);
-		
-		gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
-		gGL.vertex2f(3,-1);
-		
-		gGL.end();
+		// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+		//gGL.begin(LLRender::TRIANGLE_STRIP);
+		//gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
+		//gGL.vertex2f(-1,-1);
+		//
+		//gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
+		//gGL.vertex2f(-1,3);
+		//
+		//gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
+		//gGL.vertex2f(3,-1);
+		//
+		//gGL.end();
+		drawAuxiliaryVB(tc1, tc2);
+		// </FS:Ansariel>
 		
 		gGL.getTexUnit(0)->unbind(mScreen.getUsage());
 
@@ -7732,17 +7766,20 @@ void LLPipeline::renderBloom(bool for_snapshot, F32 zoom_factor, int subfield)
 			gGlowProgram.uniform2f(LLShaderMgr::GLOW_DELTA, 0, delta);
 		}
 
-		gGL.begin(LLRender::TRIANGLE_STRIP);
-		gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
-		gGL.vertex2f(-1,-1);
-		
-		gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
-		gGL.vertex2f(-1,3);
-		
-		gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
-		gGL.vertex2f(3,-1);
-		
-		gGL.end();
+		// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+		//gGL.begin(LLRender::TRIANGLE_STRIP);
+		//gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
+		//gGL.vertex2f(-1,-1);
+		//
+		//gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
+		//gGL.vertex2f(-1,3);
+		//
+		//gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
+		//gGL.vertex2f(3,-1);
+		//
+		//gGL.end();
+		drawAuxiliaryVB(tc1, tc2);
+		// </FS:Ansariel>
 		
 		mGlow[i%2].flush();
 	}
@@ -7911,17 +7948,20 @@ void LLPipeline::renderBloom(bool for_snapshot, F32 zoom_factor, int subfield)
 				shader->uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
 				shader->uniform1f(LLShaderMgr::DOF_RES_SCALE, CameraDoFResScale);
 
-				gGL.begin(LLRender::TRIANGLE_STRIP);
-				gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
-				gGL.vertex2f(-1,-1);
+				// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+				//gGL.begin(LLRender::TRIANGLE_STRIP);
+				//gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
+				//gGL.vertex2f(-1,-1);
 		
-				gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
-				gGL.vertex2f(-1,3);
+				//gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
+				//gGL.vertex2f(-1,3);
 		
-				gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
-				gGL.vertex2f(3,-1);
+				//gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
+				//gGL.vertex2f(3,-1);
 		
-				gGL.end();
+				//gGL.end();
+				drawAuxiliaryVB(tc1, tc2);
+				// </FS:Ansariel>
 
 				unbindDeferredShader(*shader);
 				mDeferredLight.flush();
@@ -7946,17 +7986,20 @@ void LLPipeline::renderBloom(bool for_snapshot, F32 zoom_factor, int subfield)
 				shader->uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
 				shader->uniform1f(LLShaderMgr::DOF_RES_SCALE, CameraDoFResScale);
 				
-				gGL.begin(LLRender::TRIANGLE_STRIP);
-				gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
-				gGL.vertex2f(-1,-1);
+				// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+				//gGL.begin(LLRender::TRIANGLE_STRIP);
+				//gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
+				//gGL.vertex2f(-1,-1);
 		
-				gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
-				gGL.vertex2f(-1,3);
+				//gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
+				//gGL.vertex2f(-1,3);
 		
-				gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
-				gGL.vertex2f(3,-1);
+				//gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
+				//gGL.vertex2f(3,-1);
 		
-				gGL.end();
+				//gGL.end();
+				drawAuxiliaryVB(tc1, tc2);
+				// </FS:Ansariel>
 
 				unbindDeferredShader(*shader);
 				mScreen.flush();
@@ -8000,17 +8043,20 @@ void LLPipeline::renderBloom(bool for_snapshot, F32 zoom_factor, int subfield)
 				shader->uniform1f(LLShaderMgr::DOF_WIDTH, dof_width-1);
 				shader->uniform1f(LLShaderMgr::DOF_HEIGHT, dof_height-1);
 
-				gGL.begin(LLRender::TRIANGLE_STRIP);
-				gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
-				gGL.vertex2f(-1,-1);
+				// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+				//gGL.begin(LLRender::TRIANGLE_STRIP);
+				//gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
+				//gGL.vertex2f(-1,-1);
 		
-				gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
-				gGL.vertex2f(-1,3);
+				//gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
+				//gGL.vertex2f(-1,3);
 		
-				gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
-				gGL.vertex2f(3,-1);
+				//gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
+				//gGL.vertex2f(3,-1);
 		
-				gGL.end();
+				//gGL.end();
+				drawAuxiliaryVB(tc1, tc2);
+				// </FS:Ansariel>
 
 				unbindDeferredShader(*shader);
 
@@ -8043,17 +8089,20 @@ void LLPipeline::renderBloom(bool for_snapshot, F32 zoom_factor, int subfield)
 				shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 1.0f);
 			}
 
-			gGL.begin(LLRender::TRIANGLE_STRIP);
-			gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
-			gGL.vertex2f(-1,-1);
+			// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+			//gGL.begin(LLRender::TRIANGLE_STRIP);
+			//gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
+			//gGL.vertex2f(-1,-1);
 		
-			gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
-			gGL.vertex2f(-1,3);
+			//gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
+			//gGL.vertex2f(-1,3);
 		
-			gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
-			gGL.vertex2f(3,-1);
+			//gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
+			//gGL.vertex2f(3,-1);
 		
-			gGL.end();
+			//gGL.end();
+			drawAuxiliaryVB(tc1, tc2);
+			// </FS:Ansariel>
 
 			unbindDeferredShader(*shader);
 
@@ -8083,13 +8132,16 @@ void LLPipeline::renderBloom(bool for_snapshot, F32 zoom_factor, int subfield)
 				mDeferredLight.bindTexture(0, channel);
 			}
 						
-			gGL.begin(LLRender::TRIANGLE_STRIP);
-			gGL.vertex2f(-1,-1);
-			gGL.vertex2f(-1,3);
-			gGL.vertex2f(3,-1);
-			gGL.end();
+			// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+			//gGL.begin(LLRender::TRIANGLE_STRIP);
+			//gGL.vertex2f(-1,-1);
+			//gGL.vertex2f(-1,3);
+			//gGL.vertex2f(3,-1);
+			//gGL.end();
 
-			gGL.flush();
+			//gGL.flush();
+			drawAuxiliaryVB();
+			// </FS:Ansariel>
 
 			shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mDeferredLight.getUsage());
 			shader->unbind();
@@ -8119,13 +8171,16 @@ void LLPipeline::renderBloom(bool for_snapshot, F32 zoom_factor, int subfield)
 			shader->uniform4f(LLShaderMgr::FXAA_RCP_FRAME_OPT, -0.5f/width*scale_x, -0.5f/height*scale_y, 0.5f/width*scale_x, 0.5f/height*scale_y);
 			shader->uniform4f(LLShaderMgr::FXAA_RCP_FRAME_OPT2, -2.f/width*scale_x, -2.f/height*scale_y, 2.f/width*scale_x, 2.f/height*scale_y);
 			
-			gGL.begin(LLRender::TRIANGLE_STRIP);
-			gGL.vertex2f(-1,-1);
-			gGL.vertex2f(-1,3);
-			gGL.vertex2f(3,-1);
-			gGL.end();
+			// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+			//gGL.begin(LLRender::TRIANGLE_STRIP);
+			//gGL.vertex2f(-1,-1);
+			//gGL.vertex2f(-1,3);
+			//gGL.vertex2f(3,-1);
+			//gGL.end();
 
-			gGL.flush();
+			//gGL.flush();
+			drawAuxiliaryVB();
+			// </FS:Ansariel>
 			shader->unbind();
 		}
 	}
@@ -8211,22 +8266,25 @@ void LLPipeline::renderBloom(bool for_snapshot, F32 zoom_factor, int subfield)
 				  (F32) gViewerWindow->getWorldViewHeightRaw()*2);
 
 		LLGLEnable blend(GL_BLEND);
-		gGL.color4f(1,1,1,0.75f);
+		//gGL.color4f(1,1,1,0.75f); // <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
 
 		gGL.getTexUnit(0)->bind(&mPhysicsDisplay);
 
-		gGL.begin(LLRender::TRIANGLES);
-		gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
-		gGL.vertex2f(-1,-1);
-		
-		gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
-		gGL.vertex2f(-1,3);
-		
-		gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
-		gGL.vertex2f(3,-1);
-		
-		gGL.end();
-		gGL.flush();
+		// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+		//gGL.begin(LLRender::TRIANGLES);
+		//gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
+		//gGL.vertex2f(-1,-1);
+		//
+		//gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
+		//gGL.vertex2f(-1,3);
+		//
+		//gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
+		//gGL.vertex2f(3,-1);
+		//
+		//gGL.end();
+		//gGL.flush();
+		drawAuxiliaryVB(tc1, tc2, LLColor4(1.f, 1.f, 1.f, 0.75f));
+		// </FS:Ansariel>
 
 		if (LLGLSLShader::sNoFixedFunction)
 		{
@@ -9028,17 +9086,20 @@ void LLPipeline::renderDeferredLighting()
 
 		gDeferredPostGammaCorrectProgram.uniform1f(LLShaderMgr::DISPLAY_GAMMA, (gamma > 0.1f) ? 1.0f / gamma : (1.0f/2.2f));
 		
-		gGL.begin(LLRender::TRIANGLE_STRIP);
-		gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
-		gGL.vertex2f(-1,-1);
-		
-		gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
-		gGL.vertex2f(-1,3);
-		
-		gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
-		gGL.vertex2f(3,-1);
-		
-		gGL.end();
+		// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+		//gGL.begin(LLRender::TRIANGLE_STRIP);
+		//gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
+		//gGL.vertex2f(-1,-1);
+		//
+		//gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
+		//gGL.vertex2f(-1,3);
+		//
+		//gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
+		//gGL.vertex2f(3,-1);
+		//
+		//gGL.end();
+		drawAuxiliaryVB(tc1, tc2);
+		// </FS:Ansariel>
 		
 		gGL.getTexUnit(channel)->unbind(mScreen.getUsage());
 		gDeferredPostGammaCorrectProgram.unbind();
@@ -10238,7 +10299,7 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
 	LLGLEnable cull(GL_CULL_FACE);
 
 	//enable depth clamping if available
-	LLGLEnable depth_clamp(gGLManager.mHasDepthClamp ? GL_DEPTH_CLAMP : 0);
+	LLGLEnable depth_clamp(/*gGLManager.mHasDepthClamp ? GL_DEPTH_CLAMP :*/ 0); // <FS> Fix void and region water flickr by Drake Arconis (Alchemy viewer)
 
 	if (use_shader)
 	{
@@ -11701,12 +11762,25 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 		}
 
 		{
-		gGL.begin(LLRender::QUADS);
-		gGL.vertex3f(-1, -1, clip_plane);
-		gGL.vertex3f(1, -1, clip_plane);
-		gGL.vertex3f(1, 1, clip_plane);
-		gGL.vertex3f(-1, 1, clip_plane);
+		// <FS:Ansariel> Remove QUADS rendering mode
+		//gGL.begin(LLRender::QUADS);
+		//gGL.vertex3f(-1, -1, clip_plane);
+		//gGL.vertex3f(1, -1, clip_plane);
+		//gGL.vertex3f(1, 1, clip_plane);
+		//gGL.vertex3f(-1, 1, clip_plane);
+		//gGL.end();
+		gGL.begin(LLRender::TRIANGLES);
+		{
+			gGL.vertex3f(-1.f, -1.f, clip_plane);
+			gGL.vertex3f(1.f, -1.f, clip_plane);
+			gGL.vertex3f(1.f, 1.f, clip_plane);
+
+			gGL.vertex3f(-1.f, -1.f, clip_plane);
+			gGL.vertex3f(1.f, 1.f, clip_plane);
+			gGL.vertex3f(-1.f, 1.f, clip_plane);
+		}
 		gGL.end();
+		// </FS:Ansariel>
 		gGL.flush();
 		}
 
@@ -12066,3 +12140,53 @@ void LLPipeline::disableDeferredOnLowMemory()
 	}
 }
 // </FS:ND>
+
+// <FS:Ansariel> Reset VB during TP
+void LLPipeline::initDeferredVB()
+{
+	mDeferredVB = new LLVertexBuffer(DEFERRED_VB_MASK, 0);
+	mDeferredVB->allocateBuffer(8, 0, true);
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+void LLPipeline::initAuxiliaryVB()
+{
+	mAuxiliaryVB = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_COLOR, 0);
+	mAuxiliaryVB->allocateBuffer(3, 0, true);
+
+	LLStrider<LLVector3> verts;
+	mAuxiliaryVB->getVertexStrider(verts);
+	verts[0].set(-1.f, -1.f, 0.f);
+	verts[1].set(-1.f, 3.f, 0.f);
+	verts[2].set(3.f, -1.f, 0.f);
+}
+
+void LLPipeline::drawAuxiliaryVB(U32 mask /*= 0*/)
+{
+	mAuxiliaryVB->setBuffer(LLVertexBuffer::MAP_VERTEX | mask);
+	mAuxiliaryVB->drawArrays(LLRender::TRIANGLES, 0, 3);
+}
+
+void LLPipeline::drawAuxiliaryVB(const LLVector2& tc1, const LLVector2& tc2, U32 mask /*= 0*/)
+{
+	LLStrider<LLVector2> tc;
+	mAuxiliaryVB->getTexCoord0Strider(tc);
+	tc[0].set(tc1.mV[0], tc1.mV[1]);
+	tc[1].set(tc1.mV[0], tc2.mV[1]);
+	tc[2].set(tc2.mV[0], tc1.mV[1]);
+
+	drawAuxiliaryVB(LLVertexBuffer::MAP_TEXCOORD0 | mask);
+}
+
+void LLPipeline::drawAuxiliaryVB(const LLVector2& tc1, const LLVector2& tc2, const LLColor4& color)
+{
+	LLStrider<LLColor4U> col;
+	mAuxiliaryVB->getColorStrider(col);
+	col[0].set(color);
+	col[1].set(color);
+	col[2].set(color);
+
+	drawAuxiliaryVB(tc1, tc2, LLVertexBuffer::MAP_COLOR);
+}
+// </FS:Ansariel>
