@@ -329,18 +329,19 @@ bool LLFeatureManager::parseFeatureTable(std::string filename)
 
 	// Check file version
 	file >> name;
-	file >> version;
 	if (name != "version")
 	{
 		LL_WARNS("RenderInit") << filename << " does not appear to be a valid feature table!" << LL_ENDL;
 		return false;
 	}
+	file >> version;
 
 	mTableVersion = version;
+	LL_INFOS("RenderInit") << "Found feature table version " << version << LL_ENDL;
 
 	LLFeatureList *flp = NULL;
 	bool parse_ok = true;
-	while (file >> name && parse_ok)
+	while (parse_ok && file >> name )
 	{
 		char buffer[MAX_STRING];		 /*Flawfinder: ignore*/
 		
@@ -350,7 +351,7 @@ bool LLFeatureManager::parseFeatureTable(std::string filename)
 			file.getline(buffer, MAX_STRING);
 			continue;
 		}
-
+        
 		if (name == "list")
 		{
 			LL_DEBUGS("RenderInit") << "Before new list" << std::endl;
@@ -373,7 +374,7 @@ bool LLFeatureManager::parseFeatureTable(std::string filename)
             }
             else
             {
-				LL_WARNS("RenderInit") << "Overriding mask " << name << ", this is invalid!" << LL_ENDL;
+				LL_WARNS("RenderInit") << "Overriding mask '" << name << "'; this is invalid!" << LL_ENDL;
 				parse_ok = false;
 			}
 		}
