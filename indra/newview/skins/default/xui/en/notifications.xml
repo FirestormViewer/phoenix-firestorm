@@ -9267,7 +9267,7 @@ Select residents to share with.
     name="MeshUploadErrorDetails"
     icon="alert.tga"
     type="alert">
-      [LABEL] failed to upload: [MESSAGE] [IDENTIFIER]
+      [LABEL] failed to upload: [MESSAGE]
 [DETAILS] See Firestorm.log for details
   </notification>
 
@@ -9276,7 +9276,6 @@ Select residents to share with.
     icon="alert.tga"
     type="alert">
       [LABEL] failed to upload: [MESSAGE]
-[IDENTIFIER]
 
 See Firestorm.log for details
   </notification>

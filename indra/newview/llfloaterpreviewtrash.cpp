@@ -60,13 +60,19 @@ LLFloaterPreviewTrash::~LLFloaterPreviewTrash()
 // static
 void LLFloaterPreviewTrash::show()
 {
-	LLFloaterReg::showTypedInstance<LLFloaterPreviewTrash>("preview_trash");
+	LLFloaterReg::showTypedInstance<LLFloaterPreviewTrash>("preview_trash", LLSD(), TRUE);
+}
+
+// static
+bool LLFloaterPreviewTrash::isVisible()
+{
+	return LLFloaterReg::instanceVisible("preview_trash");
 }
 
 
 void LLFloaterPreviewTrash::onClickEmpty()
 {
-	gInventory.emptyFolderType("", LLFolderType::FT_TRASH);
+	gInventory.emptyFolderType("PurgeSelectedItems", LLFolderType::FT_TRASH);
 	closeFloater();
 }
 

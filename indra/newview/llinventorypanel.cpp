@@ -43,6 +43,7 @@
 #include "llinventorybridge.h"
 #include "llinventoryfunctions.h"
 #include "llinventorymodelbackgroundfetch.h"
+#include "llnotificationsutil.h"
 #include "llpreview.h"
 #include "llsidepanelinventory.h"
 #include "lltrans.h"
@@ -1342,6 +1343,33 @@ void LLInventoryPanel::fileUploadLocation(const LLSD& userdata)
     }
 }
 
+void LLInventoryPanel::purgeSelectedItems()
+{
+    const std::set<LLFolderViewItem*> inventory_selected = mFolderRoot.get()->getSelectionList();
+    if (inventory_selected.empty()) return;
+    LLSD args;
+    args["COUNT"] = (S32)inventory_selected.size();
+    LLNotificationsUtil::add("PurgeSelectedItems", args, LLSD(), boost::bind(&LLInventoryPanel::callbackPurgeSelectedItems, this, _1, _2));
+}
+
+void LLInventoryPanel::callbackPurgeSelectedItems(const LLSD& notification, const LLSD& response)
+{
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    if (option == 0)
+    {
+        const std::set<LLFolderViewItem*> inventory_selected = mFolderRoot.get()->getSelectionList();
+        if (inventory_selected.empty()) return;
+
+        std::set<LLFolderViewItem*>::const_iterator it = inventory_selected.begin();
+        const std::set<LLFolderViewItem*>::const_iterator it_end = inventory_selected.end();
+        for (; it != it_end; ++it)
+        {
+            LLUUID item_id = static_cast<LLFolderViewModelItemInventory*>((*it)->getViewModelItem())->getUUID();
+            remove_inventory_object(item_id, NULL);
+        }
+    }
+}
+
 bool LLInventoryPanel::attachObject(const LLSD& userdata)
 {
 	// Copy selected item UUIDs to a vector.
@@ -1625,6 +1653,11 @@ void LLInventoryPanel::updateSelection()
 
 void LLInventoryPanel::doToSelected(const LLSD& userdata)
 {
+	if (("purge" == userdata.asString()))
+	{
+		purgeSelectedItems();
+		return;
+	}
 	LLInventoryAction::doToSelected(mInventory, mFolderRoot.get(), userdata.asString());
 
 	return;

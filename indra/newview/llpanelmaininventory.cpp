@@ -131,7 +131,6 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	mCommitCallbackRegistrar.add("Inventory.ResetFilters", boost::bind(&LLPanelMainInventory::resetFilters, this));
 	//mCommitCallbackRegistrar.add("Inventory.SetSortBy", boost::bind(&LLPanelMainInventory::setSortBy, this, _2)); // <FS:Zi> Sort By menu handlers
 	mCommitCallbackRegistrar.add("Inventory.Share",  boost::bind(&LLAvatarActions::shareWithAvatars, this));
-	mCommitCallbackRegistrar.add("Inventory.Purge",  boost::bind(&LLAvatarActions::purgeSelectedItems));
 
 	// <FS:Zi> Filter Links Menu
 	mCommitCallbackRegistrar.add("Inventory.FilterLinks.Set", boost::bind(&LLPanelMainInventory::onFilterLinksChecked, this, _2));
