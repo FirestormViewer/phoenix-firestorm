@@ -1291,7 +1291,7 @@ bool LLAppViewer::init()
 			minSpecs += "\n";
 			unsupported = true;
 		}
-		if(gSysMemory.getPhysicalMemoryClamped() < minRAM)
+		if(gSysMemory.getPhysicalMemoryKB() < minRAM)
 		{
 			minSpecs += LLNotifications::instance().getGlobalString("UnsupportedRAM");
 			minSpecs += "\n";
@@ -2496,13 +2496,6 @@ bool LLAppViewer::cleanup()
 	// This calls every remaining LLSingleton's deleteSingleton() method.
 	// No class destructor should perform any cleanup that might take
 	// significant realtime, or throw an exception.
-	// LLSingleton machinery includes a last-gasp implicit deleteAll() call,
-	// so this explicit call shouldn't strictly be necessary. However, by the
-	// time the runtime engages that implicit call, it may already have
-	// destroyed things like std::cerr -- so the implicit deleteAll() refrains
-	// from logging anything. Since both cleanupAll() and deleteAll() call
-	// their respective cleanup methods in computed dependency order, it's
-	// probably useful to be able to log that order.
 	LLSingletonBase::deleteAll();
 
 	removeDumpDir();
@@ -3678,7 +3671,12 @@ void LLAppViewer::initUpdater()
 	mUpdater->setAppExitCallback(boost::bind(&LLAppViewer::forceQuit, this));
 	mUpdater->initialize(channel, 
 						 version,
+// DRTVWR-418 transitional: query using "win64" until VMP is in place
+#if LL_WINDOWS && (ADDRESS_SIZE == 64)
+						 "win64",
+#else
 						 gPlatform,
+#endif
 						 getOSInfo().getOSVersionString(),
 						 unique_id,
 						 willing_to_test
@@ -4498,11 +4496,10 @@ void LLAppViewer::handleViewerCrash()
 	{
 		gDebugInfo["Dynamic"]["ParcelMediaURL"] = parcel->getMediaURL();
 	}
-	
-	
+
 	gDebugInfo["Dynamic"]["SessionLength"] = F32(LLFrameTimer::getElapsedSeconds());
-	gDebugInfo["Dynamic"]["RAMInfo"]["Allocated"] = (LLSD::Integer) LLMemory::getCurrentRSS() >> 10;
-	
+	gDebugInfo["Dynamic"]["RAMInfo"]["Allocated"] = LLSD::Integer(LLMemory::getCurrentRSS() / 1024);
+
 	if(gLogoutInProgress)
 	{
 		gDebugInfo["Dynamic"]["LastExecEvent"] = LAST_EXEC_LOGOUT_CRASH;

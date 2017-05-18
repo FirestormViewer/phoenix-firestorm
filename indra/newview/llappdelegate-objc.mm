@@ -112,8 +112,6 @@
 	callWindowUnhide();
 }
 
-//<FS:TS> This got changed at some point in the SDK.
-//- (NSApplicationDelegateReply) applicationShouldTerminate:(NSApplication *)sender
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender
 {
 	// run one frame to assess state

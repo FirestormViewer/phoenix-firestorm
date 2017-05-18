@@ -122,11 +122,7 @@ LLColor4 LLColor4::cyan6(0.2f, 0.6f, 0.6f, 1.0f);
 //////////////////////////////////////////////////////////////////////////////
 
 // conversion
-#ifdef LL_DARWIN
-LLColor4::operator /*const*/ LLColor4U() const
-#else
-LLColor4::operator const LLColor4U() const
-#endif
+LLColor4::operator LLColor4U() const
 {
 	return LLColor4U(
 		(U8)llclampb(ll_round(mV[VRED]*255.f)),

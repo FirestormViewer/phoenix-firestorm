@@ -53,6 +53,7 @@
 #include "llrender.h"
 
 #include "llvoiceclient.h"	// for push-to-talk button handling
+#include "stringize.h"
 
 //
 // TODO: Many of these includes are unnecessary.  Remove them.
@@ -428,7 +429,8 @@ public:
 		static LLCachedControl<bool> debugShowMemory(gSavedSettings, "DebugShowMemory");
 		if (debugShowMemory)
 		{
-			addText(xpos, ypos, llformat("Memory: %d (KB)", LLMemory::getWorkingSetSize() / 1024)); 
+			addText(xpos, ypos,
+					STRINGIZE("Memory: " << (LLMemory::getCurrentRSS() / 1024) << " (KB)"));
 			ypos += y_inc;
 		}
 #endif
