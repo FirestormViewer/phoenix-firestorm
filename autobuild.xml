@@ -1329,11 +1329,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>573e68f46f825a1c040daa4994ee2a61</string>
+              <string>e3659aa7b670a8fbdfb1b820254abb44</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/1627/3633/glod-1.0pre3.501614-windows-501614.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201703081158-windows-201703081158.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1343,9 +1343,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f8362e1a2f4d03d99c6231101d3d472e</string>
+              <string>7eceae7977650ebc6124a9dfee3c4d84</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/1628/3638/glod-1.0pre3.501614-windows64-501614.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201703081200-windows64-201703081200.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
