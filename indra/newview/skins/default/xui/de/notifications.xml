@@ -3578,13 +3578,12 @@ Die Schaltfläche wird angezeigt, wenn genügend Platz vorhanden ist.
 		Wählen Sie Einwohner aus, für die Sie das Objekt freigeben möchten.
 	</notification>
 	<notification name="MeshUploadErrorDetails">
-		[LABEL] konnte nicht hochgeladen werden: [MESSAGE] [IDENTIFIER] 
+		[LABEL] konnte nicht hochgeladen werden: [MESSAGE]
 
 [DETAILS] Siehe Firestorm.log für Details.
 	</notification>
 	<notification name="MeshUploadError">
 		[LABEL] konnte nicht hochgeladen werden: [MESSAGE]
-[IDENTIFIER] 
 
 Siehe Firestorm.log für Details.
 	</notification>
