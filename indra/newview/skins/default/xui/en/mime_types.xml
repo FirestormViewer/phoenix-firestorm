@@ -133,6 +133,17 @@
 			media_plugin_streaming
 		</impl>
 	</scheme>
+	<scheme name="example">
+		<label name="example_label">
+			Example Plugin scheme trigger
+		</label>
+		<widgettype>
+			movie
+		</widgettype>
+		<impl>
+			media_plugin_example
+		</impl>
+	</scheme>
 	<mimetype name="blank">
 		<label name="blank_label">
 			- None -

@@ -2123,6 +2123,7 @@ if (WINDOWS)
       SLPlugin
       media_plugin_cef
       media_plugin_libvlc
+      media_plugin_example
       media_plugin_gstreamer10
       winmm_shim
       windows-crash-logger
