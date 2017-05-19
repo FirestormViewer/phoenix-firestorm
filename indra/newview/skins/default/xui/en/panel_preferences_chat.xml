@@ -254,12 +254,12 @@
              label="Use full width of screen for console"/>
             <spinner
              top_pad="2"
-             control_name="NearbyToastLifeTime"
+             control_name="ChatPersistTime"
              decimal_digits="0"
              follows="left|top"
              height="20"
              increment="1"
-             initial_value="10"
+             initial_value="20"
              label="Fade chat after:"
              label_width="90"
              left="25"

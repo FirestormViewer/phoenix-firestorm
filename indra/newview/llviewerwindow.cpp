@@ -2093,11 +2093,7 @@ void LLViewerWindow::initBase()
 	cp.parse_urls(true); // <FS:Ansariel> Enable URL parsing for the chat console
 	cp.background_image("Rounded_Square"); // <FS:Ansariel> Configurable background for different console types
 	cp.session_support(true); // <FS:Ansariel> Session support
-	// <FS:AO>, have console respect/reuse NearbyToastLifeTime for the length popup chat messages are displayed.
-	//cp.persist_time(gSavedSettings.getF32("ChatPersistTime"));
-	cp.persist_time((F32)gSavedSettings.getS32("NearbyToastLifeTime"));
-	// </FS:AO>
-
+	cp.persist_time(gSavedSettings.getF32("ChatPersistTime"));
 	cp.font_size_index(gSavedSettings.getS32("ChatConsoleFontSize"));
 	cp.follows.flags(FOLLOWS_LEFT | FOLLOWS_RIGHT | FOLLOWS_BOTTOM);
 	gConsole = LLUICtrlFactory::create<LLConsole>(cp);
