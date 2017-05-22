@@ -19,13 +19,13 @@
 		Ersetzen von Inventar-Links beendet.
 	</string>
 	<text name="source_label">
-		Quelle:
+		Alt:
 	</text>
-	<fs_inventory_link_replace_drop_target name="source_uuid_editor" tool_tip="Quell-Objekt aus dem Inventar hier per Drag&amp;Drop hineinziehen."/>
+	<inventory_link_replace_drop_target name="source_uuid_editor" tool_tip="Quell-Objekt aus dem Inventar hier per Drag&amp;Drop hineinziehen."/>
 	<text name="target_label">
-		Ziel:
+		Neu:
 	</text>
-	<fs_inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="Ziel-Objekt aus dem Inventar hier per Drag&amp;Drop hineinziehen."/>
+	<inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="Ziel-Objekt aus dem Inventar hier per Drag&amp;Drop hineinziehen."/>
 	<text name="status_text">
 		Bereit...
 	</text>

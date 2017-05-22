@@ -1339,6 +1339,10 @@ LLModelPreview::~LLModelPreview()
 	mPreviewAvatar->markDead();
 	//*HACK : *TODO : turn this back on when we understand why this crashes
 	//glodShutdown();
+	if(mModelLoader)
+	{
+		mModelLoader->shutdown();
+	}
 }
 
 U32 LLModelPreview::calcResourceCost()

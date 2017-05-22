@@ -70,47 +70,6 @@ private:
 };
 
 
-class FSInventoryLinkReplaceDropTarget : public LLLineEditor
-{
-public:
-	struct Params : public LLInitParam::Block<Params, LLLineEditor::Params>
-	{
-		Params()
-		{}
-	};
-
-	FSInventoryLinkReplaceDropTarget(const Params& p)
-		: LLLineEditor(p) {}
-	~FSInventoryLinkReplaceDropTarget() {}
-
-	typedef boost::signals2::signal<void(const LLUUID& id)> item_dad_callback_t;
-	boost::signals2::connection setDADCallback(const item_dad_callback_t::slot_type& cb)
-	{
-		return mDADSignal.connect(cb);
-	}
-
-	virtual BOOL postBuild()
-	{
-		setEnabled(FALSE);
-		return LLLineEditor::postBuild();
-	}
-
-	virtual BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
-								   EDragAndDropType cargo_type,
-								   void* cargo_data,
-								   EAcceptance* accept,
-								   std::string& tooltip_msg);
-
-	LLUUID getItemID() const { return mItemID; }
-	void setItem(LLInventoryItem* item);
-
-private:
-	LLUUID mItemID;
-
-	item_dad_callback_t mDADSignal;
-};
-
-
 class FSDropTarget : public LLView
 {
 public:

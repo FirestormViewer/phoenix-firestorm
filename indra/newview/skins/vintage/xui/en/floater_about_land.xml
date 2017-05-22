@@ -1958,41 +1958,30 @@ Only large parcels can be listed in search.
              layout="topleft"
              left="10"
              name="public_access"
-             label="Allow Public Access (Unchecking this will create ban lines)"
+             label="Anyone can visit (Unchecking this will create ban lines)"
              top="12" 
              width="278" />
-            <text
-             type="string"
-             length="1"
-             follows="top|left"
-             height="16"
-             layout="topleft"
-             left="20"
-             name="Only Allow"
-             width="325">
-                Allow access only to Residents who:
-            </text>
             <check_box
              follows="top|left"
              height="16"
-             label="Have payment Information on File [ESTATE_PAYMENT_LIMIT]"
-             layout="topleft"
-             left="20"
-             name="limit_payment"
-             tool_tip="Residents must have payment information on file to access this parcel.  See the [SUPPORT_SITE] for more information."
-             width="278" />
-            <check_box
-             follows="top|left"
-             height="16"
-             label="Are age 18 or older [ESTATE_AGE_LIMIT]"
+             label="Must be 18+ [ESTATE_AGE_LIMIT]"
              layout="topleft"
              left="20"
              name="limit_age_verified"
              tool_tip="Residents must be age 18 or older to access this parcel. See the [SUPPORT_SITE] for more information."
              width="278" />
             <check_box
+             follows="top|left"
              height="16"
-             label="Allow Group Access: [GROUP]"
+             label="Must have payment info on file [ESTATE_PAYMENT_LIMIT]"
+             layout="topleft"
+             left="20"
+             name="limit_payment"
+             tool_tip="Residents must have payment information on file to access this parcel.  See the [SUPPORT_SITE] for more information."
+             width="278" />
+            <check_box
+             height="16"
+             label="Allow group [GROUP] with no restrictions"
              layout="topleft"
              top_pad="12"
              left="10"
@@ -2052,6 +2041,18 @@ Only large parcels can be listed in search.
              min_val="0.01"
              name="HoursSpin"
              width="200" />
+            <text
+             type="string"
+             length="1"
+             follows="top|left"
+             height="16"
+             layout="topleft"
+             left="8"
+             name="OwnerLimited"
+             top_pad="5"
+             width="400">
+                (The estate owner may have limited these choices)
+            </text>            
             <panel
             name="Allowed_layout_panel"
             follows="top|left"
@@ -2070,7 +2071,7 @@ Only large parcels can be listed in search.
              name="AllowedText"
              top="0"
              width="230">
-                Allowed Residents ([COUNT]/[MAX])
+                Always allowed ([COUNT]/[MAX])
             </text>
             <name_list
              column_padding="0"
@@ -2119,7 +2120,7 @@ Only large parcels can be listed in search.
              name="BanCheck"
              top="0"
              width="200">
-                Banned Residents ([COUNT]/[MAX])
+                Always banned ([COUNT]/[MAX])
             </text>
             <name_list
              column_padding="0"

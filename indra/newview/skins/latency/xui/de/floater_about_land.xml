@@ -465,12 +465,9 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			<panel.string name="estate_override">
 				Eine oder mehrere dieser Optionen gelten auf Grundbesitzebene
 			</panel.string>
-			<check_box label="Öffentlichen Zugang erlauben (Hinweis: Deakt. erzeugt Bannlinien)" name="public_access"/>
-			<text name="Only Allow" width="400">
-				Zugang nur Einwohnern gestatten, die:
-			</text>
-			<check_box label="Zahlungsinformationen hinterlegt haben [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Um diese Parzelle besuchen zu können, müssen Einwohner Zahlungsinformationen hinterlegt haben. Weitere Informationen finden Sie auf [SUPPORT_SITE]."/>
+			<check_box label="Zugang für jeden (Hinweis: Deaktivierung erzeugt Bannlinien)" name="public_access"/>
 			<check_box label="18 Jahre oder älter sind [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Um diese Parzelle besuchen zu können, müssen Einwohner mindestens 18 Jahre oder älter sein. Weitere Informationen finden Sie auf [SUPPORT_SITE]."/>
+			<check_box label="Zahlungsinformationen hinterlegt haben [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Um diese Parzelle besuchen zu können, müssen Einwohner Zahlungsinformationen hinterlegt haben. Weitere Informationen finden Sie auf [SUPPORT_SITE]."/>
 			<check_box label="Gruppenzugang erlauben: [GROUP]" name="GroupCheck" tool_tip="Gruppe im Register „Allgemein“ festlegen."/>
 			<check_box label="Pässe verkaufen an:" name="PassCheck" tool_tip="Ermöglicht befristeten Zugang zu dieser Parzelle"/>
 			<combo_box name="pass_combo">
@@ -479,9 +476,12 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			</combo_box>
 			<spinner label="Preis in L$:" name="PriceSpin"/>
 			<spinner label="Online-Zeit:" name="HoursSpin"/>
+			<text name="OwnerLimited">
+				(Der Grundbesitz-Eigentümer kann diese Optionen eingeschränkt haben.)
+			</text>
 			<panel name="Allowed_layout_panel">
 				<text label="Immer erlauben" name="AllowedText">
-					Zulässige Einwohner ([COUNT]/[MAX])
+					Immer zulässig ([COUNT]/[MAX])
 				</text>
 				<name_list name="AccessList" tool_tip="([LISTED] aufgeführt, [MAX] max)"/>
 				<button label="Hinzufügen" name="add_allowed"/>
@@ -489,7 +489,7 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="Verbannen" name="BanCheck">
-					Verbannte Einwohner ([COUNT]/[MAX])
+					Immer verbannt ([COUNT]/[MAX])
 				</text>
 				<name_list name="BannedList" tool_tip="([LISTED] aufgeführt, [MAX] max)"/>
 				<button label="Hinzufügen" name="add_banned"/>

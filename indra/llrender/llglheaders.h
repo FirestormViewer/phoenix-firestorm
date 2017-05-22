@@ -813,6 +813,12 @@ extern PFNGLGETDEBUGMESSAGELOGARBPROC glGetDebugMessageLogARB;
 // Note that they also must not be called on 10.3.9.  This should be taken care of by a runtime check for the existence of the GL extension.
 #include <AvailabilityMacros.h>
 
+// <FS:ND> Workaround to get a OSX version to compile (until someone with a Mac makes including gl3.h work)
+#ifndef GL_TEXTURE_RECTANGLE
+  #define GL_TEXTURE_RECTANGLE GL_TEXTURE_RECTANGLE_ARB
+#endif
+// </FS:ND>
+
 //GL_EXT_blend_func_separate
 extern void glBlendFuncSeparateEXT(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha) ;
 

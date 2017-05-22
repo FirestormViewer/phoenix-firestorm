@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- name="fs_linkreplace"
- help_topic="fs_linkreplace"
+ name="linkreplace"
+ help_topic="linkreplace"
  positioning="centered"
- title="Replace Inventory Links"
+ title="REPLACE INVENTORY LINKS"
  width="333"
  height="130"
  save_rect="true"
@@ -34,12 +34,12 @@
 	 height="23"
 	 layout="topleft"
 	 left="10"
-	 width="45"
+	 width="35"
 	 name="source_label"
 	 top="10">
-		Source:
+		Old:
 	</text>
-	<fs_inventory_link_replace_drop_target
+	<inventory_link_replace_drop_target
 	 name="source_uuid_editor"
 	 follows="left|top|right"
 	 height="23"
@@ -48,7 +48,7 @@
 	 max_length_bytes="255"
 	 top_delta="-3"
 	 right="-10"
-	 tool_tip="Drag and drop source inventory item here."/>
+	 tool_tip="Drag and drop the current inventory item here that should be replaced."/>
 	<text
 	 type="string"
 	 follows="left|top"
@@ -56,12 +56,12 @@
 	 height="23"
 	 layout="topleft"
 	 left="10"
-	 width="45"
+	 width="35"
 	 name="target_label"
 	 top_pad="10">
-		Target:
+		New:
 	</text>
-	<fs_inventory_link_replace_drop_target
+	<inventory_link_replace_drop_target
 	 name="target_uuid_editor"
 	 follows="left|top|right"
 	 height="23"
@@ -70,7 +70,7 @@
 	 max_length_bytes="255"
 	 top_delta="-3"
 	 right="-10"
-	 tool_tip="Drag and drop target inventory item here."/>
+	 tool_tip="Drag and drop new inventory item here."/>
 	<text
 	 type="string"
 	 follows="left|top|right"
