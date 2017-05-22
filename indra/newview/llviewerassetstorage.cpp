@@ -414,7 +414,7 @@ void LLViewerAssetStorage::capsRecvForRegion(const LLUUID& region_id, std::strin
     LLViewerRegion *regionp = LLWorld::instance().getRegionFromID(region_id);
     if (!regionp)
     {
-        LL_WARNS("AssetStorage") << "region not found for region_id " << region_id << LL_ENDL;
+        LL_WARNS("ViewerAsset") << "region not found for region_id " << region_id << LL_ENDL;
     }
     else
     {
@@ -453,7 +453,7 @@ void LLViewerAssetStorage::assetRequestCoro(
 
     if (!gAgent.getRegion())
     {
-        LL_WARNS_ONCE("AssetStorage") << "Asset request fails: no region set" << LL_ENDL;
+        LL_WARNS_ONCE("ViewerAsset") << "Asset request fails: no region set" << LL_ENDL;
         result_code = LL_ERR_ASSET_REQUEST_FAILED;
         ext_status = LL_EXSTAT_NONE;
         removeAndCallbackPendingDownloads(uuid, atype, uuid, atype, result_code, ext_status);
@@ -461,7 +461,7 @@ void LLViewerAssetStorage::assetRequestCoro(
     }
     else if (!gAgent.getRegion()->capabilitiesReceived())
     {
-        LL_WARNS_ONCE("AssetStorage") << "Waiting for capabilities" << LL_ENDL;
+        LL_WARNS_ONCE("ViewerAsset") << "Waiting for capabilities" << LL_ENDL;
 
         LLEventStream capsRecv("waitForCaps", true);
 
@@ -469,8 +469,8 @@ void LLViewerAssetStorage::assetRequestCoro(
             boost::bind(&LLViewerAssetStorage::capsRecvForRegion, this, _1, capsRecv.getName()));
         
         llcoro::suspendUntilEventOn(capsRecv);
-        LL_WARNS_ONCE("AssetStorage") << "capsRecv got event" << LL_ENDL;
-        LL_WARNS_ONCE("AssetStorage") << "region " << gAgent.getRegion() << " mViewerAssetUrl " << mViewerAssetUrl << LL_ENDL;
+        LL_WARNS_ONCE("ViewerAsset") << "capsRecv got event" << LL_ENDL;
+        LL_WARNS_ONCE("ViewerAsset") << "region " << gAgent.getRegion() << " mViewerAssetUrl " << mViewerAssetUrl << LL_ENDL;
     }
     if (mViewerAssetUrl.empty() && gAgent.getRegion())
     {
@@ -493,7 +493,7 @@ void LLViewerAssetStorage::assetRequestCoro(
             tpvf.setAsset(uuid, atype);
             tpvf.setCallback(downloadCompleteCallback, *req);
 
-            LL_DEBUGS("AssetStorage") << "Starting transfer for " << uuid << LL_ENDL;
+            LL_DEBUGS("ViewerAsset") << "Starting transfer for " << uuid << LL_ENDL;
             LLTransferTargetChannel *ttcp = gTransferManager.getTargetChannel(mUpstreamHost, LLTCT_ASSET);
             ttcp->requestTransfer(spa, tpvf, 100.f + (req->mIsPriority ? 1.f : 0.f));
 
@@ -503,8 +503,8 @@ void LLViewerAssetStorage::assetRequestCoro(
         }
         else
         {
-        // <FS:Ansariel> [UDP Assets]
-        LL_WARNS_ONCE("AssetStorage") << "asset request fails: caps received but no viewer asset cap found" << LL_ENDL;
+        // </FS:Ansariel> [UDP Assets]
+        LL_WARNS_ONCE("ViewerAsset") << "asset request fails: caps received but no viewer asset cap found" << LL_ENDL;
         result_code = LL_ERR_ASSET_REQUEST_FAILED;
         ext_status = LL_EXSTAT_NONE;
         removeAndCallbackPendingDownloads(uuid, atype, uuid, atype, result_code, ext_status);
@@ -569,13 +569,13 @@ void LLViewerAssetStorage::assetRequestCoro(
             if (!vf.write(raw.data(),size))
             {
                 // TODO asset-http: handle error
-                LL_WARNS("AssetStorage") << "Failure in vf.write()" << LL_ENDL;
+                LL_WARNS("ViewerAsset") << "Failure in vf.write()" << LL_ENDL;
                 result_code = LL_ERR_ASSET_REQUEST_FAILED;
                 ext_status = LL_EXSTAT_VFS_CORRUPT;
             }
             if (!vf.rename(uuid, atype))
             {
-                LL_WARNS("AssetStorage") << "rename failed" << LL_ENDL;
+                LL_WARNS("ViewerAsset") << "rename failed" << LL_ENDL;
                 result_code = LL_ERR_ASSET_REQUEST_FAILED;
                 ext_status = LL_EXSTAT_VFS_CORRUPT;
             }
@@ -584,7 +584,7 @@ void LLViewerAssetStorage::assetRequestCoro(
         else
         {
             // TODO asset-http: handle invalid size case
-			LL_WARNS("AssetStorage") << "bad size" << LL_ENDL;
+			LL_WARNS("ViewerAsset") << "bad size" << LL_ENDL;
             result_code = LL_ERR_ASSET_REQUEST_FAILED;
             ext_status = LL_EXSTAT_NONE;
         }
