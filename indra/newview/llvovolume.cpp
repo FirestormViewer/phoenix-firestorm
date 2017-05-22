@@ -408,6 +408,12 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 			{
 				LL_WARNS() << "Bogus volume parameters in object " << getID() << LL_ENDL;
 				LL_WARNS() << getRegion()->getOriginGlobal() << LL_ENDL;
+				// <FS:Beq> [FIRE-16995] [CRASH] Continuous crashing upon entering 3 adjacent sims incl. Hathian, D8, Devil's Pocket
+				// A bad object entry in a .slc simobject cache can result in an unreadable/unusable volume 
+				// This leaves the volume in an uncertain state and can result in a crash when later code access an uninitialised pointer
+				// return an INVALID_UPDATE instead
+				return(INVALID_UPDATE);
+				// </FS:Beq>
 			}
 
 			volume_params.setSculptID(sculpt_id, sculpt_type);
@@ -4067,7 +4073,7 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 			start_face = face;
 			end_face = face+1;
 		}
-
+		pick_transparent |= isHiglightedOrBeacon();
 		bool special_cursor = specialHoverCursor();
 		for (S32 i = start_face; i < end_face; ++i)
 		{

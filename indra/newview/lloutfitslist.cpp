@@ -335,7 +335,7 @@ void LLOutfitsList::onSetSelectedOutfitByUUID(const LLUUID& outfit_uuid)
 			tab->setFocus(TRUE);
 			ChangeOutfitSelection(list, outfit_uuid);
 
-			tab->setDisplayChildren(true);
+			tab->changeOpenClose(false);
 		}
 	}
 }

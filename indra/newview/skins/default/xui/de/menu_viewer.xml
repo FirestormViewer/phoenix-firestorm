@@ -185,7 +185,7 @@
 			<menu_item_call label="Skripte in Auswahl löschen" name="Remove Scripts From Selection"/>
 		</menu>
 		<menu label="Pathfinding" name="Pathfinding">
-			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
+			<menu_item_call label="Regionsobjekte" name="pathfinding_linksets_menu_item"/>
 			<menu_item_call label="Figuren..." name="pathfinding_characters_menu_item"/>
 			<menu_item_call label="Anzeigen/Testen..." name="pathfinding_console_menu_item"/>
 			<menu_item_call label="Region neu formen" name="pathfinding_rebake_navmesh_item"/>

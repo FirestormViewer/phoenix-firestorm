@@ -1167,7 +1167,6 @@ void LLAvatarActions::shareWithAvatars(LLView * panel)
 	LLNotificationsUtil::add("ShareNotification");
 }
 
-
 // static
 bool LLAvatarActions::canShareSelectedItems(LLInventoryPanel* inv_panel /* = NULL*/)
 {

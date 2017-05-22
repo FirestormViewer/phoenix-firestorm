@@ -417,6 +417,7 @@ void LLInvFVBridge::removeBatch(std::vector<LLFolderViewModelItem*>& batch)
 		}
 	}
 	removeBatchNoCheck(batch);
+	model->checkTrashOverflow();
 }
 
 void  LLInvFVBridge::removeBatchNoCheck(std::vector<LLFolderViewModelItem*>&  batch)
@@ -925,8 +926,6 @@ void LLInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 
 		getClipboardEntries(true, items, disabled_items, flags);
 	}
-
-	// <FS:Ansariel> Inventory Links Replace
 	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
@@ -1132,7 +1131,6 @@ void LLInvFVBridge::addMarketplaceContextMenuOptions(U32 flags,
     items.push_back(std::string("Marketplace Listings Separator"));
 }
 
-// <FS:Ansariel> Inventory Links Replace
 void LLInvFVBridge::addLinkReplaceMenuOption(menuentry_vec_t& items, menuentry_vec_t& disabled_items)
 {
 	const LLInventoryObject* obj = getInventoryObject();
@@ -1147,7 +1145,6 @@ void LLInvFVBridge::addLinkReplaceMenuOption(menuentry_vec_t& items, menuentry_v
 		}
 	}
 }
-// </FS:Ansariel>
 
 // <FS:Ansariel> Move to default folder
 void LLInvFVBridge::addMoveToDefaultFolderMenuOption(menuentry_vec_t& items)
@@ -4199,6 +4196,13 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
     }
 	if(trash_id == mUUID)
 	{
+		bool is_recent_panel = false;
+		LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(FALSE);
+		if (active_panel && (active_panel->getName() == "Recent Items"))
+		{
+			is_recent_panel = true;
+		}
+
 		// This is the trash.
 		items.push_back(std::string("Empty Trash"));
 
@@ -4206,7 +4210,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 		LLInventoryModel::item_array_t* item_array;
 		gInventory.getDirectDescendentsOf(mUUID, cat_array, item_array);
 		// Enable Empty menu item only when there is something to act upon.
-		if (0 == cat_array->size() && 0 == item_array->size())
+		if ((0 == cat_array->size() && 0 == item_array->size()) || is_recent_panel)
 		{
 			disabled_items.push_back(std::string("Empty Trash"));
 		}
@@ -5646,8 +5650,6 @@ void LLTextureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		}
 // [/RLVa:KB]
 	}
-
-	// <FS:Ansariel> Inventory Links Replace
 	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
@@ -5725,7 +5727,6 @@ void LLSoundBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		items.push_back(std::string("Sound Play"));
 	}
 
-	// <FS:Ansariel> Inventory Links Replace
 	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
@@ -5819,7 +5820,6 @@ void LLLandmarkBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		disabled_items.push_back(std::string("About Landmark"));
 	}
 
-	// <FS:Ansariel> Inventory Links Replace
 	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
@@ -6146,8 +6146,6 @@ void LLCallingCardBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 			disabled_items.push_back(std::string("Conference Chat"));
 		}
 	}
-
-	// <FS:Ansariel> Inventory Links Replace
 	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
@@ -6422,8 +6420,6 @@ void LLGestureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 			items.push_back(std::string("Activate"));
 		}
 	}
-
-	// <FS:Ansariel> Inventory Links Replace
 	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
@@ -6486,7 +6482,6 @@ void LLAnimationBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		items.push_back(std::string("Animation Audition"));
 	}
 
-	// <FS:Ansariel> Inventory Links Replace
 	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
@@ -6948,8 +6943,6 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 			}
 		}
 	}
-
-	// <FS:Ansariel> Inventory Links Replace
 	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
@@ -7216,8 +7209,6 @@ void LLWearableBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 			}
 		}
 	}
-
-	// <FS:Ansariel> Inventory Links Replace
 	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder
@@ -7394,10 +7385,7 @@ void LLLinkItemBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		items.push_back(std::string("Properties"));
 		addDeleteContextMenuOptions(items, disabled_items);
 	}
-
-	// <FS:Ansariel> Inventory Links Replace
 	addLinkReplaceMenuOption(items, disabled_items);
-
 	hide_context_entries(menu, items, disabled_items);
 }
 
@@ -7449,7 +7437,6 @@ void LLMeshBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		getClipboardEntries(true, items, disabled_items, flags);
 	}
 
-	// <FS:Ansariel> Inventory Links Replace
 	addLinkReplaceMenuOption(items, disabled_items);
 
 	// <FS:Ansariel> Move to default folder

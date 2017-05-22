@@ -375,9 +375,7 @@ static bool handleChatPersistTimeChanged(const LLSD& newvalue)
 {
 	if(gConsole)
 	{
-		// <FS> Changed for FIRE-805
-		//gConsole->setLinePersistTime((F32) newvalue.asReal());
-		gConsole->setLinePersistTime((F32) newvalue.asInteger());
+		gConsole->setLinePersistTime((F32) newvalue.asReal());
 	}
 	return true;
 }
@@ -1006,7 +1004,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderPerformanceTest")->getSignal()->connect(boost::bind(&handleRenderPerfTestChanged, _2));
 	gSavedSettings.getControl("TextureMemory")->getSignal()->connect(boost::bind(&handleVideoMemoryChanged, _2));
 	gSavedSettings.getControl("ChatConsoleFontSize")->getSignal()->connect(boost::bind(&handleChatFontSizeChanged, _2));
-	gSavedSettings.getControl("NearbyToastLifeTime")->getSignal()->connect(boost::bind(&handleChatPersistTimeChanged, _2));
+	gSavedSettings.getControl("ChatPersistTime")->getSignal()->connect(boost::bind(&handleChatPersistTimeChanged, _2));
 	gSavedSettings.getControl("ConsoleMaxLines")->getSignal()->connect(boost::bind(&handleConsoleMaxLinesChanged, _2));
 	gSavedSettings.getControl("UploadBakedTexOld")->getSignal()->connect(boost::bind(&handleUploadBakedTexOldChanged, _2));
 	gSavedSettings.getControl("UseOcclusion")->getSignal()->connect(boost::bind(&handleUseOcclusionChanged, _2));
