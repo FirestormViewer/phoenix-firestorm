@@ -96,7 +96,7 @@ SetOverwrite on							# Overwrite files by default
 
 ;;InstallDir "$PROGRAMFILES\${INSTNAME}"
 ;;InstallDirRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\${INSTNAME}" ""
-InstallDir "%%$PROGRAMFILES%%\${INSTNAME}"
+InstallDir "%%PROGRAMFILES%%\${INSTNAME}"
 InstallDirRegKey HKEY_LOCAL_MACHINE "%%INSTALL_DIR_REGKEY%%" ""
 UninstallText $(UninstallTextMsg)
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
