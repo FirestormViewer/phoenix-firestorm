@@ -839,6 +839,20 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="AssetErrorUnknownStatus">
 		Status unbekannt
 	</string>
+	<string name="AssetUploadServerUnreacheble">
+		Dienst nicht erreichbar.
+	</string>
+	<string name="AssetUploadServerDifficulties">
+		Der Server hat aktuell unerwartete technische Probleme.
+	</string>
+	<string name="AssetUploadServerUnavaliable">
+		Dienst nicht erreichbar oder Upload-Timeout wurde erreicht.
+	</string>
+	<string name="AssetUploadRequestInvalid">
+Fehler in der Upload-Anfrage. Bitte besuchen Sie
+Error in upload request.  Please visit 
+http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
+	</string>
 	<string name="texture">
 		Textur
 	</string>
@@ -2400,25 +2414,23 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 		alle Grundbesitze, die Sie für [OWNER] verwalten
 	</string>
 	<string name="RegionInfoAllowedResidents">
-		Zulässige Einwohner: ([ALLOWEDAGENTS], max [MAXACCESS])
+		Immer zulässig: ([ALLOWEDAGENTS], max [MAXACCESS])
 	</string>
 	<string name="RegionInfoAllowedGroups">
-		Zulässige Gruppen: ([ALLOWEDGROUPS], max [MAXACCESS])
+		Immer zulässige Gruppen: ([ALLOWEDGROUPS], max [MAXACCESS])
 	</string>
-	<!-- FS:Ansariel: Estate managers and banned residents strings -->
 	<string name="RegionInfoEstateManagers">
 		Grundbesitzverwalter: ([ESTATEMANAGERS], max [MAXMANAGERS])
 	</string>
 	<string name="RegionInfoBannedResidents">
-		Verbannte Einwohner: ([BANNEDAGENTS], max [MAXBANNED])
+		Immer verbannt: ([BANNEDAGENTS], max [MAXBANNED])
 	</string>
 	<string name="RegionInfoListTypeAllowedAgents">
-		zulässige Einwohner
+		immer zulässiger Einwohner
 	</string>
 	<string name="RegionInfoListTypeBannedAgents">
-		verbannte Einwohner
+		immer verbannter Einwohner
 	</string>
-	<!-- END FS:Ansariel: Estate managers and banned residents strings -->
 	<string name="ScriptLimitsParcelScriptMemory">
 		Parzellenskript-Speicher
 	</string>

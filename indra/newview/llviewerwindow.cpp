@@ -233,10 +233,6 @@
 #include "exopostprocess.h"	// <FS:Ansariel> Exodus Vignette
 #include "llnetmap.h"
 #include "lggcontactsets.h"
-// <FS:Ansariel> Remove circular dependency of LLWLParamManager & LLWaterParamManager singletons
-#include "llwlparammanager.h"
-#include "llwaterparammanager.h"
-// </FS:Ansariel>
 
 #include "lltracerecording.h"
 
@@ -2095,11 +2091,7 @@ void LLViewerWindow::initBase()
 	cp.parse_urls(true); // <FS:Ansariel> Enable URL parsing for the chat console
 	cp.background_image("Rounded_Square"); // <FS:Ansariel> Configurable background for different console types
 	cp.session_support(true); // <FS:Ansariel> Session support
-	// <FS:AO>, have console respect/reuse NearbyToastLifeTime for the length popup chat messages are displayed.
-	//cp.persist_time(gSavedSettings.getF32("ChatPersistTime"));
-	cp.persist_time((F32)gSavedSettings.getS32("NearbyToastLifeTime"));
-	// </FS:AO>
-
+	cp.persist_time(gSavedSettings.getF32("ChatPersistTime"));
 	cp.font_size_index(gSavedSettings.getS32("ChatConsoleFontSize"));
 	cp.follows.flags(FOLLOWS_LEFT | FOLLOWS_RIGHT | FOLLOWS_BOTTOM);
 	gConsole = LLUICtrlFactory::create<LLConsole>(cp);
@@ -2329,13 +2321,6 @@ void LLViewerWindow::initWorldUI()
 	panel_ssf_container->setVisible(TRUE);
 
 	LLMenuOptionPathfindingRebakeNavmesh::getInstance()->initialize();
-
-	// <FS:Ansariel> Remove circular dependency of LLWLParamManager & LLWaterParamManager singletons
-	// LLWLParamManager & LLWaterParamManager instances will be created as part of the toolbars
-	// because of the quick prefs floater, so do it right before the toolbars get created
-	LLWLParamManager::instance().init();
-	LLWaterParamManager::instance().init();
-	// </FS:Ansariel>
 
 	// Load and make the toolbars visible
 	// Note: we need to load the toolbars only *after* the user is logged in and IW

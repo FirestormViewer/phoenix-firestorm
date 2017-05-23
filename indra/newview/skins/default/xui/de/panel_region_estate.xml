@@ -15,24 +15,16 @@
 	<text name="estate_owner">
 		(unbekannt)
 	</text>
-	<text name="Only Allow">
-		Zugang nur Einwohnern gestatten, die:
-	</text>
-	<check_box label="Zahlungsinformationen hinterlegt haben" name="limit_payment" tool_tip="Um diesen Grundbesitz besuchen zu können, müssen Einwohner Zahlungsinformationen hinterlegt haben. Weitere Informationen finden Sie auf [SUPPORT_SITE]."/>
-	<!-- FS:Ansariel: Proper German
-	<check_box label="Sind mindestens 18 Jahre alt" name="limit_age_verified" tool_tip="Nur Einwohner, die mindestens 18 Jahre alt sind, können diesen Grundbesitz betreten. Weitere Informationen finden Sie unter [SUPPORT_SITE]."/>
-	-->
+	
+	<radio_group name="externally_visible_radio" width="310">
+		<radio_item label="Nur unten gelistete Einwohner &amp; Gruppen erlauben" name="estate_restricted_access"/>
+		<radio_item label="Zugang für jeden" name="estate_public_access"/>
+	</radio_group>
 	<check_box label="18 Jahre oder älter sind" name="limit_age_verified" tool_tip="Um diesen Grundbesitz besuchen zu können, müssen Einwohner mindestens 18 Jahre oder älter sein. Weitere Informationen finden Sie auf [SUPPORT_SITE]."/>
-	<check_box label="Voice-Chat erlauben" name="voice_chat_check"/>
-	<button label="?" name="voice_chat_help"/>
-	<text name="abuse_email_text" width="222">
-		E-Mail-Adresse für Missbrauchsmeldungen:
-	</text>
-	<string name="email_unsupported">
-		Funktion nicht unterstützt
-	</string>
-	<button label=" ?" name="abuse_email_address_help"/>
-	<button label="?" name="estate_manager_help"/>
+	<check_box label="Zahlungsinformationen hinterlegt haben" name="limit_payment" tool_tip="Um diesen Grundbesitz besuchen zu können, müssen Einwohner Zahlungsinformationen hinterlegt haben. Weitere Informationen finden Sie auf [SUPPORT_SITE]."/>
+	<check_box label="Parzellen-Eigentümer können restriktiver sein" name="parcel_access_override"/>
+	<check_box label="Voice-Chat erlauben" name="voice_chat_check" left="330"/>
+	<button label="Übernehmen" name="apply_btn"/>
 	<button label="Hinzufügen..." name="add_estate_manager_btn"/>
 	<button label="Entfernen..." name="remove_estate_manager_btn"/>
 	<check_box label="Globale Zeit verwenden" name="use_global_time_check"/>
@@ -50,7 +42,6 @@
 	<check_box label="Verweigern - keine archivierte Zahlungsinfo" name="deny_anonymous"/>
 	<check_box label="Verweigern - Zahlungsinfo archiviert" name="deny_identified"/>
 	<check_box label="Verweigern - Zahlungsinfo verwendet" name="deny_transacted"/>
-	<button label="Übernehmen" name="apply_btn"/>
 	<text name="estate_manager_label">
 		Grundbesitzverwalter:
 	</text>

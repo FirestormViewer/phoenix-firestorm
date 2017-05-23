@@ -21,11 +21,11 @@
 	<text name="source_label">
 		Źródło:
 	</text>
-	<fs_inventory_link_replace_drop_target name="source_uuid_editor" tool_tip="Przeciągnij i upuść tutaj przedmiot, którego linki chcesz zastąpić." />
+	<inventory_link_replace_drop_target name="source_uuid_editor" tool_tip="Przeciągnij i upuść tutaj przedmiot, którego linki chcesz zastąpić." />
 	<text name="target_label">
 		Cel:
 	</text>
-	<fs_inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="Przeciągnij i upuść tutaj przedmiot, którego linki zastąpią linki do przedmiotu pierwotnego." />
+	<inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="Przeciągnij i upuść tutaj przedmiot, którego linki zastąpią linki do przedmiotu pierwotnego." />
 	<text name="status_text">
 		Gotowy...
 	</text>

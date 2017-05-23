@@ -1800,7 +1800,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.5</real>
+      <real>0.3</real>
     </map>
     <key>AudioLevelMic</key>
     <map>
@@ -3088,6 +3088,17 @@
       <string>String</string>
       <key>Value</key>
       <string>default</string>
+    </map>
+    <key>ChatAutocompleteGestures</key>
+    <map>
+      <key>Comment</key>
+      <string>Auto-complete gestures in nearby chat</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
     <key>ChatBarStealsFocus</key>
     <map>
@@ -7655,6 +7666,28 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>LinkReplaceBatchSize</key>
+    <map>
+      <key>Comment</key>
+      <string>The maximum size of a batch in a link replace operation</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>25</integer>
+    </map>
+    <key>LinkReplaceBatchPauseTime</key>
+    <map>
+      <key>Comment</key>
+      <string>The time in seconds between two batches in a link replace operation</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1.0</real>
     </map>
     <key>LipSyncAah</key>
     <map>
@@ -12763,6 +12796,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Backup</key>
     <integer>0</integer>
   </map>
+  <key>MaxAttachmentComplexity</key>
+  <map>
+    <key>Comment</key>
+    <string>Attachment's render weight limit</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>1.0E6</real>
+  </map>
   <key>ComplexityChangesPopUpDelay</key>
   <map>
     <key>Comment</key>
@@ -13372,17 +13416,6 @@ Change of this parameter will affect the layout of buttons in notification toast
 		<key>Value</key>
 		<real>0.02</real>
 	</map>
-    <key>ScriptDialogPerObject</key>
-    <map>
-      <key>Comment</key>
-      <string>Controls how script dialogs from the same object are handled (0 = one dialog per object, 1 = one dialog per channel per object, 2 = unconstrained)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
     <key>ScriptHelpFollowsCursor</key>
     <map>
       <key>Comment</key>
@@ -13402,6 +13435,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>ScriptDialogLimitations</key>
+    <map>
+      <key>Comment</key>
+      <string>Limits amount of dialogs per script (0 - per object, 1 - per channel, 2 - per channel for attachments, 3 - per channel for HUDs, 4 -unconstrained for HUDs)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
       <key>Value</key>
       <integer>1</integer>
     </map>
@@ -14443,6 +14487,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>1</integer>
       <key>Type</key>
       <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>SyncMaterialSettings</key>
+    <map>
+      <key>Comment</key>
+      <string>SyncMaterialSettings - DO NOT USE AND KEEP IT SET TO 0: Use FSSyncronizeTextureMaps instead!</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
     </map>
@@ -23728,28 +23783,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>F32</string>
       <key>Value</key>
       <real>0.8</real>
-    </map>
-    <key>FSLinkReplaceBatchSize</key>
-    <map>
-      <key>Comment</key>
-      <string>The maximum size of a batch in a link replace operation</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>U32</string>
-      <key>Value</key>
-      <integer>25</integer>
-    </map>
-    <key>FSLinkReplaceBatchPauseTime</key>
-    <map>
-      <key>Comment</key>
-      <string>The time in seconds between two batches in a link replace operation</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>1.0</real>
     </map>
     <key>FSDisableWMIProbing</key>
     <map>

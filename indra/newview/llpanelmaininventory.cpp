@@ -1545,6 +1545,26 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 		mFilterEditor->setFocus(TRUE);
 	}
 
+	if (command_name == "replace_links")
+	{
+		LLSD params;
+		LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
+		if (current_item)
+		{
+			LLInvFVBridge* bridge = (LLInvFVBridge*)current_item->getViewModelItem();
+
+			if (bridge)
+			{
+				LLInventoryObject* obj = bridge->getInventoryObject();
+				if (obj && obj->getType() != LLAssetType::AT_CATEGORY && obj->getActualType() != LLAssetType::AT_LINK_FOLDER)
+				{
+					params = LLSD(obj->getUUID());
+				}
+			}
+		}
+		LLFloaterReg::showInstance("linkreplace", params);
+	}
+
 	// <FS:Ansariel> Inventory Links Replace
 	if (command_name == "replace_links")
 	{
