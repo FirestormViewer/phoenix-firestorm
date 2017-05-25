@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<menu name="Avatar Icon Menu">
+<toggleable_menu name="Avatar Icon Menu">
 	<menu_item_call label="Profil anzeigen" name="Show Profile"/>
 	<menu_item_call label="IM" name="Send IM"/>
 	<menu_item_call label="Zu Einwohner teleportieren" name="Teleport to"/>
@@ -20,4 +20,10 @@
 	<menu_item_call label="Url in Zwischenablage kopieren" name="copy url"/>
 	<menu_item_check label="Voice blockieren" name="Block Unblock"/>
 	<menu_item_check label="Chat blockieren" name="Mute Text"/>
-</menu>
+	<context_menu label="Moderatoroptionen" name="Moderator Options">
+		<menu_item_check label="Text-Chat zulassen" name="AllowTextChat"/>
+		<menu_item_call label="Diesen Teilnehmer stummschalten" name="ModerateVoiceMuteSelected"/>
+		<menu_item_call label="Stummschaltung für diesen Teilnehmer aufheben" name="ModerateVoiceUnMuteSelected"/>
+	</context_menu>
+	<menu_item_call label="Mitglied verbannen" name="BanMember"/>
+</toggleable_menu>
