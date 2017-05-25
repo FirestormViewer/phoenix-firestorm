@@ -141,6 +141,11 @@ public:
 	static void toggleBlock(const LLUUID& id);
 
 	/**
+	 * Mute/unmute avatar.
+	 */
+	static void toggleMute(const LLUUID& id, U32 flags);
+
+	/**
 	 * Block/unblock the avatar voice.
 	 */
 	static void toggleMuteVoice(const LLUUID& id);

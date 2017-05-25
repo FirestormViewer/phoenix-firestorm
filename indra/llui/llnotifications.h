@@ -564,6 +564,7 @@ public:
 	bool canLogToChat() const;
 	bool canLogToIM() const;
 	bool canShowToast() const;
+	bool canFadeToast() const;
 	bool hasFormElements() const;
     void playSound();
 
