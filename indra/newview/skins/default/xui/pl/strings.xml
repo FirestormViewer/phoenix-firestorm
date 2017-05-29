@@ -802,6 +802,19 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="AssetErrorUnknownStatus">
 		Status nieznany
 	</string>
+	<string name="AssetUploadServerUnreacheble">
+		Usługa niedostępna.
+	</string>
+	<string name="AssetUploadServerDifficulties">
+		Serwer doświadcza nieoczekiwanych trudności.
+	</string>
+	<string name="AssetUploadServerUnavaliable">
+		Usługa niedostępna lub osiągnięto limit czasu.
+	</string>
+	<string name="AssetUploadRequestInvalid">
+		Błąd podczas ładowania. Odwiedź
+http://www.firestormviewer.org/support aby uzyskać pomoc.
+	</string>
 	<string name="texture">
 		tekstury
 	</string>
@@ -2291,22 +2304,22 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 		wszystkie majątki, które nadzorujesz dla [OWNER]
 	</string>
 	<string name="RegionInfoAllowedResidents">
-		Dozwoleni Rezydenci: ([ALLOWEDAGENTS], maks. [MAXACCESS])
+		Zawsze dozwoleni: ([ALLOWEDAGENTS], maks. [MAXACCESS])
 	</string>
 	<string name="RegionInfoAllowedGroups">
-		Dozwolone Grupy: ([ALLOWEDGROUPS], maks. [MAXACCESS])
+		Zawsze dozwolone grupy: ([ALLOWEDGROUPS], maks. [MAXACCESS])
 	</string>
 	<string name="RegionInfoEstateManagers">
 		Zarządcy Majątku: ([ESTATEMANAGERS], maks. [MAXMANAGERS])
 	</string>
 	<string name="RegionInfoBannedResidents">
-		Zbanowani Rezydenci: ([BANNEDAGENTS], maks. [MAXBANNED])
+		Zawsze zbanowani: ([BANNEDAGENTS], maks. [MAXBANNED])
 	</string>
 	<string name="RegionInfoListTypeAllowedAgents">
-		Dozwoleni Rezydenci
+		zawsze dozwoleni rezydenci
 	</string>
 	<string name="RegionInfoListTypeBannedAgents">
-		Zbanowani Rezydenci
+		zawsze zbanowani rezydenci
 	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		Pamięć skryptów działki

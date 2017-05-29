@@ -186,8 +186,8 @@
 			<panel.string name="objects_deleted_text">
 				[COUNT] z [MAX] ([DELETED] zostanie usunięte)
 			</panel.string>
-			<text name="parcel_object_bonus_label">
-				Ilość ekstra obiektów:
+			<text name="parcel_object_bonus">
+				Ilość ekstra obiektów: [BONUS]
 			</text>
 			<text name="Simulator primitive usage:">
 				Pojemność regionu:
@@ -243,7 +243,7 @@
 Jedynie większe działki mogą być umieszczone w bazie wyszukiwarki.
 			</panel.string>
 			<panel.string name="search_disabled_permissions_tooltip">
-				Wybrana opcja jest wyłączona ponieważ nie posiadasz prawa do modyfikacji działki.
+				Wybrana opcja jest wyłączona, ponieważ nie posiadasz prawa do modyfikacji działki.
 			</panel.string>
 			<panel.string name="mature_check_mature">
 				Treść Moderate
@@ -408,13 +408,10 @@ teksturę:
 			<panel.string name="estate_override">
 				Jedna lub więcej z tych opcji ustawiona jest z poziomu Majątku
 			</panel.string>
-			<check_box label="Dostęp publiczny (brak zaznaczenia tej opcji = widoczne linie zakazu)" name="public_access"/>
-			<text name="Only Allow">
-				Umożliwiaj dostęp tylko dla:
-			</text>
-			<check_box label="Rezydentów zarejestrowanych w systemie płatniczym Linden Lab [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Zbanuj Rezydentów niezarejestrowanych w systemie płatniczym Linden Lab. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji."/>
-			<check_box label="Rezydentów, którzy mają 18+ lat [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Zbanuj Rezydetów, którzy mają mniej niż 18 lat. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji."/>
-			<check_box label="Udostępnij wejście grupie [GROUP]" name="GroupCheck" tool_tip="Ustaw Grupę w głównej zakładce."/>
+			<check_box label="Każdy może odwiedzać (brak zaznaczenia = widoczne linie zakazu)" name="public_access"/>
+			<check_box label="Osoba musi mieć 18+ lat [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Zbanuj Rezydetów, którzy mają mniej niż 18 lat. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji."/>
+			<check_box label="Osoba musi mieć dane płatnicze w systemie Linden Lab [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Zbanuj Rezydentów niezarejestrowanych w systemie płatniczym Linden Lab. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji."/>
+			<check_box label="Umożliwiaj wejście bez ograniczeń grupie [GROUP]" name="GroupCheck" tool_tip="Ustaw Grupę w głównej zakładce."/>
 			<check_box label="Sprzedaj przepustki:" name="PassCheck" tool_tip="Otwórz tymczasowy dostęp do tej działki"/>
 			<combo_box name="pass_combo">
 				<combo_box.item label="Każdemu" name="Anyone"/>
@@ -422,17 +419,20 @@ teksturę:
 			</combo_box>
 			<spinner label="Cena w L$:" name="PriceSpin"/>
 			<spinner label="Godziny dostępu:" name="HoursSpin"/>
+			<text name="OwnerLimited">
+				(właściciel Majątku może ograniczać te wybory)
+			</text>    
 			<panel name="Allowed_layout_panel">
-				<text label="Zawsze Zezwalaj" name="AllowedText">
-					Dozwoleni Rezydenci ([COUNT]/[MAX])
+				<text label="Zawsze zezwalaj" name="AllowedText">
+					Zawsze zezwalaj ([COUNT]/[MAX])
 				</text>
 				<name_list name="AccessList" tool_tip="([LISTED] na liście, [MAX] maksimum)"/>
 				<button label="Dodaj" name="add_allowed"/>
 				<button label="Usuń" label_selected="Usuń" name="remove_allowed"/>
 			</panel>
 			<panel name="Banned_layout_panel">
-				<text label="Banuj" name="BanCheck">
-					Zbanowani Rezydenci ([COUNT]/[MAX])
+				<text label="Zawsze banuj" name="BanCheck">
+					Zawsze banuj ([COUNT]/[MAX])
 				</text>
 				<name_list name="BannedList" tool_tip="([LISTED] na liście, [MAX] maksimum)"/>
 				<button label="Dodaj" name="add_banned"/>
