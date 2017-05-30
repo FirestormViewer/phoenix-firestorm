@@ -743,8 +743,7 @@
          name="FSRenderFriendsOnlyPersistsTP"
          width="270"
          control_name="FSRenderFriendsOnlyPersistsTP"
-         tool_tip="When checked - Will stop the automatic cancelling of the 'Show Only Friends' function (default: off)"/>
-
+         tool_tip="Disables the automatic cancelling of the 'Show Only Friends' function (default: off)"/>
     </panel>
 
     <!-- Map & Minimap -->

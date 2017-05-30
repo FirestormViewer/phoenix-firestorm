@@ -5711,6 +5711,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Report_Abuse_Label">
 		Missbrauch melden
 	</string>
+	<string name="Command_RFO_Label">
+		Nur Freunde anzeigen
+	</string>
 	<string name="Command_Search_Label">
 		Suchen
 	</string>
@@ -5895,8 +5898,8 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Report_Abuse_Tooltip">
 		Missbrauch melden
 	</string>
-	<string name="Command_Report_Abuse_Tooltip">
-		Missbrauch melden
+	<string name="Command_RFO_Tooltip">
+		Nur Freunde im Viewer darstellen. Nach Deaktivierung ist ein Teleport erforderlich, um andere Avatare wieder darzustellen.
 	</string>
 	<string name="Command_Search_Tooltip">
 		Orte, Veranstaltungen, Leute finden (Strg+F)
