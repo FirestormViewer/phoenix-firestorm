@@ -5469,6 +5469,13 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 
 	if( is_teleport )
 	{
+		// <FS:Beq> FIRE-20977: Render Only Friends changes for forgetful users
+		if (!gSavedPerAccountSettings.getBOOL("FSRenderFriendsOnlyPersistsTP"))
+		{
+			// We need to turn off the RFO as we have TP'd away and have asked not to persist
+			gSavedPerAccountSettings.setBOOL("FSRenderFriendsOnly", FALSE);
+		}
+		// </FS:Beq>
 		if (gAgent.getTeleportKeepsLookAt())
 		{
 			// *NOTE: the LookAt data we get from the sim here doesn't

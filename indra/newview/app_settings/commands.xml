@@ -275,6 +275,17 @@
            is_running_parameters="speak"
            checkbox_control="PushToTalkToggle"
            />
+  <command name="RFO"
+         available_in_toybox="true"
+         icon="Command_RFO_Icon"
+         label_ref="Command_RFO_Label"
+         tooltip_ref="Command_RFO_Tooltip"
+         execute_function="TogglePerAccountControl"
+         execute_parameters="FSRenderFriendsOnly"
+         is_running_function="CheckPerAccountControl"
+         is_running_parameters="FSRenderFriendsOnly"
+         checkbox_control="FSRenderFriendsOnlyPersistsTP"
+           />
   <command name="view"
            available_in_toybox="true"
            icon="Command_View_Icon"
