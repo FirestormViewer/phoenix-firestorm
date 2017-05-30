@@ -609,11 +609,18 @@ BOOL LLFilePicker::getSaveFile(ESaveFilter filter, const std::string& filename, 
 // </FS:CR Threaded Filepickers>
 	{
 		// NOTA BENE: hitting the file dialog triggers a window focus event, destroying the selection manager!!
-		success = GetSaveFileName(&mOFN);
-		if (success)
+		try
 		{
-			std::string filename = utf16str_to_utf8str(llutf16string(mFilesW));
-			mFiles.push_back(filename);
+			success = GetSaveFileName(&mOFN);
+			if (success)
+			{
+				std::string filename = utf16str_to_utf8str(llutf16string(mFilesW));
+				mFiles.push_back(filename);
+			}
+		}
+		catch (...)
+		{
+			LOG_UNHANDLED_EXCEPTION("");
 		}
 		gKeyboard->resetKeys();
 	}
