@@ -289,6 +289,32 @@ W grupie powinna być więcej niż jedna osoba, w przeciwnym razie zostanie ona 
 Zaproś kogoś w ciągu 48 godzin.
 		<usetemplate canceltext="Anuluj" name="okcancelbuttons" notext="Anuluj" yestext="Stwórz grupę za [COST]L$"/>
 	</notification>
+	<notification name="JoinGroupInaccessible">
+		Ta grupa nie jest dla Ciebie dostępna.
+	</notification>
+	<notification name="JoinGroupError">
+		Wystąpił błąd podczas próby dołączenia do grupy.
+	</notification>
+	<notification name="JoinGroupErrorReason">
+		Nie można dołączyć do grupy: [reason]
+	</notification>
+	<notification name="JoinGroupTrialUser">
+		Przepraszamy, ale konta próbne nie mogą dołączać do grup.
+	</notification>
+	<notification name="JoinGroupMaxGroups">
+		Nie możesz dołączyć do '[group_name]':
+Jesteś już w [group_count] grupach, a maksymalny dozwolony limit to [max_groups]
+	</notification>
+	<notification name="JoinGroupClosedEnrollment">
+		Nie możesz dołączyć do '[group_name]':
+Grupa nie umożliwia już swobodnego dołączania.
+	</notification>
+	<notification name="JoinGroupSuccess">
+		Zostałeś/aś dodany/a do grupy.
+	</notification>
+	<notification name="JoinGroupInsufficientFunds">
+		Nie można przekazać wymaganej opłaty wstępu ([membership_fee] L$).
+	</notification>
 	<notification name="LandBuyPass">
 		Za [COST]L$ możesz odwiedzić tą działkę (&apos;[PARCEL_NAME]&apos;) na [TIME] godzin. Chcesz kupić przepustkę?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
@@ -2006,6 +2032,9 @@ Kontynuować?
 [RESIDENTS]
 		<usetemplate name="yesnocancelbuttons" canceltext="Anuluj" notext="Wszystkie Majątki" yestext="Ten Majątek"/>
 	</notification>
+	<notification name="EstateParcelAccessOverride">
+		Odznaczenie tej opcji może usunąć ograniczenia nadane przez właścicieli działek w celu zapobiegania dokuczaniu, zachowaniu prywatności lub aby chronić nieletnich przed materiałami dla dorosłych. Porozmawiaj z właścicielami działek, jeśli to konieczne.
+	</notification>
 	<notification name="EstateChangeCovenant">
 		Na pewno chcesz zmienić treść umowy dla tego majątku?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
@@ -2386,13 +2415,17 @@ Chcesz wyłączyć Tryb Zajętości przed zakończeniem tej transakcji?
 		Ten folder &apos;[FOLDERNAME]&apos; to folder systemowy. Usunięcie folderu systemowego spowoduje niestabilność. Czy na pewno chcesz go skasować?
 		<usetemplate ignoretext="Potwierdź zanim folder systemu zostanie skasowany" name="okcancelignore" notext="Anuluj" />
 	</notification>
+	<notification name="PurgeSelectedItems">
+		[COUNT] przedmiotów zostanie usuniętych. Na pewno chcesz permanentnie usunąć zaznaczoną zawartość Kosza?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
 	<notification name="ConfirmEmptyTrash">
-		Na pewno chcesz permanentnie usunąć zawartość Kosza?
-		<usetemplate ignoretext="Potwierdź przed usunięciem zawartości Kosza" name="okcancelignore" notext="Anuluj" />
+		[COUNT] przedmiotów zostanie usuniętych. Na pewno chcesz permanentnie usunąć zawartość Kosza?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="TrashIsFull">
 		Twój kosz się przepełnia. Może to sprawić, że będziesz mieć problemy z zalogowaniem się.
-		<usetemplate name="okcancelbuttons" notext="Wyczyszczę kosz ręcznie później" yestext="Wyczyść kosz teraz" />
+		<usetemplate name="okcancelbuttons" notext="Wyczyszczę kosz ręcznie później" yestext="Sprawdź kosz teraz" />
 	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		Na pewno chcesz wyczyścić bufory przeglądarki internetowej, wyszukiwania i podróży?
@@ -3410,9 +3443,13 @@ Przycisk zostanie wyświetlony w przypadku dostatecznej ilości przestrzeni.
 	<notification name="ShareNotification">
 		Zaznacz Rezydentów, z którymi chcesz się podzielić.
 	</notification>
-	<notification name="MeshUploadError">
-		Nie można załadować [LABEL]: [MESSAGE] [IDENTIFIER]
+	<notification name="MeshUploadErrorDetails">
+		Nie można załadować [LABEL]: [MESSAGE]
 [DETAILS] Zobacz Firestorm.log, aby dowiedzieć się więcej.
+	</notification>
+	<notification name="MeshUploadError">
+		Nie można załadować [LABEL]: [MESSAGE]
+Zobacz Firestorm.log, aby dowiedzieć się więcej.
 	</notification>
 	<notification name="MeshUploadPermError">
 		Wystąpił błąd podczas pobierania uprawnień ładowania meszy.

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_pathfinding_linksets" title="Zbiory części odnajdywania ścieżek">
+<floater name="floater_pathfinding_linksets" title="Obiekty w regionie">
 	<floater.string name="messaging_get_inprogress">
 		Odpytywanie o zbiory części odnajdywania ścieżek...
 	</floater.string>
@@ -16,7 +16,7 @@
 		Brak zbiorów części odnajdywania ścieżek.
 	</floater.string>
 	<floater.string name="messaging_complete_available">
-		[NUM_SELECTED] zbiorów wybranych z [NUM_TOTAL].
+		[NUM_SELECTED] wybranych z [NUM_TOTAL].
 	</floater.string>
 	<floater.string name="messaging_not_enabled">
 		Ten region nie ma włączonego odnajdywania ścieżek.
@@ -114,7 +114,7 @@
 	</panel>
 	<panel name="pathfinding_linksets_actions">
 		<text name="linksets_actions_label">
-			Akcje na zazn. zbiorach (jeśli zbiór jest usunięty ze świata jego atrybuty mogą być utracone):
+			Akcje na zaznaczonych:
 		</text>
 		<check_box label="Podświetlenie" name="show_beacon" />
 		<button label="Weź" name="take_objects" />
@@ -125,7 +125,7 @@
 	</panel>
 	<panel name="pathfinding_linksets_attributes">
 		<text name="linksets_attributes_label">
-			Zmień atrybuty zaznaczonych zbiorów i naciśnij na przycisk by zachować zmiany
+			Zmień atrybuty odnajdywania ścieżek
 		</text>
 		<text name="walkability_coefficients_label">
 			Dostępność:
