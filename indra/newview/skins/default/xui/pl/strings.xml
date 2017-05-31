@@ -5118,6 +5118,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Report_Abuse_Label">
 		Zgłoś nadużycie
 	</string>
+	<string name="Command_RFO_Label">
+		Renderuj tylko znajomych
+	</string>
 	<string name="Command_Search_Label">
 		Szukaj
 	</string>
@@ -5291,6 +5294,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Report_Abuse_Tooltip">
 		Zgłoś nadużycie
+	</string>
+	<string name="Command_RFO_Tooltip">
+		Renderuj tylko znajomych w przeglądarce. Teleportacja jest wymagana aby przywrócić widzialność innych osób, jeśli włączysz tą opcję.
 	</string>
 	<string name="Command_Search_Tooltip">
 		Znajdź miejsca, wydarzenia i ludzi (CTRL+F)

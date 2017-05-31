@@ -82,6 +82,7 @@
 			<check_box label="Wyłącz znaki świetlne (czerwone strzałki) po teleportowaniu się" name="tp_beam_toggle" tool_tip="Wyłącza znaki świetlne wskazujące cel lądowania podczas teleportowania się." />
 			<check_box label="Wyłącz czarne ekrany teleportów" name="tp_screen_toggle" tool_tip="Wyłącza czarne ekrany podczas teleportowania się." />
 			<check_box label="Nie zamykaj mapy podczas teleportacji" name="FSDoNotHideMapOnTeleport" tool_tip="Wyłącz automatyczne zamykanie mapy podczas teleportacji."/>
+			<check_box label="Trzymaj ustawienie 'renderuj tylko znajomych' włączone po teleportacji" name="FSRenderFriendsOnlyPersistsTP" tool_tip="Wyłącz automatyczne anulowanie funkcji 'renderuj tylko znajomych' po teleportacji (domyślnie: wyłączone)"/>
 		</panel>
 		<panel label="Mapa i minimapa" name="tab-maps">
 			<text name="minimap_options_label">
