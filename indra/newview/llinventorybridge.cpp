@@ -99,6 +99,7 @@
 #endif
 // </FS:Zi>
 #include "fsfloaterplacedetails.h"
+#include "llviewerattachmenu.h"
 
 #include <boost/shared_ptr.hpp>
 
@@ -6939,6 +6940,11 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 						LLUICtrlFactory::create<LLMenuItemCallGL>(p, parent);
 						items.push_back(p.name);
 					}
+
+					// <FS:Ansariel> FIRE-21200: Attachment Points List in Alphabetical Order
+					attach_menu->getItems()->sort(LLViewerAttachMenu::sort());
+					attach_hud_menu->getItems()->sort(LLViewerAttachMenu::sort());
+					// </FS:Ansariel>
 				}
 			}
 		}
