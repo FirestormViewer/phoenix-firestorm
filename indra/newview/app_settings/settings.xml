@@ -13440,7 +13440,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ScriptDialogLimitations</key>
     <map>
       <key>Comment</key>
-      <string>Limits amount of dialogs per script (0 - per object, 1 - per channel, 2 - per channel for attachments, 3 - per channel for HUDs, 4 -unconstrained for HUDs)</string>
+      <string>Limits amount of dialogs per script (0 - per object, 1 - per channel, 2 - per channel for attachments, 3 - per channel for HUDs, 4 - unconstrained for HUDs, 5 - unconstrained)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

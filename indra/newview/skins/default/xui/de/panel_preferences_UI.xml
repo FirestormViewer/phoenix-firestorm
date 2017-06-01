@@ -46,6 +46,7 @@
 			<combo_box.item label="Einer pro Kanal für Anhänge" name="ScriptDialogOption_2"/>
 			<combo_box.item label="Einer pro Kanal für HUDs" name="ScriptDialogOption_3"/>
 			<combo_box.item label="Unbeschränkt für HUDs" name="ScriptDialogOption_4"/>
+			<combo_box.item label="Unbeschränkt" name="ScriptDialogOption_5"/>
 		</combo_box>
 		<check_box label="„Blockieren“-Button entfernen" name="FSRemoveScriptBlockButton"/>
 		<text name="ScriptDialogsPositionLabel">
