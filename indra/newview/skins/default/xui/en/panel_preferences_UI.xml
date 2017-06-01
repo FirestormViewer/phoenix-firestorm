@@ -318,9 +318,9 @@
          name="ScriptDialogOption_3"
          value="3"/>
         <combo_box.item
-         label="Unconstrained"
+         label="Unconstrained for HUDs"
          name="ScriptDialogOption_4"
-         value="5"/>
+         value="4"/>
       </combo_box>
         <check_box
          control_name="FSRemoveScriptBlockButton"
