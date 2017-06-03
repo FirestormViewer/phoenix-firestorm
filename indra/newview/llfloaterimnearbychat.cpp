@@ -709,6 +709,15 @@ void LLFloaterIMNearbyChat::sendChatFromViewer(const LLWString &wtext, EChatType
 		utf8_text = utf8str_truncate(utf8_text, MAX_STRING - 1);
 	}
 
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0b
+	if ( (0 == channel) && (RlvActions::isRlvEnabled()) )
+	{
+		// Adjust the (public) chat "volume" on chat and gestures (also takes care of playing the proper animation)
+		type = RlvActions::checkChatVolume(type);
+		animate &= !RlvActions::hasBehaviour( (!RlvUtil::isEmote(utf8_text)) ? RLV_BHVR_REDIRCHAT : RLV_BHVR_REDIREMOTE );
+	}
+// [/RLVa:KB]
+
 	// Don't animate for chats people can't hear (chat to scripts)
 	if (animate && (channel == 0))
 	{
