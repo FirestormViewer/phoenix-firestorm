@@ -1171,7 +1171,7 @@ void LLAgentCamera::updateCamera()
 
 // [RLVa:KB] - Checked: RLVa-2.0.0
 	// Set focus back on our avie if something changed it
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_UNLOCK)) && (cameraThirdPerson()) && (!getFocusOnAvatar()) )
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_UNLOCK)) && ((cameraThirdPerson()) || (cameraFollow())) && (!getFocusOnAvatar()) )
 	{
 		setFocusOnAvatar(TRUE, FALSE);
 	}
@@ -1949,7 +1949,7 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 	}
 
 // [RLVa:KB] - Checked: RLVa-2.0.0
-	if ( (CAMERA_MODE_THIRD_PERSON == mCameraMode) && (RlvActions::isRlvEnabled()) && (RlvActions::isCameraDistanceClamped()) )
+	if ( (RlvActions::isRlvEnabled()) && ((CAMERA_MODE_THIRD_PERSON == mCameraMode) || (CAMERA_MODE_FOLLOW == mCameraMode)) && (RlvActions::isCameraDistanceClamped()) )
 	{
 		m_fRlvMinDist = m_fRlvMaxDist = false;
 
@@ -2011,7 +2011,7 @@ bool LLAgentCamera::allowFocusOffsetChange(const LLVector3d& offsetFocus)
 {
 	if (RlvActions::isCameraDistanceClamped())
 	{
-		if ( (CAMERA_MODE_THIRD_PERSON == getCameraMode()) && ((m_fRlvMinDist) || (m_fRlvMaxDist)) )
+		if ( ((CAMERA_MODE_THIRD_PERSON == getCameraMode()) || (CAMERA_MODE_FOLLOW == getCameraMode())) && ((m_fRlvMinDist) || (m_fRlvMaxDist)) )
 		{
 			const LLVector3d posFocusGlobal = calcFocusPositionTargetGlobal();
 			// Don't allow moving the focus offset if at minimum and moving closer (or if at maximum and moving further) to prevent camera warping
