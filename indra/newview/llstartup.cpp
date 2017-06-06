@@ -1058,6 +1058,13 @@ bool idle_startup()
 			show_connect_box = TRUE;
 		}
 
+// [RLVa:KB] - Patch: RLVa-2.1.0
+		if (gSavedSettings.getBOOL(RLV_SETTING_MAIN))
+		{
+			show_connect_box = TRUE;
+		}
+// [/RVA:KB]
+
 		//setup map of datetime strings to codes and slt & local time offset from utc
 		// *TODO: Does this need to be here?
 		LLStringOps::setupDatetimeInfo(false);
