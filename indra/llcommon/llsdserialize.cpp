@@ -2319,10 +2319,10 @@ U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32
 			
 		U32 have = CHUNK-strm.avail_out;
 
-		result = (U8*) realloc(result, cur_size + have);
+		//result = (U8*) realloc(result, cur_size + have);
 		//if (result == NULL)
 		//{
-		//U8* pNew = (U8*) realloc(result, cur_size + have);
+		U8* pNew = (U8*) realloc(result, cur_size + have);
 		if (pNew == NULL)
 		{
 			LL_WARNS() << "Failed to unzip LLSD NavMesh block: can't reallocate memory, current size: " << cur_size << " bytes; requested " << cur_size + have << " bytes." << LL_ENDL;
