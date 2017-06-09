@@ -516,6 +516,7 @@ void LLPanelGroupSubTab::setSearchFilter(const std::string& filter)
 	mSearchFilter = filter;
 	LLStringUtil::toLower(mSearchFilter);
 	update(GC_ALL);
+	onFilterChanged();
 }
 
 void LLPanelGroupSubTab::activate()
@@ -2886,6 +2887,16 @@ void LLPanelGroupActionsSubTab::activate()
 	LLPanelGroupSubTab::activate();
 
 	update(GC_ALL);
+	mActionDescription->clear();
+	mActionList->deselectAllItems();
+	mActionList->deleteAllItems();
+	buildActionsList(mActionList,
+					 GP_ALL_POWERS,
+					 GP_ALL_POWERS,
+					 NULL,
+					 FALSE,
+					 TRUE,
+					 FALSE);
 }
 
 void LLPanelGroupActionsSubTab::deactivate()
@@ -2914,19 +2925,31 @@ void LLPanelGroupActionsSubTab::update(LLGroupChange gc)
 
 	if (mGroupID.isNull()) return;
 
-	mActionList->deselectAllItems();
 	mActionMembers->deleteAllItems();
 	mActionRoles->deleteAllItems();
-	mActionDescription->clear();
 
+	if(mActionList->hasSelectedItem())
+	{
+		LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
+		if (gdatap && gdatap->isMemberDataComplete() && gdatap->isRoleDataComplete())
+		{
+			handleActionSelect();
+		}
+	}
+}
+
+void LLPanelGroupActionsSubTab::onFilterChanged()
+{
+	mActionDescription->clear();
+	mActionList->deselectAllItems();
 	mActionList->deleteAllItems();
 	buildActionsList(mActionList,
-					 GP_ALL_POWERS,
-					 GP_ALL_POWERS,
-					 NULL,
-					 FALSE,
-					 TRUE,
-					 FALSE);
+		GP_ALL_POWERS,
+		GP_ALL_POWERS,
+		NULL,
+		FALSE,
+		TRUE,
+		FALSE);
 }
 
 void LLPanelGroupActionsSubTab::handleActionSelect()

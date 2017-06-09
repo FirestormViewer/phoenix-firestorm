@@ -970,6 +970,8 @@ public:
 	void setIgnoreAllNotifications(bool ignore);
 	bool getIgnoreAllNotifications();
 
+	bool getIgnored(const std::string& name);
+
 	bool isVisibleByRules(LLNotificationPtr pNotification);
 	
 private:
