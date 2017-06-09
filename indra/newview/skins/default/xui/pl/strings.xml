@@ -5296,7 +5296,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Zgłoś nadużycie
 	</string>
 	<string name="Command_RFO_Tooltip">
-		Renderuj tylko znajomych w przeglądarce. Teleportacja jest wymagana aby przywrócić widzialność innych osób, jeśli włączysz tą opcję.
+		Renderuj tylko Twoich znajomych w przeglądarce, wszystkie inne awatary będą niewidoczne. Teleportacja jest wymagana aby przywrócić widzialność innych osób, jeśli włączysz tą opcję.
 	</string>
 	<string name="Command_Search_Tooltip">
 		Znajdź miejsca, wydarzenia i ludzi (CTRL+F)

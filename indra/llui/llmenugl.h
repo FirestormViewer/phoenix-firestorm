@@ -541,6 +541,10 @@ public:
 	// add a context menu branch
 	BOOL appendContextSubMenu(LLMenuGL *menu);
 
+	// <FS:Ansariel> Items-accessor
+	typedef std::list< LLMenuItemGL* > item_list_t;
+	item_list_t* getItems() { return &mItems; }
+
 protected:
 	void createSpilloverBranch();
 	void cleanupSpilloverBranch();
@@ -555,7 +559,7 @@ protected:
 	bool addContextChild(LLView* view, S32 tab_group);
 
 	// TODO: create accessor methods for these?
-	typedef std::list< LLMenuItemGL* > item_list_t;
+	//typedef std::list< LLMenuItemGL* > item_list_t; // <FS:Ansariel> Items-accessor
 	item_list_t mItems;
 	LLMenuItemGL*mFirstVisibleItem;
 	LLMenuItemGL *mArrowUpItem, *mArrowDownItem;

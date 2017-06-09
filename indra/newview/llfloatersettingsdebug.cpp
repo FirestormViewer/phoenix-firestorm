@@ -42,6 +42,7 @@
 #include "lluictrlfactory.h"
 #include "llviewercontrol.h"
 // [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a)
+#include "llsdserialize.h"
 #include "rlvhandler.h"
 #include "rlvextensions.h"
 #include "sanitycheck.h"
@@ -593,6 +594,15 @@ void LLFloaterSettingsDebug::updateControl()
 			mColorSwatch->setValue(sd);
 			break;
 		  }
+// [RLVa:KB] - Patch: RLVa-2.1.0
+		  case TYPE_LLSD:
+			  {
+				  std::ostringstream strLLSD;
+				  LLSDSerialize::toPrettyNotation(sd, strLLSD);
+				  mComment->setText(strLLSD.str());
+			  }
+			  break;
+// [/RLVa:KB]
 		  default:
 			mComment->setText(std::string("unknown"));
 			break;

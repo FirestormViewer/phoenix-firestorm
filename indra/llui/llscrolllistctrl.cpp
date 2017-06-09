@@ -2173,7 +2173,10 @@ BOOL LLScrollListCtrl::handleClick(S32 x, S32 y, MASK mask)
 			for (item_list::iterator iter = mItemList.begin(); iter != mItemList.end(); iter++)
 			{
 				LLScrollListItem* item = *iter;
-				if (item->getSelected())
+				// <FS:ND> Some nullptr handling ...
+				//if( item->getSelected() )
+				if( item && item->getSelected() && item->getColumn( column_index ) )
+				// </FS:ND>
 				{
 					LLScrollListCell* cellp = item->getColumn(column_index);
 					cellp->setValue(item_value);

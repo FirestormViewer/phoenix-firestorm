@@ -1580,7 +1580,9 @@ even though the user gets a free copy.
              text_enabled_color="SL-MidBlue"
              top_pad="3"
              width="87" />
-            <button follows="top|right"
+            <button
+             tab_stop="false"
+             follows="top|right"
              height="19" 
              label="C"
              top_delta="-43"
@@ -1590,7 +1592,9 @@ even though the user gets a free copy.
              enabled="true"
              tool_tip="Copy Position"
              width="20" />
-            <button follows="top|right"
+            <button
+             tab_stop="false"
+             follows="top|right"
              height="19"
              label="P"
              top_pad="3"
@@ -1599,7 +1603,9 @@ even though the user gets a free copy.
              enabled="true"
              tool_tip="Paste Position"
              width="20" />
-            <button follows="top|right"
+            <button
+             tab_stop="false"
+             follows="top|right"
              height="19"
              label="p"
              top_pad="3"
@@ -1668,7 +1674,9 @@ even though the user gets a free copy.
              text_enabled_color="White"
              top_pad="3"
              width="87" />
-            <button follows="top|right"
+            <button
+             tab_stop="false"
+             follows="top|right"
              height="19" 
              label="C"
              top_delta="-43"
@@ -1678,7 +1686,9 @@ even though the user gets a free copy.
              enabled="true"
              tool_tip="Copy Size"
              width="20" />
-            <button follows="top|right"
+            <button
+             tab_stop="false"
+             follows="top|right"
              height="19"
              label="P"
              top_pad="3"
@@ -1687,7 +1697,9 @@ even though the user gets a free copy.
              enabled="true"
              tool_tip="Paste Size"
              width="20" />
-            <button follows="top|right"
+            <button
+             tab_stop="false"
+             follows="top|right"
              height="19"
              label="p"
              top_pad="3"
@@ -1756,7 +1768,9 @@ even though the user gets a free copy.
              text_enabled_color="White"
              top_pad="3"
              width="87" />
-            <button follows="top|right"
+            <button
+             tab_stop="false"
+             follows="top|right"
              height="19"
              label="C"
              top_delta="-43"
@@ -1766,7 +1780,9 @@ even though the user gets a free copy.
              enabled="true"
              tool_tip="Copy Rotation"
              width="20" />
-            <button follows="top|right"
+            <button
+             tab_stop="false"
+             follows="top|right"
              height="19"
              label="P"
              top_pad="3"
@@ -1775,7 +1791,9 @@ even though the user gets a free copy.
              enabled="true"
              tool_tip="Paste Rotation"
              width="20" />
-            <button follows="top|right"
+            <button
+             tab_stop="false"
+             follows="top|right"
              height="19"
              label="p"
              top_pad="3"
