@@ -1273,8 +1273,8 @@ Shnurui Troughton
 Shyotl Kuhr
 	MAINT-1138
 	MAINT-2334
-    STORM-2143
 	MAINT-6913
+	STORM-2143
 Siana Gearz
 	STORM-960
 	STORM-1088
@@ -1308,8 +1308,8 @@ Sovereign Engineer
     MAINT-6107
     STORM-2107
     MAINT-6218
-    STORM-2143
     MAINT-6913
+    STORM-2143
 SpacedOut Frye
 	VWR-34
 	VWR-45
