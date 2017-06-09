@@ -33,6 +33,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <boost/filesystem.hpp>
 #include <boost/lambda/core.hpp>
 #include <boost/regex.hpp>
 
@@ -4851,6 +4852,21 @@ BOOL LLViewerWindow::mousePointOnLandGlobal(const S32 x, const S32 y, LLVector3d
 // <FS:Ansariel> Threaded filepickers
 void do_save_image(LLImageFormatted* image, const std::string& snapshot_dir, const std::string& base_name, const std::string& extension, boost::function<void(bool)> callback)
 {
+// Check if there is enough free space to save snapshot
+#ifdef LL_WINDOWS
+	boost::filesystem::space_info b_space = boost::filesystem::space(utf8str_to_utf16str(snapshot_dir));
+#else
+	boost::filesystem::space_info b_space = boost::filesystem::space(snapshot_dir);
+#endif
+	if (b_space.free < image->getDataSize())
+	{
+		if (callback)
+		{
+			callback(false);
+		}
+		return;
+	}
+
 	// Look for an unused file name
 	std::string filepath;
 	S32 i = 1;
@@ -4961,6 +4977,16 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 	//	LLViewerWindow::sSnapshotDir = gDirUtilp->getDirName(filepath);
 	//}
 
+// Check if there is enough free space to save snapshot
+//#ifdef LL_WINDOWS
+//	boost::filesystem::space_info b_space = boost::filesystem::space(utf8str_to_utf16str(sSnapshotDir));
+//#else
+//	boost::filesystem::space_info b_space = boost::filesystem::space(sSnapshotDir);
+//#endif
+//	if (b_space.free < image->getDataSize())
+//	{
+//		return FALSE;
+//	}
 	//// Look for an unused file name
 	//std::string filepath;
 	//S32 i = 1;

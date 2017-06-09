@@ -861,7 +861,7 @@ class LLFileTakeSnapshotToDisk : public view_listener_t
 			//formatted->enableOverSize() ;
 			//formatted->encode(raw, 0);
 			//formatted->disableOverSize() ;
-			//gViewerWindow->saveImageNumbered(formatted);
+			//LLSnapshotLivePreview::saveLocal(formatted);
 
 			LLSnapshotModel::ESnapshotFormat fmt = (LLSnapshotModel::ESnapshotFormat) gSavedSettings.getS32("SnapshotFormat");
 			switch (fmt)
