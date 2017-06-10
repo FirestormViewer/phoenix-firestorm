@@ -1312,9 +1312,12 @@
   <color
       name="MoneyTrackerDecrease"
       reference="Red" />
+  <!-- FS:BEQ [FIRE-21013] Request from LL. Change the URL Query part colour to be be more distinct from the URL colour on default settings -->
+  <!-- Gray maps to 0.5 0.5 0.5 1 in llcolor4 terms which corresponds to the Lab viewer color -->
   <color
       name="UriQueryPartColor"
-      value="0.780 0.850 0.674 1.0" />
+      reference="Gray" />
+<!-- /FS:BEQ -->
   <color
       name="UploadDialogBackground"
       reference="DkGray" />
