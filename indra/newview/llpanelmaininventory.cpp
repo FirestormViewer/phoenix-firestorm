@@ -124,7 +124,14 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	// Menu Callbacks (non contex menus)
 	mCommitCallbackRegistrar.add("Inventory.DoToSelected", boost::bind(&LLPanelMainInventory::doToSelected, this, _2));
 	mCommitCallbackRegistrar.add("Inventory.CloseAllFolders", boost::bind(&LLPanelMainInventory::closeAllFolders, this));
-	mCommitCallbackRegistrar.add("Inventory.EmptyTrash", boost::bind(&LLInventoryModel::emptyFolderType, &gInventory, "ConfirmEmptyTrash", LLFolderType::FT_TRASH));
+	// <FS:Beq> FIRE-21247 Make it possible to disable trash-emptying warning
+	if (gSavedPerAccountSettings.getBOOL("FSDontNagWhenPurging")){
+		mCommitCallbackRegistrar.add("Inventory.EmptyTrash", boost::bind(&LLInventoryModel::emptyFolderType, &gInventory, "", LLFolderType::FT_TRASH));
+	}
+	else{
+		mCommitCallbackRegistrar.add("Inventory.EmptyTrash", boost::bind(&LLInventoryModel::emptyFolderType, &gInventory, "ConfirmEmptyTrash", LLFolderType::FT_TRASH));
+	}
+	// </FS:Beq>
 	mCommitCallbackRegistrar.add("Inventory.EmptyLostAndFound", boost::bind(&LLInventoryModel::emptyFolderType, &gInventory, "ConfirmEmptyLostAndFound", LLFolderType::FT_LOST_AND_FOUND));
 	mCommitCallbackRegistrar.add("Inventory.DoCreate", boost::bind(&LLPanelMainInventory::doCreate, this, _2));
 	mCommitCallbackRegistrar.add("Inventory.ShowFilters", boost::bind(&LLPanelMainInventory::toggleFindOptions, this));
@@ -1488,8 +1495,15 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 	}
 	if (command_name == "empty_trash")
 	{
-		const std::string notification = "ConfirmEmptyTrash";
-		gInventory.emptyFolderType(notification, LLFolderType::FT_TRASH);
+		// <FS:Beq> FIRE-21247 Make it possible to disable trash-emptying warning
+		// Restore previous behaviour if FSDontNagWhenPurging is TRUE (default FALSE)
+		if (gSavedPerAccountSettings.getBOOL("FSDontNagWhenPurging")){
+			gInventory.emptyFolderType("", LLFolderType::FT_TRASH);
+		}
+		else{
+			gInventory.emptyFolderType("ConfirmEmptyTrash", LLFolderType::FT_TRASH);
+		}
+		// </FS:Beq>
 	}
 	if (command_name == "empty_lostnfound")
 	{
