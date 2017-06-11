@@ -3490,7 +3490,10 @@ bool LLInventoryModel::callbackEmptyFolderType(const LLSD& notification, const L
 
 void LLInventoryModel::emptyFolderType(const std::string notification, LLFolderType::EType preferred_type)
 {
-	if (!notification.empty())
+	// <FS:Ansariel> FIRE-21247 Make it possible to disable trash-emptying warning
+	//if (!notification.empty())
+	if (!notification.empty() && (notification != "ConfirmEmptyTrash" || !gSavedSettings.getBOOL("FSDontNagWhenPurging")))
+	// </FS:Ansariel>
 	{
 		LLSD args;
 		if(LLFolderType::FT_TRASH == preferred_type)
