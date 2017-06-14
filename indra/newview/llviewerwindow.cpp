@@ -4922,10 +4922,13 @@ void LLViewerWindow::saveImageCallback(const std::string& filename, LLImageForma
 
 // Saves an image to the harddrive as "SnapshotX" where X >= 1.
 // <FS:Ansariel> Threaded filepickers
-//BOOL LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picker)
+//BOOL LLViewerWindow::saveImageNumbered(LLImageFormatted *image, BOOL force_picker, BOOL& insufficient_memory)
 void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picker, boost::function<void(bool)> callback)
 // </FS:Ansariel>
 {
+	// <FS:Ansariel> Threaded filepickers
+	//insufficient_memory = FALSE;
+
 	if (!image)
 	{
 		LL_WARNS() << "No image to save" << LL_ENDL;
@@ -4985,6 +4988,7 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 //#endif
 //	if (b_space.free < image->getDataSize())
 //	{
+//		insufficient_memory = TRUE;
 //		return FALSE;
 //	}
 	//// Look for an unused file name

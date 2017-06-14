@@ -1209,12 +1209,13 @@ void LLSnapshotLivePreview::saveTexture(BOOL outfit_snapshot, std::string name)
 //	return success;
 //}
 //
-////Check if failed due to insuficient memory
+////Check if failed due to insufficient memory
 //BOOL LLSnapshotLivePreview::saveLocal(LLPointer<LLImageFormatted> mFormattedImage)
 //{
-//	BOOL success = gViewerWindow->saveImageNumbered(mFormattedImage);
+//	BOOL insufficient_memory;
+//	BOOL success = gViewerWindow->saveImageNumbered(mFormattedImage, FALSE, insufficient_memory);
 //
-//	if (!success)
+//	if (insufficient_memory)
 //	{
 //		std::string lastSnapshotDir = LLViewerWindow::getLastSnapshotDir();
 //
