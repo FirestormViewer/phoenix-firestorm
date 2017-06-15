@@ -39,7 +39,11 @@
 #include "llxmltree.h"
 
 std::map<std::string, std::string> LLFloaterGridStatus::sItemsMap;
-const std::string DEFAULT_GRID_STATUS_URL = "http://secondlife-status.statuspage.io/";
+// <FS:Beq> [FIRE-21236] Changes to improve usability of grid status
+// update URL to the "internal" secondlife alias for consistency with link opening preferences
+//const std::string DEFAULT_GRID_STATUS_URL = "http://secondlife-status.statuspage.io/"; 
+const std::string DEFAULT_GRID_STATUS_URL = "http://status.secondlifegrid.net";
+// </FS:Beq>
 
 LLFloaterGridStatus::LLFloaterGridStatus(const Params& key) :
     LLFloaterWebContent(key),
@@ -62,6 +66,9 @@ void LLFloaterGridStatus::onOpen(const LLSD& key)
     p.allow_address_entry = false;
 
     LLFloaterWebContent::onOpen(p);
+	// <FS:Beq> [FIRE-21236] Changes to improve usability of grid status
+	getChildView("popexternal")->setEnabled(true);
+	// </FS:Beq>
     applyPreferredRect();
     if (mWebBrowser)
     {
