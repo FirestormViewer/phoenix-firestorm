@@ -2869,14 +2869,16 @@ void LLPanelLandAccess::refresh_ui()
 			{
 				getChildView("limit_age_verified")->setEnabled(can_manage_allowed);
 			}
-			if (override)
-			{
-				getChildView("Only Allow")->setToolTip(getString("estate_override"));
-			}
-			else
-			{
-				getChildView("Only Allow")->setToolTip(std::string());
-			}
+			// <FS:Ansariel> Does not exist as of 16-06-2017
+			//if (override)
+			//{
+			//	getChildView("Only Allow")->setToolTip(getString("estate_override"));
+			//}
+			//else
+			//{
+			//	getChildView("Only Allow")->setToolTip(std::string());
+			//}
+			// </FS:Ansariel>
 			getChildView("PassCheck")->setEnabled(FALSE);
 			getChildView("pass_combo")->setEnabled(FALSE);
 			getChildView("AccessList")->setEnabled(FALSE);
