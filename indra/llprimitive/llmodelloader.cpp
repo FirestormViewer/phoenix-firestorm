@@ -192,7 +192,7 @@ LLModelLoader::LLModelLoader(
 		mJointMap["R Upper Leg"] = "R Upper Leg";
 		mJointMap["L Upper Leg"] = "L Upper Leg";
 		mJointMap["R Lower Leg"] = "R Lower Leg";
-		mJointMap["L Lower Leg"] = "R Lower Leg";
+		mJointMap["L Lower Leg"] = "L Lower Leg";
 		mJointMap["Right Foot"] = "Right Foot";
 		mJointMap["Left Foot"] = "Left Foot";
 		mJointMap["Neck"] = "Neck";
@@ -222,7 +222,7 @@ LLModelLoader::LLModelLoader(
 		mJointMap["R_Upper_Leg"] = "R Upper Leg";
 		mJointMap["L_Upper_Leg"] = "L Upper Leg";
 		mJointMap["R_Lower_Leg"] = "R Lower Leg";
-		mJointMap["L_Lower_Leg"] = "R Lower Leg";
+		mJointMap["L_Lower_Leg"] = "L Lower Leg";
 		mJointMap["Right_Foot"] = "Right Foot";
 		mJointMap["Left_Foot"] = "Left Foot";
 		mJointMap["Chest"] = "Chest";
