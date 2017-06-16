@@ -10,7 +10,7 @@
     <button name="set_name" tool_tip="Ustaw Imię Wyświetlane" />
     <text name="Key:" value="Klucz:" />
     <text_editor name="user_key" value="(ładowanie...)" />
-    <button name="copy_uri_button" label="Kopiuj URI" />
+    <button name="copy_own_uri_button" label="Kopiuj URI" />
     <text name="label" value="Żyje:" />
     <text name="label2" value="Konto:" />
     <text name="Groups:" value="Grupy:" />
