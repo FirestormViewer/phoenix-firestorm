@@ -22546,7 +22546,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSIMSystemMessageBrackets</key>
     <map>
       <key>Comment</key>
-      <string>Enables surrounding system messages with square brackets in chat transcript. []</string>
+      <string>Enables surrounding system messages with square brackets in chat transcript if using V1 style chat history. []</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
