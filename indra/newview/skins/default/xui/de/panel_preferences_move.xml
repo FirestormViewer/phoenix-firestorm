@@ -89,6 +89,7 @@
 			<check_box label="Deaktiviere Teleport-Leitstrahl" name="tp_beam_toggle" tool_tip="Deaktiviert den Leitstrahl zum Teleportziel nach Teleports."/>
 			<check_box label="Deaktiviere Teleport-Anzeige" name="tp_screen_toggle" tool_tip="Deaktiviert den schwarzen Teleport-Bildschirm während eines Teleports."/>
 			<check_box label="Karte bei Teleports nicht schließen" name="FSDoNotHideMapOnTeleport" tool_tip="Deaktiviert das automatische Schließen der Karte während eines Teleports."/>
+			<check_box label="Nach Teleports „Nur Freunde anzeigen“ aktiviert lassen" name="FSRenderFriendsOnlyPersistsTP" tool_tip="Falls aktiviert bleibt die Einstellung „Nur Freunde anzeigen“ nach einem Teleport aktiviert (Standard: deaktiviert)"/>
 		</panel>
 
 		<!-- Map & Minimap -->

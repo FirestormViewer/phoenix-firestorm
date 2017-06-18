@@ -100,6 +100,7 @@ public:
 
 protected:
 	void				init();
+	void				populateRatioList();
 	/* virtual */ BOOL	postBuild();
 	bool				setAspectRatio(const F32 width, const F32 height);
 	static void			onAspectRatioCommit(LLUICtrl*,void* userdata);
@@ -136,9 +137,6 @@ private:
 
 	// <FS:Ansariel> Performance improvement
 	LLUICtrl*	mDimensionsCtrl;
-	S32			mCurrentImageWidth;
-	S32			mCurrentImageHeight;
-	// </FS:Ansariel>
 
 	LLLoadedCallbackEntry::source_callback_list_t mCallbackTextureList ; 
 	std::vector<std::string>		mRatiosList;

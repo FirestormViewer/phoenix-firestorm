@@ -151,19 +151,20 @@
 #include "fslslbridge.h"
 #include "fscommon.h"
 #include "fsfloaterexport.h"
-#include "fsfloatercontacts.h"	// <FS:Zi> Display group list in contacts floater
-#include "fspose.h"	// <FS:CR> FIRE-4345: Undeform
+#include "fsfloatercontacts.h"
+#include "fsfloaterplacedetails.h"
+#include "fspose.h"
 #include "lfsimfeaturehandler.h"
-#include "llavatarpropertiesprocessor.h"	// ## Zi: Texture Refresh
+#include "llavatarpropertiesprocessor.h"
+#include "llcheckboxctrl.h"
+#include "llfloatergridstatus.h"
+#include "llfloaterpreference.h"
+#include "lllogininstance.h"
+#include "llscenemonitor.h"
 #include "llsdserialize.h"
-#include "lltexturecache.h"	// ## Zi: Texture Refresh
-#include "lllogininstance.h"	// <FS:AW  opensim destinations and avatar picker>
+#include "lltexturecache.h"
 #include "llvovolume.h"
 #include "particleeditor.h"
-#include "llfloaterpreference.h"	//<FS:KC> Volume controls prefs
-#include "llcheckboxctrl.h"			//<FS:KC> Volume controls prefs
-#include "llscenemonitor.h"
-#include "fsfloaterplacedetails.h"
 
 using namespace LLAvatarAppearanceDefines;
 
@@ -9672,6 +9673,20 @@ bool isGridFeatureEnabled(const LLSD& userdata)
 }
 // </FS:CR>
 
+// <FS:Ansariel> FIRE-21236 - Help Menu - Check Grid Status doesn't open using External Browser
+void openGridStatus()
+{
+	if (LLWeb::useExternalBrowser(DEFAULT_GRID_STATUS_URL))
+	{
+		LLWeb::loadURLExternal(DEFAULT_GRID_STATUS_URL);
+	}
+	else
+	{
+		LLFloaterReg::toggleInstance("grid_status");
+	}
+}
+// </FS:Ansariel>
+
 class LLToolsSelectOnlyMyObjects : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -11036,6 +11051,7 @@ void initialize_menus()
 	
 	enable.add("GridCheck", boost::bind(&checkIsGrid, _2)); // <FS:CR> Opensim menu item visibility control
 	enable.add("GridFeatureCheck", boost::bind(&isGridFeatureEnabled, _2));
+	commit.add("OpenGridStatus", boost::bind(&openGridStatus)); // <FS:Ansariel> FIRE-21236 - Help Menu - Check Grid Status doesn't open using External Browser
 
 	// Agent
 	commit.add("Agent.toggleFlying", boost::bind(&LLAgent::toggleFlying));
@@ -11059,9 +11075,9 @@ void initialize_menus()
 	commit.add("EditShape", boost::bind(&handle_edit_shape));
 	commit.add("HoverHeight", boost::bind(&handle_hover_height));
 	commit.add("EditPhysics", boost::bind(&handle_edit_physics));
-//-TT Client LSL Bridge
+	// <FS:TT> Client LSL Bridge
 	commit.add("RecreateLSLBridge", boost::bind(&handle_recreate_lsl_bridge));
-//-TT
+	// </FS:TT>
 
 	// View menu
 	view_listener_t::addMenu(new LLViewMouselook(), "View.Mouselook");

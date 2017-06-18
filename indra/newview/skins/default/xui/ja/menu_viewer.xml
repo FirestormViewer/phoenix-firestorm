@@ -151,6 +151,7 @@
 		<menu_item_call label="テレポート履歴" name="Teleport History"/>
 		<menu_item_check label="場所" name="Places"/>
 		<menu_item_call label="行き先..." name="Destinations" />
+		<menu_item_call label="イベント" name="Events" />
 		<menu_item_check label="ミニマップ" name="Mini-Map"/>
 		<menu_item_check label="世界地図" name="World Map"/>
 		<menu_item_check label="地域別アバター数" name="Region Tracker" />

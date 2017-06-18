@@ -14,7 +14,7 @@
 				<radio_item label="Riesig" name="consradio4"/>
 			</radio_group>
 			<check_box label="Beim Chatten Avataranimation abspielen, z.B. für Rufen" name="play_avatar_animations"/>
-			<check_box label="Systemmeldungen in Klammern einschließen" name="FSIMSystemMessageBrackets"/>
+			<check_box label="Systemmeldungen in Klammern einschließen (nur bei V1-Stil-Chatverlauf)" name="FSIMSystemMessageBrackets"/>
 			<check_box label="Im Chatverlauf „Du“ anstatt des eigenen Namens anzeigen" name="FSChatHistoryShowYou"/>
 			<check_box name="EmotesUseItalic" label="Kursive Schrift für Emotes verwenden"/>
 			<check_box name="FSEmphasizeShoutWhisper" label="Rufen fett, Flüstern kursiv hervorheben"/>

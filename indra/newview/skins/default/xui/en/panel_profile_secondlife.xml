@@ -176,7 +176,16 @@ KC: Use view_border's around text_editor's due to text render issues with border
          name="status"
          halign="center"
          value="" />
-
+  
+        <button
+         top_delta="-2"
+         right="-6"
+         height="18"
+         layout="topleft"
+         follows="top|right"
+         name="copy_own_uri_button"
+         label="Copy URI" />
+  
         <texture_picker
          top_pad="3"
          left="6"

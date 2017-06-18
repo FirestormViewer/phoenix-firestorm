@@ -56,13 +56,13 @@
 		
 		<panel label="移動" name="tab-movement">
 			<check_box label="常に矢印キー操作で動くようにする" name="arrow_keys_move_avatar_check"/>
-			<check_box label="WASDなどの文字キーを押すと、ローカルチャットを始めるのではなく、（それぞれ前左後右に）移動するようにする" name="LetterKeysAffectsMovementNotFocusChatBar" />
+			<check_box label="WASDなどの文字キーを押すと、ローカルチャットを始めるのではなく、前左後右に移動するようにする" name="LetterKeysAffectsMovementNotFocusChatBar" />
 			<check_box label="AZERTYキーボード配列（フランス式）を使用" name="FSUseAzertyKeyboardLayout" />
 			<check_box label="上矢印キー2度押し+長押しで走る" name="tap_tap_hold_to_run"/>
 			<check_box label="UP/DOWNキーの長押しで飛行／着地する" name="automatic_fly" />
 			<check_box label="身をかがめる動作を有効にする" name="crouch_toggle_mode" />
 			<check_box label="構えてからジャンプしたり、着地のポーズをしてから動き出すのをやめる" name="FSIgnoreFinishAnimation" />
-			<check_box label="後ろ向きに歩き出した時に、アバターがカメラの方に向き直る機能をローカルでオフにする" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="後ろ向きに歩き出した時に、その場でアバターがカメラの方に向き直る機能をオフにします。このオプションはあなたのローカル・ビューにのみ影響し、また、スクリプトの入ったAOを装着していると機能しません。" />
+			<check_box label="画面上でアバターが後ろ向きに歩くのを許可する。（SLの仕様により、ローカルでのみ有効）" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="ここにチェックを入れると、後ろ向きに歩き出したアバターが、あなたの画面上ではそのまま後ろ向きに歩くように見えるようになります。この設定はあなたのビューワでの見せ方だけに影響しており、実際にアバターがそのような動きをしているわけではありません。動き出した時にその方向に振り返るのはセカンドライフ・ビューワのデフォルトの動きです。アバターがAOを使用していると、この動きをオーバーライドし、強制的にアバターを進行方向に振り返らせる可能性があります。" />
 			<check_box label="選択したオブジェクトの方にアバターが向くようにする" name="FSTurnAvatarToSelectedObject" tool_tip="選択しているオブジェクトの方向にアバターが顔をむけるようにします" />
 			<text name="movelock_lbl">
 				内蔵のLSL Bridgeのムーブメントロックが有効になっている場合...

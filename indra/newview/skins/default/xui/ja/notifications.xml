@@ -4554,27 +4554,27 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 	<notification name="AvatarEjectFailed">
 		その区画の管理権限がないため、追放できませんでした。
 	</notification>
-	<notification name="CantMoveObjectParcelFull">
-		区画が埋まっているため、オブジェクト &apos;[OBJECT_NAME]&apos; を、リージョン [REGION_NAME] 内の [OBJ_POSITION] に移動できません。
+	<notification name="CMOParcelFull">
+		区画が埋まっているため、オブジェクト &apos;[O]&apos; を、リージョン [R] 内の [P] に移動できません。
 	</notification>
-	<notification name="CantMoveObjectParcelPerms">
-		オブジェクト &apos;[OBJECT_NAME]&apos; は、この区画で許可されていないため、リージョン [REGION_NAME] 内の [OBJ_POSITION] に移動できません。
+	<notification name="CMOParcelPerms">
+		オブジェクト &apos;[O]&apos; は、この区画で許可されていないため、リージョン [R] 内の [P] に移動できません。
 	</notification>
-	<notification name="CantMoveObjectParcelResources">
-		この区画でこのオブジェクトのリソースが不足しているため、オブジェクト &apos;[OBJECT_NAME]&apos; をリージョン [REGION_NAME] 内の [OBJ_POSITION] に移動できません。
+	<notification name="CMOParcelResources">
+		この区画でこのオブジェクトのリソースが不足しているため、オブジェクト &apos;[O]&apos; をリージョン [R] 内の [P] に移動できません。
 	</notification>
 	<notification name="NoParcelPermsNoObject">
 		その区画へのアクセス権がないため、コピーが失敗しました。
 	</notification>
-	<notification name="CantMoveObjectRegionVersion">
-		オブジェクト &apos;[OBJECT_NAME]&apos; をリージョン [REGION_NAME] 内の [OBJ_POSITION] に移動することはできません。他のリージョンでは、リージョンの境界をまたいだこのオブジェクトを受信することができない古いバージョンを実行しているためです。
+	<notification name="CMORegionVersion">
+		オブジェクト &apos;[O]&apos; をリージョン [R] 内の [P] に移動することはできません。他のリージョンでは、リージョンの境界をまたいだこのオブジェクトを受信することができない古いバージョンを実行しているためです。
 	</notification>
-	<notification name="CantMoveObjectNavMesh">
-		リージョン境界をまたぐナビメッシュを変更できないため、オブジェクト &apos;[OBJECT_NAME]&apos; をリージョン [REGION_NAME] 内の [OBJ_POSITION] に移動できません。
+	<notification name="CMONavMesh">
+		リージョン境界をまたぐナビメッシュを変更できないため、オブジェクト &apos;[O]&apos; をリージョン [R] 内の [P] に移動できません。
 	</notification>
-	<notification name="CantMoveObjectWTF">
-		不明な理由により、オブジェクト &apos;[OBJECT_NAME]&apos; を、リージョン [REGION_NAME] 内の [OBJ_POSITION] に移動できません。
-([FAILURE_TYPE])
+	<notification name="CMOWTF">
+		不明な理由により、オブジェクト &apos;[O]&apos; を、リージョン [R] 内の [P] に移動できません。
+([F])
 	</notification>
 	<notification name="NoPermModifyObject">
 		そのオブジェクトを変更する権限がありません

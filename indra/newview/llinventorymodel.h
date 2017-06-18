@@ -290,9 +290,6 @@ public:
 									const LLUUID& start_folder_id = LLUUID::null);
 	// </FS:Ansariel>
 
-private:
-	U32 getDescendentsCountRecursive(const LLUUID& id, U32 max_item_limit);
-	
 	//--------------------------------------------------------------------
 	// Find
 	//--------------------------------------------------------------------

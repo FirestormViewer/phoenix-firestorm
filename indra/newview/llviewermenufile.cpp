@@ -87,9 +87,11 @@ class LLFileEnableUpload : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-        return true;
-// 		bool new_value = gStatusBar && LLGlobalEconomy::getInstance() && (gStatusBar->getBalance() >= LLGlobalEconomy::getInstance()->getPriceUpload());
-// 		return new_value;
+		// <FS:Ansariel> Make asset upload balance check work again
+        //return true;
+ 		bool new_value = gStatusBar && LLGlobalEconomy::getInstance() && (gStatusBar->getBalance() >= LLGlobalEconomy::getInstance()->getPriceUpload());
+ 		return new_value;
+		// </FS:Ansariel>
 	}
 };
 

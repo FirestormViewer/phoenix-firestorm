@@ -297,5 +297,37 @@
 
 	</panel>
 	
+	<!--Uploads-->
+	<panel label="アップロード" name="UploadsTab">
+		<text name="title">
+			現在アップロード先に指定されているフォルダ：
+		</text>
+		
+		<text name="title_images">
+			画像
+		</text>
+		<text name="upload_textures" />
+		
+		<text name="title_sounds">
+			サウンド
+		</text>
+		<text name="upload_sounds" />
+		
+		<text name="title_animations">
+			アニメーション
+		</text>
+		<text name="upload_animation" />
+		
+		<text name="title_models">
+			モデル
+		</text>
+		<text name="upload_models" />
+		
+		<text name="upload_help">
+アップロード先のフォルダを変更するには、インベントリ上でそのフォルダを右クリックして
+メニューから「デフォルトのフォルダとして使用」を選択して下さい。
+		</text>
+	</panel>
+
 </tab_container>
 </panel>

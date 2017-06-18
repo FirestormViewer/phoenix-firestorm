@@ -82,7 +82,7 @@
 	<menu_item_call label="Wklej" name="Paste"/>
 	<menu_item_call label="Wklej jako link" name="Paste As Link"/>
 	<menu_item_call label="Znajdź wszystkie linki" name="Find Links"/>
-	<menu_item_call label="Zastąp linki" name="Replace Links"/>
+	<menu_item_call label="Zastępowanie linków" name="Replace Links"/>
 	<menu_item_call label="Usuń" name="Delete"/>
 	<menu_item_call label="Wyczyść zepsute linki" name="Cleanup broken Links"/>
 	<menu_item_call label="Przenieś do domyślnego folderu" name="Move to Default Folder"/>
