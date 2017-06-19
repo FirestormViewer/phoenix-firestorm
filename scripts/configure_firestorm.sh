@@ -299,6 +299,21 @@ if [ $PLATFORM == "linux32" -o $PLATFORM == "linux64" -o $PLATFORM == "darwin" ]
 fi
 echo -e "       Logging to $LOG"
 
+if [ $PLATFORM == "win32" ]
+then
+	if [ -z "${AUTOBUILD_VSVER}" ]
+	then
+		echo "AUTOBUILD_VSVER not set, this can lead to autobuild picking a higher VS version than desired."
+		echo "If you see this happen you should set the variable to eg 120 for Visual Studio 2013"
+	fi
+fi
+
+if [ -z "$AUTOBUILD_VARIABLES_FILE" ]
+then
+	echo "AUTOBUILD_VARIABLES_FILE not set."
+	echo "In order to run autobuild it needs to be set to point to a correct variables file"
+	exit 1
+fi
 
 if [ $PLATFORM == "win32" ] ; then
     FIND=/usr/bin/find
