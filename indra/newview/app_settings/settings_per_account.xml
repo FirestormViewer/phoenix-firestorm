@@ -1160,5 +1160,16 @@
         <key>Value</key>
             <integer>0</integer>
         </map>
+     <key>FSRenderFriendsOnlyPersistsTP</key>
+        <map>
+        <key>Comment</key>
+            <string>If enabled, Render Only Friends will persist across TPs. Default (false)</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
     </map>
 </llsd>

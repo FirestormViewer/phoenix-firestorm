@@ -22,6 +22,7 @@
 		<check_box label="オブジェクトの発言には、会話の混乱を避けるため (no name) と表示する" name="FSMarkObjects"/>
 		<check_box label="llOwnerSay をスクリプトのデバッグウィンドウに送る" name="FSllOwnerSayToScriptDebugWindow_checkbox" />
 		<check_box label="吹き出しチャット" name="bubble_text_chat"/>
+		<check_box label="チャットを周辺チャットコンソールやトーストに表示しない" name="FSBubblesHideConsoleAndToasts" />
 		<check_box label="入力中に吹き出しを表示する" name="bubble_text_typing"/>
 		<check_box label="アバター頭上の名前タグに入力中の印を表示" name="FSShowTypingStateInNameTag" />
 		<check_box name="FSSecondsinChatTimestamps" label="タイムスタンプに秒を表示 [HH:MM:SS]" />

@@ -42,6 +42,12 @@
 		<menu_item_call label="新しい髪" name="New Hair"/>
 		<menu_item_call label="新しい眼" name="New Eyes"/>
 	</menu>
+	<menu label="デフォルトのフォルダとして使用" name="upload_def">
+		<menu_item_call label="画像のアップロード用" name="Image uploads" />
+		<menu_item_call label="サウンドのアップロード用" name="Sound uploads" />
+		<menu_item_call label="アニメーションのアップロード用" name="Animation uploads" />
+		<menu_item_call label="モデルのアップロード用" name="Model uploads" />
+	</menu>
 	<menu label="種類を変更" name="Change Type">
 		<menu_item_call label="デフォルト" name="Default"/>
 		<menu_item_call label="手袋" name="Gloves"/>

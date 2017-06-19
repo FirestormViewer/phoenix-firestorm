@@ -251,17 +251,28 @@ BOOL FSPanelProfileSecondLife::postBuild()
 	// allow skins to have copy buttons for name and avatar URI -Zi
 	LLButton* copy_uri_button = findChild<LLButton>("copy_uri_button");
 	LLButton* copy_name_button = findChild<LLButton>("copy_name_button");
-
+	// <FS:Beq> FIRE-21241 - Allow copy URI to appear only on the self profile in certain skins
+	// First we check for a all purpose copy_uri_button, if that was not defined 
+	// then we do a second lookup for copy_own_uri_button. 
+	if (!copy_uri_button)
+	{
+		// extended check to allow skins to have a copy button only on the self tab
+		copy_uri_button = findChild<LLButton>("copy_own_uri_button");
+	}
+	// Same for name
+	if (!copy_name_button){
+		copy_name_button = findChild<LLButton>("copy_own_name_button");
+	}
+	//</FS:Beq>
 	if (copy_uri_button)
 	{
 		copy_uri_button->setCommitCallback(boost::bind(&FSPanelProfileSecondLife::onCopyURI, this));
 	}
-
 	if (copy_name_button)
 	{
 		copy_name_button->setCommitCallback(boost::bind(&FSPanelProfileSecondLife::onCopyToClipboard, this));
 	}
-	// allow skins to have copy buttons for name and avatar URI -Zi
+	
 
 	LLVoiceClient::getInstance()->addObserver((LLVoiceClientStatusObserver*)this);
 
@@ -310,6 +321,22 @@ void FSPanelProfileSecondLife::onOpen(const LLSD& key)
 	FSDropTarget* drop_target = getChild<FSDropTarget>("drop_target");
 	drop_target->setVisible(!own_profile);
 	drop_target->setEnabled(!own_profile);
+
+	// <FS:Beq> FIRE-21241 - Allow copy URI to appear only on the self profile in certain skins
+	// extended check to allow skins to have a copy button only on the self tab
+	LLButton* copy_uri_button = findChild<LLButton>("copy_own_uri_button");
+	LLButton* copy_name_button = findChild<LLButton>("copy_own_name_button");
+	if (copy_uri_button)
+	{
+		copy_uri_button->setVisible(own_profile);
+		copy_uri_button->setEnabled(own_profile);
+	}
+	if (copy_name_button)
+	{
+		copy_name_button->setVisible(own_profile);
+		copy_name_button->setEnabled(own_profile);
+	}
+	// </FS:Beq>
 	
 	if (!own_profile)
 	{

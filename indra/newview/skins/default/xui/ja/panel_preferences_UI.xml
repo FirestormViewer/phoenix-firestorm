@@ -48,6 +48,8 @@
         </text>
         <slider name="ui_scale_slider" />
 
+		<check_box label="UI サイズを自動的に検知する" name="FSEnableAutomaticUIScaling" tool_tip="ここにチェックを入れると、ビューワは OS で設定されているサイズに基づいて、正確にサイズ要素を検知しようとします。この機能は現在 Windows のみで使用可能です。" />
+
 		<text name="ScriptDialogsPerObjectLabel" width="200">
 			オブジェクトあたりのスクリプト情報表示：
 		</text>

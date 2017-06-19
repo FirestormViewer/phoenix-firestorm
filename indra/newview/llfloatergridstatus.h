@@ -34,6 +34,8 @@
 
 class LLMediaCtrl;
 
+// <FS:Ansariel> FIRE-21236 - Help Menu - Check Grid Status doesn't open using External Browser
+const std::string DEFAULT_GRID_STATUS_URL = "http://secondlife-status.statuspage.io/"; 
 
 class LLFloaterGridStatus :
     public LLFloaterWebContent

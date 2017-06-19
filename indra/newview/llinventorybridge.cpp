@@ -99,6 +99,7 @@
 #endif
 // </FS:Zi>
 #include "fsfloaterplacedetails.h"
+#include "llviewerattachmenu.h"
 
 #include <boost/shared_ptr.hpp>
 
@@ -4436,58 +4437,60 @@ void LLFolderBridge::buildContextMenuFolderOptions(U32 flags,   menuentry_vec_t&
 		checkFolderForContentsOfType(model, is_object) ||
 		checkFolderForContentsOfType(model, is_gesture) )
 	{
-		// Only enable add/replace outfit for non-system folders.
-		if (!is_system_folder)
+		// <FS:Beq> FIRE-21246 re-enable context menus for remove from COF on system folders and reinstate wearables separator
+		if (is_agent_inventory)
 		{
-			// <FS:Ansariel> FIRE-3302: "Add to Current Outfit" missing for inventory outfit folder
-			items.push_back(std::string("Add To Outfit"));
-
-			// Adding an outfit onto another (versus replacing) doesn't make sense.
-			if (type != LLFolderType::FT_OUTFIT)
+			items.push_back(std::string("Folder Wearables Separator"));
+			// Only enable add/replace outfit for non-system folders.
+			if (!is_system_folder)
 			{
 				// <FS:Ansariel> FIRE-3302: "Add to Current Outfit" missing for inventory outfit folder
-				//items.push_back(std::string("Add To Outfit"));
-				// <FS:TT> Patch: ReplaceWornItemsOnly
-				items.push_back(std::string("Wear Items"));
-				// </FS:TT>
+				items.push_back(std::string("Add To Outfit"));
+	
+				// Adding an outfit onto another (versus replacing) doesn't make sense.
+				if (type != LLFolderType::FT_OUTFIT)
+				{
+					// <FS:Ansariel> FIRE-3302: "Add to Current Outfit" missing for inventory outfit folder
+					//items.push_back(std::string("Add To Outfit"));
+					// <FS:TT> Patch: ReplaceWornItemsOnly
+					items.push_back(std::string("Wear Items"));
+					// </FS:TT>
+				}
+
+				items.push_back(std::string("Replace Outfit"));
 			}
 
-			items.push_back(std::string("Replace Outfit"));
-
-			if (is_agent_inventory)
+			if (is_ensemble)
 			{
-				items.push_back(std::string("Folder Wearables Separator"));
-				if (is_ensemble)
-				{
-					items.push_back(std::string("Wear As Ensemble"));
-				}
-				items.push_back(std::string("Remove From Outfit"));
-				if (!LLAppearanceMgr::getCanRemoveFromCOF(mUUID))
-				{
-					disabled_items.push_back(std::string("Remove From Outfit"));
-				}
+				items.push_back(std::string("Wear As Ensemble"));
 			}
+			items.push_back(std::string("Remove From Outfit"));
+			if (!LLAppearanceMgr::getCanRemoveFromCOF(mUUID))
+			{
+				disabled_items.push_back(std::string("Remove From Outfit"));
+			}
+		}
+		// </FS:Beq> (change also outdents the next 3 if blocks with no fucntional impact)
 //			if (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2010-11-24 (Catznip-2.4)
-			if ( ((is_outfit) && (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))) || 
-				 ((!is_outfit) && (gAgentWearables.isCOFChangeInProgress())) )
+		if ( ((is_outfit) && (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))) || 
+			 ((!is_outfit) && (gAgentWearables.isCOFChangeInProgress())) )
 // [/SL:KB]
-				{
-					disabled_items.push_back(std::string("Replace Outfit"));
-				}
-// [RLVa:KB] - Checked: RLVa-2.0.3
-			// Block "Replace Current Outfit" if the user can't wear the new folder
-			if ( (RlvActions::isRlvEnabled()) && (RlvFolderLocks::instance().isLockedFolder(mUUID, RLV_LOCK_ADD)) )
-			{
-				disabled_items.push_back(std::string("Replace Outfit"));
-			}
-// [/RLVa:KB]
-			if (!LLAppearanceMgr::instance().getCanAddToCOF(mUUID))
-			{
-				disabled_items.push_back(std::string("Add To Outfit"));
-			}
-			items.push_back(std::string("Outfit Separator"));
+		{
+			disabled_items.push_back(std::string("Replace Outfit"));
 		}
+// [RLVa:KB] - Checked: RLVa-2.0.3
+		// Block "Replace Current Outfit" if the user can't wear the new folder
+		if ( (RlvActions::isRlvEnabled()) && (RlvFolderLocks::instance().isLockedFolder(mUUID, RLV_LOCK_ADD)) )
+		{
+			disabled_items.push_back(std::string("Replace Outfit"));
+		}
+// [/RLVa:KB]
+		if (!LLAppearanceMgr::instance().getCanAddToCOF(mUUID))
+		{
+			disabled_items.push_back(std::string("Add To Outfit"));
+		}
+		items.push_back(std::string("Outfit Separator"));
 	}
 }
 
@@ -6939,6 +6942,11 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 						LLUICtrlFactory::create<LLMenuItemCallGL>(p, parent);
 						items.push_back(p.name);
 					}
+
+					// <FS:Ansariel> FIRE-21200: Attachment Points List in Alphabetical Order
+					attach_menu->getItems()->sort(LLViewerAttachMenu::sort());
+					attach_hud_menu->getItems()->sort(LLViewerAttachMenu::sort());
+					// </FS:Ansariel>
 				}
 			}
 		}

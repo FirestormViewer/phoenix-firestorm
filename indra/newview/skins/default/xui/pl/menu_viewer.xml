@@ -183,7 +183,7 @@
 			<menu_item_call label="Usuń skrypty z zaznaczenia" name="Remove Scripts From Selection"/>
 		</menu>
 		<menu label="Odnajdywanie ścieżek" name="Pathfinding">
-			<menu_item_call label="Zbiory części (linków)..." name="pathfinding_linksets_menu_item"/>
+			<menu_item_call label="Obiekty w regionie" name="pathfinding_linksets_menu_item"/>
 			<menu_item_call label="Postacie..." name="pathfinding_characters_menu_item"/>
 			<menu_item_call label="Pokaż / testuj..." name="pathfinding_console_menu_item"/>
 			<menu_item_call label="Odśwież region" name="pathfinding_rebake_navmesh_item"/>

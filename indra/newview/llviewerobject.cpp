@@ -6381,7 +6381,10 @@ BOOL	LLViewerObject::isTempAttachment() const
 
 BOOL LLViewerObject::isHiglightedOrBeacon() const
 {
-	if (LLFloaterReg::instanceVisible("beacons") && (gPipeline.getRenderBeacons(NULL) || gPipeline.getRenderHighlights(NULL)))
+	// <FS:Ansariel> We can render beacons even if the floater is not visible
+	//if (LLFloaterReg::instanceVisible("beacons") && (gPipeline.getRenderBeacons(NULL) || gPipeline.getRenderHighlights(NULL)))
+	if (gPipeline.getRenderBeacons(NULL) || gPipeline.getRenderHighlights(NULL))
+	// </FS:Ansariel>
 	{
 		BOOL has_media = (getMediaType() == LLViewerObject::MEDIA_SET);
 		BOOL is_scripted = !isAvatar() && !getParent() && flagScripted();
