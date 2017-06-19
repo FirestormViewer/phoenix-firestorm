@@ -2,6 +2,7 @@
 <menu_bar name="Login Menu">
 	<menu label="Przeglądarka" name="File">
 		<menu_item_call label="Preferencje..." name="Preferences..."/>
+		<menu_item_call label="Zamknij okno" name="Close Window" />
 		<menu_item_check label="Pokaż wybór siatki" name="Show Grid Picker"/>
 		<menu_item_call label="Wyłącz [APP_NAME]" name="Quit"/>
 	</menu>

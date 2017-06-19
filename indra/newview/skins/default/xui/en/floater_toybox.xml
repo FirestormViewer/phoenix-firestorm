@@ -13,7 +13,7 @@
   save_rect="true"
   single_instance="true"
   title="Toolbar Buttons"
-  width="850">
+  width="875">
   <text
     follows="left|top"
     font="SansSerifMedium"

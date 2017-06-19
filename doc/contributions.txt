@@ -369,6 +369,7 @@ Cinder Roxley
     STORM-2124
     STORM-2127
     STORM-2136
+    STORM-2144
 Clara Young
 Coaldust Numbers
     VWR-1095
@@ -1272,8 +1273,8 @@ Shnurui Troughton
 Shyotl Kuhr
 	MAINT-1138
 	MAINT-2334
-    STORM-2143
 	MAINT-6913
+	STORM-2143
 Siana Gearz
 	STORM-960
 	STORM-1088
@@ -1309,6 +1310,7 @@ Sovereign Engineer
     MAINT-6218
     MAINT-6913
     STORM-2143
+    STORM-2148
     MAINT-7343
 SpacedOut Frye
 	VWR-34

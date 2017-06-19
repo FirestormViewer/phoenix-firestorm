@@ -318,8 +318,12 @@
          name="ScriptDialogOption_3"
          value="3"/>
         <combo_box.item
-         label="Unconstrained"
+         label="Unconstrained for HUDs"
          name="ScriptDialogOption_4"
+         value="4"/>
+        <combo_box.item
+         label="Unconstrained"
+         name="ScriptDialogOption_5"
          value="5"/>
       </combo_box>
         <check_box

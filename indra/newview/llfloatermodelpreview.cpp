@@ -4417,11 +4417,13 @@ void LLModelPreview::setPreviewLOD(S32 lod)
 		combo_box->setCurrentByIndex((NUM_LOD-1)-mPreviewLOD); // combo box list of lods is in reverse order
 		mFMP->childSetValue("lod_file_" + lod_name[mPreviewLOD], mLODFile[mPreviewLOD]);
 
-		LLComboBox* combo_box2 = mFMP->getChild<LLComboBox>("preview_lod_combo2");
-		combo_box2->setCurrentByIndex((NUM_LOD-1)-mPreviewLOD); // combo box list of lods is in reverse order
-		
-		LLComboBox* combo_box3 = mFMP->getChild<LLComboBox>("preview_lod_combo3");
-		combo_box3->setCurrentByIndex((NUM_LOD-1)-mPreviewLOD); // combo box list of lods is in reverse order
+		// <FS:Ansariel> Doesn't exist as of 16-06-2017
+		//LLComboBox* combo_box2 = mFMP->getChild<LLComboBox>("preview_lod_combo2");
+		//combo_box2->setCurrentByIndex((NUM_LOD-1)-mPreviewLOD); // combo box list of lods is in reverse order
+		//
+		//LLComboBox* combo_box3 = mFMP->getChild<LLComboBox>("preview_lod_combo3");
+		//combo_box3->setCurrentByIndex((NUM_LOD-1)-mPreviewLOD); // combo box list of lods is in reverse order
+		// </FS:Ansariel>
 
 		LLColor4 highlight_color = LLUIColorTable::instance().getColor("MeshImportTableHighlightColor");
 		LLColor4 normal_color = LLUIColorTable::instance().getColor("MeshImportTableNormalColor");

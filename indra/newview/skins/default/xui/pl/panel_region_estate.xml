@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Majątek" name="Estate">
 	<text name="estate_help_text">
 		Zmiany na tej zakładce będą odczuwalne we wszystkich regionach.
@@ -15,35 +15,37 @@
 	<text name="estate_owner">
 		(brak danych)
 	</text>
-	<check_box label="Dostęp publiczny" name="externally_visible_check"/>
-	<check_box label="Rozmowy głosowe" name="voice_chat_check"/>
-	<check_box label="Teleportacja bezpośrednia" name="allow_direct_teleport"/>
-	<button label="Zastosuj" name="apply_btn"/>
-	<text name="Only Allow">
-		Dostęp tylko dla Rezydentów:
-	</text>
-	<check_box label="Zarejestrowanych w systemie płatniczym" name="limit_payment" tool_tip="Zbanuj Rezydentów niezarejestrowanych w systemie płatniczym Linden Lab. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji."/>
-	<check_box label="Którzy mają 18+ lat" name="limit_age_verified" tool_tip="Zbanuj Rezydetów, którzy mają mniej niż 18 lat. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji."/>
+	<radio_group name="externally_visible_radio">
+		<radio_item label="Zezwól na osoby i grupy wybrane poniżej" name="estate_restricted_access" />
+		<radio_item label="Dostęp publiczny" name="estate_public_access" />
+	</radio_group>
+	<check_box label="Osoba musi mieć 18+ lat" name="limit_age_verified" tool_tip="Zbanuj Rezydetów, którzy mają mniej niż 18 lat. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji." />
+	<check_box label="Musi mieć dane płatnicze w systemie LL" name="limit_payment" tool_tip="Zbanuj Rezydentów niezarejestrowanych w systemie płatniczym Linden Lab. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji." />
+	<check_box label="Właściciele działek mogą być bardziej restrykcyjni" name="parcel_access_override" />
+	<check_box label="Rozmowy głosowe" name="voice_chat_check" left="308" />
+	<check_box label="Teleportacja bezpośrednia" name="allow_direct_teleport" />
+	<button label="Zastosuj" name="apply_btn" />
 	<text name="estate_manager_label">
 		Zarządcy Majątku:
 	</text>
 	<text name="allow_resident_label">
-		Dozwoleni Rezydenci:
+		Zawsze zezwalaj:
 	</text>
-	<button label="Dodaj..." name="add_estate_manager_btn"/>
-	<button label="Usuń..." name="remove_estate_manager_btn"/>
-	<button label="Dodaj..." name="add_allowed_avatar_btn"/>
-	<button label="Usuń..." name="remove_allowed_avatar_btn"/>
+	<button label="Dodaj..." name="add_estate_manager_btn" />
+	<button label="Usuń..." name="remove_estate_manager_btn" />
+	<button label="Dodaj..." name="add_allowed_avatar_btn" />
+	<button label="Usuń..." name="remove_allowed_avatar_btn" />
 	<text name="allow_group_label">
-		Dozwolone grupy:
+		Zawsze zezwalaj grupom:
 	</text>
 	<text name="ban_resident_label">
-		Zablokowani Rezydenci (bany):
+		Zawsze banuj:
 	</text>
-	<button label="Dodaj..." name="add_allowed_group_btn"/>
-	<button label="Usuń..." name="remove_allowed_group_btn"/>
-	<button label="Dodaj..." name="add_banned_avatar_btn"/>
-	<button label="Usuń..." name="remove_banned_avatar_btn"/>
-	<button label="Wyślij wiadomość do Majątku..." name="message_estate_btn"/>
-	<button label="Wyrzuć Rezydenta z Majątku..." name="kick_user_from_estate_btn"/>
+	<button label="Dodaj..." name="add_allowed_group_btn" />
+	<button label="Usuń..." name="remove_allowed_group_btn" />
+	<button label="Dodaj..." name="add_banned_avatar_btn" />
+	<button label="Usuń..." name="remove_banned_avatar_btn" />
+	<button label="Wyślij wiadomość do Majątku..." name="message_estate_btn" />
+	<button label="Wyrzuć Rezydenta z Majątku..." name="kick_user_from_estate_btn" />
 </panel>
+

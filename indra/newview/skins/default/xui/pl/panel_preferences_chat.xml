@@ -12,7 +12,7 @@
 				<radio_item label="Ogromna" name="consradio4"/>
 			</radio_group>
 			<check_box label="Odtwarzaj animacje awatara (np. krzyczenie)" name="play_avatar_animations"/>
-			<check_box name="FSIMSystemMessageBrackets" label="Pokazuj systemowe wiadomości czatu w nawiasach"/>
+			<check_box name="FSIMSystemMessageBrackets" label="Pokazuj systemowe wiadomości czatu w nawiasach (tylko styl V1)"/>
 			<check_box name="FSChatHistoryShowYou" label="Pokazuj &quot;Ty&quot; w logu czatu zamiast swojego imienia" />
 			<check_box name="EmotesUseItalic" label="Emocje (/me) pisane pochyloną czcionką"/>
 			<check_box name="FSEmphasizeShoutWhisper" label="Pogrubiaj krzyk, pochylaj szept"/>

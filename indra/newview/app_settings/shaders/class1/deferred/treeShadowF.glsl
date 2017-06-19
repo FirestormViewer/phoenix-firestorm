@@ -33,9 +33,7 @@ uniform float minimum_alpha;
 
 uniform sampler2D diffuseMap;
 
-#if !DEPTH_CLAMP // <FS> Fix void and region water flickr by Drake Arconis (Alchemy viewer)
 VARYING vec4 post_pos;
-#endif // <FS> Fix void and region water flickr by Drake Arconis (Alchemy viewer)
 VARYING vec2 vary_texcoord0;
 
 void main() 
@@ -49,7 +47,5 @@ void main()
 
 	frag_color = vec4(1,1,1,1);
 	
-#if !DEPTH_CLAMP // <FS> Fix void and region water flickr by Drake Arconis (Alchemy viewer)
 	gl_FragDepth = max(post_pos.z/post_pos.w*0.5+0.5, 0.0);
-#endif // <FS> Fix void and region water flickr by Drake Arconis (Alchemy viewer)
 }
