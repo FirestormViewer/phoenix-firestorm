@@ -6382,20 +6382,20 @@ BOOL	LLViewerObject::isTempAttachment() const
 BOOL LLViewerObject::isHiglightedOrBeacon() const
 {
 	// <FS:Ansariel> We can render beacons even if the floater is not visible
-	//if (LLFloaterReg::instanceVisible("beacons") && (gPipeline.getRenderBeacons(NULL) || gPipeline.getRenderHighlights(NULL)))
-	if (gPipeline.getRenderBeacons(NULL) || gPipeline.getRenderHighlights(NULL))
+	//if (LLFloaterReg::instanceVisible("beacons") && (gPipeline.getRenderBeacons() || gPipeline.getRenderHighlights()))
+	if (gPipeline.getRenderBeacons() || gPipeline.getRenderHighlights())
 	// </FS:Ansariel>
 	{
 		BOOL has_media = (getMediaType() == LLViewerObject::MEDIA_SET);
 		BOOL is_scripted = !isAvatar() && !getParent() && flagScripted();
 		BOOL is_physical = !isAvatar() && flagUsePhysics();
 
-		return (isParticleSource() && gPipeline.getRenderParticleBeacons(NULL))
-				|| (isAudioSource() && gPipeline.getRenderSoundBeacons(NULL))
-				|| (has_media && gPipeline.getRenderMOAPBeacons(NULL))
-				|| (is_scripted && gPipeline.getRenderScriptedBeacons(NULL))
-				|| (is_scripted && flagHandleTouch() && gPipeline.getRenderScriptedTouchBeacons(NULL))
-				|| (is_physical && gPipeline.getRenderPhysicalBeacons(NULL));
+		return (isParticleSource() && gPipeline.getRenderParticleBeacons())
+				|| (isAudioSource() && gPipeline.getRenderSoundBeacons())
+				|| (has_media && gPipeline.getRenderMOAPBeacons())
+				|| (is_scripted && gPipeline.getRenderScriptedBeacons())
+				|| (is_scripted && flagHandleTouch() && gPipeline.getRenderScriptedTouchBeacons())
+				|| (is_physical && gPipeline.getRenderPhysicalBeacons());
 	}
 	return FALSE;
 }
