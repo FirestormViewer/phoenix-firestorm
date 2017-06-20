@@ -139,6 +139,69 @@ LLModelLoader::LLModelLoader(
 	// <FS:Ansariel> FIRE-17144: Option to rig to attachment spots
 	if (LLControlGroup::getInstance("Global")->getBOOL("FSEnableRiggingToAttachmentSpots"))
 	{
+		// <FS:Beq> (with Ansariel) FIRE-21000: rigging to attachment points broken since at least v5.0.1
+		// ugly hack, we have to add mapping for '_' and ' ' also map a few other missing joints
+		// fixes the broken missing leg. 
+		// *** Revisit this later and normalise joint lookup ***
+		mJointMap["Right Ear"] = "Right Ear";
+		mJointMap["Left Ear"] = "Left Ear";
+		mJointMap["Right Eyeball"] = "Right Eyeball";
+		mJointMap["Left Eyeball"] = "Left Eyeball";
+		mJointMap["Right Shoulder"] = "Right Shoulder";
+		mJointMap["Left Shoulder"] = "Left Shoulder";
+		mJointMap["R Upper Arm"] = "R Upper Arm";
+		mJointMap["L Upper Arm"] = "L Upper Arm";
+		mJointMap["R Forearm"] = "R Forearm";
+		mJointMap["L Forearm"] = "L Forearm";
+		mJointMap["Right Hand"] = "Right Hand";
+		mJointMap["Left Hand"] = "Left Hand";
+		mJointMap["Right Pec"] = "Right Pec";
+		mJointMap["Left Pec"] = "Left Pec";
+		mJointMap["Avatar Center"] = "Avatar Center";
+		mJointMap["Right Hip"] = "Right Hip";
+		mJointMap["Left Hip"] = "Left Hip";
+		mJointMap["R Upper Leg"] = "R Upper Leg";
+		mJointMap["L Upper Leg"] = "L Upper Leg";
+		mJointMap["R Lower Leg"] = "R Lower Leg";
+		mJointMap["L Lower Leg"] = "R Lower Leg";
+		mJointMap["Right Foot"] = "Right Foot";
+		mJointMap["Neck"] = "Neck";
+		mJointMap["Spine"] = "Spine";
+		mJointMap["Pelvis"] = "Pelvis";
+		mJointMap["Chin"] = "Chin";
+		mJointMap["Nose"] = "Nose";
+		mJointMap["Stomach"] = "Stomach";
+		mJointMap["Mouth"] = "Mouth";
+		mJointMap["Right Ear"] = "Right Ear";
+		mJointMap["Left Ear"] = "Left Ear";
+		mJointMap["Right Eyeball"] = "Right Eyeball";
+		mJointMap["Left Eyeball"] = "Left Eyeball";
+		mJointMap["Right Shoulder"] = "Right Shoulder";
+		mJointMap["Left Shoulder"] = "Left Shoulder";
+		mJointMap["R Upper Arm"] = "R Upper Arm";
+		mJointMap["L Upper Arm"] = "L Upper Arm";
+		mJointMap["R Forearm"] = "R Forearm";
+		mJointMap["L Forearm"] = "L Forearm";
+		mJointMap["Right Hand"] = "Right Hand";
+		mJointMap["Left Hand"] = "Left Hand";
+		mJointMap["Right Pec"] = "Right Pec";
+		mJointMap["Left Pec"] = "Left Pec";
+		mJointMap["Avatar Center"] = "Avatar Center";
+		mJointMap["Right Hip"] = "Right Hip";
+		mJointMap["Left Hip"] = "Left Hip";
+		mJointMap["R Upper Leg"] = "R Upper Leg";
+		mJointMap["L Upper Leg"] = "L Upper Leg";
+		mJointMap["R Lower Leg"] = "R Lower Leg";
+		mJointMap["L Lower Leg"] = "L Lower Leg";
+		mJointMap["Right Foot"] = "Right Foot";
+		mJointMap["Left Foot"] = "Left Foot";
+		mJointMap["Neck"] = "Neck";
+		mJointMap["Spine"] = "Spine";
+		mJointMap["Pelvis"] = "Pelvis";
+		mJointMap["Chin"] = "Chin";
+		mJointMap["Nose"] = "Nose";
+		mJointMap["Stomach"] = "Stomach";
+		mJointMap["Mouth"] = "Mouth";
 		mJointMap["Right_Ear"] = "Right Ear";
 		mJointMap["Left_Ear"] = "Left Ear";
 		mJointMap["Right_Eyeball"] = "Right Eyeball";
@@ -159,9 +222,12 @@ LLModelLoader::LLModelLoader(
 		mJointMap["R_Upper_Leg"] = "R Upper Leg";
 		mJointMap["L_Upper_Leg"] = "L Upper Leg";
 		mJointMap["R_Lower_Leg"] = "R Lower Leg";
-		mJointMap["R_Lower_Leg"] = "R Lower Leg";
+		mJointMap["L_Lower_Leg"] = "L Lower Leg";
 		mJointMap["Right_Foot"] = "Right Foot";
 		mJointMap["Left_Foot"] = "Left Foot";
+		mJointMap["Chest"] = "Chest";
+		mJointMap["Skull"] = "Skull";
+		//</FS:Beq>
 	}
 	// </FS:Ansariel>
 	assert_main_thread();

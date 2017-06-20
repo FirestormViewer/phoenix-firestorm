@@ -100,8 +100,9 @@
 			 width="400" />
             <check_box
              control_name="FSIMSystemMessageBrackets"
+             enabled_control="PlainTextChatHistory"
              name="FSIMSystemMessageBrackets"
-             label="Wrap system chat messages in brackets"
+             label="Wrap system chat messages in brackets (V1 style chat history only)"
              layout="topleft"
              top_pad="1"
              height="16"

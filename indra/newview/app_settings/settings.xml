@@ -8644,13 +8644,13 @@
   <key>MemoryFailurePreventionEnabled</key>
   <map>
     <key>Comment</key>
-    <string>If set, the viewer will quit to avoid crash when memory failure happens</string>
+    <string>If set, the viewer will try to throttle memory allocations when memory is low (32bit systems only)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>0</integer>
+    <integer>1</integer>
   </map>
   <key>MemoryLogFrequency</key>
         <map>
@@ -22546,7 +22546,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSIMSystemMessageBrackets</key>
     <map>
       <key>Comment</key>
-      <string>Enables surrounding system messages with square brackets in chat transcript. []</string>
+      <string>Enables surrounding system messages with square brackets in chat transcript if using V1 style chat history. []</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -24396,6 +24396,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>FSDontNagWhenPurging</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, emptying trash will not double check before deleting. WARNING: You should only use this if you are a regular trash emptier and are confident that you will not lose things</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
   </map>
 </llsd>

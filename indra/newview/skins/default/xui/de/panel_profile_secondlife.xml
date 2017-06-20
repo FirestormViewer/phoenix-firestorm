@@ -18,6 +18,7 @@
 	<text name="Key:" value="UUID:"/>
 	<text_editor name="user_key" value="(laden)"/>
 	<text name="status" value="Online"/>
+	<button name="copy_own_uri_button" label="URI kopieren"/>
 	<text name="label" value="Geboren am:"/>
 	<text name="label2" value="Konto:"/>
 	<text name="partner_label" value="Partner:"/>

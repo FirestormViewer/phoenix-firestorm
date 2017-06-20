@@ -22,7 +22,7 @@
 	<check_box label="Osoba musi mieć 18+ lat" name="limit_age_verified" tool_tip="Zbanuj Rezydetów, którzy mają mniej niż 18 lat. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji." />
 	<check_box label="Musi mieć dane płatnicze w systemie LL" name="limit_payment" tool_tip="Zbanuj Rezydentów niezarejestrowanych w systemie płatniczym Linden Lab. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji." />
 	<check_box label="Właściciele działek mogą być bardziej restrykcyjni" name="parcel_access_override" />
-	<check_box label="Rozmowy głosowe" name="voice_chat_check" left="330" />
+	<check_box label="Rozmowy głosowe" name="voice_chat_check" left="308" />
 	<check_box label="Teleportacja bezpośrednia" name="allow_direct_teleport" />
 	<button label="Zastosuj" name="apply_btn" />
 	<text name="estate_manager_label">
