@@ -574,8 +574,10 @@ namespace LLError
 		}
 #endif
 		mFunctionString += std::string(mFunction) + ":";
+        const std::string tag_hash("#");
 		for (size_t i = 0; i < mTagCount; i++)
 		{
+            mTagString.append(tag_hash);
 			// <FS:ND> Tags can be 0, so work around that.
 			//mTagString.append(mTags[i]);
 			char const *pTag = mTags[i];
@@ -585,7 +587,6 @@ namespace LLError
 			// </FS:ND>
             mTagString.append((i == mTagCount - 1) ? "" : ",");
 		}
-        mTagString.append("#");
 	}
 
 #ifdef LL_LINUX
