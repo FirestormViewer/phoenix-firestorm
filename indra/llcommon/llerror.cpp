@@ -579,13 +579,13 @@ namespace LLError
 		{
 			// <FS:ND> Tags can be 0, so work around that.
 
-			// mTagString += std::string("#") + mTags[i] + ((i == mTagCount - 1) ? "" : ",");
+			// mTagString += std::string("#") + mTags[i] + ((i == mTagCount - 1) ? " " : ",");
 
 			char const *pTag = mTags[i];
 			if( !pTag )
 				pTag = "<NULL>";
 
-			mTagString += std::string("#") + pTag + ((i == mTagCount - 1) ? "" : ",");
+			mTagString += std::string("#") + pTag + ((i == mTagCount - 1) ? " " : ",");
 
 			// </FS:ND>
 		}
