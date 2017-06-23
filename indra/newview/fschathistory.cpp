@@ -1334,7 +1334,10 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		{
 			if (chat.mSourceType == CHAT_SOURCE_AGENT)
 			{
-				std::string name_format = "completename";
+				static LLCachedControl<bool> useDisplayNames(gSavedSettings, "UseDisplayNames");
+				static LLCachedControl<bool> nameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
+
+				std::string name_format = (useDisplayNames && nameTagShowUsernames) ? "completename" : "displayname";
 				if (is_local && gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 				{
 					name_format = "rlvanonym";
