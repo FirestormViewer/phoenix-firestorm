@@ -1376,6 +1376,7 @@ void LLAvatarActions::viewChatHistory(const LLUUID& id)
 		extended_id[LL_FCP_COMPLETE_NAME] = avatar_name.getCompleteName();
 		// <FS:Ansariel> [Legacy IM logfile names]
 		//extended_id[LL_FCP_ACCOUNT_NAME] = avatar_name.getAccountName();
+		//LLFloaterReg::showInstance("preview_conversation", extended_id, true);
 		if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
 		{
 			std::string avatar_user_name = avatar_name.getUserName();
@@ -1385,8 +1386,16 @@ void LLAvatarActions::viewChatHistory(const LLUUID& id)
 		{
 			extended_id[LL_FCP_ACCOUNT_NAME] = avatar_name.getAccountName();
 		}
+
+		if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
+		{
+			LLFloaterReg::showInstance("preview_conversation", extended_id, TRUE);
+		}
+		else
+		{
+			gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(extended_id[LL_FCP_ACCOUNT_NAME].asString()));
+		}
 		// </FS:Ansariel> [Legacy IM logfile names]
-		LLFloaterReg::showInstance("preview_conversation", extended_id, true);
 	}
 }
 
