@@ -1168,7 +1168,6 @@ bool LLAppViewer::init()
 		// Early out from user choice.
 		return false;
 	}
-
 	LL_INFOS("InitInfo") << "Hardware test initialization done." << LL_ENDL ;
 
 	// Prepare for out-of-memory situations, during which we will crash on
@@ -1811,33 +1810,6 @@ bool LLAppViewer::frame()
 			{
 				gFrameStalls++;
 			}
-
-			// <FS:Ansariel> MaxFPS Viewer-Chui merge error
-			// Limit FPS
-			//F32 max_fps = gSavedSettings.getF32("MaxFPS");
-			static LLCachedControl<F32> max_fps(gSavedSettings, "MaxFPS");
-			// Only limit FPS when we are actually rendering something.  Otherwise
-			// logins, logouts and teleports take much longer to complete.
-			// <FS:Ansariel> FIRE-11804: Expose MaxFPS
-			//if (max_fps > F_APPROXIMATELY_ZERO && 
-			static LLCachedControl<bool> fsLimitFramerate(gSavedSettings, "FSLimitFramerate");
-			if (fsLimitFramerate && max_fps > F_APPROXIMATELY_ZERO && 
-			// </FS:Ansariel>
-				LLStartUp::getStartupState() == STATE_STARTED &&
-				!gTeleportDisplay &&
-				!logoutRequestSent())
-			{
-				// Sleep a while to limit frame rate.
-				F32 min_frame_time = 1.f / max_fps;
-				S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
-				if (milliseconds_to_sleep > 0)
-				{
-					LL_RECORD_BLOCK_TIME(FTM_YIELD);
-					ms_sleep(milliseconds_to_sleep);
-				}
-			}
-			// </FS:Ansariel> MaxFPS Viewer-Chui merge error
-
 			frameTimer.reset();
 
 			resumeMainloopTimeout();
