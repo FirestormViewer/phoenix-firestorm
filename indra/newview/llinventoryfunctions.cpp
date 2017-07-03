@@ -2449,9 +2449,9 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 				if (!sDisplayedAtSession)
 				{
 					LLUI::sSettingGroups["ignores"]->setBOOL("DeleteItems", TRUE);
-					sDisplayedAtSession = true;
 				}
 			}
+			sDisplayedAtSession = true;
 		}
 		
 		LLAllDescendentsPassedFilter f;

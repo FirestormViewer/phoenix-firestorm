@@ -153,6 +153,7 @@ static bool sMuteListListener_listening = false;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 static LLProcessPtr sGatewayPtr;
+static LLEventStream sGatewayPump("VivoxDaemonPump", true);
 
 static bool isGatewayRunning()
 {
@@ -163,6 +164,7 @@ static void killGateway()
 {
 	if (sGatewayPtr)
 	{
+		sGatewayPump.stopListening("VivoxDaemonPump");
 		sGatewayPtr->kill();
 	}
 }
@@ -656,6 +658,19 @@ bool LLVivoxVoiceClient::endAndDisconnectSession()
     return true;
 }
 
+bool LLVivoxVoiceClient::callbackEndDaemon(const LLSD& data)
+{
+    if (!LLAppViewer::isExiting())
+    {
+        terminateAudioSession(false);
+        closeSocket();
+        cleanUp();
+        LLVoiceClient::getInstance()->setUserPTTState(false);
+        gAgent.setVoiceConnected(false);
+    }
+    sGatewayPump.stopListening("VivoxDaemonPump");
+    return false;
+}
 
 bool LLVivoxVoiceClient::startAndLaunchDaemon()
 {
@@ -768,6 +783,9 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
             params.args.add(LLVivoxSecurity::getInstance()->connectorHandle());
 #           endif // VIVOX_HANDLE_ARGS
 			} // <FS:ND/> 
+
+            params.postend = sGatewayPump.getName();
+            sGatewayPump.listen("VivoxDaemonPump", boost::bind(&LLVivoxVoiceClient::callbackEndDaemon, this, _1));
 
             sGatewayPtr = LLProcess::create(params);
 
