@@ -6,11 +6,11 @@
 		<string>CameraFocalLength</string>
 		<string>CameraFocusTransitionTime</string>
 		<string>CameraFNumber</string>
+		<string>FramePerSecondLimit</string>
 		<string>FSLimitFramerate</string>
 		<string>FSRenderDoFUnderwater</string>
 		<string>FSSimpleAvatarShadows</string>
 		<string>FullScreen</string>
-		<string>MaxFPS</string>
 		<string>RenderAnisotropic</string>
 		<string>RenderAttachedLights</string>
 		<string>RenderAttachedParticles</string>

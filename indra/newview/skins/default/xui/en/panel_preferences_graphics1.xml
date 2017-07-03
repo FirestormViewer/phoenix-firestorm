@@ -1265,7 +1265,7 @@
          width="256"/>
         <slider
          enabled_control="FSLimitFramerate"
-         control_name="MaxFPS"
+         control_name="FramePerSecondLimit"
          decimal_digits="0"
          follows="left|top"
          height="16"

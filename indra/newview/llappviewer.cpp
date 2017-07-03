@@ -1683,7 +1683,11 @@ bool LLAppViewer::frame()
 				gGLActive = TRUE;
 
 				static U64 last_call = 0;
-				if (LLStartUp::getStartupState() == STATE_STARTED
+				// <FS:Ansariel> MaxFPS improvement
+				//if (LLStartUp::getStartupState() == STATE_STARTED
+				static LLCachedControl<bool> fsLimitFramerate(gSavedSettings, "FSLimitFramerate");
+				if (fsLimitFramerate && LLStartUp::getStartupState() == STATE_STARTED
+				// </FS:Ansariel>
 					&& !gTeleportDisplay)
 				{
 					// Frame/draw throttling

@@ -17744,17 +17744,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
-    <key>MaxFPS</key>
-    <map>
-      <key>Comment</key>
-      <string>Yield some time to the local host if we reach a threshold framerate.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>60.0</real>
-    </map>
     <key>ForcePeriodicRenderingTime</key>
     <map>
       <key>Comment</key>
@@ -23213,7 +23202,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSLimitFramerate</key>
       <map>
       <key>Comment</key>
-      <string>Enable framerate limitation defined by MaxFPS</string>
+      <string>Enable framerate limitation defined by FramePerSecondLimit</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
