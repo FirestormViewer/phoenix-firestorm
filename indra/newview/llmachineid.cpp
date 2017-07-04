@@ -37,6 +37,7 @@ using namespace std;
 unsigned char static_unique_id[] =  {0,0,0,0,0,0};
 bool static has_static_unique_id = false;
 
+#if LL_WINDOWS
 class FSComInitialize
 {
 	HRESULT mHR;
@@ -54,7 +55,7 @@ public:
 			CoUninitialize();
 	}
 };
-
+#endif
 // get an unique machine id.
 // NOT THREAD SAFE - do before setting up threads.
 // MAC Address doesn't work for Windows 7 since the first returned hardware MAC address changes with each reboot,  Go figure??

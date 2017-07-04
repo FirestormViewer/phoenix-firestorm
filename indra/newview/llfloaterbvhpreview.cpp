@@ -1198,7 +1198,7 @@ bool LLFloaterBvhPreview::validateLoopIn(const LLSD& data)
 	// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
 	// <FS:Beq> FIRE-21330: (additional cleanup) make loop out round to an integer
 	//	getChild<LLUICtrl>("loop_in_frames")->setValue(LLSD(loop_in_value / 100.f * (F32)mNumFrames));
-	getChild<LLUICtrl>("loop_in_frames")->setValue(LLSD(lround(loop_in_value / 100.f * (F32)mNumFrames)));
+	getChild<LLUICtrl>("loop_in_frames")->setValue(LLSD(ll_round(loop_in_value / 100.f * (F32)mNumFrames)));
 	// </FS:Beq>
 	// </FS:Sei>
 	return true;
@@ -1232,7 +1232,7 @@ bool LLFloaterBvhPreview::validateLoopOut(const LLSD& data)
 	// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
 	// <FS:Beq> FIRE-21330: (additional cleanup) make loop out round to an integer
 //	getChild<LLUICtrl>("loop_out_frames")->setValue(LLSD(loop_out_value / 100.f * (F32)mNumFrames));
-	getChild<LLUICtrl>("loop_out_frames")->setValue(LLSD(lround(loop_out_value / 100.f * (F32)mNumFrames)));
+	getChild<LLUICtrl>("loop_out_frames")->setValue(LLSD(ll_round(loop_out_value / 100.f * (F32)mNumFrames)));
 	// </FS:Beq>
 	// </FS:Sei>
 	return true;
