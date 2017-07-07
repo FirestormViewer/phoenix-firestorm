@@ -406,13 +406,20 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 			BOOL res = LLVolumeMessage::unpackVolumeParams(&volume_params, *dp);
 			if (!res)
 			{
-				LL_WARNS() << "Bogus volume parameters in object " << getID() << LL_ENDL;
+				LL_WARNS() << "Bogus volume parameters in object " << getID() << " @ " << getPositionRegion() 
+							<< " in " << getRegion()->getName() << LL_ENDL;
 				LL_WARNS() << getRegion()->getOriginGlobal() << LL_ENDL;
 				// <FS:Beq> [FIRE-16995] [CRASH] Continuous crashing upon entering 3 adjacent sims incl. Hathian, D8, Devil's Pocket
 				// A bad object entry in a .slc simobject cache can result in an unreadable/unusable volume 
 				// This leaves the volume in an uncertain state and can result in a crash when later code access an uninitialised pointer
 				// return an INVALID_UPDATE instead
-				return(INVALID_UPDATE);
+				// <FS:Beq> July 2017 Change backed out due to side effects. FIRE-16995 still an exposure. 
+				// return(INVALID_UPDATE);
+				// NOTE: An option here would be to correctly return the media status using "retval |= INVALID_UPDATE"
+				if (gSavedSettings.getBOOL("FSDebugEnforceStrictObjectCheck"))
+				{
+					retval |= INVALID_UPDATE;
+				}
 				// </FS:Beq>
 			}
 
