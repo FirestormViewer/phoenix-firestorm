@@ -6586,7 +6586,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Ignoriere Gruppenchat von [NAME].
 	</string>
 	<string name="IgnoredAdHocSession">
-		Eine Einladung zu einer Konferenz wurde aufgrund der aktuellen Einstellungen automatisch ignoriert.
+		Eine Einladung zu einer Konferenz durch [AVATAR_NAME] wurde aufgrund der aktuellen Einstellungen automatisch ignoriert.
 	</string>
 
 	<!-- <FS:Ansariel> Radar notifications -->
