@@ -10405,7 +10405,7 @@ class LLViewCheckHUDAttachments : public view_listener_t
 // <FS:Ansariel> Disable Show HUD attachments if prevented by RLVa
 bool enable_show_HUD_attachments()
 {
-	return (!rlv_handler_t::isEnabled() || !gRlvAttachmentLocks.hasLockedHUD());
+	return (!LLPipeline::sShowHUDAttachments || !rlv_handler_t::isEnabled() || !gRlvAttachmentLocks.hasLockedHUD());
 };
 // </FS:Ansariel>
 
