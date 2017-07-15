@@ -1362,7 +1362,17 @@ void LLAvatarActions::viewChatHistory(const LLUUID& id)
 	{
 		if (iter->getParticipantID() == id)
 		{
-			LLFloaterReg::showInstance("preview_conversation", iter->getSessionID(), true);
+			// <FS:Ansariel> External chat history option
+			//LLFloaterReg::showInstance("preview_conversation", iter->getSessionID(), true);
+			if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
+			{
+				LLFloaterReg::showInstance("preview_conversation", iter->getSessionID(), TRUE);
+			}
+			else
+			{
+				gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(iter->getHistoryFileName()));
+			}
+			// </FS:Ansariel>
 			return;
 		}
 	}
