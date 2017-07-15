@@ -142,8 +142,13 @@ public:
 	/*
 	 * Returns true if the user is allowed to paste the specified inventory object (item/folder) into the specified destination category (within user inventory)
 	 */
-	static bool canPaste(const LLInventoryCategory* pSourceCat, const LLInventoryCategory* pDestCat);
-	static bool canPaste(const LLInventoryItem* pSourceItem, const LLInventoryCategory* pDestCat);
+	static bool canPasteInventory(const LLInventoryCategory* pSourceCat, const LLInventoryCategory* pDestCat);
+	static bool canPasteInventory(const LLInventoryItem* pSourceItem, const LLInventoryCategory* pDestCat);
+
+	/*
+	 * Returns true if the user can open the inventory floater for (user/library/notecard/object)inventory based textures
+	 */
+	static bool canPreviewTextures();
 
 	// ========
 	// Movement
@@ -232,9 +237,9 @@ public:
 	static bool canShowHoverText(const LLViewerObject* pObj);
 
 	/*
-	 * Returns true if the user can touch the specified object (with an optional offset relative to its center)
+	 * Returns true if the user can sit on the specified object (see canGroundSit() for sitting on land)
 	 */
-	static bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
+	static bool canSit(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
 
 	/*
 	 * Returns true if the user can see their in-world location
@@ -242,15 +247,15 @@ public:
 	static bool canShowLocation();
 
 	/*
-	 * Returns true if the user can sit on the specified object (see canGroundSit() for sitting on land)
-	 */
-	static bool canSit(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
-
-	/*
 	 * Returns true if the user can stand up (returns true if the user isn't currently sitting)
 	 */
 	static bool canStand();
 	static bool canStand(const LLUUID& idRlvObjExcept);
+
+	/*
+	 * Returns true if the user can touch the specified object (with an optional offset relative to its center)
+	 */
+	static bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
 
 	// ================
 	// Helper functions

@@ -988,7 +988,7 @@ void LLInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 			if ( (pItem) &&
 				 ( ((LLAssetType::AT_NOTECARD == pItem->getType()) && (gRlvHandler.hasBehaviour(RLV_BHVR_VIEWNOTE))) ||
 				   ((LLAssetType::AT_LSL_TEXT == pItem->getType()) && (gRlvHandler.hasBehaviour(RLV_BHVR_VIEWSCRIPT))) ||
-				   ((LLAssetType::AT_TEXTURE == pItem->getType()) && (gRlvHandler.hasBehaviour(RLV_BHVR_VIEWTEXTURE))) ) )
+				   ((LLAssetType::AT_TEXTURE == pItem->getType()) && (!RlvActions::canPreviewTextures()))))
 			{
 				disabled_items.push_back(std::string("Open"));
 			}
@@ -3999,7 +3999,7 @@ void LLFolderBridge::perform_pasteFromClipboard()
                 }
 
 // [RLVa:KB] - Checked: RLVa-2.1.0
-				if ( ((item) && (!RlvActions::canPaste(item, dest_folder))) || ((cat) && (!RlvActions::canPaste(cat, dest_folder))) )
+				if ( ((item) && (!RlvActions::canPasteInventory(item, dest_folder))) || ((cat) && (!RlvActions::canPasteInventory(cat, dest_folder))) )
 				{
 					RlvActions::notifyBlocked(RLV_STRING_BLOCKED_INVFOLDER);
 					return;
@@ -5704,6 +5704,13 @@ bool LLTextureBridge::canSaveTexture(void)
 		return false;
 	}
 	
+// [RLVa:KB] - Checked: RLVa-2.2
+	if (!RlvActions::canPreviewTextures())
+	{
+		return false;
+	}
+// [/RLVa:KB]
+
 	const LLViewerInventoryItem *item = model->getItem(mUUID);
 	if (item)
 	{
