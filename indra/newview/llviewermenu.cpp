@@ -10402,6 +10402,13 @@ class LLViewCheckHUDAttachments : public view_listener_t
 	}
 };
 
+// <FS:Ansariel> Disable Show HUD attachments if prevented by RLVa
+bool enable_show_HUD_attachments()
+{
+	return (!rlv_handler_t::isEnabled() || !gRlvAttachmentLocks.hasLockedHUD());
+};
+// </FS:Ansariel>
+
 class LLEditEnableTakeOff : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -11105,6 +11112,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLViewStatusAway(), "View.Status.CheckAway");
 	view_listener_t::addMenu(new LLViewStatusDoNotDisturb(), "View.Status.CheckDoNotDisturb");
 	view_listener_t::addMenu(new LLViewCheckHUDAttachments(), "View.CheckHUDAttachments");
+	enable.add("View.EnableHUDAttachments", boost::bind(&enable_show_HUD_attachments)); // <FS:Ansariel> Disable Show HUD attachments if prevented by RLVa
 	// <FS:Zi> Add reset camera angles menu
 	view_listener_t::addMenu(new LLViewResetCameraAngles(), "View.ResetCameraAngles");
 	// </FS:Zi>
