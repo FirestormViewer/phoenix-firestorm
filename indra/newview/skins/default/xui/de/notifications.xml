@@ -513,7 +513,7 @@ Um Medien nur auf einer Fläche einzufügen, wählen Sie „Oberfläche auswähl
 		Ein Report-Screenshot konnte aus folgendem Grund nicht hochgeladen werden: [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
-		Bevor Sie sich in [CURRENT_GRID] anmelden können, müssen Sie den Nutzungsbedingungen zustimmen.
+		Bevor Sie sich in [CURRENT_GRID] anmelden können, müssen Sie den Geschäftsbedingungen, Datenschutzbestimmungen und Servicebedingungen zustimmen.
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Outfit konnte nicht angezogen werden.
