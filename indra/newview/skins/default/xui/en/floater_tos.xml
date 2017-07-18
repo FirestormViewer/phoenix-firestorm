@@ -27,7 +27,7 @@
      top="20"
      word_wrap="true"
      width="552">
-        Please read the following Second Life Terms and Conditions, Privacy Policy, and Terms of Service, including the requirements for the use of arbitration and the waiver of any class or group claim to resolve disputes. To continue logging in, you must accept these agreements.
+        Please read the following Terms and Conditions, Privacy Policy, and Terms of Service, including the requirements for the use of arbitration and the waiver of any class or group claim to resolve disputes. To continue logging in, you must accept these agreements.
     </text>
     <text
      type="string"
@@ -74,7 +74,7 @@
      name="agree_list"
      top_delta="15"
      word_wrap="true"
-     width="552">the Second Life Terms and Conditions, Privacy Policy, and Terms of Service, including the dispute resolution requirements. 
+     width="552">the Terms and Conditions, Privacy Policy, and Terms of Service, including the dispute resolution requirements. 
     </text>
     <button
      enabled="false"
