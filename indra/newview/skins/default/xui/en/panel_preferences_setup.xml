@@ -418,7 +418,7 @@
 		 initial_value="1024"
 		 layout="topleft"
 		 max_val="9984"
-		 min_val="64"
+		 min_val="256"
 		 top_pad="10"
 		 name="cache_size"
 		 width="279" />
