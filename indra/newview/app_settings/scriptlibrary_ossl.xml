@@ -417,6 +417,30 @@
 			desc="osAddAgentToGroup(key avatar, string group_name, string role_name);Adds the avatar to a group under a given role" />
 		<function name="osRezObject" sleep="0.0" energy="10.0"
 			desc="osRezObject(string inventory, vector position, vector velocity, rotation rot, integer param, integer rez_at_root_, integer do_recoil, integer set_die_at_edge, integer check_pos);Rez an object" />
+		<function name="osCollisionSound" sleep="0.0" energy="10.0"
+			desc="void osCollisionSound(string impact_sound, double impact_volume);Sets collision sound to impact_sound with specified volume." />
+		<function name="osDie" sleep="0.0" energy="10.0"
+			desc="float osDie(key objectUUID);Deletes an object depending on the target uuid. Note: Only allow osDie() on objects rezzed by the script prim Group (linkset) or on it self." />
+		<function name="osGetPhysicsEngineName" sleep="0.0" energy="10.0"
+			desc="string osGetPhysicsEngineName();This function returns a string containing the name and version number of the physics engine." />
+		<function name="osGetPhysicsEngineType" sleep="0.0" energy="10.0"
+			desc="string osGetPhysicsEngineType();This function returns a string containing the name of the Physics Engine." />
+		<function name="osRequestSecureURL" sleep="0.0" energy="10.0"
+			desc="void osRequestSecureURL(list options);Requests one HTTPS:// url (opensim version 0.9 or over)" />
+		<function name="osRequestURL" sleep="0.0" energy="10.0"
+			desc="void osRequestURL(list options);Requests one HTTP:// url (opensim version 0.9 or over)" />
+		<function name="osNpcSetProfileAbout" sleep="0.0" energy="10.0"
+			desc="osNpcSetProfileAbout(key npc, string about);Set about in created NPC's profile." />
+		<function name="osNpcSetProfileImage" sleep="0.0" energy="10.0"
+			desc="osNpcSetProfileImage(key npc, string image);Set image in created NPC's profile." />
+		<function name="osGetGender" sleep="0.0" energy="10.0"
+			desc="string osGetGender(key id);Returns a string with one of the following values: &apos;male&apos;, &apos;female&apos;, or &apos;unknown&apos;. This value is determined by the value selected for the avatar shape in the appearance dialog in the user's viewer. If that value cannot be found for any reason (avatar is not in the region, improperly formatted key, etc.), &apos;unknown&apos; is returned." />
+		<function name="osGetHealRate" sleep="0.0" energy="10.0"
+			desc="float osGetHealRate(key avatar);Gets the current automatic healing rate in % per second. Default heal rate is now around 0.5% per second. A value of zero can disable automatic heal, current maximum value is 100 % per second." />
+		<function name="osSetHealRate" sleep="0.0" energy="10.0"
+			desc="float osSetHealRate(key avatar, float healrate);Sets the automatic healing rate in % per second. Default heal rate is now around 0.5% per second. A value of zero can disable automatic heal, current maximum value is 100 % per second." />
+		<function name="osDrawFilledEllipse" sleep="0.0" energy="10.0"
+			desc="string osDrawFilledEllipse(string drawList, integer width, integer height);Appends an FillEllipse drawing command to the string provided in drawList and returns the result. The filled ellipse is drawn with the current pen size and color, with the specified width and height (in pixels), centered on a point which is (width/2) pixels to the right of the pen's current X position, and (height/2) pixels below the pen's current Y position. After the filled ellipse is drawn, the width and height values are added to the pen's X and Y position, respectively." />
 		<!-- Windlight specific -->
 		<function name="lsGetWindlightScene" sleep="0.0" energy="10.0"
 			desc="list lsGetWindlightScene(list rules);Return the current Lightshare settings" />

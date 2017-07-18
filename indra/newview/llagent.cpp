@@ -3283,7 +3283,10 @@ bool LLAgent::requestPostCapability(const std::string &capName, LLSD &postData, 
 {
     std::string url;
 
-    url = getRegion()->getCapability(capName);
+    // <FS:Ansariel> FIRE-21323: Crashfix
+    //url = getRegion()->getCapability(capName);
+    url = getRegion() ? getRegion()->getCapability(capName) : "";
+    // </FS:Ansariel>
 
     if (url.empty())
     {
@@ -3299,7 +3302,10 @@ bool LLAgent::requestGetCapability(const std::string &capName, httpCallback_t cb
 {
     std::string url;
 
-    url = getRegion()->getCapability(capName);
+    // <FS:Ansariel> FIRE-21323: Crashfix
+    //url = getRegion()->getCapability(capName);
+    url = getRegion() ? getRegion()->getCapability(capName) : "";
+    // </FS:Ansariel>
 
     if (url.empty())
     {

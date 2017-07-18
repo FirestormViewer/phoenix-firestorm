@@ -347,6 +347,8 @@
             function="View.CheckHUDAttachments" />
             <menu_item_check.on_click
              function="View.ShowHUDAttachments" />
+            <menu_item_check.on_enable
+             function="View.EnableHUDAttachments" />
          </menu_item_check>
 
         <menu_item_separator/>
