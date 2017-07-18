@@ -2144,7 +2144,7 @@ if (WINDOWS)
       )
 
     if( ND_BUILD64BIT_ARCH )
-      set( VIEWERMANIFEST_FLAGS --m64 --copy_artwork )
+      set( VIEWERMANIFEST_FLAGS --m64 )
       set( VIEWERMANIFEST_PACKAGE_FLAGS --m64 )
     else( ND_BUILD64BIT_ARCH )
       set( VIEWERMANIFEST_FLAGS "" )

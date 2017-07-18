@@ -201,7 +201,22 @@ void LLPhysicsShapeBuilderUtil::determinePhysicsShape( const LLPhysicsVolumePara
 	}
 	else if ( volume_params.isSculpt() ) // Is a sculpt of any kind (mesh or legacy)
 	{
-		specOut.mType = volume_params.isMeshSculpt() ? PhysicsShapeSpecification::USER_MESH : PhysicsShapeSpecification::SCULPT;
+		//<FS:Beq> [BUG-134006] Viewer code is not aligned to server code when calculating physics shape for thin objects.
+		specOut.mType = PhysicsShapeSpecification::INVALID;
+		if (volume_params.isMeshSculpt()){
+			static const float SHAPE_BUILDER_CONVEXIFICATION_SIZE_MESH = 0.5;
+			// it's a mesh and only one size is smaller than min. 
+			for (S32 i = 0; i < 3; ++i)
+			{
+				if (scale[i] < SHAPE_BUILDER_CONVEXIFICATION_SIZE_MESH)
+				{
+					specOut.mType = PhysicsShapeSpecification::PRIM_CONVEX;
+				}
+			}
+		}
+		if (specOut.mType == PhysicsShapeSpecification::INVALID)
+			//</FS:Beq>
+			specOut.mType = volume_params.isMeshSculpt() ? PhysicsShapeSpecification::USER_MESH : PhysicsShapeSpecification::SCULPT;
 	}
 	else // Resort to mesh 
 	{

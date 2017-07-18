@@ -1294,7 +1294,7 @@ There was a problem uploading a report screenshot due to the following reason: [
    name="MustAgreeToLogIn"
    type="alertmodal">
    <tag>fail</tag>
-You must agree to the Terms of Service to continue logging into [CURRENT_GRID].
+You must agree to the Terms and Conditions, Privacy Policy, and Terms of Service to continue logging into [CURRENT_GRID].
   </notification>
 
   <notification
