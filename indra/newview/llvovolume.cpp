@@ -373,8 +373,9 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 
 			// Unpack volume data
 			LLVolumeParams volume_params;
-			BOOL res = LLVolumeMessage::unpackVolumeParams(&volume_params, mesgsys, _PREHASH_ObjectData, block_num);
 			// <FS:Beq> Extend the bogus volume error handling to the other code path
+			//LLVolumeMessage::unpackVolumeParams(&volume_params, mesgsys, _PREHASH_ObjectData, block_num);
+			BOOL res = LLVolumeMessage::unpackVolumeParams(&volume_params, mesgsys, _PREHASH_ObjectData, block_num);
 			if (!res)
 			{
 				//<FS:Beq> Improved bad object handling courtesy of Drake.
@@ -414,11 +415,11 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 		//
 
 		S32 result = unpackTEMessage(mesgsys, _PREHASH_ObjectData, (S32) block_num);
+		//<FS:Beq> Improved bad object handling courtesy of Drake.
 		if (TEM_INVALID == result)
 		{
 			// There's something bogus in the data that we're unpacking.
 			dp->dumpBufferToLog();
-			//<FS:Beq> Improved bad object handling courtesy of Drake.
 			std::string region_name = "unknown region";
 			if (getRegion())
 			{
@@ -437,8 +438,8 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 				gObjectList.killObject(this);
 				return (INVALID_UPDATE);
 			}
-			// </FS:Beq>
 		}
+		// </FS:Beq>
 		if (result & teDirtyBits)
 		{
 			updateTEData();
@@ -457,6 +458,8 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 			if (!res)
 			{
 				//<FS:Beq> Improved bad object handling courtesy of Drake.
+				//LL_WARNS() << "Bogus volume parameters in object " << getID() << LL_ENDL;
+				//LL_WARNS() << getRegion()->getOriginGlobal() << LL_ENDL;
 				std::string region_name = "unknown region";
 				if (getRegion())
 				{
@@ -496,6 +499,14 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 				// There's something bogus in the data that we're unpacking.
 				dp->dumpBufferToLog();
 				//<FS:Beq> Improved bad object handling courtesy of Drake.
+				//LL_WARNS() << "Flushing cache files" << LL_ENDL;
+
+				//if(LLVOCache::instanceExists() && getRegion())
+				//{
+				//	LLVOCache::getInstance()->removeEntry(getRegion()->getHandle()) ;
+				//}
+				//
+				//LL_WARNS() << "Bogus TE data in " << getID() << LL_ENDL;
 				std::string region_name = "unknown region";
 				if (getRegion())
 				{
