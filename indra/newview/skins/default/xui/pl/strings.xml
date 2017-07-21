@@ -5950,7 +5950,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Wyciszanie czatu grupowego [NAME].
 	</string>
 	<string name="IgnoredAdHocSession">
-		Zostałeś/aś zaproszony/a do konferencji (czatu ad-hoc), ale przeglądarka automatycznie ją zignorowała ze względu na Twoje ustawienia.
+		Zostałeś/aś zaproszony/a do konferencji (czatu ad-hoc) przez [AVATAR_NAME], ale przeglądarka automatycznie ją zignorowała ze względu na Twoje ustawienia.
 	</string>
 	<string name="camera_no_focus">
 		Kamera nie może skupić się na [AVATARNAME], ponieważ jest on/ona poza polem widzenia.

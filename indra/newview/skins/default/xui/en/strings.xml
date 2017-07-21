@@ -2948,7 +2948,7 @@ Try enclosing path to the editor with double quotes.
   <string name="QP_WL_None">None</string>
 
   <string name="GroupChatMuteNotice">Muting group chat from [NAME].</string>
-  <string name="IgnoredAdHocSession">You've been invited to a conference (ad-hoc) chat, but viewer automatically ignored it because of your settings.</string>
+  <string name="IgnoredAdHocSession">You've been invited to a conference (ad-hoc) chat by [AVATAR_NAME], but viewer automatically ignored it because of your settings.</string>
   
   <!-- <FS:Ansariel> Radar notifications -->
   <string name="camera_no_focus">The camera cannot focus user [AVATARNAME] because they are outside your draw distance.</string>

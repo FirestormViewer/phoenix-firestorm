@@ -897,7 +897,9 @@ LLUrlEntryAgentDisplayName::LLUrlEntryAgentDisplayName()
 
 std::string LLUrlEntryAgentDisplayName::getName(const LLAvatarName& avatar_name)
 {
-	return avatar_name.getDisplayName(true);
+	// <FS:Ansariel> Don't force a display name if display names are disabled
+	//return avatar_name.getDisplayName(true);
+	return avatar_name.getDisplayName();
 }
 
 //

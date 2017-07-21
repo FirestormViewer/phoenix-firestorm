@@ -10401,5 +10401,3 @@ void LLVOAvatar::setIsUsingServerBakes(BOOL newval)
 	appearance_version_param->setWeight(newval ? 1.0 : 0.0, false);
 }
 // </FS:Ansariel> [Legacy Bake]
-
-

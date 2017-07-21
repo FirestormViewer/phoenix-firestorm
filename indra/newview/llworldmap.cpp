@@ -363,7 +363,8 @@ LLSimInfo* LLWorldMap::simInfoFromHandle(const U64 handle)
 	//{
 	//	return it->second;
 	std::map<U64, LLSimInfo*>::const_iterator it;
-	for (it = LLWorldMap::getInstance()->mSimInfoMap.begin(); it != LLWorldMap::getInstance()->mSimInfoMap.end(); ++it)
+	std::map<U64, LLSimInfo*>::const_iterator end = LLWorldMap::instance().mSimInfoMap.end();
+	for (it = LLWorldMap::instance().mSimInfoMap.begin(); it != end; ++it)
 	{
 		const U64 hndl = (*it).first;
 		LLSimInfo* info = (*it).second;

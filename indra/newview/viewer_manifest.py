@@ -60,10 +60,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         # files during the build (see copy_w_viewer_manifest
         # and copy_l_viewer_manifest targets)
         return 'package' in self.args['actions']
-
-    def do_copy_artwork( self ):
-        return self.args.has_key( 'copy_artwork' )
-
+    
     def construct(self):
         super(ViewerManifest, self).construct()
         self.path(src="../../scripts/messages/message_template.msg", dst="app_settings/message_template.msg")
@@ -79,7 +76,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             self.end_prefix("app_settings")
         # </FS:LO>
 
-        if self.is_packaging_viewer() or self.do_copy_artwork():
+        if self.is_packaging_viewer():
             if self.prefix(src="app_settings"):
                 self.exclude("logcontrol.xml")
                 self.exclude("logcontrol-dev.xml")
@@ -168,12 +165,12 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 self.path("*.xml")
                 self.end_prefix("fonts")
                 
-            # AO: Include firestorm resources
+            # <FS:AO> Include firestorm resources
             if self.prefix(src="fs_resources"):
-				self.path("*.txt")
-				self.path("*.lsl")
-				self.path("*.lsltxt")
-				self.end_prefix("fs_resources");
+                self.path("*.txt")
+                self.path("*.lsl")
+                self.path("*.lsltxt")
+                self.end_prefix("fs_resources");
 
             # skins
             if self.prefix(src="skins"):
@@ -203,21 +200,6 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                     self.path("*.jpg")
                     self.path("*.png")
                     self.end_prefix("*/themes/*/textures")
-
-            # <FS:AO> - We intentionally do not package xui for themes, the reasoning is: 
-            #         Themes are defined as color/texture mods, not structual mods. Structural changes are done as "skins".
-            #         If a color is mentioned in xui, it can be refactored to use a more generic reference color, and
-            #         then overwritten by the theme-specific colors.xml. This saves us from having to maintain more XUI 
-            #         in more places than needed, and over time allows more and more of the viewer to be adjusted using
-            #         only color definitions.
-	 	
-            ## FS:Ansariel: Fix packaging for xui folders in themes (FIRE-6859)
-            #if self.prefix(src="*/themes/*/xui"):
-            #        self.path("*/*.xml")
-            #        self.path("*/widgets/*.xml")
-            #        self.end_prefix("*/themes/*/xui")
-            # </FS:AO>
-
                     self.path("*/*.xml")
 
                     # Local HTML files (e.g. loading screen)
@@ -328,8 +310,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
 
     def app_name_oneword(self):
         return ''.join(self.app_name().split())
-        
-
+    
     def icon_path(self):
         # <FS:ND> Add -os for oss builds
         if self.fs_flavor() == 'oss':
@@ -337,7 +318,6 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         # </FS:ND>
         return "icons/" + self.channel_type()
 
-        
     def extract_names(self,src):
         try:
             contrib_file = open(src,'r')
@@ -429,7 +409,6 @@ class WindowsManifest(ViewerManifest):
                            "slplugin.exe")
         
         self.path2basename("../viewer_components/updater/scripts/windows", "update_install.bat")
-
         # Get shared libs from the shared libs staging directory
         if self.prefix(src=os.path.join(os.pardir, 'sharedlibs', self.args['configuration']),
                        dst=""):
@@ -460,7 +439,6 @@ class WindowsManifest(ViewerManifest):
                     self.path("fmodex.dll")
             except:
                 print "Skipping fmodex audio library(assuming other audio engine)"
-			
 
             # For textures
             self.path("openjpeg.dll")
@@ -798,7 +776,6 @@ class WindowsManifest(ViewerManifest):
         NSIS_path = os.path.expandvars('${ProgramFiles}\\NSIS\\Unicode\\makensis.exe')
         if not os.path.exists(NSIS_path):
             NSIS_path = os.path.expandvars('${ProgramFiles(x86)}\\NSIS\\Unicode\\makensis.exe')
-
         installer_created=False
         nsis_attempts=3
         nsis_retry_wait=15

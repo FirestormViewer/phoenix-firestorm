@@ -533,7 +533,8 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	mColoName("unknown"),
 	mProductSKU("unknown"),
 	mProductName("unknown"),
-	mHttpUrl(""),
+	mHttpUrl(""), // <FS:Ansariel> [UDP Assets]
+	mViewerAssetUrl(""),
 	mCacheLoaded(FALSE),
 	mCacheDirty(FALSE),
 	mReleaseNotesRequested(FALSE),
@@ -3036,12 +3037,14 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("IsExperienceAdmin");
 	capabilityNames.append("IsExperienceContributor");
 	capabilityNames.append("RegionExperiences");
+	// <FS:Ansariel> [UDP Assets]
 	capabilityNames.append("GetMesh");
 	capabilityNames.append("GetMesh2");
+	// </FS:Ansariel> [UDP Assets]
 	capabilityNames.append("GetMetadata");
 	capabilityNames.append("GetObjectCost");
 	capabilityNames.append("GetObjectPhysicsData");
-	capabilityNames.append("GetTexture");
+	capabilityNames.append("GetTexture"); // <FS:Ansariel> [UDP Assets]
 	capabilityNames.append("GroupAPIv1");
 	capabilityNames.append("GroupMemberData");
 	capabilityNames.append("GroupProposalBallot");
@@ -3088,6 +3091,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("UpdateScriptAgent");
 	capabilityNames.append("UpdateScriptTask");
 	capabilityNames.append("UploadBakedTexture");
+	capabilityNames.append("ViewerAsset"); 
 	capabilityNames.append("ViewerMetrics");
 	capabilityNames.append("ViewerStartAuction");
 	capabilityNames.append("ViewerStats");
@@ -3154,10 +3158,16 @@ void LLViewerRegion::setCapability(const std::string& name, const std::string& u
 	else
 	{
 		mImpl->mCapabilities[name] = url;
-		if(name == "GetTexture")
+		if(name == "ViewerAsset")
 		{
-			mHttpUrl = url ;
+			mViewerAssetUrl = url;
 		}
+		// <FS:Ansariel> [UDP Assets]
+		else if (name == "GetTexure")
+		{
+			mHttpUrl = url;
+		}
+		// </FS:Ansariel> [UDP Assets]
 	}
 }
 
@@ -3167,10 +3177,16 @@ void LLViewerRegion::setCapabilityDebug(const std::string& name, const std::stri
 	if ( ! ( name == "EventQueueGet" || name == "UntrustedSimulatorMessage" || name == "SimulatorFeatures" ) )
 	{
 		mImpl->mSecondCapabilitiesTracker[name] = url;
-		if(name == "GetTexture")
+		if(name == "ViewerAsset")
 		{
-			mHttpUrl = url ;
+			mViewerAssetUrl = url;
 		}
+		// <FS:Ansariel> [UDP Assets]
+		else if (name == "GetTexure")
+		{
+			mHttpUrl = url;
+		}
+		// </FS:Ansariel> [UDP Assets]
 	}
 }
 

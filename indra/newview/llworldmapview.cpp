@@ -376,8 +376,13 @@ void LLWorldMapView::draw()
 	gGL.setColorMask(true, true);
 
 	// Draw per sim overlayed information (names, mature, offline...)
-	for (LLWorldMap::sim_info_map_t::const_iterator it = LLWorldMap::getInstance()->getRegionMap().begin();
-		 it != LLWorldMap::getInstance()->getRegionMap().end(); ++it)
+	// <FS:Ansariel> Performance tweak
+	//for (LLWorldMap::sim_info_map_t::const_iterator it = LLWorldMap::getInstance()->getRegionMap().begin();
+	//	 it != LLWorldMap::getInstance()->getRegionMap().end(); ++it)
+	LLWorldMap::sim_info_map_t::const_iterator end_it = LLWorldMap::instance().getRegionMap().end();
+	for (LLWorldMap::sim_info_map_t::const_iterator it = LLWorldMap::instance().getRegionMap().begin();
+		 it != end_it; ++it)
+	// </FS:Ansariel>
 	{
 		U64 handle = it->first;
 		LLSimInfo* info = it->second;
@@ -767,6 +772,7 @@ bool LLWorldMapView::drawMipmapLevel(S32 width, S32 height, S32 level, bool load
 	pos_NE[VY] += tile_width;
 
 	// Iterate through the tiles on screen: we just need to ask for one tile every tile_width meters
+	LLWorldMap* world_map = LLWorldMap::getInstance(); // <FS:Ansariel> Performance tweak
 	U32 grid_x, grid_y;
 	for (F64 index_y = pos_SW[VY]; index_y < pos_NE[VY]; index_y += tile_width)
 	{
@@ -777,7 +783,10 @@ bool LLWorldMapView::drawMipmapLevel(S32 width, S32 height, S32 level, bool load
 			// Convert to the mipmap level coordinates for that point (i.e. which tile to we hit)
 			LLWorldMipmap::globalToMipmap(pos_global[VX], pos_global[VY], level, &grid_x, &grid_y);
 			// Get the tile. Note: NULL means that the image does not exist (so it's considered "complete" as far as fetching is concerned)
-			LLPointer<LLViewerFetchedTexture> simimage = LLWorldMap::getInstance()->getObjectsTile(grid_x, grid_y, level, load);
+			// <FS:Ansariel> Performance tweak
+			//LLPointer<LLViewerFetchedTexture> simimage = LLWorldMap::getInstance()->getObjectsTile(grid_x, grid_y, level, load);
+			LLPointer<LLViewerFetchedTexture> simimage = world_map->getObjectsTile(grid_x, grid_y, level, load);
+			// </FS:Ansariel>
 			if (simimage)
 			{
 				// Checks that the image has a valid texture
@@ -943,10 +952,16 @@ void LLWorldMapView::drawItems()
     bool show_mature = mature_enabled && showMatureEvents;
 	bool show_adult = adult_enabled && showAdultEvents;
 
+	// <FS:Ansariel> Performance tweak
+	LLWorldMap* world_map = LLWorldMap::getInstance();
+
 	for (handle_list_t::iterator iter = mVisibleRegions.begin(); iter != mVisibleRegions.end(); ++iter)
 	{
 		U64 handle = *iter;
-		LLSimInfo* info = LLWorldMap::getInstance()->simInfoFromHandle(handle);
+		// <FS:Ansariel> Performance tweak
+		//LLSimInfo* info = LLWorldMap::getInstance()->simInfoFromHandle(handle);
+		LLSimInfo* info = world_map->simInfoFromHandle(handle);
+		// </FS:Ansariel>
 		if ((info == NULL) || (info->isDown()))
 		{
 			continue;
@@ -995,10 +1010,16 @@ void LLWorldMapView::drawAgents()
 {
 	static LLUIColor map_avatar_color = LLUIColorTable::instance().getColor("MapAvatarColor", LLColor4::white);
 
+	// <FS:Ansariel> Performance tweak
+	LLWorldMap* world_map = LLWorldMap::getInstance();
+
 	for (handle_list_t::iterator iter = mVisibleRegions.begin(); iter != mVisibleRegions.end(); ++iter)
 	{
 		U64 handle = *iter;
-		LLSimInfo* siminfo = LLWorldMap::getInstance()->simInfoFromHandle(handle);
+		// <FS:Ansariel> Performance tweak
+		//LLSimInfo* siminfo = LLWorldMap::getInstance()->simInfoFromHandle(handle);
+		LLSimInfo* siminfo = world_map->simInfoFromHandle(handle);
+		// </FS:Ansariel>
 		if ((siminfo == NULL) || (siminfo->isDown()))
 		{
 			continue;
