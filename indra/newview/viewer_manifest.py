@@ -307,10 +307,10 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             app_suffix='Viewer'
         else:
             app_suffix=self.channel_variant()
-			
+
         #<FS:ND> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
         if self.fs_flavor() == 'oss':
-		      app_suffix = "OS" + app_suffix
+            app_suffix = "OS" + app_suffix
         #</FS:ND>
 
         #<FS:ND> Don't separate name by whitespace. This break a lot of things in the old FS installer logic.
@@ -420,29 +420,31 @@ class WindowsManifest(ViewerManifest):
             # Find secondlife-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
             self.path(src='%s/firestorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
 
+            # <FS:Ansariel> Remove VMP
             # include the compiled launcher scripts so that it gets included in the file_list
-            self.path(src='%s/apply_update.exe' % vmpdir, dst="apply_update.exe")
-            self.path(src='%s/download_update.exe' % vmpdir, dst="download_update.exe")
-            self.path(src='%s/SL_Launcher.exe' % vmpdir, dst="SL_Launcher.exe")
-            self.path(src='%s/update_manager.exe' % vmpdir, dst="update_manager.exe")
+            #self.path(src='%s/apply_update.exe' % vmpdir, dst="apply_update.exe")
+            #self.path(src='%s/download_update.exe' % vmpdir, dst="download_update.exe")
+            #self.path(src='%s/SL_Launcher.exe' % vmpdir, dst="SL_Launcher.exe")
+            #self.path(src='%s/update_manager.exe' % vmpdir, dst="update_manager.exe")
 
             #IUM is not normally executed directly, just imported.  No exe needed.
-            self.path2basename(vmpdir,"InstallerUserMessage.py")
+            #self.path2basename(vmpdir,"InstallerUserMessage.py")
 
             #VMP  Tkinter icons
-            if self.prefix("vmp_icons"):
-                self.path("*.png")
-                self.path("*.gif")
-                self.end_prefix("vmp_icons")
+            #if self.prefix("vmp_icons"):
+            #    self.path("*.png")
+            #    self.path("*.gif")
+            #    self.end_prefix("vmp_icons")
 
             #before, we only needed llbase at build time.  With VMP, we need it at run time.
-            llbase_path = os.path.join(self.get_dst_prefix(),'llbase')
-            if not os.path.exists(llbase_path):
-                os.makedirs(llbase_path)
-            if self.prefix(dst="llbase"):
-                self.path2basename(llbasedir,"*.py")
-                self.path2basename(llbasedir,"_cllsd.so")
-                self.end_prefix()
+            #llbase_path = os.path.join(self.get_dst_prefix(),'llbase')
+            #if not os.path.exists(llbase_path):
+            #    os.makedirs(llbase_path)
+            #if self.prefix(dst="llbase"):
+            #    self.path2basename(llbasedir,"*.py")
+            #    self.path2basename(llbasedir,"_cllsd.so")
+            #    self.end_prefix()
+            # </FS:Ansariel> Remove VMP
 
         # Plugin host application
         self.path2basename(os.path.join(os.pardir,
@@ -908,52 +910,54 @@ class DarwinManifest(ViewerManifest):
             self.path(os.path.join(relpkgdir, "libndofdev.dylib"), dst="Resources/libndofdev.dylib")
             self.path(os.path.join(relpkgdir, "libhunspell-1.3.0.dylib"), dst="Resources/libhunspell-1.3.0.dylib")   
 
-            if self.prefix(dst="MacOS"):              
-                #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322, SL-323
-                self.path2basename(vmpdir,"SL_Launcher")
-                self.path2basename(vmpdir,"*.py")
-                # certifi will be imported by requests; this is our custom version to get our ca-bundle.crt 
-                certifi_path = os.path.join(self.get_dst_prefix(),'certifi')
-                if not os.path.exists(certifi_path):
-                    os.makedirs(certifi_path)
-                if self.prefix(dst="certifi"):
-                    self.path2basename(os.path.join(vmpdir,"certifi"),"*")
-                    self.end_prefix()                   
-                # llbase provides our llrest service layer and llsd decoding
-                llbase_path = os.path.join(self.get_dst_prefix(),'llbase')
-                if not os.path.exists(llbase_path):
-                    os.makedirs(llbase_path)
-                if self.prefix(dst="llbase"):
-                    self.path2basename(llbasedir,"*.py")
-                    self.path2basename(llbasedir,"_cllsd.so")
-                    self.end_prefix()
-                #requests module needed by llbase/llrest.py
-                #this is only needed on POSIX, because in Windows we compile it into the EXE
-                requests_path = os.path.join(self.get_dst_prefix(),'requests')
-                if not os.path.exists(requests_path):
-                    os.makedirs(requests_path)
-                if self.prefix(dst="requests"):
-                    self.path2basename(requestsdir,"*")
-                    self.end_prefix()                   
-                urllib3_path = os.path.join(self.get_dst_prefix(),'urllib3')
-                if not os.path.exists(urllib3_path):
-                    os.makedirs(urllib3_path)
-                if self.prefix(dst="urllib3"):
-                    self.path2basename(urllib3dir,"*")
-                    self.end_prefix()                   
-                chardet_path = os.path.join(self.get_dst_prefix(),'chardet')
-                if not os.path.exists(chardet_path):
-                    os.makedirs(chardet_path)
-                if self.prefix(dst="chardet"):
-                    self.path2basename(chardetdir,"*")
-                    self.end_prefix()                   
-                idna_path = os.path.join(self.get_dst_prefix(),'idna')
-                if not os.path.exists(idna_path):
-                    os.makedirs(idna_path)
-                if self.prefix(dst="idna"):
-                    self.path2basename(idnadir,"*")
-                    self.end_prefix()                   
-                self.end_prefix()         
+            # <FS:Ansariel> Remove VMP
+            #if self.prefix(dst="MacOS"):              
+            #    #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322, SL-323
+            #    self.path2basename(vmpdir,"SL_Launcher")
+            #    self.path2basename(vmpdir,"*.py")
+            #    # certifi will be imported by requests; this is our custom version to get our ca-bundle.crt 
+            #    certifi_path = os.path.join(self.get_dst_prefix(),'certifi')
+            #    if not os.path.exists(certifi_path):
+            #        os.makedirs(certifi_path)
+            #    if self.prefix(dst="certifi"):
+            #        self.path2basename(os.path.join(vmpdir,"certifi"),"*")
+            #        self.end_prefix()                   
+            #    # llbase provides our llrest service layer and llsd decoding
+            #    llbase_path = os.path.join(self.get_dst_prefix(),'llbase')
+            #    if not os.path.exists(llbase_path):
+            #        os.makedirs(llbase_path)
+            #    if self.prefix(dst="llbase"):
+            #        self.path2basename(llbasedir,"*.py")
+            #        self.path2basename(llbasedir,"_cllsd.so")
+            #        self.end_prefix()
+            #    #requests module needed by llbase/llrest.py
+            #    #this is only needed on POSIX, because in Windows we compile it into the EXE
+            #    requests_path = os.path.join(self.get_dst_prefix(),'requests')
+            #    if not os.path.exists(requests_path):
+            #        os.makedirs(requests_path)
+            #    if self.prefix(dst="requests"):
+            #        self.path2basename(requestsdir,"*")
+            #        self.end_prefix()                   
+            #    urllib3_path = os.path.join(self.get_dst_prefix(),'urllib3')
+            #    if not os.path.exists(urllib3_path):
+            #        os.makedirs(urllib3_path)
+            #    if self.prefix(dst="urllib3"):
+            #        self.path2basename(urllib3dir,"*")
+            #        self.end_prefix()                   
+            #    chardet_path = os.path.join(self.get_dst_prefix(),'chardet')
+            #    if not os.path.exists(chardet_path):
+            #        os.makedirs(chardet_path)
+            #    if self.prefix(dst="chardet"):
+            #        self.path2basename(chardetdir,"*")
+            #        self.end_prefix()                   
+            #    idna_path = os.path.join(self.get_dst_prefix(),'idna')
+            #    if not os.path.exists(idna_path):
+            #        os.makedirs(idna_path)
+            #    if self.prefix(dst="idna"):
+            #        self.path2basename(idnadir,"*")
+            #        self.end_prefix()                   
+            #    self.end_prefix()         
+            # </FS:Ansariel> Remove VMP
 
             # Growl Frameworks
             self.path("../packages/Frameworks/Growl", dst="Frameworks/Growl")
@@ -977,10 +981,12 @@ class DarwinManifest(ViewerManifest):
                     self.end_prefix(icon_path)
 
                 #VMP Tkinter icons
-                if self.prefix("vmp_icons"):
-                    self.path("*.png")
-                    self.path("*.gif")
-                    self.end_prefix("vmp_icons")
+                # <FS:Ansariel> Remove VMP
+                #if self.prefix("vmp_icons"):
+                #    self.path("*.png")
+                #    self.path("*.gif")
+                #    self.end_prefix("vmp_icons")
+                # <FS:Ansariel> Remove VMP
 
                 self.path("Firestorm.nib")
                 
@@ -1444,15 +1450,17 @@ class LinuxManifest(ViewerManifest):
             self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
             self.path2basename("../llplugin/slplugin", "SLPlugin") 
             #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322 and SL-323
-            self.path2basename("../viewer_components/manager","SL_Launcher")
-            self.path2basename("../viewer_components/manager","*.py")
-            llbase_path = os.path.join(self.get_dst_prefix(),'llbase')
-            if not os.path.exists(llbase_path):
-                os.makedirs(llbase_path)
-            if self.prefix(dst="llbase"):
-                self.path2basename("../packages/lib/python/llbase","*.py")
-                self.path2basename("../packages/lib/python/llbase","_cllsd.so")         
-            self.end_prefix("bin")
+            # <FS:Ansariel> Remove VMP
+            #self.path2basename("../viewer_components/manager","SL_Launcher")
+            #self.path2basename("../viewer_components/manager","*.py")
+            #llbase_path = os.path.join(self.get_dst_prefix(),'llbase')
+            #if not os.path.exists(llbase_path):
+            #    os.makedirs(llbase_path)
+            #if self.prefix(dst="llbase"):
+            #    self.path2basename("../packages/lib/python/llbase","*.py")
+            #    self.path2basename("../packages/lib/python/llbase","_cllsd.so")         
+            #self.end_prefix("bin")
+            # </FS:Ansariel> Remove VMP
 
         if self.prefix("res-sdl"):
             self.path("*")
@@ -1712,8 +1720,10 @@ class LinuxManifest(ViewerManifest):
         if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
             print "* Going strip-crazy on the packaged binaries, since this is a RELEASE build"
             # makes some small assumptions about our packaged dir structure
-            self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name update_install \! -name *.pak \! -name *.dat \! -name *.bin \! -name core \! -path '*win32*' | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
+            # <FS:Ansariel> Remove VMP
             #self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name \*.py \! -name SL_Launcher \! -name update_install | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) 
+            self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name update_install \! -name *.pak \! -name *.dat \! -name *.bin \! -name core \! -path '*win32*' | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
+            # </FS:Ansariel> Remove VMP
 
 class Linux_i686_Manifest(LinuxManifest):
     address_size = 32
