@@ -78,7 +78,6 @@
 #include "llspellcheck.h"
 #include "llslurl.h"
 #include "llstartup.h"
-#include "llupdaterservice.h"
 // [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
 #include "rlvcommon.h"
 // [/RLVa:KB]
@@ -707,19 +706,6 @@ bool toggle_show_object_render_cost(const LLSD& newvalue)
 	return true;
 }
 
-void toggle_updater_service_active(const LLSD& new_value)
-{
-    if(new_value.asInteger())
-    {
-		LLUpdaterService update_service;
-		if(!update_service.isChecking()) update_service.startChecking();
-    }
-    else
-    {
-        LLUpdaterService().stopChecking();
-    }
-}
-
 // <FS:Ansariel> Change visibility of main chatbar if autohide setting is changed
 static void handleAutohideChatbarChanged(const LLSD& new_value)
 {
@@ -1100,7 +1086,6 @@ void settings_setup_listeners()
 	// </FS: Zi>
 	gSavedSettings.getControl("ShowMenuBarLocation")->getSignal()->connect(boost::bind(&toggle_show_menubar_location_panel, _2));
 	gSavedSettings.getControl("ShowObjectRenderingCost")->getSignal()->connect(boost::bind(&toggle_show_object_render_cost, _2));
-	gSavedSettings.getControl("UpdaterServiceSetting")->getSignal()->connect(boost::bind(&toggle_updater_service_active, _2));
 	gSavedSettings.getControl("ForceShowGrid")->getSignal()->connect(boost::bind(&handleForceShowGrid, _2));
 	gSavedSettings.getControl("ShowStartLocation")->getSignal()->connect(boost::bind(&handleForceShowGrid, _2)); // <FS:Ansariel> Show start location setting has no effect on login
 	gSavedSettings.getControl("RenderTransparentWater")->getSignal()->connect(boost::bind(&handleRenderTransparentWaterChanged, _2));

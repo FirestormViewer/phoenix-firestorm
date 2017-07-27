@@ -25,7 +25,6 @@ build-darwin-*
 build-vc80/
 build-vc100/
 build-vc120/
-build-vc120_x64/
 build-vc120-32/
 build-vc120-64/
 indra/build-vc[0-9]*

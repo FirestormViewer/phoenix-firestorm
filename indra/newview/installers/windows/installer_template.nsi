@@ -94,10 +94,12 @@ SetOverwrite on							# Overwrite files by default
 # <FS:Ansariel> Don't auto-close so we can check details
 #AutoCloseWindow true					# After all files install, close window
 
-;;InstallDir "$PROGRAMFILES\${INSTNAME}"
-;;InstallDirRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\${INSTNAME}" ""
+# initial location of install (default when not already installed)
+#   note: Now we defer looking for existing install until onInit when we
+#   are able to engage the 32/64 registry function
 InstallDir "%%PROGRAMFILES%%\${INSTNAME}"
 InstallDirRegKey HKEY_LOCAL_MACHINE "%%INSTALL_DIR_REGKEY%%" ""
+
 UninstallText $(UninstallTextMsg)
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
 
@@ -113,6 +115,7 @@ Page instfiles
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Var INSTPROG
 Var INSTEXE
+Var VIEWER_EXE
 Var INSTSHORTCUT
 Var COMMANDLINE         # Command line passed to this installer, set in .onInit
 Var SHORTCUT_LANG_PARAM # "--set InstallLanguage de", Passes language to viewer
@@ -311,10 +314,10 @@ SetShellVarContext all			# Install for all users (if you change this, change it 
 # Start with some default values.
 StrCpy $INSTPROG "${INSTNAME}"
 StrCpy $INSTEXE "${INSTEXE}"
+StrCpy $VIEWER_EXE "${VIEWER_EXE}"
 StrCpy $INSTSHORTCUT "${SHORTCUT}"
 
 Call CheckIfAdministrator		# Make sure the user can install/uninstall
-Call CheckIfAlreadyCurrent		# Make sure this version is not already installed
 Call CloseSecondLife			# Make sure Second Life not currently running
 Call CheckNetworkConnection		# Ping secondlife.com
 Call CheckWillUninstallV2		# Check if Second Life is already installed
@@ -338,7 +341,7 @@ StrCmp $NO_STARTMENU "true" label_skip_start_menu
 CreateDirectory	"$SMPROGRAMS\$INSTSHORTCUT"
 SetOutPath "$INSTDIR"
 CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\$INSTSHORTCUT.lnk" \
-				"$INSTDIR\$INSTEXE" "$SHORTCUT_LANG_PARAM"
+				"$INSTDIR\$INSTEXE" "$SHORTCUT_LANG_PARAM" "$INSTDIR\$VIEWER_EXE"
 
 
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Create Account.url" \
@@ -360,15 +363,15 @@ label_skip_start_menu:
 # Other shortcuts
 SetOutPath "$INSTDIR"
 CreateShortCut "$DESKTOP\$INSTSHORTCUT.lnk" \
-        "$INSTDIR\$INSTEXE" "$SHORTCUT_LANG_PARAM"
+        "$INSTDIR\$INSTEXE" "$SHORTCUT_LANG_PARAM" "$INSTDIR\$VIEWER_EXE"
 CreateShortCut "$INSTDIR\$INSTSHORTCUT.lnk" \
-        "$INSTDIR\$INSTEXE" "$SHORTCUT_LANG_PARAM"
+        "$INSTDIR\$INSTEXE" "$SHORTCUT_LANG_PARAM" "$INSTDIR\$VIEWER_EXE"
 CreateShortCut "$INSTDIR\Uninstall $INSTSHORTCUT.lnk" \
 				'"$INSTDIR\uninst.exe"' ''
 
-# Create *.bat file to specify lang params on first run from installer - see MAINT-5259
+# Create *.bat file to specify lang params on first run from installer - see MAINT-5259S
 FileOpen $9 "$INSTDIR\autorun.bat" w
-FileWrite $9 'start "$INSTDIR\$INSTEXE" "$INSTDIR\$INSTEXE" $SHORTCUT_LANG_PARAM$\r$\n'
+FileWrite $9 'start "$INSTDIR\$INSTEXE" /d "$INSTDIR" "$INSTDIR\$INSTEXE" $SHORTCUT_LANG_PARAM$\r$\n'
 FileClose $9
 
 # Write registry
@@ -406,6 +409,10 @@ WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info\DefaultIcon" "" '"$INSTDIR\$
 
 # URL param must be last item passed to viewer, it ignores subsequent params to avoid parameter injection attacks.
 WriteRegExpandStr HKEY_CLASSES_ROOT "x-grid-location-info\shell\open\command" "" '"$INSTDIR\$INSTEXE" -url "%1"'
+
+# Only allow Launcher to be the icon
+WriteRegStr HKEY_CLASSES_ROOT "Applications\$INSTEXE" "IsHostApp" ""
+WriteRegStr HKEY_CLASSES_ROOT "Applications\${VIEWER_EXE}" "NoStartPage" ""
 
 # <FS:CR> Register hop:// protocol registry info
 WriteRegStr HKEY_CLASSES_ROOT "hop" "(default)" "URL:Second Life"
@@ -451,6 +458,8 @@ DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPRO
 DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG"
 # BUG-2707 Remove entry that disabled SEHOP
 DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$INSTEXE"
+DeleteRegKey HKEY_CLASSES_ROOT "Applications\$INSTEXE"
+DeleteRegKey HKEY_CLASSES_ROOT "Applications\${VIEWER_EXE}"
 
 # Clean up shortcuts
 Delete "$SMPROGRAMS\$INSTSHORTCUT\*.*"
@@ -494,23 +503,6 @@ Function un.CheckIfAdministrator
         MessageBox MB_OK $(CheckAdministratorUnInstMB)
         Quit
 lbl_is_admin:
-    Return
-
-FunctionEnd
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Checks to see if the current version has already been installed (according to the registry).
-;; If it has, allow user to bail out of install process.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Function CheckIfAlreadyCurrent
-    Push $0
-    ReadRegStr $0 HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Version"
-    StrCmp $0 ${VERSION_LONG} 0 continue_install
-    StrCmp $SKIP_DIALOGS "true" continue_install
-    MessageBox MB_OKCANCEL $(CheckIfCurrentMB) /SD IDOK IDOK continue_install
-    Quit
-continue_install:
-    Pop $0
     Return
 
 FunctionEnd
@@ -783,7 +775,7 @@ FunctionEnd
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function .onInstSuccess
 Call CheckWindowsServPack		# Warn if not on the latest SP before asking to launch.
-	Push $R0					# Option value, unused
+        Push $R0					# Option value, unused# 
 	# <FS:PP> Disable autorun
 	# StrCmp $SKIP_AUTORUN "true" +2;
 # Assumes SetOutPath $INSTDIR
@@ -804,11 +796,10 @@ label_ask_launch:
 
 label_launch:
 	# Assumes SetOutPath $INSTDIR
-	Exec '"$WINDIR\explorer.exe" "$INSTDIR\autorun.bat"'
+        Exec '"$WINDIR\explorer.exe" "$INSTDIR\autorun.bat"'
 label_no_launch:
-	Pop $R0
+        Pop $R0
 	# </FS:PP>
-
 FunctionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

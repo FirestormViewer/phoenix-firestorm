@@ -1569,7 +1569,6 @@ bool idle_startup()
 		login->setLastExecEvent(last_exec_event);
 // </AW: crash report grid correctness>
 
-		login->setUpdaterLauncher(boost::bind(&LLAppViewer::launchUpdater, LLAppViewer::instance()));
 
 		// This call to LLLoginInstance::connect() starts the 
 		// authentication process.

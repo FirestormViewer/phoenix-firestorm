@@ -329,11 +329,11 @@
           <key>linux</key>
           <map>
             <key>archive</key>
-'            <map>
+            <map>
               <key>hash</key>
-              <string>402552cf158e2fe953b7224f4615a957</string>
+              <string>1aa2e5355bb9df09f9196d14a72b6705</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/apr_3p-update-apr/rev/297252/arch/Linux/installer/apr_suite-1.4.5.297252-linux-297252.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-apr/rev/314241/arch/Linux/installer/apr_suite-1.4.5.314241-linux-314241.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -468,6 +468,36 @@
         <key>version</key>
         <string>1.57</string>
       </map>
+      <key>chardet</key>
+      <map>
+        <key>copyright</key>
+        <string>Contributors to charset (see https://github.com/chardet/chardet)</string>
+        <key>description</key>
+        <string>Python Character Encoding Library</string>
+        <key>license</key>
+        <string>LGPL</string>
+        <key>license_file</key>
+        <string>LICENSES/chardet.txt</string>
+        <key>name</key>
+        <string>chardet</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>0124862b6a1b88455c78a68f8b823d21</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/6662/23578/chardet-3.0.4-darwin64-506651.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>3.0.4</string>
+      </map>
       <key>colladadom</key>
       <map>
         <key>copyright</key>
@@ -587,9 +617,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>99fbc15f514be77c36280f300d257d5a</string>
+              <string>8854daffb8b87a2238461a7f72e4b4fd</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/1077/2495/curl-7.47.0.501064-darwin64-501064.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/6822/24534/curl-7.54.1.506810-darwin64-506810.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -599,9 +629,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f49d4ed203b03852a3f6b01b18319f7a</string>
+              <string>9430c08954c00736117099046694e1b1</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-curl/rev/312763/arch/Linux/installer/curl-7.47.0.312763-linux-312763.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-curl/rev/314230/arch/Linux/installer/curl-7.47.0.314230-linux-314230.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -611,9 +641,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5b164c2b1cfc1270a60c3b4ad8dd9cd1</string>
+              <string>37a6a2615d81b491e449e5680cf8d9c7</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/curl-7.47.0.201604192059-linux64-201604192059.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/6821/24528/curl-7.54.1.506810-linux64-506810.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -623,11 +653,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bda9f237d3e8238440bc5bedc2657547</string>
+              <string>eb2508dd444ac885b7fdf7d89cd2e010</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/1078/2487/curl-7.47.0.501064-windows-501064.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/6823/24516/curl-7.54.1.506810-windows-506810.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -637,16 +667,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f7fa42c7157cd5007283ae7a5d97393d</string>
+              <string>1a9848d3b1ed53e57afe44f175c2ecea</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/1079/2490/curl-7.47.0.501064-windows64-501064.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/6824/24522/curl-7.54.1.506810-windows64-506810.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>7.47.0.501064</string>
+        <string>7.54.1.506810</string>
       </map>
       <key>db</key>
       <map>
@@ -697,9 +727,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c11ff7e2e0bd59e6e59628f24902bbcd</string>
+              <string>6d676abd9ad8d2883b855dbe397d9034</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/dbus-glib_3p-update-dbus-glib/rev/297768/arch/Linux/installer/dbus_glib-0.76-linux-297768.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-dbus-glib/rev/314266/arch/Linux/installer/dbus_glib-0.76-linux-314266.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -895,9 +925,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f546615d76bc0f9e8bc2b9ef89f0ca86</string>
+              <string>387c90b9bb5ec412587fbe7a56261dd1</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/expat_3p-update-expat/rev/297014/arch/Linux/installer/expat-2.0.1.297014-linux-297014.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-expat/rev/314211/arch/Linux/installer/expat-2.1.1.314211-linux-314211.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -907,9 +937,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>da531d07c19cb09c1a7e5d9b3a8c8c1d</string>
+              <string>5e1f025d1cebd12db542080aa755257f</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/expat-2.0.1.201505150200-r31-linux-x64-201505150200-r31.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/380/943/expat-2.1.1.500375-linux64-500375.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1049,9 +1079,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>864f9361661748ecf0e2cec7110d70b3</string>
+              <string>a20a3d0ab7fc3401bc2ca81e9309f630</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/fontconfig_3p-update-fontconfig/rev/297551/arch/Linux/installer/fontconfig-2.11.0-linux-297551.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-fontconfig/rev/314281/arch/Linux/installer/fontconfig-2.11.0-linux-314281.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1061,9 +1091,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>15b2955b9b66926e52f48e929bf5e332</string>
+              <string>e2419d56960c160670051fbb055fb729</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/fontconfig-2.11.0-linux-x64-201505150243-r22.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-fontconfig/rev/314281/arch/Linux/installer/fontconfig-2.11.0-linux64-314281.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1115,9 +1145,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1ac3152b440287c58509d8af0a50326d</string>
+              <string>1b401394106cedc86926bd488f5aa45e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/freetype_3p-update-freetype/rev/297053/arch/Linux/installer/freetype-2.4.4.297053-linux-297053.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-freetype/rev/314215/arch/Linux/installer/freetype-2.4.4.314215-linux-314215.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1181,9 +1211,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4bf4f9e65168138eebbc769e9e12230b</string>
+              <string>baf1fd13e1fe6aef586200fc87a70f53</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/glext_3p-update-glext/rev/296893/arch/Linux/installer/glext-68-linux-296893.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-glext/rev/314200/arch/Linux/installer/glext-68-linux-314200.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1397,9 +1427,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e294e6ca721e271b4bae8046cfbc3c9b</string>
+              <string>352e673897e8f36f8470150b8ace6ce9</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/google-breakpad_3p-update-google-breakpad/rev/298127/arch/Linux/installer/google_breakpad-1413.298127-linux-298127.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-google-breakpad/rev/314225/arch/Linux/installer/google_breakpad-1413.314225-linux-314225.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1551,9 +1581,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fb1479533a7699b44d34e3a550037eb7</string>
+              <string>5017b3e95d2c6f47bb111c3f9c075522</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/gstreamer_3p-update-gstreamer/rev/294903/arch/Linux/installer/gstreamer-0.10.6.294903-linux-294903.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-gstreamer/rev/314267/arch/Linux/installer/gstreamer-0.10.6.314267-linux-314267.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1704,6 +1734,36 @@
         <key>version</key>
         <string>2012.1-2</string>
       </map>
+      <key>idna</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (c) 2013-2017, Kim Davies. All rights reserved.</string>
+        <key>description</key>
+        <string>Python Internationalized Domain Names in Applications (IDNA) Library</string>
+        <key>license</key>
+        <string>see idna.rst</string>
+        <key>license_file</key>
+        <string>LICENSES/idna.rst</string>
+        <key>name</key>
+        <string>idna</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>7dfe9fc4023d7d4f511dd9fac7258266</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/6663/23584/idna-2.5-darwin64-506652.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>2.5</string>
+      </map>
       <key>jpeglib</key>
       <map>
         <key>copyright</key>
@@ -1747,9 +1807,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0a6641f030e173a7bc0dc8a3087b6c7d</string>
+              <string>32560d3200da72fea2922371fcef25f5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/jpeglib_3p-update-jpeglib/rev/296854/arch/Linux/installer/jpeglib-8c.296854-linux-296854.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-jpeglib/rev/314202/arch/Linux/installer/jpeglib-8c.314202-linux-314202.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1837,9 +1897,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>910bf12e4b4635170e462b739887cda9</string>
+              <string>9d5d9fec28cbbb1651b95728173f8af7</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/jsoncpp_3p-update-jsoncpp/rev/297580/arch/Linux/installer/jsoncpp-0.5.0.297580-linux-297580.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-jsoncpp/rev/314229/arch/Linux/installer/jsoncpp-0.5.0.314229-linux-314229.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2017,9 +2077,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>988deae5c63ec638ad222b400a431f5b</string>
+              <string>0d8009c3b6c1eb510593476dd1d821b5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/hunspell_3p-update-hunspell/rev/296916/arch/Linux/installer/libhunspell-1.3.2.296916-linux-296916.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-hunspell/rev/314217/arch/Linux/installer/libhunspell-1.3.2.314217-linux-314217.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2173,9 +2233,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>744e22c5fcaaf3483a60e29f217daa9c</string>
+              <string>0758f3cb4c02ebab61854b811b0894e9</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/libpng_3p-update-libpng/rev/301387/arch/Linux/installer/libpng-1.6.8.301387-linux-301387.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-libpng/rev/314214/arch/Linux/installer/libpng-1.6.8.314214-linux-314214.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2239,9 +2299,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f231b6ec8bc2f050cfb1ee20bd83190d</string>
+              <string>a2eaf9515cd129f3e21a08e92689006b</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/libuuid_3p-update-libuuid/rev/295209/arch/Linux/installer/libuuid-1.6.2-linux-295209.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-libuuid/rev/314269/arch/Linux/installer/libuuid-1.6.2-linux-314269.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2305,9 +2365,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b8b584853dc1344bb3571c13b06ec39e</string>
+              <string>6954173a141d928f2614076577d952de</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/libxml_3p-update-libxml/rev/297050/arch/Linux/installer/libxml2-2.9.1.297050-linux-297050.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-libxml/rev/314197/arch/Linux/installer/libxml2-2.9.1.314197-linux-314197.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2381,6 +2441,46 @@
         </map>
         <key>version</key>
         <string>0.0.1</string>
+      </map>
+      <key>llbase</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (c) 2010, Linden Research, Inc.</string>
+        <key>license</key>
+        <string>mit</string>
+        <key>license_file</key>
+        <string>LICENSES/llbase-license.txt</string>
+        <key>name</key>
+        <string>llbase</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>e18eeb0691af053b83bd46b76c6ee86a</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/6299/21982/llbase-0.9.3.506286-darwin64-506286.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>e6865670f9bca1c82fb8b91db3ea515c</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/6301/21994/llbase-0.9.3.506286-windows-506286.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>0.9.3.506286</string>
       </map>
       <key>llphysicsextensions_source</key>
       <map>
@@ -2597,9 +2697,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b0cd31d5b07a9fc25c4d69ba2f95eace</string>
+              <string>5c9d94dce4551b19790057766ff939ea</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/oggvorbis_3p-update-oggvorbis/rev/296878/arch/Linux/installer/ogg_vorbis-1.2.2-1.3.2.296878-linux-296878.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-oggvorbis/rev/314224/arch/Linux/installer/ogg_vorbis-1.2.2-1.3.2.314224-linux-314224.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2705,11 +2805,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>15ebe611213c9577691ffbade081549d</string>
+              <string>24b91eda3831a51c7774644016c4cb09</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/openal_3p-update-openal/rev/297677/arch/Linux/installer/openal-1.12.854-1.1.0.297677-linux-297677.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-openal/rev/314223/arch/Linux/installer/openal-1.12.854-1.1.0.314223-linux-314223.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2799,9 +2899,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>675c283030879d3d9c49082bfa2192eb</string>
+              <string>e82317482647559d46a818ba48e9423a</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/openjpeg_3p-update-openjpeg/rev/297018/arch/Linux/installer/openjpeg-1.4.297018-linux-297018.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-openjpeg/rev/314205/arch/Linux/installer/openjpeg-2.0.0.314205-linux-314205.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2889,9 +2989,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c310ba9971cbd796b303c3be67fb11c6</string>
+              <string>f46a601d60b7dbcfde32afc0cb64453e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/openssl_3p-update-openssl/rev/297168/arch/Linux/installer/openssl-1.0.1h.297168-linux-297168.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-openssl/rev/314227/arch/Linux/installer/openssl-1.0.1h.314227-linux-314227.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2979,9 +3079,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b82817bcc2f63094d9c915d018d0b036</string>
+              <string>24a119b18e63017ad932ad54df8161bc</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/pcre_3p-update-pcre/rev/297155/arch/Linux/installer/pcre-8.35.-linux-297155.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-pcre/rev/314136/arch/Linux/installer/pcre-8.35.314136-linux-314136.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2991,9 +3091,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>316f14bec0578c39a6674938853afc88</string>
+              <string>0f058ca2176e7d02d51e54c66a96f336</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/pcre-8.35.-linux-x64-201505150212-r52.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/908/2010/pcre-8.35.500898-linux64-500898.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3008,7 +3108,7 @@
               <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/911/2021/pcre-8.35.500898-windows-500898.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>linux</string>
+            <string>windows</string>
           </map>
           <key>windows64</key>
           <map>
@@ -3025,6 +3125,52 @@
         </map>
         <key>version</key>
         <string>8.35.500898</string>
+      </map>
+      <key>requests</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright 2016 Kenneth Reitz</string>
+        <key>description</key>
+        <string>Python HTTP Library</string>
+        <key>license</key>
+        <string>Apache</string>
+        <key>license_file</key>
+        <string>LICENSES/requests.txt</string>
+        <key>name</key>
+        <string>requests</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>b8d134a970261b445a3f376ba4e05ff7</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/6693/23788/requests-2.18.1-darwin64-506681.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>a92f2235991871c3d601a73cfef9b2af</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/4105/11530/requests-1.0-linux64-504094.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
+        </map>
+        <key>source</key>
+        <string>https://bitbucket.org/lindenlab/p64_python-requests</string>
+        <key>source_type</key>
+        <string>hg</string>
+        <key>version</key>
+        <string>2.18.1</string>
       </map>
       <key>slvoice</key>
       <map>
@@ -3236,6 +3382,94 @@
         <key>version</key>
         <string>0.8.0.1</string>
       </map>
+      <key>urllib3</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright 2008-2016 Andrey Petrov and contributors (see CONTRIBUTORS.txt)</string>
+        <key>description</key>
+        <string>Python HTTP Library</string>
+        <key>license</key>
+        <string>MIT</string>
+        <key>license_file</key>
+        <string>LICENSES/urllib3.txt</string>
+        <key>name</key>
+        <string>urllib3</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>22f64c7fbb6704d2e9519fd1cca8e49b</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/6659/23560/urllib3-1.21.1-darwin64-506648.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>1.21.1</string>
+      </map>
+      <key>viewer-manager</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (c) 2000-2012, Linden Research, Inc.</string>
+        <key>description</key>
+        <string>Linden Lab Viewer Management Process suite.</string>
+        <key>license</key>
+        <string>Proprietary</string>
+        <key>license_file</key>
+        <string>LICENSE</string>
+        <key>name</key>
+        <string>viewer-manager</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>01b463520b0f253842335428901404ae</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/7371/27810/viewer_manager-1.0.507360-darwin64-507360.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>8c7f32f85850248809ae811ba8e47d81</string>
+              <key>url</key>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/3428/8686/viewer_manager-1.0-linux-503417.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>2f8626ce0448d56ecfd07e51affadcfd</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/7372/27832/viewer_manager-1.0.507360-windows-507360.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+        <key>source</key>
+        <string>https://bitbucket.org/lindenlab/vmp-standalone</string>
+        <key>source_type</key>
+        <string>hg</string>
+        <key>version</key>
+        <string>1.0.507360</string>
+      </map>
       <key>vlc-bin</key>
       <map>
         <key>copyright</key>
@@ -3355,9 +3589,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>30bb26d6cc78c16047fc85a63f48fcdb</string>
+              <string>b63f828e798287d475991134cdcfbca3</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/xmlrpc-emi_3p-update-xmlrpc-epi/rev/297075/arch/Linux/installer/xmlrpc_epi-0.54.1.297075-linux-297075.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-xmlrpc-epi/rev/314240/arch/Linux/installer/xmlrpc_epi-0.54.1.314240-linux-314240.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3445,11 +3679,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2eb8e59b6464222dcf4435016ad5f618</string>
+              <string>98a8c775c581ca80bb559e8b4e8eaae7</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/zlib_3p-update-zlib/rev/296881/arch/Linux/installer/zlib-1.2.8.296881-linux-296881.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-zlib/rev/314131/arch/Linux/installer/zlib-1.2.8.314131-linux-314131.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3971,7 +4205,6 @@
                 <key>options</key>
                 <array>
                   <string>-G</string>
-                  <string>'Unix Makefiles'</string>
                 </array>
               </map>
               <!--

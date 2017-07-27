@@ -144,6 +144,14 @@
 			media_plugin_example
 		</impl>
 	</scheme>
+		</label>
+		<widgettype>
+			movie
+		</widgettype>
+		<impl>
+			media_plugin_example
+		</impl>
+	</scheme>
 	<mimetype name="blank">
 		<label name="blank_label">
 			- None -

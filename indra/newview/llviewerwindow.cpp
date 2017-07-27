@@ -802,7 +802,7 @@ public:
 		// only display these messages if we are actually rendering beacons at this moment
 		// <FS:LO> Always show the beacon text regardless if the floater is visible
 		// <FS:Ansa> ...and if we want to see it
-		//if (LLPipeline::getRenderBeacons(NULL) && LLFloaterReg::instanceVisible("beacons"))
+		//if (LLPipeline::getRenderBeacons() && LLFloaterReg::instanceVisible("beacons"))
 		static LLCachedControl<bool> fsRenderBeaconText(gSavedSettings, "FSRenderBeaconText");
 		if (LLPipeline::getRenderBeacons() && fsRenderBeaconText)
 		// </FS:Ansa>
@@ -816,7 +816,7 @@ public:
 			}
 
 			// <FS:LO> pull the text saying if particles are hidden out from beacons
-			/*if (LLPipeline::toggleRenderTypeControlNegated((void*)LLPipeline::RENDER_TYPE_PARTICLES))
+			/*if (LLPipeline::toggleRenderTypeControlNegated(LLPipeline::RENDER_TYPE_PARTICLES))
 			{
 				addText(xpos, ypos, particle_hiding);
 				ypos += y_inc;

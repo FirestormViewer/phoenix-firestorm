@@ -8700,19 +8700,6 @@
       <key>Backup</key>
       <integer>0</integer>
     </map>
-    <key>MemProfiling</key>
-    <map>
-      <key>Comment</key>
-      <string>You want to use tcmalloc's memory profiling options.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
     <key>MenuAccessKeyTime</key>
     <map>
       <key>Comment</key>
@@ -12732,30 +12719,30 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Backup</key>
     <integer>0</integer>
   </map>
-  <key>RenderUseFarClip</key>
-  <map>
-    <key>Comment</key>
-    <string>If false, frustum culling will ignore far clip plane.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>1</integer>
+    <key>RenderUseFarClip</key>
+    <map>
+      <key>Comment</key>
+      <string>If false, frustum culling will ignore far clip plane.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
       <key>Backup</key>
       <integer>0</integer>
-  </map>
-  <key>RenderUseImpostors</key>
-  <map>
-    <key>Comment</key>
+    </map>
+    <key>RenderUseImpostors</key>
+    <map>
+      <key>Comment</key>
     <string>OBSOLETE and UNUSED. See RenderAvatarMaxNonImpostors and RenderAvatarMaxComplexity.</string>
-    <key>Persist</key>
+      <key>Persist</key>
     <integer>0</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
     <integer>0</integer>
-  </map>
+    </map>
   <key>RenderAutoMuteByteLimit</key>
   <map>
     <key>Comment</key>
@@ -20938,6 +20925,18 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>0</integer>
       <key>Type</key>
       <string>U32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>SkipBenchmark</key>
+    <map>
+      <key>Comment</key>
+      <string>if true, disables running the GPU benchmark at startup
+      (default to class 1)</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
       <key>Backup</key>

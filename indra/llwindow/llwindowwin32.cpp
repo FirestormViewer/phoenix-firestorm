@@ -788,7 +788,6 @@ void LLWindowWin32::close()
 	LL_DEBUGS("Window") << "Destroying Window" << LL_ENDL;
 	
 	// Don't process events in our mainWindowProc any longer.
-	// SetWindowLong(mWindowHandle, GWL_USERDATA, NULL);
 	SetWindowLongPtr(mWindowHandle, GWLP_USERDATA, NULL);
 
 	// Make sure we don't leave a blank toolbar button.
