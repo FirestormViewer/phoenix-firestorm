@@ -61,14 +61,13 @@ if(WINDOWS)
     # Copy MS C runtime dlls, required for packaging.
     # *TODO - Adapt this to support VC9
     if (MSVC80)
-        set(MSVC_VER 80)
-        set(MSVC_VERDOT 8.0)
+        list(APPEND LMSVC_VER 80)
+        list(APPEND LMSVC_VERDOT 8.0)
     elseif (MSVC_VERSION EQUAL 1600) # VisualStudio 2010
-        set(MSVC_VER 100)
-        set(MSVC_VERDOT 10.0)
+        MESSAGE(STATUS "MSVC_VERSION ${MSVC_VERSION}")
     elseif (MSVC_VERSION EQUAL 1800) # VisualStudio 2013, which is (sigh) VS 12
-        set(MSVC_VER 120)
-        set(MSVC_VERDOT 12.0)
+        list(APPEND LMSVC_VER 120)
+        list(APPEND LMSVC_VERDOT 12.0)
     else (MSVC80)
         MESSAGE(WARNING "New MSVC_VERSION ${MSVC_VERSION} of MSVC: adapt Copy3rdPartyLibs.cmake")
     endif (MSVC80)
