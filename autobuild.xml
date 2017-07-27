@@ -1169,9 +1169,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b7a8df22cfc910180c66bb1c1ed89cd4</string>
+              <string>46ac6421e08c5f38cddea8b81b511f64</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/876/1922/freetype-2.4.4.500865-windows-500865.tar.bz2</string>
+              <string>https://bitbucket.org/Ansariel/3p-freetype/downloads/freetype-2.3.9.172082219-windows-172082219.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1181,9 +1181,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ff72a895012ed603935083496b0a7bc9</string>
+              <string>3bc8a33be7e4b4a5a1a6abf629cf0532</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/877/1925/freetype-2.4.4.500865-windows64-500865.tar.bz2</string>
+              <string>https://bitbucket.org/Ansariel/3p-freetype/downloads/freetype-2.3.9.172082305-windows64-172082305.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
