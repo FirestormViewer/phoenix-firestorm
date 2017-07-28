@@ -107,7 +107,21 @@ endif (WINDOWS)
 if (LINUX)
   set(CMAKE_SKIP_RPATH TRUE)
 
-  add_definitions(-D_FORTIFY_SOURCE=2)
+  # <FS:ND/>
+  # And another hack for FORTIFY_SOURCE. Some distributions (for example Gentoo) define FORTIFY_SOURCE by default.
+  # Check if this is the case, if yes, do not define it again.
+  execute_process(
+      COMMAND echo "int main( char **a, int c ){ \n#ifdef _FORTIFY_SOURCE\n#error FORTITY_SOURCE_SET\n#else\nreturn 0;\n#endif\n}" 
+      COMMAND sh -c "${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -xc++ -w - -o /dev/null"
+      OUTPUT_VARIABLE FORTIFY_SOURCE_OUT
+	  ERROR_VARIABLE FORTIFY_SOURCE_ERR
+	  RESULT_VARIABLE FORTIFY_SOURCE_RES
+     )
+
+
+  if ( ${FORTIFY_SOURCE_RES} EQUAL 0 )
+   add_definitions(-D_FORTIFY_SOURCE=2)
+  endif()
   set(CMAKE_CXX_FLAGS "-Wno-deprecated -Wno-unused-but-set-variable -Wno-unused-variable ${CMAKE_CXX_FLAGS}")
 
   # gcc 4.3 and above don't like the LL boost and also
