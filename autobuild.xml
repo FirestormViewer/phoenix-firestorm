@@ -3859,7 +3859,7 @@
                 <string>bash</string>
                 <key>options</key>
                 <array>
-				  <string>../scripts/configure_firestorm.sh</string>
+                  <string>../scripts/configure_firestorm.sh</string>
                   <string>--config</string>
                   <string>--version</string>
                   <string>--opensim</string>
@@ -3867,6 +3867,42 @@
               </map>
               <key>name</key>
               <string>ReleaseFS</string>
+            </map>
+            <key>ReleaseFS_AVX</key>
+            <map>
+              <key>configure</key>
+              <map>
+                <key>command</key>
+                <string>bash</string>
+                <key>options</key>
+                <array>
+                  <string>../scripts/configure_firestorm.sh</string>
+                  <string>--config</string>
+                  <string>--version</string>
+                  <string>--opensim</string>
+                  <string>--avx</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseFS_AVX</string>
+            </map>
+            <key>ReleaseFS_AVX2</key>
+            <map>
+              <key>configure</key>
+              <map>
+                <key>command</key>
+                <string>bash</string>
+                <key>options</key>
+                <array>
+                  <string>../scripts/configure_firestorm.sh</string>
+                  <string>--config</string>
+                  <string>--version</string>
+                  <string>--opensim</string>
+                  <string>--avx2</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseFS_AVX2</string>
             </map>
             <key>ReleaseFS_open</key>
             <map>
@@ -3876,7 +3912,7 @@
                 <string>bash</string>
                 <key>options</key>
                 <array>
-				  <string>../scripts/configure_firestorm.sh</string>
+                  <string>../scripts/configure_firestorm.sh</string>
                   <string>--config</string>
                   <string>--version</string>
                   <string>--opensim</string>
@@ -3893,7 +3929,7 @@
                 <string>bash</string>
                 <key>options</key>
                 <array>
-				  <string>../scripts/configure_firestorm.sh</string>
+                  <string>../scripts/configure_firestorm.sh</string>
                   <string>--btype RelWithDebInfo</string>
                   <string>--config</string>
                   <string>--version</string>
@@ -3911,7 +3947,7 @@
                 <string>bash</string>
                 <key>options</key>
                 <array>
-				  <string>../scripts/configure_firestorm.sh</string>
+                  <string>../scripts/configure_firestorm.sh</string>
                   <string>--btype RelWithDebInfo</string>
                   <string>--config</string>
                   <string>--version</string>
@@ -4661,6 +4697,80 @@
               </map>
               <key>name</key>
               <string>ReleaseFS</string>
+            </map>
+            <key>ReleaseFS_AVX</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>Firestorm.sln</string>
+                </array>
+                <key>command</key>
+                <string>msbuild.exe</string>
+                <key>options</key>
+                <array>
+                  <string>/p:Configuration=Release</string>
+                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
+                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
+                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
+                  <string>/t:Build</string>
+                  <string>/p:useenv=true</string>
+                  <string>/verbosity:normal</string>
+                  <string>/toolsversion:12.0</string>
+                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--avx</string>
+                  <string>--fmodex</string>
+                  <string>--kdu</string>
+                  <string>--version</string>
+                  <string>--platform win32</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseFS_AVX</string>
+            </map>
+            <key>ReleaseFS_AVX2</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>Firestorm.sln</string>
+                </array>
+                <key>command</key>
+                <string>msbuild.exe</string>
+                <key>options</key>
+                <array>
+                  <string>/p:Configuration=Release</string>
+                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
+                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
+                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
+                  <string>/t:Build</string>
+                  <string>/p:useenv=true</string>
+                  <string>/verbosity:normal</string>
+                  <string>/toolsversion:12.0</string>
+                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--avx2</string>
+                  <string>--fmodex</string>
+                  <string>--kdu</string>
+                  <string>--version</string>
+                  <string>--platform win32</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseFS_AVX2</string>
             </map>
             <key>ReleaseFS_open</key>
             <map>
