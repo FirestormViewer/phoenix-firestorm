@@ -4241,6 +4241,7 @@
                 <key>options</key>
                 <array>
                   <string>-G</string>
+                  <string>Unix Makefiles</string>
                 </array>
               </map>
               <!--
