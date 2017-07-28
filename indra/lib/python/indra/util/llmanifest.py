@@ -143,9 +143,10 @@ ARGUMENTS=[
          default=None),
     dict(name='versionfile',
          description="""The name of a file containing the full version number."""),
-    dict(name='bundleid',
-         description="""The Mac OS X Bundle identifier.""",
-         default="com.secondlife.indra.viewer"),
+    # <FS:Ansariel> Don't pass the bundle ID so we sign the Mac DMG file with the developer certificate
+    #dict(name='bundleid',
+    #     description="""The Mac OS X Bundle identifier.""",
+    #     default="com.secondlife.indra.viewer"),
     dict(name='signature',
          description="""This specifies an identity to sign the viewer with, if any.
         If no value is supplied, the default signature will be used, if any. Currently
