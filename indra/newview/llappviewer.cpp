@@ -2459,9 +2459,6 @@ bool LLAppViewer::cleanup()
 
 	removeMarkerFiles();
 
-	// <FS:Ansariel> Can't log after all singletons got destroyed
-	LL_INFOS() << "Goodbye!" << LL_ENDL;
-
 	// It's not at first obvious where, in this long sequence, generic cleanup
 	// calls OUGHT to go. So let's say this: as we migrate cleanup from
 	// explicit hand-placed calls into the generic mechanism, eventually
@@ -3766,6 +3763,9 @@ LLSD LLAppViewer::getViewerInfo() const
 	}
 #endif
 
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0)
+	info["RLV_VERSION"] = (rlv_handler_t::isEnabled()) ? RlvStrings::getVersionAbout() : "(disabled)";
+// [/RLVa:KB]
 	info["OPENGL_VERSION"] = (const char*)(glGetString(GL_VERSION));
 	info["LIBCURL_VERSION"] = LLCore::LLHttp::getCURLVersion();
     // Settings
