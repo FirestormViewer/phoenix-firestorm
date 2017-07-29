@@ -1882,12 +1882,6 @@ if (WINDOWS)
     if (INTEL_MEMOPS_LIBRARY)
       list(APPEND viewer_LIBRARIES ${INTEL_MEMOPS_LIBRARY})
     endif (INTEL_MEMOPS_LIBRARY)
-
-    # <FS:Ansariel> Build 32bit Windows with LTCG linker flag because of OpenJPG
-    if ( ADDRESS_SIZE EQUAL 32 )
-        SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LTCG")
-    endif ( )
-    # </FS:Ansariel>
  
     if (ADDRESS_SIZE EQUAL 64)
         # We deliberately omit this from the 32bit build because it declares that
