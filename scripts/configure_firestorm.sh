@@ -301,18 +301,18 @@ echo -e "       Logging to $LOG"
 
 if [ $PLATFORM == "win32" ]
 then
-	if [ -z "${AUTOBUILD_VSVER}" ]
-	then
-		echo "AUTOBUILD_VSVER not set, this can lead to autobuild picking a higher VS version than desired."
-		echo "If you see this happen you should set the variable to eg 120 for Visual Studio 2013"
-	fi
+    if [ -z "${AUTOBUILD_VSVER}" ]
+    then
+        echo "AUTOBUILD_VSVER not set, this can lead to autobuild picking a higher VS version than desired."
+        echo "If you see this happen you should set the variable to eg 120 for Visual Studio 2013"
+    fi
 fi
 
 if [ -z "$AUTOBUILD_VARIABLES_FILE" ]
 then
-	echo "AUTOBUILD_VARIABLES_FILE not set."
-	echo "In order to run autobuild it needs to be set to point to a correct variables file"
-	exit 1
+    echo "AUTOBUILD_VARIABLES_FILE not set."
+    echo "In order to run autobuild it needs to be set to point to a correct variables file"
+    exit 1
 fi
 
 if [ $PLATFORM == "win32" ] ; then
@@ -343,7 +343,7 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
         mkdir -p build-darwin-i386/logs
 
     elif [ $PLATFORM == "win32" ] ; then
-		rm -rf build-vc120-${AUTOBUILD_ADDRSIZE}
+        rm -rf build-vc120-${AUTOBUILD_ADDRSIZE}
         mkdir -p build-vc120-${AUTOBUILD_ADDRSIZE}/logs
  
 
@@ -387,7 +387,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     else
         FMODEX="-DFMODEX:BOOL=OFF"
     fi
-	
+
     if [ $WANTS_OPENSIM -eq $TRUE ] ; then
         OPENSIM="-DOPENSIM:BOOL=ON"
     else
@@ -430,27 +430,24 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         mkdir -p "logs"
     fi
 
-    TARGET_ARCH="x86"
-    WORD_SIZE=32
-
     if [ $PLATFORM == "darwin" ] ; then
         TARGET="Xcode"
     elif [ \( $PLATFORM == "linux32" \) -o \( $PLATFORM == "linux64" \) ] ; then
-		if [ $WANTS_NINJA -eq $TRUE ] ; then
-			TARGET="Ninja"
-		else
-			TARGET="Unix Makefiles"
-		fi
+        if [ $WANTS_NINJA -eq $TRUE ] ; then
+            TARGET="Ninja"
+        else
+            TARGET="Unix Makefiles"
+        fi
     elif [ \( $PLATFORM == "win32" \) ] ; then
-    	TARGET="${AUTOBUILD_WIN_CMAKE_GEN}"
+        TARGET="${AUTOBUILD_WIN_CMAKE_GEN}"
         UNATTENDED="-DUNATTENDED=ON"
     fi
 
     cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $KDU $OPENSIM $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TESTBUILD $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
-          -DNDTARGET_ARCH:STRING="${TARGET_ARCH}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
+          -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
     if [ $PLATFORM == "win32" ] ; then
-		../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
+        ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
     fi
 
 fi
@@ -463,16 +460,16 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         else
             JOBS="-jobs $JOBS"
         fi
-		xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj $JOBS 2>&1 | tee -a $LOG
+        xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj $JOBS 2>&1 | tee -a $LOG
     elif [ $PLATFORM == "linux32" -o $PLATFORM == "linux64" ] ; then
         if [ $JOBS == "0" ] ; then
             JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
         fi
-		if [ $WANTS_NINJA -eq $TRUE ] ; then
-			ninja -j $JOBS | tee -a $LOG
-		else
-			make -j $JOBS | tee -a $LOG
-		fi
+        if [ $WANTS_NINJA -eq $TRUE ] ; then
+            ninja -j $JOBS | tee -a $LOG
+        else
+            make -j $JOBS | tee -a $LOG
+        fi
     elif [ $PLATFORM == "win32" ] ; then
         SLN_PLATFORM="Win32"
         if [ "${AUTOBUILD_ADDRSIZE}" == "64" ]
