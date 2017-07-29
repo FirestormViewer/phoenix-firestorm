@@ -95,7 +95,6 @@ set(cmake_SOURCE_FILES
     ViewerMiscLibs.cmake
     VisualLeakDetector.cmake
     LibVLCPlugin.cmake
-    WinManifest.cmake
     XmlRpcEpi.cmake
     ZLIB.cmake
     )

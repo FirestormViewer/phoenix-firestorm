@@ -16,7 +16,6 @@ include(Linking)
 include(LLSharedLibs)
 include(GoogleBreakpad)
 include(Boost)
-include(WinManifest)
 
 include_directories(
     ${LLCOREHTTP_INCLUDE_DIRS}
@@ -72,6 +71,9 @@ list(APPEND
     ${win_crash_logger_RESOURCE_FILES}
     )
 
+# <FS:Ansariel> Add correct manifest via CMake
+list(APPEND win_crash_logger_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../tools/manifests/compatibility.manifest)
+
 find_library(DXGUID_LIBRARY dxguid ${DIRECTX_LIBRARY_DIR})
 
 add_executable(windows-crash-logger WIN32 ${win_crash_logger_SOURCE_FILES})
@@ -106,8 +108,6 @@ if (WINDOWS)
         LINK_FLAGS "/NODEFAULTLIB:LIBCMT"
         LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\""
         )
-
-    EMBED_MANIFEST(windows-crash-logger 1)
 endif (WINDOWS)
 
 ll_deploy_sharedlibs_command(windows-crash-logger)
