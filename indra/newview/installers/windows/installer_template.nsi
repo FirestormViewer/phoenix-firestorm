@@ -98,7 +98,6 @@ SetOverwrite on							# Overwrite files by default
 #   note: Now we defer looking for existing install until onInit when we
 #   are able to engage the 32/64 registry function
 InstallDir "%%PROGRAMFILES%%\${INSTNAME}"
-InstallDirRegKey HKEY_LOCAL_MACHINE "%%INSTALL_DIR_REGKEY%%" ""
 
 UninstallText $(UninstallTextMsg)
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
@@ -377,14 +376,17 @@ CreateShortCut "$INSTDIR\Uninstall $INSTSHORTCUT.lnk" \
 
 # Create *.bat file to specify lang params on first run from installer - see MAINT-5259S
 FileOpen $9 "$INSTDIR\autorun.bat" w
-FileWrite $9 'start "$INSTDIR\$INSTEXE" /d "$INSTDIR" "$INSTDIR\$INSTEXE" $SHORTCUT_LANG_PARAM$\r$\n'
+# <FS:Ansariel> Remove VMP
+#FileWrite $9 'start "$INSTDIR\$INSTEXE" /d "$INSTDIR" "$INSTDIR\$INSTEXE" $SHORTCUT_LANG_PARAM$\r$\n'
+FileWrite $9 'start "$INSTDIR\$VIEWER_EXE" "$INSTDIR\$VIEWER_EXE" $SHORTCUT_LANG_PARAM$\r$\n'
 FileClose $9
 
 # Write registry
 WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "" "$INSTDIR"
 WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Version" "${VERSION_LONG}"
 WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Shortcut" "$INSTSHORTCUT"
-WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Exe" "$INSTEXE"
+#WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Exe" "$INSTEXE"
+WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Exe" "$VIEWER_EXE"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "Publisher" "The Phoenix Firestorm Project, Inc."
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLInfoAbout" "http://www.firestormviewer.org"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLUpdateInfo" "http://www.firestormviewer.org/downloads"
@@ -392,13 +394,21 @@ WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninst
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayName" "$INSTPROG"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "UninstallString" '"$INSTDIR\uninst.exe"'
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayVersion" "${VERSION_LONG}"
-WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "EstimatedSize" "0x0005F000"		# 380 MB
+# <FS:Ansariel> Separate install sizes for 32 and 64 bit
+#WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "EstimatedSize" "0x0001D500"		# ~117 MB
+${If} ${IS64BIT} == "1"
+  WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "EstimatedSize" "0x00064000"		# 400 MB
+${Else}
+  WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "EstimatedSize" "0x00057800"		# 350 MB
+${EndIf}
 
 # from FS:Ansariel
-WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayIcon" '"$INSTDIR\$INSTEXE"'
+#WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayIcon" '"$INSTDIR\$INSTEXE"'
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayIcon" '"$INSTDIR\$VIEWER_EXE"'
 
 # BUG-2707 Disable SEHOP for installed viewer.
-WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$INSTEXE" "DisableExceptionChainValidation" 1
+#WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$INSTEXE" "DisableExceptionChainValidation" 1
+WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$VIEWER_EXE" "DisableExceptionChainValidation" 1
 WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "NoModify" 1
 WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "NoRepair" 1
 
@@ -425,8 +435,8 @@ WriteRegExpandStr HKEY_CLASSES_ROOT "x-grid-location-info\shell\open\command" ""
 # <FS:CR> Register hop:// protocol registry info
 WriteRegStr HKEY_CLASSES_ROOT "hop" "(default)" "URL:Second Life"
 WriteRegStr HKEY_CLASSES_ROOT "hop" "URL Protocol" ""
-WriteRegStr HKEY_CLASSES_ROOT "hop\DefaultIcon" "" '"$INSTDIR\$INSTEXE"'
-WriteRegExpandStr HKEY_CLASSES_ROOT "hop\shell\open\command" "" '"$INSTDIR\$INSTEXE" -url "%1"'
+WriteRegStr HKEY_CLASSES_ROOT "hop\DefaultIcon" "" '"$INSTDIR\$VIEWER_EXE"'
+WriteRegExpandStr HKEY_CLASSES_ROOT "hop\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
 # </FS:CR>
 
 # Write out uninstaller
@@ -450,6 +460,7 @@ Section Uninstall
 # Start with some default values.
 StrCpy $INSTPROG "${INSTNAME}"
 StrCpy $INSTEXE "${INSTEXE}"
+StrCpy $VIEWER_EXE "${VIEWER_EXE}" # <FS:Ansariel> Disable VMP
 StrCpy $INSTSHORTCUT "${SHORTCUT}"
 
 # Make sure the user can install/uninstall
@@ -465,7 +476,9 @@ Call un.CloseSecondLife
 DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG"
 DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG"
 # BUG-2707 Remove entry that disabled SEHOP
-DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$INSTEXE"
+# <FS:Ansariel> Disable VMP
+#DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$INSTEXE"
+DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$VIEWER_EXE"
 # <FS:Ansariel> Remove VMP
 #DeleteRegKey HKEY_CLASSES_ROOT "Applications\$INSTEXE"
 #DeleteRegKey HKEY_CLASSES_ROOT "Applications\${VIEWER_EXE}"
@@ -646,7 +659,9 @@ FunctionEnd
 Function RemoveProgFilesOnInst
 
 # Remove old SecondLife.exe to invalidate any old shortcuts to it that may be in non-standard locations. See MAINT-3575
-Delete "$INSTDIR\$INSTEXE"
+# <FS:Ansariel> Remove VMP
+#Delete "$INSTDIR\$INSTEXE"
+Delete "$INSTDIR\$VIEWER_EXE"
 
 # Remove old shader files first so fallbacks will work. See DEV-5663
 RMDir /r "$INSTDIR\app_settings\shaders"

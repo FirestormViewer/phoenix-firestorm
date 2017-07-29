@@ -3,9 +3,6 @@ import subprocess
 import tarfile
 
 class FSViewerManifest:
-    def fs_is_64bit_build( self ):
-        return self.args.has_key( 'm64' )
-
     def fs_flavor( self ):
         return self.args['viewer_flavor']  # [oss or hvk]
     

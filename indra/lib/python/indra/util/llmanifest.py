@@ -179,8 +179,6 @@ def main():
     option_names = [arg['name'] + '=' for arg in ARGUMENTS]
     option_names.append('help')
 
-    option_names.append('m64')
-
     options, remainder = getopt.getopt(sys.argv[1:], "", option_names)
 
     # convert options to a hash

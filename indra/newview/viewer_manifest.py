@@ -672,7 +672,7 @@ class WindowsManifest(ViewerManifest):
                   dst="win_crash_logger.exe")
 
 
-        if self.fs_is_64bit_build():
+        if (self.address_size == 64):
             if self.prefix(src=os.path.join(os.pardir, '..', 'indra', 'newview', 'installers', 'windows_x64'), dst="llplugin"):
                 self.path("msvcp120.dll")
                 self.path("msvcr120.dll")
@@ -753,8 +753,7 @@ class WindowsManifest(ViewerManifest):
         # </FS:ND>
         
         substitution_strings['installer_file'] = installer_file
-        substitution_strings['fs64bit'] = ( 1 if self.fs_is_64bit_build() else 0 )
-
+        substitution_strings['is64bit'] = (1 if (self.address_size == 64) else 0)
 
         version_vars = """
         !define INSTEXE "SL_Launcher.exe"
@@ -775,7 +774,7 @@ class WindowsManifest(ViewerManifest):
             !define INSTNAME   "%(app_name_oneword)s"
             !define SHORTCUT   "%(app_name)s"
             !define URLNAME   "secondlife"
-            !define FS64BIT "%(fs64bit)d"
+            !define IS64BIT   "%(is64bit)d"
             Caption "%(caption)s"
             """
 
@@ -786,15 +785,8 @@ class WindowsManifest(ViewerManifest):
             engage_registry="SetRegView 32"
             program_files="$PROGRAMFILES32"
 
-        tempfile = "secondlife_setup_tmp.nsi"
+        tempfile = "firestorm_setup_tmp.nsi"
 
-        install_dir = "PROGRAMFILES"
-        install_dir_regkey = "SOFTWARE\\The Phoenix Firestorm Project\\${INSTNAME}" ""
-
-        if self.fs_is_64bit_build():
-            install_dir += "64"
-            install_dir_regkey = "WOW3264Node\\SOFTWARE\\The Phoenix Firestorm Project\\${INSTNAME}" ""
-        
         self.fs_sign_win_binaries() # <FS:ND/> Sign files, step one. Sign compiled binaries
 
         # the following replaces strings in the nsi template
@@ -806,8 +798,6 @@ class WindowsManifest(ViewerManifest):
                 "%%INSTALL_FILES%%":self.nsi_file_commands(True),
                 "%%PROGRAMFILES%%":program_files,
                 "%%ENGAGEREGISTRY%%":engage_registry,
-                "%%INSTALL_DIR%%": install_dir,
-                "%%INSTALL_DIR_REGKEY%%": install_dir_regkey,
                 "%%DELETE_FILES%%":self.nsi_file_commands(False)})
 
         # If we're on a build machine, sign the code using our Authenticode certificate. JC
