@@ -1445,6 +1445,11 @@ void LLAppViewer::initMaxHeapSize()
 	//F32 max_heap_size_gb = llmin(1.6f, (F32)gSavedSettings.getF32("MaxHeapSize")) ;
 	F32Gigabytes max_heap_size_gb = (F32Gigabytes)gSavedSettings.getF32("MaxHeapSize") ;
 	BOOL enable_mem_failure_prevention = (BOOL)gSavedSettings.getBOOL("MemoryFailurePreventionEnabled") ;
+// <FS:Ansariel> Enable low memory checks on 32bit builds
+#if ADDRESS_SIZE == 64
+	enable_mem_failure_prevention = FALSE;
+#endif
+// </FS:Ansariel>
 
 	LLMemory::initMaxHeapSizeGB(max_heap_size_gb, enable_mem_failure_prevention) ;
 }
@@ -1455,10 +1460,19 @@ void LLAppViewer::checkMemory()
 	//const static F32 MAX_QUIT_WAIT_TIME = 30.0f ; //seconds
 	//static F32 force_quit_timer = MAX_QUIT_WAIT_TIME + MEMORY_CHECK_INTERVAL ;
 
-	if(!gGLManager.mDebugGPU)
+	// <FS:Ansariel> Enable low memory checks on 32bit builds
+	//if(!gGLManager.mDebugGPU)
+	//{
+	//	return ;
+	//}
+#if ADDRESS_SIZE == 32
+	static LLCachedControl<bool> mem_failure_prevention(gSavedSettings, "MemoryFailurePreventionEnabled");
+	if (!mem_failure_prevention)
+#endif
 	{
 		return ;
 	}
+	// </FS:Ansariel>
 
 	if(MEMORY_CHECK_INTERVAL > mMemCheckTimer.getElapsedTimeF32())
 	{
@@ -1475,7 +1489,8 @@ void LLAppViewer::checkMemory()
 	
 	if(is_low)
 	{
-		LLMemory::logMemoryInfo() ;
+		// <FS:Ansariel> Causes spammy log output
+		//LLMemory::logMemoryInfo() ;
 	}
 }
 
