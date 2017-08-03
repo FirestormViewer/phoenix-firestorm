@@ -42,6 +42,7 @@
 #include "bufferstream.h"
 #include "llcorehttputil.h"
 #include "llviewermenu.h"
+#include "llviewernetwork.h"
 
 // History (may be apocryphal)
 //
@@ -556,7 +557,7 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 		// but is there anything to update?
 		// <FS:Ansariel> FIRE-21376: Inventory not loading properly on OpenSim
 		//gInventory.notifyObservers();
-		if (use_http_inventory())
+		if (LLGridManager::getInstance()->isInSecondLife())
 		{
 			gInventory.notifyObservers();
 		}
@@ -880,7 +881,7 @@ void BGFolderHttpHandler::processData(LLSD & content, LLCore::HttpResponse * res
                         titem->updateParentOnServer(FALSE);
                         gInventory.updateItem(titem);
                         // <FS:Ansariel> FIRE-21376: Inventory not loading properly on OpenSim
-                        if (!use_http_inventory())
+                        if (!LLGridManager::getInstance()->isInSecondLife())
                         {
                             gInventory.notifyObservers();
                         }
@@ -959,7 +960,7 @@ void BGFolderHttpHandler::processData(LLSD & content, LLCore::HttpResponse * res
 	}
 
 	// <FS:Ansariel> FIRE-21376: Inventory not loading properly on OpenSim
-	if (!use_http_inventory())
+	if (!LLGridManager::getInstance()->isInSecondLife())
 	{
 		gInventory.notifyObservers();
 	}
@@ -1008,7 +1009,7 @@ void BGFolderHttpHandler::processFailure(LLCore::HttpStatus status, LLCore::Http
 	}
 
 	// <FS:Ansariel> FIRE-21376: Inventory not loading properly on OpenSim
-	if (!use_http_inventory())
+	if (!LLGridManager::getInstance()->isInSecondLife())
 	{
 		gInventory.notifyObservers();
 	}
@@ -1052,7 +1053,7 @@ void BGFolderHttpHandler::processFailure(const char * const reason, LLCore::Http
 	}
 
 	// <FS:Ansariel> FIRE-21376: Inventory not loading properly on OpenSim
-	if (!use_http_inventory())
+	if (!LLGridManager::getInstance()->isInSecondLife())
 	{
 		gInventory.notifyObservers();
 	}
