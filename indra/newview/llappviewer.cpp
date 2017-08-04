@@ -1519,7 +1519,8 @@ void LLAppViewer::checkMemory()
 	
 	if(is_low)
 	{
-		LLMemory::logMemoryInfo() ;
+		// <FS:Ansariel> Causes spammy log output
+		//LLMemory::logMemoryInfo() ;
 	}
 }
 

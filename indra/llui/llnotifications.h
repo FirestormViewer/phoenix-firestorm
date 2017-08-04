@@ -180,6 +180,7 @@ public:
 		Optional<bool>			save_option;
 		Optional<std::string>	control;
 		Optional<bool>			invert_control;
+		Optional<bool>			session_only;
 
 		FormIgnore();
 	};
@@ -234,7 +235,8 @@ public:
 	typedef enum e_ignore_type
 	{ 
 		IGNORE_NO,
-		IGNORE_WITH_DEFAULT_RESPONSE, 
+		IGNORE_WITH_DEFAULT_RESPONSE,
+		IGNORE_WITH_DEFAULT_RESPONSE_SESSION_ONLY,
 		IGNORE_WITH_LAST_RESPONSE, 
 		IGNORE_SHOW_AGAIN 
 	} EIgnoreType;
@@ -970,6 +972,7 @@ public:
 	void setIgnoreAllNotifications(bool ignore);
 	bool getIgnoreAllNotifications();
 
+	void setIgnored(const std::string& name, bool ignored);
 	bool getIgnored(const std::string& name);
 
 	bool isVisibleByRules(LLNotificationPtr pNotification);
