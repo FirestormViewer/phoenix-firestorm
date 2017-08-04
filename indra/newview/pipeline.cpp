@@ -816,8 +816,10 @@ void LLPipeline::throttleNewMemoryAllocation(BOOL disable)
 		if(sMemAllocationThrottled)
 		{
 			//send out notification
-			LLNotification::Params params("LowMemory");
-			LLNotifications::instance().add(params);
+			// <FS:Ansariel> Disable annoying notification
+			//LLNotification::Params params("LowMemory");
+			//LLNotifications::instance().add(params);
+			// </FS:Ansariel>
 
 			//release some memory.
 		}
