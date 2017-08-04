@@ -3,6 +3,10 @@
 	<global name="skipnexttime">
 		Nicht mehr anzeigen
 	</global>
+	<global name="skipnexttimesessiononly">
+		Nicht mehr anzeigen
+(für aktuelle Sitzung)
+	</global>
 	<global name="alwayschoose">
 		Diese Option immer auswählen
 	</global>
@@ -2504,7 +2508,11 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 	</notification>
 	<notification name="DeleteItems">
 		[QUESTION]
-		<usetemplate ignoretext="Vor dem Löschen von Objekten bestätigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+		<form name="form">
+			<ignore name="ignore" text="Vor dem Löschen von Objekten bestätigen"/>
+			<button name="Yes" text="OK"/>
+			<button name="No" text="Abbrechen"/>
+		</form>
 	</notification>
 	<notification name="DeleteFilteredItems">
 		Ein Filter ist auf Ihrem Inventar aktiv und es sind nicht alle Objekte sichtbar, die Sie löschen möchten.
