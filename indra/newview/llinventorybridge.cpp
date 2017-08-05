@@ -228,6 +228,68 @@ const std::string& LLInvFVBridge::getDisplayName() const
 	return mDisplayName;
 }
 
+std::string LLInvFVBridge::getSearchableDescription() const
+{
+	const LLInventoryModel* model = getInventoryModel();
+	if (model)
+	{
+		const LLInventoryItem *item = model->getItem(mUUID);
+		if(item)
+		{
+			std::string desc = item->getDescription();
+			LLStringUtil::toUpper(desc);
+			return desc;
+		}
+	}
+	return LLStringUtil::null;
+}
+
+std::string LLInvFVBridge::getSearchableCreatorName() const
+{
+	const LLInventoryModel* model = getInventoryModel();
+	if (model)
+	{
+		const LLInventoryItem *item = model->getItem(mUUID);
+		if(item)
+		{
+			LLAvatarName av_name;
+			if (LLAvatarNameCache::get(item->getCreatorUUID(), &av_name))
+			{
+				std::string username = av_name.getUserName();
+				LLStringUtil::toUpper(username);
+				return username;
+			}
+		}
+	}
+	return LLStringUtil::null;
+}
+
+std::string LLInvFVBridge::getSearchableUUIDString() const
+{
+	const LLInventoryModel* model = getInventoryModel();
+	if (model)
+	{
+		const LLInventoryItem *item = model->getItem(mUUID);
+		if(item)
+		{
+			std::string uuid = item->getAssetUUID().asString();
+			LLStringUtil::toUpper(uuid);
+			return uuid;
+		}
+	}
+	return LLStringUtil::null;
+}
+
+// <FS:Ansariel> Zi's extended inventory search
+std::string LLInvFVBridge::getSearchableAll() const
+{
+	return getSearchableName() + "+" +
+		getSearchableCreatorName() + "+" + 
+		getSearchableDescription() + "+" +
+		getSearchableUUIDString();
+}
+// </FS:Ansariel>
+
 // Folders have full perms
 PermissionMask LLInvFVBridge::getPermissionMask() const
 {
@@ -889,6 +951,12 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 	//	disabled_items.push_back(std::string("Properties"));
 	//}
 	// </FS>
+
+	LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(FALSE);
+	if (active_panel && (active_panel->getName() != "All Items"))
+	{
+		items.push_back(std::string("Show in Main Panel"));
+	}
 }
 
 void LLInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
@@ -1695,25 +1763,6 @@ void LLItemBridge::performAction(LLInventoryModel* model, std::string action)
 	{
 		gotoItem();
 	}
-
-	// <FS:Sei> Find item in main inventory tab
-	if ("find_in_main" == action)
-	{
-		// Go to the item. Similar to gotoItem() but with normal items, not links.
-		LLInventoryObject *obj = getInventoryObject();
-
-		mInventoryPanel.get()->getParentByType<LLTabContainer>()->selectFirstTab();
-		if (obj)
-		{
-			LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel();
-			if (active_panel)
-			{
-				active_panel->setSelection(obj->getUUID(), TAKE_FOCUS_YES);
-			}
-		}
-	}
-	// </FS:Sei>
-
 	if ("open" == action || "open_original" == action)
 	{
 		openItem();
@@ -1749,6 +1798,11 @@ void LLItemBridge::performAction(LLInventoryModel* model, std::string action)
 		asset_id.toString(buffer);
 
 		gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(buffer));
+		return;
+	}
+	else if ("show_in_main_panel" == action)
+	{
+		LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, mUUID, TRUE);
 		return;
 	}
 	else if ("cut" == action)
@@ -2017,13 +2071,19 @@ void LLItemBridge::buildDisplayName() const
 	{
 		mDisplayName.assign(LLStringUtil::null);
 	}
-	
+	S32 old_length = mSearchableName.length();
+	S32 new_length = mDisplayName.length() + getLabelSuffix().length();
+
 	mSearchableName.assign(mDisplayName);
 	mSearchableName.append(getLabelSuffix());
 	LLStringUtil::toUpper(mSearchableName);
 	
-    //Name set, so trigger a sort
-    if(mParent)
+	if ((old_length > new_length) && getInventoryFilter())
+	{
+		getInventoryFilter()->setModified(LLFolderViewFilter::FILTER_MORE_RESTRICTIVE);
+	}
+	//Name set, so trigger a sort
+	if(mParent)
 	{
 		mParent->requestSort();
 	}
@@ -3361,6 +3421,11 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 		return;
 	}
 // </FS:TT>
+	else if ("show_in_main_panel" == action)
+	{
+		LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, mUUID, TRUE);
+		return;
+	}
 	else if ("cut" == action)
 	{
 		cutToClipboard();
@@ -6872,10 +6937,6 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 				if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canDetach(item)) )
 					disabled_items.push_back(std::string("Detach From Yourself"));
 // [/RLVa:KB]
-				// <FS:Sei> Add "Find in Main" option to Worn Items
-				if (mInventoryPanel.get()->getName() == "Worn Items")
-					items.push_back(std::string("Find in Main")); // This should appear only in Worn Items tab
-				// </FS:Sei>
 			}
 			else if (!isItemInTrash() && !isLinkedObjectInTrash() && !isLinkedObjectMissing() && !isCOFFolder())
 			{
@@ -7174,10 +7235,6 @@ void LLWearableBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 						if ( (rlv_handler_t::isEnabled()) && (!gRlvWearableLocks.canRemove(item)) )
 							disabled_items.push_back(std::string("Take Off"));
 // [/RLVa:KB]
-						// <FS:Sei> Add "Find in Main" option to Worn Items
-						if (mInventoryPanel.get()->getName() == "Worn Items")
-							items.push_back(std::string("Find in Main"));
-						// </FS:Sei>
 					}
 					else
 					{
@@ -7980,69 +8037,4 @@ LLInvFVBridge* LLWornInventoryBridgeBuilder::createBridge(
 	return new_listener;
 
 }
-
-// <FS:ND> Reintegrate search by uuid/creator/descripting from Zi Ree after CHUI Merge
-std::string LLInvFVBridge::getSearchableCreator( void ) const
-{
-	LLInventoryItem *pItem( dynamic_cast< LLInventoryItem* >( getInventoryObject() ) );
-
-	std::string strCreator;
-	if(pItem)
-	{
-		LLAvatarName av_name;
-		if (LLAvatarNameCache::get(pItem->getCreatorUUID(), &av_name))
-		{
-			strCreator =  av_name.getUserName();
-			LLStringUtil::toUpper( strCreator );
-		}
-	}
-
-	return strCreator;
-}
-
-std::string LLInvFVBridge::getSearchableDescription( void ) const
-{
-	LLInventoryItem *pItem( dynamic_cast< LLInventoryItem* >( getInventoryObject() ) );
-
-	std::string strDescr;
-
-	if(pItem)
-	{
-		if(!pItem->getDescription().empty() )
-		{
-			strDescr =  pItem->getDescription();
-			LLStringUtil::toUpper( strDescr );
-		}
-	}
-
-	return strDescr;
-}
-
-std::string LLInvFVBridge::getSearchableUUID( void ) const
-{
-	LLInventoryItem *pItem( dynamic_cast< LLInventoryItem* >( getInventoryObject() ) );
-
-	std::string strUUID;
-	if(pItem)
-	{
-		if(!pItem->getAssetUUID().isNull())
-		{
-			strUUID = pItem->getAssetUUID().asString();
-			LLStringUtil::toUpper( strUUID );
-		}
-
-	}
-	return strUUID;
-
-}
-
-std::string LLInvFVBridge::getSearchableAll( void ) const
-{
-	return getSearchableName() + "+" +
-		getSearchableCreator() + "+" + 
-		getSearchableDescription() + "+" +
-		getSearchableUUID();
-}
-// </FS:ND>
-
 // EOF

@@ -327,52 +327,52 @@
 			name="inventory_search_by_name"
 			label="By Name">
 			<on_click
-				function="Inventory.SearchTarget.Set"
-				parameter="name" />
+				function="Inventory.SearchType.Set"
+				parameter="search_by_name" />
 			<on_check
-				function="Inventory.SearchTarget.Check"
-				parameter="name" />
+				function="Inventory.SearchType.Check"
+				parameter="search_by_name" />
 		</menu_item_check>
 		<menu_item_check
 			name="inventory_search_by_creator"
 			label="By Creator">
 			<on_click
-				function="Inventory.SearchTarget.Set"
-				parameter="creator" />
+				function="Inventory.SearchType.Set"
+				parameter="search_by_creator" />
 			<on_check
-				function="Inventory.SearchTarget.Check"
-				parameter="creator" />
+				function="Inventory.SearchType.Check"
+				parameter="search_by_creator" />
 		</menu_item_check>
 		<menu_item_check
 			name="inventory_search_by_description"
 			label="By Description">
 			<on_click
-				function="Inventory.SearchTarget.Set"
-				parameter="description" />
+				function="Inventory.SearchType.Set"
+				parameter="search_by_description" />
 			<on_check
-				function="Inventory.SearchTarget.Check"
-				parameter="description" />
+				function="Inventory.SearchType.Check"
+				parameter="search_by_description" />
 		</menu_item_check>
 		<menu_item_check
 			name="inventory_search_by_uuid"
 			label="By UUID">
 			<on_click
-				function="Inventory.SearchTarget.Set"
-				parameter="uuid" />
+				function="Inventory.SearchType.Set"
+				parameter="search_by_UUID" />
 			<on_check
-				function="Inventory.SearchTarget.Check"
-				parameter="uuid" />
+				function="Inventory.SearchType.Check"
+				parameter="search_by_UUID" />
 		</menu_item_check>
 		<menu_item_separator />
 		<menu_item_check
 			name="inventory_search_by_all"
 			label="By All">
 			<on_click
-				function="Inventory.SearchTarget.Set"
-				parameter="all" />
+				function="Inventory.SearchType.Set"
+				parameter="search_by_all" />
 			<on_check
-				function="Inventory.SearchTarget.Check"
-				parameter="all" />
+				function="Inventory.SearchType.Check"
+				parameter="search_by_all" />
 		</menu_item_check>
 		<menu_item_separator />
 		<menu_item_check
@@ -405,19 +405,6 @@
 				function="Inventory.FilterLinks.Check"
 				parameter="hide_links" />
 		</menu_item_check>
-<!-- Not implemented yet
-		<menu_item_separator />
-		<menu_item_check
-			name="inventory_show_partial_results"
-			label="Show Partial Search Results">
-			<menu_item_check.on_click
-				function="Inventory.SearchTarget.Set"
-				parameter="partial" />
-			<menu_item_check.on_check
-				function="Inventory.SearchTarget.Check"
-				parameter="partial" />
-		</menu_item_check>
--->
 	</menu>
 
 	</menu_bar>

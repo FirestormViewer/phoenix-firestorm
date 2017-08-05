@@ -97,7 +97,7 @@
 	<menu_item_call label="Деактивировать" name="Deactivate"/>
 	<menu_item_call label="Сохранить как" name="Save As"/>
 	<menu_item_call label="Надеть" name="Wearable And Object Wear"/>
-	<menu_item_call label="Найти в общем виде" name="Find in Main"/>
+	<menu_item_call label="Найти в общем виде" name="Show in Main Panel"/>
 	<menu_item_call label="Добавить" name="Wearable Add"/>
 	<menu label="Прикрепить" name="Attach To"/>
 	<menu label="Прикрепить к HUD" name="Attach To HUD"/>

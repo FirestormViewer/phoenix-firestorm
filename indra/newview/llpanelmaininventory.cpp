@@ -30,6 +30,7 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llavataractions.h"
+#include "llcheckboxctrl.h"
 #include "llcombobox.h"
 #include "lldndbutton.h"
 #include "lleconomy.h"
@@ -94,6 +95,9 @@ public:
 	BOOL getCheckSinceLogoff();
 	U32 getDateSearchDirection();
 
+	void onCreatorSelfFilterCommit();
+	void onCreatorOtherFilterCommit();
+
 	static void onTimeAgo(LLUICtrl*, void *);
 	static void onCloseBtn(void* user_data);
 	static void selectAllTypes(void* user_data);
@@ -105,6 +109,8 @@ private:
 	LLPanelMainInventory*	mPanelMainInventory;
 	LLSpinCtrl*			mSpinSinceDays;
 	LLSpinCtrl*			mSpinSinceHours;
+	LLCheckBoxCtrl*		mCreatorSelf;
+	LLCheckBoxCtrl*		mCreatorOthers;
 	LLInventoryFilter*	mFilter;
 };
 
@@ -115,11 +121,13 @@ private:
 LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	: LLPanel(p),
 	  mActivePanel(NULL),
+	  mWornItemsPanel(NULL),
 	  mSavedFolderState(NULL),
 	  mFilterText(""),
 	  mMenuGearDefault(NULL),
 	  mMenuAddHandle(),
-	  mNeedUploadCost(true)
+	  mNeedUploadCost(true),
+	  mSearchTypeCombo(NULL) // <FS:Ansariel> Properly initialize this
 {
 	// Menu Callbacks (non contex menus)
 	mCommitCallbackRegistrar.add("Inventory.DoToSelected", boost::bind(&LLPanelMainInventory::doToSelected, this, _2));
@@ -138,8 +146,8 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	// </FS:Zi> Filter Links Menu
 
 	// <FS:Zi> Extended Inventory Search
-	mCommitCallbackRegistrar.add("Inventory.SearchTarget.Set", boost::bind(&LLPanelMainInventory::onSearchTargetChecked, this, _2));
-	mEnableCallbackRegistrar.add("Inventory.SearchTarget.Check", boost::bind(&LLPanelMainInventory::isSearchTargetChecked, this, _2));
+	mCommitCallbackRegistrar.add("Inventory.SearchType.Set", boost::bind(&LLPanelMainInventory::onSearchTypeChecked, this, _2));
+	mEnableCallbackRegistrar.add("Inventory.SearchType.Check", boost::bind(&LLPanelMainInventory::isSearchTypeChecked, this, _2));
 	// </FS:Zi> Extended Inventory Search
 
 	// <FS:Zi> Sort By menu handlers
@@ -226,30 +234,38 @@ BOOL LLPanelMainInventory::postBuild()
 		recent_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, recent_items_panel, _1, _2));
 	}
 
-	// <FS:ND> Bring back worn items panel.
-	LLInventoryPanel* worn_items_panel = getChild<LLInventoryPanel>("Worn Items");
-	if (worn_items_panel)
+	LLInventoryPanel* mWornItemsPanel = getChild<LLInventoryPanel>("Worn Items");
+	if (mWornItemsPanel)
 	{
-		worn_items_panel->setWorn(TRUE);
-		worn_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::DEFAULT_SORT_ORDER));
-		worn_items_panel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
-		LLInventoryFilter& worn_filter = worn_items_panel->getFilter();
-		worn_filter.setFilterObjectTypes(0xffffffffffffffffULL & ~(0x1 << LLInventoryType::IT_GESTURE | 0x1 << LLInventoryType::IT_CATEGORY));
-		worn_filter.markDefault();
+		U32 filter_types = 0x0;
+		filter_types |= 0x1 << LLInventoryType::IT_WEARABLE;
+		filter_types |= 0x1 << LLInventoryType::IT_ATTACHMENT;
+		filter_types |= 0x1 << LLInventoryType::IT_OBJECT;
+		mWornItemsPanel->setFilterTypes(filter_types);
+		mWornItemsPanel->setFilterWorn();
+		mWornItemsPanel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
+		mWornItemsPanel->setFilterLinks(LLInventoryFilter::FILTERLINK_EXCLUDE_LINKS);
+		mWornItemsPanel->getFilter().markDefault();
+		mWornItemsPanel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, mWornItemsPanel, _1, _2));
 
-		// <FS:ND> Do not go all crazy and recurse through the whole inventory
-		//		worn_items_panel->openAllFolders();
-		if( worn_items_panel->getRootFolder() )
+		// <FS:Ansariel> Firestorm additions
+		mWornItemsPanel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::DEFAULT_SORT_ORDER));
+
+		if (mWornItemsPanel->getRootFolder())
 		{
-			worn_items_panel->getRootFolder()->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_NO);
-			worn_items_panel->getRootFolder()->arrangeAll();
+			mWornItemsPanel->getRootFolder()->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_NO);
+			mWornItemsPanel->getRootFolder()->arrangeAll();
 		}
-		// </FS:ND>
-
-		worn_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, worn_items_panel, _1, _2));
+		// </FS:Ansariel>
 	}
-	// </FS:ND>
-
+	// <FS:Ansariel> Only if we actually have it!
+	//mSearchTypeCombo  = getChild<LLComboBox>("search_type");
+	mSearchTypeCombo  = findChild<LLComboBox>("search_type");
+	// <FS:Ansariel>
+	if(mSearchTypeCombo)
+	{
+		mSearchTypeCombo->setCommitCallback(boost::bind(&LLPanelMainInventory::onSelectSearchType, this));
+	}
 	// Now load the stored settings from disk, if available.
 	std::string filterSaveName(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, FILTERS_FILENAME));
 	LL_INFOS() << "LLPanelMainInventory::init: reading from " << filterSaveName << LL_ENDL;
@@ -391,6 +407,16 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 	delete mSavedFolderState;
 }
 
+LLInventoryPanel* LLPanelMainInventory::getAllItemsPanel()
+{
+	return  getChild<LLInventoryPanel>("All Items");
+}
+
+void LLPanelMainInventory::selectAllItemsPanel()
+{
+	mFilterTabs->selectFirstTab();
+}
+
 void LLPanelMainInventory::startSearch()
 {
 	// this forces focus to line editor portion of search editor
@@ -479,6 +505,55 @@ void LLPanelMainInventory::resetFilters()
 	}
 
 	setFilterTextFromFilter();
+}
+
+void LLPanelMainInventory::onSelectSearchType()
+{
+	std::string new_type = mSearchTypeCombo->getValue();
+	if (new_type == "search_by_name")
+	{
+		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_NAME);
+	}
+	if (new_type == "search_by_creator")
+	{
+		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_CREATOR);
+	}
+	if (new_type == "search_by_description")
+	{
+		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_DESCRIPTION);
+	}
+	if (new_type == "search_by_UUID")
+	{
+		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_UUID);
+	}
+}
+
+void LLPanelMainInventory::updateSearchTypeCombo()
+{
+	// <FS:Ansariel> Check if combo box is actually there
+	if (!mSearchTypeCombo)
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
+	LLInventoryFilter::ESearchType search_type = getActivePanel()->getSearchType();
+	switch(search_type)
+	{
+		case LLInventoryFilter::SEARCHTYPE_CREATOR:
+			mSearchTypeCombo->setValue("search_by_creator");
+			break;
+		case LLInventoryFilter::SEARCHTYPE_DESCRIPTION:
+			mSearchTypeCombo->setValue("search_by_description");
+			break;
+		case LLInventoryFilter::SEARCHTYPE_UUID:
+			mSearchTypeCombo->setValue("search_by_UUID");
+			break;
+		case LLInventoryFilter::SEARCHTYPE_NAME:
+		default:
+			mSearchTypeCombo->setValue("search_by_name");
+			break;
+	}
 }
 
 // <FS:Zi> Sort By menu handlers
@@ -572,7 +647,10 @@ void LLPanelMainInventory::onClearSearch()
 {
 	BOOL initially_active = FALSE;
 	LLFloater *finder = getFinder();
+	// <FS:Ansariel> Worn inventory panel
+	//if (mActivePanel && (getActivePanel() != mWornItemsPanel))
 	if (mActivePanel)
+	// </FS:Ansariel>
 	{
 		// <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
 		//initially_active = mActivePanel->getFilter().isNotDefault();
@@ -803,6 +881,13 @@ void LLPanelMainInventory::onFilterSelected()
 		return;
 	}
 
+	// <FS:Ansariel> Worn inventory panel; We do this at init and only once for performance reasons!
+	//if (getActivePanel() == mWornItemsPanel)
+	//{
+	//	mActivePanel->openAllFolders();
+	//}
+	// </FS:Ansariel>
+	updateSearchTypeCombo();
 	// <FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 	//setFilterSubString(mFilterSubString);
 	if (!gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
@@ -1036,6 +1121,11 @@ BOOL LLFloaterInventoryFinder::postBuild()
 	mSpinSinceDays = getChild<LLSpinCtrl>("spin_days_ago");
 	childSetCommitCallback("spin_days_ago", onTimeAgo, this);
 
+	mCreatorSelf = getChild<LLCheckBoxCtrl>("check_created_by_me");
+	mCreatorOthers = getChild<LLCheckBoxCtrl>("check_created_by_others");
+	mCreatorSelf->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onCreatorSelfFilterCommit, this));
+	mCreatorOthers->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onCreatorOtherFilterCommit, this));
+
 	childSetAction("Close", onCloseBtn, this);
 
 	// <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
@@ -1082,15 +1172,15 @@ void LLFloaterInventoryFinder::onTimeAgo(LLUICtrl *ctrl, void *user_data)
 // <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
 void LLFloaterInventoryFinder::onResetBtn()
 {
+	mFilter->resetDefault();
 	LLInventoryPanel* panel = mPanelMainInventory->getPanel();
-	panel->getFilter().resetDefault();
 	if (panel->getName() == "All Items")
 	{
 		panel->setFilterTypes(0xffffffffffffffffULL);
 	}
 
-	LLInventoryFilter &filter = panel->getFilter();
-	mPanelMainInventory->updateFilterDropdown(&filter);
+	mPanelMainInventory->updateFilterDropdown(mFilter);
+	mFilter->setFilterCreator(LLInventoryFilter::FILTERCREATOR_ALL);
 
 	updateElementsFromFilter();
 }
@@ -1114,6 +1204,10 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
 	U32 hours = mFilter->getHoursAgo();
 	U32 date_search_direction = mFilter->getDateSearchDirection();
 
+	LLInventoryFilter::EFilterCreatorType filter_creator = mFilter->getFilterCreator();
+	bool show_created_by_me = ((filter_creator == LLInventoryFilter::FILTERCREATOR_ALL) || (filter_creator == LLInventoryFilter::FILTERCREATOR_SELF));
+	bool show_created_by_others = ((filter_creator == LLInventoryFilter::FILTERCREATOR_ALL) || (filter_creator == LLInventoryFilter::FILTERCREATOR_OTHERS));
+
 	// update the ui elements
 	// <FS:PP> Make floater title translatable
 	// setTitle(mFilter->getName());
@@ -1135,6 +1229,10 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
 	getChild<LLUICtrl>("check_snapshot")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SNAPSHOT));
 	getChild<LLUICtrl>("check_transferable")->setValue(mFilter->getFilterTransferable()); // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 	getChild<LLUICtrl>("check_show_empty")->setValue(show_folders == LLInventoryFilter::SHOW_ALL_FOLDERS);
+
+	getChild<LLUICtrl>("check_created_by_me")->setValue(show_created_by_me);
+	getChild<LLUICtrl>("check_created_by_others")->setValue(show_created_by_others);
+
 	getChild<LLUICtrl>("check_since_logoff")->setValue(mFilter->isSinceLogoff());
 	mSpinSinceHours->set((F32)(hours % 24));
 	mSpinSinceDays->set((F32)(hours / 24));
@@ -1232,6 +1330,7 @@ void LLFloaterInventoryFinder::draw()
 	mPanelMainInventory->getPanel()->setShowFolderState(getCheckShowEmpty() ?
 		LLInventoryFilter::SHOW_ALL_FOLDERS : LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
 	mPanelMainInventory->getPanel()->setFilterTypes(filter);
+
 	if (getCheckSinceLogoff())
 	{
 		mSpinSinceDays->set(0);
@@ -1260,6 +1359,46 @@ void LLFloaterInventoryFinder::draw()
 	mPanelMainInventory->getPanel()->setDateSearchDirection(getDateSearchDirection());
 
 	LLPanel::draw();
+}
+
+void LLFloaterInventoryFinder::onCreatorSelfFilterCommit()
+{
+	bool show_creator_self = mCreatorSelf->getValue();
+	bool show_creator_other = mCreatorOthers->getValue();
+
+	if(show_creator_self && show_creator_other)
+	{
+		mFilter->setFilterCreator(LLInventoryFilter::FILTERCREATOR_ALL);
+	}
+	else if(show_creator_self)
+	{
+		mFilter->setFilterCreator(LLInventoryFilter::FILTERCREATOR_SELF);
+	}
+	else if(!show_creator_self || !show_creator_other)
+	{
+		mFilter->setFilterCreator(LLInventoryFilter::FILTERCREATOR_OTHERS);
+		mCreatorOthers->set(TRUE);
+	}
+}
+
+void LLFloaterInventoryFinder::onCreatorOtherFilterCommit()
+{
+	bool show_creator_self = mCreatorSelf->getValue();
+	bool show_creator_other = mCreatorOthers->getValue();
+
+	if(show_creator_self && show_creator_other)
+	{
+		mFilter->setFilterCreator(LLInventoryFilter::FILTERCREATOR_ALL);
+	}
+	else if(show_creator_other)
+	{
+		mFilter->setFilterCreator(LLInventoryFilter::FILTERCREATOR_OTHERS);
+	}
+	else if(!show_creator_other || !show_creator_self)
+	{
+		mFilter->setFilterCreator(LLInventoryFilter::FILTERCREATOR_SELF);
+		mCreatorSelf->set(TRUE);
+	}
 }
 
 BOOL LLFloaterInventoryFinder::getCheckShowEmpty()
@@ -1797,43 +1936,59 @@ BOOL LLPanelMainInventory::isFilterLinksChecked(const LLSD& userdata)
 // </FS:Zi> Filter Links Menu
 
 // <FS:Zi> Extended Inventory Search
-void LLPanelMainInventory::onSearchTargetChecked(const LLSD& userdata)
+void LLPanelMainInventory::onSearchTypeChecked(const LLSD& userdata)
 {
-	getActivePanel()->setFilterSubStringTarget(userdata.asString());
+	std::string new_type = userdata.asString();
+	if (new_type == "search_by_name")
+	{
+		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_NAME);
+	}
+	if (new_type == "search_by_creator")
+	{
+		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_CREATOR);
+	}
+	if (new_type == "search_by_description")
+	{
+		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_DESCRIPTION);
+	}
+	if (new_type == "search_by_UUID")
+	{
+		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_UUID);
+	}
+	if (new_type == "search_by_all")
+	{
+		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_ALL);
+	}
 	resetFilters();
 }
 
-LLInventoryFilter::EFilterSubstringTarget LLPanelMainInventory::getSearchTarget() const
+BOOL LLPanelMainInventory::isSearchTypeChecked(const LLSD& userdata)
 {
-	return getActivePanel()->getFilterSubStringTarget();
-}
-
-BOOL LLPanelMainInventory::isSearchTargetChecked(const LLSD& userdata)
-{
+	LLInventoryFilter::ESearchType search_type = getActivePanel()->getSearchType();
 	const std::string command_name = userdata.asString();
-	if (command_name == "name")
+	if (command_name == "search_by_name")
 	{
-		return (getSearchTarget() == LLInventoryFilter::SUBST_TARGET_NAME);
+		return (search_type == LLInventoryFilter::SEARCHTYPE_NAME);
 	}
 
-	if (command_name == "creator")
+	if (command_name == "search_by_creator")
 	{
-		return (getSearchTarget() == LLInventoryFilter::SUBST_TARGET_CREATOR);
+		return (search_type == LLInventoryFilter::SEARCHTYPE_CREATOR);
 	}
 
-	if (command_name == "description")
+	if (command_name == "search_by_description")
 	{
-		return (getSearchTarget() == LLInventoryFilter::SUBST_TARGET_DESCRIPTION);
+		return (search_type == LLInventoryFilter::SEARCHTYPE_DESCRIPTION);
 	}
 
-	if (command_name == "uuid")
+	if (command_name == "search_by_UUID")
 	{
-		return (getSearchTarget() == LLInventoryFilter::SUBST_TARGET_UUID);
+		return (search_type == LLInventoryFilter::SEARCHTYPE_UUID);
 	}
 
-	if (command_name == "all")
+	if (command_name == "search_by_all")
 	{
-		return (getSearchTarget() == LLInventoryFilter::SUBST_TARGET_ALL);
+		return (search_type == LLInventoryFilter::SEARCHTYPE_ALL);
 	}
 	return FALSE;
 }
