@@ -13,6 +13,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSEnforceStrictObjectCheck</key>
+  <map>
+    <key>Comment</key>
+    <string>Force malformed prims to be treated as invalid. This setting derenders all malformed prims, even those that might not cause obvious issues. Setting to false will allow bad prims to render but can cause crashes.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
   <key>FSUseV2Friends</key>
   <map>
     <key>Comment</key>
@@ -7800,12 +7811,12 @@
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>10.0</real>
+    <real>40.0</real>
   </map>
   <key>LoginSRVPump</key>
   <map>
     <key>Comment</key>
-    <string>Name of the message pump that handles SRV request</string>
+    <string>Name of the message pump that handles SRV request (deprecated)</string>
     <key>Persist</key>
     <integer>0</integer>
     <key>Type</key>
@@ -8650,7 +8661,7 @@
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>1</integer>
+    <integer>0</integer>
   </map>
   <key>MemoryLogFrequency</key>
         <map>

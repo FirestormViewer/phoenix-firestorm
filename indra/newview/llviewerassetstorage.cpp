@@ -515,7 +515,7 @@ void LLViewerAssetStorage::assetRequestCoro(
     }
 
     // <FS:Ansariel> [UDP Assets]
-    bool with_http = false;
+    bool with_http = true;
     bool is_temp = false;
     LLViewerAssetStatsFF::record_enqueue(atype, with_http, is_temp);
     // </FS:Ansariel> [UDP Assets]

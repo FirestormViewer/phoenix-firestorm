@@ -3075,15 +3075,21 @@ void LLIMMgr::addMessage(
 				if (!dontIgnoreAdHocFromFriends || (dontIgnoreAdHocFromFriends && LLAvatarTracker::instance().getBuddyInfo(other_participant_id) == NULL))
 				{
 					static LLCachedControl<bool> reportIgnoredAdHocSession(gSavedSettings, "FSReportIgnoredAdHocSession");
-					LL_INFOS() << "Ignoring conference (ad-hoc) chat from " << new_session_id.asString() << LL_ENDL;
+					//<FS:Beq> [FIRE-21385] Add inviter name/UUID to ad-hoc ignored messages
+					LLSD args;
+					args["AVATAR_NAME"] = LLSLURL("agent", other_participant_id, "about").getSLURLString();
+//					LL_INFOS() << "Ignoring conference (ad-hoc) chat from " << new_session_id.asString() << LL_ENDL;
+					LL_INFOS() << "Ignoring conference (ad-hoc) chat from " << args["AVATAR_NAME"] << LL_ENDL;
 					if (!gIMMgr->leaveSession(new_session_id))
 					{
 						LL_WARNS() << "Ad-hoc session " << new_session_id.asString() << " does not exist." << LL_ENDL;
 					}
 					else if (reportIgnoredAdHocSession)
 					{
-						report_to_nearby_chat(LLTrans::getString("IgnoredAdHocSession"));
+//						report_to_nearby_chat(LLTrans::getString("IgnoredAdHocSession"));
+						report_to_nearby_chat(LLTrans::getString("IgnoredAdHocSession", args));
 					}
+					//</FS:Beq>
 					return;
 				}
 			}

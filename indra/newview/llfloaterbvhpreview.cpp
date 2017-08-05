@@ -1196,7 +1196,10 @@ bool LLFloaterBvhPreview::validateLoopIn(const LLSD& data)
 
 	getChild<LLUICtrl>("loop_in_point")->setValue(LLSD(loop_in_value));
 	// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
-	getChild<LLUICtrl>("loop_in_frames")->setValue(LLSD(loop_in_value / 100.f * (F32)mNumFrames));
+	// <FS:Beq> FIRE-21330: (additional cleanup) make loop out round to an integer
+	//	getChild<LLUICtrl>("loop_in_frames")->setValue(LLSD(loop_in_value / 100.f * (F32)mNumFrames));
+	getChild<LLUICtrl>("loop_in_frames")->setValue(LLSD(ll_round(loop_in_value / 100.f * (F32)mNumFrames)));
+	// </FS:Beq>
 	// </FS:Sei>
 	return true;
 }
@@ -1227,7 +1230,10 @@ bool LLFloaterBvhPreview::validateLoopOut(const LLSD& data)
 
 	getChild<LLUICtrl>("loop_out_point")->setValue(LLSD(loop_out_value));
 	// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
-	getChild<LLUICtrl>("loop_out_frames")->setValue(LLSD(loop_out_value / 100.f * (F32)mNumFrames));
+	// <FS:Beq> FIRE-21330: (additional cleanup) make loop out round to an integer
+//	getChild<LLUICtrl>("loop_out_frames")->setValue(LLSD(loop_out_value / 100.f * (F32)mNumFrames));
+	getChild<LLUICtrl>("loop_out_frames")->setValue(LLSD(ll_round(loop_out_value / 100.f * (F32)mNumFrames)));
+	// </FS:Beq>
 	// </FS:Sei>
 	return true;
 }
@@ -1249,9 +1255,12 @@ bool LLFloaterBvhPreview::validateLoopInFrames(const LLSD& data)
 	{
 		loop_in_value = 0.f;
 	}
-	else if (loop_in_value > 100.f)
+	// <FS:Beq> FIRE-21330: Max value for the ctrl is 1000 not 100. 
+//	else if (loop_in_value > 100.f)
+	else if (loop_in_value > 1000.f)
 	{
-		loop_in_value = 100.f;
+//		loop_in_value = 100.f;
+		loop_in_value = 1000.f;
 	}
 	else if (loop_in_value > loop_out_value)
 	{
@@ -1278,9 +1287,12 @@ bool LLFloaterBvhPreview::validateLoopOutFrames(const LLSD& data)
 	{
 		loop_out_value = 0.f;
 	}
-	else if (loop_out_value > 100.f)
+	// <FS:Beq> FIRE-21330: Max value for the ctrl is 1000 not 100. 
+	//	else if (loop_out_value > 100.f)
+	else if (loop_out_value > 1000.f)
 	{
-		loop_out_value = 100.f;
+		//		loop_out_value = 100.f;
+		loop_out_value = 1000.f;
 	}
 	else if (loop_out_value < loop_in_value)
 	{
