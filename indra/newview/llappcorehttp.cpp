@@ -39,6 +39,7 @@
 #include <curl/curl.h>
 
 #include "llcorehttputil.h"
+#include "httpstats.h"
 
 #ifdef OPENSIM
 #include "llviewernetwork.h"
@@ -317,6 +318,8 @@ void LLAppCoreHttp::requestStop()
 
 void LLAppCoreHttp::cleanup()
 {
+    LLCore::HTTPStats::instance().dumpStats();
+
 	if (LLCORE_HTTP_HANDLE_INVALID == mStopHandle)
 	{
 		// Should have been started already...

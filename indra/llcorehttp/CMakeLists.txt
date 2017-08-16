@@ -34,6 +34,7 @@ set(llcorehttp_SOURCE_FILES
     httpoptions.cpp
     httprequest.cpp
     httpresponse.cpp
+    httpstats.cpp
     _httplibcurl.cpp
     _httpopcancel.cpp
     _httpoperation.cpp
@@ -61,6 +62,7 @@ set(llcorehttp_HEADER_FILES
     httpoptions.h
     httprequest.h
     httpresponse.h
+    httpstats.h
     _httpinternal.h
     _httplibcurl.h
     _httpopcancel.h
