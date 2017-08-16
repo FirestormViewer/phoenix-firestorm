@@ -1286,18 +1286,20 @@ bool LLAppViewer::init()
 		}
 	}
 
-	char* PARENT = getenv("PARENT");
-	if (! (PARENT && std::string(PARENT) == "SL_Launcher"))
-	{
-		// Don't directly run this executable. Please run the launcher, which
-		// will run the viewer itself.
-		// Naturally we do not consider this bulletproof. The point is to
-		// gently remind a user who *inadvertently* finds him/herself in this
-		// situation to do things the Right Way. Anyone who intentionally
-		// bypasses this mechanism needs no reminder that s/he's shooting
-		// him/herself in the foot.
-		LLNotificationsUtil::add("RunLauncher");
-	}
+	// <FS:Ansariel> Disable VMP
+	//char* PARENT = getenv("PARENT");
+	//if (! (PARENT && std::string(PARENT) == "SL_Launcher"))
+	//{
+	//	// Don't directly run this executable. Please run the launcher, which
+	//	// will run the viewer itself.
+	//	// Naturally we do not consider this bulletproof. The point is to
+	//	// gently remind a user who *inadvertently* finds him/herself in this
+	//	// situation to do things the Right Way. Anyone who intentionally
+	//	// bypasses this mechanism needs no reminder that s/he's shooting
+	//	// him/herself in the foot.
+	//	LLNotificationsUtil::add("RunLauncher");
+	//}
+	// </FS:Ansariel>
 
 #if LL_WINDOWS
 	if (gGLManager.mGLVersion < LLFeatureManager::getInstance()->getExpectedGLVersion())
