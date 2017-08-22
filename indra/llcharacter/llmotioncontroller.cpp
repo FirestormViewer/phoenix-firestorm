@@ -129,6 +129,7 @@ LLMotion *LLMotionRegistry::createMotion( const LLUUID &id )
 //-----------------------------------------------------------------------------
 LLMotionController::LLMotionController()
 	: mTimeFactor(sCurrentTimeFactor),
+	  mUpdateFactor(1.f), // <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
 	  mCharacter(NULL),
 	  mAnimTime(0.f),
 	  mPrevTimerElapsed(0.f),
@@ -825,7 +826,10 @@ void LLMotionController::updateMotions(bool force_update)
 	// Update timing info for this time step.
 	if (!mPaused)
 	{
-		F32 update_time = mAnimTime + delta_time * mTimeFactor;
+		// <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
+		//F32 update_time = mAnimTime + delta_time * mTimeFactor;
+		F32 update_time = mAnimTime + delta_time * mTimeFactor * mUpdateFactor;
+		// </FS:Ansariel>
 		if (use_quantum)
 		{
 			F32 time_interval = fmodf(update_time, mTimeStep);
