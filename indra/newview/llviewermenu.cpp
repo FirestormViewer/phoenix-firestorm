@@ -10082,7 +10082,7 @@ void handle_report_bug(const LLSD& param)
 	
 	LLStringUtil::format_map_t replace;
 	// <FS:Ansariel> FIRE-14001: JIRA report is being cut off when using Help -> Report Bug
-	//replace["[ENVIRONMENT]"] = LLURI::escape(LLAppViewer::instance()->getViewerInfoString());
+	//replace["[ENVIRONMENT]"] = LLURI::escape(LLAppViewer::instance()->getShortViewerInfoString());
 	LLSD sysinfo = FSData::getSystemInfo();
 	replace["[ENVIRONMENT]"] = LLURI::escape(sysinfo["Part1"].asString().substr(1) + sysinfo["Part2"].asString().substr(1));
 	// </FS:Ansariel>
