@@ -585,7 +585,7 @@ namespace LLError
 				pTag = "<NULL>";
 			mTagString.append(pTag);
 			// </FS:ND>
-            mTagString.append((i == mTagCount - 1) ? "" : ",");
+            mTagString.append((i == mTagCount - 1) ? ";" : ",");
 		}
 	}
 
