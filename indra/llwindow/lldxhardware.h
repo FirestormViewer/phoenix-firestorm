@@ -91,6 +91,8 @@ public:
 	BOOL getInfo(BOOL vram_only, bool disable_wmi);
 	// </FS:Ansariel>
 
+	std::string getDriverVersionWMI();
+
 	S32 getVRAM() const { return mVRAM; }
 
 	LLSD getDisplayInfo();

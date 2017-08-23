@@ -89,8 +89,8 @@ bool LLTipHandler::processNotification(const LLNotificationPtr& notification)
 	}
 
 	std::string session_name = notification->getPayload()["SESSION_NAME"];
-	const std::string name = notification->getSubstitutions()["NAME"];
-		const LLUUID agent_id = notification->getSubstitutions()["AGENT-ID"]; // [FIRE-3522 : SJ]
+	const std::string name = LLHandlerUtil::getSubstitutionOriginalName(notification);
+	const LLUUID agent_id = notification->getSubstitutions()["AGENT-ID"]; // [FIRE-3522 : SJ]
 		
 	if (session_name.empty())
 	{

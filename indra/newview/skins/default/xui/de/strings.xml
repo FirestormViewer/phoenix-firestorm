@@ -273,7 +273,6 @@ support@secondlife.com.
 	<string name="LoginFailedAccountDisabled">
 		Ihre Anfrage kann derzeit nicht bearbeitet werden.
 Wenden Sie sich unter http://secondlife.com/support an den Second Life-Support.
-Wenn Sie Ihr Kennwort nicht ändern können, rufen Sie die US-Nummer (866) 476-9763 an.
 	</string>
 	<string name="LoginFailedTransformError">
 		Nicht übereinstimmende Daten bei der Anmeldung festgestellt.

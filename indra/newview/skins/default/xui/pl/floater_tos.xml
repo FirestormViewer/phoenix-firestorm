@@ -1,15 +1,18 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="modal container">
 	<floater.string name="loading_url">
-		data:text/html,%3Chtml%3E%3Chead%3E%3C/head%3E%3Cbody text=%22000000%22%3E%3Ch2%3E Wczytywanie: %3Ca%20target%3D%22_external%22%20href%3D%22http%3A//secondlife.com/app/tos/%22%3EWarunki%20korzystania%3C/a%3E...%3C/h2%3E %3C/body%3E %3C/html%3E
+		data:text/html,%3Chtml%3E%3Chead%3E%3C/head%3E%3Cbody text=%22000000%22%3E%3Ch2%3E Wczytywanie %3Ca%20target%3D%22_external%22%20href%3D%22http%3A//secondlife.com/app/tos/%22%3ETerms%20of%20Service%3C/a%3E...%3C/h2%3E %3C/body%3E %3C/html%3E
 	</floater.string>
-	<button label="Kontynuuj" label_selected="Kontynuuj" name="Continue"/>
-	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>
-	<check_box label="Zgadzam się na Warunki korzystania z Usług (Terms of Service) i Politykę Prywatności (Privacy Policy)" name="agree_chk"/>
 	<text name="tos_heading">
-		Proszę dokładnie przeczytać Warunki korzystania z Usług (Terms of Service) i Politykę Prywatności (Privacy Policy). Musisz je zaakceptować, aby kontynuować logowanie.
+		Proszę przeczytać Regulamin (Terms and Conditions), Politykę Prywatności (Privacy Policy) i Warunki korzystania z Usług (Terms of Service) wraz z wymaganiami potrzebnymi do uzyskania arbitrażu oraz zrzeczeniem się grupowych skarg w celu rozwiązywania sporów. Musisz je zaakceptować, aby kontynuować logowanie.
 	</text>
 	<text name="external_tos_required">
 		Aby kontynuować będziesz musiał/a zalogować się do https://my.secondlife.com i zaakceptować Warunki korzystania. Dziękujemy!
 	</text>
+	<check_box label="Przeczytałem/am i zgadzam się na" name="agree_chk" />
+	<text name="agree_list">
+		Regulamin (Terms and Conditions), Politykę Prywatności (Privacy Policy) i Warunki korzystania z Usług (Terms of Service) wraz z wymagamiani rozwiązywania sporów.
+	</text>
+	<button label="Kontynuuj" label_selected="Kontynuuj" name="Continue" />
+	<button label="Anuluj" label_selected="Anuluj" name="Cancel" />
 </floater>

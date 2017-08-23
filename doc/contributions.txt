@@ -828,6 +828,8 @@ Kitty Barnett
 	MAINT-6153
 	MAINT-6154
 	MAINT-6568
+	STORM-2149
+	MAINT-7581
 Kolor Fall
 Komiko Okamoto
 Korvel Noh
