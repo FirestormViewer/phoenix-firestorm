@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<menu name="Avatar Icon Menu">
+<toggleable_menu name="Avatar Icon Menu">
 	<menu_item_call label="Profil" name="Show Profile"/>
 	<menu_item_call label="Czat/IM..." name="Send IM"/>
 	<menu_item_call label="Teleportuj do rezydenta" name="Teleport to"/>
@@ -20,4 +20,10 @@
 	<menu_item_call label="Kopiuj URL do schowka" name="copy url"/>
 	<menu_item_check label="Blokuj głos" name="Block Unblock"/>
 	<menu_item_check label="Blokuj tekst" name="Mute Text"/>
-</menu>
+	<context_menu label="Opcje moderatora" name="Moderator Options">
+		<menu_item_check label="Zezwól na czat tekstowy" name="AllowTextChat" />
+		<menu_item_call label="Wycisz tego rozmówcę" name="ModerateVoiceMuteSelected" />
+		<menu_item_call label="Odblokuj tego rozmówcę" name="ModerateVoiceUnMuteSelected" />
+	</context_menu>
+	<menu_item_call label="Zbanuj" name="BanMember" />
+</toggleable_menu>
