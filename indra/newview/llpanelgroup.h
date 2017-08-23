@@ -172,6 +172,8 @@ public:
 
 	virtual void setupCtrls	(LLPanel* parent) {};
 
+	virtual void onFilterChanged() { }
+
 protected:
 	LLUUID	mGroupID;
 	BOOL mAllowEdit;

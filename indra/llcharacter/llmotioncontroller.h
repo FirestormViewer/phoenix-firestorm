@@ -154,6 +154,9 @@ public:
 	void setTimeFactor(F32 time_factor);
 	F32 getTimeFactor() const { return mTimeFactor; }
 
+	// <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
+	void setUpdateFactor(F32 update_factor) { mUpdateFactor = update_factor; }
+
 	motion_list_t& getActiveMotions() { return mActiveMotions; }
 
 	void incMotionCounts(S32& num_motions, S32& num_loading_motions, S32& num_loaded_motions, S32& num_active_motions, S32& num_deprecated_motions);
@@ -191,6 +194,7 @@ protected:
 protected:
 	F32					mTimeFactor;			// 1.f for normal speed
 	static F32			sCurrentTimeFactor;		// Value to use for initialization
+	F32					mUpdateFactor;			// <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
 	static LLMotionRegistry	sRegistry;
 	LLPoseBlender		mPoseBlender;
 

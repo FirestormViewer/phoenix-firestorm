@@ -1319,7 +1319,7 @@ void LLVertexBuffer::createGLIndices(U32 size)
 
 void LLVertexBuffer::destroyGLBuffer()
 {
-	if (mGLBuffer)
+	if (mGLBuffer || mMappedData)
 	{
 		if (mMappedDataUsingVBOs)
 		{
@@ -1339,7 +1339,7 @@ void LLVertexBuffer::destroyGLBuffer()
 
 void LLVertexBuffer::destroyGLIndices()
 {
-	if (mGLIndices)
+	if (mGLIndices || mMappedIndexData)
 	{
 		if (mMappedIndexDataUsingVBOs)
 		{
