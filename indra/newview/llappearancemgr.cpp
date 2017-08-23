@@ -1645,7 +1645,14 @@ void LLAppearanceMgr::removeOutfitPhoto(const LLUUID& outfit_id)
     BOOST_FOREACH(LLViewerInventoryItem* outfit_item, outfit_item_array)
     {
         LLViewerInventoryItem* linked_item = outfit_item->getLinkedItem();
-        if (linked_item != NULL && linked_item->getActualType() == LLAssetType::AT_TEXTURE)
+        if (linked_item != NULL)
+        {
+            if (linked_item->getActualType() == LLAssetType::AT_TEXTURE)
+            {
+                gInventory.removeItem(outfit_item->getUUID());
+            }
+        }
+        else if (outfit_item->getActualType() == LLAssetType::AT_TEXTURE)
         {
             gInventory.removeItem(outfit_item->getUUID());
         }
