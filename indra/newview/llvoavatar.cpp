@@ -4102,11 +4102,13 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 	// don't early out for your own avatar, as we rely on your animations playing reliably
 	// for example, the "turn around" animation when entering customize avatar needs to trigger
 	// even when your avatar is offscreen
-	if (!visible && !isSelf())
-	{
-		updateMotions(LLCharacter::HIDDEN_UPDATE);
-		return FALSE;
-	}
+	// <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
+	//if (!visible && !isSelf())
+	//{
+	//	updateMotions(LLCharacter::HIDDEN_UPDATE);
+	//	return FALSE;
+	//}
+	// </FS:Ansariel>
 
 	// <FS:Zi> Optionally disable the usage of timesteps, testing if this affects performance or
 	//         creates animation issues - FIRE-3657
@@ -4126,6 +4128,7 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 			removeAnimationData("Walk Speed");
 		}
 		mMotionController.setTimeStep(time_step);
+		mMotionController.setUpdateFactor(mUpdatePeriod); // <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
 		//		LL_INFOS() << "Setting timestep to " << time_quantum * pixel_area_scale << LL_ENDL;
 	}
 	// <FS:Zi> Optionally disable the usage of timesteps, testing if this affects performance or
@@ -4133,8 +4136,17 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 	else
 	{
 		mMotionController.setTimeStep(0.0f);
+		mMotionController.setUpdateFactor(mUpdatePeriod); // <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
 	}
 	// </FS:Zi>
+
+	// <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
+	if (!visible && !isSelf())
+	{
+		updateMotions(LLCharacter::HIDDEN_UPDATE);
+		return FALSE;
+	}
+	// </FS:Ansariel>
 
 	if (getParent() && !mIsSitting)
 	{
