@@ -50,8 +50,9 @@
 		<integer_constant name="OS_NPC_CREATOR_OWNED" desc="Value 0x1" />
 		<integer_constant name="OS_NPC_NOT_OWNED" desc="Value 0x2" />
 		<integer_constant name="OS_NPC_SENSE_AS_AGENT" desc="Value 0x4" />
+		<integer_constant name="OS_NPC_OBJECT_GROUP" desc="Value 0x8" />
 		<integer_constant name="OS_NPC_RUNNING" desc="Value 4" />
-		
+
 		<integer_constant name="OS_LISTEN_REGEX_NAME" desc="Process name parameter as regex, Value = 0x1" />
 		<integer_constant name="OS_LISTEN_REGEX_MESSAGE" desc="Process name parameter as regex, Value = 0x2" />
 		<integer_constant name="OS_PRIM_VELOCITY" desc="Value 65032" />
@@ -135,6 +136,11 @@
 		<integer_constant name="PHYS_PARAM_SPRING_AXIS_ENABLE" desc="Bulletsim;[PHYS_PARAM_SPRING_AXIS_ENABLE, int axisCode, bool flag]"/>
 		<integer_constant name="PHYS_PARAM_SPRING_DAMPING" desc="Bulletsim;[PHYS_PARAM_SPRING_DAMPING, int axisCode, float damping]"/>
 		<integer_constant name="PHYS_PARAM_SPRING_STIFFNESS" desc="Bulletsim;[PHYS_PARAM_SPRING_STIFFNESS, int axisCode, float stiffness]"/>
+
+		<integer_constant name="OSTPOBJ_NONE" desc="Flag for osTeleportObject, Value 0"/>
+		<integer_constant name="OSTPOBJ_STOPATTARRGET" desc="Flag for osTeleportObject, object is stopped at destination"/>
+		<integer_constant name="OSTPOBJ_STOPONFAIL" desc="Flag for osTeleportObject, object stops at start point if tp fails (still does nothing)"/>
+		<integer_constant name="OSTPOBJ_SETROT" desc="Flag for osTeleportObject, the rotation is the final object rotation, otherwise is a added rotation"/>
 	</keywords>
 	<functions>
 		<function name="osSetRegionWaterHeight" sleep="0.0" energy="10.0"
@@ -441,6 +447,34 @@
 			desc="float osSetHealRate(key avatar, float healrate);Sets the automatic healing rate in % per second. Default heal rate is now around 0.5% per second. A value of zero can disable automatic heal, current maximum value is 100 % per second." />
 		<function name="osDrawFilledEllipse" sleep="0.0" energy="10.0"
 			desc="string osDrawFilledEllipse(string drawList, integer width, integer height);Appends an FillEllipse drawing command to the string provided in drawList and returns the result. The filled ellipse is drawn with the current pen size and color, with the specified width and height (in pixels), centered on a point which is (width/2) pixels to the right of the pen's current X position, and (height/2) pixels below the pen's current Y position. After the filled ellipse is drawn, the width and height values are added to the pen's X and Y position, respectively." />
+		<function name="osClearInertia" sleep="0.0" energy="10.0"
+			desc="osClearInertia();clears the effect of osSetInertia* functions. Link set total mass, center of mass and inertia will be the values estimated by default from the link set parts." />
+		<function name="osGetInertiaData" sleep="0.0" energy="10.0"
+			desc=";No description available yet" />
+		<function name="osSetInertia" sleep="0.0" energy="10.0"
+			desc="osSetInertia(float mass, vector centerOfMass, vector principalInertiaScaled, rotation InertiaRot);Allows creators to set the major physics dynamic proprieties, replacing the values estimated from the linkset parts. Call osClearInertia to undo." />
+		<function name="osSetInertiaAsBox" sleep="0.0" energy="10.0"
+			desc="osSetInertiaAsBox(float mass, vector boxSize, vector centerOfMass, rotation rot);Allows creators to set the link set total mass, center of mass and moment of inertia. Moment of inertia will be the one of a box of size boxSize, placed at the center of mass and rotated by rot in the root prim local frame. Call osClearInertia to undo." />
+		<function name="osSetInertiaAsCylinder" sleep="0.0" energy="10.0"
+			desc="osSetInertiaAsCylinder(float mass, float radius, float length, vector centerOfMass, rotation rot);Allows creators to set the link set total mass, center of mass and moment of inertia. Moment of inertia will be the one of a cylinder of radius and length, placed at the center of mass and rotated by rot in the root prim local frame. Call osClearInertia to undo." />
+		<function name="osSetInertiaAsSphere" sleep="0.0" energy="10.0"
+			desc="osSetInertiaAsSphere(float mass, float radius, vector centerOfMass);Allows creators to set the link set total mass, center of mass and moment of inertia. Moment of inertia will be the one of a sphere of radius radius, placed at the center of mass. Call osClearInertia to undo." />
+		<function name="osTeleportObject" sleep="0.0" energy="10.0"
+			desc="integer osTeleportObject(key objectUUID, vector targetPos, rotation rot, int flags);No dedication available yet" />
+		<function name="osGetLinkNumber" sleep="0.0" energy="10.0"
+			desc="integer osGetLinkNumber(string name);Returns the link number of the prim or sitting avatar with name &apos;name&apos; on the link set or -1 if the name is not found." />
+		<function name="osDrawResetTransform" sleep="0.0" energy="10.0"
+			desc="string osDrawResetTransform(string drawList);No description available yet" />
+		<function name="osDrawRotationTransform" sleep="0.0" energy="10.0"
+			desc="string osDrawRotationTransform(string drawList, float x);No description available yet" />
+		<function name="osDrawScaleTransform" sleep="0.0" energy="10.0"
+			desc="string osDrawScaleTransform(string drawList, float x, float y);No description available yet" />
+		<function name="osDrawTranslationTransform" sleep="0.0" energy="10.0"
+			desc="string osDrawTranslationTransform(string drawList, float x, float y);No description available yet" />
+		<function name="osSetDynamicTextureDataFace" sleep="0.0" energy="10.0"
+			desc="string osSetDynamicTextureDataFace(string dynamicID, string contentType, string data, string extraParams, int timer, int face);No description available yet" />
+		<function name="osGetNpcList" sleep="0.0" energy="10.0"
+			desc="list osGetNpcList();Returns a strided list of the UUID, position, and name of each NPC in the region." />
 		<!-- Windlight specific -->
 		<function name="lsGetWindlightScene" sleep="0.0" energy="10.0"
 			desc="list lsGetWindlightScene(list rules);Return the current Lightshare settings" />
