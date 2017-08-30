@@ -68,7 +68,11 @@ const S32 LOGIN_MAX_RETRIES = 3;
 
 // this can be removed once it is defined by the build for all forks
 #ifndef ADDRESS_SIZE
+#ifdef ND_BUILD64BIT_ARCH
+#  define ADDRESS_SIZE 64
+#else
 #  define ADDRESS_SIZE 32
+#endif
 #endif
 
 class LLLoginInstance::Disposable {
