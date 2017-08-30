@@ -98,8 +98,6 @@ public:
 
 	void writeDebugInfo(bool isStatic=true);
 
-	const LLOSInfo& getOSInfo() const { return mSysOSInfo; }
-
 	void setServerReleaseNotesURL(const std::string& url) { mServerReleaseNotesURL = url; }
 	LLSD getViewerInfo() const;
 	std::string getViewerInfoString() const;
@@ -287,8 +285,6 @@ private:
 	//-TT The skin and theme we are using at startup. might want to make them static.
 	std::string mCurrentSkin;
 	std::string mCurrentSkinTheme;
-	
-	LLOSInfo mSysOSInfo; 
 	bool mReportedCrash;
 
 	std::string mServerReleaseNotesURL;

@@ -429,7 +429,8 @@ LLScriptEdCore::LLScriptEdCore(
 	// </FS:CR>
 	mCompiling(false), //<FS:KC> Compile indicators, recompile button
 	mHasScriptData(FALSE),
-	mScriptRemoved(FALSE)
+	mScriptRemoved(FALSE),
+	mSaveDialogShown(FALSE)
 {
 	setFollowsAll();
 	setBorderVisible(FALSE);
@@ -1286,8 +1287,12 @@ BOOL LLScriptEdCore::canClose()
 	}
 	else
 	{
-		// Bring up view-modal dialog: Save changes? Yes, No, Cancel
-		LLNotificationsUtil::add("SaveChanges", LLSD(), LLSD(), boost::bind(&LLScriptEdCore::handleSaveChangesDialog, this, _1, _2));
+		if(!mSaveDialogShown)
+		{
+			mSaveDialogShown = TRUE;
+			// Bring up view-modal dialog: Save changes? Yes, No, Cancel
+			LLNotificationsUtil::add("SaveChanges", LLSD(), LLSD(), boost::bind(&LLScriptEdCore::handleSaveChangesDialog, this, _1, _2));
+		}
 		return FALSE;
 	}
 }
@@ -1301,6 +1306,7 @@ void LLScriptEdCore::setEnableEditing(bool enable)
 
 bool LLScriptEdCore::handleSaveChangesDialog(const LLSD& notification, const LLSD& response )
 {
+	mSaveDialogShown = FALSE;
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	switch( option )
 	{

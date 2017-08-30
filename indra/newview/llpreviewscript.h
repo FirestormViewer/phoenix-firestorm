@@ -208,6 +208,7 @@ private:
 	LLLiveLSLFile*	mLiveFile;
 	LLUUID			mAssociatedExperience;
 	BOOL			mScriptRemoved;
+	BOOL			mSaveDialogShown;
 	LLTextBox*		mLineCol;
 // <FS:CR> Advanced Script Editor
 	//LLView*			mSaveBtn;

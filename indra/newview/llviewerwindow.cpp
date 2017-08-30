@@ -4852,6 +4852,15 @@ BOOL LLViewerWindow::mousePointOnLandGlobal(const S32 x, const S32 y, LLVector3d
 // <FS:Ansariel> Threaded filepickers
 void do_save_image(LLImageFormatted* image, const std::string& snapshot_dir, const std::string& base_name, const std::string& extension, boost::function<void(bool)> callback)
 {
+	if (snapshot_dir.empty())
+	{
+		if (callback)
+		{
+			callback(false);
+		}
+		return;
+	}
+
 // Check if there is enough free space to save snapshot
 #ifdef LL_WINDOWS
 	boost::filesystem::space_info b_space = boost::filesystem::space(utf8str_to_utf16str(snapshot_dir));
@@ -4978,6 +4987,11 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 
 	//	LLViewerWindow::sSnapshotBaseName = gDirUtilp->getBaseFileName(filepath, true);
 	//	LLViewerWindow::sSnapshotDir = gDirUtilp->getDirName(filepath);
+	//}
+
+	//if(LLViewerWindow::sSnapshotDir.empty())
+	//{
+	//	return FALSE;
 	//}
 
 // Check if there is enough free space to save snapshot

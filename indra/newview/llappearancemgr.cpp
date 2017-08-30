@@ -1646,7 +1646,6 @@ void LLAppearanceMgr::removeOutfitPhoto(const LLUUID& outfit_id)
         LLInventoryModel::EXCLUDE_TRASH);
     BOOST_FOREACH(LLViewerInventoryItem* outfit_item, outfit_item_array)
     {
-        // Note: removing only links
         LLViewerInventoryItem* linked_item = outfit_item->getLinkedItem();
         if (linked_item != NULL)
         {

@@ -1475,6 +1475,7 @@ void LLTextureCache::readHeaderCache()
 	{
 		if (!mReadOnly)
 		{
+			LL_INFOS() << "Texture Cache version mismatch, Purging." << LL_ENDL;
 			purgeAllTextures(false);
 		}
 	}
@@ -1639,13 +1640,17 @@ void LLTextureCache::purgeAllTextures(bool purge_directories)
 			}
 		}
 		// <FS:Ansariel> Only delete folder if it actually exist
-		//if (purge_directories)
-		if (purge_directories && LLFile::isdir(mTexturesDirName))
-		// </FS:Ansariel>
+		if (LLFile::isdir(mTexturesDirName))
 		{
-			gDirUtilp->deleteFilesInDir(mTexturesDirName, mask);
+		// </FS:Ansariel>
+		gDirUtilp->deleteFilesInDir(mTexturesDirName, mask); // headers, fast cache
+		if (purge_directories)
+		{
 			LLFile::rmdir(mTexturesDirName);
 		}
+		// <FS:Ansariel> Only delete folder if it actually exist
+		}
+		// </FS:Ansariel>
 		}
 	}
 	mHeaderIDMap.clear();
