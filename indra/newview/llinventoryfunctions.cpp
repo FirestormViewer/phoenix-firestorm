@@ -2427,7 +2427,8 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
     
 	if ("delete" == action)
 	{
-		static bool sDisplayedAtSession = false;
+		// <FS:Ansariel> Undo delete item confirmation per-session annoyance
+		//static bool sDisplayedAtSession = false;
 		
 		LLAllDescendentsPassedFilter f;
 		for (std::set<LLFolderViewItem*>::iterator it = selected_items.begin(); (it != selected_items.end()) && (f.allDescendentsPassedFilter()); ++it)
@@ -2444,11 +2445,13 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 		}
 		else
 		{
-			if (!sDisplayedAtSession) // ask for the confirmation at least once per session
-			{
-				LLNotifications::instance().setIgnored("DeleteItems", false);
-				sDisplayedAtSession = true;
-			}
+			// <FS:Ansariel> Undo delete item confirmation per-session annoyance
+			//if (!sDisplayedAtSession) // ask for the confirmation at least once per session
+			//{
+			//	LLNotifications::instance().setIgnored("DeleteItems", false);
+			//	sDisplayedAtSession = true;
+			//}
+			// </FS:Ansariel>
 
 			LLSD args;
 			args["QUESTION"] = LLTrans::getString(root->getSelectedCount() > 1 ? "DeleteItems" :  "DeleteItem");

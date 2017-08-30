@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <notifications>
 	<global name="skipnexttime">
-		Nie pokazuj tego następnym razem
+		Nie pokazuj tego ponownie
+	</global>
+	<global name="skipnexttimesessiononly">
+		Nie pokazuj tego ponownie
+(dla obecnej sesji)
 	</global>
 	<global name="alwayschoose">
 		Zawsze wybieraj tą opcję
@@ -275,7 +279,7 @@ Chcesz kontynuować?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Dołącz"/>
 	</notification>
 	<notification name="JoinGroupNoCost">
-		Dołączasz do grupy [NAME].
+		Dołączasz do grupy &lt;nolink&gt;[NAME]&lt;/nolink&gt;.
 Czy chcesz kontynuować?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Dołącz"/>
 	</notification>
@@ -302,11 +306,11 @@ Zaproś kogoś w ciągu 48 godzin.
 		Przepraszamy, ale konta próbne nie mogą dołączać do grup.
 	</notification>
 	<notification name="JoinGroupMaxGroups">
-		Nie możesz dołączyć do '[group_name]':
+		Nie możesz dołączyć do &apos;&lt;nolink&gt;[group_name]&lt;/nolink&gt;&apos;:
 Jesteś już w [group_count] grupach, a maksymalny dozwolony limit to [max_groups]
 	</notification>
 	<notification name="JoinGroupClosedEnrollment">
-		Nie możesz dołączyć do '[group_name]':
+		Nie możesz dołączyć do &apos;&lt;nolink&gt;[group_name]&lt;/nolink&gt;&apos;:
 Grupa nie umożliwia już swobodnego dołączania.
 	</notification>
 	<notification name="JoinGroupSuccess">
@@ -336,7 +340,7 @@ Cena wynosi [SALE_PRICE]L$, a sprzedaż będzie autoryzowana dla [NAME].
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="ReturnObjectsDeededToGroup">
-		Czy na pewno chcesz zwrócić wszystkie obiekty udostępnione grupie &apos;[NAME]&apos; na tej działce do szaf ich poprzednich właścicieli?
+		Czy na pewno chcesz zwrócić wszystkie obiekty udostępnione grupie &apos;&lt;nolink&gt;[NAME]&lt;/nolink&gt;&apos; na tej działce do szaf ich poprzednich właścicieli?
 
 *UWAGA* Wybrana opcja spowoduje usunięcie wszystkich obiektów udostępnionych grupie, które nie mają praw transferu!
 
@@ -382,7 +386,7 @@ Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="ReturnObjectsNotOwnedByGroup">
-		Zwrócić obiekty z tej działki, które NIE są udostępnione grupie [NAME] do ich właścicieli?
+		Zwrócić obiekty z tej działki, które NIE są udostępnione grupie &lt;nolink&gt;[NAME]&lt;/nolink&gt; do ich właścicieli?
 
 Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
@@ -430,7 +434,7 @@ W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z narzędzia 
 		W trakcie ładowania zdjęcia ekranu do raportu pojawił się problem z następującego powodu: [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
-		Musisz zaakceptować Warunki Umowy (Terms of Service) by kontynuować logowanie się do [CURRENT_GRID].
+		Musisz zaakceptować Regulamin (Terms and Conditions), Politykę Prywatności (Privacy Policy) i Warunki korzystania z Usług (Terms of Service) by kontynuować logowanie się do [CURRENT_GRID].
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Założenie stroju nie powiodło się.
@@ -699,7 +703,7 @@ Nie będą mogły tymczasowo się poruszać, używać czatu (IM) lub oddziaływa
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Wyrzuć"/>
 	</notification>
 	<notification name="EjectAvatarFromGroup">
-		Wyrzuciłeś/aś [AVATAR_NAME] z grupy [GROUP_NAME]
+		Wyrzuciłeś/aś [AVATAR_NAME] z grupy &lt;nolink&gt;[GROUP_NAME]&lt;/nolink&gt;.
 	</notification>
 	<notification name="AcquireErrorTooManyObjects">
 		BŁĄD OTRZYMYWANIA: Zbyt wiele wybranych obiektów.
@@ -1301,7 +1305,7 @@ Wybierz mniejszy obszar i spróbuj jeszcze raz.
 		Po przekazaniu tej działki grupa będzie musiała mieć i utrzymywać wystarczający kredyt na używanie działki.
 Cena zakupu działki nie jest zwracana właścicielowi. Jeżeli przekazana działka zostanie sprzedana, cena sprzedaży zostanie podzielona pomiędzy członków grupy.
 
-Przekazać tą działkę o powierzchni [AREA] m² grupie &apos;[GROUP_NAME]&apos;?
+Przekazać tą działkę o powierzchni [AREA] m² grupie &apos;&lt;nolink&gt;[GROUP_NAME]&lt;/nolink&gt;&apos;?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="DeedLandToGroupWithContribution">
@@ -1309,7 +1313,7 @@ Przekazać tą działkę o powierzchni [AREA] m² grupie &apos;[GROUP_NAME]&apos
 Przekazanie będzie zawierać równoczesne przypisanie działki do grupy od &apos;[NAME]&apos;.
 Cena zakupu działki nie jest zwracana właścicielowi. Jeżeli przekazana działka zostanie sprzedana, cena sprzedaży zostanie podzielona pomiędzy członków grupy.
 
-Przekazać tą działkę o powierzchni [AREA] m² grupie &apos;[GROUP_NAME]&apos;?
+Przekazać tą działkę o powierzchni [AREA] m² grupie &apos;&lt;nolink&gt;[GROUP_NAME]&lt;/nolink&gt;&apos;?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="DisplaySetToSafe">
@@ -1703,7 +1707,7 @@ Chcesz ją opuścić?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="GroupDepart">
-		Opuściłeś/aś grupę &apos;[group_name]&apos;.
+		Opuściłeś/aś grupę &apos;&lt;nolink&gt;[group_name]&lt;/nolink&gt;&apos;.
 	</notification>
 	<notification name="GroupLeaveConfirmMemberWithFee">
 		Jesteś członkiem grupy &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Ponowne dołączenie będzie kosztować [AMOUNT] L$.
@@ -2339,7 +2343,16 @@ Nie możesz tego cofnąć.
 	</notification>
 	<notification name="DeleteItems">
 		[QUESTION]
-		<usetemplate ignoretext="Potwierdź, że na pewno chcesz skasować obiekty" name="okcancelignore" notext="Anuluj" />
+		<form name="form">
+			<ignore name="ignore" text="Potwierdź przed kasowaniem obiektów" />
+			<button name="No" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="DeleteFilteredItems">
+		Twoja Szafa jest obecnie filtrowana i nie wszystkie obiekty jakie masz zamiar usunąć są teraz widoczne.
+
+Czy na pewno chcesz je skasować?
+		<usetemplate ignoretext="Potwierdź przed kasowaniem filtrowanych obiektów" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="ConfirmUnlink">
 		Na pewno chcesz rozłączyć zaznaczony obiekt?
@@ -2800,7 +2813,7 @@ Zainstaluj wtyczki ponownie lub skontaktuj się z dostawcą, jeśli problem nada
 		Obiekty z działki należącej do Rezydenta [NAME] zostały zwrócone do jego Szafy.
 	</notification>
 	<notification name="GroupObjectsReturned">
-		Obiekty z wybranej działki przypisane do grupy [GROUPNAME] zostały zwrócone do szaf ich właścicieli.
+		Obiekty z wybranej działki przypisane do grupy &lt;nolink&gt;[GROUPNAME]&lt;/nolink&gt; zostały zwrócone do szaf ich właścicieli.
 Przekazywalne obiekty przekazane grupie zostały zwrócone do ich poprzednich właścicieli.
 Nieprzekazywalne obiekty przekazane grupie zostały usunięte.
 	</notification>
@@ -3249,7 +3262,7 @@ Aby ich udzielić prosimy zaktualizować przeglądarkę do najnowszej wersji z [
 		</form>
 	</notification>
 	<notification name="ScriptDialogGroup">
-		&apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; - [GROUPNAME]
+		&apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; - &lt;nolink&gt;[GROUPNAME]&lt;/nolink&gt;
 [MESSAGE]
 		<form name="form">
 			<button name="Client_Side_Mute" text="Blokuj"/>
@@ -3297,7 +3310,7 @@ Wybierz Zablokuj żeby wyciszyć wszystkie wiadomości od tej osoby.
 		Zaoferowano [NAME] obiekty i ta osoba została automatycznie odblokowana.
 	</notification>
 	<notification name="VoiceInviteGroup">
-		[NAME] zaczyna rozmowę głosową z grupą [GROUP].
+		[NAME] zaczyna rozmowę głosową z grupą &lt;nolink&gt;[GROUP]&lt;/nolink&gt;.
 Wybierz Zaakceptuj żeby rozmawiać albo Odmów żeby nie przyjąć zaproszenia.
 Wybierz Zablokuj żeby wyciszyć dzwoniącą osobę.
 		<form name="form">
@@ -3408,6 +3421,9 @@ Zostaną zablokowane na kilka sekund dla bezpieczeństwa.
 	</notification>
 	<notification name="AppearanceToXMLFailed">
 		Nie udało się zapisać wyglądu do XML.
+	</notification>
+	<notification name="SnapshotToComputerFailed">
+		Nie można zapisać zrzutu ekranu do [PATH]: Dysk jest pełny. Potrzeba [NEED_MEMORY]KB, ale wolnego jest [FREE_MEMORY]KB.
 	</notification>
 	<notification name="PresetNotSaved">
 		Błąd podczas zapisywania ustawienia [NAME].

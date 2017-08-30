@@ -1648,7 +1648,14 @@ void LLAppearanceMgr::removeOutfitPhoto(const LLUUID& outfit_id)
     {
         // Note: removing only links
         LLViewerInventoryItem* linked_item = outfit_item->getLinkedItem();
-        if (linked_item != NULL && linked_item->getActualType() == LLAssetType::AT_TEXTURE)
+        if (linked_item != NULL)
+        {
+            if (linked_item->getActualType() == LLAssetType::AT_TEXTURE)
+            {
+                gInventory.removeItem(outfit_item->getUUID());
+            }
+        }
+        else if (outfit_item->getActualType() == LLAssetType::AT_TEXTURE)
         {
             gInventory.removeItem(outfit_item->getUUID());
         }

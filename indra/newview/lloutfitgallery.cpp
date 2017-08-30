@@ -1227,6 +1227,7 @@ void LLOutfitGallery::uploadPhoto(LLUUID outfit_id)
                 upload_pending_name, callback, expected_upload_cost, nruserdata);
             mOutfitLinkPending = outfit_id;
         }
+        delete unit;
     }
 }
 
