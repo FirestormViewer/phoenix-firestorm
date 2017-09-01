@@ -4164,8 +4164,8 @@ void LLViewerWindow::saveLastMouse(const LLCoordGL &point)
 // <FS:Beq> Changes to add physics view support into edit mode
 #pragma region FSShowPhysicsInEditMode
 
-const float offset_units = -3.0;
-const float offset_factor = 3.0;
+const float offset_units = 3.0;
+const float offset_factor = -3.0;
 
 // decorator for renderMeshBaseHull from llspatialpartition. but with our own offsets to avoid glitching.
 void renderMeshBaseHullPhysics(LLVOVolume* volume, U32 data_mask, LLColor4& color, LLColor4& line_color)
@@ -4191,7 +4191,7 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 {
 	// TODO: Didn't we already disable this in the outer scope?
 	//Need to because crash on ATI 3800 (and similar cards) MAINT-5018 
-	LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
+//	LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
 
 	LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
 
@@ -4202,8 +4202,9 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 
 	gGL.matrixMode(LLRender::MM_MODELVIEW);
 	gGL.pushMatrix();
-	// scope the RAII for the depth test on hidden geometry
+	// scope for the RAII for the depth test on hidden geometry
 	{
+		// This draw section covers the hidden geometry
 
 		gGL.blendFunc(LLRender::BF_SOURCE_COLOR, LLRender::BF_ONE);
 		LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE, GL_GEQUAL);
@@ -4212,7 +4213,7 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 			{
 				LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
 				glPolygonOffset(offset_factor, offset_units);
-				gGL.diffuseColor4f(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], 0.4f);
+				gGL.diffuseColor4fv(color.mV);
 				//decomp has physics mesh, render that mesh
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
@@ -4245,7 +4246,7 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 			gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
 			{
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				gGL.diffuseColor4f(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], 0.4f);
+				gGL.diffuseColor4fv(color.mV);
 				//decomp has physics mesh, render that mesh
 				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -4253,27 +4254,58 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
 			}
 		}
-	}
+	}//End depth test for hidden geometry
 	gGL.flush();
 	gGL.setSceneBlendType(LLRender::BT_ALPHA);
 
+	if (shader)
 	{
-//		gGL.diffuseColor4f(color.mV[VRED] * 2, color.mV[VGREEN] * 2, color.mV[VBLUE] * 2, LLSelectMgr::sHighlightAlpha * 2);
-		gGL.diffuseColor4f(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], 0.4f);
-		LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glPolygonOffset(offset_factor, offset_units);
-		glLineWidth(1.f);
-		LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+		{
+			gGL.diffuseColor4fv(color.mV);
+			LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			glPolygonOffset(offset_factor, offset_units);
+			glLineWidth(1.f);
+			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+		}
+		{
+			gGL.diffuseColor4fv(line_color.mV);
+			LLGLEnable offset(GL_POLYGON_OFFSET_LINE);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glPolygonOffset(offset_factor, offset_units);
+			glLineWidth(3.f);
+			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+		}
 	}
+	else
 	{
-		gGL.diffuseColor4fv(line_color.mV);
-		LLGLEnable offset(GL_POLYGON_OFFSET_LINE);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glPolygonOffset(offset_factor, offset_units);
-		glLineWidth(3.f);
-		LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+		// <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
+		if (!LLGLSLShader::sNoFixedFunction)
+		{
+			// </FS:Ansariel>
+			LLGLEnable fog(GL_FOG);
+			glFogi(GL_FOG_MODE, GL_LINEAR);
+			float d = (LLViewerCamera::getInstance()->getPointOfInterest() - LLViewerCamera::getInstance()->getOrigin()).magVec();
+			LLColor4 fogCol = color * (F32)llclamp((LLSelectMgr::getInstance()->getSelectionCenterGlobal() - gAgentCamera.getCameraPositionGlobal()).magVec() / (LLSelectMgr::getInstance()->getBBoxOfSelection().getExtentLocal().magVec() * 4), 0.0, 1.0);
+			glFogf(GL_FOG_START, d);
+			glFogf(GL_FOG_END, d*(1 + (LLViewerCamera::getInstance()->getView() / LLViewerCamera::getInstance()->getDefaultFOV())));
+			glFogfv(GL_FOG_COLOR, fogCol.mV);
+			// <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
+		}
+		// </FS:Ansariel>
+		gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			gGL.diffuseColor4fv(color.mV);
+			//decomp has physics mesh, render that mesh
+			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			gGL.diffuseColor4fv(line_color.mV);
+			glLineWidth(3.f);
+			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+		}
 	}
+
 	glLineWidth(1.f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	gGL.popMatrix();
@@ -4647,21 +4679,27 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 	else if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::PRIM_MESH)
 #pragma region PhysicsShapePrimTriangles
 	{
-// TODO: (BEQ) We ought to be able to use a common draw call here too?
-		LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glPolygonOffset(offset_factor, offset_units);
-
 		LLVolumeParams volume_params = volume->getParams();
 		// TODO: (Beq) refactor? detail is reused, we ought to be able to pull this out in a wider scope.
 		S32 detail = get_physics_detail(volume_params, vovolume->getScale());
-
 		LLVolume* phys_volume = LLPrimitive::sVolumeManager->refVolume(volume_params, detail);
-		pushVerts(phys_volume);
 
-		gGL.diffuseColor4fv(color.mV);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		pushVerts(phys_volume); //TODO: Why is this second draw here? different colour but same mode?
+		// TODO: (BEQ) We ought to be able to use a common draw call here too?
+		glPolygonOffset(offset_factor, offset_units);
+
+		{
+			LLGLEnable offset(GL_POLYGON_OFFSET_LINE);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+			gGL.diffuseColor4fv(line_color.mV);
+			pushVerts(phys_volume); // draw the outlines
+		}
+		{
+			LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
+			gGL.diffuseColor4fv(color.mV);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			pushVerts(phys_volume); // draw the filled boxes
+		}
 		LLPrimitive::sVolumeManager->unrefVolume(phys_volume);
 	}
 #pragma endregion Physics shape for this prim is triangular mesh (typically when prim is cut/hollow etc)
@@ -4676,7 +4714,7 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 		if (phys_volume->mHullPoints && phys_volume->mHullIndices)
 		// We have the huill details so just draw them
 		{
-			// TODO: (Beq) refactor this!! yet another flavour of drawing the same crap. If this is different to render_hull() we need to ask why oh why oh why
+			// TODO: (Beq) refactor this!! yet another flavour of drawing the same crap. Can we ratioanlise the arguments
 			// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
 			if (LLGLSLShader::sNoFixedFunction)
 			{
