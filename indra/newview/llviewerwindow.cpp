@@ -4161,10 +4161,22 @@ void LLViewerWindow::saveLastMouse(const LLCoordGL &point)
 }
 
 // <FS:Beq> Changes to add physics view support into edit mode
+#pragma region FSShowPhysicsInEditMode
+
 const float offset_units = -3.0;
 const float offset_factor = 3.0;
 
-// based on render_hull from llspatialpartition.
+// decorator for renderMeshBaseHull from llspatialpartition. but with our own offsets to avoid glitching.
+void renderMeshBaseHullPhysics(LLVOVolume* volume, U32 data_mask, LLColor4& color, LLColor4& line_color)
+{
+			LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			glPolygonOffset(offset_factor, offset_units);
+			gGL.diffuseColor4fv(color.mV);
+			renderMeshBaseHull(volume, data_mask, color, line_color);
+}
+
+// decorator for render_hull from llspatialpartition. but with our own offsets to avoid glitching.
 void renderHullPhysics(LLModel::PhysicsMesh& mesh, const LLColor4& color, const LLColor4& line_color)
 {
 	LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
@@ -4173,8 +4185,10 @@ void renderHullPhysics(LLModel::PhysicsMesh& mesh, const LLColor4& color, const 
 	render_hull(mesh, color, line_color);
 }
 
+// Draw a physics shape with the edges highlighted in 'line_color'
 void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_color, LLVolume* vol, LLModel::Decomposition * decomp)
 {
+	// TODO: Didn't we already disable this in the outer scope?
 	//Need to because crash on ATI 3800 (and similar cards) MAINT-5018 
 	LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
 
@@ -4296,14 +4310,45 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 	{
 		return;
 	}
+	// Get the shape details for this object
+	LLVolume *volume = vovolume->getVolume();
+	LLVolumeParams volume_params = volume->getParams();
 
-	// linkesets. The models need an additional transform to modelview
+	// setup a volume instance to hold the physics shape
+	LLPhysicsVolumeParams physics_params(volume_params,
+		physics_type == LLViewerObject::PHYSICS_SHAPE_CONVEX_HULL);
+
+	// Set physics_spec to cache the info about the physics shape of our volume.
+	LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification physics_spec;
+	LLPhysicsShapeBuilderUtil::determinePhysicsShape(physics_params, vovolume->getScale(), physics_spec);
+
+	U32 type = physics_spec.getType();
+	/*
+	Primitive types
+	BOX,
+	SPHERE,
+	CYLINDER,
+
+	USER_CONVEX,	User specified they wanted the convex hull of the volume
+	PRIM_CONVEX,	Either a volume that is inherently convex but not a primitive type, or a shape
+	with dimensions such that will convexify it anyway.
+
+	SCULPT,			Special case for traditional sculpts--they are the convex hull of a single particular set of volume params
+
+	USER_MESH,		A user mesh. May or may not contain a convex decomposition.
+	PRIM_MESH,		A non-convex volume which we have to represent accurately
+
+	INVALID
+	*/
+
+
+
+	// This is a link set. The models need an additional transform to modelview
 	if (drawable->isActive())
 	{
 		gGL.loadMatrix(gGLModelView);
 		gGL.multMatrix((F32*)objectp->getRenderMatrix().mMatrix);
 	}
-
 
 	//gGL.pushMatrix();
 	gGL.multMatrix((F32*)vovolume->getRelativeXform().mMatrix);
@@ -4332,55 +4377,33 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 	LLColor4 line_color = color*0.5f;
 #pragma endregion Setup various values from Settings 
 
-	//Need to because crash on ATI 3800 (and similar cards) MAINT-5018 
-	LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
-
-	LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
-
-	if (shader)
-	{
-		gDebugProgram.bind();
-	}
 
 	U32 data_mask = LLVertexBuffer::MAP_VERTEX;
-
-	// Get the shape details for this object
-	LLVolume *volume = vovolume->getVolume();
-	LLVolumeParams volume_params = volume->getParams();
-
-	// setup a volume instance to hold the physics shape
-	LLPhysicsVolumeParams physics_params(volume_params,
-		physics_type == LLViewerObject::PHYSICS_SHAPE_CONVEX_HULL);
-
-	// Set physics_spec to cache the info about the physics shape of our volume.
-	LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification physics_spec;
-	LLPhysicsShapeBuilderUtil::determinePhysicsShape(physics_params, vovolume->getScale(), physics_spec);
-
-	U32 type = physics_spec.getType();
 
 	// These two are used to draw the "error" boxes
 	LLVector3 center(0, 0, 0);
 	LLVector3 size(0.25f, 0.25f, 0.25f);
 
-#pragma region PhysicsShapeUserMesh
 	if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::USER_MESH)
+#pragma region PhysicsShapeUserMesh
 	{
+		// 	USER_MESH,		A user mesh. May or may not contain a convex decomposition.
 		LLUUID mesh_id = volume_params.getSculptID();
 		LLModel::Decomposition* decomp = gMeshRepo.getDecomposition(mesh_id);
 
 		// do we have a Mesh physics loaded yet?
 		if (decomp)
-		{ //render a physics based mesh
+		{ 
+// TODO: REMOVE			gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
-			gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-
-#pragma region PhysicsShapeUserMeshHulls
 			if (!decomp->mHull.empty())
-			{ //decomposition exists, use that
-
+#pragma region PhysicsShapeUserMeshHulls
+			{ 
+				// This Model contains a hull based physics. This equates to "analysed" mesh physics in the uploader.
 				if (decomp->mMesh.empty())
 				{
-					gMeshRepo.buildPhysicsMesh(*decomp);
+					// build a mesh representation of the hulls (does nothing if Havok not present)
+					gMeshRepo.buildPhysicsMesh(*decomp); 
 				}
 
 				for (U32 i = 0; i < decomp->mMesh.size(); ++i)
@@ -4389,19 +4412,18 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 				}
 			}
 #pragma endregion Physics mesh is analysed into hulls
-#pragma region PhysicsShapeUserMeshTriangles
 			else if (!decomp->mPhysicsShapeMesh.empty())
+#pragma region PhysicsShapeUserMeshTriangles
 			{
+				// This model has triangular mesh (non-analysed)
 				renderMeshPhysicsTriangles(color, line_color, volume, decomp);
 			}
 #pragma endregion Physics mesh is non-analysed
-#pragma region PhysicsShapeUserMeshBaseHull
 			else
-			{ //no mesh or decomposition, render base hull
-				LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				glPolygonOffset(offset_factor, offset_units);
-				renderMeshBaseHull(vovolume, data_mask, color, line_color);
+			//no mesh or decomposition, render base hull
+#pragma region PhysicsShapeUserMeshBaseHull
+			{ 
+				renderMeshBaseHullPhysics(vovolume, data_mask, color, line_color);
 
 				if (decomp->mPhysicsShapeMesh.empty())
 				{
@@ -4412,38 +4434,41 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 #pragma endregion No physics mesh is defined so use the default base convex hull
 		}
 		else
+// No physics when expected, probably Havok broken/missing or asset still downloading
+#pragma region PhysicsShapeUserMeshMissingData
 		{
 			// all else fails then orange wireframe box.
 			// This typically means you are running without Havok
 			gGL.diffuseColor3f(1, 1, 0);
 			drawBoxOutline(center, size);
 		}
+#pragma endregion No physics when expected, probably Havok broken/missing or asset still downloading
 	}
-#pragma endregion Object has a user provided mesh for physics
-#pragma region PhysicsShapeConvex
+#pragma endregion Object has a user provided mesh for physics and is not in CONVEX_HULL mode.
 	else if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::USER_CONVEX ||
 		type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::PRIM_CONVEX)
+#pragma region PhysicsShapeConvex
 	{
 		if (vovolume->isMesh())
+#pragma region PhysicsShapeConvexMesh
 		{
-			LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			glPolygonOffset(offset_factor, offset_units);
-			renderMeshBaseHull(vovolume, data_mask, color, line_color);
+			renderMeshBaseHullPhysics(vovolume, data_mask, color, line_color);
 		}
+#pragma endregion This is a mesh object but the user has set it to Convex, so lets draw the base hull
 		else
+#pragma region PhysicsShapeConvexPrim
 		{
 			LLVolumeParams volume_params = volume->getParams();
 			S32 detail = get_physics_detail(volume_params, vovolume->getScale());
 			LLVolume* phys_volume = LLPrimitive::sVolumeManager->refVolume(volume_params, detail);
-
+#pragma region ConvexPrimBuildHull
 			if (!phys_volume->mHullPoints)
 			{ //build convex hull
 				std::vector<LLVector3> pos;
 				std::vector<U16> index;
 
 				S32 index_offset = 0;
-
+				// Build a vector of vertices in the visible LOD model determined by 'detail' 
 				for (S32 i = 0; i < phys_volume->getNumVolumeFaces(); ++i)
 				{
 					const LLVolumeFace& face = phys_volume->getVolumeFace(i);
@@ -4464,7 +4489,7 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 
 					index_offset += face.mNumVertices;
 				}
-
+				// use the array of vertices to construct a single hull based 
 				if (!pos.empty() && !index.empty() && LLConvexDecomposition::getInstance()) // ND: FIRE-3427
 				{
 					LLCDMeshData mesh;
@@ -4524,13 +4549,17 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 					}
 				}
 			}
+#pragma endregion Build the mesh data for a convex hull for a PRIM that is explcitly in CONVEX_HULL mode
+			// Now that we've got the hulldecomp let's draw it
 
 			// <FS:Ansariel> Crash fix due to invalid calls to drawElements by Drake Arconis
 			//if (phys_volume->mHullPoints)
 			if (phys_volume->mHullPoints && phys_volume->mHullIndices && phys_volume->mNumHullPoints > 0 && phys_volume->mNumHullIndices > 0)
+#pragma region ConvexPrimDrawHull
 				// </FS:Ansariel>
 			{
 				//render hull
+				// TODO: (BEQ) Find out why is this not a call to render_hull? it probably could be if the data is in the right form
 
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -4556,12 +4585,14 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 				gGL.diffuseColor4f(1, 0, 1, 1);
 				drawBoxOutline(center, size);
 			}
-
+#pragma endregion
 			LLPrimitive::sVolumeManager->unrefVolume(phys_volume);
 		}
+#pragma endregion The physics shape is a convex hull for a prim
 	}
 #pragma endregion The physics shape is a convex hull (mesh or prim)
-#pragma region PhysicsShapeHavokPrimitive
+
+#pragma region PhysicsShapePrimHavokNative
 	else if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::BOX)
 	{
 		LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
@@ -4612,14 +4643,16 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 		LLPrimitive::sVolumeManager->unrefVolume(cylinder);
 	}
 #pragma endregion Physics shape is a Havok primitive, either box, sphere or cylinder (object must be a prim)
-#pragma region PhysicsShapeTriangles
 	else if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::PRIM_MESH)
+#pragma region PhysicsShapePrimTriangles
 	{
+// TODO: (BEQ) We ought to be able to use a common draw call here too?
 		LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glPolygonOffset(offset_factor, offset_units);
 
 		LLVolumeParams volume_params = volume->getParams();
+		// TODO: (Beq) refactor? detail is reused, we ought to be able to pull this out in a wider scope.
 		S32 detail = get_physics_detail(volume_params, vovolume->getScale());
 
 		LLVolume* phys_volume = LLPrimitive::sVolumeManager->refVolume(volume_params, detail);
@@ -4627,12 +4660,12 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 
 		gGL.diffuseColor4fv(color.mV);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		pushVerts(phys_volume);
+		pushVerts(phys_volume); //TODO: Why is this second draw here? different colour but same mode?
 		LLPrimitive::sVolumeManager->unrefVolume(phys_volume);
 	}
 #pragma endregion Physics shape for this prim is triangular mesh (typically when prim is cut/hollow etc)
-#pragma region PhysicsShapePrimConvex
 	else if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::PRIM_CONVEX)
+#pragma region PhysicsShapePrimConvex
 	{
 		LLVolumeParams volume_params = volume->getParams();
 		S32 detail = get_physics_detail(volume_params, vovolume->getScale());
@@ -4640,7 +4673,9 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 		LLVolume* phys_volume = LLPrimitive::sVolumeManager->refVolume(volume_params, detail);
 
 		if (phys_volume->mHullPoints && phys_volume->mHullIndices)
+		// We have the huill details so just draw them
 		{
+			// TODO: (Beq) refactor this!! yet another flavour of drawing the same crap. If this is different to render_hull() we need to ask why oh why oh why
 			// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
 			if (LLGLSLShader::sNoFixedFunction)
 			{
@@ -4672,13 +4707,15 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 		}
 		else
 		{
+			// The hull data has not been computed yet (it may never be if havok is not installed) draw a magenta box and request it to be built
+			// TODO: can we cache the fact Havok is not installed and speed all this up by not bothering?
 			gGL.diffuseColor3f(1, 0, 1);
 			drawBoxOutline(center, size);
 			gMeshRepo.buildHull(volume_params, detail);
 		}
 		LLPrimitive::sVolumeManager->unrefVolume(phys_volume);
 	}
-#pragma endregion Physics shape for prim is a convex hull due to explicit user setting
+#pragma endregion Physics shape for prim is inherently convex or convexified due to scale
 #pragma region PhysicsShapeSculpt
 	else if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::SCULPT)
 	{
@@ -4690,14 +4727,8 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 		LL_ERRS() << "Unhandled type" << LL_ENDL;
 	}
 
-//	gGL.popMatrix();
-
-	// Restore the original shader program
-	if (shader)
-	{
-		shader->bind();
-	}
 }
+#pragma endregion Firestorm additions that add the ability to visualise the physics shape in edit mode.
 //</FS:Beq> Physics display in edit mode changes
 
 // Draws the selection outlines for the currently selected objects
@@ -4730,11 +4761,18 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 		
 		stop_glerror();
 		
-		// <FS:Beq> Changes to add Physics shape display in edit mode
+		// <FS:Beq> Additions to add Physics shape display in edit mode
 		if (LLToolMgr::getInstance()->inEdit() && selection->getSelectType() != SELECT_TYPE_HUD && gSavedSettings.getBOOL("ShowPhysicsShapeInEdit"))
 		{
 			gGL.flush();
 			gGL.pushMatrix();
+			//Need to because crash on ATI 3800 (and similar cards) MAINT-5018 
+			LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
+			LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
+			if (shader)
+			{
+				gDebugProgram.bind();
+			}
 			gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 			glClearColor(0, 0, 0, 0);
 			gGL.setColorMask(true, true);
@@ -4753,6 +4791,12 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 				}
 			} func;
 			LLSelectMgr::getInstance()->getSelection()->applyToObjects(&func);
+			// Restore the original shader program
+			if (shader)
+			{
+				shader->bind();
+			}
+
 			gGL.popMatrix();
 			gGL.flush();
 		}
