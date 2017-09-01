@@ -252,8 +252,7 @@ support@secondlife.com
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		Nie jesteśmy w stanie na tą chwilę wykonać Twojego żądania.
-Aby uzyskać pomoc skontaktuj się ze wsparciem: http://secondlife.com/support
-Jeśli nie możesz zmienić swojego hasła zadzwoń pod numer (866) 476-9763.
+Aby uzyskać pomoc skontaktuj się ze wsparciem: http://support.secondlife.com
 	</string>
 	<string name="LoginFailedTransformError">
 		Podczas logowania wykryto niespójność danych.

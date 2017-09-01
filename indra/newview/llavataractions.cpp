@@ -1243,7 +1243,7 @@ void LLAvatarActions::toggleBlock(const LLUUID& id)
 }
 
 // static
-void LLAvatarActions::toggleMuteVoice(const LLUUID& id)
+void LLAvatarActions::toggleMute(const LLUUID& id, U32 flags)
 {
 	LLAvatarName av_name;
 	LLAvatarNameCache::get(id, &av_name);
@@ -1254,12 +1254,18 @@ void LLAvatarActions::toggleMuteVoice(const LLUUID& id)
 	LLMute mute(id, av_name.getUserName(), LLMute::AGENT);
 	if (!is_muted)
 	{
-		mute_list->add(mute, LLMute::flagVoiceChat);
+		mute_list->add(mute, flags);
 	}
 	else
 	{
-		mute_list->remove(mute, LLMute::flagVoiceChat);
+		mute_list->remove(mute, flags);
 	}
+}
+
+// static
+void LLAvatarActions::toggleMuteVoice(const LLUUID& id)
+{
+	toggleMute(id, LLMute::flagVoiceChat);
 }
 
 // static

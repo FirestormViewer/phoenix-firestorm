@@ -1564,28 +1564,6 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 		}
 		LLFloaterReg::showInstance("linkreplace", params);
 	}
-
-	// <FS:Ansariel> Inventory Links Replace
-	if (command_name == "replace_links")
-	{
-		LLSD params;
-		LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
-		if (current_item)
-		{
-			LLInvFVBridge* bridge = (LLInvFVBridge*)current_item->getViewModelItem();
-
-			if (bridge)
-			{
-				LLInventoryObject* obj = bridge->getInventoryObject();
-				if (obj && obj->getType() != LLAssetType::AT_CATEGORY && obj->getActualType() != LLAssetType::AT_LINK_FOLDER)
-				{
-					params = LLSD(obj->getUUID());
-				}
-			}
-		}
-		LLFloaterReg::showInstance("fs_linkreplace", params);
-	}
-	// </FS:Ansariel>
 }
 
 void LLPanelMainInventory::onVisibilityChange( BOOL new_visibility )
@@ -1704,13 +1682,13 @@ BOOL LLPanelMainInventory::isActionEnabled(const LLSD& userdata)
 	{
 		const LLUUID &trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
 		LLInventoryModel::EHasChildren children = gInventory.categoryHasChildren(trash_id);
-		return children != LLInventoryModel::CHILDREN_NO;
+		return children != LLInventoryModel::CHILDREN_NO && gInventory.isCategoryComplete(trash_id);
 	}
 	if (command_name == "empty_lostnfound")
 	{
 		const LLUUID &trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND);
 		LLInventoryModel::EHasChildren children = gInventory.categoryHasChildren(trash_id);
-		return children != LLInventoryModel::CHILDREN_NO;
+		return children != LLInventoryModel::CHILDREN_NO && gInventory.isCategoryComplete(trash_id);
 	}
 
 	return TRUE;

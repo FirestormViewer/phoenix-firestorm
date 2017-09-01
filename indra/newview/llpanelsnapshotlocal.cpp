@@ -194,6 +194,7 @@ void LLPanelSnapshotLocal::onSaveFlyoutCommit(LLUICtrl* ctrl)
 	//}
 	//else
 	//{
+	//	cancel();
 	//	floater->notify(LLSD().with("set-finished", LLSD().with("ok", false).with("msg", "local")));
 	//}
 	floater->saveLocal(boost::bind(&LLPanelSnapshotLocal::saveLocalCallback, this, _1));

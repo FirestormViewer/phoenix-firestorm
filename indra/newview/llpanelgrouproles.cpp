@@ -516,6 +516,7 @@ void LLPanelGroupSubTab::setSearchFilter(const std::string& filter)
 	mSearchFilter = filter;
 	LLStringUtil::toLower(mSearchFilter);
 	update(GC_ALL);
+	onFilterChanged();
 }
 
 void LLPanelGroupSubTab::activate()
@@ -2578,12 +2579,7 @@ void LLPanelGroupRolesSubTab::handleActionCheck(LLUICtrl* ctrl, bool force)
 		
 		//////////////////////////////////////////////////////////////////////////
 
-		LLGroupMgrGroupData::role_list_t::iterator rit = gdatap->mRoles.find(role_id);
-		U64 current_role_powers = GP_NO_POWERS;
-		if (rit != gdatap->mRoles.end())
-		{
-			current_role_powers = ((*rit).second->getRoleData().mRolePowers);
-		}
+		U64 current_role_powers = gdatap->getRolePowers(role_id);
 
 		if(isEnablingAbility)
 		{
@@ -2886,6 +2882,16 @@ void LLPanelGroupActionsSubTab::activate()
 	LLPanelGroupSubTab::activate();
 
 	update(GC_ALL);
+	mActionDescription->clear();
+	mActionList->deselectAllItems();
+	mActionList->deleteAllItems();
+	buildActionsList(mActionList,
+					 GP_ALL_POWERS,
+					 GP_ALL_POWERS,
+					 NULL,
+					 FALSE,
+					 TRUE,
+					 FALSE);
 }
 
 void LLPanelGroupActionsSubTab::deactivate()
@@ -2914,19 +2920,31 @@ void LLPanelGroupActionsSubTab::update(LLGroupChange gc)
 
 	if (mGroupID.isNull()) return;
 
-	mActionList->deselectAllItems();
 	mActionMembers->deleteAllItems();
 	mActionRoles->deleteAllItems();
-	mActionDescription->clear();
 
+	if(mActionList->hasSelectedItem())
+	{
+		LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
+		if (gdatap && gdatap->isMemberDataComplete() && gdatap->isRoleDataComplete())
+		{
+			handleActionSelect();
+		}
+	}
+}
+
+void LLPanelGroupActionsSubTab::onFilterChanged()
+{
+	mActionDescription->clear();
+	mActionList->deselectAllItems();
 	mActionList->deleteAllItems();
 	buildActionsList(mActionList,
-					 GP_ALL_POWERS,
-					 GP_ALL_POWERS,
-					 NULL,
-					 FALSE,
-					 TRUE,
-					 FALSE);
+		GP_ALL_POWERS,
+		GP_ALL_POWERS,
+		NULL,
+		FALSE,
+		TRUE,
+		FALSE);
 }
 
 void LLPanelGroupActionsSubTab::handleActionSelect()

@@ -108,6 +108,7 @@ public:
 	std::string		getScriptText();
 	void			doSaveComplete(void* userdata, BOOL close_after_save, bool sync);
 	// NaCl End
+	void			makeEditorPristine();
 	bool			loadScriptText(const std::string& filename);
 	bool			writeToFile(const std::string& filename, bool unprocessed);
 	void			sync();

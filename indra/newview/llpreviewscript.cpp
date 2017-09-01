@@ -983,6 +983,14 @@ std::string LLScriptEdCore::getScriptText()
 }
 // NaCl End
 
+void LLScriptEdCore::makeEditorPristine()
+{
+	if (mEditor)
+	{
+		mEditor->makePristine();
+	}
+}
+
 bool LLScriptEdCore::loadScriptText(const std::string& filename)
 {
 	if (filename.empty())
@@ -2322,6 +2330,7 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
         mScriptEd->sync();
     }
 
+    if (!gAgent.getRegion()) return;
     const LLInventoryItem *inv_item = getItem();
     // save it out to asset server
     std::string url = gAgent.getRegion()->getCapability("UpdateScriptAgent");
@@ -2733,7 +2742,7 @@ void LLLiveLSLEditor::loadScriptText(LLVFS *vfs, const LLUUID &uuid, LLAssetType
 	buffer[file_length] = '\0';
 
 	mScriptEd->setScriptText(LLStringExplicit(&buffer[0]), TRUE);
-	mScriptEd->mEditor->makePristine();
+	mScriptEd->makeEditorPristine();
 	mScriptEd->setScriptName(getItem()->getName());
 }
 
