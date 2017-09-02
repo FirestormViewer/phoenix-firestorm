@@ -102,11 +102,15 @@ LLAudioEngine_FMODEX::~LLAudioEngine_FMODEX()
 }
 
 
+static // <FS:Ansariel> Make this file scope so it doesn't collide with the same function in llstreamingaudio_fmodex.cpp
 inline bool Check_FMOD_Error(FMOD_RESULT result, const char *string)
 {
 	if(result == FMOD_OK)
 		return false;
-	LL_DEBUGS() << string << " Error: " << FMOD_ErrorString(result) << LL_ENDL;
+	// </FS:Ansariel> Always print out error
+	//LL_DEBUGS() << string << " Error: " << FMOD_ErrorString(result) << LL_ENDL;
+	LL_WARNS() << string << " Error: " << FMOD_ErrorString(result) << LL_ENDL;
+	// </FS:Ansariel>
 	return true;
 }
 
