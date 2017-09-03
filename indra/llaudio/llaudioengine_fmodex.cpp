@@ -44,6 +44,8 @@
 
 #include "sound_ids.h"
 
+#include "indra_constants.h"
+
 FMOD_RESULT F_CALLBACK windCallback(FMOD_DSP_STATE *dsp_state, float *inbuffer, float *outbuffer, unsigned int length, int inchannels, int outchannels);
 
 // <FS> FIRE-11266 / BUG-3549 / MAINT-2983: Changing audio device now requires relog to restore sounds
@@ -202,9 +204,10 @@ bool LLAudioEngine_FMODEX::init(const S32 num_channels, void* userdata)
 			LL_DEBUGS("AppInit") << "Trying PulseAudio audio output..." << LL_ENDL;
 			// <FS> FMOD fixes
 			//if(mSystem->setOutput(FMOD_OUTPUTTYPE_PULSEAUDIO) == FMOD_OK &&
+			//	(result = mSystem->init(num_channels + 2, fmod_flags, 0)) == FMOD_OK)
 			if((result = mSystem->setOutput(FMOD_OUTPUTTYPE_PULSEAUDIO)) == FMOD_OK &&
 			// </FS>
-				(result = mSystem->init(num_channels + 2, fmod_flags, 0)) == FMOD_OK)
+				(result = mSystem->init(num_channels + 2, fmod_flags, const_cast<char*>(APP_NAME.c_str()))) == FMOD_OK)
 			{
 				LL_DEBUGS("AppInit") << "PulseAudio output initialized OKAY"	<< LL_ENDL;
 				audio_ok = true;
