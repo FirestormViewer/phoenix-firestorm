@@ -103,6 +103,7 @@
 			<check_box label="テレポートビーコンオフ" name="tp_beam_toggle" tool_tip="テレポートが完了したら、目的地点に表示されるビーコンが消えるようにします。"/>
 			<check_box label="テレポート画面オフ" name="tp_screen_toggle" tool_tip="テレポートしている間表示される黒いテレポート画面を表示しないようにします。"/>
 			<check_box label="テレポートした時に世界地図を閉じない" name="FSDoNotHideMapOnTeleport" tool_tip="テレポートした時に世界地図が自動的に閉じる機能をオフにします。"/>
+			<check_box label="テレポートした後も「フレンドのみ表示」機能を維持する" name="FSRenderFriendsOnlyPersistsTP" tool_tip="「フレンドのみ表示」機能が自動的にキャンセルされないようにします。（デフォルトはオフ）" />
 		</panel>
 		
 		<!-- Map & Minimap -->

@@ -637,6 +637,16 @@ support@secondlife.com にお問い合わせください。
 	<string name="AssetErrorUnknownStatus">
 		不明のステータス
 	</string>
+	
+	<!-- Asset upload errors. -->
+	<string name="AssetUploadServerUnreacheble">サービスが利用できません。.</string>
+	<string name="AssetUploadServerDifficulties">サーバに予期しない障害が発生しています。</string>
+	<string name="AssetUploadServerUnavaliable">サービスが利用できないか、アップロードのタイムアウト上限に達しています。</string>
+	<string name="AssetUploadRequestInvalid">
+アップロードの要求中にエラーが発生しました。この問題を解決するには、次のページを参照して下さい。
+http://www.firestormviewer.org/support
+	</string>
+	
 	<string name="texture">
 		テクスチャ
 	</string>
@@ -1460,7 +1470,8 @@ support@secondlife.com にお問い合わせください。
 		[[MARKETPLACE_CREATE_STORE_URL] マーケットプレイス ストア] がエラーを返しています。
 	</string>
 	<string name="InventoryMarketplaceError">
-		この機能は、現在、ベータ版の機能です。参加するには、この [http://goo.gl/forms/FCQ7UXkakz Google form] に名前を追加してください。
+		マーケットプレイスのリストを開く際にエラーが発生しました。
+もしこのメッセージが出続けるようであれば、セカンドライフのサポートに連絡してみて下さい。 http://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		マーケットプレイスのリストフォルダが空です。
@@ -2170,10 +2181,21 @@ support@secondlife.com にお問い合わせください。
 		あなたが [OWNER] のために管理するすべての不動産
 	</string>
 	<string name="RegionInfoAllowedResidents">
-		許可された住人： （[ALLOWEDAGENTS] 人、最大 [MAXACCESS] 人）
+		常に許可されている人： （[ALLOWEDAGENTS] 人、最大 [MAXACCESS] 人）
 	</string>
 	<string name="RegionInfoAllowedGroups">
-		許可されたグループ： （[ALLOWEDGROUPS]、最大 [MAXACCESS] ）
+		常に許可されているグループ： （[ALLOWEDGROUPS]、最大 [MAXACCESS] ）
+	</string>
+	<string name="RegionInfoEstateManagers">
+		不動産管理者：([ESTATEMANAGERS]人、最大 [MAXMANAGERS]) 人
+	</string>
+	<string name="RegionInfoBannedResidents">
+		常にバンされている人：([BANNEDAGENTS] 人、最大 [MAXBANNED] 人)</string>
+	<string name="RegionInfoListTypeAllowedAgents">
+		常に許可されている住人
+	</string>
+	<string name="RegionInfoListTypeBannedAgents">
+		常にバンさんれている住人
 	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		区画スクリプトメモリ
@@ -4442,8 +4464,11 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		[AGENT_NAME] とコンファレンスする
 	</string>
 	<string name="inventory_item_offered-im">
-		インベントリアイテムを送りました
+		インベントリアイテム '[ITEM_NAME]' を送りました
 	</string>
+	<string name="inventory_folder_offered-im">
+		インベントリフォルダー '[ITEM_NAME]' を送りました
+  </string>
 	<string name="share_alert">
 		インベントリからここにアイテムをドラッグします
 	</string>
@@ -4532,7 +4557,10 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		家の配置の設定。
 	</string>
 	<string name="voice_morphing_url">
-		http://secondlife.com/landing/voicemorphing
+		https://secondlife.com/destination/voice-island
+	</string>
+	<string name="premium_voice_morphing_url">
+		https://secondlife.com/destination/voice-morphing-premium
 	</string>
 	
 	<!-- Financial operations strings -->
@@ -4908,7 +4936,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="server_is_down">
 		大変申し訳ございませんが、予期しない問題が発生しました。
 
-	サービスに関する既知の問題については、status.secondlifegrid.net をご覧ください。
+	サービスに関する既知の問題については、http:/status.secondlifegrid.net をご覧ください。
 問題が引き続き発生する場合は、お使いのネットワークやファイアウォールの設定を調べてください。
 	</string>
 	<string name="dateTimeWeekdaysNames">
@@ -5369,6 +5397,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Gestures_Label">
 		ジェスチャー
 	</string>
+	<string name="Command_Grid_Status_Label">
+		グリッド・ステータス
+	</string>
 	<string name="Command_HowTo_Label">
 		ハウツー
 	</string>
@@ -5407,6 +5438,13 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Command_Profile_Label">
 		プロフィール
+	</string>
+	<string name="Command_Report_Abuse_Label">
+		嫌がらせを報告
+	</string>
+	<!-- FS:Beq FIRE-20977 -->
+	<string name="Command_RFO_Label">
+		フレンドのみ表示
 	</string>
 	<string name="Command_Report_Abuse_Label">
 		嫌がらせの報告
@@ -5497,6 +5535,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Gestures_Tooltip">
 		アバターのジェスチャー
 	</string>
+	<string name="Command_Grid_Status_Tooltip">
+		現在のグリッド・ステータスを表示
+	</string>
 	<string name="Command_HowTo_Tooltip">
 		一般的タスクの実行方法
 	</string>
@@ -5539,6 +5580,11 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Report_Abuse_Tooltip">
 		嫌がらせの報告
 	</string>
+	<!-- FS:Beq FIRE-20977 -->
+	<string name="Command_RFO_Tooltip">
+		ビューワにフレンドのみ表示し、他のアバターは見えなくなります。一度この機能を有効にすると、他の人も見えるように戻すにはテレポートが必要になります。
+	</string>
+	<!-- FS:Beq RFO changes -->
 	<string name="Command_Search_Tooltip">
 		場所、イベント、人を検索
 	</string>
@@ -5971,7 +6017,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
   <string name="QP_WL_Day_Cycle_Based">デイサイクル</string>
   <string name="QP_WL_None">なし</string>
 
-  <string name="GroupChatMuteNotice">Muting group chat from [NAME].</string>
+  <string name="GroupChatMuteNotice">[NAME] からのグループチャットをミュートしています</string>
+  <string name="IgnoredAdHocSession">あなたは [AVATAR_NAME] からのカンファレンスに招待されていますが、設定内容に従ってビューワは自動的にこれを無視しました</string>
   
   <!-- <FS:Ansariel> Radar notifications -->
   <string name="camera_no_focus">ユーザー [AVATARNAME] は設定した描画距離の外にいるためにカメラが焦点を当てることができません。</string>

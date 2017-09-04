@@ -470,6 +470,9 @@
 			</combo_box>
 			<spinner label="価格（L$）：" name="PriceSpin"/>
 			<spinner label="アクセス時間：" name="HoursSpin"/>
+			<text name="OwnerLimited">
+                （不動産の所有者がこれらの選択に制限を設けているかもしれません。）
+            </text> 
 			<panel name="Allowed_layout_panel">
 				<text label="常に許可" name="AllowedText">
 					立入を許可された住人 ([COUNT]/[MAX])
