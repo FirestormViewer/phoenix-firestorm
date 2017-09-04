@@ -8,6 +8,7 @@
 		<string>CameraFNumber</string>
 		<string>FSLimitFramerate</string>
 		<string>FSRenderDoFUnderwater</string>
+		<string>FSRenderVignette</string>
 		<string>FSSimpleAvatarShadows</string>
 		<string>FullScreen</string>
 		<string>MaxFPS</string>
