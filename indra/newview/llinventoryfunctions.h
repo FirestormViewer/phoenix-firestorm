@@ -480,7 +480,8 @@ struct LLInventoryAction
 	static void onItemsRemovalConfirmation(const LLSD& notification, const LLSD& response, LLHandle<LLFolderView> root);
 	static void removeItemFromDND(LLFolderView* root);
 
-	static const int sConfirmOnDeleteItemsNumber;
+	// <FS:Ansariel> Unused as of 24-08-2017
+	//static const int sConfirmOnDeleteItemsNumber;
 
 private:
 	static void buildMarketplaceFolders(LLFolderView* root);

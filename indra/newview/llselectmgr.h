@@ -173,6 +173,9 @@ typedef enum e_selection_type
 
 const S32 TE_SELECT_MASK_ALL = 0xFFFFFFFF;
 
+//<FS:Beq> Physics view in edit mode changes
+void pushWireframe(LLDrawable* drawable);
+//</FS:Beq>
 // Contains information about a selected object, particularly which TEs are selected.
 class LLSelectNode
 {

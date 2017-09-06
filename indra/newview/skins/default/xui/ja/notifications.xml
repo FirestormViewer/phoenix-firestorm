@@ -3,6 +3,10 @@
 	<global name="skipnexttime">
 		今後は表示しない
 	</global>
+	<global name="skipnexttimesessiononly">
+		次回から表示しない
+（今回のセッションのみ）
+  </global>
 	<global name="alwayschoose">
 		常にこのオプションを選択
 	</global>
@@ -143,8 +147,7 @@
 	<notification name="MerchantTransactionFailed">
 		マーケットプレイスによる取引が次のエラーにより失敗しました:
         
-理由：&apos;[ERROR_REASON]&apos;
-[ERROR_DESCRIPTION]
+[ERROR_REASON][ERROR_DESCRIPTION]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="MerchantUnprocessableEntity">
@@ -355,7 +358,7 @@
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="参加"/>
 	</notification>
 	<notification name="JoinGroupNoCost">
-		[NAME] というグループに入ろうとしています。
+		&lt;nolink&gt;[NAME]&lt;/nolink&gt; というグループに入ろうとしています。
 続けますか？
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="参加"/>
 	</notification>
@@ -369,6 +372,40 @@ L$ が不足しているのでこのグループに参加することができ�
 48 時間以内にメンバーを勧誘し、入会してもらってください。
 		<usetemplate canceltext="キャンセル" name="okcancelbuttons" notext="キャンセル" yestext="L$100 でグループを作成"/>
 	</notification>
+	<notification name="JoinGroupInaccessible">
+		あなたはこのグループにアクセスできません。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="JoinGroupError">
+		あなたの参加リクエストの処理中にエラーが発生しました。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="JoinGroupErrorReason">
+		次の理由によりグループに参加できません：[reason]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="JoinGroupTrialUser">
+		残念ですが、正規のユーザでなければグループには参加できません。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="JoinGroupMaxGroups">
+		グループ &apos;&lt;nolink&gt;[group_name]&lt;/nolink&gt;&apos; には参加できません。
+あなたは既に [group_count] グループに参加しており、参加可能な最大グループ数は [max_groups] となっています。
+		 <usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="JoinGroupClosedEnrollment">
+		グループ &apos;&lt;nolink&gt;[group_name]&lt;/nolink&gt;&apos; には参加できません。
+このグループは既に自由参加できるようにはなっていません。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="JoinGroupSuccess">
+		グループに参加しました。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="JoinGroupInsufficientFunds">
+		必要な会費 L$ [membership_fee] の送金ができませんでした。
+		<usetemplate name="okbutton" yestext="OK"/>
+		</notification>
 	<notification name="LandBuyPass">
 		L$ [COST] で [TIME] 時間 [PARCEL_NAME] に入ることができます。
 入場許可を購入しますか？
@@ -446,7 +483,7 @@ L$ が不足しているのでこのグループに参加することができ�
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsNotOwnedByGroup">
-		この土地の区画上のオブジェクトのうち、グループ [NAME] との間で共有していないオブジェクトを所有者に返却しますか？
+		この土地の区画上のオブジェクトのうち、グループ &lt;nolink&gt;[NAME]&lt;/nolink&gt; との間で共有していないオブジェクトを所有者に返却しますか？
 
 オブジェクト： [N]
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
@@ -495,7 +532,7 @@ L$ が不足しているのでこのグループに参加することができ�
 		次の理由で、レポートのスクリーンショットのアップロード時に問題が起こりました。 [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
-		[CURRENT_GRID] へのログインを続けるには、利用規約に同意してください。
+		[CURRENT_GRID] へのログインを続けるには、取引条件、プライバシーポリシー、及び利用規約に同意してください。
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		アウトフィットを装着できません。
@@ -780,7 +817,7 @@ L$ が不足しているのでこのグループに参加することができ�
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="追放"/>
 	</notification>
 	<notification name="EjectAvatarFromGroup">
-		[GROUP_NAME] から [AVATAR_NAME] を追放しました
+		&lt;nolink&gt;[GROUP_NAME]&lt;/nolink&gt; から [AVATAR_NAME] を追放しました
 	</notification>
 	<notification name="AcquireErrorTooManyObjects">
 		取得エラー：選択したオブジェクトの数が多すぎます。
@@ -816,6 +853,9 @@ L$ が不足しているのでこのグループに参加することができ�
 どのオブジェクトもロックされておらず、あなたのものであることを確認してください。
 	</notification>
 	<notification name="CannotLinkPermanent">
+		地域（リージョン）の境界を越えてオブジェクトをリンクできません。
+	</notification>
+	<notification name="CannotLinkAcrossRegions">
 		地域（リージョン）の境界を越えてオブジェクトをリンクできません。
 	</notification>
 	<notification name="CannotLinkDifferentOwners">
@@ -1407,7 +1447,7 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries を参照してく
 土地の購入価格は、所有者に返金されません。譲渡された区画が売れると、売上金額はグループメンバーに均等に分配されます。
 
 この [AREA] 平方メートルの土地を、グループ
-「 [GROUP_NAME] 」に譲渡しますか？
+「 &lt;nolink&gt;[GROUP_NAME]&lt;/nolink&gt; 」に譲渡しますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="DeedLandToGroupWithContribution">
@@ -1415,7 +1455,7 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries を参照してく
 譲渡には同時に [NAME] からグループへの土地の貢献が含まれます。
 土地の購入価格は所有者に返金されません。譲渡された区画が売却されると、販売価格はグループメンバーの間で均等に分配されます。
 
-この [AREA] m² の土地を [GROUP_NAME] というグループに譲渡しますか？
+この [AREA] m² の土地を「&lt;nolink&gt;[GROUP_NAME]&lt;/nolink&gt;」というグループに譲渡しますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="DisplaySetToSafe">
@@ -1835,7 +1875,7 @@ http://secondlife.com/download から最新バージョンをダウンロード�
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="GroupDepart">
-		グループ &apos;[group_name]&apos; を抜けました。
+		グループ &apos;&lt;nolink&gt;[group_name]&lt;/nolink&gt;&apos; を抜けました。
 	</notification>
 	<notification name="GroupLeaveConfirmMemberWithFee">
 現在、あなたは &lt;nolink&gt;[GROUP]&lt;/nolink&gt; グループのメンバーです。再度入会する場合は L$[AMOUNT] の費用がかかります。
@@ -1881,7 +1921,6 @@ http://secondlife.com/download から最新バージョンをダウンロード�
 	<notification name="DoNotDisturbModeSet">
 		取り込み中モードになりました。チャットやインスタントメッセージを受け取っても通知されません。
 		− 他の住民には取り込み中の自動応答が返信されます。（「環境設定」＞「プライバシー」で設定したもの）
-		− テレポートのオファーは受け取り拒否となります。
 		− ボイスコールは拒否します。
 		<usetemplate ignoretext="ログイン状態を取り込み中モードに変更するとき" name="okignore" yestext="OK"/>
 	</notification>
@@ -2182,6 +2221,10 @@ http://wiki.secondlife.com/wiki/Setting_your_display_name を参照してくだ�
 
 [RESIDENTS]
 		<usetemplate name="yesnocancelbuttons" canceltext="取り消し" notext="全ての不動産" yestext="この不動産のみ"/>
+	</notification>
+	<notification name="EstateParcelAccessOverride">
+		このオプションのチェックを外すことにより、土地のオーナーが嫌がらせの帽子、プライバシーの保護、或いは未成年者をアダルトなものから守るために設定した制約を解除する可能性があります。必要であれば土地のオーナーとよく相談して下さい。
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked">
 		これから訪問しようとしている地域には、あなたの現在のレーティング設定を越えるコンテンツがあります。レーティング設定の変更は、「アバター」＞「 環境設定」＞「一般」で行えます。
@@ -2535,7 +2578,17 @@ L$ [AMOUNT] で、このクラシファイド広告を今すぐ公開します�
 	</notification>
 	<notification name="DeleteItems">
 		[QUESTION]
-		<usetemplate ignoretext="アイテムを削除する前の確認" name="okcancelignore" notext="取り消し" yestext="OK"/>
+		<form name="form">
+			<ignore name="ignore" text="アイテムを削除する前に確認"/>
+			<button name="Yes" text="OK"/>
+			<button name="No" text="取り消し"/>
+		</form>
+	</notification>
+	<notification name="DeleteFilteredItems">
+		あなたのイベント理は現在フィルターがかかっていて、あなたが削除しようとしているアイテムが全て表示されているわけではありません。
+
+本当にこれらのアイテムを削除してもよろしいですか？
+		<usetemplate ignoretext="フィルターされたアイテムを削除する前に確認" name="okcancelignore" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmUnlink">
 		選択したオブジェクトのリンクを本当に解除しますか？
@@ -2628,13 +2681,17 @@ Linden Lab
 		「 [FOLDERNAME] 」 は、システムフォルダです。 システムフォルダを削除すると不安定になることがあります。  続けますか？
 		<usetemplate ignoretext="システムフォルダを削除する前の確認" name="okcancelignore" notext="キャンセル" yestext="OK"/>
 	</notification>
+	<notification name="PurgeSelectedItems">
+		[COUNT] このアイテムが完全に削除されます。本当に選択されたアイテムをゴミ箱から完全に削除してもよろしいですか？
+		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmEmptyTrash">
-		ごみ箱の中身をすべて削除しますか？
-		<usetemplate ignoretext="インベントリのごみ箱フォルダを空にする前の確認" name="okcancelignore" notext="キャンセル" yestext="OK"/>
+		[COUNT] 個のアイテムが完全に削除されます。本当にごみ箱の中身をすべて削除しますか？
+		<usetemplate ignoretext="インベントリのごみ箱フォルダを空にする前の確認" name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="TrashIsFull">
 		ゴミ箱があふれています。これはログイン時に問題を引き起こします。
-		<usetemplate name="okcancelbuttons" notext="後でゴミ箱を空にする" yestext="今すぐゴミ箱を空にする"/>
+		<usetemplate name="okcancelbuttons" notext="後でゴミ箱を空にする" yestext="ゴミ箱を確認する"/>
 	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		トラベル、Web、検索の履歴をすべて削除しますか？
@@ -2843,9 +2900,6 @@ URL: [AUDIOURL]
 	</notification>
 	<notification name="Cancelled">
 		取り消されました。
-	</notification>
-	<notification name="CancelledSit">
-		座るのをやめました。
 	</notification>
 	<notification name="CancelledAttach">
 		添付が取り消されました。
@@ -3066,7 +3120,7 @@ URL: [AUDIOURL]
 		「 [NAME] 」という名前の住人が所有する、選択した区画上のオブジェクトは、本人に返却されました。
 	</notification>
 	<notification name="GroupObjectsReturned">
-		選択した区画上の、[GROUPNAME] というグループと共有していたオブジェクトは、それぞれの所有者のインベントリに返却されました。
+		選択した区画上の、&lt;nolink&gt;[GROUPNAME]&lt;/nolink&gt; というグループと共有していたオブジェクトは、それぞれの所有者のインベントリに返却されました。
 譲渡されていた「再販・プレゼント可」のオブジェクトは、以前の所有者に返却されました。
 グループに譲渡されていた「再販・プレゼント不可」のオブジェクトは、削除されました。
 	</notification>
@@ -3555,7 +3609,7 @@ URL: [AUDIOURL]
 		</form>
 	</notification>
 	<notification name="ScriptDialogGroup">
-		[GROUPNAME] の「&lt;nolink&gt;[TITLE]&lt;/nolink&gt;」
+		&lt;nolink&gt;[GROUPNAME]&lt;/nolink&gt; の「&lt;nolink&gt;[TITLE]&lt;/nolink&gt;」
 [MESSAGE]
 		<form name="form">
 			<button name="Client_Side_Mute" text="ブロック"/>
@@ -3602,7 +3656,7 @@ M キーを押して変更します。
 		[NAME] はインベントリを受け取り、自動的にブロックが解除されました。
 	</notification>
 	<notification name="VoiceInviteGroup">
-		[NAME] は [GROUP] のボイスチャットコールに参加しました。
+		[NAME] は &lt;nolink&gt;[GROUP]&lt;/nolink&gt; のボイスチャットコールに参加しました。
 受け入れるをクリックするか、断る場合は拒否をクリックしてください。 ブロックをクリックすると、この発信者をブロックします。
 		<form name="form">
 			<button name="Accept" text="受け入れる"/>
@@ -3709,6 +3763,9 @@ M キーを押して変更します。
 	<notification name="AppearanceToXMLFailed">
 		容姿のXMLファイルへの保存が失敗しました
 	</notification>
+	<notification icon="notifytip.tga" name="SnapshotToComputerFailed">
+		スナップショットを [PATH] に保存するのに失敗しました。ディスクが一杯です。[NEED_MEMORY]KB 必要ですが、空いているのは [FREE_MEMORY]KB です。
+	</notification>
 	<notification name="PresetNotSaved">
 		プリセット [NAME] の保存エラー。
 	</notification>
@@ -3746,9 +3803,14 @@ M キーを押して変更します。
 	<notification name="ShareNotification">
 		共有する住人を選択します。
 	</notification>
-	<notification name="MeshUploadError">
+	<notification name="MeshUploadErrorDetails">
 		[LABEL] をアップロードできませんでした：[MESSAGE] [IDENTIFIER] 
 [DETAILS] 詳細については Firestorm.log をご確認ください。
+	</notification>
+	<notification name="MeshUploadError">
+		[LABEL] をアップロードできませんでした：[MESSAGE]
+
+詳細については Firestorm.log をご確認ください。
 	</notification>
 	<notification name="MeshUploadPermError">
 		メッシュのアップロード許可をリクエスト中にエラーが発生しました。

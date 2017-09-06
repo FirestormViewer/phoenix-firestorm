@@ -5997,7 +5997,7 @@ You cannot undo this action.
     <tag>confirm</tag>
     <form name="form">
      <ignore name="ignore"
-      session_only="true"
+      session_only="false"
       text="Confirm before deleting items"/>
       <button
        default="true"

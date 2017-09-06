@@ -417,6 +417,7 @@
 				Typ kształtu fizycznego:
 			</text>
 			<combo_box name="Physics Shape Type Combo Ctrl" tool_tip="Wybierz typ kształtu fizycznego"/>
+			<button name="PhysicsViewToggle" tool_tip="Przełącz widoczność kształtów fizycznych w trybie edycji" />
 			<combo_box name="material">
 				<combo_box.item label="Kamień" name="Stone"/>
 				<combo_box.item label="Szkło" name="Glass"/>
