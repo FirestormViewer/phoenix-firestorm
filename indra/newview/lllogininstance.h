@@ -65,7 +65,7 @@ public:
 	void setSerialNumber(const std::string& sn) { mSerialNumber = sn; }
 	void setLastExecEvent(int lee) { mLastExecEvent = lee; }
 	void setLastExecDuration(S32 duration) { mLastExecDuration = duration; }
-	void setPlatformInfo(const std::string platform, const std::string platform_version);
+	void setPlatformInfo(const std::string platform, const std::string platform_version, const std::string platform_name);
 
 	void setNotificationsInterface(LLNotificationsInterface* ni) { mNotifications = ni; }
 	LLNotificationsInterface& getNotificationsInterface() const { return *mNotifications; }
@@ -99,6 +99,7 @@ private:
 	S32 mLastExecDuration;
 	std::string mPlatform;
 	std::string mPlatformVersion;
+	std::string mPlatformVersionName;
 	LLEventDispatcher mDispatcher;
 };
 
