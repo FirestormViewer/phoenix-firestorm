@@ -2551,9 +2551,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>566aa2c6f5b2f40a8b0bedf90d9c6beb</string>
+              <string>793b8d3e43f047c518b917347c8ca8e97ca07bdf</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/4723/14838/llphysicsextensions_stub-1.0.504712-darwin64-504712.tar.bz2</string>
+              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.507006-darwin64-507006.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2575,12 +2575,24 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d830aca10ea9396557b1e613c2736e49</string>
+              <string>f7a8dae01d244df1f779f625d6932b1b9403403e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/4725/14853/llphysicsextensions_stub-1.0.504712-windows-504712.tar.bz2</string>
+              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.507006-windows-507006.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
+          </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>0552f226a8a81aee06b3805a11ef656fd53381ff</string>
+              <key>url</key>
+              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.507006-windows64-507006.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
           </map>
         </map>
         <key>version</key>
