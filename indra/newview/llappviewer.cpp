@@ -715,7 +715,7 @@ public:
 
 	void run()
 	{
-		std::ofstream os(mFile.c_str());
+		llofstream os(mFile.c_str());
 		
 		while (!LLAppViewer::instance()->isQuitting())
 		{
@@ -4486,7 +4486,7 @@ void getFileList()
 		if ( ( iter->length() > 30 ) && (iter->rfind(".dmp") == (iter->length()-4) ) )
 		{
 			std::string fullname = pathname + *iter;
-			std::ifstream fdat( fullname.c_str(), std::ifstream::binary);
+			llifstream fdat( fullname.c_str(), std::ifstream::binary);
 			if (fdat)
 			{
 				char buf[5];

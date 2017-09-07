@@ -269,8 +269,8 @@ std::string LLInvFVBridge::getSearchableUUIDString() const
 	const LLInventoryModel* model = getInventoryModel();
 	if (model)
 	{
-		const LLInventoryItem *item = model->getItem(mUUID);
-		if(item)
+		const LLViewerInventoryItem *item = model->getItem(mUUID);
+		if(item /*&& (item->getIsFullPerm() || gAgent.isGodlikeWithoutAdminMenuFakery())*/) // Keep it FS-legacy style since we had it like this for ages
 		{
 			std::string uuid = item->getAssetUUID().asString();
 			LLStringUtil::toUpper(uuid);

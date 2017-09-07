@@ -5879,13 +5879,13 @@ void LLVOAvatar::resetAnimations()
 
 // Override selectively based on avatar sex and whether we're using new
 // animations.
-LLUUID LLVOAvatar::remapMotionID(const LLUUID& id, ESex gender)
+LLUUID LLVOAvatar::remapMotionID(const LLUUID& id)
 {
 	static LLCachedControl<bool> use_new_walk_run(gSavedSettings, "UseNewWalkRun");
 	LLUUID result = id;
 
 	// start special case female walk for female avatars
-	if (gender == SEX_FEMALE)
+	if (getSex() == SEX_FEMALE)
 	{
 		if (id == ANIM_AGENT_WALK)
 		{
@@ -5900,10 +5900,6 @@ LLUUID LLVOAvatar::remapMotionID(const LLUUID& id, ESex gender)
 			// in one case.
 			if (use_new_walk_run)
 				result = ANIM_AGENT_FEMALE_RUN_NEW;
-		}
-		else if (id == ANIM_AGENT_SIT)
-		{
-			result = ANIM_AGENT_SIT_FEMALE;
 		}
 	}
 	else
@@ -5943,7 +5939,7 @@ BOOL LLVOAvatar::startMotion(const LLUUID& id, F32 time_offset)
 		remap_id = AOEngine::getInstance()->override(id, TRUE);
 		if (remap_id.isNull())
 		{
-			remap_id = remapMotionID(id, getSex());
+			remap_id = remapMotionID(id);
 		}
 		else
 		{
@@ -5952,7 +5948,7 @@ BOOL LLVOAvatar::startMotion(const LLUUID& id, F32 time_offset)
 	}
 	else
 	{
-		remap_id = remapMotionID(id, getSex());
+		remap_id = remapMotionID(id);
 	}
 	// </FS:Zi> Animation Overrider
 
@@ -5977,24 +5973,14 @@ BOOL LLVOAvatar::stopMotion(const LLUUID& id, BOOL stop_immediate)
 	LL_DEBUGS() << "motion requested " << id.asString() << " " << gAnimLibrary.animationName(id) << LL_ENDL;
 
 	// <FS:Zi> Animation Overrider
-	//LLUUID remap_id = remapMotionID(id, getSex());
-	//if (findMotion(remap_id) == NULL)
-	//{
-	//	//possibility of encountering animation from the previous gender
-	//	remap_id = remapMotionID(id, (getSex() == SEX_MALE) ? SEX_FEMALE : SEX_MALE);
-	//}
+	//LLUUID remap_id = remapMotionID(id);
 	LLUUID remap_id;
 	if (isSelf())
 	{
 		remap_id = AOEngine::getInstance()->override(id, FALSE);
 		if (remap_id.isNull())
 		{
-			remap_id = remapMotionID(id, getSex());
-			if (findMotion(remap_id) == NULL)
-			{
-				//possibility of encountering animation from the previous gender
-				remap_id = remapMotionID(id, (getSex() == SEX_MALE) ? SEX_FEMALE : SEX_MALE);
-			}
+			remap_id = remapMotionID(id);
 		}
 		else
 		{
@@ -6003,15 +5989,10 @@ BOOL LLVOAvatar::stopMotion(const LLUUID& id, BOOL stop_immediate)
 	}
 	else
 	{
-		remap_id = remapMotionID(id, getSex());
-		if (findMotion(remap_id) == NULL)
-		{
-			//possibility of encountering animation from the previous gender
-			remap_id = remapMotionID(id, (getSex() == SEX_MALE) ? SEX_FEMALE : SEX_MALE);
-		}
+		remap_id = remapMotionID(id);
 	}
 	// </FS:Zi> Animation Overrider
-
+	
 	if (remap_id != id)
 	{
 		LL_DEBUGS() << "motion resultant " << remap_id.asString() << " " << gAnimLibrary.animationName(remap_id) << LL_ENDL;
@@ -9319,7 +9300,7 @@ void dump_sequential_xml(const std::string outprefix, const LLSD& content)
 {
 	std::string outfilename = get_sequential_numbered_file_name(outprefix,".xml");
 	std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
-	std::ofstream ofs(fullpath.c_str(), std::ios_base::out);
+	llofstream ofs(fullpath.c_str(), std::ios_base::out);
 	ofs << LLSDOStreamer<LLSDXMLFormatter>(content, LLSDFormatter::OPTIONS_PRETTY);
 	LL_DEBUGS("Avatar") << "results saved to: " << fullpath << LL_ENDL;
 }
