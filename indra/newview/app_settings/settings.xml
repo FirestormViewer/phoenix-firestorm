@@ -1758,6 +1758,17 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>AssetFetchConcurrency</key>
+    <map>
+      <key>Comment</key>
+      <string>Maximum number of HTTP connections used for asset fetches</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>AuctionShowFence</key>
     <map>
       <key>Comment</key>
