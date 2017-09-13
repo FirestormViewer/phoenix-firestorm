@@ -423,6 +423,13 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 	mKeyVirtualKey = 0;
 	mhDC = NULL;
 	mhRC = NULL;
+	
+	// <FS:Ansariel> Respect "Hide pointer while typing" Windows preference setting
+	if (!SystemParametersInfo(SPI_GETMOUSEVANISH, 0, &mMouseVanish, 0))
+	{
+		mMouseVanish = TRUE;
+	}
+	// </FS:Ansariel>
 
 	// Initialize the keyboard
 	gKeyboard = new LLKeyboardWin32();
@@ -1687,8 +1694,7 @@ void LLWindowWin32::hideCursorUntilMouseMove()
 {
 	// <FS:Ansariel> Respect "Hide pointer while typing" Windows preference setting
 	//if (!mHideCursorPermanent)
-	BOOL mouse_vanish = FALSE;
-	if (!mHideCursorPermanent && (!SystemParametersInfo(SPI_GETMOUSEVANISH, 0, &mouse_vanish, 0) || mouse_vanish))
+	if (!mHideCursorPermanent && mMouseVanish)
 	// </FS:Ansariel>
 	{
 		hideCursor();
@@ -2706,6 +2712,20 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 			return 0;			
 
 			break;
+
+		// <FS:Ansariel> Respect "Hide pointer while typing" Windows preference setting
+		case WM_SETTINGCHANGE:
+			{
+				if (w_param == SPI_SETMOUSEVANISH)
+				{
+					if (!SystemParametersInfo(SPI_GETMOUSEVANISH, 0, &window_imp->mMouseVanish, 0))
+					{
+						window_imp->mMouseVanish = TRUE;
+					}
+				}
+			}
+			break;
+		// </FS:Ansariel>
 		}
 
 	window_imp->mCallbacks->handlePauseWatchdog(window_imp);	
