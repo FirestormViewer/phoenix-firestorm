@@ -1687,8 +1687,8 @@ void LLWindowWin32::hideCursorUntilMouseMove()
 {
 	// <FS:Ansariel> Respect "Hide pointer while typing" Windows preference setting
 	//if (!mHideCursorPermanent)
-	BOOL mouse_manish = FALSE;
-	if (!mHideCursorPermanent && (!SystemParametersInfo(SPI_GETMOUSEVANISH, 0, &mouse_manish, 0) || mouse_manish))
+	BOOL mouse_vanish = FALSE;
+	if (!mHideCursorPermanent && (!SystemParametersInfo(SPI_GETMOUSEVANISH, 0, &mouse_vanish, 0) || mouse_vanish))
 	// </FS:Ansariel>
 	{
 		hideCursor();
