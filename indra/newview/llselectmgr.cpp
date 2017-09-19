@@ -6985,7 +6985,7 @@ void LLSelectMgr::pauseAssociatedAvatars()
                 }
                 else
                 {
-                    LLViewerObject* objectp = mSelectedObjects->getPrimaryObject();
+                    LLViewerObject* objectp = object;
                     if (objectp && objectp->isAttachment())
                     {
                         while (objectp && !objectp->isAvatar())
@@ -7012,7 +7012,7 @@ void LLSelectMgr::pauseAssociatedAvatars()
                 }
                 else
                 {
-                    LLViewerObject* objectp = mSelectedObjects->getPrimaryObject();
+                    LLViewerObject* objectp = object;
                     if (objectp && objectp->isAttachment())
                     {
                         while (objectp && !objectp->isAvatar())
