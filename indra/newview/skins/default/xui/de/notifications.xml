@@ -4373,6 +4373,9 @@ Sie ist voll oder startet in Kürze neu.
 	<notification name="CantChangeShape">
 		Sie können diese Form nicht ändern.
 	</notification>
+	<notification name="NoPermsTooManyAttachedAnimatedObjects">
+		Durch diese Aktion würde die Anzahl an animierten Objekten das Limit überschreiten.
+	</notification>
 	<notification name="NoAccessToClaimObjects">
 		Ihr Zugangsberechtigungen gestatten nicht das Beanspruchen von Objekten an dieser Stelle.
 	</notification>

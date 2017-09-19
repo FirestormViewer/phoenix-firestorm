@@ -434,6 +434,7 @@
 			<menu_item_check label="Texturbereich" name="Texture Area"/>
 			<menu_item_check label="Oberflächenbereich" name="Face Area"/>
 			<menu_item_check label="Detailstufeninfos" name="LOD Info"/>
+			<menu_item_check label="Triangle-Zähler" name="Triangle Count"/>
 			<menu_item_check label="Konstruktionswarteschlange" name="Build Queue"/>
 			<menu_item_check label="Lichter" name="Lights"/>
 			<menu_item_check label="Partikel" name="Particles"/>
