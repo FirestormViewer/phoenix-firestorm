@@ -50,6 +50,7 @@
 #include "llviewerobjectlist.h"
 #include "llviewerwindow.h"
 #include "llvocache.h"
+#include "llcontrolavatar.h"
 
 const F32 MIN_INTERPOLATE_DISTANCE_SQUARED = 0.001f * 0.001f;
 const F32 MAX_INTERPOLATE_DISTANCE_SQUARED = 10.f * 10.f;
@@ -550,7 +551,8 @@ void LLDrawable::makeStatic(BOOL warning_enabled)
 	if (isState(ACTIVE) && 
 		!isState(ACTIVE_CHILD) && 
 		!mVObjp->isAttachment() && 
-		!mVObjp->isFlexible())
+		!mVObjp->isFlexible() &&
+        !mVObjp->isAnimatedObject())
 	{
 		clearState(ACTIVE | ANIMATED_CHILD);
 

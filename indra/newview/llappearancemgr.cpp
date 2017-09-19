@@ -893,10 +893,10 @@ void LLWearableHoldingPattern::onAllComplete()
 //			 ++it)
 //		{
 //			LLViewerObject *objectp = *it;
-//			gAgentAvatarp->addAttachmentOverridesForObject(objectp);
-//		}
-//		
-//		// Add new attachments to match those requested.
+//            if (!objectp->isAnimatedObject())
+//            {
+//                gAgentAvatarp->addAttachmentOverridesForObject(objectp);
+//            }
 //		LL_DEBUGS("Avatar") << self_av_string() << "Adding " << items_to_add.size() << " attachments" << LL_ENDL;
 //		LLAgentWearables::userAttachMultipleAttachments(items_to_add);
 	}
@@ -2752,7 +2752,10 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 		for (LLAgentWearables::llvo_vec_t::iterator it = objects_to_retain.begin(); it != objects_to_retain.end(); ++it)
 		{
 			LLViewerObject *objectp = *it;
-			gAgentAvatarp->addAttachmentOverridesForObject(objectp);
+			if (!objectp->isAnimatedObject())
+			{
+				gAgentAvatarp->addAttachmentOverridesForObject(objectp);
+			}
 		}
 
 		// Add new attachments to match those requested.

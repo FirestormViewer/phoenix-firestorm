@@ -76,8 +76,13 @@
 #include "lldatapacker.h"
 #include "llviewershadermgr.h"
 #include "llvoavatar.h"
+#include "llcontrolavatar.h"
+#include "llvoavatarself.h"
 #include "llvocache.h"
 #include "llmaterialmgr.h"
+#include "llanimationstates.h"
+#include "llinventorytype.h"
+#include "llviewerinventory.h"
 // [RLVa:KB] - Checked: RLVa-2.0.0
 #include "rlvactions.h"
 #include "rlvlocks.h"
@@ -90,6 +95,8 @@ U32 JOINT_COUNT_REQUIRED_FOR_FULLRIG = 1;
 BOOL gAnimateTextures = TRUE;
 //extern BOOL gHideSelectedObjects;
 
+// AXON TEMP
+S32 LLVOVolume::sForceLOD = -1;
 F32 LLVOVolume::sLODFactor = 1.f;
 F32	LLVOVolume::sLODSlopDistanceFactor = 0.5f; //Changing this to zero, effectively disables the LOD transition slop 
 F32 LLVOVolume::sDistanceFactor = 1.0f;
@@ -1361,16 +1368,24 @@ void LLVOVolume::sculpt()
 S32	LLVOVolume::computeLODDetail(F32 distance, F32 radius)
 {
 	S32	cur_detail;
-	if (LLPipeline::sDynamicLOD)
-	{
-		// We've got LOD in the profile, and in the twist.  Use radius.
-		F32 tan_angle = (LLVOVolume::sLODFactor*radius)/distance;
-		cur_detail = LLVolumeLODGroup::getDetailFromTan(ll_round(tan_angle, 0.01f));
-	}
-	else
-	{
-		cur_detail = llclamp((S32) (sqrtf(radius)*LLVOVolume::sLODFactor*4.f), 0, 3);		
-	}
+    // AXON TEMP
+    if (LLVOVolume::sForceLOD>=0 && LLVOVolume::sForceLOD<=3)
+    {
+        cur_detail = LLVOVolume::sForceLOD;
+    }
+    else
+    {
+        if (LLPipeline::sDynamicLOD)
+        {
+            // We've got LOD in the profile, and in the twist.  Use radius.
+            F32 tan_angle = (LLVOVolume::sLODFactor*radius)/distance;
+            cur_detail = LLVolumeLODGroup::getDetailFromTan(ll_round(tan_angle, 0.01f));
+        }
+        else
+        {
+            cur_detail = llclamp((S32) (sqrtf(radius)*LLVOVolume::sLODFactor*4.f), 0, 3);		
+        }
+    }
 	return cur_detail;
 }
 
@@ -1424,16 +1439,39 @@ BOOL LLVOVolume::calcLOD()
 	distance *= F_PI/3.f;
 
 	cur_detail = computeLODDetail(ll_round(distance, 0.01f), 
-									ll_round(radius, 0.01f));
+                                  ll_round(radius, 0.01f));
 
 
+    if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TRIANGLE_COUNT) && mDrawable->getFace(0))
+    {
+        if (isRootEdit() && getChildren().size()>0)
+        {
+            S32 total_tris = getTriangleCount();
+            LLViewerObject::const_child_list_t& child_list = getChildren();
+            for (LLViewerObject::const_child_list_t::const_iterator iter = child_list.begin();
+                 iter != child_list.end(); ++iter)
+            {
+                LLViewerObject* childp = *iter;
+                LLVOVolume *child_volp = dynamic_cast<LLVOVolume*>(childp);
+                if (child_volp)
+                {
+                    total_tris += child_volp->getTriangleCount();
+                }
+            }
+            setDebugText(llformat("TRIS %d TOTAL %d", getTriangleCount(), total_tris));
+        }
+        else
+        {
+            setDebugText(llformat("TRIS %d", getTriangleCount()));
+        }
+	
+    }
 	// <FS> FIRE-20191 / STORM-2139 Render Metadata->LOD Info is broken on all "recent" viewer versions
 	//if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_LOD_INFO) &&
 	//	mDrawable->getFace(0))
 	//{
-	//	//setDebugText(llformat("%.2f:%.2f, %d", mDrawable->mDistanceWRTCamera, radius, cur_detail));
-
-	//	setDebugText(llformat("%d", mDrawable->getFace(0)->getTextureIndex()));
+        //// This is a debug display for LODs. Please don't put the texture index here.
+        //setDebugText(llformat("%d", cur_detail));
 	//}
 	if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_LOD_INFO))
 	{
@@ -1542,7 +1580,8 @@ void LLVOVolume::updateFaceFlags()
 BOOL LLVOVolume::setParent(LLViewerObject* parent)
 {
 	BOOL ret = FALSE ;
-	if (parent != getParent())
+    LLViewerObject *old_parent = (LLViewerObject*) getParent();
+	if (parent != old_parent)
 	{
 		ret = LLViewerObject::setParent(parent);
 		if (ret && mDrawable)
@@ -1550,6 +1589,7 @@ BOOL LLVOVolume::setParent(LLViewerObject* parent)
 			gPipeline.markMoved(mDrawable);
 			gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, TRUE);
 		}
+        updateAnimatedObjectState(old_parent, parent);
 	}
 
 	return ret ;
@@ -3442,6 +3482,176 @@ BOOL LLVOVolume::setIsFlexible(BOOL is_flexible)
 }
 
 //----------------------------------------------------------------------------
+// AXON - methods related to extended mesh flags
+
+U32 LLVOVolume::getExtendedMeshFlags() const
+{
+	const LLExtendedMeshParams *param_block = 
+        (const LLExtendedMeshParams *)getParameterEntry(LLNetworkData::PARAMS_EXTENDED_MESH);
+	if (param_block)
+	{
+		return param_block->getFlags();
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+void LLVOVolume::setExtendedMeshFlags(U32 flags)
+{
+    U32 curr_flags = getExtendedMeshFlags();
+    if (curr_flags != flags)
+    {
+        bool in_use = (flags != 0);
+        setParameterEntryInUse(LLNetworkData::PARAMS_EXTENDED_MESH, in_use, true);
+        LLExtendedMeshParams *param_block = 
+            (LLExtendedMeshParams *)getParameterEntry(LLNetworkData::PARAMS_EXTENDED_MESH);
+        if (param_block)
+        {
+            param_block->setFlags(flags);
+        }
+        parameterChanged(LLNetworkData::PARAMS_EXTENDED_MESH, true);
+    }
+}
+
+bool LLVOVolume::canBeAnimatedObject() const
+{
+    if (!isMesh())
+    {
+        return false;
+    }
+// AXON remove this check if animated object attachments are allowed
+#if 0
+    if (isAttachment())
+    {
+        return false;
+    }
+#endif
+	if (!getVolume())
+	{
+		return false;
+	}
+	const LLMeshSkinInfo* skin = gMeshRepo.getSkinInfo(getVolume()->getParams().getSculptID(), this);
+    if (!skin)
+    {
+        return false;
+    }
+    return true;
+}
+
+bool LLVOVolume::isAnimatedObject() const
+{
+    LLVOVolume *root_vol = (LLVOVolume*)getRootEdit();
+    bool can_be_animated = canBeAnimatedObject();
+    bool root_can_be_animated = root_vol->canBeAnimatedObject();
+    bool root_is_animated = root_vol->getExtendedMeshFlags() & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG;
+    if (can_be_animated && root_can_be_animated && root_is_animated)
+    {
+        return true;
+    }
+    return false;
+}
+
+// Make sure animated objects in a linkset are consistent. The rules are:
+// Only the root of a linkset can have the animated object flag set
+// Only the root of a linkset can have a control avatar (iff the animated object flag is set)
+// Only skinned mesh volumes can have the animated object flag set, or a control avatar
+bool LLVOVolume::isAnimatedObjectStateConsistent() const
+{
+    if (!canBeAnimatedObject())
+    {
+        if ((getExtendedMeshFlags() & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG) ||
+            mControlAvatar.notNull())
+        {
+            LL_WARNS("AXON") << "Non animatable object has mesh enabled flag or mControlAvatar. Flags " 
+                             << getExtendedMeshFlags() << " cav " << mControlAvatar.get() << LL_ENDL;
+            return false;
+        }
+    }
+    if (!isRootEdit())
+    {
+        if ((getExtendedMeshFlags() & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG) ||
+            mControlAvatar.notNull())
+        {
+            LL_WARNS("AXON") << "Non root object has mesh enabled flag or mControlAvatar. Flags " 
+                             << getExtendedMeshFlags() << " cav " << mControlAvatar.get() << LL_ENDL;
+            return false;
+        }
+    }
+    // If we get here, we have a potentially animatable root volume.
+    bool is_animation_enabled = getExtendedMeshFlags() & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG;
+    bool has_control_avatar = (mControlAvatar.notNull());
+    if (is_animation_enabled != has_control_avatar)
+    {
+        LL_WARNS("AXON") << "Inconsistent state: animation enabled " << is_animation_enabled
+                         << " has control avatar " << has_control_avatar 
+                         << " flags " << getExtendedMeshFlags() << " cav " << mControlAvatar.get() << LL_ENDL;
+        return false;
+    }
+    return true;
+}
+
+// Called any time parenting changes for a volume. Update flags and
+// control av accordingly.  This is called after parent has been
+// changed to new_parent.
+void LLVOVolume::updateAnimatedObjectState(LLViewerObject *old_parent, LLViewerObject *new_parent)
+{
+    LLVOVolume *old_volp = dynamic_cast<LLVOVolume*>(old_parent);
+    LLVOVolume *new_volp = dynamic_cast<LLVOVolume*>(new_parent);
+
+    // AXON - depending on whether animated objects can be attached,
+    // we may want to include or remove the isAvatar() check.
+    if (new_parent && !new_parent->isAvatar())
+    {
+        // Object should inherit control avatar and animated mesh flag
+        // from parent, so clear them out from our own state
+        if (getExtendedMeshFlags() & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG)
+        {
+            setExtendedMeshFlags(getExtendedMeshFlags() & ~LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG);
+        }
+        if (mControlAvatar.notNull())
+        {
+            LLControlAvatar *av = mControlAvatar;
+            mControlAvatar = NULL;
+            av->markForDeath();
+        }
+        // If this succeeds now, it's because the new_parent is an animated object
+        if (isAnimatedObject() && getControlAvatar())
+        {
+            getControlAvatar()->addAttachmentOverridesForObject(this);
+        }
+    }
+    if (old_volp && old_volp->isAnimatedObject())
+    {
+        if (old_volp->getControlAvatar())
+        {
+            // We have been removed from an animated object, need to do cleanup.
+            old_volp->getControlAvatar()->removeAttachmentOverridesForObject(this);
+        }
+    }
+    
+    if (old_volp)
+    {
+        if (!old_volp->isAnimatedObjectStateConsistent())
+        {
+            LL_WARNS("AXON") << "old_volp failed consistency check" << LL_ENDL;
+        }
+    }
+    if (new_volp)
+    {
+        if (!new_volp->isAnimatedObjectStateConsistent())
+        {
+            LL_WARNS("AXON") << "new_volp failed consistency check" << LL_ENDL;
+        }
+    }
+    if (!isAnimatedObjectStateConsistent())
+    {
+        LL_WARNS("AXON") << "child object failed consistency check" << LL_ENDL;
+    }
+}
+
+//----------------------------------------------------------------------------
 
 void LLVOVolume::generateSilhouette(LLSelectNode* nodep, const LLVector3& view_point)
 {
@@ -3502,7 +3712,7 @@ void LLVOVolume::updateRadius()
 
 BOOL LLVOVolume::isAttachment() const
 {
-	return mState != 0 ;
+	return mAttachmentState != 0 ;
 }
 
 BOOL LLVOVolume::isHUDAttachment() const
@@ -3510,7 +3720,7 @@ BOOL LLVOVolume::isHUDAttachment() const
 	// *NOTE: we assume hud attachment points are in defined range
 	// since this range is constant for backwards compatibility
 	// reasons this is probably a reasonable assumption to make
-	S32 attachment_id = ATTACHMENT_ID_FROM_STATE(mState);
+	S32 attachment_id = ATTACHMENT_ID_FROM_STATE(mAttachmentState);
 	return ( attachment_id >= 31 && attachment_id <= 38 );
 }
 
@@ -4279,9 +4489,9 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 bool LLVOVolume::treatAsRigged()
 {
 	return isSelected() &&
-			isAttachment() &&
-			mDrawable.notNull() &&
-			mDrawable->isState(LLDrawable::RIGGED);
+        (isAttachment() || isAnimatedObject()) &&
+        mDrawable.notNull() &&
+        mDrawable->isState(LLDrawable::RIGGED);
 }
 
 LLRiggedVolume* LLVOVolume::getRiggedVolume()
@@ -4374,6 +4584,9 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 	U32 maxJoints = LLSkinningUtil::getMeshJointCount(skin);
     LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, maxJoints, skin, avatar);
 
+    S32 rigged_vert_count = 0;
+    S32 rigged_face_count = 0;
+    LLVector4a box_min, box_max;
 	for (S32 i = 0; i < volume->getNumVolumeFaces(); ++i)
 	{
 		const LLVolumeFace& vol_face = volume->getVolumeFace(i);
@@ -4395,6 +4608,8 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 				LL_RECORD_BLOCK_TIME(FTM_SKIN_RIGGED);
 
                 U32 max_joints = LLSkinningUtil::getMaxJointCount();
+                rigged_vert_count += dst_face.mNumVertices;
+                rigged_face_count++;
 				for (U32 j = 0; j < dst_face.mNumVertices; ++j)
 				{
 					LLMatrix4a final_mat;
@@ -4418,12 +4633,19 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 
 				min = pos[0];
 				max = pos[1];
+                if (i==0)
+                {
+                    box_min = min;
+                    box_max = max;
+                }
 
 				for (U32 j = 1; j < dst_face.mNumVertices; ++j)
 				{
 					min.setMin(min, pos[j]);
 					max.setMax(max, pos[j]);
 				}
+                box_min.setMin(min,box_min);
+                box_max.setMax(max,box_max);
 
 				dst_face.mCenter->setAdd(dst_face.mExtents[0], dst_face.mExtents[1]);
 				dst_face.mCenter->mul(0.5f);
@@ -4459,6 +4681,10 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 			}
 		}
 	}
+    mExtraDebugText = llformat("rigged %d/%d - box (%f %f %f) (%f %f %f)",
+                               rigged_face_count, rigged_vert_count,
+                               box_min[0], box_min[1], box_min[2],
+                               box_max[0], box_max[1], box_max[2]);
 }
 
 U32 LLVOVolume::getPartitionType() const
@@ -5028,11 +5254,35 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                           vobj->isMesh() && 
 						  gMeshRepo.getSkinInfo(vobj->getVolume()->getParams().getSculptID(), vobj);
 
+            if (vobj->isAnimatedObject())
+            {
+                if (!vobj->getControlAvatar())
+                {
+                    vobj->linkControlAvatar();
+                }
+                if (vobj->getControlAvatar())
+                {
+                    pAvatarVO = vobj->getControlAvatar();
+                }
+            }
+            else
+            {
+                // Not animated but has a control avatar - probably
+                // the checkbox has changed since the last rebuild.
+                if (vobj->getControlAvatar())
+                {
+                    vobj->unlinkControlAvatar();
+                }
+            }
+
 			bool bake_sunlight = LLPipeline::sBakeSunlight && drawablep->isStatic();
 
+            // AXON why this variable? Only different from rigged if
+            // there are no LLFaces associated with the drawable.
 			bool is_rigged = false;
 
-            if (rigged && pAvatarVO)
+            // AXON handle NPC case
+            if (rigged && pAvatarVO && !vobj->isAnimatedObject())
             {
                 pAvatarVO->addAttachmentOverridesForObject(vobj);
 				if (!LLApp::isExiting() && pAvatarVO->isSelf() && debugLoggingEnabled("AvatarAttachments"))
@@ -5058,7 +5308,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 				//sum up face verts and indices
 				drawablep->updateFaceSize(i);
 			
-				if (rigged) 
+				if (rigged || (vobj->getControlAvatar() && vobj->getControlAvatar()->mPlaying))
 				{
 					if (!facep->isState(LLFace::RIGGED))
 					{ //completely reset vertex buffer

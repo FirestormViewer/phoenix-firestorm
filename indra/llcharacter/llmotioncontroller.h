@@ -150,10 +150,13 @@ public:
 	BOOL isPaused() const { return mPaused; }
 
 	void setTimeStep(F32 step);
+    F32 getTimeStep() const { return mTimeStep; }
 
 	void setTimeFactor(F32 time_factor);
 	F32 getTimeFactor() const { return mTimeFactor; }
 
+    F32 getAnimTime() const { return mAnimTime; }
+    
 	// <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
 	void setUpdateFactor(F32 update_factor) { mUpdateFactor = update_factor; }
 

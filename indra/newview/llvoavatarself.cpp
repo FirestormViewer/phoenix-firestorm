@@ -3370,7 +3370,7 @@ BOOL LLVOAvatarSelf::needsRenderBeam()
 		// don't render selection beam on hud objects
 		is_touching_or_grabbing = FALSE;
 	}
-	return is_touching_or_grabbing || (mState & AGENT_STATE_EDITING && LLSelectMgr::getInstance()->shouldShowSelection());
+	return is_touching_or_grabbing || (getAttachmentState() & AGENT_STATE_EDITING && LLSelectMgr::getInstance()->shouldShowSelection());
 }
 
 // static

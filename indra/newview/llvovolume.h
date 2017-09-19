@@ -62,6 +62,8 @@ public:
 	}
 
 	void update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, const LLVolume* src_volume);
+
+    std::string mExtraDebugText;
 };
 
 // Base class for implementations of the volume - Primitive, Flexible Object, etc.
@@ -262,9 +264,23 @@ public:
 	virtual BOOL isMesh() const;
 	virtual BOOL hasLightTexture() const;
 
+    
 	BOOL isVolumeGlobal() const;
 	BOOL canBeFlexible() const;
 	BOOL setIsFlexible(BOOL is_flexible);
+
+    // Extended Mesh Properties
+    U32 getExtendedMeshFlags() const;
+    void setExtendedMeshFlags(U32 flags);
+    bool canBeAnimatedObject() const;
+    bool isAnimatedObject() const;
+    bool isAnimatedObjectStateConsistent() const;
+    void updateAnimatedObjectState(LLViewerObject *old_parent, LLViewerObject *new_parent);
+
+    // AXON For animated objects, we need to track animations requested
+    // per-object, then reconcile those to manage the control avatar
+    // animation state.
+	std::map<LLUUID, S32> 					mObjectSignaledAnimations; // requested state of Animation name/value
 
     // Functions that deal with media, or media navigation
     
@@ -381,6 +397,7 @@ private:
 public:
 	static F32 sLODSlopDistanceFactor;// Changing this to zero, effectively disables the LOD transition slop
 	static F32 sLODFactor;				// LOD scale factor
+	static S32 sForceLOD;				// LOD override
 	static F32 sDistanceFactor;			// LOD distance factor
 
 	static LLPointer<LLObjectMediaDataClient> sObjectMediaClient;

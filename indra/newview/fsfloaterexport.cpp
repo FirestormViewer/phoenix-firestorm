@@ -379,7 +379,7 @@ void FSFloaterObjectExport::addPrim(LLViewerObject* object, bool root)
 	{
 		if (object->isAttachment())
 		{
-			prim["attachment_point"] = ATTACHMENT_ID_FROM_STATE(object->getState());
+			prim["attachment_point"] = ATTACHMENT_ID_FROM_STATE(object->getAttachmentState());
 		}
 	}
 	else

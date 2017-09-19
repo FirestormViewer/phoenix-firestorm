@@ -2096,8 +2096,7 @@ BOOL LLToolPie::handleRightClickPick()
 		gMenuHolder->setObjectSelection(LLSelectMgr::getInstance()->getSelection());
 
 		bool is_other_attachment = (object->isAttachment() && !object->isHUDAttachment() && !object->permYouOwner());
-		if (object->isAvatar() 
-			|| is_other_attachment)
+		if (object->isAvatar() || is_other_attachment)
 		{
 			// Find the attachment's avatar
 			while( object && object->isAttachment())

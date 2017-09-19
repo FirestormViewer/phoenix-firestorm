@@ -330,10 +330,16 @@ public:
 	void addTrianglesDrawn(S32 index_count, U32 render_type = LLRender::TRIANGLES);
 
 	BOOL hasRenderDebugFeatureMask(const U32 mask) const	{ return (mRenderDebugFeatureMask & mask) ? TRUE : FALSE; }
-	BOOL hasRenderDebugMask(const U32 mask) const			{ return (mRenderDebugMask & mask) ? TRUE : FALSE; }
+	// <FS:Ansariel> Need an unsigned long here
+	//BOOL hasRenderDebugMask(const U32 mask) const			{ return (mRenderDebugMask & mask) ? TRUE : FALSE; }
+	BOOL hasRenderDebugMask(const U64 mask) const			{ return (mRenderDebugMask & mask) ? TRUE : FALSE; }
+	// </FS:Ansariel>
 	void setAllRenderDebugFeatures() { mRenderDebugFeatureMask = 0xffffffff; }
 	void clearAllRenderDebugFeatures() { mRenderDebugFeatureMask = 0x0; }
-	void setAllRenderDebugDisplays() { mRenderDebugMask = 0xffffffff; }
+	// <FS:Ansariel> Need an unsigned long here
+	//void setAllRenderDebugDisplays() { mRenderDebugMask = 0xffffffff; }
+	void setAllRenderDebugDisplays() { mRenderDebugMask = 0xffffffffffffffff; }
+	// </FS:Ansariel>
 	void clearAllRenderDebugDisplays() { mRenderDebugMask = 0x0; }
 
 	BOOL hasRenderType(const U32 type) const;
@@ -510,7 +516,7 @@ public:
 		RENDER_DEBUG_FEATURE_FOOT_SHADOWS		= 0x0100,
 	};
 
-	enum LLRenderDebugMask
+	enum LLRenderDebugMask : U64 // <FS:Ansariel> Need an unsigned long here - needs C++11 support!
 	{
 		RENDER_DEBUG_COMPOSITION		= 0x00000001,
 		RENDER_DEBUG_VERIFY				= 0x00000002,
@@ -523,11 +529,11 @@ public:
 		RENDER_DEBUG_TEXTURE_AREA		= 0x00000100,
 		RENDER_DEBUG_FACE_AREA			= 0x00000200,
 		RENDER_DEBUG_PARTICLES			= 0x00000400,
-		RENDER_DEBUG_GLOW				= 0x00000800,
+		RENDER_DEBUG_GLOW				= 0x00000800, // not used
 		RENDER_DEBUG_TEXTURE_ANIM		= 0x00001000,
 		RENDER_DEBUG_LIGHTS				= 0x00002000,
 		RENDER_DEBUG_BATCH_SIZE			= 0x00004000,
-		RENDER_DEBUG_ALPHA_BINS			= 0x00008000,
+		RENDER_DEBUG_ALPHA_BINS			= 0x00008000, // not used
 		RENDER_DEBUG_RAYCAST            = 0x00010000,
 		RENDER_DEBUG_AVATAR_DRAW_INFO	= 0x00020000,
 		RENDER_DEBUG_SHADOW_FRUSTA		= 0x00040000,
@@ -541,9 +547,10 @@ public:
 		RENDER_DEBUG_NORMALS	        = 0x04000000,
 		RENDER_DEBUG_LOD_INFO	        = 0x08000000,
 		RENDER_DEBUG_RENDER_COMPLEXITY  = 0x10000000,
-		RENDER_DEBUG_ATTACHMENT_BYTES	= 0x20000000,
+		RENDER_DEBUG_ATTACHMENT_BYTES	= 0x20000000, // not used
 		RENDER_DEBUG_TEXEL_DENSITY		= 0x40000000,
-		RENDER_DEBUG_TEXTURE_SIZE		= 0x80000000
+		RENDER_DEBUG_TRIANGLE_COUNT		= 0x80000000,
+		RENDER_DEBUG_TEXTURE_SIZE		= 0x100000000
 	};
 
 public:
@@ -689,10 +696,14 @@ protected:
 	std::stack<std::string> mRenderTypeEnableStack;
 
 	U32						mRenderDebugFeatureMask;
-	U32						mRenderDebugMask;
+	// <FS:Ansariel> Need an unsigned long here
+	//U32						mRenderDebugMask;
+	U64						mRenderDebugMask;
 	std::stack<U32>			mRenderDebugFeatureStack;
 
-	U32						mOldRenderDebugMask;
+	// <FS:Ansariel> Need an unsigned long here
+	//U32						mOldRenderDebugMask;
+	U64						mOldRenderDebugMask;
 	
 	/////////////////////////////////////////////
 	//

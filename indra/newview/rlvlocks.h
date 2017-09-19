@@ -418,7 +418,7 @@ inline S32 RlvAttachPtLookup::getAttachPointIndex(std::string strText)
 // Checked: 2010-03-03 (RLVa-1.2.0a) | Modified: RLVa-0.2.0d
 inline S32 RlvAttachPtLookup::getAttachPointIndex(const LLViewerObject* pObj)
 {
-	return (pObj) ? ATTACHMENT_ID_FROM_STATE(pObj->getState()) : 0;
+	return (pObj) ? ATTACHMENT_ID_FROM_STATE(pObj->getAttachmentState()) : 0;
 }
 
 // ============================================================================

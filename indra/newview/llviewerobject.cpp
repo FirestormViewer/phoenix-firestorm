@@ -60,6 +60,7 @@
 #include "llbbox.h"
 #include "llbox.h"
 #include "llcylinder.h"
+#include "llcontrolavatar.h"
 #include "lldrawable.h"
 #include "llface.h"
 #include "llfloaterproperties.h"
@@ -150,7 +151,7 @@ const F32 PHYSICS_TIMESTEP = 1.f / 45.f;
 static LLTrace::BlockTimerStatHandle FTM_CREATE_OBJECT("Create Object");
 
 // static
-LLViewerObject *LLViewerObject::createObject(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp)
+LLViewerObject *LLViewerObject::createObject(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp, S32 flags)
 {
 	LLViewerObject *res = NULL;
 	LL_RECORD_BLOCK_TIME(FTM_CREATE_OBJECT);
@@ -183,6 +184,12 @@ LLViewerObject *LLViewerObject::createObject(const LLUUID &id, const LLPCode pco
 				}
 			}
 			res = gAgentAvatarp;
+		}
+		else if (flags & CO_FLAG_CONTROL_AVATAR)
+		{
+            LLControlAvatar *avatar = new LLControlAvatar(id, pcode, regionp);
+			avatar->initInstance();
+			res = avatar;
 		}
 		else
 		{
@@ -253,6 +260,7 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mText(),
 	mHudText(""),
 	mHudTextColor(LLColor4::white),
+    mControlAvatar(NULL),
 	mLastInterpUpdateSecs(0.f),
 	mLastMessageUpdateSecs(0.f),
 	mLatestRecvPacketID(0),
@@ -277,7 +285,7 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mRotTime(0.f),
 	mAngularVelocityRot(),
 	mPreviousRotation(),
-	mState(0),
+	mAttachmentState(0),
 	mMedia(NULL),
 	mClickAction(0),
 	mObjectCost(0),
@@ -381,17 +389,23 @@ void LLViewerObject::markDead()
 		//LL_INFOS() << "Marking self " << mLocalID << " as dead." << LL_ENDL;
 		
 		// Root object of this hierarchy unlinks itself.
-		LLVOAvatar *av = getAvatarAncestor();
 		if (getParent())
 		{
 			((LLViewerObject *)getParent())->removeChild(this);
 		}
 		LLUUID mesh_id;
-		if (av && LLVOAvatar::getRiggedMeshID(this,mesh_id))
-		{
-			// This case is needed for indirectly attached mesh objects.
-			av->resetJointsOnDetach(mesh_id);
-		}
+        {
+            LLVOAvatar *av = getAvatar();
+            if (av && LLVOAvatar::getRiggedMeshID(this,mesh_id))
+            {
+                // This case is needed for indirectly attached mesh objects.
+                av->removeAttachmentOverridesForObject(mesh_id);
+            }
+        }
+        if (getControlAvatar())
+        {
+            unlinkControlAvatar();
+        }
 
 		// Mark itself as dead
 		mDead = TRUE;
@@ -1408,7 +1422,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 
 				U8 state;
 				mesgsys->getU8Fast(_PREHASH_ObjectData, _PREHASH_State, state, block_num );
-				mState = state;
+				mAttachmentState = state;
 
 				// ...new objects that should come in selected need to be added to the selected list
 				mCreateSelected = ((flags & FLAGS_CREATE_SELECTED) != 0);
@@ -1684,7 +1698,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 
 				U8 state;
 				mesgsys->getU8Fast(_PREHASH_ObjectData, _PREHASH_State, state, block_num );
-				mState = state;
+				mAttachmentState = state;
 				break;
 			}
 
@@ -1707,7 +1721,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 		U8		state;
 
 		dp->unpackU8(state, "State");
-		mState = state;
+		mAttachmentState = state;
 
 		switch(update_type)
 		{
@@ -2050,7 +2064,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 							if ( (RlvActions::isRlvEnabled()) && (sent_parentp->isAvatar()) && (sent_parentp->getID() == gAgent.getID()) )
 							{
 								// Rezzed object that's being worn as an attachment (we're assuming this will be due to llAttachToAvatar())
-								S32 idxAttachPt = ATTACHMENT_ID_FROM_STATE(getState());
+								S32 idxAttachPt = ATTACHMENT_ID_FROM_STATE(getAttachmentState());
 								if (gRlvAttachmentLocks.isLockedAttachmentPoint(idxAttachPt, RLV_LOCK_ADD))
 								{
 									// If this will end up on an "add locked" attachment point then treat the attach as a user action
@@ -2968,6 +2982,61 @@ void LLViewerObject::fetchInventoryFromServer()
 		// this will get reset by dirtyInventory or doInventoryCallback
 		mInvRequestState = INVENTORY_REQUEST_PENDING;
 	}
+}
+
+LLControlAvatar *LLViewerObject::getControlAvatar()
+{
+    return getRootEdit()->mControlAvatar.get();
+}
+
+LLControlAvatar *LLViewerObject::getControlAvatar() const
+{
+    return getRootEdit()->mControlAvatar.get();
+}
+
+void LLViewerObject::linkControlAvatar()
+{
+    if (!getControlAvatar() && isRootEdit())
+    {
+        LLVOVolume *volp = dynamic_cast<LLVOVolume*>(this);
+        if (!volp)
+        {
+            LL_WARNS() << "called with null or non-volume object" << LL_ENDL;
+            return;
+        }
+        mControlAvatar = LLControlAvatar::createControlAvatar(volp);
+    }
+    if (getControlAvatar())
+    {
+        getControlAvatar()->addAttachmentOverridesForObject(this);
+    }
+    else
+    {
+        LL_WARNS() << "no control avatar found!" << LL_ENDL;
+    }
+}
+
+void LLViewerObject::unlinkControlAvatar()
+{
+    if (getControlAvatar())
+    {
+        getControlAvatar()->removeAttachmentOverridesForObject(this);
+    }
+    if (isRootEdit())
+    {
+        // This will remove the entire linkset from the control avatar
+        LLControlAvatar *av = mControlAvatar;
+        mControlAvatar = NULL;
+        av->markForDeath();
+    }
+    // For non-root prims, removing from the linkset will
+    // automatically remove the control avatar connection.
+}
+
+// virtual
+bool LLViewerObject::isAnimatedObject() const
+{
+    return false;
 }
 
 struct LLFilenameAndTask
@@ -3950,7 +4019,7 @@ const LLVector3 LLViewerObject::getRenderPosition() const
 	if (mDrawable.notNull() && mDrawable->isState(LLDrawable::RIGGED))
 	{
 		LLVOAvatar* avatar = getAvatar();
-		if (avatar)
+		if (avatar && !getControlAvatar())
 		{
 			return avatar->getPositionAgent();
 		}
@@ -5213,7 +5282,13 @@ LLVOAvatar* LLViewerObject::asAvatar()
 	return NULL;
 }
 
-// If this object is directly or indirectly parented by an avatar, return it.
+// If this object is directly or indirectly parented by an avatar,
+// return it.  Normally getAvatar() is the correct function to call;
+// it will give the avatar used for skinning.  The exception is with
+// animated objects that are also attachments; in that case,
+// getAvatar() will return the control avatar, used for skinning, and
+// getAvatarAncestor will return the avatar to which the object is
+// attached.
 LLVOAvatar* LLViewerObject::getAvatarAncestor()
 {
 	LLViewerObject *pobj = (LLViewerObject*) getParent();
@@ -5560,6 +5635,11 @@ LLViewerObject::ExtraParameter* LLViewerObject::createNewParameterEntry(U16 para
 		  new_block = new LLLightImageParams();
 		  break;
 	  }
+      case LLNetworkData::PARAMS_EXTENDED_MESH:
+      {
+		  new_block = new LLExtendedMeshParams();
+		  break;
+      }
 	  default:
 	  {
 		  LL_INFOS() << "Unknown param type." << LL_ENDL;
@@ -6461,6 +6541,10 @@ const std::string& LLViewerObject::getAttachmentItemName() const
 //virtual
 LLVOAvatar* LLViewerObject::getAvatar() const
 {
+    if (getControlAvatar())
+    {
+        return getControlAvatar();
+    }
 	if (isAttachment())
 	{
 		LLViewerObject* vobj = (LLViewerObject*) getParent();

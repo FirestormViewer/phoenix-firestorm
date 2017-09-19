@@ -55,6 +55,7 @@
 #include "llagentcamera.h"
 #include "llcallingcard.h"
 #include "llbuycurrencyhtml.h"
+#include "llcontrolavatar.h"
 #include "llfirstuse.h"
 #include "llfloaterbump.h"
 #include "llfloaterbuyland.h"
@@ -107,6 +108,7 @@
 #include "llviewerwindow.h"
 #include "llvlmanager.h"
 #include "llvoavatarself.h"
+#include "llvovolume.h"
 #include "llworld.h"
 #include "llworldmap.h"
 #include "pipeline.h"
@@ -6510,12 +6512,15 @@ void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data)
 	LLUUID	animation_id;
 	LLUUID	uuid;
 	S32		anim_sequence_id;
-	LLVOAvatar *avatarp;
+	LLVOAvatar *avatarp = NULL;
 	
 	mesgsys->getUUIDFast(_PREHASH_Sender, _PREHASH_ID, uuid);
 
-	//clear animation flags
-	avatarp = (LLVOAvatar *)gObjectList.findObject(uuid);
+	LLViewerObject *objp = gObjectList.findObject(uuid);
+    if (objp)
+    {
+        avatarp =  objp->asAvatar();
+    }
 
 	if (!avatarp)
 	{
@@ -6527,6 +6532,7 @@ void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data)
 	S32 num_blocks = mesgsys->getNumberOfBlocksFast(_PREHASH_AnimationList);
 	S32 num_source_blocks = mesgsys->getNumberOfBlocksFast(_PREHASH_AnimationSourceList);
 
+	//clear animation flags
 	avatarp->mSignaledAnimations.clear();
 	
 	if (avatarp->isSelf())
@@ -6602,6 +6608,65 @@ void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data)
 		avatarp->processAnimationStateChanges();
 	}
 }
+
+void process_object_animation(LLMessageSystem *mesgsys, void **user_data)
+{
+	LLUUID	animation_id;
+	LLUUID	uuid;
+	S32		anim_sequence_id;
+	
+	mesgsys->getUUIDFast(_PREHASH_Sender, _PREHASH_ID, uuid);
+
+    LLViewerObject *objp = gObjectList.findObject(uuid);
+    if (!objp)
+    {
+		LL_WARNS("Messaging") << "AXON Received animation state for unknown object" << uuid << LL_ENDL;
+        return;
+    }
+    
+	LLVOVolume *volp = dynamic_cast<LLVOVolume*>(objp);
+    if (!volp)
+    {
+		LL_WARNS("Messaging") << "AXON Received animation state for non-volume object" << uuid << LL_ENDL;
+        return;
+    }
+
+    if (!volp->isAnimatedObject())
+    {
+		LL_WARNS("Messaging") << "AXON Received animation state for non-animated object" << uuid << LL_ENDL;
+        return;
+    }
+
+    LLControlAvatar *avatarp = volp->getControlAvatar();
+    if (!avatarp)
+    {
+        LL_WARNS() << "AXON no control avatar, ignoring" << LL_ENDL;
+        return;
+    }
+    
+	S32 num_blocks = mesgsys->getNumberOfBlocksFast(_PREHASH_AnimationList);
+	LL_DEBUGS("AXON") << "handle object animation here, num_blocks " << num_blocks << LL_ENDL;
+
+    if (!avatarp->mPlaying)
+    {
+        avatarp->mPlaying = true;
+		avatarp->updateVolumeGeom();
+    }
+
+	volp->mObjectSignaledAnimations.clear();
+	
+    for( S32 i = 0; i < num_blocks; i++ )
+    {
+        mesgsys->getUUIDFast(_PREHASH_AnimationList, _PREHASH_AnimID, animation_id, i);
+        mesgsys->getS32Fast(_PREHASH_AnimationList, _PREHASH_AnimSequenceID, anim_sequence_id, i);
+        volp->mObjectSignaledAnimations[animation_id] = anim_sequence_id;
+        LL_DEBUGS("AXON") << "got object animation request for object " 
+                          << uuid << " animation id " << animation_id << LL_ENDL;
+    }
+
+    avatarp->updateAnimations();
+}
+
 
 void process_avatar_appearance(LLMessageSystem *mesgsys, void **user_data)
 {

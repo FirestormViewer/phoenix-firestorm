@@ -888,7 +888,7 @@ RlvObject::RlvObject(const LLUUID& idObj) : m_idObj(idObj), m_nLookupMisses(0)
 {
 	LLViewerObject* pObj = gObjectList.findObject(idObj);
 	m_fLookup = (NULL != pObj);
-	m_idxAttachPt = (pObj) ? ATTACHMENT_ID_FROM_STATE(pObj->getState()) : 0;
+	m_idxAttachPt = (pObj) ? ATTACHMENT_ID_FROM_STATE(pObj->getAttachmentState()) : 0;
 	m_idRoot = (pObj) ? pObj->getRootEdit()->getID() : LLUUID::null;
 }
 

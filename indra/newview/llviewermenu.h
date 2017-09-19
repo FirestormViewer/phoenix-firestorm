@@ -164,7 +164,10 @@ void handle_export_selected( void * );
 // Convert strings to internal types
 U32 render_type_from_string(std::string render_type);
 U32 feature_from_string(std::string feature);
-U32 info_display_from_string(std::string info_display);
+// <FS:Ansariel> Need an unsigned long here
+//U32 info_display_from_string(std::string info_display);
+U64 info_display_from_string(std::string info_display);
+// </FS:Ansariel>
 // <FS:Techwolf Lupindo> export
 bool enable_object_export();
 // </FS:Techwolf Lupindo>

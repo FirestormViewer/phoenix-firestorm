@@ -6958,7 +6958,10 @@ BOOL LLPipeline::toggleRenderTypeControlNegated(void* data)
 //static
 void LLPipeline::toggleRenderDebug(void* data)
 {
-	U32 bit = (U32)(intptr_t)data;
+	// <FS:Ansariel> Need an unsigned long here
+	//U32 bit = (U32)(intptr_t)data;
+	U64 bit = *(U64*)data;
+	// </FS:Ansariel>
 	if (gPipeline.hasRenderDebugMask(bit))
 	{
 		LL_INFOS() << "Toggling render debug mask " << std::hex << bit << " off" << std::dec << LL_ENDL;
@@ -6974,7 +6977,10 @@ void LLPipeline::toggleRenderDebug(void* data)
 //static
 BOOL LLPipeline::toggleRenderDebugControl(void* data)
 {
-	U32 bit = (U32)(intptr_t)data;
+	// <FS:Ansariel> Need an unsigned long here
+	//U32 bit = (U32)(intptr_t)data;
+	U64 bit = *(U64*)data;
+	// </FS:Ansariel>
 	return gPipeline.hasRenderDebugMask(bit);
 }
 

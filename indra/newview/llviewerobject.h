@@ -47,6 +47,7 @@ class LLAgent;			// TODO: Get rid of this.
 class LLAudioSource;
 class LLAudioSourceVO;
 class LLColor4;
+class LLControlAvatar;
 class LLDataPacker;
 class LLDataPackerBinaryBuffer;
 class LLDrawable;
@@ -378,9 +379,9 @@ public:
 
 	void sendShapeUpdate();
 
-//	U8 getState()							{ return mState; }
+//	U8 getAttachmentState()							{ return mAttachmentState; }
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
-	U8 getState() const						{ return mState; }
+	U8 getAttachmentState() const						{ return mAttachmentState; }
 // [/RLVa:KB]
 
 	F32 getAppAngle() const					{ return mAppAngle; }
@@ -700,6 +701,21 @@ public:
 
 	static			BOOL		sUseSharedDrawables;
 
+public:
+    // Returns mControlAvatar for the edit root prim of this linkset
+    LLControlAvatar *getControlAvatar();
+    LLControlAvatar *getControlAvatar() const;
+
+    // Create or connect to an existing control av as applicable
+    void linkControlAvatar();
+    // Remove any reference to control av for this prim
+    void unlinkControlAvatar();
+
+    virtual bool isAnimatedObject() const;
+
+protected:
+    LLPointer<LLControlAvatar> mControlAvatar;
+
 protected:
 	// delete an item in the inventory, but don't tell the
 	// server. This is used internally by remove, update, and
@@ -710,8 +726,10 @@ protected:
 	// updateInventory.
 	void doUpdateInventory(LLPointer<LLViewerInventoryItem>& item, U8 key, bool is_new);
 
+    // Flags for createObject
+    static const S32 CO_FLAG_CONTROL_AVATAR = 1 << 1;
 
-	static LLViewerObject *createObject(const LLUUID &id, LLPCode pcode, LLViewerRegion *regionp);
+	static LLViewerObject *createObject(const LLUUID &id, LLPCode pcode, LLViewerRegion *regionp, S32 flags = 0);
 
 	BOOL setData(const U8 *datap, const U32 data_size);
 
@@ -799,7 +817,7 @@ protected:
 	LLQuaternion	mAngularVelocityRot;		// accumulated rotation from the angular velocity computations
 	LLQuaternion	mPreviousRotation;
 
-	U8				mState;	// legacy
+	U8				mAttachmentState;	// this encodes the attachment id in a somewhat complex way. 0 if not an attachment.
 	LLViewerObjectMedia* mMedia;	// NULL if no media associated
 	U8 mClickAction;
 	F32 mObjectCost; //resource cost of this object or -1 if unknown

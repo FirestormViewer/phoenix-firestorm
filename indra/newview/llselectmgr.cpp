@@ -46,6 +46,7 @@
 #include "llundo.h"
 #include "lluuid.h"
 #include "llvolume.h"
+#include "llcontrolavatar.h"
 #include "message.h"
 #include "object_flags.h"
 #include "llquaternion.h"
@@ -6834,7 +6835,10 @@ S32 get_family_count(LLViewerObject *parent)
 
 //-----------------------------------------------------------------------------
 // updateSelectionCenter
-//-----------------------------------------------------------------------------
+//
+// FIXME this is a grab bag of functionality only some of which has to do
+// with the selection center
+// -----------------------------------------------------------------------------
 void LLSelectMgr::updateSelectionCenter()
 {
 	const F32 MOVE_SELECTION_THRESHOLD = 1.f;		//  Movement threshold in meters for updating selection
@@ -6852,47 +6856,11 @@ void LLSelectMgr::updateSelectionCenter()
 		mSelectionCenterGlobal.clearVec();
 		mShowSelection = FALSE;
 		mSelectionBBox = LLBBox(); 
-		mPauseRequest = NULL;
 		resetAgentHUDZoom();
-
 	}
 	else
 	{
 		mSelectedObjects->mSelectType = getSelectTypeForObject(object);
-
-		// <FS:Ansariel> Chalice Yao's pause agent on attachment selection
-		//if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT && isAgentAvatarValid() && object->getParent() != NULL)
-		//{
-		//	mPauseRequest = gAgentAvatarp->requestPause();
-		//}
-		if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT)
-		{
-			if (isAgentAvatarValid() && object->permYouOwner())
-			{
-				mPauseRequest = gAgentAvatarp->requestPause();
-			}
-			else
-			{
-				LLViewerObject* objectp = mSelectedObjects->getPrimaryObject();
-				if (objectp && objectp->isAttachment())
-				{
-					while (objectp && !objectp->isAvatar())
-					{
-						objectp = (LLViewerObject*)objectp->getParent();
-					}
-
-					if (objectp && objectp->isAvatar())
-					{
-						mPauseRequest = objectp->asAvatar()->requestPause();
-					}
-				}
-			}
-		}
-		// </FS:Ansariel>
-		else
-		{
-			mPauseRequest = NULL;
-		}
 
 		if (mSelectedObjects->mSelectType != SELECT_TYPE_HUD && isAgentAvatarValid())
 		{
@@ -6970,6 +6938,59 @@ void LLSelectMgr::updateSelectionCenter()
 	{
 		gEditMenuHandler = NULL;
 	}
+
+    pauseAssociatedAvatars();
+}
+
+//-----------------------------------------------------------------------------
+// pauseAssociatedAvatars
+//
+// If the selection includes an attachment or an animated object, the
+// associated avatars should pause their animations until they are no
+// longer selected.
+//-----------------------------------------------------------------------------
+void LLSelectMgr::pauseAssociatedAvatars()
+{
+    mPauseRequests.clear();
+
+    for (LLObjectSelection::iterator iter = mSelectedObjects->begin();
+         iter != mSelectedObjects->end(); iter++)
+    {
+        LLSelectNode* node = *iter;
+        LLViewerObject* object = node->getObject();
+        if (!object)
+            continue;
+			
+        mSelectedObjects->mSelectType = getSelectTypeForObject(object);
+
+        if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT && 
+            isAgentAvatarValid() && object->getParent() != NULL)
+        {
+            if (object->isAnimatedObject())
+            {
+                // Is an animated object attachment.
+                // Pause both the control avatar and the avatar it's attached to.
+                if (object->getControlAvatar())
+                {
+                    mPauseRequests.push_back(object->getControlAvatar()->requestPause());
+                }
+                mPauseRequests.push_back(gAgentAvatarp->requestPause());
+            }
+            else
+            {
+                // Is a regular attachment. Pause the avatar it's attached to.
+                mPauseRequests.push_back(gAgentAvatarp->requestPause());
+            }
+        }
+        else
+        {
+            if (object && object->isAnimatedObject() && object->getControlAvatar())
+            {
+                // Is a non-attached animated object. Pause the control avatar.
+                mPauseRequests.push_back(object->getControlAvatar()->requestPause());
+            }
+        }
+    }
 }
 
 void LLSelectMgr::updatePointAt()

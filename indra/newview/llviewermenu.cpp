@@ -1113,7 +1113,10 @@ class LLAdvancedSetDisplayTextureDensity : public view_listener_t
 //////////////////
 // INFO DISPLAY //
 //////////////////
-U32 info_display_from_string(std::string info_display)
+// <FS:Ansariel> Need an unsigned long here
+//U32 info_display_from_string(std::string info_display)
+U64 info_display_from_string(std::string info_display)
+// </FS:Ansariel>
 {
 	if ("verify" == info_display)
 	{
@@ -1227,6 +1230,10 @@ U32 info_display_from_string(std::string info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_TEXEL_DENSITY;
 	}
+	else if ("triangle count" == info_display)
+	{
+		return LLPipeline::RENDER_DEBUG_TRIANGLE_COUNT;
+	}
 	else if ("texture size" == info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_TEXTURE_SIZE;
@@ -1242,13 +1249,19 @@ class LLAdvancedToggleInfoDisplay : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		U32 info_display = info_display_from_string( userdata.asString() );
+		// <FS:Ansariel> Need an unsigned long here
+		//U32 info_display = info_display_from_string( userdata.asString() );
+		U64 info_display = info_display_from_string( userdata.asString() );
+		// </FS:Ansariel>
 
 		LL_INFOS("ViewerMenu") << "toggle " << userdata.asString() << LL_ENDL;
 		
 		if ( info_display != 0 )
 		{
-			LLPipeline::toggleRenderDebug( (void*)(ptrdiff_t)info_display );
+			// <FS:Ansariel> Need an unsigned long here
+			//LLPipeline::toggleRenderDebug( (void*)(ptrdiff_t)info_display );
+			LLPipeline::toggleRenderDebug( (void*)&info_display );
+			// </FS:Ansariel>
 		}
 
 		return true;
@@ -1260,12 +1273,18 @@ class LLAdvancedCheckInfoDisplay : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		U32 info_display = info_display_from_string( userdata.asString() );
+		// <FS:Ansariel> Need an unsigned long here
+		//U32 info_display = info_display_from_string( userdata.asString() );
+		U64 info_display = info_display_from_string( userdata.asString() );
+		// </FS:Ansariel>
 		bool new_value = false;
 
 		if ( info_display != 0 )
 		{
-			new_value = LLPipeline::toggleRenderDebugControl( (void*)(ptrdiff_t)info_display );
+			// <FS:Ansariel> Need an unsigned long here
+			//new_value = LLPipeline::toggleRenderDebugControl( (void*)(ptrdiff_t)info_display );
+			new_value = LLPipeline::toggleRenderDebugControl( (void*)&info_display );
+			// </FS:Ansariel>
 		}
 
 		return new_value;
@@ -8529,7 +8548,7 @@ class LLAttachmentEnableDrop : public view_listener_t
 		// Do not enable drop if all faces of object are not enabled
 		if (object && LLSelectMgr::getInstance()->getSelection()->contains(object,SELECT_ALL_TES ))
 		{
-    		S32 attachmentID  = ATTACHMENT_ID_FROM_STATE(object->getState());
+    		S32 attachmentID  = ATTACHMENT_ID_FROM_STATE(object->getAttachmentState());
 			attachment = get_if_there(gAgentAvatarp->mAttachmentPoints, attachmentID, (LLViewerJointAttachment*)NULL);
 
 			if (attachment)

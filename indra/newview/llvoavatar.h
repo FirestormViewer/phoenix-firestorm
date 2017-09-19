@@ -170,7 +170,8 @@ public:
 												 LLVector2* tex_coord = NULL,      // return the texture coordinates of the intersection point
 												 LLVector4a* normal = NULL,         // return the surface normal at the intersection point
 												 LLVector4a* tangent = NULL);     // return the surface tangent at the intersection point
-	LLViewerObject*	lineSegmentIntersectRiggedAttachments(const LLVector4a& start, const LLVector4a& end,
+	virtual LLViewerObject*	lineSegmentIntersectRiggedAttachments(
+                                                 const LLVector4a& start, const LLVector4a& end,
 												 S32 face = -1,                    // which face to check, -1 = ALL_SIDES
 												 BOOL pick_transparent = FALSE,
 												 BOOL pick_rigged = FALSE,
@@ -207,8 +208,8 @@ public:
 	LLJoint*		        getJoint(S32 num);
 
 	void 					addAttachmentOverridesForObject(LLViewerObject *vo);
-	void					resetJointsOnDetach(const LLUUID& mesh_id);
-	void					resetJointsOnDetach(LLViewerObject *vo);
+	void					removeAttachmentOverridesForObject(const LLUUID& mesh_id);
+	void					removeAttachmentOverridesForObject(LLViewerObject *vo);
     bool					jointIsRiggedTo(const std::string& joint_name);
     bool					jointIsRiggedTo(const std::string& joint_name, const LLViewerObject *vo);
 	void					clearAttachmentOverrides();
@@ -238,6 +239,8 @@ public:
 public:
 	virtual bool 	isSelf() const { return false; } // True if this avatar is for this viewer's agent
 
+	virtual bool 	isControlAvatar() const { return mIsControlAvatar; } // True if this avatar is a control av (no associated user)
+
 private: //aligned members
 	LL_ALIGN_16(LLVector4a	mImpostorExtents[2]);
 
@@ -245,8 +248,14 @@ private: //aligned members
 	// Updates
 	//--------------------------------------------------------------------
 public:
-	void			updateDebugText();
+	virtual void	updateDebugText();
 	virtual BOOL 	updateCharacter(LLAgent &agent);
+    void			updateFootstepSounds();
+    void			computeUpdatePeriod();
+    void			updateOrientation(LLAgent &agent, F32 speed, F32 delta_time);
+    void			updateTimeStep();
+    void			updateRootPositionAndRotation(LLAgent &agent, F32 speed, bool was_sit_ground_constrained);
+    
 	void 			idleUpdateVoiceVisualizer(bool voice_enabled);
 	void 			idleUpdateMisc(bool detailed_update);
 	virtual void	idleUpdateAppearanceAnimation();
@@ -451,6 +460,13 @@ public:
 	F64			mCachedMuteListUpdateTime;
 
 	VisualMuteSettings		mVisuallyMuteSetting;			// Always or never visually mute this AV
+
+	//--------------------------------------------------------------------
+	// animated object status
+	//--------------------------------------------------------------------
+public:
+    bool mIsControlAvatar;
+    bool mEnableDefaultMotions;
 
 	//--------------------------------------------------------------------
 	// Morph masks
@@ -769,9 +785,9 @@ public:
 	static LLVOAvatar*  findAvatarFromAttachment(LLViewerObject* obj);
 	/*virtual*/ BOOL	isWearingWearableType(LLWearableType::EType type ) const;
 	LLViewerObject *	findAttachmentByID( const LLUUID & target_id ) const;
+	LLViewerJointAttachment* getTargetAttachmentPoint(LLViewerObject* viewer_object);
 
 //-TT Patch: ReplaceWornItemsOnly
-	LLViewerJointAttachment* getTargetAttachmentPoint(LLViewerObject* viewer_object);
 //-TT
 protected:
 	//LLViewerJointAttachment* getTargetAttachmentPoint(LLViewerObject* viewer_object);
@@ -794,10 +810,11 @@ public:
 	BOOL 				hasHUDAttachment() const;
 	LLBBox 				getHUDBBox() const;
 	void 				resetHUDAttachments();
-	BOOL				canAttachMoreObjects() const;
-	BOOL				canAttachMoreObjects(U32 n) const;
+	BOOL				canAttachMoreObjects(U32 n=1) const;
+    BOOL				canAttachMoreAnimatedObjects(U32 n=1) const;
 protected:
 	U32					getNumAttachments() const; // O(N), not O(1)
+	U32					getNumAnimatedObjectAttachments() const; // O(N), not O(1)
 
 /**                    Wearables
  **                                                                            **
