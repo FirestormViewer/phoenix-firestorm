@@ -6964,7 +6964,10 @@ void LLSelectMgr::pauseAssociatedAvatars()
         mSelectedObjects->mSelectType = getSelectTypeForObject(object);
 
         if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT && 
-            isAgentAvatarValid() && object->getParent() != NULL)
+            // <FS:Ansariel> Chalice Yao's pause agent on attachment selection
+            //isAgentAvatarValid() && object->getParent() != NULL)
+            object->getParent() != NULL)
+            // </FS:Ansariel>
         {
             if (object->isAnimatedObject())
             {
@@ -6974,12 +6977,56 @@ void LLSelectMgr::pauseAssociatedAvatars()
                 {
                     mPauseRequests.push_back(object->getControlAvatar()->requestPause());
                 }
-                mPauseRequests.push_back(gAgentAvatarp->requestPause());
+                // <FS:Ansariel> Chalice Yao's pause agent on attachment selection
+                //mPauseRequests.push_back(gAgentAvatarp->requestPause());
+                if (isAgentAvatarValid() && object->permYouOwner())
+                {
+                    mPauseRequests.push_back(gAgentAvatarp->requestPause());
+                }
+                else
+                {
+                    LLViewerObject* objectp = mSelectedObjects->getPrimaryObject();
+                    if (objectp && objectp->isAttachment())
+                    {
+                        while (objectp && !objectp->isAvatar())
+                        {
+                            objectp = (LLViewerObject*)objectp->getParent();
+                        }
+
+                        if (objectp && objectp->isAvatar())
+                        {
+                            mPauseRequests.push_back(objectp->asAvatar()->requestPause());
+                        }
+                    }
+                }
+                // </FS:Ansariel>
             }
             else
             {
                 // Is a regular attachment. Pause the avatar it's attached to.
-                mPauseRequests.push_back(gAgentAvatarp->requestPause());
+                // <FS:Ansariel> Chalice Yao's pause agent on attachment selection
+                //mPauseRequests.push_back(gAgentAvatarp->requestPause());
+                if (isAgentAvatarValid() && object->permYouOwner())
+                {
+                    mPauseRequests.push_back(gAgentAvatarp->requestPause());
+                }
+                else
+                {
+                    LLViewerObject* objectp = mSelectedObjects->getPrimaryObject();
+                    if (objectp && objectp->isAttachment())
+                    {
+                        while (objectp && !objectp->isAvatar())
+                        {
+                            objectp = (LLViewerObject*)objectp->getParent();
+                        }
+
+                        if (objectp && objectp->isAvatar())
+                        {
+                            mPauseRequests.push_back(objectp->asAvatar()->requestPause());
+                        }
+                    }
+                }
+                // </FS:Ansariel>
             }
         }
         else
