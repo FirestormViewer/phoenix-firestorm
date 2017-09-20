@@ -265,6 +265,11 @@ void LLFloaterBuyCurrencyUI::updateUI()
 
 void LLFloaterBuyCurrencyUI::onClickBuy()
 {
+	// <COLOSI opensim multi-currency support>
+	// Do not wrap the "buy_currency" string because it is the mOrig later stored
+	// in an LLUIString with params and will be wrapped when params are inserted.
+	// wrapping here would break multi-currency support as it would remove the L$
+	//</COLOSI opensim multi-currency support>>
 	mManager.buy(getString("buy_currency"));
 	updateUI();
 	// Update L$ balance
@@ -298,8 +303,34 @@ void LLFloaterBuyCurrency::buyCurrency()
 void LLFloaterBuyCurrency::buyCurrency(const std::string& name, S32 price)
 {
 	LLFloaterBuyCurrencyUI* ui = LLFloaterReg::showTypedInstance<LLFloaterBuyCurrencyUI>("buy_currency");
+	// <COLOSI opensim multi-currency support>
+	// Not wrapping name here because according to llfloaterbuycurrency.h
+	// name should not include currency symbols as the price will be appended to the string.
+	// If an "L$" is ever included in a name, then we should call Tea::wrapCurrency on it here.
+	// </COLOSI opensim multi-currency support>>
 	ui->target(name, price);
 	ui->updateUI();
 }
 
+// <COLOSI opensim multi-currency support>
+// static
+void LLFloaterBuyCurrency::updateCurrencySymbols()
+{
+	LLFloater* fbc = LLFloaterReg::findInstance("buy_currency");
+	if (fbc != NULL) {
+		// Call update on the floater to update the title
+		fbc->updateCurrencySymbols();
 
+		// update all text boxes with currency symbols.
+		LLTextBox* tb;
+		static const std::list<std::string> sctb = { "info_need_more", "info_buying", "currency_label", "purchase_warning_repurchase", "purchase_warning_notenough" };
+		// Do not include balance_amount and total_amount because they are updated on every display when amounts are replaced.
+		for (std::list<std::string>::const_iterator iter = sctb.begin(); iter != sctb.end(); ++iter) {
+			tb = fbc->getChild<LLTextBox>(*iter);
+			if (tb != NULL) {
+				tb->updateCurrencySymbols();
+			}
+		}
+	}
+}
+// </COLOSI opensim multi-currency support>

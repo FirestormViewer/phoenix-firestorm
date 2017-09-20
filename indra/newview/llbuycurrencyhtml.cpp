@@ -35,6 +35,8 @@
 #include "llviewercontrol.h"
 #include "llstatusbar.h"
 
+#include "tea.h"	<COLOSI opensim multi-currency support />>
+
 // support for secondlife:///app/buycurrencyhtml/{ACTION}/{NEXT_ACTION}/{RETURN_CODE} SLapps
 class LLBuyCurrencyHTMLHandler : 
 	public LLCommandHandler
@@ -132,7 +134,14 @@ void LLBuyCurrencyHTML::showDialog( bool specific_sum_requested, const std::stri
 	if ( buy_currency_floater )
 	{
 		// pass on flag indicating if we want to buy specific amount and if so, how much
-		buy_currency_floater->setParams( specific_sum_requested, message, sum );
+		// <COLOSI opensim multi-currency support>
+		// Unclear if html version is used or if message will ever include "L$"..  
+		// Message is stored as a std::string, not an LLUIString, in indra/newview/llfloaterbuycurrencyhtml.cpp
+		// As long as this is set every time it is displayed, we can just wrap it as below, but if not,
+		// then we should convert this to an LLUIString, unwrap it here so it stores with "L$" and
+		// update it on retrieval.
+		//<COLOSI opensim multi-currency support>
+		buy_currency_floater->setParams( specific_sum_requested, Tea::wrapCurrency(message), sum );
 
 		// force navigate to new URL
 		buy_currency_floater->navigateToFinalURL();

@@ -718,6 +718,16 @@ void LLStatusBar::setBalance(S32 balance)
 	std::string label_str = getString("buycurrencylabel", string_args);
 	mBoxBalance->setValue(label_str);
 
+	// <COLOSI opensim currency support>
+	// Unclear if call to getTextBoundingRect updates text but assuming it calls length()
+	// when getting the bounding box which will update the text and get the length of the
+	// wrapped (Tea::wrapCurrency) text (see lluistring).  If not, and currency symbols 
+	// that are not two characters have the wrong size bounding rect, then the correct
+	// place to fix this is in the getTextBoundingRect() function, not here.
+	// buy_rect below should be properly set to dirty() when we modify the currency and
+	// should also be updated and wrapped before width is determined.
+	// </COLOSI opensim currency support>
+
 	// Resize the L$ balance background to be wide enough for your balance plus the buy button
 	{
 		const S32 HPAD = 24;
@@ -1053,6 +1063,20 @@ void LLStatusBar::showBalance(bool show)
 {
 	mBoxBalance->setVisible(show);
 }
+
+// <COLOSI opensim multi-currency support>
+void LLStatusBar::updateCurrencySymbols()
+{
+	// Update "Buy L$" button because it is only evaluated once when panel is loaded
+	LLButton* buyButton = getChild<LLButton>("buyL");
+	if (buyButton != NULL) {
+		buyButton->updateCurrencySymbols();
+	}
+	// Should not need to update the balance display because it is updated frequently.
+	// If it does require an update, do so via a balance update request so we don't
+	// switch the symbol without updating the balance.
+}
+// </COLOSI opensim multi-currency support>
 
 void LLStatusBar::onBandwidthGraphButtonClicked()
 {

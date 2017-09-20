@@ -41,12 +41,28 @@ public:
 	Tea();
 	~Tea();
 
-	static void setCurrency(const std::string& currency) { sCurrency = currency; }
-	static std::string getCurrency() { return sCurrency; }
+	static void setCurrency(const std::string& currency);
+	static void setRegionCurrency(const std::string& currency);
+	static std::string getCurrency() { return sActiveCurrency; }
 	static std::string wrapCurrency(const std::string& to_substitute);
 	static void wrapCurrency(std::string& to_substitute);
 private:
-	static std::string sCurrency;
+	static std::string sGridCurrency;	// Grid wide default currency symbol eg: L$, G$, D$
+	static std::string sRegionCurrency;	// Region currency symbol override; empty string means use grid symbol
+	static std::string sActiveCurrency;	// Active currency symbol (Grid if region is empty string)
+
+	static void updateActiveCurrencySymbol();	// Updated on...
+							// 	Startup to L$ (default set at top of cpp)
+							// 	Login to Grid Currency (see llstartup)
+							//	HG teleport to new Grid Currency (hopefully also llstartup)
+							//	Entering region with currency module override to Region Currency (see lfsimfeaturehandler)
+							// Ideally, this would trigger an update to mark any LLUIStrings with L$
+							// symbols but without params to dirty to force re-execution and do any
+							// necessary reloads of UI widgets, but llcommon really should include
+							// systems from newview, so we've placed this function in lfsimfeaturehandler
+							// and call it manually.  Aternatively, we could consider registering
+							// that func with Tea to let Tea call it, but for the timebeing, I did
+							// not want to complicate Tea which is rather simple.
 };
 
 #endif //TEA_H

@@ -48,6 +48,7 @@
 #include "llstartup.h"
 
 #include "fscorehttputil.h"
+#include "lfsimfeaturehandler.h"	// <COLOSI opensim multi-currency support />
 
 void downloadError( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState )
 {
@@ -1137,6 +1138,12 @@ std::string LLGridManager::getHelperURI()
 	{
 		return cmd_line_helper_uri;
 	}
+	// <COLOSI opensim multi-currency support>
+	std::string helperUriOverride = LFSimFeatureHandler::getInstance()->helperUriOverride();
+	if(!helperUriOverride.empty()) {
+		return helperUriOverride;
+	}
+	// </COLOSI opensim multi-currency support>>
 	return mGridList[mGrid][GRID_HELPER_URI_VALUE];
 }
 

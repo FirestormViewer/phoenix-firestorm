@@ -61,7 +61,19 @@ class LFSimFeatureHandler : public LLSingleton<LFSimFeatureHandler>
 
 public:
 	void handleRegionChange();
+	void onSimulatorFeaturesReceived(const LLUUID &region_id);
 	void setSupportedFeatures();
+	// <COLOSI opensim multi-currency support>
+	// public helper to manage all the manual updates in one place callable from other systems like llstartup.
+	// Should be called whenever the sActiveCurrency in Tea is changed, but can't simply be called from Tea
+	// because that is an llcommon include and really shouldn't call out to newview system.
+	// updating the currency in Tea updates any dynamic LLUIStrings automatically when a param is replaced on the next get call,
+	// but static LLUIStrings for floaters/panels/etc pre-loaded are only evaluated once, so these need to be manually updated
+	// after we update the currency symbol in Tea.  This function handles that.  As we discover more UI components which we've
+	// missed, they can be added to this function.  For now, it primaily handles the status panel (top bar) and the buy currency floater.
+	// If there is a better location for this function, we could move it.
+	static void updateCurrencySymbols();
+	// </COLOSI opensim multi-currency support>
 
 	// Connection setters
 	boost::signals2::connection setSupportsExportCallback(const boost::signals2::signal<void()>::slot_type& slot);
@@ -91,6 +103,11 @@ public:
 	bool hasAvatarPicker() const { return mHasAvatarPicker; }
 	bool hasDestinationGuide() const { return mHasDestinationGuide; }
 
+	// <COLOSI opensim multi-currency support>
+	std::string helperUriOverride() const { return mHelperUriOverride; }
+	std::string currencySymbolOverride() const { return mCurrencySymbolOverride; }
+	// </COLOSI opensim multi-currency support>
+
 private:
 	// SignaledTypes
 	SignaledType<bool> mSupportsExport;
@@ -109,6 +126,11 @@ private:
 
 	bool mHasAvatarPicker;
 	bool mHasDestinationGuide;
+
+	// <COLOSI opensim multi-currency support>
+	std::string mHelperUriOverride;
+	std::string mCurrencySymbolOverride;
+	// </COLOSI opensim multi-currency support>>
 };
 
 #endif //LFSIMFEATUREHANDLER_H

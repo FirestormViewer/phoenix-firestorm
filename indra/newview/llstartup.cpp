@@ -4518,6 +4518,10 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	}
 	// </FS:AW>
 
+	// <COLOSI opensim multi-currency support>
+	std::string prev_currency_symbol = Tea::getCurrency();
+	// </COLOSI opensim multi-currency support>
+
 // <FS:AW opensim currency support>
 	std::string currency = "L$";
 #ifdef OPENSIM // <FS:AW optional opensim support>
@@ -4533,6 +4537,16 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	}
 	Tea::setCurrency(currency);
 // </FS:AW opensim currency support>
+
+	// <COLOSI  opensim multi-currency support>
+	// Blank out the region currency which is set in in lfsimfeatureshandler
+	Tea::setRegionCurrency(LLStringUtil::null);
+	std::string new_currency_symbol = Tea::getCurrency();
+	// If currency symbol has changed, update currency symbols where manually necessary.
+	if (new_currency_symbol != prev_currency_symbol) {
+		LFSimFeatureHandler::updateCurrencySymbols();
+	}
+	// </COLOSI opensim multi-currency support>
 
 // <FS:AW  opensim destinations and avatar picker>
 	if(response.has("avatar_picker_url"))
