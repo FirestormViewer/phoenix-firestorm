@@ -34,7 +34,7 @@
 #include "llstreamingaudio_fmodex.h"
 
 // <FS> FMOD fixes
-inline bool Check_FMOD_Error(FMOD_RESULT result, const char *string)
+static inline bool Check_FMOD_Error(FMOD_RESULT result, const char *string)
 {
 	if (result == FMOD_OK)
 		return false;

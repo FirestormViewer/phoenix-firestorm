@@ -454,6 +454,7 @@
 				Art der physischen Form:
 			</text>
 			<combo_box name="Physics Shape Type Combo Ctrl" tool_tip="Art der physischen Form auswählen"/>
+			<button name="PhysicsViewToggle" tool_tip="Schaltet die Ansicht der physischen Form um"/>
 			<combo_box name="material">
 				<combo_box.item label="Stein" name="Stone"/>
 				<combo_box.item label="Metall" name="Metal"/>

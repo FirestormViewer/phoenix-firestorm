@@ -608,6 +608,9 @@ void LLPanelVolume::clearCtrls()
 	mSpinPhysicsDensity->setEnabled(FALSE);
 	mSpinPhysicsRestitution->setEnabled(FALSE);
 
+	//<FS:Beq> physics view changes
+	getChildView("PhysicsViewToggle")->setEnabled(true);
+	//</FS:Beq>
 	mComboMaterial->setEnabled( FALSE );
 }
 
