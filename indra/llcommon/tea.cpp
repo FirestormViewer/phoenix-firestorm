@@ -61,9 +61,12 @@ void Tea::setRegionCurrency(const std::string& currency)
 
 void Tea::updateActiveCurrencySymbol()
 {
-	if(!sRegionCurrency.empty()) {
+	if(!sRegionCurrency.empty())
+	{
 		sActiveCurrency = sRegionCurrency;
-	} else {
+	}
+	else
+	{
 		sActiveCurrency = sGridCurrency;
 	}
 }

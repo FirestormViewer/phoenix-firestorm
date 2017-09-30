@@ -859,6 +859,11 @@ void LLFloaterBuyLandUI::startTransaction(TransactionType type, const LLXMLRPCVa
 
 	// Select a URI and method appropriate for the transaction type.
 	// <COLOSI  opensim multi-currency support>
+	//static std::string transaction_uri;
+	//if (transaction_uri.empty())
+	//{
+	//	transaction_uri = LLGridManager::getInstance()->getHelperURI() + "landtool.php";
+	//}
 	// Previously, transaction_uri was a static local var only set once.  This needs
 	// to update on HG teleport or crossing regions to a new currency module.
 	// Set every time as this action should be infrequent and efficient.

@@ -4543,7 +4543,8 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	Tea::setRegionCurrency(LLStringUtil::null);
 	std::string new_currency_symbol = Tea::getCurrency();
 	// If currency symbol has changed, update currency symbols where manually necessary.
-	if (new_currency_symbol != prev_currency_symbol) {
+	if (new_currency_symbol != prev_currency_symbol)
+	{
 		LFSimFeatureHandler::updateCurrencySymbols();
 	}
 	// </COLOSI opensim multi-currency support>

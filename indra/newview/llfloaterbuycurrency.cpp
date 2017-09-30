@@ -317,17 +317,20 @@ void LLFloaterBuyCurrency::buyCurrency(const std::string& name, S32 price)
 void LLFloaterBuyCurrency::updateCurrencySymbols()
 {
 	LLFloater* fbc = LLFloaterReg::findInstance("buy_currency");
-	if (fbc != NULL) {
+	if (fbc)
+	{
 		// Call update on the floater to update the title
 		fbc->updateCurrencySymbols();
 
 		// update all text boxes with currency symbols.
-		LLTextBox* tb;
+		LLTextBox* tb = NULL;
 		static const std::list<std::string> sctb = { "info_need_more", "info_buying", "currency_label", "purchase_warning_repurchase", "purchase_warning_notenough" };
 		// Do not include balance_amount and total_amount because they are updated on every display when amounts are replaced.
-		for (std::list<std::string>::const_iterator iter = sctb.begin(); iter != sctb.end(); ++iter) {
-			tb = fbc->getChild<LLTextBox>(*iter);
-			if (tb != NULL) {
+		for (std::list<std::string>::const_iterator iter = sctb.begin(); iter != sctb.end(); ++iter)
+		{
+			tb = fbc->findChild<LLTextBox>(*iter);
+			if (tb)
+			{
 				tb->updateCurrencySymbols();
 			}
 		}

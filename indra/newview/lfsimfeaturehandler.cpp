@@ -167,15 +167,21 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			}
 
 			// <COLOSI opensim multi-currency support>
-			if (extras.has("currency-base-uri")) {
+			if (extras.has("currency-base-uri"))
+			{
 				mHelperUriOverride = extras["currency-base-uri"].asString();
-			} else {
-					mHelperUriOverride = LLStringUtil::null;
+			}
+			else
+			{
+				mHelperUriOverride = LLStringUtil::null;
 			}
 
-			if (extras.has("currency")) {
+			if (extras.has("currency"))
+			{
 				mCurrencySymbolOverride = extras["currency"].asString();
-			} else {
+			}
+			else
+			{
 				mCurrencySymbolOverride = LLStringUtil::null;
 			}
 			// </COLOSI opensim multi-currency support>
@@ -238,14 +244,15 @@ void LFSimFeatureHandler::setSupportedFeatures()
 		mHasDestinationGuide = !destinationGuideURL().empty();
 		
 		// <COLOSI opensim multi-currency support>
-		std::string prevCurrencySymbol = Tea::getCurrency();
+		std::string prev_currency_symbol = Tea::getCurrency();
 		Tea::setRegionCurrency(mCurrencySymbolOverride);
-		std::string newCurrencySymbol = Tea::getCurrency();
+		std::string new_currency_symbol = Tea::getCurrency();
 		// If currency symbol has changed, then update things
-		if (newCurrencySymbol != prevCurrencySymbol) {
+		if (new_currency_symbol != prev_currency_symbol)
+		{
 			LFSimFeatureHandler::updateCurrencySymbols();
 		}
-		// </COLOSI opensim multi-currency support>		
+		// </COLOSI opensim multi-currency support>
 	}
 }
 
@@ -256,7 +263,8 @@ void LFSimFeatureHandler::updateCurrencySymbols()
 	// Update the static ui for the buy_currency_floater xml version; html version may require additional work.
 	LLFloaterBuyCurrency::updateCurrencySymbols();
 	// Update the necessary compontents of the status bar panel
-	if (gStatusBar != NULL) {
+	if (gStatusBar)
+	{
 		gStatusBar->updateCurrencySymbols();
 	}
 	// TODO: What else needs to be updated?

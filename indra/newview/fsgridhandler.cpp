@@ -1140,7 +1140,8 @@ std::string LLGridManager::getHelperURI()
 	}
 	// <COLOSI opensim multi-currency support>
 	std::string helperUriOverride = LFSimFeatureHandler::getInstance()->helperUriOverride();
-	if(!helperUriOverride.empty()) {
+	if (!helperUriOverride.empty())
+	{
 		return helperUriOverride;
 	}
 	// </COLOSI opensim multi-currency support>>

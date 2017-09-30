@@ -280,6 +280,11 @@ void LLCurrencyUIManager::Impl::startTransaction(TransactionType type,
 		const char* method, LLXMLRPCValue params)
 {
 	// <COLOSI opensim multi-currency support>
+	//static std::string transactionURI;
+	//if (transactionURI.empty())
+	//{
+	//	transactionURI = LLGridManager::getInstance()->getHelperURI() + "currency.php";
+	//}
 	// Previously, transactionURI was a static local var only set once.  This needs
 	// to update on HG teleport or crossing regions to a new currency module.
 	// Set every time as this action should be infrequent and efficient.

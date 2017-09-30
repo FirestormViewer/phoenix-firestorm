@@ -1068,8 +1068,9 @@ void LLStatusBar::showBalance(bool show)
 void LLStatusBar::updateCurrencySymbols()
 {
 	// Update "Buy L$" button because it is only evaluated once when panel is loaded
-	LLButton* buyButton = getChild<LLButton>("buyL");
-	if (buyButton != NULL) {
+	LLButton* buyButton = findChild<LLButton>("buyL");
+	if (buyButton)
+	{
 		buyButton->updateCurrencySymbols();
 	}
 	// Should not need to update the balance display because it is updated frequently.
