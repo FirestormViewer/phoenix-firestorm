@@ -3695,6 +3695,13 @@ Voice-Kommunikation ist leider nicht verfügbar.
 Bitte überprüfen Sie Ihr Netzwerk- und Firewall-Setup.
 		<usetemplate name="okignore" yestext="OK" ignoretext="Warnen, wenn keine Verbindung zum Voice-Server hergestellt werden kann."/>
 	</notification>
+	<notification name="NoVoiceConnect-GIAB">
+		Verbindung mit Voice-Server ist leider nicht möglich:
+
+Voice-Kommunikation ist leider nicht verfügbar.
+Bitte überprüfen Sie Ihr Netzwerk- und Firewall-Setup.
+		<usetemplate name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="AvatarRezLeftNotification">
 		(Seit [EXISTENCE] Sekunden inworld )
 Avatar &apos;[NAME]&apos; hat als vollständig gerezzter Avatar die Welt verlassen.
