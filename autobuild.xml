@@ -799,9 +799,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ec71ffd68af829bf77fb03fdf39c2461</string>
+              <string>bbdea742f2a89bcd6360e61e01d6be93</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/7820/30257/dullahan-1.1.813_3.3071.1637.gcb6cf75-darwin64-507809.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8207/32592/dullahan-1.1.820_3.3071.1637.gcb6cf75-darwin64-508196.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -811,9 +811,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>234547cab68748f82e429237d5a46783</string>
+              <string>31e11a74e0d3f1e5e4036cb5fea8d944</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/7822/30267/dullahan-1.1.813_3.3071.1634.g9cc59c8-windows-507809.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8209/32599/dullahan-1.1.820_3.3071.1634.g9cc59c8-windows-508196.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -823,9 +823,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c3bcb52276cb115577e8c0cd053b8fc7</string>
+              <string>f965d244e7921c06ee79b68a4abcea3b</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/7821/30264/dullahan-1.1.813_3.3071.1634.g9cc59c8-windows64-507809.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8208/32602/dullahan-1.1.820_3.3071.1634.g9cc59c8-windows64-508196.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -856,7 +856,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>1.1.813_3.3071.1634.g9cc59c8</string>
+        <string>1.1.820_3.3071.1634.g9cc59c8</string>
       </map>
       <key>elfio</key>
       <map>
@@ -3443,9 +3443,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0a5cc9172214a0a20f2d78f5cb16844d</string>
+              <string>0d65bb763808feffb6308914aa53272b</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8213/32619/viewer_manager-1.0.508202-darwin64-508202.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8942/38652/viewer_manager-1.0.508931-darwin64-508931.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3467,9 +3467,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ca78e324fe75ac097bdbadb91181cfa7</string>
+              <string>c235c6ef33f52b0130808fe57710fe35</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8216/32625/viewer_manager-1.0.508202-windows-508202.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8943/38658/viewer_manager-1.0.508931-windows-508931.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3480,7 +3480,7 @@
         <key>source_type</key>
         <string>hg</string>
         <key>version</key>
-        <string>1.0.508202</string>
+        <string>1.0.508931</string>
       </map>
       <key>vlc-bin</key>
       <map>
