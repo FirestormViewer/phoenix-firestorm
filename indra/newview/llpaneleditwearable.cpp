@@ -262,8 +262,6 @@ LLEditWearableDictionary::WearableEntry::WearableEntry(LLWearableType::EType typ
         mTextureCtrls(texture_pickers)
 {}
 
-		va_end( argp ); // <FS:ND/> Need to clean up
-
 LLEditWearableDictionary::Subparts::Subparts()
 {
         addEntry(SUBPART_SHAPE_WHOLE, new SubpartEntry(SUBPART_SHAPE_WHOLE, "mPelvis", "shape_body","shape_body_param_list", "shape_body_tab", LLVector3d(0.f, 0.f, 0.1f), LLVector3d(-2.5f, 0.5f, 0.8f),SEX_BOTH));
