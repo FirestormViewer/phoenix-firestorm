@@ -72,6 +72,13 @@ static const struct
 		"",
 		"other"
 	},
+	// <FS:Beq> Avoid stall in texture fetch due to asset fetching. [Drake]
+	{ // AP_ASSET
+		12,		1,		16,		0,		true,
+		"AssetFetchConcurrency",
+		"asset fetch"
+	},
+	// </FS:Beq>
 	{ // AP_TEXTURE
 		8,		1,		12,		0,		true,
 		"TextureFetchConcurrency",

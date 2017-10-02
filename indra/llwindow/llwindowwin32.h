@@ -221,6 +221,9 @@ protected:
 	U32				mRawWParam;
 	U32				mRawLParam;
 
+	// <FS:Ansariel> Respect "Hide pointer while typing" Windows preference setting
+	BOOL			mMouseVanish;
+
 	friend class LLWindowManager;
 // <FS:ND> Allow to query for window chrome sizes.
 public:

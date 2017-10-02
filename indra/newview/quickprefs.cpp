@@ -2098,7 +2098,14 @@ void FloaterQuickPrefs::onAvatarZOffsetSliderMoved()
 	LL_INFOS("Avatar") << "setting hover from slider moved" << offset[VZ] << LL_ENDL;
 	if (gAgent.getRegion() && gAgent.getRegion()->avatarHoverHeightEnabled())
 	{
-		gAgentAvatarp->setHoverOffset(offset, false);
+		if (mAvatarZOffsetSlider->isMouseHeldDown())
+		{
+			gAgentAvatarp->setHoverOffset(offset, false);
+		}
+		else
+		{
+			gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", value);
+		}
 	}
 	else if (!gAgentAvatarp->isUsingServerBakes())
 	{
