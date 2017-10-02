@@ -31,9 +31,8 @@ out vec4 frag_color;
 
 //class 1 -- no shadows
 
-// <FS> Fix GLSL compatibility
-//#extension GL_ARB_texture_rectangle : enable
-//#extension GL_ARB_shader_texture_lod : enable
+#extension GL_ARB_texture_rectangle : enable
+#extension GL_ARB_shader_texture_lod : enable
 
 uniform sampler2DRect diffuseRect;
 uniform sampler2DRect specularRect;

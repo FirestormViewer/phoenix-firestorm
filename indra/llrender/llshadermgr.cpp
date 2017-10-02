@@ -600,10 +600,6 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 		if (minor_version <= 19)
 		{
 			text[count++] = strdup("#version 110\n");
-			// <FS> Fix GLSL compatibility
-			text[count++] = strdup("#extension GL_ARB_texture_rectangle : enable\n");
-			text[count++] = strdup("#extension GL_ARB_shader_texture_lod : enable\n");
-			// </FS>
 			text[count++] = strdup("#define ATTRIBUTE attribute\n");
 			text[count++] = strdup("#define VARYING varying\n");
 			text[count++] = strdup("#define VARYING_FLAT varying\n");
@@ -612,10 +608,6 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 		{
 			//set version to 1.20
 			text[count++] = strdup("#version 120\n");
-			// <FS> Fix GLSL compatibility
-			text[count++] = strdup("#extension GL_ARB_texture_rectangle : enable\n");
-			text[count++] = strdup("#extension GL_ARB_shader_texture_lod : enable\n");
-			// </FS>
 			text[count++] = strdup("#define FXAA_GLSL_120 1\n");
 			text[count++] = strdup("#define FXAA_FAST_PIXEL_OFFSET 0\n");
 			text[count++] = strdup("#define ATTRIBUTE attribute\n");
@@ -629,10 +621,6 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 		{
 			//set version to 1.30
 			text[count++] = strdup("#version 130\n");
-			// <FS> Fix GLSL compatibility
-			text[count++] = strdup("#extension GL_ARB_texture_rectangle : enable\n");
-			text[count++] = strdup("#extension GL_ARB_shader_texture_lod : enable\n");
-			// </FS>
 
 			//some implementations of GLSL 1.30 require integer precision be explicitly declared
 			text[count++] = strdup("precision mediump int;\n");
@@ -641,9 +629,6 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 		else
 		{ //set version to 400
 			text[count++] = strdup("#version 400\n");
-			// <FS> Fix GLSL compatibility
-			text[count++] = strdup("#extension GL_ARB_shader_texture_lod : enable\n");
-			// </FS>
 		}
 
 		text[count++] = strdup("#define DEFINE_GL_FRAGCOLOR 1\n");
