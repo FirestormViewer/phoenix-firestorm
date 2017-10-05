@@ -3,7 +3,7 @@
  name="linkreplace"
  help_topic="linkreplace"
  positioning="centered"
- title="REPLACE INVENTORY LINKS"
+ title="Replace Inventory Links"
  width="333"
  height="130"
  save_rect="true"

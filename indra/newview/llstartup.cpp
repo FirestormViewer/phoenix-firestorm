@@ -1132,13 +1132,16 @@ bool idle_startup()
 			// Show the login dialog
 			login_show();
 			// connect dialog is already shown, so fill in the names
-			if (gUserCredential.notNull())
+			// <FS:CR>
+			//if (gUserCredential.notNull() && !LLPanelLogin::isCredentialSet())
+			//{
+			//	LLPanelLogin::setFields( gUserCredential, gRememberPassword);
+			//}
+			if (gUserCredential.notNull() && !FSPanelLogin::isCredentialSet())
 			{
-// <FS:CR>
-				//LLPanelLogin::setFields( gUserCredential, gRememberPassword);
 				FSPanelLogin::setFields(gUserCredential, true);
-// </FS:CR>
 			}
+			// </FS:CR>
 			// <FS:Ansariel> [FS Login Panel]
 			//LLPanelLogin::giveFocus();
 			FSPanelLogin::giveFocus();
