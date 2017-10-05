@@ -2502,7 +2502,7 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 	</notification>
 	<notification name="ConfirmClearAllToybox">
 		Durch diese Aktion werden alle Schaltflächen zurück in die Toolbox gestellt; die Symbolleisten sind leer.
-    
+
 Diese Aktion kann nicht rückgängig gemacht werden.
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>

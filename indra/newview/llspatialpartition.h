@@ -40,6 +40,9 @@
 #include "llface.h"
 #include "llviewercamera.h"
 #include "llvector4a.h"
+//<FS:Beq> needed to resolve render_hull dep
+#include "llmodel.h"
+//</FS:Beq>
 #include <queue>
 
 #define SG_STATE_INHERIT_MASK (OCCLUDED)
@@ -54,6 +57,14 @@ class LLTextureAtlasSlot;
 class LLViewerRegion;
 
 void pushVerts(LLFace* face, U32 mask);
+//<FS:BEQ> Make helper functions externally visible for use from viewerwindow
+void pushVerts(LLVolume* volume);
+void drawBoxOutline(const LLVector3& pos, const LLVector3& size);
+void drawBox(const LLVector3& c, const LLVector3& r);
+S32 get_physics_detail(const LLVolumeParams& volume_params, const LLVector3& scale);
+void renderMeshBaseHull(LLVOVolume* volume, U32 data_mask, LLColor4& color, LLColor4& line_color);
+void render_hull(LLModel::PhysicsMesh& mesh, const LLColor4& color, const LLColor4& line_color);
+//</FS:BEQ>
 
 class LLDrawInfo : public LLRefCount, public LLTrace::MemTrackableNonVirtual<LLDrawInfo, 16>
 {

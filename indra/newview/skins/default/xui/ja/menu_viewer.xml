@@ -99,6 +99,7 @@
             <menu_item_separator/>
             <menu_item_check label="プレビュー..." name="Preview" />
 			<menu_item_call label="購入..." name="Subscribe" />
+			<menu_item_call label="プレミアム特典..." name="PremiumPerk" />
         </menu>
 		<menu_item_check name="Conversation Log..." label="会話ログ..." />
         <!--
@@ -209,6 +210,7 @@
 		<menu_item_call label="アニメーションエクスプローラ" name="Animation Explorer" />
 		<menu_item_call label="非表示アイテムリスト" name="asset_blacklist"/>
 		<menu_item_call label="アバターの表示設定" name="Avatar Render Settings" />
+		<menu_item_check label="フレンドは常に通常表示" name="Always show Friends normally" />
 		<menu_item_check label="フレンドのみ表示" name="Render Friends Only" />
 	</menu>
 	
@@ -260,7 +262,7 @@
 		</menu>
 		
 		<menu label="パスファインディング" name="Pathfinding">
-			<menu_item_call label="リンクセット..." name="pathfinding_linksets_menu_item"/>
+			<menu_item_call label="地域のオブジェクト" name="pathfinding_linksets_menu_item"/>
 			<menu_item_call label="キャラクター..." name="pathfinding_characters_menu_item"/>
 			<menu_item_call label="表示／テスト..." name="pathfinding_console_menu_item"/>
 			<menu_item_call label="地域を再描画" name="pathfinding_rebake_navmesh_item"/>

@@ -115,7 +115,14 @@ void LLFloaterHoverHeight::onSliderMoved(LLUICtrl* ctrl, void* userData)
 	//gAgentAvatarp->setHoverOffset(offset, false);
 	if (gAgent.getRegion() && gAgent.getRegion()->avatarHoverHeightEnabled())
 	{
-		gAgentAvatarp->setHoverOffset(offset, false);
+		if (sldrCtrl->isMouseHeldDown())
+		{
+			gAgentAvatarp->setHoverOffset(offset, false);
+		}
+		else
+		{
+			gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", value);
+		}
 	}
 	else if (!gAgentAvatarp->isUsingServerBakes())
 	{

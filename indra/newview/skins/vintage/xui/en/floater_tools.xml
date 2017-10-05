@@ -2714,20 +2714,35 @@ even though the user gets a free copy.
              width="130">
                 Physics Shape Type:
             </text>
-			<combo_box
-			   height="19"
-			   top_delta="15" 
-			   layout="topleft"
-			   follows="left|top"
-			   name="Physics Shape Type Combo Ctrl"
-			   tool_tip="Choose the physics shape type"
-			   width="108"/>
-            <combo_box
+			    <combo_box
+			       height="19"
+			       top_delta="15" 
+			       layout="topleft"
+			       follows="left|top"
+			       name="Physics Shape Type Combo Ctrl"
+			       tool_tip="Choose the physics shape type"
+			       width="108"/>
+          <button
+             follows="left|top"
+             height="19"
+             is_toggle="true"
+             control_name="ShowPhysicsShapeInEdit"
+             image_disabled="PhysicsView_Off"
+             image_disabled_selected="PhysicsView_Off"
+             image_selected="PhysicsView_On"
+             image_unselected="PhysicsView_Off"
+             layout="topleft"
+             left_delta="117"
+             name="PhysicsViewToggle"
+             tool_tip="Toggle the physics view on in edit mode"
+             width="19"/>
+          <combo_box
              height="19"
              layout="topleft"
              name="material"
              top_pad="5"
-             width="150">
+             width="150"
+             left="144">
                 <combo_box.item
                  label="Stone"
                  name="Stone"

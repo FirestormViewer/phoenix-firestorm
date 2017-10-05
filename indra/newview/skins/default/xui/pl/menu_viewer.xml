@@ -196,6 +196,7 @@
 			<menu_item_check label="Wybierz tylko obiekty kopiowalne" name="Select Only Copyable Objects"/>
 			<menu_item_check label="Dołącz obiekty, których właścicielem jest grupa" name="Include Group-Owned Objects"/>
 			<menu_item_check label="Wybierz przez otoczenie" name="Select By Surrounding"/>
+			<menu_item_check label="Pokaż kształty fizyczne w trybie edycji" name="Show Physics Shape" />
 			<menu_item_check label="Pokaż kontury selekcji" name="Show Selection Outlines"/>
 			<menu_item_check label="Zobacz ukrytą selekcję" name="Show Hidden Selection"/>
 			<menu_item_check label="Pokaż promień światła dla selekcji" name="Show Light Radius for Selection"/>
