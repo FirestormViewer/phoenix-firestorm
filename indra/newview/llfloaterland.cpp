@@ -525,10 +525,7 @@ BOOL LLPanelLandGeneral::postBuild()
 	// note: on region change this will not be re checked, should not matter on Agni as
 	// 99% of the time all regions will return the same caps. In case of an erroneous setting
 	// to enabled the floater will just throw an error when trying to get it's cap
-	// <FS:Ansariel> Crash fix
-	//std::string url = gAgent.getRegion()->getCapability("LandResources");
-	std::string url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("LandResources") : LLStringUtil::null;
-	// </FS:Ansariel>
+	std::string url = gAgent.getRegionCapability("LandResources");
 	if (!url.empty())
 	{
 		if(mBtnScriptLimits)
