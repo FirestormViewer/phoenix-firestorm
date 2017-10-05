@@ -58,8 +58,10 @@ public:
 		void* callback_data);
 
 	static void setFields(LLPointer<LLCredential> credential, BOOL remember);
-
+  
 	static void getFields(LLPointer<LLCredential>& credential, BOOL& remember);
+
+	static BOOL isCredentialSet() { return sCredentialSet; }
 
 	static BOOL areCredentialFieldsDirty();
 	static void setLocation(const LLSLURL& slurl);
@@ -117,6 +119,8 @@ private:
 	static LLPanelLogin* sInstance;
 	static BOOL		sCapslockDidNotification;
 	bool			mFirstLoginThisInstall;
+    
+    static BOOL sCredentialSet;
 
 	unsigned int mUsernameLength;
 	unsigned int mPasswordLength;

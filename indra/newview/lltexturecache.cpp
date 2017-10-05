@@ -53,6 +53,7 @@ const F32 TEXTURE_CACHE_PURGE_AMOUNT = .20f; // % amount to reduce the cache by 
 const F32 TEXTURE_CACHE_LRU_SIZE = .10f; // % amount for LRU list (low overhead to regenerate)
 const S32 TEXTURE_FAST_CACHE_ENTRY_OVERHEAD = sizeof(S32) * 4; //w, h, c, level
 const S32 TEXTURE_FAST_CACHE_ENTRY_SIZE = 16 * 16 * 4 + TEXTURE_FAST_CACHE_ENTRY_OVERHEAD;
+const F32 TEXTURE_LAZY_PURGE_TIME_LIMIT = .01f; // 10ms
 
 class LLTextureCacheWorker : public LLWorkerClass
 {
@@ -550,9 +551,11 @@ bool LLTextureCacheRemoteWorker::doWrite()
 	{
 		if ((mOffset != 0) // We currently do not support write offsets
 			|| (mDataSize <= 0) // Things will go badly wrong if mDataSize is nul or negative...
-			|| (mImageSize < mDataSize))
+			|| (mImageSize < mDataSize)
+			|| (mRawDiscardLevel < 0)
+			|| (mRawImage->isBufferInvalid())) // decode failed or malfunctioned, don't write
 		{
-			LL_WARNS() << "INIT state check failed" << LL_ENDL;
+			LL_WARNS() << "INIT state check failed for image: " << mID << " Size: " << mImageSize << " DataSize: " << mDataSize << " Discard:" << mRawDiscardLevel << LL_ENDL;
 			mDataSize = -1; // failed
 			done = true;
 		}
@@ -577,15 +580,12 @@ bool LLTextureCacheRemoteWorker::doWrite()
 			idx = mCache->setHeaderCacheEntry(mID, entry, mImageSize, mDataSize); // create the new entry.
 			if(idx >= 0)
 			{
-				// (almost always) write to the fast cache.
-				if (mRawImage->getDataSize())
+				// write to the fast cache.
+				if(!mCache->writeToFastCache(idx, mRawImage, mRawDiscardLevel))
 				{
-					if(!mCache->writeToFastCache(idx, mRawImage, mRawDiscardLevel))
-					{
-						LL_WARNS() << "writeToFastCache failed" << LL_ENDL;
-						mDataSize = -1; // failed
-						done = true;
-					}
+					LL_WARNS() << "writeToFastCache failed" << LL_ENDL;
+					mDataSize = -1; // failed
+					done = true;
 				}
 			}
 		}
@@ -1667,6 +1667,92 @@ void LLTextureCache::purgeAllTextures(bool purge_directories)
 	LL_INFOS() << "The entire texture cache is cleared." << LL_ENDL ;
 }
 
+void LLTextureCache::purgeTexturesLazy(F32 time_limit)
+{
+	if (mReadOnly)
+	{
+		return;
+	}
+
+	if (!mThreaded)
+	{
+		// *FIX:Mani - watchdog off.
+		LLAppViewer::instance()->pauseMainloopTimeout();
+	}
+
+	// time_limit doesn't account for lock time
+	LLMutexLock lock(&mHeaderMutex);
+
+	if (mPurgeEntryList.empty())
+	{
+		// Read the entries list and form list of textures to purge
+		std::vector<Entry> entries;
+		U32 num_entries = openAndReadEntries(entries);
+		if (!num_entries)
+		{
+			return; // nothing to purge
+		}
+
+		// Use mTexturesSizeMap to collect UUIDs of textures with bodies
+		typedef std::set<std::pair<U32, S32> > time_idx_set_t;
+		std::set<std::pair<U32, S32> > time_idx_set;
+		for (size_map_t::iterator iter1 = mTexturesSizeMap.begin();
+			iter1 != mTexturesSizeMap.end(); ++iter1)
+		{
+			if (iter1->second > 0)
+			{
+				id_map_t::iterator iter2 = mHeaderIDMap.find(iter1->first);
+				if (iter2 != mHeaderIDMap.end())
+				{
+					S32 idx = iter2->second;
+					time_idx_set.insert(std::make_pair(entries[idx].mTime, idx));
+				}
+				else
+				{
+					LL_ERRS() << "mTexturesSizeMap / mHeaderIDMap corrupted." << LL_ENDL;
+				}
+			}
+		}
+
+		S64 cache_size = mTexturesSizeTotal;
+		S64 purged_cache_size = (sCacheMaxTexturesSize * (S64)((1.f - TEXTURE_CACHE_PURGE_AMOUNT) * 100)) / 100;
+		for (time_idx_set_t::iterator iter = time_idx_set.begin();
+			iter != time_idx_set.end(); ++iter)
+		{
+			S32 idx = iter->second;
+			if (cache_size >= purged_cache_size)
+			{
+				cache_size -= entries[idx].mBodySize;
+				mPurgeEntryList.push_back(std::pair<S32, Entry>(idx, entries[idx]));
+			}
+			else
+			{
+				break;
+			}
+		}
+		LL_DEBUGS() << "Formed Purge list of " << mPurgeEntryList.size() << " entries" << LL_ENDL;
+	}
+	else
+	{
+		// Remove collected entried
+		LLTimer timer;
+		while (!mPurgeEntryList.empty() && timer.getElapsedTimeF32() < time_limit)
+		{
+			S32 idx = mPurgeEntryList.back().first;
+			Entry entry = mPurgeEntryList.back().second;
+			mPurgeEntryList.pop_back();
+			// make sure record is still valid
+			id_map_t::iterator iter_header = mHeaderIDMap.find(entry.mID);
+			if (iter_header != mHeaderIDMap.end() && iter_header->second == idx)
+			{
+				std::string tex_filename = getTextureFileName(entry.mID);
+				removeEntry(idx, entry, tex_filename);
+				writeEntryToHeaderImmediately(idx, entry);
+			}
+		}
+	}
+}
+
 void LLTextureCache::purgeTextures(bool validate)
 {
 	if (mReadOnly)
@@ -1920,11 +2006,10 @@ LLTextureCache::handle_t LLTextureCache::writeToCache(const LLUUID& id, U32 prio
 	}
 	if (mDoPurge)
 	{
-		// NOTE: This may cause an occasional hiccup,
-		//  but it really needs to be done on the control thread
-		//  (i.e. here)		
-		purgeTextures(false);
-		mDoPurge = FALSE;
+		// NOTE: Needs to be done on the control thread
+		//  (i.e. here)
+		purgeTexturesLazy(TEXTURE_LAZY_PURGE_TIME_LIMIT);
+		mDoPurge = !mPurgeEntryList.empty();
 	}
 
 	// <FS:ND> There seems to be an edge case of KDU failing to decode images and then we end with null data here.
