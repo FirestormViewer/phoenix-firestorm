@@ -147,7 +147,8 @@
                 layout="topleft"
                 top_pad="1"
                 value="2"/>
-            </radio_group> 
+            </radio_group>
+            <!-- Removed (again) to prefer the name and location of the FS control
             <check_box
              control_name="SyncMaterialSettings"
              follows="top|left"
@@ -160,6 +161,7 @@
              tool_tip="Adjust all maps repeats simultaneously"
              top_pad="-16"
              width="160" />
+             -->
             <texture_picker
              can_apply_immediately="true"
              default_image_name="Default"
@@ -815,15 +817,16 @@
              tool_tip="Align textures on all selected faces with the last selected face. Requires Planar texture mapping."
              top_pad="2"
              width="203" />
+            <!-- FS:Beq use Linden Lab control_name with FS control definition (also removes the typo in "syncronize" yay )-->
             <check_box
-             control_name="FSSyncronizeTextureMaps"
+             control_name="SyncMaterialSettings"
              follows="top|left"
              height="16"
              label="Synchronize materials"
              layout="topleft"
              left="7"
              top_pad="0"
-             name="checkbox maps sync"
+             name="checkbox_sync_settings"
              tool_tip="Synchronize texture map parameters"
              width="199" />
             <button

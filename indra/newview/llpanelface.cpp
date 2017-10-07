@@ -163,7 +163,10 @@ BOOL	LLPanelFace::postBuild()
 	childSetCommitCallback("maskcutoff",&LLPanelFace::onCommitMaterialMaskCutoff, this);
 	
 	// <FS:CR>
-	childSetCommitCallback("checkbox maps sync", &LLPanelFace::onClickMapsSync, this);
+	// <FS:Beq> FIRE-21375 use LL setting name as part of the material sync changes (FIRE-21375)
+	//	childSetCommitCallback("checkbox maps sync", &LLPanelFace::onClickMapsSync, this);
+	// </FS:Beq>
+	childSetCommitCallback("checkbox_sync_settings", &LLPanelFace::onClickMapsSync, this);
 	childSetAction("copytextures",&LLPanelFace::onClickCopy,this);
 	childSetAction("pastetextures",&LLPanelFace::onClickPaste,this);
 	
@@ -764,7 +767,10 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 		getChildView("button align")->setEnabled(editable);
 		
 		// <FS>
-		BOOL enable_material_controls = (!gSavedSettings.getBOOL("FSSyncronizeTextureMaps"));
+		// <FS:Beq> FIRE-21375 use LL setting name as part of the material sync changes (FIRE-21375)
+		// BOOL enable_material_controls = (!gSavedSettings.getBOOL("FSSyncronizeTextureMaps"));
+		BOOL enable_material_controls = (!gSavedSettings.getBOOL("SyncMaterialSettings"));
+		// </FS:Beq> 
 		S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
 		BOOL single_volume = ((LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
 							  && (selected_count == 1));
@@ -1111,7 +1117,10 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 			// <FS:CR> FIRE-11407 - Materials alignment
 			// <FS:TS> FIRE-11911 - Synchronize materials doens't work with planar textures
 			//   Disable the checkbox if planar textures are in use
-			getChildView("checkbox maps sync")->setEnabled(editable && (specmap_id.notNull() || normmap_id.notNull()) && !align_planar);
+			// <FS:Beq> FIRE-21375 use LL setting name as part of the material sync changes
+			//getChildView("checkbox maps sync")->setEnabled(editable && (specmap_id.notNull() || normmap_id.notNull()) && !align_planar);
+			getChildView("checkbox_sync_settings")->setEnabled(editable && (specmap_id.notNull() || normmap_id.notNull()) && !align_planar);
+			// </FS:Beq>
 			// </FS:TS> FIRE-11911
 			// </FS:CR>
 		}
@@ -2258,6 +2267,8 @@ void LLPanelFace::onCommitMaterialMaskCutoff(LLUICtrl* ctrl, void* userdata)
 	LLSelectedTEMaterial::setAlphaMaskCutoff(self,self->getCurrentAlphaMaskCutoff());
 }
 
+#ifdef REQUIRE_DEPRECATED_MATERIAL_SYNC_CALLBACK
+// Note this is no longer used though it has been updated to reflect the new booloean control name.
 // static
 void LLPanelFace::onCommitTextureInfo( LLUICtrl* ctrl, void* userdata )
 {
@@ -2266,13 +2277,16 @@ void LLPanelFace::onCommitTextureInfo( LLUICtrl* ctrl, void* userdata )
 	// vertical scale and repeats per meter depends on each other, so force set on changes
 	self->updateUI(true);
 	// <FS:CR> Materials alignment
-	if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
+	// <FS:Beq> FIRE-21375- use LL setting name as part of the material sync changes 
+	// if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
+	if (gSavedSettings.getBOOL("SyncMaterialSettings"))
+	// </FS:Beq>
 	{
 		alignMaterialsProperties(self);
 	}
 	// </FS:CR>
 }
-
+#endif
 // static
 void LLPanelFace::onCommitTextureScaleX( LLUICtrl* ctrl, void* userdata )
 {
@@ -2871,7 +2885,10 @@ void LLPanelFace::onClickMapsSync(LLUICtrl* ctrl, void *userdata)
 	LLPanelFace *self = (LLPanelFace*) userdata;
 	llassert_always(self);
 	self->getState();
-	if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
+	// <FS:Beq> FIRE-21375 use LL setting name as part of the material sync changes (FIRE-21375)
+	//	if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
+	if (gSavedSettings.getBOOL("SyncMaterialSettings"))
+	// </FS:Beq>
 	{
 		alignMaterialsProperties(self);
 	}
@@ -2974,7 +2991,11 @@ void LLPanelFace::onCommitFlip(const LLUICtrl* ctrl, const LLSD& user_data)
 		{
 			case MATTYPE_DIFFUSE:
 				self->sendTextureInfo();
-				if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
+// <FS:Beq> FIRE-21375 use LL setting name as part of the material sync changes (FIRE-21375)
+//				if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
+
+				if (gSavedSettings.getBOOL("SyncMaterialSettings"))
+// </FS:Beq>
 				{
 					alignMaterialsProperties(self);
 				}

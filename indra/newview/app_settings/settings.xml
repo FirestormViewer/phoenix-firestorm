@@ -22783,7 +22783,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSSyncronizeTextureMaps</key>
       <map>
       <key>Comment</key>
-      <string>Align texture maps (texture, bumpy, shiny) across the faces of a prim</string>
+      <string>Deprecated - Leave this at ZERO and use SyncMaterialSettings instead. </string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
