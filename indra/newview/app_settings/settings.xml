@@ -14514,7 +14514,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>SyncMaterialSettings</key>
     <map>
       <key>Comment</key>
-      <string>SyncMaterialSettings - DO NOT USE AND KEEP IT SET TO 0: Use FSSyncronizeTextureMaps instead!</string>
+      <string>SyncMaterialSettings</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
