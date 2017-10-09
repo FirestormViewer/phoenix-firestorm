@@ -87,7 +87,7 @@
 	<spinner label="Décalage horizontal" name="shinyOffsetU"/>
 	<spinner label="Décalage vertical" name="shinyOffsetV"/>
 	<check_box label="Aligner les plans de faces" name="checkbox planar align" tool_tip="Aligner les textures sur toutes les faces sélectionnées d'après la dernière face sélectionnée. Requiert le mapping texture planaire."/>
-	<check_box label="Synchroniser les matériaux" name="checkbox maps sync" tool_tip="Synchronise les paramètres des textures appliquées"/>
+	<check_box label="Synchroniser les matériaux" name="checkbox_sync_settings" tool_tip="Synchronise les paramètres des textures appliquées"/>
 	<button label="Copier" name="copytextures"/>
 	<button label="Coller" name="pastetextures"/>
 </panel>
