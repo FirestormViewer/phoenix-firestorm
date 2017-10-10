@@ -144,6 +144,7 @@ BOOL	LLPanelFace::postBuild()
 	//childSetCommitCallback("TexScaleU",&LLPanelFace::onCommitTextureScaleX, this);
 	//childSetCommitCallback("TexScaleV",&LLPanelFace::onCommitTextureScaleY, this);
 	//childSetCommitCallback("TexRot",&LLPanelFace::onCommitTextureRot, this);
+	//childSetCommitCallback("rptctrl",&LLPanelFace::onCommitRepeatsPerMeter, this);
 	childSetCommitCallback("checkbox planar align",&LLPanelFace::onCommitPlanarAlign, this);
 	//childSetCommitCallback("TexOffsetU",LLPanelFace::onCommitTextureOffsetX, this);
 	//childSetCommitCallback("TexOffsetV",LLPanelFace::onCommitTextureOffsetY, this);
@@ -161,11 +162,8 @@ BOOL	LLPanelFace::postBuild()
 	childSetCommitCallback("glossiness",&LLPanelFace::onCommitMaterialGloss, this);
 	childSetCommitCallback("environment",&LLPanelFace::onCommitMaterialEnv, this);
 	childSetCommitCallback("maskcutoff",&LLPanelFace::onCommitMaterialMaskCutoff, this);
-	
+
 	// <FS:CR>
-	// <FS:Beq> FIRE-21375 use LL setting name as part of the material sync changes (FIRE-21375)
-	//	childSetCommitCallback("checkbox maps sync", &LLPanelFace::onClickMapsSync, this);
-	// </FS:Beq>
 	childSetCommitCallback("checkbox_sync_settings", &LLPanelFace::onClickMapsSync, this);
 	childSetAction("copytextures",&LLPanelFace::onClickCopy,this);
 	childSetAction("pastetextures",&LLPanelFace::onClickPaste,this);
@@ -253,8 +251,7 @@ BOOL	LLPanelFace::postBuild()
 	
 	changePrecision(gSavedSettings.getS32("FSBuildToolDecimalPrecision"));
 	// </FS>
-	
-	
+
 	childSetAction("button align",&LLPanelFace::onClickAutoFix,this);
 
 	// <FS:CR> Moved to the header so other functions can use them too.
@@ -547,11 +544,11 @@ struct LLPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 	{
 		BOOL valid;
 		F32 value;
-		//LLSpinCtrl*	ctrlTexScaleS = mPanel->mCtrlTexScaleU;
-		//LLSpinCtrl*	ctrlTexScaleT = mPanel->mCtrlTexScaleV;
-		//LLSpinCtrl*	ctrlTexOffsetS = mPanel->mCtrlTexOffsetU;
-		//LLSpinCtrl*	ctrlTexOffsetT = mPanel->mCtrlTexOffsetV;
-		//LLSpinCtrl*	ctrlTexRotation = mPanel->mCtrlTexRot;
+		//LLSpinCtrl*	ctrlTexScaleS = mPanel->getChild<LLSpinCtrl>("TexScaleU");
+		//LLSpinCtrl*	ctrlTexScaleT = mPanel->getChild<LLSpinCtrl>("TexScaleV");
+		//LLSpinCtrl*	ctrlTexOffsetS = mPanel->getChild<LLSpinCtrl>("TexOffsetU");
+		//LLSpinCtrl*	ctrlTexOffsetT = mPanel->getChild<LLSpinCtrl>("TexOffsetV");
+		//LLSpinCtrl*	ctrlTexRotation = mPanel->getChild<LLSpinCtrl>("TexRot");
 		LLComboBox*		comboTexGen = mPanel->getChild<LLComboBox>("combobox texgen");
 		llassert(comboTexGen);
 		llassert(object);
@@ -733,7 +730,7 @@ void LLPanelFace::sendTextureInfo()
 	if ((bool)childGetValue("checkbox planar align").asBoolean())
 	{
 		LLFace* last_face = NULL;
-		bool identical_face = false;
+		bool identical_face =false;
 		LLSelectedTE::getFace(last_face, identical_face);		
 		LLPanelFaceSetAlignedTEFunctor setfunc(this, last_face);
 		LLSelectMgr::getInstance()->getSelection()->applyToTEs(&setfunc);
@@ -767,17 +764,14 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 		getChildView("button align")->setEnabled(editable);
 		
 		// <FS>
-		// <FS:Beq> FIRE-21375 use LL setting name as part of the material sync changes (FIRE-21375)
-		// BOOL enable_material_controls = (!gSavedSettings.getBOOL("FSSyncronizeTextureMaps"));
 		BOOL enable_material_controls = (!gSavedSettings.getBOOL("SyncMaterialSettings"));
-		// </FS:Beq> 
 		S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
 		BOOL single_volume = ((LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
 							  && (selected_count == 1));
 		getChildView("copytextures")->setEnabled(single_volume && editable);
 		getChildView("pastetextures")->setEnabled(editable);
 		// </FS>
-		
+
 		//LLComboBox* combobox_matmedia = getChild<LLComboBox>("combobox matmedia");
 		if (mComboMatMedia)
 		{
@@ -1115,14 +1109,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 			mCtrlBumpyScaleU->setTentative(LLSD(norm_scale_tentative));
 			
 			// <FS:CR> FIRE-11407 - Materials alignment
-			// <FS:TS> FIRE-11911 - Synchronize materials doens't work with planar textures
-			//   Disable the checkbox if planar textures are in use
-			// <FS:Beq> FIRE-21375 use LL setting name as part of the material sync changes
-			//getChildView("checkbox maps sync")->setEnabled(editable && (specmap_id.notNull() || normmap_id.notNull()) && !align_planar);
 			getChildView("checkbox_sync_settings")->setEnabled(editable && (specmap_id.notNull() || normmap_id.notNull()) && !align_planar);
-			// </FS:Beq>
-			// </FS:TS> FIRE-11911
-			// </FS:CR>
 		}
 
 		{
@@ -2267,8 +2254,6 @@ void LLPanelFace::onCommitMaterialMaskCutoff(LLUICtrl* ctrl, void* userdata)
 	LLSelectedTEMaterial::setAlphaMaskCutoff(self,self->getCurrentAlphaMaskCutoff());
 }
 
-#ifdef REQUIRE_DEPRECATED_MATERIAL_SYNC_CALLBACK
-// Note this is no longer used though it has been updated to reflect the new booloean control name.
 // static
 void LLPanelFace::onCommitTextureInfo( LLUICtrl* ctrl, void* userdata )
 {
@@ -2276,17 +2261,8 @@ void LLPanelFace::onCommitTextureInfo( LLUICtrl* ctrl, void* userdata )
 	self->sendTextureInfo();
 	// vertical scale and repeats per meter depends on each other, so force set on changes
 	self->updateUI(true);
-	// <FS:CR> Materials alignment
-	// <FS:Beq> FIRE-21375- use LL setting name as part of the material sync changes 
-	// if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
-	if (gSavedSettings.getBOOL("SyncMaterialSettings"))
-	// </FS:Beq>
-	{
-		alignMaterialsProperties(self);
-	}
-	// </FS:CR>
 }
-#endif
+
 // static
 void LLPanelFace::onCommitTextureScaleX( LLUICtrl* ctrl, void* userdata )
 {
