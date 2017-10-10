@@ -1762,7 +1762,7 @@ bool LLAppViewer::frame()
 				S32 io_pending = 0;
 				F32 max_time = llmin(gFrameIntervalSeconds.value() *10.f, 1.f);
 
-				work_pending += updateTextureThreads(max_time / 3.f); // <FS:Ansariel> 3 Threads in there that should share this amount of time, right?
+				work_pending += updateTextureThreads(max_time);
 
 				{
 					LL_RECORD_BLOCK_TIME(FTM_VFS);
