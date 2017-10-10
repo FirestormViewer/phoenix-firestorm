@@ -1162,6 +1162,11 @@ void LLInvFVBridge::addMoveToDefaultFolderMenuOption(menuentry_vec_t& items)
 	{
 		items.push_back(std::string("Move to Default Folder"));
 	}
+
+	if (isAgentInventory() && obj->getActualType() != LLAssetType::AT_CATEGORY && mInventoryPanel.get()->getName() != "All Items")
+	{
+		items.push_back(std::string("Find in Main"));
+	}
 }
 // </FS:Ansariel>
 
@@ -6872,10 +6877,6 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 				if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canDetach(item)) )
 					disabled_items.push_back(std::string("Detach From Yourself"));
 // [/RLVa:KB]
-				// <FS:Sei> Add "Find in Main" option to Worn Items
-				if (mInventoryPanel.get()->getName() == "Worn Items")
-					items.push_back(std::string("Find in Main")); // This should appear only in Worn Items tab
-				// </FS:Sei>
 			}
 			else if (!isItemInTrash() && !isLinkedObjectInTrash() && !isLinkedObjectMissing() && !isCOFFolder())
 			{
