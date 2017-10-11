@@ -144,6 +144,7 @@ BOOL	LLPanelFace::postBuild()
 	//childSetCommitCallback("TexScaleU",&LLPanelFace::onCommitTextureScaleX, this);
 	//childSetCommitCallback("TexScaleV",&LLPanelFace::onCommitTextureScaleY, this);
 	//childSetCommitCallback("TexRot",&LLPanelFace::onCommitTextureRot, this);
+	//childSetCommitCallback("rptctrl",&LLPanelFace::onCommitRepeatsPerMeter, this);
 	childSetCommitCallback("checkbox planar align",&LLPanelFace::onCommitPlanarAlign, this);
 	//childSetCommitCallback("TexOffsetU",LLPanelFace::onCommitTextureOffsetX, this);
 	//childSetCommitCallback("TexOffsetV",LLPanelFace::onCommitTextureOffsetY, this);
@@ -161,59 +162,92 @@ BOOL	LLPanelFace::postBuild()
 	childSetCommitCallback("glossiness",&LLPanelFace::onCommitMaterialGloss, this);
 	childSetCommitCallback("environment",&LLPanelFace::onCommitMaterialEnv, this);
 	childSetCommitCallback("maskcutoff",&LLPanelFace::onCommitMaterialMaskCutoff, this);
-	
+
 	// <FS:CR>
-	childSetCommitCallback("checkbox maps sync", &LLPanelFace::onClickMapsSync, this);
+	childSetCommitCallback("checkbox_sync_settings", &LLPanelFace::onClickMapsSync, this);
 	childSetAction("copytextures",&LLPanelFace::onClickCopy,this);
 	childSetAction("pastetextures",&LLPanelFace::onClickPaste,this);
 	
 	mCtrlTexScaleU = getChild<LLSpinCtrl>("TexScaleU");
-	mCtrlTexScaleU->setCommitCallback(&LLPanelFace::onCommitTextureScaleX, this);
-
+	if (mCtrlTexScaleU)
+	{
+		mCtrlTexScaleU->setCommitCallback(&LLPanelFace::onCommitTextureScaleX, this);
+	}
 	mCtrlTexScaleV = getChild<LLSpinCtrl>("TexScaleV");
-	mCtrlTexScaleV->setCommitCallback(&LLPanelFace::onCommitTextureScaleY, this);
-
+	if (mCtrlTexScaleV)
+	{
+		mCtrlTexScaleV->setCommitCallback(&LLPanelFace::onCommitTextureScaleY, this);
+	}
 	mCtrlBumpyScaleU = getChild<LLSpinCtrl>("bumpyScaleU");
-	mCtrlBumpyScaleU->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyScaleX, this);
-
+	if (mCtrlBumpyScaleU)
+	{
+		mCtrlBumpyScaleU->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyScaleX, this);
+	}
 	mCtrlBumpyScaleV = getChild<LLSpinCtrl>("bumpyScaleV");
-	mCtrlBumpyScaleV->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyScaleY, this);
-
+	if (mCtrlBumpyScaleV)
+	{
+		mCtrlBumpyScaleV->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyScaleY, this);
+	}
 	mCtrlShinyScaleU = getChild<LLSpinCtrl>("shinyScaleU");
-	mCtrlShinyScaleU->setCommitCallback(&LLPanelFace::onCommitMaterialShinyScaleX, this);
-
+	if (mCtrlShinyScaleU)
+	{
+		mCtrlShinyScaleU->setCommitCallback(&LLPanelFace::onCommitMaterialShinyScaleX, this);
+	}
 	mCtrlShinyScaleV = getChild<LLSpinCtrl>("shinyScaleV");
-	mCtrlShinyScaleV->setCommitCallback(&LLPanelFace::onCommitMaterialShinyScaleY, this);
-
+	if (mCtrlShinyScaleV)
+	{
+		mCtrlShinyScaleV->setCommitCallback(&LLPanelFace::onCommitMaterialShinyScaleY, this);
+	}	
 	mCtrlTexOffsetU = getChild<LLSpinCtrl>("TexOffsetU");
-	mCtrlTexOffsetU->setCommitCallback(&LLPanelFace::onCommitTextureOffsetX, this);
-
+	if (mCtrlTexOffsetU)
+	{
+		mCtrlTexOffsetU->setCommitCallback(&LLPanelFace::onCommitTextureOffsetX, this);
+	}
 	mCtrlTexOffsetV = getChild<LLSpinCtrl>("TexOffsetV");
-	mCtrlTexOffsetV->setCommitCallback(&LLPanelFace::onCommitTextureOffsetY, this);
-
+	if (mCtrlTexOffsetV)
+	{
+		mCtrlTexOffsetV->setCommitCallback(&LLPanelFace::onCommitTextureOffsetY, this);
+	}
 	mCtrlBumpyOffsetU = getChild<LLSpinCtrl>("bumpyOffsetU");
-	mCtrlBumpyOffsetU->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyOffsetX, this);
-
+	if (mCtrlBumpyOffsetU)
+	{
+		mCtrlBumpyOffsetU->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyOffsetX, this);
+	}
 	mCtrlBumpyOffsetV = getChild<LLSpinCtrl>("bumpyOffsetV");
-	mCtrlBumpyOffsetV->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyOffsetY, this);
-
+	if (mCtrlBumpyOffsetV)
+	{
+		mCtrlBumpyOffsetV->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyOffsetY, this);
+	}
 	mCtrlShinyOffsetU = getChild<LLSpinCtrl>("shinyOffsetU");
-	mCtrlShinyOffsetU->setCommitCallback(&LLPanelFace::onCommitMaterialShinyOffsetX, this);
-
+	if (mCtrlShinyOffsetU)
+	{
+		mCtrlShinyOffsetU->setCommitCallback(&LLPanelFace::onCommitMaterialShinyOffsetX, this);
+	}
 	mCtrlShinyOffsetV = getChild<LLSpinCtrl>("shinyOffsetV");
-	mCtrlShinyOffsetV->setCommitCallback(&LLPanelFace::onCommitMaterialShinyOffsetY, this);
-
+	if (mCtrlShinyOffsetV)
+	{
+		mCtrlShinyOffsetV->setCommitCallback(&LLPanelFace::onCommitMaterialShinyOffsetY, this);
+	}
 	mCtrlTexRot = getChild<LLSpinCtrl>("TexRot");
-	mCtrlTexRot->setCommitCallback(&LLPanelFace::onCommitTextureRot, this);
-
+	if (mCtrlTexRot)
+	{
+		mCtrlTexRot->setCommitCallback(&LLPanelFace::onCommitTextureRot, this);
+	}
 	mCtrlBumpyRot = getChild<LLSpinCtrl>("bumpyRot");
-	mCtrlBumpyRot->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyRot, this);
-
+	if (mCtrlBumpyRot)
+	{
+		mCtrlBumpyRot->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyRot, this);
+	}
 	mCtrlShinyRot = getChild<LLSpinCtrl>("shinyRot");
-	mCtrlShinyRot->setCommitCallback(&LLPanelFace::onCommitMaterialShinyRot, this);
-
+	if (mCtrlShinyRot)
+	{
+		mCtrlShinyRot->setCommitCallback(&LLPanelFace::onCommitMaterialShinyRot, this);
+	}
 	mCtrlRpt = getChild<LLSpinCtrl>("rptctrl");
-	mCtrlRpt->setCommitCallback(LLPanelFace::onCommitRepeatsPerMeter, this);
+	if (mCtrlRpt)
+	{
+		mCtrlRpt->setCommitCallback(LLPanelFace::onCommitRepeatsPerMeter, this);
+	}
 	
 	changePrecision(gSavedSettings.getS32("FSBuildToolDecimalPrecision"));
 	// </FS>
@@ -510,11 +544,11 @@ struct LLPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 	{
 		BOOL valid;
 		F32 value;
-		//LLSpinCtrl*	ctrlTexScaleS = mPanel->mCtrlTexScaleU;
-		//LLSpinCtrl*	ctrlTexScaleT = mPanel->mCtrlTexScaleV;
-		//LLSpinCtrl*	ctrlTexOffsetS = mPanel->mCtrlTexOffsetU;
-		//LLSpinCtrl*	ctrlTexOffsetT = mPanel->mCtrlTexOffsetV;
-		//LLSpinCtrl*	ctrlTexRotation = mPanel->mCtrlTexRot;
+		//LLSpinCtrl*	ctrlTexScaleS = mPanel->getChild<LLSpinCtrl>("TexScaleU");
+		//LLSpinCtrl*	ctrlTexScaleT = mPanel->getChild<LLSpinCtrl>("TexScaleV");
+		//LLSpinCtrl*	ctrlTexOffsetS = mPanel->getChild<LLSpinCtrl>("TexOffsetU");
+		//LLSpinCtrl*	ctrlTexOffsetT = mPanel->getChild<LLSpinCtrl>("TexOffsetV");
+		//LLSpinCtrl*	ctrlTexRotation = mPanel->getChild<LLSpinCtrl>("TexRot");
 		LLComboBox*		comboTexGen = mPanel->getChild<LLComboBox>("combobox texgen");
 		llassert(comboTexGen);
 		llassert(object);
@@ -696,7 +730,7 @@ void LLPanelFace::sendTextureInfo()
 	if ((bool)childGetValue("checkbox planar align").asBoolean())
 	{
 		LLFace* last_face = NULL;
-		bool identical_face = false;
+		bool identical_face =false;
 		LLSelectedTE::getFace(last_face, identical_face);		
 		LLPanelFaceSetAlignedTEFunctor setfunc(this, last_face);
 		LLSelectMgr::getInstance()->getSelection()->applyToTEs(&setfunc);
@@ -730,14 +764,14 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 		getChildView("button align")->setEnabled(editable);
 		
 		// <FS>
-		BOOL enable_material_controls = (!gSavedSettings.getBOOL("FSSyncronizeTextureMaps"));
+		BOOL enable_material_controls = (!gSavedSettings.getBOOL("SyncMaterialSettings"));
 		S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
 		BOOL single_volume = ((LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
 							  && (selected_count == 1));
 		getChildView("copytextures")->setEnabled(single_volume && editable);
 		getChildView("pastetextures")->setEnabled(editable);
 		// </FS>
-		
+
 		//LLComboBox* combobox_matmedia = getChild<LLComboBox>("combobox matmedia");
 		if (mComboMatMedia)
 		{
@@ -767,10 +801,8 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 		}
 
 		mRadioMatType->setEnabled(editable);
-		// <FS:Ansariel> Commented out because we already had this
-		//getChildView("checkbox_sync_settings")->setEnabled(editable);
-		//childSetValue("checkbox_sync_settings", gSavedSettings.getBOOL("SyncMaterialSettings"));
-		// </FS:Ansariel>
+		getChildView("checkbox_sync_settings")->setEnabled(editable);
+		childSetValue("checkbox_sync_settings", gSavedSettings.getBOOL("SyncMaterialSettings"));
 		updateVisibility();
 
 		bool identical			= true;	// true because it is anded below
@@ -1077,11 +1109,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 			mCtrlBumpyScaleU->setTentative(LLSD(norm_scale_tentative));
 			
 			// <FS:CR> FIRE-11407 - Materials alignment
-			// <FS:TS> FIRE-11911 - Synchronize materials doens't work with planar textures
-			//   Disable the checkbox if planar textures are in use
-			getChildView("checkbox maps sync")->setEnabled(editable && (specmap_id.notNull() || normmap_id.notNull()) && !align_planar);
-			// </FS:TS> FIRE-11911
-			// </FS:CR>
+			getChildView("checkbox_sync_settings")->setEnabled(editable && (specmap_id.notNull() || normmap_id.notNull()) && !align_planar);
 		}
 
 		{
@@ -2233,12 +2261,6 @@ void LLPanelFace::onCommitTextureInfo( LLUICtrl* ctrl, void* userdata )
 	self->sendTextureInfo();
 	// vertical scale and repeats per meter depends on each other, so force set on changes
 	self->updateUI(true);
-	// <FS:CR> Materials alignment
-	if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
-	{
-		alignMaterialsProperties(self);
-	}
-	// </FS:CR>
 }
 
 // static
@@ -2839,7 +2861,10 @@ void LLPanelFace::onClickMapsSync(LLUICtrl* ctrl, void *userdata)
 	LLPanelFace *self = (LLPanelFace*) userdata;
 	llassert_always(self);
 	self->getState();
-	if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
+	// <FS:Beq> FIRE-21375 use LL setting name as part of the material sync changes (FIRE-21375)
+	//	if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
+	if (gSavedSettings.getBOOL("SyncMaterialSettings"))
+	// </FS:Beq>
 	{
 		alignMaterialsProperties(self);
 	}
@@ -2942,7 +2967,11 @@ void LLPanelFace::onCommitFlip(const LLUICtrl* ctrl, const LLSD& user_data)
 		{
 			case MATTYPE_DIFFUSE:
 				self->sendTextureInfo();
-				if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
+// <FS:Beq> FIRE-21375 use LL setting name as part of the material sync changes (FIRE-21375)
+//				if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
+
+				if (gSavedSettings.getBOOL("SyncMaterialSettings"))
+// </FS:Beq>
 				{
 					alignMaterialsProperties(self);
 				}
