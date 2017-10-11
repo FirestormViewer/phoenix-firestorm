@@ -68,17 +68,15 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         self.path(src="../../etc/message.xml", dst="app_settings/message.xml")
         
         # <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
-        if self.prefix(src="app_settings"):
+        with self.prefix(src="app_settings"):
             # ... and the included spell checking dictionaries
             pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
-            if self.prefix(src=pkgdir,dst=""):
+            with self.prefix(src=pkgdir,dst=""):
                 self.path("dictionaries")
-                self.end_prefix(pkgdir)
-            self.end_prefix("app_settings")
         # </FS:LO>
 
         if self.is_packaging_viewer():
-            if self.prefix(src="app_settings"):
+            with self.prefix(src="app_settings"):
                 self.exclude("logcontrol.xml")
                 self.exclude("logcontrol-dev.xml")
                 self.path("*.pem")
@@ -102,9 +100,8 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 # <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
                 # ... and the included spell checking dictionaries
 #                pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
-#                if self.prefix(src=pkgdir,dst=""):
+#                with self.prefix(src=pkgdir,dst=""):
 #                    self.path("dictionaries")
-#                    self.end_prefix(pkgdir)
                 # </FS:LO>
                 # include the entire beams directory
                 self.path("beams")
@@ -151,56 +148,50 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                                  "settings_install.xml",
                                  src="environment")
 
-                self.end_prefix("app_settings")
 
-            if self.prefix(src="character"):
+            with self.prefix(src="character"):
                 self.path("*.llm")
                 self.path("*.xml")
                 self.path("*.tga")
-                self.end_prefix("character")
 
             # Include our fonts
-            if self.prefix(src="fonts"):
+            with self.prefix(src="fonts"):
                 self.path("*.ttf")
                 self.path("*.txt")
                 self.path("*.xml")
-                self.end_prefix("fonts")
                 
             # <FS:AO> Include firestorm resources
-            if self.prefix(src="fs_resources"):
+            with self.prefix(src="fs_resources"):
                 self.path("*.txt")
                 self.path("*.lsl")
                 self.path("*.lsltxt")
-                self.end_prefix("fs_resources");
 
             # skins
-            if self.prefix(src="skins"):
+            with self.prefix(src="skins"):
                 self.path("skins.xml")
-                # include the entire textures directory recursively
-                if self.prefix(src="*/textures"):
-                    self.path("*/*.tga")
-                    self.path("*/*.j2c")
-                    self.path("*/*.jpg")
-                    self.path("*/*.png")
-                    self.path("*.tga")
-                    self.path("*.j2c")
-                    self.path("*.jpg")
-                    self.path("*.png")
-                    self.path("textures.xml")
-                    self.end_prefix("*/textures")
-                self.path("*/xui/*/*.xml")
-                self.path("*/xui/*/widgets/*.xml")
-                self.path("*/themes/*/colors.xml")
-                if self.prefix(src="*/themes/*/textures"):
-                    self.path("*/*.tga")
-                    self.path("*/*.j2c")
-                    self.path("*/*.jpg")
-                    self.path("*/*.png")
-                    self.path("*.tga")
-                    self.path("*.j2c")
-                    self.path("*.jpg")
-                    self.path("*.png")
-                    self.end_prefix("*/themes/*/textures")
+                    # include the entire textures directory recursively
+                    with self.prefix(src="*/textures"):
+                            self.path("*/*.tga")
+                            self.path("*/*.j2c")
+                            self.path("*/*.jpg")
+                            self.path("*/*.png")
+                            self.path("*.tga")
+                            self.path("*.j2c")
+                            self.path("*.jpg")
+                            self.path("*.png")
+                            self.path("textures.xml")
+                    self.path("*/xui/*/*.xml")
+                    self.path("*/xui/*/widgets/*.xml")
+                    self.path("*/themes/*/colors.xml")
+                    with self.prefix(src="*/themes/*/textures"):
+                        self.path("*/*.tga")
+                        self.path("*/*.j2c")
+                        self.path("*/*.jpg")
+                        self.path("*/*.png")
+                        self.path("*.tga")
+                        self.path("*.j2c")
+                        self.path("*.jpg")
+                        self.path("*.png")
                     self.path("*/*.xml")
 
                     # Local HTML files (e.g. loading screen)
@@ -210,19 +201,16 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                     # we're wrong, a user actually does have the relevant
                     # files; s/he just needs to rename every html.old
                     # directory back to html to recover them.
-                    if self.prefix(src="*/html", dst="*/html.old"):
+                    with self.prefix(src="*/html", dst="*/html.old"):
                             self.path("*.png")
                             self.path("*/*/*.html")
                             self.path("*/*/*.gif")
-                            self.end_prefix("*/html")
 
-                    self.end_prefix("skins")
 
             # local_assets dir (for pre-cached textures)
-            if self.prefix(src="local_assets"):
+            with self.prefix(src="local_assets"):
                 self.path("*.j2c")
                 self.path("*.tga")
-                self.end_prefix("local_assets")
 
             # File in the newview/ directory
             self.path("gpu_table.txt")
@@ -424,28 +412,27 @@ class WindowsManifest(ViewerManifest):
 
             # <FS:Ansariel> Remove VMP
             # include the compiled launcher scripts so that it gets included in the file_list
-            #self.path(src='%s/apply_update.exe' % vmpdir, dst="apply_update.exe")
             #self.path(src='%s/download_update.exe' % vmpdir, dst="download_update.exe")
             #self.path(src='%s/SL_Launcher.exe' % vmpdir, dst="SL_Launcher.exe")
-            #self.path(src='%s/update_manager.exe' % vmpdir, dst="update_manager.exe")
 
             #IUM is not normally executed directly, just imported.  No exe needed.
             #self.path2basename(vmpdir,"InstallerUserMessage.py")
 
+            #with self.prefix(src=self.icon_path(), dst="vmp_icons"):
+            #    self.path("secondlife.ico")
+
             #VMP  Tkinter icons
-            #if self.prefix("vmp_icons"):
+            #with self.prefix("vmp_icons"):
             #    self.path("*.png")
             #    self.path("*.gif")
-            #    self.end_prefix("vmp_icons")
 
             #before, we only needed llbase at build time.  With VMP, we need it at run time.
             #llbase_path = os.path.join(self.get_dst_prefix(),'llbase')
             #if not os.path.exists(llbase_path):
             #    os.makedirs(llbase_path)
-            #if self.prefix(dst="llbase"):
+            #with self.prefix(dst="llbase"):
             #    self.path2basename(llbasedir,"*.py")
             #    self.path2basename(llbasedir,"_cllsd.so")
-            #    self.end_prefix()
             # </FS:Ansariel> Remove VMP
 
         # Plugin host application
@@ -454,7 +441,7 @@ class WindowsManifest(ViewerManifest):
                            "slplugin.exe")
         
         # Get shared libs from the shared libs staging directory
-        if self.prefix(src=os.path.join(os.pardir, 'sharedlibs', self.args['configuration']),
+        with self.prefix(src=os.path.join(os.pardir, 'sharedlibs', self.args['configuration']),
                        dst=""):
 
             # Get llcommon and deps. If missing assume static linkage and continue.
@@ -533,7 +520,6 @@ class WindowsManifest(ViewerManifest):
             except:
                 print "Skipping libtcmalloc_minimal.dll"
 
-            self.end_prefix()
 
         self.path(src="licenses-win32.txt", dst="licenses.txt")
         self.path("featuretable.txt")
@@ -541,29 +527,25 @@ class WindowsManifest(ViewerManifest):
         self.path("VivoxAUP.txt")
 
         # Media plugins - CEF
-        if self.prefix(src='../media_plugins/cef/%s' % self.args['configuration'], dst="llplugin"):
+        with self.prefix(src='../media_plugins/cef/%s' % self.args['configuration'], dst="llplugin"):
             self.path("media_plugin_cef.dll")
-            self.end_prefix()
 
         # Media plugins - LibVLC
-        if self.prefix(src='../media_plugins/libvlc/%s' % self.args['configuration'], dst="llplugin"):
+        with self.prefix(src='../media_plugins/libvlc/%s' % self.args['configuration'], dst="llplugin"):
             self.path("media_plugin_libvlc.dll")
-            self.end_prefix()
 
         # Media plugins - Example (useful for debugging - not shipped with release viewer)
         if self.channel_type() != 'release':
-            if self.prefix(src='../media_plugins/example/%s' % self.args['configuration'], dst="llplugin"):
+            with self.prefix(src='../media_plugins/example/%s' % self.args['configuration'], dst="llplugin"):
                 self.path("media_plugin_example.dll")
-                self.end_prefix()
  
         # Media plugins - GStreamer
-        if self.prefix(src='../media_plugins/gstreamer10/%s' % self.args['configuration'], dst="llplugin"):
+        with self.prefix(src='../media_plugins/gstreamer10/%s' % self.args['configuration'], dst="llplugin"):
             self.path("media_plugin_gstreamer10.dll")
-            self.end_prefix()
 
         # CEF runtime files - debug
         if self.args['configuration'].lower() == 'debug':
-            if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'debug'), dst="llplugin"):
+            with self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'debug'), dst="llplugin"):
                 self.path("chrome_elf.dll")
                 self.path("d3dcompiler_43.dll")
                 self.path("d3dcompiler_47.dll")
@@ -574,10 +556,9 @@ class WindowsManifest(ViewerManifest):
                 self.path("natives_blob.bin")
                 self.path("snapshot_blob.bin")
                 self.path("widevinecdmadapter.dll")
-                self.end_prefix()
         else:
         # CEF runtime files - not debug (release, relwithdebinfo etc.)
-            if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'release'), dst="llplugin"):
+            with self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'release'), dst="llplugin"):
                 self.path("chrome_elf.dll")
                 self.path("d3dcompiler_43.dll")
                 self.path("d3dcompiler_47.dll")
@@ -588,25 +569,22 @@ class WindowsManifest(ViewerManifest):
                 self.path("natives_blob.bin")
                 self.path("snapshot_blob.bin")
                 self.path("widevinecdmadapter.dll")
-                self.end_prefix()
 
         # MSVC DLLs needed for CEF and have to be in same directory as plugin
-        if self.prefix(src=os.path.join(os.pardir, 'sharedlibs', 'Release'), dst="llplugin"):
+        with self.prefix(src=os.path.join(os.pardir, 'sharedlibs', 'Release'), dst="llplugin"):
             self.path("msvcp120.dll")
             self.path("msvcr120.dll")
-            self.end_prefix()
 
         # CEF files common to all configurations
-        if self.prefix(src=os.path.join(os.pardir, 'packages', 'resources'), dst="llplugin"):
+        with self.prefix(src=os.path.join(os.pardir, 'packages', 'resources'), dst="llplugin"):
             self.path("cef.pak")
             self.path("cef_100_percent.pak")
             self.path("cef_200_percent.pak")
             self.path("cef_extensions.pak")
             self.path("devtools_resources.pak")
             self.path("icudtl.dat")
-            self.end_prefix()
 
-        if self.prefix(src=os.path.join(os.pardir, 'packages', 'resources', 'locales'), dst=os.path.join('llplugin', 'locales')):
+        with self.prefix(src=os.path.join(os.pardir, 'packages', 'resources', 'locales'), dst=os.path.join('llplugin', 'locales')):
             self.path("am.pak")
             self.path("ar.pak")
             self.path("bg.pak")
@@ -660,13 +638,11 @@ class WindowsManifest(ViewerManifest):
             self.path("vi.pak")
             self.path("zh-CN.pak")
             self.path("zh-TW.pak")
-            self.end_prefix()
 
-            if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'release'), dst="llplugin"):
+            with self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'release'), dst="llplugin"):
                 self.path("libvlc.dll")
                 self.path("libvlccore.dll")
                 self.path("plugins/")
-                self.end_prefix()
 
         # pull in the crash logger and updater from other projects
         # tag:"crash-logger" here as a cue to the exporter
@@ -675,14 +651,12 @@ class WindowsManifest(ViewerManifest):
 
 
         if (self.address_size == 64):
-            if self.prefix(src=os.path.join(os.pardir, '..', 'indra', 'newview', 'installers', 'windows_x64'), dst="llplugin"):
+            with self.prefix(src=os.path.join(os.pardir, '..', 'indra', 'newview', 'installers', 'windows_x64'), dst="llplugin"):
                 self.path("msvcp120.dll")
                 self.path("msvcr120.dll")
-                self.end_prefix()
-            if self.prefix(src=os.path.join(os.pardir, '..', 'indra', 'newview', 'installers', 'windows_x64'), dst=""):
+            with self.prefix(src=os.path.join(os.pardir, '..', 'indra', 'newview', 'installers', 'windows_x64'), dst=""):
                 self.path("msvcp120.dll")
                 self.path("msvcr120.dll")
-                self.end_prefix()
 
         if not self.is_packaging_viewer():
             self.package_file = "copied_deps"    
@@ -806,10 +780,8 @@ class WindowsManifest(ViewerManifest):
         # note that the enclosing setup exe is signed later, after the makensis makes it.
         # Unlike the viewer binary, the VMP filenames are invariant with respect to version, os, etc.
         #for exe in (
-        #    "apply_update.exe",
         #    "download_update.exe",
         #    "SL_Launcher.exe",
-        #    "update_manager.exe",
         #    ):
         #    self.sign(exe)
             
@@ -895,7 +867,7 @@ class DarwinManifest(ViewerManifest):
         chardetdir = os.path.join(pkgdir, "lib", "python", "chardet")
         idnadir = os.path.join(pkgdir, "lib", "python", "idna")
 
-        if self.prefix(src="", dst="Contents"):  # everything goes in Contents
+        with self.prefix(src="", dst="Contents"):  # everything goes in Contents
             self.path("Info.plist", dst="Info.plist")
 
             # copy additional libs in <bundle>/Contents/MacOS/
@@ -903,7 +875,7 @@ class DarwinManifest(ViewerManifest):
             self.path(os.path.join(relpkgdir, "libhunspell-1.3.0.dylib"), dst="Resources/libhunspell-1.3.0.dylib")   
 
             # <FS:Ansariel> Remove VMP
-            #if self.prefix(dst="MacOS"):              
+            #with self.prefix(dst="MacOS"):              
             #    #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322, SL-323
             #    self.path2basename(vmpdir,"SL_Launcher")
             #    self.path2basename(vmpdir,"*.py")
@@ -911,56 +883,48 @@ class DarwinManifest(ViewerManifest):
             #    certifi_path = os.path.join(self.get_dst_prefix(),'certifi')
             #    if not os.path.exists(certifi_path):
             #        os.makedirs(certifi_path)
-            #    if self.prefix(dst="certifi"):
+            #    with self.prefix(dst="certifi"):
             #        self.path2basename(os.path.join(vmpdir,"certifi"),"*")
-            #        self.end_prefix()                   
             #    # llbase provides our llrest service layer and llsd decoding
             #    llbase_path = os.path.join(self.get_dst_prefix(),'llbase')
             #    if not os.path.exists(llbase_path):
             #        os.makedirs(llbase_path)
-            #    if self.prefix(dst="llbase"):
+            #    with self.prefix(dst="llbase"):
             #        self.path2basename(llbasedir,"*.py")
             #        self.path2basename(llbasedir,"_cllsd.so")
-            #        self.end_prefix()
             #    #requests module needed by llbase/llrest.py
             #    #this is only needed on POSIX, because in Windows we compile it into the EXE
             #    requests_path = os.path.join(self.get_dst_prefix(),'requests')
             #    if not os.path.exists(requests_path):
             #        os.makedirs(requests_path)
-            #    if self.prefix(dst="requests"):
+            #    with self.prefix(dst="requests"):
             #        self.path2basename(requestsdir,"*")
-            #        self.end_prefix()                   
             #    urllib3_path = os.path.join(self.get_dst_prefix(),'urllib3')
             #    if not os.path.exists(urllib3_path):
             #        os.makedirs(urllib3_path)
-            #    if self.prefix(dst="urllib3"):
+            #    with self.prefix(dst="urllib3"):
             #        self.path2basename(urllib3dir,"*")
-            #        self.end_prefix()                   
             #    chardet_path = os.path.join(self.get_dst_prefix(),'chardet')
             #    if not os.path.exists(chardet_path):
             #        os.makedirs(chardet_path)
-            #    if self.prefix(dst="chardet"):
+            #    with self.prefix(dst="chardet"):
             #        self.path2basename(chardetdir,"*")
-            #        self.end_prefix()                   
             #    idna_path = os.path.join(self.get_dst_prefix(),'idna')
             #    if not os.path.exists(idna_path):
             #        os.makedirs(idna_path)
-            #    if self.prefix(dst="idna"):
+            #    with self.prefix(dst="idna"):
             #        self.path2basename(idnadir,"*")
-            #        self.end_prefix()                   
-            #    self.end_prefix()         
             # </FS:Ansariel> Remove VMP
 
             # Growl Frameworks
             self.path("../packages/Frameworks/Growl", dst="Frameworks/Growl")
 
             # most everything goes in the Resources directory
-            if self.prefix(src="", dst="Resources"):
+            with self.prefix(src="", dst="Resources"):
                 super(DarwinManifest, self).construct()
 
-                if self.prefix("cursors_mac"):
+                with self.prefix("cursors_mac"):
                     self.path("*.tif")
-                    self.end_prefix("cursors_mac")
 
                 self.path("licenses-mac.txt", dst="licenses.txt")
                 self.path("featuretable_mac.txt")
@@ -968,16 +932,17 @@ class DarwinManifest(ViewerManifest):
                 self.path("ca-bundle.crt")
 
                 icon_path = self.icon_path()
-                if self.prefix(src=icon_path, dst="") :
+                with self.prefix(src=icon_path, dst="") :
                     self.path("firestorm_icon.icns")
-                    self.end_prefix(icon_path)
+
+                # <FS:Ansariel> Remove VMP
+                #with self.prefix(src=icon_path, dst="vmp_icons"):
+                #    self.path("secondlife.ico")
 
                 #VMP Tkinter icons
-                # <FS:Ansariel> Remove VMP
-                #if self.prefix("vmp_icons"):
+                #with self.prefix("vmp_icons"):
                 #    self.path("*.png")
                 #    self.path("*.gif")
-                #    self.end_prefix("vmp_icons")
                 # <FS:Ansariel> Remove VMP
 
                 self.path("Firestorm.nib")
@@ -1090,18 +1055,15 @@ class DarwinManifest(ViewerManifest):
 
                 #<FS:TS> Moved from the x86_64 specific version because code
                 # below that does symlinking and path fixup depends on it.
-                if(self.prefix(src="../packages/bin_x86", dst="")):
+                with self.prefix(src="../packages/bin_x86", dst=""):
                     self.path("SLPlugin.app", "SLPlugin.app")
 	
-                    if self.prefix(src = "llplugin", dst="llplugin"):
+                    with self.prefix(src = "llplugin", dst="llplugin"):
                         self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
                         self.path("media_plugin_cef.dylib", "media_plugin_cef.dylib")
-                        self.end_prefix("llplugin")
-
-                    self.end_prefix();
 
                 # Dullahan helper apps go inside SLPlugin.app
-                if self.prefix(src="", dst="SLPlugin.app/Contents/Frameworks"):
+                with self.prefix(src="", dst="SLPlugin.app/Contents/Frameworks"):
                     helperappfile = 'DullahanHelper.app'
                     self.path2basename(relpkgdir, helperappfile)
 
@@ -1117,15 +1079,14 @@ class DarwinManifest(ViewerManifest):
                         self.dst_path_of('DullahanHelper.app/Contents/MacOS/'
                                          'Frameworks/Chromium Embedded Framework.framework')
 
-                    self.end_prefix()
 
-                    helperexecutablepath = self.dst_path_of('SLPlugin.app/Contents/Frameworks/DullahanHelper.app/Contents/MacOS/DullahanHelper')
-                    self.run_command('install_name_tool -change '
-                                     '"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
-                                     '"@executable_path/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % helperexecutablepath)
+                helperexecutablepath = self.dst_path_of('SLPlugin.app/Contents/Frameworks/DullahanHelper.app/Contents/MacOS/DullahanHelper')
+                self.run_command('install_name_tool -change '
+                                 '"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
+                                 '"@executable_path/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % helperexecutablepath)
 
                 # SLPlugin plugins
-                if self.prefix(src="", dst="llplugin"):
+                with self.prefix(src="", dst="llplugin"):
                     self.path2basename("../media_plugins/cef/" + self.args['configuration'],
                                        "media_plugin_cef.dylib")
 
@@ -1134,79 +1095,72 @@ class DarwinManifest(ViewerManifest):
                                        "media_plugin_libvlc.dylib")
 
                     # copy LibVLC dynamic libraries
-                    if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release' ), dst="lib"):
+                    with self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release' ), dst="lib"):
                         self.path( "libvlc*.dylib*" )
-                        self.end_prefix()
 
                     # copy LibVLC plugins folder
-                    if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release', 'plugins' ), dst="lib"):
+                    with self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release', 'plugins' ), dst="lib"):
                         self.path( "*.dylib" )
                         self.path( "plugins.dat" )
-                        self.end_prefix()
 
-                    self.end_prefix("llplugin")
 
-                    # do this install_name_tool *after* media plugin is copied over
-                    dylibexecutablepath = self.dst_path_of('llplugin/media_plugin_cef.dylib')
-                    self.run_command('install_name_tool -change '
-                                     '"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
-                                     '"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % dylibexecutablepath)
+                # do this install_name_tool *after* media plugin is copied over
+                dylibexecutablepath = self.dst_path_of('llplugin/media_plugin_cef.dylib')
+                self.run_command('install_name_tool -change '
+                                 '"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
+                                 '"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % dylibexecutablepath)
 
-                self.end_prefix("Resources")
 
                 #<FS:TS> Copy in prebuilt framework if it's there
-                if self.prefix(src="../packages/bin_x86/Frameworks", dst="Frameworks"):
+                with self.prefix(src="../packages/bin_x86/Frameworks", dst="Frameworks"):
                     self.path("Chromium Embedded Framework.framework")
-                    self.end_prefix()
 
-                # CEF framework goes inside Second Life.app/Contents/Frameworks
-                if self.prefix(src="", dst="Frameworks"):
-                    frameworkfile="Chromium Embedded Framework.framework"
-                    self.path2basename(relpkgdir, frameworkfile)
-                    self.end_prefix("Frameworks")
+            # CEF framework goes inside Second Life.app/Contents/Frameworks
+            with self.prefix(src="", dst="Frameworks"):
+                frameworkfile="Chromium Embedded Framework.framework"
+                self.path2basename(relpkgdir, frameworkfile)
 
-                # This code constructs a relative path from the
-                # target framework folder back to the location of the symlink.
-                # It needs to be relative so that the symlink still works when
-                # (as is normal) the user moves the app bundle out of the DMG
-                # and into the /Applications folder. Note we also call 'raise'
-                # to terminate the process if we get an error since without
-                # this symlink, Second Life web media can't possibly work.
-                # Real Framework folder:
-                #   Second Life.app/Contents/Frameworks/Chromium Embedded Framework.framework/
-                # Location of symlink and why it's relative 
-                #   Second Life.app/Contents/Resources/SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework/
-                # Real Frameworks folder, with the symlink inside the bundled SLPlugin.app (and why it's relative)
-                #   <top level>.app/Contents/Frameworks/Chromium Embedded Framework.framework/
-                #   <top level>.app/Contents/Resources/SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework ->
-                # It might seem simpler just to create a symlink Frameworks to
-                # the parent of Chromimum Embedded Framework.framework. But
-                # that would create a symlink cycle, which breaks our
-                # packaging step. So make a symlink from Chromium Embedded
-                # Framework.framework to the directory of the same name, which
-                # is NOT an ancestor of the symlink.
-                frameworkpath = os.path.join(os.pardir, os.pardir, os.pardir,
-                                             os.pardir, "Frameworks",
-                                             "Chromium Embedded Framework.framework")
-                try:
-                    # from SLPlugin.app/Contents/Frameworks/Chromium Embedded
-                    # Framework.framework back to Second
-                    # Life.app/Contents/Frameworks/Chromium Embedded Framework.framework
-                    origin, target = pluginframeworkpath, frameworkpath
-                    symlinkf(target, origin)
-                    # from SLPlugin.app/Contents/Frameworks/Dullahan
-                    # Helper.app/Contents/MacOS/Frameworks/Chromium Embedded
-                    # Framework.framework back to
-                    # SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework
-                    self.cmakedirs(os.path.dirname(helperframeworkpath))
-                    origin = helperframeworkpath
-                    target = os.path.join(os.pardir, frameworkpath)
-                    symlinkf(target, origin)
-                except OSError as err:
-                    print "Can't symlink %s -> %s: %s" % (origin, target, err)
-                    raise
+            # This code constructs a relative path from the
+            # target framework folder back to the location of the symlink.
+            # It needs to be relative so that the symlink still works when
+            # (as is normal) the user moves the app bundle out of the DMG
+            # and into the /Applications folder. Note we also call 'raise'
+            # to terminate the process if we get an error since without
+            # this symlink, Second Life web media can't possibly work.
+            # Real Framework folder:
+            #   Second Life.app/Contents/Frameworks/Chromium Embedded Framework.framework/
+            # Location of symlink and why it's relative 
+            #   Second Life.app/Contents/Resources/SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework/
+            # Real Frameworks folder, with the symlink inside the bundled SLPlugin.app (and why it's relative)
+            #   <top level>.app/Contents/Frameworks/Chromium Embedded Framework.framework/
+            #   <top level>.app/Contents/Resources/SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework ->
+            # It might seem simpler just to create a symlink Frameworks to
+            # the parent of Chromimum Embedded Framework.framework. But
+            # that would create a symlink cycle, which breaks our
+            # packaging step. So make a symlink from Chromium Embedded
+            # Framework.framework to the directory of the same name, which
+            # is NOT an ancestor of the symlink.
+            frameworkpath = os.path.join(os.pardir, os.pardir, os.pardir,
+                                         os.pardir, "Frameworks",
+                                         "Chromium Embedded Framework.framework")
+            try:
+                # from SLPlugin.app/Contents/Frameworks/Chromium Embedded
+                # Framework.framework back to Second
+                # Life.app/Contents/Frameworks/Chromium Embedded Framework.framework
+                origin, target = pluginframeworkpath, frameworkpath
+                symlinkf(target, origin)
+                # from SLPlugin.app/Contents/Frameworks/Dullahan
+                # Helper.app/Contents/MacOS/Frameworks/Chromium Embedded
+                # Framework.framework back to
+                # SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework
+                self.cmakedirs(os.path.dirname(helperframeworkpath))
+                origin = helperframeworkpath
+                target = os.path.join(os.pardir, frameworkpath)
+                symlinkf(target, origin)
+            except OSError as err:
+                print "Can't symlink %s -> %s: %s" % (origin, target, err)
+                raise
 
-            self.end_prefix("Contents")
 
         # NOTE: the -S argument to strip causes it to keep enough info for
         # annotated backtraces (i.e. function names in the crash log).  'strip' with no
@@ -1439,22 +1393,20 @@ class LinuxManifest(ViewerManifest):
         self.path("licenses-linux.txt","licenses.txt")
         self.path("VivoxAUP.txt")
         self.path("res/firestorm_icon.png","firestorm_icon.png")
-        if self.prefix("linux_tools", dst=""):
+        with self.prefix("linux_tools", dst=""):
             self.path("client-readme.txt","README-linux.txt")
-	    self.path("FIRESTORM_DESKTOPINSTALL.txt","FIRESTORM_DESKTOPINSTALL.txt")
+        self.path("FIRESTORM_DESKTOPINSTALL.txt","FIRESTORM_DESKTOPINSTALL.txt")
             self.path("client-readme-voice.txt","README-linux-voice.txt")
             self.path("client-readme-joystick.txt","README-linux-joystick.txt")
             self.path("wrapper.sh","firestorm")
-            if self.prefix(src="", dst="etc"):
+            with self.prefix(src="", dst="etc"):
                 self.path("handle_secondlifeprotocol.sh")
                 self.path("register_secondlifeprotocol.sh")
                 self.path("refresh_desktop_app_entry.sh")
                 self.path("launch_url.sh")
-                self.end_prefix("etc")
             self.path("install.sh")
-            self.end_prefix("linux_tools")
 
-        if self.prefix(src="", dst="bin"):
+        with self.prefix(src="", dst="bin"):
             self.path("firestorm-bin","do-not-directly-run-firestorm-bin")
             self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
             self.path2basename("../llplugin/slplugin", "SLPlugin") 
@@ -1465,77 +1417,65 @@ class LinuxManifest(ViewerManifest):
             #llbase_path = os.path.join(self.get_dst_prefix(),'llbase')
             #if not os.path.exists(llbase_path):
             #    os.makedirs(llbase_path)
-            #if self.prefix(dst="llbase"):
+            #with self.prefix(dst="llbase"):
             #    self.path2basename("../packages/lib/python/llbase","*.py")
             #    self.path2basename("../packages/lib/python/llbase","_cllsd.so")         
-            #self.end_prefix("bin")
             # </FS:Ansariel> Remove VMP
 
-        if self.prefix("res-sdl"):
+        with self.prefix("res-sdl"):
             self.path("*")
             # recurse
-            self.end_prefix("res-sdl")
 
         # Get the icons based on the channel type
         icon_path = self.icon_path()
         print "DEBUG: icon_path '%s'" % icon_path
-        if self.prefix(src=icon_path, dst="") :
+        with self.prefix(src=icon_path, dst="") :
             self.path("firestorm_256.png","firestorm_48.png")
-            if self.prefix(src="",dst="res-sdl") :
+            with self.prefix(src="",dst="res-sdl") :
                 self.path("firestorm_256.BMP","ll_icon.BMP")
-                self.end_prefix("res-sdl")
-            self.end_prefix(icon_path)
 
         # plugins
-        if self.prefix(src="", dst="bin/llplugin"):
+        with self.prefix(src="", dst="bin/llplugin"):
             self.path("../media_plugins/gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
             self.path("../media_plugins/cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
             self.path("../media_plugins/libvlc/libmedia_plugin_libvlc.so", "libmedia_plugin_libvlc.so")
             self.path("../media_plugins/gstreamer10/libmedia_plugin_gstreamer10.so", "libmedia_plugin_gstreamer10.so")
-            self.end_prefix("bin/llplugin")
 
-        if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
+        with self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
             self.path( "plugins.dat" )
             self.path( "*/*.so" )
-            self.end_prefix()
 
-        if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib' ), dst="lib"):
+        with self.prefix(src=os.path.join(os.pardir, 'packages', 'lib' ), dst="lib"):
             self.path( "libvlc*.so*" )
-            self.end_prefix()
 
-        if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
+        with self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
             self.path( "plugins.dat" )
             self.path( "*/*.so" )
-            self.end_prefix()
 
-        if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib' ), dst="lib"):
+        with self.prefix(src=os.path.join(os.pardir, 'packages', 'lib' ), dst="lib"):
             self.path( "libvlc*.so*" )
-            self.end_prefix()
 
         # CEF files 
-        if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release'), dst="lib"):
+        with self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release'), dst="lib"):
             self.path( "libcef.so" )
             self.path( "libllceflib.so" )
-            self.end_prefix()
 
-        if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'release'), dst="bin"):
+        with self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'release'), dst="bin"):
             self.path( "chrome-sandbox" )
             self.path( "llceflib_host" )
             self.path( "natives_blob.bin" )
             self.path( "snapshot_blob.bin" )
             self.path( "libffmpegsumo.so" )
-            self.end_prefix()
 
-        if self.prefix(src=os.path.join(os.pardir, 'packages', 'resources'), dst="bin"):
+        with self.prefix(src=os.path.join(os.pardir, 'packages', 'resources'), dst="bin"):
             self.path( "cef.pak" )
             self.path( "cef_extensions.pak" )
             self.path( "cef_100_percent.pak" )
             self.path( "cef_200_percent.pak" )
             self.path( "devtools_resources.pak" )
             self.path( "icudtl.dat" )
-            self.end_prefix()
 
-        if self.prefix(src=os.path.join(os.pardir, 'packages', 'resources', 'locales'), dst=os.path.join('bin', 'locales')):
+        with self.prefix(src=os.path.join(os.pardir, 'packages', 'resources', 'locales'), dst=os.path.join('bin', 'locales')):
             self.path("am.pak")
             self.path("ar.pak")
             self.path("bg.pak")
@@ -1589,7 +1529,6 @@ class LinuxManifest(ViewerManifest):
             self.path("vi.pak")
             self.path("zh-CN.pak")
             self.path("zh-TW.pak")
-            self.end_prefix()
 
         # llcommon
         if not self.path("../llcommon/libllcommon.so", "lib/libllcommon.so"):
@@ -1599,7 +1538,7 @@ class LinuxManifest(ViewerManifest):
         self.path("ca-bundle.crt")
 
         if self.is_packaging_viewer():
-          if self.prefix("../packages/lib/release", dst="lib"):
+          with self.prefix("../packages/lib/release", dst="lib"):
             self.path("libapr-1.so*")
             self.path("libaprutil-1.so*")
             self.path("libboost_context-mt.so*")
@@ -1634,7 +1573,6 @@ class LinuxManifest(ViewerManifest):
             self.path("libopenal.so*")
             #self.path("libnotify.so.1.1.2", "libnotify.so.1") # LO - uncomment when testing libnotify(growl) on linux
             self.path("libpangox-1.0.so*")
-
             # KLUDGE: As of 2012-04-11, the 'fontconfig' package installs
             # libfontconfig.so.1.4.4, along with symlinks libfontconfig.so.1
             # and libfontconfig.so. Before we added support for library-file
@@ -1653,7 +1591,6 @@ class LinuxManifest(ViewerManifest):
             # previous call did, without having to explicitly state the
             # version number.
             self.path("libfontconfig.so.*.*")
-
             try:
                 self.path("libtcmalloc.so*") #formerly called google perf tools
                 pass
@@ -1661,22 +1598,19 @@ class LinuxManifest(ViewerManifest):
                 print "tcmalloc files not found, skipping"
                 pass
 
-            self.end_prefix("lib")
+          # Vivox runtimes
+          # Currentelly, the 32-bit ones will work with a 64-bit client.
+          with self.prefix(src="../packages/lib/release", dst="bin"):
+                  self.path("SLVoice")
+                  self.path("win32")
 
-            # Vivox runtimes
-            # Currentelly, the 32-bit ones will work with a 64-bit client.
-            if self.prefix(src="../packages/lib/release", dst="bin"):
-                    self.path("SLVoice")
-                    self.path("win32")
-                    self.end_prefix()
-            if self.prefix(src="../packages/lib/release", dst="lib"):
-                    self.path("libortp.so")
-                    self.path("libsndfile.so.1")
-                    # <FS:TS> Vivox wants this library even if it's present already in the viewer
-                    self.path("libvivoxoal.so.1")
-                    self.path("libvivoxsdk.so")
-                    self.path("libvivoxplatform.so")
-                    self.end_prefix("lib")
+          with self.prefix(src="../packages/lib/release", dst="lib"):
+                  self.path("libortp.so")
+                  self.path("libsndfile.so.1")
+                  # <FS:TS> Vivox wants this library even if it's present already in the viewer
+                  self.path("libvivoxoal.so.1")
+                  self.path("libvivoxsdk.so")
+                  self.path("libvivoxplatform.so")
 
 
     def package_finish(self):
@@ -1744,7 +1678,7 @@ class Linux_i686_Manifest(LinuxManifest):
         relpkgdir = os.path.join(pkgdir, "lib", "release")
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
-        if self.prefix(relpkgdir, dst="lib"):
+        with self.prefix(relpkgdir, dst="lib"):
             self.path("libapr-1.so")
             self.path("libapr-1.so.0")
             self.path("libapr-1.so.0.4.5")
@@ -1808,22 +1742,19 @@ class Linux_i686_Manifest(LinuxManifest):
                 print "Skipping libfmodex.so - not found"
                 pass
 
-            self.end_prefix("lib")
 
-            # Vivox runtimes
-            if self.prefix(src=relpkgdir, dst="bin"):
-                self.path("SLVoice")
-                self.end_prefix()
-            if self.prefix(src=relpkgdir, dst="lib"):
-                self.path("libortp.so")
-                self.path("libsndfile.so.1")
-                #self.path("libvivoxoal.so.1") # no - we'll re-use the viewer's own OpenAL lib
-                self.path("libvivoxsdk.so")
-                self.path("libvivoxplatform.so")
-                self.end_prefix("lib")
+        # Vivox runtimes
+        with self.prefix(src=relpkgdir, dst="bin"):
+            self.path("SLVoice")
+        with self.prefix(src=relpkgdir, dst="lib"):
+            self.path("libortp.so")
+            self.path("libsndfile.so.1")
+            #self.path("libvivoxoal.so.1") # no - we'll re-use the viewer's own OpenAL lib
+            self.path("libvivoxsdk.so")
+            self.path("libvivoxplatform.so")
 
-            self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
-            self.strip_binaries()
+        self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
+        self.strip_binaries()
 
 
 class Linux_x86_64_Manifest(LinuxManifest):
@@ -1833,16 +1764,14 @@ class Linux_x86_64_Manifest(LinuxManifest):
         super(Linux_x86_64_Manifest, self).construct()
 
         if self.is_packaging_viewer():
-          if self.prefix("../packages/lib/release", dst="lib"):
+          with self.prefix("../packages/lib/release", dst="lib"):
             self.path("libffi*.so*")
-
             # vivox 32-bit hack.
             # one has to extract libopenal.so from the 32-bit openal package, or official LL viewer, and rename it to libopenal32.so
             # and place it in the prebuilt lib/release directory
             # <FS:TS> No, we don't need to dink with this. A usable library
             # is now in the slvoice package, and we need to just use it as is.
             # self.path("libopenal32.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
-
             try:
                     self.path("libfmodex64-*.so")
                     self.path("libfmodex64.so")
@@ -1851,8 +1780,6 @@ class Linux_x86_64_Manifest(LinuxManifest):
                     print "Skipping libfmodex.so - not found"
                     pass
 
-            self.end_prefix("lib")
-
           self.prefix(src="../packages/lib/release/x64", dst="lib")
           try:
               self.path("libLeap.so")
@@ -1860,17 +1787,14 @@ class Linux_x86_64_Manifest(LinuxManifest):
               print "Leap Motion library not found"
           self.end_prefix("lib")
 
-        if self.prefix(src="", dst="bin"):
+        with self.prefix(src="", dst="bin"):
             self.path2basename("../llplugin/slplugin", "SLPlugin")
-            self.end_prefix("bin")        # support file for valgrind debug tool
 
         # plugins
-        if self.prefix(src="", dst="bin/llplugin"):
+        with self.prefix(src="", dst="bin/llplugin"):
             self.path2basename("../media_plugins/webkit", "libmedia_plugin_webkit.so")
             self.path("../media_plugins/gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
-            self.end_prefix("bin/llplugin")
-                                                        
-            
+
         self.path("secondlife-i686.supp")
 
 ################################################################
