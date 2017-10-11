@@ -3446,7 +3446,6 @@ void LLAppViewer::initStrings()
 	}
 }
 
-						 LLOSInfo::instance().getOSVersionString(),
 //
 // This function decides whether the client machine meets the minimum requirements to
 // run in a maximized window, per the consensus of davep, boa and nyx on 3/30/2011.

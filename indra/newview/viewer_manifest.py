@@ -168,7 +168,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
 
             # skins
             with self.prefix(src="skins"):
-                self.path("skins.xml")
+                    self.path("skins.xml")
                     # include the entire textures directory recursively
                     with self.prefix(src="*/textures"):
                             self.path("*/*.tga")
@@ -639,10 +639,10 @@ class WindowsManifest(ViewerManifest):
             self.path("zh-CN.pak")
             self.path("zh-TW.pak")
 
-            with self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'release'), dst="llplugin"):
-                self.path("libvlc.dll")
-                self.path("libvlccore.dll")
-                self.path("plugins/")
+        with self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'release'), dst="llplugin"):
+            self.path("libvlc.dll")
+            self.path("libvlccore.dll")
+            self.path("plugins/")
 
         # pull in the crash logger and updater from other projects
         # tag:"crash-logger" here as a cue to the exporter
@@ -1395,7 +1395,7 @@ class LinuxManifest(ViewerManifest):
         self.path("res/firestorm_icon.png","firestorm_icon.png")
         with self.prefix("linux_tools", dst=""):
             self.path("client-readme.txt","README-linux.txt")
-        self.path("FIRESTORM_DESKTOPINSTALL.txt","FIRESTORM_DESKTOPINSTALL.txt")
+            self.path("FIRESTORM_DESKTOPINSTALL.txt","FIRESTORM_DESKTOPINSTALL.txt")
             self.path("client-readme-voice.txt","README-linux-voice.txt")
             self.path("client-readme-joystick.txt","README-linux-joystick.txt")
             self.path("wrapper.sh","firestorm")
