@@ -16873,6 +16873,19 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>ShowSpecificLODInEdit</key>
+    <map>
+      <key>Comment</key>
+      <string>Force the display of a specific LOD while editing</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <string>-1</string>
+      <key>Backup</key>
+      <integer>0</integer>
+    </map>
     <key>SocialPhotoResolution</key>
     <map>
       <key>Comment</key>

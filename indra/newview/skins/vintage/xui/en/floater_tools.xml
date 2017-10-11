@@ -2435,7 +2435,162 @@ even though the user gets a free copy.
                  name="Cylinder"
                  value="4" />
               </combo_box>
-        </panel>
+        <!-- FS:Beq adding Mesh Info support so Object panel-->
+        <text
+          type="string"
+          length="1"
+          follows="left|top"
+          height="12"
+          layout="topleft"
+          left="125"
+          name="mesh_info_label"
+          top="6"
+          width="100"
+          visible="false">
+          Mesh Information:
+        </text>
+        <text
+          follows="left|top"
+          halign="left"
+          height="16"
+          layout="topleft"
+          left="125"
+          name="lod_label"
+          top_pad="3"
+          value="LOD:"
+          visible="false"
+          width="60" />
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left_pad="10"
+          halign="right"
+          name="lod_num_tris"
+          top_delta="0"
+          value="Num Triangles"
+          visible="false"
+          width="80" />
+        <text
+          follows="left|top"
+          halign="left"
+          height="16"
+          layout="topleft"
+          left="125"
+          name="high_lod_label"
+          top_pad="3"
+          value="High:"
+          visible="false"
+          width="60" />
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left_pad="10"
+          halign="right"
+          name="high_lod_num_tris"
+          top_delta="0"
+          value="--"
+          visible="false"
+          width="80" />
+        <text
+          follows="left|top"
+          halign="left"
+          height="16"
+          layout="topleft"
+          left="125"
+          name="med_lod_label"
+          top_pad="3"
+          value="Medium:"
+          visible="false"
+          width="60" />
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left_pad="10"
+          halign="right"
+          name="med_lod_num_tris"
+          top_delta="0"
+          value="--"
+          visible="false"
+          width="80" />
+        <text
+          follows="left|top"
+          halign="left"
+          height="16"
+          layout="topleft"
+          left="125"
+          name="low_lod_label"
+          top_pad="3"
+          value="Low:"
+          visible="false"
+          width="60" />
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left_pad="10"
+          halign="right"
+          name="low_lod_num_tris"
+          top_delta="0"
+          value="--"
+          visible="false"
+          width="80" />
+        <text
+          follows="left|top"
+          halign="left"
+          height="16"
+          layout="topleft"
+          left="125"
+          name="lowest_lod_label"
+          top_pad="3"
+          value="Lowest:"
+          visible="false"
+          width="60" />
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left_pad="10"
+          halign="right"
+          name="lowest_lod_num_tris"
+          top_delta="0"
+          value="--"
+          visible="false"
+          width="80" />
+        <combo_box
+             height="19"
+             layout="topleft"
+             name="LOD_show_combo"
+             top_pad="20"
+             left="125"
+             width="150"
+             visible="false">
+          <combo_box.item
+               label="Default"
+               name="Default"
+               value="-1" />
+          <combo_box.item
+               label="High"
+               name="High"
+               value="3" />
+          <combo_box.item
+               label="Medium"
+               name="Medium"
+               value="2" />
+          <combo_box.item
+               label="Low"
+               name="Low"
+               value="1" />
+          <combo_box.item
+               label="Lowest"
+               name="Lowest/Imposter"
+               value="0" />
+        </combo_box>
+        <!-- /FS:Beq end of Mesh info section-->
+
+      </panel>
         <panel
          border="false"
          follows="all"
