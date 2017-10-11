@@ -28,22 +28,6 @@
 #include "llfontgl.h"	// just for StyleFlags enum
 #include "llfolderview.h"
 
-// <FS:ND> Reintegrate search by uuid/creator/descripting from Zi Ree after CHUI Merge
-// Interface to query extended object attributes,
-class FSFolderViewModelItem
-{
-public:
-	virtual std::string getSearchableCreator( void ) const
-	{ return ""; }
-	virtual std::string getSearchableDescription( void ) const
-	{ return ""; }
-	virtual std::string getSearchableUUID( void ) const
-	{ return ""; }
-	virtual std::string getSearchableAll( void ) const
-	{ return ""; }
-};
-// </FS:ND>
-
 // These are grouping of inventory types.
 // Order matters when sorting system folders to the top.
 enum EInventorySortGroup
@@ -149,7 +133,7 @@ public:
 
 // This is an abstract base class that users of the folderview classes
 // would use to bridge the folder view with the underlying data
-class LLFolderViewModelItem : public LLRefCount, public LLTrace::MemTrackable<LLFolderViewModelItem>, public FSFolderViewModelItem
+class LLFolderViewModelItem : public LLRefCount, public LLTrace::MemTrackable<LLFolderViewModelItem>
 {
 public:
 	LLFolderViewModelItem() 
@@ -162,6 +146,11 @@ public:
 	virtual const std::string& getName() const = 0;
 	virtual const std::string& getDisplayName() const = 0;
 	virtual const std::string& getSearchableName() const = 0;
+
+	virtual std::string getSearchableDescription() const = 0;
+	virtual std::string getSearchableCreatorName()const = 0;
+	virtual std::string getSearchableUUIDString() const = 0;
+	virtual std::string getSearchableAll() const = 0; // <FS:Ansariel> Zi's extended inventory search
 
 	virtual LLPointer<LLUIImage> getIcon() const = 0;
 	virtual LLPointer<LLUIImage> getIconOpen() const { return getIcon(); }

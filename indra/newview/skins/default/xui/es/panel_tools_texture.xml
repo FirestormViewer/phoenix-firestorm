@@ -117,7 +117,7 @@
 	<spinner label="Despl. horizontal" name="shinyOffsetU"/>
 	<spinner label="Despl. vertical" name="shinyOffsetV"/>
 	<check_box label="Alinear caras planas" name="checkbox planar align" tool_tip="Alinea las texturas en todas las caras seleccionadas con la última en seleccionarse. Requiere mapeado de textura plano."/>
-	<check_box label="Sincronizar materiales" name="checkbox maps sync" tool_tip="Sincroniza los parámetros del mapa de texturas"/>
+	<check_box label="Sincronizar materiales" name="checkbox_sync_settings" tool_tip="Sincroniza los parámetros del mapa de texturas"/>
 	<button label="Copiar" name="copytextures"/>
 	<button label="Pegar" name="pastetextures"/>
 </panel>

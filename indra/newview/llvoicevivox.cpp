@@ -248,6 +248,7 @@ static bool sMuteListListener_listening = false;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 static LLProcessPtr sGatewayPtr;
+static LLEventStream sGatewayPump("VivoxDaemonPump", true);
 
 static bool isGatewayRunning()
 {
@@ -258,6 +259,7 @@ static void killGateway()
 {
 	if (sGatewayPtr)
 	{
+		sGatewayPump.stopListening("VivoxDaemonPump");
 		sGatewayPtr->kill();
 	}
 }
@@ -766,6 +768,19 @@ bool LLVivoxVoiceClient::endAndDisconnectSession()
     return true;
 }
 
+bool LLVivoxVoiceClient::callbackEndDaemon(const LLSD& data)
+{
+    if (!LLAppViewer::isExiting())
+    {
+        terminateAudioSession(false);
+        closeSocket();
+        cleanUp();
+        LLVoiceClient::getInstance()->setUserPTTState(false);
+        gAgent.setVoiceConnected(false);
+    }
+    sGatewayPump.stopListening("VivoxDaemonPump");
+    return false;
+}
 
 bool LLVivoxVoiceClient::startAndLaunchDaemon()
 {
@@ -878,6 +893,9 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
 #           endif // VIVOX_HANDLE_ARGS
 			} // <FS:ND/> 
 
+            params.postend = sGatewayPump.getName();
+            sGatewayPump.listen("VivoxDaemonPump", boost::bind(&LLVivoxVoiceClient::callbackEndDaemon, this, _1));
+
             sGatewayPtr = LLProcess::create(params);
 
             mDaemonHost = LLHost(gSavedSettings.getString("VivoxVoiceHost").c_str(), gSavedSettings.getU32("VivoxVoicePort"));
@@ -974,15 +992,13 @@ bool LLVivoxVoiceClient::provisionVoiceAccount()
         llcoro::suspend();
     }
 
-    LLViewerRegion *region = gAgent.getRegion();
-
-    while (!region->capabilitiesReceived())
+    while (!gAgent.getRegion()->capabilitiesReceived())
     {
         // *TODO* Pump a message for wake up.
         llcoro::suspend();
     }
 
-    std::string url = region->getCapability("ProvisionVoiceAccountRequest");
+    std::string url = gAgent.getRegionCapability("ProvisionVoiceAccountRequest");
 
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t

@@ -172,17 +172,8 @@ std::string getStartupStateFromLog(std::string& sllog)
 
 bool LLCrashLogger::readFromXML(LLSD& dest, const std::string& filename )
 {
-    std::string db_file_name = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,filename);
-	// <FS:ND> Properly handle unicode path on Windows. Maybe could use a llifstream instead of ifdef?
-    // std::ifstream log_file(db_file_name.c_str());
-	
-#ifdef LL_WINDOWS
-	std::ifstream log_file( utf8str_to_utf16str( db_file_name ).c_str());
-#else
-    std::ifstream log_file(db_file_name.c_str());
-#endif
-    
-	// </FS:ND>
+	std::string db_file_name = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,filename);
+	llifstream log_file(db_file_name.c_str());
 
 	// Look for it in the given file
 	if (log_file.is_open())
@@ -212,7 +203,7 @@ bool LLCrashLogger::readMinidump(std::string minidump_path)
 {
 	size_t length=0;
 
-	std::ifstream minidump_stream(minidump_path.c_str(), std::ios_base::in | std::ios_base::binary);
+	llifstream minidump_stream(minidump_path.c_str(), std::ios_base::in | std::ios_base::binary);
 	if(minidump_stream.is_open())
 	{
 		minidump_stream.seekg(0, std::ios::end);
@@ -321,7 +312,7 @@ void LLCrashLogger::gatherFiles()
         //if (!file.empty())
         //{
         //    LL_DEBUGS("CRASHREPORT") << "trying to read " << itr->first << ": " << file << LL_ENDL;
-        //    std::ifstream f(file.c_str());
+        //    llifstream f(file.c_str());
         //    if(f.is_open())
         //    {
         //        std::stringstream s;
@@ -377,7 +368,7 @@ void LLCrashLogger::gatherFiles()
             if ( ( iter->length() > 30 ) && (iter->rfind(".dmp") == (iter->length()-4) ) )
             {
                 std::string fullname = pathname + *iter;
-                std::ifstream fdat( fullname.c_str(), std::ifstream::binary);
+                llifstream fdat(fullname.c_str(), std::ifstream::binary);
                 if (fdat)
                 {
                     char buf[5];
@@ -581,12 +572,7 @@ bool LLCrashLogger::sendCrashLog(std::string dump_dir)
     
 	updateApplication("Sending reports...");
 
-#ifdef LL_WINDOWS
-	std::ofstream out_file( utf8str_to_utf16str(report_file).c_str() );
-#else
-	std::ofstream out_file(report_file.c_str());
-#endif
-
+	llofstream out_file(report_file.c_str());
 	LLSDSerialize::toPrettyXML(post_data, out_file);
     out_file.flush();
 	out_file.close();
