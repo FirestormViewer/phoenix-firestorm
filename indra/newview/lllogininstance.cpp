@@ -66,11 +66,7 @@ const S32 LOGIN_MAX_RETRIES = 3;
 
 // this can be removed once it is defined by the build for all forks
 #ifndef ADDRESS_SIZE
-#ifdef ND_BUILD64BIT_ARCH
-#  define ADDRESS_SIZE 64
-#else
 #  define ADDRESS_SIZE 32
-#endif
 #endif
 
 class LLLoginInstance::Disposable {
@@ -234,8 +230,9 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
 	request_params["version"] = LLVersionInfo::getVersion();
 	request_params["channel"] = LLVersionInfo::getChannel();
 	request_params["platform"] = mPlatform;
+	//request_params["address_size"] = ADDRESS_SIZE; // <FS:Ansariel> Duplicate
 	request_params["platform_version"] = mPlatformVersion;
-	request_params["address_size"] = ADDRESS_SIZE;
+	request_params["address_size"] = ADDRESS_SIZE; // <FS:Ansariel> Duplicate - just tagging here to create a merge conflict if this duplicate gets removed
 	request_params["platform_string"] = mPlatformVersionName;
 	request_params["id0"] = mSerialNumber;
 	request_params["host_id"] = gSavedSettings.getString("HostID");
