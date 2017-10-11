@@ -117,7 +117,7 @@
 	<spinner label="Versatz Horizontal" name="shinyOffsetU"/>
 	<spinner label="Versatz Vertikal" name="shinyOffsetV"/>
 	<check_box label="Planare Oberflächen ausrichten" name="checkbox planar align" tool_tip="Richtet Texturen auf allen ausgewählten Flächen wie die zuletzt ausgewählte Fläche aus. Erfordert planares Textur-Mapping."/>
-	<check_box label="Materialien synchronisieren" name="checkbox maps sync" tool_tip="Synchronisiere Texture-Mapping-Parameter"/>
+	<check_box label="Materialien synchronisieren" name="checkbox_sync_settings" tool_tip="Synchronisiere Texture-Mapping-Parameter"/>
 	<button name="copytextures" label="Kopieren"/>
 	<button name="pastetextures" label="Einfügen"/>
 </panel>
