@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Preferences" title="Einstellungen">
+	<floater.string name="email_unverified_tooltip">
+		Bitte bestätigen Sie Ihre E-Mail-Adresse unter
+https://accounts.secondlife.com/change_email/?lang=de-DE
+	</floater.string>
 	<floater.string name="LoginToChange">
 		Zum Ändern einloggen
 	</floater.string>
