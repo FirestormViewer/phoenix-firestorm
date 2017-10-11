@@ -4376,6 +4376,15 @@ Sie ist voll oder startet in Kürze neu.
 	<notification name="NoPermsTooManyAttachedAnimatedObjects">
 		Durch diese Aktion würde die Anzahl an animierten Objekten das Limit überschreiten.
 	</notification>
+	<notification name="NoPermsLinkAnimatedObjectTooLarge">
+		Objekte können nicht verknüpft werden, da das resultierende animierte Objekt das Größenlimit überschreiten würde.
+	</notification>
+	<notification name="NoPermsSetFlagAnimatedObjectTooLarge">
+		Objekt kann nicht in ein animiertes Objekt geändert werden, da es das Größenlimit überschreiten würde.
+	</notification>
+	<notification name="ErrorNoMeshData">
+		Server-Fehler: Aktionen kann nicht abgeschlossen werden, da die Mesh-Daten nicht gelanden sind.
+	</notification>
 	<notification name="NoAccessToClaimObjects">
 		Ihr Zugangsberechtigungen gestatten nicht das Beanspruchen von Objekten an dieser Stelle.
 	</notification>
