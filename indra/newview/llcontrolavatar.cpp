@@ -50,24 +50,6 @@ LLControlAvatar::~LLControlAvatar()
 
 void LLControlAvatar::matchVolumeTransform()
 {
-#if 0
-    // AXON - should we be using bind_shape?
-    {
-        LLVolume *volume = mRootVolp->getVolume();
-        if (volume)
-        {
-            LLUUID mesh_id = volume->getParams().getSculptID();
-            const LLMeshSkinInfo* skin = gMeshRepo.getSkinInfo(mesh_id, mRootVolp);
-            if (skin)
-            {
-                LLMatrix4 bind_shape = skin->mBindShapeMatrix;
-                LL_INFOS("AXON") << "bind_shape is " << bind_shape << LL_ENDL;
-            }
-        }
-    }
-#endif
-
-
     if (mRootVolp)
     {
         if (mRootVolp->isAttachment())
@@ -77,19 +59,15 @@ void LLControlAvatar::matchVolumeTransform()
             {
                 LLViewerJointAttachment *attach = attached_av->getTargetAttachmentPoint(mRootVolp);
                 setPositionAgent(mRootVolp->getRenderPosition());
-                // AXON why doesn't attach joint have a valid world
-                // position? Using the parent as a kludge but not
-                // right.
-                //LLQuaternion fix_axes_rot(-F_PI_BY_TWO, LLVector3(0,0,1));
-                LLVector3 joint_pos = attach->getParent()->getWorldPosition();
-                LLQuaternion joint_rot = attach->getParent()->getWorldRotation();
-                //LLVector3 attach_pos = mRootVolp->mDrawable->getPosition();
-                //attach_pos.rotVec(joint_rot);
-                //LLQuaternion attach_rot = mRootVolp->mDrawable->getRotation();
-                //mRoot->setWorldPosition(joint_pos + attach_pos);
-                //mRoot->setWorldRotation(joint_rot * (attach_rot * ~fix_axes_rot));
-                mRoot->setWorldPosition(joint_pos);
-                mRoot->setWorldRotation(joint_rot);
+				attach->updateWorldPRSParent();
+                LLVector3 joint_pos = attach->getWorldPosition();
+                LLQuaternion joint_rot = attach->getWorldRotation();
+                LLVector3 obj_pos = mRootVolp->mDrawable->getPosition();
+                LLQuaternion obj_rot = mRootVolp->mDrawable->getRotation();
+                obj_pos.rotVec(joint_rot);
+                mRoot->setWorldPosition(obj_pos + joint_pos);
+                mRoot->setWorldRotation(obj_rot * joint_rot);
+                setRotation(mRoot->getRotation());
             }
             else
             {
@@ -99,11 +77,8 @@ void LLControlAvatar::matchVolumeTransform()
         else
         {
             setPositionAgent(mRootVolp->getRenderPosition());
-            //slamPosition();
-        
-            LLQuaternion fix_axes_rot(-F_PI_BY_TWO, LLVector3(0,0,1));
             LLQuaternion obj_rot = mRootVolp->getRotation();
-            LLQuaternion result_rot = fix_axes_rot * obj_rot;
+            LLQuaternion result_rot = obj_rot;
             setRotation(result_rot);
             mRoot->setWorldRotation(result_rot);
             mRoot->setPosition(mRootVolp->getRenderPosition());
@@ -263,7 +238,7 @@ void LLControlAvatar::updateDebugText()
             total_tris += volp->getTriangleCount(&verts);
             total_verts += verts;
             lod_string += llformat("%d",volp->getLOD());
-                        if (volp && volp->mDrawable)
+            if (volp && volp->mDrawable)
             {
                 if (volp->mDrawable->isActive())
                 {
@@ -281,19 +256,6 @@ void LLControlAvatar::updateDebugText()
         }
         addDebugText(llformat("CAV obj %d anim %d active %s",
                               total_linkset_count, animated_volume_count, active_string.c_str()));
-
-#if 0
-        // AXON - detailed rigged mesh info
-        for (std::vector<LLVOVolume*>::iterator it = volumes.begin();
-             it != volumes.end(); ++it)
-        {
-            LLRiggedVolume *rig_vol = (*it)->getRiggedVolume();
-            if (rig_vol)
-            {
-                addDebugText(rig_vol->mExtraDebugText);
-            }
-        }
-#endif
 
         addDebugText(llformat("lod %s",lod_string.c_str()));
         addDebugText(llformat("tris %d verts %d", total_tris, total_verts));
@@ -336,7 +298,7 @@ void LLControlAvatar::updateAnimations()
 {
     if (!mRootVolp)
     {
-        LL_WARNS("AXON") << "No root vol" << LL_ENDL;
+        LL_WARNS_ONCE("AXON") << "No root vol" << LL_ENDL;
         return;
     }
 

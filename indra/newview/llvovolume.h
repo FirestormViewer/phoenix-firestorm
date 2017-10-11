@@ -134,7 +134,7 @@ public:
 	/*virtual*/	const LLMatrix4	getRenderMatrix() const;
 				typedef std::map<LLUUID, S32> texture_cost_t;
 				U32 	getRenderCost(texture_cost_t &textures) const;
-
+    /*virtual*/	F32		getEstTrianglesMax() const;
 				F32		getStreamingCost(S32* bytes, S32* visible_bytes, F32* unscaled_value) const;
 	/*virtual*/	F32		getStreamingCost(S32* bytes = NULL, S32* visible_bytes = NULL) { return getStreamingCost(bytes, visible_bytes, NULL); }
 
@@ -271,6 +271,7 @@ public:
 
     // Extended Mesh Properties
     U32 getExtendedMeshFlags() const;
+    void onSetExtendedMeshFlags(U32 flags);
     void setExtendedMeshFlags(U32 flags);
     bool canBeAnimatedObject() const;
     bool isAnimatedObject() const;
@@ -315,7 +316,10 @@ public:
 	bool hasMedia() const;
 	
 	LLVector3 getApproximateFaceNormal(U8 face_id);
-	
+
+    // Flag any corresponding avatars as needing update.
+    void updateVisualComplexity();
+    
 	void notifyMeshLoaded();
 	
 	// Returns 'true' iff the media data for this object is in flight

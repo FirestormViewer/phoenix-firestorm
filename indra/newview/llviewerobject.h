@@ -361,9 +361,15 @@ public:
 	
 	virtual void setScale(const LLVector3 &scale, BOOL damped = FALSE);
 
+    S32 getAnimatedObjectMaxTris() const;
+    F32 recursiveGetEstTrianglesMax() const;
+    virtual F32 getEstTrianglesMax() const;
 	virtual F32 getStreamingCost(S32* bytes = NULL, S32* visible_bytes = NULL, F32* unscaled_value = NULL) const;
 	virtual U32 getTriangleCount(S32* vcount = NULL) const;
 	virtual U32 getHighLODTriangleCount();
+    F32 recursiveGetScaledSurfaceArea() const;
+
+    U32 recursiveGetTriangleCount(S32* vcount = NULL) const;
 
 	void setObjectCost(F32 cost);
 	F32 getObjectCost();

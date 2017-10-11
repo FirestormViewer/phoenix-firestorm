@@ -3668,6 +3668,38 @@ F32 LLViewerObject::getLinksetPhysicsCost()
 	return mLinksetPhysicsCost;
 }
 
+F32 LLViewerObject::recursiveGetEstTrianglesMax() const
+{
+    F32 est_tris = getEstTrianglesMax();
+    for (child_list_t::const_iterator iter = mChildList.begin();
+         iter != mChildList.end(); iter++)
+    {
+        const LLViewerObject* child = *iter;
+        est_tris += child->recursiveGetEstTrianglesMax();
+    }
+    return est_tris;
+}
+
+S32 LLViewerObject::getAnimatedObjectMaxTris() const
+{
+    S32 max_tris = 0;
+    LLSD features;
+    if (gAgent.getRegion())
+    {
+        gAgent.getRegion()->getSimulatorFeatures(features);
+        if (features.has("AnimatedObjects"))
+        {
+            max_tris = features["AnimatedObjects"]["AnimatedObjectMaxTris"].asInteger();
+        }
+    }
+    return max_tris;
+}
+
+F32 LLViewerObject::getEstTrianglesMax() const
+{
+    return 0.f;
+}
+
 F32 LLViewerObject::getStreamingCost(S32* bytes, S32* visible_bytes, F32* unscaled_value) const
 {
 	return 0.f;
@@ -3681,6 +3713,58 @@ U32 LLViewerObject::getTriangleCount(S32* vcount) const
 U32 LLViewerObject::getHighLODTriangleCount()
 {
 	return 0;
+}
+
+U32 LLViewerObject::recursiveGetTriangleCount(S32* vcount) const
+{
+    S32 total_tris = getTriangleCount(vcount);
+    LLViewerObject::const_child_list_t& child_list = getChildren();
+    for (LLViewerObject::const_child_list_t::const_iterator iter = child_list.begin();
+         iter != child_list.end(); ++iter)
+    {
+        LLViewerObject* childp = *iter;
+        if (childp)
+        {
+            total_tris += childp->getTriangleCount(vcount);
+        }
+    }
+    return total_tris;
+}
+
+// This is using the stored surface area for each volume (which
+// defaults to 1.0 for the case of everything except a sculpt) and
+// then scaling it linearly based on the largest dimension in the
+// prim's scale. Should revisit at some point.
+F32 LLViewerObject::recursiveGetScaledSurfaceArea() const
+{
+    F32 area = 0.f;
+    const LLDrawable* drawable = mDrawable;
+    if (drawable)
+    {
+        const LLVOVolume* volume = drawable->getVOVolume();
+        if (volume)
+        {
+            if (volume->getVolume())
+            {
+				const LLVector3& scale = volume->getScale();
+                area += volume->getVolume()->getSurfaceArea() * llmax(llmax(scale.mV[0], scale.mV[1]), scale.mV[2]);
+            }
+            LLViewerObject::const_child_list_t children = volume->getChildren();
+            for (LLViewerObject::const_child_list_t::const_iterator child_iter = children.begin();
+                 child_iter != children.end();
+                 ++child_iter)
+            {
+                LLViewerObject* child_obj = *child_iter;
+                LLVOVolume *child = dynamic_cast<LLVOVolume*>( child_obj );
+                if (child && child->getVolume())
+                {
+                    const LLVector3& scale = child->getScale();
+                    area += child->getVolume()->getSurfaceArea() * llmax(llmax(scale.mV[0], scale.mV[1]), scale.mV[2]);
+                }
+            }
+        }
+    }
+    return area;
 }
 
 void LLViewerObject::updateSpatialExtents(LLVector4a& newMin, LLVector4a &newMax)
@@ -3785,7 +3869,6 @@ void LLViewerObject::boostTexturePriority(BOOL boost_children /* = TRUE */)
 		}
 	}
 }
-
 
 void LLViewerObject::setLineWidthForWindowSize(S32 window_width)
 {
@@ -4043,7 +4126,7 @@ const LLVector3 LLViewerObject::getPivotPositionAgent() const
 const LLQuaternion LLViewerObject::getRenderRotation() const
 {
 	LLQuaternion ret;
-	if (mDrawable.notNull() && mDrawable->isState(LLDrawable::RIGGED))
+	if (mDrawable.notNull() && mDrawable->isState(LLDrawable::RIGGED) && !isAnimatedObject())
 	{
 		return ret;
 	}

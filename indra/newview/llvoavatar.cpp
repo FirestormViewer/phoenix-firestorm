@@ -635,6 +635,9 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	LLViewerObject(id, pcode, regionp),
 	mSpecialRenderMode(0),
 	mAttachmentSurfaceArea(0.f),
+	mDirectAttachmentSurfaceArea(0.f),
+	mAttachmentVisibleTriangleCount(0),
+	mAttachmentEstTriangleCount(0.f),
 	mReportedVisualComplexity(VISUAL_COMPLEXITY_UNKNOWN),
 	mTurning(FALSE),
 	mLastSkeletonSerialNum( 0 ),
@@ -6375,7 +6378,18 @@ void LLVOAvatar::rebuildAttachmentOverrides()
 {
     LLScopedContextString str("rebuildAttachmentOverrides " + getFullname());
 
-    // Attachment points
+    // Handle the case that we're resetting the skeleton of an animated object.
+    LLControlAvatar *control_av = dynamic_cast<LLControlAvatar*>(this);
+    if (control_av)
+    {
+        LLVOVolume *volp = control_av->mRootVolp;
+        if (volp)
+        {
+            addAttachmentOverridesForObject(volp);
+        }
+    }
+
+    // Attached objects
 	for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
 		 iter != mAttachmentPoints.end();
 		 ++iter)
@@ -6386,17 +6400,24 @@ void LLVOAvatar::rebuildAttachmentOverrides()
             for (LLViewerJointAttachment::attachedobjs_vec_t::iterator at_it = attachment_pt->mAttachedObjects.begin();
 				 at_it != attachment_pt->mAttachedObjects.end(); ++at_it)
             {
-                addAttachmentOverridesForObject(*at_it);
+                LLViewerObject *vo = *at_it;
+                // Attached animated objects affect joints in their control
+                // avs, not the avs to which they are attached.
+                if (!vo->isAnimatedObject())
+                {
+                    addAttachmentOverridesForObject(vo);
+                }
             }
         }
     }
 }
+
 //-----------------------------------------------------------------------------
 // addAttachmentPosOverridesForObject
 //-----------------------------------------------------------------------------
 void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo)
 {
-    if (vo->getAvatar() != this)
+    if (vo->getAvatar() != this && vo->getAvatarAncestor() != this)
     {
 		LL_WARNS("Avatar") << "called with invalid avatar" << LL_ENDL;
         return;
@@ -6622,7 +6643,7 @@ void LLVOAvatar::showAttachmentOverrides(bool verbose) const
 // AXON handle NPC case
 void LLVOAvatar::removeAttachmentOverridesForObject(LLViewerObject *vo)
 {
-	if (vo->getAvatar() != this)
+    if (vo->getAvatar() != this && vo->getAvatarAncestor() != this)
 	{
 		LL_WARNS("Avatar") << "called with invalid avatar" << LL_ENDL;
         return;
@@ -7313,12 +7334,31 @@ U32 LLVOAvatar::getNumAnimatedObjectAttachments() const
 }
 
 //-----------------------------------------------------------------------------
+// getMaxAnimatedObjectAttachments()
+// Gets from simulator feature if available, otherwise 0.
+//-----------------------------------------------------------------------------
+S32 LLVOAvatar::getMaxAnimatedObjectAttachments() const
+{
+    S32 max_attach = 0;
+    LLSD features;
+    if (gAgent.getRegion())
+    {
+        gAgent.getRegion()->getSimulatorFeatures(features);
+        if (features.has("AnimatedObjects"))
+        {
+            max_attach = features["AnimatedObjects"]["MaxAgentAnimatedObjectAttachments"].asInteger();
+        }
+    }
+    return max_attach;
+}
+
+//-----------------------------------------------------------------------------
 // canAttachMoreAnimatedObjects()
 // Returns true if we can attach <n> more animated objects.
 //-----------------------------------------------------------------------------
 BOOL LLVOAvatar::canAttachMoreAnimatedObjects(U32 n) const
 {
-	return (getNumAnimatedObjectAttachments() + n) <= MAX_AGENT_ANIMATED_OBJECT_ATTACHMENTS;
+	return (getNumAnimatedObjectAttachments() + n) <= getMaxAnimatedObjectAttachments();
 }
 
 //-----------------------------------------------------------------------------
@@ -10058,6 +10098,17 @@ void LLVOAvatar::updateImpostorRendering(U32 newMaxNonImpostorsValue)
 
 void LLVOAvatar::idleUpdateRenderComplexity()
 {
+    if (isControlAvatar())
+    {
+        LLControlAvatar *cav = dynamic_cast<LLControlAvatar*>(this);
+        bool is_attachment = cav && cav->mRootVolp && cav->mRootVolp->isAttachment(); // For attached animated objects
+        if (is_attachment)
+        {
+            // ARC for animated object attachments is accounted with the avatar they're attached to.
+            return;
+        }
+    }
+
     // Render Complexity
     calculateUpdateRenderComplexity(); // Update mVisualComplexity if needed	
 
@@ -10105,13 +10156,22 @@ void LLVOAvatar::idleUpdateRenderComplexity()
 		// Visual rank
 		info_line = llformat("%d rank", mVisibilityRank);
 		// Use grey for imposters, white for normal rendering or no impostors
-		info_color.set(isImpostor() ? LLColor4::grey : LLColor4::white);
+		info_color.set(isImpostor() ? LLColor4::grey : (isControlAvatar() ? LLColor4::yellow : LLColor4::white));
 		info_style = LLFontGL::NORMAL;
 		mText->addLine(info_line, info_color, info_style);
 
+        // Triangle count
+        mText->addLine(std::string("VisTris ") + LLStringOps::getReadableNumber(mAttachmentVisibleTriangleCount), 
+                       info_color, info_style);
+        mText->addLine(std::string("EstMaxTris ") + LLStringOps::getReadableNumber(mAttachmentEstTriangleCount), 
+                       info_color, info_style);
+
 		// Attachment Surface Area
 		static LLCachedControl<F32> max_attachment_area(gSavedSettings, "RenderAutoMuteSurfaceAreaLimit", 1000.0f);
-		info_line = llformat("%.0f m^2", mAttachmentSurfaceArea);
+        // AXON we can consolidate mAttachmentSurfaceArea and
+        // mDirectAttachmentSurfaceArea once QA establishes
+        // equivalence.
+		info_line = llformat("%.0f m^2", mDirectAttachmentSurfaceArea);
 
 		if (max_render_cost != 0 && max_attachment_area != 0) // zero means don't care, so don't bother coloring based on this
 		{
@@ -10148,6 +10208,136 @@ void LLVOAvatar::updateVisualComplexity()
 	LL_DEBUGS("AvatarRender") << "avatar " << getID() << " appearance changed" << LL_ENDL;
 	// Set the cache time to in the past so it's updated ASAP
 	mVisualComplexityStale = true;
+}
+
+// Account for the complexity of a single top-level object associated
+// with an avatar. This will be either an attached object or an animated
+// object.
+void LLVOAvatar::accountRenderComplexityForObject(
+    const LLViewerObject *attached_object,
+    const F32 max_attachment_complexity,
+    LLVOVolume::texture_cost_t& textures,
+    U32& cost,
+    hud_complexity_list_t& hud_complexity_list)
+{
+    if (attached_object && !attached_object->isHUDAttachment())
+    {
+        mAttachmentVisibleTriangleCount += attached_object->recursiveGetTriangleCount();
+        mAttachmentEstTriangleCount += attached_object->recursiveGetEstTrianglesMax();
+        mDirectAttachmentSurfaceArea += attached_object->recursiveGetScaledSurfaceArea();
+
+        textures.clear();
+        const LLDrawable* drawable = attached_object->mDrawable;
+        if (drawable)
+        {
+            const LLVOVolume* volume = drawable->getVOVolume();
+            if (volume)
+            {
+                F32 attachment_total_cost = 0;
+                F32 attachment_volume_cost = 0;
+                F32 attachment_texture_cost = 0;
+                F32 attachment_children_cost = 0;
+                // AXON placeholder value, will revisit in testing.
+                const F32 animated_object_attachment_surcharge = 20000;
+
+                if (attached_object->isAnimatedObject())
+                {
+                    attachment_volume_cost += animated_object_attachment_surcharge;
+                }
+                attachment_volume_cost += volume->getRenderCost(textures);
+
+                const_child_list_t children = volume->getChildren();
+                for (const_child_list_t::const_iterator child_iter = children.begin();
+                     child_iter != children.end();
+                     ++child_iter)
+                {
+                    LLViewerObject* child_obj = *child_iter;
+                    LLVOVolume *child = dynamic_cast<LLVOVolume*>( child_obj );
+                    if (child)
+                    {
+                        attachment_children_cost += child->getRenderCost(textures);
+                    }
+                }
+
+                for (LLVOVolume::texture_cost_t::iterator volume_texture = textures.begin();
+                     volume_texture != textures.end();
+                     ++volume_texture)
+                {
+                    // add the cost of each individual texture in the linkset
+                    attachment_texture_cost += volume_texture->second;
+                }
+                attachment_total_cost = attachment_volume_cost + attachment_texture_cost + attachment_children_cost;
+                LL_DEBUGS("ARCdetail") << "Attachment costs " << attached_object->getAttachmentItemID()
+                                       << " total: " << attachment_total_cost
+                                       << ", volume: " << attachment_volume_cost
+                                       << ", textures: " << attachment_texture_cost
+                                       << ", " << volume->numChildren()
+                                       << " children: " << attachment_children_cost
+                                       << LL_ENDL;
+                // Limit attachment complexity to avoid signed integer flipping of the wearer's ACI
+                cost += (U32)llclamp(attachment_total_cost, MIN_ATTACHMENT_COMPLEXITY, max_attachment_complexity);
+            }
+        }
+    }
+    if (isSelf()
+        && attached_object
+        && attached_object->isHUDAttachment()
+        && !attached_object->isTempAttachment()
+        && attached_object->mDrawable)
+    {
+        textures.clear();
+
+        mDirectAttachmentSurfaceArea += attached_object->recursiveGetScaledSurfaceArea();
+
+        const LLVOVolume* volume = attached_object->mDrawable->getVOVolume();
+        if (volume)
+        {
+            LLHUDComplexity hud_object_complexity;
+            hud_object_complexity.objectName = attached_object->getAttachmentItemName();
+            hud_object_complexity.objectId = attached_object->getAttachmentItemID();
+            std::string joint_name;
+            gAgentAvatarp->getAttachedPointName(attached_object->getAttachmentItemID(), joint_name);
+            hud_object_complexity.jointName = joint_name;
+            // get cost and individual textures
+            hud_object_complexity.objectsCost += volume->getRenderCost(textures);
+            hud_object_complexity.objectsCount++;
+
+            LLViewerObject::const_child_list_t& child_list = attached_object->getChildren();
+            for (LLViewerObject::child_list_t::const_iterator iter = child_list.begin();
+                 iter != child_list.end(); ++iter)
+            {
+                LLViewerObject* childp = *iter;
+                const LLVOVolume* chld_volume = dynamic_cast<LLVOVolume*>(childp);
+                if (chld_volume)
+                {
+                    // get cost and individual textures
+                    hud_object_complexity.objectsCost += chld_volume->getRenderCost(textures);
+                    hud_object_complexity.objectsCount++;
+                }
+            }
+
+            hud_object_complexity.texturesCount += textures.size();
+
+            for (LLVOVolume::texture_cost_t::iterator volume_texture = textures.begin();
+                 volume_texture != textures.end();
+                 ++volume_texture)
+            {
+                // add the cost of each individual texture (ignores duplicates)
+                hud_object_complexity.texturesCost += volume_texture->second;
+                LLViewerFetchedTexture *tex = LLViewerTextureManager::getFetchedTexture(volume_texture->first);
+                if (tex)
+                {
+                    // Note: Texture memory might be incorect since texture might be still loading.
+                    hud_object_complexity.texturesMemoryTotal += tex->getTextureMemory();
+                    if (tex->getOriginalHeight() * tex->getOriginalWidth() >= HUD_OVERSIZED_TEXTURE_DATA_SIZE)
+                    {
+                        hud_object_complexity.largeTexturesCount++;
+                    }
+                }
+            }
+            hud_complexity_list.push_back(hud_object_complexity);
+        }
+    }
 }
 
 // Calculations for mVisualComplexity value
@@ -10189,7 +10379,25 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		}
         LL_DEBUGS("ARCdetail") << "Avatar body parts complexity: " << cost << LL_ENDL;
 
+        mAttachmentVisibleTriangleCount = 0;
+        mAttachmentEstTriangleCount = 0.f;
+        mDirectAttachmentSurfaceArea = 0.f;
+        
+        // A standalone animated object needs to be accounted for
+        // using its associated volume. Attached animated objects
+        // will be covered by the subsequent loop over attachments.
+        LLControlAvatar *control_av = dynamic_cast<LLControlAvatar*>(this);
+        if (control_av)
+        {
+            LLVOVolume *volp = control_av->mRootVolp;
+            if (volp && !volp->isAttachment())
+            {
+                accountRenderComplexityForObject(volp, max_attachment_complexity,
+                                                 textures, cost, hud_complexity_list);
+            }
+        }
 
+        // Account for complexity of all attachments.
 		for (attachment_map_t::const_iterator attachment_point = mAttachmentPoints.begin(); 
 			 attachment_point != mAttachmentPoints.end();
 			 ++attachment_point)
@@ -10208,112 +10416,8 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 				 ++attachment_iter)
 			{
 				const LLViewerObject* attached_object = (*attachment_iter);
-				if (attached_object && !attached_object->isHUDAttachment())
-				{
-					textures.clear();
-					const LLDrawable* drawable = attached_object->mDrawable;
-					if (drawable)
-					{
-						const LLVOVolume* volume = drawable->getVOVolume();
-						if (volume)
-						{
-                            F32 attachment_total_cost = 0;
-                            F32 attachment_volume_cost = 0;
-                            F32 attachment_texture_cost = 0;
-                            F32 attachment_children_cost = 0;
-
-							attachment_volume_cost += volume->getRenderCost(textures);
-
-							const_child_list_t children = volume->getChildren();
-							for (const_child_list_t::const_iterator child_iter = children.begin();
-								  child_iter != children.end();
-								  ++child_iter)
-							{
-								LLViewerObject* child_obj = *child_iter;
-								LLVOVolume *child = dynamic_cast<LLVOVolume*>( child_obj );
-								if (child)
-								{
-									attachment_children_cost += child->getRenderCost(textures);
-								}
-							}
-
-							for (LLVOVolume::texture_cost_t::iterator volume_texture = textures.begin();
-								 volume_texture != textures.end();
-								 ++volume_texture)
-							{
-								// add the cost of each individual texture in the linkset
-								attachment_texture_cost += volume_texture->second;
-							}
-                            attachment_total_cost = attachment_volume_cost + attachment_texture_cost + attachment_children_cost;
-                            LL_DEBUGS("ARCdetail") << "Attachment costs " << attached_object->getAttachmentItemID()
-                                                   << " total: " << attachment_total_cost
-                                                   << ", volume: " << attachment_volume_cost
-                                                   << ", textures: " << attachment_texture_cost
-                                                   << ", " << volume->numChildren()
-                                                   << " children: " << attachment_children_cost
-                                                   << LL_ENDL;
-                            // Limit attachment complexity to avoid signed integer flipping of the wearer's ACI
-                            cost += (U32)llclamp(attachment_total_cost, MIN_ATTACHMENT_COMPLEXITY, max_attachment_complexity);
-						}
-					}
-				}
-                if (isSelf()
-                    && attached_object
-                    && attached_object->isHUDAttachment()
-                    && !attached_object->isTempAttachment()
-                    && attached_object->mDrawable)
-                {
-                    textures.clear();
-
-                    const LLVOVolume* volume = attached_object->mDrawable->getVOVolume();
-                    if (volume)
-                    {
-                        LLHUDComplexity hud_object_complexity;
-                        hud_object_complexity.objectName = attached_object->getAttachmentItemName();
-                        hud_object_complexity.objectId = attached_object->getAttachmentItemID();
-                        std::string joint_name;
-                        gAgentAvatarp->getAttachedPointName(attached_object->getAttachmentItemID(), joint_name);
-                        hud_object_complexity.jointName = joint_name;
-                        // get cost and individual textures
-                        hud_object_complexity.objectsCost += volume->getRenderCost(textures);
-                        hud_object_complexity.objectsCount++;
-
-                        LLViewerObject::const_child_list_t& child_list = attached_object->getChildren();
-                        for (LLViewerObject::child_list_t::const_iterator iter = child_list.begin();
-                            iter != child_list.end(); ++iter)
-                        {
-                            LLViewerObject* childp = *iter;
-                            const LLVOVolume* chld_volume = dynamic_cast<LLVOVolume*>(childp);
-                            if (chld_volume)
-                            {
-                                // get cost and individual textures
-                                hud_object_complexity.objectsCost += chld_volume->getRenderCost(textures);
-                                hud_object_complexity.objectsCount++;
-                            }
-                        }
-
-                        hud_object_complexity.texturesCount += textures.size();
-
-                        for (LLVOVolume::texture_cost_t::iterator volume_texture = textures.begin();
-                            volume_texture != textures.end();
-                            ++volume_texture)
-                        {
-                            // add the cost of each individual texture (ignores duplicates)
-                            hud_object_complexity.texturesCost += volume_texture->second;
-                            LLViewerFetchedTexture *tex = LLViewerTextureManager::getFetchedTexture(volume_texture->first);
-                            if (tex)
-                            {
-                                // Note: Texture memory might be incorect since texture might be still loading.
-                                hud_object_complexity.texturesMemoryTotal += tex->getTextureMemory();
-                                if (tex->getOriginalHeight() * tex->getOriginalWidth() >= HUD_OVERSIZED_TEXTURE_DATA_SIZE)
-                                {
-                                    hud_object_complexity.largeTexturesCount++;
-                                }
-                            }
-                        }
-                        hud_complexity_list.push_back(hud_object_complexity);
-                    }
-                }
+                accountRenderComplexityForObject(attached_object, max_attachment_complexity,
+                                                 textures, cost, hud_complexity_list);
 			}
 		}
 

@@ -50,6 +50,8 @@
 #include "llviewertexlayer.h"
 #include "material_codes.h"		// LL_MCODE_END
 #include "llviewerstats.h"
+#include "llvovolume.h"
+#include "llavatarrendernotifier.h"
 
 extern const LLUUID ANIM_AGENT_BODY_NOISE;
 extern const LLUUID ANIM_AGENT_BREATHE_ROT;
@@ -279,6 +281,11 @@ public:
 	void			addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font, bool is_name = false);
 	// </FS:Ansariel>
 	void 			idleUpdateRenderComplexity();
+    void 			accountRenderComplexityForObject(const LLViewerObject *attached_object,
+                                                     const F32 max_attachment_complexity,
+                                                     LLVOVolume::texture_cost_t& textures,
+                                                     U32& cost,
+                                                     hud_complexity_list_t& hud_complexity_list);
 	void			calculateUpdateRenderComplexity();
 	static const U32 VISUAL_COMPLEXITY_UNKNOWN;
 	void			updateVisualComplexity();
@@ -443,6 +450,9 @@ public:
         
   private:
 	F32			mAttachmentSurfaceArea; //estimated surface area of attachments
+	F32			mDirectAttachmentSurfaceArea; //estimated surface area of attachments
+    U32			mAttachmentVisibleTriangleCount;
+    F32			mAttachmentEstTriangleCount;
 	bool		shouldAlphaMask();
 
 	BOOL 		mNeedsSkin; // avatar has been animated and verts have not been updated
@@ -811,6 +821,7 @@ public:
 	LLBBox 				getHUDBBox() const;
 	void 				resetHUDAttachments();
 	BOOL				canAttachMoreObjects(U32 n=1) const;
+    S32					getMaxAnimatedObjectAttachments() const;
     BOOL				canAttachMoreAnimatedObjects(U32 n=1) const;
 protected:
 	U32					getNumAttachments() const; // O(N), not O(1)

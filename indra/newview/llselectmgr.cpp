@@ -714,6 +714,10 @@ void LLSelectMgr::confirmUnlinkObjects(const LLSD& notification, const LLSD& res
 // otherwise. this allows the handle_link method to more finely check
 // the selection and give an error message when the uer has a
 // reasonable expectation for the link to work, but it will fail.
+//
+// AXON - additional check that if the selection includes at least one
+// animated object, the total mesh triangle count cannot exceed the
+// designated limit.
 bool LLSelectMgr::enableLinkObjects()
 {
 	bool new_value = false;
@@ -738,6 +742,10 @@ bool LLSelectMgr::enableLinkObjects()
 			new_value = LLSelectMgr::getInstance()->getSelection()->applyToRootObjects(&func, firstonly);
 		}
 	}
+    if (!LLSelectMgr::getInstance()->getSelection()->checkAnimatedObjectEstTris())
+    {
+        new_value = false;
+    }
 // [RLVa:KB] - Checked: 2011-03-19 (RLVa-1.3.0f) | Modified: RLVa-0.2.0g
 	if ( (new_value) && ((rlv_handler_t::isEnabled()) && (!RlvActions::canStand())) )
 	{
@@ -7742,6 +7750,27 @@ bool LLObjectSelection::applyToObjects(LLSelectedObjectFunctor* func)
 		result = result && r;
 	}
 	return result;
+}
+
+bool LLObjectSelection::checkAnimatedObjectEstTris()
+{
+    F32 est_tris = 0;
+    F32 max_tris = 0;
+    S32 anim_count = 0;
+	for (root_iterator iter = root_begin(); iter != root_end(); )
+	{
+		root_iterator nextiter = iter++;
+		LLViewerObject* object = (*nextiter)->getObject();
+		if (!object)
+			continue;
+        if (object->isAnimatedObject())
+        {
+            anim_count++;
+        }
+        est_tris += object->recursiveGetEstTrianglesMax();
+        max_tris = llmax((F32)max_tris,(F32)object->getAnimatedObjectMaxTris());
+	}
+	return anim_count==0 || est_tris <= max_tris;
 }
 
 bool LLObjectSelection::applyToRootObjects(LLSelectedObjectFunctor* func, bool firstonly)

@@ -1247,16 +1247,26 @@ void LLVOVolume::updateSculptTexture()
 	
 }
 
+void LLVOVolume::updateVisualComplexity()
+{
+    LLVOAvatar* avatar = getAvatarAncestor();
+    if (avatar)
+    {
+        avatar->updateVisualComplexity();
+    }
+    LLVOAvatar* rigged_avatar = getAvatar();
+    if(rigged_avatar && (rigged_avatar != avatar))
+    {
+        rigged_avatar->updateVisualComplexity();
+    }
+}
+
 void LLVOVolume::notifyMeshLoaded()
 { 
 	mSculptChanged = TRUE;
 	gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_GEOMETRY, TRUE);
 
-	LLVOAvatar* avatar = getAvatar();
-	if (avatar)
-	{
-		avatar->updateVisualComplexity();
-	}
+    updateVisualComplexity();
 }
 
 // sculpt replaces generate() for sculpted surfaces
@@ -1446,18 +1456,7 @@ BOOL LLVOVolume::calcLOD()
     {
         if (isRootEdit() && getChildren().size()>0)
         {
-            S32 total_tris = getTriangleCount();
-            LLViewerObject::const_child_list_t& child_list = getChildren();
-            for (LLViewerObject::const_child_list_t::const_iterator iter = child_list.begin();
-                 iter != child_list.end(); ++iter)
-            {
-                LLViewerObject* childp = *iter;
-                LLVOVolume *child_volp = dynamic_cast<LLVOVolume*>(childp);
-                if (child_volp)
-                {
-                    total_tris += child_volp->getTriangleCount();
-                }
-            }
+            S32 total_tris = recursiveGetTriangleCount();
             setDebugText(llformat("TRIS %d TOTAL %d", getTriangleCount(), total_tris));
         }
         else
@@ -1484,7 +1483,8 @@ BOOL LLVOVolume::calcLOD()
 	{
 		mAppAngle = ll_round((F32) atan2( mDrawable->getRadius(), mDrawable->mDistanceWRTCamera) * RAD_TO_DEG, 0.01f);
 		mLOD = cur_detail;		
-		return TRUE;
+
+        return TRUE;
 	}
 
 	return FALSE;
@@ -1852,6 +1852,11 @@ bool LLVOVolume::lodOrSculptChanged(LLDrawable *drawable, BOOL &compiled)
 
 	if ((new_lod != old_lod) || mSculptChanged)
 	{
+        if (mDrawable->isState(LLDrawable::RIGGED))
+        {
+            updateVisualComplexity();
+        }
+
 		compiled = TRUE;
 		sNumLODChanges += new_num_faces;
 
@@ -3498,12 +3503,39 @@ U32 LLVOVolume::getExtendedMeshFlags() const
 	}
 }
 
+void LLVOVolume::onSetExtendedMeshFlags(U32 flags)
+{
+    // AXON - the check against mUserSelected is "empirically
+    // derived": doing rebuildGeom() while in selection trashes the
+    // graphics state of animated objects. Skipping this update is OK
+    // because we get another one on deselect.
+    if (mDrawable.notNull() && !mUserSelected)
+    {
+        // Need to trigger rebuildGeom(), which is where control avatars get created/removed
+        markForUpdate(TRUE);
+    }
+    if (isAttachment() && getAvatarAncestor())
+    {
+        updateVisualComplexity();
+        if (flags & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG)
+        {
+            // Making a rigged mesh into an animated object
+            getAvatarAncestor()->removeAttachmentOverridesForObject(this);
+        }
+        else
+        {
+            // Making an animated object into a rigged mesh
+            getAvatarAncestor()->addAttachmentOverridesForObject(this);
+        }
+    }
+}
+
 void LLVOVolume::setExtendedMeshFlags(U32 flags)
 {
     U32 curr_flags = getExtendedMeshFlags();
     if (curr_flags != flags)
     {
-        bool in_use = (flags != 0);
+        bool in_use = true;
         setParameterEntryInUse(LLNetworkData::PARAMS_EXTENDED_MESH, in_use, true);
         LLExtendedMeshParams *param_block = 
             (LLExtendedMeshParams *)getParameterEntry(LLNetworkData::PARAMS_EXTENDED_MESH);
@@ -3512,6 +3544,11 @@ void LLVOVolume::setExtendedMeshFlags(U32 flags)
             param_block->setFlags(flags);
         }
         parameterChanged(LLNetworkData::PARAMS_EXTENDED_MESH, true);
+        LL_DEBUGS("AXON") << (U32) this
+                   << " new flags " << flags << " curr_flags " << curr_flags
+                   << ", calling onSetExtendedMeshFlags()"
+                   << LL_ENDL;
+        onSetExtendedMeshFlags(flags);
     }
 }
 
@@ -3521,20 +3558,23 @@ bool LLVOVolume::canBeAnimatedObject() const
     {
         return false;
     }
-// AXON remove this check if animated object attachments are allowed
-#if 0
-    if (isAttachment())
-    {
-        return false;
-    }
-#endif
 	if (!getVolume())
 	{
 		return false;
 	}
+    if (!isRootEdit())
+    {
+        return false;
+    }
 	const LLMeshSkinInfo* skin = gMeshRepo.getSkinInfo(getVolume()->getParams().getSculptID(), this);
     if (!skin)
     {
+        return false;
+    }
+    F32 est_tris = recursiveGetEstTrianglesMax();
+    if (est_tris > getAnimatedObjectMaxTris())
+    {
+        LL_INFOS() << "est_tris " << est_tris << " exceeds limit " << getAnimatedObjectMaxTris() << LL_ENDL;
         return false;
     }
     return true;
@@ -3543,12 +3583,15 @@ bool LLVOVolume::canBeAnimatedObject() const
 bool LLVOVolume::isAnimatedObject() const
 {
     LLVOVolume *root_vol = (LLVOVolume*)getRootEdit();
-    bool can_be_animated = canBeAnimatedObject();
-    bool root_can_be_animated = root_vol->canBeAnimatedObject();
-    bool root_is_animated = root_vol->getExtendedMeshFlags() & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG;
-    if (can_be_animated && root_can_be_animated && root_is_animated)
+    bool root_is_animated_flag = root_vol->getExtendedMeshFlags() & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG;
+    if (root_is_animated_flag)
     {
-        return true;
+        bool root_can_be_animated = root_vol->canBeAnimatedObject();
+        bool this_can_be_animated = (root_vol == this) ? root_can_be_animated : canBeAnimatedObject();
+        if (this_can_be_animated && root_can_be_animated)
+        {
+            return true;
+        }
     }
     return false;
 }
@@ -3604,12 +3647,14 @@ void LLVOVolume::updateAnimatedObjectState(LLViewerObject *old_parent, LLViewerO
     // we may want to include or remove the isAvatar() check.
     if (new_parent && !new_parent->isAvatar())
     {
+#if 0 // AXON - MAINT-7819
         // Object should inherit control avatar and animated mesh flag
         // from parent, so clear them out from our own state
         if (getExtendedMeshFlags() & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG)
         {
             setExtendedMeshFlags(getExtendedMeshFlags() & ~LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG);
         }
+#endif
         if (mControlAvatar.notNull())
         {
             LLControlAvatar *av = mControlAvatar;
@@ -4005,6 +4050,15 @@ U32 LLVOVolume::getRenderCost(texture_cost_t &textures) const
 	return (U32)shame;
 }
 
+F32 LLVOVolume::getEstTrianglesMax() const
+{
+	if (isMesh())
+	{
+		return gMeshRepo.getEstTrianglesMax(getVolume()->getParams().getSculptID());
+	}
+    return 0.f;
+}
+
 F32 LLVOVolume::getStreamingCost(S32* bytes, S32* visible_bytes, F32* unscaled_value) const
 {
 	F32 radius = getScale().length()*0.5f;
@@ -4100,6 +4154,22 @@ void LLVOVolume::parameterChanged(U16 param_type, LLNetworkData* data, BOOL in_u
 	{
 		mVolumeImpl->onParameterChanged(param_type, data, in_use, local_origin);
 	}
+    if (!local_origin && param_type == LLNetworkData::PARAMS_EXTENDED_MESH)
+    {
+        // AXON better if we could compare the before and after flags directly.
+        U32 extended_mesh_flags = getExtendedMeshFlags();
+        bool enabled =  (extended_mesh_flags & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG);
+        bool was_enabled = (getControlAvatar() != NULL);
+        if (enabled != was_enabled)
+        {
+            LL_INFOS() << (U32) this
+                       << " calling onSetExtendedMeshFlags, enabled " << (U32) enabled
+                       << " was_enabled " << (U32) was_enabled
+                       << " local_origin " << (U32) local_origin
+                       << LL_ENDL;
+            onSetExtendedMeshFlags(extended_mesh_flags);
+        }
+    }
 	if (mDrawable.notNull())
 	{
 		BOOL is_light = getIsLight();
@@ -5095,8 +5165,6 @@ static LLDrawPoolAvatar* get_avatar_drawpool(LLViewerObject* vobj)
 
 void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 {
-	
-
 	if (group->changeLOD())
 	{
 		group->mLastUpdateDistance = group->mDistance;
@@ -5117,27 +5185,43 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 	group->mBuilt = 1.f;
 	
-	LLVOAvatar* pAvatarVO = NULL;
+	LLVOAvatar *rigged_av = NULL;
+    LLVOAvatar *attached_av = NULL;
 
 	LLSpatialBridge* bridge = group->getSpatialPartition()->asBridge();
+    LLViewerObject *vobj = NULL;
+    LLVOVolume *vol_obj = NULL;
+
 	if (bridge)
 	{
+        vobj = bridge->mDrawable->getVObj();
+        vol_obj = dynamic_cast<LLVOVolume*>(vobj);
 		if (bridge->mAvatar.isNull())
 		{
-			LLViewerObject* vobj = bridge->mDrawable->getVObj();
 			if (vobj)
 			{
 				bridge->mAvatar = vobj->getAvatar();
 			}
 		}
-
-		pAvatarVO = bridge->mAvatar;
+        rigged_av = bridge->mAvatar;
 	}
+    if (vobj)
+    {
+        attached_av = vobj->getAvatarAncestor();
+    }
 
-	if (pAvatarVO)
-	{
-		pAvatarVO->subtractAttachmentArea( group->mSurfaceArea );
-	}
+    if (attached_av)
+    {
+        attached_av->subtractAttachmentArea( group->mSurfaceArea );
+    }
+    if (rigged_av && (rigged_av != attached_av))
+    {
+        rigged_av->subtractAttachmentArea( group->mSurfaceArea );
+    }
+    if (vol_obj)
+    {
+        vol_obj->updateVisualComplexity();
+    }
 
 	group->mGeometryBytes = 0;
 	group->mSurfaceArea = 0;
@@ -5205,6 +5289,8 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 			}
 
 			LLVOVolume* vobj = drawablep->getVOVolume();
+            
+            std::string vobj_name = llformat("Vol%u", (U32) vobj);
 
 			if (!vobj)
 			{
@@ -5223,6 +5309,14 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 				const LLVector3& scale = vobj->getScale();
 				group->mSurfaceArea += volume->getSurfaceArea() * llmax(llmax(scale.mV[0], scale.mV[1]), scale.mV[2]);
 			}
+
+            LL_DEBUGS("AXON") << vobj_name << " rebuilding, isAttachment: " << (U32) vobj->isAttachment()
+                       << " is_animated " << vobj->isAnimatedObject()
+                       << " can_animate " << vobj->canBeAnimatedObject() 
+                       << " cav " << vobj->getControlAvatar() 
+                       << " playing " << (U32) (vobj->getControlAvatar() ? vobj->getControlAvatar()->mPlaying : false)
+                       << " frame " << LLFrameTimer::getFrameCount()
+                       << LL_ENDL;
 
 			llassert_always(vobj);
 
@@ -5258,11 +5352,12 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
             {
                 if (!vobj->getControlAvatar())
                 {
+                    LL_DEBUGS("AXON") << vobj_name << " calling linkControlAvatar()" << LL_ENDL;
                     vobj->linkControlAvatar();
                 }
                 if (vobj->getControlAvatar())
                 {
-                    pAvatarVO = vobj->getControlAvatar();
+                    rigged_av = vobj->getControlAvatar();
                 }
             }
             else
@@ -5271,6 +5366,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 // the checkbox has changed since the last rebuild.
                 if (vobj->getControlAvatar())
                 {
+                    LL_DEBUGS("AXON") << vobj_name << " calling unlinkControlAvatar()" << LL_ENDL;
                     vobj->unlinkControlAvatar();
                 }
             }
@@ -5282,13 +5378,13 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 			bool is_rigged = false;
 
             // AXON handle NPC case
-            if (rigged && pAvatarVO && !vobj->isAnimatedObject())
+            if (rigged && rigged_av && !vobj->isAnimatedObject())
             {
-                pAvatarVO->addAttachmentOverridesForObject(vobj);
-				if (!LLApp::isExiting() && pAvatarVO->isSelf() && debugLoggingEnabled("AvatarAttachments"))
+                rigged_av->addAttachmentOverridesForObject(vobj);
+				if (!LLApp::isExiting() && rigged_av->isSelf() && debugLoggingEnabled("AvatarAttachments"))
                 {
                     bool verbose = true;
-					pAvatarVO->showAttachmentOverrides(verbose);
+					rigged_av->showAttachmentOverrides(verbose);
 				}
             }
 
@@ -5739,9 +5835,9 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 			LLDrawable* drawablep = (LLDrawable*)(*drawable_iter)->getDrawable();
 			if(drawablep)
 			{
-			drawablep->clearState(LLDrawable::REBUILD_ALL);
-		}
-	}
+                drawablep->clearState(LLDrawable::REBUILD_ALL);
+            }
+        }
 	}
 
 	group->mLastUpdateTime = gFrameTimeSeconds;
@@ -5755,10 +5851,14 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 	mFaceList.clear();
 
-	if (pAvatarVO)
-	{
-        pAvatarVO->addAttachmentArea( group->mSurfaceArea );
-	}
+    if (attached_av)
+    {
+        attached_av->addAttachmentArea( group->mSurfaceArea );
+    }
+    if (rigged_av && (rigged_av != attached_av))
+    {
+        rigged_av->addAttachmentArea( group->mSurfaceArea );
+    }
 }
 
 static LLTrace::BlockTimerStatHandle FTM_REBUILD_MESH_FLUSH("Flush Mesh");
