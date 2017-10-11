@@ -746,6 +746,19 @@ LLInventoryPanel *LLSidepanelInventory::getActivePanel()
 	return NULL;
 }
 
+void LLSidepanelInventory::selectAllItemsPanel()
+{
+	if (!getVisible())
+	{
+		return;
+	}
+	if (mInventoryPanel->getVisible())
+	{
+		 mPanelMainInventory->selectAllItemsPanel();
+	}
+
+}
+
 BOOL LLSidepanelInventory::isMainInventoryPanelActive() const
 {
 	return mInventoryPanel->getVisible();

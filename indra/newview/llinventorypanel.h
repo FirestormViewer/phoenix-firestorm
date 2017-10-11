@@ -173,23 +173,21 @@ public:
 	LLInventoryFilter& getFilter();
 	const LLInventoryFilter& getFilter() const;
 	void setFilterTypes(U64 filter, LLInventoryFilter::EFilterType = LLInventoryFilter::FILTERTYPE_OBJECT);
+	void setFilterWorn();
 	U32 getFilterObjectTypes() const;
 	void setFilterPermMask(PermissionMask filter_perm_mask);
 	U32 getFilterPermMask() const;
 	void setFilterWearableTypes(U64 filter);
 	void setFilterSubString(const std::string& string);
 	const std::string getFilterSubString();
-	// <FS:Zi> Extended Inventory Search
-	void setFilterSubStringTarget(const std::string& target);
-	LLInventoryFilter::EFilterSubstringTarget getFilterSubStringTarget() const;
-	// </FS:Zi> Extended Inventory Search
 	void setSinceLogoff(BOOL sl);
 	void setHoursAgo(U32 hours);
 	void setDateSearchDirection(U32 direction);
 	BOOL getSinceLogoff();
 	void setFilterLinks(U64 filter_links);
 	U64 getFilterLinks();		// <FS:Zi> Filter Links Menu
-	void setWorn(BOOL worn);	// <FS>
+	void setSearchType(LLInventoryFilter::ESearchType type);
+	LLInventoryFilter::ESearchType getSearchType();
 	void setTransferable(BOOL transferable); // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 
 	void setShowFolderState(LLInventoryFilter::EFolderShow show);
@@ -232,7 +230,7 @@ public:
 	// "Auto_open" determines if we open an inventory panel if none are open.
 	static LLInventoryPanel *getActiveInventoryPanel(BOOL auto_open = TRUE);
 	
-	static void openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id);
+	static void openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id, BOOL main_panel = FALSE);
 
 	void addItemID(const LLUUID& id, LLFolderViewItem* itemp);
 	void removeItemID(const LLUUID& id);

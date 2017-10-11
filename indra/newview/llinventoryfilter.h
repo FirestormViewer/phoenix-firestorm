@@ -58,7 +58,7 @@ public:
         FILTERTYPE_MARKETPLACE_UNASSOCIATED = 0x1 << 8,	// pass if folder is a marketplace non associated (no market ID) folder
         FILTERTYPE_MARKETPLACE_LISTING_FOLDER = 0x1 << 9,	// pass iff folder is a listing folder
         FILTERTYPE_NO_MARKETPLACE_ITEMS = 0x1 << 10,         // pass iff folder is not under the marketplace
-		FILTERTYPE_WORN = 0x1 << 11,		// <FS> search by wearable type
+        FILTERTYPE_WORN = 0x1 << 11,     // pass if item is worn
 		FILTERTYPE_TRANSFERABLE = 0x1 << 12 // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 	};
 
@@ -84,16 +84,21 @@ public:
 		SO_FOLDERS_BY_WEIGHT = 0x1 << 3,    // Force folder sort by weight, usually, amount of some elements in their descendents
 	};
 
-	// <FS:Zi> Extended Inventory Search
-	enum EFilterSubstringTarget
+	enum ESearchType
 	{
-		SUBST_TARGET_NAME = 0,			// Classic search for item name
-		SUBST_TARGET_CREATOR,			// Search for creator name
-		SUBST_TARGET_DESCRIPTION,		// Search for item description
-		SUBST_TARGET_UUID,				// Search for asset UUID
-		SUBST_TARGET_ALL					// Search in all fields at the same time
+		SEARCHTYPE_NAME,
+		SEARCHTYPE_DESCRIPTION,
+		SEARCHTYPE_CREATOR,
+		SEARCHTYPE_UUID,
+		SEARCHTYPE_ALL // <FS:Ansariel> Zi's extended inventory search
 	};
-	// </FS:Zi> Extended Inventory Search
+
+	enum EFilterCreatorType
+	{
+		FILTERCREATOR_ALL,
+		FILTERCREATOR_SELF,
+		FILTERCREATOR_OTHERS
+	};
 
 	struct FilterOps
 	{
@@ -191,6 +196,7 @@ public:
 	void 				setFilterUUID(const LLUUID &object_id);
 	void				setFilterWearableTypes(U64 types);
 	void				setFilterEmptySystemFolders();
+	void				setFilterWorn();
 	void				removeFilterEmptySystemFolders(); // <FS:Ansariel> Optional hiding of empty system folders
 	void				setFilterMarketplaceActiveFolders();
 	void				setFilterMarketplaceInactiveFolders();
@@ -198,6 +204,10 @@ public:
     void                setFilterMarketplaceListingFolders(bool select_only_listing_folders);
     void                setFilterNoMarketplaceFolder();
 	void				updateFilterTypes(U64 types, U64& current_types);
+	void 				setSearchType(ESearchType type);
+	ESearchType			getSearchType() { return mSearchType; }
+	void 				setFilterCreator(EFilterCreatorType type);
+	EFilterCreatorType		getFilterCreator() { return mFilterCreatorType; }
 
 	void 				setFilterSubString(const std::string& string);
 	const std::string& 	getFilterSubString(BOOL trim = FALSE) const;
@@ -231,9 +241,7 @@ public:
 	void				setFindAllLinksMode(const std::string &search_name, const LLUUID& search_id);
 
 	// <FS>
-	void 				setFilterWorn(BOOL worn);
 	BOOL 				getFilterWorn() const { return mFilterOps.mFilterTypes & FILTERTYPE_WORN; }
-	// </FS>
 
 	// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 	void 				setFilterTransferable(BOOL transferable);
@@ -252,11 +260,6 @@ public:
 
 	std::string::size_type getStringMatchOffset(LLFolderViewModelItem* item) const;
 	std::string::size_type getFilterStringSize() const;
-	// <FS:Zi> Extended Inventory Search
-	void setFilterSubStringTarget(const std::string& targetName);
-	EFilterSubstringTarget getFilterSubStringTarget() const;
-	std::string getSearchableTarget(const LLFolderViewItem* item) const;
-	// </FS:Zi> Extended Inventory Search
 
 	// +-------------------------------------------------------------------+
 	// + Presentation
@@ -316,6 +319,7 @@ private:
 	bool 				checkAgainstPermissions(const class LLFolderViewModelItemInventory* listener) const;
 	bool 				checkAgainstPermissions(const LLInventoryItem* item) const;
 	bool 				checkAgainstFilterLinks(const class LLFolderViewModelItemInventory* listener) const;
+	bool 				checkAgainstCreator(const class LLFolderViewModelItemInventory* listener) const;
 	bool				checkAgainstClipboard(const LLUUID& object_id) const;
 
 	FilterOps				mFilterOps;
@@ -327,10 +331,10 @@ private:
 	// <FS:Zi> Multi-substring inventory search
 	std::vector<std::string::size_type>	mSubStringMatchOffsets;
 	std::vector<std::string>			mFilterSubStrings;
-	EFilterSubstringTarget mFilterSubStringTarget;
 	// </FS:Zi> Multi-substring inventory search
 
 	std::string				mFilterSubStringOrig;
+	std::string				mUsername;
 	const std::string		mName;
 
 	S32						mCurrentGeneration;
@@ -345,6 +349,9 @@ private:
     
 	std::string 			mFilterText;
 	std::string 			mEmptyLookupMessage;
+
+	ESearchType 			mSearchType;
+	EFilterCreatorType		mFilterCreatorType;
 };
 
 #endif

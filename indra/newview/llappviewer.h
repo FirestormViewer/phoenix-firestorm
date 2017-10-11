@@ -97,11 +97,10 @@ public:
 
 	void writeDebugInfo(bool isStatic=true);
 
-	const LLOSInfo& getOSInfo() const { return mSysOSInfo; }
-
 	void setServerReleaseNotesURL(const std::string& url) { mServerReleaseNotesURL = url; }
 	LLSD getViewerInfo() const;
 	std::string getViewerInfoString() const;
+	std::string getShortViewerInfoString() const;
 
 	// Report true if under the control of a debugger. A null-op default.
 	virtual bool beingDebugged() { return false; } 
@@ -263,6 +262,8 @@ private:
     void sendLogoutRequest();
     void disconnectViewer();
 
+	bool onChangeFrameLimit(LLSD const & evt);
+
 	// *FIX: the app viewer class should be some sort of singleton, no?
 	// Perhaps its child class is the singleton and this should be an abstract base.
 	static LLAppViewer* sInstance; 
@@ -282,8 +283,6 @@ private:
 	//-TT The skin and theme we are using at startup. might want to make them static.
 	std::string mCurrentSkin;
 	std::string mCurrentSkinTheme;
-	
-	LLOSInfo mSysOSInfo; 
 	bool mReportedCrash;
 
 	std::string mServerReleaseNotesURL;
@@ -332,6 +331,8 @@ private:
 	LLAppCoreHttp mAppCoreHttp;
 
         bool mIsFirstRun;
+	U64 mMinMicroSecPerFrame; // frame throttling
+
 
 	// <FS:Zi> Backup Settings
 public:
@@ -383,7 +384,6 @@ extern F32SecondsImplicit		gFrameTimeSeconds;			// Loses msec precision after ~4
 extern F32SecondsImplicit		gFrameIntervalSeconds;		// Elapsed time between current and previous gFrameTimeSeconds
 extern F32		gFPSClamped;				// Frames per second, smoothed, weighted toward last frame
 extern F32		gFrameDTClamped;
-extern U32 		gFrameStalls;
 
 extern LLTimer gRenderStartTime;
 extern LLFrameTimer gForegroundTime;

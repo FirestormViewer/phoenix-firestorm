@@ -57,11 +57,21 @@
 #include "llmachineid.h"
 #include "llevents.h"
 #include "llappviewer.h"
+#include "llsdserialize.h"
 
 #include <boost/scoped_ptr.hpp>
 #include <sstream>
 
 const S32 LOGIN_MAX_RETRIES = 3;
+
+// this can be removed once it is defined by the build for all forks
+#ifndef ADDRESS_SIZE
+#ifdef ND_BUILD64BIT_ARCH
+#  define ADDRESS_SIZE 64
+#else
+#  define ADDRESS_SIZE 32
+#endif
+#endif
 
 class LLLoginInstance::Disposable {
 public:
@@ -230,6 +240,19 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
 	request_params["id0"] = mSerialNumber;
 	request_params["host_id"] = gSavedSettings.getString("HostID");
 	request_params["extended_errors"] = true; // request message_id and message_args
+
+    // log request_params _before_ adding the credentials   
+    LL_DEBUGS("LLLogin") << "Login parameters: " << LLSDOStreamer<LLSDNotationFormatter>(request_params) << LL_ENDL;
+
+    // Copy the credentials into the request after logging the rest
+    LLSD credentials(user_credential->getLoginParams());
+    for (LLSD::map_const_iterator it = credentials.beginMap();
+         it != credentials.endMap();
+         it++
+         )
+    {
+        request_params[it->first] = it->second;
+    }
 
     // log request_params _before_ adding the credentials   
     LL_DEBUGS("LLLogin") << "Login parameters: " << LLSDOStreamer<LLSDNotationFormatter>(request_params) << LL_ENDL;

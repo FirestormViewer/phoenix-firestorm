@@ -1383,6 +1383,8 @@ static void removeDuplicateWearableItemsByAssetID(LLInventoryModel::item_array_t
 
 //=========================================================================
 
+const std::string LLAppearanceMgr::sExpectedTextureName = "OutfitPreview";
+
 const LLUUID LLAppearanceMgr::getCOF() const
 {
 	return gInventory.findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT);
@@ -3648,9 +3650,26 @@ void update_base_outfit_after_ordering()
 	BOOST_FOREACH(LLViewerInventoryItem* outfit_item, outfit_item_array)
 	{
 		LLViewerInventoryItem* linked_item = outfit_item->getLinkedItem();
-		if (linked_item != NULL && linked_item->getActualType() == LLAssetType::AT_TEXTURE)
+		if (linked_item != NULL)
 		{
-			app_mgr.setOutfitImage(linked_item->getLinkedUUID());
+			if (linked_item->getActualType() == LLAssetType::AT_TEXTURE)
+			{
+				app_mgr.setOutfitImage(linked_item->getLinkedUUID());
+				if (linked_item->getName() == LLAppearanceMgr::sExpectedTextureName)
+				{
+					// Images with "appropriate" name take priority
+					break;
+				}
+			}
+		}
+		else if (outfit_item->getActualType() == LLAssetType::AT_TEXTURE)
+		{
+			app_mgr.setOutfitImage(outfit_item->getUUID());
+			if (outfit_item->getName() == LLAppearanceMgr::sExpectedTextureName)
+			{
+				// Images with "appropriate" name take priority
+				break;
+			}
 		}
 	}
 

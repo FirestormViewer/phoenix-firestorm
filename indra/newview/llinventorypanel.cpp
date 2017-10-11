@@ -382,6 +382,11 @@ void LLInventoryPanel::setFilterTypes(U64 types, LLInventoryFilter::EFilterType 
 		getFilter().setFilterCategoryTypes(types);
 }
 
+void LLInventoryPanel::setFilterWorn()
+{
+    getFilter().setFilterWorn();
+}
+
 U32 LLInventoryPanel::getFilterObjectTypes() const 
 { 
 	return getFilter().getFilterObjectTypes();
@@ -407,18 +412,6 @@ void LLInventoryPanel::setFilterSubString(const std::string& string)
 {
 	getFilter().setFilterSubString(string);
 }
-
-// <FS:Zi> Extended Inventory Search
-void LLInventoryPanel::setFilterSubStringTarget(const std::string& target)
-{
-	getFilter().setFilterSubStringTarget(target);
-}
-
-LLInventoryFilter::EFilterSubstringTarget LLInventoryPanel::getFilterSubStringTarget() const
-{
-	return getFilter().getFilterSubStringTarget();
-}
-// </FS:Zi> Extended Inventory Search
 
 const std::string LLInventoryPanel::getFilterSubString() 
 { 
@@ -470,12 +463,15 @@ U64 LLInventoryPanel::getFilterLinks()
 }
 // </FS:Zi> Filter Links Menu
 
-// <FS>
-void LLInventoryPanel::setWorn(BOOL worn)
+void LLInventoryPanel::setSearchType(LLInventoryFilter::ESearchType type)
 {
-	getFilter().setFilterWorn(worn);
+	getFilter().setSearchType(type);
 }
-// </FS>
+
+LLInventoryFilter::ESearchType LLInventoryPanel::getSearchType()
+{
+	return getFilter().getSearchType();
+}
 
 // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 void LLInventoryPanel::setTransferable(BOOL transferable)
@@ -1520,9 +1516,14 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 }
 
 //static
-void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id)
+void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id, BOOL main_panel)
 {
-	LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
+	LLInventoryPanel *active_panel;
+	if (main_panel)
+	{
+		LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory")->selectAllItemsPanel();
+	}
+	active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
 
 	if (active_panel)
 	{

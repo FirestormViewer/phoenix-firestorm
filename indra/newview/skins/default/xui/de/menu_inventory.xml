@@ -108,7 +108,7 @@
 	<menu label="An HUD hängen" name="Attach To HUD"/>
 	<menu_item_call label="Bearbeiten" name="Wearable Edit"/>
 	<menu_item_call label="Berühren" name="Touch Attachment"/>
-	<menu_item_call label="In Gesamtansicht suchen" name="Find in Main"/>
+	<menu_item_call label="In Gesamtansicht anzeigen" name="Show in Main Panel"/>
 	<menu_item_call label="Hinzufügen" name="Wearable Add"/>
 	<menu_item_call label="Ausziehen" name="Take Off"/>
 	<menu_item_call label="In Marktplatz-Auflistungen kopieren" name="Marketplace Copy"/>

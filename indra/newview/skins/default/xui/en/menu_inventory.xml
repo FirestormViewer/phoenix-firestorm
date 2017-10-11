@@ -578,6 +578,14 @@
          parameter="copy_uuid" />
     </menu_item_call>
     <menu_item_call
+     label="Show in Main View"
+     layout="topleft"
+     name="Show in Main Panel">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="show_in_main_panel" />
+    </menu_item_call>
+    <menu_item_call
      label="Restore to Last Position"
      layout="topleft"
      name="Restore to Last Position">
@@ -822,14 +830,6 @@
         <menu_item_call.on_click
          function="Inventory.DoToSelected"
          parameter="wear" />
-    </menu_item_call>
-    <menu_item_call
-     label="Find in Main View"
-     layout="topleft"
-     name="Find in Main">
-        <menu_item_call.on_click
-         function="Inventory.DoToSelected"
-         parameter="find_in_main" />
     </menu_item_call>
     <menu_item_call
      label="Add"

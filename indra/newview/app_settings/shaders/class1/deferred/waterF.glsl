@@ -200,8 +200,10 @@ void main()
 	
 	// <FS> Fix weird water glow on edge of land due to broken alpha value
 	//frag_data[0] = vec4(color.rgb, color); // diffuse
+	//frag_data[1] = vec4(0);		// speccolor, spec
+	//frag_data[2] = vec4(encode_normal(screenspacewavef.xyz*0.5+0.5), 0.05, 0);// normalxy, 0, 0
 	frag_data[0] = vec4(color.rgb, color.a); // diffuse
+	frag_data[1] = vec4(0.5, 0.5, 0.5, 0.75);		// speccolor, spec
+	frag_data[2] = vec4(encode_normal(screenspacewavef.xyz), 0.05, 0);// normalxy, 0, 0
 	// </FS>
-	frag_data[1] = vec4(0);		// speccolor, spec
-	frag_data[2] = vec4(encode_normal(screenspacewavef.xyz*0.5+0.5), 0.05, 0);// normalxy, 0, 0
 }

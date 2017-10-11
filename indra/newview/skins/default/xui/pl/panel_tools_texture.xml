@@ -117,7 +117,7 @@
 	<spinner label="Wyrównanie poziome" name="shinyOffsetU" />
 	<spinner label="Wyrównanie pionowe" name="shinyOffsetV" />
 	<check_box label="Równaj powierzchnie planarne" name="checkbox planar align" tool_tip="Wyrównuj tekstury na wszystkich wybranych powierzchniach z powierzchnią wybraną jako ostatnia. Wymaga planarnego mapowania tekstur." />
-	<check_box label="Synchronizuj materiały" name="checkbox maps sync" tool_tip="Synchronizuj parametry map tekstur" />
+	<check_box label="Synchronizuj materiały" name="checkbox_sync_settings" tool_tip="Synchronizuj parametry map tekstur" />
 	<button label="Kopiuj" name="copytextures" />
 	<button label="Wklej" name="pastetextures" />
 </panel>
