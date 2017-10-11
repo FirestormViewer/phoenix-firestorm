@@ -94,6 +94,11 @@ public:
 	virtual const std::string& getDisplayName() const;
 	const std::string& getSearchableName() const { return mSearchableName; }
 
+	std::string getSearchableDescription() const;
+	std::string getSearchableCreatorName() const;
+	std::string getSearchableUUIDString() const;
+	std::string getSearchableAll() const; // <FS:Ansariel> Zi's extended inventory search
+
 	virtual PermissionMask getPermissionMask() const;
 	virtual LLFolderType::EType getPreferredType() const;
 	virtual time_t getCreationDate() const;
@@ -206,14 +211,6 @@ protected:
 	void purgeItem(LLInventoryModel *model, const LLUUID &uuid);
 	void removeObject(LLInventoryModel *model, const LLUUID &uuid);
 	virtual void buildDisplayName() const {}
-
-	// <FS:ND> Reintegrate search by uuid/creator/descripting from Zi Ree after CHUI Merge
-public:
-	virtual std::string getSearchableCreator( void ) const;
-	virtual std::string getSearchableDescription( void ) const;
-	virtual std::string getSearchableUUID( void ) const;
-	virtual std::string getSearchableAll( void ) const;
-	// </FS:ND>
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

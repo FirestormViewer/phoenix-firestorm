@@ -16,6 +16,8 @@
 	<button label="Keine" label_selected="Keine" name="None"/>
 	<check_box label="Nur Transferierbar" name="check_transferable"/>
 	<check_box label="Ordner immer anz." name="check_show_empty"/>
+	<check_box label="Erstellt von mir" name="check_created_by_me"/>
+	<check_box label="Erstellt von anderen" name="check_created_by_others"/>
 	<check_box label="Seit Abmeldung" name="check_since_logoff"/>
 	<text name="- OR -">
 		- ODER -

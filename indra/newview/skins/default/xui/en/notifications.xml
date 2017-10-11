@@ -10,6 +10,11 @@ Don&apos;t show me this again
 (for current session)
   </global>
 
+  <global name="skipnexttimesessiononly">
+Don&apos;t show me this again
+(for current session)
+  </global>
+
   <global name="alwayschoose">
 
 		Always choose this option
@@ -7069,6 +7074,13 @@ Topic: [SUBJECT], Message: [MESSAGE]
    type="notifytip">
     <tag>friendship</tag>
 Although you&apos;re very nice, you can&apos;t add yourself as a friend.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="AddSelfRenderExceptions"
+   type="notifytip">
+You can&apos;t add yourself to the rendering exceptions list.
   </notification>
 
   <notification

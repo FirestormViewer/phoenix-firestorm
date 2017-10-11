@@ -82,6 +82,7 @@ const S32 MAX_PASSWORD_OPENSIM = 255;
 
 FSPanelLogin *FSPanelLogin::sInstance = NULL;
 BOOL FSPanelLogin::sCapslockDidNotification = FALSE;
+BOOL FSPanelLogin::sCredentialSet = FALSE;
 std::string FSPanelLogin::sPassword = "";
 
 // Helper for converting a user name into the canonical "Firstname Lastname" form.
@@ -187,6 +188,7 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	setBackgroundOpaque(TRUE);
 
 	mPasswordModified = FALSE;
+		
 	FSPanelLogin::sInstance = this;
 
 	LLView* login_holder = gViewerWindow->getLoginPanelHolder();
@@ -463,6 +465,7 @@ void FSPanelLogin::setFields(LLPointer<LLCredential> credential, bool from_start
 		LL_WARNS() << "Attempted setFields with no login view shown" << LL_ENDL;
 		return;
 	}
+	sCredentialSet = TRUE;
 	LL_INFOS("Credentials") << "Setting login fields to " << *credential << LL_ENDL;
 
 	std::string login_id;
@@ -727,9 +730,12 @@ void FSPanelLogin::onUpdateStartSLURL(const LLSLURL& new_start_slurl)
 
 				updateServer(); // to change the links and splash screen
 			}
-			location_combo->setTextEntry(new_start_slurl.getLocationString());
-			sInstance->mLocationLength = new_start_slurl.getLocationString().length();
-			sInstance->updateLoginButtons();
+			if ( new_start_slurl.getLocationString().length() )
+			{
+				location_combo->setTextEntry(new_start_slurl.getLocationString());
+				sInstance->mLocationLength = new_start_slurl.getLocationString().length();
+				sInstance->updateLoginButtons();
+			}
 		}
 		else
 		{
@@ -837,7 +843,7 @@ void FSPanelLogin::loadLoginPage()
 	params["grid"] = LLGridManager::getInstance()->getGridId();
 
 	// add OS info
-	params["os"] = LLAppViewer::instance()->getOSInfo().getOSStringSimple();
+	params["os"] = LLOSInfo::instance().getOSStringSimple();
 
 	// sourceid
 	params["sourceid"] = gSavedSettings.getString("sourceid");
@@ -908,6 +914,7 @@ void FSPanelLogin::onClickConnect(void *)
 		}
 		else
 		{
+			sCredentialSet = FALSE;
 			LLPointer<LLCredential> cred;
 			BOOL remember;
 			getFields(cred, remember);

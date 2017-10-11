@@ -2305,6 +2305,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FramePerSecondLimit</key>
+    <map>
+      <key>Comment</key>
+      <string>Controls upper limit of frames per second</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>120</integer>
+    </map>
     <key>BackgroundYieldTime</key>
     <map>
       <key>Comment</key>
@@ -6596,11 +6607,11 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://search.secondlife.com/viewer/[CATEGORY]/?q=[QUERY]&amp;p=[AUTH_TOKEN]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;sid=[SESSION_ID]</string>
+      <string>https://search.[GRID]/viewer/[CATEGORY]/?q=[QUERY]&amp;p=[AUTH_TOKEN]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;sid=[SESSION_ID]</string>
       <key>Backup</key>
       <integer>0</integer>
       <!-- LL, possibly privacy leaking search string 
-	  <string>http://search.secondlife.com/viewer/[CATEGORY]/?q=[QUERY]&amp;p=[AUTH_TOKEN]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;g=[GODLIKE]&amp;sid=[SESSION_ID]&amp;rid=[REGION_ID]&amp;pid=[PARCEL_ID]&amp;channel=[CHANNEL]&amp;version=[VERSION]&amp;major=[VERSION_MAJOR]&amp;minor=[VERSION_MINOR]&amp;patch=[VERSION_PATCH]&amp;build=[VERSION_BUILD]</string>
+      <string>https://search.[GRID]/viewer/[CATEGORY]/?q=[QUERY]&amp;p=[AUTH_TOKEN]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;g=[GODLIKE]&amp;sid=[SESSION_ID]&amp;rid=[REGION_ID]&amp;pid=[PARCEL_ID]&amp;channel=[CHANNEL]&amp;version=[VERSION]&amp;major=[VERSION_MAJOR]&amp;minor=[VERSION_MINOR]&amp;patch=[VERSION_PATCH]&amp;build=[VERSION_BUILD]</string>
 	  -->
     </map>
     <key>HighResSnapshot</key>
@@ -14536,7 +14547,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>SyncMaterialSettings</key>
     <map>
       <key>Comment</key>
-      <string>SyncMaterialSettings - DO NOT USE AND KEEP IT SET TO 0: Use FSSyncronizeTextureMaps instead!</string>
+      <string>SyncMaterialSettings</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -17802,17 +17813,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>-1</integer>
       <key>Backup</key>
       <integer>0</integer>
-    </map>
-    <key>MaxFPS</key>
-    <map>
-      <key>Comment</key>
-      <string>Yield some time to the local host if we reach a threshold framerate.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>60.0</real>
     </map>
     <key>ForcePeriodicRenderingTime</key>
     <map>
@@ -22805,7 +22805,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSSyncronizeTextureMaps</key>
       <map>
       <key>Comment</key>
-      <string>Align texture maps (texture, bumpy, shiny) across the faces of a prim</string>
+      <string>Deprecated - Leave this at ZERO and use SyncMaterialSettings instead. </string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -23272,7 +23272,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSLimitFramerate</key>
       <map>
       <key>Comment</key>
-      <string>Enable framerate limitation defined by MaxFPS</string>
+      <string>Enable framerate limitation defined by FramePerSecondLimit</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

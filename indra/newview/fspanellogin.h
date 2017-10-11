@@ -58,6 +58,8 @@ public:
 
 	static void getFields(LLPointer<LLCredential>& credential, BOOL& remember);
 
+	static BOOL isCredentialSet() { return sCredentialSet; }
+
 	static BOOL areCredentialFieldsDirty();
 	static void setLocation(const LLSLURL& slurl);
 	static void autologinToLocation(const LLSLURL& slurl);
@@ -121,6 +123,8 @@ private:
 
 	static FSPanelLogin* sInstance;
 	static BOOL		sCapslockDidNotification;
+
+	static BOOL sCredentialSet;
 
 	unsigned int mUsernameLength;
 	unsigned int mPasswordLength;

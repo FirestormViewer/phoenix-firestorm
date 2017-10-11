@@ -22,10 +22,9 @@
  * $/LicenseInfo$
  */
 
-#include <fstream>
 #include "../llmath.h"
 #include "ndoctreelog.h"
-
+#include "llfile.h"
 
 namespace nd
 {
@@ -34,7 +33,7 @@ namespace nd
 		namespace debug
 		{
 			U32 gOctreeDebug;
-			std::ofstream *pLogStream;
+			llofstream *pLogStream;
 			std::string mOctreeLogFilename;
 			
 			void setOctreeLogFilename( std::string const &aFilename )
@@ -55,7 +54,7 @@ namespace nd
 			{
 				if( !pLogStream && mOctreeLogFilename.size() )
 				{
-					pLogStream = new std::ofstream();
+					pLogStream = new llofstream();
 					pLogStream->open(  mOctreeLogFilename.c_str(), std::ios::out );
 					if( pLogStream->is_open() )
 					{

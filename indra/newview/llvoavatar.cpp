@@ -4005,10 +4005,62 @@ void LLVOAvatar::updateDebugText()
                 }
                 if (motion_name.empty())
                 {
+					std::string name;
+					if (gAgent.isGodlikeWithoutAdminMenuFakery() || isSelf())
+					{
+						name = motionp->getID().asString();
+						LLVOAvatar::AnimSourceIterator anim_it = mAnimationSources.begin();
+						for (; anim_it != mAnimationSources.end(); ++anim_it)
+						{
+							if (anim_it->second == motionp->getID())
+							{
+								LLViewerObject* object = gObjectList.findObject(anim_it->first);
+								if (!object)
+								{
+									break;
+								}
+								if (object->isAvatar())
+								{
+									if (mMotionController.mIsSelf)
+									{
+										// Searching inventory by asset id is really long
+										// so just mark as inventory
+										// Also item is likely to be named by LLPreviewAnim
+										name += "(inventory)";
+									}
+								}
+								else
+								{
+									LLViewerInventoryItem* item = NULL;
+									if (!object->isInventoryDirty())
+									{
+										item = object->getInventoryItemByAsset(motionp->getID());
+									}
+									if (item)
+									{
+										name = item->getName();
+									}
+									else if (object->isAttachment())
+									{
+										name += "(" + getAttachmentItemName() + ")";
+									}
+									else
+									{
+										// in-world object, name or content unknown
+										name += "(in-world)";
+									}
+								}
+								break;
+							}
+						}
+					}
+					else
+					{
+						name = LLUUID::null.asString();
+					}
+
 					output = llformat("%s - %d",
-							  gAgent.isGodlikeWithoutAdminMenuFakery() ?
-							  motionp->getID().asString().c_str() :
-							  LLUUID::null.asString().c_str(),
+							  name.c_str(),
 							  (U32)motionp->getPriority());
 				}
 				else
@@ -6048,10 +6100,6 @@ LLUUID LLVOAvatar::remapMotionID(const LLUUID& id)
 			if (use_new_walk_run)
 				result = ANIM_AGENT_FEMALE_RUN_NEW;
 		}
-		else if (id == ANIM_AGENT_SIT)
-		{
-			result = ANIM_AGENT_SIT_FEMALE;
-		}
 	}
 	else
 	{
@@ -6083,7 +6131,7 @@ BOOL LLVOAvatar::startMotion(const LLUUID& id, F32 time_offset)
 	LL_DEBUGS() << "motion requested " << id.asString() << " " << gAnimLibrary.animationName(id) << LL_ENDL;
 
 	// <FS:Zi> Animation Overrider
-	//LLUUID remap_id = remapMotionID(id);
+	//LLUUID remap_id = remapMotionID(id, getSex());
 	LLUUID remap_id;
 	if (isSelf())
 	{
@@ -6143,7 +6191,7 @@ BOOL LLVOAvatar::stopMotion(const LLUUID& id, BOOL stop_immediate)
 		remap_id = remapMotionID(id);
 	}
 	// </FS:Zi> Animation Overrider
-
+	
 	if (remap_id != id)
 	{
 		LL_DEBUGS() << "motion resultant " << remap_id.asString() << " " << gAnimLibrary.animationName(remap_id) << LL_ENDL;
@@ -9517,7 +9565,7 @@ void dump_sequential_xml(const std::string outprefix, const LLSD& content)
 {
 	std::string outfilename = get_sequential_numbered_file_name(outprefix,".xml");
 	std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
-	std::ofstream ofs(fullpath.c_str(), std::ios_base::out);
+	llofstream ofs(fullpath.c_str(), std::ios_base::out);
 	ofs << LLSDOStreamer<LLSDXMLFormatter>(content, LLSDFormatter::OPTIONS_PRETTY);
 	LL_DEBUGS("Avatar") << "results saved to: " << fullpath << LL_ENDL;
 }

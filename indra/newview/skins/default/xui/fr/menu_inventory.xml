@@ -96,7 +96,7 @@
 	<menu_item_call label="Désactiver" name="Deactivate"/>
 	<menu_item_call label="Enregistrer sous" name="Save As"/>
 	<menu_item_call label="Porter" name="Wearable And Object Wear"/>
-	<menu_item_call label="Afficher dans l'onglet Inventaire" name="Find in Main"/>
+	<menu_item_call label="Afficher dans l'onglet Inventaire" name="Show in Main Panel"/>
 	<menu_item_call label="Ajouter" name="Wearable Add"/>
 	<menu label="Attacher à" name="Attach To"/>
 	<menu label="Attacher au HUD" name="Attach To HUD"/>

@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  can_minimize="false"
- height="486"
+ height="528"
  layout="topleft"
  name="Inventory Finder"
  help_topic="inventory_finder"
@@ -247,11 +247,27 @@
      width="144" />
     <check_box
      height="16"
+     label="Created by me"
+     layout="topleft"
+     left="8"
+     name="check_created_by_me"
+     top_pad="6"
+     width="144" />
+    <check_box
+     height="16"
+     label="Created by others"
+     layout="topleft"
+     left="8"
+     name="check_created_by_others"
+     top_pad="0"
+     width="144" />
+    <check_box
+     height="16"
      label="Since Logoff"
      layout="topleft"
      left_delta="0"
      name="check_since_logoff"
-     top_pad="0"
+     top_pad="6"
      width="144" />
     <text
      type="string"
