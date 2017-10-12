@@ -10,11 +10,6 @@ Don&apos;t show me this again
 (for current session)
   </global>
 
-  <global name="skipnexttimesessiononly">
-Don&apos;t show me this again
-(for current session)
-  </global>
-
   <global name="alwayschoose">
 
 		Always choose this option
