@@ -1213,11 +1213,11 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 		temporary = getChild<LLCheckBoxCtrl>("temp_asset")->get();
 		if (temporary)
 		{
-			url = gAgent.getRegion()->getCapability("UploadBakedTexture");
+			url = gAgent.getRegionCapability("UploadBakedTexture");
 		}
 		else
 		{
-			url = gAgent.getRegion()->getCapability("NewFileAgentInventory");
+			url = gAgent.getRegionCapability("NewFileAgentInventory");
 			new_file_agent_inventory = true;
 		}
 		LLTrace::add(LLStatViewer::UPLOAD_TEXTURE,1);
@@ -1235,7 +1235,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 		}
 		else
 		{
-			url = gAgent.getRegion()->getCapability("NewFileAgentInventory");
+			url = gAgent.getRegionCapability("NewFileAgentInventory");
 			new_file_agent_inventory = true;
 			LLTrace::add(LLStatViewer::UPLOAD_SOUND,1);
 		}
@@ -1306,7 +1306,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 		}
 		else
 		{
-			url = gAgent.getRegion()->getCapability("UpdateNotecardAgentInventory");
+			url = gAgent.getRegionCapability("UpdateNotecardAgentInventory");
 			body["item_id"] = inventory_item;
 		}
 	}
@@ -1330,7 +1330,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 		}
 		else
 		{
-			url = gAgent.getRegion()->getCapability("UpdateScriptAgent");
+			url = gAgent.getRegionCapability("UpdateScriptAgent");
 			body["item_id"] = inventory_item;
 			if (gSavedSettings.getBOOL("FSSaveInventoryScriptsAsMono"))
 			{
@@ -1355,7 +1355,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 		}
 		else
 		{
-			url = gAgent.getRegion()->getCapability("NewFileAgentInventory");
+			url = gAgent.getRegionCapability("NewFileAgentInventory");
 			new_file_agent_inventory = true;
 			LLTrace::add(LLStatViewer::ANIMATION_UPLOADS,1);
 		}
@@ -1380,7 +1380,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 		}
 		else
 		{
-			url = gAgent.getRegion()->getCapability("UpdateGestureAgentInventory");
+			url = gAgent.getRegionCapability("UpdateGestureAgentInventory");
 			body["item_id"] = inventory_item;
 			asset_data.push_back('\0');
 			LLMultiGesture* gesture = new LLMultiGesture();
@@ -1449,7 +1449,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 		break;
 	default:
 	{
-		url = gAgent.getRegion()->getCapability("NewFileAgentInventory");
+		url = gAgent.getRegionCapability("NewFileAgentInventory");
 		new_file_agent_inventory = true;
 	}
 		break;

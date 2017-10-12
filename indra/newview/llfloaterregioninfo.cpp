@@ -226,7 +226,7 @@ BOOL LLFloaterRegionInfo::postBuild()
 
 // <FS:CR> Aurora Sim - Region Settings Console
 	// We only use this panel on Aurora-based sims
-	std::string url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("DispatchOpenRegionSettings") : LLStringUtil::null;
+	std::string url = gAgent.getRegionCapability("DispatchOpenRegionSettings");
 	if (!url.empty())
 	{
 		panel = new LLPanelRegionOpenSettingsInfo;
@@ -1108,7 +1108,7 @@ void LLPanelRegionOpenSettingsInfo::onClickOrs(void* userdata)
 	LL_INFOS() << "LLPanelRegionOpenSettingsInfo::onClickOrs()" << LL_ENDL;
 
 	LLSD body;
-	std::string url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("DispatchOpenRegionSettings") : LLStringUtil::null;
+	std::string url = gAgent.getRegionCapability("DispatchOpenRegionSettings");
 	if (!url.empty())
 	{
 		body["draw_distance"] = (LLSD::Integer)self->childGetValue("draw_distance");

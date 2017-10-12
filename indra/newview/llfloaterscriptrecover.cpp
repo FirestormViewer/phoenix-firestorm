@@ -248,41 +248,41 @@ void LLScriptRecoverQueue::onCreateScript(const LLUUID& idItem)
 		break;
 	}
 
-	std::string strCapsUrl = gAgent.getRegion()->getCapability("UpdateScriptAgent");
+	std::string strCapsUrl = gAgent.getRegionCapability("UpdateScriptAgent");
 
-
-    std::string buffer;
-	llstat stat;
-	if( 0 == LLFile::stat(strFilePath, &stat ) && stat.st_size > 0 )
+	if (!strCapsUrl.empty())
 	{
-		buffer.resize( stat.st_size );
-		LLFILE *pFile = LLFile::fopen( strFileName, "wb" );
-
-		if( pFile )
+		std::string buffer;
+		llstat stat;
+		if (0 == LLFile::stat(strFilePath, &stat) && stat.st_size > 0)
 		{
-			if( fread( &buffer[0], 1, stat.st_size, pFile ) != stat.st_size )
+			buffer.resize(stat.st_size);
+			LLFILE *pFile = LLFile::fopen(strFileName, "wb");
+
+			if (pFile)
 			{
-				LL_WARNS() << "Incomplete read of " << strFilePath << LL_ENDL;
-				buffer = "";
+				if (fread(&buffer[0], 1, stat.st_size, pFile) != stat.st_size)
+				{
+					LL_WARNS() << "Incomplete read of " << strFilePath << LL_ENDL;
+					buffer = "";
+				}
+				LLFile::close(pFile);
 			}
-			LLFile::close( pFile );
+			else
+			{
+				buffer = "";
+				LL_WARNS() << "Cannot open " << strFilePath << LL_ENDL;
+			}
 		}
 		else
 		{
-			buffer = "";
-			LL_WARNS() << "Cannot open " << strFilePath << LL_ENDL;
+			LL_WARNS() << "No access to " << strFilePath << LL_ENDL;
 		}
+
+		LLBufferedAssetUploadInfo::taskUploadFinish_f proc = boost::bind(&LLScriptRecoverQueue::onSavedScript, this, _1, _2, _3, _4);
+		LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(idItem, buffer, proc));
+		LLViewerAssetUpload::EnqueueInventoryUpload(strCapsUrl, uploadInfo);
 	}
-	else
-	{
-		LL_WARNS() << "No access to " << strFilePath << LL_ENDL;
-	}
-
-    LLBufferedAssetUploadInfo::taskUploadFinish_f proc = boost::bind(&LLScriptRecoverQueue::onSavedScript, this, _1, _2, _3, _4 );
-
-    LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload( idItem, buffer, proc ) );
-
-    LLViewerAssetUpload::EnqueueInventoryUpload(strCapsUrl, uploadInfo);
 }
 
 void LLScriptRecoverQueue::onSavedScript(LLUUID itemId, LLUUID newAssetId, LLUUID newItemId, LLSD response)
