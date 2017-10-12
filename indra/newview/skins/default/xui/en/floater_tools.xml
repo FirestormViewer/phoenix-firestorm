@@ -2443,7 +2443,7 @@ even though the user gets a free copy.
                  name="Cylinder"
                  value="4" />
               </combo_box>
-        <!-- FS:Beq adding Mesh Info support so Object panel-->
+        <!-- FS:Beq adding Mesh Info support to Object panel-->
         <text
           type="string"
           length="1"
@@ -2566,7 +2566,7 @@ even though the user gets a free copy.
           top_delta="0"
           value="--"
           visible="false"
-          width="80" />        
+          width="80" />
         <combo_box
              height="19"
              layout="topleft"

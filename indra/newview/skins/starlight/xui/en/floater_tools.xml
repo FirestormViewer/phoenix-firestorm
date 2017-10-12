@@ -2501,7 +2501,7 @@ even though the user gets a free copy.
                  name="Cylinder"
                  value="4" />
               </combo_box>
-        <!-- FS:Beq adding Mesh Info support so Object panel-->
+        <!-- FS:Beq adding Mesh Info support to Object panel-->
         <text
           type="string"
           length="1"

@@ -415,6 +415,22 @@
 				<combo_box.item label="Fläche / Keine" name="Plane"/>
 				<combo_box.item label="Zylinder" name="Cylinder"/>
 			</combo_box>
+			<text name="mesh_info_label">
+				Mesh-Information:
+			</text>
+			<text name="lod_label" value="LOD:"/>
+			<text name="lod_num_tris" value="Anz. Dreiecke"/>
+			<text name="high_lod_label" value="Hoch:"/>
+			<text name="med_lod_label" value="Mittel:"/>
+			<text name="low_lod_label" value="Niedrig:"/>
+			<text name="lowest_lod_label" value="Niedrigste:"/>
+			<combo_box name="LOD_show_combo">
+				<combo_box.item label="Standard" name="Default"/>
+				<combo_box.item label="Hoch" name="High"/>
+				<combo_box.item label="Mittel" name="Medium"/>
+				<combo_box.item label="Niedrig" name="Low"/>
+				<combo_box.item label="Niedrigste" name="Lowest/Imposter"/>
+			</combo_box>
 		</panel>
 		<panel label="Eigensch." name="Features">
 			<panel.string name="None">
