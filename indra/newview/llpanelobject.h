@@ -94,7 +94,7 @@ public:
 protected:
 	void			getState();
 	//<FS:Beq> FIRE-21445 + Mesh Info in object panel
-	void LLPanelObject::deactivateStandardFields();
+	void			deactivateStandardFields();
 	void			activateMeshFields(LLViewerObject * objectp);
 	void			deactivateMeshFields();
 	//</FS:Beq>
