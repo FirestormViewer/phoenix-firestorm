@@ -9321,7 +9321,7 @@ void send_places_query(const LLUUID& query_id,
 	gAgent.sendReliableMessage();
 }
 
-
+// Deprecated in favor of cap "UserInfo"
 void process_user_info_reply(LLMessageSystem* msg, void**)
 {
 	LLUUID agent_id;
@@ -9339,9 +9339,10 @@ void process_user_info_reply(LLMessageSystem* msg, void**)
 	std::string dir_visibility;
 	msg->getString( "UserData", "DirectoryVisibility", dir_visibility);
 
+    // For Message based user info information the is_verified is assumed to be false.
 	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	//LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email);
-	LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email, email);
+	//LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email, false);   
+	LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email, !LLGridManager::instance().isInSecondLife(), email); // Assume verified in OpenSim
 	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 	LLFloaterSnapshot::setAgentEmail(email);
 }
