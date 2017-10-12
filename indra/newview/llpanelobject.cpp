@@ -1343,9 +1343,10 @@ void LLPanelObject::getState( )
 	//</FS:Beq>
 
 	// sculpt texture
-	if (selected_item == MI_SCULPT)
+	//<FS:Beq> extend mesh info to no-edit items
+	if (selected_item == MI_SCULPT || mSelectedType == MI_NONE)
+	//</FS:Beq>
 	{
-
 
 		LLUUID id;
 		LLSculptParams *sculpt_params = (LLSculptParams *)objectp->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
@@ -1368,13 +1369,12 @@ void LLPanelObject::getState( )
 			// <FS:Beq> FIRE-21445 - Show specific LOD + Mesh Info in object panel
 			if (isMesh)
 			{
-				mComboBaseType->setEnabled(FALSE);
-				mComboBaseType->setVisible(FALSE);
-				mCtrlSculptTexture->setVisible(FALSE);
-				mLabelSculptType->setVisible(FALSE);
-				mCtrlSculptType->setVisible(FALSE);
-				sculpt_texture_visible = FALSE;
+				deactivateStandardFields();
 				activateMeshFields(objectp);
+			}
+			else if (!isMesh && mSelectedType == MI_NONE)
+			{
+				// Do nothing as the perms are off.
 			}
 			else
 			//</FS:Beq>
@@ -1441,6 +1441,68 @@ void LLPanelObject::getState( )
 	}
 }
 //<FS:Beq> FIRE-21445 + Mesh Info in object panel
+// Helper function duplicating the inline switch statements which ideally we'd refactor but...ugh MAINT
+void LLPanelObject::deactivateStandardFields()
+{
+
+	// Update field visibility
+	mComboBaseType->setEnabled(FALSE);
+	mComboBaseType->setVisible(FALSE);
+
+	mLabelCut->setVisible(FALSE);
+	mSpinCutBegin->setVisible(FALSE);
+	mSpinCutEnd->setVisible(FALSE);
+
+	mLabelHollow->setVisible(FALSE);
+	mSpinHollow->setVisible(FALSE);
+	mLabelHoleType->setVisible(FALSE);
+	mComboHoleType->setVisible(FALSE);
+
+	mLabelTwist->setVisible(FALSE);
+	mSpinTwist->setVisible(FALSE);
+	mSpinTwistBegin->setVisible(FALSE);
+	mSpinTwist->setMinValue(FALSE);
+	mSpinTwist->setMaxValue(FALSE);
+	mSpinTwist->setIncrement(FALSE);
+	mSpinTwistBegin->setMinValue(FALSE);
+	mSpinTwistBegin->setMaxValue(FALSE);
+	mSpinTwistBegin->setIncrement(FALSE);
+
+	mSpinScaleX->setVisible(FALSE);
+	mSpinScaleY->setVisible(FALSE);
+
+	mLabelSkew->setVisible(FALSE);
+	mSpinSkew->setVisible(FALSE);
+
+	mLabelShear->setVisible(FALSE);
+	mSpinShearX->setVisible(FALSE);
+	mSpinShearY->setVisible(FALSE);
+
+	mCtrlPathBegin->setVisible(FALSE);
+	mCtrlPathEnd->setVisible(FALSE);
+
+	mLabelTaper->setVisible(FALSE);
+	mSpinTaperX->setVisible(FALSE);
+	mSpinTaperY->setVisible(FALSE);
+
+	mLabelRadiusOffset->setVisible(FALSE);
+	mSpinRadiusOffset->setVisible(FALSE);
+
+	mLabelRevolutions->setVisible(FALSE);
+	mSpinRevolutions->setVisible(FALSE);
+
+	mCtrlSculptTexture->setVisible(FALSE);
+	mLabelSculptType->setVisible(FALSE);
+	mCtrlSculptType->setVisible(FALSE);
+
+	getChildView("scale_hole")->setVisible(FALSE);
+	getChildView("scale_taper")->setVisible(FALSE);
+
+	getChildView("advanced_cut")->setVisible(FALSE);
+	getChildView("advanced_dimple")->setVisible(FALSE);
+	getChildView("advanced_slice")->setVisible(FALSE);
+}
+
 void LLPanelObject::activateMeshFields(LLViewerObject * objectp)
 {
 	static const char * dataFields[4] = { "lowest_lod_num_tris", "low_lod_num_tris", "med_lod_num_tris", "high_lod_num_tris" };
