@@ -1236,9 +1236,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6996aa434163d9ab1ff0316382dea8a4</string>
+              <string>51f0cff72d1673772d70a6fab3154041</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/9558/44428/googlemock-1.7.0.509541-darwin64-509541.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/9698/45738/googlemock-1.7.0.509686-darwin64-509686.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1260,9 +1260,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2b77ad2e21ae064ea20db43550bff402</string>
+              <string>ff459b58695c76838782847a0b792104</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/9552/44374/googlemock-1.7.0.509541-linux64-509541.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/9697/45717/googlemock-1.7.0.509686-linux64-509686.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1272,9 +1272,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>32678be1c8d872066f225f2900e90a1f</string>
+              <string>d69ba513a9cb2e13fa1addbd1003932c</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/9557/44416/googlemock-1.7.0.509541-windows-509541.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/9704/45766/googlemock-1.7.0.509686-windows-509686.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1284,16 +1284,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c829442223d524465d0ed0d336913671</string>
+              <string>49b089c60f869cf4f1010c9a44f20579</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/9555/44410/googlemock-1.7.0.509541-windows64-509541.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/9701/45760/googlemock-1.7.0.509686-windows64-509686.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.7.0.509541</string>
+        <string>1.7.0.509686</string>
       </map>
       <key>gstreamer</key>
       <map>
