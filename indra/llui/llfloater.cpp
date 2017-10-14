@@ -2396,8 +2396,7 @@ LLFloaterView::LLFloaterView (const Params& p)
 	mSnapOffsetBottom(0),
 	mSnapOffsetChatBar(0),
 	mSnapOffsetLeft(0),
-	mSnapOffsetRight(0),
-	mFrontChild(NULL)
+	mSnapOffsetRight(0)
 {
 	mSnapView = getHandle();
 }
@@ -2553,7 +2552,7 @@ void LLFloaterView::bringToFront(LLFloater* child, BOOL give_focus, BOOL restore
 	if (!child)
 		return;
 
-	if (mFrontChild == child)
+	if (mFrontChildHandle.get() == child)
 	{
 		if (give_focus && !gFocusMgr.childHasKeyboardFocus(child))
 		{
@@ -2562,7 +2561,7 @@ void LLFloaterView::bringToFront(LLFloater* child, BOOL give_focus, BOOL restore
 		return;
 	}
 
-	mFrontChild = child;
+	mFrontChildHandle = child->getHandle();
 
 	// *TODO: make this respect floater's mAutoFocus value, instead of
 	// using parameter
