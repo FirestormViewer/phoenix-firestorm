@@ -2632,6 +2632,9 @@ Temat: [SUBJECT], Treść: [MESSAGE]
 	<notification name="AddSelfFriend">
 		Niewątpliwie znasz siebie najlepiej, ale nie możesz dodać swojej własnej osoby do listy znajomych.
 	</notification>
+	<notification name="AddSelfRenderExceptions">
+		Nie możesz dodać siebie do listy wyjątków renderowania.
+	</notification>
 	<notification name="UploadingAuctionSnapshot">
 		Ładowanie obrazów z Internetu...
 (Zajmuje około 5 minut.)
