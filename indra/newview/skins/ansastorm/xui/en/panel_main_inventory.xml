@@ -415,18 +415,18 @@
    height="23"
    label="Filter Inventory"
    layout="topleft"
-   left="10"
+   left="4"
    max_length_chars="300"
    name="inventory search editor"
    tool_tip="Type in one or more words to search for, separated by '+' "
    top_pad="4"
-   width="310" />
+   right="-6" />
 
   <button
    name="collapse_btn"
-   label="Collapse"
-   width="80"
-   height="16"
+   image_overlay="MinusItem_Off"
+   width="18"
+   height="18"
    left="4"
    top_pad="4"
    follows="top|left"
@@ -434,10 +434,10 @@
 
   <button
    name="expand_btn"
-   label="Expand"
-   width="80"
-   height="16"
-   left_pad="4"
+   image_overlay="AddItem_Off"
+   width="18"
+   height="18"
+   left_pad="2"
    follows="top|left"
    layout="topleft" />
 
@@ -445,17 +445,19 @@
    name="filter_label"
    value="Filter:"
    width="40"
-   height="16"
+   height="18"
    left_pad="4"
+   top_delta="2"
    follows="top|left"
    layout="topleft" />
 
   <combo_box
    name="filter_combo_box"
-   width="80"
-   height="16"
+   right="-26"
+   height="18"
    left_pad="4"
-   follows="top|left"
+   top_delta="-2"
+   follows="top|left|right"
    layout="topleft">
 
   <combo_box.item value="filter_type_all" label="All Types" />
@@ -477,6 +479,17 @@
 
   </combo_box>
 
+  <button
+   commit_callback.function="Inventory.ShowFilters"
+   name="filteroptions_btn"
+   image_overlay="Script_Config"
+   width="18"
+   height="18"
+   right="-6"
+   top_delta="0"
+   follows="top|right"
+   layout="topleft"/>
+
   <tab_container
      bg_alpha_color="DkGray"
      bg_opaque_color="DkGray"
@@ -484,15 +497,15 @@
      background_opaque="false"
      follows="all"
      halign="center"
-     height="324"
+     height="322"
      layout="topleft"
-     left="4"
+     left="2"
      name="inventory filter tabs"
      open_tabs_on_drag_and_drop="true"
      tab_group="1"
      tab_position="top"
      top_pad="4"
-     width="322">
+     width="326">
     <inventory_panel
      border="false"
      bevel_style="none"
