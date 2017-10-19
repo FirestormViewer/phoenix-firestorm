@@ -1426,19 +1426,18 @@ void LLPanelObject::getState( )
 			}
 			//</FS:Beq>
 		}
-		else
-		{
-			mSculptTextureRevert = LLUUID::null;
-		}
-
-		mCtrlSculptMirror->setVisible(sculpt_texture_visible && !isMesh);
-		mCtrlSculptInvert->setVisible(sculpt_texture_visible && !isMesh);
-
-		//----------------------------------------------------------------------------
-
-		mObject = objectp;
-		mRootObject = root_objectp;
 	}
+	else
+	{
+		mSculptTextureRevert = LLUUID::null;
+	}
+
+	mCtrlSculptMirror->setVisible(sculpt_texture_visible && !isMesh);
+	mCtrlSculptInvert->setVisible(sculpt_texture_visible && !isMesh);
+
+	//----------------------------------------------------------------------------
+	mObject = objectp;
+	mRootObject = root_objectp;
 }
 //<FS:Beq> FIRE-21445 + Mesh Info in object panel
 // Helper function duplicating the inline switch statements which ideally we'd refactor but...ugh MAINT
