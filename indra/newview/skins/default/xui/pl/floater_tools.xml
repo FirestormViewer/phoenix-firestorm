@@ -378,6 +378,21 @@
 				<combo_box.item label="Płaszczyzna / Żadne" name="Plane"/>
 				<combo_box.item label="Walec" name="Cylinder"/>
 			</combo_box>
+			<text name="mesh_info_label">
+				Info o meszu:
+			</text>
+			<text name="lod_num_tris" value="Trójkąty" />
+			<text name="high_lod_label" value="Wysoki:" />
+			<text name="med_lod_label" value="Średni:" />
+			<text name="low_lod_label" value="Niski:" />
+			<text name="lowest_lod_label" value="Najniższy:" />
+			<combo_box name="LOD_show_combo">
+				<combo_box.item label="Domyślny" name="Default" />
+				<combo_box.item label="Wysoki" name="High" />
+				<combo_box.item label="Średni" name="Medium" />
+				<combo_box.item label="Niski" name="Low" />
+				<combo_box.item label="Najniższy" name="Lowest/Imposter" />
+			</combo_box>
 		</panel>
 		<panel label="Cechy" name="Features">
 			<panel.string name="None">

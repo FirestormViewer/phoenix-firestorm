@@ -1490,6 +1490,15 @@ BOOL LLVOVolume::calcLOD()
 	return FALSE;
 }
 
+//<FS:Beq> FIRE-21445
+void LLVOVolume::forceLOD(S32 lod)
+{
+	mLOD = lod;
+	gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, FALSE);
+	mLODChanged = true;
+}
+//</FS:Beq>
+
 BOOL LLVOVolume::updateLOD()
 {
 	if (mDrawable.isNull())
@@ -4105,8 +4114,42 @@ U32 LLVOVolume::getTriangleCount(S32* vcount) const
 
 	return count;
 }
-
+// <FS:Beq> Generalise TriangleCount
+//U32 LLVOVolume::getHighLODTriangleCount()
+//{
+//	U32 ret = 0;
+//
+//	LLVolume* volume = getVolume();
+//
+//	if (!isSculpted())
+//	{
+//		LLVolume* ref = LLPrimitive::getVolumeManager()->refVolume(volume->getParams(), 3);
+//		ret = ref->getNumTriangles();
+//		LLPrimitive::getVolumeManager()->unrefVolume(ref);
+//	}
+//	else if (isMesh())
+//	{
+//		LLVolume* ref = LLPrimitive::getVolumeManager()->refVolume(volume->getParams(), 3);
+//		if (!ref->isMeshAssetLoaded() || ref->getNumVolumeFaces() == 0)
+//		{
+//			gMeshRepo.loadMesh(this, volume->getParams(), LLModel::LOD_HIGH);
+//		}
+//		ret = ref->getNumTriangles();
+//		LLPrimitive::getVolumeManager()->unrefVolume(ref);
+//	}
+//	else
+//	{ //default sculpts have a constant number of triangles
+//		ret = 31*2*31;  //31 rows of 31 columns of quads for a 32x32 vertex patch
+//	}
+//
+//	return ret;
+//}
 U32 LLVOVolume::getHighLODTriangleCount()
+{
+	return (getLODTriangleCount(LLModel::LOD_HIGH));
+}
+
+U32 LLVOVolume::getLODTriangleCount(S32 lod)
 {
 	U32 ret = 0;
 
@@ -4114,27 +4157,29 @@ U32 LLVOVolume::getHighLODTriangleCount()
 
 	if (!isSculpted())
 	{
-		LLVolume* ref = LLPrimitive::getVolumeManager()->refVolume(volume->getParams(), 3);
+		LLVolume* ref = LLPrimitive::getVolumeManager()->refVolume(volume->getParams(), lod);
 		ret = ref->getNumTriangles();
 		LLPrimitive::getVolumeManager()->unrefVolume(ref);
 	}
 	else if (isMesh())
 	{
-		LLVolume* ref = LLPrimitive::getVolumeManager()->refVolume(volume->getParams(), 3);
+		LLVolume* ref = LLPrimitive::getVolumeManager()->refVolume(volume->getParams(), lod);
 		if (!ref->isMeshAssetLoaded() || ref->getNumVolumeFaces() == 0)
 		{
-			gMeshRepo.loadMesh(this, volume->getParams(), LLModel::LOD_HIGH);
+			gMeshRepo.loadMesh(this, volume->getParams(), lod);
 		}
 		ret = ref->getNumTriangles();
 		LLPrimitive::getVolumeManager()->unrefVolume(ref);
 	}
 	else
 	{ //default sculpts have a constant number of triangles
-		ret = 31*2*31;  //31 rows of 31 columns of quads for a 32x32 vertex patch
+		ret = (31 * 2 * 31)>>3*(3-lod);  //31 rows of 31 columns of quads for a 32x32 vertex patch (Beq: left shift by 2 for each lower LOD)
 	}
 
 	return ret;
 }
+//</FS:Beq>
+
 
 //static
 void LLVOVolume::preUpdateGeom()
