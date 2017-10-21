@@ -1239,6 +1239,11 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 		const LLUUID& obj_id = (*obj_iter);
 		if(!highlight_offered_object(obj_id))
 		{
+			const LLViewerInventoryCategory *parent = gInventory.getFirstNondefaultParent(obj_id);
+			if (parent && (parent->getPreferredType() == LLFolderType::FT_TRASH))
+			{
+				gInventory.checkTrashOverflow();
+			}
 			continue;
 		}
 
@@ -1407,6 +1412,14 @@ void inventory_offer_mute_callback(const LLUUID& blocked_id,
 			gSavedSettings.getString("NotificationChannelUUID")), OfferMatcher(blocked_id));
 }
 
+
+void inventory_offer_mute_avatar_callback(const LLUUID& blocked_id,
+    const LLAvatarName& av_name)
+{
+    inventory_offer_mute_callback(blocked_id, av_name.getUserName(), false);
+}
+
+
 std::string LLOfferInfo::mResponderType = "offer_info";
 
 LLOfferInfo::LLOfferInfo()
@@ -1562,7 +1575,14 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 	{
 		if (notification_ptr != NULL)
 		{
-			gCacheName->get(mFromID, mFromGroup, boost::bind(&inventory_offer_mute_callback, _1, _2, _3));
+			if (mFromGroup)
+			{
+				gCacheName->getGroup(mFromID, boost::bind(&inventory_offer_mute_callback, _1, _2, _3));
+			}
+			else
+			{
+				LLAvatarNameCache::get(mFromID, boost::bind(&inventory_offer_mute_avatar_callback, _1, _2));
+			}
 		}
 	}
 
@@ -1731,7 +1751,14 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 		llassert(notification_ptr != NULL);
 		if (notification_ptr != NULL)
 		{
-			gCacheName->get(mFromID, mFromGroup, boost::bind(&inventory_offer_mute_callback, _1, _2, _3));
+			if (mFromGroup)
+			{
+				gCacheName->getGroup(mFromID, boost::bind(&inventory_offer_mute_callback, _1, _2, _3));
+			}
+			else
+			{
+				LLAvatarNameCache::get(mFromID, boost::bind(&inventory_offer_mute_avatar_callback, _1, _2));
+			}
 		}
 	}
 	
@@ -1781,12 +1808,12 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 		else
 		{
 /*
-			std::string full_name;
-			if (gCacheName->getFullName(mFromID, full_name))
+			LLAvatarName av_name;
+			if (LLAvatarNameCache::get(mFromID, &av_name))
 			{
 				from_string = LLTrans::getString("InvOfferAnObjectNamed") + " "+ LLTrans::getString("'") + mFromName 
-					+ LLTrans::getString("'")+" " + LLTrans::getString("InvOfferOwnedBy") + full_name;
-				chatHistory_string = mFromName + " " + LLTrans::getString("InvOfferOwnedBy") + " " + full_name;
+					+ LLTrans::getString("'")+" " + LLTrans::getString("InvOfferOwnedBy") + av_name.getUserName();
+				chatHistory_string = mFromName + " " + LLTrans::getString("InvOfferOwnedBy") + " " + av_name.getUserName();
 			}
 			else
 			{
@@ -2760,9 +2787,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			{
 				original_name = original_name.substr(0, index);
 			}
+
 			std::string legacy_name = gCacheName->buildLegacyName(original_name);
-			LLUUID agent_id;
-			gCacheName->getUUID(legacy_name, agent_id);
+			LLUUID agent_id = LLAvatarNameCache::findIdByName(legacy_name);
 
 			if (agent_id.isNull())
 			{
@@ -2821,6 +2848,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				payload["subject"] = subj;
 				payload["message"] = mes;
 				payload["sender_name"] = name;
+				payload["sender_id"] = agent_id;
 				payload["group_id"] = group_id;
 				payload["inventory_name"] = item_name;
  				payload["received_time"] = LLDate::now();
@@ -2972,11 +3000,16 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	case IM_INVENTORY_ACCEPTED:
 	{
 //		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();;
+//		args["ORIGINAL_NAME"] = original_name;
 // [RLVa:KB] - Checked: RLVa-1.2.2
 		// Only anonymize the name if the agent is nearby, there isn't an open IM session to them and their profile isn't open
 		bool fRlvCanShowName = (!RlvActions::isRlvEnabled()) ||
 			(RlvActions::canShowName(RlvActions::SNC_DEFAULT, from_id)) || (!RlvUtil::isNearbyAgent(from_id)) || (RlvUIEnabler::hasOpenProfile(from_id)) || (RlvUIEnabler::hasOpenIM(from_id));
-		args["NAME"] = LLSLURL("agent", from_id, (fRlvCanShowName) ? "completename" : "rlvanonym").getSLURLString();;
+		args["NAME"] = LLSLURL("agent", from_id, (fRlvCanShowName) ? "completename" : "rlvanonym").getSLURLString();
+		if (RlvActions::canShowName(RlvActions::SNC_DEFAULT, from_id))
+			args["ORIGINAL_NAME"] = original_name;
+		else
+			args["ORIGINAL_NAME"] = RlvStrings::getAnonym(original_name);
 // [/RLVa:KB]
 		LLSD payload;
 		payload["from_id"] = from_id;
@@ -3238,19 +3271,20 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			{ 
 				return;
 			}
-//			else if (is_do_not_disturb) 
-// [RLVa:KB] - Checked: RLVa-1.4.9
-			else if ( (is_do_not_disturb) && (!fRlvAutoAccept) )
-// [/RLVa:KB]
-			{
-				send_do_not_disturb_message(msg, from_id);
-			}
 			else if (gSavedSettings.getBOOL("VoiceCallsFriendsOnly") && (LLAvatarTracker::instance().getBuddyInfo(from_id) == NULL))
 			{
 				return;
 			}
 			else
 			{
+//				if (is_do_not_disturb) 
+// [RLVa:KB] - Checked: RLVa-1.4.9
+				if ( (is_do_not_disturb) && (!fRlvAutoAccept) )
+// [/RLVa:KB]
+				{
+					send_do_not_disturb_message(msg, from_id);
+				}
+
 				LLVector3 pos, look_at;
 				U64 region_handle(0);
 				U8 region_access(SIM_ACCESS_MIN);
@@ -3784,7 +3818,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		LLAvatarName av_name;
 		if (LLAvatarNameCache::get(from_id, &av_name))
 		{
-			chat.mFromName = av_name.getDisplayName();
+			chat.mFromName = av_name.getCompleteName();
 		}
 		else
 		{
@@ -6446,7 +6480,14 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
                 return LLMarketplaceData::instance().getListing(llsdBlock["listing_id"].asInteger());
             }
         }
-        
+
+		// Error Notification can come with and without reason
+		if (notificationID == "JoinGroupError" && llsdBlock.has("reason"))
+		{
+			LLNotificationsUtil::add("JoinGroupErrorReason", llsdBlock);
+			return true;
+		}
+
 		LLNotificationsUtil::add(notificationID, llsdBlock);
 		return true;
 	}	
@@ -6638,7 +6679,7 @@ void handle_show_mean_events(void *)
 	//LLFloaterBump::showInstance();
 }
 
-void mean_name_callback(const LLUUID &id, const std::string& full_name, bool is_group)
+void mean_name_callback(const LLUUID &id, const LLAvatarName& av_name)
 {
 	static const U32 max_collision_list_size = 20;
 	if (gMeanCollisionList.size() > max_collision_list_size)
@@ -6655,7 +6696,7 @@ void mean_name_callback(const LLUUID &id, const std::string& full_name, bool is_
 		LLMeanCollisionData *mcd = *iter;
 		if (mcd->mPerp == id)
 		{
-			mcd->mFullName = full_name;
+			mcd->mFullName = av_name.getUserName();
 		}
 	}
 }
@@ -6709,7 +6750,7 @@ void process_mean_collision_alert_message(LLMessageSystem *msgsystem, void **use
 		{
 			LLMeanCollisionData *mcd = new LLMeanCollisionData(gAgentID, perp, time, type, mag);
 			gMeanCollisionList.push_front(mcd);
-			gCacheName->get(perp, false, boost::bind(&mean_name_callback, _1, _2, _3));
+			LLAvatarNameCache::get(perp, boost::bind(&mean_name_callback, _1, _2));
 		}
 	}
 	LLFloaterBump* bumps_floater = LLFloaterBump::getInstance();
@@ -7338,14 +7379,10 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
 		// Get the message ID
 		msg->getStringFast(_PREHASH_AlertInfo, _PREHASH_Message, message_id);
 		big_reason = LLAgent::sTeleportErrorMessages[message_id];
-		if ( big_reason.size() > 0 )
-		{	// Substitute verbose reason from the local map
-			args["REASON"] = big_reason;
-		}
-		else
-		{	// Nothing found in the map - use what the server returned in the original message block
+		if ( big_reason.size() <= 0 )
+		{
+			// Nothing found in the map - use what the server returned in the original message block
 			msg->getStringFast(_PREHASH_Info, _PREHASH_Reason, big_reason);
-			args["REASON"] = big_reason;
 		}
 
 		LLSD llsd_block;
@@ -7360,6 +7397,16 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
 			}
 			else
 			{
+				if(llsd_block.has("REGION_NAME"))
+				{
+					std::string region_name = llsd_block["REGION_NAME"].asString();
+					if(!region_name.empty())
+					{
+						LLStringUtil::format_map_t name_args;
+						name_args["[REGION_NAME]"] = region_name;
+						LLStringUtil::format(big_reason, name_args);
+					}
+				}
 				// change notification name in this special case
 				if (handle_teleport_access_blocked(llsd_block, message_id, args["REASON"]))
 				{
@@ -7371,7 +7418,7 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
 				}
 			}
 		}
-
+		args["REASON"] = big_reason;
 	}
 	else
 	{	// Extra message payload not found - use what the simulator sent
@@ -7567,13 +7614,17 @@ void send_lures(const LLSD& notification, const LLSD& response)
 // [RLVa:KB] - Checked: RLVa-2.0.1
 			bool fRlvCanShowName = (!notification["payload"].has("rlv_shownames")) ? true : !notification["payload"]["rlv_shownames"].asBoolean();
 // [/RLVa:KB]
-			std::string target_name;
-			gCacheName->getFullName(target_id, target_name);  // for im log filenames
+			LLAvatarName av_name;
+			LLAvatarNameCache::get(target_id, &av_name);  // for im log filenames
 			LLSD args;
+// [SL:KB] - Patch: Notification-Logging | Checked: 2012-08-23 (Catznip-3.3)
 // [RLVa:KB] - Checked: RLVa-2.0.1
-			args["TO_NAME"] = LLSLURL("agent", target_id, (fRlvCanShowName) ? "displayname" : "rlvanonym").getSLURLString();;
+			args["TO_NAME"] = LLSLURL("agent", target_id, (fRlvCanShowName) ? "completename" : "rlvanonym").getSLURLString();;
 // [/RLVa:KB]
+//			args["TO_NAME"] = LLSLURL("agent", target_id, "completename").getSLURLString();;
+// [/SL:KB]
 //			args["TO_NAME"] = LLSLURL("agent", target_id, "displayname").getSLURLString();;
+
 	
 			LLSD payload;
 				
@@ -7683,10 +7734,10 @@ bool teleport_request_callback(const LLSD& notification, const LLSD& response)
 		return false;
 	}
 
-	std::string from_name;
-	gCacheName->getFullName(from_id, from_name);
+	LLAvatarName av_name;
+	LLAvatarNameCache::get(from_id, &av_name);
 
-	if(LLMuteList::getInstance()->isMuted(from_id) && !LLMuteList::getInstance()->isLinden(from_name))
+	if(LLMuteList::getInstance()->isMuted(from_id) && !LLMuteList::getInstance()->isLinden(av_name.getUserName()))
 	{
 		return false;
 	}
@@ -7961,8 +8012,7 @@ bool callback_load_url(const LLSD& notification, const LLSD& response)
 }
 static LLNotificationFunctorRegistration callback_load_url_reg("LoadWebPage", callback_load_url);
 
-
-// We've got the name of the person who owns the object hurling the url.
+// We've got the name of the person or group that owns the object hurling the url.
 // Display confirmation dialog.
 void callback_load_url_name(const LLUUID& id, const std::string& full_name, bool is_group)
 {
@@ -8004,6 +8054,12 @@ void callback_load_url_name(const LLUUID& id, const std::string& full_name, bool
 	}
 }
 
+// We've got the name of the person who owns the object hurling the url.
+void callback_load_url_avatar_name(const LLUUID& id, const LLAvatarName& av_name)
+{
+    callback_load_url_name(id, av_name.getUserName(), false);
+}
+
 void process_load_url(LLMessageSystem* msg, void**)
 {
 	LLUUID object_id;
@@ -8041,8 +8097,14 @@ void process_load_url(LLMessageSystem* msg, void**)
 	// Add to list of pending name lookups
 	gLoadUrlList.push_back(payload);
 
-	gCacheName->get(owner_id, owner_is_group,
-		boost::bind(&callback_load_url_name, _1, _2, _3));
+	if (owner_is_group)
+	{
+		gCacheName->getGroup(owner_id, boost::bind(&callback_load_url_name, _1, _2, _3));
+	}
+	else
+	{
+		LLAvatarNameCache::get(owner_id, boost::bind(&callback_load_url_avatar_name, _1, _2));
+	}
 }
 
 

@@ -538,15 +538,14 @@ void LLAvatarActions::kick(const LLUUID& id)
 // static
 void LLAvatarActions::freezeAvatar(const LLUUID& id)
 {
-	std::string fullname;
-	gCacheName->getFullName(id, fullname);
+	LLAvatarName av_name;
 	LLSD payload;
 	payload["avatar_id"] = id;
 
-	if (!fullname.empty())
+	if (LLAvatarNameCache::get(id, &av_name))
 	{
 		LLSD args;
-		args["AVATAR_NAME"] = fullname;
+		args["AVATAR_NAME"] = av_name.getUserName();
 		LLNotificationsUtil::add("FreezeAvatarFullname", args, payload, handleFreezeAvatar);
 	}
 	else
@@ -558,15 +557,15 @@ void LLAvatarActions::freezeAvatar(const LLUUID& id)
 // static
 void LLAvatarActions::ejectAvatar(const LLUUID& id, bool ban_enabled)
 {
-	std::string fullname;
-	gCacheName->getFullName(id, fullname);
+	LLAvatarName av_name;
 	LLSD payload;
 	payload["avatar_id"] = id;
 	payload["ban_enabled"] = ban_enabled;
 	LLSD args;
-	if (!fullname.empty())
+	bool has_name = LLAvatarNameCache::get(id, &av_name);
+	if (has_name)
 	{
-		args["AVATAR_NAME"] = fullname;
+		args["AVATAR_NAME"] = av_name.getUserName();
 	}
 
 	if (ban_enabled)
@@ -575,7 +574,7 @@ void LLAvatarActions::ejectAvatar(const LLUUID& id, bool ban_enabled)
 	}
 	else
 	{
-		if (!fullname.empty())
+		if (has_name)
 		{
 			LLNotificationsUtil::add("EjectAvatarFullnameNoBan", args, payload, handleEjectAvatar);
 		}
@@ -990,7 +989,6 @@ void LLAvatarActions::shareWithAvatars(LLView * panel)
 	LLNotificationsUtil::add("ShareNotification");
 }
 
-
 // static
 bool LLAvatarActions::canShareSelectedItems(LLInventoryPanel* inv_panel /* = NULL*/)
 {
@@ -1051,10 +1049,10 @@ bool LLAvatarActions::canShareSelectedItems(LLInventoryPanel* inv_panel /* = NUL
 // static
 void LLAvatarActions::toggleBlock(const LLUUID& id)
 {
-	std::string name;
+	LLAvatarName av_name;
+	LLAvatarNameCache::get(id, &av_name);
 
-	gCacheName->getFullName(id, name); // needed for mute
-	LLMute mute(id, name, LLMute::AGENT);
+	LLMute mute(id, av_name.getUserName(), LLMute::AGENT);
 
 	if (LLMuteList::getInstance()->isMuted(mute.mID, mute.mName))
 	{
@@ -1067,23 +1065,29 @@ void LLAvatarActions::toggleBlock(const LLUUID& id)
 }
 
 // static
-void LLAvatarActions::toggleMuteVoice(const LLUUID& id)
+void LLAvatarActions::toggleMute(const LLUUID& id, U32 flags)
 {
-	std::string name;
-	gCacheName->getFullName(id, name); // needed for mute
+	LLAvatarName av_name;
+	LLAvatarNameCache::get(id, &av_name);
 
 	LLMuteList* mute_list = LLMuteList::getInstance();
 	bool is_muted = mute_list->isMuted(id, LLMute::flagVoiceChat);
 
-	LLMute mute(id, name, LLMute::AGENT);
+	LLMute mute(id, av_name.getUserName(), LLMute::AGENT);
 	if (!is_muted)
 	{
-		mute_list->add(mute, LLMute::flagVoiceChat);
+		mute_list->add(mute, flags);
 	}
 	else
 	{
-		mute_list->remove(mute, LLMute::flagVoiceChat);
+		mute_list->remove(mute, flags);
 	}
+}
+
+// static
+void LLAvatarActions::toggleMuteVoice(const LLUUID& id)
+{
+	toggleMute(id, LLMute::flagVoiceChat);
 }
 
 // static
@@ -1389,9 +1393,9 @@ bool LLAvatarActions::isFriend(const LLUUID& id)
 // static
 bool LLAvatarActions::isBlocked(const LLUUID& id)
 {
-	std::string name;
-	gCacheName->getFullName(id, name); // needed for mute
-	return LLMuteList::getInstance()->isMuted(id, name);
+	LLAvatarName av_name;
+	LLAvatarNameCache::get(id, &av_name);
+	return LLMuteList::getInstance()->isMuted(id, av_name.getUserName());
 }
 
 // static
@@ -1403,8 +1407,10 @@ bool LLAvatarActions::isVoiceMuted(const LLUUID& id)
 // static
 bool LLAvatarActions::canBlock(const LLUUID& id)
 {
-	std::string full_name;
-	gCacheName->getFullName(id, full_name); // needed for mute
+	LLAvatarName av_name;
+	LLAvatarNameCache::get(id, &av_name);
+
+	std::string full_name = av_name.getUserName();
 	bool is_linden = (full_name.find("Linden") != std::string::npos);
 	bool is_self = id == gAgentID;
 	return !is_self && !is_linden;

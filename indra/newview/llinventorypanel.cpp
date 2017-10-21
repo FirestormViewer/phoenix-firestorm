@@ -43,6 +43,7 @@
 #include "llinventorybridge.h"
 #include "llinventoryfunctions.h"
 #include "llinventorymodelbackgroundfetch.h"
+#include "llnotificationsutil.h"
 #include "llpreview.h"
 #include "llsidepanelinventory.h"
 #include "lltrans.h"
@@ -354,6 +355,11 @@ void LLInventoryPanel::setFilterTypes(U64 types, LLInventoryFilter::EFilterType 
 		getFilter().setFilterCategoryTypes(types);
 }
 
+void LLInventoryPanel::setFilterWorn()
+{
+    getFilter().setFilterWorn();
+}
+
 U32 LLInventoryPanel::getFilterObjectTypes() const 
 { 
 	return getFilter().getFilterObjectTypes();
@@ -421,6 +427,16 @@ void LLInventoryPanel::setDateSearchDirection(U32 direction)
 void LLInventoryPanel::setFilterLinks(U64 filter_links)
 {
 	getFilter().setFilterLinks(filter_links);
+}
+
+void LLInventoryPanel::setSearchType(LLInventoryFilter::ESearchType type)
+{
+	getFilter().setSearchType(type);
+}
+
+LLInventoryFilter::ESearchType LLInventoryPanel::getSearchType()
+{
+	return getFilter().getSearchType();
 }
 
 void LLInventoryPanel::setShowFolderState(LLInventoryFilter::EFolderShow show)
@@ -1251,6 +1267,44 @@ void LLInventoryPanel::fileUploadLocation(const LLSD& userdata)
     }
 }
 
+void LLInventoryPanel::purgeSelectedItems()
+{
+    const std::set<LLFolderViewItem*> inventory_selected = mFolderRoot.get()->getSelectionList();
+    if (inventory_selected.empty()) return;
+    LLSD args;
+    S32 count = inventory_selected.size();
+    for (std::set<LLFolderViewItem*>::const_iterator it = inventory_selected.begin(), end_it = inventory_selected.end();
+        it != end_it;
+        ++it)
+    {
+        LLUUID item_id = static_cast<LLFolderViewModelItemInventory*>((*it)->getViewModelItem())->getUUID();
+        LLInventoryModel::cat_array_t cats;
+        LLInventoryModel::item_array_t items;
+        gInventory.collectDescendents(item_id, cats, items, LLInventoryModel::INCLUDE_TRASH);
+        count += items.size() + cats.size();
+    }
+    args["COUNT"] = count;
+    LLNotificationsUtil::add("PurgeSelectedItems", args, LLSD(), boost::bind(&LLInventoryPanel::callbackPurgeSelectedItems, this, _1, _2));
+}
+
+void LLInventoryPanel::callbackPurgeSelectedItems(const LLSD& notification, const LLSD& response)
+{
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    if (option == 0)
+    {
+        const std::set<LLFolderViewItem*> inventory_selected = mFolderRoot.get()->getSelectionList();
+        if (inventory_selected.empty()) return;
+
+        std::set<LLFolderViewItem*>::const_iterator it = inventory_selected.begin();
+        const std::set<LLFolderViewItem*>::const_iterator it_end = inventory_selected.end();
+        for (; it != it_end; ++it)
+        {
+            LLUUID item_id = static_cast<LLFolderViewModelItemInventory*>((*it)->getViewModelItem())->getUUID();
+            remove_inventory_object(item_id, NULL);
+        }
+    }
+}
+
 bool LLInventoryPanel::attachObject(const LLSD& userdata)
 {
 	// Copy selected item UUIDs to a vector.
@@ -1348,9 +1402,14 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 }
 
 //static
-void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id)
+void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id, BOOL main_panel)
 {
-	LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
+	LLInventoryPanel *active_panel;
+	if (main_panel)
+	{
+		LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory")->selectAllItemsPanel();
+	}
+	active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
 
 	if (active_panel)
 	{
@@ -1491,6 +1550,11 @@ void LLInventoryPanel::updateSelection()
 
 void LLInventoryPanel::doToSelected(const LLSD& userdata)
 {
+	if (("purge" == userdata.asString()))
+	{
+		purgeSelectedItems();
+		return;
+	}
 	LLInventoryAction::doToSelected(mInventory, mFolderRoot.get(), userdata.asString());
 
 	return;
@@ -1525,7 +1589,9 @@ BOOL LLInventoryPanel::handleKeyHere( KEY key, MASK mask )
 		}
 		break;
 	case KEY_DELETE:
+#if LL_DARWIN
 	case KEY_BACKSPACE:
+#endif
 		// Delete selected items if delete or backspace key hit on the inventory panel
 		// Note: on Mac laptop keyboards, backspace and delete are one and the same
 		if (isSelectionRemovable() && (mask == MASK_NONE))

@@ -581,7 +581,6 @@ void LLPanelOutfitEdit::onOpen(const LLSD& key)
 		// *TODO: this method is called even panel is not visible to user because its parent layout panel is hidden.
 		// So, we can defer initializing a bit.
 		mWearableListManager = new LLFilteredWearableListManager(mWearableItemsList, mListViewItemTypes[LVIT_ALL]->collector);
-		mWearableListManager->populateList();
 		displayCurrentOutfit();
 		mInitialized = true;
 	}
@@ -639,6 +638,10 @@ void LLPanelOutfitEdit::showAddWearablesPanel(bool show_add_wearables)
 		// Reset mWearableItemsList position to top. See EXT-8180.
 		mWearableItemsList->goToTop();
 	}
+	else
+	{
+		mWearableListManager->populateIfNeeded();
+	}
 
 	//switching button bars
 	getChildView("no_add_wearables_button_bar")->setVisible( !show_add_wearables);
@@ -668,6 +671,7 @@ void LLPanelOutfitEdit::showWearablesListView()
 	{
 		updateWearablesPanelVerbButtons();
 		updateFiltersVisibility();
+		mWearableListManager->populateIfNeeded();
 	}
 	mListViewBtn->setToggleState(TRUE);
 }
@@ -1288,7 +1292,7 @@ void LLPanelOutfitEdit::showFilteredWearablesListView(LLWearableType::EType type
 	showWearablesListView();
 
 	//e_list_view_item_type implicitly contains LLWearableType::EType starting from LVIT_SHAPE
-	applyListViewFilter((EListViewItemType) (LVIT_SHAPE + type));
+	applyListViewFilter(static_cast<EListViewItemType>(LVIT_SHAPE + type));
 }
 
 static void update_status_widget_rect(LLView * widget, S32 right_border)
@@ -1308,8 +1312,10 @@ void LLPanelOutfitEdit::onOutfitChanging(bool started)
 	S32 delta = started ? indicator_delta : 0;
 	S32 right_border = status_panel->getRect().getWidth() - delta;
 
-	update_status_widget_rect(mCurrentOutfitName, right_border);
-	update_status_widget_rect(mStatus, right_border);
+	if (mCurrentOutfitName)
+		update_status_widget_rect(mCurrentOutfitName, right_border);
+	if (mStatus)
+		update_status_widget_rect(mStatus, right_border);
 
 	indicator->setVisible(started);
 }

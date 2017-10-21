@@ -56,14 +56,20 @@
 #include "llfloatergroups.h"
 #include "llfloaterreg.h"
 #include "llavataractions.h"
+#include "llavatariconctrl.h"
 #include "llnamebox.h"
 #include "llviewercontrol.h"
 #include "lluictrlfactory.h"
 #include "llspinctrl.h"
 #include "roles_constants.h"
 #include "llgroupactions.h"
+#include "llgroupiconctrl.h"
 #include "lltrans.h"
 #include "llinventorymodel.h"
+
+#include "llavatarnamecache.h"
+#include "llcachename.h"
+
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a)
 #include "llslurl.h"
 #include "rlvactions.h"
@@ -190,10 +196,13 @@ void LLPanelPermissions::disableAll()
 	getChild<LLUICtrl>("pathfinding_attributes_value")->setValue(LLStringUtil::null);
 
 	getChildView("Creator:")->setEnabled(FALSE);
+	getChild<LLUICtrl>("Creator Icon")->setVisible(FALSE);
 	getChild<LLUICtrl>("Creator Name")->setValue(LLStringUtil::null);
 	getChildView("Creator Name")->setEnabled(FALSE);
 
 	getChildView("Owner:")->setEnabled(FALSE);
+	getChild<LLUICtrl>("Owner Icon")->setVisible(FALSE);
+	getChild<LLUICtrl>("Owner Group Icon")->setVisible(FALSE);
 	getChild<LLUICtrl>("Owner Name")->setValue(LLStringUtil::null);
 	getChildView("Owner Name")->setEnabled(FALSE);
 
@@ -370,67 +379,111 @@ void LLPanelPermissions::refresh()
 	
 	// Update creator text field
 	getChildView("Creator:")->setEnabled(TRUE);
+	std::string creator_app_link;
 // [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-	BOOL creators_identical = FALSE;
+	const bool creators_identical = LLSelectMgr::getInstance()->selectGetCreator(mCreatorID, creator_app_link);
+	std::string owner_app_link;
+	const bool owners_identical = LLSelectMgr::getInstance()->selectGetOwner(mOwnerID, owner_app_link);
 // [/RLVa:KB]
-	std::string creator_name;
-// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-	creators_identical = LLSelectMgr::getInstance()->selectGetCreator(mCreatorID, creator_name);
-// [/RLVa:KB]
-//	LLSelectMgr::getInstance()->selectGetCreator(mCreatorID, creator_name);
+//	LLSelectMgr::getInstance()->selectGetCreator(mCreatorID, creator_app_link);
 
-//	getChild<LLUICtrl>("Creator Name")->setValue(creator_name);
-//	getChildView("Creator Name")->setEnabled(TRUE);
-// [RLVa:KB] - Moved further down to avoid an annoying flicker when the text is set twice in a row
+	// Style for creator and owner links (both group and agent)
+	LLStyle::Params style_params;
+	LLColor4 link_color = LLUIColorTable::instance().getColor("HTMLLinkColor");
+	style_params.color = link_color;
+	style_params.readonly_color = link_color;
+	style_params.is_link = true; // link will be added later
+	const LLFontGL* fontp = getChild<LLTextBox>("Creator Name")->getFont();
+	style_params.font.name = LLFontGL::nameFromFont(fontp);
+	style_params.font.size = LLFontGL::sizeFromFont(fontp);
+	style_params.font.style = "UNDERLINE";
+
+	LLAvatarName av_name;
+// [RLVa:KB] - Checked: RLVa-2.0.1
+	// Only anonymize the creator if all of the selection was created by the same avie who's also the owner or they're a nearby avie
+	if ( (RlvActions::isRlvEnabled()) && (creators_identical) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, mCreatorID)) && ( (mCreatorID == mOwnerID) || (RlvUtil::isNearbyAgent(mCreatorID))) )
+	{
+		creator_app_link = LLSLURL("agent", mCreatorID, "rlvanonym").getSLURLString();
+	}
+	childSetValue("Creator Name", creator_app_link);
+// [/RLVa:KB]
+//	if (LLAvatarNameCache::get(mCreatorID, &av_name))
+//	{
+//		// If name isn't present, this will 'request' it and trigger refresh() again
+//		LLTextBox* text_box = getChild<LLTextBox>("Creator Name");
+//		style_params.link_href = creator_app_link;
+//		text_box->setText(av_name.getCompleteName(), style_params);
+//	}
+//	getChild<LLAvatarIconCtrl>("Creator Icon")->setValue(mCreatorID);
+//	getChild<LLAvatarIconCtrl>("Creator Icon")->setVisible(TRUE);
+	getChildView("Creator Name")->setEnabled(TRUE);
 
 	// Update owner text field
 	getChildView("Owner:")->setEnabled(TRUE);
 
-	std::string owner_name;
-	const BOOL owners_identical = LLSelectMgr::getInstance()->selectGetOwner(mOwnerID, owner_name);
-	if (mOwnerID.isNull())
+//	std::string owner_app_link;
+//	const BOOL owners_identical = LLSelectMgr::getInstance()->selectGetOwner(mOwnerID, owner_app_link);
+
+
+	if (LLSelectMgr::getInstance()->selectIsGroupOwned())
 	{
-		if (LLSelectMgr::getInstance()->selectIsGroupOwned())
-		{
-			// Group owned already displayed by selectGetOwner
-		}
-		else
+		// Group owned already displayed by selectGetOwner
+// [RLVa:KB] - Checked: RLVa-2.0.1
+		childSetValue("Owner Name", owner_app_link);
+// [/RLVa:KB]
+//		LLGroupMgrGroupData* group_data = LLGroupMgr::getInstance()->getGroupData(mOwnerID);
+//		if (group_data && group_data->isGroupPropertiesDataComplete())
+//		{
+//			LLTextBox* text_box = getChild<LLTextBox>("Owner Name");
+//			style_params.link_href = owner_app_link;
+//			text_box->setText(group_data->mName, style_params);
+//			getChild<LLGroupIconCtrl>("Owner Group Icon")->setIconId(group_data->mInsigniaID);
+//			getChild<LLGroupIconCtrl>("Owner Group Icon")->setVisible(TRUE);
+//			getChild<LLUICtrl>("Owner Icon")->setVisible(FALSE);
+//		}
+//		else
+//		{
+//			// Triggers refresh
+//			LLGroupMgr::getInstance()->sendGroupPropertiesRequest(mOwnerID);
+//		}
+	}
+	else
+	{
+		LLUUID owner_id = mOwnerID;
+		if (owner_id.isNull())
 		{
 			// Display last owner if public
-			std::string last_owner_name;
-			LLSelectMgr::getInstance()->selectGetLastOwner(mLastOwnerID, last_owner_name);
+			std::string last_owner_app_link;
+			LLSelectMgr::getInstance()->selectGetLastOwner(mLastOwnerID, last_owner_app_link);
 
 			// It should never happen that the last owner is null and the owner
 			// is null, but it seems to be a bug in the simulator right now. JC
-			if (!mLastOwnerID.isNull() && !last_owner_name.empty())
+			if (!mLastOwnerID.isNull() && !last_owner_app_link.empty())
 			{
-				owner_name.append(", last ");
-				owner_name.append(last_owner_name);
+				owner_app_link.append(", last ");
+				owner_app_link.append(last_owner_app_link);
 			}
+			owner_id = mLastOwnerID;
 		}
-	}
-//	getChild<LLUICtrl>("Owner Name")->setValue(owner_name);
-//	getChildView("Owner Name")->setEnabled(TRUE);
-// [RLVa:KB] - Moved further down to avoid an annoying flicker when the text is set twice in a row
-
 // [RLVa:KB] - Checked: RLVa-2.0.1
-	if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) )
-	{
-		// Only anonymize the creator if all of the selection was created by the same avie who's also the owner or they're a nearby avie
-		if ( (creators_identical) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, mCreatorID)) && ((mCreatorID == mOwnerID) || (RlvUtil::isNearbyAgent(mCreatorID))) )
-			creator_name = LLSLURL("agent", mCreatorID, "rlvanonym").getSLURLString();
-
-		// Only anonymize the owner name if all of the selection is owned by the same avie and isn't group owned
-		if ( (owners_identical) && (!LLSelectMgr::getInstance()->selectIsGroupOwned()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, mOwnerID)) )
-			owner_name = LLSLURL("agent", mOwnerID, "rlvanonym").getSLURLString();
-	}
-
-	getChild<LLUICtrl>("Creator Name")->setValue(creator_name);
-	getChildView("Creator Name")->setEnabled(TRUE);
-
-	getChild<LLUICtrl>("Owner Name")->setValue(owner_name);
-	getChildView("Owner Name")->setEnabled(TRUE);
+		if ( (RlvActions::isRlvEnabled()) && (owners_identical) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, mOwnerID)) )
+		{
+			owner_app_link = LLSLURL("agent", mOwnerID, "rlvanonym").getSLURLString();
+		}
+		childSetValue("Owner Name", owner_app_link);
 // [/RLVa:KB]
+//		if (LLAvatarNameCache::get(owner_id, &av_name))
+//		{
+//			// If name isn't present, this will 'request' it and trigger refresh() again
+//			LLTextBox* text_box = getChild<LLTextBox>("Owner Name");
+//			style_params.link_href = owner_app_link;
+//			text_box->setText(av_name.getCompleteName(), style_params);
+//		}
+//		getChild<LLAvatarIconCtrl>("Owner Icon")->setValue(owner_id);
+//		getChild<LLAvatarIconCtrl>("Owner Icon")->setVisible(TRUE);
+//		getChild<LLUICtrl>("Owner Group Icon")->setVisible(FALSE);
+	}
+	getChildView("Owner Name")->setEnabled(TRUE);
 
 	// update group text field
 	getChildView("Group:")->setEnabled(TRUE);

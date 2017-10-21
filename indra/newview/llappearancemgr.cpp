@@ -1362,6 +1362,8 @@ static void removeDuplicateItems(LLInventoryModel::item_array_t& items)
 
 //=========================================================================
 
+const std::string LLAppearanceMgr::sExpectedTextureName = "OutfitPreview";
+
 // [SL:KB] - Patch: Appearance-WearableDuplicateAssets | Checked: 2015-06-30 (Catznip-3.7)
 static void removeDuplicateWearableItemsByAssetID(LLInventoryModel::item_array_t& items)
 {
@@ -1641,7 +1643,14 @@ void LLAppearanceMgr::removeOutfitPhoto(const LLUUID& outfit_id)
     BOOST_FOREACH(LLViewerInventoryItem* outfit_item, outfit_item_array)
     {
         LLViewerInventoryItem* linked_item = outfit_item->getLinkedItem();
-        if (linked_item != NULL && linked_item->getActualType() == LLAssetType::AT_TEXTURE)
+        if (linked_item != NULL)
+        {
+            if (linked_item->getActualType() == LLAssetType::AT_TEXTURE)
+            {
+                gInventory.removeItem(outfit_item->getUUID());
+            }
+        }
+        else if (outfit_item->getActualType() == LLAssetType::AT_TEXTURE)
         {
             gInventory.removeItem(outfit_item->getUUID());
         }
@@ -3257,14 +3266,35 @@ void LLAppearanceMgr::removeAllAttachmentsFromAvatar()
 	removeItemsFromAvatar(ids_to_remove);
 }
 
+class LLUpdateOnCOFLinkRemove : public LLInventoryCallback
+{
+public:
+	LLUpdateOnCOFLinkRemove(const LLUUID& remove_item_id, LLPointer<LLInventoryCallback> cb = NULL):
+		mItemID(remove_item_id),
+		mCB(cb)
+	{
+	}
+
+	/* virtual */ void fire(const LLUUID& item_id)
+	{
+		// just removed cof link, "(wear)" suffix depends on presence of link, so update label
+		gInventory.addChangedMask(LLInventoryObserver::LABEL, mItemID);
+		if (mCB.notNull())
+		{
+			mCB->fire(item_id);
+		}
+	}
+
+private:
+	LLUUID mItemID;
+	LLPointer<LLInventoryCallback> mCB;
+};
+
 //void LLAppearanceMgr::removeCOFItemLinks(const LLUUID& item_id, LLPointer<LLInventoryCallback> cb)
 // [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-05-02 (Catznip-3.7)
 void LLAppearanceMgr::removeCOFItemLinks(const LLUUID& item_id, LLPointer<LLInventoryCallback> cb, bool immediate_delete)
 // [/SL:KB]
-{
-	gInventory.addChangedMask(LLInventoryObserver::LABEL, item_id);
-
-	LLInventoryModel::cat_array_t cat_array;
+{	LLInventoryModel::cat_array_t cat_array;
 	LLInventoryModel::item_array_t item_array;
 	gInventory.collectDescendents(LLAppearanceMgr::getCOF(),
 								  cat_array,
@@ -3281,12 +3311,24 @@ void LLAppearanceMgr::removeCOFItemLinks(const LLUUID& item_id, LLPointer<LLInve
 				RLV_ASSERT(rlvPredCanRemoveItem(item));
 			}
 // [/RLVa:KB]
-//			bool immediate_delete = false;
+
 //			if (item->getType() == LLAssetType::AT_OBJECT)
-//			{
-//				immediate_delete = true;
-//			}
-			remove_inventory_item(item->getUUID(), cb, immediate_delete);
+// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
+			if (immediate_delete)
+// [/RLVa:KB]
+			{
+				// Immediate delete
+				remove_inventory_item(item->getUUID(), cb, true);
+				gInventory.addChangedMask(LLInventoryObserver::LABEL, item_id);
+			}
+			else
+			{
+				// Delayed delete
+				// Pointless to update item_id label here since link still exists and first notifyObservers
+				// call will restore (wear) suffix, mark for update after deletion
+				LLPointer<LLUpdateOnCOFLinkRemove> cb_label = new LLUpdateOnCOFLinkRemove(item_id, cb);
+				remove_inventory_item(item->getUUID(), cb_label, false);
+			}
 		}
 	}
 }
@@ -3535,6 +3577,7 @@ void appearance_mgr_update_dirty_state()
 void update_base_outfit_after_ordering()
 {
 	LLAppearanceMgr& app_mgr = LLAppearanceMgr::instance();
+	app_mgr.setOutfitImage(LLUUID());
 	LLInventoryModel::cat_array_t sub_cat_array;
 	LLInventoryModel::item_array_t outfit_item_array;
 	gInventory.collectDescendents(app_mgr.getBaseOutfitUUID(),
@@ -3544,9 +3587,26 @@ void update_base_outfit_after_ordering()
 	BOOST_FOREACH(LLViewerInventoryItem* outfit_item, outfit_item_array)
 	{
 		LLViewerInventoryItem* linked_item = outfit_item->getLinkedItem();
-		if (linked_item != NULL && linked_item->getActualType() == LLAssetType::AT_TEXTURE)
+		if (linked_item != NULL)
 		{
-			app_mgr.setOutfitImage(linked_item->getLinkedUUID());
+			if (linked_item->getActualType() == LLAssetType::AT_TEXTURE)
+			{
+				app_mgr.setOutfitImage(linked_item->getLinkedUUID());
+				if (linked_item->getName() == LLAppearanceMgr::sExpectedTextureName)
+				{
+					// Images with "appropriate" name take priority
+					break;
+				}
+			}
+		}
+		else if (outfit_item->getActualType() == LLAssetType::AT_TEXTURE)
+		{
+			app_mgr.setOutfitImage(outfit_item->getUUID());
+			if (outfit_item->getName() == LLAppearanceMgr::sExpectedTextureName)
+			{
+				// Images with "appropriate" name take priority
+				break;
+			}
 		}
 	}
 

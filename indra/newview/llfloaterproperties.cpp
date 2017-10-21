@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <functional>
 #include "llcachename.h"
+#include "llavatarnamecache.h"
 #include "lldbstrings.h"
 #include "llfloaterreg.h"
 
@@ -278,8 +279,8 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 
 	if (item->getCreatorUUID().notNull())
 	{
-		std::string name;
-		gCacheName->getFullName(item->getCreatorUUID(), name);
+		LLAvatarName av_name;
+		LLAvatarNameCache::get(item->getCreatorUUID(), &av_name);
 		getChildView("BtnCreator")->setEnabled(TRUE);
 		getChildView("LabelCreatorTitle")->setEnabled(TRUE);
 		getChildView("LabelCreatorName")->setEnabled(TRUE);
@@ -289,10 +290,14 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		     ( ((perm.isOwned()) && (!perm.isGroupOwned()) && (perm.getOwner() == item->getCreatorUUID()) ) || (RlvUtil::isNearbyAgent(item->getCreatorUUID())) ) )
 		{
 			childSetEnabled("BtnCreator", FALSE);
-			name = RlvStrings::getAnonym(name);
+			getChild<LLUICtrl>("LabelCreatorName")->setValue(RlvStrings::getAnonym(av_name.getUserName()));
+		}
+		else
+		{
+			getChild<LLUICtrl>("LabelCreatorName")->setValue(av_name.getUserName());
 		}
 // [/RLVa:KB]
-		getChild<LLUICtrl>("LabelCreatorName")->setValue(name);
+//		getChild<LLUICtrl>("LabelCreatorName")->setValue(av_name.getUserName());
 	}
 	else
 	{
@@ -317,7 +322,9 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		}
 		else
 		{
-			gCacheName->getFullName(perm.getOwner(), name);
+			LLAvatarName av_name;
+			LLAvatarNameCache::get(perm.getOwner(), &av_name);
+			name = av_name.getUserName();
 // [RLVa:KB] - Checked: RLVa-2.0.1
 			if (RlvActions::isRlvEnabled())
 			{

@@ -1687,7 +1687,7 @@ void LLAgent::stopAutoPilot(BOOL user_cancel)
 		if (user_cancel && !mAutoPilotBehaviorName.empty())
 		{
 			if (mAutoPilotBehaviorName == "Sit")
-				LLNotificationsUtil::add("CancelledSit");
+				LL_INFOS("Agent") << "Autopilot-Sit was canceled by user action" << LL_ENDL;
 			else if (mAutoPilotBehaviorName == "Attach")
 				LLNotificationsUtil::add("CancelledAttach");
 			else

@@ -509,7 +509,8 @@ void LLToolPie::walkToClickedLocation()
 	mAutoPilotDestination->setColor(LLColor4U(170, 210, 190));
 	mAutoPilotDestination->setDuration(3.f);
 
-	handle_go_to();
+	LLVector3d pos = LLToolPie::getInstance()->getPick().mPosGlobal;
+	gAgent.startAutoPilotGlobal(pos, std::string(), NULL, NULL, NULL, 0.f, 0.03f, FALSE);
 }
 
 // When we get object properties after left-clicking on an object
@@ -957,14 +958,19 @@ BOOL LLToolPie::handleTooltipLand(std::string line, std::string tooltip_msg)
 				line.append(LLTrans::getString("RetrievingData"));
 			}
 		}
-		else if(gCacheName->getFullName(owner, name))
-		{
-			line.append(name);
-		}
-		else
-		{
-			line.append(LLTrans::getString("RetrievingData"));
-		}
+        else
+        {
+            LLAvatarName av_name;
+            if (LLAvatarNameCache::get(owner, &av_name))
+            {
+                name = av_name.getUserName();
+                line.append(name);
+            }
+            else
+            {
+                line.append(LLTrans::getString("RetrievingData"));
+            }
+        }
 	}
 	else
 	{
