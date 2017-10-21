@@ -112,24 +112,16 @@ BOOL LLFloaterScriptLimits::postBuild()
 	}
 
 	// contruct the panels
-	std::string land_url = gAgent.getRegion()->getCapability("LandResources");
-	if (!land_url.empty())
-	{
-		LLPanelScriptLimitsRegionMemory* panel_memory;
-		panel_memory = new LLPanelScriptLimitsRegionMemory;
-		mInfoPanels.push_back(panel_memory);
-		panel_memory->buildFromFile( "panel_script_limits_region_memory.xml");
-		mTab->addTabPanel(panel_memory);
-	}
-	
-	std::string attachment_url = gAgent.getRegion()->getCapability("AttachmentResources");
-	if (!attachment_url.empty())
-	{
-		LLPanelScriptLimitsAttachment* panel_attachments = new LLPanelScriptLimitsAttachment;
-		mInfoPanels.push_back(panel_attachments);
-		panel_attachments->buildFromFile("panel_script_limits_my_avatar.xml");
-		mTab->addTabPanel(panel_attachments);
-	}
+	LLPanelScriptLimitsRegionMemory* panel_memory = new LLPanelScriptLimitsRegionMemory;
+	mInfoPanels.push_back(panel_memory);
+	panel_memory->buildFromFile( "panel_script_limits_region_memory.xml");
+	mTab->addTabPanel(panel_memory);
+
+	LLPanelScriptLimitsAttachment* panel_attachments = new LLPanelScriptLimitsAttachment;
+	mInfoPanels.push_back(panel_attachments);
+	panel_attachments->buildFromFile("panel_script_limits_my_avatar.xml");
+	mTab->addTabPanel(panel_attachments);
+
 	
 	if(mInfoPanels.size() > 0)
 	{
@@ -195,6 +187,8 @@ LLPanelScriptLimitsRegionMemory::~LLPanelScriptLimitsRegionMemory()
 
 BOOL LLPanelScriptLimitsRegionMemory::getLandScriptResources()
 {
+	if (!gAgent.getRegion()) return FALSE;
+
 	LLSD body;
 	std::string url = gAgent.getRegion()->getCapability("LandResources");
 	if (!url.empty())
@@ -391,6 +385,14 @@ void LLPanelScriptLimitsRegionMemory::setErrorStatus(S32 status, const std::stri
 }
 
 // callback from the name cache with an owner name to add to the list
+void LLPanelScriptLimitsRegionMemory::onAvatarNameCache(
+    const LLUUID& id,
+    const LLAvatarName& av_name)
+{
+    onNameCache(id, av_name.getUserName());
+}
+
+// callback from the name cache with an owner name to add to the list
 void LLPanelScriptLimitsRegionMemory::onNameCache(
 						 const LLUUID& id,
 						 const std::string& full_name)
@@ -503,7 +505,9 @@ void LLPanelScriptLimitsRegionMemory::setRegionDetails(LLSD content)
 				}
 				else
 				{
-					name_is_cached = gCacheName->getFullName(owner_id, owner_buf);  // username
+					LLAvatarName av_name;
+					name_is_cached = LLAvatarNameCache::get(owner_id, &av_name);
+					owner_buf = av_name.getUserName();
 					owner_buf = LLCacheName::buildUsername(owner_buf);
 				}
 				if(!name_is_cached)
@@ -511,9 +515,18 @@ void LLPanelScriptLimitsRegionMemory::setRegionDetails(LLSD content)
 					if(std::find(names_requested.begin(), names_requested.end(), owner_id) == names_requested.end())
 					{
 						names_requested.push_back(owner_id);
-						gCacheName->get(owner_id, is_group_owned,  // username
-							boost::bind(&LLPanelScriptLimitsRegionMemory::onNameCache,
-							    this, _1, _2));
+						if (is_group_owned)
+						{
+							gCacheName->getGroup(owner_id,
+								boost::bind(&LLPanelScriptLimitsRegionMemory::onNameCache,
+								    this, _1, _2));
+						}
+						else
+						{
+							LLAvatarNameCache::get(owner_id,
+								boost::bind(&LLPanelScriptLimitsRegionMemory::onAvatarNameCache,
+								    this, _1, _2));
+						}
 					}
 				}
 			}
@@ -699,10 +712,9 @@ BOOL LLPanelScriptLimitsRegionMemory::StartRequestChain()
 	LLParcel* parcel = instance->getCurrentSelectedParcel();
 	LLViewerRegion* region = LLViewerParcelMgr::getInstance()->getSelectionRegion();
 	
-	LLUUID current_region_id = gAgent.getRegion()->getRegionID();
-
 	if ((region) && (parcel))
 	{
+		LLUUID current_region_id = gAgent.getRegion()->getRegionID();
 		LLVector3 parcel_center = parcel->getCenterpoint();
 		
 		region_id = region->getRegionID();
@@ -963,6 +975,8 @@ void LLPanelScriptLimitsRegionMemory::onClickReturn(void* userdata)
 
 BOOL LLPanelScriptLimitsAttachment::requestAttachmentDetails()
 {
+	if (!gAgent.getRegion()) return FALSE;
+
 	LLSD body;
 	std::string url = gAgent.getRegion()->getCapability("AttachmentResources");
 	if (!url.empty())

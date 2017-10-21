@@ -214,6 +214,7 @@ Ansariel Hiller
 	MAINT-6953
 	MAINT-7028
 	MAINT-7059
+	MAINT-6519
 Aralara Rajal
 Arare Chantilly
 	CHUIBUG-191
@@ -361,6 +362,7 @@ Cinder Roxley
     STORM-2053
     STORM-2113
     STORM-2127
+    STORM-2144
 Clara Young
 Coaldust Numbers
     VWR-1095
@@ -770,6 +772,8 @@ Kadah Coba
 	STORM-1060
     STORM-1843
 Jondan Lundquist
+Joosten Briebers
+    MAINT-7074
 Josef Munster
 Josette Windlow
 Juilan Tripsa
@@ -818,6 +822,8 @@ Kitty Barnett
 	MAINT-6153
 	MAINT-6154
 	MAINT-6568
+	STORM-2149
+	MAINT-7581
 Kolor Fall
 Komiko Okamoto
 Korvel Noh
@@ -1033,9 +1039,9 @@ Nicholaz Beresford
 	VWR-2682
 	VWR-2684
 Nick Rhodes
-NickyD
-	MAINT-873
 Nicky Dasmijn
+	MAINT-873
+	MAINT-7541
 	VWR-29228
 	MAINT-1392
 	MAINT-873
@@ -1299,6 +1305,8 @@ Sovereign Engineer
     MAINT-6218
     MAINT-6913
     STORM-2143
+    STORM-2148
+    MAINT-7343
 SpacedOut Frye
 	VWR-34
 	VWR-45
