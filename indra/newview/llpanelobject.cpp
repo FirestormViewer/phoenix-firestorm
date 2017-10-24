@@ -330,7 +330,10 @@ BOOL	LLPanelObject::postBuild()
 	childSetCommitCallback("sculpt mirror control", onCommitSculptType, this);
 	mCtrlSculptInvert = getChild<LLCheckBoxCtrl>("sculpt invert control");
 	childSetCommitCallback("sculpt invert control", onCommitSculptType, this);
-
+	//<FS:Beq> FIRE-21445 + Mesh Info in object panel
+	mComboLOD = getChild<LLComboBox>("LOD_show_combo");
+	childSetCommitCallback("LOD_show_combo", onCommitLOD, this);
+	//</FS:Beq>
 	// Start with everyone disabled
 	clearCtrls();
 
@@ -1335,91 +1338,231 @@ void LLPanelObject::getState( )
 	mCtrlSculptTexture->setVisible(sculpt_texture_visible);
 	mLabelSculptType->setVisible(sculpt_texture_visible);
 	mCtrlSculptType->setVisible(sculpt_texture_visible);
-
+	//<FS:Beq> FIRE-21445 + Mesh Info in object panel
+	deactivateMeshFields();
+	//</FS:Beq>
 
 	// sculpt texture
-	if (selected_item == MI_SCULPT)
+	//<FS:Beq> extend mesh info to no-edit items
+	if (selected_item == MI_SCULPT || mSelectedType == MI_NONE)
+	//</FS:Beq>
 	{
-
 
 		LLUUID id;
 		LLSculptParams *sculpt_params = (LLSculptParams *)objectp->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
 
-		
+
 		if (sculpt_params) // if we have a legal sculpt param block for this object:
 		{
 			if (mObject != objectp)  // we've just selected a new object, so save for undo
 			{
 				mSculptTextureRevert = sculpt_params->getSculptTexture();
-				mSculptTypeRevert    = sculpt_params->getSculptType();
+				mSculptTypeRevert = sculpt_params->getSculptType();
 			}
-		
+
 			U8 sculpt_type = sculpt_params->getSculptType();
 			U8 sculpt_stitching = sculpt_type & LL_SCULPT_TYPE_MASK;
 			BOOL sculpt_invert = sculpt_type & LL_SCULPT_FLAG_INVERT;
 			BOOL sculpt_mirror = sculpt_type & LL_SCULPT_FLAG_MIRROR;
 			isMesh = (sculpt_stitching == LL_SCULPT_TYPE_MESH);
 
-			LLTextureCtrl*  mTextureCtrl = getChild<LLTextureCtrl>("sculpt texture control");
-			if(mTextureCtrl)
+			// <FS:Beq> FIRE-21445 - Show specific LOD + Mesh Info in object panel
+			if (isMesh)
 			{
-				mTextureCtrl->setTentative(FALSE);
-				mTextureCtrl->setEnabled(editable && !isMesh);
-				if (editable)
-					mTextureCtrl->setImageAssetID(sculpt_params->getSculptTexture());
-				else
-					mTextureCtrl->setImageAssetID(LLUUID::null);
+				deactivateStandardFields();
+				activateMeshFields(objectp);
 			}
-
-			mComboBaseType->setEnabled(!isMesh);
-			
-			if (mCtrlSculptType)
+			else if (!isMesh && mSelectedType == MI_NONE)
 			{
-				if (sculpt_stitching == LL_SCULPT_TYPE_NONE)
+				// Do nothing as the perms are off.
+			}
+			else
+			//</FS:Beq>
+			{
+				LLTextureCtrl*  mTextureCtrl = getChild<LLTextureCtrl>("sculpt texture control");
+				if (mTextureCtrl)
 				{
-					// since 'None' is no longer an option in the combo box
-					// use 'Plane' as an equivalent sculpt type
-					mCtrlSculptType->setSelectedByValue(LLSD(LL_SCULPT_TYPE_PLANE), true);
+					mTextureCtrl->setTentative(FALSE);
+					mTextureCtrl->setEnabled(editable && !isMesh);
+					if (editable)
+						mTextureCtrl->setImageAssetID(sculpt_params->getSculptTexture());
+					else
+						mTextureCtrl->setImageAssetID(LLUUID::null);
 				}
-				else
+
+				mComboBaseType->setEnabled(!isMesh);
+				if (mCtrlSculptType)
 				{
-					mCtrlSculptType->setSelectedByValue(LLSD(sculpt_stitching), true);
+					if (sculpt_stitching == LL_SCULPT_TYPE_NONE)
+					{
+						// since 'None' is no longer an option in the combo box
+						// use 'Plane' as an equivalent sculpt type
+						mCtrlSculptType->setSelectedByValue(LLSD(LL_SCULPT_TYPE_PLANE), true);
+					}
+					else
+					{
+						mCtrlSculptType->setSelectedByValue(LLSD(sculpt_stitching), true);
+					}
+					mCtrlSculptType->setEnabled(editable && !isMesh);
 				}
-				mCtrlSculptType->setEnabled(editable && !isMesh);
-			}
 
-			if (mCtrlSculptMirror)
-			{
-				mCtrlSculptMirror->set(sculpt_mirror);
-				mCtrlSculptMirror->setEnabled(editable && !isMesh);
-			}
+				if (mCtrlSculptMirror)
+				{
+					mCtrlSculptMirror->set(sculpt_mirror);
+					mCtrlSculptMirror->setEnabled(editable && !isMesh);
+				}
 
-			if (mCtrlSculptInvert)
-			{
-				mCtrlSculptInvert->set(sculpt_invert);
-				mCtrlSculptInvert->setEnabled(editable);
-			}
+				if (mCtrlSculptInvert)
+				{
+					mCtrlSculptInvert->set(sculpt_invert);
+					mCtrlSculptInvert->setEnabled(editable);
+				}
 
-			if (mLabelSculptType)
-			{
-				mLabelSculptType->setEnabled(TRUE);
+				if (mLabelSculptType)
+				{
+					mLabelSculptType->setEnabled(TRUE);
+				}
+			//<FS:Beq> FIRE-21445
 			}
-			
+			//</FS:Beq>
 		}
 	}
 	else
 	{
-		mSculptTextureRevert = LLUUID::null;		
+		mSculptTextureRevert = LLUUID::null;
 	}
 
 	mCtrlSculptMirror->setVisible(sculpt_texture_visible && !isMesh);
 	mCtrlSculptInvert->setVisible(sculpt_texture_visible && !isMesh);
 
 	//----------------------------------------------------------------------------
-
 	mObject = objectp;
 	mRootObject = root_objectp;
 }
+//<FS:Beq> FIRE-21445 + Mesh Info in object panel
+// Helper function duplicating the inline switch statements which ideally we'd refactor but...ugh MAINT
+void LLPanelObject::deactivateStandardFields()
+{
+
+	// Update field visibility
+	mComboBaseType->setEnabled(FALSE);
+	mComboBaseType->setVisible(FALSE);
+
+	mLabelCut->setVisible(FALSE);
+	mSpinCutBegin->setVisible(FALSE);
+	mSpinCutEnd->setVisible(FALSE);
+
+	mLabelHollow->setVisible(FALSE);
+	mSpinHollow->setVisible(FALSE);
+	mLabelHoleType->setVisible(FALSE);
+	mComboHoleType->setVisible(FALSE);
+
+	mLabelTwist->setVisible(FALSE);
+	mSpinTwist->setVisible(FALSE);
+	mSpinTwistBegin->setVisible(FALSE);
+	mSpinTwist->setMinValue(FALSE);
+	mSpinTwist->setMaxValue(FALSE);
+	mSpinTwist->setIncrement(FALSE);
+	mSpinTwistBegin->setMinValue(FALSE);
+	mSpinTwistBegin->setMaxValue(FALSE);
+	mSpinTwistBegin->setIncrement(FALSE);
+
+	mSpinScaleX->setVisible(FALSE);
+	mSpinScaleY->setVisible(FALSE);
+
+	mLabelSkew->setVisible(FALSE);
+	mSpinSkew->setVisible(FALSE);
+
+	mLabelShear->setVisible(FALSE);
+	mSpinShearX->setVisible(FALSE);
+	mSpinShearY->setVisible(FALSE);
+
+	mCtrlPathBegin->setVisible(FALSE);
+	mCtrlPathEnd->setVisible(FALSE);
+
+	mLabelTaper->setVisible(FALSE);
+	mSpinTaperX->setVisible(FALSE);
+	mSpinTaperY->setVisible(FALSE);
+
+	mLabelRadiusOffset->setVisible(FALSE);
+	mSpinRadiusOffset->setVisible(FALSE);
+
+	mLabelRevolutions->setVisible(FALSE);
+	mSpinRevolutions->setVisible(FALSE);
+
+	mCtrlSculptTexture->setVisible(FALSE);
+	mLabelSculptType->setVisible(FALSE);
+	mCtrlSculptType->setVisible(FALSE);
+
+	getChildView("scale_hole")->setVisible(FALSE);
+	getChildView("scale_taper")->setVisible(FALSE);
+
+	getChildView("advanced_cut")->setVisible(FALSE);
+	getChildView("advanced_dimple")->setVisible(FALSE);
+	getChildView("advanced_slice")->setVisible(FALSE);
+}
+
+void LLPanelObject::activateMeshFields(LLViewerObject * objectp)
+{
+	static const char * dataFields[4] = { "lowest_lod_num_tris", "low_lod_num_tris", "med_lod_num_tris", "high_lod_num_tris" };
+	for (int i = 0; i < 4; i++)
+	{
+		LLTextBox *num_tris = getChild<LLTextBox>(dataFields[i]);
+		if (num_tris)
+		{
+			num_tris->setText(llformat("%d", objectp->mDrawable->getVOVolume()->getLODTriangleCount(i)));
+			num_tris->setVisible(TRUE);
+		}
+	}
+	childSetVisible("mesh_info_label", TRUE);
+	childSetVisible("lod_label", TRUE);
+	childSetVisible("lod_num_tris", TRUE);
+	childSetVisible("high_lod_label", TRUE);
+	childSetVisible("med_lod_label", TRUE);
+	childSetVisible("low_lod_label", TRUE);
+	childSetVisible("lowest_lod_label", TRUE);
+	// Mesh specific display
+	mComboLOD = getChild<LLComboBox>("LOD_show_combo");
+	if (mComboLOD)
+	{
+		mComboLOD->setEnabled(TRUE);
+		mComboLOD->setVisible(TRUE);
+	}
+}
+
+void LLPanelObject::deactivateMeshFields()
+{
+	static const char * dataFields[4] = { "lowest_lod_num_tris", "low_lod_num_tris", "med_lod_num_tris", "high_lod_num_tris" };
+	for (int i = 0; i < 4; i++)
+	{
+		LLTextBox *num_tris = getChild<LLTextBox>(dataFields[i]);
+		if (num_tris)
+		{
+			num_tris->setVisible(FALSE);
+		}
+	}
+
+	childSetVisible("mesh_info_label", FALSE);
+	childSetVisible("lod_label", FALSE);
+	childSetVisible("lod_num_tris", FALSE);
+	childSetVisible("high_lod_label", FALSE);
+	childSetVisible("med_lod_label", FALSE);
+	childSetVisible("low_lod_label", FALSE);
+	childSetVisible("lowest_lod_label", FALSE);
+
+	// reset the debug setting as we are editing a new object
+	gSavedSettings.setS32("ShowSpecificLODInEdit", -1);
+	// </FS:Beq>
+
+	mComboLOD = getChild<LLComboBox>("LOD_show_combo");
+	if (mComboLOD)
+	{
+		mComboLOD->setCurrentByIndex(0);
+		mComboLOD->setEnabled(FALSE);
+		mComboLOD->setVisible(FALSE);
+	}
+}
+//</FS:Beq>
 
 // static
 bool LLPanelObject::precommitValidate( const LLSD& data )
@@ -1476,6 +1619,22 @@ void LLPanelObject::sendIsPhantom()
 		LL_INFOS() << "update phantom not changed" << LL_ENDL;
 	}
 }
+
+//<FS:Beq> FIRE-21445 + Mesh Info in object panel
+// static
+void LLPanelObject::onCommitLOD(LLUICtrl* ctrl, void* userdata)
+{
+	LLPanelObject* self = (LLPanelObject*)userdata;
+
+	if (self->mObject.isNull())
+	{
+		return;
+	}
+	// We use the setting to pass down the override because overriding at this point get reset by other code in the render pipeline.
+	// the actual forceLOD call is made in llviewerwindow.cpp
+	gSavedSettings.setS32("ShowSpecificLODInEdit", self->mComboLOD->getValue());
+}
+//</FS:Beq>
 
 // static
 void LLPanelObject::onCommitParametric( LLUICtrl* ctrl, void* userdata )

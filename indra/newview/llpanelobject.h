@@ -67,7 +67,9 @@ public:
 	static void 	onCommitTemporary(		LLUICtrl* ctrl, void* userdata);
 	static void 	onCommitPhantom(		LLUICtrl* ctrl, void* userdata);
 	static void 	onCommitPhysics(		LLUICtrl* ctrl, void* userdata);
-
+	//<FS:Beq> FIRE-21445 - Display specific LOD
+	static void		onCommitLOD(			LLUICtrl* ctrl, void* userdata);
+	//</FS:Beq>
 	void 	onCopyPos(				const LLSD& data);
 	void 	onPastePos(				const LLSD& data);
 	void 	onPastePosClip(			const LLSD& data);
@@ -91,7 +93,11 @@ public:
 
 protected:
 	void			getState();
-
+	//<FS:Beq> FIRE-21445 + Mesh Info in object panel
+	void			deactivateStandardFields();
+	void			activateMeshFields(LLViewerObject * objectp);
+	void			deactivateMeshFields();
+	//</FS:Beq>
 	void			sendRotation(BOOL btn_down);
 	void			sendScale(BOOL btn_down);
 	void			sendPosition(BOOL btn_down);
@@ -126,6 +132,7 @@ protected:
 	
 	// Per-object options
 	LLComboBox*		mComboBaseType;
+	LLComboBox*		mComboLOD;
 
 	LLTextBox*		mLabelCut;
 	LLSpinCtrl*		mSpinCutBegin;

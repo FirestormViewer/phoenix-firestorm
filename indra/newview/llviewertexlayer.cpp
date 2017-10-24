@@ -679,7 +679,7 @@ void LLViewerTexLayerSetBuffer::doUpload()
 				mUploadID = asset_id;
 
 				// Upload the image
-				const std::string url = gAgent.getRegion()->getCapability("UploadBakedTexture");
+				const std::string url = gAgent.getRegionCapability("UploadBakedTexture");
 				if(!url.empty()
 					&& !LLPipeline::sForceOldBakedUpload // toggle debug setting UploadBakedTexOld to change between the new caps method and old method
 					&& (mUploadFailCount < (BAKE_UPLOAD_ATTEMPTS - 1))) // Try last ditch attempt via asset store if cap upload is failing.

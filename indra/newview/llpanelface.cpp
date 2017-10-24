@@ -2870,10 +2870,7 @@ void LLPanelFace::onClickMapsSync(LLUICtrl* ctrl, void *userdata)
 	LLPanelFace *self = (LLPanelFace*) userdata;
 	llassert_always(self);
 	self->getState();
-	// <FS:Beq> FIRE-21375 use LL setting name as part of the material sync changes (FIRE-21375)
-	//	if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
 	if (gSavedSettings.getBOOL("SyncMaterialSettings"))
-	// </FS:Beq>
 	{
 		alignMaterialsProperties(self);
 	}
@@ -2976,11 +2973,7 @@ void LLPanelFace::onCommitFlip(const LLUICtrl* ctrl, const LLSD& user_data)
 		{
 			case MATTYPE_DIFFUSE:
 				self->sendTextureInfo();
-// <FS:Beq> FIRE-21375 use LL setting name as part of the material sync changes (FIRE-21375)
-//				if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
-
 				if (gSavedSettings.getBOOL("SyncMaterialSettings"))
-// </FS:Beq>
 				{
 					alignMaterialsProperties(self);
 				}

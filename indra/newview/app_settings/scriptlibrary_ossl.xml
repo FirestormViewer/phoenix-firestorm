@@ -361,6 +361,8 @@
 			desc="list osGetRegionStats();Returns the current region&apos; statistics" />
 		<function name="osGetSimulatorMemory" sleep="0.0" energy="10.0"
 			desc="integer osGetSimulatorMemory();Returns the memory in use by the current region" />
+		<function name="osGetSimulatorMemoryKB" sleep="0.0" energy="10.0"
+			desc="integer osGetSimulatorMemoryKB();Returns the memory in use in KB by the current region" />
 		<function name="osKickAvatar" sleep="0.0" energy="10.0"
 			desc="osKickAvatar(string FirstName, string LastName, string alert);Kicks specified avatar out of the current region" />
 		<function name="osSetSpeed" sleep="0.0" energy="10.0"

@@ -16873,6 +16873,19 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>ShowSpecificLODInEdit</key>
+    <map>
+      <key>Comment</key>
+      <string>Force the display of a specific LOD while editing</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <string>-1</string>
+      <key>Backup</key>
+      <integer>0</integer>
+    </map>
     <key>SocialPhotoResolution</key>
     <map>
       <key>Comment</key>
@@ -22779,17 +22792,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
-    </map>
-    <key>FSSyncronizeTextureMaps</key>
-      <map>
-      <key>Comment</key>
-      <string>Deprecated - Leave this at ZERO and use SyncMaterialSettings instead. </string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
     </map>
     <!-- <FS_Zi> Add avatar hitbox debug -->
     <key>DebugRenderHitboxes</key>
