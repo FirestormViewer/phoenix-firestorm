@@ -3553,7 +3553,7 @@ void LLVOVolume::setExtendedMeshFlags(U32 flags)
             param_block->setFlags(flags);
         }
         parameterChanged(LLNetworkData::PARAMS_EXTENDED_MESH, true);
-        LL_DEBUGS("AXON") << (U32) this
+        LL_DEBUGS("AXON") << (uintptr_t) this
                    << " new flags " << flags << " curr_flags " << curr_flags
                    << ", calling onSetExtendedMeshFlags()"
                    << LL_ENDL;
@@ -4207,7 +4207,7 @@ void LLVOVolume::parameterChanged(U16 param_type, LLNetworkData* data, BOOL in_u
         bool was_enabled = (getControlAvatar() != NULL);
         if (enabled != was_enabled)
         {
-            LL_INFOS() << (U32) this
+            LL_INFOS() << (uintptr_t) this
                        << " calling onSetExtendedMeshFlags, enabled " << (U32) enabled
                        << " was_enabled " << (U32) was_enabled
                        << " local_origin " << (U32) local_origin
@@ -5335,7 +5335,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 			LLVOVolume* vobj = drawablep->getVOVolume();
             
-            std::string vobj_name = llformat("Vol%u", (U32) vobj);
+            std::string vobj_name = llformat("Vol%u", (uintptr_t) vobj);
 
 			if (!vobj)
 			{
