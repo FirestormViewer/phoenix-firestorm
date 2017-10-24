@@ -540,13 +540,11 @@ void LLInventoryPanel::modelChanged(U32 mask)
 
 					view_item->refresh();
 				}
-				// <FS:Ansariel> FIRE-11103: Fix empty folders being shown in worn inventory panel
 				LLFolderViewFolder* parent = view_item->getParentFolder();
 				if(parent)
 				{
 					parent->getViewModelItem()->dirtyDescendantsFilter();
 				}
-				// </FS:Ansariel>
 			}
 		}
 

@@ -232,8 +232,9 @@ bool LLFolderViewModelItemInventory::filter( LLFolderViewFilter& filter)
 		return true;
 	}
      */
-    
-	const bool passed_filter_folder = (getInventoryType() == LLInventoryType::IT_CATEGORY) ? filter.checkFolder(this) : true;
+
+	bool is_folder = (getInventoryType() == LLInventoryType::IT_CATEGORY);
+	const bool passed_filter_folder = is_folder ? filter.checkFolder(this) : true;
 	setPassedFolderFilter(passed_filter_folder, filter_generation);
 
 	bool continue_filtering = true;
@@ -258,10 +259,7 @@ bool LLFolderViewModelItemInventory::filter( LLFolderViewFilter& filter)
 	{
         // This is where filter check on the item done (CHUI-849)
 		const bool passed_filter = filter.check(this);
-		// <FS:Ansariel> FIRE-21632: Only do this for folders or it will break correct filtering of the "Worn" inventory tab
-		//if (passed_filter && mChildren.empty()) // Update the latest filter generation for empty folders
-		if (passed_filter && mChildren.empty() && getInventoryType() == LLInventoryType::IT_CATEGORY) // Update the latest filter generation for empty folders
-		// </FS:Ansariel>
+		if (passed_filter && mChildren.empty() && is_folder) // Update the latest filter generation for empty folders
 		{
 			LLFolderViewModelItemInventory* view_model = this;
 			while (view_model && view_model->mMostFilteredDescendantGeneration < filter_generation)

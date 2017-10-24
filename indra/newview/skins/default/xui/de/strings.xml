@@ -271,8 +271,8 @@ support@secondlife.com.
 [TIME] Pacific Time wieder verfügbar.
 	</string>
 	<string name="LoginFailedAccountDisabled">
-		Ihre Anfrage kann derzeit nicht bearbeitet werden.
-Wenden Sie sich unter http://secondlife.com/support an den Second Life-Support.
+		Ihre Anfrage kann derzeit nicht bearbeitet werden. 
+Bitte wenden Sie sich unter http://secondlife.com/support an den Second Life-Support.
 	</string>
 	<string name="LoginFailedTransformError">
 		Nicht übereinstimmende Daten bei der Anmeldung festgestellt.
@@ -839,17 +839,16 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Status unbekannt
 	</string>
 	<string name="AssetUploadServerUnreacheble">
-		Dienst nicht erreichbar.
+		Dienst nicht verfügbar.
 	</string>
 	<string name="AssetUploadServerDifficulties">
-		Der Server hat aktuell unerwartete technische Probleme.
+		Auf dem Server sind unerwartete Probleme aufgetreten.
 	</string>
 	<string name="AssetUploadServerUnavaliable">
-		Dienst nicht erreichbar oder Upload-Timeout wurde erreicht.
+		Dienst nicht verfügbar oder Zeitüberschreitung beim Upload.
 	</string>
 	<string name="AssetUploadRequestInvalid">
-Fehler in der Upload-Anfrage. Bitte besuchen Sie
-Error in upload request.  Please visit 
+Fehler in der Upload-Anforderung. Bitte besuchen Sie
 http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	</string>
 	<string name="texture">
@@ -2416,7 +2415,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 		Immer zulässig: ([ALLOWEDAGENTS], max [MAXACCESS])
 	</string>
 	<string name="RegionInfoAllowedGroups">
-		Immer zulässige Gruppen: ([ALLOWEDGROUPS], max [MAXACCESS])
+		Immer zugelassene Gruppen: ([ALLOWEDGROUPS], max [MAXACCESS])
 	</string>
 	<string name="RegionInfoEstateManagers">
 		Grundbesitzverwalter: ([ESTATEMANAGERS], max [MAXMANAGERS])

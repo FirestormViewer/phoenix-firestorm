@@ -4,8 +4,8 @@
 		Nicht mehr anzeigen
 	</global>
 	<global name="skipnexttimesessiononly">
-		Nicht mehr anzeigen
-(für aktuelle Sitzung)
+		Nicht mehr anzeigen 
+(während der aktuellen Sitzung)
 	</global>
 	<global name="alwayschoose">
 		Diese Option immer auswählen
@@ -368,37 +368,33 @@ Bitte laden Sie innerhalb von 48 Stunden Mitglieder in Ihre Gruppe ein.
 		<usetemplate canceltext="Abbrechen" name="okcancelbuttons" notext="Abbrechen" yestext="Gruppe für [COST] L$ erstellen"/>
 	</notification>
 	<notification name="JoinGroupInaccessible">
-		Sie haben keine Zugriff auf diese Gruppe.
+		Diese Gruppe ist für Sie nicht verfügbar.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="JoinGroupError">
-		Fehler bei der Verarbeitung Ihrer Gruppenmitglied-Anfrage.
+		Fehler bei der Verarbeitung Ihrer Anfrage zur Gruppenmitgliedschaft.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="JoinGroupErrorReason">
-		Gruppe kann nicht beigetreten werden: [reason]
+		Beitritt zur Gruppe nicht möglich: [reason]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="JoinGroupTrialUser">
-		Entschuldigung, Benutzer auf Probe können keiner Gruppe beitreten.
+		Leider können Testbenutzer keinen Gruppen beitreten.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="JoinGroupMaxGroups">
-		Sie können der Gruppe &lt;nolink&gt;[group_name]&lt;/nolink&gt; nicht beitreten:
-Sie sind bereits Mitglied in [group_count] Gruppen, das erlaubte Limit sind [max_groups].
+		Sie können „&lt;nolink&gt;[group_name]&lt;/nolink&gt;“ nicht beitreten: 
+Sie sind bereits Mitglied in [group_count] Gruppen, die maximale zulässige Anzahl beträgt [max_groups]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="JoinGroupClosedEnrollment">
-		Sie können der Gruppe &lt;nolink&gt;[group_name]&lt;/nolink&gt; nicht beitreten:
-Die Gruppe besitzt keine öffentliche Anmeldung mehr.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="JoinGroupSuccess">
-		Sie sind der Gruppe beigetreten.
+		Sie können „&lt;nolink&gt;[group_name]&lt;/nolink&gt;“ nicht beitreten: 
+Die Gruppe steht für freie Registrierungen nicht mehr zur Verfügung.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="JoinGroupInsufficientFunds">
-		Die benötigte Gebühr L$ [membership_fee] für die Mitgliedschaft konnte nicht übertragen werden.
+		Die erforderliche L$ [membership_fee] Mitgliedschaftsgebühr kann nicht übertragen werden.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LandBuyPass">
@@ -423,9 +419,9 @@ Der Verkaufspreis beträgt [SALE_PRICE] L$. Der Verkauf an [NAME] wird zu diesem
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsDeededToGroup">
-		Möchten Sie alle Ihre Objekte auf dieser Parzelle, die der Gruppe „&lt;nolink&gt;[NAME]&lt;/nolink&gt;“ gehören, zurück in das jeweilige Inventar ihrer vorherigen Eigentümer transferieren?
+		Möchten Sie alle Ihre Objekte auf dieser Parzelle, die gemeinsam mit der Gruppe „&lt;nolink&gt;[NAME]&lt;/nolink&gt;“ verwendet werden, zurück in das Inventar ihrer vorherigen Eigentümer transferieren? 
 
-*WARNUNG* Alle nicht transferierbaren Objekte, die der Gruppe übertragen wurden, werden dabei gelöscht!
+*WARNUNG* Hierdurch werden alle nicht transferierbaren Objekte gelöscht, die der Gruppe übertragen wurden. 
 
 Objekte: [N]
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
@@ -469,7 +465,7 @@ Objekte: [N]
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsNotOwnedByGroup">
-		Objekte auf dieser Parzelle, die von der Gruppe &lt;nolink&gt;[NAME]&lt;/nolink&gt; nicht gemeinsam genutzt werden, an ihre Eigentümer zurückgeben?
+		Möchten Sie die Objekte auf dieser Parzelle, die NICHT gemeinsam mit der Gruppe „&lt;nolink&gt;[NAME]&lt;/nolink&gt;“ verwendet werden, an ihre Eigentümer zurückgeben? 
 
 Objekte: [N]
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
@@ -517,7 +513,7 @@ Um Medien nur auf einer Fläche einzufügen, wählen Sie „Oberfläche auswähl
 		Ein Report-Screenshot konnte aus folgendem Grund nicht hochgeladen werden: [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
-		Bevor Sie sich in [CURRENT_GRID] anmelden können, müssen Sie den Geschäftsbedingungen, Datenschutzbestimmungen und Servicebedingungen zustimmen.
+		Bevor Sie sich in [CURRENT_GRID] anmelden können, müssen Sie den Allgemeinen Geschäftsbedingungen, Datenschutzbestimmungen und Servicebedingungen zustimmen.
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Outfit konnte nicht angezogen werden.
@@ -778,7 +774,7 @@ Der Avatar wird außer Gefecht gesetzt und kann sich nicht mehr bewegen, chatten
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Hinauswerfen"/>
 	</notification>
 	<notification name="EjectAvatarFromGroup">
-		Sie haben [AVATAR_NAME] aus der Gruppe &lt;nolink&gt;[GROUP_NAME]&lt;/nolink&gt; geworfen.
+		Sie haben [AVATAR_NAME] aus der Gruppe „&lt;nolink&gt;[GROUP_NAME]&lt;/nolink&gt;“ entfernt.
 	</notification>
 	<notification name="AcquireErrorTooManyObjects">
 		FEHLER: Zu viele Objekte ausgewählt.
@@ -1387,19 +1383,18 @@ Möchten Sie diese Objekte nehmen?
 Wählen Sie ein kleineres Gebiet und versuchen Sie es erneut.
 	</notification>
 	<notification name="DeedLandToGroup">
-		Die Schenkung dieser Parzelle setzt voraus, dass die Gruppe über ausreichende Landnutzungsrechte verfügt.
-Dem Eigentümer wird der Kaufpreis für das Land nicht rückerstattet. Bei Verkauf der übertragenen Parzelle wird der Erlös zwischen den Gruppenmitgliedern aufgeteilt.
+		Die Schenkung dieser Parzelle setzt voraus, dass die Gruppe über ausreichende Landnutzungsrechte verfügt. 
+Dem Eigentümer wird der Kaufpreis für das Land nicht zurückerstattet. Bei einem Verkauf der übertragenen Parzelle wird der Erlös zu gleichen Teilen unter den Gruppenmitgliedern aufgeteilt. 
 
-Der Gruppe „&lt;nolink&gt;[GROUP_NAME]&lt;/nolink&gt;“
- [AREA] m² Land schenken?
+Der Gruppe „&lt;nolink&gt;[GROUP_NAME]&lt;/nolink&gt;“ diese [AREA] m² Land schenken?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="DeedLandToGroupWithContribution">
-		Die Schenkung dieser Parzelle setzt voraus, dass die Gruppe über ausreichende Landnutzungsrechte verfügt.
-Die Schenkung beinhaltet eine Landübertragung an die Gruppe von „[NAME]“.
-Dem Eigentümer wird der Kaufpreis für das Land nicht rückerstattet. Bei Verkauf der übertragenen Parzelle wird der Erlös zwischen den Gruppenmitgliedern aufgeteilt.
+		Die Schenkung dieser Parzelle setzt voraus, dass die Gruppe über ausreichende Landnutzungsrechte verfügt. 
+Die Schenkung beinhaltet eine Landübertragung an die Gruppe von &quot;[NAME]&quot;. 
+Dem Eigentümer wird der Kaufpreis für das Land nicht zurückerstattet. Bei einem Verkauf der übertragenen Parzelle wird der Erlös zu gleichen Teilen unter den Gruppenmitgliedern aufgeteilt. 
 
-Der Gruppe „&lt;nolink&gt;[GROUP_NAME]&lt;/nolink&gt;“ [AREA] m² an Land schenken?
+Der Gruppe „&lt;nolink&gt;[GROUP_NAME]&lt;/nolink&gt;“ diese [AREA] m² Land schenken?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="DisplaySetToSafe">
@@ -1814,7 +1809,7 @@ Diese Gruppe verlassen?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GroupLeaveConfirmMemberWithFee">
-		Sie sind gegenwärtig Mitglied der Gruppe &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Erneutes Beitreten kostet [AMOUNT] L$.
+		Sie sind gegenwärtig Mitglied der Gruppe „&lt;nolink&gt;[GROUP]&lt;/nolink&gt;“. Erneutes Beitreten kostet [AMOUNT] L$.
 Diese Gruppe verlassen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
@@ -2162,9 +2157,8 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 		Möchten Sie den Grundbesitzvertrag wirklich ändern?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
-
 	<notification name="EstateParcelAccessOverride">
-		Deaktivieren dieser Einstellung kann Einschränkungen von Parzellen-Eigentümer aufheben, um Griefing zu verhindern, die Privatsphäre sicherzustellen oder minderjährige Einwohner vor Über-18-Material zu schützen. Bitte besprechen Sie dieses Vorgehen mit den Parzellen-Eigentümern, falls notwendig.
+		Durch Deaktivieren dieser Option können Einstellungen der Parzellenbesitzer zum Schutz vor Belästigungen, zur Aufrechterhaltung der Privatsphäre oder zum Schutz von Minderjährigen vor nicht altersgemäßen Inhalten aufgehoben werden. Bitte sprechen Sie mit den Parzellenbesitzern, falls erforderlich.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked">
@@ -2515,10 +2509,10 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 		</form>
 	</notification>
 	<notification name="DeleteFilteredItems">
-		Ein Filter ist auf Ihrem Inventar aktiv und es sind nicht alle Objekte sichtbar, die Sie löschen möchten.
+		Ihr Inventar wird zur Zeit gefiltert, und nicht alle Objekte, die gelöscht werden sollen, sind momentan sichtbar. 
 
-Sind Sie sicher, dass Sie diese löschen möchten?
-		<usetemplate ignoretext="Bestätigten, wenn gefilterte Objekte gelöscht werden" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+Möchten Sie diese Objekte wirklich löschen?
+		<usetemplate ignoretext="Vor dem Löschen gefilterter Objekte bestätigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmUnlink">
 		Soll das ausgewählte Objekt wirklich getrennt werden?
@@ -2595,16 +2589,16 @@ Möchten Sie den Nicht-stören-Modus deaktivieren, bevor Sie diese Transaktion a
 		<usetemplate ignoretext="Bestätigen, bevor ich einen Systemordner lösche." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="PurgeSelectedItems">
-		[COUNT] Objekt(e) werden permanent gelöscht. Sind Sie sicher, dass Sie die ausgewählten Objekte permanent aus dem Papierkorb löschen möchten?
+		[COUNT] Objekt(e) wird/werden dauerhaft gelöscht. Möchten Sie das/die ausgewählte(n) Objekt(e) wirklich dauerhaft aus dem Papierkorb löschen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmEmptyTrash">
-		[COUNT] Objekt(e) werden permanent gelöscht. Sind Sie sicher, dass Sie den Inhalt des Papierkorbs permanent löschen möchten?
+		[COUNT] Objekte werden dauerhaft gelöscht. Möchten Sie den Inhalt Ihres Papierkorbs wirklich dauerhaft löschen?
 		<usetemplate ignoretext="Bestätigen, bevor der Ordner Papierkorb im Inventar geleert wird" name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="TrashIsFull">
 		Ihr Papierkorb läuft über. Dies kann zu Anmeldeproblemen führen.
-		<usetemplate name="okcancelbuttons" notext="Papierkorb später leeren" yestext="Papierkorb überprüfen"/>
+		<usetemplate name="okcancelbuttons" notext="Papierkorb später leeren" yestext="Papierkorb ansehen"/>
 	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		Sind Sie sicher, dass Sie Ihren Reise-, Internet- und Suchverlauf löschen möchten?
@@ -2741,6 +2735,9 @@ Betreff: [SUBJECT], Nachricht: [MESSAGE]
 	</notification>
 	<notification name="AddSelfFriend">
 		Obwohl Sie ein sehr netter Mensch sind, können Sie sich nicht selbst als Freund hinzufügen.
+	</notification>
+	<notification name="AddSelfRenderExceptions">
+		Sie können sich nicht selbst der Rendering-Ausnahmeliste hinzufügen.
 	</notification>
 	<notification name="UploadingAuctionSnapshot">
 		In-Welt- und Website-Fotos werden hochgeladen...
@@ -2941,9 +2938,9 @@ Bitte installieren Sie das Plugin erneut. Falls weiterhin Problem auftreten, kon
 		Alle Objekte auf der ausgewählten Parzelle, die Einwohner &apos;[NAME]&apos; gehören, wurden an ihren Eigentümern zurückgegeben.
 	</notification>
 	<notification name="GroupObjectsReturned">
-		Die mit der Gruppe &lt;nolink&gt;[GROUPNAME]&lt;/nolink&gt; gemeinsam genutzten Objekte auf dieser Parzelle wurden in das Inventar ihrer Eigentümer transferiert.
-Transferierbare übertragene Objekte wurden an ihre früheren Eigentümer zurückgegeben.
-Nicht transferierbare an die Gruppe übertragene Objekte wurden gelöscht.
+		Die mit der Gruppe &lt;nolink&gt;[GROUPNAME]&lt;/nolink&gt; gemeinsam verwendeten Objekte auf dieser Parzelle wurden zurück in das Inventar ihrer Eigentümer transferiert.
+Transferierbare, an die Gruppe übertragene Objekte wurden an ihre früheren Eigentümer zurückgegeben.
+Nicht transferierbare, an die Gruppe übertragene Objekte wurden gelöscht.
 	</notification>
 	<notification name="UnOwnedObjectsReturned">
 		Alle Objekte auf der ausgewählten Parzelle, die NICHT Ihnen gehören, wurden ihren Eigentümern zurückgegeben.
@@ -3397,7 +3394,7 @@ Um diese Berechtigung zu gewähren, laden Sie die neueste Version des Viewers vo
 		</form>
 	</notification>
 	<notification name="ScriptDialogGroup">
-		„&lt;nolink&gt;[TITLE]&lt;/nolink&gt;“ von &lt;nolink&gt;[GROUPNAME]&lt;/nolink&gt;
+		&lt;nolink&gt;[GROUPNAME]&lt;/nolink&gt;s &quot;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&quot; 
 [MESSAGE]
 		<form name="form">
 			<button name="Client_Side_Mute" text="Blockieren"/>
@@ -3446,7 +3443,7 @@ Klicken Sie auf  &apos;Akzeptieren &apos;, um dem Gespräch beizutreten, oder au
 	</notification>
 	<notification name="VoiceInviteGroup">
 		[NAME] ist einem Voice-Chat mit der Gruppe &lt;nolink&gt;[GROUP]&lt;/nolink&gt; beigetreten.
-Klicken Sie auf  &apos;Akzeptieren &apos;, um dem Gespräch beizutreten, oder auf  &apos;Ablehnen &apos;, um die Einladung auszuschlagen. Klicken Sie auf Ignorieren, um diesen Anrufer zu ignorieren.
+Klicken Sie auf „Annehmen“, um die Einladung zu akzeptieren, oder auf „Ablehnen“, um die Einladung nicht zu akzeptieren. Klicken Sie auf „Ignorieren“, um diesen Anrufer zu ignorieren.
 		<form name="form">
 			<button name="Accept" text="Akzeptieren"/>
 			<button name="Decline" text="Ablehnen"/>
@@ -3553,6 +3550,9 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 	</notification>
 	<notification name="AppearanceToXMLFailed">
 		Fehler beim Speichern des Erscheinungsbilds als XML.
+	</notification>
+	<notification name="SnapshotToComputerFailed">
+		Fehler beim Speichern des Bildes unter [PATH]: Zu wenig Speicherplatz auf dem Medium. [NEED_MEMORY]KB werden benötigt, es stehen jedoch nur [FREE_MEMORY]KB zur Verfügung.
 	</notification>
 	<notification name="PresetNotSaved">
 		Fehler beim Speichern der Voreinstellung [NAME].

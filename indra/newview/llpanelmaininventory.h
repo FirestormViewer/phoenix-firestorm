@@ -129,7 +129,7 @@ protected:
 
 	const std::string getFilterSubString();
 	void setFilterSubString(const std::string& string);
-	
+
 	// menu callbacks
 	void doToSelected(const LLSD& userdata);
 	void closeAllFolders();
@@ -176,6 +176,7 @@ private:
 	std::map<std::string,U64>	mFilterMap;			// contains name-to-number mapping for dropdown filter types
 	U64							mFilterMask;		// contains the cumulated bit filter for all dropdown filter types
 	// </FS:Zi> Filter dropdown
+
 
 	//////////////////////////////////////////////////////////////////////////////////
 	// List Commands                                                                //
