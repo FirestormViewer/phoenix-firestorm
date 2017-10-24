@@ -1046,6 +1046,9 @@ void LLPanelObject::getState( )
 	
 	// Compute control visibility, label names, and twist range.
 	// Start with defaults.
+	// <FS:Beq> FIRE-21772 mComboBaseType remians invisible after editing a mesh
+	mComboBaseType->setVisible(TRUE);
+	// </FS:Beq>
 	BOOL cut_visible                = TRUE;
 	BOOL hollow_visible             = TRUE;
 	BOOL top_size_x_visible			= TRUE;
