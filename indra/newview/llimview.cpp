@@ -2820,7 +2820,7 @@ void LLIncomingCallDialog::processCallResponse(S32 response, const LLSD &payload
 
 bool inviteUserResponse(const LLSD& notification, const LLSD& response)
 {
-	if (!gIMMgr)
+	if (!gIMMgr || gDisconnected)
 		return false;
 
 	const LLSD& payload = notification["payload"];
@@ -4436,8 +4436,7 @@ public:
 			}
 
 			//K now we want to accept the invitation
-			std::string url = gAgent.getRegion()->getCapability(
-				"ChatSessionRequest");
+			std::string url = gAgent.getRegionCapability("ChatSessionRequest");
 
 			if ( url != "" )
 			{

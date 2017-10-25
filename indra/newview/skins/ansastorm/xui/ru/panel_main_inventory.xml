@@ -67,8 +67,6 @@
 		</menu>
 	</menu_bar>
 	<filter_editor label="Фильтр" name="inventory search editor" tool_tip="Напишите одно или несколько слов для поиска. Для разделения используйте '+' "/>
-	<button name="collapse_btn" label="Свернуть"/>
-	<button name="expand_btn" label="Развернуть" />
 	<text name="filter_label" width="60" value="Фильтр:"/>
 	<combo_box name="filter_combo_box">
 		<combo_box.item value="filter_type_all" label="Все типы" />
@@ -104,7 +102,6 @@
 		<panel name="dummy_panel">
 			<text name="ItemcountText">
 				Элементов
-			</text>
 			</text>
 		</panel>
 		<panel name="trash_btn_panel">

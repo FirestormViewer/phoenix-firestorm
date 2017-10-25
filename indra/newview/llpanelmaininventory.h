@@ -35,6 +35,7 @@
 
 #include "llfolderview.h"
 
+class LLComboBox;
 class LLFolderViewItem;
 class LLInventoryPanel;
 class LLSaveFolderState;
@@ -81,6 +82,8 @@ public:
 	LLInventoryPanel* getPanel() { return mActivePanel; }
 	LLInventoryPanel* getActivePanel() { return mActivePanel; }
 	const LLInventoryPanel* getActivePanel() const { return mActivePanel; }
+	LLInventoryPanel* getAllItemsPanel();
+	void selectAllItemsPanel();
 	// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
 	void showAllItemsPanel();
 	void resetFilters();
@@ -148,6 +151,8 @@ protected:
 	void onExpandButtonClicked();
 	// </FS:Zi> Inventory Collapse and Expand Buttons
 	void onFocusReceived();
+	void onSelectSearchType();
+	void updateSearchTypeCombo();
 
 private:
 	LLFloaterInventoryFinder* getFinder();
@@ -157,12 +162,14 @@ private:
     LLUICtrl*                   mCounterCtrl;
 	LLHandle<LLFloater>			mFinderHandle;
 	LLInventoryPanel*			mActivePanel;
+	LLInventoryPanel*			mWornItemsPanel;
 	bool						mResortActivePanel;
 	LLSaveFolderState*			mSavedFolderState;
 	std::string					mFilterText;
 	std::string					mFilterSubString;
 	S32							mItemCount;
 	std::string 				mItemCountString;
+	LLComboBox*					mSearchTypeCombo;
 
 	// <FS:Zi> Filter dropdown
 	LLComboBox*					mFilterComboBox;
@@ -189,9 +196,8 @@ protected:
 	// </FS:Zi> Filter Links Menu
 
 	// <FS:Zi> Extended Inventory Search
-	BOOL isSearchTargetChecked(const LLSD& userdata);
-	void onSearchTargetChecked(const LLSD& userdata);
-	LLInventoryFilter::EFilterSubstringTarget getSearchTarget() const;
+	BOOL isSearchTypeChecked(const LLSD& userdata);
+	void onSearchTypeChecked(const LLSD& userdata);
 	// </FS:Zi> Extended Inventory Search
 
 	bool handleDragAndDropToTrash(BOOL drop, EDragAndDropType cargo_type, EAcceptance* accept);

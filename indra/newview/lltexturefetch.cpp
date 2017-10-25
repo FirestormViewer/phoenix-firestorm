@@ -1767,7 +1767,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 				// In case of a partial response, our offset may
 				// not be trivially contiguous with the data we have.
 				// Get back into alignment.
-				if (mHttpReplyOffset > cur_size)
+				if ( (mHttpReplyOffset > cur_size) || (cur_size > mHttpReplyOffset + append_size))
 				{
 					LL_WARNS(LOG_TXT) << "Partial HTTP response produces break in image data for texture "
 									  << mID << ".  Aborting load."  << LL_ENDL;
@@ -2580,7 +2580,7 @@ LLTextureFetch::LLTextureFetch(LLTextureCache* cache, LLImageDecodeThread* image
 	  mTextureInfoMainThread(false)
 {
 	mMaxBandwidth = gSavedSettings.getF32("ThrottleBandwidthKBPS");
-	mTextureInfo.setUpLogging(gSavedSettings.getBOOL("LogTextureDownloadsToViewerLog"), gSavedSettings.getBOOL("LogTextureDownloadsToSimulator"), U32Bytes(gSavedSettings.getU32("TextureLoggingThreshold")));
+	mTextureInfo.setLogging(true);
 
 	LLAppCoreHttp & app_core_http(LLAppViewer::instance()->getAppCoreHttp());
 	mHttpRequest = new LLCore::HttpRequest;

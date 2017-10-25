@@ -1189,13 +1189,8 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 		LL_WARNS("FSLSLBridge") << "Bridge non valid" << LL_ENDL;
 	}
 
-	//caps import 
-	std::string url;
-	
-	if (gAgent.getRegion())
-	{
-		url = gAgent.getRegion()->getCapability("UpdateScriptAgent");
-	}
+	//caps import
+	std::string url = gAgent.getRegionCapability("UpdateScriptAgent");
 
 	bool cleanup = false;
 	if (!url.empty() && obj)

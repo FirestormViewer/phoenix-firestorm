@@ -429,7 +429,8 @@ LLScriptEdCore::LLScriptEdCore(
 	// </FS:CR>
 	mCompiling(false), //<FS:KC> Compile indicators, recompile button
 	mHasScriptData(FALSE),
-	mScriptRemoved(FALSE)
+	mScriptRemoved(FALSE),
+	mSaveDialogShown(FALSE)
 {
 	setFollowsAll();
 	setBorderVisible(FALSE);
@@ -630,12 +631,36 @@ void LLScriptEdCore::processKeywords()
 
 	LLColor3 color(LLUIColorTable::instance().getColor("SyntaxLslFunction"));
 	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
+	{
 		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
+	}
+
 #ifdef OPENSIM
 	if (LLGridManager::getInstance()->isInOpenSim())
-		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"), funcs, tooltips, color);
+	{
+		std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "scriptlibrary_ossl.xml");
+		if (LLFile::isfile(filename))
+		{
+			mEditor->loadKeywords(filename, funcs, tooltips, color);
+		}
+		else
+		{
+			mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"), funcs, tooltips, color);
+		}
+	}
+
 	if (LLGridManager::getInstance()->isInAuroraSim())
-		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"), funcs, tooltips, color);
+	{
+		std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "scriptlibrary_aa.xml");
+		if (LLFile::isfile(filename))
+		{
+			mEditor->loadKeywords(filename, funcs, tooltips, color);
+		}
+		else
+		{
+			mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"), funcs, tooltips, color);
+		}
+	}
 #endif // OPENSIM
 	// </FS:Ansariel>
 	
@@ -1286,8 +1311,12 @@ BOOL LLScriptEdCore::canClose()
 	}
 	else
 	{
-		// Bring up view-modal dialog: Save changes? Yes, No, Cancel
-		LLNotificationsUtil::add("SaveChanges", LLSD(), LLSD(), boost::bind(&LLScriptEdCore::handleSaveChangesDialog, this, _1, _2));
+		if(!mSaveDialogShown)
+		{
+			mSaveDialogShown = TRUE;
+			// Bring up view-modal dialog: Save changes? Yes, No, Cancel
+			LLNotificationsUtil::add("SaveChanges", LLSD(), LLSD(), boost::bind(&LLScriptEdCore::handleSaveChangesDialog, this, _1, _2));
+		}
 		return FALSE;
 	}
 }
@@ -1301,6 +1330,7 @@ void LLScriptEdCore::setEnableEditing(bool enable)
 
 bool LLScriptEdCore::handleSaveChangesDialog(const LLSD& notification, const LLSD& response )
 {
+	mSaveDialogShown = FALSE;
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	switch( option )
 	{
@@ -1696,7 +1726,7 @@ void LLScriptEdCore::onBtnLoadFromFile( void* data )
 
 	std::string filename = file_picker.getFirstFile();
 
-	std::ifstream fin(filename.c_str());
+	llifstream fin(filename.c_str());
 
 	std::string line;
 	std::string text;
@@ -1734,7 +1764,7 @@ void LLScriptEdCore::onBtnSaveToFile( void* userdata )
 		{
 			std::string filename = file_picker.getFirstFile();
 			std::string scriptText=self->mEditor->getText();
-			std::ofstream fout(filename.c_str());
+			llofstream fout(filename.c_str());
 			fout<<(scriptText);
 			fout.close();
 			// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice

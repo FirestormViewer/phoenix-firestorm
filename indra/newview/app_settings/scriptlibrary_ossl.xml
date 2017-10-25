@@ -143,359 +143,188 @@
 		<integer_constant name="OSTPOBJ_SETROT" desc="Flag for osTeleportObject, the rotation is the final object rotation, otherwise is a added rotation"/>
 	</keywords>
 	<functions>
-		<function name="osSetRegionWaterHeight" sleep="0.0" energy="10.0"
-			desc="osSetRegionWaterHeight(float height);Adjusts water height in current region" />
-		<function name="osSetRegionSunSettings" sleep="0.0" energy="10.0"
-			desc="osSetRegionSunSettings(integer useEstateSun, integer sunFixed, float sunHour);Set the current region's sun settings" />
-		<function name="osSetEstateSunSettings" sleep="0.0" energy="10.0"
-			desc="osSetEstateSunSettings(integer sunFixed, float sunHour);Set current estate's sun settings" />
-		<function name="osGetCurrentSunHour" sleep="0.0" energy="10.0"
-			desc="float osGetCurrentSunHour();Returns the value of the current region's sun hour" />
-		<function name="osGetSunParam" sleep="0.0" energy="10.0"
-			desc="string osGetSunParam(string param);Returns region's current sun parameters.;Param are: day_length, year_length, day_night_offset, update_interval." />
-		<function name="osSetSunParam" sleep="0.0" energy="10.0"
-			desc="osSetSunParam(string param, float value);Sets the current region's sun parameters.;Param are: day_length, year_length, day_night_offset, update_interval." />
-		<function name="osWindActiveModelPluginName" sleep="0.0" energy="10.0"
-			desc="string osWindActiveModelPluginName();Returns active wind plugin name, specified by &quot;wind_plugin&quot; in OpenSim.ini" />
-		<function name="osSetWindParam" sleep="0.0" energy="10.0"
-			desc="osSetWindParam(string plugin, string param, float value);Sets value of param property for plugin module.;SimpleRandomWind plugin param is: strength.;ConfigurableWind plugin params are: avgStrength, avgDirection, varStrength, varDirection, rateChange" />
-		<function name="osGetWindParam" sleep="0.0" energy="10.0"
-			desc="string osGetWindParam(string plugin, string param);Gets the value of param property for plugin module.;SimpleRandomWind plugin param is: strength.;ConfigurableWind plugin params are: avgStrength, avgDirection, varStrength, varDirection, rateChange." />
-		<function name="osParcelJoin" sleep="0.0" energy="10.0"
-			desc="osParcelJoin(vector start, vector end);Joins two adjacent parcels within the same region" />
-		<function name="osParcelSubdivide" sleep="0.0" energy="10.0"
-			desc="osParcelSubdivide(vector start, vector end);Subdivides a parcel into two adjacent parcels within the same region" />
-		<function name="osSetParcelDetails" sleep="0.0" energy="10.0"
-			desc="osSetParcelDetails(vector pos, list parameters);Sets parcel details;PARCEL_DETAILS_NAME, PARCEL_DETAILS_DESC, PARCEL_DETAILS_OWNER, PARCEL_DETAILS_GROUP, PARCEL_DETAILS_CLAIMDATE are implemented" />
-		<function name="osList2Double" sleep="0.0" energy="10.0"
-			desc="osList2Double(list src, integer index);This function converts a value in the specified index of the list src to the double data type. However, OSSL does not have a double data type. C# contains a double type, but the current LSL implementation does not." />
-		<function name="osSetDynamicTextureURL" sleep="0.0" energy="10.0"
-			desc="string osSetDynamicTextureURL(key dynamicID, string contentType, string url, string extraParams, integer timer);Renders a web texture on the prim containing the script and returns the UUID of the newly created texture" />
-		<function name="osSetDynamicTextureData" sleep="0.0" energy="10.0"
-			desc="osSetDynamicTextureData(key dynamicID, string contentType, string data, string extraParams, integer timer);Renders a dynamically created texture on the prim containing the script and returns the UUID of the newly created texture" />
-		<function name="osSetDynamicTextureURLBlend" sleep="0.0" energy="10.0"
-			desc="string osSetDynamicTextureDataBlend(string dynamicID, string contentType, string data, string extraParams, integer timer, integer alpha);Allows for two dynamic textures to blend on the prim containing this script" />
-		<function name="osSetDynamicTextureDataBlendFace" sleep="0.0" energy="10.0"
-			desc="string osSetDynamicTextureDataBlendFace(string dynamicID, string contentType, string data, string extraParams, integer blend, integer disp, integer timer, integer alpha, integer face);Returns UUID of the generated texture. Intended to be used with subsequent calls to osSetDynamicTexture* functions in order to modify the texture" />
-		<function name="osSetDynamicTextureURLBlend" sleep="0.0" energy="10.0"
-			desc="osSetDynamicTextureURLBlend(key dynamicID, string contentType, string url, string extraParams, integer timer, integer alpha);Allows for two dynamic textures to blend on the prim containing this script" />
-		<function name="osSetDynamicTextureURLBlendFace" sleep="0.0" energy="10.0"
-			desc="osSetDynamicTextureURLBlendFace(key dynamicID, string contentType, string url, string extraParams, integer blend, integer disp, integer timer, integer alpha, integer face);Allows for two dynamic textures to blend on the specified face of the prim containing this script" />
-		<function name="osGetTerrainHeight" sleep="0.0" energy="10.0"
-			desc="integer osGetTerrainHeight(integer x, integer y);Returns the current region's terrain height as a float at the given coordinates" />
-		<function name="osSetTerrainHeight" sleep="0.0" energy="10.0"
-			desc="osSetTerrainHeight(integer x, integer y, float val);Sets the current region's terrain height at the given coordinates" />
-		<function name="osTerrainFlush" sleep="0.0" energy="10.0"
-			desc="osTerrainFlush();Updates terrain changes in the grid&apos;s database" />
-		<function name="osRegionRestart" sleep="0.0" energy="10.0"
-			desc="osRegionRestart(float seconds);Restarts the current region after a specified amount of time (in seconds)" />
-		<function name="osRegionNotice" sleep="0.0" energy="10.0"
-			desc="osRegionNotice(string msg);Sends a region notice throughout the current region" />
-		<function name="osConsoleCommand" sleep="0.0" energy="10.0"
-			desc="osConsoleCommand(string command);Sends a given console command to the region.;NOTE: There are no security checks with this function. DO NOT USE THIS FUNCTION UNLESS YOU ARE ABSOLUTELY SURE YOU KNOW WHAT YOU ARE DOING." />
-		<function name="osSetParcelMediaURL" sleep="0.0" energy="10.0"
-			desc="osSetParcelMediaURL(string url);Set parcel media to a given url" />
-		<function name="osSetParcelSIPaddress" sleep="0.0" energy="10.0"
-			desc="osSetParcelSIPAddress(string SIPAddress);Set parcel SIP Address for voice" />
-		<function name="osSetPrimFloatOnWater" sleep="0.0" energy="10.0"
-			desc="osSetPrimFloatOnWater(integer float);Set physical object to float at the given water level" />
-		<function name="osTeleportAgent" sleep="0.0" energy="10.0"
-			desc="osTeleportAgent(key agent, integer regionX, integer regionY, vector position, vector lookat);;osTeleportAgent(key agent, string regionName, vector position, vector lookat);;osTeleportAgent(key agent, vector position, vector lookat);Teleports an agent to the specified location" />
-		<function name="osTeleportOwner" sleep="0.0" energy="10.0"
-			desc="osTeleportOwner(integer regionX, integer regionY, vector position, vector lookat);;osTeleportOwner(string regionName, vector position, vector lookat);;osTeleportOwner(vector position, vector lookat);Teleports the owner of the object containing the script to the specified location" />
-		<function name="osGetAgentIP" sleep="0.0" energy="10.0"
-			desc="string osGetAgentIP(key avatar);Returns the agent&apos;s IP Address" />
-		<function name="osGetAgents" sleep="0.0" energy="10.0"
-			desc="list osGetAgents();Returns a list of all avatars in the current region" />
-		<function name="osAvatarPlayAnimation" sleep="0.0" energy="10.0"
-			desc="osAvatarPlayAnimation(key avatar, string animation);Plays a given animation on a specified avatar.;No PERMISSION_TRIGGER_ANIMATION check." />
-		<function name="osAvatarStopAnimation" sleep="0.0" energy="10.0"
-			desc="osAvatarStopAnimation(key UUID, string animation);Stops playing an animation on a specified avatar" />
-		<function name="osForceAttachToAvatar" sleep="0.0" energy="10.0"
-			desc="osForceAttachToAvatar(integer attach_point);Attaches the object to the avatar.;No PERMISSION_ATTACH check." />
-		<function name="osForceAttachToAvatarFromInventory" sleep="0.0" energy="10.0"
-			desc="osForceAttachToAvatarFromInventory(string item, integer attach_point);Attaches given inventory item to the avatar.;No PERMISSION_ATTACH check." />
-		<function name="osForceAttachToOtherAvatarFromInventory" sleep="0.0" energy="10.0"
-			desc="osForceAttachToOtherAvatarFromInventory(key avatar, string item, integer attach_point);Attaches given inventory item to a specified avatar.;No PERMISSION_ATTACH check." />
-		<function name="osForceDetachFromAvatar" sleep="0.0" energy="10.0"
-			desc="osForceDetachFromAvatar();Detaches the object from the avatar.;No PERMISSION_ATTACH check." />
-		<function name="osGetNumberOfAttachments" sleep="0.0" energy="10.0"
-			desc="list osGetNumberOfAttachments(key avatar, list attach_point);Returns a strided list of the specified attachment points and the number of attachments on those points" />
-		<function name="osMessageAttachments" sleep="0.0" energy="10.0"
-			desc="osMessageAttachments(key avatar, string message, list attach_point, integer flags);Sends a given message to the specified avatar's attachments on the given attachment points" />
-		<function name="osMovePen" sleep="0.0" energy="10.0"
-			desc="osMovePen(string draw_list, integer x, integer y);Moves the pen's location to the coordinates specified by the x and y parameters, without drawing anything" />
-		<function name="osDrawLine" sleep="0.0" energy="10.0"
-			desc="osDrawLine(string draw_list, integer start_x, integer start_y, integer end_x, integer end_y);osDrawLine(string draw_list, integer end_x, integer end_y);Draws a line on a dynamic texture" />
-		<function name="osDrawText" sleep="0.0" energy="10.0"
-			desc="osDrawText(string draw_list, string text);Renders text on a dynamic texture" />
-		<function name="osDrawEllipse" sleep="0.0" energy="10.0"
-			desc="osDrawEllipse(string draw_list, integer width, integer height);Draws an ellipse on a dynamic texture" />
-		<function name="osDrawRectangle" sleep="0.0" energy="10.0"
-			desc="osDrawRectangle(string draw_list, integer width, integer height);Draws a rectangle on a dynamic texture" />
-		<function name="osDrawFilledRectangle" sleep="0.0" energy="10.0"
-			desc="osDrawFilledRectangle(string draw_list, integer width, integer height);Draws a rectangle on a dynamic texture, and fills it with the current pen color" />
-		<function name="osDrawPolygon" sleep="0.0" energy="10.0"
-			desc="osDrawPolygon (string draw_list, list x, list y);Draws a polygon on a dynamic texture" />
-		<function name="osDrawFilledPolygon" sleep="0.0" energy="10.0"
-			desc="osDrawFilledPolygon (string draw_list, list x, list y);Draws a polygon on a dynamic texture, and fills it with the current pen color" />
-		<function name="osSetFontSize" sleep="0.0" energy="10.0"
-			desc="osSetFontSize(string draw_list, integer font_size);Sets the font size to be used in osDrawText" />
-		<function name="osSetFontName" sleep="0.0" energy="10.0"
-			desc="osSetFontName(string draw_list, string font_name);Sets the font to be used by osDrawText" />
-		<function name="osSetPenSize" sleep="0.0" energy="10.0"
-			desc="osSetPenSize(string draw_list, integer pen_size);Sets the line thickness to be used when drawing dynamic textures" />
-		<function name="osSetPenColor" sleep="0.0" energy="10.0"
-			desc="osSetPenColor(string draw_list, string color);Sets the pen color to be used when drawing dynamic textures" />
-		<function name="osSetPenCap" sleep="0.0" energy="10.0"
-			desc="osSetPenCap(string draw_list, string direction, string type);Apply a shape on the end of a line" />
-		<function name="osDrawImage" sleep="0.0" energy="10.0"
-			desc="osDrawImage(string draw_list, integer width, integer height, string url);Retrieves a specified image and draws it at the specified height and width" />
-		<function name="osGetDrawStringSize" sleep="0.0" energy="10.0"
-			desc="osGetDrawStringSize(string contentType, string text, string fontName, integer fontSize);Returns a vector containing the horizontal and vertical dimensions in pixels of the specified text" />
-		<function name="osGetScriptEngineName" sleep="0.0" energy="10.0"
-			desc="string osGetScriptEngineName();Returns the name of the script engine running on the current region" />
-		<function name="osGetSimulatorVersion" sleep="0.0" energy="10.0"
-			desc="string osGetSimulatorVersion();Returns the current simulator version" />
-		<function name="osGetThreatLevel" sleep="0.0" energy="10.0"
-			desc="string osGetThreatLevel();Returns the current scripting threat level" />
-		<function name="osParseJSON" sleep="0.0" energy="10.0"
-			desc="string osParseJSON(string JSON);Returns a hashtable containing the structured JSON contents" />
-		<function name="osParseJSONNew" sleep="0.0" energy="10.0"
-			desc="string osParseJSON(string JSON);Returns a hashtable containing the structured JSON contents" />
-		<function name="osMessageObject" sleep="0.0" energy="10.0"
-			desc="osMessageObject(key object, string msg);Sends a specified message to an object" />
-		<function name="osMakeNotecard" sleep="0.0" energy="10.0"
-			desc="osMakeNotecard(string notecard, list contents);Creates a notecard with contents of list" />
-		<function name="osGetNotecardLine" sleep="0.0" energy="10.0"
-			desc="string osGetNotecardLine(string notecard, integer line);Returns a given line in a specified notecard contained in the object" />
-		<function name="osGetNotecard" sleep="0.0" energy="10.0"
-			desc="string osGetNotecard(string notecard);Returns the full contents of a notecard" />
-		<function name="osGetNumberOfNotecardLines" sleep="0.0" energy="10.0"
-			desc="integer osGetNumberOfNotecardLines(string notecard);Returns the number of lines in a notecard" />
-		<function name="osAvatarName2Key" sleep="0.0" energy="10.0"
-			desc="key osAvatarName2Key(string firstname, string lastname);Returns the avatar&apos;s key from their first and last name" />
-		<function name="osKey2Name" sleep="0.0" energy="10.0"
-			desc="string osKey2Name(key avatar);Returns the avatar&apos;s name from their key" />
-		<function name="osGetGridNick" sleep="0.0" energy="10.0"
-			desc="string osGetGridNick();Returns the current grid&apos;s nickname" />
-		<function name="osGetGridName" sleep="0.0" energy="10.0"
-			desc="string osGetGridName();Returns the current grid&apos;s name" />
-		<function name="osGetGridLoginURI" sleep="0.0" energy="10.0"
-			desc="string osGetGridLoginURI();Returns the current grid&apos;s LoginURI" />
-		<function name="osGetGridHomeURI" sleep="0.0" energy="10.0"
-			desc="string osGetGridHomeURI();Returns the current grid&apos;s HomeURI" />
-		<function name="osGetGridGatekeeperURI" sleep="0.0" energy="10.0"
-			desc="string osGetGridGatekeeperURI();Returns the current grid&apos;s Gatekeeper URI as a string." />
-		<function name="osGetGridCustom" sleep="0.0" energy="10.0"
-			desc="string osGetGridCustom();Returns the current grid&apos;s GridInfo key" />
-		<function name="osFormatString" sleep="0.0" energy="10.0"
-			desc="string osFormatString(string to_format, list strings);Formats the given string using specified parameters" />
-		<function name="osMatchString" sleep="0.0" energy="10.0"
-			desc="list osMatchString(string to_match, string pattern, integer start);Returns a list containing the matches from the specified string" />
-		<function name="osReplaceString" sleep="0.0" energy="10.0"
-			desc="string isReplaceString(string in);Replaces a given string" />
-		<function name="osLoadedCreationDate" sleep="0.0" energy="10.0"
-			desc="string osLoadedCreationDate();Returns the creation date of the current region" />
-		<function name="osLoadedCreationTime" sleep="0.0" energy="10.0"
-			desc="string osLoadedCreationTime();Returns the creation time of the current region" />
-		<function name="osLoadedCreationID" sleep="0.0" energy="10.0"
-			desc="string osLoadedCreationID();Returns the original UUID of the current region" />
-		<function name="osGetLinkPrimitiveParams" sleep="0.0" energy="10.0"
-			desc="list osGetLinkPrimitiveParams(integer link_num, list parameters);Returns prim params for the prim specified by link_num" />
-		<function name="osForceCreateLink" sleep="0.0" energy="10.0"
-			desc="osForceCreateLink(key target, int parent);Idential to llCreateLink() except that it doesn't require the link permission to be granted. Attempt to link the script's object with target." />
-		<function name="osForceBreakLink" sleep="0.0" energy="10.0"
-			desc="osForceBreakLink(integer link);to llBreakLink(integer link) except that it doesn't require the link permission to be granted. Delinks the prim with the given link number in a linked object set." />
-		<function name="osForceBreakAllLinks" sleep="0.0" energy="10.0"
-			desc="osForceBreakAllLinks();Identical to llBreakAllLinks() except that it doesn't require the link permission to be granted. Delinks all prims in the link set." />
-		<function name="osIsNpc" sleep="0.0" energy="10.0"
-			desc="integer osIsNpc(key npc);Returns 1 if TRUE, 0 if FALSE" />
-		<function name="osNpcCreate" sleep="0.0" energy="10.0"
-			desc="key osNpcCreate(string firstname, string lastname, vector position, string clone);key osNpcCreate(string firstname, string lastname, vector position, string clone, integer options);Creates an NPC" />
-		<function name="osNpcSaveAppearance" sleep="0.0" energy="10.0"
-			desc="osNpcSaveAppearance(key npc, string notecard);Save the target NPC&apos;s current appearance to a notecard in the object's inventory" />
-		<function name="osNpcLoadAppearance" sleep="0.0" energy="10.0"
-			desc="osNpcLoadAppearance(key npc, string notecard);Load the target NPC&apos;s appearance from a notecard" />
-		<function name="osNpcGetOwner" sleep="0.0" energy="10.0"
-			desc="key osNpcGetOwner(key npc);Returns the avatar key for the target NPC&apos;s owner" />
-		<function name="osNpcGetPos" sleep="0.0" energy="10.0"
-			desc="vector osNpcGetPos(key npc);Returns current position vector of the target NPC" />
-		<function name="osNpcGetRot" sleep="0.0" energy="10.0"
-			desc="rotation osNpcGetRot(key npc);Returns the rotation of the the target NPC" />
-		<function name="osNpcSetRot" sleep="0.0" energy="10.0"
-			desc="osNpcSetRot(key npc, rotation rot);Set the rotation of the target NPC" />
-		<function name="osNpcMoveTo" sleep="0.0" energy="10.0"
-			desc="osNpcMoveTo(key npc, vector position);Moves the target NPC to a location within the region" />
-		<function name="osNpcMoveToTarget" sleep="0.0" energy="10.0"
-			desc="osNpcMoveToTarget(key npc, vector target, integer options);Moves the target NPC to a specified location over a period of time" />
-		<function name="osNpcStopMoveToTarget" sleep="0.0" energy="10.0"
-			desc="osNpcStopMoveToTarget(key npc);Stop the target NPC&apos;s movement" />
-		<function name="osNpcSay" sleep="0.0" energy="10.0"
-			desc="osNpcSay(key npc, string message);Target NPC says message on the nearby chat channel" />
-		<function name="osNpcShout" sleep="0.0" energy="10.0"
-			desc="osNpcShout(key npc, string message);Target NPC shouts message on the nearby chat channel" />
-		<function name="osNpcWhisper" sleep="0.0" energy="10.0"
-			desc="osNpcWhisper(key npc, string message);Target NPC whispers message on the nearby chat channel" />
-		<function name="osNpcSit" sleep="0.0" energy="10.0"
-			desc="osNpcSit(key npc, key object, integer options);Makes the target NPC sit on an object" />
-		<function name="osNpcStand" sleep="0.0" energy="10.0"
-			desc="osNpcStand(key npc);Makes the target NPC stand up" />
-		<function name="osNpcTouch" sleep="0.0" energy="10.0"
-			desc="osNpcTouch(key npcKey, key object_key, integer link_num);Makes the target NPC to touch the specified object" />
-		<function name="osNpcRemove" sleep="0.0" energy="10.0"
-			desc="key osNpcRemove(key npc);Removes the NPC specified by key npc" />
-		<function name="osNpcPlayAnimation" sleep="0.0" energy="10.0"
-			desc="osNpcPlayAnimation(key npc, string animation);Plays animation on the target NPC" />
-		<function name="osNpcStopAnimation" sleep="0.0" energy="10.0"
-			desc="osNpcStopAnimation(key npc, string animation);Stops animation being played by the NPC" />
-		<function name="osOwnerSaveAppearance" sleep="0.0" energy="10.0"
-			desc="key osOwnerSaveAppearance(string notecard);Creates a notecard with the object owner&apos;s current appearance inside the object" />
-		<function name="osAgentSaveAppearance" sleep="0.0" energy="10.0"
-			desc="key osAgentSaveAppearance(key avatar, string notecard);Creates a notecard with the specified avatar&apos;s current appearance inside the object" />
-		<function name="osGetMapTexture" sleep="0.0" energy="10.0"
-			desc="key osGetMapTexture();Returns the map texture key for the current region" />
-		<function name="osGetRegionMapTexture" sleep="0.0" energy="10.0"
-			desc="key osGetRegionMapTexture(string region);Returns the map texture key for a specified region" />
-		<function name="osGetRegionStats" sleep="0.0" energy="10.0"
-			desc="list osGetRegionStats();Returns the current region&apos; statistics" />
-		<function name="osGetSimulatorMemory" sleep="0.0" energy="10.0"
-			desc="integer osGetSimulatorMemory();Returns the memory in use by the current region" />
-		<function name="osKickAvatar" sleep="0.0" energy="10.0"
-			desc="osKickAvatar(string FirstName, string LastName, string alert);Kicks specified avatar out of the current region" />
-		<function name="osSetSpeed" sleep="0.0" energy="10.0"
-			desc="osSetSpeed(key avatar, float modifier);Modify the speed of movement for the given avatar" />
-		<function name="osGetHealth" sleep="0.0" energy="10.0"
-			desc="osGetHealth(key avatar);Return the target avatar's health" />
-		<function name="osCauseDamage" sleep="0.0" energy="10.0"
-			desc="osCauseDamage(key avatar, float damage);Causes health damage to the specified avatar" />
-		<function name="osCauseHealing" sleep="0.0" energy="10.0"
-			desc="osCauseHealing(key avatar, float healing);Increase health to the specified avatar" />
-		<function name="osGetPrimitiveParams" sleep="0.0" energy="10.0"
-			desc="list osGetPrimitiveParams(key prim, list parameters);Returns the parameters of a primitive, specified by its key" />
-		<function name="osSetPrimitiveParams" sleep="0.0" energy="10.0"
-			desc="osSetPrimitiveParams(key prim, list parameters);Sets the primitive parameters for the given primitive" />
-		<function name="osSetProjectionParams" sleep="0.0" energy="10.0"
-			desc="osSetProjectionParams(integer projection, key texture, float fov, float focus, float ambience);;osSetProjectionParams(key prim, integer projection, key texture, float fov, float focus, float ambience);Sets the project parameters for the given primitive" />
-		<function name="osGetAvatarList" sleep="0.0" energy="10.0"
-			desc="list osGetAvatarList();Returns a list with the keys, position, and name of each avatar in the current region" />
-		<function name="osUnixTimeToTimestamp" sleep="0.0" energy="10.0"
-			desc="string osUnixTimeToTimestamp(integer time);Returns unix time as a formatted timestamp" />
-		<function name="osGetInventoryDesc" sleep="0.0" energy="10.0"
-			desc="string osGetInventoryDesc(string name);Returns the description of inventory item" />
-		<function name="osInviteToGroup" sleep="0.0" energy="10.0"
-			desc="integer osInviteToGroup(key avatar);Invited the specified avatar to the object&apos;s current group" />
-		<function name="osEjectFromGroup" sleep="0.0" energy="10.0"
-			desc="integer osEjectFromGroup(key avatar);Eject the specified avatar from the object&apos;s current group" />
-		<function name="osSetTerrainTexture" sleep="0.0" energy="10.0"
-			desc="osSetTerrainTexture(integer level, key texture);Set the terrain texture for the current region to a given texture" />
-		<function name="osSetTerrainTextureHeight" sleep="0.0" energy="10.0"
-			desc="osSetTerrainTextureHeight(integer corner, float low, float high);Set the terrain texture height for the current region" />
-		<function name="osIsUUID" sleep="0.0" energy="10.0"
-			desc="osIsUUID(string);Returns 1 if the given string is a valid UUID, 0 if not" />
-		<function name="osMin" sleep="0.0" energy="10.0"
-			desc="float osMin(float x, float y);Returns the lesser of two numbers" />
-		<function name="osMax" sleep="0.0" energy="10.0"
-			desc="float osMax(float x, float y);Returns the greater of two numbers" />
-		<function name="osGetRezzingObject" sleep="0.0" energy="10.0"
-			desc="key osGetRezzingObject();Returns the key of the object&apos;s parent object" />
-		<function name="osSetContentType" sleep="0.0" energy="10.0"
-			desc="osSetContentType(key id, string type);Sets a content return type for a llRequestUrl()" />
-		<function name="osDropAttachment" sleep="0.0" energy="10.0"
-			desc="osDropAttachment();Drops an attachment" />
-		<function name="osDropAttachmentAt" sleep="0.0" energy="10.0"
-			desc="osDropAttachmentAt(vector pos, rotation rot);Drops an attachment at a given position and rotation" />
-		<function name="osForceDropAttachment" sleep="0.0" energy="10.0"
-			desc="osForceDropAttachment();Drops an attachment without a PERMISSION_ATTACH check" />
-		<function name="osForceDropAttachmentAt" sleep="0.0" energy="10.0"
-			desc="osForceDropAttachmentAt(vector pos, rotation rot);Drops an attachment at a given position and rotation without a PERMISSION_ATTACH check" />
-		<function name="osListenRegex" sleep="0.0" energy="10.0"
-			desc="osListenRegex(integer channel, string name, string id, string msg, integer regex_bitfield);Filter listen events by regex" />
-		<function name="osRegexIsMatch" sleep="0.0" energy="10.0"
-			desc="osRegexIsMatch(string input, string pattern);Returns 1 if the input string matches the regular expression pattern, returns 0 if not" />
-		<function name="osReturnObject" sleep="0.0" energy="10.0"
-			desc="osReturnObject(key avatar);Returns object to a specified avatar" />
-		<function name="osReturnObjects" sleep="0.0" energy="10.0"
-			desc="osReturnObjects(integer param);Returns a group of objects" />
-		<function name="osShutDown" sleep="0.0" energy="10.0"
-			desc="osShutDown();Shuts down the current simulator" />
-		<function name="osAddAgentToGroup" sleep="0.0" energy="10.0"
-			desc="osAddAgentToGroup(key avatar, string group_name, string role_name);Adds the avatar to a group under a given role" />
-		<function name="osRezObject" sleep="0.0" energy="10.0"
-			desc="osRezObject(string inventory, vector position, vector velocity, rotation rot, integer param, integer rez_at_root_, integer do_recoil, integer set_die_at_edge, integer check_pos);Rez an object" />
-		<function name="osCollisionSound" sleep="0.0" energy="10.0"
-			desc="void osCollisionSound(string impact_sound, double impact_volume);Sets collision sound to impact_sound with specified volume." />
-		<function name="osDie" sleep="0.0" energy="10.0"
-			desc="float osDie(key objectUUID);Deletes an object depending on the target uuid. Note: Only allow osDie() on objects rezzed by the script prim Group (linkset) or on it self." />
-		<function name="osGetPhysicsEngineName" sleep="0.0" energy="10.0"
-			desc="string osGetPhysicsEngineName();This function returns a string containing the name and version number of the physics engine." />
-		<function name="osGetPhysicsEngineType" sleep="0.0" energy="10.0"
-			desc="string osGetPhysicsEngineType();This function returns a string containing the name of the Physics Engine." />
-		<function name="osRequestSecureURL" sleep="0.0" energy="10.0"
-			desc="void osRequestSecureURL(list options);Requests one HTTPS:// url (opensim version 0.9 or over)" />
-		<function name="osRequestURL" sleep="0.0" energy="10.0"
-			desc="void osRequestURL(list options);Requests one HTTP:// url (opensim version 0.9 or over)" />
-		<function name="osNpcSetProfileAbout" sleep="0.0" energy="10.0"
-			desc="osNpcSetProfileAbout(key npc, string about);Set about in created NPC's profile." />
-		<function name="osNpcSetProfileImage" sleep="0.0" energy="10.0"
-			desc="osNpcSetProfileImage(key npc, string image);Set image in created NPC's profile." />
-		<function name="osGetGender" sleep="0.0" energy="10.0"
-			desc="string osGetGender(key id);Returns a string with one of the following values: &apos;male&apos;, &apos;female&apos;, or &apos;unknown&apos;. This value is determined by the value selected for the avatar shape in the appearance dialog in the user's viewer. If that value cannot be found for any reason (avatar is not in the region, improperly formatted key, etc.), &apos;unknown&apos; is returned." />
-		<function name="osGetHealRate" sleep="0.0" energy="10.0"
-			desc="float osGetHealRate(key avatar);Gets the current automatic healing rate in % per second. Default heal rate is now around 0.5% per second. A value of zero can disable automatic heal, current maximum value is 100 % per second." />
-		<function name="osSetHealRate" sleep="0.0" energy="10.0"
-			desc="float osSetHealRate(key avatar, float healrate);Sets the automatic healing rate in % per second. Default heal rate is now around 0.5% per second. A value of zero can disable automatic heal, current maximum value is 100 % per second." />
-		<function name="osDrawFilledEllipse" sleep="0.0" energy="10.0"
-			desc="string osDrawFilledEllipse(string drawList, integer width, integer height);Appends an FillEllipse drawing command to the string provided in drawList and returns the result. The filled ellipse is drawn with the current pen size and color, with the specified width and height (in pixels), centered on a point which is (width/2) pixels to the right of the pen's current X position, and (height/2) pixels below the pen's current Y position. After the filled ellipse is drawn, the width and height values are added to the pen's X and Y position, respectively." />
-		<function name="osClearInertia" sleep="0.0" energy="10.0"
-			desc="osClearInertia();clears the effect of osSetInertia* functions. Link set total mass, center of mass and inertia will be the values estimated by default from the link set parts." />
-		<function name="osGetInertiaData" sleep="0.0" energy="10.0"
-			desc=";No description available yet" />
-		<function name="osSetInertia" sleep="0.0" energy="10.0"
-			desc="osSetInertia(float mass, vector centerOfMass, vector principalInertiaScaled, rotation InertiaRot);Allows creators to set the major physics dynamic proprieties, replacing the values estimated from the linkset parts. Call osClearInertia to undo." />
-		<function name="osSetInertiaAsBox" sleep="0.0" energy="10.0"
-			desc="osSetInertiaAsBox(float mass, vector boxSize, vector centerOfMass, rotation rot);Allows creators to set the link set total mass, center of mass and moment of inertia. Moment of inertia will be the one of a box of size boxSize, placed at the center of mass and rotated by rot in the root prim local frame. Call osClearInertia to undo." />
-		<function name="osSetInertiaAsCylinder" sleep="0.0" energy="10.0"
-			desc="osSetInertiaAsCylinder(float mass, float radius, float length, vector centerOfMass, rotation rot);Allows creators to set the link set total mass, center of mass and moment of inertia. Moment of inertia will be the one of a cylinder of radius and length, placed at the center of mass and rotated by rot in the root prim local frame. Call osClearInertia to undo." />
-		<function name="osSetInertiaAsSphere" sleep="0.0" energy="10.0"
-			desc="osSetInertiaAsSphere(float mass, float radius, vector centerOfMass);Allows creators to set the link set total mass, center of mass and moment of inertia. Moment of inertia will be the one of a sphere of radius radius, placed at the center of mass. Call osClearInertia to undo." />
-		<function name="osTeleportObject" sleep="0.0" energy="10.0"
-			desc="integer osTeleportObject(key objectUUID, vector targetPos, rotation rot, int flags);No dedication available yet" />
-		<function name="osGetLinkNumber" sleep="0.0" energy="10.0"
-			desc="integer osGetLinkNumber(string name);Returns the link number of the prim or sitting avatar with name &apos;name&apos; on the link set or -1 if the name is not found." />
-		<function name="osDrawResetTransform" sleep="0.0" energy="10.0"
-			desc="string osDrawResetTransform(string drawList);No description available yet" />
-		<function name="osDrawRotationTransform" sleep="0.0" energy="10.0"
-			desc="string osDrawRotationTransform(string drawList, float x);No description available yet" />
-		<function name="osDrawScaleTransform" sleep="0.0" energy="10.0"
-			desc="string osDrawScaleTransform(string drawList, float x, float y);No description available yet" />
-		<function name="osDrawTranslationTransform" sleep="0.0" energy="10.0"
-			desc="string osDrawTranslationTransform(string drawList, float x, float y);No description available yet" />
-		<function name="osSetDynamicTextureDataFace" sleep="0.0" energy="10.0"
-			desc="string osSetDynamicTextureDataFace(string dynamicID, string contentType, string data, string extraParams, int timer, int face);No description available yet" />
-		<function name="osGetNpcList" sleep="0.0" energy="10.0"
-			desc="list osGetNpcList();Returns a strided list of the UUID, position, and name of each NPC in the region." />
-		<!-- Windlight specific -->
-		<function name="lsGetWindlightScene" sleep="0.0" energy="10.0"
-			desc="list lsGetWindlightScene(list rules);Return the current Lightshare settings" />
-		<function name="lsSetWindlightScene" sleep="0.0" energy="10.0"
-			desc="lsSetWindlightScene(list parameters);Sets the Lightshare scene" />
-		<function name="lsSetWindlightSceneTargeted" sleep="0.0" energy="10.0"
-			desc="lsSetWindlightSceneTargeted(list parameters, key avatar);Sets the Lightshare scene for a given avatar" />
-		<function name="lsClearWindlightScene" sleep="0.0" energy="10.0"
-			desc="lsClearWindlightScene();Remove Windlight settings from a region" />
+		<function name="osAddAgentToGroup" sleep="0.0" energy="10.0" desc="osAddAgentToGroup(key avatar, string group_name, string role_name);Adds the avatar to a group under a given role" />
+		<function name="osAgentSaveAppearance" sleep="0.0" energy="10.0" desc="key osAgentSaveAppearance(key avatar, string notecard);Creates a notecard with the specified avatar&apos;s current appearance inside the object" />
+		<function name="osAvatarName2Key" sleep="0.0" energy="10.0" desc="key osAvatarName2Key(string firstname, string lastname);Returns the avatar&apos;s key from their first and last name" />
+		<function name="osAvatarPlayAnimation" sleep="0.0" energy="10.0" desc="osAvatarPlayAnimation(key avatar, string animation);Plays a given animation on a specified avatar.;No PERMISSION_TRIGGER_ANIMATION check." />
+		<function name="osAvatarStopAnimation" sleep="0.0" energy="10.0" desc="osAvatarStopAnimation(key UUID, string animation);Stops playing an animation on a specified avatar" />
+		<function name="osCauseDamage" sleep="0.0" energy="10.0" desc="osCauseDamage(key avatar, float damage);Causes health damage to the specified avatar" />
+		<function name="osCauseHealing" sleep="0.0" energy="10.0" desc="osCauseHealing(key avatar, float healing);Increase health to the specified avatar" />
+		<function name="osCheckODE" sleep="0.0" energy="10.0" desc="integer osCheckODE(); Checks if physics engine is legacy ODE and returns 1 ( TRUE ) it is, or 0 ( FALSE ) if not" />
+		<function name="osClearInertia" sleep="0.0" energy="10.0" desc="osClearInertia();clears the effect of osSetInertia* functions. Link set total mass, center of mass and inertia will be the values estimated by default from the link set parts." />
+		<function name="osCollisionSound" sleep="0.0" energy="10.0" desc="osCollisionSound(string impact_sound, double impact_volume);Sets collision sound to impact_sound with specified volume." />
+		<function name="osConsoleCommand" sleep="0.0" energy="10.0" desc="osConsoleCommand(string command);Sends a given console command to the region.;NOTE: There are no security checks with this function. DO NOT USE THIS FUNCTION UNLESS YOU ARE ABSOLUTELY SURE YOU KNOW WHAT YOU ARE DOING." />
+		<function name="osDie" sleep="0.0" energy="10.0" desc="osDie(key objectUUID);Deletes an object depending on the target uuid. Note: Only allow osDie() on objects rezzed by the script prim Group (linkset) or on it self." />
+		<function name="osDrawEllipse" sleep="0.0" energy="10.0" desc="osDrawEllipse(string draw_list, integer width, integer height);Draws an ellipse on a dynamic texture" />
+		<function name="osDrawFilledEllipse" sleep="0.0" energy="10.0" desc="string osDrawFilledEllipse(string drawList, integer width, integer height);Appends an FillEllipse drawing command to the string provided in drawList and returns the result. The filled ellipse is drawn with the current pen size and color, with the specified width and height (in pixels), centered on a point which is (width/2) pixels to the right of the pen's current X position, and (height/2) pixels below the pen's current Y position. After the filled ellipse is drawn, the width and height values are added to the pen's X and Y position, respectively." />
+		<function name="osDrawFilledPolygon" sleep="0.0" energy="10.0" desc="string osDrawFilledPolygon (string draw_list, list x, list y);Draws a polygon on a dynamic texture, and fills it with the current pen color" />
+		<function name="osDrawFilledRectangle" sleep="0.0" energy="10.0" desc="string osDrawFilledRectangle(string draw_list, integer width, integer height);Draws a rectangle on a dynamic texture, and fills it with the current pen color" />
+		<function name="osDrawImage" sleep="0.0" energy="10.0" desc="string osDrawImage(string draw_list, integer width, integer height, string url);Retrieves a specified image and draws it at the specified height and width" />
+		<function name="osDrawLine" sleep="0.0" energy="10.0" desc="string osDrawLine(string draw_list, integer start_x, integer start_y, integer end_x, integer end_y);osDrawLine(string draw_list, integer end_x, integer end_y);Draws a line on a dynamic texture" />
+		<function name="osDrawPolygon" sleep="0.0" energy="10.0" desc="string osDrawPolygon (string draw_list, list x, list y);Draws a polygon on a dynamic texture" />
+		<function name="osDrawRectangle" sleep="0.0" energy="10.0" desc="string osDrawRectangle(string draw_list, integer width, integer height);Draws a rectangle on a dynamic texture" />
+		<function name="osDrawResetTransform" sleep="0.0" energy="10.0" desc="string osDrawResetTransform(string drawList);No description available yet" />
+		<function name="osDrawRotationTransform" sleep="0.0" energy="10.0" desc="string osDrawRotationTransform(string drawList, float x);No description available yet" />
+		<function name="osDrawScaleTransform" sleep="0.0" energy="10.0" desc="string osDrawScaleTransform(string drawList, float x, float y);No description available yet" />
+		<function name="osDrawText" sleep="0.0" energy="10.0" desc="string osDrawText(string draw_list, string text);Renders text on a dynamic texture" />
+		<function name="osDrawTranslationTransform" sleep="0.0" energy="10.0" desc="string osDrawTranslationTransform(string drawList, float x, float y);No description available yet" />
+		<function name="osDropAttachment" sleep="0.0" energy="10.0" desc="osDropAttachment();Drops an attachment" />
+		<function name="osDropAttachmentAt" sleep="0.0" energy="10.0" desc="osDropAttachmentAt(vector pos, rotation rot);Drops an attachment at a given position and rotation" />
+		<function name="osEjectFromGroup" sleep="0.0" energy="10.0" desc="integer osEjectFromGroup(key avatar);Eject the specified avatar from the object&apos;s current group" />
+		<function name="osForceAttachToAvatar" sleep="0.0" energy="10.0" desc="osForceAttachToAvatar(integer attach_point);Attaches the object to the avatar.;No PERMISSION_ATTACH check." />
+		<function name="osForceAttachToAvatarFromInventory" sleep="0.0" energy="10.0" desc="osForceAttachToAvatarFromInventory(string item, integer attach_point);Attaches given inventory item to the avatar.;No PERMISSION_ATTACH check." />
+		<function name="osForceAttachToOtherAvatarFromInventory" sleep="0.0" energy="10.0" desc="osForceAttachToOtherAvatarFromInventory(key avatar, string item, integer attach_point);Attaches given inventory item to a specified avatar.;No PERMISSION_ATTACH check." />
+		<function name="osForceBreakAllLinks" sleep="0.0" energy="10.0" desc="osForceBreakAllLinks();Identical to llBreakAllLinks() except that it doesn't require the link permission to be granted. Delinks all prims in the link set." />
+		<function name="osForceBreakLink" sleep="0.0" energy="10.0" desc="osForceBreakLink(integer link);to llBreakLink(integer link) except that it doesn't require the link permission to be granted. Delinks the prim with the given link number in a linked object set." />
+		<function name="osForceCreateLink" sleep="0.0" energy="10.0" desc="osForceCreateLink(key target, int parent);Idential to llCreateLink() except that it doesn't require the link permission to be granted. Attempt to link the script's object with target." />
+		<function name="osForceDetachFromAvatar" sleep="0.0" energy="10.0" desc="osForceDetachFromAvatar();Detaches the object from the avatar.;No PERMISSION_ATTACH check." />
+		<function name="osForceDropAttachment" sleep="0.0" energy="10.0" desc="osForceDropAttachment();Drops an attachment without a PERMISSION_ATTACH check" />
+		<function name="osForceDropAttachmentAt" sleep="0.0" energy="10.0" desc="osForceDropAttachmentAt(vector pos, rotation rot);Drops an attachment at a given position and rotation without a PERMISSION_ATTACH check" />
+		<function name="osForceOtherSit" sleep="0.0" energy="10.0" desc="osForceOtherSit(key avatar, key target); Forces a sit of targeted avatar onto itself or another Prim" />
+		<function name="osFormatString" sleep="0.0" energy="10.0" desc="string osFormatString(string to_format, list strings);Formats the given string using specified parameters" />
+		<function name="osGetAgentIP" sleep="0.0" energy="10.0" desc="string osGetAgentIP(key avatar);Returns the agent&apos;s IP Address" />
+		<function name="osGetAgents" sleep="0.0" energy="10.0" desc="list osGetAgents();Returns a list of all avatars in the current region" />
+		<function name="osGetAvatarHomeURI" sleep="0.0" energy="10.0" desc="string osGetAvatarHomeURI(key uuid); Returns the Home URI of an avatar" />
+		<function name="osGetAvatarList" sleep="0.0" energy="10.0" desc="list osGetAvatarList();Returns a list with the keys, position, and name of each avatar in the current region" />
+		<function name="osGetCurrentSunHour" sleep="0.0" energy="10.0" desc="float osGetCurrentSunHour();Returns the value of the current region's sun hour" />
+		<function name="osGetDrawStringSize" sleep="0.0" energy="10.0" desc="osGetDrawStringSize(string contentType, string text, string fontName, integer fontSize);Returns a vector containing the horizontal and vertical dimensions in pixels of the specified text" />
+		<function name="osGetGender" sleep="0.0" energy="10.0" desc="string osGetGender(key id);Returns a string with one of the following values: &apos;male&apos;, &apos;female&apos;, or &apos;unknown&apos;. This value is determined by the value selected for the avatar shape in the appearance dialog in the user's viewer. If that value cannot be found for any reason (avatar is not in the region, improperly formatted key, etc.), &apos;unknown&apos; is returned." />
+		<function name="osGetGridCustom" sleep="0.0" energy="10.0" desc="string osGetGridCustom();Returns the current grid&apos;s GridInfo key" />
+		<function name="osGetGridGatekeeperURI" sleep="0.0" energy="10.0" desc="string osGetGridGatekeeperURI();Returns the current grid&apos;s Gatekeeper URI as a string." />
+		<function name="osGetGridHomeURI" sleep="0.0" energy="10.0" desc="string osGetGridHomeURI();Returns the current grid&apos;s HomeURI" />
+		<function name="osGetGridLoginURI" sleep="0.0" energy="10.0" desc="string osGetGridLoginURI();Returns the current grid&apos;s LoginURI" />
+		<function name="osGetGridName" sleep="0.0" energy="10.0" desc="string osGetGridName();Returns the current grid&apos;s name" />
+		<function name="osGetGridNick" sleep="0.0" energy="10.0" desc="string osGetGridNick();Returns the current grid&apos;s nickname" />
+		<function name="osGetHealRate" sleep="0.0" energy="10.0" desc="float osGetHealRate(key avatar);Gets the current automatic healing rate in % per second. Default heal rate is now around 0.5% per second. A value of zero can disable automatic heal, current maximum value is 100 % per second." />
+		<function name="osGetHealth" sleep="0.0" energy="10.0" desc="osGetHealth(key avatar);Return the target avatar's health" />
+		<function name="osGetInertiaData" sleep="0.0" energy="10.0" desc="list osGetInertiaData();Returns list of Intertia Data" />
+		<function name="osGetInventoryDesc" sleep="0.0" energy="10.0" desc="string osGetInventoryDesc(string name);Returns the description of inventory item" />
+		<function name="osGetLinkNumber" sleep="0.0" energy="10.0" desc="integer osGetLinkNumber(string name);Returns the link number of the prim or sitting avatar with name &apos;name&apos; on the link set or -1 if the name is not found." />
+		<function name="osGetLinkPrimitiveParams" sleep="0.0" energy="10.0" desc="list osGetLinkPrimitiveParams(integer link_num, list parameters);Returns prim params for the prim specified by link_num" />
+		<function name="osGetMapTexture" sleep="0.0" energy="10.0" desc="key osGetMapTexture();Returns the map texture key for the current region" />
+		<function name="osGetNotecard" sleep="0.0" energy="10.0" desc="string osGetNotecard(string notecard);Returns the full contents of a notecard" />
+		<function name="osGetNotecardLine" sleep="0.0" energy="10.0" desc="string osGetNotecardLine(string notecard, integer line);Returns a given line in a specified notecard contained in the object" />
+		<function name="osGetNpcList" sleep="0.0" energy="10.0" desc="list osGetNpcList();Returns a strided list of the UUID, position, and name of each NPC in the region." />
+		<function name="osGetNumberOfAttachments" sleep="0.0" energy="10.0" desc="list osGetNumberOfAttachments(key avatar, list attach_point);Returns a strided list of the specified attachment points and the number of attachments on those points" />
+		<function name="osGetNumberOfNotecardLines" sleep="0.0" energy="10.0" desc="integer osGetNumberOfNotecardLines(string notecard);Returns the number of lines in a notecard" />
+		<function name="osGetPhysicsEngineName" sleep="0.0" energy="10.0" desc="string osGetPhysicsEngineName();This function returns a string containing the name and version number of the physics engine." />
+		<function name="osGetPhysicsEngineType" sleep="0.0" energy="10.0" desc="string osGetPhysicsEngineType();This function returns a string containing the name of the Physics Engine." />
+		<function name="osGetPrimitiveParams" sleep="0.0" energy="10.0" desc="list osGetPrimitiveParams(key prim, list parameters);Returns the parameters of a primitive, specified by its key" />
+		<function name="osGetRegionMapTexture" sleep="0.0" energy="10.0" desc="key osGetRegionMapTexture(string region);Returns the map texture key for a specified region" />
+		<function name="osGetRegionSize" sleep="0.0" energy="10.0" desc="vector osGetRegionSize(); Returns size of region in meters as vector" />
+		<function name="osGetRegionStats" sleep="0.0" energy="10.0" desc="list osGetRegionStats();Returns the current region&apos; statistics" />
+		<function name="osGetRezzingObject" sleep="0.0" energy="10.0" desc="key osGetRezzingObject();Returns the key of the object&apos;s parent object" />
+		<function name="osGetScriptEngineName" sleep="0.0" energy="10.0" desc="string osGetScriptEngineName();Returns the name of the script engine running on the current region" />
+		<function name="osGetSimulatorMemory" sleep="0.0" energy="10.0" desc="integer osGetSimulatorMemory();Returns the memory in use by the current region" />
+		<function name="osGetSimulatorMemoryKB" sleep="0.0" energy="10.0" desc="integer osGetSimulatorMemoryKB();Returns the memory in use in KB by the current region" />
+		<function name="osGetSimulatorVersion" sleep="0.0" energy="10.0" desc="string osGetSimulatorVersion();Returns the current simulator version" />
+		<function name="osGetSunParam" sleep="0.0" energy="10.0" desc="string osGetSunParam(string param);Returns region's current sun parameters.;Param are: day_length, year_length, day_night_offset, update_interval." />
+		<function name="osGetTerrainHeight" sleep="0.0" energy="10.0" desc="integer osGetTerrainHeight(integer x, integer y);Returns the current region's terrain height as a float at the given coordinates" />
+		<function name="osGetThreatLevel" sleep="0.0" energy="10.0" desc="string osGetThreatLevel();Returns the current scripting threat level" />
+		<function name="osGetWindParam" sleep="0.0" energy="10.0" desc="string osGetWindParam(string plugin, string param);Gets the value of param property for plugin module.;SimpleRandomWind plugin param is: strength.;ConfigurableWind plugin params are: avgStrength, avgDirection, varStrength, varDirection, rateChange." />
+		<function name="osInviteToGroup" sleep="0.0" energy="10.0" desc="integer osInviteToGroup(key avatar);Invited the specified avatar to the object&apos;s current group" />
+		<function name="osIsNpc" sleep="0.0" energy="10.0" desc="integer osIsNpc(key npc);Returns 1 if TRUE, 0 if FALSE" />
+		<function name="osIsUUID" sleep="0.0" energy="10.0" desc="osIsUUID(string);Returns 1 if the given string is a valid UUID, 0 if not" />
+		<function name="osKey2Name" sleep="0.0" energy="10.0" desc="string osKey2Name(key avatar);Returns the avatar&apos;s name from their key" />
+		<function name="osKickAvatar" sleep="0.0" energy="10.0" desc="osKickAvatar(string FirstName, string LastName, string alert);Kicks specified avatar out of the current region" />
+		<function name="osList2Double" sleep="0.0" energy="10.0" desc="osList2Double(list src, integer index);This function converts a value in the specified index of the list src to the double data type. However, OSSL does not have a double data type. C# contains a double type, but the current LSL implementation does not." />
+		<function name="osListenRegex" sleep="0.0" energy="10.0" desc="osListenRegex(integer channel, string name, string id, string msg, integer regex_bitfield);Filter listen events by regex" />
+		<function name="osLoadedCreationDate" sleep="0.0" energy="10.0" desc="string osLoadedCreationDate();Returns the creation date of the current region" />
+		<function name="osLoadedCreationID" sleep="0.0" energy="10.0" desc="string osLoadedCreationID();Returns the original UUID of the current region" />
+		<function name="osLoadedCreationTime" sleep="0.0" energy="10.0" desc="string osLoadedCreationTime();Returns the creation time of the current region" />
+		<function name="osMakeNotecard" sleep="0.0" energy="10.0" desc="osMakeNotecard(string notecard, list contents);Creates a notecard with contents of list" />
+		<function name="osMatchString" sleep="0.0" energy="10.0" desc="list osMatchString(string to_match, string pattern, integer start);Returns a list containing the matches from the specified string" />
+		<function name="osMax" sleep="0.0" energy="10.0" desc="float osMax(float x, float y);Returns the greater of two numbers" />
+		<function name="osMessageAttachments" sleep="0.0" energy="10.0" desc="osMessageAttachments(key avatar, string message, list attach_point, integer flags);Sends a given message to the specified avatar's attachments on the given attachment points" />
+		<function name="osMessageObject" sleep="0.0" energy="10.0" desc="osMessageObject(key object, string msg);Sends a specified message to an object" />
+		<function name="osMin" sleep="0.0" energy="10.0" desc="float osMin(float x, float y);Returns the lesser of two numbers" />
+		<function name="osMovePen" sleep="0.0" energy="10.0" desc="osMovePen(string draw_list, integer x, integer y);Moves the pen's location to the coordinates specified by the x and y parameters, without drawing anything" />
+		<function name="osNpcCreate" sleep="0.0" energy="10.0" desc="key osNpcCreate(string firstname, string lastname, vector position, string clone);key osNpcCreate(string firstname, string lastname, vector position, string clone, integer options);Creates an NPC" />
+		<function name="osNpcGetOwner" sleep="0.0" energy="10.0" desc="key osNpcGetOwner(key npc);Returns the avatar key for the target NPC&apos;s owner" />
+		<function name="osNpcGetPos" sleep="0.0" energy="10.0" desc="vector osNpcGetPos(key npc);Returns current position vector of the target NPC" />
+		<function name="osNpcGetRot" sleep="0.0" energy="10.0" desc="rotation osNpcGetRot(key npc);Returns the rotation of the the target NPC" />
+		<function name="osNpcLoadAppearance" sleep="0.0" energy="10.0" desc="osNpcLoadAppearance(key npc, string notecard);Load the target NPC&apos;s appearance from a notecard" />
+		<function name="osNpcMoveTo" sleep="0.0" energy="10.0" desc="osNpcMoveTo(key npc, vector position);Moves the target NPC to a location within the region" />
+		<function name="osNpcMoveToTarget" sleep="0.0" energy="10.0" desc="osNpcMoveToTarget(key npc, vector target, integer options);Moves the target NPC to a specified location over a period of time" />
+		<function name="osNpcPlayAnimation" sleep="0.0" energy="10.0" desc="osNpcPlayAnimation(key npc, string animation);Plays animation on the target NPC" />
+		<function name="osNpcRemove" sleep="0.0" energy="10.0" desc="key osNpcRemove(key npc);Removes the NPC specified by key npc" />
+		<function name="osNpcSaveAppearance" sleep="0.0" energy="10.0" desc="osNpcSaveAppearance(key npc, string notecard);Save the target NPC&apos;s current appearance to a notecard in the object's inventory" />
+		<function name="osNpcSay" sleep="0.0" energy="10.0" desc="osNpcSay(key npc, string message);Target NPC says message on the nearby chat channel" />
+		<function name="osNpcSetProfileAbout" sleep="0.0" energy="10.0" desc="osNpcSetProfileAbout(key npc, string about);Set about in created NPC's profile." />
+		<function name="osNpcSetProfileImage" sleep="0.0" energy="10.0" desc="osNpcSetProfileImage(key npc, string image);Set image in created NPC's profile." />
+		<function name="osNpcSetRot" sleep="0.0" energy="10.0" desc="osNpcSetRot(key npc, rotation rot);Set the rotation of the target NPC" />
+		<function name="osNpcShout" sleep="0.0" energy="10.0" desc="osNpcShout(key npc, string message);Target NPC shouts message on the nearby chat channel" />
+		<function name="osNpcSit" sleep="0.0" energy="10.0" desc="osNpcSit(key npc, key object, integer options);Makes the target NPC sit on an object" />
+		<function name="osNpcStand" sleep="0.0" energy="10.0" desc="osNpcStand(key npc);Makes the target NPC stand up" />
+		<function name="osNpcStopAnimation" sleep="0.0" energy="10.0" desc="osNpcStopAnimation(key npc, string animation);Stops animation being played by the NPC" />
+		<function name="osNpcStopMoveToTarget" sleep="0.0" energy="10.0" desc="osNpcStopMoveToTarget(key npc);Stop the target NPC&apos;s movement" />
+		<function name="osNpcTouch" sleep="0.0" energy="10.0" desc="osNpcTouch(key npcKey, key object_key, integer link_num);Makes the target NPC to touch the specified object" />
+		<function name="osNpcWhisper" sleep="0.0" energy="10.0" desc="osNpcWhisper(key npc, string message);Target NPC whispers message on the nearby chat channel" />
+		<function name="osOwnerSaveAppearance" sleep="0.0" energy="10.0" desc="key osOwnerSaveAppearance(string notecard);Creates a notecard with the object owner&apos;s current appearance inside the object" />
+		<function name="osParcelJoin" sleep="0.0" energy="10.0" desc="osParcelJoin(vector start, vector end);Joins two adjacent parcels within the same region" />
+		<function name="osParcelSubdivide" sleep="0.0" energy="10.0" desc="osParcelSubdivide(vector start, vector end);Subdivides a parcel into two adjacent parcels within the same region" />
+		<function name="osParseJSON" sleep="0.0" energy="10.0" desc="string osParseJSON(string JSON);Returns a hashtable containing the structured JSON contents" />
+		<function name="osParseJSONNew" sleep="0.0" energy="10.0" desc="string osParseJSON(string JSON);Returns a hashtable containing the structured JSON contents" />
+		<function name="osRegexIsMatch" sleep="0.0" energy="10.0" desc="osRegexIsMatch(string input, string pattern);Returns 1 if the input string matches the regular expression pattern, returns 0 if not" />
+		<function name="osRegionNotice" sleep="0.0" energy="10.0" desc="osRegionNotice(string msg);Sends a region notice throughout the current region" />
+		<function name="osRegionRestart" sleep="0.0" energy="10.0" desc="osRegionRestart(float seconds);Restarts the current region after a specified amount of time (in seconds)" />
+		<function name="osReplaceString" sleep="0.0" energy="10.0" desc="string isReplaceString(string in);Replaces a given string" />
+		<function name="osRequestSecureURL" sleep="0.0" energy="10.0" desc="osRequestSecureURL(list options);Requests one HTTPS:// url (opensim version 0.9 or over)" />
+		<function name="osRequestURL" sleep="0.0" energy="10.0" desc="osRequestURL(list options);Requests one HTTP:// url (opensim version 0.9 or over)" />		
+		<function name="osReturnObject" sleep="0.0" energy="10.0" desc="osReturnObject(key avatar);Returns object to a specified avatar" />
+		<function name="osReturnObjects" sleep="0.0" energy="10.0" desc="osReturnObjects(integer param);Returns a group of objects" />
+		<function name="osRezObject" sleep="0.0" energy="10.0" desc="osRezObject(string inventory, vector position, vector velocity, rotation rot, integer param, integer rez_at_root_, integer do_recoil, integer set_die_at_edge, integer check_pos);Rez an object" />
+		<function name="osSetContentType" sleep="0.0" energy="10.0" desc="osSetContentType(key id, string type);Sets a content return type for a llRequestUrl()" />
+		<function name="osSetDynamicTextureData" sleep="0.0" energy="10.0" desc="osSetDynamicTextureData(key dynamicID, string contentType, string data, string extraParams, integer timer);Renders a dynamically created texture on the prim containing the script and returns the UUID of the newly created texture" />
+		<function name="osSetDynamicTextureDataBlendFace" sleep="0.0" energy="10.0" desc="string osSetDynamicTextureDataBlendFace(string dynamicID, string contentType, string data, string extraParams, integer blend, integer disp, integer timer, integer alpha, integer face);Returns UUID of the generated texture. Intended to be used with subsequent calls to osSetDynamicTexture* functions in order to modify the texture" />
+		<function name="osSetDynamicTextureDataFace" sleep="0.0" energy="10.0" desc="string osSetDynamicTextureDataFace(string dynamicID, string contentType, string data, string extraParams, int timer, int face);No description available yet" />
+		<function name="osSetDynamicTextureURL" sleep="0.0" energy="10.0" desc="string osSetDynamicTextureURL(key dynamicID, string contentType, string url, string extraParams, integer timer);Renders a web texture on the prim containing the script and returns the UUID of the newly created texture" />
+		<function name="osSetDynamicTextureURLBlend" sleep="0.0" energy="10.0" desc="osSetDynamicTextureURLBlend(key dynamicID, string contentType, string url, string extraParams, integer timer, integer alpha);Allows for two dynamic textures to blend on the prim containing this script" />
+		<function name="osSetDynamicTextureURLBlend" sleep="0.0" energy="10.0" desc="string osSetDynamicTextureDataBlend(string dynamicID, string contentType, string data, string extraParams, integer timer, integer alpha);Allows for two dynamic textures to blend on the prim containing this script" />
+		<function name="osSetDynamicTextureURLBlendFace" sleep="0.0" energy="10.0" desc="osSetDynamicTextureURLBlendFace(key dynamicID, string contentType, string url, string extraParams, integer blend, integer disp, integer timer, integer alpha, integer face);Allows for two dynamic textures to blend on the specified face of the prim containing this script" />
+		<function name="osSetEstateSunSettings" sleep="0.0" energy="10.0" desc="osSetEstateSunSettings(integer sunFixed, float sunHour);Set current estate's sun settings" />
+		<function name="osSetFontName" sleep="0.0" energy="10.0" desc="osSetFontName(string draw_list, string font_name);Sets the font to be used by osDrawText" />
+		<function name="osSetFontSize" sleep="0.0" energy="10.0" desc="osSetFontSize(string draw_list, integer font_size);Sets the font size to be used in osDrawText" />
+		<function name="osSetHealRate" sleep="0.0" energy="10.0" desc="osSetHealRate(key avatar, float healrate);Sets the automatic healing rate in % per second. Default heal rate is now around 0.5% per second. A value of zero can disable automatic heal, current maximum value is 100 % per second." />
+		<function name="osSetHealth" sleep="0.0" energy="10.0" desc="osSetHealth(key avatar, float health);Sets avatars health" />
+		<function name="osSetInertia" sleep="0.0" energy="10.0" desc="osSetInertia(float mass, vector centerOfMass, vector principalInertiaScaled, rotation InertiaRot);Allows creators to set the major physics dynamic proprieties, replacing the values estimated from the linkset parts. Call osClearInertia to undo." />
+		<function name="osSetInertiaAsBox" sleep="0.0" energy="10.0" desc="osSetInertiaAsBox(float mass, vector boxSize, vector centerOfMass, rotation rot);Allows creators to set the link set total mass, center of mass and moment of inertia. Moment of inertia will be the one of a box of size boxSize, placed at the center of mass and rotated by rot in the root prim local frame. Call osClearInertia to undo." />
+		<function name="osSetInertiaAsCylinder" sleep="0.0" energy="10.0" desc="osSetInertiaAsCylinder(float mass, float radius, float length, vector centerOfMass, rotation rot);Allows creators to set the link set total mass, center of mass and moment of inertia. Moment of inertia will be the one of a cylinder of radius and length, placed at the center of mass and rotated by rot in the root prim local frame. Call osClearInertia to undo." />
+		<function name="osSetInertiaAsSphere" sleep="0.0" energy="10.0" desc="osSetInertiaAsSphere(float mass, float radius, vector centerOfMass);Allows creators to set the link set total mass, center of mass and moment of inertia. Moment of inertia will be the one of a sphere of radius radius, placed at the center of mass. Call osClearInertia to undo." />
+		<function name="osSetParcelDetails" sleep="0.0" energy="10.0" desc="osSetParcelDetails(vector pos, list parameters);Sets parcel details;PARCEL_DETAILS_NAME, PARCEL_DETAILS_DESC, PARCEL_DETAILS_OWNER, PARCEL_DETAILS_GROUP, PARCEL_DETAILS_CLAIMDATE are implemented" />
+		<function name="osSetParcelMediaURL" sleep="0.0" energy="10.0" desc="osSetParcelMediaURL(string url);Set parcel media to a given url" />
+		<function name="osSetParcelSIPaddress" sleep="0.0" energy="10.0" desc="osSetParcelSIPAddress(string SIPAddress);Set parcel SIP Address for voice" />
+		<function name="osSetPenCap" sleep="0.0" energy="10.0" desc="osSetPenCap(string draw_list, string direction, string type);Apply a shape on the end of a line" />
+		<function name="osSetPenColor" sleep="0.0" energy="10.0" desc="osSetPenColor(string draw_list, string color);Sets the pen color to be used when drawing dynamic textures" />
+		<function name="osSetPenSize" sleep="0.0" energy="10.0" desc="osSetPenSize(string draw_list, integer pen_size);Sets the line thickness to be used when drawing dynamic textures" />
+		<function name="osSetPrimFloatOnWater" sleep="0.0" energy="10.0" desc="osSetPrimFloatOnWater(integer float);Set physical object to float at the given water level" />
+		<function name="osSetPrimitiveParams" sleep="0.0" energy="10.0" desc="osSetPrimitiveParams(key prim, list parameters);Sets the primitive parameters for the given primitive" />
+		<function name="osSetProjectionParams" sleep="0.0" energy="10.0" desc="osSetProjectionParams(integer projection, key texture, float fov, float focus, float ambience);;osSetProjectionParams(key prim, integer projection, key texture, float fov, float focus, float ambience);Sets the project parameters for the given primitive" />
+		<function name="osSetRegionSunSettings" sleep="0.0" energy="10.0" desc="osSetRegionSunSettings(integer useEstateSun, integer sunFixed, float sunHour);Set the current region's sun settings" />
+		<function name="osSetRegionWaterHeight" sleep="0.0" energy="10.0" desc="osSetRegionWaterHeight(float height);Adjusts water height in current region" />
+		<function name="osSetSpeed" sleep="0.0" energy="10.0" desc="osSetSpeed(key avatar, float modifier);Modify the speed of movement for the given avatar" />
+		<function name="osSetSunParam" sleep="0.0" energy="10.0" desc="osSetSunParam(string param, float value);Sets the current region's sun parameters.;Param are: day_length, year_length, day_night_offset, update_interval." />
+		<function name="osSetTerrainHeight" sleep="0.0" energy="10.0" desc="osSetTerrainHeight(integer x, integer y, float val);Sets the current region's terrain height at the given coordinates" />
+		<function name="osSetTerrainTexture" sleep="0.0" energy="10.0" desc="osSetTerrainTexture(integer level, key texture);Set the terrain texture for the current region to a given texture" />
+		<function name="osSetTerrainTextureHeight" sleep="0.0" energy="10.0" desc="osSetTerrainTextureHeight(integer corner, float low, float high);Set the terrain texture height for the current region" />
+		<function name="osSetWindParam" sleep="0.0" energy="10.0" desc="osSetWindParam(string plugin, string param, float value);Sets value of param property for plugin module.;SimpleRandomWind plugin param is: strength.;ConfigurableWind plugin params are: avgStrength, avgDirection, varStrength, varDirection, rateChange" />
+		<function name="osShutDown" sleep="0.0" energy="10.0" desc="osShutDown();Shuts down the current simulator" />
+		<function name="osTeleportAgent" sleep="0.0" energy="10.0" desc="osTeleportAgent(key agent, integer regionX, integer regionY, vector position, vector lookat);;osTeleportAgent(key agent, string regionName, vector position, vector lookat);;osTeleportAgent(key agent, vector position, vector lookat);Teleports an agent to the specified location" />
+		<function name="osTeleportObject" sleep="0.0" energy="10.0" desc="integer osTeleportObject(key objectUUID, vector targetPos, rotation rot, int flags);No dedication available yet" />
+		<function name="osTeleportOwner" sleep="0.0" energy="10.0" desc="osTeleportOwner(integer regionX, integer regionY, vector position, vector lookat);;osTeleportOwner(string regionName, vector position, vector lookat);;osTeleportOwner(vector position, vector lookat);Teleports the owner of the object containing the script to the specified location" />
+		<function name="osTerrainFlush" sleep="0.0" energy="10.0" desc="osTerrainFlush();Updates terrain changes in the grid&apos;s database" />
+		<function name="osUnixTimeToTimestamp" sleep="0.0" energy="10.0" desc="string osUnixTimeToTimestamp(integer time);Returns unix time as a formatted timestamp" />
+		<function name="osWindActiveModelPluginName" sleep="0.0" energy="10.0" desc="string osWindActiveModelPluginName();Returns active wind plugin name, specified by &quot;wind_plugin&quot; in OpenSim.ini" />		<!-- Windlight specific -->
+		<function name="lsGetWindlightScene" sleep="0.0" energy="10.0" desc="list lsGetWindlightScene(list rules);Return the current Lightshare settings" />
+		<function name="lsSetWindlightScene" sleep="0.0" energy="10.0" desc="lsSetWindlightScene(list parameters);Sets the Lightshare scene" />
+		<function name="lsSetWindlightSceneTargeted" sleep="0.0" energy="10.0" desc="lsSetWindlightSceneTargeted(list parameters, key avatar);Sets the Lightshare scene for a given avatar" />
+		<function name="lsClearWindlightScene" sleep="0.0" energy="10.0" desc="lsClearWindlightScene();Remove Windlight settings from a region" />
 		<!-- Bulletsim specific -->
-		<function name="physGetEngineType" sleep="0.0" energy="10.0"
-			desc="string physGetEngineType();Get physics engine type" />
-		<function name="physGetPhysicsParameter" sleep="0.0" energy="10.0"
-			desc="string physGetPhysicsParameter(string parameterName);Bulletsim: Returns physics parameter" />
-		<function name="physSetPhysicsParameter" sleep="0.0" energy="10.0"
-			desc="physSetPhysicsParameter(string parameterName, string value);Bulletsim: Set physics parameter" />
-		<function name="physSetLinksetType" sleep="0.0" energy="10.0"
-			desc="physSetLinksetType(integer linksetTypeCode):Bulletsim: Set linkset type" />
-		<function name="physSetCenterOfMass" sleep="0.0" energy="10.0"
-			desc="physSetCenterOfMass(vector centerOfMassDisplacement);Bulletsim: Set center of mass" />
-		<function name="physChangeLinkParams" sleep="0.0" energy="10.0"
-			desc="physChangeLinkParams(integer linkNum, list parms);Bulletsim: Change link params" />
+		<function name="physGetEngineType" sleep="0.0" energy="10.0" desc="string physGetEngineType();Get physics engine type" />
+		<function name="physGetPhysicsParameter" sleep="0.0" energy="10.0" desc="string physGetPhysicsParameter(string parameterName);Bulletsim: Returns physics parameter" />
+		<function name="physSetPhysicsParameter" sleep="0.0" energy="10.0" desc="physSetPhysicsParameter(string parameterName, string value);Bulletsim: Set physics parameter" />
+		<function name="physSetLinksetType" sleep="0.0" energy="10.0" desc="physSetLinksetType(integer linksetTypeCode):Bulletsim: Set linkset type" />
+		<function name="physSetCenterOfMass" sleep="0.0" energy="10.0" desc="physSetCenterOfMass(vector centerOfMassDisplacement);Bulletsim: Set center of mass" />
+		<function name="physChangeLinkParams" sleep="0.0" energy="10.0" desc="physChangeLinkParams(integer linkNum, list parms);Bulletsim: Change link params" />
 	</functions>
 </script_library>

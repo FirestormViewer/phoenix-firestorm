@@ -226,7 +226,7 @@ BOOL LLFloaterRegionInfo::postBuild()
 
 // <FS:CR> Aurora Sim - Region Settings Console
 	// We only use this panel on Aurora-based sims
-	std::string url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("DispatchOpenRegionSettings") : LLStringUtil::null;
+	std::string url = gAgent.getRegionCapability("DispatchOpenRegionSettings");
 	if (!url.empty())
 	{
 		panel = new LLPanelRegionOpenSettingsInfo;
@@ -256,7 +256,7 @@ BOOL LLFloaterRegionInfo::postBuild()
 		return TRUE;
 	}
 
-	if(!gAgent.getRegion()->getCapability("RegionExperiences").empty())
+	if(!gAgent.getRegionCapability("RegionExperiences").empty())
 	{
 		panel = new LLPanelRegionExperiences;
 		mInfoPanels.push_back(panel);
@@ -926,10 +926,7 @@ bool LLPanelRegionGeneralInfo::onMessageCommit(const LLSD& notification, const L
 
 void LLFloaterRegionInfo::requestMeshRezInfo()
 {
-	// <FS:Ansariel> Crash fix
-	//std::string sim_console_url = gAgent.getRegion()->getCapability("SimConsoleAsync");
-	std::string sim_console_url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("SimConsoleAsync") : LLStringUtil::null;
-	// </FS:Ansariel>
+	std::string sim_console_url = gAgent.getRegionCapability("SimConsoleAsync");
 
 	if (!sim_console_url.empty())
 	{
@@ -964,7 +961,7 @@ BOOL LLPanelRegionGeneralInfo::sendUpdate()
 
 	// First try using a Cap.  If that fails use the old method.
 	LLSD body;
-	std::string url = gAgent.getRegion()->getCapability("DispatchRegionInfo");
+	std::string url = gAgent.getRegionCapability("DispatchRegionInfo");
 	if (!url.empty())
 	{
 		body["block_terraform"] = getChild<LLUICtrl>("block_terraform_check")->getValue();
@@ -1111,7 +1108,7 @@ void LLPanelRegionOpenSettingsInfo::onClickOrs(void* userdata)
 	LL_INFOS() << "LLPanelRegionOpenSettingsInfo::onClickOrs()" << LL_ENDL;
 
 	LLSD body;
-	std::string url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("DispatchOpenRegionSettings") : LLStringUtil::null;
+	std::string url = gAgent.getRegionCapability("DispatchOpenRegionSettings");
 	if (!url.empty())
 	{
 		body["draw_distance"] = (LLSD::Integer)self->childGetValue("draw_distance");

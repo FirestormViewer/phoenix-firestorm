@@ -192,13 +192,13 @@ void FSPanelClassifiedInfo::onOpen(const LLSD& key)
 
 	// While we're at it let's get the stats from the new table if that
 	// capability exists.
-	std::string url = gAgent.getRegion()->getCapability("SearchStatRequest");
+	std::string url = gAgent.getRegionCapability("SearchStatRequest");
 	if (!url.empty())
 	{
 		LL_INFOS("FSPanelClassifiedInfo") << "Classified stat request via capability" << LL_ENDL;
 		LLSD body;
 		body["classified_id"] = getClassifiedId();
-        LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body, boost::bind(&LLPanelClassifiedInfo::handleSearchStatResponse, getClassifiedId(), _1));
+		LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body, boost::bind(&LLPanelClassifiedInfo::handleSearchStatResponse, getClassifiedId(), _1));
 	}
 
 	// Update classified click stats.
@@ -518,10 +518,10 @@ void FSPanelClassifiedInfo::sendClickMessage(
 	body["dest_pos_global"]	= global_pos.getValue();
 	body["region_name"]		= sim_name;
 
-	std::string url = gAgent.getRegion()->getCapability("SearchStatTracking");
+	std::string url = gAgent.getRegionCapability("SearchStatTracking");
 	LL_INFOS("FSPanelClassifiedInfo") << "Sending click msg via capability (url=" << url << ")" << LL_ENDL;
 	LL_INFOS("FSPanelClassifiedInfo") << "body: [" << body << "]" << LL_ENDL;
-    LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body );
+	LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body );
 }
 
 void FSPanelClassifiedInfo::sendClickMessage(const std::string& type)

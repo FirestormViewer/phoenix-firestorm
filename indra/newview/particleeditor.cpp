@@ -601,18 +601,16 @@ void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 	gInventory.updateItem(mParticleScriptInventoryItem);
 	gInventory.notifyObservers();
 
-	//caps import 
-	std::string url = gAgent.getRegion()->getCapability("UpdateScriptAgent");
+	//caps import
+	std::string url = gAgent.getRegionCapability("UpdateScriptAgent");
 
 	if (!url.empty())
 	{
 		std::string script = createScript();
 
-        LLBufferedAssetUploadInfo::taskUploadFinish_f proc = boost::bind(scriptUploadDone, _1, _2, _3, _4, this );
-
-        LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(mObject->getID(), inventoryItemID, LLScriptAssetUpload::MONO, true, LLUUID::null, script, proc));
-
-        LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
+		LLBufferedAssetUploadInfo::taskUploadFinish_f proc = boost::bind(scriptUploadDone, _1, _2, _3, _4, this );
+		LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(mObject->getID(), inventoryItemID, LLScriptAssetUpload::MONO, true, LLUUID::null, script, proc));
+		LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
 
 		mMainPanel->setEnabled(FALSE);
 		setCanClose(FALSE);

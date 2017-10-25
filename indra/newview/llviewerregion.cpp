@@ -546,6 +546,8 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	mLastVisitedEntry(NULL),
 	mInvisibilityCheckHistory(-1),
 	mPaused(FALSE),
+	mRegionCacheHitCount(0),
+	mRegionCacheMissCount(0),
 	// <FS:CR> Aurora Sim
 	mWidth(region_width_meters),
 	mWidthScaleFactor(region_width_meters / REGION_WIDTH_METERS) // <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
@@ -2627,6 +2629,7 @@ LLVOCacheEntry* LLViewerRegion::getCacheEntry(U32 local_id, bool valid)
 
 void LLViewerRegion::addCacheMiss(U32 id, LLViewerRegion::eCacheMissType miss_type)
 {
+	mRegionCacheMissCount++;
 #if 0
 	mCacheMissList.insert(CacheMissItem(id, miss_type));
 #else
@@ -2678,6 +2681,7 @@ bool LLViewerRegion::probeCache(U32 local_id, U32 crc, U32 flags, U8 &cache_miss
 		if (entry->getCRC() == crc)
 		{
 			// Record a hit
+			mRegionCacheHitCount++;
 			entry->recordHit();
 		cache_miss_type = CACHE_MISS_TYPE_NONE;
 			entry->setUpdateFlags(flags);
@@ -3091,6 +3095,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("UpdateScriptAgent");
 	capabilityNames.append("UpdateScriptTask");
 	capabilityNames.append("UploadBakedTexture");
+    capabilityNames.append("UserInfo");
 	capabilityNames.append("ViewerAsset"); 
 	capabilityNames.append("ViewerMetrics");
 	capabilityNames.append("ViewerStartAuction");

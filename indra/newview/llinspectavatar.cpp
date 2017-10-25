@@ -50,7 +50,6 @@
 
 // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
 #include "llagentdata.h"
-#include "llavatarnamecache.h"
 #include "llcallingcard.h"
 #include "llfloaterreporter.h"
 #include "llfloaterworldmap.h"
@@ -158,7 +157,7 @@ private:
 	// Is used to determine if "Add friend" option should be enabled in gear menu
 	bool isNotFriend();
 
-    void moderationActionCoro(std::string url, LLSD action);
+	void moderationActionCoro(std::string url, LLSD action);
 
 	// </FS:Ansariel>
 
@@ -349,9 +348,9 @@ void LLInspectAvatar::onOpen(const LLSD& data)
 // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
 // virtual
 void LLInspectAvatar::onClose(bool app_quitting)
-{  
-  getChild<LLMenuButton>("gear_btn")->hideMenu();
-}	
+{
+	getChild<LLMenuButton>("gear_btn")->hideMenu();
+}
 // </FS:Ansariel>
 
 void LLInspectAvatar::requestUpdate()
@@ -622,25 +621,24 @@ void LLInspectAvatar::toggleSelectedVoice(bool enabled)
 
 	if (speaker_mgr)
 	{
-		if (!gAgent.getRegion())
-			return;
+		std::string url = gAgent.getRegionCapability("ChatSessionRequest");
+		if (!url.empty())
+		{
+			LLSD data;
+			data["method"] = "mute update";
+			data["session-id"] = session_id;
+			data["params"] = LLSD::emptyMap();
+			data["params"]["agent_id"] = mAvatarID;
+			data["params"]["mute_info"] = LLSD::emptyMap();
+			// ctrl value represents ability to type, so invert
+			data["params"]["mute_info"]["voice"] = !enabled;
 
-		std::string url = gAgent.getRegion()->getCapability("ChatSessionRequest");
-		LLSD data;
-		data["method"] = "mute update";
-		data["session-id"] = session_id;
-		data["params"] = LLSD::emptyMap();
-		data["params"]["agent_id"] = mAvatarID;
-		data["params"]["mute_info"] = LLSD::emptyMap();
-		// ctrl value represents ability to type, so invert
-		data["params"]["mute_info"]["voice"] = !enabled;
-
-	    LLCoros::instance().launch("LLIMSpeakerMgr::moderationActionCoro",
-	        boost::bind(&LLInspectAvatar::moderationActionCoro, this, url, data));
+			LLCoros::instance().launch("LLIMSpeakerMgr::moderationActionCoro",
+				boost::bind(&LLInspectAvatar::moderationActionCoro, this, url, data));
+		}
 	}
 
 	closeFloater();
-
 }
 
 void LLInspectAvatar::onClickAddFriend()
@@ -818,35 +816,34 @@ void LLInspectAvatar::onClickFindOnMap()
 	LLFloaterReg::showInstance("world_map");
 }
 
-
 bool LLInspectAvatar::enableMute()
 {
-		bool is_linden = LLStringUtil::endsWith(mAvatarName.getDisplayName(), " Linden");
-		bool is_self = mAvatarID == gAgent.getID();
+	bool is_linden = LLStringUtil::endsWith(mAvatarName.getDisplayName(), " Linden");
+	bool is_self = mAvatarID == gAgent.getID();
 
-		if (!is_linden && !is_self && !LLMuteList::getInstance()->isMuted(mAvatarID, mAvatarName.getDisplayName()))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+	if (!is_linden && !is_self && !LLMuteList::getInstance()->isMuted(mAvatarID, mAvatarName.getDisplayName()))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 bool LLInspectAvatar::enableUnmute()
 {
-		bool is_linden = LLStringUtil::endsWith(mAvatarName.getDisplayName(), " Linden");
-		bool is_self = mAvatarID == gAgent.getID();
+	bool is_linden = LLStringUtil::endsWith(mAvatarName.getDisplayName(), " Linden");
+	bool is_self = mAvatarID == gAgent.getID();
 
-		if (!is_linden && !is_self && LLMuteList::getInstance()->isMuted(mAvatarID, mAvatarName.getDisplayName()))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+	if (!is_linden && !is_self && LLMuteList::getInstance()->isMuted(mAvatarID, mAvatarName.getDisplayName()))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 bool LLInspectAvatar::enableTeleportOffer()
@@ -866,46 +863,42 @@ bool LLInspectAvatar::godModeEnabled()
 
 void LLInspectAvatar::moderationActionCoro(std::string url, LLSD action)
 {
-    LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
-    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("moderationActionCoro", httpPolicy));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
-    LLCore::HttpOptions::ptr_t httpOpts = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
+	LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
+	LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("moderationActionCoro", httpPolicy));
+	LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+	LLCore::HttpOptions::ptr_t httpOpts = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
 
-    httpOpts->setWantHeaders(true);
+	httpOpts->setWantHeaders(true);
 
-    LLUUID sessionId = action["session-id"];
+	LLUUID sessionId = action["session-id"];
 
-    LLSD result = httpAdapter->postAndSuspend(httpRequest, url, action, httpOpts);
+	LLSD result = httpAdapter->postAndSuspend(httpRequest, url, action, httpOpts);
+	LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
 
-    LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
-    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
-
-    if (!status)
-    {
-        if (gIMMgr)
-        {
-            //403 == you're not a mod
-            //should be disabled if you're not a moderator
-            if (status == LLCore::HttpStatus(HTTP_FORBIDDEN))
-            {
-                gIMMgr->showSessionEventError(
-                    "mute",
-                    "not_a_mod_error",
-                    sessionId);
-            }
-            else
-            {
-                gIMMgr->showSessionEventError(
-                    "mute",
-                    "generic_request_error",
-                    sessionId);
-            }
-        }
-        return;
-    }
+	if (!status)
+	{
+		if (gIMMgr)
+		{
+			//403 == you're not a mod
+			//should be disabled if you're not a moderator
+			if (status == LLCore::HttpStatus(HTTP_FORBIDDEN))
+			{
+				gIMMgr->showSessionEventError(
+					"mute",
+					"not_a_mod_error",
+					sessionId);
+			}
+			else
+			{
+				gIMMgr->showSessionEventError(
+					"mute",
+					"generic_request_error",
+					sessionId);
+			}
+		}
+	}
 }
-
 // </FS:Ansariel>
 
 //////////////////////////////////////////////////////////////////////////////

@@ -113,7 +113,7 @@
 	<spinner label="Смещение по горизонтали" name="shinyOffsetU"/>
 	<spinner label="Смещение по вертикали" name="shinyOffsetV"/>
 	<check_box initial_value="false" label="Согласование" name="checkbox planar align" tool_tip="Согласование текстур на всех выбранных гранях по последней выбранной грани. Должно быть выбрано наложение по плоскостям."/>
-	<check_box label="Синхронизировать материалы" name="checkbox maps sync" tool_tip="Синхронизация параметров карты текстур" />
+	<check_box label="Синхронизировать материалы" name="checkbox_sync_settings" tool_tip="Синхронизация параметров карты текстур" />
 	<button label="Копировать" name="copytextures" />
 	<button label="Вставить" name="pastetextures" />
 </panel>

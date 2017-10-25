@@ -377,22 +377,22 @@
     <integer>0</integer>
   </map>
 
-  <key>MaxFPS</key>
+  <key>FramePerSecondLimit</key>
   <map>
     <key>Comment</key>
     <string>Yield some time to the local host if we reach a threshold framerate.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
-    <string>F32</string>
+    <string>U32</string>
     <key>Value</key>
-    <real>45.0</real>
+    <real>45</real>
   </map>
 
   <key>FSLimitFramerate</key>
   <map>
     <key>Comment</key>
-    <string>Enable framerate limitation defined by MaxFPS</string>
+    <string>Enable framerate limitation defined by FramePerSecondLimit</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
