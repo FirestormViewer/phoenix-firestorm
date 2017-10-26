@@ -2465,9 +2465,6 @@ bool LLAppViewer::cleanup()
 
 	removeMarkerFiles();
 
-	// <FS:Ansariel> Can't log after all singletons got destroyed
-	LL_INFOS() << "Goodbye!" << LL_ENDL;
-
 	// It's not at first obvious where, in this long sequence, generic cleanup
 	// calls OUGHT to go. So let's say this: as we migrate cleanup from
 	// explicit hand-placed calls into the generic mechanism, eventually
@@ -2492,8 +2489,7 @@ bool LLAppViewer::cleanup()
 	// probably useful to be able to log that order.
 	LLSingletonBase::deleteAll();
 
-	// <FS:Ansariel> Can't log after all singletons got destroyed
-	//LL_INFOS() << "Goodbye!" << LL_ENDL;
+	LL_INFOS() << "Goodbye!" << LL_ENDL;
 
 	removeDumpDir();
 
