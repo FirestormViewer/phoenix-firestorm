@@ -3095,6 +3095,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("UpdateScriptAgent");
 	capabilityNames.append("UpdateScriptTask");
 	capabilityNames.append("UploadBakedTexture");
+    capabilityNames.append("UserInfo");
 	capabilityNames.append("ViewerAsset"); 
 	capabilityNames.append("ViewerMetrics");
 	capabilityNames.append("ViewerStartAuction");

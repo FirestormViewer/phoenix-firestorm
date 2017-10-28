@@ -87,8 +87,8 @@ public:
 
 	// static data update, called from message handler
 	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	//static void updateUserInfo(const std::string& visibility, bool im_via_email);
-	static void updateUserInfo(const std::string& visibility, bool im_via_email, const std::string& email);
+	//static void updateUserInfo(const std::string& visibility, bool im_via_email, bool is_verified_email);
+	static void updateUserInfo(const std::string& visibility, bool im_via_email, bool is_verified_email, const std::string& email);
 
 	// refresh all the graphics preferences menus
 	static void refreshEnabledGraphics();
@@ -211,8 +211,8 @@ public:
 	void onClickResetLogPath();
 	void enableHistory();
 	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	//void setPersonalInfo(const std::string& visibility, bool im_via_email);
-	void setPersonalInfo(const std::string& visibility, bool im_via_email, const std::string& email);
+	//void setPersonalInfo(const std::string& visibility, bool im_via_email, bool is_verified_email);
+	void setPersonalInfo(const std::string& visibility, bool im_via_email, bool is_verified_email, const std::string& email);
 	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 	void refreshEnabledState();
 	// <FS:Ansariel> Improved graphics preferences

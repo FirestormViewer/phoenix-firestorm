@@ -4800,44 +4800,61 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 		
 		stop_glerror();
 		
-		// <FS:Beq> Additions to add Physics shape display in edit mode
-		if (LLToolMgr::getInstance()->inEdit() && selection->getSelectType() != SELECT_TYPE_HUD && gSavedSettings.getBOOL("ShowPhysicsShapeInEdit"))
+		// <FS:Beq> Additions to display/tools in edit mode
+		if (LLToolMgr::getInstance()->inEdit() && selection->getSelectType() != SELECT_TYPE_HUD)
 		{
-			//gGL.flush();
-			gGL.pushMatrix();
-			//Need to because crash on ATI 3800 (and similar cards) MAINT-5018 
-			LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
-			LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
-			if (shader)
-			{
-				gDebugProgram.bind();
-			}
-			gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-			glClearColor(0, 0, 0, 0);
-			gGL.setColorMask(true, true);
-			gGL.color4f(1.f, 1.f, 1.f, 0.5);
-			gGL.matrixMode(LLRender::MM_MODELVIEW);
-			LLGLEnable gls_blend(GL_BLEND);
-			LLGLEnable gls_cull(GL_CULL_FACE);
-			LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE);
+			static LLCachedControl<S32> showSpecificLOD(gSavedSettings, "ShowSpecificLODInEdit");
+			static LLCachedControl<bool> showPhysicsShapeInEdit(gSavedSettings, "ShowPhysicsShapeInEdit");
 
-			struct f : public LLSelectedObjectFunctor
+			if (-1 != showSpecificLOD) // Note -1 is disabled [no force] so 0 = lowest 1= low etc. 
 			{
-				virtual bool apply(LLViewerObject* object)
+				struct f : public LLSelectedObjectFunctor
 				{
-					renderOnePhysicsShape(object);
-					return true;
-				}
-			} func;
-			LLSelectMgr::getInstance()->getSelection()->applyToObjects(&func);
-			// Restore the original shader program
-			if (shader)
-			{
-				shader->bind();
+					virtual bool apply(LLViewerObject* object)
+					{
+						object->mDrawable->getVOVolume()->forceLOD(showSpecificLOD);
+						return true;
+					}
+				} func;
+				LLSelectMgr::getInstance()->getSelection()->applyToObjects(&func);
 			}
 
-			gGL.popMatrix();
-//			gGL.flush();
+			if (showPhysicsShapeInEdit)
+			{
+				gGL.pushMatrix();
+				//Need to because crash on ATI 3800 (and similar cards) MAINT-5018 
+				LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
+				LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
+				if (shader)
+				{
+					gDebugProgram.bind();
+				}
+				gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+				glClearColor(0, 0, 0, 0);
+				gGL.setColorMask(true, true);
+				gGL.color4f(1.f, 1.f, 1.f, 0.5);
+				gGL.matrixMode(LLRender::MM_MODELVIEW);
+				LLGLEnable gls_blend(GL_BLEND);
+				LLGLEnable gls_cull(GL_CULL_FACE);
+				LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE);
+
+				struct f : public LLSelectedObjectFunctor
+				{
+					virtual bool apply(LLViewerObject* object)
+					{
+						renderOnePhysicsShape(object);
+						return true;
+					}
+				} func;
+				LLSelectMgr::getInstance()->getSelection()->applyToObjects(&func);
+				// Restore the original shader program
+				if (shader)
+				{
+					shader->bind();
+				}
+
+				gGL.popMatrix();
+			}
 		}
 		// </FS:Beq>
 

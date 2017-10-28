@@ -168,13 +168,13 @@ public:
 			{
 				mParent->displayClassifiedDetails(c_info);
 				LLAvatarPropertiesProcessor::getInstance()->removeObserver(c_info->classified_id, this);
-				std::string url = gAgent.getRegion()->getCapability("SearchStatRequest");
+				std::string url = gAgent.getRegionCapability("SearchStatRequest");
 				if (!url.empty())
 				{
 					LL_INFOS("Search") << "Classified stat request via capability" << LL_ENDL;
 					LLSD body;
 					body["classified_id"] = c_info->classified_id;
-			        LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body, boost::bind(&LLPanelClassifiedInfo::handleSearchStatResponse, c_info->classified_id, _1));
+					LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body, boost::bind(&LLPanelClassifiedInfo::handleSearchStatResponse, c_info->classified_id, _1));
 				}
 			}
 		}
