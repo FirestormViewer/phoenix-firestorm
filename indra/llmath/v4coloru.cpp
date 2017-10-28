@@ -118,34 +118,3 @@ BOOL LLColor4U::parseColor4U(const std::string& buf, LLColor4U* value)
 	value->set( U8(v[0]), U8(v[1]), U8(v[2]), U8(v[3]) );
 	return TRUE;
 }
-
-
-U32 LLColor4U::asRGBA() const
-{
-	U32 nRet(0);
-
-	// Little endian: values are swapped in memory. The original code access the array like a U32, so we need to swap here
-
-	nRet |= mV[3];
-	nRet <<= 8;
-	nRet |= mV[2];
-	nRet <<= 8;
-	nRet |= mV[1];
-	nRet <<= 8;
-	nRet |= mV[0];
-
-	return nRet;
-}
-
-void LLColor4U::fromRGBA( U32 aVal )
-{
-	// Little endian: values are swapped in memory. The original code access the array like a U32, so we need to swap here
-
-	mV[0] = aVal & 0xFF;
-	aVal >>= 8;
-	mV[1] = aVal & 0xFF;
-	aVal >>= 8;
-	mV[2] = aVal & 0xFF;
-	aVal >>= 8;
-	mV[3] = aVal & 0xFF;
-}
