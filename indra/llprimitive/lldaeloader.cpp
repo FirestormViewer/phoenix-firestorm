@@ -896,12 +896,6 @@ bool LLDAELoader::OpenFile(const std::string& filename)
 	// <FS:ND> Set up colladadom error handler
 	FSDaeSetErrorHandler oErrorHandlerSerror;
 
-	// <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
-	//replace illegal # in path as collada's escapser is broke
-	std::string tmp_file = filename;
-	boost::replace_all(tmp_file, "#", "%23");
-	// </FS:Ansariel>
-
 	setLoadState( READING_FILE );
 
 	//no suitable slm exists, load from the .dae file
@@ -909,16 +903,12 @@ bool LLDAELoader::OpenFile(const std::string& filename)
 	domCOLLADA* dom;
 	if (mPreprocessDAE)
 	{
-		// <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
-		//dom = dae.openFromMemory(filename, preprocessDAE(filename).c_str());
-		dom = dae.openFromMemory(tmp_file, preprocessDAE(filename).c_str());
+		dom = dae.openFromMemory(filename, preprocessDAE(filename).c_str());
 	}
 	else
 	{
 		LL_INFOS() << "Skipping dae preprocessing" << LL_ENDL;
-		// <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
-		//dom = dae.open(filename);
-		dom = dae.open(tmp_file);
+		dom = dae.open(filename);
 	}
 	
 	if (!dom)
@@ -947,9 +937,7 @@ bool LLDAELoader::OpenFile(const std::string& filename)
 	
 	daeInt count = db->getElementCount(NULL, COLLADA_TYPE_MESH);
 	
-	// <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
-	//daeDocument* doc = dae.getDoc(filename);
-	daeDocument* doc = dae.getDoc(tmp_file);
+	daeDocument* doc = dae.getDoc(filename);
 	if (!doc)
 	{
 		LL_WARNS() << "can't find internal doc" << LL_ENDL;
