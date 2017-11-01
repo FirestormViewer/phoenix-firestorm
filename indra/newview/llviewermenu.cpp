@@ -9120,6 +9120,58 @@ class FSResetPerAccountControl : public view_listener_t
 };
 // </FS:Ansariel> Control enhancements
 
+// <FS:Ansariel> Reset Mesh LOD; Forcing highest LOD on each mesh briefly should fix
+//               broken meshes bursted into triangles
+class FSResetMeshLOD : public view_listener_t
+{
+	bool handleEvent( const LLSD& userdata)
+	{
+		LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+		if (avatar)
+		{
+			for (LLVOAvatar::attachment_map_t::iterator it = avatar->mAttachmentPoints.begin(); it != avatar->mAttachmentPoints.end(); it++)
+			{
+				LLViewerJointAttachment::attachedobjs_vec_t& att_objects = (*it).second->mAttachedObjects;
+
+				for (LLViewerJointAttachment::attachedobjs_vec_t::iterator at_it = att_objects.begin(); at_it != att_objects.end(); at_it++)
+				{
+					LLViewerObject* objectp = *at_it;
+					if (objectp)
+					{
+						if (objectp->getPCode() == LL_PCODE_VOLUME)
+						{
+							LLVOVolume* vol = (LLVOVolume*)objectp;
+							if (vol && vol->isMesh())
+							{
+								vol->forceLOD(LLModel::LOD_HIGH);
+							}
+						}
+
+						LLViewerObject::const_child_list_t& children = objectp->getChildren();
+						for (LLViewerObject::const_child_list_t::const_iterator cit = children.begin(); cit != children.end(); cit++)
+						{
+							LLViewerObject* child_objectp = *cit;
+							if (!child_objectp || (child_objectp->getPCode() != LL_PCODE_VOLUME))
+							{
+								continue;
+							}
+
+							LLVOVolume* child_vol = (LLVOVolume*)child_objectp;
+							if (child_vol && child_vol->isMesh())
+							{
+								child_vol->forceLOD(LLModel::LOD_HIGH);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+};
+// </FS:Ansariel>
+
 // not so generic
 
 class LLAdvancedCheckRenderShadowOption: public view_listener_t
@@ -11564,6 +11616,9 @@ void initialize_menus()
 	view_listener_t::addMenu(new FSResetControl(), "ResetControl");
 	view_listener_t::addMenu(new FSResetPerAccountControl(), "ResetPerAccountControl");
 	// </FS:Ansariel> Control enhancements
+
+	// <FS:Ansariel> Reset Mesh LOD
+	view_listener_t::addMenu(new FSResetMeshLOD(), "Avatar.ResetMeshLOD");
 
 	commit.add("Inventory.NewWindow", boost::bind(&LLPanelMainInventory::newWindow));
 
