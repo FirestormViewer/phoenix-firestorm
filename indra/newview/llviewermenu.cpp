@@ -3027,18 +3027,29 @@ bool enable_derender_object()
 
 class LLEnableEditParticleSource : public view_listener_t
 {
-    bool handleEvent(const LLSD& userdata)
-    {
-		if(LLSelectMgr::instance().getSelection()->getObjectCount()!=0)
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLObjectSelectionHandle handle = LLSelectMgr::instance().getSelection();
+
+		if (handle->getObjectCount() >= 1)
 		{
-			LLObjectSelection::valid_iterator iter=LLSelectMgr::instance().getSelection()->valid_begin();
-			LLSelectNode* node=*iter;
-
-			if(!node || !node->mPermissions)
+			LLObjectSelection::valid_iterator iter = handle->valid_begin();
+			if (iter == handle->valid_end())
+			{
 				return false;
+			}
 
-			if(node->mPermissions->getOwner()==gAgent.getID())
+			LLSelectNode* node = *iter;
+
+			if (!node || !node->mPermissions)
+			{
+				return false;
+			}
+
+			if (node->mPermissions->getOwner() == gAgentID)
+			{
 				return true;
+			}
 		}
 		return false;
 	}
@@ -3046,14 +3057,16 @@ class LLEnableEditParticleSource : public view_listener_t
 
 class LLEditParticleSource : public view_listener_t
 {
-    bool handleEvent(const LLSD& userdata)
-    {
+	bool handleEvent(const LLSD& userdata)
+	{
 		LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
 		if (objectp)
 		{
-			ParticleEditor* particleEditor=LLFloaterReg::showTypedInstance<ParticleEditor>("particle_editor", LLSD(objectp->getID()), TAKE_FOCUS_YES);
-			if(particleEditor)
+			ParticleEditor* particleEditor = LLFloaterReg::showTypedInstance<ParticleEditor>("particle_editor", LLSD(objectp->getID()), TAKE_FOCUS_YES);
+			if (particleEditor)
+			{
 				particleEditor->setObject(objectp);
+			}
 		}
 		return true;
 	}
