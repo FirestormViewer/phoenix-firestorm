@@ -108,9 +108,9 @@ public:
 	static bool canSendIM(const LLUUID& idRecipient);
 
 	/*
-	 * Returns true if the user is allowed to start a - P2P or group - conversation with the specified UUID (or if the session already exists)
+	 * Returns true if the user is allowed to start a - P2P or group - conversation with the specified UUID (or if the session already exists, unless 'ignore open' is specified)
 	 */
-	static bool canStartIM(const LLUUID& idRecipient);
+	static bool canStartIM(const LLUUID& idRecipient, bool fIgnoreOpen = false);
 
 	/*
 	 * Returns true if an avatar's name should be hidden for the requested operation/context

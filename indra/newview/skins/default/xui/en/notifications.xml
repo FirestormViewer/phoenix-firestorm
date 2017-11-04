@@ -7006,6 +7006,14 @@ URL: [AUDIOURL]
   
   <notification
    icon="notifytip.tga"
+   name="ChatSystemMessageTip"
+   log_to_chat="true"
+   type="notifytip">
+[MESSAGE]
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
    name="IMSystemMessageTip"
    log_to_im="true"   
    log_to_chat="false"   
