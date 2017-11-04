@@ -476,16 +476,19 @@ bool RlvHandler::processIMQuery(const LLUUID& idSender, const std::string& strMe
 {
 	if ("@stopim" == strMessage)
 	{
-		// If the user can't start an IM session and one is open terminate it - always notify the sender in this case
-		if ( (!RlvActions::canStartIM(idSender)) && (RlvActions::hasOpenP2PSession(idSender)) )
+		// If the user can't start an IM session terminate it (if one is open) - always notify the sender in this case
+		if (!RlvActions::canStartIM(idSender, true))
 		{
 			RlvUtil::sendBusyMessage(idSender, RlvStrings::getString(RLV_STRING_STOPIM_ENDSESSION_REMOTE));
-			LLAvatarActions::endIM(idSender);
-			RlvUtil::notifyBlocked(RLV_STRING_STOPIM_ENDSESSION_LOCAL, LLSD().with("NAME", LLSLURL("agent", idSender, "about").getSLURLString()));
+			if (RlvActions::hasOpenP2PSession(idSender))
+			{
+				LLAvatarActions::endIM(idSender);
+				RlvUtil::notifyBlocked(RLV_STRING_STOPIM_ENDSESSION_LOCAL, LLSD().with("NAME", LLSLURL("agent", idSender, "about").getSLURLString()), true);
+			}
 			return true;
 		}
 
-		// User can start an IM session (or one isn't open) so we do nothing - notify and hide it from the user only if IM queries are enabled
+		// User can start an IM session so we do nothing - notify and hide it from the user only if IM queries are enabled
 		if (!RlvSettings::getEnableIMQuery())
 			return false;
 		RlvUtil::sendBusyMessage(idSender, RlvStrings::getString(RLV_STRING_STOPIM_NOSESSION));

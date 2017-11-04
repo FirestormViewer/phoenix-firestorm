@@ -543,14 +543,17 @@ bool RlvUtil::isNearbyRegion(const std::string& strRegion)
 }
 
 // Checked: 2011-04-11 (RLVa-1.3.0h) | Modified: RLVa-1.3.0h
-void RlvUtil::notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs)
+void RlvUtil::notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs, bool fLogToChat)
 {
 	std::string strMsg = RlvStrings::getString(strNotifcation);
 	LLStringUtil::format(strMsg, sdArgs);
 
 	LLSD sdNotify;
 	sdNotify["MESSAGE"] = strMsg;
-	LLNotificationsUtil::add("SystemMessageTip", sdNotify);
+	if (!fLogToChat)
+		LLNotificationsUtil::add("SystemMessageTip", sdNotify);
+	else
+		LLNotificationsUtil::add("ChatSystemMessageTip", sdNotify);
 }
 
 // Checked: 2010-11-11 (RLVa-1.2.1g) | Added: RLVa-1.2.1g
