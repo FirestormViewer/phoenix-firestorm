@@ -9135,6 +9135,46 @@ class FSResetPerAccountControl : public view_listener_t
 
 // <FS:Ansariel> Reset Mesh LOD; Forcing highest LOD on each mesh briefly should fix
 //               broken meshes bursted into triangles
+static void reset_mesh_lod(LLVOAvatar* avatar)
+{
+	for (LLVOAvatar::attachment_map_t::iterator it = avatar->mAttachmentPoints.begin(); it != avatar->mAttachmentPoints.end(); it++)
+	{
+		LLViewerJointAttachment::attachedobjs_vec_t& att_objects = (*it).second->mAttachedObjects;
+
+		for (LLViewerJointAttachment::attachedobjs_vec_t::iterator at_it = att_objects.begin(); at_it != att_objects.end(); at_it++)
+		{
+			LLViewerObject* objectp = *at_it;
+			if (objectp)
+			{
+				if (objectp->getPCode() == LL_PCODE_VOLUME)
+				{
+					LLVOVolume* vol = (LLVOVolume*)objectp;
+					if (vol && vol->isMesh())
+					{
+						vol->forceLOD(LLModel::LOD_HIGH);
+					}
+				}
+
+				LLViewerObject::const_child_list_t& children = objectp->getChildren();
+				for (LLViewerObject::const_child_list_t::const_iterator cit = children.begin(); cit != children.end(); cit++)
+				{
+					LLViewerObject* child_objectp = *cit;
+					if (!child_objectp || (child_objectp->getPCode() != LL_PCODE_VOLUME))
+					{
+						continue;
+					}
+
+					LLVOVolume* child_vol = (LLVOVolume*)child_objectp;
+					if (child_vol && child_vol->isMesh())
+					{
+						child_vol->forceLOD(LLModel::LOD_HIGH);
+					}
+				}
+			}
+		}
+	}
+}
+
 class FSResetMeshLOD : public view_listener_t
 {
 	bool handleEvent( const LLSD& userdata)
@@ -9142,42 +9182,7 @@ class FSResetMeshLOD : public view_listener_t
 		LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
 		if (avatar)
 		{
-			for (LLVOAvatar::attachment_map_t::iterator it = avatar->mAttachmentPoints.begin(); it != avatar->mAttachmentPoints.end(); it++)
-			{
-				LLViewerJointAttachment::attachedobjs_vec_t& att_objects = (*it).second->mAttachedObjects;
-
-				for (LLViewerJointAttachment::attachedobjs_vec_t::iterator at_it = att_objects.begin(); at_it != att_objects.end(); at_it++)
-				{
-					LLViewerObject* objectp = *at_it;
-					if (objectp)
-					{
-						if (objectp->getPCode() == LL_PCODE_VOLUME)
-						{
-							LLVOVolume* vol = (LLVOVolume*)objectp;
-							if (vol && vol->isMesh())
-							{
-								vol->forceLOD(LLModel::LOD_HIGH);
-							}
-						}
-
-						LLViewerObject::const_child_list_t& children = objectp->getChildren();
-						for (LLViewerObject::const_child_list_t::const_iterator cit = children.begin(); cit != children.end(); cit++)
-						{
-							LLViewerObject* child_objectp = *cit;
-							if (!child_objectp || (child_objectp->getPCode() != LL_PCODE_VOLUME))
-							{
-								continue;
-							}
-
-							LLVOVolume* child_vol = (LLVOVolume*)child_objectp;
-							if (child_vol && child_vol->isMesh())
-							{
-								child_vol->forceLOD(LLModel::LOD_HIGH);
-							}
-						}
-					}
-				}
-			}
+			reset_mesh_lod(avatar);
 		}
 
 		return true;
@@ -10192,8 +10197,9 @@ void handle_rebake_textures(void*)
 		LLAppearanceMgr::instance().syncCofVersionAndRefresh();
 // [/SL:KB]
 //		LLAppearanceMgr::instance().requestServerAppearanceUpdate();
-		avatar_tex_refresh(gAgentAvatarp);	// <FS:CR> FIRE-11800 - Refresh the textures too
+		avatar_tex_refresh(gAgentAvatarp); // <FS:CR> FIRE-11800 - Refresh the textures too
 	}
+	reset_mesh_lod(gAgentAvatarp); // <FS:Ansariel> Reset Mesh LOD
 	gAgentAvatarp->setIsCrossingRegion(false); // <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
 }
 
