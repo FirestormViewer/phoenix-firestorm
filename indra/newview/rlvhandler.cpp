@@ -2510,9 +2510,10 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
 	LLViewerObject* pObj = NULL;
 	if (idTarget.isNull())
 	{
-		if (!RlvActions::canGroundSit())
+		if ( (!RlvActions::canGroundSit()) || ((isAgentAvatarValid()) && (gAgentAvatarp->isSitting())) )
 			return RLV_RET_FAILED_LOCK;
 		gAgent.sitDown();
+		send_agent_update(TRUE, TRUE);
 	}
 	else if ( ((pObj = gObjectList.findObject(idTarget)) != NULL) && (LL_PCODE_VOLUME == pObj->getPCode()))
 	{
@@ -2521,7 +2522,7 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
 
 		if ((gRlvHandler.hasBehaviour(RLV_BHVR_STANDTP)) && (isAgentAvatarValid()))
 		{
-			if (gAgentAvatarp->isSitting())
+			if ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) )
 				return RLV_RET_FAILED_LOCK;
 			gRlvHandler.m_posSitSource = gAgent.getPositionGlobal();
 		}
