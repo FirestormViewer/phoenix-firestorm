@@ -315,7 +315,7 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		     ( ((perm.isOwned()) && (!perm.isGroupOwned()) && (perm.getOwner() == item->getCreatorUUID()) ) || (RlvUtil::isNearbyAgent(item->getCreatorUUID())) ) )
 		{
 			childSetEnabled("BtnCreator", FALSE);
-			name = RlvStrings::getAnonym(name);
+			name = RlvStrings::getAnonym(av_name);
 		}
 		getChild<LLUICtrl>("LabelCreatorName")->setValue(name);
 // [/RLVa:KB]
@@ -352,7 +352,7 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 			{
 				fRlvCanShowOwner = RlvActions::canShowName(RlvActions::SNC_DEFAULT, perm.getOwner());
 				if (!fRlvCanShowOwner)
-					name = RlvStrings::getAnonym(name);
+					name = RlvStrings::getAnonym(av_name);
 			}
 // [/RLVa:KB]
 		}

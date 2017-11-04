@@ -2331,7 +2331,15 @@ void inventory_offer_handler(LLOfferInfo* info)
 		if (!fRlvCanShowName)
 		{
 			payload["rlv_shownames"] = TRUE;
-			args["NAME"] = RlvStrings::getAnonym(info->mFromName);
+			LLAvatarName av_name;
+			if (LLAvatarNameCache::get(info->mFromID, &av_name))
+			{
+				args["NAME"] = RlvStrings::getAnonym(av_name);
+			}
+			else
+			{
+				args["NAME"] = RlvStrings::getAnonym(info->mFromName);
+			}
 			args["NAME_SLURL"] = LLSLURL("agent", info->mFromID, "rlvanonym").getSLURLString();
 		}
 // [/RLVa:KB]
@@ -3582,10 +3590,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 //		args["ORIGINAL_NAME"] = original_name;
 // [RLVa:KB] - Checked: RLVa-1.2.2
 		// Only anonymize the name if the agent is nearby, there isn't an open IM session to them and their profile isn't open
+		LLAvatarName av_name;
 		bool fRlvCanShowName = (!RlvActions::isRlvEnabled()) ||
 			(RlvActions::canShowName(RlvActions::SNC_DEFAULT, from_id)) || (!RlvUtil::isNearbyAgent(from_id)) || (RlvUIEnabler::hasOpenProfile(from_id)) || (RlvUIEnabler::hasOpenIM(from_id));
 		args["NAME"] = LLSLURL("agent", from_id, (fRlvCanShowName) ? "completename" : "rlvanonym").getSLURLString();;
-		args["ORIGINAL_NAME"] = fRlvCanShowName ? original_name : RlvStrings::getAnonym(original_name);
+		args["ORIGINAL_NAME"] = fRlvCanShowName ? original_name : (LLAvatarNameCache::get(from_id, &av_name) ? RlvStrings::getAnonym(av_name) : RlvStrings::getAnonym(original_name));
 // [/RLVa:KB]
 		LLSD payload;
 		payload["from_id"] = from_id;
@@ -4701,11 +4710,22 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			{
 				if (CHAT_SOURCE_AGENT != chat.mSourceType)
 				{
-					RlvUtil::filterNames(chat.mFromName);
+					if (chat.mChatType != CHAT_TYPE_RADAR) // Radar messages are already correct anonymized
+					{
+						RlvUtil::filterNames(chat.mFromName);
+					}
 				}
 				else if (chat.mFromID != gAgent.getID())
 				{
-					chat.mFromName = RlvStrings::getAnonym(chat.mFromName);
+					LLAvatarName av_name;
+					if (LLAvatarNameCache::get(chat.mFromID, &av_name))
+					{
+						chat.mFromName = RlvStrings::getAnonym(av_name);
+					}
+					else
+					{
+						chat.mFromName = RlvStrings::getAnonym(chat.mFromName);
+					}
 					chat.mRlvNamesFiltered = TRUE;
 				}
 			}
