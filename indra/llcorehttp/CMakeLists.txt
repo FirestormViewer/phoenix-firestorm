@@ -10,6 +10,7 @@ include(00-Common)
 
 include(CURL)
 include(OpenSSL)
+include(NGHTTP2)
 include(ZLIB)
 include(LLCoreHttp)
 include(LLAddBuildTest)
@@ -98,6 +99,7 @@ target_link_libraries(
   ${CURL_LIBRARIES}
   ${OPENSSL_LIBRARIES}
   ${CRYPTO_LIBRARIES}
+  ${NGHTTP2_LIBRARIES}
   ${BOOST_THREAD_LIBRARY}
   ${BOOST_SYSTEM_LIBRARY}
   )
@@ -136,6 +138,7 @@ if (LL_TESTS)
       ${CURL_LIBRARIES}
       ${OPENSSL_LIBRARIES}
       ${CRYPTO_LIBRARIES}
+      ${NGHTTP2_LIBRARIES}
       ${BOOST_THREAD_LIBRARY}
       ${BOOST_SYSTEM_LIBRARY}
       )
@@ -206,6 +209,7 @@ endif (DARWIN)
       ${CURL_LIBRARIES}
       ${OPENSSL_LIBRARIES}
       ${CRYPTO_LIBRARIES}
+      ${NGHTTP2_LIBRARIES}
       ${BOOST_THREAD_LIBRARY}
       ${BOOST_SYSTEM_LIBRARY}
       )

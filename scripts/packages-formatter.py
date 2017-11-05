@@ -62,45 +62,71 @@ def autobuild(*args):
     # no exceptions yet, let caller read stdout
     return child.stdout
 
-# <FS:ND> Pass -m64 down to autobuild if needed
-if len( sys.argv ) > 1 and sys.argv[1] == "-m64":
-    os.environ[ "ND_AUTOBUILD_ARCH" ] = "x64"
-# </FS:ND>
-    
-version={}
-versions=autobuild('install', '--versions')
-for line in versions:
-    pkg_info = pkg_line.match(line)
-    if pkg_info:
-        pkg = pkg_info.group(1)
-        if pkg not in version:
-            version[pkg] = pkg_info.group(2).strip()
-        elif version[pkg] != pkg_info.group(2).strip(): #<FS:ND/> Only error out if the version is duplicate and does not match.
-            sys.exit("Duplicate version for %s" % pkg)
-    else:
-        sys.exit("Unrecognized --versions output: %s" % line)
+info=dict(versions={},    copyrights={})
+dups=dict(versions=set(), copyrights=set())
 
-copyright={}
+def add_info(key, pkg, lines):
+    if pkg not in info[key]:
+        info[key][pkg] = '\n'.join(lines)
+    # <FS:Ansariel> Only add as duplicate of the version is duplicate and the copyright string does not match
+    #else:
+    elif info[key][pkg] != '\n'.join(lines):
+    # </FS:Ansariel>
+        dups[key].add(pkg)
+
+versions=autobuild('install', '--versions')
 copyrights=autobuild('install', '--copyrights')
 viewer_copyright = copyrights.readline() # first line is the copyright for the viewer itself
-for line in copyrights:
-    pkg_info = pkg_line.match(line)
-    if pkg_info:
-        pkg = pkg_info.group(1)
-        if pkg not in copyright:
-            copyright[pkg] = pkg_info.group(2).strip()
-        #else:
-        #    sys.exit("Duplicate copyright for %s" % pkg)
-    else:
+
+# Two different autobuild outputs, but we treat them essentially the same way:
+# populating each into a dict; each a subdict of 'info'.
+for key, rawdata in ("versions", versions), ("copyrights", copyrights):
+    lines = iter(rawdata)
+    try:
+        line = next(lines)
+    except StopIteration:
+        # rawdata is completely empty? okay...
         pass
-        #sys.exit("Unrecognized --copyrights output: %s" % line)
+    else:
+        pkg_info = pkg_line.match(line)
+        # The first line for each package must match pkg_line.
+        if not pkg_info:
+            sys.exit("Unrecognized --%s output: %r" % (key, line))
+        # Only the very first line in rawdata MUST match; for the rest of
+        # rawdata, matching the regexp is how we recognize the start of the
+        # next package.
+        while True:                     # iterate over packages in rawdata
+            pkg = pkg_info.group(1)
+            pkg_lines = [pkg_info.group(2).strip()]
+            for line in lines:
+                pkg_info = pkg_line.match(line)
+                if pkg_info:
+                    # we hit the start of the next package data
+                    add_info(key, pkg, pkg_lines)
+                    break
+                else:
+                    # no package prefix: additional line for same package
+                    pkg_lines.append(line.rstrip())
+            else:
+                # last package in the output -- finished 'lines'
+                add_info(key, pkg, pkg_lines)
+                break
+
+# Now that we've run through all of both outputs -- are there duplicates?
+if any(pkgs for pkgs in dups.values()):
+    for key, pkgs in dups.items():
+        if pkgs:
+            print >>sys.stderr, "Duplicate %s for %s" % (key, ", ".join(pkgs))
+    sys.exit(1)
 
 print "%s %s" % (args.channel, args.version)
 print viewer_copyright
-for pkg in sorted(version):
-    print ': '.join([pkg, version[pkg]])
-    if pkg in copyright:
-        print copyright[pkg]
-    else:
+version = list(info['versions'].items())
+version.sort()
+for pkg, pkg_version in version:
+    print ': '.join([pkg, pkg_version])
+    try:
+        print info['copyrights'][pkg]
+    except KeyError:
         sys.exit("No copyright for %s" % pkg)
-    print ''
+    print
