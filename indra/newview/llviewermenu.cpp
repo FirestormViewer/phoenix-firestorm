@@ -384,7 +384,7 @@ BOOL enable_detach(const LLSD& = LLSD());
 void menu_toggle_attached_lights(void* user_data);
 void menu_toggle_attached_particles(void* user_data);
 
-void avatar_tex_refresh();	// <FS:CR> FIRE-11800
+void avatar_tex_refresh(LLVOAvatar* avatar);	// <FS:CR> FIRE-11800
 
 class LLMenuParcelObserver : public LLParcelObserver
 {
@@ -3011,18 +3011,29 @@ bool enable_derender_object()
 
 class LLEnableEditParticleSource : public view_listener_t
 {
-    bool handleEvent(const LLSD& userdata)
-    {
-		if(LLSelectMgr::instance().getSelection()->getObjectCount()!=0)
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLObjectSelectionHandle handle = LLSelectMgr::instance().getSelection();
+
+		if (handle->getObjectCount() >= 1)
 		{
-			LLObjectSelection::valid_iterator iter=LLSelectMgr::instance().getSelection()->valid_begin();
-			LLSelectNode* node=*iter;
-
-			if(!node || !node->mPermissions)
+			LLObjectSelection::valid_iterator iter = handle->valid_begin();
+			if (iter == handle->valid_end())
+			{
 				return false;
+			}
 
-			if(node->mPermissions->getOwner()==gAgent.getID())
+			LLSelectNode* node = *iter;
+
+			if (!node || !node->mPermissions)
+			{
+				return false;
+			}
+
+			if (node->mPermissions->getOwner() == gAgentID)
+			{
 				return true;
+			}
 		}
 		return false;
 	}
@@ -3030,14 +3041,16 @@ class LLEnableEditParticleSource : public view_listener_t
 
 class LLEditParticleSource : public view_listener_t
 {
-    bool handleEvent(const LLSD& userdata)
-    {
+	bool handleEvent(const LLSD& userdata)
+	{
 		LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
 		if (objectp)
 		{
-			ParticleEditor* particleEditor=LLFloaterReg::showTypedInstance<ParticleEditor>("particle_editor", LLSD(objectp->getID()), TAKE_FOCUS_YES);
-			if(particleEditor)
+			ParticleEditor* particleEditor = LLFloaterReg::showTypedInstance<ParticleEditor>("particle_editor", LLSD(objectp->getID()), TAKE_FOCUS_YES);
+			if (particleEditor)
+			{
 				particleEditor->setObject(objectp);
+			}
 		}
 		return true;
 	}
@@ -3129,27 +3142,27 @@ class LLObjectTexRefresh : public view_listener_t
 	}
 };
 
-void avatar_tex_refresh()
+void avatar_tex_refresh(LLVOAvatar* avatar)
 {
-	LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
-	if(avatar)
-	{
-		// I bet this can be done more elegantly, but this is just straightforward
-		destroy_texture(avatar->getTE(TEX_HEAD_BAKED)->getID());
-		destroy_texture(avatar->getTE(TEX_UPPER_BAKED)->getID());
-		destroy_texture(avatar->getTE(TEX_LOWER_BAKED)->getID());
-		destroy_texture(avatar->getTE(TEX_EYES_BAKED)->getID());
-		destroy_texture(avatar->getTE(TEX_SKIRT_BAKED)->getID());
-		destroy_texture(avatar->getTE(TEX_HAIR_BAKED)->getID());
-		LLAvatarPropertiesProcessor::getInstance()->sendAvatarTexturesRequest(avatar->getID());
-	}
+	// I bet this can be done more elegantly, but this is just straightforward
+	destroy_texture(avatar->getTE(TEX_HEAD_BAKED)->getID());
+	destroy_texture(avatar->getTE(TEX_UPPER_BAKED)->getID());
+	destroy_texture(avatar->getTE(TEX_LOWER_BAKED)->getID());
+	destroy_texture(avatar->getTE(TEX_EYES_BAKED)->getID());
+	destroy_texture(avatar->getTE(TEX_SKIRT_BAKED)->getID());
+	destroy_texture(avatar->getTE(TEX_HAIR_BAKED)->getID());
+	LLAvatarPropertiesProcessor::getInstance()->sendAvatarTexturesRequest(avatar->getID());
 }
 
 class LLAvatarTexRefresh : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		avatar_tex_refresh();
+		LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+		if (avatar)
+		{
+			avatar_tex_refresh(avatar);
+		}
 
 		return true;
 	}
@@ -9104,6 +9117,63 @@ class FSResetPerAccountControl : public view_listener_t
 };
 // </FS:Ansariel> Control enhancements
 
+// <FS:Ansariel> Reset Mesh LOD; Forcing highest LOD on each mesh briefly should fix
+//               broken meshes bursted into triangles
+static void reset_mesh_lod(LLVOAvatar* avatar)
+{
+	for (LLVOAvatar::attachment_map_t::iterator it = avatar->mAttachmentPoints.begin(); it != avatar->mAttachmentPoints.end(); it++)
+	{
+		LLViewerJointAttachment::attachedobjs_vec_t& att_objects = (*it).second->mAttachedObjects;
+
+		for (LLViewerJointAttachment::attachedobjs_vec_t::iterator at_it = att_objects.begin(); at_it != att_objects.end(); at_it++)
+		{
+			LLViewerObject* objectp = *at_it;
+			if (objectp)
+			{
+				if (objectp->getPCode() == LL_PCODE_VOLUME)
+				{
+					LLVOVolume* vol = (LLVOVolume*)objectp;
+					if (vol && vol->isMesh())
+					{
+						vol->forceLOD(LLModel::LOD_HIGH);
+					}
+				}
+
+				LLViewerObject::const_child_list_t& children = objectp->getChildren();
+				for (LLViewerObject::const_child_list_t::const_iterator cit = children.begin(); cit != children.end(); cit++)
+				{
+					LLViewerObject* child_objectp = *cit;
+					if (!child_objectp || (child_objectp->getPCode() != LL_PCODE_VOLUME))
+					{
+						continue;
+					}
+
+					LLVOVolume* child_vol = (LLVOVolume*)child_objectp;
+					if (child_vol && child_vol->isMesh())
+					{
+						child_vol->forceLOD(LLModel::LOD_HIGH);
+					}
+				}
+			}
+		}
+	}
+}
+
+class FSResetMeshLOD : public view_listener_t
+{
+	bool handleEvent( const LLSD& userdata)
+	{
+		LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+		if (avatar)
+		{
+			reset_mesh_lod(avatar);
+		}
+
+		return true;
+	}
+};
+// </FS:Ansariel>
+
 // not so generic
 
 class LLAdvancedCheckRenderShadowOption: public view_listener_t
@@ -10111,8 +10181,9 @@ void handle_rebake_textures(void*)
 		LLAppearanceMgr::instance().syncCofVersionAndRefresh();
 // [/SL:KB]
 //		LLAppearanceMgr::instance().requestServerAppearanceUpdate();
-		avatar_tex_refresh();	// <FS:CR> FIRE-11800 - Refresh the textures too
+		avatar_tex_refresh(gAgentAvatarp); // <FS:CR> FIRE-11800 - Refresh the textures too
 	}
+	reset_mesh_lod(gAgentAvatarp); // <FS:Ansariel> Reset Mesh LOD
 	gAgentAvatarp->setIsCrossingRegion(false); // <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
 }
 
@@ -11547,6 +11618,9 @@ void initialize_menus()
 	view_listener_t::addMenu(new FSResetControl(), "ResetControl");
 	view_listener_t::addMenu(new FSResetPerAccountControl(), "ResetPerAccountControl");
 	// </FS:Ansariel> Control enhancements
+
+	// <FS:Ansariel> Reset Mesh LOD
+	view_listener_t::addMenu(new FSResetMeshLOD(), "Avatar.ResetMeshLOD");
 
 	commit.add("Inventory.NewWindow", boost::bind(&LLPanelMainInventory::newWindow));
 

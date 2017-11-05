@@ -55,6 +55,7 @@ public:
 	struct Params : public LLInitParam::Block<Params, LLUICtrl::Params>
 	{
 		Optional<std::string>	shortcut;
+		Optional<std::string>	shortcut_linux; // <FS> Remap shortcuts on Linux
 		Optional<KEY>			jump_key;
 		Optional<bool>			use_mac_ctrl,
 								allow_key_repeat;
