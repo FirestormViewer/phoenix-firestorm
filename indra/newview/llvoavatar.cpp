@@ -6802,6 +6802,30 @@ LLViewerObject *	LLVOAvatar::findAttachmentByID( const LLUUID & target_id ) cons
 	return NULL;
 }
 
+// [SL:KB] - Patch: Appearance-RefreshAttachments | Checked: Catznip-5.3
+void LLVOAvatar::rebuildAttachments()
+{
+	if (!isValid())
+		return;
+
+	for (const auto& kvpAttachPt : mAttachmentPoints)
+	{
+		for (LLViewerObject* pAttachObj : kvpAttachPt.second->mAttachedObjects)
+		{
+			if (LLVOVolume* pAttachVol = (pAttachObj->isMesh()) ? dynamic_cast<LLVOVolume*>(pAttachObj) : nullptr)
+			{
+				pAttachVol->forceLOD(3);
+				for (LLViewerObject* pChildObj : pAttachObj->getChildren())
+				{
+					if (LLVOVolume* pChildVol = (pChildObj->isMesh()) ? dynamic_cast<LLVOVolume*>(pChildObj) : nullptr)
+						pAttachVol->forceLOD(3);
+				}
+			}
+		}
+	}
+}
+// [/SL:KB]
+
 // virtual
 void LLVOAvatar::invalidateComposite( LLTexLayerSet* layerset)
 {

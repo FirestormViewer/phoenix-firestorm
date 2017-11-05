@@ -1936,6 +1936,8 @@ class LLAdvancedRebakeTextures : public view_listener_t
 // [SL:KB] - Patch: Appearance-PhantomAttach | Checked: Catznip-5.0
 void handle_refresh_attachments()
 {
+	if (isAgentAvatarValid())
+		gAgentAvatarp->rebuildAttachments();
 	LLAttachmentsMgr::instance().refreshAttachments();
 }
 // [/SL:KB]
@@ -4088,6 +4090,13 @@ void handle_reset_view()
 	gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
 	reset_view_final( TRUE );
 	LLFloaterCamera::resetCameraMode();
+
+// [SL:KB] - Patch: Appearance-RefreshAttachments | Checked: Catznip-5.3
+	if (isAgentAvatarValid())
+	{
+		gAgentAvatarp->rebuildAttachments();
+	}
+// [/SL:KB]
 }
 
 class LLViewResetView : public view_listener_t
@@ -6080,6 +6089,9 @@ class LLAvatarResetSkeleton: public view_listener_t
 		if(avatar)
         {
             avatar->resetSkeleton(false);
+// [SL:KB] - Patch: Appearance-RefreshAttachments | Checked: Catznip-5.3
+			avatar->rebuildAttachments();
+// [/SL:KB]
         }
         return true;
     }
@@ -6093,6 +6105,9 @@ class LLAvatarResetSkeletonAndAnimations : public view_listener_t
 		if (avatar)
 		{
 			avatar->resetSkeleton(true);
+// [SL:KB] - Patch: Appearance-RefreshAttachments | Checked: Catznip-5.3
+			avatar->rebuildAttachments();
+// [/SL:KB]
 		}
 		return true;
 	}

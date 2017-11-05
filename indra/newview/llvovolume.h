@@ -154,6 +154,9 @@ public:
 				LLVector3 volumeDirectionToAgent(const LLVector3& dir) const;
 
 				
+// [FS:Beq] - Patch: Appearance-RebuildAttachments | Checked: Catznip-5.3
+				void    forceLOD(S32 lod);
+// [/FS]
 				BOOL	getVolumeChanged() const				{ return mVolumeChanged; }
 				
 	/*virtual*/ F32  	getRadius() const						{ return mVObjRadius; };
