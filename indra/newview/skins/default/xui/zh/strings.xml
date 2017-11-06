@@ -4859,7 +4859,7 @@ http://secondlife.com/viewer-access-faq
 	<string name="server_is_down">
 		儘管我們努力避免，還是發生意料外的錯誤。
 
-	請察訪 status.secondlifegrid.net 看是否發生了已知狀況。
+	請察訪 https://secondlife-status.statuspage.io 看是否發生了已知狀況。
         如果文體繼續發生，請檢查你的網路和防火牆設定。
 	</string>
 	<string name="dateTimeWeekdaysNames">

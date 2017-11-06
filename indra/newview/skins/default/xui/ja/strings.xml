@@ -4936,7 +4936,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="server_is_down">
 		大変申し訳ございませんが、予期しない問題が発生しました。
 
-	サービスに関する既知の問題については、http:/status.secondlifegrid.net をご覧ください。
+	サービスに関する既知の問題については、https://secondlife-status.statuspage.io をご覧ください。
 問題が引き続き発生する場合は、お使いのネットワークやファイアウォールの設定を調べてください。
 	</string>
 	<string name="dateTimeWeekdaysNames">
