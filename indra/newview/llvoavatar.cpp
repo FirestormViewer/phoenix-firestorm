@@ -6805,9 +6805,6 @@ LLViewerObject *	LLVOAvatar::findAttachmentByID( const LLUUID & target_id ) cons
 // [SL:KB] - Patch: Appearance-RefreshAttachments | Checked: Catznip-5.3
 void LLVOAvatar::rebuildAttachments()
 {
-	if (!isValid())
-		return;
-
 	for (const auto& kvpAttachPt : mAttachmentPoints)
 	{
 		for (LLViewerObject* pAttachObj : kvpAttachPt.second->mAttachedObjects)
