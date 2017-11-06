@@ -26,6 +26,7 @@
             <pie_menu name="ResetMenu" label="Resetuj &gt;">
                 <pie_slice label="Szkielet i animacje" name="Reset Skeleton And Animations"/>
                 <pie_slice label="Szkielet" name="Reset Skeleton"/>
+                <pie_slice label="Detale meszu" name="Reset Mesh LOD" />
             </pie_menu>
             <pie_slice label="Zrzuć XML" name="Dump XML"/>
             <pie_menu name="RenderMenu" label="Renderuj &gt;">
