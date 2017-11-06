@@ -4069,7 +4069,7 @@ Krænkelsesanmeldelse
 	<string name="server_is_down">
 		Desværre er noget gået galt.
 
-	Check venligst status.secondlifegrid.net for at se om der skulle være driftsproblemer.
+	Check venligst https://secondlife-status.statuspage.io for at se om der skulle være driftsproblemer.
 	Hvis du bliver ved med at have problemer, check venligst din firewall- og netværksopsætning.
 	</string>
 	<string name="dateTimeWeekdaysNames">
