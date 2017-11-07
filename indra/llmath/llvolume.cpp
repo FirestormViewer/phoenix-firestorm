@@ -52,8 +52,6 @@
 #include "llmatrix4a.h"
 #include "lltimer.h"
 
-#include "nd/ndintrin.h" // For FAA/FAD
-
 #define DEBUG_SILHOUETTE_BINORMALS 0
 #define DEBUG_SILHOUETTE_NORMALS 0 // TomY: Use this to display normals using the silhouette
 #define DEBUG_SILHOUETTE_EDGE_MAP 0 // DaveP: Use this to display edge map using the silhouette
@@ -2055,17 +2053,10 @@ void LLPathParams::copyParams(const LLPathParams &params)
 	setSkew(params.getSkew());
 }
 
-// <FS:ND> Switch the logic around. Different threads can race for profile_delete_lock. To make this work, each once increments
-// profile_delete_lock to signal a LLProfile can be deleted. Once 0 it is illegal again to call the dtor
-// S32 profile_delete_lock = 1 ; 
-volatile U32 profile_delete_lock = 0 ; 
-// </FS:ND>
+S32 profile_delete_lock = 1 ; 
 LLProfile::~LLProfile()
 {
-	// <FS:ND> See above. IF all threads reset profile_delete_lock to 0 deletion is illegal.
-	// if(profile_delete_lock)
-	if(!profile_delete_lock)
-	// </FS:ND>
+	if(profile_delete_lock)
 	{
 		LL_ERRS() << "LLProfile should not be deleted here!" << LL_ENDL ;
 	}
@@ -2134,17 +2125,9 @@ LLVolume::~LLVolume()
 	sNumMeshPoints -= mMesh.size();
 	delete mPathp;
 
-	// <FS:ND> We might arrive here from multiple threads. To properly guard profile_delete_lock it's now valid to delete a LLProfile when profile_delete_lock is > 0
-
-	// profile_delete_lock = 0 ;
-	// delete mProfilep;
-	// profile_delete_lock = 1 ;
-
-	nd::intrin::FAA( &profile_delete_lock );
+	profile_delete_lock = 0 ;
 	delete mProfilep;
-	nd::intrin::FAD( &profile_delete_lock );
-
-	// </FS:ND>
+	profile_delete_lock = 1 ;
 
 	mPathp = NULL;
 	mProfilep = NULL;
