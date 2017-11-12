@@ -1150,7 +1150,14 @@ LLVertexBuffer::~LLVertexBuffer()
 	sVertexCount -= mNumVerts;
 	sIndexCount -= mNumIndices;
 
-	llassert_always(!mMappedData && !mMappedIndexData);
+	if (mMappedData)
+	{
+		LL_ERRS() << "Failed to clear vertex buffer's vertices" << LL_ENDL;
+	}
+	if (mMappedIndexData)
+	{
+		LL_ERRS() << "Failed to clear vertex buffer's indices" << LL_ENDL;
+	}
 };
 
 void LLVertexBuffer::placeFence() const
@@ -1252,7 +1259,7 @@ void LLVertexBuffer::releaseIndices()
 	sGLCount--;
 }
 
-void LLVertexBuffer::createGLBuffer(U32 size)
+bool LLVertexBuffer::createGLBuffer(U32 size)
 {
 	if (mGLBuffer)
 	{
@@ -1261,8 +1268,10 @@ void LLVertexBuffer::createGLBuffer(U32 size)
 
 	if (size == 0)
 	{
-		return;
+		return true;
 	}
+
+	bool sucsess = true;
 
 	mEmpty = true;
 
@@ -1281,9 +1290,15 @@ void LLVertexBuffer::createGLBuffer(U32 size)
 		mSize = size;
 		claimMem(mSize);
 	}
+
+	if (!mMappedData)
+	{
+		sucsess = false;
+	}
+	return sucsess;
 }
 
-void LLVertexBuffer::createGLIndices(U32 size)
+bool LLVertexBuffer::createGLIndices(U32 size)
 {
 	if (mGLIndices)
 	{
@@ -1292,8 +1307,10 @@ void LLVertexBuffer::createGLIndices(U32 size)
 	
 	if (size == 0)
 	{
-		return;
+		return true;
 	}
+
+	bool sucsess = true;
 
 	mEmpty = true;
 
@@ -1315,6 +1332,12 @@ void LLVertexBuffer::createGLIndices(U32 size)
 		mGLIndices = ++gl_buffer_idx;
 		mIndicesSize = size;
 	}
+
+	if (!mMappedIndexData)
+	{
+		sucsess = false;
+	}
+	return sucsess;
 }
 
 void LLVertexBuffer::destroyGLBuffer()
@@ -1357,9 +1380,11 @@ void LLVertexBuffer::destroyGLIndices()
 	//unbind();
 }
 
-void LLVertexBuffer::updateNumVerts(S32 nverts)
+bool LLVertexBuffer::updateNumVerts(S32 nverts)
 {
 	llassert(nverts >= 0);
+
+	bool sucsess = true;
 
 	if (nverts > 65536)
 	{
@@ -1371,31 +1396,37 @@ void LLVertexBuffer::updateNumVerts(S32 nverts)
 
 	if (needed_size > mSize || needed_size <= mSize/2)
 	{
-		createGLBuffer(needed_size);
+		sucsess &= createGLBuffer(needed_size);
 	}
 
 	sVertexCount -= mNumVerts;
 	mNumVerts = nverts;
 	sVertexCount += mNumVerts;
+
+	return sucsess;
 }
 
-void LLVertexBuffer::updateNumIndices(S32 nindices)
+bool LLVertexBuffer::updateNumIndices(S32 nindices)
 {
 	llassert(nindices >= 0);
+
+	bool sucsess = true;
 
 	U32 needed_size = sizeof(U16) * nindices;
 
 	if (needed_size > mIndicesSize || needed_size <= mIndicesSize/2)
 	{
-		createGLIndices(needed_size);
+		sucsess &= createGLIndices(needed_size);
 	}
 
 	sIndexCount -= mNumIndices;
 	mNumIndices = nindices;
 	sIndexCount += mNumIndices;
+
+	return sucsess;
 }
 
-void LLVertexBuffer::allocateBuffer(S32 nverts, S32 nindices, bool create)
+bool LLVertexBuffer::allocateBuffer(S32 nverts, S32 nindices, bool create)
 {
 	stop_glerror();
 
@@ -1405,10 +1436,12 @@ void LLVertexBuffer::allocateBuffer(S32 nverts, S32 nindices, bool create)
 		LL_ERRS() << "Bad vertex buffer allocation: " << nverts << " : " << nindices << LL_ENDL;
 	}
 
-	updateNumVerts(nverts);
-	updateNumIndices(nindices);
+	bool sucsess = true;
+
+	sucsess &= updateNumVerts(nverts);
+	sucsess &= updateNumIndices(nindices);
 	
-	if (create && (nverts || nindices))
+	if (sucsess && create && (nverts || nindices))
 	{
 		//actually allocate space for the vertex buffer if using VBO mapping
 		flush();
@@ -1421,6 +1454,8 @@ void LLVertexBuffer::allocateBuffer(S32 nverts, S32 nindices, bool create)
 			setupVertexArray();
 		}
 	}
+
+	return sucsess;
 }
 
 static LLTrace::BlockTimerStatHandle FTM_SETUP_VERTEX_ARRAY("Setup VAO");
@@ -1543,15 +1578,17 @@ void LLVertexBuffer::setupVertexArray()
 	unbind();
 }
 
-void LLVertexBuffer::resizeBuffer(S32 newnverts, S32 newnindices)
+bool LLVertexBuffer::resizeBuffer(S32 newnverts, S32 newnindices)
 {
 	llassert(newnverts >= 0);
 	llassert(newnindices >= 0);
 
-	updateNumVerts(newnverts);		
-	updateNumIndices(newnindices);
+	bool sucsess = true;
+
+	sucsess &= updateNumVerts(newnverts);		
+	sucsess &= updateNumIndices(newnindices);
 	
-	if (useVBOs())
+	if (sucsess && useVBOs())
 	{
 		flush();
 
@@ -1560,6 +1597,8 @@ void LLVertexBuffer::resizeBuffer(S32 newnverts, S32 newnindices)
 			setupVertexArray();
 		}
 	}
+
+	return sucsess;
 }
 
 bool LLVertexBuffer::useVBOs() const

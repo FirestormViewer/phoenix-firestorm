@@ -682,6 +682,8 @@ protected:
 
 class LLProfile
 {
+	friend class LLVolume;
+
 public:
 	LLProfile()
 		: mOpen(FALSE),
@@ -691,8 +693,6 @@ public:
 		  mTotal(2)
 	{
 	}
-
-	~LLProfile();
 
 	S32	 getTotal() const								{ return mTotal; }
 	S32	 getTotalOut() const							{ return mTotalOut; }	// Total number of outside points
@@ -726,6 +726,8 @@ public:
 	friend std::ostream& operator<<(std::ostream &s, const LLProfile &profile);
 
 protected:
+	~LLProfile();
+
 	static S32 getNumNGonPoints(const LLProfileParams& params, S32 sides, F32 offset=0.0f, F32 bevel = 0.0f, F32 ang_scale = 1.f, S32 split = 0);
 	void genNGon(const LLProfileParams& params, S32 sides, F32 offset=0.0f, F32 bevel = 0.0f, F32 ang_scale = 1.f, S32 split = 0);
 

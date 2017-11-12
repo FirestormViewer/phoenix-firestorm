@@ -99,6 +99,8 @@ public:
 
 	static void newWindow();
 
+	void toggleFindOptions();
+
 	// <FS:Zi> Filter dropdown
 	void onFilterTypeSelected(const std::string& filter_type_name);
 	void updateFilterDropdown(const LLInventoryFilter* filter);
@@ -116,7 +118,6 @@ protected:
 	void setFilterTextFromFilter();
 	void startSearch();
 	
-	void toggleFindOptions();
 	void onSelectionChange(LLInventoryPanel *panel, const std::deque<LLFolderViewItem*>& items, BOOL user_action);
 
 	static BOOL filtersVisible(void* user_data);
