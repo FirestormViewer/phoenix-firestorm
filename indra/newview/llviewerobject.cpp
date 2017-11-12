@@ -709,6 +709,18 @@ void LLViewerObject::setNameValueList(const std::string& name_value_list)
 	}
 }
 
+BOOL LLViewerObject::isAnySelected() const
+{
+    bool any_selected = isSelected();
+    for (child_list_t::const_iterator iter = mChildList.begin();
+         iter != mChildList.end(); iter++)
+    {
+        const LLViewerObject* child = *iter;
+        any_selected = any_selected || child->isSelected();
+    }
+    return any_selected;
+}
+
 void LLViewerObject::setSelected(BOOL sel)
 {
 	mUserSelected = sel;
@@ -3030,9 +3042,11 @@ void LLViewerObject::unlinkControlAvatar()
     if (isRootEdit())
     {
         // This will remove the entire linkset from the control avatar
-        LLControlAvatar *av = mControlAvatar;
-        mControlAvatar = NULL;
-        av->markForDeath();
+        if (mControlAvatar)
+        {
+            mControlAvatar->markForDeath();
+            mControlAvatar = NULL;
+        }
     }
     // For non-root prims, removing from the linkset will
     // automatically remove the control avatar connection.
@@ -3688,13 +3702,21 @@ F32 LLViewerObject::recursiveGetEstTrianglesMax() const
 S32 LLViewerObject::getAnimatedObjectMaxTris() const
 {
     S32 max_tris = 0;
-    LLSD features;
-    if (gAgent.getRegion())
+    // AXON remove after server testing done
+    if (gSavedSettings.getBOOL("AnimatedObjectsIgnoreLimits"))
     {
-        gAgent.getRegion()->getSimulatorFeatures(features);
-        if (features.has("AnimatedObjects"))
+        max_tris = S32_MAX;
+    }
+    else
+    {
+        if (gAgent.getRegion())
         {
-            max_tris = features["AnimatedObjects"]["AnimatedObjectMaxTris"].asInteger();
+            LLSD features;
+            gAgent.getRegion()->getSimulatorFeatures(features);
+            if (features.has("AnimatedObjects"))
+            {
+                max_tris = features["AnimatedObjects"]["AnimatedObjectMaxTris"].asInteger();
+            }
         }
     }
     return max_tris;
@@ -6130,6 +6152,17 @@ void LLViewerObject::updateVolume(const LLVolumeParams& volume_params)
 	}
 }
 
+void LLViewerObject::recursiveMarkForUpdate(BOOL priority)
+{
+    for (LLViewerObject::child_list_t::iterator iter = mChildList.begin();
+         iter != mChildList.end(); iter++)
+    {
+        LLViewerObject* child = *iter;
+        child->markForUpdate(priority);
+    }
+    markForUpdate(priority);
+}
+
 void LLViewerObject::markForUpdate(BOOL priority)
 {
 	if (mDrawable.notNull())
@@ -6180,6 +6213,11 @@ void LLViewerObject::setRegion(LLViewerRegion *regionp)
 		LLViewerObject* child = *i;
 		child->setRegion(regionp);
 	}
+
+    if (mControlAvatar)
+    {
+        mControlAvatar->setRegion(regionp);
+    }
 
 	setChanged(MOVED | SILHOUETTE);
 	updateDrawable(FALSE);

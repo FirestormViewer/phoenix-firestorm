@@ -221,6 +221,8 @@ public:
 	LLViewerRegion* getRegion() const				{ return mRegionp; }
 
 	BOOL isSelected() const							{ return mUserSelected; }
+    // Check whole linkset
+    BOOL isAnySelected() const;
 	virtual void setSelected(BOOL sel);
 
 	const LLUUID &getID() const						{ return mID; }
@@ -232,6 +234,7 @@ public:
 	virtual BOOL isFlexible() const					{ return FALSE; }
 	virtual BOOL isSculpted() const 				{ return FALSE; }
 	virtual BOOL isMesh() const						{ return FALSE; }
+	virtual BOOL isRiggedMesh() const				{ return FALSE; }
 	virtual BOOL hasLightTexture() const			{ return FALSE; }
 
 	// This method returns true if the object is over land owned by
@@ -428,7 +431,8 @@ public:
 	// <FS:Ansariel> Getter for HUD icon attached to the object
 	LLPointer<LLHUDIcon> getIcon() const { return mIcon; };
 
-	void markForUpdate(BOOL priority);
+    void recursiveMarkForUpdate(BOOL priority);
+	virtual void markForUpdate(BOOL priority);
 	void updateVolume(const LLVolumeParams& volume_params);
 	virtual	void updateSpatialExtents(LLVector4a& min, LLVector4a& max);
 	virtual F32 getBinRadius();

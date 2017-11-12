@@ -32,6 +32,7 @@
 #include "llanimationstates.h"
 #include "llviewercontrol.h"
 #include "llmeshrepository.h"
+#include "llviewerregion.h"
 
 LLControlAvatar::LLControlAvatar(const LLUUID& id, const LLPCode pcode, LLViewerRegion* regionp) :
     LLVOAvatar(id, pcode, regionp),
@@ -227,6 +228,7 @@ void LLControlAvatar::updateDebugText()
         getAnimatedVolumes(volumes);
         S32 animated_volume_count = volumes.size();
         std::string active_string;
+        std::string type_string;
         std::string lod_string;
         S32 total_tris = 0;
         S32 total_verts = 0;
@@ -248,24 +250,51 @@ void LLControlAvatar::updateDebugText()
                 {
                     active_string += "S";
                 }
+                if (volp->isRiggedMesh())
+                {
+                    // Rigged/animateable mesh
+                    type_string += "R";
+                }
+                else if (volp->isMesh())
+                {
+                    // Static mesh
+                    type_string += "M";
+                }
+                else
+                {
+                    // Any other prim
+                    type_string += "P";
+                }
             }
             else
             {
                 active_string += "-";
+                type_string += "-";
             }
         }
         addDebugText(llformat("CAV obj %d anim %d active %s",
                               total_linkset_count, animated_volume_count, active_string.c_str()));
-
-        addDebugText(llformat("lod %s",lod_string.c_str()));
+        addDebugText(llformat("types %s lods %s", type_string.c_str(), lod_string.c_str()));
         addDebugText(llformat("tris %d verts %d", total_tris, total_verts));
+        std::string region_name = "no region";
+        if (mRootVolp->getRegion())
+        {
+            region_name = mRootVolp->getRegion()->getName();
+        }
+        std::string skel_region_name = "skel no region";
+        if (getRegion())
+        {
+            skel_region_name = getRegion()->getName();
+        }
+        addDebugText(llformat("region %x %s skel %x %s",
+                              mRootVolp->getRegion(), region_name.c_str(),
+                              getRegion(), skel_region_name.c_str()));
         //addDebugText(llformat("anim time %.1f (step %f factor %f)", 
         //                      mMotionController.getAnimTime(),
         //                      mMotionController.getTimeStep(), 
         //                      mMotionController.getTimeFactor()));
         
     }
-
     LLVOAvatar::updateDebugText();
 }
 
@@ -329,7 +358,6 @@ void LLControlAvatar::updateAnimations()
     }
     mSignaledAnimations = anims;
 
-    LL_DEBUGS("AXON") << "process animation state changes here" << LL_ENDL;
     processAnimationStateChanges();
 }
 

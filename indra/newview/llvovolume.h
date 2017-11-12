@@ -165,7 +165,7 @@ public:
 	/*virtual*/ F32  	getRadius() const						{ return mVObjRadius; };
 				const LLMatrix4& getWorldMatrix(LLXformMatrix* xform) const;
 
-				void	markForUpdate(BOOL priority)			{ LLViewerObject::markForUpdate(priority); mVolumeChanged = TRUE; }
+				void	markForUpdate(BOOL priority);
 				void    faceMappingChanged()                    { mFaceMappingChanged=TRUE; };
 
 	/*virtual*/ void	onShift(const LLVector4a &shift_vector); // Called when the drawable shifts
@@ -265,6 +265,7 @@ public:
 	virtual BOOL isFlexible() const;
 	virtual BOOL isSculpted() const;
 	virtual BOOL isMesh() const;
+	virtual BOOL isRiggedMesh() const;
 	virtual BOOL hasLightTexture() const;
 
     
@@ -272,6 +273,8 @@ public:
 	BOOL canBeFlexible() const;
 	BOOL setIsFlexible(BOOL is_flexible);
 
+    const LLMeshSkinInfo* getSkinInfo() const;
+    
     // Extended Mesh Properties
     U32 getExtendedMeshFlags() const;
     void onSetExtendedMeshFlags(U32 flags);
@@ -279,7 +282,7 @@ public:
     bool canBeAnimatedObject() const;
     bool isAnimatedObject() const;
     bool isAnimatedObjectStateConsistent() const;
-    void updateAnimatedObjectState(LLViewerObject *old_parent, LLViewerObject *new_parent);
+    void updateAnimatedObjectStateOnReparent(LLViewerObject *old_parent, LLViewerObject *new_parent);
 
     // AXON For animated objects, we need to track animations requested
     // per-object, then reconcile those to manage the control avatar
