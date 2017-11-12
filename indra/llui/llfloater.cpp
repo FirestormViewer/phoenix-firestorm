@@ -696,11 +696,7 @@ void LLFloater::openFloater(const LLSD& key)
 		&& (!getVisible() || isMinimized()))
 	{
 		// <FS:PP> UI Sounds connection
-		if (getName() == "incoming call")
-		{
-			make_ui_sound("UISndIncomingVoiceCall");
-		}
-		else if (getName() == "script_floater")
+		if (getName() == "script_floater")
 		{
 			make_ui_sound("UISndScriptFloaterOpen");
 		}
@@ -1239,11 +1235,11 @@ void LLFloater::handleReshape(const LLRect& new_rect, bool by_user)
 			{
 				setDocked( false, false);
 			}
-		storeRectControl();
 		mPositioning = LLFloaterEnums::POSITIONING_RELATIVE;
 		LLRect screen_rect = calcScreenRect();
 		mPosition = LLCoordGL(screen_rect.getCenterX(), screen_rect.getCenterY()).convert();
-	}
+		}
+		storeRectControl();
 
 		// gather all snapped dependents
 		for(handle_set_iter_t dependent_it = mDependents.begin();
@@ -2078,19 +2074,18 @@ void	LLFloater::drawShadow(LLPanel* panel)
 
 void LLFloater::updateTransparency(LLView* view, ETypeTransparency transparency_type)
 {
-	if (!view) return;
-	child_list_t children = *view->getChildList();
-	child_list_t::iterator it = children.begin();
-
-	LLUICtrl* ctrl = dynamic_cast<LLUICtrl*>(view);
-	if (ctrl)
+	if (view)
 	{
-		ctrl->setTransparencyType(transparency_type);
-	}
+		if (view->isCtrl())
+		{
+			static_cast<LLUICtrl*>(view)->setTransparencyType(transparency_type);
+		}
 
-	for(; it != children.end(); ++it)
-	{
-		updateTransparency(*it, transparency_type);
+		for (LLView* pChild : *view->getChildList())
+		{
+			if ( (pChild->getChildCount()) || (pChild->isCtrl()) )
+				updateTransparency(pChild, transparency_type);
+		}
 	}
 }
 
@@ -2396,8 +2391,7 @@ LLFloaterView::LLFloaterView (const Params& p)
 	mSnapOffsetBottom(0),
 	mSnapOffsetChatBar(0),
 	mSnapOffsetLeft(0),
-	mSnapOffsetRight(0),
-	mFrontChild(NULL)
+	mSnapOffsetRight(0)
 {
 	mSnapView = getHandle();
 }
@@ -2553,7 +2547,7 @@ void LLFloaterView::bringToFront(LLFloater* child, BOOL give_focus, BOOL restore
 	if (!child)
 		return;
 
-	if (mFrontChild == child)
+	if (mFrontChildHandle.get() == child)
 	{
 		if (give_focus && !gFocusMgr.childHasKeyboardFocus(child))
 		{
@@ -2562,7 +2556,7 @@ void LLFloaterView::bringToFront(LLFloater* child, BOOL give_focus, BOOL restore
 		return;
 	}
 
-	mFrontChild = child;
+	mFrontChildHandle = child->getHandle();
 
 	// *TODO: make this respect floater's mAutoFocus value, instead of
 	// using parameter

@@ -62,8 +62,6 @@
 		</menu>
 	</menu_bar>
 	<filter_editor label="Filtrar" name="inventory search editor" tool_tip="Escribe una o más palabras a buscar, separadas por '+'"/>
-	<button name="collapse_btn" label="Colapsar"/>
-	<button name="expand_btn" label="Expandir"/>
 	<text name="filter_label" value="Filtro:"/>
 	<combo_box name="filter_combo_box">
 		<combo_box.item value="filter_type_all" label="Todo"/>

@@ -4,7 +4,7 @@
 		Cosa sta succedendo?
 	</text>
 	<text name="status_counter_label">
-		140
+		280
 	</text>
 	<check_box initial_value="true" label="Includi il luogo in SL" name="add_location_cb"/>
 	<check_box initial_value="true" label="Includi una foto" name="add_photo_cb"/>

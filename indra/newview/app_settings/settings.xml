@@ -16873,6 +16873,19 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>ShowSpecificLODInEdit</key>
+    <map>
+      <key>Comment</key>
+      <string>Force the display of a specific LOD while editing</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <string>-1</string>
+      <key>Backup</key>
+      <integer>0</integer>
+    </map>
     <key>SocialPhotoResolution</key>
     <map>
       <key>Comment</key>
@@ -22780,17 +22793,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>FSSyncronizeTextureMaps</key>
-      <map>
-      <key>Comment</key>
-      <string>Deprecated - Leave this at ZERO and use SyncMaterialSettings instead. </string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <!-- <FS_Zi> Add avatar hitbox debug -->
     <key>DebugRenderHitboxes</key>
     <map>
@@ -24469,6 +24471,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>If enabled, emptying trash will not double check before deleting. WARNING: You should only use this if you are a regular trash emptier and are confident that you will not lose things</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSRemapLinuxShortcuts</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, use the special shortcuts on Linux to remap shortcuts that are already in use by the operating system (e.g. CTRL-ALT-Fx)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

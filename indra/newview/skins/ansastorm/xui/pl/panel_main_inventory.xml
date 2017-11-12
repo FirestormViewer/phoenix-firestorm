@@ -70,8 +70,6 @@
 		</menu>
 	</menu_bar>
 	<filter_editor label="Filtruj Szafę" name="inventory search editor" tool_tip="Wpisz jedno lub więcej słów które chcesz wyszukać, oddzielonych za pomocą '+' "/>
-	<button name="collapse_btn" label="Zwiń"/>
-	<button name="expand_btn" label="Rozwiń" />
 	<text name="filter_label" value="Filtruj:"/>
 	<combo_box name="filter_combo_box">
 		<combo_box.item value="filter_type_all" label="Wszystkie typy" />

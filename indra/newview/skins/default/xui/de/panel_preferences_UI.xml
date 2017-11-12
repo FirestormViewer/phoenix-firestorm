@@ -73,6 +73,7 @@
 		<text name="FSLegacyNotificationWellRequiresRestart">
 			(Erfordert Neustart)
 		</text>
+		<check_box label="Shortcuts anpassen, die von Linux verwendet werden (nur Linux; erfordert Neustart)" name="FSRemapLinuxShortcuts" tool_tip="Aktivieren, die Shortcuts umzudefinieren, die bereits durch das Linux-Betriebssystem verwendet werden, z.B. STRG-ALT-Fx."/>
 		<slider label_width="230" label="Wiederholungen für blinkende IM-Reiter:" name="ButtonsFlashCount"/>
 		<slider label_width="230" label="Aufblinkdauer für IM-Reiter:" tool_tip="Legt fest, wie lange in Sekunden ein einzelnes Aufblinken eines IM-Reiter dauert - verwendet für IM-Benachrichtungen" name="ButtonFlashRate"/>
 		<text name="ButtonFlashRateText">

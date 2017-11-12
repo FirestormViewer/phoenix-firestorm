@@ -28,7 +28,7 @@
            name="status_counter_label"
            top="5"
            type="string">
-            140
+            280
           </text>
           <text_editor
            follows="left|top"
@@ -37,7 +37,7 @@
            width="250"
            left="10"
            length="1"
-           max_length="140"
+           max_length="280"
            name="photo_status"
            top_pad="0"
            type="string"

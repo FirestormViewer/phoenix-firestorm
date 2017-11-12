@@ -2643,12 +2643,13 @@ void LLIncomingCallDialog::onOpen(const LLSD& key)
 {
 	LLCallDialog::onOpen(key);
 
-	// <FS:Ansariel> FIRE-7556: Configurable User Interface sounds; This is done in LLFloater::openFloater
+	// <FS:Ansariel> FIRE-7556: Configurable User Interface sounds; This is controlled in llui.cpp
 	//if (gSavedSettings.getBOOL("PlaySoundIncomingVoiceCall"))
 	//{
 	//	// play a sound for incoming voice call if respective property is set
 	//	make_ui_sound("UISndStartIM");
 	//}
+	make_ui_sound("UISndIncomingVoiceCall");
 	// </FS:Ansariel>
 
 	LLStringUtil::format_map_t args;
@@ -2820,7 +2821,7 @@ void LLIncomingCallDialog::processCallResponse(S32 response, const LLSD &payload
 
 bool inviteUserResponse(const LLSD& notification, const LLSD& response)
 {
-	if (!gIMMgr)
+	if (!gIMMgr || gDisconnected)
 		return false;
 
 	const LLSD& payload = notification["payload"];

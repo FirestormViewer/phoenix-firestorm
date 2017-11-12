@@ -9,6 +9,7 @@
 	<menu_item_call label="Zaproś do grupy" name="Invite..."/>
 	<menu_item_call label="Reset szkieletu" name="Reset Skeleton"/>
 	<menu_item_call label="Reset szkieletu i animacji" name="Reset Skeleton And Animations"/>
+	<menu_item_call label="Reset detali meszu" name="Reset Mesh LOD" />
 	<context_menu label="Irytacja?" name="Annoyance">
 		<menu_item_call label="Zablokuj" name="Avatar Mute"/>
 		<menu_item_call label="Odblokuj" name="Avatar Unmute"/>

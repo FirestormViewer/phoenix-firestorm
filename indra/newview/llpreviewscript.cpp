@@ -631,12 +631,36 @@ void LLScriptEdCore::processKeywords()
 
 	LLColor3 color(LLUIColorTable::instance().getColor("SyntaxLslFunction"));
 	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
+	{
 		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
+	}
+
 #ifdef OPENSIM
 	if (LLGridManager::getInstance()->isInOpenSim())
-		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"), funcs, tooltips, color);
+	{
+		std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "scriptlibrary_ossl.xml");
+		if (LLFile::isfile(filename))
+		{
+			mEditor->loadKeywords(filename, funcs, tooltips, color);
+		}
+		else
+		{
+			mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"), funcs, tooltips, color);
+		}
+	}
+
 	if (LLGridManager::getInstance()->isInAuroraSim())
-		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"), funcs, tooltips, color);
+	{
+		std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "scriptlibrary_aa.xml");
+		if (LLFile::isfile(filename))
+		{
+			mEditor->loadKeywords(filename, funcs, tooltips, color);
+		}
+		else
+		{
+			mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"), funcs, tooltips, color);
+		}
+	}
 #endif // OPENSIM
 	// </FS:Ansariel>
 	

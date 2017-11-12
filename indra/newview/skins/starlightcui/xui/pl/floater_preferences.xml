@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Preferences" title="USTAWIENIA">
+	<floater.string name="email_unverified_tooltip">
+		Zweryfikuj swój email, aby móc wysyłać wiadomości IM:
+https://accounts.secondlife.com/change_email/
+	</floater.string>
 	<floater.string name="LoginToChange">
 		Zmiana po logowaniu
 	</floater.string>

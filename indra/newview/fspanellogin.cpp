@@ -182,7 +182,8 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	mUsernameLength(0),
 	mPasswordLength(0),
 	mLocationLength(0),
-	mShowFavorites(false)
+	mShowFavorites(false),
+	mInitialized(false)
 {
 	setBackgroundVisible(FALSE);
 	setBackgroundOpaque(TRUE);
@@ -284,6 +285,8 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	username_combo->setCommitCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
 	username_combo->setFocusLostCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
 	mPreviousUsername = username_combo->getValue().asString();
+
+	mInitialized = true;
 }
 
 void FSPanelLogin::addFavoritesToStartLocation()
@@ -465,7 +468,10 @@ void FSPanelLogin::setFields(LLPointer<LLCredential> credential, bool from_start
 		LL_WARNS() << "Attempted setFields with no login view shown" << LL_ENDL;
 		return;
 	}
-	sCredentialSet = TRUE;
+	if (sInstance->mInitialized)
+	{
+		sCredentialSet = TRUE;
+	}
 	LL_INFOS("Credentials") << "Setting login fields to " << *credential << LL_ENDL;
 
 	std::string login_id;
