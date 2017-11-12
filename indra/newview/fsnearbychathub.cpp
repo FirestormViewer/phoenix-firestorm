@@ -759,7 +759,7 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
 						name = av_name.getUserName();
 						if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 						{
-							name = RlvStrings::getAnonym(name);
+							name = RlvStrings::getAnonym(av_name);
 						}
 						LLStringUtil::toLower(name);
 						found = (name.find(full_pattern) == 0);
@@ -787,7 +787,7 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
 						name = av_name.getUserName();
 						if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 						{
-							name = RlvStrings::getAnonym(name);
+							name = RlvStrings::getAnonym(av_name);
 						}
 						LLStringUtil::toLower(name);
 						found = (name.find(pattern) == 0);
@@ -813,7 +813,7 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
 				std::string replaced_text;
 				if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 				{
-					replaced_text += RlvStrings::getAnonym(first_name + " " + last_name) + " ";
+					replaced_text += RlvStrings::getAnonym(av_name) + " ";
 				}
 				else
 				{

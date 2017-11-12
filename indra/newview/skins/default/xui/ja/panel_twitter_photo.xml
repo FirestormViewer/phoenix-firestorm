@@ -4,7 +4,7 @@
 		いまどうしてる？
 	</text>
 	<text name="status_counter_label">
-		140
+		280
 	</text>
 	<check_box initial_value="true" label="SL の場所を含める" name="add_location_cb"/>
 	<check_box initial_value="true" label="写真を掲載する" name="add_photo_cb"/>

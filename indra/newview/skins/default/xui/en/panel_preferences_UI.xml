@@ -498,6 +498,16 @@
          name="FSLegacyNotificationWellRequiresRestart">
             (requires restart)
         </text>
+        <check_box
+         control_name="FSRemapLinuxShortcuts"
+         height="16"
+         label="Remap shortcuts already used by Linux (Linux only; requires restart)"
+         layout="topleft"
+         left="5"
+         name="FSRemapLinuxShortcuts"
+         tool_tip="If enabled, shortcuts that are already used by the Linux operating system (such as CTRL-ALT-Fx) will be remapped."
+         top_pad="5"
+         width="256" />
 
         <slider
          control_name="FlashCount"

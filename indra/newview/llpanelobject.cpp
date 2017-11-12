@@ -1046,6 +1046,9 @@ void LLPanelObject::getState( )
 	
 	// Compute control visibility, label names, and twist range.
 	// Start with defaults.
+	// <FS:Beq> FIRE-21772 mComboBaseType remians invisible after editing a mesh
+	mComboBaseType->setVisible(TRUE);
+	// </FS:Beq>
 	BOOL cut_visible                = TRUE;
 	BOOL hollow_visible             = TRUE;
 	BOOL top_size_x_visible			= TRUE;
@@ -1169,19 +1172,27 @@ void LLPanelObject::getState( )
 	default:
 		if (editable)
 		{
-			F32 tmp_scale_x = scale_x;
-			F32 tmp_scale_y = scale_y;
-			if ( selected_item == MI_BOX || selected_item == MI_CYLINDER || selected_item == MI_PRISM)
+			// <FS> Make sure to use the correct values for the LL default types. These
+			//      should be handled by the explicit cases and the ones in this if-condition.
+			//      Everything else are the special FS types and profiles
+			if (selected_item == MI_BOX || selected_item == MI_CYLINDER || selected_item == MI_PRISM)
 			{
-				tmp_scale_x = 1.f - tmp_scale_x;
-				tmp_scale_y = 1.f - tmp_scale_y;
+				mSpinScaleX->set( 1.f - scale_x );
+				mSpinScaleY->set( 1.f - scale_y );
+				mSpinScaleX->setMinValue(-1.f);
+				mSpinScaleX->setMaxValue(1.f);
+				mSpinScaleY->setMinValue(-1.f);
+				mSpinScaleY->setMaxValue(1.f);
 			}
-			mSpinScaleX->set( tmp_scale_x );
-			mSpinScaleY->set( tmp_scale_y );
-			mSpinScaleX->setMinValue(-4000.f);
-			mSpinScaleX->setMaxValue(4000.f);
-			mSpinScaleY->setMinValue(-4000.f);
-			mSpinScaleY->setMaxValue(4000.f);
+			else
+			{
+				mSpinScaleX->set( scale_x );
+				mSpinScaleY->set( scale_x );
+				mSpinScaleX->setMinValue(-4000.f);
+				mSpinScaleX->setMaxValue(4000.f);
+				mSpinScaleY->setMinValue(-4000.f);
+				mSpinScaleY->setMaxValue(4000.f);
+			}
 
 			// Torus' Hole Size is Box/Cyl/Prism's Taper
 			calcp->setVar(LLCalc::X_TAPER, 1.f - scale_x);

@@ -2384,7 +2384,7 @@ Abuse Report</string>
   <string name="server_is_down">
 	Despite our best efforts, something unexpected has gone wrong.
 
-Please check http://status.secondlifegrid.net to see if there is a known problem with the service.
+Please check https://secondlife-status.statuspage.io to see if there is a known problem with the service.
 If you continue to experience problems, please check your network and firewall setup.
   </string>
 

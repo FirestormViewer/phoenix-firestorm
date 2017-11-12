@@ -4919,7 +4919,7 @@ Bu iletiyi almaya devam ederseniz, lütfen [SUPPORT_SITE] bölümüne başvurun.
 	<string name="server_is_down">
 		Tüm çabalarımıza rağmen beklenmeyen bir hata meydana geldi.
 
-Hizmetle ilişkili bilinen bir sorun olup olmadığını görmek için lütfen http://status.secondlifegrid.net adresine bakın.
+Hizmetle ilişkili bilinen bir sorun olup olmadığını görmek için lütfen https://secondlife-status.statuspage.io adresine bakın.
         Sorun yaşamaya devam ederseniz lütfen ağınızın ve güvenlik duvarınızın ayarlarına bakın.
 	</string>
 	<string name="dateTimeWeekdaysNames">

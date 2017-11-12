@@ -10,6 +10,7 @@
 	<menu_item_call label="In Gruppe einladen" name="Invite..."/>
 	<menu_item_call label="Skelett zurücksetzen" name="Reset Skeleton"/>
 	<menu_item_call label="Skelett und Animationen zurücksetzen" name="Reset Skeleton And Animations"/>
+	<menu_item_call label="Mesh LOD zurücksetzen" name="Reset Mesh LOD"/>
 	<context_menu label="Belästigung" name="Remove">
 		<menu_item_call label="Ignorieren" name="Avatar Mute"/>
 		<menu_item_call label="Freischalten" name="Avatar Unmute"/>

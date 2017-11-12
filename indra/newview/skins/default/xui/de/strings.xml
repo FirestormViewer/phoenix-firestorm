@@ -5201,7 +5201,7 @@ Missbrauchsbericht
 	<string name="server_is_down">
 		Trotz all unserer Bemühungen ist ein unerwarteter Fehler aufgetreten.
 
-Bitte überprüfen Sie http://status.secondlifegrid.net, um herauszufinden, ob ein Problem mit dem Service vorliegt.
+Bitte überprüfen Sie https://secondlife-status.statuspage.io, um herauszufinden, ob ein Problem mit dem Service vorliegt.
 Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und Firewalleinstellungen.
 	</string>
 	<string name="dateTimeWeekdaysNames">

@@ -4766,7 +4766,7 @@ Denunciar abuso
 	<string name="server_is_down">
 		Aconteceu algo inesperado, apesar de termos tentado impedir isso.
 
-	Cheque secondlifegrid.net para saber se foi detectado um problema com o serviço.
+	Cheque https://secondlife-status.statuspage.io para saber se foi detectado um problema com o serviço.
         Se o problema persistir, cheque a configuração da sua rede e firewall.
 	</string>
 	<string name="dateTimeWeekdaysNames">
