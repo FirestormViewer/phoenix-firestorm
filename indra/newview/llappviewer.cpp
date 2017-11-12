@@ -829,10 +829,7 @@ LLAppViewer::LLAppViewer()
 LLAppViewer::~LLAppViewer()
 {
 	delete mSettingsLocationList;
-	LLViewerEventRecorder::deleteSingleton();
 
-	LLLoginInstance::instance().setUpdaterService(0);
-	
 	destroyMainloopTimeout();
     
 	// If we got to this destructor somehow, the app didn't hang.
@@ -2466,9 +2463,6 @@ bool LLAppViewer::cleanup()
 
 	removeMarkerFiles();
 
-	// <FS:Ansariel> Can't log after all singletons got destroyed
-	LL_INFOS() << "Goodbye!" << LL_ENDL;
-
 	// It's not at first obvious where, in this long sequence, generic cleanup
 	// calls OUGHT to go. So let's say this: as we migrate cleanup from
 	// explicit hand-placed calls into the generic mechanism, eventually
@@ -2481,20 +2475,14 @@ bool LLAppViewer::cleanup()
 	// realtime, or might throw an exception.
 	LLSingletonBase::cleanupAll();
 
+	// The logging subsystem depends on an LLSingleton. Any logging after
+	// LLSingletonBase::deleteAll() won't be recorded.
+	LL_INFOS() << "Goodbye!" << LL_ENDL;
+
 	// This calls every remaining LLSingleton's deleteSingleton() method.
 	// No class destructor should perform any cleanup that might take
 	// significant realtime, or throw an exception.
-	// LLSingleton machinery includes a last-gasp implicit deleteAll() call,
-	// so this explicit call shouldn't strictly be necessary. However, by the
-	// time the runtime engages that implicit call, it may already have
-	// destroyed things like std::cerr -- so the implicit deleteAll() refrains
-	// from logging anything. Since both cleanupAll() and deleteAll() call
-	// their respective cleanup methods in computed dependency order, it's
-	// probably useful to be able to log that order.
 	LLSingletonBase::deleteAll();
-
-	// <FS:Ansariel> Can't log after all singletons got destroyed
-	//LL_INFOS() << "Goodbye!" << LL_ENDL;
 
 	removeDumpDir();
 

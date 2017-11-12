@@ -1975,6 +1975,12 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 		dirtySpatialGroup(drawable->isState(LLDrawable::IN_REBUILD_Q1));
 		compiled = TRUE;
 		lodOrSculptChanged(drawable, compiled);
+		// <FS:Ansariel> Pull fix for MAINT-MAINT-6125 - Mesh avatar deforms constantly
+		if(drawable->isState(LLDrawable::REBUILD_RIGGED | LLDrawable::RIGGED)) 
+		{
+			updateRiggedVolume(false);
+		}
+		// </FS:Ansariel>
 		genBBoxes(FALSE);
 	}
 	// it has its own drawable (it's moved) or it has changed UVs or it has changed xforms from global<->local

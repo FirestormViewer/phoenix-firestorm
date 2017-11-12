@@ -132,6 +132,8 @@ private:
 
 	std::string		mPreviousUsername;
 	static std::string	sPassword;
+
+	bool			mInitialized;
 };
 
 #endif //FS_PANELLOGIN_H

@@ -127,6 +127,7 @@ static LLDefaultChildRegistry::Register<LLMenuGL> register_menu_default("menu");
 
 LLMenuItemGL::Params::Params()
 :	shortcut("shortcut"),
+	shortcut_linux("shortcut_linux"), // <FS> Remap shortcuts on Linux
 	jump_key("jump_key", KEY_NONE),
 	use_mac_ctrl("use_mac_ctrl", false),
 	allow_key_repeat("allow_key_repeat", false),
@@ -171,6 +172,15 @@ LLMenuItemGL::LLMenuItemGL(const LLMenuItemGL::Params& p)
 #endif // LL_DARWIN
 	
 	std::string shortcut = p.shortcut;
+// <FS> Remap shortcuts on Linux
+#ifdef LL_LINUX
+	static LLUICachedControl<bool> fsRemapLinuxShortcuts("FSRemapLinuxShortcuts", false);
+	if (fsRemapLinuxShortcuts && p.shortcut_linux.isProvided())
+	{
+		shortcut = p.shortcut_linux;
+	}
+#endif // LL_LINUX
+// </FS>
 	if (shortcut.find("control") != shortcut.npos)
 	{
 #ifdef LL_DARWIN

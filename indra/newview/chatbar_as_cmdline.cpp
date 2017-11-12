@@ -531,7 +531,7 @@ void key_to_name_callback(const LLUUID& id, const LLAvatarName& av_name)
 	std::string name = av_name.getCompleteName();
 	if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, id))
 	{
-		name = RlvStrings::getAnonym(name);
+		name = RlvStrings::getAnonym(av_name);
 	}
 	report_to_nearby_chat(llformat("%s: (%s)", id.asString().c_str(), name.c_str()));
 }

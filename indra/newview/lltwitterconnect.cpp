@@ -96,7 +96,7 @@ void LLTwitterConnect::twitterConnectCoro(std::string requestToken, std::string 
             std::string location = httpResults[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS][HTTP_IN_HEADER_LOCATION];
             if (location.empty())
             {
-                LL_WARNS("FlickrConnect") << "Missing Location header " << LL_ENDL;
+                LL_WARNS("TwitterConnect") << "Missing Location header " << LL_ENDL;
             }
             else
             {
@@ -180,7 +180,7 @@ void LLTwitterConnect::twitterShareImageCoro(LLPointer<LLImageFormatted> image, 
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("FlickrConnect", httpPolicy));
+        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("TwitterConnect", httpPolicy));
     LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
     LLCore::HttpHeaders::ptr_t httpHeaders(new LLCore::HttpHeaders);
     LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);

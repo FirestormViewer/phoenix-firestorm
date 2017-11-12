@@ -131,6 +131,12 @@ name="Edit Outfit">
        <menu_item_call.on_click
         function="Avatar.ResetSkeletonAndAnimations" />
   </menu_item_call>
+  <menu_item_call label="Reset Mesh LOD"
+       layout="topleft"
+       name="Reset Mesh LOD">
+       <menu_item_call.on_click
+        function="Avatar.ResetMeshLOD" />
+  </menu_item_call>
 
   <menu_item_call
     label="Friends"

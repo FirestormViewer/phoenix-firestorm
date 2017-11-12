@@ -2779,7 +2779,8 @@
             <menu_item_check
              label="UI"
              name="ToggleUI"
-             shortcut="control|alt|F1">
+             shortcut="control|alt|F1"
+             shortcut_linux="control|shift|F1">
                 <menu_item_check.on_check
                  function="Advanced.CheckFeature"
                  parameter="ui" />
@@ -2790,7 +2791,8 @@
             <menu_item_check
              label="Selected"
              name="Selected"
-             shortcut="control|alt|F2">
+             shortcut="control|alt|F2"
+             shortcut_linux="control|shift|F2">
                 <menu_item_check.on_check
                  function="Advanced.CheckFeature"
                  parameter="selected" />
@@ -2801,7 +2803,8 @@
             <menu_item_check
              label="Highlighted"
              name="Highlighted"
-             shortcut="control|alt|F3">
+             shortcut="control|alt|F3"
+             shortcut_linux="control|shift|F3">
                 <menu_item_check.on_check
                  function="Advanced.CheckFeature"
                  parameter="highlighted" />
@@ -2812,7 +2815,8 @@
             <menu_item_check
              label="Dynamic Textures"
              name="Dynamic Textures"
-             shortcut="control|alt|F4">
+             shortcut="control|alt|F4"
+             shortcut_linux="control|shift|F4">
                 <menu_item_check.on_check
                  function="Advanced.CheckFeature"
                  parameter="dynamic textures" />
@@ -2823,7 +2827,8 @@
             <menu_item_check
              label="Foot Shadows"
              name="Foot Shadows"
-             shortcut="control|alt|F5">
+             shortcut="control|alt|F5"
+             shortcut_linux="control|shift|F5">
                 <menu_item_check.on_check
                  function="Advanced.CheckFeature"
                  parameter="foot shadows" />
@@ -2834,7 +2839,8 @@
             <menu_item_check
              label="Fog"
              name="Fog"
-             shortcut="control|alt|F6">
+             shortcut="control|alt|F6"
+             shortcut_linux="control|shift|F6">
                 <menu_item_check.on_check
                  function="Advanced.CheckFeature"
                  parameter="fog" />
@@ -2845,7 +2851,8 @@
             <menu_item_check
              label="Test FRInfo"
              name="Test FRInfo"
-             shortcut="control|alt|F8">
+             shortcut="control|alt|F8"
+             shortcut_linux="control|shift|F8">
                 <menu_item_check.on_check
                  function="Advanced.CheckFeature"
                  parameter="fr info" />
@@ -2856,7 +2863,8 @@
             <menu_item_check
              label="Flexible Objects"
              name="Flexible Objects"
-             shortcut="control|alt|F9">
+             shortcut="control|alt|F9"
+             shortcut_linux="control|shift|F9">
                 <menu_item_check.on_check
                  function="Advanced.CheckFeature"
                  parameter="flexible" />
