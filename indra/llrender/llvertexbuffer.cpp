@@ -611,30 +611,64 @@ void LLVertexBuffer::drawArrays(U32 mode, const std::vector<LLVector3>& pos, con
 	//LLGLSLShader::startProfile();
 	//glDrawArrays(sGLMode[mode], 0, count);
 	//LLGLSLShader::stopProfile(count, mode);
+	bool has_buffer = true;
 	if (!sUtilityBuffer)
 	{
 		sUtilityBuffer = new LLVertexBuffer(MAP_VERTEX | MAP_NORMAL | MAP_TEXCOORD0, GL_STREAM_DRAW);
-		sUtilityBuffer->allocateBuffer(count, count, true);
+		has_buffer = sUtilityBuffer->allocateBuffer(count, count, true);
 	}
 	if (sUtilityBuffer->getNumVerts() < (S32) count)
 	{
-		sUtilityBuffer->resizeBuffer(count, count);
+		has_buffer = sUtilityBuffer->resizeBuffer(count, count);
 	}
 
-	LLStrider<LLVector3> vertex_strider;
-	LLStrider<LLVector3> normal_strider;
-	sUtilityBuffer->getVertexStrider(vertex_strider);
-	sUtilityBuffer->getNormalStrider(normal_strider);
-	for (U32 i = 0; i < count; ++i)
+	if (has_buffer)
 	{
-		*(vertex_strider++) = pos[i];
-		*(normal_strider++) = norm[i];
-	}
+		LLStrider<LLVector3> vertex_strider;
+		LLStrider<LLVector3> normal_strider;
+		sUtilityBuffer->getVertexStrider(vertex_strider);
+		sUtilityBuffer->getNormalStrider(normal_strider);
+		for (U32 i = 0; i < count; ++i)
+		{
+			*(vertex_strider++) = pos[i];
+			*(normal_strider++) = norm[i];
+		}
 
-	sUtilityBuffer->setBuffer(MAP_VERTEX | MAP_NORMAL);
-	LLGLSLShader::startProfile();
-	sUtilityBuffer->drawArrays(mode, 0, pos.size());
-	LLGLSLShader::stopProfile(count, mode);
+		sUtilityBuffer->setBuffer(MAP_VERTEX | MAP_NORMAL);
+		LLGLSLShader::startProfile();
+		sUtilityBuffer->drawArrays(mode, 0, pos.size());
+		LLGLSLShader::stopProfile(count, mode);
+	}
+	else
+	{
+		unbind();
+		
+		setupClientArrays(MAP_VERTEX | MAP_NORMAL);
+
+		LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
+
+		if (shader)
+		{
+			S32 loc = LLVertexBuffer::TYPE_VERTEX;
+			if (loc > -1)
+			{
+				glVertexAttribPointerARB(loc, 3, GL_FLOAT, GL_FALSE, 0, pos[0].mV);
+			}
+			loc = LLVertexBuffer::TYPE_NORMAL;
+			if (loc > -1)
+			{
+				glVertexAttribPointerARB(loc, 3, GL_FLOAT, GL_FALSE, 0, norm[0].mV);
+			}
+		}
+		else
+		{
+			glVertexPointer(3, GL_FLOAT, 0, pos[0].mV);
+			glNormalPointer(GL_FLOAT, 0, norm[0].mV);
+		}
+		LLGLSLShader::startProfile();
+		glDrawArrays(sGLMode[mode], 0, count);
+		LLGLSLShader::stopProfile(count, mode);
+	}
 	// </FS:Ansariel>
 }
 
@@ -663,36 +697,43 @@ void LLVertexBuffer::drawElements(U32 mode, const S32 num_vertices, const LLVect
 	gGL.syncMatrices();
 
 	// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
+	bool has_buffer = true;
 	if (!sUtilityBuffer)
 	{
 		sUtilityBuffer = new LLVertexBuffer(MAP_VERTEX | MAP_NORMAL | MAP_TEXCOORD0, GL_STREAM_DRAW);
-		sUtilityBuffer->allocateBuffer(num_vertices, num_indices, true);
+		has_buffer = sUtilityBuffer->allocateBuffer(num_vertices, num_indices, true);
 	}
 	if (sUtilityBuffer->getNumVerts() < num_vertices || sUtilityBuffer->getNumIndices() < num_indices)
 	{
-		sUtilityBuffer->resizeBuffer(llmax(sUtilityBuffer->getNumVerts(), num_vertices), llmax(sUtilityBuffer->getNumIndices(), num_indices));
+		has_buffer = sUtilityBuffer->resizeBuffer(llmax(sUtilityBuffer->getNumVerts(), num_vertices), llmax(sUtilityBuffer->getNumIndices(), num_indices));
 	}
 	// </FS:Ansariel>
 
 	U32 mask = LLVertexBuffer::MAP_VERTEX;
 	// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-	LLStrider<U16> index_strider;
-	LLStrider<LLVector3> vertex_strider;
-	sUtilityBuffer->getIndexStrider(index_strider);
-	sUtilityBuffer->getVertexStrider(vertex_strider);
-	const S32 index_size = ((num_indices * sizeof(U16)) + 0xF) & ~0xF;
-	const S32 vertex_size = ((num_vertices * 4 * sizeof(F32)) + 0xF) & ~0xF;
-	LLVector4a::memcpyNonAliased16((F32*)index_strider.get(), (F32*)indicesp, index_size);
-	LLVector4a::memcpyNonAliased16((F32*)vertex_strider.get(), (F32*)pos, vertex_size);
+	if (has_buffer)
+	{
+		LLStrider<U16> index_strider;
+		LLStrider<LLVector3> vertex_strider;
+		sUtilityBuffer->getIndexStrider(index_strider);
+		sUtilityBuffer->getVertexStrider(vertex_strider);
+		const S32 index_size = ((num_indices * sizeof(U16)) + 0xF) & ~0xF;
+		const S32 vertex_size = ((num_vertices * 4 * sizeof(F32)) + 0xF) & ~0xF;
+		LLVector4a::memcpyNonAliased16((F32*)index_strider.get(), (F32*)indicesp, index_size);
+		LLVector4a::memcpyNonAliased16((F32*)vertex_strider.get(), (F32*)pos, vertex_size);
+	}
 	// </FS:Ansariel>
 	if (tc)
 	{
 		mask = mask | LLVertexBuffer::MAP_TEXCOORD0;
 		// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-		LLStrider<LLVector2> tc_strider;
-		sUtilityBuffer->getTexCoord0Strider(tc_strider);
-		const S32 tc_size = ((num_vertices * 2 * sizeof(F32)) + 0xF) & ~0xF;
-		LLVector4a::memcpyNonAliased16((F32*)tc_strider.get(), (F32*)tc, tc_size);
+		if (has_buffer)
+		{
+			LLStrider<LLVector2> tc_strider;
+			sUtilityBuffer->getTexCoord0Strider(tc_strider);
+			const S32 tc_size = ((num_vertices * 2 * sizeof(F32)) + 0xF) & ~0xF;
+			LLVector4a::memcpyNonAliased16((F32*)tc_strider.get(), (F32*)tc, tc_size);
+		}
 		// </FS:Ansariel>
 	}
 
@@ -721,10 +762,40 @@ void LLVertexBuffer::drawElements(U32 mode, const S32 num_vertices, const LLVect
 	//LLGLSLShader::startProfile();
 	//glDrawElements(sGLMode[mode], num_indices, GL_UNSIGNED_SHORT, indicesp);
 	//LLGLSLShader::stopProfile(num_indices, mode);
-	sUtilityBuffer->setBuffer(mask);
-	LLGLSLShader::startProfile();
-	sUtilityBuffer->draw(mode, num_indices, 0);
-	LLGLSLShader::stopProfile(num_indices, mode);
+	if (has_buffer)
+	{
+		sUtilityBuffer->setBuffer(mask);
+		LLGLSLShader::startProfile();
+		sUtilityBuffer->draw(mode, num_indices, 0);
+		LLGLSLShader::stopProfile(num_indices, mode);
+	}
+	else
+	{
+		unbind();
+		
+		setupClientArrays(mask);
+
+		if (LLGLSLShader::sNoFixedFunction)
+		{
+			S32 loc = LLVertexBuffer::TYPE_VERTEX;
+			glVertexAttribPointerARB(loc, 3, GL_FLOAT, GL_FALSE, 16, pos);
+
+			if (tc)
+			{
+				loc = LLVertexBuffer::TYPE_TEXCOORD0;
+				glVertexAttribPointerARB(loc, 2, GL_FLOAT, GL_FALSE, 0, tc);
+			}
+		}
+		else
+		{
+			glTexCoordPointer(2, GL_FLOAT, 0, tc);
+			glVertexPointer(3, GL_FLOAT, 16, pos);
+		}
+
+		LLGLSLShader::startProfile();
+		glDrawElements(sGLMode[mode], num_indices, GL_UNSIGNED_SHORT, indicesp);
+		LLGLSLShader::stopProfile(num_indices, mode);
+	}
 	// </FS:Ansariel>
 }
 
