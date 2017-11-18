@@ -13190,4 +13190,18 @@ Due to server load, mass toggling online status visibility can take a while to b
      name="okignore"
      yestext="OK"/>
   </notification>
+  <notification
+   icon="alert.tga"
+   name="RenderVolumeLODFactorWarning"
+   type="alert">
+    WARNING: Your Level of Detail (LOD) seems to be set to a high value.
+
+Values higher than 8 are meaningless and give no improvement. You should set this to no higher than 4, and only in exceptional situations (like taking high-resolution photos). Setting this too high seriously lowers your graphics performance.
+
+For everyday use LOD set to 2 should suffice. If you own some objects that look deformed with such value, then you should consider replacing them.
+    <usetemplate
+     ignoretext="Warn about high Level of Detail"
+     name="okignore"
+     yestext="OK"/>
+  </notification>
 </notifications>
