@@ -37,6 +37,7 @@
 #include "llviewerregion.h"
 #include "llvopartgroup.h"
 #include "llworld.h"
+#include "llmutelist.h"
 #include "pipeline.h"
 #include "llspatialpartition.h"
 #include "llvoavatarself.h"
@@ -710,6 +711,11 @@ void LLViewerPartSim::updateSimulation()
 			LLViewerObject* vobj = mViewerPartSources[i]->mSourceObjectp;
 
 			if (vobj && vobj->isAvatar() && ((LLVOAvatar*)vobj)->isInMuteList())
+			{
+				upd = FALSE;
+			}
+
+			if(vobj && vobj->isOwnerInMuteList())
 			{
 				upd = FALSE;
 			}
