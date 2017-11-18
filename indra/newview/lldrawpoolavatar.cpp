@@ -1642,7 +1642,7 @@ void LLDrawPoolAvatar::getRiggedGeometry(
 			// allocate dummy triangle
 			buffer->allocateBuffer(1, 3, true);
 			memset((U8*)buffer->getMappedData(), 0, buffer->getSize());
-			memset((U8*)buffer->getIndicesPointer(), 0, buffer->getIndicesSize());
+			memset((U8*)buffer->getMappedIndices(), 0, buffer->getIndicesSize());
 		}
 	}
 	else
@@ -1656,7 +1656,7 @@ void LLDrawPoolAvatar::getRiggedGeometry(
 			// allocate dummy triangle
 			buffer->resizeBuffer(1, 3);
 			memset((U8*)buffer->getMappedData(), 0, buffer->getSize());
-			memset((U8*)buffer->getIndicesPointer(), 0, buffer->getIndicesSize());
+			memset((U8*)buffer->getMappedIndices(), 0, buffer->getIndicesSize());
 		}
 	}
 
@@ -1770,6 +1770,14 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(
 			//just rebuild this face
 			getRiggedGeometry(face, buffer, data_mask, skin, volume, vol_face);
 		}
+	}
+
+	if (buffer.isNull() ||
+		buffer->getNumVerts() != vol_face.mNumVertices ||
+		buffer->getNumIndices() != vol_face.mNumIndices)
+	{
+		// Allocation failed
+		return;
 	}
 
 	if (sShaderLevel <= 0 && face->mLastSkinTime < avatar->getLastSkinTime())
