@@ -5311,4 +5311,12 @@ Welche Bezeichnung soll für die Region
 		Abhängig von der Serverauslastung kann es einen Moment dauern, bis das Umschalten der Sichtbarkeit des Online-Status effektiv wird.
 		<usetemplate ignoretext="Weise mich darauf hin, dass das Umschalten der Sichtbarkeit des Online-Status etwas dauern kann." name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="RenderVolumeLODFactorWarning">
+		ACHTUNG: Die Detailstufe (LOD) scheint auf einen hohen Wert eingestellt zu sein.
+
+Werte höher als 8 sind bedeutungslos und erzeugen keine Verbesserung. Sie sollten diesen Wert nicht höher als 4 einstellen und zudem nur in bestimmten Situationen (z.B. zum Erstellen von Fotos in hohen Auflösungen). Ein hoher Wert verringert die Grafik-Performance maßgeblich.
+
+Für den normalen Gebrauch sollte ein Wert von 2 ausreichen. Sollten Sie einige Objekte besitzen, die bei diesem Wert deformiert aussehen, sollten Sie in Erwägung ziehen, diese zu ersetzen.
+		<usetemplate ignoretext="Warnen bei zu hoher Detailstufe" name="okignore" yestext="OK"/>
+	</notification>
 </notifications>
