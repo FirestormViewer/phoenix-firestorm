@@ -19,38 +19,73 @@
      name="Group">
         (Group)
     </floater.string>
+
+    <text_editor
+      top="24"
+      left="5"
+      width="120"
+      height="242"
+      layout="topleft"
+      follows="left|top|bottom"
+      name="linksetstats_text"
+      max_length="2048"
+      bg_visible="false"
+      border_visible="true"
+      allow_scroll="true"
+      h_pad="2"
+      v_pad="0"
+      read_only="true"
+      translate="false"
+      value="(loading...)"
+      word_wrap="true"/>
     <scroll_list
-     bottom="268"
+     top="24"
+     height="242"
      column_padding="0"
      draw_heading="true"
      follows="top|right|left|bottom"
      layout="topleft"
-     left="10"
+     left_pad="5"
      name="object_list"
-     right="-10"
-     tool_tip="Select an object from this list to highlight it in-world"
-     top="20">
+     right="-6"
+     tool_tip="Select an object from this list to highlight it in-world">
         <scroll_list.columns
-         relative_width="0.20"
+         dynamic_width="true"
          label="Object Name"
          name="object_name" />
         <scroll_list.columns
-         relative_width="0.20"
+         dynamic_width="true"
+         label="Description"
+         name="description" />
+        <scroll_list.columns
+         dynamic_width="true"
          label="Owner Name"
          name="owner_name" />
         <scroll_list.columns
-         relative_width="0.20"
+         dynamic_width="true"
          label="Creator Name"
          name="creator_name" />
         <scroll_list.columns
+         label="Faces"
+         name="facecount"
+         width="45" />
+        <scroll_list.columns
+         label="Vertices"
+         name="vertexcount"
+         width="55" />
+        <scroll_list.columns
+         label="Triangles"
+         name="trianglecount"
+         width="55" />
+        <scroll_list.columns
+         label="VRAM"
+         name="vramcount"
+         width="55" />
+        <scroll_list.columns
          label="Creation Date"
          name="creation_date"
-         relative_width="0.20"
+         dynamic_width="true"
          sort_column="creation_date_sort"/>
-        <scroll_list.columns
-         label="Description"
-         name="description"
-         relative_width="0.20" />
         <scroll_list.columns
          label=""
          name="creation_date_sort"
@@ -63,7 +98,7 @@
      height="23"
      label="See Owner Profile..."
      layout="topleft"
-     left_delta="-1"
+     left="4"
      name="button owner"
      tool_tip="See profile of the highlighted object&apos;s owner"
      top_pad="4"
