@@ -47,7 +47,6 @@ VRAM: [VRAM_USAGE] KB
       h_pad="2"
       v_pad="0"
       read_only="true"
-      translate="false"
       value="(loading...)"
       word_wrap="true"/>
     <scroll_list
