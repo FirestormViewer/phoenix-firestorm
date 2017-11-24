@@ -511,11 +511,10 @@ U32 LLFloaterInspect::getObjectVRAM(LLViewerObject* object)
 	for (U8 j = 0; j < te_count; j++)
 	{
 		LLViewerTexture* img = object->getTEImage(j);
-		if (!img)
+		if (img)
 		{
-			continue;
+			memory += addToVRAMTexList(img, object_texture_list);
 		}
-		memory += addToVRAMTexList(img, object_texture_list);
 
 		// materials per face
 		if (object->getTE(j)->getMaterialParams().notNull())
@@ -524,22 +523,20 @@ U32 LLFloaterInspect::getObjectVRAM(LLViewerObject* object)
 			if (uuid.notNull())
 			{
 				LLViewerTexture* img = gTextureList.getImage(uuid);
-				if (!img)
+				if (img)
 				{
-					continue;
+					memory += addToVRAMTexList(img, object_texture_list);
 				}
-				memory += addToVRAMTexList(img, object_texture_list);
 			}
 
 			uuid = object->getTE(j)->getMaterialParams()->getSpecularID();
 			if (uuid.notNull())
 			{
 				LLViewerTexture* img = gTextureList.getImage(uuid);
-				if (!img)
+				if (img)
 				{
-					continue;
+					memory += addToVRAMTexList(img, object_texture_list);
 				}
-				memory += addToVRAMTexList(img, object_texture_list);
 			}
 		}
 	}
