@@ -1935,7 +1935,6 @@ void LLPanelMainInventory::onSearchTypeChecked(const LLSD& userdata)
 	{
 		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_ALL);
 	}
-	resetFilters();
 }
 
 BOOL LLPanelMainInventory::isSearchTypeChecked(const LLSD& userdata)
