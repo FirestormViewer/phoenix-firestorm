@@ -284,10 +284,6 @@ LLUUID LLFloaterInspect::getSelectedUUID()
 
 void LLFloaterInspect::refresh()
 {
-	// PoundLife - Improved Object Inspect
-	mlinksetstats = "Total stats:\n\n";
-	getChild<LLTextBase>("linksetstats_text")->setText(mlinksetstats);
-	// PoundLife - End
 	LLUUID creator_id;
 	std::string creator_name;
 	S32 pos = mObjectList->getScrollPos();
@@ -298,9 +294,8 @@ void LLFloaterInspect::refresh()
 	S32 vcount = 0;
 	S32 objcount = 0;
 	S32 primcount = 0;
-	texturecount = 0;
-	texturememory = 0;
-	vTextureList.clear();
+	mTextureList.clear();
+	mTextureMemory = 0;
 	// PoundLife - End
 	getChildView("button owner")->setEnabled(false);
 	getChildView("button creator")->setEnabled(false);
@@ -449,16 +444,9 @@ void LLFloaterInspect::refresh()
 		row["columns"][8]["value"] = llformat("%d", obj->getObject()->getNumIndices() / 3);
 
 		// Poundlife - Get VRAM
-		U32 tempMem = 0;
-		U32 tempCount = 0;
-		getObjectVRAM(obj->getObject(), tempMem, tempCount);
-		texturememory += tempMem;
-		texturecount += tempCount;
-		//
-
 		row["columns"][9]["column"] = "vramcount";
 		row["columns"][9]["type"] = "text";
-		row["columns"][9]["value"] = llformat("%d", tempMem / 1024);
+		row["columns"][9]["value"] = llformat("%d", getObjectVRAM(obj->getObject()) / 1024);
 
 		primcount = selmgr->getSelection()->getObjectCount();
 		objcount = selmgr->getSelection()->getRootObjectCount();
@@ -479,38 +467,40 @@ void LLFloaterInspect::refresh()
 	onSelectObject();
 	mObjectList->setScrollPos(pos);
 	// PoundLife - Total linkset stats.
-	mlinksetstats += llformat("%d objects, %d prims.\n\n", objcount, primcount);
-	mlinksetstats += llformat("Faces: %d\n", fcount);
-	mlinksetstats += llformat("Vertices: %d\n", vcount);
-	mlinksetstats += llformat("Triangles: %d\n\n", tcount);
-	mlinksetstats += llformat("Textures: %d\n", texturecount);
-	mlinksetstats += llformat("VRAM Use: %d kb", texturememory / 1024);
-	getChild<LLTextBase>("linksetstats_text")->setText(mlinksetstats);
+	LLStringUtil::format_map_t args;
+	args["NUM_OBJECTS"] = llformat("%d", objcount);
+	args["NUM_PRIMS"] = llformat("%d", primcount);
+	args["NUM_FACES"] = llformat("%d", fcount);
+	args["NUM_VERTICES"] = llformat("%d", vcount);
+	args["NUM_TRIANGLES"] = llformat("%d", tcount);
+	args["NUM_TEXTURES"] = llformat("%d", mTextureList.size());
+	args["VRAM_USAGE"] = llformat("%d", mTextureMemory / 1024);
+	getChild<LLTextBase>("linksetstats_text")->setText(getString("stats_list", args));
 	// PoundLife - End
 }
 
 // PoundLife - Improved Object Inspect
-void LLFloaterInspect::getObjectVRAM(LLViewerObject* object, U32 &memory, U32 &count)
+U32 LLFloaterInspect::getObjectVRAM(LLViewerObject* object)
 {
-	if (!object) return;
+	U32 memory = 0;
+	uuid_vec_t object_texture_list;
 
-	S32 height;
-	S32 width;
-	std::string type_str;
+	if (!object)
+	{
+		return memory;
+	}
+
 	LLUUID uuid;
 	U8 te_count = object->getNumTEs();
-	//	LLUUID uploader;
 
-	typedef std::map< LLUUID, std::vector<U8> > map_t;
-	map_t faces_per_texture;
 	for (U8 j = 0; j < te_count; j++)
 	{
 		LLViewerTexture* img = object->getTEImage(j);
-		if (!img) continue;
-		uuid = img->getID();
-		height = img->getFullHeight();
-		width = img->getFullWidth();
-		addToVRAMTexList(uuid, height, width, memory, count);
+		if (!img)
+		{
+			continue;
+		}
+		memory += addToVRAMTexList(img, object_texture_list);
 
 		// materials per face
 		if (object->getTE(j)->getMaterialParams().notNull())
@@ -519,19 +509,22 @@ void LLFloaterInspect::getObjectVRAM(LLViewerObject* object, U32 &memory, U32 &c
 			if (uuid.notNull())
 			{
 				LLViewerTexture* img = gTextureList.getImage(uuid);
-				if (!img) continue;
-				height = img->getFullHeight();
-				width = img->getFullWidth();
-				addToVRAMTexList(uuid, height, width, memory, count);
+				if (!img)
+				{
+					continue;
+				}
+				memory += addToVRAMTexList(img, object_texture_list);
 			}
+
 			uuid = object->getTE(j)->getMaterialParams()->getSpecularID();
 			if (uuid.notNull())
 			{
 				LLViewerTexture* img = gTextureList.getImage(uuid);
-				if (!img) continue;
-				height = img->getFullHeight();
-				width = img->getFullWidth();
-				addToVRAMTexList(uuid, height, width, memory, count);
+				if (!img)
+				{
+					continue;
+				}
+				memory += addToVRAMTexList(img, object_texture_list);
 			}
 		}
 	}
@@ -544,20 +537,32 @@ void LLFloaterInspect::getObjectVRAM(LLViewerObject* object, U32 &memory, U32 &c
 		LLViewerTexture* img = gTextureList.getImage(uuid);
 		if (img)
 		{
-			height = img->getFullHeight();
-			width = img->getFullWidth();
-			addToVRAMTexList(uuid, height, width, memory, count);
+			memory += addToVRAMTexList(img, object_texture_list);
 		}
 	}
+	
+	return memory;
 }
 
-void LLFloaterInspect::addToVRAMTexList(const LLUUID& uuid, S32 height, S32 width, U32 &memory, U32 &count)
+U32 LLFloaterInspect::addToVRAMTexList(LLViewerTexture* texture, uuid_vec_t& object_texture_list)
 {
-	if (std::find(vTextureList.begin(), vTextureList.end(), uuid) == vTextureList.end())
+	const LLUUID uuid = texture->getID();
+	U32 memory = (texture->getFullHeight() * texture->getFullWidth() * 32 / 8);
+
+	if (std::find(mTextureList.begin(), mTextureList.end(), uuid) == mTextureList.end())
 	{
-		vTextureList.push_back(uuid);
-		memory += (((height * width) * 32) / 8);
-		count += 1;
+		mTextureList.push_back(uuid);
+		mTextureMemory += memory;
+	}
+
+	if (std::find(object_texture_list.begin(), object_texture_list.end(), uuid) == object_texture_list.end())
+	{
+		object_texture_list.push_back(uuid);
+		return memory;
+	}
+	else
+	{
+		return 0;
 	}
 }
 // PoundLife - End

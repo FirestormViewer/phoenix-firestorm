@@ -19,6 +19,18 @@
      name="Group">
         (Group)
     </floater.string>
+    <floater.string name="stats_list">
+        Total stats:
+
+[NUM_OBJECTS] objects, [NUM_PRIMS] prims
+
+Faces: [NUM_FACES]
+Vertices: [NUM_VERTICES]
+Triangles: [NUM_TRIANGLES]
+
+Textures: [NUM_TEXTURES]
+VRAM: [VRAM_USAGE] KB
+    </floater.string>
 
     <text_editor
       top="24"

@@ -59,7 +59,6 @@ public:
 	void onClickOwnerProfile();
 	void onSelectObject();
 	// PoundLife - Improved Object Inspect
-	std::string mlinksetstats;
 	U64 mStatsMemoryTotal;
 	// PoundLife - End
 	LLScrollListCtrl* mObjectList;
@@ -74,12 +73,10 @@ protected:
 
 private:
 	// PoundLife - Improved Object Inspect
-	LLUUID mObjectID;
-	void getObjectVRAM(LLViewerObject* object, U32 &memory, U32 &count);
-	void addToVRAMTexList(const LLUUID& uuid, S32 height, S32 width, U32 &memory, U32 &count);
-	std::vector<LLUUID> vTextureList;
-	U32 texturememory;
-	U32 texturecount;
+	U32 getObjectVRAM(LLViewerObject* object);
+	U32 addToVRAMTexList(LLViewerTexture* texture, uuid_vec_t& object_texture_list);
+	uuid_vec_t mTextureList;
+	U32 mTextureMemory;
 	// PoundLife - End
 	void onGetOwnerNameCallback();
 	void onGetCreatorNameCallback();
