@@ -48,6 +48,7 @@
 #include "rlvui.h"
 // [/RLVa:KB]
 // PoundLife - Improved Object Inspect
+#include "llresmgr.h"
 #include "lltexturectrl.h"
 #include "llviewerobjectlist.h" //gObjectList
 #include "llviewertexturelist.h"
@@ -288,7 +289,9 @@ void LLFloaterInspect::refresh()
 	std::string creator_name;
 	S32 pos = mObjectList->getScrollPos();
 	// PoundLife - Improved Object Inspect
-	LLSelectMgr* selmgr = LLSelectMgr::getInstance();
+	LLLocale locale("");
+	LLResMgr& res_mgr = LLResMgr::instance();
+	LLSelectMgr& sel_mgr = LLSelectMgr::instance();
 	S32 fcount = 0;
 	S32 tcount = 0;
 	S32 vcount = 0;
@@ -296,6 +299,7 @@ void LLFloaterInspect::refresh()
 	S32 primcount = 0;
 	mTextureList.clear();
 	mTextureMemory = 0;
+	std::string format_res_string;
 	// PoundLife - End
 	getChildView("button owner")->setEnabled(false);
 	getChildView("button creator")->setEnabled(false);
@@ -431,25 +435,29 @@ void LLFloaterInspect::refresh()
 		row["columns"][5]["value"] = llformat("%d", timestamp);
 		// </FS:Ansariel>
 		// PoundLife - Improved Object Inspect
+		res_mgr.getIntegerString(format_res_string, obj->getObject()->getNumFaces());
 		row["columns"][6]["column"] = "facecount";
 		row["columns"][6]["type"] = "text";
-		row["columns"][6]["value"] = llformat("%d", obj->getObject()->getNumFaces());
+		row["columns"][6]["value"] = format_res_string;
 
+		res_mgr.getIntegerString(format_res_string, obj->getObject()->getNumVertices());
 		row["columns"][7]["column"] = "vertexcount";
 		row["columns"][7]["type"] = "text";
-		row["columns"][7]["value"] = llformat("%d", obj->getObject()->getNumVertices());
+		row["columns"][7]["value"] = format_res_string;
 
+		res_mgr.getIntegerString(format_res_string, obj->getObject()->getNumIndices() / 3);
 		row["columns"][8]["column"] = "trianglecount";
 		row["columns"][8]["type"] = "text";
-		row["columns"][8]["value"] = llformat("%d", obj->getObject()->getNumIndices() / 3);
+		row["columns"][8]["value"] = format_res_string;
 
 		// Poundlife - Get VRAM
+		res_mgr.getIntegerString(format_res_string, getObjectVRAM(obj->getObject()) / 1024);
 		row["columns"][9]["column"] = "vramcount";
 		row["columns"][9]["type"] = "text";
-		row["columns"][9]["value"] = llformat("%d", getObjectVRAM(obj->getObject()) / 1024);
+		row["columns"][9]["value"] = format_res_string;
 
-		primcount = selmgr->getSelection()->getObjectCount();
-		objcount = selmgr->getSelection()->getRootObjectCount();
+		primcount = sel_mgr.getSelection()->getObjectCount();
+		objcount = sel_mgr.getSelection()->getRootObjectCount();
 		fcount += obj->getObject()->getNumFaces();
 		tcount += obj->getObject()->getNumIndices() / 3;
 		vcount += obj->getObject()->getNumVertices();
@@ -468,13 +476,20 @@ void LLFloaterInspect::refresh()
 	mObjectList->setScrollPos(pos);
 	// PoundLife - Total linkset stats.
 	LLStringUtil::format_map_t args;
-	args["NUM_OBJECTS"] = llformat("%d", objcount);
-	args["NUM_PRIMS"] = llformat("%d", primcount);
-	args["NUM_FACES"] = llformat("%d", fcount);
-	args["NUM_VERTICES"] = llformat("%d", vcount);
-	args["NUM_TRIANGLES"] = llformat("%d", tcount);
-	args["NUM_TEXTURES"] = llformat("%d", mTextureList.size());
-	args["VRAM_USAGE"] = llformat("%d", mTextureMemory / 1024);
+	res_mgr.getIntegerString(format_res_string, objcount);
+	args["NUM_OBJECTS"] = format_res_string;
+	res_mgr.getIntegerString(format_res_string, primcount);
+	args["NUM_PRIMS"] = format_res_string;
+	res_mgr.getIntegerString(format_res_string, fcount);
+	args["NUM_FACES"] = format_res_string;
+	res_mgr.getIntegerString(format_res_string, vcount);
+	args["NUM_VERTICES"] = format_res_string;
+	res_mgr.getIntegerString(format_res_string, tcount);
+	args["NUM_TRIANGLES"] = format_res_string;
+	res_mgr.getIntegerString(format_res_string, mTextureList.size());
+	args["NUM_TEXTURES"] = format_res_string;
+	res_mgr.getIntegerString(format_res_string, mTextureMemory / 1024);
+	args["VRAM_USAGE"] = format_res_string;
 	getChild<LLTextBase>("linksetstats_text")->setText(getString("stats_list", args));
 	// PoundLife - End
 }
