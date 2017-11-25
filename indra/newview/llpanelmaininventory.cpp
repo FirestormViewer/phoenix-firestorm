@@ -505,6 +505,7 @@ void LLPanelMainInventory::resetFilters()
 	filter.setFilterCreator(LLInventoryFilter::FILTERCREATOR_ALL);
 	filter.setSearchType(LLInventoryFilter::SEARCHTYPE_NAME);
 	filter.setFilterTransferable(FALSE);
+	getActivePanel()->updateShowInboxFolder(gSavedSettings.getBOOL("FSShowInboxFolder"));
 	updateFilterDropdown(&filter);
 	// </FS:Ansariel>
 	if (finder)
