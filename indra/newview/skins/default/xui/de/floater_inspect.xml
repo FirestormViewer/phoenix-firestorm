@@ -17,8 +17,8 @@ Dreiecke: [NUM_TRIANGLES]
 
 Texturen: [NUM_TEXTURES]
 VRAM: [VRAM_USAGE] KB
-	<text_editor name="linksetstats_text" value="(wird geladen...)"/>
 	</floater.string>
+	<text_editor name="linksetstats_text" value="(wird geladen...)"/>
 	<scroll_list name="object_list" tool_tip="Wählen Sie ein Objekt aus dieser Liste, um es in der Second Life-Welt zu markieren">
 		<scroll_list.columns label="Objektname" name="object_name"/>
 		<scroll_list.columns label="Beschreibung" name="description"/>

@@ -3,12 +3,28 @@
 	<floater.string name="Group">
 		(Grupa)
 	</floater.string>
+	<floater.string name="stats_list">
+		Statystyki:
+
+Obiekty: [NUM_OBJECTS], primy: [NUM_PRIMS]
+
+Strony: [NUM_FACES]
+Wierzchołki: [NUM_VERTICES]
+Trójkąty: [NUM_TRIANGLES]
+
+Tekstury: [NUM_TEXTURES]
+VRAM: [VRAM_USAGE] KB
+	</floater.string>
+	<text_editor name="linksetstats_text" value="(ładowanie...)"/>
 	<scroll_list name="object_list" tool_tip="Wybierz obiekt z tej listy, aby podświetlić go w świecie">
 		<scroll_list.columns label="Nazwa" name="object_name"/>
+		<scroll_list.columns label="Opis" name="description"/>
 		<scroll_list.columns label="Właściciel" name="owner_name"/>
 		<scroll_list.columns label="Twórca" name="creator_name"/>
+		<scroll_list.columns label="Strony" name="facecount" />
+		<scroll_list.columns label="Wierzchołki" name="vertexcount" />
+		<scroll_list.columns label="Trójkąty" name="trianglecount" />
 		<scroll_list.columns label="Utworzony" name="creation_date"/>
-		<scroll_list.columns label="Opis" name="description"/>
 	</scroll_list>
 	<button label="Profil Właściciela..." name="button owner" tool_tip="Zobacz profil Właściciela podświetlonego obiektu"/>
 	<button label="Profil Twórcy..." name="button creator" tool_tip="Zobacz profil Twórcy podświetlonego obiektu"/>
