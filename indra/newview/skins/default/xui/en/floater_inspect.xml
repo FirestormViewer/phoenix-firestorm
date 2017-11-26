@@ -29,6 +29,7 @@ Vertices: [NUM_VERTICES]
 Triangles: [NUM_TRIANGLES]
 
 Textures: [NUM_TEXTURES]
+TMem: [TEXTURE_MEMORY] KB
 VRAM: [VRAM_USAGE] KB
     </floater.string>
 
@@ -87,6 +88,10 @@ VRAM: [VRAM_USAGE] KB
         <scroll_list.columns
          label="Triangles"
          name="trianglecount"
+         width="55" />
+        <scroll_list.columns
+         label="TMem"
+         name="tramcount"
          width="55" />
         <scroll_list.columns
          label="VRAM"

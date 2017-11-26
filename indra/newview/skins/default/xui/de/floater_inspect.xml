@@ -16,6 +16,7 @@ Vertices: [NUM_VERTICES]
 Dreiecke: [NUM_TRIANGLES]
 
 Texturen: [NUM_TEXTURES]
+TMem: [TEXTURE_MEMORY] KB
 VRAM: [VRAM_USAGE] KB
 	</floater.string>
 	<text_editor name="linksetstats_text" value="(wird geladen...)"/>
@@ -27,6 +28,7 @@ VRAM: [VRAM_USAGE] KB
 		<scroll_list.columns label="Flächen" name="facecount"/>
 		<scroll_list.columns label="Vertices" name="vertexcount"/>
 		<scroll_list.columns label="Dreiecke" name="trianglecount"/>
+		<scroll_list.columns label="TMem" name="tramcount"/>
 		<scroll_list.columns label="VRAM" name="vramcount"/>
 		<scroll_list.columns label="Erstellungsdatum" name="creation_date"/>
 	</scroll_list>

@@ -299,6 +299,7 @@ void LLFloaterInspect::refresh()
 	S32 primcount = 0;
 	mTextureList.clear();
 	mTextureMemory = 0;
+	mTextureVRAMMemory = 0;
 	std::string format_res_string;
 	// PoundLife - End
 	getChildView("button owner")->setEnabled(false);
@@ -451,10 +452,18 @@ void LLFloaterInspect::refresh()
 		row["columns"][8]["value"] = format_res_string;
 
 		// Poundlife - Get VRAM
-		res_mgr.getIntegerString(format_res_string, getObjectVRAM(obj->getObject()) / 1024);
-		row["columns"][9]["column"] = "vramcount";
+		U32 texture_memory = 0;
+		U32 vram_memory = 0;
+		getObjectTextureMemory(obj->getObject(), texture_memory, vram_memory);
+		res_mgr.getIntegerString(format_res_string, texture_memory / 1024);
+		row["columns"][9]["column"] = "tramcount";
 		row["columns"][9]["type"] = "text";
 		row["columns"][9]["value"] = format_res_string;
+
+		res_mgr.getIntegerString(format_res_string, vram_memory / 1024);
+		row["columns"][10]["column"] = "vramcount";
+		row["columns"][10]["type"] = "text";
+		row["columns"][10]["value"] = format_res_string;
 
 		primcount = sel_mgr.getSelection()->getObjectCount();
 		objcount = sel_mgr.getSelection()->getRootObjectCount();
@@ -489,20 +498,21 @@ void LLFloaterInspect::refresh()
 	res_mgr.getIntegerString(format_res_string, mTextureList.size());
 	args["NUM_TEXTURES"] = format_res_string;
 	res_mgr.getIntegerString(format_res_string, mTextureMemory / 1024);
+	args["TEXTURE_MEMORY"] = format_res_string;
+	res_mgr.getIntegerString(format_res_string, mTextureVRAMMemory / 1024);
 	args["VRAM_USAGE"] = format_res_string;
 	getChild<LLTextBase>("linksetstats_text")->setText(getString("stats_list", args));
 	// PoundLife - End
 }
 
 // PoundLife - Improved Object Inspect
-U32 LLFloaterInspect::getObjectVRAM(LLViewerObject* object)
+void LLFloaterInspect::getObjectTextureMemory(LLViewerObject* object, U32& object_texture_memory, U32& object_vram_memory)
 {
-	U32 memory = 0;
 	uuid_vec_t object_texture_list;
 
 	if (!object)
 	{
-		return memory;
+		return;
 	}
 
 	LLUUID uuid;
@@ -513,7 +523,7 @@ U32 LLFloaterInspect::getObjectVRAM(LLViewerObject* object)
 		LLViewerTexture* img = object->getTEImage(j);
 		if (img)
 		{
-			memory += addToVRAMTexList(img, object_texture_list);
+			calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
 		}
 
 		// materials per face
@@ -525,7 +535,7 @@ U32 LLFloaterInspect::getObjectVRAM(LLViewerObject* object)
 				LLViewerTexture* img = gTextureList.getImage(uuid);
 				if (img)
 				{
-					memory += addToVRAMTexList(img, object_texture_list);
+					calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
 				}
 			}
 
@@ -535,7 +545,7 @@ U32 LLFloaterInspect::getObjectVRAM(LLViewerObject* object)
 				LLViewerTexture* img = gTextureList.getImage(uuid);
 				if (img)
 				{
-					memory += addToVRAMTexList(img, object_texture_list);
+					calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
 				}
 			}
 		}
@@ -549,32 +559,29 @@ U32 LLFloaterInspect::getObjectVRAM(LLViewerObject* object)
 		LLViewerTexture* img = gTextureList.getImage(uuid);
 		if (img)
 		{
-			memory += addToVRAMTexList(img, object_texture_list);
+			calculateTextureMemory(img, object_texture_list, object_texture_memory, object_vram_memory);
 		}
 	}
-	
-	return memory;
 }
 
-U32 LLFloaterInspect::addToVRAMTexList(LLViewerTexture* texture, uuid_vec_t& object_texture_list)
+void LLFloaterInspect::calculateTextureMemory(LLViewerTexture* texture, uuid_vec_t& object_texture_list, U32& object_texture_memory, U32& object_vram_memory)
 {
 	const LLUUID uuid = texture->getID();
-	U32 memory = (texture->getFullHeight() * texture->getFullWidth() * 32 / 8);
+	U32 vram_memory = (texture->getFullHeight() * texture->getFullWidth() * 32 / 8);
+	U32 texture_memory = (texture->getFullHeight() * texture->getFullWidth() * texture->getComponents());
 
 	if (std::find(mTextureList.begin(), mTextureList.end(), uuid) == mTextureList.end())
 	{
 		mTextureList.push_back(uuid);
-		mTextureMemory += memory;
+		mTextureMemory += texture_memory;
+		mTextureVRAMMemory += vram_memory;
 	}
 
 	if (std::find(object_texture_list.begin(), object_texture_list.end(), uuid) == object_texture_list.end())
 	{
 		object_texture_list.push_back(uuid);
-		return memory;
-	}
-	else
-	{
-		return 0;
+		object_texture_memory += texture_memory;
+		object_vram_memory += vram_memory;
 	}
 }
 // PoundLife - End
