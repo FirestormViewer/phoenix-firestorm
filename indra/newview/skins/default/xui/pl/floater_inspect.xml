@@ -13,7 +13,8 @@ Wierzchołki: [NUM_VERTICES]
 Trójkąty: [NUM_TRIANGLES]
 
 Tekstury: [NUM_TEXTURES]
-VRAM: [VRAM_USAGE] KB
+VRAM tekstur: [TEXTURE_MEMORY] KB
+VRAM łącznie: [VRAM_USAGE] KB
 	</floater.string>
 	<text_editor name="linksetstats_text" value="(ładowanie...)"/>
 	<scroll_list name="object_list" tool_tip="Wybierz obiekt z tej listy, aby podświetlić go w świecie">
@@ -24,6 +25,8 @@ VRAM: [VRAM_USAGE] KB
 		<scroll_list.columns label="Strony" name="facecount" />
 		<scroll_list.columns label="Wierzchołki" name="vertexcount" />
 		<scroll_list.columns label="Trójkąty" name="trianglecount" />
+		<scroll_list.columns label="VRAM tekstur" name="tramcount" />
+		<scroll_list.columns label="VRAM łącznie" name="vramcount" />
 		<scroll_list.columns label="Utworzony" name="creation_date"/>
 	</scroll_list>
 	<button label="Profil Właściciela..." name="button owner" tool_tip="Zobacz profil Właściciela podświetlonego obiektu"/>
