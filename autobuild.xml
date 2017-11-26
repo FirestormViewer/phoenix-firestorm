@@ -1805,11 +1805,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2b201c98e2092443615397eb7b78a339</string>
+              <string>a0cea95fe336f624c712d1f5065ee1eb</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.300918-darwin-300918.tar.bz2</string>
+              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.507006-darwin64-507006.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>

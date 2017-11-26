@@ -28,6 +28,7 @@
 			<pie_menu label="Zurücksetz. &gt;" name="ResetMenu">
 				<pie_slice label="Skel. &amp; Anim." name="Reset Skeleton And Animations"/>
 				<pie_slice label="Skelett" name="Reset Skeleton"/>
+				<pie_slice label="Mesh LOD" name="Reset Mesh LOD"/>
 			</pie_menu>
 			<pie_menu label="Speichern als &gt;" name="ExportMenu">
 				<pie_slice label="Backup" name="Backup"/>

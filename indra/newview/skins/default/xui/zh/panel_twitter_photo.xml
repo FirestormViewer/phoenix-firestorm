@@ -4,7 +4,7 @@
 		說一說你正在做什麼
 	</text>
 	<text name="status_counter_label">
-		140
+		280
 	</text>
 	<check_box initial_value="true" label="加入所在位置" name="add_location_cb"/>
 	<check_box initial_value="true" label="附上照片" name="add_photo_cb"/>

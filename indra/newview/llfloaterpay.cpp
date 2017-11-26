@@ -55,6 +55,8 @@
 
 #include "llviewercontrol.h"
 
+#include "rlvactions.h"
+
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
 ///----------------------------------------------------------------------------
@@ -428,6 +430,9 @@ void LLFloaterPay::payDirectly(money_callback callback,
 	floater->getChildView("amount")->setVisible(TRUE);
 	floater->getChildView("pay btn")->setVisible(TRUE);
 	floater->getChildView("amount text")->setVisible(TRUE);
+
+	// <FS:Ansariel> FIRE-21803: Prevent cheating IM restriction via pay message
+	floater->getChildView("payment_message")->setEnabled(RlvActions::canSendIM(target_id));
 
 	for(S32 i=0;i<MAX_PAY_BUTTONS;++i)
 	{

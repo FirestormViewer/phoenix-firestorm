@@ -4785,7 +4785,7 @@ Segnala abuso
 	<string name="server_is_down">
 		Nonostante i nostri tentativi, si è verificato un errore imprevisto.
 
-	Consulta la pagina status.secondlifegrid.net per determinare se si sia verificato un problema noto con il servizio.
+	Consulta la pagina https://secondlife-status.statuspage.io per determinare se si sia verificato un problema noto con il servizio.
         Se il problema continua, ti consigliamo di controllare le tue impostazioni di rete e della firewall.
 	</string>
 	<string name="dateTimeWeekdaysNames">

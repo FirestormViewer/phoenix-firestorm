@@ -793,10 +793,16 @@ BOOL LLFloaterPreference::postBuild()
 #endif
 	// </FS:Ansariel>
 
-	// <FS:Ansariel> Disable options only available on Windows on other platforms
+	// <FS:Ansariel> Disable options only available on Windows and not on other platforms
 #ifndef LL_WINDOWS
 	childSetEnabled("FSEnableAutomaticUIScaling", FALSE);
 	childSetEnabled("FSDisableWMIProbing", FALSE);
+#endif
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> Disable options only available on Linux and not on other platforms
+#ifndef LL_LINUX
+	childSetEnabled("FSRemapLinuxShortcuts", FALSE);
 #endif
 	// </FS:Ansariel>
 
@@ -2114,7 +2120,6 @@ void LLFloaterPreference::refreshEnabledState()
 	BOOL shaders = ctrl_shader_enable->get();
 	if (shaders)
 	{
-		terrain_detail->setValue(1);
 		terrain_detail->setEnabled(FALSE);
 	}
 	else

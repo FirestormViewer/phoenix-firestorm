@@ -6,12 +6,29 @@
 	<floater.string name="Group">
 		(Gruppe)
 	</floater.string>
+	<floater.string name="stats_list">
+		Objekt-Statistik:
+
+[NUM_OBJECTS] Objekte, [NUM_PRIMS] Prims
+
+Flächen: [NUM_FACES]
+Vertices: [NUM_VERTICES]
+Dreiecke: [NUM_TRIANGLES]
+
+Texturen: [NUM_TEXTURES]
+VRAM: [VRAM_USAGE] KB
+	</floater.string>
+	<text_editor name="linksetstats_text" value="(wird geladen...)"/>
 	<scroll_list name="object_list" tool_tip="Wählen Sie ein Objekt aus dieser Liste, um es in der Second Life-Welt zu markieren">
 		<scroll_list.columns label="Objektname" name="object_name"/>
+		<scroll_list.columns label="Beschreibung" name="description"/>
 		<scroll_list.columns label="Besitzer" name="owner_name" />
 		<scroll_list.columns label="Ersteller" name="creator_name"/>
+		<scroll_list.columns label="Flächen" name="facecount"/>
+		<scroll_list.columns label="Vertices" name="vertexcount"/>
+		<scroll_list.columns label="Dreiecke" name="trianglecount"/>
+		<scroll_list.columns label="VRAM" name="vramcount"/>
 		<scroll_list.columns label="Erstellungsdatum" name="creation_date"/>
-		<scroll_list.columns label="Beschreibung" name="description"/>
 	</scroll_list>
 	<button label="Besitzerprofil einsehen..." name="button owner" tool_tip="Profil des Besitzers des markierten Objekts einsehen" width="155"/>
 	<button label="Erstellerprofil einsehen..." left="175" name="button creator" tool_tip="Profil des ursprünglichen Erstellers des markierten Objekts einsehen" width="155"/>

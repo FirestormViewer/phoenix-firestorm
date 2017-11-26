@@ -3024,6 +3024,14 @@ void login_show()
 	//LLPanelLogin::show(	gViewerWindow->getWindowRectScaled(), login_callback, NULL );
 	FSPanelLogin::show(	gViewerWindow->getWindowRectScaled(), login_callback, NULL );
 	// </FS:Ansariel> [FS Login Panel]
+
+	// <FS:PP> Warning about too high LOD on startup
+	if (gSavedSettings.getF32("RenderVolumeLODFactor") >= 4.0f)
+	{
+		LLNotificationsUtil::add("RenderVolumeLODFactorWarning");
+	}
+	// </FS:PP>
+
 }
 
 // Callback for when login screen is closed.  Option 0 = connect, option 1 = quit.

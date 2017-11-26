@@ -304,7 +304,7 @@ template<typename T> struct RlvPredValuesEqual
 // Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 inline const std::string& RlvStrings::getAnonym(const LLAvatarName& avName)
 {
-	return getAnonym(avName.getDisplayName());
+	return getAnonym(avName.getLegacyName());
 }
 
 // Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.2a

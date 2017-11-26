@@ -87,7 +87,7 @@ private:
 	void unicodeInput(const std::string &utf8str, LLCEFLib::EKeyboardModifier modifiers, LLSD native_key_data);
 
 	void checkEditState();
-    void setVolume(F32 vol);
+    void setVolume();
 
 	bool mEnableMediaPluginDebugging;
 	std::string mHostLanguage;
@@ -104,9 +104,9 @@ private:
 	std::string mCachePath;
 	std::string mCookiePath;
 	std::string mPickedFile;
+	VolumeCatcher mVolumeCatcher;
+	F32 mCurVolume;
 	LLCEFLib* mLLCEFLib;
-
-    VolumeCatcher mVolumeCatcher;
 
 	U8 *mPopupBuffer;
 	U32 mPopupW;
@@ -139,7 +139,11 @@ MediaPluginBase(host_send_func, host_user_data)
 	mCachePath = "";
 	mCookiePath = "";
 	mPickedFile = "";
+	mCurVolume = 0.0;
+
 	mLLCEFLib = new LLCEFLib();
+
+	setVolume();
 
 	mPopupBuffer = NULL;
 	mPopupW = 0;
@@ -786,8 +790,9 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
         {
             if (message_name == "set_volume")
             {
-                F32 volume = (F32)message_in.getValueReal("volume");
-                setVolume(volume);
+				F32 volume = (F32)message_in.getValueReal("volume");
+				mCurVolume = volume;
+                setVolume();
             }
         }
         else
@@ -958,9 +963,9 @@ void MediaPluginCEF::checkEditState()
 	}
 }
 
-void MediaPluginCEF::setVolume(F32 vol)
+void MediaPluginCEF::setVolume()
 {
-    mVolumeCatcher.setVolume(vol);
+	mVolumeCatcher.setVolume(mCurVolume);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

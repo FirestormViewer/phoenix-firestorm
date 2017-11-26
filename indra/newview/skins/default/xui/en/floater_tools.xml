@@ -395,15 +395,12 @@
      width="134" />
   <check_box
      height="18"
-     initial_value="true"
+     control_name="RenderHighlightSelections"
      label="Show Highlight"
      layout="topleft"
      top_pad="-2"
      name="checkbox show highlight"
-     width="134" >
-		  <check_box.commit_callback
-			function="BuildTool.commitShowHighlight"/>
-	</check_box>
+     width="134"/>
     <button
      left_pad="0"
      image_selected="ForwardArrow_Press"

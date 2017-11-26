@@ -31,6 +31,7 @@
 
 #include "llavatarname.h"
 #include "llfloater.h"
+#include "llviewerobject.h" // PoundLife - Improved Object Inspect
 
 //class LLTool;
 class LLObjectSelection;
@@ -57,7 +58,9 @@ public:
 	void onClickCreatorProfile();
 	void onClickOwnerProfile();
 	void onSelectObject();
-
+	// PoundLife - Improved Object Inspect
+	U64 mStatsMemoryTotal;
+	// PoundLife - End
 	LLScrollListCtrl* mObjectList;
 protected:
 	// protected members
@@ -69,6 +72,12 @@ protected:
 // [/RLVa:KB]
 
 private:
+	// PoundLife - Improved Object Inspect
+	U32 getObjectVRAM(LLViewerObject* object);
+	U32 addToVRAMTexList(LLViewerTexture* texture, uuid_vec_t& object_texture_list);
+	uuid_vec_t mTextureList;
+	U32 mTextureMemory;
+	// PoundLife - End
 	void onGetOwnerNameCallback();
 	void onGetCreatorNameCallback();
 	

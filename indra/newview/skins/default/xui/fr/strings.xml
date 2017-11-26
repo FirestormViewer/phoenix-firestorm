@@ -4797,7 +4797,7 @@ du rapport d&apos;infraction
 	<string name="server_is_down">
 		Malgré nos efforts, une erreur inattendue s’est produite.
 
-Veuillez vous reporter à http://status.secondlifegrid.net afin de déterminer si un problème connu existe avec ce service.
+Veuillez vous reporter à https://secondlife-status.statuspage.io afin de déterminer si un problème connu existe avec ce service.
         Si le problème persiste, vérifiez la configuration de votre réseau et de votre pare-feu.
 	</string>
 	<string name="dateTimeWeekdaysNames">

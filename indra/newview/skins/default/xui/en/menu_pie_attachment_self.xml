@@ -167,6 +167,12 @@
 				<pie_slice.on_click
 					function="Avatar.ResetSkeleton" />
 			</pie_slice>
+			<pie_slice
+				label="Mesh LOD"
+				name="Reset Mesh LOD">
+				<pie_slice.on_click
+					function="Avatar.ResetMeshLOD" />
+			</pie_slice>
 		</pie_menu>
         <pie_separator />
         <pie_separator />
