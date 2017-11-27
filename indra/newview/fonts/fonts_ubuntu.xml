@@ -162,6 +162,10 @@
     <file>DejaVuSans.ttf</file>
   </font>
 
+  <font_size name="Scripting"
+	     comment="Size of script editor font (points, or 1/72 of an inch)"
+	     size="9.6"
+	     />
   <font_size name="Monospace"
 	     comment="Size for monospaced font (points, or 1/72 of an inch)"
 	     size="8.0"
