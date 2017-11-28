@@ -1539,6 +1539,141 @@ void LLPanelObject::activateMeshFields(LLViewerObject * objectp)
 		mComboLOD->setEnabled(TRUE);
 		mComboLOD->setVisible(TRUE);
 	}
+
+	F32 radius;
+//	F32 distance;
+
+	if (objectp->mDrawable->isState(LLDrawable::RIGGED))
+	{
+		LLVOAvatar* avatar = objectp->getAvatar();
+
+		// Not sure how this can really happen, but alas it does. Better exit here than crashing.
+		if (!avatar || !avatar->mDrawable)
+		{
+			return;
+		}
+		radius = avatar->getBinRadius();
+	}
+	else
+	{
+		radius = objectp->getVolume() ? objectp->getVolume()->mLODScaleBias.scaledVec(objectp->getScale()).length() : objectp->getScale().length();
+	}
+
+	static const F32 max_distance = 512.f;
+	F32 factor;
+	F32 dlowest = llmin(radius / 0.03f, max_distance);
+	F32 dlow = llmin(radius / 0.06f, max_distance);
+	F32 dmid = llmin(radius / 0.24f, max_distance);
+
+	childSetVisible("object_radius", TRUE);
+	LLTextBox* tb = getChild<LLTextBox>("object_radius_value");
+	if (tb)
+	{
+		tb->setText(llformat("%f", radius));
+		tb->setVisible(TRUE);
+	}
+	
+	childSetVisible("LOD_swap_defaults_label", TRUE);
+	childSetVisible("LOD_swap_usr_label", TRUE);
+	childSetVisible("LOD_swap_factors_label", TRUE);
+	childSetVisible("LOD_swap_label", TRUE);
+	childSetVisible("LOD_swap_usr_label", TRUE);
+	childSetVisible("LOD_swap_H2M_label", TRUE);
+	childSetVisible("LOD_swap_M2L_label", TRUE);
+	childSetVisible("LOD_swap_L2I_label", TRUE);
+	childSetVisible("LODSwapTableDscriptionsText", TRUE);
+	childSetVisible("ObjectLODbehaviourLabel", TRUE);
+
+	factor = 1.125; // LL default for most people http://wiki.phoenixviewer.com/support:whirly_fizzle#lod_comparison
+	tb = getChild<LLTextBox>("LOD_swap_ll_default");
+	if (tb)
+	{
+		LLUIString factor_string = tb->getText();
+		factor_string.setArg("[FACTOR]", llformat("%.2f", factor));
+		tb->setText(factor_string.getString());
+		tb->setVisible(TRUE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_ll_H2M");
+	if (tb)
+	{
+		tb->setText(llformat("%.1f", factor*dmid));
+		tb->setVisible(TRUE);
+		tb->setEnabled(TRUE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_ll_M2L");
+	if (tb)
+	{
+		tb->setText(llformat("%.1f", factor*dlow));
+		tb->setVisible(TRUE);
+		tb->setEnabled(TRUE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_ll_L2I");
+	if (tb)
+	{
+		tb->setText(llformat("%.1f", factor*dlowest));
+		tb->setVisible(TRUE);
+		tb->setEnabled(TRUE);
+	}
+	factor = 2.0;
+	tb = getChild<LLTextBox>("LOD_swap_fs_default");
+	if (tb)
+	{
+		LLUIString factor_string = tb->getText();
+		factor_string.setArg("[FACTOR]", llformat("%.2f", factor));
+		tb->setText(factor_string.getString());
+		tb->setVisible(TRUE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_fs_H2M");
+	if (tb)
+	{
+		tb->setText(llformat("%.1f", factor*dmid));
+		tb->setVisible(TRUE);
+		tb->setEnabled(TRUE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_fs_M2L");
+	if (tb)
+	{
+		tb->setText(llformat("%.1f", factor*dlow));
+		tb->setVisible(TRUE);
+		tb->setEnabled(TRUE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_fs_L2I");
+	if (tb)
+	{
+		tb->setText(llformat("%.1f", factor*dlowest));
+		tb->setVisible(TRUE);
+		tb->setEnabled(TRUE);
+	}
+	factor = LLVOVolume::sLODFactor;
+	tb = getChild<LLTextBox>("LOD_swap_usr_current");
+	if (tb)
+	{
+		LLUIString factor_string = getString("user_lod_label_string");
+		factor_string.setArg("[FACTOR]", llformat("%.2f", factor));
+		tb->setText(factor_string.getString());
+		tb->setVisible(TRUE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_usr_H2M");
+	if (tb)
+	{
+		tb->setText(llformat("%.1f", factor*dmid));
+		tb->setVisible(TRUE);
+		tb->setEnabled(TRUE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_usr_M2L");
+	if (tb)
+	{
+		tb->setText(llformat("%.1f", factor*dlow));
+		tb->setVisible(TRUE);
+		tb->setEnabled(TRUE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_usr_L2I");
+	if (tb)
+	{
+		tb->setText(llformat("%.1f", factor*dlowest));
+		tb->setVisible(TRUE);
+		tb->setEnabled(TRUE);
+	}
 }
 
 void LLPanelObject::deactivateMeshFields()
@@ -1560,7 +1695,6 @@ void LLPanelObject::deactivateMeshFields()
 	childSetVisible("med_lod_label", FALSE);
 	childSetVisible("low_lod_label", FALSE);
 	childSetVisible("lowest_lod_label", FALSE);
-
 	// reset the debug setting as we are editing a new object
 	gSavedSettings.setS32("ShowSpecificLODInEdit", -1);
 	// </FS:Beq>
@@ -1571,6 +1705,93 @@ void LLPanelObject::deactivateMeshFields()
 		mComboLOD->setCurrentByIndex(0);
 		mComboLOD->setEnabled(FALSE);
 		mComboLOD->setVisible(FALSE);
+	}
+	childSetVisible("object_radius", FALSE);
+	LLTextBox* tb = getChild<LLTextBox>("object_radius_value");
+	if (tb)
+	{
+		tb->setVisible(FALSE);
+	}
+	
+	childSetVisible("ObjectLODbehaviourLabel", FALSE);
+	childSetVisible("LOD_swap_defaults_label", FALSE);
+	childSetVisible("LOD_swap_factors_label", FALSE);
+	childSetVisible("LOD_swap_usr_label", FALSE);
+	childSetVisible("LOD_swap_label", FALSE);
+	childSetVisible("LOD_swap_usr_label", FALSE);
+	childSetVisible("LOD_swap_H2M_label", FALSE);
+	childSetVisible("LOD_swap_M2L_label", FALSE);
+	childSetVisible("LOD_swap_L2I_label", FALSE);
+	childSetVisible("LODSwapTableDscriptionsText", FALSE);
+
+	tb = getChild<LLTextBox>("LOD_swap_ll_default");
+	if (tb)
+	{
+		tb->setVisible(FALSE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_ll_H2M");
+	if (tb)
+	{
+		tb->setVisible(FALSE);
+		tb->setEnabled(FALSE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_ll_M2L");
+	if (tb)
+	{
+		tb->setVisible(FALSE);
+		tb->setEnabled(FALSE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_ll_L2I");
+	if (tb)
+	{
+		tb->setVisible(FALSE);
+		tb->setEnabled(FALSE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_fs_default");
+	if (tb)
+	{
+		tb->setVisible(FALSE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_fs_H2M");
+	if (tb)
+	{
+		tb->setVisible(FALSE);
+		tb->setEnabled(FALSE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_fs_M2L");
+	if (tb)
+	{
+		tb->setVisible(FALSE);
+		tb->setEnabled(FALSE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_fs_L2I");
+	if (tb)
+	{
+		tb->setVisible(FALSE);
+		tb->setEnabled(FALSE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_usr_current");
+	if (tb)
+	{
+		tb->setVisible(FALSE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_usr_H2M");
+	if (tb)
+	{
+		tb->setVisible(FALSE);
+		tb->setEnabled(FALSE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_usr_M2L");
+	if (tb)
+	{
+		tb->setVisible(FALSE);
+		tb->setEnabled(FALSE);
+	}
+	tb = getChild<LLTextBox>("LOD_swap_usr_L2I");
+	if (tb)
+	{
+		tb->setVisible(FALSE);
+		tb->setEnabled(FALSE);
 	}
 }
 //</FS:Beq>
