@@ -1424,6 +1424,10 @@ bool idle_startup()
 		std::string user_windlight_days_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/days", ""));
 		LLFile::mkdir(user_windlight_days_path_name.c_str());
 
+		// <FS:Ansariel> Create user fonts directory
+		std::string user_fonts_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "fonts", ""));
+		LLFile::mkdir(user_fonts_path_name.c_str());
+
 		// <FS:WS> Initalize Account based asset_blacklist
 		FSAssetBlacklist::getInstance()->init();
 
