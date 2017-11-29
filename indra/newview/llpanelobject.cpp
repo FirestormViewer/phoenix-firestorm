@@ -498,7 +498,8 @@ void LLPanelObject::getState( )
 
 	// can move or rotate only linked group with move permissions, or sub-object with move and modify perms
 
-    // AXON it's not entirely clear what the motivation is to have 3
+    // AXON REVIEW BEFORE RELEASE, behavior during edit is glitchy.
+    // it's not entirely clear what the motivation is to have 3
     // different rules for enablement. At least the difference between
     // move and rotate looks like just a parens error, have updated accordingly.
 	// <FS:Ansariel> FS always had these without the check for !objectp->isAttachment(), so keep this for now

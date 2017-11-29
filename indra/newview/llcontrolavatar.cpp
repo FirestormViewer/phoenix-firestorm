@@ -49,6 +49,15 @@ LLControlAvatar::~LLControlAvatar()
 {
 }
 
+// virtual
+void LLControlAvatar::initInstance()
+{
+	// AXON - potential optimizations here: avoid creating system
+	// avatar mesh content since it's not used. For now we just clean some
+	// things up after the fact in releaseMeshData().
+    LLVOAvatar::initInstance();
+}
+
 void LLControlAvatar::matchVolumeTransform()
 {
     if (mRootVolp)
@@ -173,7 +182,6 @@ void LLControlAvatar::updateVolumeGeom()
 
 LLControlAvatar *LLControlAvatar::createControlAvatar(LLVOVolume *obj)
 {
-    // AXON Lifted from LLPreviewAnimation
 	LLControlAvatar *cav = (LLControlAvatar*)gObjectList.createObjectViewer(LL_PCODE_LEGACY_AVATAR, gAgent.getRegion(), CO_FLAG_CONTROL_AVATAR);
 
     cav->mRootVolp = obj;

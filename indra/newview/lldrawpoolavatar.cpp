@@ -482,7 +482,6 @@ void LLDrawPoolAvatar::renderShadow(S32 pass)
 	}
 	LLVOAvatar *avatarp = (LLVOAvatar *)facep->getDrawable()->getVObj().get();
 
-// AXON fix
 	if (avatarp->isDead() || (avatarp->mIsDummy && !avatarp->isControlAvatar()) || avatarp->mDrawable.isNull())
 	{
 		return;

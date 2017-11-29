@@ -635,7 +635,6 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	LLViewerObject(id, pcode, regionp),
 	mSpecialRenderMode(0),
 	mAttachmentSurfaceArea(0.f),
-	mDirectAttachmentSurfaceArea(0.f),
 	mAttachmentVisibleTriangleCount(0),
 	mAttachmentEstTriangleCount(0.f),
 	mReportedVisualComplexity(VISUAL_COMPLEXITY_UNKNOWN),
@@ -1185,7 +1184,8 @@ void LLVOAvatar::initCloud()
 	// </FS:ND>
 }
 
-void LLVOAvatar::initInstance(void)
+// virtual
+void LLVOAvatar::initInstance()
 {
 	//-------------------------------------------------------------------------
 	// register motions
@@ -2070,9 +2070,8 @@ void LLVOAvatar::resetSkeleton(bool reset_animations)
 //-----------------------------------------------------------------------------
 void LLVOAvatar::releaseMeshData()
 {
-    // AXON what should we be doing here for control avs? Why are
-    // dummies treated differently in the first place?
-	if (sInstances.size() < AVATAR_RELEASE_THRESHOLD || mIsDummy)
+	if (sInstances.size() < AVATAR_RELEASE_THRESHOLD ||
+        (mIsDummy && !isControlAvatar()))
 	{
 		return;
 	}
@@ -2932,14 +2931,15 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 //																 LLPartData::LL_PART_EMISSIVE_MASK | // LLPartData::LL_PART_FOLLOW_SRC_MASK |
 //																 LLPartData::LL_PART_TARGET_POS_MASK );
 //			
-//            // AXON skip cloud effects for dummy avs as well
-//			if (!mIsDummy && !isTooComplex()) // do not generate particles for overly-complex avatars
+//			// do not generate particles for dummy or overly-complex avatars
+//			if (!mIsDummy && !isTooComplex())
 //			{
 //				setParticleSource(particle_parameters, getID());
 //			}
 
 			// Firestorm Clouds
-			if (!mIsDummy && !isTooComplex()) // do not generate particles for overly-complex avatars
+			// do not generate particles for dummy or overly-complex avatars
+			if (!mIsDummy && !isTooComplex())
 			{
 				setParticleSource(sCloud, getID());
 			}
@@ -3994,7 +3994,7 @@ void LLVOAvatar::updateDebugText()
                         LLVOVolume *volp = control_av->mRootVolp;
                         if (volp)
                         {
-                            volp->requestInventory(); // AXON should be a no-op if already requested or fetched?
+                            volp->requestInventory(); 
                             LLViewerInventoryItem* item = volp->getInventoryItemByAsset(motionp->getID());
                             if (item)
                             {
@@ -4187,10 +4187,9 @@ void LLVOAvatar::updateFootstepSounds()
 void LLVOAvatar::computeUpdatePeriod()
 {
 	bool visually_muted = isVisuallyMuted();
-    // AXON FIXME this expression is a crawling horror
 	if (mDrawable.notNull()
         && isVisible() 
-        && (!isSelf() || visually_muted) // AXON would the self ever be visually muted?
+        && (!isSelf() || visually_muted)
         && !mIsDummy
 	// <FS:Ansariel> Fix LL impostor hacking; Adjust update period for muted avatars if using no impostors
         //&& sUseImpostors
@@ -4422,7 +4421,8 @@ void LLVOAvatar::updateTimeStep()
 	if (!isSelf() && !is_pure_dummy && use_timesteps)
 	// </FS:Zi>
 	{
-        // AXON note that sInstances counts animated objects and standard avatars in the same bucket. Is this desirable?
+        // AXON note that sInstances counts animated objects and
+        // standard avatars in the same bucket. Is this desirable?
 		F32 time_quantum = clamp_rescale((F32)sInstances.size(), 10.f, 35.f, 0.f, 0.25f);
 		F32 pixel_area_scale = clamp_rescale(mPixelArea, 100, 5000, 1.f, 0.f);
 		F32 time_step = time_quantum * pixel_area_scale;
@@ -4438,8 +4438,11 @@ void LLVOAvatar::updateTimeStep()
 			stopMotion(ANIM_AGENT_WALK_ADJUST);
 			removeAnimationData("Walk Speed");
 		}
-        // AXON: see SL-763 - playback with altered time step does not
+        // See SL-763 - playback with altered time step does not
         // appear to work correctly, odd behavior for distant avatars.
+        // As of 11-2017, LLMotionController::updateMotions() will
+        // ignore the value here. Need to re-enable if it's every
+        // fixed.
 		mMotionController.setTimeStep(time_step);
 		mMotionController.setUpdateFactor(mUpdatePeriod); // <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
 	}
@@ -4451,7 +4454,6 @@ void LLVOAvatar::updateTimeStep()
 		mMotionController.setUpdateFactor(mUpdatePeriod); // <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
 	}
 	// </FS:Zi>
-
 }
 
 void LLVOAvatar::updateRootPositionAndRotation(LLAgent& agent, F32 speed, bool was_sit_ground_constrained) 
@@ -4549,7 +4551,9 @@ void LLVOAvatar::updateRootPositionAndRotation(LLAgent& agent, F32 speed, bool w
 		//--------------------------------------------------------------------
 		if (!isControlAvatar() && !isAnyAnimationSignaled(AGENT_NO_ROTATE_ANIMS, NUM_AGENT_NO_ROTATE_ANIMS))
 		{
-            // AXON - should we always skip for control avatars? Rotation fixups for avatars in motion, some may be relevant.
+            // AXON - should we always skip for control avatars?
+            // Rotation fixups for avatars in motion, some may be
+            // relevant.
             updateOrientation(agent, speed, delta_time);
 		}
 	}
@@ -4641,7 +4645,8 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 	// change animation time quanta based on avatar render load
     // AXON how should control avs be handled here?
 	//--------------------------------------------------------------------
-    updateTimeStep();
+    // SL-763 the time step quantization does not currently work.
+    //updateTimeStep();
     
 	// <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
 	if (!visible && !isSelf())
@@ -4958,7 +4963,8 @@ void LLVOAvatar::updateVisibility()
 	}
 	else
 	{
-		if (mMeshValid && mMeshInvisibleTime.getElapsedTimeF32() > TIME_BEFORE_MESH_CLEANUP)
+		if (mMeshValid &&
+            (isControlAvatar() || mMeshInvisibleTime.getElapsedTimeF32() > TIME_BEFORE_MESH_CLEANUP))
 		{
 			releaseMeshData();
 		}
@@ -6686,7 +6692,6 @@ void LLVOAvatar::showAttachmentOverrides(bool verbose) const
 //-----------------------------------------------------------------------------
 // removeAttachmentOverridesForObject
 //-----------------------------------------------------------------------------
-// AXON handle NPC case
 void LLVOAvatar::removeAttachmentOverridesForObject(LLViewerObject *vo)
 {
     if (vo->getAvatar() != this && vo->getAvatarAncestor() != this)
@@ -6715,7 +6720,6 @@ void LLVOAvatar::removeAttachmentOverridesForObject(LLViewerObject *vo)
 //-----------------------------------------------------------------------------
 // removeAttachmentOverridesForObject
 //-----------------------------------------------------------------------------
-// AXON handle NPC case
 void LLVOAvatar::removeAttachmentOverridesForObject(const LLUUID& mesh_id)
 {	
 	//Subsequent joints are relative to pelvis
@@ -6797,7 +6801,7 @@ void LLVOAvatar::getGround(const LLVector3 &in_pos_agent, LLVector3 &out_pos_age
 	LLVector3d z_vec(0.0f, 0.0f, 1.0f);
 	LLVector3d p0_global, p1_global;
 
-    // AXON update for control avs?
+    // AXON UPDATE FOR CONTROL AVS?
 	if (mIsDummy)
 	{
 		outNorm.setVec(z_vec);
@@ -6827,7 +6831,7 @@ F32 LLVOAvatar::getTimeDilation()
 //-----------------------------------------------------------------------------
 F32 LLVOAvatar::getPixelArea() const
 {
-    // AXON update for control avatars
+    // AXON UPDATE FOR CONTROL AVATARS
 	if (mIsDummy)
 	{
 		return 100000.f;
@@ -7386,7 +7390,7 @@ U32 LLVOAvatar::getNumAnimatedObjectAttachments() const
 S32 LLVOAvatar::getMaxAnimatedObjectAttachments() const
 {
     S32 max_attach = 0;
-    // AXON remove after server testing done
+    // AXON REMOVE AFTER SERVER TESTING DONE
     if (gSavedSettings.getBOOL("AnimatedObjectsIgnoreLimits"))
     {
         max_attach = MAX_AGENT_ATTACHMENTS;
@@ -8214,9 +8218,9 @@ bool LLVOAvatar::isTooComplex() const
         // so that unlimited will completely disable the overly complex impostor rendering
         // yes, this leaves them vulnerable to griefing objects... their choice
         too_complex = (   max_render_cost > 0
-                       && (   mVisualComplexity > max_render_cost
-                           || (max_attachment_area > 0.0f && mAttachmentSurfaceArea > max_attachment_area)
-                           ));
+                          && (mVisualComplexity > max_render_cost
+                                 || (max_attachment_area > 0.0f && mAttachmentSurfaceArea > max_attachment_area)
+                              ));
 	}
 
 	return too_complex;
@@ -10222,10 +10226,7 @@ void LLVOAvatar::idleUpdateRenderComplexity()
 
 		// Attachment Surface Area
 		static LLCachedControl<F32> max_attachment_area(gSavedSettings, "RenderAutoMuteSurfaceAreaLimit", 1000.0f);
-        // AXON we can consolidate mAttachmentSurfaceArea and
-        // mDirectAttachmentSurfaceArea once QA establishes
-        // equivalence.
-		info_line = llformat("%.0f m^2", mDirectAttachmentSurfaceArea);
+		info_line = llformat("%.0f m^2", mAttachmentSurfaceArea);
 
 		if (max_render_cost != 0 && max_attachment_area != 0) // zero means don't care, so don't bother coloring based on this
 		{
@@ -10241,20 +10242,11 @@ void LLVOAvatar::idleUpdateRenderComplexity()
 			info_color.set(LLColor4::grey);
 			info_style = LLFontGL::NORMAL;
 		}
+
 		mText->addLine(info_line, info_color, info_style);
 
 		updateText(); // corrects position
 	}
-}
-
-void LLVOAvatar::addAttachmentArea(F32 delta_area)
-{
-    mAttachmentSurfaceArea   += delta_area;
-}
-
-void LLVOAvatar::subtractAttachmentArea(F32 delta_area)
-{
-    mAttachmentSurfaceArea   = delta_area > mAttachmentSurfaceArea ? 0.0 : mAttachmentSurfaceArea - delta_area;
 }
 
 void LLVOAvatar::updateVisualComplexity()
@@ -10278,7 +10270,7 @@ void LLVOAvatar::accountRenderComplexityForObject(
     {
         mAttachmentVisibleTriangleCount += attached_object->recursiveGetTriangleCount();
         mAttachmentEstTriangleCount += attached_object->recursiveGetEstTrianglesMax();
-        mDirectAttachmentSurfaceArea += attached_object->recursiveGetScaledSurfaceArea();
+        mAttachmentSurfaceArea += attached_object->recursiveGetScaledSurfaceArea();
 
         textures.clear();
         const LLDrawable* drawable = attached_object->mDrawable;
@@ -10341,7 +10333,7 @@ void LLVOAvatar::accountRenderComplexityForObject(
     {
         textures.clear();
 
-        mDirectAttachmentSurfaceArea += attached_object->recursiveGetScaledSurfaceArea();
+        mAttachmentSurfaceArea += attached_object->recursiveGetScaledSurfaceArea();
 
         const LLVOVolume* volume = attached_object->mDrawable->getVOVolume();
         if (volume)
@@ -10435,7 +10427,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 
         mAttachmentVisibleTriangleCount = 0;
         mAttachmentEstTriangleCount = 0.f;
-        mDirectAttachmentSurfaceArea = 0.f;
+        mAttachmentSurfaceArea = 0.f;
         
         // A standalone animated object needs to be accounted for
         // using its associated volume. Attached animated objects

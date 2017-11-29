@@ -715,9 +715,9 @@ void LLSelectMgr::confirmUnlinkObjects(const LLSD& notification, const LLSD& res
 // the selection and give an error message when the uer has a
 // reasonable expectation for the link to work, but it will fail.
 //
-// AXON - additional check that if the selection includes at least one
-// animated object, the total mesh triangle count cannot exceed the
-// designated limit.
+// For animated objects, there's additional check that if the
+// selection includes at least one animated object, the total mesh
+// triangle count cannot exceed the designated limit.
 bool LLSelectMgr::enableLinkObjects()
 {
 	bool new_value = false;
@@ -742,7 +742,7 @@ bool LLSelectMgr::enableLinkObjects()
 			new_value = LLSelectMgr::getInstance()->getSelection()->applyToRootObjects(&func, firstonly);
 		}
 	}
-    if (!LLSelectMgr::getInstance()->getSelection()->checkAnimatedObjectEstTris())
+    if (!LLSelectMgr::getInstance()->getSelection()->checkAnimatedObjectLinkable())
     {
         new_value = false;
     }
@@ -7774,17 +7774,7 @@ bool LLObjectSelection::checkAnimatedObjectEstTris()
 
 bool LLObjectSelection::checkAnimatedObjectLinkable()
 {
-    LL_ERRS() << "Not using this restriction" << LL_ENDL;
-    // Can't link if any of the roots is currently an animated object
-	for (root_iterator iter = root_begin(); iter != root_end(); ++iter)
-	{
-        LLViewerObject* objectp = (*iter)->getObject();
-        if (objectp && objectp->isAnimatedObject())
-        {
-            return false;
-        }
-	}
-	return true;
+    return checkAnimatedObjectEstTris();
 }
 
 bool LLObjectSelection::applyToRootObjects(LLSelectedObjectFunctor* func, bool firstonly)

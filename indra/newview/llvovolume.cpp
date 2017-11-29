@@ -95,7 +95,6 @@ U32 JOINT_COUNT_REQUIRED_FOR_FULLRIG = 1;
 BOOL gAnimateTextures = TRUE;
 //extern BOOL gHideSelectedObjects;
 
-// AXON TEMP
 S32 LLVOVolume::sForceLOD = -1;
 F32 LLVOVolume::sLODFactor = 1.f;
 F32	LLVOVolume::sLODSlopDistanceFactor = 0.5f; //Changing this to zero, effectively disables the LOD transition slop 
@@ -1378,7 +1377,7 @@ void LLVOVolume::sculpt()
 S32	LLVOVolume::computeLODDetail(F32 distance, F32 radius)
 {
 	S32	cur_detail;
-    // AXON TEMP
+    // AXON TEMP REMOVE
     if (LLVOVolume::sForceLOD>=0 && LLVOVolume::sForceLOD<=3)
     {
         cur_detail = LLVOVolume::sForceLOD;
@@ -3528,8 +3527,6 @@ BOOL LLVOVolume::isRiggedMesh() const
 }
 
 //----------------------------------------------------------------------------
-// AXON - methods related to extended mesh flags
-
 U32 LLVOVolume::getExtendedMeshFlags() const
 {
 	const LLExtendedMeshParams *param_block = 
@@ -3599,7 +3596,6 @@ bool LLVOVolume::canBeAnimatedObject() const
     F32 est_tris = recursiveGetEstTrianglesMax();
     if (est_tris < 0 || est_tris > getAnimatedObjectMaxTris())
     {
-        LL_DEBUGS("AXON") << "est_tris " << est_tris << " is outside limit of 0-" << getAnimatedObjectMaxTris() << LL_ENDL;
         return false;
     }
     return true;
@@ -3624,65 +3620,18 @@ bool LLVOVolume::isAnimatedObject() const
 #endif
 }
 
-// Make sure animated objects in a linkset are consistent. The rules are:
-// Only the root of a linkset can have the animated object flag set
-// Only the root of a linkset can have a control avatar (iff the animated object flag is set)
-// Only skinned mesh volumes can have the animated object flag set, or a control avatar
-bool LLVOVolume::isAnimatedObjectStateConsistent() const
-{
-    if (!canBeAnimatedObject())
-    {
-        if ((getExtendedMeshFlags() & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG) ||
-            mControlAvatar.notNull())
-        {
-            LL_WARNS("AXON") << "Non animatable object has mesh enabled flag or mControlAvatar. Flags " 
-                             << getExtendedMeshFlags() << " cav " << mControlAvatar.get() << LL_ENDL;
-            return false;
-        }
-    }
-    if (!isRootEdit())
-    {
-        if ((getExtendedMeshFlags() & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG) ||
-            mControlAvatar.notNull())
-        {
-            LL_WARNS("AXON") << "Non root object has mesh enabled flag or mControlAvatar. Flags " 
-                             << getExtendedMeshFlags() << " cav " << mControlAvatar.get() << LL_ENDL;
-            return false;
-        }
-    }
-    // If we get here, we have a potentially animatable root volume.
-    bool is_animation_enabled = getExtendedMeshFlags() & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG;
-    bool has_control_avatar = (mControlAvatar.notNull());
-    if (is_animation_enabled != has_control_avatar)
-    {
-        LL_WARNS("AXON") << "Inconsistent state: animation enabled " << is_animation_enabled
-                         << " has control avatar " << has_control_avatar 
-                         << " flags " << getExtendedMeshFlags() << " cav " << mControlAvatar.get() << LL_ENDL;
-        return false;
-    }
-    return true;
-}
-
 // Called any time parenting changes for a volume. Update flags and
 // control av accordingly.  This is called after parent has been
 // changed to new_parent.
 void LLVOVolume::updateAnimatedObjectStateOnReparent(LLViewerObject *old_parent, LLViewerObject *new_parent)
 {
     LLVOVolume *old_volp = dynamic_cast<LLVOVolume*>(old_parent);
-    LLVOVolume *new_volp = dynamic_cast<LLVOVolume*>(new_parent);
 
     // AXON - depending on whether animated objects can be attached,
     // we may want to include or remove the isAvatar() check.
+    // BUG??
     if (new_parent && !new_parent->isAvatar())
     {
-#if 0 // AXON - MAINT-7819
-        // Object should inherit control avatar and animated mesh flag
-        // from parent, so clear them out from our own state
-        if (getExtendedMeshFlags() & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG)
-        {
-            setExtendedMeshFlags(getExtendedMeshFlags() & ~LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG);
-        }
-#endif
         if (mControlAvatar.notNull())
         {
             LLControlAvatar *av = mControlAvatar;
@@ -3702,25 +3651,6 @@ void LLVOVolume::updateAnimatedObjectStateOnReparent(LLViewerObject *old_parent,
             // We have been removed from an animated object, need to do cleanup.
             old_volp->getControlAvatar()->removeAttachmentOverridesForObject(this);
         }
-    }
-    
-    if (old_volp)
-    {
-        if (!old_volp->isAnimatedObjectStateConsistent())
-        {
-            LL_WARNS("AXON") << "old_volp failed consistency check" << LL_ENDL;
-        }
-    }
-    if (new_volp)
-    {
-        if (!new_volp->isAnimatedObjectStateConsistent())
-        {
-            LL_WARNS("AXON") << "new_volp failed consistency check" << LL_ENDL;
-        }
-    }
-    if (!isAnimatedObjectStateConsistent())
-    {
-        LL_WARNS("AXON") << "child object failed consistency check" << LL_ENDL;
     }
 }
 
@@ -4220,17 +4150,19 @@ void LLVOVolume::parameterChanged(U16 param_type, LLNetworkData* data, BOOL in_u
 	}
     if (!local_origin && param_type == LLNetworkData::PARAMS_EXTENDED_MESH)
     {
-        // AXON better if we could compare the before and after flags directly.
         U32 extended_mesh_flags = getExtendedMeshFlags();
         bool enabled =  (extended_mesh_flags & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG);
+        // AXON This is kind of a guess. Better if we could compare
+        // the before and after flags directly. What about cases where
+        // there's no control avatar for optimization reasons?
         bool was_enabled = (getControlAvatar() != NULL);
         if (enabled != was_enabled)
         {
             LL_INFOS("AXON") << (uintptr_t) this
-                       << " calling onSetExtendedMeshFlags, enabled " << (U32) enabled
-                       << " was_enabled " << (U32) was_enabled
-                       << " local_origin " << (U32) local_origin
-                       << LL_ENDL;
+                              << " calling onSetExtendedMeshFlags, enabled " << (U32) enabled
+                              << " was_enabled " << (U32) was_enabled
+                              << " local_origin " << (U32) local_origin
+                              << LL_ENDL;
             onSetExtendedMeshFlags(extended_mesh_flags);
         }
     }
@@ -5268,7 +5200,6 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 	group->mBuilt = 1.f;
 	
 	LLVOAvatar *rigged_av = NULL;
-    LLVOAvatar *attached_av = NULL;
 
 	LLSpatialBridge* bridge = group->getSpatialPartition()->asBridge();
     LLViewerObject *vobj = NULL;
@@ -5287,19 +5218,6 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 		}
         rigged_av = bridge->mAvatar;
 	}
-    if (vobj)
-    {
-        attached_av = vobj->getAvatarAncestor();
-    }
-
-    if (attached_av)
-    {
-        attached_av->subtractAttachmentArea( group->mSurfaceArea );
-    }
-    if (rigged_av && (rigged_av != attached_av))
-    {
-        rigged_av->subtractAttachmentArea( group->mSurfaceArea );
-    }
     if (vol_obj)
     {
         vol_obj->updateVisualComplexity();
@@ -5475,13 +5393,10 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 			bool bake_sunlight = LLPipeline::sBakeSunlight && drawablep->isStatic();
 
-            // AXON why this variable? Only different from rigged if
-            // there are no LLFaces associated with the drawable.
-			bool is_rigged = false;
+			bool any_rigged_face = false;
 
             if (rigged && rigged_av)
             {
-                // AXON don't we want to do this for standalone animesh as well?
                 rigged_av->addAttachmentOverridesForObject(vobj);
 				if (!LLApp::isExiting() && rigged_av->isSelf() && debugLoggingEnabled("AvatarAttachments"))
                 {
@@ -5514,7 +5429,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 					}
 		
 					facep->setState(LLFace::RIGGED);
-					is_rigged = true;
+					any_rigged_face = true;
 				
 					//get drawpool of avatar with rigged face
 					LLDrawPoolAvatar* pool = get_avatar_drawpool(vobj);				
@@ -5870,7 +5785,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 				}		
 			}
 			
-			if (is_rigged)
+			if (any_rigged_face)
 			{
 				if (!drawablep->isState(LLDrawable::RIGGED))
 				{
@@ -5953,15 +5868,6 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 	}
 
 	mFaceList.clear();
-
-    if (attached_av)
-    {
-        attached_av->addAttachmentArea( group->mSurfaceArea );
-    }
-    if (rigged_av && (rigged_av != attached_av))
-    {
-        rigged_av->addAttachmentArea( group->mSurfaceArea );
-    }
 }
 
 static LLTrace::BlockTimerStatHandle FTM_REBUILD_MESH_FLUSH("Flush Mesh");
