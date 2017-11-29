@@ -153,6 +153,10 @@ LLFontDescriptor LLFontDescriptor::normalize() const
 	// For other fonts, there's no ambiguity between font name and size specifier.
 	if (new_size != s_template_string && new_size.empty() && findSubString(new_name,"Monospace"))
 		new_size = "Monospace";
+	// <FS:Ansariel> Advanced script editor
+	if (new_size != s_template_string && new_size.empty() && findSubString(new_name,"Scripting"))
+		new_size = "Scripting";
+	// </FS:Ansariel>
 	if (new_size.empty())
 		new_size = "Medium";
 

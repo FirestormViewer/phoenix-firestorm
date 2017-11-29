@@ -31,33 +31,20 @@ LLVector3	exoPostProcess::sExodusRenderVignette;
 
 exoPostProcess::exoPostProcess()
 {
-	mExoPostBuffer = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_TEXCOORD1, 0);
-	mExoPostBuffer->allocateBuffer(8, 0, true);
-
-	LLStrider<LLVector3> vert; 
-	mExoPostBuffer->getVertexStrider(vert);
-	LLStrider<LLVector2> tc0;
-	LLStrider<LLVector2> tc1;
-	mExoPostBuffer->getTexCoord0Strider(tc0);
-	mExoPostBuffer->getTexCoord1Strider(tc1);
-
-	vert[0].set(-1.f, 1.f, 0.f);
-	vert[1].set(-1.f, -3.f, 0.f);
-	vert[2].set(3.f,1.f, 0.f);
-	
+	initVB();
 	sExodusRenderVignette = LLVector3(0.f, 0.f, 0.f);
 }
 
 exoPostProcess::~exoPostProcess()
 {
-	mExoPostBuffer = NULL;
+	destroyVB();
 }
 
 void exoPostProcess::ExodusRenderPostStack(LLRenderTarget *src, LLRenderTarget *dst)
 {
 	if (mVertexShaderLevel > 0)
 	{
-		if (sExodusRenderVignette.mV[0] > 0 && LLPipeline::sRenderDeferred)
+		if (sExodusRenderVignette.mV[0] > 0.f && LLPipeline::sRenderDeferred)
 			ExodusRenderVignette(src, dst); // Don't render vignette here in non-deferred. Do it in the glow combine shader.
 	}
 }
@@ -76,51 +63,61 @@ void exoPostProcess::ExodusRenderPostUpdate()
 
 void exoPostProcess::initVB()
 {
+	destroyVB();
+	mExoPostBuffer = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_TEXCOORD1, 0);
+
 	if (!gPipeline.sRenderDeferred)
 	{
-		// Destroy our old buffer, and create a new vertex buffer for the screen (shamelessly ganked from pipeline.cpp).
-		destroyVB();
-		mExoPostBuffer = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_TEXCOORD1, 0);
-		mExoPostBuffer->allocateBuffer(3,0,TRUE);
+		if (mExoPostBuffer->allocateBuffer(3, 0, true))
+		{
+			LLStrider<LLVector3> v;
+			LLStrider<LLVector2> uv1;
+			LLStrider<LLVector2> uv2;
 
-		LLStrider<LLVector3> v;
-		LLStrider<LLVector2> uv1;
-		LLStrider<LLVector2> uv2;
+			mExoPostBuffer->getVertexStrider(v);
+			mExoPostBuffer->getTexCoord0Strider(uv1);
+			mExoPostBuffer->getTexCoord1Strider(uv2);
+		
+			uv1[0] = LLVector2(0.f, 0.f);
+			uv1[1] = LLVector2(0.f, 2.f);
+			uv1[2] = LLVector2(2.f, 0.f);
+		
+			uv2[0] = LLVector2(0.f, 0.f);
+			uv2[1] = LLVector2(0.f, etc2.mV[1] * 2.f);
+			uv2[2] = LLVector2(etc2.mV[0] * 2.f, 0.f);
+		
+			v[0] = LLVector3(-1.f, -1.f, 0.f);
+			v[1] = LLVector3(-1.f, 3.f, 0.f);
+			v[2] = LLVector3(3.f, -1.f, 0.f);
 
-		mExoPostBuffer->getVertexStrider(v);
-		mExoPostBuffer->getTexCoord0Strider(uv1);
-		mExoPostBuffer->getTexCoord1Strider(uv2);
-		
-		uv1[0] = LLVector2(0.f, 0.f);
-		uv1[1] = LLVector2(0.f, 2.f);
-		uv1[2] = LLVector2(2.f, 0.f);
-		
-		uv2[0] = LLVector2(0.f, 0.f);
-		uv2[1] = LLVector2(0.f, etc2.mV[1] * 2.f);
-		uv2[2] = LLVector2(etc2.mV[0] * 2.f, 0.f);
-		
-		v[0] = LLVector3(-1.f, -1.f, 0.f);
-		v[1] = LLVector3(-1.f, 3.f, 0.f);
-		v[2] = LLVector3(3.f, -1.f, 0.f);
-
-		mExoPostBuffer->flush();
+			mExoPostBuffer->flush();
+		}
+		else
+		{
+			LL_WARNS() << "Failed to allocate Vertex Buffer for exoPostProcessing" << LL_ENDL;
+			destroyVB();
+		}
 	}
 	else
 	{
-		destroyVB();
-		mExoPostBuffer = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_TEXCOORD1, 0);
-		mExoPostBuffer->allocateBuffer(8, 0, true);
+		if (mExoPostBuffer->allocateBuffer(8, 0, true))
+		{
+			LLStrider<LLVector3> vert;
+			mExoPostBuffer->getVertexStrider(vert);
+			LLStrider<LLVector2> tc0;
+			LLStrider<LLVector2> tc1;
+			mExoPostBuffer->getTexCoord0Strider(tc0);
+			mExoPostBuffer->getTexCoord1Strider(tc1);
 
-		LLStrider<LLVector3> vert; 
-		mExoPostBuffer->getVertexStrider(vert);
-		LLStrider<LLVector2> tc0;
-		LLStrider<LLVector2> tc1;
-		mExoPostBuffer->getTexCoord0Strider(tc0);
-		mExoPostBuffer->getTexCoord1Strider(tc1);
-
-		vert[0].set(-1.f, 1.f, 0.f);
-		vert[1].set(-1.f, -3.f, 0.f);
-		vert[2].set(3.f, 1.f, 0.f);
+			vert[0].set(-1.f, 1.f, 0.f);
+			vert[1].set(-1.f, -3.f, 0.f);
+			vert[2].set(3.f, 1.f, 0.f);
+		}
+		else
+		{
+			LL_WARNS() << "Failed to allocate Vertex Buffer for exoPostProcessing" << LL_ENDL;
+			destroyVB();
+		}
 	}
 }
 
@@ -139,20 +136,23 @@ void exoPostProcess::ExodusRenderPost(LLRenderTarget* src, LLRenderTarget* dst, 
 
 void exoPostProcess::ExodusRenderVignette(LLRenderTarget* src, LLRenderTarget* dst)
 {
-	dst->bindTarget();
-	LLGLSLShader *shader = &gPostVignetteProgram;
-	shader->bind();
+	if (mExoPostBuffer)
+	{
+		dst->bindTarget();
+		LLGLSLShader *shader = &gPostVignetteProgram;
+		shader->bind();
 
-	mExoPostBuffer->setBuffer(LLVertexBuffer::MAP_VERTEX);
+		mExoPostBuffer->setBuffer(LLVertexBuffer::MAP_VERTEX);
 
-	exoShader::BindRenderTarget(dst, shader, LLShaderMgr::EXO_RENDER_SCREEN);
+		exoShader::BindRenderTarget(dst, shader, LLShaderMgr::EXO_RENDER_SCREEN);
 
-	shader->uniform3fv(LLShaderMgr::EXO_RENDER_VIGNETTE, 1, sExodusRenderVignette.mV);
-	mExoPostBuffer->drawArrays(LLRender::TRIANGLES, 0, 3);
-	stop_glerror();
+		shader->uniform3fv(LLShaderMgr::EXO_RENDER_VIGNETTE, 1, sExodusRenderVignette.mV);
+		mExoPostBuffer->drawArrays(LLRender::TRIANGLES, 0, 3);
+		stop_glerror();
 
-	shader->unbind();
-	dst->flush();
+		shader->unbind();
+		dst->flush();
+	}
 }
 
 void exoShader::BindTex2D(LLTexture *tex2D, LLGLSLShader *shader, S32 uniform, S32 unit, LLTexUnit::eTextureType mode, LLTexUnit::eTextureAddressMode addressMode, LLTexUnit::eTextureFilterOptions filterMode)

@@ -1000,7 +1000,7 @@ void LLUICtrl::setColor(const LLColor4& color)
 
 F32 LLUICtrl::getCurrentTransparency()
 {
-	F32 alpha = 0;
+	F32 alpha = 0.f;
 
 	switch(mTransparencyType)
 	{
@@ -1017,12 +1017,12 @@ F32 LLUICtrl::getCurrentTransparency()
 		break;
 
 	case TT_FADING:
-		alpha = sInactiveControlTransparency / 2;
+		alpha = sInactiveControlTransparency / 2.f;
 		break;
 
 	// <FS:PP> FIRE-5583, FIRE-5220: Option to show Camera Controls always opaque
 	case TT_FORCE_OPAQUE:
-		alpha = 1;
+		alpha = 1.f;
 		break;
 	// </FS:PP>
 

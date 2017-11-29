@@ -230,6 +230,7 @@ BOOL LLPanelMainInventory::postBuild()
 		recent_items_panel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
 		LLInventoryFilter& recent_filter = recent_items_panel->getFilter();
 		recent_filter.setFilterObjectTypes(recent_filter.getFilterObjectTypes() & ~(0x1 << LLInventoryType::IT_CATEGORY));
+		recent_filter.setEmptyLookupMessage("InventoryNoMatchingRecentItems");
 		recent_filter.markDefault();
 		recent_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, recent_items_panel, _1, _2));
 	}
@@ -498,7 +499,16 @@ void LLPanelMainInventory::doCreate(const LLSD& userdata)
 void LLPanelMainInventory::resetFilters()
 {
 	LLFloaterInventoryFinder *finder = getFinder();
-	getActivePanel()->getFilter().resetDefault();
+	// <FS:Ansariel> Properly reset all filters
+	//getActivePanel()->getFilter().resetDefault();
+	LLInventoryFilter& filter = getActivePanel()->getFilter();
+	filter.resetDefault();
+	filter.setFilterCreator(LLInventoryFilter::FILTERCREATOR_ALL);
+	filter.setSearchType(LLInventoryFilter::SEARCHTYPE_NAME);
+	filter.setFilterTransferable(FALSE);
+	getActivePanel()->updateShowInboxFolder(gSavedSettings.getBOOL("FSShowInboxFolder"));
+	updateFilterDropdown(&filter);
+	// </FS:Ansariel>
 	if (finder)
 	{
 		finder->updateElementsFromFilter();
@@ -1172,17 +1182,7 @@ void LLFloaterInventoryFinder::onTimeAgo(LLUICtrl *ctrl, void *user_data)
 // <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
 void LLFloaterInventoryFinder::onResetBtn()
 {
-	mFilter->resetDefault();
-	LLInventoryPanel* panel = mPanelMainInventory->getPanel();
-	if (panel->getName() == "All Items")
-	{
-		panel->setFilterTypes(0xffffffffffffffffULL);
-	}
-
-	mPanelMainInventory->updateFilterDropdown(mFilter);
-	mFilter->setFilterCreator(LLInventoryFilter::FILTERCREATOR_ALL);
-
-	updateElementsFromFilter();
+	mPanelMainInventory->resetFilters();
 }
 // </FS:Ansariel>
 
@@ -1937,7 +1937,6 @@ void LLPanelMainInventory::onSearchTypeChecked(const LLSD& userdata)
 	{
 		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_ALL);
 	}
-	resetFilters();
 }
 
 BOOL LLPanelMainInventory::isSearchTypeChecked(const LLSD& userdata)

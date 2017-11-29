@@ -25,6 +25,12 @@
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
 
+// <COLOSI opensim multi-currency support>
+#include "tea.h"
+#include "llstatusbar.h"
+#include "llfloaterbuycurrency.h"
+// </COLOSI opensim multi-currency support>
+
 LFSimFeatureHandler::LFSimFeatureHandler()
 	: mSupportsExport(false),
 	mSayRange(20),
@@ -56,14 +62,23 @@ void LFSimFeatureHandler::handleRegionChange()
 {
 	if (LLViewerRegion* region = gAgent.getRegion())
 	{
-		if (region->capabilitiesReceived())
+		if (region->simulatorFeaturesReceived())
 		{
 			setSupportedFeatures();
 		}
 		else
 		{
-			region->setCapabilitiesReceivedCallback(boost::bind(&LFSimFeatureHandler::setSupportedFeatures, this));
+			region->setSimulatorFeaturesReceivedCallback(boost::bind(&LFSimFeatureHandler::onSimulatorFeaturesReceived,this,_1));
 		}
+	}
+}
+
+void LFSimFeatureHandler::onSimulatorFeaturesReceived(const LLUUID &region_id)
+{
+	LLViewerRegion *region = gAgent.getRegion();
+	if (region && (region->getRegionID()==region_id))
+	{
+		setSupportedFeatures();
 	}
 }
 
@@ -150,6 +165,26 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			{
 				mAvatarPickerURL = LLStringUtil::null;
 			}
+
+			// <COLOSI opensim multi-currency support>
+			if (extras.has("currency-base-uri"))
+			{
+				mHelperUriOverride = extras["currency-base-uri"].asString();
+			}
+			else
+			{
+				mHelperUriOverride = LLStringUtil::null;
+			}
+
+			if (extras.has("currency"))
+			{
+				mCurrencySymbolOverride = extras["currency"].asString();
+			}
+			else
+			{
+				mCurrencySymbolOverride = LLStringUtil::null;
+			}
+			// </COLOSI opensim multi-currency support>
 		}
 		else // OpenSim specifics are unsupported reset all to default
 		{
@@ -198,12 +233,43 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			{
 				mAvatarPickerURL = LLStringUtil::null;
 			}
+
+			// <COLOSI opensim multi-currency support>
+			mHelperUriOverride = LLStringUtil::null;
+			mCurrencySymbolOverride = LLStringUtil::null;
+			// </COLOSI opensim multi-currency support>>
 		}
 
 		mHasAvatarPicker = !avatarPickerURL().empty();
 		mHasDestinationGuide = !destinationGuideURL().empty();
+		
+		// <COLOSI opensim multi-currency support>
+		std::string prev_currency_symbol = Tea::getCurrency();
+		Tea::setRegionCurrency(mCurrencySymbolOverride);
+		std::string new_currency_symbol = Tea::getCurrency();
+		// If currency symbol has changed, then update things
+		if (new_currency_symbol != prev_currency_symbol)
+		{
+			LFSimFeatureHandler::updateCurrencySymbols();
+		}
+		// </COLOSI opensim multi-currency support>
 	}
 }
+
+// <COLOSI opensim multi-currency support>
+//static
+void LFSimFeatureHandler::updateCurrencySymbols()
+{
+	// Update the static ui for the buy_currency_floater xml version; html version may require additional work.
+	LLFloaterBuyCurrency::updateCurrencySymbols();
+	// Update the necessary compontents of the status bar panel
+	if (gStatusBar)
+	{
+		gStatusBar->updateCurrencySymbols();
+	}
+	// TODO: What else needs to be updated?
+}
+// </COLOSI opensim multi-currency support>
 
 boost::signals2::connection LFSimFeatureHandler::setSupportsExportCallback(const boost::signals2::signal<void()>::slot_type& slot)
 {

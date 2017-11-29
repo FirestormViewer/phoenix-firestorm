@@ -128,7 +128,7 @@ linee della chat:
         </text>
         <text name="tooltip_textbox4">
           Pixel (Richiesto riavvio)
-V3 Default 0. V1 Default 2.
+[VIEWER_GENERATION] Default 0. Viewer 1 Default 2.
         </text>
         <text name="Label_FolderItemViewHeight">
            Distanza massima 
@@ -136,7 +136,7 @@ cartelle inventario:
         </text>
         <text name="Label_FolderItemViewHeight_Scale">
           Pixel (Richiesto riavvio)
-V3 Default 20. V1 Default 18.
+[VIEWER_GENERATION] Default 20. Viewer 1 Default 18.
         </text>
     </panel>
 </tab_container>

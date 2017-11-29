@@ -96,7 +96,7 @@ FloaterQuickPrefs::QuickPrefsXMLEntry::QuickPrefsXMLEntry()
 // </FS:Zi>
 
 FloaterQuickPrefs::FloaterQuickPrefs(const LLSD& key)
-:	LLTransientDockableFloater(NULL, true, key),
+:	LLTransientDockableFloater(NULL, false, key),
 	mAvatarZOffsetSlider(NULL),
 	mRlvBehaviorCallbackConnection(),
 	mRegionChangedSlot()

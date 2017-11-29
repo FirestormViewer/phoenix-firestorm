@@ -224,13 +224,11 @@ public:
 private:
 	BOOL					mDirty;
 	BOOL                    mHasSelection;
-	BOOL					mOpen; //Phoenix:KC
 
 	//Phoenix:KC
 	S32					mCollapsedHeight;
 	S32					mExpandedHeight;
 	std::map<std::string, std::string> mStatusText;
-
 
 protected:
 	LLSD				mMediaSettings;

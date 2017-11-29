@@ -69,15 +69,6 @@ const S32 MAX_CHILDREN_PER_TASK = 255;
 const S32 MAX_CHILDREN_PER_PHYSICAL_TASK = 32;
 // </FS:Ansariel>
 
-// <FS:KC> show/hide build highlight
-enum EFSShowHideHighlight
-{
-	FS_SHOW_HIDE_HIGHLIGHT_NORMAL = 0,
-	FS_SHOW_HIDE_HIGHLIGHT_SHOW = 1,
-	FS_SHOW_HIDE_HIGHLIGHT_HIDE = 2
-};
-// </FS:KC>
-
 // This is used by the DeRezObject message to determine where to put
 // derezed tasks.
 enum EDeRezDestination
@@ -624,10 +615,6 @@ public:
 	void renderSilhouettes(BOOL for_hud);
 	void enableSilhouette(BOOL enable) { mRenderSilhouettes = enable; }
 	
-	// <FS:KC> show/hide build highlight
-	void setFSShowHideHighlight(EFSShowHideHighlight state) { mFSShowHideHighlight = state; }
-	// </FS:KC>
-	
 	////////////////////////////////////////////////////////////////
 	// Utility functions that operate on the current selection
 	////////////////////////////////////////////////////////////////
@@ -930,10 +917,6 @@ private:
 	BOOL					mForceSelection;
 
     std::vector<LLAnimPauseRequest>	mPauseRequests;
-
-// <FS:KC> show/hide build highlight
-	EFSShowHideHighlight	mFSShowHideHighlight;
-// </FS:KC>
 
 // <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
 public:

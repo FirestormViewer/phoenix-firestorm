@@ -1734,7 +1734,7 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 
 	LLVolumeParams volume_params;
 
-	volume_params.setType(LL_PCODE_PROFILE_CIRCLE, LL_PCODE_PATH_LINE);
+	volume_params.setType(LL_PCODE_PROFILE_SQUARE, LL_PCODE_PATH_LINE);
 	volume_params.setBeginAndEndS(0.f, 1.f);
 	volume_params.setBeginAndEndT(0.f, 1.f);
 	volume_params.setRatio(1.f, 1.f);
@@ -1743,7 +1743,7 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 	LLVolumeMessage::packVolumeParams(&volume_params, msg);
 	LLVector3 rezpos = agentPos - LLVector3(0.0f, 0.0f, 2.5f);
 	LLQuaternion rotation;
-	rotation.setQuat(90.f * DEG_TO_RAD, LLVector3::y_axis);
+	rotation.setQuat(0.f, LLVector3::y_axis);
 
 	static LLCachedControl<F32> sFSCmdLinePlatformSize(gSavedSettings, "FSCmdLinePlatformSize");
 
@@ -1763,7 +1763,7 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 		realsize = max_scale;
 	}
 
-	msg->addVector3Fast(_PREHASH_Scale, LLVector3(0.01f, realsize, realsize));
+	msg->addVector3Fast(_PREHASH_Scale, LLVector3(realsize, realsize, 0.01f));
 	msg->addQuatFast(_PREHASH_Rotation, rotation);
 	msg->addVector3Fast(_PREHASH_RayStart, rezpos);
 	msg->addVector3Fast(_PREHASH_RayEnd, rezpos);

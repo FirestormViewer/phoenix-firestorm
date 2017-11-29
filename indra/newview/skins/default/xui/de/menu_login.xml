@@ -2,6 +2,7 @@
 <menu_bar name="Login Menu">
 	<menu label="Viewer" name="File">
 		<menu_item_call label="Einstellungen..." name="Preferences..."/>
+		<menu_item_call label="Fenster schließen" name="Close Window"/>
 		<menu_item_check label="Grid-Auswahl anzeigen" name="Show Grid Picker"/>
 		<menu_item_call label="[APP_NAME] beenden" name="Quit"/>
 	</menu>

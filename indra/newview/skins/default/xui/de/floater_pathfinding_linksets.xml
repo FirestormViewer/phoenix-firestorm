@@ -118,7 +118,7 @@
 			<scroll_list.columns label="Geskriptet" name="scripted"/>
 			<scroll_list.columns label="Belastung" name="land_impact"/>
 			<scroll_list.columns label="Abstand" name="dist_from_you"/>
-			<scroll_list.columns label="Pathfinding-Nutzung" name="linkset_use"/>
+			<scroll_list.columns label="Pathfinding verwenden" name="linkset_use"/>
 			<scroll_list.columns label="A %" name="a_percent"/>
 			<scroll_list.columns label="B %" name="b_percent"/>
 			<scroll_list.columns label="C %" name="c_percent"/>
@@ -133,7 +133,7 @@
 	</panel>
 	<panel name="pathfinding_linksets_actions">
 		<text name="linksets_actions_label">
-			Aktionen für ausgewählte Objekte:
+			Aktionen für Auswahl
 		</text>
 		<check_box label="Beacon anzeigen" name="show_beacon"/>
 		<button label="Nehmen" name="take_objects"/>

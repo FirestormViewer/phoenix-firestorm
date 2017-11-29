@@ -44,6 +44,12 @@ public:
 		*/
 	
 	static LLFloater* buildFloater(const LLSD& key);
+
+	// <COLOSI opensim multi-currency support>
+	// Necessary because floater was designed to build only on first display.
+	// Forces refresh of all currency symbols in floater when called.
+	static void updateCurrencySymbols();
+	// </COLOSI opensim multi-currency support>
 };
 
 

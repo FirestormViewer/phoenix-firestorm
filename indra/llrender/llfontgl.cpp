@@ -1077,7 +1077,7 @@ LLFontGL* LLFontGL::getFontSansSerifBold()
 //static
 LLFontGL* LLFontGL::getFontScripting()
 {
-	static LLFontGL* fontp = getFont(LLFontDescriptor("Scripting","Monospace",0));
+	static LLFontGL* fontp = getFont(LLFontDescriptor("Scripting","Scripting",0));
 	return fontp;
 }
 
@@ -1130,6 +1130,10 @@ LLFontGL* LLFontGL::getFontByName(const std::string& name)
 	else if (name == "OCRA")
 	{
 		return getFontOCRA();
+	}
+	else if (name == "Scripting")
+	{
+		return getFontScripting();
 	}
 	// </FS:CR>
 	else
