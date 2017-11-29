@@ -373,35 +373,31 @@ void FSData::downloadAgents()
 		mAssetsURL = mBaseURL + "/" + "assets.xml";
 	}
 	
-	if (mAgentsURL.empty())
+	if (!mAgentsURL.empty())
 	{
-		// we can saftly presume if agents.xml URL is not present, assets.xml is not going to be present also
-		return;
+		mAgentsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, filename_prefix + "_agents.xml");
+		time_t last_modified = 0;
+		llstat stat_data;
+		if(!LLFile::stat(mAgentsFilename, &stat_data))
+		{
+			last_modified = stat_data.st_mtime;
+		}
+		LL_INFOS("fsdata") << "Downloading agents.xml from " << mAgentsURL << " with last modifed of " << last_modified << LL_ENDL;
+		FSCoreHttpUtil::callbackHttpGet(mAgentsURL, last_modified, boost::bind(downloadComplete, _1, mAgentsURL), boost::bind(downloadError, _1, mAgentsURL));
 	}
-	
-	mAgentsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, filename_prefix + "_agents.xml");
-	time_t last_modified = 0;
-	llstat stat_data;
-	if(!LLFile::stat(mAgentsFilename, &stat_data))
-	{
-		last_modified = stat_data.st_mtime;
-	}
-	LL_INFOS("fsdata") << "Downloading agents.xml from " << mAgentsURL << " with last modifed of " << last_modified << LL_ENDL;
-	FSCoreHttpUtil::callbackHttpGet(mAgentsURL, last_modified, boost::bind(downloadComplete, _1, mAgentsURL), boost::bind(downloadError, _1, mAgentsURL));
 
-	if (mAssetsURL.empty())
+	if (!mAssetsURL.empty())
 	{
-		return;
+		mAssestsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, filename_prefix + "_assets.xml");
+		time_t last_modified = 0;
+		llstat stat_data;
+		if(!LLFile::stat(mAssestsFilename, &stat_data))
+		{
+			last_modified = stat_data.st_mtime;
+		}
+		LL_INFOS("fsdata") << "Downloading assets.xml from " << mAssetsURL << " with last modifed of " << last_modified << LL_ENDL;
+		FSCoreHttpUtil::callbackHttpGet(mAssetsURL, last_modified, boost::bind(downloadComplete, _1, mAssetsURL), boost::bind(downloadError, _1, mAssetsURL));
 	}
-	
-	mAssestsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, filename_prefix + "_assets.xml");
-	last_modified = 0;
-	if(!LLFile::stat(mAssestsFilename, &stat_data))
-	{
-		last_modified = stat_data.st_mtime;
-	}
-	LL_INFOS("fsdata") << "Downloading assets.xml from " << mAssetsURL << " with last modifed of " << last_modified << LL_ENDL;
-	FSCoreHttpUtil::callbackHttpGet(mAssetsURL, last_modified, boost::bind(downloadComplete, _1, mAssetsURL), boost::bind(downloadError, _1, mAssetsURL));
 }
 
 void FSData::processData(const LLSD& fs_data)
