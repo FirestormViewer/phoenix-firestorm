@@ -4649,6 +4649,9 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
     //updateTimeStep();
     
 	// <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
+	// This was originally done in updateTimeStep(), but since that is globally disabled for now, we do it here
+	mMotionController.setUpdateFactor(mUpdatePeriod);
+
 	if (!visible && !isSelf())
 	{
 		updateMotions(LLCharacter::HIDDEN_UPDATE);
