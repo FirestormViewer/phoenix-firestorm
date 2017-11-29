@@ -499,7 +499,16 @@ void LLPanelMainInventory::doCreate(const LLSD& userdata)
 void LLPanelMainInventory::resetFilters()
 {
 	LLFloaterInventoryFinder *finder = getFinder();
-	getActivePanel()->getFilter().resetDefault();
+	// <FS:Ansariel> Properly reset all filters
+	//getActivePanel()->getFilter().resetDefault();
+	LLInventoryFilter& filter = getActivePanel()->getFilter();
+	filter.resetDefault();
+	filter.setFilterCreator(LLInventoryFilter::FILTERCREATOR_ALL);
+	filter.setSearchType(LLInventoryFilter::SEARCHTYPE_NAME);
+	filter.setFilterTransferable(FALSE);
+	getActivePanel()->updateShowInboxFolder(gSavedSettings.getBOOL("FSShowInboxFolder"));
+	updateFilterDropdown(&filter);
+	// </FS:Ansariel>
 	if (finder)
 	{
 		finder->updateElementsFromFilter();
@@ -1173,17 +1182,7 @@ void LLFloaterInventoryFinder::onTimeAgo(LLUICtrl *ctrl, void *user_data)
 // <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
 void LLFloaterInventoryFinder::onResetBtn()
 {
-	mFilter->resetDefault();
-	LLInventoryPanel* panel = mPanelMainInventory->getPanel();
-	if (panel->getName() == "All Items")
-	{
-		panel->setFilterTypes(0xffffffffffffffffULL);
-	}
-
-	mPanelMainInventory->updateFilterDropdown(mFilter);
-	mFilter->setFilterCreator(LLInventoryFilter::FILTERCREATOR_ALL);
-
-	updateElementsFromFilter();
+	mPanelMainInventory->resetFilters();
 }
 // </FS:Ansariel>
 
@@ -1938,7 +1937,6 @@ void LLPanelMainInventory::onSearchTypeChecked(const LLSD& userdata)
 	{
 		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_ALL);
 	}
-	resetFilters();
 }
 
 BOOL LLPanelMainInventory::isSearchTypeChecked(const LLSD& userdata)

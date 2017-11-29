@@ -1850,13 +1850,14 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	LLCoordScreen scr;
     mWindow->getSize(&scr);
 
-    if(p.fullscreen && ( scr.mX!=p.width || scr.mY!=p.height))
-    {
-		LL_WARNS() << "Fullscreen has forced us in to a different resolution now using "<<scr.mX<<" x "<<scr.mY<<LL_ENDL;
-		gSavedSettings.setS32("FullScreenWidth",scr.mX);
-		gSavedSettings.setS32("FullScreenHeight",scr.mY);
-    }
-
+	// <FS:Ansariel> Settings don't exist anymore as of 28-11-2017
+  //  if(p.fullscreen && ( scr.mX!=p.width || scr.mY!=p.height))
+  //  {
+		//LL_WARNS() << "Fullscreen has forced us in to a different resolution now using "<<scr.mX<<" x "<<scr.mY<<LL_ENDL;
+		//gSavedSettings.setS32("FullScreenWidth",scr.mX);
+		//gSavedSettings.setS32("FullScreenHeight",scr.mY);
+  //  }
+	// </FS:Ansariel>
 
 	F32 system_scale_factor = mWindow->getSystemUISize();
 	if (system_scale_factor < MIN_UI_SCALE || system_scale_factor > MAX_UI_SCALE)

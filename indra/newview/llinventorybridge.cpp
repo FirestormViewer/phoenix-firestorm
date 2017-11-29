@@ -6471,6 +6471,15 @@ void LLGestureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		getClipboardEntries(true, items, disabled_items, flags);
 
 		items.push_back(std::string("Gesture Separator"));
+		// <FS:Ansariel> FIRE-5913: Selecting a mix of active and inactive gestures disables both "Activate" / "Deactivate" menu options
+		if (flags & ITEM_IN_MULTI_SELECTION)
+		{
+			items.push_back(std::string("Deactivate"));
+			items.push_back(std::string("Activate"));
+		}
+		else
+		{
+		// </FS:Ansariel>
 		if (LLGestureMgr::instance().isGestureActive(getUUID()))
 		{
 			items.push_back(std::string("Deactivate"));
@@ -6479,6 +6488,9 @@ void LLGestureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		{
 			items.push_back(std::string("Activate"));
 		}
+		// <FS:Ansariel> FIRE-5913: Selecting a mix of active and inactive gestures disables both "Activate" / "Deactivate" menu options
+		}
+		// </FS:Ansariel>
 	}
 	addLinkReplaceMenuOption(items, disabled_items);
 

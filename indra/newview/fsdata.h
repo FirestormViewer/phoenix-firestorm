@@ -79,9 +79,9 @@ public:
 	std::string getOpenSimMOTD() { return mOpensimMOTD; }
 	bool getFSDataDone() { return mFSDataDone; }
 	bool getAgentsDone() { return mAgentsDone; }
-	
+	void checkDone(const std::string& url);
+
 	bool isAgentFlag(const LLUUID& agent_id, FSData::flags_t flag);
-	
 
 private:
 	static void sendInfo(const LLUUID& destination, const LLUUID& sessionid, const std::string& my_name, EInstantMessage dialog);

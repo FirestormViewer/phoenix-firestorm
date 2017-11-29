@@ -66,7 +66,7 @@
 
 static const std::string OPTIONS_BUTTON_NAME = "options_gear_btn";
 static const std::string ADD_BUTTON_NAME = "add_btn";
-static const std::string ADD_FOLDER_BUTTON_NAME = "add_folder_btn";
+//static const std::string ADD_FOLDER_BUTTON_NAME = "add_folder_btn"; // <FS:Ansariel> Doesn't exist as of 18-11-2017
 static const std::string TRASH_BUTTON_NAME = "trash_btn";
 
 
@@ -203,6 +203,7 @@ LLLandmarksPanel::LLLandmarksPanel()
 	,	mGearButton(NULL)
 	,	mGearFolderMenu(NULL)
 	,	mGearLandmarkMenu(NULL)
+	,	mMyLandmarksAccordionTab(NULL) // <FS:Ansariel> Fix warnings log spam
 {
 	mInventoryObserver = new LLLandmarksPanelObserver(this);
 	gInventory.addObserver(mInventoryObserver);
@@ -493,18 +494,43 @@ LLFolderViewItem* LLLandmarksPanel::selectItemInAccordionTab(LLPlacesInventoryPa
 	if (!item)
 		return NULL;
 
-	LLAccordionCtrlTab* tab = getChild<LLAccordionCtrlTab>(tab_name);
-	if (!tab->isExpanded())
+	// <FS:Ansariel> Fix warnings log spam
+	//LLAccordionCtrlTab* tab = getChild<LLAccordionCtrlTab>(tab_name);
+	//if (!tab->isExpanded())
+	LLView* tab_view = findChildView(tab_name);
+	LLAccordionCtrlTab* tab = dynamic_cast<LLAccordionCtrlTab*>(tab_view);
+	if (tab && !tab->isExpanded())
+	// </FS:Ansariel>
 	{
 		tab->changeOpenClose(false);
 	}
+	// <FS:Ansariel> Fix warnings log spam
+	else
+	{
+		LLPanel* panel = dynamic_cast<LLPanel*>(tab_view);
+		if (panel)
+		{
+			panel->getParentByType<LLTabContainer>()->selectTabPanel(panel);
+		}
+	}
+	// </FS:Ansariel>
 
 	root->setSelection(item, FALSE, take_keyboard_focus);
 
-	LLAccordionCtrl* accordion = getChild<LLAccordionCtrl>("landmarks_accordion");
-	LLRect screen_rc;
-	localRectToScreen(item->getRect(), &screen_rc);
-	accordion->notifyParent(LLSD().with("scrollToShowRect", screen_rc.getValue()));
+	// <FS:Ansariel> Fix warnings log spam
+	//LLAccordionCtrl* accordion = getChild<LLAccordionCtrl>("landmarks_accordion");
+	//LLRect screen_rc;
+	//localRectToScreen(item->getRect(), &screen_rc);
+	//accordion->notifyParent(LLSD().with("scrollToShowRect", screen_rc.getValue()));
+	LLView* accordion_view = findChildView("landmarks_accordion");
+	LLAccordionCtrl* accordion = dynamic_cast<LLAccordionCtrl*>(accordion_view);
+	if (accordion)
+	{
+		LLRect screen_rc;
+		localRectToScreen(item->getRect(), &screen_rc);
+		accordion->notifyParent(LLSD().with("scrollToShowRect", screen_rc.getValue()));
+	}
+	// </FS:Ansariel>
 
 	return item;
 }
@@ -635,7 +661,15 @@ void LLLandmarksPanel::initLandmarksPanel(LLPlacesInventoryPanel* inventory_list
 
 LLAccordionCtrlTab* LLLandmarksPanel::initAccordion(const std::string& accordion_tab_name, LLPlacesInventoryPanel* inventory_list,	bool expand_tab)
 {
-	LLAccordionCtrlTab* accordion_tab = getChild<LLAccordionCtrlTab>(accordion_tab_name);
+	// <FS:Ansariel> Fix warnings log spam
+	//LLAccordionCtrlTab* accordion_tab = getChild<LLAccordionCtrlTab>(accordion_tab_name);
+	LLView* accordion_tab_view = findChildView(accordion_tab_name);
+	LLAccordionCtrlTab* accordion_tab = dynamic_cast<LLAccordionCtrlTab*>(accordion_tab_view);
+	if (!accordion_tab)
+	{
+		return NULL;
+	}
+	// </FS:Ansariel>
 
 	mAccordionTabs.push_back(accordion_tab);
 	accordion_tab->setDropDownStateChangedCallback(
@@ -732,11 +766,11 @@ void LLLandmarksPanel::initListCommandsHandlers()
 
 void LLLandmarksPanel::updateListCommands()
 {
-	bool add_folder_enabled = isActionEnabled("category");
+	//bool add_folder_enabled = isActionEnabled("category"); // <FS:Ansariel> Doesn't exist as of 18-11-2017
 	bool trash_enabled = isActionEnabled("delete") && (isFolderSelected() || isLandmarkSelected());
 
 	// keep Options & Add Landmark buttons always enabled
-	mListCommands->getChildView(ADD_FOLDER_BUTTON_NAME)->setEnabled(add_folder_enabled);
+	//mListCommands->getChildView(ADD_FOLDER_BUTTON_NAME)->setEnabled(add_folder_enabled); // <FS:Ansariel> Doesn't exist as of 18-11-2017
 	mListCommands->getChildView(TRASH_BUTTON_NAME)->setEnabled(trash_enabled);
 }
 

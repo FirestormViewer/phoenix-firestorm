@@ -3168,7 +3168,7 @@ void LLViewerRegion::setCapability(const std::string& name, const std::string& u
 			mViewerAssetUrl = url;
 		}
 		// <FS:Ansariel> [UDP Assets]
-		else if (name == "GetTexure")
+		else if (name == "GetTexture")
 		{
 			mHttpUrl = url;
 		}
@@ -3187,7 +3187,7 @@ void LLViewerRegion::setCapabilityDebug(const std::string& name, const std::stri
 			mViewerAssetUrl = url;
 		}
 		// <FS:Ansariel> [UDP Assets]
-		else if (name == "GetTexure")
+		else if (name == "GetTexture")
 		{
 			mHttpUrl = url;
 		}

@@ -375,6 +375,7 @@ void downloadGridlistComplete( LLSD const &aData )
 void downloadGridlistError( LLSD const &aData, std::string const &aURL )
 {
 	LL_WARNS() << "Failed to download grid list from " << aURL << LL_ENDL;
+	sGridListRequestReady = true;
 }
 
  void downloadGridstatusComplete( LLSD const &aData )
@@ -670,6 +671,8 @@ bool idle_startup()
 		gSavedSettings.setS32("LastFeatureVersion", LLFeatureManager::getInstance()->getVersion());
 		gSavedSettings.setString("LastGPUString", thisGPU);
 
+		// <FS:Ansariel> Re-enable feature table download
+		LLFeatureManager::getInstance()->fetchHTTPTables();
 
 		std::string xml_file = LLUI::locateSkin("xui_version.xml");
 		LLXMLNodePtr root;
@@ -884,7 +887,7 @@ bool idle_startup()
 			}
 
 			std::string url = gSavedSettings.getString("GridListDownloadURL");
-			LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( url, boost::bind( downloadGridlistComplete, _1 ), boost::bind( downloadGridlistError, _1, url ) );
+			FSCoreHttpUtil::callbackHttpGet(url, last_modified, boost::bind(downloadGridlistComplete, _1), boost::bind(downloadGridlistError, _1, url));
 		}
 #ifdef OPENSIM // <FS:AW optional opensim support>
 		// Fetch grid infos as needed
@@ -1423,6 +1426,10 @@ bool idle_startup()
 
 		std::string user_windlight_days_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/days", ""));
 		LLFile::mkdir(user_windlight_days_path_name.c_str());
+
+		// <FS:Ansariel> Create user fonts directory
+		std::string user_fonts_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "fonts", ""));
+		LLFile::mkdir(user_fonts_path_name.c_str());
 
 		// <FS:WS> Initalize Account based asset_blacklist
 		FSAssetBlacklist::getInstance()->init();
@@ -4528,6 +4535,10 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	}
 	// </FS:AW>
 
+	// <COLOSI opensim multi-currency support>
+	std::string prev_currency_symbol = Tea::getCurrency();
+	// </COLOSI opensim multi-currency support>
+
 // <FS:AW opensim currency support>
 	std::string currency = "L$";
 #ifdef OPENSIM // <FS:AW optional opensim support>
@@ -4543,6 +4554,17 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	}
 	Tea::setCurrency(currency);
 // </FS:AW opensim currency support>
+
+	// <COLOSI  opensim multi-currency support>
+	// Blank out the region currency which is set in in lfsimfeatureshandler
+	Tea::setRegionCurrency(LLStringUtil::null);
+	std::string new_currency_symbol = Tea::getCurrency();
+	// If currency symbol has changed, update currency symbols where manually necessary.
+	if (new_currency_symbol != prev_currency_symbol)
+	{
+		LFSimFeatureHandler::updateCurrencySymbols();
+	}
+	// </COLOSI opensim multi-currency support>
 
 // <FS:AW  opensim destinations and avatar picker>
 	if(response.has("avatar_picker_url"))

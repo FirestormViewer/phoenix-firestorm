@@ -90,6 +90,13 @@ public:
 	void insert(S32 charidx, const LLWString& wchars);
 	void replace(S32 charidx, llwchar wc);
 
+	// <COLOSI opensim multi-currency support>
+	// Need a public method for setting an lluistring to dirty when we change
+	// currency symbols.  This will force the text to be re-wrapped on the next
+	// get call with Tea::wrapCurrency()
+	void updateCurrencySymbols() { dirty(); }
+	// </COLOSI opensim multi-currency support>
+
 private:
 	// something changed, requiring reformatting of strings
 	void dirty();
