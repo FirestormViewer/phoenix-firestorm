@@ -1018,11 +1018,7 @@ void LLFloaterModelPreview::onPhysicsUseLOD(LLUICtrl* ctrl, void* userdata)
 	}
 
 	S32 file_mode = iface->getItemCount() - 1;
-	//<FS:Beq> Add box physics support
-	// Ugh, the code assumes the last entry is "load from file", we are going to have to be the next to last.
-	S32 box_mode = file_mode - 1;
-//	if (which_mode < file_mode)
-	if (which_mode < box_mode)
+	if (which_mode < file_mode)
 	{
 		S32 which_lod = num_lods - which_mode;
 		sInstance->mModelPreview->setPhysicsFromLOD(which_lod);
