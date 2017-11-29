@@ -935,7 +935,7 @@ bool LLAppViewer::init()
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "colors.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "ignorable_dialogs.xml"));
-		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.remote.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.user.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "password.dat"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "quick_preferences.xml"));
