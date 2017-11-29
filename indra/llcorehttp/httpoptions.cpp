@@ -46,7 +46,8 @@ HttpOptions::HttpOptions() :
     mVerifyPeer(false),
     mVerifyHost(false),
     mDNSCacheTimeout(-1L),
-    mNoBody(false)
+    mNoBody(false),
+	mLastModified(0) // <FS:Ansariel> GetIfModified request
 {}
 
 
@@ -124,5 +125,12 @@ void HttpOptions::setHeadersOnly(bool nobody)
     if (mNoBody)
         setWantHeaders(true);
 }
+
+// <FS:Ansariel> GetIfModified request
+void HttpOptions::setLastModified(long last_modified)
+{
+	mLastModified = last_modified;
+}
+// </FS:Ansariel>
 
 }   // end namespace LLCore

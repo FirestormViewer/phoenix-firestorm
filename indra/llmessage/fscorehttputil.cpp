@@ -116,13 +116,38 @@ namespace FSCoreHttpUtil
 								   boost::bind(trivialGetCoroRaw, url, LLCore::HttpRequest::DEFAULT_POLICY_ID, aHeader, options, success, failure));
 	}
 
-	LLCore::HttpHeaders::ptr_t createModifiedSinceHeader( time_t aTime )
+	void trivialGetCoro(const std::string &url, const time_t& last_modified, completionCallback_t success, completionCallback_t failure)
 	{
-		std::string strDate = LLDate::toHTTPDateString( gmtime( &aTime ), "%A, %d %b %Y %H:%M:%S GMT" );
+		LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("trivialGetCoro", LLCore::HttpRequest::DEFAULT_POLICY_ID));
+		LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+		LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
 
-		LLCore::HttpHeaders::ptr_t pHeader( new LLCore::HttpHeaders() );
-		pHeader->append( "If-Modified-Since", strDate );
-	
-		return pHeader;
+		httpOpts->setWantHeaders(true);
+		httpOpts->setLastModified((long)last_modified);
+
+		LLSD result = httpAdapter->getAndSuspend(httpRequest, url, httpOpts);
+
+		LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+		LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+
+		if (!status)
+		{
+			if (failure)
+			{
+				failure(httpResults);
+			}
+		}
+		else
+		{
+			if (success)
+			{
+				success(result);
+			}
+		}
+	}
+
+	void callbackHttpGet(const std::string &url, const time_t& last_modified, completionCallback_t success, completionCallback_t failure)
+	{
+		LLCoros::instance().launch("HttpCoroutineAdapter::genericGetCoro", boost::bind(&trivialGetCoro, url, last_modified, success, failure));
 	}
 }
