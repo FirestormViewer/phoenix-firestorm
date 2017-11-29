@@ -116,7 +116,7 @@ namespace FSCoreHttpUtil
 								   boost::bind(trivialGetCoroRaw, url, LLCore::HttpRequest::DEFAULT_POLICY_ID, aHeader, options, success, failure));
 	}
 
-	void trivialGetCoro(const std::string &url, const time_t& last_modified, completionCallback_t success, completionCallback_t failure)
+	void trivialGetCoro(std::string url, time_t last_modified, completionCallback_t success, completionCallback_t failure)
 	{
 		LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("trivialGetCoro", LLCore::HttpRequest::DEFAULT_POLICY_ID));
 		LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
