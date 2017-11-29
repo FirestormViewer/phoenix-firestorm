@@ -166,14 +166,14 @@ no funcionar bien.
 			</text>
 			<text name="tooltip_textbox4" line_spacing.pixels="5">
 				pixels (requiere reiniciar)
-0 por defecto en V3 y 2 en V1.
+0 por defecto en [VIEWER_GENERATION] y 2 en Viewer 1.
 			</text>
 			<text name="Label_FolderItemViewHeight" width="165">
 				Altura de carpeta:
 			</text>
 			<text name="Label_FolderItemViewHeight_Scale" line_spacing.pixels="5">
 				pixels (requiere reiniciar)
-20 por defecto en V3 y 18 en V1.
+20 por defecto en [VIEWER_GENERATION] y 18 en Viewer 1.
 			</text>
 		</panel>
 	</tab_container>

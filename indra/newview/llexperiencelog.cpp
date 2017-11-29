@@ -217,6 +217,7 @@ void LLExperienceLog::loadEvents()
 	if(mMaxDays > 0 && settings.has("Events"))
 	{
 		mEvents = settings["Events"];
+		eraseExpired(); // <FS:Ansariel> FIRE-21781: experience_events.xml log file grows indefinitely
 		mEventsToSave = mEvents;
 	}
 }
@@ -228,10 +229,25 @@ LLExperienceLog::~LLExperienceLog()
 
 void LLExperienceLog::eraseExpired()
 {
-	while(mEvents.size() > mMaxDays && mMaxDays > 0)
+	// <FS:Ansariel> FIRE-21781: experience_events.xml log file grows indefinitely
+	//while(mEvents.size() > mMaxDays && mMaxDays > 0)
+	//{
+	//	mEvents.erase(mEvents.beginMap()->first);
+	//}
+	if (mMaxDays > 0)
 	{
-		mEvents.erase(mEvents.beginMap()->first);
+		LLSD events = mEvents;
+		for (LLSD::map_const_iterator it = mEvents.beginMap(); it != mEvents.endMap(); ++it)
+		{
+			std::string date = it->first;
+			if (!isNotExpired(date))
+			{
+				events.erase(it->first);
+			}
+		}
+		mEvents = events;
 	}
+	// </FS:Ansariel>
 }
 
 bool LLExperienceLog::isNotExpired(std::string& date)

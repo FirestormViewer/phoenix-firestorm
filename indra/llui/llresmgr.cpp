@@ -254,6 +254,7 @@ void LLResMgr::getIntegerString( std::string& output, S32 input ) const
 	}
 	
 	// *NOTE: this method does not handle negative input integers correctly
+	output.clear(); // <FS:Ansariel> Clear string in case it gets reused multiple times
 	S32 fraction = 0;
 	std::string fraction_string;
 	S32 remaining_count = input;

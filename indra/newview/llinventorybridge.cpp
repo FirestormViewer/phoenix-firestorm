@@ -2071,21 +2071,11 @@ void LLItemBridge::buildDisplayName() const
 	{
 		mDisplayName.assign(LLStringUtil::null);
 	}
-	// <FS:Ansariel> FIRE-21739: Inventory restarts filter when detaching attachments
-	//S32 old_length = mSearchableName.length();
-	//S32 new_length = mDisplayName.length() + getLabelSuffix().length();
-	// </FS:Ansariel>
 
 	mSearchableName.assign(mDisplayName);
 	mSearchableName.append(getLabelSuffix());
 	LLStringUtil::toUpper(mSearchableName);
 	
-	// <FS:Ansariel> FIRE-21739: Inventory restarts filter when detaching attachments
-	//if ((old_length > new_length) && getInventoryFilter())
-	//{
-	//	getInventoryFilter()->setModified(LLFolderViewFilter::FILTER_MORE_RESTRICTIVE);
-	//}
-	// </FS:Ansariel>
 	//Name set, so trigger a sort
 	if(mParent)
 	{
@@ -6481,6 +6471,15 @@ void LLGestureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		getClipboardEntries(true, items, disabled_items, flags);
 
 		items.push_back(std::string("Gesture Separator"));
+		// <FS:Ansariel> FIRE-5913: Selecting a mix of active and inactive gestures disables both "Activate" / "Deactivate" menu options
+		if (flags & ITEM_IN_MULTI_SELECTION)
+		{
+			items.push_back(std::string("Deactivate"));
+			items.push_back(std::string("Activate"));
+		}
+		else
+		{
+		// </FS:Ansariel>
 		if (LLGestureMgr::instance().isGestureActive(getUUID()))
 		{
 			items.push_back(std::string("Deactivate"));
@@ -6489,6 +6488,9 @@ void LLGestureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		{
 			items.push_back(std::string("Activate"));
 		}
+		// <FS:Ansariel> FIRE-5913: Selecting a mix of active and inactive gestures disables both "Activate" / "Deactivate" menu options
+		}
+		// </FS:Ansariel>
 	}
 	addLinkReplaceMenuOption(items, disabled_items);
 

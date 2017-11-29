@@ -229,14 +229,14 @@ Standard 0. Größere Werte können nicht korrekt funktionieren.
 		</text>
 		<text name="tooltip_textbox4">
 			Pixel (Erfordert Neustart)
-V3-Standard 0. V1-Standard 2.
+[VIEWER_GENERATION]-Standard 0. Viewer 1-Standard 2.
 		</text>
 		<text name="Label_FolderItemViewHeight">
 			Höhe Ordner-Eintrag:
 		</text>
 		<text name="Label_FolderItemViewHeight_Scale">
 			Pixel (Erfordert Neustart)
-V3-Standard 20. V1-Standard 18.
+[VIEWER_GENERATION]-Standard 20. Viewer 1-Standard 18.
 		</text>
 	</panel>
 </tab_container>

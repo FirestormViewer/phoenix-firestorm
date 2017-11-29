@@ -1850,13 +1850,14 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	LLCoordScreen scr;
     mWindow->getSize(&scr);
 
-    if(p.fullscreen && ( scr.mX!=p.width || scr.mY!=p.height))
-    {
-		LL_WARNS() << "Fullscreen has forced us in to a different resolution now using "<<scr.mX<<" x "<<scr.mY<<LL_ENDL;
-		gSavedSettings.setS32("FullScreenWidth",scr.mX);
-		gSavedSettings.setS32("FullScreenHeight",scr.mY);
-    }
-
+	// <FS:Ansariel> Settings don't exist anymore as of 28-11-2017
+  //  if(p.fullscreen && ( scr.mX!=p.width || scr.mY!=p.height))
+  //  {
+		//LL_WARNS() << "Fullscreen has forced us in to a different resolution now using "<<scr.mX<<" x "<<scr.mY<<LL_ENDL;
+		//gSavedSettings.setS32("FullScreenWidth",scr.mX);
+		//gSavedSettings.setS32("FullScreenHeight",scr.mY);
+  //  }
+	// </FS:Ansariel>
 
 	F32 system_scale_factor = mWindow->getSystemUISize();
 	if (system_scale_factor < MIN_UI_SCALE || system_scale_factor > MAX_UI_SCALE)
@@ -5636,6 +5637,8 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 		pick_type = LLFilePicker::FFSAVE_ALL; // ???
 	
 	// <FS:Ansariel> Threaded filepickers
+	//BOOL is_snapshot_name_loc_set = isSnapshotLocSet();
+
 	//// Get a base file location if needed.
 	//if (force_picker || !isSnapshotLocSet())
 	//{
@@ -5684,7 +5687,12 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 	//	filepath = sSnapshotDir;
 	//	filepath += gDirUtilp->getDirDelimiter();
 	//	filepath += sSnapshotBaseName;
-	//	filepath += llformat("_%.3d",i);
+
+	//	if (is_snapshot_name_loc_set)
+	//	{
+	//		filepath += llformat("_%.3d",i);
+	//	}		
+
 	//	filepath += extension;
 
 	//	llstat stat_info;

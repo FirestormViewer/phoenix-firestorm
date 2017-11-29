@@ -68,6 +68,11 @@ public:
 	/*virtual*/ LLSD	getValue() const;
 	/*virtual*/ BOOL	setTextArg( const std::string& key, const LLStringExplicit& text );
 
+	// <COLOSI opensim multi-currency support>
+ 	// Set all LLUIStrings to dirty after currency symbol change to force them to be updated.
+	void updateCurrencySymbols() { mText.updateCurrencySymbols(); LLTextBase::setText(mText.getString()); mLabel.updateCurrencySymbols(); }
+	// </COLOSI opensim multi-currency support>
+
 protected:
 	void            onUrlLabelUpdated(const std::string &url, const std::string &label);
 

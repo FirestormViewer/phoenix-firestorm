@@ -87,11 +87,21 @@ BOOL LLPanelPlaceInfo::postBuild()
 	mMaturityRatingIcon = getChild<LLIconCtrl>("maturity_icon");
 	mMaturityRatingText = getChild<LLTextBox>("maturity_value");
 
-	mScrollingPanel = getChild<LLPanel>("scrolling_panel");
-	mScrollContainer = getChild<LLScrollContainer>("place_scroll");
+	// <FS:Ansariel> Fix warnings log spam
+	//mScrollingPanel = getChild<LLPanel>("scrolling_panel");
+	//mScrollContainer = getChild<LLScrollContainer>("place_scroll");
 
-	mScrollingPanelMinHeight = mScrollContainer->getScrolledViewRect().getHeight();
-	mScrollingPanelWidth = mScrollingPanel->getRect().getWidth();
+	//mScrollingPanelMinHeight = mScrollContainer->getScrolledViewRect().getHeight();
+	//mScrollingPanelWidth = mScrollingPanel->getRect().getWidth();
+	mScrollingPanel = findChild<LLPanel>("scrolling_panel");
+	mScrollContainer = findChild<LLScrollContainer>("place_scroll");
+
+	if (mScrollingPanel && mScrollContainer)
+	{
+		mScrollingPanelMinHeight = mScrollContainer->getScrolledViewRect().getHeight();
+		mScrollingPanelWidth = mScrollingPanel->getRect().getWidth();
+	}
+	// </FS:Ansariel>
 
 	return TRUE;
 }

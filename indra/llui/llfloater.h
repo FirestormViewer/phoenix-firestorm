@@ -373,6 +373,11 @@ public:
 	void			enableResizeCtrls(bool enable, bool width = true, bool height = true);
 
 	bool			isPositioning(LLFloaterEnums::EOpenPositioning p) const { return (p == mPositioning); }
+	
+	// <COLOSI opensim multi-currency support>
+	// update currency symbols in titles (if there) and force update of display
+	void			updateCurrencySymbols() { mTitle.updateCurrencySymbols(); mShortTitle.updateCurrencySymbols(); applyTitle(); }
+	// </COLOSI opensim multi-currency support>
 protected:
 	void			applyControlsAndPosition(LLFloater* other);
 
