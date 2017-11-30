@@ -286,6 +286,11 @@ public:
 	
 	void 		setAutoResize(bool auto_resize) { mAutoResize = auto_resize; }
 
+	// <COLOSI opensim multi-currency support>
+	// Set all LLUIStrings to dirty after currency symbol change to force them to be updated.
+	void updateCurrencySymbols() { mUnselectedLabel.updateCurrencySymbols(); mSelectedLabel.updateCurrencySymbols(); mDisabledSelectedLabel.updateCurrencySymbols(); }
+	// </COLOSI opensim multi-currency support>
+
 protected:
 	LLPointer<LLUIImage> getImageUnselected() const	{ return mImageUnselected; }
 	LLPointer<LLUIImage> getImageSelected() const	{ return mImageSelected; }

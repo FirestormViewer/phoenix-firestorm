@@ -854,7 +854,6 @@ void show_item_original(const LLUUID& item_uuid)
 	main_inventory->showAllItemsPanel();
 	main_inventory->resetFilters();
 	main_inventory->onFilterEdit("");
-	main_inventory->getActivePanel()->setFilterLinks(LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
 	main_inventory->getActivePanel()->setSelection(gInventory.getLinkedItemID(item_uuid), TAKE_FOCUS_YES);
 	// </FS:Ansariel>
 }

@@ -453,7 +453,7 @@
 
   <combo_box
    name="filter_combo_box"
-   right="-26"
+   right="-46"
    height="18"
    left_pad="4"
    top_delta="-2"
@@ -483,6 +483,17 @@
    commit_callback.function="Inventory.ShowFilters"
    name="filteroptions_btn"
    image_overlay="Script_Config"
+   width="18"
+   height="18"
+   right="-26"
+   top_delta="0"
+   follows="top|right"
+   layout="topleft"/>
+
+  <button
+   commit_callback.function="Inventory.ResetFilters"
+   name="resetfilters_btn"
+   image_overlay="StopReload_Off"
    width="18"
    height="18"
    right="-6"

@@ -203,14 +203,14 @@
         </text>
         <text name="tooltip_textbox4">
           пикселей (необходим перезапуск)
-V2/3 по умолчанию 0. V1 по умолчанию 2.
+[VIEWER_GENERATION] по умолчанию 0. V1 по умолчанию 2.
         </text>
         <text name="Label_FolderItemViewHeight">
            Высота папок:
         </text>
         <text name="Label_FolderItemViewHeight_Scale">
           пикселей (необходим перезапуск)
-V2/3 по умолчанию 20. V1 по умолчанию 18.
+[VIEWER_GENERATION] по умолчанию 20. V1 по умолчанию 18.
         </text>
     </panel>
 </tab_container>

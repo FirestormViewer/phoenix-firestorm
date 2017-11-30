@@ -126,9 +126,6 @@ void commit_radio_group_land(LLUICtrl* ctrl);
 void commit_grid_mode(LLUICtrl *);
 void commit_slider_zoom(LLUICtrl *ctrl);
 
-// <FS:KC> show/hide build highlight
-void commit_show_highlight(void *ctrl);
-
 /**
  * Class LLLandImpactsObserver
  *
@@ -271,12 +268,8 @@ BOOL	LLFloaterTools::postBuild()
 
 	// <FS:KC> show highlight
 	mCheckShowHighlight = getChild<LLCheckBoxCtrl>("checkbox show highlight");
-	mCheckShowHighlight->setValue(gSavedSettings.getBOOL("RenderHighlightSelections"));
-	LLSelectMgr::instance().setFSShowHideHighlight(FS_SHOW_HIDE_HIGHLIGHT_NORMAL);
-
 	mCheckActualRoot = getChild<LLCheckBoxCtrl>("checkbox actual root");
 	// </FS:KC>
-
 
 	//
 	// Create Buttons
@@ -482,9 +475,6 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 
 	// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 	mCommitCallbackRegistrar.add("BuildTool.TreeGrass",			boost::bind(&LLFloaterTools::onSelectTreeGrassCombo, this));
-
-	// <FS:KC> show/hide build highlight
-	mCommitCallbackRegistrar.add("BuildTool.commitShowHighlight",	boost::bind(&commit_show_highlight, this));
 
 	mLandImpactsObserver = new LLLandImpactsObserver();
 	LLViewerParcelMgr::getInstance()->addObserver(mLandImpactsObserver);
@@ -1080,15 +1070,6 @@ void LLFloaterTools::onOpen(const LLSD& key)
 {
 	mParcelSelection = LLViewerParcelMgr::getInstance()->getFloatingParcelSelection();
 	mObjectSelection = LLSelectMgr::getInstance()->getEditSelection();
-	
-	// <FS:KC> Set the check box value from the saved setting
-	// this function runs on selection change
-	if (!mOpen)
-	{
-		mOpen = TRUE;
-		mCheckShowHighlight->setValue(gSavedSettings.getBOOL("RenderHighlightSelections"));
-	}
-	// </FS:KC>
 
 	std::string panel = key.asString();
 	if (!panel.empty())
@@ -1117,12 +1098,6 @@ void LLFloaterTools::onClose(bool app_quitting)
 	// exit component selection mode
 	LLSelectMgr::getInstance()->promoteSelectionToRoot();
 	gSavedSettings.setBOOL("EditLinkedParts", FALSE);
-
-	// <FS:KC>
-	LLSelectMgr::instance().setFSShowHideHighlight(FS_SHOW_HIDE_HIGHLIGHT_NORMAL);
-
-	mOpen = FALSE; //hack cause onOpen runs on every selection change but onClose doesnt.
-	// </FS:KC>
 
 	gViewerWindow->showCursor();
 
@@ -1319,23 +1294,6 @@ void commit_select_component(void *data)
 		LLSelectMgr::getInstance()->promoteSelectionToRoot();
 	}
 }
-
-// <FS:KC> show/hide build highlight
-void commit_show_highlight(void *data)
-{
-	LLFloaterTools* floaterp = (LLFloaterTools*)data;
-	BOOL show_highlight = floaterp->mCheckShowHighlight->get();
-	if (show_highlight)
-	{
-		LLSelectMgr::getInstance()->setFSShowHideHighlight(FS_SHOW_HIDE_HIGHLIGHT_SHOW);
-	}
-	else
-	{
-		LLSelectMgr::getInstance()->setFSShowHideHighlight(FS_SHOW_HIDE_HIGHLIGHT_HIDE);
-	}
-}
-// </FS:KC>
-
 
 // static 
 void LLFloaterTools::setObjectType( LLPCode pcode )

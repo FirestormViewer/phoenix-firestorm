@@ -48,7 +48,10 @@ const F32 ATTACHED_OBJECT_TIMEOUT = 5.0f;
 const F32 DEFAULT_MIN_DISTANCE = 2.0f;
 
 #define MAX_CHANNELS 30
-#define MAX_BUFFERS 40	// Some extra for preloading, maybe?
+// <FS:Ansariel> FIRE-4276: Increase number of audio buffers
+//#define MAX_BUFFERS 40	// Some extra for preloading, maybe?
+#define MAX_BUFFERS 60
+// </FS:Ansariel>
 
 // This define is intended to allow us to switch from os based wav
 // file loading to vfs based wav file loading. The problem is that I

@@ -37,6 +37,10 @@
 #include <deque>
 #include "llpointer.h"
 
+// <FS:Ansariel> Script editor ignoring font selection
+class LLStyle;
+typedef LLPointer<LLStyle> LLStyleSP;
+// </FS:Ansariel
 class LLTextSegment;
 typedef LLPointer<LLTextSegment> LLTextSegmentPtr;
 
@@ -199,6 +203,9 @@ protected:
 	std::string	getAttribute(const std::string& key);
 
 	std::string	getArguments(LLSD& arguments);
+
+	// <FS:Ansariel> Script editor ignoring font selection
+	LLStyleSP getDefaultStyle(const LLTextEditor& editor);
 };
 
 #endif  // LL_LLKEYWORDS_H
