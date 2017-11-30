@@ -2433,7 +2433,7 @@ Chcesz wyłączyć Tryb Zajętości przed zakończeniem tej transakcji?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="ConfirmEmptyTrash">
-		[COUNT] przedmiotów zostanie usuniętych. Na pewno chcesz permanentnie usunąć zawartość Kosza?
+		[COUNT] przedmiotów i folderów zostanie usuniętych. Na pewno chcesz permanentnie usunąć zawartość Kosza?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="TrashIsFull">
@@ -4933,5 +4933,13 @@ Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
 	<notification name="GlobalOnlineStatusToggle">
 		Ze względu na obciążenie serwera masowa zmiana widoczności online może zająć trochę czasu. Prosimy o cierpliwość.
 		<usetemplate ignoretext="Informuj mnie, że masowa zmiana widoczności online może zająć trochę czasu" name="okignore" />
+	</notification>
+	<notification name="RenderVolumeLODFactorWarning">
+		UWAGA: Wygląda na to, że Twój poziom detali (LOD) jest ustawiony na wysoką wartość.
+
+Wartości wyższe niż 8 są bez znaczenia i nie powodują żadnej poprawy. Nie powinieneś/aś ustawiać go na więcej niż 4, a i to tylko w wyjątkowych sytuacjach (jak robienie zdjęć w wysokiej rozdzielczości). Ustawienie zbyt wysokiej wartości poważnie obniża wydajność grafiki.
+
+Do codziennego użytku LOD ustawiony na 2 powinien wystarczyć. Jeśli posiadasz obiekty, które wyglądają na zdeformowane z taką wartością, to powinieneś/aś rozważyć ich wymianę.
+		<usetemplate ignoretext="Ostrzegaj o wysokim poziomie detali" name="okignore" />
 	</notification>
 </notifications>

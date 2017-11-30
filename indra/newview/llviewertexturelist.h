@@ -156,6 +156,7 @@ private:
 	void addImageToList(LLViewerFetchedTexture *image);
 	void removeImageFromList(LLViewerFetchedTexture *image);
 
+public: 	// PoundLife - Improved Object Inspect
 	LLViewerFetchedTexture * getImage(const LLUUID &image_id,									 
 									 FTType f_type = FTT_DEFAULT,
 									 BOOL usemipmap = TRUE,
@@ -166,6 +167,7 @@ private:
 									 LLHost request_from_host = LLHost()
 									 );
 	
+private:	// PoundLife - Improved Object Inspect
 	LLViewerFetchedTexture * getImageFromFile(const std::string& filename,									 
 									 FTType f_type = FTT_LOCAL_FILE,
 									 BOOL usemipmap = TRUE,

@@ -217,7 +217,8 @@ Pessoas com contas gratuitas não poderão acessar o Second Life no momento para
 		Sua conta não está disponível para acesso até [TIME], horário do Pacífico nos EUA (GMT-08).
 	</string>
 	<string name="LoginFailedAccountDisabled">
-		Não é possível concluir a solicitação neste momento. Para obter mais ajuda, conte o suporte em http://secondlife.com/support. Caso você não possa mudar sua senha, ligue para (866) 476-9763.
+		Não é possível concluir a solicitação neste momento. 
+Entre em contato com o suporte do Second Life para obter ajuda em http://support.secondlife.com.
 	</string>
 	<string name="LoginFailedTransformError">
 		Dados discrepantes detectados durante o login.  Contate support@secondlife.com.
@@ -630,6 +631,19 @@ Pessoas com contas gratuitas não poderão acessar o Second Life no momento para
 	</string>
 	<string name="AssetErrorUnknownStatus">
 		Status desconhecido
+	</string>
+	<string name="AssetUploadServerUnreacheble">
+		Serviço não disponível.
+	</string>
+	<string name="AssetUploadServerDifficulties">
+		O servidor está enfrentando dificuldades inesperadas.
+	</string>
+	<string name="AssetUploadServerUnavaliable">
+		Serviço não disponível ou o tempo final para upload foi atingido.
+	</string>
+	<string name="AssetUploadRequestInvalid">
+		Erro na solicitação de upload. Acesso 
+http://secondlife.com/support para ajuda ao resolver este problema.
 	</string>
 	<string name="texture">
 		textura
@@ -2106,10 +2120,19 @@ Pessoas com contas gratuitas não poderão acessar o Second Life no momento para
 		todas as propriedades que você gerencia para [OWNER]
 	</string>
 	<string name="RegionInfoAllowedResidents">
-		Residentes autorizados: ([ALLOWEDAGENTS], max [MAXACCESS])
+		Sempre permitido: ([ALLOWEDAGENTS], máx [MAXACCESS])
 	</string>
 	<string name="RegionInfoAllowedGroups">
-		Grupos permitidos: ([ALLOWEDGROUPS], max [MAXACCESS])
+		Grupos sempre permitidos: ([ALLOWEDGROUPS], máx [MAXACCESS])
+	</string>
+	<string name="RegionInfoBannedResidents">
+		Grupos banidos: ([BANNEDAGENTS], máx [MAXBANNED])
+	</string>
+	<string name="RegionInfoListTypeAllowedAgents">
+		Sempre permitido
+	</string>
+	<string name="RegionInfoListTypeBannedAgents">
+		Sempre banido
 	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		Memória de scripts no lote
@@ -4743,7 +4766,7 @@ Denunciar abuso
 	<string name="server_is_down">
 		Aconteceu algo inesperado, apesar de termos tentado impedir isso.
 
-	Cheque secondlifegrid.net para saber se foi detectado um problema com o serviço.
+	Cheque https://secondlife-status.statuspage.io para saber se foi detectado um problema com o serviço.
         Se o problema persistir, cheque a configuração da sua rede e firewall.
 	</string>
 	<string name="dateTimeWeekdaysNames">

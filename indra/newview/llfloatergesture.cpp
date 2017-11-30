@@ -279,12 +279,14 @@ void LLFloaterGesture::buildGestureList()
 	getSelectedIds(selected_items);
 	LL_DEBUGS("Gesture")<< "Rebuilding gesture list "<< LL_ENDL;
 //	mGestureList->deleteAllItems(); // <FS:ND/> Don't recreate the list over and over.
+	uuid_set_t added_items; // <FS:Ansariel> FIRE-5939: Deleted gestures not removed from gestures floater
 
 	LLGestureMgr::item_map_t::const_iterator it;
 	const LLGestureMgr::item_map_t& active_gestures = LLGestureMgr::instance().getActiveGestures();
 	for (it = active_gestures.begin(); it != active_gestures.end(); ++it)
 	{
 		addGesture(it->first,it->second, mGestureList);
+		added_items.insert(it->first); // <FS:Ansariel> FIRE-5939: Deleted gestures not removed from gestures floater
 	}
 	// <FS:PP> FIRE-5646: Option to show only active gestures
 	// if (gInventory.isCategoryComplete(mGestureFolderID))
@@ -304,9 +306,26 @@ void LLFloaterGesture::buildGestureList()
 			{
 				// if gesture wasn't loaded yet, we can display only name
 				addGesture(item->getUUID(), NULL, mGestureList);
+				added_items.insert(item->getUUID()); // <FS:Ansariel> FIRE-5939: Deleted gestures not removed from gestures floater
 			}
 		}
 	}
+
+	// <FS:Ansariel> FIRE-5939: Deleted gestures not removed from gestures floater
+	std::map<LLUUID, LLScrollListItem*> new_items;
+	for (std::map<LLUUID, LLScrollListItem*>::iterator iit = mItems.begin(); iit != mItems.end(); ++iit)
+	{
+		if (added_items.find(iit->first) == added_items.end())
+		{
+			mGestureList->deleteItems(iit->first);
+		}
+		else
+		{
+			new_items[iit->first] = iit->second;
+		}
+	}
+	mItems = new_items;
+	// </FS:Ansariel>
 
 	// attempt to preserve scroll position through re-builds
 	// since we do re-build whenever something gets dirty

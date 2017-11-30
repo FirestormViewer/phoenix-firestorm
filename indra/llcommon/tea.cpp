@@ -34,7 +34,9 @@
 #include <boost/algorithm/string.hpp>
 
 
-std::string Tea::sCurrency="L$";
+std::string Tea::sGridCurrency="L$";
+std::string Tea::sRegionCurrency="";
+std::string Tea::sActiveCurrency="L$";
 
 Tea::Tea()
 {
@@ -45,12 +47,36 @@ Tea::~Tea()
 {
 }
 
+void Tea::setCurrency(const std::string& currency)
+{
+	sGridCurrency = currency;
+	updateActiveCurrencySymbol();
+}
+
+void Tea::setRegionCurrency(const std::string& currency)
+{
+	sRegionCurrency = currency;
+	updateActiveCurrencySymbol();
+}
+
+void Tea::updateActiveCurrencySymbol()
+{
+	if(!sRegionCurrency.empty())
+	{
+		sActiveCurrency = sRegionCurrency;
+	}
+	else
+	{
+		sActiveCurrency = sGridCurrency;
+	}
+}
+
 std::string Tea::wrapCurrency(const std::string& to_substitute)
 {
-	return boost::algorithm::replace_all_copy(to_substitute, "L$",  sCurrency);
+	return boost::algorithm::replace_all_copy(to_substitute, "L$",  sActiveCurrency);
 }
 
 void Tea::wrapCurrency(std::string& to_substitute)
 {
-	boost::algorithm::replace_all(to_substitute, "L$",  sCurrency);
+	boost::algorithm::replace_all(to_substitute, "L$",  sActiveCurrency);
 }

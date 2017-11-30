@@ -177,6 +177,14 @@ public:
     {
         return mNoBody;
     }
+
+	// <FS:Ansariel> GetIfModified request
+	void                setLastModified(long last_modified);
+	long                getLastModified() const
+	{
+		return mLastModified;
+	}
+	// </FS:Ansariel>
 	
 protected:
 	bool				mWantHeaders;
@@ -192,6 +200,7 @@ protected:
 	bool        		mVerifyHost;
 	int					mDNSCacheTimeout;
     bool                mNoBody;
+	long				mLastModified; // <FS:Ansariel> GetIfModified request
 }; // end class HttpOptions
 
 

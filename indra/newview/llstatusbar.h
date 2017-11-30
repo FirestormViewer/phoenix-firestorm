@@ -152,6 +152,11 @@ public:
 	
 	void showBalance(bool show);	// <FS:CR> Hide currency balance in snapshots
 
+	// <COLOSI opensim multi-currency support>
+	// force update of the "BUY L$" button when currency symbol is changed.
+	void updateCurrencySymbols();
+	// </COLOSI opensim multi-currency support>
+
 private:
 	
 	void onClickBuyCurrency();

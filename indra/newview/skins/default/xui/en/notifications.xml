@@ -6216,7 +6216,7 @@ The folder &apos;[FOLDERNAME]&apos; is a system folder. Deleting system folders 
    icon="alertmodal.tga"
    name="ConfirmEmptyTrash"
    type="alertmodal">
-[COUNT] items will be permanently deleted. Are you sure you want to permanently delete the contents of your Trash?
+[COUNT] items and folders will be permanently deleted. Are you sure you want to permanently delete the contents of your Trash?
     <tag>confirm</tag>
     <usetemplate
      name="okcancelbuttons"
@@ -12898,6 +12898,20 @@ the region &quot;[REGION]&quot;?
 Due to server load, mass toggling online status visibility can take a while to become effective. Please be patient.
     <usetemplate
      ignoretext="Inform me that toggling online status visibility may take a while"
+     name="okignore"
+     yestext="OK"/>
+  </notification>
+  <notification
+   icon="alert.tga"
+   name="RenderVolumeLODFactorWarning"
+   type="alert">
+    WARNING: The Level of Detail (LOD) seems to be set to a high value.
+
+Values higher than 8 are meaningless and give no improvement. You should not set this to a value higher than 4, and only in exceptional situations (like taking high-resolution photos). Setting this too high seriously lowers your graphics performance.
+
+For everyday use, LOD set to 2 should suffice. If you own some objects that look deformed with such value, then you should consider replacing them.
+    <usetemplate
+     ignoretext="Warn about high Level of Detail"
      name="okignore"
      yestext="OK"/>
   </notification>

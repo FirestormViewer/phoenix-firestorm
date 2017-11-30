@@ -1127,7 +1127,11 @@ void LLRender::shutdown()
 void LLRender::initVB()
 {
 	mBuffer = new LLVertexBuffer(immediate_mask, 0);
-	mBuffer->allocateBuffer(4096, 0, TRUE);
+	if (!mBuffer->allocateBuffer(4096, 0, true))
+	{
+		// If this doesn't work, we're knee-deep in trouble!
+		LL_WARNS() << "Failed to allocate Vertex Buffer for common rendering" << LL_ENDL;
+	}
 	mBuffer->getVertexStrider(mVerticesp);
 	mBuffer->getTexCoord0Strider(mTexcoordsp);
 	mBuffer->getColorStrider(mColorsp);

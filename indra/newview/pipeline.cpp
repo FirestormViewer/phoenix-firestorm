@@ -4019,7 +4019,14 @@ void LLPipeline::postSort(LLCamera& camera)
 	}
 	
 	//flush particle VB
-	LLVOPartGroup::sVB->flush();
+	if (LLVOPartGroup::sVB)
+	{
+		LLVOPartGroup::sVB->flush();
+	}
+	else
+	{
+		LL_WARNS_ONCE() << "Missing particle buffer" << LL_ENDL;
+	}
 
 	/*bool use_transform_feedback = gTransformPositionProgram.mProgramObject && !mMeshDirtyGroup.empty();
 
@@ -12147,7 +12154,11 @@ void LLPipeline::disableDeferredOnLowMemory()
 void LLPipeline::initDeferredVB()
 {
 	mDeferredVB = new LLVertexBuffer(DEFERRED_VB_MASK, 0);
-	mDeferredVB->allocateBuffer(8, 0, true);
+	if (!mDeferredVB->allocateBuffer(8, 0, true))
+	{
+		// Most likely going to crash...
+		LL_WARNS() << "Failed to allocate Vertex Buffer for deferred rendering" << LL_ENDL;
+	}
 }
 // </FS:Ansariel>
 
@@ -12155,7 +12166,12 @@ void LLPipeline::initDeferredVB()
 void LLPipeline::initAuxiliaryVB()
 {
 	mAuxiliaryVB = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_COLOR, 0);
-	mAuxiliaryVB->allocateBuffer(3, 0, true);
+	if (!mAuxiliaryVB->allocateBuffer(3, 0, true))
+	{
+		LL_WARNS() << "Failed to allocate auxiliary Vertex Buffer" << LL_ENDL;
+		mAuxiliaryVB = NULL;
+		return;
+	}
 
 	LLStrider<LLVector3> verts;
 	mAuxiliaryVB->getVertexStrider(verts);
@@ -12166,12 +12182,20 @@ void LLPipeline::initAuxiliaryVB()
 
 void LLPipeline::drawAuxiliaryVB(U32 mask /*= 0*/)
 {
+	if (!mAuxiliaryVB)
+	{
+		return;
+	}
 	mAuxiliaryVB->setBuffer(LLVertexBuffer::MAP_VERTEX | mask);
 	mAuxiliaryVB->drawArrays(LLRender::TRIANGLES, 0, 3);
 }
 
 void LLPipeline::drawAuxiliaryVB(const LLVector2& tc1, const LLVector2& tc2, U32 mask /*= 0*/)
 {
+	if (!mAuxiliaryVB)
+	{
+		return;
+	}
 	LLStrider<LLVector2> tc;
 	mAuxiliaryVB->getTexCoord0Strider(tc);
 	tc[0].set(tc1.mV[0], tc1.mV[1]);
@@ -12183,6 +12207,10 @@ void LLPipeline::drawAuxiliaryVB(const LLVector2& tc1, const LLVector2& tc2, U32
 
 void LLPipeline::drawAuxiliaryVB(const LLVector2& tc1, const LLVector2& tc2, const LLColor4& color)
 {
+	if (!mAuxiliaryVB)
+	{
+		return;
+	}
 	LLStrider<LLColor4U> col;
 	mAuxiliaryVB->getColorStrider(col);
 	col[0].set(color);

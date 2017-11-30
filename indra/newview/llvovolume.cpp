@@ -1930,6 +1930,12 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 		dirtySpatialGroup(drawable->isState(LLDrawable::IN_REBUILD_Q1));
 		compiled = TRUE;
 		lodOrSculptChanged(drawable, compiled);
+		// <FS:Ansariel> Pull fix for MAINT-MAINT-6125 - Mesh avatar deforms constantly
+		if(drawable->isState(LLDrawable::REBUILD_RIGGED | LLDrawable::RIGGED)) 
+		{
+			updateRiggedVolume(false);
+		}
+		// </FS:Ansariel>
 		genBBoxes(FALSE);
 	}
 	// it has its own drawable (it's moved) or it has changed UVs or it has changed xforms from global<->local
@@ -5964,18 +5970,25 @@ void LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFac
 		}
 
 		//create vertex buffer
-		LLVertexBuffer* buffer = NULL;
+		LLPointer<LLVertexBuffer> buffer;
 
 		{
 			LL_RECORD_BLOCK_TIME(FTM_GEN_DRAW_INFO_ALLOCATE);
 			buffer = createVertexBuffer(mask, buffer_usage);
-			buffer->allocateBuffer(geom_count, index_count, TRUE);
+			if(!buffer->allocateBuffer(geom_count, index_count, TRUE))
+			{
+				LL_WARNS() << "Failed to allocate group Vertex Buffer to "
+					<< geom_count << " vertices and "
+					<< index_count << " indices" << LL_ENDL;
+				buffer = NULL;
+			}
 		}
 
-		group->mGeometryBytes += buffer->getSize() + buffer->getIndicesSize();
-
-
-		buffer_map[mask][*face_iter].push_back(buffer);
+		if (buffer)
+		{
+			group->mGeometryBytes += buffer->getSize() + buffer->getIndicesSize();
+			buffer_map[mask][*face_iter].push_back(buffer);
+		}
 
 		//add face geometry
 
@@ -5983,8 +5996,17 @@ void LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFac
 		U16 index_offset = 0;
 
 		while (face_iter < i)
-		{ //update face indices for new buffer
+		{
+			//update face indices for new buffer
 			facep = *face_iter;
+			if (buffer.isNull())
+			{
+				// Bulk allocation failed
+				facep->setVertexBuffer(buffer);
+				facep->setSize(0, 0); // mark as no geometry
+				++face_iter;
+				continue;
+			}
 			facep->setIndicesIndex(indices_index);
 			facep->setGeomIndex(index_offset);
 			facep->setVertexBuffer(buffer);	
@@ -6309,7 +6331,10 @@ void LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFac
 			++face_iter;
 		}
 
-		buffer->flush();
+		if (buffer)
+		{
+			buffer->flush();
+		}
 	}
 
 	group->mBufferMap[mask].clear();

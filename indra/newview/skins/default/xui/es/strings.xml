@@ -4981,7 +4981,7 @@ Denuncia de infracción
 	<string name="server_is_down">
 		Parece que hay algún problema que ha escapado a nuestros controles.
 
-Visita http://status.secondlifegrid.net para ver si hay alguna incidencia conocida que esté afectando al servicio.
+Visita https://secondlife-status.statuspage.io para ver si hay alguna incidencia conocida que esté afectando al servicio.
         Si sigues teniendo problemas, comprueba la configuración de la red y del servidor de seguridad.
 	</string>
 	<string name="dateTimeWeekdaysNames">

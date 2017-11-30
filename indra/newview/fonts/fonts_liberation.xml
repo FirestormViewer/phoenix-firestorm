@@ -10,6 +10,8 @@
       <file>simhei.ttf</file>
       <file>ArialUni.ttf</file>
       <file>seguisym.ttf</file>
+      <file>nirmala.ttf</file>
+      <file>tahoma.ttf</file>
     </os>
     <os name="Mac">
       <file>ヒラギノ角ゴシック W3.ttc</file>
@@ -158,7 +160,7 @@
 
   <font_size name="Scripting"
 	     comment="Size of script editor font (points, or 1/72 of an inch)"
-	     size="9.6"
+	     size="10.0"
 	     />
   <font_size name="Monospace"
 	     comment="Size for monospaced font (points, or 1/72 of an inch)"

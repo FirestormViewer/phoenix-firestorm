@@ -733,6 +733,7 @@ http://www.firestormviewer.org/support for help fixing this problem.
 
 	<!-- inventory -->
 	<string name="InventoryNoMatchingItems">Didn't find what you're looking for? Try [secondlife:///app/search/all/[SEARCH_TERM] Search].</string>
+	<string name="InventoryNoMatchingRecentItems">Didn't find what you're looking for? Show [secondlife:///app/inventory/filters Filters].</string>
 	<string name="PlacesNoMatchingItems">Didn't find what you're looking for? Try [secondlife:///app/search/places/[SEARCH_TERM] Search].</string>
 	<string name="FavoritesNoMatchingItems">Drag a landmark here to add it to your favorites.</string>
 	<string name="MarketplaceNoMatchingItems">No items found. Check the spelling of your search string and try again.</string>
@@ -2383,7 +2384,7 @@ Abuse Report</string>
   <string name="server_is_down">
 	Despite our best efforts, something unexpected has gone wrong.
 
-Please check http://status.secondlifegrid.net to see if there is a known problem with the service.
+Please check https://secondlife-status.statuspage.io to see if there is a known problem with the service.
 If you continue to experience problems, please check your network and firewall setup.
   </string>
 

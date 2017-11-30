@@ -1245,7 +1245,6 @@ support@secondlife.com.
 	<string name="ForceSitAvatar">
 		Заставьте аватар сесть
 	</string>
-	</string>
 	<string name="ChangeYourDefaultAnimations">
 		Изменить ваши стандартные анимации
 	</string>
@@ -5154,7 +5153,7 @@ support@secondlife.com.
 	<string name="server_is_down">
 		Несмотря на наши усилия, что-то неожиданно пошло не так.
 
-	Ознакомьтесь с описанием известных проблем в работе этой службы на сайте status.secondlifegrid.net.
+	Ознакомьтесь с описанием известных проблем в работе этой службы на сайте https://secondlife-status.statuspage.io.
     Если проблемы продолжаются, то проверьте подключение к сети и настройки брандмауэра. 
 	</string>
 	<string name="dateTimeWeekdaysNames">

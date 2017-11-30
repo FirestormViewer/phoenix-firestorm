@@ -88,12 +88,15 @@ void LLScriptEditor::drawLineNumbers()
 	
 	if (mShowLineNumbers)
 	{
-		S32 left = 0;
+		//S32 left = 0; // <FS:Ansariel> FIRE-6955: Line numbers not using correct transparency
 		S32 top = getRect().getHeight();
 		S32 bottom = 0;
-		
-		gl_rect_2d(left, top, UI_TEXTEDITOR_LINE_NUMBER_MARGIN, bottom, mReadOnlyBgColor.get() ); // line number area always read-only
-		gl_rect_2d(UI_TEXTEDITOR_LINE_NUMBER_MARGIN, top, UI_TEXTEDITOR_LINE_NUMBER_MARGIN-1, bottom, LLColor4::grey3); // separator
+
+		// <FS:Ansariel> FIRE-6955: Line numbers not using correct transparency
+		//gl_rect_2d(left, top, UI_TEXTEDITOR_LINE_NUMBER_MARGIN, bottom, mReadOnlyBgColor.get() ); // line number area always read-only
+		//gl_rect_2d(UI_TEXTEDITOR_LINE_NUMBER_MARGIN, top, UI_TEXTEDITOR_LINE_NUMBER_MARGIN-1, bottom, LLColor4::grey3); // separator
+		gl_rect_2d(UI_TEXTEDITOR_LINE_NUMBER_MARGIN, top, UI_TEXTEDITOR_LINE_NUMBER_MARGIN-1, bottom, LLColor4::grey3 % getCurrentTransparency()); // separator
+		// </FS:Ansariel>
 		
 		S32 last_line_num = -1;
 		
@@ -110,7 +113,10 @@ void LLScriptEditor::drawLineNumbers()
 			// draw the line numbers
 			if(line.mLineNum != last_line_num && line.mRect.mTop <= scrolled_view_rect.mTop)
 			{
-				const LLFontGL *num_font = LLFontGL::getFontMonospace();
+				// <FS:Ansariel> Script editor ignoring font selection
+				//const LLFontGL *num_font = LLFontGL::getFontMonospace();
+				const LLFontGL *num_font = getFont();
+				// </FS:Ansariel>
 				const LLWString ltext = utf8str_to_wstring(llformat("%d", line.mLineNum ));
 				BOOL is_cur_line = cursor_line == line.mLineNum;
 				const U8 style = is_cur_line ? LLFontGL::BOLD : LLFontGL::NORMAL;

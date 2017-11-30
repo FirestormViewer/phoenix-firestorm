@@ -207,6 +207,8 @@ void LLFloaterTOS::setSiteIsAlive( bool alive )
 			// normally this is set when navigation to TOS page navigation completes (so you can't accept before TOS loads)
 			// but if the page is unavailable, we need to do this now
 			updateAgreeEnabled(true);
+			LLTextBox* tos_list = getChild<LLTextBox>("agree_list");
+			tos_list->setEnabled(true);
 		}
 	}
 #endif
@@ -298,6 +300,8 @@ void LLFloaterTOS::handleMediaEvent(LLPluginClassMedia* /*self*/, EMediaEvent ev
 			LL_INFOS("TOS") << "TOS: NAVIGATE COMPLETE" << LL_ENDL;
 			// enable Agree to TOS check box now that page has loaded
 			updateAgreeEnabled(true);
+			LLTextBox* tos_list = getChild<LLTextBox>("agree_list");
+			tos_list->setEnabled(true);
 		}
 	}
 }

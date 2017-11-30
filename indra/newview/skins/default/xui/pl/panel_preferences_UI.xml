@@ -69,6 +69,7 @@
         <text name="FSLegacyNotificationWellRequiresRestart">
             (wymaga restartu)
         </text>
+        <check_box label="Przemapuj skróty klawiszowe na nieużywane przez Linuksa (tylko Linux; wymaga restartu)" name="FSRemapLinuxShortcuts" tool_tip="Gdy zaznaczysz tą opcję, to skróty klawiszowe używane już przez system operacyjny Linux (takie jak CTRL-ALT-Fx) zostaną przemapowane w przeglądarce." />
         <slider label="Ile razy mrugają karty IM:" name="ButtonsFlashCount" />
         <slider label="Czas mrugnięcia karty IM:" tool_tip="Czas w sekundach, jaki jest potrzebny karcie wiadomości IM na mrugnięcie - używane przy powiadomieniach IM" name="ButtonFlashRate" />
         <text name="ButtonFlashRateText">
@@ -214,14 +215,14 @@ Domyślnie 0. Większa wartość może sprawiać kłopoty.
         </text>
         <text name="tooltip_textbox4">
           pikseli (wymaga restartu)
-V3 domyślnie 0. V1 domyślnie 2.
+[VIEWER_GENERATION] domyślnie 0. V1 domyślnie 2.
         </text>
         <text name="Label_FolderItemViewHeight">
            Wysokość w folderach:
         </text>
         <text name="Label_FolderItemViewHeight_Scale">
           pikseli (wymaga restartu)
-V3 domyślnie 20. V1 domyślnie 18.
+[VIEWER_GENERATION] domyślnie 20. V1 domyślnie 18.
         </text>
     </panel>
 </tab_container>

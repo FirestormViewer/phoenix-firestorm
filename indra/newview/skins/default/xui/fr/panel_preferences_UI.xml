@@ -138,12 +138,12 @@
 			<text name="tooltip_textbox3" width="195">Espacement entre les lignes :</text>
 			<text name="tooltip_textbox4">
            pixels (Redémarrage requis)
- 0 par défaut pour le style V3, 2 pour le style V1.
+ 0 par défaut pour le style [VIEWER_GENERATION], 2 pour le style V1iewer .
 			</text>
 			<text name="Label_FolderItemViewHeight" width="195">Hauteur d'une ligne d'inventaire :</text>
 			<text name="Label_FolderItemViewHeight_Scale">
            pixels (Redémarrage requis)
- 20 par défaut pour le style V3, 18 pour le style V1.
+ 20 par défaut pour le style [VIEWER_GENERATION], 18 pour le style Viewer 1.
 			</text>
 		</panel>
 	</tab_container>

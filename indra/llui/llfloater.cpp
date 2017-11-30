@@ -696,11 +696,7 @@ void LLFloater::openFloater(const LLSD& key)
 		&& (!getVisible() || isMinimized()))
 	{
 		// <FS:PP> UI Sounds connection
-		if (getName() == "incoming call")
-		{
-			make_ui_sound("UISndIncomingVoiceCall");
-		}
-		else if (getName() == "script_floater")
+		if (getName() == "script_floater")
 		{
 			make_ui_sound("UISndScriptFloaterOpen");
 		}

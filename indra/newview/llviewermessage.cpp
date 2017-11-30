@@ -7331,7 +7331,12 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		args["NAME"] = balance_change_in_chat ? "%s" : source_slurl;
 		is_name_group = is_source_group;
 		name_id = source_id;
-		if (!reason.empty())
+
+		// <FS:Ansariel> FIRE-21803: Prevent cheating IM restriction via pay message
+		//if (!reason.empty() && !LLMuteList::getInstance()->isMuted(source_id))
+		bool is_muted = LLMuteList::getInstance()->isMuted(source_id);
+		if (!reason.empty() && !is_muted && RlvActions::canReceiveIM(source_id))
+		// </FS:Ansariel>
 		{
 			message = LLTrans::getString("paid_you_ldollars" + gift_suffix, args);
 		}
@@ -7350,9 +7355,9 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		name_id = source_id;
 
 		args["NAME"] = source_slurl;
-		if (!reason.empty())
+		if (!reason.empty() && !is_muted && RlvActions::canReceiveIM(source_id))
 		{
-			message = LLTrans::getString("paid_you_ldollars", args);
+			message = LLTrans::getString("paid_you_ldollars" + gift_suffix, args);
 		}
 		else 
 		{
@@ -7361,9 +7366,9 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		final_args["SLURLMESSAGE"] = message;
 
 		args["NAME"] = source_slurl_name;
-		if (!reason.empty())
+		if (!reason.empty() && !is_muted && RlvActions::canReceiveIM(source_id))
 		{
-			message_notification_well = LLTrans::getString("paid_you_ldollars", args);
+			message_notification_well = LLTrans::getString("paid_you_ldollars" + gift_suffix, args);
 		}
 		else 
 		{
