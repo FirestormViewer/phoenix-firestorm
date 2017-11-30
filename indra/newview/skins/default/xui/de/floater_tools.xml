@@ -420,10 +420,12 @@
 			</text>
 			<text name="lod_label" value="LOD:"/>
 			<text name="lod_num_tris" value="Anz. Dreiecke"/>
-			<text name="high_lod_label" value="Hoch:"/>
-			<text name="med_lod_label" value="Mittel:"/>
-			<text name="low_lod_label" value="Niedrig:"/>
-			<text name="lowest_lod_label" value="Niedrigste:"/>
+			<text name="mesh_lod_label">
+				Hoch:
+Medium:
+Niedrig:
+Niedrigste:
+			</text>
 			<combo_box name="LOD_show_combo">
 				<combo_box.item label="Standard" name="Default"/>
 				<combo_box.item label="Hoch" name="High"/>
@@ -431,6 +433,25 @@
 				<combo_box.item label="Niedrig" name="Low"/>
 				<combo_box.item label="Niedrigste" name="Lowest/Imposter"/>
 			</combo_box>
+			<text name="ObjectLODbehaviourLabel" value="Objekt-LOD-Verhalten:"/>
+			<text name="object_radius" value="Objekt-Radius:"/>
+			<text name="LOD_swap_factors_label" value="LOD-Faktoren"/>
+			<text name="LOD_swap_defaults_label" value="Standard" tool_tip="Dieser Standard-LOD-Faktor wird von den meisten Viewern angewendet."/>
+			<text name="LOD_swap_usr_label" value="Ihrer" tool_tip="Ihre aktuelle Einstellung basierend auf RenderVolumeLODFactor."/>
+			<text name="LOD_swap_label" value="Wechsel" tool_tip="Ihre aktuelle Einstellung basierend auf RenderVolumeLODFactor."/>
+			<string name="ll_lod_tooltip_msg">"Linden Lab Second-Life-Viewer-Standard ([FACTOR])"</string>
+			<text name="LOD_swap_ll_default" value="LL"/>
+			<string name="fs_lod_tooltip_msg">"Firestorm-Viewer-Standard ([FACTOR])"</string>
+			<text name="LOD_swap_fs_default" value="FS"/>
+			<text name="LOD_swap_usr_current" tool_tip="Ihr aktueller LOD-Faktor."/>
+			<text name="LOD_swap_LOD_Change_label">
+				Hoch ↔ Mit
+Mit ↔ Ndrg
+Ndrg ↔ Nst
+			</text>
+			<text name="LODSwapTableDscriptionsText" tool_tip="Best Practice: Hersteller sollten ein gutes LOD-Verhalten für die Standard-Einstellung auf allen Viewern sicherstellen.">
+				Diese Tabelle zeigt die Grenzen für den LOD-Wechsel in Meter von der Kameraposition.
+			</text>
 		</panel>
 		<panel label="Eigensch." name="Features">
 			<panel.string name="None">
