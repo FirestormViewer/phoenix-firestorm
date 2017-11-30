@@ -5644,6 +5644,8 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 		pick_type = LLFilePicker::FFSAVE_ALL; // ???
 	
 	// <FS:Ansariel> Threaded filepickers
+	//BOOL is_snapshot_name_loc_set = isSnapshotLocSet();
+
 	//// Get a base file location if needed.
 	//if (force_picker || !isSnapshotLocSet())
 	//{
@@ -5692,7 +5694,12 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 	//	filepath = sSnapshotDir;
 	//	filepath += gDirUtilp->getDirDelimiter();
 	//	filepath += sSnapshotBaseName;
-	//	filepath += llformat("_%.3d",i);
+
+	//	if (is_snapshot_name_loc_set)
+	//	{
+	//		filepath += llformat("_%.3d",i);
+	//	}		
+
 	//	filepath += extension;
 
 	//	llstat stat_info;

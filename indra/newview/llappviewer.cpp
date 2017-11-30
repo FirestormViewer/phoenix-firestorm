@@ -769,8 +769,6 @@ LLAppViewer::LLAppViewer()
 	mSavePerAccountSettings(false),		// don't save settings on logout unless login succeeded.
 	mQuitRequested(false),
 	mLogoutRequestSent(false),
-	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
-	//mYieldTime(-1),
 	mLastAgentControlFlags(0),
 	mLastAgentForceUpdate(0),
 	mMainloopTimeout(NULL),
@@ -935,7 +933,7 @@ bool LLAppViewer::init()
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "colors.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "ignorable_dialogs.xml"));
-		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.remote.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.user.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "password.dat"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "quick_preferences.xml"));
@@ -1717,20 +1715,12 @@ bool LLAppViewer::frame()
 			LL_RECORD_BLOCK_TIME(FTM_SLEEP);
 			
 			// yield some time to the os based on command line option
-			// <FS:Ansariel> MaxFPS Viewer-Chui merge error
-			//if(mYieldTime >= 0)
-			//{
-			//	LLFastTimer t(FTM_YIELD);
-			//	ms_sleep(mYieldTime);
-			//}
-			//S32 yield_time = gSavedSettings.getS32("YieldTime");
-			static LLCachedControl<S32> yield_time(gSavedSettings, "YieldTime");
+			static LLCachedControl<S32> yield_time(gSavedSettings, "YieldTime", -1);
 			if(yield_time >= 0)
 			{
 				LL_RECORD_BLOCK_TIME(FTM_YIELD);
 				ms_sleep(yield_time);
 			}
-			// </FS:Ansariel> MaxFPS Viewer-Chui merge error
 
 			// yield cooperatively when not running as foreground window
 			if (   (gViewerWindow && !gViewerWindow->getWindow()->getVisible())
@@ -3251,8 +3241,6 @@ bool LLAppViewer::initConfiguration()
 		}
 	}
 
-	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
-    //mYieldTime = gSavedSettings.getS32("YieldTime");
 
 	// Display splash screen.  Must be after above check for previous
 	// crash as this dialog is always frontmost.

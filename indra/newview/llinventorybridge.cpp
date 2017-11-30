@@ -2071,21 +2071,11 @@ void LLItemBridge::buildDisplayName() const
 	{
 		mDisplayName.assign(LLStringUtil::null);
 	}
-	// <FS:Ansariel> FIRE-21739: Inventory restarts filter when detaching attachments
-	//S32 old_length = mSearchableName.length();
-	//S32 new_length = mDisplayName.length() + getLabelSuffix().length();
-	// </FS:Ansariel>
 
 	mSearchableName.assign(mDisplayName);
 	mSearchableName.append(getLabelSuffix());
 	LLStringUtil::toUpper(mSearchableName);
 	
-	// <FS:Ansariel> FIRE-21739: Inventory restarts filter when detaching attachments
-	//if ((old_length > new_length) && getInventoryFilter())
-	//{
-	//	getInventoryFilter()->setModified(LLFolderViewFilter::FILTER_MORE_RESTRICTIVE);
-	//}
-	// </FS:Ansariel>
 	//Name set, so trigger a sort
 	if(mParent)
 	{

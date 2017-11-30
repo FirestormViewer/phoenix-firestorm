@@ -539,6 +539,7 @@ HttpStatus HttpOpRequest::prepareRequest(HttpService * service)
 	long sslHostV(0L);
     long dnsCacheTimeout(-1L);
     long nobody(0L);
+	long last_modified(0L); // <FS:Ansariel> GetIfModified request
 
 	if (mReqOptions)
 	{
@@ -547,6 +548,7 @@ HttpStatus HttpOpRequest::prepareRequest(HttpService * service)
 		sslHostV = mReqOptions->getSSLVerifyHost() ? 2L : 0L;
 		dnsCacheTimeout = mReqOptions->getDNSCacheTimeout();
         nobody = mReqOptions->getHeadersOnly() ? 1L : 0L;
+		last_modified = mReqOptions->getLastModified(); // <FS:Ansariel> GetIfModified request
 	}
 	code = curl_easy_setopt(mCurlHandle, CURLOPT_FOLLOWLOCATION, follow_redirect);
 	check_curl_easy_code(code, CURLOPT_FOLLOWLOCATION);
@@ -558,6 +560,16 @@ HttpStatus HttpOpRequest::prepareRequest(HttpService * service)
 
     code = curl_easy_setopt(mCurlHandle, CURLOPT_NOBODY, nobody);
     check_curl_easy_code(code, CURLOPT_NOBODY);
+
+	// <FS:Ansariel> GetIfModified request
+	if (last_modified > 0)
+	{
+		code = curl_easy_setopt(mCurlHandle, CURLOPT_TIMECONDITION, CURL_TIMECOND_IFMODSINCE);
+		check_curl_easy_code(code, CURLOPT_TIMECONDITION);
+		code = curl_easy_setopt(mCurlHandle, CURLOPT_TIMEVALUE, last_modified);
+		check_curl_easy_code(code, CURLOPT_TIMEVALUE);
+	}
+	// </FS:Ansariel>
 
 	// The Linksys WRT54G V5 router has an issue with frequent
 	// DNS lookups from LAN machines.  If they happen too often,

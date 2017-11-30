@@ -498,22 +498,24 @@ void LLFeatureManager::fetchFeatureTableCoro(std::string tableName)
 
     const std::string base = gSavedSettings.getString("FeatureManagerHTTPTable");
 
-
-#if LL_WINDOWS
-    std::string os_string = LLOSInfo::instance().getOSStringSimple();
-    std::string filename;
-
-    if (os_string.find("Microsoft Windows XP") == 0)
-    {
-        filename = llformat(tableName.c_str(), "_xp", LLVersionInfo::getVersion().c_str());
-    }
-    else
-    {
-        filename = llformat(tableName.c_str(), "", LLVersionInfo::getVersion().c_str());
-    }
-#else
-    const std::string filename   = llformat(tableName.c_str(), LLVersionInfo::getVersion().c_str());
-#endif
+    // <FS:Ansariel> Re-enable feature table download
+//#if LL_WINDOWS
+//    std::string os_string = LLOSInfo::instance().getOSStringSimple();
+//    std::string filename;
+//
+//    if (os_string.find("Microsoft Windows XP") == 0)
+//    {
+//        filename = llformat(tableName.c_str(), "_xp", LLVersionInfo::getVersion().c_str());
+//    }
+//    else
+//    {
+//        filename = llformat(tableName.c_str(), "", LLVersionInfo::getVersion().c_str());
+//    }
+//#else
+//    const std::string filename   = llformat(tableName.c_str(), LLVersionInfo::getVersion().c_str());
+//#endif
+    const std::string filename   = llformat(tableName.c_str(), LLVersionInfo::getShortVersion().c_str());
+    // </FS:Ansariel>
 
     std::string url        = base + "/" + filename;
     // testing url below
@@ -521,14 +523,30 @@ void LLFeatureManager::fetchFeatureTableCoro(std::string tableName)
     const std::string path       = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, filename);
 
 
-    LL_INFOS() << "LLFeatureManager fetching " << url << " into " << path << LL_ENDL;
+    // <FS:Ansariel> Re-enable feature table download
+    //LL_INFOS() << "LLFeatureManager fetching " << url << " into " << path << LL_ENDL;
 
-    LLSD result = httpAdapter->getRawAndSuspend(httpRequest, url);
+    //LLSD result = httpAdapter->getRawAndSuspend(httpRequest, url);
+    time_t last_modified = 0;
+    llstat stat_data;
+    if(!LLFile::stat(path, &stat_data))
+    {
+        last_modified = stat_data.st_mtime;
+    }
+    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+    httpOpts->setWantHeaders(true);
+    httpOpts->setLastModified((long)last_modified);
+    LL_INFOS() << "LLFeatureManager fetching " << url << " with last modifed of " << last_modified << " into " << path << LL_ENDL;
+    LLSD result = httpAdapter->getRawAndSuspend(httpRequest, url, httpOpts);
+    // </FS:Ansariel>
 
     LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
     LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
 
-    if (status)
+    // <FS:Ansariel> Re-enable feature table download
+    //if (status)
+    if (status == LLCore::HttpStatus(HTTP_OK))
+    // </FS:Ansariel>
     {   // There was a newer feature table on the server. We've grabbed it and now should write it.
         // write to file
         const LLSD::Binary &raw = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();

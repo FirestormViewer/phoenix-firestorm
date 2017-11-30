@@ -99,6 +99,8 @@ public:
 
 	static void newWindow();
 
+	void toggleFindOptions();
+
 	// <FS:Zi> Filter dropdown
 	void onFilterTypeSelected(const std::string& filter_type_name);
 	void updateFilterDropdown(const LLInventoryFilter* filter);
@@ -116,7 +118,6 @@ protected:
 	void setFilterTextFromFilter();
 	void startSearch();
 	
-	void toggleFindOptions();
 	void onSelectionChange(LLInventoryPanel *panel, const std::deque<LLFolderViewItem*>& items, BOOL user_action);
 
 	static BOOL filtersVisible(void* user_data);
@@ -129,7 +130,7 @@ protected:
 
 	const std::string getFilterSubString();
 	void setFilterSubString(const std::string& string);
-	
+
 	// menu callbacks
 	void doToSelected(const LLSD& userdata);
 	void closeAllFolders();
@@ -176,6 +177,7 @@ private:
 	std::map<std::string,U64>	mFilterMap;			// contains name-to-number mapping for dropdown filter types
 	U64							mFilterMask;		// contains the cumulated bit filter for all dropdown filter types
 	// </FS:Zi> Filter dropdown
+
 
 	//////////////////////////////////////////////////////////////////////////////////
 	// List Commands                                                                //

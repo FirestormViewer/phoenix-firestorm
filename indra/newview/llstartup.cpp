@@ -375,6 +375,7 @@ void downloadGridlistComplete( LLSD const &aData )
 void downloadGridlistError( LLSD const &aData, std::string const &aURL )
 {
 	LL_WARNS() << "Failed to download grid list from " << aURL << LL_ENDL;
+	sGridListRequestReady = true;
 }
 
  void downloadGridstatusComplete( LLSD const &aData )
@@ -670,6 +671,8 @@ bool idle_startup()
 		gSavedSettings.setS32("LastFeatureVersion", LLFeatureManager::getInstance()->getVersion());
 		gSavedSettings.setString("LastGPUString", thisGPU);
 
+		// <FS:Ansariel> Re-enable feature table download
+		LLFeatureManager::getInstance()->fetchHTTPTables();
 
 		std::string xml_file = LLUI::locateSkin("xui_version.xml");
 		LLXMLNodePtr root;
@@ -884,7 +887,7 @@ bool idle_startup()
 			}
 
 			std::string url = gSavedSettings.getString("GridListDownloadURL");
-			LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( url, boost::bind( downloadGridlistComplete, _1 ), boost::bind( downloadGridlistError, _1, url ) );
+			FSCoreHttpUtil::callbackHttpGet(url, last_modified, boost::bind(downloadGridlistComplete, _1), boost::bind(downloadGridlistError, _1, url));
 		}
 #ifdef OPENSIM // <FS:AW optional opensim support>
 		// Fetch grid infos as needed
@@ -3619,6 +3622,7 @@ void LLStartUp::postStartupState()
 	stateInfo["str"] = getStartupStateString();
 	stateInfo["enum"] = gStartupState;
 	sStateWatcher->post(stateInfo);
+	gDebugInfo["StartupState"] = getStartupStateString();
 }
 
 

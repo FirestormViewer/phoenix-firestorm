@@ -140,6 +140,7 @@ private:
 	typedef std::map<LLUUID, FloaterPositionInfo> floater_position_map_t;
 
 	floater_position_map_t mFloaterPositions;
+	boost::signals2::connection mDialogLimitationsSlot;
 
 // <FS:Zi> script dialogs position
 public:
