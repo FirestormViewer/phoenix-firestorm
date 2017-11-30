@@ -2479,87 +2479,31 @@ even though the user gets a free copy.
         <text
           follows="left|top"
           halign="left"
-          height="16"
+          height="64"
           layout="topleft"
           left="125"
-          name="high_lod_label"
+          name="mesh_lod_label"
           top_pad="3"
-          value="High:"
           visible="false"
-          width="60" />
+          width="60" >
+High:
+Medium:
+Low:
+Lowest:
+        </text>
+        <string name="mesh_lod_num_tris_values">
+[HIGHTRIS]
+[MIDTRIS]
+[LOWTRIS]
+[LOWESTTRIS]
+        </string>
         <text
           follows="left|top"
-          height="16"
+          height="64"
           layout="topleft"
           left_pad="10"
           halign="right"
-          name="high_lod_num_tris"
-          top_delta="0"
-          value="--"
-          visible="false"
-          width="80" />
-        <text
-          follows="left|top"
-          halign="left"
-          height="16"
-          layout="topleft"
-          left="125"
-          name="med_lod_label"
-          top_pad="3"
-          value="Medium:"
-          visible="false"
-          width="60" />
-        <text
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left_pad="10"
-          halign="right"
-          name="med_lod_num_tris"
-          top_delta="0"
-          value="--"
-          visible="false"
-          width="80" />
-        <text
-          follows="left|top"
-          halign="left"
-          height="16"
-          layout="topleft"
-          left="125"
-          name="low_lod_label"
-          top_pad="3"
-          value="Low:"
-          visible="false"
-          width="60" />
-        <text
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left_pad="10"
-          halign="right"
-          name="low_lod_num_tris"
-          top_delta="0"
-          value="--"
-          visible="false"
-          width="80" />
-        <text
-          follows="left|top"
-          halign="left"
-          height="16"
-          layout="topleft"
-          left="125"
-          name="lowest_lod_label"
-          top_pad="3"
-          value="Lowest:"
-          visible="false"
-          width="60" />
-        <text
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left_pad="10"
-          halign="right"
-          name="lowest_lod_num_tris"
+          name="mesh_lod_num_tris"
           top_delta="0"
           value="--"
           visible="false"
@@ -2673,6 +2617,7 @@ even though the user gets a free copy.
           value="LOD Swap"
           visible="false"
           width="60" />
+        <string name="ll_lod_tooltip_msg">"Linden Lab Second Life Viewer default ([FACTOR])"</string>
         <text
           follows="left|top"
           height="16"
@@ -2681,10 +2626,10 @@ even though the user gets a free copy.
           halign="center"
           name="LOD_swap_ll_default"
           top_delta="0"
-          tool_tip="Linden Lab Second Life Viewer default"
           value="LL"
           visible="false"
           width="30" />
+        <string name="fs_lod_tooltip_msg">"Firestorm Viewer default ([FACTOR])"</string>
         <text
           follows="left|top"
           height="16"
@@ -2692,7 +2637,6 @@ even though the user gets a free copy.
           left_pad="5"
           halign="center"
           name="LOD_swap_fs_default"
-          tool_tip="Firestorm default"
           top_delta="0"
           value="FS"
           visible="false"
@@ -2712,137 +2656,58 @@ even though the user gets a free copy.
           width="30" />
         <text
           follows="left|top"
-          height="16"
+          height="50"
           layout="topleft"
           left="125"
-          halign="center"
-          name="LOD_swap_H2M_label"
+          halign="left"
+          name="LOD_swap_LOD_Change_label"
           top_pad="3"
-          value="High ↔ Med"
           visible="false"
-          width="65" />
+          width="65" >
+High ↔ Med
+Med ↔ Low
+Low ↔ Lwst         
+        </text>
+        <string
+          name="LODSwapFormatString"
+          visible="false">
+[HIGH2MED]
+[MED2LOW]
+[LOW2LOWEST]
+        </string>
         <text
           follows="left|top"
-          height="16"
+          height="50"
           layout="topleft"
           left_pad="0"
-          halign="center"
-          name="LOD_swap_ll_H2M"
+          halign="right"
+          name="LOD_swap_ll_values"
           top_delta="0"
-          value="--"
           visible="false"
           width="30" />
         <text
           follows="left|top"
-          height="16"
+          height="50"
           layout="topleft"
           left_pad="5"
-          halign="center"
-          name="LOD_swap_fs_H2M"
+          halign="right"
+          name="LOD_swap_fs_values"
           top_delta="0"
           value="--"
           visible="false"
           width="30" />
         <text
           follows="left|top"
-          height="16"
+          height="50"
           layout="topleft"
           left_pad="5"
-          halign="center"
-          name="LOD_swap_usr_H2M"
+          halign="right"
+          name="LOD_swap_usr_values"
           top_delta="0"
           value="--"
           visible="false"
           width="30" />
-        <text
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left="125"
-          halign="center"
-          name="LOD_swap_M2L_label"
-          top_pad="3"
-          value="Med ↔ Low"
-          visible="false"
-          width="60" />
-        <text
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left_pad="5"
-          halign="center"
-          name="LOD_swap_ll_M2L"
-          top_delta="0"
-          value="--"
-          visible="false"
-          width="30" />
-        <text
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left_pad="5"
-          halign="center"
-          name="LOD_swap_fs_M2L"
-          top_delta="0"
-          value="--"
-          visible="false"
-          width="30" />
-        <text
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left_pad="5"
-          halign="center"
-          name="LOD_swap_usr_M2L"
-          top_delta="0"
-          value="--"
-          visible="false"
-          width="30" />
-        <text
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left="125"
-          halign="center"
-          name="LOD_swap_L2I_label"
-          top_pad="3"
-          value="Low ↔ Lwst"
-          visible="false"
-          width="60" />
-        <text
-         follows="left|top"
-         height="16"
-         layout="topleft"
-         left_pad="5"
-         halign="center"
-         name="LOD_swap_ll_L2I"
-         top_delta="0"
-         value="--"
-         visible="false"
-         width="30" />
-        <text
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left_pad="5"
-          halign="center"
-          name="LOD_swap_fs_L2I"
-          top_delta="0"
-          value="--"
-          visible="false"
-          width="30" />
-        <text
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left_pad="5"
-          halign="center"
-          name="LOD_swap_usr_L2I"
-          top_delta="0"
-          value="--"
-          visible="false"
-          width="30" />
-        <text
+         <text
           name="LODSwapTableDscriptionsText"
           follows="top|left"
           layout="topleft"
@@ -2852,7 +2717,7 @@ even though the user gets a free copy.
           top_pad="15"
           tool_tip="Best practice: Creators should ensure good LOD behaviour for Default settings across all viewers."
           height="100">
-        This table shows the LOD change boundaries in metres from the camera.
+          This table shows the LOD change boundaries in metres from the camera.
         </text>
         <!-- /FS:Beq end of Mesh info section-->
         </panel>

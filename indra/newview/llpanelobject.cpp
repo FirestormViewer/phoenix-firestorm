@@ -1515,23 +1515,23 @@ void LLPanelObject::deactivateStandardFields()
 
 void LLPanelObject::activateMeshFields(LLViewerObject * objectp)
 {
-	static const char * dataFields[4] = { "lowest_lod_num_tris", "low_lod_num_tris", "med_lod_num_tris", "high_lod_num_tris" };
-	for (int i = 0; i < 4; i++)
+	LLStringUtil::format_map_t args;
+	static const char * dataFields[4] = { "LOWESTTRIS", "LOWTRIS", "MIDTRIS", "HIGHTRIS" };
+
+	LLTextBox *num_tris = getChild<LLTextBox>("mesh_lod_num_tris");
+	if (num_tris)
 	{
-		LLTextBox *num_tris = getChild<LLTextBox>(dataFields[i]);
-		if (num_tris)
+		for (int i = 0; i < 4; i++)
 		{
-			num_tris->setText(llformat("%d", objectp->mDrawable->getVOVolume()->getLODTriangleCount(i)));
-			num_tris->setVisible(TRUE);
+			args[dataFields[i]] = llformat("%d", objectp->mDrawable->getVOVolume()->getLODTriangleCount(i));
 		}
+		num_tris->setText(getString("mesh_lod_num_tris_values",args));
+		num_tris->setVisible(TRUE);
 	}
 	childSetVisible("mesh_info_label", TRUE);
 	childSetVisible("lod_label", TRUE);
 	childSetVisible("lod_num_tris", TRUE);
-	childSetVisible("high_lod_label", TRUE);
-	childSetVisible("med_lod_label", TRUE);
-	childSetVisible("low_lod_label", TRUE);
-	childSetVisible("lowest_lod_label", TRUE);
+	childSetVisible("mesh_lod_label", TRUE);
 	// Mesh specific display
 	mComboLOD = getChild<LLComboBox>("LOD_show_combo");
 	if (mComboLOD)
@@ -1569,7 +1569,7 @@ void LLPanelObject::activateMeshFields(LLViewerObject * objectp)
 	LLTextBox* tb = getChild<LLTextBox>("object_radius_value");
 	if (tb)
 	{
-		tb->setText(llformat("%f", radius));
+		tb->setText(llformat("%.3f", radius));
 		tb->setVisible(TRUE);
 	}
 	
@@ -1578,99 +1578,59 @@ void LLPanelObject::activateMeshFields(LLViewerObject * objectp)
 	childSetVisible("LOD_swap_factors_label", TRUE);
 	childSetVisible("LOD_swap_label", TRUE);
 	childSetVisible("LOD_swap_usr_label", TRUE);
-	childSetVisible("LOD_swap_H2M_label", TRUE);
-	childSetVisible("LOD_swap_M2L_label", TRUE);
-	childSetVisible("LOD_swap_L2I_label", TRUE);
+	childSetVisible("LOD_swap_LOD_Change_label", TRUE);
 	childSetVisible("LODSwapTableDscriptionsText", TRUE);
 	childSetVisible("ObjectLODbehaviourLabel", TRUE);
+	childSetVisible("LOD_swap_ll_default", TRUE);
+	childSetVisible("LOD_swap_fs_default", TRUE);
+	childSetVisible("LOD_swap_usr_current", TRUE);
 
+	// Setup the LL defaults
 	factor = 1.125; // LL default for most people http://wiki.phoenixviewer.com/support:whirly_fizzle#lod_comparison
+	args["FACTOR"] = llformat("%.3f", factor);
 	tb = getChild<LLTextBox>("LOD_swap_ll_default");
 	if (tb)
 	{
-		LLUIString factor_string = tb->getText();
-		factor_string.setArg("[FACTOR]", llformat("%.2f", factor));
-		tb->setText(factor_string.getString());
+		tb->setToolTip(getString("ll_lod_tooltip_msg",args));
 		tb->setVisible(TRUE);
 	}
-	tb = getChild<LLTextBox>("LOD_swap_ll_H2M");
-	if (tb)
-	{
-		tb->setText(llformat("%.1f", factor*dmid));
-		tb->setVisible(TRUE);
-		tb->setEnabled(TRUE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_ll_M2L");
-	if (tb)
-	{
-		tb->setText(llformat("%.1f", factor*dlow));
-		tb->setVisible(TRUE);
-		tb->setEnabled(TRUE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_ll_L2I");
-	if (tb)
-	{
-		tb->setText(llformat("%.1f", factor*dlowest));
-		tb->setVisible(TRUE);
-		tb->setEnabled(TRUE);
-	}
+	tb = getChild<LLTextBox>("LOD_swap_ll_values");
+	setLODDistValues(tb, factor, dmid, dlow, dlowest);
+
+	// now the FS defaults
 	factor = 2.0;
+	args["FACTOR"] = llformat("%.3f", factor);
 	tb = getChild<LLTextBox>("LOD_swap_fs_default");
 	if (tb)
 	{
-		LLUIString factor_string = tb->getText();
-		factor_string.setArg("[FACTOR]", llformat("%.2f", factor));
-		tb->setText(factor_string.getString());
+		tb->setToolTip(getString("fs_lod_tooltip_msg", args));
 		tb->setVisible(TRUE);
 	}
-	tb = getChild<LLTextBox>("LOD_swap_fs_H2M");
-	if (tb)
-	{
-		tb->setText(llformat("%.1f", factor*dmid));
-		tb->setVisible(TRUE);
-		tb->setEnabled(TRUE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_fs_M2L");
-	if (tb)
-	{
-		tb->setText(llformat("%.1f", factor*dlow));
-		tb->setVisible(TRUE);
-		tb->setEnabled(TRUE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_fs_L2I");
-	if (tb)
-	{
-		tb->setText(llformat("%.1f", factor*dlowest));
-		tb->setVisible(TRUE);
-		tb->setEnabled(TRUE);
-	}
+	tb = getChild<LLTextBox>("LOD_swap_fs_values");
+	setLODDistValues(tb, factor, dmid, dlow, dlowest);
+
+	// finally the user's own LODFactor
 	factor = LLVOVolume::sLODFactor;
+	args["FACTOR"] = llformat("%.3f", factor);
 	tb = getChild<LLTextBox>("LOD_swap_usr_current");
 	if (tb)
 	{
-		LLUIString factor_string = getString("user_lod_label_string");
-		factor_string.setArg("[FACTOR]", llformat("%.2f", factor));
-		tb->setText(factor_string.getString());
+		tb->setText(getString("user_lod_label_string", args));// Note: here we are setting the label not the tooltip
 		tb->setVisible(TRUE);
 	}
-	tb = getChild<LLTextBox>("LOD_swap_usr_H2M");
+	tb = getChild<LLTextBox>("LOD_swap_usr_values");
+	setLODDistValues(tb, factor, dmid, dlow, dlowest);
+}
+
+void LLPanelObject::setLODDistValues(LLTextBox * tb, F32 factor, F32 dmid, F32 dlow, F32 dlowest)
+{
 	if (tb)
 	{
-		tb->setText(llformat("%.1f", factor*dmid));
-		tb->setVisible(TRUE);
-		tb->setEnabled(TRUE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_usr_M2L");
-	if (tb)
-	{
-		tb->setText(llformat("%.1f", factor*dlow));
-		tb->setVisible(TRUE);
-		tb->setEnabled(TRUE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_usr_L2I");
-	if (tb)
-	{
-		tb->setText(llformat("%.1f", factor*dlowest));
+		LLStringUtil::format_map_t args;
+		args["HIGH2MED"] = llformat("%.1f", factor*dmid);
+		args["MED2LOW"] = llformat("%.1f", factor*dlow);
+		args["LOW2LOWEST"] = llformat("%.1f", factor*dlowest);
+		tb->setText(getString("LODSwapFormatString",args));
 		tb->setVisible(TRUE);
 		tb->setEnabled(TRUE);
 	}
@@ -1678,23 +1638,12 @@ void LLPanelObject::activateMeshFields(LLViewerObject * objectp)
 
 void LLPanelObject::deactivateMeshFields()
 {
-	static const char * dataFields[4] = { "lowest_lod_num_tris", "low_lod_num_tris", "med_lod_num_tris", "high_lod_num_tris" };
-	for (int i = 0; i < 4; i++)
-	{
-		LLTextBox *num_tris = getChild<LLTextBox>(dataFields[i]);
-		if (num_tris)
-		{
-			num_tris->setVisible(FALSE);
-		}
-	}
 
 	childSetVisible("mesh_info_label", FALSE);
 	childSetVisible("lod_label", FALSE);
 	childSetVisible("lod_num_tris", FALSE);
-	childSetVisible("high_lod_label", FALSE);
-	childSetVisible("med_lod_label", FALSE);
-	childSetVisible("low_lod_label", FALSE);
-	childSetVisible("lowest_lod_label", FALSE);
+	childSetVisible("mesh_lod_num_tris", FALSE);
+	childSetVisible("mesh_lod_label", FALSE);
 	// reset the debug setting as we are editing a new object
 	gSavedSettings.setS32("ShowSpecificLODInEdit", -1);
 	// </FS:Beq>
@@ -1723,76 +1672,12 @@ void LLPanelObject::deactivateMeshFields()
 	childSetVisible("LOD_swap_M2L_label", FALSE);
 	childSetVisible("LOD_swap_L2I_label", FALSE);
 	childSetVisible("LODSwapTableDscriptionsText", FALSE);
-
-	tb = getChild<LLTextBox>("LOD_swap_ll_default");
-	if (tb)
-	{
-		tb->setVisible(FALSE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_ll_H2M");
-	if (tb)
-	{
-		tb->setVisible(FALSE);
-		tb->setEnabled(FALSE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_ll_M2L");
-	if (tb)
-	{
-		tb->setVisible(FALSE);
-		tb->setEnabled(FALSE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_ll_L2I");
-	if (tb)
-	{
-		tb->setVisible(FALSE);
-		tb->setEnabled(FALSE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_fs_default");
-	if (tb)
-	{
-		tb->setVisible(FALSE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_fs_H2M");
-	if (tb)
-	{
-		tb->setVisible(FALSE);
-		tb->setEnabled(FALSE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_fs_M2L");
-	if (tb)
-	{
-		tb->setVisible(FALSE);
-		tb->setEnabled(FALSE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_fs_L2I");
-	if (tb)
-	{
-		tb->setVisible(FALSE);
-		tb->setEnabled(FALSE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_usr_current");
-	if (tb)
-	{
-		tb->setVisible(FALSE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_usr_H2M");
-	if (tb)
-	{
-		tb->setVisible(FALSE);
-		tb->setEnabled(FALSE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_usr_M2L");
-	if (tb)
-	{
-		tb->setVisible(FALSE);
-		tb->setEnabled(FALSE);
-	}
-	tb = getChild<LLTextBox>("LOD_swap_usr_L2I");
-	if (tb)
-	{
-		tb->setVisible(FALSE);
-		tb->setEnabled(FALSE);
-	}
+	childSetVisible("LOD_swap_ll_default", FALSE);
+	childSetVisible("LOD_swap_fs_default", FALSE);
+	childSetVisible("LOD_swap_usr_current", FALSE);
+	childSetVisible("LOD_swap_ll_values", FALSE);
+	childSetVisible("LOD_swap_fs_values", FALSE);
+	childSetVisible("LOD_swap_usr_values", FALSE);
 }
 //</FS:Beq>
 
