@@ -1281,7 +1281,7 @@ void LLViewerObjectList::fetchPhisicsFlagsCoro(std::string url)
 
     if (idList.size() < 1)
     {
-        LL_INFOS() << "No outstanding object physics flags to request." << LL_ENDL;
+        LL_DEBUGS() << "No outstanding object physics flags to request." << LL_ENDL;
         return;
     }
 
