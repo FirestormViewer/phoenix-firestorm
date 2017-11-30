@@ -1561,6 +1561,9 @@ http://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="InventoryNoMatchingItems">
 		Nie udało Ci się znaleźć tego, czego szukasz? Spróbuj [secondlife:///app/search/all/[SEARCH_TERM] Wyszukiwarki].
 	</string>
+	<string name="InventoryNoMatchingRecentItems">
+		Nie udało Ci się znaleźć tego, czego szukasz? Spróbuj [secondlife:///app/inventory/filters Filtrowania].
+	</string>
 	<string name="PlacesNoMatchingItems">
 		Nie udało Ci się znaleźć tego, czego szukasz? Spróbuj [secondlife:///app/search/places/[SEARCH_TERM] Wyszukiwarki].
 	</string>
