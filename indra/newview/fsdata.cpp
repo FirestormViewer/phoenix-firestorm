@@ -118,7 +118,7 @@ void FSData::processResponder(const LLSD& content, const std::string& url, bool 
 		else
 		{
 			processData(content);
-			saveLLSD(content , mFSdataFilename, last_modified);
+			saveLLSD(content, mFSdataFilename, last_modified);
 		}
 		mFSDataDone = true;
 	}
@@ -140,7 +140,7 @@ void FSData::processResponder(const LLSD& content, const std::string& url, bool 
 		else
 		{
 			processAssets(content);
-			saveLLSD(content , mAssestsFilename, last_modified);
+			saveLLSD(content, mAssestsFilename, last_modified);
 		}
 	}
 	else if (url == mAgentsURL)
@@ -161,7 +161,7 @@ void FSData::processResponder(const LLSD& content, const std::string& url, bool 
 		else
 		{
 			processAgents(content);
-			saveLLSD(content , mAgentsFilename, last_modified);
+			saveLLSD(content, mAgentsFilename, last_modified);
 		}
 		mAgentsDone = true;
 		addAgents();
@@ -175,7 +175,7 @@ void FSData::processResponder(const LLSD& content, const std::string& url, bool 
 		else
 		{
 			processClientTags(content);
-			saveLLSD(content , mClientTagsFilename, last_modified);
+			saveLLSD(content, mClientTagsFilename, last_modified);
 		}
 	}
 	else if (url == mFSdataDefaultsUrl)
@@ -186,7 +186,7 @@ void FSData::processResponder(const LLSD& content, const std::string& url, bool 
 		}
 		else
 		{
-			saveLLSD(content , mFSdataDefaultsFilename, last_modified);
+			saveLLSD(content, mFSdataDefaultsFilename, last_modified);
 		}
 	}
 }
@@ -215,38 +215,38 @@ bool FSData::loadFromFile(LLSD& data, std::string filename)
 	}
 }
 
-void downloadComplete( LLSD const &aData, std::string const &aURL )
+void downloadComplete(LLSD const &aData, std::string const &aURL, bool success)
 {
-	LL_DEBUGS() << aData << LL_ENDL;
+	LL_DEBUGS("fsdata") << aData << LL_ENDL;
 	
-	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
+	LLSD header = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS][LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
 
 	LLDate lastModified;
 	if (header.has("last-modified"))
 	{
-		lastModified.secondsSinceEpoch( FSCommon::secondsSinceEpochFromString( "%a, %d %b %Y %H:%M:%S %ZP", header["last-modified"].asString() ) );
+		lastModified.secondsSinceEpoch(FSCommon::secondsSinceEpochFromString("%a, %d %b %Y %H:%M:%S %ZP", header["last-modified"].asString()));
 	}
 
 	LLSD data = aData;
-	data.erase( LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS );
+	data.erase(LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS);
 	
-	FSData::getInstance()->processResponder( data, aURL, true, lastModified);
+	FSData::getInstance()->processResponder(data, aURL, success, lastModified);
 }
 
-void downloadCompleteScript( LLSD const &aData, std::string const &aURL, std::string const &aFilename  )
+void downloadCompleteScript(LLSD const &aData, std::string const &aURL, std::string const &aFilename)
 {
-	LL_DEBUGS() << aData << LL_ENDL;
-	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
-	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
+	LL_DEBUGS("fsdata") << aData << LL_ENDL;
+	LLSD header = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS][LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
+	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS]);
 
 	LLDate lastModified;
 	if (header.has("last-modified"))
 	{
-		lastModified.secondsSinceEpoch( FSCommon::secondsSinceEpochFromString( "%a, %d %b %Y %H:%M:%S %ZP", header["last-modified"].asString() ) );
+		lastModified.secondsSinceEpoch(FSCommon::secondsSinceEpochFromString("%a, %d %b %Y %H:%M:%S %ZP", header["last-modified"].asString()));
 	}
 	const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
 
-	if ( status.getType() == HTTP_NOT_MODIFIED )
+	if (status.getType() == HTTP_NOT_MODIFIED)
 	{
 		LL_INFOS("fsdata") << "Got [304] not modified for " << aURL << LL_ENDL;
 		return;
@@ -282,22 +282,9 @@ void downloadCompleteScript( LLSD const &aData, std::string const &aURL, std::st
 	}
 }
 
-void downloadError( LLSD const &aData, std::string const &aURL )
+void downloadError(LLSD const &aData, std::string const &aURL)
 {
-	LL_WARNS() << "Failed to download " << aURL << ": " << aData << LL_ENDL;
-	FSData::instance().checkDone(aURL);
-}
-
-void FSData::checkDone(const std::string& url)
-{
-	if (url == mFSDataURL)
-	{
-		mFSDataDone = true;
-	}
-	else if (url == mAgentsURL)
-	{
-		mAgentsDone = true;
-	}
+	LL_WARNS("fsdata") << "Failed to download " << aURL << ": " << aData << LL_ENDL;
 }
 
 // call this just before the login screen and after the LLProxy has been setup.
@@ -315,7 +302,7 @@ void FSData::startDownload()
 		last_modified = stat_data.st_mtime;
 	}
 	LL_INFOS("fsdata") << "Downloading data.xml from " << mFSDataURL << " with last modifed of " << last_modified << LL_ENDL;
-	FSCoreHttpUtil::callbackHttpGet(mFSDataURL, last_modified, boost::bind(downloadComplete, _1, mFSDataURL), boost::bind(downloadError, _1, mFSDataURL));
+	FSCoreHttpUtil::callbackHttpGet(mFSDataURL, last_modified, boost::bind(downloadComplete, _1, mFSDataURL, true), boost::bind(downloadComplete, _1, mFSDataURL, false));
 
 	last_modified = 0;
 	if(!LLFile::stat(mFSdataDefaultsFilename, &stat_data))
@@ -325,7 +312,7 @@ void FSData::startDownload()
 	std::string filename = llformat("defaults.%s.xml", LLVersionInfo::getShortVersion().c_str());
 	mFSdataDefaultsUrl = mBaseURL + "/" + filename;
 	LL_INFOS("fsdata") << "Downloading defaults.xml from " << mFSdataDefaultsUrl << " with last modifed of " << last_modified << LL_ENDL;
-	FSCoreHttpUtil::callbackHttpGet(mFSdataDefaultsUrl, last_modified, boost::bind(downloadComplete, _1, mFSdataDefaultsUrl), boost::bind(downloadError, _1, mFSdataDefaultsUrl));
+	FSCoreHttpUtil::callbackHttpGet(mFSdataDefaultsUrl, last_modified, boost::bind(downloadComplete, _1, mFSdataDefaultsUrl, true), boost::bind(downloadComplete, _1, mFSdataDefaultsUrl, false));
 
 #if OPENSIM
 	std::string filenames[] = {"scriptlibrary_ossl.xml", "scriptlibrary_aa.xml"};
@@ -383,7 +370,7 @@ void FSData::downloadAgents()
 			last_modified = stat_data.st_mtime;
 		}
 		LL_INFOS("fsdata") << "Downloading agents.xml from " << mAgentsURL << " with last modifed of " << last_modified << LL_ENDL;
-		FSCoreHttpUtil::callbackHttpGet(mAgentsURL, last_modified, boost::bind(downloadComplete, _1, mAgentsURL), boost::bind(downloadError, _1, mAgentsURL));
+		FSCoreHttpUtil::callbackHttpGet(mAgentsURL, last_modified, boost::bind(downloadComplete, _1, mAgentsURL, true), boost::bind(downloadComplete, _1, mAgentsURL, false));
 	}
 
 	if (!mAssetsURL.empty())
@@ -396,7 +383,7 @@ void FSData::downloadAgents()
 			last_modified = stat_data.st_mtime;
 		}
 		LL_INFOS("fsdata") << "Downloading assets.xml from " << mAssetsURL << " with last modifed of " << last_modified << LL_ENDL;
-		FSCoreHttpUtil::callbackHttpGet(mAssetsURL, last_modified, boost::bind(downloadComplete, _1, mAssetsURL), boost::bind(downloadError, _1, mAssetsURL));
+		FSCoreHttpUtil::callbackHttpGet(mAssetsURL, last_modified, boost::bind(downloadComplete, _1, mAssetsURL, true), boost::bind(downloadComplete, _1, mAssetsURL, false));
 	}
 }
 
@@ -463,7 +450,7 @@ void FSData::processData(const LLSD& fs_data)
 			last_modified = stat_data.st_mtime;
 		}
 		LL_INFOS("fsdata") << "Downloading client_list_v2.xml from " << LEGACY_CLIENT_LIST_URL << " with last modifed of " << last_modified << LL_ENDL;
-		FSCoreHttpUtil::callbackHttpGet(LEGACY_CLIENT_LIST_URL, last_modified, boost::bind(downloadComplete, _1, LEGACY_CLIENT_LIST_URL), boost::bind(downloadError, _1, LEGACY_CLIENT_LIST_URL));
+		FSCoreHttpUtil::callbackHttpGet(LEGACY_CLIENT_LIST_URL, last_modified, boost::bind(downloadComplete, _1, LEGACY_CLIENT_LIST_URL, true), boost::bind(downloadComplete, _1, LEGACY_CLIENT_LIST_URL, false));
 	}
 	else if(use_legacy_tags)
 	{
