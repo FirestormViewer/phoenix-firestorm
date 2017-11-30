@@ -68,7 +68,6 @@ private:
     bool mNeedsUpdate;
     LLListContextMenu* mContextMenu;
     LLNameListCtrl* mAvatarSettingsList;
-    LLHandle<LLFloater> mPicker;
 
     std::string mNameFilter;
 };

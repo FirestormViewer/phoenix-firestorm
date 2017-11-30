@@ -225,7 +225,6 @@ protected:
 	U32				mRawWParam;
 	U32				mRawLParam;
 
-	// <FS:Ansariel> Respect "Hide pointer while typing" Windows preference setting
 	BOOL			mMouseVanish;
 
 	friend class LLWindowManager;

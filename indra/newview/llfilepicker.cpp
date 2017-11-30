@@ -359,11 +359,7 @@ BOOL LLFilePicker::getMultipleOpenFiles(ELoadFilter filter, bool blocking)
 					dirname = filename + "\\";
 				else
 					mFiles.push_back(dirname + filename);
-				
-				// </FS:ND> Do not add the length of the utf8 string, but use the length of the utf16 string
-				// tptrw += filename.size();
-				tptrw += wcslen( tptrw );
-				// </FS:ND>
+				tptrw += wcslen(tptrw);
 			}
 		}
 	}
