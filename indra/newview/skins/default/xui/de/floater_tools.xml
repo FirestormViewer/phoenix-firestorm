@@ -418,7 +418,7 @@
 			<text name="mesh_info_label">
 				Mesh-Information:
 			</text>
-			<text name="lod_label" value="LOD:"/>
+			<text name="lod_label" value="LOD"/>
 			<text name="lod_num_tris" value="Anz. Dreiecke"/>
 			<text name="mesh_lod_label">
 				Hoch:

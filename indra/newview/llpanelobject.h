@@ -68,7 +68,7 @@ public:
 	static void 	onCommitPhantom(		LLUICtrl* ctrl, void* userdata);
 	static void 	onCommitPhysics(		LLUICtrl* ctrl, void* userdata);
 	//<FS:Beq> FIRE-21445 - Display specific LOD
-	static void		onCommitLOD(			LLUICtrl* ctrl, void* userdata);
+	void			onCommitLOD();
 	//</FS:Beq>
 	void 	onCopyPos(				const LLSD& data);
 	void 	onPastePos(				const LLSD& data);
