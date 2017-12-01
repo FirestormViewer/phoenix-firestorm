@@ -1533,12 +1533,8 @@ void LLPanelObject::activateMeshFields(LLViewerObject * objectp)
 	childSetVisible("lod_num_tris", TRUE);
 	childSetVisible("mesh_lod_label", TRUE);
 	// Mesh specific display
-	mComboLOD = getChild<LLComboBox>("LOD_show_combo");
-	if (mComboLOD)
-	{
-		mComboLOD->setEnabled(TRUE);
-		mComboLOD->setVisible(TRUE);
-	}
+	mComboLOD->setEnabled(TRUE);
+	mComboLOD->setVisible(TRUE);
 
 	F32 radius;
 
@@ -1573,7 +1569,6 @@ void LLPanelObject::activateMeshFields(LLViewerObject * objectp)
 	childSetVisible("LOD_swap_usr_label", true);
 	childSetVisible("LOD_swap_factors_label", true);
 	childSetVisible("LOD_swap_label", true);
-	childSetVisible("LOD_swap_usr_label", true);
 	childSetVisible("LOD_swap_LOD_Change_label", true);
 	childSetVisible("LODSwapTableDscriptionsText", true);
 	childSetVisible("ObjectLODbehaviourLabel", true);
@@ -1625,7 +1620,6 @@ void LLPanelObject::setLODDistValues(LLTextBox * tb, F32 factor, F32 dmid, F32 d
 
 void LLPanelObject::deactivateMeshFields()
 {
-
 	childSetVisible("mesh_info_label", FALSE);
 	childSetVisible("lod_label", FALSE);
 	childSetVisible("lod_num_tris", FALSE);
@@ -1635,26 +1629,20 @@ void LLPanelObject::deactivateMeshFields()
 	gSavedSettings.setS32("ShowSpecificLODInEdit", -1);
 	// </FS:Beq>
 
-	mComboLOD = getChild<LLComboBox>("LOD_show_combo");
-	if (mComboLOD)
-	{
-		mComboLOD->setCurrentByIndex(0);
-		mComboLOD->setEnabled(FALSE);
-		mComboLOD->setVisible(FALSE);
-	}
+	mComboLOD->setCurrentByIndex(0);
+	mComboLOD->setEnabled(FALSE);
+	mComboLOD->setVisible(FALSE);
+
 	childSetVisible("object_radius", FALSE);
 	LLTextBox* tb = getChild<LLTextBox>("object_radius_value");
-	if (tb)
-	{
-		tb->setVisible(FALSE);
-	}
-	
+	tb->setVisible(FALSE);
+
 	childSetVisible("ObjectLODbehaviourLabel", false);
 	childSetVisible("LOD_swap_defaults_label", false);
 	childSetVisible("LOD_swap_factors_label", false);
 	childSetVisible("LOD_swap_usr_label", false);
 	childSetVisible("LOD_swap_label", false);
-	childSetVisible("LOD_swap_usr_label", false);
+	childSetVisible("LOD_swap_LOD_Change_label", false);
 	childSetVisible("LOD_swap_H2M_label", false);
 	childSetVisible("LOD_swap_M2L_label", false);
 	childSetVisible("LOD_swap_L2I_label", false);
