@@ -396,7 +396,7 @@ Najniższy:
 				<combo_box.item label="Najniższy" name="Lowest/Imposter" />
 			</combo_box>
 			<text name="ObjectLODbehaviourLabel" value="Zachowanie LOD obiektu:" />
-			<text name="object_radius" value="Promień obiektu: " />
+			<text name="object_radius" value="Promień obiektu:" />
 			<text name="LOD_swap_factors_label" value="Mnożnik LOD" />
 			<text name="LOD_swap_defaults_label" value="Domyślny" tool_tip="Domyślne, fabryczne ustawienie mnożnika LOD (poziomu detali), jakie będzie stosowane przez większość przeglądarek." />
 			<text name="LOD_swap_usr_label" tool_tip="Twoje obecne ustawienie pobrane z RenderVolumeLODFactor" value="Twój" />
