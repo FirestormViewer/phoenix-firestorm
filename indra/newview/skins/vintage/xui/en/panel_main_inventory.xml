@@ -534,6 +534,7 @@
 		height="16"
 		layout="topleft"
 		top_pad="2"
+		tool_tip="[ITEMS] Items, [CATEGORIES] Folders"
 		left_delta="2"
 		name="ItemcountText"
 		right="-1"

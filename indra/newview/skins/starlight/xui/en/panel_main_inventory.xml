@@ -34,6 +34,7 @@
 		     name="ItemcountText"
 		     font="SansSerifMedium"
 		     text_color="EmphasisColor"
+		     tool_tip="[ITEMS] Items, [CATEGORIES] Folders"
 		     top_pad="0"
 		     width="300">
     Items:

@@ -237,6 +237,7 @@
            name="ItemcountText"
            font="SansSerifMedium"
            top_pad="6"
+           tool_tip="[ITEMS] Items, [CATEGORIES] Folders"
            follows="bottom|left|right"
            width="170">
           Items

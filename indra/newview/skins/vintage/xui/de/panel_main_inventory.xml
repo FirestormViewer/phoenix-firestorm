@@ -173,7 +173,7 @@
 		<worn_inventory_panel label="Angezogene Objekte" name="Worn Items" width="290" />
 	</tab_container>
 
-	<text name="ItemcountText" >
+	<text name="ItemcountText" tool_tip="[ITEMS] Objekte, [CATEGORIES] Ordner">
 		Objekte
 	</text>
 

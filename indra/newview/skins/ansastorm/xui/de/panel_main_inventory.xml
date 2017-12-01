@@ -108,7 +108,7 @@
 			<button name="new_inv_btn" tool_tip="Zusätzliches Inventar-Fenster"/>
 		</panel>
 		<panel name="dummy_panel">
-			<text name="ItemcountText">
+			<text name="ItemcountText" tool_tip="[ITEMS] Objekte, [CATEGORIES] Ordner">
 				Objekte
 			</text>
 		</panel>

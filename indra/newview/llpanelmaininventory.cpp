@@ -1023,6 +1023,16 @@ void LLPanelMainInventory::updateItemcountText()
 		LLLocale locale("");
 		// </FS:Ansariel>
 		LLResMgr::getInstance()->getIntegerString(mItemCountString, mItemCount);
+		
+		// <FS:Ansariel> Include folders in inventory count
+		std::string item_str, category_str;
+		LLResMgr::getInstance()->getIntegerString(item_str, gInventory.getItemCount());
+		LLResMgr::getInstance()->getIntegerString(category_str, gInventory.getCategoryCount());
+		LLStringUtil::format_map_t args;
+		args["[ITEMS]"] = item_str;
+		args["[CATEGORIES]"] = category_str;
+		mCounterCtrl->setToolTipArgs(args);
+		// </FS:Ansariel>
 	}
 
 	LLStringUtil::format_map_t string_args;
