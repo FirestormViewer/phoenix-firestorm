@@ -1008,9 +1008,15 @@ void LLPanelMainInventory::draw()
 
 void LLPanelMainInventory::updateItemcountText()
 {
-	if(mItemCount != gInventory.getItemCount())
+	// <FS:Ansariel> Include folders in inventory count
+	//if(mItemCount != gInventory.getItemCount())
+	//{
+	//	mItemCount = gInventory.getItemCount();
+	S32 new_count = gInventory.getItemCount() + gInventory.getCategoryCount();
+	if(mItemCount != new_count)
 	{
-		mItemCount = gInventory.getItemCount();
+		mItemCount = new_count;
+	// </FS:Ansariel>
 		mItemCountString = "";
 		// <FS:Ansariel> Use user-default locale from operating system
 		//LLLocale locale(LLLocale::USER_LOCALE);

@@ -3493,10 +3493,7 @@ void LLInventoryModel::emptyFolderType(const std::string notification, LLFolderT
 			LLInventoryModel::item_array_t items;
 			const LLUUID trash_id = findCategoryUUIDForType(preferred_type);
 			gInventory.collectDescendents(trash_id, cats, items, LLInventoryModel::INCLUDE_TRASH); //All descendants
-			// <FS:Ansariel> FIRE-21630: Make item count match counting method for inventory (don't include folders)
-			//S32 item_count = items.size() + cats.size();
-			S32 item_count = items.size();
-			// </FS:Ansariel>
+			S32 item_count = items.size() + cats.size();
 			args["COUNT"] = item_count;
 		}
 		LLNotificationsUtil::add(notification, args, LLSD(),
