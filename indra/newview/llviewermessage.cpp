@@ -3458,7 +3458,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	case IM_GROUP_INVITATION:
 		{
 			// <FS:Ansariel> FIRE-20385: Don't show group invitation for groups agent is already a member of
-			if (gAgent.isInGroup(from_id))
+			if (gAgent.isInGroup(from_id) && !gSavedSettings.getBOOL("FSShowJoinedGroupInvitations"))
 			{
 				LL_INFOS("Messaging") << "Received group invitation for group " << from_id << " but we are already a member" << LL_ENDL;
 				return;
