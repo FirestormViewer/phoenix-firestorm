@@ -131,6 +131,7 @@
 	<texture name="icon_avatar_online"		file_name="icons/green_square.png" preload="true" />
 	<texture name="slim_icon_16_viewer"		file_name="icons/yellow_square.png" preload="true" />
 	<texture name="avatar_in_region"		file_name="icons/green_square.png" preload="true" />
+	<texture name="avatar_on_parcel"		file_name="icons/yellow_square.png" preload="false" />
 
 	<texture name="Radar_VoicePTT_Lvl1"		file_name="icons/Radar_Voice_Lvl1.png" preload="false" />
 	<texture name="Radar_VoicePTT_Lvl2"		file_name="icons/Radar_Voice_Lvl2.png" preload="false" />
