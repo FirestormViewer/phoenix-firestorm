@@ -691,7 +691,6 @@ LLAppViewer::LLAppViewer()
 	mSavePerAccountSettings(false),		// don't save settings on logout unless login succeeded.
 	mQuitRequested(false),
 	mLogoutRequestSent(false),
-	mYieldTime(-1),
 	mLastAgentControlFlags(0),
 	mLastAgentForceUpdate(0),
 	mMainloopTimeout(NULL),
@@ -1452,10 +1451,11 @@ bool LLAppViewer::frame()
 			LL_RECORD_BLOCK_TIME(FTM_SLEEP);
 			
 			// yield some time to the os based on command line option
-			if(mYieldTime >= 0)
+			static LLCachedControl<S32> yield_time(gSavedSettings, "YieldTime", -1);
+			if(yield_time >= 0)
 			{
 				LL_RECORD_BLOCK_TIME(FTM_YIELD);
-				ms_sleep(mYieldTime);
+				ms_sleep(yield_time);
 			}
 
 			// yield cooperatively when not running as foreground window
@@ -2747,8 +2747,6 @@ bool LLAppViewer::initConfiguration()
 			LLSpellChecker::instance().setSecondaryDictionaries(dict_list);
 		}
 	}
-
-    mYieldTime = gSavedSettings.getS32("YieldTime");
 
 
 	// Display splash screen.  Must be after above check for previous
