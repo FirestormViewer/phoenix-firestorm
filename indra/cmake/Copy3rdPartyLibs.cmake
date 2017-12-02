@@ -20,7 +20,6 @@ if(WINDOWS)
     set(vivox_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     set(vivox_files
         SLVoice.exe
-        ca-bundle.crt
         libsndfile-1.dll
         vivoxsdk.dll
         ortp.dll
@@ -38,6 +37,7 @@ if(WINDOWS)
         libapriconv-1.dll
         ssleay32.dll
         libeay32.dll
+        nghttp2.dll
         glod.dll
         libhunspell.dll
         )
@@ -151,7 +151,6 @@ elseif(DARWIN)
     set(vivox_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     set(vivox_files
         SLVoice
-        ca-bundle.crt
         libsndfile.dylib
         libvivoxoal.dylib
         libortp.dylib
@@ -171,6 +170,9 @@ elseif(DARWIN)
         ${EXPAT_COPY}
         libGLOD.dylib
         libndofdev.dylib
+        libnghttp2.dylib
+        libnghttp2.14.dylib
+        libnghttp2.14.14.0.dylib
        )
 
     if (FMODEX)

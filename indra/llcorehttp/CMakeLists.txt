@@ -6,6 +6,7 @@ include(00-Common)
 include(GoogleMock)
 include(CURL)
 include(OpenSSL)
+include(NGHTTP2)
 include(ZLIB)
 include(LLCoreHttp)
 include(LLAddBuildTest)
@@ -30,6 +31,7 @@ set(llcorehttp_SOURCE_FILES
     httpoptions.cpp
     httprequest.cpp
     httpresponse.cpp
+    httpstats.cpp
     _httplibcurl.cpp
     _httpopcancel.cpp
     _httpoperation.cpp
@@ -57,6 +59,7 @@ set(llcorehttp_HEADER_FILES
     httpoptions.h
     httprequest.h
     httpresponse.h
+    httpstats.h
     _httpinternal.h
     _httplibcurl.h
     _httpopcancel.h
@@ -92,6 +95,7 @@ target_link_libraries(
   ${CURL_LIBRARIES}
   ${OPENSSL_LIBRARIES}
   ${CRYPTO_LIBRARIES}
+  ${NGHTTP2_LIBRARIES}
   ${BOOST_THREAD_LIBRARY}
   ${BOOST_SYSTEM_LIBRARY}
   )
@@ -130,6 +134,7 @@ if (LL_TESTS)
       ${CURL_LIBRARIES}
       ${OPENSSL_LIBRARIES}
       ${CRYPTO_LIBRARIES}
+      ${NGHTTP2_LIBRARIES}
       ${BOOST_THREAD_LIBRARY}
       ${BOOST_SYSTEM_LIBRARY}
       )
@@ -200,6 +205,7 @@ endif (DARWIN)
       ${CURL_LIBRARIES}
       ${OPENSSL_LIBRARIES}
       ${CRYPTO_LIBRARIES}
+      ${NGHTTP2_LIBRARIES}
       ${BOOST_THREAD_LIBRARY}
       ${BOOST_SYSTEM_LIBRARY}
       )
