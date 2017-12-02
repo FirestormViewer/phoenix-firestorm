@@ -996,6 +996,7 @@ with the same filename but different name
 <texture name="friends_icon_24x24" file_name="icons/Friends_Icon_24x24.png" preload="false" />
 <texture name="gift_icon_24x24" file_name="icons/gift_icon_24x24.png" preload="false" />
 <texture name="avatar_in_region" file_name="icons/green_square.png" preload="false" />
+<texture name="avatar_on_parcel" file_name="icons/yellow_square.png" preload="false" />
 <texture name="radarbox_n" file_name="icons/radar_n.png" preload="false" />
 <texture name="radarbox_p" file_name="icons/radar_p.png" preload="false" />
 <texture name="radarbox_s" file_name="icons/radar_s.png" preload="false" />
