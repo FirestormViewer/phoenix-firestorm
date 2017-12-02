@@ -51,7 +51,7 @@
 #include "lltrans.h"
 #include "llviewercontrol.h"		// for gSavedSettings
 #include "llviewermenu.h"			// for gMenuHolder
-#include "llViewerparcelmgr.h"
+#include "llviewerparcelmgr.h"
 #include "llvoavatar.h"
 #include "llvoiceclient.h"
 #include "llworld.h"
