@@ -26,7 +26,7 @@
 						<radar_list name="radar_list">
 							<radar_list.columns label="Name" tool_tip="[TOTAL] Avatare, [IN_REGION] in derselben Region, [IN_CHAT_RANGE] in Chat-Reichweite" name="name"/>
 							<radar_list.columns tool_tip="Spricht via Voice" name="voice_level"/>
-							<radar_list.columns tool_tip="Ist in derselben Region" name="in_region"/>
+							<radar_list.columns tool_tip="Ist in derselben Region (grün) oder derselben Parzelle (gelb)" name="in_region"/>
 							<radar_list.columns tool_tip="Schreibt gerade" name="typing_status"/>
 							<radar_list.columns tool_tip="Sitz gerade" name="sitting_status"/>
 							<radar_list.columns tool_tip="Status Zahlungsinformationen" name="flags"/>
