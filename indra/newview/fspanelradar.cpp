@@ -366,6 +366,10 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 		{
 			row_data["columns"][2]["value"] = "avatar_in_region";
 		}
+		else
+		{
+			row_data["columns"][2]["value"] = "";
+		}
 
 		row_data["columns"][3]["column"] = "typing_status";
 		row_data["columns"][3]["type"] = "icon";
