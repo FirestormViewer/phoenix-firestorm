@@ -301,7 +301,7 @@ void FSData::startDownload()
 	{
 		last_modified = stat_data.st_mtime;
 	}
-	LL_INFOS("fsdata") << "Downloading data.xml from " << mFSDataURL << " with last modifed of " << last_modified << LL_ENDL;
+	LL_INFOS("fsdata") << "Downloading data.xml from " << mFSDataURL << " with last modified of " << last_modified << LL_ENDL;
 	FSCoreHttpUtil::callbackHttpGet(mFSDataURL, last_modified, boost::bind(downloadComplete, _1, mFSDataURL, true), boost::bind(downloadComplete, _1, mFSDataURL, false));
 
 	last_modified = 0;
@@ -311,7 +311,7 @@ void FSData::startDownload()
 	}
 	std::string filename = llformat("defaults.%s.xml", LLVersionInfo::getShortVersion().c_str());
 	mFSdataDefaultsUrl = mBaseURL + "/" + filename;
-	LL_INFOS("fsdata") << "Downloading defaults.xml from " << mFSdataDefaultsUrl << " with last modifed of " << last_modified << LL_ENDL;
+	LL_INFOS("fsdata") << "Downloading defaults.xml from " << mFSdataDefaultsUrl << " with last modified of " << last_modified << LL_ENDL;
 	FSCoreHttpUtil::callbackHttpGet(mFSdataDefaultsUrl, last_modified, boost::bind(downloadComplete, _1, mFSdataDefaultsUrl, true), boost::bind(downloadComplete, _1, mFSdataDefaultsUrl, false));
 
 #if OPENSIM
@@ -325,7 +325,7 @@ void FSData::startDownload()
 			last_modified = stat_data.st_mtime;
 		}
 		std::string url = mBaseURL + "/" + script_name;
-		LL_INFOS("fsdata") << "Downloading " << script_name << " from " << url << " with last modifed of " << last_modified << LL_ENDL;
+		LL_INFOS("fsdata") << "Downloading " << script_name << " from " << url << " with last modified of " << last_modified << LL_ENDL;
 		LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
 		httpOpts->setWantHeaders(true);
 		httpOpts->setLastModified((long)last_modified);
@@ -369,7 +369,7 @@ void FSData::downloadAgents()
 		{
 			last_modified = stat_data.st_mtime;
 		}
-		LL_INFOS("fsdata") << "Downloading agents.xml from " << mAgentsURL << " with last modifed of " << last_modified << LL_ENDL;
+		LL_INFOS("fsdata") << "Downloading agents.xml from " << mAgentsURL << " with last modified of " << last_modified << LL_ENDL;
 		FSCoreHttpUtil::callbackHttpGet(mAgentsURL, last_modified, boost::bind(downloadComplete, _1, mAgentsURL, true), boost::bind(downloadComplete, _1, mAgentsURL, false));
 	}
 
@@ -382,7 +382,7 @@ void FSData::downloadAgents()
 		{
 			last_modified = stat_data.st_mtime;
 		}
-		LL_INFOS("fsdata") << "Downloading assets.xml from " << mAssetsURL << " with last modifed of " << last_modified << LL_ENDL;
+		LL_INFOS("fsdata") << "Downloading assets.xml from " << mAssetsURL << " with last modified of " << last_modified << LL_ENDL;
 		FSCoreHttpUtil::callbackHttpGet(mAssetsURL, last_modified, boost::bind(downloadComplete, _1, mAssetsURL, true), boost::bind(downloadComplete, _1, mAssetsURL, false));
 	}
 }
@@ -449,7 +449,7 @@ void FSData::processData(const LLSD& fs_data)
 		{
 			last_modified = stat_data.st_mtime;
 		}
-		LL_INFOS("fsdata") << "Downloading client_list_v2.xml from " << LEGACY_CLIENT_LIST_URL << " with last modifed of " << last_modified << LL_ENDL;
+		LL_INFOS("fsdata") << "Downloading client_list_v2.xml from " << LEGACY_CLIENT_LIST_URL << " with last modified of " << last_modified << LL_ENDL;
 		FSCoreHttpUtil::callbackHttpGet(LEGACY_CLIENT_LIST_URL, last_modified, boost::bind(downloadComplete, _1, LEGACY_CLIENT_LIST_URL, true), boost::bind(downloadComplete, _1, LEGACY_CLIENT_LIST_URL, false));
 	}
 	else if(use_legacy_tags)
