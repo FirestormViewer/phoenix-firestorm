@@ -1508,15 +1508,16 @@ BOOL LLVOVolume::updateLOD()
 
 	if (lod_changed)
 	{
-#if 1
-        // AXON debugging
-        if (isAnimatedObject() && isRiggedMesh())
+        if (debugLoggingEnabled("AnimatedObjectsLinkset"))
         {
-            std::string vobj_name = llformat("Vol%u", (U32) this);
-            F32 est_tris = getEstTrianglesMax();
-            LL_DEBUGS("AXONLinkset") << vobj_name << " updateLOD to " << getLOD() << ", tris " << est_tris << LL_ENDL; 
+            if (isAnimatedObject() && isRiggedMesh())
+            {
+                std::string vobj_name = llformat("Vol%u", (U32) this);
+                F32 est_tris = getEstTrianglesMax();
+                LL_DEBUGS("AnimatedObjectsLinkset") << vobj_name << " updateLOD to " << getLOD() << ", tris " << est_tris << LL_ENDL; 
+            }
         }
-#endif
+
 		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, FALSE);
 		mLODChanged = TRUE;
 	}
@@ -3583,10 +3584,10 @@ void LLVOVolume::setExtendedMeshFlags(U32 flags)
             param_block->setFlags(flags);
         }
         parameterChanged(LLNetworkData::PARAMS_EXTENDED_MESH, true);
-        LL_DEBUGS("AXON") << (uintptr_t) this
-                   << " new flags " << flags << " curr_flags " << curr_flags
-                   << ", calling onSetExtendedMeshFlags()"
-                   << LL_ENDL;
+        LL_DEBUGS("AnimatedObjects") << (uintptr_t) this
+                                     << " new flags " << flags << " curr_flags " << curr_flags
+                                     << ", calling onSetExtendedMeshFlags()"
+                                     << LL_ENDL;
         onSetExtendedMeshFlags(flags);
     }
 }
@@ -3606,18 +3607,6 @@ bool LLVOVolume::isAnimatedObject() const
     LLVOVolume *root_vol = (LLVOVolume*)getRootEdit();
     bool root_is_animated_flag = root_vol->getExtendedMeshFlags() & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG;
     return root_is_animated_flag;
-#if 0
-    if (root_is_animated_flag)
-    {
-        bool root_can_be_animated = root_vol->canBeAnimatedObject();
-        bool this_can_be_animated = (root_vol == this) ? root_can_be_animated : canBeAnimatedObject();
-        if (this_can_be_animated && root_can_be_animated)
-        {
-            return true;
-        }
-    }
-    return false;
-#endif
 }
 
 // Called any time parenting changes for a volume. Update flags and
@@ -3627,13 +3616,12 @@ void LLVOVolume::updateAnimatedObjectStateOnReparent(LLViewerObject *old_parent,
 {
     LLVOVolume *old_volp = dynamic_cast<LLVOVolume*>(old_parent);
 
-    // AXON - depending on whether animated objects can be attached,
-    // we may want to include or remove the isAvatar() check.
-    // BUG??
     if (new_parent && !new_parent->isAvatar())
     {
         if (mControlAvatar.notNull())
         {
+            // Here an animated object is being made the child of some
+            // other prim. Should remove the control av from the child.
             LLControlAvatar *av = mControlAvatar;
             mControlAvatar = NULL;
             av->markForDeath();
@@ -4152,17 +4140,14 @@ void LLVOVolume::parameterChanged(U16 param_type, LLNetworkData* data, BOOL in_u
     {
         U32 extended_mesh_flags = getExtendedMeshFlags();
         bool enabled =  (extended_mesh_flags & LLExtendedMeshParams::ANIMATED_MESH_ENABLED_FLAG);
-        // AXON This is kind of a guess. Better if we could compare
-        // the before and after flags directly. What about cases where
-        // there's no control avatar for optimization reasons?
         bool was_enabled = (getControlAvatar() != NULL);
         if (enabled != was_enabled)
         {
-            LL_INFOS("AXON") << (uintptr_t) this
-                              << " calling onSetExtendedMeshFlags, enabled " << (U32) enabled
-                              << " was_enabled " << (U32) was_enabled
-                              << " local_origin " << (U32) local_origin
-                              << LL_ENDL;
+            LL_DEBUGS("AnimatedObjects") << (uintptr_t) this
+                                         << " calling onSetExtendedMeshFlags, enabled " << (U32) enabled
+                                         << " was_enabled " << (U32) was_enabled
+                                         << " local_origin " << (U32) local_origin
+                                         << LL_ENDL;
             onSetExtendedMeshFlags(extended_mesh_flags);
         }
     }
@@ -4313,15 +4298,16 @@ const LLMatrix4& LLVOVolume::getWorldMatrix(LLXformMatrix* xform) const
 
 void LLVOVolume::markForUpdate(BOOL priority)
 { 
-#if 1
-	// AXON debugging
-    if (isAnimatedObject() && isRiggedMesh())
+    if (debugLoggingEnabled("AnimatedObjectsLinkset"))
     {
-        std::string vobj_name = llformat("Vol%u", (U32) this);
-        F32 est_tris = getEstTrianglesMax();
-        LL_DEBUGS("AXONLinkset") << vobj_name << " markForUpdate, tris " << est_tris << LL_ENDL; 
+        if (isAnimatedObject() && isRiggedMesh())
+        {
+            std::string vobj_name = llformat("Vol%u", (U32) this);
+            F32 est_tris = getEstTrianglesMax();
+            LL_DEBUGS("AnimatedObjectsLinkset") << vobj_name << " markForUpdate, tris " << est_tris << LL_ENDL; 
+        }
     }
-#endif
+
     LLViewerObject::markForUpdate(priority); 
     mVolumeChanged = TRUE; 
 }
@@ -5314,17 +5300,15 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
             bool is_mesh = vobj->isMesh();
             F32 est_tris = vobj->getEstTrianglesMax();
 
-#if 1
-            LL_DEBUGS("AXONLinkset") << vobj_name << " rebuilding, isAttachment: " << (U32) vobj->isAttachment()
-                              << " is_mesh " << is_mesh
-                              << " est_tris " << est_tris
-                              << " is_animated " << vobj->isAnimatedObject()
-                              << " can_animate " << vobj->canBeAnimatedObject() 
-                              << " cav " << vobj->getControlAvatar() 
-                              << " playing " << (U32) (vobj->getControlAvatar() ? vobj->getControlAvatar()->mPlaying : false)
-                              << " frame " << LLFrameTimer::getFrameCount()
-                              << LL_ENDL;
-#endif
+            LL_DEBUGS("AnimatedObjectsLinkset") << vobj_name << " rebuilding, isAttachment: " << (U32) vobj->isAttachment()
+                                                << " is_mesh " << is_mesh
+                                                << " est_tris " << est_tris
+                                                << " is_animated " << vobj->isAnimatedObject()
+                                                << " can_animate " << vobj->canBeAnimatedObject() 
+                                                << " cav " << vobj->getControlAvatar() 
+                                                << " playing " << (U32) (vobj->getControlAvatar() ? vobj->getControlAvatar()->mPlaying : false)
+                                                << " frame " << LLFrameTimer::getFrameCount()
+                                                << LL_ENDL;
 
 			llassert_always(vobj);
 
@@ -5366,11 +5350,11 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                     F32 tri_count = vobj->getRootEdit()->recursiveGetEstTrianglesMax();
                     if (tri_count <= 0.f)
                     {
-                        LL_DEBUGS("AXON") << vobj_name << " not calling linkControlAvatar(), because no tris" << LL_ENDL;
+                        LL_DEBUGS("AnimatedObjects") << vobj_name << " not calling linkControlAvatar(), because no tris" << LL_ENDL;
                     }
                     else
                     {
-                        LL_DEBUGS("AXON") << vobj_name << " calling linkControlAvatar()" << LL_ENDL;
+                        LL_DEBUGS("AnimatedObjects") << vobj_name << " calling linkControlAvatar()" << LL_ENDL;
                         vobj->linkControlAvatar();
                     }
                 }
@@ -5386,7 +5370,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 // the checkbox has changed since the last rebuild.
                 if (vobj->getControlAvatar())
                 {
-                    LL_DEBUGS("AXON") << vobj_name << " calling unlinkControlAvatar()" << LL_ENDL;
+                    LL_DEBUGS("AnimatedObjects") << vobj_name << " calling unlinkControlAvatar()" << LL_ENDL;
                     vobj->unlinkControlAvatar();
                 }
             }
@@ -5896,15 +5880,17 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 			if (drawablep && !drawablep->isDead() && drawablep->isState(LLDrawable::REBUILD_ALL) && !drawablep->isState(LLDrawable::RIGGED) )
 			{
 				LLVOVolume* vobj = drawablep->getVOVolume();
-#if 1 
-                // AXON debugging
-                if (vobj->isAnimatedObject() && vobj->isRiggedMesh())
+
+                if (debugLoggingEnabled("AnimatedObjectsLinkset"))
                 {
-                    std::string vobj_name = llformat("Vol%u", (U32) vobj);
-                    F32 est_tris = vobj->getEstTrianglesMax();
-                    LL_DEBUGS("AXONLinkset") << vobj_name << " rebuildMesh, tris " << est_tris << LL_ENDL; 
-        }
-#endif
+                    if (vobj->isAnimatedObject() && vobj->isRiggedMesh())
+                    {
+                        std::string vobj_name = llformat("Vol%u", (U32) vobj);
+                        F32 est_tris = vobj->getEstTrianglesMax();
+                        LL_DEBUGS("AnimatedObjectsLinkset") << vobj_name << " rebuildMesh, tris " << est_tris << LL_ENDL; 
+                    }
+                }
+
 				vobj->preRebuild();
 
 				if (drawablep->isState(LLDrawable::ANIMATED_CHILD))

@@ -40,6 +40,7 @@ LLControlAvatar::LLControlAvatar(const LLUUID& id, const LLPCode pcode, LLViewer
     mGlobalScale(1.0f),
     mMarkedForDeath(false)
 {
+    mIsDummy = TRUE;
     mIsControlAvatar = true;
     mEnableDefaultMotions = false;
 }
@@ -52,10 +53,15 @@ LLControlAvatar::~LLControlAvatar()
 // virtual
 void LLControlAvatar::initInstance()
 {
-	// AXON - potential optimizations here: avoid creating system
+	// Potential optimizations here: avoid creating system
 	// avatar mesh content since it's not used. For now we just clean some
 	// things up after the fact in releaseMeshData().
     LLVOAvatar::initInstance();
+
+	createDrawable(&gPipeline);
+	updateJointLODs();
+	updateGeometry(mDrawable);
+	hideSkirt();
 }
 
 void LLControlAvatar::matchVolumeTransform()
@@ -185,13 +191,6 @@ LLControlAvatar *LLControlAvatar::createControlAvatar(LLVOVolume *obj)
 	LLControlAvatar *cav = (LLControlAvatar*)gObjectList.createObjectViewer(LL_PCODE_LEGACY_AVATAR, gAgent.getRegion(), CO_FLAG_CONTROL_AVATAR);
 
     cav->mRootVolp = obj;
-    
-	cav->createDrawable(&gPipeline);
-	cav->mIsDummy = TRUE;
-	cav->mSpecialRenderMode = 1;
-	cav->updateJointLODs();
-	cav->updateGeometry(cav->mDrawable);
-	cav->hideSkirt();
 
     // Sync up position/rotation with object
     cav->matchVolumeTransform();
@@ -280,10 +279,11 @@ void LLControlAvatar::updateDebugText()
                 type_string += "-";
             }
         }
-        addDebugText(llformat("CAV obj %d anim %d active %s",
-                              total_linkset_count, animated_volume_count, active_string.c_str()));
+        addDebugText(llformat("CAV obj %d anim %d active %s impost %d",
+                              total_linkset_count, animated_volume_count, active_string.c_str(), (S32) isImpostor()));
         addDebugText(llformat("types %s lods %s", type_string.c_str(), lod_string.c_str()));
         addDebugText(llformat("tris %d verts %d", total_tris, total_verts));
+        addDebugText(llformat("pxarea %s", LLStringOps::getReadableNumber(getPixelArea()).c_str()));
         std::string region_name = "no region";
         if (mRootVolp->getRegion())
         {
@@ -335,7 +335,7 @@ void LLControlAvatar::updateAnimations()
 {
     if (!mRootVolp)
     {
-        LL_WARNS_ONCE("AXON") << "No root vol" << LL_ENDL;
+        LL_WARNS_ONCE("AnimatedObjects") << "No root vol" << LL_ENDL;
         return;
     }
 
