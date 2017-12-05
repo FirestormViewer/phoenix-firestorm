@@ -79,7 +79,6 @@ public:
 	std::string getOpenSimMOTD() { return mOpensimMOTD; }
 	bool getFSDataDone() { return mFSDataDone; }
 	bool getAgentsDone() { return mAgentsDone; }
-	void checkDone(const std::string& url);
 
 	bool isAgentFlag(const LLUUID& agent_id, FSData::flags_t flag);
 

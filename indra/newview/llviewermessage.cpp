@@ -3004,6 +3004,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		          (message.length() > 3) && (RLV_CMD_PREFIX == message[0]) && (RlvHandler::instance().processIMQuery(from_id, message)) )
 		{
 			// Eat the message and do nothing
+			return;
 		}
 // [/RLVa:KB]
 //		else if (offline == IM_ONLINE 
@@ -3341,7 +3342,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				|| (binary_bucket[binary_bucket_size - 1] != '\0') )
 			{
 				LL_WARNS("Messaging") << "Malformed group notice binary bucket" << LL_ENDL;
-				break;
+				// <FS:Ansariel> Don't flash task icon
+				//break;
+				return;
 			}
 
 			// The group notice packet does not have an AgentID.  Obtain one from the name cache.
@@ -3361,7 +3364,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			}
 			else if (LLMuteList::getInstance()->isMuted(agent_id))
 			{
-				break;
+				// <FS:Ansariel> Don't flash task icon
+				//break;
+				return;
 			}
 
 			notice_bin_bucket = (struct notice_bucket_full_t*) &binary_bucket[0];
@@ -3454,6 +3459,14 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		break;
 	case IM_GROUP_INVITATION:
 		{
+			// <FS:Ansariel> FIRE-20385: Don't show group invitation for groups agent is already a member of
+			if (gAgent.isInGroup(from_id) && !gSavedSettings.getBOOL("FSShowJoinedGroupInvitations"))
+			{
+				LL_INFOS("Messaging") << "Received group invitation for group " << from_id << " but we are already a member" << LL_ENDL;
+				return;
+			}
+			// </FS:Ansariel>
+
 			if (!is_muted)
 			{
 				// group is not blocked, but we still need to check agent that sent the invitation
@@ -3480,7 +3493,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				if (binary_bucket_size != sizeof(invite_bucket_t))
 				{
 					LL_WARNS("Messaging") << "Malformed group invite binary bucket" << LL_ENDL;
-					break;
+					// <FS:Ansariel> Don't flash task icon
+					//break;
+					return;
 				}
 
 				invite_bucket = (struct invite_bucket_t*) &binary_bucket[0];
@@ -3502,6 +3517,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				if (is_rejecting_group_invites)
 				{
 					LL_INFOS("Messaging") << "Group invite automatically rejected because of the user setting..." << LL_ENDL;
+					return;
 				}
 				else
 				{
@@ -3509,7 +3525,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					LLNotificationsUtil::add("JoinGroup", args, payload);
 				}
 				// </FS:PP>
-
 			}
 		}
 		break;
@@ -3531,7 +3546,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				{
 					LL_WARNS("Messaging") << "Malformed inventory offer from agent" << LL_ENDL;
 					delete info;
-					break;
+					// <FS:Ansariel> Don't flash task icon
+					//break;
+					return; 
 				}
 				bucketp = (struct offer_agent_bucket_t*) &binary_bucket[0];
 				info->mType = (LLAssetType::EType) bucketp->asset_type;
@@ -3544,7 +3561,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				{
 					LL_WARNS("Messaging") << "Malformed inventory offer from object" << LL_ENDL;
 					delete info;
-					break;
+					// <FS:Ansariel> Don't flash task icon
+					//break;
+					return; 
 				}
 				info->mType = (LLAssetType::EType) binary_bucket[0];
 				info->mObjectID = LLUUID::null;
@@ -4291,7 +4310,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	//if (viewer_window && viewer_window->getMinimized())
 	static LLCachedControl<bool> sFlashIcon(gSavedSettings, "FSFlashOnMessage");
 	static LLCachedControl<bool> sFSFlashOnObjectIM(gSavedSettings, "FSFlashOnObjectIM");
-	if (viewer_window && dialog != IM_TYPING_START && dialog != IM_TYPING_STOP && sFlashIcon && (sFSFlashOnObjectIM || (chat.mChatType != CHAT_TYPE_IM)))
+	if (viewer_window && dialog != IM_TYPING_START && dialog != IM_TYPING_STOP && sFlashIcon && (sFSFlashOnObjectIM || (chat.mChatType != CHAT_TYPE_IM)) && !is_muted)
 	{
 		viewer_window->flashIcon(5.f);
 	}

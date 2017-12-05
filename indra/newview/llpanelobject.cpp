@@ -332,7 +332,7 @@ BOOL	LLPanelObject::postBuild()
 	childSetCommitCallback("sculpt invert control", onCommitSculptType, this);
 	//<FS:Beq> FIRE-21445 + Mesh Info in object panel
 	mComboLOD = getChild<LLComboBox>("LOD_show_combo");
-	childSetCommitCallback("LOD_show_combo", onCommitLOD, this);
+	mComboLOD->setCommitCallback(boost::bind(&LLPanelObject::onCommitLOD, this));
 	//</FS:Beq>
 	// Start with everyone disabled
 	clearCtrls();
@@ -1523,63 +1523,144 @@ void LLPanelObject::deactivateStandardFields()
 
 void LLPanelObject::activateMeshFields(LLViewerObject * objectp)
 {
-	static const char * dataFields[4] = { "lowest_lod_num_tris", "low_lod_num_tris", "med_lod_num_tris", "high_lod_num_tris" };
-	for (int i = 0; i < 4; i++)
+	LLStringUtil::format_map_t args;
+	static const char * dataFields[4] = { "LOWESTTRIS", "LOWTRIS", "MIDTRIS", "HIGHTRIS" };
+
+	LLTextBox *num_tris = getChild<LLTextBox>("mesh_lod_num_tris");
+	if (num_tris)
 	{
-		LLTextBox *num_tris = getChild<LLTextBox>(dataFields[i]);
-		if (num_tris)
+		for (int i = 0; i < 4; i++)
 		{
-			num_tris->setText(llformat("%d", objectp->mDrawable->getVOVolume()->getLODTriangleCount(i)));
-			num_tris->setVisible(TRUE);
+			args[dataFields[i]] = llformat("%d", objectp->mDrawable->getVOVolume()->getLODTriangleCount(i));
 		}
+		num_tris->setText(getString("mesh_lod_num_tris_values",args));
+		num_tris->setVisible(TRUE);
 	}
 	childSetVisible("mesh_info_label", TRUE);
 	childSetVisible("lod_label", TRUE);
 	childSetVisible("lod_num_tris", TRUE);
-	childSetVisible("high_lod_label", TRUE);
-	childSetVisible("med_lod_label", TRUE);
-	childSetVisible("low_lod_label", TRUE);
-	childSetVisible("lowest_lod_label", TRUE);
+	childSetVisible("mesh_lod_label", TRUE);
 	// Mesh specific display
-	mComboLOD = getChild<LLComboBox>("LOD_show_combo");
-	if (mComboLOD)
+	mComboLOD->setEnabled(TRUE);
+	mComboLOD->setVisible(TRUE);
+
+	F32 radius;
+
+	if (objectp->mDrawable->isState(LLDrawable::RIGGED))
 	{
-		mComboLOD->setEnabled(TRUE);
-		mComboLOD->setVisible(TRUE);
+		LLVOAvatar* avatar = objectp->getAvatar();
+
+		// Not sure how this can really happen, but alas it does. Better exit here than crashing.
+		if (!avatar || !avatar->mDrawable)
+		{
+			return;
+		}
+		radius = avatar->getBinRadius();
+	}
+	else
+	{
+		radius = objectp->getVolume() ? objectp->getVolume()->mLODScaleBias.scaledVec(objectp->getScale()).length() : objectp->getScale().length();
+	}
+
+	static const F32 max_distance = 512.f;
+	F32 factor;
+	F32 dlowest = llmin(radius / 0.03f, max_distance);
+	F32 dlow = llmin(radius / 0.06f, max_distance);
+	F32 dmid = llmin(radius / 0.24f, max_distance);
+
+	childSetVisible("object_radius", true);
+	LLTextBox* tb = getChild<LLTextBox>("object_radius_value");
+	tb->setText(llformat("%.3f", radius));
+	tb->setVisible(TRUE);
+
+	childSetVisible("LOD_swap_defaults_label", true);
+	childSetVisible("LOD_swap_usr_label", true);
+	childSetVisible("LOD_swap_factors_label", true);
+	childSetVisible("LOD_swap_label", true);
+	childSetVisible("LOD_swap_LOD_Change_label", true);
+	childSetVisible("LODSwapTableDscriptionsText", true);
+	childSetVisible("ObjectLODbehaviourLabel", true);
+
+	// Setup the LL defaults
+	factor = 1.125f; // LL default for most people http://wiki.phoenixviewer.com/support:whirly_fizzle#lod_comparison
+	args["FACTOR"] = llformat("%.3f", factor);
+	tb = getChild<LLTextBox>("LOD_swap_ll_default");
+	tb->setToolTip(getString("ll_lod_tooltip_msg",args));
+	tb->setVisible(TRUE);
+
+	tb = getChild<LLTextBox>("LOD_swap_ll_values");
+	setLODDistValues(tb, factor, dmid, dlow, dlowest);
+
+	// now the FS defaults
+	factor = 2.0f;
+	args["FACTOR"] = llformat("%.3f", factor);
+	tb = getChild<LLTextBox>("LOD_swap_fs_default");
+	tb->setToolTip(getString("fs_lod_tooltip_msg", args));
+	tb->setVisible(TRUE);
+
+	tb = getChild<LLTextBox>("LOD_swap_fs_values");
+	setLODDistValues(tb, factor, dmid, dlow, dlowest);
+
+	// finally the user's own LODFactor
+	factor = LLVOVolume::sLODFactor;
+	args["FACTOR"] = llformat("%.3f", factor);
+	tb = getChild<LLTextBox>("LOD_swap_usr_current");
+	tb->setText(getString("user_lod_label_string", args));// Note: here we are setting the label not the tooltip
+	tb->setVisible(TRUE);
+
+	tb = getChild<LLTextBox>("LOD_swap_usr_values");
+	setLODDistValues(tb, factor, dmid, dlow, dlowest);
+}
+
+void LLPanelObject::setLODDistValues(LLTextBox * tb, F32 factor, F32 dmid, F32 dlow, F32 dlowest)
+{
+	if (tb)
+	{
+		LLStringUtil::format_map_t args;
+		args["HIGH2MED"] = llformat("%.1f", factor*dmid);
+		args["MED2LOW"] = llformat("%.1f", factor*dlow);
+		args["LOW2LOWEST"] = llformat("%.1f", factor*dlowest);
+		tb->setText(getString("LODSwapFormatString",args));
+		tb->setVisible(TRUE);
+		tb->setEnabled(TRUE);
 	}
 }
 
 void LLPanelObject::deactivateMeshFields()
 {
-	static const char * dataFields[4] = { "lowest_lod_num_tris", "low_lod_num_tris", "med_lod_num_tris", "high_lod_num_tris" };
-	for (int i = 0; i < 4; i++)
-	{
-		LLTextBox *num_tris = getChild<LLTextBox>(dataFields[i]);
-		if (num_tris)
-		{
-			num_tris->setVisible(FALSE);
-		}
-	}
-
 	childSetVisible("mesh_info_label", FALSE);
 	childSetVisible("lod_label", FALSE);
 	childSetVisible("lod_num_tris", FALSE);
-	childSetVisible("high_lod_label", FALSE);
-	childSetVisible("med_lod_label", FALSE);
-	childSetVisible("low_lod_label", FALSE);
-	childSetVisible("lowest_lod_label", FALSE);
-
+	childSetVisible("mesh_lod_num_tris", FALSE);
+	childSetVisible("mesh_lod_label", FALSE);
 	// reset the debug setting as we are editing a new object
 	gSavedSettings.setS32("ShowSpecificLODInEdit", -1);
 	// </FS:Beq>
 
-	mComboLOD = getChild<LLComboBox>("LOD_show_combo");
-	if (mComboLOD)
-	{
-		mComboLOD->setCurrentByIndex(0);
-		mComboLOD->setEnabled(FALSE);
-		mComboLOD->setVisible(FALSE);
-	}
+	mComboLOD->setCurrentByIndex(0);
+	mComboLOD->setEnabled(FALSE);
+	mComboLOD->setVisible(FALSE);
+
+	childSetVisible("object_radius", FALSE);
+	LLTextBox* tb = getChild<LLTextBox>("object_radius_value");
+	tb->setVisible(FALSE);
+
+	childSetVisible("ObjectLODbehaviourLabel", false);
+	childSetVisible("LOD_swap_defaults_label", false);
+	childSetVisible("LOD_swap_factors_label", false);
+	childSetVisible("LOD_swap_usr_label", false);
+	childSetVisible("LOD_swap_label", false);
+	childSetVisible("LOD_swap_LOD_Change_label", false);
+	childSetVisible("LOD_swap_H2M_label", false);
+	childSetVisible("LOD_swap_M2L_label", false);
+	childSetVisible("LOD_swap_L2I_label", false);
+	childSetVisible("LODSwapTableDscriptionsText", false);
+	childSetVisible("LOD_swap_ll_default", false);
+	childSetVisible("LOD_swap_fs_default", false);
+	childSetVisible("LOD_swap_usr_current", false);
+	childSetVisible("LOD_swap_ll_values", false);
+	childSetVisible("LOD_swap_fs_values", false);
+	childSetVisible("LOD_swap_usr_values", false);
 }
 //</FS:Beq>
 
@@ -1640,18 +1721,15 @@ void LLPanelObject::sendIsPhantom()
 }
 
 //<FS:Beq> FIRE-21445 + Mesh Info in object panel
-// static
-void LLPanelObject::onCommitLOD(LLUICtrl* ctrl, void* userdata)
+void LLPanelObject::onCommitLOD()
 {
-	LLPanelObject* self = (LLPanelObject*)userdata;
-
-	if (self->mObject.isNull())
+	if (mObject.isNull())
 	{
 		return;
 	}
 	// We use the setting to pass down the override because overriding at this point get reset by other code in the render pipeline.
 	// the actual forceLOD call is made in llviewerwindow.cpp
-	gSavedSettings.setS32("ShowSpecificLODInEdit", self->mComboLOD->getValue());
+	gSavedSettings.setS32("ShowSpecificLODInEdit", mComboLOD->getValue());
 }
 //</FS:Beq>
 
@@ -2244,21 +2322,23 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 		new_pos_global = regionp->getPosGlobalFromRegion(newpos);
 	}
 
-	// ## Zi: Building spin controls for attachments
+	// <FS:Zi> Building spin controls for attachments
 	// partly copied from llmaniptranslate.cpp to get the positioning right
 	if (mObject->isAttachment())
 	{
-		LLVector3 old_position_local=mObject->getPosition();
+		LLVector3 old_position_local = mObject->getPosition();
 
-		if(mRootObject!=mObject)
+		if (mRootObject != mObject)
 		{
-			newpos=newpos-mRootObject->getPosition();
-			newpos=newpos*~mRootObject->getRotation();
+			newpos = newpos - mRootObject->getPosition();
+			newpos = newpos * ~mRootObject->getRotation();
 			mObject->setPositionParent(newpos);
 		}
 		else
+		{
 			mObject->setPosition(newpos);
-		LLManip::rebuild(mObject) ;
+		}
+		LLManip::rebuild(mObject);
 
 		gAgentAvatarp->clampAttachmentPositions();
 
@@ -2268,17 +2348,17 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 		if (mObject->isRootEdit())
 		{
 			// counter-translate child objects if we are moving the root as an individual
-			mObject->resetChildrenPosition(old_position_local-new_position_local,TRUE);
+			mObject->resetChildrenPosition(old_position_local - new_position_local, TRUE);
 		}
 
-		if(!btn_down)
+		if (!btn_down)
 		{
 			LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_POSITION);
 		}
 
 		LLSelectMgr::getInstance()->updateSelectionCenter();
 	}
-	// ## Zi: Building spin controls for attachments
+	// </FS:Zi> Building spin controls for attachments
 	else if (LLWorld::getInstance()->positionRegionValidGlobal(new_pos_global) )
 	{
 		// send only if the position is changed, that is, the delta vector is not zero

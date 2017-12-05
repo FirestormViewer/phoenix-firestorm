@@ -18,7 +18,7 @@
 						<radar_list name="radar_list">
 							<radar_list.columns label="Imię" name="name" tool_tip="[TOTAL] awatarów, [IN_REGION] w tym samym regionie, [IN_CHAT_RANGE] w zasięgu czatu"/>
 							<radar_list.columns name="voice_level" tool_tip="Rozmawia głosowo"/>
-							<radar_list.columns name="in_region" tool_tip="Jest w tym samym regionie"/>
+							<radar_list.columns name="in_region" tool_tip="Jest w tym samym regionie (zielone) lub tej samej działce (zielono-żółte)"/>
 							<radar_list.columns name="typing_status" tool_tip="Obecnie pisze"/>
 							<radar_list.columns name="sitting_status" tool_tip="Obecnie siedzi"/>
 							<radar_list.columns name="flags" tool_tip="Stan danych płatniczych"/>

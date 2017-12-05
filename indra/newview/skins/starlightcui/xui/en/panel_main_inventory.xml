@@ -16,15 +16,15 @@
   </panel.string>
   <panel.string
    name="ItemcountFetching">
-    Fetching [ITEM_COUNT] Items... [FILTER]
+    Fetching [ITEM_COUNT] Elements... [FILTER]
   </panel.string>
   <panel.string
    name="ItemcountCompleted">
-    [ITEM_COUNT] Items [FILTER]
+    [ITEM_COUNT] Elements [FILTER]
   </panel.string>
   <panel.string
    name="ItemcountUnknown">
-    Fetched [ITEM_COUNT] Items [FILTER]
+    Fetched [ITEM_COUNT] Elements [FILTER]
   </panel.string>
   <text
 		     type="string"
@@ -36,9 +36,10 @@
 		     name="ItemcountText"
 		     font="SansSerifMedium"
 		     text_color="SL-EmphasisColor"
+		     tool_tip="[ITEMS] Items, [CATEGORIES] Folders"
 		     top_pad="0"
 		     width="300">
-    Items:
+    Elements:
   </text>
   <filter_editor
    text_pad_left="10"
