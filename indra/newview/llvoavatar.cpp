@@ -4469,14 +4469,12 @@ void LLVOAvatar::updateTimeStep()
         // ignore the value here. Need to re-enable if it's every
         // fixed.
 		mMotionController.setTimeStep(time_step);
-		mMotionController.setUpdateFactor(mUpdatePeriod); // <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
 	}
 	// <FS:Zi> Optionally disable the usage of timesteps, testing if this affects performance or
 	//         creates animation issues - FIRE-3657
 	else
 	{
 		mMotionController.setTimeStep(0.0f);
-		mMotionController.setUpdateFactor(mUpdatePeriod); // <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
 	}
 	// </FS:Zi>
 }
