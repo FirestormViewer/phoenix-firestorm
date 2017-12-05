@@ -793,14 +793,17 @@ BOOL AOEngine::createAnimationLink(const AOSet* set, AOSet::AOState* state, cons
 		LLInventoryModel::cat_array_t* cats;
 		gInventory.getDirectDescendentsOf(set->getInventoryUUID(), cats, items);
 
-		for (S32 index = 0; index < cats->size(); ++index)
+		if (cats)
 		{
-			if (cats->at(index)->getName().compare(state->mName) == 0)
+			for (S32 index = 0; index < cats->size(); ++index)
 			{
-				LL_DEBUGS("AOEngine") << "UUID found!" << LL_ENDL;
-				newStateFolderUUID = cats->at(index)->getUUID();
-				state->mInventoryUUID = newStateFolderUUID;
-				break;
+				if (cats->at(index)->getName().compare(state->mName) == 0)
+				{
+					LL_DEBUGS("AOEngine") << "UUID found!" << LL_ENDL;
+					newStateFolderUUID = cats->at(index)->getUUID();
+					state->mInventoryUUID = newStateFolderUUID;
+					break;
+				}
 			}
 		}
 	}

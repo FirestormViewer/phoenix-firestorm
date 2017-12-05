@@ -120,11 +120,7 @@ public:
 	static BOOL parseColor4U(const std::string& buf, LLColor4U* value);
 
 	// conversion
-#if defined(LL_WINDOWS) && !defined(ND_BUILD64BIT_ARCH)
-	operator const LLColor4() const
-#else
 	operator LLColor4() const
-#endif
 	{
 		return LLColor4(*this);
 	}

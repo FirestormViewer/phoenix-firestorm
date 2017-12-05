@@ -1075,6 +1075,17 @@ BOOL LLInventoryPanel::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 		{
 			mFolderRoot.get()->setDragAndDropThisFrame();
 		}
+
+		// <FS:Ansariel> FIRE-18014: Inventory window "loses" focus during drag&drop
+		if (drop)
+		{
+			LLFloater* root_floater = getParentByType<LLFloater>();
+			if (root_floater)
+			{
+				root_floater->setTransparencyType(LLUICtrl::TT_ACTIVE);
+			}
+		}
+		// </FS:Ansariel>
 	}
 
 	return handled;

@@ -3413,6 +3413,18 @@ void LLScrollListCtrl::setFilterString(const std::string& str)
 	std::transform(mFilterString.begin(), mFilterString.end(), mFilterString.begin(), ::tolower);
 	mIsFiltered = (mFilterColumn > -1 && !mFilterString.empty());
 	updateLayout();
+
+	if (mIsFiltered && getNumSelected() > 0 && isFiltered(getFirstSelected()))
+	{
+		for (item_list::iterator iter = mItemList.begin(); iter != mItemList.end(); iter++)
+		{
+			if (!isFiltered(*iter))
+			{
+				selectItem(*iter);
+				break;
+			}
+		}
+	}
 }
 
 bool LLScrollListCtrl::isFiltered(const LLScrollListItem* item) const

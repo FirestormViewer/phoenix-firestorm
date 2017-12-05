@@ -4812,7 +4812,14 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 				{
 					virtual bool apply(LLViewerObject* object)
 					{
-						object->mDrawable->getVOVolume()->forceLOD(showSpecificLOD);
+						if (object->getPCode() == LL_PCODE_VOLUME)
+						{
+							LLVOVolume* vol = static_cast<LLVOVolume*>(object);
+							if (vol->isMesh())
+							{
+								vol->forceLOD(showSpecificLOD);
+							}
+						}
 						return true;
 					}
 				} func;

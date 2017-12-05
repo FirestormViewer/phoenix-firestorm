@@ -382,10 +382,12 @@
 				Info o meszu:
 			</text>
 			<text name="lod_num_tris" value="Trójkąty" />
-			<text name="high_lod_label" value="Wysoki:" />
-			<text name="med_lod_label" value="Średni:" />
-			<text name="low_lod_label" value="Niski:" />
-			<text name="lowest_lod_label" value="Najniższy:" />
+			<text name="mesh_lod_label">
+Wysoki:
+Średni:
+Niski:
+Najniższy:
+			</text>
 			<combo_box name="LOD_show_combo">
 				<combo_box.item label="Domyślny" name="Default" />
 				<combo_box.item label="Wysoki" name="High" />
@@ -393,6 +395,23 @@
 				<combo_box.item label="Niski" name="Low" />
 				<combo_box.item label="Najniższy" name="Lowest/Imposter" />
 			</combo_box>
+			<text name="ObjectLODbehaviourLabel" value="Zachowanie LOD obiektu:" />
+			<text name="object_radius" value="Promień ob.:" />
+			<text name="LOD_swap_factors_label" value="Mnożnik LOD" />
+			<text name="LOD_swap_defaults_label" value="Domyślny" tool_tip="Domyślne, fabryczne ustawienie mnożnika LOD (poziomu detali), jakie będzie stosowane przez większość przeglądarek." />
+			<text name="LOD_swap_usr_label" tool_tip="Twoje obecne ustawienie pobrane z RenderVolumeLODFactor" value="Twój" />
+			<text name="LOD_swap_label" value="Podmiana" />
+			<string name="ll_lod_tooltip_msg">"Domyślne Linden Lab Second Life Viewer ([FACTOR])"</string>
+			<string name="fs_lod_tooltip_msg">"Domyślne Firestorm Viewer ([FACTOR])"</string>
+			<text name="LOD_swap_usr_current" tool_tip="Twój obecny mnożnik LOD" />
+			<text name="LOD_swap_LOD_Change_label">
+Wys ↔ Śred
+Śred ↔ Nis
+Nis ↔ Najniż
+			</text>
+			<text name="LODSwapTableDscriptionsText" tool_tip="Najlepsza praktyka: Twórcy rzeczy powinni zapewnić dobre zachowanie LOD dla ustawień domyślnych na wszystkich przeglądarkach.">
+				Ta tabela pokazuje granice zmieniania się LOD, w metrach od kamery.
+			</text>
 		</panel>
 		<panel label="Cechy" name="Features">
 			<panel.string name="None">
