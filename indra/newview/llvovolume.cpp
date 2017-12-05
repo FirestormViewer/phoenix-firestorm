@@ -1512,7 +1512,7 @@ BOOL LLVOVolume::updateLOD()
         {
             if (isAnimatedObject() && isRiggedMesh())
             {
-                std::string vobj_name = llformat("Vol%u", (U32) this);
+                std::string vobj_name = llformat("Vol%u", (uintptr_t) this);
                 F32 est_tris = getEstTrianglesMax();
                 LL_DEBUGS("AnimatedObjectsLinkset") << vobj_name << " updateLOD to " << getLOD() << ", tris " << est_tris << LL_ENDL; 
             }
@@ -4302,7 +4302,7 @@ void LLVOVolume::markForUpdate(BOOL priority)
     {
         if (isAnimatedObject() && isRiggedMesh())
         {
-            std::string vobj_name = llformat("Vol%u", (U32) this);
+            std::string vobj_name = llformat("Vol%u", (uintptr_t) this);
             F32 est_tris = getEstTrianglesMax();
             LL_DEBUGS("AnimatedObjectsLinkset") << vobj_name << " markForUpdate, tris " << est_tris << LL_ENDL; 
         }
