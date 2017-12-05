@@ -68,7 +68,7 @@ public:
 	static void 	onCommitPhantom(		LLUICtrl* ctrl, void* userdata);
 	static void 	onCommitPhysics(		LLUICtrl* ctrl, void* userdata);
 	//<FS:Beq> FIRE-21445 - Display specific LOD
-	static void		onCommitLOD(			LLUICtrl* ctrl, void* userdata);
+	void			onCommitLOD();
 	//</FS:Beq>
 	void 	onCopyPos(				const LLSD& data);
 	void 	onPastePos(				const LLSD& data);
@@ -96,6 +96,7 @@ protected:
 	//<FS:Beq> FIRE-21445 + Mesh Info in object panel
 	void			deactivateStandardFields();
 	void			activateMeshFields(LLViewerObject * objectp);
+	void			setLODDistValues(LLTextBox * tb, F32 factor, F32 dmid, F32 dlow, F32 dlowest);
 	void			deactivateMeshFields();
 	//</FS:Beq>
 	void			sendRotation(BOOL btn_down);

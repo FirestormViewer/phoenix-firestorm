@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Rzeczy" name="main inventory panel">
 	<panel.string name="ItemcountFetching">
-		Pobieranie [ITEM_COUNT] obiektów... [FILTER]
+		Pobieranie [ITEM_COUNT] elementów... [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountCompleted">
-		[ITEM_COUNT] obiektów [FILTER]
+		[ITEM_COUNT] elementów [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountUnknown">
-		Pobrano [ITEM_COUNT] obiektów [FILTER]
+		Pobrano [ITEM_COUNT] elementów [FILTER]
 	</panel.string>
 	<text name="ItemcountText">
 		Obiekty:
@@ -56,8 +56,8 @@
 		</panel>
 		<!-- / Used by StarLight skins -->
 		<panel name="dummy_panel">
-			<text name="ItemcountText">
-				Obiekty
+			<text name="ItemcountText" tool_tip="[ITEMS] przedmiotów, [CATEGORIES] folderów">
+				Elementy
 			</text>
 		</panel>
 		<panel name="trash_btn_panel">

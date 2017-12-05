@@ -3,16 +3,16 @@
 	<panel.string name="Itemcount">
 	</panel.string>
 	<panel.string name="ItemcountFetching">
-	Inventar ([ITEM_COUNT] Artikel werden abgerufen... [FILTER]
+	Inventar ([ITEM_COUNT] Elemente werden abgerufen... [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountCompleted">
-	[ITEM_COUNT] Objekte [FILTER]
+	[ITEM_COUNT] Elemente [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountUnknown">
-		[ITEM_COUNT] Objekte abgerufen [FILTER]
+		[ITEM_COUNT] Elemente abgerufen [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountUnknown">
-	Objekte:
+	Elemente:
   </panel.string>
 
 	<menu_bar name="inventory_menu_bar" width="200">
@@ -173,8 +173,8 @@
 		<worn_inventory_panel label="Angezogene Objekte" name="Worn Items" width="290" />
 	</tab_container>
 
-	<text name="ItemcountText" >
-		Objekte
+	<text name="ItemcountText" tool_tip="[ITEMS] Objekte, [CATEGORIES] Ordner">
+		Elemente
 	</text>
 
 </panel>

@@ -2433,7 +2433,7 @@ Chcesz wyłączyć Tryb Zajętości przed zakończeniem tej transakcji?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="ConfirmEmptyTrash">
-		[COUNT] przedmiotów zostanie usuniętych. Na pewno chcesz permanentnie usunąć zawartość Kosza?
+		[COUNT] przedmiotów i folderów zostanie usuniętych. Na pewno chcesz permanentnie usunąć zawartość Kosza?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="TrashIsFull">

@@ -358,7 +358,18 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 
 		row_data["columns"][2]["column"] = "in_region";
 		row_data["columns"][2]["type"] = "icon";
-		row_data["columns"][2]["value"] = (entry["in_region"].asBoolean() ? "avatar_in_region" : "");
+		if (entry["on_parcel"].asBoolean())
+		{
+			row_data["columns"][2]["value"] = "avatar_on_parcel";
+		}
+		else if (entry["in_region"].asBoolean())
+		{
+			row_data["columns"][2]["value"] = "avatar_in_region";
+		}
+		else
+		{
+			row_data["columns"][2]["value"] = "";
+		}
 
 		row_data["columns"][3]["column"] = "typing_status";
 		row_data["columns"][3]["type"] = "icon";

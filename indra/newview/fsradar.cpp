@@ -51,6 +51,7 @@
 #include "lltrans.h"
 #include "llviewercontrol.h"		// for gSavedSettings
 #include "llviewermenu.h"			// for gMenuHolder
+#include "llviewerparcelmgr.h"
 #include "llvoavatar.h"
 #include "llvoiceclient.h"
 #include "llworld.h"
@@ -334,6 +335,7 @@ void FSRadar::updateRadarList()
 			avRegion = reg->getRegionID();
 		}
 		bool isInSameRegion = (avRegion == regionSelf);
+		bool isOnSameParcel = LLViewerParcelMgr::instance().inAgentParcel(avPos);
 		S32 seentime = (S32)difftime(now, ent->mFirstSeen);
 		S32 hours = (S32)(seentime / 3600);
 		S32 mins = (S32)((seentime - hours * 3600) / 60);
@@ -511,6 +513,7 @@ void FSRadar::updateRadarList()
 		entry["id"] = avId;
 		entry["name"] = avName;
 		entry["in_region"] = isInSameRegion;
+		entry["on_parcel"] = isOnSameParcel;
 		entry["flags"] = avFlag;
 		entry["seen"] = avSeenStr;
 		entry["range"] = (avRange > AVATAR_UNKNOWN_RANGE ? llformat("%3.2f", avRange) : llformat(">%3.2f", drawRadius));
