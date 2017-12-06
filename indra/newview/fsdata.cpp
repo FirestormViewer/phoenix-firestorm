@@ -392,7 +392,7 @@ void FSData::processData(const LLSD& fs_data)
 	// Set Message Of The Day if present 
 	if (fs_data.has("MOTD") && !fs_data["MOTD"].asString().empty())
 	{
-		mSecondLifeMOTD = fs_data["MOTD"];
+		mSecondLifeMOTD = fs_data["MOTD"].asString();
 		gAgent.mMOTD.assign(mSecondLifeMOTD);
 	}
 	else if (fs_data.has("RandomMOTD") && fs_data["RandomMOTD"].isArray() && fs_data["RandomMOTD"].size() > 0) // only used if MOTD is not present or empty in the xml file.
