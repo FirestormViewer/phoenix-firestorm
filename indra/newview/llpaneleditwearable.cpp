@@ -1334,6 +1334,14 @@ void LLPanelEditWearable::showWearable(LLViewerWearable* wearable, BOOL show, BO
 
 void LLPanelEditWearable::showDefaultSubpart()
 {
+        // <FS:Ansariel> Correct camera position for last subpart
+        std::map<LLWearableType::EType, U8>::iterator found = mLastShownSubpartIndex.find(mWearablePtr->getType());
+        if (found != mLastShownSubpartIndex.end())
+        {
+            changeCamera(found->second);
+        }
+        else
+        // </FS:Ansariel>
         changeCamera(0);
 }
 
@@ -1349,6 +1357,7 @@ void LLPanelEditWearable::onTabExpandedCollapsed(const LLSD& param, U8 index)
 
         if (expanded)
         {
+                mLastShownSubpartIndex[mWearablePtr->getType()] = index; // <FS:Ansariel> Correct camera position for last subpart
                 changeCamera(index);
         }
 
@@ -1383,6 +1392,7 @@ void LLPanelEditWearable::onTabChanged(LLUICtrl* ctrl, LLWearableType::EType typ
 
 		if (subpart_entry && container->getCurrentPanel()->hasChild(subpart_entry->mAccordionTab, TRUE))
 		{
+			mLastShownSubpartIndex[type] = index; // <FS:Ansariel> Correct camera position for last subpart
 			changeCamera(index);
 			break;
 		}

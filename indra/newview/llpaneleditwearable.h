@@ -183,6 +183,8 @@ private:
 
 	typedef std::map<LLAvatarAppearanceDefines::ETextureIndex, LLUUID> s32_uuid_map_t;
 	s32_uuid_map_t mPreviousAlphaTexture;
+
+	std::map<LLWearableType::EType, U8> mLastShownSubpartIndex;
 };
 
 #endif
