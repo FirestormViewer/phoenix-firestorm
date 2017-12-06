@@ -390,15 +390,16 @@ void FSData::downloadAgents()
 void FSData::processData(const LLSD& fs_data)
 {
 	// Set Message Of The Day if present 
-	if(fs_data.has("MOTD"))
+	if (fs_data.has("MOTD") && !fs_data["MOTD"].asString().empty())
 	{
-		gAgent.mMOTD.assign(fs_data["MOTD"]);
+		mSecondLifeMOTD = fs_data["MOTD"];
+		gAgent.mMOTD.assign(mSecondLifeMOTD);
 	}
-	else if(fs_data.has("RandomMOTD")) // only used if MOTD is not presence in the xml file.
+	else if (fs_data.has("RandomMOTD") && fs_data["RandomMOTD"].isArray() && fs_data["RandomMOTD"].size() > 0) // only used if MOTD is not present or empty in the xml file.
 	{
-		const LLSD& motd = fs_data["RandomMOTD"];
-		LLSD::array_const_iterator iter = motd.beginArray();
-		gAgent.mMOTD.assign((iter + (ll_rand((S32)motd.size())))->asString());
+		mRandomMOTDs = fs_data["RandomMOTD"];
+		LLSD::array_const_iterator iter = mRandomMOTDs.beginArray();
+		gAgent.mMOTD.assign((iter + (ll_rand((S32)mRandomMOTDs.size())))->asString());
 	}
 	
 	// If the event falls withen the current date, use that for MOTD instead.
@@ -419,12 +420,12 @@ void FSData::processData(const LLSD& fs_data)
 		}
 	}
 
-	if(fs_data.has("OpensimMOTD"))
+	if (fs_data.has("OpensimMOTD"))
 	{
-		mOpensimMOTD.assign(fs_data["OpensimMOTD"]);
+		mOpenSimMOTD.assign(fs_data["OpensimMOTD"]);
 	}
 
-	if(fs_data.has("BlockedReleases"))
+	if (fs_data.has("BlockedReleases"))
 	{
 		const LLSD& blocked = fs_data["BlockedReleases"];
 		for (LLSD::map_const_iterator iter = blocked.beginMap(); iter != blocked.endMap(); ++iter)
@@ -441,24 +442,24 @@ void FSData::processData(const LLSD& fs_data)
 
 	// FSUseLegacyClienttags: 0=Off, 1=Local Clienttags, 2=Download Clienttags
 	static LLCachedControl<U32> use_legacy_tags(gSavedSettings, "FSUseLegacyClienttags");
-	if(use_legacy_tags > 1)
+	if (use_legacy_tags > 1)
 	{
 		time_t last_modified = 0;
 		llstat stat_data;
-		if(!LLFile::stat(mClientTagsFilename, &stat_data))
+		if (!LLFile::stat(mClientTagsFilename, &stat_data))
 		{
 			last_modified = stat_data.st_mtime;
 		}
 		LL_INFOS("fsdata") << "Downloading client_list_v2.xml from " << LEGACY_CLIENT_LIST_URL << " with last modified of " << last_modified << LL_ENDL;
 		FSCoreHttpUtil::callbackHttpGet(LEGACY_CLIENT_LIST_URL, last_modified, boost::bind(downloadComplete, _1, LEGACY_CLIENT_LIST_URL, true), boost::bind(downloadComplete, _1, LEGACY_CLIENT_LIST_URL, false));
 	}
-	else if(use_legacy_tags)
+	else if (use_legacy_tags)
 	{
 		updateClientTagsLocal();
 	}
 
 // [RLVa:KB]
-	if ( (RlvActions::isRlvEnabled()) && (fs_data.has("rlva_compat_list")) )
+	if ((RlvActions::isRlvEnabled()) && (fs_data.has("rlva_compat_list")))
 	{
 		RlvSettings::initCompatibilityMode(fs_data["rlva_compat_list"].asString());
 	}
@@ -548,6 +549,28 @@ void FSData::processClientTags(const LLSD& tags)
 	if(tags.has("isComplete"))
 	{
 		mLegacyClientList = tags;
+	}
+}
+
+// Selection rules for MOTD:
+// * if main MOTD is defined, show this at login and during TPs
+// * if random MOTDs are defined and main MOTD not set, show a random MOTD
+//   at login and every TP
+// * if event MOTD is defined, show event MOTD at login. For TPs, either
+//   show main MOTD if defined, or show a random MOTD if defined
+void FSData::selectNextMOTD()
+{
+	if (LLGridManager::instance().isInSLMain())
+	{
+		if (!mSecondLifeMOTD.empty())
+		{
+			gAgent.mMOTD.assign(mSecondLifeMOTD);
+		}
+		else if (mRandomMOTDs.isArray() && mRandomMOTDs.size() > 0)
+		{
+			LLSD::array_const_iterator iter = mRandomMOTDs.beginArray();
+			gAgent.mMOTD.assign((iter + (ll_rand((S32)mRandomMOTDs.size())))->asString());
+		}
 	}
 }
 
