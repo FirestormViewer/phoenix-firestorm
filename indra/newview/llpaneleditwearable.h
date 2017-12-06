@@ -72,6 +72,7 @@ public:
 
 	void				showDefaultSubpart();
 	void				onTabExpandedCollapsed(const LLSD& param, U8 index);
+	void				onTabChanged(LLUICtrl* ctrl, LLWearableType::EType type); // <FS:Ansariel> Appearance panel not updating camera position
 
 	void 				updateScrollingPanelList();
 
