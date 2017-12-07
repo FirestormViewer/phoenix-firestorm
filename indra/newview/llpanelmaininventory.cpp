@@ -1008,15 +1008,31 @@ void LLPanelMainInventory::draw()
 
 void LLPanelMainInventory::updateItemcountText()
 {
-	if(mItemCount != gInventory.getItemCount())
+	// <FS:Ansariel> Include folders in inventory count
+	//if(mItemCount != gInventory.getItemCount())
+	//{
+	//	mItemCount = gInventory.getItemCount();
+	S32 new_count = gInventory.getItemCount() + gInventory.getCategoryCount();
+	if(mItemCount != new_count)
 	{
-		mItemCount = gInventory.getItemCount();
+		mItemCount = new_count;
+	// </FS:Ansariel>
 		mItemCountString = "";
 		// <FS:Ansariel> Use user-default locale from operating system
 		//LLLocale locale(LLLocale::USER_LOCALE);
 		LLLocale locale("");
 		// </FS:Ansariel>
 		LLResMgr::getInstance()->getIntegerString(mItemCountString, mItemCount);
+		
+		// <FS:Ansariel> Include folders in inventory count
+		std::string item_str, category_str;
+		LLResMgr::getInstance()->getIntegerString(item_str, gInventory.getItemCount());
+		LLResMgr::getInstance()->getIntegerString(category_str, gInventory.getCategoryCount());
+		LLStringUtil::format_map_t args;
+		args["[ITEMS]"] = item_str;
+		args["[CATEGORIES]"] = category_str;
+		mCounterCtrl->setToolTipArgs(args);
+		// </FS:Ansariel>
 	}
 
 	LLStringUtil::format_map_t string_args;

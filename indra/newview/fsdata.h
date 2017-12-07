@@ -40,7 +40,6 @@ class FSData : public LLSingleton<FSData>
 	virtual ~FSData();
 
 public:
-
 	void startDownload();
 	void downloadAgents();
 	void processResponder(const LLSD& content, const std::string& url, bool save_to_file, const LLDate& last_modified);
@@ -52,12 +51,12 @@ public:
 	{
 		SUPPORT		= (1 << 0), //0x01 1
 		DEVELOPER	= (1 << 1), //0x02 2
-		QA		= (1 << 2), //0x04 4
+		QA			= (1 << 2), //0x04 4
 		CHAT_COLOR	= (1 << 3), //0x08 8
 		NO_SUPPORT	= (1 << 4), //0x10 16
 		NO_USE		= (1 << 5), //0x20 32
-		NO_SPAM		= (1 << 6),  //0x40 64
-		GATEWAY		= (1 << 7),	//0x80 128 <FS:JL>
+		NO_SPAM		= (1 << 6), //0x40 64
+		GATEWAY		= (1 << 7), //0x80 128 <FS:JL>
 	};
 
 	std::set<LLUUID> mSupportGroup;
@@ -76,7 +75,9 @@ public:
 	static LLSD getSystemInfo();
 	static void callbackReqInfo(const LLSD &notification, const LLSD &response);
 	
-	std::string getOpenSimMOTD() { return mOpensimMOTD; }
+	std::string getOpenSimMOTD() { return mOpenSimMOTD; }
+	void selectNextMOTD();
+
 	bool getFSDataDone() { return mFSDataDone; }
 	bool getAgentsDone() { return mAgentsDone; }
 
@@ -98,21 +99,23 @@ private:
 
 	LLSD mHeaders;
 	LLSD mLegacyClientList;
-	
+	LLSD mRandomMOTDs;
+
 	std::string mFSdataFilename;
 	std::string mFSdataDefaultsFilename;
 	std::string mFSdataDefaultsUrl;
 	std::string mAgentsFilename;
 	std::string mAssestsFilename;
 	std::string mClientTagsFilename;
-	
+
 	std::string mBaseURL;
 	std::string mFSDataURL;
 	std::string mAgentsURL;
 	std::string mAssetsURL;
 	
-	std::string mOpensimMOTD;
-	
+	std::string mSecondLifeMOTD;
+	std::string mOpenSimMOTD;
+
 	bool mLegacySearch;
 	bool mFSDataDone;
 	bool mAgentsDone;

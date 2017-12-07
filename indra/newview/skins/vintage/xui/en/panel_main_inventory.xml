@@ -14,15 +14,15 @@
 	</panel.string>
 	<panel.string
 	name="ItemcountFetching">
-	Fetching [ITEM_COUNT] Items... [FILTER]
+	Fetching [ITEM_COUNT] Elements... [FILTER]
 	</panel.string>
 	<panel.string
 	name="ItemcountCompleted">
-	[ITEM_COUNT] Items [FILTER]
+	[ITEM_COUNT] Elements [FILTER]
 	</panel.string>
 	<panel.string
 	name="ItemcountUnknown">
-	Fetched [ITEM_COUNT] Items [FILTER]
+	Fetched [ITEM_COUNT] Elements [FILTER]
   </panel.string>
 
 	<menu_bar
@@ -534,12 +534,13 @@
 		height="16"
 		layout="topleft"
 		top_pad="2"
+		tool_tip="[ITEMS] Items, [CATEGORIES] Folders"
 		left_delta="2"
 		name="ItemcountText"
 		right="-1"
 		font="SansSerifMedium"
 		follows="bottom|left">
-		Items
+		Elements
 	</text>
 
 	<!-- keep the buttons so the code doesn't complain about missing controls -Zi -->

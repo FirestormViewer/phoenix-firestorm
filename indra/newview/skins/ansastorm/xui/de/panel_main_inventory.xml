@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Sonstiges" name="main inventory panel">
 	<panel.string name="ItemcountFetching">
-		Inventar ([ITEM_COUNT] Artikel werden abgerufen... [FILTER]
+		Inventar ([ITEM_COUNT] Elemente werden abgerufen... [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountCompleted">
-		[ITEM_COUNT] Objekte [FILTER]
+		[ITEM_COUNT] Elemente [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountUnknown">
-		[ITEM_COUNT] Objekte abgerufen [FILTER]
+		[ITEM_COUNT] Elemente abgerufen [FILTER]
 	</panel.string>
-	<text name="ItemcountText">
-		Objekte:
-	</text>
 	<menu_bar name="inventory_menu_bar">
 		<menu label="Inventar" name="inventory_inventory_menu">
 			<menu_item_call name="inventory_open" label="Öffnen"/>
@@ -108,8 +105,8 @@
 			<button name="new_inv_btn" tool_tip="Zusätzliches Inventar-Fenster"/>
 		</panel>
 		<panel name="dummy_panel">
-			<text name="ItemcountText">
-				Objekte
+			<text name="ItemcountText" tool_tip="[ITEMS] Objekte, [CATEGORIES] Ordner">
+				Elemente
 			</text>
 		</panel>
 		<panel name="trash_btn_panel">

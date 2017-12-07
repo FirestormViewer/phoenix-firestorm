@@ -2549,7 +2549,7 @@ Lowest:
           left="125"
           name="object_radius"
           top_delta="0"
-          value="Object radius : "
+          value="Object radius:"
           visible="false"
           width="80" />
         <text

@@ -21,6 +21,7 @@
 			<check_box label="Pokaż mój profil w wynikach wyszukiwarki" name="online_searchresults"/>
 			<check_box label="Mój status online dostępny tylko dla znajomych i grup" name="online_visibility"/>
 			<check_box label="Tylko znajomi i grupy mogą wysyłać do mnie wiadomości lub dzwonić głosowo" name="voice_call_friends_only_check"/>
+			<check_box label="Pokaż zaproszenia także dla tych grup, do jakich już należysz" name="FSShowJoinedGroupInvitations"/>
 			<check_box label="Wyłącz mikrofon po zakończeniu rozmowy głosowej" name="auto_disengage_mic_check"/>
 			<check_box label="Pozwól oskryptowanym obiektom znać moje obecne ustawienie języka" name="LanguageIsPublic"/>
 			<check_box label="Automatycznie akceptuj nowe przedmioty" name="Auto_Accept_New_Inventory"/>

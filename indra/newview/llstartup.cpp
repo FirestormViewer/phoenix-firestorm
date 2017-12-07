@@ -2894,7 +2894,14 @@ bool idle_startup()
 		// <FS:TT> Client LSL Bridge
 		if (gSavedSettings.getBOOL("UseLSLBridge"))
 		{
-			FSLSLBridge::instance().initBridge();
+			if (!FSLSLBridge::instance().getBridgeCreating())
+			{
+				FSLSLBridge::instance().initBridge();
+			}
+			else
+			{
+				LL_INFOS("FSLSLBridge") << "LSL bridge already getting created - skipping bridge init" << LL_ENDL;
+			}
 		}
 		// </FS:TT>
 
