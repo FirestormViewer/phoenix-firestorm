@@ -29,7 +29,7 @@ public:
 	SignaledType(Type b) : mValue(b) {}
 
 	typedef typename Signal::slot_type changed_signal_t;
-	boost::signals2::connection connect(const typename changed_signal_t& slot) { return mSignal.connect(slot); }
+	boost::signals2::connection connect(const changed_signal_t& slot) { return mSignal.connect(slot); }
 
 	SignaledType& operator =(Type val)
 	{
