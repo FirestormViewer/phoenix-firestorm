@@ -858,7 +858,7 @@ class DarwinManifest(ViewerManifest):
 
     def construct(self):
         # copy over the build result (this is a no-op if run within the xcode script)
-        self.path(self.args['configuration'] + "/Firestorm.app", dst="")
+        self.path(self.args['configuration'] + "/Second Life.app", dst="")
 
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
         relpkgdir = os.path.join(pkgdir, "lib", "release")
@@ -877,50 +877,45 @@ class DarwinManifest(ViewerManifest):
             self.path(os.path.join(relpkgdir, "libndofdev.dylib"), dst="Resources/libndofdev.dylib")
             self.path(os.path.join(relpkgdir, "libhunspell-1.3.0.dylib"), dst="Resources/libhunspell-1.3.0.dylib")   
 
-            # <FS:Ansariel> Remove VMP
-            #with self.prefix(dst="MacOS"):              
-            #    #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322, SL-323
-            #    self.path2basename(vmpdir,"SL_Launcher")
-            #    self.path2basename(vmpdir,"*.py")
-            #    # certifi will be imported by requests; this is our custom version to get our ca-bundle.crt 
-            #    certifi_path = os.path.join(self.get_dst_prefix(),'certifi')
-            #    if not os.path.exists(certifi_path):
-            #        os.makedirs(certifi_path)
-            #    with self.prefix(dst="certifi"):
-            #        self.path2basename(os.path.join(vmpdir,"certifi"),"*")
-            #    # llbase provides our llrest service layer and llsd decoding
-            #    llbase_path = os.path.join(self.get_dst_prefix(),'llbase')
-            #    if not os.path.exists(llbase_path):
-            #        os.makedirs(llbase_path)
-            #    with self.prefix(dst="llbase"):
-            #        self.path2basename(llbasedir,"*.py")
-            #        self.path2basename(llbasedir,"_cllsd.so")
-            #    #requests module needed by llbase/llrest.py
-            #    #this is only needed on POSIX, because in Windows we compile it into the EXE
-            #    requests_path = os.path.join(self.get_dst_prefix(),'requests')
-            #    if not os.path.exists(requests_path):
-            #        os.makedirs(requests_path)
-            #    with self.prefix(dst="requests"):
-            #        self.path2basename(requestsdir,"*")
-            #    urllib3_path = os.path.join(self.get_dst_prefix(),'urllib3')
-            #    if not os.path.exists(urllib3_path):
-            #        os.makedirs(urllib3_path)
-            #    with self.prefix(dst="urllib3"):
-            #        self.path2basename(urllib3dir,"*")
-            #    chardet_path = os.path.join(self.get_dst_prefix(),'chardet')
-            #    if not os.path.exists(chardet_path):
-            #        os.makedirs(chardet_path)
-            #    with self.prefix(dst="chardet"):
-            #        self.path2basename(chardetdir,"*")
-            #    idna_path = os.path.join(self.get_dst_prefix(),'idna')
-            #    if not os.path.exists(idna_path):
-            #        os.makedirs(idna_path)
-            #    with self.prefix(dst="idna"):
-            #        self.path2basename(idnadir,"*")
-            # </FS:Ansariel> Remove VMP
-
-            # Growl Frameworks
-            self.path("../packages/Frameworks/Growl", dst="Frameworks/Growl")
+            with self.prefix(dst="MacOS"):              
+                #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322, SL-323
+                self.path2basename(vmpdir,"SL_Launcher")
+                self.path2basename(vmpdir,"*.py")
+                # certifi will be imported by requests; this is our custom version to get our ca-bundle.crt 
+                certifi_path = os.path.join(self.get_dst_prefix(),'certifi')
+                if not os.path.exists(certifi_path):
+                    os.makedirs(certifi_path)
+                with self.prefix(dst="certifi"):
+                    self.path2basename(os.path.join(vmpdir,"certifi"),"*")
+                # llbase provides our llrest service layer and llsd decoding
+                llbase_path = os.path.join(self.get_dst_prefix(),'llbase')
+                if not os.path.exists(llbase_path):
+                    os.makedirs(llbase_path)
+                with self.prefix(dst="llbase"):
+                    self.path2basename(llbasedir,"*.py")
+                    self.path2basename(llbasedir,"_cllsd.so")
+                #requests module needed by llbase/llrest.py
+                #this is only needed on POSIX, because in Windows we compile it into the EXE
+                requests_path = os.path.join(self.get_dst_prefix(),'requests')
+                if not os.path.exists(requests_path):
+                    os.makedirs(requests_path)
+                with self.prefix(dst="requests"):
+                    self.path2basename(requestsdir,"*")
+                urllib3_path = os.path.join(self.get_dst_prefix(),'urllib3')
+                if not os.path.exists(urllib3_path):
+                    os.makedirs(urllib3_path)
+                with self.prefix(dst="urllib3"):
+                    self.path2basename(urllib3dir,"*")
+                chardet_path = os.path.join(self.get_dst_prefix(),'chardet')
+                if not os.path.exists(chardet_path):
+                    os.makedirs(chardet_path)
+                with self.prefix(dst="chardet"):
+                    self.path2basename(chardetdir,"*")
+                idna_path = os.path.join(self.get_dst_prefix(),'idna')
+                if not os.path.exists(idna_path):
+                    os.makedirs(idna_path)
+                with self.prefix(dst="idna"):
+                    self.path2basename(idnadir,"*")
 
             # most everything goes in the Resources directory
             with self.prefix(src="", dst="Resources"):
@@ -931,24 +926,22 @@ class DarwinManifest(ViewerManifest):
 
                 self.path("licenses-mac.txt", dst="licenses.txt")
                 self.path("featuretable_mac.txt")
-                self.path("VivoxAUP.txt")
+                self.path("SecondLife.nib")
                 self.path("ca-bundle.crt")
 
                 icon_path = self.icon_path()
                 with self.prefix(src=icon_path, dst="") :
-                    self.path("firestorm_icon.icns")
+                    self.path("secondlife.icns")
 
-                # <FS:Ansariel> Remove VMP
-                #with self.prefix(src=icon_path, dst="vmp_icons"):
-                #    self.path("secondlife.ico")
+                with self.prefix(src=icon_path, dst="vmp_icons"):
+                    self.path("secondlife.ico")
 
                 #VMP Tkinter icons
-                #with self.prefix("vmp_icons"):
-                #    self.path("*.png")
-                #    self.path("*.gif")
-                # <FS:Ansariel> Remove VMP
+                with self.prefix("vmp_icons"):
+                    self.path("*.png")
+                    self.path("*.gif")
 
-                self.path("Firestorm.nib")
+                self.path("SecondLife.nib")
                 
                 # Translations
                 self.path("English.lproj/language.txt")
@@ -1017,16 +1010,11 @@ class DarwinManifest(ViewerManifest):
                                 # libnghttp2.major.dylib, which is a symlink
                                 # to libnghttp2.version.dylib. Get all of them.
                                 "libnghttp2.*dylib",
-                                "libgrowl.dylib",
-                                "libgrowl++.dylib",
-                                "libLeap.dylib",
                                 ):
                     dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
                 # SLVoice and vivox lols, no symlinks needed
                 for libfile in (
-                                'libalut.dylib',
-                                'libopenal.dylib',
                                 'libortp.dylib',
                                 'libsndfile.dylib',
                                 'libvivoxoal.dylib',
@@ -1068,15 +1056,6 @@ class DarwinManifest(ViewerManifest):
                             symlinkf(src, dst)
                         except OSError as err:
                             print "Can't symlink %s -> %s: %s" % (src, dst, err)
-
-                #<FS:TS> Moved from the x86_64 specific version because code
-                # below that does symlinking and path fixup depends on it.
-                with self.prefix(src="../packages/bin_x86", dst=""):
-                    self.path("SLPlugin.app", "SLPlugin.app")
-	
-                    with self.prefix(src = "llplugin", dst="llplugin"):
-                        self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
-                        self.path("media_plugin_cef.dylib", "media_plugin_cef.dylib")
 
                 # Dullahan helper apps go inside SLPlugin.app
                 with self.prefix(src="", dst="SLPlugin.app/Contents/Frameworks"):
@@ -1126,10 +1105,6 @@ class DarwinManifest(ViewerManifest):
                                  '"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
                                  '"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % dylibexecutablepath)
 
-
-                #<FS:TS> Copy in prebuilt framework if it's there
-                with self.prefix(src="../packages/bin_x86/Frameworks", dst="Frameworks"):
-                    self.path("Chromium Embedded Framework.framework")
 
             # CEF framework goes inside Second Life.app/Contents/Frameworks
             with self.prefix(src="", dst="Frameworks"):
@@ -1185,22 +1160,16 @@ class DarwinManifest(ViewerManifest):
         if ("package" in self.args['actions'] or 
             "unpacked" in self.args['actions']):
             self.run_command('strip -S %(viewer_binary)r' %
-                             { 'viewer_binary' : self.dst_path_of('Contents/MacOS/Firestorm')})
+                             { 'viewer_binary' : self.dst_path_of('Contents/MacOS/Second Life')})
 
     def package_finish(self):
         global CHANNEL_VENDOR_BASE
-        substitution_strings = self.fs_get_substitution_strings()         # <FS:AO> Copied from windows manifest, since we're starting to use many of the same vars
-
-        imagename = ("Phoenix-" + self.app_name() + '-' + '-'.join(self.args['version']))
-
         # MBW -- If the mounted volume name changes, it breaks the .DS_Store's background image and icon positioning.
         #  If we really need differently named volumes, we'll need to create multiple DS_Store file images, or use some other trick.
 
-        #volname=CHANNEL_VENDOR_BASE+" Installer"  # DO NOT CHANGE without understanding comment above
-        #[FS:CR] Understood and disregarded!
-        volname = (self.app_name() + " " + '.'.join(self.args['version']) + " Installer")
+        volname=CHANNEL_VENDOR_BASE+" Installer"  # DO NOT CHANGE without understanding comment above
 
-        #imagename = self.installer_base_name()
+        imagename = self.installer_base_name()
 
         sparsename = imagename + ".sparseimage"
         finalname = imagename + ".dmg"
@@ -1237,45 +1206,21 @@ class DarwinManifest(ViewerManifest):
             # one for release candidate and one for first look. Any other channels
             # will use the release .DS_Store, and will look broken.
             # - Ambroff 2008-08-20
-            # If the channel is "firestorm-private-"anything, then use the
-            #  private folder for .DS_Store and the background image. -- TS
-            template_chan = app_name.lower()
-            if template_chan.startswith("firestorm-private"):
-                template_chan = "firestorm-private"
-            elif template_chan.startswith("firestormos-private"):
-                template_chan = "firestormos-private"
             dmg_template = os.path.join(
-                'installers', 'darwin', '%s-dmg' % template_chan)
+                'installers', 'darwin', '%s-dmg' % self.channel_type())
 
             if not os.path.exists (self.src_path_of(dmg_template)):
-                dmg_template = os.path.join ('installers', 'darwin', 'firestorm-release-dmg')
+                dmg_template = os.path.join ('installers', 'darwin', 'release-dmg')
 
             for s,d in {self.get_dst_prefix():app_name + ".app",
                         os.path.join(dmg_template, "_VolumeIcon.icns"): ".VolumeIcon.icns",
-                        os.path.join(dmg_template, "background.png"): "background.png",
-                        os.path.join(dmg_template, "VivoxAUP.txt"): "Vivox Acceptable Use Policy.txt",
-                        os.path.join(dmg_template, "LGPL-license.txt"): "LGPL License.txt"}.items():
-                        #os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items():
+                        os.path.join(dmg_template, "background.jpg"): "background.jpg",
+                        os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items():
                 print "Copying to dmg", s, d
                 self.copy_action(self.src_path_of(s), os.path.join(volpath, d))
 
-            # <FS:TS> The next two commands *MUST* execute before the loop
-            #         that hides the files. If not, packaging will fail.
-            #         YOU HAVE BEEN WARNED. 
-            # Create the alias file (which is a resource file) from the .r
-            self.run_command('Rez %r -o %r' %
-                             (self.src_path_of("installers/darwin/firestorm-release-dmg/Applications-alias.r"),
-                              os.path.join(volpath, "Applications")))
-
-            # Set up the installer disk image: set icon positions, folder view
-            #  options, and icon label colors. This must be done before the
-            #  files are hidden.
-            self.run_command('osascript %r %r' % 
-                             (self.src_path_of("installers/darwin/installer-dmg.applescript"),
-                             volname))
-
             # Hide the background image, DS_Store file, and volume icon file (set their "visible" bit)
-            for f in ".VolumeIcon.icns", "background.png", ".DS_Store":
+            for f in ".VolumeIcon.icns", "background.jpg", ".DS_Store":
                 pathname = os.path.join(volpath, f)
                 # We've observed mysterious "no such file" failures of the SetFile
                 # command, especially on the first file listed above -- yet
@@ -1293,6 +1238,11 @@ class DarwinManifest(ViewerManifest):
                 # case, don't hang up the whole build looping indefinitely, let
                 # the original problem manifest by executing the desired command.
                 self.run_command('SetFile -a V %r' % pathname)
+
+            # Create the alias file (which is a resource file) from the .r
+            self.run_command('Rez %r -o %r' %
+                             (self.src_path_of("installers/darwin/release-dmg/Applications-alias.r"),
+                              os.path.join(volpath, "Applications")))
 
             # Set the alias file's alias and custom icon bits
             self.run_command('SetFile -a AC %r' % os.path.join(volpath, "Applications"))
@@ -1373,19 +1323,10 @@ class DarwinManifest(ViewerManifest):
         self.package_file = finalname
         self.remove(sparsename)
 
-        #AO: Try to package up symbols
-        # New Method, for reading cross platform stack traces on a linux/mac host
-        if (os.path.exists("%s/firestorm-symbols-darwin.tar.bz2" % self.args['configuration'].lower())):
-            # Rename to add version numbers
-            os.rename("%s/firestorm-symbols-darwin.tar.bz2" % self.args['configuration'].lower(),
-                      "%s/Phoenix_%s_%s_%s_symbols-darwin.tar.bz2" % (self.args['configuration'].lower(),
-                                                                      self.fs_channel_legacy_oneword(),
-                                                                      substitution_strings['version_dashes'],
-                                                                      self.args['viewer_flavor']))
-
 
 class Darwin_i386_Manifest(DarwinManifest):
     address_size = 32
+
 
 class Darwin_i686_Manifest(DarwinManifest):
     """alias in case arch is passed as i686 instead of i386"""
