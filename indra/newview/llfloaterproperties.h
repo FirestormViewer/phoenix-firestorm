@@ -44,6 +44,11 @@ class LLTextBox;
 
 class LLPropertiesObserver;
 
+// <FS:Ansariel> Avatar names often not showing on first open
+class LLAvatarName;
+class LLPermissions;
+// </FS:Ansariel>
+
 class LLFloaterProperties : public LLFloater
 {
 public:
@@ -90,6 +95,15 @@ protected:
 	BOOL mDirty;
 
 	LLPropertiesObserver* mPropertiesObserver;
+
+	// <FS:Ansariel> Avatar names often not showing on first open
+	boost::signals2::connection mCreatorNameCbConnection;
+	boost::signals2::connection mOwnerNameCbConnection;
+	boost::signals2::connection mGroupOwnerNameCbConnection;
+	void onCreatorNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLPermissions& perm);
+	void onOwnerNameCallback(const LLUUID& av_id, const LLAvatarName& av_name);
+	void onGroupOwnerNameCallback(const std::string& name);
+	// </FS:Ansariel>
 };
 
 class LLMultiProperties : public LLMultiFloater
