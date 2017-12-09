@@ -2542,9 +2542,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8a7f0be5647e07235d205ac00805fb78</string>
+              <string>545954e46a316e469f6b68ecbcb76573</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/1116/2586/openjpeg-1.5.1.501102-windows-501102.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/packages/openjpeg-1.5.2.171271050-windows-171271050.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2554,9 +2554,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>398544058036bc27097fcff208934d11</string>
+              <string>a68103651741c8b66356153ee5668d6b</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/1115/2581/openjpeg-1.5.1.501102-windows64-501102.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/packages/openjpeg-1.5.2.171271046-windows64-171271046.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
