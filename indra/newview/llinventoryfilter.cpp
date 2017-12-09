@@ -866,6 +866,16 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
 		{
 			mFilterOps.mFilterTypes &= ~FILTERTYPE_UUID;
 			mFilterOps.mFilterUUID = LLUUID::null;
+			// <FS:Ansariel> Find all links unhiding hidden empty system folders
+			if (gSavedSettings.getBOOL("DebugHideEmptySystemFolders"))
+			{
+				setFilterEmptySystemFolders();
+			}
+			else
+			{
+				removeFilterEmptySystemFolders();
+			}
+			// </FS:Ansariel>
 			setModified(FILTER_RESTART);
 		}
 	}
