@@ -334,7 +334,7 @@ LLUUID LLCoprocedurePool::enqueueCoprocedure(const std::string &name, LLCoproced
     LLUUID id(LLUUID::generateNewID());
 
     mPendingCoprocs.push_back(QueuedCoproc::ptr_t(new QueuedCoproc(name, id, proc)));
-    LL_INFOS() << "Coprocedure(" << name << ") enqueued with id=" << id.asString() << " in pool \"" << mPoolName << "\"" << LL_ENDL;
+    LL_DEBUGS("CoprocedurePool") << "Coprocedure(" << name << ") enqueued with id=" << id.asString() << " in pool \"" << mPoolName << "\"" << LL_ENDL;
 
     mWakeupTrigger.post(LLSD());
 
@@ -347,7 +347,7 @@ bool LLCoprocedurePool::cancelCoprocedure(const LLUUID &id)
     ActiveCoproc_t::iterator itActive = mActiveCoprocs.find(id);
     if (itActive != mActiveCoprocs.end())
     {
-        LL_INFOS() << "Found and canceling active coprocedure with id=" << id.asString() << " in pool \"" << mPoolName << "\"" << LL_ENDL;
+        LL_DEBUGS("CoprocedurePool") << "Found and canceling active coprocedure with id=" << id.asString() << " in pool \"" << mPoolName << "\"" << LL_ENDL;
         (*itActive).second->cancelSuspendedOperation();
         mActiveCoprocs.erase(itActive);
         return true;
@@ -357,13 +357,13 @@ bool LLCoprocedurePool::cancelCoprocedure(const LLUUID &id)
     {
         if ((*it)->mId == id)
         {
-            LL_INFOS() << "Found and removing queued coroutine(" << (*it)->mName << ") with Id=" << id.asString() << " in pool \"" << mPoolName << "\"" << LL_ENDL;
+            LL_DEBUGS("CoprocedurePool") << "Found and removing queued coroutine(" << (*it)->mName << ") with Id=" << id.asString() << " in pool \"" << mPoolName << "\"" << LL_ENDL;
             mPendingCoprocs.erase(it);
             return true;
         }
     }
 
-    LL_INFOS() << "Coprocedure with Id=" << id.asString() << " was not found in pool \"" << mPoolName << "\"" << LL_ENDL;
+    LL_WARNS("CoprocedurePool") << "Coprocedure with Id=" << id.asString() << " was not found in pool \"" << mPoolName << "\"" << LL_ENDL;
     return false;
 }
 
@@ -384,7 +384,7 @@ void LLCoprocedurePool::coprocedureInvokerCoro(LLCoreHttpUtil::HttpCoroutineAdap
             mPendingCoprocs.pop_front();
             ActiveCoproc_t::iterator itActive = mActiveCoprocs.insert(ActiveCoproc_t::value_type(coproc->mId, httpAdapter)).first;
 
-            LL_INFOS() << "Dequeued and invoking coprocedure(" << coproc->mName << ") with id=" << coproc->mId.asString() << " in pool \"" << mPoolName << "\"" << LL_ENDL;
+            LL_DEBUGS("CoprocedurePool") << "Dequeued and invoking coprocedure(" << coproc->mName << ") with id=" << coproc->mId.asString() << " in pool \"" << mPoolName << "\"" << LL_ENDL;
 
             try
             {
@@ -400,7 +400,7 @@ void LLCoprocedurePool::coprocedureInvokerCoro(LLCoreHttpUtil::HttpCoroutineAdap
                 throw;
             }
 
-            LL_INFOS() << "Finished coprocedure(" << coproc->mName << ")" << " in pool \"" << mPoolName << "\"" << LL_ENDL;
+            LL_DEBUGS("CoprocedurePool") << "Finished coprocedure(" << coproc->mName << ")" << " in pool \"" << mPoolName << "\"" << LL_ENDL;
 
             mActiveCoprocs.erase(itActive);
         }
