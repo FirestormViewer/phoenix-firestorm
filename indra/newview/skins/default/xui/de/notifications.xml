@@ -5316,4 +5316,11 @@ Werte höher als 8 sind bedeutungslos und erzeugen keine Verbesserung. Sie sollt
 Für den normalen Gebrauch sollte ein Wert von 2 ausreichen. Sollten Sie einige Objekte besitzen, die bei diesem Wert deformiert aussehen, sollten Sie in Erwägung ziehen, diese zu ersetzen.
 		<usetemplate ignoretext="Warnen bei zu hoher Detailstufe" name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="CurrencyURIOverrideReceived">
+Diese Region hat sich dazu entschieden, das Währungsportal eines Drittanbieters zu nutzen.
+Bitte beachten Sie, dass es sich bei Käufen von Währung innerhalb des Firestorm Viewers um Transaktionen zwischen Ihnen (dem Nutzer) und den Anbietern oder Verkäufern der Währung handelt.
+Weder Firestorm Viewer, Phoenix Firestorm Viewer Project Inc. noch dessen Team können für jegliche Kosten oder Schäden haftbar gemacht werden, die direkt oder indirekt aus solchen Transaktionen entstehen.
+Falls Sie diesen Nutzungsbestimmungen nicht zustimmen, sollten keinerlei finanzielle Transaktionen im Rahmen der Nutzung dieses Viewers durchgeführt werden.
+		<usetemplate ignoretext="Warnen, wenn eine Region die URL zum Währungsportal ändert" name="okignore" yestext="OK"/>
+	</notification>
 </notifications>
