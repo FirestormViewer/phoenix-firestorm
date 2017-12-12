@@ -26,6 +26,7 @@
 #include "llviewerregion.h"
 
 // <COLOSI opensim multi-currency support>
+#include "llnotificationsutil.h"
 #include "tea.h"
 #include "llstatusbar.h"
 #include "llfloaterbuycurrency.h"
@@ -169,6 +170,10 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			// <COLOSI opensim multi-currency support>
 			if (extras.has("currency-base-uri"))
 			{
+				if (mHelperUriOverride != extras["currency-base-uri"].asString())
+				{
+					LLNotificationsUtil::add("CurrencyURIOverrideReceived");
+				}
 				mHelperUriOverride = extras["currency-base-uri"].asString();
 			}
 			else

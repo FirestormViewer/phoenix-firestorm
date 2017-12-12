@@ -1643,9 +1643,6 @@ void LLPanelObject::deactivateMeshFields()
 	childSetVisible("LOD_swap_usr_label", false);
 	childSetVisible("LOD_swap_label", false);
 	childSetVisible("LOD_swap_LOD_Change_label", false);
-	childSetVisible("LOD_swap_H2M_label", false);
-	childSetVisible("LOD_swap_M2L_label", false);
-	childSetVisible("LOD_swap_L2I_label", false);
 	childSetVisible("LODSwapTableDscriptionsText", false);
 	childSetVisible("LOD_swap_ll_default", false);
 	childSetVisible("LOD_swap_fs_default", false);
