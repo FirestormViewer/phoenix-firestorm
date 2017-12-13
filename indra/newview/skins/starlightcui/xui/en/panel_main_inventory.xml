@@ -29,7 +29,7 @@
   <text
 		     type="string"
 		     length="1"
-		     follows="left|top"
+		     follows="left|top|right"
 		     height="13"
 		     layout="topleft"
     		 left="12"
@@ -37,6 +37,7 @@
 		     font="SansSerifMedium"
 		     text_color="SL-EmphasisColor"
 		     tool_tip="[ITEMS] Items, [CATEGORIES] Folders"
+		     use_ellipses="true"
 		     top_pad="0"
 		     width="300">
     Elements:

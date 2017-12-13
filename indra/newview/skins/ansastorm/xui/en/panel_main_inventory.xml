@@ -651,8 +651,9 @@
            font="SansSerifMedium"
            top_pad="6"
            tool_tip="[ITEMS] Items, [CATEGORIES] Folders"
+           use_ellipses="true"
            follows="bottom|left|right"
-           width="240">
+           right="-8">
           Elements
           </text>
           <icon

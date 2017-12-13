@@ -538,8 +538,9 @@
 		left_delta="2"
 		name="ItemcountText"
 		right="-1"
+		use_ellipses="true"
 		font="SansSerifMedium"
-		follows="bottom|left">
+		follows="bottom|left|right">
 		Elements
 	</text>
 
