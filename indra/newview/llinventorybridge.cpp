@@ -100,6 +100,7 @@
 // </FS:Zi>
 #include "fsfloaterplacedetails.h"
 #include "llviewerattachmenu.h"
+#include "llresmgr.h"
 
 #include <boost/shared_ptr.hpp>
 
@@ -2428,8 +2429,35 @@ std::string LLFolderBridge::getLabelSuffix() const
     {
         return llformat(" ( %s ) ", LLTrans::getString("LoadingData").c_str());
     }
-    
-    return LLInvFVBridge::getLabelSuffix();
+    std::string suffix = "";
+    if(mShowDescendantsCount)
+    {
+        LLInventoryModel::cat_array_t cat_array;
+        LLInventoryModel::item_array_t item_array;
+        gInventory.collectDescendents(getUUID(), cat_array, item_array, TRUE);
+        // <FS:Ansariel> Fix item count formatting
+        //S32 count = item_array.size();
+        //if(count > 0)
+        //{
+        //    std::ostringstream oss;
+        //    oss << count;
+        //    suffix = " ( " + oss.str() + " Items )";
+        //}
+        if (cat_array.size() > 0 || item_array.size() > 0)
+        {
+            LLLocale locale("");
+            LLStringUtil::format_map_t args;
+            std::string count_str;
+            LLResMgr::getInstance()->getIntegerString(count_str, item_array.size());
+            args["ITEMS"] = count_str;
+            LLResMgr::getInstance()->getIntegerString(count_str, cat_array.size());
+            args["FOLDERS"] = count_str;
+            suffix = " " + LLTrans::getString("FolderItemCount", args);
+        }
+        // </FS:Ansariel>
+    }
+
+    return LLInvFVBridge::getLabelSuffix() + suffix;
 }
 
 LLFontGL::StyleFlags LLFolderBridge::getLabelStyle() const

@@ -3080,4 +3080,5 @@ Try enclosing path to the editor with double quotes.
 
 [ASSET_NAME]
   </string>
+  <string name="FolderItemCount">([ITEMS]/[FOLDERS] Elements)</string>
 </strings>
