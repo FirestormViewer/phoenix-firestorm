@@ -1619,6 +1619,9 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="InventoryMarketplaceListingsNoItems">
 		Przeciągnij foldery do tego obszaru, aby dodać je na listę sprzedaży w [[MARKETPLACE_DASHBOARD_URL] Marketplace].
 	</string>
+	<string name="InventoryItemsCount">
+		([ITEMS]/[FOLDERS] elementów)
+	</string>
 	<string name="Marketplace Validation Warning Stock">
 		folder Magazynowy musi być zawarty w folderze wersji
 	</string>
