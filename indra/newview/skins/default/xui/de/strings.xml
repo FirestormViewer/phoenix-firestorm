@@ -6852,7 +6852,4 @@ Setzen Sie den Editorpfad in Anführungszeichen
 
 [ASSET_NAME]
 	</string>
-	<string name="FolderItemCount">
-		([ITEMS]/[FOLDERS] Elemente)
-	</string>
 </strings>
