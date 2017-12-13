@@ -798,6 +798,8 @@ void LLPanelMainInventory::onFilterTypeSelected(const std::string& filter_type_n
 	{
 		finder->updateElementsFromFilter();
 	}
+
+	setFilterTextFromFilter();
 }
 
 // reflect state of current filter selection in the dropdown list
