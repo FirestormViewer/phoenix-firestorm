@@ -1704,6 +1704,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="InventoryMarketplaceListingsNoItems">
 		Ziehen Sie Ordner in diesen Bereich, um sie im [[MARKETPLACE_DASHBOARD_URL] Marktplatz] zum Verkauf anzubieten.
 	</string>
+	<string name="InventoryItemsCount">
+		([ITEMS]/[CATEGORIES] Elemente)
+	</string>
 	<string name="Marketplace Validation Warning Stock">
 		Bestandsordner müssen in einem Versionsordner gespeichert sein
 	</string>

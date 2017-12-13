@@ -2427,7 +2427,7 @@ std::string LLFolderBridge::getLabelSuffix() const
     
     if (mIsLoading && mTimeSinceRequestStart.getElapsedTimeF32() >= folder_loading_message_delay())
     {
-        return llformat(" ( %s ) ", LLTrans::getString("LoadingData").c_str());
+        return llformat(" (%s) ", LLTrans::getString("LoadingData").c_str());
     }
     std::string suffix = "";
     if(mShowDescendantsCount)
@@ -2441,7 +2441,9 @@ std::string LLFolderBridge::getLabelSuffix() const
         //{
         //    std::ostringstream oss;
         //    oss << count;
-        //    suffix = " ( " + oss.str() + " Items )";
+        //    LLStringUtil::format_map_t args;
+        //    args["[ITEMS_COUNT]"] = oss.str();
+        //    suffix = " " + LLTrans::getString("InventoryItemsCount", args);
         //}
         if (cat_array.size() > 0 || item_array.size() > 0)
         {
@@ -2451,8 +2453,8 @@ std::string LLFolderBridge::getLabelSuffix() const
             LLResMgr::getInstance()->getIntegerString(count_str, item_array.size());
             args["ITEMS"] = count_str;
             LLResMgr::getInstance()->getIntegerString(count_str, cat_array.size());
-            args["FOLDERS"] = count_str;
-            suffix = " " + LLTrans::getString("FolderItemCount", args);
+            args["CATEGORIES"] = count_str;
+            suffix = " " + LLTrans::getString("InventoryItemsCount", args);
         }
         // </FS:Ansariel>
     }
@@ -4889,7 +4891,7 @@ std::string LLMarketplaceFolderBridge::getLabelSuffix() const
     
     if (mIsLoading && mTimeSinceRequestStart.getElapsedTimeF32() >= folder_loading_message_delay())
     {
-        return llformat(" ( %s ) ", LLTrans::getString("LoadingData").c_str());
+        return llformat(" (%s) ", LLTrans::getString("LoadingData").c_str());
     }
     
     std::string suffix = "";
