@@ -1,6 +1,6 @@
 # -*- cmake -*-
 
-# FMOD can be set when launching the make using the argument -DFMOD:BOOL=ON
+# FMOD can be set when launching the make using the argument -DFMODSTUDIO:BOOL=ON
 # When building using proprietary binaries though (i.e. having access to LL private servers),
 # we always build with FMODSTUDIO.
 # Open source devs should use the -DFMODSTUDIO:BOOL=ON then if they want to build with FMOD, whether
