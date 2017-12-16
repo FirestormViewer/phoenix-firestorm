@@ -1517,6 +1517,11 @@ void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
 
 	S32 num_removed = 0;
 	LLViewerObject *objectp;
+
+	// <FS:Ansariel> Use timer for cleaning up dead objects
+	static const F64 max_time = 0.01; // Let's try 10ms per frame
+	LLTimer timer;
+	// </FS:Ansariel>
 	
 	vobj_list_t::reverse_iterator target = mObjects.rbegin();
 
@@ -1532,12 +1537,16 @@ void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
 
 		if (objectp->isDead())
 		{
+			mDeadObjects.erase(objectp->mID); // <FS:Ansariel> Use timer for cleaning up dead objects
 			LLPointer<LLViewerObject>::swap(*iter, *target);
 			*target = NULL;
 			++target;
 			num_removed++;
 
-			if (num_removed == mNumDeadObjects || iter->isNull())
+			// <FS:Ansariel> Use timer for cleaning up dead objects
+			//if (num_removed == mNumDeadObjects || iter->isNull())
+			if (num_removed == mNumDeadObjects || iter->isNull() || (use_timer && timer.getElapsedTimeF64() > max_time))
+			// </FS:Ansariel>
 			{
 				// We've cleaned up all of the dead objects or caught up to the dead tail
 				break;
@@ -1549,15 +1558,24 @@ void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
 		}
 	}
 
-	llassert(num_removed == mNumDeadObjects);
+	// <FS:Ansariel> Use timer for cleaning up dead objects
+	//llassert(num_removed == mNumDeadObjects);
 
-	//erase as a block
-	mObjects.erase(mObjects.begin()+(mObjects.size()-mNumDeadObjects), mObjects.end());
+	////erase as a block
+	//mObjects.erase(mObjects.begin()+(mObjects.size()-mNumDeadObjects), mObjects.end());
 
-	// We've cleaned the global object list, now let's do some paranoia testing on objects
-	// before blowing away the dead list.
-	mDeadObjects.clear();
-	mNumDeadObjects = 0;
+	//// We've cleaned the global object list, now let's do some paranoia testing on objects
+	//// before blowing away the dead list.
+	//mDeadObjects.clear();
+	//mNumDeadObjects = 0;
+	mObjects.erase(mObjects.begin()+(mObjects.size()-num_removed), mObjects.end());
+	mNumDeadObjects -= num_removed;
+
+	if (mNumDeadObjects != mDeadObjects.size())
+	{
+		LL_WARNS() << "Num dead objects != dead object list size" << LL_ENDL;
+	}
+	// </FS:Ansariel>
 }
 
 void LLViewerObjectList::removeFromActiveList(LLViewerObject* objectp)
