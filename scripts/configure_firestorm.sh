@@ -16,6 +16,7 @@ FALSE=1
 #                  <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
 #                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
 #                  <string>-DUSE_KDU=TRUE</string>
+#                  <string>-DFMODSTUDIO:BOOL=ON</string>
 #                  <string>-DFMODEX:BOOL=ON</string>
 #                  <string>-DOPENSIM:BOOL=ON</string>
 #                  <string>-DUSE_AVX_OPTIMIZATION:BOOL=OFF</string>
@@ -33,6 +34,7 @@ WANTS_CONFIG=$FALSE
 WANTS_PACKAGE=$FALSE
 WANTS_VERSION=$FALSE
 WANTS_KDU=$FALSE
+WANTS_FMODSTUDIO=$FALSE
 WANTS_FMODEX=$FALSE
 WANTS_OPENSIM=$TRUE
 WANTS_AVX=$FALSE
@@ -66,6 +68,7 @@ showUsage()
     echo "  --kdu        : Build with KDU"
     echo "  --package    : Build installer"
     echo "  --no-package : Build without installer (Overrides --package)"
+    echo "  --fmodstudio : Build with FMOD Studio"
     echo "  --fmodex     : Build with FMOD Ex"
     echo "  --quicktime  : Build with Quicktime (Windows)"
     echo "  --opensim    : Build with OpenSim support (Disables Havok features)"
@@ -84,7 +87,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package no-package fmodex ninja jobs: platform: kdu quicktime opensim no-opensim avx avx2 testbuild: help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodstudio fmodex ninja jobs: platform: kdu quicktime opensim no-opensim avx avx2 testbuild: help chan: btype:" "$@" ; do
 
           #insure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -102,6 +105,7 @@ getArgs()
                       fi
                       ;;
           kdu)        WANTS_KDU=$TRUE;;
+          fmodstudio) WANTS_FMODSTUDIO=$TRUE;;
           fmodex)     WANTS_FMODEX=$TRUE;;
           opensim)    WANTS_OPENSIM=$TRUE;;
           no-opensim) WANTS_OPENSIM=$FALSE;;
@@ -281,6 +285,7 @@ fi
 echo -e "configure_firestorm.py" > $LOG
 echo -e "    PLATFORM: '$PLATFORM'"            | tee -a $LOG
 echo -e "         KDU: `b2a $WANTS_KDU`"       | tee -a $LOG
+echo -e "  FMODSTUDIO: `b2a $WANTS_FMODSTUDIO`" | tee -a $LOG
 echo -e "      FMODEX: `b2a $WANTS_FMODEX`"    | tee -a $LOG
 echo -e "     OPENSIM: `b2a $WANTS_OPENSIM`"   | tee -a $LOG
 echo -e "         AVX: `b2a $WANTS_AVX`"       | tee -a $LOG
@@ -376,12 +381,16 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     else
         KDU="-DUSE_KDU:BOOL=OFF"
     fi
+    if [ $WANTS_FMODSTUDIO -eq $TRUE ] ; then
+        FMODSTUDIO="-DFMODSTUDIO:BOOL=ON"
+    else
+        FMODSTUDIO="-DFMODSTUDIO:BOOL=OFF"
+    fi
     if [ $WANTS_FMODEX -eq $TRUE ] ; then
         FMODEX="-DFMODEX:BOOL=ON"
     else
         FMODEX="-DFMODEX:BOOL=OFF"
     fi
-	
     if [ $WANTS_OPENSIM -eq $TRUE ] ; then
         OPENSIM="-DOPENSIM:BOOL=ON"
     else
@@ -457,7 +466,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         UNATTENDED="-DUNATTENDED=ON"
     fi
 
-    cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $KDU $OPENSIM $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TESTBUILD $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=$WORD_SIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
+    cmake -G "$TARGET" ../indra $CHANNEL $FMODSTUDIO $FMODEX $KDU $OPENSIM $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TESTBUILD $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=$WORD_SIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
           -DNDTARGET_ARCH:STRING="${TARGET_ARCH}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
     if [ $PLATFORM == "win32" ] ; then

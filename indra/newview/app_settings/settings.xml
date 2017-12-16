@@ -19992,6 +19992,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>7000</integer>
   </map>
+  <key>FMODResampleMethod</key>
+  <map>
+    <key>Comment</key>
+    <string>Sets the method used for internal resampler 0(Linear), 1(Cubic), 2(Spline)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>DisablePrecacheDelayAfterTeleporting</key>
   <map>
     <key>Comment</key>
