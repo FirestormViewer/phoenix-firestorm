@@ -9,7 +9,7 @@
      can_edit_text="true"
      decimal_digits="0"
      enabled="false"
-     height="12"
+     height="16"
      increment="1"
      initial_value="0"
      label="[DESC]"
