@@ -71,6 +71,9 @@
 	 name="LtGray_50"
 	 value="0.90 0.90 0.90 0.50" />
 	<color
+	 name="LtGray_75"
+	 value="0.90 0.90 0.90 0.75" />
+	<color
 	 name="Gray"
 	 value="0.5 0.5 0.5 1" />
 	<color
@@ -756,6 +759,9 @@
     <color
      name="InventoryItemEnabledColor"
      reference="LtGray" />
+    <color
+     name="InventoryItemSuffixColor"
+     reference="LtGray_75" />
     <color
      name="InventoryItemHighlightBgColor"
      reference="AnsaStormBlue_Lt_13" />
