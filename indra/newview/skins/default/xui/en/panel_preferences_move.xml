@@ -163,6 +163,7 @@
          tool_tip="Use automatic camera positioning while in edit mode"
          width="100" />
         <check_box
+         enabled_control="AppearanceCameraMovement"
          control_name="EditAppearanceLighting"
          follows="left|top"
          height="16"
