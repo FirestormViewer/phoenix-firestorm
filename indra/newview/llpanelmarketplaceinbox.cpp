@@ -69,11 +69,17 @@ BOOL LLPanelMarketplaceInbox::postBuild()
 	return TRUE;
 }
 
-void LLPanelMarketplaceInbox::onSelectionChange()
+// <FS:Ansariel> FIRE-21948: Show element count in Received Items folder
+//void LLPanelMarketplaceInbox::onSelectionChange()
+void LLPanelMarketplaceInbox::onSelectionChange(const std::deque<LLFolderViewItem*>& items, BOOL user_action)
+// </FS:Ansariel>
 {
 	LLSidepanelInventory* sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
 		
 	sidepanel_inventory->updateVerbs();
+
+	// <FS:Ansariel> FIRE-21948: Show element count in Received Items folder
+	mInventoryPanel->onSelectionChange(items, user_action);
 }
 
 
@@ -98,7 +104,10 @@ LLInventoryPanel * LLPanelMarketplaceInbox::setupInventoryPanel()
 	mInventoryPanel->getFilter().markDefault();
 
 	// Set selection callback for proper update of inventory status buttons
-	mInventoryPanel->setSelectCallback(boost::bind(&LLPanelMarketplaceInbox::onSelectionChange, this));
+	// <FS:Ansariel> FIRE-21948: Show element count in Received Items folder
+	//mInventoryPanel->setSelectCallback(boost::bind(&LLPanelMarketplaceInbox::onSelectionChange, this));
+	mInventoryPanel->setSelectCallback(boost::bind(&LLPanelMarketplaceInbox::onSelectionChange, this, _1, _2));
+	// </FS:Ansariel>
 
 	// Set up the note to display when the inbox is empty
 	mInventoryPanel->getFilter().setEmptyLookupMessage("InventoryInboxNoItems");
