@@ -179,7 +179,10 @@ LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
 		sMouseOverColor = LLUIColorTable::instance().getColor("InventoryMouseOverColor", DEFAULT_WHITE);
 		sFilterBGColor = LLUIColorTable::instance().getColor("FilterBackgroundColor", DEFAULT_WHITE);
 		sFilterTextColor = LLUIColorTable::instance().getColor("FilterTextColor", DEFAULT_WHITE);
-		sSuffixColor = LLUIColorTable::instance().getColor("InventoryItemColor", DEFAULT_WHITE);
+		// <FS:Ansariel> Fix misleading color name
+		//sSuffixColor = LLUIColorTable::instance().getColor("InventoryItemColor", DEFAULT_WHITE);
+		sSuffixColor = LLUIColorTable::instance().getColor("InventoryItemSuffixColor", DEFAULT_WHITE);
+		// </FS:Ansariel>
 		sSearchStatusColor = LLUIColorTable::instance().getColor("InventorySearchStatusColor", DEFAULT_WHITE);
 		// <FS:Ansariel> Special for protected items
 		sProtectedColor = LLUIColorTable::instance().getColor("InventoryProtectedColor", DEFAULT_WHITE);
