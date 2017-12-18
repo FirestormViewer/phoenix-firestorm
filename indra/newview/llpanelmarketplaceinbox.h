@@ -28,6 +28,7 @@
 #define LL_LLPANELMARKETPLACEINBOX_H
 
 #include "llpanel.h"
+#include "llfolderview.h"
 
 class LLButton;
 class LLInventoryPanel;
@@ -63,7 +64,10 @@ public:
 
 private:
 
-	void onSelectionChange();
+	// <FS:Ansariel> FIRE-21948: Show element count in Received Items folder
+	//void onSelectionChange();
+	void onSelectionChange(const std::deque<LLFolderViewItem*>& items, BOOL user_action);
+	// </FS:Ansariel>
 
 	void onFocusReceived();
 
