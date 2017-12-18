@@ -148,7 +148,7 @@
          follows="left|top"
          label="Build/Edit"
          layout="topleft"
-         left_delta="30"
+         left_delta="10"
          name="edit_camera_movement"
          tool_tip="Use automatic camera positioning when entering and exiting edit mode"
          width="280"
@@ -171,6 +171,16 @@
          left_pad="10"
          name="EditAppearanceLighting"
          tool_tip="Enable or disable the additional lighting used while editing avatar appearance."
+         width="150" />
+        <check_box
+         control_name="FSAppearanceShowHints"
+         follows="left|top"
+         height="16"
+         label="Show Visual Hints"
+         layout="topleft"
+         left_pad="10"
+         name="FSAppearanceShowHints"
+         tool_tip="Enable or disable the visual hints showing the avatar parts being modified."
          width="150" />
 
         <check_box
