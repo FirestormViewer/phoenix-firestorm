@@ -163,7 +163,7 @@ S32 FSCommon::secondsSinceEpochFromString(const std::string& format, const std::
 
 void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 {
-	if (!object)
+	if (!object || !object->getRegion())
 	{
 		return;
 	}
@@ -234,8 +234,8 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 	{
 		gMessageSystem->newMessageFast(_PREHASH_ObjectPermissions);
 		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 		gMessageSystem->nextBlockFast(_PREHASH_HeaderData);
 		gMessageSystem->addBOOLFast(_PREHASH_Override, (BOOL)FALSE);
 		gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
@@ -258,13 +258,13 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 
 	gMessageSystem->newMessage(_PREHASH_ObjectFlagUpdate);
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID() );
-	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 	gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
 	gMessageSystem->addBOOLFast(_PREHASH_UsePhysics, gSavedSettings.getBOOL("FSBuildPrefs_Physical"));
 	gMessageSystem->addBOOL(_PREHASH_IsTemporary, gSavedSettings.getBOOL("FSBuildPrefs_Temporary"));
 	gMessageSystem->addBOOL(_PREHASH_IsPhantom, gSavedSettings.getBOOL("FSBuildPrefs_Phantom"));
-	gMessageSystem->addBOOL("CastsShadows", FALSE );
+	gMessageSystem->addBOOL("CastsShadows", FALSE);
 	gMessageSystem->sendReliable(object->getRegion()->getHost());
 }
 
