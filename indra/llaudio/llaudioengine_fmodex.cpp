@@ -111,7 +111,14 @@ inline bool Check_FMOD_Error(FMOD_RESULT result, const char *string)
 		return false;
 	// </FS:Ansariel> Always print out error
 	//LL_DEBUGS() << string << " Error: " << FMOD_ErrorString(result) << LL_ENDL;
-	LL_WARNS() << string << " Error: " << FMOD_ErrorString(result) << LL_ENDL;
+	if (result != FMOD_ERR_INVALID_HANDLE)
+	{
+		LL_WARNS() << string << " Error: " << FMOD_ErrorString(result) << LL_ENDL;
+	}
+	else
+	{
+		LL_DEBUGS() << string << " Error: " << FMOD_ErrorString(result) << LL_ENDL;
+	}
 	// </FS:Ansariel>
 	return true;
 }

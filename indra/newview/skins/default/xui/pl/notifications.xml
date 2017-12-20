@@ -4942,4 +4942,11 @@ Wartości wyższe niż 8 są bez znaczenia i nie powodują żadnej poprawy. Nie 
 Do codziennego użytku LOD ustawiony na 2 powinien wystarczyć. Jeśli posiadasz obiekty, które wyglądają na zdeformowane z taką wartością, to powinieneś/aś rozważyć ich wymianę.
 		<usetemplate ignoretext="Ostrzegaj o wysokim poziomie detali" name="okignore" />
 	</notification>
+	<notification name="CurrencyURIOverrideReceived">
+		W tym regionie wybrano portal walutowy strony trzeciej.
+Należy pamiętać, że zakupy w walucie dokonywane za pośrednictwem Firestorm Viewer są transakcjami między Tobą (użytkownikiem) a dostawcą (-ami) lub sprzedawcą (-ami) waluty.
+Ani Firestorm Viewer, ani Phoenix Firestorm Viewer Project Inc., ani jego zespół nie ponoszą odpowiedzialności za jakiekolwiek koszty lub szkody wynikające bezpośrednio lub pośrednio z takich transakcji.
+Jeśli nie zgadzasz się z niniejszymi warunkami użytkowania, nie należy przeprowadzać transakcji finansowych za pomocą tej przeglądarki.
+	<usetemplate ignoretext="Kiedy region ustawia nowego pomocnika walutowego." name="okignore" />
+	</notification>
 </notifications>

@@ -64,6 +64,7 @@
 
 // [FS:CR] FIRE-10986
 #include "llfilepicker.h"
+#include "lltabcontainer.h"
 
 // register panel with appropriate XML
 static LLPanelInjector<LLPanelEditWearable> t_edit_wearable("panel_edit_wearable");
@@ -315,13 +316,21 @@ LLEditWearableDictionary::Subparts::Subparts()
         addEntry(SUBPART_GLOVES, new SubpartEntry(SUBPART_GLOVES, "mTorso", "gloves", "gloves_main_param_list", "gloves_main_tab", LLVector3d(0.f, 0.f, 0.f), LLVector3d(-1.f, 0.15f, 0.f),SEX_BOTH));
         addEntry(SUBPART_UNDERSHIRT, new SubpartEntry(SUBPART_UNDERSHIRT, "mTorso", "undershirt", "undershirt_main_param_list", "undershirt_main_tab", LLVector3d(0.f, 0.f, 0.3f), LLVector3d(-1.f, 0.15f, 0.3f),SEX_BOTH));
         addEntry(SUBPART_UNDERPANTS, new SubpartEntry(SUBPART_UNDERPANTS, "mPelvis", "underpants", "underpants_main_param_list", "underpants_main_tab", LLVector3d(0.f, 0.f, -0.5f), LLVector3d(-1.6f, 0.15f, -0.5f),SEX_BOTH));
-        addEntry(SUBPART_ALPHA, new SubpartEntry(SUBPART_ALPHA, "mPelvis", "alpha", "alpha_main_param_list", "alpha_main_tab", LLVector3d(0.f, 0.f, 0.1f), LLVector3d(-2.5f, 0.5f, 0.8f),SEX_BOTH));
-        addEntry(SUBPART_TATTOO, new SubpartEntry(SUBPART_TATTOO, "mPelvis", "tattoo", "tattoo_main_param_list", "tattoo_main_tab", LLVector3d(0.f, 0.f, 0.1f), LLVector3d(-2.5f, 0.5f, 0.8f),SEX_BOTH));
+        // <FS:Ansariel> Alpha and tattoo don't adhere to the usual panel layout and don't have a param list and main tab
+        //addEntry(SUBPART_ALPHA, new SubpartEntry(SUBPART_ALPHA, "mPelvis", "alpha", "alpha_main_param_list", "alpha_main_tab", LLVector3d(0.f, 0.f, 0.1f), LLVector3d(-2.5f, 0.5f, 0.8f),SEX_BOTH));
+        //addEntry(SUBPART_TATTOO, new SubpartEntry(SUBPART_TATTOO, "mPelvis", "tattoo", "tattoo_main_param_list", "tattoo_main_tab", LLVector3d(0.f, 0.f, 0.1f), LLVector3d(-2.5f, 0.5f, 0.8f),SEX_BOTH));
+        addEntry(SUBPART_ALPHA, new SubpartEntry(SUBPART_ALPHA, "mPelvis", "alpha", "", "", LLVector3d(0.f, 0.f, 0.1f), LLVector3d(-2.5f, 0.5f, 0.8f),SEX_BOTH));
+        addEntry(SUBPART_TATTOO, new SubpartEntry(SUBPART_TATTOO, "mPelvis", "tattoo", "", "", LLVector3d(0.f, 0.f, 0.1f), LLVector3d(-2.5f, 0.5f, 0.8f),SEX_BOTH));
+        // </FS:Ansariel>
         addEntry(SUBPART_PHYSICS_BREASTS_UPDOWN, new SubpartEntry(SUBPART_PHYSICS_BREASTS_UPDOWN, "mTorso", "physics_breasts_updown", "physics_breasts_updown_param_list", "physics_breasts_updown_tab", LLVector3d(0.f, 0.f, 0.3f), LLVector3d(0.f, 0.f, 0.f),SEX_FEMALE));
         addEntry(SUBPART_PHYSICS_BREASTS_INOUT, new SubpartEntry(SUBPART_PHYSICS_BREASTS_INOUT, "mTorso", "physics_breasts_inout", "physics_breasts_inout_param_list", "physics_breasts_inout_tab", LLVector3d(0.f, 0.f, 0.3f), LLVector3d(0.f, 0.f, 0.f),SEX_FEMALE));
         addEntry(SUBPART_PHYSICS_BREASTS_LEFTRIGHT, new SubpartEntry(SUBPART_PHYSICS_BREASTS_LEFTRIGHT, "mTorso", "physics_breasts_leftright", "physics_breasts_leftright_param_list", "physics_breasts_leftright_tab", LLVector3d(0.f, 0.f, 0.3f), LLVector3d(0.f, 0.f, 0.f),SEX_FEMALE));
-        addEntry(SUBPART_PHYSICS_BELLY_UPDOWN, new SubpartEntry(SUBPART_PHYSICS_BELLY_UPDOWN, "mTorso", "physics_belly_updown", "physics_belly_updown_param_list", "physics_belly_updown_tab", LLVector3d(0.f, 0.f, 0.3f), LLVector3d(0.f, 0.f, 0.f),SEX_BOTH));
-        addEntry(SUBPART_PHYSICS_BUTT_UPDOWN, new SubpartEntry(SUBPART_PHYSICS_BUTT_UPDOWN, "mTorso", "physics_butt_updown", "physics_butt_updown_param_list", "physics_butt_updown_tab", LLVector3d(0.f, 0.f, 0.3f), LLVector3d(0.f, 0.f, 0.f),SEX_BOTH));
+        // <FS:Ansariel> Fix XUI warning
+        //addEntry(SUBPART_PHYSICS_BELLY_UPDOWN, new SubpartEntry(SUBPART_PHYSICS_BELLY_UPDOWN, "mTorso", "physics_belly_updown", "physics_belly_updown_param_list", "physics_belly_updown_tab", LLVector3d(0.f, 0.f, 0.3f), LLVector3d(0.f, 0.f, 0.f),SEX_BOTH));
+        //addEntry(SUBPART_PHYSICS_BUTT_UPDOWN, new SubpartEntry(SUBPART_PHYSICS_BUTT_UPDOWN, "mTorso", "physics_butt_updown", "physics_butt_updown_param_list", "physics_butt_updown_tab", LLVector3d(0.f, 0.f, 0.3f), LLVector3d(0.f, 0.f, 0.f),SEX_BOTH));
+        addEntry(SUBPART_PHYSICS_BELLY_UPDOWN, new SubpartEntry(SUBPART_PHYSICS_BELLY_UPDOWN, "mTorso", "physics_belly_updown", "physics_belly_updown_param_list", "physics_belly_tab", LLVector3d(0.f, 0.f, 0.3f), LLVector3d(0.f, 0.f, 0.f),SEX_BOTH));
+        addEntry(SUBPART_PHYSICS_BUTT_UPDOWN, new SubpartEntry(SUBPART_PHYSICS_BUTT_UPDOWN, "mTorso", "physics_butt_updown", "physics_butt_updown_param_list", "physics_butt_tab", LLVector3d(0.f, 0.f, 0.3f), LLVector3d(0.f, 0.f, 0.f),SEX_BOTH));
+        // </FS:Ansariel>
         addEntry(SUBPART_PHYSICS_BUTT_LEFTRIGHT, new SubpartEntry(SUBPART_PHYSICS_BUTT_LEFTRIGHT, "mTorso", "physics_butt_leftright", "physics_butt_leftright_param_list", "physics_butt_leftright_tab", LLVector3d(0.f, 0.f, 0.f), LLVector3d(0.f, 0.f, 0.f),SEX_BOTH));
         addEntry(SUBPART_PHYSICS_ADVANCED, new SubpartEntry(SUBPART_PHYSICS_ADVANCED, "mTorso", "physics_advanced", "physics_advanced_param_list", "physics_advanced_tab", LLVector3d(0.f, 0.f, 0.f), LLVector3d(0.f, 0.f, 0.f),SEX_BOTH));
 }
@@ -748,10 +757,16 @@ BOOL LLPanelEditWearable::postBuild()
         // Setting the visibility callback is applied only to the bodyparts panel
         // because currently they are the only ones whose 'wearable_accordion' has
         // multiple accordion tabs (see EXT-8164 for details).
-        setWearablePanelVisibilityChangeCallback(mPanelShape);
-        setWearablePanelVisibilityChangeCallback(mPanelSkin);
-        setWearablePanelVisibilityChangeCallback(mPanelEyes);
-        setWearablePanelVisibilityChangeCallback(mPanelHair);
+        // <FS:Ansariel> Commenting out these calls fix XUI parser warnings.
+        //               While it would be easy to fix those by using the correct
+        //               widget classes, we comment it out because the LL default
+        //               behavior is to always switch to the first tab when editing
+        //               appearance which is highly annoying when fine-tuning shapes
+        //setWearablePanelVisibilityChangeCallback(mPanelShape);
+        //setWearablePanelVisibilityChangeCallback(mPanelSkin);
+        //setWearablePanelVisibilityChangeCallback(mPanelEyes);
+        //setWearablePanelVisibilityChangeCallback(mPanelHair);
+        // </FS:Ansariel>
 
         //clothes
         mPanelShirt = getChild<LLPanel>("edit_shirt_panel");
@@ -788,6 +803,9 @@ BOOL LLPanelEditWearable::postBuild()
                         continue;
                 }
                 U8 num_subparts = wearable_entry->mSubparts.size();
+
+                // <FS:Ansariel> Appearance panel not updating camera position
+                bool tab_container_cb_set = false;
         
                 for (U8 index = 0; index < num_subparts; ++index)
                 {
@@ -803,7 +821,16 @@ BOOL LLPanelEditWearable::postBuild()
         
                         const std::string accordion_tab = subpart_entry->mAccordionTab;
         
-                        LLAccordionCtrlTab *tab = getChild<LLAccordionCtrlTab>(accordion_tab);
+                        // <FS:Ansariel> Alpha and tattoo don't adhere to the usual panel layout and don't have a param list and main tab
+                        //               We can safely skip here as the wearables having no accordion tabs only have one sub-part,
+                        //               so no camera switch is needed
+                        //LLAccordionCtrlTab *tab = getChild<LLAccordionCtrlTab>(accordion_tab);
+                        if (accordion_tab.empty())
+                        {
+                            continue;
+                        }
+                        LLAccordionCtrlTab *tab = findChild<LLAccordionCtrlTab>(accordion_tab);
+                        // </FS:Ansariel>
         
                         if (!tab)
                         {
@@ -813,6 +840,19 @@ BOOL LLPanelEditWearable::postBuild()
         
                         // initialize callback to ensure camera view changes appropriately.
                         tab->setDropDownStateChangedCallback(boost::bind(&LLPanelEditWearable::onTabExpandedCollapsed,this,_2,index));
+
+                        // <FS:Ansariel> Appearance panel not updating camera position; Some skins use tabs - in this case
+                        //               set a callback on the tab container when the tab is changed to switch the camera position
+                        if (!tab_container_cb_set)
+                        {
+                            LLTabContainer* tab_container = dynamic_cast<LLTabContainer*>(tab->getParent()->getParent()->getParent());
+                            if (tab_container)
+                            {
+                                tab_container->setCommitCallback(boost::bind(&LLPanelEditWearable::onTabChanged, this, _1, type));
+                                tab_container_cb_set = true;
+                            }
+                        }
+                        // </FS:Ansariel>
                 }
 
                 // initialize texture and color picker controls
@@ -1227,6 +1267,14 @@ void LLPanelEditWearable::showWearable(LLViewerWearable* wearable, BOOL show, BO
         
                         const std::string scrolling_panel = subpart_entry->mParamList;
                         const std::string accordion_tab = subpart_entry->mAccordionTab;
+
+                        // <FS:Ansariel> Alpha and tattoo don't adhere to the usual panel layout and don't have a param list and main tab
+                        //               Since there are no sex-based differences, we can skip here
+                        if (scrolling_panel.empty() || accordion_tab.empty())
+                        {
+                            continue;
+                        }
+                        // </FS:Ansariel>
         
                         LLScrollingPanelList *panel_list = getChild<LLScrollingPanelList>(scrolling_panel);
                         LLAccordionCtrlTab *tab = getChild<LLAccordionCtrlTab>(accordion_tab);
@@ -1286,6 +1334,14 @@ void LLPanelEditWearable::showWearable(LLViewerWearable* wearable, BOOL show, BO
 
 void LLPanelEditWearable::showDefaultSubpart()
 {
+        // <FS:Ansariel> Correct camera position for last subpart
+        std::map<LLWearableType::EType, U8>::iterator found = mLastShownSubpartIndex.find(mWearablePtr->getType());
+        if (found != mLastShownSubpartIndex.end())
+        {
+            changeCamera(found->second);
+        }
+        else
+        // </FS:Ansariel>
         changeCamera(0);
 }
 
@@ -1301,10 +1357,48 @@ void LLPanelEditWearable::onTabExpandedCollapsed(const LLSD& param, U8 index)
 
         if (expanded)
         {
+                mLastShownSubpartIndex[mWearablePtr->getType()] = index; // <FS:Ansariel> Correct camera position for last subpart
                 changeCamera(index);
         }
 
 }
+
+// <FS:Ansariel> Appearance panel not updating camera position
+void LLPanelEditWearable::onTabChanged(LLUICtrl* ctrl, LLWearableType::EType type)
+{
+	LLTabContainer* container = dynamic_cast<LLTabContainer*>(ctrl);
+	if (!container)
+	{
+		return;
+	}
+
+	if (!mWearablePtr || !gAgentCamera.cameraCustomizeAvatar())
+	{
+		// we don't have a valid wearable we're editing, or we've left the wearable editor
+		return;
+	}
+
+	const LLEditWearableDictionary::WearableEntry* wearable_entry = LLEditWearableDictionary::getInstance()->getWearable(type);
+	if (!wearable_entry)
+	{
+		return;
+	}
+
+	U8 num_subparts = wearable_entry->mSubparts.size();
+	for (U8 index = 0; index < num_subparts; ++index)
+	{
+		ESubpart subpart_e = wearable_entry->mSubparts[index];
+		const LLEditWearableDictionary::SubpartEntry* subpart_entry = LLEditWearableDictionary::getInstance()->getSubpart(subpart_e);
+
+		if (subpart_entry && container->getCurrentPanel()->hasChild(subpart_entry->mAccordionTab, TRUE))
+		{
+			mLastShownSubpartIndex[type] = index; // <FS:Ansariel> Correct camera position for last subpart
+			changeCamera(index);
+			break;
+		}
+	}
+}
+// </FS:Ansariel>
 
 void LLPanelEditWearable::changeCamera(U8 subpart)
 {
@@ -1540,6 +1634,9 @@ void LLPanelEditWearable::getSortedParams(value_map_t &sorted_params, const std:
 
 void LLPanelEditWearable::buildParamList(LLScrollingPanelList *panel_list, value_map_t &sorted_params, LLAccordionCtrlTab *tab, LLJoint* jointp)
 {
+        // <FS:Ansariel> FIRE-21936: Option to disable visual hints for appearance editor
+        BOOL show_hints = gSavedSettings.getBOOL("FSAppearanceShowHints");
+
         // sorted_params is sorted according to magnitude of effect from
         // least to greatest.  Adding to the front of the child list
         // reverses that order.
@@ -1553,7 +1650,10 @@ void LLPanelEditWearable::buildParamList(LLScrollingPanelList *panel_list, value
                         p.name("LLScrollingPanelParam");
                         LLViewerWearable *wearable = this->getWearable();
                         LLScrollingPanelParamBase *panel_param = NULL;
-                        if (wearable && wearable->getType() == LLWearableType::WT_PHYSICS) // Hack to show a different panel for physics.  Should generalize this later.
+                        // <FS:Ansariel> FIRE-21936: Option to disable visual hints for appearance editor
+                        //if (wearable && wearable->getType() == LLWearableType::WT_PHYSICS) // Hack to show a different panel for physics.  Should generalize this later.
+                        if (!show_hints || (wearable && wearable->getType() == LLWearableType::WT_PHYSICS)) // Hack to show a different panel for physics.  Should generalize this later.
+                        // </FS:Ansariel>
                         {
                                 panel_param = new LLScrollingPanelParamBase( p, NULL, (*it).second, TRUE, this->getWearable(), jointp);
                         }

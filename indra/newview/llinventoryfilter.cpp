@@ -864,8 +864,11 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
 		// Cancel out UUID once the search string is modified
 		if (mFilterOps.mFilterTypes == FILTERTYPE_UUID)
 		{
-			mFilterOps.mFilterTypes &= ~FILTERTYPE_UUID;
-			mFilterOps.mFilterUUID = LLUUID::null;
+			// <FS:Ansariel> Find all links unhiding hidden empty system folders
+			//mFilterOps.mFilterTypes &= ~FILTERTYPE_UUID;
+			//mFilterOps.mFilterUUID = LLUUID::null;
+			mFilterOps = mBackupFilterOps;
+			// </FS:Ansariel>
 			setModified(FILTER_RESTART);
 		}
 	}
@@ -1088,7 +1091,7 @@ void LLInventoryFilter::setFindAllLinksMode(const std::string &search_name, cons
 {
 	// Save a copy of settings so that we will be able to restore it later
 	// but make sure we are not searching for links already
-	if(mFilterOps.mFilterLinks != FILTERLINK_ONLY_LINKS)
+	//if(mFilterOps.mFilterLinks != FILTERLINK_ONLY_LINKS) // <FS:Ansariel> Find all links unhiding hidden empty system folders
 	{
 		mBackupFilterOps = mFilterOps;
 	}

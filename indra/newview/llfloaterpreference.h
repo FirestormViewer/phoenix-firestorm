@@ -36,7 +36,6 @@
 #include "llfloater.h"
 #include "llavatarpropertiesprocessor.h"
 #include "llconversationlog.h"
-#include "lllineeditor.h" // <FS:CR>
 #include "llsearcheditor.h"
 
 namespace nd
@@ -57,6 +56,7 @@ class LLSliderCtrl;
 class LLSD;
 class LLTextBox;
 class LLComboBox;
+class LLLineEditor;
 
 typedef std::map<std::string, std::string> notifications_map;
 
@@ -150,11 +150,6 @@ protected:
 	void updateClickActionControls();
 	// <FS:PP> updates UI Sounds controls depending on values from settings.xml
 	void updateUISoundsControls();
-	
-	// <FS:Zi> Optional Edit Appearance Lighting
-	// make sure controls get greyed out or enabled when appearance camera movement is toggled
-	void onAppearanceCameraChanged();
-	// </FS:Zi> Optional Edit Appearance Lighting
 
 	//<FS:Kadah> Font Selection
 	void populateFontSelectionCombo();

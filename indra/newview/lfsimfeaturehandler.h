@@ -21,21 +21,22 @@
 #include "llsingleton.h"
 #include "llpermissions.h"	// ExportPolicy
 
-template<typename Type, typename Signal = boost::signals2::signal<void()> >
+template<typename Type, typename Signal = boost::signals2::signal<void(Type)> >
 class SignaledType
 {
 public:
 	SignaledType() : mValue() {}
 	SignaledType(Type b) : mValue(b) {}
 
-	boost::signals2::connection connect(const typename Signal::slot_type& slot) { return mSignal.connect(slot); }
+	typedef typename Signal::slot_type changed_signal_t;
+	boost::signals2::connection connect(const changed_signal_t& slot) { return mSignal.connect(slot); }
 
 	SignaledType& operator =(Type val)
 	{
 		if (val != mValue)
 		{
 			mValue = val;
-			mSignal();
+			mSignal(mValue);
 		}
 		return *this;
 	}
@@ -76,13 +77,13 @@ public:
 	// </COLOSI opensim multi-currency support>
 
 	// Connection setters
-	boost::signals2::connection setSupportsExportCallback(const boost::signals2::signal<void()>::slot_type& slot);
-	boost::signals2::connection setSearchURLCallback(const boost::signals2::signal<void()>::slot_type& slot);
-	boost::signals2::connection setSayRangeCallback(const boost::signals2::signal<void()>::slot_type& slot);
-	boost::signals2::connection setShoutRangeCallback(const boost::signals2::signal<void()>::slot_type& slot);
-	boost::signals2::connection setWhisperRangeCallback(const boost::signals2::signal<void()>::slot_type& slot);
-	boost::signals2::connection setAvatarPickerCallback(const boost::signals2::signal<void()>::slot_type& slot);
-	boost::signals2::connection setDestinationGuideCallback(const boost::signals2::signal<void()>::slot_type& slot);
+	boost::signals2::connection setSupportsExportCallback(const SignaledType<bool>::changed_signal_t& slot);
+	boost::signals2::connection setSearchURLCallback(const SignaledType<std::string>::changed_signal_t& slot);
+	boost::signals2::connection setSayRangeCallback(const SignaledType<U32>::changed_signal_t& slot);
+	boost::signals2::connection setShoutRangeCallback(const SignaledType<U32>::changed_signal_t& slot);
+	boost::signals2::connection setWhisperRangeCallback(const SignaledType<U32>::changed_signal_t& slot);
+	boost::signals2::connection setAvatarPickerCallback(const SignaledType<std::string>::changed_signal_t& slot);
+	boost::signals2::connection setDestinationGuideCallback(const SignaledType<std::string>::changed_signal_t& slot);
 
 	// Accessors
 	bool simSupportsExport() const { return mSupportsExport; }

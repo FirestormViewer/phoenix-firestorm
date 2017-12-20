@@ -217,7 +217,7 @@ private:
 	LLFilterEditor*		mSearchFilter;
 	LLSaveFolderState*	mSavedFolderState;
 	std::string			mSearchString;
-	LLButton*			mEditWearableBtn;
+	//LLButton*			mEditWearableBtn; // <FS:Ansariel> Unused as of 06-12-2017
 	LLButton*			mFolderViewBtn;
 	LLButton*			mListViewBtn;
 	LLButton*			mPlusBtn;

@@ -72,14 +72,14 @@ void LLFloaterDestinations::onOpen(const LLSD& key)
 	// region the avatar logs into as well.
 	if (!mDestinationGuideUrlChangedSignal.connected())
 	{
-		mDestinationGuideUrlChangedSignal = LFSimFeatureHandler::instance().setDestinationGuideCallback(boost::bind(&LLFloaterDestinations::handleUrlChanged, this));
+		mDestinationGuideUrlChangedSignal = LFSimFeatureHandler::instance().setDestinationGuideCallback(boost::bind(&LLFloaterDestinations::handleUrlChanged, this, _1));
 	}
 
-	handleUrlChanged();
+	handleUrlChanged(LFSimFeatureHandler::instance().destinationGuideURL());
 }
 
-void LLFloaterDestinations::handleUrlChanged()
+void LLFloaterDestinations::handleUrlChanged(const std::string& url)
 {
-	getChild<LLMediaCtrl>("destination_guide_contents")->navigateTo(LLWeb::expandURLSubstitutions(LFSimFeatureHandler::instance().destinationGuideURL(), LLSD()), HTTP_CONTENT_TEXT_HTML);
+	getChild<LLMediaCtrl>("destination_guide_contents")->navigateTo(LLWeb::expandURLSubstitutions(url, LLSD()), HTTP_CONTENT_TEXT_HTML);
 }
 // </FS:Ansariel>

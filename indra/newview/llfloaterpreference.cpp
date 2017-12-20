@@ -689,12 +689,6 @@ BOOL LLFloaterPreference::postBuild()
 	//getChild<LLComboBox>("NearbyChatOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"NearbyChatOptions"));
 	//getChild<LLComboBox>("ObjectIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"ObjectIMOptions"));
 	// </FS:CR>
-	
-	// <FS:Zi> Optional Edit Appearance Lighting
-	gSavedSettings.getControl("AppearanceCameraMovement")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAppearanceCameraChanged, this));
-	onAppearanceCameraChanged();
-	// </FS:Zi> Optional Edit Appearance Lighting
-
 
 	// if floater is opened before login set default localized do not disturb message
 	if (LLStartUp::getStartupState() < STATE_STARTED)
@@ -888,14 +882,6 @@ void LLFloaterPreference::onDoNotDisturbResponseChanged()
 	gSavedPerAccountSettings.setBOOL("FSAwayAvatarResponseChanged", away_avatar_response_changed_flag );
 	// </FS:Ansariel>
 }
-
-// <FS:Zi> Optional Edit Appearance Lighting
-void LLFloaterPreference::onAppearanceCameraChanged()
-{
-	BOOL enable = gSavedSettings.getBOOL("AppearanceCameraMovement");
-	getChild<LLCheckBoxCtrl>("EditAppearanceLighting")->setEnabled(enable);
-}
-// </FS:Zi> Optional Edit Appearance Lighting
 
 LLFloaterPreference::~LLFloaterPreference()
 {

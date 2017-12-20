@@ -536,6 +536,8 @@ void FSLSLBridge::recreateBridge()
 
 void FSLSLBridge::cleanUpPreCreation()
 {
+	LL_INFOS("FSLSLBridge") << "Starting clean up prior creation - bridge category has been loaded" << LL_ENDL;
+
 	LLInventoryModel::cat_array_t cats;
 	LLInventoryModel::item_array_t items;
 	NameCollectFunctor namefunctor(mCurrentFullName);
@@ -547,6 +549,7 @@ void FSLSLBridge::cleanUpPreCreation()
 		LLUUID item_id= (*it)->getUUID();
 		if (get_is_item_worn(item_id))
 		{
+			LL_INFOS("FSLSLBridge") << "Found worn object " << item_id << " bridge category - detaching..." << LL_ENDL;
 			mAllowedDetachables.push_back(item_id);
 			LLVOAvatarSelf::detachAttachmentIntoInventory(item_id);
 		}
@@ -556,7 +559,12 @@ void FSLSLBridge::cleanUpPreCreation()
 	// any attachments we need to wait for until they got detached
 	if (mAllowedDetachables.size() == 0)
 	{
+		LL_INFOS("FSLSLBridge") << "Not waiting for any objects to get detached. Starting pre-creation cleanup immediately" << LL_ENDL;
 		finishCleanUpPreCreation();
+	}
+	else
+	{
+		LL_INFOS("FSLSLBridge") << "Waiting for any objects to get detached. Pre-creation cleanup will start after objects got detached" << LL_ENDL;
 	}
 }
 
@@ -564,6 +572,8 @@ void FSLSLBridge::cleanUpPreCreation()
 // after all pending detachments have been processed
 void FSLSLBridge::finishCleanUpPreCreation()
 {
+	LL_INFOS("FSLSLBridge") << "Finishing cleanup prior creation" << LL_ENDL;
+
 	LLInventoryModel::cat_array_t cats;
 	LLInventoryModel::item_array_t items;
 	NameCollectFunctor namefunctor(mCurrentFullName);
@@ -571,13 +581,14 @@ void FSLSLBridge::finishCleanUpPreCreation()
 
 	for (LLInventoryModel::item_array_t::iterator it = items.begin(); it != items.end(); ++it)
 	{
-		remove_inventory_object((*it)->getUUID(), NULL);
+		LL_INFOS("FSLSLBridge") << "Bridge folder cleanup: Deleting " << (*it)->getName() << " (" << (*it)->getUUID() << ")" << LL_ENDL;
+		remove_inventory_item((*it)->getUUID(), NULL, true); // Don't wait for callback from server to update inventory model
 	}
 	gInventory.notifyObservers();
 
 	// clear the stored bridge ID - we are starting over.
 	mpBridge = NULL; //the object itself will get cleaned up when new one is created.
-	mCurrentURL = "";
+	mCurrentURL.clear();
 
 	setBridgeCreating(true);
 	mFinishCreation = false;
@@ -755,6 +766,8 @@ void FSLSLBridge::processAttach(LLViewerObject* object, const LLViewerJointAttac
 
 	if (!mpBridge) //user is attaching an existing bridge?
 	{
+		LL_INFOS("FSLSLBridge") << "mpBridge is NULL" << LL_ENDL;
+
 		//is it the right version?
 		if (fsObject->getName() != mCurrentFullName)
 		{
@@ -787,8 +800,7 @@ void FSLSLBridge::processAttach(LLViewerObject* object, const LLViewerJointAttac
 		mpBridge = fsObject;
 	}
 
-	LL_DEBUGS("FSLSLBridge") << "Bridge container is attached, mpBridge not NULL, avatar is self, point is bridge, all is good." << LL_ENDL;
-
+	LL_INFOS("FSLSLBridge") << "Bridge container is attached, mpBridge not NULL, avatar is self, point is bridge, all is good." << LL_ENDL;
 
 	if (fsObject->getUUID() != mpBridge->getUUID())
 	{
@@ -1228,7 +1240,7 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 	
 		FSLSLBridge::instance().cleanUpBridge();
 		//also clean up script remains
-		remove_inventory_object(item->getUUID(), NULL);
+		remove_inventory_item(item->getUUID(), NULL, true);
 		gInventory.notifyObservers();
 		LL_WARNS("FSLSLBridge") << "Can't update bridge script. Purging bridge." << LL_ENDL;
 		return;
@@ -1331,7 +1343,7 @@ void FSLSLBridge::cleanUpBridge()
 
 	if (isBridgeValid())
 	{
-		remove_inventory_object(mpBridge->getUUID(), NULL);
+		remove_inventory_item(mpBridge->getUUID(), NULL, true);
 	}
 
 	gInventory.notifyObservers();
@@ -1348,10 +1360,18 @@ void FSLSLBridge::finishBridge()
 	mIsFirstCallDone = false;
 	cleanUpOldVersions();
 	cleanUpBridgeFolder();
+	LL_INFOS("FSLSLBridge") << "Bridge cleaned up. Detaching bridge" << LL_ENDL;
 
 	mAllowDetach = true;
 	mFinishCreation = true;
-	LLVOAvatarSelf::detachAttachmentIntoInventory(getBridge()->getUUID());
+	if (getBridge())
+	{
+		LLVOAvatarSelf::detachAttachmentIntoInventory(getBridge()->getUUID());
+	}
+	else
+	{
+		LL_WARNS("FSLSLBridge") << "Cannot detach bridge - mpBridge = NULL" << LL_ENDL;
+	}
 }
 
 //
@@ -1507,7 +1527,8 @@ void FSLSLBridge::cleanUpBridgeFolder(const std::string& nameToCleanUp)
 		const LLViewerInventoryItem* itemp = *it;
 		if (!itemp->getIsLinkType() && (itemp->getUUID() != mpBridge->getUUID()))
 		{
-			remove_inventory_object(itemp->getUUID(), NULL);
+			LL_INFOS("FSLSLBridge") << "Bridge folder cleanup: Deleting " << itemp->getName() << " (" << itemp->getUUID() << ")" << LL_ENDL;
+			remove_inventory_item(itemp->getUUID(), NULL, true);
 		}
 	}
 

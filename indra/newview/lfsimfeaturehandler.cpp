@@ -26,6 +26,7 @@
 #include "llviewerregion.h"
 
 // <COLOSI opensim multi-currency support>
+#include "llnotificationsutil.h"
 #include "tea.h"
 #include "llstatusbar.h"
 #include "llfloaterbuycurrency.h"
@@ -169,6 +170,10 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			// <COLOSI opensim multi-currency support>
 			if (extras.has("currency-base-uri"))
 			{
+				if (mHelperUriOverride != extras["currency-base-uri"].asString())
+				{
+					LLNotificationsUtil::add("CurrencyURIOverrideReceived");
+				}
 				mHelperUriOverride = extras["currency-base-uri"].asString();
 			}
 			else
@@ -271,37 +276,37 @@ void LFSimFeatureHandler::updateCurrencySymbols()
 }
 // </COLOSI opensim multi-currency support>
 
-boost::signals2::connection LFSimFeatureHandler::setSupportsExportCallback(const boost::signals2::signal<void()>::slot_type& slot)
+boost::signals2::connection LFSimFeatureHandler::setSupportsExportCallback(const SignaledType<bool>::changed_signal_t& slot)
 {
 	return mSupportsExport.connect(slot);
 }
 
-boost::signals2::connection LFSimFeatureHandler::setSearchURLCallback(const boost::signals2::signal<void()>::slot_type& slot)
+boost::signals2::connection LFSimFeatureHandler::setSearchURLCallback(const SignaledType<std::string>::changed_signal_t& slot)
 {
 	return mSearchURL.connect(slot);
 }
 
-boost::signals2::connection LFSimFeatureHandler::setSayRangeCallback(const boost::signals2::signal<void()>::slot_type& slot)
+boost::signals2::connection LFSimFeatureHandler::setSayRangeCallback(const SignaledType<U32>::changed_signal_t& slot)
 {
 	return mSayRange.connect(slot);
 }
 
-boost::signals2::connection LFSimFeatureHandler::setShoutRangeCallback(const boost::signals2::signal<void()>::slot_type& slot)
+boost::signals2::connection LFSimFeatureHandler::setShoutRangeCallback(const SignaledType<U32>::changed_signal_t& slot)
 {
 	return mShoutRange.connect(slot);
 }
 
-boost::signals2::connection LFSimFeatureHandler::setWhisperRangeCallback(const boost::signals2::signal<void()>::slot_type& slot)
+boost::signals2::connection LFSimFeatureHandler::setWhisperRangeCallback(const SignaledType<U32>::changed_signal_t& slot)
 {
 	return mWhisperRange.connect(slot);
 }
 
-boost::signals2::connection LFSimFeatureHandler::setAvatarPickerCallback(const boost::signals2::signal<void()>::slot_type& slot)
+boost::signals2::connection LFSimFeatureHandler::setAvatarPickerCallback(const SignaledType<std::string>::changed_signal_t& slot)
 {
 	return mAvatarPickerURL.connect(slot);
 }
 
-boost::signals2::connection LFSimFeatureHandler::setDestinationGuideCallback(const boost::signals2::signal<void()>::slot_type& slot)
+boost::signals2::connection LFSimFeatureHandler::setDestinationGuideCallback(const SignaledType<std::string>::changed_signal_t& slot)
 {
 	return mDestinationGuideURL.connect(slot);
 }

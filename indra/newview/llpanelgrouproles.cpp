@@ -3099,7 +3099,8 @@ BOOL LLPanelGroupBanListSubTab::postBuildSubTab(LLView* root)
 	// <FS:Ansariel> Fix Baker's NameListCtrl un-fix
 	//mBanList->setOnNameListCompleteCallback(boost::bind(&LLPanelGroupBanListSubTab::onBanListCompleted, this, _1));
 	
-	populateBanList();
+	// <FS:Ansariel> Don't do this - it will cause populateBanList() being called twice because activate() is being called when switching to a tab, also calling populateBanList()
+	//populateBanList();
 
 	setFooterEnabled(FALSE);
 	return TRUE;

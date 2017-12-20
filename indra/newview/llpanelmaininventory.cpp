@@ -510,6 +510,7 @@ void LLPanelMainInventory::resetFilters()
 	filter.setSearchType(LLInventoryFilter::SEARCHTYPE_NAME);
 	filter.setFilterTransferable(FALSE);
 	getActivePanel()->updateShowInboxFolder(gSavedSettings.getBOOL("FSShowInboxFolder"));
+	getActivePanel()->updateHideEmptySystemFolders(gSavedSettings.getBOOL("DebugHideEmptySystemFolders"));
 	updateFilterDropdown(&filter);
 	// </FS:Ansariel>
 	if (finder)
@@ -820,6 +821,8 @@ void LLPanelMainInventory::onFilterTypeSelected(const std::string& filter_type_n
 	{
 		finder->updateElementsFromFilter();
 	}
+
+	setFilterTextFromFilter();
 }
 
 // reflect state of current filter selection in the dropdown list

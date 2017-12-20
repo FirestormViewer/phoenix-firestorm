@@ -101,6 +101,7 @@
 // </FS:Zi>
 #include "fsfloaterplacedetails.h"
 #include "llviewerattachmenu.h"
+#include "llresmgr.h"
 
 #include <boost/shared_ptr.hpp>
 
@@ -2443,10 +2444,39 @@ std::string LLFolderBridge::getLabelSuffix() const
     
     if (mIsLoading && mTimeSinceRequestStart.getElapsedTimeF32() >= folder_loading_message_delay())
     {
-        return llformat(" ( %s ) ", LLTrans::getString("LoadingData").c_str());
+        return llformat(" (%s) ", LLTrans::getString("LoadingData").c_str());
     }
-    
-    return LLInvFVBridge::getLabelSuffix();
+    std::string suffix = "";
+    if(mShowDescendantsCount)
+    {
+        LLInventoryModel::cat_array_t cat_array;
+        LLInventoryModel::item_array_t item_array;
+        gInventory.collectDescendents(getUUID(), cat_array, item_array, TRUE);
+        // <FS:Ansariel> Fix item count formatting
+        //S32 count = item_array.size();
+        //if(count > 0)
+        //{
+        //    std::ostringstream oss;
+        //    oss << count;
+        //    LLStringUtil::format_map_t args;
+        //    args["[ITEMS_COUNT]"] = oss.str();
+        //    suffix = " " + LLTrans::getString("InventoryItemsCount", args);
+        //}
+        if (cat_array.size() > 0 || item_array.size() > 0)
+        {
+            LLLocale locale("");
+            LLStringUtil::format_map_t args;
+            std::string count_str;
+            LLResMgr::getInstance()->getIntegerString(count_str, item_array.size());
+            args["ITEMS"] = count_str;
+            LLResMgr::getInstance()->getIntegerString(count_str, cat_array.size());
+            args["CATEGORIES"] = count_str;
+            suffix = " " + LLTrans::getString("InventoryItemsCount", args);
+        }
+        // </FS:Ansariel>
+    }
+
+    return LLInvFVBridge::getLabelSuffix() + suffix;
 }
 
 LLFontGL::StyleFlags LLFolderBridge::getLabelStyle() const
@@ -4878,7 +4908,7 @@ std::string LLMarketplaceFolderBridge::getLabelSuffix() const
     
     if (mIsLoading && mTimeSinceRequestStart.getElapsedTimeF32() >= folder_loading_message_delay())
     {
-        return llformat(" ( %s ) ", LLTrans::getString("LoadingData").c_str());
+        return llformat(" (%s) ", LLTrans::getString("LoadingData").c_str());
     }
     
     std::string suffix = "";
