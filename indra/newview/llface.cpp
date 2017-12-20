@@ -360,34 +360,6 @@ void LLFace::dirtyTexture()
 	gPipeline.markTextured(drawablep);
 }
 
-void LLFace::notifyAboutCreatingTexture(LLViewerTexture *texture)
-{
-	LLDrawable* drawablep = getDrawable();
-	if(mVObjp.notNull() && mVObjp->getVolume())
-	{
-		LLVOVolume *vobj = drawablep->getVOVolume();
-		if(vobj && vobj->notifyAboutCreatingTexture(texture))
-		{
-			gPipeline.markTextured(drawablep);
-			gPipeline.markRebuild(drawablep, LLDrawable::REBUILD_VOLUME);
-		}
-	}
-}
-
-void LLFace::notifyAboutMissingAsset(LLViewerTexture *texture)
-{
-	LLDrawable* drawablep = getDrawable();
-	if(mVObjp.notNull() && mVObjp->getVolume())
-	{
-		LLVOVolume *vobj = drawablep->getVOVolume();
-		if(vobj && vobj->notifyAboutMissingAsset(texture))
-		{
-			gPipeline.markTextured(drawablep);
-			gPipeline.markRebuild(drawablep, LLDrawable::REBUILD_VOLUME);
-		}
-	}
-}
-
 void LLFace::switchTexture(U32 ch, LLViewerTexture* new_texture)
 {
 	llassert(ch < LLRender::NUM_TEXTURE_CHANNELS);
@@ -1132,7 +1104,7 @@ bool LLFace::canRenderAsMask()
 	}
 
 	LLMaterial* mat = te->getMaterialParams();
-	if (mat && !mat->isDiffuseAlphaInvalid() && mat->getDiffuseAlphaMode() == LLMaterial::DIFFUSE_ALPHA_MODE_BLEND)
+	if (mat && mat->getDiffuseAlphaMode() == LLMaterial::DIFFUSE_ALPHA_MODE_BLEND)
 	{
 		return false;
 	}
@@ -1392,14 +1364,14 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			
 			if (LLPipeline::sRenderDeferred)
 			{ //store shiny in alpha if we don't have a specular map
-				if  (!mat || mat->getSpecularID().isNull() || mat->isSpecularInvalid())
+				if  (!mat || mat->getSpecularID().isNull())
 				{
 					shiny_in_alpha = true;
 				}
 			}
 			else
 			{
-				if (!mat || mat->getDiffuseAlphaMode() != LLMaterial::DIFFUSE_ALPHA_MODE_MASK || mat->isDiffuseAlphaInvalid())
+				if (!mat || mat->getDiffuseAlphaMode() != LLMaterial::DIFFUSE_ALPHA_MODE_MASK)
 				{
 					shiny_in_alpha = true;
 				}
@@ -1899,7 +1871,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 				std::vector<LLVector2> bump_tc;
 		
-				if (mat && !(mat->getNormalID().isNull() || mat->isNormalInvalid()))
+				if (mat && !mat->getNormalID().isNull())
 				{ //writing out normal and specular texture coordinates, not bump offsets
 					do_bump = false;
 				}
