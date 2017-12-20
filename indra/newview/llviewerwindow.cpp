@@ -1481,7 +1481,12 @@ BOOL LLViewerWindow::handleTranslatedKeyDown(KEY key,  MASK mask, BOOL repeated)
 {
 	// Let the voice chat code check for its PTT key.  Note that this never affects event processing.
 	LLVoiceClient::getInstance()->keyDown(key, mask);
-	
+
+	if (gAwayTimer.getElapsedTimeF32() > LLAgent::MIN_AFK_TIME)
+	{
+		gAgent.clearAFK();
+	}
+
 	// *NOTE: We want to interpret KEY_RETURN later when it arrives as
 	// a Unicode char, not as a keydown.  Otherwise when client frame
 	// rate is really low, hitting return sends your chat text before
@@ -1495,13 +1500,7 @@ BOOL LLViewerWindow::handleTranslatedKeyDown(KEY key,  MASK mask, BOOL repeated)
     		return FALSE;
 	}
 
-	BOOL handled = gViewerKeyboard.handleKey(key, mask, repeated);
-	if (!handled || (gAwayTimer.getElapsedTimeF32() > LLAgent::MIN_AFK_TIME))
-	{
-		gAgent.clearAFK();
-	}
-
-	return handled;
+	return gViewerKeyboard.handleKey(key, mask, repeated);
 }
 
 BOOL LLViewerWindow::handleTranslatedKeyUp(KEY key,  MASK mask)
@@ -2117,7 +2116,11 @@ void LLViewerWindow::initBase()
 	// (But wait to add it as a child of the root view so that it will be in front of the 
 	// other views.)
 	MainPanel* main_view = new MainPanel();
-	main_view->buildFromFile("main_view.xml");
+	if (!main_view->buildFromFile("main_view.xml"))
+	{
+		LL_ERRS() << "Failed to initialize viewer: Viewer couldn't process file main_view.xml, "
+				<< "if this problem happens again, please validate your installation." << LL_ENDL;
+	}
 	main_view->setShape(full_window);
 	getRootView()->addChild(main_view);
 
@@ -5707,7 +5710,8 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 	//	err = LLFile::stat( filepath, &stat_info );
 	//	i++;
 	//}
-	//while( -1 != err );  // search until the file is not found (i.e., stat() gives an error).
+	//while( -1 != err  // Search until the file is not found (i.e., stat() gives an error).
+	//		&& is_snapshot_name_loc_set); // Or stop if we are rewriting.
 
 	//LL_INFOS() << "Saving snapshot to " << filepath << LL_ENDL;
 	//return image->save(filepath);

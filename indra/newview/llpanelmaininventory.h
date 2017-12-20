@@ -160,7 +160,7 @@ private:
 
 	LLFilterEditor*				mFilterEditor;
 	LLTabContainer*				mFilterTabs;
-    LLUICtrl*                   mCounterCtrl;
+	LLUICtrl*					mCounterCtrl;
 	LLHandle<LLFloater>			mFinderHandle;
 	LLInventoryPanel*			mActivePanel;
 	LLInventoryPanel*			mWornItemsPanel;
@@ -169,7 +169,9 @@ private:
 	std::string					mFilterText;
 	std::string					mFilterSubString;
 	S32							mItemCount;
-	std::string 				mItemCountString;
+	std::string					mItemCountString;
+	S32							mCategoryCount;
+	std::string					mCategoryCountString;
 	LLComboBox*					mSearchTypeCombo;
 
 	// <FS:Zi> Filter dropdown

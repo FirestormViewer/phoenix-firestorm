@@ -867,6 +867,10 @@ void reset_inventory_filter()
 		LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
 		if (main_inventory)
 		{
+			// <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
+			main_inventory->showAllItemsPanel();
+			main_inventory->resetFilters();
+			// </FS:Ansariel>
 			main_inventory->onFilterEdit("");
 		}
 	}
