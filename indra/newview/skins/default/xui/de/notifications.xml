@@ -4325,6 +4325,9 @@ Sie ist voll oder startet in Kürze neu.
 	<notification name="CantCreateObjectRegionFull">
 		Angefordertes Objekt kann nicht erstellt werden. Die Region ist voll.
 	</notification>
+	<notification name="CantCreateAnimatedObjectTooLarge">
+		Angefordertes animiertes Objekt kann nicht erstellt werden, da es die Größenbeschränkung übersteigt.
+	</notification>
 	<notification name="CantAttackMultipleObjOneSpot">
 		Sie können nicht mehrere Objekte an ein und derselben Stelle anhängen.
 	</notification>
