@@ -773,7 +773,7 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="InventoryMarketplaceListingsNoItems">
         Drag folders to this area to list them for sale on the [[MARKETPLACE_DASHBOARD_URL] Marketplace].
 	</string>
-
+	<string name="InventoryItemsCount">([ITEMS]/[CATEGORIES] Elements)</string>
 	<string name="Marketplace Validation Log"></string>
 	<string name="Marketplace Validation Warning Stock">stock folder must be contained by a version folder</string>
 	<string name="Marketplace Validation Error Mixed Stock">: Error: all items in a stock folder must be no-copy and of the same type</string>
@@ -3068,6 +3068,7 @@ Try enclosing path to the editor with double quotes.
   <string name="font_fonts_dyslexia.xml">OpenDyslexic</string>
   <string name="font_fonts_deja_vu_all_caps.xml">Deja Vu All Caps</string>
   <string name="font_fonts_noto.xml">Noto Sans</string>
+  <string name="font_fonts_celestia_medium_redux.xml">Celestia Medium Redux</string>
   <string name="mode_unknown">Unknown Mode</string>
   <string name="mode_settings_firestorm.xml">Firestorm</string>
   <string name="mode_settings_phoenix.xml">Phoenix</string>
