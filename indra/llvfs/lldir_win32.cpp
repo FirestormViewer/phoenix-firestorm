@@ -32,6 +32,12 @@
 #include "llerror.h"
 #include "llrand.h"		// for gLindenLabRandomNumber
 #include <shlobj.h>
+// <FS:Ansariel> Remove VMP
+#include <Knownfolders.h>
+#include <iostream>
+#include <map>
+#include <Objbase.h>                // CoTaskMemFree()
+// </FS:Ansariel> Remove VMP
 #include <fstream>
 
 #include <direct.h>
@@ -43,6 +49,43 @@
 #define PACKVERSION(major,minor) MAKELONG(minor,major)
 DWORD GetDllVersion(LPCTSTR lpszDllName);
 
+// <FS:Ansariel> Remove VMP
+namespace {
+
+std::string getKnownFolderPath(const std::string& desc, REFKNOWNFOLDERID folderid)
+{
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/bb762188(v=vs.85).aspx
+    PWSTR wstrptr = 0;
+    HRESULT result = SHGetKnownFolderPath(
+        folderid,
+        KF_FLAG_DEFAULT,            // no flags
+        NULL,                       // current user, no impersonation
+        &wstrptr);
+    if (result == S_OK)
+    {
+        std::string utf8 = utf16str_to_utf8str(llutf16string(wstrptr));
+        // have to free the returned pointer after copying its data
+        CoTaskMemFree(wstrptr);
+        return utf8;
+    }
+
+    // gack, no logging yet!
+    // at least say something to a developer trying to debug this...
+    static std::map<HRESULT, const char*> codes
+    {
+        { E_FAIL, "E_FAIL; known folder does not have a path?" },
+        { E_INVALIDARG, "E_INVALIDARG; not present on system?" }
+    };
+    auto found = codes.find(result);
+    const char* text = (found == codes.end())? "unknown" : found->second;
+    std::cout << "*** SHGetKnownFolderPath(" << desc << ") failed with "
+              << result << " (" << text << ")\n";
+    return {};
+}
+
+} // anonymous namespace
+// </FS:Ansariel> Remove VMP
+
 LLDir_Win32::LLDir_Win32()
 {
 	// set this first: used by append() and add() methods
@@ -51,7 +94,10 @@ LLDir_Win32::LLDir_Win32()
 	// Application Data is where user settings go. We rely on $APPDATA being
 	// correct; in fact the VMP makes a point of setting it properly, since
 	// Windows itself botches the job for non-ASCII usernames (MAINT-8087).
-	mOSUserDir = ll_safe_string(getenv("APPDATA"));
+	// <FS:Ansariel> Remove VMP
+	//mOSUserDir = ll_safe_string(getenv("APPDATA"));
+	mOSUserDir = getKnownFolderPath("RoamingAppData", FOLDERID_RoamingAppData);
+	// </FS:Ansariel> Remove VMP
 
 	// We want cache files to go on the local disk, even if the
 	// user is on a network with a "roaming profile".
@@ -61,7 +107,10 @@ LLDir_Win32::LLDir_Win32()
 	//
 	// We used to store the cache in AppData\Roaming, and the installer
 	// cleans up that version on upgrade.  JC
-	mOSCacheDir = ll_safe_string(getenv("LOCALAPPDATA"));
+	// <FS:Ansariel> Remove VMP
+	//mOSCacheDir = ll_safe_string(getenv("LOCALAPPDATA"));
+	mOSCacheDir = getKnownFolderPath("LocalAppData", FOLDERID_LocalAppData);
+	// </FS:Ansariel> Remove VMP
 
 	WCHAR w_str[MAX_PATH];
 	if (GetTempPath(MAX_PATH, w_str))
