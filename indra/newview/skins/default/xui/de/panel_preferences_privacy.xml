@@ -22,6 +22,7 @@
 			<check_box label="Zeige meine Profilinformationen in den Suchergebnissen" name="online_searchresults"/>
 			<check_box label="Nur Freunde und Gruppen wissen, dass ich online bin" name="online_visibility"/>
 			<check_box label="Nur Freunde und Gruppen können mich anrufen oder mir eine IM schicken" name="voice_call_friends_only_check"/>
+			<check_box label="Einladungen für bereits beigetretene Gruppen anzeigen" name="FSShowJoinedGroupInvitations"/>
 			<check_box label="Mikrofon ausschalten, wenn Anrufe beendet werden" name="auto_disengage_mic_check"/>
 			<check_box label="Objekten erlauben, die aktuelle Spracheinstellung abzufragen" name="LanguageIsPublic"/>
 			<check_box label="Automatisches Akzeptieren von Inventar-Angeboten" name="Auto_Accept_New_Inventory"/>

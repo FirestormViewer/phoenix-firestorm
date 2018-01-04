@@ -41,7 +41,7 @@ private:
 
 	// <FS:Ansariel> Avatar chooser does not change between OpenSim grids
 	/*virtual*/ void onOpen(const LLSD& key);
-	void handleUrlChanged();
+	void handleUrlChanged(const std::string& url);
 
 	boost::signals2::connection mAvatarPickerUrlChangedSignal;
 	// </FS:Ansariel>

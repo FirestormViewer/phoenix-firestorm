@@ -43,6 +43,7 @@
 #include "boost/make_shared.hpp"
 
 #include "llsdutil.h" // <FS:ND/> for ll_pretty_print_sd
+#include "llviewernetwork.h"
 
 namespace LLEventPolling
 {
@@ -103,8 +104,13 @@ namespace Details
         mHttpPolicy = app_core_http.getPolicy(LLAppCoreHttp::AP_LONG_POLL);
         // <FS:Ansariel> Restore pre-coro behavior (60s timeout, no retries)
         mHttpOptions = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
-        mHttpOptions->setRetries(0);
-        mHttpOptions->setTransferTimeout(60);
+#ifdef OPENSIM
+        if (LLGridManager::instance().isInOpenSim())
+        {
+            mHttpOptions->setRetries(0);
+            mHttpOptions->setTransferTimeout(60);
+        }
+#endif
         // </FS:Ansariel>
         mSenderIp = sender.getIPandPort();
     }
@@ -197,13 +203,15 @@ namespace Details
                     continue;
                 }
                 // <FS:Ansariel> Restore pre-coro behavior (60s timeout, no retries)
-                else if (status == LLCore::HttpStatus(HTTP_BAD_GATEWAY))
+#ifdef OPENSIM
+                else if (status == LLCore::HttpStatus(HTTP_BAD_GATEWAY) && LLGridManager::instance().isInOpenSim())
                 {   // Pre-coro says this is the default answer for timeouts and it can happen
                     // frequently on OpenSim - assume this is normal and issue a new request immediately
                     LL_DEBUGS("LLEventPollImpl") << "Received HTTP 502 - start new request." << LL_ENDL;
                     errorCount = 0;
                     continue;
                 }
+#endif
                 // </FS:Ansariel>
                 else if ((status == LLCore::HttpStatus(LLCore::HttpStatus::LLCORE, LLCore::HE_OP_CANCELED)) || 
                         (status == LLCore::HttpStatus(HTTP_NOT_FOUND)))

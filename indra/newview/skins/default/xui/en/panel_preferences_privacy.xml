@@ -102,6 +102,14 @@
     top_pad="3"
     width="350" />
    <check_box
+    control_name="FSShowJoinedGroupInvitations"
+    height="16"
+    label="Show invitations for already joined groups"
+    layout="topleft"
+    name="FSShowJoinedGroupInvitations"
+    top_pad="3"
+    width="350" />
+   <check_box
     enabled_control="EnableVoiceChat"
     control_name="AutoDisengageMic"
     height="16"

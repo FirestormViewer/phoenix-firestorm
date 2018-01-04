@@ -13,8 +13,10 @@ Wierzchołki: [NUM_VERTICES]
 Trójkąty: [NUM_TRIANGLES]
 
 Tekstury: [NUM_TEXTURES]
-VRAM tekstur: [TEXTURE_MEMORY] KB
-VRAM łącznie: [VRAM_USAGE] KB
+VRAM tekstur:
+[TEXTURE_MEMORY] KB
+VRAM łącznie:
+[VRAM_USAGE] KB
 	</floater.string>
 	<text_editor name="linksetstats_text" value="(ładowanie...)"/>
 	<scroll_list name="object_list" tool_tip="Wybierz obiekt z tej listy, aby podświetlić go w świecie">

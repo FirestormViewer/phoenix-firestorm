@@ -608,6 +608,7 @@ void LLInventoryPanel::modelChanged(U32 mask)
 				{
 					setSelection(item_id, FALSE);
 				}
+				updateFolderLabel(model_item->getParentUUID());
 			}
 
 			//////////////////////////////
@@ -619,6 +620,7 @@ void LLInventoryPanel::modelChanged(U32 mask)
 				// Don't process the item if it is the root
 				if (old_parent)
 				{
+					LLFolderViewModelItemInventory* viewmodel_folder = static_cast<LLFolderViewModelItemInventory*>(old_parent->getViewModelItem());
 					LLFolderViewFolder* new_parent =   (LLFolderViewFolder*)getItemByID(model_item->getParentUUID());
 					// Item has been moved.
 					if (old_parent != new_parent)
@@ -636,6 +638,7 @@ void LLInventoryPanel::modelChanged(U32 mask)
 									setSelection(item_id, FALSE);
 								}
 							}
+							updateFolderLabel(model_item->getParentUUID());
 						}
 						else 
 						{
@@ -646,6 +649,10 @@ void LLInventoryPanel::modelChanged(U32 mask)
 							// Item is to be moved outside the panel's directory (e.g. moved to trash for a panel that 
 							// doesn't include trash).  Just remove the item's UI.
 							view_item->destroyView();
+						}
+						if(viewmodel_folder)
+						{
+							updateFolderLabel(viewmodel_folder->getUUID());
 						}
 						old_parent->getViewModelItem()->dirtyDescendantsFilter();
 					}
@@ -664,6 +671,11 @@ void LLInventoryPanel::modelChanged(U32 mask)
 				if(parent)
 				{
 					parent->getViewModelItem()->dirtyDescendantsFilter();
+					LLFolderViewModelItemInventory* viewmodel_folder = static_cast<LLFolderViewModelItemInventory*>(parent->getViewModelItem());
+					if(viewmodel_folder)
+					{
+						updateFolderLabel(viewmodel_folder->getUUID());
+					}
 				}
 			}
 		}
@@ -1075,6 +1087,17 @@ BOOL LLInventoryPanel::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 		{
 			mFolderRoot.get()->setDragAndDropThisFrame();
 		}
+
+		// <FS:Ansariel> FIRE-18014: Inventory window "loses" focus during drag&drop
+		if (drop)
+		{
+			LLFloater* root_floater = getParentByType<LLFloater>();
+			if (root_floater)
+			{
+				root_floater->setTransparencyType(LLUICtrl::TT_ACTIVE);
+			}
+		}
+		// </FS:Ansariel>
 	}
 
 	return handled;
@@ -1169,6 +1192,73 @@ void LLInventoryPanel::onSelectionChange(const std::deque<LLFolderViewItem*>& it
 		if (items.size()) // new asset is visible and selected
 		{
 			fv->startRenamingSelectedItem();
+		}
+	}
+
+	std::set<LLFolderViewItem*> selected_items = mFolderRoot.get()->getSelectionList();
+	LLFolderViewItem* prev_folder_item = getItemByID(mPreviousSelectedFolder);
+
+	if (selected_items.size() == 1)
+	{
+		std::set<LLFolderViewItem*>::const_iterator iter = selected_items.begin();
+		LLFolderViewItem* folder_item = (*iter);
+		if(folder_item && (folder_item != prev_folder_item))
+		{
+			LLFolderViewModelItemInventory* fve_listener = static_cast<LLFolderViewModelItemInventory*>(folder_item->getViewModelItem());
+			if (fve_listener && (fve_listener->getInventoryType() == LLInventoryType::IT_CATEGORY))
+			{
+				if(prev_folder_item)
+				{
+					LLFolderBridge* prev_bridge = (LLFolderBridge*)prev_folder_item->getViewModelItem();
+					if(prev_bridge)
+					{
+						prev_bridge->clearDisplayName();
+						prev_bridge->setShowDescendantsCount(false);
+						prev_folder_item->refresh();
+					}
+				}
+
+				LLFolderBridge* bridge = (LLFolderBridge*)folder_item->getViewModelItem();
+				if(bridge)
+				{
+					bridge->clearDisplayName();
+					bridge->setShowDescendantsCount(true);
+					folder_item->refresh();
+					mPreviousSelectedFolder = bridge->getUUID();
+				}
+			}
+		}
+	}
+	else
+	{
+		if(prev_folder_item)
+		{
+			LLFolderBridge* prev_bridge = (LLFolderBridge*)prev_folder_item->getViewModelItem();
+			if(prev_bridge)
+			{
+				prev_bridge->clearDisplayName();
+				prev_bridge->setShowDescendantsCount(false);
+				prev_folder_item->refresh();
+			}
+		}
+		mPreviousSelectedFolder = LLUUID();
+	}
+
+}
+
+void LLInventoryPanel::updateFolderLabel(const LLUUID& folder_id)
+{
+	if(folder_id != mPreviousSelectedFolder) return;
+
+	LLFolderViewItem* folder_item = getItemByID(mPreviousSelectedFolder);
+	if(folder_item)
+	{
+		LLFolderBridge* bridge = (LLFolderBridge*)folder_item->getViewModelItem();
+		if(bridge)
+		{
+			bridge->clearDisplayName();
+			bridge->setShowDescendantsCount(true);
+			folder_item->refresh();
 		}
 	}
 }

@@ -14,6 +14,7 @@
 			<check_box label="Budowanie/Edycja" name="edit_camera_movement" tool_tip="Używaj automatycznego pozycjonowania kamery podczas włączania i wyłączania trybu edycji."/>
 			<check_box label="Wygląd" name="appearance_camera_movement" tool_tip="Używaj automatycznego pozycjonowania kamery podczas trybu edycji wyglądu."/>
 			<check_box label="Dodawaj dodatkowe oświetlenie" name="EditAppearanceLighting" tool_tip="Włącz lub wyłącz dodatkowe oświetlenie, gdy edytujesz wygląd."/>
+			<check_box label="Pokazuj wskazówki wizualne" name="FSAppearanceShowHints" tool_tip="Włącz lub wyłącz wskazówki wizualne pokazujące które sekcje awatara są modyfikowane." />
 			<check_box label="Nie resetuj kamery, gdy kliknę na swojego awatara" name="clickonavatarkeepscamera" tool_tip="Normalnie gdy klikniesz na swojego awatara pozycja kamery ulega zresetowaniu. Ta opcja usuwa to zachowanie."/>
 			<check_box label="Resetowanie pozycji kamery po teleportacji (wewnątrz regionu)" name="FSResetCameraOnTP" tool_tip="Normalnie pozycja kamery ulega zresetowaniu po teleportacji. Ta opcja zapobiega temu zachowaniu."/>
 			<check_box label="Resetowanie pozycji kamery przy poruszaniu się awatarem" name="FSResetCameraOnMovement"/>

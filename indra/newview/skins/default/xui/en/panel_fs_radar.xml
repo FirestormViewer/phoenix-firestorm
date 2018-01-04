@@ -189,7 +189,7 @@
 							<radar_list.columns
 							 label=""
 							 name="in_region"
-							 tool_tip="Is in the same region"
+							 tool_tip="Is in the same region (green) or on the same parcel (green/yellow)"
 							 width="15"/>
 							<radar_list.columns
 							 label=""

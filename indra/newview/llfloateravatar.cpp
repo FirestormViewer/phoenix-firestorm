@@ -80,13 +80,13 @@ void LLFloaterAvatar::onOpen(const LLSD& key)
 	// region the avatar logs into as well.
 	if (!mAvatarPickerUrlChangedSignal.connected())
 	{
-		mAvatarPickerUrlChangedSignal = LFSimFeatureHandler::instance().setAvatarPickerCallback(boost::bind(&LLFloaterAvatar::handleUrlChanged, this));
+		mAvatarPickerUrlChangedSignal = LFSimFeatureHandler::instance().setAvatarPickerCallback(boost::bind(&LLFloaterAvatar::handleUrlChanged, this, _1));
 	}
 }
 
-void LLFloaterAvatar::handleUrlChanged()
+void LLFloaterAvatar::handleUrlChanged(const std::string& url)
 {
-	getChild<LLMediaCtrl>("avatar_picker_contents")->navigateTo(LLWeb::expandURLSubstitutions(LFSimFeatureHandler::instance().avatarPickerURL(), LLSD()), HTTP_CONTENT_TEXT_HTML);
+	getChild<LLMediaCtrl>("avatar_picker_contents")->navigateTo(LLWeb::expandURLSubstitutions(url, LLSD()), HTTP_CONTENT_TEXT_HTML);
 }
 // </FS:Ansariel>
 

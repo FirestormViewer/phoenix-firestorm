@@ -2479,87 +2479,31 @@ even though the user gets a free copy.
         <text
           follows="left|top"
           halign="left"
-          height="16"
+          height="64"
           layout="topleft"
           left="125"
-          name="high_lod_label"
+          name="mesh_lod_label"
           top_pad="3"
-          value="High:"
           visible="false"
-          width="60" />
+          width="60" >
+High:
+Medium:
+Low:
+Lowest:
+        </text>
+        <string name="mesh_lod_num_tris_values">
+[HIGHTRIS]
+[MIDTRIS]
+[LOWTRIS]
+[LOWESTTRIS]
+        </string>
         <text
           follows="left|top"
-          height="16"
+          height="64"
           layout="topleft"
           left_pad="10"
           halign="right"
-          name="high_lod_num_tris"
-          top_delta="0"
-          value="--"
-          visible="false"
-          width="80" />
-        <text
-          follows="left|top"
-          halign="left"
-          height="16"
-          layout="topleft"
-          left="125"
-          name="med_lod_label"
-          top_pad="3"
-          value="Medium:"
-          visible="false"
-          width="60" />
-        <text
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left_pad="10"
-          halign="right"
-          name="med_lod_num_tris"
-          top_delta="0"
-          value="--"
-          visible="false"
-          width="80" />
-        <text
-          follows="left|top"
-          halign="left"
-          height="16"
-          layout="topleft"
-          left="125"
-          name="low_lod_label"
-          top_pad="3"
-          value="Low:"
-          visible="false"
-          width="60" />
-        <text
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left_pad="10"
-          halign="right"
-          name="low_lod_num_tris"
-          top_delta="0"
-          value="--"
-          visible="false"
-          width="80" />
-        <text
-          follows="left|top"
-          halign="left"
-          height="16"
-          layout="topleft"
-          left="125"
-          name="lowest_lod_label"
-          top_pad="3"
-          value="Lowest:"
-          visible="false"
-          width="60" />
-        <text
-          follows="left|top"
-          height="16"
-          layout="topleft"
-          left_pad="10"
-          halign="right"
-          name="lowest_lod_num_tris"
+          name="mesh_lod_num_tris"
           top_delta="0"
           value="--"
           visible="false"
@@ -2593,6 +2537,188 @@ even though the user gets a free copy.
                name="Lowest/Imposter"
                value="0" />
         </combo_box>
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          halign="left"
+          top_pad="16"
+          left="125"
+          name="ObjectLODbehaviourLabel"
+          value="Object LOD behaviour:"
+          visible="true"
+          width="180"/>
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          halign="left"
+          top_pad="10"
+          left="125"
+          name="object_radius"
+          top_delta="0"
+          value="Object radius:"
+          visible="false"
+          width="80" />
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left_pad="10"
+          halign="right"
+          name="object_radius_value"
+          top_delta="0"
+          value="--"
+          visible="false"
+          width="60" />
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left="190"
+          halign="center"
+          name="LOD_swap_factors_label"
+          top_pad="3"
+          value="LOD Factors"
+          visible="true"
+          width="100" />
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left="190"
+          halign="center"
+          name="LOD_swap_defaults_label"
+          top_pad="3"
+          value="Default"
+          tool_tip="The default LOD factor setting that will be applied by most viewers."
+          visible="true"
+          width="60" />
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left_pad="5"
+          halign="center"
+          name="LOD_swap_usr_label"
+          top_delta="0"
+          tool_tip="Your current setting, taken from RenderVolumeLODFactor"
+          value="Yours"
+          visible="true"
+          width="30" />
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left="125"
+          halign="left"
+          name="LOD_swap_label"
+          top_pad="3"
+          value="LOD Swap"
+          visible="false"
+          width="60" />
+        <string name="ll_lod_tooltip_msg">"Linden Lab Second Life Viewer default ([FACTOR])"</string>
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left_pad="5"
+          halign="center"
+          name="LOD_swap_ll_default"
+          top_delta="0"
+          value="LL"
+          visible="false"
+          width="30" />
+        <string name="fs_lod_tooltip_msg">"Firestorm Viewer default ([FACTOR])"</string>
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left_pad="5"
+          halign="center"
+          name="LOD_swap_fs_default"
+          top_delta="0"
+          value="FS"
+          visible="false"
+          width="30" />
+        <string name="user_lod_label_string">[FACTOR]</string>
+        <text
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left_pad="5"
+          halign="center"
+          name="LOD_swap_usr_current"
+          top_delta="0"
+          tool_tip="Your current LOD Factor"
+          value="[FACTOR]"
+          visible="false"
+          width="30" />
+        <text
+          follows="left|top"
+          height="50"
+          layout="topleft"
+          left="125"
+          halign="left"
+          name="LOD_swap_LOD_Change_label"
+          top_pad="3"
+          visible="false"
+          width="65" >
+High ↔ Med
+Med ↔ Low
+Low ↔ Lwst         
+        </text>
+        <string
+          name="LODSwapFormatString"
+          visible="false">
+[HIGH2MED]
+[MED2LOW]
+[LOW2LOWEST]
+        </string>
+        <text
+          follows="left|top"
+          height="50"
+          layout="topleft"
+          left_pad="0"
+          halign="right"
+          name="LOD_swap_ll_values"
+          top_delta="0"
+          visible="false"
+          width="30" />
+        <text
+          follows="left|top"
+          height="50"
+          layout="topleft"
+          left_pad="5"
+          halign="right"
+          name="LOD_swap_fs_values"
+          top_delta="0"
+          value="--"
+          visible="false"
+          width="30" />
+        <text
+          follows="left|top"
+          height="50"
+          layout="topleft"
+          left_pad="5"
+          halign="right"
+          name="LOD_swap_usr_values"
+          top_delta="0"
+          value="--"
+          visible="false"
+          width="30" />
+         <text
+          name="LODSwapTableDscriptionsText"
+          follows="top|left"
+          layout="topleft"
+          left="125"
+          right="-1"
+          word_wrap="true"
+          top_pad="15"
+          tool_tip="Best practice: Creators should ensure good LOD behaviour for Default settings across all viewers."
+          height="100">
+          This table shows the LOD change boundaries in metres from the camera.
+        </text>
         <!-- /FS:Beq end of Mesh info section-->
         </panel>
         <panel
