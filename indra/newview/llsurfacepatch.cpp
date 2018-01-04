@@ -1004,14 +1004,26 @@ void LLSurfacePatch::updateVisibility()
 			if (mVObjp)
 			{
 				mVObjp->dirtyGeom();
-				if (getNeighborPatch(WEST))
+				// <FS:Ansariel> FIRE-19720: Crash when teleporting on Littlefield grid - LLVOSurfacePatch::dirtyGeom()
+				//if (getNeighborPatch(WEST))
+				//{
+				//	getNeighborPatch(WEST)->mVObjp->dirtyGeom();
+				//}
+				//if (getNeighborPatch(SOUTH))
+				//{
+				//	getNeighborPatch(SOUTH)->mVObjp->dirtyGeom();
+				//}
+				LLSurfacePatch* neighbor = getNeighborPatch(WEST);
+				if (neighbor && neighbor->mVObjp.notNull())
 				{
-					getNeighborPatch(WEST)->mVObjp->dirtyGeom();
+					neighbor->mVObjp->dirtyGeom();
 				}
-				if (getNeighborPatch(SOUTH))
+				neighbor = getNeighborPatch(SOUTH);
+				if (neighbor && neighbor->mVObjp.notNull())
 				{
-					getNeighborPatch(SOUTH)->mVObjp->dirtyGeom();
+					neighbor->mVObjp->dirtyGeom();
 				}
+				// </FS:Ansariel>
 			}
 		}
 		mVisInfo.mbIsVisible = TRUE;

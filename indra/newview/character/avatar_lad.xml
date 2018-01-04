@@ -532,7 +532,7 @@
      location="ATTACH_FACE_JAW"
      position="0.000 0.000 0.000"
      rotation="0 0 0"
-     visible_in_first_person="true"/>
+     visible_in_first_person="false"/>
 
     <attachment_point
      id="48"
@@ -543,7 +543,7 @@
      location="ATTACH_FACE_LEAR"
      position="0.000 0.000 0.000"
      rotation="0 0 0"
-     visible_in_first_person="true"/>
+     visible_in_first_person="false"/>
 
     <attachment_point
      id="49"
@@ -554,7 +554,7 @@
      location="ATTACH_FACE_REAR"
      position="0.000 0.000 0.000"
      rotation="0 0 0"
-     visible_in_first_person="true"/>
+     visible_in_first_person="false"/>
 
     <attachment_point
      id="50"
@@ -565,7 +565,7 @@
      location="ATTACH_FACE_LEYE"
      position="0.000 0.000 0.000"
      rotation="0 0 0"
-     visible_in_first_person="true"/>
+     visible_in_first_person="false"/>
 
     <attachment_point
      id="51"
@@ -576,7 +576,7 @@
      location="ATTACH_FACE_REYE"
      position="0.000 0.000 0.000"
      rotation="0 0 0"
-     visible_in_first_person="true"/>
+     visible_in_first_person="false"/>
 
     <attachment_point
      id="52"
@@ -587,7 +587,7 @@
      location="ATTACH_FACE_TONGUE"
      position="0.000 0.000 0.000"
      rotation="0 0 0"
-     visible_in_first_person="true"/>
+     visible_in_first_person="false"/>
 
     <attachment_point
      id="53"

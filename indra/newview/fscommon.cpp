@@ -163,7 +163,7 @@ S32 FSCommon::secondsSinceEpochFromString(const std::string& format, const std::
 
 void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 {
-	if (!object)
+	if (!object || !object->getRegion())
 	{
 		return;
 	}
@@ -173,28 +173,28 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 	texture_entry.setColor(gSavedSettings.getColor4("FSBuildPrefs_Color"));
 	texture_entry.setAlpha((100.f - gSavedSettings.getF32("FSBuildPrefs_Alpha")) / 100.f);
 	texture_entry.setGlow(gSavedSettings.getF32("FSBuildPrefs_Glow"));
-	if(gSavedSettings.getBOOL("FSBuildPrefs_FullBright"))
+	if (gSavedSettings.getBOOL("FSBuildPrefs_FullBright"))
 	{
 		texture_entry.setFullbright(TEM_FULLBRIGHT_MASK);
 	}
 	
 	U8 shiny = 0; // Default none
 	std::string shininess = gSavedSettings.getString("FSBuildPrefs_Shiny");
-	if(shininess == "Low")
+	if (shininess == "Low")
 	{
 		shiny = 1;
 	}
-	else if(shininess == "Medium")
+	else if (shininess == "Medium")
 	{
 		shiny = 2;
 	}
-	else if(shininess == "High")
+	else if (shininess == "High")
 	{
 		shiny = 3;
 	}
 	texture_entry.setShiny(shiny);
 	
-	for(U8 face = 0; face < object->getNumTEs(); face++)
+	for (U8 face = 0; face < object->getNumTEs(); face++)
 	{
 		object->setTE(face, texture_entry);
 	}
@@ -234,10 +234,10 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 	{
 		gMessageSystem->newMessageFast(_PREHASH_ObjectPermissions);
 		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 		gMessageSystem->nextBlockFast(_PREHASH_HeaderData);
-		gMessageSystem->addBOOLFast(_PREHASH_Override, (BOOL)FALSE);
+		gMessageSystem->addBOOLFast(_PREHASH_Override, FALSE);
 		gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 		gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
 		gMessageSystem->addU8Fast(_PREHASH_Field, PERM_NEXT_OWNER);
@@ -258,13 +258,13 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 
 	gMessageSystem->newMessage(_PREHASH_ObjectFlagUpdate);
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID() );
-	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 	gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
 	gMessageSystem->addBOOLFast(_PREHASH_UsePhysics, gSavedSettings.getBOOL("FSBuildPrefs_Physical"));
 	gMessageSystem->addBOOL(_PREHASH_IsTemporary, gSavedSettings.getBOOL("FSBuildPrefs_Temporary"));
 	gMessageSystem->addBOOL(_PREHASH_IsPhantom, gSavedSettings.getBOOL("FSBuildPrefs_Phantom"));
-	gMessageSystem->addBOOL("CastsShadows", FALSE );
+	gMessageSystem->addBOOL("CastsShadows", FALSE);
 	gMessageSystem->sendReliable(object->getRegion()->getHost());
 }
 

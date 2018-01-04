@@ -41,7 +41,7 @@ private:
 
 	// <FS:Ansariel> FIRE-16833: Destination guide does not change between OpenSim grids
 	/*virtual*/ void onOpen(const LLSD& key);
-	void handleUrlChanged();
+	void handleUrlChanged(const std::string& url);
 
 	boost::signals2::connection mDestinationGuideUrlChangedSignal;
 	// </FS:Ansariel>

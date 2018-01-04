@@ -29,7 +29,7 @@
 		</panel>
 		<panel name="shape_ears_tab_holder" title="Ohren">
 			<accordion name="shape_ears_accordion">
-				<accordion_tab name="shape_head_tab" title="Ohren"/>
+				<accordion_tab name="shape_ears_tab" title="Ohren"/>
 			</accordion>
 		</panel>
 		<panel name="shape_nose_tab_holder" title="Nase">

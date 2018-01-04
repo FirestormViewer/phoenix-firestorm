@@ -184,7 +184,7 @@
        header_visible="false"
        layout="topleft"
        min_height="150"
-       name="shape_head_tab"
+       name="shape_ears_tab"
        fit_panel="false"
        title="Ears">
       <!-- Viewer will replace things here with tiled editing views -->

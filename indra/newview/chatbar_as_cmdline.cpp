@@ -147,7 +147,6 @@ public:
 		}
 	}
 
-
 private:
 	std::stack<LLViewerInventoryItem*> mStack;
 	LLUUID mDestination;
@@ -236,143 +235,143 @@ public:
 
 	BOOL tick()
 	{
+		switch (mState)
 		{
-			switch (mState) {
-				case ZTS_COUNTDOWN:
-					report_to_nearby_chat(llformat("%i...", mCountdown--));
-					if (mCountdown == 0) mState = ZTS_SELECTION;
-					break;
-					
-				case ZTS_SELECTION:
-					for (LLObjectSelection::root_iterator itr = LLSelectMgr::getInstance()->getSelection()->root_begin();
-						itr != LLSelectMgr::getInstance()->getSelection()->root_end(); ++itr)
+			case ZTS_COUNTDOWN:
+				report_to_nearby_chat(llformat("%i...", mCountdown--));
+				if (mCountdown == 0) mState = ZTS_SELECTION;
+				break;
+
+			case ZTS_SELECTION:
+				for (LLObjectSelection::root_iterator itr = LLSelectMgr::getInstance()->getSelection()->root_begin();
+					itr != LLSelectMgr::getInstance()->getSelection()->root_end(); ++itr)
+				{
+					LLSelectNode* node = (*itr);
+					LLViewerObject* objectp = node->getObject();
+					U32 localid = objectp->getLocalID();
+					if (mDonePrims.find(localid) == mDonePrims.end())
 					{
-						LLSelectNode* node = (*itr);
-						LLViewerObject* objectp = node->getObject();
-						U32 localid = objectp->getLocalID();
-						if (mDonePrims.find(localid) == mDonePrims.end())
-						{
-							mDonePrims.insert(localid);
-							mToTake.push_back(localid);
-						}
+						mDonePrims.insert(localid);
+						mToTake.push_back(localid);
 					}
-					if (mToTake.size() > 0) mState = ZTS_TAKE;
-					break;
-					
-				case ZTS_TAKE:
-					if (mToTake.size() > 0)
+				}
+				if (mToTake.size() > 0) mState = ZTS_TAKE;
+				break;
+
+			case ZTS_TAKE:
+				if (mToTake.size() > 0)
+				{
+					std::vector<LLPointer<LLViewerInventoryItem> > inventory = findInventoryInFolder(mFolderName);
+					mPackSize = mToTake.size() + inventory.size();
+
+					LLMessageSystem* msg = gMessageSystem;
+					msg->newMessageFast(_PREHASH_DeRezObject);
+					msg->nextBlockFast(_PREHASH_AgentData);
+					msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+					msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
+					msg->nextBlockFast(_PREHASH_AgentBlock);
+					msg->addUUIDFast(_PREHASH_GroupID, LLUUID::null);
+					msg->addU8Fast(_PREHASH_Destination, mDest);
+					msg->addUUIDFast(_PREHASH_DestinationID, mTarget);
+					LLUUID rand;
+					rand.generate();
+					msg->addUUIDFast(_PREHASH_TransactionID, rand);
+					msg->addU8Fast(_PREHASH_PacketCount, 1);
+					msg->addU8Fast(_PREHASH_PacketNumber, 0);
+					msg->nextBlockFast(_PREHASH_ObjectData);
+					msg->addU32Fast(_PREHASH_ObjectLocalID, mToTake[0]);
+					gAgent.sendReliableMessage();
+					mToTake.erase(mToTake.begin());
+
+					if (mToTake.size() % 10 == 0)
 					{
-						std::vector<LLPointer<LLViewerInventoryItem> > inventory = findInventoryInFolder(mFolderName);
-						mPackSize = mToTake.size() + inventory.size();
-						
-						LLMessageSystem* msg = gMessageSystem;
-						msg->newMessageFast(_PREHASH_DeRezObject);
-						msg->nextBlockFast(_PREHASH_AgentData);
-						msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
-						msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
-						msg->nextBlockFast(_PREHASH_AgentBlock);
-						msg->addUUIDFast(_PREHASH_GroupID, LLUUID::null);
-						msg->addU8Fast(_PREHASH_Destination, mDest);
-						msg->addUUIDFast(_PREHASH_DestinationID, mTarget);
-						LLUUID rand;
-						rand.generate();
-						msg->addUUIDFast(_PREHASH_TransactionID, rand);
-						msg->addU8Fast(_PREHASH_PacketCount, 1);
-						msg->addU8Fast(_PREHASH_PacketNumber, 0);
-						msg->nextBlockFast(_PREHASH_ObjectData);
-						msg->addU32Fast(_PREHASH_ObjectLocalID, mToTake[0]);
-						gAgent.sendReliableMessage();
-						mToTake.erase(mToTake.begin());
-						
-						if (mToTake.size() % 10 == 0)
+						if (mToTake.size() == 0)
 						{
-							if (mToTake.size() == 0)
+							if (mPackage)
 							{
-								if (mPackage)
+								if (mPackageDest.notNull())
 								{
-									if (mPackageDest != LLUUID::null)
-									{
-										mPeriod = 1.0f;
-										mCountdown = 45; //reused for a basic timeout
-										mState = ZTS_DROP;
-									}
-									else
-									{
-										report_to_nearby_chat("Ktake has taken all selected objects.");
-										doZtCleanup();
-										mState = ZTS_DONE;
-									}
+									mPeriod = 1.0f;
+									mCountdown = 45; //reused for a basic timeout
+									mState = ZTS_DROP;
 								}
 								else
 								{
-									report_to_nearby_chat("Ztake has taken all selected objects. Say \"ztake off\" to deactivate ztake or select more objects to continue.");
-								}
-							} 
-							else
-							{
-								if (mPackage)
-								{
-									report_to_nearby_chat(llformat("Packager: %i objects left to take.", mToTake.size()));
-								}
-								else
-								{
-									report_to_nearby_chat(llformat("Ztake: %i objects left to take.", mToTake.size()));
+									report_to_nearby_chat("Ktake has taken all selected objects.");
+									doZtCleanup();
+									mState = ZTS_DONE;
 								}
 							}
-						}
-					}
-					else
-					{
-						if (mPackage)
-						{
-							report_to_nearby_chat(llformat("Packager: no objects to take."));
-							doZtCleanup();
+							else
+							{
+								report_to_nearby_chat("Ztake has taken all selected objects. Say \"ztake off\" to deactivate ztake or select more objects to continue.");
+							}
 						}
 						else
 						{
-							report_to_nearby_chat(llformat("Ztake: no objects to take."));
-						}
-					}
-					break;
-					
-				case ZTS_DROP:
-					{
-						mCountdown --;
-
-						std::stack<LLViewerInventoryItem*> itemstack;
-						std::vector<LLPointer<LLViewerInventoryItem> > inventory = findInventoryInFolder(mFolderName);
-						for (std::vector<LLPointer<LLViewerInventoryItem> >::iterator it = inventory.begin(); it != inventory.end(); ++it)
-						{
-							LLViewerInventoryItem* item = *it;
-							itemstack.push(item);
-						}
-
-						if (itemstack.size() >= mPackSize || mCountdown == 0)
-						{
-							if (itemstack.size() < mPackSize) {
-								report_to_nearby_chat("Phase 1 of the packager finished, but some items mave have been missed.");
+							if (mPackage)
+							{
+								report_to_nearby_chat(llformat("Packager: %i objects left to take.", mToTake.size()));
 							}
 							else
 							{
-								report_to_nearby_chat("Phase 1 of the packager finished.");
+								report_to_nearby_chat(llformat("Ztake: %i objects left to take.", mToTake.size()));
 							}
-
-							report_to_nearby_chat("Do not have the destination prim selected while transfer is running to reduce the chances of \"Inventory creation on in-world object failed.\"");
-
-							LLUUID sdest = LLUUID(mPackageDest);
-							new JCZdrop(itemstack, sdest, mFolderName.c_str(), mPackageDest.asString().c_str(), true);
-
-							doZtCleanup();
-							mState = ZTS_DONE;
 						}
 					}
-					break;
+				}
+				else
+				{
+					if (mPackage)
+					{
+						report_to_nearby_chat(llformat("Packager: no objects to take."));
+						doZtCleanup();
+					}
+					else
+					{
+						report_to_nearby_chat(llformat("Ztake: no objects to take."));
+					}
+				}
+				break;
 
-				case ZTS_DONE:
-					/* nothing left to do */
-					break;
-			}
+			case ZTS_DROP:
+				{
+					mCountdown --;
+
+					std::stack<LLViewerInventoryItem*> itemstack;
+					std::vector<LLPointer<LLViewerInventoryItem> > inventory = findInventoryInFolder(mFolderName);
+					for (std::vector<LLPointer<LLViewerInventoryItem> >::iterator it = inventory.begin(); it != inventory.end(); ++it)
+					{
+						LLViewerInventoryItem* item = *it;
+						itemstack.push(item);
+					}
+
+					if (itemstack.size() >= mPackSize || mCountdown == 0)
+					{
+						if (itemstack.size() < mPackSize) {
+							report_to_nearby_chat("Phase 1 of the packager finished, but some items mave have been missed.");
+						}
+						else
+						{
+							report_to_nearby_chat("Phase 1 of the packager finished.");
+						}
+
+						report_to_nearby_chat("Do not have the destination prim selected while transfer is running to reduce the chances of \"Inventory creation on in-world object failed.\"");
+
+						LLUUID sdest = LLUUID(mPackageDest);
+						new JCZdrop(itemstack, sdest, mFolderName.c_str(), mPackageDest.asString().c_str(), true);
+
+						doZtCleanup();
+						mState = ZTS_DONE;
+					}
+				}
+				break;
+
+			case ZTS_DONE:
+				/* nothing left to do */
+				break;
 		}
+
 		return mRunning;
 	}
 
@@ -417,7 +416,6 @@ class TMZtake : public LLEventTimer
 {
 public:
 	BOOL mRunning;
-
 
 	TMZtake(const LLUUID& target) : LLEventTimer(0.33f), mTarget(target), mRunning(FALSE), mCountdown(5)
 	{
@@ -783,7 +781,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 					if ((!RlvActions::isRlvEnabled()) || (RlvActions::canSit(myObject, LLVector3::zero)))
 					{
-						LLMessageSystem	*msg = gMessageSystem;
+						LLMessageSystem* msg = gMessageSystem;
 						msg->newMessageFast(_PREHASH_AgentRequestSit);
 						msg->nextBlockFast(_PREHASH_AgentData);
 						msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
@@ -830,7 +828,6 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				}
 				return false;
 			}
-			
 			else if (command == sFSCmdLineGround())
 			{
 				LLVector3 agentPos = gAgent.getPositionAgent();
@@ -911,7 +908,6 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				F32 result = 0.f;
 				if (revised_text.length() > command.length() + 1)
 				{
-
 					std::string expr = revised_text.substr(command.length()+1);
 					LLStringUtil::toUpper(expr);
 					std::string original_expr = expr;
@@ -983,7 +979,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 
 			else if (command == sFSCmdLineClearChat())
 			{
-				FSFloaterNearbyChat* chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
+				FSFloaterNearbyChat* chat = LLFloaterReg::findTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
 				if (chat)
 				{
 					chat->clearChatHistory();
@@ -1237,11 +1233,9 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 								if (folder.notNull())
 								{
 									std::vector<U32> to_take;
-									
 									std::string take;
 									while (i >> take)
 									{
-										
 										if (!LLUUID::validate(take))
 										{
 											report_to_nearby_chat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
@@ -1265,7 +1259,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 											}
 										}
 									}
-									
+
 									if (to_take.empty())
 									{
 										report_to_nearby_chat("No objects to take.");
@@ -1346,8 +1340,10 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				}
 				return false;
 			}
-			else if (command == "kpackagerstop") {
-				if (!cmd_line_mPackagerDest.isNull()) {
+			else if (command == "kpackagerstop")
+			{
+				if (!cmd_line_mPackagerDest.isNull())
+				{
 					cmd_line_mPackagerToTake.clear();
 					cmd_line_mPackagerTargetFolderName = "";
 					cmd_line_mPackagerTargetFolder.setNull();
@@ -1371,7 +1367,6 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 							std::string take;
 							while (i >> take)
 							{
-								
 								if (!LLUUID::validate(take))
 								{
 									report_to_nearby_chat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
@@ -1395,7 +1390,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 									}
 								}
 							}
-							
+
 							if (to_take.empty())
 							{
 								report_to_nearby_chat("No objects to take.");
@@ -1555,7 +1550,6 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						S32 die_penetrated = 0;
 						while (die_iter <= dice)
 						{
-
 							// Each die may have a different value rolled
 							result_per_die = 1 + (rand() % faces);
 							if (die_penetrated == 1)
@@ -1774,17 +1768,16 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 	msg->sendReliable(gAgent.getRegionHost());
 }
 
-bool cmdline_packager(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID) {
-	
+bool cmdline_packager(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID)
+{
 	if (message.empty() || cmd_line_mPackagerDest.isNull() || fromID != cmd_line_mPackagerDest)
 	{
 		return false;
 	}
-	
+
 	std::string cmd = message.substr(0, 12);
-	
+
 	if (cmd == "kpackageradd") {
-		//
 		std::string csv = message.substr(13, -1);
 		std::string::size_type start = 0;
 		std::string::size_type comma = 0;
@@ -1821,7 +1814,7 @@ bool cmdline_packager(const std::string& message, const LLUUID& fromID, const LL
 	}
 	else if (cmd == "kpackagerend") {
 		
-		report_to_nearby_chat("Packager: finilizing.");
+		report_to_nearby_chat("Packager: finalizing.");
 		ztake = new JCZtake(cmd_line_mPackagerTargetFolder, true, cmd_line_mPackagerDest, cmd_line_mPackagerTargetFolderName, DRD_ACQUIRE_TO_AGENT_INVENTORY, false, cmd_line_mPackagerToTake);
 		cmd_line_mPackagerToTake.clear();
 		cmd_line_mPackagerTargetFolderName = "";

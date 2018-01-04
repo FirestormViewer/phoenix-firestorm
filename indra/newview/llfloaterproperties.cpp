@@ -114,6 +114,11 @@ void LLPropertiesObserver::changed(U32 mask)
 LLFloaterProperties::LLFloaterProperties(const LLSD& key)
   : LLFloater(key),
 	mDirty(TRUE)
+	// <FS:Ansariel> Avatar names often not showing on first open
+	,mCreatorNameCbConnection(),
+	mOwnerNameCbConnection(),
+	mGroupOwnerNameCbConnection()
+	// </FS:Ansariel>
 {
 	if (key.has("item_id"))
 	{
@@ -129,6 +134,21 @@ LLFloaterProperties::~LLFloaterProperties()
 {
 	delete mPropertiesObserver;
 	mPropertiesObserver = NULL;
+
+	// <FS:Ansariel> Avatar names often not showing on first open
+	if (mCreatorNameCbConnection.connected())
+	{
+		mCreatorNameCbConnection.disconnect();
+	}
+	if (mOwnerNameCbConnection.connected())
+	{
+		mOwnerNameCbConnection.disconnect();
+	}
+	if (mGroupOwnerNameCbConnection.connected())
+	{
+		mGroupOwnerNameCbConnection.disconnect();
+	}
+	// </FS:Ansariel>
 }
 
 // virtual
@@ -303,23 +323,19 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 
 	if (item->getCreatorUUID().notNull())
 	{
-		LLAvatarName av_name;
-		LLAvatarNameCache::get(item->getCreatorUUID(), &av_name);
-		getChildView("BtnCreator")->setEnabled(TRUE);
+		// <FS:Ansariel> Avatar names often not showing on first open
+		//LLAvatarName av_name;
+		//LLAvatarNameCache::get(item->getCreatorUUID(), &av_name);
+		//getChildView("BtnCreator")->setEnabled(TRUE); 
+		// </FS:Ansariel>
 		getChildView("LabelCreatorTitle")->setEnabled(TRUE);
 		getChildView("LabelCreatorName")->setEnabled(TRUE);
-// [RLVa:KB] - Checked: RLVa-2.0.1
-		std::string name = av_name.getUserName();
-		// If the object creator matches the object owner we need to anonymize the creator field as well
-		if ( (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, item->getCreatorUUID())) &&
-		     ( ((perm.isOwned()) && (!perm.isGroupOwned()) && (perm.getOwner() == item->getCreatorUUID()) ) || (RlvUtil::isNearbyAgent(item->getCreatorUUID())) ) )
-		{
-			childSetEnabled("BtnCreator", FALSE);
-			name = RlvStrings::getAnonym(av_name);
-		}
-		getChild<LLUICtrl>("LabelCreatorName")->setValue(name);
-// [/RLVa:KB]
-//		getChild<LLUICtrl>("LabelCreatorName")->setValue(av_name.getUserName());
+		// <FS:Ansariel> Avatar names often not showing on first open
+		//getChild<LLUICtrl>("LabelCreatorName")->setValue(av_name.getUserName());
+		getChildView("BtnCreator")->setEnabled(FALSE);
+		getChild<LLUICtrl>("LabelCreatorName")->setValue(LLTrans::getString("AvatarNameWaiting"));
+		mCreatorNameCbConnection = LLAvatarNameCache::get(item->getCreatorUUID(), boost::bind(&LLFloaterProperties::onCreatorNameCallback, this, _1, _2, perm));
+		// </FS:Ansariel>
 	}
 	else
 	{
@@ -334,35 +350,31 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 	////////////////
 	if(perm.isOwned())
 	{
-// [RLVa:KB] - Checked: RVLa-2.0.1
-		bool fRlvCanShowOwner = true;
-// [/RLVa:KB]
-		std::string name;
+		// <FS:Ansariel> Avatar names often not showing on first open
+		//std::string name;
+		getChildView("BtnOwner")->setEnabled(FALSE);
+		getChild<LLUICtrl>("LabelOwnerName")->setValue(LLTrans::getString("AvatarNameWaiting"));
+		// </FS:Ansariel>
 		if (perm.isGroupOwned())
 		{
-			gCacheName->getGroupName(perm.getGroup(), name);
+			// <FS:Ansariel> Avatar names often not showing on first open
+			//gCacheName->getGroupName(perm.getGroup(), name);
+			mGroupOwnerNameCbConnection = gCacheName->getGroup(perm.getGroup(), boost::bind(&LLFloaterProperties::onGroupOwnerNameCallback, this, _2));
+			// </FS:Ansariel>
 		}
 		else
 		{
-			LLAvatarName av_name;
-			LLAvatarNameCache::get(perm.getOwner(), &av_name);
-			name = av_name.getUserName();
-// [RLVa:KB] - Checked: RLVa-2.0.1
-			if (RlvActions::isRlvEnabled())
-			{
-				fRlvCanShowOwner = RlvActions::canShowName(RlvActions::SNC_DEFAULT, perm.getOwner());
-				if (!fRlvCanShowOwner)
-					name = RlvStrings::getAnonym(av_name);
-			}
-// [/RLVa:KB]
+			// <FS:Ansariel> Avatar names often not showing on first open
+			//LLAvatarName av_name;
+			//LLAvatarNameCache::get(perm.getOwner(), &av_name);
+			//name = av_name.getUserName();
+			mOwnerNameCbConnection = LLAvatarNameCache::get(perm.getOwner(), boost::bind(&LLFloaterProperties::onOwnerNameCallback, this, _1, _2));
+			// </FS:Ansariel>
 		}
-//		getChildView("BtnOwner")->setEnabled(TRUE);
-// [RLVa:KB] - Checked: RLVa-2.0.1
-		getChildView("BtnOwner")->setEnabled(fRlvCanShowOwner);
-// [/RLVa:KB]
+		//getChildView("BtnOwner")->setEnabled(TRUE); // <FS:Ansariel> Avatar names often not showing on first open
 		getChildView("LabelOwnerTitle")->setEnabled(TRUE);
 		getChildView("LabelOwnerName")->setEnabled(TRUE);
-		getChild<LLUICtrl>("LabelOwnerName")->setValue(name);
+		//getChild<LLUICtrl>("LabelOwnerName")->setValue(name); // <FS:Ansariel> Avatar names often not showing on first open
 	}
 	else
 	{
@@ -978,6 +990,46 @@ void LLFloaterProperties::dirtyAll()
 		}
 	}
 }
+
+// <FS:Ansariel> Avatar names often not showing on first open
+void LLFloaterProperties::onCreatorNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLPermissions& perm)
+{
+	bool enabled = true;
+	std::string name = av_name.getUserName();
+	// If the object creator matches the object owner we need to anonymize the creator field as well
+	if ( (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, av_id)) &&
+		    ( ((perm.isOwned()) && (!perm.isGroupOwned()) && (perm.getOwner() == av_id) ) || (RlvUtil::isNearbyAgent(av_id)) ) )
+	{
+		enabled = false;
+		name = RlvStrings::getAnonym(av_name);
+	}
+	getChild<LLUICtrl>("LabelCreatorName")->setValue(name);
+	childSetEnabled("BtnCreator", enabled);
+}
+
+void LLFloaterProperties::onOwnerNameCallback(const LLUUID& av_id, const LLAvatarName& av_name)
+{
+	bool fRlvCanShowOwner = true;
+	std::string name = av_name.getUserName();
+	if (RlvActions::isRlvEnabled())
+	{
+		fRlvCanShowOwner = RlvActions::canShowName(RlvActions::SNC_DEFAULT, av_id);
+		if (!fRlvCanShowOwner)
+		{
+			name = RlvStrings::getAnonym(av_name);
+		}
+	}
+
+	getChild<LLUICtrl>("LabelOwnerName")->setValue(name);
+	getChildView("BtnOwner")->setEnabled(fRlvCanShowOwner);
+}
+
+void LLFloaterProperties::onGroupOwnerNameCallback(const std::string& name)
+{
+	getChild<LLUICtrl>("LabelOwnerName")->setValue(name);
+	getChildView("BtnOwner")->setEnabled(TRUE);
+}
+// </FS:Ansariel>
 
 ///----------------------------------------------------------------------------
 /// LLMultiProperties
