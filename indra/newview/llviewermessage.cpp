@@ -6676,6 +6676,7 @@ void process_object_animation(LLMessageSystem *mesgsys, void **user_data)
         return;
     }
 
+    volp->updateControlAvatar();
     LLControlAvatar *avatarp = volp->getControlAvatar();
     if (!avatarp)
     {

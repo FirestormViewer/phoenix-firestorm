@@ -136,7 +136,7 @@ LLMotionController::LLMotionController()
 	  mLastTime(0.0f),
 	  mHasRunOnce(FALSE),
 	  mPaused(FALSE),
-	  mPauseTime(0.f),
+	  mPausedFrame(0),
 	  mTimeStep(0.f),
 	  mTimeStepCount(0),
 	  mLastInterp(0.f),
@@ -1133,6 +1133,7 @@ void LLMotionController::pauseAllMotions()
 	{
 		//LL_INFOS() << "Pausing animations..." << LL_ENDL;
 		mPaused = TRUE;
+        mPausedFrame = LLFrameTimer::getFrameCount();
 	}
 	
 }

@@ -1452,16 +1452,12 @@ BOOL LLVOVolume::calcLOD()
 
     if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TRIANGLE_COUNT) && mDrawable->getFace(0))
     {
-        if (isRootEdit() && getChildren().size()>0)
+        if (isRootEdit())
         {
             S32 total_tris = recursiveGetTriangleCount();
-            setDebugText(llformat("TRIS %d TOTAL %d", getTriangleCount(), total_tris));
+            S32 est_max_tris = recursiveGetEstTrianglesMax();
+            setDebugText(llformat("TRIS SHOWN %d EST %d", total_tris, est_max_tris));
         }
-        else
-        {
-            setDebugText(llformat("TRIS %d", getTriangleCount()));
-        }
-	
     }
 	// <FS> FIRE-20191 / STORM-2139 Render Metadata->LOD Info is broken on all "recent" viewer versions
 	//if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_LOD_INFO) &&
@@ -3544,12 +3540,11 @@ U32 LLVOVolume::getExtendedMeshFlags() const
 
 void LLVOVolume::onSetExtendedMeshFlags(U32 flags)
 {
-    // AXON - the check against isAnySelected() is "empirically
-    // derived": doing rebuildGeom() while in selection trashes the
-    // graphics state of animated objects. Skipping this update is OK
-    // because we get another one on deselect.
 
-	if (!getRootEdit()->isAnySelected() && mDrawable.notNull())
+    // The isAnySelected() check was needed at one point to prevent
+    // graphics problems. These are now believed to be fixed so the
+    // check has been disabled.
+	if (/*!getRootEdit()->isAnySelected() &&*/ mDrawable.notNull())
     {
         // Need to trigger rebuildGeom(), which is where control avatars get created/removed
         getRootEdit()->recursiveMarkForUpdate(TRUE);
@@ -4646,6 +4641,21 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 	{
 		copyVolumeFaces(volume);	
 	}
+    else
+    {
+#if 1
+        bool is_paused = avatar && avatar->areAnimationsPaused();
+		if (is_paused)
+		{
+            S32 frames_paused = LLFrameTimer::getFrameCount() - avatar->getMotionController().getPausedFrame();
+            if (frames_paused > 2)
+            {
+                return;
+            }
+		}
+#endif
+    }
+
 
 	//build matrix palette
 	static const size_t kMaxJoints = LL_MAX_JOINTS_PER_MESH_OBJECT;
@@ -5343,38 +5353,13 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 			rigged = rigged || (vobj->isAnimatedObject() && vobj->isRiggedMesh() &&
                 vobj->getControlAvatar() && vobj->getControlAvatar()->mPlaying);
 
-            if (vobj->isAnimatedObject())
+            vobj->updateControlAvatar();
+            if (vobj->getControlAvatar())
             {
-                if (!vobj->getControlAvatar())
-                {
-                    F32 tri_count = vobj->getRootEdit()->recursiveGetEstTrianglesMax();
-                    if (tri_count <= 0.f)
-                    {
-                        LL_DEBUGS("AnimatedObjects") << vobj_name << " not calling linkControlAvatar(), because no tris" << LL_ENDL;
-                    }
-                    else
-                    {
-                        LL_DEBUGS("AnimatedObjects") << vobj_name << " calling linkControlAvatar()" << LL_ENDL;
-                        vobj->linkControlAvatar();
-                    }
-                }
-                if (vobj->getControlAvatar())
-                {
-                    rigged_av = vobj->getControlAvatar();
-                    rigged_av->rebuildAttachmentOverrides();
-                }
+                rigged_av = vobj->getControlAvatar();
+                rigged_av->rebuildAttachmentOverrides();
             }
-            else
-            {
-                // Not animated but has a control avatar - probably
-                // the checkbox has changed since the last rebuild.
-                if (vobj->getControlAvatar())
-                {
-                    LL_DEBUGS("AnimatedObjects") << vobj_name << " calling unlinkControlAvatar()" << LL_ENDL;
-                    vobj->unlinkControlAvatar();
-                }
-            }
-
+            
 			bool bake_sunlight = LLPipeline::sBakeSunlight && drawablep->isStatic();
 
 			bool any_rigged_face = false;

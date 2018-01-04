@@ -113,7 +113,7 @@ void LLControlAvatar::setGlobalScale(F32 scale)
     {
         F32 adjust_scale = scale/mGlobalScale;
         LL_INFOS() << "scale " << scale << " adjustment " << adjust_scale << LL_ENDL;
-        // AXON - should we be scaling from the pelvis or the root?
+        // should we be scaling from the pelvis or the root?
         recursiveScaleJoint(mPelvisp,adjust_scale);
         mGlobalScale = scale;
     }
@@ -167,7 +167,10 @@ void LLControlAvatar::updateVolumeGeom()
 
     matchVolumeTransform();
 
-    // AXON testing scale
+    // Initial exploration of allowing scaling skeleton to match root
+    // prim bounding box. If enabled, would probably be controlled by
+    // an additional checkbox and default to off. Not enabled for
+    // initial release.
 
     // What should the scale be? What we really want is the ratio
     // between the scale at which the object was originally designed
@@ -239,6 +242,7 @@ void LLControlAvatar::updateDebugText()
         std::string lod_string;
         S32 total_tris = 0;
         S32 total_verts = 0;
+        S32 est_tris = 0;
         for (std::vector<LLVOVolume*>::iterator it = volumes.begin();
              it != volumes.end(); ++it)
         {
@@ -246,6 +250,7 @@ void LLControlAvatar::updateDebugText()
             S32 verts = 0;
             total_tris += volp->getTriangleCount(&verts);
             total_verts += verts;
+            est_tris += volp->getEstTrianglesMax();
             lod_string += llformat("%d",volp->getLOD());
             if (volp && volp->mDrawable)
             {
@@ -282,8 +287,9 @@ void LLControlAvatar::updateDebugText()
         addDebugText(llformat("CAV obj %d anim %d active %s impost %d",
                               total_linkset_count, animated_volume_count, active_string.c_str(), (S32) isImpostor()));
         addDebugText(llformat("types %s lods %s", type_string.c_str(), lod_string.c_str()));
-        addDebugText(llformat("tris %d verts %d", total_tris, total_verts));
+        addDebugText(llformat("tris %d (est %d), verts %d", total_tris, est_tris, total_verts));
         addDebugText(llformat("pxarea %s", LLStringOps::getReadableNumber(getPixelArea()).c_str()));
+#if 0
         std::string region_name = "no region";
         if (mRootVolp->getRegion())
         {
@@ -297,10 +303,7 @@ void LLControlAvatar::updateDebugText()
         addDebugText(llformat("region %x %s skel %x %s",
                               mRootVolp->getRegion(), region_name.c_str(),
                               getRegion(), skel_region_name.c_str()));
-        //addDebugText(llformat("anim time %.1f (step %f factor %f)", 
-        //                      mMotionController.getAnimTime(),
-        //                      mMotionController.getTimeStep(), 
-        //                      mMotionController.getTimeFactor()));
+#endif
         
     }
     LLVOAvatar::updateDebugText();
