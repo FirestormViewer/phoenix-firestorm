@@ -805,6 +805,16 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				}
 				return false;
 			}
+			else if (command == "/zoffset_up")
+			{
+				gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", gSavedPerAccountSettings.getF32("AvatarHoverOffsetZ") + 0.05f);
+				return false;
+			}
+			else if (command == "/zoffset_down")
+			{
+				gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", gSavedPerAccountSettings.getF32("AvatarHoverOffsetZ") - 0.05f);
+				return false;
+			}
 			else if (command == sFSCmdLineOfferTp())
 			{
 				LLUUID target_key;
