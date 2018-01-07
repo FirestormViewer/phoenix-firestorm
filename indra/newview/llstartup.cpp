@@ -3039,12 +3039,18 @@ void login_show()
 	FSPanelLogin::show(	gViewerWindow->getWindowRectScaled(), login_callback, NULL );
 	// </FS:Ansariel> [FS Login Panel]
 
-	// <FS:PP> Warning about too high LOD on startup
-	if (gSavedSettings.getF32("RenderVolumeLODFactor") >= 4.0f)
+	// <FS:Beq> [FIRE-22130] for LOD Factors > 4 reset to the detected dafault 
+	F32 old_val = gSavedSettings.getF32("RenderVolumeLODFactor");
+	if (old_val > 4.0f)
 	{
-		LLNotificationsUtil::add("RenderVolumeLODFactorWarning");
+		U32 gfx_level = gSavedSettings.getU32("RenderQualityPerformance");
+		F32 new_val = 2.0; //majority
+		if (gfx_level == 0) new_val = 1.125; // low = 0
+		if (gfx_level > 5) new_val = 3.0;    // ultra = 6
+		gSavedSettings.setF32("RenderVolumeLODFactor", new_val);
+		LL_INFOS("AppInit") << "LOD Factor reset to sane value. Was " << old_val << " now " << gSavedSettings.getF32("RenderVolumeLODFactor") << LL_ENDL;
 	}
-	// </FS:PP>
+	// </FS:Beq>
 
 }
 
