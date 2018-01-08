@@ -294,7 +294,7 @@
 					Jakość podł.
 				</text>
 				<button name="Reset_Terrain_Quality" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Object_Detail" tool_tip="Detale obiektów i prim. Większe wartości dodają więcej szczegółów.">
+				<text name="T_Object_Detail" tool_tip="Kontroluje kiedy obiekty z mniejszą ilością detali mogą zostać użyte, aby ograniczyć koszty renderowania. Wyższe wartości mogą powodować lag, używaj z rozwagą.">
 					Det. obktw
 				</text>
 				<button name="Reset_Object_Detail" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
