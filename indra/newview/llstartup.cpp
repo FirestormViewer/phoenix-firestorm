@@ -1072,6 +1072,36 @@ bool idle_startup()
 		// *TODO: Does this need to be here?
 		LLStringOps::setupDatetimeInfo(false);
 
+		// <FS:Beq> [FIRE-22130] for LOD Factors > 4 reset to the detected dafault 
+		if (gSavedSettings.getF32("RenderVolumeLODFactor") > 4.f)
+		{
+			bool feature_table_success = false;
+			LLFeatureManager& feature_manager = LLFeatureManager::instance();
+			U32 level = gSavedSettings.getU32("RenderQualityPerformance");
+			if (feature_manager.isValidGraphicsLevel(level))
+			{
+				std::string level_name = feature_manager.getNameForGraphicsLevel(level);
+				LLFeatureList* feature_list = feature_manager.findMask(level_name);
+				if (feature_list)
+				{
+					F32 new_val = feature_list->getRecommendedValue("RenderVolumeLODFactor");
+					if (new_val > 0.f)
+					{
+						feature_table_success = true;
+						gSavedSettings.setF32("RenderVolumeLODFactor", new_val);
+						LL_INFOS("AppInit") << "LOD Factor too high. Resetting to recommended value for graphics level '" << level_name << "': " << new_val << LL_ENDL;
+					}
+				}
+			}
+
+			if (!feature_table_success)
+			{
+				gSavedSettings.getControl("RenderVolumeLODFactor")->resetToDefault(true);
+				LL_INFOS("AppInit") << "LOD Factor too high. Resetting to recommended value for global default: " << gSavedSettings.getF32("RenderVolumeLODFactor") << LL_ENDL;
+			}
+		}
+		// </FS:Beq>
+
 		// Go to the next startup state
 		LLStartUp::setStartupState( STATE_BROWSER_INIT );
 		return FALSE;
@@ -3038,20 +3068,6 @@ void login_show()
 	//LLPanelLogin::show(	gViewerWindow->getWindowRectScaled(), login_callback, NULL );
 	FSPanelLogin::show(	gViewerWindow->getWindowRectScaled(), login_callback, NULL );
 	// </FS:Ansariel> [FS Login Panel]
-
-	// <FS:Beq> [FIRE-22130] for LOD Factors > 4 reset to the detected dafault 
-	F32 old_val = gSavedSettings.getF32("RenderVolumeLODFactor");
-	if (old_val > 4.0f)
-	{
-		U32 gfx_level = gSavedSettings.getU32("RenderQualityPerformance");
-		F32 new_val = 2.0; //majority
-		if (gfx_level == 0) new_val = 1.125; // low = 0
-		if (gfx_level > 5) new_val = 3.0;    // ultra = 6
-		gSavedSettings.setF32("RenderVolumeLODFactor", new_val);
-		LL_INFOS("AppInit") << "LOD Factor reset to sane value. Was " << old_val << " now " << gSavedSettings.getF32("RenderVolumeLODFactor") << LL_ENDL;
-	}
-	// </FS:Beq>
-
 }
 
 // Callback for when login screen is closed.  Option 0 = connect, option 1 = quit.
