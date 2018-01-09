@@ -72,7 +72,10 @@ LLUUID notification_id_to_object_id(const LLUUID& notification_id)
 
 
 LLScriptFloater::LLScriptFloater(const LLSD& key)
-: LLDockableFloater(NULL, true, key)
+// <FS:Ansariel> FIRE-21546: Don't close docked floater if IMs arrive, but only if IMs shown in tabs - still hide when using docked windows!
+//: LLDockableFloater(NULL, true, key)
+: LLDockableFloater(NULL, gSavedSettings.getS32("FSChatWindow") != 1, key)
+// </FS:Ansariel>
 , mScriptForm(NULL)
 , mSaveFloaterPosition(false)
 {

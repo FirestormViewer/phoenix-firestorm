@@ -13022,13 +13022,13 @@ Change of this parameter will affect the layout of buttons in notification toast
 	<key>RenderVolumeLODFactor</key>
     <map>
       <key>Comment</key>
-      <string>Controls level of detail of primitives (multiplier for current screen area when calculated level of detail)</string>
+      <string>Influences the distance at which the viewer will display a lower detail model. Higher values = more lag. IMPORTANT: Please disregard advice to increase this value, such as is commonly distributed in notecards.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1.0</real>
+      <real>2.0</real>
       <key>SanityCheckType</key>
       <string>LessThanEquals</string>
       <key>SanityValue</key>
