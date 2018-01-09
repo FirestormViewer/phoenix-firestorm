@@ -1,0 +1,20 @@
+<llsd>
+    <array>
+        <array>
+            <real>0</real>
+            <string>Hyborian Dawn B - midnight</string>
+        </array>
+        <array>
+            <real>0.24652767181396484</real>
+            <string>Hyborian Age - Water E-morning</string>
+        </array>
+        <array>
+            <real>0.49999982118606567</real>
+            <string>Hyborian Age - Water F - noon</string>
+        </array>
+        <array>
+            <real>0.74999970197677612</real>
+            <string>Hyborian Age - Water E-evening</string>
+        </array>
+    </array>
+</llsd>
