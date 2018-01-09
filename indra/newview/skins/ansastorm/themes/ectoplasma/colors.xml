@@ -717,7 +717,7 @@
      reference="White" />
     <color
      name="InventoryItemSuffixColor"
-     reference="White_25" />
+     reference="White_50" />
     <color
      name="InventoryItemLibraryColor"
      reference="White" />
