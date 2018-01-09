@@ -285,7 +285,7 @@ static bool handleVolumeLODChanged(const LLSD& newvalue)
 	LLVOVolume::sDistanceFactor = 1.f-LLVOVolume::sLODFactor * 0.1f;
 
 	// <FS:PP> Warning about too high LOD on LOD change
-	if (LLVOVolume::sLODFactor >= 4.0f)
+	if (LLVOVolume::sLODFactor > 4.0f)
 	{
 		LLNotificationsUtil::add("RenderVolumeLODFactorWarning");
 	}

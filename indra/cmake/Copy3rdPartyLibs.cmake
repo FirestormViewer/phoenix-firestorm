@@ -44,11 +44,21 @@ if(WINDOWS)
 
     if( NOT ND_USE_OPENJPEG2 )
       set(release_files ${release_files} openjpeg.dll )
-	else()
+    else()
       set(release_files ${release_files} openjp2.dll )
     endif( NOT ND_USE_OPENJPEG2 ) 
     
     set(release_files ${release_files} growl++.dll growl.dll )
+    if (FMODSTUDIO)
+      if(ADDRESS_SIZE EQUAL 32)
+        set(debug_files ${debug_files} fmodL.dll)
+        set(release_files ${release_files} fmod.dll)
+      else(ADDRESS_SIZE EQUAL 32)
+        set(debug_files ${debug_files} fmodL64.dll)
+        set(release_files ${release_files} fmod64.dll)
+      endif(ADDRESS_SIZE EQUAL 32)
+    endif (FMODSTUDIO)
+
     if (FMODEX)
 
         if(ADDRESS_SIZE EQUAL 32)
@@ -184,6 +194,11 @@ elseif(DARWIN)
         libgrowl++.dylib
        )
 
+    if (FMODSTUDIO)
+      set(debug_files ${debug_files} libfmodL.dylib)
+      set(release_files ${release_files} libfmod.dylib)
+    endif (FMODSTUDIO)
+
     if (FMODEX)
       set(debug_files ${debug_files} libfmodexL.dylib)
       set(release_files ${release_files} libfmodex.dylib)
@@ -234,6 +249,16 @@ elseif(LINUX)
         libfontconfig.so.1.8.0
         libfontconfig.so.1
        )
+
+    if (FMODSTUDIO)
+      if(ADDRESS_SIZE EQUAL 32)
+        set(debug_files ${debug_files} "libfmodL.so")
+        set(release_files ${release_files} "libfmod.so")
+      else(ADDRESS_SIZE EQUAL 32)
+        set(debug_files ${debug_files} "libfmodL64.so")
+        set(release_files ${release_files} "libfmod64.so")
+      endif(ADDRESS_SIZE EQUAL 32)
+    endif (FMODSTUDIO)
 
     #if (FMODEX)
     #  set(debug_files ${debug_files} "libfmodexL.so")

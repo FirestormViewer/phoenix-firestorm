@@ -5316,12 +5316,15 @@ Welche Bezeichnung soll für die Region
 		<usetemplate ignoretext="Weise mich darauf hin, dass das Umschalten der Sichtbarkeit des Online-Status etwas dauern kann." name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="RenderVolumeLODFactorWarning">
-		ACHTUNG: Die Detailstufe (LOD) scheint auf einen hohen Wert eingestellt zu sein.
+		ACHTUNG: Die Detailstufe (LOD) ist auf einen hohen Wert eingestellt.
 
-Werte höher als 8 sind bedeutungslos und erzeugen keine Verbesserung. Sie sollten diesen Wert nicht höher als 4 einstellen und zudem nur in bestimmten Situationen (z.B. zum Erstellen von Fotos in hohen Auflösungen). Ein hoher Wert verringert die Grafik-Performance maßgeblich.
+Für den normalen Gebrauch ist ein Wert zwischen 1 und 3 ausreichend.
+Ziehen Sie in Erwägung Objekte zu ersetzen, die bei einem entsprechenden Wert deformiert aussehen.
 
-Für den normalen Gebrauch sollte ein Wert von 2 ausreichen. Sollten Sie einige Objekte besitzen, die bei diesem Wert deformiert aussehen, sollten Sie in Erwägung ziehen, diese zu ersetzen.
-		<usetemplate ignoretext="Warnen bei zu hoher Detailstufe" name="okignore" yestext="OK"/>
+LOD-Faktor >3: Verschlechtert Performance. Nur für Fotoaufnahmen ratsam.
+LOD-Faktor >4: Nur in Ausnahmefällen verwenden. Wird beim Neustart zurückgesetzt.
+LOD-Faktor >8: Hat keinen echten Effekt. Kann Fehler verursachen.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="CurrencyURIOverrideReceived">
 Diese Region hat sich dazu entschieden, das Währungsportal eines Drittanbieters zu nutzen.
