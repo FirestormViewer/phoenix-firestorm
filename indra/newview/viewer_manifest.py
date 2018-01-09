@@ -592,13 +592,17 @@ class WindowsManifest(ViewerManifest):
             # Get fmodstudio dll, continue if missing
             try:
                 if self.args['configuration'].lower() == 'debug':
-                    self.path("fmodL.dll")
-                    self.path("fmodL64.dll")
+                    if(self.address_size == 64):
+                        self.path("fmodL64.dll")
+                    else:
+                        self.path("fmodL.dll")
                 else:
-                    self.path("fmod.dll")
-                    self.path("fmod64.dll")
+                    if(self.address_size == 64):
+                        self.path("fmod64.dll")
+                    else:
+                        self.path("fmod.dll")
             except:
-                print "Skipping fmodstudio audio library(assuming other audio engine)"
+                print "Skipping fmodstudio audio library (assuming other audio engine)"
 
             # Get fmodex dll, continue if missing
             try:
@@ -607,7 +611,7 @@ class WindowsManifest(ViewerManifest):
                 else:
                     self.path("fmodex.dll")
             except:
-                print "Skipping fmodex audio library(assuming other audio engine)"
+                print "Skipping fmodex audio library (assuming other audio engine)"
 
             # For textures
             self.path("openjpeg.dll")
