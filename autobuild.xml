@@ -619,11 +619,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1331456a3df95294eaf44fab990f62cd</string>
+              <string>eccdcb4a1e96bb829284d01255f4f913</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.02-linux-.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.02-linux-201801091647.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
