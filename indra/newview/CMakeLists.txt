@@ -166,6 +166,7 @@ set(viewer_SOURCE_FILES
     fsfloatervoicecontrols.cpp
     fsfloatervolumecontrols.cpp
     fsfloatervramusage.cpp
+    fsfloaterwearablefavorites.cpp
     fskeywords.cpp
     fslightshare.cpp
     fslslbridge.cpp
@@ -914,6 +915,7 @@ set(viewer_HEADER_FILES
     fsfloatervoicecontrols.h
     fsfloatervolumecontrols.h
     fsfloatervramusage.h
+    fsfloaterwearablefavorites.h
     fsgridhandler.h
     fskeywords.h
     fslightshare.h

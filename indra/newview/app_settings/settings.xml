@@ -24522,6 +24522,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>FSWearableFavoritesSortOrder</key>
+    <map>
+      <key>Comment</key>
+      <string>The sort order for the wearable favorites item list</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>3</integer>
+    </map>
   </map>
 </llsd>
 

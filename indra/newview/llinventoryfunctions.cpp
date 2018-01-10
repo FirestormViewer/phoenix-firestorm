@@ -94,6 +94,7 @@
 
 // Firestorm includes
 #include "aoengine.h"
+#include "fsfloaterwearablefavorites.h"
 #include "fslslbridge.h"
 
 BOOL LLInventoryState::sWearNewClothing = FALSE;
@@ -640,6 +641,9 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 		||
 		(model->isObjectDescendentOf(id, FSLSLBridge::instance().getBridgeFolder())
 			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		||
+		(model->isObjectDescendentOf(id, FSFloaterWearableFavorites::getFavoritesFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders"))
 		)
 	{
 		return FALSE;
@@ -707,6 +711,9 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 		||
 		((id == FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id, FSLSLBridge::instance().getBridgeFolder()))
 			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		||
+		((id == FSFloaterWearableFavorites::getFavoritesFolder() || model->isObjectDescendentOf(id, FSFloaterWearableFavorites::getFavoritesFolder()))
+			&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders"))
 		)
 	{
 		return FALSE;
@@ -762,6 +769,9 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 		||
 		((id == FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id, FSLSLBridge::instance().getBridgeFolder()))
 			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		||
+		((id == FSFloaterWearableFavorites::getFavoritesFolder() || model->isObjectDescendentOf(id, FSFloaterWearableFavorites::getFavoritesFolder()))
+			&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders"))
 		)
 	{
 		return FALSE;

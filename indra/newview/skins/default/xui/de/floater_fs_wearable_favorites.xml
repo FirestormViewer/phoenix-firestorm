@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_wearable_favorites" title="Kleidungsfavoriten">
+	<floater.string name="empty_list">
+		Kleidung oder Objekt hier hinziehen, um zur Liste hinzuzufügen.
+	</floater.string>
+	<floater.string name="search_no_items">
+		Keine treffenden Objekte gefunden.
+	</floater.string>
+	<panel name="buttons_panel">
+		<filter_editor label="Kleidungsfavoriten filtern" name="wearable_filter_input"/>
+		<menu_button name="options_btn" tool_tip="Kleidungsfavoriten-Optionen"/>
+		<button name="remove_btn" tool_tip="Kleidung aus Kleidungsfavoriten löschen"/>
+	</panel>
+</floater>

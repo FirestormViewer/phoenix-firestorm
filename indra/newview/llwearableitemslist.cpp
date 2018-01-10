@@ -950,7 +950,14 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
 // [/RLVa:KB]
 	} // for
 
-	bool standalone = mParent ? mParent->isStandalone() : false;
+	// <FS:Ansariel> Standalone check doesn't make sense here as the context
+	//               menu is only shown if standalone is true. If not, this
+	//               method isn't called at all and it is assumed you provide
+	//               your own right-click handler (LLWearableItemsList::ContextMenu
+	//               is only used in LLWearableItemsList::onRightClick handler
+	//               method which in return is only set as event handler if
+	//               standalone is true).
+	bool standalone = /*mParent ? mParent->isStandalone() :*/ false;
 	bool wear_add_visible = mask & (MASK_CLOTHING|MASK_ATTACHMENT) && n_worn == 0 && can_be_worn && (n_already_worn != 0 || mask & MASK_ATTACHMENT);
 
 	// *TODO: eliminate multiple traversals over the menu items
