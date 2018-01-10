@@ -184,7 +184,7 @@ bool RlvActions::canSendIM(const LLUUID& idRecipient)
 		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDIMTO)) || (!gRlvHandler.isException(RLV_BHVR_SENDIMTO, idRecipient)) ) );
 }
 
-bool RlvActions::canStartIM(const LLUUID& idRecipient)
+bool RlvActions::canStartIM(const LLUUID& idRecipient, bool fIgnoreOpen)
 {
 	// User can start an IM session with "recipient" (could be an agent or a group) if:
 	//   - not generally restricted from starting IM sessions (or the recipient is an exception or inside the exclusion range)
@@ -194,7 +194,7 @@ bool RlvActions::canStartIM(const LLUUID& idRecipient)
 		(!isRlvEnabled()) ||
 		( ( (!gRlvHandler.hasBehaviour(RLV_BHVR_STARTIM)) || (gRlvHandler.isException(RLV_BHVR_STARTIM, idRecipient)) || (rlvCheckAvatarIMDistance(idRecipient, RLV_MODIFIER_STARTIMDISTMIN, RLV_MODIFIER_STARTIMDISTMAX)) ) &&
 		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_STARTIMTO)) || (!gRlvHandler.isException(RLV_BHVR_STARTIMTO, idRecipient)) ) ) ||
-		( (hasOpenP2PSession(idRecipient)) || (hasOpenGroupSession(idRecipient)) );
+		( (!fIgnoreOpen) && ((hasOpenP2PSession(idRecipient)) || (hasOpenGroupSession(idRecipient))) );
 }
 
 bool RlvActions::canShowName(EShowNamesContext eContext, const LLUUID& idAgent)
