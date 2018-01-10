@@ -499,6 +499,11 @@ void LLInventoryPanel::modelChanged(U32 mask)
 
 					view_item->refresh();
 				}
+				LLFolderViewFolder* parent = view_item->getParentFolder();
+				if(parent)
+				{
+					parent->getViewModelItem()->dirtyDescendantsFilter();
+				}
 			}
 		}
 
