@@ -3244,7 +3244,7 @@
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--platform linux32</string>
                   <string>--package</string>
                   <string>--btype RelWithDebInfo</string>
@@ -3298,7 +3298,7 @@
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--platform linux32</string>
                 </array>
               </map>
@@ -3322,7 +3322,7 @@
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--platform linux32</string>
                 </array>
               </map>
@@ -3346,7 +3346,7 @@
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--platform linux32</string>
                 </array>
               </map>
