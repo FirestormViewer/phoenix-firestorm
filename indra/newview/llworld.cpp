@@ -774,10 +774,26 @@ LLVector3d	LLWorld::clipToVisibleRegions(const LLVector3d &start_pos, const LLVe
 	}
 
 	LLViewerRegion* regionp = getRegionFromPosGlobal(start_pos);
-	if (!regionp) 
+// <FS> FIRE-21915: Fix bogus avatar movement on region crossing
+	//if (!regionp) 
+	//{
+	//	return start_pos;
+	//}
+	bool clipped = false;										// sink, unused
+	return clipToRegion(regionp, start_pos, end_pos, clipped);	// use common fn for clipping to region
+}
+
+//  Clip to region, using a point along the line start_pos .. end_pos.
+//  If start_pos is outside the region, use start_pos.
+LLVector3d	LLWorld::clipToRegion(const LLViewerRegion* regionp, const LLVector3d &start_pos, const LLVector3d &end_pos, bool &clipped)
+{
+	clipped = false;									// no clipping yet
+	if (!regionp)										// no region. We're lost
 	{
+		clipped = true;									// very bad
 		return start_pos;
 	}
+// </FS>
 
 	LLVector3d delta_pos = end_pos - start_pos;
 	LLVector3d delta_pos_abs;
@@ -785,8 +801,21 @@ LLVector3d	LLWorld::clipToVisibleRegions(const LLVector3d &start_pos, const LLVe
 	delta_pos_abs.abs();
 
 	LLVector3 region_coord = regionp->getPosRegionFromGlobal(end_pos);
-	F64 clip_factor = 1.0;
+	// <FS> FIRE-21915: Fix bogus avatar movement on region crossing
+	//F64 clip_factor = 1.0;
+	LLVector3 region_coord_start = regionp->getPosRegionFromGlobal(start_pos);
+	F64 clip_factor = 0.0;								// zero means no cli
+	// </FS>
 	F32 region_width = regionp->getWidth();
+	// <FS> FIRE-21915: Fix bogus avatar movement on region crossing
+	if (region_coord_start.mV[VX] < 0.f || region_coord_start.mV[VX] > region_width
+		|| region_coord_start.mV[VY] < 0.f || region_coord_start.mV[VY] > region_width)
+	{
+		clip_factor = 1.0;								// start pos outside region, use start pos
+	}
+	else												// clip to region along line from start pos to end po
+	{
+	// </FS>
 	if (region_coord.mV[VX] < 0.f)
 	{
 		if (region_coord.mV[VY] < region_coord.mV[VX])
@@ -823,15 +852,38 @@ LLVector3d	LLWorld::clipToVisibleRegions(const LLVector3d &start_pos, const LLVe
 		// clip along y +
 		clip_factor = (region_coord.mV[VY] - region_width) / delta_pos_abs.mdV[VY];
 	}
+	// <FS> FIRE-21915: Fix bogus avatar movement on region crossing
+		if (!std::isfinite(clip_factor)) { clip_factor = 0.0; }	// avoid NaN problems
+		clip_factor = llclamp(clip_factor, 0.0, 1.0);			// avoid overflow problem
+	}
+	// </FS>
 
-	// clamp to within region dimensions
+	// <FS> FIRE-21915: Fix bogus avatar movement on region crossing
+	//// clamp to within region dimensions
+	//LLVector3d final_region_pos = LLVector3d(region_coord) - (delta_pos * clip_factor);
+	//final_region_pos.mdV[VX] = llclamp(final_region_pos.mdV[VX], 0.0,
+	//								   (F64)(region_width - F_ALMOST_ZERO));
+	//final_region_pos.mdV[VY] = llclamp(final_region_pos.mdV[VY], 0.0,
+	//								   (F64)(region_width - F_ALMOST_ZERO));
+	//final_region_pos.mdV[VZ] = llclamp(final_region_pos.mdV[VZ], 0.0,
+	//								   (F64)(LLWorld::getInstance()->getRegionMaxHeight() - F_ALMOST_ZERO));
+
+	// True if clipped. Caller needs to know, because it will kill velocity if there's clipping
+	// Don't do this by comparing floating point numbers for equality. That has roundoff problems.
+	clipped = clip_factor > F_ALMOST_ZERO;						// clipped in X or Y
 	LLVector3d final_region_pos = LLVector3d(region_coord) - (delta_pos * clip_factor);
-	final_region_pos.mdV[VX] = llclamp(final_region_pos.mdV[VX], 0.0,
-									   (F64)(region_width - F_ALMOST_ZERO));
-	final_region_pos.mdV[VY] = llclamp(final_region_pos.mdV[VY], 0.0,
-									   (F64)(region_width - F_ALMOST_ZERO));
+	clipped |= final_region_pos.mdV[VX] < -F_ALMOST_ZERO || final_region_pos.mdV[VX] > (F64)(region_width - F_ALMOST_ZERO);
+	clipped |= final_region_pos.mdV[VY] < -F_ALMOST_ZERO || final_region_pos.mdV[VY] > (F64)(region_width - F_ALMOST_ZERO);
+	clipped |= final_region_pos.mdV[VZ] < -F_ALMOST_ZERO || final_region_pos.mdV[VZ] > (F64)(LLWorld::getInstance()->getRegionMaxHeight() - F_ALMOST_ZERO); // if actually clipping
+	// Final sanity check - don't allow positions more than clamp_range out of region.
+	F64 clamp_range = region_width / 2.0; // half a region width
+	final_region_pos.mdV[VX] = llclamp(final_region_pos.mdV[VX], -clamp_range,
+									   (F64)(region_width + clamp_range));
+	final_region_pos.mdV[VY] = llclamp(final_region_pos.mdV[VY], -clamp_range,
+									   (F64)(region_width + clamp_range));
 	final_region_pos.mdV[VZ] = llclamp(final_region_pos.mdV[VZ], 0.0,
 									   (F64)(LLWorld::getInstance()->getRegionMaxHeight() - F_ALMOST_ZERO));
+	// </FS>
 	return regionp->getPosGlobalFromRegion(LLVector3(final_region_pos));
 }
 
