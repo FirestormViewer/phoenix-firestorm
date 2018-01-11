@@ -663,6 +663,7 @@ static const LLDefaultChildRegistry::Register<LLWearableItemsList> r("wearable_i
 LLWearableItemsList::Params::Params()
 :	standalone("standalone", true)
 ,	worn_indication_enabled("worn_indication_enabled", true)
+,	show_create_new("show_create_new", true) // <FS:Ansariel> Optional "Create new" menu item
 {}
 
 LLWearableItemsList::LLWearableItemsList(const LLWearableItemsList::Params& p)
@@ -676,6 +677,7 @@ LLWearableItemsList::LLWearableItemsList(const LLWearableItemsList::Params& p)
 		setRightMouseDownCallback(boost::bind(&LLWearableItemsList::onRightClick, this, _2, _3));
 	}
 	mWornIndicationEnabled = p.worn_indication_enabled;
+	mShowCreateNew = p.show_create_new; // <FS:Ansariel> Optional "Create new" menu item
 	setNoItemsCommentText(LLTrans::getString("LoadingData"));
 }
 
@@ -959,6 +961,7 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
 	//               standalone is true).
 	bool standalone = /*mParent ? mParent->isStandalone() :*/ false;
 	bool wear_add_visible = mask & (MASK_CLOTHING|MASK_ATTACHMENT) && n_worn == 0 && can_be_worn && (n_already_worn != 0 || mask & MASK_ATTACHMENT);
+	bool show_create_new = mParent ? mParent->showCreateNew() : true; // <FS:Ansariel> Optional "Create new" menu item
 
 	// *TODO: eliminate multiple traversals over the menu items
 	setMenuItemVisible(menu, "wear_wear", 			n_already_worn == 0 && n_worn == 0 && can_be_worn);
@@ -977,7 +980,10 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
 	setMenuItemVisible(menu, "edit",				!standalone && mask & (MASK_CLOTHING|MASK_BODYPART|MASK_ATTACHMENT) && n_worn == n_items && n_worn == 1);
 // [/SL:KB]
 	setMenuItemEnabled(menu, "edit",				n_editable == 1 && n_worn == 1 && n_items == 1);
-	setMenuItemVisible(menu, "create_new",			mask & (MASK_CLOTHING|MASK_BODYPART) && n_items == 1);
+	// <FS:Ansariel> Optional "Create new" menu item
+	//setMenuItemVisible(menu, "create_new",			mask & (MASK_CLOTHING|MASK_BODYPART) && n_items == 1);
+	setMenuItemVisible(menu, "create_new",			show_create_new && mask & (MASK_CLOTHING|MASK_BODYPART) && n_items == 1);
+	// </FS:Ansariel>
 	setMenuItemEnabled(menu, "create_new",			LLAppearanceMgr::instance().canAddWearables(ids));
 	setMenuItemVisible(menu, "show_original",		!standalone);
 	setMenuItemEnabled(menu, "show_original",		n_items == 1 && n_links == n_items);

@@ -83,6 +83,7 @@
 		 name="favorites_list"
 		 multi_select="true"
 		 standalone="true"
+		 show_create_new="false"
 		 top="0"
 		 left="0"
 		 bottom="-1"
