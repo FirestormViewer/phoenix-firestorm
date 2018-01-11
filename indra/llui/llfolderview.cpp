@@ -983,6 +983,9 @@ void LLFolderView::cut()
 	LLClipboard::instance().reset();
 	if(getVisible() && getEnabled() && (mSelectedItems.size() > 0))
 	{
+		// <FS:Ansariel> Next item gets selected if cutting in inventory
+		bool cut_to_clipboard = true;
+
 		// Find out which item will be selected once the selection will be cut
 		LLFolderViewItem* item_to_select = getNextUnselectedItem();
 		
@@ -997,10 +1000,12 @@ void LLFolderView::cut()
 			if (listener)
 			{
 				listener->cutToClipboard();
+				cut_to_clipboard &= listener->isCutToClipboard(); // <FS:Ansariel> Next item gets selected if cutting in inventory
 			}
 		}
 		
 		// Update the selection
+		if (!cut_to_clipboard) // <FS:Ansariel> Next item gets selected if cutting in inventory
 		setSelection(item_to_select, item_to_select ? item_to_select->isOpen() : false, mParentPanel.get()->hasFocus());
 	}
 	mSearchString.clear();
