@@ -13025,6 +13025,8 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Influences the distance at which the viewer will display a lower detail model. Higher values = more lag. IMPORTANT: Please disregard advice to increase this value, such as is commonly distributed in notecards.</string>
       <key>Persist</key>
       <integer>1</integer>
+      <key>HideFromEditor</key>
+      <integer>1</integer>
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
