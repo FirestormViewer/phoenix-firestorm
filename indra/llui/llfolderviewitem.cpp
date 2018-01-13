@@ -122,10 +122,6 @@ LLFolderViewItem::Params::Params()
 	// <FS:Ansariel> Inventory specials
 	for_inventory("for_inventory", false)
 {
-	// <FS:Ansariel> User-definable item height in folder views
-	static LLCachedControl<S32> FolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
-	item_height = (S32)FolderViewItemHeight;
-	// </FS:Ansariel>
 }
 
 // Default constructor
@@ -164,7 +160,8 @@ LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
     mArrowSize(p.arrow_size),
     mMaxFolderItemOverlap(p.max_folder_item_overlap),
 	// <FS:Ansariel> Inventory specials
-	mForInventory(p.for_inventory)
+	mForInventory(p.for_inventory),
+	mItemTopPad(p.item_top_pad)
 {
 	if (!sColorSetInitialized)
 	{
@@ -745,7 +742,9 @@ void LLFolderViewItem::drawOpenFolderArrow(const Params& default_params, const L
 	//--------------------------------------------------------------------------------//
 	// Draw open folder arrow
 	//
-	const S32 TOP_PAD = default_params.item_top_pad;
+	// <FS:Ansariel> Inventory specials
+	//const S32 TOP_PAD = default_params.item_top_pad;
+	const S32 TOP_PAD = mItemTopPad;
 
 	if (hasVisibleChildren() || !isFolderComplete())
 	{
@@ -905,7 +904,9 @@ void LLFolderViewItem::draw()
     const BOOL filled = show_context || (getRoot() ? getRoot()->getParentPanel()->hasFocus() : FALSE); // If we have keyboard focus, draw selection filled
 
 	const Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
-	const S32 TOP_PAD = default_params.item_top_pad;
+	// <FS:Ansariel> Inventory specials
+	//const S32 TOP_PAD = default_params.item_top_pad;
+	const S32 TOP_PAD = mItemTopPad;
 	
 	const LLFontGL* font = getLabelFontForStyle(mLabelStyle);
 
