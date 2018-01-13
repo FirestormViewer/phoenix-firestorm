@@ -165,14 +165,7 @@ bool LLImageDimensionsInfo::getImageDimensionsJpeg()
 {
 	sJpegErrorEncountered = false;
 	clean();
-
-	// <FS:ND> Cannot just use fopen under windows. mSrcFilename might be an utf-8 filename
-
-	// FILE *fp = fopen (mSrcFilename.c_str(), "rb");
-	FILE *fp =  nd_openFile (mSrcFilename.c_str(), "rb");
-
-	// </FS:ND>
-
+	FILE *fp = LLFile::fopen(mSrcFilename, "rb");
 	if (fp == NULL) 
 	{
 		setLastError("Unable to open file for reading", mSrcFilename);

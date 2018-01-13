@@ -107,6 +107,8 @@ LLFontFreetype::LLFontFreetype()
 	mAscender(0.f),
 	mDescender(0.f),
 	mLineHeight(0.f),
+	pFontBuffer(NULL),
+	mBufferSize(0),
 	mIsFallback(FALSE),
 	mFTFace(NULL),
 	mRenderGlyphCount(0),
@@ -135,6 +137,8 @@ LLFontFreetype::~LLFontFreetype()
 	mCharGlyphInfoMap.clear();
 
 	delete mFontBitmapCachep;
+	delete pFontBuffer;
+	disclaimMem(mBufferSize);
 	// mFallbackFonts cleaned up by LLPointer destructor
 
 	// <FS:ND> Delete the kerning cache
@@ -157,13 +161,58 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 	
 	int error;
 
-	// <FS:ND> FIRE-7570. Only load/mmap fonts once. loadFont will either load a font into memory, or reuse an already loaded font.
-
-	// error = FT_New_Face( gFTLibrary,
-	// 					 filename.c_str(),
-	// 					 0,
-	// 					 &mFTFace );
-
+// <FS:ND> FIRE-7570. Only load/mmap fonts once. loadFont will either load a font into memory, or reuse an already loaded font.
+//#ifdef LL_WINDOWS
+//
+//	if (mBufferSize > 0)
+//	{
+//		delete pFontBuffer;
+//		disclaimMem(mBufferSize);
+//		pFontBuffer = NULL;
+//		mBufferSize = 0;
+//	}
+//
+//	S32 file_size = 0;
+//	LLFILE* file = LLFile::fopen(filename, "rb");
+//	if (!file)
+//	{
+//		return FALSE;
+//	}
+//
+//	if (!fseek(file, 0, SEEK_END))
+//	{
+//		file_size = ftell(file);
+//		fseek(file, 0, SEEK_SET);
+//	}
+//
+//	// Don't delete before FT_Done_Face
+//	pFontBuffer = new(std::nothrow) U8[file_size];
+//	if (!pFontBuffer)
+//	{
+//		fclose(file);
+//		return FALSE;
+//	}
+//
+//	mBufferSize = fread(pFontBuffer, 1, file_size, file);
+//	fclose(file);
+//
+//	if (mBufferSize != file_size)
+//	{
+//		delete pFontBuffer;
+//		mBufferSize = 0;
+//		return FALSE;
+//	}
+//
+//	error = FT_New_Memory_Face( gFTLibrary,
+//								(FT_Byte*) pFontBuffer,
+//								mBufferSize,
+//								0,
+//								&mFTFace);
+//#else
+//	error = FT_New_Face( gFTLibrary,
+//						 filename.c_str(),
+//						 0,
+//						 &mFTFace);
 	FT_Open_Args openArgs;
 	memset( &openArgs, 0, sizeof( openArgs ) );
 	openArgs.memory_base = gFontManagerp->loadFont( filename, openArgs.memory_size );
@@ -175,10 +224,14 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 
 	error = FT_Open_Face( gFTLibrary, &openArgs, 0, &mFTFace );
 
-	// </FS:ND>
+//#endif
+// </FS:ND>
 
-    if (error)
+	if (error)
 	{
+		delete pFontBuffer;
+		pFontBuffer = NULL;
+		mBufferSize = 0;
 		return FALSE;
 	}
 
@@ -195,9 +248,14 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 	{
 		// Clean up freetype libs.
 		FT_Done_Face(mFTFace);
+		delete pFontBuffer;
+		pFontBuffer = NULL;
+		mBufferSize = 0;
 		mFTFace = NULL;
 		return FALSE;
 	}
+
+	claimMem(mBufferSize);
 
 	F32 y_max, y_min, x_max, x_min;
 	F32 ems_per_unit = 1.f/ mFTFace->units_per_EM;

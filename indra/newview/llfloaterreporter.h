@@ -154,6 +154,7 @@ private:
 
 	LLPointer<LLImageRaw> mImageRaw;
 	LLPointer<LLImageRaw> mPrevImageRaw;
+	LLFrameTimer	mSnapshotTimer;
 };
 
 #endif

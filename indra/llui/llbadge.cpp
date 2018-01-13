@@ -102,6 +102,7 @@ LLBadge::LLBadge(const LLBadge::Params& p)
 	, mPaddingHoriz(p.padding_horiz)
 	, mPaddingVert(p.padding_vert)
 	, mParentScroller(NULL)
+	, mDrawAtParentTop(false)
 {
 	if (mImage.isNull())
 	{
@@ -236,7 +237,7 @@ void LLBadge::draw()
 	{
 		LLView* owner_view = mOwner.get();
 
-		if (owner_view)
+		if (owner_view && owner_view->isInVisibleChain())
 		{
 			//
 			// Calculate badge size based on label text
@@ -319,7 +320,14 @@ void LLBadge::draw()
 			// Compute y position
 			if (mLocationOffsetVCenter == BADGE_OFFSET_NOT_SPECIFIED)
 			{
-				badge_center_y = owner_rect.mBottom + owner_rect.getHeight() * mLocationPercentVCenter;
+				if(mDrawAtParentTop)
+				{
+					badge_center_y = owner_rect.mTop - badge_height * 0.5f - 1;
+				}
+				else
+				{
+					badge_center_y = owner_rect.mBottom + owner_rect.getHeight() * mLocationPercentVCenter;
+				}
 			}
 			else
 			{

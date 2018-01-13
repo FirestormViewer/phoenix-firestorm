@@ -220,8 +220,6 @@ public:
 	// <FS:Ansariel> Optional hiding of Inbox folder
 	void updateShowInboxFolder(const LLSD &data);
 
-	void updateFolderLabel(const LLUUID& folder_id);
-
 	// DEBUG ONLY:
 	static void dumpSelectionInformation(void* user_data);
 
