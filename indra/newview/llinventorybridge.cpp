@@ -100,6 +100,7 @@
 #endif
 // </FS:Zi>
 #include "fsfloaterplacedetails.h"
+#include "fsfloaterwearablefavorites.h"
 #include "llviewerattachmenu.h"
 #include "llresmgr.h"
 
@@ -1371,6 +1372,13 @@ BOOL LLInvFVBridge::isProtectedFolder(bool ignore_setting /*= false*/) const
 	if ((mUUID == AOEngine::instance().getAOFolder()
 		|| model->isObjectDescendentOf(mUUID, AOEngine::instance().getAOFolder()))
 		&& (gSavedPerAccountSettings.getBOOL("ProtectAOFolders") || ignore_setting))
+	{
+		return TRUE;
+	}
+
+	if ((mUUID == FSFloaterWearableFavorites::getFavoritesFolder()
+		|| model->isObjectDescendentOf(mUUID, FSFloaterWearableFavorites::getFavoritesFolder()))
+		&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders"))
 	{
 		return TRUE;
 	}
@@ -5670,9 +5678,11 @@ bool LLFolderBridge::isProtected() const
 {
 	static LLCachedControl<bool> protectAOFolders(gSavedPerAccountSettings, "ProtectAOFolders");
 	static LLCachedControl<bool> protectBridgeFolder(gSavedPerAccountSettings, "ProtectBridgeFolder");
+	static LLCachedControl<bool> WearableFavoritesprotectBridgeFolder(gSavedPerAccountSettings, "ProtectWearableFavoritesFolders");
 
 	return ((mUUID == AOEngine::instance().getAOFolder() && protectAOFolders) ||
-		(mUUID == FSLSLBridge::instance().getBridgeFolder() && protectBridgeFolder));
+		(mUUID == FSLSLBridge::instance().getBridgeFolder() && protectBridgeFolder) ||
+		(mUUID == FSFloaterWearableFavorites::getFavoritesFolder() && WearableFavoritesprotectBridgeFolder));
 }
 // </FS:Ansariel>
 

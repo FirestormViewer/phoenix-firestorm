@@ -194,6 +194,7 @@
 #include "fsfloatervoicecontrols.h"
 #include "fsfloatervolumecontrols.h"
 #include "fsfloatervramusage.h"
+#include "fsfloaterwearablefavorites.h"
 #include "fsmoneytracker.h"
 #include "fspanelclassified.h"
 #include "lggbeamcolormapfloater.h"
@@ -466,6 +467,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("fs_teleporthistory", "floater_fs_teleporthistory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterTeleportHistory>);
 	LLFloaterReg::add("fs_voice_controls", "floater_fs_voice_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterVoiceControls>);
 	LLFloaterReg::add("fs_volume_controls", "floater_fs_volume_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterVolumeControls>);
+	LLFloaterReg::add("fs_wearable_favorites", "floater_fs_wearable_favorites.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterWearableFavorites>);
 	LLFloaterReg::add("imcontacts", "floater_fs_contacts.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterContacts>);
 	LLFloaterReg::add("lgg_beamcolormap", "floater_beamcolor.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggBeamColorMapFloater>);
 	LLFloaterReg::add("lgg_beamshape", "floater_beamshape.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggBeamMapFloater>);

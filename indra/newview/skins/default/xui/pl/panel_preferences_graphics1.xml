@@ -84,7 +84,7 @@
 			<text name="MeshDetailText">
 				Poziom szczegółowości obiektów (LOD):
 			</text>
-			<slider label="  Obiekty i skulpty" name="ObjectMeshDetail"/>
+			<slider label="  Obiekty i skulpty" name="ObjectMeshDetail" tool_tip="Kontroluje kiedy obiekty z mniejszą ilością detali mogą zostać użyte, aby ograniczyć koszty renderowania. Wyższe wartości mogą powodować lag, używaj z rozwagą." />
 			<slider label="  Obiekty elastyczne" name="FlexibleMeshDetail"/>
 			<slider label="  Drzewa" name="TreeMeshDetail"/>
 			<slider label="  Awatary" name="AvatarMeshDetail"/>

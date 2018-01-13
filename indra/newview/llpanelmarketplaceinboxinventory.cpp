@@ -83,6 +83,15 @@ LLFolderViewFolder * LLInboxInventoryPanel::createFolderViewFolder(LLInvFVBridge
 	params.font_color = item_color;
 	params.font_highlight_color = item_color;
     params.allow_drop = allow_drop;
+
+	// <FS:Ansariel> Inventory specials
+	params.for_inventory = true;
+
+	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+	const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+	params.item_height = fsFolderViewItemHeight;
+	params.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+	// </FS:Ansariel>
 	
 	return LLUICtrlFactory::create<LLInboxFolderViewFolder>(params);
 }
@@ -101,6 +110,15 @@ LLFolderViewItem * LLInboxInventoryPanel::createFolderViewItem(LLInvFVBridge * b
 	params.tool_tip = params.name;
 	params.font_color = item_color;
 	params.font_highlight_color = item_color;
+
+	// <FS:Ansariel> Inventory specials
+	params.for_inventory = true;
+
+	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+	const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+	params.item_height = fsFolderViewItemHeight;
+	params.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+	// </FS:Ansariel>
 
 	return LLUICtrlFactory::create<LLInboxFolderViewItem>(params);
 }

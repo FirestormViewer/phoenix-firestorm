@@ -25,7 +25,7 @@
     layout="topleft"
     left="0"
     name="item_icon"
-    top="0"
+    top="2"
     width="16" />
   <item_name
     follows="left|right"
