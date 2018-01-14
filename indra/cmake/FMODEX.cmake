@@ -10,6 +10,10 @@ if (INSTALL_PROPRIETARY)
 endif (INSTALL_PROPRIETARY)
 
 if (FMODEX)
+  if (FMODSTUDIO)
+    MESSAGE(FATAL_ERROR "You cannot use FMOD Ex if you are already using FMOD Studio.")
+  endif (FMODSTUDIO)
+
   if (USESYSTEMLIBS)
     # In that case, we use the version of the library installed on the system
     set(FMODEX_FIND_REQUIRED ON)
