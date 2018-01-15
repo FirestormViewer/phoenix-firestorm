@@ -6842,7 +6842,7 @@
     <key>InventoryDisplayInbox</key>
     <map>
         <key>Comment</key>
-        <string>Override received items inventory inbox display</string>
+        <string>UNUSED - Controlled via FSShowInboxFolder and FSAlwaysShowInboxButton: Override received items inventory inbox display</string>
         <key>Persist</key>
         <integer>0</integer>
         <key>Type</key>
