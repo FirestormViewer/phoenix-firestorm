@@ -1625,10 +1625,12 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id, BOOL main_panel)
 {
 	LLInventoryPanel *active_panel;
-	if (main_panel)
-	{
-		LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory")->selectAllItemsPanel();
-	}
+	// <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
+	//if (main_panel)
+	//{
+	//	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory")->selectAllItemsPanel();
+	//}
+	// </FS:Ansariel>
 	active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
 
 	if (active_panel)
@@ -1674,7 +1676,15 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 		}
 		else
 		{
-			LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+			// <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
+			//LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+			if (main_panel)
+			{
+				active_panel->getParentByType<LLTabContainer>()->selectFirstTab();
+				active_panel = getActiveInventoryPanel(FALSE);
+			}
+			LLFloater* floater_inventory = active_panel->getParentByType<LLFloater>();
+			// </FS:Ansariel>
 			if (floater_inventory)
 			{
 				floater_inventory->setFocus(TRUE);
