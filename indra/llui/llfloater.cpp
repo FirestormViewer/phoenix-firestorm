@@ -947,13 +947,7 @@ void LLFloater::applyControlsAndPosition(LLFloater* other)
 	{
 		if (!applyRectControl())
 		{
-			// <FS:Ansariel> Don't apply position to undocked IM floater (FIRE-5459)
-			//applyPositioning(other);
-			if (getName() != "panel_im")
-			{
-				applyPositioning(other, true);
-			}
-			// </FS:Ansariel> Don't apply position to undocked IM floater (FIRE-5459)
+			applyPositioning(other, true);
 		}
 	}
 }

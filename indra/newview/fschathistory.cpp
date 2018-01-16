@@ -1295,7 +1295,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	// We graying out chat history by graying out messages that contains full date in a time string
 	if (message_from_log && !is_conversation_log)
 	{
-		txt_color = LLColor4::grey;
+		txt_color = LLUIColorTable::instance().getColor("ChatHistoryMessageFromLog");
 		body_message_params.color(txt_color);
 		body_message_params.readonly_color(txt_color);
 		name_params.color(txt_color);

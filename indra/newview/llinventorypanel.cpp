@@ -326,11 +326,14 @@ void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
     }
     
 	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
-	if (!gSavedSettings.getBOOL("FSShowInboxFolder"))
+	if (getName() != "Worn Items")
 	{
-		getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
+		if (!gSavedSettings.getBOOL("FSShowInboxFolder"))
+		{
+			getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
+		}
+		gSavedSettings.getControl("FSShowInboxFolder")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateShowInboxFolder, this, _2));
 	}
-	gSavedSettings.getControl("FSShowInboxFolder")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateShowInboxFolder, this, _2));
 	// </FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 
 	// set the filter for the empty folder if the debug setting is on
@@ -1628,13 +1631,13 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 	bool in_inbox = (gInventory.isObjectDescendentOf(obj_id, gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX)));
 	bool show_inbox = gSavedSettings.getBOOL("FSShowInboxFolder"); // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 
-	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+	// <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
 	//if (main_panel && !in_inbox)
-	if (main_panel && (!in_inbox || show_inbox))
+	//{
+	//	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory")->selectAllItemsPanel();
+	//}
 	// </FS:Ansariel>
-	{
-		LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory")->selectAllItemsPanel();
-	}
+
 	active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
 
 	if (active_panel)
@@ -1663,7 +1666,15 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 		}
 		else
 		{
-			LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+			// <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
+			//LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+			if (main_panel)
+			{
+				active_panel->getParentByType<LLTabContainer>()->selectFirstTab();
+				active_panel = getActiveInventoryPanel(FALSE);
+			}
+			LLFloater* floater_inventory = active_panel->getParentByType<LLFloater>();
+			// </FS:Ansariel>
 			if (floater_inventory)
 			{
 				floater_inventory->setFocus(TRUE);

@@ -193,16 +193,6 @@ void LLMultiFloater::addFloater(LLFloater* floaterp, BOOL select_added_floater, 
 	floater_data.mCanResize = floaterp->isResizable();
     floater_data.mSaveRect = floaterp->mSaveRect;
 
-	// <FS> Update torn off status and add title bar
-	if (getName() == IM_CONTAINER)
-	{
-		floaterp->getDragHandle()->setTitleVisible(FALSE);
-		LLRect rect = floaterp->getRect();
-		rect.mTop -= floaterp->getHeaderHeight();
-		floaterp->setRect(rect);
-	}
-	// </FS>
-
 	// remove minimize and close buttons
 	floaterp->setCanMinimize(FALSE);
 	floaterp->setCanResize(FALSE);
@@ -211,6 +201,16 @@ void LLMultiFloater::addFloater(LLFloater* floaterp, BOOL select_added_floater, 
 	floaterp->storeRectControl();
 	// avoid double rendering of floater background (makes it more opaque)
 	floaterp->setBackgroundVisible(FALSE);
+
+	// <FS> Update torn off status and add title bar; Do this AFTER we stored the original rect!
+	if (getName() == IM_CONTAINER)
+	{
+		floaterp->getDragHandle()->setTitleVisible(FALSE);
+		LLRect rect = floaterp->getRect();
+		rect.mTop -= floaterp->getHeaderHeight();
+		floaterp->setRect(rect);
+	}
+	// </FS>
 
 	if (mAutoResize)
 	{
