@@ -411,8 +411,8 @@ BOOL LLFloaterBvhPreview::loadBVH()
 			onBtnPlay();
 			// </FS>
 			
-			getChild<LLSlider>("playback_slider")->setMinValue(0.0);
-			getChild<LLSlider>("playback_slider")->setMaxValue(1.0);
+			getChild<LLSliderCtrl>("playback_slider")->setMinValue(0.0);
+			getChild<LLSliderCtrl>("playback_slider")->setMaxValue(1.0);
 
 			//<FS:Sei> FIRE-17251: Use defaults from XUI, not from the JointMotionList constructor
 			//getChild<LLUICtrl>("loop_check")->setValue(LLSD(motionp->getLoop()));
