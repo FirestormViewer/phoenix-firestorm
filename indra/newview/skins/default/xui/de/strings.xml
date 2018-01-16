@@ -5827,6 +5827,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Group_Titles_Label">
 		Gruppentitel
 	</string>
+	<string name="Command_Wearable_Favorites_Label">
+		Kleidungsfavoriten
+	</string>
 	<string name="Command_Appearance_Tooltip">
 		Avatar ändern
 	</string>
@@ -6006,6 +6009,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Group_Titles_Tooltip">
 		Aktuellen Gruppentitel ändern
+	</string>
+	<string name="Command_Wearable_Favorites_Tooltip">
+		Liste der Kleidungsfavoriten öffnen
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste

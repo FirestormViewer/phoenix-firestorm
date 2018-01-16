@@ -166,6 +166,7 @@ set(viewer_SOURCE_FILES
     fsfloatervoicecontrols.cpp
     fsfloatervolumecontrols.cpp
     fsfloatervramusage.cpp
+    fsfloaterwearablefavorites.cpp
     fskeywords.cpp
     fslightshare.cpp
     fslslbridge.cpp
@@ -914,6 +915,7 @@ set(viewer_HEADER_FILES
     fsfloatervoicecontrols.h
     fsfloatervolumecontrols.h
     fsfloatervramusage.h
+    fsfloaterwearablefavorites.h
     fsgridhandler.h
     fskeywords.h
     fslightshare.h
@@ -2462,7 +2464,7 @@ if (DARWIN)
   set(MACOSX_BUNDLE_BUNDLE_NAME "Firestorm")
   set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${VIEWER_SHORT_VERSION}")
   set(MACOSX_BUNDLE_BUNDLE_VERSION "${VIEWER_SHORT_VERSION}${VIEWER_MACOSX_PHASE}${VIEWER_REVISION}")
-  set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2017 The Phoenix Firestorm Project, Inc.")
+  set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2018 The Phoenix Firestorm Project, Inc.")
   set(MACOSX_BUNDLE_NSMAIN_NIB_FILE "Firestorm.nib")
   set(MACOSX_BUNDLE_NSPRINCIPAL_CLASS "LLNSApplication")
 

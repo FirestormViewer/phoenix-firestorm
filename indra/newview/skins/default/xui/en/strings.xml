@@ -2630,6 +2630,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_ResyncAnimations_Label">Resync animations</string>
   <string name="Command_RegionTracker_Label">Region Tracker</string>
   <string name="Command_Group_Titles_Label">Group Titles</string>
+  <string name="Command_Wearable_Favorites_Label">Favorite Wearables</string>
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
   <string name="Command_Appearance_Tooltip">Change your avatar</string>
@@ -2693,6 +2694,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_ResyncAnimations_Tooltip">Synchronizes avatar animations</string>
   <string name="Command_RegionTracker_Tooltip">Track various regions status</string>
   <string name="Command_Group_Titles_Tooltip">Change active group tag</string>
+  <string name="Command_Wearable_Favorites_Tooltip">Open the list of favorite wearables</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>

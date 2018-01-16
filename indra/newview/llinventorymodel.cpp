@@ -64,11 +64,11 @@
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> Patch: ReplaceWornItemsOnly
 #include "llviewerobjectlist.h"
 #include "llviewerobject.h"
 #include "llgesturemgr.h"
-//-TT
+// </FS:TT>
 
 //#define DIFF_INVENTORY_FILES
 #ifdef DIFF_INVENTORY_FILES
@@ -76,6 +76,7 @@
 #endif
 
 #include "aoengine.h"
+#include "fsfloaterwearablefavorites.h"
 #include "fslslbridge.h"
 #ifdef OPENSIM
 #include "llviewernetwork.h"
@@ -1310,7 +1311,9 @@ void LLInventoryModel::changeItemParent(LLViewerInventoryItem* item,
 		if ((isObjectDescendentOf(item->getUUID(), AOEngine::instance().getAOFolder())
 				&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders")) ||
 			(isObjectDescendentOf(item->getUUID(), FSLSLBridge::instance().getBridgeFolder())
-				&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder")))
+				&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder")) ||
+			(isObjectDescendentOf(item->getUUID(), FSFloaterWearableFavorites::getFavoritesFolder())
+				&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders")))
 		{
 			LL_INFOS("Inventory") << "Cannot move item because it is descendent of a protected folder" << LL_ENDL;
 			return;
@@ -1352,7 +1355,9 @@ void LLInventoryModel::changeCategoryParent(LLViewerInventoryCategory* cat,
 	if ((isObjectDescendentOf(cat->getUUID(), AOEngine::instance().getAOFolder())
 			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders")) ||
 		(isObjectDescendentOf(cat->getUUID(), FSLSLBridge::instance().getBridgeFolder())
-			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder")))
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder")) ||
+		(isObjectDescendentOf(cat->getUUID(), FSFloaterWearableFavorites::getFavoritesFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders")))
 	{
 		LL_INFOS("Inventory") << "Cannot move category because it is descendent of a protected folder" << LL_ENDL;
 		return;

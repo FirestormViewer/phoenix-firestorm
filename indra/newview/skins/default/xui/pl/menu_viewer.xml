@@ -4,11 +4,12 @@
 		<menu_item_call label="Zarządzaj kontem" name="Manage Account"/>
 		<menu_item_call label="Moje rzeczy na Marketplace" name="MarketplaceListings"/>
 		<menu_item_call label="Kup L$" name="Buy and Sell L$"/>
-		<menu_item_check label="Moja Szafa" name="Inventory"/>
-		<menu_item_check label="Moja Szafa" name="ShowSidetrayInventory"/>
+		<menu_item_check label="Moja szafa" name="Inventory"/>
+		<menu_item_check label="Moja szafa" name="ShowSidetrayInventory"/>
+		<menu_item_check label="Ulubione rzeczy" name="WearableFavorites"/>
 		<menu_item_call label="Miejsca" name="Picks"/>
 		<menu_item_call label="Przygody" name="Experiences"/>
-		<menu_item_call label="Mój Profil" name="Profile"/>
+		<menu_item_call label="Mój profil" name="Profile"/>
 		<menu_item_check label="Mój wygląd" name="ChangeOutfit"/>
 		<menu_item_call label="Biblioteka awatarów" name="Avatar Picker"/>
 		<menu label="Ruch" name="Movement">

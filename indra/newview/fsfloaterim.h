@@ -161,6 +161,7 @@ public:
 protected:
 	/* virtual */
 	void	onClickCloseBtn(bool app_quitting = false);
+	/*virtual*/ bool applyRectControl();
 
 	// support sysinfo button -Zi
 	void	onSysinfoButtonVisibilityChanged(const LLSD& yes);
@@ -276,6 +277,8 @@ private:
 	uuid_vec_t mPendingParticipants;
 
 	boost::signals2::connection mAvatarNameCacheConnection;
+
+	bool mApplyRect;
 };
 
 #endif  // FS_FLOATERIM_H

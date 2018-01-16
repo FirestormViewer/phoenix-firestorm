@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_wearable_favorites" title="Ulubione rzeczy">
+	<floater.string name="empty_list">
+		Przeciągnij rzeczy tutaj aby dodać je do listy.
+	</floater.string>
+	<floater.string name="search_no_items">
+		Nie znaleziono pasujących rzeczy.
+	</floater.string>
+	<panel name="buttons_panel">
+		<filter_editor label="Filtruj rzeczy" name="wearable_filter_input" />
+		<menu_button name="options_btn" tool_tip="Opcje ulubionych rzeczy" />
+		<button name="remove_btn" tool_tip="Usuń rzecz z listy ulubionych" />
+	</panel>
+</floater>

@@ -233,6 +233,8 @@ protected:
 
 private:
 
+	bool doFrame();
+
 	void initMaxHeapSize();
 	bool initThreads(); // Initialize viewer threads, return false on failure.
 	bool initConfiguration(); // Initialize settings from the command line/config file.
@@ -424,5 +426,7 @@ extern LLUUID gBlackSquareID;
 
 extern BOOL gRandomizeFramerate;
 extern BOOL gPeriodicSlowFrame;
+
+extern BOOL gSimulateMemLeak;
 
 #endif // LL_LLAPPVIEWER_H

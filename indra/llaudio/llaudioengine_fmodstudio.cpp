@@ -126,9 +126,8 @@ bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata)
 		break;
 	}
 
-	// In this case, all sounds, PLUS wind and stream will be software.
-	result = mSystem->setSoftwareChannels(num_channels + 2);
-	Check_FMOD_Error(result,"FMOD::System::setSoftwareChannels");
+	result = mSystem->setAdvancedSettings(&adv_settings);
+	Check_FMOD_Error(result, "FMOD::System::setAdvancedSettings");
 
 	U32 fmod_flags = FMOD_INIT_NORMAL | FMOD_INIT_3D_RIGHTHANDED | FMOD_INIT_THREAD_UNSAFE;
 	if(mEnableProfiler)
@@ -238,6 +237,11 @@ bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata)
 		setStreamingAudioImpl(new LLStreamingAudio_FMODSTUDIO(mSystem));
 
 	LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() FMOD Studio initialized correctly" << LL_ENDL;
+
+	FMOD_ADVANCEDSETTINGS adv_settings_dump = { };
+	mSystem->getAdvancedSettings(&adv_settings_dump);
+
+	LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init(): resampler=" << adv_settings.resamplerMethod << " bytes" << LL_ENDL;
 
 	int r_numbuffers, r_samplerate, r_channels;
 	unsigned int r_bufferlength;

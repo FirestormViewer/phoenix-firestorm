@@ -1005,14 +1005,28 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1331456a3df95294eaf44fab990f62cd</string>
+              <string>eccdcb4a1e96bb829284d01255f4f913</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.02-linux-.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.02-linux-201801091647.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>8787b777a49d41ccbb3cbd6c4a1d768d</string>
+              <key>hash_algorithm</key>
+              <string>md5</string>
+              <key>url</key>
+              <string>file:///opt/firestorm/fmodstudio-1.10.02-linux-x64-201801091648.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -3885,7 +3899,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
     <key>package_description</key>
     <map>
       <key>copyright</key>
-      <string>Copyright (c) 2017, The Phoenix Firestorm Project, Inc.</string>
+      <string>Copyright (c) 2018, The Phoenix Firestorm Project, Inc.</string>
       <key>description</key>
       <string>Firestorm Viewer</string>
       <key>license</key>
@@ -4501,7 +4515,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--platform linux32</string>
                   <string>--package</string>
                   <string>--btype RelWithDebInfo</string>
@@ -4555,7 +4569,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--platform linux32</string>
                 </array>
               </map>

@@ -2199,6 +2199,15 @@ class Linux_i686_Manifest(LinuxManifest):
                 print "Skipping libfmodex.so - not found"
                 pass
 
+            try:
+                self.path("libfmod-*.so")
+                self.path("libfmod.so")
+                self.path("libfmod.so*")
+                pass
+            except:
+                print "Skipping libfmodstudio.so - not found"
+                pass
+
 
         # Vivox runtimes
         with self.prefix(src=relpkgdir, dst="bin"):
@@ -2232,13 +2241,20 @@ class Linux_x86_64_Manifest(LinuxManifest):
             try:
                     self.path("libfmodex64-*.so")
                     self.path("libfmodex64.so")
-                    self.path("libfmod64.so")
-                    self.path("libfmod.so")
-                    self.path("libfmod.so*")
+                    self.path("libfmodex64.so*")
                     pass
             except:
                     print "Skipping libfmodex.so - not found"
                     pass
+
+            try:
+                self.path("libfmod-*.so")
+                self.path("libfmod.so")
+                self.path("libfmod.so*")
+                pass
+            except:
+                print "Skipping libfmod.so - not found"
+                pass
 
           self.prefix(src="../packages/lib/release/x64", dst="lib")
           try:

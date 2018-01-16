@@ -11,13 +11,13 @@
   <default_style
    font="SansSerifSmall"
    font.style="NORMAL"
-   color="DkGray"/>
+   color="White"/>
 
   <!-- styles for avatar item INVITED to voice call -->
   <voice_call_invited_style
    font="SansSerifSmall"
    font.style="NORMAL"
-   color="SL-MidDkGray_50"/>
+   color="White_50"/>
 
   <!-- styles for avatar item JOINED to voice call -->
   <voice_call_joined_style
@@ -41,7 +41,7 @@
   <offline_style
    font="SansSerifSmall"
    font.style="NORMAL"
-   color="SL-MidDkGray"/>
+   color="White_70"/>
 
   <!-- TS: styles for GROUP MODERATOR avatar item (FIRE-984)-->
   <group_moderator_style
