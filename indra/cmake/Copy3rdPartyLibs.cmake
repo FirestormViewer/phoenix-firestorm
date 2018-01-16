@@ -54,7 +54,7 @@ if(WINDOWS)
     if( NOT ND_USE_OPENJPEG2 )
       set(debug_files ${debug_files} openjpegd.dll )
       set(release_files ${release_files} openjpeg.dll )
-	else()
+    else()
       set(debug_files ${debug_files} openjp2.dll )
       set(release_files ${release_files} openjp2.dll )
     endif( NOT ND_USE_OPENJPEG2 ) 
@@ -66,6 +66,16 @@ if(WINDOWS)
       set(debug_files ${debug_files} libtcmalloc_minimal-debug.dll)
       set(release_files ${release_files} libtcmalloc_minimal.dll)
     endif(USE_TCMALLOC)
+
+    if (FMODSTUDIO)
+      if( NOT ND_BUILD64BIT_ARCH )
+        set(debug_files ${debug_files} fmodL.dll)
+        set(release_files ${release_files} fmod.dll)
+      else( NOT ND_BUILD64BIT_ARCH )
+        set(debug_files ${debug_files} fmodL64.dll)
+        set(release_files ${release_files} fmod64.dll)
+      endif( NOT ND_BUILD64BIT_ARCH )
+    endif (FMODSTUDIO)
 
     if (FMODEX)
       if( NOT ND_BUILD64BIT_ARCH )
@@ -179,9 +189,14 @@ elseif(DARWIN)
         libGLOD.dylib
         libhunspell-1.3.0.dylib
         libndofdev.dylib
-	libgrowl.dylib
+        libgrowl.dylib
         libgrowl++.dylib
        )
+
+    if (FMODSTUDIO)
+      set(debug_files ${debug_files} libfmodL.dylib)
+      set(release_files ${release_files} libfmod.dylib)
+    endif (FMODSTUDIO)
 
     if (FMODEX)
       set(debug_files ${debug_files} libfmodexL.dylib)
@@ -240,7 +255,7 @@ elseif(LINUX)
           libdb-5.1.so
           libfreetype.so.6.6.2
           libfreetype.so.6
-		 )
+         )
     endif( NOT ND_BUILD64BIT_ARCH )
     if( NOT ND_USE_OPENJPEG2 )
       set(release_files ${release_files} libopenjpeg.so )
@@ -250,6 +265,11 @@ elseif(LINUX)
     if (USE_TCMALLOC)
       set(release_files ${release_files} "libtcmalloc_minimal.so")
     endif (USE_TCMALLOC)
+
+    if (FMODSTUDIO)
+      set(debug_files ${debug_files} "libfmodL.so")
+      set(release_files ${release_files} "libfmod.so")
+    endif (FMODSTUDIO)
 
     #if (FMODEX)
     #  set(debug_files ${debug_files} "libfmodexL.so")

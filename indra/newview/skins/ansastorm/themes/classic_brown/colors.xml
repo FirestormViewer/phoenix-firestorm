@@ -1373,4 +1373,7 @@
   <color
       name="UploadDialogBackground"
       reference="SL-Background_66" />
+  <color
+      name="ChatHistoryMessageFromLog"
+      reference="Gray" />
 </colors>

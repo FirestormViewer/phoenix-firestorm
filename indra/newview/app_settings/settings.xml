@@ -6842,7 +6842,7 @@
     <key>InventoryDisplayInbox</key>
     <map>
         <key>Comment</key>
-        <string>Override received items inventory inbox display</string>
+        <string>UNUSED - Controlled via FSShowInboxFolder and FSAlwaysShowInboxButton: Override received items inventory inbox display</string>
         <key>Persist</key>
         <integer>0</integer>
         <key>Type</key>
@@ -13022,13 +13022,13 @@ Change of this parameter will affect the layout of buttons in notification toast
 	<key>RenderVolumeLODFactor</key>
     <map>
       <key>Comment</key>
-      <string>Controls level of detail of primitives (multiplier for current screen area when calculated level of detail)</string>
+      <string>Influences the distance at which the viewer will display a lower detail model. Higher values = more lag. IMPORTANT: Please disregard advice to increase this value, such as is commonly distributed in notecards.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1.0</real>
+      <real>2.0</real>
       <key>SanityCheckType</key>
       <string>LessThanEquals</string>
       <key>SanityValue</key>
@@ -19959,10 +19959,10 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>1.0</real>
   </map>
-  <key>FMODExProfilerEnable</key>
+  <key>FMODProfilerEnable</key>
   <map>
     <key>Comment</key>
-    <string>Enable profiler tool if using FMOD Ex</string>
+    <string>Enable profiler tool if using FMOD</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -19970,7 +19970,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
     </map>
-  <key>FMODExDecodeBufferSize</key>
+  <key>FMODDecodeBufferSize</key>
   <map>
     <key>Comment</key>
     <string>Sets the streaming decode buffer size (in milliseconds)</string>
@@ -19981,7 +19981,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>1000</integer>
     </map>
-  <key>FMODExStreamBufferSize</key>
+  <key>FMODStreamBufferSize</key>
   <map>
     <key>Comment</key>
     <string>Sets the streaming buffer size (in milliseconds)</string>
@@ -19991,6 +19991,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>U32</string>
     <key>Value</key>
     <integer>7000</integer>
+  </map>
+  <key>FMODResampleMethod</key>
+  <map>
+    <key>Comment</key>
+    <string>Sets the method used for internal resampler 0(Linear), 1(Cubic), 2(Spline)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>0</integer>
   </map>
   <key>DisablePrecacheDelayAfterTeleporting</key>
   <map>
@@ -24510,6 +24521,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>FSWearableFavoritesSortOrder</key>
+    <map>
+      <key>Comment</key>
+      <string>The sort order for the wearable favorites item list</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>3</integer>
     </map>
   </map>
 </llsd>

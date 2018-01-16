@@ -4932,12 +4932,14 @@ Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
 		<usetemplate ignoretext="Informuj mnie, że masowa zmiana widoczności online może zająć trochę czasu" name="okignore" />
 	</notification>
 	<notification name="RenderVolumeLODFactorWarning">
-		UWAGA: Wygląda na to, że Twój poziom detali (LOD) jest ustawiony na wysoką wartość.
+		UWAGA: Twój poziom detali (LOD) jest ustawiony na wysoką wartość.
 
-Wartości wyższe niż 8 są bez znaczenia i nie powodują żadnej poprawy. Nie powinieneś/aś ustawiać go na więcej niż 4, a i to tylko w wyjątkowych sytuacjach (jak robienie zdjęć w wysokiej rozdzielczości). Ustawienie zbyt wysokiej wartości poważnie obniża wydajność grafiki.
+Do codziennego użytku LOD ustawiony na 1-3 powinien wystarczyć.
+Rozważ wymianę obiektów, które wyglądają na zdeformowane z taką wartością.
 
-Do codziennego użytku LOD ustawiony na 2 powinien wystarczyć. Jeśli posiadasz obiekty, które wyglądają na zdeformowane z taką wartością, to powinieneś/aś rozważyć ich wymianę.
-		<usetemplate ignoretext="Ostrzegaj o wysokim poziomie detali" name="okignore" />
+Mnożnik LOD >3: Zwiększa lag. Zalecane tylko dla fotografii.
+Mnożnik LOD >4: Używaj tylko w specjalnych przypadkach. Resetuje się po restarcie.
+Mnożnik LOD >8: Brak widocznych efektów. Może powodować błędy.
 	</notification>
 	<notification name="CurrencyURIOverrideReceived">
 		W tym regionie wybrano portal walutowy strony trzeciej.

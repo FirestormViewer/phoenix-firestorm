@@ -79,6 +79,8 @@ static const char * const INBOX_LAYOUT_PANEL_NAME = "inbox_layout_panel";
 static const char * const INVENTORY_LAYOUT_STACK_NAME = "inventory_layout_stack";
 static const char * const MARKETPLACE_INBOX_PANEL = "marketplace_inbox";
 
+bool LLSidepanelInventory::sInboxInitalized = false; // <FS:Ansariel> Inbox panel randomly shown on secondary inventory windows
+
 //
 // Helpers
 //
@@ -231,6 +233,7 @@ BOOL LLSidepanelInventory::postBuild()
 	}
 	
 	// Received items inbox setup
+	if (!sInboxInitalized) // <FS:Ansariel> Inbox panel randomly shown on secondary inventory window
 	{
 		// <FS:Ansariel> FIRE-17603: Received Items button sometimes vanishing
 		//LLLayoutStack* inv_stack = getChild<LLLayoutStack>(INVENTORY_LAYOUT_STACK_NAME);
@@ -256,20 +259,24 @@ BOOL LLSidepanelInventory::postBuild()
 		}
 
 		// Set the inbox visible based on debug settings (final setting comes from http request below)
-		enableInbox(gSavedSettings.getBOOL("InventoryDisplayInbox"));
 		// <FS:Ansariel> FIRE-17603: Received Items button sometimes vanishing
+		//enableInbox(gSavedSettings.getBOOL("InventoryDisplayInbox"));
+		enableInbox(!gSavedSettings.getBOOL("FSShowInboxFolder") || gSavedSettings.getBOOL("FSAlwaysShowInboxButton"));
 		}
 		// </FS:Ansariel>
 
 		// Trigger callback for after login so we can setup to track inbox changes after initial inventory load
 		LLAppViewer::instance()->setOnLoginCompletedCallback(boost::bind(&LLSidepanelInventory::updateInbox, this));
+
+		// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+		gSavedSettings.getControl("FSShowInboxFolder")->getSignal()->connect(boost::bind(&LLSidepanelInventory::refreshInboxVisibility, this));
+		gSavedSettings.getControl("FSAlwaysShowInboxButton")->getSignal()->connect(boost::bind(&LLSidepanelInventory::refreshInboxVisibility, this));
+
+		sInboxInitalized = true; // <FS:Ansariel> Inbox panel randomly shown on secondary inventory window
 	}
 
-	gSavedSettings.getControl("InventoryDisplayInbox")->getCommitSignal()->connect(boost::bind(&handleInventoryDisplayInboxChanged));
-
 	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
-	gSavedSettings.getControl("FSShowInboxFolder")->getSignal()->connect(boost::bind(&LLSidepanelInventory::refreshInboxVisibility, this));
-	gSavedSettings.getControl("FSAlwaysShowInboxButton")->getSignal()->connect(boost::bind(&LLSidepanelInventory::refreshInboxVisibility, this));
+	//gSavedSettings.getControl("InventoryDisplayInbox")->getCommitSignal()->connect(boost::bind(&handleInventoryDisplayInboxChanged));
 
 	// Update the verbs buttons state.
 	updateVerbs();

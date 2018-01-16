@@ -87,7 +87,7 @@
 		<text name="MeshDetailText">
 			Darstellungsgrad:
 		</text>
-		<slider label="   Objekte:" name="ObjectMeshDetail"/>
+		<slider label="   Objekte:" name="ObjectMeshDetail" tool_tip="Legt fest, wann ein niedrigerer Detailgrad von Objekten verwendet wird, um Renderkosten zu reduzieren. Bitte mit Vorsicht verwenden: Höhere Werte verschlechtern die Performance."/>
 		<slider label="   Flexiprimitiva:" name="FlexibleMeshDetail"/>
 		<slider label="   Bäume:" name="TreeMeshDetail"/>
 		<slider label="   Avatare:" name="AvatarMeshDetail"/>

@@ -2026,6 +2026,12 @@ void LLVOAvatar::resetSkeleton(bool reset_animations)
             // Local viewer-side reset for non-self avatars.
             resetAnimations();
         }
+
+        // <FS:Ansariel> FIRE-22135: Try to re-register LLPhysicsMotionController to see if that unfreezes stuck physics
+        removeMotion(ANIM_AGENT_PHYSICS_MOTION);
+        registerMotion(ANIM_AGENT_PHYSICS_MOTION, LLPhysicsMotionController::create);
+        startMotion(ANIM_AGENT_PHYSICS_MOTION);
+        // </FS:Ansariel>
     }
     
     LL_DEBUGS("Avatar") << avString() << " reset ends" << LL_ENDL;

@@ -13190,14 +13190,16 @@ Due to server load, mass toggling online status visibility can take a while to b
    icon="alert.tga"
    name="RenderVolumeLODFactorWarning"
    type="alert">
-    WARNING: The Level of Detail (LOD) seems to be set to a high value.
+    WARNING: The Level of Detail (LOD) Factor is set high
 
-Values higher than 8 are meaningless and give no improvement. You should not set this to a value higher than 4, and only in exceptional situations (like taking high-resolution photos). Setting this too high seriously lowers your graphics performance.
+For everyday use, LOD Factor in the range of 1-3 suffices. 
+Consider replacing objects that look deformed at such values.
 
-For everyday use, LOD set to 2 should suffice. If you own some objects that look deformed with such value, then you should consider replacing them.
+LOD Factor >3: Adds to lag. Advised only for photography. 
+LOD Factor >4: Use in special circumstances. Reverts after relog.
+LOD Factor >8: Has no real effect. May cause errors.
     <usetemplate
-     ignoretext="Warn about high Level of Detail"
-     name="okignore"
+     name="okbutton"
      yestext="OK"/>
   </notification>
   <notification

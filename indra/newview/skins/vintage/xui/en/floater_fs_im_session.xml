@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
   positioning="centered"
-  legacy_header_height="18"
   background_visible="true"
   default_tab_group="1"
   show_title="true"
   follows="all"
-  height="350"
+  height="332"
   layout="topleft"
   left="0"
   name="panel_im"
@@ -26,7 +25,7 @@
     <floater.string
      name="multiple_participants_added"
      value="[NAME] were invited to the conversation."/>
-  
+
   <layout_stack
     border_size="0"
     animate="false"
@@ -38,7 +37,7 @@
     layout="topleft"
     orientation="horizontal"
     name="ls_control_panel"
-    top="20"
+    top="2"
     left="3">
     <layout_panel
       auto_resize="false"
@@ -384,9 +383,9 @@
      name="send_sysinfo_btn"
      top="0"
      width="24" />
-  </layout_panel>
-  
-     <layout_panel
+    </layout_panel>
+
+    <layout_panel
       name="lp_options_btn"
       auto_resize="false"
       user_resize="false"
@@ -444,7 +443,7 @@
     layout="topleft"
     orientation="horizontal"
     name="chat_stack"
-    top="40"
+    top="22"
     left="0">
     <layout_panel
       name="im_control_panel_holder"

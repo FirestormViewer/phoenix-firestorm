@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ positioning="cascading"
+ can_close="true"
+ can_resize="true"
+ height="350"
+ help_topic="fs_wearable_favorites"
+ min_height="150"
+ min_width="175"
+ layout="topleft"
+ name="floater_fs_wearable_favorites"
+ save_rect="true"
+ save_visibility="true"
+ single_instance="true"
+ reuse_instance="true"
+ title="Favorite Wearables"
+ width="310">
+
+	<floater.string name="empty_list">
+		Drag wearable items here to add to list.
+	</floater.string>
+	<floater.string name="search_no_items">
+		No matching items found.
+	</floater.string>
+
+	<panel
+	 follows="left|top|right"
+	 height="27"
+	 layout="topleft"
+	 left="2"
+	 name="buttons_panel"
+	 right="-1"
+	 top="2">
+		<filter_editor
+		 follows="left|top|right"
+		 height="23"
+		 layout="topleft"
+		 left="3"
+		 label="Filter Wearables"
+		 max_length_chars="300"
+		 name="wearable_filter_input"
+		 top="1"
+		 right="-70" />
+		<menu_button
+		 follows="right"
+		 height="25"
+		 image_hover_unselected="Toolbar_Middle_Over"
+		 image_overlay="Conv_toolbar_sort"
+		 image_selected="Toolbar_Middle_Selected"
+		 image_unselected="Toolbar_Middle_Off"
+		 layout="topleft"
+		 left_pad="2"
+		 name="options_btn"
+		 tool_tip="Wearable favorites options"
+		 top_delta="0"
+		 width="31" />
+		<button
+		 follows="right"
+		 height="25"
+		 image_hover_unselected="Toolbar_Middle_Over"
+		 image_overlay="TrashItem_Off"
+		 image_selected="Toolbar_Middle_Selected"
+		 image_unselected="Toolbar_Middle_Off"
+		 left_pad="2"
+		 layout="topleft"
+		 name="remove_btn"
+		 tool_tip="Remove wearable from favorites list"
+		 top_delta="0"
+		 width="31"/>
+	</panel>
+
+	<panel
+	 layout="topleft"
+	 follows="all"
+	 name="panel_fs_wearable_favorites"
+	 top="32"
+	 left="2"
+	 bottom="-2"
+	 right="-1">
+		<fs_wearable_favorites_items_list
+		 layout="topleft"
+		 follows="all"
+		 name="favorites_list"
+		 multi_select="true"
+		 standalone="true"
+		 show_create_new="false"
+		 top="0"
+		 left="0"
+		 bottom="-1"
+		 right="-1"
+		 worn_indication_enabled="true" />
+	</panel>
+</floater>

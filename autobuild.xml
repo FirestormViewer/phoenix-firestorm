@@ -586,6 +586,66 @@
         <key>version</key>
         <string>2.0.1.297014</string>
       </map>
+      <key>fmodstudio</key>
+      <map>
+        <key>copyright</key>
+        <string>FMOD Studio, copyright (c) Firelight Technologies Pty, Ltd., 2012-2017.</string>
+        <key>description</key>
+        <string>FMOD Studio audio system library</string>
+        <key>license</key>
+        <string>fmodstudio</string>
+        <key>license_file</key>
+        <string>LICENSES/fmodstudio.txt</string>
+        <key>name</key>
+        <string>fmodstudio</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>6324120be383af3564f2b46b07f1b765</string>
+              <key>hash_algorithm</key>
+              <string>md5</string>
+              <key>url</key>
+              <string>file:///opt/firestorm/fmodstudio-1.10.02-darwin-.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin</string>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>eccdcb4a1e96bb829284d01255f4f913</string>
+              <key>hash_algorithm</key>
+              <string>md5</string>
+              <key>url</key>
+              <string>file:///opt/firestorm/fmodstudio-1.10.02-linux-201801091647.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>206f34d4a262a09323bc9d03cd81a2f6</string>
+              <key>hash_algorithm</key>
+              <string>md5</string>
+              <key>url</key>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.02-windows-173500059.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>1.10.02</string>
+      </map>
       <key>fmodex</key>
       <map>
         <key>copyright</key>
@@ -2541,7 +2601,7 @@
     <key>package_description</key>
     <map>
       <key>copyright</key>
-      <string>Copyright (c) 2017, The Phoenix Firestorm Project, Inc.</string>
+      <string>Copyright (c) 2018, The Phoenix Firestorm Project, Inc.</string>
       <key>description</key>
       <string>Firestorm Viewer</string>
       <key>license</key>
@@ -3213,7 +3273,7 @@
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--platform linux32</string>
                   <string>--package</string>
                   <string>--btype RelWithDebInfo</string>
@@ -3267,7 +3327,7 @@
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--platform linux32</string>
                 </array>
               </map>
@@ -3291,7 +3351,7 @@
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--platform linux32</string>
                 </array>
               </map>
@@ -3315,7 +3375,7 @@
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--platform linux32</string>
                 </array>
               </map>
@@ -3517,7 +3577,7 @@
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--btype RelWithDebInfo</string>
@@ -3591,7 +3651,7 @@
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--platform win32</string>
@@ -3627,7 +3687,7 @@
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--platform win32</string>
@@ -3663,7 +3723,7 @@
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--platform win32</string>

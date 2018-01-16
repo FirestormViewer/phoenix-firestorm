@@ -1736,6 +1736,12 @@ void LLPanelObjectInventory::reset()
 	// <FS:Ansariel> Inventory specials
 	p.for_inventory = true;
 
+	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+	const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+	p.item_height = fsFolderViewItemHeight;
+	p.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+	// </FS:Ansariel>
+
 	mFolders = LLUICtrlFactory::create<LLFolderView>(p);
 
 	mFolders->setCallbackRegistrar(&mCommitCallbackRegistrar);
@@ -1900,6 +1906,12 @@ void LLPanelObjectInventory::createFolderViews(LLInventoryObject* inventory_root
 		// <FS:Ansariel> Inventory specials
 		p.for_inventory = true;
 
+		static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+		const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+		p.item_height = fsFolderViewItemHeight;
+		p.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+		// </FS:Ansariel>
+
 		LLFolderViewFolder* new_folder = LLUICtrlFactory::create<LLFolderViewFolder>(p);
 		new_folder->addToFolder(mFolders);
 		new_folder->toggleOpen();
@@ -1950,6 +1962,12 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
 				// <FS:Ansariel> Inventory specials
 				p.for_inventory = true;
 
+				static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+				const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+				p.item_height = fsFolderViewItemHeight;
+				p.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+				// </FS:Ansariel>
+
 				view = LLUICtrlFactory::create<LLFolderViewFolder>(p);
 				child_categories.push_back(new obj_folder_pair(obj,
 														 (LLFolderViewFolder*)view));
@@ -1968,6 +1986,12 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
 
 				// <FS:Ansariel> Inventory specials
 				params.for_inventory = true;
+
+				static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+				const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+				params.item_height = fsFolderViewItemHeight;
+				params.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+				// </FS:Ansariel>
 
 				view = LLUICtrlFactory::create<LLFolderViewItem> (params);
 			}
