@@ -775,7 +775,10 @@ void LLTaskInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 // [/RLVa:KB]
 	}
 	items.push_back(std::string("Task Properties"));
-	if ((flags & FIRST_SELECTED_ITEM) == 0)
+	// <FS:Ansariel> Legacy object properties
+	//if ((flags & FIRST_SELECTED_ITEM) == 0)
+	if (!gSavedSettings.getBOOL("FSUseLegacyObjectProperties") && (flags & FIRST_SELECTED_ITEM) == 0)
+	// </FS:Ansariel>
 	{
 		disabled_items.push_back(std::string("Task Properties"));
 	}
@@ -1139,7 +1142,10 @@ void LLTaskSoundBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		}
 	}
 	items.push_back(std::string("Task Properties"));
-	if ((flags & FIRST_SELECTED_ITEM) == 0)
+	// <FS:Ansariel> Legacy object properties
+	//if ((flags & FIRST_SELECTED_ITEM) == 0)
+	if (!gSavedSettings.getBOOL("FSUseLegacyObjectProperties") && (flags & FIRST_SELECTED_ITEM) == 0)
+	// </FS:Ansariel>
 	{
 		disabled_items.push_back(std::string("Task Properties"));
 	}
@@ -1532,7 +1538,10 @@ void LLTaskMeshBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		}
 	}
 	items.push_back(std::string("Task Properties"));
-	if ((flags & FIRST_SELECTED_ITEM) == 0)
+	// <FS:Ansariel> Legacy object properties
+	//if ((flags & FIRST_SELECTED_ITEM) == 0)
+	if (!gSavedSettings.getBOOL("FSUseLegacyObjectProperties") && (flags & FIRST_SELECTED_ITEM) == 0)
+	// </FS:Ansariel>
 	{
 		disabled_items.push_back(std::string("Task Properties"));
 	}
