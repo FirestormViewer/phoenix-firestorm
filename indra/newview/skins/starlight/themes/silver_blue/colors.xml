@@ -1163,4 +1163,7 @@
   <color
     name="OutfitGalleryItemUnselected"
     value="0.4 0.4 0.4 1" />
+  <color
+      name="ChatHistoryMessageFromLog"
+      reference="White_50" />
 </colors>
