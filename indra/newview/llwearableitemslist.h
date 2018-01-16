@@ -439,6 +439,7 @@ public:
 	{
 		Optional<bool> standalone;
 		Optional<bool> worn_indication_enabled;
+		Optional<bool> show_create_new; // <FS:Ansariel> Optional "Create new" menu item
 
 		Params();
 	};
@@ -469,6 +470,8 @@ public:
 
 	void setSortOrder(ESortOrder sort_order, bool sort_now = true);
 
+	bool showCreateNew() const { return mShowCreateNew; } // <FS:Ansariel> Optional "Create new" menu item
+
 protected:
 	friend class LLUICtrlFactory;
 	LLWearableItemsList(const LLWearableItemsList::Params& p);
@@ -477,6 +480,7 @@ protected:
 
 	bool mIsStandalone;
 	bool mWornIndicationEnabled;
+	bool mShowCreateNew; // <FS:Ansariel> Optional "Create new" menu item
 
 	ESortOrder		mSortOrder;
 };

@@ -211,6 +211,12 @@ LLFolderView * LLInventoryPanel::createFolderRoot(LLUUID root_id )
 	// <FS:Ansariel> Inventory specials
 	p.for_inventory = true;
 
+	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+	const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+	p.item_height = fsFolderViewItemHeight;
+	p.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+	// </FS:Ansariel>
+
     return LLUICtrlFactory::create<LLFolderView>(p);
 }
 
@@ -857,6 +863,12 @@ LLFolderViewFolder * LLInventoryPanel::createFolderViewFolder(LLInvFVBridge * br
 	// <FS:Ansariel> Inventory specials
 	params.for_inventory = true;
 
+	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+	const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+	params.item_height = fsFolderViewItemHeight;
+	params.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+	// </FS:Ansariel>
+
 	return LLUICtrlFactory::create<LLFolderViewFolder>(params);
 }
 
@@ -876,6 +888,12 @@ LLFolderViewItem * LLInventoryPanel::createFolderViewItem(LLInvFVBridge * bridge
 
 	// <FS:Ansariel> Inventory specials
 	params.for_inventory = true;
+
+	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+	const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+	params.item_height = fsFolderViewItemHeight;
+	params.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+	// </FS:Ansariel>
 	
 	return LLUICtrlFactory::create<LLFolderViewItem>(params);
 }
@@ -1607,10 +1625,12 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id, BOOL main_panel)
 {
 	LLInventoryPanel *active_panel;
-	if (main_panel)
-	{
-		LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory")->selectAllItemsPanel();
-	}
+	// <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
+	//if (main_panel)
+	//{
+	//	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory")->selectAllItemsPanel();
+	//}
+	// </FS:Ansariel>
 	active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
 
 	if (active_panel)
@@ -1656,7 +1676,15 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 		}
 		else
 		{
-			LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+			// <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
+			//LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+			if (main_panel)
+			{
+				active_panel->getParentByType<LLTabContainer>()->selectFirstTab();
+				active_panel = getActiveInventoryPanel(FALSE);
+			}
+			LLFloater* floater_inventory = active_panel->getParentByType<LLFloater>();
+			// </FS:Ansariel>
 			if (floater_inventory)
 			{
 				floater_inventory->setFocus(TRUE);

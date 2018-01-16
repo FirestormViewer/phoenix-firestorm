@@ -135,6 +135,7 @@ protected:
 
 	// <FS:Ansariel> Inventory specials
 	bool						mForInventory;
+	S32							mItemTopPad;
 
 	// For now assuming all colors are the same in derived classes.
 	static bool                 sColorSetInitialized;

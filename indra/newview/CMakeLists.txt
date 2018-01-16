@@ -11,6 +11,7 @@ include(DBusGlib)
 include(DirectX)
 include(DragDrop)
 include(EXPAT)
+include(FMODSTUDIO)
 include(FMODEX)
 include(GLOD)
 include(GooglePerfTools)
@@ -65,6 +66,10 @@ endif (NOT HAVOK_TPV)
 # <FS:ND>
 endif( LLPHYSICSEXTENSIONS_SRC_DIR )
 # </FS:ND>
+
+if(FMODSTUDIO)
+  include_directories(${FMODSTUDIO_INCLUDE_DIR})
+endif(FMODSTUDIO)
 
 if(FMODEX)
   include_directories(${FMODEX_INCLUDE_DIR})
@@ -161,6 +166,7 @@ set(viewer_SOURCE_FILES
     fsfloatervoicecontrols.cpp
     fsfloatervolumecontrols.cpp
     fsfloatervramusage.cpp
+    fsfloaterwearablefavorites.cpp
     fskeywords.cpp
     fslightshare.cpp
     fslslbridge.cpp
@@ -911,6 +917,7 @@ set(viewer_HEADER_FILES
     fsfloatervoicecontrols.h
     fsfloatervolumecontrols.h
     fsfloatervramusage.h
+    fsfloaterwearablefavorites.h
     fsgridhandler.h
     fskeywords.h
     fslightshare.h
@@ -2022,6 +2029,11 @@ if (OPENAL)
   set(LLSTARTUP_COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS} -DLL_OPENAL")
 endif (OPENAL)
 
+if (FMODSTUDIO)
+  set(LLSTARTUP_COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS} -DLL_FMODSTUDIO")
+  set(FMODWRAPPER_LIBRARY ${FMODSTUDIO_LIBRARY})
+endif (FMODSTUDIO)
+
 if (FMODEX)
   set(LLSTARTUP_COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS} -DLL_FMODEX")
   set(FMODWRAPPER_LIBRARY ${FMODEX_LIBRARY})
@@ -2154,6 +2166,14 @@ if (WINDOWS)
       set( VIEWERMANIFEST_FLAGS "" )
       set( VIEWERMANIFEST_PACKAGE_FLAGS )
     endif( ND_BUILD64BIT_ARCH )
+
+    if (FMODSTUDIO)
+      list(APPEND COPY_INPUT_DEPENDENCIES
+           ${SHARED_LIB_STAGING_DIR}/Release/fmod.dll
+           ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod.dll
+           ${SHARED_LIB_STAGING_DIR}/Debug/fmodL.dll
+          )
+    endif (FMODSTUDIO)
 
     if (FMODEX)
       list(APPEND COPY_INPUT_DEPENDENCIES
@@ -2461,7 +2481,7 @@ if (DARWIN)
   set(MACOSX_BUNDLE_BUNDLE_NAME "Firestorm")
   set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${VIEWER_SHORT_VERSION}")
   set(MACOSX_BUNDLE_BUNDLE_VERSION "${VIEWER_SHORT_VERSION}${VIEWER_MACOSX_PHASE}${VIEWER_REVISION}")
-  set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2017 The Phoenix Firestorm Project, Inc.")
+  set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2018 The Phoenix Firestorm Project, Inc.")
   set(MACOSX_BUNDLE_NSMAIN_NIB_FILE "Firestorm.nib")
   set(MACOSX_BUNDLE_NSPRINCIPAL_CLASS "LLNSApplication")
 

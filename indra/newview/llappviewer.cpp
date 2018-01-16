@@ -397,6 +397,8 @@ BOOL gCrashOnStartup = FALSE;
 BOOL gLLErrorActivated = FALSE;
 BOOL gLogoutInProgress = FALSE;
 
+BOOL gSimulateMemLeak = FALSE;
+
 ////////////////////////////////////////////////////////////
 // Internal globals... that should be removed.
 
@@ -1542,6 +1544,35 @@ LLTrace::BlockTimerStatHandle FTM_FRAME("Frame");
 
 bool LLAppViewer::frame()
 {
+	bool ret = false;
+
+	if (gSimulateMemLeak)
+	{
+		try
+		{
+			ret = doFrame();
+		}
+		catch (std::bad_alloc)
+		{
+			LLMemory::logMemoryInfo(TRUE);
+			LLFloaterMemLeak* mem_leak_instance = LLFloaterReg::findTypedInstance<LLFloaterMemLeak>("mem_leaking");
+			if (mem_leak_instance)
+			{
+				mem_leak_instance->stop();
+			}
+			LL_WARNS() << "Bad memory allocation in LLAppViewer::frame()!" << LL_ENDL;
+		}
+	}
+	else
+	{ 
+		ret = doFrame();
+	}
+
+	return ret;
+}
+
+bool LLAppViewer::doFrame()
+{
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
 	LLSD newFrame;
 
@@ -1569,7 +1600,7 @@ bool LLAppViewer::frame()
 	//check memory availability information
 	checkMemory() ;
 
-	try
+	try // <FS:Ansariel> Don't crash on LLContinueError
 	{
 		// <FS:Ansariel> MaxFPS Viewer-Chui merge error
 		// Check if we need to restore rendering masks.
@@ -1618,12 +1649,15 @@ bool LLAppViewer::frame()
 		}
 
 		//memory leaking simulation
-		LLFloaterMemLeak* mem_leak_instance =
-			LLFloaterReg::findTypedInstance<LLFloaterMemLeak>("mem_leaking");
-		if(mem_leak_instance)
+		if (gSimulateMemLeak)
 		{
-			mem_leak_instance->idle() ;				
-		}							
+			LLFloaterMemLeak* mem_leak_instance =
+				LLFloaterReg::findTypedInstance<LLFloaterMemLeak>("mem_leaking");
+			if (mem_leak_instance)
+			{
+				mem_leak_instance->idle();
+			}
+		}
 
 		// canonical per-frame event
 		mainloop.post(newFrame);
@@ -1810,60 +1844,19 @@ bool LLAppViewer::frame()
 			pingMainloopTimeout("Main:End");
 		}
 	}
+	// <FS:Ansariel> Don't crash on LLContinueError
 	catch (const LLContinueError&)
 	{
 		LOG_UNHANDLED_EXCEPTION("");
 	}
-	catch(std::bad_alloc)
-	{
-		LLMemory::logMemoryInfo(TRUE) ;
-
-		//stop memory leaking simulation
-		LLFloaterMemLeak* mem_leak_instance =
-			LLFloaterReg::findTypedInstance<LLFloaterMemLeak>("mem_leaking");
-		if(mem_leak_instance)
-		{
-			mem_leak_instance->stop() ;
-			LL_WARNS() << "Bad memory allocation in LLAppViewer::frame()!" << LL_ENDL ;
-		}
-		else
-		{
-			//output possible call stacks to log file.
-			LLError::LLCallStacks::print() ;
-
-			LL_ERRS() << "Bad memory allocation in LLAppViewer::frame()!" << LL_ENDL ;
-		}
-	}
-	catch (...)
-	{
-		CRASH_ON_UNHANDLED_EXCEPTION("");
-	}
+	// </FS:Ansariel>
 
 	if (LLApp::isExiting())
 	{
 		// Save snapshot for next time, if we made it through initialization
 		if (STATE_STARTED == LLStartUp::getStartupState())
 		{
-			try
-			{
-				saveFinalSnapshot();
-			}
-			catch(std::bad_alloc)
-			{
-				LL_WARNS() << "Bad memory allocation when saveFinalSnapshot() is called!" << LL_ENDL ;
-
-				//stop memory leaking simulation
-				LLFloaterMemLeak* mem_leak_instance =
-				LLFloaterReg::findTypedInstance<LLFloaterMemLeak>("mem_leaking");
-				if(mem_leak_instance)
-				{
-					mem_leak_instance->stop() ;
-				}
-			}
-			catch (...)
-			{
-				CRASH_ON_UNHANDLED_EXCEPTION("saveFinalSnapshot()");
-			}
+			saveFinalSnapshot();
 		}
 
 		// <FS:Ansariel> Cut down wait on logout; Need to terminate voice here because we need gServicePump!

@@ -39,6 +39,10 @@
 #include "llviewermedia_streamingaudio.h"
 #include "llaudioengine.h"
 
+#ifdef LL_FMODSTUDIO
+# include "llaudioengine_fmodstudio.h"
+#endif
+
 #ifdef LL_FMODEX
 # include "llaudioengine_fmodex.h"
 #endif
@@ -955,12 +959,21 @@ bool idle_startup()
 			delete gAudiop;
 			gAudiop = NULL;
 
-#ifdef LL_FMODEX		
+#ifdef LL_FMODSTUDIO
+#if !LL_WINDOWS
+			if (NULL == getenv("LL_BAD_FMODSTUDIO_DRIVER"))
+#endif // !LL_WINDOWS
+			{
+				gAudiop = (LLAudioEngine *) new LLAudioEngine_FMODSTUDIO(gSavedSettings.getBOOL("FMODProfilerEnable"), gSavedSettings.getU32("FMODResampleMethod"));
+			}
+#endif
+
+#ifdef LL_FMODEX
 #if !LL_WINDOWS
 			if (NULL == getenv("LL_BAD_FMODEX_DRIVER"))
 #endif // !LL_WINDOWS
 			{
-				gAudiop = (LLAudioEngine *) new LLAudioEngine_FMODEX(gSavedSettings.getBOOL("FMODExProfilerEnable"));
+				gAudiop = (LLAudioEngine *) new LLAudioEngine_FMODEX(gSavedSettings.getBOOL("FMODProfilerEnable"));
 			}
 #endif
 
@@ -977,7 +990,7 @@ bool idle_startup()
 			if (gAudiop)
 			{
 #if LL_WINDOWS
-				// FMOD Ex on Windows needs the window handle to stop playing audio
+				// FMOD Studio and FMOD Ex on Windows needs the window handle to stop playing audio
 				// when window is minimized. JC
 				void* window_handle = (HWND)gViewerWindow->getPlatformWindow();
 #else
@@ -1071,6 +1084,36 @@ bool idle_startup()
 		//setup map of datetime strings to codes and slt & local time offset from utc
 		// *TODO: Does this need to be here?
 		LLStringOps::setupDatetimeInfo(false);
+
+		// <FS:Beq> [FIRE-22130] for LOD Factors > 4 reset to the detected dafault 
+		if (gSavedSettings.getF32("RenderVolumeLODFactor") > 4.f)
+		{
+			bool feature_table_success = false;
+			LLFeatureManager& feature_manager = LLFeatureManager::instance();
+			U32 level = gSavedSettings.getU32("RenderQualityPerformance");
+			if (feature_manager.isValidGraphicsLevel(level))
+			{
+				std::string level_name = feature_manager.getNameForGraphicsLevel(level);
+				LLFeatureList* feature_list = feature_manager.findMask(level_name);
+				if (feature_list)
+				{
+					F32 new_val = feature_list->getRecommendedValue("RenderVolumeLODFactor");
+					if (new_val > 0.f)
+					{
+						feature_table_success = true;
+						gSavedSettings.setF32("RenderVolumeLODFactor", new_val);
+						LL_INFOS("AppInit") << "LOD Factor too high. Resetting to recommended value for graphics level '" << level_name << "': " << new_val << LL_ENDL;
+					}
+				}
+			}
+
+			if (!feature_table_success)
+			{
+				gSavedSettings.getControl("RenderVolumeLODFactor")->resetToDefault(true);
+				LL_INFOS("AppInit") << "LOD Factor too high. Resetting to recommended value for global default: " << gSavedSettings.getF32("RenderVolumeLODFactor") << LL_ENDL;
+			}
+		}
+		// </FS:Beq>
 
 		// Go to the next startup state
 		LLStartUp::setStartupState( STATE_BROWSER_INIT );
@@ -3038,14 +3081,6 @@ void login_show()
 	//LLPanelLogin::show(	gViewerWindow->getWindowRectScaled(), login_callback, NULL );
 	FSPanelLogin::show(	gViewerWindow->getWindowRectScaled(), login_callback, NULL );
 	// </FS:Ansariel> [FS Login Panel]
-
-	// <FS:PP> Warning about too high LOD on startup
-	if (gSavedSettings.getF32("RenderVolumeLODFactor") >= 4.0f)
-	{
-		LLNotificationsUtil::add("RenderVolumeLODFactorWarning");
-	}
-	// </FS:PP>
-
 }
 
 // Callback for when login screen is closed.  Option 0 = connect, option 1 = quit.

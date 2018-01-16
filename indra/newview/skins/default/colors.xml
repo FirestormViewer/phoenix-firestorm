@@ -1327,4 +1327,7 @@
   <color
       name="UploadDialogBackground"
       reference="DkGray" />
+  <color
+      name="ChatHistoryMessageFromLog"
+      reference="Gray" />
 </colors>

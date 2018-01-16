@@ -332,7 +332,7 @@
 				</text>
 				<button name="Reset_Particle_Cnt" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_Terrain_Scale" tool_tip="Legt die Qualitöt der Standard-Bodentexturen (Terrain) fest.">
+				<text name="T_Terrain_Scale" tool_tip="Legt die Qualität der Standard-Bodentexturen (Terrain) fest.">
 					Terr.-Skal.
 				</text>
 				<button name="Reset_Terrain_Scale" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
@@ -342,7 +342,7 @@
 				</text>
 				<button name="Reset_Terrain_Quality" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_Object_Detail" tool_tip="Legt den Detailgrad von Objekten fest. Höhere Werte erzeugen einen höheren Detailgrad von Objekten.">
+				<text name="T_Object_Detail" tool_tip="Legt fest, wann ein niedrigerer Detailgrad von Objekten verwendet wird, um Renderkosten zu reduzieren. Bitte mit Vorsicht verwenden: Höhere Werte verschlechtern die Performance.">
 					Obj.-Detail.
 				</text>
 				<button name="Reset_Object_Detail" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
