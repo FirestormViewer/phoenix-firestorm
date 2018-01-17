@@ -4369,6 +4369,14 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 				{
 					disabled_items.push_back(std::string("Delete"));
 				}
+
+				// <FS:Ansariel> FIRE-4595: Paste as Link missing for outfit folders
+				items.push_back(std::string("Paste As Link"));
+				if (!isClipboardPasteableAsLink() || (flags & FIRST_SELECTED_ITEM) == 0)
+				{
+					disabled_items.push_back(std::string("Paste As Link"));
+				}
+				// </FS:Ansariel>
 			}
 		}
 
