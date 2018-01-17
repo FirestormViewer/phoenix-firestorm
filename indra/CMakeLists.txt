@@ -3,8 +3,8 @@
 # cmake_minimum_required should appear before any
 # other commands to guarantee full compatibility
 # with the version specified
-## prior to 2.8, the add_custom_target commands used in setting the version did not work correctly
-cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
+## prior to 3.4, the Windows manifest handling was missing
+cmake_minimum_required(VERSION 3.4.0 FATAL_ERROR)
 
 # [FS:CR] Shut up Cmake 2.8.12+ by using the old policy.
 if(${CMAKE_VERSION} VERSION_GREATER 2.8.12 OR ${CMAKE_VERSION} VERSION_EQUAL 2.8.12)
@@ -102,7 +102,7 @@ if (LINUX)
       include(LLAppearanceUtility)
       add_subdirectory(${LLAPPEARANCEUTILITY_SRC_DIR} ${LLAPPEARANCEUTILITY_BIN_DIR})
   endif (INSTALL_PROPRIETARY)
-  add_dependencies(viewer linux-crash-logger-strip-target linux-updater)
+  add_dependencies(viewer linux-crash-logger-strip-target)
 elseif (DARWIN)
   add_subdirectory(${VIEWER_PREFIX}mac_crash_logger)
   add_dependencies(viewer mac-crash-logger)
@@ -114,9 +114,6 @@ elseif (WINDOWS)
   endif (EXISTS ${VIEWER_DIR}win_setup)
   # add_dependencies(viewer windows-setup windows-crash-logger)
   add_dependencies(viewer windows-crash-logger)
-elseif (SOLARIS)
-  add_subdirectory(solaris_crash_logger)
-  add_dependencies(viewer solaris-crash-logger)
 endif (LINUX)
 
 add_subdirectory(${VIEWER_PREFIX}newview)

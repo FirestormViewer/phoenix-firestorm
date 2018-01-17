@@ -17,11 +17,6 @@ include(OpenGL)
 
 include(CEFPlugin)
 
-# <FS:ND> Linux volume catcher
-include(PulseAudio)
-include_directories( ${PULSEAUDIO_INCLUDE_DIRS} )
-# </FS:ND>
-
 include_directories(
     ${LLPLUGIN_INCLUDE_DIRS}
     ${MEDIA_PLUGIN_BASE_INCLUDE_DIRS}
@@ -39,11 +34,13 @@ include_directories(SYSTEM
 
 ### media_plugin_cef
 
-if(NOT WORD_SIZE EQUAL 32)
-  if( NOT WINDOWS) # not windows therefore gcc LINUX and DARWIN
+if(NOT ADDRESS_SIZE EQUAL 32)
+  if(WINDOWS)
+    ##add_definitions(/FIXED:NO)
+  else(WINDOWS) # not windows therefore gcc LINUX and DARWIN
     add_definitions(-fPIC)
-  endif(NOT WINDOWS)
-endif(NOT WORD_SIZE EQUAL 32)
+  endif(WINDOWS)
+endif(NOT ADDRESS_SIZE EQUAL 32)
 
 set(media_plugin_cef_SOURCE_FILES
     media_plugin_cef.cpp
@@ -60,22 +57,12 @@ set (media_plugin_cef_LINK_LIBRARIES
   ${LLCOMMON_LIBRARIES}
   ${PLUGIN_API_WINDOWS_LIBRARIES})
 
-
 # Select which VolumeCatcher implementation to use
 if (LINUX)
-  #message(FATAL_ERROR "CEF plugin has been enabled for a Linux compile.\n"
-  #  "  Please create a volume_catcher implementation for this platform.")
-  if (PULSEAUDIO_FOUND)
-    list(APPEND media_plugin_cef_SOURCE_FILES linux_volume_catcher.cpp)
-  else (PULSEAUDIO_FOUND)
-    list(APPEND media_plugin_cef_SOURCE_FILES dummy_volume_catcher.cpp)
-  endif (PULSEAUDIO_FOUND)
-  list(APPEND media_plugin_cef_LINK_LIBRARIES
-       ${UI_LIBRARIES}     # for glib/GTK
-       Xext #<FS:ND/> force pulling libXext in, otherwise we get undefined symbols.
-       )
+  message(FATAL_ERROR "CEF plugin has been enabled for a Linux compile.\n"
+    "  Please create a volume_catcher implementation for this platform.")
 elseif (DARWIN)
-  list(APPEND media_plugin_cef_SOURCE_FILES mac_volume_catcher.cpp)
+  list(APPEND media_plugin_cef_SOURCE_FILES mac_volume_catcher_null.cpp)
   find_library(CORESERVICES_LIBRARY CoreServices)
   find_library(AUDIOUNIT_LIBRARY AudioUnit)
   list(APPEND media_plugin_cef_LINK_LIBRARIES
@@ -108,8 +95,8 @@ if (WINDOWS)
   set_target_properties(
     media_plugin_cef
     PROPERTIES
-    LINK_FLAGS "/MANIFEST:NO /SAFESEH:NO /NODEFAULTLIB:LIBCMT"
-    LINK_FLAGS_DEBUG "/MANIFEST:NO /SAFESEH:NO /NODEFAULTLIB:LIBCMTD"
+    LINK_FLAGS "/MANIFEST:NO /SAFESEH:NO /NODEFAULTLIB:LIBCMT /IGNORE:4099"
+    LINK_FLAGS_DEBUG "/MANIFEST:NO /SAFESEH:NO /NODEFAULTLIB:LIBCMTD /IGNORE:4099"
     )
 endif (WINDOWS)
 
@@ -124,6 +111,9 @@ if (DARWIN)
     CXX_FLAGS "-std=c++11 -stdlib=libc++"
     LINK_FLAGS "-stdlib=libc++ -exported_symbols_list ${CMAKE_CURRENT_SOURCE_DIR}/../base/media_plugin_base.exp"
   )
+
+  ## turns on C++11 using Cmake
+  target_compile_features(media_plugin_cef PRIVATE cxx_range_for)
 
   add_custom_command(TARGET media_plugin_cef
     POST_BUILD COMMAND ${CMAKE_INSTALL_NAME_TOOL} -change "@executable_path/Chromium Embedded Framework"
