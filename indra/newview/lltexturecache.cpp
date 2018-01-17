@@ -1066,7 +1066,7 @@ S64 LLTextureCache::initCache(ELLPath location, S64 max_size, BOOL texture_cache
 			return max_size ;
 		}
 	}
-	
+
 	if (!mReadOnly)
 	{
 	        if (!LLFile::isdir(mCacheParentDirName))
@@ -1074,7 +1074,7 @@ S64 LLTextureCache::initCache(ELLPath location, S64 max_size, BOOL texture_cache
 	                LLFile::mkdir(mCacheParentDirName);
                 }
 		LLFile::mkdir(mTexturesDirName);
-		
+
 		const char* subdirs = "0123456789abcdef";
 		for (S32 i=0; i<16; i++)
 		{
@@ -1618,11 +1618,11 @@ void LLTextureCache::clearCorruptedCache()
 
 	closeHeaderEntriesFile();//close possible file handler
 	purgeAllTextures(false) ; //clear the cache.
-	
+
 	if (!mReadOnly) //regenerate the directory tree if not exists.
 	{
 		LLFile::mkdir(mTexturesDirName);
-		
+
 		const char* subdirs = "0123456789abcdef";
 		for (S32 i=0; i<16; i++)
 		{

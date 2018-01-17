@@ -3,9 +3,6 @@ import subprocess
 import tarfile
 
 class FSViewerManifest:
-    def fs_is_64bit_build( self ):
-        return self.args.has_key( 'm64' )
-
     def fs_flavor( self ):
         return self.args['viewer_flavor']  # [oss or hvk]
     
@@ -99,12 +96,12 @@ class FSViewerManifest:
         if not os.path.exists( debugDir ):
             os.makedirs( debugDir )
 
-        self.run_command( "objcopy %s %s" % (fileSource, debugFile) )
+        self.run_command_shell( "objcopy %s %s" % (fileSource, debugFile) )
 
-        self.run_command( "gdb -batch -ex \"save gdb-index %s\" %s" % (debugDir, debugFile ) )
-        self.run_command( "objcopy --add-section .gdb_index=%s --set-section-flags .gdb_index=readonly %s %s" % (debugIndexFile, debugFile, debugFile) )
+        self.run_command_shell( "gdb -batch -ex \"save gdb-index %s\" %s" % (debugDir, debugFile ) )
+        self.run_command_shell( "objcopy --add-section .gdb_index=%s --set-section-flags .gdb_index=readonly %s %s" % (debugIndexFile, debugFile, debugFile) )
 
-        self.run_command( "cd %s && objcopy --add-gnu-debuglink=%s %s" % (debugDir, debugName, fileBin) )
+        self.run_command_shell( "cd %s && objcopy --add-gnu-debuglink=%s %s" % (debugDir, debugName, fileBin) )
         
         if( os.path.exists( "%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower()) ):
             symName = "%s/Phoenix_%s_%s_%s_symbols-linux.tar.bz2" % ( self.args['configuration'].lower(), self.fs_channel_legacy_oneword(),
@@ -167,19 +164,17 @@ class FSViewerManifest:
     def fs_copy_windows_manifest(self):
         from shutil import copyfile
         self.fs_strip_windows_manifest( "%s/slplugin.exe" % self.args['configuration'].lower() )
-        self.fs_strip_windows_manifest( "%s/firestorm-bin.exe" % self.args['configuration'].lower() )
-        self.fs_strip_windows_manifest( "%s/llplugin/llceflib_host.exe" % self.args['configuration'].lower() )
+        self.fs_strip_windows_manifest( "%s/llplugin/dullahan_host.exe" % self.args['configuration'].lower() )
         if self.prefix(src=os.path.join(os.pardir, '..', 'indra', 'tools', 'manifests'), dst=""):
             self.path( "compatibility.manifest", "slplugin.exe.manifest" )
-            self.path( "compatibility.manifest", "firestorm-bin.exe.manifest" )
             self.end_prefix()
         if self.prefix(src=os.path.join(os.pardir, '..', 'indra', 'tools', 'manifests'), dst="llplugin"):
-            self.path( "compatibility.manifest", "llceflib_host.exe.manifest" )
+            self.path( "compatibility.manifest", "dullahan_host.exe.manifest" )
             self.end_prefix()
 
     def fs_setuid_chromesandbox( self ):
         filename = os.path.join( self.get_dst_prefix(), "bin", "chrome-sandbox" )
-        self.run_command( "chmod 755 %s" % ( filename) ) # Strip sticky bit that might be set (in case the following two commands fail)
-        self.run_command( "sudo -n chown root:root %s || exit 0" % ( filename) )
-        self.run_command( "sudo -n chmod 4755 %s || exit 0" % ( filename) )
+        self.run_command_shell( "chmod 755 %s" % ( filename) ) # Strip sticky bit that might be set (in case the following two commands fail)
+        self.run_command_shell( "sudo -n chown root:root %s || exit 0" % ( filename) )
+        self.run_command_shell( "sudo -n chmod 4755 %s || exit 0" % ( filename) )
 

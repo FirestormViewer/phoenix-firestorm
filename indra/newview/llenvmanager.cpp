@@ -35,12 +35,28 @@
 #include "llwaterparammanager.h"
 #include "llwlhandlers.h"
 #include "llwlparammanager.h"
+#include "lltrans.h"
 // [RLVa:KB] - Checked: 2011-09-04 (RLVa-1.4.1a) | Added: RLVa-1.4.1a
 #include <boost/algorithm/string.hpp>
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "kcwlinterface.h"
 #include "quickprefs.h"
+
+std::string LLWLParamKey::toString() const
+{
+	switch (scope)
+	{
+	case SCOPE_LOCAL:
+		return name + std::string(" (") + LLTrans::getString("Local") + std::string(")");
+		break;
+	case SCOPE_REGION:
+		return name + std::string(" (") + LLTrans::getString("Region") + std::string(")");
+		break;
+	default:
+		return name + " (?)";
+	}
+}
 
 std::string LLEnvPrefs::getWaterPresetName() const
 {

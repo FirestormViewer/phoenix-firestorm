@@ -155,10 +155,7 @@ protected:
 	U32		fillReconvertString(const LLWString &text, S32 focus, S32 focus_length, RECONVERTSTRING *reconvert_string);
 	void	handleStartCompositionMessage();
 	void	handleCompositionMessage(U32 indexes);
-	// <FS:Ansariel> Unsafe Win64 code fix by Drake Arconis
-	//BOOL	handleImeRequests(U32 request, U32 param, LRESULT *result);
 	BOOL	handleImeRequests(WPARAM request, LPARAM param, LRESULT *result);
-	// </FS:Ansariel>
 
 protected:
 	//

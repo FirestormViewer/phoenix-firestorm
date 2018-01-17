@@ -26,9 +26,11 @@
 
 #include "linden_common.h"
 #include "llprocessor.h"
-
+#include "llstring.h"
+#include "stringize.h"
 #include "llerror.h"
 
+#include <iomanip>
 //#include <memory>
 
 #if LL_WINDOWS
@@ -46,11 +48,6 @@
 #      define LL_X86_64 1
 #      define LL_X86 1
 #elif LL_MSVC && _M_IX86
-#      define LL_X86 1
-#elif LL_CLANG && ( defined(__amd64__) || defined(__x86_64__) )
-#      define LL_X86_64 1
-#      define LL_X86 1
-#elif LL_CLANG && ( defined(__i386__) )
 #      define LL_X86 1
 #elif LL_GNUC && ( defined(__amd64__) || defined(__x86_64__) )
 #      define LL_X86_64 1
@@ -193,7 +190,7 @@ namespace
 		case 0xF: return "Intel Pentium 4";
 		case 0x10: return "Intel Itanium 2 (IA-64)";
 		}
-		return "Unknown";
+		return STRINGIZE("Intel <unknown 0x" << std::hex << composed_family << ">");
 	}
 	
 	std::string amd_CPUFamilyName(int composed_family) 
@@ -206,27 +203,28 @@ namespace
 		case 0xF: return "AMD K8";
 		case 0x10: return "AMD K8L";
 		}
-   		return "Unknown";
+		return STRINGIZE("AMD <unknown 0x" << std::hex << composed_family << ">");
 	}
 
 	std::string compute_CPUFamilyName(const char* cpu_vendor, int family, int ext_family) 
 	{
 		const char* intel_string = "GenuineIntel";
 		const char* amd_string = "AuthenticAMD";
-		if(!strncmp(cpu_vendor, intel_string, strlen(intel_string)))
+		if (LLStringUtil::startsWith(cpu_vendor, intel_string))
 		{
 			U32 composed_family = family + ext_family;
 			return intel_CPUFamilyName(composed_family);
 		}
-		else if(!strncmp(cpu_vendor, amd_string, strlen(amd_string)))
+		else if (LLStringUtil::startsWith(cpu_vendor, amd_string))
 		{
 			U32 composed_family = (family == 0xF) 
 				? family + ext_family
 				: family;
 			return amd_CPUFamilyName(composed_family);
 		}
-		return "Unknown";
+		return STRINGIZE("Unrecognized CPU vendor <" << cpu_vendor << ">");
 	}
+
 } // end unnamed namespace
 
 // The base class for implementations.
@@ -262,8 +260,8 @@ public:
 		return hasExtension("Altivec"); 
 	}
 
-	std::string getCPUFamilyName() const { return getInfo(eFamilyName, "Unknown").asString(); }
-	std::string getCPUBrandName() const { return getInfo(eBrandName, "Unknown").asString(); }
+	std::string getCPUFamilyName() const { return getInfo(eFamilyName, "Unset family").asString(); }
+	std::string getCPUBrandName() const { return getInfo(eBrandName, "Unset brand").asString(); }
 
 	// This is virtual to support a different linux format.
 	// *NOTE:Mani - I didn't want to screw up server use of this data...
@@ -275,7 +273,7 @@ public:
 		out << "//////////////////////////" << std::endl;
 		out << "Processor Name:   " << getCPUBrandName() << std::endl;
 		out << "Frequency:        " << getCPUFrequency() << " MHz" << std::endl;
-		out << "Vendor:           " << getInfo(eVendor, "Unknown").asString() << std::endl;
+		out << "Vendor:			  " << getInfo(eVendor, "Unset vendor").asString() << std::endl;
 		out << "Family:           " << getCPUFamilyName() << " (" << getInfo(eFamily, 0) << ")" << std::endl;
 		out << "Extended family:  " << getInfo(eExtendedFamily, 0) << std::endl;
 		out << "Model:            " << getInfo(eModel, 0) << std::endl;
@@ -402,7 +400,6 @@ static F64 calculate_cpu_frequency(U32 measure_msecs)
 	HANDLE hThread = GetCurrentThread();
 	unsigned long dwCurPriorityClass = GetPriorityClass(hProcess);
 	int iCurThreadPriority = GetThreadPriority(hThread);
-	// unsigned long dwProcessMask, dwSystemMask, dwNewMask = 1;
 	DWORD_PTR dwProcessMask, dwSystemMask, dwNewMask = 1;
 	GetProcessAffinityMask(hProcess, &dwProcessMask, &dwSystemMask);
 

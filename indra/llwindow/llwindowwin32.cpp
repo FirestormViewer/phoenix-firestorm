@@ -796,7 +796,6 @@ void LLWindowWin32::close()
 	LL_DEBUGS("Window") << "Destroying Window" << LL_ENDL;
 	
 	// Don't process events in our mainWindowProc any longer.
-	// SetWindowLong(mWindowHandle, GWL_USERDATA, NULL);
 	SetWindowLongPtr(mWindowHandle, GWLP_USERDATA, NULL);
 
 	// Make sure we don't leave a blank toolbar button.
@@ -1576,7 +1575,6 @@ BOOL LLWindowWin32::switchContext(BOOL fullscreen, const LLCoordScreen &size, BO
 		LL_DEBUGS("Window") << "Keeping vertical sync" << LL_ENDL;
 	}
 
-	// SetWindowLong(mWindowHandle, GWL_USERDATA, (U32)this);
 	SetWindowLongPtr(mWindowHandle, GWLP_USERDATA, (LONG_PTR)this);
 
 	// register this window as handling drag/drop events from the OS
@@ -1905,8 +1903,8 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 	// This is to avoid triggering double click teleport after returning focus (see MAINT-3786).
 	static bool sHandleDoubleClick = true;
 
-	// LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLong(h_wnd, GWL_USERDATA);
-	LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLongPtr(h_wnd, GWLP_USERDATA);
+	LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLongPtr( h_wnd, GWLP_USERDATA );
+
 
 	if (NULL != window_imp)
 	{
@@ -3906,10 +3904,7 @@ LLWindowCallbacks::DragNDropResult LLWindowWin32::completeDragNDropRequest( cons
 // When it handled the message, the value to be returned from
 // the Window Procedure is set to *result.
 
-// <FS:Ansariel> Unsafe Win64 code fix by Drake Arconis
-//BOOL LLWindowWin32::handleImeRequests(U32 request, U32 param, LRESULT *result)
 BOOL LLWindowWin32::handleImeRequests(WPARAM request, LPARAM param, LRESULT *result)
-// </FS:Ansariel>
 {
 	if ( mPreeditor )
 	{
