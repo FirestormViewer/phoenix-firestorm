@@ -678,7 +678,10 @@ LLWearableItemsList::LLWearableItemsList(const LLWearableItemsList::Params& p)
 	}
 	mWornIndicationEnabled = p.worn_indication_enabled;
 	mShowCreateNew = p.show_create_new; // <FS:Ansariel> Optional "Create new" menu item
-	setNoItemsCommentText(LLTrans::getString("NoneFound"));
+	// <FS:Ansariel> MAINT-8085 done right
+	//setNoItemsCommentText(LLTrans::getString("NoneFound"));
+	setNoItemsCommentText(LLTrans::getString("LoadingData"));
+	// </FS:Ansariel>
 }
 
 // virtual
