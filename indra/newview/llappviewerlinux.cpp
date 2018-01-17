@@ -90,7 +90,7 @@ void exportFlashVars()
 	};
 
 	std::string strExpectedArch = "ia32";
-#ifdef ND_BUILD64BIT_ARCH
+#if ADDRESS_SIZE == 64
 	strExpectedArch = "x64";
 #endif
 	
