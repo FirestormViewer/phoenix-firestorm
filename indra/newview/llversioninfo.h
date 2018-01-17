@@ -82,6 +82,9 @@ public:
 	static const std::string& getBuildPlatform();
 // [/SL:KB]
 
+    /// return the bit width of an address
+    static const S32 getAddressSize() { return ADDRESS_SIZE; }
+
     typedef enum
     {
         TEST_VIEWER,

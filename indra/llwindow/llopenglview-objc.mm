@@ -380,8 +380,8 @@ attributedStringInfo getSegments(NSAttributedString *str)
 - (void)mouseMoved:(NSEvent *)theEvent
 {
 	float mouseDeltas[2] = {
-		static_cast<float>([theEvent deltaX]),
-		static_cast<float>([theEvent deltaY])
+		float([theEvent deltaX]),
+		float([theEvent deltaY])
 	};
 	
 	callDeltaUpdate(mouseDeltas, 0);
@@ -401,8 +401,8 @@ attributedStringInfo getSegments(NSAttributedString *str)
 	// The old CoreGraphics APIs we previously relied on are now flagged as obsolete.
 	// NSEvent isn't obsolete, and provides us with the correct deltas.
 	float mouseDeltas[2] = {
-		static_cast<float>([theEvent deltaX]),
-		static_cast<float>([theEvent deltaY])
+		float([theEvent deltaX]),
+		float([theEvent deltaY])
 	};
 	
 	callDeltaUpdate(mouseDeltas, 0);
@@ -604,13 +604,13 @@ attributedStringInfo getSegments(NSAttributedString *str)
     if (mMarkedTextAllowed)
     {
         unsigned int selected[2] = {
-            static_cast<unsigned int>(selectedRange.location),
-            static_cast<unsigned int>(selectedRange.length)
+            unsigned(selectedRange.location),
+            unsigned(selectedRange.length)
         };
         
         unsigned int replacement[2] = {
-            static_cast<unsigned int>(replacementRange.location),
-            static_cast<unsigned int>(replacementRange.length)
+            unsigned(replacementRange.location),
+            unsigned(replacementRange.length)
         };
         
         int string_length = [aString length];

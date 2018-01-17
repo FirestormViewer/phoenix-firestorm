@@ -92,19 +92,13 @@ std::string LLPresetsManager::getPresetsDir(const std::string& subdirectory)
 	// </FS:Ansariel>
 	std::string full_path;
 
-	if (!gDirUtilp->fileExists(presets_path))
-	{
-		LLFile::mkdir(presets_path);
-	}
+	LLFile::mkdir(presets_path);
 
 	// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
 	//full_path = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, subdirectory);
 	full_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR, subdirectory);
 	// </FS:Ansariel>
-	if (!gDirUtilp->fileExists(full_path))
-	{
-		LLFile::mkdir(full_path);
-	}
+	LLFile::mkdir(full_path);
 
 	return full_path;
 }
@@ -189,8 +183,8 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
 	}
     else if(PRESETS_CAMERA == subdirectory)
 	{
-		name_list = boost::assign::list_of
-			("Placeholder").to_container(name_list); // <FS:Ansariel> Assign operation is ambigious
+		name_list.clear();
+		name_list.push_back("Placeholder");
 	}
     else
     {

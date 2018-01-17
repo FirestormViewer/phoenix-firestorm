@@ -94,7 +94,7 @@ LLDir_Mac::LLDir_Mac()
 		// MBW -- This keeps the mac application from finding other things.
 		// If this is really for skins, it should JUST apply to skins.
         
-		size_t build_dir_pos = mExecutableDir.rfind("/build-darwin-");
+		std::string::size_type build_dir_pos = mExecutableDir.rfind("/build-darwin-");
 		if (build_dir_pos != std::string::npos)
 		{
 			// ...we're in a dev checkout
@@ -140,13 +140,13 @@ LLDir_Mac::LLDir_Mac()
             std::string FSCacheDirName = secondLifeString;
             // This was lifted from Cinder's fix for FIRE-8226.
 #ifdef OPENSIM
-  #ifdef ND_BUILD64BIT_ARCH
+  #if ADDRESS_SIZE == 64
                 FSCacheDirName.append("OS_x64");
   #else
                 FSCacheDirName.append("OS");
   #endif
 #else
-  #ifdef ND_BUILD64BIT_ARCH
+  #if ADDRESS_SIZE == 64
                 FSCacheDirName.append("_x64");
   #endif
 #endif // OPENSIM

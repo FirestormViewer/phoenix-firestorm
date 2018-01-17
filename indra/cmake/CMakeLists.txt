@@ -30,7 +30,6 @@ set(cmake_SOURCE_FILES
     FindFMODEX.cmake
     FindGLH.cmake
     FindGoogleBreakpad.cmake
-    FindGooglePerfTools.cmake
     FindHUNSPELL.cmake
     FindJsonCpp.cmake
     FindNDOF.cmake
@@ -46,12 +45,8 @@ set(cmake_SOURCE_FILES
     GLH.cmake
     GLOD.cmake
 ##  GStreamer010Plugin.cmake
-    GetPrerequisites_2_8.cmake
-##  Glui.cmake
-    Glut.cmake
     GoogleBreakpad.cmake
     GoogleMock.cmake
-    GooglePerfTools.cmake
     Growl.cmake
     Havok.cmake
     Hunspell.cmake
@@ -92,7 +87,6 @@ set(cmake_SOURCE_FILES
     Prebuilt.cmake
     PulseAudio.cmake
     Python.cmake
-    QuickTimePlugin.cmake
     TemplateCheck.cmake
     Tut.cmake
     UI.cmake
@@ -102,7 +96,6 @@ set(cmake_SOURCE_FILES
     ViewerMiscLibs.cmake
     VisualLeakDetector.cmake
     LibVLCPlugin.cmake
-    WinManifest.cmake
     XmlRpcEpi.cmake
     ZLIB.cmake
     )
