@@ -18,11 +18,19 @@ if(WINDOWS)
     #*******************************
     # VIVOX - *NOTE: no debug version
     set(vivox_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
-    set(vivox_files
+    if(ADDRESS_SIZE EQUAL 32)
+      set(vivox_files
         SLVoice.exe
         vivoxsdk.dll
         ortp.dll
         )
+    else (ADDRESS_SIZE EQUAL 32)
+      set(vivox_files
+        SLVoice.exe
+        vivoxsdk_x64.dll
+        ortp_x64.dll
+        )
+    endif (ADDRESS_SIZE EQUAL 32)
 
     #*******************************
     # Misc shared libs 

@@ -630,8 +630,12 @@ class WindowsManifest(ViewerManifest):
 
             # Vivox runtimes
             self.path("SLVoice.exe")
-            self.path("vivoxsdk.dll")
-            self.path("ortp.dll")
+            if(self.address_size == 64):
+                self.path("vivoxsdk_x64.dll")
+                self.path("ortp_x64.dll")
+            else:
+                self.path("vivoxsdk.dll")
+                self.path("ortp.dll")
             self.path("libsndfile-1.dll")
             self.path("vivoxoal.dll")
             
