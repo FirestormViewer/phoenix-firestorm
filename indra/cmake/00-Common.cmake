@@ -109,7 +109,7 @@ if (WINDOWS)
       /nologo
       /Oy-
       /arch:AVX2
-      /fp:fast
+#      /fp:fast
       )
   else (USE_AVX_OPTIMIZATION)
   # </FS:Ansariel> AVX/AVX2 support
