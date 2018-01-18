@@ -3530,6 +3530,14 @@ bool LLFloater::initFloaterXML(LLXMLNodePtr node, LLView *parent, const std::str
 	if (node->hasName("multi_floater"))
 	{
 		LLFloater::setFloaterHost((LLMultiFloater*) this);
+
+		// <FS:Ansariel> MultiFloater without titlebar for hosted floater
+		BOOL show_titlebar;
+		if (node->getAttributeBOOL("hosted_floater_show_titlebar", show_titlebar))
+		{
+			static_cast<LLMultiFloater*>(this)->setHostedFloaterShowtitlebar(show_titlebar);
+		}
+		// </FS:Ansariel>
 	}
 
 	LLUICtrlFactory::createChildren(this, node, child_registry_t::instance(), output_node);

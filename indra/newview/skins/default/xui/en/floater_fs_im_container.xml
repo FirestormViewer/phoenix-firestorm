@@ -4,6 +4,7 @@
  can_minimize="true"
  can_resize="true"
  height="390"
+ hosted_floater_show_titlebar="false"
  layout="topleft"
  name="floater_im_box"
  save_rect="true"

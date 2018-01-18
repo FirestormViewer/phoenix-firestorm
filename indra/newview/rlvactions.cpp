@@ -184,7 +184,7 @@ bool RlvActions::canSendIM(const LLUUID& idRecipient)
 		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDIMTO)) || (!gRlvHandler.isException(RLV_BHVR_SENDIMTO, idRecipient)) ) );
 }
 
-bool RlvActions::canStartIM(const LLUUID& idRecipient)
+bool RlvActions::canStartIM(const LLUUID& idRecipient, bool fIgnoreOpen)
 {
 	// User can start an IM session with "recipient" (could be an agent or a group) if:
 	//   - not generally restricted from starting IM sessions (or the recipient is an exception or inside the exclusion range)
@@ -194,7 +194,7 @@ bool RlvActions::canStartIM(const LLUUID& idRecipient)
 		(!isRlvEnabled()) ||
 		( ( (!gRlvHandler.hasBehaviour(RLV_BHVR_STARTIM)) || (gRlvHandler.isException(RLV_BHVR_STARTIM, idRecipient)) || (rlvCheckAvatarIMDistance(idRecipient, RLV_MODIFIER_STARTIMDISTMIN, RLV_MODIFIER_STARTIMDISTMAX)) ) &&
 		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_STARTIMTO)) || (!gRlvHandler.isException(RLV_BHVR_STARTIMTO, idRecipient)) ) ) ||
-		( (hasOpenP2PSession(idRecipient)) || (hasOpenGroupSession(idRecipient)) );
+		( (!fIgnoreOpen) && ((hasOpenP2PSession(idRecipient)) || (hasOpenGroupSession(idRecipient))) );
 }
 
 bool RlvActions::canShowName(EShowNamesContext eContext, const LLUUID& idAgent)
@@ -250,7 +250,7 @@ EChatType RlvActions::checkChatVolume(EChatType chatType)
 // Inventory
 //
 
-bool RlvActions::canPaste(const LLInventoryCategory* pSourceCat, const LLInventoryCategory* pDestCat)
+bool RlvActions::canPasteInventory(const LLInventoryCategory* pSourceCat, const LLInventoryCategory* pDestCat)
 {
 	// The user can paste the specified object into the destination if:
 	//   - the source and destination are subject to the same lock type (or none at all) => NOTE: this happens to be the same logic we use for moving
@@ -258,12 +258,17 @@ bool RlvActions::canPaste(const LLInventoryCategory* pSourceCat, const LLInvento
 		( (pSourceCat) && (pDestCat) && ((!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().canMoveFolder(pSourceCat->getUUID(), pDestCat->getUUID()))) );
 }
 
-bool RlvActions::canPaste(const LLInventoryItem* pSourceItem, const LLInventoryCategory* pDestCat)
+bool RlvActions::canPasteInventory(const LLInventoryItem* pSourceItem, const LLInventoryCategory* pDestCat)
 {
 	// The user can paste the specified object into the destination if:
 	//   - the source and destination are subject to the same lock type (or none at all) => NOTE: this happens to be the same logic we use for moving
 	return (!isRlvEnabled()) ||
 		( (pSourceItem) && (pDestCat) && ((!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().canMoveItem(pSourceItem->getUUID(), pDestCat->getUUID()))) );
+}
+
+bool RlvActions::canPreviewTextures()
+{
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_VIEWTEXTURE));
 }
 
 // ============================================================================
