@@ -181,7 +181,7 @@ LLFloater::Params::Params()
 	can_close("can_close", true),
 	can_snooze("can_snooze", false),		// <FS:Ansariel> FIRE-11724: Snooze group chat
 	can_drag_on_left("can_drag_on_left", false),
-	drop_shadow("drop_shadow",true),		// ## Zi: Optional Drop Shadows
+	drop_shadow("drop_shadow",true),		// <FS:Zi> Optional Drop Shadows
 	label_v_padding("label_v_padding", -1),	// <FS:Zi> Make vertical label padding a per-skin option
 	can_tear_off("can_tear_off", true),
 	save_dock_state("save_dock_state", false),
@@ -208,7 +208,8 @@ LLFloater::Params::Params()
 	help_pressed_image("help_pressed_image"),
 	open_callback("open_callback"),
 	close_callback("close_callback"),
-	follows("follows")
+	follows("follows"),
+	hosted_floater_show_titlebar("hosted_floater_show_titlebar", true) // <FS:Ansariel> MultiFloater without titlebar for hosted floater
 {
 	changeDefault(visible, false);
 }
@@ -279,7 +280,8 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	mHasBeenDraggedWhileMinimized(FALSE),
 	mPreviousMinimizedBottom(0),
 	mPreviousMinimizedLeft(0),
-	mMinimizeSignal(NULL)
+	mMinimizeSignal(NULL),
+	mHostedFloaterShowtitlebar(p.hosted_floater_show_titlebar) // <FS:Ansariel> MultiFloater without titlebar for hosted floater
 //	mNotificationContext(NULL)
 {
 	mPosition.setFloater(*this);
@@ -1950,7 +1952,7 @@ void LLFloater::draw()
 	// draw background
 	if( isBackgroundVisible() )
 	{
-		// ## Zi: Optional Drop Shadows
+		// <FS:Zi> Optional Drop Shadows
 		if(mDropShadow)
 			drawShadow(this);
 
@@ -3402,7 +3404,9 @@ void LLFloater::initFromParams(const LLFloater::Params& p)
 
 	mPositioning = p.positioning;
 
-	// ## Zi: Optional Drop Shadows
+	mHostedFloaterShowtitlebar = p.hosted_floater_show_titlebar; // <FS:Ansariel> MultiFloater without titlebar for hosted floater
+
+	// <FS:Zi> Optional Drop Shadows
 	// we do this here because the values in the constructor get ignored, probably due to
 	// the comment at the beginning of this method. -Zi
 	mDropShadow = p.drop_shadow;
@@ -3530,14 +3534,6 @@ bool LLFloater::initFloaterXML(LLXMLNodePtr node, LLView *parent, const std::str
 	if (node->hasName("multi_floater"))
 	{
 		LLFloater::setFloaterHost((LLMultiFloater*) this);
-
-		// <FS:Ansariel> MultiFloater without titlebar for hosted floater
-		BOOL show_titlebar;
-		if (node->getAttributeBOOL("hosted_floater_show_titlebar", show_titlebar))
-		{
-			static_cast<LLMultiFloater*>(this)->setHostedFloaterShowtitlebar(show_titlebar);
-		}
-		// </FS:Ansariel>
 	}
 
 	LLUICtrlFactory::createChildren(this, node, child_registry_t::instance(), output_node);

@@ -38,20 +38,6 @@
 class LLMultiFloater : public LLFloater
 {
 public:
-	// <FS:Ansariel> MultiFloater without titlebar for hosted floater
-	struct Params
-		: public LLInitParam::Block<Params, LLFloater::Params>
-	{
-		Optional<bool>		hosted_floater_show_titlebar;
-
-		Params() :
-			hosted_floater_show_titlebar("hosted_floater_show_titlebar", true)
-		{}
-	};
-
-	static const Params& getDefaultParams();
-	// </FS:Ansariel>
-
 	LLMultiFloater(const LLSD& key, const Params& params = getDefaultParams());
 	virtual ~LLMultiFloater() {};
 	
@@ -96,9 +82,6 @@ public:
 	// <FS:Ansariel> CTRL-W doesn't work with multifloaters
 	void closeDockedFloater();
 
-	// <FS:Ansariel> MultiFloater without titlebar for hosted floater
-	void setHostedFloaterShowtitlebar(bool show) { mHostedFloaterShowtitlebar = show; }
-
 protected:
 	struct LLFloaterData
 	{
@@ -117,9 +100,6 @@ protected:
 	LLTabContainer::TabPosition mTabPos;
 	BOOL				mAutoResize;
 	S32					mOrigMinWidth, mOrigMinHeight;  // logically const but initialized late
-
-	// <FS:Ansariel> MultiFloater without titlebar for hosted floater
-	bool				mHostedFloaterShowtitlebar;
 
 private:
 	virtual void computeResizeLimits(S32& new_min_width, S32& new_min_height);

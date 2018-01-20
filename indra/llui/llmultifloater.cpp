@@ -37,23 +37,13 @@
 // LLMultiFloater
 //
 
-// <FS:Ansariel> MultiFloater without titlebar for hosted floater
-//static 
-const LLMultiFloater::Params& LLMultiFloater::getDefaultParams()
-{
-	return LLUICtrlFactory::getDefaultParams<LLMultiFloater>();
-}
-
-//LLMultiFloater::LLMultiFloater(const LLSD& key, const LLFloater::Params& params)
-LLMultiFloater::LLMultiFloater(const LLSD& key, const Params& params)
-// </FS:Ansariel>
+LLMultiFloater::LLMultiFloater(const LLSD& key, const LLFloater::Params& params)
 	: LLFloater(key),
 	  mTabContainer(NULL),
 	  mTabPos(LLTabContainer::TOP),
 	  mAutoResize(TRUE),
 	  mOrigMinWidth(params.min_width),
-	  mOrigMinHeight(params.min_height),
-	  mHostedFloaterShowtitlebar(params.hosted_floater_show_titlebar) // <FS:Ansariel> MultiFloater without titlebar for hosted floater
+	  mOrigMinHeight(params.min_height)
 {
 }
 

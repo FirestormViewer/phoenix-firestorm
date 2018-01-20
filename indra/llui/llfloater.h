@@ -198,6 +198,8 @@ public:
 									  close_callback;
 
 		Ignored					follows;
+
+		Optional<bool>			hosted_floater_show_titlebar; // <FS:Ansariel> MultiFloater without titlebar for hosted floater
 		
 		Params();
 	};
@@ -531,6 +533,9 @@ private:
 	BOOL			mHasBeenDraggedWhileMinimized;
 	S32				mPreviousMinimizedBottom;
 	S32				mPreviousMinimizedLeft;
+
+	// <FS:Ansariel> MultiFloater without titlebar for hosted floater
+	bool			mHostedFloaterShowtitlebar;
 };
 
 
