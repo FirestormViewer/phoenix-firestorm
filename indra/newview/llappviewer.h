@@ -192,7 +192,8 @@ public:
 	// *NOTE:Mani Fix this for login abstraction!!
 	void handleLoginComplete();
 
-    LLAllocator & getAllocator() { return mAlloc; }
+	// <FS:Ansariel> Get rid of unused LLAllocator
+    //LLAllocator & getAllocator() { return mAlloc; }
 
 	// On LoginCompleted callback
 	typedef boost::signals2::signal<void (void)> login_completed_signal_t;
@@ -323,7 +324,8 @@ private:
 	bool mAgentRegionLastAlive;
 	LLUUID mAgentRegionLastID;
 
-    LLAllocator mAlloc;
+	// <FS:Ansariel> Get rid of unused LLAllocator
+    //LLAllocator mAlloc;
 
 	LLFrameTimer mMemCheckTimer;
 

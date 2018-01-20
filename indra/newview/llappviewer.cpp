@@ -989,7 +989,8 @@ bool LLAppViewer::init()
 		LLError::setFatalFunction(boost::bind(fast_exit, rc));
 	}
 
-    mAlloc.setProfilingEnabled(gSavedSettings.getBOOL("MemProfiling"));
+	// <FS:Ansariel> Get rid of unused LLAllocator
+    //mAlloc.setProfilingEnabled(gSavedSettings.getBOOL("MemProfiling"));
 
 	// Initialize the non-LLCurl libcurl library.  Should be called
 	// before consumers (LLTextureFetch).
