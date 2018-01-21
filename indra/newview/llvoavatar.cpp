@@ -10014,6 +10014,8 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 	// <FS:Ansariel> Disable useless diagnostics
 	//static std::set<LLUUID> all_textures;
 
+	std::map<LLUUID, U32> item_complexity; // <FS:Ansariel> Show per-item complexity in COF
+
 	if (mVisualComplexityStale)
 	{
 		U32 cost = VISUAL_COMPLEXITY_UNKNOWN;
@@ -10100,6 +10102,13 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
                                                    << LL_ENDL;
                             // Limit attachment complexity to avoid signed integer flipping of the wearer's ACI
                             cost += (U32)llclamp(attachment_total_cost, MIN_ATTACHMENT_COMPLEXITY, max_attachment_complexity);
+
+							// <FS:Ansariel> Show per-item complexity in COF
+							if (isSelf())
+							{
+								item_complexity.insert(std::make_pair(attached_object->getAttachmentItemID(), (U32)attachment_total_cost));
+							}
+							// </FS:Ansariel>
 						}
 					}
 				}
@@ -10235,7 +10244,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		// <FS:Ansariel> Show avatar complexity in appearance floater
 		if (isSelf())
 		{
-			LLSidepanelAppearance::updateAvatarComplexity(mVisualComplexity);
+			LLSidepanelAppearance::updateAvatarComplexity(mVisualComplexity, item_complexity);
 		}
 		// </FS:Ansariel>
     }

@@ -623,13 +623,15 @@ void LLPanelWearing::copyToClipboard()
 }
 
 // <FS:Ansariel> Show avatar complexity in appearance floater
-void LLPanelWearing::updateAvatarComplexity(U32 complexity)
+void LLPanelWearing::updateAvatarComplexity(U32 complexity, const std::map<LLUUID, U32>& item_complexity)
 {
 	std::string complexity_string;
 	LLLocale locale("");
 	LLResMgr::getInstance()->getIntegerString(complexity_string, complexity);
 
 	mAvatarComplexityLabel->setTextArg("[WEIGHT]", complexity_string);
+	
+	mCOFItemsList->updateItemComplexity(item_complexity);
 }
 // </FS:Ansariel>
 // EOF

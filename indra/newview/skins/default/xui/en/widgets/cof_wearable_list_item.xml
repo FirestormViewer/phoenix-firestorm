@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<cof_wearable_list_item
+  follows="top|right|left"
+  height="23"
+  layout="topleft"
+  left="0"
+  name="cof_wearable_item"
+  bottom="0"
+  width="380">
+  <item_icon
+   height="16"
+   follows="top|left"
+   image_name="Inv_Object"
+   layout="topleft"
+   left="24"
+   name="item_icon"
+   top="2"
+   width="16" />
+  <item_name
+   follows="left|right"
+   height="16"
+   layout="topleft"
+   left="45"
+   parse_urls="false"
+   use_ellipses="true"
+   name="item_name"
+   text_color="white"
+   top="4"
+   value="..."
+   width="359" />
+  <item_weight
+   follows="top|right"
+   height="20"
+   layout="topleft"
+   right="-2"
+   parse_urls="false"
+   use_ellipses="true"
+   name="item_weight"
+   halign="right"
+   text_color="white"
+   top="4"
+   value="..."
+   width="70" />
+</cof_wearable_list_item>

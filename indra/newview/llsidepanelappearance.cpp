@@ -574,12 +574,12 @@ bool LLSidepanelAppearance::isWearableEditPanelVisible() const
 
 // <FS:Ansariel> Show avatar complexity in appearance floater
 // static
-void LLSidepanelAppearance::updateAvatarComplexity(U32 complexity)
+void LLSidepanelAppearance::updateAvatarComplexity(U32 complexity, const std::map<LLUUID, U32>& item_complexity)
 {
 	LLSidepanelAppearance* instance = LLFloaterSidePanelContainer::getPanel<LLSidepanelAppearance>("appearance");
 	if (instance->mLastAvatarComplexity != complexity)
 	{
-		instance->mPanelOutfitsInventory->updateAvatarComplexity(complexity);
+		instance->mPanelOutfitsInventory->updateAvatarComplexity(complexity, item_complexity);
 		instance->mOutfitEdit->updateAvatarComplexity(complexity);
 	}
 	instance->mLastAvatarComplexity = complexity;

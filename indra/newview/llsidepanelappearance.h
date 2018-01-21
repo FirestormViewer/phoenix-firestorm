@@ -79,7 +79,7 @@ public:
 // [/RLVa:KB]
 
 	// <FS:Ansariel> Show avatar complexity in appearance floater
-	static void updateAvatarComplexity(U32 complexity);
+	static void updateAvatarComplexity(U32 complexity, const std::map<LLUUID, U32>& item_complexity);
 
 private:
 	void onFilterEdit(const std::string& search_string);

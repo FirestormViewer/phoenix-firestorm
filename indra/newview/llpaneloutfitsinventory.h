@@ -67,7 +67,7 @@ public:
 	static LLPanelOutfitsInventory* findInstance();
 
 	// <FS:Ansariel> Show avatar complexity in appearance floater
-	void updateAvatarComplexity(U32 complexity);
+	void updateAvatarComplexity(U32 complexity, const std::map<LLUUID, U32>& item_complexity);
 
 protected:
 	void updateVerbs();
