@@ -220,6 +220,11 @@ void GrowlManager::loadConfig()
 
 void GrowlManager::performNotification(const std::string& title, const std::string& message, const std::string& type)
 {
+	if (LLAppViewer::instance()->isExiting())
+	{
+		return;
+	}
+
 	static LLCachedControl<bool> enabled(gSavedSettings, "FSEnableGrowl");
 	if (!enabled)
 	{
