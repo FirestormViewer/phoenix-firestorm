@@ -2973,7 +2973,8 @@ Try enclosing path to the editor with double quotes.
   <string name="fs_preprocessor_not_supported">Warning: Preprocessor not supported in this build. ([WHERE])</string>
   <string name="fs_preprocessor_disabled_by_script_marker">[APP_NAME] preprocessor disabled by directive at line [LINENUMBER].</string>
   <string name="fs_preprocessor_settings_list_prefix">Settings:</string>
-  <string name="fs_preprocessor_wave_exception">[ERR_NAME] ([LINENUMBER]): [ERR_DESC]</string>
+  <string name="fs_preprocessor_cpp_exception">[ERR_NAME] ([LINENUMBER]): [ERR_DESC]</string>
+  <string name="fs_preprocessor_lexing_exception">[SEVERITY]: [ERR_NAME] ([LINENUMBER]): [ERR_DESC]</string>
   <string name="fs_preprocessor_exception">[ERR_NAME] ([LINENUMBER]): exception caught: [ERR_DESC]</string>
   <string name="fs_preprocessor_error">[ERR_NAME] ([LINENUMBER]): unexpected exception caught.</string>
   <!-- LSL Optimizer -->

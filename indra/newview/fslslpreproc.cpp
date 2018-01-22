@@ -1396,21 +1396,25 @@ void FSLSLPreprocessor::start_process()
 			// some preprocessing error
 			LLStringUtil::format_map_t args;
 			args["[ERR_NAME]"] = e.file_name();
-			args["[LINENUMBER]"] = llformat("%d",e.line_no()-1);
+			args["[LINENUMBER]"] = llformat("%d", e.line_no() - 1);
 			args["[ERR_DESC]"] = e.description();
-			std::string err = LLTrans::getString("fs_preprocessor_wave_exception", args);
+			std::string err = LLTrans::getString("fs_preprocessor_cpp_exception", args);
 			LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 			display_error(err);
 		}
 		catch(boost::wave::cpplexer::lexing_exception const& e)
 		{
-			errored = true;
 			// lexing preprocessing error
+			boost::wave::cpplexer::util::severity severity_level = e.severity_level(e.get_errorcode());
+			errored = (severity_level != boost::wave::cpplexer::util::severity_warning && severity_level != boost::wave::cpplexer::util::severity_remark);
 			LLStringUtil::format_map_t args;
+			std::string severity_text = e.severity_text(e.get_errorcode());
+			LLStringUtil::toUpper(severity_text);
+			args["[SEVERITY]"] = severity_text;
 			args["[ERR_NAME]"] = e.file_name();
-			args["[LINENUMBER]"] = llformat("%d",e.line_no()-1);
+			args["[LINENUMBER]"] = llformat("%d", e.line_no() - 1);
 			args["[ERR_DESC]"] = e.description();
-			std::string err = LLTrans::getString("fs_preprocessor_wave_exception", args);
+			std::string err = LLTrans::getString("fs_preprocessor_lexing_exception", args);
 			LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 			display_error(err);
 		}
