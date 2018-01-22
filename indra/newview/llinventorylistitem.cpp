@@ -426,7 +426,10 @@ void LLPanelInventoryListItemBase::reshapeLeftWidgets()
 
 void LLPanelInventoryListItemBase::reshapeRightWidgets()
 {
-	S32 widget_right = getLocalRect().getWidth();
+	// <FS:Ansariel> Add some spacing at the right side
+	//S32 widget_right = getLocalRect().getWidth();
+	S32 widget_right = getLocalRect().getWidth() - getWidgetSpacing();
+	// </FS:Ansariel>
 	S32 widget_left = widget_right;
 
 	widget_array_t::const_reverse_iterator it = mRightSideWidgets.rbegin();
