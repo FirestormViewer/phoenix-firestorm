@@ -10014,7 +10014,10 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 	// <FS:Ansariel> Disable useless diagnostics
 	//static std::set<LLUUID> all_textures;
 
-	std::map<LLUUID, U32> item_complexity; // <FS:Ansariel> Show per-item complexity in COF
+	// <FS:Ansariel> Show per-item complexity in COF
+	std::map<LLUUID, U32> item_complexity;
+	std::map<LLUUID, U32> temp_item_complexity;
+	// </FS:Ansariel>
 
 	if (mVisualComplexityStale)
 	{
@@ -10106,7 +10109,14 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 							// <FS:Ansariel> Show per-item complexity in COF
 							if (isSelf())
 							{
-								item_complexity.insert(std::make_pair(attached_object->getAttachmentItemID(), (U32)attachment_total_cost));
+								if (!attached_object->isTempAttachment())
+								{
+									item_complexity.insert(std::make_pair(attached_object->getAttachmentItemID(), (U32)attachment_total_cost));
+								}
+								else
+								{
+									temp_item_complexity.insert(std::make_pair(attached_object->getID(), (U32)attachment_total_cost));
+								}
 							}
 							// </FS:Ansariel>
 						}
@@ -10244,7 +10254,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		// <FS:Ansariel> Show avatar complexity in appearance floater
 		if (isSelf())
 		{
-			LLSidepanelAppearance::updateAvatarComplexity(mVisualComplexity, item_complexity);
+			LLSidepanelAppearance::updateAvatarComplexity(mVisualComplexity, item_complexity, temp_item_complexity);
 		}
 		// </FS:Ansariel>
     }

@@ -403,11 +403,11 @@ LLSidepanelAppearance* LLPanelOutfitsInventory::getAppearanceSP()
 }
 
 // <FS:Ansariel> Show avatar complexity in appearance floater
-void LLPanelOutfitsInventory::updateAvatarComplexity(U32 complexity, const std::map<LLUUID, U32>& item_complexity)
+void LLPanelOutfitsInventory::updateAvatarComplexity(U32 complexity, const std::map<LLUUID, U32>& item_complexity, const std::map<LLUUID, U32>& temp_item_complexity)
 {
 	mOutfitGalleryPanel->updateAvatarComplexity(complexity);
 	mMyOutfitsPanel->updateAvatarComplexity(complexity);
-	mCurrentOutfitPanel->updateAvatarComplexity(complexity, item_complexity);
+	mCurrentOutfitPanel->updateAvatarComplexity(complexity, item_complexity, temp_item_complexity);
 }
 // </FS:Ansariel>
 

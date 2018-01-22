@@ -54,7 +54,10 @@
          width="15" />
         <scroll_list.columns
          name="text"
-         width="210" />
+         dynamic_width="true" />
+        <scroll_list.columns
+         name="weight"
+         width="70" />
   </scroll_list>
      </accordion_tab>
      </accordion>

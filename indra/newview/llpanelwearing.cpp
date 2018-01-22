@@ -474,6 +474,14 @@ bool LLPanelWearing::populateAttachmentsList(bool update)
 				// </FS:Ansariel>
 				populated = false;
 			}
+			// <FS:Ansariel> Show avatar complexity in appearance floater
+			std::string complexity_string;
+			LLLocale locale("");
+			LLResMgr::getInstance()->getIntegerString(complexity_string, mTempItemComplexityMap[attachment->getID()]);
+			row["columns"][2]["column"] = "weight";
+			row["columns"][2]["value"] = complexity_string;
+			row["columns"][2]["halign"] = "right";
+			// </FS:Ansariel>
 			mTempItemsList->addElement(row);
 			mAttachmentsMap[attachment->getID()] = attachment;
 		}
@@ -623,7 +631,7 @@ void LLPanelWearing::copyToClipboard()
 }
 
 // <FS:Ansariel> Show avatar complexity in appearance floater
-void LLPanelWearing::updateAvatarComplexity(U32 complexity, const std::map<LLUUID, U32>& item_complexity)
+void LLPanelWearing::updateAvatarComplexity(U32 complexity, const std::map<LLUUID, U32>& item_complexity, const std::map<LLUUID, U32>& temp_item_complexity)
 {
 	std::string complexity_string;
 	LLLocale locale("");
@@ -632,6 +640,9 @@ void LLPanelWearing::updateAvatarComplexity(U32 complexity, const std::map<LLUUI
 	mAvatarComplexityLabel->setTextArg("[WEIGHT]", complexity_string);
 	
 	mCOFItemsList->updateItemComplexity(item_complexity);
+
+	mTempItemComplexityMap = temp_item_complexity;
+	updateAttachmentsList();
 }
 // </FS:Ansariel>
 // EOF
