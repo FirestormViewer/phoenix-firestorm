@@ -2608,7 +2608,7 @@
         <key>version</key>
         <string>1.0.504710</string>
       </map>
-      <key>llphysicsextensions_stub</key>
+      <key>llphysicsextensions_tpv</key>
       <map>
         <key>copyright</key>
         <string>Copyright (c) 2010, Linden Research, Inc.</string>
@@ -2617,7 +2617,7 @@
         <key>license_file</key>
         <string>LICENSES/llphysicsextensions.txt</string>
         <key>name</key>
-        <string>llphysicsextensions_stub</string>
+        <string>llphysicsextensions_tpv</string>
         <key>platforms</key>
         <map>
           <key>darwin64</key>

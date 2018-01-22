@@ -22,8 +22,7 @@ if (HAVOK)
    set(LLPHYSICSEXTENSIONS_LIBRARIES    llphysicsextensions)
 
 elseif (HAVOK_TPV)
-   #use_prebuilt_binary(llphysicsextensions_tpv)
-   use_prebuilt_binary( llphysicsextensions_stub )
+   use_prebuilt_binary(llphysicsextensions_tpv)
    set(LLPHYSICSEXTENSIONS_LIBRARIES    llphysicsextensions_tpv)
 
    # <FS:ND> include paths for LLs version and ours are different.
