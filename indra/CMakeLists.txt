@@ -6,11 +6,6 @@
 ## prior to 3.4, the Windows manifest handling was missing
 cmake_minimum_required(VERSION 3.4.0 FATAL_ERROR)
 
-# [FS:CR] Shut up Cmake 2.8.12+ by using the old policy.
-if(${CMAKE_VERSION} VERSION_GREATER 2.8.12 OR ${CMAKE_VERSION} VERSION_EQUAL 2.8.12)
-  cmake_policy(SET CMP0022 OLD)
-endif()
-
 set(ROOT_PROJECT_NAME "SecondLife" CACHE STRING
     "The root project/makefile/solution name. Defaults to SecondLife.")
 project(${ROOT_PROJECT_NAME})
