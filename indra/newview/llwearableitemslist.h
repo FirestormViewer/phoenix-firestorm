@@ -509,7 +509,7 @@ public:
 
 	bool showCreateNew() const { return mShowCreateNew; } // <FS:Ansariel> Optional "Create new" menu item
 
-	void updateItemComplexity(const std::map<LLUUID, U32>& item_complexity); // <FS:Ansariel> Show per-item complexity in COF
+	void updateItemComplexity(const std::map<LLUUID, U32>& item_complexity, U32 body_parts_complexity); // <FS:Ansariel> Show per-item complexity in COF
 
 protected:
 	friend class LLUICtrlFactory;
@@ -529,6 +529,7 @@ protected:
 
 	std::map<LLUUID, LLUUID> mLinkedItemsMap;
 	std::map<LLUUID, U32> mItemComplexityMap;
+	U32 mBodyPartsComplexity;
 	// </FS:Ansariel>
 };
 

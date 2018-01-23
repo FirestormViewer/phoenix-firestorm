@@ -747,7 +747,10 @@ LLWearableItemsList::LLWearableItemsList(const LLWearableItemsList::Params& p)
 	}
 	mWornIndicationEnabled = p.worn_indication_enabled;
 	mShowCreateNew = p.show_create_new; // <FS:Ansariel> Optional "Create new" menu item
-	mShowComplexity = p.show_complexity; // <FS:Ansariel> Show per-item complexity in COF
+	// <FS:Ansariel> Show per-item complexity in COF
+	mShowComplexity = p.show_complexity;
+	mBodyPartsComplexity = 0;
+	// </FS:Ansariel>
 	setNoItemsCommentText(LLTrans::getString("LoadingData"));
 }
 
@@ -773,9 +776,18 @@ LLPanel* LLWearableItemsList::createNewItem(LLViewerInventoryItem* item)
     }
     else
     {
-        LLUUID linked_item_id = item->getLinkedUUID();
-        mLinkedItemsMap[linked_item_id] = item->getUUID();
-        return FSPanelCOFWearableOutfitListItem::create(item, mWornIndicationEnabled, mItemComplexityMap[linked_item_id]);
+        U32 weight;
+        if (item->getWearableType() == LLWearableType::WT_SKIN)
+        {
+            weight = mBodyPartsComplexity;
+        }
+        else
+        {
+            LLUUID linked_item_id = item->getLinkedUUID();
+            mLinkedItemsMap[linked_item_id] = item->getUUID();
+            weight = mItemComplexityMap[linked_item_id];
+        }
+        return FSPanelCOFWearableOutfitListItem::create(item, mWornIndicationEnabled, weight);
     }
     // </FS:Ansariel>
 }
@@ -883,11 +895,12 @@ void LLWearableItemsList::setSortOrder(ESortOrder sort_order, bool sort_now)
 }
 
 // <FS:Ansariel> Show per-item complexity in COF
-void LLWearableItemsList::updateItemComplexity(const std::map<LLUUID, U32>& item_complexity)
+void LLWearableItemsList::updateItemComplexity(const std::map<LLUUID, U32>& item_complexity, U32 body_parts_complexity)
 {
 	if (mShowComplexity)
 	{
 		mItemComplexityMap = item_complexity;
+		mBodyPartsComplexity = body_parts_complexity;
 		updateComplexity();
 	}
 }
@@ -902,6 +915,18 @@ void LLWearableItemsList::updateComplexity()
 		{
 			FSPanelCOFWearableOutfitListItem* list_item = static_cast<FSPanelCOFWearableOutfitListItem*>(panel);
 			list_item->updateItemWeight(it->second);
+		}
+	}
+
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for (std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); ++it)
+	{
+		FSPanelCOFWearableOutfitListItem* list_item = static_cast<FSPanelCOFWearableOutfitListItem*>(*it);
+		if (list_item->getWearableType() == LLWearableType::WT_SKIN)
+		{
+			list_item->updateItemWeight(mBodyPartsComplexity);
+			break;
 		}
 	}
 }

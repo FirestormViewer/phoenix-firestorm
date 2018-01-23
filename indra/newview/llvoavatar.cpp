@@ -10017,6 +10017,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 	// <FS:Ansariel> Show per-item complexity in COF
 	std::map<LLUUID, U32> item_complexity;
 	std::map<LLUUID, U32> temp_item_complexity;
+	U32 body_parts_complexity;
 	// </FS:Ansariel>
 
 	if (mVisualComplexityStale)
@@ -10039,6 +10040,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 			}
 		}
         LL_DEBUGS("ARCdetail") << "Avatar body parts complexity: " << cost << LL_ENDL;
+		body_parts_complexity = cost; // <FS:Ansariel> Show per-item complexity in COF
 
 
 		for (attachment_map_t::const_iterator attachment_point = mAttachmentPoints.begin(); 
@@ -10254,7 +10256,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		// <FS:Ansariel> Show avatar complexity in appearance floater
 		if (isSelf())
 		{
-			LLSidepanelAppearance::updateAvatarComplexity(mVisualComplexity, item_complexity, temp_item_complexity);
+			LLSidepanelAppearance::updateAvatarComplexity(mVisualComplexity, item_complexity, temp_item_complexity, body_parts_complexity);
 		}
 		// </FS:Ansariel>
     }
