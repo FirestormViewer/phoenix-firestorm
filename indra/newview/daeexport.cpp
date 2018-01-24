@@ -231,7 +231,7 @@ void ColladaExportFloater::onTextureExportCheck()
 
 void ColladaExportFloater::onTexturesSaved()
 {
-	bool success = mSaver.saveDAE( nd::aprhelper::ndConvertFilename( mFilename ) );
+	bool success = mSaver.saveDAE(mFilename);
 	LLSD args;
 	args["OBJECT"] = mObjectName;
 	args["FILENAME"] = mFilename;
@@ -719,11 +719,21 @@ void DAESaver::transformTexCoord(S32 num_vert, LLVector2* coord, LLVector3* posi
 
 bool DAESaver::saveDAE(std::string filename)
 {
+	// Collada expects file and folder names to be escaped
+	// Note: cdom::nativePathToUri()
+	// Same as in LLDAELoader::OpenFile()
+	const char* allowed =
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		"abcdefghijklmnopqrstuvwxyz"
+		"0123456789"
+		"%-._~:\"|\\/";
+	std::string uri_filename = LLURI::escape(filename, allowed);
+
 	mAllMaterials.clear();
 	mTotalNumMaterials = 0;
 	DAE dae;
 	// First set the filename to save
-	daeElement* root = dae.add(filename);
+	daeElement* root = dae.add(uri_filename);
 
 	// Obligatory elements in header
 	daeElement* asset = root->add("asset");
