@@ -1098,7 +1098,7 @@ bool idle_startup()
 				if (feature_list)
 				{
 					F32 new_val = feature_list->getRecommendedValue("RenderVolumeLODFactor");
-					if (new_val > 0.f)
+					if (new_val > 0.f && new_val <= 4.f)
 					{
 						feature_table_success = true;
 						gSavedSettings.setF32("RenderVolumeLODFactor", new_val);
@@ -1110,6 +1110,10 @@ bool idle_startup()
 			if (!feature_table_success)
 			{
 				gSavedSettings.getControl("RenderVolumeLODFactor")->resetToDefault(true);
+				if (gSavedSettings.getF32("RenderVolumeLODFactor") > 4.f)
+				{
+					gSavedSettings.setF32("RenderVolumeLODFactor", 2.f);
+				}
 				LL_INFOS("AppInit") << "LOD Factor too high. Resetting to recommended value for global default: " << gSavedSettings.getF32("RenderVolumeLODFactor") << LL_ENDL;
 			}
 		}
