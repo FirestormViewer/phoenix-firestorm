@@ -84,6 +84,7 @@ public:
 	LLViewerRegion*			getRegionFromID(const LLUUID& region_id);
 	BOOL					positionRegionValidGlobal(const LLVector3d& pos);			// true if position is in valid region
 	LLVector3d				clipToVisibleRegions(const LLVector3d &start_pos, const LLVector3d &end_pos);
+	LLVector3d				clipToRegion(const LLViewerRegion* regionp, const LLVector3d &start_pos, const LLVector3d &end_pos, bool &clipped); // clip to specified region // <FS> FIRE-21915: Fix bogus avatar movement on region crossing
 
 	void					updateAgentOffset(const LLVector3d &offset);
 

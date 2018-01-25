@@ -6649,9 +6649,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="fs_preprocessor_settings_list_prefix">
 		Einstellungen:
 	</string>
-	<string name="fs_preprocessor_wave_exception">
-		[ERR_NAME] ([LINENUMBER]): [ERR_DESC]
-	</string>
 	<string name="fs_preprocessor_exception">
 		[ERR_NAME] ([LINENUMBER]): Gefangener Ausnahmefehler: [ERR_DESC]
 	</string>

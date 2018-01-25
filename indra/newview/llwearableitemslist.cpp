@@ -46,6 +46,8 @@
 #include "rlvactions.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+#include "lltextbox.h"
+#include "llresmgr.h"
 
 class LLFindOutfitItems : public LLInventoryCollectFunctor
 {
@@ -386,6 +388,72 @@ void LLPanelAttachmentListItem::updateItem(const std::string& name,
 	LLPanelInventoryListItemBase::updateItem(title_joint, item_state);
 }
 
+// <FS:Ansariel> Show per-item complexity in COF
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelCOFWearableOutfitListItem(&typeid(FSPanelCOFWearableOutfitListItem::Params), "cof_wearable_list_item");
+
+FSPanelCOFWearableOutfitListItem::Params::Params()
+:	item_weight("item_weight")
+{}
+
+// static
+FSPanelCOFWearableOutfitListItem* FSPanelCOFWearableOutfitListItem::create(LLViewerInventoryItem* item,
+															 bool worn_indication_enabled, U32 weight)
+{
+	FSPanelCOFWearableOutfitListItem* list_item = NULL;
+	if(item)
+	{
+		const Params& params = LLUICtrlFactory::getDefaultParams<FSPanelCOFWearableOutfitListItem>();
+		list_item = new FSPanelCOFWearableOutfitListItem(item, worn_indication_enabled, params);
+		list_item->initFromParams(params);
+		list_item->postBuild();
+		list_item->updateItemWeight(weight);
+	}
+	return list_item;
+}
+
+
+FSPanelCOFWearableOutfitListItem::FSPanelCOFWearableOutfitListItem(LLViewerInventoryItem* item,
+													 bool worn_indication_enabled,
+													 const FSPanelCOFWearableOutfitListItem::Params& params)
+: LLPanelWearableOutfitItem(item, worn_indication_enabled, params)
+, mWeightCtrl(NULL)
+{
+	LLTextBox::Params weight_params = params.item_weight;
+	applyXUILayout(weight_params, this);
+	addChild(LLUICtrlFactory::create<LLTextBox>(weight_params));
+}
+
+BOOL FSPanelCOFWearableOutfitListItem::postBuild()
+{
+	mWeightCtrl = getChild<LLTextBox>("item_weight");
+
+	LLPanelWearableOutfitItem::postBuild();
+
+	addWidgetToRightSide("item_weight");
+
+	// Reserve space for 'delete' button event if it is invisible.
+	setRightWidgetsWidth(mWeightCtrl->getRect().getWidth() + 5);
+
+	reshapeWidgets();
+
+	return TRUE;
+}
+
+void FSPanelCOFWearableOutfitListItem::updateItemWeight(U32 item_weight)
+{
+	std::string complexity_string;
+	if (item_weight > 0)
+	{
+		LLLocale locale("");
+		LLResMgr::getInstance()->getIntegerString(complexity_string, item_weight);
+	}
+	mWeightCtrl->setText(complexity_string);
+}
+// </FS:Ansariel>
+
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -664,6 +732,7 @@ LLWearableItemsList::Params::Params()
 :	standalone("standalone", true)
 ,	worn_indication_enabled("worn_indication_enabled", true)
 ,	show_create_new("show_create_new", true) // <FS:Ansariel> Optional "Create new" menu item
+,	show_complexity("show_complexity", false) // <FS:Ansariel> Show per-item complexity in COF
 {}
 
 LLWearableItemsList::LLWearableItemsList(const LLWearableItemsList::Params& p)
@@ -678,10 +747,11 @@ LLWearableItemsList::LLWearableItemsList(const LLWearableItemsList::Params& p)
 	}
 	mWornIndicationEnabled = p.worn_indication_enabled;
 	mShowCreateNew = p.show_create_new; // <FS:Ansariel> Optional "Create new" menu item
-	// <FS:Ansariel> MAINT-8085 done right
-	//setNoItemsCommentText(LLTrans::getString("NoneFound"));
-	setNoItemsCommentText(LLTrans::getString("LoadingData"));
+	// <FS:Ansariel> Show per-item complexity in COF
+	mShowComplexity = p.show_complexity;
+	mBodyPartsComplexity = 0;
 	// </FS:Ansariel>
+	setNoItemsCommentText(LLTrans::getString("LoadingData"));
 }
 
 // virtual
@@ -698,7 +768,28 @@ LLPanel* LLWearableItemsList::createNewItem(LLViewerInventoryItem* item)
         return NULL;
     }
 
-    return LLPanelWearableOutfitItem::create(item, mWornIndicationEnabled);
+    // <FS:Ansariel> Show per-item complexity in COF
+    //return LLPanelWearableOutfitItem::create(item, mWornIndicationEnabled);
+    if (!mShowComplexity)
+    {
+        return LLPanelWearableOutfitItem::create(item, mWornIndicationEnabled);
+    }
+    else
+    {
+        U32 weight;
+        if (item->getWearableType() == LLWearableType::WT_SKIN)
+        {
+            weight = mBodyPartsComplexity;
+        }
+        else
+        {
+            LLUUID linked_item_id = item->getLinkedUUID();
+            mLinkedItemsMap[linked_item_id] = item->getUUID();
+            weight = mItemComplexityMap[linked_item_id];
+        }
+        return FSPanelCOFWearableOutfitListItem::create(item, mWornIndicationEnabled, weight);
+    }
+    // </FS:Ansariel>
 }
 
 void LLWearableItemsList::updateList(const LLUUID& category_id)
@@ -802,6 +893,44 @@ void LLWearableItemsList::setSortOrder(ESortOrder sort_order, bool sort_now)
 		sort();
 	}
 }
+
+// <FS:Ansariel> Show per-item complexity in COF
+void LLWearableItemsList::updateItemComplexity(const std::map<LLUUID, U32>& item_complexity, U32 body_parts_complexity)
+{
+	if (mShowComplexity)
+	{
+		mItemComplexityMap = item_complexity;
+		mBodyPartsComplexity = body_parts_complexity;
+		updateComplexity();
+	}
+}
+
+void LLWearableItemsList::updateComplexity()
+{
+	for (std::map<LLUUID, U32>::const_iterator it = mItemComplexityMap.begin(); it != mItemComplexityMap.end(); ++it)
+	{
+		LLUUID id = mLinkedItemsMap[it->first];
+		LLPanel* panel = getItemByValue(id);
+		if (panel)
+		{
+			FSPanelCOFWearableOutfitListItem* list_item = static_cast<FSPanelCOFWearableOutfitListItem*>(panel);
+			list_item->updateItemWeight(it->second);
+		}
+	}
+
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for (std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); ++it)
+	{
+		FSPanelCOFWearableOutfitListItem* list_item = static_cast<FSPanelCOFWearableOutfitListItem*>(*it);
+		if (list_item->getWearableType() == LLWearableType::WT_SKIN)
+		{
+			list_item->updateItemWeight(mBodyPartsComplexity);
+			break;
+		}
+	}
+}
+// </FS:Ansariel>
 
 //////////////////////////////////////////////////////////////////////////
 /// ContextMenu
