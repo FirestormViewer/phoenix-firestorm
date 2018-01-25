@@ -59,6 +59,7 @@
 #include "llrender.h"
 
 #include "llvoiceclient.h"	// for push-to-talk button handling
+#include "stringize.h"
 
 //
 // TODO: Many of these includes are unnecessary.  Remove them.
@@ -430,7 +431,8 @@ public:
 		static LLCachedControl<bool> debugShowMemory(gSavedSettings, "DebugShowMemory");
 		if (debugShowMemory)
 		{
-			addText(xpos, ypos, llformat("Memory: %d (KB)", LLMemory::getWorkingSetSize() / 1024)); 
+			addText(xpos, ypos,
+					STRINGIZE("Memory: " << (LLMemory::getCurrentRSS() / 1024) << " (KB)"));
 			ypos += y_inc;
 		}
 #endif
@@ -796,7 +798,7 @@ public:
 			ypos += y_inc;
 		}
 		// <FS:LO> pull the text saying if particles are hidden out from beacons
-		if (LLPipeline::toggleRenderTypeControlNegated((void*)LLPipeline::RENDER_TYPE_PARTICLES))
+		if (LLPipeline::toggleRenderTypeControlNegated(LLPipeline::RENDER_TYPE_PARTICLES))
 		{
 			addText(xpos, ypos, particle_hiding);
 			ypos += y_inc;
@@ -806,12 +808,12 @@ public:
 		// only display these messages if we are actually rendering beacons at this moment
 		// <FS:LO> Always show the beacon text regardless if the floater is visible
 		// <FS:Ansa> ...and if we want to see it
-		//if (LLPipeline::getRenderBeacons(NULL) && LLFloaterReg::instanceVisible("beacons"))
+		//if (LLPipeline::getRenderBeacons() && LLFloaterReg::instanceVisible("beacons"))
 		static LLCachedControl<bool> fsRenderBeaconText(gSavedSettings, "FSRenderBeaconText");
-		if (LLPipeline::getRenderBeacons(NULL) && fsRenderBeaconText)
+		if (LLPipeline::getRenderBeacons() && fsRenderBeaconText)
 		// </FS:Ansa>
 		{
-			if (LLPipeline::getRenderMOAPBeacons(NULL))
+			if (LLPipeline::getRenderMOAPBeacons())
 			{
 				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
 				//addText(xpos, ypos, "Viewing media beacons (white)");
@@ -820,14 +822,14 @@ public:
 			}
 
 			// <FS:LO> pull the text saying if particles are hidden out from beacons
-			/*if (LLPipeline::toggleRenderTypeControlNegated((void*)LLPipeline::RENDER_TYPE_PARTICLES))
+			/*if (LLPipeline::toggleRenderTypeControlNegated(LLPipeline::RENDER_TYPE_PARTICLES))
 			{
 				addText(xpos, ypos, particle_hiding);
 				ypos += y_inc;
 			}*/
 			// </FS:LO>
 
-			if (LLPipeline::getRenderParticleBeacons(NULL))
+			if (LLPipeline::getRenderParticleBeacons())
 			{
 				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
 				//addText(xpos, ypos, "Viewing particle beacons (blue)");
@@ -835,7 +837,7 @@ public:
 				ypos += y_inc;
 			}
 
-			if (LLPipeline::getRenderSoundBeacons(NULL))
+			if (LLPipeline::getRenderSoundBeacons())
 			{
 				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
 				//addText(xpos, ypos, "Viewing sound beacons (yellow)");
@@ -843,19 +845,19 @@ public:
 				ypos += y_inc;
 			}
 
-			if (LLPipeline::getRenderScriptedBeacons(NULL))
+			if (LLPipeline::getRenderScriptedBeacons())
 			{
 				addText(xpos, ypos, beacon_scripted);
 				ypos += y_inc;
 			}
 			else
-				if (LLPipeline::getRenderScriptedTouchBeacons(NULL))
+				if (LLPipeline::getRenderScriptedTouchBeacons())
 				{
 					addText(xpos, ypos, beacon_scripted_touch);
 					ypos += y_inc;
 				}
 
-			if (LLPipeline::getRenderPhysicalBeacons(NULL))
+			if (LLPipeline::getRenderPhysicalBeacons())
 			{
 				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
 				//addText(xpos, ypos, "Viewing physical object beacons (green)");
@@ -1943,7 +1945,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	// memory and up to 2GB texture memory on cards with 4GB video memory. Check
 	// is performed against a lower limit as not exactly 2 or 4GB might not be
 	// returned.
-#ifdef ND_BUILD64BIT_ARCH
+#if ADDRESS_SIZE == 64
 	LL_INFOS() << "GLManager detected " << gGLManager.mVRAM << " MB VRAM" << LL_ENDL;
 
 	if (gGLManager.mVRAM > 3584)
@@ -5841,7 +5843,7 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 
 	if ( prev_draw_ui != show_ui)
 	{
-		LLPipeline::toggleRenderDebugFeature((void*)LLPipeline::RENDER_DEBUG_FEATURE_UI);
+		LLPipeline::toggleRenderDebugFeature(LLPipeline::RENDER_DEBUG_FEATURE_UI);
 	}
 
 	BOOL hide_hud = !gSavedSettings.getBOOL("RenderHUDInSnapshot") && LLPipeline::sShowHUDAttachments;
@@ -6107,7 +6109,7 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 	// POST SNAPSHOT
 	if (!gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
 	{
-		LLPipeline::toggleRenderDebugFeature((void*)LLPipeline::RENDER_DEBUG_FEATURE_UI);
+		LLPipeline::toggleRenderDebugFeature(LLPipeline::RENDER_DEBUG_FEATURE_UI);
 	}
 
 	if (hide_hud)
@@ -6848,6 +6850,9 @@ void LLViewerWindow::setUIVisibility(bool visible)
 	{
 		gToolBarView->setToolBarsVisible(visible);
 	}
+
+	// <FS:Ansariel> Notification not showing if hiding the UI
+	FSNearbyChat::instance().showDefaultChatBar(visible && !gSavedSettings.getBOOL("AutohideChatBar"));
 
 	// <FS:Zi> Is done inside XUI now, using visibility_control
 	//LLNavigationBar::getInstance()->setVisible(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);

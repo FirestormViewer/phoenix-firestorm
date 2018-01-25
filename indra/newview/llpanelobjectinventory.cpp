@@ -67,6 +67,7 @@
 #include "llviewerobjectlist.h"
 #include "llviewermessage.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
@@ -767,7 +768,7 @@ void LLTaskInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 			bool fLocked = (pAttachObj) ? gRlvAttachmentLocks.isLockedAttachment(pAttachObj->getRootEdit()) : false;
 			if ( ((LLAssetType::AT_NOTECARD == item->getType()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_VIEWNOTE)) || (fLocked))) || 
 				 ((LLAssetType::AT_LSL_TEXT == item->getType()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_VIEWSCRIPT)) || (fLocked))) ||
-				 ((LLAssetType::AT_TEXTURE == item->getType()) && (gRlvHandler.hasBehaviour(RLV_BHVR_VIEWTEXTURE))) )
+				 ((LLAssetType::AT_TEXTURE == item->getType()) && (!RlvActions::canPreviewTextures())))
 			{
 				disabled_items.push_back(std::string("Task Open"));
 			}
@@ -1736,6 +1737,12 @@ void LLPanelObjectInventory::reset()
 	// <FS:Ansariel> Inventory specials
 	p.for_inventory = true;
 
+	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+	const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+	p.item_height = fsFolderViewItemHeight;
+	p.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+	// </FS:Ansariel>
+
 	mFolders = LLUICtrlFactory::create<LLFolderView>(p);
 
 	mFolders->setCallbackRegistrar(&mCommitCallbackRegistrar);
@@ -1900,6 +1907,12 @@ void LLPanelObjectInventory::createFolderViews(LLInventoryObject* inventory_root
 		// <FS:Ansariel> Inventory specials
 		p.for_inventory = true;
 
+		static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+		const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+		p.item_height = fsFolderViewItemHeight;
+		p.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+		// </FS:Ansariel>
+
 		LLFolderViewFolder* new_folder = LLUICtrlFactory::create<LLFolderViewFolder>(p);
 		new_folder->addToFolder(mFolders);
 		new_folder->toggleOpen();
@@ -1950,6 +1963,12 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
 				// <FS:Ansariel> Inventory specials
 				p.for_inventory = true;
 
+				static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+				const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+				p.item_height = fsFolderViewItemHeight;
+				p.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+				// </FS:Ansariel>
+
 				view = LLUICtrlFactory::create<LLFolderViewFolder>(p);
 				child_categories.push_back(new obj_folder_pair(obj,
 														 (LLFolderViewFolder*)view));
@@ -1968,6 +1987,12 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
 
 				// <FS:Ansariel> Inventory specials
 				params.for_inventory = true;
+
+				static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+				const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+				params.item_height = fsFolderViewItemHeight;
+				params.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+				// </FS:Ansariel>
 
 				view = LLUICtrlFactory::create<LLFolderViewItem> (params);
 			}

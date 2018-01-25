@@ -3611,7 +3611,7 @@
       <key>Comment</key>
       <string>Size (in bytes) for each coroutine stack</string>
       <key>Persist</key>
-      <integer>0</integer>
+      <integer>1</integer>
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
@@ -6842,7 +6842,7 @@
     <key>InventoryDisplayInbox</key>
     <map>
         <key>Comment</key>
-        <string>Override received items inventory inbox display</string>
+        <string>UNUSED - Controlled via FSShowInboxFolder and FSAlwaysShowInboxButton: Override received items inventory inbox display</string>
         <key>Persist</key>
         <integer>0</integer>
         <key>Type</key>
@@ -8719,19 +8719,6 @@
       <string>U32</string>
       <key>Value</key>
       <integer>512</integer>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>MemProfiling</key>
-    <map>
-      <key>Comment</key>
-      <string>You want to use tcmalloc's memory profiling options.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -12754,30 +12741,30 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Backup</key>
     <integer>0</integer>
   </map>
-  <key>RenderUseFarClip</key>
-  <map>
-    <key>Comment</key>
-    <string>If false, frustum culling will ignore far clip plane.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>1</integer>
+    <key>RenderUseFarClip</key>
+    <map>
+      <key>Comment</key>
+      <string>If false, frustum culling will ignore far clip plane.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
       <key>Backup</key>
       <integer>0</integer>
-  </map>
-  <key>RenderUseImpostors</key>
-  <map>
-    <key>Comment</key>
+    </map>
+    <key>RenderUseImpostors</key>
+    <map>
+      <key>Comment</key>
     <string>OBSOLETE and UNUSED. See RenderAvatarMaxNonImpostors and RenderAvatarMaxComplexity.</string>
-    <key>Persist</key>
+      <key>Persist</key>
     <integer>0</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
     <integer>0</integer>
-  </map>
+    </map>
   <key>RenderAutoMuteByteLimit</key>
   <map>
     <key>Comment</key>
@@ -13022,13 +13009,13 @@ Change of this parameter will affect the layout of buttons in notification toast
 	<key>RenderVolumeLODFactor</key>
     <map>
       <key>Comment</key>
-      <string>Controls level of detail of primitives (multiplier for current screen area when calculated level of detail)</string>
+      <string>Influences the distance at which the viewer will display a lower detail model. Higher values = more lag. IMPORTANT: Please disregard advice to increase this value, such as is commonly distributed in notecards.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1.0</real>
+      <real>2.0</real>
       <key>SanityCheckType</key>
       <string>LessThanEquals</string>
       <key>SanityValue</key>
@@ -15050,7 +15037,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>UpdaterMaximumBandwidth</key>
     <map>
       <key>Comment</key>
-      <string>Maximum allowable downstream bandwidth for updater service (kilo bits per second)</string>
+      <string>Obsolete: this parameter is no longer used.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -16530,9 +16517,9 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>UpdaterServiceCheckPeriod</key>
     <map>
       <key>Comment</key>
-      <string>Default period between update checking.</string>
+      <string>Obsolete; no longer used.</string>
       <key>Persist</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
@@ -16552,7 +16539,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>UpdaterServicePath</key>
     <map>
       <key>Comment</key>
-      <string>Path on the update server host.</string>
+      <string>Obsolete: no longer used</string>
       <key>Persist</key>
       <integer>0</integer>
       <key>Type</key>
@@ -19959,10 +19946,10 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>1.0</real>
   </map>
-  <key>FMODExProfilerEnable</key>
+  <key>FMODProfilerEnable</key>
   <map>
     <key>Comment</key>
-    <string>Enable profiler tool if using FMOD Ex</string>
+    <string>Enable profiler tool if using FMOD</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -19970,7 +19957,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
     </map>
-  <key>FMODExDecodeBufferSize</key>
+  <key>FMODDecodeBufferSize</key>
   <map>
     <key>Comment</key>
     <string>Sets the streaming decode buffer size (in milliseconds)</string>
@@ -19981,7 +19968,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>1000</integer>
     </map>
-  <key>FMODExStreamBufferSize</key>
+  <key>FMODStreamBufferSize</key>
   <map>
     <key>Comment</key>
     <string>Sets the streaming buffer size (in milliseconds)</string>
@@ -19991,6 +19978,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>U32</string>
     <key>Value</key>
     <integer>7000</integer>
+  </map>
+  <key>FMODResampleMethod</key>
+  <map>
+    <key>Comment</key>
+    <string>Sets the method used for internal resampler 0(Linear), 1(Cubic), 2(Spline)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>0</integer>
   </map>
   <key>DisablePrecacheDelayAfterTeleporting</key>
   <map>
@@ -20991,6 +20989,18 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
       <key>Backup</key>
+      <integer>0</integer>
+    </map>
+    <key>SkipBenchmark</key>
+    <map>
+      <key>Comment</key>
+      <string>if true, disables running the GPU benchmark at startup
+      (default to class 1)</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
       <integer>0</integer>
     </map>
     <key>FSShowServerVersionChangeNotice</key>
@@ -24510,6 +24520,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>FSWearableFavoritesSortOrder</key>
+    <map>
+      <key>Comment</key>
+      <string>The sort order for the wearable favorites item list</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>3</integer>
     </map>
   </map>
 </llsd>

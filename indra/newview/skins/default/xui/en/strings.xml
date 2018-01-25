@@ -26,7 +26,7 @@
 
 	<!-- about dialog/support string-->
 	<string name="AboutHeader">
-[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL]) [BUILD_TYPE]
+[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]bit)
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="AboutCompiler">Built with [COMPILER] version [COMPILER_VERSION]</string>
@@ -76,7 +76,7 @@ RestrainedLove API: [RLV_VERSION]
 libcurl Version: [LIBCURL_VERSION]
 J2C Decoder Version: [J2C_VERSION]
 Audio Driver Version: [AUDIO_DRIVER_VERSION]
-LLCEFLib/CEF Version: [LLCEFLIB_VERSION]
+[LIBCEF_VERSION]
 LibVLC Version: [LIBVLC_VERSION]
 Voice Server Version: [VOICE_VERSION]
 	</string>
@@ -2630,6 +2630,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_ResyncAnimations_Label">Resync animations</string>
   <string name="Command_RegionTracker_Label">Region Tracker</string>
   <string name="Command_Group_Titles_Label">Group Titles</string>
+  <string name="Command_Wearable_Favorites_Label">Favorite Wearables</string>
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
   <string name="Command_Appearance_Tooltip">Change your avatar</string>
@@ -2693,6 +2694,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_ResyncAnimations_Tooltip">Synchronizes avatar animations</string>
   <string name="Command_RegionTracker_Tooltip">Track various regions status</string>
   <string name="Command_Group_Titles_Tooltip">Change active group tag</string>
+  <string name="Command_Wearable_Favorites_Tooltip">Open the list of favorite wearables</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>
@@ -2971,7 +2973,8 @@ Try enclosing path to the editor with double quotes.
   <string name="fs_preprocessor_not_supported">Warning: Preprocessor not supported in this build. ([WHERE])</string>
   <string name="fs_preprocessor_disabled_by_script_marker">[APP_NAME] preprocessor disabled by directive at line [LINENUMBER].</string>
   <string name="fs_preprocessor_settings_list_prefix">Settings:</string>
-  <string name="fs_preprocessor_wave_exception">[ERR_NAME] ([LINENUMBER]): [ERR_DESC]</string>
+  <string name="fs_preprocessor_cpp_exception">[ERR_NAME] ([LINENUMBER]): [ERR_DESC]</string>
+  <string name="fs_preprocessor_lexing_exception">[SEVERITY]: [ERR_NAME] ([LINENUMBER]): [ERR_DESC]</string>
   <string name="fs_preprocessor_exception">[ERR_NAME] ([LINENUMBER]): exception caught: [ERR_DESC]</string>
   <string name="fs_preprocessor_error">[ERR_NAME] ([LINENUMBER]): unexpected exception caught.</string>
   <!-- LSL Optimizer -->

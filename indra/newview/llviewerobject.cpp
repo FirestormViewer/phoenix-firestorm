@@ -2655,6 +2655,28 @@ void LLViewerObject::interpolateLinearMotion(const F64SecondsImplicit& time, con
 			LLVector3d old_pos_global = mRegionp->getPosGlobalFromRegion(getPositionRegion());
 			new_pos_global = mRegionp->getPosGlobalFromRegion(new_pos);		// Re-fetch in case it got clipped above
 
+			// <FS> FIRE-21915: Fix bogus avatar movement on region crossing
+			// Clip new_pos to current region. Moves across region boundaries should not be extrapolated.
+			// Extrapolation across region boundaries is almost always wrong, and if the region being
+			// entered is slow to respond, very wrong.
+			// Probably don't need edge of world check below any more since we are clipping the predictor to the region.
+			bool clipped; // true if clipped at boundary
+			LLVector3d clip_pos_global_region = LLWorld::getInstance()->clipToRegion(mRegionp,old_pos_global, new_pos_global, clipped);
+			if (clipped)
+			{
+				// Was clipped, so we crossed a region boundary
+				//LL_INFOS() << "Beyond region edge, clipped predicted position to " << mRegionp->getPosRegionFromGlobal(clip_pos_global_region)
+				//	<< " from [" << getPositionRegion() << " .. " << new_pos << "]" << LL_ENDL;
+				new_pos = mRegionp->getPosRegionFromGlobal(clip_pos_global_region);
+				// Don't zero out velocity on the server. Telling the server affects scripts and audio.
+				//new_v.clear();
+				//setAcceleration(LLVector3::zero); // stop linear acceleration
+				LLVector3 new_angv;
+				new_angv.clear();
+				setAngularVelocity(new_angv); // stop rotation
+			}
+			// </FS>
+
 			// Clip the positions to known regions
 			LLVector3d clip_pos_global = LLWorld::getInstance()->clipToVisibleRegions(old_pos_global, new_pos_global);
 			if (clip_pos_global != new_pos_global)
@@ -6416,20 +6438,20 @@ BOOL	LLViewerObject::isTempAttachment() const
 BOOL LLViewerObject::isHiglightedOrBeacon() const
 {
 	// <FS:Ansariel> We can render beacons even if the floater is not visible
-	//if (LLFloaterReg::instanceVisible("beacons") && (gPipeline.getRenderBeacons(NULL) || gPipeline.getRenderHighlights(NULL)))
-	if (gPipeline.getRenderBeacons(NULL) || gPipeline.getRenderHighlights(NULL))
+	//if (LLFloaterReg::instanceVisible("beacons") && (gPipeline.getRenderBeacons() || gPipeline.getRenderHighlights()))
+	if (gPipeline.getRenderBeacons() || gPipeline.getRenderHighlights())
 	// </FS:Ansariel>
 	{
 		BOOL has_media = (getMediaType() == LLViewerObject::MEDIA_SET);
 		BOOL is_scripted = !isAvatar() && !getParent() && flagScripted();
 		BOOL is_physical = !isAvatar() && flagUsePhysics();
 
-		return (isParticleSource() && gPipeline.getRenderParticleBeacons(NULL))
-				|| (isAudioSource() && gPipeline.getRenderSoundBeacons(NULL))
-				|| (has_media && gPipeline.getRenderMOAPBeacons(NULL))
-				|| (is_scripted && gPipeline.getRenderScriptedBeacons(NULL))
-				|| (is_scripted && flagHandleTouch() && gPipeline.getRenderScriptedTouchBeacons(NULL))
-				|| (is_physical && gPipeline.getRenderPhysicalBeacons(NULL));
+		return (isParticleSource() && gPipeline.getRenderParticleBeacons())
+				|| (isAudioSource() && gPipeline.getRenderSoundBeacons())
+				|| (has_media && gPipeline.getRenderMOAPBeacons())
+				|| (is_scripted && gPipeline.getRenderScriptedBeacons())
+				|| (is_scripted && flagHandleTouch() && gPipeline.getRenderScriptedTouchBeacons())
+				|| (is_physical && gPipeline.getRenderPhysicalBeacons());
 	}
 	return FALSE;
 }

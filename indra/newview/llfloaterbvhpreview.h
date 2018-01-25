@@ -150,7 +150,8 @@ protected:
 	std::map<std::string, LLUUID>	mIDList;
 
 	// <FS> Preview on own avatar
-	bool mUseOwnAvatar;
+	bool				mUseOwnAvatar;
+	static S32			sOwnAvatarInstanceCount;
 
 	// <FS:Ansariel> FIRE-2083: Slider in upload animation floater doesn't work
 	LLFrameTimer		mTimer;

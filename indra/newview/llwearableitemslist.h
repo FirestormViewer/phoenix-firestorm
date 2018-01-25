@@ -210,6 +210,42 @@ protected:
 };
 
 
+// <FS:Ansariel> Show per-item complexity in COF
+/**
+ * @class FSPanelCOFWearableOutfitListItem
+ *
+ * Outfit item for "Wearing" list.
+ * Extends LLPanelWearableOutfitItem with showing the
+ * render weight of the item.
+ */
+class FSPanelCOFWearableOutfitListItem : public LLPanelWearableOutfitItem
+{
+	LOG_CLASS(FSPanelCOFWearableOutfitListItem);
+public:
+	struct Params : public LLInitParam::Block<Params, LLPanelWearableListItem::Params>
+	{
+		Optional<LLTextBox::Params>		item_weight;
+
+		Params();
+	};
+
+	static FSPanelCOFWearableOutfitListItem* create(LLViewerInventoryItem* item,
+											 bool worn_indication_enabled, U32 weight);
+
+	/*virtual*/ BOOL postBuild();
+
+	void updateItemWeight(U32 item_weight);
+
+protected:
+	FSPanelCOFWearableOutfitListItem(LLViewerInventoryItem* item,
+							  bool worn_indication_enabled, const Params& params);
+
+private:
+	LLTextBox*		mWeightCtrl;
+};
+// </FS:Ansariel>
+
+
 /**
  * @class LLPanelDummyClothingListItem
  *
@@ -439,6 +475,8 @@ public:
 	{
 		Optional<bool> standalone;
 		Optional<bool> worn_indication_enabled;
+		Optional<bool> show_create_new; // <FS:Ansariel> Optional "Create new" menu item
+		Optional<bool> show_complexity; // <FS:Ansariel> Show per-item complexity in COF
 
 		Params();
 	};
@@ -469,6 +507,10 @@ public:
 
 	void setSortOrder(ESortOrder sort_order, bool sort_now = true);
 
+	bool showCreateNew() const { return mShowCreateNew; } // <FS:Ansariel> Optional "Create new" menu item
+
+	void updateItemComplexity(const std::map<LLUUID, U32>& item_complexity, U32 body_parts_complexity); // <FS:Ansariel> Show per-item complexity in COF
+
 protected:
 	friend class LLUICtrlFactory;
 	LLWearableItemsList(const LLWearableItemsList::Params& p);
@@ -477,8 +519,18 @@ protected:
 
 	bool mIsStandalone;
 	bool mWornIndicationEnabled;
+	bool mShowCreateNew; // <FS:Ansariel> Optional "Create new" menu item
+	bool mShowComplexity; // <FS:Ansariel> Show per-item complexity in COF
 
 	ESortOrder		mSortOrder;
+
+	// <FS:Ansariel> Show per-item complexity in COF
+	void updateComplexity();
+
+	std::map<LLUUID, LLUUID> mLinkedItemsMap;
+	std::map<LLUUID, U32> mItemComplexityMap;
+	U32 mBodyPartsComplexity;
+	// </FS:Ansariel>
 };
 
 #endif //LL_LLWEARABLEITEMSLIST_H

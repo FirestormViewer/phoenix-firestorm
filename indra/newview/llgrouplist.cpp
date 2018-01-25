@@ -536,7 +536,10 @@ void LLGroupListItem::onProfileBtnClick()
 void LLGroupListItem::changed(LLGroupChange gc)
 {
 	LLGroupMgrGroupData* group_data = LLGroupMgr::getInstance()->getGroupData(mID);
-	if(group_data)
+	// <FS:Ansariel> FIRE-22148: Only update group icon if the received group data actually contains group icon info
+	//if (group_data)
+	if ((gc == GC_ALL || gc == GC_PROPERTIES) && group_data)
+	// </FS:Ansariel>
 		setGroupIconID(group_data->mInsigniaID);
 }
 

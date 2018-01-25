@@ -1256,13 +1256,15 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	}
 
 	// <FS:Zi> Add avatar hitbox debug
-	static LLCachedControl<bool> render_hitbox(gSavedSettings,"DebugRenderHitboxes",false);
-
-	if(render_hitbox && pass==1)
+	static LLCachedControl<bool> render_hitbox(gSavedSettings, "DebugRenderHitboxes", false);
+	if (render_hitbox && pass == 1)
 	{
+		LLGLSLShader* current_shader_program = NULL;
+
 		// load the debug output shader
-		if(LLGLSLShader::sNoFixedFunction)
+		if (LLGLSLShader::sNoFixedFunction)
 		{
+			current_shader_program = LLGLSLShader::sCurBoundShaderPtr;
 			gDebugProgram.bind();
 		}
 
@@ -1276,11 +1278,11 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
 		LLColor4 avatar_color = LLNetMap::getAvatarColor(avatarp->getID());
 		gGL.diffuseColor4f(avatar_color.mV[VRED], avatar_color.mV[VGREEN], avatar_color.mV[VBLUE], avatar_color.mV[VALPHA]);
-		glLineWidth(2.0);
+		glLineWidth(2.0f);
 
-		LLQuaternion rot=avatarp->getRotationRegion();
-		LLVector3 pos=avatarp->getPositionAgent();
-		LLVector3 size=avatarp->getScale();
+		LLQuaternion rot = avatarp->getRotationRegion();
+		LLVector3 pos = avatarp->getPositionAgent();
+		LLVector3 size = avatarp->getScale();
 
 		// *NOTE: Tried this so I wouldn't have to duplcate code, but I didn't find a way to rotate
 		// the matrix by "rot" so the drawBoxOutline function would do the right thing. So
@@ -1291,47 +1293,47 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		// // drawBoxOutline partly copied from llspatialpartition.cpp below
 
 		// set up and rotate hitbox to avatar orientation, half the avatar scale in either direction
-		LLVector3 v1=size.scaledVec(LLVector3( 0.5f, 0.5f, 0.5f))*rot;
-		LLVector3 v2=size.scaledVec(LLVector3(-0.5f, 0.5f, 0.5f))*rot;
-		LLVector3 v3=size.scaledVec(LLVector3(-0.5f,-0.5f, 0.5f))*rot;
-		LLVector3 v4=size.scaledVec(LLVector3( 0.5f,-0.5f, 0.5f))*rot;
+		LLVector3 v1 = size.scaledVec(LLVector3( 0.5f, 0.5f, 0.5f)) * rot;
+		LLVector3 v2 = size.scaledVec(LLVector3(-0.5f, 0.5f, 0.5f)) * rot;
+		LLVector3 v3 = size.scaledVec(LLVector3(-0.5f,-0.5f, 0.5f)) * rot;
+		LLVector3 v4 = size.scaledVec(LLVector3( 0.5f,-0.5f, 0.5f)) * rot;
 
 		// render the box
 		gGL.begin(LLRender::LINES);
 
 		//top
-		gGL.vertex3fv((pos+v1).mV);
-		gGL.vertex3fv((pos+v2).mV);
-		gGL.vertex3fv((pos+v2).mV);
-		gGL.vertex3fv((pos+v3).mV);
-		gGL.vertex3fv((pos+v3).mV);
-		gGL.vertex3fv((pos+v4).mV);
-		gGL.vertex3fv((pos+v4).mV);
-		gGL.vertex3fv((pos+v1).mV);
+		gGL.vertex3fv((pos + v1).mV);
+		gGL.vertex3fv((pos + v2).mV);
+		gGL.vertex3fv((pos + v2).mV);
+		gGL.vertex3fv((pos + v3).mV);
+		gGL.vertex3fv((pos + v3).mV);
+		gGL.vertex3fv((pos + v4).mV);
+		gGL.vertex3fv((pos + v4).mV);
+		gGL.vertex3fv((pos + v1).mV);
 		
 		//bottom
-		gGL.vertex3fv((pos-v1).mV);
-		gGL.vertex3fv((pos-v2).mV);
-		gGL.vertex3fv((pos-v2).mV);
-		gGL.vertex3fv((pos-v3).mV);
-		gGL.vertex3fv((pos-v3).mV);
-		gGL.vertex3fv((pos-v4).mV);
-		gGL.vertex3fv((pos-v4).mV);
-		gGL.vertex3fv((pos-v1).mV);
+		gGL.vertex3fv((pos - v1).mV);
+		gGL.vertex3fv((pos - v2).mV);
+		gGL.vertex3fv((pos - v2).mV);
+		gGL.vertex3fv((pos - v3).mV);
+		gGL.vertex3fv((pos - v3).mV);
+		gGL.vertex3fv((pos - v4).mV);
+		gGL.vertex3fv((pos - v4).mV);
+		gGL.vertex3fv((pos - v1).mV);
 		
 		//right
-		gGL.vertex3fv((pos+v1).mV);
-		gGL.vertex3fv((pos-v3).mV);
+		gGL.vertex3fv((pos + v1).mV);
+		gGL.vertex3fv((pos - v3).mV);
 				
-		gGL.vertex3fv((pos+v4).mV);
-		gGL.vertex3fv((pos-v2).mV);
+		gGL.vertex3fv((pos + v4).mV);
+		gGL.vertex3fv((pos - v2).mV);
 
 		//left
-		gGL.vertex3fv((pos+v2).mV);
-		gGL.vertex3fv((pos-v4).mV);
+		gGL.vertex3fv((pos + v2).mV);
+		gGL.vertex3fv((pos - v4).mV);
 
-		gGL.vertex3fv((pos+v3).mV);
-		gGL.vertex3fv((pos-v1).mV);
+		gGL.vertex3fv((pos + v3).mV);
+		gGL.vertex3fv((pos - v1).mV);
 
 		gGL.end();
 
@@ -1339,9 +1341,13 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		gGL.popMatrix();
 
 		// unload debug shader
-		if(LLGLSLShader::sNoFixedFunction)
+		if (LLGLSLShader::sNoFixedFunction)
 		{
 			gDebugProgram.unbind();
+			if (current_shader_program)
+			{
+				current_shader_program->bind();
+			}
 		}
 	}
 	// </FS:Zi>

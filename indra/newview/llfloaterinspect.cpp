@@ -53,6 +53,7 @@
 #include "llviewerobjectlist.h" //gObjectList
 #include "llviewertexturelist.h"
 // PoundLife END
+#include "llvovolume.h"
 
 //LLFloaterInspect* LLFloaterInspect::sInstance = NULL;
 
@@ -297,10 +298,14 @@ void LLFloaterInspect::refresh()
 	S32 vcount = 0;
 	S32 objcount = 0;
 	S32 primcount = 0;
+	U32 complexity = 0;
 	mTextureList.clear();
 	mTextureMemory = 0;
 	mTextureVRAMMemory = 0;
 	std::string format_res_string;
+	static LLCachedControl<F32> max_complexity_setting(gSavedSettings, "MaxAttachmentComplexity");
+	F32 max_attachment_complexity = max_complexity_setting;
+	max_attachment_complexity = llmax(max_attachment_complexity, 1.0e6f);
 	// PoundLife - End
 	getChildView("button owner")->setEnabled(false);
 	getChildView("button creator")->setEnabled(false);
@@ -473,6 +478,50 @@ void LLFloaterInspect::refresh()
 		// PoundLife - END
 		mObjectList->addElement(row, ADD_TOP);
 	}
+
+	// <FS:Ansariel> Show complexity in inspect window
+	for (LLObjectSelection::valid_root_iterator root_it = mObjectSelection->valid_root_begin(); root_it != mObjectSelection->valid_root_end(); ++root_it)
+	{
+		LLSelectNode* obj = *root_it;
+		LLVOVolume* volume = dynamic_cast<LLVOVolume*>(obj->getObject());
+		if (volume)
+		{
+			LLVOVolume::texture_cost_t textures;
+			F32 attachment_total_cost = 0;
+			F32 attachment_volume_cost = 0;
+			F32 attachment_texture_cost = 0;
+			F32 attachment_children_cost = 0;
+
+			attachment_volume_cost += volume->getRenderCost(textures);
+
+			LLViewerObject::const_child_list_t children = volume->getChildren();
+			for (LLViewerObject::const_child_list_t::const_iterator child_iter = children.begin();
+				child_iter != children.end();
+				++child_iter)
+			{
+				LLViewerObject* child_obj = *child_iter;
+				LLVOVolume *child = dynamic_cast<LLVOVolume*>(child_obj);
+				if (child)
+				{
+					attachment_children_cost += child->getRenderCost(textures);
+				}
+			}
+
+			for (LLVOVolume::texture_cost_t::iterator volume_texture = textures.begin();
+				volume_texture != textures.end();
+				++volume_texture)
+			{
+				// add the cost of each individual texture in the linkset
+				attachment_texture_cost += volume_texture->second;
+			}
+			attachment_total_cost = attachment_volume_cost + attachment_texture_cost + attachment_children_cost;
+
+			// Limit attachment complexity to avoid signed integer flipping of the wearer's ACI
+			complexity += (U32)llclamp(attachment_total_cost, 0.f, max_attachment_complexity);
+		}
+	}
+	// </FS:Ansariel>
+
 	if(selected_index > -1 && mObjectList->getItemIndex(selected_uuid) == selected_index)
 	{
 		mObjectList->selectNthItem(selected_index);
@@ -483,6 +532,7 @@ void LLFloaterInspect::refresh()
 	}
 	onSelectObject();
 	mObjectList->setScrollPos(pos);
+
 	// PoundLife - Total linkset stats.
 	LLStringUtil::format_map_t args;
 	res_mgr.getIntegerString(format_res_string, objcount);
@@ -501,6 +551,8 @@ void LLFloaterInspect::refresh()
 	args["TEXTURE_MEMORY"] = format_res_string;
 	res_mgr.getIntegerString(format_res_string, mTextureVRAMMemory / 1024);
 	args["VRAM_USAGE"] = format_res_string;
+	res_mgr.getIntegerString(format_res_string, complexity);
+	args["COMPLEXITY"] = format_res_string;
 	getChild<LLTextBase>("linksetstats_text")->setText(getString("stats_list", args));
 	// PoundLife - End
 }

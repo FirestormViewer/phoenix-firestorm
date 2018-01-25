@@ -94,6 +94,7 @@
 
 // Firestorm includes
 #include "aoengine.h"
+#include "fsfloaterwearablefavorites.h"
 #include "fslslbridge.h"
 
 BOOL LLInventoryState::sWearNewClothing = FALSE;
@@ -433,7 +434,10 @@ void copy_inventory_category(LLInventoryModel* model,
 		LLInventoryItem* item = *iter;
         LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(update_folder_cb, new_cat_uuid));
 
-        if (!item->getPermissions().allowOperationBy(PERM_COPY, gAgent.getID(), gAgent.getGroupID()))
+        // <FS:Ansariel> FIRE-21719: Copy-pasting a folder doesn't copy contained links
+        //if (!item->getPermissions().allowOperationBy(PERM_COPY, gAgent.getID(), gAgent.getGroupID()))
+        if (!item->getIsLinkType() && !item->getPermissions().allowOperationBy(PERM_COPY, gAgent.getID(), gAgent.getGroupID()))
+        // </FS:Ansariel>
         {
             // If the item is nocopy, we do nothing or, optionally, move it
             if (move_no_copy_items)
@@ -445,6 +449,12 @@ void copy_inventory_category(LLInventoryModel* model,
             // Decrement the count in root_id since that one item won't be copied over
             LLMarketplaceData::instance().decrementValidationWaiting(root_id);
         }
+        // <FS:Ansariel> FIRE-21719: Copy-pasting a folder doesn't copy contained links
+        else if (item->getIsLinkType())
+        {
+            link_inventory_object(new_cat_uuid, item->getLinkedUUID(), cb);
+        }
+        // </FS:Ansariel>
         else
         {
             copy_inventory_item(
@@ -640,6 +650,9 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 		||
 		(model->isObjectDescendentOf(id, FSLSLBridge::instance().getBridgeFolder())
 			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		||
+		(model->isObjectDescendentOf(id, FSFloaterWearableFavorites::getFavoritesFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders"))
 		)
 	{
 		return FALSE;
@@ -707,6 +720,9 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 		||
 		((id == FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id, FSLSLBridge::instance().getBridgeFolder()))
 			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		||
+		((id == FSFloaterWearableFavorites::getFavoritesFolder() || model->isObjectDescendentOf(id, FSFloaterWearableFavorites::getFavoritesFolder()))
+			&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders"))
 		)
 	{
 		return FALSE;
@@ -762,6 +778,9 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 		||
 		((id == FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id, FSLSLBridge::instance().getBridgeFolder()))
 			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		||
+		((id == FSFloaterWearableFavorites::getFavoritesFolder() || model->isObjectDescendentOf(id, FSFloaterWearableFavorites::getFavoritesFolder()))
+			&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders"))
 		)
 	{
 		return FALSE;

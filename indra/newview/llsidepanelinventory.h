@@ -134,6 +134,8 @@ private:
 
 	LLInventoryCategoriesObserver* 	mCategoriesObserver;
 	LLInboxAddedObserver*			mInboxAddedObserver;
+
+	static bool					sInboxInitalized; // <FS:Ansariel> Inbox panel randomly shown on secondary inventory windows
 };
 
 #endif //LL_LLSIDEPANELINVENTORY_H

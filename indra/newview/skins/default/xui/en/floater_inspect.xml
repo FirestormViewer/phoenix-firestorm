@@ -5,12 +5,12 @@
  height="300"
  layout="topleft"
  min_height="300"
- min_width="600"
+ min_width="610"
  name="inspect"
  help_topic="inspect"
  save_rect="true"
  title="Inspect Objects"
- width="600">
+ width="610">
     <floater.string
      name="timeStamp">
         [year,datetime,local] [mth,datetime,local] [day,datetime,local], [hour,datetime,local]:[min,datetime,local]:[second,datetime,local], [wkday,datetime,local]
@@ -27,6 +27,7 @@
 Faces: [NUM_FACES]
 Vertices: [NUM_VERTICES]
 Triangles: [NUM_TRIANGLES]
+Complex.: [COMPLEXITY]
 
 Textures: [NUM_TEXTURES]
 TMem: [TEXTURE_MEMORY] KB
@@ -36,7 +37,7 @@ VRAM: [VRAM_USAGE] KB
     <text_editor
       top="24"
       left="5"
-      width="120"
+      width="130"
       height="242"
       layout="topleft"
       follows="left|top|bottom"

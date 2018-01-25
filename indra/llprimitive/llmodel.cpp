@@ -1034,18 +1034,11 @@ LLModel::weight_list& LLModel::getJointInfluences(const LLVector3& pos)
 	{  //no exact match found, get closest point
 		const F32 epsilon = 1e-5f;
 		weight_map::iterator iter_up = mSkinWeights.lower_bound(pos);
-		weight_map::iterator iter_down = ++iter_up;
-
-		// <FS:ND> FIRE-9251; it can happen than iter_up points at end(), in that case iter_down points to end()+1. Adjust iter_up to end()-1 and iter_down to end then.
-		// This will gurantee we have at least one valid pointer from our map and can use that safely as 'best'.
-		if( mSkinWeights.end() == iter_up )
+		weight_map::iterator iter_down = iter_up;
+		if (iter_up != mSkinWeights.end())
 		{
-			iter_down = iter_up;
-			--iter_up;
+			iter_down = ++iter_up;
 		}
-		// </FS:ND>
-
-
 		weight_map::iterator best = iter_up;
 
 		// <FS:ND> FIRE-9251; There is no way iter can be valid here, otherwise we had hit the if branch and not the else branch.

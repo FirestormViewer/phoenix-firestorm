@@ -63,7 +63,6 @@ protected:
 
 	void onCreateScript(const LLUUID& idItem);
 	void onSavedScript(LLUUID itemId, LLUUID newAssetId, LLUUID newItemId, LLSD response);
-	bool onUploadError(const std::string& strFilename);
 
 protected:
 	typedef std::map<std::string, LLSD> filename_queue_t;

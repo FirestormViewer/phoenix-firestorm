@@ -211,6 +211,12 @@ LLFolderView * LLInventoryPanel::createFolderRoot(LLUUID root_id )
 	// <FS:Ansariel> Inventory specials
 	p.for_inventory = true;
 
+	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+	const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+	p.item_height = fsFolderViewItemHeight;
+	p.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+	// </FS:Ansariel>
+
     return LLUICtrlFactory::create<LLFolderView>(p);
 }
 
@@ -320,11 +326,14 @@ void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
     }
     
 	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
-	if (!gSavedSettings.getBOOL("FSShowInboxFolder"))
+	if (getName() != "Worn Items")
 	{
-		getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
+		if (!gSavedSettings.getBOOL("FSShowInboxFolder"))
+		{
+			getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
+		}
+		gSavedSettings.getControl("FSShowInboxFolder")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateShowInboxFolder, this, _2));
 	}
-	gSavedSettings.getControl("FSShowInboxFolder")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateShowInboxFolder, this, _2));
 	// </FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 
 	// set the filter for the empty folder if the debug setting is on
@@ -857,6 +866,12 @@ LLFolderViewFolder * LLInventoryPanel::createFolderViewFolder(LLInvFVBridge * br
 	// <FS:Ansariel> Inventory specials
 	params.for_inventory = true;
 
+	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+	const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+	params.item_height = fsFolderViewItemHeight;
+	params.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+	// </FS:Ansariel>
+
 	return LLUICtrlFactory::create<LLFolderViewFolder>(params);
 }
 
@@ -876,6 +891,12 @@ LLFolderViewItem * LLInventoryPanel::createFolderViewItem(LLInvFVBridge * bridge
 
 	// <FS:Ansariel> Inventory specials
 	params.for_inventory = true;
+
+	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+	const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
+	params.item_height = fsFolderViewItemHeight;
+	params.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
+	// </FS:Ansariel>
 	
 	return LLUICtrlFactory::create<LLFolderViewItem>(params);
 }
@@ -1610,13 +1631,13 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 	bool in_inbox = (gInventory.isObjectDescendentOf(obj_id, gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX)));
 	bool show_inbox = gSavedSettings.getBOOL("FSShowInboxFolder"); // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 
-	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+	// <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
 	//if (main_panel && !in_inbox)
-	if (main_panel && (!in_inbox || show_inbox))
+	//{
+	//	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory")->selectAllItemsPanel();
+	//}
 	// </FS:Ansariel>
-	{
-		LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory")->selectAllItemsPanel();
-	}
+
 	active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
 
 	if (active_panel)
@@ -1645,7 +1666,15 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 		}
 		else
 		{
-			LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+			// <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
+			//LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+			if (main_panel)
+			{
+				active_panel->getParentByType<LLTabContainer>()->selectFirstTab();
+				active_panel = getActiveInventoryPanel(FALSE);
+			}
+			LLFloater* floater_inventory = active_panel->getParentByType<LLFloater>();
+			// </FS:Ansariel>
 			if (floater_inventory)
 			{
 				floater_inventory->setFocus(TRUE);

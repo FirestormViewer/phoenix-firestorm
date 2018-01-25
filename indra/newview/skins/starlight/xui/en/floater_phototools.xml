@@ -2743,7 +2743,7 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Controls the detail of prims. Higher values produce greater detail for objects."
+				 tool_tip="Controls when lower-detail objects can be used to reduce rendering cost. Higher values cause lag, use with care."
 				 width="80">
 					Obj. Detail
 				</text>
@@ -2752,11 +2752,11 @@
 				 control_name="RenderVolumeLODFactor"
 				 follows="left|top"
 				 height="16"
-				 increment="1"
+				 increment="0.125"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val="15"
+				 max_val="8.0"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2765,12 +2765,12 @@
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
-				 decimal_digits="0"
+				 decimal_digits="3"
 				 follows="left|top"
-				 max_val="15"
+				 max_val="8.0"
 				 min_val="0"
 				 width="53"
-				 increment="1"/>
+				 increment="0.125"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Object_Detail"

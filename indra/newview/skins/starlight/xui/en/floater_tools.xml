@@ -13,7 +13,7 @@
  sound_flags="0"
  width="295">
   <floater.string
-    name="grid_screen_text">
+     name="grid_screen_text">
     Screen
   </floater.string>
   <floater.string
@@ -32,7 +32,7 @@
    name="grid_attachment_text">
     Attachment
   </floater.string>
-    <floater.string
+  <floater.string
      name="status_rotate">
         Drag colored bands to rotate object
     </floater.string>
@@ -393,12 +393,15 @@
      width="134" />
   <check_box
      height="18"
-     control_name="RenderHighlightSelections"
+     initial_value="true"
      label="Show Highlight"
      layout="topleft"
      top_pad="-2"
      name="checkbox show highlight"
-     width="134"/>
+     width="134" >
+		  <check_box.commit_callback
+			function="BuildTool.commitShowHighlight"/>
+	</check_box>
     <button
      left_pad="0"
      image_selected="ForwardArrow_Press"
@@ -988,7 +991,7 @@
              left="10"
              length="1"
              follows="left|top"
-             height="19"
+             height="29"
              layout="topleft"
              name="Creator:"
              width="75">
@@ -1015,7 +1018,7 @@
              length="1"
              left="10"
              follows="left|top"
-             height="19"
+             height="29"
              layout="topleft"
              name="Owner:"
              top_pad="7"
@@ -1139,7 +1142,7 @@
              top_pad="10"
              left="10"
              name="label click action"
-             width="118">
+             width="82">
                 Click to:
             </text>
             <combo_box
@@ -1192,13 +1195,14 @@
              name="checkbox for sale"
              left="7"
              width="100" />
-<!-- NEW SALE TYPE COMBO BOX -->
+  <!-- NEW SALE TYPE COMBO BOX -->
       <combo_box
-            left_pad="10"
+            left_pad="8"
             layout="topleft"
             follows="left|top"
             allow_text_entry="false"
             height="23"
+            top_pad="-23"
             initial_value="2"
             max_chars="20"
             mouse_opaque="true"
@@ -1217,24 +1221,25 @@
            label="Original"
            value="1" />
       </combo_box>
-<!-- NEW PRICE SPINNER
+  <!-- NEW PRICE SPINNER
 Objects are allowed to be for sale for L$0 to invoke buy UI behavior
 even though the user gets a free copy.
 -->
-    <spinner
-        follows="left|top"
-        decimal_digits="0"
-        increment="1"
-        top_pad="5"
-        left="10"
-        control_name="Edit Cost"
-        name="Edit Cost"
-        label="Price: L$"
-        label_width="65"
-        width="165"
-        min_val="0"
-        height="20"
-        max_val="999999999" />
+  <spinner
+      follows="left|top"
+      decimal_digits="0"
+      increment="1"
+      top_pad="5"
+      left="10"
+      control_name="Edit Cost"
+      name="Edit Cost"
+      label="Price: L$"
+      label_width="65"
+      valign="center"
+      width="165"
+      min_val="0"
+      height="20"
+      max_val="999999999" />
 	<button
 	 left_pad="10"
 	 enabled="false"
@@ -1251,7 +1256,7 @@ even though the user gets a free copy.
 	 height="20"
 	 label="Copy Keys"
 	 name="btnCopyKeys"
-	 tool_tip="Copies the selected object's root key to the clipboard. Shift-click copies all of the selected objects' keys" width="80">
+     tool_tip="Copies the selected object's root key to the clipboard. Shift-click copies all of the selected objects' keys" width="80">
 		<button.commit_callback
 		function="BuildTool.CopyKeys"/>
 	</button>
@@ -1273,19 +1278,20 @@ even though the user gets a free copy.
          name="perms_build"
          left="0"
          top_pad="4"
-         height="95"
+         height="98"
          width="290">
             <text
              type="string"
              length="1"
              left="10"
-             top_pad="9"
+             word_wrap="true"
+             top_pad="4"
              text_color="EmphasisColor"
-             height="16"
+             height="24"
              follows="left|top|right"
              layout="topleft"
              name="perm_modify"
-             width="264">
+             width="214">
                 You can modify this object
             </text>
             <text
@@ -1309,6 +1315,13 @@ even though the user gets a free copy.
              layout="topleft"
              left_pad="0"
              name="checkbox allow everyone copy"
+             width="80" />
+            <check_box
+             height="19"
+             label="Export"
+             layout="topleft"
+             left_pad="0"
+             name="checkbox allow export"
              width="90" />
             <text
                type="string"
@@ -1321,10 +1334,10 @@ even though the user gets a free copy.
             </text>
             <check_box
              follows="left|top|right"
-             height="10"
              label="Modify"
              layout="topleft"
              left="10"
+             height="10"
              name="checkbox next owner can modify"
              width="85" />
             <check_box
@@ -1351,7 +1364,7 @@ even though the user gets a free copy.
              type="string"
              text_color="EmphasisColor"
              length="1"
-             top="9"
+             top="3"
              follows="left|top"
              layout="topleft"
              left="230"
@@ -1455,7 +1468,7 @@ even though the user gets a free copy.
          left_pad="0">
       </text>
     </panel>
-      </panel>
+  </panel>
       <!-- Object tab -->
       <panel
          border="false"
@@ -1514,8 +1527,7 @@ even though the user gets a free copy.
              tool_tip="Causes object to not collide with other objects or avatars"
              top_pad="0"
              width="123" />
-
-            <text
+        <text
              type="string"
              length="1"
              follows="left|top"
@@ -1542,17 +1554,6 @@ even though the user gets a free copy.
              text_enabled_color="Red"
              top_pad="5"
              width="87" />
-            <button
-             tab_stop="false"
-             follows="top|right"
-             height="18" 
-             label="C"
-             left_pad="5"
-             mouse_opaque="true"
-             name="copypos"
-             enabled="true"
-             tool_tip="Copy Position"
-             width="20" />
             <spinner
              decimal_digits="4"
              follows="left|top"
@@ -1569,17 +1570,6 @@ even though the user gets a free copy.
              text_enabled_color="EmphasisColor"
              top_pad="3"
              width="87" />
-            <button
-             tab_stop="false"
-             follows="top|right"
-             height="18"
-             label="P"
-             left_pad="5"
-             mouse_opaque="true"
-             name="pastepos"
-             enabled="true"
-             tool_tip="Paste Position"
-             width="20" />
             <spinner
              decimal_digits="4"
              follows="left|top"
@@ -1599,9 +1589,32 @@ even though the user gets a free copy.
             <button
              tab_stop="false"
              follows="top|right"
-             height="18"
-             label="p"
+             height="19" 
+             label="C"
+             top_delta="-43"
              left_pad="5"
+             mouse_opaque="true"
+             name="copypos"
+             enabled="true"
+             tool_tip="Copy Position"
+             width="20" />
+            <button
+             tab_stop="false"
+             follows="top|right"
+             height="19"
+             label="P"
+             top_pad="3"
+             mouse_opaque="true"
+             name="pastepos"
+             enabled="true"
+             tool_tip="Paste Position"
+             width="20" />
+            <button
+             tab_stop="false"
+             follows="top|right"
+             height="19"
+             label="p"
+             top_pad="3"
              mouse_opaque="true"
              name="pasteposclip"
              enabled="true"
@@ -1619,118 +1632,83 @@ even though the user gets a free copy.
              width="121">
                 Size (meters)
             </text>
-			<!-- Note that labels are added in here because LL appear to have hardcoded the colour settings for these spinner labels in the code! -->
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="19"
-             layout="topleft"
-             left_delta="0"
-             name="label size X"
-             top_pad="5"
-             width="12">
-                X
-            </text>			
             <spinner
              decimal_digits="4"
              follows="left|top"
              height="19"
              increment="0.01"
              initial_value="0"
-             label=""
-             label_width="1"
+             label="X"
+             label_width="10"
              layout="topleft"
-             left_pad="0"
+             left_delta="0"
              max_val="64"
              min_val="0.01"
              name="Scale X"
-             top_delta="0"
-             width="75" />
+             text_enabled_color="White"
+             top_pad="5"
+             width="87" />
+            <spinner
+             decimal_digits="4"
+             follows="left|top"
+             height="19"
+             increment="0.01"
+             initial_value="0"
+             label="Y"
+             label_width="10"
+             layout="topleft"
+             left="10"
+             max_val="64"
+             min_val="0.01"
+             name="Scale Y"
+             text_enabled_color="White"
+             top_pad="3"
+             width="87" />
+            <spinner
+             decimal_digits="4"
+             follows="left|top"
+             height="19"
+             increment="0.01"
+             initial_value="0"
+             label="Z"
+             label_width="10"
+             layout="topleft"
+             left="10"
+             max_val="64"
+             min_val="0.01"
+             name="Scale Z"
+             text_enabled_color="White"
+             top_pad="3"
+             width="87" />
             <button
              tab_stop="false"
              follows="top|right"
-             height="18" 
+             height="19" 
              label="C"
+             top_delta="-43"
              left_pad="5"
              mouse_opaque="true"
              name="copysize"
              enabled="true"
              tool_tip="Copy Size"
              width="20" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="19"
-             layout="topleft"
-             left="10"
-             name="label size Y"
-             top_pad="3"
-             width="12">
-                Y
-            </text>
-            <spinner
-             decimal_digits="4"
-             follows="left|top"
-             height="19"
-             increment="0.01"
-             initial_value="0"
-             label=""
-             label_width="1"
-             layout="topleft"
-             left_pad="0"
-             max_val="64"
-             min_val="0.01"
-             name="Scale Y"
-             text_enabled_color="White"
-             top_delta="0"
-             width="75" />
             <button
              tab_stop="false"
              follows="top|right"
-             height="18"
+             height="19"
              label="P"
-             left_pad="5"
+             top_pad="3"
              mouse_opaque="true"
              name="pastesize"
              enabled="true"
              tool_tip="Paste Size"
              width="20" />
-			<text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="19"
-             layout="topleft"
-             left="10"
-             name="label size Z"
-             top_pad="3"
-             width="12">
-                Z
-            </text>
-            <spinner
-             decimal_digits="4"
-             follows="left|top"
-             height="19"
-             increment="0.01"
-             initial_value="0"
-             label=""
-             label_width="1"
-             layout="topleft"
-             left_pad="0"
-             max_val="64"
-             min_val="0.01"
-             name="Scale Z"
-             text_enabled_color="White"
-             top_delta="0"
-             width="75" />
             <button
              tab_stop="false"
              follows="top|right"
-             height="18"
+             height="19"
              label="p"
-             left_pad="5"
+             top_pad="3"
              mouse_opaque="true"
              name="pastesizeclip"
              enabled="true"
@@ -1748,119 +1726,83 @@ even though the user gets a free copy.
              width="121">
                 Rotation (degrees)
             </text>
-			<!-- Note that labels are added in here because LL appear to have hardcoded the colour settings for these spinner labels in the code! -->
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="19"
-             layout="topleft"
-             left_delta="0"
-             name="label rotation X"
-             top_pad="5"
-             width="12">
-                X
-            </text>
             <spinner
              decimal_digits="3"
              follows="left|top"
              height="19"
              increment="1"
              initial_value="0"
-             label=""
-             label_width="1"
+             label="X"
+             label_width="10"
              layout="topleft"
-             left_pad="0"
+             left_delta="0"
              max_val="9999"
              min_val="-9999"
              name="Rot X"
              text_enabled_color="White"
-             top_delta="0"
-             width="75" />
+             top_pad="5"
+             width="87" />
+            <spinner
+             decimal_digits="3"
+             follows="left|top"
+             height="19"
+             increment="1"
+             initial_value="0"
+             label="Y"
+             label_width="10"
+             layout="topleft"
+             left="10"
+             max_val="9999"
+             min_val="-9999"
+             name="Rot Y"
+             text_enabled_color="White"
+             top_pad="3"
+             width="87" />
+            <spinner
+             decimal_digits="3"
+             follows="left|top"
+             height="19"
+             increment="1"
+             initial_value="0"
+             label="Z"
+             label_width="10"
+             layout="topleft"
+             left="10"
+             max_val="9999"
+             min_val="-9999"
+             name="Rot Z"
+             text_enabled_color="White"
+             top_pad="3"
+             width="87" />
             <button
              tab_stop="false"
              follows="top|right"
-             height="18"
+             height="19"
              label="C"
+             top_delta="-43"
              left_pad="5"
              mouse_opaque="true"
              name="copyrot"
              enabled="true"
              tool_tip="Copy Rotation"
              width="20" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="19"
-             layout="topleft"
-             left="10"
-             name="label rotation Y"
-             top_pad="3"
-             width="12">
-                Y
-            </text>			 
-            <spinner
-             decimal_digits="3"
-             follows="left|top"
-             height="19"
-             increment="1"
-             initial_value="0"
-             label=""
-             label_width="1"
-             layout="topleft"
-             left_pad="0"
-             max_val="9999"
-             min_val="-9999"
-             name="Rot Y"
-             text_enabled_color="White"
-             top_delta="0"
-             width="75" />
             <button
              tab_stop="false"
              follows="top|right"
-             height="18"
+             height="19"
              label="P"
-             left_pad="5"
+             top_pad="3"
              mouse_opaque="true"
              name="pasterot"
              enabled="true"
              tool_tip="Paste Rotation"
              width="20" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="19"
-             layout="topleft"
-             left="10"
-             name="label rotation Z"
-             top_pad="3"
-             width="12">
-                Z
-            </text>
-            <spinner
-             decimal_digits="3"
-             follows="left|top"
-             height="19"
-             increment="1"
-             initial_value="0"
-             label=""
-             label_width="1"
-             layout="topleft"
-             left_pad="0"
-             max_val="9999"
-             min_val="-9999"
-             name="Rot Z"
-             text_enabled_color="White"
-             top_delta="0"
-             width="75" />
             <button
              tab_stop="false"
              follows="top|right"
-             height="18"
+             height="19"
              label="p"
-             left_pad="5"
+             top_pad="3"
              mouse_opaque="true"
              name="pasterotclip"
              enabled="true"
@@ -2480,6 +2422,7 @@ even though the user gets a free copy.
              name="sculpt type control"
              top_pad="4"
              visible="false"
+			 tool_tip="The &quot;none&quot; option has been removed because it is identical with &quot;Plane&quot;."
              width="150">
                 <combo_box.item
                  label="Sphere"
@@ -2490,7 +2433,7 @@ even though the user gets a free copy.
                  name="Torus"
                  value="2" />
                 <combo_box.item
-                 label="Plane"
+                 label="Plane / None"
                  name="Plane"
                  value="3" />
                 <combo_box.item
@@ -2510,7 +2453,7 @@ even though the user gets a free copy.
           top="6"
           width="100"
           visible="false">
-          Mesh Information:
+                   Mesh Information:
         </text>
         <text
           follows="left|top"
@@ -2724,7 +2667,7 @@ Lowest:
           width="65" >
 High ↔ Med
 Med ↔ Low
-Low ↔ Lwst
+Low ↔ Lwst         
         </text>
         <string
           name="LODSwapFormatString"
@@ -2765,21 +2708,20 @@ Low ↔ Lwst
           value="--"
           visible="false"
           width="30" />
-        <text
-         name="LODSwapTableDscriptionsText"
-         follows="top|left"
-         layout="topleft"
-         left="125"
-         right="-1"
-         word_wrap="true"
-         top_pad="15"
-         tool_tip="Best practice: Creators should ensure good LOD behaviour for Default settings across all viewers."
-         height="100">
+         <text
+          name="LODSwapTableDscriptionsText"
+          follows="top|left"
+          layout="topleft"
+          left="125"
+          right="-1"
+          word_wrap="true"
+          top_pad="15"
+          tool_tip="Best practice: Creators should ensure good LOD behaviour for Default settings across all viewers."
+          height="100">
           This table shows the LOD change boundaries in metres from the camera.
         </text>
-
         <!-- /FS:Beq end of Mesh info section-->
-      </panel>
+        </panel>
         <panel
          border="false"
          follows="all"
@@ -3047,7 +2989,7 @@ Low ↔ Lwst
                    mouse_opaque="true"
                    name="Light Ambiance"
                    width="120" />
-            <text
+          <text
              type="string"
              length="1"
              follows="left|top"
@@ -3057,29 +2999,28 @@ Low ↔ Lwst
              top="38"
              width="130">
                 Physics Shape Type:
-            </text>
-			      <combo_box
-			         height="19"
-			         top_delta="15" 
-			         layout="topleft"
-			         follows="left|top"
-			         name="Physics Shape Type Combo Ctrl"
-			         tool_tip="Choose the physics shape type"
-			         width="108"/>
-            <button
-               follows="left|top"
-               height="19"
-               is_toggle="true"
-               control_name="ShowPhysicsShapeInEdit"
-               image_disabled="PhysicsView_Off"
-               image_disabled_selected="PhysicsView_Off"
-               image_selected="PhysicsView_On"
-               image_unselected="PhysicsView_Off"
-               layout="topleft"
-               left_delta="117"
-               name="PhysicsViewToggle"
-               tool_tip="Toggle the physics view on in edit mode"
-               width="19"/>          
+          </text>
+				  <combo_box
+				     height="19"
+				     layout="topleft"
+				     follows="left|top"
+				     name="Physics Shape Type Combo Ctrl"
+				     tool_tip="Choose the physics shape type"
+				     width="108"/>
+          <button
+              follows="left|top"
+              height="19"
+         		  is_toggle="true"
+              control_name="ShowPhysicsShapeInEdit"
+              image_disabled="PhysicsView_Off"
+              image_disabled_selected="PhysicsView_Off"
+              image_selected="PhysicsView_On"
+              image_unselected="PhysicsView_Off"
+              layout="topleft"
+              left_delta="117"
+              name="PhysicsViewToggle"
+              tool_tip="Toggle the physics view on in edit mode"
+              width="19"/>
             <combo_box
              height="19"
              layout="topleft"
@@ -3087,7 +3028,7 @@ Low ↔ Lwst
              top_pad="5"
              width="150"
              left="144">
-              <combo_box.item
+                <combo_box.item
                  label="Stone"
                  name="Stone"
                  value="Stone" />
@@ -3182,7 +3123,7 @@ Low ↔ Lwst
          help_topic="toolbox_texture_tab"
          name="Texture"
          filename="panel_tools_texture.xml">
-	    </panel>
+	   </panel>
        <panel
          border="false"
          follows="all"
@@ -3238,7 +3179,7 @@ Low ↔ Lwst
              border_visible="true"
              bevel_style="in"
              follows="left|top|right"
-             height="325"
+             height="345"
              layout="topleft"
              left="10"
              name="contents_inventory"

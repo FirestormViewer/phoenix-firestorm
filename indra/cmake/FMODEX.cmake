@@ -1,6 +1,6 @@
 # -*- cmake -*-
 
-# FMOD can be set when launching the make using the argument -DFMOD:BOOL=ON
+# FMOD can be set when launching the make using the argument -DFMODEX:BOOL=ON
 # When building using proprietary binaries though (i.e. having access to LL private servers),
 # we always build with FMODEX.
 # Open source devs should use the -DFMODEX:BOOL=ON then if they want to build with FMOD, whether
@@ -10,6 +10,10 @@ if (INSTALL_PROPRIETARY)
 endif (INSTALL_PROPRIETARY)
 
 if (FMODEX)
+  if (FMODSTUDIO)
+    MESSAGE(FATAL_ERROR "You cannot use FMOD Ex if you are already using FMOD Studio.")
+  endif (FMODSTUDIO)
+
   if (USESYSTEMLIBS)
     # In that case, we use the version of the library installed on the system
     set(FMODEX_FIND_REQUIRED ON)
@@ -26,29 +30,29 @@ if (FMODEX)
       include(Prebuilt)
       use_prebuilt_binary(fmodex)    
       if (WINDOWS)
-        if( NOT ND_BUILD64BIT_ARCH )
+        if( ADDRESS_SIZE EQUAL 32 )
           set(FMODEX_LIBRARY 
               debug fmodexL_vc
               optimized fmodex_vc)
-        else( NOT ND_BUILD64BIT_ARCH )
+        else( )
           set(FMODEX_LIBRARY 
               debug fmodexL64_vc
               optimized fmodex64_vc)
-        endif( NOT ND_BUILD64BIT_ARCH )
+        endif( )
       elseif (DARWIN)
         set(FMODEX_LIBRARY 
             debug fmodexL
             optimized fmodex)
       elseif (LINUX)
-        if(ND_BUILD64BIT_ARCH)
+        if( ADDRESS_SIZE EQUAL 64 )
           set(FMODEX_LIBRARY
               debug fmodexL64
               optimized fmodex64)
-        else(ND_BUILD64BIT_ARCH)
+        else( )
           set(FMODEX_LIBRARY
               debug fmodexL
               optimized fmodex)
-        endif(ND_BUILD64BIT_ARCH)
+        endif( )
       endif (WINDOWS)
       set(FMODEX_LIBRARIES ${FMODEX_LIBRARY})
       set(FMODEX_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include/fmodex)

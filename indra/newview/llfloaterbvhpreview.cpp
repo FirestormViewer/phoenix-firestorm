@@ -67,6 +67,8 @@
 #include "llviewercontrol.h" // for gSavedSettings 
 #include "llvoavatarself.h" 
 
+S32 LLFloaterBvhPreview::sOwnAvatarInstanceCount = 0; // <FS> Preview on own avatar
+
 const S32 PREVIEW_BORDER_WIDTH = 2;
 const S32 PREVIEW_RESIZE_HANDLE_SIZE = S32(RESIZE_HANDLE_WIDTH * OO_SQRT2) + PREVIEW_BORDER_WIDTH;
 const S32 PREVIEW_HPAD = PREVIEW_RESIZE_HANDLE_SIZE;
@@ -127,6 +129,11 @@ LLFloaterBvhPreview::LLFloaterBvhPreview(const std::string& filename) :
 
 	// <FS> Preview on own avatar
 	mUseOwnAvatar = gSavedSettings.getBOOL("FSUploadAnimationOnOwnAvatar");
+	if (mUseOwnAvatar)
+	{
+		sOwnAvatarInstanceCount++;
+	}
+	// </FS>
 
 	mIDList["Standing"] = ANIM_AGENT_STAND;
 	mIDList["Walking"] = ANIM_AGENT_FEMALE_WALK;
@@ -404,8 +411,8 @@ BOOL LLFloaterBvhPreview::loadBVH()
 			onBtnPlay();
 			// </FS>
 			
-			getChild<LLSlider>("playback_slider")->setMinValue(0.0);
-			getChild<LLSlider>("playback_slider")->setMaxValue(1.0);
+			getChild<LLSliderCtrl>("playback_slider")->setMinValue(0.0);
+			getChild<LLSliderCtrl>("playback_slider")->setMaxValue(1.0);
 
 			//<FS:Sei> FIRE-17251: Use defaults from XUI, not from the JointMotionList constructor
 			//getChild<LLUICtrl>("loop_check")->setValue(LLSD(motionp->getLoop()));
@@ -484,16 +491,16 @@ BOOL LLFloaterBvhPreview::loadBVH()
 void LLFloaterBvhPreview::unloadMotion()
 {
 	if (mMotionID.notNull() && mAnimPreview && mUseOwnAvatar)
-	{ 
+	{
 		resetMotion(); 
 		// <FS> Preview on own avatar
 		//mAnimPreview->getDummyAvatar()->removeMotion(mMotionID);
 		mAnimPreview->getPreviewAvatar(this)->removeMotion(mMotionID);
 		// </FS>
-		LLKeyframeDataCache::removeKeyframeData(mMotionID); 
+		LLKeyframeDataCache::removeKeyframeData(mMotionID);
 	}
 
-	mMotionID.setNull(); 
+	mMotionID.setNull();
 	mAnimPreview = NULL;
 }
 // </FS>
@@ -503,9 +510,25 @@ void LLFloaterBvhPreview::unloadMotion()
 //-----------------------------------------------------------------------------
 LLFloaterBvhPreview::~LLFloaterBvhPreview()
 {
-	// <FS> Reload animation from disk
-	//mAnimPreview = NULL;
-	unloadMotion();
+	mAnimPreview = NULL;
+
+	// <FS> Preview on own avatar
+	if (mUseOwnAvatar)
+	{
+		sOwnAvatarInstanceCount--;
+
+		if (mMotionID.notNull())
+		{
+			LLKeyframeDataCache::removeKeyframeData(mMotionID);
+		}
+
+		if (sOwnAvatarInstanceCount == 0 && isAgentAvatarValid())
+		{
+			gAgentAvatarp->deactivateAllMotions();
+			gAgentAvatarp->startDefaultMotions();
+			gAgentAvatarp->startMotion(ANIM_AGENT_STAND);
+		}
+	}
 	// </FS>
 
 	setEnabled(FALSE);

@@ -107,7 +107,8 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 	mMeTypingTimer(),
 	mOtherTypingTimer(),
 	mUnreadMessagesNotificationPanel(NULL),
-	mUnreadMessagesNotificationTextBox(NULL)
+	mUnreadMessagesNotificationTextBox(NULL),
+	mApplyRect(true)
 {
 	initIMSession(session_id);
 	
@@ -380,7 +381,7 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 					}
 					// </FS:PP>
 
-#if !defined(ND_BUILD64BIT_ARCH)
+#if ADDRESS_SIZE == 32
 					std::string strFSTag = "(FS ";
 #else
 					std::string strFSTag = "(FS64 ";
@@ -1121,7 +1122,9 @@ FSFloaterIM* FSFloaterIM::show(const LLUUID& session_id)
 			}
 		}
 
+		floater->mApplyRect = false;
 		floater->openFloater(floater->getKey());
+		floater->mApplyRect = true;
 		floater->setFocus(TRUE);
 	}
 	else
@@ -2369,4 +2372,32 @@ void FSFloaterIM::handleMinimized(bool minimized)
 			updateMessages();
 		}
 	}
+}
+
+bool FSFloaterIM::applyRectControl()
+{
+	bool res = true;
+
+	// We need to do some sort of hack here to prevent torn-off floaters from
+	// jumping around if clicking on the IM chiclets: Clicking on a chiclet to
+	// switch to a particular IM floater will call FSFloaterIM::show() and in
+	// the process LLFloater::applyControlsAndPosition(). Depending on the result
+	// of the call to applyRectControl(), applyPositioning() positioning is
+	// called that will ultimately set the position of the floater depending
+	// of the position of the last floater in the group. However, this doesn't
+	// work properly and will cause floaters to jump. To prevent this, we only
+	// apply the rect if not called by FSFloaterIM::show(). To prevent an
+	// additionally misplaced floater caused by cascading a group of IM floaters,
+	// we force LLFloater::applyRectControl() into the path where no cascaded
+	// position is going to be applied by temporarily clear the instance name
+	// of the floater. -AH
+	if (mApplyRect)
+	{
+		std::string name = mInstanceName;
+		mInstanceName.clear();
+		res = LLFloater::applyRectControl();
+		mInstanceName = name;
+	}
+
+	return res;
 }

@@ -170,6 +170,8 @@ void LLScriptRecoverQueue::recoverIfNeeded()
 		sdFiles.append(LLSD().with("path", strTempPath + strFilename).with("name", strName));
 	}
 
+	LL_INFOS() << "Checking for recoverable scripts. Found: " << sdFiles.size() << LL_ENDL;
+
 	if (sdFiles.size())
 		LLFloaterReg::showInstance("script_recover", sdData);
 }
@@ -257,13 +259,14 @@ void LLScriptRecoverQueue::onCreateScript(const LLUUID& idItem)
 		if (0 == LLFile::stat(strFilePath, &stat) && stat.st_size > 0)
 		{
 			buffer.resize(stat.st_size);
-			LLFILE *pFile = LLFile::fopen(strFileName, "wb");
+			LLFILE *pFile = LLFile::fopen(strFileName, "rb");
 
 			if (pFile)
 			{
-				if (fread(&buffer[0], 1, stat.st_size, pFile) != stat.st_size)
+				size_t act_read = fread(&buffer[0], 1, stat.st_size, pFile);
+				if (act_read != stat.st_size)
 				{
-					LL_WARNS() << "Incomplete read of " << strFilePath << LL_ENDL;
+					LL_WARNS() << "Incomplete read of " << strFilePath << ": File size = " << stat.st_size << " - bytes read: " << act_read << LL_ENDL;
 					buffer = "";
 				}
 				LLFile::close(pFile);
@@ -283,6 +286,10 @@ void LLScriptRecoverQueue::onCreateScript(const LLUUID& idItem)
 		LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(idItem, buffer, proc));
 		LLViewerAssetUpload::EnqueueInventoryUpload(strCapsUrl, uploadInfo);
 	}
+	else
+	{
+		LL_WARNS() << "Cannot recover script - no UpdateScriptAgent cap!" << LL_ENDL;
+	}
 }
 
 void LLScriptRecoverQueue::onSavedScript(LLUUID itemId, LLUUID newAssetId, LLUUID newItemId, LLSD response)
@@ -301,6 +308,8 @@ void LLScriptRecoverQueue::onSavedScript(LLUUID itemId, LLUUID newAssetId, LLUUI
 
 	if( HTTP_OK == status.getType() )
 	{
+		LL_INFOS() << "Recovered script uploaded successfully" << LL_ENDL;
+
 		LLPointer<LLViewerInventoryItem> pItem = gInventory.getItem(itemId);
 		if (pItem.notNull())
 		{
@@ -321,27 +330,14 @@ void LLScriptRecoverQueue::onSavedScript(LLUUID itemId, LLUUID newAssetId, LLUUI
 	}
 	else
 	{
+		LL_WARNS() << "Recovered script upload FAILED" << LL_ENDL;
+
 		LLViewerInventoryItem* pItem = gInventory.getItem( itemId );
 		if (pItem)
 			gInventory.changeItemParent(pItem, gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH), FALSE);
 		m_FileQueue.erase(itFile);
 	}
 	recoverNext();
-}
-
-bool LLScriptRecoverQueue::onUploadError(const std::string& strFilename)
-{
-	// Skip over the file when there's an error, we can try again on the next relog
-	filename_queue_t::iterator itFile = m_FileQueue.find(strFilename);
-	if (itFile != m_FileQueue.end())
-	{
-		LLViewerInventoryItem* pItem = gInventory.getItem(itFile->second["item"]);
-		if (pItem)
-			gInventory.changeItemParent(pItem, gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH), FALSE);
-		m_FileQueue.erase(itFile);
-	}
-	recoverNext();
-	return false;
 }
 
 // ============================================================================

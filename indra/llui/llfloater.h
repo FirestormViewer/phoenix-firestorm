@@ -198,6 +198,8 @@ public:
 									  close_callback;
 
 		Ignored					follows;
+
+		Optional<bool>			hosted_floater_show_titlebar; // <FS:Ansariel> MultiFloater without titlebar for hosted floater
 		
 		Params();
 	};
@@ -464,6 +466,9 @@ protected:
 	LLResizeHandle*	mResizeHandle[4];
 
 	LLButton*		mButtons[BUTTON_COUNT];
+
+	// <FS:Ansariel> Make this accessible from child classes
+	std::string		mInstanceName;		  // Store the instance name so we can remove ourselves from the list
 private:
 	LLRect			mExpandedRect;
 	
@@ -473,7 +478,8 @@ private:
 	BOOL			mSingleInstance;	  // TRUE if there is only ever one instance of the floater
 	bool			mReuseInstance;		  // true if we want to hide the floater when we close it instead of destroying it
     bool            mIsReuseInitialized;  // true if mReuseInstance already set from parameters
-	std::string		mInstanceName;		  // Store the instance name so we can remove ourselves from the list
+	// <FS:Ansariel> Make this accessible from child classes
+	//std::string		mInstanceName;		  // Store the instance name so we can remove ourselves from the list
 	
 	BOOL			mDropShadow;		// ## Zi: Optional Drop Shadows
 	S32				mLabelVPadding;	// <FS:Zi> Make vertical label padding a per-skin option
@@ -527,6 +533,9 @@ private:
 	BOOL			mHasBeenDraggedWhileMinimized;
 	S32				mPreviousMinimizedBottom;
 	S32				mPreviousMinimizedLeft;
+
+	// <FS:Ansariel> MultiFloater without titlebar for hosted floater
+	bool			mHostedFloaterShowtitlebar;
 };
 
 
