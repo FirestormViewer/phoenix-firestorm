@@ -416,7 +416,9 @@ BOOL LLGLSLShader::createShader(std::vector<LLStaticHashedString> * attributes,
     {
         GLhandleARB shaderhandle = LLShaderMgr::instance()->loadShaderFile((*fileIter).first, mShaderLevel, (*fileIter).second, &mDefines, mFeatures.mIndexedTextureChannels);
         LL_DEBUGS("ShaderLoading") << "SHADER FILE: " << (*fileIter).first << " mShaderLevel=" << mShaderLevel << LL_ENDL;
-        if (shaderhandle > 0)
+        //<FS:TS> Xcode 9 compatibility
+        //if (shaderhandle > 0)
+        if (shaderhandle)
         {
             attachObject(shaderhandle);
         }
@@ -1005,7 +1007,9 @@ S32 LLGLSLShader::disableTexture(S32 uniform, LLTexUnit::eTextureType mode)
 
 void LLGLSLShader::uniform1i(U32 index, GLint x)
 {
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {   
         if (mUniform.size() <= index)
         {
@@ -1027,7 +1031,9 @@ void LLGLSLShader::uniform1i(U32 index, GLint x)
 
 void LLGLSLShader::uniform1f(U32 index, GLfloat x)
 {
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {   
         if (mUniform.size() <= index)
         {
@@ -1049,7 +1055,9 @@ void LLGLSLShader::uniform1f(U32 index, GLfloat x)
 
 void LLGLSLShader::uniform2f(U32 index, GLfloat x, GLfloat y)
 {
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {   
         if (mUniform.size() <= index)
         {
@@ -1072,7 +1080,9 @@ void LLGLSLShader::uniform2f(U32 index, GLfloat x, GLfloat y)
 
 void LLGLSLShader::uniform3f(U32 index, GLfloat x, GLfloat y, GLfloat z)
 {
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {   
         if (mUniform.size() <= index)
         {
@@ -1095,7 +1105,9 @@ void LLGLSLShader::uniform3f(U32 index, GLfloat x, GLfloat y, GLfloat z)
 
 void LLGLSLShader::uniform4f(U32 index, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {   
         if (mUniform.size() <= index)
         {
@@ -1118,7 +1130,9 @@ void LLGLSLShader::uniform4f(U32 index, GLfloat x, GLfloat y, GLfloat z, GLfloat
 
 void LLGLSLShader::uniform1iv(U32 index, U32 count, const GLint* v)
 {
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {   
         if (mUniform.size() <= index)
         {
@@ -1141,7 +1155,9 @@ void LLGLSLShader::uniform1iv(U32 index, U32 count, const GLint* v)
 
 void LLGLSLShader::uniform1fv(U32 index, U32 count, const GLfloat* v)
 {
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {   
         if (mUniform.size() <= index)
         {
@@ -1164,7 +1180,9 @@ void LLGLSLShader::uniform1fv(U32 index, U32 count, const GLfloat* v)
 
 void LLGLSLShader::uniform2fv(U32 index, U32 count, const GLfloat* v)
 {
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {   
         if (mUniform.size() <= index)
         {
@@ -1187,7 +1205,9 @@ void LLGLSLShader::uniform2fv(U32 index, U32 count, const GLfloat* v)
 
 void LLGLSLShader::uniform3fv(U32 index, U32 count, const GLfloat* v)
 {
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {   
         if (mUniform.size() <= index)
         {
@@ -1210,7 +1230,9 @@ void LLGLSLShader::uniform3fv(U32 index, U32 count, const GLfloat* v)
 
 void LLGLSLShader::uniform4fv(U32 index, U32 count, const GLfloat* v)
 {
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {   
         if (mUniform.size() <= index)
         {
@@ -1233,7 +1255,9 @@ void LLGLSLShader::uniform4fv(U32 index, U32 count, const GLfloat* v)
 
 void LLGLSLShader::uniformMatrix2fv(U32 index, U32 count, GLboolean transpose, const GLfloat *v)
 {
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {   
         if (mUniform.size() <= index)
         {
@@ -1250,7 +1274,9 @@ void LLGLSLShader::uniformMatrix2fv(U32 index, U32 count, GLboolean transpose, c
 
 void LLGLSLShader::uniformMatrix3fv(U32 index, U32 count, GLboolean transpose, const GLfloat *v)
 {
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {   
         if (mUniform.size() <= index)
         {
@@ -1267,7 +1293,9 @@ void LLGLSLShader::uniformMatrix3fv(U32 index, U32 count, GLboolean transpose, c
 
 void LLGLSLShader::uniformMatrix3x4fv(U32 index, U32 count, GLboolean transpose, const GLfloat *v)
 {
-	if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
 	{	
 		if (mUniform.size() <= index)
 		{
@@ -1284,7 +1312,9 @@ void LLGLSLShader::uniformMatrix3x4fv(U32 index, U32 count, GLboolean transpose,
 
 void LLGLSLShader::uniformMatrix4fv(U32 index, U32 count, GLboolean transpose, const GLfloat *v)
 {
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {   
         if (mUniform.size() <= index)
         {
@@ -1302,7 +1332,9 @@ void LLGLSLShader::uniformMatrix4fv(U32 index, U32 count, GLboolean transpose, c
 GLint LLGLSLShader::getUniformLocation(const LLStaticHashedString& uniform)
 {
     GLint ret = -1;
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {
         LLStaticStringTable<GLint>::iterator iter = mUniformMap.find(uniform);
         if (iter != mUniformMap.end())
@@ -1326,7 +1358,9 @@ GLint LLGLSLShader::getUniformLocation(const LLStaticHashedString& uniform)
 GLint LLGLSLShader::getUniformLocation(U32 index)
 {
     GLint ret = -1;
-    if (mProgramObject > 0)
+    //<FS:TS> Xcode 9 compatibiltiy
+    //if (mProgramObject > 0)
+    if (mProgramObject)
     {
         llassert(index < mUniform.size());
         return mUniform[index];
