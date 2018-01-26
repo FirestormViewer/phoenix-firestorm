@@ -4023,10 +4023,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>configure</key>
               <map>
                 <key>command</key>
-                <string>bash</string>
+                <string>../scripts/configure_firestorm.sh</string>
                 <key>options</key>
                 <array>
-                  <string>../scripts/configure_firestorm.sh</string>
                   <string>--config</string>
                   <string>--version</string>
                   <string>--opensim</string>
@@ -4040,10 +4039,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>configure</key>
               <map>
                 <key>command</key>
-                <string>bash</string>
+                <string>../scripts/configure_firestorm.sh</string>
                 <key>options</key>
                 <array>
-                  <string>../scripts/configure_firestorm.sh</string>
                   <string>--config</string>
                   <string>--version</string>
                   <string>--opensim</string>
@@ -4058,10 +4056,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>configure</key>
               <map>
                 <key>command</key>
-                <string>bash</string>
+                <string>../scripts/configure_firestorm.sh</string>
                 <key>options</key>
                 <array>
-                  <string>../scripts/configure_firestorm.sh</string>
                   <string>--config</string>
                   <string>--version</string>
                   <string>--opensim</string>
@@ -4076,10 +4073,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>configure</key>
               <map>
                 <key>command</key>
-                <string>bash</string>
+                <string>../scripts/configure_firestorm.sh</string>
                 <key>options</key>
                 <array>
-                  <string>../scripts/configure_firestorm.sh</string>
                   <string>--config</string>
                   <string>--version</string>
                   <string>--opensim</string>
@@ -4093,10 +4089,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>configure</key>
               <map>
                 <key>command</key>
-                <string>bash</string>
+                <string>../scripts/configure_firestorm.sh</string>
                 <key>options</key>
                 <array>
-                  <string>../scripts/configure_firestorm.sh</string>
                   <string>--btype RelWithDebInfo</string>
                   <string>--config</string>
                   <string>--version</string>
@@ -4111,10 +4106,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>configure</key>
               <map>
                 <key>command</key>
-                <string>bash</string>
+                <string>../scripts/configure_firestorm.sh</string>
                 <key>options</key>
                 <array>
-                  <string>../scripts/configure_firestorm.sh</string>
                   <string>--btype RelWithDebInfo</string>
                   <string>--config</string>
                   <string>--version</string>
