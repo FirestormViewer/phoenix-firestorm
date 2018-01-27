@@ -185,6 +185,7 @@ std::string getStreamingPlugin()
     return "media_plugin_libvlc";
 #else
     llassert_always( false );
+    return ""; // shut up the compiler
 #endif
 }
 // </FS:ND>

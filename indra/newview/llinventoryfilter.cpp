@@ -1596,13 +1596,13 @@ U32	LLInventoryFilter::getFilterSubStringCount() const
 
 std::string::size_type LLInventoryFilter::getFilterSubStringPos(U32 index) const
 {
-	if (index < 0 || index >= mSubStringMatchOffsets.size()) return std::string::npos;
+	if (index >= mSubStringMatchOffsets.size()) return std::string::npos;
 	return mSubStringMatchOffsets[index];
 }
 
 std::string::size_type LLInventoryFilter::getFilterSubStringLen(U32 index) const
 {
-	if (index < 0 || index >= mFilterSubStrings.size()) return 0;
+	if (index >= mFilterSubStrings.size()) return 0;
 	return mFilterSubStrings[index].size();
 }
 // </FS:Zi> Multi-substring inventory search

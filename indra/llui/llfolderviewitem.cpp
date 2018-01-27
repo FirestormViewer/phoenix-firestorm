@@ -624,7 +624,9 @@ BOOL LLFolderViewItem::handleHover( S32 x, S32 y, MASK mask )
 		bool can_drag = true;
 		if ( (root->isOverDragThreshold(screen_x, screen_y)) && (root->getCurSelectedItem()) )
 		{
-			if (can_drag = root->startDrag())
+			//<FS:TS> Silence compiler warning
+			//if (can_drag = root->startDrag())
+			if ((can_drag = root->startDrag()))
 			{
 					// RN: when starting drag and drop, clear out last auto-open
 					root->autoOpenTest(NULL);

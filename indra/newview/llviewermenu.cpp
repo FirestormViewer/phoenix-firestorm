@@ -10512,7 +10512,9 @@ class LLEditTakeOff : public view_listener_t
 				&& (gAgentWearables.getWearableCount(type) > 0))
 			{
 				// MULTI-WEARABLES: assuming user wanted to remove top shirt.
-				U32 wearable_index = gAgentWearables.getWearableCount(type) - 1;
+				//<FS:TS> Shut the compiler up about unsigned comparisons <0 or >0
+				//U32 wearable_index = gAgentWearables.getWearableCount(type) - 1;
+				S32 wearable_index = gAgentWearables.getWearableCount(type) - 1;
 
 // [RLVa:KB] - Checked: 2010-06-09 (RLVa-1.2.0g) | Added: RLVa-1.2.0g
 				if ( (rlv_handler_t::isEnabled()) && (gRlvWearableLocks.hasLockedWearable(type)) )

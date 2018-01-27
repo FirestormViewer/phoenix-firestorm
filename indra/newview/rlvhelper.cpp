@@ -1769,7 +1769,7 @@ std::string rlvGetLastParenthesisedText(const std::string& strText, std::string:
 		*pidxStart = std::string::npos;	// Assume we won't find anything
 
 	// Extracts the last - matched - parenthesised text from the input string
-	std::string::size_type idxIt, idxEnd; int cntLevel = 1;
+	int idxIt; std::string::size_type idxEnd; int cntLevel = 1;
 	if ((idxEnd = strText.find_last_of(')')) == std::string::npos)
 		return std::string();
 
