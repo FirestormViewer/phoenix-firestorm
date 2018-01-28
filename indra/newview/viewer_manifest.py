@@ -694,10 +694,6 @@ class WindowsManifest(ViewerManifest):
         if self.channel_type() != 'release':
             with self.prefix(src='../media_plugins/example/%s' % self.args['configuration'], dst="llplugin"):
                 self.path("media_plugin_example.dll")
- 
-        # Media plugins - GStreamer
-        with self.prefix(src='../media_plugins/gstreamer10/%s' % self.args['configuration'], dst="llplugin"):
-            self.path("media_plugin_gstreamer10.dll")
 
         # CEF runtime files - debug
         # CEF runtime files - not debug (release, relwithdebinfo etc.)
