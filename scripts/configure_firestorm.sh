@@ -344,8 +344,14 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
     pushd ..
 
     if [ $PLATFORM == "darwin" ] ; then
-        rm -rf build-darwin-i386/*
-        mkdir -p build-darwin-i386/logs
+        if [ "${AUTOBUILD_ADDRSIZE}" == "64" ]
+        then
+           rm -rf build-darwin-x86_64/*
+           mkdir -p build-darwin-x86_64/logs
+        else
+           rm -rf build-darwin-i386/*
+           mkdir -p build-darwin-i386/logs
+        fi
 
     elif [ $PLATFORM == "win32" ] ; then
         rm -rf build-vc120-${AUTOBUILD_ADDRSIZE}

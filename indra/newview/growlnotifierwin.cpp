@@ -43,7 +43,9 @@
 #include "llviewercontrol.h"
 
 #ifdef GROWL_HAS_LOG
+#if LL_WINDOWS
 #pragma comment(lib,"growl.lib")
+#endif
 void __cdecl GrowlLogSink( char const *aMessage, int aLevel )
 {
 	LL_INFOS( "Growl" ) << aMessage << LL_ENDL;
