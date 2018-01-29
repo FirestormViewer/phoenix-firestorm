@@ -28,14 +28,14 @@ on run (volumeName)
 				set file_list to every file
 				repeat with i in file_list
 					if the name of i is "Applications" then
-						set the position of i to {345, 125}
+						set the position of i to {345, 200}
 					else if the name of i ends with ".app" then
-						set the position of i to {145, 125}
+						set the position of i to {145, 200}
 					else if the name of i is "LGPL License.txt" then
-						set the position of i to {145, 225}
+						set the position of i to {145, 400}
 						set the extension hidden of i to true
 					else if the name of i is "Vivox Acceptable Use Policy.txt" then
-						set the position of i to {345, 225}
+						set the position of i to {345, 400}
 						set the extension hidden of i to true
 					end if
 				end repeat

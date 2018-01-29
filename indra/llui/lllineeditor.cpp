@@ -967,7 +967,7 @@ void LLLineEditor::removeWord(bool prev)
 		if (new_pos == pos) // Other character we don't jump over
 			new_pos = prev ? prevWordPos(new_pos-1) : nextWordPos(new_pos+1);
 
-		const U32 diff(labs(pos - new_pos));
+		const U32 diff(labs(static_cast<S32>(pos) - static_cast<S32>(new_pos)));
 		if (prev)
 		{
 			mText.erase(new_pos, diff);

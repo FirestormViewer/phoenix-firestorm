@@ -2147,8 +2147,6 @@ if (WINDOWS)
       media_plugin_cef
       media_plugin_libvlc
       media_plugin_example
-      media_plugin_gstreamer10
-      winmm_shim
       windows-crash-logger
       )
 
@@ -2400,7 +2398,6 @@ else (NOT ENABLE_MEDIA_PLUGINS)
     SLPlugin
     media_plugin_cef
     media_plugin_gstreamer010
-    media_plugin_gstreamer10
     llcommon
     )
 endif (NOT ENABLE_MEDIA_PLUGINS)

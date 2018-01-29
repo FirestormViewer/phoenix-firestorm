@@ -615,63 +615,73 @@ void LLVertexBuffer::drawArrays(U32 mode, const std::vector<LLVector3>& pos, con
 	//LLGLSLShader::startProfile();
 	//glDrawArrays(sGLMode[mode], 0, count);
 	//LLGLSLShader::stopProfile(count, mode);
-	bool has_buffer = true;
-	if (!sUtilityBuffer)
-	{
-		sUtilityBuffer = new LLVertexBuffer(MAP_VERTEX | MAP_NORMAL | MAP_TEXCOORD0, GL_STREAM_DRAW);
-		has_buffer = sUtilityBuffer->allocateBuffer(count, count, true);
-	}
-	if (sUtilityBuffer->getNumVerts() < (S32) count)
-	{
-		has_buffer = sUtilityBuffer->resizeBuffer(count, count);
-	}
+	U32 start_pos = 0;
+	U32 remaining = pos.size();
 
-	if (has_buffer)
+	while (remaining > 0)
 	{
-		LLStrider<LLVector3> vertex_strider;
-		LLStrider<LLVector3> normal_strider;
-		sUtilityBuffer->getVertexStrider(vertex_strider);
-		sUtilityBuffer->getNormalStrider(normal_strider);
-		for (U32 i = 0; i < count; ++i)
+		count = llmin(remaining, 65536u);
+		start_pos = pos.size() - remaining;
+		remaining -= count;
+
+		bool has_buffer = true;
+		if (!sUtilityBuffer)
 		{
-			*(vertex_strider++) = pos[i];
-			*(normal_strider++) = norm[i];
+			sUtilityBuffer = new LLVertexBuffer(MAP_VERTEX | MAP_NORMAL | MAP_TEXCOORD0, GL_STREAM_DRAW);
+			has_buffer = sUtilityBuffer->allocateBuffer(count, count, true);
+		}
+		if (sUtilityBuffer->getNumVerts() < (S32)count)
+		{
+			has_buffer = sUtilityBuffer->resizeBuffer(count, count);
 		}
 
-		sUtilityBuffer->setBuffer(MAP_VERTEX | MAP_NORMAL);
-		LLGLSLShader::startProfile();
-		sUtilityBuffer->drawArrays(mode, 0, pos.size());
-		LLGLSLShader::stopProfile(count, mode);
-	}
-	else
-	{
-		unbind();
-		
-		setupClientArrays(MAP_VERTEX | MAP_NORMAL);
-
-		LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
-
-		if (shader)
+		if (has_buffer)
 		{
-			S32 loc = LLVertexBuffer::TYPE_VERTEX;
-			if (loc > -1)
+			LLStrider<LLVector3> vertex_strider;
+			LLStrider<LLVector3> normal_strider;
+			sUtilityBuffer->getVertexStrider(vertex_strider);
+			sUtilityBuffer->getNormalStrider(normal_strider);
+			for (U32 i = 0; i < count; ++i)
 			{
-				glVertexAttribPointerARB(loc, 3, GL_FLOAT, GL_FALSE, 0, pos[0].mV);
+				*(vertex_strider++) = pos[start_pos + i];
+				*(normal_strider++) = norm[start_pos + i];
 			}
-			loc = LLVertexBuffer::TYPE_NORMAL;
-			if (loc > -1)
-			{
-				glVertexAttribPointerARB(loc, 3, GL_FLOAT, GL_FALSE, 0, norm[0].mV);
-			}
+
+			sUtilityBuffer->setBuffer(MAP_VERTEX | MAP_NORMAL);
+			LLGLSLShader::startProfile();
+			sUtilityBuffer->drawArrays(mode, 0, count);
+			LLGLSLShader::stopProfile(count, mode);
 		}
 		else
 		{
-			glVertexPointer(3, GL_FLOAT, 0, pos[0].mV);
-			glNormalPointer(GL_FLOAT, 0, norm[0].mV);
+			unbind();
+
+			setupClientArrays(MAP_VERTEX | MAP_NORMAL);
+
+			LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
+
+			if (shader)
+			{
+				S32 loc = LLVertexBuffer::TYPE_VERTEX;
+				if (loc > -1)
+				{
+					glVertexAttribPointerARB(loc, 3, GL_FLOAT, GL_FALSE, 0, pos[start_pos].mV);
+				}
+				loc = LLVertexBuffer::TYPE_NORMAL;
+				if (loc > -1)
+				{
+					glVertexAttribPointerARB(loc, 3, GL_FLOAT, GL_FALSE, 0, norm[start_pos].mV);
+				}
+			}
+			else
+			{
+				glVertexPointer(3, GL_FLOAT, 0, pos[start_pos].mV);
+				glNormalPointer(GL_FLOAT, 0, norm[start_pos].mV);
+			}
+			LLGLSLShader::startProfile();
+			glDrawArrays(sGLMode[mode], 0, count);
+			LLGLSLShader::stopProfile(count, mode);
 		}
-		LLGLSLShader::startProfile();
-		glDrawArrays(sGLMode[mode], 0, count);
-		LLGLSLShader::stopProfile(count, mode);
 	}
 	// </FS:Ansariel>
 }

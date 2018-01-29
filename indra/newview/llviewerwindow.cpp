@@ -4542,7 +4542,7 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 
 					LLCDMeshData res;
 					LLCDResult retval;
-					if (retval = LLConvexDecomposition::getInstance()->generateSingleHullMeshFromMesh(&mesh, &res))
+					if ((retval = LLConvexDecomposition::getInstance()->generateSingleHullMeshFromMesh(&mesh, &res)))
 					{
 						LL_WARNS() << "ConvexDecomp Failed (generateSingleHullMeshFromMesh): " << retval << LL_ENDL;
 					}

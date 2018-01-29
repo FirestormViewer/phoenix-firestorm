@@ -2012,10 +2012,10 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 		//     F     |      T       | skip av    => slam focus
 		//     F     |      F       | clamp focus then av
 		bool fCamAvDistClamped, fCamAvDistLocked = false; float nCamAvDistLimitMin, nCamAvDistLimitMax;
-		if (fCamAvDistClamped = RlvActions::getCameraAvatarDistanceLimits(nCamAvDistLimitMin, nCamAvDistLimitMax))
+		if ((fCamAvDistClamped = RlvActions::getCameraAvatarDistanceLimits(nCamAvDistLimitMin, nCamAvDistLimitMax)))
 			fCamAvDistLocked = nCamAvDistLimitMin == nCamAvDistLimitMax;
 		bool fCamOriginDistClamped, fCamOriginDistLocked = false; float nCamOriginDistLimitMin, nCamOriginDistLimitMax;
-		if (fCamOriginDistClamped = RlvActions::getCameraOriginDistanceLimits(nCamOriginDistLimitMin, nCamOriginDistLimitMax))
+		if ((fCamOriginDistClamped = RlvActions::getCameraOriginDistanceLimits(nCamOriginDistLimitMin, nCamOriginDistLimitMax)))
 			fCamOriginDistLocked = nCamOriginDistLimitMin == nCamOriginDistLimitMax;
 
 		// Check focus distance limits

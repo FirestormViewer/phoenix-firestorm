@@ -3,39 +3,6 @@
 <map>
     <key>installables</key>
     <map>
-
-      <key>slplugin_x86</key>
-      <map>
-        <key>license</key>
-        <string>LGPL</string>
-        <key>license_file</key>
-        <string>LICENSES/slplugin.txt</string>
-        <key>name</key>
-        <string>slplugin_x86</string>
-        <key>platforms</key>
-        <map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>4c3728f376711663c22d32b6d71689df</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/slplugin_x86-4.7.10.51243-darwin-201610300350-r5.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-        </map>
-      </map>
       <key>ndPhysicsStub</key>
       <map>
         <key>license</key>
@@ -204,48 +171,6 @@
         <key>version</key>
         <string>2.1</string>
       </map>
-      <key>gstreamer10</key>
-      <map>
-        <key>copyright</key>
-        <string>Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;</string>
-        <key>license</key>
-        <string>LGPL</string>
-        <key>license_file</key>
-        <string>LICENSES/gstreamer.txt</string>
-        <key>name</key>
-        <string>gstreamer10</string>
-        <key>platforms</key>
-        <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>01f39ecf80dae64e30402ac384035b3e</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/gstreamer10-1.6.3.201605191852-linux-201605191852.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>437b1dfd7e20cd0b688e2c1393cdbfc3</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/gstreamer10-1.6.3.201605192127-r9-windows-201605192127-r9.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-        </map>
-        <key>version</key>
-        <string>0.10.6.294903</string>
-      </map>
-
-
       <key>SDL</key>
       <map>
         <key>copyright</key>
@@ -1393,11 +1318,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f62e7cff14feb646babaa19b7ea14ed3</string>
+              <string>94fc457c46e1fb94b31251bd4747d10f</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201704302344-linux-201704302344.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.171101143-darwin64-171101143.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1407,11 +1332,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e3659aa7b670a8fbdfb1b820254abb44</string>
+              <string>f62e7cff14feb646babaa19b7ea14ed3</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201703081158-windows-201703081158.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201704302344-linux-201704302344.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3042,9 +2967,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2adb5b8bd2493d576c5d02b992d8f819</string>
+              <string>4e278d789c5d6e448d1e39211d19bf41</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/openjpeg_3p-update-openjpeg/rev/297018/arch/Darwin/installer/openjpeg-1.4.297018-darwin-297018.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.4.201505181816-r27-darwin-201505181816-r27.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -3054,9 +2979,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f7013e1f0b6a877090622fd73ec72cbc</string>
+              <string>4e278d789c5d6e448d1e39211d19bf41</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/1114/2576/openjpeg-1.5.1.501102-darwin64-501102.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.4.201505181816-r27-darwin-201505181816-r27.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3066,9 +2991,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e82317482647559d46a818ba48e9423a</string>
+              <string>675c283030879d3d9c49082bfa2192eb</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-openjpeg/rev/314205/arch/Linux/installer/openjpeg-2.0.0.314205-linux-314205.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/openjpeg_3p-update-openjpeg/rev/297018/arch/Linux/installer/openjpeg-1.4.297018-linux-297018.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3078,9 +3003,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ac66f3197010b1549a5e4467aebbc27d</string>
+              <string>8b36861396af4a31668f673aebd4b1d8</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/1113/2571/openjpeg-1.5.1.501102-linux64-501102.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jpeglib-8c.201505150200-r27-linux-x64-201505150200-r27.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3090,9 +3015,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8a7f0be5647e07235d205ac00805fb78</string>
+              <string>b35adcf74d22c128045aa87aade74736</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/1116/2586/openjpeg-1.5.1.501102-windows-501102.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/openjpeg_3p-update-openjpeg/rev/297018/arch/CYGWIN/installer/openjpeg-1.4.297018-windows-297018.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3102,16 +3027,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>398544058036bc27097fcff208934d11</string>
+              <string>47c09d96ae84fa4518b639cd93ba45b3</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/1115/2581/openjpeg-1.5.1.501102-windows64-501102.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.4.201412051021-windows-x64-201412051021.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.5.1.501102</string>
+        <string>1.4.0.297018</string>
       </map>
       <key>openssl</key>
       <map>
