@@ -133,7 +133,10 @@ public:
 	void endDeferredRiggedSimple();
 	void endDeferredRiggedBump();
 		
-	void getRiggedGeometry(LLFace* face, LLPointer<LLVertexBuffer>& buffer, U32 data_mask, const LLMeshSkinInfo* skin, LLVolume* volume, const LLVolumeFace& vol_face);
+	// <FS> Fix bogus rigged mesh crash
+	//void getRiggedGeometry(LLFace* face, LLPointer<LLVertexBuffer>& buffer, U32 data_mask, const LLMeshSkinInfo* skin, LLVolume* volume, const LLVolumeFace& vol_face);
+	bool getRiggedGeometry(LLFace* face, LLPointer<LLVertexBuffer>& buffer, U32 data_mask, const LLMeshSkinInfo* skin, LLVolume* volume, const LLVolumeFace& vol_face);
+	// </FS>
 	void updateRiggedFaceVertexBuffer(LLVOAvatar* avatar,
 									  LLFace* facep, 
 									  const LLMeshSkinInfo* skin, 
