@@ -1589,7 +1589,6 @@ bool LLAppViewer::doFrame()
 	//check memory availability information
 	checkMemory() ;
 
-	try // <FS:Ansariel> Don't crash on LLContinueError
 	{
 		// <FS:Ansariel> MaxFPS Viewer-Chui merge error
 		// Check if we need to restore rendering masks.
@@ -1833,12 +1832,6 @@ bool LLAppViewer::doFrame()
 			pingMainloopTimeout("Main:End");
 		}
 	}
-	// <FS:Ansariel> Don't crash on LLContinueError
-	catch (const LLContinueError&)
-	{
-		LOG_UNHANDLED_EXCEPTION("");
-	}
-	// </FS:Ansariel>
 
 	if (LLApp::isExiting())
 	{
