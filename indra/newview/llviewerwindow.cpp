@@ -786,17 +786,6 @@ public:
 			ypos += y_inc;
 		}
 
-		//if (gSavedSettings.getBOOL("DebugShowPrivateMem"))
-		static LLCachedControl<bool> debugShowPrivateMem(gSavedSettings, "DebugShowPrivateMem");
-		if (debugShowPrivateMem)
-		{
-			LLPrivateMemoryPoolManager::getInstance()->updateStatistics() ;
-			addText(xpos, ypos, llformat("Total Reserved(KB): %d", LLPrivateMemoryPoolManager::getInstance()->mTotalReservedSize / 1024));
-			ypos += y_inc;
-
-			addText(xpos, ypos, llformat("Total Allocated(KB): %d", LLPrivateMemoryPoolManager::getInstance()->mTotalAllocatedSize / 1024));
-			ypos += y_inc;
-		}
 		// <FS:LO> pull the text saying if particles are hidden out from beacons
 		if (LLPipeline::toggleRenderTypeControlNegated(LLPipeline::RENDER_TYPE_PARTICLES))
 		{
@@ -804,7 +793,6 @@ public:
 			ypos += y_inc;
 		}
 		// </FS:LO>
-
 		// only display these messages if we are actually rendering beacons at this moment
 		// <FS:LO> Always show the beacon text regardless if the floater is visible
 		// <FS:Ansa> ...and if we want to see it
@@ -2543,6 +2531,7 @@ void LLViewerWindow::shutdownGL()
 LLViewerWindow::~LLViewerWindow()
 {
 	LL_INFOS() << "Destroying Window" << LL_ENDL;
+	gDebugWindowProc = TRUE; // event catching, at this point it shouldn't output at all
 	destroyWindow();
 
 	delete mDebugText;

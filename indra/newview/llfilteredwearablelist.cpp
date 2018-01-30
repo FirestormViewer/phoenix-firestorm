@@ -119,12 +119,10 @@ void LLFilteredWearableListManager::populateList()
 
 	// Probably will also need to get items from Library (waiting for reply in EXT-6724).
 
-	// <FS:Ansariel> MAINT-8085 done right
 	if (item_array.empty() && gInventory.isCategoryComplete(gInventory.getRootFolderID()))
 	{
 		mWearableList->setNoItemsCommentText(LLTrans::getString("NoneFound"));
 	}
-	// </FS:Ansariel>
 
 	mWearableList->refreshList(item_array);
 }

@@ -968,7 +968,6 @@ bool LLAppViewer::init()
 	initMaxHeapSize() ;
 	LLCoros::instance().setStackSize(gSavedSettings.getS32("CoroutineStackSize"));
 
-	LLPrivateMemoryPoolManager::initClass((BOOL)gSavedSettings.getBOOL("MemoryPrivatePoolEnabled"), (U32)gSavedSettings.getU32("MemoryPrivatePoolSize")*1024*1024) ;
 	// write Google Breakpad minidump files to a per-run dump directory to avoid multiple viewer issues.
 	std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "");
 	mDumpPath = logdir;
@@ -1541,6 +1540,10 @@ bool LLAppViewer::frame()
 		{
 			ret = doFrame();
 		}
+		catch (const LLContinueError&)
+		{
+			LOG_UNHANDLED_EXCEPTION("");
+		}
 		catch (std::bad_alloc)
 		{
 			LLMemory::logMemoryInfo(TRUE);
@@ -1554,7 +1557,14 @@ bool LLAppViewer::frame()
 	}
 	else
 	{ 
-		ret = doFrame();
+		try
+		{
+			ret = doFrame();
+		}
+		catch (const LLContinueError&)
+		{
+			LOG_UNHANDLED_EXCEPTION("");
+		}
 	}
 
 	return ret;
@@ -1569,10 +1579,6 @@ bool LLAppViewer::doFrame()
 	LLTimer periodicRenderingTimer;
 	BOOL restore_rendering_masks = FALSE;
 	// </FS:Ansariel> MaxFPS Viewer-Chui merge error
-
-	//LLPrivateMemoryPoolTester::getInstance()->run(false) ;
-	//LLPrivateMemoryPoolTester::getInstance()->run(true) ;
-	//LLPrivateMemoryPoolTester::destroy() ;
 
 	nd::etw::logFrame(); // <FS:ND> Write the start of each frame. Even if our Provider (Firestorm) would be enabled, this has only light impact. Does nothing on OSX and Linux.
 
@@ -2418,9 +2424,6 @@ bool LLAppViewer::cleanup()
 	SUBSYSTEM_CLEANUP(LLWearableType);
 
 	LLMainLoopRepeater::instance().stop();
-
-	//release all private memory pools.
-	LLPrivateMemoryPoolManager::destroyClass() ;
 
 	ll_close_fail_log();
 
@@ -3999,8 +4002,8 @@ std::string LLAppViewer::getShortViewerInfoString() const
 	std::ostringstream support;
 	LLSD info(getViewerInfo());
 
-	support << LLTrans::getString("APP_NAME") << " " << info["VIEWER_VERSION_STR"].asString();
-	support << " (" << info["CHANNEL"].asString() << ")";
+	support << info["CHANNEL"].asString() << " ";
+	support << info["VIEWER_VERSION_STR"].asString() << " (" << info["ADDRESS_SIZE"].asString() << "bit)";
 	if (info.has("BUILD_CONFIG"))
 	{
 		support << "\n" << "Build Configuration " << info["BUILD_CONFIG"].asString();

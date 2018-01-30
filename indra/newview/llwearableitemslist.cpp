@@ -746,12 +746,12 @@ LLWearableItemsList::LLWearableItemsList(const LLWearableItemsList::Params& p)
 		setRightMouseDownCallback(boost::bind(&LLWearableItemsList::onRightClick, this, _2, _3));
 	}
 	mWornIndicationEnabled = p.worn_indication_enabled;
+	setNoItemsCommentText(LLTrans::getString("LoadingData"));
 	mShowCreateNew = p.show_create_new; // <FS:Ansariel> Optional "Create new" menu item
 	// <FS:Ansariel> Show per-item complexity in COF
 	mShowComplexity = p.show_complexity;
 	mBodyPartsComplexity = 0;
 	// </FS:Ansariel>
-	setNoItemsCommentText(LLTrans::getString("LoadingData"));
 }
 
 // virtual
