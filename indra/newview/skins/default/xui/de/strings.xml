@@ -86,7 +86,7 @@ RestrainedLove API: [RLV_VERSION]
 libcurl-Version: [LIBCURL_VERSION]
 J2C-Decoderversion: [J2C_VERSION]
 Audio-Treiberversion: [AUDIO_DRIVER_VERSION]
-CEF-Version: [LIBCEF_VERSION]
+[LIBCEF_VERSION]
 LibVLC-Version: [LIBVLC_VERSION]
 Voice-Serverversion: [VOICE_VERSION]
 	</string>
