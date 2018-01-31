@@ -608,6 +608,9 @@ Obiekt może znajdować się zbyt daleko albo został usunięty.
 Odwiedzić [_URL], aby uzyskać więcej informacji?
 		<usetemplate ignoretext="Sprzęt w moim komputerze nie jest wspierany" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
+	<notification name="RunLauncher">
+		Proszę nie uruchamiać przeglądarki bezpośrednio. Zamiast tego zaktualizuj wszystkie skróty, aby wskazywały na program rozruchowy.
+	</notification>
 	<notification name="OldGPUDriver">
 		Prawdopodobnie istnieje nowszy sterownik dla Twojej karty graficznej. Aktualizacja sterowników graficznych może znacznie zwiększyć wydajność.
 
@@ -1513,145 +1516,15 @@ Wybierz obiekt na sprzedaż i spróbuj jeszcze raz.
 		Plik surowego terenu pobrany do:
 [DOWNLOAD_PATH].
 	</notification>
-	<notification name="DownloadWindowsMandatory">
-		Nowa wersja [APP_NAME] została opublikowana.
-[MESSAGE]
-Musisz zainstalować nową wersję żeby używać [APP_NAME].
-		<usetemplate name="okcancelbuttons" notext="Wyłącz" yestext="Pobierz"/>
+	<notification name="RequiredUpdate">
+		Do zalogowania się wymagana jest wersja [VERSION].
+Wygląda na to, że nie została ona zaktualizowana.
+Pobierz ją z https://secondlife.com/support/downloads/
 	</notification>
-	<notification name="DownloadWindows">
-		Uaktualniona wersja [APP_NAME] została opublikowana.
-[MESSAGE]
-Aktualizacja nie jest wymagana, ale jest zalecana w celu poprawy wydajności i stabilności.
-		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Pobierz"/>
-	</notification>
-	<notification name="DownloadWindowsReleaseForDownload">
-		Uaktualniona wersja [APP_NAME] została opublikowana.
-[MESSAGE]
-Aktualizacja nie jest wymagana, ale jest zalecana w celu poprawy wydajności i stabilności.
-		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Pobierz"/>
-	</notification>
-	<notification name="DownloadLinuxMandatory">
-		Nowa wersja [APP_NAME] jest dostępna.
-[MESSAGE]
-Musisz pobrać aktualizację aby korzystać z [APP_NAME].
-		<usetemplate name="okcancelbuttons" notext="Wyłącz" yestext="Pobierz"/>
-	</notification>
-	<notification name="DownloadLinux">
-		Aktualizacja [APP_NAME] jest dostępna.
-[MESSAGE]
-Ta aktualizacja nie jest wymagana, ale zaleca się jej instalację w celu poprawienia wydajności i stabilności.
-		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Pobierz"/>
-	</notification>
-	<notification name="DownloadLinuxReleaseForDownload">
-		Uaktualniona wersja [APP_NAME]została opublikowana.
-[MESSAGE]
-Aktualizacja nie jest wymagana, ale jest zalecana w celu poprawy wydajności i stabilności.
-		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Pobierz"/>
-	</notification>
-	<notification name="DownloadMacMandatory">
-		Nowa wersja [APP_NAME] została opublikowana.
-[MESSAGE]
-Musisz zainstalować nową wersję żeby używać [APP_NAME].
-
-Pobrać i zapisać w folderze Aplikacje?
-		<usetemplate name="okcancelbuttons" notext="Wyłącz" yestext="Pobierz"/>
-	</notification>
-	<notification name="DownloadMac">
-		Uaktualniona wersja [APP_NAME] została opublikowana.
-[MESSAGE]
-Aktualizacja nie jest wymagana, ale jest zalecana w celu poprawy wydajności i stabilności.
-
-Pobrać i zapisać w folderze Aplikacje?
-		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Pobierz"/>
-	</notification>
-	<notification name="DownloadMacReleaseForDownload">
-		Uaktualniona wersja [APP_NAME] została opublikowana.
-[MESSAGE]
-Aktualizacja nie jest wymagana, ale jest zalecana w celu poprawy wydajności i stabilności.
-
-Pobrać i zapisać w folderze Aplikacje?
-		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Pobierz"/>
-	</notification>
-	<notification name="FailedUpdateInstall">
-		Podczas aktualizacji pojawił się błąd.
-Proszę pobrać i zainstalować najnowszego klienta z
-http://secondlife.com/download lub http://www.phoenixviewer.com.
-	</notification>
-	<notification name="FailedRequiredUpdateInstall">
-		Nie można zainstalować wymaganej aktualizacji.
-Nie będzie można zalogować się dopóki [APP_NAME] nie zostanie zaktualizowana.
-Proszę pobrać i zainstalować najnowszą wersję z
-http://secondlife.com/download lub http://www.phoenixviewer.com.
+	<notification name="LoginFailedUnknown">
+		Przepraszamy, ale nie udało się zalogować - powód jest nieznany.
+Jeśli ciągle widzisz tą wiadomość sprawdź [SUPPORT_SITE].
 		<usetemplate name="okbutton" yestext="Wyjdź"/>
-	</notification>
-	<notification name="UpdaterServiceNotRunning">
-		Istnieje obowiązkowa aktualizacja dla Second Life.
-Możesz ją pobrać z http://www.secondlife.com/downloads
-lub zainstalować teraz.
-		<usetemplate name="okcancelbuttons" notext="Opuść Second Life" yestext="Pobierz i instaluj teraz"/>
-	</notification>
-	<notification name="DownloadBackgroundTip">
-		Aktualizacja dla [APP_NAME] została pobrana.
-Wersja [VERSION] [[INFO_URL] Informacja o tej aktualizacji]
-		<usetemplate name="okcancelbuttons" notext="Później..." yestext="Instaluj teraz i restartuj [APP_NAME]"/>
-	</notification>
-	<notification name="DownloadBackgroundDialog">
-		Aktualizacja [APP_NAME] została pobrana.
-Wersja [VERSION] [[INFO_URL] Informacja o aktualizacji]
-		<usetemplate name="okcancelbuttons" notext="Później..." yestext="Instaluj teraz i restartuj [APP_NAME]"/>
-	</notification>
-	<notification name="RequiredUpdateDownloadedVerboseDialog">
-		Pobrano wymaganą aktualizację.
-Wersja [VERSION] [[INFO_URL] Informacje o tej aktualizacji]
-
-W celu instalacji aktualizacji [APP_NAME] musi zostać zrestartowany.
-	</notification>
-	<notification name="RequiredUpdateDownloadedDialog">
-		W celu instalacji aktualizacji [APP_NAME] musi zostać zrestartowany.
-[[INFO_URL] Informacje o tej aktualizacji]
-	</notification>
-	<notification name="OtherChannelDownloadBackgroundTip">
-		Została pobrana aktualizacja dla Twojej instalacji [APP_NAME].
-Wersja [VERSION]
-Ta eksperymentalna przeglądarka została zastąpiona przez wersję [NEW_CHANNEL];
-zobacz [[INFO_URL] Więcej informacji o tej aktualizacji]
-		<usetemplate name="okcancelbuttons" notext="Później..." yestext="Instaluj teraz i zrestartuj [APP_NAME]"/>
-	</notification>
-	<notification name="OtherChannelDownloadBackgroundDialog">
-		Została pobrana aktualizacja dla Twojej instalacji [APP_NAME].
-Wersja [VERSION]
-Ta eksperymentalna przeglądarka została zastąpiona przez wersję [NEW_CHANNEL];
-zobacz [[INFO_URL] Więcej informacji o tej aktualizacji]
-		<usetemplate name="okcancelbuttons" notext="Później..." yestext="Instaluj teraz i zrestartuj [APP_NAME]"/>
-	</notification>
-	<notification name="OtherChannelRequiredUpdateDownloadedVerboseDialog">
-		Została pobrana wymagana aktualizacja.
-Wersja [VERSION]
-Ta eksperymentalna przeglądarka została zastąpiona przez wersję [NEW_CHANNEL];
-zobacz [[INFO_URL] Więcej informacji o tej aktualizacji]
-
-W celu instalacji aktualizacji [APP_NAME] musi zostać zrestartowany.
-	</notification>
-	<notification name="OtherChannelRequiredUpdateDownloadedDialog">
-		W celu instalacji aktualizacji [APP_NAME] musi zostać zrestartowany.
-Ta eksperymentalna przeglądarka została zastąpiona przez wersję [NEW_CHANNEL];
-zobacz [[INFO_URL] Więcej informacji o tej aktualizacji]
-	</notification>
-	<notification name="UpdateDownloadInProgress">
-		Aktualizacja jest dostępna!
-Pobiera się ona w tle i zostaniesz powiadomiony/a o konieczności restartu przeglądarki, gdy będzie trzeba.
-	</notification>
-	<notification name="UpdateDownloadComplete">
-		Aktualizacja została pobrana. Zostanie zainstalowana podczas restartu.
-	</notification>
-	<notification name="UpdateCheckError">
-		Wystąpił błąd podczas sprawdzania dostępności aktualizacji.
-Spróbuj ponownie później.
-	</notification>
-	<notification name="UpdateViewerUpToDate">
-		Twoja przeglądarka jest aktualna!
-Jeśli ciągle nie możesz się doczekać, aby wypróbować najnowsze funkcje i łatki, to sprawdź stronę z alternatywnymi przeglądarkami: http://wiki.secondlife.com/wiki/Linden_Lab_Official:Alternate_Viewers
 	</notification>
 	<notification name="DeedObjectToGroup">
 		Przypisanie tego obiektu spowoduje, że grupa:
@@ -3562,6 +3435,12 @@ Proszę sprawdź swoją sieć i ustawienia firewall.
 Komunikacja głosowa nie będzie dostępna.
 Proszę sprawdź swoją sieć i ustawienia firewall.
 		<usetemplate name="okignore" ignoretext="Ostrzegaj mnie, gdy przeglądarka nie może połączyć się z serwerem głosu" />
+	</notification>
+	<notification name="NoVoiceConnect-GIAB">
+		Występuje problem z Twoim połączeniem głosowym.
+
+Komunikacja głosowa nie będzie dostępna.
+Proszę sprawdź swoją sieć i ustawienia firewall.
 	</notification>
 	<notification name="AvatarRezLeftNotification">
 		( [EXISTENCE] sekund w Second Life)
