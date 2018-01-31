@@ -3693,6 +3693,7 @@ Bitte überprüfen Sie Ihre Netzwerk- und Firewalleinstellungen.
 
 Voice-Kommunikation ist leider nicht verfügbar.
 Bitte überprüfen Sie Ihr Netzwerk- und Firewall-Setup.
+[http://wiki.phoenixviewer.com/fs_voice Weitere Hinweise zur Fehlerbehebung]
 		<usetemplate name="okignore" yestext="OK" ignoretext="Warnen, wenn keine Verbindung zum Voice-Server hergestellt werden kann."/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
@@ -3700,6 +3701,7 @@ Bitte überprüfen Sie Ihr Netzwerk- und Firewall-Setup.
 
 Voice-Kommunikation ist leider nicht verfügbar.
 Bitte überprüfen Sie Ihr Netzwerk- und Firewall-Setup.
+[http://wiki.phoenixviewer.com/fs_voice Weitere Hinweise zur Fehlerbehebung]
 		<usetemplate name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="AvatarRezLeftNotification">
