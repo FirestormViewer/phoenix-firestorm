@@ -97,7 +97,7 @@
 		<menu_item_call label="Mein Land" name="My Land"/>
 		<menu label="Anzeigen" name="LandShow">
 			<menu_item_check label="Bannlinien" name="Ban Lines"/>
-			<menu_item_check label="Strahlen" name="beacons"/>
+			<menu_item_check label="Ortungssignale" name="beacons"/>
 			<menu_item_check label="Grundstücksgrenzen" name="Property Lines"/>
 			<menu_item_check label="Landeigentümer" name="Land Owners"/>
 			<menu_item_check label="Koordinaten" name="Coordinates"/>
@@ -283,7 +283,7 @@
 			<menu_item_check label="Informationen zur Avatarkomplexität anzeigen" name="Avatar Draw Info"/>
 		</menu>
 		<menu label="Hervorhebung und Sichtbarkeit" name="Highlighting and Visibility">
-			<menu_item_check label="Pulsierende Strahlen" name="Cheesy Beacon"/>
+			<menu_item_check label="Pulsierende Ortungssignale" name="Cheesy Beacon"/>
 			<menu_item_check label="Partikel ausblenden" name="Hide Particles"/>
 			<menu_item_check label="Auswahl ausblenden" name="Hide Selected"/>
 			<menu_item_check label="Durchsichtig hervorheben" name="Highlight Transparent"/>
