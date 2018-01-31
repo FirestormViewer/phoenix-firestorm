@@ -5123,9 +5123,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Report_Abuse_Label">
 		Zgłoś nadużycie
 	</string>
-	<string name="Command_RFO_Label">
-		Renderuj tylko znajomych
-	</string>
 	<string name="Command_Search_Label">
 		Szukaj
 	</string>
@@ -5225,6 +5222,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Wearable_Favorites_Label">
 		Ulubione rzeczy
 	</string>
+	<string name="Command_RFO_Label">
+		Renderuj tylko znajomych
+	</string>
+	<string name="Command_Beacons_Label">
+		Emitery
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -5302,9 +5305,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Report_Abuse_Tooltip">
 		Zgłoś nadużycie
-	</string>
-	<string name="Command_RFO_Tooltip">
-		Renderuj tylko Twoich znajomych w przeglądarce, wszystkie inne awatary będą niewidoczne. Teleportacja jest wymagana aby przywrócić widzialność innych osób, jeśli włączysz tą opcję.
 	</string>
 	<string name="Command_Search_Tooltip">
 		Znajdź miejsca, wydarzenia i ludzi (CTRL+F)
@@ -5401,6 +5401,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Wearable_Favorites_Tooltip">
 		Otwiera listę ulubionych rzeczy
+	</string>
+	<string name="Command_RFO_Tooltip">
+		Renderuj tylko Twoich znajomych w przeglądarce, wszystkie inne awatary będą niewidoczne. Teleportacja jest wymagana aby przywrócić widzialność innych osób, jeśli włączysz tą opcję.
+	</string>
+	<string name="Command_Beacons_Tooltip">
+		Pokaż emitery
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku
