@@ -3434,6 +3434,7 @@ Proszę sprawdź swoją sieć i ustawienia firewall.
 
 Komunikacja głosowa nie będzie dostępna.
 Proszę sprawdź swoją sieć i ustawienia firewall.
+[http://wiki.phoenixviewer.com/fs_voice Więcej wskazówek można znaleźć tutaj]
 		<usetemplate name="okignore" ignoretext="Ostrzegaj mnie, gdy przeglądarka nie może połączyć się z serwerem głosu" />
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
@@ -3441,6 +3442,7 @@ Proszę sprawdź swoją sieć i ustawienia firewall.
 
 Komunikacja głosowa nie będzie dostępna.
 Proszę sprawdź swoją sieć i ustawienia firewall.
+[http://wiki.phoenixviewer.com/fs_voice Więcej wskazówek można znaleźć tutaj]
 	</notification>
 	<notification name="AvatarRezLeftNotification">
 		( [EXISTENCE] sekund w Second Life)
