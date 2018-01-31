@@ -1027,18 +1027,6 @@
             <key>name</key>
             <string>darwin</string>
           </map>
-          <key>darwin64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>cba1feed7f6bb671d791a517fddf205a</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44461-darwin-201601300040-r23.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin64</string>
-          </map>
           <key>linux</key>
           <map>
             <key>archive</key>
@@ -1050,18 +1038,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>9b090869508fabee82dc53cae977fb99</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44461-linux-201601282301-r23.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -1075,21 +1051,9 @@
             <key>name</key>
             <string>windows</string>
           </map>
-          <key>windows64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>5b1b5ce866afd2a74e445af1fffe6a8b</string>
-              <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodex-44461-windows-201601282252-r23.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows64</string>
-          </map>
         </map>
         <key>version</key>
-        <string>4.44.64.501533</string>
+        <string>4.44.61</string>
       </map>
       <key>fontconfig</key>
       <map>
