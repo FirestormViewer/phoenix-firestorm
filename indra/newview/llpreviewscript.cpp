@@ -428,6 +428,10 @@ LLScriptEdCore::LLScriptEdCore(
 	mPreprocTab(NULL),
 	// </FS:CR>
 	mCompiling(false), //<FS:KC> Compile indicators, recompile button
+	// <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+	mFontNameChangedCallbackConnection(),
+	mFontSizeChangedCallbackConnection(),
+	// </FS:Ansariel>
 	mHasScriptData(FALSE),
 	mScriptRemoved(FALSE),
 	mSaveDialogShown(FALSE)
@@ -475,6 +479,17 @@ LLScriptEdCore::~LLScriptEdCore()
 
 	// NaCl - Script Preprocessor
 	delete mLSLProc;
+
+	// <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+	if (mFontNameChangedCallbackConnection.connected())
+	{
+		mFontNameChangedCallbackConnection.disconnect();
+	}
+	if (mFontSizeChangedCallbackConnection.connected())
+	{
+		mFontSizeChangedCallbackConnection.disconnect();
+	}
+	// </FS:Ansariel>
 }
 
 void LLLiveLSLEditor::experienceChanged()
@@ -551,14 +566,6 @@ BOOL LLScriptEdCore::postBuild()
 
 	mEditor = getChild<LLScriptEditor>("Script Editor");
 
-	// <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
-	LLFontGL* font = LLFontGL::getFont(LLFontDescriptor(gSavedSettings.getString("FSScriptingFontName"), gSavedSettings.getString("FSScriptingFontSize"), LLFontGL::NORMAL));
-	if (font)
-	{
-		mEditor->setFont(font);
-	}
-	// </FS:Ansariel>
-
 	// NaCl - LSL Preprocessor
 	mCurrentEditor = mEditor;
 	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
@@ -573,6 +580,12 @@ BOOL LLScriptEdCore::postBuild()
 	// FIRE-16042: Warn when preproc is toggled.
 	mTogglePreprocConnection = gSavedSettings.getControl("_NACL_LSLPreprocessor")->getSignal()->connect(boost::bind(&LLScriptEdCore::onToggleProc, this));
 	// NaCl End
+
+	// <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+	mFontNameChangedCallbackConnection = gSavedSettings.getControl("FSScriptingFontName")->getSignal()->connect(boost::bind(&LLScriptEdCore::onFontChanged, this));
+	mFontSizeChangedCallbackConnection = gSavedSettings.getControl("FSScriptingFontSize")->getSignal()->connect(boost::bind(&LLScriptEdCore::onFontChanged, this));
+	onFontChanged();
+	// </FS:Ansariel>
 
 	childSetCommitCallback("lsl errors", &LLScriptEdCore::onErrorList, this);
 // <FS:CR> Advanced Script Editor
@@ -1808,6 +1821,23 @@ LLUUID LLScriptEdCore::getAssociatedExperience()const
 {
 	return mAssociatedExperience;
 }
+
+// <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+void LLScriptEdCore::onFontChanged()
+{
+	LLFontGL* font = LLFontGL::getFont(LLFontDescriptor(gSavedSettings.getString("FSScriptingFontName"), gSavedSettings.getString("FSScriptingFontSize"), LLFontGL::NORMAL));
+	if (font)
+	{
+		mEditor->setFont(font);
+		mEditor->needsReflow();
+		if (mPostEditor)
+		{
+			mPostEditor->setFont(font);
+			mPostEditor->needsReflow();
+		}
+	}
+}
+// </FS:Ansariel>
 
 void LLLiveLSLEditor::setExperienceIds( const LLSD& experience_ids )
 {
