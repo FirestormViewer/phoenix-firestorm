@@ -551,6 +551,14 @@ BOOL LLScriptEdCore::postBuild()
 
 	mEditor = getChild<LLScriptEditor>("Script Editor");
 
+	// <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+	LLFontGL* font = LLFontGL::getFont(LLFontDescriptor(gSavedSettings.getString("FSScriptingFontName"), gSavedSettings.getString("FSScriptingFontSize"), LLFontGL::NORMAL));
+	if (font)
+	{
+		mEditor->setFont(font);
+	}
+	// </FS:Ansariel>
+
 	// NaCl - LSL Preprocessor
 	mCurrentEditor = mEditor;
 	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
