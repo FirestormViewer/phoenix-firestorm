@@ -172,6 +172,12 @@ private:
 
 	void	updateIndicators(bool compiling, bool success); // <FS:Kadah> Compile indicators
 
+	// <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+	boost::signals2::connection mFontNameChangedCallbackConnection;
+	boost::signals2::connection mFontSizeChangedCallbackConnection;
+	void	onFontChanged();
+	// </FS:Ansariel>
+
 protected:
 	void deleteBridges();
 	void setHelpPage(const std::string& help_string);

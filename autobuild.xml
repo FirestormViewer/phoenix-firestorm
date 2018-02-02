@@ -47,7 +47,7 @@
               <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201505150224-r74-linux-x64-201505150224-r74.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>linux</string>
+            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -71,7 +71,7 @@
               <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201412081952-windows-x64-201412081952.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>windows</string>
+            <string>windows64</string>
           </map>
         </map>
       </map>
@@ -95,7 +95,9 @@
               <string>33300134846d0f00ac4f31c1a190e3e6</string>
               <key>url</key>
               <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-darwin-201505101047-r12.tar.bz2</uri>
-           </map>
+            </map>
+            <key>name</key>
+            <string>darwin</string>
           </map>
           <key>linux</key>
           <map>
@@ -106,6 +108,8 @@
               <key>url</key>
               <uri>http://downloads.phoenixviewer.com/libnotify-0.4.4-linux-20101003.tar.bz2</uri>
             </map>
+            <key>name</key>
+            <string>linux</string>
           </map>
           <key>windows</key>
           <map>
@@ -116,6 +120,8 @@
               <key>url</key>
               <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows-201601022248-r16.tar.bz2</uri>
             </map>
+            <key>name</key>
+            <string>windows</string>
           </map>
           <key>windows64</key>
           <map>
@@ -126,7 +132,9 @@
               <key>url</key>
               <string>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows-x64-201601022251-r16.tar.bz2</string>
             </map>
-		  </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
         </map>
       </map>
       <key>openjpeg2</key>
@@ -143,6 +151,30 @@
         <string>openjpeg2</string>
         <key>platforms</key>
         <map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>3925c90f0d3f5523acdad063620d01d6</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141918-r32-linux-201601141918-r32.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>8f4188c9a281425e26d89af0676bb6b7</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141020-r32-linux-x64-201601141020-r32.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -155,17 +187,17 @@
             <key>name</key>
             <string>windows</string>
           </map>
-          <key>linux</key>
+          <key>windows64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3925c90f0d3f5523acdad063620d01d6</string>
+              <string>0465f2221c22a7349e4ae49f751ae3d3</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141918-r32-linux-201601141918-r32.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141917-r32-windows-x64-201601141917-r32.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>linux</string>
+            <string>windows64</string>
           </map>
         </map>
         <key>version</key>
@@ -678,7 +710,7 @@
       <key>dictionaries</key>
       <map>
         <key>copyright</key>
-        <string>Copyright 2014 Apache OpenOffice software and other Open Source authors</string>
+        <string>Copyright 2014 Apache OpenOffice software</string>
         <key>description</key>
         <string>Spell checking dictionaries to bundled into the viewer</string>
         <key>license</key>
@@ -731,30 +763,6 @@
             <key>name</key>
             <string>darwin64</string>
           </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>31e11a74e0d3f1e5e4036cb5fea8d944</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8209/32599/dullahan-1.1.820_3.3071.1634.g9cc59c8-windows-508196.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-          <key>windows64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>f965d244e7921c06ee79b68a4abcea3b</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8208/32602/dullahan-1.1.820_3.3071.1634.g9cc59c8-windows64-508196.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows64</string>
-          </map>
           <key>linux</key>
           <map>
             <key>archive</key>
@@ -778,6 +786,30 @@
             </map>
             <key>name</key>
             <string>linux64</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>31e11a74e0d3f1e5e4036cb5fea8d944</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8209/32599/dullahan-1.1.820_3.3071.1634.g9cc59c8-windows-508196.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>f965d244e7921c06ee79b68a4abcea3b</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8208/32602/dullahan-1.1.820_3.3071.1634.g9cc59c8-windows64-508196.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
           </map>
         </map>
         <key>version</key>
@@ -995,18 +1027,6 @@
             <key>name</key>
             <string>darwin</string>
           </map>
-          <key>darwin64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>cba1feed7f6bb671d791a517fddf205a</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44461-darwin-201601300040-r23.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin64</string>
-          </map>
           <key>linux</key>
           <map>
             <key>archive</key>
@@ -1018,18 +1038,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>9b090869508fabee82dc53cae977fb99</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44461-linux-201601282301-r23.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -1043,21 +1051,9 @@
             <key>name</key>
             <string>windows</string>
           </map>
-          <key>windows64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>5b1b5ce866afd2a74e445af1fffe6a8b</string>
-              <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodex-44461-windows-201601282252-r23.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows64</string>
-          </map>
         </map>
         <key>version</key>
-        <string>4.44.64.501533</string>
+        <string>4.44.61</string>
       </map>
       <key>fontconfig</key>
       <map>

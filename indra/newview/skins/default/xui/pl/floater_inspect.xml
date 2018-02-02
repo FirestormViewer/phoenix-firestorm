@@ -11,6 +11,7 @@ Obiekty: [NUM_OBJECTS], primy: [NUM_PRIMS]
 Strony: [NUM_FACES]
 Wierzchołki: [NUM_VERTICES]
 Trójkąty: [NUM_TRIANGLES]
+Złożoność: [COMPLEXITY]
 
 Tekstury: [NUM_TEXTURES]
 VRAM tekstur:
