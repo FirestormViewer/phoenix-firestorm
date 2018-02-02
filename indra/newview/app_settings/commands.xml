@@ -608,4 +608,14 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="fs_wearable_favorites"
            />
+  <command name="beacons"
+           available_in_toybox="true"
+           icon="beacons"
+           label_ref="Command_Beacons_Label"
+           tooltip_ref="Command_Beacons_Tooltip"
+           execute_function="Floater.Toggle"
+           execute_parameters="beacons"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="beacons"
+           />
 </commands>

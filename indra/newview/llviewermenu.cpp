@@ -10938,19 +10938,19 @@ void toggleTeleportHistory()
 // </FS:Ansariel> Toggle teleport history panel directly
 
 // <FS:Techwolf Lupindo> export
-BOOL enable_export_object()
+bool enable_export_object()
 {
-    // <FS:CR>
 	for (LLObjectSelection::root_iterator iter = LLSelectMgr::getInstance()->getSelection()->root_begin();
 		 iter != LLSelectMgr::getInstance()->getSelection()->root_end(); iter++)
 	{
 		LLSelectNode* node = *iter;
 		LLViewerObject* obj = node->getObject();
 		if (obj || node)
+		{
 			return gSavedSettings.getBOOL("FSEnableObjectExports");
+		}
 	}
-    return false;
-    // </FS:CR>
+	return false;
 }
 
 class FSObjectExport : public view_listener_t
@@ -10966,6 +10966,7 @@ class FSObjectExport : public view_listener_t
 	}
 };
 // </FS:Techwolf Lupindo>
+
 // <FS:CR>
 class FSObjectExportCollada : public view_listener_t
 {

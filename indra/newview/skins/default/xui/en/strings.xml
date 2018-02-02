@@ -2591,9 +2591,6 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Preferences_Label">Preferences</string>
   <string name="Command_Profile_Label">Profile</string>
   <string name="Command_Report_Abuse_Label">Report Abuse</string>
-  <!-- FS:Beq FIRE-20977 -->
-  <string name="Command_RFO_Label">Show Friends Only</string>
-  <!-- FS:Beq RFO changes -->
   <string name="Command_Search_Label">Search</string>
   <string name="Command_Snapshot_Label">Snapshot</string>
   <string name="Command_Speak_Label">Speak</string>
@@ -2631,6 +2628,8 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_RegionTracker_Label">Region Tracker</string>
   <string name="Command_Group_Titles_Label">Group Titles</string>
   <string name="Command_Wearable_Favorites_Label">Favorite Wearables</string>
+  <string name="Command_RFO_Label">Show Friends Only</string>
+  <string name="Command_Beacons_Label">Beacons</string>
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
   <string name="Command_Appearance_Tooltip">Change your avatar</string>
@@ -2658,9 +2657,6 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Preferences_Tooltip">Preferences (CTRL+P)</string>
   <string name="Command_Profile_Tooltip">Edit or view your profile</string>
   <string name="Command_Report_Abuse_Tooltip">Report Abuse</string>
-  <!-- FS:Beq FIRE-20977 -->
-  <string name="Command_RFO_Tooltip">Show only your friends in the viewer, all other avatars will be removed. Once enabled a TP is required to restore visibility of others.</string>
-  <!-- FS:Beq RFO changes -->
   <string name="Command_Search_Tooltip">Find places, events, people (CTRL+F)</string>
   <string name="Command_Snapshot_Tooltip">Take a picture (CTRL+SHIFT+S)</string>
   <string name="Command_Speak_Tooltip">Speak with people nearby using your microphone</string>
@@ -2695,6 +2691,8 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_RegionTracker_Tooltip">Track various regions status</string>
   <string name="Command_Group_Titles_Tooltip">Change active group tag</string>
   <string name="Command_Wearable_Favorites_Tooltip">Open the list of favorite wearables</string>
+  <string name="Command_RFO_Tooltip">Show only your friends in the viewer, all other avatars will be removed. Once enabled a TP is required to restore visibility of others.</string>
+  <string name="Command_Beacons_Tooltip">Show beacons</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>

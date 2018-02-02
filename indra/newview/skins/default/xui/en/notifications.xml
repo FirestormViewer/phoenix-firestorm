@@ -9213,6 +9213,7 @@ We're having trouble connecting to your voice server:
 
 Voice communications will not be available.
 Please check your network and firewall setup.
+[http://wiki.phoenixviewer.com/fs_voice More troubleshooting tips can be found here]
     <tag>voice</tag>
   <tag>fail</tag>
     <usetemplate
@@ -9229,6 +9230,7 @@ We're having trouble connecting to your voice server.
 
 Voice communications will not be available.
 Please check your network and firewall setup.
+[http://wiki.phoenixviewer.com/fs_voice More troubleshooting tips can be found here]
     <tag>voice</tag>
   <tag>fail</tag>
     <usetemplate

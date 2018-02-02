@@ -70,7 +70,6 @@ showUsage()
     echo "  --no-package : Build without installer (Overrides --package)"
     echo "  --fmodstudio : Build with FMOD Studio"
     echo "  --fmodex     : Build with FMOD Ex"
-    echo "  --quicktime  : Build with Quicktime (Windows)"
     echo "  --opensim    : Build with OpenSim support (Disables Havok features)"
     echo "  --no-opensim : Build without OpenSim support (Overrides --opensim)"
     echo "  --avx        : Build with Advanced Vector Extensions"
@@ -87,7 +86,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package no-package fmodstudio fmodex ninja jobs: platform: kdu quicktime opensim no-opensim avx avx2 testbuild: help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodstudio fmodex ninja jobs: platform: kdu opensim no-opensim avx avx2 testbuild: help chan: btype:" "$@" ; do
 
           #insure options are valid
           if [  -z "$OPTOPT"  ] ; then

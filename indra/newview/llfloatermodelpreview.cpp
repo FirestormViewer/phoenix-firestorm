@@ -3218,7 +3218,10 @@ void LLModelPreview::updateStatusMessages()
 
 		//fmp->childSetEnabled("physics_optimize", !use_hull);
 
-		bool enable = (phys_tris > 0 || phys_hulls > 0) && fmp->mCurRequest.empty();
+		// <FS:Ansariel> Enable mesh analysis in SL only for now
+		//bool enable = (phys_tris > 0 || phys_hulls > 0) && fmp->mCurRequest.empty();
+		bool enable = (phys_tris > 0 || phys_hulls > 0) && fmp->mCurRequest.empty() && LLGridManager::instance().isInSecondLife();
+		// </FS:Ansariel>
 		//enable = enable && !use_hull && fmp->childGetValue("physics_optimize").asBoolean();
 
 		//enable/disable "analysis" UI
@@ -3252,10 +3255,13 @@ void LLModelPreview::updateStatusMessages()
 				fmp->childEnable("Simplify");
 			}
 		
-			if (phys_tris || phys_hulls > 0)
-			{
-				fmp->childEnable("Decompose");
-			}
+			// <FS:Ansariel> Enable mesh analysis in SL only for now
+			//if (phys_tris || phys_hulls > 0)
+			//{
+			//	fmp->childEnable("Decompose");
+			//}
+			fmp->childSetEnabled("Decompose", (phys_tris || phys_hulls > 0) && LLGridManager::instance().isInSecondLife());
+			// </FS:Ansariel>
 		}
 		else
 		{
