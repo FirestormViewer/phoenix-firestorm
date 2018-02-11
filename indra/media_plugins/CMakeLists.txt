@@ -2,7 +2,7 @@
 add_subdirectory(base)
 
 if (LINUX)
-    add_subdirectory(gstreamer010)
+#    add_subdirectory(gstreamer010)
     add_subdirectory(cef)
     add_subdirectory(libvlc)
     add_subdirectory(example)
