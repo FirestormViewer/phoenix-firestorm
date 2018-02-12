@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="firestorm">
 <panel.string name="BeamsOffLabel">
-	=== WYŁĄCZONE ===
+    === WYŁĄCZONE ===
 </panel.string>
 <string name="EmbeddedItemNotSet">
-	Brak ustawionego
+    Brak ustawionego
 </string>
 <string name="EmbeddedItemNotAvailable">
-	Niedostępny
+    Niedostępny
 </string>
 <string name="EmbeddedItemNotLoggedIn">
-	Zaloguj się
+    Zaloguj się
 </string>
 <tab_container label="Ust. Firestorma" name="tabs">
     <panel label="Dodatki" name="tab-extras">
@@ -178,6 +178,18 @@
         <spinner label="Poz. Z" name="Z pos" />
         <check_box label="Wart. procentowo" tool_tip="Domyślne ustawienie jako procenty, a każda oś na 50" name="FSPivotPercToggle" />
         <button label="Domyślne uprawnienia tworzenia" name="fs_default_creation_permissions" />
+        <text name="text_box_scripting_font" width="150">
+            Czcionka edytora skryptów:
+        </text>
+        <combo_box name="FSScriptingFontName" tool_tip="Nazwa czcionki używanej w edytorze skryptów LSL">
+            <combo_item name="Scripting" label="Skryptowanie"/>
+        </combo_box>
+        <combo_box name="FSScriptingFontSize" tool_tip="Rozmiar czcionki używanej w edytorze skryptów LSL">
+            <combo_item name="Scripting" label="Skryptowanie"/>
+            <combo_item name="Small" label="Mała"/>
+            <combo_item name="Medium" label="Średnia"/>
+            <combo_item name="Large" label="Duża"/>
+        </combo_box>
         <check_box label="Włącz preprocesor LSL" tool_tip="Preprocesor LSL będzie aktywny, gdy ta opcja zostanie zaznaczona." name="preproc_checkbox" />
         <check_box label="Optymalizator" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor będzie LSL optymalizować miejsce zajmowane przez skrypty." name="preprocoptimizer_checkbox" />
         <check_box label="Instrukcja switch()" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z instrukcji switch() do sterowania przepływem skryptu." name="preprocswitch_checkbox" />
@@ -213,27 +225,27 @@
         <check_box label="Używaj CTRL+myszki, aby chwytać obiekty i manipulować nimi" tool_tip="Gdy zaznaczysz tą opcję, to będziesz w stanie chwytać i przesuwać obiekty za pomocą myszki oraz klawisza CTRL." name="FSEnableGrab" />
         <check_box label="Przesuwaj / skaluj tekstury budując, gdy trzymany jest przycisk myszy oraz klawisz caps-lock" tool_tip="Gdy zaznaczysz tą opcję, to będziesz mógł/mogła przesuwać lub skalować strony tekstur trzymając przycisk myszy (wraz z klawiszem caps-lock) w trybie budowania. Ta funkcja jest eksperymentalna i powinna być używana ostrożnie." name="FSExperimentalDragTexture" />
         <check_box label="Podgląd animacji na własnym awatarze podczas ładowania ich na serwer" tool_tip="Gdy zaznaczysz tą opcję, to będziesz w stanie oglądać animacje na swoim własnym awatarze podczas ładowania ich na serwer" name="FSUploadAnimationOnOwnAvatar" />
-	</panel>
-	<panel label="Nowe pliki" name="UploadsTab">
-		<text name="title">
-			Obecne lokalizacje dla nowych plików:
-		</text>
-		<text name="title_images">
-			Obrazy
-		</text>
-		<text name="title_sounds">
-			Dźwięki
-		</text>
-		<text name="title_animations">
-			Animacje
-		</text>
-		<text name="title_models">
-			Modele
-		</text>
-		<text name="upload_help">
-			Aby zmienić folder docelowy kliknij na nim prawym przyciskiem myszy w Szafie
+    </panel>
+    <panel label="Nowe pliki" name="UploadsTab">
+        <text name="title">
+            Obecne lokalizacje dla nowych plików:
+        </text>
+        <text name="title_images">
+            Obrazy
+        </text>
+        <text name="title_sounds">
+            Dźwięki
+        </text>
+        <text name="title_animations">
+            Animacje
+        </text>
+        <text name="title_models">
+            Modele
+        </text>
+        <text name="upload_help">
+            Aby zmienić folder docelowy kliknij na nim prawym przyciskiem myszy w Szafie
 i użyj opcji "ustaw jako domyślne dla"
-		</text>
-	</panel>
+        </text>
+    </panel>
 </tab_container>
 </panel>
