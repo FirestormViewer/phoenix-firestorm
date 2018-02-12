@@ -2147,8 +2147,6 @@ if (WINDOWS)
       media_plugin_cef
       media_plugin_libvlc
       media_plugin_example
-      media_plugin_gstreamer10
-      winmm_shim
       windows-crash-logger
       )
 
@@ -2164,14 +2162,22 @@ if (WINDOWS)
             )
     endif (ADDRESS_SIZE EQUAL 64)
 
-
     if (FMODSTUDIO)
-      list(APPEND COPY_INPUT_DEPENDENCIES
+      if (ADDRESS_SIZE EQUAL 64)
+        list(APPEND COPY_INPUT_DEPENDENCIES
+           ${SHARED_LIB_STAGING_DIR}/Release/fmod64.dll
+           ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod64.dll
+           ${SHARED_LIB_STAGING_DIR}/Debug/fmodL64.dll
+          )
+      else (ADDRESS_SIZE EQUAL 64)
+        list(APPEND COPY_INPUT_DEPENDENCIES
            ${SHARED_LIB_STAGING_DIR}/Release/fmod.dll
            ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod.dll
            ${SHARED_LIB_STAGING_DIR}/Debug/fmodL.dll
           )
+      endif (ADDRESS_SIZE EQUAL 64)
     endif (FMODSTUDIO)
+
     if (FMODEX)
       list(APPEND COPY_INPUT_DEPENDENCIES
            ${SHARED_LIB_STAGING_DIR}/Release/fmodex.dll
@@ -2404,7 +2410,6 @@ else (NOT ENABLE_MEDIA_PLUGINS)
     SLPlugin
     media_plugin_cef
     media_plugin_gstreamer010
-    media_plugin_gstreamer10
     llcommon
     )
 endif (NOT ENABLE_MEDIA_PLUGINS)

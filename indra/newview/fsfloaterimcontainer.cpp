@@ -247,7 +247,7 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 					// Look for the first IM session to the left of this one
 					while (--idxChiclet >= 0)
 					{
-						if (pChiclet = dynamic_cast<LLIMChiclet*>(pChicletPanel->getChiclet(idxChiclet)))
+						if ((pChiclet = dynamic_cast<LLIMChiclet*>(pChicletPanel->getChiclet(idxChiclet))))
 						{
 							FSFloaterIM* pFloater = FSFloaterIM::findInstance(pChiclet->getSessionId());
 							if (pFloater)

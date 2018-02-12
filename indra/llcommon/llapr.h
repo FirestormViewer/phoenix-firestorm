@@ -277,11 +277,5 @@ public:
 //*******************************************************************************************************************************
 };
 
-namespace nd
-{
-	namespace aprhelper
-	{
-		std::string LL_COMMON_API ndConvertFilename( std::string const &aFilename );
-	}
-}
+
 #endif // LL_LLAPR_H

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  name="linkreplace"
- help_topic="linkreplace"
+ help_topic="fs_linkreplace"
  positioning="centered"
  title="Replace Inventory Links"
  width="333"

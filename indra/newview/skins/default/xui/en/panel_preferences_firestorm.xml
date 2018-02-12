@@ -1099,13 +1099,11 @@
          left_delta="1"
          follows="left|top"
          height="18"
-         left="10"
          max_chars="20"
          mouse_opaque="true"
          name="material"
          width="87"
-         control_name="FSBuildPrefs_Material"
-         tool_tip="">
+         control_name="FSBuildPrefs_Material">
              <combo_item name="Stone" value="Stone" label="Stone"/>
              <combo_item name="Metal" value="Metal" label="Metal"/>
              <combo_item name="Glass" value="Glass" label="Glass"/>
@@ -1360,10 +1358,50 @@
              function="Pref.PermsDefault" />
         </button>
 
+        <text
+         top_pad="80"
+         left="8"
+         follows="left|top"
+         name="text_box_scripting_font"
+         width="100">
+          Script Editor Font:
+        </text>
+        <combo_box
+         allow_text_entry="false"
+         top_delta="-5"
+         left_pad="5"
+         follows="left|top"
+         max_chars="20"
+         mouse_opaque="true"
+         name="FSScriptingFontName"
+         width="100"
+         control_name="FSScriptingFontName"
+         tool_tip="Name of the font used in the LSL script editor">
+             <combo_item name="Monospace" value="Monospace" label="Monospace"/>
+             <combo_item name="Scripting" value="Scripting" label="Scripting"/>
+        </combo_box>
+        <combo_box
+         allow_text_entry="false"
+         top_delta="0"
+         left_pad="5"
+         follows="left|top"
+         max_chars="20"
+         mouse_opaque="true"
+         name="FSScriptingFontSize"
+         width="100"
+         control_name="FSScriptingFontSize"
+         tool_tip="Size of the font used in the LSL script editor">
+             <combo_item name="Monospace" value="Monospace" label="Monospace"/>
+             <combo_item name="Scripting" value="Scripting" label="Scripting"/>
+             <combo_item name="Small" value="Small" label="Small"/>
+             <combo_item name="Medium" value="Medium" label="Medium"/>
+             <combo_item name="Large" value="Large" label="Large"/>
+        </combo_box>
+
         <check_box
          follows="left|top"
          height="16"
-         top_pad="105"
+         top_pad="10"
          left="5"
          label="Enable LSL preprocessor"
          tool_tip="When checked, the LSL preprocessor is enabled."

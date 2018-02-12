@@ -10014,6 +10014,12 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 	// <FS:Ansariel> Disable useless diagnostics
 	//static std::set<LLUUID> all_textures;
 
+	// <FS:Ansariel> Show per-item complexity in COF
+	std::map<LLUUID, U32> item_complexity;
+	std::map<LLUUID, U32> temp_item_complexity;
+	U32 body_parts_complexity;
+	// </FS:Ansariel>
+
 	if (mVisualComplexityStale)
 	{
 		U32 cost = VISUAL_COMPLEXITY_UNKNOWN;
@@ -10034,6 +10040,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 			}
 		}
         LL_DEBUGS("ARCdetail") << "Avatar body parts complexity: " << cost << LL_ENDL;
+		body_parts_complexity = cost; // <FS:Ansariel> Show per-item complexity in COF
 
 
 		for (attachment_map_t::const_iterator attachment_point = mAttachmentPoints.begin(); 
@@ -10100,6 +10107,20 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
                                                    << LL_ENDL;
                             // Limit attachment complexity to avoid signed integer flipping of the wearer's ACI
                             cost += (U32)llclamp(attachment_total_cost, MIN_ATTACHMENT_COMPLEXITY, max_attachment_complexity);
+
+							// <FS:Ansariel> Show per-item complexity in COF
+							if (isSelf())
+							{
+								if (!attached_object->isTempAttachment())
+								{
+									item_complexity.insert(std::make_pair(attached_object->getAttachmentItemID(), (U32)attachment_total_cost));
+								}
+								else
+								{
+									temp_item_complexity.insert(std::make_pair(attached_object->getID(), (U32)attachment_total_cost));
+								}
+							}
+							// </FS:Ansariel>
 						}
 					}
 				}
@@ -10235,7 +10256,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		// <FS:Ansariel> Show avatar complexity in appearance floater
 		if (isSelf())
 		{
-			LLSidepanelAppearance::updateAvatarComplexity(mVisualComplexity);
+			LLSidepanelAppearance::updateAvatarComplexity(mVisualComplexity, item_complexity, temp_item_complexity, body_parts_complexity);
 		}
 		// </FS:Ansariel>
     }

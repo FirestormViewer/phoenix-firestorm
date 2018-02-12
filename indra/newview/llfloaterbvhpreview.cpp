@@ -491,16 +491,16 @@ BOOL LLFloaterBvhPreview::loadBVH()
 void LLFloaterBvhPreview::unloadMotion()
 {
 	if (mMotionID.notNull() && mAnimPreview && mUseOwnAvatar)
-	{ 
+	{
 		resetMotion(); 
 		// <FS> Preview on own avatar
 		//mAnimPreview->getDummyAvatar()->removeMotion(mMotionID);
 		mAnimPreview->getPreviewAvatar(this)->removeMotion(mMotionID);
 		// </FS>
-		LLKeyframeDataCache::removeKeyframeData(mMotionID); 
+		LLKeyframeDataCache::removeKeyframeData(mMotionID);
 	}
 
-	mMotionID.setNull(); 
+	mMotionID.setNull();
 	mAnimPreview = NULL;
 }
 // </FS>
@@ -510,19 +510,23 @@ void LLFloaterBvhPreview::unloadMotion()
 //-----------------------------------------------------------------------------
 LLFloaterBvhPreview::~LLFloaterBvhPreview()
 {
-	// <FS> Reload animation from disk
-	//mAnimPreview = NULL;
-	unloadMotion();
-	// </FS>
+	mAnimPreview = NULL;
 
 	// <FS> Preview on own avatar
 	if (mUseOwnAvatar)
 	{
 		sOwnAvatarInstanceCount--;
 
+		if (mMotionID.notNull())
+		{
+			LLKeyframeDataCache::removeKeyframeData(mMotionID);
+		}
+
 		if (sOwnAvatarInstanceCount == 0 && isAgentAvatarValid())
 		{
+			gAgentAvatarp->deactivateAllMotions();
 			gAgentAvatarp->startDefaultMotions();
+			gAgentAvatarp->startMotion(ANIM_AGENT_STAND);
 		}
 	}
 	// </FS>

@@ -351,7 +351,7 @@ void FSFloaterWearableFavorites::onDoubleClick()
 		if (get_is_item_worn(selected_item_id))
 		{
 			if ((item->getType() == LLAssetType::AT_CLOTHING && (!RlvActions::isRlvEnabled() || gRlvWearableLocks.canRemove(item))) ||
-			    (item->getType() == LLAssetType::AT_OBJECT) && (!RlvActions::isRlvEnabled() || gRlvAttachmentLocks.canDetach(item)))
+			    ((item->getType() == LLAssetType::AT_OBJECT) && (!RlvActions::isRlvEnabled() || gRlvAttachmentLocks.canDetach(item))))
 			{
 				LLAppearanceMgr::instance().removeItemsFromAvatar(ids);
 			}

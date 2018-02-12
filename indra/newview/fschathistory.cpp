@@ -1478,6 +1478,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		p.right_pad = mRightWidgetPad;
 
 		LLDate new_message_time = LLDate::now();
+		bool needs_header_text = false;
 
 		if (mLastFromName == chat.mFromName 
 			&& mLastFromID == chat.mFromID
@@ -1491,6 +1492,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		}
 		else
 		{
+			needs_header_text = true;
 			view = getHeader(chat, name_params, args);
 			if (getLength() == 0)
 				p.top_pad = 0;
@@ -1508,9 +1510,15 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		view->reshape(target_rect.getWidth(), view->getRect().getHeight());
 		view->setOrigin(target_rect.mLeft, view->getRect().mBottom);
 
-		std::string widget_associated_text = "\n[" + chat.mTimeStr + "] ";
-		if (utf8str_trim(chat.mFromName).size() != 0 && chat.mFromName != SYSTEM_FROM)
-			widget_associated_text += chat.mFromName + delimiter;
+		std::string widget_associated_text = "\n";
+		if (needs_header_text)
+		{
+			widget_associated_text = "[" + chat.mTimeStr + "] ";
+			if (utf8str_trim(chat.mFromName).size() != 0 && chat.mFromName != SYSTEM_FROM)
+			{
+				widget_associated_text += chat.mFromName + delimiter;
+			}
+		}
 
 		appendWidget(p, widget_associated_text, false);	// <FS:Zi> FIRE-8600: TAB out of chat history
 

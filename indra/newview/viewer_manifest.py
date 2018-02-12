@@ -263,10 +263,15 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             channel_type='release'
         elif channel_qualifier.startswith('beta'):
             channel_type='beta'
-        elif channel_qualifier.startswith('project'):
-            channel_type='project'
+        #<FS:TS> Use our more-or-less-standard channel types instead of LL's
+        #elif channel_qualifier.startswith('project'):
+        #    channel_type='project'
+        #else:
+        #    channel_type='test'
+        elif channel_qualifier.startswith('nightly'):
+            channel_type='nightly'
         else:
-            channel_type='test'
+            channel_type='private'
         return channel_type
 
     def channel_variant_app_suffix(self):
@@ -277,7 +282,8 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             suffix=suffix.replace('Release', '').strip()
         # for the base release viewer, suffix will now be null - for any other, append what remains
         if len(suffix) > 0:
-            suffix = "_"+ ("_".join(suffix.split()))
+            #suffix = "_"+ ("_".join(suffix.split()))
+            suffix = "_".join(suffix.split())
         # the additional_packages mechanism adds more to the installer name (but not to the app name itself)
         if 'channel_suffix' in self.args and self.args['channel_suffix']:
             suffix+='_'+("_".join(self.args['channel_suffix'].split()))
@@ -286,8 +292,13 @@ class ViewerManifest(LLManifest,FSViewerManifest):
     def installer_base_name(self):
         global CHANNEL_VENDOR_BASE
         # a standard map of strings for replacing in the templates
+        #<FS:TS> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
+        channel_base = "Phoenix-" + CHANNEL_VENDOR_BASE
+        if self.fs_flavor() == 'oss':
+            channel_base = channel_base + "OS"
+        #</FS:TS>
         substitution_strings = {
-            'channel_vendor_base' : '_'.join(CHANNEL_VENDOR_BASE.split()),
+            'channel_vendor_base' : '_'.join(channel_base.split()),
             'channel_variant_underscores':self.channel_variant_app_suffix(),
             'version_underscores' : '_'.join(self.args['version']),
             'arch':self.args['arch']
@@ -689,10 +700,6 @@ class WindowsManifest(ViewerManifest):
         if self.channel_type() != 'release':
             with self.prefix(src='../media_plugins/example/%s' % self.args['configuration'], dst="llplugin"):
                 self.path("media_plugin_example.dll")
- 
-        # Media plugins - GStreamer
-        with self.prefix(src='../media_plugins/gstreamer10/%s' % self.args['configuration'], dst="llplugin"):
-            self.path("media_plugin_gstreamer10.dll")
 
         # CEF runtime files - debug
         # CEF runtime files - not debug (release, relwithdebinfo etc.)
@@ -1714,21 +1721,52 @@ class DarwinManifest(ViewerManifest):
             # one for release candidate and one for first look. Any other channels
             # will use the release .DS_Store, and will look broken.
             # - Ambroff 2008-08-20
+            #<FS:TS> Select proper directory based on flavor and build type
+            dmg_template_prefix = 'firestorm'
+            if self.fs_flavor() == 'oss':
+                dmg_template_prefix = 'firestormos'
             dmg_template = os.path.join(
-                'installers', 'darwin', '%s-dmg' % self.channel_type())
+                'installers', 'darwin', '%s-%s-dmg' % (dmg_template_prefix, self.channel_type()))
+            print "Trying template directory", dmg_template
 
             if not os.path.exists (self.src_path_of(dmg_template)):
                 dmg_template = os.path.join ('installers', 'darwin', 'release-dmg')
+                print "Not found, trying template directory", dmg_template
 
             for s,d in {self.get_dst_prefix():app_name + ".app",
-                        os.path.join(dmg_template, "_VolumeIcon.icns"): ".VolumeIcon.icns",
-                        os.path.join(dmg_template, "background.jpg"): "background.jpg",
+                        #os.path.join(dmg_template, "_VolumeIcon.icns"): ".VolumeIcon.icns",
+                        os.path.join(dmg_template, "background.png"): "background.png",
+                        os.path.join(dmg_template, "LGPL-license.txt"): "LGPL License.txt",
+                        os.path.join(dmg_template, "VivoxAUP.txt"): "Vivox Acceptable Use Policy.txt",
                         os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items():
                 print "Copying to dmg", s, d
                 self.copy_action(self.src_path_of(s), os.path.join(volpath, d))
 
+            # <FS:TS> The next two commands *MUST* execute before the loop
+            #         that hides the files. If not, packaging will fail.
+            #         YOU HAVE BEEN WARNED.
+            # Create the alias file (which is a resource file) from the .r
+            self.run_command(
+                ['Rez', self.src_path_of("%s/Applications-alias.r" % dmg_template),
+                 '-o', os.path.join(volpath, "Applications")])
+
+            # Set up the installer disk image: set icon positions, folder view
+            #  options, and icon label colors. This must be done before the
+            #  files are hidden.
+            self.run_command(
+                ['osascript',
+                 self.src_path_of("installers/darwin/installer-dmg.applescript"),
+                 volname])
+
+            # <FS:TS> ARGH! osascript clobbers the volume icon file, for no
+            #        reason I can find anywhere. So we need to copy it after
+            #        running the script to set everything else up.
+            print "Copying volume icon to dmg"
+            self.copy_action(self.src_path_of(os.path.join(dmg_template, "_VolumeIcon.icns")),
+                os.path.join(volpath, ".VolumeIcon.icns"))
+
             # Hide the background image, DS_Store file, and volume icon file (set their "visible" bit)
-            for f in ".VolumeIcon.icns", "background.jpg", ".DS_Store":
+            for f in ".VolumeIcon.icns", "background.png", ".DS_Store":
                 pathname = os.path.join(volpath, f)
                 # We've observed mysterious "no such file" failures of the SetFile
                 # command, especially on the first file listed above -- yet
@@ -1746,11 +1784,6 @@ class DarwinManifest(ViewerManifest):
                 # case, don't hang up the whole build looping indefinitely, let
                 # the original problem manifest by executing the desired command.
                 self.run_command(['SetFile', '-a', 'V', pathname])
-
-            # Create the alias file (which is a resource file) from the .r
-            self.run_command(
-                ['Rez', self.src_path_of("installers/darwin/release-dmg/Applications-alias.r"),
-                 '-o', os.path.join(volpath, "Applications")])
 
             # Set the alias file's alias and custom icon bits
             self.run_command(['SetFile', '-a', 'AC', os.path.join(volpath, "Applications")])
