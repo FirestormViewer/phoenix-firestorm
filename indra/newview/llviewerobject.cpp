@@ -105,6 +105,7 @@
 #include "llfloaterperms.h"
 #include "llvocache.h"
 #include "llcleanup.h"
+#include "llcallstack.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
 #include "rlvcommon.h"
@@ -154,6 +155,9 @@ static LLTrace::BlockTimerStatHandle FTM_CREATE_OBJECT("Create Object");
 // static
 LLViewerObject *LLViewerObject::createObject(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp, S32 flags)
 {
+    LL_DEBUGS("ObjectUpdate") << "creating " << id << LL_ENDL;
+    dumpStack("ObjectUpdateStack");
+    
 	LLViewerObject *res = NULL;
 	LL_RECORD_BLOCK_TIME(FTM_CREATE_OBJECT);
 	
@@ -906,7 +910,16 @@ void LLViewerObject::addChild(LLViewerObject *childp)
 	if(childp->setParent(this))
 	{
 		mChildList.push_back(childp);
+        childp->afterReparent();
 	}
+}
+
+void LLViewerObject::onReparent(LLViewerObject *old_parent, LLViewerObject *new_parent)
+{
+}
+
+void LLViewerObject::afterReparent()
+{
 }
 
 void LLViewerObject::removeChild(LLViewerObject *childp)
@@ -1128,6 +1141,9 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 {
 	LL_DEBUGS_ONCE("SceneLoadTiming") << "Received viewer object data" << LL_ENDL;
 
+    LL_DEBUGS("ObjectUpdate") << " mesgsys " << mesgsys << " dp " << dp << " id " << getID() << " update_type " << (S32) update_type << LL_ENDL;
+    dumpStack("ObjectUpdateStack");
+
 	U32 retval = 0x0;
 	
 	// If region is removed from the list it is also deleted.
@@ -1182,10 +1198,10 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 	F32 time_dilation = 1.f;
 	if(mesgsys != NULL)
 	{
-	U16 time_dilation16;
-	mesgsys->getU16Fast(_PREHASH_RegionData, _PREHASH_TimeDilation, time_dilation16);
-	time_dilation = ((F32) time_dilation16) / 65535.f;
-	mRegionp->setTimeDilation(time_dilation);
+        U16 time_dilation16;
+        mesgsys->getU16Fast(_PREHASH_RegionData, _PREHASH_TimeDilation, time_dilation16);
+        time_dilation = ((F32) time_dilation16) / 65535.f;
+        mRegionp->setTimeDilation(time_dilation);
 	}
 
 	// this will be used to determine if we've really changed position
@@ -3055,14 +3071,14 @@ void LLViewerObject::updateControlAvatar()
         }
         if (any_mesh)
         {
-            std::string vobj_name = llformat("Vol%u", (U32) root);
+            std::string vobj_name = llformat("Vol%p", root);
             LL_DEBUGS("AnimatedObjects") << vobj_name << " calling linkControlAvatar()" << LL_ENDL;
             root->linkControlAvatar();
         }
     }
     if (!root->isAnimatedObject() && root->getControlAvatar())
     {
-        std::string vobj_name = llformat("Vol%u", (U32) root);
+        std::string vobj_name = llformat("Vol%p", root);
         LL_DEBUGS("AnimatedObjects") << vobj_name << " calling unlinkControlAvatar()" << LL_ENDL;
         root->unlinkControlAvatar();
     }
@@ -3079,10 +3095,14 @@ void LLViewerObject::linkControlAvatar()
             return;
         }
         mControlAvatar = LLControlAvatar::createControlAvatar(volp);
+        LL_DEBUGS("AnimatedObjects") << volp->getID() 
+                                     << " created control av for " 
+                                     << (S32) (1+volp->numChildren()) << " prims" << LL_ENDL;
     }
     if (getControlAvatar())
     {
         getControlAvatar()->rebuildAttachmentOverrides();
+        getControlAvatar()->updateAnimations();
     }
     else
     {

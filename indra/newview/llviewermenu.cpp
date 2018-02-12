@@ -1832,7 +1832,19 @@ class LLAdvancedEnableAppearanceToXML : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		return gSavedSettings.getBOOL("DebugAvatarAppearanceMessage");
+        LLViewerObject *obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+        if (obj && obj->isAnimatedObject() && obj->getControlAvatar())
+        {
+            return gSavedSettings.getBOOL("DebugAnimatedObjects");
+        }
+        else if (obj && obj->isAttachment() && obj->getAvatar())
+        {
+            return gSavedSettings.getBOOL("DebugAvatarAppearanceMessage");
+        }
+		else
+		{
+			return false;
+		}
 	}
 };
 
@@ -1841,8 +1853,8 @@ class LLAdvancedAppearanceToXML : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 		std::string emptyname;
-		LLVOAvatar* avatar =
-			find_avatar_from_object( LLSelectMgr::getInstance()->getSelection()->getPrimaryObject() );
+        LLViewerObject *obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+        LLVOAvatar* avatar = obj->getAvatar();
 		if (!avatar)
 		{
 			avatar = gAgentAvatarp;
@@ -7516,7 +7528,12 @@ class LLAvatarResetSkeleton: public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-		LLVOAvatar* avatar = find_avatar_from_object( LLSelectMgr::getInstance()->getSelection()->getPrimaryObject() );
+		LLVOAvatar* avatar = NULL;
+        LLViewerObject *obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+        if (obj)
+        {
+            avatar = obj->getAvatar();
+        }
 		if(avatar)
         {
             avatar->resetSkeleton(false);
@@ -7524,6 +7541,20 @@ class LLAvatarResetSkeleton: public view_listener_t
         return true;
     }
 };
+
+class LLAvatarEnableResetSkeleton: public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        LLViewerObject *obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+        if (obj && obj->getAvatar())
+        {
+            return true;
+        }
+        return false;
+    }
+};
+
 
 class LLAvatarResetSkeletonAndAnimations : public view_listener_t
 {
@@ -11550,6 +11581,7 @@ void initialize_menus()
 
 	view_listener_t::addMenu(new LLAvatarToggleMyProfile(), "Avatar.ToggleMyProfile");
 	view_listener_t::addMenu(new LLAvatarResetSkeleton(), "Avatar.ResetSkeleton");
+	view_listener_t::addMenu(new LLAvatarEnableResetSkeleton(), "Avatar.EnableResetSkeleton");
 	view_listener_t::addMenu(new LLAvatarResetSkeletonAndAnimations(), "Avatar.ResetSkeletonAndAnimations");
 	enable.add("Avatar.IsMyProfileOpen", boost::bind(&my_profile_visible));
 

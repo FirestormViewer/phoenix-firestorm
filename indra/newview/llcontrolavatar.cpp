@@ -367,8 +367,17 @@ void LLControlAvatar::updateAnimations()
             }
         }
     }
-    mSignaledAnimations = anims;
+    if (!mPlaying && anims.size()>0)
+    {
+        mPlaying = true;
+        if (!mRootVolp->isAnySelected())
+        {
+            updateVolumeGeom();
+            mRootVolp->recursiveMarkForUpdate(TRUE);
+        }
+    }
 
+    mSignaledAnimations = anims;
     processAnimationStateChanges();
 }
 
@@ -404,4 +413,17 @@ LLViewerObject* LLControlAvatar::lineSegmentIntersectRiggedAttachments(const LLV
 	}
 		
 	return hit;
+}
+
+// virtual
+std::string LLControlAvatar::getFullname() const
+{
+    if (mRootVolp)
+    {
+        return "AO_" + mRootVolp->getID().getString();
+    }
+    else
+    {
+        return "AO_no_root_vol";
+    }
 }

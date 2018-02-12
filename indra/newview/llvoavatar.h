@@ -251,6 +251,8 @@ private: //aligned members
 	// Updates
 	//--------------------------------------------------------------------
 public:
+    void			updateAppearanceMessageDebugText();
+	void 			updateAnimationDebugText();
 	virtual void	updateDebugText();
 	virtual BOOL 	updateCharacter(LLAgent &agent);
     void			updateFootstepSounds();
@@ -286,7 +288,11 @@ public:
                                                      const F32 max_attachment_complexity,
                                                      LLVOVolume::texture_cost_t& textures,
                                                      U32& cost,
-                                                     hud_complexity_list_t& hud_complexity_list);
+                                                     hud_complexity_list_t& hud_complexity_list,
+                                                     // <FS:Ansariel> Show per-item complexity in COF
+                                                     std::map<LLUUID, U32>& item_complexity,
+                                                     std::map<LLUUID, U32>& temp_item_complexity);
+                                                     // </FS:Ansariel>
 	void			calculateUpdateRenderComplexity();
 	static const U32 VISUAL_COMPLEXITY_UNKNOWN;
 	void			updateVisualComplexity();
@@ -961,7 +967,7 @@ private:
  **/
 
 public:
-	std::string		getFullname() const; // Returns "FirstName LastName"
+	virtual std::string	getFullname() const; // Returns "FirstName LastName"
 	std::string		avString() const; // Frequently used string in log messages "Avatar '<full name'"
 protected:
 	static void		getAnimLabels(std::vector<std::string>* labels);

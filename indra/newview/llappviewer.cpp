@@ -1297,7 +1297,10 @@ bool LLAppViewer::init()
 	//	// situation to do things the Right Way. Anyone who intentionally
 	//	// bypasses this mechanism needs no reminder that s/he's shooting
 	//	// him/herself in the foot.
-	//	LLNotificationsUtil::add("RunLauncher");
+	//	if (!beingDebugged())
+	//	{
+	//		LLNotificationsUtil::add("RunLauncher");
+	//	}
 	//}
 	// </FS:Ansariel>
 

@@ -83,6 +83,7 @@
 #include "llanimationstates.h"
 #include "llinventorytype.h"
 #include "llviewerinventory.h"
+#include "llcallstack.h"
 // [RLVa:KB] - Checked: RLVa-2.0.0
 #include "rlvactions.h"
 #include "rlvlocks.h"
@@ -323,6 +324,7 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 										  U32 block_num, EObjectUpdateType update_type,
 										  LLDataPacker *dp)
 {
+	 	
 	LLColor4U color;
 	const S32 teDirtyBits = (TEM_CHANGE_TEXTURE|TEM_CHANGE_COLOR|TEM_CHANGE_MEDIA);
 
@@ -336,6 +338,9 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 		LLSculptParams *sculpt_params = (LLSculptParams *)getParameterEntry(LLNetworkData::PARAMS_SCULPT);
 		sculpt_id = sculpt_params->getSculptTexture();
 		sculpt_type = sculpt_params->getSculptType();
+
+        LL_DEBUGS("ObjectUpdate") << "uuid " << mID << " set sculpt_id " << sculpt_id << LL_ENDL;
+        dumpStack("ObjectUpdateStack");
 	}
 
 	if (!dp)
@@ -1516,7 +1521,7 @@ BOOL LLVOVolume::updateLOD()
         {
             if (isAnimatedObject() && isRiggedMesh())
             {
-                std::string vobj_name = llformat("Vol%u", (uintptr_t) this);
+                std::string vobj_name = llformat("Vol%p", this);
                 F32 est_tris = getEstTrianglesMax();
                 LL_DEBUGS("AnimatedObjectsLinkset") << vobj_name << " updateLOD to " << getLOD() << ", tris " << est_tris << LL_ENDL; 
             }
@@ -1610,7 +1615,7 @@ BOOL LLVOVolume::setParent(LLViewerObject* parent)
 			gPipeline.markMoved(mDrawable);
 			gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, TRUE);
 		}
-        updateAnimatedObjectStateOnReparent(old_parent, parent);
+        onReparent(old_parent, parent);
 	}
 
 	return ret ;
@@ -3587,7 +3592,7 @@ void LLVOVolume::setExtendedMeshFlags(U32 flags)
             param_block->setFlags(flags);
         }
         parameterChanged(LLNetworkData::PARAMS_EXTENDED_MESH, true);
-        LL_DEBUGS("AnimatedObjects") << (uintptr_t) this
+        LL_DEBUGS("AnimatedObjects") << this
                                      << " new flags " << flags << " curr_flags " << curr_flags
                                      << ", calling onSetExtendedMeshFlags()"
                                      << LL_ENDL;
@@ -3614,8 +3619,10 @@ bool LLVOVolume::isAnimatedObject() const
 
 // Called any time parenting changes for a volume. Update flags and
 // control av accordingly.  This is called after parent has been
-// changed to new_parent.
-void LLVOVolume::updateAnimatedObjectStateOnReparent(LLViewerObject *old_parent, LLViewerObject *new_parent)
+// changed to new_parent, but before new_parent's mChildList has changed.
+
+// virtual
+void LLVOVolume::onReparent(LLViewerObject *old_parent, LLViewerObject *new_parent)
 {
     LLVOVolume *old_volp = dynamic_cast<LLVOVolume*>(old_parent);
 
@@ -3629,11 +3636,6 @@ void LLVOVolume::updateAnimatedObjectStateOnReparent(LLViewerObject *old_parent,
             mControlAvatar = NULL;
             av->markForDeath();
         }
-        // If this succeeds now, it's because the new_parent is an animated object
-        if (isAnimatedObject() && getControlAvatar())
-        {
-            getControlAvatar()->addAttachmentOverridesForObject(this);
-        }
     }
     if (old_volp && old_volp->isAnimatedObject())
     {
@@ -3641,7 +3643,43 @@ void LLVOVolume::updateAnimatedObjectStateOnReparent(LLViewerObject *old_parent,
         {
             // We have been removed from an animated object, need to do cleanup.
             old_volp->getControlAvatar()->rebuildAttachmentOverrides();
+            old_volp->getControlAvatar()->updateAnimations();
         }
+    }
+}
+
+// This needs to be called after onReparent(), because mChildList is
+// not updated until the end of LLViewerObject::addChild()
+
+// virtual
+void LLVOVolume::afterReparent()
+{
+    {
+        LL_DEBUGS("AnimatedObjects") << "new child added for parent " 
+            << ((LLViewerObject*)getParent())->getID() << LL_ENDL;
+    }
+                                                                                             
+    if (isAnimatedObject() && getControlAvatar())
+    {
+        LL_DEBUGS("AnimatedObjects") << "adding attachment overrides, parent is animated object " 
+            << ((LLViewerObject*)getParent())->getID() << LL_ENDL;
+
+        // MAINT-8239 - doing a full rebuild whenever parent is set
+        // makes the joint overrides load more robustly. In theory,
+        // addAttachmentOverrides should be sufficient, but in
+        // practice doing a full rebuild helps compensate for
+        // notifyMeshLoaded() not being called reliably enough.
+        
+        // was: getControlAvatar()->addAttachmentOverridesForObject(this);
+        getControlAvatar()->rebuildAttachmentOverrides();
+        getControlAvatar()->updateAnimations();
+    }
+    else
+    {
+        LL_DEBUGS("AnimatedObjects") << "not adding overrides, parent: " 
+                                     << ((LLViewerObject*)getParent())->getID() 
+                                     << " isAnimated: "  << isAnimatedObject() << " cav "
+                                     << getControlAvatar() << LL_ENDL;
     }
 }
 
@@ -4146,7 +4184,7 @@ void LLVOVolume::parameterChanged(U16 param_type, LLNetworkData* data, BOOL in_u
         bool was_enabled = (getControlAvatar() != NULL);
         if (enabled != was_enabled)
         {
-            LL_DEBUGS("AnimatedObjects") << (uintptr_t) this
+            LL_DEBUGS("AnimatedObjects") << this
                                          << " calling onSetExtendedMeshFlags, enabled " << (U32) enabled
                                          << " was_enabled " << (U32) was_enabled
                                          << " local_origin " << (U32) local_origin
@@ -4305,7 +4343,7 @@ void LLVOVolume::markForUpdate(BOOL priority)
     {
         if (isAnimatedObject() && isRiggedMesh())
         {
-            std::string vobj_name = llformat("Vol%u", (uintptr_t) this);
+            std::string vobj_name = llformat("Vol%p", this);
             F32 est_tris = getEstTrianglesMax();
             LL_DEBUGS("AnimatedObjectsLinkset") << vobj_name << " markForUpdate, tris " << est_tris << LL_ENDL; 
         }
@@ -5290,7 +5328,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 				continue;
 			}
 
-            std::string vobj_name = llformat("Vol%u", (uintptr_t) vobj);
+            std::string vobj_name = llformat("Vol%p", vobj);
 
 			if (vobj->isMesh() &&
 				((vobj->getVolume() && !vobj->getVolume()->isMeshAssetLoaded()) || !gMeshRepo.meshRezEnabled()))
@@ -5852,7 +5890,7 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
                 {
                     if (vobj->isAnimatedObject() && vobj->isRiggedMesh())
                     {
-                        std::string vobj_name = llformat("Vol%u", (U32) vobj);
+                        std::string vobj_name = llformat("Vol%p", vobj);
                         F32 est_tris = vobj->getEstTrianglesMax();
                         LL_DEBUGS("AnimatedObjectsLinkset") << vobj_name << " rebuildMesh, tris " << est_tris << LL_ENDL; 
                     }
