@@ -1135,6 +1135,10 @@ LLFontGL* LLFontGL::getFontByName(const std::string& name)
 	{
 		return getFontScripting();
 	}
+	else if (name == "Monospace")
+	{
+		return getFontMonospace();
+	}
 	// </FS:CR>
 	else
 	{

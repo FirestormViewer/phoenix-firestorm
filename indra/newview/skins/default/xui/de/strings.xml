@@ -86,7 +86,7 @@ RestrainedLove API: [RLV_VERSION]
 libcurl-Version: [LIBCURL_VERSION]
 J2C-Decoderversion: [J2C_VERSION]
 Audio-Treiberversion: [AUDIO_DRIVER_VERSION]
-CEF-Version: [LIBCEF_VERSION]
+[LIBCEF_VERSION]
 LibVLC-Version: [LIBVLC_VERSION]
 Voice-Serverversion: [VOICE_VERSION]
 	</string>
@@ -5715,9 +5715,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Report_Abuse_Label">
 		Missbrauch melden
 	</string>
-	<string name="Command_RFO_Label">
-		Nur Freunde anzeigen
-	</string>
 	<string name="Command_Search_Label">
 		Suchen
 	</string>
@@ -5830,6 +5827,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Wearable_Favorites_Label">
 		Kleidungsfavoriten
 	</string>
+	<string name="Command_RFO_Label">
+		Nur Freunde anzeigen
+	</string>
+	<string name="Command_Beacons_Label">
+		Ortungssignale
+	</string>
 	<string name="Command_Appearance_Tooltip">
 		Avatar ändern
 	</string>
@@ -5904,9 +5907,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Report_Abuse_Tooltip">
 		Missbrauch melden
-	</string>
-	<string name="Command_RFO_Tooltip">
-		Nur Freunde im Viewer darstellen. Nach Deaktivierung ist ein Teleport erforderlich, um andere Avatare wieder darzustellen.
 	</string>
 	<string name="Command_Search_Tooltip">
 		Orte, Veranstaltungen, Leute finden (Strg+F)
@@ -6012,6 +6012,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Wearable_Favorites_Tooltip">
 		Liste der Kleidungsfavoriten öffnen
+	</string>
+	<string name="Command_RFO_Tooltip">
+		Nur Freunde im Viewer darstellen. Nach Deaktivierung ist ein Teleport erforderlich, um andere Avatare wieder darzustellen.
+	</string>
+	<string name="Command_Beacons_Tooltip">
+		Ortungssignale anzeigen
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
@@ -6648,9 +6654,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="fs_preprocessor_settings_list_prefix">
 		Einstellungen:
-	</string>
-	<string name="fs_preprocessor_wave_exception">
-		[ERR_NAME] ([LINENUMBER]): [ERR_DESC]
 	</string>
 	<string name="fs_preprocessor_exception">
 		[ERR_NAME] ([LINENUMBER]): Gefangener Ausnahmefehler: [ERR_DESC]

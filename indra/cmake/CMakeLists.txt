@@ -15,6 +15,7 @@ set(cmake_SOURCE_FILES
     BuildVersion.cmake
     CEFPlugin.cmake
     CMakeCopyIfDifferent.cmake
+    ColladaDom.cmake
     ConfigurePkgConfig.cmake
     CURL.cmake
     Copy3rdPartyLibs.cmake

@@ -9,7 +9,7 @@
 #  also defined, but not for general use are
 #  JSONCPP_LIBRARY, where to find the jsoncpp library.
 
-FIND_PATH(JSONCPP_INCLUDE_DIR jsoncpp/json.h
+FIND_PATH(JSONCPP_INCLUDE_DIR NAMES jsoncpp/json.h jsoncpp/json/json.h
 /usr/local/include
 /usr/include
 )
@@ -25,7 +25,7 @@ EXEC_PROGRAM(${CMAKE_CXX_COMPILER}
 SET(JSONCPP_NAMES ${JSONCPP_NAMES} libjson_linux-gcc-${_gcc_COMPILER_VERSION}_libmt.so)
 
 # On standalone, assume that the system installed library was compiled with the used compiler.
-SET(JSONCPP_NAMES ${JSONCPP_NAMES} libjson.so)
+SET(JSONCPP_NAMES ${JSONCPP_NAMES} libjson.so libjsoncpp.so)
 
 FIND_LIBRARY(JSONCPP_LIBRARY
   NAMES ${JSONCPP_NAMES}

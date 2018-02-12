@@ -519,7 +519,6 @@ void LLTracker::drawBeacon(LLVector3 pos_agent, std::string direction, LLColor4 
 	const U32 BEACON_VERTS = 256;
 	F32 step;
 
-	LLVector3d pos_agent_3d = gAgent.getPositionGlobal();	// <FS:CR> FIRE-8234
 	gGL.matrixMode(LLRender::MM_MODELVIEW);
 	gGL.pushMatrix();
 

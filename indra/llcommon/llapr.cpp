@@ -813,23 +813,3 @@ void LLAPRFile::flush()
 }
 
 // </FS:ND>
-namespace nd { namespace aprhelper  {
-std::string ndConvertFilename( std::string const &aFilename )
-{
-#ifdef LL_WINDOWS
-	// For safety reason (don't change any behaviour) do nothing different if filename is already ASCII
-	std::string::const_iterator itr = std::find_if( aFilename.begin(), aFilename.end(), [&]( char const & aVal ){ return aVal < 0; } ); 
-	if( aFilename.end() == itr )
-		return aFilename;
-	
-	wchar_t aShort[ MAX_PATH ] = {0};
-	DWORD nRes = ::GetShortPathNameW( utf8str_to_utf16str( aFilename ).c_str(), aShort, _countof( aShort ) );
-	if( nRes == 0 || nRes >= _countof( aShort ) )
-		return aFilename;
-	
-	return utf16str_to_utf8str( aShort );
-#else
-	return aFilename;
-#endif
-}
-	}}

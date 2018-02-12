@@ -4540,7 +4540,7 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 
 					LLCDMeshData res;
 					LLCDResult retval;
-					if (retval = LLConvexDecomposition::getInstance()->generateSingleHullMeshFromMesh(&mesh, &res))
+					if ((retval = LLConvexDecomposition::getInstance()->generateSingleHullMeshFromMesh(&mesh, &res)))
 					{
 						LL_WARNS() << "ConvexDecomp Failed (generateSingleHullMeshFromMesh): " << retval << LL_ENDL;
 					}
@@ -6847,6 +6847,9 @@ void LLViewerWindow::setUIVisibility(bool visible)
 	{
 		gToolBarView->setToolBarsVisible(visible);
 	}
+
+	// <FS:Ansariel> Notification not showing if hiding the UI
+	FSNearbyChat::instance().showDefaultChatBar(visible && !gSavedSettings.getBOOL("AutohideChatBar"));
 
 	// <FS:Zi> Is done inside XUI now, using visibility_control
 	//LLNavigationBar::getInstance()->setVisible(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);

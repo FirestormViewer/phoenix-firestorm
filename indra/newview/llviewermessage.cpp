@@ -3293,6 +3293,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 						session_id);
 					gAgent.sendReliableMessage();
 				}
+
+				// <FS:Ansariel> Don't flash for muted IMs
+				return;
 			}
 		}
 		break;
@@ -3526,6 +3529,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				}
 				// </FS:PP>
 			}
+			// <FS:Ansariel> Don't flash task icon for group messages from muted senders
+			else
+			{
+				return;
+			}
+			// </FS:Ansariel>
 		}
 		break;
 

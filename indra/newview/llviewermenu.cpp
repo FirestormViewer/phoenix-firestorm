@@ -5289,11 +5289,14 @@ class LLViewToggleUI : public view_listener_t
 			LLNotification::Params params("ConfirmHideUI");
 			params.functor.function(boost::bind(&LLViewToggleUI::confirm, this, _1, _2));
 			LLSD substitutions;
-#if LL_DARWIN
-			substitutions["SHORTCUT"] = "Cmd+Shift+U";
-#else
-			substitutions["SHORTCUT"] = "Ctrl+Shift+U";
-#endif
+			// <FS:Ansariel> Notification not showing if hiding the UI
+//#if LL_DARWIN
+//			substitutions["SHORTCUT"] = "Cmd+Shift+U";
+//#else
+//			substitutions["SHORTCUT"] = "Ctrl+Shift+U";
+//#endif
+			substitutions["SHORTCUT"] = "Alt+Shift+U";
+			// </FS:Ansariel>
 			params.substitutions = substitutions;
 			if (!gSavedSettings.getBOOL("HideUIControls"))
 			{
@@ -5320,6 +5323,16 @@ class LLViewToggleUI : public view_listener_t
 		}
 	}
 };
+
+// <FS:Ansariel> Notification not showing if hiding the UI
+class LLViewCheckToggleUI : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		return gViewerWindow->getUIVisibility();
+	}
+};
+// </FS:Ansariel>
 
 void handle_duplicate_in_place(void*)
 {
@@ -10512,7 +10525,9 @@ class LLEditTakeOff : public view_listener_t
 				&& (gAgentWearables.getWearableCount(type) > 0))
 			{
 				// MULTI-WEARABLES: assuming user wanted to remove top shirt.
-				U32 wearable_index = gAgentWearables.getWearableCount(type) - 1;
+				//<FS:TS> Shut the compiler up about unsigned comparisons <0 or >0
+				//U32 wearable_index = gAgentWearables.getWearableCount(type) - 1;
+				S32 wearable_index = gAgentWearables.getWearableCount(type) - 1;
 
 // [RLVa:KB] - Checked: 2010-06-09 (RLVa-1.2.0g) | Added: RLVa-1.2.0g
 				if ( (rlv_handler_t::isEnabled()) && (gRlvWearableLocks.hasLockedWearable(type)) )
@@ -10936,19 +10951,19 @@ void toggleTeleportHistory()
 // </FS:Ansariel> Toggle teleport history panel directly
 
 // <FS:Techwolf Lupindo> export
-BOOL enable_export_object()
+bool enable_export_object()
 {
-    // <FS:CR>
 	for (LLObjectSelection::root_iterator iter = LLSelectMgr::getInstance()->getSelection()->root_begin();
 		 iter != LLSelectMgr::getInstance()->getSelection()->root_end(); iter++)
 	{
 		LLSelectNode* node = *iter;
 		LLViewerObject* obj = node->getObject();
 		if (obj || node)
+		{
 			return gSavedSettings.getBOOL("FSEnableObjectExports");
+		}
 	}
-    return false;
-    // </FS:CR>
+	return false;
 }
 
 class FSObjectExport : public view_listener_t
@@ -10964,6 +10979,7 @@ class FSObjectExport : public view_listener_t
 	}
 };
 // </FS:Techwolf Lupindo>
+
 // <FS:CR>
 class FSObjectExportCollada : public view_listener_t
 {
@@ -11169,6 +11185,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLZoomer(DEFAULT_FIELD_OF_VIEW, false), "View.ZoomDefault");
 	view_listener_t::addMenu(new LLViewDefaultUISize(), "View.DefaultUISize");
 	view_listener_t::addMenu(new LLViewToggleUI(), "View.ToggleUI");
+	view_listener_t::addMenu(new LLViewCheckToggleUI(), "View.CheckToggleUI"); // <FS:Ansariel> Notification not showing if hiding the UI
 
 	view_listener_t::addMenu(new LLViewEnableMouselook(), "View.EnableMouselook");
 	view_listener_t::addMenu(new LLViewEnableJoystickFlycam(), "View.EnableJoystickFlycam");

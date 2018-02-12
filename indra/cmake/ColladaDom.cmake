@@ -3,7 +3,7 @@ include (Prebuilt)
 
 if (USESYSTEMLIBS)
   find_path(COLLADA_INCLUDE_DIRS 1.4/dom/domConstants.h
-    PATH_SUFFIXES collada)
+    PATH_SUFFIXES collada collada-dom2.4)
   set(COLLADA_INCLUDE_DIRS
     ${COLLADA_INCLUDE_DIRS} ${COLLADA_INCLUDE_DIRS}/1.4
     )
