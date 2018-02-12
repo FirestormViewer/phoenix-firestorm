@@ -4442,6 +4442,11 @@ void LLViewerObject::sendMaterialUpdate() const
 //formerly send_object_shape(LLViewerObject *object)
 void LLViewerObject::sendShapeUpdate()
 {
+	// <FS:Ansariel> FIRE-22268: Crash fix
+	LLViewerRegion *regionp = getRegion();
+	if (!regionp) return;
+	// </FS:Ansariel>
+
 	gMessageSystem->newMessageFast(_PREHASH_ObjectShape);
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID() );
@@ -4451,13 +4456,18 @@ void LLViewerObject::sendShapeUpdate()
 
 	LLVolumeMessage::packVolumeParams(&getVolume()->getParams(), gMessageSystem);
 
-	LLViewerRegion *regionp = getRegion();
+	//LLViewerRegion *regionp = getRegion(); // <FS:Ansariel> FIRE-22268: Crash fix
 	gMessageSystem->sendReliable( regionp->getHost() );
 }
 
 
 void LLViewerObject::sendTEUpdate() const
 {
+	// <FS:Ansariel> FIRE-22268: Crash fix
+	LLViewerRegion *regionp = getRegion();
+	if (!regionp) return;
+	// </FS:Ansariel>
+
 	LLMessageSystem* msg = gMessageSystem;
 	msg->newMessageFast(_PREHASH_ObjectImage);
 
@@ -4480,7 +4490,7 @@ void LLViewerObject::sendTEUpdate() const
 
 	packTEMessage(msg);
 
-	LLViewerRegion *regionp = getRegion();
+	//LLViewerRegion *regionp = getRegion(); // <FS:Ansariel> FIRE-22268: Crash fix
 	msg->sendReliable( regionp->getHost() );
 }
 

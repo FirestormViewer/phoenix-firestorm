@@ -59,8 +59,9 @@ set (media_plugin_cef_LINK_LIBRARIES
 
 # Select which VolumeCatcher implementation to use
 if (LINUX)
-  message(FATAL_ERROR "CEF plugin has been enabled for a Linux compile.\n"
-    "  Please create a volume_catcher implementation for this platform.")
+#  message(FATAL_ERROR "CEF plugin has been enabled for a Linux compile.\n"
+#    "  Please create a volume_catcher implementation for this platform.")
+  list(APPEND media_plugin_cef_SOURCE_FILES dummy_volume_catcher.cpp)
 elseif (DARWIN)
   list(APPEND media_plugin_cef_SOURCE_FILES mac_volume_catcher_null.cpp)
   find_library(CORESERVICES_LIBRARY CoreServices)

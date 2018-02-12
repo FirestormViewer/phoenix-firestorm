@@ -230,7 +230,10 @@ elseif(LINUX)
     # or ARCH_PREBUILT_DIRS
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     # *FIX - figure out what to do with duplicate libalut.so here -brad
-    set(release_files
+    #<FS:TS> Even if we're doing USESYSTEMLIBS, there are a few libraries we
+    # have to deal with
+    if (NOT USESYSTEMLIBS)
+      set(release_files
         #libapr-1.so.0
         #libaprutil-1.so.0
         libatk-1.0.so
@@ -249,6 +252,11 @@ elseif(LINUX)
         libfontconfig.so.1.8.0
         libfontconfig.so.1
        )
+    else (NOT USESYSTEMLIBS)
+      set(release_files
+        libGLOD.so
+       )
+    endif (NOT USESYSTEMLIBS)
 
     if (FMODSTUDIO)
       set(debug_files ${debug_files} "libfmodL.so")
@@ -344,9 +352,10 @@ copy_if_different(
     )
 set(third_party_targets ${third_party_targets} ${out_targets})
 
-if(NOT USESYSTEMLIBS)
+#<FS:TS> We need to do this regardless
+#if(NOT USESYSTEMLIBS)
   add_custom_target(
       stage_third_party_libs ALL
       DEPENDS ${third_party_targets}
       )
-endif(NOT USESYSTEMLIBS)
+#endif(NOT USESYSTEMLIBS)
