@@ -146,13 +146,13 @@ if (LL_TESTS)
   # If http_proxy is in the current environment (e.g. to fetch s3-proxy
   # autobuild packages), suppress it for this integration test: it screws up
   # the tests.
-  LL_ADD_INTEGRATION_TEST(llcorehttp
-                          "${llcorehttp_TEST_SOURCE_FILES}"
-                          "${test_libs}"
-                          "-Dhttp_proxy"
-                          ${PYTHON_EXECUTABLE}
-                          "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_llcorehttp_peer.py"
-                          )
+  #LL_ADD_INTEGRATION_TEST(llcorehttp
+  #                        "${llcorehttp_TEST_SOURCE_FILES}"
+  #                        "${test_libs}"
+  #                        "-Dhttp_proxy"
+  #                        ${PYTHON_EXECUTABLE}
+  #                        "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_llcorehttp_peer.py"
+  #                        )
 
 if (DARWIN)
   # Path inside the app bundle where we'll need to copy libraries
@@ -183,6 +183,10 @@ if (DARWIN)
   add_custom_command(TARGET INTEGRATION_TEST_llcorehttp PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy ${AUTOBUILD_INSTALL_DIR}/lib/release/libexception_handler.dylib ${LL_TEST_DESTINATION_DIR}
     DEPENDS ${AUTOBUILD_INSTALL_DIR}/lib/release/libexception_handler.dylib
+  )
+  add_custom_command(TARGET INTEGRATION_TEST_llcorehttp PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy ${AUTOBUILD_INSTALL_DIR}/lib/release/libnghttp2*.dylib ${LL_TEST_DESTINATION_DIR}
+    DEPENDS ${AUTOBUILD_INSTALL_DIR}/lib/release/libnghttp2.dylib
   )
   foreach(expat ${EXPAT_COPY})
     add_custom_command(TARGET INTEGRATION_TEST_llcorehttp PRE_BUILD
