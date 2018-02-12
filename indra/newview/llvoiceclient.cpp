@@ -217,7 +217,10 @@ void LLVoiceClient::updateSettings()
 
 	updateMicMuteLogic();
 
-	if (mVoiceModule) mVoiceModule->updateSettings();
+	if (mVoiceModule)
+    {
+        mVoiceModule->updateSettings();
+    }
 }
 
 //--------------------------------------------------
@@ -433,24 +436,36 @@ void LLVoiceClient::setNonSpatialChannel(
 	const std::string &uri,
 	const std::string &credentials)
 {
-	if (mVoiceModule) mVoiceModule->setNonSpatialChannel(uri, credentials);
+	if (mVoiceModule)
+    {
+        mVoiceModule->setNonSpatialChannel(uri, credentials);
+    }
 }
 
 void LLVoiceClient::setSpatialChannel(
 	const std::string &uri,
 	const std::string &credentials)
 {
-	if (mVoiceModule) mVoiceModule->setSpatialChannel(uri, credentials);
+	if (mVoiceModule)
+    {
+        mVoiceModule->setSpatialChannel(uri, credentials);
+    }
 }
 
 void LLVoiceClient::leaveNonSpatialChannel()
 {
-	if (mVoiceModule) mVoiceModule->leaveNonSpatialChannel();
+	if (mVoiceModule)
+    {
+        mVoiceModule->leaveNonSpatialChannel();
+    }
 }
 
 void LLVoiceClient::leaveChannel(void)
 {
-	if (mVoiceModule) mVoiceModule->leaveChannel();
+	if (mVoiceModule)
+    {
+        mVoiceModule->leaveChannel();
+    }
 }
 
 std::string LLVoiceClient::getCurrentChannel()
@@ -542,7 +557,10 @@ bool LLVoiceClient::voiceEnabled(bool no_cache)
 
 void LLVoiceClient::setVoiceEnabled(bool enabled)
 {
-	if (mVoiceModule) mVoiceModule->setVoiceEnabled(enabled);
+	if (mVoiceModule)
+    {
+        mVoiceModule->setVoiceEnabled(enabled);
+    }
 }
 
 void LLVoiceClient::updateMicMuteLogic()

@@ -75,13 +75,13 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
             with self.prefix(src=pkgdir,dst=""):
                 self.path("dictionaries")
+                self.path("ca-bundle.crt")
         # </FS:LO>
 
         if self.is_packaging_viewer():
             with self.prefix(src="app_settings"):
                 self.exclude("logcontrol.xml")
                 self.exclude("logcontrol-dev.xml")
-                self.path("*.pem")
                 self.path("*.ini")
                 self.path("*.xml")
                 self.path("*.db2")
@@ -99,19 +99,21 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 # ... and the entire image filters directory
                 self.path("filters")
             
+                # ... and the included spell checking dictionaries
                 # <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
                 # ... and the included spell checking dictionaries
 #                pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
 #                with self.prefix(src=pkgdir,dst=""):
 #                    self.path("dictionaries")
+#                    self.path("ca-bundle.crt")
                 # </FS:LO>
+
                 # include the entire beams directory
                 self.path("beams")
                 self.path("beamsColors")
 
                 # include the extracted packages information (see BuildPackagesInfo.cmake)
                 self.path(src=os.path.join(self.args['build'],"packages-info.txt"), dst="packages-info.txt")
-
                 # CHOP-955: If we have "sourceid" or "viewer_channel" in the
                 # build process environment, generate it into
                 # settings_install.xml.
@@ -639,8 +641,12 @@ class WindowsManifest(ViewerManifest):
 
             # Vivox runtimes
             self.path("SLVoice.exe")
-            self.path("vivoxsdk.dll")
-            self.path("ortp.dll")
+            if (self.address_size == 64):
+                self.path("vivoxsdk_x64.dll")
+                self.path("ortp_x64.dll")
+            else:
+                self.path("vivoxsdk.dll")
+                self.path("ortp.dll")
             self.path("libsndfile-1.dll")
             self.path("vivoxoal.dll")
             

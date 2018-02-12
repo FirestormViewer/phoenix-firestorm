@@ -3460,9 +3460,6 @@ URL: [MEDIAURL]
 	<notification name="VoiceChannelJoinFailed">
 		Не удалось подключиться к [VOICE_CHANNEL_NAME], повторите попытку позже. Будет установлено подключение к общему голосовому чату.
 	</notification>
-	<notification name="VoiceLoginRetry">
-		Создается голосовой канал для вас. Создание займет не больше минуты.
-	</notification>
 	<notification name="VoiceEffectsExpired">
 		Истек срок действия одного или нескольких типов изменения голоса, на которые вы подписаны.
 [[URL] Нажмите здесь], чтобы обновить подписку.
