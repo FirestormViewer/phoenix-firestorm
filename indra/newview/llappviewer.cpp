@@ -1438,8 +1438,10 @@ bool LLAppViewer::init()
 	joystick->setNeedsReset(true);
 	/*----------------------------------------------------------------------*/
 
-	gSavedSettings.getControl("FramePerSecondLimit")->getSignal()->connect(boost::bind(&LLAppViewer::onChangeFrameLimit, this, _2));
-	onChangeFrameLimit(gSavedSettings.getLLSD("FramePerSecondLimit"));
+	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
+	//gSavedSettings.getControl("FramePerSecondLimit")->getSignal()->connect(boost::bind(&LLAppViewer::onChangeFrameLimit, this, _2));
+	//onChangeFrameLimit(gSavedSettings.getLLSD("FramePerSecondLimit"));
+	// </FS:Ansariel>
 
 	return true;
 }
@@ -1569,6 +1571,8 @@ bool LLAppViewer::doFrame()
 	LLTimer periodicRenderingTimer;
 	BOOL restore_rendering_masks = FALSE;
 	// </FS:Ansariel> MaxFPS Viewer-Chui merge error
+	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
+	LLTimer frameTimer;
 
 	//LLPrivateMemoryPoolTester::getInstance()->run(false) ;
 	//LLPrivateMemoryPoolTester::getInstance()->run(true) ;
@@ -1702,24 +1706,22 @@ bool LLAppViewer::doFrame()
 				pingMainloopTimeout("Main:Display");
 				gGLActive = TRUE;
 
-				static U64 last_call = 0;
-				// <FS:Ansariel> MaxFPS improvement
+				// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
+				//static U64 last_call = 0;
 				//if (!gTeleportDisplay)
-				static LLCachedControl<bool> fsLimitFramerate(gSavedSettings, "FSLimitFramerate");
-				if (fsLimitFramerate && !gTeleportDisplay)
+				//{
+				//	// Frame/draw throttling
+				//	U64 elapsed_time = LLTimer::getTotalTime() - last_call;
+				//	if (elapsed_time < mMinMicroSecPerFrame)
+				//	{
+				//		LL_RECORD_BLOCK_TIME(FTM_SLEEP);
+				//		// llclamp for when time function gets funky
+				//		U64 sleep_time = llclamp(mMinMicroSecPerFrame - elapsed_time, (U64)1, (U64)1e6);
+				//		micro_sleep(sleep_time, 0);
+				//	}
+				//}
+				//last_call = LLTimer::getTotalTime();
 				// </FS:Ansariel>
-				{
-					// Frame/draw throttling
-					U64 elapsed_time = LLTimer::getTotalTime() - last_call;
-					if (elapsed_time < mMinMicroSecPerFrame)
-					{
-						LL_RECORD_BLOCK_TIME(FTM_SLEEP);
-						// llclamp for when time function gets funky
-						U64 sleep_time = llclamp(mMinMicroSecPerFrame - elapsed_time, (U64)1, (U64)1e6);
-						micro_sleep(sleep_time, 0);
-					}
-				}
-				last_call = LLTimer::getTotalTime();
 
 				display();
 
@@ -1827,6 +1829,23 @@ bool LLAppViewer::doFrame()
 					tex_fetch_debugger_instance->idle() ;				
 				}
 			}
+
+			// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
+			static LLCachedControl<U32> max_fps(gSavedSettings, "FramePerSecondLimit");
+			static LLCachedControl<bool> fsLimitFramerate(gSavedSettings, "FSLimitFramerate");
+			if (fsLimitFramerate && LLStartUp::getStartupState() == STATE_STARTED && !gTeleportDisplay && !logoutRequestSent())
+			{
+				// Sleep a while to limit frame rate.
+				F32 min_frame_time = 1.f / (F32)max_fps;
+				S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
+				if (milliseconds_to_sleep > 0)
+				{
+					LL_RECORD_BLOCK_TIME(FTM_SLEEP);
+					ms_sleep(milliseconds_to_sleep);
+				}
+			}
+			frameTimer.reset();
+			// </FS:Ansariel>
 
 			resumeMainloopTimeout();
 
