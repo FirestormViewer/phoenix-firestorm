@@ -1833,7 +1833,7 @@ bool LLAppViewer::doFrame()
 			// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
 			static LLCachedControl<U32> max_fps(gSavedSettings, "FramePerSecondLimit");
 			static LLCachedControl<bool> fsLimitFramerate(gSavedSettings, "FSLimitFramerate");
-			if (fsLimitFramerate && LLStartUp::getStartupState() == STATE_STARTED && !gTeleportDisplay && !logoutRequestSent())
+			if (fsLimitFramerate && LLStartUp::getStartupState() == STATE_STARTED && !gTeleportDisplay && !logoutRequestSent() && max_fps > F_APPROXIMATELY_ZERO)
 			{
 				// Sleep a while to limit frame rate.
 				F32 min_frame_time = 1.f / (F32)max_fps;
