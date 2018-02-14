@@ -1505,9 +1505,6 @@ bool idle_startup()
 		// Load Avatars icons cache
 		LLAvatarIconIDCache::getInstance()->load();
 		
-		// Load media plugin cookies
-		LLViewerMedia::loadCookieFile();
-
 		// <FS:Ansariel> [FS Persisted Avatar Render Settings]
 		//LLRenderMuteList::getInstance()->loadFromFile();
 
