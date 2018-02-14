@@ -1851,7 +1851,10 @@ void LLFloaterPreference::setPreprocInclude()
 //[FIX JIRA-1971 : SJ] Show an notify when Javascript setting change
 void LLFloaterPreference::onClickJavascript()
 {
-	LLNotificationsUtil::add("DisableJavascriptBreaksSearch");
+	if (!gSavedSettings.getBOOL("BrowserJavascriptEnabled"))
+	{
+		LLNotificationsUtil::add("DisableJavascriptBreaksSearch");
+	}
 }
 
 /*
