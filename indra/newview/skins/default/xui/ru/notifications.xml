@@ -549,9 +549,6 @@
 	<notification name="CacheWillClear">
 		Кэш будет очищен после перезапуска [APP_NAME].
 	</notification>
-	<notification name="DisableCookiesBreaksSearch">
-		Если вы отключите Cookies, функции поиска не будут работать должным образом и вы не сможете его использовать.
-	</notification>
 	<notification name="DisableJavascriptBreaksSearch">
 		Если вы отключите Javascript, функции поиска не будут работать должным образом и вы не сможете его использовать.
 	</notification>

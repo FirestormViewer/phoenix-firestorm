@@ -542,9 +542,6 @@ No se reembolsarán las cuotas pagadas.
 	<notification name="CacheWillClear">
 		La caché se limpiará cuando reinicies [APP_NAME].
 	</notification>
-	<notification name="DisableCookiesBreaksSearch">
-		Si desactivas las cookies, la función de búsqueda no funcionará correctamente y no podrás usarla.
-	</notification>
 	<notification name="DisableJavascriptBreaksSearch">
 		Si desactivas Javascript, la función de búsqueda no funcionará correctamente y no podrás usarla.
 	</notification>
