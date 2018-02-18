@@ -327,11 +327,13 @@ void LLCoros::toplevel(coro::self& self, CoroData* data, const callable_t& calla
     // run the code the caller actually wants in the coroutine
     try
     {
-#if LL_WINDOWS
-        winlevel(callable);
-#else
+// <FS:Ansariel> Disable for more meaningful callstacks
+//#if LL_WINDOWS
+//        winlevel(callable);
+//#else
+// </FS:Ansariel>
         callable();
-#endif
+//#endif // <FS:Ansariel> Disable for more meaningful callstacks
     }
     catch (const LLContinueError&)
     {
@@ -345,7 +347,7 @@ void LLCoros::toplevel(coro::self& self, CoroData* data, const callable_t& calla
     //{
     //    // Any OTHER kind of uncaught exception will cause the viewer to
     //    // crash, hopefully informatively.
-    //    CRASH_ON_UNHANDLED_EXCEPTION(STRINGIZE("coroutine " << data->mName));
+    //   CRASH_ON_UNHANDLED_EXCEPTION(STRINGIZE("coroutine " << data->mName));
     //}
     // </FS:Ansariel>
     // This cleanup isn't perfectly symmetrical with the way we initially set
