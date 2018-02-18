@@ -340,12 +340,14 @@ void LLCoros::toplevel(coro::self& self, CoroData* data, const callable_t& calla
         // viewer will carry on.
         LOG_UNHANDLED_EXCEPTION(STRINGIZE("coroutine " << data->mName));
     }
-    catch (...)
-    {
-        // Any OTHER kind of uncaught exception will cause the viewer to
-        // crash, hopefully informatively.
-        CRASH_ON_UNHANDLED_EXCEPTION(STRINGIZE("coroutine " << data->mName));
-    }
+    // <FS:Ansariel> Disable for more meaningful callstacks
+    //catch (...)
+    //{
+    //    // Any OTHER kind of uncaught exception will cause the viewer to
+    //    // crash, hopefully informatively.
+    //    CRASH_ON_UNHANDLED_EXCEPTION(STRINGIZE("coroutine " << data->mName));
+    //}
+    // </FS:Ansariel>
     // This cleanup isn't perfectly symmetrical with the way we initially set
     // data->mPrev, but this is our last chance to reset Current.
     Current().reset(data->mPrev);
