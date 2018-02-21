@@ -622,15 +622,15 @@ void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 	}
 }
 
-void ParticleEditor::scriptInjectReturned( )
+void ParticleEditor::scriptInjectReturned()
 {
 	setCanClose(TRUE);
 
 	// play it safe, because some time may have passed
 	LLViewerObject* object = gObjectList.findObject(mObject->getID());
-	if (!object)
+	if (!object || mObject->isDead())
 	{
-		LL_DEBUGS() << "object went away!" << LL_ENDL;
+		LL_WARNS() << "Can't inject script - object is dead or went away!" << LL_ENDL;
 		mMainPanel->setEnabled(TRUE);
 		return;
 	}
