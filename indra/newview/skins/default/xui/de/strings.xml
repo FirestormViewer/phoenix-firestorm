@@ -289,8 +289,7 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 	</string>
 	<string name="LoginFailedPendingLogout">
 		Das System meldet Sie gerade ab.
-Ihr Konto ist erst ab
-[TIME] Pacific Time wieder verfügbar.
+Bitte warten Sie eine Minute, bevor Sie erneut versuchen sich anzumelden.
 	</string>
 	<string name="LoginFailedUnableToCreateSession">
 		Es kann keine gültige Sitzung erstellt werden.
