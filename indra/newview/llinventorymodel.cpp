@@ -362,6 +362,21 @@ LLViewerInventoryCategory* LLInventoryModel::getCategory(const LLUUID& id) const
 	return category;
 }
 
+bool LLInventoryModel::isCategoryHidden(const LLUUID& id) const
+{
+	const LLViewerInventoryCategory* category = getCategory(id);
+	if (category)
+	{
+		LLFolderType::EType cat_type = category->getPreferredType();
+		// <FS:Ansariel> Show inbox folder depending on FSShowInboxFolder setting
+		//return (cat_type == LLFolderType::FT_INBOX || cat_type == LLFolderType::FT_OUTBOX);
+		static LLCachedControl<bool> fsShowInboxFolder(gSavedSettings, "FSShowInboxFolder");
+		return ((cat_type == LLFolderType::FT_INBOX && !fsShowInboxFolder) || cat_type == LLFolderType::FT_OUTBOX);
+		// </FS:Ansariel>
+	}
+	return false;
+}
+
 S32 LLInventoryModel::getItemCount() const
 {
 	return mItemMap.size();

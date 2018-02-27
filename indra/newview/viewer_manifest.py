@@ -70,12 +70,9 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         self.path(src="../../etc/message.xml", dst="app_settings/message.xml")
         
         # <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
-        with self.prefix(src="app_settings"):
-            # ... and the included spell checking dictionaries
-            pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
-            with self.prefix(src=pkgdir,dst=""):
-                self.path("dictionaries")
-                self.path("ca-bundle.crt")
+        pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
+        with self.prefix(src=pkgdir, dst="app_settings"):
+            self.path("dictionaries")
         # </FS:LO>
 
         if self.is_packaging_viewer():
@@ -105,7 +102,6 @@ class ViewerManifest(LLManifest,FSViewerManifest):
 #                pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
 #                with self.prefix(src=pkgdir,dst=""):
 #                    self.path("dictionaries")
-#                    self.path("ca-bundle.crt")
                 # </FS:LO>
 
                 # include the entire beams directory
@@ -685,7 +681,8 @@ class WindowsManifest(ViewerManifest):
 
         self.path(src="licenses-win32.txt", dst="licenses.txt")
         self.path("featuretable.txt")
-        self.path("ca-bundle.crt")
+        with self.prefix(src=pkgdir,dst=""):
+            self.path("ca-bundle.crt")
         self.path("VivoxAUP.txt")
 
         # Media plugins - CEF
@@ -1171,7 +1168,9 @@ class DarwinManifest(ViewerManifest):
                         # self.path("licenses-mac.txt", dst="licenses.txt")
                         # self.path("featuretable_mac.txt")
                         # self.path("SecondLife.nib")
-                        # self.path("ca-bundle.crt")
+
+                        # with self.prefix(src=pkgdir,dst=""):
+                            # self.path("ca-bundle.crt")
 
                         # self.path("SecondLife.nib")
 
@@ -1418,7 +1417,9 @@ class DarwinManifest(ViewerManifest):
                 self.path("licenses-mac.txt", dst="licenses.txt")
                 self.path("featuretable_mac.txt")
                 self.path("VivoxAUP.txt")
-                self.path("ca-bundle.crt")
+
+                with self.prefix(src=pkgdir,dst=""):
+                    self.path("ca-bundle.crt")
 
                 icon_path = self.icon_path()
                 with self.prefix(src=icon_path, dst="") :
@@ -2033,7 +2034,9 @@ class LinuxManifest(ViewerManifest):
             print "Skipping llcommon.so (assuming llcommon was linked statically)"
 
         self.path("featuretable_linux.txt")
-        self.path("ca-bundle.crt")
+
+        with self.prefix(src=pkgdir,dst=""):
+            self.path("ca-bundle.crt")
 
         if self.is_packaging_viewer():
           with self.prefix("../packages/lib/release", dst="lib"):

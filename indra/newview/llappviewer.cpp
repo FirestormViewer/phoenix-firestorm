@@ -648,6 +648,7 @@ static void settings_to_globals()
 	LLSurface::setTextureSize(gSavedSettings.getU32("RegionTextureSize"));
 	
 	LLRender::sGLCoreProfile = gSavedSettings.getBOOL("RenderGLCoreProfile");
+	LLRender::sNsightDebugSupport = gSavedSettings.getBOOL("RenderNsightDebugSupport");
 	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
 	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
 	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO");
@@ -1848,7 +1849,11 @@ bool LLAppViewer::doFrame()
 		}
 
 		// <FS:Ansariel> Cut down wait on logout; Need to terminate voice here because we need gServicePump!
-		LLVoiceClient::getInstance()->terminate();
+		if (LLVoiceClient::instanceExists())
+		{
+			LLVoiceClient::getInstance()->terminate();
+		}
+		// </FS:Ansariel>
 
 		delete gServicePump;
 
@@ -1908,7 +1913,10 @@ bool LLAppViewer::cleanup()
 #endif
 
 	//dump scene loading monitor results
-	LLSceneMonitor::instance().dumpToFile(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "scene_monitor_results.csv"));
+	if (LLSceneMonitor::instanceExists())
+	{
+		LLSceneMonitor::instance().dumpToFile(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "scene_monitor_results.csv"));
+	}
 
 	// There used to be an 'if (LLFastTimerView::sAnalyzePerformance)' block
 	// here, completely redundant with the one that occurs later in this same
@@ -1951,8 +1959,12 @@ bool LLAppViewer::cleanup()
     LLPluginProcessParent::shutdown();
 
 	// <FS:Ansariel> Cut down wait on logout; Need to terminate voice earlier because we need gServicePump!
-	//LLVoiceClient::getInstance()->terminate();
-	
+	//if (LLVoiceClient::instanceExists())
+	//{
+	//	LLVoiceClient::getInstance()->terminate();
+	//}
+	// </FS:Ansariel>
+
 	disconnectViewer();
 
 	LL_INFOS() << "Viewer disconnected" << LL_ENDL;
@@ -2051,7 +2063,10 @@ bool LLAppViewer::cleanup()
 
 	// Note: this is where gLocalSpeakerMgr and gActiveSpeakerMgr used to be deleted.
 
-	LLWorldMap::getInstance()->reset(); // release any images
+	if (LLWorldMap::instanceExists())
+	{
+		LLWorldMap::getInstance()->reset(); // release any images
+	}
 
 	LLCalc::cleanUp();
 
@@ -2268,10 +2283,16 @@ bool LLAppViewer::cleanup()
 	LLURLHistory::saveFile("url_history.xml");
 
 	// save mute list. gMuteList used to also be deleted here too.
-	LLMuteList::getInstance()->cache(gAgent.getID());
+	if (gAgent.isInitialized() && LLMuteList::instanceExists())
+	{
+		LLMuteList::getInstance()->cache(gAgent.getID());
+	}
 
 	//save call log list
-	LLConversationLog::instance().cache();
+	if (LLConversationLog::instanceExists())
+	{
+		LLConversationLog::instance().cache();
+	}
 
 	if (mPurgeOnExit)
 	{
