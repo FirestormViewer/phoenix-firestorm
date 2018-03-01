@@ -5531,7 +5531,7 @@ BOOL LLViewerWindow::mousePointOnLandGlobal(const S32 x, const S32 y, LLVector3d
 // <FS:Ansariel> Threaded filepickers
 void do_save_image(LLImageFormatted* image, const std::string& snapshot_dir, const std::string& base_name, const std::string& extension, boost::function<void(bool)> callback)
 {
-	if (snapshot_dir.empty())
+	if (snapshot_dir.empty() || !LLFile::isdir(snapshot_dir))
 	{
 		if (callback)
 		{
@@ -5714,7 +5714,7 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 	//return image->save(filepath);
 
 	// Get a base file location if needed.
-	if (force_picker || !isSnapshotLocSet())
+	if (force_picker || !isSnapshotLocSet() || !LLFile::isdir(sSnapshotDir))
 	{
 		std::string proposed_name( sSnapshotBaseName );
 
