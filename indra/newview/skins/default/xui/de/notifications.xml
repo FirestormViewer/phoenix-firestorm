@@ -4834,17 +4834,21 @@ Möchten Sie diese Informationen übermitteln?
     </form>
   </notification>
 
-  <!-- Firestorm Phantom -->
+	<notification name="PhantomOn">
+		Phantom-Modus eingeschaltet.
+	</notification>
+	<notification name="PhantomOff">
+		Phantom-Modus ausgeschaltet.
+	</notification>
+	<notification label="Alle Einstellungen zurücksetzen" name="FirestormClearSettingsPrompt">
+		Ein Zurücksetzen aller Einstellungen kann bei Problemen hilfreich sein, allerdings müssen Sie anschließend jegliche Anpassungen erneut vornehmen.
 
-  <notification name="PhantomOn">
-Phantom-Modus eingeschaltet.
-  </notification>
-
-  <notification name="PhantomOff">
-Phantom-Modus ausgeschaltet.
-  </notification>
-
-<!-- Firestorm Phantom -->
+Sind Sie sicher, dass Sie alle Einstellungen zurücksetzen möchten?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="SettingsWillClear">
+		Einstellungen werden nach einem Neustart von [APP_NAME] zurückgesetzt.
+	</notification>
 
   <!-- ## Zi: Particle Editor -->
   <notification name="ParticleScriptFindFolderFailed">
