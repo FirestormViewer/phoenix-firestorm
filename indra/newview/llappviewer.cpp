@@ -936,22 +936,30 @@ bool LLAppViewer::init()
 		LLFile::rmdir(base_dir + "data");
 		
 		// Delete per-user files below
-		std::string per_user_dir_glob = base_dir + "*" + delem;
-		
-		LLFile::remove(per_user_dir_glob + "filters.xml");
-		LLFile::remove(per_user_dir_glob + "medialist.xml");
-		LLFile::remove(per_user_dir_glob + "plugin_cookies.xml");
-		LLFile::remove(per_user_dir_glob + "screen_last.bmp");
-		LLFile::remove(per_user_dir_glob + "search_history.xml");
-		LLFile::remove(per_user_dir_glob + "settings_friends_groups.xml");
-		LLFile::remove(per_user_dir_glob + "settings_per_account.xml");
-		LLFile::remove(per_user_dir_glob + "teleport_history.xml");
-		LLFile::remove(per_user_dir_glob + "texture_list_last.xml");
-		LLFile::remove(per_user_dir_glob + "toolbars.xml");
-		LLFile::remove(per_user_dir_glob + "typed_locations.xml");
-		LLFile::remove(per_user_dir_glob + "url_history.xml");
-		LLFile::remove(per_user_dir_glob + "volume_settings.xml");
-		LLFile::rmdir(per_user_dir_glob + "browser_profile");
+		LLDirIterator dir_it(base_dir, "*");
+		std::string dir_name;
+		while (dir_it.next(dir_name))
+		{
+			if (LLFile::isdir(base_dir + delem + dir_name))
+			{
+				std::string per_user_dir_glob = base_dir + delem + dir_name + delem;
+
+				LLFile::remove(per_user_dir_glob + "filters.xml");
+				LLFile::remove(per_user_dir_glob + "medialist.xml");
+				LLFile::remove(per_user_dir_glob + "plugin_cookies.xml");
+				LLFile::remove(per_user_dir_glob + "screen_last.bmp");
+				LLFile::remove(per_user_dir_glob + "search_history.xml");
+				LLFile::remove(per_user_dir_glob + "settings_friends_groups.xml");
+				LLFile::remove(per_user_dir_glob + "settings_per_account.xml");
+				LLFile::remove(per_user_dir_glob + "teleport_history.xml");
+				LLFile::remove(per_user_dir_glob + "texture_list_last.xml");
+				LLFile::remove(per_user_dir_glob + "toolbars.xml");
+				LLFile::remove(per_user_dir_glob + "typed_locations.xml");
+				LLFile::remove(per_user_dir_glob + "url_history.xml");
+				LLFile::remove(per_user_dir_glob + "volume_settings.xml");
+				LLFile::rmdir(per_user_dir_glob + "browser_profile");
+			}
+		}
 	}
 // </FS>
 	init_default_trans_args();
