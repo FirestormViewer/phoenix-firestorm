@@ -3120,8 +3120,8 @@ class LLObjectTexRefresh : public view_listener_t
 					LLViewerFetchedTexture* tx = LLViewerTextureManager::getFetchedTexture(sculpt_uuid);
 					if (tx)
 					{
-						S32 num_volumes = tx->getNumVolumes();
-						const LLViewerTexture::ll_volume_list_t* pVolumeList = tx->getVolumeList();
+						S32 num_volumes = tx->getNumVolumes(LLRender::SCULPT_TEX);
+						const LLViewerTexture::ll_volume_list_t* pVolumeList = tx->getVolumeList(LLRender::SCULPT_TEX);
 
 						destroy_texture(sculpt_uuid);
 
