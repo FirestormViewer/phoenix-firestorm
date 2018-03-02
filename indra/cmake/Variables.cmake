@@ -12,10 +12,7 @@
 # Switches set here and in 00-Common.cmake must agree with
 # https://bitbucket.org/lindenlab/viewer-build-variables/src/tip/variables
 # Reading $LL_BUILD is an attempt to directly use those switches.
-# <FS:Ansariel> This causes CMP0054 warning
-#if ("$ENV{LL_BUILD}" STREQUAL "")
-if ($ENV{LL_BUILD} STREQUAL "")
-# </FS:Ansariel>
+if ("$ENV{LL_BUILD}" STREQUAL "")
   message(FATAL_ERROR "Environment variable LL_BUILD must be set")
 endif ()
 

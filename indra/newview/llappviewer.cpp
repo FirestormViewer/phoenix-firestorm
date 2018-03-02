@@ -936,22 +936,30 @@ bool LLAppViewer::init()
 		LLFile::rmdir(base_dir + "data");
 		
 		// Delete per-user files below
-		std::string per_user_dir_glob = base_dir + "*" + delem;
-		
-		LLFile::remove(per_user_dir_glob + "filters.xml");
-		LLFile::remove(per_user_dir_glob + "medialist.xml");
-		LLFile::remove(per_user_dir_glob + "plugin_cookies.xml");
-		LLFile::remove(per_user_dir_glob + "screen_last.bmp");
-		LLFile::remove(per_user_dir_glob + "search_history.xml");
-		LLFile::remove(per_user_dir_glob + "settings_friends_groups.xml");
-		LLFile::remove(per_user_dir_glob + "settings_per_account.xml");
-		LLFile::remove(per_user_dir_glob + "teleport_history.xml");
-		LLFile::remove(per_user_dir_glob + "texture_list_last.xml");
-		LLFile::remove(per_user_dir_glob + "toolbars.xml");
-		LLFile::remove(per_user_dir_glob + "typed_locations.xml");
-		LLFile::remove(per_user_dir_glob + "url_history.xml");
-		LLFile::remove(per_user_dir_glob + "volume_settings.xml");
-		LLFile::rmdir(per_user_dir_glob + "browser_profile");
+		LLDirIterator dir_it(base_dir, "*");
+		std::string dir_name;
+		while (dir_it.next(dir_name))
+		{
+			if (LLFile::isdir(base_dir + delem + dir_name))
+			{
+				std::string per_user_dir_glob = base_dir + delem + dir_name + delem;
+
+				LLFile::remove(per_user_dir_glob + "filters.xml");
+				LLFile::remove(per_user_dir_glob + "medialist.xml");
+				LLFile::remove(per_user_dir_glob + "plugin_cookies.xml");
+				LLFile::remove(per_user_dir_glob + "screen_last.bmp");
+				LLFile::remove(per_user_dir_glob + "search_history.xml");
+				LLFile::remove(per_user_dir_glob + "settings_friends_groups.xml");
+				LLFile::remove(per_user_dir_glob + "settings_per_account.xml");
+				LLFile::remove(per_user_dir_glob + "teleport_history.xml");
+				LLFile::remove(per_user_dir_glob + "texture_list_last.xml");
+				LLFile::remove(per_user_dir_glob + "toolbars.xml");
+				LLFile::remove(per_user_dir_glob + "typed_locations.xml");
+				LLFile::remove(per_user_dir_glob + "url_history.xml");
+				LLFile::remove(per_user_dir_glob + "volume_settings.xml");
+				LLFile::rmdir(per_user_dir_glob + "browser_profile");
+			}
+		}
 	}
 // </FS>
 	init_default_trans_args();
@@ -1438,8 +1446,10 @@ bool LLAppViewer::init()
 	joystick->setNeedsReset(true);
 	/*----------------------------------------------------------------------*/
 
-	gSavedSettings.getControl("FramePerSecondLimit")->getSignal()->connect(boost::bind(&LLAppViewer::onChangeFrameLimit, this, _2));
-	onChangeFrameLimit(gSavedSettings.getLLSD("FramePerSecondLimit"));
+	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
+	//gSavedSettings.getControl("FramePerSecondLimit")->getSignal()->connect(boost::bind(&LLAppViewer::onChangeFrameLimit, this, _2));
+	//onChangeFrameLimit(gSavedSettings.getLLSD("FramePerSecondLimit"));
+	// </FS:Ansariel>
 
 	return true;
 }
@@ -1569,6 +1579,8 @@ bool LLAppViewer::doFrame()
 	LLTimer periodicRenderingTimer;
 	BOOL restore_rendering_masks = FALSE;
 	// </FS:Ansariel> MaxFPS Viewer-Chui merge error
+	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
+	LLTimer frameTimer;
 
 	//LLPrivateMemoryPoolTester::getInstance()->run(false) ;
 	//LLPrivateMemoryPoolTester::getInstance()->run(true) ;
@@ -1702,24 +1714,22 @@ bool LLAppViewer::doFrame()
 				pingMainloopTimeout("Main:Display");
 				gGLActive = TRUE;
 
-				static U64 last_call = 0;
-				// <FS:Ansariel> MaxFPS improvement
+				// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
+				//static U64 last_call = 0;
 				//if (!gTeleportDisplay)
-				static LLCachedControl<bool> fsLimitFramerate(gSavedSettings, "FSLimitFramerate");
-				if (fsLimitFramerate && !gTeleportDisplay)
+				//{
+				//	// Frame/draw throttling
+				//	U64 elapsed_time = LLTimer::getTotalTime() - last_call;
+				//	if (elapsed_time < mMinMicroSecPerFrame)
+				//	{
+				//		LL_RECORD_BLOCK_TIME(FTM_SLEEP);
+				//		// llclamp for when time function gets funky
+				//		U64 sleep_time = llclamp(mMinMicroSecPerFrame - elapsed_time, (U64)1, (U64)1e6);
+				//		micro_sleep(sleep_time, 0);
+				//	}
+				//}
+				//last_call = LLTimer::getTotalTime();
 				// </FS:Ansariel>
-				{
-					// Frame/draw throttling
-					U64 elapsed_time = LLTimer::getTotalTime() - last_call;
-					if (elapsed_time < mMinMicroSecPerFrame)
-					{
-						LL_RECORD_BLOCK_TIME(FTM_SLEEP);
-						// llclamp for when time function gets funky
-						U64 sleep_time = llclamp(mMinMicroSecPerFrame - elapsed_time, (U64)1, (U64)1e6);
-						micro_sleep(sleep_time, 0);
-					}
-				}
-				last_call = LLTimer::getTotalTime();
 
 				display();
 
@@ -1827,6 +1837,23 @@ bool LLAppViewer::doFrame()
 					tex_fetch_debugger_instance->idle() ;				
 				}
 			}
+
+			// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
+			static LLCachedControl<U32> max_fps(gSavedSettings, "FramePerSecondLimit");
+			static LLCachedControl<bool> fsLimitFramerate(gSavedSettings, "FSLimitFramerate");
+			if (fsLimitFramerate && LLStartUp::getStartupState() == STATE_STARTED && !gTeleportDisplay && !logoutRequestSent() && max_fps > F_APPROXIMATELY_ZERO)
+			{
+				// Sleep a while to limit frame rate.
+				F32 min_frame_time = 1.f / (F32)max_fps;
+				S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
+				if (milliseconds_to_sleep > 0)
+				{
+					LL_RECORD_BLOCK_TIME(FTM_SLEEP);
+					ms_sleep(milliseconds_to_sleep);
+				}
+			}
+			frameTimer.reset();
+			// </FS:Ansariel>
 
 			resumeMainloopTimeout();
 

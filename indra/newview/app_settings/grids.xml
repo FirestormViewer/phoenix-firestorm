@@ -408,42 +408,19 @@
         </map>
     <key>login.aurorascape.com:8002</key>
         <map>
-		<key>DEPRECATED</key>
+        <key>DEPRECATED</key>
             <string>TRUE</string>
         <key>name</key>
             <string>login.aurorascape.com:8002</string>
         </map>
     <key>login.avination.com/</key>
         <map>
-        <key>LastModified</key>
-            <date>2011-08-28T12:00:00.00Z</date>
-        <key>about</key>
-            <string>https://www.avination.com/</string>
-        <key>grid_login_id</key>
-            <string>login.avination.com/</string>
-        <key>gridname</key>
-            <string>Avination</string>
-        <key>gridnick</key>
-            <string>avination</string>
-        <key>helperuri</key>
-            <string>https://secure.3dhosting.de/</string>
-        <key>login_identifier_types</key>
-            <array>
-                <string>agent</string>
-                <string>account</string>
-            </array>
-        <key>loginpage</key>
-            <string>https://www.avination.com/welcome.php</string>
-        <key>loginuri</key>
-            <array>
-                <string>https://login.avination.com/</string>
-            </array>
+        <key>DEPRECATED</key>
+            <string>TRUE</string>
         <key>name</key>
             <string>login.avination.com/</string>
-        <key>register</key>
-            <string>https://www.avination.com/join.html</string>
-        <key>slurl_base</key>
-            <string>https://login.avination.com/</string>
+        <key>LastModified</key>
+            <date>2018-02-28T15:36:26.43Z</date>
         </map>
     <key>login.francogrid.org:80</key>
         <map>
