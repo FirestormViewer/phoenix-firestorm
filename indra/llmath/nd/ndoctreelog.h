@@ -45,10 +45,4 @@ namespace nd
 #define ND_OCTREE_LOG { if( nd::octree::debug::gOctreeDebug ){ nd::octree::debug::checkOctreeLog(); std::stringstream strm; strm << std::setprecision(10)
 #define ND_OCTREE_LOG_END std::endl; nd::octree::debug::doOctreeLog( strm.str() ); } }
 
-inline std::ostream& operator<<( std::ostream &strm, const LLVector4a &vc )
-{
-	strm << "{" << vc[0] << "/" << vc[1] << "/" << vc[2] << "}";
-	return strm;
-}
-
 #endif
