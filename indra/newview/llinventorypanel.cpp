@@ -326,11 +326,14 @@ void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
     }
     
 	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
-	if (!gSavedSettings.getBOOL("FSShowInboxFolder"))
+	if (getName() != "Worn Items")
 	{
-		getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
+		if (!gSavedSettings.getBOOL("FSShowInboxFolder"))
+		{
+			getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
+		}
+		gSavedSettings.getControl("FSShowInboxFolder")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateShowInboxFolder, this, _2));
 	}
-	gSavedSettings.getControl("FSShowInboxFolder")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateShowInboxFolder, this, _2));
 	// </FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 
 	// set the filter for the empty folder if the debug setting is on
@@ -1622,56 +1625,43 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 }
 
 //static
-void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id, BOOL main_panel)
+void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id, BOOL main_panel, BOOL take_keyboard_focus, BOOL reset_filter)
 {
 	LLInventoryPanel *active_panel;
+	bool in_inbox = (gInventory.isObjectDescendentOf(obj_id, gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX)));
+	bool show_inbox = gSavedSettings.getBOOL("FSShowInboxFolder"); // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+
 	// <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
-	//if (main_panel)
+	//if (main_panel && !in_inbox)
 	//{
 	//	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory")->selectAllItemsPanel();
 	//}
 	// </FS:Ansariel>
+
 	active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
 
 	if (active_panel)
 	{
 		LL_DEBUGS("Messaging") << "Highlighting" << obj_id  << LL_ENDL;
-		
-		LLViewerInventoryItem * item = gInventory.getItem(obj_id);
-		LLViewerInventoryCategory * cat = gInventory.getCategory(obj_id);
-		
-		bool in_inbox = false;
-		
-		LLViewerInventoryCategory * parent_cat = NULL;
-		
-		if (item)
+
+		if (reset_filter)
 		{
-			parent_cat = gInventory.getCategory(item->getParentUUID());
+			reset_inventory_filter();
 		}
-		else if (cat)
-		{
-			parent_cat = gInventory.getCategory(cat->getParentUUID());
-		}
-		
-		if (parent_cat)
-		{
-			in_inbox = (LLFolderType::FT_INBOX == parent_cat->getPreferredType());
-		}
-		
-		if (in_inbox)
+
+		// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+		//if (in_inbox)
+		if (in_inbox && !show_inbox)
+		// </FS:Ansariel>
 		{
 			LLSidepanelInventory * sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
 			LLInventoryPanel * inventory_panel = NULL;
-			
-			if (in_inbox)
-			{
-				sidepanel_inventory->openInbox();
-				inventory_panel = sidepanel_inventory->getInboxPanel();
-			}
+			sidepanel_inventory->openInbox();
+			inventory_panel = sidepanel_inventory->getInboxPanel();
 
 			if (inventory_panel)
 			{
-				inventory_panel->setSelection(obj_id, TAKE_FOCUS_YES);
+				inventory_panel->setSelection(obj_id, take_keyboard_focus);
 			}
 		}
 		else
@@ -1689,7 +1679,7 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 			{
 				floater_inventory->setFocus(TRUE);
 			}
-			active_panel->setSelection(obj_id, TAKE_FOCUS_YES);
+			active_panel->setSelection(obj_id, take_keyboard_focus);
 		}
 	}
 }

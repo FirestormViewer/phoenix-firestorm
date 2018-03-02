@@ -51,11 +51,15 @@ LLPanelMarketplaceInbox::LLPanelMarketplaceInbox(const Params& p)
 	, mFreshCountCtrl(NULL)
 	, mInboxButton(NULL)
 	, mInventoryPanel(NULL)
+	, mSavedFolderState(NULL)
 {
+	mSavedFolderState = new LLSaveFolderState();
+	mSavedFolderState->setApply(FALSE);
 }
 
 LLPanelMarketplaceInbox::~LLPanelMarketplaceInbox()
 {
+	delete mSavedFolderState;
 }
 
 // virtual
@@ -102,6 +106,7 @@ LLInventoryPanel * LLPanelMarketplaceInbox::setupInventoryPanel()
 	// Set the sort order newest to oldest
 	mInventoryPanel->getFolderViewModel()->setSorter(LLInventoryFilter::SO_DATE);
 	mInventoryPanel->getFilter().markDefault();
+	mInventoryPanel->getRootFolder()->applyFunctorRecursively(*mSavedFolderState);
 
 	// Set selection callback for proper update of inventory status buttons
 	// <FS:Ansariel> FIRE-21948: Show element count in Received Items folder
@@ -200,6 +205,38 @@ U32 LLPanelMarketplaceInbox::getTotalItemCount() const
 	}
 	
 	return item_count;
+}
+
+void LLPanelMarketplaceInbox::onClearSearch()
+{
+	if (mInventoryPanel)
+	{
+		mInventoryPanel->setFilterSubString(LLStringUtil::null);
+		mSavedFolderState->setApply(TRUE);
+		mInventoryPanel->getRootFolder()->applyFunctorRecursively(*mSavedFolderState);
+		LLOpenFoldersWithSelection opener;
+		mInventoryPanel->getRootFolder()->applyFunctorRecursively(opener);
+		mInventoryPanel->getRootFolder()->scrollToShowSelection();
+	}
+}
+
+void LLPanelMarketplaceInbox::onFilterEdit(const std::string& search_string)
+{
+	if (mInventoryPanel)
+	{
+
+		if (search_string == "")
+		{
+			onClearSearch();
+		}
+
+		if (!mInventoryPanel->getFilter().isNotDefault())
+		{
+			mSavedFolderState->setApply(FALSE);
+			mInventoryPanel->getRootFolder()->applyFunctorRecursively(*mSavedFolderState);
+		}
+		mInventoryPanel->setFilterSubString(search_string);
+	}
 }
 
 std::string LLPanelMarketplaceInbox::getBadgeString() const

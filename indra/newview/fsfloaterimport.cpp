@@ -241,7 +241,7 @@ void FSFloaterImport::loadFile()
 		filestream.seekg(0, std::ios::end);
 		S32 file_size = (S32)filestream.tellg();
 		filestream.seekg(0, std::ios::beg);
-		if (unzip_llsd(mManifest, filestream, file_size))
+		if (LLUZipHelper::unzip_llsd(mManifest, filestream, file_size) == LLUZipHelper::ZR_OK)
 		{
 			file_loaded = true;
 		}
