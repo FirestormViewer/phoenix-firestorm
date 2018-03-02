@@ -1926,11 +1926,10 @@ BOOL LLWorldMapView::handleDoubleClick( S32 x, S32 y, MASK mask )
 		case MAP_ITEM_LAND_FOR_SALE:
 		case MAP_ITEM_LAND_FOR_SALE_ADULT:
 			{
+				LLVector3d pos_global = viewPosToGlobal(x, y);
+				LLSimInfo* info = LLWorldMap::getInstance()->simInfoFromPosGlobal(pos_global);
 				LLFloaterReg::hideInstance("world_map");
-				// <FS:Ansariel> FIRE-6904: Double Clicking Land Sales Price Tags in WorldMap causes Search Error
-				//LLFloaterReg::showInstance("search", LLSD().with("category", "destinations").with("query", id));
-				LLUrlAction::executeSLURL(LLSLURL("parcel", id, "about").getSLURLString());
-				// </FS:Ansariel>
+				LLFloaterReg::showInstance("search", LLSD().with("category", "land").with("query", info->getName()));
 				break;
 			}
 		case MAP_ITEM_CLASSIFIED:

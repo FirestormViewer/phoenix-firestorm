@@ -1279,7 +1279,12 @@ bool LLMeshRepoThread::fetchMeshSkinInfo(const LLUUID& mesh_id)
 				LLMeshRepository::sCacheBytesRead += size;
 				++LLMeshRepository::sCacheReads;
 				file.seek(offset);
-				U8* buffer = new U8[size];
+				U8* buffer = new(std::nothrow) U8[size];
+				if (!buffer)
+				{
+					LL_WARNS(LOG_MESH) << "Failed to allocate memory for skin info" << LL_ENDL;
+					return false;
+				}
 				file.read(buffer, size);
 
 				//make sure buffer isn't all 0's by checking the first 1KB (reserved block but not written)
@@ -1378,7 +1383,12 @@ bool LLMeshRepoThread::fetchMeshDecomposition(const LLUUID& mesh_id)
 				++LLMeshRepository::sCacheReads;
 
 				file.seek(offset);
-				U8* buffer = new U8[size];
+				U8* buffer = new(std::nothrow) U8[size];
+				if (!buffer)
+				{
+					LL_WARNS(LOG_MESH) << "Failed to allocate memory for mesh decomposition" << LL_ENDL;
+					return false;
+				}
 				file.read(buffer, size);
 
 				//make sure buffer isn't all 0's by checking the first 1KB (reserved block but not written)
@@ -1476,7 +1486,12 @@ bool LLMeshRepoThread::fetchMeshPhysicsShape(const LLUUID& mesh_id)
 				LLMeshRepository::sCacheBytesRead += size;
 				++LLMeshRepository::sCacheReads;
 				file.seek(offset);
-				U8* buffer = new U8[size];
+				U8* buffer = new(std::nothrow) U8[size];
+				if (!buffer)
+				{
+					LL_WARNS(LOG_MESH) << "Failed to allocate memory for physics shape" << LL_ENDL;
+					return false;
+				}
 				file.read(buffer, size);
 
 				//make sure buffer isn't all 0's by checking the first 1KB (reserved block but not written)
@@ -1855,9 +1870,11 @@ bool LLMeshRepoThread::skinInfoReceived(const LLUUID& mesh_id, U8* data, S32 dat
 
 		std::istringstream stream(res_str);
 
-		if (!unzip_llsd(skin, stream, data_size))
+		U32 uzip_result = LLUZipHelper::unzip_llsd(skin, stream, data_size);
+		if (uzip_result != LLUZipHelper::ZR_OK)
 		{
 			LL_WARNS(LOG_MESH) << "Mesh skin info parse error.  Not a valid mesh asset!  ID:  " << mesh_id
+							   << " uzip result" << uzip_result
 							   << LL_ENDL;
 			return false;
 		}
@@ -1887,9 +1904,11 @@ bool LLMeshRepoThread::decompositionReceived(const LLUUID& mesh_id, U8* data, S3
 
 		std::istringstream stream(res_str);
 
-		if (!unzip_llsd(decomp, stream, data_size))
+		U32 uzip_result = LLUZipHelper::unzip_llsd(decomp, stream, data_size);
+		if (uzip_result != LLUZipHelper::ZR_OK)
 		{
 			LL_WARNS(LOG_MESH) << "Mesh decomposition parse error.  Not a valid mesh asset!  ID:  " << mesh_id
+							   << " uzip result: " << uzip_result
 							   << LL_ENDL;
 			return false;
 		}
@@ -5112,26 +5131,32 @@ void on_new_single_inventory_upload_complete(
         gInventory.notifyObservers();
         success = true;
 
+        LLFocusableElement* focus = gFocusMgr.getKeyboardFocus();
+
         // Show the preview panel for textures and sounds to let
         // user know that the image (or snapshot) arrived intact.
-        LLInventoryPanel* panel = LLInventoryPanel::getActiveInventoryPanel();
+        LLInventoryPanel* panel = LLInventoryPanel::getActiveInventoryPanel(FALSE);
         if (panel)
         {
-            LLFocusableElement* focus = gFocusMgr.getKeyboardFocus();
 
             panel->setSelection(
                 server_response["new_inventory_item"].asUUID(),
                 TAKE_FOCUS_NO);
-
-            // restore keyboard focus
-            gFocusMgr.setKeyboardFocus(focus);
         }
+        else
+        {
+            LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, server_response["new_inventory_item"].asUUID(), TRUE, TAKE_FOCUS_NO, TRUE);
+        }
+
+        // restore keyboard focus
+        gFocusMgr.setKeyboardFocus(focus);
     }
     else
     {
         LL_WARNS() << "Can't find a folder to put it in" << LL_ENDL;
     }
 
+    // Todo: This is mesh repository code, is following code really needed?
     // remove the "Uploading..." message
     LLUploadDialog::modalUploadFinished();
 

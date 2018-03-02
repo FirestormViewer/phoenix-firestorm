@@ -2302,8 +2302,9 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 		//if replacing - make sure bridge stays.
 		if (!append && FSLSLBridge::instance().getBridge())
 		{
-			LL_INFOS("FSLSLBridge") << "reinserting bridge at outfit replace" << LL_ENDL;
+			LL_INFOS("FSLSLBridge") << "Reinserting bridge at outfit replace" << LL_ENDL;
 			obj_items.insert(obj_items.end(), FSLSLBridge::instance().getBridge());
+			LL_INFOS("FSLSLBridge") << "Bridge reinserted" << LL_ENDL;
 		}
 	}
 	// </FS:TT>

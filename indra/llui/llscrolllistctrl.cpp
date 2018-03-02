@@ -2196,6 +2196,10 @@ BOOL LLScrollListCtrl::handleClick(S32 x, S32 y, MASK mask)
 					LLScrollListCell* cellp = item->getColumn(column_index);
 					cellp->setValue(item_value);
 					cellp->onCommit();
+					if (mLastSelected == NULL)
+					{
+						break;
+					}
 				}
 			}
 			//FIXME: find a better way to signal cell changes

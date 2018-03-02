@@ -29,7 +29,6 @@
 
 #include "llpanel.h"
 #include "llfolderview.h"
-
 class LLButton;
 class LLInventoryPanel;
 class LLUICtrl;
@@ -57,6 +56,9 @@ public:
 	
 	LLInventoryPanel * setupInventoryPanel();
 
+	void onClearSearch();
+	void onFilterEdit(const std::string& search_string);
+
 	U32 getFreshItemCount() const;
 	U32 getTotalItemCount() const;
 
@@ -75,6 +77,7 @@ private:
 	LLUICtrl *			mFreshCountCtrl;
 	LLButton *			mInboxButton;
 	LLInventoryPanel *	mInventoryPanel;
+	LLSaveFolderState*			mSavedFolderState;
 };
 
 
