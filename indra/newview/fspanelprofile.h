@@ -582,9 +582,13 @@ public:
 
 protected:
 	virtual void enableControls();
+	void onDescriptionFocusReceived();
 
-	LLUICtrl*		mDescriptionEdit;
+	LLTextEditor*	mDescriptionEdit;
 	LLTextureCtrl*	mPicture;
+
+	bool			mIsEditing;
+	std::string		mCurrentDescription;
 };
 
 /**

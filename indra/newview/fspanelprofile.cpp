@@ -1855,7 +1855,8 @@ bool FSPanelProfilePicks::canDeletePick()
 //////////////////////////////////////////////////////////////////////////
 
 FSPanelProfileFirstLife::FSPanelProfileFirstLife()
- : FSPanelProfileTab()
+ : FSPanelProfileTab(),
+ mIsEditing(false)
 {
 }
 
@@ -1865,8 +1866,10 @@ FSPanelProfileFirstLife::~FSPanelProfileFirstLife()
 
 BOOL FSPanelProfileFirstLife::postBuild()
 {
-	mDescriptionEdit = getChild<LLUICtrl>("fl_description_edit");
+	mDescriptionEdit = getChild<LLTextEditor>("fl_description_edit");
 	mPicture = getChild<LLTextureCtrl>("real_world_pic");
+
+	mDescriptionEdit->setFocusReceivedCallback(boost::bind(&FSPanelProfileFirstLife::onDescriptionFocusReceived, this));
 
 	return TRUE;
 }
@@ -1878,6 +1881,17 @@ void FSPanelProfileFirstLife::onOpen(const LLSD& key)
 	resetData();
 }
 
+
+void FSPanelProfileFirstLife::onDescriptionFocusReceived()
+{
+	if (!mIsEditing && getSelfProfile())
+	{
+		mIsEditing = true;
+		mDescriptionEdit->setParseHTML(false);
+		mDescriptionEdit->setText(mCurrentDescription);
+	}
+}
+
 void FSPanelProfileFirstLife::processProperties(void* data, EAvatarProcessorType type)
 {
 	if (APT_PROPERTIES == type)
@@ -1885,7 +1899,8 @@ void FSPanelProfileFirstLife::processProperties(void* data, EAvatarProcessorType
 		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
 		if (avatar_data && getAvatarId() == avatar_data->avatar_id)
 		{
-			mDescriptionEdit->setValue(avatar_data->fl_about_text);
+			mCurrentDescription = avatar_data->fl_about_text;
+			mDescriptionEdit->setValue(mCurrentDescription);
 			mPicture->setValue(avatar_data->fl_image_id);
 			enableControls();
 		}
