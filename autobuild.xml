@@ -948,11 +948,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6324120be383af3564f2b46b07f1b765</string>
+              <string>9f69c9fa0932d54d17c159fc33faea87</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.03-darwin-.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.04-darwin-180681405.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -4246,7 +4246,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>--package</string>
                   <string>--platform darwin</string>
                   <string>--btype RelWithDebInfo</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                 </array>
               </map>
@@ -4257,7 +4257,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>--platform darwin</string>
                   <string>--package</string>
                   <string>--btype RelWithDebInfo</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                 </array>
               </map>
@@ -4302,7 +4302,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>--build</string>
                   <string>--platform darwin</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                 </array>
               </map>
@@ -4312,7 +4312,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>--platform darwin</string>
                   <string>--kdu</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                 </array>
               </map>
               <key>name</key>
