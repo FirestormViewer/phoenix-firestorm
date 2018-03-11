@@ -85,7 +85,7 @@ public:
 
 	/*virtual*/ ~FSPanelProfileTab();
 
-	void setEmbedded(BOOL embedded) { mEmbedded = embedded; }
+	void setEmbedded(bool embedded) { mEmbedded = embedded; }
 
 protected:
 
@@ -93,28 +93,28 @@ protected:
 
 	virtual void enableControls();
 
-	// mLoading: FALSE: Initial state, can request
-	//           TRUE:  Data requested, skip duplicate requests (happens due to LLUI's habit of repeated callbacks)
-	// mLoaded:  FALSE: Initial state, show loading indicator
-	//           TRUE:  Data recieved, which comes in a single message, hide indicator
+	// mLoading: false: Initial state, can request
+	//           true:  Data requested, skip duplicate requests (happens due to LLUI's habit of repeated callbacks)
+	// mLoaded:  false: Initial state, show loading indicator
+	//           true:  Data recieved, which comes in a single message, hide indicator
 	bool getIsLoading() { return mLoading; }
-	void setIsLoading() { mLoading = TRUE; }
+	void setIsLoading() { mLoading = true; }
 	bool getIsLoaded() { return mLoaded; }
-	void resetLoading() { mLoading = FALSE; mLoaded = FALSE; }
+	void resetLoading() { mLoading = false; mLoaded = false; }
 	
-	const BOOL getEmbedded() const { return mEmbedded; }
+	const bool getEmbedded() const { return mEmbedded; }
 	
-	const BOOL getSelfProfile() const { return mSelfProfile; }
+	const bool getSelfProfile() const { return mSelfProfile; }
 
 	void setApplyProgress(bool started);
 
 private:
 
-	LLUUID  mAvatarId;
-	BOOL    mLoading;
-	BOOL    mLoaded;
-	BOOL	mEmbedded;
-	BOOL	mSelfProfile;
+	LLUUID	mAvatarId;
+	bool	mLoading;
+	bool	mLoaded;
+	bool	mEmbedded;
+	bool	mSelfProfile;
 };
 
 
@@ -248,11 +248,11 @@ private:
 	void onAvatarNameCacheSetName(const LLUUID& id, const LLAvatarName& av_name);
 
 private:
-	typedef std::map<std::string,LLUUID>    group_map_t;
-	group_map_t             mGroups;
-	void                    openGroupProfile();
+	typedef std::map<std::string, LLUUID> group_map_t;
+	group_map_t			mGroups;
+	void				openGroupProfile();
 
-	LLTextBox*          mStatusText;
+	LLTextBox*			mStatusText;
 	LLGroupList*		mGroupList;
 	LLCheckBoxCtrl*		mShowInSearchCheckbox;
 	LLTextureCtrl*		mSecondLifePic;
@@ -268,7 +268,7 @@ private:
 	LLButton*			mIMButton;
 	LLMenuButton*		mOverflowButton;
 
-	bool                mVoiceStatus;
+	bool				mVoiceStatus;
 
 	boost::signals2::connection mRlvBehaviorCallbackConnection;
 	void updateRlvRestrictions(ERlvBehaviour behavior);
@@ -305,12 +305,6 @@ public:
 	/*virtual*/ void updateData();
 
 	/*virtual*/ void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);
-
-	// void load(std::string url);
-	// static void onURLKeystroke(LLLineEditor* editor, void* data);
-	// static void onCommitLoad(LLUICtrl* ctrl, void* data);
-	// static void onCommitURL(LLUICtrl* ctrl, void* data);
-	// static void onClickWebProfileHelp(void *);
 
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
@@ -359,8 +353,8 @@ protected:
 	virtual void enableControls();
 
 private:
-	LLCheckBoxCtrl *mWantChecks[8];
-	LLCheckBoxCtrl *mSkillChecks[6];
+	LLCheckBoxCtrl*	mWantChecks[8];
+	LLCheckBoxCtrl*	mSkillChecks[6];
 	LLLineEditor*	mWantToEditor;
 	LLLineEditor*	mSkillsEditor;
 	LLLineEditor*	mLanguagesEditor;
@@ -499,14 +493,14 @@ protected:
 	LLButton*			mSetCurrentLocationButton;
 	LLButton*			mSaveButton;
 
-	LLVector3d mPosGlobal;
-	LLUUID mParcelId;
-	LLUUID mPickId;
-	LLUUID mRequestedId;
+	LLVector3d			mPosGlobal;
+	LLUUID				mParcelId;
+	LLUUID				mPickId;
+	LLUUID				mRequestedId;
 
-	bool mLocationChanged;
-	bool mNewPick;
-	bool mIsEditing;
+	bool				mLocationChanged;
+	bool				mNewPick;
+	bool				mIsEditing;
 
 	std::string mCurrentPickDescription;
 
@@ -630,8 +624,7 @@ protected:
 	 */
 	void fillRightsData();
 
-	void rightsConfirmationCallback(const LLSD& notification,
-			const LLSD& response, S32 rights);
+	void rightsConfirmationCallback(const LLSD& notification, const LLSD& response, S32 rights);
 	void confirmModifyRights(bool grant, S32 rights);
 	void onCommitRights();
 	void onCommitNotes();
@@ -680,6 +673,8 @@ private:
 	FSPanelProfileFirstLife*	mPanelFirstlife;
 	FSPanelAvatarNotes*			mPanelNotes;
 	LLTabContainer*				mTabContainer;
+
+	boost::signals2::connection	mAvatarNameCacheConnection;
 };
 
 #endif // FS_PANELPROFILE_H
