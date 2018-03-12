@@ -2020,9 +2020,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>adeb9db4d4435a65c44a72f981a18b33</string>
+              <string>7da700b9ca0d05aff5e83c79505827b3</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.9.1-windows-201703182143-r61.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.3-windows-180702336.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2032,9 +2032,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>adeb9db4d4435a65c44a72f981a18b33</string>
+              <string>7da700b9ca0d05aff5e83c79505827b3</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.9.1-windows-201703182143-r61.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.3-windows-180702336.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
