@@ -364,6 +364,9 @@ LLViewerInventoryCategory* LLInventoryModel::getCategory(const LLUUID& id) const
 
 bool LLInventoryModel::isCategoryHidden(const LLUUID& id) const
 {
+	// <FS:Ansariel> Show inbox folder depending on FSShowInboxFolder setting
+	static LLCachedControl<bool> fsShowInboxFolder(gSavedSettings, "FSShowInboxFolder");
+
 	bool res = false;
 	const LLViewerInventoryCategory* category = getCategory(id);
 	if (category)
@@ -373,8 +376,7 @@ bool LLInventoryModel::isCategoryHidden(const LLUUID& id) const
 		{
 			case LLFolderType::FT_INBOX:
 				// <FS:Ansariel> Show inbox folder depending on FSShowInboxFolder setting
-				static LLCachedControl<bool> fsShowInboxFolder(gSavedSettings, "FSShowInboxFolder");
-				res = !fsShowIndoxFolder;
+				res = !fsShowInboxFolder;
 				break;
 				// </FS:Ansariel>
 			case LLFolderType::FT_OUTBOX:

@@ -259,6 +259,7 @@ void LLFloaterReporter::onIdle(void* user_data)
 			//floater_reporter->takeNewSnapshot();
 			floater_reporter->takeNewSnapshot(false);
 			// </FS:Ansariel>
+		}
 	}
 }
 
