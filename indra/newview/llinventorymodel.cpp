@@ -374,7 +374,8 @@ bool LLInventoryModel::isCategoryHidden(const LLUUID& id) const
 			case LLFolderType::FT_INBOX:
 				// <FS:Ansariel> Show inbox folder depending on FSShowInboxFolder setting
 				static LLCachedControl<bool> fsShowInboxFolder(gSavedSettings, "FSShowInboxFolder");
-				return !fsShowIndoxFolder;
+				res = !fsShowIndoxFolder;
+				break;
 				// </FS:Ansariel>
 			case LLFolderType::FT_OUTBOX:
 			case LLFolderType::FT_MARKETPLACE_LISTINGS:
