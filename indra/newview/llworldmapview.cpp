@@ -1926,10 +1926,14 @@ BOOL LLWorldMapView::handleDoubleClick( S32 x, S32 y, MASK mask )
 		case MAP_ITEM_LAND_FOR_SALE:
 		case MAP_ITEM_LAND_FOR_SALE_ADULT:
 			{
-				LLVector3d pos_global = viewPosToGlobal(x, y);
-				LLSimInfo* info = LLWorldMap::getInstance()->simInfoFromPosGlobal(pos_global);
+				// <FS:Ansariel> Show parcel details instead of search with possible useless result
+				//LLVector3d pos_global = viewPosToGlobal(x, y);
+				//LLSimInfo* info = LLWorldMap::getInstance()->simInfoFromPosGlobal(pos_global);
+				//LLFloaterReg::hideInstance("world_map");
+				//LLFloaterReg::showInstance("search", LLSD().with("category", "land").with("query", info->getName()));
 				LLFloaterReg::hideInstance("world_map");
-				LLFloaterReg::showInstance("search", LLSD().with("category", "land").with("query", info->getName()));
+				LLUrlAction::executeSLURL(LLSLURL("parcel", id, "about").getSLURLString());
+				// </FS:Ansariel>
 				break;
 			}
 		case MAP_ITEM_CLASSIFIED:
