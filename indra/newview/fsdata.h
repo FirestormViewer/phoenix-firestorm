@@ -56,14 +56,16 @@ public:
 		NO_SUPPORT	= (1 << 4), //0x10 16
 		NO_USE		= (1 << 5), //0x20 32
 		NO_SPAM		= (1 << 6), //0x40 64
-		GATEWAY		= (1 << 7), //0x80 128 <FS:JL>
+		GATEWAY		= (1 << 7), //0x80 128
 	};
 
 	std::set<LLUUID> mSupportGroup;
 
 	bool isDeveloper(const LLUUID& avatar_id);
 	bool isSupport(const LLUUID& avatar_id);
-	BOOL isSupportGroup(const LLUUID& id); // BOOL is used due to used in a LL function.
+	bool isQA(const LLUUID& avatar_id);
+	bool isSupportGroup(const LLUUID& id);
+
 	// returns -1 if agent is not found.
 	S32 getAgentFlags(const LLUUID& avatar_id);
 

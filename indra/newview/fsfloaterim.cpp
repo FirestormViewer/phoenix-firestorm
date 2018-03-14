@@ -335,7 +335,7 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 		|| !mOtherParticipantUUID.isNull())
 	{
 		// <FS:Techwolf Lupindo> fsdata support
-		if(mDialog == IM_NOTHING_SPECIAL && FSData::instance().isSupport(mOtherParticipantUUID) && FSData::instance().isAgentFlag(gAgentID, FSData::NO_SUPPORT))
+		if (mDialog == IM_NOTHING_SPECIAL && FSData::instance().isSupport(mOtherParticipantUUID) && FSData::instance().isAgentFlag(gAgentID, FSData::NO_SUPPORT))
 		{
 			return;
 		}
@@ -873,8 +873,8 @@ BOOL FSFloaterIM::postBuild()
 
 	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 
-	BOOL isFSSupportGroup = FSData::getInstance()->isSupportGroup(mSessionID);
-	getChild<LLUICtrl>("support_panel")->setVisible(isFSSupportGroup);
+	bool isFSSupportGroup = FSData::getInstance()->isSupportGroup(mSessionID);
+	childSetVisible("support_panel", isFSSupportGroup);
 
 	// <FS:Zi> Viewer version popup
 	if (isFSSupportGroup)
