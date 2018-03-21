@@ -18,6 +18,7 @@
 #include "llfloatertools.h"
 #include "llselectmgr.h"
 #include "llviewercamera.h"
+#include "llviewercontrol.h"
 #include "llviewerobject.h"
 #include "llviewerwindow.h"
 
@@ -350,8 +351,10 @@ void QToolAlign::renderManipulators()
 
 BOOL QToolAlign::canAffectSelection()
 {
-	// An selection is scalable if you are allowed to both edit and move
-	// everything in it, and it does not have any sitting agents
+	// An selection is scalable if you are allowed to move the objects
+	// and it does not have any sitting agents. In case of editing linked parts,
+	// the object itself has to be modifiable.
+	static LLCachedControl<bool> edit_linked_parts(gSavedSettings, "EditLinkedParts");
 	BOOL can_scale = LLSelectMgr::getInstance()->getSelection()->getObjectCount() != 0;
 	if (can_scale)
 	{
@@ -359,7 +362,7 @@ BOOL QToolAlign::canAffectSelection()
 		{
 			virtual bool apply(LLViewerObject* objectp)
 			{
-				return objectp->permModify() && objectp->permMove() && !objectp->isSeat();
+				return (!edit_linked_parts || objectp->permModify()) && objectp->permMove() && !objectp->isSeat();
 			}
 		} func;
 		can_scale = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&func);

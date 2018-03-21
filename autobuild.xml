@@ -948,11 +948,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6324120be383af3564f2b46b07f1b765</string>
+              <string>9f69c9fa0932d54d17c159fc33faea87</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.03-darwin-.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.04-darwin-180681405.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -990,18 +990,32 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4be36322f3bf16dfbba67c8df574d446</string>
+              <string>7cf0785fa38889c9028fe776eda060f6</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.03-windows-180491728.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.04-windows-180672209.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
           </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>fe0951c7fffbf1cd0154bcdb5bcaa5c9</string>
+              <key>hash_algorithm</key>
+              <string>md5</string>
+              <key>url</key>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.04-windows64-180672211.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
         </map>
         <key>version</key>
-        <string>1.10.03</string>
+        <string>1.10.04</string>
       </map>
       <key>fmodex</key>
       <map>
@@ -1958,9 +1972,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>88ab0fb55e82f8cd3a75ee636def785a</string>
+              <string>75991f598df209713faf94b4a1cb1a89</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.9.0-darwin-201702032052-r58.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.3-darwin-180711129.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1970,9 +1984,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>88ab0fb55e82f8cd3a75ee636def785a</string>
+              <string>75991f598df209713faf94b4a1cb1a89</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.9.0-darwin-201702032052-r58.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.3-darwin-180711129.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2006,9 +2020,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>adeb9db4d4435a65c44a72f981a18b33</string>
+              <string>be46f22a4fbf7bd06c2fcd65cd434ed1</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.9.1-windows-201703182143-r61.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.4-windows-180791827.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2018,16 +2032,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>adeb9db4d4435a65c44a72f981a18b33</string>
+              <string>be46f22a4fbf7bd06c2fcd65cd434ed1</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.9.1-windows-201703182143-r61.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.4-windows-180791827.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>7.9.1.504041</string>
+        <string>7.A.4</string>
       </map>
       <key>libhunspell</key>
       <map>
@@ -4232,7 +4246,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>--package</string>
                   <string>--platform darwin</string>
                   <string>--btype RelWithDebInfo</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                 </array>
               </map>
@@ -4243,7 +4257,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>--platform darwin</string>
                   <string>--package</string>
                   <string>--btype RelWithDebInfo</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                 </array>
               </map>
@@ -4288,7 +4302,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>--build</string>
                   <string>--platform darwin</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                 </array>
               </map>
@@ -4298,7 +4312,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>--platform darwin</string>
                   <string>--kdu</string>
-                  <string>--fmodex</string>
+                  <string>--fmodstudio</string>
                 </array>
               </map>
               <key>name</key>

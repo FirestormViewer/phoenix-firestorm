@@ -94,10 +94,10 @@ static const std::string PANEL_NOTES		= "panel_profile_notes";
 FSPanelProfileTab::FSPanelProfileTab()
 : LLPanel()
 , mAvatarId(LLUUID::null)
-, mLoading(FALSE)
-, mLoaded(FALSE)
-, mEmbedded(FALSE)
-, mSelfProfile(FALSE)
+, mLoading(false)
+, mLoaded(false)
+, mEmbedded(false)
+, mSelfProfile(false)
 {
 }
 
@@ -136,7 +136,7 @@ void FSPanelProfileTab::enableControls()
 {
 	setApplyProgress(false);
 
-	mLoaded = TRUE;
+	mLoaded = true;
 }
 
 void FSPanelProfileTab::setApplyProgress(bool started)
@@ -316,7 +316,7 @@ void FSPanelProfileSecondLife::onOpen(const LLSD& key)
 		mDisplayNameButton->setEnabled(TRUE);
 	}
 
-	mDescriptionEdit->setParseHTML( !own_profile && !getEmbedded() );
+	mDescriptionEdit->setParseHTML(!own_profile && !getEmbedded());
 
 	FSDropTarget* drop_target = getChild<FSDropTarget>("drop_target");
 	drop_target->setVisible(!own_profile);
@@ -750,10 +750,10 @@ void FSPanelProfileSecondLife::enableControls()
 
 	if (getSelfProfile() && !getEmbedded())
 	{
-		mShowInSearchCheckbox->setVisible( TRUE );
-		mShowInSearchCheckbox->setEnabled( TRUE );
-		mDescriptionEdit->setEnabled( TRUE );
-		mSecondLifePic->setEnabled( TRUE );
+		mShowInSearchCheckbox->setVisible(TRUE);
+		mShowInSearchCheckbox->setEnabled(TRUE);
+		mDescriptionEdit->setEnabled(TRUE);
+		mSecondLifePic->setEnabled(TRUE);
 	}
 }
 
@@ -1039,7 +1039,7 @@ void FSPanelProfileWeb::enableControls()
 
 	if (getSelfProfile() && !getEmbedded())
 	{
-		mUrlEdit->setEnabled( TRUE );
+		mUrlEdit->setEnabled(TRUE);
 	}
 }
 
@@ -1296,10 +1296,6 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
 		mPickDescription->setEnabled(TRUE);
 		mSetCurrentLocationButton->setVisible(TRUE);
 	}
-	/*else
-	{
-		mSnapshotCtrl->setEnabled(FALSE);
-	}*/
 }
 
 BOOL FSPanelPick::postBuild()
@@ -1855,7 +1851,8 @@ bool FSPanelProfilePicks::canDeletePick()
 //////////////////////////////////////////////////////////////////////////
 
 FSPanelProfileFirstLife::FSPanelProfileFirstLife()
- : FSPanelProfileTab()
+ : FSPanelProfileTab(),
+ mIsEditing(false)
 {
 }
 
@@ -1865,8 +1862,10 @@ FSPanelProfileFirstLife::~FSPanelProfileFirstLife()
 
 BOOL FSPanelProfileFirstLife::postBuild()
 {
-	mDescriptionEdit = getChild<LLUICtrl>("fl_description_edit");
+	mDescriptionEdit = getChild<LLTextEditor>("fl_description_edit");
 	mPicture = getChild<LLTextureCtrl>("real_world_pic");
+
+	mDescriptionEdit->setFocusReceivedCallback(boost::bind(&FSPanelProfileFirstLife::onDescriptionFocusReceived, this));
 
 	return TRUE;
 }
@@ -1878,6 +1877,17 @@ void FSPanelProfileFirstLife::onOpen(const LLSD& key)
 	resetData();
 }
 
+
+void FSPanelProfileFirstLife::onDescriptionFocusReceived()
+{
+	if (!mIsEditing && getSelfProfile())
+	{
+		mIsEditing = true;
+		mDescriptionEdit->setParseHTML(false);
+		mDescriptionEdit->setText(mCurrentDescription);
+	}
+}
+
 void FSPanelProfileFirstLife::processProperties(void* data, EAvatarProcessorType type)
 {
 	if (APT_PROPERTIES == type)
@@ -1885,7 +1895,8 @@ void FSPanelProfileFirstLife::processProperties(void* data, EAvatarProcessorType
 		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
 		if (avatar_data && getAvatarId() == avatar_data->avatar_id)
 		{
-			mDescriptionEdit->setValue(avatar_data->fl_about_text);
+			mCurrentDescription = avatar_data->fl_about_text;
+			mDescriptionEdit->setValue(mCurrentDescription);
 			mPicture->setValue(avatar_data->fl_image_id);
 			enableControls();
 		}
@@ -1910,8 +1921,8 @@ void FSPanelProfileFirstLife::enableControls()
 
 	if (getSelfProfile() && !getEmbedded())
 	{
-		mDescriptionEdit->setEnabled( TRUE );
-		mPicture->setEnabled( TRUE );
+		mDescriptionEdit->setEnabled(TRUE);
+		mPicture->setEnabled(TRUE);
 	}
 }
 
@@ -2135,12 +2146,17 @@ void FSPanelAvatarNotes::setAvatarId(const LLUUID& id)
 //////////////////////////////////////////////////////////////////////////
 
 FSPanelProfile::FSPanelProfile()
- : FSPanelProfileTab()
+ : FSPanelProfileTab(),
+ mAvatarNameCacheConnection()
 {
 }
 
 FSPanelProfile::~FSPanelProfile()
 {
+	if (mAvatarNameCacheConnection.connected())
+	{
+		mAvatarNameCacheConnection.disconnect();
+	}
 }
 
 BOOL FSPanelProfile::postBuild()
@@ -2214,7 +2230,7 @@ void FSPanelProfile::onOpen(const LLSD& key)
 		getChild<LLUICtrl>("cancel_btn")->setVisible(TRUE);
 	}
 
-	LLAvatarNameCache::get(getAvatarId(), boost::bind(&FSPanelProfile::onAvatarNameCache, this, _1, _2));
+	mAvatarNameCacheConnection = LLAvatarNameCache::get(getAvatarId(), boost::bind(&FSPanelProfile::onAvatarNameCache, this, _1, _2));
 }
 
 void FSPanelProfile::updateData()
@@ -2239,8 +2255,6 @@ void FSPanelProfile::apply()
 		mPanelWeb->apply(&data);
 		mPanelSecondlife->apply(&data);
 
-		// panel_classifieds->apply();
-
 		mPanelInterests->apply();
 		mPanelPicks->apply();
 		mPanelNotes->apply();
@@ -2249,9 +2263,8 @@ void FSPanelProfile::apply()
 
 void FSPanelProfile::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
+	mAvatarNameCacheConnection.disconnect();
+
 	mPanelSecondlife->onAvatarNameCache(agent_id, av_name);
 	mPanelWeb->onAvatarNameCache(agent_id, av_name);
 }
-
-
-// eof
