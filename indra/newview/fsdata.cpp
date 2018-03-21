@@ -194,9 +194,9 @@ void FSData::processResponder(const LLSD& content, const std::string& url, bool 
 bool FSData::loadFromFile(LLSD& data, std::string filename)
 {
 	llifstream file(filename.c_str());
-	if(file.is_open())
+	if (file.is_open())
 	{
-		if(LLSDSerialize::fromXML(data, file) != LLSDParser::PARSE_FAILURE)
+		if (LLSDSerialize::fromXML(data, file) != LLSDParser::PARSE_FAILURE)
 		{
 			file.close();
 			return true;
@@ -297,7 +297,7 @@ void FSData::startDownload()
 	// Stat the file to see if it exists and when it was last modified.
 	time_t last_modified = 0;
 	llstat stat_data;
-	if(!LLFile::stat(mFSdataFilename, &stat_data))
+	if (!LLFile::stat(mFSdataFilename, &stat_data))
 	{
 		last_modified = stat_data.st_mtime;
 	}
@@ -305,7 +305,7 @@ void FSData::startDownload()
 	FSCoreHttpUtil::callbackHttpGet(mFSDataURL, last_modified, boost::bind(downloadComplete, _1, mFSDataURL, true), boost::bind(downloadComplete, _1, mFSDataURL, false));
 
 	last_modified = 0;
-	if(!LLFile::stat(mFSdataDefaultsFilename, &stat_data))
+	if (!LLFile::stat(mFSdataDefaultsFilename, &stat_data))
 	{
 		last_modified = stat_data.st_mtime;
 	}
@@ -320,7 +320,7 @@ void FSData::startDownload()
 	{
 		filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, script_name);
 		last_modified = 0;
-		if(!LLFile::stat(filename, &stat_data))
+		if (!LLFile::stat(filename, &stat_data))
 		{
 			last_modified = stat_data.st_mtime;
 		}
@@ -365,7 +365,7 @@ void FSData::downloadAgents()
 		mAgentsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, filename_prefix + "_agents.xml");
 		time_t last_modified = 0;
 		llstat stat_data;
-		if(!LLFile::stat(mAgentsFilename, &stat_data))
+		if (!LLFile::stat(mAgentsFilename, &stat_data))
 		{
 			last_modified = stat_data.st_mtime;
 		}
@@ -378,7 +378,7 @@ void FSData::downloadAgents()
 		mAssestsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, filename_prefix + "_assets.xml");
 		time_t last_modified = 0;
 		llstat stat_data;
-		if(!LLFile::stat(mAssestsFilename, &stat_data))
+		if (!LLFile::stat(mAssestsFilename, &stat_data))
 		{
 			last_modified = stat_data.st_mtime;
 		}
@@ -472,6 +472,7 @@ void FSData::processAssets(const LLSD& assets)
 	{
 		return;
 	}
+
 	const LLSD& asset = assets["assets"];
 	for (LLSD::map_const_iterator itr = asset.beginMap(); itr != asset.endMap(); ++itr)
 	{
@@ -505,7 +506,7 @@ void FSData::processAgents(const LLSD& data)
 	{
 		const LLSD& support_agents = data["SupportAgents"];
 		std::string newFormat;
-		for(LLSD::map_const_iterator iter = support_agents.beginMap(); iter != support_agents.endMap(); ++iter)
+		for (LLSD::map_const_iterator iter = support_agents.beginMap(); iter != support_agents.endMap(); ++iter)
 		{
 			LLUUID key = LLUUID(iter->first);
 			mSupportAgents[key] = 0;
@@ -576,7 +577,7 @@ void FSData::selectNextMOTD()
 
 //WS: Create a new LLSD based on the data from the mLegacyClientList if
 LLSD FSData::resolveClientTag(const LLUUID& id, bool new_system, const LLColor4& color)
-{	
+{
 	LLSD curtag;
 	curtag["uuid"] = id.asString();
 	curtag["id_based"] = new_system;
@@ -674,7 +675,7 @@ LLSD FSData::resolveClientTag(const LLUUID& id, bool new_system, const LLColor4&
 
 	//If we only want to display tpvd viewer. And "tpvd" is not available or false, then
 	// clear the data, but keep the basedata (like uuid, id_based and tex_color) for (maybe) later displaying.
-	if(client_tag_visibility <= 1 && (!curtag.has("tpvd") || !curtag["tpvd"].asBoolean()))
+	if (client_tag_visibility <= 1 && (!curtag.has("tpvd") || !curtag["tpvd"].asBoolean()))
 	{
 		curtag.clear();
 	}
@@ -705,7 +706,7 @@ void FSData::saveLLSD(const LLSD& data, const std::string& filename, const LLDat
 	LL_INFOS("fsdata") << "Saving " << filename << LL_ENDL;
 	llofstream file;
 	file.open(filename.c_str());
-	if(!file.is_open())
+	if (!file.is_open())
 	{
 		LL_WARNS("fsdata") << "Unable to open " << filename << LL_ENDL;
 		return;
@@ -719,7 +720,7 @@ void FSData::saveLLSD(const LLSD& data, const std::string& filename, const LLDat
 	const std::time_t new_time = last_modified.secondsSinceEpoch();
 
 #ifdef LL_WINDOWS
-	boost::filesystem::last_write_time(boost::filesystem::path( utf8str_to_utf16str(filename) ), new_time);
+	boost::filesystem::last_write_time(boost::filesystem::path(utf8str_to_utf16str(filename)), new_time);
 #else
 	boost::filesystem::last_write_time(boost::filesystem::path(filename), new_time);
 #endif
@@ -737,22 +738,20 @@ S32 FSData::getAgentFlags(const LLUUID& avatar_id)
 
 bool FSData::isSupport(const LLUUID& avatar_id)
 {
-	std::map<LLUUID, S32>::iterator iter = mSupportAgents.find(avatar_id);
-	if (iter == mSupportAgents.end())
-	{
-		return false;
-	}
-	return (iter->second & SUPPORT);
+	S32 flags = getAgentFlags(avatar_id);
+	return (flags != -1 && (flags & SUPPORT));
 }
 
 bool FSData::isDeveloper(const LLUUID& avatar_id)
 {
-	std::map<LLUUID, S32>::iterator iter = mSupportAgents.find(avatar_id);
-	if (iter == mSupportAgents.end())
-	{
-		return false;
-	}
-	return (iter->second & DEVELOPER);
+	S32 flags = getAgentFlags(avatar_id);
+	return (flags != -1 && (flags & DEVELOPER));
+}
+
+bool FSData::isQA(const LLUUID& avatar_id)
+{
+	S32 flags = getAgentFlags(avatar_id);
+	return (flags != -1 && (flags & QA));
 }
 
 LLSD FSData::allowedLogin()
@@ -760,13 +759,13 @@ LLSD FSData::allowedLogin()
 	std::map<std::string, LLSD>::iterator iter = mBlockedVersions.find(LLVersionInfo::getChannelAndVersionFS());
 	if (iter == mBlockedVersions.end())
 	{
-		return LLSD(); 
+		return LLSD();
 	}
 	else
 	{
 		LLSD block = iter->second;
 		bool blocked = true; // default is to block all unless there is a gridtype or grids present.
-		if(block.has("gridtype"))
+		if (block.has("gridtype"))
 		{
 			blocked = false;
 #ifdef OPENSIM
@@ -780,13 +779,11 @@ LLSD FSData::allowedLogin()
 				return block;
 			}
 		}
-		if(block.has("grids"))
+		if (block.has("grids"))
 		{
 			blocked = false;
 			LLSD grids = block["grids"];
-			for (LLSD::array_iterator grid_iter = grids.beginArray();
-				grid_iter != grids.endArray();
-				++grid_iter)
+			for (LLSD::array_iterator grid_iter = grids.beginArray(); grid_iter != grids.endArray(); ++grid_iter)
 			{
 				if ((*grid_iter).asString() == LLGridManager::getInstance()->getGrid())
 				{
@@ -798,7 +795,7 @@ LLSD FSData::allowedLogin()
 	}
 }
 
-BOOL FSData::isSupportGroup(const LLUUID& id)
+bool FSData::isSupportGroup(const LLUUID& id)
 {
 	return (mSupportGroup.count(id));
 }
@@ -865,7 +862,7 @@ std::string FSData::processRequestForInfo(const LLUUID& requester, const std::st
 		return message;
 	}
 
-	if (!isSupport(requester) && !isDeveloper(requester))
+	if (!isSupport(requester) && !isDeveloper(requester) && !isQA(requester))
 	{
 		return message;
 	}
@@ -969,10 +966,8 @@ LLSD FSData::getSystemInfo()
 	LLSD info = LLAppViewer::instance()->getViewerInfo();
 
 	std::string sysinfo1("\n");
-	sysinfo1 += llformat("%s %s (%d) %s %s (%s) %s\n\n", LLAppViewer::instance()->getSecondLifeTitle().c_str(), LLVersionInfo::getShortVersion().c_str(), LLVersionInfo::getBuild(), info["BUILD_DATE"].asString().c_str(), info["BUILD_TIME"].asString().c_str(), LLVersionInfo::getChannel().c_str(),
-//<FS:CR> FIRE-8273: Add Havok/Opensim indicator to getSystemInfo()
-		info["BUILD_TYPE"].asString().c_str());
-// </FS:CR>
+	sysinfo1 += llformat("%s %s (%d) %s %s (%s %dbit) %s\n\n", LLAppViewer::instance()->getSecondLifeTitle().c_str(), LLVersionInfo::getShortVersion().c_str(), LLVersionInfo::getBuild(), info["BUILD_DATE"].asString().c_str(), info["BUILD_TIME"].asString().c_str(), LLVersionInfo::getChannel().c_str(),
+		info["ADDRESS_SIZE"].asInteger(), info["BUILD_TYPE"].asString().c_str());
 	sysinfo1 += llformat("Build with %s version %s\n\n", info["COMPILER"].asString().c_str(), info["COMPILER_VERSION"].asString().c_str());
 	sysinfo1 += llformat("I am in %s located at %s (%s)\n", info["REGION"].asString().c_str(), info["HOSTNAME"].asString().c_str(), info["HOSTIP"].asString().c_str());
 	sysinfo1 += llformat("%s\n\n", info["SERVER_VERSION"].asString().c_str());
@@ -993,7 +988,7 @@ LLSD FSData::getSystemInfo()
 	sysinfo2 += llformat("libcurl Version: %s\n", info["LIBCURL_VERSION"].asString().c_str());
 	sysinfo2 += llformat("J2C Decoder Version: %s\n", info["J2C_VERSION"].asString().c_str());
 	sysinfo2 += llformat("Audio Driver Version: %s\n", info["AUDIO_DRIVER_VERSION"].asString().c_str());
-	sysinfo2 += llformat("CEF Version: %s\n", info["LLCEFLIB_VERSION"].asString().c_str());
+	sysinfo2 += llformat("%s\n", info["LIBCEF_VERSION"].asString().c_str());
 	sysinfo2 += llformat("LibVLC Version: %s\n", info["LIBVLC_VERSION"].asString().c_str());
 
 	sysinfo2 += llformat("Vivox Version: %s\n", info["VOICE_VERSION"].asString().c_str());
