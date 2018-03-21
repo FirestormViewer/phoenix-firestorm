@@ -39,6 +39,9 @@
 #include <boost/function.hpp>
 #include <boost/signals2.hpp>
 
+#include "llinventorymodel.h" // <FS:Ansariel> For LLOpenAgentOffer
+#include "llinventoryobserver.h" // <FS:Ansariel> For LLOpenAgentOffer
+
 //
 // Forward declarations
 //
@@ -282,6 +285,41 @@ private:
 
 	respond_function_map_t mRespondFunctions;
 };
+
+// <FS:Ansariel> Moved from source; needed in llimprocessing.cpp
+class LLOpenAgentOffer : public LLInventoryFetchItemsObserver
+{
+public:
+	LLOpenAgentOffer(const LLUUID& object_id,
+					 const std::string& from_name) : 
+		LLInventoryFetchItemsObserver(object_id),
+		mFromName(from_name) {}
+	/*virtual*/ void startFetch()
+	{
+		for (uuid_vec_t::const_iterator it = mIDs.begin(); it < mIDs.end(); ++it)
+		{
+			LLViewerInventoryCategory* cat = gInventory.getCategory(*it);
+			if (cat)
+			{
+				mComplete.push_back((*it));
+			}
+		}
+		LLInventoryFetchItemsObserver::startFetch();
+	}
+	/*virtual*/ void done()
+	{
+		// <FS:Ansariel> FIRE-3234: Don't need a check for ShowNewInventory here;
+		// This only gets called if the user explicity clicks "Show" or
+		// AutoAcceptNewInventory and ShowNewInventory are TRUE.
+		//open_inventory_offer(mComplete, mFromName);
+		open_inventory_offer(mComplete, mFromName, true);
+		gInventory.removeObserver(this);
+		delete this;
+	}
+private:
+	std::string mFromName;
+};
+// </FS:Ansariel>
 
 void process_feature_disabled_message(LLMessageSystem* msg, void**);
 
