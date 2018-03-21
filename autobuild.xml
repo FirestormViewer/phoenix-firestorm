@@ -1974,7 +1974,7 @@
               <key>hash</key>
               <string>75991f598df209713faf94b4a1cb1a89</string>
               <key>url</key>
-              <string>file:///opt/firestorm/du-7.A.3-darwin-180711129.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.3-darwin-180711129.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2020,9 +2020,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7da700b9ca0d05aff5e83c79505827b3</string>
+              <string>be46f22a4fbf7bd06c2fcd65cd434ed1</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.3-windows-180702336.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.4-windows-180791827.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2032,16 +2032,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7da700b9ca0d05aff5e83c79505827b3</string>
+              <string>be46f22a4fbf7bd06c2fcd65cd434ed1</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.3-windows-180702336.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.4-windows-180791827.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>7.9.1.504041</string>
+        <string>7.A.4</string>
       </map>
       <key>libhunspell</key>
       <map>
