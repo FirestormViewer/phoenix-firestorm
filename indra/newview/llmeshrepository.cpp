@@ -1147,38 +1147,46 @@ void LLMeshRepoThread::constructUrl(LLUUID mesh_id, std::string * url, int * leg
 	
 	if (gAgent.getRegion())
 	{
-		LLMutexLock lock(mMutex);
-		// <FS:Ansariel> [UDP Assets]
-        //res_url = mGetMeshCapability;
-		if (!mGetMeshCapability.empty() && mLegacyGetMeshVersion == 0)
 		{
-			res_url = mGetMeshCapability;
+			LLMutexLock lock(mMutex);
+			// <FS:Ansariel> [UDP Assets]
+			//res_url = mGetMeshCapability;
+			if (!mGetMeshCapability.empty() && mLegacyGetMeshVersion == 0)
+			{
+				res_url = mGetMeshCapability;
+			}
+			else if (!mLegacyGetMesh2Capability.empty() && mLegacyGetMeshVersion > 1)
+			{
+				res_url = mLegacyGetMesh2Capability;
+				res_version = 2;
+			}
+			else
+			{
+				res_url = mLegacyGetMeshCapability;
+				res_version = 1;
+			}
+			// </FS:Ansariel> [UDP Assets]
 		}
-		else if (!mLegacyGetMesh2Capability.empty() && mLegacyGetMeshVersion > 1)
+
+		if (!res_url.empty())
 		{
-			res_url = mLegacyGetMesh2Capability;
-			res_version = 2;
+			res_url += "/?mesh_id=";
+			res_url += mesh_id.asString().c_str();
 		}
 		else
 		{
-			res_url = mLegacyGetMeshCapability;
-			res_version = 1;
+			// <FS:Ansariel> [UDP Assets]
+			//LL_WARNS_ONCE(LOG_MESH) << "Current region does not have ViewerAsset capability!  Cannot load meshes. Region id: "
+			LL_WARNS_ONCE(LOG_MESH) << "Current region does not have ViewerAsset or GetMesh capability!  Cannot load "
+			// </FS:Ansariel> [UDP Assets
+									<< gAgent.getRegion()->getRegionID() << LL_ENDL;
+			LL_DEBUGS_ONCE(LOG_MESH) << "Cannot load mesh " << mesh_id << " due to missing capability." << LL_ENDL;
 		}
-		// </FS:Ansariel> [UDP Assets]
-	}
-
-	if (! res_url.empty())
-	{
-		res_url += "/?mesh_id=";
-		res_url += mesh_id.asString().c_str();
 	}
 	else
 	{
-		// <FS:Ansariel> [UDP Assets]
-		//LL_WARNS_ONCE(LOG_MESH) << "Current region does not have ViewerAsset capability!  Cannot load "
-		LL_WARNS_ONCE(LOG_MESH) << "Current region does not have ViewerAsset or GetMesh capability!  Cannot load "
-		// </FS:Ansariel> [UDP Assets]
-								<< mesh_id << ".mesh" << LL_ENDL;
+		LL_WARNS_ONCE(LOG_MESH) << "Current region is not loaded so there is no capability to load from! Cannot load meshes." << LL_ENDL;
+		LL_DEBUGS_ONCE(LOG_MESH) << "Cannot load mesh " << mesh_id << " due to missing capability." << LL_ENDL;
 	}
 
 	*url = res_url;
