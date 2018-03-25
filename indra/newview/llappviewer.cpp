@@ -1144,10 +1144,11 @@ bool LLAppViewer::init()
 
 	if (!initCache())
 	{
+		LL_WARNS("InitInfo") << "Failed to init cache" << LL_ENDL;
 		std::ostringstream msg;
 		msg << LLTrans::getString("MBUnableToAccessFile");
 		OSMessageBox(msg.str(),LLStringUtil::null,OSMB_OK);
-		return 1;
+		return 0;
 	}
 	LL_INFOS("InitInfo") << "Cache initialization is done." << LL_ENDL ;
 
@@ -1657,7 +1658,8 @@ bool LLAppViewer::doFrame()
 			// Scan keyboard for movement keys.  Command keys and typing
 			// are handled by windows callbacks.  Don't do this until we're
 			// done initializing.  JC
-			if ((gHeadlessClient || gViewerWindow->getWindow()->getVisible())
+			if (gViewerWindow
+				&& (gHeadlessClient || gViewerWindow->getWindow()->getVisible())
 				&& gViewerWindow->getActive()
 				&& !gViewerWindow->getWindow()->getMinimized()
 				&& LLStartUp::getStartupState() == STATE_STARTED
@@ -1696,7 +1698,7 @@ bool LLAppViewer::doFrame()
 
 			// Render scene.
 			// *TODO: Should we run display() even during gHeadlessClient?  DK 2011-02-18
-			if (!LLApp::isExiting() && !gHeadlessClient)
+			if (!LLApp::isExiting() && !gHeadlessClient && gViewerWindow)
 			{
 				pingMainloopTimeout("Main:Display");
 				gGLActive = TRUE;
