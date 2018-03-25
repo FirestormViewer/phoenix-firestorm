@@ -3,206 +3,6 @@
 <map>
     <key>installables</key>
     <map>
-      <key>ndPhysicsStub</key>
-      <map>
-        <key>license</key>
-        <string>HACD/LGPL</string>
-        <key>license_file</key>
-        <string>LICENSES/ndPhysicsStub.txt</string>
-        <key>name</key>
-        <string>ndPhysicsStub</string>
-        <key>platforms</key>
-        <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>47ddd059d48f650e39796c10ea828689</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-darwin-201606211534-r77.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>0ea99b626d4d5e3dc43f9f35f88625ba</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201502162025-r74-linux-201502162025-r74.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>2709f7a5cf499ea77481dd1fce796d61</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201505150224-r74-linux-x64-201505150224-r74.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>7ffe5a6165e6808e0674754b56545034</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-windows-201505061845-r74.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-          <key>windows64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>a2baf97f950cc16af9fe5cf316b7fa4d</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201412081952-windows-x64-201412081952.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows64</string>
-          </map>
-        </map>
-      </map>
-      <key>gntp-growl</key>
-      <map>
-        <key>copyright</key>
-        <string>The Growl Project</string>
-        <key>description</key>
-        <string>A unified notification system for Mac OS X</string>
-        <key>license</key>
-        <string>bsd</string>
-        <key>name</key>
-        <string>gntp-growl</string>
-        <key>platforms</key>
-        <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>33300134846d0f00ac4f31c1a190e3e6</string>
-              <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-darwin-201505101047-r12.tar.bz2</uri>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>af06208ec80b1f170cc560141602e2dc</string>
-              <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/libnotify-0.4.4-linux-20101003.tar.bz2</uri>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>315e6d3917b1b1327033eb41f868e828</string>
-              <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows-201601022248-r16.tar.bz2</uri>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-          <key>windows64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>5b1d8e9d3f4fd4fcc6b090d2e9bfd23d</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows-x64-201601022251-r16.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows64</string>
-          </map>
-        </map>
-      </map>
-      <key>openjpeg2</key>
-      <map>
-        <key>copyright</key>
-        <string>Copyright (c) 2002-2016, Communications and Remote Sensing Laboratory, Universite catholique de Louvain (UCL), Belgium, Copyright (c) 2002-2007, Professor Benoit Macq, Copyright (c) 2001-2003, David Janssens, Copyright (c) 2002-2003, Yannick Verschueren, Copyright (c) 2003-2007, Francois-Olivier Devaux and Antonin Descampe, Copyright (c) 2005, Herve Drolon, FreeImage Team</string>
-        <key>description</key>
-        <string>The OpenJPEG library is an open-source JPEG 2000 codec written in C language.</string>
-        <key>license</key>
-        <string>BSD</string>
-        <key>license_file</key>
-        <string>LICENSES/openjpeg.txt</string>
-        <key>name</key>
-        <string>openjpeg2</string>
-        <key>platforms</key>
-        <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>3925c90f0d3f5523acdad063620d01d6</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141918-r32-linux-201601141918-r32.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>8f4188c9a281425e26d89af0676bb6b7</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141020-r32-linux-x64-201601141020-r32.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>bc784edaab1b786766b2f381a86b8710</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141919-r32-windows-201601141919-r32.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-          <key>windows64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>0465f2221c22a7349e4ae49f751ae3d3</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141917-r32-windows-x64-201601141917-r32.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows64</string>
-          </map>
-        </map>
-        <key>version</key>
-        <string>2.1</string>
-      </map>
       <key>SDL</key>
       <map>
         <key>copyright</key>
@@ -234,9 +34,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2566e373b89a2e4f8e93a78948deda10</string>
+              <string>608dfd27f7aed9d57cf1f581c995b680</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux-x64-201509062227-r43.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux64-180841947.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -300,9 +100,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e640dcbc376eec6f3a942b4625d92d8e</string>
+              <string>5c3c29851edd837d5f9518618c4a303b</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5.201505150215-r92-linux-x64-201505150215-r92.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5.180841559-linux64-180841559.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -333,7 +133,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>1.4.5.504800</string>
+        <string>1.4.5.180841559</string>
       </map>
       <key>boost</key>
       <map>
@@ -390,9 +190,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e86cc6e004d39d7210f708b39bed77a9</string>
+              <string>b1d3daab689c5a8c8869715c5111d38e</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/boost-1.57-linux-x64-201505150230-r138.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.57-linux64-180841628.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -508,9 +308,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0f3447ce6fddba79b54cb5959e95f330</string>
+              <string>91a522a7bf0e8d66d2941c76dc28a261</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/colladadom-2.3.201505150238-r95-linux-x64-201505150238-r95.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/colladadom-2.3.180841822-linux64-180841822.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -541,7 +341,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>2.3.500902</string>
+        <string>2.3.180841822</string>
       </map>
       <key>curl</key>
       <map>
@@ -598,9 +398,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>630a2ddf43bba6e5b6e171dc68921dcb</string>
+              <string>51d9ce98279709854b0be5d0f450ba63</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8663/36142/curl-7.54.1.508652-linux64-508652.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/curl-7.54.1.180841943-linux64-180841943.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -633,7 +433,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>7.54.1.509254</string>
+        <string>7.54.1.180841943</string>
       </map>
       <key>db</key>
       <map>
@@ -696,9 +496,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7ee7b9aed3c0c8c09e7bf26bba7af8e1</string>
+              <string>5a685a65a7066937ef580dcd5a90f9dc</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-dbus-glib/rev/314266/arch/Linux/installer/dbus_glib-0.76-linux64-314266.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dbus_glib-0.76-linux64-180841549.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -770,7 +570,7 @@
               <key>hash</key>
               <string>efc92b20a8170ab4f4d3f88c03c6cb9b</string>
               <key>url</key>
-              <string>http://192.168.1.115/dev/pkg/dullahan-1.1.651_3.2987.1591.gd3e47f5-linux-171011511.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.1.651_3.2987.1591.gd3e47f5-linux-171011511.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -780,9 +580,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>331c13dfd261f867884308f15d9952bc</string>
+              <string>1640e6ca5010e0e191ec6de54dad973d</string>
               <key>url</key>
-              <string>http://192.168.1.115/dev/pkg/dullahan-1.1.651_3.2987.1591.gd3e47f5-linux64-171011518.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.1.651_3.2987.1591.gd3e47f5-linux64-180841928.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -813,7 +613,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>1.1.820_3.3071.1634.g9cc59c8</string>
+        <string>1.1.651_3.2987.1591.gd3e47f5</string>
       </map>
       <key>elfio</key>
       <map>
@@ -894,9 +694,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5e1f025d1cebd12db542080aa755257f</string>
+              <string>bbcfe77b920fb7f00c7f2a494ffc6c43</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/380/943/expat-2.1.1.500375-linux64-500375.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/expat-2.1.1.180841547-linux64-180841547.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -927,7 +727,59 @@
           </map>
         </map>
         <key>version</key>
-        <string>2.1.1.500375</string>
+        <string>2.1.1.180841547</string>
+      </map>
+      <key>fmodex</key>
+      <map>
+        <key>copyright</key>
+        <string>COPYRIGHT 2014 FIRELIGHT TECHNOLOGIES PTY LTD. ALL RIGHTS RESERVED</string>
+        <key>license</key>
+        <string>fmodex</string>
+        <key>license_file</key>
+        <string>LICENSES/fmodex.txt</string>
+        <key>name</key>
+        <string>fmodex</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>cba1feed7f6bb671d791a517fddf205a</string>
+              <key>url</key>
+              <string>file:///opt/firestorm/fmodex-44461-darwin-201601300040-r23.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin</string>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>9b090869508fabee82dc53cae977fb99</string>
+              <key>url</key>
+              <string>file:///opt/firestorm/fmodex-44461-linux-201601282301-r23.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>5b1b5ce866afd2a74e445af1fffe6a8b</string>
+              <key>url</key>
+              <string>file:///c:/cygwin/opt/firestorm/fmodex-44461-windows-201601282252-r23.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>4.44.61</string>
       </map>
       <key>fmodstudio</key>
       <map>
@@ -1017,58 +869,6 @@
         <key>version</key>
         <string>1.10.04</string>
       </map>
-      <key>fmodex</key>
-      <map>
-        <key>copyright</key>
-        <string>COPYRIGHT 2014 FIRELIGHT TECHNOLOGIES PTY LTD. ALL RIGHTS RESERVED</string>
-        <key>license</key>
-        <string>fmodex</string>
-        <key>license_file</key>
-        <string>LICENSES/fmodex.txt</string>
-        <key>name</key>
-        <string>fmodex</string>
-        <key>platforms</key>
-        <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>cba1feed7f6bb671d791a517fddf205a</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44461-darwin-201601300040-r23.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>9b090869508fabee82dc53cae977fb99</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44461-linux-201601282301-r23.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>5b1b5ce866afd2a74e445af1fffe6a8b</string>
-              <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodex-44461-windows-201601282252-r23.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-        </map>
-        <key>version</key>
-        <string>4.44.61</string>
-      </map>
       <key>fontconfig</key>
       <map>
         <key>copyright</key>
@@ -1100,9 +900,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e2419d56960c160670051fbb055fb729</string>
+              <string>5818ed2d9b29bad00878f3e26b09b7f9</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-fontconfig/rev/314281/arch/Linux/installer/fontconfig-2.11.0-linux64-314281.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/fontconfig-2.11.0-linux64-180841833.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1166,9 +966,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b30634f1a6ee2b4940eee06267a607df</string>
+              <string>0dab99c682433145aa8f5e26d8940afd</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/freetype-2.3.9.201505150242-r61-linux-x64-201505150242-r61.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/freetype-2.4.4.180841832-linux64-180841832.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1199,7 +999,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>2.4.4.500865</string>
+        <string>2.4.4.180841832</string>
       </map>
       <key>glext</key>
       <map>
@@ -1232,9 +1032,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5f3c9d61b620f949b199ebd8885218ed</string>
+              <string>12b2d643a013be8297bbbe37743abe94</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-glext/rev/314200/arch/Linux/installer/glext-68-linux64-314200.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glext-68-linux64-180841554.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1356,9 +1156,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fea16abf8c2b7f38fc33a2142bfbfe18</string>
+              <string>d99ebfff4639d1c94bc45466b870f2d0</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201704302331-linux64-201704302331.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.180841551-linux64-180841551.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1391,7 +1191,69 @@
           </map>
         </map>
         <key>version</key>
-        <string>1.0pre3.501614</string>
+        <string>1.0pre3.180841551</string>
+      </map>
+      <key>gntp-growl</key>
+      <map>
+        <key>copyright</key>
+        <string>The Growl Project</string>
+        <key>description</key>
+        <string>A unified notification system for Mac OS X</string>
+        <key>license</key>
+        <string>bsd</string>
+        <key>name</key>
+        <string>gntp-growl</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>33300134846d0f00ac4f31c1a190e3e6</string>
+              <key>url</key>
+              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-darwin-201505101047-r12.tar.bz2</uri>
+            </map>
+            <key>name</key>
+            <string>darwin</string>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>af06208ec80b1f170cc560141602e2dc</string>
+              <key>url</key>
+              <uri>http://downloads.phoenixviewer.com/libnotify-0.4.4-linux-20101003.tar.bz2</uri>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>315e6d3917b1b1327033eb41f868e828</string>
+              <key>url</key>
+              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows-201601022248-r16.tar.bz2</uri>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>5b1d8e9d3f4fd4fcc6b090d2e9bfd23d</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows-x64-201601022251-r16.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
+        </map>
       </map>
       <key>google_breakpad</key>
       <map>
@@ -1448,9 +1310,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f8df27382e6afeee5408e85c010a6c86</string>
+              <string>aa4a74b0c5794034797f22d4bdc57a0d</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/google_breakpad-1413.201505150223-r95-linux-x64-201505150223-r95.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/google_breakpad-1413.180841553-linux64-180841553.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1481,7 +1343,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>1413.501824</string>
+        <string>1413.180841553</string>
       </map>
       <key>googlemock</key>
       <map>
@@ -1538,9 +1400,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0f606bf01f933f00edeb9bf9a2530930</string>
+              <string>f879f518ea207cecf13943d58b57b515</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/918/2056/googlemock-1.7.0.500908-linux64-500908.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/googlemock-1.7.0.180841921-linux64-180841921.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1571,7 +1433,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>1.7.0.500908</string>
+        <string>1.7.0.180841921</string>
       </map>
       <key>gstreamer</key>
       <map>
@@ -1602,16 +1464,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7c9d7cc88add7831a6afeedc20cad2fe</string>
+              <string>86a358f1b5a2c2baf68444b2bfc5bb32</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-gstreamer/rev/314267/arch/Linux/installer/gstreamer-0.10.6.314267-linux64-314267.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/gstreamer-0.10.6.180841551-linux64-180841551.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>0.10.6.314267</string>
+        <string>0.10.6.180841551</string>
       </map>
       <key>gtk-atk-pango-glib</key>
       <map>
@@ -1642,16 +1504,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>61a10409052c7f77cbfe30b7a8cd7c0b</string>
+              <string>d918d894430c1d1d869b9f2e06570c65</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/gtk_atk_pango_glib-2.0-linux-x64-201505151700-r5.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/gtk_atk_pango_glib-2.1-linux64-180841902.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>0.1</string>
+        <string>2.1</string>
       </map>
       <key>havok-source</key>
       <map>
@@ -1828,9 +1690,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8b36861396af4a31668f673aebd4b1d8</string>
+              <string>324bb9deb00d256a12f8cbf686f413f0</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jpeglib-8c.201505150200-r27-linux-x64-201505150200-r27.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jpeglib-8c.180841548-linux64-180841548.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1861,7 +1723,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>8c.503140</string>
+        <string>8c.180841548</string>
       </map>
       <key>jsoncpp</key>
       <map>
@@ -1918,9 +1780,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e10077e94fa6916b6da001fc52e15ed6</string>
+              <string>724850830e01cdb6afb4eed9ce2ec6c5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.201508041908-r34-linux-x64-201508041908-r34.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.180841554-linux64-180841554.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1951,7 +1813,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>0.5.0.501464</string>
+        <string>0.5.0.180841554</string>
       </map>
       <key>kdu</key>
       <map>
@@ -2098,9 +1960,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7341037efcf156ad7aa6ba67ab0413c5</string>
+              <string>6555f040c686d8c1dec8e6264c2d3672</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libhunspell-1.3.2.201505150222-r21-linux-x64-201505150222-r21.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libhunspell-1.3.2.180841552-linux64-180841552.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2131,7 +1993,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>1.3.2.500526</string>
+        <string>1.3.2.180841552</string>
       </map>
       <key>libndofdev</key>
       <map>
@@ -2254,9 +2116,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>96cccc9c256107ff8425e15647957f17</string>
+              <string>83ae55031f81dace9dcf688cc5510010</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libpng-1.6.8.201505150228-r52-linux-x64-201505150228-r52.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libpng-1.6.8.180841558-linux64-180841558.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2287,7 +2149,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>1.6.8.500873</string>
+        <string>1.6.8.180841558</string>
       </map>
       <key>libuuid</key>
       <map>
@@ -2320,9 +2182,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6eca8418f134d2f4d97de89a33773be3</string>
+              <string>f3cc32c84b99f1277370ce88a0faf40e</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libuuid-1.6.2-linux-x64-201505150200-r8.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libuuid-1.6.2-linux64-180841554.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2386,9 +2248,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ba36cdab49fd5f3f5158cd6719a84a90</string>
+              <string>0bc56fa68f59537486c75b04646d65a9</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libxml2-2.9.1.201505150226-r42-linux-x64-201505150226-r42.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libxml2-2.9.4.180841555-linux64-180841555.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2419,7 +2281,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>2.9.4.500877</string>
+        <string>2.9.4.180841555</string>
       </map>
       <key>llappearance_utility</key>
       <map>
@@ -2662,6 +2524,78 @@
         <key>version</key>
         <string>7.11.1.297294</string>
       </map>
+      <key>ndPhysicsStub</key>
+      <map>
+        <key>license</key>
+        <string>HACD/LGPL</string>
+        <key>license_file</key>
+        <string>LICENSES/ndPhysicsStub.txt</string>
+        <key>name</key>
+        <string>ndPhysicsStub</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>47ddd059d48f650e39796c10ea828689</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-darwin-201606211534-r77.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin</string>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>0ea99b626d4d5e3dc43f9f35f88625ba</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201502162025-r74-linux-201502162025-r74.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>2709f7a5cf499ea77481dd1fce796d61</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201505150224-r74-linux-x64-201505150224-r74.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>7ffe5a6165e6808e0674754b56545034</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-windows-201505061845-r74.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>a2baf97f950cc16af9fe5cf316b7fa4d</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201412081952-windows-x64-201412081952.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
+        </map>
+      </map>
       <key>nghttp2</key>
       <map>
         <key>copyright</key>
@@ -2706,9 +2640,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c3c5ff7d2f7ac1143ef8d888192d4a53</string>
+              <string>b460d5bac2d20b38cb73b54d0ab1b6e3</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/9257/41579/nghttp2-1.25.0.509246-linux64-509246.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/nghttp2-1.25.0.180841549-linux64-180841549.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2741,7 +2675,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>source_type</key>
         <string>hg</string>
         <key>version</key>
-        <string>1.25.0.509246</string>
+        <string>1.25.0.180841549</string>
       </map>
       <key>nvapi</key>
       <map>
@@ -2840,9 +2774,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a237c81b2c5fa3926ce04586568cce74</string>
+              <string>ec5fd10d3a504e528b61d339522ca0f9</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.2.2-1.3.2.201505150221-r32-linux-x64-201505150221-r32.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.2.2-1.3.2.180841550-linux64-180841550.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2873,7 +2807,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.2.2-1.3.2.500397</string>
+        <string>1.2.2-1.3.2.180841550</string>
       </map>
       <key>open-libndofdev</key>
       <map>
@@ -2906,16 +2840,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>587567ef04c06b9bf746e3491dbcc556</string>
+              <string>4df349abfc942fb8e674244d1bd0a515</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.8-linux-x64-201602152224-r18.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.3.180841957-linux64-180841957.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>0.3</string>
+        <string>0.3.180841957</string>
       </map>
       <key>openal</key>
       <map>
@@ -2950,9 +2884,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9ccf2c9046edd73854fc084919f507b2</string>
+              <string>4f36ae378593240701fd4453bd6074c8</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openal-1.12.854-1.1.0.201505150222-r25-linux-x64-201505150222-r25.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openal-1.12.854-1.1.0.180841552-linux64-180841552.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2985,7 +2919,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.12.854-1.1.0.314223</string>
+        <string>1.12.854-1.1.0.180841552</string>
       </map>
       <key>openjpeg</key>
       <map>
@@ -3042,9 +2976,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8b36861396af4a31668f673aebd4b1d8</string>
+              <string>6098e555296583336b02f1a78b41b93a</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jpeglib-8c.201505150200-r27-linux-x64-201505150200-r27.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.5.1.180841553-linux64-180841553.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3075,7 +3009,73 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.4.0.297018</string>
+        <string>1.5.1.180841553</string>
+      </map>
+      <key>openjpeg2</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (c) 2002-2016, Communications and Remote Sensing Laboratory, Universite catholique de Louvain (UCL), Belgium, Copyright (c) 2002-2007, Professor Benoit Macq, Copyright (c) 2001-2003, David Janssens, Copyright (c) 2002-2003, Yannick Verschueren, Copyright (c) 2003-2007, Francois-Olivier Devaux and Antonin Descampe, Copyright (c) 2005, Herve Drolon, FreeImage Team</string>
+        <key>description</key>
+        <string>The OpenJPEG library is an open-source JPEG 2000 codec written in C language.</string>
+        <key>license</key>
+        <string>BSD</string>
+        <key>license_file</key>
+        <string>LICENSES/openjpeg.txt</string>
+        <key>name</key>
+        <string>openjpeg2</string>
+        <key>platforms</key>
+        <map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>3925c90f0d3f5523acdad063620d01d6</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141918-r32-linux-201601141918-r32.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>8f4188c9a281425e26d89af0676bb6b7</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141020-r32-linux-x64-201601141020-r32.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>bc784edaab1b786766b2f381a86b8710</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141919-r32-windows-201601141919-r32.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>0465f2221c22a7349e4ae49f751ae3d3</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141917-r32-windows-x64-201601141917-r32.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>2.1</string>
       </map>
       <key>openssl</key>
       <map>
@@ -3132,9 +3132,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d50ccfbf0c1d249392919e2c46ad8d5c</string>
+              <string>7920fce93d9addf63a420d86f91c5749</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8339/33495/openssl-1.0.2l.508328-linux64-508328.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.2l.180841936-linux64-180841936.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3165,7 +3165,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.0.2l.508328</string>
+        <string>1.0.2l.180841936</string>
       </map>
       <key>pcre</key>
       <map>
@@ -3222,9 +3222,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0f058ca2176e7d02d51e54c66a96f336</string>
+              <string>348a6111dede9a4ddfc51049c2ff186f</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/908/2010/pcre-8.35.500898-linux64-500898.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/pcre-8.35.180841548-linux64-180841548.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3255,7 +3255,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
           </map>
         </map>
         <key>version</key>
-        <string>8.35.500898</string>
+        <string>8.35.180841548</string>
       </map>
       <key>requests</key>
       <map>
@@ -3288,9 +3288,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a92f2235991871c3d601a73cfef9b2af</string>
+              <string>9fe44ba82ee05363fdfa4c1b9f2ec360</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/4105/11530/requests-1.0-linux64-504094.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/requests-2.18.1-linux64-180841555.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3478,9 +3478,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e67a27e13e546cbb13fad2665a1896b7</string>
+              <string>df570f2b9c0087438604a8ba4dc37a85</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/uriparser-0.8.0.1-linux-x64-201502251606-r15.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/uriparser-0.8.0.1-linux64-180841550.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3732,9 +3732,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e2e5b6aba70c8fbc09ef7f12e8fb3937</string>
+              <string>f810193590cae9b35a1c77b6c72bfb01</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/xmlrpc_epi-0.54.1.201505150223-r63-linux-x64-201505150223-r63.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/xmlrpc_epi-0.54.1.180841935-linux64-180841935.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3765,7 +3765,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
           </map>
         </map>
         <key>version</key>
-        <string>0.54.1.500719</string>
+        <string>0.54.1.180841935</string>
       </map>
       <key>zlib</key>
       <map>
@@ -3824,9 +3824,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c165dcf9bd8a27c0382137c33e1a3854</string>
+              <string>15a645809cb2f14074f22e7848bb42cf</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/zlib-1.2.8.201505150226-r125-linux-x64-201505150226-r125.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/zlib-1.2.8.180841547-linux64-180841547.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3857,7 +3857,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.2.8.500857</string>
+        <string>1.2.8.180841547</string>
       </map>
     </map>
     <key>package_description</key>
@@ -3878,6 +3878,25 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <map>
           <key>configurations</key>
           <map>
+            <key>Doxygen</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>doxygen/Doxyfile</string>
+                </array>
+                <key>command</key>
+                <string>doxygen</string>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>command</key>
+                <string>cmake</string>
+              </map>
+              <key>name</key>
+              <string>Doxygen</string>
+            </map>
             <key>RelWithDebInfo</key>
             <map>
               <key>configure</key>
@@ -3898,6 +3917,42 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               </map>
               <key>name</key>
               <string>RelWithDebInfo</string>
+            </map>
+            <key>RelWithDebInfoFS</key>
+            <map>
+              <key>configure</key>
+              <map>
+                <key>command</key>
+                <string>bash</string>
+                <key>options</key>
+                <array>
+                  <string>../scripts/configure_firestorm.sh</string>
+                  <string>--btype RelWithDebInfo</string>
+                  <string>--config</string>
+                  <string>--version</string>
+                  <string>--opensim</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>RelWithDebInfoFS</string>
+            </map>
+            <key>RelWithDebInfoFS_open</key>
+            <map>
+              <key>configure</key>
+              <map>
+                <key>command</key>
+                <string>bash</string>
+                <key>options</key>
+                <array>
+                  <string>../scripts/configure_firestorm.sh</string>
+                  <string>--btype RelWithDebInfo</string>
+                  <string>--config</string>
+                  <string>--version</string>
+                  <string>--opensim</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>RelWithDebInfoFS_open</string>
             </map>
             <key>RelWithDebInfoOS</key>
             <map>
@@ -3941,47 +3996,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>Release</string>
             </map>
-            <key>ReleaseOS</key>
-            <map>
-              <key>configure</key>
-              <map>
-                <key>arguments</key>
-                <array>
-                  <string>../indra</string>
-                </array>
-                <key>command</key>
-                <string>cmake</string>
-                <key>options</key>
-                <array>
-                  <string>-DCMAKE_BUILD_TYPE:STRING=Release</string>
-                  <string>-DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE</string>
-                  <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
-                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
-                </array>
-              </map>
-              <key>name</key>
-              <string>ReleaseOS</string>
-            </map>
-            <key>Doxygen</key>
-            <map>
-              <key>build</key>
-              <map>
-                <key>arguments</key>
-                <array>
-                  <string>doxygen/Doxyfile</string>
-                </array>
-                <key>command</key>
-                <string>doxygen</string>
-              </map>
-              <key>configure</key>
-              <map>
-                <key>command</key>
-                <string>cmake</string>
-              </map>
-              <key>name</key>
-              <string>Doxygen</string>
-            </map>
-
             <key>ReleaseFS</key>
             <map>
               <key>configure</key>
@@ -4052,43 +4066,27 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>ReleaseFS_open</string>
             </map>
-            <key>RelWithDebInfoFS</key>
+            <key>ReleaseOS</key>
             <map>
               <key>configure</key>
               <map>
+                <key>arguments</key>
+                <array>
+                  <string>../indra</string>
+                </array>
                 <key>command</key>
-                <string>bash</string>
+                <string>cmake</string>
                 <key>options</key>
                 <array>
-                  <string>../scripts/configure_firestorm.sh</string>
-                  <string>--btype RelWithDebInfo</string>
-                  <string>--config</string>
-                  <string>--version</string>
-                  <string>--opensim</string>
+                  <string>-DCMAKE_BUILD_TYPE:STRING=Release</string>
+                  <string>-DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE</string>
+                  <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
+                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
                 </array>
               </map>
               <key>name</key>
-              <string>RelWithDebInfoFS</string>
+              <string>ReleaseOS</string>
             </map>
-            <key>RelWithDebInfoFS_open</key>
-            <map>
-              <key>configure</key>
-              <map>
-                <key>command</key>
-                <string>bash</string>
-                <key>options</key>
-                <array>
-                  <string>../scripts/configure_firestorm.sh</string>
-                  <string>--btype RelWithDebInfo</string>
-                  <string>--config</string>
-                  <string>--version</string>
-                  <string>--opensim</string>
-                </array>
-              </map>
-              <key>name</key>
-              <string>RelWithDebInfoFS_open</string>
-            </map>
-
           </map>
           <key>name</key>
           <string>common</string>
@@ -4106,16 +4104,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               </map>
               <key>configure</key>
               <map>
+                <key>arguments</key>
+                <array>
+                  <string>../indra</string>
+                </array>
                 <key>options</key>
                 <array>
                   <string>-DCMAKE_BUILD_TYPE:STRING=Release</string>
                   <string>-DWORD_SIZE:STRING=32</string>
                   <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
                   <string>-DINSTALL_PROPRIETARY=TRUE</string>
-                </array>
-                <key>arguments</key>
-                <array>
-                  <string>../indra</string>
                 </array>
               </map>
               <key>name</key>
@@ -4147,12 +4145,66 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>Xcode</string>
                 </array>
               </map>
-              <!--
-              <key>default</key>
-              <string>True</string>
-              -->
               <key>name</key>
               <string>RelWithDebInfo</string>
+            </map>
+            <key>RelWithDebInfoFS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>../scripts/configure_firestorm.sh</string>
+                <key>options</key>
+                <array>
+                  <string>--build</string>
+                  <string>--package</string>
+                  <string>--platform darwin</string>
+                  <string>--btype RelWithDebInfo</string>
+                  <string>--fmodstudio</string>
+                  <string>--kdu</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--platform darwin</string>
+                  <string>--package</string>
+                  <string>--btype RelWithDebInfo</string>
+                  <string>--fmodstudio</string>
+                  <string>--kdu</string>
+                </array>
+              </map>
+              <key>default</key>
+              <string>True</string>
+              <key>name</key>
+              <string>RelWithDebInfoFS</string>
+            </map>
+            <key>RelWithDebInfoFS_open</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>../scripts/configure_firestorm.sh</string>
+                <key>options</key>
+                <array>
+                  <string>--build</string>
+                  <string>--package</string>
+                  <string>--platform darwin</string>
+                  <string>--btype RelWithDebInfo</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--platform darwin</string>
+                  <string>--package</string>
+                  <string>--btype RelWithDebInfo</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>RelWithDebInfoFS_open</string>
             </map>
             <key>RelWithDebInfoOS</key>
             <map>
@@ -4208,90 +4260,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>Release</string>
             </map>
-            <key>ReleaseOS</key>
-            <map>
-              <key>build</key>
-              <map>
-                <key>command</key>
-                <string>xcodebuild</string>
-                <key>options</key>
-                <array>
-                  <string>-configuration</string>
-                  <string>Release</string>
-                  <string>-project</string>
-                  <string>SecondLife.xcodeproj</string>
-                </array>
-              </map>
-              <key>configure</key>
-              <map>
-                <key>options</key>
-                <array>
-                  <string>-G</string>
-                  <string>Xcode</string>
-                </array>
-              </map>
-              <key>name</key>
-              <string>ReleaseOS</string>
-            </map>
-
-            <key>RelWithDebInfoFS</key>
-            <map>
-              <key>build</key>
-              <map>
-                <key>command</key>
-                <string>../scripts/configure_firestorm.sh</string>
-                <key>options</key>
-                <array>
-                  <string>--build</string>
-                  <string>--package</string>
-                  <string>--platform darwin</string>
-                  <string>--btype RelWithDebInfo</string>
-                  <string>--fmodstudio</string>
-                  <string>--kdu</string>
-                </array>
-              </map>
-              <key>configure</key>
-              <map>
-                <key>options</key>
-                <array>
-                  <string>--platform darwin</string>
-                  <string>--package</string>
-                  <string>--btype RelWithDebInfo</string>
-                  <string>--fmodstudio</string>
-                  <string>--kdu</string>
-                </array>
-              </map>
-              <key>default</key>
-              <string>True</string>
-              <key>name</key>
-              <string>RelWithDebInfoFS</string>
-            </map>
-            <key>RelWithDebInfoFS_open</key>
-            <map>
-              <key>build</key>
-              <map>
-                <key>command</key>
-                <string>../scripts/configure_firestorm.sh</string>
-                <key>options</key>
-                <array>
-                  <string>--build</string>
-                  <string>--package</string>
-                  <string>--platform darwin</string>
-                  <string>--btype RelWithDebInfo</string>
-                </array>
-              </map>
-              <key>configure</key>
-              <map>
-                <key>options</key>
-                <array>
-                  <string>--platform darwin</string>
-                  <string>--package</string>
-                  <string>--btype RelWithDebInfo</string>
-                </array>
-              </map>
-              <key>name</key>
-              <string>RelWithDebInfoFS_open</string>
-            </map>
             <key>ReleaseFS</key>
             <map>
               <key>build</key>
@@ -4318,7 +4286,31 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>ReleaseFS</string>
             </map>
-
+            <key>ReleaseOS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>xcodebuild</string>
+                <key>options</key>
+                <array>
+                  <string>-configuration</string>
+                  <string>Release</string>
+                  <string>-project</string>
+                  <string>SecondLife.xcodeproj</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>-G</string>
+                  <string>Xcode</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseOS</string>
+            </map>
           </map>
           <key>name</key>
           <string>darwin64</string>
@@ -4375,91 +4367,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>Unix Makefiles</string>
                 </array>
               </map>
-              <!--
-              <key>default</key>
-              <string>True</string>
-              -->
               <key>name</key>
               <string>RelWithDebInfo</string>
             </map>
-            <key>RelWithDebInfoOS</key>
-            <map>
-              <key>build</key>
-              <map>
-                <key>command</key>
-                <string>make</string>
-                <key>options</key>
-                <array>
-                  <string>-j</string>
-                  <string>7</string>
-                </array>
-              </map>
-              <key>configure</key>
-              <map>
-                <key>options</key>
-                <array>
-                  <string>-G</string>
-                  <string>Unix Makefiles</string>
-                </array>
-              </map>
-              <key>name</key>
-              <string>RelWithDebInfoOS</string>
-            </map>
-            <key>Release</key>
-            <map>
-              <key>build</key>
-              <map>
-                <key>command</key>
-                <string>make</string>
-                <key>options</key>
-                <array>
-                  <string>-j</string>
-                  <string>12</string>
-                </array>
-              </map>
-              <key>configure</key>
-              <map>
-                <key>options</key>
-                <array>
-                  <string>-G</string>
-                  <string>Unix Makefiles</string>
-                </array>
-              </map>
-              <key>name</key>
-              <string>Release</string>
-            </map>
-            <key>ReleaseOS</key>
-            <map>
-              <key>build</key>
-              <map>
-                <key>command</key>
-                <string>make</string>
-                <key>options</key>
-                <array>
-                  <string>-j</string>
-                  <string>7</string>
-                </array>
-              </map>
-              <key>configure</key>
-              <map>
-                <key>options</key>
-                <array>
-                  <string>-G</string>
-                  <string>Unix Makefiles</string>
-                </array>
-              </map>
-              <key>name</key>
-              <string>ReleaseOS</string>
-            </map>
-            <key>default</key>
-            <map>
-              <key>build</key>
-              <map>
-              </map>
-              <key>name</key>
-              <string>default</string>
-            </map>
-
             <key>RelWithDebInfoFS</key>
             <map>
               <key>build</key>
@@ -4516,6 +4426,52 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>RelWithDebInfoFS_open</string>
             </map>
+            <key>RelWithDebInfoOS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>make</string>
+                <key>options</key>
+                <array>
+                  <string>-j</string>
+                  <string>7</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>-G</string>
+                  <string>Unix Makefiles</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>RelWithDebInfoOS</string>
+            </map>
+            <key>Release</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>make</string>
+                <key>options</key>
+                <array>
+                  <string>-j</string>
+                  <string>12</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>-G</string>
+                  <string>Unix Makefiles</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>Release</string>
+            </map>
             <key>ReleaseFS</key>
             <map>
               <key>build</key>
@@ -4564,7 +4520,37 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>ReleaseFS_open</string>
             </map>
-
+            <key>ReleaseOS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>make</string>
+                <key>options</key>
+                <array>
+                  <string>-j</string>
+                  <string>7</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>-G</string>
+                  <string>Unix Makefiles</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseOS</string>
+            </map>
+            <key>default</key>
+            <map>
+              <key>build</key>
+              <map>
+              </map>
+              <key>name</key>
+              <string>default</string>
+            </map>
           </map>
           <key>name</key>
           <string>linux</string>
@@ -4603,12 +4589,82 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
                 </array>
               </map>
-              <!--
-              <key>default</key>
-              <string>True</string>
-              -->
               <key>name</key>
               <string>RelWithDebInfo</string>
+            </map>
+            <key>RelWithDebInfoFS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>Firestorm.sln</string>
+                </array>
+                <key>command</key>
+                <string>msbuild.exe</string>
+                <key>options</key>
+                <array>
+                  <string>/p:Configuration=RelWithDebInfo</string>
+                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
+                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
+                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
+                  <string>/t:Build</string>
+                  <string>/p:useenv=true</string>
+                  <string>/verbosity:normal</string>
+                  <string>/toolsversion:12.0</string>
+                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--fmodstudio</string>
+                  <string>--kdu</string>
+                  <string>--version</string>
+                  <string>--btype RelWithDebInfo</string>
+                  <string>--platform win32</string>
+                </array>
+              </map>
+              <key>default</key>
+              <string>True</string>
+              <key>name</key>
+              <string>RelWithDebInfoFS</string>
+            </map>
+            <key>RelWithDebInfoFS_open</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>Firestorm.sln</string>
+                </array>
+                <key>command</key>
+                <string>msbuild.exe</string>
+                <key>options</key>
+                <array>
+                  <string>/p:Configuration=RelWithDebInfo</string>
+                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
+                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
+                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
+                  <string>/t:Build</string>
+                  <string>/p:useenv=true</string>
+                  <string>/verbosity:normal</string>
+                  <string>/toolsversion:12.0</string>
+                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--version</string>
+                  <string>--btype RelWithDebInfo</string>
+                  <string>--platform win32</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>RelWithDebInfoFS_open</string>
             </map>
             <key>RelWithDebInfoOS</key>
             <map>
@@ -4680,120 +4736,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>Release</string>
             </map>
-            <key>ReleaseOS</key>
-            <map>
-              <key>build</key>
-              <map>
-                <key>arguments</key>
-                <array>
-                  <string>SecondLife.sln</string>
-                </array>
-                <key>command</key>
-                <string>devenv</string>
-                <key>options</key>
-                <array>
-                  <string>/p:Configuration=Release</string>
-                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-                  <string>/t:Build</string>
-                  <string>/p:useenv=true</string>
-                  <string>/verbosity:minimal</string>
-                  <string>/toolsversion:4.0</string>
-                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
-                </array>
-              </map>
-              <key>configure</key>
-              <map>
-                <key>arguments</key>
-                <array>
-                  <string>..\indra</string>
-                </array>
-                <key>options</key>
-                <array>
-                  <string>-G</string>
-                  <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
-                  <string>-DUNATTENDED:BOOL=ON</string>
-                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
-                  <string>-DUSE_KDU=FALSE</string>
-                </array>
-              </map>
-              <key>name</key>
-              <string>ReleaseOS</string>
-            </map>
-
-            <key>RelWithDebInfoFS</key>
-            <map>
-              <key>build</key>
-              <map>
-                <key>arguments</key>
-                <array>
-                  <string>Firestorm.sln</string>
-                </array>
-                <key>command</key>
-                <string>msbuild.exe</string>
-                <key>options</key>
-                <array>
-                  <string>/p:Configuration=RelWithDebInfo</string>
-                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
-                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
-                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-                  <string>/t:Build</string>
-                  <string>/p:useenv=true</string>
-                  <string>/verbosity:normal</string>
-                  <string>/toolsversion:12.0</string>
-                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
-                </array>
-              </map>
-              <key>configure</key>
-              <map>
-                <key>options</key>
-                <array>
-                  <string>--fmodstudio</string>
-                  <string>--kdu</string>
-                  <string>--version</string>
-                  <string>--btype RelWithDebInfo</string>
-                  <string>--platform win32</string>
-                </array>
-              </map>
-              <key>default</key>
-              <string>True</string>
-              <key>name</key>
-              <string>RelWithDebInfoFS</string>
-            </map>
-            <key>RelWithDebInfoFS_open</key>
-            <map>
-              <key>build</key>
-              <map>
-                <key>arguments</key>
-                <array>
-                  <string>Firestorm.sln</string>
-                </array>
-                <key>command</key>
-                <string>msbuild.exe</string>
-                <key>options</key>
-                <array>
-                  <string>/p:Configuration=RelWithDebInfo</string>
-                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
-                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
-                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-                  <string>/t:Build</string>
-                  <string>/p:useenv=true</string>
-                  <string>/verbosity:normal</string>
-                  <string>/toolsversion:12.0</string>
-                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
-                </array>
-              </map>
-              <key>configure</key>
-              <map>
-                <key>options</key>
-                <array>
-                  <string>--version</string>
-                  <string>--btype RelWithDebInfo</string>
-                  <string>--platform win32</string>
-                </array>
-              </map>
-              <key>name</key>
-              <string>RelWithDebInfoFS_open</string>
-            </map>
             <key>ReleaseFS</key>
             <map>
               <key>build</key>
@@ -4938,8 +4880,45 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>ReleaseFS_open</string>
             </map>
-
-
+            <key>ReleaseOS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>SecondLife.sln</string>
+                </array>
+                <key>command</key>
+                <string>devenv</string>
+                <key>options</key>
+                <array>
+                  <string>/p:Configuration=Release</string>
+                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
+                  <string>/t:Build</string>
+                  <string>/p:useenv=true</string>
+                  <string>/verbosity:minimal</string>
+                  <string>/toolsversion:4.0</string>
+                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>..\indra</string>
+                </array>
+                <key>options</key>
+                <array>
+                  <string>-G</string>
+                  <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
+                  <string>-DUNATTENDED:BOOL=ON</string>
+                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
+                  <string>-DUSE_KDU=FALSE</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseOS</string>
+            </map>
           </map>
           <key>name</key>
           <string>windows</string>
