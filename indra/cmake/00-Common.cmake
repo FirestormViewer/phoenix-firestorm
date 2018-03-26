@@ -157,7 +157,7 @@ if (LINUX)
   if ( ${FORTIFY_SOURCE_RES} EQUAL 0 )
    add_definitions(-D_FORTIFY_SOURCE=2)
   endif()
-  set(CMAKE_CXX_FLAGS "-Wno-deprecated -Wno-unused-but-set-variable -Wno-unused-variable ${CMAKE_CXX_FLAGS}")
+  set(CMAKE_CXX_FLAGS "-Wno-deprecated -Wno-unused-but-set-variable -Wno-unused-variable -Wno-placement-new ${CMAKE_CXX_FLAGS}")
 
   # gcc 4.3 and above don't like the LL boost and also
   # cause warnings due to our use of deprecated headers
@@ -178,6 +178,10 @@ if (LINUX)
 
   # <FS:ND> Enable C++11 support + gnu extensions
   add_definitions(-std=gnu++11)
+  # </FS:ND>
+
+  # <FS:ND> Enable old C++ ABI
+  add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
   # </FS:ND>
 
   # force this platform to accept TOS via external browser <FS:ND> No, do not.
