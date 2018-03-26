@@ -1834,9 +1834,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>75991f598df209713faf94b4a1cb1a89</string>
+              <string>814bec3fa5045a18dce2bc4ce78b585d</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.3-darwin-180711129.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.4-darwin-180792321.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1846,9 +1846,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>75991f598df209713faf94b4a1cb1a89</string>
+              <string>814bec3fa5045a18dce2bc4ce78b585d</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.3-darwin-180711129.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.4-darwin-180792321.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
