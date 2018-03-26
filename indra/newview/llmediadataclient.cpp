@@ -204,7 +204,7 @@ bool LLMediaDataClient::isInQueue(const LLMediaDataClientObject::ptr_t &object)
     if (std::find_if(mUnQueuedRequests.begin(), mUnQueuedRequests.end(), upred) != mUnQueuedRequests.end())
         return true;
     
-	return false;
+    return false;
 }
 
 void LLMediaDataClient::removeFromQueue(const LLMediaDataClientObject::ptr_t &object)
@@ -815,14 +815,14 @@ bool LLObjectMediaDataClient::isEmpty() const
 
 bool LLObjectMediaDataClient::isInQueue(const LLMediaDataClientObject::ptr_t &object)
 {
-	// First, call parent impl.
-	if(LLMediaDataClient::isInQueue(object))
-		return true;
+    // First, call parent impl.
+    if(LLMediaDataClient::isInQueue(object))
+        return true;
 
     if (std::find_if(mRoundRobinQueue.begin(), mRoundRobinQueue.end(), PredicateMatchRequest(object->getID())) != mRoundRobinQueue.end())
         return true;
 
-	return false;
+    return false;
 }
 
 void LLObjectMediaDataClient::removeFromQueue(const LLMediaDataClientObject::ptr_t &object)
