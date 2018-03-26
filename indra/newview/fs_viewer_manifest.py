@@ -103,11 +103,11 @@ class FSViewerManifest:
 
         self.run_command_shell( "cd %s && objcopy --add-gnu-debuglink=%s %s" % (debugDir, debugName, fileBin) )
         
-        if( os.path.exists( "%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower()) ):
-            symName = "%s/Phoenix_%s_%s_%s_symbols-linux.tar.bz2" % ( self.args['configuration'].lower(), self.fs_channel_legacy_oneword(),
-                                                                      '-'.join( self.args['version'] ), self.args['viewer_flavor'] )
+        if( os.path.exists( "%s/firestorm-symbols-linux-%d.tar.bz2" % (self.args['configuration'].lower(), self.address_size)) ):
+            symName = "%s/Phoenix_%s_%s_%s_symbols-linux-%d.tar.bz2" % ( self.args['configuration'].lower(), self.fs_channel_legacy_oneword(),
+                                                                      '-'.join( self.args['version'] ), self.args['viewer_flavor'], self.address_size )
             print( "Saving symbols %s" % symName )
-            os.rename("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower(), symName )
+            os.rename("%s/firestorm-symbols-linux-%d.tar.bz2" % (self.args['configuration'].lower(), self.address_size), symName )
 
     def fs_linux_tar_excludes(self):
         return "--exclude=core --exclude=.debug/* --exclude=.debug"
@@ -115,17 +115,19 @@ class FSViewerManifest:
     def fs_save_windows_symbols(self, substitution_strings):
         #AO: Try to package up symbols
         # New Method, for reading cross platform stack traces on a linux/mac host
-        if (os.path.exists("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower())):
+        if (os.path.exists("%s/firestorm-symbols-windows-%d.tar.bz2" % (self.args['configuration'].lower(),
+                                                                        self.address_size))):
             # Rename to add version numbers
-            sName = "%s/Phoenix_%s_%s_%s_symbols-windows.tar.bz2" % (self.args['configuration'].lower(),
+            sName = "%s/Phoenix_%s_%s_%s_symbols-windows-%d.tar.bz2" % (self.args['configuration'].lower(),
                                                                      self.fs_channel_legacy_oneword(),
                                                                      substitution_strings['version_dashes'],
-                                                                     self.args['viewer_flavor'])
+                                                                     self.args['viewer_flavor'],
+                                                                     self.address_size)
 
             if os.path.exists( sName ):
                 os.unlink( sName )
 
-            os.rename("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower(), sName )
+            os.rename("%s/firestorm-symbols-windows-%d.tar.bz2" % (self.args['configuration'].lower(), self.address_size), sName )
         
         pdbName = "firestorm-bin.pdb"
         try:
@@ -141,10 +143,11 @@ class FSViewerManifest:
         # Store windows symbols we want to keep for debugging in a tar file, this will be later compressed with xz (lzma)
         # Using tat+xz gives far superior compression than zip (~half the size of the zip archive).
         # Python3 natively supports tar+xz via mode 'w:xz'. But we're stuck with Python2 for now.
-        symbolTar = tarfile.TarFile("%s/Phoenix_%s_%s_%s_pdbsymbols-windows.tar" % (self.args['configuration'].lower(),
+        symbolTar = tarfile.TarFile("%s/Phoenix_%s_%s_%s_pdbsymbols-windows-%d.tar" % (self.args['configuration'].lower(),
                                                                                     self.fs_channel_legacy_oneword(),
                                                                                     substitution_strings['version_dashes'],
-                                                                                    self.args['viewer_flavor']),
+                                                                                    self.args['viewer_flavor'],
+                                                                                    self.address_size),
                                                                                     'w')
         symbolTar.add( "%s/Firestorm-bin.exe" % self.args['configuration'].lower(), "firestorm-bin.exe" )
         symbolTar.add( "%s/%s" % (self.args['configuration'].lower(),pdbName), pdbName )
