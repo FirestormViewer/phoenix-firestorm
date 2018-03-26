@@ -1960,7 +1960,7 @@ class LinuxManifest(ViewerManifest):
 
         with self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'release'), dst="bin"):
             self.path( "chrome-sandbox" )
-            self.path( "llceflib_host" )
+            self.path( "dullahan_host" )
             self.path( "natives_blob.bin" )
             self.path( "snapshot_blob.bin" )
             self.path( "libffmpegsumo.so" )
