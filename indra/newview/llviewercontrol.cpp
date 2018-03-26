@@ -919,6 +919,14 @@ void handleStaticEyesChanged()
 }
 // </FS:Ansariel>
 
+// <FS:Ansariel> Notification not showing if hiding the UI
+void handleNavbarSettingsChanged()
+{
+	gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
+	gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
+}
+// </FS:Ansariel>
+
 // <FS:Ansariel> FIRE-20288: Option to render friends only
 void handleRenderFriendsOnlyChanged(const LLSD& newvalue)
 {
@@ -1167,6 +1175,11 @@ void settings_setup_listeners()
 
 	// <FS:Ansariel> FIRE-20288: Option to render friends only
 	gSavedPerAccountSettings.getControl("FSRenderFriendsOnly")->getSignal()->connect(boost::bind(&handleRenderFriendsOnlyChanged, _2));
+
+	// <FS:Ansariel> Notification not showing if hiding the UI
+	gSavedSettings.getControl("ShowNavbarFavoritesPanel")->getSignal()->connect(boost::bind(&handleNavbarSettingsChanged));
+	gSavedSettings.getControl("ShowNavbarNavigationPanel")->getSignal()->connect(boost::bind(&handleNavbarSettingsChanged));
+	// </FS:Ansariel>
 }
 
 #if TEST_CACHED_CONTROL
