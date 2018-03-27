@@ -110,7 +110,9 @@ class FSViewerManifest:
             os.rename("%s/firestorm-symbols-linux-%d.tar.bz2" % (self.args['configuration'].lower(), self.address_size), symName )
 
     def fs_linux_tar_excludes(self):
-        return "--exclude=core --exclude=.debug/* --exclude=.debug"
+        installer_name_components = ['Phoenix',self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
+        installer_name = "_".join(installer_name_components)
+        return "--exclude=%s/bin/.debug" % installer_name
 
     def fs_save_windows_symbols(self, substitution_strings):
         #AO: Try to package up symbols
