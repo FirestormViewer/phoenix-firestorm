@@ -3581,6 +3581,18 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>name</key>
             <string>linux</string>
           </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>129b80dd47b53bfa02fc21ab1eb1901c</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/viewer_manager-1.0.180861311-linux64-180861311.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
