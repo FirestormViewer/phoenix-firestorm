@@ -141,6 +141,9 @@ bool LLPipeline::RenderDeferred;
 F32 LLPipeline::RenderDeferredSunWash;
 U32 LLPipeline::RenderFSAASamples;
 U32 LLPipeline::RenderResolutionDivisor;
+// [SL:KB] - Patch: Settings-RenderResolutionMultiplier | Checked: Catznip-5.4
+F32 LLPipeline::RenderResolutionMultiplier;
+// [/SL:KB]
 bool LLPipeline::RenderUIBuffer;
 S32 LLPipeline::RenderShadowDetail;
 bool LLPipeline::RenderDeferredSSAO;
@@ -586,6 +589,9 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("RenderDeferredSunWash");
 	connectRefreshCachedSettingsSafe("RenderFSAASamples");
 	connectRefreshCachedSettingsSafe("RenderResolutionDivisor");
+// [SL:KB] - Patch: Settings-RenderResolutionMultiplier | Checked: Catznip-5.4
+	connectRefreshCachedSettingsSafe("RenderResolutionMultiplier");
+// [/SL:KB]
 	connectRefreshCachedSettingsSafe("RenderUIBuffer");
 	connectRefreshCachedSettingsSafe("RenderShadowDetail");
 	connectRefreshCachedSettingsSafe("RenderDeferredSSAO");
@@ -792,17 +798,20 @@ void LLPipeline::resizeScreenTexture()
 		GLuint resX = gViewerWindow->getWorldViewWidthRaw();
 		GLuint resY = gViewerWindow->getWorldViewHeightRaw();
 	
-// [RLVa:KB] - Checked: 2014-02-23 (RLVa-1.4.10)
-		U32 resMod = RenderResolutionDivisor, resAdjustedX = resX, resAdjustedY = resY;
-		if ( (resMod > 1) && (resMod < resX) && (resMod < resY) )
+// [SL:KB] - Patch: Settings-RenderResolutionMultiplier | Checked: Catznip-5.4
+		if ( (RenderResolutionDivisor > 1) && (RenderResolutionDivisor < resX) && (RenderResolutionDivisor < resY) )
 		{
-			resAdjustedX /= resMod;
-			resAdjustedY /= resMod;
+			resX /= RenderResolutionDivisor;
+			resY /= RenderResolutionDivisor;
 		}
+		else if (RenderResolutionMultiplier != 1.f)
+		{
+			resX *= RenderResolutionMultiplier;
+			resY *= RenderResolutionMultiplier;
+		}
+// [/SL:KB]
 
-		if ( (resAdjustedX != mScreen.getWidth()) || (resAdjustedY != mScreen.getHeight()) )
-// [/RLVa:KB]
-//		if ((resX != mScreen.getWidth()) || (resY != mScreen.getHeight()))
+		if ((resX != mScreen.getWidth()) || (resY != mScreen.getHeight()))
 		{
 			releaseScreenBuffers();
 		if (!allocateScreenBuffer(resX,resY))
@@ -938,6 +947,13 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 		resX /= res_mod;
 		resY /= res_mod;
 	}
+// [SL:KB] - Patch: Settings-RenderResolutionMultiplier | Checked: Catznip-5.4
+	else if (RenderResolutionMultiplier != 1.f)
+	{
+		resX *= RenderResolutionMultiplier;
+		resY *= RenderResolutionMultiplier;
+	}
+// [/SL:KB]
 
 	if (RenderUIBuffer)
 	{
@@ -1116,6 +1132,9 @@ void LLPipeline::refreshCachedSettings()
 	RenderDeferredSunWash = gSavedSettings.getF32("RenderDeferredSunWash");
 	RenderFSAASamples = gSavedSettings.getU32("RenderFSAASamples");
 	RenderResolutionDivisor = gSavedSettings.getU32("RenderResolutionDivisor");
+// [SL:KB] - Patch: Settings-RenderResolutionMultiplier | Checked: Catznip-5.4
+	RenderResolutionMultiplier = gSavedSettings.getF32("RenderResolutionMultiplier");
+// [/SL:KB]
 	RenderUIBuffer = gSavedSettings.getBOOL("RenderUIBuffer");
 	RenderShadowDetail = gSavedSettings.getS32("RenderShadowDetail");
 	RenderDeferredSSAO = gSavedSettings.getBOOL("RenderDeferredSSAO");

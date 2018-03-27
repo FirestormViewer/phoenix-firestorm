@@ -871,6 +871,9 @@ public:
 	static F32 RenderDeferredSunWash;
 	static U32 RenderFSAASamples;
 	static U32 RenderResolutionDivisor;
+// [SL:KB] - Patch: Settings-RenderResolutionMultiplier | Checked: Catznip-5.4
+	static F32 RenderResolutionMultiplier;
+// [/SL:KB]
 	static bool RenderUIBuffer;
 	static S32 RenderShadowDetail;
 	static bool RenderDeferredSSAO;
