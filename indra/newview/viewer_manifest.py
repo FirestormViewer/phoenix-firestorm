@@ -1957,12 +1957,16 @@ class LinuxManifest(ViewerManifest):
         with self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release'), dst="lib"):
             self.path( "libcef.so" )
             self.path( "libllceflib.so" )
+            
+        with self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
+            self.path( "*.so" )
 
         with self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'release'), dst="bin"):
             self.path( "chrome-sandbox" )
             self.path( "dullahan_host" )
             self.path( "natives_blob.bin" )
             self.path( "snapshot_blob.bin" )
+            self.path( "v8_context_snapshot.bin" )
             self.path( "libffmpegsumo.so" )
 
         with self.prefix(src=os.path.join(os.pardir, 'packages', 'resources'), dst="bin"):
