@@ -3083,7 +3083,17 @@ void LLAppearanceMgr::removeCOFItemLinks(const LLUUID& item_id, LLPointer<LLInve
 		const LLInventoryItem* item = item_array.at(i).get();
 		if (item->getIsLinkType() && item->getLinkedUUID() == item_id)
 		{
-			if (item->getType() == LLAssetType::AT_OBJECT)
+// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
+			if (rlv_handler_t::isEnabled())
+			{
+				RLV_ASSERT(rlvPredCanRemoveItem(item));
+			}
+// [/RLVa:KB]
+
+//			if (item->getType() == LLAssetType::AT_OBJECT)
+// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
+			if (immediate_delete)
+// [/RLVa:KB]
 			{
 				// Immediate delete
 				remove_inventory_item(item->getUUID(), cb, true);
