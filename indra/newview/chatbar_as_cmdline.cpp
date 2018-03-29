@@ -1708,7 +1708,7 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
 void cmdline_tp2name(const std::string& target)
 {
 	LLUUID avkey = cmdline_partial_name2key(target);
-	if (avkey.notNull())
+	if (avkey.notNull() && avkey != gAgentID)
 	{
 		LLAvatarActions::teleportTo(avkey);
 	}
