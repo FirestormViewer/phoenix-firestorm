@@ -94,7 +94,7 @@ LLDir_Mac::LLDir_Mac()
 		// MBW -- This keeps the mac application from finding other things.
 		// If this is really for skins, it should JUST apply to skins.
         
-		U32 build_dir_pos = mExecutableDir.rfind("/build-darwin-");
+		std::string::size_type build_dir_pos = mExecutableDir.rfind("/build-darwin-");
 		if (build_dir_pos != std::string::npos)
 		{
 			// ...we're in a dev checkout
@@ -173,7 +173,7 @@ void LLDir_Mac::initAppDirs(const std::string &app_name,
 		mAppRODataDir = app_read_only_data_dir;
 		mSkinBaseDir = mAppRODataDir + mDirDelimiter + "skins";
 	}
-	mCAFile = getExpandedFilename(LL_PATH_APP_SETTINGS, "CA.pem");
+	mCAFile = getExpandedFilename(LL_PATH_APP_SETTINGS, "ca-bundle.crt");
 }
 
 std::string LLDir_Mac::getCurPath()

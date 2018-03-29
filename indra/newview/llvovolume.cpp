@@ -632,7 +632,7 @@ void LLVOVolume::updateTextures()
 		if (mDrawable.notNull() && !isVisible() && !mDrawable->isActive())
 		{ //delete vertex buffer to free up some VRAM
 			LLSpatialGroup* group  = mDrawable->getSpatialGroup();
-			if (group)
+			if (group && (group->mVertexBuffer.notNull() || !group->mBufferMap.empty() || !group->mDrawMap.empty()))
 			{
 				group->destroyGL(true);
 
@@ -3699,6 +3699,20 @@ U32 LLVOVolume::getHighLODTriangleCount()
 
 	return ret;
 }
+
+// [FS:Beq] - Patch: Appearance-RebuildAttachments | Checked: Catznip-5.3
+void LLVOVolume::forceLOD(S32 lod)
+{
+// [SL:KB] - Patch: Appearance-RebuildAttachments | Checked: Catznip-5.3
+	if (mDrawable.isNull())
+		return;
+// [/SL:KB]
+
+	mLOD = lod;
+	gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, FALSE);
+	mLODChanged = true;
+}
+// [/FS]
 
 //static
 void LLVOVolume::preUpdateGeom()

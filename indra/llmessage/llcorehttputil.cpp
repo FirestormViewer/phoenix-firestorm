@@ -84,7 +84,7 @@ void logMessageSuccess(std::string logAuth, std::string url, std::string message
 
 void logMessageFail(std::string logAuth, std::string url, std::string message)
 {
-    LL_WARNS() << logAuth << " Failure '" << message << "' for " << url << LL_ENDL;
+    LL_INFOS("CoreHTTP") << logAuth << " Possible failure '" << message << "' for " << url << LL_ENDL;
 }
 
 //=========================================================================
@@ -279,11 +279,10 @@ void HttpCoroHandler::onCompleted(LLCore::HttpHandle handle, LLCore::HttpRespons
         result = LLSD::emptyMap();
         LLCore::HttpStatus::type_enum_t errType = status.getType();
 
-        LL_WARNS()
-            << "\n--------------------------------------------------------------------------\n"
-            << " Error[" << status.toTerseString() << "] cannot access url '" << response->getRequestURL()
-            << "' because " << status.toString()
-            << "\n--------------------------------------------------------------------------"
+        LL_INFOS()
+            << "Possible failure [" << status.toTerseString() << "] cannot "<< response->getRequestMethod() 
+            << " url '" << response->getRequestURL()
+            << "' because " << status.toString() 
             << LL_ENDL;
         if ((errType >= 400) && (errType < 500))
         {
@@ -299,7 +298,6 @@ void HttpCoroHandler::onCompleted(LLCore::HttpHandle handle, LLCore::HttpRespons
                     result = body;
                 }
             }
-
         }
     }
     else
@@ -323,7 +321,7 @@ void HttpCoroHandler::onCompleted(LLCore::HttpHandle handle, LLCore::HttpRespons
         if (getBoolSetting(HTTP_LOGBODY_KEY))
         {
             // commenting out, but keeping since this can be useful for debugging
-            LL_WARNS() << "Returned body=" << std::endl << httpStatus["error_body"].asString() << LL_ENDL;
+            LL_WARNS("CoreHTTP") << "Returned body=" << std::endl << httpStatus["error_body"].asString() << LL_ENDL;
         }
     }
 
@@ -423,7 +421,7 @@ LLSD HttpCoroLLSDHandler::handleSuccess(LLCore::HttpResponse * response, LLCore:
         if (contentType && (HTTP_CONTENT_LLSD_XML == *contentType))
         {
             std::string thebody = LLCoreHttpUtil::responseToString(response);
-            LL_WARNS() << "Failed to deserialize . " << response->getRequestURL() << " [status:" << response->getStatus().toString() << "] "
+            LL_WARNS("CoreHTTP") << "Failed to deserialize . " << response->getRequestURL() << " [status:" << response->getStatus().toString() << "] "
                 << " body: " << thebody << LL_ENDL;
 
             // Replace the status with a new one indicating the failure.
@@ -442,7 +440,7 @@ LLSD HttpCoroLLSDHandler::handleSuccess(LLCore::HttpResponse * response, LLCore:
         if (contentType && (HTTP_CONTENT_LLSD_XML == *contentType))
         {
             std::string thebody = LLCoreHttpUtil::responseToString(response);
-            LL_WARNS() << "Failed to deserialize . " << response->getRequestURL() << " [status:" << response->getStatus().toString() << "] "
+            LL_WARNS("CoreHTTP") << "Failed to deserialize . " << response->getRequestURL() << " [status:" << response->getStatus().toString() << "] "
                 << " body: " << thebody << LL_ENDL;
 
             // Replace the status with a new one indicating the failure.
@@ -1210,7 +1208,7 @@ LLSD HttpCoroutineAdapter::buildImmediateErrorResult(const LLCore::HttpRequest::
     const std::string &url) 
 {
     LLCore::HttpStatus status = request->getStatus();
-    LL_WARNS() << "Error posting to " << url << " Status=" << status.getStatus() <<
+    LL_WARNS("CoreHTTP") << "Error posting to " << url << " Status=" << status.getStatus() <<
         " message = " << status.getMessage() << LL_ENDL;
 
     // Mimic the status results returned from an http error that we had 

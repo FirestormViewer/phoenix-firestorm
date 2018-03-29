@@ -275,7 +275,9 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mPhysicsShapeUnknown(true),
 	mAttachmentItemID(LLUUID::null),
 	mLastUpdateType(OUT_UNKNOWN),
-	mLastUpdateCached(FALSE)
+	mLastUpdateCached(FALSE),
+	mCachedMuteListUpdateTime(0),
+	mCachedOwnerInMuteList(false)
 {
 	if (!is_global)
 	{
@@ -5161,6 +5163,30 @@ void LLViewerObject::updateText()
 	}
 }
 
+bool LLViewerObject::isOwnerInMuteList(LLUUID id)
+{
+	LLUUID owner_id = id.isNull() ? mOwnerID : id;
+	if (isAvatar() || owner_id.isNull())
+	{
+		return false;
+	}
+	bool muted = false;
+	F64 now = LLFrameTimer::getTotalSeconds();
+	if (now < mCachedMuteListUpdateTime)
+	{
+		muted = mCachedOwnerInMuteList;
+	}
+	else
+	{
+		muted = LLMuteList::getInstance()->isMuted(owner_id);
+
+		const F64 SECONDS_BETWEEN_MUTE_UPDATES = 1;
+		mCachedMuteListUpdateTime = now + SECONDS_BETWEEN_MUTE_UPDATES;
+		mCachedOwnerInMuteList = muted;
+	}
+	return muted;
+}
+
 LLVOAvatar* LLViewerObject::asAvatar()
 {
 	return NULL;
@@ -6329,18 +6355,18 @@ BOOL	LLViewerObject::isTempAttachment() const
 
 BOOL LLViewerObject::isHiglightedOrBeacon() const
 {
-	if (LLFloaterReg::instanceVisible("beacons") && (gPipeline.getRenderBeacons(NULL) || gPipeline.getRenderHighlights(NULL)))
+	if (LLFloaterReg::instanceVisible("beacons") && (gPipeline.getRenderBeacons() || gPipeline.getRenderHighlights()))
 	{
 		BOOL has_media = (getMediaType() == LLViewerObject::MEDIA_SET);
 		BOOL is_scripted = !isAvatar() && !getParent() && flagScripted();
 		BOOL is_physical = !isAvatar() && flagUsePhysics();
 
-		return (isParticleSource() && gPipeline.getRenderParticleBeacons(NULL))
-				|| (isAudioSource() && gPipeline.getRenderSoundBeacons(NULL))
-				|| (has_media && gPipeline.getRenderMOAPBeacons(NULL))
-				|| (is_scripted && gPipeline.getRenderScriptedBeacons(NULL))
-				|| (is_scripted && flagHandleTouch() && gPipeline.getRenderScriptedTouchBeacons(NULL))
-				|| (is_physical && gPipeline.getRenderPhysicalBeacons(NULL));
+		return (isParticleSource() && gPipeline.getRenderParticleBeacons())
+				|| (isAudioSource() && gPipeline.getRenderSoundBeacons())
+				|| (has_media && gPipeline.getRenderMOAPBeacons())
+				|| (is_scripted && gPipeline.getRenderScriptedBeacons())
+				|| (is_scripted && flagHandleTouch() && gPipeline.getRenderScriptedTouchBeacons())
+				|| (is_physical && gPipeline.getRenderPhysicalBeacons());
 	}
 	return FALSE;
 }

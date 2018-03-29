@@ -728,7 +728,6 @@ bool idle_startup()
 		set_startup_status(0.03f, msg.c_str(), gAgent.mMOTD.c_str());
 		display_startup();
 		// LLViewerMedia::initBrowser();
-		show_release_notes_if_required();
 		LLStartUp::setStartupState( STATE_LOGIN_SHOW );
 		return FALSE;
 	}
@@ -759,6 +758,7 @@ bool idle_startup()
 			initialize_spellcheck_menu();
 			init_menus();
 		}
+		show_release_notes_if_required();
 
 		if (show_connect_box)
 		{
@@ -1055,7 +1055,6 @@ bool idle_startup()
 		login->setSerialNumber(LLAppViewer::instance()->getSerialNumber());
 		login->setLastExecEvent(gLastExecEvent);
 		login->setLastExecDuration(gLastExecDuration);
-		login->setUpdaterLauncher(boost::bind(&LLAppViewer::launchUpdater, LLAppViewer::instance()));
 
 		// This call to LLLoginInstance::connect() starts the 
 		// authentication process.

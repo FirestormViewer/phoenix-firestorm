@@ -22,7 +22,7 @@
 
 	<!-- about dialog/support string-->
 	<string name="AboutHeader">
-[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL])
+[CHANNEL] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([ADDRESS_SIZE]bit)
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
     <string name="BuildConfig">Build Configuration [BUILD_CONFIG]</string>
@@ -67,7 +67,7 @@ VFS (cache) creation time: [VFS_TIME]
 RestrainedLove API: [RLV_VERSION]
 J2C Decoder Version: [J2C_VERSION]
 Audio Driver Version: [AUDIO_DRIVER_VERSION]
-LLCEFLib/CEF Version: [LLCEFLIB_VERSION]
+[LIBCEF_VERSION]
 LibVLC Version: [LIBVLC_VERSION]
 Voice Server Version: [VOICE_VERSION]
 	</string>
@@ -2335,7 +2335,7 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="InventoryMarketplaceListingsNoItems">
         Drag folders to this area to list them for sale on the [[MARKETPLACE_DASHBOARD_URL] Marketplace].
 	</string>
-
+	<string name="InventoryItemsCount">( [ITEMS_COUNT] Items )</string>
 	<string name="Marketplace Validation Log"></string>
 	<string name="Marketplace Validation Warning Stock">stock folder must be contained by a version folder</string>
 	<string name="Marketplace Validation Error Mixed Stock">: Error: all items in a stock folder must be no-copy and of the same type</string>

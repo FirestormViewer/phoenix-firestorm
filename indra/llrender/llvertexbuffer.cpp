@@ -1057,10 +1057,12 @@ LLVertexBuffer::~LLVertexBuffer()
 
 	if (mFence)
 	{
+		// Sanity check. We have weird crashes in this destructor (on delete). Yet mFence is disabled.
+		// TODO: mFence was added in scope of SH-2038, but was never enabled, consider removing mFence.
+		LL_ERRS() << "LLVertexBuffer destruction failed" << LL_ENDL;
 		delete mFence;
+		mFence = NULL;
 	}
-	
-	mFence = NULL;
 
 	sVertexCount -= mNumVerts;
 	sIndexCount -= mNumIndices;
@@ -1471,13 +1473,22 @@ void LLVertexBuffer::setupVertexArray()
 				//glVertexattribIPointer requires GLSL 1.30 or later
 				if (gGLManager.mGLSLVersionMajor > 1 || gGLManager.mGLSLVersionMinor >= 30)
 				{
-					glVertexAttribIPointer(i, attrib_size[i], attrib_type[i], sTypeSize[i], (void*) mOffsets[i]); 
+					glVertexAttribIPointer(i, attrib_size[i], attrib_type[i], sTypeSize[i], (const GLvoid*) mOffsets[i]); 
 				}
 #endif
 			}
 			else
 			{
-				glVertexAttribPointerARB(i, attrib_size[i], attrib_type[i], attrib_normalized[i], sTypeSize[i], (void*) mOffsets[i]); 
+				// nat 2016-12-16: With 64-bit clang compile, the compiler
+				// produces an error if we simply cast mOffsets[i] -- an S32
+				// -- to (GLvoid *), the type of the parameter. It correctly
+				// points out that there's no way an S32 could fit a real
+				// pointer value. Ruslan asserts that in this case the last
+				// param is interpreted as an array data offset within the VBO
+				// rather than as an actual pointer, so it's okay.
+				glVertexAttribPointerARB(i, attrib_size[i], attrib_type[i],
+										 attrib_normalized[i], sTypeSize[i],
+										 reinterpret_cast<GLvoid*>(mOffsets[i])); 
 			}
 		}
 		else
@@ -1921,7 +1932,21 @@ void LLVertexBuffer::unmapBuffer()
 					const MappedRegion& region = mMappedVertexRegions[i];
 					S32 offset = region.mIndex >= 0 ? mOffsets[region.mType]+sTypeSize[region.mType]*region.mIndex : 0;
 					S32 length = sTypeSize[region.mType]*region.mCount;
-					glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, offset, length, (U8*) mMappedData+offset);
+					if (mSize >= length + offset)
+					{
+						glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, offset, length, (U8*)mMappedData + offset);
+					}
+					else
+					{
+						GLint size = 0;
+						glGetBufferParameterivARB(GL_ARRAY_BUFFER_ARB, GL_BUFFER_SIZE_ARB, &size);
+						LL_WARNS() << "Attempted to map regions to a buffer that is too small, " 
+							<< "mapped size: " << mSize
+							<< ", gl buffer size: " << size
+							<< ", length: " << length
+							<< ", offset: " << offset
+							<< LL_ENDL;
+					}
 					stop_glerror();
 				}
 
@@ -1989,7 +2014,21 @@ void LLVertexBuffer::unmapBuffer()
 					const MappedRegion& region = mMappedIndexRegions[i];
 					S32 offset = region.mIndex >= 0 ? sizeof(U16)*region.mIndex : 0;
 					S32 length = sizeof(U16)*region.mCount;
-					glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, offset, length, (U8*) mMappedIndexData+offset);
+					if (mIndicesSize >= length + offset)
+					{
+						glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, offset, length, (U8*) mMappedIndexData+offset);
+					}
+					else
+					{
+						GLint size = 0;
+						glGetBufferParameterivARB(GL_ELEMENT_ARRAY_BUFFER_ARB, GL_BUFFER_SIZE_ARB, &size);
+						LL_WARNS() << "Attempted to map regions to a buffer that is too small, " 
+							<< "mapped size: " << mIndicesSize
+							<< ", gl buffer size: " << size
+							<< ", length: " << length
+							<< ", offset: " << offset
+							<< LL_ENDL;
+					}
 					stop_glerror();
 				}
 

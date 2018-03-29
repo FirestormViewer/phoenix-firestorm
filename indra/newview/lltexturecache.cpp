@@ -452,26 +452,37 @@ bool LLTextureCacheRemoteWorker::doRead()
 		size = llmin(size, mDataSize);
 		// Allocate the read buffer
 		mReadData = (U8*)ALLOCATE_MEM(LLImageBase::getPrivatePool(), size);
-		S32 bytes_read = LLAPRFile::readEx(mCache->mHeaderDataFileName, 
-											 mReadData, offset, size, mCache->getLocalAPRFilePool());
-		if (bytes_read != size)
+		if (mReadData)
 		{
-			LL_WARNS() << "LLTextureCacheWorker: "  << mID
-					<< " incorrect number of bytes read from header: " << bytes_read
-					<< " / " << size << LL_ENDL;
-			FREE_MEM(LLImageBase::getPrivatePool(), mReadData);
-			mReadData = NULL;
-			mDataSize = -1; // failed
-			done = true;
-		}
-		// If we already read all we expected, we're actually done
-		if (mDataSize <= bytes_read)
-		{
-			done = true;
+			S32 bytes_read = LLAPRFile::readEx(mCache->mHeaderDataFileName, 
+												 mReadData, offset, size, mCache->getLocalAPRFilePool());
+			if (bytes_read != size)
+			{
+				LL_WARNS() << "LLTextureCacheWorker: "  << mID
+						<< " incorrect number of bytes read from header: " << bytes_read
+						<< " / " << size << LL_ENDL;
+				FREE_MEM(LLImageBase::getPrivatePool(), mReadData);
+				mReadData = NULL;
+				mDataSize = -1; // failed
+				done = true;
+			}
+			// If we already read all we expected, we're actually done
+			if (mDataSize <= bytes_read)
+			{
+				done = true;
+			}
+			else
+			{
+				mState = BODY;
+			}
 		}
 		else
 		{
-			mState = BODY;
+			LL_WARNS() << "LLTextureCacheWorker: "  << mID
+				<< " failed to allocate memory for reading: " << mDataSize << LL_ENDL;
+			mReadData = NULL;
+			mDataSize = -1; // failed
+			done = true;
 		}
 	}
 
@@ -1054,11 +1065,11 @@ S64 LLTextureCache::initCache(ELLPath location, S64 max_size, BOOL texture_cache
 			return max_size ;
 		}
 	}
-	
+
 	if (!mReadOnly)
 	{
 		LLFile::mkdir(mTexturesDirName);
-		
+
 		const char* subdirs = "0123456789abcdef";
 		for (S32 i=0; i<16; i++)
 		{
@@ -1602,11 +1613,11 @@ void LLTextureCache::clearCorruptedCache()
 
 	closeHeaderEntriesFile();//close possible file handler
 	purgeAllTextures(false) ; //clear the cache.
-	
+
 	if (!mReadOnly) //regenerate the directory tree if not exists.
 	{
 		LLFile::mkdir(mTexturesDirName);
-		
+
 		const char* subdirs = "0123456789abcdef";
 		for (S32 i=0; i<16; i++)
 		{

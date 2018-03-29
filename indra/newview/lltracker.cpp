@@ -101,9 +101,8 @@ LLTracker::~LLTracker()
 
 
 // static
-void LLTracker::stopTracking(void* userdata)
+void LLTracker::stopTracking(bool clear_ui)
 {
-	BOOL clear_ui = ((BOOL)(intptr_t)userdata);
 	instance()->stopTrackingAll(clear_ui);
 }
 
@@ -184,7 +183,7 @@ void LLTracker::render3D()
 		F32 dist = gFloaterWorldMap->getDistanceToDestination(pos_global, 0.5f);
 		if (dist < DESTINATION_REACHED_RADIUS)
 		{
-			instance()->stopTrackingLocation(FALSE,TRUE);
+			instance()->stopTrackingLocation(false,true);
 		}
 		else
 		{
@@ -607,7 +606,7 @@ void LLTracker::renderBeacon(LLVector3d pos_global,
 }
 
 
-void LLTracker::stopTrackingAll(BOOL clear_ui)
+void LLTracker::stopTrackingAll(bool clear_ui)
 {
 	switch (mTrackingStatus)
 	{
@@ -627,7 +626,7 @@ void LLTracker::stopTrackingAll(BOOL clear_ui)
 }
 
 
-void LLTracker::stopTrackingAvatar(BOOL clear_ui)
+void LLTracker::stopTrackingAvatar(bool clear_ui)
 {
 	LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
 	if( !av_tracker.getAvatarID().isNull() )
@@ -641,7 +640,7 @@ void LLTracker::stopTrackingAvatar(BOOL clear_ui)
 }
 
 
-void LLTracker::stopTrackingLandmark(BOOL clear_ui)
+void LLTracker::stopTrackingLandmark(bool clear_ui)
 {
 	purgeBeaconText();
 	mTrackedLandmarkAssetID.setNull();
@@ -656,7 +655,7 @@ void LLTracker::stopTrackingLandmark(BOOL clear_ui)
 }
 
 
-void LLTracker::stopTrackingLocation(BOOL clear_ui, BOOL dest_reached)
+void LLTracker::stopTrackingLocation(bool clear_ui, bool dest_reached)
 {
 	purgeBeaconText();
 	mTrackedLocationName.assign("");

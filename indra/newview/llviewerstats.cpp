@@ -62,6 +62,7 @@
 #include "llmeshrepository.h" //for LLMeshRepository::sBytesReceived
 #include "llsdserialize.h"
 #include "llcorehttputil.h"
+#include "llvoicevivox.h"
 
 namespace LLStatViewer
 {
@@ -307,7 +308,8 @@ U32Bytes				gTotalWorldData,
 U32								gSimPingCount = 0;
 U32Bits				gObjectData;
 F32Milliseconds		gAvgSimPing(0.f);
-U32Bytes			gTotalTextureBytesPerBoostLevel[LLViewerTexture::MAX_GL_IMAGE_CATEGORY] = {U32Bytes(0)};
+// rely on default initialization
+U32Bytes			gTotalTextureBytesPerBoostLevel[LLViewerTexture::MAX_GL_IMAGE_CATEGORY];
 
 extern U32  gVisCompared;
 extern U32  gVisTested;
@@ -489,6 +491,7 @@ void send_stats()
 	system["ram"] = (S32) gSysMemory.getPhysicalMemoryKB().value();
 	system["os"] = LLOSInfo::instance().getOSStringSimple();
 	system["cpu"] = gSysCPU.getCPUString();
+	system["address_size"] = ADDRESS_SIZE;
 	unsigned char MACAddress[MAC_ADDRESS_BYTES];
 	LLUUID::getNodeID(MACAddress);
 	std::string macAddressString = llformat("%02x-%02x-%02x-%02x-%02x-%02x",
@@ -567,6 +570,8 @@ void send_stats()
 	fail["failed_resends"] = (S32) gMessageSystem->mFailedResendPackets;
 	fail["off_circuit"] = (S32) gMessageSystem->mOffCircuitPackets;
 	fail["invalid"] = (S32) gMessageSystem->mInvalidOnCircuitPackets;
+
+	body["stats"]["voice"] = LLVoiceVivoxStats::getInstance()->read();
 
 	// Misc stats, two strings and two ints
 	// These are not expecticed to persist across multiple releases

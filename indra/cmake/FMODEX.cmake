@@ -26,9 +26,15 @@ if (FMODEX)
       include(Prebuilt)
       use_prebuilt_binary(fmodex)    
       if (WINDOWS)
-        set(FMODEX_LIBRARY 
-            debug fmodexL_vc
-            optimized fmodex_vc)
+        if (ADDRESS_SIZE EQUAL 32)
+            set(FMODEX_LIBRARY
+                debug fmodexL_vc
+                optimized fmodex_vc)
+        else (ADDRESS_SIZE EQUAL 64)
+            set(FMODEX_LIBRARY
+                debug fmodexL64_vc
+                optimized fmodex64_vc)
+        endif (ADDRESS_SIZE EQUAL 32)
       elseif (DARWIN)
         set(FMODEX_LIBRARY 
             debug fmodexL
