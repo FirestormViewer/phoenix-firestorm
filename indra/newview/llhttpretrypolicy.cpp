@@ -64,6 +64,15 @@ void LLAdaptiveRetryPolicy::reset()
 	init();
 }
 
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-06-27 (Catznip-3.7)
+// virtual
+void LLAdaptiveRetryPolicy::cancelRetry()
+{
+	// This relies on the current implementation where mShouldRetry is set to true only on initialization
+	mShouldRetry = false;
+}
+// [/SL:KB]
+
 bool LLAdaptiveRetryPolicy::getRetryAfter(const LLSD& headers, F32& retry_header_time)
 {
 	return (headers.has(HTTP_IN_HEADER_RETRY_AFTER)

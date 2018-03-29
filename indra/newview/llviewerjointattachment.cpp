@@ -28,6 +28,9 @@
 
 #include "llviewerjointattachment.h"
 
+// [SL:KB] - Patch: Appearance-PhantomAttach | Checked: Catznip-5.0
+#include "llagent.h"
+// [/SL:KB]
 #include "llviewercontrol.h"
 #include "lldrawable.h"
 #include "llgl.h"
@@ -166,7 +169,7 @@ void LLViewerJointAttachment::setupDrawable(LLViewerObject *object)
 //-----------------------------------------------------------------------------
 BOOL LLViewerJointAttachment::addObject(LLViewerObject* object)
 {
-	object->extractAttachmentItemID();
+//	object->extractAttachmentItemID();
 
 	// Same object reattached
 	if (isObjectAttached(object))
@@ -177,17 +180,39 @@ BOOL LLViewerJointAttachment::addObject(LLViewerObject* object)
 		// re-connect object to the joint correctly
 	}
 	
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2011-01-13 (Catznip-2.4)
+	// LLViewerJointAttachment::removeObject() sets the object's item to the NULL UUID so we need to extract it *after* the block above
+	object->extractAttachmentItemID();
+// [/SL:KB]
+
 	// Two instances of the same inventory item attached --
 	// Request detach, and kill the object in the meantime.
-	if (getAttachedObject(object->getAttachmentItemID()))
+// [SL:KB] - Patch: Appearance-PhantomAttach | Checked: Catznip-5.0
+	if (LLViewerObject* pAttachObj = getAttachedObject(object->getAttachmentItemID()))
 	{
 		LL_INFOS() << "(same object re-attached)" << LL_ENDL;
-		object->markDead();
-
-		// If this happens to be attached to self, then detach.
-		LLVOAvatarSelf::detachAttachmentIntoInventory(object->getAttachmentItemID());
-		return FALSE;
-	}
+		pAttachObj->markDead();
+		if (pAttachObj->permYouOwner())
+		{
+			gMessageSystem->newMessage("ObjectDetach");
+			gMessageSystem->nextBlockFast(_PREHASH_AgentData);
+			gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+			gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+			gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
+			gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, pAttachObj->getLocalID());
+			gMessageSystem->sendReliable(gAgent.getRegionHost());
+		}
+ 	}
+// [/SL:KB]
+//	if (getAttachedObject(object->getAttachmentItemID()))
+//	{
+//		LL_INFOS() << "(same object re-attached)" << LL_ENDL;
+//		object->markDead();
+//
+//		// If this happens to be attached to self, then detach.
+//		LLVOAvatarSelf::detachAttachmentIntoInventory(object->getAttachmentItemID());
+//		return FALSE;
+//	}
 
 	mAttachedObjects.push_back(object);
 	setupDrawable(object);
@@ -442,7 +467,10 @@ const LLViewerObject *LLViewerJointAttachment::getAttachedObject(const LLUUID &o
 		 ++iter)
 	{
 		const LLViewerObject* attached_object = (*iter);
-		if (attached_object->getAttachmentItemID() == object_id)
+//		if (attached_object->getAttachmentItemID() == object_id)
+// [SL:KB] - Patch: Appearance-PhantomAttach | Checked: Catznip-5.0
+		if ( (attached_object->getAttachmentItemID() == object_id) && (!attached_object->isDead()) )
+// [/SL:KB]
 		{
 			return attached_object;
 		}

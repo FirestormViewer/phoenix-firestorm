@@ -49,6 +49,9 @@
 #include "llagentui.h"
 #include "llagentwearables.h"
 #include "llagentpilot.h"
+// [SL:KB] - Patch: Appearance-PhantomAttach | Checked: Catznip-5.0
+#include "llattachmentsmgr.h"
+// [/SL:KB]
 #include "llcompilequeue.h"
 #include "llconsole.h"
 #include "lldaycyclemanager.h"
@@ -1930,6 +1933,15 @@ class LLAdvancedRebakeTextures : public view_listener_t
 };
 	
 	
+// [SL:KB] - Patch: Appearance-PhantomAttach | Checked: Catznip-5.0
+void handle_refresh_attachments()
+{
+	if (isAgentAvatarValid())
+		gAgentAvatarp->rebuildAttachments();
+	LLAttachmentsMgr::instance().refreshAttachments();
+}
+// [/SL:KB]
+
 #if 1 //ndef LL_RELEASE_FOR_DOWNLOAD
 ///////////////////////////
 // DEBUG AVATAR TEXTURES //
@@ -4062,6 +4074,13 @@ void handle_reset_view()
 	gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
 	reset_view_final( TRUE );
 	LLFloaterCamera::resetCameraMode();
+
+// [SL:KB] - Patch: Appearance-RefreshAttachments | Checked: Catznip-5.3
+	if (isAgentAvatarValid())
+	{
+		gAgentAvatarp->rebuildAttachments();
+	}
+// [/SL:KB]
 }
 
 class LLViewResetView : public view_listener_t
@@ -6054,6 +6073,9 @@ class LLAvatarResetSkeleton: public view_listener_t
 		if(avatar)
         {
             avatar->resetSkeleton(false);
+// [SL:KB] - Patch: Appearance-RefreshAttachments | Checked: Catznip-5.3
+			avatar->rebuildAttachments();
+// [/SL:KB]
         }
         return true;
     }
@@ -6067,6 +6089,9 @@ class LLAvatarResetSkeletonAndAnimations : public view_listener_t
 		if (avatar)
 		{
 			avatar->resetSkeleton(true);
+// [SL:KB] - Patch: Appearance-RefreshAttachments | Checked: Catznip-5.3
+			avatar->rebuildAttachments();
+// [/SL:KB]
 		}
 		return true;
 	}
@@ -8038,6 +8063,9 @@ void handle_rebake_textures(void*)
 	gAgentAvatarp->forceBakeAllTextures(slam_for_debug);
 	if (gAgent.getRegion() && gAgent.getRegion()->getCentralBakeVersion())
 	{
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-06-27 (Catznip-3.7)
+//		LLAppearanceMgr::instance().syncCofVersionAndRefresh();
+// [/SL:KB]
 		LLAppearanceMgr::instance().requestServerAppearanceUpdate();
 	}
 }
@@ -8985,6 +9013,9 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAdvancedCheckDebugCharacterVis(), "Advanced.CheckDebugCharacterVis");
 	view_listener_t::addMenu(new LLAdvancedDumpAttachments(), "Advanced.DumpAttachments");
 	view_listener_t::addMenu(new LLAdvancedRebakeTextures(), "Advanced.RebakeTextures");
+// [SL:KB] - Patch: Appearance-PhantomAttach | Checked: Catznip-5.0
+	commit.add("Advanced.RefreshAttachments", boost::bind(&handle_refresh_attachments));
+// [/SL:KB]
 	view_listener_t::addMenu(new LLAdvancedDebugAvatarTextures(), "Advanced.DebugAvatarTextures");
 	view_listener_t::addMenu(new LLAdvancedDumpAvatarLocalTextures(), "Advanced.DumpAvatarLocalTextures");
 	// Advanced > Network

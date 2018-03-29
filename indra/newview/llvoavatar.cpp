@@ -6824,6 +6824,27 @@ LLViewerObject *	LLVOAvatar::findAttachmentByID( const LLUUID & target_id ) cons
 	return NULL;
 }
 
+// [SL:KB] - Patch: Appearance-RefreshAttachments | Checked: Catznip-5.3
+void LLVOAvatar::rebuildAttachments()
+{
+	for (const auto& kvpAttachPt : mAttachmentPoints)
+	{
+		for (LLViewerObject* pAttachObj : kvpAttachPt.second->mAttachedObjects)
+		{
+			if (LLVOVolume* pAttachVol = (pAttachObj->isMesh()) ? dynamic_cast<LLVOVolume*>(pAttachObj) : nullptr)
+			{
+				pAttachVol->forceLOD(3);
+				for (LLViewerObject* pChildObj : pAttachObj->getChildren())
+				{
+					if (LLVOVolume* pChildVol = (pChildObj->isMesh()) ? dynamic_cast<LLVOVolume*>(pChildObj) : nullptr)
+						pAttachVol->forceLOD(3);
+				}
+			}
+		}
+	}
+}
+// [/SL:KB]
+
 // virtual
 void LLVOAvatar::invalidateComposite( LLTexLayerSet* layerset)
 {
@@ -7140,7 +7161,11 @@ BOOL LLVOAvatar::processFullyLoadedChange(bool loading)
 
 BOOL LLVOAvatar::isFullyLoaded() const
 {
-	return (mRenderUnloadedAvatar || mFullyLoaded);
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-2.2
+	// Changes to LLAppearanceMgr::updateAppearanceFromCOF() expect this function to actually return mFullyLoaded for gAgentAvatarp
+	return (mRenderUnloadedAvatar && !isSelf()) ||(mFullyLoaded);
+// [/SL:KB]
+//	return (mRenderUnloadedAvatar || mFullyLoaded);
 }
 
 bool LLVOAvatar::isTooComplex() const
