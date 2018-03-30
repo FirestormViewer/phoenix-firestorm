@@ -2082,7 +2082,7 @@ void LLIMProcessing::requestOfflineMessages()
         // Auto-accepted inventory items may require the avatar object
         // to build a correct name.  Likewise, inventory offers from
         // muted avatars require the mute list to properly mute.
-        if (cap_url.empty())
+        if (cap_url.empty() && gSavedSettings.getBOOL("FSUseReadOfflineMsgsCap"))
         {
             requestOfflineMessagesLegacy();
         }
