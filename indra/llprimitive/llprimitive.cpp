@@ -1140,7 +1140,7 @@ BOOL LLPrimitive::packTEMessage(LLMessageSystem *mesgsys) const
 			const LLTextureEntry &te = getTEref( face_index );
 
 			// Directly sending image_ids is not safe!
-			memcpy(&image_ids[face_index*16], te.getID().mData,16);	/* Flawfinder: ignore */ 
+			memcpy( &image_ids[ face_index*UUID_BYTES ], te.getID().mData, UUID_BYTES );	/* Flawfinder: ignore */
 
 			// Cast LLColor4 to LLColor4U
 			coloru.setVec( te.getColor() );
@@ -1163,7 +1163,7 @@ BOOL LLPrimitive::packTEMessage(LLMessageSystem *mesgsys) const
 			glow[face_index] = (U8) ll_round((llclamp(te.getGlow(), 0.0f, 1.0f) * (F32)0xFF));
 
 			// Directly sending material_ids is not safe!
-			memcpy(&material_data[face_index*16],te.getMaterialID().get(),16);	/* Flawfinder: ignore */ 
+			memcpy( &material_data[ face_index * UUID_BYTES ], te.getMaterialID().get(), UUID_BYTES );	/* Flawfinder: ignore */
 		}
 
 		cur_ptr += packTEField(cur_ptr, (U8 *)image_ids, sizeof(LLUUID),last_face_index, MVT_LLUUID);
@@ -1225,7 +1225,7 @@ BOOL LLPrimitive::packTEMessage(LLDataPacker &dp) const
 		{
 			const LLTextureEntry &te = getTEref( face_index );
 			// Directly sending image_ids is not safe!
-			memcpy(&image_ids[face_index*16], te.getID().mData,16);	/* Flawfinder: ignore */ 
+			memcpy( &image_ids[ face_index*UUID_BYTES ], te.getID().mData, UUID_BYTES );	/* Flawfinder: ignore */
 
 			// Cast LLColor4 to LLColor4U
 			coloru.setVec( te.getColor() );
@@ -1248,7 +1248,7 @@ BOOL LLPrimitive::packTEMessage(LLDataPacker &dp) const
             glow[face_index] = (U8) ll_round((llclamp(te.getGlow(), 0.0f, 1.0f) * (F32)0xFF));
 
 			// Directly sending material_ids is not safe!
-			memcpy(&material_data[face_index*16],te.getMaterialID().get(),16);	/* Flawfinder: ignore */ 
+			memcpy( &material_data[ face_index*UUID_BYTES ], te.getMaterialID().get(), UUID_BYTES );	/* Flawfinder: ignore */
 		}
 
 		cur_ptr += packTEField(cur_ptr, (U8 *)image_ids, sizeof(LLUUID),last_face_index, MVT_LLUUID);
@@ -1470,8 +1470,8 @@ S32 LLPrimitive::unpackTEMessage(LLDataPacker &dp)
 
 	for (i = 0; i < face_count; i++)
 	{
-		memcpy(image_ids[i].mData,&image_data[i*16],16);	/* Flawfinder: ignore */ 	
-		material_ids[i].set(&material_data[i * 16]);
+		memcpy( image_ids[ i ].mData, &image_data[ i*UUID_BYTES ], UUID_BYTES );	/* Flawfinder: ignore */
+		material_ids[ i ].set( &material_data[ i * UUID_BYTES ] );
 	}
 	
 	LLColor4 color;
