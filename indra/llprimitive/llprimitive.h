@@ -357,7 +357,8 @@ public:
 	
 	// Modify texture entry properties
 	inline BOOL validTE(const U8 te_num) const;
-	LLTextureEntry* getTE(const U8 te_num) const;
+	LLTextureEntry* getTE( const U8 te_num ) const;
+	LLTextureEntry& getTEref( const U8 te_num ) const;
 
 	virtual void setNumTEs(const U8 num_tes);
 	virtual void setAllTESelected(bool sel);

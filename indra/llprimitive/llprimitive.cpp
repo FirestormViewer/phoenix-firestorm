@@ -219,6 +219,11 @@ LLTextureEntry* LLPrimitive::getTE(const U8 index) const
 	return mTextureList.getTexture(index);
 }
 
+LLTextureEntry& LLPrimitive::getTEref( const U8 te_num ) const
+{
+	return mTextureList.getTextureRef( te_num );
+}
+
 //===============================================================
 void LLPrimitive::setNumTEs(const U8 num_tes)
 {
@@ -713,7 +718,7 @@ void LLPrimitive::copyTEs(const LLPrimitive *primitivep)
 	}
 	for (i = 0; i < num_tes; i++)
 	{
-		mTextureList.copyTexture(i, *(primitivep->getTE(i)));
+		mTextureList.copyTexture(i, primitivep->getTEref(i));
 	}
 }
 
@@ -805,7 +810,7 @@ BOOL LLPrimitive::setVolume(const LLVolumeParams &volume_params, const S32 detai
 		if (old_face_mask & cur_mask)
 		{
 			S32 te_index = face_index_from_id(cur_mask, old_faces);
-			old_tes.copyTexture(face_bit, *(getTE(te_index)));
+			old_tes.copyTexture(face_bit, getTEref(te_index));
 			//LL_INFOS() << face_bit << ":" << te_index << ":" << old_tes[face_bit].getID() << LL_ENDL;
 		}
 	}
