@@ -2714,9 +2714,9 @@ bool LLVOAvatarSelf::sendAppearanceMessage(LLMessageSystem *mesgsys) const
 		const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = iter->second;
 		if (!texture_dict->mIsBakedTexture)
 		{
-			LLTextureEntry* entry = getTE((U8) index);
-			texture_id[index] = entry->getID();
-			entry->setID(IMG_DEFAULT_AVATAR);
+			LLTextureEntry &entry = getTEref((U8) index);
+			texture_id[index] = entry.getID();
+			entry.setID(IMG_DEFAULT_AVATAR);
 		}
 	}
 
@@ -2731,8 +2731,8 @@ bool LLVOAvatarSelf::sendAppearanceMessage(LLMessageSystem *mesgsys) const
 		const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = iter->second;
 		if (!texture_dict->mIsBakedTexture)
 		{
-			LLTextureEntry* entry = getTE((U8) index);
-			entry->setID(texture_id[index]);
+			LLTextureEntry &entry = getTEref((U8) index);
+			entry.setID(texture_id[index]);
 		}
 	}
 

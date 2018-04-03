@@ -1137,11 +1137,13 @@ BOOL LLPrimitive::packTEMessage(LLMessageSystem *mesgsys) const
 		LLColor4U coloru;
 		for (face_index = 0; face_index <= last_face_index; face_index++)
 		{
+			const LLTextureEntry &te = getTEref( face_index );
+
 			// Directly sending image_ids is not safe!
-			memcpy(&image_ids[face_index*16],getTE(face_index)->getID().mData,16);	/* Flawfinder: ignore */ 
+			memcpy(&image_ids[face_index*16], te.getID().mData,16);	/* Flawfinder: ignore */ 
 
 			// Cast LLColor4 to LLColor4U
-			coloru.setVec( getTE(face_index)->getColor() );
+			coloru.setVec( te.getColor() );
 
 			// Note:  This is an optimization to send common colors (1.f, 1.f, 1.f, 1.f)
 			// as all zeros.  However, the subtraction and addition must be done in unsigned
@@ -1151,18 +1153,17 @@ BOOL LLPrimitive::packTEMessage(LLMessageSystem *mesgsys) const
 			colors[4*face_index + 2] = 255 - coloru.mV[2];
 			colors[4*face_index + 3] = 255 - coloru.mV[3];
 
-			const LLTextureEntry* te = getTE(face_index);
-			scale_s[face_index] = (F32) te->mScaleS;
-			scale_t[face_index] = (F32) te->mScaleT;
-			offset_s[face_index] = (S16) ll_round((llclamp(te->mOffsetS,-1.0f,1.0f) * (F32)0x7FFF)) ;
-			offset_t[face_index] = (S16) ll_round((llclamp(te->mOffsetT,-1.0f,1.0f) * (F32)0x7FFF)) ;
-			image_rot[face_index] = (S16) ll_round(((fmod(te->mRotation, F_TWO_PI)/F_TWO_PI) * TEXTURE_ROTATION_PACK_FACTOR));
-			bump[face_index] = te->getBumpShinyFullbright();
-			media_flags[face_index] = te->getMediaTexGen();
-			glow[face_index] = (U8) ll_round((llclamp(te->getGlow(), 0.0f, 1.0f) * (F32)0xFF));
+			scale_s[face_index] = (F32) te.mScaleS;
+			scale_t[face_index] = (F32) te.mScaleT;
+			offset_s[face_index] = (S16) ll_round((llclamp(te.mOffsetS,-1.0f,1.0f) * (F32)0x7FFF)) ;
+			offset_t[face_index] = (S16) ll_round((llclamp(te.mOffsetT,-1.0f,1.0f) * (F32)0x7FFF)) ;
+			image_rot[face_index] = (S16) ll_round(((fmod(te.mRotation, F_TWO_PI)/F_TWO_PI) * TEXTURE_ROTATION_PACK_FACTOR));
+			bump[face_index] = te.getBumpShinyFullbright();
+			media_flags[face_index] = te.getMediaTexGen();
+			glow[face_index] = (U8) ll_round((llclamp(te.getGlow(), 0.0f, 1.0f) * (F32)0xFF));
 
 			// Directly sending material_ids is not safe!
-			memcpy(&material_data[face_index*16],getTE(face_index)->getMaterialID().get(),16);	/* Flawfinder: ignore */ 
+			memcpy(&material_data[face_index*16],te.getMaterialID().get(),16);	/* Flawfinder: ignore */ 
 		}
 
 		cur_ptr += packTEField(cur_ptr, (U8 *)image_ids, sizeof(LLUUID),last_face_index, MVT_LLUUID);
@@ -1222,11 +1223,12 @@ BOOL LLPrimitive::packTEMessage(LLDataPacker &dp) const
 		LLColor4U coloru;
 		for (face_index = 0; face_index <= last_face_index; face_index++)
 		{
+			const LLTextureEntry &te = getTEref( face_index );
 			// Directly sending image_ids is not safe!
-			memcpy(&image_ids[face_index*16],getTE(face_index)->getID().mData,16);	/* Flawfinder: ignore */ 
+			memcpy(&image_ids[face_index*16], te.getID().mData,16);	/* Flawfinder: ignore */ 
 
 			// Cast LLColor4 to LLColor4U
-			coloru.setVec( getTE(face_index)->getColor() );
+			coloru.setVec( te.getColor() );
 
 			// Note:  This is an optimization to send common colors (1.f, 1.f, 1.f, 1.f)
 			// as all zeros.  However, the subtraction and addition must be done in unsigned
@@ -1236,18 +1238,17 @@ BOOL LLPrimitive::packTEMessage(LLDataPacker &dp) const
 			colors[4*face_index + 2] = 255 - coloru.mV[2];
 			colors[4*face_index + 3] = 255 - coloru.mV[3];
 
-			const LLTextureEntry* te = getTE(face_index);
-			scale_s[face_index] = (F32) te->mScaleS;
-			scale_t[face_index] = (F32) te->mScaleT;
-			offset_s[face_index] = (S16) ll_round((llclamp(te->mOffsetS,-1.0f,1.0f) * (F32)0x7FFF)) ;
-			offset_t[face_index] = (S16) ll_round((llclamp(te->mOffsetT,-1.0f,1.0f) * (F32)0x7FFF)) ;
-			image_rot[face_index] = (S16) ll_round(((fmod(te->mRotation, F_TWO_PI)/F_TWO_PI) * TEXTURE_ROTATION_PACK_FACTOR));
-			bump[face_index] = te->getBumpShinyFullbright();
-			media_flags[face_index] = te->getMediaTexGen();
-            glow[face_index] = (U8) ll_round((llclamp(te->getGlow(), 0.0f, 1.0f) * (F32)0xFF));
+			scale_s[face_index] = (F32) te.mScaleS;
+			scale_t[face_index] = (F32) te.mScaleT;
+			offset_s[face_index] = (S16) ll_round((llclamp(te.mOffsetS,-1.0f,1.0f) * (F32)0x7FFF)) ;
+			offset_t[face_index] = (S16) ll_round((llclamp(te.mOffsetT,-1.0f,1.0f) * (F32)0x7FFF)) ;
+			image_rot[face_index] = (S16) ll_round(((fmod(te.mRotation, F_TWO_PI)/F_TWO_PI) * TEXTURE_ROTATION_PACK_FACTOR));
+			bump[face_index] = te.getBumpShinyFullbright();
+			media_flags[face_index] = te.getMediaTexGen();
+            glow[face_index] = (U8) ll_round((llclamp(te.getGlow(), 0.0f, 1.0f) * (F32)0xFF));
 
 			// Directly sending material_ids is not safe!
-			memcpy(&material_data[face_index*16],getTE(face_index)->getMaterialID().get(),16);	/* Flawfinder: ignore */ 
+			memcpy(&material_data[face_index*16],te.getMaterialID().get(),16);	/* Flawfinder: ignore */ 
 		}
 
 		cur_ptr += packTEField(cur_ptr, (U8 *)image_ids, sizeof(LLUUID),last_face_index, MVT_LLUUID);

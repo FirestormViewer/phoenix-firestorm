@@ -8065,7 +8065,7 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 		else
 		{
 			LL_DEBUGS("Avatar") << avString() << " baked_index " << (S32) baked_index << " using texture id "
-								<< getTE(mBakedTextureDatas[baked_index].mTextureIndex)->getID() << LL_ENDL;
+								<< getTEref(mBakedTextureDatas[baked_index].mTextureIndex).getID() << LL_ENDL;
 		}
 	}
 

@@ -1427,7 +1427,7 @@ void LLPanelFace::refresh()
 // static
 F32 LLPanelFace::valueGlow(LLViewerObject* object, S32 face)
 {
-	return (F32)(object->getTE(face)->getGlow());
+	return (F32)(object->getTEref(face).getGlow());
 }
 
 
@@ -2311,8 +2311,8 @@ struct LLPanelFaceSetMediaFunctor : public LLSelectedTEFunctor
 	{
 		viewer_media_t pMediaImpl;
 				
-		const LLTextureEntry* tep = object->getTE(te);
-		const LLMediaEntry* mep = tep->hasMedia() ? tep->getMediaData() : NULL;
+		const LLTextureEntry &tep = object->getTEref(te);
+		const LLMediaEntry* mep = tep.hasMedia() ? tep.getMediaData() : NULL;
 		if ( mep )
 		{
 			pMediaImpl = LLViewerMedia::getMediaImplFromTextureID(mep->getMediaID());
@@ -2321,7 +2321,7 @@ struct LLPanelFaceSetMediaFunctor : public LLSelectedTEFunctor
 		if ( pMediaImpl.isNull())
 		{
 			// If we didn't find face media for this face, check whether this face is showing parcel media.
-			pMediaImpl = LLViewerMedia::getMediaImplFromTextureID(tep->getID());
+			pMediaImpl = LLViewerMedia::getMediaImplFromTextureID(tep.getID());
 		}
 		
 		if ( pMediaImpl.notNull())
@@ -2502,7 +2502,7 @@ void LLPanelFace::LLSelectedTEMaterial::getCurrent(LLMaterialPtr& material_ptr, 
 	{
 		LLMaterialPtr get(LLViewerObject* object, S32 te_index)
 		{
-			return object->getTE(te_index)->getMaterialParams();
+			return object->getTEref(te_index).getMaterialParams();
 		}
 	} func;
 	identical_material = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue( &func, material_ptr);
@@ -2514,7 +2514,7 @@ void LLPanelFace::LLSelectedTEMaterial::getMaxSpecularRepeats(F32& repeats, bool
 	{
 		F32 get(LLViewerObject* object, S32 face)
 		{
-			LLMaterial* mat = object->getTE(face)->getMaterialParams().get();
+			LLMaterial* mat = object->getTEref(face).getMaterialParams().get();
 			U32 s_axis = VX;
 			U32 t_axis = VY;
 			F32 repeats_s = 1.0f;
@@ -2538,7 +2538,7 @@ void LLPanelFace::LLSelectedTEMaterial::getMaxNormalRepeats(F32& repeats, bool& 
 	{
 		F32 get(LLViewerObject* object, S32 face)
 		{
-			LLMaterial* mat = object->getTE(face)->getMaterialParams().get();
+			LLMaterial* mat = object->getTEref(face).getMaterialParams().get();
 			U32 s_axis = VX;
 			U32 t_axis = VY;
 			F32 repeats_s = 1.0f;
@@ -2626,8 +2626,8 @@ void LLPanelFace::LLSelectedTE::getMaxDiffuseRepeats(F32& repeats, bool& identic
 			U32 s_axis = VX;
 			U32 t_axis = VY;
 			LLPrimitive::getTESTAxes(face, &s_axis, &t_axis);
-			F32 repeats_s = object->getTE(face)->mScaleS / object->getScale().mV[s_axis];
-			F32 repeats_t = object->getTE(face)->mScaleT / object->getScale().mV[t_axis];
+			F32 repeats_s = object->getTEref(face).mScaleS / object->getScale().mV[s_axis];
+			F32 repeats_t = object->getTEref(face).mScaleT / object->getScale().mV[t_axis];
 			return llmax(repeats_s, repeats_t);
 		}
 
