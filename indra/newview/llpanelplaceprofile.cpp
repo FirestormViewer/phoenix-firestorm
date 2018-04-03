@@ -575,10 +575,10 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
 		S32 primitives = llmin(ll_round(parcel->getMaxPrimCapacity() * parcel->getParcelPrimBonus()),
 							   (S32)region->getMaxTasks());
 
-		const U8* available = (U8*)getString("available").c_str();
-		const U8* allocated = (U8*)getString("allocated").c_str();
+		std::string available = getString("available");
+		std::string allocated = getString("allocated");
 
-		mPrimitivesText->setText(llformat("%d %s, %d %s", primitives, available, parcel->getPrimCount(), allocated));
+		mPrimitivesText->setText(llformat("%d %s, %d %s", primitives, available.c_str(), parcel->getPrimCount(), allocated.c_str() ));
 
 		if (parcel->getAllowOtherScripts())
 		{
