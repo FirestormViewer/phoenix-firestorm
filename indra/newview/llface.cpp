@@ -984,11 +984,18 @@ void LLFace::getPlanarProjectedParams(LLQuaternion* face_rot, LLVector3* face_po
 	const LLMatrix4& vol_mat = getWorldMatrix();
 	const LLVolumeFace& vf = getViewerObject()->getVolume()->getVolumeFace(mTEOffset);
 
-	if( !vf.mNormals || !vf.mTangents )
+	if( !vf.mNormals )
 	{
-		LL_WARNS( ) << "Volume face without normals or tangents" << LL_ENDL;
+		LL_WARNS( ) << "Volume face without normal vector (object id: " << getViewerObject()->getID().asString() << ")" << LL_ENDL;
 		return;
 	}
+
+	if( !vf.mTangents )
+	{
+		LL_WARNS() << "Volume face without tangent (object id: " << getViewerObject()->getID().asString() << ")" << LL_ENDL;
+		return;
+	}
+
 
 	const LLVector4a& normal4a = vf.mNormals[0];
 	const LLVector4a& tangent = vf.mTangents[0];
