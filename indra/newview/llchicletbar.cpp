@@ -36,6 +36,7 @@
 // Firestorm includes
 #include "fsfloaterim.h"
 #include "llfloaterreg.h"
+#include "llviewerwindow.h"
 
 namespace
 {
@@ -354,6 +355,6 @@ void LLChicletBar::fitWithTopInfoBar()
 // <FS:Ansariel> Option to hide IM/Group chat chiclets
 void LLChicletBar::updateVisibility(const LLSD &data)
 {
-	mChicletPanel->setVisible(!data.asBoolean());
+	mChicletPanel->setVisible(gViewerWindow->getUIVisibility() && !data.asBoolean());
 }
 // </FS:Ansariel>
