@@ -29,6 +29,7 @@
 
 #include "llexception.h"
 #include "llmutex.h"
+#include "lltimer.h"
 #include <string>
 #include <deque>
 
@@ -165,7 +166,7 @@ ElementT LLThreadSafeQueue<ElementT>::popBack(void)
 			{
 				ElementT value = mStorage.back();
 				mStorage.pop_back();
-				return val;
+				return value;
 			}
 		}
 		ms_sleep( 100 );
