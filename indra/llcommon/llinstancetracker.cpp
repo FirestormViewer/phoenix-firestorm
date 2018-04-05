@@ -47,5 +47,5 @@ void LLInstanceTrackerBase::StaticBase::decrementDepth()
 
 U32 LLInstanceTrackerBase::StaticBase::getDepth()
 {
-	return sIterationNestDepth.load();
+	return sIterationNestDepth;
 }

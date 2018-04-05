@@ -174,39 +174,40 @@ protected:
 	std::mutex* mMutex;
 };
 
-template <typename Type, typename AtomicType> class LLAtomic
+template <typename Type, typename AtomicType = std::atomic< Type > > class LLAtomicBase
 {
 public:
-	LLAtomic() {};
-	LLAtomic( Type x ) { mData.store( x ); };
-	~LLAtomic() {};
+	LLAtomicBase() {};
+	LLAtomicBase( Type x ) { mData.store( x ); };
+	~LLAtomicBase() {};
 
-	operator const Type() { return (Type)mData.load(); }
+	operator const Type() { return mData; }
 	
-	Type	CurrentValue() const { return (Type)mData; }
+	Type	CurrentValue() const { return mData; }
 
-	Type operator =( Type x) { mData.store( x ); return Type(mData); }
+	Type operator =( Type x) { mData.store( x ); return mData; }
 	void operator -=(Type x) { mData -= x; }
 	void operator +=(Type x) { mData += x; }
-	Type operator ++(int) { return ++mData; } // Type++
-	Type operator --(int) { return --mData; } // approximately --Type (0 if final is 0, non-zero otherwise)
+	Type operator ++(int) { return mData++; }
+	Type operator --(int) { return mData--; }
 
-	Type operator ++() { return mData++; } // Type++
-	Type operator --() { return mData--; } // approximately --Type (0 if final is 0, non-zero otherwise)
+	Type operator ++() { return ++mData; }
+	Type operator --() { return --mData; }
 	
 private:
 	AtomicType mData;
 };
 
+// ND: Typedefs for specialized versions. Using std::atomic_(u)int32_t to get the optimzed implementation.
 #ifndef LL_LINUX
-typedef LLAtomic<U32, std::atomic_uint32_t> LLAtomicU32;
-typedef LLAtomic<S32, std::atomic_int32_t> LLAtomicS32;
+typedef LLAtomicBase<U32, std::atomic_uint32_t> LLAtomicU32;
+typedef LLAtomicBase<S32, std::atomic_int32_t> LLAtomicS32;
 #else
-typedef LLAtomic<U32, std::atomic_uint> LLAtomicU32;
-typedef LLAtomic<S32, std::atomic_int> LLAtomicS32;
+typedef LLAtomicBase<U32, std::atomic_uint> LLAtomicU32;
+typedef LLAtomicBase<S32, std::atomic_int> LLAtomicS32;
 #endif
 
-typedef LLAtomic<bool, std::atomic_bool> LLAtomicBool;
+typedef LLAtomicBase<bool, std::atomic_bool> LLAtomicBool;
 
 // File IO convenience functions.
 // Returns NULL if the file fails to open, sets *sizep to file size if not NULL

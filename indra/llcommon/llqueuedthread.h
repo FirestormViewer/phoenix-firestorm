@@ -128,7 +128,7 @@ public:
 		};
 		
 	protected:
-		LLAtomic<status_t, std::atomic< status_t > > mStatus;
+		LLAtomicBase<status_t> mStatus;
 		U32 mPriority;
 		U32 mFlags;
 	};
