@@ -34,6 +34,8 @@
 #include "llmutex.h"
 #include "llrefcount.h"
 
+#include <thread>
+
 LL_COMMON_API void assert_main_thread();
 
 namespace LLTrace
@@ -99,15 +101,14 @@ public:
 private:
     BOOL                mPaused;
     
-    // static function passed to APR thread creation routine
-    static void *APR_THREAD_FUNC staticRun(struct apr_thread_t *apr_threadp, void *datap);
+	void staticRun(  );
 
 protected:
     std::string         mName;
     class LLCondition*  mRunCondition;
     LLMutex*            mDataLock;
 
-    apr_thread_t        *mAPRThreadp;
+    std::thread        *mThreadp;
     apr_pool_t          *mAPRPoolp;
     BOOL                mIsLocalPool;
     EThreadStatus       mStatus;
