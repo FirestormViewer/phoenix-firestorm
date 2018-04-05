@@ -88,7 +88,6 @@ public:
     // this kicks off the apr thread
     void start(void);
 
-    apr_pool_t *getAPRPool() { return mAPRPoolp; }
     LLVolatileAPRPool* getLocalAPRFilePool() { return mLocalAPRFilePoolp ; }
 
     U32 getID() const { return mID; }
@@ -109,8 +108,6 @@ protected:
     LLMutex*            mDataLock;
 
     std::thread        *mThreadp;
-    apr_pool_t          *mAPRPoolp;
-    BOOL                mIsLocalPool;
     EThreadStatus       mStatus;
     U32                 mID;
     LLTrace::ThreadRecorder* mRecorder;
