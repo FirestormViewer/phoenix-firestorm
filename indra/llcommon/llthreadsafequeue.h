@@ -28,12 +28,9 @@
 #define LL_LLTHREADSAFEQUEUE_H
 
 #include "llexception.h"
+#include "llmutex.h"
 #include <string>
-
-
-struct apr_pool_t; // From apr_pools.h
-class LLThreadSafeQueueImplementation; // See below.
-
+#include <deque>
 
 //
 // A general queue exception.
@@ -65,29 +62,6 @@ public:
 };
 
 
-struct apr_queue_t; // From apr_queue.h
-
-
-//
-// Implementation details. 
-//
-class LL_COMMON_API LLThreadSafeQueueImplementation
-{
-public:
-	LLThreadSafeQueueImplementation(apr_pool_t * pool, unsigned int capacity);
-	~LLThreadSafeQueueImplementation();
-	void pushFront(void * element);
-	bool tryPushFront(void * element);
-	void * popBack(void);
-	bool tryPopBack(void *& element);
-	size_t size();
-	
-private:
-	bool mOwnsPool;
-	apr_pool_t * mPool;
-	apr_queue_t * mQueue;
-};
-
 
 //
 // Implements a thread safe FIFO.
@@ -100,7 +74,7 @@ public:
 	
 	// If the pool is set to NULL one will be allocated and managed by this
 	// queue.
-	LLThreadSafeQueue(apr_pool_t * pool = 0, unsigned int capacity = 1024);
+	LLThreadSafeQueue( U32 capacity = 1024);
 	
 	// Add an element to the front of queue (will block if the queue has
 	// reached capacity).
@@ -128,7 +102,9 @@ public:
 	size_t size();
 
 private:
-	LLThreadSafeQueueImplementation mImplementation;
+	std::deque< ElementT > mStorage;
+	LLMutex mLock;
+	U32 mCapacity; // Really needed?
 };
 
 
@@ -138,8 +114,8 @@ private:
 
 
 template<typename ElementT>
-LLThreadSafeQueue<ElementT>::LLThreadSafeQueue(apr_pool_t * pool, unsigned int capacity):
-	mImplementation(pool, capacity)
+LLThreadSafeQueue<ElementT>::LLThreadSafeQueue( U32 capacity):
+	mCapacity( capacity )
 {
 	; // No op.
 }
@@ -148,12 +124,17 @@ LLThreadSafeQueue<ElementT>::LLThreadSafeQueue(apr_pool_t * pool, unsigned int c
 template<typename ElementT>
 void LLThreadSafeQueue<ElementT>::pushFront(ElementT const & element)
 {
-	ElementT * elementCopy = new ElementT(element);
-	try {
-		mImplementation.pushFront(elementCopy);
-	} catch (LLThreadSafeQueueInterrupt) {
-		delete elementCopy;
-		throw;
+	while( true )
+	{
+		{
+			LLMutexLock lck( &mLock );
+			if( mStorage.size() < mCapacity )
+			{
+				mStorage.push_front( element );
+				return;
+			}
+		}
+		ms_sleep( 100 );
 	}
 }
 
@@ -161,43 +142,60 @@ void LLThreadSafeQueue<ElementT>::pushFront(ElementT const & element)
 template<typename ElementT>
 bool LLThreadSafeQueue<ElementT>::tryPushFront(ElementT const & element)
 {
-	ElementT * elementCopy = new ElementT(element);
-	bool result = mImplementation.tryPushFront(elementCopy);
-	if(!result) delete elementCopy;
-	return result;
+	LLMutexTrylock lck( &mLock );
+	if( !lck.isLocked() )
+		return false;
+
+	if( mStorage.size() >= mCapacity )
+		return false;
+
+	mStorage.push_front( element );
+	return true;
 }
 
 
 template<typename ElementT>
 ElementT LLThreadSafeQueue<ElementT>::popBack(void)
 {
-	ElementT * element = reinterpret_cast<ElementT *> (mImplementation.popBack());
-	ElementT result(*element);
-	delete element;
-	return result;
+	while( true )
+	{
+		{
+			LLMutexLock lck( &mLock );
+			if( !mStorage.empty() )
+			{
+				ElementT value = mStorage.back();
+				mStorage.pop_back();
+				return val;
+			}
+		}
+		ms_sleep( 100 );
+	}
 }
 
 
 template<typename ElementT>
 bool LLThreadSafeQueue<ElementT>::tryPopBack(ElementT & element)
 {
-	void * storedElement;
-	bool result = mImplementation.tryPopBack(storedElement);
-	if(result) {
-		ElementT * elementPtr = reinterpret_cast<ElementT *>(storedElement); 
-		element = *elementPtr;
-		delete elementPtr;
-	} else {
-		; // No op.
-	}
-	return result;
+	LLMutexTrylock lck( &mLock );
+
+	if( !lck.isLocked() )
+		return false;
+	if( mStorage.empty() )
+		return false;
+
+	element = mStorage.back();
+	mStorage.pop_back();
+	return true;
 }
 
 
 template<typename ElementT>
 size_t LLThreadSafeQueue<ElementT>::size(void)
 {
-	return mImplementation.size();
+	// Nicky: apr_queue_size is/was NOT threadsafe. I still play it safe here and rather lock the storage
+
+	LLMutexLock lck( &mLock );
+	return mStorage.size();
 }
 
 
