@@ -33,7 +33,13 @@
 #include <atomic>
 // Forward declarations
 template <typename Type, typename AtomicType> class LLAtomic;
+
+#ifndef LL_LINUX
 typedef LLAtomic<U32, std::atomic_uint32_t> LLAtomicU32;
+#else
+typedef LLAtomic<U32, std::atomic_uint> LLAtomicU32;
+#endif
+
 class LLErrorThread;
 class LLLiveFile;
 #if LL_LINUX

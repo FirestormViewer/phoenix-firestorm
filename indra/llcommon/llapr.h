@@ -198,8 +198,14 @@ private:
 	AtomicType mData;
 };
 
+#ifndef LL_LINUX
 typedef LLAtomic<U32, std::atomic_uint32_t> LLAtomicU32;
 typedef LLAtomic<S32, std::atomic_int32_t> LLAtomicS32;
+#else
+typedef LLAtomic<U32, std::atomic_uint> LLAtomicU32;
+typedef LLAtomic<S32, std::atomic_int> LLAtomicS32;
+#endif
+
 typedef LLAtomic<bool, std::atomic_bool> LLAtomicBool;
 
 // File IO convenience functions.
