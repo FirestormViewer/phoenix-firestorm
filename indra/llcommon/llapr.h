@@ -36,15 +36,25 @@
 #include <boost/noncopyable.hpp>
 #include "llwin32headerslean.h"
 #include "apr_thread_proc.h"
-#include "apr_thread_mutex.h"
+
 #include "apr_getopt.h"
 #include "apr_signal.h"
 #include <atomic>
 
+#if LL_WINDOWS
+#pragma warning(disable:4265)
+#endif
+
+#include <mutex>
+
+#if LL_WINDOWS
+#pragma warning(default:4265)
+#endif
+
 #include "llstring.h"
 
-extern LL_COMMON_API apr_thread_mutex_t* gLogMutexp;
-extern apr_thread_mutex_t* gCallStacksLogMutexp;
+extern LL_COMMON_API std::mutex* gLogMutexp;
+extern std::mutex* gCallStacksLogMutexp;
 
 struct apr_dso_handle_t;
 /**
@@ -120,7 +130,7 @@ private:
 	S32 mNumActiveRef ; //number of active pointers pointing to the apr_pool.
 	S32 mNumTotalRef ;  //number of total pointers pointing to the apr_pool since last creating.  
 
-	apr_thread_mutex_t *mMutexp;
+	std::mutex *mMutexp;
 	apr_pool_t         *mMutexPool;
 } ;
 
@@ -142,7 +152,7 @@ public:
 	 * @param mutex An allocated APR mutex. If you pass in NULL,
 	 * this wrapper will not lock.
 	 */
-	LLScopedLock(apr_thread_mutex_t* mutex);
+	LLScopedLock( std::mutex* mutex );
 
 	/**
 	 * @brief Destructor which unlocks the mutex if still locked.
@@ -161,7 +171,7 @@ public:
 
 protected:
 	bool mLocked;
-	apr_thread_mutex_t* mMutex;
+	std::mutex* mMutex;
 };
 
 template <typename Type, typename AtomicType> class LLAtomic

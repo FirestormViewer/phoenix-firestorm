@@ -33,20 +33,11 @@
 
 //============================================================================
 
-LLMutex::LLMutex(apr_pool_t *poolp) :
-	mAPRMutexp(NULL), mCount(0), mLockingThread(NO_THREAD)
+LLMutex::LLMutex() :
+ mCount(0), mLockingThread(NO_THREAD)
 {
-	//if (poolp)
-	//{
-	//	mIsLocalPool = FALSE;
-	//	mAPRPoolp = poolp;
-	//}
-	//else
-	{
-		mIsLocalPool = TRUE;
-		apr_pool_create(&mAPRPoolp, NULL); // Create a subpool for this thread
-	}
-	apr_thread_mutex_create(&mAPRMutexp, APR_THREAD_MUTEX_UNNESTED, mAPRPoolp);
+
+	mMutexp = new std::mutex();
 }
 
 
@@ -56,15 +47,8 @@ LLMutex::~LLMutex()
 	//bad assertion, the subclass LLSignal might be "locked", and that's OK
 	//llassert_always(!isLocked()); // better not be locked!
 #endif
-	if (ll_apr_is_initialized())
-	{
-		apr_thread_mutex_destroy(mAPRMutexp);
-		if (mIsLocalPool)
-		{
-			apr_pool_destroy(mAPRPoolp);
-		}
-	}
-	mAPRMutexp = NULL;
+	delete mMutexp;
+	mMutexp = nullptr;
 }
 
 
@@ -76,7 +60,7 @@ void LLMutex::lock()
 		return;
 	}
 	
-	apr_thread_mutex_lock(mAPRMutexp);
+	mMutexp->lock();
 	
 #if MUTEX_DEBUG
 	// Have to have the lock before we can access the debug info
@@ -106,19 +90,18 @@ void LLMutex::unlock()
 #endif
 
 	mLockingThread = NO_THREAD;
-	apr_thread_mutex_unlock(mAPRMutexp);
+	mMutexp->unlock();
 }
 
 bool LLMutex::isLocked()
 {
-	apr_status_t status = apr_thread_mutex_trylock(mAPRMutexp);
-	if (APR_STATUS_IS_EBUSY(status))
+	if (!mMutexp->try_lock())
 	{
 		return true;
 	}
 	else
 	{
-		apr_thread_mutex_unlock(mAPRMutexp);
+		mMutexp->unlock();
 		return false;
 	}
 }
@@ -141,8 +124,7 @@ bool LLMutex::trylock()
 		return true;
 	}
 	
-	apr_status_t status(apr_thread_mutex_trylock(mAPRMutexp));
-	if (APR_STATUS_IS_EBUSY(status))
+	if (!mMutexp->try_lock())
 	{
 		return false;
 	}
@@ -161,44 +143,35 @@ bool LLMutex::trylock()
 
 //============================================================================
 
-LLCondition::LLCondition(apr_pool_t *poolp) :
-	LLMutex(poolp)
+LLCondition::LLCondition()
+
 {
 	// base class (LLMutex) has already ensured that mAPRPoolp is set up.
-
-	apr_thread_cond_create(&mAPRCondp, mAPRPoolp);
+	mCondp = new std::condition_variable();
 }
 
 
 LLCondition::~LLCondition()
 {
-	apr_thread_cond_destroy(mAPRCondp);
-	mAPRCondp = NULL;
+	delete mCondp;
+	mCondp = nullptr;
 }
 
 
 void LLCondition::wait()
 {
-	if (!isLocked())
-	{ //mAPRMutexp MUST be locked before calling apr_thread_cond_wait
-		apr_thread_mutex_lock(mAPRMutexp);
-#if MUTEX_DEBUG
-		// avoid asserts on destruction in non-release builds
-		U32 id = LLThread::currentID();
-		mIsLocked[id] = TRUE;
-#endif
-	}
-	apr_thread_cond_wait(mAPRCondp, mAPRMutexp);
+	std::unique_lock< std::mutex > lock( *mMutexp );
+	mCondp->wait( lock );
 }
 
 void LLCondition::signal()
 {
-	apr_thread_cond_signal(mAPRCondp);
+	mCondp->notify_one() ;
 }
 
 void LLCondition::broadcast()
 {
-	apr_thread_cond_broadcast(mAPRCondp);
+	mCondp->notify_all();
 }
 
 

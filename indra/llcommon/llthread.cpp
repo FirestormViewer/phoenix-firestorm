@@ -183,8 +183,8 @@ LLThread::LLThread(const std::string& name, apr_pool_t *poolp) :
         mIsLocalPool = TRUE;
         apr_pool_create(&mAPRPoolp, NULL); // Create a subpool for this thread
     }
-    mRunCondition = new LLCondition(mAPRPoolp);
-    mDataLock = new LLMutex(mAPRPoolp);
+    mRunCondition = new LLCondition();
+    mDataLock = new LLMutex();
     mLocalAPRFilePoolp = NULL ;
 }
 
@@ -409,7 +409,7 @@ void LLThreadSafeRefCount::initThreadSafeRefCount()
 {
     if (!sMutex)
     {
-        sMutex = new LLMutex(0);
+        sMutex = new LLMutex();
     }
 }
 

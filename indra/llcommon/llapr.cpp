@@ -33,8 +33,8 @@
 
 apr_pool_t *gAPRPoolp = NULL; // Global APR memory pool
 LLVolatileAPRPool *LLAPRFile::sAPRFilePoolp = NULL ; //global volatile APR memory pool.
-apr_thread_mutex_t *gLogMutexp = NULL;
-apr_thread_mutex_t *gCallStacksLogMutexp = NULL;
+std::mutex *gLogMutexp = nullptr;
+std::mutex *gCallStacksLogMutexp = nullptr;
 
 const S32 FULL_VOLATILE_APR_POOL = 1024 ; //number of references to LLVolatileAPRPool
 
@@ -49,9 +49,8 @@ void ll_init_apr()
 	{
 		apr_pool_create(&gAPRPoolp, NULL);
 		
-		// Initialize the logging mutex
-		apr_thread_mutex_create(&gLogMutexp, APR_THREAD_MUTEX_UNNESTED, gAPRPoolp);
-		apr_thread_mutex_create(&gCallStacksLogMutexp, APR_THREAD_MUTEX_UNNESTED, gAPRPoolp);
+		gLogMutexp = new std::mutex();
+		gCallStacksLogMutexp = new std::mutex();
 	}
 
 	if(!LLAPRFile::sAPRFilePoolp)
@@ -75,22 +74,12 @@ void ll_cleanup_apr()
 
 	LL_INFOS("APR") << "Cleaning up APR" << LL_ENDL;
 
-	if (gLogMutexp)
-	{
-		// Clean up the logging mutex
-
-		// All other threads NEED to be done before we clean up APR, so this is okay.
-		apr_thread_mutex_destroy(gLogMutexp);
-		gLogMutexp = NULL;
-	}
-	if (gCallStacksLogMutexp)
-	{
-		// Clean up the logging mutex
-
-		// All other threads NEED to be done before we clean up APR, so this is okay.
-		apr_thread_mutex_destroy(gCallStacksLogMutexp);
-		gCallStacksLogMutexp = NULL;
-	}
+	// Clean up the logging mutex
+	// All other threads NEED to be done before we clean up APR, so this is okay.
+	delete gLogMutexp;
+	gLogMutexp = nullptr;
+	delete gCallStacksLogMutexp;
+	gCallStacksLogMutexp = nullptr;
 
 	LLThreadLocalPointerBase::destroyAllThreadLocalStorage();
 
@@ -176,18 +165,14 @@ LLVolatileAPRPool::LLVolatileAPRPool(BOOL is_local, apr_pool_t *parent, apr_size
 	if(!is_local) //not a local apr_pool, that is: shared by multiple threads.
 	{
 		apr_pool_create(&mMutexPool, NULL); // Create a pool for mutex
-		apr_thread_mutex_create(&mMutexp, APR_THREAD_MUTEX_UNNESTED, mMutexPool);
+		mMutexp = new std::mutex();
 	}
 }
 
 LLVolatileAPRPool::~LLVolatileAPRPool()
 {
-	//delete mutex
-	if(mMutexp)
-	{
-		apr_thread_mutex_destroy(mMutexp);
-		apr_pool_destroy(mMutexPool);
-	}
+	delete mMutexp;
+	mMutexp = nullptr;
 }
 
 //
@@ -254,18 +239,12 @@ BOOL LLVolatileAPRPool::isFull()
 //
 // LLScopedLock
 //
-LLScopedLock::LLScopedLock(apr_thread_mutex_t* mutex) : mMutex(mutex)
+LLScopedLock::LLScopedLock(std::mutex* mutex) : mMutex(mutex)
 {
 	if(mutex)
 	{
-		if(ll_apr_warn_status(apr_thread_mutex_lock(mMutex)))
-		{
-			mLocked = false;
-		}
-		else
-		{
-			mLocked = true;
-		}
+		mutex->lock();
+		mLocked = true;
 	}
 	else
 	{
@@ -282,10 +261,7 @@ void LLScopedLock::unlock()
 {
 	if(mLocked)
 	{
-		if(!ll_apr_warn_status(apr_thread_mutex_unlock(mMutex)))
-		{
-			mLocked = false;
-		}
+		mMutex->unlock();
 	}
 }
 

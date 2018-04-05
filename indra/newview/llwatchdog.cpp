@@ -185,7 +185,7 @@ void LLWatchdog::init(killer_event_callback func)
 	mKillerCallback = func;
 	if(!mSuspectsAccessMutex && !mTimer)
 	{
-		mSuspectsAccessMutex = new LLMutex(NULL);
+		mSuspectsAccessMutex = new LLMutex();
 		mTimer = new LLWatchdogTimerThread();
 		mTimer->setSleepTime(WATCHDOG_SLEEP_TIME_USEC / 1000);
 		mLastClockCount = LLTimer::getTotalTime();

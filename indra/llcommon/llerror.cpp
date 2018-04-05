@@ -1018,8 +1018,7 @@ namespace {
 		const int MAX_RETRIES = 5;
 		for (int attempts = 0; attempts < MAX_RETRIES; ++attempts)
 		{
-			apr_status_t s = apr_thread_mutex_trylock(gLogMutexp);
-			if (!APR_STATUS_IS_EBUSY(s))
+			if( gLogMutexp->try_lock() )
 			{
 				mLocked = true;
 				mOK = true;
@@ -1041,7 +1040,7 @@ namespace {
 	{
 		if (mLocked)
 		{
-			apr_thread_mutex_unlock(gLogMutexp);
+			gLogMutexp->unlock();
 		}
 	}
 }

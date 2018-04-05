@@ -29,6 +29,16 @@
 
 #include "stdtypes.h"
 
+#if LL_WINDOWS
+#pragma warning(disable:4265)
+#endif
+
+#include <mutex>
+#include <condition_variable>
+
+#if LL_WINDOWS
+#pragma warning(default:4265)
+#endif
 //============================================================================
 
 #define MUTEX_DEBUG (LL_DEBUG || LL_RELEASE_WITH_DEBUG_INFO)
@@ -37,9 +47,6 @@
 #include <map>
 #endif
 
-struct apr_thread_mutex_t;
-struct apr_pool_t;
-struct apr_thread_cond_t;
 
 class LL_COMMON_API LLMutex
 {
@@ -49,7 +56,7 @@ public:
 		NO_THREAD = 0xFFFFFFFF
 	} e_locking_thread;
 
-	LLMutex(apr_pool_t *apr_poolp = NULL); // NULL pool constructs a new pool for the mutex
+	LLMutex(); // NULL pool constructs a new pool for the mutex
 	virtual ~LLMutex();
 	
 	void lock();		// blocks
@@ -60,11 +67,10 @@ public:
 	U32 lockingThread() const; //get ID of locking thread
 	
 protected:
-	apr_thread_mutex_t *mAPRMutexp;
+	std::mutex *mMutexp;
 	mutable U32			mCount;
 	mutable U32			mLockingThread;
 	
-	apr_pool_t			*mAPRPoolp;
 	BOOL				mIsLocalPool;
 	
 #if MUTEX_DEBUG
@@ -76,7 +82,7 @@ protected:
 class LL_COMMON_API LLCondition : public LLMutex
 {
 public:
-	LLCondition(apr_pool_t* apr_poolp); // Defaults to global pool, could use the thread pool as well.
+	LLCondition(); // Defaults to global pool, could use the thread pool as well.
 	~LLCondition();
 	
 	void wait();		// blocks
@@ -84,7 +90,7 @@ public:
 	void broadcast();
 	
 protected:
-	apr_thread_cond_t* mAPRCondp;
+	std::condition_variable* mCondp;
 };
 
 class LLMutexLock
