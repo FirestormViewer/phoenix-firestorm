@@ -52,6 +52,9 @@
 #include "lltimer.h"
 
 namespace {
+	LLMutex gLogMutex;
+	LLMutex gCallStacksLogMutex ;
+
 #if LL_WINDOWS
 	void debugger_print(const std::string& s)
 	{
@@ -412,7 +415,7 @@ namespace
 
 namespace LLError
 {
-	class SettingsConfig : public LLRefCount
+	class SettingsConfig: public LLRefCount
 	{
 		friend class Settings;
 
@@ -994,63 +997,14 @@ namespace {
 		}
 		return found_level;
 	}
-	
-	class LogLock
-	{
-	public:
-		LogLock();
-		~LogLock();
-		bool ok() const { return mOK; }
-	private:
-		bool mLocked;
-		bool mOK;
-	};
-	
-	LogLock::LogLock()
-		: mLocked(false), mOK(false)
-	{
-		if (!gLogMutexp)
-		{
-			mOK = true;
-			return;
-		}
-		
-		const int MAX_RETRIES = 5;
-		for (int attempts = 0; attempts < MAX_RETRIES; ++attempts)
-		{
-			if( gLogMutexp->try_lock() )
-			{
-				mLocked = true;
-				mOK = true;
-				return;
-			}
-
-			ms_sleep(1);
-			//apr_thread_yield();
-				// Just yielding won't necessarily work, I had problems with
-				// this on Linux - doug 12/02/04
-		}
-
-		// We're hosed, we can't get the mutex.  Blah.
-		std::cerr << "LogLock::LogLock: failed to get mutex for log"
-					<< std::endl;
-	}
-	
-	LogLock::~LogLock()
-	{
-		if (mLocked)
-		{
-			gLogMutexp->unlock();
-		}
-	}
 }
 
 namespace LLError
 {
 	bool Log::shouldLog(CallSite& site)
 	{
-		LogLock lock;
-		if (!lock.ok())
+		LLMutexTrylock lock( &gLogMutex,5);
+		if (!lock.isLocked() )
 		{
 			return false;
 		}
@@ -1100,11 +1054,11 @@ namespace LLError
 
 	std::ostringstream* Log::out()
 	{
-		LogLock lock;
+		LLMutexTrylock lock(&gLogMutex,5);
 		// If we hit a logging request very late during shutdown processing,
 		// when either of the relevant LLSingletons has already been deleted,
 		// DO NOT resurrect them.
-		if (lock.ok() && ! (Settings::wasDeleted() || Globals::wasDeleted()))
+		if (lock.isLocked() && ! (Settings::wasDeleted() || Globals::wasDeleted()))
 		{
 			Globals* g = Globals::getInstance();
 
@@ -1120,8 +1074,8 @@ namespace LLError
 
 	void Log::flush(std::ostringstream* out, char* message)
 	{
-		LogLock lock;
-		if (!lock.ok())
+		LLMutexTrylock lock(&gLogMutex,5);
+		if (!lock.isLocked())
 		{
 			return;
 		}
@@ -1160,8 +1114,8 @@ namespace LLError
 
 	void Log::flush(std::ostringstream* out, const CallSite& site)
 	{
-		LogLock lock;
-		if (!lock.ok())
+		LLMutexTrylock lock(&gLogMutex,5);
+		if (!lock.isLocked())
 		{
 			return;
 		}

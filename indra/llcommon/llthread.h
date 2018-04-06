@@ -98,16 +98,16 @@ public:
     static void registerThreadID();
     
 private:
-    BOOL                mPaused;
+    bool                mPaused;
     
-	void staticRun(  );
+	void threadRun(  );
 
 protected:
     std::string         mName;
     class LLCondition*  mRunCondition;
     LLMutex*            mDataLock;
 
-    std::thread        *mThreadp;
+    std::thread         *mThreadp;
     EThreadStatus       mStatus;
     U32                 mID;
     LLTrace::ThreadRecorder* mRecorder;

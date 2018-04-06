@@ -116,7 +116,7 @@ void LLThread::registerThreadID()
 //
 // Handed to the APR thread creation function
 //
-void  LLThread::staticRun()
+void  LLThread::threadRun()
 {
 #ifdef LL_WINDOWS
 	set_thread_name( -1, mName.c_str() );
@@ -268,7 +268,7 @@ void LLThread::start()
 
 	try
 	{
-		mThreadp = new std::thread( std::bind( &LLThread::staticRun, this ) );
+		mThreadp = new std::thread( std::bind( &LLThread::threadRun, this ) );
 		//mThreadp->detach();
 	}
 	catch( std::system_error& ex )

@@ -28,6 +28,7 @@
 #define LL_LLMUTEX_H
 
 #include "stdtypes.h"
+#include "lltimer.h"
 
 #if LL_WINDOWS
 #pragma warning(disable:4265)
@@ -67,11 +68,11 @@ public:
 	U32 lockingThread() const; //get ID of locking thread
 	
 protected:
-	std::mutex *mMutexp;
+	std::mutex mMutex;
 	mutable U32			mCount;
 	mutable U32			mLockingThread;
 	
-	BOOL				mIsLocalPool;
+	bool				mIsLocalPool;
 	
 #if MUTEX_DEBUG
 	std::map<U32, BOOL> mIsLocked;
@@ -90,7 +91,7 @@ public:
 	void broadcast();
 	
 protected:
-	std::condition_variable* mCondp;
+	std::condition_variable mCond;
 };
 
 class LLMutexLock
@@ -131,6 +132,23 @@ public:
 	{
 		if (mMutex)
 			mLocked = mMutex->trylock();
+	}
+	LLMutexTrylock( LLMutex* mutex, U32 aTries )
+		: mMutex( mutex ),
+		mLocked( false )
+	{
+		if( !mMutex )
+			return;
+
+		U32 i = 0;
+		while( i < aTries )
+		{
+			mLocked = mMutex->trylock();
+			if( mLocked )
+				break;
+			++i;
+			ms_sleep( 10 );
+		}
 	}
 
 	~LLMutexTrylock()

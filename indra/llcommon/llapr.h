@@ -53,9 +53,6 @@
 
 #include "llstring.h"
 
-extern LL_COMMON_API std::mutex* gLogMutexp;
-extern std::mutex* gCallStacksLogMutexp;
-
 struct apr_dso_handle_t;
 /**
  * @brief Function which appropriately logs error or remains quiet on
