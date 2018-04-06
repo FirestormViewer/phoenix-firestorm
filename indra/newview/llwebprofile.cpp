@@ -42,7 +42,11 @@
 #include "llcorehttputil.h"
 
 // third-party
+#ifndef LL_USESYSTEMLIBS
 #include "reader.h" // JSON
+#else
+#include "json/reader.h" // JSON
+#endif
 
 /*
  * Workflow:
