@@ -54,10 +54,10 @@ include(VisualLeakDetector)
 include(ZLIB)
 include(URIPARSER)
 
-if (NOT HAVOK_TPV)
+if ( HAVOK )
    # When using HAVOK_TPV, the library is precompiled, so no need for this
    add_subdirectory(${LLPHYSICSEXTENSIONS_SRC_DIR} llphysicsextensions)
-endif (NOT HAVOK_TPV)
+endif ( HAVOK )
 
 if(FMODEX)
   include_directories(${FMODEX_INCLUDE_DIR})
@@ -1990,7 +1990,7 @@ if (LINUX)
     linux-crash-logger
     SLPlugin
     media_plugin_gstreamer010
-    media_plugin_libvlc
+    #media_plugin_libvlc
     llcommon
     )
 
