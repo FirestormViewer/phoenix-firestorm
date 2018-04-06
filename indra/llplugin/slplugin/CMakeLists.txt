@@ -82,6 +82,10 @@ if (DARWIN)
   )
 endif (DARWIN)
 
+if( LINUX )
+    SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
+endif()
+  
 if (LL_TESTS)
   ll_deploy_sharedlibs_command(SLPlugin)
 endif (LL_TESTS)
