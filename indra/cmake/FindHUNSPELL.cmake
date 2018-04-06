@@ -6,11 +6,11 @@
 #  HUNSPELL_LIBRARY, the library needed to use HUNSPELL.
 #  HUNSPELL_FOUND, If false, do not try to use HUNSPELL.
 
-find_path(HUNSPELL_INCLUDE_DIR hunspell.h
+find_path(HUNSPELL_INCLUDE_DIR hunspell.hxx
   PATH_SUFFIXES hunspell
   )
 
-set(HUNSPELL_NAMES ${HUNSPELL_NAMES} libhunspell-1.3 libhunspell)
+set(HUNSPELL_NAMES ${HUNSPELL_NAMES} libhunspell-1.3.a libhunspell.a)
 find_library(HUNSPELL_LIBRARY
   NAMES ${HUNSPELL_NAMES}
   )

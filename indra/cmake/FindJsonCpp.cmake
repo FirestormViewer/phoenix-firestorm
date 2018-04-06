@@ -9,9 +9,10 @@
 #  also defined, but not for general use are
 #  JSONCPP_LIBRARY, where to find the jsoncpp library.
 
-FIND_PATH(JSONCPP_INCLUDE_DIR jsoncpp/json.h
+FIND_PATH(JSONCPP_INCLUDE_DIR json/json.h
 /usr/local/include
 /usr/include
+/usr/include/jsoncpp
 )
 
 # Get the GCC compiler version
@@ -25,7 +26,7 @@ EXEC_PROGRAM(${CMAKE_CXX_COMPILER}
 SET(JSONCPP_NAMES ${JSONCPP_NAMES} libjson_linux-gcc-${_gcc_COMPILER_VERSION}_libmt.so)
 IF (USESYSTEMLIBS)
     # On standalone, assume that the system installed library was compiled with the used compiler.
-    SET(JSONCPP_NAMES ${JSONCPP_NAMES} libjson.so)
+    SET(JSONCPP_NAMES ${JSONCPP_NAMES} libjson.so libjsoncpp.so )
 ENDIF (USESYSTEMLIBS)
 FIND_LIBRARY(JSONCPP_LIBRARY
   NAMES ${JSONCPP_NAMES}

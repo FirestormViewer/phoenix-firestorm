@@ -14,7 +14,7 @@
 # Note: Since this file is only used for standalone, the windows
 # specific parts were left out.
 
-FIND_PATH(URIPARSER_INCLUDE_DIR uriparser/uri.h
+FIND_PATH(URIPARSER_INCLUDE_DIR uriparser/Uri.h
   NO_SYSTEM_ENVIRONMENT_PATH
   )
 
