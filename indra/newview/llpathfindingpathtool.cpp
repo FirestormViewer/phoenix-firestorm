@@ -377,12 +377,12 @@ bool LLPathfindingPathTool::hasFinalA() const
 	return mFinalPathData.mHasPointA;
 }
 
-const LLVector3 &LLPathfindingPathTool::getFinalAStart() const
+const LLVector3 LLPathfindingPathTool::getFinalAStart() const
 {
 	return mFinalPathData.mStartPointA;
 }
 
-const LLVector3 &LLPathfindingPathTool::getFinalAEnd() const
+const LLVector3 LLPathfindingPathTool::getFinalAEnd() const
 {
 	return mFinalPathData.mEndPointA;
 }
@@ -411,12 +411,12 @@ bool LLPathfindingPathTool::hasFinalB() const
 	return mFinalPathData.mHasPointB;
 }
 
-const LLVector3 &LLPathfindingPathTool::getFinalBStart() const
+const LLVector3 LLPathfindingPathTool::getFinalBStart() const
 {
 	return mFinalPathData.mStartPointB;
 }
 
-const LLVector3 &LLPathfindingPathTool::getFinalBEnd() const
+const LLVector3 LLPathfindingPathTool::getFinalBEnd() const
 {
 	return mFinalPathData.mEndPointB;
 }
