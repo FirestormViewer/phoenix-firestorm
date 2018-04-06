@@ -76,7 +76,7 @@ private:
 	bool play(double rate);
 	bool getTimePos(double &sec_out);
 
-	static const double MIN_LOOP_SEC = 1.0F;
+	static constexpr double MIN_LOOP_SEC = 1.0F;
 
 	bool mIsLooping;
 
@@ -798,10 +798,6 @@ MediaPluginGStreamer010::startup()
 	// only do global GStreamer initialization once.
 	if (!mDoneInit)
 	{
-		g_thread_init(NULL);
-
-		// Init the glib type system - we need it.
-		g_type_init();
 
 		// Get symbols!
 #if LL_DARWIN

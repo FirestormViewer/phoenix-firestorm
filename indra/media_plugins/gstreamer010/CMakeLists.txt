@@ -37,7 +37,7 @@ if(NOT ADDRESS_SIZE EQUAL 32)
   if(WINDOWS)
     ##add_definitions(/FIXED:NO)
   else(WINDOWS) # not windows therefore gcc LINUX and DARWIN
-    add_definitions(-fPIC)
+    add_definitions(-fPIC -Wno-literal-suffix)
   endif(WINDOWS)
 endif(NOT ADDRESS_SIZE EQUAL 32)
 
