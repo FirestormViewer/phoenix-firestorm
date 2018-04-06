@@ -69,7 +69,7 @@ target_link_libraries(media_plugin_gstreamer010
 add_dependencies(media_plugin_gstreamer010
   ${LLPLUGIN_LIBRARIES}
   ${MEDIA_PLUGIN_BASE_LIBRARIES}
-  ${LLCOMMON_LIBRARIES}
+  llcommon
 )
 
 
