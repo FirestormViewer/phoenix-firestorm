@@ -59,6 +59,9 @@ add_executable(linux-crash-logger ${linux_crash_logger_SOURCE_FILES})
 # llcommon uses `clock_gettime' which is provided by librt on linux.
 set(LIBRT_LIBRARY rt)
 
+set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+find_package(Threads REQUIRED)
 
 target_link_libraries(linux-crash-logger
     ${LLCRASHLOGGER_LIBRARIES}
@@ -75,6 +78,7 @@ target_link_libraries(linux-crash-logger
     ${DB_LIBRARIES}
     ${FREETYPE_LIBRARIES}
     ${LIBRT_LIBRARY}
+    Threads::Threads
     )
 
 add_custom_target(linux-crash-logger-target ALL
