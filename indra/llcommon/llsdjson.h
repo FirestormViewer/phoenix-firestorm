@@ -34,7 +34,12 @@
 #include "stdtypes.h"
 
 #include "llsd.h"
+
+#ifndef LL_USESYSTEMLIBS
 #include "value.h"
+#else
+#include "json/value.h"
+#endif
 
 /// Convert a parsed JSON structure into LLSD maintaining member names and 
 /// array indexes.
