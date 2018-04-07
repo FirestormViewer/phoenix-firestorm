@@ -137,14 +137,22 @@ S32 LLPrimTextureList::copyTexture(const U8 index, const LLTextureEntry& te)
 		// we're changing an existing entry
 	llassert(mEntryList[index]);
 	delete (mEntryList[index]);
-	if  (&te)
-	{
-		mEntryList[index] = te.newCopy();
-	}
-	else
-	{
-		mEntryList[index] = LLPrimTextureList::newTextureEntry();
-	}
+
+	//<FS:ND> The compiler will assume te being valid as it is passed by reference and thus else will never be executed.
+	// If someone really passed *nullptr in here, this will be undefined behaviour
+	
+	// if  (&te)
+	// {
+	// 	mEntryList[index] = te.newCopy();
+	// }
+	// else
+	// {
+	// 	mEntryList[index] = LLPrimTextureList::newTextureEntry();
+	// }
+
+	mEntryList[index] = te.newCopy();
+	// </FS:ND>
+	
 	return TEM_CHANGE_TEXTURE;
 }
 

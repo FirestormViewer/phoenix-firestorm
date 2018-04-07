@@ -785,7 +785,10 @@ bool LLVivoxVoiceClient::callbackEndDaemon(const LLSD& data)
 bool LLVivoxVoiceClient::startAndLaunchDaemon()
 {
     //---------------------------------------------------------------------
-    if (!voiceEnabled())
+    // </FS:Ansariel> Bypass cached controls
+    //if (!voiceEnabled())
+    if (!voiceEnabled(true))
+    // </FS:Ansariel>
     {
         // Voice is locked out, we must not launch the vivox daemon.
         return false;

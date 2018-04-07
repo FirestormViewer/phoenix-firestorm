@@ -28,13 +28,13 @@
     animate="false"
     follows="top|left"
     clip="false"
-    height="9"
+    height="27"
     width="200"
     left_pad="0"
     layout="topleft"
     orientation="horizontal"
     name="ls_control_panel"
-    top="18"
+    top="0"
     left="3">
     <layout_panel
       name="lp_translate_btn"

@@ -1471,10 +1471,10 @@ BOOL LLWindowSDL::convertCoords(LLCoordGL from, LLCoordWindow *to)
     if (!to)
         return FALSE;
 
-	to->mX = from.mX;
-	to->mY = mWindow->h - from.mY - 1;
+    to->mX = from.mX;
+    to->mY = mWindow->h - from.mY - 1;
 
-	return TRUE;
+    return TRUE;
 }
 
 BOOL LLWindowSDL::convertCoords(LLCoordWindow from, LLCoordGL* to)
@@ -1482,31 +1482,31 @@ BOOL LLWindowSDL::convertCoords(LLCoordWindow from, LLCoordGL* to)
     if (!to)
         return FALSE;
 
-	to->mX = from.mX;
-	to->mY = mWindow->h - from.mY - 1;
+    to->mX = from.mX;
+    to->mY = mWindow->h - from.mY - 1;
 
-	return TRUE;
+    return TRUE;
 }
 
 BOOL LLWindowSDL::convertCoords(LLCoordScreen from, LLCoordWindow* to)
 {
     if (!to)
-		return FALSE;
+        return FALSE;
 
-	// In the fullscreen case, window and screen coordinates are the same.
-	to->mX = from.mX;
-	to->mY = from.mY;
+    // In the fullscreen case, window and screen coordinates are the same.
+    to->mX = from.mX;
+    to->mY = from.mY;
     return (TRUE);
 }
 
 BOOL LLWindowSDL::convertCoords(LLCoordWindow from, LLCoordScreen *to)
 {
     if (!to)
-		return FALSE;
+        return FALSE;
 
-	// In the fullscreen case, window and screen coordinates are the same.
-	to->mX = from.mX;
-	to->mY = from.mY;
+    // In the fullscreen case, window and screen coordinates are the same.
+    to->mX = from.mX;
+    to->mY = from.mY;
     return (TRUE);
 }
 

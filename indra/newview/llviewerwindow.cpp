@@ -6854,6 +6854,10 @@ void LLViewerWindow::setUIVisibility(bool visible)
 
 	// <FS:Ansariel> Notification not showing if hiding the UI
 	FSNearbyChat::instance().showDefaultChatBar(visible && !gSavedSettings.getBOOL("AutohideChatBar"));
+	gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
+	gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", visible && gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
+	mRootView->getChildView("chiclet_container")->setVisible(visible);
+	// </FS:Ansariel>
 
 	// <FS:Zi> Is done inside XUI now, using visibility_control
 	//LLNavigationBar::getInstance()->setVisible(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);

@@ -157,7 +157,7 @@ if (LINUX)
   if ( ${FORTIFY_SOURCE_RES} EQUAL 0 )
    add_definitions(-D_FORTIFY_SOURCE=2)
   endif()
-  set(CMAKE_CXX_FLAGS "-Wno-deprecated -Wno-unused-but-set-variable -Wno-unused-variable ${CMAKE_CXX_FLAGS}")
+  set(CMAKE_CXX_FLAGS "-Wno-deprecated -Wno-unused-but-set-variable -Wno-unused-variable -Wno-placement-new ${CMAKE_CXX_FLAGS}")
 
   # gcc 4.3 and above don't like the LL boost and also
   # cause warnings due to our use of deprecated headers
@@ -180,6 +180,10 @@ if (LINUX)
   add_definitions(-std=gnu++11)
   # </FS:ND>
 
+  # <FS:ND> Enable old C++ ABI
+  add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
+  # </FS:ND>
+
   # force this platform to accept TOS via external browser <FS:ND> No, do not.
   # add_definitions(-DEXTERNAL_TOS)
 
@@ -198,7 +202,8 @@ if (LINUX)
     # this stops us requiring a really recent glibc at runtime
     add_compile_options(-fno-stack-protector)
     # linking can be very memory-hungry, especially the final viewer link
-    set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory")
+    #set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory")
+	set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
   endif (NOT USESYSTEMLIBS)
 
   set(CMAKE_CXX_FLAGS_DEBUG "-fno-inline ${CMAKE_CXX_FLAGS_DEBUG}")
