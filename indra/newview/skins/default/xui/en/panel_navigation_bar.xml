@@ -33,7 +33,7 @@
  height="22"
  layout="topleft"
  name="navigation_bar_visibility_panel"
- visibility_control="ShowNavbarNavigationPanel"
+ visibility_control="FSInternalShowNavbarNavigationPanel"
  auto_resize="false"
  width="1024">
 
@@ -216,7 +216,7 @@
  height="15"
  layout="topleft"
  name="favorites_bar_visibility_panel"
- visibility_control="ShowNavbarFavoritesPanel"
+ visibility_control="FSInternalShowNavbarFavoritesPanel"
  auto_resize="false">
 
   <favorites_bar

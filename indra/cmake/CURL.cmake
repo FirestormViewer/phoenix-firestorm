@@ -1,5 +1,6 @@
 # -*- cmake -*-
 include(Prebuilt)
+include(NGHTTP2)
 
 set(CURL_FIND_QUIETLY ON)
 set(CURL_FIND_REQUIRED ON)
@@ -16,7 +17,7 @@ else (USESYSTEMLIBS)
     set(CURL_LIBRARIES libcurl.a)
       if (LINUX)
           list(APPEND CURL_LIBRARIES
-               pthread
+               pthread ${NGHTTP2_LIBRARIES}
               )
       endif (LINUX)
   endif (WINDOWS)

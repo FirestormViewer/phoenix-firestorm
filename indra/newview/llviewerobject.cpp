@@ -2709,20 +2709,24 @@ void LLViewerObject::interpolateLinearMotion(const F64SecondsImplicit& time, con
 			// Extrapolation across region boundaries is almost always wrong, and if the region being
 			// entered is slow to respond, very wrong.
 			// Probably don't need edge of world check below any more since we are clipping the predictor to the region.
-			bool clipped; // true if clipped at boundary
-			LLVector3d clip_pos_global_region = LLWorld::getInstance()->clipToRegion(mRegionp,old_pos_global, new_pos_global, clipped);
-			if (clipped)
+			static LLCachedControl<bool> fsExperimentalRegionCrossingMovementFix(gSavedSettings, "FSExperimentalRegionCrossingMovementFix");
+			if (fsExperimentalRegionCrossingMovementFix)
 			{
-				// Was clipped, so we crossed a region boundary
-				//LL_INFOS() << "Beyond region edge, clipped predicted position to " << mRegionp->getPosRegionFromGlobal(clip_pos_global_region)
-				//	<< " from [" << getPositionRegion() << " .. " << new_pos << "]" << LL_ENDL;
-				new_pos = mRegionp->getPosRegionFromGlobal(clip_pos_global_region);
-				// Don't zero out velocity on the server. Telling the server affects scripts and audio.
-				//new_v.clear();
-				//setAcceleration(LLVector3::zero); // stop linear acceleration
-				LLVector3 new_angv;
-				new_angv.clear();
-				setAngularVelocity(new_angv); // stop rotation
+				bool clipped; // true if clipped at boundary
+				LLVector3d clip_pos_global_region = LLWorld::getInstance()->clipToRegion(mRegionp, old_pos_global, new_pos_global, clipped);
+				if (clipped)
+				{
+					// Was clipped, so we crossed a region boundary
+					//LL_INFOS() << "Beyond region edge, clipped predicted position to " << mRegionp->getPosRegionFromGlobal(clip_pos_global_region)
+					//	<< " from [" << getPositionRegion() << " .. " << new_pos << "]" << LL_ENDL;
+					new_pos = mRegionp->getPosRegionFromGlobal(clip_pos_global_region);
+					// Don't zero out velocity on the server. Telling the server affects scripts and audio.
+					//new_v.clear();
+					//setAcceleration(LLVector3::zero); // stop linear acceleration
+					LLVector3 new_angv;
+					new_angv.clear();
+					setAngularVelocity(new_angv); // stop rotation
+				}
 			}
 			// </FS>
 

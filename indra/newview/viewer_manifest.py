@@ -1957,12 +1957,16 @@ class LinuxManifest(ViewerManifest):
         with self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release'), dst="lib"):
             self.path( "libcef.so" )
             self.path( "libllceflib.so" )
+            
+        with self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
+            self.path( "*.so" )
 
         with self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'release'), dst="bin"):
             self.path( "chrome-sandbox" )
-            self.path( "llceflib_host" )
+            self.path( "dullahan_host" )
             self.path( "natives_blob.bin" )
             self.path( "snapshot_blob.bin" )
+            self.path( "v8_context_snapshot.bin" )
             self.path( "libffmpegsumo.so" )
 
         with self.prefix(src=os.path.join(os.pardir, 'packages', 'resources'), dst="bin"):
@@ -2159,7 +2163,7 @@ class LinuxManifest(ViewerManifest):
                 [os.path.join(self.get_dst_prefix(), dir) for dir in ('bin', 'lib')] +
                 # <FS:Ansariel> Remove VMP
                 #['-type', 'f', '!', '-name', '*.py', '!', '-name', 'SL_Launcher',
-                ['-type', 'f', '!',
+                ['-type', 'f', "!", "-name", "*.dat", "!", "-name", "*.pak", "!", "-name", "*.bin",
                 # </FS:Ansariel> Remove VMP
                  '!', '-name', 'update_install', '-exec', 'strip', '-S', '{}', ';'])
 
