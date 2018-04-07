@@ -2481,7 +2481,7 @@ http://secondlife.com/download.
 		<usetemplate ignoretext="Подтверждать перед удалением системной папки" name="okcancelignore" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmEmptyTrash">
-		Вы действительно хотите необратимо удалить содержимое корзины?
+		[COUNT] предметов(а) и папки будут окончательно удалены. Вы действительно хотите удалить содержимое корзины без возможности восстановления?
 		<usetemplate ignoretext="Подтверждать перед опорожнением корзины инвентаря" name="okcancelignore" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="TrashIsFull">
@@ -3647,7 +3647,7 @@ URL: [MEDIAURL]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect">
-		Возникли проблемы соединения с голосовым сервером:
+		Нет связи с речевым сервером: порты 
 
 &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 

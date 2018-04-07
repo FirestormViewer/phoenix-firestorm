@@ -288,8 +288,8 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 		Abmeldeanforderung führte zu einem Simulatorfehler.
 	</string>
 	<string name="LoginFailedPendingLogout">
-		Das System meldet Sie gerade ab.
-Bitte warten Sie eine Minute, bevor Sie erneut versuchen sich anzumelden.
+		Das System meldet Sie gerade ab. 
+Bitte warten Sie eine Minute, bevor Sie sich erneut einloggen.
 	</string>
 	<string name="LoginFailedUnableToCreateSession">
 		Es kann keine gültige Sitzung erstellt werden.

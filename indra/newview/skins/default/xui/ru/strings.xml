@@ -283,9 +283,8 @@ support@secondlife.com.
 		В ответ на запрос выхода, симулятор вернул сообщение о сбое.
 	</string>
 	<string name="LoginFailedPendingLogout">
-		В системе выполняется выход для вашего аккаунта.
-Он будет недоступна до
-[TIME] по тихоокеанскому времени.
+		В системе выполняется выход для вашего аккаунта. 
+Подождите минуту перед повторным входом в систему.
 	</string>
 	<string name="LoginFailedUnableToCreateSession">
 		Не удается создать допустимый сеанс.
@@ -1658,6 +1657,9 @@ support@secondlife.com.
 	</string>
 	<string name="InventoryMarketplaceListingsNoItems">
 		Перетащите папки в эту область, чтобы выставить их на продажу в [[MARKETPLACE_DASHBOARD_URL] Торговом центре].
+	</string>
+	<string name="InventoryItemsCount">
+		( [ITEMS_COUNT] предметов(а))
 	</string>
 	<string name="Marketplace Validation Warning Stock">
 		В папке версии должна быть папка запасов
