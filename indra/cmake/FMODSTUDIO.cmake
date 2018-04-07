@@ -41,15 +41,9 @@ if (FMODSTUDIO)
             debug fmodL
             optimized fmod)
       elseif (LINUX)
-        if (ADDRESS_SIZE EQUAL 32)
-          set(FMODSTUDIO_LIBRARY 
+        set(FMODSTUDIO_LIBRARY 
             debug fmodL
             optimized fmod)
-         elseif (ADDRESS_SIZE EQUAL 64)
-          set(FMODSTUDIO_LIBRARY 
-            debug fmodL64
-            optimized fmod64)
-         endif(ADDRESS_SIZE EQUAL 32)
       endif (WINDOWS)
       set(FMODSTUDIO_LIBRARIES ${FMODSTUDIO_LIBRARY})
       set(FMODSTUDIO_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include/fmodstudio)

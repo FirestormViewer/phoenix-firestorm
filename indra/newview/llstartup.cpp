@@ -650,6 +650,11 @@ bool idle_startup()
 		gSavedSettings.setString("FSInternalSkinCurrentTheme", gSavedSettings.getString("FSSkinCurrentThemeReadableName"));
 		// </FS:Ansariel>
 
+		// <FS:Ansariel> Notification not showing if hiding the UI
+		gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
+		gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
+		// </FS:Ansariel>
+
 		if (LLFeatureManager::getInstance()->isSafe())
 		{
 			LLNotificationsUtil::add("DisplaySetToSafe");

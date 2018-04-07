@@ -222,9 +222,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8a19ebfac2b8ad690ef406ae55d13fe3</string>
+              <string>2dd97d8bd012be4cdc58f550395feb7d</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux-201605221913-r44.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux-180871815.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -234,9 +234,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2566e373b89a2e4f8e93a78948deda10</string>
+              <string>608dfd27f7aed9d57cf1f581c995b680</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux-x64-201509062227-r43.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux64-180841947.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -288,9 +288,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1aa2e5355bb9df09f9196d14a72b6705</string>
+              <string>161e07b37e2f30da004a0d72d5075ad7</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-apr/rev/314241/arch/Linux/installer/apr_suite-1.4.5.314241-linux-314241.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5.180871344-linux-180871344.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -300,9 +300,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e640dcbc376eec6f3a942b4625d92d8e</string>
+              <string>5c3c29851edd837d5f9518618c4a303b</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5.201505150215-r92-linux-x64-201505150215-r92.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5.180841559-linux64-180841559.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -378,9 +378,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5ff95c28897a7bb4da93bd4f5b3d9d06</string>
+              <string>32828f4ee3e5a45ed31e37eb7dd6367c</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/boost-1.57-linux-201505061539-r135.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.57-linux-180871354.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -390,9 +390,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e86cc6e004d39d7210f708b39bed77a9</string>
+              <string>b1d3daab689c5a8c8869715c5111d38e</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/boost-1.57-linux-x64-201505150230-r138.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.57-linux64-180841628.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -496,9 +496,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f73cbdc220605119cf5f1b0c42d3bb9c</string>
+              <string>d83896f28716f34b7b49d61a23283c4c</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/colladadom-2.3.201505061613-r94-linux-201505061613-r94.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/colladadom-2.3.180871403-linux-180871403.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -508,9 +508,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0f3447ce6fddba79b54cb5959e95f330</string>
+              <string>91a522a7bf0e8d66d2941c76dc28a261</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/colladadom-2.3.201505150238-r95-linux-x64-201505150238-r95.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/colladadom-2.3.180841822-linux64-180841822.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -586,9 +586,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9430c08954c00736117099046694e1b1</string>
+              <string>cade3843dfd7985f008cc8161daaefb0</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-curl/rev/314230/arch/Linux/installer/curl-7.47.0.314230-linux-314230.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/curl-7.54.1.180871811-linux-180871811.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -598,9 +598,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>630a2ddf43bba6e5b6e171dc68921dcb</string>
+              <string>51d9ce98279709854b0be5d0f450ba63</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8663/36142/curl-7.54.1.508652-linux64-508652.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/curl-7.54.1.180841943-linux64-180841943.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -684,9 +684,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6d676abd9ad8d2883b855dbe397d9034</string>
+              <string>9591dcb7efce2a770d77e907705e1492</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-dbus-glib/rev/314266/arch/Linux/installer/dbus_glib-0.76-linux-314266.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dbus_glib-0.76-linux-180871236.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -696,9 +696,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7ee7b9aed3c0c8c09e7bf26bba7af8e1</string>
+              <string>5a685a65a7066937ef580dcd5a90f9dc</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-dbus-glib/rev/314266/arch/Linux/installer/dbus_glib-0.76-linux64-314266.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dbus_glib-0.76-linux64-180841549.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -768,9 +768,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>efc92b20a8170ab4f4d3f88c03c6cb9b</string>
+              <string>bd0f62a03d846332adf07997e307cde6</string>
               <key>url</key>
-              <string>http://192.168.1.115/dev/pkg/dullahan-1.1.651_3.2987.1591.gd3e47f5-linux-171011511.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1080_3.3325.1750.gaabe4c4-linux-180871715.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -780,9 +780,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>331c13dfd261f867884308f15d9952bc</string>
+              <string>6dded97d697c5ac9e4bd33c9ca8e3f9e</string>
               <key>url</key>
-              <string>http://192.168.1.115/dev/pkg/dullahan-1.1.651_3.2987.1591.gd3e47f5-linux64-171011518.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1080_3.3325.1750.gaabe4c4-linux64-180861548.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -882,9 +882,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>387c90b9bb5ec412587fbe7a56261dd1</string>
+              <string>b20e813b55488e43df5c197f1efd165c</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-expat/rev/314211/arch/Linux/installer/expat-2.1.1.314211-linux-314211.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/expat-2.1.1.180871203-linux-180871203.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -894,9 +894,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5e1f025d1cebd12db542080aa755257f</string>
+              <string>bbcfe77b920fb7f00c7f2a494ffc6c43</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/380/943/expat-2.1.1.500375-linux64-500375.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/expat-2.1.1.180841547-linux64-180841547.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -962,11 +962,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>eccdcb4a1e96bb829284d01255f4f913</string>
+              <string>a379240b46b13b2b9e858baa79d1a6ab</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.02-linux-201801091647.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.04-linux-180891813.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -976,11 +976,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8787b777a49d41ccbb3cbd6c4a1d768d</string>
+              <string>e0b59ec3b5549b9a0f9caf8c7116af4e</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.02-linux-x64-201801091648.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.04-linux64-180891838.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1088,9 +1088,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a20a3d0ab7fc3401bc2ca81e9309f630</string>
+              <string>f7a2a70417ab9d2f999f80604cb4fa48</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-fontconfig/rev/314281/arch/Linux/installer/fontconfig-2.11.0-linux-314281.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/fontconfig-2.11.0-linux-180871443.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1100,9 +1100,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e2419d56960c160670051fbb055fb729</string>
+              <string>5818ed2d9b29bad00878f3e26b09b7f9</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-fontconfig/rev/314281/arch/Linux/installer/fontconfig-2.11.0-linux64-314281.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/fontconfig-2.11.0-linux64-180841833.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1154,9 +1154,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1b401394106cedc86926bd488f5aa45e</string>
+              <string>ced1bc8b28a2e87093b364c2b6d8cb9c</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-freetype/rev/314215/arch/Linux/installer/freetype-2.4.4.314215-linux-314215.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/freetype-2.4.4.180871412-linux-180871412.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1166,9 +1166,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b30634f1a6ee2b4940eee06267a607df</string>
+              <string>0dab99c682433145aa8f5e26d8940afd</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/freetype-2.3.9.201505150242-r61-linux-x64-201505150242-r61.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/freetype-2.4.4.180841832-linux64-180841832.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1220,9 +1220,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>baf1fd13e1fe6aef586200fc87a70f53</string>
+              <string>da432b959ccd920adca1030ad7f1b6cf</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-glext/rev/314200/arch/Linux/installer/glext-68-linux-314200.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glext-68-linux-180871251.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1232,9 +1232,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5f3c9d61b620f949b199ebd8885218ed</string>
+              <string>12b2d643a013be8297bbbe37743abe94</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-glext/rev/314200/arch/Linux/installer/glext-68-linux64-314200.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glext-68-linux64-180841554.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1342,11 +1342,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f62e7cff14feb646babaa19b7ea14ed3</string>
+              <string>4aa53f9774195899efb9d14a0f6c4748</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201704302344-linux-201704302344.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.180872225-linux-180872225.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1356,9 +1356,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fea16abf8c2b7f38fc33a2142bfbfe18</string>
+              <string>c742c8b3903aadd79c3a6f3d3c09986d</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201704302331-linux64-201704302331.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.180842253-linux64-180842253.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1436,9 +1436,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>352e673897e8f36f8470150b8ace6ce9</string>
+              <string>95860763e872e984e4215b0fa22d40b8</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-google-breakpad/rev/314225/arch/Linux/installer/google_breakpad-1413.314225-linux-314225.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/google_breakpad-1413.180871249-linux-180871249.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1448,9 +1448,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f8df27382e6afeee5408e85c010a6c86</string>
+              <string>aa4a74b0c5794034797f22d4bdc57a0d</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/google_breakpad-1413.201505150223-r95-linux-x64-201505150223-r95.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/google_breakpad-1413.180841553-linux64-180841553.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1526,9 +1526,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ad51f68702f25ba245fff312c50c8876</string>
+              <string>5bc5ddeb97b8498d5141e27092161323</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-googlemock/rev/317828/arch/Linux/installer/googlemock-1.7.0.317828-linux-317828.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/googlemock-1.7.0.180871704-linux-180871704.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1538,9 +1538,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0f606bf01f933f00edeb9bf9a2530930</string>
+              <string>f879f518ea207cecf13943d58b57b515</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/918/2056/googlemock-1.7.0.500908-linux64-500908.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/googlemock-1.7.0.180841921-linux64-180841921.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1590,9 +1590,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5017b3e95d2c6f47bb111c3f9c075522</string>
+              <string>904540d91ea7d577c7bcbb679621f013</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-gstreamer/rev/314267/arch/Linux/installer/gstreamer-0.10.6.314267-linux-314267.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/gstreamer-0.10.6.180871246-linux-180871246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1602,9 +1602,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7c9d7cc88add7831a6afeedc20cad2fe</string>
+              <string>86a358f1b5a2c2baf68444b2bfc5bb32</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-gstreamer/rev/314267/arch/Linux/installer/gstreamer-0.10.6.314267-linux64-314267.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/gstreamer-0.10.6.180841551-linux64-180841551.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1630,9 +1630,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8cd64b4c5d7f02c5ad87051861108749</string>
+              <string>fb047d496c32cc3b9f99793ee6ebb1e3</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/gtk_atk_pango_glib-2.0-linux-201608031222.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/gtk_atk_pango_glib-2.1-linux-180871647.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1642,16 +1642,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>61a10409052c7f77cbfe30b7a8cd7c0b</string>
+              <string>d918d894430c1d1d869b9f2e06570c65</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/gtk_atk_pango_glib-2.0-linux-x64-201505151700-r5.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/gtk_atk_pango_glib-2.1-linux64-180841902.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>0.1</string>
+        <string>2.1</string>
       </map>
       <key>havok-source</key>
       <map>
@@ -1816,9 +1816,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>32560d3200da72fea2922371fcef25f5</string>
+              <string>a7039c9a9c4461c5f85542f068dc09e5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-jpeglib/rev/314202/arch/Linux/installer/jpeglib-8c.314202-linux-314202.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jpeglib-8c.180871203-linux-180871203.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1828,9 +1828,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8b36861396af4a31668f673aebd4b1d8</string>
+              <string>324bb9deb00d256a12f8cbf686f413f0</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jpeglib-8c.201505150200-r27-linux-x64-201505150200-r27.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jpeglib-8c.180841548-linux64-180841548.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1906,9 +1906,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9d5d9fec28cbbb1651b95728173f8af7</string>
+              <string>da45220ec6fcf945f6ca1f11bc7606cf</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-jsoncpp/rev/314229/arch/Linux/installer/jsoncpp-0.5.0.314229-linux-314229.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.180872045-linux-180872045.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1918,9 +1918,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e10077e94fa6916b6da001fc52e15ed6</string>
+              <string>724850830e01cdb6afb4eed9ce2ec6c5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.201508041908-r34-linux-x64-201508041908-r34.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.180841554-linux64-180841554.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1996,9 +1996,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1c4e11f6ca7cdc2a3e5158eda7a432be</string>
+              <string>fa8a0db7f4900663f5d58eaac2b782b5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.9.1-linux-201703182157.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.4-linux-180892203.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2008,9 +2008,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1c4e11f6ca7cdc2a3e5158eda7a432be</string>
+              <string>fa8a0db7f4900663f5d58eaac2b782b5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.9.1-linux-201703182157.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.4-linux-180892203.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2086,9 +2086,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0d8009c3b6c1eb510593476dd1d821b5</string>
+              <string>77996d95cf2f072f4f277a2aaff20456</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-hunspell/rev/314217/arch/Linux/installer/libhunspell-1.3.2.314217-linux-314217.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libhunspell-1.3.2.180871248-linux-180871248.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2098,9 +2098,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7341037efcf156ad7aa6ba67ab0413c5</string>
+              <string>6555f040c686d8c1dec8e6264c2d3672</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libhunspell-1.3.2.201505150222-r21-linux-x64-201505150222-r21.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libhunspell-1.3.2.180841552-linux64-180841552.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2242,9 +2242,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0758f3cb4c02ebab61854b811b0894e9</string>
+              <string>31754947447ec98374b3bf92e29cf68a</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-libpng/rev/314214/arch/Linux/installer/libpng-1.6.8.314214-linux-314214.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libpng-1.6.8.180871343-linux-180871343.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2254,9 +2254,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>96cccc9c256107ff8425e15647957f17</string>
+              <string>83ae55031f81dace9dcf688cc5510010</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libpng-1.6.8.201505150228-r52-linux-x64-201505150228-r52.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libpng-1.6.8.180841558-linux64-180841558.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2308,9 +2308,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a2eaf9515cd129f3e21a08e92689006b</string>
+              <string>1b1d83df165c947bea5c60c460277f93</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-libuuid/rev/314269/arch/Linux/installer/libuuid-1.6.2-linux-314269.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libuuid-1.6.2-linux-180871203.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2320,9 +2320,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6eca8418f134d2f4d97de89a33773be3</string>
+              <string>f3cc32c84b99f1277370ce88a0faf40e</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libuuid-1.6.2-linux-x64-201505150200-r8.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libuuid-1.6.2-linux64-180841554.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2374,9 +2374,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6954173a141d928f2614076577d952de</string>
+              <string>b4e676d3d583264f006432510727aa05</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-libxml/rev/314197/arch/Linux/installer/libxml2-2.9.1.314197-linux-314197.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libxml2-2.9.4.180871340-linux-180871340.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2386,9 +2386,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ba36cdab49fd5f3f5158cd6719a84a90</string>
+              <string>0bc56fa68f59537486c75b04646d65a9</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libxml2-2.9.1.201505150226-r42-linux-x64-201505150226-r42.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libxml2-2.9.4.180841555-linux64-180841555.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2694,9 +2694,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>079c1a1bdb3ce1cda8ce3d7f75eeced3</string>
+              <string>24c50d563fe8ff10ca819088ffbef7a6</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/9258/41585/nghttp2-1.25.0.509246-linux-509246.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/nghttp2-1.25.0.180871240-linux-180871240.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2706,9 +2706,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c3c5ff7d2f7ac1143ef8d888192d4a53</string>
+              <string>b460d5bac2d20b38cb73b54d0ab1b6e3</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/9257/41579/nghttp2-1.25.0.509246-linux64-509246.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/nghttp2-1.25.0.180841549-linux64-180841549.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2828,9 +2828,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5c9d94dce4551b19790057766ff939ea</string>
+              <string>ee185657aed3a7fcabcd9a1335a6050b</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-oggvorbis/rev/314224/arch/Linux/installer/ogg_vorbis-1.2.2-1.3.2.314224-linux-314224.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.2.2-1.3.2.180871245-linux-180871245.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2840,9 +2840,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a237c81b2c5fa3926ce04586568cce74</string>
+              <string>ec5fd10d3a504e528b61d339522ca0f9</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.2.2-1.3.2.201505150221-r32-linux-x64-201505150221-r32.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.2.2-1.3.2.180841550-linux64-180841550.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2894,9 +2894,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a0f11d381e6daf2b4352461a75c53e89</string>
+              <string>86cb59b79ce0aafe28d4055a17d1f748</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.8-linux-201605222023-r13.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.3.180871824-linux-180871824.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2906,16 +2906,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>587567ef04c06b9bf746e3491dbcc556</string>
+              <string>4df349abfc942fb8e674244d1bd0a515</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.8-linux-x64-201602152224-r18.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.3.180841957-linux64-180841957.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>0.3</string>
+        <string>0.3.180841957</string>
       </map>
       <key>openal</key>
       <map>
@@ -2936,11 +2936,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>24b91eda3831a51c7774644016c4cb09</string>
+              <string>cc0f030e6f4a78e3afd5269165c056b4</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-openal/rev/314223/arch/Linux/installer/openal-1.12.854-1.1.0.314223-linux-314223.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openal-1.12.854-1.1.0.180871246-linux-180871246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2950,9 +2950,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9ccf2c9046edd73854fc084919f507b2</string>
+              <string>4f36ae378593240701fd4453bd6074c8</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openal-1.12.854-1.1.0.201505150222-r25-linux-x64-201505150222-r25.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openal-1.12.854-1.1.0.180841552-linux64-180841552.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3030,9 +3030,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>675c283030879d3d9c49082bfa2192eb</string>
+              <string>cc1aca5688b00878ae94a0ad71cb4f35</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/openjpeg_3p-update-openjpeg/rev/297018/arch/Linux/installer/openjpeg-1.4.297018-linux-297018.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.5.1.180871249-linux-180871249.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3042,9 +3042,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8b36861396af4a31668f673aebd4b1d8</string>
+              <string>6098e555296583336b02f1a78b41b93a</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jpeglib-8c.201505150200-r27-linux-x64-201505150200-r27.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.5.1.180841553-linux64-180841553.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3120,9 +3120,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f46a601d60b7dbcfde32afc0cb64453e</string>
+              <string>343f6ace63617546704c4aad9b432312</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-openssl/rev/314227/arch/Linux/installer/openssl-1.0.1h.314227-linux-314227.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.2l.180871731-linux-180871731.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3132,9 +3132,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d50ccfbf0c1d249392919e2c46ad8d5c</string>
+              <string>7920fce93d9addf63a420d86f91c5749</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8339/33495/openssl-1.0.2l.508328-linux64-508328.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.2l.180841936-linux64-180841936.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3210,9 +3210,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>24a119b18e63017ad932ad54df8161bc</string>
+              <string>cf1c53b27e5889c7c5963ed06ab23cb2</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-pcre/rev/314136/arch/Linux/installer/pcre-8.35.314136-linux-314136.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/pcre-8.35.180871234-linux-180871234.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3222,9 +3222,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0f058ca2176e7d02d51e54c66a96f336</string>
+              <string>348a6111dede9a4ddfc51049c2ff186f</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/908/2010/pcre-8.35.500898-linux64-500898.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/pcre-8.35.180841548-linux64-180841548.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3288,9 +3288,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a92f2235991871c3d601a73cfef9b2af</string>
+              <string>9fe44ba82ee05363fdfa4c1b9f2ec360</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/4105/11530/requests-1.0-linux64-504094.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/requests-2.18.1-linux64-180841555.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3466,9 +3466,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>dddfc8dea540801f93ba0382cb1e3685</string>
+              <string>6573a190dbdef9b23235beb9b1219bef</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/uriparser_3p-update-uriparser/rev/299435/arch/Linux/installer/uriparser-0.8.0.1-linux-299435.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/uriparser-0.8.0.1-linux-180871244.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3478,9 +3478,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e67a27e13e546cbb13fad2665a1896b7</string>
+              <string>df570f2b9c0087438604a8ba4dc37a85</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/uriparser-0.8.0.1-linux-x64-201502251606-r15.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/uriparser-0.8.0.1-linux64-180841550.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3574,12 +3574,24 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8c7f32f85850248809ae811ba8e47d81</string>
+              <string>b7167025f54c044abee21b48476ad4f2</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/3428/8686/viewer_manager-1.0-linux-503417.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/viewer_manager-1.0.180871935-linux-180871935.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>129b80dd47b53bfa02fc21ab1eb1901c</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/viewer_manager-1.0.180861311-linux64-180861311.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -3720,9 +3732,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b63f828e798287d475991134cdcfbca3</string>
+              <string>0f318372198fb34b3a59b4aa03c40ac7</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-xmlrpc-epi/rev/314240/arch/Linux/installer/xmlrpc_epi-0.54.1.314240-linux-314240.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/xmlrpc_epi-0.54.1.180871731-linux-180871731.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3732,9 +3744,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e2e5b6aba70c8fbc09ef7f12e8fb3937</string>
+              <string>f810193590cae9b35a1c77b6c72bfb01</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/xmlrpc_epi-0.54.1.201505150223-r63-linux-x64-201505150223-r63.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/xmlrpc_epi-0.54.1.180841935-linux64-180841935.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3810,11 +3822,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>98a8c775c581ca80bb559e8b4e8eaae7</string>
+              <string>ee84398d540324533332a048f77bf08a</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-zlib/rev/314131/arch/Linux/installer/zlib-1.2.8.314131-linux-314131.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/zlib-1.2.8.180871259-linux-180871259.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3824,9 +3836,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c165dcf9bd8a27c0382137c33e1a3854</string>
+              <string>15a645809cb2f14074f22e7848bb42cf</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/zlib-1.2.8.201505150226-r125-linux-x64-201505150226-r125.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/zlib-1.2.8.180841547-linux64-180841547.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3981,7 +3993,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>Doxygen</string>
             </map>
-
             <key>ReleaseFS</key>
             <map>
               <key>configure</key>
@@ -4088,7 +4099,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>RelWithDebInfoFS_open</string>
             </map>
-
           </map>
           <key>name</key>
           <string>common</string>
@@ -4147,10 +4157,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>Xcode</string>
                 </array>
               </map>
-              <!--
-              <key>default</key>
-              <string>True</string>
-              -->
               <key>name</key>
               <string>RelWithDebInfo</string>
             </map>
@@ -4233,7 +4239,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>ReleaseOS</string>
             </map>
-
             <key>RelWithDebInfoFS</key>
             <map>
               <key>build</key>
@@ -4318,7 +4323,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>ReleaseFS</string>
             </map>
-
           </map>
           <key>name</key>
           <string>darwin64</string>
@@ -4375,10 +4379,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>Unix Makefiles</string>
                 </array>
               </map>
-              <!--
-              <key>default</key>
-              <string>True</string>
-              -->
               <key>name</key>
               <string>RelWithDebInfo</string>
             </map>
@@ -4603,10 +4603,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
                 </array>
               </map>
-              <!--
-              <key>default</key>
-              <string>True</string>
-              -->
               <key>name</key>
               <string>RelWithDebInfo</string>
             </map>
@@ -4719,7 +4715,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>ReleaseOS</string>
             </map>
-
             <key>RelWithDebInfoFS</key>
             <map>
               <key>build</key>
@@ -4938,8 +4933,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>ReleaseFS_open</string>
             </map>
-
-
           </map>
           <key>name</key>
           <string>windows</string>

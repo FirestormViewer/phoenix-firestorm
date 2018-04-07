@@ -2400,7 +2400,7 @@ if (NOT ENABLE_MEDIA_PLUGINS)
     linux-crash-logger
     SLPlugin
     media_plugin_cef
-    media_plugin_gstreamer010
+    #media_plugin_gstreamer010
     media_plugin_libvlc
     llcommon
     )
@@ -2410,7 +2410,7 @@ else (NOT ENABLE_MEDIA_PLUGINS)
     linux-crash-logger
     SLPlugin
     media_plugin_cef
-    media_plugin_gstreamer010
+    #media_plugin_gstreamer010
     llcommon
     )
 endif (NOT ENABLE_MEDIA_PLUGINS)

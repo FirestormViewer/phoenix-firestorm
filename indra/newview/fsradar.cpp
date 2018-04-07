@@ -864,33 +864,35 @@ void FSRadar::teleportToAvatar(const LLUUID& targetAv)
 		}
 		else
 		{
-			// <FS:TS> FIRE-20862: Teleport the configured offset
-			//	   toward the center of the region from the
+			// <FS:TS> FIRE-20862: Teleport the configured offset toward the center of the region from the
 			//         avatar's reported position
 			LLViewerRegion* avreg = world->getRegionFromPosGlobal(avpos);
-		        LLVector3d region_center = avreg->getCenterGlobal();
-		        LLVector3d offset = avpos - region_center;
-		        LLVector3d destination;
-	        	F32 lateral_distance= gSavedSettings.getF32("FSTeleportToOffsetLateral");
-	        	F32 vertical_distance= gSavedSettings.getF32("FSTeleportToOffsetVertical");
-		        if (offset.normalize() != 0.f) // there's an actual offset
-		        {
-		        	if (lateral_distance > 0.0f)
-		        	{
-			        	offset *= lateral_distance;
-			        	destination = avpos - offset;
-				}
-				else
-				{
-					destination = avpos;
-				}
-			}
-			else // the target is exactly at the center, so the offset is 0
+			if (avreg)
 			{
-				destination = region_center + LLVector3d(0.f, lateral_distance, 0.f);
+				LLVector3d region_center = avreg->getCenterGlobal();
+				LLVector3d offset = avpos - region_center;
+				LLVector3d destination;
+				F32 lateral_distance = gSavedSettings.getF32("FSTeleportToOffsetLateral");
+				F32 vertical_distance = gSavedSettings.getF32("FSTeleportToOffsetVertical");
+				if (offset.normalize() != 0.f) // there's an actual offset
+				{
+					if (lateral_distance > 0.0f)
+					{
+						offset *= lateral_distance;
+						destination = avpos - offset;
+					}
+					else
+					{
+						destination = avpos;
+					}
+				}
+				else // the target is exactly at the center, so the offset is 0
+				{
+					destination = region_center + LLVector3d(0.f, lateral_distance, 0.f);
+				}
+				destination.mdV[VZ] = avpos.mdV[VZ] + vertical_distance;
+				gAgent.teleportViaLocation(destination);
 			}
-			destination.mdV[VZ] = avpos.mdV[VZ] + vertical_distance;
-			gAgent.teleportViaLocation(destination);
 		}
 	}
 	else
