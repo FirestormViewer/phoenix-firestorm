@@ -853,12 +853,15 @@ BOOL LLPanelGroupMembersSubTab::postBuildSubTab(LLView* root)
 	mMembersList 		= parent->getChild<LLNameListCtrl>("member_list", recurse);
 	mAssignedRolesList	= parent->getChild<LLScrollListCtrl>("member_assigned_roles", recurse);
 	mAllowedActionsList	= parent->getChild<LLScrollListCtrl>("member_allowed_actions", recurse);
-	mActionDescription = parent->getChild<LLTextEditor>("member_action_description", recurse);
+	// <FS:Ansariel> Undo changes from MAINT-2929
+	//mActionDescription = parent->getChild<LLTextEditor>("member_action_description", recurse);
 
+	//if (!mMembersList || !mAssignedRolesList || !mAllowedActionsList || !mActionDescription) return FALSE;
+
+	//mAllowedActionsList->setCommitOnSelectionChange(TRUE);
+	//mAllowedActionsList->setCommitCallback(boost::bind(&LLPanelGroupMembersSubTab::updateActionDescription, this));
 	if (!mMembersList || !mAssignedRolesList || !mAllowedActionsList || !mActionDescription) return FALSE;
-
-	mAllowedActionsList->setCommitOnSelectionChange(TRUE);
-	mAllowedActionsList->setCommitCallback(boost::bind(&LLPanelGroupMembersSubTab::updateActionDescription, this));
+	// </FS:Ansariel>
 
 	// We want to be notified whenever a member is selected.
 	mMembersList->setCommitOnSelectionChange(TRUE);
@@ -936,7 +939,7 @@ void LLPanelGroupMembersSubTab::handleMemberSelect()
 
 	mAssignedRolesList->deleteAllItems();
 	mAllowedActionsList->deleteAllItems();
-	mActionDescription->clear();
+	//mActionDescription->clear(); // <FS:Ansariel> Undo changes from MAINT-2929
 	
 	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
 	if (!gdatap) 
@@ -1437,7 +1440,7 @@ void LLPanelGroupMembersSubTab::activate()
 			update(GC_MEMBER_DATA);
 		}
 	}
-	mActionDescription->clear();
+	//mActionDescription->clear(); // <FS:Ansariel> Undo changes from MAINT-2929
 }
 
 void LLPanelGroupMembersSubTab::deactivate()
@@ -2094,7 +2097,7 @@ BOOL LLPanelGroupRolesSubTab::postBuildSubTab(LLView* root)
 	mRolesList 		= parent->getChild<LLScrollListCtrl>("role_list", recurse);
 	mAssignedMembersList	= parent->getChild<LLNameListCtrl>("role_assigned_members", recurse);
 	mAllowedActionsList	= parent->getChild<LLScrollListCtrl>("role_allowed_actions", recurse);
-	mActionDescription	= parent->getChild<LLTextEditor>("role_action_description", recurse);
+	//mActionDescription	= parent->getChild<LLTextEditor>("role_action_description", recurse); // <FS:Ansariel> Undo changes from MAINT-2929
 
 	mRoleName = parent->getChild<LLLineEditor>("role_name", recurse);
 	mRoleTitle = parent->getChild<LLLineEditor>("role_title", recurse);
@@ -2102,7 +2105,7 @@ BOOL LLPanelGroupRolesSubTab::postBuildSubTab(LLView* root)
 
 	mMemberVisibleCheck = parent->getChild<LLCheckBoxCtrl>("role_visible_in_list", recurse);
 
-	if (!mRolesList || !mAssignedMembersList || !mAllowedActionsList || !mActionDescription
+	if (!mRolesList || !mAssignedMembersList || !mAllowedActionsList //|| !mActionDescription // <FS:Ansariel> Undo changes from MAINT-2929
 		|| !mRoleName || !mRoleTitle || !mRoleDescription || !mMemberVisibleCheck)
 	{
 		LL_WARNS() << "ARG! element not found." << LL_ENDL;
@@ -2135,7 +2138,7 @@ BOOL LLPanelGroupRolesSubTab::postBuildSubTab(LLView* root)
 	mMemberVisibleCheck->setCommitCallback(onMemberVisibilityChange, this);
 
 	mAllowedActionsList->setCommitOnSelectionChange(TRUE);
-	mAllowedActionsList->setCommitCallback(boost::bind(&LLPanelGroupRolesSubTab::updateActionDescription, this));
+	//mAllowedActionsList->setCommitCallback(boost::bind(&LLPanelGroupRolesSubTab::updateActionDescription, this)); // <FS:Ansariel> Undo changes from MAINT-2929
 
 	mRoleName->setCommitOnFocusLost(TRUE);
 	mRoleName->setKeystrokeCallback(onPropertiesKey, this);
@@ -2155,7 +2158,7 @@ void LLPanelGroupRolesSubTab::activate()
 {
 	LLPanelGroupSubTab::activate();
 
-	mActionDescription->clear();
+	//mActionDescription->clear(); // <FS:Ansariel> Undo changes from MAINT-2929
 	mRolesList->deselectAllItems();
 	mAssignedMembersList->deleteAllItems();
 	mAllowedActionsList->deleteAllItems();
