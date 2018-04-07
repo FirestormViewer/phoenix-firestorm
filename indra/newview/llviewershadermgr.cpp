@@ -235,6 +235,9 @@ LLGLSLShader			gDeferredFullbrightShinyProgram;
 LLGLSLShader			gDeferredSkinnedFullbrightShinyProgram;
 LLGLSLShader			gDeferredSkinnedFullbrightProgram;
 LLGLSLShader			gNormalMapGenProgram;
+// [RLVa:KB] - @setsphere
+LLGLSLShader			gDeferredRlvProgram;
+// [/RLVa:KB]
 
 // Deferred materials shaders
 LLGLSLShader			gDeferredMaterialProgram[LLMaterial::SHADER_COUNT*2];
@@ -340,6 +343,9 @@ LLViewerShaderMgr::LLViewerShaderMgr() :
 	mShaderList.push_back(&gDeferredAvatarAlphaProgram);
 	mShaderList.push_back(&gDeferredWLSkyProgram);
 	mShaderList.push_back(&gDeferredWLCloudProgram);
+// [RLVa:KB] - @setsphere
+	mShaderList.push_back(&gDeferredRlvProgram);
+// [/RLVa:KB]
 }
 
 LLViewerShaderMgr::~LLViewerShaderMgr()
@@ -1166,6 +1172,9 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredFullbrightShinyProgram.unload();
 		gDeferredSkinnedFullbrightShinyProgram.unload();
 		gDeferredSkinnedFullbrightProgram.unload();
+// [RLVa:KB] - @setsphere
+		gDeferredRlvProgram.unload();
+// [/RLVa:KB]
 
 		gNormalMapGenProgram.unload();
 		for (U32 i = 0; i < LLMaterial::SHADER_COUNT*2; ++i)
@@ -1995,6 +2004,18 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gNormalMapGenProgram.mShaderGroup = LLGLSLShader::SG_SKY;
 		success = gNormalMapGenProgram.createShader(NULL, NULL);
 	}
+
+// [RLVa:KB] - @setsphere
+	if (success)
+	{
+		gDeferredRlvProgram.mName = "Deferred (RLVa) Post Processing Shader";
+		gDeferredRlvProgram.mShaderFiles.clear();
+		gDeferredRlvProgram.mShaderFiles.push_back(make_pair("deferred/rlvV.glsl", GL_VERTEX_SHADER_ARB));
+		gDeferredRlvProgram.mShaderFiles.push_back(make_pair("deferred/rlvF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gDeferredRlvProgram.mShaderLevel = mVertexShaderLevel[SHADER_DEFERRED];
+		success = gDeferredRlvProgram.createShader(NULL, NULL);
+	}
+// [/RLV:KB]
 
 	return success;
 }

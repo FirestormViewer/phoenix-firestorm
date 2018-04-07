@@ -203,6 +203,9 @@ public:
 		WATER_SUN_ANGLE2,
 		
 		WL_CAMPOSLOCAL,
+// [RLVa:KB] - @setsphere
+		RLV_AVPOSLOCAL,
+// [/RLVa:KB]
 
 		AVATAR_WIND,
 		AVATAR_SINWAVE,
