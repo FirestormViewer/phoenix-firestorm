@@ -4569,11 +4569,6 @@ bool can_batch_texture(LLFace* facep)
 	{ //texture animation breaks batches
 		return false;
 	}
-	
-	if( facep->mTextureMatrix &&
-		( ( facep->getTextureEntry() && facep->getTextureEntry()->hasMedia() ) ||
-		  ( facep->getTexture() && facep->getTexture()->getType()  == LLViewerTexture::MEDIA_TEXTURE ) ) )
-		return false;
 
 	return true;
 }
@@ -4687,13 +4682,6 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 		tex_mat = facep->mTextureMatrix;	
 	}
 
-	// <FS:ND> CEF: if this is a face with media, then use the texture matrix to flip the texture
-	if( facep->mTextureMatrix &&
-		( ( facep->getTextureEntry() && facep->getTextureEntry()->hasMedia() ) ||
-		  ( facep->getTexture() && facep->getTexture()->getType()  == LLViewerTexture::MEDIA_TEXTURE ) ) )
-		tex_mat = facep->mTextureMatrix;
-	// </FS:ND>
-	
 	const LLMatrix4* model_mat = NULL;
 
 	LLDrawable* drawable = facep->getDrawable();
