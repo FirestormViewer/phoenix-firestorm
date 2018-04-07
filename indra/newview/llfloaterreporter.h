@@ -134,6 +134,7 @@ private:
 	// <FS:Ansariel> FIRE-15368: Don't include floater in screenshot update
 	void onUpdateScreenshot();
 
+	static void requestAbuseCategoriesCoro(std::string url, LLHandle<LLFloater> handle);
     static void finishedARPost(const LLSD &);
 
 private:
