@@ -6483,6 +6483,8 @@ void LLVOAvatar::clearAttachmentOverrides()
 {
     LLScopedContextString str("clearAttachmentOverrides " + getFullname());
 
+    mActiveOverrideMeshes.clear();
+    
     for (S32 i=0; i<LL_CHARACTER_MAX_ANIMATED_JOINTS; i++)
     {
         LLJoint *pJoint = getJoint(i);
@@ -6609,10 +6611,24 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo)
 			const F32 pelvisZOffset = pSkinData->mPelvisOffset;
 			const LLUUID& mesh_id = pSkinData->mMeshID;
 
-            LL_DEBUGS("AnimatedObjects") << "adding attachment overrides for " << mesh_id << " to root object " << root_object->getID() << LL_ENDL;
+            bool mesh_overrides_loaded = (mActiveOverrideMeshes.find(mesh_id) != mActiveOverrideMeshes.end());
+            if (mesh_overrides_loaded)
+            {
+                LL_DEBUGS("AnimatedObjects") << "skipping add attachment overrides for " << mesh_id 
+                                             << " to root object " << root_object->getID()
+                                             << ", already loaded"
+                                             << LL_ENDL;
+            }
+            else
+            {
+                LL_DEBUGS("AnimatedObjects") << "adding attachment overrides for " << mesh_id 
+                                             << " to root object " << root_object->getID() << LL_ENDL;
+            }
 			bool fullRig = (jointCnt>=JOINT_COUNT_REQUIRED_FOR_FULLRIG) ? true : false;								
-			if ( fullRig )
+			if ( fullRig && !mesh_overrides_loaded )
 			{								
+                mActiveOverrideMeshes.insert(mesh_id);
+                
 				for ( int i=0; i<jointCnt; ++i )
 				{
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
@@ -6823,6 +6839,8 @@ void LLVOAvatar::removeAttachmentOverridesForObject(LLViewerObject *vo)
 //-----------------------------------------------------------------------------
 void LLVOAvatar::removeAttachmentOverridesForObject(const LLUUID& mesh_id)
 {	
+    mActiveOverrideMeshes.erase(mesh_id);
+
 	//Subsequent joints are relative to pelvis
 	avatar_joint_list_t::iterator iter = mSkeleton.begin();
 	avatar_joint_list_t::iterator end  = mSkeleton.end();
@@ -10402,7 +10420,7 @@ void LLVOAvatar::accountRenderComplexityForObject(
                 F32 attachment_texture_cost = 0;
                 F32 attachment_children_cost = 0;
                 // AXON placeholder value, will revisit in testing.
-                const F32 animated_object_attachment_surcharge = 20000;
+                const F32 animated_object_attachment_surcharge = 1000;
 
                 if (attached_object->isAnimatedObject())
                 {

@@ -3717,7 +3717,7 @@ void LLVOVolume::afterReparent()
         // notifyMeshLoaded() not being called reliably enough.
         
         // was: getControlAvatar()->addAttachmentOverridesForObject(this);
-        getControlAvatar()->rebuildAttachmentOverrides();
+        //getControlAvatar()->rebuildAttachmentOverrides();
         getControlAvatar()->updateAnimations();
     }
     else
@@ -4092,13 +4092,39 @@ F32 LLVOVolume::getEstTrianglesMax() const
     return 0.f;
 }
 
+F32 LLVOVolume::getEstTrianglesStreamingCost() const
+{
+	if (isMesh() && getVolume())
+	{
+		return gMeshRepo.getEstTrianglesStreamingCost(getVolume()->getParams().getSculptID());
+	}
+    return 0.f;
+}
+
 F32 LLVOVolume::getStreamingCost(S32* bytes, S32* visible_bytes, F32* unscaled_value) const
 {
 	F32 radius = getScale().length()*0.5f;
 
+    // AXON make sure this is consistent with the final simulator-side values.
+    const F32 ANIMATED_OBJECT_BASE_COST = 10.0f; // placeholder
+    const F32 ANIMATED_OBJECT_COST_PER_KTRI = 1.0f; //placeholder
+
+    F32 linkset_base_cost = 0.f;
+    if (isAnimatedObject() && isRootEdit())
+    {
+        // Root object of an animated object has this to account for skeleton overhead.
+        linkset_base_cost = ANIMATED_OBJECT_BASE_COST;
+    }
 	if (isMesh())
 	{
-		return gMeshRepo.getStreamingCost(getVolume()->getParams().getSculptID(), radius, bytes, visible_bytes, mLOD, unscaled_value);
+        if (isAnimatedObject() && isRiggedMesh())
+        {
+            return linkset_base_cost + ANIMATED_OBJECT_COST_PER_KTRI * 0.001 * getEstTrianglesStreamingCost();
+        }
+        else
+        {
+            return linkset_base_cost + gMeshRepo.getStreamingCost(getVolume()->getParams().getSculptID(), radius, bytes, visible_bytes, mLOD, unscaled_value);
+        }
 	}
 	else
 	{
@@ -4116,7 +4142,7 @@ F32 LLVOVolume::getStreamingCost(S32* bytes, S32* visible_bytes, F32* unscaled_v
 		header["medium_lod"]["size"] = counts[2] * 10;
 		header["high_lod"]["size"] = counts[3] * 10;
 
-		return LLMeshRepository::getStreamingCost(header, radius, NULL, NULL, -1, unscaled_value);
+		return linkset_base_cost + LLMeshRepository::getStreamingCost(header, radius, NULL, NULL, -1, unscaled_value);
 	}	
 }
 
@@ -5421,6 +5447,11 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 			drawablep->clearState(LLDrawable::HAS_ALPHA);
 
+            if (vobj->isRiggedMesh() && vobj->getAvatar())
+            {
+                vobj->getAvatar()->addAttachmentOverridesForObject(vobj);
+            }
+            
             // Standard rigged mesh attachments: 
 			bool rigged = !vobj->isAnimatedObject() && vobj->isRiggedMesh() && vobj->isAttachment();
             // Animated objects. Have to check for isRiggedMesh() to

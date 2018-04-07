@@ -3109,6 +3109,7 @@ void LLViewerObject::linkControlAvatar()
     {
         getControlAvatar()->rebuildAttachmentOverrides();
         getControlAvatar()->updateAnimations();
+        getControlAvatar()->mPlaying = true;
     }
     else
     {
@@ -3805,6 +3806,11 @@ S32 LLViewerObject::getAnimatedObjectMaxTris() const
 }
 
 F32 LLViewerObject::getEstTrianglesMax() const
+{
+    return 0.f;
+}
+
+F32 LLViewerObject::getEstTrianglesStreamingCost() const
 {
     return 0.f;
 }
