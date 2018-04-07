@@ -426,7 +426,7 @@ void ColladaExportFloater::CacheReadResponder::completed(bool success)
 		else
 		{
 			// For other formats we need to decode first
-			if (mFormattedImage->updateData() && (mFormattedImage->getWidth() * mFormattedImage->getHeight() * mFormattedImage->getComponents()))
+			if (mFormattedImage->updateData() && ( (mFormattedImage->getWidth() * mFormattedImage->getHeight() * mFormattedImage->getComponents()) != 0 ) )
 			{
 				LLPointer<LLImageRaw> raw = new LLImageRaw;
 				raw->resize(mFormattedImage->getWidth(), mFormattedImage->getHeight(),	mFormattedImage->getComponents());
