@@ -104,7 +104,7 @@ public:
 
 private:
 	std::deque< ElementT > mStorage;
-	LLMutex mLock;
+	LLCondition mLock;;
 	U32 mCapacity; // Really needed?
 };
 
@@ -132,6 +132,7 @@ void LLThreadSafeQueue<ElementT>::pushFront(ElementT const & element)
 			if( mStorage.size() < mCapacity )
 			{
 				mStorage.push_front( element );
+				mLock.signal();
 				return;
 			}
 		}
@@ -151,6 +152,7 @@ bool LLThreadSafeQueue<ElementT>::tryPushFront(ElementT const & element)
 		return false;
 
 	mStorage.push_front( element );
+	mLock.signal();
 	return true;
 }
 
@@ -160,16 +162,13 @@ ElementT LLThreadSafeQueue<ElementT>::popBack(void)
 {
 	while( true )
 	{
+		mLock.wait();
+		if( !mStorage.empty() )
 		{
-			LLMutexLock lck( &mLock );
-			if( !mStorage.empty() )
-			{
-				ElementT value = mStorage.back();
-				mStorage.pop_back();
-				return value;
-			}
+			ElementT value = mStorage.back();
+			mStorage.pop_back();
+			return value;
 		}
-		ms_sleep( 100 );
 	}
 }
 
