@@ -350,7 +350,7 @@ LLUrlEntryInvalidSLURL::LLUrlEntryInvalidSLURL()
 {
 	// <FS:Ansariel> Inworldz special
 	//mPattern = boost::regex("(http://(maps.secondlife.com|slurl.com)/secondlife/|secondlife://(/app/(worldmap|teleport)/)?)[^ /]+(/-?[0-9]+){1,3}(/?(\\?title|\\?img|\\?msg)=\\S*)?/?",
-	mPattern = boost::regex("(http://(maps.secondlife.com|slurl.com)/secondlife/|(secondlife|inworldz|iw)://(/app/(worldmap|teleport)/)?)[^ /]+(/-?[0-9]+){1,3}(/?(\\?title|\\?img|\\?msg)=\\S*)?/?",
+	mPattern = boost::regex("(https?://(maps.secondlife.com|slurl.com)/secondlife/|(secondlife|inworldz|iw)://(/app/(worldmap|teleport)/)?)[^ /]+(/-?[0-9]+){1,3}(/?(\\?title|\\?img|\\?msg)=\\S*)?/?",
 									boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_http.xml";
 	mTooltip = LLTrans::getString("TooltipHttpUrl");
