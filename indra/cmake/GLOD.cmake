@@ -7,5 +7,5 @@
   include(Prebuilt)
   use_prebuilt_binary(glod)
 set(GLOD_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include)
-set(GLOD_LIBRARIES GLOD)
+set(GLOD_LIBRARIES GLOD vds)
 #endif (USESYSTEMLIBS)
