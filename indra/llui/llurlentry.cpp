@@ -437,7 +437,7 @@ bool LLUrlEntryInvalidSLURL::isSLURLvalid(const std::string &url) const
 LLUrlEntrySLURL::LLUrlEntrySLURL()
 {
 	// see http://slurl.com/about.php for details on the SLURL format
-	mPattern = boost::regex("http://(maps.secondlife.com|slurl.com)/secondlife/[^ /]+(/\\d+){0,3}(/?(\\?title|\\?img|\\?msg)=\\S*)?/?",
+	mPattern = boost::regex("https?://(maps.secondlife.com|slurl.com)/secondlife/[^ /]+(/\\d+){0,3}(/?(\\?title|\\?img|\\?msg)=\\S*)?/?",
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_slurl.xml";
 	mTooltip = LLTrans::getString("TooltipSLURL");
