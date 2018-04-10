@@ -31,6 +31,7 @@
 #include <map>
 #include <typeinfo>
 
+#include <atomic>
 #include "llstringtable.h"
 #include <boost/iterator/transform_iterator.hpp>
 #include <boost/iterator/indirect_iterator.hpp>
@@ -119,7 +120,11 @@ protected:
 		void decrementDepth();
 		U32 getDepth();
 	private:
-		U32 sIterationNestDepth;
+	#ifndef LL_LINUX
+		std::atomic_uint32_t sIterationNestDepth;
+	#else
+		std::atomic_uint sIterationNestDepth;
+	#endif
     };
 };
 
