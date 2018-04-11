@@ -23,12 +23,13 @@ if (HAVOK)
 
 elseif (HAVOK_TPV)
    use_prebuilt_binary(llphysicsextensions_tpv)
-   set(LLPHYSICSEXTENSIONS_LIBRARIES    llphysicsextensions_tpv)
+   #set(LLPHYSICSEXTENSIONS_LIBRARIES    llphysicsextensions_tpv)
+   set(LLPHYSICSEXTENSIONS_LIBRARIES   libhacd.a libnd_hacdConvexDecomposition.a libnd_Pathing.a )
 
 else (HAVOK)
    use_prebuilt_binary(llphysicsextensions_stub)
-   #set(LLPHYSICSEXTENSIONS_SRC_DIR ${LIBS_PREBUILT_DIR}/llphysicsextensions/stub)
-   set(LLPHYSICSEXTENSIONS_LIBRARIES   libhacd.a libnd_hacdConvexDecomposition.a libnd_Pathing.a )
+   set(LLPHYSICSEXTENSIONS_SRC_DIR ${LIBS_PREBUILT_DIR}/llphysicsextensions/stub)
+   set(LLPHYSICSEXTENSIONS_LIBRARIES    llphysicsextensionsstub)
 
 endif (HAVOK)
 
