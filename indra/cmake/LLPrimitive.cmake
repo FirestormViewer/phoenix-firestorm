@@ -72,7 +72,7 @@ else()
       ${COLLADADOM_LIBRARY}
       ${MINIZIP_LIBRARIES}
       ${LIBXML2_LIBRARIES}
-      ${LIBPRCECCPP_LIBRARIES}
+      ${LIBPRCECPP_LIBRARIES}
      )
 
 endif()
