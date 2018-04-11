@@ -4,7 +4,11 @@ project(viewer)
 
 include(00-Common)
 include(Boost)
-include(BuildPackagesInfo)
+
+if( NOT USESYSTEMLIBS )
+  include(BuildPackagesInfo)
+endif()
+
 include(BuildVersion)
 include(CMakeCopyIfDifferent)
 include(DBusGlib)
@@ -1625,8 +1629,11 @@ set(viewer_APPSETTINGS_FILES
     ${CMAKE_SOURCE_DIR}/../etc/message.xml
     ${CMAKE_SOURCE_DIR}/../scripts/messages/message_template.msg
     ${AUTOBUILD_INSTALL_DIR}/ca-bundle.crt
-    packages-info.txt
     )
+
+if( NOT USESYSTEMLIBS )
+  set( viewer_APPSETTINGS_FILES ${viewer_APPSETTINGS_FILE} packages-info.txt )
+endif()
 
 source_group("App Settings" FILES ${viewer_APPSETTINGS_FILES})
 
