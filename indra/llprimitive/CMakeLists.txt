@@ -10,14 +10,14 @@ include(LLCoreHttp)
 include(LLXML)
 include(LLPhysicsExtensions)
 include(LLCharacter)
+include (LLPrimitive )
 
 include_directories(
     ${LLCOMMON_INCLUDE_DIRS}
     ${LLMATH_INCLUDE_DIRS}
     ${LLMESSAGE_INCLUDE_DIRS}
     ${LLXML_INCLUDE_DIRS}
-    ${LIBS_PREBUILT_DIR}/include/collada
-    ${LIBS_PREBUILT_DIR}/include/collada/1.4
+    ${COLLADADOM_INCLUDE_DIRS}
     ${LLCHARACTER_INCLUDE_DIRS}
     )
 include_directories(SYSTEM
