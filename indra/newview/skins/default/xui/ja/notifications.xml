@@ -616,9 +616,6 @@ L$ が不足しているのでこのグループに参加することができ�
 	<notification name="CacheWillClear">
 		[APP_NAME] を再起動後にキャッシュがクリアされます。
 	</notification>
-	<notification name="DisableCookiesBreaksSearch">
-		クッキーを無効にすると、検索機能が正しく働かず、検索を使用できなくなります。
-	</notification>
 	<notification name="DisableJavascriptBreaksSearch">
 		Javascript を無効にすると、検索機能が正しく働かず、検索を使用できなくなります。
 	</notification>
