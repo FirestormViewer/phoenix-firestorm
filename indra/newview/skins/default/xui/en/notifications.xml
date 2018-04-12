@@ -1541,13 +1541,6 @@ Cache will be cleared after restarting [APP_NAME].
 
   <notification
  icon="alertmodal.tga"
- name="DisableCookiesBreaksSearch"
- type="alertmodal">
-If you disable cookies, the search function will not work properly, and you will not be able to use it.
-  </notification>
-
-  <notification
- icon="alertmodal.tga"
  name="DisableJavascriptBreaksSearch"
  type="alertmodal">
 If you disable Javascript, the search function will not work properly, and you will not be able to use it.

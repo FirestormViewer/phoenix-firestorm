@@ -8,14 +8,14 @@
  help_topic="floater_about"
  save_rect="true"
  title="About [APP_NAME]"
- width="470">
+ width="500">
   
   <tab_container
     follows="all" 
     top="20"
     left="7"
     height="572" 
-    width="456" 
+    width="486" 
     name="about_tab"
     tab_position="top">
     <panel
@@ -46,7 +46,7 @@ http://www.firestormviewer.org
         max_length="65536"
         name="support_editor"
         top_pad="5"
-        width="444"
+        width="474"
         word_wrap="true" />
       <button
         follows="left|top" 
@@ -69,7 +69,7 @@ http://www.firestormviewer.org
         left="4"
         name="linden_intro"
         top="16"
-        width="444"
+        width="474"
         wrap="true">
 Firestorm would not be possible without the decision from Linden Lab to make their Second Life viewer source code available.
 
@@ -85,7 +85,7 @@ with open source contributions from:
        max_length="65536"
        name="contrib_names"
        top_pad="5"
-       width="446"
+       width="476"
        word_wrap="true">
 Dummy Name replaced at run time
       </text_editor>
@@ -122,7 +122,7 @@ Dummy Name replaced at run time
                  left="5"
                  name="firestorm_intro"
                  top="0"
-                 width="420"
+                 width="450"
                  wrap="true">
 Firestorm is a community development project to improve the SecondLife(tm) Viewer experience.  We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team.  Firestorm is brought to you by The Phoenix Firestorm Project, Inc., a non-profit organization.
 
@@ -138,7 +138,7 @@ The Firestorm Development Team:
                  max_length="65536"
                  name="firestorm_names"
                  top_pad="4"
-                 width="420"
+                 width="450"
                  wrap="true">
 Ansariel Hiller, ArminWeatherHax, Arrehn Oberlander, Beq Janus, Cinder Roxley, Holy Gavenkrantz, Jessica Lyon, Kadah Coba, Kitty Barnett, Liny Odell, LordGregGreg Back, Mobius Ryba, Nicky Dasmijn, PanteraPolnocy, Selo Jacobus, Tankmaster Finesmith, Techwolf Lupindo, Tonya Souther, Tozh Taurog, Vortex Saito, WoLf Loonie, Wolfspirit Magic and Zi Ree.
                 </text>
@@ -149,7 +149,7 @@ Ansariel Hiller, ArminWeatherHax, Arrehn Oberlander, Beq Janus, Cinder Roxley, H
                  left="5"
                  name="fs_contrib_intro"
                  top_pad="8"
-                 width="420"
+                 width="450"
                  wrap="true">
 Additional code generously contributed to Firestorm by:
                 </text>
@@ -163,7 +163,7 @@ Additional code generously contributed to Firestorm by:
                  max_length="65536"
                  name="fs_contrib_names"
                  top_pad="4"
-                 width="420"
+                 width="450"
                  wrap="true">
 Albatroz Hird, Alexie Birman, Andromeda Rage, Armin Weatherwax, Beq Janus, Casper Warden, Chalice Yao, Cron Stardust, Damian Zhaoying, Dan Threebeards, Dawa Gurbux, Drake Arconis, Felyza Wishbringer, f0rbidden, Fractured Crystal, Geenz Spad, Gibson Firehawk, Hitomi Tiponi, Inusaito Sayori, Katharine Berry, Kittin Ninetails, Kool Koolhoven, Lance Corrimal, Latif Khalifa, Magne Metaverse LLC, Magus Freston, Manami Hokkigai, MartinRJ Fayray, McCabe Maxstead, Melancholy Lemon, Melysmile, Mimika Oh, Mister Acacia, Mysty Saunders, Nagi Michinaga, Name Short, nhede Core, NiranV Dean, Nogardrevlis Lectar, Paladin Forzane, paperwork, Peyton Menges, programmtest, Qwerty Venom, Revolution Smythe, Sahkolihaa Contepomi, sal Kaligawa, Samm Florian, Satomi Ahn, Sei Lisa, Sempervirens Oddfellow, Shin Wasp, Shyotl Kuhr, Sione Lomu, Skills Hak, StarlightShining, Sunset Faulkes, Thickbrick Sleaford, Vaalith Jinn, Vincent Sylvester, Whirly Fizzle, Xenhat Liamano, Zwagoth Klaar and others.
                 </text>
@@ -174,7 +174,7 @@ Albatroz Hird, Alexie Birman, Andromeda Rage, Armin Weatherwax, Beq Janus, Caspe
                  left="5"
                  name="fs_support_intro"
                  top_pad="8"
-                 width="420"
+                 width="450"
                  wrap="true">
 Special thanks to our Firestorm Support Team, wiki editors, educators, and translators:
                 </text>
@@ -188,7 +188,7 @@ Special thanks to our Firestorm Support Team, wiki editors, educators, and trans
                  max_length="65536"
                  name="fs_trans_names"
                  top_pad="4"
-                 width="420"
+                 width="450"
                  word_wrap="true">
 Afrika Burton, Albatroz Hird, Alexru Resident, alison Seesaw, AnaLucia Loon, Angell Airy, Annuccia Resident, Annuccia Vuckovic, Anubi Alter, Atthosz Amiot, Ayelin Ethaniel, Basement Desade, Bia Scribe, Bluezy Bleac, Clarke2, Christy Mansbridge, Chymy India, Cordoba Cluny, Damian Zhaoying, DARK Mirabella, Emmanuella Checchinato, Ed Merryman, Eressea Karsin, Erick Gregan, F0RBIDDEN, Fabry String, Fetish3d, Flandria Connolly, Foksy, Franklyn Watanabe, FreeSpirit Simmering, Gee McAuley, Greatfox Snowpaw, Gweneth Lange, Hatake Kohime, Hiroshi Kumaki, Hope Dreier, Jodi Nikolaidis, JogiTE Clip, Kool Koolhoven, Kosmox Voom, Lachrimo Skytower, Lalwende Leakey, Landaree Levee, Lassie, Lette Ponnier, Lina Pussycat, Lyn Mimistrobell, Marianne Qunhua, Marybeth Oceanlane, Mel Hinarada, Mickeala Praga, Miller Thor, Miro Collas, Mister Acacia, Morgause Whiteberry, Mysty Saunders, Nano Bouscario, narcisssia McMahon, Natem Andel, Nicoletta Schnute, Nisa Maverick, NogarDrevlis Lectar, Norton Burns, PanteraPolnocy, Peewee Musytari, Pisano Smit, PixelProphet Lane, Pol Xaron, Poledra Behemoth, Programmtest, Rander Teskat, Ricky Munz, Riku Highfield, RINOBIT Footman, Robert0 Siamendes, Roth Grut, Sabah Back, SaHaRa Connor, Selene Gregoire, Selo Jacobus, silvanaf Demina, Sniper Siemans, Spartaco Zemenis, Spino Forcella, Srilania Svoboda, Sunset Faulkes, Tanja Levenque, TankMaster Finesmith, Tarlyn Dagger, Thea Brianna, Toy Wylie, Whirly Fizzle, Willow Wilder, Wolfspirit Magic and XLR8RRICK Hudson.
                 </text>
@@ -199,7 +199,7 @@ Afrika Burton, Albatroz Hird, Alexru Resident, alison Seesaw, AnaLucia Loon, Ang
                  left="5"
                  name="fs_art_intro"
                  top_pad="8"
-                 width="420"
+                 width="450"
                  wrap="true">
 Firestorm includes Starlight, modified for Firestorm.  It is provided by residents for residents, with the intention of providing an alternative, brighter, and hopefully easier to use interface.  For further details see &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
 
@@ -215,7 +215,7 @@ UI Artists and Designers:
                  max_length="65536"
                  name="fs_artists_names"
                  top_pad="4"
-                 width="420"
+                 width="450"
                  wrap="true">
 Adam Frisby, Alexandrea Fride, DarkAgent Baphomet, David Rowe, Digital Scribe, Hitomi Tiponi, Hugh Helendale, KirstenLee Cinquetti, Mobius Ryba, Nadin, Naomah Beaumont, Paladin Forzane, psi Merlin, samm florian, Sammie Benoir, Tommi Waydelich and Vincent Nacon.
                 </text>
@@ -237,7 +237,7 @@ Adam Frisby, Alexandrea Fride, DarkAgent Baphomet, David Rowe, Digital Scribe, H
        max_length="65536"
        name="licenses_editor"
        top="16"
-       width="444"
+       width="474"
        word_wrap="true">
 3Dconnexion SDK Copyright (C) 1992-2009 3Dconnexion
 APR Copyright (C) 2011 The Apache Software Foundation
