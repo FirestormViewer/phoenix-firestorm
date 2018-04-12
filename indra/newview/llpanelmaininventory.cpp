@@ -1090,7 +1090,7 @@ void LLPanelMainInventory::updateItemcountText()
 	}
 	
     mCounterCtrl->setValue(text);
-    mCounterCtrl->setToolTip(text);
+    //mCounterCtrl->setToolTip(text); // <FS:Ansariel> Include folders in inventory count
 }
 
 void LLPanelMainInventory::onFocusReceived()
