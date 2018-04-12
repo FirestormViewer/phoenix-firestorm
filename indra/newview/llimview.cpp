@@ -3981,147 +3981,151 @@ void LLIMMgr::noteMutedUsers(const LLUUID& session_id,
 	}
 }
 
-void LLIMMgr::processIMTypingStart(const LLIMInfo* im_info)
+void LLIMMgr::processIMTypingStart(const LLUUID& from_id, const EInstantMessage im_type)
 {
-	processIMTypingCore(im_info, TRUE);
+	processIMTypingCore(from_id, im_type, TRUE);
 }
 
-void LLIMMgr::processIMTypingStop(const LLIMInfo* im_info)
+void LLIMMgr::processIMTypingStop(const LLUUID& from_id, const EInstantMessage im_type)
 {
-	processIMTypingCore(im_info, FALSE);
+	processIMTypingCore(from_id, im_type, FALSE);
 }
 
-void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
+// <FS:Ansariel> Announce incoming IMs
+void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& session_id)
 {
-	LLUUID session_id = computeSessionID(im_info->mIMType, im_info->mFromID);
+	LLStringUtil::format_map_t args;
+	args["[NAME]"] = av_name.getCompleteName();
+
+	BOOL is_muted = LLMuteList::getInstance()->isMuted(av_id, av_name.getCompleteName(), LLMute::flagTextChat);
+	bool is_friend = (LLAvatarTracker::instance().getBuddyInfo(av_id) == NULL) ? false : true;
+	static LLCachedControl<bool> VoiceCallsFriendsOnly(gSavedSettings, "VoiceCallsFriendsOnly");
+
+	if (!is_muted && ( (VoiceCallsFriendsOnly && is_friend) || !VoiceCallsFriendsOnly ))
+	{
+		gIMMgr->addMessage(
+			session_id,
+			av_id,
+			SYSTEM_FROM, // Use system name instead of NULL Growl notifier acts funny with NULL here.
+			LLTrans::getString("IM_announce_incoming", args),
+			false,
+			LLStringUtil::null,
+			IM_NOTHING_SPECIAL,
+			0,
+			LLUUID::null,
+			LLVector3::zero,
+			false,
+			true
+			);
+	}
+
+	// Send busy and auto-response messages now or they won't be send
+	// later because a session has already been created by showing the
+	// incoming IM announcement.
+	// The logic was originally copied from process_improved_im() in llviewermessage.cpp
+	bool is_busy = gAgent.isDoNotDisturb();
+	BOOL is_autorespond = gAgent.getAutorespond();
+	BOOL is_autorespond_nonfriends = gAgent.getAutorespondNonFriends();
+	BOOL is_autorespond_muted = gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse");
+	BOOL is_linden = LLMuteList::getInstance()->isLinden(av_name.getAccountName());
+	static LLCachedControl<bool> FSSendAwayAvatarResponse(gSavedPerAccountSettings, "FSSendAwayAvatarResponse");
+	BOOL is_afk = gAgent.getAFK();
+
+	if (RlvActions::canReceiveIM(av_id) && !is_linden &&
+		(!VoiceCallsFriendsOnly || is_friend) &&
+		((is_busy && (!is_muted || (is_muted && !is_autorespond_muted))) ||
+		(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted) || (FSSendAwayAvatarResponse && is_afk && !is_muted)) )
+	{
+		std::string my_name;
+		std::string response;
+		LLAgentUI::buildFullname(my_name);
+		if (is_busy)
+		{
+			response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
+		}
+		else if (is_autorespond_nonfriends && !is_friend)
+		{
+			response = gSavedPerAccountSettings.getString("FSAutorespondNonFriendsResponse");
+		}
+		else if (is_autorespond)
+		{
+			response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
+		}
+		else if (is_afk && FSSendAwayAvatarResponse)
+		{
+			response = gSavedPerAccountSettings.getString("FSAwayAvatarResponse");
+		}
+		else
+		{
+			LL_WARNS() << "Unknown auto-response mode" << LL_ENDL;
+		}
+		pack_instant_message(
+			gMessageSystem,
+			gAgent.getID(),
+			FALSE,
+			gAgent.getSessionID(),
+			av_id,
+			my_name,
+			response,
+			IM_ONLINE,
+			IM_DO_NOT_DISTURB_AUTO_RESPONSE,
+			session_id);
+		gAgent.sendReliableMessage();
+
+		LLStringUtil::format_map_t args;
+		args["MESSAGE"] = response;
+
+		gIMMgr->addMessage(
+			session_id,
+			gAgentID,
+			LLStringUtil::null, // Pass null value so no name gets prepended
+			LLTrans::getString("IM_autoresponse_sent", args),
+			false,
+			LLStringUtil::null,
+			IM_NOTHING_SPECIAL,
+			0,
+			LLUUID::null,
+			LLVector3::zero,
+			false,
+			true
+			);
+
+		// Send inventory item on autoresponse
+		LLUUID item_id(gSavedPerAccountSettings.getString("FSAutoresponseItemUUID"));
+		if (item_id.notNull())
+		{
+			LLInventoryItem* item = dynamic_cast<LLInventoryItem*>(gInventory.getItem(item_id));
+			if (item)
+			{
+				gIMMgr->addMessage(
+						session_id,
+						gAgentID,
+						LLStringUtil::null, // Pass null value so no name gets prepended
+						LLTrans::getString("IM_autoresponse_item_sent", LLSD().with("[ITEM_NAME]", item->getName())),
+						false,
+						LLStringUtil::null,
+						IM_NOTHING_SPECIAL,
+						0,
+						LLUUID::null,
+						LLVector3::zero,
+						false,
+						true);
+				LLGiveInventory::doGiveInventoryItem(av_id, item, session_id);
+			}
+		}
+	}
+}
+// </FS:Ansariel>
+
+void LLIMMgr::processIMTypingCore(const LLUUID& from_id, const EInstantMessage im_type, BOOL typing)
+{
+	LLUUID session_id = computeSessionID(im_type, from_id);
 
 	// <FS:Ansariel> Announce incoming IMs
 	static LLCachedControl<bool> announceIncomingIM(gSavedSettings, "FSAnnounceIncomingIM");
 	if (typing && !gIMMgr->hasSession(session_id) && announceIncomingIM)
 	{
-		LLStringUtil::format_map_t args;
-		args["[NAME]"] = im_info->mName;
-		
-		BOOL is_muted = LLMuteList::getInstance()->isMuted(im_info->mFromID, im_info->mName, LLMute::flagTextChat);
-		bool is_friend = (LLAvatarTracker::instance().getBuddyInfo(im_info->mFromID) == NULL) ? false : true;
-		static LLCachedControl<bool> VoiceCallsFriendsOnly(gSavedSettings, "VoiceCallsFriendsOnly");
-
-		if(!is_muted && ( (VoiceCallsFriendsOnly && is_friend) || !VoiceCallsFriendsOnly ))
-		{
-			gIMMgr->addMessage(
-				session_id,
-				im_info->mFromID,
-				//<FS:TS> FIRE-8601: Use system name instead of NULL
-				//         Growl notifier acts funny with NULL here.
-				SYSTEM_FROM,
-				LLTrans::getString("IM_announce_incoming", args),
-				false,
-				im_info->mName,
-				IM_NOTHING_SPECIAL,
-				im_info->mParentEstateID,
-				im_info->mRegionID,
-				im_info->mPosition,
-				false,
-				true
-				);
-		}
-
-		// Send busy and auto-response messages now or they won't be send
-		// later because a session has already been created by showing the
-		// incoming IM announcement.
-		// The logic was originally copied from process_improved_im() in llviewermessage.cpp
-		BOOL is_busy = gAgent.isDoNotDisturb();
-		BOOL is_autorespond = gAgent.getAutorespond();
-		BOOL is_autorespond_nonfriends = gAgent.getAutorespondNonFriends();
-		BOOL is_autorespond_muted = gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse");
-		BOOL is_linden = LLMuteList::getInstance()->isLinden(im_info->mName);
-		static LLCachedControl<bool> FSSendAwayAvatarResponse(gSavedPerAccountSettings, "FSSendAwayAvatarResponse");
-		BOOL is_afk = gAgent.getAFK();
-
-		if (RlvActions::canReceiveIM(im_info->mFromID) && !is_linden &&
-			(!VoiceCallsFriendsOnly || is_friend) &&
-			((is_busy && (!is_muted || (is_muted && !is_autorespond_muted))) ||
-			(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted) || (FSSendAwayAvatarResponse && is_afk && !is_muted)) )
-		{
-			std::string my_name;
-			std::string response;
-			LLAgentUI::buildFullname(my_name);
-			if (is_busy)
-			{
-				response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
-			}
-			else if (is_autorespond_nonfriends && !is_friend)
-			{
-				response = gSavedPerAccountSettings.getString("FSAutorespondNonFriendsResponse");
-			}
-			else if (is_autorespond)
-			{
-				response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
-			}
-			else if (is_afk && FSSendAwayAvatarResponse)
-			{
-				response = gSavedPerAccountSettings.getString("FSAwayAvatarResponse");
-			}
-			else
-			{
-				LL_WARNS() << "Unknown auto-response mode" << LL_ENDL;
-			}
-			pack_instant_message(
-				gMessageSystem,
-				gAgent.getID(),
-				FALSE,
-				gAgent.getSessionID(),
-				im_info->mFromID,
-				my_name,
-				response,
-				IM_ONLINE,
-				IM_DO_NOT_DISTURB_AUTO_RESPONSE,
-				session_id);
-			gAgent.sendReliableMessage();
-
-			LLStringUtil::format_map_t args;
-			args["MESSAGE"] = response;
-
-			gIMMgr->addMessage(
-				session_id,
-				gAgentID,
-				LLStringUtil::null, // Pass null value so no name gets prepended
-				LLTrans::getString("IM_autoresponse_sent", args),
-				false,
-				im_info->mName,
-				IM_NOTHING_SPECIAL,
-				im_info->mParentEstateID,
-				im_info->mRegionID,
-				im_info->mPosition,
-				false,
-				true
-				);
-
-				// <FS:Ansariel> Send inventory item on autoresponse
-				LLUUID item_id(gSavedPerAccountSettings.getString("FSAutoresponseItemUUID"));
-				if (item_id.notNull())
-				{
-					LLInventoryItem* item = dynamic_cast<LLInventoryItem*>(gInventory.getItem(item_id));
-					if (item)
-					{
-						gIMMgr->addMessage(
-								session_id,
-								gAgentID,
-								LLStringUtil::null, // Pass null value so no name gets prepended
-								LLTrans::getString("IM_autoresponse_item_sent", LLSD().with("[ITEM_NAME]", item->getName())),
-								false,
-								im_info->mName,
-								IM_NOTHING_SPECIAL,
-								im_info->mParentEstateID,
-								im_info->mRegionID,
-								im_info->mPosition,
-								false,
-								true);
-						LLGiveInventory::doGiveInventoryItem(im_info->mFromID, item, session_id);
-					}
-				}
-				// </FS:Ansariel>
-		}
+		LLAvatarNameCache::get(from_id, boost::bind(&typingNameCallback, _1, _2, session_id));
 	}
 	// </FS:Ansariel>
 
@@ -4132,7 +4136,7 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 
 	if ( im_floater )
 	{
-		im_floater->processIMTyping(im_info, typing);
+		im_floater->processIMTyping(from_id, typing);
 	}
 }
 
