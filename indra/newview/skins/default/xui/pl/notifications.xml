@@ -510,9 +510,6 @@ Czy na pewno chcesz kontynuować?
 	<notification name="CacheWillClear">
 		Bufor danych zostanie wyczyszczony po restarcie aplikacji [APP_NAME].
 	</notification>
-	<notification name="DisableCookiesBreaksSearch">
-		Jeśli wyłączysz ciasteczka, to wyszukiwarka przestanie działać.
-	</notification>
 	<notification name="DisableJavascriptBreaksSearch">
 		Jeśli wyłączysz Javascript, to wyszukiwarka przestanie działać.
 	</notification>

@@ -597,6 +597,9 @@ Sind Sie sicher, dass Sie fortfahren wollen?
 	<notification name="CacheWillClear">
 		Der Cache wird nach einem Neustart von [APP_NAME] geleert.
 	</notification>
+	<notification name="DisableJavascriptBreaksSearch">
+		Wenn Sie Javascript deaktivieren wird die Suchfunktion nicht korrekt funktionieren und Sie werden sie nicht benutzen können.
+	</notification>
 	<notification name="CacheWillBeMoved">
 		Der Cache wird nach einem Neustart von [APP_NAME] verschoben.
 Hinweis: Der Cache wird dabei gelöscht/geleert.
