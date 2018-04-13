@@ -6980,21 +6980,15 @@ void LLVOAvatar::removeAttachmentOverridesForObject(const LLUUID& mesh_id)
 {	
     mActiveOverrideMeshes.erase(mesh_id);
 
-	//Subsequent joints are relative to pelvis
-	avatar_joint_list_t::iterator iter = mSkeleton.begin();
-	avatar_joint_list_t::iterator end  = mSkeleton.end();
-
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
 //	LLJoint* pJointPelvis = getJoint( "mPelvis" );
 	LLJoint* pJointPelvis = getJoint( JointKey::construct( "mPelvis" ) );
 // </FS:ND>
 
     const std::string av_string = avString();
-
     for (S32 joint_num = 0; joint_num < LL_CHARACTER_MAX_ANIMATED_JOINTS; joint_num++)
     {
         LLJoint *pJoint = getJoint(joint_num);
-		//Reset joints except for pelvis
 		if ( pJoint )
 		{			
             bool dummy; // unused
