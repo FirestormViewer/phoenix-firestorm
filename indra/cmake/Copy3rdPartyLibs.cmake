@@ -244,7 +244,7 @@ elseif(LINUX)
         libgobject-2.0.so
         libhunspell-1.3.so.0.0.0
         libopenal.so
-        libopenjpeg.so
+        #libopenjpeg.so
         libuuid.so.16
         libuuid.so.16.0.22
         libfontconfig.so.1.8.0
