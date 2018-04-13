@@ -1,12 +1,6 @@
 # -*- cmake -*-
 include(Prebuilt)
 
-if( ND_USE_OPENJPEG2 )
-  message( "Using OpenJPEG2" )
-  include( OpenJPEG2 )
-  return()
-endif( ND_USE_OPENJPEG2 )
-
 set(OPENJPEG_FIND_QUIETLY ON)
 set(OPENJPEG_FIND_REQUIRED ON)
 
