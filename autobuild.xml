@@ -42,9 +42,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2709f7a5cf499ea77481dd1fce796d61</string>
+              <string>99fe10fdec03a22d680de72bc8b5f85a</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201505150224-r74-linux-x64-201505150224-r74.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.181041840-linux64-181041840.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1918,9 +1918,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>724850830e01cdb6afb4eed9ce2ec6c5</string>
+              <string>275d45727849245f2ed147d60b905413</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.180841554-linux64-180841554.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.181041824-linux64-181041824.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
