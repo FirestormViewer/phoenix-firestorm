@@ -26,9 +26,10 @@
 
 #include "linden_common.h"
 #include "llavatarappearancedefines.h"
+#include "indra_constants.h"
 
-const S32 LLAvatarAppearanceDefines::SCRATCH_TEX_WIDTH = 512;
-const S32 LLAvatarAppearanceDefines::SCRATCH_TEX_HEIGHT = 512;
+const S32 LLAvatarAppearanceDefines::SCRATCH_TEX_WIDTH = 1024;
+const S32 LLAvatarAppearanceDefines::SCRATCH_TEX_HEIGHT = 1024;
 const S32 LLAvatarAppearanceDefines::IMPOSTOR_PERIOD = 2;
 
 using namespace LLAvatarAppearanceDefines;
@@ -266,4 +267,78 @@ EBakedTextureIndex LLAvatarAppearanceDictionary::findBakedByImageName(std::strin
 LLWearableType::EType LLAvatarAppearanceDictionary::getTEWearableType(ETextureIndex index )
 {
 	return getInstance()->getTexture(index)->mWearableType;
+}
+
+// static
+BOOL LLAvatarAppearanceDictionary::isBakedImageId(const LLUUID& id)
+{
+	if ((id == IMG_USE_BAKED_EYES) || (id == IMG_USE_BAKED_HAIR) || (id == IMG_USE_BAKED_HEAD) || (id == IMG_USE_BAKED_LOWER) || (id == IMG_USE_BAKED_SKIRT) || (id == IMG_USE_BAKED_UPPER))
+	{
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+// static 
+EBakedTextureIndex LLAvatarAppearanceDictionary::assetIdToBakedTextureIndex(const LLUUID& id)
+{
+	if (id == IMG_USE_BAKED_EYES)
+	{
+		return BAKED_EYES;
+	}
+	else if (id == IMG_USE_BAKED_HAIR)
+	{
+		return BAKED_HAIR;
+	}
+	else if (id == IMG_USE_BAKED_HEAD)
+	{
+		return BAKED_HEAD;
+	}
+	else if (id == IMG_USE_BAKED_LOWER)
+	{
+		return BAKED_LOWER;
+	}
+	else if (id == IMG_USE_BAKED_SKIRT)
+	{
+		return BAKED_SKIRT;
+	}
+	else if (id == IMG_USE_BAKED_UPPER)
+	{
+		return BAKED_UPPER;
+	}
+
+	return BAKED_NUM_INDICES;
+}
+
+//static
+LLUUID LLAvatarAppearanceDictionary::localTextureIndexToMagicId(ETextureIndex t)
+{
+	LLUUID id = LLUUID::null;
+
+	switch (t)
+	{
+	case LLAvatarAppearanceDefines::TEX_HEAD_BAKED:
+		id = IMG_USE_BAKED_HEAD;
+		break;
+	case LLAvatarAppearanceDefines::TEX_UPPER_BAKED:
+		id = IMG_USE_BAKED_UPPER;
+		break;
+	case LLAvatarAppearanceDefines::TEX_LOWER_BAKED:
+		id = IMG_USE_BAKED_LOWER;
+		break;
+	case LLAvatarAppearanceDefines::TEX_EYES_BAKED:
+		id = IMG_USE_BAKED_EYES;
+		break;
+	case LLAvatarAppearanceDefines::TEX_SKIRT_BAKED:
+		id = IMG_USE_BAKED_SKIRT;
+		break;
+	case LLAvatarAppearanceDefines::TEX_HAIR_BAKED:
+		id = IMG_USE_BAKED_HAIR;
+		break;
+	default:
+		break;
+	}
+
+	return id;
 }

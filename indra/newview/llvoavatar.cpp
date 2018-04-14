@@ -2333,6 +2333,7 @@ LLViewerFetchedTexture *LLVOAvatar::getBakedTextureImage(const U8 te, const LLUU
 		{
 			result->setIsMissingAsset(false);
 		}
+		
 	}
 	return result;
 }
@@ -7139,6 +7140,22 @@ const LLViewerJointAttachment *LLVOAvatar::attachObject(LLViewerObject *viewer_o
 		LLSelectMgr::getInstance()->updatePointAt();
 	}
 
+	viewer_object->refreshBakeTexture();
+
+
+	LLViewerObject::const_child_list_t& child_list = viewer_object->getChildren();
+	for (LLViewerObject::child_list_t::const_iterator iter = child_list.begin();
+		iter != child_list.end(); ++iter)
+	{
+		LLViewerObject* objectp = *iter;
+		if (objectp)
+		{
+			objectp->refreshBakeTexture();
+		}
+	}
+
+	updateMeshVisibility();
+
 	return attachment;
 }
 
@@ -7295,7 +7312,6 @@ void LLVOAvatar::cleanupAttachedMesh( LLViewerObject* pVO )
 //-----------------------------------------------------------------------------
 BOOL LLVOAvatar::detachObject(LLViewerObject *viewer_object)
 {
-
 	for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
 		 iter != mAttachmentPoints.end();
 		 ++iter)
@@ -7307,10 +7323,25 @@ BOOL LLVOAvatar::detachObject(LLViewerObject *viewer_object)
 		if (attachment && attachment->isObjectAttached(viewer_object))
 		// </FS:Ansariel>
 		{
-            updateVisualComplexity();
-			cleanupAttachedMesh( viewer_object );
-		
+			updateVisualComplexity();
+			cleanupAttachedMesh(viewer_object);
+
 			attachment->removeObject(viewer_object);
+			viewer_object->refreshBakeTexture();
+			
+			LLViewerObject::const_child_list_t& child_list = viewer_object->getChildren();
+			for (LLViewerObject::child_list_t::const_iterator iter1 = child_list.begin();
+				iter1 != child_list.end(); ++iter1)
+			{
+				LLViewerObject* objectp = *iter1;
+				if (objectp)
+				{
+					objectp->refreshBakeTexture();
+				}
+			}
+
+			updateMeshVisibility();
+
 			LL_DEBUGS() << "Detaching object " << viewer_object->mID << " from " << attachment->getName() << LL_ENDL;
 			return TRUE;
 		}
@@ -8006,6 +8037,105 @@ void LLVOAvatar::debugColorizeSubMeshes(U32 i, const LLColor4& color)
 	}
 }
 
+
+//-----------------------------------------------------------------------------
+// updateMeshVisibility()
+// Hide the mesh joints if attachments are using baked textures
+//-----------------------------------------------------------------------------
+void LLVOAvatar::updateMeshVisibility()
+{
+	bool bake_flag[BAKED_NUM_INDICES];
+	memset(bake_flag, 0, BAKED_NUM_INDICES*sizeof(bool));
+
+	for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
+		iter != mAttachmentPoints.end();
+		++iter)
+	{
+		LLViewerJointAttachment* attachment = iter->second;
+		if (attachment)
+		{
+			for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
+				attachment_iter != attachment->mAttachedObjects.end();
+				++attachment_iter)
+			{
+				LLViewerObject *objectp = (*attachment_iter);
+				if (objectp)
+				{
+					for (int face_index = 0; face_index < objectp->getNumTEs(); face_index++)
+					{
+						LLTextureEntry* tex_entry = objectp->getTE(face_index);
+						bake_flag[BAKED_HEAD] |= (tex_entry->getID() == IMG_USE_BAKED_HEAD);
+						bake_flag[BAKED_EYES] |= (tex_entry->getID() == IMG_USE_BAKED_EYES);
+						bake_flag[BAKED_HAIR] |= (tex_entry->getID() == IMG_USE_BAKED_HAIR);
+						bake_flag[BAKED_LOWER] |= (tex_entry->getID() == IMG_USE_BAKED_LOWER);
+						bake_flag[BAKED_UPPER] |= (tex_entry->getID() == IMG_USE_BAKED_UPPER);
+						bake_flag[BAKED_SKIRT] |= (tex_entry->getID() == IMG_USE_BAKED_SKIRT);
+					}
+				}
+
+				LLViewerObject::const_child_list_t& child_list = objectp->getChildren();
+				for (LLViewerObject::child_list_t::const_iterator iter1 = child_list.begin();
+					iter1 != child_list.end(); ++iter1)
+				{
+					LLViewerObject* objectchild = *iter1;
+					if (objectchild)
+					{
+						for (int face_index = 0; face_index < objectchild->getNumTEs(); face_index++)
+						{
+							LLTextureEntry* tex_entry = objectchild->getTE(face_index);
+							bake_flag[BAKED_HEAD] |= (tex_entry->getID() == IMG_USE_BAKED_HEAD);
+							bake_flag[BAKED_EYES] |= (tex_entry->getID() == IMG_USE_BAKED_EYES);
+							bake_flag[BAKED_HAIR] |= (tex_entry->getID() == IMG_USE_BAKED_HAIR);
+							bake_flag[BAKED_LOWER] |= (tex_entry->getID() == IMG_USE_BAKED_LOWER);
+							bake_flag[BAKED_UPPER] |= (tex_entry->getID() == IMG_USE_BAKED_UPPER);
+							bake_flag[BAKED_SKIRT] |= (tex_entry->getID() == IMG_USE_BAKED_SKIRT);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	LL_INFOS() << "head " << bake_flag[BAKED_HEAD] << "eyes " << bake_flag[BAKED_EYES] << "hair " << bake_flag[BAKED_HAIR] << "lower " << bake_flag[BAKED_LOWER] << "upper " << bake_flag[BAKED_UPPER] << "skirt " << bake_flag[BAKED_SKIRT] << LL_ENDL;
+
+	for (S32 i = 0; i < mMeshLOD.size(); i++)
+	{
+		LLAvatarJoint* joint = mMeshLOD[i];
+		if (i == MESH_ID_HAIR)
+		{
+			joint->setVisible(!bake_flag[BAKED_HAIR], TRUE);
+		}
+		else if (i == MESH_ID_HEAD)
+		{
+			joint->setVisible(!bake_flag[BAKED_HEAD], TRUE);
+		}
+		else if (i == MESH_ID_SKIRT)
+		{
+			joint->setVisible(!bake_flag[BAKED_SKIRT], TRUE);
+		}
+		else if (i == MESH_ID_UPPER_BODY)
+		{
+			joint->setVisible(!bake_flag[BAKED_UPPER], TRUE);
+		}
+		else if (i == MESH_ID_LOWER_BODY)
+		{
+			joint->setVisible(!bake_flag[BAKED_LOWER], TRUE);
+		}
+		else if (i == MESH_ID_EYEBALL_LEFT)
+		{
+			joint->setVisible(!bake_flag[BAKED_EYES], TRUE);
+		}
+		else if (i == MESH_ID_EYEBALL_RIGHT)
+		{
+			joint->setVisible(!bake_flag[BAKED_EYES], TRUE);
+		}
+		else if (i == MESH_ID_EYELASH)
+		{
+			joint->setVisible(!bake_flag[BAKED_EYES], TRUE);
+		}
+	}
+}
+
 //-----------------------------------------------------------------------------
 // updateMeshTextures()
 // Uses the current TE values to set the meshes' and layersets' textures.
@@ -8223,6 +8353,9 @@ void LLVOAvatar::updateMeshTextures()
 		removeMissingBakedTextures();	// May call back into this function if anything is removed
 		call_remove_missing = true;
 	}
+
+	
+
 }
 
 // virtual
@@ -9066,6 +9199,36 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 	}
 
 	updateMeshTextures();
+
+	//refresh bakes on any attached objects
+	for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
+		iter != mAttachmentPoints.end();
+		++iter)
+	{
+		LLViewerJointAttachment* attachment = iter->second;
+
+		for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
+			attachment_iter != attachment->mAttachedObjects.end();
+			++attachment_iter)
+		{
+			LLViewerObject* attached_object = (*attachment_iter);
+			attached_object->refreshBakeTexture();
+
+			LLViewerObject::const_child_list_t& child_list = attached_object->getChildren();
+			for (LLViewerObject::child_list_t::const_iterator iter = child_list.begin();
+				iter != child_list.end(); ++iter)
+			{
+				LLViewerObject* objectp = *iter;
+				if (objectp)
+				{
+					objectp->refreshBakeTexture();
+				}
+			}
+		}
+	}
+
+	updateMeshVisibility();
+
 }
 
 // static
