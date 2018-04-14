@@ -318,7 +318,7 @@ void LLPanelPrimMediaControls::updateShape()
 	{
 		bool hasPermsControl = true;
 		bool mini_controls = false;
-		LLMediaEntry *media_data = objectp->getTE(mTargetObjectFace)->getMediaData();
+		LLMediaEntry *media_data = objectp->getTEref(mTargetObjectFace).getMediaData();
 		if (media_data && NULL != dynamic_cast<LLVOVolume*>(objectp))
 		{
 			// Don't show the media controls if we do not have permissions
@@ -810,7 +810,7 @@ void LLPanelPrimMediaControls::draw()
 	LLMediaEntry *media_data(0);
 
 	if( objectp )
-		media_data = objectp->getTE(mTargetObjectFace)->getMediaData();
+		media_data = objectp->getTEref(mTargetObjectFace).getMediaData();
 
 	if( !dynamic_cast<LLVOVolume*>(objectp) || !media_data || dynamic_cast<LLVOVolume*>(objectp)->hasMediaPermission(media_data, LLVOVolume::MEDIA_PERM_CONTROL) )
 		mBackgroundImage->draw( controls_bg_area, UI_VERTEX_COLOR % alpha);

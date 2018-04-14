@@ -240,7 +240,7 @@ void LLGenericLoadMultipleFilePicker::notify(std::list<std::string> filenames)
 //static
 void LLFilePickerThread::initClass()
 {
-	sMutex = new LLMutex(NULL);
+	sMutex = new LLMutex();
 }
 
 //static
