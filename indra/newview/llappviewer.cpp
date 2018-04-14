@@ -1162,6 +1162,19 @@ bool LLAppViewer::init()
 	initWindow();
 	LL_INFOS("InitInfo") << "Window is initialized." << LL_ENDL ;
 
+
+
+	// <FS:LO> Add ability for the statistics window to not be able to receive focus
+	if (gSavedSettings.getBOOL("FSStatisticsNoFocus"))
+	{
+		LLFloater* stats = LLFloaterReg::getInstance("stats");
+		if (stats)
+		{
+			stats->setIsChrome(TRUE);
+		}
+	}
+	// </FS:LO>
+
 	// initWindow also initializes the Feature List, so now we can initialize this global.
 	LLCubeMap::sUseCubeMaps = LLFeatureManager::getInstance()->isFeatureAvailable("RenderCubeMap");
 

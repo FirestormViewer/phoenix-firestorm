@@ -38,7 +38,7 @@ if(WINDOWS)
 
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     set(release_files
-        #openjpeg.dll
+        openjpeg.dll
         libapr-1.dll
         libaprutil-1.dll
         libapriconv-1.dll
@@ -49,12 +49,6 @@ if(WINDOWS)
         libhunspell.dll
         )
 
-    if( NOT ND_USE_OPENJPEG2 )
-      set(release_files ${release_files} openjpeg.dll )
-    else()
-      set(release_files ${release_files} openjp2.dll )
-    endif( NOT ND_USE_OPENJPEG2 ) 
-    
     set(release_files ${release_files} growl++.dll growl.dll )
     if (FMODSTUDIO)
       if(ADDRESS_SIZE EQUAL 32)
