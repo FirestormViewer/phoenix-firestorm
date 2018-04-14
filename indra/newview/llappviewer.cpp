@@ -1172,10 +1172,6 @@ bool LLAppViewer::init()
 		{
 			stats->setIsChrome(TRUE);
 		}
-		else
-		{
-			LL_ERRS("") << "Cant find floater" << LL_ENDL;
-		}
 	}
 	// </FS:LO>
 
