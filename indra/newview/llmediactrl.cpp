@@ -827,21 +827,6 @@ void LLMediaCtrl::draw()
 			S32 x_offset, y_offset, width, height;
 			calcOffsetsAndSize(&x_offset, &y_offset, &width, &height);
 
-#if 0
-			// <FS:ND> Flip Y-Axis of media texture
-			U32 mode = gGL.getMatrixMode();
-			gGL.matrixMode(LLRender::MM_TEXTURE0);
-
-			F32 aMatrix[16] = {	1.0f,  0.0f, 0.0f, 0.0f,
-								0.0f, -1.0f, 0.0f, 0.0f,
-								0.0f,  0.0f, 1.0f, 0.0f,
-								0.0f,  max_v, 0.0f, 1.0f
-								};
-			gGL.pushMatrix();
-			gGL.loadMatrix( aMatrix );
-			gGL.matrixMode(mode);
-			// </FS:ND>
-#endif
 			// draw the browser
 			// <FS:Ansariel> Remove QUADS rendering mode
 			//gGL.begin( LLRender::QUADS );
@@ -894,13 +879,6 @@ void LLMediaCtrl::draw()
 				gGL.vertex2i( x_offset + width, y_offset );
 			}
 			gGL.end();
-#if 0
-			// <FS:ND> Restore matrix for texture 0
-			gGL.matrixMode(LLRender::MM_TEXTURE0);
-			gGL.popMatrix();
-			gGL.matrixMode( mode );
-			// </FS:ND>
-#endif
 		}
 		gGL.popUIMatrix();
 	
@@ -1082,7 +1060,7 @@ void LLMediaCtrl::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event)
 			// try as slurl first
 			if (!LLURLDispatcher::dispatch(url, "clicked", NULL, mTrusted))
 			{
-				LLWeb::loadURL(url, target, std::string());
+				LLWeb::loadURL(url, target, uuid);
 			}
 
 			// CP: removing this code because we no longer support popups so this breaks the flow.

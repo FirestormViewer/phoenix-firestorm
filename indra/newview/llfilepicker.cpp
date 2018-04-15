@@ -1252,13 +1252,13 @@ static std::string add_anim_filter_to_gtkchooser(GtkWindow *picker)
 static std::string add_xml_filter_to_gtkchooser(GtkWindow *picker)
 {
 	return add_simple_pattern_filter_to_gtkchooser(picker,  "*.xml",
-												   LLTrans::getString("xml_files") + " (*.xml)");
+												   LLTrans::getString("xml_file") + " (*.xml)");
 }
 
 static std::string add_collada_filter_to_gtkchooser(GtkWindow *picker)
 {
 	return add_simple_pattern_filter_to_gtkchooser(picker,  "*.dae",
-						       LLTrans::getString("scene_files") + " (*.dae)");
+						       LLTrans::getString("collada_files") + " (*.dae)");
 }
 
 static std::string add_imageload_filter_to_gtkchooser(GtkWindow *picker)

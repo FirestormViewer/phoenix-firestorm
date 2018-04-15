@@ -49,12 +49,6 @@ if(WINDOWS)
         libhunspell.dll
         )
 
-    if( NOT ND_USE_OPENJPEG2 )
-      set(release_files ${release_files} openjpeg.dll )
-    else()
-      set(release_files ${release_files} openjp2.dll )
-    endif( NOT ND_USE_OPENJPEG2 ) 
-    
     set(release_files ${release_files} growl++.dll growl.dll )
     if (FMODSTUDIO)
       if(ADDRESS_SIZE EQUAL 32)
@@ -255,6 +249,10 @@ elseif(LINUX)
         libuuid.so.16.0.22
         libfontconfig.so.1.8.0
         libfontconfig.so.1
+       )
+    else (NOT USESYSTEMLIBS)
+      set(release_files
+        libGLOD.so
        )
     endif (NOT USESYSTEMLIBS)
 

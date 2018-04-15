@@ -508,6 +508,16 @@
          tool_tip="If enabled, shortcuts that are already used by the Linux operating system (such as CTRL-ALT-Fx) will be remapped."
          top_pad="5"
          width="256" />
+        <check_box
+         control_name="FSStatisticsNoFocus"
+         height="16"
+         label="Prevent statistics window from gaining focus"
+         layout="topleft"
+         left="5"
+         name="FSStatisticsNoFocus"
+         tool_tip="If enabled, the statistics window will never receive focus when another window is closed, (actions such as changing graph layout for items are still possible when enabled)."
+         top_pad="3"
+         width="256" />
 
         <slider
          control_name="FlashCount"

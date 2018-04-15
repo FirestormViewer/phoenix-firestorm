@@ -215,7 +215,6 @@
 		 width="400">
 			Web browser:
 		</text>
-
 	  <radio_group
 	   control_name="PreferredBrowserBehavior"
 	   follows="left|top"
@@ -227,7 +226,7 @@
 	   width="480">
 		<radio_item
 		  height="20"
-		  label="Use my browser (Chrome, Firefox, IE) for all links"
+		  label="Use the default system browser for all links"
 		  layout="topleft"
 		  left="0"
 		  name="new_external"
@@ -237,18 +236,18 @@
 		  width="480" />
 		<radio_item
 		  height="20"
-		  label="Use built-in browser for Second Life links only"
+		  label="Use the built-in browser for Second Life links only"
 		  layout="topleft"
 		  left_delta="0"
 		  name="new_internal"
 		  value="1"      
-		  tool_tip="Use the default system web browser for help, web links, etc. Builtin browser will be used only for LindenLab/SecondLife links."
+		  tool_tip="Use the default system web browser for help, web links, etc. The built-in browser will be used only for LindenLab/SecondLife links."
 		  top_delta="15"
 		  width="480" />
 		<radio_item
 		  top_delta="15"
 		  height="20"
-		  label="Use built-in browser for all links"
+		  label="Use the built-in browser for all links"
 		  layout="topleft"
 		  left="0"
 		  name="new_internal_all"
@@ -322,23 +321,6 @@
 		 radio_style="false"
 		 width="200"
 		 top_pad="5"/>
-
-		<check_box
-		 enabled="true"
-		 follows="left|top"
-		 height="16"
-		 initial_value="true"
-		 control_name="CookiesEnabled"
-		 label="Accept cookies"
-		 left_delta="0"
-		 mouse_opaque="true"
-		 name="cookies_enabled"
-		 radio_style="false"
-		 width="200"
-		 top_pad="5">
-			<check_box.commit_callback
-			 function="Pref.Cookies" />
-		</check_box>
 
 		<check_box
 		 enabled="true"

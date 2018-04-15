@@ -4569,11 +4569,6 @@ bool can_batch_texture(LLFace* facep)
 	{ //texture animation breaks batches
 		return false;
 	}
-	
-	if( facep->mTextureMatrix &&
-		( ( facep->getTextureEntry() && facep->getTextureEntry()->hasMedia() ) ||
-		  ( facep->getTexture() && facep->getTexture()->getType()  == LLViewerTexture::MEDIA_TEXTURE ) ) )
-		return false;
 
 	return true;
 }

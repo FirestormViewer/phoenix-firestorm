@@ -560,7 +560,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.BrowseCrashLogs",		boost::bind(&LLFloaterPreference::onClickBrowseCrashLogs, this));
 	mCommitCallbackRegistrar.add("Pref.BrowseSettingsDir",		boost::bind(&LLFloaterPreference::onClickBrowseSettingsDir, this));
 	mCommitCallbackRegistrar.add("Pref.BrowseLogPath",			boost::bind(&LLFloaterPreference::onClickBrowseChatLogDir, this));
-	mCommitCallbackRegistrar.add("Pref.Cookies",	    		boost::bind(&LLFloaterPreference::onClickCookies, this));
 	mCommitCallbackRegistrar.add("Pref.Javascript",	        	boost::bind(&LLFloaterPreference::onClickJavascript, this));
 	//[FIX FIRE-2765 : SJ] Making sure Reset button resets works
 	mCommitCallbackRegistrar.add("Pref.ResetLogPath",			boost::bind(&LLFloaterPreference::onClickResetLogPath, this));
@@ -1849,16 +1848,13 @@ void LLFloaterPreference::setPreprocInclude()
 	}
 }
 
-//[FIX JIRA-1971 : SJ] Show an notify when Cookies setting change
-void LLFloaterPreference::onClickCookies()
-{
-	LLNotificationsUtil::add("DisableCookiesBreaksSearch");
-}
-
 //[FIX JIRA-1971 : SJ] Show an notify when Javascript setting change
 void LLFloaterPreference::onClickJavascript()
 {
-	LLNotificationsUtil::add("DisableJavascriptBreaksSearch");
+	if (!gSavedSettings.getBOOL("BrowserJavascriptEnabled"))
+	{
+		LLNotificationsUtil::add("DisableJavascriptBreaksSearch");
+	}
 }
 
 /*
