@@ -953,7 +953,7 @@ void handleRenderFriendsOnlyChanged(const LLSD& newvalue)
 // <FS:LO> Add ability for the statistics window to not be able to receive focus
 void handleFSStatisticsNoFocusChanged(const LLSD& newvalue)
 {
-	LLFloater* stats = LLFloaterReg::getInstance("stats");
+	LLFloater* stats = LLFloaterReg::findInstance("stats");
 	if (stats)
 	{
 		stats->setIsChrome(newvalue.asBoolean());
