@@ -3346,9 +3346,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>785c86999b56e1838cefb430f674cba7</string>
+              <string>6e7b0961d6489a1b3c3090eccfd6e80e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/oz-426-slvoice/rev/330003/arch/Linux/installer/slvoice-3.2.0002.10426.330003-linux-330003.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/slvoice-3.2.0002.10426.298329-linux-20160717.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3358,9 +3358,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>92b0ae08832bd0e99c34ef8f3e6346ad</string>
+              <string>6e7b0961d6489a1b3c3090eccfd6e80e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/613/1289/slvoice-3.2.0002.10426.500605-linux64-500605.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/slvoice-3.2.0002.10426.298329-linux-20160717.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
