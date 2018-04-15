@@ -24627,7 +24627,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSStatisticsNoFocus</key>
     <map>
       <key>Comment</key>
-      <string>If enabled, the statistics bar will never gain focus (i.e. from closing another floater). Requires restart.</string>
+      <string>If enabled, the statistics bar will never gain focus (i.e. from closing another floater).</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
