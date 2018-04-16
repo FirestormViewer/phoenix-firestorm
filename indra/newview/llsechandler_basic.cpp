@@ -1284,8 +1284,7 @@ void LLSecAPIBasicHandler::init()
 		
 		// grab the application ca-bundle.crt file that contains the well-known certs shipped
 		// with the product
-		//std::string ca_file_path = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "ca-bundle.crt");
-		std::string ca_file_path = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "app_settings", "ca-bundle.crt"); //<FS:LO> Fix running firestorm from visual studio
+		std::string ca_file_path = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "ca-bundle.crt");
 		LL_INFOS("SECAPI") << "Loading application certificate store from " << ca_file_path << LL_ENDL;
 		LLPointer<LLBasicCertificateStore> app_ca_store = new LLBasicCertificateStore(ca_file_path);
 		
