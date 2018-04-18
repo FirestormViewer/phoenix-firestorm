@@ -691,15 +691,26 @@ void LLPanelMainInventory::onClearSearch()
 	}
 	mFilterSubString = "";
 
-	LLSidepanelInventory * sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
-	if (sidepanel_inventory)
+	// <FS:Ansariel> FIRE-22509: Only apply inbox filter on primary inventory window
+	//LLSidepanelInventory * sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+	//if (sidepanel_inventory)
+	//{
+	//	LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getChild<LLPanelMarketplaceInbox>("marketplace_inbox");
+	//	if (inbox_panel)
+	//	{
+	//		inbox_panel->onClearSearch();
+	//	}
+	//}
+	LLFloater* inv_floater = getParentByType<LLFloater>();
+	if (inv_floater)
 	{
-		LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getChild<LLPanelMarketplaceInbox>("marketplace_inbox");
+		LLPanelMarketplaceInbox* inbox_panel = inv_floater->findChild<LLPanelMarketplaceInbox>("marketplace_inbox");
 		if (inbox_panel)
 		{
 			inbox_panel->onClearSearch();
 		}
 	}
+	// </FS:Ansariel>
 }
 
 void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
@@ -754,15 +765,26 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
 	}
 	// </FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 
-	LLSidepanelInventory * sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
-	if (sidepanel_inventory)
+	// <FS:Ansariel> FIRE-22509: Only apply inbox filter on primary inventory window
+	//LLSidepanelInventory * sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+	//if (sidepanel_inventory)
+	//{
+	//	LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getChild<LLPanelMarketplaceInbox>("marketplace_inbox");
+	//	if (inbox_panel)
+	//	{
+	//		inbox_panel->onFilterEdit(search_string);
+	//	}
+	//}
+	LLFloater* inv_floater = getParentByType<LLFloater>();
+	if (inv_floater)
 	{
-		LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getChild<LLPanelMarketplaceInbox>("marketplace_inbox");
+		LLPanelMarketplaceInbox* inbox_panel = inv_floater->findChild<LLPanelMarketplaceInbox>("marketplace_inbox");
 		if (inbox_panel)
 		{
 			inbox_panel->onFilterEdit(search_string);
 		}
 	}
+	// </FS:Ansariel>
 }
 
 // <FS:Zi> Filter dropdown
