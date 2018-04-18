@@ -218,18 +218,16 @@ std::string stripSuffix(std::string name)
 }
 
 LLMeshFilePicker::LLMeshFilePicker(LLModelPreview* mp, S32 lod)
-// <FS:CR> Threaded Filepickers
-//: LLFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
-: LLLoadFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
-// </FS:CR>
+: LLFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
 	{
 		mMP = mp;
 		mLOD = lod;
 	}
 
-void LLMeshFilePicker::notify(const std::string& filename)
+void LLMeshFilePicker::notify(const std::vector<std::string>& filenames)
 {
-	mMP->loadModel(mFile, mLOD);
+	if (!filenames.empty())
+		mMP->loadModel(filenames[0], mLOD);
 }
 
 void FindModel(LLModelLoader::scene& scene, const std::string& name_to_match, LLModel*& baseModelOut, LLMatrix4& matOut)

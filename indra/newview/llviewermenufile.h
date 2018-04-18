@@ -82,86 +82,52 @@ public:
 	static void cleanupClass();
 	static void clearDead();
 
-	std::string mFile; 
-	std::list<std::string> mFiles; // <FS:Ansariel> Threaded file pickers
+	std::vector<std::string> mResponses;
+	std::string mProposedName;
 
-// <FS:CR Threaded Filepickers>
-	//LLFilePicker::ELoadFilter mFilter;
-	//
-	//LLFilePickerThread(LLFilePicker::ELoadFilter filter)
-	//	: LLThread("file picker"), mFilter(filter)
-	LLFilePickerThread(bool multiple)
-		: LLThread("file picker"), mMultiple(multiple)
-// </FS:CR Threaded Filepickers>
+	LLFilePicker::ELoadFilter mLoadFilter;
+	LLFilePicker::ESaveFilter mSaveFilter;
+	bool mIsSaveDialog;
+	bool mIsGetMultiple;
+
+	LLFilePickerThread(LLFilePicker::ELoadFilter filter, bool get_multiple = false)
+		: LLThread("file picker"), mLoadFilter(filter), mIsSaveDialog(false), mIsGetMultiple(get_multiple)
 	{
+	}
 
+	LLFilePickerThread(LLFilePicker::ESaveFilter filter, const std::string &proposed_name)
+		: LLThread("file picker"), mSaveFilter(filter), mIsSaveDialog(true), mProposedName(proposed_name)
+	{
 	}
 
 	void getFile();
 
-// <FS:CR Threaded Filepickers>
-	void getFiles() { getFile(); }
-
-	virtual void run() = 0;
-
-	virtual void notify(const std::string& filename) = 0;
-
-	virtual void notify(std::list<std::string> filenames) = 0;
-
-	bool mMultiple;
-};
-
-class LLLoadFilePickerThread : public LLFilePickerThread
-{ //multi-threaded file picker (runs system specific file picker in background and calls "notify" from main thread)
-public:
-
-	LLFilePicker::ELoadFilter mFilter;
-
-	LLLoadFilePickerThread(LLFilePicker::ELoadFilter filter)
-		: LLFilePickerThread(false), mFilter(filter)
-	{
-
-	}
-// </FS:CR Threaded Filepickers>
-
 	virtual void run();
 
-	virtual void notify(const std::string& filename) = 0;
-
-	virtual void notify(std::list<std::string> filenames) {}; // <FS:Ansariel> Threaded file pickers
+	virtual void notify(const std::vector<std::string>& filenames) = 0;
 };
 
 // <FS:CR Threaded Filepickers>
-class LLSaveFilePickerThread : public LLFilePickerThread
-{ //multi-threaded file picker (runs system specific file picker in background and calls "notify" from main thread)
-public:
-
-	LLFilePicker::ESaveFilter mFilter;
-
-	std::string mDefaultFilename;
-
-	LLSaveFilePickerThread(LLFilePicker::ESaveFilter filter, const std::string& default_name)
-		: LLFilePickerThread(false), mFilter(filter), mDefaultFilename(default_name)
-	{
-
-	}
-
-	virtual void run();
-
-	virtual void notify(const std::string& filename) = 0;
-
-	virtual void notify(std::list<std::string> filenames) {};
-};
-
-class LLGenericLoadFilePicker : public LLLoadFilePickerThread
+class LLGenericLoadFilePicker : public LLFilePickerThread
 {
 public:
 	LLGenericLoadFilePicker(LLFilePicker::ELoadFilter filter, boost::function<void (const std::string&)> notify_slot)
-		: LLLoadFilePickerThread(filter)
+		: LLFilePickerThread(filter)
 	{
 		mSignal.connect(notify_slot);
 	}
-	virtual void notify(const std::string& filename);
+
+	virtual void notify(const std::vector<std::string>& filenames)
+	{
+		if (!filenames.empty())
+		{
+			mSignal(filenames[0]);
+		}
+		else
+		{
+			mSignal(std::string());
+		}
+	}
 
 	static void open(LLFilePicker::ELoadFilter filter, boost::function<void (const std::string&)> notify_slot)
 	{
@@ -172,15 +138,26 @@ protected:
 	boost::signals2::signal<void (const std::string&)> mSignal;
 };
 
-class LLGenericSaveFilePicker : public LLSaveFilePickerThread
+class LLGenericSaveFilePicker : public LLFilePickerThread
 {
 public:
 	LLGenericSaveFilePicker(LLFilePicker::ESaveFilter filter, const std::string& default_name, boost::function<void (const std::string&)> notify_slot)
-		: LLSaveFilePickerThread(filter, default_name)
+		: LLFilePickerThread(filter, default_name)
 	{
 		mSignal.connect(notify_slot);
 	}
-	virtual void notify(const std::string& filename);
+
+	virtual void notify(const std::vector<std::string>& filenames)
+	{
+		if (!filenames.empty())
+		{
+			mSignal(filenames[0]);
+		}
+		else
+		{
+			mSignal(std::string());
+		}
+	}
 
 	static void open(LLFilePicker::ESaveFilter filter, const std::string& default_name, boost::function<void (const std::string&)> notify_slot)
 	{
@@ -192,44 +169,33 @@ protected:
 };
 
 
-class LLLoadMultipleFilePickerThread : public LLFilePickerThread
-{ //multi-threaded file picker (runs system specific file picker in background and calls "notify" from main thread)
-public:
-
-	LLFilePicker::ELoadFilter mFilter;
-
-	LLLoadMultipleFilePickerThread(LLFilePicker::ELoadFilter filter)
-		: LLFilePickerThread(true), mFilter(filter)
-	{
-
-	}
-
-	virtual void run();
-
-	virtual void notify(const std::string& filename) {};
-
-	virtual void notify(std::list<std::string> filenames) = 0;
-};
-
-class LLGenericLoadMultipleFilePicker : public LLLoadMultipleFilePickerThread
+class LLGenericLoadMultipleFilePicker : public LLFilePickerThread
 {
 public:
 	LLGenericLoadMultipleFilePicker(LLFilePicker::ELoadFilter filter, boost::function<void (std::list<std::string> filenames)> notify_slot)
-		: LLLoadMultipleFilePickerThread(filter)
+		: LLFilePickerThread(filter, true)
 	{
 		mSignal.connect(notify_slot);
 	}
-	virtual void notify(std::list<std::string> filenames);
+
+	virtual void notify(const std::vector<std::string>& filenames)
+	{
+		std::list<std::string> files;
+		if (!filenames.empty())
+		{
+			std::copy(filenames.begin(), filenames.end(), files.begin());
+		}
+		mSignal(files);
+	}
 
 	static void open(LLFilePicker::ELoadFilter filter, boost::function<void (std::list<std::string> filenames)> notify_slot)
 	{
-		(new LLGenericLoadMultipleFilePicker(filter, notify_slot))->getFiles();
+		(new LLGenericLoadMultipleFilePicker(filter, notify_slot))->getFile();
 	}
 
 protected:
 	boost::signals2::signal<void (std::list<std::string> filenames)> mSignal;
 };
-
 // <FS:CR Threaded Filepickers>
 
 #endif

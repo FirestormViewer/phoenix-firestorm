@@ -138,104 +138,44 @@ void LLFilePickerThread::getFile()
 }
 
 //virtual 
-// <FS:CR Threaded Filepickers>
-//void LLFilePickerThread::run()
-void LLLoadFilePickerThread::run()
-// </FS:CR Threaded Filepickers>
+void LLFilePickerThread::run()
 {
-	LLFilePicker picker;
 #if LL_WINDOWS
-	if (picker.getOpenFile(mFilter, false))
-	{
-		mFile = picker.getFirstFile();
-	}
+	bool blocking = false;
 #else
-	if (picker.getOpenFile(mFilter, true))
-	{
-		mFile = picker.getFirstFile();
-	}
+	bool blocking = true; // modal
 #endif
 
-	{
-		LLMutexLock lock(sMutex);
-		sDeadQ.push(this);
-	}
-
-}
-
-// <FS:CR Threaded Filepickers>
-//virtual 
-void LLSaveFilePickerThread::run()
-{
 	LLFilePicker picker;
-#if LL_WINDOWS
-	if (picker.getSaveFile(mFilter, mDefaultFilename, false))
-	{
-		mFile = picker.getFirstFile();
-	}
-#else
-	if (picker.getSaveFile(mFilter, mDefaultFilename, true))
-	{
-		mFile = picker.getFirstFile();
-	}
-#endif
 
+	if (mIsSaveDialog)
 	{
-		LLMutexLock lock(sMutex);
-		sDeadQ.push(this);
-	}
-
-}
-
-void LLLoadMultipleFilePickerThread::run()
-{
-	LLFilePicker picker;
-#if LL_WINDOWS
-	if (picker.getMultipleOpenFiles(mFilter, false))
-	{
-		std::string file = picker.getFirstFile();
-		while (!file.empty())
+		if (picker.getSaveFile(mSaveFilter, mProposedName, blocking))
 		{
-			mFiles.push_back(file);
-			file = picker.getNextFile();
+			mResponses.push_back(picker.getFirstFile());
 		}
 	}
-#else
-	if (picker.getMultipleOpenFiles(mFilter, true))
+	else
 	{
-		std::string file = picker.getFirstFile();
-		while (!file.empty())
+		bool result = mIsGetMultiple ? picker.getMultipleOpenFiles(mLoadFilter, blocking) : picker.getOpenFile(mLoadFilter, blocking);
+		if (result)
 		{
-			mFiles.push_back(file);
-			file = picker.getNextFile();
+			std::string filename = picker.getFirstFile(); // consider copying mFiles directly
+			do
+			{
+				mResponses.push_back(filename);
+				filename = picker.getNextFile();
+			}
+			while (mIsGetMultiple && !filename.empty());
 		}
 	}
-#endif
 
 	{
 		LLMutexLock lock(sMutex);
 		sDeadQ.push(this);
 	}
-}
 
-//virtual
-void LLGenericLoadFilePicker::notify(const std::string& filename)
-{
-	mSignal(filename);
 }
-
-//virtual
-void LLGenericSaveFilePicker::notify(const std::string& filename)
-{
-	mSignal(filename);
-}
-
-//virtual
-void LLGenericLoadMultipleFilePicker::notify(std::list<std::string> filenames)
-{
-	mSignal(filenames);
-}
-// </FS:CR Threaded Filepickers>
 
 //static
 void LLFilePickerThread::initClass()
@@ -261,17 +201,7 @@ void LLFilePickerThread::clearDead()
 		while (!sDeadQ.empty())
 		{
 			LLFilePickerThread* thread = sDeadQ.front();
-			// <FS:Ansariel> Threaded file pickers
-			//thread->notify(thread->mFile);
-			if (thread->mMultiple)
-			{
-				thread->notify(thread->mFiles);
-			}
-			else
-			{
-				thread->notify(thread->mFile);
-			}
-			// </FS:Ansariel>
+			thread->notify(thread->mResponses);
 			delete thread;
 			sDeadQ.pop();
 		}
