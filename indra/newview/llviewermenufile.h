@@ -183,7 +183,7 @@ public:
 		std::list<std::string> files;
 		if (!filenames.empty())
 		{
-			std::copy(filenames.begin(), filenames.end(), files.begin());
+			files.assign(filenames.begin(), filenames.end());
 		}
 		mSignal(files);
 	}
