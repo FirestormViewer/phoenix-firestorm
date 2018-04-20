@@ -1274,7 +1274,7 @@ void LLInventoryPanel::updateFolderLabel(const LLUUID& folder_id)
 	LLFolderViewItem* folder_item = getItemByID(mPreviousSelectedFolder);
 	if(folder_item)
 	{
-		LLFolderBridge* bridge = (LLFolderBridge*)folder_item->getViewModelItem();
+		LLFolderBridge* bridge = static_cast<LLFolderBridge*>(folder_item->getViewModelItem());
 		if(bridge)
 		{
 			bridge->clearDisplayName();
