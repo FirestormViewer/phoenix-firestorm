@@ -1230,7 +1230,7 @@ void LLInventoryPanel::onSelectionChange(const std::deque<LLFolderViewItem*>& it
 			{
 				if(prev_folder_item)
 				{
-					LLFolderBridge* prev_bridge = static_cast<LLFolderBridge*>(prev_folder_item->getViewModelItem());
+					LLFolderBridge* prev_bridge = dynamic_cast<LLFolderBridge*>(prev_folder_item->getViewModelItem());
 					if(prev_bridge)
 					{
 						prev_bridge->clearDisplayName();
@@ -1239,7 +1239,7 @@ void LLInventoryPanel::onSelectionChange(const std::deque<LLFolderViewItem*>& it
 					}
 				}
 
-				LLFolderBridge* bridge = static_cast<LLFolderBridge*>(folder_item->getViewModelItem());
+				LLFolderBridge* bridge = dynamic_cast<LLFolderBridge*>(folder_item->getViewModelItem());
 				if(bridge)
 				{
 					bridge->clearDisplayName();
@@ -1254,7 +1254,7 @@ void LLInventoryPanel::onSelectionChange(const std::deque<LLFolderViewItem*>& it
 	{
 		if(prev_folder_item)
 		{
-			LLFolderBridge* prev_bridge = static_cast<LLFolderBridge*>(prev_folder_item->getViewModelItem());
+			LLFolderBridge* prev_bridge = dynamic_cast<LLFolderBridge*>(prev_folder_item->getViewModelItem());
 			if(prev_bridge)
 			{
 				prev_bridge->clearDisplayName();
@@ -1274,7 +1274,7 @@ void LLInventoryPanel::updateFolderLabel(const LLUUID& folder_id)
 	LLFolderViewItem* folder_item = getItemByID(mPreviousSelectedFolder);
 	if(folder_item)
 	{
-		LLFolderBridge* bridge = static_cast<LLFolderBridge*>(folder_item->getViewModelItem());
+		LLFolderBridge* bridge = dynamic_cast<LLFolderBridge*>(folder_item->getViewModelItem());
 		if(bridge)
 		{
 			bridge->clearDisplayName();
