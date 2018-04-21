@@ -120,7 +120,7 @@ protected:
 		void decrementDepth();
 		U32 getDepth();
 	private:
-	#ifndef LL_LINUX
+	#ifdef LL_WINDOWS
 		std::atomic_uint32_t sIterationNestDepth;
 	#else
 		std::atomic_uint sIterationNestDepth;

@@ -196,7 +196,7 @@ private:
 };
 
 // ND: Typedefs for specialized versions. Using std::atomic_(u)int32_t to get the optimzed implementation.
-#ifndef LL_LINUX
+#ifdef LL_WINDOWS
 typedef LLAtomicBase<U32, std::atomic_uint32_t> LLAtomicU32;
 typedef LLAtomicBase<S32, std::atomic_int32_t> LLAtomicS32;
 #else
