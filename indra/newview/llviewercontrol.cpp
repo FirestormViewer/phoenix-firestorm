@@ -950,6 +950,17 @@ void handleRenderFriendsOnlyChanged(const LLSD& newvalue)
 }
 // </FS:Ansariel>
 
+// <FS:LO> Add ability for the statistics window to not be able to receive focus
+void handleFSStatisticsNoFocusChanged(const LLSD& newvalue)
+{
+	LLFloater* stats = LLFloaterReg::findInstance("stats");
+	if (stats)
+	{
+		stats->setIsChrome(newvalue.asBoolean());
+	}
+}
+// </FS:LO>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1180,6 +1191,10 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("ShowNavbarFavoritesPanel")->getSignal()->connect(boost::bind(&handleNavbarSettingsChanged));
 	gSavedSettings.getControl("ShowNavbarNavigationPanel")->getSignal()->connect(boost::bind(&handleNavbarSettingsChanged));
 	// </FS:Ansariel>
+
+	// <FS:LO> Add ability for the statistics window to not be able to receive focus
+	gSavedSettings.getControl("FSStatisticsNoFocus")->getSignal()->connect(boost::bind(&handleFSStatisticsNoFocusChanged, _2));
+	// </FS:LO>
 }
 
 #if TEST_CACHED_CONTROL
