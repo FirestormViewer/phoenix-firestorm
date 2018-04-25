@@ -1513,7 +1513,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		std::string widget_associated_text = "\n";
 		if (needs_header_text)
 		{
-			widget_associated_text = "[" + chat.mTimeStr + "] ";
+			widget_associated_text += "[" + chat.mTimeStr + "] ";
 			if (utf8str_trim(chat.mFromName).size() != 0 && chat.mFromName != SYSTEM_FROM)
 			{
 				widget_associated_text += chat.mFromName + delimiter;
