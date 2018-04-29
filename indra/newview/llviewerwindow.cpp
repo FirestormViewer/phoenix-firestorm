@@ -5543,6 +5543,16 @@ void LLPickInfo::fetchResults()
 	
 	mPickPt = mMousePt;
 
+// [RLVa:KB] - Checked: RLVa-2.3 (@setoverlay)
+	if ( (gRlvHandler.isEnabled()) && (hit_object) && (!hit_object->isHUDAttachment()) )
+	{
+		if (gRlvHandler.hitTestOverlay(mMousePt))
+		{
+			hit_object = nullptr;
+		}
+	}
+// [/RLVa:KB]
+
 	U32 te_offset = face_hit > -1 ? face_hit : 0;
 
 	if (mPickParticle)

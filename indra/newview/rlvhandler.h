@@ -22,6 +22,12 @@
 #include "rlvcommon.h"
 #include "rlvhelper.h"
 
+ // ============================================================================
+ // Forward declarations
+ //
+
+class LLViewerFetchedTexture;
+
 // ============================================================================
 
 class RlvHandler : public LLOldEvents::LLSimpleListener
@@ -93,7 +99,7 @@ public:
 	 * Helper functions
 	 */
 public:
-	// Accessors
+	// Accessors/Mutators
 	const LLUUID&     getAgentGroup() const			{ return m_idAgentGroup; }					// @setgroup
 	bool              getCanCancelTp() const		{ return m_fCanCancelTp; }					// @accepttp and @tpto
 	void              setCanCancelTp(bool fAllow)	{ m_fCanCancelTp = fAllow; }				// @accepttp and @tpto
@@ -102,7 +108,9 @@ public:
 
 	// Command specific helper functions
 	bool filterChat(std::string& strUTF8Text, bool fFilterEmote) const;							// @sendchat, @recvchat and @redirchat
+	bool hitTestOverlay(const LLCoordGL& ptMouse) const;                                        // @setoverlay
 	bool redirectChatOrEmote(const std::string& strUTF8Test) const;								// @redirchat and @rediremote
+	void renderOverlay();																		// @setoverlay
 
 	// Command processing helper functions
 	ERlvCmdRet processCommand(const LLUUID& idObj, const std::string& strCommand, bool fFromObj);
@@ -119,6 +127,10 @@ public:
 	static bool isEnabled()	{ return m_fEnabled; }
 	static bool setEnabled(bool fEnable);
 protected:
+	// Command specific helper functions
+	void clearOverlayImage();                                                                   // @setoverlay
+	void setOverlayImage(const LLUUID& idTexture);                                              // @setoverlay
+
 	void onIMQueryListResponse(const LLSD& sdNotification, const LLSD sdResponse);
 
 	// --------------------------------
@@ -209,11 +221,15 @@ protected:
 	mutable LLVector3d	m_posSitSource;				// @standtp=n (mutable because onForceXXX handles are all declared as const)
 	mutable LLUUID		m_idAgentGroup;				// @setgroup=n
 
+	LLPointer<LLViewerFetchedTexture> m_pOverlayImage = nullptr;               // @setoverlay
+	int                 m_nOverlayOrigBoost = 0 /*LLGLTexture::BOOST_NONE*/;   // @setoverlay
+
 	friend class RlvSharedRootFetcher;				// Fetcher needs access to m_fFetchComplete
 	friend class RlvGCTimer;						// Timer clear its own point at destruction
-	template<ERlvBehaviourOptionType optionType> friend struct RlvBehaviourGenericHandler;
+	template<ERlvBehaviourOptionType> friend struct RlvBehaviourGenericHandler;
 	template<ERlvParamType> friend struct RlvCommandHandlerBaseImpl;
 	template<ERlvParamType, ERlvBehaviour> friend struct RlvCommandHandler;
+	template<ERlvBehaviourModifier> friend class RlvBehaviourModifierHandler;
 
 	// --------------------------------
 

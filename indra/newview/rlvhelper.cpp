@@ -174,6 +174,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("viewnote", RLV_BHVR_VIEWNOTE));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("viewscript", RLV_BHVR_VIEWSCRIPT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("viewtexture", RLV_BHVR_VIEWTEXTURE));
+
 	// Camera
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM, RLV_OPTION_NONE>("setcam"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_avdistmin", RLV_BHVR_SETCAM_AVDISTMIN, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
@@ -203,6 +204,15 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourProcessor<RLV_BHVR_CAMZOOMMIN, RlvBehaviourCamZoomMinMaxHandler>("camzoommin", RlvBehaviourInfo::BHVR_DEPRECATED));
 	addEntry(new RlvBehaviourProcessor<RLV_BHVR_CAMZOOMMAX, RlvBehaviourCamZoomMinMaxHandler>("camzoommax", RlvBehaviourInfo::BHVR_DEPRECATED));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_UNLOCK, RLV_OPTION_NONE>("camunlock", RlvBehaviourInfo::BHVR_SYNONYM | RlvBehaviourInfo::BHVR_DEPRECATED));
+
+	// Overlay
+	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETOVERLAY, RLV_OPTION_NONE>("setoverlay", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addModifier(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setoverlay_alpha", RLV_BHVR_SETOVERLAY_ALPHA, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
+	            RLV_MODIFIER_OVERLAY_ALPHA, new RlvBehaviourModifier("Overlay - Alpha", 1.0f, false, new RlvBehaviourModifier_Comp()));
+	addModifier(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setoverlay_texture", RLV_BHVR_SETOVERLAY_TEXTURE, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
+				RLV_MODIFIER_OVERLAY_TEXTURE, new RlvBehaviourModifierHandler<RLV_MODIFIER_OVERLAY_TEXTURE>("Overlay - Texture", LLUUID::null, false, new RlvBehaviourModifier_Comp()));
+	addModifier(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("setoverlay_touch", RLV_BHVR_SETOVERLAY_TOUCH, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
+				RLV_MODIFIER_OVERLAY_TOUCH, new RlvBehaviourModifier("Overlay - Touch", true, true, new RlvBehaviourModifier_Comp()));
 
 	//
 	// Force-wear
@@ -350,6 +360,13 @@ void RlvBehaviourDictionary::addModifier(ERlvBehaviour eBhvr, ERlvBehaviourModif
 		m_BehaviourModifiers[eModifier] = pModifierEntry;
 		m_Bhvr2ModifierMap.insert(std::make_pair(eBhvr, eModifier));
 	}
+}
+
+// Convenience function to add both the behaviour entry as well as the corresponding modifier entry
+void RlvBehaviourDictionary::addModifier(const RlvBehaviourInfo* pBhvrEntry, ERlvBehaviourModifier eModifier, RlvBehaviourModifier* pModifierEntry)
+{
+	addEntry(pBhvrEntry);
+	addModifier(pBhvrEntry->getBehaviourType(), eModifier, pModifierEntry);
 }
 
 const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict) const

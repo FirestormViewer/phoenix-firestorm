@@ -95,8 +95,9 @@ class RlvBehaviourDictionary : public LLSingleton<RlvBehaviourDictionary>
 protected:
 	~RlvBehaviourDictionary();
 public:
-	void addEntry(const RlvBehaviourInfo* pEntry);
+	void addEntry(const RlvBehaviourInfo* pBhvrEntry);
 	void addModifier(ERlvBehaviour eBhvr, ERlvBehaviourModifier eModifier, RlvBehaviourModifier* pModifierEntry);
+	void addModifier(const RlvBehaviourInfo* pBhvrEntry, ERlvBehaviourModifier eModifier, RlvBehaviourModifier* pModifierEntry);
 
 	/*
 	 * General helper functions

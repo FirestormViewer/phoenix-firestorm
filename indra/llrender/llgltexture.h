@@ -142,7 +142,10 @@ public:
 	LLGLenum   getPrimaryFormat() const;
 	BOOL       getIsAlphaMask() const ;
 	LLTexUnit::eTextureType getTarget(void) const ;
-	BOOL       getMask(const LLVector2 &tc);
+// [RLVa:KB] - Checked: RLVa-2.3 (@setoverlay)
+	bool       getMask(const LLVector2 &tc) const;
+// [/RLVa:KB]
+//	BOOL       getMask(const LLVector2 &tc);
 	F32        getTimePassedSinceLastBound();
 	BOOL       getMissed() const ;
 	BOOL       isJustBound()const ;

@@ -79,6 +79,7 @@
 #include "llpostprocess.h"
 #include "llscenemonitor.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
 
@@ -1305,6 +1306,12 @@ void render_ui(F32 zoom_factor, int subfield)
 		}
 		
 		render_hud_elements();
+// [RLVa:KB] - Checked: RLVa-2.3 (@setoverlay)
+		if (gRlvHandler.isEnabled())
+		{
+			gRlvHandler.renderOverlay();
+		}
+// [/RLVa:KB]
 		render_hud_attachments();
 	}
 

@@ -49,6 +49,7 @@
 #include "llviewercamera.h"				// @setcam and related
 #include "llworldmapmessage.h"			// @tpto
 #include "llviewertexturelist.h"		// @setcam_texture
+#include "llviewerwindow.h"				// @setoverlay
 
 // RLVa includes
 #include "rlvactions.h"
@@ -1625,6 +1626,40 @@ void RlvBehaviourToggleHandler<RLV_BHVR_EDIT>::onCommandToggle(ERlvBehaviour eBh
 		RlvUIEnabler::instance().removeGenericFloaterFilter("beacons");
 }
 
+// Handles: @setoverlay=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SETOVERLAY>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	// Once an object has exclusive control over the overlay only its behaviours should be active. This affects:
+	//   - behaviour modifiers         => handled for us once we set the primary object
+
+	LLUUID idRlvObject;
+	if (fHasBhvr)
+	{
+		// Get the UUID of the primary object (there should only be one)
+		std::list<const RlvObject*> lObjects;
+		gRlvHandler.findBehaviour(RLV_BHVR_SETOVERLAY, lObjects);
+		RLV_ASSERT(lObjects.size() == 1);
+		idRlvObject = lObjects.front()->getObjectID();
+	}
+
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_ALPHA)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TEXTURE)->setPrimaryObject(idRlvObject);
+}
+
+// Handles: @setoverlay_texture:<uuid>=n|y changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_OVERLAY_TEXTURE>::onValueChange() const
+{
+	if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TEXTURE))
+	{
+		if (pBhvrModifier->hasValue())
+			gRlvHandler.setOverlayImage(pBhvrModifier->getValue<LLUUID>());
+		else
+			gRlvHandler.clearOverlayImage();
+	}
+}
+
 // Handles: @sendchannel[:<channel>]=n|y and @sendchannel_except[:<channel>]=n|y
 template<> template<>
 ERlvCmdRet RlvBehaviourSendChannelHandler::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
@@ -3175,6 +3210,92 @@ ERlvCmdRet RlvHandler::onGetPath(const RlvCommand& rlvCmd, std::string& strReply
 		}
 	}
 	return RLV_RET_SUCCESS;
+}
+
+// ============================================================================
+// Command specific helper functions - @setoverlay
+//
+
+void RlvHandler::clearOverlayImage()
+{
+	if (m_pOverlayImage)
+	{
+		m_pOverlayImage->setBoostLevel(m_nOverlayOrigBoost);
+		m_pOverlayImage = nullptr;
+	}
+}
+
+bool RlvHandler::hitTestOverlay(const LLCoordGL& ptMouse) const
+{
+	if (!m_pOverlayImage)
+		return false;
+
+	RlvBehaviourModifier* pTouchModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TOUCH);
+	return (pTouchModifier) && (pTouchModifier->hasValue()) && (pTouchModifier->getValue<bool>()) &&
+	       (m_pOverlayImage->getMask(LLVector2((float)ptMouse.mX / gViewerWindow->getWorldViewWidthScaled(), (float)ptMouse.mY / gViewerWindow->getWorldViewHeightScaled())));
+}
+
+void RlvHandler::renderOverlay()
+{
+	if (m_pOverlayImage)
+	{
+		if (LLGLSLShader::sNoFixedFunction)
+		{
+			gUIProgram.bind();
+		}
+
+		int nWidth = gViewerWindow->getWorldViewWidthScaled();
+		int nHeight = gViewerWindow->getWorldViewHeightScaled();
+
+		m_pOverlayImage->addTextureStats(nWidth * nHeight);
+		m_pOverlayImage->setKnownDrawSize(nWidth, nHeight);
+
+		LLGLSUIDefault glsUI;
+		gViewerWindow->setup2DRender();
+		gGL.pushMatrix();
+
+		const LLVector2& displayScale = gViewerWindow->getDisplayScale();
+		gGL.scalef(displayScale.mV[VX], displayScale.mV[VY], 1.f);
+
+		gGL.getTexUnit(0)->bind(m_pOverlayImage);
+		gGL.color4f(1.f, 1.f, 1.f, llclamp(RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_ALPHA)->getValue<float>(), 0.0f, 1.0f));
+
+		gGL.begin(LLRender::QUADS);
+			gGL.texCoord2f(1.f, 1.f);
+			gGL.vertex2i(nWidth, nHeight);
+
+			gGL.texCoord2f(0.f, 1.f);
+			gGL.vertex2i(0, nHeight);
+
+			gGL.texCoord2f(0.f, 0.f);
+			gGL.vertex2i(0, 0);
+
+			gGL.texCoord2f(1.f, 0.f);
+			gGL.vertex2i(nWidth, 0);
+		gGL.end();
+
+		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+
+		gGL.popMatrix();
+		gGL.flush();
+
+		if (LLGLSLShader::sNoFixedFunction)
+		{
+			gUIProgram.unbind();
+		}
+	}
+}
+
+void RlvHandler::setOverlayImage(const LLUUID& idTexture)
+{
+	if ( (m_pOverlayImage) && (m_pOverlayImage->getID() == idTexture) )
+		return;
+
+	clearOverlayImage();
+	m_pOverlayImage = LLViewerTextureManager::getFetchedTexture(idTexture, FTT_DEFAULT, MIPMAP_YES, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+	m_nOverlayOrigBoost = m_pOverlayImage->getBoostLevel();
+	m_pOverlayImage->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
+	m_pOverlayImage->forceToSaveRawImage(0);
 }
 
 // ============================================================================
