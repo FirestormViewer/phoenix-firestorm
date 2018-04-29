@@ -23,8 +23,8 @@
 
 // Version of the specifcation we report
 const S32 RLV_VERSION_MAJOR = 3;
-const S32 RLV_VERSION_MINOR = 1;
-const S32 RLV_VERSION_PATCH = 4;
+const S32 RLV_VERSION_MINOR = 2;
+const S32 RLV_VERSION_PATCH = 1;
 const S32 RLV_VERSION_BUILD = 0;
 
 // Version of the specifcation we report (in compatibility mode)
@@ -35,7 +35,7 @@ const S32 RLV_VERSION_BUILD_COMPAT = 0;
 
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 2;
-const S32 RLVa_VERSION_MINOR = 1;
+const S32 RLVa_VERSION_MINOR = 2;
 const S32 RLVa_VERSION_PATCH = 0;
 
 // Uncomment before a final release
