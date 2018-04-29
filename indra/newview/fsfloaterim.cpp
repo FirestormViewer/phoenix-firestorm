@@ -366,42 +366,31 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 				static LLCachedControl<bool> chat_prefix(gSavedSettings, "FSSupportGroupChatPrefix2");
 				if (chat_prefix && FSData::getInstance()->isSupportGroup(mSessionID))
 				{
-					
 					// <FS:PP> FIRE-7075: Skin indicator
 					static LLCachedControl<std::string> FSInternalSkinCurrent(gSavedSettings, "FSInternalSkinCurrent");
-					std::string skinIndicator(FSInternalSkinCurrent);
-					LLStringUtil::toLower(skinIndicator);
-					if (skinIndicator == "starlight cui")
+					std::string skin_indicator(FSInternalSkinCurrent);
+					LLStringUtil::toLower(skin_indicator);
+					if (skin_indicator == "starlight cui")
 					{
-						skinIndicator = "sc"; // Separate "s" (StarLight) from "sc" (StarLight CUI)
+						skin_indicator = "sc"; // Separate "s" (StarLight) from "sc" (StarLight CUI)
 					}
 					else
 					{
-						skinIndicator = skinIndicator.substr(0, 1); // "FS 4.4.1f os", "FS 4.4.1v", "FS 4.4.1a", "FS 4.4.1s os", "FS 4.4.1m os" etc.
+						skin_indicator = skin_indicator.substr(0, 1); // "FS 4.4.1f os", "FS 4.4.1v", "FS 4.4.1a", "FS 4.4.1s os", "FS 4.4.1m os" etc.
 					}
 					// </FS:PP>
 
 #if ADDRESS_SIZE == 32
-					std::string strFSTag = "(FS ";
+					std::string str_fs_tag = "FS ";
 #else
-					std::string strFSTag = "(FS64 ";
+					std::string str_fs_tag = "FS64 ";
 #endif
-					if (is_irc_me_prefix(utf8_text))
-					{
-						utf8_text.insert(4,(strFSTag + LLVersionInfo::getShortVersion() + skinIndicator +
+					std::string str_os_tag;
 #ifdef OPENSIM
-											" os" +
+					str_os_tag = " os";
 #endif
-											") "));
-					}
-					else
-					{
-						utf8_text.insert(0,(strFSTag + LLVersionInfo::getShortVersion() + skinIndicator +
-#ifdef OPENSIM
-											" os" +
-#endif
-											") "));
-					}
+					size_t insert_pos = is_irc_me_prefix(utf8_text) ? 4 : 0;
+					utf8_text.insert(insert_pos, ("(" + str_fs_tag + LLVersionInfo::getShortVersion() + skin_indicator + str_os_tag + ")"));
 				}
 				
 				// <FS:Techwolf Lupindo> Allow user to send system info.
