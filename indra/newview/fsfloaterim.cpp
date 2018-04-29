@@ -390,7 +390,7 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 					str_os_tag = " os";
 #endif
 					size_t insert_pos = is_irc_me_prefix(utf8_text) ? 4 : 0;
-					utf8_text.insert(insert_pos, ("(" + str_fs_tag + LLVersionInfo::getShortVersion() + skin_indicator + str_os_tag + ")"));
+					utf8_text.insert(insert_pos, ("(" + str_fs_tag + LLVersionInfo::getShortVersion() + skin_indicator + str_os_tag + ") "));
 				}
 				
 				// <FS:Techwolf Lupindo> Allow user to send system info.
