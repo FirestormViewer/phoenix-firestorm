@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2009-2016, Kitty Barnett
+ * Copyright (c) 2009-2018, Kitty Barnett
  *
  * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -139,10 +139,14 @@ RlvHandler::RlvHandler() : m_fCanCancelTp(true), m_posSitSource(), m_pGCTimer(NU
 	memset(m_Behaviours, 0, sizeof(S16) * RLV_BHVR_COUNT);
 }
 
-// Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.1d
 RlvHandler::~RlvHandler()
 {
 	gAgent.removeListener(this);
+	if (m_PendingGroupChange.first.notNull())
+	{
+		LLGroupMgr::instance().removeObserver(m_PendingGroupChange.first, this);
+		m_PendingGroupChange = std::make_pair(LLUUID::null, LLStringUtil::null);
+	}
 
 	//delete m_pGCTimer;	// <- deletes itself
 }
@@ -541,53 +545,141 @@ void RlvHandler::onIMQueryListResponse(const LLSD& sdNotification, const LLSD sd
 }
 
 // ============================================================================
-// Externally invoked event handlers
+// Command specific helper functions - @setgroup
 //
+
+void RlvHandler::changed(const LLUUID& idGroup, LLGroupChange change)
+{
+	// If we're receiving information about a group we're not interested in, we forgot a removeObserver somewhere
+	RLV_ASSERT(idGroup == m_PendingGroupChange.first);
+
+	if ( ((GC_ALL == change) || (GC_ROLE_DATA == change)) && (m_PendingGroupChange.first == idGroup) )
+	{
+		LLGroupMgr::instance().removeObserver(m_PendingGroupChange.first, this);
+		setActiveGroupRole(m_PendingGroupChange.first, m_PendingGroupChange.second);
+	}
+}
 
 bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& sdUserdata)
 {
-	// NOTE: we'll fire once for every group the user belongs to so we need to manually keep track of pending changes
+	// NOTE: we'll fire once for every group the user belongs to so we need to manually keep track of changes
 	static LLUUID s_idLastAgentGroup = LLUUID::null;
-	static bool s_fGroupChanging = false;
-
 	if (s_idLastAgentGroup != gAgent.getGroupID())
 	{
 		s_idLastAgentGroup = gAgent.getGroupID();
-		s_fGroupChanging = false;
+		onActiveGroupChanged();
 	}
+	return false;
+}
 
+void RlvHandler::onActiveGroupChanged()
+{
 	// If the user managed to change their active group (= newly joined or created group) we need to reactivate the previous one
-	if ( (!RlvActions::canChangeActiveGroup()) && ("new group" == event->desc()) && (m_idAgentGroup != gAgent.getGroupID()) )
+	if ( (!RlvActions::canChangeActiveGroup()) && (m_idAgentGroup != gAgent.getGroupID()) )
 	{
 		// Make sure they still belong to the group
 		if ( (m_idAgentGroup.notNull()) && (!gAgent.isInGroup(m_idAgentGroup)) )
 		{
 			m_idAgentGroup.setNull();
-			s_fGroupChanging = false;
 		}
 
-		if (!s_fGroupChanging)
-		{
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_GROUPCHANGE, LLSD().with("GROUP_SLURL", (m_idAgentGroup.notNull()) ? llformat("secondlife:///app/group/%s/about", m_idAgentGroup.asString()) : "(none)"));
+		// Notify them about the change
+		const LLSD sdArgs = LLSD().with("GROUP_SLURL", (m_idAgentGroup.notNull()) ? llformat("secondlife:///app/group/%s/about", m_idAgentGroup.asString().c_str()) : "(none)");
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_GROUPCHANGE, sdArgs);
 
-			// [Copy/paste from LLGroupActions::activate()]
-			LLMessageSystem* msg = gMessageSystem;
-			msg->newMessageFast(_PREHASH_ActivateGroup);
-			msg->nextBlockFast(_PREHASH_AgentData);
-			msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-			msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-			msg->addUUIDFast(_PREHASH_GroupID, m_idAgentGroup);
-			gAgent.sendReliableMessage();
-			s_fGroupChanging = true;
-			return true;
-		}
+		setActiveGroup(m_idAgentGroup);
 	}
 	else
 	{
 		m_idAgentGroup = gAgent.getGroupID();
+
+		// Allowed change - check if we still need to activate a role
+		if ( (m_PendingGroupChange.first.notNull()) && (m_PendingGroupChange.first == m_idAgentGroup) )
+		{
+			setActiveGroupRole(m_PendingGroupChange.first, m_PendingGroupChange.second);
+		}
 	}
-	return false;
 }
+
+void RlvHandler::setActiveGroup(const LLUUID& idGroup)
+{
+	// If we have an existing observer fpr a different group, remove it
+	if ( (m_PendingGroupChange.first.notNull()) && (m_PendingGroupChange.first != idGroup) )
+	{
+		LLGroupMgr::instance().removeObserver(m_PendingGroupChange.first, this);
+		m_PendingGroupChange = std::make_pair(LLUUID::null, LLStringUtil::null);
+	}
+
+	if (gAgent.getGroupID() != idGroup)
+	{
+		// [Copy/paste from LLGroupActions::activate()]
+		LLMessageSystem* msg = gMessageSystem;
+		msg->newMessageFast(_PREHASH_ActivateGroup);
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		msg->addUUIDFast(_PREHASH_GroupID, idGroup);
+		gAgent.sendReliableMessage();
+	}
+	m_idAgentGroup = idGroup;
+}
+
+void RlvHandler::setActiveGroupRole(const LLUUID& idGroup, const std::string& strRole)
+{
+	// Check if we need a group change first
+	if (gAgent.getGroupID() != idGroup)
+	{
+		setActiveGroup(idGroup);
+		m_PendingGroupChange = std::make_pair(idGroup, strRole);
+		return;
+	}
+
+	// Now that we have the correct group, check if we need to request the role information
+	/*const*/ auto* pGroupData = LLGroupMgr::instance().getGroupData(idGroup);
+	if ( ((!pGroupData) && (gAgent.isInGroup(idGroup))) || (!pGroupData->isRoleDataComplete()) )
+	{
+		if (m_PendingGroupChange.first.notNull())
+			LLGroupMgr::instance().removeObserver(m_PendingGroupChange.first, this);
+		m_PendingGroupChange = std::make_pair(idGroup, strRole);
+		LLGroupMgr::instance().addObserver(idGroup, this);
+		LLGroupMgr::instance().sendGroupRoleDataRequest(idGroup);
+		return;
+	}
+
+	// We have everything - activate the requested role (if we can find it)
+	if (pGroupData)
+	{
+		enum class EMatch { None, Partial, Exact } eMatch = EMatch::None; LLUUID idRole;
+		for (const auto& roleData : pGroupData->mRoles)
+		{
+			// NOTE: exact matches take precedence over partial matches; in case of partial matches the last match wins
+			const std::string& strRoleName = roleData.second->getRoleData().mRoleName;
+			if (boost::istarts_with(strRoleName, strRole))
+			{
+				idRole = roleData.first;
+				eMatch = (strRoleName.length() == strRole.length()) ? EMatch::Exact : EMatch::Partial;
+				if (eMatch == EMatch::Exact)
+					break;
+			}
+		}
+
+		if (eMatch != EMatch::None)
+		{
+			RLV_INFOS << "Activating role '" << strRole << "' for group '" << pGroupData->mName << "'" << RLV_ENDL;
+			LLGroupMgr::getInstance()->sendGroupTitleUpdate(idGroup, idRole);
+		}
+		else
+		{
+			RLV_INFOS << "Couldn't find role '" << strRole << "' in group '" << pGroupData->mName << "'" << RLV_ENDL;
+		}
+	}
+
+	m_PendingGroupChange = std::make_pair(LLUUID::null, LLStringUtil::null);
+}
+
+// ============================================================================
+// Externally invoked event handlers
+//
 
 // Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 void RlvHandler::onSitOrStand(bool fSitting)
@@ -2494,20 +2586,24 @@ void RlvHandler::onForceWearCallback(const uuid_vec_t& idItems, U32 nFlags) cons
 	}
 }
 
-// Handles: @setgroup:<uuid|name>=force
+// Handles: @setgroup:<uuid|name>[;<role>]=force
 template<> template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCmd)
 {
 	if (!RlvActions::canChangeActiveGroup(rlvCmd.getObjectID()))
 		return RLV_RET_FAILED_LOCK;
 
+	std::vector<std::string> optionList;
+	if ( (!RlvCommandOptionHelper::parseStringList(rlvCmd.getOption(), optionList)) || (optionList.size() < 1) || (optionList.size() > 2) )
+		return RLV_RET_FAILED_OPTION;
+
 	LLUUID idGroup; bool fValid = false;
-	if ("none" == rlvCmd.getOption())
+	if ("none" == optionList[0])
 	{
 		idGroup.setNull();
 		fValid = true;
 	}
-	else if (idGroup.set(rlvCmd.getOption()))
+	else if (idGroup.set(optionList[0]))
 	{
 		fValid = (idGroup.isNull()) || (gAgent.isInGroup(idGroup, true));
 	}
@@ -2517,10 +2613,10 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCm
 		for (const auto& groupData : gAgent.mGroups)
 		{
 			// NOTE: exact matches take precedence over partial matches; in case of partial matches the last match wins
-			if (boost::istarts_with(groupData.mName, rlvCmd.getOption()))
+			if (boost::istarts_with(groupData.mName, optionList[0]))
 			{
 				idGroup = groupData.mID;
-				fExactMatch = groupData.mName.length() == rlvCmd.getOption().length();
+				fExactMatch = groupData.mName.length() == optionList[0].length();
 				if (fExactMatch)
 					break;
 			}
@@ -2530,8 +2626,10 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCm
 
 	if (fValid)
 	{
-		gRlvHandler.m_idAgentGroup = idGroup;
-		LLGroupActions::activate(idGroup);
+		if (optionList.size() == 1)
+			gRlvHandler.setActiveGroup(idGroup);
+		else if (optionList.size() == 2)
+			gRlvHandler.setActiveGroupRole(idGroup, optionList[1]);
 	}
 
 	return (fValid) ? RLV_RET_SUCCESS : RLV_RET_FAILED_OPTION;

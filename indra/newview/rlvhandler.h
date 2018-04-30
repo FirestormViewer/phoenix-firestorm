@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2009-2016, Kitty Barnett
+ * Copyright (c) 2009-2018, Kitty Barnett
  *
  * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -17,6 +17,7 @@
 #ifndef RLV_HANDLER_H
 #define RLV_HANDLER_H
 
+#include "llgroupmgr.h"
 #include <stack>
 
 #include "rlvcommon.h"
@@ -30,7 +31,7 @@ class LLViewerFetchedTexture;
 
 // ============================================================================
 
-class RlvHandler : public LLOldEvents::LLSimpleListener
+class RlvHandler : public LLOldEvents::LLSimpleListener, public LLParticularGroupObserver
 {
 	// Temporary LLSingleton look-alike
 public:
@@ -127,9 +128,11 @@ public:
 	static bool isEnabled()	{ return m_fEnabled; }
 	static bool setEnabled(bool fEnable);
 protected:
-	// Command specific helper functions
-	void clearOverlayImage();                                                                   // @setoverlay
-	void setOverlayImage(const LLUUID& idTexture);                                              // @setoverlay
+	// Command specific helper functions (NOTE: these generally do not perform safety checks)
+	void clearOverlayImage();                                                                   // @setoverlay=n
+	void setActiveGroup(const LLUUID& idGroup);                                                 // @setgroup=force
+	void setActiveGroupRole(const LLUUID& idGroup, const std::string& strRole);                 // @setgroup=force
+	void setOverlayImage(const LLUUID& idTexture);                                              // @setoverlay=n
 
 	void onIMQueryListResponse(const LLSD& sdNotification, const LLSD sdResponse);
 
@@ -155,7 +158,7 @@ protected:
 
 	// Externally invoked event handlers
 public:
-	bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& sdUserdata);			// Implementation of public LLSimpleListener
+	void onActiveGroupChanged();
 	void onAttach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
 	void onDetach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
 	bool onGC();
@@ -164,6 +167,15 @@ public:
 	void onTeleportFailed();
 	void onTeleportFinished(const LLVector3d& posArrival);
 	static void onIdleStartup(void* pParam);
+
+	/*
+	 * Base class overrides
+	 */
+public:
+	// LLParticularGroupObserver implementation
+	void changed(const LLUUID& group_id, LLGroupChange gc) override;
+	// LLOldEvents::LLSimpleListener implementation
+	bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& sdUserdata) override;
 
 	/*
 	 * Command processing
@@ -217,12 +229,12 @@ protected:
 
 	static bool         m_fEnabled;					// Use setEnabled() to toggle this
 
-	bool				m_fCanCancelTp;				// @accepttp=n and @tpto=force
-	mutable LLVector3d	m_posSitSource;				// @standtp=n (mutable because onForceXXX handles are all declared as const)
-	mutable LLUUID		m_idAgentGroup;				// @setgroup=n
-
-	LLPointer<LLViewerFetchedTexture> m_pOverlayImage = nullptr;               // @setoverlay
-	int                 m_nOverlayOrigBoost = 0 /*LLGLTexture::BOOST_NONE*/;   // @setoverlay
+	bool                                    m_fCanCancelTp;					// @accepttp=n and @tpto=force
+	mutable LLVector3d                      m_posSitSource;					// @standtp=n (mutable because onForceXXX handles are all declared as const)
+	mutable LLUUID                          m_idAgentGroup;					// @setgroup=n
+	std::pair<LLUUID, std::string>          m_PendingGroupChange;			// @setgroup=force
+	LLPointer<LLViewerFetchedTexture>       m_pOverlayImage = nullptr;		// @setoverlay=n
+	int                                     m_nOverlayOrigBoost = 0;		// @setoverlay=n
 
 	friend class RlvSharedRootFetcher;				// Fetcher needs access to m_fFetchComplete
 	friend class RlvGCTimer;						// Timer clear its own point at destruction
