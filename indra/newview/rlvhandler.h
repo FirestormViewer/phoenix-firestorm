@@ -167,6 +167,8 @@ public:
 	void onTeleportFailed();
 	void onTeleportFinished(const LLVector3d& posArrival);
 	static void onIdleStartup(void* pParam);
+protected:
+	void onTeleportCallback(U64 hRegion, const LLVector3& posRegion, const LLVector3& vecLookAt, const LLUUID& idRlvObj);
 
 	/*
 	 * Base class overrides

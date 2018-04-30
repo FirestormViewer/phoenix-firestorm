@@ -43,6 +43,7 @@
 #include "llpaneloutfitsinventory.h"	// @showinv - "Appearance" floater
 #include "llpanelpeople.h"				// @shownames
 #include "llpanelwearing.h"				// @showinv - "Appearance / Current Outfit" panel
+#include "llregionhandle.h"				// @tpto
 #include "llsidepanelappearance.h"		// @showinv - "Appearance / Edit appearance" panel
 #include "lltabcontainer.h"				// @showinv - Tab container control for inventory tabs
 #include "lltoolmgr.h"					// @edit
@@ -882,6 +883,22 @@ void RlvHandler::onLoginComplete()
 	LLViewerParcelMgr::getInstance()->setTeleportFinishedCallback(boost::bind(&RlvHandler::onTeleportFinished, this, _1));
 
 	processRetainedCommands();
+}
+
+void RlvHandler::onTeleportCallback(U64 hRegion, const LLVector3& posRegion, const LLVector3& vecLookAt, const LLUUID& idRlvObj)
+{
+	if (hRegion)
+	{
+		m_CurObjectStack.push(idRlvObj);
+
+		const LLVector3d posGlobal = from_region_handle(hRegion) + (LLVector3d)posRegion;
+		if (vecLookAt.isExactlyZero())
+			gAgent.teleportViaLocation(posGlobal);
+		else
+			gAgent.teleportViaLocationLookAt(posGlobal, vecLookAt);
+
+		m_CurObjectStack.pop();
+	}
 }
 
 // Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
@@ -2719,7 +2736,7 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_TPTO>::onCommand(const RlvCommand& rlvCmd)
 			return RLV_RET_FAILED_OPTION;
 		}
 
-		LLWorldMapMessage::url_callback_t cb = boost::bind(&RlvUtil::teleportCallback, _1, posRegion, vecLookAt);
+		LLWorldMapMessage::url_callback_t cb = boost::bind(&RlvHandler::onTeleportCallback, &gRlvHandler, _1, posRegion, vecLookAt, rlvCmd.getObjectID());
 		LLWorldMapMessage::getInstance()->sendNamedRegionRequest(posList[0], cb, std::string(""), true);
 	}
 
