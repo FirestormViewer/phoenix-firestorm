@@ -306,12 +306,12 @@ bool RlvActions::canTeleportToLocal(const LLVector3d& posGlobal)
 	// NOTE: if we're teleporting due to an active command we should disregard any restrictions from the same object
 	const LLUUID& idRlvObjExcept = gRlvHandler.getCurrentObject();
 	bool fCanStand = RlvActions::canStand(idRlvObjExcept);
-	if ( (fCanStand) && ((gRlvHandler.hasBehaviourExcept(RLV_BHVR_SITTP, gRlvHandler.getCurrentObject())) || (gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOCAL, gRlvHandler.getCurrentObject()))) )
+	if ( (fCanStand) && ((gRlvHandler.hasBehaviourExcept(RLV_BHVR_SITTP, idRlvObjExcept)) || (gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOCAL, idRlvObjExcept))) )
 	{
 		// User can stand up but is either @sittp or @tplocal restricted so we need to distance check
 		const F32 nDistSq = (LLVector2(posGlobal.mdV[0], posGlobal.mdV[1]) - LLVector2(gAgent.getPositionGlobal().mdV[0], gAgent.getPositionGlobal().mdV[1])).lengthSquared();
 		F32 nMaxDist = llmin(RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_TPLOCALDIST)->getValue<float>(), RLV_MODIFIER_TPLOCAL_DEFAULT);
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_SITTP))
+		if (gRlvHandler.hasBehaviourExcept(RLV_BHVR_SITTP, idRlvObjExcept))
 			nMaxDist = llmin(nMaxDist, RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SITTPDIST)->getValue<F32>());
 		return (nDistSq < nMaxDist * nMaxDist);
 	}
