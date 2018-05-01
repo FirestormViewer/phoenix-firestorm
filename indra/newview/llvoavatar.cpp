@@ -6698,7 +6698,7 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LL
         return;
     }
 
-    LLScopedContextString str("addAttachmentOverridesForObject " + vo->getAvatar()->getFullname());
+    LLScopedContextString str("addAttachmentOverridesForObject " + getFullname());
     
     LL_DEBUGS("AnimatedObjects") << "adding" << LL_ENDL;
     dumpStack("AnimatedObjectsStack");

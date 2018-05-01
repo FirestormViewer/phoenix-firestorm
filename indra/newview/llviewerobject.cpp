@@ -106,6 +106,7 @@
 #include "llvocache.h"
 #include "llcleanup.h"
 #include "llcallstack.h"
+#include "llmeshrepository.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
 #include "rlvcommon.h"
@@ -3065,24 +3066,25 @@ LLControlAvatar *LLViewerObject::getControlAvatar() const
 void LLViewerObject::updateControlAvatar()
 {
     LLViewerObject *root = getRootEdit();
-    if (root->isAnimatedObject() && !root->getControlAvatar())
+    bool any_rigged_mesh = root->isRiggedMesh();
+    LLViewerObject::const_child_list_t& child_list = root->getChildren();
+    for (LLViewerObject::const_child_list_t::const_iterator iter = child_list.begin();
+         iter != child_list.end(); ++iter)
     {
-        bool any_mesh = root->isMesh();
-        LLViewerObject::const_child_list_t& child_list = root->getChildren();
-        for (LLViewerObject::const_child_list_t::const_iterator iter = child_list.begin();
-             iter != child_list.end(); ++iter)
-        {
-            const LLViewerObject* child = *iter;
-            any_mesh = any_mesh || child->isMesh();
-        }
-        if (any_mesh)
-        {
-            std::string vobj_name = llformat("Vol%p", root);
-            LL_DEBUGS("AnimatedObjects") << vobj_name << " calling linkControlAvatar()" << LL_ENDL;
-            root->linkControlAvatar();
-        }
+        const LLViewerObject* child = *iter;
+        any_rigged_mesh = any_rigged_mesh || child->isRiggedMesh();
     }
-    if (!root->isAnimatedObject() && root->getControlAvatar())
+
+    bool has_control_avatar = getControlAvatar();
+    bool should_have_control_avatar = root->isAnimatedObject() && any_rigged_mesh;
+
+    if (should_have_control_avatar && !has_control_avatar)
+    {
+        std::string vobj_name = llformat("Vol%p", root);
+        LL_DEBUGS("AnimatedObjects") << vobj_name << " calling linkControlAvatar()" << LL_ENDL;
+        root->linkControlAvatar();
+    }
+    if (!should_have_control_avatar && has_control_avatar)
     {
         std::string vobj_name = llformat("Vol%p", root);
         LL_DEBUGS("AnimatedObjects") << vobj_name << " calling unlinkControlAvatar()" << LL_ENDL;
@@ -3105,11 +3107,20 @@ void LLViewerObject::linkControlAvatar()
                                      << " created control av for " 
                                      << (S32) (1+volp->numChildren()) << " prims" << LL_ENDL;
     }
-    if (getControlAvatar())
+    LLControlAvatar *cav = getControlAvatar();
+    if (cav)
     {
-        getControlAvatar()->updateAttachmentOverrides();
-        getControlAvatar()->updateAnimations();
-        getControlAvatar()->mPlaying = true;
+        cav->updateAttachmentOverrides();
+        cav->updateAnimations();
+        if (!cav->mPlaying)
+        {
+            cav->mPlaying = true;
+            if (!cav->mRootVolp->isAnySelected())
+            {
+                cav->updateVolumeGeom();
+                cav->mRootVolp->recursiveMarkForUpdate(TRUE);
+            }
+        }
     }
     else
     {
@@ -3778,7 +3789,10 @@ F32 LLViewerObject::recursiveGetEstTrianglesMax() const
          iter != mChildList.end(); iter++)
     {
         const LLViewerObject* child = *iter;
-        est_tris += child->recursiveGetEstTrianglesMax();
+        if (!child->isAvatar())
+        {
+            est_tris += child->recursiveGetEstTrianglesMax();
+        }
     }
     return est_tris;
 }
@@ -3815,9 +3829,17 @@ F32 LLViewerObject::getEstTrianglesStreamingCost() const
     return 0.f;
 }
 
-F32 LLViewerObject::getStreamingCost(S32* bytes, S32* visible_bytes, F32* unscaled_value) const
+// virtual
+F32 LLViewerObject::getStreamingCost() const
 {
 	return 0.f;
+}
+
+// virtual
+bool LLViewerObject::getCostData(LLMeshCostData& costs) const
+{
+    costs = LLMeshCostData();
+    return false;
 }
 
 U32 LLViewerObject::getTriangleCount(S32* vcount) const

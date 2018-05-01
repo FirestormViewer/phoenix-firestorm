@@ -3878,16 +3878,25 @@ U32 LLVOVolume::getRenderCost(texture_cost_t &textures) const
 		path_params = volume_params.getPathParams();
 		profile_params = volume_params.getProfileParams();
 
-		F32 weighted_triangles = -1.0;
-		getStreamingCost(NULL, NULL, &weighted_triangles);
-
-		if (weighted_triangles > 0.0)
+        LLMeshCostData costs;
+		if (getCostData(costs))
 		{
-			num_triangles = (U32)(weighted_triangles); 
+            if (isAnimatedObject() && isRiggedMesh())
+            {
+                // AXON Scaling here is to make animated object vs
+                // non-animated object ARC proportional to the
+                // corresponding calculations for streaming cost.
+                num_triangles = (ANIMATED_OBJECT_COST_PER_KTRI * 0.001 * costs.getEstTrisForStreamingCost())/0.06;
+            }
+            else
+            {
+                F32 radius = getScale().length()*0.5f;
+                num_triangles = costs.getRadiusWeightedTris(radius);
+            }
 		}
 	}
 
-	if (num_triangles == 0)
+	if (num_triangles <= 0)
 	{
 		num_triangles = 4;
 	}
@@ -3906,7 +3915,6 @@ U32 LLVOVolume::getRenderCost(texture_cost_t &textures) const
 					// weighted attachment - 1 point for every 3 bytes
 					weighted_mesh = 1;
 				}
-
 			}
 			else
 			{
@@ -4075,6 +4083,14 @@ U32 LLVOVolume::getRenderCost(texture_cost_t &textures) const
 		shame += media_faces * ARC_MEDIA_FACE_COST;
 	}
 
+    // Streaming cost for animated objects includes a fixed cost
+    // per linkset. Add a corresponding charge here translated into
+    // triangles, but not weighted by any graphics properties.
+    if (isAnimatedObject() && isRootEdit())
+    {
+        shame += (ANIMATED_OBJECT_BASE_COST/0.06) * 5.0f;
+    }
+
 	if (shame > mRenderComplexity_current)
 	{
 		mRenderComplexity_current = (S32)shame;
@@ -4101,33 +4117,50 @@ F32 LLVOVolume::getEstTrianglesStreamingCost() const
     return 0.f;
 }
 
-F32 LLVOVolume::getStreamingCost(S32* bytes, S32* visible_bytes, F32* unscaled_value) const
+F32 LLVOVolume::getStreamingCost() const
 {
 	F32 radius = getScale().length()*0.5f;
-
-    // AXON make sure this is consistent with the final simulator-side values.
-    const F32 ANIMATED_OBJECT_BASE_COST = 15.0f;
-    const F32 ANIMATED_OBJECT_COST_PER_KTRI = 1.5f;
-
     F32 linkset_base_cost = 0.f;
-    if (isAnimatedObject() && isRootEdit())
+
+    LLMeshCostData costs;
+    if (getCostData(costs))
     {
-        // Root object of an animated object has this to account for skeleton overhead.
-        linkset_base_cost = ANIMATED_OBJECT_BASE_COST;
-    }
-	if (isMesh())
-	{
-        if (isAnimatedObject() && isRiggedMesh())
+        if (isAnimatedObject() && isRootEdit())
         {
-            return linkset_base_cost + ANIMATED_OBJECT_COST_PER_KTRI * 0.001 * getEstTrianglesStreamingCost();
+            // Root object of an animated object has this to account for skeleton overhead.
+            linkset_base_cost = ANIMATED_OBJECT_BASE_COST;
+        }
+        if (isMesh())
+        {
+            if (isAnimatedObject() && isRiggedMesh())
+            {
+                return linkset_base_cost + costs.getTriangleBasedStreamingCost();
+            }
+            else
+            {
+                return linkset_base_cost + costs.getRadiusBasedStreamingCost(radius);
+            }
         }
         else
         {
-            return linkset_base_cost + gMeshRepo.getStreamingCost(getVolume()->getParams().getSculptID(), radius, bytes, visible_bytes, mLOD, unscaled_value);
+            return linkset_base_cost + costs.getRadiusBasedStreamingCost(radius);
         }
-	}
-	else
-	{
+    }
+    else
+    {
+        return 0.f;
+    }
+}
+
+// virtual
+bool LLVOVolume::getCostData(LLMeshCostData& costs) const
+{
+    if (isMesh())
+    {
+        return gMeshRepo.getCostData(getVolume()->getParams().getSculptID(), costs);
+    }
+    else
+    {
 		LLVolume* volume = getVolume();
 		S32 counts[4];
 
@@ -4142,8 +4175,8 @@ F32 LLVOVolume::getStreamingCost(S32* bytes, S32* visible_bytes, F32* unscaled_v
 		header["medium_lod"]["size"] = counts[2] * 10;
 		header["high_lod"]["size"] = counts[3] * 10;
 
-		return linkset_base_cost + LLMeshRepository::getStreamingCost(header, radius, NULL, NULL, -1, unscaled_value);
-	}	
+		return gMeshRepo.getCostData(header, costs);
+    }
 }
 
 //static 
