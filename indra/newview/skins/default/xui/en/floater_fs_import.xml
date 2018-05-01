@@ -52,7 +52,7 @@
     </floater.string>
     <floater.string
      name="upload_cost">
-        Total cost of uploads: $L [COST].
+        Total cost of uploads: L$ [COST].
     </floater.string>
 	<floater.string
 		name="object">
