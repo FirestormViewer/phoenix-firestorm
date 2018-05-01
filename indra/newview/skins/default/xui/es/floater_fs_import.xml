@@ -32,7 +32,7 @@
 		Subiendo activo [ASSET] de [ASSETTOTAL].
 	</floater.string>
 	<floater.string name="upload_cost">
-		Coste total de la subida: [COST] $L.
+		Coste total de la subida: [COST] L$.
 	</floater.string>
 	<floater.string name="object">
 		objeto

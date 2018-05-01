@@ -89,6 +89,7 @@
 #ifdef OPENSIM
 #include "llviewernetwork.h"
 #endif // OPENSIM
+#include "fsfloaterbantime.h"
 #include "fsnamelistavatarmenu.h"
 
 const F64 COVENANT_REFRESH_TIME_SEC = 60.0f;
@@ -3126,6 +3127,7 @@ void LLPanelLandAccess::callbackAvatarCBBanned(const uuid_vec_t& ids)
 	if (!ids.empty())
 	{
 		LLUUID id = ids[0];
+		/* <FS:LO> Add ability to do time based temp bans
 		LLParcel* parcel = mParcel->getParcel();
 		if (parcel && parcel->addToBanList(id, 0))
 		{
@@ -3139,8 +3141,35 @@ void LLPanelLandAccess::callbackAvatarCBBanned(const uuid_vec_t& ids)
 			LLViewerParcelMgr::getInstance()->sendParcelAccessListUpdate(lists_to_update);
 			refresh();
 		}
+		*/
+		LLFloater * root_floater = gFloaterView->getParentFloater(this);
+		FSFloaterBanTime* timer = FSFloaterBanTime::show(boost::bind(&LLPanelLandAccess::callbackAvatarCBBannedTimed, this, _1, _2), id);
+		if (timer)
+		{
+			root_floater->addDependentFloater(timer);
+		}
+		// </FS:LO>
 	}
 }
+//<FS:LO> Add ability to do time based temp bans
+// static
+void LLPanelLandAccess::callbackAvatarCBBannedTimed(const LLUUID& id, S32 time)
+{
+	LLParcel* parcel = mParcel->getParcel();
+	if (parcel && parcel->addToBanList(id, time))
+	{
+		U32 lists_to_update = AL_BAN;
+		// agent was successfully added to ban list
+		// but we also need to check access list to ensure that agent will not be in two lists simultaneously
+		if (parcel->removeFromAccessList(id))
+		{
+			lists_to_update |= AL_ACCESS;
+		}
+		LLViewerParcelMgr::getInstance()->sendParcelAccessListUpdate(lists_to_update);
+		refresh();
+	}
+}
+//</FS:LO>
 
 // static
 void LLPanelLandAccess::onClickRemoveBanned(void* data)

@@ -13,17 +13,9 @@ include_directories(
     ${OPENJPEG_INCLUDE_DIR}
     )
 
-if( NOT ND_USE_OPENJPEG2 )
-
 set(llimagej2coj_SOURCE_FILES
     llimagej2coj.cpp
     )
-
-else()
-set(llimagej2coj_SOURCE_FILES
-    llimagej2coj2.cpp
-    )
-endif()
 
 set(llimagej2coj_HEADER_FILES
     CMakeLists.txt
