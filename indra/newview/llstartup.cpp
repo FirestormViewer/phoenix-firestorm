@@ -1172,7 +1172,6 @@ bool idle_startup()
 			// <FS:Zi> Moved this to initBase() in llviewerwindow.cpp to get the edit menu set up
 			//         before any text widget uses it
 			// initialize_spellcheck_menu();
-			// initialize_edit_menu();
 			// </FS:Zi>
 			init_menus();
 		}

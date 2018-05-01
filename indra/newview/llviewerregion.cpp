@@ -1984,10 +1984,7 @@ void LLViewerRegion::updateNetStats()
 	mLastPacketsLost =	mPacketsLost;
 
 	mPacketsIn =				cdp->getPacketsIn();
-	// <FS:Ansariel> FIRE-17071: UDP network data measuring is wrong
-	//mBitsIn =					8 * cdp->getBytesIn();
 	mBitsIn =					cdp->getBytesIn();
-	// </FS:Ansariel>
 	mPacketsOut =				cdp->getPacketsOut();
 	mPacketsLost =				cdp->getPacketsLost();
 	mPingDelay =				cdp->getPingDelay();

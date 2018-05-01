@@ -288,10 +288,8 @@ static const F32 MIN_UI_SCALE = 0.75f;
 static const F32 MAX_UI_SCALE = 7.0f;
 static const F32 MIN_DISPLAY_SCALE = 0.75f;
 
-std::string	LLViewerWindow::sSnapshotBaseName;
-std::string	LLViewerWindow::sSnapshotDir;
-
-std::string	LLViewerWindow::sMovieBaseName;
+static LLCachedControl<std::string>	sSnapshotBaseName(LLCachedControl<std::string>(gSavedPerAccountSettings, "SnapshotBaseName", "Snapshot"));
+static LLCachedControl<std::string>	sSnapshotDir(LLCachedControl<std::string>(gSavedPerAccountSettings, "SnapshotBaseDir", ""));
 
 LLTrace::SampleStatHandle<> LLViewerWindow::sMouseVelocityStat("Mouse Velocity");
 
@@ -1776,11 +1774,6 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	LL_INFOS() << "NOTE: ALL NOTIFICATIONS THAT OCCUR WILL GET ADDED TO IGNORE LIST FOR LATER RUNS." << LL_ENDL;
 	}
 
-	// Default to application directory.
-	LLViewerWindow::sSnapshotBaseName = "Snapshot";
-	LLViewerWindow::sMovieBaseName = "SLmovie";
-	resetSnapshotLoc();
-
 
 	BOOL useLegacyCursors = gSavedSettings.getBOOL("FSUseLegacyCursors");//<FS:LO> Legacy cursor setting from main program
 
@@ -2000,6 +1993,11 @@ void LLViewerWindow::showSystemUIScaleFactorChanged()
 	LLNotificationsUtil::add("SystemUIScaleFactorChanged", LLSD(), LLSD(), onSystemUIScaleFactorChanged);
 }
 
+std::string LLViewerWindow::getLastSnapshotDir()
+{
+    return sSnapshotDir;
+}
+
 //static
 bool LLViewerWindow::onSystemUIScaleFactorChanged(const LLSD& notification, const LLSD& response)
 {
@@ -2075,8 +2073,12 @@ void LLViewerWindow::initBase()
 
 	// Create global views
 
-	// <FS:Ansariel> Move console further down in the view hierarchy to not float
-	//               in front of floaters!
+	// Login screen and main_view.xml need edit menus for preferences and browser
+	LL_DEBUGS("AppInit") << "initializing edit menu" << LL_ENDL;
+	initialize_edit_menu();
+	initialize_spellcheck_menu(); // <FS:Zi> Set up edit menu here to get the spellcheck callbacks assigned before anyone uses them
+
+	// <FS:Ansariel> Move console further down in the view hierarchy to not float in front of floaters!
 	// Console
 	llassert( !gConsole );
 	LLConsole::Params cp;
@@ -2093,11 +2095,6 @@ void LLViewerWindow::initBase()
 	getRootView()->addChild(gConsole);
 	// </FS:Ansariel>
 
-	// <FS:Zi> Set up edit menu here to get the spellcheck callbacks assigned before anyone uses them
-	initialize_edit_menu();
-	initialize_spellcheck_menu();
-	// </FS:Zi>
-	
 	//<FS:KC> Centralize a some of these volume panel callbacks
 	initialize_volume_controls_callbacks();
 	//</FS:KC>
@@ -5587,10 +5584,10 @@ void LLViewerWindow::saveImageCallback(const std::string& filename, LLImageForma
 {
 	if (!filename.empty())
 	{
-		LLViewerWindow::sSnapshotBaseName = gDirUtilp->getBaseFileName(filename, true);
-		LLViewerWindow::sSnapshotDir = gDirUtilp->getDirName(filename);
+		gSavedPerAccountSettings.setString("SnapshotBaseName", gDirUtilp->getBaseFileName(filename, true));
+		gSavedPerAccountSettings.setString("SnapshotBaseDir", gDirUtilp->getDirName(filename));
 
-		do_save_image(image, LLViewerWindow::sSnapshotDir, LLViewerWindow::sSnapshotBaseName, extension, callback);
+		do_save_image(image, sSnapshotDir, sSnapshotBaseName, extension, callback);
 		return;
 	}
 
@@ -5659,20 +5656,21 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 	//	// Copy the directory + file name
 	//	std::string filepath = picker.getFirstFile();
 
-	//	LLViewerWindow::sSnapshotBaseName = gDirUtilp->getBaseFileName(filepath, true);
-	//	LLViewerWindow::sSnapshotDir = gDirUtilp->getDirName(filepath);
+	//	gSavedPerAccountSettings.setString("SnapshotBaseName", gDirUtilp->getBaseFileName(filepath, true));
+	//	gSavedPerAccountSettings.setString("SnapshotBaseDir", gDirUtilp->getDirName(filepath));
 	//}
 
-	//if(LLViewerWindow::sSnapshotDir.empty())
+	//std::string snapshot_dir = sSnapshotDir;
+	//if(snapshot_dir.empty())
 	//{
 	//	return FALSE;
 	//}
 
 // Check if there is enough free space to save snapshot
 //#ifdef LL_WINDOWS
-//	boost::filesystem::space_info b_space = boost::filesystem::space(utf8str_to_utf16str(sSnapshotDir));
+//	boost::filesystem::space_info b_space = boost::filesystem::space(utf8str_to_utf16str(snapshot_dir));
 //#else
-//	boost::filesystem::space_info b_space = boost::filesystem::space(sSnapshotDir);
+//	boost::filesystem::space_info b_space = boost::filesystem::space(snapshot_dir);
 //#endif
 //	if (b_space.free < image->getDataSize())
 //	{
@@ -5708,7 +5706,7 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 	//return image->save(filepath);
 
 	// Get a base file location if needed.
-	if (force_picker || !isSnapshotLocSet() || !LLFile::isdir(sSnapshotDir))
+	if (force_picker || !isSnapshotLocSet() || !LLFile::isdir(sSnapshotDir()))
 	{
 		std::string proposed_name( sSnapshotBaseName );
 
@@ -5716,19 +5714,19 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 		return;
 	}
 
-	do_save_image(image, LLViewerWindow::sSnapshotDir, LLViewerWindow::sSnapshotBaseName, extension, callback);
+	do_save_image(image, sSnapshotDir, sSnapshotBaseName, extension, callback);
 	// </FS:Ansariel>
 }
 
 void LLViewerWindow::resetSnapshotLoc()
 {
-	sSnapshotDir.clear();
+	gSavedPerAccountSettings.setString("SnapshotBaseDir", std::string());
 }
 
 // static
 void LLViewerWindow::movieSize(S32 new_width, S32 new_height)
 {
-	// FS:TS FIRE-6182: Set Window Size sets random size each time
+	// <FS:TS> FIRE-6182: Set Window Size sets random size each time
 	// Don't use LLCoordWindow, since the chosen resolution winds up
 	// with position dependent numbers added each time. Instead, we use
 	// LLCoordScreen, which avoids this. Fix from Niran's Viewer.
@@ -5746,7 +5744,7 @@ void LLViewerWindow::movieSize(S32 new_width, S32 new_height)
 	new_size.mX = new_width + nChromeW;
 	new_size.mY = new_height + nChromeH;
 	gViewerWindow->getWindow()->setSize(new_size);
-	// FS:TS FIRE-6182 end
+	// </FS:TS>
 
 }
 
@@ -5790,6 +5788,17 @@ void LLViewerWindow::playSnapshotAnimAndSound()
 	}
 	gAgent.sendAnimationRequest(ANIM_AGENT_SNAPSHOT, ANIM_REQUEST_START);
 	send_sound_trigger(LLUUID(gSavedSettings.getString("UISndSnapshot")), 1.0f);
+}
+
+BOOL LLViewerWindow::isSnapshotLocSet() const
+{
+	std::string snapshot_dir = sSnapshotDir;
+	return !snapshot_dir.empty();
+}
+
+void LLViewerWindow::resetSnapshotLoc() const
+{
+	gSavedPerAccountSettings.setString("SnapshotBaseDir", std::string());
 }
 
 BOOL LLViewerWindow::thumbnailSnapshot(LLImageRaw *raw, S32 preview_width, S32 preview_height, BOOL show_ui, BOOL do_rebuild, LLSnapshotModel::ESnapshotLayerType type)

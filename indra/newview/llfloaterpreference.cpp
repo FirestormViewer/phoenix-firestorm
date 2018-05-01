@@ -2159,11 +2159,11 @@ void LLFloaterPreference::refreshEnabledState()
 	// now turn off any features that are unavailable
 	disableUnavailableSettings();
 
-	getChildView("block_list")->setEnabled(LLLoginInstance::getInstance()->authSuccess());
-
 	// Cannot have floater active until caps have been received
 	//getChild<LLButton>("default_creation_permissions")->setEnabled(LLStartUp::getStartupState() < STATE_STARTED ? false : true);
 	getChild<LLButton>("fs_default_creation_permissions")->setEnabled(LLStartUp::getStartupState() < STATE_STARTED ? false : true);
+
+	getChildView("block_list")->setEnabled(LLLoginInstance::getInstance()->authSuccess());
 }
 
 void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
@@ -2310,8 +2310,6 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
 
 	// now turn off any features that are unavailable
 	disableUnavailableSettings();
-
-	getChildView("block_list")->setEnabled(LLLoginInstance::getInstance()->authSuccess());
 }
 
 
@@ -4117,6 +4115,7 @@ BOOL LLPanelPreferenceGraphics::postBuild()
 	//LLFloaterReg::hideInstance("prefs_graphics_advanced");
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> Advanced graphics preferences
 // Don't do this on Mac as their braindead GL versioning
 // sets this when 8x and 16x are indeed available
 //
@@ -4128,6 +4127,7 @@ BOOL LLPanelPreferenceGraphics::postBuild()
 		combo->remove("16x");
 	}
 #endif
+	// </FS:Ansariel>
 
 	resetDirtyChilds();
 	setPresetText();
@@ -4318,6 +4318,23 @@ LLFloaterPreferenceProxy::LLFloaterPreferenceProxy(const LLSD& key)
 	mCommitCallbackRegistrar.add("Proxy.OK",                boost::bind(&LLFloaterPreferenceProxy::onBtnOk, this));
 	mCommitCallbackRegistrar.add("Proxy.Cancel",            boost::bind(&LLFloaterPreferenceProxy::onBtnCancel, this));
 	mCommitCallbackRegistrar.add("Proxy.Change",            boost::bind(&LLFloaterPreferenceProxy::onChangeSocksSettings, this));
+}
+
+BOOL LLFloaterPreferenceGraphicsAdvanced::postBuild()
+{
+    // Don't do this on Mac as their braindead GL versioning
+    // sets this when 8x and 16x are indeed available
+    //
+#if !LL_DARWIN
+    if (gGLManager.mIsIntel || gGLManager.mGLVersion < 3.f)
+    { //remove FSAA settings above "4x"
+        LLComboBox* combo = getChild<LLComboBox>("fsaa");
+        combo->remove("8x");
+        combo->remove("16x");
+    }
+#endif
+
+    return TRUE;
 }
 
 void LLFloaterPreferenceGraphicsAdvanced::onOpen(const LLSD& key)

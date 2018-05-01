@@ -1097,9 +1097,13 @@ void LLTaskSoundBridge::performAction(LLInventoryModel* model, std::string actio
 void LLTaskSoundBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 {
 	LLInventoryItem* item = findItem();
-	if(!item) return;
 	std::vector<std::string> items;
 	std::vector<std::string> disabled_items;
+	if (!item)
+	{
+		hide_context_entries(menu, items, disabled_items);
+		return;
+	}
 
 	if(item->getPermissions().getOwner() != gAgent.getID()
 	   && item->getSaleInfo().isForSale())
@@ -1492,9 +1496,13 @@ void LLTaskMeshBridge::performAction(LLInventoryModel* model, std::string action
 void LLTaskMeshBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 {
 	LLInventoryItem* item = findItem();
-	if(!item) return;
 	std::vector<std::string> items;
 	std::vector<std::string> disabled_items;
+	if(!item)
+	{
+		hide_context_entries(menu, items, disabled_items);
+		return;
+	}
 
 	if(item->getPermissions().getOwner() != gAgent.getID()
 	   && item->getSaleInfo().isForSale())
