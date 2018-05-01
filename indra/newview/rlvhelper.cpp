@@ -369,6 +369,16 @@ void RlvBehaviourDictionary::addModifier(const RlvBehaviourInfo* pBhvrEntry, ERl
 	addModifier(pBhvrEntry->getBehaviourType(), eModifier, pModifierEntry);
 }
 
+// TODO: this shouldn't be in this class - find a better spot for it
+void RlvBehaviourDictionary::clearModifiers(const LLUUID& idRlvObj)
+{
+	for (int idxModifier = 0; idxModifier < RLV_MODIFIER_COUNT; idxModifier++)
+	{
+		if (m_BehaviourModifiers[idxModifier])
+			m_BehaviourModifiers[idxModifier]->clearValues(idRlvObj);
+	}
+}
+
 const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict) const
 {
 	bool fStrict = boost::algorithm::ends_with(strBhvr, "_sec");
@@ -450,17 +460,31 @@ RlvBehaviourModifier::~RlvBehaviourModifier()
 	}
 }
 
-bool RlvBehaviourModifier::addValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject)
+bool RlvBehaviourModifier::addValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idRlvObj, ERlvBehaviour eBhvr)
 {
 	if (modValue.which() == m_DefaultValue.which())
 	{
-		m_Values.insert((m_pValueComparator) ? std::lower_bound(m_Values.begin(), m_Values.end(), std::make_pair(modValue, idObject), boost::bind(&RlvBehaviourModifier_Comp::operator(), m_pValueComparator, _1, _2)) : m_Values.end(), std::make_pair(modValue, idObject));
+		m_Values.insert((m_pValueComparator) ? std::lower_bound(m_Values.begin(), m_Values.end(), std::make_tuple(modValue, idRlvObj, eBhvr), boost::bind(&RlvBehaviourModifier_Comp::operator(), m_pValueComparator, _1, _2)) : m_Values.end(), std::make_tuple(modValue, idRlvObj, eBhvr));
 		// NOTE: change signal needs to trigger before modifier handlers so cached values have a chance to update properly
 		m_ChangeSignal(getValue());
 		onValueChange();
 		return true;
 	}
 	return false;
+}
+
+void RlvBehaviourModifier::clearValues(const LLUUID& idRlvObj)
+{
+	size_t origCount = m_Values.size();
+	m_Values.erase(std::remove_if(m_Values.begin(), m_Values.end(),
+	                              [&idRlvObj](const RlvBehaviourModifierValueTuple& modValue) {
+									return (std::get<1>(modValue) == idRlvObj) && (std::get<2>(modValue) == RLV_BHVR_UNKNOWN);
+	                              }), m_Values.end());
+	if (origCount != m_Values.size())
+	{
+		onValueChange();
+		m_ChangeSignal(getValue());
+	}
 }
 
 const LLUUID& RlvBehaviourModifier::getPrimaryObject() const
@@ -472,14 +496,14 @@ bool RlvBehaviourModifier::hasValue() const {
 	// If no primary object is set this returns "any value set"; otherwise it returns "any value set by the primary object"
 	if ( (!m_pValueComparator) || (m_pValueComparator->m_idPrimaryObject.isNull()) )
 		return !m_Values.empty();
-	return (!m_Values.empty()) ? m_Values.front().second == m_pValueComparator->m_idPrimaryObject : false;
+	return (!m_Values.empty()) ? std::get<1>(m_Values.front()) == m_pValueComparator->m_idPrimaryObject : false;
 }
 
-void RlvBehaviourModifier::removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject)
+void RlvBehaviourModifier::removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idRlvObj, ERlvBehaviour eBhvr)
 {
 	if ( (modValue.which() == m_DefaultValue.which()) )
 	{
-		auto itValue = std::find(m_Values.begin(), m_Values.end(), std::make_pair(modValue, idObject));
+		auto itValue = std::find(m_Values.begin(), m_Values.end(), std::make_tuple(modValue, idRlvObj, eBhvr));
 		if (m_Values.end() != itValue)
 		{
 			m_Values.erase(itValue);
@@ -497,6 +521,31 @@ void RlvBehaviourModifier::setPrimaryObject(const LLUUID& idPrimaryObject)
 		m_Values.sort(boost::bind(&RlvBehaviourModifier_Comp::operator(), m_pValueComparator, _1, _2));
 		onValueChange();
 		m_ChangeSignal(getValue());
+	}
+}
+
+void RlvBehaviourModifier::setValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idRlvObj)
+{
+	if ( (modValue.which() == m_DefaultValue.which()) )
+	{
+		auto itValue = std::find_if(m_Values.begin(), m_Values.end(),
+		                            [&idRlvObj](const RlvBehaviourModifierValueTuple& cmpValue) {
+		                            	return (std::get<1>(cmpValue) == idRlvObj) && (std::get<2>(cmpValue) == RLV_BHVR_UNKNOWN);
+		                            });
+		if (m_Values.end() != itValue)
+		{
+			// The object already has a modifier value set => change it
+			std::get<0>(*itValue) = modValue;
+			if (m_pValueComparator)
+				m_Values.sort(boost::bind(&RlvBehaviourModifier_Comp::operator(), m_pValueComparator, _1, _2));
+			onValueChange();
+			m_ChangeSignal(getValue());
+		}
+		else
+		{
+			// The command doesn't have a modifier value yet => add it
+			addValue(modValue, idRlvObj, RLV_BHVR_UNKNOWN);
+		}
 	}
 }
 

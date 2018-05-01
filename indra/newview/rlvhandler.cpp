@@ -387,6 +387,7 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 					if (0 == itObj->second.m_Commands.size())
 					{
 						RLV_DEBUGS << "\t- command list empty => removing " << idCurObj << RLV_ENDL;
+						RlvBehaviourDictionary::instance().clearModifiers(idCurObj);
 						m_Objects.erase(itObj);
 					}
 				}
@@ -1519,13 +1520,13 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvC
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
 	{
 		gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]++;
-		pBhvrModifier->addValue(modValue, rlvCmd.getObjectID());
+		pBhvrModifier->addValue(modValue, rlvCmd.getObjectID(), rlvCmd.getBehaviourType());
 		gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]--;
 	}
 	else
 	{
 		gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]--;
-		pBhvrModifier->removeValue(modValue, rlvCmd.getObjectID());
+		pBhvrModifier->removeValue(modValue, rlvCmd.getObjectID(), rlvCmd.getBehaviourType());
 		gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]++;
 	}
 
@@ -1549,13 +1550,13 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(co
 		if (RLV_TYPE_ADD == rlvCmd.getParamType())
 		{
 			gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]++;
-			pBhvrModifier->addValue(pBhvrModifier->getDefaultValue(), rlvCmd.getObjectID());
+			pBhvrModifier->addValue(pBhvrModifier->getDefaultValue(), rlvCmd.getObjectID(), rlvCmd.getBehaviourType());
 			gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]--;
 		}
 		else
 		{
 			gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]--;
-			pBhvrModifier->removeValue(pBhvrModifier->getDefaultValue(), rlvCmd.getObjectID());
+			pBhvrModifier->removeValue(pBhvrModifier->getDefaultValue(), rlvCmd.getObjectID(), rlvCmd.getBehaviourType());
 			gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]++;
 		}
 	}
@@ -1828,15 +1829,15 @@ ERlvCmdRet RlvBehaviourRecvSendStartIMHandler::onCommand(const RlvCommand& rlvCm
 		RlvBehaviourModifier *pBhvrModDistMin = RlvBehaviourDictionary::instance().getModifier(eModDistMin), *pBhvrModDistMax = RlvBehaviourDictionary::instance().getModifier(eModDistMax);
 		if (RLV_TYPE_ADD == rlvCmd.getParamType())
 		{
-			pBhvrModDistMin->addValue(nDistMin * nDistMin, rlvCmd.getObjectID());
+			pBhvrModDistMin->addValue(nDistMin * nDistMin, rlvCmd.getObjectID(), rlvCmd.getBehaviourType());
 			if (optionList.size() >= 2)
-				pBhvrModDistMax->addValue(nDistMax * nDistMax, rlvCmd.getObjectID());
+				pBhvrModDistMax->addValue(nDistMax * nDistMax, rlvCmd.getObjectID(), rlvCmd.getBehaviourType());
 		}
 		else
 		{
-			pBhvrModDistMin->removeValue(nDistMin * nDistMin, rlvCmd.getObjectID());
+			pBhvrModDistMin->removeValue(nDistMin * nDistMin, rlvCmd.getObjectID(), rlvCmd.getBehaviourType());
 			if (optionList.size() >= 2)
-				pBhvrModDistMax->removeValue(nDistMax * nDistMax, rlvCmd.getObjectID());
+				pBhvrModDistMax->removeValue(nDistMax * nDistMax, rlvCmd.getObjectID(), rlvCmd.getBehaviourType());
 		}
 
 		fRefCount = true;
@@ -2277,6 +2278,24 @@ void RlvBehaviourShowSelfToggleHandler::onCommandToggle(ERlvBehaviour eBvhr, boo
 ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_FORCE>::processCommand(const RlvCommand& rlvCmd, RlvForceHandlerFunc* pHandler)
 {
 	return (*pHandler)(rlvCmd);
+}
+
+// Handles: @bhvr:<modifier>=force
+template<>
+ERlvCmdRet RlvForceGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvCommand& rlvCmd)
+{
+	// The object should be holding at least one active behaviour
+	if (!gRlvHandler.hasBehaviour(rlvCmd.getObjectID()))
+		return RLV_RET_FAILED_NOBEHAVIOUR;
+
+	// There should be an option and it should specify a valid modifier (RlvBehaviourModifier performs the appropriate type checks)
+	RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifierFromBehaviour(rlvCmd.getBehaviourType());
+	RlvBehaviourModifierValue modValue;
+	if ( (!rlvCmd.hasOption()) || (!pBhvrModifier) || (!pBhvrModifier->convertOptionValue(rlvCmd.getOption(), modValue)) )
+		return RLV_RET_FAILED_OPTION;
+
+	pBhvrModifier->setValue(modValue, rlvCmd.getObjectID());
+	return RLV_RET_SUCCESS;
 }
 
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0j
@@ -3048,12 +3067,12 @@ ERlvCmdRet RlvBehaviourCamZoomMinMaxHandler::onCommand(const RlvCommand& rlvCmd,
 		if (RLV_TYPE_ADD == rlvCmd.getParamType())
 		{
 			gRlvHandler.m_Behaviours[(RLV_BHVR_CAMZOOMMIN == rlvCmd.getBehaviourType()) ? RLV_BHVR_SETCAM_FOVMIN : RLV_BHVR_SETCAM_FOVMAX]++;
-			pBhvrModifier->addValue(DEFAULT_FIELD_OF_VIEW / nMult, rlvCmd.getObjectID());
+			pBhvrModifier->addValue(DEFAULT_FIELD_OF_VIEW / nMult, rlvCmd.getObjectID(), rlvCmd.getBehaviourType());
 		}
 		else
 		{
 			gRlvHandler.m_Behaviours[(RLV_BHVR_CAMZOOMMIN == rlvCmd.getBehaviourType()) ? RLV_BHVR_SETCAM_FOVMIN : RLV_BHVR_SETCAM_FOVMAX]--;
-			pBhvrModifier->removeValue(DEFAULT_FIELD_OF_VIEW / nMult, rlvCmd.getObjectID());
+			pBhvrModifier->removeValue(DEFAULT_FIELD_OF_VIEW / nMult, rlvCmd.getObjectID(), rlvCmd.getBehaviourType());
 		}
 	}
 
@@ -3352,7 +3371,7 @@ bool RlvHandler::hitTestOverlay(const LLCoordGL& ptMouse) const
 
 void RlvHandler::renderOverlay()
 {
-	if (m_pOverlayImage)
+	if ( (hasBehaviour(RLV_BHVR_SETOVERLAY)) && (m_pOverlayImage) )
 	{
 		if (LLGLSLShader::sNoFixedFunction)
 		{

@@ -305,6 +305,7 @@ enum ERlvCmdRet {
 	RLV_RET_FAILED_UNKNOWN,			// Command failed (unknown command)
 	RLV_RET_FAILED_NOSHAREDROOT,	// Command failed (missing #RLV)
 	RLV_RET_FAILED_DEPRECATED,		// Command failed (deprecated and no longer supported)
+	RLV_RET_FAILED_NOBEHAVIOUR,		// Command failed (force modifier on an object with no active restrictions)
 	RLV_RET_NO_PROCESSOR			// Command doesn't have a template processor define (legacy code)
 };
 #define RLV_RET_SUCCEEDED(eCmdRet)  (((eCmdRet) & RLV_RET_SUCCESS) == RLV_RET_SUCCESS)

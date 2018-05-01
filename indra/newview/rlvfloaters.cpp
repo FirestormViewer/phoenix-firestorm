@@ -750,6 +750,7 @@ BOOL RlvFloaterConsole::postBuild()
 
 void RlvFloaterConsole::onClose(bool fQuitting)
 {
+	RlvBehaviourDictionary::instance().clearModifiers(gAgent.getID());
 	gRlvHandler.processCommand(gAgent.getID(), "clear", true);
 }
 

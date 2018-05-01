@@ -103,6 +103,7 @@ public:
 	 * General helper functions
 	 */
 public:
+	void                    clearModifiers(const LLUUID& idRlvObj);
 	ERlvBehaviour           getBehaviourFromString(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = NULL) const;
 	const RlvBehaviourInfo*	getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = NULL) const;
 	bool                    getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const;
@@ -207,6 +208,8 @@ template<ERlvBehaviour templBhvr, typename handlerImpl = RlvCommandHandler<RLV_T
 // Provides pre-defined generic implementations of basic behaviours (template voodoo - see original commit for something that still made sense)
 template<ERlvBehaviourOptionType templOptionType> struct RlvBehaviourGenericHandler { static ERlvCmdRet onCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
 template<ERlvBehaviourOptionType templOptionType> using RlvBehaviourGenericProcessor = RlvBehaviourProcessor<RLV_BHVR_UNKNOWN, RlvBehaviourGenericHandler<templOptionType>>;
+template<ERlvBehaviourOptionType templOptionType> struct RlvForceGenericHandler { static ERlvCmdRet onCommand(const RlvCommand& rlvCmd); };
+template<ERlvBehaviourOptionType templOptionType> using RlvForceGenericProcessor = RlvForceProcessor<RLV_BHVR_UNKNOWN, RlvForceGenericHandler<templOptionType>>;
 
 // ============================================================================
 // RlvBehaviourProcessor and related classes - Handles add/rem comamnds aka "restrictions)
@@ -225,7 +228,7 @@ template <ERlvBehaviour eBhvr, ERlvBehaviourOptionType optionType, typename togg
 // RlvBehaviourModifier - stores behaviour modifiers in an - optionally - sorted list and returns the first element (or default value if there are no modifiers)
 //
 
-typedef std::pair<RlvBehaviourModifierValue, LLUUID> RlvBehaviourModifierValueTuple;
+typedef std::tuple<RlvBehaviourModifierValue, LLUUID, ERlvBehaviour> RlvBehaviourModifierValueTuple;
 
 struct RlvBehaviourModifier_Comp
 {
@@ -233,7 +236,7 @@ struct RlvBehaviourModifier_Comp
 	virtual bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs)
 	{
 		// Values that match the primary object take precedence (otherwise maintain relative ordering)
-		if ( (rhs.second == m_idPrimaryObject) && (lhs.second != m_idPrimaryObject) )
+		if ( (std::get<1>(rhs) == m_idPrimaryObject) && (std::get<1>(lhs) != m_idPrimaryObject) )
 			return false;
 		return true;
 	}
@@ -244,8 +247,8 @@ struct RlvBehaviourModifier_CompMin : public RlvBehaviourModifier_Comp
 {
 	bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs) override
 	{
-		if ( (m_idPrimaryObject.isNull()) || ((lhs.second == m_idPrimaryObject) && (rhs.second == m_idPrimaryObject)) )
-			return lhs.first < rhs.first;
+		if ( (m_idPrimaryObject.isNull()) || ((std::get<1>(lhs) == m_idPrimaryObject) && (std::get<1>(rhs) == m_idPrimaryObject)) )
+			return std::get<0>(lhs) < std::get<0>(rhs);
 		return RlvBehaviourModifier_Comp::operator()(lhs, rhs);
 	}
 };
@@ -253,8 +256,8 @@ struct RlvBehaviourModifier_CompMax : public RlvBehaviourModifier_Comp
 {
 	bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs) override
 	{
-		if ( (m_idPrimaryObject.isNull()) || ((lhs.second == m_idPrimaryObject) && (rhs.second == m_idPrimaryObject)) )
-			return rhs.first < lhs.first;
+		if ( (m_idPrimaryObject.isNull()) || ((std::get<1>(lhs) == m_idPrimaryObject) && (std::get<1>(rhs) == m_idPrimaryObject)) )
+			return std::get<0>(rhs) < std::get<0>(lhs);
 		return RlvBehaviourModifier_Comp::operator()(lhs, rhs);
 	}
 };
@@ -271,16 +274,18 @@ public:
 protected:
 	virtual void onValueChange() const {}
 public:
-	bool                             addValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject);
+	bool                             addValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idRlvObj, ERlvBehaviour eBhvr = RLV_BHVR_UNKNOWN);
 	bool                             convertOptionValue(const std::string& optionValue, RlvBehaviourModifierValue& modValue) const;
+	void                             clearValues(const LLUUID& idRlvObj);
 	bool                             getAddDefault() const { return m_fAddDefaultOnEmpty; }
 	const RlvBehaviourModifierValue& getDefaultValue() const { return m_DefaultValue; }
 	const LLUUID&                    getPrimaryObject() const;
 	const std::string&               getName() const { return m_strName; }
-	const RlvBehaviourModifierValue& getValue() const { return (hasValue()) ? m_Values.front().first : m_DefaultValue; }
+	const RlvBehaviourModifierValue& getValue() const { return (hasValue()) ? std::get<0>(m_Values.front()) : m_DefaultValue; }
 	template<typename T> const T&    getValue() const { return boost::get<T>(getValue()); }
 	bool                             hasValue() const;
-	void                             removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject);
+	void                             removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idRlvObj, ERlvBehaviour eBhvr = RLV_BHVR_UNKNOWN);
+	void                             setValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idRlvObj);
 	void                             setPrimaryObject(const LLUUID& idPrimaryObject);
 
 	typedef boost::signals2::signal<void(const RlvBehaviourModifierValue& newValue)> change_signal_t;

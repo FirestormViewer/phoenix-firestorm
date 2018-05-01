@@ -59,6 +59,8 @@ public:
 	// Returns TRUE is at least one object contains the specified behaviour (and optional option)
 	bool hasBehaviour(ERlvBehaviour eBhvr) const { return (eBhvr < RLV_BHVR_COUNT) ? (0 != m_Behaviours[eBhvr]) : false; }
 	bool hasBehaviour(ERlvBehaviour eBhvr, const std::string& strOption) const;
+	// Returns TRUE if the specified object has at least one active behaviour
+	bool hasBehaviour(const LLUUID& idObj) { return m_Objects.end() != m_Objects.find(idObj);  }
 	// Returns TRUE if the specified object contains the specified behaviour (and optional option)
 	bool hasBehaviour(const LLUUID& idObj, ERlvBehaviour eBhvr, const std::string& strOption = LLStringUtil::null) const;
 	// Returns TRUE if at least one object (except the specified one) contains the specified behaviour (and optional option)
