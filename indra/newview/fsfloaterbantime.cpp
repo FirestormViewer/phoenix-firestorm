@@ -44,13 +44,12 @@ BOOL FSFloaterBanTime::postBuild()
 	return TRUE;
 }
 
-FSFloaterBanTime* FSFloaterBanTime::show(select_callback_t callback, LLUUID id)
+FSFloaterBanTime* FSFloaterBanTime::show(select_callback_t callback, const LLUUID& id)
 {
-	FSFloaterBanTime* floater =
-		LLFloaterReg::showTypedInstance<FSFloaterBanTime>("Ban duration");
+	FSFloaterBanTime* floater = LLFloaterReg::showTypedInstance<FSFloaterBanTime>("fs_ban_time");
 	if (!floater)
 	{
-		LL_WARNS() << "Cannot instantiate avatar picker" << LL_ENDL;
+		LL_WARNS() << "Cannot instantiate ban time floater" << LL_ENDL;
 		return NULL;
 	}
 
@@ -69,7 +68,7 @@ void FSFloaterBanTime::onClickBan()
 {
 	if (mSelectionCallback)
 	{
-		LLSpinCtrl* timectrl = getChild<LLSpinCtrl>("ban_time");
+		LLSpinCtrl* timectrl = findChild<LLSpinCtrl>("ban_time");
 		if (timectrl)
 		{
 			S32 time = timectrl->getValue().asInteger();
@@ -79,10 +78,8 @@ void FSFloaterBanTime::onClickBan()
 				time = now.secondsSinceEpoch() + (time * 3600);
 			}
 			mSelectionCallback(mAvatar_id, time);
-			timectrl->set(0.0);
+			timectrl->set(0.f);
 		}
 	}
 	closeFloater();
 }
-
-

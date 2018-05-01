@@ -36,7 +36,7 @@ public:
 	FSFloaterBanTime(const LLSD& target);
 	BOOL postBuild();
 	typedef boost::function<void(const LLUUID&, const S32 time)> select_callback_t;
-	static FSFloaterBanTime* show(select_callback_t callback, LLUUID id);
+	static FSFloaterBanTime* show(select_callback_t callback, const LLUUID& id);
 	
 private:
 	~FSFloaterBanTime(){};
