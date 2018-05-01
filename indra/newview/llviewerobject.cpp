@@ -156,8 +156,8 @@ static LLTrace::BlockTimerStatHandle FTM_CREATE_OBJECT("Create Object");
 // static
 LLViewerObject *LLViewerObject::createObject(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp, S32 flags)
 {
-    LL_DEBUGS("ObjectUpdate") << "creating " << id << LL_ENDL;
-    dumpStack("ObjectUpdateStack");
+    //LL_DEBUGS("ObjectUpdate") << "creating " << id << LL_ENDL;
+    //dumpStack("ObjectUpdateStack");
     
 	LLViewerObject *res = NULL;
 	LL_RECORD_BLOCK_TIME(FTM_CREATE_OBJECT);
