@@ -3067,6 +3067,18 @@ void LLViewerObject::updateControlAvatar()
 {
     LLViewerObject *root = getRootEdit();
     bool any_rigged_mesh = root->isRiggedMesh();
+
+    // <FS:Ansariel> Optimize - Only iterate the child list if needed:
+    //               * if object root is rigged_mesh, iterating won't change anything at all
+    //               * if it is an animated object, we need to check for any rigged mesh to
+    //                 determine the value of should_have_control_avatar for the first check
+    //                 for calling linkControlAvatar(). If it is not an animated object,
+    //                 then should_have_control_avatar is always false and the value of
+    //                 any_rigged_mesh doesn't matter at all
+    bool is_animated_object = root->isAnimatedObject();
+    if (!any_rigged_mesh && is_animated_object)
+    {
+    // </FS:Ansariel>
     LLViewerObject::const_child_list_t& child_list = root->getChildren();
     for (LLViewerObject::const_child_list_t::const_iterator iter = child_list.begin();
          iter != child_list.end(); ++iter)
@@ -3074,9 +3086,13 @@ void LLViewerObject::updateControlAvatar()
         const LLViewerObject* child = *iter;
         any_rigged_mesh = any_rigged_mesh || child->isRiggedMesh();
     }
+    } // <FS:Ansariel>
 
     bool has_control_avatar = getControlAvatar();
-    bool should_have_control_avatar = root->isAnimatedObject() && any_rigged_mesh;
+    // <FS:Ansariel> Optimize
+    //bool should_have_control_avatar = root->isAnimatedObject() && any_rigged_mesh;
+    bool should_have_control_avatar = is_animated_object && any_rigged_mesh;
+    // <FS:Ansariel>
 
     if (should_have_control_avatar && !has_control_avatar)
     {
