@@ -3085,6 +3085,12 @@ void LLViewerObject::updateControlAvatar()
     {
         const LLViewerObject* child = *iter;
         any_rigged_mesh = any_rigged_mesh || child->isRiggedMesh();
+        // <FS:Ansariel> Optimize
+        if (any_rigged_mesh)
+        {
+            break;
+        }
+        // <FS:Ansariel>
     }
     } // <FS:Ansariel>
 
