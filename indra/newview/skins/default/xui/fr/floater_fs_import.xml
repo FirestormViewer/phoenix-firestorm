@@ -13,7 +13,7 @@
 	<floater.string name="sound_uploading">Upload du son [SOUND] sur [SOUNDTOTAL].</floater.string>
 	<floater.string name="animation_uploading">Upload de l'animation [ANIMATION] sur [ANIMATIONTOTAL].</floater.string>
 	<floater.string name="asset_uploading">Upload de l'objet [ASSET] sur [ASSETTOTAL].</floater.string>
-	<floater.string name="upload_cost">Cout total de l'upload : [COST] $L.</floater.string>
+	<floater.string name="upload_cost">Cout total de l'upload : [COST] L$.</floater.string>
 	<floater.string name="object">objet</floater.string>
 	<floater.string name="objects">objets</floater.string>
 	<text name="filename_text">[FILENAME]</text>
