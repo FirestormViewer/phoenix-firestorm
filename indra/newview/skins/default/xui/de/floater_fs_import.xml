@@ -32,7 +32,7 @@
 		Hochladen von Asset [ASSET] von [ASSETTOTAL].
 	</floater.string>
 	<floater.string name="upload_cost">
-		Gesamte Kosten der Uploads: $L [COST].
+		Gesamte Kosten der Uploads: [COST] L$.
 	</floater.string>
 	<floater.string name="object">
 		Objekt

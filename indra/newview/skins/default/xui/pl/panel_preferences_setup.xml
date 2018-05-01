@@ -17,7 +17,7 @@
 				Przeglądarka internetowa:
 			</text>
 			<radio_group name="preferred_browser_behavior">
-				<radio_item label="Własna (Chrome, Firefox, IE) dla wszystkich linków" name="new_external" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Nie jest zalecane zaznaczanie tej opcji, jeśli uruchamiasz Second Life na pełnym ekranie." />
+				<radio_item label="Domyślna systemowa dla wszystkich linków" name="new_external" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Nie jest zalecane zaznaczanie tej opcji, jeśli uruchamiasz Second Life na pełnym ekranie." />
 				<radio_item label="Wbudowana tylko dla linków Second Life" name="new_internal" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Przeglądarka wbudowana będzie używana tylko dla linków LindenLab/SecondLife." />
 				<radio_item label="Wbudowana dla wszystkich linków" name="new_internal_all" />
 			</radio_group>
@@ -32,7 +32,6 @@
 			</combo_box>
 			<button label="Wyczyść bufor przeglądarki WWW" name="ClearWebBrowserCache" width="195"/>
 			<check_box label="Włącz wtyczki" name="browser_plugins_enabled"/>
-			<check_box label="Akceptuj ciasteczka" name="cookies_enabled"/>
 			<check_box label="Włącz Javascript" name="browser_javascript_enabled"/>
 			<check_box label="Włącz wyskakujące okienka przeglądarki mediów" name="media_popup_enabled"/>
 			<button label="Dostosuj ustawienia proxy" label_selected="Dostosuj ustawienia proxy" name="set_proxy"/>

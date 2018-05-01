@@ -137,72 +137,6 @@
           </map>
         </map>
       </map>
-      <key>openjpeg2</key>
-      <map>
-        <key>copyright</key>
-        <string>Copyright (c) 2002-2016, Communications and Remote Sensing Laboratory, Universite catholique de Louvain (UCL), Belgium, Copyright (c) 2002-2007, Professor Benoit Macq, Copyright (c) 2001-2003, David Janssens, Copyright (c) 2002-2003, Yannick Verschueren, Copyright (c) 2003-2007, Francois-Olivier Devaux and Antonin Descampe, Copyright (c) 2005, Herve Drolon, FreeImage Team</string>
-        <key>description</key>
-        <string>The OpenJPEG library is an open-source JPEG 2000 codec written in C language.</string>
-        <key>license</key>
-        <string>BSD</string>
-        <key>license_file</key>
-        <string>LICENSES/openjpeg.txt</string>
-        <key>name</key>
-        <string>openjpeg2</string>
-        <key>platforms</key>
-        <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>3925c90f0d3f5523acdad063620d01d6</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141918-r32-linux-201601141918-r32.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>8f4188c9a281425e26d89af0676bb6b7</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141020-r32-linux-x64-201601141020-r32.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>bc784edaab1b786766b2f381a86b8710</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141919-r32-windows-201601141919-r32.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-          <key>windows64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>0465f2221c22a7349e4ae49f751ae3d3</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg2-2.1.201601141917-r32-windows-x64-201601141917-r32.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows64</string>
-          </map>
-        </map>
-        <key>version</key>
-        <string>2.1</string>
-      </map>
       <key>SDL</key>
       <map>
         <key>copyright</key>
@@ -792,9 +726,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2ecc71350b30a1057091b9cd7af18b1c</string>
+              <string>acf7ce31ef174df000889516767b5a1d</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/15128/97755/dullahan-1.1.1080_3.3325.1750.gaabe4c4-windows-513449.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1080_3.3325.1750.gaabe4c4-windows-181191512.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -804,9 +738,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2ed3e49388514dafb907c59a209d580e</string>
+              <string>bcafca464648fb949f1b02edce0fb488</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/15129/97760/dullahan-1.1.1080_3.3325.1750.gaabe4c4-windows64-513449.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1080_3.3325.1750.gaabe4c4-windows64-181191514.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>

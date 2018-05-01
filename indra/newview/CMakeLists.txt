@@ -148,6 +148,7 @@ set(viewer_SOURCE_FILES
     fsfloateraddtocontactset.cpp
     fsfloaterassetblacklist.cpp
     fsfloateravatarrendersettings.cpp
+    fsfloaterbantime.cpp
     fsfloaterblocklist.cpp
     fsfloatercontacts.cpp
     fsfloatercontactsetconfiguration.cpp
@@ -163,6 +164,7 @@ set(viewer_SOURCE_FILES
     fsfloaterprofile.cpp
     fsfloaterradar.cpp
     fsfloatersearch.cpp
+    fsfloaterstatistics.cpp
     fsfloaterteleporthistory.cpp
     fsfloatervoicecontrols.cpp
     fsfloatervolumecontrols.cpp
@@ -899,6 +901,7 @@ set(viewer_HEADER_FILES
     fsfloateraddtocontactset.h
     fsfloaterassetblacklist.h
     fsfloateravatarrendersettings.h
+    fsfloaterbantime.h
     fsfloaterblocklist.h
     fsfloatercontacts.h
     fsfloatercontactsetconfiguration.h
@@ -914,6 +917,7 @@ set(viewer_HEADER_FILES
     fsfloaterprofile.h
     fsfloaterradar.h
     fsfloatersearch.h
+    fsfloaterstatistics.h
     fsfloaterteleporthistory.h
     fsfloatervoicecontrols.h
     fsfloatervolumecontrols.h

@@ -285,8 +285,7 @@ void LLDir_Win32::initAppDirs(const std::string &app_name,
 		LL_WARNS() << "Couldn't create LL_PATH_CACHE dir " << getExpandedFilename(LL_PATH_CACHE,"") << LL_ENDL;
 	}
 
-	//mCAFile = getExpandedFilename(LL_PATH_APP_SETTINGS, "ca-bundle.crt");
-	mCAFile = getExpandedFilename(LL_PATH_EXECUTABLE, "app_settings", "ca-bundle.crt"); //<FS:LO> Fix running firestorm from visual studio
+	mCAFile = getExpandedFilename(LL_PATH_APP_SETTINGS, "ca-bundle.crt");
 }
 
 U32 LLDir_Win32::countFilesInDir(const std::string &dirname, const std::string &mask)
