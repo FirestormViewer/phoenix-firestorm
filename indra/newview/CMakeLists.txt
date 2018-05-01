@@ -148,6 +148,7 @@ set(viewer_SOURCE_FILES
     fsfloateraddtocontactset.cpp
     fsfloaterassetblacklist.cpp
     fsfloateravatarrendersettings.cpp
+    fsfloaterbantime.cpp
     fsfloaterblocklist.cpp
     fsfloatercontacts.cpp
     fsfloatercontactsetconfiguration.cpp
@@ -899,6 +900,7 @@ set(viewer_HEADER_FILES
     fsfloateraddtocontactset.h
     fsfloaterassetblacklist.h
     fsfloateravatarrendersettings.h
+    fsfloaterbantime.h
     fsfloaterblocklist.h
     fsfloatercontacts.h
     fsfloatercontactsetconfiguration.h
