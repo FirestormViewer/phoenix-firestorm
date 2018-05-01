@@ -215,14 +215,11 @@ private:
 	LLButton* mCalculateBtn;
 };
 
-// <FS:CR Threaded Filepickers>
-//class LLMeshFilePicker : public LLFilePickerThread
-class LLMeshFilePicker : public LLLoadFilePickerThread
-// </FS:CR Threaded Filepickers>
+class LLMeshFilePicker : public LLFilePickerThread
 {
 public:
 	LLMeshFilePicker(LLModelPreview* mp, S32 lod);
-	virtual void notify(const std::string& filename);
+	virtual void notify(const std::vector<std::string>& filenames);
 
 private:
 	LLModelPreview* mMP;
