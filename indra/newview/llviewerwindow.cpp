@@ -426,7 +426,6 @@ public:
 		}
 		}
 		
-#if LL_WINDOWS
 		//if (gSavedSettings.getBOOL("DebugShowMemory"))
 		static LLCachedControl<bool> debugShowMemory(gSavedSettings, "DebugShowMemory");
 		if (debugShowMemory)
@@ -435,7 +434,6 @@ public:
 					STRINGIZE("Memory: " << (LLMemory::getCurrentRSS() / 1024) << " (KB)"));
 			ypos += y_inc;
 		}
-#endif
 
 		if (gDisplayCameraPos)
 		{
