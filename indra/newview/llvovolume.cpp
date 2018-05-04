@@ -82,6 +82,7 @@
 #include "rlvactions.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+#include "llviewernetwork.h"
 
 const F32 FORCE_SIMPLE_RENDER_AREA = 512.f;
 const F32 FORCE_CULL_AREA = 8.f;
@@ -317,6 +318,11 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 										  U32 block_num, EObjectUpdateType update_type,
 										  LLDataPacker *dp)
 {
+	// <FS:Ansariel> Improved bad object handling
+	static LLCachedControl<bool> fsEnforceStrictObjectCheck(gSavedSettings, "FSEnforceStrictObjectCheck");
+	bool enfore_strict_object_check = LLGridManager::instance().isInSecondLife() && fsEnforceStrictObjectCheck;
+	// </FS:Ansariel>
+
 	LLColor4U color;
 	const S32 teDirtyBits = (TEM_CHANGE_TEXTURE|TEM_CHANGE_COLOR|TEM_CHANGE_MEDIA);
 
@@ -383,7 +389,7 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 				if (getRegion())
 				{
 					region_name = getRegion()->getName();
-					if (gSavedSettings.getBOOL("FSEnforceStrictObjectCheck"))
+					if (enfore_strict_object_check)
 					{
 						LL_WARNS() << "An invalid object (" << getID() << ") has been removed (FSEnforceStrictObjectCheck)" << LL_ENDL;
 						getRegion()->addCacheMissFull(getLocalID()); // force cache skip the object
@@ -392,7 +398,7 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 				LL_WARNS() << "Bogus volume parameters in object " << getID() << " @ " << getPositionRegion()
 					<< " in " << region_name << LL_ENDL;
 				
-				if (gSavedSettings.getBOOL("FSEnforceStrictObjectCheck"))
+				if (enfore_strict_object_check)
 				{
 					gObjectList.killObject(this);
 					return (INVALID_UPDATE);
@@ -424,7 +430,7 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 			if (getRegion())
 			{
 				region_name = getRegion()->getName();
-				if (gSavedSettings.getBOOL("FSEnforceStrictObjectCheck"))
+				if (enfore_strict_object_check)
 				{
 					LL_WARNS() << "An invalid object (" << getID() << ") has been removed (FSEnforceStrictObjectCheck)" << LL_ENDL;
 					getRegion()->addCacheMissFull(getLocalID()); // force cache skip
@@ -433,7 +439,7 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 
 			LL_WARNS() << "Bogus TE data in object " << getID() << " @ " << getPositionRegion()
 				<< " in " << region_name << LL_ENDL;
-			if (gSavedSettings.getBOOL("FSEnforceStrictObjectCheck"))
+			if (enfore_strict_object_check)
 			{
 				gObjectList.killObject(this);
 				return (INVALID_UPDATE);
@@ -464,7 +470,7 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 				if (getRegion())
 				{
 					region_name = getRegion()->getName();
-					if (gSavedSettings.getBOOL("FSEnforceStrictObjectCheck"))
+					if (enfore_strict_object_check)
 					{
 						LL_WARNS() << "An invalid object (" << getID() << ") has been removed (FSEnforceStrictObjectCheck)" << LL_ENDL;
 						getRegion()->addCacheMissFull(getLocalID()); // force cache skip the object
@@ -479,7 +485,7 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 				// <FS:Beq> July 2017 Change backed out due to side effects. FIRE-16995 still an exposure. 
 				// return(INVALID_UPDATE);
 				// NOTE: An option here would be to correctly return the media status using "retval |= INVALID_UPDATE"
-				if (gSavedSettings.getBOOL("FSEnforceStrictObjectCheck"))
+				if (enfore_strict_object_check)
 				{
 					gObjectList.killObject(this);
 					return (INVALID_UPDATE);
@@ -511,7 +517,7 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 				if (getRegion())
 				{
 					region_name = getRegion()->getName();
-					if (gSavedSettings.getBOOL("FSEnforceStrictObjectCheck"))
+					if (enfore_strict_object_check)
 					{
 						LL_WARNS() << "An invalid object (" << getID() << ") has been removed (FSEnforceStrictObjectCheck)" << LL_ENDL;
 						getRegion()->addCacheMissFull(getLocalID()); // force cache skip
@@ -520,7 +526,7 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 						
 				LL_WARNS() << "Bogus TE data in object " << getID() << " @ " << getPositionRegion()
 					<< " in " << region_name << LL_ENDL;
-				if (gSavedSettings.getBOOL("FSEnforceStrictObjectCheck"))
+				if (enfore_strict_object_check)
 				{
 					gObjectList.killObject(this);
 					return (INVALID_UPDATE);
