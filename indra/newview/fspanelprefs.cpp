@@ -35,7 +35,7 @@
 #include "llagent.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
-#include "lldiriterator.h"	// <FS:CR> for populating the cloud combo
+#include "lldiriterator.h"
 #include "llfloaterreg.h"
 #include "llinventorymodel.h"
 #include "llstartup.h"
@@ -47,7 +47,7 @@ static LLPanelInjector<FSPanelPrefs> t_pref_fs("panel_preference_firestorm");
 FSPanelPrefs::FSPanelPrefs() : LLPanelPreference()
 {
 	mCommitCallbackRegistrar.add("Perms.Copy",	boost::bind(&FSPanelPrefs::onCommitCopy, this));
-	mCommitCallbackRegistrar.add("Perms.Trans", boost::bind(&FSPanelPrefs::onCommitTrans, this));
+	mCommitCallbackRegistrar.add("Perms.Trans",	boost::bind(&FSPanelPrefs::onCommitTrans, this));
 
 	mEmbeddedItem = gSavedPerAccountSettings.getString("FSBuildPrefs_Item");
 }
@@ -124,12 +124,10 @@ void FSPanelPrefs::apply()
 	}
 }
 
-
 void FSPanelPrefs::cancel()
 {
 	LLPanelPreference::cancel();
 }
-
 
 void FSPanelPrefs::refreshBeamLists()
 {
@@ -243,13 +241,9 @@ void FSPanelPrefs::populateCloudCombo()
 
 void FSPanelPrefs::onCommitTexture(const LLSD& data)
 {
-	LLTextureCtrl* texture_ctrl = getChild<LLTextureCtrl>("texture control");
-	if (!texture_ctrl)
-	{
-		return;
-	}
+	LLTextureCtrl* texture_ctrl = findChild<LLTextureCtrl>("texture control");
 
-	if (!texture_ctrl->getTentative())
+	if (texture_ctrl && !texture_ctrl->getTentative())
 	{
 		// we grab the item id first, because we want to do a
 		// permissions check
@@ -262,7 +256,7 @@ void FSPanelPrefs::onCommitTexture(const LLSD& data)
 		// Texture picker defaults aren't inventory items
 		// * Don't need to worry about permissions for them
 		LLViewerInventoryItem* item = gInventory.getItem(id);
-		if (item && !item->getPermissions().allowOperationBy(PERM_COPY, gAgent.getID()))
+		if (item && !item->getPermissions().allowOperationBy(PERM_COPY, gAgentID))
 		{
 			// Do not have permission to copy the texture.
 			return;
