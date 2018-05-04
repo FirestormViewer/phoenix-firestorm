@@ -67,6 +67,8 @@ BOOL FSPanelPrefs::postBuild()
 	getChild<LLUICtrl>("refresh_beams")->setCommitCallback(boost::bind(&FSPanelPrefs::refreshBeamLists, this));
 	getChild<LLUICtrl>("delete_beam")->setCommitCallback(boost::bind(&FSPanelPrefs::onBeamDelete, this));
 
+	getChild<LLUICtrl>("reset_default_folders")->setCommitCallback(boost::bind(&FSPanelPrefs::onResetDefaultFolders, this));
+
 	populateCloudCombo();
 	
 	LLTextureCtrl* tex_ctrl = getChild<LLTextureCtrl>("texture control");
@@ -102,11 +104,13 @@ void FSPanelPrefs::onOpen(const LLSD& key)
 				getChild<LLTextBox>("build_item_add_disp_rect_txt")->setTextArg("[ITEM]", getString("EmbeddedItemNotAvailable"));
 			}
 		}
+		getChild<LLUICtrl>("reset_default_folders")->setEnabled(TRUE);
 	}
 	else
 	{
 		getChild<LLCheckBoxCtrl>("FSBuildPrefs_EmbedItem")->setEnabled(FALSE);
 		getChild<LLTextBox>("build_item_add_disp_rect_txt")->setTextArg("[ITEM]", getString("EmbeddedItemNotLoggedIn"));
+		getChild<LLUICtrl>("reset_default_folders")->setEnabled(FALSE);
 	}
 }
 
@@ -299,3 +303,10 @@ void FSPanelPrefs::onDADEmbeddedItem(const LLUUID& item_id)
 	}
 }
 
+void FSPanelPrefs::onResetDefaultFolders()
+{
+	gSavedPerAccountSettings.getControl("ModelUploadFolder")->resetToDefault(true);
+	gSavedPerAccountSettings.getControl("TextureUploadFolder")->resetToDefault(true);
+	gSavedPerAccountSettings.getControl("SoundUploadFolder")->resetToDefault(true);
+	gSavedPerAccountSettings.getControl("AnimationUploadFolder")->resetToDefault(true);
+}

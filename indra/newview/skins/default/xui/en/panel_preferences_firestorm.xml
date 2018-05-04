@@ -1816,6 +1816,13 @@
         To change a destination folder, right click on it in inventory and choose
      "Use as default for"
       </text>
+      <button
+       name="reset_default_folders"
+       label="Reset default folders"
+       left="10"
+       top_pad="10"
+       width="200"
+       follows="left|top" />
     </panel>
 </tab_container>
 </panel>
