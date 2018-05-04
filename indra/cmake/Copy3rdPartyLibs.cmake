@@ -38,7 +38,7 @@ if(WINDOWS)
 
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     set(release_files
-        openjpeg.dll
+        #openjpeg.dll
         libapr-1.dll
         libaprutil-1.dll
         libapriconv-1.dll
@@ -239,7 +239,7 @@ elseif(LINUX)
         ${EXPAT_COPY}
         #libfreetype.so.6.6.2
         #libfreetype.so.6
-        libGLOD.so
+        #libGLOD.so
         libgmodule-2.0.so
         libgobject-2.0.so
         libhunspell-1.3.so.0.0.0

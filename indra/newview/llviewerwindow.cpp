@@ -1248,7 +1248,7 @@ LLWindowCallbacks::DragNDropResult LLViewerWindow::handleDragNDrop( LLWindow *wi
 						LLTextureEntry *te = obj->getTE(object_face);
 
 						// can modify URL if we can modify the object or we have navigate permissions
-						bool allow_modify_url = obj->permModify() || obj->hasMediaPermission( te->getMediaData(), LLVOVolume::MEDIA_PERM_INTERACT );
+						bool allow_modify_url = obj->permModify() || (te && obj->hasMediaPermission( te->getMediaData(), LLVOVolume::MEDIA_PERM_INTERACT ));
 
 						if (te && allow_modify_url )
 						{
@@ -7055,8 +7055,8 @@ void LLPickInfo::updateXYCoords()
 {
 	if (mObjectFace > -1)
 	{
-		const LLTextureEntry* tep = getObject()->getTE(mObjectFace);
-		LLPointer<LLViewerTexture> imagep = LLViewerTextureManager::getFetchedTexture(tep->getID());
+		const LLTextureEntry &tep = getObject()->getTEref(mObjectFace);
+		LLPointer<LLViewerTexture> imagep = LLViewerTextureManager::getFetchedTexture(tep.getID());
 		if(mUVCoords.mV[VX] >= 0.f && mUVCoords.mV[VY] >= 0.f && imagep.notNull())
 		{
 			mXYCoords.mX = ll_round(mUVCoords.mV[VX] * (F32)imagep->getWidth());

@@ -95,7 +95,7 @@ void LLViewerMediaFocus::setFocusFace(LLPointer<LLViewerObject> objectp, S32 fac
 		media_impl->setDisabled(false);
 
 		LLTextureEntry* tep = objectp->getTE(face);
-		if(tep->hasMedia())
+		if(tep && tep->hasMedia())
 		{
 			LLMediaEntry* mep = tep->getMediaData();
 			face_auto_zoom = mep->getAutoZoom();

@@ -1042,9 +1042,9 @@ void LLVOVolume::setScale(const LLVector3 &scale, BOOL damped)
 
 LLFace* LLVOVolume::addFace(S32 f)
 {
-	const LLTextureEntry* te = getTE(f);
+	const LLTextureEntry *te = getTE(f);
 	LLViewerTexture* imagep = getTEImage(f);
-	if (te->getMaterialParams().notNull())
+	if ( te && te->getMaterialParams().notNull())
 	{
 		LLViewerTexture* normalp = getTENormalMap(f);
 		LLViewerTexture* specularp = getTESpecularMap(f);
@@ -1535,7 +1535,7 @@ void LLVOVolume::updateFaceFlags()
 		LLFace *face = mDrawable->getFace(i);
 		if (face)
 		{
-			BOOL fullbright = getTE(i)->getFullbright();
+			BOOL fullbright = getTEref(i).getFullbright();
 			face->clearState(LLFace::FULLBRIGHT | LLFace::HUD_RENDER | LLFace::LIGHT);
 
 			if (fullbright || (mMaterial == LL_MCODE_LIGHT))
@@ -2019,10 +2019,10 @@ void LLVOVolume::setNumTEs(const U8 num_tes)
 		if(mMediaImplList.size() >= old_num_tes && mMediaImplList[old_num_tes -1].notNull())//duplicate the last media textures if exists.
 		{
 			mMediaImplList.resize(num_tes) ;
-			const LLTextureEntry* te = getTE(old_num_tes - 1) ;
+			const LLTextureEntry &te = getTEref(old_num_tes - 1) ;
 			for(U8 i = old_num_tes; i < num_tes ; i++)
 			{
-				setTE(i, *te) ;
+				setTE(i, te) ;
 				mMediaImplList[i] = mMediaImplList[old_num_tes -1] ;
 			}
 			mMediaImplList[old_num_tes -1]->setUpdated(TRUE) ;
@@ -2536,7 +2536,7 @@ bool LLVOVolume::hasMedia() const
 	for (U8 i = 0; i < numTEs; i++)
 	{
 		const LLTextureEntry* te = getTE(i);
-		if(te->hasMedia())
+		if( te && te->hasMedia())
 		{
 			result = true;
 			break;
@@ -2589,7 +2589,7 @@ void LLVOVolume::cleanUpMediaImpls()
 	for (U8 i = 0; i < numTEs; i++)
 	{
 		const LLTextureEntry* te = getTE(i);
-		if( ! te->hasMedia())
+		if( te && ! te->hasMedia())
 		{
 			// Delete the media IMPL!
 			removeMediaImpl(i) ;
@@ -4688,6 +4688,13 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 		tex_mat = facep->mTextureMatrix;	
 	}
 
+	// <FS:ND> CEF: if this is a face with media, then use the texture matrix to flip the texture
+	if( facep->mTextureMatrix &&
+		( ( facep->getTextureEntry() && facep->getTextureEntry()->hasMedia() ) ||
+		  ( facep->getTexture() && facep->getTexture()->getType()  == LLViewerTexture::MEDIA_TEXTURE ) ) )
+		tex_mat = facep->mTextureMatrix;
+	// </FS:ND>
+	
 	const LLMatrix4* model_mat = NULL;
 
 	LLDrawable* drawable = facep->getDrawable();
