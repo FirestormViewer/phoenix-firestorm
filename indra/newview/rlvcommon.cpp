@@ -372,6 +372,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 			return "missing #RLV";
 		case RLV_RET_FAILED_DEPRECATED:
 			return "deprecated and disabled";
+		case RLV_RET_FAILED_NOBEHAVIOUR:
+			return "no active behaviours";
 		// The following are identified by the chat verb
 		case RLV_RET_RETAINED:
 		case RLV_RET_SUCCESS:

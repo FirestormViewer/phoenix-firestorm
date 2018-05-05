@@ -1754,7 +1754,9 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETOVERLAY>::onCommandToggle(ERlvBehavio
 	}
 
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_ALPHA)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TINT)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TEXTURE)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TOUCH)->setPrimaryObject(idRlvObject);
 }
 
 // Handles: @setoverlay_texture:<uuid>=n|y changes
@@ -3392,7 +3394,8 @@ void RlvHandler::renderOverlay()
 		gGL.scalef(displayScale.mV[VX], displayScale.mV[VY], 1.f);
 
 		gGL.getTexUnit(0)->bind(m_pOverlayImage);
-		gGL.color4f(1.f, 1.f, 1.f, llclamp(RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_ALPHA)->getValue<float>(), 0.0f, 1.0f));
+		const LLVector3 overlayTint = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TINT)->getValue<LLVector3>();
+		gGL.color4f(overlayTint.mV[0], overlayTint.mV[1], overlayTint.mV[2], llclamp(RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_ALPHA)->getValue<float>(), 0.0f, 1.0f));
 
 		gGL.begin(LLRender::QUADS);
 			gGL.texCoord2f(1.f, 1.f);

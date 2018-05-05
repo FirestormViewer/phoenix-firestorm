@@ -207,10 +207,12 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 
 	// Overlay
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETOVERLAY, RLV_OPTION_NONE>("setoverlay", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addModifier(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setoverlay_alpha", RLV_BHVR_SETOVERLAY_ALPHA, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
+	addModifier(new RlvForceGenericProcessor<RLV_OPTION_MODIFIER>("setoverlay_alpha", RLV_BHVR_SETOVERLAY_ALPHA, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
 	            RLV_MODIFIER_OVERLAY_ALPHA, new RlvBehaviourModifier("Overlay - Alpha", 1.0f, false, new RlvBehaviourModifier_Comp()));
-	addModifier(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setoverlay_texture", RLV_BHVR_SETOVERLAY_TEXTURE, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
+	addModifier(new RlvForceGenericProcessor<RLV_OPTION_MODIFIER>("setoverlay_texture", RLV_BHVR_SETOVERLAY_TEXTURE, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
 				RLV_MODIFIER_OVERLAY_TEXTURE, new RlvBehaviourModifierHandler<RLV_MODIFIER_OVERLAY_TEXTURE>("Overlay - Texture", LLUUID::null, false, new RlvBehaviourModifier_Comp()));
+	addModifier(new RlvForceGenericProcessor<RLV_OPTION_MODIFIER>("setoverlay_tint", RLV_BHVR_SETOVERLAY_TINT, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
+				RLV_MODIFIER_OVERLAY_TINT, new RlvBehaviourModifier("Overlay - Tint", LLVector3(1.0f, 1.0f, 1.0f), false, new RlvBehaviourModifier_Comp()));
 	addModifier(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("setoverlay_touch", RLV_BHVR_SETOVERLAY_TOUCH, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
 				RLV_MODIFIER_OVERLAY_TOUCH, new RlvBehaviourModifier("Overlay - Touch", true, true, new RlvBehaviourModifier_Comp()));
 
