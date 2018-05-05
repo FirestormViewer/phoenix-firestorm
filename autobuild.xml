@@ -660,9 +660,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2fa9e9e89a81ed2ed686a170681f6bbc</string>
+              <string>2d59bb6f4bd38a18d9250ff010a13b59</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/571/1225/dictionaries-1.500564-common-500564.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dictionaries-2.46203-common-46203.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>
