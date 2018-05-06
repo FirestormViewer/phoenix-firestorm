@@ -60,6 +60,7 @@
 #include "rlvhelper.h"
 #include "rlvinventory.h"
 #include "rlvlocks.h"
+#include "rlvmodifiers.h"
 #include "rlvui.h"
 #include "rlvextensions.h"
 
@@ -2592,6 +2593,32 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SETCAM_MODE>::onCommand(const RlvCommand& rl
 		handle_reset_view();
 	else
 		return RLV_RET_FAILED_OPTION;
+	return RLV_RET_SUCCESS;
+}
+
+// Handles: @setoverlay_tween:[<alpha>];[<tint>];<duration>=force
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_SETOVERLAY_TWEEN>::onCommand(const RlvCommand& rlvCmd)
+{
+	std::vector<std::string> optionList;
+	if ( (!RlvCommandOptionHelper::parseStringList(rlvCmd.getOption(), optionList)) || (3 != optionList.size()) )
+		return RLV_RET_FAILED_OPTION;
+
+	// Parse the duration first (required param)
+	float tweenDuration = .0f;
+	if (!RlvCommandOptionHelper::parseOption(optionList[2], tweenDuration))
+		return RLV_RET_FAILED_OPTION;
+
+	// Process the overlay alpha tween (if there is one and it is a valid value)
+	float overlayAlpha = .0f;
+	if (RlvCommandOptionHelper::parseOption(optionList[0], overlayAlpha))
+		RlvBehaviourModifierAnimator::instance().addTween(rlvCmd.getObjectID(), RLV_MODIFIER_OVERLAY_ALPHA, RlvBehaviourModifierAnimationType::Lerp, overlayAlpha, tweenDuration);
+
+	// Process the overlay tint tween (if there is one and it is a valid value)
+	LLVector3 overlayColor;
+	if (RlvCommandOptionHelper::parseOption(optionList[1], overlayColor))
+		RlvBehaviourModifierAnimator::instance().addTween(rlvCmd.getObjectID(), RLV_MODIFIER_OVERLAY_TINT, RlvBehaviourModifierAnimationType::Lerp, overlayColor, tweenDuration);
+
 	return RLV_RET_SUCCESS;
 }
 

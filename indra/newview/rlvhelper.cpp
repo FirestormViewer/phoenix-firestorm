@@ -25,6 +25,7 @@
 #include "rlvhelper.h"
 #include "rlvhandler.h"
 #include "rlvinventory.h"
+#include "rlvmodifiers.h"
 
 #include <boost/algorithm/string.hpp>
 
@@ -215,6 +216,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 				RLV_MODIFIER_OVERLAY_TINT, new RlvBehaviourModifier("Overlay - Tint", LLVector3(1.0f, 1.0f, 1.0f), false, new RlvBehaviourModifier_Comp()));
 	addModifier(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("setoverlay_touch", RLV_BHVR_SETOVERLAY_TOUCH, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
 				RLV_MODIFIER_OVERLAY_TOUCH, new RlvBehaviourModifier("Overlay - Touch", true, true, new RlvBehaviourModifier_Comp()));
+	addEntry(new RlvForceProcessor<RLV_BHVR_SETOVERLAY_TWEEN>("setoverlay_tween", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 
 	//
 	// Force-wear
@@ -482,6 +484,7 @@ void RlvBehaviourModifier::clearValues(const LLUUID& idRlvObj)
 	                              [&idRlvObj](const RlvBehaviourModifierValueTuple& modValue) {
 									return (std::get<1>(modValue) == idRlvObj) && (std::get<2>(modValue) == RLV_BHVR_UNKNOWN);
 	                              }), m_Values.end());
+	RlvBehaviourModifierAnimator::instance().clearTweens(idRlvObj);
 	if (origCount != m_Values.size())
 	{
 		onValueChange();
@@ -499,6 +502,11 @@ bool RlvBehaviourModifier::hasValue() const {
 	if ( (!m_pValueComparator) || (m_pValueComparator->m_idPrimaryObject.isNull()) )
 		return !m_Values.empty();
 	return (!m_Values.empty()) ? std::get<1>(m_Values.front()) == m_pValueComparator->m_idPrimaryObject : false;
+}
+
+bool RlvBehaviourModifier::hasValue(const LLUUID& idRlvObj) const
+{
+	return m_Values.end() != std::find_if(m_Values.begin(), m_Values.end(), [&idRlvObj](const RlvBehaviourModifierValueTuple& cmpValue) { return std::get<1>(cmpValue) == idRlvObj; });
 }
 
 void RlvBehaviourModifier::removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idRlvObj, ERlvBehaviour eBhvr)

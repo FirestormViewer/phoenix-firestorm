@@ -237,6 +237,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_SETOVERLAY_TEXTURE,	// Changes the overlay texture
 	RLV_BHVR_SETOVERLAY_TINT,		// Changes the tint that's applied to the overlay texture
 	RLV_BHVR_SETOVERLAY_TOUCH,		// Block world interaction (=touching) based on the alpha channel of the overlay texture
+	RLV_BHVR_SETOVERLAY_TWEEN,		// Animate between the current overlay settings and the supplied values
 
 	RLV_BHVR_COUNT,
 	RLV_BHVR_UNKNOWN

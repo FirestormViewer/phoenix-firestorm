@@ -284,6 +284,7 @@ public:
 	const RlvBehaviourModifierValue& getValue() const { return (hasValue()) ? std::get<0>(m_Values.front()) : m_DefaultValue; }
 	template<typename T> const T&    getValue() const { return boost::get<T>(getValue()); }
 	bool                             hasValue() const;
+	bool                             hasValue(const LLUUID& idRlvObj) const;
 	void                             removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idRlvObj, ERlvBehaviour eBhvr = RLV_BHVR_UNKNOWN);
 	void                             setValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idRlvObj);
 	void                             setPrimaryObject(const LLUUID& idPrimaryObject);
