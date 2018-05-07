@@ -20,10 +20,12 @@
 #include "llviewercamera.h"
 #include "llvoavatarself.h"
 #include "llworld.h"
+
 #include "rlvactions.h"
 #include "rlvhelper.h"
 #include "rlvhandler.h"
 #include "rlvinventory.h"
+#include "rlvmodifiers.h"
 
 // ============================================================================
 // Camera

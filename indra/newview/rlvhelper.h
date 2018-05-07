@@ -30,6 +30,7 @@
 //
 
 class RlvBehaviourModifier;
+struct RlvBehaviourModifierComp;
 
 // ============================================================================
 // RlvBehaviourInfo class - Generic behaviour descriptor (used by restrictions, reply and force commands)
@@ -230,42 +231,10 @@ template <ERlvBehaviour eBhvr, ERlvBehaviourOptionType optionType, typename togg
 
 typedef std::tuple<RlvBehaviourModifierValue, LLUUID, ERlvBehaviour> RlvBehaviourModifierValueTuple;
 
-struct RlvBehaviourModifier_Comp
-{
-	virtual ~RlvBehaviourModifier_Comp() {}
-	virtual bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs)
-	{
-		// Values that match the primary object take precedence (otherwise maintain relative ordering)
-		if ( (std::get<1>(rhs) == m_idPrimaryObject) && (std::get<1>(lhs) != m_idPrimaryObject) )
-			return false;
-		return true;
-	}
-
-	LLUUID m_idPrimaryObject;
-};
-struct RlvBehaviourModifier_CompMin : public RlvBehaviourModifier_Comp
-{
-	bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs) override
-	{
-		if ( (m_idPrimaryObject.isNull()) || ((std::get<1>(lhs) == m_idPrimaryObject) && (std::get<1>(rhs) == m_idPrimaryObject)) )
-			return std::get<0>(lhs) < std::get<0>(rhs);
-		return RlvBehaviourModifier_Comp::operator()(lhs, rhs);
-	}
-};
-struct RlvBehaviourModifier_CompMax : public RlvBehaviourModifier_Comp
-{
-	bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs) override
-	{
-		if ( (m_idPrimaryObject.isNull()) || ((std::get<1>(lhs) == m_idPrimaryObject) && (std::get<1>(rhs) == m_idPrimaryObject)) )
-			return std::get<0>(rhs) < std::get<0>(lhs);
-		return RlvBehaviourModifier_Comp::operator()(lhs, rhs);
-	}
-};
-
 class RlvBehaviourModifier
 {
 public:
-	RlvBehaviourModifier(const std::string strName, const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator = nullptr);
+	RlvBehaviourModifier(const std::string strName, const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifierComp* pValueComparator = nullptr);
 	virtual ~RlvBehaviourModifier();
 
 	/*
@@ -301,80 +270,7 @@ protected:
 	bool                                 m_fAddDefaultOnEmpty;
 	std::list<RlvBehaviourModifierValueTuple> m_Values;
 	change_signal_t                      m_ChangeSignal;
-	RlvBehaviourModifier_Comp*           m_pValueComparator;
-};
-
-template<ERlvBehaviourModifier eBhvrMod>
-class RlvBehaviourModifierHandler : public RlvBehaviourModifier
-{
-public:
-	//using RlvBehaviourModifier::RlvBehaviourModifier; // Needs VS2015 and up
-	RlvBehaviourModifierHandler(const std::string& strName, const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator)
-		: RlvBehaviourModifier(strName, defaultValue, fAddDefaultOnEmpty, pValueComparator) {}
-protected:
-	void onValueChange() const override;
-};
-
-// Inspired by LLControlCache<T>
-template<typename T>
-class RlvBehaviourModifierCache : public LLRefCount, public LLInstanceTracker<RlvBehaviourModifierCache<T>, ERlvBehaviourModifier>
-{
-public:
-	RlvBehaviourModifierCache(ERlvBehaviourModifier eModifier)
-		: LLInstanceTracker<RlvBehaviourModifierCache<T>, ERlvBehaviourModifier>(eModifier)
-	{
-		RlvBehaviourModifier* pBhvrModifier = (eModifier < RLV_MODIFIER_COUNT) ? RlvBehaviourDictionary::instance().getModifier(eModifier) : nullptr;
-		if (pBhvrModifier)
-		{
-			mConnection = pBhvrModifier->getSignal().connect(boost::bind(&RlvBehaviourModifierCache<T>::handleValueChange, this, _1));
-			mCachedValue = pBhvrModifier->getValue<T>();
-		}
-		else
-		{
-			mCachedValue = {};
-		}
-	}
-	~RlvBehaviourModifierCache() {}
-
-	/*
-	 * Member functions
-	 */
-public:
-	const T& getValue() const { return mCachedValue; }
-protected:
-	void handleValueChange(const RlvBehaviourModifierValue& newValue) { mCachedValue = boost::get<T>(newValue); }
-
-	/*
-	 * Member variables
-	 */
-protected:
-	T mCachedValue;
-	boost::signals2::scoped_connection mConnection;
-};
-
-// Inspired by LLCachedControl<T>
-template <typename T>
-class RlvCachedBehaviourModifier
-{
-public:
-	RlvCachedBehaviourModifier(ERlvBehaviourModifier eModifier)
-	{
-		if ((mCachedModifierPtr = RlvBehaviourModifierCache<T>::getInstance(eModifier)) == nullptr)
-			mCachedModifierPtr = new RlvBehaviourModifierCache<T>(eModifier);
-	}
-
-	/*
-	 * Operators
-	 */
-public:
-	operator const T&() const { return mCachedModifierPtr->getValue(); }
-	const T& operator()() { return mCachedModifierPtr->getValue(); }
-
-	/*
-	 * Member variables
-	 */
-protected:
-	LLPointer<RlvBehaviourModifierCache<T>> mCachedModifierPtr;
+	RlvBehaviourModifierComp*           m_pValueComparator;
 };
 
 // ============================================================================

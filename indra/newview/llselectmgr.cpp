@@ -97,7 +97,7 @@
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
 #include "rlvhandler.h"
-#include "rlvhelper.h"
+#include "rlvmodifiers.h"
 // [/RLVa:KB]
 #include "llglheaders.h"
 
