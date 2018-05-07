@@ -31,8 +31,6 @@
 #include "llmutex.h"
 #include "llapr.h"
 
-#include "nd/ndintrin.h" // <FS:ND/> For FAA/FAD
-
 #define LL_REF_COUNT_DEBUG 0
 #if LL_REF_COUNT_DEBUG
 class LLMutex ;
@@ -59,24 +57,13 @@ public:
 #else
 	inline void ref() const
 	{ 
-		// <FS:ND> Use intrinsic functions for threadsafe increment
-
-		//	++mRef;
-		nd::intrin::FAA( &mRef );
-
-		// </FS:ND>
+		mRef++; 
 	} 
 
 	inline S32 unref() const
 	{
 		llassert(mRef >= 1);
-
-		// <FS:ND> Use intrinsic functions for threadsafe decrement
-
-		//		if (0 == --mRef)
-		if (0 == nd::intrin::FAD( &mRef) )
-
-		// </FS:ND>
+		if (0 == --mRef)
 		{
 			delete this; 
 			return 0;
@@ -93,12 +80,7 @@ public:
 	}
 
 private: 
-	// <FS:ND> Needs to be volatile and U32
-
-	//	mutable S32	mRef; 
-	mutable volatile U32 mRef; 
-
-	// </FS:ND>
+	mutable S32	mRef; 
 
 #if LL_REF_COUNT_DEBUG
 	LLMutex*  mMutexp ;
