@@ -24,11 +24,8 @@
 
 RlvBehaviourModifierAnimator::~RlvBehaviourModifierAnimator()
 {
-	if (m_pTimer)
-	{
-		delete m_pTimer;
-		m_pTimer = nullptr;
-	}
+	if (!m_TimerHandle.isDead())
+		m_TimerHandle.markDead();
 }
 
 void RlvBehaviourModifierAnimator::addTween(const LLUUID& idObject, ERlvBehaviourModifier eBhvrMod, RlvBehaviourModifierAnimationType eAnimType, const RlvBehaviourModifierValue& endValue, float nDuration)
@@ -38,7 +35,7 @@ void RlvBehaviourModifierAnimator::addTween(const LLUUID& idObject, ERlvBehaviou
 	if (m_Tweens.end() != itTween)
 		m_Tweens.erase(itTween);
 
-	if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(eBhvrMod))
+	if (const RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(eBhvrMod))
 	{
 		RlvBehaviourModifierTween newTween;
 		newTween.idObject = idObject;
@@ -50,8 +47,8 @@ void RlvBehaviourModifierAnimator::addTween(const LLUUID& idObject, ERlvBehaviou
 		newTween.endValue = endValue;
 		if (newTween.startValue.which() == newTween.endValue.which())
 		{
-			if (!m_pTimer)
-				m_pTimer = new AnimationTimer();
+			if (m_TimerHandle.isDead())
+				m_TimerHandle = (new AnimationTimer())->getHandle();
 			m_Tweens.emplace_back(std::move(newTween));
 		}
 	}
@@ -60,22 +57,21 @@ void RlvBehaviourModifierAnimator::addTween(const LLUUID& idObject, ERlvBehaviou
 void RlvBehaviourModifierAnimator::clearTweens(const LLUUID& idObject, ERlvBehaviourModifier eBhvrMod)
 {
 	m_Tweens.erase(std::remove_if(m_Tweens.begin(), m_Tweens.end(),
-	               [&idObject, eBhvrMod](const RlvBehaviourModifierTween& cmpTween)
-	               {
-		               return cmpTween.idObject == idObject && ((cmpTween.eBhvrMod == eBhvrMod) || (RLV_MODIFIER_UNKNOWN == eBhvrMod));
-	               }), m_Tweens.end());
+	                              [&idObject, eBhvrMod](const RlvBehaviourModifierTween& cmpTween)
+	                              {
+		                              return cmpTween.idObject == idObject && ((cmpTween.eBhvrMod == eBhvrMod) || (RLV_MODIFIER_UNKNOWN == eBhvrMod));
+	                              }), m_Tweens.end());
 }
 
 // ====================================================================================
 // RlvBehaviourModifierAnimator timer
 //
 
-#define ANIMATION_FREQUENCY 10
-
 RlvBehaviourModifierAnimator::AnimationTimer::AnimationTimer()
-	: LLEventTimer(1.f / ANIMATION_FREQUENCY)
+	: LLEventTimer(1.f / RLV_MODIFIER_ANIMATION_FREQUENCY)
 {
 }
+
 
 BOOL RlvBehaviourModifierAnimator::AnimationTimer::tick()
 {
@@ -105,7 +101,7 @@ BOOL RlvBehaviourModifierAnimator::AnimationTimer::tick()
 				auto itTween = std::find_if(modAnimatior.m_Tweens.begin(), modAnimatior.m_Tweens.end(),
 											[&curTween](const RlvBehaviourModifierTween& t)
 											{
-												// NOTE: implementation leak - taking advantage of the fact that we know there can only be one active tween per object/modifier/type combnination
+												// NOTE: implementation leak - taking advantage of the fact that we know there can only be one active tween per object/modifier/type combination
 												return t.idObject == curTween.idObject && t.eBhvrMod == curTween.eBhvrMod && t.eAnimType == curTween.eAnimType;
 											});
 				modAnimatior.m_Tweens.erase(itTween);
@@ -113,12 +109,7 @@ BOOL RlvBehaviourModifierAnimator::AnimationTimer::tick()
 		}
 	}
 
-	if (modAnimatior.m_Tweens.empty())
-	{
-		modAnimatior.m_pTimer = nullptr;
-		return true;
-	}
-	return false;
+	return modAnimatior.m_Tweens.empty();
 }
 
  // ====================================================================================

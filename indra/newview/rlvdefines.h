@@ -71,6 +71,7 @@ const S32 RLVa_VERSION_PATCH = 0;
 
 #define RLV_ROOT_FOLDER					"#RLV"
 #define RLV_CMD_PREFIX					'@'
+#define RLV_MODIFIER_ANIMATION_FREQUENCY 10
 #define RLV_MODIFIER_TPLOCAL_DEFAULT    256.f			// Any teleport that's more than a region away is non-local
 #define RLV_MODIFIER_FARTOUCH_DEFAULT   1.5f			// Specifies the default @fartouch distance
 #define RLV_MODIFIER_SITTP_DEFAULT      1.5f			// Specifies the default @sittp distance

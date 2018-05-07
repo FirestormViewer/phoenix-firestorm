@@ -16,11 +16,12 @@
 
 #pragma once
 
+#include "llhandle.h"
 #include "llsingleton.h"
 #include "rlvhelper.h"
 
 // ====================================================================================
-// RlvBehaviourModifierAnimator - Helper types
+// RlvBehaviourModifierAnimator - A class to animate behaviour modifiers
 //
 
 enum class RlvBehaviourModifierAnimationType { Lerp };
@@ -36,13 +37,8 @@ struct RlvBehaviourModifierTween
 	RlvBehaviourModifierValue endValue;
 };
 
-// ====================================================================================
-// RlvBehaviourModifierAnimator - A class to animate behaviour modifiers
-//
-
 class RlvBehaviourModifierAnimator : public LLSingleton<RlvBehaviourModifierAnimator>
 {
-	friend class AnimationTimer;
 	LLSINGLETON_EMPTY_CTOR(RlvBehaviourModifierAnimator);
 public:
 	~RlvBehaviourModifierAnimator() override;
@@ -58,7 +54,8 @@ public:
 	/*
 	 * Animation timer
 	 */
-	class AnimationTimer : LLEventTimer
+protected:
+	class AnimationTimer : public LLEventTimer, public LLHandleProvider<AnimationTimer>
 	{
 	public:
 		AnimationTimer();
@@ -68,8 +65,9 @@ public:
 	/*
 	 * Member variables
 	 */
-	std::list<struct RlvBehaviourModifierTween> m_Tweens;
-	AnimationTimer*                             m_pTimer = nullptr;
+protected:
+	LLHandle<AnimationTimer>              m_TimerHandle;
+	std::list< RlvBehaviourModifierTween> m_Tweens;
 };
 
 // ====================================================================================
