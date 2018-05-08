@@ -82,7 +82,8 @@ public:
 //	void copyTexture(const U8 index, const LLTextureEntry* entry);
 
 	// returns pointer to texture at 'index' slot
-	LLTextureEntry* getTexture(const U8 index) const;
+	LLTextureEntry* getTexture( const U8 index ) const;
+	LLTextureEntry& getTextureRef( const U8 index ) const;
 
 	S32 setID(const U8 index, const LLUUID& id);
 	S32 setColor(const U8 index, const LLColor3& color);

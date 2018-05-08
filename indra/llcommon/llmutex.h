@@ -28,10 +28,18 @@
 #define LL_LLMUTEX_H
 
 #include "stdtypes.h"
-#if !LL_WINDOWS
-#include <stdint.h>
+#include "lltimer.h"
+
+#if LL_WINDOWS
+#pragma warning(disable:4265)
 #endif
 
+#include <mutex>
+#include <condition_variable>
+
+#if LL_WINDOWS
+#pragma warning(default:4265)
+#endif
 //============================================================================
 
 #define MUTEX_DEBUG (LL_DEBUG || LL_RELEASE_WITH_DEBUG_INFO)
@@ -40,9 +48,6 @@
 #include <map>
 #endif
 
-struct apr_thread_mutex_t;
-struct apr_pool_t;
-struct apr_thread_cond_t;
 
 class LL_COMMON_API LLMutex
 {
@@ -52,7 +57,7 @@ public:
 		NO_THREAD = 0xFFFFFFFF
 	} e_locking_thread;
 
-	LLMutex(apr_pool_t *apr_poolp = NULL); // NULL pool constructs a new pool for the mutex
+	LLMutex(); // NULL pool constructs a new pool for the mutex
 	virtual ~LLMutex();
 	
 	void lock();		// blocks
@@ -63,12 +68,11 @@ public:
 	U32 lockingThread() const; //get ID of locking thread
 	
 protected:
-	apr_thread_mutex_t *mAPRMutexp;
+	std::mutex mMutex;
 	mutable U32			mCount;
 	mutable U32			mLockingThread;
 	
-	apr_pool_t			*mAPRPoolp;
-	BOOL				mIsLocalPool;
+	bool				mIsLocalPool;
 	
 #if MUTEX_DEBUG
 	std::map<U32, BOOL> mIsLocked;
@@ -79,7 +83,7 @@ protected:
 class LL_COMMON_API LLCondition : public LLMutex
 {
 public:
-	LLCondition(apr_pool_t* apr_poolp); // Defaults to global pool, could use the thread pool as well.
+	LLCondition(); // Defaults to global pool, could use the thread pool as well.
 	~LLCondition();
 	
 	void wait();		// blocks
@@ -87,7 +91,7 @@ public:
 	void broadcast();
 	
 protected:
-	apr_thread_cond_t* mAPRCondp;
+	std::condition_variable mCond;
 };
 
 class LLMutexLock
@@ -128,6 +132,23 @@ public:
 	{
 		if (mMutex)
 			mLocked = mMutex->trylock();
+	}
+	LLMutexTrylock( LLMutex* mutex, U32 aTries )
+		: mMutex( mutex ),
+		mLocked( false )
+	{
+		if( !mMutex )
+			return;
+
+		U32 i = 0;
+		while( i < aTries )
+		{
+			mLocked = mMutex->trylock();
+			if( mLocked )
+				break;
+			++i;
+			ms_sleep( 10 );
+		}
 	}
 
 	~LLMutexTrylock()

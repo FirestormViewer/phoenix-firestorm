@@ -574,7 +574,7 @@ U32 LLPartSysCompressedPacket::writeUUID(LLPartInitData *in, U32 startByte)
 
 	mData[startByte++] = 0x00; // flag for "read whole UUID"
 
-	memcpy(bufPtr, in->mImageUuid.mData, 16);		/* Flawfinder: ignore */
+	memcpy( bufPtr, in->mImageUuid.mData, UUID_BYTES );		/* Flawfinder: ignore */
 	return (startByte+16);
 }
 
@@ -936,8 +936,8 @@ U32 LLPartSysCompressedPacket::readUUID(LLPartInitData *in, U32 startByte)
 	}
 
 	startByte++; // cause we actually have to read the UUID now.
-	memcpy(in->mImageUuid.mData, bufPtr, 16);		/* Flawfinder: ignore */
-	return (startByte+16);
+	memcpy( in->mImageUuid.mData, bufPtr, UUID_BYTES );		/* Flawfinder: ignore */
+	return (startByte + UUID_BYTES);
 }
 
 

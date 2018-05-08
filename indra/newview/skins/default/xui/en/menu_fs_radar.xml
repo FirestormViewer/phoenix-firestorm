@@ -258,4 +258,36 @@
 		<menu_item_call.on_click
 			function="Avatar.DerenderPermanent"/>
 	</menu_item_call>
+	<menu label="Render Settings" name="render_settings">
+		<menu_item_check
+			label="Render Normally"
+			name="av_render_normal">
+			<menu_item_check.on_click
+				function="Nearby.People.SetRenderMode"
+				parameter="0" />
+			<menu_item_check.on_check
+				function="Nearby.People.CheckRenderMode"
+				parameter="0" />
+		</menu_item_check>
+		<menu_item_check
+			label="Do Not Render"
+			name="av_render_never">
+			<menu_item_check.on_click
+				function="Nearby.People.SetRenderMode"
+				parameter="1" />
+			<menu_item_check.on_check
+				function="Nearby.People.CheckRenderMode"
+				parameter="1" />
+		</menu_item_check>
+		<menu_item_check
+			label="Render Fully"
+			name="av_render_always">
+			<menu_item_check.on_click
+				function="Nearby.People.SetRenderMode"
+				parameter="2" />
+			<menu_item_check.on_check
+				function="Nearby.People.CheckRenderMode"
+				parameter="2" />
+		</menu_item_check>
+	</menu>
 </context_menu>

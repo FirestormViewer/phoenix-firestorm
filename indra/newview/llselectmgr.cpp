@@ -1824,7 +1824,7 @@ void LLSelectMgr::selectionSetColorOnly(const LLColor4 &color)
 		{
 			if (object->permModify())
 			{
-				LLColor4 prev_color = object->getTE(te)->getColor();
+				LLColor4 prev_color = object->getTEref(te).getColor();
 				mColor.mV[VALPHA] = prev_color.mV[VALPHA];
 				// update viewer side color in anticipation of update from simulator
 				object->setTEColor(te, mColor);
@@ -1851,7 +1851,7 @@ void LLSelectMgr::selectionSetAlphaOnly(const F32 alpha)
 		{
 			if (object->permModify())
 			{
-				LLColor4 prev_color = object->getTE(te)->getColor();
+				LLColor4 prev_color = object->getTEref(te).getColor();
 				prev_color.mV[VALPHA] = mAlpha;
 				// update viewer side color in anticipation of update from simulator
 				object->setTEColor(te, prev_color);
@@ -1907,12 +1907,12 @@ void LLSelectMgr::selectionRevertShinyColors()
 				{
 					LLColor4 color = nodep->mSavedShinyColors[te];
 					// update viewer side color in anticipation of update from simulator
-					LLMaterialPtr old_mat = object->getTE(te)->getMaterialParams();
+					LLMaterialPtr old_mat = object->getTEref(te).getMaterialParams();
 					if (!old_mat.isNull())
 					{
 						LLMaterialPtr new_mat = gFloaterTools->getPanelFace()->createDefaultMaterial(old_mat);
 						new_mat->setSpecularLightColor(color);
-						object->getTE(te)->setMaterialParams(new_mat);
+						object->getTEref(te).setMaterialParams(new_mat);
 						LLMaterialMgr::getInstance()->put(object->getID(), te, *new_mat);
 					}
 				}
@@ -2284,7 +2284,7 @@ BOOL LLSelectMgr::selectionGetGlow(F32 *glow)
 	{
 		F32 get(LLViewerObject* object, S32 face)
 		{
-			return object->getTE(face)->getGlow();
+			return object->getTEref(face).getGlow();
 		}
 	} func;
 	identical = mSelectedObjects->getSelectedTEValue( &func, lglow );
@@ -2682,6 +2682,10 @@ void LLSelectMgr::adjustTexturesByScale(BOOL send_to_sim, BOOL stretch)
 		for (U8 te_num = 0; te_num < object->getNumTEs(); te_num++)
 		{
 			const LLTextureEntry* tep = object->getTE(te_num);
+
+			// ND: Down the code there is a check if getTE did return a valid pointer (actually the pointer is fetched again there, can it change mid loop?)
+			if( !tep )
+				continue;
 
 			BOOL planar = tep->getTexGen() == LLTextureEntry::TEX_GEN_PLANAR;
 			if (planar == stretch)
@@ -6248,8 +6252,8 @@ void LLSelectNode::saveColors()
 		mSavedColors.clear();
 		for (S32 i = 0; i < mObject->getNumTEs(); i++)
 		{
-			const LLTextureEntry* tep = mObject->getTE(i);
-			mSavedColors.push_back(tep->getColor());
+			const LLTextureEntry &tep = mObject->getTEref(i);
+			mSavedColors.push_back(tep.getColor());
 		}
 	}
 }
@@ -6261,7 +6265,7 @@ void LLSelectNode::saveShinyColors()
 		mSavedShinyColors.clear();
 		for (S32 i = 0; i < mObject->getNumTEs(); i++)
 		{
-			const LLMaterialPtr mat = mObject->getTE(i)->getMaterialParams();
+			const LLMaterialPtr mat = mObject->getTEref(i).getMaterialParams();
 			if (!mat.isNull())
 			{
 				mSavedShinyColors.push_back(mat->getSpecularLightColor());

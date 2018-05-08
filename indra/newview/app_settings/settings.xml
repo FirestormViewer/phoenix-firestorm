@@ -16,7 +16,7 @@
   <key>FSEnforceStrictObjectCheck</key>
   <map>
     <key>Comment</key>
-    <string>Force malformed prims to be treated as invalid. This setting derenders all malformed prims, even those that might not cause obvious issues. Setting to false will allow bad prims to render but can cause crashes.</string>
+    <string>Force malformed prims to be treated as invalid. This setting derenders all malformed prims, even those that might not cause obvious issues. Setting to false will allow bad prims to render but can cause crashes. (Disabled on OpenSim)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>

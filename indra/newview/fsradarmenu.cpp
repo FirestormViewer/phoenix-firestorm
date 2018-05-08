@@ -31,6 +31,7 @@
 #include "llmenugl.h"
 
 #include "fsradarmenu.h"
+#include "fsavatarrenderpersistence.h"
 
 // newview
 #include "llagent.h"
@@ -83,6 +84,7 @@ LLContextMenu* FSRadarMenu::createMenu()
 		registrar.add("Avatar.AddToContactSet",					boost::bind(&FSRadarMenu::addToContactSet,					this));
 		registrar.add("Nearby.People.TeleportToAvatar",			boost::bind(&FSRadarMenu::teleportToAvatar,					this));
 		registrar.add("Nearby.People.TrackAvatar",				boost::bind(&FSRadarMenu::onTrackAvatarMenuItemClick,		this));
+		registrar.add("Nearby.People.SetRenderMode",			boost::bind(&FSRadarMenu::onSetRenderMode,					this, _2));
 		registrar.add("Nearby.People.SetAvatarMarkColor",		boost::bind(&LLNetMap::setAvatarMarkColor,					id, _2));
 		registrar.add("Nearby.People.ClearAvatarMarkColor",		boost::bind(&LLNetMap::clearAvatarMarkColor,				id));
 		registrar.add("Nearby.People.ClearAllAvatarMarkColors",	boost::bind(&LLNetMap::clearAvatarMarkColors				));
@@ -92,6 +94,7 @@ LLContextMenu* FSRadarMenu::createMenu()
 		enable_registrar.add("Avatar.VisibleZoomIn",			boost::bind(&LLAvatarActions::canZoomIn,					id));
 		enable_registrar.add("Avatar.VisibleFreezeEject",		boost::bind(&LLAvatarActions::canLandFreezeOrEject,			id));
 		enable_registrar.add("Avatar.VisibleKickTeleportHome",	boost::bind(&LLAvatarActions::canEstateKickOrTeleportHome,	id));
+		enable_registrar.add("Nearby.People.CheckRenderMode",	boost::bind(&FSRadarMenu::checkSetRenderMode,				this, _2));
 
 		// create the context menu from the XUI
 		return createFromFile("menu_fs_radar.xml");
@@ -120,6 +123,7 @@ LLContextMenu* FSRadarMenu::createMenu()
 		registrar.add("Avatar.Derender",						boost::bind(&LLAvatarActions::derenderMultiple,						mUUIDs, false));
 		registrar.add("Avatar.DerenderPermanent",				boost::bind(&LLAvatarActions::derenderMultiple,						mUUIDs, true));
 		registrar.add("Avatar.AddToContactSet",					boost::bind(&FSRadarMenu::addToContactSet,							this));
+		registrar.add("Nearby.People.SetRenderMode",			boost::bind(&FSRadarMenu::onSetRenderMode,							this, _2));
 		registrar.add("Nearby.People.SetAvatarMarkColor",		boost::bind(&LLNetMap::setAvatarMarkColors,							mUUIDs, _2));
 		registrar.add("Nearby.People.ClearAvatarMarkColor",		boost::bind(&LLNetMap::clearAvatarMarkColors,						mUUIDs));
 		registrar.add("Nearby.People.ClearAllAvatarMarkColors",	boost::bind(&LLNetMap::clearAvatarMarkColors						));
@@ -264,4 +268,71 @@ void FSRadarMenu::addToContactSet()
 {
 	LLAvatarActions::addToContactSet(mUUIDs);
 }
+
+void FSRadarMenu::onSetRenderMode(const LLSD& userdata)
+{
+	LLVOAvatar::VisualMuteSettings render_setting;
+	U32 mode = userdata.asInteger();
+	switch (mode)
+	{
+		case 0:
+			render_setting = LLVOAvatar::AV_RENDER_NORMALLY;
+			break;
+		case 1:
+			render_setting = LLVOAvatar::AV_DO_NOT_RENDER;
+			break;
+		case 2:
+			render_setting = LLVOAvatar::AV_ALWAYS_RENDER;
+			break;
+		default:
+			LL_WARNS() << "Unknown value for visual mute settings: " << mode << LL_ENDL;
+			return;
+	}
+
+	bool needs_culling = false;
+	for (uuid_vec_t::const_iterator it = mUUIDs.begin(); it != mUUIDs.end(); ++it)
+	{
+		const LLUUID& avatar_id = *it;
+
+		LLVOAvatar *avatarp = dynamic_cast<LLVOAvatar*>(gObjectList.findObject(avatar_id));
+		if (avatarp)
+		{
+			avatarp->setVisualMuteSettings(render_setting);
+			needs_culling = true;
+		}
+		else
+		{
+			FSAvatarRenderPersistence::instance().setAvatarRenderSettings(avatar_id, render_setting);
+		}
+	}
+
+	if (needs_culling)
+	{
+		LLVOAvatar::cullAvatarsByPixelArea();
+	}
+}
+
+bool FSRadarMenu::checkSetRenderMode(const LLSD& userdata)
+{
+	LLVOAvatar::VisualMuteSettings render_setting;
+	U32 mode = userdata.asInteger();
+	switch (mode)
+	{
+		case 0:
+			render_setting = LLVOAvatar::AV_RENDER_NORMALLY;
+			break;
+		case 1:
+			render_setting = LLVOAvatar::AV_DO_NOT_RENDER;
+			break;
+		case 2:
+			render_setting = LLVOAvatar::AV_ALWAYS_RENDER;
+			break;
+		default:
+			LL_WARNS() << "Unknown value for visual mute settings: " << mode << LL_ENDL;
+			return false;
+	}
+
+	return FSAvatarRenderPersistence::instance().getAvatarRenderSettings(mUUIDs.front()) == render_setting;
+}
+
 } // namespace FSFloaterRadarMenu

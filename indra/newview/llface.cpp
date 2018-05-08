@@ -1045,17 +1045,22 @@ void LLFace::getPlanarProjectedParams(LLQuaternion* face_rot, LLVector3* face_po
 	}
 
 	const LLVolumeFace& vf = getViewerObject()->getVolume()->getVolumeFace(mTEOffset);
+
+	if( !vf.mNormals )
+	{
+		LL_WARNS( ) << "Volume face without normal vector (object id: " << getViewerObject()->getID().asString() << ")" << LL_ENDL;
+		return;
+	}
+
+
+	if( !vf.mTangents )
+	{
+		LL_WARNS() << "Volume face without tangent (object id: " << getViewerObject()->getID().asString() << ")" << LL_ENDL;
+		return;
+	}
+
 	const LLVector4a& normal4a = vf.mNormals[0];
 	const LLVector4a& tangent = vf.mTangents[0];
-
-	// <FS:ND> tangent is a reference, compiler will always assume it's valid and skip the check due to tangent==nullptr being undefined behaviour.
-
-	// if (!&tangent)
-	// {
-	// 	return;
-	// }
-
-	// </FS:ND>
 
 	LLVector4a binormal4a;
 	binormal4a.setCross3(normal4a, tangent);
