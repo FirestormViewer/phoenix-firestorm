@@ -42,9 +42,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2709f7a5cf499ea77481dd1fce796d61</string>
+              <string>99fe10fdec03a22d680de72bc8b5f85a</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201505150224-r74-linux-x64-201505150224-r74.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.181041840-linux64-181041840.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -660,9 +660,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2fa9e9e89a81ed2ed686a170681f6bbc</string>
+              <string>2d59bb6f4bd38a18d9250ff010a13b59</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/571/1225/dictionaries-1.500564-common-500564.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dictionaries-2.46203-common-46203.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>
@@ -714,9 +714,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6dded97d697c5ac9e4bd33c9ca8e3f9e</string>
+              <string>c01b1a180f6c12d00d359996ecd1cf52</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1080_3.3325.1750.gaabe4c4-linux64-180861548.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1080_3.3325.1750.gaabe4c4-linux64-181051505.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1276,11 +1276,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4aa53f9774195899efb9d14a0f6c4748</string>
+              <string>3bae1e9a188680a81c1d5b32571538b9</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.180872225-linux-180872225.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.180990859-linux-180990859.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1290,9 +1290,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c742c8b3903aadd79c3a6f3d3c09986d</string>
+              <string>acc1181cd31ef32c3724eda84ae4b580</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.180842253-linux64-180842253.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.180990827-linux64-180990827.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1852,9 +1852,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>724850830e01cdb6afb4eed9ce2ec6c5</string>
+              <string>275d45727849245f2ed147d60b905413</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.180841554-linux64-180841554.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.181041824-linux64-181041824.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2964,9 +2964,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>cc1aca5688b00878ae94a0ad71cb4f35</string>
+              <string>4a5591349005afac44a688e99517a9f3</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg-1.5.1.180871249-linux-180871249.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.5.1.180991818-linux-180991818.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2976,9 +2976,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6098e555296583336b02f1a78b41b93a</string>
+              <string>addb209bb56a8f16602a7222f119191d</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg-1.5.1.180841553-linux64-180841553.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.5.1.180991822-linux64-180991822.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3280,9 +3280,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>785c86999b56e1838cefb430f674cba7</string>
+              <string>6e7b0961d6489a1b3c3090eccfd6e80e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/oz-426-slvoice/rev/330003/arch/Linux/installer/slvoice-3.2.0002.10426.330003-linux-330003.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/slvoice-3.2.0002.10426.298329-linux-20160717.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3292,9 +3292,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>92b0ae08832bd0e99c34ef8f3e6346ad</string>
+              <string>6e7b0961d6489a1b3c3090eccfd6e80e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/613/1289/slvoice-3.2.0002.10426.500605-linux64-500605.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/slvoice-3.2.0002.10426.298329-linux-20160717.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

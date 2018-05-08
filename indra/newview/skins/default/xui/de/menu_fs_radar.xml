@@ -34,4 +34,9 @@
 	<menu_item_call label="Estate: Verbannen" name="estate_ban"/>
 	<menu_item_call label="Nicht anzeigen" name="derender"/>
 	<menu_item_call label="Nicht anzeigen &amp; Blacklist" name="derender_permanent"/>
+	<menu label="Anzeigeeinstellungen" name="render_settings">
+		<menu_item_check label="Normal darstellen" name="av_render_normal"/>
+		<menu_item_check label="Nicht darstellen" name="av_render_never"/>
+		<menu_item_check label="Komplett darstellen" name="av_render_always"/>
+	</menu>
 </context_menu>

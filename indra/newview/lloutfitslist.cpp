@@ -53,6 +53,9 @@
 #include "lltextbox.h"
 #include "lleconomy.h"
 
+#include "rlvactions.h"
+#include "rlvlocks.h"
+
 static bool is_tab_header_clicked(LLAccordionCtrlTab* tab, S32 y);
 
 static const LLOutfitTabNameComparator OUTFIT_TAB_NAME_COMPARATOR;
@@ -155,6 +158,7 @@ void LLOutfitsList::updateAddedCategory(LLUUID cat_id)
     LLAccordionCtrlTab* tab = LLUICtrlFactory::create<LLAccordionCtrlTab>(tab_params);
     if (!tab) return;
     LLWearableItemsList* wearable_list = LLUICtrlFactory::create<LLWearableItemsList>(tab_params.wearable_list);
+    wearable_list->setDoubleClickCallback(boost::bind(&LLOutfitsList::onDoubleClick, this, wearable_list)); // <FS:Ansariel> FIRE-22484: Double-click wear in outfits list
     wearable_list->setShape(tab->getLocalRect());
     tab->addChild(wearable_list);
 
@@ -263,6 +267,48 @@ void LLOutfitsList::arrange()
 	if (mAccordion)
 	{
 		mAccordion->arrange();
+	}
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> FIRE-22484: Double-click wear in outfits list
+void LLOutfitsList::onDoubleClick(LLWearableItemsList* list)
+{
+	if (!list)
+	{
+		return;
+	}
+
+	LLUUID selected_item_id = list->getSelectedUUID();
+	if (selected_item_id.notNull())
+	{
+		uuid_vec_t ids;
+		ids.push_back(selected_item_id);
+		LLViewerInventoryItem* item = gInventory.getItem(selected_item_id);
+
+		if (get_is_item_worn(selected_item_id))
+		{
+			if ((item->getType() == LLAssetType::AT_CLOTHING && (!RlvActions::isRlvEnabled() || gRlvWearableLocks.canRemove(item))) ||
+			    ((item->getType() == LLAssetType::AT_OBJECT) && (!RlvActions::isRlvEnabled() || gRlvAttachmentLocks.canDetach(item))))
+			{
+				LLAppearanceMgr::instance().removeItemsFromAvatar(ids);
+			}
+		}
+		else
+		{
+			if (item->getType() == LLAssetType::AT_BODYPART && (!RlvActions::isRlvEnabled() || (gRlvWearableLocks.canWear(item) & RLV_WEAR_REPLACE) == RLV_WEAR_REPLACE))
+			{
+				wear_multiple(ids, true);
+			}
+			else if (item->getType() == LLAssetType::AT_CLOTHING && LLAppearanceMgr::instance().canAddWearables(ids) && (!RlvActions::isRlvEnabled() || (gRlvWearableLocks.canWear(item) & RLV_WEAR_ADD) == RLV_WEAR_ADD))
+			{
+				wear_multiple(ids, false);
+			}
+			else if (item->getType() == LLAssetType::AT_OBJECT && LLAppearanceMgr::instance().canAddWearables(ids) && (!RlvActions::isRlvEnabled() || (gRlvAttachmentLocks.canAttach(item) & RLV_WEAR_ADD) == RLV_WEAR_ADD))
+			{
+				wear_multiple(ids, false);
+			}
+		}
 	}
 }
 // </FS:Ansariel>

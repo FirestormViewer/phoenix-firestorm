@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="Ban duration" title="Czas trwania bana" width="220">
+	<text name="duration_textbox" width="110">
+		Czas trwania bana:
+	</text>
+	<spinner name="ban_time" tool_tip="Ile czasu ma trwać ban, 0 banuje na zawsze"/>
+	<text name="hours_textbox">
+		godzin.
+	</text>
+	<button label="Anuluj" name="BanCancelButton" />
+</floater>

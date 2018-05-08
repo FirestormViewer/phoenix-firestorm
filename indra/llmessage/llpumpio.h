@@ -394,8 +394,8 @@ protected:
 	S32 mCurrentPoolReallocCount;
 
 #if LL_THREADS_APR
-	apr_thread_mutex_t* mChainsMutex;
-	apr_thread_mutex_t* mCallbackMutex;
+	std::mutex* mChainsMutex;
+	std::mutex* mCallbackMutex;
 #else
 	int* mChainsMutex;
 	int* mCallbackMutex;
