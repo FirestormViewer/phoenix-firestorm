@@ -36,15 +36,22 @@
 #include <boost/noncopyable.hpp>
 #include "llwin32headerslean.h"
 #include "apr_thread_proc.h"
-#include "apr_thread_mutex.h"
+
 #include "apr_getopt.h"
 #include "apr_signal.h"
-#include "apr_atomic.h"
+#include <atomic>
+
+#if LL_WINDOWS
+#pragma warning(disable:4265)
+#endif
+
+#include <mutex>
+
+#if LL_WINDOWS
+#pragma warning(default:4265)
+#endif
 
 #include "llstring.h"
-
-extern LL_COMMON_API apr_thread_mutex_t* gLogMutexp;
-extern apr_thread_mutex_t* gCallStacksLogMutexp;
 
 struct apr_dso_handle_t;
 /**
@@ -120,7 +127,7 @@ private:
 	S32 mNumActiveRef ; //number of active pointers pointing to the apr_pool.
 	S32 mNumTotalRef ;  //number of total pointers pointing to the apr_pool since last creating.  
 
-	apr_thread_mutex_t *mMutexp;
+	std::mutex *mMutexp;
 	apr_pool_t         *mMutexPool;
 } ;
 
@@ -142,7 +149,7 @@ public:
 	 * @param mutex An allocated APR mutex. If you pass in NULL,
 	 * this wrapper will not lock.
 	 */
-	LLScopedLock(apr_thread_mutex_t* mutex);
+	LLScopedLock( std::mutex* mutex );
 
 	/**
 	 * @brief Destructor which unlocks the mutex if still locked.
@@ -161,35 +168,43 @@ public:
 
 protected:
 	bool mLocked;
-	apr_thread_mutex_t* mMutex;
+	std::mutex* mMutex;
 };
 
-template <typename Type> class LLAtomic32
+template <typename Type, typename AtomicType = std::atomic< Type > > class LLAtomicBase
 {
 public:
-	LLAtomic32<Type>() {};
-	LLAtomic32<Type>(Type x) {apr_atomic_set32(&mData, apr_uint32_t(x)); };
-	~LLAtomic32<Type>() {};
+	LLAtomicBase() {};
+	LLAtomicBase( Type x ) { mData.store( x ); };
+	~LLAtomicBase() {};
 
-	operator const Type() { apr_uint32_t data = apr_atomic_read32(&mData); return Type(data); }
+	operator const Type() { return mData; }
 	
-	Type	CurrentValue() const { apr_uint32_t data = apr_atomic_read32(const_cast< volatile apr_uint32_t* >(&mData)); return Type(data); }
+	Type	CurrentValue() const { return mData; }
 
-	Type operator =(const Type& x) { apr_atomic_set32(&mData, apr_uint32_t(x)); return Type(mData); }
-	void operator -=(Type x) { apr_atomic_sub32(&mData, apr_uint32_t(x)); }
-	void operator +=(Type x) { apr_atomic_add32(&mData, apr_uint32_t(x)); }
-	Type operator ++(int) { return apr_atomic_inc32(&mData); } // Type++
-	Type operator --(int) { return apr_atomic_dec32(&mData); } // approximately --Type (0 if final is 0, non-zero otherwise)
+	Type operator =( Type x) { mData.store( x ); return mData; }
+	void operator -=(Type x) { mData -= x; }
+	void operator +=(Type x) { mData += x; }
+	Type operator ++(int) { return mData++; }
+	Type operator --(int) { return mData--; }
 
-	Type operator ++() { return apr_atomic_inc32(&mData); } // Type++
-	Type operator --() { return apr_atomic_dec32(&mData); } // approximately --Type (0 if final is 0, non-zero otherwise)
+	Type operator ++() { return ++mData; }
+	Type operator --() { return --mData; }
 	
 private:
-	volatile apr_uint32_t mData;
+	AtomicType mData;
 };
 
-typedef LLAtomic32<U32> LLAtomicU32;
-typedef LLAtomic32<S32> LLAtomicS32;
+// ND: Typedefs for specialized versions. Using std::atomic_(u)int32_t to get the optimzed implementation.
+#ifdef LL_WINDOWS
+typedef LLAtomicBase<U32, std::atomic_uint32_t> LLAtomicU32;
+typedef LLAtomicBase<S32, std::atomic_int32_t> LLAtomicS32;
+#else
+typedef LLAtomicBase<U32, std::atomic_uint> LLAtomicU32;
+typedef LLAtomicBase<S32, std::atomic_int> LLAtomicS32;
+#endif
+
+typedef LLAtomicBase<bool, std::atomic_bool> LLAtomicBool;
 
 // File IO convenience functions.
 // Returns NULL if the file fails to open, sets *sizep to file size if not NULL

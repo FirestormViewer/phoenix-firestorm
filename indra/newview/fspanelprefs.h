@@ -58,6 +58,8 @@ private:
 
 	void onDADEmbeddedItem(const LLUUID& item_id);
 
+	void onResetDefaultFolders();
+
 	FSEmbeddedItemDropTarget*	mInvDropTarget;
 	std::string					mEmbeddedItem;
 };

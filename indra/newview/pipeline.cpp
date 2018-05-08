@@ -3847,7 +3847,7 @@ void renderMOAPBeacons(LLDrawable* drawablep)
 	U8 tecount=vobj->getNumTEs();
 	for(int x=0;x<tecount;x++)
 	{
-		if(vobj->getTE(x)->hasMedia())
+		if(vobj->getTEref(x).hasMedia())
 		{
 			beacon=true;
 			break;

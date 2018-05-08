@@ -273,6 +273,7 @@
 			Um einen Zielordner zu ändern, im Inventar auf den gewünschten Ordner rechts-klicken und
 „Als Standard nutzen für“ auswählen.
 		</text>
+		<button name="reset_default_folders" label="Standard-Ordner zurücksetzen"/>
 	</panel>
 </tab_container>
 </panel>

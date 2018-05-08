@@ -1122,7 +1122,7 @@ LLPrivateMemoryPool::LLPrivateMemoryPool(S32 type, U32 max_pool_size) :
 {
 	if(type == STATIC_THREADED || type == VOLATILE_THREADED)
 	{
-		mMutexp = new LLMutex(NULL) ;
+		mMutexp = new LLMutex() ;
 	}
 
 	for(S32 i = 0 ; i < SUPER_ALLOCATION ; i++)

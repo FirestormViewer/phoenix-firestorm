@@ -628,6 +628,7 @@ class WindowsManifest(ViewerManifest):
 
             # For textures
             self.path("openjpeg.dll")
+            self.path("openjp2.dll") # <FS:ND/> OpenJPEG2 if used
 
             # These need to be installed as a SxS assembly, currently a 'private' assembly.
             # See http://msdn.microsoft.com/en-us/library/ms235291(VS.80).aspx
@@ -2145,8 +2146,8 @@ class LinuxManifest(ViewerManifest):
                 # --numeric-owner hides the username of the builder for
                 # security etc.
                 self.run_command(['tar', '-C', self.get_build_prefix(),
-                                  '--numeric-owner', self.fs_linux_tar_excludes(), '-cjf',
-                                 tempname + '.tar.bz2', installer_name])
+                                  '--numeric-owner', self.fs_linux_tar_excludes(), '-caf',
+                                 tempname + '.tar.xz', installer_name])
             else:
                 print "Skipping %s.tar.xz for non-Release build (%s)" % \
                       (installer_name, self.args['buildtype'])
