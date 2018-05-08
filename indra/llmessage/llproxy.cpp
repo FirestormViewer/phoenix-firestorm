@@ -48,7 +48,6 @@ static void tcp_close_channel(LLSocket::ptr_t* handle_ptr); // Close an open TCP
 
 LLProxy::LLProxy():
 		mHTTPProxyEnabled(false),
-		mProxyMutex(NULL),
 		mUDPProxy(),
 		mTCPProxy(),
 		mHTTPProxy(),

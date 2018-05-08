@@ -47,6 +47,8 @@ private:
 	void teleportToAvatar();
 	void onTrackAvatarMenuItemClick();
 	void addToContactSet();
+	void onSetRenderMode(const LLSD& userdata);
+	bool checkSetRenderMode(const LLSD& userdata);
 };
 
 extern FSRadarMenu gFSRadarMenu;
