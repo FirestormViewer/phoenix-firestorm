@@ -47,8 +47,10 @@
 #include "llsdserialize.h"
 #include "llclipboard.h"
 // [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+#include "rlvactions.h"
 #include "rlvcommon.h"
 #include "rlvhandler.h"
+#include "rlvlocks.h"
 // [/RLVa:KB]
 #include "lltextbox.h"
 #include "llresmgr.h"
@@ -293,10 +295,12 @@ BOOL LLPanelWearing::postBuild()
 
 	mCOFItemsList = getChild<LLWearableItemsList>("cof_items_list");
 	mCOFItemsList->setRightMouseDownCallback(boost::bind(&LLPanelWearing::onWearableItemsListRightClick, this, _1, _2, _3));
+	mCOFItemsList->setDoubleClickCallback(boost::bind(&LLPanelWearing::onDoubleClick, this)); // <FS:Ansariel> FIRE-22484: Double-click wear in outfits list
 
 	mTempItemsList = getChild<LLScrollListCtrl>("temp_attachments_list");
 	mTempItemsList->setFgUnselectedColor(LLColor4::white);
 	mTempItemsList->setRightMouseDownCallback(boost::bind(&LLPanelWearing::onTempAttachmentsListRightClick, this, _1, _2, _3));
+	mTempItemsList->setDoubleClickCallback(boost::bind(&LLPanelWearing::onRemoveAttachment, this)); // <FS:Ansariel> FIRE-22484: Double-click wear in outfits list
 
 	// <FS:Ansariel> Show avatar complexity in appearance floater
 	mAvatarComplexityLabel = getChild<LLTextBox>("avatar_complexity_label");
@@ -664,4 +668,24 @@ void LLPanelWearing::updateAvatarComplexity(U32 complexity, const std::map<LLUUI
 	updateAttachmentsList();
 }
 // </FS:Ansariel>
+
+// <FS:Ansariel> FIRE-22484: Double-click wear in outfits list
+void LLPanelWearing::onDoubleClick()
+{
+	LLUUID selected_item_id = mCOFItemsList->getSelectedUUID();
+	if (selected_item_id.notNull())
+	{
+		uuid_vec_t ids;
+		ids.push_back(selected_item_id);
+		LLViewerInventoryItem* item = gInventory.getItem(selected_item_id);
+
+		if ((item->getType() == LLAssetType::AT_CLOTHING && (!RlvActions::isRlvEnabled() || gRlvWearableLocks.canRemove(item))) ||
+			((item->getType() == LLAssetType::AT_OBJECT) && (!RlvActions::isRlvEnabled() || gRlvAttachmentLocks.canDetach(item))))
+		{
+			LLAppearanceMgr::instance().removeItemsFromAvatar(ids);
+		}
+	}
+}
+// </FS:Ansariel>
+
 // EOF

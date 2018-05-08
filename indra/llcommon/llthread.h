@@ -34,6 +34,8 @@
 #include "llmutex.h"
 #include "llrefcount.h"
 
+#include <thread>
+
 LL_COMMON_API void assert_main_thread();
 
 namespace LLTrace
@@ -86,7 +88,6 @@ public:
     // this kicks off the apr thread
     void start(void);
 
-    apr_pool_t *getAPRPool() { return mAPRPoolp; }
     LLVolatileAPRPool* getLocalAPRFilePool() { return mLocalAPRFilePoolp ; }
 
     U32 getID() const { return mID; }
@@ -97,19 +98,16 @@ public:
     static void registerThreadID();
     
 private:
-    BOOL                mPaused;
+    bool                mPaused;
     
-    // static function passed to APR thread creation routine
-    static void *APR_THREAD_FUNC staticRun(struct apr_thread_t *apr_threadp, void *datap);
+	void threadRun(  );
 
 protected:
     std::string         mName;
     class LLCondition*  mRunCondition;
     LLMutex*            mDataLock;
 
-    apr_thread_t        *mAPRThreadp;
-    apr_pool_t          *mAPRPoolp;
-    BOOL                mIsLocalPool;
+    std::thread         *mThreadp;
     EThreadStatus       mStatus;
     U32                 mID;
     LLTrace::ThreadRecorder* mRecorder;

@@ -214,7 +214,7 @@ void LLVolumeMgr::useMutex()
 { 
 	if (!mDataMutex)
 	{
-		mDataMutex = new LLMutex(gAPRPoolp);
+		mDataMutex = new LLMutex();
 	}
 }
 
