@@ -36,8 +36,6 @@
 
 #include "llsd.h"
 
-#include "nd/ndintrin.h"
-
 class LLIOPipe;
 class LLPumpIO;
 class LLBufferArray;

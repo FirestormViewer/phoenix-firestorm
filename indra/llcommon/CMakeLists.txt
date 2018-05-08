@@ -256,18 +256,12 @@ set(llcommon_HEADER_FILES
 
 SET( llcommon_ND_SOURCE_FILES
 	 nd/ndexceptions.cpp
-	 nd/ndintrin.cpp
 	 nd/ndlogthrottle.cpp
 	 nd/ndetw.cpp
 	 )
 SET(  llcommon_ND_HEADER_FILES 
-	  nd/ndboolswitch.h
 	  nd/ndexceptions.h
-	  nd/ndintrin.h
-	  nd/ndlocks.h
 	  nd/ndlogthrottle.h
-	  nd/ndobjectpool.h
-	  nd/ndstlallocator.h
 	  nd/ndetw.h
 	  )
 

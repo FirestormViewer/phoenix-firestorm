@@ -1992,7 +1992,7 @@ static void handle_click_action_open_media(LLPointer<LLViewerObject> objectp)
 	if( face < 0 || face >= objectp->getNumTEs() ) return;
 		
 	// is media playing on this face?
-	if (LLViewerMedia::getMediaImplFromTextureID(objectp->getTE(face)->getID()) != NULL)
+	if (LLViewerMedia::getMediaImplFromTextureID(objectp->getTEref(face).getID()) != NULL)
 	{
 		handle_click_action_play();
 		return;

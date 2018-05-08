@@ -1163,7 +1163,7 @@ bool LLModel::loadModel(std::istream& is)
 
 	const S32 MODEL_LODS = 5;
 
-	S32 lod = llclamp((S32) mDetail, 0, MODEL_LODS);
+	S32 lod = llclamp((S32) mDetail, 0, MODEL_LODS-1);
 
 	if (header[lod_name[lod]]["offset"].asInteger() == -1 || 
 		header[lod_name[lod]]["size"].asInteger() == 0 )

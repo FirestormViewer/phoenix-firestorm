@@ -1,4 +1,4 @@
-/** 
+﻿/** 
  * @File llvoavatar.cpp
  * @brief Implementation of LLVOAvatar class which is a derivation of LLViewerObject
  *
@@ -9069,7 +9069,7 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 			// <FS:Ansariel> [Legacy Bake]
 			//LL_DEBUGS("Avatar") << avString() << " baked_index " << (S32) baked_index << " using texture id "
 			LL_DEBUGS("Avatar") << avString() << "sb " << (S32) isUsingServerBakes() << " baked_index " << (S32) baked_index << " using texture id "
-								<< getTE(mBakedTextureDatas[baked_index].mTextureIndex)->getID() << LL_ENDL;
+								<< getTEref(mBakedTextureDatas[baked_index].mTextureIndex).getID() << LL_ENDL;
 		}
 	}
 

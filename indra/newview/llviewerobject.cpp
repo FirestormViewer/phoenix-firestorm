@@ -4556,19 +4556,19 @@ void LLViewerObject::setTE(const U8 te, const LLTextureEntry &texture_entry)
 		
 	LLPrimitive::setTE(te, texture_entry);
 
-	const LLUUID& image_id = getTE(te)->getID();
+	const LLUUID& image_id = getTEref(te).getID();
 	LLViewerTexture* bakedTexture = getBakedTextureForMagicId(image_id);
 	mTEImages[te] = bakedTexture ? bakedTexture : LLViewerTextureManager::getFetchedTexture(image_id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
 
 	
 	updateAvatarMeshVisibility(image_id,old_image_id);
-
-	if (getTE(te)->getMaterialParams().notNull())
+	
+	if (getTEref(te).getMaterialParams().notNull())
 	{
-		const LLUUID& norm_id = getTE(te)->getMaterialParams()->getNormalID();
+		const LLUUID& norm_id = getTEref(te).getMaterialParams()->getNormalID();
 		mTENormalMaps[te] = LLViewerTextureManager::getFetchedTexture(norm_id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
 
-		const LLUUID& spec_id = getTE(te)->getMaterialParams()->getSpecularID();
+		const LLUUID& spec_id = getTEref(te).getMaterialParams()->getSpecularID();
 		mTESpecularMaps[te] = LLViewerTextureManager::getFetchedTexture(spec_id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
 	}
 }
@@ -4611,7 +4611,7 @@ S32 LLViewerObject::setTETextureCore(const U8 te, LLViewerTexture *image)
 	LLUUID old_image_id = getTE(te)->getID();
 	const LLUUID& uuid = image->getID();
 	S32 retval = 0;
-	if (uuid != getTE(te)->getID() ||
+	if (uuid != getTEref(te).getID() ||
 		uuid == LLUUID::null)
 	{
 		retval = LLPrimitive::setTETexture(te, uuid);
@@ -4631,7 +4631,7 @@ S32 LLViewerObject::setTENormalMapCore(const U8 te, LLViewerTexture *image)
 {
 	S32 retval = TEM_CHANGE_TEXTURE;
 	const LLUUID& uuid = image ? image->getID() : LLUUID::null;
-	if (uuid != getTE(te)->getID() ||
+	if( (getTE( te ) && uuid != getTE( te )->getID()) ||
 		uuid == LLUUID::null)
 	{
 		LLTextureEntry* tep = getTE(te);
@@ -4654,7 +4654,7 @@ S32 LLViewerObject::setTESpecularMapCore(const U8 te, LLViewerTexture *image)
 {
 	S32 retval = TEM_CHANGE_TEXTURE;
 	const LLUUID& uuid = image ? image->getID() : LLUUID::null;
-	if (uuid != getTE(te)->getID() ||
+	if ( (getTE(te) && uuid != getTE(te)->getID()) ||
 		uuid == LLUUID::null)
 	{
 		LLTextureEntry* tep = getTE(te);

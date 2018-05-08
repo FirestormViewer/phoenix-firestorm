@@ -239,7 +239,7 @@ elseif(LINUX)
         ${EXPAT_COPY}
         #libfreetype.so.6.6.2
         #libfreetype.so.6
-        libGLOD.so
+        #libGLOD.so
         libgmodule-2.0.so
         libgobject-2.0.so
         libhunspell-1.3.so.0.0.0
