@@ -150,7 +150,7 @@ protected:
 				attachments_selected = true;
 			}
 // [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
-			if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(item)) )
+			if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(*it)) )
 			{
 				rlv_locked_count++;
 			}
