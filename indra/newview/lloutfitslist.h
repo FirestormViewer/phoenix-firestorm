@@ -335,7 +335,7 @@ private:
 	static void onOutfitRename(const LLSD& notification, const LLSD& response);
 
 	// <FS:Ansariel> FIRE-22484: Double-click wear in outfits list
-	void onDoubleClick(LLWearableItemsList* ctrl);
+	void onDoubleClick(LLWearableItemsList* list);
 
 	//LLInventoryCategoriesObserver* 	mCategoriesObserver;
 
