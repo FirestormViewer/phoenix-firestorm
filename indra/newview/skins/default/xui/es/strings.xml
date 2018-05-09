@@ -67,8 +67,8 @@ Tarjeta gráfica: [GRAPHICS_CARD]
 Versión de libcurl: [LIBCURL_VERSION]
 Versión de J2C Decoder: [J2C_VERSION]
 Versión de Audio Driver: [AUDIO_DRIVER_VERSION]
-Versión de CEF: [LIBCEF_VERSION]
-Versión de LibVLC: [LIBVLC_VERSION]
+[LIBCEF_VERSION] 
+Versión LibVLC: [LIBVLC_VERSION] 
 Versión del servidor de voz: [VOICE_VERSION]
 	</string>
 	<string name="AboutTraffic">
@@ -1476,6 +1476,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="InventoryNoMatchingItems">
 		¿No encuentras lo que buscas? Prueba con la [secondlife:///app/search/all/[SEARCH_TERM] Búsqueda].
+	</string>
+	<string name="InventoryNoMatchingRecentItems">
+		¿No encuentras lo que buscas? Intenta [secondlife:///app/inventory/filters Show filters].
 	</string>
 	<string name="PlacesNoMatchingItems">
 		¿No encuentras lo que buscas? Prueba con la [secondlife:///app/search/places/[SEARCH_TERM] Búsqueda].
