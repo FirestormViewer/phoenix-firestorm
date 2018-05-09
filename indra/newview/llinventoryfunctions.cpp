@@ -434,10 +434,11 @@ void copy_inventory_category(LLInventoryModel* model,
 		LLInventoryItem* item = *iter;
         LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(update_folder_cb, new_cat_uuid));
 
-        // <FS:Ansariel> FIRE-21719: Copy-pasting a folder doesn't copy contained links
-        //if (!item->getPermissions().allowOperationBy(PERM_COPY, gAgent.getID(), gAgent.getGroupID()))
-        if (!item->getIsLinkType() && !item->getPermissions().allowOperationBy(PERM_COPY, gAgent.getID(), gAgent.getGroupID()))
-        // </FS:Ansariel>
+        if (item->getIsLinkType())
+        {
+            link_inventory_object(new_cat_uuid, item->getLinkedUUID(), cb);
+        }
+        else if(!item->getPermissions().allowOperationBy(PERM_COPY, gAgent.getID(), gAgent.getGroupID()))
         {
             // If the item is nocopy, we do nothing or, optionally, move it
             if (move_no_copy_items)
@@ -449,12 +450,6 @@ void copy_inventory_category(LLInventoryModel* model,
             // Decrement the count in root_id since that one item won't be copied over
             LLMarketplaceData::instance().decrementValidationWaiting(root_id);
         }
-        // <FS:Ansariel> FIRE-21719: Copy-pasting a folder doesn't copy contained links
-        else if (item->getIsLinkType())
-        {
-            link_inventory_object(new_cat_uuid, item->getLinkedUUID(), cb);
-        }
-        // </FS:Ansariel>
         else
         {
             copy_inventory_item(

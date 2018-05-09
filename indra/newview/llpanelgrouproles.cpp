@@ -479,20 +479,12 @@ BOOL LLPanelGroupSubTab::postBuild()
 {
 	// Hook up the search widgets.
 	bool recurse = true;
-	// <FS:Ansariel> Does not exist on all tabs!
-	//mSearchEditor = getChild<LLFilterEditor>("filter_input", recurse);
 
-	//if (!mSearchEditor) 
-	//	return FALSE;
-
-	//mSearchEditor->setCommitCallback(boost::bind(&LLPanelGroupSubTab::setSearchFilter, this, _2));
 	mSearchEditor = findChild<LLFilterEditor>("filter_input", recurse);
-
-	if (mSearchEditor)
+	if (mSearchEditor) // SubTab doesn't implement this, only some of derived classes
 	{
 		mSearchEditor->setCommitCallback(boost::bind(&LLPanelGroupSubTab::setSearchFilter, this, _2));
 	}
-	// </FS:Ansariel>
 
 	return LLPanelGroupTab::postBuild();
 }
@@ -843,12 +835,8 @@ BOOL LLPanelGroupMembersSubTab::postBuildSubTab(LLView* root)
 
 	// Look recursively from the parent to find all our widgets.
 	bool recurse = true;
-	// <FS:Ansariel> Might not exist
-	//mHeader = parent->getChild<LLPanel>("members_header", recurse);
-	//mFooter = parent->getChild<LLPanel>("members_footer", recurse);
 	mHeader = parent->findChild<LLPanel>("members_header", recurse);
 	mFooter = parent->findChild<LLPanel>("members_footer", recurse);
-	// </FS:Ansariel>
 
 	mMembersList 		= parent->getChild<LLNameListCtrl>("member_list", recurse);
 	mAssignedRolesList	= parent->getChild<LLScrollListCtrl>("member_assigned_roles", recurse);
@@ -2086,12 +2074,8 @@ BOOL LLPanelGroupRolesSubTab::postBuildSubTab(LLView* root)
 
 	// Look recursively from the parent to find all our widgets.
 	bool recurse = true;
-	// <FS:Ansariel> Might not exist
-	//mHeader = parent->getChild<LLPanel>("roles_header", recurse);
-	//mFooter = parent->getChild<LLPanel>("roles_footer", recurse);
 	mHeader = parent->findChild<LLPanel>("roles_header", recurse);
 	mFooter = parent->findChild<LLPanel>("roles_footer", recurse);
-	// </FS:Ansariel>
 
 
 	mRolesList 		= parent->getChild<LLScrollListCtrl>("role_list", recurse);
@@ -2899,12 +2883,8 @@ BOOL LLPanelGroupActionsSubTab::postBuildSubTab(LLView* root)
 
 	// Look recursively from the parent to find all our widgets.
 	bool recurse = true;
-	// <FS:Ansariel> Might not exist
-	//mHeader = parent->getChild<LLPanel>("actions_header", recurse);
-	//mFooter = parent->getChild<LLPanel>("actions_footer", recurse);
 	mHeader = parent->findChild<LLPanel>("actions_header", recurse);
 	mFooter = parent->findChild<LLPanel>("actions_footer", recurse);
-	// </FS:Ansariel>
 
 	mActionDescription = parent->getChild<LLTextEditor>("action_description", recurse);
 
@@ -3110,14 +3090,10 @@ BOOL LLPanelGroupBanListSubTab::postBuildSubTab(LLView* root)
 
 	// Look recursively from the parent to find all our widgets.
 	bool recurse = true;
-	
-	// <FS:Ansariel> Might not exist
-	//mHeader	= parent->getChild<LLPanel>("banlist_header", recurse);
-	//mFooter	= parent->getChild<LLPanel>("banlist_footer", recurse);
-	mHeader	= parent->findChild<LLPanel>("banlist_header", recurse);
-	mFooter	= parent->findChild<LLPanel>("banlist_footer", recurse);
-	// </FS:Ansariel>
-	
+
+	mHeader = parent->findChild<LLPanel>("banlist_header", recurse);
+	mFooter = parent->findChild<LLPanel>("banlist_footer", recurse);
+
 	mBanList = parent->getChild<LLNameListCtrl>("ban_list", recurse);
 	
 	mCreateBanButton		= parent->getChild<LLButton>("ban_create", recurse);
