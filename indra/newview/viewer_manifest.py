@@ -1865,7 +1865,7 @@ class DarwinManifest(ViewerManifest):
         # get rid of the temp file
         self.package_file = finalname
         self.remove(sparsename)
-
+        self.fs_save_osx_symbols()
 
 class Darwin_i386_Manifest(DarwinManifest):
     address_size = 32

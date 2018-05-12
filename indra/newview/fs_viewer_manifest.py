@@ -183,3 +183,17 @@ class FSViewerManifest:
         self.run_command_shell( "sudo -n chown root:root %s || exit 0" % ( filename) )
         self.run_command_shell( "sudo -n chmod 4755 %s || exit 0" % ( filename) )
 
+    def fs_save_osx_symbols( self ):
+        if (os.path.exists("%s/firestorm-symbols-darwin-%d.tar.bz2" % (self.args['configuration'].lower(),
+                                                                       self.address_size))):
+            # Rename to add version numbers
+            sName = "%s/Phoenix_%s_%s_%s_symbols-darwin-%d.tar.bz2" % (self.args['configuration'].lower(),
+                                                                       self.fs_channel_legacy_oneword(),
+                                                                       '-'.join( self.args['version'] ),
+                                                                       self.args['viewer_flavor'],
+                                                                       self.address_size)
+
+            if os.path.exists( sName ):
+                os.unlink( sName )
+
+            os.rename("%s/firestorm-symbols-darwin-%d.tar.bz2" % (self.args['configuration'].lower(), self.address_size), sName )
