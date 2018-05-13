@@ -103,34 +103,16 @@ class FSViewerManifest:
 
         self.run_command_shell( "cd %s && objcopy --add-gnu-debuglink=%s %s" % (debugDir, debugName, fileBin) )
         
-        if( os.path.exists( "%s/firestorm-symbols-linux-%d.tar.bz2" % (self.args['configuration'].lower(), self.address_size)) ):
-            symName = "%s/Phoenix_%s_%s_%s_symbols-linux-%d.tar.bz2" % ( self.args['configuration'].lower(), self.fs_channel_legacy_oneword(),
-                                                                      '-'.join( self.args['version'] ), self.args['viewer_flavor'], self.address_size )
-            print( "Saving symbols %s" % symName )
-            os.rename("%s/firestorm-symbols-linux-%d.tar.bz2" % (self.args['configuration'].lower(), self.address_size), symName )
+        self.fs_save_symbols("linux")
 
     def fs_linux_tar_excludes(self):
         installer_name_components = ['Phoenix',self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
         installer_name = "_".join(installer_name_components)
         return "--exclude=%s/bin/.debug" % installer_name
 
-    def fs_save_windows_symbols(self, substitution_strings):
-        #AO: Try to package up symbols
-        # New Method, for reading cross platform stack traces on a linux/mac host
-        if (os.path.exists("%s/firestorm-symbols-windows-%d.tar.bz2" % (self.args['configuration'].lower(),
-                                                                        self.address_size))):
-            # Rename to add version numbers
-            sName = "%s/Phoenix_%s_%s_%s_symbols-windows-%d.tar.bz2" % (self.args['configuration'].lower(),
-                                                                     self.fs_channel_legacy_oneword(),
-                                                                     substitution_strings['version_dashes'],
-                                                                     self.args['viewer_flavor'],
-                                                                     self.address_size)
+    def fs_save_windows_symbols(self):
+        self.fs_save_symbols("windows")
 
-            if os.path.exists( sName ):
-                os.unlink( sName )
-
-            os.rename("%s/firestorm-symbols-windows-%d.tar.bz2" % (self.args['configuration'].lower(), self.address_size), sName )
-        
         pdbName = "firestorm-bin.pdb"
         try:
             subprocess.check_call( [ "pdbcopy.exe" ,
@@ -147,7 +129,7 @@ class FSViewerManifest:
         # Python3 natively supports tar+xz via mode 'w:xz'. But we're stuck with Python2 for now.
         symbolTar = tarfile.TarFile("%s/Phoenix_%s_%s_%s_pdbsymbols-windows-%d.tar" % (self.args['configuration'].lower(),
                                                                                     self.fs_channel_legacy_oneword(),
-                                                                                    substitution_strings['version_dashes'],
+                                                                                    '-'.join(self.args['version']),
                                                                                     self.args['viewer_flavor'],
                                                                                     self.address_size),
                                                                                     'w')
@@ -184,16 +166,21 @@ class FSViewerManifest:
         self.run_command_shell( "sudo -n chmod 4755 %s || exit 0" % ( filename) )
 
     def fs_save_osx_symbols( self ):
-        if (os.path.exists("%s/firestorm-symbols-darwin-%d.tar.bz2" % (self.args['configuration'].lower(),
+        self.fs_save_symbols("darwin")
+
+    def fs_save_symbols(self, osname):
+        if (os.path.exists("%s/firestorm-symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(),
+                                                                       osname,
                                                                        self.address_size))):
             # Rename to add version numbers
-            sName = "%s/Phoenix_%s_%s_%s_symbols-darwin-%d.tar.bz2" % (self.args['configuration'].lower(),
+            sName = "%s/Phoenix_%s_%s_%s_symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(),
                                                                        self.fs_channel_legacy_oneword(),
                                                                        '-'.join( self.args['version'] ),
                                                                        self.args['viewer_flavor'],
+                                                                       osname,
                                                                        self.address_size)
 
             if os.path.exists( sName ):
                 os.unlink( sName )
 
-            os.rename("%s/firestorm-symbols-darwin-%d.tar.bz2" % (self.args['configuration'].lower(), self.address_size), sName )
+            os.rename("%s/firestorm-symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(), osname, self.address_size), sName)
