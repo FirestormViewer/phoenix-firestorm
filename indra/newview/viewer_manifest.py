@@ -956,8 +956,8 @@ class WindowsManifest(ViewerManifest):
             print >> sys.stderr, "Maximum nsis attempts exceeded; giving up"
             raise
 
-        self.fs_sign_win_installer( substitution_strings ) # <FS:ND/> Sign files, step two. Sign installer.
-        self.fs_save_windows_symbols( substitution_strings )
+        self.fs_sign_win_installer(substitution_strings) # <FS:ND/> Sign files, step two. Sign installer.
+        self.fs_save_windows_symbols()
 
         self.created_path(self.dst_path_of(installer_file))
         self.package_file = installer_file
@@ -1866,7 +1866,7 @@ class DarwinManifest(ViewerManifest):
         # get rid of the temp file
         self.package_file = finalname
         self.remove(sparsename)
-
+        self.fs_save_osx_symbols()
 
 class Darwin_i386_Manifest(DarwinManifest):
     address_size = 32

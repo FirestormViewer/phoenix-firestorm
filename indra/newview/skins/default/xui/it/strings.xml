@@ -26,7 +26,7 @@
 		Inizializzazione grafica non riuscita. Aggiorna il driver della scheda grafica!
 	</string>
 	<string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit) ([CHANNEL])
+		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]bit)
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="BuildConfig">
@@ -56,11 +56,28 @@ Scheda grafica: [GRAPHICS_CARD]
 		Versione OpenGL: [OPENGL_VERSION]
 	</string>
 	<string name="AboutSettings">
-Versione libcurl: [LIBCURL_VERSION]
-Versione J2C Decoder: [J2C_VERSION]
-Versione Driver audio: [AUDIO_DRIVER_VERSION]
+		Modalità impostata: [MODE]
+Viewer Skin: [SKIN] ([THEME])
+Dimensione finestra: [WINDOW_WIDTH] x [WINDOW_HEIGHT] px
+Carattere utilizzato: [FONT] ([FONT_SCREEN_DPI] dpi)
+Regolazione dimensione carattere: [FONT_SIZE] pt
+Scalabilità dell'interfaccia utente: [UI_SCALE_FACTOR]
+Distanza di Visuale: [DRAW_DISTANCE] m
+Larghezza di banda: [BANDWIDTH] kbit / s
+Fattore LOD: [LOD]
+Qualità di rendering: [RENDERQUALITY]
+Ombre Attive: [ALMSTATUS]
+Memoria texture: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+Tempo di creazione VFS (cache) (UTC): [VFS_DATE]
+	</string>
+	<string name="AboutLibs">
+API RestrainedLove: [RLV_VERSION]
+Versione di libcurl: [LIBCURL_VERSION]
+Versione decodificatore J2C: [J2C_VERSION]
+Versione del driver audio: [AUDIO_DRIVER_VERSION]
 [LIBCEF_VERSION]
-Versione server voce: [VOICE_VERSION]
+Versione di LibVLC: [LIBVLC_VERSION]
+Versione server vocale: [VOICE_VERSION]
 	</string>
 	<string name="AboutTraffic">
 		Pacchetti perduti: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)

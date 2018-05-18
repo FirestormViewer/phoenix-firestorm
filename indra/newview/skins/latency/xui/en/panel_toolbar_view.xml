@@ -15,7 +15,7 @@
 	 name="bottom_toolbar_stack"
 	 top="0"
 	 left="0"
-	 height="500"
+	 bottom="-58"
 	 width="1024"
 	 follows="all"
 	 border_size="0"
@@ -75,7 +75,8 @@
 				</layout_panel>
 				<layout_panel
 				 name="non_toolbar_panel"
-				 height="100"
+				 follows="top|left|right"
+				 bottom="48"
 				 width="200"
 				 auto_resize="true"
 				 mouse_opaque="false"
@@ -162,6 +163,18 @@
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
+	</layout_stack>
+	<layout_stack
+	 name="bottom_toolbar_stack2"
+	 bottom="-1"
+	 left="0"
+	 height="213"
+	 width="1024"
+	 follows="bottom|left|right"
+	 border_size="0"
+	 mouse_opaque="false"
+	 orientation="vertical"
+	>
 		<!-- Nearby chat panel, resting on top of the bottom toolbar -->
 		<layout_panel
 		 name="bottom_chat_bar_panel"

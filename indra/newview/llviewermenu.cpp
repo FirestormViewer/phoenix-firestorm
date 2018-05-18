@@ -7069,11 +7069,13 @@ class LLWorldAlwaysRun : public view_listener_t
 		{
 			gAgent.clearAlwaysRun();
 //			gAgent.clearRunning();
+			report_to_nearby_chat(LLTrans::getString("AlwaysRunDisabled"));
 		}
 		else
 		{
 			gAgent.setAlwaysRun();
 //			gAgent.setRunning();
+			report_to_nearby_chat(LLTrans::getString("AlwaysRunEnabled"));
 		}
 
 		// tell the simulator.
