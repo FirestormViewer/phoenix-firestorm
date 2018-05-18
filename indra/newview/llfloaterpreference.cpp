@@ -3026,6 +3026,9 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 
 	// <FS:Ansariel> FIRE-18250: Option to disable default eye movement
 	getChildView("FSStaticEyes")->setEnabled(TRUE);
+
+	// <FS:Ansariel> FIRE-22564: Route llOwnerSay to scipt debug window
+	getChildView("FSllOwnerSayToScriptDebugWindow_checkbox")->setEnabled(TRUE);
 }
 
 

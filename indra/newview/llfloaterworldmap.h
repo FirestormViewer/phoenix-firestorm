@@ -222,7 +222,7 @@ private:
 	LLVector3d				mTrackedLocation;
 	LLTracker::ETrackingStatus mTrackedStatus;
 	std::string				mTrackedSimName;
-	std::string				mTrackedAvatarName;
+	LLUUID					mTrackedAvatarID;
 	LLSLURL  				mSLURL;
 
 	LLCtrlListInterface *	mListFriendCombo;

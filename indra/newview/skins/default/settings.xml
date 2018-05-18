@@ -1,0 +1,15 @@
+<llsd>
+<map>
+    <key>FSLegacyEdgeSnap</key>
+	<map>
+		<key>Comment</key>
+			<string>Use old method for adjusting edge snap regions.</string>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>0</integer>
+	</map>
+</map>
+</llsd>

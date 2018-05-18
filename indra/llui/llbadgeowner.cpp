@@ -92,6 +92,14 @@ void LLBadgeOwner::setBadgeVisibility(bool visible)
 	}
 }
 
+void LLBadgeOwner::setDrawBadgeAtTop(bool draw_at_top)
+{
+	if (mBadge)
+	{
+		mBadge->setDrawAtParentTop(draw_at_top);
+	}
+}
+
 void LLBadgeOwner::addBadgeToParentHolder()
 {
 	LLView * owner_view = mBadgeOwnerView.get();

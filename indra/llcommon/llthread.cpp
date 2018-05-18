@@ -150,12 +150,15 @@ void  LLThread::threadRun()
 
     //LL_INFOS() << "LLThread::staticRun() Exiting: " << threadp->mName << LL_ENDL;
 
+
+    delete mRecorder;
+    mRecorder = nullptr;
+
     // We're done with the run function, this thread is done executing now.
     //NB: we are using this flag to sync across threads...we really need memory barriers here
-	mStatus = STOPPED;
-
-	delete mRecorder;
-	mRecorder = nullptr;
+    // Todo: add LLMutex per thread instead of flag?
+    // We are using "while (mStatus != STOPPED) {ms_sleep();}" everywhere.
+    mStatus = STOPPED;
 
     return;
 }

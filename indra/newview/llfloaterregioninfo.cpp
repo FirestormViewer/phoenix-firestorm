@@ -314,19 +314,23 @@ void LLFloaterRegionInfo::requestRegionInfo()
 void LLFloaterRegionInfo::processEstateOwnerRequest(LLMessageSystem* msg,void**)
 {
 	static LLDispatcher dispatch;
-	LLFloaterRegionInfo* floater = LLFloaterReg::findTypedInstance<LLFloaterRegionInfo>("region_info");
-	if(!floater)
-	{
-		return;
-	}
+	// <FS:Ansariel> FIRE-22573: Always refresh windlight even if floater not open
+	//LLFloaterRegionInfo* floater = LLFloaterReg::findTypedInstance<LLFloaterRegionInfo>("region_info");
+	//if(!floater)
+	//{
+	//	return;
+	//}
+	// </FS:Ansariel>
 	
 	if (!estate_dispatch_initialized)
 	{
 		LLPanelEstateInfo::initDispatch(dispatch);
 	}
 
-	LLTabContainer* tab = floater->getChild<LLTabContainer>("region_panels");
-	LLPanelEstateInfo* panel = (LLPanelEstateInfo*)tab->getChild<LLPanel>("Estate");
+	// <FS:Ansariel> FIRE-22573: Always refresh windlight even if floater not open
+	//LLTabContainer* tab = floater->getChild<LLTabContainer>("region_panels");
+	//LLPanelEstateInfo* panel = (LLPanelEstateInfo*)tab->getChild<LLPanel>("Estate");
+	// </FS:Ansariel>
 
 	// unpack the message
 	std::string request;
@@ -342,6 +346,17 @@ void LLFloaterRegionInfo::processEstateOwnerRequest(LLMessageSystem* msg,void**)
 	//dispatch the message
 	dispatch.dispatch(request, invoice, strings);
 
+	// <FS:Ansariel> FIRE-22573: Always refresh windlight even if floater not open
+	LLFloaterRegionInfo* floater = LLFloaterReg::findTypedInstance<LLFloaterRegionInfo>("region_info");
+	if(!floater)
+	{
+		return;
+	}
+
+	LLTabContainer* tab = floater->getChild<LLTabContainer>("region_panels");
+	LLPanelEstateInfo* panel = (LLPanelEstateInfo*)tab->getChild<LLPanel>("Estate");
+	// </FS:Ansariel>
+
 	panel->updateControls(gAgent.getRegion());
 }
 
@@ -349,6 +364,9 @@ void LLFloaterRegionInfo::processEstateOwnerRequest(LLMessageSystem* msg,void**)
 // static
 void LLFloaterRegionInfo::processRegionInfo(LLMessageSystem* msg)
 {
+	// <FS:Ansariel> FIRE-22573: Always refresh windlight even if floater not open
+	LLEnvManagerNew::instance().requestRegionSettings();
+
 	LLPanel* panel;
 	LLFloaterRegionInfo* floater = LLFloaterReg::findTypedInstance<LLFloaterRegionInfo>("region_info");
 	if(!floater)
@@ -360,7 +378,7 @@ void LLFloaterRegionInfo::processRegionInfo(LLMessageSystem* msg)
 	// otherwise after we apply (send) updated region settings we won't get them back,
 	// so our environment won't be updated.
 	// This is also the way to know about externally changed region environment.
-	LLEnvManagerNew::instance().requestRegionSettings();
+	//LLEnvManagerNew::instance().requestRegionSettings(); // <FS:Ansariel> FIRE-22573: Always refresh windlight even if floater not open
 	
 	LLTabContainer* tab = floater->getChild<LLTabContainer>("region_panels");
 
