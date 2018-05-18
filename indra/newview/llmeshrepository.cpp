@@ -3504,8 +3504,12 @@ void LLMeshRepository::shutdown()
 
 	if (mDecompThread)
 	{
-		mDecompThread->shutdown();		
-		delete mDecompThread;
+		mDecompThread->shutdown();
+
+		// <FS:ND> Deleting the thread at this point can lead to very subtle memory corruption due to the thread still possibly executing code that comes after shutdown does return.
+		// Not nice, but leak it and let the OS clean up once process exit is complete.
+		// delete mDecompThread;
+		
 		mDecompThread = NULL;
 	}
 

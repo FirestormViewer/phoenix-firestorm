@@ -223,7 +223,7 @@ default
     {
         if (i & PERMISSION_TAKE_CONTROLS)
         {
-            // This also cause the script to work in no-script sims
+            // This also cause the script to work in no-script parcels
             llTakeControls(CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN, TRUE, TRUE);
         }
         else if (i & PERMISSION_ATTACH)

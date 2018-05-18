@@ -220,6 +220,7 @@ background_visible="true"
                follows="left|top|right"
                layout="topleft"
                left="0"
+               help_topic="group_experiences_tab"
                name="group_experiences_tab_panel"
                top="0" />
          </accordion_tab>
