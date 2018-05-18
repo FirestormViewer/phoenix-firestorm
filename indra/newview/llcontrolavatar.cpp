@@ -355,7 +355,7 @@ void LLControlAvatar::updateAnimations()
 {
     if (!mRootVolp)
     {
-        LL_WARNS_ONCE("AnimatedObjects") << "No root vol" << LL_ENDL;
+        LL_WARNS_ONCE("AnimatedObjectsNotify") << "No root vol" << LL_ENDL;
         return;
     }
 
@@ -367,8 +367,10 @@ void LLControlAvatar::updateAnimations()
     for (std::vector<LLVOVolume*>::iterator vol_it = volumes.begin(); vol_it != volumes.end(); ++vol_it)
     {
         LLVOVolume *volp = *vol_it;
-        for (std::map<LLUUID,S32>::iterator anim_it = volp->mObjectSignaledAnimations.begin();
-             anim_it != volp->mObjectSignaledAnimations.end();
+        //LL_INFOS("AnimatedObjects") << "updating anim for vol " << volp->getID() << " root " << mRootVolp->getID() << LL_ENDL;
+        signaled_animation_map_t& signaled_animations = LLObjectSignaledAnimationMap::instance().getMap()[volp->getID()];
+        for (std::map<LLUUID,S32>::iterator anim_it = signaled_animations.begin();
+             anim_it != signaled_animations.end();
              ++anim_it)
         {
             std::map<LLUUID,S32>::iterator found_anim_it = anims.find(anim_it->first);
@@ -382,9 +384,10 @@ void LLControlAvatar::updateAnimations()
                 // Animation not already present, use this sequence id.
                 anims[anim_it->first] = anim_it->second;
             }
+            LL_DEBUGS("AnimatedObjectsNotify") << "found anim for vol " << volp->getID() << " anim " << anim_it->first << " root " << mRootVolp->getID() << LL_ENDL;
         }
     }
-    if (!mPlaying && anims.size()>0)
+    if (!mPlaying)
     {
         mPlaying = true;
         if (!mRootVolp->isAnySelected())

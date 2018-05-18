@@ -3888,7 +3888,7 @@ U32 LLVOVolume::getRenderCost(texture_cost_t &textures) const
 		{
             if (isAnimatedObject() && isRiggedMesh())
             {
-                // AXON Scaling here is to make animated object vs
+                // Scaling here is to make animated object vs
                 // non-animated object ARC proportional to the
                 // corresponding calculations for streaming cost.
                 num_triangles = (ANIMATED_OBJECT_COST_PER_KTRI * 0.001 * costs.getEstTrisForStreamingCost())/0.06;
@@ -5446,6 +5446,8 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
             bool is_mesh = vobj->isMesh();
             F32 est_tris = vobj->getEstTrianglesMax();
 
+            vobj->updateControlAvatar();
+            
             LL_DEBUGS("AnimatedObjectsLinkset") << vobj_name << " rebuilding, isAttachment: " << (U32) vobj->isAttachment()
                                                 << " is_mesh " << is_mesh
                                                 << " est_tris " << est_tris
@@ -5499,8 +5501,6 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 			rigged = rigged || (vobj->isAnimatedObject() && vobj->isRiggedMesh() &&
                 vobj->getControlAvatar() && vobj->getControlAvatar()->mPlaying);
 
-            vobj->updateControlAvatar();
-            
 			bool bake_sunlight = LLPipeline::sBakeSunlight && drawablep->isStatic();
 			bool any_rigged_face = false;
 
