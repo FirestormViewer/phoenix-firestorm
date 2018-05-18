@@ -41,7 +41,7 @@
 		Инициализация графики не удалась. Пожалуйста, обновите драйвер видеокарты!
 	</string>
 	<string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit) ([CHANNEL]) [BUILD_TYPE]
+		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]bit)
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="BuildConfig">
@@ -75,13 +75,14 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 Версия libcurl: [LIBCURL_VERSION]
 Версия декодера J2C: [J2C_VERSION]
 Версия драйвера звука: [AUDIO_DRIVER_VERSION]
-Версия CEF: [LIBCEF_VERSION]
+[LIBCEF_VERSION]
 Версия LibVLC: [LIBVLC_VERSION]
 Версия голосового сервера: [VOICE_VERSION]
 	</string>
 	<string name="AboutSettings">
 		Режим настроек: [MODE]
 Графическое оформление: [SKIN] ([THEME])
+Window size: [WINDOW_WIDTH]x[WINDOW_HEIGHT] px
 Используемый шрифт: [FONT] ([FONT_SCREEN_DPI])
 Размер шрифта: [FONT_SIZE] pt
 Масштаб UI: [UI_SCALE_FACTOR]
