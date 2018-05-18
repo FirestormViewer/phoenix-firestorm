@@ -3145,8 +3145,8 @@ class LLObjectTexRefresh : public view_listener_t
 					LLViewerFetchedTexture* tx = LLViewerTextureManager::getFetchedTexture(sculpt_uuid);
 					if (tx)
 					{
-						S32 num_volumes = tx->getNumVolumes();
-						const LLViewerTexture::ll_volume_list_t* pVolumeList = tx->getVolumeList();
+						S32 num_volumes = tx->getNumVolumes(LLRender::SCULPT_TEX);
+						const LLViewerTexture::ll_volume_list_t* pVolumeList = tx->getVolumeList(LLRender::SCULPT_TEX);
 
 						destroy_texture(sculpt_uuid);
 
@@ -7094,11 +7094,13 @@ class LLWorldAlwaysRun : public view_listener_t
 		{
 			gAgent.clearAlwaysRun();
 //			gAgent.clearRunning();
+			report_to_nearby_chat(LLTrans::getString("AlwaysRunDisabled"));
 		}
 		else
 		{
 			gAgent.setAlwaysRun();
 //			gAgent.setRunning();
+			report_to_nearby_chat(LLTrans::getString("AlwaysRunEnabled"));
 		}
 
 		// tell the simulator.
@@ -10193,7 +10195,7 @@ void handle_report_bug(const LLSD& param)
 	
 	LLStringUtil::format_map_t replace;
 	// <FS:Ansariel> FIRE-14001: JIRA report is being cut off when using Help -> Report Bug
-	//replace["[ENVIRONMENT]"] = LLURI::escape(LLAppViewer::instance()->getShortViewerInfoString());
+	//replace["[ENVIRONMENT]"] = LLURI::escape(LLAppViewer::instance()->getViewerInfoString(true));
 	LLSD sysinfo = FSData::getSystemInfo();
 	replace["[ENVIRONMENT]"] = LLURI::escape(sysinfo["Part1"].asString().substr(1) + sysinfo["Part2"].asString().substr(1));
 	// </FS:Ansariel>

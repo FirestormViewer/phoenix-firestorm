@@ -2596,7 +2596,7 @@ Möchten Sie den Nicht-stören-Modus deaktivieren, bevor Sie diese Transaktion a
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmEmptyTrash">
-		[COUNT] Objekte und Ordner werden dauerhaft gelöscht. Möchten Sie den Inhalt Ihres Papierkorbs wirklich dauerhaft löschen?
+		[COUNT] Objekte und Ordner werden dauerhaft gelöscht. Sind Sie sicher, dass Sie den Inhalt Ihres Papierkorbs dauerhaft löschen möchten?
 		<usetemplate ignoretext="Bestätigen, bevor der Ordner Papierkorb im Inventar geleert wird" name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="TrashIsFull">
@@ -3687,7 +3687,7 @@ Bitte überprüfen Sie Ihre Netzwerk- und Firewalleinstellungen.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect">
-		Verbindung mit Voice-Server ist leider nicht möglich:
+		Wir können uns nicht mit dem Voice-Server verbinden: 
 
 &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 

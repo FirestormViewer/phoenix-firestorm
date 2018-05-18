@@ -629,6 +629,7 @@ static void settings_to_globals()
 	LLSurface::setTextureSize(gSavedSettings.getU32("RegionTextureSize"));
 	
 	LLRender::sGLCoreProfile = gSavedSettings.getBOOL("RenderGLCoreProfile");
+	LLRender::sNsightDebugSupport = gSavedSettings.getBOOL("RenderNsightDebugSupport");
 	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
 	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
 	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO");
@@ -957,7 +958,6 @@ bool LLAppViewer::init()
 	initMaxHeapSize() ;
 	LLCoros::instance().setStackSize(gSavedSettings.getS32("CoroutineStackSize"));
 
-	LLPrivateMemoryPoolManager::initClass((BOOL)gSavedSettings.getBOOL("MemoryPrivatePoolEnabled"), (U32)gSavedSettings.getU32("MemoryPrivatePoolSize")*1024*1024) ;
 	// write Google Breakpad minidump files to a per-run dump directory to avoid multiple viewer issues.
 	std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "");
 	mDumpPath = logdir;
@@ -1536,6 +1536,10 @@ bool LLAppViewer::frame()
 		{
 			ret = doFrame();
 		}
+		catch (const LLContinueError&)
+		{
+			LOG_UNHANDLED_EXCEPTION("");
+		}
 		catch (std::bad_alloc)
 		{
 			LLMemory::logMemoryInfo(TRUE);
@@ -1549,7 +1553,14 @@ bool LLAppViewer::frame()
 	}
 	else
 	{ 
-		ret = doFrame();
+		try
+		{
+			ret = doFrame();
+		}
+		catch (const LLContinueError&)
+		{
+			LOG_UNHANDLED_EXCEPTION("");
+		}
 	}
 
 	return ret;
@@ -1567,10 +1578,6 @@ bool LLAppViewer::doFrame()
 	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
 	LLTimer frameTimer;
 
-	//LLPrivateMemoryPoolTester::getInstance()->run(false) ;
-	//LLPrivateMemoryPoolTester::getInstance()->run(true) ;
-	//LLPrivateMemoryPoolTester::destroy() ;
-
 	nd::etw::logFrame(); // <FS:ND> Write the start of each frame. Even if our Provider (Firestorm) would be enabled, this has only light impact. Does nothing on OSX and Linux.
 
 	LL_RECORD_BLOCK_TIME(FTM_FRAME);
@@ -1586,7 +1593,6 @@ bool LLAppViewer::doFrame()
 	//check memory availability information
 	checkMemory() ;
 
-	try // <FS:Ansariel> Don't crash on LLContinueError
 	{
 		// <FS:Ansariel> MaxFPS Viewer-Chui merge error
 		// Check if we need to restore rendering masks.
@@ -1846,12 +1852,6 @@ bool LLAppViewer::doFrame()
 			pingMainloopTimeout("Main:End");
 		}
 	}
-	// <FS:Ansariel> Don't crash on LLContinueError
-	catch (const LLContinueError&)
-	{
-		LOG_UNHANDLED_EXCEPTION("");
-	}
-	// </FS:Ansariel>
 
 	if (LLApp::isExiting())
 	{
@@ -1862,7 +1862,11 @@ bool LLAppViewer::doFrame()
 		}
 
 		// <FS:Ansariel> Cut down wait on logout; Need to terminate voice here because we need gServicePump!
-		LLVoiceClient::getInstance()->terminate();
+		if (LLVoiceClient::instanceExists())
+		{
+			LLVoiceClient::getInstance()->terminate();
+		}
+		// </FS:Ansariel>
 
 		delete gServicePump;
 
@@ -1922,7 +1926,10 @@ bool LLAppViewer::cleanup()
 #endif
 
 	//dump scene loading monitor results
-	LLSceneMonitor::instance().dumpToFile(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "scene_monitor_results.csv"));
+	if (LLSceneMonitor::instanceExists())
+	{
+		LLSceneMonitor::instance().dumpToFile(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "scene_monitor_results.csv"));
+	}
 
 	// There used to be an 'if (LLFastTimerView::sAnalyzePerformance)' block
 	// here, completely redundant with the one that occurs later in this same
@@ -1965,8 +1972,12 @@ bool LLAppViewer::cleanup()
     LLPluginProcessParent::shutdown();
 
 	// <FS:Ansariel> Cut down wait on logout; Need to terminate voice earlier because we need gServicePump!
-	//LLVoiceClient::getInstance()->terminate();
-	
+	//if (LLVoiceClient::instanceExists())
+	//{
+	//	LLVoiceClient::getInstance()->terminate();
+	//}
+	// </FS:Ansariel>
+
 	disconnectViewer();
 
 	LL_INFOS() << "Viewer disconnected" << LL_ENDL;
@@ -2065,7 +2076,10 @@ bool LLAppViewer::cleanup()
 
 	// Note: this is where gLocalSpeakerMgr and gActiveSpeakerMgr used to be deleted.
 
-	LLWorldMap::getInstance()->reset(); // release any images
+	if (LLWorldMap::instanceExists())
+	{
+		LLWorldMap::getInstance()->reset(); // release any images
+	}
 
 	LLCalc::cleanUp();
 
@@ -2282,10 +2296,16 @@ bool LLAppViewer::cleanup()
 	LLURLHistory::saveFile("url_history.xml");
 
 	// save mute list. gMuteList used to also be deleted here too.
-	LLMuteList::getInstance()->cache(gAgent.getID());
+	if (gAgent.isInitialized() && LLMuteList::instanceExists())
+	{
+		LLMuteList::getInstance()->cache(gAgent.getID());
+	}
 
 	//save call log list
-	LLConversationLog::instance().cache();
+	if (LLConversationLog::instanceExists())
+	{
+		LLConversationLog::instance().cache();
+	}
 
 	if (mPurgeOnExit)
 	{
@@ -2436,9 +2456,6 @@ bool LLAppViewer::cleanup()
 	SUBSYSTEM_CLEANUP(LLWearableType);
 
 	LLMainLoopRepeater::instance().stop();
-
-	//release all private memory pools.
-	LLPrivateMemoryPoolManager::destroyClass() ;
 
 	ll_close_fail_log();
 
@@ -3936,7 +3953,7 @@ LLSD LLAppViewer::getViewerInfo() const
 	return info;
 }
 
-std::string LLAppViewer::getViewerInfoString() const
+std::string LLAppViewer::getViewerInfoString(bool default_string) const
 {
 	std::ostringstream support;
 
@@ -3946,7 +3963,7 @@ std::string LLAppViewer::getViewerInfoString() const
 	LLStringUtil::format_map_t args;
 
 	// allow the "Release Notes" URL label to be localized
-	args["ReleaseNotes"] = LLTrans::getString("ReleaseNotes");
+	args["ReleaseNotes"] = LLTrans::getString("ReleaseNotes", default_string);
 
 	for (LLSD::map_const_iterator ii(info.beginMap()), iend(info.endMap());
 		ii != iend; ++ii)
@@ -3956,7 +3973,7 @@ std::string LLAppViewer::getViewerInfoString() const
 			// Scalar value
 			if (ii->second.isUndefined())
 			{
-				args[ii->first] = LLTrans::getString("none_text");
+				args[ii->first] = LLTrans::getString("none_text", default_string);
 			}
 			else
 			{
@@ -3975,110 +3992,46 @@ std::string LLAppViewer::getViewerInfoString() const
 	}
 
 	// Now build the various pieces
-	support << LLTrans::getString("AboutHeader", args);
+	support << LLTrans::getString("AboutHeader", args, default_string);
 	//if (info.has("BUILD_CONFIG"))
 	//{
-	//	support << "\n" << LLTrans::getString("BuildConfig", args);
+	//	support << "\n" << LLTrans::getString("BuildConfig", args, default_string);
 	//}
 	if (info.has("REGION"))
 	{
 // [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
-		support << "\n\n" << LLTrans::getString( (RlvActions::canShowLocation()) ? "AboutPosition" : "AboutPositionRLVShowLoc", args);
+		support << "\n\n" << LLTrans::getString( (RlvActions::canShowLocation()) ? "AboutPosition" : "AboutPositionRLVShowLoc", args, default_string);
 // [/RLVa:KB]
-//		support << "\n\n" << LLTrans::getString("AboutPosition", args);
+//		support << "\n\n" << LLTrans::getString("AboutPosition", args, default_string);
 	}
-	support << "\n\n" << LLTrans::getString("AboutSystem", args);
+	support << "\n\n" << LLTrans::getString("AboutSystem", args, default_string);
 	support << "\n";
 	if (info.has("GRAPHICS_DRIVER_VERSION"))
 	{
-		support << "\n" << LLTrans::getString("AboutDriver", args);
+		support << "\n" << LLTrans::getString("AboutDriver", args, default_string);
 	}
-	support << "\n" << LLTrans::getString("AboutOGL", args);
-	//support << "\n\n" << LLTrans::getString("AboutSettings", args); // <FS> Custom sysinfo
-	support << "\n\n" << LLTrans::getString("AboutLibs", args);
+	support << "\n" << LLTrans::getString("AboutOGL", args, default_string);
+	//support << "\n\n" << LLTrans::getString("AboutSettings", args, default_string); // <FS> Custom sysinfo
+	support << "\n\n" << LLTrans::getString("AboutLibs", args, default_string);
 	// <FS> Custom sysinfo
 	if (info.has("BANDWIDTH")) //For added info in help floater
 	{
-		support << "\n" << LLTrans::getString("AboutSettings", args);
+		support << "\n" << LLTrans::getString("AboutSettings", args, default_string);
 	}
 	// </FS>
 	if (info.has("COMPILER"))
 	{
-		support << "\n" << LLTrans::getString("AboutCompiler", args);
+		support << "\n" << LLTrans::getString("AboutCompiler", args, default_string);
 	}
 	if (info.has("PACKETS_IN"))
 	{
-		support << '\n' << LLTrans::getString("AboutTraffic", args);
+		support << '\n' << LLTrans::getString("AboutTraffic", args, default_string);
 	}
 
 	// SLT timestamp
 	LLSD substitution;
 	substitution["datetime"] = (S32)time(NULL);//(S32)time_corrected();
-	support << "\n" << LLTrans::getString("AboutTime", substitution);
-
-	return support.str();
-}
-
-std::string LLAppViewer::getShortViewerInfoString() const
-{
-	std::ostringstream support;
-	LLSD info(getViewerInfo());
-
-	support << LLTrans::getString("APP_NAME") << " " << info["VIEWER_VERSION_STR"].asString();
-	support << " (" << info["CHANNEL"].asString() << ")";
-	if (info.has("BUILD_CONFIG"))
-	{
-		support << "\n" << "Build Configuration " << info["BUILD_CONFIG"].asString();
-	}
-	if (info.has("REGION"))
-	{
-		support << "\n\n" << "You are at " << ll_vector3_from_sd(info["POSITION_LOCAL"]) << " in " << info["REGION"].asString();
-		support << " located at " << info["HOSTNAME"].asString() << " (" << info["HOSTIP"].asString() << ")";
-		support << "\n" << "SLURL: " << info["SLURL"].asString();
-		support << "\n" << "(Global coordinates " << ll_vector3_from_sd(info["POSITION"]) << ")";
-		support << "\n" << info["SERVER_VERSION"].asString();
-	}
-
-	support << "\n\n" << "CPU: " << info["CPU"].asString();
-	support << "\n" << "Memory: " << info["MEMORY_MB"].asString() << " MB";
-	support << "\n" << "OS: " << info["OS_VERSION"].asString();
-	support << "\n" << "Graphics Card: " << info["GRAPHICS_CARD"].asString() << " (" <<  info["GRAPHICS_CARD_VENDOR"].asString() << ")";
-
-	if (info.has("GRAPHICS_DRIVER_VERSION"))
-	{
-		support << "\n" << "Windows Graphics Driver Version: " << info["GRAPHICS_DRIVER_VERSION"].asString();
-	}
-
-	support << "\n" << "OpenGL Version: " << info["OPENGL_VERSION"].asString();
-
-	support << "\n\n" << "Window size:" << info["WINDOW_WIDTH"].asString() << "x" << info["WINDOW_HEIGHT"].asString();
-	support << "\n" << "Language: " << LLUI::getLanguage();
-	support << "\n" << "Font Size Adjustment: " << info["FONT_SIZE_ADJUSTMENT"].asString() << "pt";
-	support << "\n" << "UI Scaling: " << info["UI_SCALE"].asString();
-	support << "\n" << "Draw distance: " << info["DRAW_DISTANCE"].asString();
-	support << "\n" << "Bandwidth: " << info["NET_BANDWITH"].asString() << "kbit/s";
-	support << "\n" << "LOD factor: " << info["LOD_FACTOR"].asString();
-	support << "\n" << "Render quality: " << info["RENDER_QUALITY"].asString() << " / 7";
-	support << "\n" << "ALM: " << info["GPU_SHADERS"].asString();
-	support << "\n" << "Texture memory: " << info["TEXTURE_MEMORY"].asString() << "MB";
-	support << "\n" << "VFS (cache) creation time: " << info["VFS_TIME"].asString();
-
-	support << "\n\n" << "J2C Decoder: " << info["J2C_VERSION"].asString();
-	support << "\n" << "Audio Driver: " << info["AUDIO_DRIVER_VERSION"].asString();
-	support << "\n" << "LLCEFLib/CEF: " << info["LLCEFLIB_VERSION"].asString();
-	support << "\n" << "LibVLC: " << info["LIBVLC_VERSION"].asString();
-	support << "\n" << "Voice Server: " << info["VOICE_VERSION"].asString();
-
-	if (info.has("PACKETS_IN"))
-	{
-		support << "\n" << "Packets Lost: " << info["PACKETS_LOST"].asInteger() << "/" << info["PACKETS_IN"].asInteger();
-		F32 packets_pct = info["PACKETS_PCT"].asReal();
-		support << " (" << ll_round(packets_pct, 0.001f) << "%)";
-	}
-
-	LLSD substitution;
-	substitution["datetime"] = (S32)time(NULL);
-	support << "\n" << LLTrans::getString("AboutTime", substitution);
+	support << "\n" << LLTrans::getString("AboutTime", substitution, default_string);
 
 	return support.str();
 }

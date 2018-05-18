@@ -195,6 +195,27 @@ static bool handleDebugAvatarJointsChanged(const LLSD& newvalue)
     return true;
 }
 
+static bool handleAvatarHoverOffsetChanged(const LLSD& newvalue)
+{
+	if (isAgentAvatarValid())
+	{
+		// <FS:Ansariel> [Legacy bake]
+		//gAgentAvatarp->setHoverIfRegionEnabled();
+		if (gAgent.getRegion()->avatarHoverHeightEnabled())
+		{
+			LLVector3 avOffset(0.0f, 0.0f, llclamp<F32>(newvalue.asReal(), MIN_HOVER_Z, MAX_HOVER_Z));
+			gAgentAvatarp->setHoverOffset(avOffset, true);
+		}
+		else if (!gAgentAvatarp->isUsingServerBakes())
+		{
+			gAgentAvatarp->computeBodySize();
+		}
+		// </FS:Ansariel> [Legacy bake]
+	}
+	return true;
+}
+
+
 // <FS:Ansariel> Expose handleSetShaderChanged()
 //static bool handleSetShaderChanged(const LLSD& newvalue)
 bool handleSetShaderChanged(const LLSD& newvalue)
@@ -601,25 +622,6 @@ bool handleVelocityInterpolate(const LLSD& newvalue)
 	}
 	return true;
 }
-
-// <FS:Zi> Moved Avatar Z offset from RLVa to here
-bool handleAvatarZOffsetChanged(const LLSD& sdValue)
-{
-	if (isAgentAvatarValid())
-	{
-		if (gAgent.getRegion()->avatarHoverHeightEnabled())
-		{
-			LLVector3 avOffset(0.0f, 0.0f, llclamp<F32>(sdValue.asReal(), MIN_HOVER_Z, MAX_HOVER_Z));
-			gAgentAvatarp->setHoverOffset(avOffset, true);
-		}
-		else if (!gAgentAvatarp->isUsingServerBakes())
-		{
-			gAgentAvatarp->computeBodySize();
-		}
-	}
-	return true;
-}
-// </FS:Zi> Moved Avatar Z offset from RLVa to here
 
 bool handleForceShowGrid(const LLSD& newvalue)
 {
@@ -1119,12 +1121,12 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("LoginLocation")->getSignal()->connect(boost::bind(&handleLoginLocationChanged));
-    gSavedSettings.getControl("DebugAvatarJoints")->getCommitSignal()->connect(boost::bind(&handleDebugAvatarJointsChanged, _2));
+	gSavedSettings.getControl("DebugAvatarJoints")->getCommitSignal()->connect(boost::bind(&handleDebugAvatarJointsChanged, _2));
+	gSavedPerAccountSettings.getControl("AvatarHoverOffsetZ")->getCommitSignal()->connect(boost::bind(&handleAvatarHoverOffsetChanged, _2));
 
 // [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
 	gSavedSettings.getControl("RestrainedLove")->getSignal()->connect(boost::bind(&RlvSettings::onChangedSettingMain, _2));
 // [/RLVa:KB]
-	gSavedPerAccountSettings.getControl("AvatarHoverOffsetZ")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // <FS:Zi> Moved Avatar Z offset from RLVa to here
 	// <FS:Zi> Is done inside XUI now, using visibility_control
 	// gSavedSettings.getControl("ShowNavbarFavoritesPanel")->getSignal()->connect(boost::bind(&toggle_show_favorites_panel, _2));
 	// </FS:Zi>

@@ -244,7 +244,7 @@ LLVOVolume::LLVOVolume(const LLUUID &id, const LLPCode pcode, LLViewerRegion *re
 
 	mMediaImplList.resize(getNumTEs());
 	mLastFetchedMediaVersion = -1;
-	mIndexInTex = 0;
+	memset(&mIndexInTex, 0, sizeof(S32) * LLRender::NUM_VOLUME_TEXTURE_CHANNELS);
 	mMDCImplCount = 0;
 }
 
@@ -286,7 +286,12 @@ void LLVOVolume::markDead()
 
 		if (mSculptTexture.notNull())
 		{
-			mSculptTexture->removeVolume(this);
+			mSculptTexture->removeVolume(LLRender::SCULPT_TEX, this);
+		}
+
+		if (mLightTexture.notNull())
+		{
+			mLightTexture->removeVolume(LLRender::LIGHT_TEX, this);
 		}
 	}
 	
@@ -956,7 +961,7 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
 	{
 		LLLightImageParams* params = (LLLightImageParams*) getParameterEntry(LLNetworkData::PARAMS_LIGHT_IMAGE);
 		LLUUID id = params->getLightTexture();
-		mLightTexture = LLViewerTextureManager::getFetchedTexture(id);
+		mLightTexture = LLViewerTextureManager::getFetchedTexture(id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_ALM);
 		if (mLightTexture.notNull())
 		{
 			F32 rad = getLightRadius();
@@ -1245,11 +1250,11 @@ void LLVOVolume::updateSculptTexture()
 	{
 		if (old_sculpt.notNull())
 		{
-			old_sculpt->removeVolume(this);
+			old_sculpt->removeVolume(LLRender::SCULPT_TEX, this);
 		}
 		if (mSculptTexture.notNull())
 		{
-			mSculptTexture->addVolume(this);
+			mSculptTexture->addVolume(LLRender::SCULPT_TEX, this);
 		}
 	}
 	
@@ -1377,12 +1382,12 @@ void LLVOVolume::sculpt()
 				mSculptTexture->updateBindStatsForTester() ;
 			}
 		}
-		getVolume()->sculpt(sculpt_width, sculpt_height, sculpt_components, sculpt_data, discard_level);
+		getVolume()->sculpt(sculpt_width, sculpt_height, sculpt_components, sculpt_data, discard_level, mSculptTexture->isMissingAsset());
 
 		//notify rebuild any other VOVolumes that reference this sculpty volume
-		for (S32 i = 0; i < mSculptTexture->getNumVolumes(); ++i)
+		for (S32 i = 0; i < mSculptTexture->getNumVolumes(LLRender::SCULPT_TEX); ++i)
 		{
-			LLVOVolume* volume = (*(mSculptTexture->getVolumeList()))[i];
+			LLVOVolume* volume = (*(mSculptTexture->getVolumeList(LLRender::SCULPT_TEX)))[i];
 			if (volume != this && volume->getVolume() == getVolume())
 			{
 				gPipeline.markRebuild(volume->mDrawable, LLDrawable::REBUILD_GEOMETRY, FALSE);
@@ -2825,7 +2830,9 @@ void LLVOVolume::mediaNavigateBounceBack(U8 texture_index)
 			LL_WARNS("MediaOnAPrim") << "FAILED to bounce back URL \"" << url << "\" -- unloading impl" << LL_ENDL;
 			impl->setMediaFailed(true);
 		}
-		else {
+		// Make sure we are not bouncing to url we came from
+		else if (impl->getCurrentMediaURL() != url) 
+		{
 			// Okay, navigate now
             LL_INFOS("MediaOnAPrim") << "bouncing back to URL: " << url << LL_ENDL;
             impl->navigateTo(url, "", false, true);
@@ -3137,11 +3144,16 @@ S32 LLVOVolume::getFaceIndexWithMediaImpl(const LLViewerMediaImpl* media_impl, S
 
 void LLVOVolume::setLightTextureID(LLUUID id)
 {
+	LLViewerTexture* old_texturep = getLightTexture(); // same as mLightTexture, but inits if nessesary
 	if (id.notNull())
 	{
 		if (!hasLightTexture())
 		{
 			setParameterEntryInUse(LLNetworkData::PARAMS_LIGHT_IMAGE, TRUE, true);
+		}
+		else if (old_texturep)
+		{	
+			old_texturep->removeVolume(LLRender::LIGHT_TEX, this);
 		}
 		LLLightImageParams* param_block = (LLLightImageParams*) getParameterEntry(LLNetworkData::PARAMS_LIGHT_IMAGE);
 		if (param_block && param_block->getLightTexture() != id)
@@ -3149,15 +3161,25 @@ void LLVOVolume::setLightTextureID(LLUUID id)
 			param_block->setLightTexture(id);
 			parameterChanged(LLNetworkData::PARAMS_LIGHT_IMAGE, true);
 		}
-	}
-	else
-	{
-		if (hasLightTexture())
+		LLViewerTexture* tex = getLightTexture();
+		if (tex)
 		{
-			setParameterEntryInUse(LLNetworkData::PARAMS_LIGHT_IMAGE, FALSE, true);
-			parameterChanged(LLNetworkData::PARAMS_LIGHT_IMAGE, true);
-			mLightTexture = NULL;
+			tex->addVolume(LLRender::LIGHT_TEX, this); // new texture
 		}
+		else
+		{
+			LL_WARNS() << "Can't get light texture for ID " << id.asString() << LL_ENDL;
+		}
+	}
+	else if (hasLightTexture())
+	{
+		if (old_texturep)
+		{
+			old_texturep->removeVolume(LLRender::LIGHT_TEX, this);
+		}
+		setParameterEntryInUse(LLNetworkData::PARAMS_LIGHT_IMAGE, FALSE, true);
+		parameterChanged(LLNetworkData::PARAMS_LIGHT_IMAGE, true);
+		mLightTexture = NULL;
 	}		
 }
 
@@ -3375,7 +3397,7 @@ LLViewerTexture* LLVOVolume::getLightTexture()
 	{
 		if (mLightTexture.isNull() || id != mLightTexture->getID())
 		{
-			mLightTexture = LLViewerTextureManager::getFetchedTexture(id);
+			mLightTexture = LLViewerTextureManager::getFetchedTexture(id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_ALM);
 		}
 	}
 	else

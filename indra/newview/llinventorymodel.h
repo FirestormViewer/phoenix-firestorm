@@ -341,7 +341,8 @@ public:
     // Copy content of all folders of type "type" into folder "id" and delete/purge the empty folders
     // Note : This method has been designed for FT_OUTBOX (aka Merchant Outbox) but can be used for other categories
     void consolidateForType(const LLUUID& id, LLFolderType::EType type);
-    
+
+    bool isCategoryHidden(const LLUUID& id) const;
 
 // <FS:TT> ReplaceWornItemsOnly
 	void wearItemsOnAvatar(LLInventoryCategory* category);

@@ -236,6 +236,7 @@
 		<menu_item_call label="Fehlerbehebung" name="Troubleshooting"/>
 		<menu_item_call label="Firestorm Support-Gruppe beitreten" name="firestorm_support_group"/>
 		<menu_item_call label="Stundenplan Firestorm-Klassen" name="Firestorm Classes Schedule"/>
+		<menu_item_call label="Firestorm-Eventkalender" name="Firestorm Events Calendar"/>
 		<menu_item_call label="[CURRENT_GRID]-Hilfe" name="current_grid_help"/>
 		<menu_item_call label="Über [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Grid-Status prüfen" name="Grid Status"/>
@@ -400,7 +401,6 @@
 			<menu_item_check label="Matrizen anzeigen" name="Show Matrices"/>
 			<menu_item_check label="Farbe unter Cursor anzeigen" name="Show Color Under Cursor"/>
 			<menu_item_check label="Speicher anzeigen" name="Show Memory"/>
-			<menu_item_check label="Info über privaten Speicher anzeigen" name="Show Private Mem Info"/>
 			<menu_item_check label="Aktualisierungen an Objekten anzeigen" name="Show Updates"/>
 		</menu>
 		<menu label="Fehler erzwingen" name="Force Errors">
