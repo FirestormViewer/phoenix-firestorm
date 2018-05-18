@@ -69,6 +69,7 @@ Qualità di rendering: [RENDERQUALITY]
 Ombre Attive: [ALMSTATUS]
 Memoria texture: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 Tempo di creazione VFS (cache) (UTC): [VFS_DATE]
+	</string>
 	<string name="AboutLibs">
 API RestrainedLove: [RLV_VERSION]
 Versione di libcurl: [LIBCURL_VERSION]
@@ -77,7 +78,6 @@ Versione del driver audio: [AUDIO_DRIVER_VERSION]
 [LIBCEF_VERSION]
 Versione di LibVLC: [LIBVLC_VERSION]
 Versione server vocale: [VOICE_VERSION]
-	</string>
 	</string>
 	<string name="AboutTraffic">
 		Pacchetti perduti: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
