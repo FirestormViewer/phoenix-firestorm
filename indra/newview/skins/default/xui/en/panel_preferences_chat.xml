@@ -141,6 +141,7 @@
 			 label="Mark objects with (no name) when they speak to avoid spoofing"/>
             <check_box
              control_name="FSllOwnerSayToScriptDebugWindow"
+             enabled="false"
              height="16"
              label="Route llOwnerSay to script debug window"
              layout="topleft"

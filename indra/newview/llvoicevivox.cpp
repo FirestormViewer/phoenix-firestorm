@@ -700,7 +700,13 @@ void LLVivoxVoiceClient::voiceControlCoro()
 {
     mIsCoroutineActive = true;
     LLCoros::set_consuming(true);
-    
+
+    while (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE)
+    {
+        LL_INFOS("Voice") << "Suspending voiceControlCoro() due to teleport. Tuning: " << mTuningMode << ". Relog: " << mRelogRequested << LL_ENDL;
+        llcoro::suspendUntilTimeout(1.0);
+    }
+
     do
     {
         
@@ -722,7 +728,7 @@ void LLVivoxVoiceClient::voiceControlCoro()
         // and then reconstruct the voice connecion from scratch.
         if (mRelogRequested)
         {
-            while (isGatewayRunning())
+            while (isGatewayRunning() || gAgent.getTeleportState() != LLAgent::TELEPORT_NONE)
             {
                 llcoro::suspendUntilTimeout(1.0);
             }
@@ -1437,7 +1443,7 @@ bool LLVivoxVoiceClient::addAndJoinSession(const sessionStatePtr_t &nextSession)
 
     mAudioSession = nextSession;
     mAudioSessionChanged = true;
-    if (!mAudioSession->mReconnect)
+    if (!mAudioSession || !mAudioSession->mReconnect)
     {
         mNextAudioSession.reset();
     }
@@ -1445,16 +1451,19 @@ bool LLVivoxVoiceClient::addAndJoinSession(const sessionStatePtr_t &nextSession)
     // The old session may now need to be deleted.
     reapSession(oldSession);
 
-    if (!mAudioSession->mHandle.empty())
+    if (mAudioSession)
     {
-        // Connect to a session by session handle
+        if (!mAudioSession->mHandle.empty())
+        {
+            // Connect to a session by session handle
 
-        sessionMediaConnectSendMessage(mAudioSession);
-    }
-    else
-    {
-        // Connect to a session by URI
-        sessionCreateSendMessage(mAudioSession, true, false);
+            sessionMediaConnectSendMessage(mAudioSession);
+        }
+        else
+        {
+            // Connect to a session by URI
+            sessionCreateSendMessage(mAudioSession, true, false);
+        }
     }
 
     notifyStatusObservers(LLVoiceClientStatusObserver::STATUS_JOINING);
@@ -1522,6 +1531,11 @@ bool LLVivoxVoiceClient::addAndJoinSession(const sessionStatePtr_t &nextSession)
         LL_INFOS("Voice") << "event=" << ll_stream_notation_sd(result) << LL_ENDL;
         if (result.has("session"))
         {
+            if (!mAudioSession)
+            {
+                LL_WARNS("Voice") << "Message for session handle \"" << result["handle"] << "\" while session is not initialized." << LL_ENDL;
+                continue;
+            }
             if (result.has("handle") && result["handle"] != mAudioSession->mHandle)
             {
                 LL_WARNS("Voice") << "Message for session handle \"" << result["handle"] << "\" while waiting for \"" << mAudioSession->mHandle << "\"." << LL_ENDL;
@@ -1868,6 +1882,11 @@ bool LLVivoxVoiceClient::runSession(const sessionStatePtr_t &session)
         {   
             if (result.has("handle"))
             {
+                if (!mAudioSession)
+                {
+                    LL_WARNS("Voice") << "Message for session handle \"" << result["handle"] << "\" while session is not initiated." << LL_ENDL;
+                    continue;
+                }
                 if (result["handle"] != mAudioSession->mHandle)
                 {
                     LL_WARNS("Voice") << "Message for session handle \"" << result["handle"] << "\" while waiting for \"" << mAudioSession->mHandle << "\"." << LL_ENDL;

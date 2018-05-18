@@ -183,6 +183,7 @@ background_visible="false"
         follows="left|top|right"
         layout="topleft"
         left="0"
+        help_topic="group_experiences_tab"
         name="group_experiences_tab_panel"
         top="0" />
     </tab_container>

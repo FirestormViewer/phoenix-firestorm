@@ -39,6 +39,7 @@
 #include "lleconomy.h"
 #include "llagent.h"
 #include "llfloaterreg.h"
+#include "llfloatersnapshot.h"
 #include "llstatusbar.h"
 #include "llinventorypanel.h"
 #include "llsdutil.h"
@@ -899,11 +900,23 @@ void LLViewerAssetUpload::HandleUploadError(LLCore::HttpStatus status, LLSD &res
     }
 
     // Let the Snapshot floater know we have failed uploading.
-    LLFloater* floater_snapshot = LLFloaterReg::findInstance("snapshot");
-    if (uploadInfo->getAssetType() == LLAssetType::AT_TEXTURE && floater_snapshot)
+    LLFloaterSnapshot* floater_snapshot = LLFloaterSnapshot::findInstance();
+    if (floater_snapshot && floater_snapshot->isWaitingState())
     {
-        floater_snapshot->notify(LLSD().with("set-finished", LLSD().with("ok", false).with("msg", "inventory")));
+        if (uploadInfo->getAssetType() == LLAssetType::AT_IMAGE_JPEG)
+        {
+            floater_snapshot->notify(LLSD().with("set-finished", LLSD().with("ok", false).with("msg", "postcard")));
+        }
+        if (uploadInfo->getAssetType() == LLAssetType::AT_TEXTURE)
+        {
+            floater_snapshot->notify(LLSD().with("set-finished", LLSD().with("ok", false).with("msg", "inventory")));
+        }
     }
 
+    LLFloater* floater_outfit_snapshot = LLFloaterReg::findInstance("outfit_snapshot");
+    if (uploadInfo->getAssetType() == LLAssetType::AT_TEXTURE && floater_outfit_snapshot && floater_outfit_snapshot->isShown())
+    {
+        floater_outfit_snapshot->notify(LLSD().with("set-finished", LLSD().with("ok", false).with("msg", "inventory")));
+    }
 }
 
