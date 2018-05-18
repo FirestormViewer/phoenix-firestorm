@@ -199,18 +199,7 @@ static bool handleAvatarHoverOffsetChanged(const LLSD& newvalue)
 {
 	if (isAgentAvatarValid())
 	{
-		// <FS:Ansariel> [Legacy bake]
-		//gAgentAvatarp->setHoverIfRegionEnabled();
-		if (gAgent.getRegion()->avatarHoverHeightEnabled())
-		{
-			LLVector3 avOffset(0.0f, 0.0f, llclamp<F32>(newvalue.asReal(), MIN_HOVER_Z, MAX_HOVER_Z));
-			gAgentAvatarp->setHoverOffset(avOffset, true);
-		}
-		else if (!gAgentAvatarp->isUsingServerBakes())
-		{
-			gAgentAvatarp->computeBodySize();
-		}
-		// </FS:Ansariel> [Legacy bake]
+		gAgentAvatarp->setHoverIfRegionEnabled();
 	}
 	return true;
 }
