@@ -4688,8 +4688,7 @@ void LLAgent::teleportRequest(const U64& region_handle, const LLVector3& pos_loc
 // [/RLVa:KB]
 {
 	LLViewerRegion* regionp = getRegion();
-	bool is_local = (region_handle == regionp->getHandle());
-	if(regionp && teleportCore(is_local))
+	if (regionp && teleportCore(region_handle == regionp->getHandle()))
 	{
 		LL_INFOS("") << "TeleportLocationRequest: '" << region_handle << "':"
 					 << pos_local << LL_ENDL;

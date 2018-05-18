@@ -31,6 +31,9 @@
 
 // Freetype stuff
 #include <ft2build.h>
+#ifdef LL_WINDOWS
+#include <freetype2\freetype\ftsystem.h>
+#endif
 
 // For some reason, this won't work if it's not wrapped in the ifdef
 #ifdef FT_FREETYPE_H
@@ -107,6 +110,10 @@ LLFontFreetype::LLFontFreetype()
 	mAscender(0.f),
 	mDescender(0.f),
 	mLineHeight(0.f),
+#ifdef LL_WINDOWS
+	pFileStream(NULL),
+	pFtStream(NULL),
+#endif
 	mIsFallback(FALSE),
 	mFTFace(NULL),
 	mRenderGlyphCount(0),
@@ -134,6 +141,10 @@ LLFontFreetype::~LLFontFreetype()
 	std::for_each(mCharGlyphInfoMap.begin(), mCharGlyphInfoMap.end(), DeletePairedPointer());
 	mCharGlyphInfoMap.clear();
 
+#ifdef LL_WINDOWS
+	delete pFileStream; // closed by FT_Done_Face
+	delete pFtStream;
+#endif
 	delete mFontBitmapCachep;
 	// mFallbackFonts cleaned up by LLPointer destructor
 
@@ -144,6 +155,21 @@ LLFontFreetype::~LLFontFreetype()
 	delete[] mKerningCache;
 	// </FS:ND>
 }
+
+#ifdef LL_WINDOWS
+unsigned long ft_read_cb(FT_Stream stream, unsigned long offset, unsigned char *buffer, unsigned long count) {
+	if (count <= 0) return count;
+	llifstream *file_stream = static_cast<llifstream *>(stream->descriptor.pointer);
+	file_stream->seekg(offset, std::ios::beg);
+	file_stream->read((char*)buffer, count);
+	return file_stream->gcount();
+}
+
+void ft_close_cb(FT_Stream stream) {
+	llifstream *file_stream = static_cast<llifstream *>(stream->descriptor.pointer);
+	file_stream->close();
+}
+#endif
 
 BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 components, BOOL is_fallback)
 {
@@ -157,13 +183,46 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 	
 	int error;
 
-	// <FS:ND> FIRE-7570. Only load/mmap fonts once. loadFont will either load a font into memory, or reuse an already loaded font.
-
-	// error = FT_New_Face( gFTLibrary,
-	// 					 filename.c_str(),
-	// 					 0,
-	// 					 &mFTFace );
-
+// <FS:ND> FIRE-7570. Only load/mmap fonts once. loadFont will either load a font into memory, or reuse an already loaded font.
+//#ifdef LL_WINDOWS
+//	pFileStream = new llifstream(filename, std::ios::binary);
+//	if (pFileStream->is_open())
+//	{
+//		std::streampos beg = pFileStream->tellg();
+//		pFileStream->seekg(0, std::ios::end);
+//		std::streampos end = pFileStream->tellg();
+//		std::size_t file_size = end - beg;
+//		pFileStream->seekg(0, std::ios::beg);
+//
+//		pFtStream = new LLFT_Stream();
+//		pFtStream->base = 0;
+//		pFtStream->pos = 0;
+//		pFtStream->size = file_size;
+//		pFtStream->descriptor.pointer = pFileStream;
+//		pFtStream->read = ft_read_cb;
+//		pFtStream->close = ft_close_cb;
+//
+//		FT_Open_Args args;
+//		args.flags = FT_OPEN_STREAM;
+//		args.stream = (FT_StreamRec*)pFtStream;
+//
+//		error = FT_Open_Face(gFTLibrary,
+//							 &args,
+//							 0,
+//							 &mFTFace);
+//	}
+//	else
+//	{
+//		delete pFileStream;
+//		pFileStream = NULL;
+//		return FALSE;
+//	}
+//#else
+//	error = FT_New_Face( gFTLibrary,
+//						 filename.c_str(),
+//						 0,
+//						 &mFTFace);
+//#endif
 	FT_Open_Args openArgs;
 	memset( &openArgs, 0, sizeof( openArgs ) );
 	openArgs.memory_base = gFontManagerp->loadFont( filename, openArgs.memory_size );
@@ -174,11 +233,19 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 	openArgs.flags = FT_OPEN_MEMORY;
 
 	error = FT_Open_Face( gFTLibrary, &openArgs, 0, &mFTFace );
+// </FS:ND>
 
-	// </FS:ND>
-
-    if (error)
+	if (error)
 	{
+// <FS:ND> FIRE-7570. Only load/mmap fonts once. loadFont will either load a font into memory, or reuse an already loaded font.
+//#ifdef LL_WINDOWS
+//		pFileStream->close();
+//		delete pFileStream;
+//		delete pFtStream;
+//		pFileStream = NULL;
+//		pFtStream = NULL;
+//#endif
+// </FS:ND>
 		return FALSE;
 	}
 
@@ -195,6 +262,15 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 	{
 		// Clean up freetype libs.
 		FT_Done_Face(mFTFace);
+// <FS:ND> FIRE-7570. Only load/mmap fonts once. loadFont will either load a font into memory, or reuse an already loaded font.
+//#ifdef LL_WINDOWS
+//		pFileStream->close();
+//		delete pFileStream;
+//		delete pFtStream;
+//		pFileStream = NULL;
+//		pFtStream = NULL;
+//#endif
+// </FS:ND>
 		mFTFace = NULL;
 		return FALSE;
 	}

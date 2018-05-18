@@ -174,8 +174,7 @@ Your account is not accessible until
 If you feel this is an error, please contact support@secondlife.com.</string>
 	<string name="LoginFailedPendingLogoutFault">Request for logout responded with a fault from simulator.</string>
 	<string name="LoginFailedPendingLogout">The system is logging you out right now.
-Your Account will not be available until
-[TIME] Pacific Time.</string>
+Please wait a minute before you try logging in again.</string>
 	<string name="LoginFailedUnableToCreateSession">Unable to create valid session.</string>
 	<string name="LoginFailedUnableToConnectToSimulator">Unable to connect to a simulator.</string>
 	<string name="LoginFailedRestrictedHours">Your account can only access Second Life
@@ -3028,6 +3027,9 @@ Try enclosing path to the editor with double quotes.
 
   <string name="DoubleClickTeleportEnabled">DoubleClick Teleport enabled.</string>
   <string name="DoubleClickTeleportDisabled">DoubleClick Teleport disabled.</string>
+
+  <string name="AlwaysRunEnabled">Always Run enabled.</string>
+  <string name="AlwaysRunDisabled">Always Run disabled.</string>
 
   <string name="FSRegionRestartInLocalChat">The region you are in now is about to restart. If you stay in this region you will be logged out.</string>
 

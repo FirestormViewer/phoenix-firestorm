@@ -48,6 +48,7 @@ public:
 	void setBadgeLabel(const LLStringExplicit& label);
 	// </FS:Ansariel>
 	void setBadgeVisibility(bool visible);
+	void setDrawBadgeAtTop(bool draw_at_top);
 
 private:
 

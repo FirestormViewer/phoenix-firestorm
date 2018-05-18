@@ -288,9 +288,8 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 		Abmeldeanforderung führte zu einem Simulatorfehler.
 	</string>
 	<string name="LoginFailedPendingLogout">
-		Das System meldet Sie gerade ab.
-Ihr Konto ist erst ab
-[TIME] Pacific Time wieder verfügbar.
+		Das System meldet Sie gerade ab. 
+Bitte warten Sie eine Minute, bevor Sie sich erneut einloggen.
 	</string>
 	<string name="LoginFailedUnableToCreateSession">
 		Es kann keine gültige Sitzung erstellt werden.
@@ -6777,14 +6776,18 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="SLGridStatusOtherError">
 		SL-Grid-Status-Fehler: [STATUS] ( https://de.wikipedia.org/wiki/HTTP-Statuscode ).
 	</string>
-
 	<string name="DoubleClickTeleportEnabled">
 		Doppelklick-Teleport aktiviert.
 	</string>
 	<string name="DoubleClickTeleportDisabled">
 		Doppelklick-Teleport deaktiviert.
 	</string>
-
+	<string name="AlwaysRunEnabled">
+		Immer rennen aktiviert.
+	</string>
+	<string name="AlwaysRunDisabled">
+		Immer rennen deaktiviert.
+	</string>
 	<string name="FSRegionRestartInLocalChat">
 		Die Region, in der Sie sich gerade befinden, ist dabei neu zu starten. Falls Sie in dieser Region bleiben, werden Sie ausgeloggt.
 	</string>

@@ -95,7 +95,7 @@ public:
 		LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
 
 		registrar.add("Gear.Edit", boost::bind(&edit_outfit));
-		registrar.add("Gear.TakeOff", boost::bind(&LLWearingGearMenu::onTakeOff, this));
+		registrar.add("Gear.TakeOff", boost::bind(&LLPanelWearing::onRemoveItem, mPanelWearing));
 		registrar.add("Gear.Copy", boost::bind(&LLPanelWearing::copyToClipboard, mPanelWearing));
 
 		enable_registrar.add("Gear.OnEnable", boost::bind(&LLPanelWearing::isActionEnabled, mPanelWearing, _2));
@@ -108,13 +108,6 @@ public:
 	LLToggleableMenu* getMenu() { return mMenu; }
 
 private:
-
-	void onTakeOff()
-	{
-		uuid_vec_t selected_uuids;
-		mPanelWearing->getSelectedItemsUUIDs(selected_uuids);
-		LLAppearanceMgr::instance().removeItemsFromAvatar(selected_uuids);
-	}
 
 	LLToggleableMenu*		mMenu;
 	LLPanelWearing* 		mPanelWearing;
@@ -412,7 +405,18 @@ bool LLPanelWearing::isActionEnabled(const LLSD& userdata)
 
 	if (command_name == "take_off")
 	{
-		return hasItemSelected() && canTakeOffSelected();
+		if (mWearablesTab->isExpanded())
+		{
+			return hasItemSelected() && canTakeOffSelected();
+		}
+		else
+		{
+			LLScrollListItem* item = mTempItemsList->getFirstSelected();
+			if (item && item->getUUID().notNull())
+			{
+				return true;
+			}
+		}
 	}
 
 	return false;
@@ -604,13 +608,28 @@ void LLPanelWearing::onEditAttachment()
 void LLPanelWearing::onRemoveAttachment()
 {
 	LLScrollListItem* item = mTempItemsList->getFirstSelected();
-	if (item)
+	if (item && item->getUUID().notNull())
 	{
 		LLSelectMgr::getInstance()->deselectAll();
 		LLSelectMgr::getInstance()->selectObjectAndFamily(mAttachmentsMap[item->getUUID()]);
 		LLSelectMgr::getInstance()->sendDropAttachment();
 	}
 }
+
+void LLPanelWearing::onRemoveItem()
+{
+	if (mWearablesTab->isExpanded())
+	{
+		uuid_vec_t selected_uuids;
+		getSelectedItemsUUIDs(selected_uuids);
+		LLAppearanceMgr::instance().removeItemsFromAvatar(selected_uuids);
+	}
+	else
+	{
+		onRemoveAttachment();
+	}
+}
+
 
 void LLPanelWearing::copyToClipboard()
 {

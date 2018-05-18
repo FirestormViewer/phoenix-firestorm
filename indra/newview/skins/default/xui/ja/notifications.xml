@@ -2683,7 +2683,7 @@ Linden Lab
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmEmptyTrash">
-		[COUNT] 個のアイテムが完全に削除されます。本当にごみ箱の中身をすべて削除しますか？
+		[COUNT] 個のアイテムとフォルダーが完全に削除されます。ごみ箱の項目をすべて削除しますか？
 		<usetemplate ignoretext="インベントリのごみ箱フォルダを空にする前の確認" name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="TrashIsFull">
@@ -3892,12 +3892,18 @@ M キーを押して変更します。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect">
-		ボイスサーバーに接続できません：
+		ボイスサーバーに接続できません： 音声に許可される必要のある 
 
 &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
-ボイスチャットによるコミュニケーションが利用できません。
+ポート: 
+:TCP:80, 443 
+:UDP:3478, 3479, 5060, 5062, 6250, 12000-32000
+
 お使いのネットワークやファイアウォールの設定を確認してください。
+お使いのルーターの SIP ALG 機能をすべて無効にしてください。
+
+ボイスチャットによるコミュニケーションが利用できません。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AvatarRezLeftNotification">
