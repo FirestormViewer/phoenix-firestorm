@@ -751,6 +751,22 @@ void FSPanelSearchPeople::find()
 		mSearchResults->setCommentText(LLTrans::getString("search_short"));
 		return;
 	}
+
+	// slow and stupid, but it's late
+	S32 len = text.length();
+	std::string temp;
+	for (S32 i = 0; i < len; i++)
+	{
+		if (text[i] == '.')
+		{
+			temp += " ";
+		}
+		else
+		{
+			temp += text[i];
+		}
+	}
+	text = temp;
 	
 	mResultsReceived = 0;
 	if (mQueryID.notNull())
