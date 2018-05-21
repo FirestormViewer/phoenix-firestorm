@@ -168,9 +168,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>608dfd27f7aed9d57cf1f581c995b680</string>
+              <string>64c1dff0e19792acec7fd32556bf4d7b</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux64-180841947.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux64-181411635.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2840,9 +2840,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4df349abfc942fb8e674244d1bd0a515</string>
+              <string>774e6a85deb149309f1ccf59d2f5c5a4</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.3.180841957-linux64-180841957.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.3.181411657-linux64-181411657.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
