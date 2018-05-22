@@ -6,7 +6,7 @@ if (USESYSTEMLIBS)
     set(CEFPLUGIN OFF CACHE BOOL
         "CEFPLUGIN support for the llplugin/llmedia test apps.")
 else (USESYSTEMLIBS)
-  if (LINUX AND ( CMAKE_CXX_COMPILER_VERSION GREATER_EQUAL 5 ) )
+  if (LINUX AND ( CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9.4 ) )
       message( "Using dullahan for GCC >= 5 " )
       use_prebuilt_binary(dullahan-gcc5)
   else()
