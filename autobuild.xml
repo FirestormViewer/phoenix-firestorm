@@ -3,6 +3,36 @@
 <map>
     <key>installables</key>
     <map>
+      <key>dullahan-gcc5</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (c) 2017, Linden Research, Inc.</string>
+        <key>description</key>
+        <string>A headless browser SDK that uses the Chromium Embedded Framework (CEF). It is designed to make it easier to write applications that render modern web content directly to a memory buffer, inject synthesized mouse and keyboard events as well as interact with web based features like JavaScript or cookies.</string>
+        <key>license</key>
+        <string>MPL</string>
+        <key>license_file</key>
+        <string>LICENSES/LICENSE.txt</string>
+        <key>name</key>
+        <string>dullahan-gcc5</string>
+        <key>platforms</key>
+        <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>cffd8a7f9d8e55ecd50c72cc39b41f3d</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.1.1080_3.3325.1750.gaabe4c4-linux64-181420123.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>1.1.1080_3.3325.1750.gaabe4c4</string>
+      </map>
       <key>ndPhysicsStub</key>
       <map>
         <key>license</key>
@@ -156,9 +186,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2dd97d8bd012be4cdc58f550395feb7d</string>
+              <string>ff2e4df5bffe0203dc654b111347e617</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux-180871815.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux-181412059.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -168,9 +198,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>608dfd27f7aed9d57cf1f581c995b680</string>
+              <string>64c1dff0e19792acec7fd32556bf4d7b</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux64-180841947.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux64-181411635.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2828,9 +2858,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>86cb59b79ce0aafe28d4055a17d1f748</string>
+              <string>c5404596040e5f6e66a09a6de5edeefa</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.3.180871824-linux-180871824.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.3.181412109-linux-181412109.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2840,9 +2870,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4df349abfc942fb8e674244d1bd0a515</string>
+              <string>774e6a85deb149309f1ccf59d2f5c5a4</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.3.180841957-linux64-180841957.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.3.181411657-linux64-181411657.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

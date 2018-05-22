@@ -2039,7 +2039,7 @@ class LinuxManifest(ViewerManifest):
 
         self.path("featuretable_linux.txt")
 
-        with self.prefix(src=pkgdir,dst=""):
+        with self.prefix(src=pkgdir,dst="bin"):
             self.path("ca-bundle.crt")
 
         if self.is_packaging_viewer():

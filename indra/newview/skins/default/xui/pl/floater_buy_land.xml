@@ -210,7 +210,7 @@ Działka ta zawiera 512 m² ziemi.
 	<text name="currency_balance">
 		Masz 2,100 L$.
 	</text>
-	<check_box label="Usuń [AMOUNT] m² z kontrybucji w grupie." name="remove_contribution"/>
 	<button label="Zakup" name="buy_btn"/>
+	<check_box label="Usuń [AMOUNT] m² z kontrybucji w grupie." name="remove_contribution"/>
 	<button label="Anuluj" name="cancel_btn"/>
 </floater>
