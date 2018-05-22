@@ -536,7 +536,8 @@ void LLFloaterTexturePicker::draw()
 		{
 			LLPointer<LLViewerFetchedTexture> texture = NULL;
 
-			if ((mImageAssetID == IMG_USE_BAKED_EYES) || (mImageAssetID == IMG_USE_BAKED_HAIR) || (mImageAssetID == IMG_USE_BAKED_HEAD) || (mImageAssetID == IMG_USE_BAKED_LOWER) || (mImageAssetID == IMG_USE_BAKED_SKIRT) || (mImageAssetID == IMG_USE_BAKED_UPPER))
+			if ((mImageAssetID == IMG_USE_BAKED_EYES) || (mImageAssetID == IMG_USE_BAKED_HAIR) || (mImageAssetID == IMG_USE_BAKED_HEAD) || (mImageAssetID == IMG_USE_BAKED_LOWER) || (mImageAssetID == IMG_USE_BAKED_SKIRT) || (mImageAssetID == IMG_USE_BAKED_UPPER)
+				|| (mImageAssetID == IMG_USE_BAKED_LEFTARM) || (mImageAssetID == IMG_USE_BAKED_LEFTLEG) || (mImageAssetID == IMG_USE_BAKED_AUX1) || (mImageAssetID == IMG_USE_BAKED_AUX2) || (mImageAssetID == IMG_USE_BAKED_AUX3))
 			{
 				LLViewerObject* obj = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
 				if (obj)
@@ -900,6 +901,27 @@ void LLFloaterTexturePicker::onModeSelect(LLUICtrl* ctrl, void *userdata)
 		{
 			val = 5;
 		}
+		else if (imageID == IMG_USE_BAKED_LEFTARM)
+		{
+			val = 6;
+		}
+		else if (imageID == IMG_USE_BAKED_LEFTLEG)
+		{
+			val = 7;
+		}
+		else if (imageID == IMG_USE_BAKED_AUX1)
+		{
+			val = 8;
+		}
+		else if (imageID == IMG_USE_BAKED_AUX2)
+		{
+			val = 9;
+		}
+		else if (imageID == IMG_USE_BAKED_AUX3)
+		{
+			val = 10;
+		}
+
 
 		self->getChild<LLComboBox>("l_bake_use_texture_combo_box")->setSelectedByValue(val, TRUE);
 	}
@@ -1070,6 +1092,26 @@ void LLFloaterTexturePicker::onBakeTextureSelect(LLUICtrl* ctrl, void *user_data
 	else if (type == 5)
 	{
 		imageID = IMG_USE_BAKED_HAIR;
+	}
+	else if (type == 6)
+	{
+		imageID = IMG_USE_BAKED_LEFTARM;
+	}
+	else if (type == 7)
+	{
+		imageID = IMG_USE_BAKED_LEFTLEG;
+	}
+	else if (type == 8)
+	{
+		imageID = IMG_USE_BAKED_AUX1;
+	}
+	else if (type == 9)
+	{
+		imageID = IMG_USE_BAKED_AUX2;
+	}
+	else if (type == 10)
+	{
+		imageID = IMG_USE_BAKED_AUX3;
 	}
 
 	self->setImageID(imageID);
@@ -1680,7 +1722,8 @@ void LLTextureCtrl::draw()
 	{
 		LLPointer<LLViewerFetchedTexture> texture = NULL;
 
-		if ((mImageAssetID == IMG_USE_BAKED_EYES) || (mImageAssetID == IMG_USE_BAKED_HAIR) || (mImageAssetID == IMG_USE_BAKED_HEAD) || (mImageAssetID == IMG_USE_BAKED_LOWER) || (mImageAssetID == IMG_USE_BAKED_SKIRT) || (mImageAssetID == IMG_USE_BAKED_UPPER))
+		if ((mImageAssetID == IMG_USE_BAKED_EYES) || (mImageAssetID == IMG_USE_BAKED_HAIR) || (mImageAssetID == IMG_USE_BAKED_HEAD) || (mImageAssetID == IMG_USE_BAKED_LOWER) || (mImageAssetID == IMG_USE_BAKED_SKIRT) || (mImageAssetID == IMG_USE_BAKED_UPPER)
+			|| (mImageAssetID == IMG_USE_BAKED_LEFTARM) || (mImageAssetID == IMG_USE_BAKED_LEFTLEG) || (mImageAssetID == IMG_USE_BAKED_AUX1) || (mImageAssetID == IMG_USE_BAKED_AUX2) || (mImageAssetID == IMG_USE_BAKED_AUX3))
 		{
 			LLViewerObject* obj = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
 			if (obj)
