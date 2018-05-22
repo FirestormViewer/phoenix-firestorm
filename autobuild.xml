@@ -3,6 +3,36 @@
 <map>
     <key>installables</key>
     <map>
+      <key>dullahan-gcc5</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (c) 2017, Linden Research, Inc.</string>
+        <key>description</key>
+        <string>A headless browser SDK that uses the Chromium Embedded Framework (CEF). It is designed to make it easier to write applications that render modern web content directly to a memory buffer, inject synthesized mouse and keyboard events as well as interact with web based features like JavaScript or cookies.</string>
+        <key>license</key>
+        <string>MPL</string>
+        <key>license_file</key>
+        <string>LICENSES/LICENSE.txt</string>
+        <key>name</key>
+        <string>dullahan-gcc5</string>
+        <key>platforms</key>
+        <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>cffd8a7f9d8e55ecd50c72cc39b41f3d</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.1.1080_3.3325.1750.gaabe4c4-linux64-181420123.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>1.1.1080_3.3325.1750.gaabe4c4</string>
+      </map>
       <key>ndPhysicsStub</key>
       <map>
         <key>license</key>
