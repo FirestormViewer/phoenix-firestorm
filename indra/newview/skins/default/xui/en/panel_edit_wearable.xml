@@ -3,7 +3,7 @@
  background_visible="false"
  bevel_style="in"
  follows="all"
- height="700"
+ height="570"
  help_topic="fs_edit_body_part"
  label="Wearable"
  layout="topleft"
@@ -411,7 +411,7 @@
         <panel
          filename="panel_edit_tattoo.xml"
          follows="all"
-         height="900"
+         height="425"
          layout="topleft"
          left="0"
          name="edit_tattoo_panel"

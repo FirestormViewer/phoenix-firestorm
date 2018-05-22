@@ -2,12 +2,21 @@
  <panel
      background_visible="true"
 	 follows="all"
-	 height="900"
+	 height="400"
 	 layout="topleft"
 	 left="0"
 	 name="edit_tattoo_panel"
 	 top_pad="10"
 	 width="333" >
+	<scroll_container
+	 follows="all"
+	 layout="topleft"
+	 left="10"
+	 name="tattoo_scroll_container"
+	 reserve_scroll_corner="false"
+	 top="0"
+	 bottom="-1"
+	 right="-10">
 	 <panel
 	  border="false"
       bg_alpha_color="DkGray2"
@@ -15,12 +24,12 @@
       background_visible="true"
       background_opaque="true"
 	  follows="all"
-	  height="900" 
-	  left="10" 
+	  height="725" 
+	  left="0" 
 	  layout="topleft" 
 	  name="avatar_tattoo_color_panel"
 	  top="0"
-	  width="313" >
+	  width="298" >
        <texture_picker
         can_apply_immediately="true"
         default_image_name="Default"
@@ -202,5 +211,6 @@
              function="ColorSwatch.Commit" />
        </color_swatch>
 	 </panel>
+	</scroll_container>
 </panel>
 
