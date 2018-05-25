@@ -296,6 +296,12 @@ void LLVOAvatarSelf::setHoverIfRegionEnabled()
 			setHoverOffset(LLVector3(0.0, 0.0, llclamp(hover_z,MIN_HOVER_Z,MAX_HOVER_Z)));
 			LL_INFOS("Avatar") << avString() << " set hover height from debug setting " << hover_z << LL_ENDL;
 		}
+		// <FS:Ansariel> [Legacy bake]
+		else if (!isUsingServerBakes())
+		{
+			computeBodySize();
+		}
+		// </FS:Ansariel> [Legacy bake]
 		else 
 		{
 			setHoverOffset(LLVector3(0.0, 0.0, 0.0));

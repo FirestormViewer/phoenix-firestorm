@@ -28,48 +28,46 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsfloatersearch.h"
+
 #include "fsavatarsearchmenu.h"
+#include "fsdispatchclassifiedclickthrough.h"
+#include "fspanelclassified.h"
+#include "fspanelprofile.h"
 #include "fsscrolllistctrl.h"
 #include "lfsimfeaturehandler.h"
 #include "llagent.h"
+#include "llavataractions.h"
 #include "llavatarname.h"
 #include "llavatarnamecache.h"
+#include "llavatarpropertiesprocessor.h"
 #include "llclassifiedflags.h"
+#include "llclassifiedinfo.h"
+#include "llcombobox.h"
 #include "lldateutil.h"
-#include "llqueryflags.h"
 #include "lleventflags.h"
 #include "lleventnotifier.h"
+#include "llfloaterreg.h"
+#include "llfloaterworldmap.h"
+#include "llgroupactions.h"
 #include "llgroupmgr.h"
-#include "llparcel.h"
-#include "llclassifiedinfo.h"
-#include "llremoteparcelrequest.h"
-#include "llavatarpropertiesprocessor.h"
-#include "llproductinforequest.h"
+#include "llloadingindicator.h"
 #include "lllogininstance.h"
+#include "llnotificationsutil.h"
+#include "llpanelclassified.h"
+#include "llparcel.h"
+#include "llproductinforequest.h"
+#include "llqueryflags.h"
+#include "llremoteparcelrequest.h"
+#include "lltimer.h"
+#include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llviewergenericmessage.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
-#include "llnotificationsutil.h"
-#include "lltrans.h"
 #include "message.h"
-
-#include "llcombobox.h"
-#include "llfloaterreg.h"
-#include "llloadingindicator.h"
-#include "lltimer.h"
-
-#include "llavataractions.h"
-#include "llgroupactions.h"
-#include "llfloaterworldmap.h"
-#include "fspanelclassified.h"
-#include "fspanelprofile.h"
-#include "llpanelclassified.h"
-#include "fsdispatchclassifiedclickthrough.h"
-
-#include <string>
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string.hpp>
+#include <string>
 
 static const S32 MIN_SEARCH_STRING_SIZE = 2;
 static const S32 RESULT_PAGE_SIZE = 100;
@@ -87,19 +85,19 @@ public:
 	FSSearchRemoteParcelInfoObserver(FSFloaterSearch* floater) : LLRemoteParcelInfoObserver(),
 		mParent(floater)
 	{}
-	
+
 	~FSSearchRemoteParcelInfoObserver()
 	{
 		// remove any in-flight observers
 		std::set<LLUUID>::iterator it;
 		for (it = mParcelIDs.begin(); it != mParcelIDs.end(); ++it)
-			{
-				const LLUUID &id = *it;
-				LLRemoteParcelInfoProcessor::getInstance()->removeObserver(id, this);
-			}
+		{
+			const LLUUID &id = *it;
+			LLRemoteParcelInfoProcessor::getInstance()->removeObserver(id, this);
+		}
 		mParcelIDs.clear();
 	}
-	
+
 	/*virtual*/ void processParcelInfo(const LLParcelData& parcel_data)
 	{
 		if (mParent)
@@ -109,7 +107,7 @@ public:
 		mParcelIDs.erase(parcel_data.parcel_id);
 		LLRemoteParcelInfoProcessor::getInstance()->removeObserver(parcel_data.parcel_id, this);
 	}
-	
+
 	/*virtual*/ void setParcelID(const LLUUID& parcel_id)
 	{
 		if (!parcel_id.isNull())
@@ -119,14 +117,14 @@ public:
 			LLRemoteParcelInfoProcessor::getInstance()->sendParcelInfoRequest(parcel_id);
 		}
 	}
-	
+
 	/*virtual*/ void setErrorStatus(S32 status, const std::string& reason)
 	{
 		LL_ERRS("Search") << "Can't complete remote parcel request. Http Status: " << status << ". Reason : " << reason << LL_ENDL;
 	}
 private:
 	std::set<LLUUID>	mParcelIDs;
-	FSFloaterSearch*		mParent;
+	FSFloaterSearch*	mParent;
 };
 
 ///// Avatar Properties Observer /////
@@ -137,7 +135,7 @@ public:
 	FSSearchAvatarPropertiesObserver(FSFloaterSearch* floater) : LLAvatarPropertiesObserver(),
 	mParent(floater)
 	{}
-	
+
 	~FSSearchAvatarPropertiesObserver()
 	{
 		// remove any in-flight observers
@@ -149,7 +147,7 @@ public:
 		}
 		mAvatarIDs.clear();
 	}
-	
+
 	void processProperties(void* data, EAvatarProcessorType type)
 	{
 		if (APT_PROPERTIES == type)
@@ -164,7 +162,7 @@ public:
 		if (APT_CLASSIFIED_INFO == type)
 		{
 			LLAvatarClassifiedInfo* c_info = static_cast<LLAvatarClassifiedInfo*>(data);
-			if(c_info)
+			if (c_info)
 			{
 				mParent->displayClassifiedDetails(c_info);
 				LLAvatarPropertiesProcessor::getInstance()->removeObserver(c_info->classified_id, this);
@@ -181,7 +179,7 @@ public:
 	}
 private:
 	std::set<LLUUID>	mAvatarIDs;
-	FSFloaterSearch*		mParent;
+	FSFloaterSearch*	mParent;
 };
 
 ///// Group Info Observer /////
@@ -201,12 +199,12 @@ public:
 			groupmgr->sendGroupPropertiesRequest(group_id);
 		}
 	}
-	
+
 	~FSSearchGroupInfoObserver()
 	{
 		LLGroupMgr::getInstance()->removeObserver(this);
 	}
-	
+
 	void changed(LLGroupChange gc)
 	{
 		if (gc == GC_PROPERTIES)
@@ -217,8 +215,8 @@ public:
 		}
 	}
 private:
-	FSFloaterSearch* mParent;
-	LLUUID mID;
+	FSFloaterSearch*	mParent;
+	LLUUID				mID;
 };
 
 ///// Silly Classified Clickthrough Class /////
@@ -272,7 +270,9 @@ void FSFloaterSearch::onOpen(const LLSD& key)
 void FSFloaterSearch::onClose(bool app_quitting)
 {
 	if (mTabContainer)
+	{
 		gSavedSettings.setS32("FSLastSearchTab", mTabContainer->getCurrentPanelIndex());
+	}
 }
 
 BOOL FSFloaterSearch::postBuild()
@@ -287,15 +287,15 @@ BOOL FSFloaterSearch::postBuild()
 	childSetAction("teleport_btn", boost::bind(&FSFloaterSearch::onBtnTeleport, this));
 	childSetAction("map_btn", boost::bind(&FSFloaterSearch::onBtnMap, this));
 	resetVerbs();
-	
-	mPanelPeople	= findChild<FSPanelSearchPeople>("panel_ls_people");
-	mPanelGroups	= findChild<FSPanelSearchGroups>("panel_ls_groups");
-	mPanelPlaces	= findChild<FSPanelSearchPlaces>("panel_ls_places");
-	mPanelEvents	= findChild<FSPanelSearchEvents>("panel_ls_events");
-	mPanelLand		= findChild<FSPanelSearchLand>("panel_ls_land");
+
+	mPanelPeople		= findChild<FSPanelSearchPeople>("panel_ls_people");
+	mPanelGroups		= findChild<FSPanelSearchGroups>("panel_ls_groups");
+	mPanelPlaces		= findChild<FSPanelSearchPlaces>("panel_ls_places");
+	mPanelEvents		= findChild<FSPanelSearchEvents>("panel_ls_events");
+	mPanelLand			= findChild<FSPanelSearchLand>("panel_ls_land");
 	mPanelClassifieds	= findChild<FSPanelSearchClassifieds>("panel_ls_classifieds");
-	mPanelWeb		= findChild<FSPanelSearchWeb>("panel_ls_web");
-	
+	mPanelWeb			= findChild<FSPanelSearchWeb>("panel_ls_web");
+
 	// <KC> If skin has legacy full profile view, use it
 	mPanelProfile = mPanelPeople->findChild<FSPanelProfile>("panel_profile_view");
 	if (mPanelProfile)
@@ -304,7 +304,7 @@ BOOL FSFloaterSearch::postBuild()
 		mPanelProfile->setEmbedded(true);
 		mPanelPeople->childSetAction("people_profile_btn", boost::bind(&FSFloaterSearch::onBtnPeopleProfile, this));
 	}
-	
+
 	mDetailsPanel =		getChild<LLPanel>("panel_ls_details");
 	mDetailTitle =		getChild<LLTextEditor>("title");
 	mDetailDesc =		getChild<LLTextEditor>("desc");
@@ -326,19 +326,19 @@ BOOL FSFloaterSearch::postBuild()
 		mDetailsPanel->setVisible(false);
 	}
 	mHasSelection = false;
-	
+
 	if (!mTabContainer->selectTab(gSavedSettings.getS32("FSLastSearchTab")))
 	{
 		mTabContainer->selectFirstTab();
 	}
-	
+
 	return TRUE;
 }
 
 void FSFloaterSearch::onTabChange()
 {
 	LLPanel* active_panel = mTabContainer->getCurrentPanel();
-	
+
 	if (active_panel == mPanelWeb)
 	{
 		mDetailsPanel->setVisible(false);
@@ -354,7 +354,7 @@ void FSFloaterSearch::onTabChange()
 LLPanel* FSFloaterSearch::getSearchPanel(std::string panel_name)
 {
 	FSFloaterSearch* search_instance = LLFloaterReg::getTypedInstance<FSFloaterSearch>("search");
-	if(search_instance && search_instance->mTabContainer)
+	if (search_instance && search_instance->mTabContainer)
 	{
 		return search_instance->mTabContainer->getPanelByName(panel_name);
 	}
@@ -374,19 +374,19 @@ void FSFloaterSearch::onSelectedItem(const LLUUID& selected_item, ESearchCategor
 		switch (type)
 		{
 			case SC_AVATAR:
-			{
-				// <KC> If skin has legacy full profile view, use it
-				if (mPanelProfile)
 				{
-					mPanelProfile->setVisible(true);
-					mPanelProfile->onOpen(selected_item);
+					// <KC> If skin has legacy full profile view, use it
+					if (mPanelProfile)
+					{
+						mPanelProfile->setVisible(true);
+						mPanelProfile->onOpen(selected_item);
+					}
+					else
+					{
+						LLAvatarPropertiesProcessor::getInstance()->addObserver(selected_item, mAvatarPropertiesObserver);
+						LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(selected_item);
+					}
 				}
-				else
-				{
-					LLAvatarPropertiesProcessor::getInstance()->addObserver(selected_item, mAvatarPropertiesObserver);
-					LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(selected_item);
-				}
-			}
 				break;
 			case SC_GROUP:
 				mGroupPropertiesRequest = new FSSearchGroupInfoObserver(selected_item, this);
@@ -408,11 +408,11 @@ void FSFloaterSearch::onSelectedEvent(const S32 selected_event)
 {
 	resetVerbs();
 	flushDetails();
-	
+
 	gMessageSystem->newMessageFast(_PREHASH_EventInfoRequest);
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID() );
-	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID() );
+	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 	gMessageSystem->nextBlockFast(_PREHASH_EventData);
 	gMessageSystem->addU32Fast(_PREHASH_EventID, selected_event);
 	gAgent.sendReliableMessage();
@@ -429,18 +429,23 @@ void FSFloaterSearch::displayParcelDetails(const LLParcelData& parcel_data)
 	// HACK: Flag 0x2 == adult region,
 	// Flag 0x1 == mature region, otherwise assume PG
 	if (parcel_data.flags & 0x2)
+	{
 		mDetailMaturity->setValue("Parcel_R_Dark");
+	}
 	else if (parcel_data.flags & 0x1)
+	{
 		mDetailMaturity->setValue("Parcel_M_Dark");
+	}
 	else
+	{
 		mDetailMaturity->setValue("Parcel_PG_Dark");
-	
+	}
+
 	LLStringUtil::format_map_t map;
 	map["DWELL"] = llformat("%.0f", (F64)parcel_data.dwell);
 	map["AREA"] = llformat("%d m²", parcel_data.actual_area);
-	map["LOCATION"] = llformat("%s (%d, %d, %d)",
-							   parcel_data.sim_name.c_str(), region_x, region_y, region_z);
-	
+	map["LOCATION"] = llformat("%s (%d, %d, %d)", parcel_data.sim_name.c_str(), region_x, region_y, region_z);
+
 	mParcelGlobal = LLVector3d(parcel_data.global_x, parcel_data.global_y, parcel_data.global_z);
 	mDetailsPanel->setVisible(true);
 	mHasSelection = true;
@@ -467,15 +472,14 @@ void FSFloaterSearch::displayAvatarDetails(LLAvatarData*& avatar_data)
 			map["PARTNER"] = LLSLURL("agent", avatar_data->partner_id, "inspect").getSLURLString();
 			mDetailAux2->setValue(getString("string.partner", map));
 		}
-		
+
 		mDetailsPanel->setVisible(true);
 		mHasSelection = true;
 		mDetailTitle->setValue(LLTrans::getString("LoadingData"));
 		mDetailDesc->setValue(avatar_data->about_text);
 		mDetailSnapshot->setValue(avatar_data->image_id);
 		mDetailAux1->setValue(getString("string.age", map));
-		LLAvatarNameCache::get(avatar_data->avatar_id,
-							   boost::bind(&FSFloaterSearch::avatarNameUpdatedCallback,this, _1, _2));
+		LLAvatarNameCache::get(avatar_data->avatar_id, boost::bind(&FSFloaterSearch::avatarNameUpdatedCallback,this, _1, _2));
 		childSetVisible("people_profile_btn", true);
 		childSetVisible("people_message_btn", true);
 		childSetVisible("people_friend_btn", true);
@@ -486,11 +490,11 @@ void FSFloaterSearch::displayAvatarDetails(LLAvatarData*& avatar_data)
 void FSFloaterSearch::displayGroupDetails(LLGroupMgrGroupData*& group_data)
 {
 	if (group_data)
-	{		
+	{
 		LLStringUtil::format_map_t map;
 		map["MEMBER_COUNT"] = llformat("%d",group_data->mMemberCount);
 		map["FOUNDER"] = LLSLURL("agent", group_data->mFounderID, "inspect").getSLURLString();
-		
+
 		mDetailsPanel->setVisible(true);
 		mHasSelection = true;
 		mDetailTitle->setValue(LLTrans::getString("LoadingData"));
@@ -506,8 +510,7 @@ void FSFloaterSearch::displayGroupDetails(LLGroupMgrGroupData*& group_data)
 		childSetVisible("group_join_btn", true);
 		getChildView("group_join_btn")->setEnabled(join_btn_enabled);
 		getChildView("group_message_btn")->setEnabled(is_member);
-		gCacheName->getGroup(getSelectedID(),
-							 boost::bind(&FSFloaterSearch::groupNameUpdatedCallback, this, _1, _2, _3));
+		gCacheName->getGroup(getSelectedID(), boost::bind(&FSFloaterSearch::groupNameUpdatedCallback, this, _1, _2, _3));
 	}
 }
 
@@ -516,13 +519,18 @@ void FSFloaterSearch::displayClassifiedDetails(LLAvatarClassifiedInfo*& c_info)
 	if (c_info)
 	{
 		if (c_info->flags & CLASSIFIED_FLAG_MATURE)
+		{
 			mDetailMaturity->setValue("Parcel_M_Dark");
+		}
 		else
+		{
 			mDetailMaturity->setValue("Parcel_PG_Dark");
+		}
+
 		LLStringUtil::format_map_t map;
 		map["LISTING_PRICE"] = llformat("L$%d", c_info->price_for_listing);
 		map["SLURL"] = LLSLURL("parcel", c_info->parcel_id, "about").getSLURLString();
-		
+
 		mDetailsPanel->setVisible(true);
 		mHasSelection = true;
 		mDetailMaturity->setVisible(true);
@@ -541,11 +549,18 @@ void FSFloaterSearch::displayClassifiedDetails(LLAvatarClassifiedInfo*& c_info)
 void FSFloaterSearch::displayEventDetails(U32 eventId, F64 eventEpoch, const std::string& eventDateStr, const std::string &eventName, const std::string &eventDesc, const std::string &simName, U32 eventDuration, U32 eventFlags, U32 eventCover, LLVector3d eventGlobalPos)
 {
 	if (eventFlags == EVENT_FLAG_ADULT)
+	{
 		mDetailMaturity->setValue("Parcel_R_Dark");
+	}
 	else if (eventFlags == EVENT_FLAG_MATURE)
+	{
 		mDetailMaturity->setValue("Parcel_M_Dark");
+	}
 	else
+	{
 		mDetailMaturity->setValue("Parcel_PG_Dark");
+	}
+
 	S32 region_x;
 	S32 region_y;
 	S32 region_z;
@@ -560,7 +575,7 @@ void FSFloaterSearch::displayEventDetails(U32 eventId, F64 eventEpoch, const std
 		map["COVERCHARGE"] = llformat("L$%d", eventCover);
 		mDetailAux2->setValue(getString("string.covercharge", map));
 	}
-	
+
 	mParcelGlobal = eventGlobalPos;
 	mEventID = eventId;
 	mDetailsPanel->setVisible(true);
@@ -599,13 +614,17 @@ void FSFloaterSearch::groupNameUpdatedCallback(const LLUUID& id, const std::stri
 void FSFloaterSearch::setLoadingProgress(bool started)
 {
 	LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("loading");
-	
-    indicator->setVisible(started);
-	
-    if (started)
-        indicator->start();
-    else
-        indicator->stop();
+
+	indicator->setVisible(started);
+
+	if (started)
+	{
+		indicator->start();
+	}
+	else
+	{
+		indicator->stop();
+	}
 }
 
 void FSFloaterSearch::resetVerbs()
@@ -673,10 +692,13 @@ void FSFloaterSearch::onBtnTeleport()
 		/// the user may elect to minimize the floater (2), or to do nothing (any other setting)
 		static LLCachedControl<U32> teleport_action(gSavedSettings, "FSLegacySearchActionOnTeleport");
 		if (teleport_action == 1)
+		{
 			closeFloater();
+		}
 		else if (teleport_action == 2)
+		{
 			setMinimized(TRUE);
-			
+		}
 	}
 }
 
@@ -728,12 +750,12 @@ BOOL FSPanelSearchPeople::postBuild()
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
 		mSearchResults->setContextMenu(&gFSAvatarSearchMenu);
 	}
-	
+
 	childSetAction("people_next", boost::bind(&FSPanelSearchPeople::onBtnNext, this));
 	childSetAction("people_back", boost::bind(&FSPanelSearchPeople::onBtnBack, this));
 	getChildView("people_next")->setEnabled(FALSE);
 	getChildView("people_back")->setEnabled(FALSE);
-	
+
 	return TRUE;
 }
 
@@ -751,19 +773,25 @@ void FSPanelSearchPeople::find()
 		mSearchResults->setCommentText(LLTrans::getString("search_short"));
 		return;
 	}
-	
+
+	LLStringUtil::replaceChar(text, '.', ' ');
+
 	mResultsReceived = 0;
 	if (mQueryID.notNull())
+	{
 		mQueryID.setNull();
+	}
 	mQueryID.generate();
 	
 	if (mStartSearch < 0)
+	{
 		mStartSearch = 0;
-	
+	}
+
 	gMessageSystem->newMessage("DirFindQuery");
 	gMessageSystem->nextBlock("AgentData");
-	gMessageSystem->addUUID("AgentID", gAgent.getID());
-	gMessageSystem->addUUID("SessionID", gAgent.getSessionID());
+	gMessageSystem->addUUID("AgentID", gAgentID);
+	gMessageSystem->addUUID("SessionID", gAgentSessionID);
 	gMessageSystem->nextBlock("QueryData");
 	gMessageSystem->addUUID("QueryID", getQueryID());
 	gMessageSystem->addString("QueryText", text);
@@ -771,7 +799,7 @@ void FSPanelSearchPeople::find()
 	gMessageSystem->addS32("QueryStart", mStartSearch);
 	gAgent.sendReliableMessage();
 	LL_DEBUGS("Search") << "Firing off search request: " << getQueryID() << LL_ENDL;
-	
+
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
 	mNumResultsReturned = 0;
@@ -780,11 +808,11 @@ void FSPanelSearchPeople::find()
 void FSPanelSearchPeople::onBtnFind()
 {
 	std::string text = mSearchComboBox->getSimple();
-	if(!text.empty())
+	if (!text.empty())
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
-	
+
 	resetSearch();
 	
 	find();
@@ -794,7 +822,7 @@ void FSPanelSearchPeople::onBtnNext()
 {
 	mStartSearch += RESULT_PAGE_SIZE;
 	getChildView("people_back")->setEnabled(TRUE);
-	
+
 	find();
 }
 
@@ -802,7 +830,7 @@ void FSPanelSearchPeople::onBtnBack()
 {
 	mStartSearch -= RESULT_PAGE_SIZE;
 	getChildView("people_back")->setEnabled(mStartSearch > 0);
-	
+
 	find();
 }
 
@@ -839,32 +867,35 @@ void FSPanelSearchPeople::onSelectItem()
 void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 {
 	LLUUID query_id;
-	std::string   first_name;
-	std::string   last_name;
+	std::string first_name;
+	std::string last_name;
 	LLUUID agent_id;
-	
+
 	msg->getUUIDFast(_PREHASH_QueryData,	_PREHASH_QueryID,	query_id);
 	msg->getUUIDFast(_PREHASH_AgentData,	_PREHASH_AgentID,	agent_id);
-	
+
 	// This result is not for us.
-	if (agent_id != gAgent.getID()) return;
+	if (agent_id != gAgentID)
+	{
+		return;
+	}
 	LL_DEBUGS("Search") << "received search results - QueryID: " << query_id << " AgentID: " << agent_id << LL_ENDL;
-	
+
 	FSPanelSearchPeople* self = (FSPanelSearchPeople*)FSFloaterSearch::getSearchPanel("panel_ls_people");
-	
+
 	// floater is closed or these are not results from our last request
 	if (NULL == self || query_id != self->getQueryID())
 	{
 		return;
 	}
-	
+
 	LLScrollListCtrl* search_results = self->getChild<LLScrollListCtrl>("search_results_people");
-	
+
 	if (self->mNumResultsReturned++ == 0)
 	{
 		search_results->deleteAllItems();
 	}
-	
+
 	// Check for status messages
 	if (msg->getNumberOfBlocks("StatusData"))
 	{
@@ -897,8 +928,8 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 			return;
 		}
 	}
-	
-	BOOL found_one = FALSE;
+
+	bool found_one = false;
 	S32 num_new_rows = msg->getNumberOfBlocksFast(_PREHASH_QueryReplies);
 	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
@@ -907,10 +938,10 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->setEnabled(FALSE);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
 	}
-	
+
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
-	
+
 	for (S32 i = 0; i < num_new_rows; i++)
 	{
 		msg->getStringFast(	_PREHASH_QueryReplies,	_PREHASH_FirstName,	first_name, i);
@@ -930,25 +961,25 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 		{
 			LL_DEBUGS("Search") << "Got: " << first_name << " " << last_name << " AgentID: " << agent_id << LL_ENDL;
 			search_results->setEnabled(TRUE);
-			found_one = TRUE;
+			found_one = true;
 			
 			std::string avatar_name;
 			avatar_name = LLCacheName::buildFullName(first_name, last_name);
-			
+
 			LLSD content;
 			LLSD element;
-			
+
 			element["id"] = agent_id;
-			
+
 			element["columns"][0]["column"]	= "icon";
 			element["columns"][0]["type"]	= "icon";
 			element["columns"][0]["value"]	= "icon_avatar_offline.tga";
-			
+
 			element["columns"][1]["column"]	= "username";
 			element["columns"][1]["value"]	= avatar_name;
-			
+
 			content["name"] = avatar_name;
-			
+
 			search_results->addElement(element, ADD_BOTTOM);
 			self->mResultsContent[agent_id.asString()] = content;
 		}
@@ -994,12 +1025,12 @@ BOOL FSPanelSearchGroups::postBuild()
 		mSearchResults->setEnabled(FALSE);
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
 	}
-	
+
 	childSetAction("groups_next", boost::bind(&FSPanelSearchGroups::onBtnNext, this));
 	childSetAction("groups_back", boost::bind(&FSPanelSearchGroups::onBtnBack, this));
 	getChildView("groups_next")->setEnabled(FALSE);
 	getChildView("groups_back")->setEnabled(FALSE);
-	
+
 	return TRUE;
 }
 
@@ -1009,14 +1040,14 @@ void FSPanelSearchGroups::focusDefaultElement()
 }
 
 void FSPanelSearchGroups::find()
-{	
+{
 	std::string text = filterShortWords(mSearchComboBox->getSimple());
 	if (text.size() == 0)
 	{
 		mSearchResults->setCommentText(LLTrans::getString("search_short"));
 		return;
 	}
-	
+
 	static LLUICachedControl<bool> inc_pg("ShowPGSims", 1);
 	static LLUICachedControl<bool> inc_mature("ShowMatureSims", 0);
 	static LLUICachedControl<bool> inc_adult("ShowAdultSims", 0);
@@ -1027,29 +1058,41 @@ void FSPanelSearchGroups::find()
 	}
 	U32 scope = 0;
 	if (gAgent.wantsPGOnly())
+	{
 		scope |= DFQ_PG_SIMS_ONLY;
+	}
 	bool adult_enabled = gAgent.canAccessAdult();
 	bool mature_enabled = gAgent.canAccessMature();
 	if (inc_pg)
+	{
 		scope |= DFQ_INC_PG;
+	}
 	if (inc_mature && mature_enabled)
+	{
 		scope |= DFQ_INC_MATURE;
+	}
 	if (inc_adult && adult_enabled)
+	{
 		scope |= DFQ_INC_ADULT;
+	}
 	scope |= DFQ_GROUPS;
-	
+
 	mResultsReceived = 0;
 	if (mQueryID.notNull())
+	{
 		mQueryID.setNull();
+	}
 	mQueryID.generate();
-	
+
 	if (mStartSearch < 0)
+	{
 		mStartSearch = 0;
-	
+	}
+
 	gMessageSystem->newMessage("DirFindQuery");
 	gMessageSystem->nextBlock("AgentData");
-	gMessageSystem->addUUID("AgentID", gAgent.getID());
-	gMessageSystem->addUUID("SessionID", gAgent.getSessionID());
+	gMessageSystem->addUUID("AgentID", gAgentID);
+	gMessageSystem->addUUID("SessionID", gAgentSessionID);
 	gMessageSystem->nextBlock("QueryData");
 	gMessageSystem->addUUID("QueryID", getQueryID());
 	gMessageSystem->addString("QueryText", text);
@@ -1057,7 +1100,7 @@ void FSPanelSearchGroups::find()
 	gMessageSystem->addS32("QueryStart", mStartSearch);
 	gAgent.sendReliableMessage();
 	LL_DEBUGS("Search") << "Firing off search request: " << getQueryID() << LL_ENDL;
-	
+
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
 	mNumResultsReturned = 0;
@@ -1070,7 +1113,7 @@ void FSPanelSearchGroups::onBtnFind()
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
-	
+
 	resetSearch();
 	
 	find();
@@ -1080,7 +1123,7 @@ void FSPanelSearchGroups::onBtnNext()
 {
 	mStartSearch += RESULT_PAGE_SIZE;
 	getChildView("groups_back")->setEnabled(TRUE);
-	
+
 	find();
 }
 
@@ -1088,7 +1131,7 @@ void FSPanelSearchGroups::onBtnBack()
 {
 	mStartSearch -= RESULT_PAGE_SIZE;
 	getChildView("groups_back")->setEnabled(mStartSearch > 0);
-	
+
 	find();
 }
 
@@ -1118,7 +1161,9 @@ void FSPanelSearchGroups::onSelectItem()
 	}
 	FSFloaterSearch* search_instance = LLFloaterReg::getTypedInstance<FSFloaterSearch>("search");
 	if (search_instance)
+	{
 		search_instance->FSFloaterSearch::onSelectedItem(mSearchResults->getSelectedValue(), FSFloaterSearch::SC_GROUP);
+	}
 }
 
 // static
@@ -1130,30 +1175,33 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 	std::string group_name;
 	S32 members;
 	F32 search_order;
-	
+
 	msg->getUUIDFast(	_PREHASH_QueryData,	_PREHASH_QueryID,	query_id);
 	msg->getUUIDFast(	_PREHASH_AgentData,	_PREHASH_AgentID,	agent_id);
-	
+
 	// Not for us
-	if (agent_id != gAgent.getID()) return;
+	if (agent_id != gAgentID)
+	{
+		return;
+	}
 	LL_DEBUGS("Search") << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << LL_ENDL;
-	
+
 	FSPanelSearchGroups* self = (FSPanelSearchGroups*)FSFloaterSearch::getSearchPanel("panel_ls_groups");
-	
+
 	// floater is closed or these are not results from our last request
 	if (NULL == self || query_id != self->mQueryID)
 	{
 		return;
 	}
-	
+
 	LLScrollListCtrl* search_results = self->getChild<LLScrollListCtrl>("search_results_groups");
-	
+
 	// Clear "Searching" label on first results
 	if (self->mNumResultsReturned++ == 0)
 	{
 		search_results->deleteAllItems();
 	}
-	
+
 	// Check for status messages
 	if (msg->getNumberOfBlocks("StatusData"))
 	{
@@ -1186,8 +1234,8 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 			return;
 		}
 	}
-	
-	BOOL found_one = FALSE;
+
+	bool found_one = false;
 	S32 num_new_rows = msg->getNumberOfBlocksFast(_PREHASH_QueryReplies);
 	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
@@ -1196,10 +1244,10 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->setEnabled(FALSE);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
 	}
-	
+
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
-	
+
 	for (S32 i = 0; i < num_new_rows; i++)
 	{
 		msg->getUUIDFast(	_PREHASH_QueryReplies,	_PREHASH_GroupID,		group_id,	i);
@@ -1218,28 +1266,28 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 		{
 			LL_DEBUGS("Search") << "Got: " << group_name << " GroupID: " << group_id << LL_ENDL;
 			search_results->setEnabled(TRUE);
-			found_one = TRUE;
-			
+			found_one = true;
+
 			LLSD content;
 			LLSD element;
-			
+
 			element["id"] = group_id;
-			
+
 			element["columns"][0]["column"]	= "icon";
 			element["columns"][0]["type"]	= "icon";
 			element["columns"][0]["value"]	= "Icon_Group";
-			
+
 			element["columns"][1]["column"]	= "group_name";
 			element["columns"][1]["value"]	= group_name;
-			
+
 			element["columns"][2]["column"]	= "members";
 			element["columns"][2]["value"]	= members;
-			
+
 			element["columns"][3]["column"]	= "score";
 			element["columns"][3]["value"]	= search_order;
-			
+
 			content["name"] = group_name;
-			
+
 			search_results->addElement(element, ADD_BOTTOM);
 			self->mResultsContent[group_id.asString()] = content;
 		}
@@ -1301,7 +1349,7 @@ BOOL FSPanelSearchPlaces::postBuild()
 	childSetAction("places_back", boost::bind(&FSPanelSearchPlaces::onBtnBack, this));
 	getChildView("places_next")->setEnabled(FALSE);
 	getChildView("places_back")->setEnabled(FALSE);
-	
+
 	return TRUE;
 }
 
@@ -1311,14 +1359,14 @@ void FSPanelSearchPlaces::focusDefaultElement()
 }
 
 void FSPanelSearchPlaces::find()
-{	
+{
 	std::string text = filterShortWords(mSearchComboBox->getSimple());
 	if (text.size() == 0)
 	{
 		mSearchResults->setCommentText(LLTrans::getString("search_short"));
 		return;
 	}
-	
+
 	static LLUICachedControl<bool> inc_pg("ShowPGSims", 1);
 	static LLUICachedControl<bool> inc_mature("ShowMatureSims", 0);
 	static LLUICachedControl<bool> inc_adult("ShowAdultSims", 0);
@@ -1339,29 +1387,41 @@ void FSPanelSearchPlaces::find()
 	}
 	U32 scope = 0;
 	if (gAgent.wantsPGOnly())
+	{
 		scope |= DFQ_PG_SIMS_ONLY;
+	}
 	bool adult_enabled = gAgent.canAccessAdult();
 	bool mature_enabled = gAgent.canAccessMature();
 	if (inc_pg)
+	{
 		scope |= DFQ_INC_PG;
+	}
 	if (inc_mature && mature_enabled)
+	{
 		scope |= DFQ_INC_MATURE;
+	}
 	if (inc_adult && adult_enabled)
+	{
 		scope |= DFQ_INC_ADULT;
+	}
 	scope |= DFQ_DWELL_SORT;
-	
+
 	mResultsReceived = 0;
 	if (mQueryID.notNull())
+	{
 		mQueryID.setNull();
+	}
 	mQueryID.generate();
-	
+
 	if (mStartSearch < 0)
+	{
 		mStartSearch = 0;
-	
+	}
+
 	gMessageSystem->newMessage("DirPlacesQuery");
 	gMessageSystem->nextBlock("AgentData");
-	gMessageSystem->addUUID("AgentID", gAgent.getID());
-	gMessageSystem->addUUID("SessionID", gAgent.getSessionID());
+	gMessageSystem->addUUID("AgentID", gAgentID);
+	gMessageSystem->addUUID("SessionID", gAgentSessionID);
 	gMessageSystem->nextBlock("QueryData");
 	gMessageSystem->addUUID("QueryID", getQueryID());
 	gMessageSystem->addString("QueryText", text);
@@ -1372,7 +1432,7 @@ void FSPanelSearchPlaces::find()
 	gMessageSystem->addS32("QueryStart", mStartSearch);
 	gAgent.sendReliableMessage();
 	LL_DEBUGS("Search") << "Firing off places search request: " << getQueryID() << LL_ENDL;
-	
+
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
 	mNumResultsReturned = 0;
@@ -1381,13 +1441,13 @@ void FSPanelSearchPlaces::find()
 void FSPanelSearchPlaces::onBtnFind()
 {
 	std::string text = mSearchComboBox->getSimple();
-	if(!text.empty())
+	if (!text.empty())
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
-	
+
 	resetSearch();
-	
+
 	find();
 }
 
@@ -1395,7 +1455,7 @@ void FSPanelSearchPlaces::onBtnNext()
 {
 	mStartSearch += RESULT_PAGE_SIZE;
 	getChildView("places_back")->setEnabled(TRUE);
-	
+
 	find();
 }
 
@@ -1403,7 +1463,7 @@ void FSPanelSearchPlaces::onBtnBack()
 {
 	mStartSearch -= RESULT_PAGE_SIZE;
 	getChildView("places_back")->setEnabled(mStartSearch > 0);
-	
+
 	find();
 }
 
@@ -1433,43 +1493,48 @@ void FSPanelSearchPlaces::onSelectItem()
 	}
 	FSFloaterSearch* search_instance = LLFloaterReg::getTypedInstance<FSFloaterSearch>("search");
 	if (search_instance)
+	{
 		search_instance->FSFloaterSearch::onSelectedItem(mSearchResults->getSelectedValue(), FSFloaterSearch::SC_PLACE);
+	}
 }
 
 // static
 void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 {
-	LLUUID	agent_id;
-	LLUUID	query_id;
-	LLUUID	parcel_id;
+	LLUUID		agent_id;
+	LLUUID		query_id;
+	LLUUID		parcel_id;
 	std::string	name;
-	BOOL	for_sale;
-	BOOL	auction;
-	F32		dwell;
-	
+	BOOL		for_sale;
+	BOOL		auction;
+	F32			dwell;
+
 	msg->getUUID("AgentData", "AgentID", agent_id);
 	msg->getUUID("QueryData", "QueryID", query_id);
-	
+
 	// Not for us
-	if (agent_id != gAgent.getID()) return;
+	if (agent_id != gAgentID)
+	{
+		return;
+	}
 	LL_DEBUGS("Search") << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << LL_ENDL;
-	
+
 	FSPanelSearchPlaces* self = (FSPanelSearchPlaces*)FSFloaterSearch::getSearchPanel("panel_ls_places");
-	
+
 	// floater is closed or these are not results from our last request
 	if (NULL == self || query_id != self->getQueryID())
 	{
 		return;
 	}
-	
+
 	LLScrollListCtrl* search_results = self->getChild<LLScrollListCtrl>("search_results_places");
-	
+
 	// Clear "Searching" label on first results
 	if (self->mNumResultsReturned++ == 0)
 	{
 		search_results->deleteAllItems();
 	}
-	
+
 	// Check for status messages
 	if (msg->getNumberOfBlocks("StatusData"))
 	{
@@ -1508,8 +1573,8 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 			return;
 		}
 	}
-	
-	BOOL found_one = FALSE;
+
+	bool found_one = false;
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
 	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
@@ -1518,10 +1583,10 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->setEnabled(FALSE);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
 	}
-	
+
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
-	
+
 	for (S32 i = 0; i < num_new_rows; i++)
 	{
 		msg->getUUID(	"QueryReplies",	"ParcelID",	parcel_id,	i);
@@ -1541,13 +1606,13 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 		{
 			LL_DEBUGS("Search") << "Got: " << name << " ParcelID: " << parcel_id << LL_ENDL;
 			search_results->setEnabled(TRUE);
-			found_one = TRUE;
-			
+			found_one = true;
+
 			LLSD content;
 			LLSD element;
-			
+
 			element["id"] = parcel_id;
-			
+
 			if (auction)
 			{
 				element["columns"][0]["column"]	= "icon";
@@ -1566,16 +1631,16 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 				element["columns"][0]["type"]	= "icon";
 				element["columns"][0]["value"]	= "Icon_Place";
 			}
-			
+
 			element["columns"][1]["column"]	= "place_name";
 			element["columns"][1]["value"]	= name;
-			
+
 			content["name"] = name;
-			
+
 			std::string buffer = llformat("%.0f", (F64)dwell);
 			element["columns"][2]["column"]	= "dwell";
 			element["columns"][2]["value"]	= buffer;
-			
+
 			search_results->addElement(element, ADD_BOTTOM);
 			self->mResultsContent[parcel_id.asString()] = content;
 		}
@@ -1650,67 +1715,99 @@ void FSPanelSearchLand::find()
 		LLNotificationsUtil::add("NoContentToSearch");
 		return;
 	}
-	
+
 	U32 category = ST_ALL;
 	const std::string& selection = findChild<LLComboBox>("land_category")->getSelectedValue().asString();
 	if (!selection.empty())
 	{
 		if (selection == "Auction")
+		{
 			category = ST_AUCTION;
+		}
 		else if (selection == "Mainland")
+		{
 			category = ST_MAINLAND;
+		}
 		else if (selection == "Estate")
+		{
 			category = ST_ESTATE;
+		}
 	}
-	
+
 	U32 scope = 0;
 	if (gAgent.wantsPGOnly())
+	{
 		scope |= DFQ_PG_SIMS_ONLY;
+	}
 	bool mature_enabled = gAgent.canAccessMature();
 	bool adult_enabled = gAgent.canAccessAdult();
 	if (inc_pg)
+	{
 		scope |= DFQ_INC_PG;
+	}
 	if (inc_mature && mature_enabled)
+	{
 		scope |= DFQ_INC_MATURE;
+	}
 	if (inc_adult && adult_enabled)
+	{
 		scope |= DFQ_INC_ADULT;
+	}
 	const std::string& sort = findChild<LLComboBox>("land_sort_combo")->getSelectedValue().asString();
 	if (!sort.empty())
 	{
 		if (sort == "Name")
+		{
 			scope |= DFQ_NAME_SORT;
+		}
 		else if (sort == "Price")
+		{
 			scope |= DFQ_PRICE_SORT;
+		}
 		else if (sort == "PPM")
+		{
 			scope |= DFQ_PER_METER_SORT;
+		}
 		else if (sort == "Area")
+		{
 			scope |= DFQ_AREA_SORT;
+		}
 	}
 	else
 	{
 		scope |= DFQ_PRICE_SORT;
 	}
 	if (childGetValue("ascending_check").asBoolean())
+	{
 		scope |= DFQ_SORT_ASC;
+	}
 	if (limit_price)
+	{
 		scope |= DFQ_LIMIT_BY_PRICE;
+	}
 	if (limit_area)
+	{
 		scope |= DFQ_LIMIT_BY_AREA;
+	}
 	S32 price = childGetValue("edit_price").asInteger();
 	S32 area = childGetValue("edit_area").asInteger();
-	
+
 	mResultsReceived = 0;
 	if (mQueryID.notNull())
+	{
 		mQueryID.setNull();
+	}
 	mQueryID.generate();
-	
+
 	if (mStartSearch < 0)
+	{
 		mStartSearch = 0;
-	
+	}
+
 	gMessageSystem->newMessage("DirLandQuery");
 	gMessageSystem->nextBlock("AgentData");
-	gMessageSystem->addUUID("AgentID", gAgent.getID());
-	gMessageSystem->addUUID("SessionID", gAgent.getSessionID());
+	gMessageSystem->addUUID("AgentID", gAgentID);
+	gMessageSystem->addUUID("SessionID", gAgentSessionID);
 	gMessageSystem->nextBlock("QueryData");
 	gMessageSystem->addUUID("QueryID", getQueryID());
 	gMessageSystem->addU32("QueryFlags", scope);
@@ -1720,7 +1817,7 @@ void FSPanelSearchLand::find()
 	gMessageSystem->addS32("QueryStart", mStartSearch);
 	gAgent.sendReliableMessage();
 	LL_DEBUGS("Search") << "Firing off places search request: " << getQueryID() << category << LL_ENDL;
-	
+
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
 	mNumResultsReturned = 0;
@@ -1729,7 +1826,7 @@ void FSPanelSearchLand::find()
 void FSPanelSearchLand::onBtnFind()
 {
 	resetSearch();
-	
+
 	find();
 }
 
@@ -1737,7 +1834,7 @@ void FSPanelSearchLand::onBtnNext()
 {
 	mStartSearch += RESULT_PAGE_SIZE;
 	getChildView("land_back")->setEnabled(TRUE);
-	
+
 	find();
 }
 
@@ -1745,7 +1842,7 @@ void FSPanelSearchLand::onBtnBack()
 {
 	mStartSearch -= RESULT_PAGE_SIZE;
 	getChildView("land_back")->setEnabled(mStartSearch > 0);
-	
+
 	find();
 }
 
@@ -1775,51 +1872,56 @@ void FSPanelSearchLand::onSelectItem()
 	}
 	FSFloaterSearch* search_instance = LLFloaterReg::getTypedInstance<FSFloaterSearch>("search");
 	if (search_instance)
+	{
 		search_instance->FSFloaterSearch::onSelectedItem(mSearchResults->getSelectedValue(), FSFloaterSearch::SC_PLACE);
+	}
 }
 
 // static
 void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 {
-	LLUUID	agent_id;
-	LLUUID	query_id;
-	LLUUID	parcel_id;
+	LLUUID		agent_id;
+	LLUUID		query_id;
+	LLUUID		parcel_id;
 	std::string	name;
-	std::string land_sku;
-	std::string land_type;
-	BOOL	auction;
-	BOOL	for_sale;
-	S32		price;
-	S32		area;
-	
+	std::string	land_sku;
+	std::string	land_type;
+	BOOL		auction;
+	BOOL		for_sale;
+	S32			price;
+	S32			area;
+
 	msg->getUUID("AgentData", "AgentID", agent_id);
 	msg->getUUID("QueryData", "QueryID", query_id);
-	
+
 	// Not for us
-	if (agent_id != gAgent.getID()) return;
+	if (agent_id != gAgentID)
+	{
+		return;
+	}
 	LL_DEBUGS("Search") << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << LL_ENDL;
-	
+
 	FSPanelSearchLand* self = (FSPanelSearchLand*)FSFloaterSearch::getSearchPanel("panel_ls_land");
-	
+
 	// floater is closed or these are not results from our last request
 	if (NULL == self || query_id != self->mQueryID)
 	{
 		return;
 	}
-	
+
 	LLScrollListCtrl* search_results = self->getChild<LLScrollListCtrl>("search_results_land");
 	// clear "Searching" label on first results
 	if (self->mNumResultsReturned++ == 0)
 	{
 		search_results->deleteAllItems();
 	}
-	
+
 	static LLUICachedControl<bool> use_price("FindLandPrice", 1);
 	static LLUICachedControl<bool> use_area("FindLandArea", 1);
 	S32 limit_price = self->childGetValue("edit_price").asInteger();
 	S32 limit_area = self->childGetValue("edit_area").asInteger();
-	
-	BOOL found_one = FALSE;
+
+	bool found_one = false;
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
 	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
@@ -1829,7 +1931,7 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->setCommentText(LLTrans::getString("not_found", map));
 	}
 	self->mResultsReceived += num_new_rows;
-	
+
 	S32 not_auction = 0;
 	for (S32 i = 0; i < num_new_rows; i++)
 	{
@@ -1849,7 +1951,7 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 		{
 			LL_DEBUGS("Search") << "Got: " << name << " ClassifiedID: " << parcel_id << LL_ENDL;
 			search_results->setEnabled(TRUE);
-			found_one = TRUE;
+			found_one = true;
 			if ( msg->getSizeFast(_PREHASH_QueryReplies, i, _PREHASH_ProductSKU) > 0 )
 			{
 				msg->getStringFast(	_PREHASH_QueryReplies, _PREHASH_ProductSKU, land_sku, i);
@@ -1861,15 +1963,21 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 				land_type = LLTrans::getString("land_type_unknown");
 			}
 			if (parcel_id.isNull())
+			{
 				continue;
+			}
 			if (use_price && (price > limit_price))
+			{
 				continue;
+			}
 			if (use_area && (area < limit_area))
+			{
 				continue;
-			
+			}
+
 			LLSD content;
 			LLSD element;
-			
+
 			element["id"] = parcel_id;
 			if (auction)
 			{
@@ -1889,12 +1997,12 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 				element["columns"][0]["type"]	= "icon";
 				element["columns"][0]["value"]	= "Icon_Place";
 			}
-			
+
 			element["columns"][1]["column"]	= "land_name";
 			element["columns"][1]["value"]	= name;
-			
+
 			content["place_name"] = name;
-			
+
 			std::string buffer = "Auction";
 			if (!auction)
 			{
@@ -1903,16 +2011,20 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 			}
 			element["columns"][2]["column"]	= "price";
 			element["columns"][2]["value"]	= price;
-			
+
 			element["columns"][3]["column"]	= "area";
 			element["columns"][3]["value"]	= area;
 			if (!auction)
 			{
 				F32 ppm;
 				if (area > 0)
+				{
 					ppm = (F32)price / (F32)area;
+				}
 				else
+				{
 					ppm = 0.f;
+				}
 				std::string ppm_buffer = llformat("%.1f", ppm);
 				element["columns"][4]["column"]	= "ppm";
 				element["columns"][4]["value"] = ppm_buffer;
@@ -1922,10 +2034,10 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 				element["columns"][4]["column"]	= "ppm";
 				element["columns"][4]["value"]	= "1.0";
 			}
-			
+
 			element["columns"][5]["column"]	= "land_type";
 			element["columns"][5]["value"]	= land_type;
-			
+
 			search_results->addElement(element, ADD_BOTTOM);
 			self->mResultsContent[parcel_id.asString()] = content;
 		}
@@ -1974,7 +2086,7 @@ BOOL FSPanelSearchClassifieds::postBuild()
 		mSearchResults->setEnabled(FALSE);
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
 	}
-	
+
 	mClassifiedsCategory = getChild<LLComboBox>("classifieds_category");
 	if (mClassifiedsCategory)
 	{
@@ -2010,7 +2122,7 @@ void FSPanelSearchClassifieds::find()
 		mSearchResults->setCommentText(LLTrans::getString("search_short"));
 		return;
 	}
-	
+
 	static LLUICachedControl<bool> inc_pg("ShowPGClassifieds", 1);
 	static LLUICachedControl<bool> inc_mature("ShowMatureClassifieds", 0);
 	static LLUICachedControl<bool> inc_adult("ShowAdultClassifieds", 0);
@@ -2022,19 +2134,23 @@ void FSPanelSearchClassifieds::find()
 	U32 category = mClassifiedsCategory->getValue().asInteger();
 	BOOL auto_renew = FALSE;
 	U32 flags = pack_classified_flags_request(auto_renew, inc_pg, inc_mature, inc_adult);
-	
+
 	mResultsReceived = 0;
 	if (mQueryID.notNull())
+	{
 		mQueryID.setNull();
+	}
 	mQueryID.generate();
-	
+
 	if (mStartSearch < 0)
+	{
 		mStartSearch = 0;
-	
+	}
+
 	gMessageSystem->newMessageFast(_PREHASH_DirClassifiedQuery);
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID() );
-	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 	gMessageSystem->nextBlockFast(_PREHASH_QueryData);
 	gMessageSystem->addUUIDFast(_PREHASH_QueryID, getQueryID());
 	gMessageSystem->addStringFast(_PREHASH_QueryText, text);
@@ -2043,7 +2159,7 @@ void FSPanelSearchClassifieds::find()
 	gMessageSystem->addS32Fast(_PREHASH_QueryStart, mStartSearch);
 	gAgent.sendReliableMessage();
 	LL_DEBUGS("Search") << "Firing off classified ad search request: " << getQueryID() << LL_ENDL;
-	
+
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
 	mNumResultsReturned = 0;
@@ -2056,9 +2172,9 @@ void FSPanelSearchClassifieds::onBtnFind()
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
-	
+
 	resetSearch();
-	
+
 	find();
 }
 
@@ -2066,7 +2182,7 @@ void FSPanelSearchClassifieds::onBtnNext()
 {
 	mStartSearch += RESULT_PAGE_SIZE;
 	getChildView("classifieds_back")->setEnabled(TRUE);
-	
+
 	find();
 }
 
@@ -2074,7 +2190,7 @@ void FSPanelSearchClassifieds::onBtnBack()
 {
 	mStartSearch -= RESULT_PAGE_SIZE;
 	getChildView("classifieds_back")->setEnabled(mStartSearch > 0);
-	
+
 	find();
 }
 
@@ -2104,29 +2220,34 @@ void FSPanelSearchClassifieds::onSelectItem()
 	}
 	FSFloaterSearch* search_instance = LLFloaterReg::getTypedInstance<FSFloaterSearch>("search");
 	if (search_instance)
+	{
 		search_instance->FSFloaterSearch::onSelectedItem(mSearchResults->getSelectedValue(), FSFloaterSearch::SC_CLASSIFIED);
+	}
 }
 
 // static
 void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 {
-	LLUUID	agent_id;
-	LLUUID	query_id;
-	LLUUID	classified_id;
-	std::string name;
-	U32		creation_date;
-	U32		expiration_date;
-	S32		price_for_listing;
-	
+	LLUUID		agent_id;
+	LLUUID		query_id;
+	LLUUID		classified_id;
+	std::string	name;
+	U32			creation_date;
+	U32			expiration_date;
+	S32			price_for_listing;
+
 	msg->getUUID("AgentData", "AgentID", agent_id);
 	msg->getUUID("QueryData", "QueryID", query_id);
-	
+
 	// Not for us
-	if (agent_id != gAgent.getID()) return;
+	if (agent_id != gAgentID)
+	{
+		return;
+	}
 	LL_DEBUGS("Search") << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << LL_ENDL;
-	
+
 	FSPanelSearchClassifieds* self = (FSPanelSearchClassifieds*)FSFloaterSearch::getSearchPanel("panel_ls_classifieds");
-	
+
 	if (msg->getNumberOfBlocks("StatusData"))
 	{
 		U32 status;
@@ -2136,21 +2257,21 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 			LLNotificationsUtil::add("SearchWordBanned");
 		}
 	}
-	
+
 	// floater is closed or these are not results from our last request
 	if (NULL == self || query_id != self->mQueryID)
 	{
 		return;
 	}
-	
+
 	LLScrollListCtrl* search_results = self->getChild<LLScrollListCtrl>("search_results_classifieds");
-	
+
 	// Clear "Searching" label on first results
 	if (self->mNumResultsReturned++ == 0)
 	{
 		search_results->deleteAllItems();
 	}
-	
+
 	// Check for status messages
 	if (msg->getNumberOfBlocks("StatusData"))
 	{
@@ -2183,8 +2304,8 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 			return;
 		}
 	}
-	
-	BOOL found_one = FALSE;
+
+	bool found_one = false;
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
 	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
@@ -2195,7 +2316,7 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 	}
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
-	
+
 	for (S32 i = 0; i < num_new_rows; i++)
 	{
 		msg->getUUID(	"QueryReplies", "ClassifiedID",		classified_id,	i);
@@ -2215,25 +2336,25 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 		{
 			LL_DEBUGS("Search") << "Got: " << name << " ClassifiedID: " << classified_id << LL_ENDL;
 			search_results->setEnabled(TRUE);
-			found_one = TRUE;
-			
+			found_one = true;
+
 			LLSD content;
 			LLSD element;
-			
+
 			element["id"] = classified_id;
-			
+
 			element["columns"][0]["column"]	= "icon";
 			element["columns"][0]["type"]	= "icon";
 			element["columns"][0]["value"]	= "icon_top_pick.tga";
-			
+
 			element["columns"][1]["column"]	= "classified_name";
 			element["columns"][1]["value"]	= name;
-			
+
 			element["columns"][2]["column"]	= "price";
 			element["columns"][2]["value"]	= price_for_listing;
-			
+
 			content["name"] = name;
-			
+
 			search_results->addElement(element, ADD_BOTTOM);
 			self->mResultsContent[classified_id.asString()] = content;
 		}
@@ -2287,20 +2408,20 @@ BOOL FSPanelSearchEvents::postBuild()
 		mEventsMode->setCommitCallback(boost::bind(&FSPanelSearchEvents::onSearchModeChanged, this));
 		mEventsMode->selectFirstItem();
 	}
-	
+
 	childSetAction("events_next", boost::bind(&FSPanelSearchEvents::onBtnNext, this));
 	childSetAction("events_back", boost::bind(&FSPanelSearchEvents::onBtnBack, this));
 	childSetAction("events_tomorrow", boost::bind(&FSPanelSearchEvents::onBtnTomorrow, this));
 	childSetAction("events_yesterday", boost::bind(&FSPanelSearchEvents::onBtnYesterday, this));
 	childSetAction("events_today", boost::bind(&FSPanelSearchEvents::onBtnToday, this));
-	
+
 	getChildView("events_next")->setEnabled(FALSE);
 	getChildView("events_back")->setEnabled(FALSE);
 	getChildView("events_tomorrow")->setEnabled(FALSE);
 	getChildView("events_yesterday")->setEnabled(FALSE);
 	getChildView("events_today")->setEnabled(FALSE);
 	setDay(0);
-	
+
 	return TRUE;
 }
 
@@ -2310,9 +2431,9 @@ void FSPanelSearchEvents::focusDefaultElement()
 }
 
 void FSPanelSearchEvents::find()
-{	
+{
 	std::string text = filterShortWords(mSearchComboBox->getSimple());
-	
+
 	static LLUICachedControl<bool> inc_pg("ShowPGEvents", 1);
 	static LLUICachedControl<bool> inc_mature("ShowMatureEvents", 0);
 	static LLUICachedControl<bool> inc_adult("ShowAdultEvents", 0);
@@ -2321,41 +2442,57 @@ void FSPanelSearchEvents::find()
 		LLNotificationsUtil::add("NoContentToSearch");
 		return;
 	}
-	
+
 	U32 category = findChild<LLComboBox>("events_category")->getSelectedValue().asInteger();
 	U32 scope = DFQ_DATE_EVENTS;
 	if (gAgent.wantsPGOnly())
+	{
 		scope |= DFQ_PG_SIMS_ONLY;
+	}
 	bool mature_enabled = gAgent.canAccessMature();
 	bool adult_enabled = gAgent.canAccessAdult();
 	if (inc_pg)
+	{
 		scope |= DFQ_INC_PG;
+	}
 	if (inc_mature && mature_enabled)
+	{
 		scope |= DFQ_INC_MATURE;
+	}
 	if (inc_adult && adult_enabled)
+	{
 		scope |= DFQ_INC_ADULT;
-	
+	}
+
 	std::ostringstream string;
-	
+
 	if ("current" == childGetValue("events_search_mode").asString())
+	{
 		string << "u|";
+	}
 	else
+	{
 		string << mDay << "|";
+	}
 	string << category << "|";
 	string << text;
-	
+
 	mResultsReceived = 0;
 	if (mQueryID.notNull())
+	{
 		mQueryID.setNull();
+	}
 	mQueryID.generate();
-	
+
 	if (mStartSearch < 0)
+	{
 		mStartSearch = 0;
-	
+	}
+
 	gMessageSystem->newMessage("DirFindQuery");
 	gMessageSystem->nextBlock("AgentData");
-	gMessageSystem->addUUID("AgentID", gAgent.getID());
-	gMessageSystem->addUUID("SessionID", gAgent.getSessionID());
+	gMessageSystem->addUUID("AgentID", gAgentID);
+	gMessageSystem->addUUID("SessionID", gAgentSessionID);
 	gMessageSystem->nextBlock("QueryData");
 	gMessageSystem->addUUID("QueryID", getQueryID());
 	gMessageSystem->addString("QueryText", string.str());
@@ -2363,7 +2500,7 @@ void FSPanelSearchEvents::find()
 	gMessageSystem->addS32("QueryStart", mStartSearch);
 	gAgent.sendReliableMessage();
 	LL_DEBUGS("Search") << "Firing off search request: " << getQueryID() << " Search Text: " << string.str() << LL_ENDL;
-	
+
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
 	mNumResultsReturned = 0;
@@ -2372,13 +2509,13 @@ void FSPanelSearchEvents::find()
 void FSPanelSearchEvents::onBtnFind()
 {
 	std::string text = mSearchComboBox->getSimple();
-	if(!text.empty())
+	if (!text.empty())
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
-	
+
 	resetSearch();
-	
+
 	find();
 }
 
@@ -2386,7 +2523,7 @@ void FSPanelSearchEvents::onBtnNext()
 {
 	mStartSearch += RESULT_PAGE_SIZE;
 	getChildView("events_back")->setEnabled(TRUE);
-	
+
 	find();
 }
 
@@ -2394,7 +2531,7 @@ void FSPanelSearchEvents::onBtnBack()
 {
 	mStartSearch -= RESULT_PAGE_SIZE;
 	getChildView("events_back")->setEnabled(mStartSearch > 0);
-	
+
 	find();
 }
 
@@ -2402,7 +2539,7 @@ void FSPanelSearchEvents::onBtnTomorrow()
 {
 	resetSearch();
 	setDay(mDay + 1);
-	
+
 	find();
 }
 
@@ -2410,7 +2547,7 @@ void FSPanelSearchEvents::onBtnYesterday()
 {
 	resetSearch();
 	setDay(mDay - 1);
-	
+
 	find();
 }
 
@@ -2418,7 +2555,7 @@ void FSPanelSearchEvents::onBtnToday()
 {
 	resetSearch();
 	setDay(0);
-	
+
 	find();
 }
 
@@ -2449,7 +2586,7 @@ void FSPanelSearchEvents::setDay(S32 day)
 {
 	mDay = day;
 	struct tm* internal_time;
-	
+
 	time_t utc = time_corrected();
 	utc += day * 24 * 60 * 60;
 	internal_time = utc_to_pacific_time(utc, is_daylight_savings());
@@ -2477,35 +2614,40 @@ void FSPanelSearchEvents::onSelectItem()
 	S32 event_id = mSearchResults->getSelectedValue();
 	FSFloaterSearch* search_instance = LLFloaterReg::getTypedInstance<FSFloaterSearch>("search");
 	if (search_instance)
+	{
 		search_instance->FSFloaterSearch::onSelectedEvent(event_id);
+	}
 }
 
 // static
 void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 {
-	LLUUID	agent_id;
-	LLUUID	query_id;
-	LLUUID	owner_id;
+	LLUUID		agent_id;
+	LLUUID		query_id;
+	LLUUID		owner_id;
 	std::string	name;
 	std::string	date;
-	
+
 	msg->getUUID("AgentData", "AgentID", agent_id);
 	msg->getUUID("QueryData", "QueryID", query_id);
-	
+
 	// Not for us
-	if (agent_id != gAgent.getID()) return;
+	if (agent_id != gAgentID)
+	{
+		return;
+	}
 	LL_DEBUGS("Search") << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << LL_ENDL;
-	
+
 	FSPanelSearchEvents* self = (FSPanelSearchEvents*)FSFloaterSearch::getSearchPanel("panel_ls_events");
-	
+
 	// floater is closed or these are not results from our last request
 	if (NULL == self || query_id != self->mQueryID)
 	{
 		return;
 	}
-	
+
 	LLScrollListCtrl* search_results = self->getChild<LLScrollListCtrl>("search_results_events");
-	
+
 	// Clear "Searching" label on first results
 	if (self->mNumResultsReturned++ == 0)
 	{
@@ -2561,7 +2703,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 			return;
 		}
 	}
-	
+
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
 	if (num_new_rows == 0 && self->mResultsReceived == 0)
 	{
@@ -2570,20 +2712,20 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->setEnabled(FALSE);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
 	}
-	
+
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
 	static LLUICachedControl<bool> inc_pg("ShowPGEvents", 1);
 	static LLUICachedControl<bool> inc_mature("ShowMatureEvents", 0);
 	static LLUICachedControl<bool> inc_adult("ShowAdultEvents", 0);
-	BOOL found_one = FALSE;
+	bool found_one = false;
 
 	for (S32 i = 0; i < num_new_rows; i++)
 	{
 		U32 event_id;
 		U32 unix_time;
 		U32 event_flags;
-		
+
 		msg->getUUID(	"QueryReplies",	"OwnerID",		owner_id,	i);
 		msg->getString(	"QueryReplies",	"Name",			name,		i);
 		msg->getU32(	"QueryReplies",	"EventID",		event_id,	i);
@@ -2614,13 +2756,13 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 			continue;
 		}
 		search_results->setEnabled(TRUE);
-		found_one = TRUE;
+		found_one = true;
 
 		LLSD content;
 		LLSD element;
-		
+
 		element["id"] = llformat("%u", event_id);
-		
+
 		if (event_flags == EVENT_FLAG_ADULT)
 		{
 			element["columns"][0]["column"] = "icon";
@@ -2641,16 +2783,16 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 		}
 		element["columns"][1]["column"] = "name";
 		element["columns"][1]["value"] = name;
-		
+
 		element["columns"][2]["column"] = "date";
 		element["columns"][2]["value"] = date;
-		
+
 		element["columns"][3]["column"] = "time";
 		element["columns"][3]["value"] = llformat("%u", unix_time);
-		
+
 		content["name"] = name;
 		content["event_id"] = (S32)event_id;
-		
+
 		search_results->addElement(element, ADD_BOTTOM);
 		std::string event = llformat("%u", event_id);
 		self->mResultsContent[event] = content;
@@ -2694,14 +2836,17 @@ BOOL FSPanelSearchWeb::postBuild()
 
 void FSPanelSearchWeb::loadURL(const SearchQuery &p)
 {
-	if (!mWebBrowser || !p.validateBlock()) return;
-	
+	if (!mWebBrowser || !p.validateBlock())
+	{
+		return;
+	}
+
 	// work out the subdir to use based on the requested category
 	LLSD subs = LLSD().with("CATEGORY", (mCategoryPaths.has(p.category) ? mCategoryPaths[p.category].asString() : mCategoryPaths["all"].asString()));
-	
+
 	// add the search query string
 	subs["QUERY"] = LLURI::escape(p.query);
-	
+
 	// add the permissions token that login.cgi gave us
 	// We use "search_token", and fallback to "auth_token" if not present.
 	LLSD search_token = LLLoginInstance::getInstance()->getResponse("search_token");
@@ -2710,7 +2855,7 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
 		search_token = LLLoginInstance::getInstance()->getResponse("auth_token");
 	}
 	subs["AUTH_TOKEN"] = search_token.asString();
-	
+
 	// add the user's preferred maturity (can be changed via prefs)
 	std::string maturity;
 	if (gAgent.prefersAdult())
@@ -2726,10 +2871,10 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
 		maturity = "13";  // PG
 	}
 	subs["MATURITY"] = maturity;
-	
+
 	// add the user's god status
 	subs["GODLIKE"] = gAgent.isGodlike() ? "1" : "0";
-	
+
 	// Get the search URL and expand all of the substitutions
 	// (also adds things like [LANGUAGE], [VERSION], [OS], etc.)
 	std::string url;
@@ -2745,9 +2890,9 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
 	{
 		url = LFSimFeatureHandler::instance().searchURL();
 	}
-	
+
 	url = LLWeb::expandURLSubstitutions(url, subs);
-	
+
 	// Finally, load the URL in the webpanel
 	mWebBrowser->navigateTo(url, HTTP_CONTENT_TEXT_HTML);
 }
@@ -2774,8 +2919,11 @@ void FSPanelSearchWeb::draw()
 
 std::string filterShortWords(std::string query_string)
 {
-	if (query_string.length() < 1) return "";
-	
+	if (query_string.length() < 1)
+	{
+		return "";
+	}
+
 	std::string final_query;
 	bool filtered = false;
 	boost::char_separator<char> sep(" ");
@@ -2799,7 +2947,7 @@ std::string filterShortWords(std::string query_string)
 			filtered = true;
 		}
 	}
-	
+
 	if (filtered)
 	{
 		LLSD args = LLSD().with("FINALQUERY", final_query);
@@ -2811,14 +2959,17 @@ std::string filterShortWords(std::string query_string)
 
 void fillSearchComboBox(LLSearchComboBox* search_combo)
 {
-	if(search_combo == NULL) return;
-	
+	if (search_combo == NULL)
+	{
+		return;
+	}
+
 	LLSearchHistory::getInstance()->load();
-	
+
 	LLSearchHistory::search_history_list_t search_list =
 	LLSearchHistory::getInstance()->getSearchHistoryList();
 	LLSearchHistory::search_history_list_t::const_iterator it = search_list.begin();
-	for( ; search_list.end() != it; ++it)
+	for ( ; search_list.end() != it; ++it)
 	{
 		LLSearchHistory::LLSearchHistoryItem item = *it;
 		search_combo->add(item.search_query);
