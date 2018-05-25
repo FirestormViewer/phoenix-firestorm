@@ -200,6 +200,7 @@
 #include "fspanelclassified.h"
 #include "lggbeamcolormapfloater.h"
 #include "lggbeammapfloater.h"
+#include "llfloaterauction.h"
 #include "llfloaterdisplayname.h"
 #include "llfloaterscriptrecover.h"
 #include "llfloatersearchreplace.h"
@@ -452,6 +453,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("animation_explorer", "floater_animation_explorer.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<AnimationExplorer>);
 	LLFloaterReg::add("animation_overrider", "floater_ao.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterAO>);
 	LLFloaterReg::add("area_search", "floater_fs_area_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSAreaSearch>);
+	LLFloaterReg::add("auction", "floater_auction.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterAuction>);
 	LLFloaterReg::add("export_collada", "floater_export_collada.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<ColladaExportFloater>);
 	LLFloaterReg::add("delete_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterDeleteQueue>);
 	LLFloaterReg::add("floater_profile", "floater_profile_view.xml",&LLFloaterReg::build<FSFloaterProfile>);

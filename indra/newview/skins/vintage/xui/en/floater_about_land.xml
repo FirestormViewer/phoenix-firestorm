@@ -474,7 +474,6 @@
             </text>
 
             <button
-             enabled="false"
              follows="left|top"
              height="20"
              label="Linden Sale"
@@ -484,7 +483,7 @@
              tool_tip="Land must be owned, set content, and not already for auction."
              width="150" />
             <button
-             enabled="true"
+             enabled="false"
              follows="left|top"
              height="20"
              label="Buy Land"
