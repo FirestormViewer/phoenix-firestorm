@@ -484,7 +484,7 @@
              tool_tip="Land must be owned, set content, and not already for auction."
              width="150" />
             <button
-             enabled="false"
+             enabled="true"
              follows="left|top"
              height="20"
              label="Buy Land"
