@@ -374,6 +374,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 			return "missing #RLV";
 		case RLV_RET_FAILED_DEPRECATED:
 			return "deprecated and disabled";
+		case RLV_RET_FAILED_NOBEHAVIOUR:
+			return "no active behaviours";
 		// The following are identified by the chat verb
 		case RLV_RET_RETAINED:
 		case RLV_RET_SUCCESS:
@@ -640,18 +642,6 @@ void RlvUtil::sendIMMessage(const LLUUID& idRecipient, const std::string& strMsg
 			IM_NOTHING_SPECIAL,
 			idSession);
 		gAgent.sendReliableMessage();
-	}
-}
-
-void RlvUtil::teleportCallback(U64 hRegion, const LLVector3& posRegion, const LLVector3& vecLookAt)
-{
-	if (hRegion)
-	{
-		const LLVector3d posGlobal = from_region_handle(hRegion) + (LLVector3d)posRegion;
-		if (vecLookAt.isExactlyZero())
-			gAgent.teleportViaLocation(posGlobal);
-		else
-			gAgent.teleportViaLocationLookAt(posGlobal, vecLookAt);
 	}
 }
 
