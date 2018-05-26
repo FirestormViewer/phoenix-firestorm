@@ -478,7 +478,10 @@ void LLFloaterIMNearbyChat::onChatBoxKeystroke()
 
 	S32 length = raw_text.length();
 
-	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
+//	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
+// [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.0d
+	if ( (length > 0) && (raw_text[0] != '/') && (!RlvActions::hasBehaviour(RLV_BHVR_REDIRCHAT)) )
+// [/RLVa:KB]
 	{
 		gAgent.startTyping();
 	}
@@ -718,6 +721,15 @@ void LLFloaterIMNearbyChat::sendChatFromViewer(const LLWString &wtext, EChatType
 	{
 		utf8_text = utf8str_truncate(utf8_text, MAX_STRING - 1);
 	}
+
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0b
+	if ( (0 == channel) && (RlvActions::isRlvEnabled()) )
+	{
+		// Adjust the (public) chat "volume" on chat and gestures (also takes care of playing the proper animation)
+		type = RlvActions::checkChatVolume(type);
+		animate &= !RlvActions::hasBehaviour( (!RlvUtil::isEmote(utf8_text)) ? RLV_BHVR_REDIRCHAT : RLV_BHVR_REDIREMOTE );
+	}
+// [/RLVa:KB]
 
 	// Don't animate for chats people can't hear (chat to scripts)
 	if (animate && (channel == 0))

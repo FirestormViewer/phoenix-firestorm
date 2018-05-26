@@ -30,6 +30,9 @@
 
 //#include "llfirstuse.h"
 #include "llbutton.h"
+// [RLVa:KB] - Patch: RLVa-2.1.0
+#include "llsdserialize.h"
+// [/RLVa:KB]
 #include "llcolorswatch.h"
 #include "llfloater.h"
 #include "lllineeditor.h"
