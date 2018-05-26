@@ -2228,9 +2228,8 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	
 	// Collect and filter descendents to determine new COF contents.
 
-	//
-	// - Body parts: always include COF contents as a fallback in case any required parts are missing.
-	//
+	// - Body parts: always include COF contents as a fallback in case any
+	// required parts are missing.
 	// Preserve body parts from COF if appending.
 	LLInventoryModel::item_array_t body_items;
 	getDescendentsOfAssetType(cof, body_items, LLAssetType::AT_BODYPART);
@@ -2248,9 +2247,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	removeDuplicateItems(body_items);
 	filterWearableItems(body_items, 1, 0);
 
-	//
 	// - Wearables: include COF contents only if appending.
-	//
 	LLInventoryModel::item_array_t wear_items;
 	if (append)
 		getDescendentsOfAssetType(cof, wear_items, LLAssetType::AT_CLOTHING);
@@ -2276,9 +2273,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 // [/SL:KB]
 	filterWearableItems(wear_items, 0, LLAgentWearables::MAX_CLOTHING_LAYERS);
 
-	//
 	// - Attachments: include COF contents only if appending.
-	//
 	LLInventoryModel::item_array_t obj_items;
 	if (append)
 		getDescendentsOfAssetType(cof, obj_items, LLAssetType::AT_OBJECT);
@@ -2313,9 +2308,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 
 	removeDuplicateItems(obj_items);
 
-	//
 	// - Gestures: include COF contents only if appending.
-	//
 	LLInventoryModel::item_array_t gest_items;
 	if (append)
 		getDescendentsOfAssetType(cof, gest_items, LLAssetType::AT_GESTURE);
@@ -4407,7 +4400,7 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, LLP
 		return;
 	}
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-//	LLPointer<LLInventoryCallback> cb = NULL;
+//	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
 	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 	{
 		const LLUUID& id_to_remove = *it;
