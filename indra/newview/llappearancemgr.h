@@ -256,7 +256,6 @@ public:
 // [SL:KB] - Patch: Appearance-Misc
 	void syncCofVersionAndRefresh();
 // [/SL:KB]
-
 private:
     void serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &httpAdapter);
 

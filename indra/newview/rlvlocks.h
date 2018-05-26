@@ -141,6 +141,7 @@ extern RlvAttachmentLocks gRlvAttachmentLocks;
 class RlvAttachmentLockWatchdog : public LLSingleton<RlvAttachmentLockWatchdog>
 {
 	LLSINGLETON(RlvAttachmentLockWatchdog);
+protected:
 	~RlvAttachmentLockWatchdog() { delete m_pTimer; }
 
 	/*
@@ -212,10 +213,8 @@ protected:
 		virtual ~RlvAttachmentLockWatchdogTimer() { m_pWatchdog->m_pTimer = NULL; }
 		virtual BOOL tick() { return m_pWatchdog->onTimer(); }
 		RlvAttachmentLockWatchdog* m_pWatchdog;
-	} *m_pTimer;
+	} *m_pTimer = nullptr;
 };
-
-inline RlvAttachmentLockWatchdog::RlvAttachmentLockWatchdog() : m_pTimer(NULL) {}
 
 // ============================================================================
 // RlvWearableLocks class declaration - modelled on RlvAttachmentLocks (attach pt = wearable type - attachment = wearable)
@@ -283,13 +282,11 @@ extern RlvWearableLocks gRlvWearableLocks;
 class RlvFolderLocks : public LLSingleton<RlvFolderLocks>
 {
 	friend class RlvLockedDescendentsCollector;
-
 	LLSINGLETON(RlvFolderLocks);
-
 public:
 	// Specifies the source of a folder lock
 	enum ELockSourceType
-	{ 
+	{
 		ST_ATTACHMENT = 0x01, ST_ATTACHMENTPOINT = 0x02, ST_FOLDER = 0x04, ST_ROOTFOLDER = 0x08,
 		ST_SHAREDPATH = 0x10, ST_WEARABLETYPE = 0x20, ST_NONE= 0x00, ST_MASK_ANY = 0xFF
 	};
@@ -382,6 +379,8 @@ protected:
 	mutable uuid_vec_t       m_LockedAttachmentRem;
 	mutable folderlock_map_t m_LockedFolderMap;
 	mutable uuid_vec_t       m_LockedWearableRem;
+private:
+	friend class LLSingleton<RlvFolderLocks>;
 };
 
 // ============================================================================
