@@ -94,7 +94,7 @@ class RlvBehaviourModifierAnimator : public LLSingleton<RlvBehaviourModifierAnim
 {
 	LLSINGLETON_EMPTY_CTOR(RlvBehaviourModifierAnimator);
 public:
-	~RlvBehaviourModifierAnimator() override;
+	~RlvBehaviourModifierAnimator();
 
 	/*
 	 * Member functions
