@@ -189,7 +189,7 @@
     <key>grid.avatarconnection.com:8002/</key>
         <map>
         <key>DEPRECATED</key>
-			<string>TRUE</string>
+            <string>TRUE</string>
         <key>name</key>
             <string>grid.avatarconnection.com:8002/</string>
         </map>
@@ -468,7 +468,7 @@
     <key>login.osgrid.org</key>
         <map>
         <key>LastModified</key>
-            <date>2012-08-03T15:36:22.93Z</date>
+            <date>2019-04-19T21:15:00.00Z</date>
         <key>about</key>
             <string>http://www.osgrid.org/</string>
         <key>gatekeeper</key>
@@ -591,7 +591,7 @@
     <key>util.aditi.lindenlab.com</key>
         <map>
         <key>LastModified</key>
-            <date>2018-04-15T11:25:00Z</date>
+            <date>2019-04-19T21:15:00Z</date>
         <key>app_slurl_base</key>
             <string>secondlife:///app</string>
         <key>gridname</key>
@@ -622,7 +622,7 @@
     <key>util.agni.lindenlab.com</key>
         <map>
         <key>LastModified</key>
-            <date>2018-04-15T11:25:00Z</date>
+            <date>2019-04-19T21:15:00Z</date>
         <key>app_slurl_base</key>
             <string>secondlife:///app</string>
         <key>favorite</key>

@@ -269,8 +269,7 @@ Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 	</string>
 	<string name="LoginFailedPendingLogout">
 		System w tej chwili Cię wylogowywuje.
-Twoje konto będzie niedostępne do
-[TIME] czasu pacyficznego.
+Poczekaj chwilę, zanim spróbujesz zalogować się ponownie.
 	</string>
 	<string name="LoginFailedUnableToCreateSession">
 		Nie można utworzyć poprawnej sesji.

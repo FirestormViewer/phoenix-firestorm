@@ -390,7 +390,6 @@
 			<menu_item_check label="Pokaż macierze" name="Show Matrices"/>
 			<menu_item_check label="Pokaż kolor pod kursorem" name="Show Color Under Cursor"/>
 			<menu_item_check label="Pokaż pamięć" name="Show Memory"/>
-			<menu_item_check label="Pokaż informacje o pamięci prywatnej" name="Show Private Mem Info"/>
 			<menu_item_check label="Pokaż aktualizacje obiektów" name="Show Updates"/>
 		</menu>
 		<menu label="Wymuś błąd" name="Force Errors">
