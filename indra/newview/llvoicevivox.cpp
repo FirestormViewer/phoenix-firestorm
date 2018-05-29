@@ -779,6 +779,7 @@ bool LLVivoxVoiceClient::callbackEndDaemon(const LLSD& data)
     LL_DEBUGS("Voice") << LL_ENDL;
     if (!LLAppViewer::isExiting())
     {
+        LL_DEBUGS("Voice") << "callbackEndDaemon terminating audio session" << LL_ENDL;
         terminateAudioSession(false);
         closeSocket();
         cleanUp();
@@ -1614,7 +1615,7 @@ bool LLVivoxVoiceClient::terminateAudioSession(bool wait)
 
     if (mAudioSession)
     {
-        LL_INFOS("Voice") << "Terminating current voice session " << mAudioSession->mHandle << LL_ENDL;
+        LL_INFOS("Voice") << "terminateAudioSession(" << wait << ") Terminating current voice session " << mAudioSession->mHandle << LL_ENDL;
 
         if (mIsLoggedIn)
         {
@@ -1690,7 +1691,7 @@ bool LLVivoxVoiceClient::terminateAudioSession(bool wait)
     }
     else
     {
-        LL_WARNS("Voice") << "stateSessionTerminated with NULL mAudioSession" << LL_ENDL;
+        LL_WARNS("Voice") << "terminateAudioSession(" << wait << ") with NULL mAudioSession" << LL_ENDL;
     }
 
     notifyStatusObservers(LLVoiceClientStatusObserver::STATUS_LEFT_CHANNEL);
@@ -1808,7 +1809,7 @@ bool LLVivoxVoiceClient::runSession(const sessionStatePtr_t &session)
 
         if (mSessionTerminateRequested)
         {
-            LL_DEBUGS("Voice") << "terminate requested " << LL_ENDL;
+            LL_DEBUGS("Voice") << "runSession terminate requested " << LL_ENDL;
             terminateAudioSession(true);
         }
         // if a relog has been requested then addAndJoineSession 
@@ -3055,7 +3056,6 @@ void LLVivoxVoiceClient::sendPositionAndVolumeUpdate(void)
 		}
 	}
 
-	//sendLocalAudioUpdates();  obsolete, used to send volume setting on position updates
     std::string update(stream.str());
 	if(!update.empty())
 	{
