@@ -1634,6 +1634,12 @@ void LLPanelFace::updateVisibility()
 	getChildView("radio_material_type")->setVisible(!show_media);
 	// <FS:CR> FIRE-11407 - Be consistant and hide this with the other controls
 	getChildView("rptctrl")->setVisible(combo_matmedia->getEnabled());
+	getChildView("tex gen")->setVisible(combo_matmedia->getEnabled());
+	getChildView("combobox texgen")->setVisible(combo_matmedia->getEnabled());
+	getChildView("checkbox planar align")->setVisible(combo_matmedia->getEnabled());
+	getChildView("checkbox_sync_settings")->setVisible(combo_matmedia->getEnabled());
+	getChildView("copytextures")->setVisible(combo_matmedia->getEnabled());
+	getChildView("pastetextures")->setVisible(combo_matmedia->getEnabled());
 	// and other additions...
 	getChildView("flipTextureScaleU")->setVisible(combo_matmedia->getEnabled());
 	getChildView("flipTextureScaleV")->setVisible(combo_matmedia->getEnabled());
