@@ -49,7 +49,7 @@
 #include "llworld.h"
 // [RLVa:KB] - Checked: RLVa-2.0.0
 #include "rlvactions.h"
-#include "rlvhelper.h"
+#include "rlvmodifiers.h"
 #include "llfloaterreg.h"
 // [/RLVa:KB]
 

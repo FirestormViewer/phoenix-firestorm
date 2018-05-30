@@ -5872,6 +5872,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="loading_chat_logs">
 		Cargando...
 	</string>
+	<string name="RLVaStatusDisabled">
+		(deshabilitado)
+	</string>
 	<string name="experience_tools_experience">
 		Experiencia
 	</string>

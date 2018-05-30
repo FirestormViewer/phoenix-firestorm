@@ -10210,7 +10210,14 @@ void handle_rebake_textures(void*)
 	if (gAgent.getRegion() && gAgent.getRegion()->getCentralBakeVersion())
 	{
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2015-06-27 (Catznip-3.7)
-		LLAppearanceMgr::instance().syncCofVersionAndRefresh();
+		if (!gAgent.getRegionCapability("IncrementCOFVersion").empty())
+		{
+			LLAppearanceMgr::instance().syncCofVersionAndRefresh();
+		}
+		else
+		{
+			LLAppearanceMgr::instance().requestServerAppearanceUpdate();
+		}
 // [/SL:KB]
 //		LLAppearanceMgr::instance().requestServerAppearanceUpdate();
 		avatar_tex_refresh(gAgentAvatarp); // <FS:CR> FIRE-11800 - Refresh the textures too

@@ -23,8 +23,8 @@
 
 // Version of the specifcation we report
 const S32 RLV_VERSION_MAJOR = 3;
-const S32 RLV_VERSION_MINOR = 1;
-const S32 RLV_VERSION_PATCH = 4;
+const S32 RLV_VERSION_MINOR = 2;
+const S32 RLV_VERSION_PATCH = 1;
 const S32 RLV_VERSION_BUILD = 0;
 
 // Version of the specifcation we report (in compatibility mode)
@@ -35,7 +35,7 @@ const S32 RLV_VERSION_BUILD_COMPAT = 0;
 
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 2;
-const S32 RLVa_VERSION_MINOR = 1;
+const S32 RLVa_VERSION_MINOR = 2;
 const S32 RLVa_VERSION_PATCH = 0;
 
 // Uncomment before a final release
@@ -71,6 +71,7 @@ const S32 RLVa_VERSION_PATCH = 0;
 
 #define RLV_ROOT_FOLDER					"#RLV"
 #define RLV_CMD_PREFIX					'@'
+#define RLV_MODIFIER_ANIMATION_FREQUENCY 10
 #define RLV_MODIFIER_TPLOCAL_DEFAULT    256.f			// Any teleport that's more than a region away is non-local
 #define RLV_MODIFIER_FARTOUCH_DEFAULT   1.5f			// Specifies the default @fartouch distance
 #define RLV_MODIFIER_SITTP_DEFAULT      1.5f			// Specifies the default @sittp distance
@@ -231,6 +232,14 @@ enum ERlvBehaviour {
 	// Camera (force)
 	RLV_BHVR_SETCAM_MODE,			// Switch the user's camera into the specified mode (e.g. mouselook or thirdview)
 
+	// Overlay
+	RLV_BHVR_SETOVERLAY,			// Gives an object exclusive control of the overlay
+	RLV_BHVR_SETOVERLAY_ALPHA,		// Changes the overlay texture's transparency level
+	RLV_BHVR_SETOVERLAY_TEXTURE,	// Changes the overlay texture
+	RLV_BHVR_SETOVERLAY_TINT,		// Changes the tint that's applied to the overlay texture
+	RLV_BHVR_SETOVERLAY_TOUCH,		// Block world interaction (=touching) based on the alpha channel of the overlay texture
+	RLV_BHVR_SETOVERLAY_TWEEN,		// Animate between the current overlay settings and the supplied values
+
 	RLV_BHVR_COUNT,
 	RLV_BHVR_UNKNOWN
 };
@@ -238,6 +247,10 @@ enum ERlvBehaviour {
 enum ERlvBehaviourModifier
 {
 	RLV_MODIFIER_FARTOUCHDIST,			// Radius of a sphere around the user in which they can interact with the world
+	RLV_MODIFIER_OVERLAY_ALPHA,			// Transparency level of the overlay texture (in addition to the texture's own alpha channel)
+	RLV_MODIFIER_OVERLAY_TEXTURE,		// Specifies the UUID of the overlay texture
+	RLV_MODIFIER_OVERLAY_TINT,			// The tint that's applied to the overlay texture
+	RLV_MODIFIER_OVERLAY_TOUCH,			// Determines whether the overlay texture's alpha channel will be used to allow/block world interaction
 	RLV_MODIFIER_RECVIMDISTMIN,			// Minimum distance to receive an IM from an otherwise restricted sender (squared value)
 	RLV_MODIFIER_RECVIMDISTMAX,			// Maximum distance to receive an IM from an otherwise restricted sender (squared value)
 	RLV_MODIFIER_SENDIMDISTMIN,			// Minimum distance to send an IM to an otherwise restricted recipient (squared value)
@@ -296,6 +309,7 @@ enum ERlvCmdRet {
 	RLV_RET_FAILED_UNKNOWN,			// Command failed (unknown command)
 	RLV_RET_FAILED_NOSHAREDROOT,	// Command failed (missing #RLV)
 	RLV_RET_FAILED_DEPRECATED,		// Command failed (deprecated and no longer supported)
+	RLV_RET_FAILED_NOBEHAVIOUR,		// Command failed (force modifier on an object with no active restrictions)
 	RLV_RET_NO_PROCESSOR			// Command doesn't have a template processor define (legacy code)
 };
 #define RLV_RET_SUCCEEDED(eCmdRet)  (((eCmdRet) & RLV_RET_SUCCESS) == RLV_RET_SUCCESS)
