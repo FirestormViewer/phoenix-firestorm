@@ -6102,6 +6102,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="RLVaToggleDisabled">
 		deaktiviert
 	</string>
+	<string name="RLVaStatusDisabled">
+		(deaktiviert)
+	</string>
 	<string name="experience_tools_experience">
 		Erlebnis
 	</string>

@@ -2791,6 +2791,7 @@ Try enclosing path to the editor with double quotes.
   <string name="RLVaToggleMessageRestart">RLVa will be [STATE] after you restart</string>
   <string name="RLVaToggleEnabled">enabled</string>
   <string name="RLVaToggleDisabled">disabled</string>
+  <string name="RLVaStatusDisabled">(disabled)</string>
    
   <!-- Experience Tools strings -->
   <string name="experience_tools_experience">Experience</string>

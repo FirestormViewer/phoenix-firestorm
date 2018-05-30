@@ -66,7 +66,7 @@
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e)
 #include "rlvactions.h"
 #include "rlvhandler.h"
-#include "rlvhelper.h"
+#include "rlvmodifiers.h"
 // [/RLVa:KB]
 
 #include <vector>
