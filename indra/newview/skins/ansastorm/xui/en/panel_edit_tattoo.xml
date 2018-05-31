@@ -10,13 +10,13 @@
   width="363" >
   <scroll_container
      follows="all"
+     height="400"
      layout="topleft"
      left="10"
-     name="tattoo_scroll_container"
+     name="avatar_tattoo_scroll"
      reserve_scroll_corner="false"
-     top="0"
-     bottom="-1"
-     right="-10">
+     top_pad="0"
+     width="344">
     <panel
      border="false"
        bg_alpha_color="DkGray2"
