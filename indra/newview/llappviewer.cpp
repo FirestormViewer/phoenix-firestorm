@@ -3776,7 +3776,7 @@ LLSD LLAppViewer::getViewerInfo() const
 #endif
 
 // [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0)
-	info["RLV_VERSION"] = (rlv_handler_t::isEnabled()) ? RlvStrings::getVersionAbout() : "(disabled)";
+	info["RLV_VERSION"] = (rlv_handler_t::isEnabled()) ? RlvStrings::getVersionAbout() : LLTrans::getString("RLVaStatusDisabled");
 // [/RLVa:KB]
 	info["OPENGL_VERSION"] = (const char*)(glGetString(GL_VERSION));
 	info["LIBCURL_VERSION"] = LLCore::LLHttp::getCURLVersion();

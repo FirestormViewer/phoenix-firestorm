@@ -611,6 +611,41 @@ std::string utf8str_substr(const std::string& utf8str, const S32 index, const S3
 		return utf8str.substr(index, cur_char);
 	}
 }
+
+void utf8str_split(std::list<std::string>& split_list, const std::string& utf8str, size_t maxlen, char split_token)
+{
+	split_list.clear();
+
+	std::string::size_type lenMsg = utf8str.length(), lenIt = 0;
+
+	const char* pstrIt = utf8str.c_str(); std::string strTemp;
+	while (lenIt < lenMsg)
+	{
+		if (lenIt + maxlen < lenMsg)
+		{
+			// Find the last split character
+			const char* pstrTemp = pstrIt + maxlen;
+			while ( (pstrTemp > pstrIt) && (*pstrTemp != split_token) )
+				pstrTemp--;
+
+			if (pstrTemp > pstrIt)
+				strTemp = utf8str.substr(lenIt, pstrTemp - pstrIt);
+			else
+				strTemp = utf8str_substr(utf8str, lenIt, maxlen);
+		}
+		else
+		{
+			strTemp = utf8str.substr(lenIt, std::string::npos);
+		}
+
+		split_list.push_back(strTemp);
+
+		lenIt += strTemp.length();
+		pstrIt = utf8str.c_str() + lenIt;
+		if (*pstrIt == split_token)
+			lenIt++;
+	}
+}
 // [/RLVa:KB]
 
 std::string utf8str_symbol_truncate(const std::string& utf8str, const S32 symbol_len)

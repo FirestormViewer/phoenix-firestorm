@@ -100,7 +100,7 @@
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
 #include "rlvhandler.h"
-#include "rlvhelper.h"
+#include "rlvmodifiers.h"
 // [/RLVa:KB]
 // <FS:CR> Aurora Sim
 #include "llviewernetwork.h"
@@ -2588,7 +2588,8 @@ void LLSelectMgr::logNoOp(LLSelectNode* node, void *)
 // static
 void LLSelectMgr::logAttachmentRequest(LLSelectNode* node, void *)
 {
-    LLAttachmentsMgr::instance().onAttachmentRequested(node->mItemID);
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-3.7
+//    LLAttachmentsMgr::instance().onAttachmentRequested(node->mItemID);
 }
 
 // static

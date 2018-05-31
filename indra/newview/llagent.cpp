@@ -5647,7 +5647,7 @@ void LLTeleportRequestViaLocationLookAt::startTeleport()
 // [RLVa:KB] - Checked: RLVa-2.0.0
 	gAgent.doTeleportViaLocationLookAt(getPosGlobal(), getLookAt());
 // [/RLVa:KB]
-//	gAgent.doTeleportViaLocationLookAt(getPosGlobal());
+//    gAgent.doTeleportViaLocationLookAt(getPosGlobal());
 }
 
 void LLTeleportRequestViaLocationLookAt::restartTeleport()
@@ -5656,7 +5656,7 @@ void LLTeleportRequestViaLocationLookAt::restartTeleport()
 // [RLVa:KB] - Checked: RLVa-2.0.0
 	gAgent.doTeleportViaLocationLookAt(getPosGlobal(), getLookAt());
 // [/RLVa:KB]
-//	gAgent.doTeleportViaLocationLookAt(getPosGlobal());
+//    gAgent.doTeleportViaLocationLookAt(getPosGlobal());
 }
 
 

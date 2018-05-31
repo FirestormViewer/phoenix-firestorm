@@ -57,7 +57,7 @@ class RlvObject;
 
 struct RlvException;
 typedef boost::variant<std::string, LLUUID, S32, ERlvBehaviour> RlvExceptionOption;
-typedef boost::variant<int, float, LLVector3, LLUUID> RlvBehaviourModifierValue;
+typedef boost::variant<int, float, bool, LLVector3, LLUUID> RlvBehaviourModifierValue;
 
 class RlvGCTimer;
 
@@ -186,7 +186,6 @@ public:
 	static bool sendChatReply(S32 nChannel, const std::string& strUTF8Text);
 	static bool sendChatReply(const std::string& strChannel, const std::string& strUTF8Text);
 	static void sendIMMessage(const LLUUID& idTo, const std::string& strMsg, char chSplit);
-	static void teleportCallback(U64 hRegion, const LLVector3& posRegion, const LLVector3& vecLookAt);
 protected:
 	static bool m_fForceTp;															// @standtp
 };
