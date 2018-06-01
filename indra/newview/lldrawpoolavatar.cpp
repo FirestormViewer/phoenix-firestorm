@@ -1779,6 +1779,11 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(
 	LLPointer<LLVertexBuffer> buffer = face->getVertexBuffer();
 	LLDrawable* drawable = face->getDrawable();
 
+	if (drawable->getVOVolume() && drawable->getVOVolume()->isNoLOD())
+	{
+		return;
+	}
+
 	U32 data_mask = face->getRiggedVertexBufferDataMask();
 
     if (!vol_face.mWeightsScrubbed)
@@ -1838,7 +1843,9 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(
 		return;
 	}
 
-	if (sShaderLevel <= 0 && face->mLastSkinTime < avatar->getLastSkinTime())
+	if (!buffer.isNull() && 
+		sShaderLevel <= 0 && 
+		face->mLastSkinTime < avatar->getLastSkinTime())
 	{
 		//perform software vertex skinning for this face
 		LLStrider<LLVector3> position;
@@ -2269,7 +2276,7 @@ void LLDrawPoolAvatar::updateRiggedVertexBuffers(LLVOAvatar* avatar)
 
 			LLVOVolume* vobj = drawable->getVOVolume();
 
-			if (!vobj)
+			if (!vobj || vobj->isNoLOD())
 			{
 				continue;
 			}

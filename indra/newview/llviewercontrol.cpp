@@ -705,6 +705,8 @@ bool toggle_show_object_render_cost(const LLSD& newvalue)
 	return true;
 }
 
+void handleRenderAutoMuteByteLimitChanged(const LLSD& new_value);
+
 // <FS:Ansariel> Change visibility of main chatbar if autohide setting is changed
 static void handleAutohideChatbarChanged(const LLSD& new_value)
 {
@@ -1114,6 +1116,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("LoginLocation")->getSignal()->connect(boost::bind(&handleLoginLocationChanged));
 	gSavedSettings.getControl("DebugAvatarJoints")->getCommitSignal()->connect(boost::bind(&handleDebugAvatarJointsChanged, _2));
+	gSavedSettings.getControl("RenderAutoMuteByteLimit")->getSignal()->connect(boost::bind(&handleRenderAutoMuteByteLimitChanged, _2));
 	gSavedPerAccountSettings.getControl("AvatarHoverOffsetZ")->getCommitSignal()->connect(boost::bind(&handleAvatarHoverOffsetChanged, _2));
 
 // [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
