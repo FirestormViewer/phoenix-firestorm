@@ -1631,18 +1631,22 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 //static
 void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id, BOOL main_panel, BOOL take_keyboard_focus, BOOL reset_filter)
 {
-	LLInventoryPanel *active_panel;
+	// <FS:Ansariel> Use correct inventory floater
+	//LLSidepanelInventory* sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+	//sidepanel_inventory->showInventoryPanel();
+	// </FS:Ansariel>
+
 	bool in_inbox = (gInventory.isObjectDescendentOf(obj_id, gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX)));
 	bool show_inbox = gSavedSettings.getBOOL("FSShowInboxFolder"); // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 
 	// <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
 	//if (main_panel && !in_inbox)
 	//{
-	//	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory")->selectAllItemsPanel();
+	//	sidepanel_inventory->selectAllItemsPanel();
 	//}
 	// </FS:Ansariel>
 
-	active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
+	LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
 
 	if (active_panel)
 	{
@@ -1658,7 +1662,7 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 		if (in_inbox && !show_inbox)
 		// </FS:Ansariel>
 		{
-			LLSidepanelInventory * sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+			LLSidepanelInventory* sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory"); // <FS:Ansariel> Use correct inventory floater
 			LLInventoryPanel * inventory_panel = NULL;
 			sidepanel_inventory->openInbox();
 			inventory_panel = sidepanel_inventory->getInboxPanel();
