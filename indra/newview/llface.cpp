@@ -53,6 +53,7 @@
 #include "llviewershadermgr.h"
 #include "llviewertexture.h"
 #include "llvoavatar.h"
+#include "llsculptidsize.h"
 // [RLVa:KB] - Checked: RLVa-2.0.0
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -2811,12 +2812,27 @@ void LLFace::setDefaultTexture(U32 nChannel, bool fShowDefault) const
 
 void LLFace::setVertexBuffer(LLVertexBuffer* buffer)
 {
+	if (buffer)
+	{
+		LLSculptIDSize::instance().inc(mDrawablep, buffer->getSize() + buffer->getIndicesSize());
+	}
+
+	if (mVertexBuffer)
+	{
+		LLSculptIDSize::instance().dec(mDrawablep);
+	}
+
 	mVertexBuffer = buffer;
 	llassert(verify());
 }
 
 void LLFace::clearVertexBuffer()
 {
+	if (mVertexBuffer)
+	{
+		LLSculptIDSize::instance().dec(mDrawablep);
+	}
+
 	mVertexBuffer = NULL;
 }
 

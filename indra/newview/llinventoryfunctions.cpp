@@ -873,7 +873,25 @@ void show_item_original(const LLUUID& item_uuid)
 	main_inventory->showAllItemsPanel();
 	main_inventory->resetFilters();
 	main_inventory->onFilterEdit("");
-	main_inventory->getActivePanel()->setSelection(gInventory.getLinkedItemID(item_uuid), TAKE_FOCUS_YES);
+	LLUUID linked_item_id = gInventory.getLinkedItemID(item_uuid);
+	bool in_inbox = (gInventory.isObjectDescendentOf(linked_item_id, gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX)));
+	bool show_inbox = gSavedSettings.getBOOL("FSShowInboxFolder"); // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+
+	if (in_inbox && !show_inbox)
+	{
+		LLInventoryPanel * inventory_panel = NULL;
+		sidepanel_inventory->openInbox();
+		inventory_panel = sidepanel_inventory->getInboxPanel();
+
+		if (inventory_panel)
+		{
+			inventory_panel->setSelection(linked_item_id, TAKE_FOCUS_YES);
+		}
+	}
+	else
+	{
+		main_inventory->getActivePanel()->setSelection(linked_item_id, TAKE_FOCUS_YES);
+	}
 	// </FS:Ansariel>
 }
 
