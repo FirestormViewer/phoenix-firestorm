@@ -47,22 +47,17 @@
 extern U64MicrosecondsImplicit gFrameTime;
 
 LLPointer<LLVertexBuffer> LLVOPartGroup::sVB = NULL;
-// <FS> Fix particle flashing
-//S32 LLVOPartGroup::sVBSlotCursor = 0;
 S32 LLVOPartGroup::sVBSlotFree[];
 S32* LLVOPartGroup::sVBSlotCursor = NULL;
-// </FS>
 
 void LLVOPartGroup::initClass()
 {
-	// <FS> Fix particle flashing
 	for (S32 i = 0; i < LL_MAX_PARTICLE_COUNT; ++i)
 	{
 		sVBSlotFree[i] = i;
 	}
-
+	
 	sVBSlotCursor = sVBSlotFree;
-	// </FS>
 }
 
 //static
@@ -135,21 +130,14 @@ void LLVOPartGroup::destroyGL()
 //static
 S32 LLVOPartGroup::findAvailableVBSlot()
 {
-	// <FS> Fix particle flashing
-	//if (sVBSlotCursor >= LL_MAX_PARTICLE_COUNT)
 	if (sVBSlotCursor >= sVBSlotFree + LL_MAX_PARTICLE_COUNT)
-	// </FS>
 	{ //no more available slots
 		return -1;
 	}
 
-	// <FS> Fix particle flashing
-	//return sVBSlotCursor++;
 	S32 ret = *sVBSlotCursor;
 	sVBSlotCursor++;
-
 	return ret;
-	// </FS>
 }
 
 bool ll_is_part_idx_allocated(S32 idx, S32* start, S32* end)
@@ -184,16 +172,6 @@ bool ll_is_part_idx_allocated(S32 idx, S32* start, S32* end)
 //static
 void LLVOPartGroup::freeVBSlot(S32 idx)
 {
-	// <FS> Fix particle flashing
-	/*llassert(idx < LL_MAX_PARTICLE_COUNT && idx >= 0);
-	//llassert(sVBSlotCursor > sVBSlotFree);
-	//llassert(ll_is_part_idx_allocated(idx, sVBSlotCursor, sVBSlotFree+LL_MAX_PARTICLE_COUNT));
-
-	if (sVBSlotCursor > sVBSlotFree)
-	{
-		sVBSlotCursor--;
-		*sVBSlotCursor = idx;
-	}*/
 	llassert(idx < LL_MAX_PARTICLE_COUNT && idx >= 0);
 	//llassert(sVBSlotCursor > sVBSlotFree);
 	//llassert(ll_is_part_idx_allocated(idx, sVBSlotCursor, sVBSlotFree+LL_MAX_PARTICLE_COUNT));
@@ -203,7 +181,6 @@ void LLVOPartGroup::freeVBSlot(S32 idx)
 		sVBSlotCursor--;
 		*sVBSlotCursor = idx;
 	}
-	// </FS>
 }
 
 LLVOPartGroup::LLVOPartGroup(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp)
@@ -915,10 +892,7 @@ void LLParticlePartition::getGeometry(LLSpatialGroup* group)
 		LLFace* facep = *i;
 		LLAlphaObject* object = (LLAlphaObject*) facep->getViewerObject();
 
-		// <FS> Fix particle flashing
-		//if (!facep->isState(LLFace::PARTICLE))
 		if (!facep->isState(LLFace::PARTICLE))
-		// </FS>
 		{ //set the indices of this face
 			S32 idx = LLVOPartGroup::findAvailableVBSlot();
 			if (idx >= 0)
@@ -927,10 +901,7 @@ void LLParticlePartition::getGeometry(LLSpatialGroup* group)
 				facep->setIndicesIndex(idx*6);
 				facep->setVertexBuffer(LLVOPartGroup::sVB);
 				facep->setPoolType(LLDrawPool::POOL_ALPHA);
-				// <FS> Fix particle flashing
-				//facep->setState(LLFace::PARTICLE);
 				facep->setState(LLFace::PARTICLE);
-				// </FS>
 			}
 			else
 			{
@@ -1015,7 +986,7 @@ void LLParticlePartition::getGeometry(LLSpatialGroup* group)
 			U32 count = facep->getIndicesCount();
 			LLDrawInfo* info = new LLDrawInfo(start,end,count,offset,facep->getTexture(), 
 				//facep->getTexture(),
-				buffer, fullbright); 
+				buffer, object->isSelected(), fullbright);
 
 			const LLVector4a* exts = group->getObjectExtents();
 			info->mExtents[0] = exts[0];

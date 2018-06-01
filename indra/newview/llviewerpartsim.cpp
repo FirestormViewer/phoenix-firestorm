@@ -662,10 +662,6 @@ void LLViewerPartSim::updateSimulation()
 {
 	static LLFrameTimer update_timer;
 
-	//reset VBO cursor
-	// <FS> Fix particle flashing
-	//LLVOPartGroup::sVBSlotCursor = 0;
-
 	const F32 dt = llmin(update_timer.getElapsedTimeAndResetF32(), 0.1f);
 
 	// <FS:LO> Dont suspend partical processing while particles are hidden, just skip over drawing them
