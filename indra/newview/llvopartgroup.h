@@ -42,11 +42,8 @@ public:
 
 	//vertex buffer for holding all particles
 	static LLPointer<LLVertexBuffer> sVB;
-	// <FS> Fix particle flashing
-	//static S32 sVBSlotCursor;
 	static S32 sVBSlotFree[LL_MAX_PARTICLE_COUNT];
-	static S32* sVBSlotCursor;
-	// </FS>
+	static S32 *sVBSlotCursor;
 
 	static void initClass();
 	static void restoreGL();
