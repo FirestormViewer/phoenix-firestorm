@@ -506,7 +506,8 @@ void LLRenderPass::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL ba
 			params.mGroup->rebuildMesh();
 		}
 
-		LLGLEnableFunc stencil_test(GL_STENCIL_TEST, params.mSelected, &LLGLCommonFunc::selected_stencil_test);
+		// <FS:Ansariel> Enabling stencil test here will cull name tags and voice indicator when selecting mesh
+		//LLGLEnableFunc stencil_test(GL_STENCIL_TEST, params.mSelected, &LLGLCommonFunc::selected_stencil_test);
 	
 		params.mVertexBuffer->setBuffer(mask);
 		params.mVertexBuffer->drawRange(params.mDrawMode, params.mStart, params.mEnd, params.mCount, params.mOffset);
