@@ -50,6 +50,9 @@ private:
 	void onClickLoad();
 	void onBackgroundChange();
 
+	void onSaveCallback(const std::vector<std::string>& filenames);
+	void onLoadCallback(const std::vector<std::string>& filenames);
+
 	void clearPoints();
 
 	LLSD getMyDataSerialized();

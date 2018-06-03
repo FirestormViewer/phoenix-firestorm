@@ -45,6 +45,9 @@ protected:
 	void onClickLoad();
 	void onClickCancel();
 
+	void onSaveCallback(const std::vector<std::string>& filenames);
+	void onLoadCallback(const std::vector<std::string>& filenames);
+
 	void fixOrder();
 	LLSD getMyDataSerialized();
 
