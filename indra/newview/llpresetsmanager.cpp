@@ -154,7 +154,10 @@ std::string LLPresetsManager::getPresetsDir(const std::string& subdirectory)
 				{
 					std::string source = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, PRESETS_CAMERA, file);
 					file = LLURI::escape(file);
-					std::string dest = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_CAMERA, file);
+					// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
+					//std::string dest = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_CAMERA, file);
+					std::string dest = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR, PRESETS_CAMERA, file);
+					// </FS:Ansariel>
 					LLFile::copy(source, dest);
 				}
 			}
@@ -411,7 +414,7 @@ bool LLPresetsManager::setPresetNamesInComboBox(const std::string& subdirectory,
 		std::list<std::string> preset_names;
 		loadPresetNamesFromDir(presets_dir, preset_names, default_option);
 
-		std::string preset_graphic_active = gSavedSettings.getString("PresetGraphicActive");
+		//std::string preset_graphic_active = gSavedSettings.getString("PresetGraphicActive"); // <FS:Ansariel> Unused
 
 		if (preset_names.begin() != preset_names.end())
 		{
