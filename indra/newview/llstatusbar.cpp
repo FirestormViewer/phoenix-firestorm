@@ -39,6 +39,7 @@
 #include "llfloaterbuycurrency.h"
 #include "llbuycurrencyhtml.h"
 #include "llpanelnearbymedia.h"
+#include "llpanelpresetscamerapulldown.h"
 #include "llpanelpresetspulldown.h"
 #include "llpanelvolumepulldown.h"
 #include "llfloaterregioninfo.h"
@@ -193,9 +194,11 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mSearchData(NULL),			// <FS:ND/> Hook up and init for filtering
 	mFilterEdit(NULL),			// <FS:ND/> Edit for filtering
 	mSearchPanel(NULL),			// <FS:ND/> Panel for filtering
-	mIconPresets(NULL),
+	mIconPresetsGraphic(NULL),
+	mIconPresetsCamera(NULL),
 	mMediaToggle(NULL),
 	mMouseEnterPresetsConnection(),
+	mMouseEnterPresetsCameraConnection(),
 	mMouseEnterVolumeConnection(),
 	mMouseEnterNearbyMediaConnection(),
 	mCurrentLocationString()
@@ -253,6 +256,10 @@ LLStatusBar::~LLStatusBar()
 	{
 		mMouseEnterPresetsConnection.disconnect();
 	}
+	if (mMouseEnterPresetsCameraConnection.connected())
+	{
+		mMouseEnterPresetsCameraConnection.disconnect();
+	}
 	if (mMouseEnterVolumeConnection.connected())
 	{
 		mMouseEnterVolumeConnection.disconnect();
@@ -303,15 +310,23 @@ BOOL LLStatusBar::postBuild()
 	// <FS:Ansariel> Not used in Firestorm
 	//mBtnStats = getChildView("stat_btn");
 
-	mIconPresets = getChild<LLButton>( "presets_icon" );
-	// <FS: KC> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
-	// mIconPresets->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+	mIconPresetsCamera = getChild<LLButton>( "presets_icon_camera" );
+	//mIconPresetsCamera->setMouseEnterCallback(boost::bind(&LLStatusBar::mIconPresetsCamera, this));
 	if (gSavedSettings.getBOOL("FSStatusBarMenuButtonPopupOnRollover"))
 	{
-		mMouseEnterPresetsConnection = mIconPresets->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+		mMouseEnterPresetsCameraConnection = mIconPresetsCamera->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresetsCamera, this));
+	}
+	mIconPresetsCamera->setClickedCallback(boost::bind(&LLStatusBar::mIconPresetsCamera, this));
+
+	mIconPresetsGraphic = getChild<LLButton>( "presets_icon_graphic" );
+	// <FS: KC> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
+	// mIconPresetsGraphic->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+	if (gSavedSettings.getBOOL("FSStatusBarMenuButtonPopupOnRollover"))
+	{
+		mMouseEnterPresetsConnection = mIconPresetsGraphic->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
 	}
 	// </FS: KC> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
-	mIconPresets->setClickedCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+	mIconPresetsGraphic->setClickedCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
 
 	mBtnVolume = getChild<LLButton>( "volume_btn" );
 	mBtnVolume->setClickedCallback( onClickVolume, this );
@@ -401,6 +416,11 @@ BOOL LLStatusBar::postBuild()
 
 	mSGPacketLoss = LLUICtrlFactory::create<LLStatGraph>(pgp);
 	addChild(mSGPacketLoss);
+
+	mPanelPresetsCameraPulldown = new LLPanelPresetsCameraPulldown();
+	addChild(mPanelPresetsCameraPulldown);
+	mPanelPresetsCameraPulldown->setFollows(FOLLOWS_TOP|FOLLOWS_RIGHT);
+	mPanelPresetsCameraPulldown->setVisible(FALSE);
 
 	mPanelPresetsPulldown = new LLPanelPresetsPulldown();
 	addChild(mPanelPresetsPulldown);
@@ -691,7 +711,8 @@ void LLStatusBar::setVisibleForMouselook(bool visible)
 	mSearchPanel->setVisible(visible && gSavedSettings.getBOOL("FSMenuSearch"));
 	mTimeMediaPanel->setVisible(visible);
 	setBackgroundVisible(visible);
-	mIconPresets->setVisible(visible);
+	mIconPresetsCamera->setVisible(visible);
+	mIconPresetsGraphic->setVisible(visible);
 }
 
 void LLStatusBar::debitBalance(S32 debit)
@@ -857,13 +878,40 @@ void LLStatusBar::onClickBuyCurrency()
 	LLFirstUse::receiveLindens(false);
 }
 
+void LLStatusBar::onMouseEnterPresetsCamera()
+{
+	LLView* popup_holder = gViewerWindow->getRootView()->getChildView("popup_holder");
+	// <FS:Ansariel> Changed presets icon to LLButton
+	//LLIconCtrl* icon =  getChild<LLIconCtrl>( "presets_icon_camera" );
+	//LLRect icon_rect = icon->getRect();
+	LLRect icon_rect = mIconPresetsCamera->getRect();
+	// </FS:Ansariel>
+	LLRect pulldown_rect = mPanelPresetsCameraPulldown->getRect();
+	pulldown_rect.setLeftTopAndSize(icon_rect.mLeft -
+	     (pulldown_rect.getWidth() - icon_rect.getWidth()),
+			       icon_rect.mBottom,
+			       pulldown_rect.getWidth(),
+			       pulldown_rect.getHeight());
+
+	pulldown_rect.translate(popup_holder->getRect().getWidth() - pulldown_rect.mRight, 0);
+	mPanelPresetsCameraPulldown->setShape(pulldown_rect);
+
+	// show the master presets pull-down
+	LLUI::clearPopups();
+	LLUI::addPopup(mPanelPresetsCameraPulldown);
+	mPanelNearByMedia->setVisible(FALSE);
+	mPanelVolumePulldown->setVisible(FALSE);
+	mPanelPresetsPulldown->setVisible(FALSE);
+	mPanelPresetsCameraPulldown->setVisible(TRUE);
+}
+
 void LLStatusBar::onMouseEnterPresets()
 {
 	LLView* popup_holder = gViewerWindow->getRootView()->getChildView("popup_holder");
 	// <FS:Ansariel> Changed presets icon to LLButton
-	//LLIconCtrl* icon =  getChild<LLIconCtrl>( "presets_icon" );
+	//LLIconCtrl* icon =  getChild<LLIconCtrl>( "presets_icon_graphic" );
 	//LLRect icon_rect = icon->getRect();
-	LLRect icon_rect = mIconPresets->getRect();
+	LLRect icon_rect = mIconPresetsGraphic->getRect();
 	// </FS:Ansariel>
 	LLRect pulldown_rect = mPanelPresetsPulldown->getRect();
 	pulldown_rect.setLeftTopAndSize(icon_rect.mLeft -
@@ -905,6 +953,7 @@ void LLStatusBar::onMouseEnterVolume()
 	// show the master volume pull-down
 	LLUI::clearPopups();
 	LLUI::addPopup(mPanelVolumePulldown);
+	mPanelPresetsCameraPulldown->setVisible(FALSE);
 	mPanelPresetsPulldown->setVisible(FALSE);
 	mPanelNearByMedia->setVisible(FALSE);
 	mPanelVolumePulldown->setVisible(TRUE);
@@ -929,6 +978,7 @@ void LLStatusBar::onMouseEnterNearbyMedia()
 	LLUI::clearPopups();
 	LLUI::addPopup(mPanelNearByMedia);
 
+	mPanelPresetsCameraPulldown->setVisible(FALSE);
 	mPanelPresetsPulldown->setVisible(FALSE);
 	mPanelVolumePulldown->setVisible(FALSE);
 	mPanelNearByMedia->setVisible(TRUE);
@@ -1668,6 +1718,10 @@ void LLStatusBar::onPopupRolloverChanged(const LLSD& newvalue)
 	{
 		mMouseEnterPresetsConnection.disconnect();
 	}
+	if (mMouseEnterPresetsCameraConnection.connected())
+	{
+		mMouseEnterPresetsCameraConnection.disconnect();
+	}
 	if (mMouseEnterVolumeConnection.connected())
 	{
 		mMouseEnterVolumeConnection.disconnect();
@@ -1679,7 +1733,8 @@ void LLStatusBar::onPopupRolloverChanged(const LLSD& newvalue)
 
 	if (new_value)
 	{
-		mMouseEnterPresetsConnection = mIconPresets->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+		mMouseEnterPresetsConnection = mIconPresetsGraphic->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+		mMouseEnterPresetsCameraConnection = mIconPresetsCamera->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresetsCamera, this));
 		mMouseEnterVolumeConnection = mBtnVolume->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterVolume, this));
 		mMouseEnterNearbyMediaConnection = mMediaToggle->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterNearbyMedia, this));
 	}

@@ -58,6 +58,9 @@ enum ECameraPreset
 	/** "Above and to the left, over the shoulder, pulled back a little on the zoom" */
 	CAMERA_PRESET_GROUP_VIEW,
 
+	/** Current view when a preset is saved */
+	CAMERA_PRESET_CUSTOM0,
+
 // [RLVa:KB] - Checked: RLVa-2.0.0
 	/* Used by RLVa */
 	CAMERA_RLV_SETCAM_VIEW
