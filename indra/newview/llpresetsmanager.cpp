@@ -244,8 +244,15 @@ void LLPresetsManager::getControlNames(std::vector<std::string>& names)
 		("CameraOffsetBuild")
 		("CameraOffsetRearView")
 		("FocusOffsetRearView")
-		("CameraOffsetScale")
+		//("CameraOffsetScale") // <FS:Ansariel> Duplicate
 		("TrackFocusObject")
+		// <FS:Ansariel> Additional settings
+		("ZoomTime")
+		("CameraPositionSmoothing")
+		("EditAppearanceLighting")
+		("FSDisableMouseWheelCameraZoom")
+		("DisableCameraConstraints")
+		// </FS:Ansariel>
         ;
     names = camera_controls;
 }
