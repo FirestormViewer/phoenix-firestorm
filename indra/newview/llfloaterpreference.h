@@ -57,6 +57,7 @@ class LLSD;
 class LLTextBox;
 class LLComboBox;
 class LLLineEditor;
+class LLSpinCtrl;
 
 typedef std::map<std::string, std::string> notifications_map;
 
@@ -368,6 +369,24 @@ public:
 private:
 	void onPresetsListChangeCamera();
 	LOG_CLASS(LLPanelPreferenceView);
+
+	// <FS:Ansariel> Hook up camera and focus spin controls
+	LLSpinCtrl*			mSpinnerCameraX;
+	LLSpinCtrl*			mSpinnerCameraY;
+	LLSpinCtrl*			mSpinnerCameraZ;
+	LLSpinCtrl*			mSpinnerFocusX;
+	LLSpinCtrl*			mSpinnerFocusY;
+	LLSpinCtrl*			mSpinnerFocusZ;
+
+	void onChangeCameraX();
+	void onChangeCameraY();
+	void onChangeCameraZ();
+	void onChangeFocusX();
+	void onChangeFocusY();
+	void onChangeFocusZ();
+
+	void refreshCameraSettings();
+	// </FS:Ansariel>
 };
 
 class LLPanelPreferenceGraphics : public LLPanelPreference

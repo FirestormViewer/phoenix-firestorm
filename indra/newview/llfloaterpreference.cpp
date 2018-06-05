@@ -1010,6 +1010,9 @@ void LLFloaterPreference::apply()
 
 	// <FS:Ansariel> Fix resetting graphics preset on cancel; Save preset here because cancel() gets called in either way!
 	saveGraphicsPreset(gSavedSettings.getString("PresetGraphicActive"));
+
+	// <FS:Ansariel> Fix resetting camera preset on cancel
+	saveCameraPreset(gSavedSettings.getString("PresetCameraActive"));
 }
 
 void LLFloaterPreference::cancel()
@@ -1069,6 +1072,14 @@ void LLFloaterPreference::cancel()
 		gSavedSettings.setString("PresetGraphicActive", mSavedGraphicsPreset);
 		LLPresetsManager::getInstance()->triggerChangeSignal();
 	}
+
+	// <FS:Ansariel> Fix resetting camera preset on cancel
+	if (mSavedCameraPreset != gSavedSettings.getString("PresetCameraActive"))
+	{
+		gSavedSettings.setString("PresetCameraActive", mSavedCameraPreset);
+		LLPresetsManager::getInstance()->triggerChangeCameraSignal();
+	}
+	// </FS:Ansariel>
 }
 
 void LLFloaterPreference::onOpen(const LLSD& key)
@@ -1229,6 +1240,9 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 
 	// <FS:Ansariel> Fix resetting graphics preset on cancel
 	saveGraphicsPreset(gSavedSettings.getString("PresetGraphicActive"));
+
+	// <FS:Ansariel> Fix resetting camera preset on cancel
+	saveCameraPreset(gSavedSettings.getString("PresetCameraActive"));
 
 	// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
 	//bool started = (LLStartUp::getStartupState() == STATE_STARTED);
@@ -4154,6 +4168,27 @@ BOOL LLPanelPreferenceView::postBuild()
 		presetsMgr->createMissingDefault(PRESETS_CAMERA); // a no-op after the first time, but that's ok
 	}
 
+	// <FS:Ansariel> Hook up camera and focus spin controls
+	mSpinnerCameraX = getChild<LLSpinCtrl>("camera_x");
+	mSpinnerCameraY = getChild<LLSpinCtrl>("camera_y");
+	mSpinnerCameraZ = getChild<LLSpinCtrl>("camera_z");
+	mSpinnerFocusX = getChild<LLSpinCtrl>("focus_x");
+	mSpinnerFocusY = getChild<LLSpinCtrl>("focus_y");
+	mSpinnerFocusZ = getChild<LLSpinCtrl>("focus_z");
+
+	mSpinnerCameraX->setCommitCallback(boost::bind(&LLPanelPreferenceView::onChangeCameraX, this));
+	mSpinnerCameraY->setCommitCallback(boost::bind(&LLPanelPreferenceView::onChangeCameraY, this));
+	mSpinnerCameraZ->setCommitCallback(boost::bind(&LLPanelPreferenceView::onChangeCameraZ, this));
+	mSpinnerFocusX->setCommitCallback(boost::bind(&LLPanelPreferenceView::onChangeFocusX, this));
+	mSpinnerFocusY->setCommitCallback(boost::bind(&LLPanelPreferenceView::onChangeFocusY, this));
+	mSpinnerFocusZ->setCommitCallback(boost::bind(&LLPanelPreferenceView::onChangeFocusZ, this));
+
+	gSavedSettings.getControl("CameraOffsetRearView")->getSignal()->connect(boost::bind(&LLPanelPreferenceView::refreshCameraSettings, this));
+	gSavedSettings.getControl("FocusOffsetRearView")->getSignal()->connect(boost::bind(&LLPanelPreferenceView::refreshCameraSettings, this));
+
+	refreshCameraSettings();
+	// </FS:Ansariel>
+
 	return LLPanelPreference::postBuild();
 }
 
@@ -4167,42 +4202,47 @@ void LLPanelPreferenceView::onPresetsListChangeCamera()
 
 	setPresetText();
 
-	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
-	if (instance && !gSavedSettings.getString("PresetCameraActive").empty())
-	{
-		instance->saveSettings(); //make cancel work correctly after changing the preset
-	}
+	// <FS:Ansariel> Fix resetting camera preset on cancel
+	//LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+	//if (instance && !gSavedSettings.getString("PresetCameraActive").empty())
+	//{
+	//	instance->saveSettings(); //make cancel work correctly after changing the preset
+	//}
+	// </FS:Ansariel>
 }
 
 void LLPanelPreferenceView::draw()
 {
-	setPresetText();
+	// <FS:Ansariel> Fix resetting camera preset on cancel
+	//setPresetText();
 	LLPanelPreference::draw();
 }
 
 void LLPanelPreferenceView::setPresetText()
 {
-	LLTextBox* preset_text = getChild<LLTextBox>("preset_camera_text");
+	static LLTextBox* preset_text = getChild<LLTextBox>("preset_camera_text");
 
 	std::string preset_camera_active = gSavedSettings.getString("PresetCameraActive");
 
-	if (!preset_camera_active.empty() && preset_camera_active != preset_text->getText())
-	{
-		LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
-		if (instance)
-		{
-			instance->saveCameraPreset(preset_camera_active);
-		}
-	}
+	// <FS:Ansariel> Fix resetting camera preset on cancel
+	//if (!preset_camera_active.empty() && preset_camera_active != preset_text->getText())
+	//{
+	//	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+	//	if (instance)
+	//	{
+	//		instance->saveCameraPreset(preset_camera_active);
+	//	}
+	//}
 
-	LLPresetsManager* presetsMgr = LLPresetsManager::getInstance();
-	if (presetsMgr)
-	{
-		if (presetsMgr->isCameraDirty() && !preset_camera_active.empty())
-		{
-			preset_camera_active.clear();
-		}
-	}
+	//LLPresetsManager* presetsMgr = LLPresetsManager::getInstance();
+	//if (presetsMgr)
+	//{
+	//	if (presetsMgr->isCameraDirty() && !preset_camera_active.empty())
+	//	{
+	//		preset_camera_active.clear();
+	//	}
+	//}
+	// </FS:Ansariel>
 
 	if (!preset_camera_active.empty())
 	{
@@ -4217,6 +4257,69 @@ void LLPanelPreferenceView::setPresetText()
 		preset_text->setText(LLTrans::getString("none_paren_cap"));
 	}
 }
+
+// <FS:Ansariel> Hook up camera and focus spin controls
+void LLPanelPreferenceView::onChangeCameraX()
+{
+	LLVector3 camera = gSavedSettings.getVector3("CameraOffsetRearView");
+	camera.mV[VX] = mSpinnerCameraX->getValueF32();
+	mSpinnerCameraX->setValue(camera.mV[VX]);
+	gSavedSettings.setVector3("CameraOffsetRearView", camera);
+}
+
+void LLPanelPreferenceView::onChangeCameraY()
+{
+	LLVector3 camera = gSavedSettings.getVector3("CameraOffsetRearView");
+	camera.mV[VY] = mSpinnerCameraY->getValueF32();
+	mSpinnerCameraY->setValue(camera.mV[VY]);
+	gSavedSettings.setVector3("CameraOffsetRearView", camera);
+}
+
+void LLPanelPreferenceView::onChangeCameraZ()
+{
+	LLVector3 camera = gSavedSettings.getVector3("CameraOffsetRearView");
+	camera.mV[VZ] = mSpinnerCameraZ->getValueF32();
+	mSpinnerCameraZ->setValue(camera.mV[VZ]);
+	gSavedSettings.setVector3("CameraOffsetRearView", camera);
+}
+
+void LLPanelPreferenceView::onChangeFocusX()
+{
+	LLVector3d focus = gSavedSettings.getVector3d("FocusOffsetRearView");
+	focus.mdV[VX] = mSpinnerFocusX->getValueF32();
+	mSpinnerFocusX->setValue(focus.mdV[VX]);
+	gSavedSettings.setVector3d("FocusOffsetRearView", focus);
+}
+
+void LLPanelPreferenceView::onChangeFocusY()
+{
+	LLVector3d focus = gSavedSettings.getVector3d("FocusOffsetRearView");
+	focus.mdV[VY] = mSpinnerFocusY->getValueF32();
+	mSpinnerFocusY->setValue(focus.mdV[VY]);
+	gSavedSettings.setVector3d("FocusOffsetRearView", focus);
+}
+
+void LLPanelPreferenceView::onChangeFocusZ()
+{
+	LLVector3d focus = gSavedSettings.getVector3d("FocusOffsetRearView");
+	focus.mdV[VZ] = mSpinnerFocusZ->getValueF32();
+	mSpinnerFocusZ->setValue(focus.mdV[VZ]);
+	gSavedSettings.setVector3d("FocusOffsetRearView", focus);
+}
+
+void LLPanelPreferenceView::refreshCameraSettings()
+{
+	LLVector3 camera = gSavedSettings.getVector3("CameraOffsetRearView");
+	mSpinnerCameraX->setValue(camera.mV[VX]);
+	mSpinnerCameraY->setValue(camera.mV[VY]);
+	mSpinnerCameraZ->setValue(camera.mV[VZ]);
+
+	LLVector3d focus = gSavedSettings.getVector3d("FocusOffsetRearView");
+	mSpinnerFocusX->setValue(focus.mdV[VX]);
+	mSpinnerFocusY->setValue(focus.mdV[VY]);
+	mSpinnerFocusZ->setValue(focus.mdV[VZ]);
+}
+// </FS:Ansariel>
 
 BOOL LLPanelPreferenceGraphics::postBuild()
 {

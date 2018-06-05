@@ -52,6 +52,10 @@ LLPresetsManager::LLPresetsManager()
 	// This works, because the LLPresetsManager instance is created in the
 	// STATE_WORLD_INIT phase during startup when the status bar is initialized
 	initGraphicPresetControls();
+
+	// <FS:Ansariel> Start watching camera controls as soon as the preset
+	// manager gets initialized
+	startWatching(PRESETS_CAMERA);
 }
 
 LLPresetsManager::~LLPresetsManager()
@@ -280,7 +284,7 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
 	}
 	else if(PRESETS_CAMERA == subdirectory)
 	{
-		gSavedSettings.setString("PresetGraphicActive", name);
+		gSavedSettings.setString("PresetCameraActive", name);
 
 		name_list.clear();
 		getControlNames(name_list);
