@@ -316,7 +316,7 @@ BOOL LLStatusBar::postBuild()
 	{
 		mMouseEnterPresetsCameraConnection = mIconPresetsCamera->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresetsCamera, this));
 	}
-	mIconPresetsCamera->setClickedCallback(boost::bind(&LLStatusBar::mIconPresetsCamera, this));
+	mIconPresetsCamera->setClickedCallback(boost::bind(&LLStatusBar::onMouseEnterPresetsCamera, this));
 
 	mIconPresetsGraphic = getChild<LLButton>( "presets_icon_graphic" );
 	// <FS: KC> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
