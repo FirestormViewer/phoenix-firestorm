@@ -81,8 +81,6 @@ public:
 	LLPanelCameraZoom*	mZoom;
 	LLJoystickCameraTrack*	mTrack;
 
-	void setCameraFloaterTransparencyMode(const LLSD &data); // <FS:PP> FIRE-5583, FIRE-5220: Option to show Camera Controls always opaque
-
 private:
 
 	LLFloaterCamera(const LLSD& val);

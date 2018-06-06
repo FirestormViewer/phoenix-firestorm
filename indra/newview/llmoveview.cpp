@@ -93,7 +93,8 @@ LLFloaterMove::~LLFloaterMove()
 // virtual
 BOOL LLFloaterMove::postBuild()
 {
-	updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730)
+	// <FS:Ansariel> Customizable floater transparency
+	//updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730)
 	
 	// Code that implements floater buttons toggling when user moves via keyboard is located in LLAgent::propagate()
 
@@ -534,6 +535,14 @@ void LLFloaterMove::setModeButtonToggleState(const EMovementMode mode)
 	mModeControlButtonMap[mode]->setToggleState(TRUE);
 }
 
+// <FS:Ansariel> Customizable floater transparency
+F32 LLFloaterMove::getCurrentTransparency()
+{
+	static LLCachedControl<F32> camera_opacity(gSavedSettings, "CameraOpacity");
+	static LLCachedControl<F32> active_floater_transparency(gSavedSettings, "ActiveFloaterTransparency");
+	return llmin(camera_opacity(), active_floater_transparency());
+}
+// </FS:Ansariel>
 
 
 /************************************************************************/

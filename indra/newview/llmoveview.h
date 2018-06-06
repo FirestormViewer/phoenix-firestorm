@@ -64,6 +64,9 @@ public:
 	static void sUpdateMovementStatus();
 // [/RLVa:KB]
 
+	// <FS:Ansariel> Customizable floater transparency
+	/*virtual*/ F32 getCurrentTransparency();
+
 protected:
 	void turnLeft();
 	void turnRight();

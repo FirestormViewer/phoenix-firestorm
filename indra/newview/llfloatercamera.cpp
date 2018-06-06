@@ -345,7 +345,6 @@ void LLFloaterCamera::onOpen(const LLSD& key)
 	LLFirstUse::viewPopup();
 
 	mZoom->onOpen(key);
-	setCameraFloaterTransparencyMode(LLSD(gSavedSettings.getBOOL("FSAlwaysOpaqueCameraControls"))); // <FS:PP> FIRE-5583, FIRE-5220: Option to show Camera Controls always opaque
 
 	// Returns to previous mode, see EXT-2727(View tool should remember state).
 	// In case floater was just hidden and it isn't reset the mode
@@ -393,12 +392,6 @@ LLFloaterCamera::LLFloaterCamera(const LLSD& val)
 // virtual
 BOOL LLFloaterCamera::postBuild()
 {
-
-	// <FS:PP> FIRE-5583, FIRE-5220: Option to show Camera Controls always opaque
-	// updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730)
-	gSavedSettings.getControl("FSAlwaysOpaqueCameraControls")->getSignal()->connect(boost::bind(&LLFloaterCamera::setCameraFloaterTransparencyMode, this, _2));
-	// </FS:PP>
-
 	mRotate = getChild<LLJoystickCameraRotate>(ORBIT);
 	mZoom = findChild<LLPanelCameraZoom>(ZOOM);
 	mTrack = getChild<LLJoystickCameraTrack>(PAN);
@@ -448,23 +441,6 @@ void LLFloaterCamera::onViewButtonClick(const LLSD& user_data)
 		}
 	}
 }
-
-
-// <FS:PP> FIRE-5583, FIRE-5220: Option to show Camera Controls always opaque
-void LLFloaterCamera::setCameraFloaterTransparencyMode(const LLSD &data)
-{
-	if(data.asBoolean())
-	{
-		updateTransparency(TT_FORCE_OPAQUE);
-		setBackgroundOpaque(true);
-	}
-	else
-	{
-		updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730)
-		setBackgroundOpaque(false);
-	}
-}
-// </FS:PP>
 
 void LLFloaterCamera::fillFlatlistFromPanel (LLFlatListView* list, LLPanel* panel)
 {
