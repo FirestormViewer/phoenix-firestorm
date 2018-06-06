@@ -8,7 +8,7 @@
  border="false"
  chrome="true"
  follows="bottom"
- height="155"
+ height="157"
  layout="topleft"
  name="presets_camera_pulldown"
  width="225">
@@ -22,7 +22,7 @@
     left_delta="5"
     font.style="BOLD"
     name="Camera Presets"
-    width="120">
+    width="200">
       Camera Presets
   </text>
   <scroll_list
@@ -59,9 +59,9 @@
     name="open_prefs_btn"
     label="Open View Preferences"
     tool_tip = "Bring up view preferences"
-    top_delta="5"
+    top_delta="3"
     left="15"
-    height="20"
+    height="22"
     width="200">
     <button.commit_callback
       function="Presets.GoViewPrefs" />
