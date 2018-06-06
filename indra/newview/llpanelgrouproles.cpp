@@ -57,8 +57,9 @@
 #include "roles_constants.h"
 
 // [FS:CR] FIRE-12276
-#include "llfilepicker.h"
 #include "fsnamelistavatarmenu.h"
+#include "llfilepicker.h"
+#include "llviewermenufile.h"
 
 static LLPanelInjector<LLPanelGroupRoles> t_panel_group_roles("panel_group_roles");
 
@@ -1974,21 +1975,29 @@ void LLPanelGroupMembersSubTab::updateActionDescription()
 // [FS:CR] FIRE-12276
 void LLPanelGroupMembersSubTab::onExportMembersToXML()
 {
-	if (mPendingMemberUpdate) return;
-	
-	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
-	LLFilePicker& file_picker = LLFilePicker::instance();
-	if (!file_picker.getSaveFile(LLFilePicker::FFSAVE_CSV, LLDir::getScrubbedFileName(gdatap->mName + "_members.csv")))
+	if (mPendingMemberUpdate)
 	{
 		return;
 	}
-	std::string fullpath = file_picker.getFirstFile();
+	
+	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
+	(new LLFilePickerReplyThread(boost::bind(&LLPanelGroupMembersSubTab::onExportMembersToXMLCallback, this, _1),
+		LLFilePicker::FFSAVE_CSV, LLDir::getScrubbedFileName(gdatap->mName + "_members.csv")))->getFile();
+}
+
+void LLPanelGroupMembersSubTab::onExportMembersToXMLCallback(const std::vector<std::string>& filenames)
+{
+	std::string fullpath = filenames[0];
 	
 	LLAPRFile outfile;
-	outfile.open(fullpath, LL_APR_WB );
+	outfile.open(fullpath, LL_APR_WB);
 	LLAPRFile::tFiletype* file = outfile.getFileHandle();
-	if (!file) return;
+	if (!file)
+	{
+		return;
+	}
 	
+	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
 	apr_file_printf(file, "Group membership record for %s (avatar key, avatar name, last online, land contribution)", gdatap->mName.c_str());
 	
 	LLSD memberlist;

@@ -120,6 +120,7 @@
 #include "lggcontactsets.h"
 #include "llcontrol.h"
 #include "llfilepicker.h"	// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
+#include "llviewermenufile.h"
 #include "llnetmap.h"
 #include "llviewernetwork.h"	// [FS:CR] isInSecondlife()
 #include "llsidepanelappearance.h"
@@ -9409,17 +9410,17 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 	std::string outfilename = get_sequential_numbered_file_name(outprefix,".xml");
 	
 // <FS:CR> FIRE-8893  - Dump archetype xml to user defined location
-	LLFilePicker& file_picker = LLFilePicker::instance();
-	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_XML, outfilename))
-	{
-		return;
-	}
+	(new LLFilePickerReplyThread(boost::bind(&LLVOAvatar::dumpArchetypeXMLCallback, this, _1, group_by_wearables),
+		LLFilePicker::FFSAVE_XML, outfilename))->getFile();
+}
+
+void LLVOAvatar::dumpArchetypeXMLCallback(const std::vector<std::string>& filenames, bool group_by_wearables)
+{
 // </FS:CR>
-	
 	LLAPRFile outfile;
 // <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
 	//std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
-	std::string fullpath = file_picker.getFirstFile();
+	std::string fullpath = filenames[0];
 // </FS:CR>
 	if (APR_SUCCESS == outfile.open(fullpath, LL_APR_WB ))
 	{

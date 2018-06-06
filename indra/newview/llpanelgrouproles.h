@@ -242,6 +242,7 @@ protected:
 // [FS:CR] FIRE-12276
 private:
 	void onExportMembersToXML();
+	void onExportMembersToXMLCallback(const std::vector<std::string>& filenames);
 };
 
 
