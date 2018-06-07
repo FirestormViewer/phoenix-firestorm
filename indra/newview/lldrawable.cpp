@@ -50,9 +50,9 @@
 #include "llviewerobjectlist.h"
 #include "llviewerwindow.h"
 #include "llvocache.h"
-#include "lldrawpoolavatar.h"
 #include "llcontrolavatar.h"
 #include "llcallstack.h"
+#include "lldrawpoolavatar.h"
 
 const F32 MIN_INTERPOLATE_DISTANCE_SQUARED = 0.001f * 0.001f;
 const F32 MAX_INTERPOLATE_DISTANCE_SQUARED = 10.f * 10.f;
