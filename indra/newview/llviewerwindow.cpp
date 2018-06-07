@@ -293,6 +293,37 @@ static LLCachedControl<std::string>	sSnapshotDir(LLCachedControl<std::string>(gS
 
 LLTrace::SampleStatHandle<> LLViewerWindow::sMouseVelocityStat("Mouse Velocity");
 
+// <FS:Ansariel> Threaded filepickers
+class FSSnapshotSaveFilePicker : public LLFilePickerThread
+{
+public:
+	FSSnapshotSaveFilePicker(LLFilePicker::ESaveFilter filter, const std::string& default_name, boost::function<void (const std::string&)> notify_slot)
+		: LLFilePickerThread(filter, default_name)
+	{
+		mSignal.connect(notify_slot);
+	}
+
+	virtual void notify(const std::vector<std::string>& filenames)
+	{
+		if (!filenames.empty())
+		{
+			mSignal(filenames[0]);
+		}
+		else
+		{
+			mSignal(std::string());
+		}
+	}
+
+	static void open(LLFilePicker::ESaveFilter filter, const std::string& default_name, boost::function<void (const std::string&)> notify_slot)
+	{
+		(new FSSnapshotSaveFilePicker(filter, default_name, notify_slot))->getFile();
+	}
+
+protected:
+	boost::signals2::signal<void (const std::string&)> mSignal;
+};
+// </FS:Ansariel>
 
 class RecordToChatConsoleRecorder : public LLError::Recorder
 {
@@ -5721,7 +5752,7 @@ void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 	{
 		std::string proposed_name( sSnapshotBaseName );
 
-		LLGenericSaveFilePicker::open(pick_type, proposed_name, boost::bind(&LLViewerWindow::saveImageCallback, this, _1, image, extension, callback));
+		FSSnapshotSaveFilePicker::open(pick_type, proposed_name, boost::bind(&LLViewerWindow::saveImageCallback, this, _1, image, extension, callback));
 		return;
 	}
 
