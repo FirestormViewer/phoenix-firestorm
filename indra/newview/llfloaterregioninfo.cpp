@@ -104,6 +104,7 @@
 #include "llworld.h"
 #include "llstartup.h"
 // </FS:CR> Aurora Sim - Region Settings Console
+#include "llviewermenufile.h"
 
 const S32 TERRAIN_TEXTURE_COUNT = 4;
 const S32 CORNER_COUNT = 4;
@@ -1648,46 +1649,87 @@ bool LLPanelRegionTerrainInfo::callbackTextureHeights(const LLSD& notification, 
 }
 
 // static
+// <FS:Ansariel> Threaded filepickers
+//void LLPanelRegionTerrainInfo::onClickDownloadRaw(void* data)
+//{
+//	LLFilePicker& picker = LLFilePicker::instance();
+//	if (!picker.getSaveFile(LLFilePicker::FFSAVE_RAW, "terrain.raw"))
+//	{
+//		LL_WARNS() << "No file" << LL_ENDL;
+//		return;
+//	}
+//	std::string filepath = picker.getFirstFile();
+//	gXferManager->expectFileForRequest(filepath);
+//
+//	LLPanelRegionTerrainInfo* self = (LLPanelRegionTerrainInfo*)data;
+//	strings_t strings;
+//	strings.push_back("download filename");
+//	strings.push_back(filepath);
+//	LLUUID invoice(LLFloaterRegionInfo::getLastInvoice());
+//	self->sendEstateOwnerMessage(gMessageSystem, "terrain", invoice, strings);
+//}
+//
+//// static
+//void LLPanelRegionTerrainInfo::onClickUploadRaw(void* data)
+//{
+//	LLFilePicker& picker = LLFilePicker::instance();
+//	if (!picker.getOpenFile(LLFilePicker::FFLOAD_RAW))
+//	{
+//		LL_WARNS() << "No file" << LL_ENDL;
+//		return;
+//	}
+//	std::string filepath = picker.getFirstFile();
+//	gXferManager->expectFileForTransfer(filepath);
+//
+//	LLPanelRegionTerrainInfo* self = (LLPanelRegionTerrainInfo*)data;
+//	strings_t strings;
+//	strings.push_back("upload filename");
+//	strings.push_back(filepath);
+//	LLUUID invoice(LLFloaterRegionInfo::getLastInvoice());
+//	self->sendEstateOwnerMessage(gMessageSystem, "terrain", invoice, strings);
+//
+//	LLNotificationsUtil::add("RawUploadStarted");
+//}
+
 void LLPanelRegionTerrainInfo::onClickDownloadRaw(void* data)
 {
-	LLFilePicker& picker = LLFilePicker::instance();
-	if (!picker.getSaveFile(LLFilePicker::FFSAVE_RAW, "terrain.raw"))
-	{
-		LL_WARNS() << "No file" << LL_ENDL;
-		return;
-	}
-	std::string filepath = picker.getFirstFile();
+	LLPanelRegionTerrainInfo* self = (LLPanelRegionTerrainInfo*)data;
+	(new LLFilePickerReplyThread(boost::bind(&LLPanelRegionTerrainInfo::onDownloadRawFilepickerCB, self, _1), LLFilePicker::FFSAVE_RAW, "terrain.raw"))->getFile();
+}
+
+void LLPanelRegionTerrainInfo::onDownloadRawFilepickerCB(const std::vector<std::string>& filenames)
+{
+	std::string filepath = filenames[0];
 	gXferManager->expectFileForRequest(filepath);
 
-	LLPanelRegionTerrainInfo* self = (LLPanelRegionTerrainInfo*)data;
 	strings_t strings;
 	strings.push_back("download filename");
 	strings.push_back(filepath);
 	LLUUID invoice(LLFloaterRegionInfo::getLastInvoice());
-	self->sendEstateOwnerMessage(gMessageSystem, "terrain", invoice, strings);
+	sendEstateOwnerMessage(gMessageSystem, "terrain", invoice, strings);
 }
 
 // static
 void LLPanelRegionTerrainInfo::onClickUploadRaw(void* data)
 {
-	LLFilePicker& picker = LLFilePicker::instance();
-	if (!picker.getOpenFile(LLFilePicker::FFLOAD_RAW))
-	{
-		LL_WARNS() << "No file" << LL_ENDL;
-		return;
-	}
-	std::string filepath = picker.getFirstFile();
+	LLPanelRegionTerrainInfo* self = (LLPanelRegionTerrainInfo*)data;
+	(new LLFilePickerReplyThread(boost::bind(&LLPanelRegionTerrainInfo::onUploadRawFilepickerCB, self, _1), LLFilePicker::FFLOAD_RAW, false))->getFile();
+}
+
+void LLPanelRegionTerrainInfo::onUploadRawFilepickerCB(const std::vector<std::string>& filenames)
+{
+	std::string filepath = filenames[0];
 	gXferManager->expectFileForTransfer(filepath);
 
-	LLPanelRegionTerrainInfo* self = (LLPanelRegionTerrainInfo*)data;
 	strings_t strings;
 	strings.push_back("upload filename");
 	strings.push_back(filepath);
 	LLUUID invoice(LLFloaterRegionInfo::getLastInvoice());
-	self->sendEstateOwnerMessage(gMessageSystem, "terrain", invoice, strings);
+	sendEstateOwnerMessage(gMessageSystem, "terrain", invoice, strings);
 
 	LLNotificationsUtil::add("RawUploadStarted");
 }
+// </FS:Ansariel> Threaded filepickers
 
 // static
 void LLPanelRegionTerrainInfo::onClickBakeTerrain(void* data)
