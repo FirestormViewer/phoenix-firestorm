@@ -31,26 +31,24 @@
 #include "llvoavatar.h"
 #include "llviewercontrol.h"
 #include "llmeshrepository.h"
+#include "llvolume.h"
+#include "llrigginginfo.h"
 
-// static
 void LLSkinningUtil::initClass()
 {
 }
 
-// static
 U32 LLSkinningUtil::getMaxJointCount()
 {
     U32 result = LL_MAX_JOINTS_PER_MESH_OBJECT;
 	return result;
 }
 
-// static
 U32 LLSkinningUtil::getMeshJointCount(const LLMeshSkinInfo *skin)
 {
 	return llmin((U32)getMaxJointCount(), (U32)skin->mJointNames.size());
 }
 
-// static
 void LLSkinningUtil::scrubInvalidJoints(LLVOAvatar *avatar, LLMeshSkinInfo* skin)
 {
     if (skin->mInvalidJointsScrubbed)
@@ -75,7 +73,6 @@ void LLSkinningUtil::scrubInvalidJoints(LLVOAvatar *avatar, LLMeshSkinInfo* skin
     skin->mInvalidJointsScrubbed = true;
 }
 
-// static
 void LLSkinningUtil::initSkinningMatrixPalette(
     LLMatrix4* mat,
     S32 count, 
@@ -123,7 +120,6 @@ void LLSkinningUtil::initSkinningMatrixPalette(
     }
 }
 
-// static
 void LLSkinningUtil::checkSkinWeights(LLVector4a* weights, U32 num_vertices, const LLMeshSkinInfo* skin)
 {
 #ifdef SHOW_ASSERT                  // same condition that controls llassert()
@@ -163,7 +159,6 @@ void LLSkinningUtil::scrubSkinWeights(LLVector4a* weights, U32 num_vertices, con
 	checkSkinWeights(weights, num_vertices, skin);
 }
 
-// static
 void LLSkinningUtil::getPerVertexSkinMatrix(
     F32* weights,
     LLMatrix4a* mat,
@@ -218,6 +213,47 @@ void LLSkinningUtil::getPerVertexSkinMatrix(
     // SL-366 - with weight validation/cleanup code, it should no longer be
     // possible to hit the bad scale case.
     llassert(valid_weights);
+}
+
+void LLSkinningUtil::updateRiggingInfo(const LLMeshSkinInfo* skin, LLVOAvatar *avatar, LLVolumeFace& vol_face)
+{
+    S32 num_verts = vol_face.mNumVertices;
+    if (num_verts>0 && vol_face.mWeights && (skin->mJointNames.size()>0))
+    {
+        if (!vol_face.mJointRiggingInfoTabPtr)
+        {
+            vol_face.mJointRiggingInfoTabPtr = new joint_rig_info_tab(LL_CHARACTER_MAX_ANIMATED_JOINTS);
+            joint_rig_info_tab& rig_info_tab = *vol_face.mJointRiggingInfoTabPtr;
+            for (S32 i=0; i<vol_face.mNumVertices; i++)
+            {
+                LLVector4a& pos = vol_face.mPositions[i];
+                F32 *w = vol_face.mWeights[i].getF32ptr();
+                for (U32 k=0; k<4; ++k)
+                {
+                    S32 joint_index = llfloor(w[k]);
+                    S32 joint_num = skin->mJointNums[joint_index];
+                    if (joint_num != -1)
+                    {
+                        rig_info_tab[joint_num].setIsRiggedTo(true);
+
+                        // AXON can precompute that matMuls.
+                        LLMatrix4a bind_shape;
+                        bind_shape.loadu(skin->mBindShapeMatrix);
+                        LLMatrix4a inv_bind;
+                        inv_bind.loadu(skin->mInvBindMatrix[joint_index]);
+                        LLMatrix4a mat;
+                        matMul(bind_shape, inv_bind, mat);
+                        LLVector4a pos_joint_space;
+                        mat.affineTransform(pos, pos_joint_space);
+                        LLVector4a *extents = rig_info_tab[joint_num].getRiggedExtents();
+                        update_min_max(extents[0], extents[1], pos_joint_space);
+                    }
+                }
+            }
+            LL_DEBUGS("RigSpammish") << "updated rigging info for vf " << &vol_face 
+                                     << " num_verts " << vol_face.mNumVertices << LL_ENDL; 
+        }
+    }
 }
 
 namespace FSSkinningUtil

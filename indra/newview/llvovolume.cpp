@@ -247,6 +247,7 @@ LLVOVolume::LLVOVolume(const LLUUID &id, const LLPCode pcode, LLViewerRegion *re
 	mLastFetchedMediaVersion = -1;
 	memset(&mIndexInTex, 0, sizeof(S32) * LLRender::NUM_VOLUME_TEXTURE_CHANNELS);
 	mMDCImplCount = 0;
+    mLastRiggingInfoLOD = -1;
 }
 
 LLVOVolume::~LLVOVolume()
@@ -3773,6 +3774,38 @@ void LLVOVolume::afterReparent()
                                      << ((LLViewerObject*)getParent())->getID() 
                                      << " isAnimated: "  << isAnimatedObject() << " cav "
                                      << getControlAvatar() << LL_ENDL;
+    }
+}
+
+//----------------------------------------------------------------------------
+void LLVOVolume::updateRiggingInfo()
+{
+    if (isRiggedMesh())
+    {
+        const LLMeshSkinInfo* skin = getSkinInfo();
+        LLVOAvatar *avatar = getAvatar();
+        if (skin && avatar && getLOD()>mLastRiggingInfoLOD)
+        {
+            LLVolume *volume = getVolume();
+            if (volume)
+            {
+                mJointRiggingInfoTab.clear();
+                for (S32 f = 0; f < volume->getNumVolumeFaces(); ++f)
+                {
+                    LLVolumeFace& vol_face = volume->getVolumeFace(f);
+                    LLSkinningUtil::updateRiggingInfo(skin, avatar, vol_face);
+                    if (vol_face.mJointRiggingInfoTabPtr)
+                    {
+                        mergeRigInfoTab(mJointRiggingInfoTab, *vol_face.mJointRiggingInfoTabPtr);
+                    }
+                }
+                // Keep the highest LOD info available.
+                // AXON would this ever need to be forced to refresh? Set to -1 if so.
+                mLastRiggingInfoLOD = getLOD();
+                LL_DEBUGS("RigSpammish") << "updated rigging info for LLVOVolume " 
+                                         << this << " lod " << mLastRiggingInfoLOD << LL_ENDL;
+            }
+        }
     }
 }
 
