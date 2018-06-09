@@ -295,6 +295,21 @@ bool RlvActions::autoAcceptTeleportRequest(const LLUUID& idRequester)
 	return ((idRequester.notNull()) && (gRlvHandler.isException(RLV_BHVR_ACCEPTTPREQUEST, idRequester))) || (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTTPREQUEST));
 }
 
+bool RlvActions::canFly()
+{
+	return (!gRlvHandler.getCurrentCommand()) ? !gRlvHandler.hasBehaviour(RLV_BHVR_FLY) : !gRlvHandler.hasBehaviourExcept(RLV_BHVR_FLY, gRlvHandler.getCurrentObject());
+}
+
+bool RlvActions::canFly(const LLUUID& idRlvObjExcept)
+{
+	return !gRlvHandler.hasBehaviourExcept(RLV_BHVR_FLY, idRlvObjExcept);
+}
+
+bool RlvActions::canJump()
+{
+	return !gRlvHandler.hasBehaviour(RLV_BHVR_JUMP);
+}
+
 // ============================================================================
 // Teleporting
 //

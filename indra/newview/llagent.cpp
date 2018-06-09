@@ -672,6 +672,13 @@ void LLAgent::moveLeftNudge(S32 direction)
 //-----------------------------------------------------------------------------
 void LLAgent::moveUp(S32 direction)
 {
+// [RLVa:KB] - Checked: RLVa-2.2
+	if ( (!RlvActions::canJump()) && (direction > 0) && (!getFlying()) )
+	{
+		return;
+	}
+// [/Sl:KB]
+
 	mMoveTimer.reset();
 	LLFirstUse::notMoving(false);
 
@@ -735,8 +742,11 @@ void LLAgent::movePitch(F32 mag)
 // Does this parcel allow you to fly?
 BOOL LLAgent::canFly()
 {
-// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.0d) | Modified: RLVa-1.0.0c
-	if (gRlvHandler.hasBehaviour(RLV_BHVR_FLY)) return FALSE;
+// [RLVa:KB] - Checked: RLVa-1.0
+	if (!RlvActions::canFly())
+	{
+		return FALSE;
+	}
 // [/RLVa:KB]
 	if (isGodlike()) return TRUE;
 
@@ -786,8 +796,8 @@ void LLAgent::setFlying(BOOL fly)
 
 	if (fly)
 	{
-// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.0d) | Modified: RLVa-1.0.0c
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_FLY))
+// [RLVa:KB] - Checked: RLVa-1.0
+		if (!RlvActions::canFly())
 		{
 			return;
 		}

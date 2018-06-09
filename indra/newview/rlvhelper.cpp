@@ -104,6 +104,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addModifier(RLV_BHVR_FARTOUCH, RLV_MODIFIER_FARTOUCHDIST, new RlvBehaviourModifier("Fartouch Distance", RLV_MODIFIER_FARTOUCH_DEFAULT, true, new RlvBehaviourModifierCompMin));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("fly", RLV_BHVR_FLY));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("interact", RLV_BHVR_INTERACT, RlvBehaviourInfo::BHVR_EXTENDED));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("jump", RLV_BHVR_JUMP));
 	addEntry(new RlvBehaviourInfo("notify",					RLV_BHVR_NOTIFY,				RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("permissive", RLV_BHVR_PERMISSIVE));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("recvchat", RLV_BHVR_RECVCHAT, RlvBehaviourInfo::BHVR_STRICT));
@@ -255,6 +256,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	//
 	addEntry(new RlvBehaviourInfo("adjustheight",			RLV_BHVR_ADJUSTHEIGHT,			RLV_TYPE_FORCE));
 	addEntry(new RlvForceProcessor<RLV_BHVR_DETACHME>("detachme"));
+	addEntry(new RlvForceProcessor<RLV_BHVR_FLY>("fly"));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_FOCUS>("setcam_focus", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_EYEOFFSET, RlvForceCamEyeFocusOffsetHandler>("setcam_eyeoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_FOCUSOFFSET, RlvForceCamEyeFocusOffsetHandler>("setcam_focusoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
@@ -697,6 +699,25 @@ bool RlvCommandOptionHelper::parseOption<int>(const std::string& strOption, int&
 		return false;
 	}
 	return true;
+}
+
+template<>
+bool RlvCommandOptionHelper::parseOption<bool>(const std::string& strOption, bool& fOption)
+{
+	try
+	{
+		// Try and parse it as a number first
+		int nOption = std::stoi(strOption);
+		fOption = (bool)nOption;
+		return (nOption == 0) || (nOption == 1);
+	}
+	catch (const std::invalid_argument&)
+	{
+		// Then try and parse it as true/false
+		std::istringstream ss(strOption);
+		ss >> std::boolalpha >> fOption;
+		return !ss.fail();
+	}
 }
 
 template<>

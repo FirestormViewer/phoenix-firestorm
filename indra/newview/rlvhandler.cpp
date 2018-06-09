@@ -2391,6 +2391,23 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_DETACHME>::onCommand(const RlvCommand& rlvCm
 	return RLV_RET_SUCCESS;
 }
 
+// Handles: @fly:[true|false]=force
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_FLY>::onCommand(const RlvCommand& rlvCmd)
+{
+	bool fForceFly = true;
+	if ( (rlvCmd.hasOption()) && (!RlvCommandOptionHelper::parseOption<bool>(rlvCmd.getOption(), fForceFly)) )
+		return RLV_RET_FAILED_OPTION;
+
+	if ( (fForceFly) && (!RlvActions::canFly(rlvCmd.getObjectID())) )
+		return RLV_RET_FAILED_LOCK;
+
+	if (fForceFly != (bool)gAgent.getFlying())
+		gAgent.setFlying(fForceFly);
+
+	return RLV_RET_SUCCESS;
+}
+
 // Handles: @remattach[:<folder|attachpt|attachgroup>]=force
 template<> template<>
 ERlvCmdRet RlvForceRemAttachHandler::onCommand(const RlvCommand& rlvCmd)
