@@ -5020,10 +5020,6 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 現在のSIM: [NEWVERSION]
 前にいたSIM: [OLDVERSION]
 	</notification>
-	
-	<notification name="CannotSaveSnapshot">
-		スナップショットを保存できませんでした。
-	</notification>
 	<notification name="RegExFail">
 正規表現のエラー：
 [EWHAT]

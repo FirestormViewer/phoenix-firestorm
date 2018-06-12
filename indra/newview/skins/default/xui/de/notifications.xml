@@ -4957,10 +4957,6 @@ Aktueller Simulator: [NEWVERSION]
 Vorheriger Simulator: [OLDVERSION]
 	</notification>
 
-	<notification name="CannotSaveSnapshot">
-Foto konnte nicht gespeichert werden.
-	</notification>
-
 	<notification name="RegExFail">
 Fehler im Regulären Ausdruck:
 [EWHAT]

@@ -4742,9 +4742,6 @@ URL: [MEDIAURL]
 Текущий симулятор: [NEWVERSION]
 Предыдущий симулятор: [OLDVERSION]
 	</notification>
-	<notification name="CannotSaveSnapshot">
-		Невозможно сохранить снимок.
-	</notification>
 	<notification name="RegExFail">
 		Ошибка в регулярном выражении:
 [EWHAT]

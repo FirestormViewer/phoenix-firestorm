@@ -40,10 +40,10 @@
 		Fehler beim Senden der E-Mail.
 	</string>
 	<string name="inventory_failed_str">
-		Fehler beim Speichern im Inventar.
+		Fehler beim Speichern.
 	</string>
 	<string name="local_failed_str">
-		Fehler beim Speichern auf dem Computer.
+		Fehler beim Speichern.
 	</string>
 	<view name="controls_container">
 	<button name="new_snapshot_btn" label="Aktualisieren"/>

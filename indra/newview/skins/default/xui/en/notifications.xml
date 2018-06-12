@@ -12357,14 +12357,6 @@ Previous simulator: [OLDVERSION]
   
   <notification
    icon="alertmodal.tga"
-   name="CannotSaveSnapshot"
-   type="alertmodal">
-Unable to save snapshot.
-  <tag>fail</tag>
-  </notification>
-  
-  <notification
-   icon="alertmodal.tga"
    name="RegExFail"
    type="alertmodal">
 Error in the regular expression:

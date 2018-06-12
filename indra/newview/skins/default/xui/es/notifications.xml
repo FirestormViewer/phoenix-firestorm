@@ -5471,9 +5471,6 @@ Intento cancelado.
 Simulador actual:   [NEWVERSION]
 Simulador anterior: [OLDVERSION]
 	</notification>
-	<notification name="CannotSaveSnapshot">
-		No se ha podido guardar la fotografía.
-	</notification>
 	<notification name="RegExFail">
 		Error en la expresión regular:
 [EWHAT]

@@ -68,6 +68,9 @@ private:
 	void onFormatComboCommit(LLUICtrl* ctrl);
 	void onQualitySliderCommit(LLUICtrl* ctrl);
 	void onSaveFlyoutCommit(LLUICtrl* ctrl);
+
+	void LLPanelSnapshotLocal::onLocalSaved();
+	void LLPanelSnapshotLocal::onLocalCanceled();
 };
 
 static LLPanelInjector<LLPanelSnapshotLocal> panel_class("llpanelsnapshotlocal");
@@ -182,18 +185,21 @@ void LLPanelSnapshotLocal::onSaveFlyoutCommit(LLUICtrl* ctrl)
 	LLFloaterSnapshot* floater = LLFloaterSnapshot::getInstance();
 
 	floater->notify(LLSD().with("set-working", true));
-	BOOL saved = floater->saveLocal();
-	if (saved)
-	{
-		mSnapshotFloater->postSave();
-		floater->notify(LLSD().with("set-finished", LLSD().with("ok", true).with("msg", "local")));
-	}
-	else
-	{
-		cancel();
-		floater->notify(LLSD().with("set-finished", LLSD().with("ok", false).with("msg", "local")));
-	}
+	floater->saveLocal((boost::bind(&LLPanelSnapshotLocal::onLocalSaved, this)), (boost::bind(&LLPanelSnapshotLocal::onLocalCanceled, this)));
 }
+
+void LLPanelSnapshotLocal::onLocalSaved()
+{
+	mSnapshotFloater->postSave();
+	LLFloaterSnapshot::getInstance()->notify(LLSD().with("set-finished", LLSD().with("ok", true).with("msg", "local")));
+}
+
+void LLPanelSnapshotLocal::onLocalCanceled()
+{
+	//cancel(); // <FS:Ansariel> Don't go back to selection
+	LLFloaterSnapshot::getInstance()->notify(LLSD().with("set-finished", LLSD().with("ok", false).with("msg", "local")));
+}
+
 
 // <FS:Ansariel> Store settings at logout
 LLPanelSnapshotLocal::~LLPanelSnapshotLocal()
