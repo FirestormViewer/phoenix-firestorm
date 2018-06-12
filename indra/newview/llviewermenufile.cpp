@@ -597,18 +597,6 @@ class LLFileCloseAllWindows : public view_listener_t
 	}
 };
 
-// <FS:Ansariel> Threaded filepickers
-LLPointer<LLImageFormatted> sFormattedSnapshotImage = NULL;
-void take_snapshot_to_disk_callback(bool success)
-{
-	sFormattedSnapshotImage = NULL;
-	if (success)
-	{
-		gViewerWindow->playSnapshotAnimAndSound();
-	}
-}
-// </FS:Ansariel>
-
 class LLFileTakeSnapshotToDisk : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -632,49 +620,27 @@ class LLFileTakeSnapshotToDisk : public view_listener_t
 									   gSavedSettings.getBOOL("RenderUIInSnapshot"),
 									   FALSE))
 		{
-			// <FS:Ansariel> Threaded filepickers
-			//gViewerWindow->playSnapshotAnimAndSound();
-			//LLPointer<LLImageFormatted> formatted;
-			//LLSnapshotModel::ESnapshotFormat fmt = (LLSnapshotModel::ESnapshotFormat) gSavedSettings.getS32("SnapshotFormat");
-			//switch (fmt)
-			//{
-			//case LLSnapshotModel::SNAPSHOT_FORMAT_JPEG:
-			//	formatted = new LLImageJPEG(gSavedSettings.getS32("SnapshotQuality"));
-			//	break;
-			//default:
-			//	LL_WARNS() << "Unknown local snapshot format: " << fmt << LL_ENDL;
-			//case LLSnapshotModel::SNAPSHOT_FORMAT_PNG:
-			//	formatted = new LLImagePNG;
-			//	break;
-			//case LLSnapshotModel::SNAPSHOT_FORMAT_BMP:
-			//	formatted = new LLImageBMP;
-			//	break;
-			//}
-			//formatted->enableOverSize() ;
-			//formatted->encode(raw, 0);
-			//formatted->disableOverSize() ;
-			//LLSnapshotLivePreview::saveLocal(formatted);
-
+			gViewerWindow->playSnapshotAnimAndSound();
+			LLPointer<LLImageFormatted> formatted;
 			LLSnapshotModel::ESnapshotFormat fmt = (LLSnapshotModel::ESnapshotFormat) gSavedSettings.getS32("SnapshotFormat");
 			switch (fmt)
 			{
 			case LLSnapshotModel::SNAPSHOT_FORMAT_JPEG:
-				sFormattedSnapshotImage = new LLImageJPEG(gSavedSettings.getS32("SnapshotQuality"));
+				formatted = new LLImageJPEG(gSavedSettings.getS32("SnapshotQuality"));
 				break;
 			default:
 				LL_WARNS() << "Unknown local snapshot format: " << fmt << LL_ENDL;
 			case LLSnapshotModel::SNAPSHOT_FORMAT_PNG:
-				sFormattedSnapshotImage = new LLImagePNG;
+				formatted = new LLImagePNG;
 				break;
 			case LLSnapshotModel::SNAPSHOT_FORMAT_BMP:
-				sFormattedSnapshotImage = new LLImageBMP;
+				formatted = new LLImageBMP;
 				break;
 			}
-			sFormattedSnapshotImage->enableOverSize() ;
-			sFormattedSnapshotImage->encode(raw, 0);
-			sFormattedSnapshotImage->disableOverSize() ;
-			gViewerWindow->saveImageNumbered(sFormattedSnapshotImage, false, boost::bind(&take_snapshot_to_disk_callback, _1));
-			// </FS:Ansariel>
+			formatted->enableOverSize() ;
+			formatted->encode(raw, 0);
+			formatted->disableOverSize() ;
+			LLSnapshotLivePreview::saveLocal(formatted);
 		}
 		return true;
 	}
