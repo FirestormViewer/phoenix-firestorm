@@ -3430,9 +3430,9 @@ void RlvHandler::renderOverlay()
 		m_pOverlayImage->addTextureStats(nWidth * nHeight);
 		m_pOverlayImage->setKnownDrawSize(nWidth, nHeight);
 
+		gGL.pushMatrix();
 		LLGLSUIDefault glsUI;
 		gViewerWindow->setup2DRender();
-		gGL.pushMatrix();
 
 		const LLVector2& displayScale = gViewerWindow->getDisplayScale();
 		gGL.scalef(displayScale.mV[VX], displayScale.mV[VY], 1.f);
@@ -3459,6 +3459,7 @@ void RlvHandler::renderOverlay()
 
 		gGL.popMatrix();
 		gGL.flush();
+		gViewerWindow->setup3DRender();
 
 		if (LLGLSLShader::sNoFixedFunction)
 		{
