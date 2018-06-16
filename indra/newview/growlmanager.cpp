@@ -298,7 +298,8 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 			LLStringUtil::format(body, substitutions);
 		}
 
-		if (name == "ObjectGiveItem" || name == "OwnObjectGiveItem" || name == "ObjectGiveItemUnknownUser" || name == "UserGiveItem" || name == "SystemMessageTip")
+		if (name == "ObjectGiveItem" || name == "OwnObjectGiveItem" || name == "ObjectGiveItemUnknownUser" || name == "UserGiveItem" || name == "SystemMessageTip"
+			|| LLStringUtil::startsWith(name, "TeleportOffered") || name == "TeleportRequest")
 		{
 			LLUrlMatch urlMatch;
 			LLWString newLine = utf8str_to_wstring(body);

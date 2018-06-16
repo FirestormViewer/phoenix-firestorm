@@ -5611,6 +5611,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="RLVaToggleDisabled">
 		wyłączone
 	</string>
+	<string name="RLVaStatusDisabled">
+		(wyłączone)
+	</string>
 	<string name="UserDictionary">
 		[Użytkownika]
 	</string>

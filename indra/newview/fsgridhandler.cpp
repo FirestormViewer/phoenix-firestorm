@@ -50,7 +50,7 @@
 #include "fscorehttputil.h"
 #include "lfsimfeaturehandler.h"	// <COLOSI opensim multi-currency support />
 
-void downloadError( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState )
+void gridDownloadError( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState )
 {
     LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData );
 
@@ -61,6 +61,15 @@ void downloadError( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, 
 			mOwner->addGrid(mData,	LLGridManager::RETRY);
 		}
 
+	}
+	else if (status.getType() == HTTP_NOT_MODIFIED && LLGridManager::TRYLEGACY != mState) // not modified
+	{
+		mOwner->addGrid(mData, LLGridManager::FINISH);
+	}
+	else if (HTTP_INTERNAL_ERROR ==  status.getType() && LLGridManager::LOCAL == mState) //add localhost even if its not up
+	{
+		mOwner->addGrid(mData, LLGridManager::FINISH);
+		//since we know now that its not up we cold also start it
 	}
 	else if (LLGridManager::TRYLEGACY == mState) //we did TRYLEGACY and faild
 	{
@@ -88,9 +97,9 @@ void downloadError( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, 
 	}
 }
 
-void downloadComplete( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState )
+void gridDownloadComplete( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState )
 {
-	mOwner->decResponderCount();
+	//mOwner->decResponderCount();
 	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
     LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
 
@@ -126,10 +135,6 @@ void downloadComplete( LLSD const &aData, LLGridManager* mOwner, GridEntry* mDat
 			mOwner->addGrid(mData, LLGridManager::FAIL);
 		}
 	}
-	else if (HTTP_NOT_MODIFIED ==  status.getType() && LLGridManager::TRYLEGACY != mState)// not modified
-	{
-		mOwner->addGrid(mData, LLGridManager::FINISH);
-	}
 	else if (HTTP_INTERNAL_ERROR ==  status.getType() && LLGridManager::LOCAL == mState) //add localhost even if its not up
 	{
 		mOwner->addGrid(mData,	LLGridManager::FINISH);
@@ -137,7 +142,7 @@ void downloadComplete( LLSD const &aData, LLGridManager* mOwner, GridEntry* mDat
 	}
 	else
 	{
-		downloadError( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ], mOwner, mData, mState );
+		gridDownloadError( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ], mOwner, mData, mState );
 	}
 }
 
@@ -622,9 +627,12 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 				LLDate saved_value = grid_entry->grid["LastModified"];
 				last_modified = (time_t)saved_value.secondsSinceEpoch();
 			}
+			LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+			httpOpts->setWantHeaders(true);
+			httpOpts->setLastModified((long)last_modified);
 
-			FSCoreHttpUtil::callbackHttpGetRaw( uri, boost::bind( downloadComplete, _1, this, grid_entry, state ),
-												boost::bind( downloadError, _1, this, grid_entry, state ) );
+			FSCoreHttpUtil::callbackHttpGetRaw( uri, boost::bind( gridDownloadComplete, _1, this, grid_entry, state ),
+												boost::bind( gridDownloadError, _1, this, grid_entry, state ), LLCore::HttpHeaders::ptr_t(), httpOpts );
 			return;
 		}
 	}
@@ -643,8 +651,8 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 
 		LL_WARNS() << "No gridinfo found. Trying if legacy login page exists: " << uri << LL_ENDL;
 
-		FSCoreHttpUtil::callbackHttpGetRaw( uri, boost::bind( downloadComplete, _1, this, grid_entry, state ),
-											boost::bind( downloadError, _1, this, grid_entry, state ) );
+		FSCoreHttpUtil::callbackHttpGetRaw( uri, boost::bind( gridDownloadComplete, _1, this, grid_entry, state ),
+											boost::bind( gridDownloadError, _1, this, grid_entry, state ) );
 		return;
 	}
 

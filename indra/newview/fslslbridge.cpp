@@ -1153,7 +1153,7 @@ FSLSLBridgeScriptCallback::~FSLSLBridgeScriptCallback()
 class FSMonoScriptAssetUpload: public LLScriptAssetUpload
 {
 public:
-    FSMonoScriptAssetUpload(LLUUID itemId, std::string buffer, invnUploadFinish_f finish)
+	FSMonoScriptAssetUpload(LLUUID itemId, std::string buffer, invnUploadFinish_f finish)
 	: LLScriptAssetUpload( itemId, buffer, finish)
 	{
 	}
@@ -1207,12 +1207,12 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 	bool cleanup = false;
 	if (!url.empty() && obj)
 	{
-        std::string buffer;
+		std::string buffer;
 		const std::string fName = prepUploadFile(buffer);
 		if (!fName.empty())
 		{
-            LLResourceUploadInfo::ptr_t uploadInfo(new FSMonoScriptAssetUpload(	inv_item,  buffer, uploadDone ));
-            LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
+			LLResourceUploadInfo::ptr_t uploadInfo(new FSMonoScriptAssetUpload(	inv_item,  buffer, uploadDone ));
+			LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
 
 			LL_INFOS("FSLSLBridge") << "updating script ID for bridge" << LL_ENDL;
 			FSLSLBridge::instance().mScriptItemID = inv_item;
@@ -1330,8 +1330,8 @@ void FSLSLBridge::checkBridgeScriptName()
 
 BOOL FSLSLBridgeCleanupTimer::tick()
 {
-	FSLSLBridge::instance().finishBridge();
 	stopTimer();
+	FSLSLBridge::instance().finishBridge();
 	return TRUE;
 }
 
@@ -1360,18 +1360,21 @@ void FSLSLBridge::finishBridge()
 	mIsFirstCallDone = false;
 	cleanUpOldVersions();
 	cleanUpBridgeFolder();
-	LL_INFOS("FSLSLBridge") << "Bridge cleaned up. Detaching bridge" << LL_ENDL;
+	LL_INFOS("FSLSLBridge") << "Bridge cleaned up" << LL_ENDL;
 
 	mAllowDetach = true;
 	mFinishCreation = true;
 	if (getBridge())
 	{
+		LL_INFOS("FSLSLBridge") << "Detaching bridge after cleanup" << LL_ENDL;
 		LLVOAvatarSelf::detachAttachmentIntoInventory(getBridge()->getUUID());
 	}
 	else
 	{
 		LL_WARNS("FSLSLBridge") << "Cannot detach bridge - mpBridge = NULL" << LL_ENDL;
 	}
+
+	LL_INFOS("FSLSLBridge") << "End finishing bridge" << LL_ENDL;
 }
 
 //
@@ -1589,6 +1592,7 @@ void FSLSLBridge::detachOtherBridges()
 BOOL FSLSLBridgeReAttachTimer::tick()
 {
 	LL_INFOS("FSLSLBridge") << "Re-attaching bridge after creation..." << LL_ENDL;
+	mEventTimer.stop();
 	LLViewerInventoryItem* inv_object = gInventory.getItem(mBridgeUUID);
 	if (inv_object && FSLSLBridge::instance().mpBridge && FSLSLBridge::instance().mpBridge->getUUID() == inv_object->getUUID())
 	{
