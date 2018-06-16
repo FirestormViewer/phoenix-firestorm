@@ -317,6 +317,7 @@
 	<texture name="Inv_Texture"				file_name="legacy/inv_item_texture.tga" />
 	<texture name="Inv_Underpants"			file_name="legacy/inv_item_underpants.tga" />
 	<texture name="Inv_Undershirt"			file_name="legacy/inv_item_undershirt.tga" />
+	<texture name="Inv_Universal"			file_name="legacy/inv_item_universal.tga" />
 
 	<texture name="Inv_TexturesOpen"		file_name="legacy/inv_folder_texture.tga" />
 	<texture name="Inv_TexturesClosed"		file_name="legacy/inv_folder_texture.tga" />

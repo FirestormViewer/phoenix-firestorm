@@ -65,14 +65,18 @@ LLAvatarAppearanceDictionary::Textures::Textures()
 	addEntry(TEX_HEAD_TATTOO,                 new TextureEntry("head_tattoo",      TRUE,  BAKED_NUM_INDICES, "",     LLWearableType::WT_TATTOO));
 	addEntry(TEX_UPPER_TATTOO,                new TextureEntry("upper_tattoo",     TRUE,  BAKED_NUM_INDICES, "",     LLWearableType::WT_TATTOO));
 	addEntry(TEX_LOWER_TATTOO,                new TextureEntry("lower_tattoo",     TRUE,  BAKED_NUM_INDICES, "",     LLWearableType::WT_TATTOO));
-	addEntry(TEX_SKIRT_TATTOO,				  new TextureEntry("skirt_tattoo",	   TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_TATTOO));
-	addEntry(TEX_HAIR_TATTOO,				  new TextureEntry("hair_tattoo",	   TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_TATTOO));
-	addEntry(TEX_EYES_TATTOO,				  new TextureEntry("eyes_tattoo",      TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_TATTOO));
-	addEntry(TEX_LEFT_ARM_TATTOO,			  new TextureEntry("leftarm_tattoo",   TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_TATTOO));
-	addEntry(TEX_LEFT_LEG_TATTOO,			  new TextureEntry("leftleg_tattoo",   TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_TATTOO));
-	addEntry(TEX_AUX1_TATTOO,				  new TextureEntry("aux1_tattoo",      TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_TATTOO));
-	addEntry(TEX_AUX2_TATTOO,				  new TextureEntry("aux2_tattoo",      TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_TATTOO));
-	addEntry(TEX_AUX3_TATTOO,				  new TextureEntry("aux3_tattoo",      TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_TATTOO));
+
+	addEntry(TEX_HEAD_UNIVERSAL_TATTOO,		  new TextureEntry("head_universal_tattoo", TRUE, BAKED_NUM_INDICES, "", LLWearableType::WT_UNIVERSAL));
+	addEntry(TEX_UPPER_UNIVERSAL_TATTOO,	  new TextureEntry("upper_universal_tattoo", TRUE, BAKED_NUM_INDICES, "", LLWearableType::WT_UNIVERSAL));
+	addEntry(TEX_LOWER_UNIVERSAL_TATTOO,      new TextureEntry("lower_universal_tattoo", TRUE, BAKED_NUM_INDICES, "", LLWearableType::WT_UNIVERSAL));
+	addEntry(TEX_SKIRT_TATTOO,				  new TextureEntry("skirt_tattoo",	   TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_UNIVERSAL));
+	addEntry(TEX_HAIR_TATTOO,				  new TextureEntry("hair_tattoo",	   TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_UNIVERSAL));
+	addEntry(TEX_EYES_TATTOO,				  new TextureEntry("eyes_tattoo",      TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_UNIVERSAL));
+	addEntry(TEX_LEFT_ARM_TATTOO,			  new TextureEntry("leftarm_tattoo",   TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_UNIVERSAL));
+	addEntry(TEX_LEFT_LEG_TATTOO,			  new TextureEntry("leftleg_tattoo",   TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_UNIVERSAL));
+	addEntry(TEX_AUX1_TATTOO,				  new TextureEntry("aux1_tattoo",      TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_UNIVERSAL));
+	addEntry(TEX_AUX2_TATTOO,				  new TextureEntry("aux2_tattoo",      TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_UNIVERSAL));
+	addEntry(TEX_AUX3_TATTOO,				  new TextureEntry("aux3_tattoo",      TRUE,  BAKED_NUM_INDICES, "",	 LLWearableType::WT_UNIVERSAL));
 
 
 	addEntry(TEX_HEAD_BAKED,                  new TextureEntry("head-baked",       FALSE, BAKED_HEAD, "head"));
@@ -93,60 +97,60 @@ LLAvatarAppearanceDictionary::BakedTextures::BakedTextures()
 	// Baked textures
 	addEntry(BAKED_HEAD,       new BakedEntry(TEX_HEAD_BAKED,  
 											  "head", "a4b9dc38-e13b-4df9-b284-751efb0566ff", 
-											  3, TEX_HEAD_BODYPAINT, TEX_HEAD_TATTOO, TEX_HEAD_ALPHA,
-											  5, LLWearableType::WT_SHAPE, LLWearableType::WT_SKIN, LLWearableType::WT_HAIR, LLWearableType::WT_TATTOO, LLWearableType::WT_ALPHA));
+											  4, TEX_HEAD_BODYPAINT, TEX_HEAD_TATTOO, TEX_HEAD_ALPHA, TEX_HEAD_UNIVERSAL_TATTOO,
+											  6, LLWearableType::WT_SHAPE, LLWearableType::WT_SKIN, LLWearableType::WT_HAIR, LLWearableType::WT_TATTOO, LLWearableType::WT_ALPHA, LLWearableType::WT_UNIVERSAL));
 
 	addEntry(BAKED_UPPER,      new BakedEntry(TEX_UPPER_BAKED, 
 											  "upper_body", "5943ff64-d26c-4a90-a8c0-d61f56bd98d4", 
-											  7, TEX_UPPER_SHIRT,TEX_UPPER_BODYPAINT, TEX_UPPER_JACKET,
-											  TEX_UPPER_GLOVES, TEX_UPPER_UNDERSHIRT, TEX_UPPER_TATTOO, TEX_UPPER_ALPHA,
-											  8, LLWearableType::WT_SHAPE, LLWearableType::WT_SKIN,	LLWearableType::WT_SHIRT, LLWearableType::WT_JACKET, LLWearableType::WT_GLOVES, LLWearableType::WT_UNDERSHIRT, LLWearableType::WT_TATTOO, LLWearableType::WT_ALPHA));											  
+											  8, TEX_UPPER_SHIRT,TEX_UPPER_BODYPAINT, TEX_UPPER_JACKET,
+											  TEX_UPPER_GLOVES, TEX_UPPER_UNDERSHIRT, TEX_UPPER_TATTOO, TEX_UPPER_ALPHA, TEX_UPPER_UNIVERSAL_TATTOO,
+											  9, LLWearableType::WT_SHAPE, LLWearableType::WT_SKIN,	LLWearableType::WT_SHIRT, LLWearableType::WT_JACKET, LLWearableType::WT_GLOVES, LLWearableType::WT_UNDERSHIRT, LLWearableType::WT_TATTOO, LLWearableType::WT_ALPHA, LLWearableType::WT_UNIVERSAL));											  
 
 	addEntry(BAKED_LOWER,      new BakedEntry(TEX_LOWER_BAKED, 
 											  "lower_body", "2944ee70-90a7-425d-a5fb-d749c782ed7d",
-											  8, TEX_LOWER_PANTS,TEX_LOWER_BODYPAINT,TEX_LOWER_SHOES, TEX_LOWER_SOCKS,
-											  TEX_LOWER_JACKET, TEX_LOWER_UNDERPANTS, TEX_LOWER_TATTOO, TEX_LOWER_ALPHA,
-											  9, LLWearableType::WT_SHAPE, LLWearableType::WT_SKIN,	LLWearableType::WT_PANTS, LLWearableType::WT_SHOES,	 LLWearableType::WT_SOCKS,  LLWearableType::WT_JACKET, LLWearableType::WT_UNDERPANTS, LLWearableType::WT_TATTOO, LLWearableType::WT_ALPHA));
+											  9, TEX_LOWER_PANTS,TEX_LOWER_BODYPAINT,TEX_LOWER_SHOES, TEX_LOWER_SOCKS,
+											  TEX_LOWER_JACKET, TEX_LOWER_UNDERPANTS, TEX_LOWER_TATTOO, TEX_LOWER_ALPHA, TEX_LOWER_UNIVERSAL_TATTOO,
+											  10, LLWearableType::WT_SHAPE, LLWearableType::WT_SKIN,	LLWearableType::WT_PANTS, LLWearableType::WT_SHOES,	 LLWearableType::WT_SOCKS,  LLWearableType::WT_JACKET, LLWearableType::WT_UNDERPANTS, LLWearableType::WT_TATTOO, LLWearableType::WT_ALPHA, LLWearableType::WT_UNIVERSAL));
 
 	addEntry(BAKED_EYES,       new BakedEntry(TEX_EYES_BAKED,  
 											  "eyes", "27b1bc0f-979f-4b13-95fe-b981c2ba9788",
 											  3, TEX_EYES_IRIS, TEX_EYES_TATTOO, TEX_EYES_ALPHA,
-											  3, LLWearableType::WT_EYES, LLWearableType::WT_TATTOO, LLWearableType::WT_ALPHA));
+											  3, LLWearableType::WT_EYES, LLWearableType::WT_UNIVERSAL, LLWearableType::WT_ALPHA));
 
 	addEntry(BAKED_SKIRT,      new BakedEntry(TEX_SKIRT_BAKED,
 											  "skirt", "03e7e8cb-1368-483b-b6f3-74850838ba63", 
 											  2, TEX_SKIRT, TEX_SKIRT_TATTOO,
-											  2, LLWearableType::WT_SKIRT, LLWearableType::WT_TATTOO ));
+											  2, LLWearableType::WT_SKIRT, LLWearableType::WT_UNIVERSAL ));
 
 	addEntry(BAKED_HAIR,       new BakedEntry(TEX_HAIR_BAKED,
 											  "hair", "a60e85a9-74e8-48d8-8a2d-8129f28d9b61", 
 											  3, TEX_HAIR, TEX_HAIR_TATTOO, TEX_HAIR_ALPHA,
-											  3, LLWearableType::WT_HAIR, LLWearableType::WT_TATTOO, LLWearableType::WT_ALPHA));
+											  3, LLWearableType::WT_HAIR, LLWearableType::WT_UNIVERSAL, LLWearableType::WT_ALPHA));
 
 	addEntry(BAKED_LEFT_ARM, new BakedEntry(TEX_LEFT_ARM_BAKED,
 		"leftarm", "9f39febf-22d7-0087-79d1-e9e8c6c9ed19",
 		1, TEX_LEFT_ARM_TATTOO,
-		1, LLWearableType::WT_TATTOO));
+		1, LLWearableType::WT_UNIVERSAL));
 
 	addEntry(BAKED_LEFT_LEG, new BakedEntry(TEX_LEFT_LEG_BAKED,
 		"leftleg", "054a7a58-8ed5-6386-0add-3b636fb28b78",
 		1, TEX_LEFT_LEG_TATTOO,
-		1, LLWearableType::WT_TATTOO));
+		1, LLWearableType::WT_UNIVERSAL));
 
 	addEntry(BAKED_AUX1, new BakedEntry(TEX_AUX1_BAKED,
 		"aux1", "790c11be-b25c-c17e-b4d2-6a4ad786b752",
 		1, TEX_AUX1_TATTOO,
-		1, LLWearableType::WT_TATTOO));
+		1, LLWearableType::WT_UNIVERSAL));
 
 	addEntry(BAKED_AUX2, new BakedEntry(TEX_AUX2_BAKED,
 		"aux2", "d78c478f-48c7-5928-5864-8d99fb1f521e",
 		1, TEX_AUX2_TATTOO,
-		1, LLWearableType::WT_TATTOO));
+		1, LLWearableType::WT_UNIVERSAL));
 
 	addEntry(BAKED_AUX3, new BakedEntry(TEX_AUX3_BAKED,
 		"aux3", "6a95dd53-edd9-aac8-f6d3-27ed99f3c3eb",
 		1, TEX_AUX3_TATTOO,
-		1, LLWearableType::WT_TATTOO));
+		1, LLWearableType::WT_UNIVERSAL));
 }
 
 LLAvatarAppearanceDictionary::MeshEntries::MeshEntries()
