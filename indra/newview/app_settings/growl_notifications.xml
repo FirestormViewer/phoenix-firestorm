@@ -191,5 +191,68 @@
       <key>GrowlBody</key>
       <string>[MESSAGE]</string>
     </map>
+    <key>TeleportOffered</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Teleport offer received</string>
+      <key>GrowlTitle</key>
+      <string>Teleport offer received</string>
+      <key>GrowlBody</key>
+      <string>[NAME_SLURL] has offered to teleport you to their location: [MESSAGE]</string>
+    </map>
+    <key>TeleportOffered_MaturityExceeded</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Teleport offer received (Maturity exceeded)</string>
+      <key>GrowlTitle</key>
+      <string>Teleport offer received</string>
+      <key>GrowlBody</key>
+      <string>[NAME_SLURL] has offered to teleport you to their location: [MESSAGE]</string>
+    </map>
+    <key>TeleportOffered_MaturityBlocked</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Teleport offer received (Maturity blocked)</string>
+      <key>GrowlTitle</key>
+      <string>Teleport offer received</string>
+      <key>GrowlBody</key>
+      <string>[NAME_SLURL] has offered to teleport you to their location: [MESSAGE]</string>
+    </map>
+    <key>TeleportOffered_SLUrl</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Teleport offer received (SLUrl)</string>
+      <key>GrowlTitle</key>
+      <string>Teleport offer received</string>
+      <key>GrowlBody</key>
+      <string>[NAME_SLURL] has offered to teleport you to their location: [MESSAGE]</string>
+    </map>
+    <key>TeleportOffered_MaturityExceeded_SLUrl</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Teleport offer received (SLURL, Maturity exceeded)</string>
+      <key>GrowlTitle</key>
+      <string>Teleport offer received</string>
+      <key>GrowlBody</key>
+      <string>[NAME_SLURL] has offered to teleport you to their location: [MESSAGE]</string>
+    </map>
+    <key>TeleportOffered_MaturityBlocked_SLUrl</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Teleport offer received (SLUrl, Maturity blocked)</string>
+      <key>GrowlTitle</key>
+      <string>Teleport offer received</string>
+      <key>GrowlBody</key>
+      <string>[NAME_SLURL] has offered to teleport you to their location: [MESSAGE]</string>
+    </map>
+    <key>TeleportRequest</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Teleport request received</string>
+      <key>GrowlTitle</key>
+      <string>Teleport request received</string>
+      <key>GrowlBody</key>
+      <string>[NAME_SLURL] is requesting to be teleported to your location: [MESSAGE]</string>
+    </map>
   </map>
 </llsd>
