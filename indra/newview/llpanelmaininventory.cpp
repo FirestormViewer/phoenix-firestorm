@@ -701,10 +701,10 @@ void LLPanelMainInventory::onClearSearch()
 	//		inbox_panel->onClearSearch();
 	//	}
 	//}
-	LLFloater* inv_floater = getParentByType<LLFloater>();
-	if (inv_floater)
+	LLSidepanelInventory * sidepanel_inventory = getParentByType<LLSidepanelInventory>();
+	if (sidepanel_inventory && sidepanel_inventory->getInboxPanel())
 	{
-		LLPanelMarketplaceInbox* inbox_panel = inv_floater->findChild<LLPanelMarketplaceInbox>("marketplace_inbox");
+		LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getInboxPanel()->getParentByType<LLPanelMarketplaceInbox>();
 		if (inbox_panel)
 		{
 			inbox_panel->onClearSearch();
@@ -775,10 +775,10 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
 	//		inbox_panel->onFilterEdit(search_string);
 	//	}
 	//}
-	LLFloater* inv_floater = getParentByType<LLFloater>();
-	if (inv_floater)
+	LLSidepanelInventory * sidepanel_inventory = getParentByType<LLSidepanelInventory>();
+	if (sidepanel_inventory && sidepanel_inventory->getInboxPanel())
 	{
-		LLPanelMarketplaceInbox* inbox_panel = inv_floater->findChild<LLPanelMarketplaceInbox>("marketplace_inbox");
+		LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getInboxPanel()->getParentByType<LLPanelMarketplaceInbox>();
 		if (inbox_panel)
 		{
 			inbox_panel->onFilterEdit(search_string);
