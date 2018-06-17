@@ -106,6 +106,8 @@ public:
 	static void initCompatibilityMode(std::string strCompatList);
 	static bool isCompatibilityModeObject(const LLUUID& idRlvObject);
 
+	static bool isAllowedExperience(const LLUUID& idExperience, U8 nMaturity);
+
 	static void initClass();
 	static void onChangedSettingMain(const LLSD& sdValue);
 protected:
@@ -121,9 +123,11 @@ protected:
 	 */
 protected:
 	static bool s_fCanOOC;
+	static U8   s_nExperienceMinMaturity;
 	static bool s_fLegacyNaming;
 	static bool s_fNoSetEnv;
 	static bool s_fTempAttach;
+	static std::list<std::string> s_BlockedExperiences;
 	static std::list<LLUUID>      s_CompatItemCreators;
 	static std::list<std::string> s_CompatItemNames;
 };

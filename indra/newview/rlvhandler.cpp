@@ -883,7 +883,7 @@ void RlvHandler::onDetach(const LLViewerObject* pAttachObj, const LLViewerJointA
 
 void RlvHandler::onExperienceAttach(const LLSD& sdExperience, const std::string& strObjName)
 {
-	if (sdExperience["maturity"].asInteger() != SIM_ACCESS_ADULT)
+	if (!RlvSettings::isAllowedExperience(sdExperience[LLExperienceCache::EXPERIENCE_ID].asUUID(), sdExperience[LLExperienceCache::MATURITY].asInteger()))
 	{
 		addBlockedObject(LLUUID::null, strObjName);
 
