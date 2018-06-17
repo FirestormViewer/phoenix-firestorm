@@ -11065,12 +11065,18 @@ Changes won't take effect until after you restart [APP_NAME].
     <form name="form">
       <button
        index="0"
+       default="true"
        name="Allow"
        text="Allow"/>
       <button
        index="1"
+       name="Always Allow"
+       text="Always Allow"/>
+      <button
+       index="2"
        name="Deny"
        text="Deny"/>
+      <ignore text="Confirm before sending anyone a list of my current RLV restrictions."/>
     </form>
   </notification>
 

@@ -618,8 +618,14 @@ void RlvHandler::onIMQueryListResponse(const LLSD& sdNotification, const LLSD sd
 	const LLUUID idRequester = sdNotification["payload"]["from_id"].asUUID();
 
 	const int idxOption = LLNotificationsUtil::getSelectedOption(sdNotification, sdResponse);
-	if (idxOption == 0)
+	if ( (idxOption == 0) || (idxOption == 1) )
 	{
+		if (idxOption == 1)
+		{
+			if (LLNotificationPtr pNotif = LLNotificationsUtil::find(sdNotification["id"]))
+				pNotif->setIgnored(true);
+		}
+
 		const std::string& strCommand = sdNotification["payload"]["command"].asStringRef();
 		if ("@list" == strCommand)
 		{
