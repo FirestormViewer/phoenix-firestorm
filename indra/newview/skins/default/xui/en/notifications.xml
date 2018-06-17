@@ -12260,7 +12260,7 @@ Changes won't take effect until after you restart [APP_NAME].
        index="2"
        name="Deny"
        text="Deny"/>
-      <ignore text="Confirm before sending anyone a list of my current RLV restrictions."/>
+      <ignore name="ignore" text="Confirm before sending anyone a list of my current RLV restrictions."/>
     </form>
   </notification>
 
