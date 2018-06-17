@@ -230,7 +230,7 @@ void RlvFloaterBehaviours::onAvatarNameLookup(const LLUUID& idAgent, const LLAva
 }
 
 // static
-const std::string RlvFloaterBehaviours::getFormattedBehaviourString()
+std::string RlvFloaterBehaviours::getFormattedBehaviourString(ERlvBehaviourFilter eFilter)
 {
 	std::ostringstream strRestrictions;
 
@@ -241,6 +241,13 @@ const std::string RlvFloaterBehaviours::getFormattedBehaviourString()
 		strRestrictions << "\n" << rlvGetItemNameFromObjID(rlvObjectEntry.first) << ":\n";
 		for (const RlvCommand& rlvCmd : rlvObjectEntry.second.getCommandList())
 		{
+			bool fIsException = (rlvCmd.hasOption()) && (rlvGetShowException(rlvCmd.getBehaviourType()));
+			if ( ((ERlvBehaviourFilter::BEHAVIOURS_ONLY == eFilter) && (fIsException)) ||
+				 ((ERlvBehaviourFilter::EXCEPTIONS_ONLY == eFilter) && (!fIsException)) )
+			{
+				continue;
+			}
+
 			std::string strOption; LLUUID idOption;
 			if ( (rlvCmd.hasOption()) && (idOption.set(rlvCmd.getOption(), FALSE)) && (idOption.notNull()) )
 			{
@@ -266,7 +273,7 @@ const std::string RlvFloaterBehaviours::getFormattedBehaviourString()
 // Checked: 2011-05-26 (RLVa-1.3.1c) | Added: RLVa-1.3.1c
 void RlvFloaterBehaviours::onBtnCopyToClipboard()
 {
-	LLWString wstrRestrictions = utf8str_to_wstring(getFormattedBehaviourString());
+	LLWString wstrRestrictions = utf8str_to_wstring(getFormattedBehaviourString(ERlvBehaviourFilter::ALL));
 	LLClipboard::instance().copyToClipboard(wstrRestrictions, 0, wstrRestrictions.length());
 }
 
