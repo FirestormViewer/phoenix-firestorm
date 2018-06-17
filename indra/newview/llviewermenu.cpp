@@ -7054,7 +7054,13 @@ class LLWorldTeleportHome : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		gAgent.teleportHome();
+		// <FS:Ansariel> FIRE-21576: Prevent TPing home while still logging in if RLVa is enabled
+		//gAgent.teleportHome();
+		if (!rlv_handler_t::isEnabled() || LLStartUp::getStartupState() == STATE_STARTED)
+		{
+			gAgent.teleportHome();
+		}
+		// </FS:Ansariel>
 		return true;
 	}
 };
