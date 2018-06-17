@@ -107,7 +107,7 @@ private:
 	std::string mFSdataDefaultsFilename;
 	std::string mFSdataDefaultsUrl;
 	std::string mAgentsFilename;
-	std::string mAssestsFilename;
+	std::string mAssetsFilename;
 	std::string mClientTagsFilename;
 
 	std::string mBaseURL;

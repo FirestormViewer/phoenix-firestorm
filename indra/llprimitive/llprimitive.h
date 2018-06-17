@@ -498,6 +498,11 @@ protected:
 
 public:
 	static LLVolumeMgr* sVolumeManager;
+
+	enum
+	{
+		NO_LOD = -1
+	};
 };
 
 inline BOOL LLPrimitive::isAvatar() const

@@ -218,6 +218,7 @@ void GrowlManager::loadConfig()
 
 }
 
+static LLTrace::BlockTimerStatHandle FTM_GROWL_NOTIFY("Growl Notify");
 void GrowlManager::performNotification(const std::string& title, const std::string& message, const std::string& type)
 {
 	if (LLAppViewer::instance()->isExiting())
@@ -250,7 +251,11 @@ void GrowlManager::performNotification(const std::string& title, const std::stri
 		}
 		mTitleTimers[title] = now;
 	}
-	mNotifier->showNotification(title, message.substr(0, GROWL_MAX_BODY_LENGTH), type);
+
+	{
+		LL_RECORD_BLOCK_TIME(FTM_GROWL_NOTIFY);
+		mNotifier->showNotification(title, message.substr(0, GROWL_MAX_BODY_LENGTH), type);
+	}
 }
 
 BOOL GrowlManager::tick()
@@ -293,7 +298,8 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 			LLStringUtil::format(body, substitutions);
 		}
 
-		if (name == "ObjectGiveItem" || name == "OwnObjectGiveItem" || name == "ObjectGiveItemUnknownUser" || name == "UserGiveItem" || name == "SystemMessageTip")
+		if (name == "ObjectGiveItem" || name == "OwnObjectGiveItem" || name == "ObjectGiveItemUnknownUser" || name == "UserGiveItem" || name == "SystemMessageTip"
+			|| LLStringUtil::startsWith(name, "TeleportOffered") || name == "TeleportRequest")
 		{
 			LLUrlMatch urlMatch;
 			LLWString newLine = utf8str_to_wstring(body);

@@ -4723,6 +4723,13 @@ void LLAgent::teleportRequest(const U64& region_handle, const LLVector3& pos_loc
 // Landmark ID = LLUUID::null means teleport home
 void LLAgent::teleportViaLandmark(const LLUUID& landmark_asset_id)
 {
+	// <FS:Ansariel> FIRE-21576: Prevent TPing home while still logging in if RLVa is enabled
+	if (RlvActions::isRlvEnabled() && LLStartUp::getStartupState() < STATE_STARTED)
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
 // [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
 	// NOTE: we'll allow teleporting home unless both @tplm=n *and* @tploc=n restricted
 	if ( (rlv_handler_t::isEnabled()) &&
@@ -4838,6 +4845,11 @@ void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 // [RLVa:KB] - Checked: RLVa-2.0.0
 	if ( (RlvActions::isRlvEnabled()) && (!RlvUtil::isForceTp()) )
 	{
+		if (LLStartUp::getStartupState() < STATE_STARTED)
+		{
+			return;
+		}
+
 		if ( (RlvActions::isLocalTp(pos_global)) ? !RlvActions::canTeleportToLocal(pos_global) : !RlvActions::canTeleportToLocation() )
 		{
 			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
@@ -4918,6 +4930,11 @@ void LLAgent::teleportViaLocationLookAt(const LLVector3d& pos_global, const LLVe
 {
 	if ( (RlvActions::isRlvEnabled()) && (!RlvUtil::isForceTp()) )
 	{
+		if (LLStartUp::getStartupState() < STATE_STARTED)
+		{
+			return;
+		}
+
 		if ( (RlvActions::isLocalTp(pos_global)) ? !RlvActions::canTeleportToLocal(pos_global) : !RlvActions::canTeleportToLocation() )
 		{
 			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);

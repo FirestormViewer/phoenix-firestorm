@@ -140,7 +140,7 @@ extern RlvAttachmentLocks gRlvAttachmentLocks;
 // TODO-RLVa: [RLVa-1.2.1] This class really looks rather cluttered so look into cleaning it up/simplifying it a bit
 class RlvAttachmentLockWatchdog : public LLSingleton<RlvAttachmentLockWatchdog>
 {
-	LLSINGLETON(RlvAttachmentLockWatchdog);
+	LLSINGLETON_EMPTY_CTOR(RlvAttachmentLockWatchdog);
 protected:
 	~RlvAttachmentLockWatchdog() { delete m_pTimer; }
 
@@ -379,8 +379,6 @@ protected:
 	mutable uuid_vec_t       m_LockedAttachmentRem;
 	mutable folderlock_map_t m_LockedFolderMap;
 	mutable uuid_vec_t       m_LockedWearableRem;
-private:
-	friend class LLSingleton<RlvFolderLocks>;
 };
 
 // ============================================================================
