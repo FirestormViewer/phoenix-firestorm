@@ -150,7 +150,7 @@ public:
 	void setUseMipMaps(BOOL usemips) { mUseMipMaps = usemips; }	
 
 	void updatePickMask(S32 width, S32 height, const U8* data_in);
-// [RLVa:KB] - Checked: RLVa-2.3 (@setoverlay)
+// [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)
 	BOOL getMask(const LLVector2 &tc) const;
 // [/RLVa:KB]
 //	BOOL getMask(const LLVector2 &tc);

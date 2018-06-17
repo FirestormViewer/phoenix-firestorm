@@ -1516,7 +1516,7 @@ void LLGroupMgr::notifyObservers(LLGroupChange gc)
 		        return;
 
 //		    observer_set_t& obs = obs_it->second;
-// [RLVa:KB] - Checked: RLVa-2.3 (General bugfix)
+// [RLVa:KB] - Checked: RLVa-2.2 (General bugfix)
 			// Iterate over a *copy* of the observer list
 		    observer_set_t obs = obs_it->second;
 // [/RLVa:KB]

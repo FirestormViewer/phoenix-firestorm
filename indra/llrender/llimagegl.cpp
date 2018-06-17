@@ -1994,7 +1994,7 @@ void LLImageGL::updatePickMask(S32 width, S32 height, const U8* data_in)
 }
 
 //BOOL LLImageGL::getMask(const LLVector2 &tc)
-// [RLVa:KB] - Checked: RLVa-2.3 (@setoverlay)
+// [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)
 BOOL LLImageGL::getMask(const LLVector2 &tc) const
 // [/RLVa:KB]
 {

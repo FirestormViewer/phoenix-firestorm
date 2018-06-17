@@ -1306,7 +1306,7 @@ void render_ui(F32 zoom_factor, int subfield)
 		}
 		
 		render_hud_elements();
-// [RLVa:KB] - Checked: RLVa-2.3 (@setoverlay)
+// [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)
 		if (gRlvHandler.isEnabled())
 		{
 			gRlvHandler.renderOverlay();
