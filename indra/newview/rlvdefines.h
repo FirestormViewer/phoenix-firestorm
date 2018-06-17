@@ -206,6 +206,7 @@ enum ERlvBehaviour {
 
 	// Camera (behaviours)
 	RLV_BHVR_SETCAM,                // Gives an object exclusive control of the user's camera
+	RLV_BHVR_SETCAM_AVDIST,			// Distance at which nearby avatars turn into a silhouette
 	RLV_BHVR_SETCAM_AVDISTMIN,		// Enforces a minimum distance from the avatar (in m)
 	RLV_BHVR_SETCAM_AVDISTMAX,		// Enforces a maximum distance from the avatar (in m)
 	RLV_BHVR_SETCAM_ORIGINDISTMIN,	// Enforces a minimum distance from the camera origin (in m)
@@ -258,6 +259,7 @@ enum ERlvBehaviourModifier
 	RLV_MODIFIER_SENDIMDISTMAX,			// Maximum distance to send an IM to an otherwise restricted recipient (squared value)
 	RLV_MODIFIER_STARTIMDISTMIN,		// Minimum distance to start an IM to an otherwise restricted recipient (squared value)
 	RLV_MODIFIER_STARTIMDISTMAX,		// Maximum distance to start an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_SETCAM_AVDIST,			// Distance at which nearby avatars turn into a silhouette (normal value)
 	RLV_MODIFIER_SETCAM_AVDISTMIN,		// Minimum distance between the camera position and the user's avatar (normal value)
 	RLV_MODIFIER_SETCAM_AVDISTMAX,		// Maximum distance between the camera position and the user's avatar (normal value)
 	RLV_MODIFIER_SETCAM_ORIGINDISTMIN,	// Minimum distance between the camera position and the origin point (normal value)
