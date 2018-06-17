@@ -374,6 +374,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 			return "deprecated and disabled";
 		case RLV_RET_FAILED_NOBEHAVIOUR:
 			return "no active behaviours";
+		case RLV_RET_FAILED_BLOCKED:
+			return "blocked object";
 		// The following are identified by the chat verb
 		case RLV_RET_RETAINED:
 		case RLV_RET_SUCCESS:

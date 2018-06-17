@@ -96,6 +96,16 @@ public:
 	bool isHiddenCompositeItem(const LLUUID& idItem, const std::string& strItemType) const;
 	#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 
+public:
+	// Adds a blocked object (= object that is blocked from issuing commands) by UUID (can be null) and/or name
+	void addBlockedObject(const LLUUID& idObj, const std::string& strObjName);
+	// Returns TRUE if there's an unresolved blocked object (known name but unknown UUID)
+	bool hasUnresolvedBlockedObject() const;
+	// Returns TRUE if the object with the specified UUID is blocked from issuing commands
+	bool isBlockedObject(const LLUUID& idObj) const;
+	// Removes a blocked object
+	void removeBlockedObject(const LLUUID& idObj);
+
 	// --------------------------------
 
 	/*
@@ -163,6 +173,8 @@ public:
 	void onActiveGroupChanged();
 	void onAttach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
 	void onDetach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
+	void onExperienceAttach(const LLSD& sdExperience, const std::string& strObjName);
+	void onExperienceEvent(const LLSD& sdEvent);
 	bool onGC();
 	void onLoginComplete();
 	void onSitOrStand(bool fSitting);
@@ -170,6 +182,7 @@ public:
 	void onTeleportFinished(const LLVector3d& posArrival);
 	static void onIdleStartup(void* pParam);
 protected:
+	void getAttachmentResourcesCoro(const std::string& strUrl);
 	void onTeleportCallback(U64 hRegion, const LLVector3& posRegion, const LLVector3& vecLookAt, const LLUUID& idRlvObj);
 
 	/*
@@ -214,9 +227,12 @@ protected:
 	 */
 public:
 	typedef std::map<LLUUID, RlvObject> rlv_object_map_t;
+	typedef std::tuple<LLUUID, std::string, double> rlv_blocked_object_t;
+	typedef std::list<rlv_blocked_object_t> rlv_blocked_object_list_t;
 	typedef std::multimap<ERlvBehaviour, RlvException> rlv_exception_map_t;
 protected:
 	rlv_object_map_t      m_Objects;				// Map of objects that have active restrictions (idObj -> RlvObject)
+	rlv_blocked_object_list_t m_BlockedObjects;		// List of (attached) objects that can't issue commands
 	rlv_exception_map_t   m_Exceptions;				// Map of currently active restriction exceptions (ERlvBehaviour -> RlvException)
 	S16                   m_Behaviours[RLV_BHVR_COUNT];
 
@@ -230,6 +246,9 @@ protected:
 	rlv_behaviour_signal_t m_OnBehaviourToggle;
 	rlv_command_signal_t   m_OnCommand;
 	mutable std::list<RlvExtCommandHandler*> m_CommandHandlers;
+	boost::signals2::scoped_connection       m_ExperienceEventConn;
+	boost::signals2::scoped_connection       m_TeleportFailedConn;
+	boost::signals2::scoped_connection       m_TeleportFinishedConn;
 
 	static bool         m_fEnabled;					// Use setEnabled() to toggle this
 

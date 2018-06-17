@@ -19,6 +19,8 @@
 #include "llagent.h"
 #include "llappearancemgr.h"
 #include "llappviewer.h"
+#include "llexperiencecache.h"
+#include "llexperiencelog.h"
 #include "llgroupactions.h"
 #include "llhudtext.h"
 #include "llmoveview.h"
@@ -260,6 +262,78 @@ void RlvHandler::removeException(const LLUUID& idObj, ERlvBehaviour eBhvr, const
 }
 
 // ============================================================================
+// Blocked object handling
+//
+
+void RlvHandler::addBlockedObject(const LLUUID& idObj, const std::string& strName)
+{
+	m_BlockedObjects.push_back(std::make_tuple(idObj, strName, LLTimer::getTotalSeconds()));
+}
+
+bool RlvHandler::hasUnresolvedBlockedObject() const
+{
+	return std::any_of(m_BlockedObjects.begin(), m_BlockedObjects.end(), [](const rlv_blocked_object_t& entry) { return std::get<0>(entry).isNull(); });
+}
+
+bool RlvHandler::isBlockedObject(const LLUUID& idObj) const
+{
+	return std::any_of(m_BlockedObjects.begin(), m_BlockedObjects.end(), [&idObj](const rlv_blocked_object_t& entry) { return std::get<0>(entry) == idObj; });
+}
+
+void RlvHandler::removeBlockedObject(const LLUUID& idObj)
+{
+	m_BlockedObjects.erase(std::remove_if(m_BlockedObjects.begin(), m_BlockedObjects.end(),
+		[&idObj](const rlv_blocked_object_t& entry) {
+			return (idObj.notNull()) ? std::get<0>(entry) == idObj : false;
+		}), m_BlockedObjects.end());
+}
+
+void RlvHandler::getAttachmentResourcesCoro(const std::string& strUrl)
+{
+	LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
+	LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("RlvHandler::getAttachmentResourcesCoro", httpPolicy));
+	LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+	const LLSD sdResult = httpAdapter->getAndSuspend(httpRequest, strUrl);
+
+	const LLCore::HttpStatus httpStatus = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(sdResult[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS]);
+	if ( (httpStatus) && (sdResult.has("attachments")) )
+	{
+		const LLSD& sdAttachments = sdResult["attachments"];
+		for (auto& itAttach = sdAttachments.beginArray(), endAttach = sdAttachments.endArray(); itAttach != endAttach; ++itAttach)
+		{
+			if (!itAttach->has("objects"))
+				continue;
+
+			const LLSD& sdAttachObjects = itAttach->get("objects");
+			for (auto& itAttachObj = sdAttachObjects.beginArray(), endAttachObj = sdAttachObjects.endArray(); itAttachObj != endAttachObj; ++itAttachObj)
+			{
+				const LLUUID idObj = itAttachObj->get("id").asUUID();
+				const std::string& strObjName = itAttachObj->get("name").asStringRef();
+
+				// If it's an attachment, it should be a temporary one (NOTE: we might catch it before it's had a chance to attach)
+				const LLViewerObject* pObj = gObjectList.findObject(idObj);
+				if ( (pObj) && ((!pObj->isAttachment()) || (!pObj->isTempAttachment()) || (isBlockedObject(idObj))) )
+					continue;
+
+				// Find it by object name
+				auto itBlockedObj = std::find_if(m_BlockedObjects.begin(), m_BlockedObjects.end(),
+					[&strObjName](const rlv_blocked_object_t& entry) {
+						return (std::get<0>(entry).isNull()) && (std::get<1>(entry) == strObjName);
+					});
+				if (m_BlockedObjects.end() != itBlockedObj)
+				{
+					std::get<0>(*itBlockedObj) = idObj;
+
+					RLV_INFOS << "Clearing restrictions from blocked object " << idObj.asString() << RLV_ENDL;
+					processCommand(idObj, "clear", true);
+					return;
+				}
+			}
+		}
+	}
+}
+
+// ============================================================================
 // Command processing functions
 //
 
@@ -309,6 +383,11 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 {
 	RLV_DEBUGS << "[" << rlvCmd.getObjectID() << "]: " << rlvCmd.asString() << RLV_ENDL;
 
+	if ( (isBlockedObject(rlvCmd.getObjectID())) && (RLV_TYPE_REMOVE != rlvCmd.getParamType()) && (RLV_TYPE_CLEAR != rlvCmd.getParamType()) )
+	{
+		RLV_DEBUGS << "\t-> blocked object" << RLV_ENDL;
+		return RLV_RET_FAILED_BLOCKED;
+	}
 	if (!rlvCmd.isValid())
 	{
 		RLV_DEBUGS << "\t-> invalid syntax" << RLV_ENDL;
@@ -794,6 +873,42 @@ void RlvHandler::onDetach(const LLViewerObject* pAttachObj, const LLViewerJointA
 				RLV_INFOS << "\t-> done" << RLV_ENDL;
 			}
 		}
+
+		if (pAttachObj->isTempAttachment())
+		{
+			removeBlockedObject(pAttachObj->getID());
+		}
+	}
+}
+
+void RlvHandler::onExperienceAttach(const LLSD& sdExperience, const std::string& strObjName)
+{
+	if (sdExperience["maturity"].asInteger() != SIM_ACCESS_ADULT)
+	{
+		addBlockedObject(LLUUID::null, strObjName);
+
+		const std::string strUrl = gAgent.getRegionCapability("AttachmentResources");
+		if (!strUrl.empty())
+		{
+			LLCoros::instance().launch("RlvHandler::getAttachmentResourcesCoro", boost::bind(&RlvHandler::getAttachmentResourcesCoro, this, strUrl));
+		}
+	}
+}
+
+void RlvHandler::onExperienceEvent(const LLSD& sdEvent)
+{
+	const int nPermission = sdEvent["Permission"].asInteger();
+	switch (nPermission)
+	{
+		case 4: // Attach
+			{
+				const LLUUID& idExperience = sdEvent["public_id"].asUUID();
+				const std::string strObjName = sdEvent["ObjectName"].asString();
+				LLExperienceCache::instance().get(idExperience, boost::bind(&RlvHandler::onExperienceAttach, this, _1, strObjName));
+			}
+			break;
+		default:
+			break;
 	}
 }
 
@@ -848,6 +963,23 @@ bool RlvHandler::onGC()
 
 	RLV_ASSERT(gRlvAttachmentLocks.verifyAttachmentLocks()); // Verify that we haven't leaked any attachment locks somehow
 
+	// Clean up pending temp attachments that we were never able to resolve
+	rlv_blocked_object_list_t::const_iterator itBlocked = m_BlockedObjects.cbegin(), itCurBlocked;
+	while (itBlocked != m_BlockedObjects.end())
+	{
+		itCurBlocked = itBlocked++;
+#ifdef RLV_DEBUG
+		bool itBlocked = true;
+		RLV_ASSERT(itBlocked);
+#endif // RLV_DEBUG
+
+		const LLUUID& idObj = std::get<0>(*itCurBlocked);
+		if ( (idObj.notNull()) || (LLTimer::getTotalSeconds() - std::get<2>(*itCurBlocked) < 300.f) )
+			continue;
+
+		m_BlockedObjects.erase(itCurBlocked);
+	}
+
 	return (0 != m_Objects.size());	// GC will kill itself if it has nothing to do
 }
 
@@ -881,8 +1013,9 @@ void RlvHandler::onLoginComplete()
 	RlvInventory::instance().fetchSharedInventory();
 	RlvSettings::updateLoginLastLocation();
 
-	LLViewerParcelMgr::getInstance()->setTeleportFailedCallback(boost::bind(&RlvHandler::onTeleportFailed, this));
-	LLViewerParcelMgr::getInstance()->setTeleportFinishedCallback(boost::bind(&RlvHandler::onTeleportFinished, this, _1));
+	m_ExperienceEventConn = LLExperienceLog::instance().addUpdateSignal(boost::bind(&RlvHandler::onExperienceEvent, this, _1));
+	m_TeleportFailedConn = LLViewerParcelMgr::getInstance()->setTeleportFailedCallback(boost::bind(&RlvHandler::onTeleportFailed, this));
+	m_TeleportFinishedConn = LLViewerParcelMgr::getInstance()->setTeleportFinishedCallback(boost::bind(&RlvHandler::onTeleportFinished, this, _1));
 
 	processRetainedCommands();
 }
