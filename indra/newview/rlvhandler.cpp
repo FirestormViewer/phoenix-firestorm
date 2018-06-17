@@ -588,13 +588,13 @@ bool RlvHandler::processIMQuery(const LLUUID& idSender, const std::string& strMe
 			RlvUtil::sendBusyMessage(idSender, RlvStrings::getVersion(LLUUID::null));
 			return true;
 		}
-		else if ("@list" == strMessage)
+		else if ( ("@list" == strMessage) || ("@except" == strMessage) )
 		{
 			LLNotification::Params params;
 			params.name = "RLVaListRequested";
 			params.functor.function(boost::bind(&RlvHandler::onIMQueryListResponse, this, _1, _2));
 			params.substitutions = LLSD().with("NAME_LABEL", LLSLURL("agent", idSender, "completename").getSLURLString()).with("NAME_SLURL", LLSLURL("agent", idSender, "about").getSLURLString());
-			params.payload = LLSD().with("from_id", idSender);
+			params.payload = LLSD().with("from_id", idSender).with("command", strMessage);
 
 			class RlvPostponedOfferNotification : public LLPostponedNotification
 			{
@@ -616,9 +616,19 @@ bool RlvHandler::processIMQuery(const LLUUID& idSender, const std::string& strMe
 void RlvHandler::onIMQueryListResponse(const LLSD& sdNotification, const LLSD sdResponse)
 {
 	const LLUUID idRequester = sdNotification["payload"]["from_id"].asUUID();
-	if (LLNotificationsUtil::getSelectedOption(sdNotification, sdResponse) == 0)
+
+	const int idxOption = LLNotificationsUtil::getSelectedOption(sdNotification, sdResponse);
+	if (idxOption == 0)
 	{
-		RlvUtil::sendIMMessage(idRequester, RlvFloaterBehaviours::getFormattedBehaviourString(), '\n');
+		const std::string& strCommand = sdNotification["payload"]["command"].asStringRef();
+		if ("@list" == strCommand)
+		{
+			RlvUtil::sendIMMessage(idRequester, RlvFloaterBehaviours::getFormattedBehaviourString(ERlvBehaviourFilter::BEHAVIOURS_ONLY).append("\n").append(RlvStrings::getString("imquery_list_suffix")), '\n');
+		}
+		else if ("@except" == strCommand)
+		{
+			RlvUtil::sendIMMessage(idRequester, RlvFloaterBehaviours::getFormattedBehaviourString(ERlvBehaviourFilter::EXCEPTIONS_ONLY), '\n');
+		}
 	}
 	else
 	{

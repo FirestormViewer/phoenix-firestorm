@@ -45,7 +45,7 @@
 			<boolean>1</boolean>
 		</map>
 
-		<!-- Sent to the remote party when they issue @list as an IM query (if enabled) -->
+		<!-- Sent to the remote party when they issue @list or @except as an IM query (if enabled) -->
 		<key>imquery_list_deny</key>
 		<map>
 			<key>value</key>
@@ -53,9 +53,22 @@
 			<key>description</key>
 			<string>Sent to the remote party when you deny their request to list your active RLV restrictions)</string>
 			<key>label</key>
-			<string>@list command (remote)</string>
+			<string>@list and @except command (remote)</string>
 			<key>customizable</key>
 			<boolean>1</boolean>
+		</map>
+
+		<!-- Sent to the remote party as a suffix to @list to inform them there might be more information -->
+		<key>imquery_list_suffix</key>
+		<map>
+			<key>value</key>
+			<string>(Use @except to see the list of active exceptions)</string>
+			<key>description</key>
+			<string>Sent to the remote party as a suffix to @list to inform them how to request your exceptions</string>
+			<key>label</key>
+			<string>@list command suffix (remote)</string>
+			<key>customizable</key>
+			<boolean>0</boolean>
 		</map>
 
 		<!-- Sent to the remote party when they issue @stopim as an IM query (if enabled) -->
