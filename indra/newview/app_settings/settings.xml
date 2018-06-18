@@ -24673,11 +24673,11 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSExperimentalRegionCrossingMovementFix</key>
     <map>
       <key>Comment</key>
-      <string>If enabled, use the experimental fix for region crossing movements being bogus due to false predictions by the viewer.</string>
+      <string>Enables the experimental fix for region crossing movements being bogus due to false predictions by the viewer (0 = Disabled, 1 = Enabled)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>Boolean</string>
+      <string>S32</string>
       <key>Value</key>
       <integer>0</integer>
     </map>

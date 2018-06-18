@@ -593,8 +593,8 @@
              layout="topleft"
              height="16"
              left="0"
-             value=""
-             width="75" /> <!-- Yes, value="" really means 0 = false -->
+             value="0"
+             width="75" />
             <radio_item
              label="Stop"
              left_pad="0"
