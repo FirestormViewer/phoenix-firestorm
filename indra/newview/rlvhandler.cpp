@@ -299,13 +299,13 @@ void RlvHandler::getAttachmentResourcesCoro(const std::string& strUrl)
 	if ( (httpStatus) && (sdResult.has("attachments")) )
 	{
 		const LLSD& sdAttachments = sdResult["attachments"];
-		for (auto& itAttach = sdAttachments.beginArray(), endAttach = sdAttachments.endArray(); itAttach != endAttach; ++itAttach)
+		for (LLSD::array_const_iterator itAttach = sdAttachments.beginArray(), endAttach = sdAttachments.endArray(); itAttach != endAttach; ++itAttach)
 		{
 			if (!itAttach->has("objects"))
 				continue;
 
 			const LLSD& sdAttachObjects = itAttach->get("objects");
-			for (auto& itAttachObj = sdAttachObjects.beginArray(), endAttachObj = sdAttachObjects.endArray(); itAttachObj != endAttachObj; ++itAttachObj)
+			for (LLSD::array_const_iterator itAttachObj = sdAttachObjects.beginArray(), endAttachObj = sdAttachObjects.endArray(); itAttachObj != endAttachObj; ++itAttachObj)
 			{
 				const LLUUID idObj = itAttachObj->get("id").asUUID();
 				const std::string& strObjName = itAttachObj->get("name").asStringRef();

@@ -126,7 +126,8 @@ void RlvSettings::initClass()
 
 		int nMinMaturity = gSavedSettings.getS32("RLVaExperienceMaturityThreshold");
 		s_nExperienceMinMaturity = (nMinMaturity == 0) ? 0 : ((nMinMaturity == 1) ? SIM_ACCESS_PG : ((nMinMaturity == 2) ? SIM_ACCESS_MATURE : SIM_ACCESS_ADULT));
-		boost::split(s_BlockedExperiences, gSavedSettings.getString("RLVaBlockedExperiences"), boost::is_any_of(";"));
+		const std::string& strBlockedExperiences = gSavedSettings.getString("RLVaBlockedExperiences");
+		boost::split(s_BlockedExperiences, strBlockedExperiences, boost::is_any_of(";"));
 
 		fInitialized = true;
 	}
