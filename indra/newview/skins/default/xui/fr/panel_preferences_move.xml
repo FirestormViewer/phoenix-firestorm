@@ -65,7 +65,7 @@
 		<panel label="Téléportations" name="tab-teleports">
 			<check_box label="Jouer un effet sonore lors des téléportations" name="PlayTeleportSound"/>
 			<check_box label="Toujours voler après une téléportation" name="FSFlyAfterTeleport"/>
-			<check_box label="Toujours afficher le bouton Annuler sur les écrans de téléportation" name="FSAlwaysShowTPCancel" tool_tip="Toujours afficher le bouton Annuler lors des téléportations même si la région indique qu'elle ne peut pas l'être. Ce paramètre peut être ignoré par les options RLVa."/>
+			<check_box label="Toujours afficher le bouton Annuler sur les écrans de téléportation" name="FSAlwaysShowTPCancel" tool_tip="Toujours afficher le bouton Annuler lors des téléportations même si la région indique qu'elle ne peut pas l'être. Ce paramètre peut être ignoré par les options RestrainedLoveAPI."/>
 			<check_box label="Désactiver les balises de téléportation" name="tp_beam_toggle" tool_tip="Désactive le repère visuel après une téléportation vers celui-ci."/>
 			<check_box label="Désactiver les écrans de téléportation" name="tp_screen_toggle" tool_tip="Désactiver l'écran de téléportation noir pendant les téléportations."/>
 		</panel>
