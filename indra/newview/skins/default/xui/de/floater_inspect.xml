@@ -35,4 +35,5 @@ VRAM: [VRAM_USAGE] KB
 	</scroll_list>
 	<button label="Besitzerprofil einsehen..." name="button owner" tool_tip="Profil des Besitzers des markierten Objekts einsehen" width="155"/>
 	<button label="Erstellerprofil einsehen..." left="175" name="button creator" tool_tip="Profil des ursprünglichen Erstellers des markierten Objekts einsehen" width="155"/>
+	<menu_button name="options_btn" tool_tip="Optionen"/>
 </floater>
