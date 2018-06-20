@@ -3523,6 +3523,15 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 
 	}
 
+	// <FS:Ansariel> Crash fix
+	if (!gAgent.getRegion())
+	{
+		LL_WARNS("Messaging") << "Agent was disconnected from the region" << LL_ENDL;
+		LLAppViewer::instance()->forceDisconnect(LLTrans::getString("YouHaveBeenDisconnected"));
+		return;
+	}
+	// </FS:Ansariel>
+
 	LL_INFOS("Messaging") << "Changing home region to " << x << ":" << y << LL_ENDL;
 
 	// set our upstream host the new simulator and shuffle things as

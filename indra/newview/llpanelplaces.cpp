@@ -75,6 +75,7 @@
 #include "llviewerwindow.h"
 #include "fsfloaterplacedetails.h"
 #include "fscommon.h"
+#include "rlvactions.h"
 
 // Constants
 static const F32 PLACE_INFO_UPDATE_INTERVAL = 3.0;
@@ -1271,7 +1272,10 @@ void LLPanelPlaces::updateVerbs()
 		//else if (mPlaceInfoType == LANDMARK_INFO_TYPE || mPlaceInfoType == REMOTE_PLACE_INFO_TYPE)
 		else if (mPlaceInfoType == LANDMARK_INFO_TYPE || mPlaceInfoType == REMOTE_PLACE_INFO_TYPE || mPlaceInfoType == TELEPORT_HISTORY_INFO_TYPE)
 		{
-			mTeleportBtn->setEnabled(have_3d_pos);
+			// <FS:Ansariel> FIRE-21863: TP restrictions can be circumvented via parcel SLURL
+			//mTeleportBtn->setEnabled(have_3d_pos);
+			mTeleportBtn->setEnabled(have_3d_pos && RlvActions::canTeleportToLocation());
+			// </FS:Ansariel>
 		}
 	}
 	else

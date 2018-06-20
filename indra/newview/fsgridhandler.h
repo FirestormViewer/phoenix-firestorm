@@ -248,8 +248,8 @@ public:
 private:
 	friend class GridInfoRequestResponder;
 
-	friend void downloadComplete( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState );
-	friend void downloadError( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState );
+	friend void gridDownloadComplete( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState );
+	friend void gridDownloadError( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState );
 
 	void incResponderCount(){++mResponderCount;}
 	void decResponderCount(){--mResponderCount;}

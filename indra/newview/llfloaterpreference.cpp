@@ -966,7 +966,7 @@ void LLFloaterPreference::apply()
 	// <FS:Ansariel> Sound cache
 	setSoundCacheLocation(gSavedSettings.getString("FSSoundCacheLocation"));
 	
-	LLViewerMedia::setCookiesEnabled(getChild<LLUICtrl>("cookies_enabled")->getValue());
+	//LLViewerMedia::setCookiesEnabled(getChild<LLUICtrl>("cookies_enabled")->getValue()); // <FS:Ansariel> Doesn't exist anymore as of 13-06-2018
 	
 	if (hasChild("web_proxy_enabled", TRUE) &&hasChild("web_proxy_editor", TRUE) && hasChild("web_proxy_port", TRUE))
 	{

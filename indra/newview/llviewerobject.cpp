@@ -2710,8 +2710,8 @@ void LLViewerObject::interpolateLinearMotion(const F64SecondsImplicit& time, con
 			// Extrapolation across region boundaries is almost always wrong, and if the region being
 			// entered is slow to respond, very wrong.
 			// Probably don't need edge of world check below any more since we are clipping the predictor to the region.
-			static LLCachedControl<bool> fsExperimentalRegionCrossingMovementFix(gSavedSettings, "FSExperimentalRegionCrossingMovementFix");
-			if (fsExperimentalRegionCrossingMovementFix)
+			static LLCachedControl<S32> fsExperimentalRegionCrossingMovementFix(gSavedSettings, "FSExperimentalRegionCrossingMovementFix");
+			if (fsExperimentalRegionCrossingMovementFix == 1)
 			{
 				bool clipped; // true if clipped at boundary
 				LLVector3d clip_pos_global_region = LLWorld::getInstance()->clipToRegion(mRegionp, old_pos_global, new_pos_global, clipped);

@@ -742,6 +742,13 @@ void LLAgent::moveLeftNudge(S32 direction)
 //-----------------------------------------------------------------------------
 void LLAgent::moveUp(S32 direction)
 {
+// [RLVa:KB] - Checked: RLVa-2.2 (@jump)
+	if ( (!RlvActions::canJump()) && (direction > 0) && (!getFlying()) )
+	{
+		return;
+	}
+// [/Sl:KB]
+
 	mMoveTimer.reset();
 	LLFirstUse::notMoving(false);
 
@@ -819,8 +826,11 @@ void LLAgent::movePitch(F32 mag)
 // Does this parcel allow you to fly?
 BOOL LLAgent::canFly()
 {
-// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.0d) | Modified: RLVa-1.0.0c
-	if (gRlvHandler.hasBehaviour(RLV_BHVR_FLY)) return FALSE;
+// [RLVa:KB] - Checked: RLVa-1.0
+	if (!RlvActions::canFly())
+	{
+		return FALSE;
+	}
 // [/RLVa:KB]
 	if (isGodlike()) return TRUE;
 	// <FS> Always fly
@@ -876,8 +886,8 @@ void LLAgent::setFlying(BOOL fly)
 
 	if (fly)
 	{
-// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.0d) | Modified: RLVa-1.0.0c
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_FLY))
+// [RLVa:KB] - Checked: RLVa-1.0
+		if (!RlvActions::canFly())
 		{
 			return;
 		}
@@ -4713,6 +4723,13 @@ void LLAgent::teleportRequest(const U64& region_handle, const LLVector3& pos_loc
 // Landmark ID = LLUUID::null means teleport home
 void LLAgent::teleportViaLandmark(const LLUUID& landmark_asset_id)
 {
+	// <FS:Ansariel> FIRE-21576: Prevent TPing home while still logging in if RLVa is enabled
+	if (RlvActions::isRlvEnabled() && LLStartUp::getStartupState() < STATE_STARTED)
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
 // [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
 	// NOTE: we'll allow teleporting home unless both @tplm=n *and* @tploc=n restricted
 	if ( (rlv_handler_t::isEnabled()) &&
@@ -4828,6 +4845,11 @@ void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 // [RLVa:KB] - Checked: RLVa-2.0.0
 	if ( (RlvActions::isRlvEnabled()) && (!RlvUtil::isForceTp()) )
 	{
+		if (LLStartUp::getStartupState() < STATE_STARTED)
+		{
+			return;
+		}
+
 		if ( (RlvActions::isLocalTp(pos_global)) ? !RlvActions::canTeleportToLocal(pos_global) : !RlvActions::canTeleportToLocation() )
 		{
 			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
@@ -4908,6 +4930,11 @@ void LLAgent::teleportViaLocationLookAt(const LLVector3d& pos_global, const LLVe
 {
 	if ( (RlvActions::isRlvEnabled()) && (!RlvUtil::isForceTp()) )
 	{
+		if (LLStartUp::getStartupState() < STATE_STARTED)
+		{
+			return;
+		}
+
 		if ( (RlvActions::isLocalTp(pos_global)) ? !RlvActions::canTeleportToLocal(pos_global) : !RlvActions::canTeleportToLocation() )
 		{
 			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);

@@ -4679,7 +4679,9 @@ Wählen Sie eine kleinere Landfläche aus.
 		[NAME_SLURL] hat das Senden einer Liste aller aktuell aktiven RLV-Restriktionen angefragt.
 		<form name="form">
 			<button name="Allow" text="Erlauben"/>
+			<button name="Always Allow" text="Immer erlauben"/>
 			<button name="Deny" text="Verbieten"/>
+			<ignore name="ignore" text="Bestätigen, bevor eine Liste meiner aktuell aktiven RLV-Restriktionen an jemanden übertragen werden."/>
 		</form>
 	</notification>
 	<notification name="PreferenceChatClearLog">

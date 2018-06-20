@@ -140,6 +140,7 @@
 #include "boost/unordered_map.hpp"
 #include "llcleanup.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "fsavatarrenderpersistence.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
 #include "rlvlocks.h"
@@ -3766,11 +3767,20 @@ bool check_avatar_render_mode(U32 mode)
 	switch (mode) 
 	{
 		case 0:
-			return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_RENDER_NORMALLY);
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+				return FSAvatarRenderPersistence::instance().getAvatarRenderSettings(avatar->getID()) == LLVOAvatar::AV_RENDER_NORMALLY;
+// [/RLVa:KB]
+//				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_RENDER_NORMALLY);
 		case 1:
-			return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_DO_NOT_RENDER);
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+				return FSAvatarRenderPersistence::instance().getAvatarRenderSettings(avatar->getID()) == LLVOAvatar::AV_DO_NOT_RENDER;
+// [/RLVa:KB]
+//				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_DO_NOT_RENDER);
 		case 2:
-			return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_ALWAYS_RENDER);
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+				return FSAvatarRenderPersistence::instance().getAvatarRenderSettings(avatar->getID()) == LLVOAvatar::AV_ALWAYS_RENDER;
+// [/RLVa:KB]
+//				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_ALWAYS_RENDER);
 		default:
 			return false;
 	}

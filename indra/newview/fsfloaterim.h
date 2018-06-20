@@ -38,6 +38,7 @@
 #include "llvoicechannel.h"
 
 class FSChatHistory;
+class FSFloaterIMTimer;
 class FSPanelChatControlPanel;
 class LLAvatarName;
 class LLButton;		// support sysinfo button -Zi
@@ -48,6 +49,7 @@ class LLLayoutPanel;
 class LLLayoutStack;
 class LLTextBox;
 class LLTextEditor;
+
 
 typedef boost::signals2::signal<void(const LLUUID& session_id)> floater_showed_signal_t;
 
@@ -67,8 +69,6 @@ public:
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void setVisible(BOOL visible);
 	/*virtual*/ BOOL getVisible();
-	// Check typing timeout timer.
-	/*virtual*/ void draw();
 	/*virtual*/ void setMinimized(BOOL b);
 
 	// LLFloater overrides
@@ -157,6 +157,8 @@ public:
 	bool isP2PChat() const { return mIsP2PChat; }
 
 	void handleMinimized(bool minimized);
+
+	void timedUpdate();
 
 protected:
 	/* virtual */
@@ -261,6 +263,7 @@ private:
 	LLFrameTimer mTypingTimeoutTimer;
 	LLFrameTimer mMeTypingTimer;
 	LLFrameTimer mOtherTypingTimer;
+	LLFrameTimer mRefreshNameTimer;
 
 	bool mSessionInitialized;
 	LLSD mQueuedMsgsForInit;
@@ -279,6 +282,20 @@ private:
 	boost::signals2::connection mAvatarNameCacheConnection;
 
 	bool mApplyRect;
+
+	FSFloaterIMTimer*	mIMFloaterTimer;
+};
+
+class FSFloaterIMTimer : public LLEventTimer
+{
+public:
+	typedef boost::function<void()> callback_t;
+
+	FSFloaterIMTimer(callback_t callback);
+	/*virtual*/ BOOL tick();
+
+private:
+	callback_t mCallback;
 };
 
 #endif  // FS_FLOATERIM_H
