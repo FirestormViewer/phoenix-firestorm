@@ -875,8 +875,6 @@ public:
 	BOOL create(LLVolume* volume, BOOL partial_build = FALSE);
 	void createTangents();
 	
-	void appendFace(const LLVolumeFace& face, LLMatrix4& transform, LLMatrix4& normal_tranform);
-
 	void resizeVertices(S32 num_verts);
 	void allocateTangents(S32 num_verts);
 	void allocateWeights(S32 num_verts);
@@ -965,7 +963,7 @@ public:
 
     // Which joints are rigged to, and the bounding box of any rigged
     // vertices per joint.
-    joint_rig_info_tab *mJointRiggingInfoTabPtr;
+    LLJointRiggingInfoTab mJointRiggingInfoTab;
     
 	LLOctreeNode<LLVolumeTriangle>* mOctree;
 

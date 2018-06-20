@@ -163,7 +163,7 @@ public:
 	/*virtual*/ void   	 	 	setPixelAreaAndAngle(LLAgent &agent);
 	/*virtual*/ void   	 	 	updateRegion(LLViewerRegion *regionp);
 	/*virtual*/ void   	 	 	updateSpatialExtents(LLVector4a& newMin, LLVector4a &newMax);
-	/*virtual*/ void   	 	 	getSpatialExtents(LLVector4a& newMin, LLVector4a& newMax);
+	void			   	 	 	calculateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax);
 	/*virtual*/ BOOL   	 	 	lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
 												 S32 face = -1,                    // which face to check, -1 = ALL_SIDES
 												 BOOL pick_transparent = FALSE,
@@ -213,8 +213,7 @@ public:
 	void 					addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LLUUID>* meshes_seen = NULL, bool recursive = true);
 	void					removeAttachmentOverridesForObject(const LLUUID& mesh_id);
 	void					removeAttachmentOverridesForObject(LLViewerObject *vo);
-    bool					jointIsRiggedTo(const std::string& joint_name);
-    bool					jointIsRiggedTo(const std::string& joint_name, const LLViewerObject *vo);
+    bool					jointIsRiggedTo(const LLJoint *joint) const;
 	void					clearAttachmentOverrides();
 	void					rebuildAttachmentOverrides();
     void					updateAttachmentOverrides();
@@ -222,12 +221,13 @@ public:
     void                    getAttachmentOverrideNames(std::set<std::string>& pos_names, 
                                                        std::set<std::string>& scale_names) const;
 
+    void 					getAssociatedVolumes(std::vector<LLVOVolume*>& volumes);
+
     // virtual
     void 					updateRiggingInfo();
 
     std::set<LLUUID>		mActiveOverrideMeshes;
-
-    
+    virtual void			onActiveOverrideMeshesChanged();
     
 	/*virtual*/ const LLUUID&	getID() const;
 	/*virtual*/ void			addDebugText(const std::string& text);
@@ -554,10 +554,14 @@ public:
 	static void updateImpostors();
 	LLRenderTarget mImpostor;
 	BOOL		mNeedsImpostorUpdate;
+    const LLVector3*  getLastAnimExtents() const { return mLastAnimExtents; }
 private:
 	LLVector3	mImpostorOffset;
 	LLVector2	mImpostorDim;
+    // This becomes true in the constructor and false after the first
+    // idleUpdateMisc(). Not clear it serves any purpose.
 	BOOL		mNeedsAnimUpdate;
+    bool		mNeedsExtentUpdate;
 	LLVector3	mImpostorAngle;
 	F32			mImpostorDistance;
 	F32			mImpostorPixelArea;

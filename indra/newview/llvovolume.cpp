@@ -3779,32 +3779,37 @@ void LLVOVolume::afterReparent()
 }
 
 //----------------------------------------------------------------------------
+static LLTrace::BlockTimerStatHandle FTM_VOVOL_RIGGING_INFO("VOVol Rigging Info");
+
 void LLVOVolume::updateRiggingInfo()
 {
+    LL_RECORD_BLOCK_TIME(FTM_VOVOL_RIGGING_INFO);
     if (isRiggedMesh())
     {
         const LLMeshSkinInfo* skin = getSkinInfo();
         LLVOAvatar *avatar = getAvatar();
-        if (skin && avatar && getLOD()>mLastRiggingInfoLOD)
+        LLVolume *volume = getVolume();
+        if (skin && avatar && volume)
         {
-            LLVolume *volume = getVolume();
-            if (volume)
+            LL_DEBUGS("RigSpammish") << "starting, vovol " << this << " lod " << getLOD() << " last " << mLastRiggingInfoLOD << LL_ENDL;
+            if (getLOD()>mLastRiggingInfoLOD || getLOD()==3)
             {
+                // Rigging info may need update
                 mJointRiggingInfoTab.clear();
                 for (S32 f = 0; f < volume->getNumVolumeFaces(); ++f)
                 {
                     LLVolumeFace& vol_face = volume->getVolumeFace(f);
                     LLSkinningUtil::updateRiggingInfo(skin, avatar, vol_face);
-                    if (vol_face.mJointRiggingInfoTabPtr)
+                    if (vol_face.mJointRiggingInfoTab.size()>0)
                     {
-                        mergeRigInfoTab(mJointRiggingInfoTab, *vol_face.mJointRiggingInfoTabPtr);
+                        mJointRiggingInfoTab.merge(vol_face.mJointRiggingInfoTab);
                     }
                 }
                 // Keep the highest LOD info available.
-                // AXON would this ever need to be forced to refresh? Set to -1 if so.
                 mLastRiggingInfoLOD = getLOD();
                 LL_DEBUGS("RigSpammish") << "updated rigging info for LLVOVolume " 
-                                         << this << " lod " << mLastRiggingInfoLOD << LL_ENDL;
+                                         << this << " lod " << mLastRiggingInfoLOD 
+                                         << LL_ENDL;
             }
         }
     }

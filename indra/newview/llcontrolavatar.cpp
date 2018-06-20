@@ -92,12 +92,50 @@ void LLControlAvatar::matchVolumeTransform()
         }
         else
         {
-            setPositionAgent(mRootVolp->getRenderPosition());
+
+            LLVector3 vol_pos = mRootVolp->getRenderPosition();
+            LLVector3 pos_box_offset;
+            LLVector3 box_offset;
+
+            // Fix up position if needed to prevent visual encroachment
+            if (box_valid_and_non_zero(getLastAnimExtents())) // wait for state to settle down
+            {
+                const F32 MAX_LEGAL_OFFSET = 3.0;
+                
+                // The goal here is to ensure that the extent of the avatar's 
+                // bounding box does not wander too far from the
+                // official position of the corresponding volume. We
+                // do this by tracking the distance and applying a
+                // correction to the control avatar position if
+                // needed.
+                LLVector3 uncorrected_extents[2];
+                uncorrected_extents[0] = getLastAnimExtents()[0] - mPositionConstraintFixup;
+                uncorrected_extents[1] = getLastAnimExtents()[1] - mPositionConstraintFixup;
+                pos_box_offset = point_to_box_offset(vol_pos, uncorrected_extents);
+                F32 offset_dist = pos_box_offset.length();
+                if (offset_dist > MAX_LEGAL_OFFSET)
+                {
+                    F32 target_dist = (offset_dist - MAX_LEGAL_OFFSET);
+                    box_offset = (target_dist/offset_dist)*pos_box_offset;
+                }
+            }
+
+            mPositionConstraintFixup = box_offset;
+
+            // Currently if you're doing something like playing an
+            // animation that moves the pelvis (on an avatar or
+            // animated object), the name tag and debug text will be
+            // left behind. Ideally setPosition() would follow the
+            // skeleton around in a smarter way, so name tags,
+            // complexity info and such line up better. Should defer
+            // this until avatars also get fixed.
+            setPositionAgent(vol_pos);
+
             LLQuaternion obj_rot = mRootVolp->getRotation();
             LLQuaternion result_rot = obj_rot;
             setRotation(result_rot);
             mRoot->setWorldRotation(result_rot);
-            mRoot->setPosition(mRootVolp->getRenderPosition());
+            mRoot->setPosition(vol_pos + mPositionConstraintFixup);
         }
     }
 }
@@ -306,6 +344,12 @@ void LLControlAvatar::updateDebugText()
         addDebugText(llformat("flags %s", animated_object_flag_string.c_str()));
         addDebugText(llformat("tris %d (est %.1f, streaming %.1f), verts %d", total_tris, est_tris, est_streaming_tris, total_verts));
         addDebugText(llformat("pxarea %s rank %d", LLStringOps::getReadableNumber(getPixelArea()).c_str(), getVisibilityRank()));
+        if (mPositionConstraintFixup.length() > 0.0f)
+        {
+            addDebugText(llformat("pos fix (%.1f %.1f %.1f)", 
+                                  mPositionConstraintFixup[0], mPositionConstraintFixup[1], mPositionConstraintFixup[2]));
+        }
+        
 #if 0
         std::string region_name = "no region";
         if (mRootVolp->getRegion())
