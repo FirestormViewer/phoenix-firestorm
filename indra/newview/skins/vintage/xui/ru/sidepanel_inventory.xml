@@ -15,9 +15,9 @@
 					Новых: [NUM]
 				</text>
 				<panel name="inbox_inventory_placeholder_panel" tool_tip="Перетащите вещи в ваш инвентарь для их использования">
-					<panel name="inbox_inventory_placeholder">
+					<text name="inbox_inventory_placeholder">
 						Покупки из Marketplace будут доставлены сюда.
-					</panel>
+					</text>
 				</panel>
 			</panel>
 		</tab_container>

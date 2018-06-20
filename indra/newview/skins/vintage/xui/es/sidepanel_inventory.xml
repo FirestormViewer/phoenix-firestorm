@@ -11,9 +11,9 @@
 					[NUM] Nuevo(s)
 				</text>
 				<panel name="inbox_inventory_placeholder_panel" tool_tip="Arrastra aquí items de tu inventario para gestionarlos y usarlos">
-					<panel name="inbox_inventory_placeholder">
+					<text name="inbox_inventory_placeholder">
 						Las compras realizadas en Marketplace serán entregadas aquí.
-					</panel>
+					</text>
 				</panel>
 			</panel>
 		</tab_container>

@@ -3,7 +3,7 @@
 	<panel name="sidepanel_inventory_panel">
 		<tab_container name="inventory_tab_container">
 			<panel label="Szafa" name="panel_main_inventory" />
-			<panel label="Marketplace" name="marketplace_inbox">
+			<panel name="marketplace_inbox">
 				<string name="InboxLabelWithArg">
 					Odebrane przedmioty ([NUM])
 				</string>
@@ -15,9 +15,9 @@
 					[NUM] nowe/y
 				</text>
 				<panel name="inbox_inventory_placeholder_panel" tool_tip="Przeciągnij przedmioty do swojej Szafy, aby ich używać">
-					<panel name="inbox_inventory_placeholder">
+					<text name="inbox_inventory_placeholder">
 						Rzeczy kupione na Marketplace będą tu dostarczane.
-					</panel>
+					</text>
 				</panel>
 			</panel>
 		</tab_container>
