@@ -104,7 +104,7 @@ static void update_texture_ctrl(LLVOAvatar* avatarp,
 	}
 	else
 	{
-		id = tex_entry ? avatarp->getTEref(te)->getID() : IMG_DEFAULT_AVATAR;
+		id = tex_entry ? avatarp->getTEref(te).getID() : IMG_DEFAULT_AVATAR;
 	}
 	//id = avatarp->getTE(te)->getID();
 	if (id == IMG_DEFAULT_AVATAR)
