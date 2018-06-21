@@ -57,6 +57,7 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerwindow.h"
 #include "llviewerinventory.h"
+#include "rlvactions.h"
 
 static const F32 FS_PLACE_INFO_UPDATE_INTERVAL = 3.0f;
 
@@ -442,6 +443,7 @@ void FSFloaterPlaceDetails::updateVerbs()
 	else if (mDisplayInfo == REMOTE_PLACE || mDisplayInfo == TELEPORT_HISTORY_ITEM)
 	{
 		getChildView("teleport_btn")->setVisible(TRUE);
+		getChildView("teleport_btn")->setEnabled(RlvActions::canTeleportToLocation());
 		getChildView("map_btn")->setVisible(TRUE);
 		getChildView("edit_btn")->setVisible(FALSE);
 		getChildView("save_btn")->setVisible(FALSE);

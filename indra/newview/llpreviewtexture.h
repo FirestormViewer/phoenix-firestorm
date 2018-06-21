@@ -80,6 +80,11 @@ public:
 							BOOL final,
 							void* userdata );
 	void 				openToSave();
+
+	// <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
+	//void				saveTextureToFile(const std::vector<std::string>& filenames);
+	void				saveTextureToFile(const std::vector<std::string>& filenames, EFileformatType format, loaded_callback_func callback);
+	// </FS:Ansariel>
 	
 	static void			onSaveAsBtn(LLUICtrl* ctrl, void* data);
 

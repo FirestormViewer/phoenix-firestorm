@@ -317,7 +317,7 @@ BOOL LLGLTexture::getIsAlphaMask() const
 }
 
 //BOOL LLGLTexture::getMask(const LLVector2 &tc)
-// [RLVa:KB] - Checked: RLVa-2.3 (@setoverlay)
+// [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)
 bool LLGLTexture::getMask(const LLVector2 &tc) const
 // [/RLVa:KB]
 {

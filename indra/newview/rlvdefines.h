@@ -163,6 +163,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_TOUCHALL,				// "touchall"
 	RLV_BHVR_TOUCHME,				// "touchme"
 	RLV_BHVR_FLY,					// "fly"
+	RLV_BHVR_JUMP,                  // "jump"
 	RLV_BHVR_SETGROUP,				// "setgroup"
 	RLV_BHVR_UNSIT,					// "unsit"
 	RLV_BHVR_SIT,					// "sit"
@@ -205,6 +206,7 @@ enum ERlvBehaviour {
 
 	// Camera (behaviours)
 	RLV_BHVR_SETCAM,                // Gives an object exclusive control of the user's camera
+	RLV_BHVR_SETCAM_AVDIST,			// Distance at which nearby avatars turn into a silhouette
 	RLV_BHVR_SETCAM_AVDISTMIN,		// Enforces a minimum distance from the avatar (in m)
 	RLV_BHVR_SETCAM_AVDISTMAX,		// Enforces a maximum distance from the avatar (in m)
 	RLV_BHVR_SETCAM_ORIGINDISTMIN,	// Enforces a minimum distance from the camera origin (in m)
@@ -257,6 +259,7 @@ enum ERlvBehaviourModifier
 	RLV_MODIFIER_SENDIMDISTMAX,			// Maximum distance to send an IM to an otherwise restricted recipient (squared value)
 	RLV_MODIFIER_STARTIMDISTMIN,		// Minimum distance to start an IM to an otherwise restricted recipient (squared value)
 	RLV_MODIFIER_STARTIMDISTMAX,		// Maximum distance to start an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_SETCAM_AVDIST,			// Distance at which nearby avatars turn into a silhouette (normal value)
 	RLV_MODIFIER_SETCAM_AVDISTMIN,		// Minimum distance between the camera position and the user's avatar (normal value)
 	RLV_MODIFIER_SETCAM_AVDISTMAX,		// Maximum distance between the camera position and the user's avatar (normal value)
 	RLV_MODIFIER_SETCAM_ORIGINDISTMIN,	// Minimum distance between the camera position and the origin point (normal value)
@@ -310,6 +313,7 @@ enum ERlvCmdRet {
 	RLV_RET_FAILED_NOSHAREDROOT,	// Command failed (missing #RLV)
 	RLV_RET_FAILED_DEPRECATED,		// Command failed (deprecated and no longer supported)
 	RLV_RET_FAILED_NOBEHAVIOUR,		// Command failed (force modifier on an object with no active restrictions)
+	RLV_RET_FAILED_BLOCKED,			// Command failed (object is blocked)
 	RLV_RET_NO_PROCESSOR			// Command doesn't have a template processor define (legacy code)
 };
 #define RLV_RET_SUCCEEDED(eCmdRet)  (((eCmdRet) & RLV_RET_SUCCESS) == RLV_RET_SUCCESS)

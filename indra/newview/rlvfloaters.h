@@ -32,6 +32,12 @@ class LLTextEditor;
 // RlvFloaterLocks class declaration
 //
 
+enum class ERlvBehaviourFilter {
+	BEHAVIOURS_ONLY,
+	EXCEPTIONS_ONLY,
+	ALL
+};
+
 class RlvFloaterBehaviours : public LLFloater
 {
 	friend class LLFloaterReg;
@@ -49,7 +55,7 @@ public:
 	/*
 	 * Member functions
 	 */
-	static const std::string getFormattedBehaviourString();
+	static std::string getFormattedBehaviourString(ERlvBehaviourFilter eFilter);
 protected:
 	void onAvatarNameLookup(const LLUUID& idAgent, const LLAvatarName& avName);
 	void onBtnCopyToClipboard();

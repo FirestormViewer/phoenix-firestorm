@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Mitglieder und Rollen" name="roles_tab">
+<panel label="Mitglieder &amp; Rollen" name="roles_tab">
 	<panel.string name="default_needs_apply_text">
 		Diese Änderungen wurden nicht gespeichert.
 	</panel.string>

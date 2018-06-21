@@ -65,6 +65,7 @@
 // [FS:CR] FIRE-10986
 #include "llfilepicker.h"
 #include "lltabcontainer.h"
+#include "llviewermenufile.h"
 
 // register panel with appropriate XML
 static LLPanelInjector<LLPanelEditWearable> t_edit_wearable("panel_edit_wearable");
@@ -729,8 +730,8 @@ BOOL LLPanelEditWearable::postBuild()
         mBtnBack = getChild<LLButton>("back_btn");
         mBackBtnLabel = mBtnBack->getLabelUnselected();
         mBtnBack->setLabel(LLStringUtil::null);
-	
-		childSetAction("import_btn", boost::bind(&LLPanelEditWearable::onClickedImportBtn, this));	// [FS:CR] FIRE-290
+
+        childSetAction("import_btn", boost::bind(&LLPanelEditWearable::onClickedImportBtn, this));	// [FS:CR] FIRE-290
 
         mBtnBack->setClickedCallback(boost::bind(&LLPanelEditWearable::onBackButtonClicked, this));
 
@@ -1679,10 +1680,10 @@ void LLPanelEditWearable::updateVerbs()
 
         mBtnRevert->setEnabled(is_dirty);
         getChildView("save_as_button")->setEnabled(is_dirty && can_copy);
-	
-		/// [FS:CR] FIRE-10986 - A little redundant since you shouldn't be able to get here if the wearable is
-		/// no modify, but what the hell, check anyways.
-		childSetEnabled("import_btn", mWearableItem->getPermissions().allowModifyBy(gAgentID));
+
+        // [FS:CR] FIRE-10986 - A little redundant since you shouldn't be able to get here if the wearable is
+        // no modify, but what the hell, check anyways.
+        childSetEnabled("import_btn", mWearableItem->getPermissions().allowModifyBy(gAgentID));
 
         if(isAgentAvatarValid())
         {
@@ -1805,14 +1806,12 @@ void LLPanelEditWearable::initPreviousAlphaTextureEntry(LLAvatarAppearanceDefine
 // [FS:CR] FIRE-10986
 void LLPanelEditWearable::onClickedImportBtn()
 {
-	LLFilePicker& file_picker = LLFilePicker::instance();
-	if(!file_picker.getOpenFile(LLFilePicker::FFLOAD_XML))
-	{
-		LL_INFOS("ShapeImport") << "User closed the filepicker. Aborting!" << LL_ENDL;
-		return;
-	}
-	
-	const std::string filename = file_picker.getFirstFile();
+	(new LLFilePickerReplyThread(boost::bind(&LLPanelEditWearable::onClickedImportBtnCallback, this, _1), LLFilePicker::FFLOAD_XML, false))->getFile();
+}
+
+void LLPanelEditWearable::onClickedImportBtnCallback(const std::vector<std::string>& filenames)
+{
+	const std::string filename = filenames[0];
 	LLXmlTree tree;
 	if (!tree.parseFile(filename, FALSE))
 	{

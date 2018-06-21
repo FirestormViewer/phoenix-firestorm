@@ -55,17 +55,42 @@
 // PoundLife END
 #include "llvovolume.h"
 
+// <FS:Ansariel> FIRE-22292: Configurable columns
+#include "llmenugl.h"
+#include "llmenubutton.h"
+#include "lltoggleablemenu.h"
+#include "llviewermenu.h"			// for gMenuHolder
+// </FS:Ansariel>
+
 //LLFloaterInspect* LLFloaterInspect::sInstance = NULL;
 
 LLFloaterInspect::LLFloaterInspect(const LLSD& key)
   : LLFloater(key),
 	mDirty(FALSE),
 	mOwnerNameCacheConnection(),
-	mCreatorNameCacheConnection()
+	mCreatorNameCacheConnection(),
+	// <FS:Ansariel> FIRE-22292: Configurable columns
+	mOptionsButton(NULL),
+	mFSInspectColumnConfigConnection(),
+	mLastResizeDelta(0)
+	// </FS:Ansariel>
 {
 	mCommitCallbackRegistrar.add("Inspect.OwnerProfile",	boost::bind(&LLFloaterInspect::onClickOwnerProfile, this));
 	mCommitCallbackRegistrar.add("Inspect.CreatorProfile",	boost::bind(&LLFloaterInspect::onClickCreatorProfile, this));
 	mCommitCallbackRegistrar.add("Inspect.SelectObject",	boost::bind(&LLFloaterInspect::onSelectObject, this));
+
+	// <FS:Ansariel> FIRE-22292: Configurable columns
+	mColumnBits["object_name"] = 1;
+	mColumnBits["description"] = 2;
+	mColumnBits["owner_name"] = 4;
+	mColumnBits["creator_name"] = 8;
+	mColumnBits["facecount"] = 16;
+	mColumnBits["vertexcount"] = 32;
+	mColumnBits["trianglecount"] = 64;
+	mColumnBits["tramcount"] = 128;
+	mColumnBits["vramcount"] = 256;
+	mColumnBits["creation_date"] = 512;
+	// </FS:Ansariel>
 }
 
 BOOL LLFloaterInspect::postBuild()
@@ -74,6 +99,26 @@ BOOL LLFloaterInspect::postBuild()
 //	childSetAction("button owner",onClickOwnerProfile, this);
 //	childSetAction("button creator",onClickCreatorProfile, this);
 //	childSetCommitCallback("object_list", onSelectObject, NULL);
+
+	// <FS:Ansariel> FIRE-22292: Configurable columns
+	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
+
+	registrar.add("Inspect.ToggleColumn",			boost::bind(&LLFloaterInspect::onColumnVisibilityChecked, this, _2));
+	enable_registrar.add("Inspect.EnableColumn",	boost::bind(&LLFloaterInspect::onEnableColumnVisibilityChecked, this, _2));
+
+	mOptionsButton = getChild<LLMenuButton>("options_btn");
+
+	LLToggleableMenu* options_menu  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_fs_inspect_options.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	if (options_menu)
+	{
+		mOptionsMenuHandle = options_menu->getHandle();
+		mOptionsButton->setMenu(options_menu, LLMenuButton::MP_BOTTOM_LEFT);
+	}
+
+	mFSInspectColumnConfigConnection = gSavedSettings.getControl("FSInspectColumnConfig")->getSignal()->connect(boost::bind(&LLFloaterInspect::onColumnDisplayModeChanged, this));
+	onColumnDisplayModeChanged();
+	// </FS:Ansariel>
 	
 	refresh();
 	
@@ -103,6 +148,15 @@ LLFloaterInspect::~LLFloaterInspect(void)
 	{
 		LLFloaterReg::showInstance("build", LLSD(), TRUE);
 	}
+
+	// <FS:Ansariel> FIRE-22292: Configurable columns
+	if (mFSInspectColumnConfigConnection.connected())
+	{
+		mFSInspectColumnConfigConnection.disconnect();
+	}
+
+	if (mOptionsMenuHandle.get()) mOptionsMenuHandle.get()->die();
+	// </FS:Ansariel>
 }
 
 void LLFloaterInspect::onOpen(const LLSD& key)
@@ -671,3 +725,103 @@ void LLFloaterInspect::draw()
 
 	LLFloater::draw();
 }
+
+// <FS:Ansariel> FIRE-22292: Configurable columns
+void LLFloaterInspect::onColumnDisplayModeChanged()
+{
+	U32 column_config = gSavedSettings.getU32("FSInspectColumnConfig");
+	std::vector<LLScrollListColumn::Params> column_params = mObjectList->getColumnInitParams();
+	S32 column_padding = mObjectList->getColumnPadding();
+
+	S32 default_width = 0;
+	S32 new_width = 0;
+	S32 min_width, min_height;
+	getResizeLimits(&min_width, &min_height);
+
+	std::string current_sort_col = mObjectList->getSortColumnName();
+	BOOL current_sort_asc = mObjectList->getSortAscending();
+	
+	mObjectList->clearRows();
+	mObjectList->clearColumns();
+	mObjectList->updateLayout();
+
+	std::vector<LLScrollListColumn::Params>::iterator param_it;
+	for (param_it = column_params.begin(); param_it != column_params.end(); ++param_it)
+	{
+		LLScrollListColumn::Params p = *param_it;
+		default_width += (p.width.pixel_width.getValue() + column_padding);
+		
+		LLScrollListColumn::Params params;
+		params.header = p.header;
+		params.name = p.name;
+		params.halign = p.halign;
+		params.sort_direction = p.sort_direction;
+		params.sort_column = p.sort_column;
+		params.tool_tip = p.tool_tip;
+
+		if (column_config & mColumnBits[p.name.getValue()])
+		{
+			params.width = p.width;
+			new_width += (params.width.pixel_width.getValue() + column_padding);
+		}
+		else
+		{
+			params.width.pixel_width.set(-1, true);
+		}
+
+		mObjectList->addColumn(params);
+	}
+
+	min_width -= (default_width - new_width - mLastResizeDelta);
+	mLastResizeDelta = default_width - new_width;
+	setResizeLimits(min_width, min_height);
+
+	if (getRect().getWidth() < min_width)
+	{
+		reshape(min_width, getRect().getHeight());
+	}
+
+	if (!current_sort_col.empty())
+	{
+		if ((current_sort_col == "creation_date_sort" && mObjectList->getColumn("creation_date")->getWidth() == -1) ||
+			mObjectList->getColumn(current_sort_col)->getWidth() == -1)
+		{
+			mObjectList->clearSortOrder();
+		}
+		else
+		{
+			mObjectList->sortByColumn(current_sort_col, current_sort_asc);
+		}
+	}
+	mObjectList->setFilterColumn(0);
+	mObjectList->dirtyColumns();
+	setDirty();
+}
+
+void LLFloaterInspect::onColumnVisibilityChecked(const LLSD& userdata)
+{
+	std::string column = userdata.asString();
+	U32 column_config = gSavedSettings.getU32("FSInspectColumnConfig");
+
+	U32 new_value;
+	U32 enabled = (mColumnBits[column] & column_config);
+	if (enabled)
+	{
+		new_value = (column_config & ~mColumnBits[column]);
+	}
+	else
+	{
+		new_value = (column_config | mColumnBits[column]);
+	}
+
+	gSavedSettings.setU32("FSInspectColumnConfig", new_value);
+}
+
+bool LLFloaterInspect::onEnableColumnVisibilityChecked(const LLSD& userdata)
+{
+	std::string column = userdata.asString();
+	U32 column_config = gSavedSettings.getU32("FSInspectColumnConfig");
+
+	return (mColumnBits[column] & column_config);
+}
+// </FS:Ansariel>

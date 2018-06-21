@@ -123,6 +123,7 @@ private:
 	
 	// [FS:CR] FIRE-10986
 	void onClickedImportBtn();
+	void onClickedImportBtnCallback(const std::vector<std::string>& filenames);
 
 	// *HACK Remove this when serverside texture baking is available on all regions.
 	void incrementCofVersionLegacy();

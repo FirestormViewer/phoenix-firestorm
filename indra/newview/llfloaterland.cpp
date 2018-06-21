@@ -45,7 +45,6 @@
 #include "llcombobox.h"
 #include "llfloaterreg.h"
 #include "llfloateravatarpicker.h"
-#include "llfloaterauction.h"
 #include "llfloatergroups.h"
 #include "llfloaterscriptlimits.h"
 #include "llavataractions.h"
@@ -79,6 +78,7 @@
 #include "llpanelexperiencelisteditor.h"
 #include "llpanelexperiencepicker.h"
 #include "llexperiencecache.h"
+#include "llweb.h"
 
 #include "llgroupactions.h"
 #include "llsdutil_math.h"
@@ -91,6 +91,7 @@
 #endif // OPENSIM
 #include "fsfloaterbantime.h"
 #include "fsnamelistavatarmenu.h"
+#include "llfloaterauction.h"
 
 const F64 COVENANT_REFRESH_TIME_SEC = 60.0f;
 
@@ -515,6 +516,7 @@ BOOL LLPanelLandGeneral::postBuild()
 
 	mBtnStartAuction = getChild<LLButton>("Linden Sale...");
 	mBtnStartAuction->setClickedCallback(onClickStartAuction, this);
+	mBtnStartAuction->setEnabled(LLGridManager::instance().isInSecondLife()); // <FS:Ansariel> Restore land auction floater for OpenSim
 
 	mBtnScriptLimits = getChild<LLButton>("Scripts...");
 
@@ -567,7 +569,7 @@ void LLPanelLandGeneral::refresh()
 
 	mBtnDeedToGroup->setEnabled(FALSE);
 	mBtnSetGroup->setEnabled(FALSE);
-	mBtnStartAuction->setEnabled(FALSE);
+	mBtnStartAuction->setEnabled(LLGridManager::instance().isInSecondLife()); // <FS:Ansariel> Restore land auction floater for OpenSim
 
 	mCheckDeedToGroup	->set(FALSE);
 	mCheckDeedToGroup	->setEnabled(FALSE);
@@ -667,7 +669,7 @@ void LLPanelLandGeneral::refresh()
 			mTextClaimDate->setEnabled(FALSE);
 			mTextGroup->setText(getString("none_text"));
 			mTextGroup->setEnabled(FALSE);
-			mBtnStartAuction->setEnabled(FALSE);
+			mBtnStartAuction->setEnabled(LLGridManager::instance().isInSecondLife()); // <FS:Ansariel> Restore land auction floater for OpenSim
 		}
 		else
 		{
@@ -723,10 +725,12 @@ void LLPanelLandGeneral::refresh()
 			mTextClaimDate->setText(claim_date_str);
 			mTextClaimDate->setEnabled(is_leased);
 
+			// <FS:Ansariel> Restore land auction floater for OpenSim
 			BOOL enable_auction = (gAgent.getGodLevel() >= GOD_LIAISON)
 								  && (owner_id == GOVERNOR_LINDEN_ID)
 								  && (parcel->getAuctionID() == 0);
-			mBtnStartAuction->setEnabled(enable_auction);
+			mBtnStartAuction->setEnabled(enable_auction || LLGridManager::instance().isInSecondLife());
+			// </FS:Ansariel>
 		}
 
 		// Display options
@@ -1080,20 +1084,32 @@ void LLPanelLandGeneral::onClickBuyPass(void* data)
 // static
 void LLPanelLandGeneral::onClickStartAuction(void* data)
 {
-	LLPanelLandGeneral* panelp = (LLPanelLandGeneral*)data;
-	LLParcel* parcelp = panelp->mParcel->getParcel();
-	if(parcelp)
+	// <FS:Ansariel> Restore land auction floater for OpenSim
+	//std::string auction_url = "https://places.[GRID]/auctions/";
+	//LLWeb::loadURLExternal(LLWeb::expandURLSubstitutions(auction_url, LLSD()));
+	if (LLGridManager::instance().isInSecondLife())
 	{
-		if(parcelp->getForSale())
+		std::string auction_url = "https://places.[GRID]/auctions/";
+		LLWeb::loadURLExternal(LLWeb::expandURLSubstitutions(auction_url, LLSD()));
+	}
+	else
+	{
+		LLPanelLandGeneral* panelp = (LLPanelLandGeneral*)data;
+		LLParcel* parcelp = panelp->mParcel->getParcel();
+		if (parcelp)
 		{
-			LLNotificationsUtil::add("CannotStartAuctionAlreadyForSale");
-		}
-		else
-		{
-			//LLFloaterAuction::showInstance();
-			LLFloaterReg::showInstance("auction");
+			if (parcelp->getForSale())
+			{
+				LLNotificationsUtil::add("CannotStartAuctionAlreadyForSale");
+			}
+			else
+			{
+				//LLFloaterAuction::showInstance();
+				LLFloaterReg::showInstance("auction");
+			}
 		}
 	}
+	// </FS:Ansariel>
 }
 
 // static

@@ -991,15 +991,15 @@ void LLLocalBitmapMgr::cleanupClass()
 
 void LLLocalBitmapMgr::addUnit()
 {
-	LLGenericLoadMultipleFilePicker::open(LLFilePicker::FFLOAD_IMAGE, boost::bind(&LLLocalBitmapMgr::filePickerCallback, _1));
+	(new LLFilePickerReplyThread(boost::bind(&LLLocalBitmapMgr::filePickerCallback, _1), LLFilePicker::FFLOAD_IMAGE, true))->getFile();
 }
 
-void LLLocalBitmapMgr::filePickerCallback(std::list<std::string> filenames)
+void LLLocalBitmapMgr::filePickerCallback(const std::vector<std::string>& filenames)
 {
 	bool add_successful = false;
 	sTimer.stopTimer();
 
-	for (std::list<std::string>::iterator it = filenames.begin(); it != filenames.end(); ++it)
+	for (std::vector<std::string>::const_iterator it = filenames.begin(); it != filenames.end(); ++it)
 	{
 		std::string filename = *it;
 

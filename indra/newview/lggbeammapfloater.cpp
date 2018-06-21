@@ -21,6 +21,7 @@
 #include "llfilepicker.h"
 #include "llsdserialize.h"
 #include "llviewercontrol.h"
+#include "llviewermenufile.h"
 
 const F32 CONTEXT_CONE_IN_ALPHA = 0.0f;
 const F32 CONTEXT_CONE_OUT_ALPHA = 1.f;
@@ -196,33 +197,30 @@ LLSD lggBeamMapFloater::getMyDataSerialized()
 
 void lggBeamMapFloater::onClickSave()
 {
-	LLRect r = mBeamshapePanel->getRect();
-	LLFilePicker& picker = LLFilePicker::instance();
-	
-	std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "beams", ""));
-	std::string filename=path_name2 + "myNewBeam.xml";
-	if (!picker.getSaveFile(LLFilePicker::FFSAVE_BEAM, filename))
-	{
-		return;
-	}
-	
-	filename = path_name2 +gDirUtilp->getBaseFileName(picker.getFirstFile());
+	std::string filename(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "beams", "NewBeam.xml"));
+	(new LLFilePickerReplyThread(boost::bind(&lggBeamMapFloater::onSaveCallback, this, _1), LLFilePicker::FFSAVE_BEAM, filename))->getFile();
+}
+
+void lggBeamMapFloater::onSaveCallback(const std::vector<std::string>& filenames)
+{
+	std::string filename = filenames[0];
 
 	LLSD main;
-	main["scale"] = 8.0f / (r.getWidth());
+	main["scale"] = 8.0f / (mBeamshapePanel->getRect().getWidth());
 	main["data"] = getMyDataSerialized();
 
 	llofstream export_file;
 	export_file.open(filename.c_str());
 	LLSDSerialize::toPrettyXML(main, export_file);
 	export_file.close();
-	gSavedSettings.setString("FSBeamShape",gDirUtilp->getBaseFileName(filename, true));
+	gSavedSettings.setString("FSBeamShape", gDirUtilp->getBaseFileName(filename, true));
 
 	if (mFSPanel)
 	{
 		mFSPanel->refreshBeamLists();
 	}
 }
+
 
 void lggBeamMapFloater::onClickClear()
 {
@@ -231,15 +229,14 @@ void lggBeamMapFloater::onClickClear()
 
 void lggBeamMapFloater::onClickLoad()
 {
-	LLFilePicker& picker = LLFilePicker::instance();
-	if (!picker.getOpenFile(LLFilePicker::FFLOAD_XML))
-	{
-		return;
-	}
+	(new LLFilePickerReplyThread(boost::bind(&lggBeamMapFloater::onLoadCallback, this, _1), LLFilePicker::FFLOAD_XML, false))->getFile();
+}
 
+void lggBeamMapFloater::onLoadCallback(const std::vector<std::string>& filenames)
+{
 	mDots.clear();
 	LLSD mydata;
-	llifstream importer(picker.getFirstFile().c_str());
+	llifstream importer(filenames[0].c_str());
 	LLSDSerialize::fromXMLDocument(mydata, importer);
 	LLSD myPicture = mydata["data"];
 	F32 scale = (F32)mydata["scale"].asReal();

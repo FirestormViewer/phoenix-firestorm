@@ -1323,16 +1323,6 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 			getChild<LLUICtrl>("combobox texgen")->setTentative(!identical);
 			getChildView("tex gen")->setEnabled(editable);
 
-			if (selected_texgen == LLTextureEntry::TEX_GEN_PLANAR)
-			{
-				// EXP-1507 (change label based on the mapping mode)
-				mCtrlRpt->setValue(getString("string repeats per meter"));
-			}
-			else
-			if (selected_texgen == LLTextureEntry::TEX_GEN_DEFAULT)
-			{
-				mCtrlRpt->setValue(getString("string repeats per face"));
-			}
 			}
 
 		{
@@ -1556,9 +1546,6 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 		}
 		getChildView("color trans")->setEnabled(FALSE);
 		mCtrlRpt->setEnabled(FALSE);
-		// <FS:Ansariel> Doesn't exist as of 2016-11-16
-		//getChildView("tex offset")->setEnabled(FALSE);
-		// </FS:Ansariel>
 		getChildView("tex gen")->setEnabled(FALSE);
 		getChildView("label shininess")->setEnabled(FALSE);
 		getChildView("label bumpiness")->setEnabled(FALSE);

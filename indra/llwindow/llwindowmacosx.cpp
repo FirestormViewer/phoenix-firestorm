@@ -1532,6 +1532,7 @@ void LLWindowMacOSX::updateCursor()
 	case UI_CURSOR_NOLOCKED:
 	case UI_CURSOR_ARROWLOCKED:
 	case UI_CURSOR_GRABLOCKED:
+	case UI_CURSOR_PIPETTE:
 	case UI_CURSOR_TOOLTRANSLATE:
 	case UI_CURSOR_TOOLROTATE:
 	case UI_CURSOR_TOOLSCALE:
@@ -1585,6 +1586,7 @@ void LLWindowMacOSX::initCursors(BOOL useLegacyCursors)
 	initPixmapCursor(UI_CURSOR_NOLOCKED, 8, 8);
 	initPixmapCursor(UI_CURSOR_ARROWLOCKED, 1, 1);
 	initPixmapCursor(UI_CURSOR_GRABLOCKED, 2, 14);
+	initPixmapCursor(UI_CURSOR_PIPETTE, 3, 29);
 	initPixmapCursor(UI_CURSOR_TOOLTRANSLATE, 1, 1);
 	initPixmapCursor(UI_CURSOR_TOOLROTATE, 1, 1);
 	initPixmapCursor(UI_CURSOR_TOOLSCALE, 1, 1);

@@ -34,6 +34,7 @@
 #include "llviewercontrol.h"
 
 using namespace LLNotificationsUI;
+std::list<LLToast*> LLToast::sModalToastsList;
 
 //--------------------------------------------------------------------------
 LLToastLifeTimer::LLToastLifeTimer(LLToast* toast, F32 period)
@@ -153,6 +154,11 @@ LLToast::LLToast(const LLToast::Params& p)
 	{
 		mOnDeleteToastSignal.connect(p.on_delete_toast());
 	}
+
+	if (isModal())
+	{
+		sModalToastsList.push_front(this);
+	}
 }
 
 void LLToast::reshape(S32 width, S32 height, BOOL called_from_parent)
@@ -196,6 +202,15 @@ LLToast::~LLToast()
 	else
 	{
 		mOnToastDestroyedSignal(this);
+	}
+
+	if (isModal())
+	{
+		std::list<LLToast*>::iterator iter = std::find(sModalToastsList.begin(), sModalToastsList.end(), this);
+		if (iter != sModalToastsList.end())
+		{
+			sModalToastsList.erase(iter);
+		}
 	}
 }
 

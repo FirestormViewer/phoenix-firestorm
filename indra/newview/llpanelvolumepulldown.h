@@ -48,6 +48,10 @@ class LLPanelVolumePulldown : public LLPanel
  private:
 	/*//<FS:KC> Handled centrally now
 	void setControlFalse(const LLSD& user_data);
+	void onClickSetSounds();
+	// Disables "Allow Media to auto play" check box only when both
+	// "Streaming Music" and "Media" are unchecked. Otherwise enables it.
+	void updateMediaAutoPlayCheckbox(LLUICtrl* ctrl);
 	void onAdvancedButtonClick(const LLSD& user_data);
 	// <FS:Ansariel> Missing callback function
 	void setSounds();
