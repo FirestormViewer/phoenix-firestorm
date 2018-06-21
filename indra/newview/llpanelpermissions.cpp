@@ -208,7 +208,9 @@ BOOL LLPanelPermissions::postBuild()
 	childSetCommitCallback("clickaction",LLPanelPermissions::onCommitClickAction,this);
 	childSetCommitCallback("search_check",LLPanelPermissions::onCommitIncludeInSearch,this);
 	
-	// mLabelGroupName = getChild<LLNameBox>("Group Name Proxy");
+	//mLabelGroupName = getChild<LLNameBox>("Group Name Proxy");
+	//mLabelOwnerName = getChild<LLTextBox>("Owner Name");
+	//mLabelCreatorName = getChild<LLTextBox>("Creator Name");
 
 	return TRUE;
 }
@@ -216,6 +218,14 @@ BOOL LLPanelPermissions::postBuild()
 
 LLPanelPermissions::~LLPanelPermissions()
 {
+	//if (mOwnerCacheConnection.connected())
+	//{
+	//	mOwnerCacheConnection.disconnect();
+	//}
+	//if (mCreatorCacheConnection.connected())
+	//{
+	//	mCreatorCacheConnection.disconnect();
+	//}
 	// base class will take care of everything
 }
 
@@ -230,12 +240,16 @@ void LLPanelPermissions::disableAll()
 
 	getChildView("Creator:")->setEnabled(FALSE);
 	//getChild<LLUICtrl>("Creator Icon")->setVisible(FALSE);
+	//mLabelCreatorName->setValue(LLStringUtil::null);
+	//mLabelCreatorName->setEnabled(FALSE);
 	getChild<LLUICtrl>("Creator Name")->setValue(LLStringUtil::null);
 	getChildView("Creator Name")->setEnabled(FALSE);
 
 	getChildView("Owner:")->setEnabled(FALSE);
 	//getChild<LLUICtrl>("Owner Icon")->setVisible(FALSE);
 	//getChild<LLUICtrl>("Owner Group Icon")->setVisible(FALSE);
+	//mLabelOwnerName->setValue(LLStringUtil::null);
+	//mLabelOwnerName->setEnabled(FALSE);
 	getChild<LLUICtrl>("Owner Name")->setValue(LLStringUtil::null);
 	getChildView("Owner Name")->setEnabled(FALSE);
 
@@ -443,22 +457,29 @@ void LLPanelPermissions::refresh()
 //	style_params.color = link_color;
 //	style_params.readonly_color = link_color;
 //	style_params.is_link = true; // link will be added later
-//	const LLFontGL* fontp = getChild<LLTextBox>("Creator Name")->getFont();
+//	const LLFontGL* fontp = mLabelCreatorName->getFont();
 //	style_params.font.name = LLFontGL::nameFromFont(fontp);
 //	style_params.font.size = LLFontGL::sizeFromFont(fontp);
 //	style_params.font.style = "UNDERLINE";
 
 //	LLAvatarName av_name;
+//	style_params.link_href = creator_app_link;
 //	if (LLAvatarNameCache::get(mCreatorID, &av_name))
 //	{
-//		// If name isn't present, this will 'request' it and trigger refresh() again
-//		LLTextBox* text_box = getChild<LLTextBox>("Creator Name");
-//		style_params.link_href = creator_app_link;
-//		text_box->setText(av_name.getCompleteName(), style_params);
+//		updateCreatorName(mCreatorID, av_name, style_params);
+//	}
+//	else
+//	{
+//		if (mCreatorCacheConnection.connected())
+//		{
+//			mCreatorCacheConnection.disconnect();
+//		}
+//		mLabelCreatorName->setText(LLTrans::getString("None"));
+//		mCreatorCacheConnection = LLAvatarNameCache::get(mCreatorID, boost::bind(&LLPanelPermissions::updateCreatorName, this, _1, _2, style_params));
 //	}
 //	getChild<LLAvatarIconCtrl>("Creator Icon")->setValue(mCreatorID);
 //	getChild<LLAvatarIconCtrl>("Creator Icon")->setVisible(TRUE);
-//	getChildView("Creator Name")->setEnabled(TRUE);
+//	mLabelCreatorName->setEnabled(TRUE);
 // [RLVa:KB] - Moved further down to avoid an annoying flicker when the text is set twice in a row
 
 	// Update owner text field
@@ -474,9 +495,8 @@ void LLPanelPermissions::refresh()
 	//	LLGroupMgrGroupData* group_data = LLGroupMgr::getInstance()->getGroupData(mOwnerID);
 	//	if (group_data && group_data->isGroupPropertiesDataComplete())
 	//	{
-	//		LLTextBox* text_box = getChild<LLTextBox>("Owner Name");
 	//		style_params.link_href = owner_app_link;
-	//		text_box->setText(group_data->mName, style_params);
+	//		mLabelOwnerName->setText(group_data->mName, style_params);
 	//		getChild<LLGroupIconCtrl>("Owner Group Icon")->setIconId(group_data->mInsigniaID);
 	//		getChild<LLGroupIconCtrl>("Owner Group Icon")->setVisible(TRUE);
 	//		getChild<LLUICtrl>("Owner Icon")->setVisible(FALSE);
@@ -505,18 +525,27 @@ void LLPanelPermissions::refresh()
 			//}
 	//		owner_id = mLastOwnerID;
 	//	}
+	//
+	//	style_params.link_href = owner_app_link;
 	//	if (LLAvatarNameCache::get(owner_id, &av_name))
 	//	{
-	//		// If name isn't present, this will 'request' it and trigger refresh() again
-	//		LLTextBox* text_box = getChild<LLTextBox>("Owner Name");
-	//		style_params.link_href = owner_app_link;
-	//		text_box->setText(av_name.getCompleteName(), style_params);
+	//		updateOwnerName(owner_id, av_name, style_params);
 	//	}
+	//	else
+	//	{
+	//		if (mOwnerCacheConnection.connected())
+	//		{
+	//			mOwnerCacheConnection.disconnect();
+	//		}
+	//		mLabelOwnerName->setText(LLTrans::getString("None"));
+	//		mOwnerCacheConnection = LLAvatarNameCache::get(owner_id, boost::bind(&LLPanelPermissions::updateOwnerName, this, _1, _2, style_params));
+	//	}
+	//
 	//	getChild<LLAvatarIconCtrl>("Owner Icon")->setValue(owner_id);
 	//	getChild<LLAvatarIconCtrl>("Owner Icon")->setVisible(TRUE);
 	//	getChild<LLUICtrl>("Owner Group Icon")->setVisible(FALSE);
 	//}
-//	getChildView("Owner Name")->setEnabled(TRUE);
+//	mLabelOwnerName->setEnabled(TRUE);
 // [RLVa:KB] - Moved further down to avoid an annoying flicker when the text is set twice in a row
 
 // [RLVa:KB] - Checked: RLVa-2.0.1
@@ -1137,6 +1166,23 @@ void LLPanelPermissions::refresh()
 	getChildView("clickaction")->setEnabled(is_perm_modify && is_nonpermanent_enforced && all_volume);
 }
 
+//void LLPanelPermissions::updateOwnerName(const LLUUID& owner_id, const LLAvatarName& owner_name, const LLStyle::Params& style_params)
+//{
+//	if (mOwnerCacheConnection.connected())
+//	{
+//		mOwnerCacheConnection.disconnect();
+//	}
+//	mLabelOwnerName->setText(owner_name.getCompleteName(), style_params);
+//}
+//
+//void LLPanelPermissions::updateCreatorName(const LLUUID& creator_id, const LLAvatarName& creator_name, const LLStyle::Params& style_params)
+//{
+//	if (mCreatorCacheConnection.connected())
+//	{
+//		mCreatorCacheConnection.disconnect();
+//	}
+//	mLabelCreatorName->setText(creator_name.getCompleteName(), style_params);
+//}
 
 // static
 void LLPanelPermissions::onClickClaim(void*)

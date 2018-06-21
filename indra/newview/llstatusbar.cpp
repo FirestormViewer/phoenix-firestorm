@@ -178,7 +178,6 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mSGBandwidth(NULL),
 	mSGPacketLoss(NULL),
 	mBandwidthButton(NULL), // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
-	mBtnStats(NULL),
 	mBtnVolume(NULL),
 	mBoxBalance(NULL),
 	mBalance(0),
@@ -299,9 +298,6 @@ BOOL LLStatusBar::postBuild()
 
 	mBoxBalance = getChild<LLTextBox>("balance");
 	mBoxBalance->setClickedCallback( &LLStatusBar::onClickBalance, this );
-	
-	// <FS:Ansariel> Not used in Firestorm
-	//mBtnStats = getChildView("stat_btn");
 
 	mIconPresets = getChild<LLButton>( "presets_icon" );
 	// <FS: KC> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
@@ -418,7 +414,6 @@ BOOL LLStatusBar::postBuild()
 	mPanelNearByMedia->setVisible(FALSE);
 
 	// <FS:Ansariel> Script debug
-	//mScriptOut = getChildView("scriptout");
 	mScriptOut = getChild<LLIconCtrl>("scriptout");
 	mScriptOut->setMouseDownCallback(boost::bind(&LLFloaterScriptDebug::show, LLUUID::null));
 	mNearbyIcons = LLHUDIcon::scriptIconsNearby();
@@ -506,7 +501,6 @@ BOOL LLStatusBar::postBuild()
 		updateVolumeControlsVisibility(LLSD(FALSE));
 	}
 	// </FS:PP>
-
 	return TRUE;
 }
 

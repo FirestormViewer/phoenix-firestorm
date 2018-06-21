@@ -223,11 +223,13 @@ void LLToolCamera::pickCallback(const LLPickInfo& pick_info)
 			gAgentCamera.setFocusGlobal(pick_info);
 		}
 
+		BOOL zoom_tool = gCameraBtnZoom && (LLToolMgr::getInstance()->getBaseTool() == LLToolCamera::getInstance());
 		// <FS:Ansariel> Replace frequently called gSavedSettings
 		static LLCachedControl<bool> sFreezeTime(gSavedSettings, "FreezeTime");
 		// </FS:Ansariel>
 		if (!(pick_info.mKeyMask & MASK_ALT) &&
 			!LLFloaterCamera::inFreeCameraMode() &&
+			!zoom_tool &&
 			gAgentCamera.cameraThirdPerson() &&
 			gViewerWindow->getLeftMouseDown() && 
 			// <FS:Ansariel> Replace frequently called gSavedSettings

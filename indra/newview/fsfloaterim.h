@@ -111,7 +111,7 @@ public:
 	BOOL focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
 
 	void onVisibilityChange(BOOL new_visibility);
-	void processIMTyping(const LLIMInfo* im_info, BOOL typing);
+	void processIMTyping(const LLUUID& from_id, BOOL typing);
 	void processAgentListUpdates(const LLSD& body);
 	void processSessionUpdate(const LLSD& session_update);
 
@@ -214,10 +214,10 @@ private:
 	static void* 	createPanelAdHocControl(void* userdata);
 
 	// Add the "User is typing..." indicator.
-	void addTypingIndicator(const LLIMInfo* im_info);
+	void addTypingIndicator(const LLUUID& from_id);
 
 	// Remove the "User is typing..." indicator.
-	void removeTypingIndicator(const LLIMInfo* im_info = NULL);
+	void removeTypingIndicator(const LLUUID& from_id = LLUUID::null);
 
 	static void closeHiddenIMToasts();
 

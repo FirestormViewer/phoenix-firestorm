@@ -124,6 +124,7 @@
 #include "lggcontactsets.h"
 #include "llcontrol.h"
 #include "llfilepicker.h"	// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
+#include "llviewermenufile.h"
 #include "llnetmap.h"
 #include "llviewernetwork.h"	// [FS:CR] isInSecondlife()
 #include "llsidepanelappearance.h"
@@ -1060,7 +1061,7 @@ void LLVOAvatar::dumpBakedStatus()
 				const ETextureIndex index = baked_dict->mTextureIndex;
 				if (!inst->isTextureDefined(index))
 				{
-					LL_CONT << " " << LLAvatarAppearanceDictionary::getInstance()->getTexture(index)->mName;
+					LL_CONT << " " << (LLAvatarAppearanceDictionary::getInstance()->getTexture(index) ? LLAvatarAppearanceDictionary::getInstance()->getTexture(index)->mName : "");
 				}
 			}
 			LL_CONT << " ) " << inst->getUnbakedPixelAreaRank();
@@ -5670,7 +5671,7 @@ void LLVOAvatar::collectLocalTextureUUIDs(std::set<LLUUID>& ids) const
 			if (imagep)
 			{
 				const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = LLAvatarAppearanceDictionary::getInstance()->getTexture((ETextureIndex)texture_index);
-				if (texture_dict->mIsLocalTexture)
+				if (texture_dict && texture_dict->mIsLocalTexture)
 				{
 					ids.insert(imagep->getID());
 				}
@@ -5827,8 +5828,8 @@ void LLVOAvatar::updateTextures()
 			if (imagep)
 			{
 				const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = LLAvatarAppearanceDictionary::getInstance()->getTexture((ETextureIndex)texture_index);
-				const EBakedTextureIndex baked_index = texture_dict->mBakedTextureIndex;
-				if (texture_dict->mIsLocalTexture)
+				const EBakedTextureIndex baked_index = texture_dict ? texture_dict->mBakedTextureIndex : EBakedTextureIndex::BAKED_NUM_INDICES;
+				if (texture_dict && texture_dict->mIsLocalTexture)
 				{
 					addLocalTextureStats((ETextureIndex)texture_index, imagep, texel_area_ratio, render_avatar, mBakedTextureDatas[baked_index].mIsUsed);
 				}
@@ -6319,6 +6320,11 @@ LLUUID LLVOAvatar::remapMotionID(const LLUUID& id)
 		{
 			if (use_new_walk_run)
 				result = ANIM_AGENT_RUN_NEW;
+		}
+		// keeps in sync with setSex() related code (viewer controls sit's sex)
+		else if (id == ANIM_AGENT_SIT_FEMALE)
+		{
+			result = ANIM_AGENT_SIT;
 		}
 	
 	}
@@ -7316,7 +7322,26 @@ void LLVOAvatar::initAttachmentPoints(bool ignore_hud_joints)
 //-----------------------------------------------------------------------------
 void LLVOAvatar::updateVisualParams()
 {
-	setSex( (getVisualParamWeight( "male" ) > 0.5f) ? SEX_MALE : SEX_FEMALE );
+	ESex avatar_sex = (getVisualParamWeight("male") > 0.5f) ? SEX_MALE : SEX_FEMALE;
+	if (getSex() != avatar_sex)
+	{
+		if (mIsSitting && findMotion(avatar_sex == SEX_MALE ? ANIM_AGENT_SIT_FEMALE : ANIM_AGENT_SIT) != NULL)
+		{
+			// In some cases of gender change server changes sit motion with motion message,
+			// but in case of some avatars (legacy?) there is no update from server side,
+			// likely because server doesn't know about difference between motions
+			// (female and male sit ids are same server side, so it is likely unaware that it
+			// need to send update)
+			// Make sure motion is up to date
+			stopMotion(ANIM_AGENT_SIT);
+			setSex(avatar_sex);
+			startMotion(ANIM_AGENT_SIT);
+		}
+		else
+		{
+			setSex(avatar_sex);
+		}
+	}
 
 	LLCharacter::updateVisualParams();
 
@@ -9975,17 +10000,17 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 	std::string outfilename = get_sequential_numbered_file_name(outprefix,".xml");
 	
 // <FS:CR> FIRE-8893  - Dump archetype xml to user defined location
-	LLFilePicker& file_picker = LLFilePicker::instance();
-	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_XML, outfilename))
-	{
-		return;
-	}
+	(new LLFilePickerReplyThread(boost::bind(&LLVOAvatar::dumpArchetypeXMLCallback, this, _1, group_by_wearables),
+		LLFilePicker::FFSAVE_XML, outfilename))->getFile();
+}
+
+void LLVOAvatar::dumpArchetypeXMLCallback(const std::vector<std::string>& filenames, bool group_by_wearables)
+{
 // </FS:CR>
-	
 	LLAPRFile outfile;
 // <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
 	//std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
-	std::string fullpath = file_picker.getFirstFile();
+	std::string fullpath = filenames[0];
 // </FS:CR>
 	if (APR_SUCCESS == outfile.open(fullpath, LL_APR_WB ))
 	{
@@ -9999,6 +10024,8 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 		apr_file_printf( file, "<?xml version=\"1.0\" encoding=\"US-ASCII\" standalone=\"yes\"?>\n" );
 		apr_file_printf( file, "<linden_genepool version=\"1.0\">\n" );
 		apr_file_printf( file, "\n\t<archetype name=\"???\">\n" );
+
+		bool agent_is_godlike = gAgent.isGodlikeWithoutAdminMenuFakery();
 
 		if (group_by_wearables)
 		{
@@ -10025,8 +10052,11 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 						LLViewerTexture* te_image = getImage((ETextureIndex)te, 0);
 						if( te_image )
 						{
-							std::string uuid_str;
-							te_image->getID().toString( uuid_str );
+							std::string uuid_str = LLUUID().asString();
+							if (agent_is_godlike)
+							{
+								te_image->getID().toString(uuid_str);
+							}
 							apr_file_printf( file, "\t\t<texture te=\"%i\" uuid=\"%s\"/>\n", te, uuid_str.c_str());
 						}
 					}
@@ -10048,8 +10078,11 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 				LLViewerTexture* te_image = getImage((ETextureIndex)te, 0);
 				if( te_image )
 				{
-					std::string uuid_str;
-					te_image->getID().toString( uuid_str );
+					std::string uuid_str = LLUUID().asString();
+					if (agent_is_godlike)
+					{
+						te_image->getID().toString(uuid_str);
+					}
 					apr_file_printf( file, "\t\t<texture te=\"%i\" uuid=\"%s\"/>\n", te, uuid_str.c_str());
 				}
 			}
