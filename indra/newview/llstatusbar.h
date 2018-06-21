@@ -330,7 +330,6 @@ private:
 	LLStatGraph *mSGBandwidth;
 	LLStatGraph *mSGPacketLoss;
 
-	LLView		*mBtnStats;
 	LLButton	*mIconPresetsCamera;
 	LLButton	*mIconPresetsGraphic;
 	LLButton	*mBtnVolume;
@@ -339,7 +338,6 @@ private:
 	LLButton	*mMediaToggle;
 	LLButton	*mBandwidthButton; // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
 	// <FS:Ansariel> Script debug
-	//LLView		*mScriptOut;
 	LLIconCtrl	*mScriptOut;
 	// </FS:Ansariel> Script debug
 	LLFrameTimer	mClockUpdateTimer;

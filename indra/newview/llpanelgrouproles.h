@@ -139,7 +139,7 @@ protected:
 									BOOL is_owner_role);
 
 protected:
-	LLPanel* mHeader;
+	LLPanel* mHeader; // Might not be present in xui of derived class (NULL)
 	LLPanel* mFooter;
 
 	LLFilterEditor*	mSearchEditor;
@@ -189,6 +189,7 @@ public:
 	bool handleBanCallback(const LLSD& notification, const LLSD& response);
 	void confirmBanMembers();
 
+	void updateActionDescription();
 
 	void applyMemberChanges();
 	bool addOwnerCB(const LLSD& notification, const LLSD& response);
@@ -229,6 +230,8 @@ protected:
 	BOOL mPendingMemberUpdate;
 	BOOL mHasMatch;
 
+	LLTextEditor*	mActionDescription;
+
 	member_role_changes_map_t mMemberRoleChangeData;
 	U32 mNumOwnerAdditions;
 
@@ -239,6 +242,7 @@ protected:
 // [FS:CR] FIRE-12276
 private:
 	void onExportMembersToXML();
+	void onExportMembersToXMLCallback(const std::vector<std::string>& filenames);
 };
 
 
@@ -280,6 +284,8 @@ public:
 	static void onDeleteRole(void*);
 	void handleDeleteRole();
 
+	void updateActionDescription();
+
 	void saveRoleChanges(bool select_saved_role);
 
 	virtual void setGroupID(const LLUUID& id);
@@ -293,6 +299,7 @@ protected:
 	LLScrollListCtrl* mRolesList;
 	LLNameListCtrl* mAssignedMembersList;
 	LLScrollListCtrl* mAllowedActionsList;
+	LLTextEditor* mActionDescription;
 
 	LLLineEditor* mRoleName;
 	LLLineEditor* mRoleTitle;

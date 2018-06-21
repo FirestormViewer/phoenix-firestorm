@@ -59,7 +59,6 @@ public:
 
 	void fetchInventory();
 	void inventoryFetched();
-	void onNewOutfitButtonClicked();
 
 	void showOutfitsInventoryPanel();
 	void showOutfitEditPanel();
@@ -99,7 +98,6 @@ private:
 
 	LLButton*					mOpenOutfitBtn;
 	LLButton*					mEditAppearanceBtn;
-	//LLButton*					mNewOutfitBtn; // <FS:Ansariel> Disabled as of 12-09-2014
 	LLPanel*					mCurrOutfitPanel;
 
 	LLTextBox*					mCurrentLookName;

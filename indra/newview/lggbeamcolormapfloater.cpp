@@ -22,6 +22,7 @@
 #include "llsdserialize.h"
 #include "llsliderctrl.h"
 #include "llviewercontrol.h"
+#include "llviewermenufile.h"
 
 F32 convertXToHue(S32 place)
 {
@@ -277,22 +278,18 @@ LLSD lggBeamColorMapFloater::getMyDataSerialized()
 
 void lggBeamColorMapFloater::onClickSave()
 {
-	LLFilePicker& picker = LLFilePicker::instance();
+	std::string filename(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors", "NewBeamColor.xml"));
+	(new LLFilePickerReplyThread(boost::bind(&lggBeamColorMapFloater::onSaveCallback, this, _1), LLFilePicker::FFSAVE_BEAM, filename))->getFile();
+}
 
-	std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors", ""));
-
-	std::string filename=path_name2 + "myNewBeamColor.xml";
-	if (!picker.getSaveFile(LLFilePicker::FFSAVE_BEAM, filename))
-	{
-		return;
-	}
-
-	filename = path_name2 + gDirUtilp->getBaseFileName(picker.getFirstFile());
+void lggBeamColorMapFloater::onSaveCallback(const std::vector<std::string>& filenames)
+{
+	std::string filename = filenames[0];
 
 	LLSD main = getMyDataSerialized();
 
 	llofstream export_file;
-	export_file.open( filename.c_str() );
+	export_file.open(filename.c_str());
 	LLSDSerialize::toPrettyXML(main, export_file);
 	export_file.close();
 
@@ -312,16 +309,15 @@ void lggBeamColorMapFloater::onClickCancel()
 
 void lggBeamColorMapFloater::onClickLoad()
 {
-	LLFilePicker& picker = LLFilePicker::instance();
-	if (!picker.getOpenFile(LLFilePicker::FFLOAD_XML))
-	{
-		return;
-	}
+	(new LLFilePickerReplyThread(boost::bind(&lggBeamColorMapFloater::onLoadCallback, this, _1), LLFilePicker::FFLOAD_XML, false))->getFile();
+}
+
+void lggBeamColorMapFloater::onLoadCallback(const std::vector<std::string>& filenames)
+{
 	LLSD minedata;
-	llifstream importer( picker.getFirstFile().c_str() );
+	llifstream importer(filenames[0].c_str());
 	LLSDSerialize::fromXMLDocument(minedata, importer);
 
 	myData = lggBeamsColors::fromLLSD(minedata);
-	childSetValue("BeamColor_Speed", myData.mRotateSpeed * 100);
+	childSetValue("BeamColor_Speed", myData.mRotateSpeed * 100.f);
 }
-

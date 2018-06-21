@@ -1282,6 +1282,12 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 {
 	LL_RECORD_BLOCK_TIME(FTM_FACE_GET_GEOM);
 	llassert(verify());
+
+	if (volume.getNumVolumeFaces() <= f) {
+        LL_WARNS() << "Attempt get volume face out of range! Total Faces: " << volume.getNumVolumeFaces() << " Attempt get access to: " << f << LL_ENDL;
+		return FALSE;
+	}
+
 	const LLVolumeFace &vf = volume.getVolumeFace(f);
 	S32 num_vertices = (S32)vf.mNumVertices;
 	S32 num_indices = (S32) vf.mNumIndices;
@@ -2760,6 +2766,13 @@ LLViewerTexture* LLFace::getTexture(U32 ch) const
 }
 
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+bool LLFace::isDefaultTexture(U32 nChannel) const
+{
+	// NOTE: mShowDiffTexture gets flipped before the clear (good) but also before the restore (bad) and hence can't
+	//       be used to tell whether we're usurping a texture channel for our own use
+	return (LLRender::DIFFUSE_MAP == nChannel) ? mOrigDiffTexture.notNull() : false;
+}
+
 void LLFace::setDefaultTexture(U32 nChannel, bool fShowDefault) const
 {
 	bool fUpdated = false;

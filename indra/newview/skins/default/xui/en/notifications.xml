@@ -11112,13 +11112,13 @@ Cannot save to object contents: This would modify the attachment permissions.
 Your attachments contain too much inventory to add more.
   </notification>
 
-  <!--<notification
+  <notification
    icon="alertmodal.tga"
    name="IllegalAttachment"
    type="notify">
    <tag>fail</tag>
 The attachment has requested a nonexistent point on the avatar. It has been attached to the chest instead.
-  </notification>-->
+  </notification>
 
   <notification
    icon="alertmodal.tga"
@@ -11607,14 +11607,6 @@ Not enough script resources available to attach object!
    type="notify">
     <tag>fail</tag>
     Cannot attach object because it is already being removed.
-  </notification>
-
-  <notification
-  icon="alertmodal.tga"
-  name="IllegalAttachment"
-  type="notify">
-   <tag>fail</tag>
-   The attachment has requested a nonexistent point on the avatar. It has been attached to the chest instead.
   </notification>
 
   <notification
@@ -12227,7 +12219,7 @@ An internal error prevented us from properly updating your viewer.  The L$ balan
    name="LargePrimAgentIntersect"
    type="notify">
    <tag>fail</tag>
-Cannot create large prims that intersect other players.  Please re-try when other players have moved.
+Cannot create large prims that intersect other residents.  Please re-try when other residents have moved.
   </notification>
 
   <notification
@@ -12249,12 +12241,18 @@ Changes won't take effect until after you restart [APP_NAME].
     <form name="form">
       <button
        index="0"
+       default="true"
        name="Allow"
        text="Allow"/>
       <button
        index="1"
+       name="Always Allow"
+       text="Always Allow"/>
+      <button
+       index="2"
        name="Deny"
        text="Deny"/>
+      <ignore name="ignore" text="Confirm before sending anyone a list of my current RLV restrictions."/>
     </form>
   </notification>
 

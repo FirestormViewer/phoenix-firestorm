@@ -71,7 +71,7 @@
 libcurl 版本： [LIBCURL_VERSION]
 J2C 解碼器版本： [J2C_VERSION]
 音效驅動程式版本： [AUDIO_DRIVER_VERSION]
-CEF版本：[LIBCEF_VERSION]
+[LIBCEF_VERSION]
 語音伺服器版本： [VOICE_VERSION]
 	</string>
 	<string name="AboutTraffic">
@@ -1416,6 +1416,9 @@ http://secondlife.com/support 求助解決問題。
 	</string>
 	<string name="InventoryNoMatchingItems">
 		找不到你要找的嗎？ 請試試 [secondlife:///app/search/places/ 搜尋]。
+	</string>
+	<string name="InventoryNoMatchingRecentItems">
+		找不到你要找的嗎？ 請試試[secondlife:///app/inventory/filters 顯示過濾器]。
 	</string>
 	<string name="PlacesNoMatchingItems">
 		找不到你要找的嗎？ 請試試 [secondlife:///app/search/places/[SEARCH_TERM] 搜尋]。

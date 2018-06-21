@@ -99,7 +99,7 @@
 			-->
 			<check_box label="テレポートサウンドを鳴らす" name="PlayTeleportSound" />
 			<check_box label="テレポート後は常に飛行状態のままにする" name="FSFlyAfterTeleport" />
-			<check_box label="テレポートキャンセルボタンを常に表示" name="FSAlwaysShowTPCancel" tool_tip="シミュレータからキャンセルできない通知がある場合でも、常にテレポートキャンセルのボタンを表示します。結局のところ、シミュレータは例えばゴッド・テレポートのような強制テレポートの要求があった場合、それがキャンセルできるかどうかをわかっていて、できない場合はキャンセル指示を無視します。この設定はRLVaでは無効です（つまり、RLVの制約により、この機能は停止されています）。"/>
+			<check_box label="テレポートキャンセルボタンを常に表示" name="FSAlwaysShowTPCancel" tool_tip="シミュレータからキャンセルできない通知がある場合でも、常にテレポートキャンセルのボタンを表示します。結局のところ、シミュレータは例えばゴッド・テレポートのような強制テレポートの要求があった場合、それがキャンセルできるかどうかをわかっていて、できない場合はキャンセル指示を無視します。この設定はRestrainedLoveAPIでは無効です（つまり、RestrainedLoveAPIの制約により、この機能は停止されています）。"/>
 			<check_box label="テレポートビーコンオフ" name="tp_beam_toggle" tool_tip="テレポートが完了したら、目的地点に表示されるビーコンが消えるようにします。"/>
 			<check_box label="テレポート画面オフ" name="tp_screen_toggle" tool_tip="テレポートしている間表示される黒いテレポート画面を表示しないようにします。"/>
 			<check_box label="テレポートした時に世界地図を閉じない" name="FSDoNotHideMapOnTeleport" tool_tip="テレポートした時に世界地図が自動的に閉じる機能をオフにします。"/>

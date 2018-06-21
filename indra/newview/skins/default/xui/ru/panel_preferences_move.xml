@@ -76,7 +76,7 @@
 		<panel label="Телепортация" name="tab-teleports">
 			<check_box label="Востпроизводить звуковой эффект при телепортации" name="PlayTeleportSound"/>
 			<check_box label="Всегда летать после телепортации" name="FSFlyAfterTeleport"/>
-			<check_box label="Всегда отображать кнопку отмены телепортации" name="FSAlwaysShowTPCancel" tool_tip="Этот параметр игнорируется RLVa"/>
+			<check_box label="Всегда отображать кнопку отмены телепортации" name="FSAlwaysShowTPCancel" tool_tip="Этот параметр игнорируется RestrainedLoveAPI"/>
 			<check_box label="Отключить метки телепорта" name="tp_beam_toggle" tool_tip="Отклучение отображения метки назначения после телепортации" />
 			<check_box label="Отключение экрана телепортации" name="tp_screen_toggle" tool_tip="Отключение черного экрана телепортации" />
 		</panel>

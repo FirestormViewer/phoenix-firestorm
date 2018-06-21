@@ -176,6 +176,18 @@ public:
 	 */
 	static bool autoAcceptTeleportRequest(const LLUUID& idRequester);
 
+	/*
+	 * Returns true if the user can fly
+	 * (NOTE: the parameter-less overload takes the currently executing command into account)
+	 */
+	static bool canFly();
+	static bool canFly(const LLUUID& idRlvObjExcept);
+
+	/*
+	 * Returns true if the user can jump
+	 */
+	static bool canJump();
+
 	// ===========
 	// Teleporting
 	// ===========

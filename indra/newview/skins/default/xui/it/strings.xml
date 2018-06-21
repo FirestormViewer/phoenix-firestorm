@@ -1431,6 +1431,9 @@ http://secondlife.com/support per risolvere il problema.
 	<string name="InventoryNoMatchingItems">
 		Non riesci a trovare quello che cerchi? Prova [secondlife:///app/search/all/[SEARCH_TERM] Cerca].
 	</string>
+	<string name="InventoryNoMatchingRecentItems">
+		Non hai trovato ció che cercavi? Prova [secondlife:///app/inventory/filters Show filters].
+	</string>
 	<string name="PlacesNoMatchingItems">
 		Non riesci a trovare quello che cerchi? Prova [secondlife:///app/search/places/[SEARCH_TERM] Cerca].
 	</string>

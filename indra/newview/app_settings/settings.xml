@@ -1229,6 +1229,17 @@
       <key>Value</key>
       <string>+</string>
     </map>
+    <key>RLVaBlockedExperiences</key>
+    <map>
+      <key>Comment</key>
+      <string>List of experiences blocked from interacting with RLVa</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>bfe25fb4-222c-11e5-85a2-fa4c4ccaa202</string>
+    </map>
     <key>RLVaCompatibilityModeList</key>
     <map>
       <key>Comment</key>
@@ -1327,6 +1338,17 @@
       <string>Boolean</string>
       <key>Value</key>
       <boolean>1</boolean>
+    </map>
+    <key>RLVaExperienceMaturityThreshold</key>
+    <map>
+      <key>Comment</key>
+      <string>Specifies the minimum maturity an experience has to be before it can interact with RLVa (0: never; 1: PG; 2: Mature; 3: Adult)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>2</integer>
     </map>
     <key>RLVaHideLockedLayers</key>
     <map>
@@ -24662,13 +24684,13 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSExperimentalRegionCrossingMovementFix</key>
     <map>
       <key>Comment</key>
-      <string>If enabled, use the experimental fix for region crossing movements being bogus due to false predictions by the viewer.</string>
+      <string>Enables the experimental fix for region crossing movements being bogus due to false predictions by the viewer (0 = Disabled, 1 = Enabled)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>Boolean</string>
+      <string>S32</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>FSStatisticsNoFocus</key>
     <map>
@@ -24680,6 +24702,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>FSInspectColumnConfig</key>
+    <map>
+      <key>Comment</key>
+      <string>Stores the column visibility of the inspect window</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>1023</integer>
     </map>
   </map>
 </llsd>
