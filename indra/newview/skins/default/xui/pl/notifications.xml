@@ -4588,7 +4588,9 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 		[NAME_SLURL] zażądał, aby mu wysłać listę Twoich aktywnych ograniczeń RLV.
 		<form name="form">
 			<button name="Allow" text="Zezwól"/>
+			<button name="Always Allow" text="Zawsze zezwalaj"/>
 			<button name="Deny" text="Odmów"/>
+			<ignore name="ignore" text="Potwierdź przed wysłaniem komuś listy moich aktywnych ograniczeń RLV."/>
 		</form>
 	</notification>
 	<notification name="PreferenceChatClearLog">

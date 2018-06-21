@@ -59,6 +59,9 @@ LLColor4 LLColor4::grey1(0.8f, 0.8f, 0.8f, 1.0f);
 LLColor4 LLColor4::grey2(0.6f, 0.6f, 0.6f, 1.0f);
 LLColor4 LLColor4::grey3(0.4f, 0.4f, 0.4f, 1.0f);
 LLColor4 LLColor4::grey4(0.3f, 0.3f, 0.3f, 1.0f);
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+LLColor4 LLColor4::silhouette(0.05f, 0.05f, 0.05f, 1.0f);
+// [/RLVa:KB]
 
 LLColor4 LLColor4::red1(1.0f, 0.0f, 0.0f, 1.0f);
 LLColor4 LLColor4::red2(0.6f, 0.0f, 0.0f, 1.0f);

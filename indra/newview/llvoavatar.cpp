@@ -101,6 +101,7 @@
 // [RLVa:KB] - Checked: RLVa-2.0.1
 #include "rlvactions.h"
 #include "rlvhandler.h"
+#include "rlvmodifiers.h"
 // [/RLVa:KB]
 
 #include "llgesturemgr.h" //needed to trigger the voice gesticulations
@@ -1042,7 +1043,7 @@ void LLVOAvatar::dumpBakedStatus()
 				const ETextureIndex index = baked_dict->mTextureIndex;
 				if (!inst->isTextureDefined(index))
 				{
-					LL_CONT << " " << LLAvatarAppearanceDictionary::getInstance()->getTexture(index)->mName;
+					LL_CONT << " " << (LLAvatarAppearanceDictionary::getInstance()->getTexture(index) ? LLAvatarAppearanceDictionary::getInstance()->getTexture(index)->mName : "");
 				}
 			}
 			LL_CONT << " ) " << inst->getUnbakedPixelAreaRank();
@@ -3846,6 +3847,12 @@ bool LLVOAvatar::isVisuallyMuted()
         //    muted = true;
         //}
 		// </FS:Ansariel>
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+		else if (isRlvSilhouette())
+		{
+			muted = true;
+		}
+// [/RLVa:KB]
 		else
 		{
 			muted = isTooComplex();
@@ -3873,6 +3880,30 @@ bool LLVOAvatar::isInMuteList()
 	}
 	return muted;
 }
+
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+bool LLVOAvatar::isRlvSilhouette()
+{
+	if (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_AVDIST))
+		return false;
+
+	static RlvCachedBehaviourModifier<float> s_nSetCamAvDist(RLV_MODIFIER_SETCAM_AVDIST);
+
+	const F64 now = LLFrameTimer::getTotalSeconds();
+	if (now >= mCachedRlvSilhouetteUpdateTime)
+	{
+		const F64 SECONDS_BETWEEN_NEARBY_UPDATES = .5f;
+		bool fIsRlvSilhouette = dist_vec_squared(gAgent.getPositionGlobal(), getPositionGlobal()) > s_nSetCamAvDist() * s_nSetCamAvDist();
+		if (fIsRlvSilhouette != mCachedIsRlvSilhouette)
+		{
+			mCachedIsRlvSilhouette = fIsRlvSilhouette;
+			mNeedsImpostorUpdate = TRUE;
+		}
+		mCachedRlvSilhouetteUpdateTime = now + SECONDS_BETWEEN_NEARBY_UPDATES;
+	}
+	return mCachedIsRlvSilhouette;
+}
+// [/RLVa:KB]
 
 void LLVOAvatar::updateDebugText()
 {
@@ -5307,7 +5338,7 @@ void LLVOAvatar::collectLocalTextureUUIDs(std::set<LLUUID>& ids) const
 			if (imagep)
 			{
 				const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = LLAvatarAppearanceDictionary::getInstance()->getTexture((ETextureIndex)texture_index);
-				if (texture_dict->mIsLocalTexture)
+				if (texture_dict && texture_dict->mIsLocalTexture)
 				{
 					ids.insert(imagep->getID());
 				}
@@ -5464,8 +5495,8 @@ void LLVOAvatar::updateTextures()
 			if (imagep)
 			{
 				const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = LLAvatarAppearanceDictionary::getInstance()->getTexture((ETextureIndex)texture_index);
-				const EBakedTextureIndex baked_index = texture_dict->mBakedTextureIndex;
-				if (texture_dict->mIsLocalTexture)
+				const EBakedTextureIndex baked_index = texture_dict ? texture_dict->mBakedTextureIndex : EBakedTextureIndex::BAKED_NUM_INDICES;
+				if (texture_dict && texture_dict->mIsLocalTexture)
 				{
 					addLocalTextureStats((ETextureIndex)texture_index, imagep, texel_area_ratio, render_avatar, mBakedTextureDatas[baked_index].mIsUsed);
 				}
@@ -10316,9 +10347,21 @@ void LLVOAvatar::calcMutedAVColor()
 
     if (getVisualMuteSettings() == AV_DO_NOT_RENDER)
     {
-        // explicitly not-rendered avatars are light grey
-        new_color = LLColor4::grey3;
-        change_msg = " not rendered: color is grey3";
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+		 if (isRlvSilhouette())
+		 {
+			 new_color = LLColor4::silhouette;
+			 change_msg = " not rendered: color is silhouette";
+		 }
+		 else
+		 {
+// [/RLVa:KB]
+			// explicitly not-rendered avatars are light grey
+			 new_color = LLColor4::grey3;
+			 change_msg = " not rendered: color is grey3";
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+		 }
+// [/RLVa:KB]
     }
     else if (LLMuteList::getInstance()->isMuted(av_id)) // the user blocked them
     {
@@ -10326,8 +10369,11 @@ void LLVOAvatar::calcMutedAVColor()
         new_color = LLColor4::grey4;
         change_msg = " blocked: color is grey4";
     }
-    else if ( mMutedAVColor == LLColor4::white || mMutedAVColor == LLColor4::grey3 || mMutedAVColor == LLColor4::grey4 )
-    {
+//    else if ( mMutedAVColor == LLColor4::white || mMutedAVColor == LLColor4::grey3 || mMutedAVColor == LLColor4::grey4 )
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+	else if ( mMutedAVColor == LLColor4::white || mMutedAVColor == LLColor4::grey3 || mMutedAVColor == LLColor4::grey4 || mMutedAVColor == LLColor4::silhouette)
+// [/RLVa:KB]
+   {
         // select a color based on the first byte of the agents uuid so any muted agent is always the same color
         F32 color_value = (F32) (av_id.mData[0]);
         F32 spectrum = (color_value / 256.0);		// spectrum is between 0 and 1.f

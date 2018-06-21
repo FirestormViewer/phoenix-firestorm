@@ -787,7 +787,7 @@ LLVector3d	LLWorld::clipToVisibleRegions(const LLVector3d &start_pos, const LLVe
 //  If start_pos is outside the region, use start_pos.
 LLVector3d	LLWorld::clipToRegion(const LLViewerRegion* regionp, const LLVector3d &start_pos, const LLVector3d &end_pos, bool &clipped)
 {
-	static LLCachedControl<bool> fsExperimentalRegionCrossingMovementFix(gSavedSettings, "FSExperimentalRegionCrossingMovementFix");
+	static LLCachedControl<S32> fsExperimentalRegionCrossingMovementFix(gSavedSettings, "FSExperimentalRegionCrossingMovementFix");
 
 	clipped = false;									// no clipping yet
 	if (!regionp)										// no region. We're lost
@@ -810,7 +810,7 @@ LLVector3d	LLWorld::clipToRegion(const LLViewerRegion* regionp, const LLVector3d
 	// </FS>
 	F32 region_width = regionp->getWidth();
 	// <FS> FIRE-21915: Fix bogus avatar movement on region crossing
-	if (fsExperimentalRegionCrossingMovementFix &&
+	if (fsExperimentalRegionCrossingMovementFix == 1 &&
 		(region_coord_start.mV[VX] < 0.f || region_coord_start.mV[VX] > region_width
 		|| region_coord_start.mV[VY] < 0.f || region_coord_start.mV[VY] > region_width))
 	{
@@ -878,7 +878,7 @@ LLVector3d	LLWorld::clipToRegion(const LLViewerRegion* regionp, const LLVector3d
 	//								   (F64)(LLWorld::getInstance()->getRegionMaxHeight() - F_ALMOST_ZERO));
 
 	LLVector3d final_region_pos;
-	if (fsExperimentalRegionCrossingMovementFix)
+	if (fsExperimentalRegionCrossingMovementFix == 1)
 	{
 		// True if clipped. Caller needs to know, because it will kill velocity if there's clipping
 		// Don't do this by comparing floating point numbers for equality. That has roundoff problems.

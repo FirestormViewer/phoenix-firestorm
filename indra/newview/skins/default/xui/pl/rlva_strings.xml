@@ -47,9 +47,20 @@
 				<key>description</key>
 				<string>Wysyłane do drugiej osoby, gdy odmówisz dostępu do aktywnych ograniczeń RLV.</string>
 				<key>label</key>
-				<string>Komenda @list (zdalna)</string>
+				<string>Komenda @list oraz @except (zdalna)</string>
 				<key>customizable</key>
 				<boolean>1</boolean>
+			</map>
+			<key>imquery_list_suffix</key>
+			<map>
+				<key>value</key>
+				<string>(użyj @except aby zobaczyć listę aktywnych wyjątków)</string>
+				<key>description</key>
+				<string>Wysyłane do drugiej osoby jako dodatek do @list aby poinformować ją, jak poprosić o wyjątki</string>
+				<key>label</key>
+				<string>Dodatek komendy @list (zdalny)</string>
+				<key>customizable</key>
+				<boolean>0</boolean>
 			</map>
 			<key>stopim_nosession</key>
 			<map>
