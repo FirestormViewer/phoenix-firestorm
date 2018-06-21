@@ -59,6 +59,13 @@
 			<check_box label="Warten auf Vor-Sprung- und Lande-Animationen deaktivieren" name="FSIgnoreFinishAnimation"/>
 			<check_box label="Avataren des Rückwärtsgehen in der lokalen Ansicht erlauben (SL-Standard)" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Falls aktiviert, gehen Avatare auf dem eigenen Bildschirm beim Rückwärtsgehen rückwärts, anstatt sich umzudrehen und anschließend vorwärts zu gehen. Diese Option hat nur lokalen Effekt und hat keinen Einfluss auf was andere sehen. Dies ist die Standardeinstellung im Second Life Viewer und kann u.U. durch den AO des Avatars übersteuert werden."/>
 			<check_box label="Avatar zum ausgewählten Objekt drehen" name="FSTurnAvatarToSelectedObject" tool_tip="Dreht den Avatar mit dem Gesicht zum aktuell ausgewählten Objekt."/>
+			<text name="Region_Crossing_Movement_Label" width="190">
+				Bewegung beim Regionswechsel:
+			</text>
+			<radio_group name="Region_Crossing_Movement">
+				<radio_item label="Projektion" name="move_projection" width="85" />
+				<radio_item label="Stop" name="move_stop" width="85" />
+			</radio_group>
 			<text name="movelock_lbl">
 				Falls Movelock in der LSL-Brücke aktiviert ist...
 			</text>
@@ -86,7 +93,7 @@
 		<panel label="Teleports" name="tab-teleports">
 			<check_box label="Soundeffekte beim Teleportieren abspielen" name="PlayTeleportSound"/>
 			<check_box label="Nach einem Teleport immer fliegen" name="FSFlyAfterTeleport"/>
-			<check_box label="Bei Teleports immer „Abbrechen“-Button anzeigen" name="FSAlwaysShowTPCancel" tool_tip="Falls aktiviert, wird immer der „Abbrechen“-Button bei einem Teleport anzeigt, auch wenn der Simulator anderweitiges behauptet. Der Simulator weiß zu jeder Zeit, ob ein Teleport abgebrochen werden kann und ignoriert einen Abbruch-Befehl bei Gott- und Todes-TPs sowieso. RLVa-Restriktionen können diese Einstellung übersteuern."/>
+			<check_box label="Bei Teleports immer „Abbrechen“-Button anzeigen" name="FSAlwaysShowTPCancel" tool_tip="Falls aktiviert, wird immer der „Abbrechen“-Button bei einem Teleport anzeigt, auch wenn der Simulator anderweitiges behauptet. Der Simulator weiß zu jeder Zeit, ob ein Teleport abgebrochen werden kann und ignoriert einen Abbruch-Befehl bei Gott- und Todes-TPs sowieso. RestrainedLoveAPI-Restriktionen können diese Einstellung übersteuern."/>
 			<check_box label="Deaktiviere Teleport-Leitstrahl" name="tp_beam_toggle" tool_tip="Deaktiviert den Leitstrahl zum Teleportziel nach Teleports."/>
 			<check_box label="Deaktiviere Teleport-Anzeige" name="tp_screen_toggle" tool_tip="Deaktiviert den schwarzen Teleport-Bildschirm während eines Teleports."/>
 			<check_box label="Karte bei Teleports nicht schließen" name="FSDoNotHideMapOnTeleport" tool_tip="Deaktiviert das automatische Schließen der Karte während eines Teleports."/>

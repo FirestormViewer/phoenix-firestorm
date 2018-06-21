@@ -78,8 +78,25 @@
 
 const F32 ME_TYPING_TIMEOUT = 4.0f;
 const F32 OTHER_TYPING_TIMEOUT = 9.0f;
+const F32 NAME_REFRESH_TIMEOUT = 300.0f;
 
 floater_showed_signal_t FSFloaterIM::sIMFloaterShowedSignal;
+
+FSFloaterIMTimer::FSFloaterIMTimer(FSFloaterIMTimer::callback_t callback) :
+	LLEventTimer(0.1f),
+	mCallback(callback)
+{ }
+
+BOOL FSFloaterIMTimer::tick()
+{
+	if (!mCallback.empty())
+	{
+		mCallback();
+	}
+
+	return FALSE;
+}
+
 
 FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
   : LLTransientDockableFloater(NULL, true, session_id),
@@ -106,9 +123,11 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 	mVoiceChannel(NULL),
 	mMeTypingTimer(),
 	mOtherTypingTimer(),
+	mRefreshNameTimer(),
 	mUnreadMessagesNotificationPanel(NULL),
 	mUnreadMessagesNotificationTextBox(NULL),
-	mApplyRect(true)
+	mApplyRect(true),
+	mIMFloaterTimer(NULL)
 {
 	initIMSession(session_id);
 	
@@ -157,6 +176,10 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 	setDocked(!disable_chiclets);
 	// make sure to save position and size with chiclets disabled (torn off floater does that)
 	setTornOff(disable_chiclets);
+
+	mRefreshNameTimer.setTimerExpirySec(NAME_REFRESH_TIMEOUT);
+
+	mIMFloaterTimer = new FSFloaterIMTimer(boost::bind(&FSFloaterIM::timedUpdate, this));
 }
 
 // virtual
@@ -490,6 +513,8 @@ void FSFloaterIM::sendMsg(const std::string& msg)
 
 FSFloaterIM::~FSFloaterIM()
 {
+	delete mIMFloaterTimer;
+
 	mEventTimer.stop();
 
 	LLTransientFloaterMgr::getInstance()->removeControlView(LLTransientFloaterMgr::IM, (LLView*)this);
@@ -993,8 +1018,7 @@ void FSFloaterIM::onAvatarNameCache(const LLUUID& agent_id,
 	LL_DEBUGS("FSFloaterIM") << "Setting IM tab name to '" << name << "'" << LL_ENDL;
 }
 
-// virtual
-void FSFloaterIM::draw()
+void FSFloaterIM::timedUpdate()
 {
 	if (mMeTyping)
 	{
@@ -1022,9 +1046,15 @@ void FSFloaterIM::draw()
 		mOtherTyping = false;
 	}
 
-	LLTransientDockableFloater::draw();
+	if (mRefreshNameTimer.checkExpirationAndReset(NAME_REFRESH_TIMEOUT))
+	{
+		LLIMModel::LLIMSession* im_session = LLIMModel::instance().findIMSession(mSessionID);
+		if (im_session && im_session->isP2PSessionType())
+		{
+			fetchAvatarName(im_session->mOtherParticipantID);
+		}
+	}
 }
-
 
 // static
 void* FSFloaterIM::createPanelIMControl(void* userdata)
