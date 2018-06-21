@@ -55,6 +55,9 @@
 #include "llviewernetwork.h"
 #include "llviewercontrol.h"
 
+#include "llfloatersidepanelcontainer.h"
+#include "llsidepanelinventory.h"
+
 void dialog_refresh_all();
 
 static const U32 LL_ASSET_UPLOAD_TIMEOUT_SEC = 60;
@@ -802,14 +805,20 @@ void LLViewerAssetUpload::AssetInventoryUploadCoproc(LLCoreHttpUtil::HttpCorouti
             // Show the preview panel for textures and sounds to let
             // user know that the image (or snapshot) arrived intact.
             LLInventoryPanel* panel = LLInventoryPanel::getActiveInventoryPanel(FALSE);
-            if (panel)
+            // <FS:Ansariel> Use correct inventory floater for showing the upload
+            if (!panel)
             {
-                panel->setSelection(serverInventoryItem, TAKE_FOCUS_NO);
+                // Having no active panel here could either mean the primary inventory floater
+                // is the most-active inventory, but showing the object properties panel, or
+                // no inventory floater is open. In that case we make sure to show the inventory
+                // panel on the primary inventory floater. We don't have to deal with selecting
+                // the correct floater because only the primary inventory floater can show
+                // object properties.
+                LLSidepanelInventory* sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+                sidepanel_inventory->showInventoryPanel();
             }
-            else
-            {
-                LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, serverInventoryItem, TRUE, TAKE_FOCUS_NO, TRUE);
-            }
+            // </FS:Ansariel>
+            LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, serverInventoryItem, TRUE, TAKE_FOCUS_NO, (panel == NULL));
 
             // restore keyboard focus
             gFocusMgr.setKeyboardFocus(focus);

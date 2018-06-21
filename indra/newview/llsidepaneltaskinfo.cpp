@@ -128,30 +128,24 @@ BOOL LLSidepanelTaskInfo::postBuild()
 	childSetCommitCallback("search_check",						&LLSidepanelTaskInfo::onCommitIncludeInSearch,this);
 	
 	mDAPermModify = getChild<LLUICtrl>("perm_modify");
-	//mDACreator = getChildView("Creator:"); // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	mDACreatorName = getChild<LLUICtrl>("Creator Name");
 	mDAOwner = getChildView("Owner:");
 	mDAOwnerName = getChild<LLUICtrl>("Owner Name");
-	//mDAGroup = getChildView("Group:"); // <FS:Ansariel> Doesn't exist as of 2015-11-26
-	//mDAGroupName = getChild<LLUICtrl>("Group Name"); // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	mDAButtonSetGroup = getChildView("button set group");
 	mDAObjectName = getChild<LLUICtrl>("Object Name");
 	mDAName = getChildView("Name:");
 	mDADescription = getChildView("Description:");
 	mDAObjectDescription = getChild<LLUICtrl>("Object Description");
-	//mDAPermissions = getChildView("Permissions:"); // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	mDACheckboxShareWithGroup = getChild<LLUICtrl>("checkbox share with group");
 	mDAButtonDeed = getChildView("button deed");
 	mDACheckboxAllowEveryoneMove = getChild<LLUICtrl>("checkbox allow everyone move");
 	mDACheckboxAllowEveryoneCopy = getChild<LLUICtrl>("checkbox allow everyone copy");
-	//mDANextOwnerCan = getChildView("Next owner can:"); // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	mDACheckboxNextOwnerCanModify = getChild<LLUICtrl>("checkbox next owner can modify");
 	mDACheckboxNextOwnerCanCopy = getChild<LLUICtrl>("checkbox next owner can copy");
 	mDACheckboxNextOwnerCanTransfer = getChild<LLUICtrl>("checkbox next owner can transfer");
 	mDACheckboxForSale = getChild<LLUICtrl>("checkbox for sale");
 	mDASearchCheck = getChild<LLUICtrl>("search_check");
 	mDAComboSaleType = getChild<LLComboBox>("sale type");
-	//mDACost = getChild<LLUICtrl>("Cost");  // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	mDAEditCost = getChild<LLUICtrl>("Edit Cost");
 	mDALabelClickAction = getChildView("label click action");
 	mDAComboClickAction = getChild<LLComboBox>("clickaction");
@@ -187,7 +181,6 @@ void LLSidepanelTaskInfo::disableAll()
 	mDAPermModify->setEnabled(FALSE);
 	mDAPermModify->setValue(LLStringUtil::null);
 
-	//mDACreator->setEnabled(FALSE); // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	mDACreatorName->setValue(LLStringUtil::null);
 	mDACreatorName->setEnabled(FALSE);
 
@@ -195,21 +188,14 @@ void LLSidepanelTaskInfo::disableAll()
 	mDAOwnerName->setValue(LLStringUtil::null);
 	mDAOwnerName->setEnabled(FALSE);
 
-	//mDAGroup->setEnabled(FALSE); // <FS:Ansariel> Doesn't exist as of 2015-11-26
-	//mDAGroupName->setValue(LLStringUtil::null); // <FS:Ansariel> Doesn't exist as of 2015-11-26
-	//mDAGroupName->setEnabled(FALSE); // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	mDAButtonSetGroup->setEnabled(FALSE);
 
 	mDAObjectName->setValue(LLStringUtil::null);
 	mDAObjectName->setEnabled(FALSE);
 	mDAName->setEnabled(FALSE);
-	//mDAGroupName->setValue(LLStringUtil::null); // <FS:Ansariel> Doesn't exist as of 2015-11-26
-	//mDAGroupName->setEnabled(FALSE); // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	mDADescription->setEnabled(FALSE);
 	mDAObjectDescription->setValue(LLStringUtil::null);
 	mDAObjectDescription->setEnabled(FALSE);
-
-	//mDAPermissions->setEnabled(FALSE); // <FS:Ansariel> Doesn't exist as of 2015-11-26
 		
 	mDACheckboxShareWithGroup->setValue(FALSE);
 	mDACheckboxShareWithGroup->setEnabled(FALSE);
@@ -221,7 +207,6 @@ void LLSidepanelTaskInfo::disableAll()
 	mDACheckboxAllowEveryoneCopy->setEnabled(FALSE);
 
 	//Next owner can:
-	//mDANextOwnerCan->setEnabled(FALSE); // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	mDACheckboxNextOwnerCanModify->setValue(FALSE);
 	mDACheckboxNextOwnerCanModify->setEnabled(FALSE);
 	mDACheckboxNextOwnerCanCopy->setValue(FALSE);
@@ -239,9 +224,7 @@ void LLSidepanelTaskInfo::disableAll()
 		
 	mDAComboSaleType->setValue(LLSaleInfo::FS_COPY);
 	mDAComboSaleType->setEnabled(FALSE);
-		
-	//mDACost->setEnabled(FALSE); // <FS:Ansariel> Doesn't exist as of 2015-11-26
-	//mDACost->setValue(getString("Cost Default")); // <FS:Ansariel> Doesn't exist as of 2015-11-26
+	
 	mDAEditCost->setValue(LLStringUtil::null);
 	mDAEditCost->setEnabled(FALSE);
 		
@@ -369,8 +352,6 @@ void LLSidepanelTaskInfo::refresh()
 
 	mDAPathfindingAttributes->setEnabled(TRUE);
 	mDAPathfindingAttributes->setValue(LLTrans::getString(pfAttrName));
-
-	getChildView("Permissions:")->setEnabled(TRUE);
 	
 	// Update creator text field
 	//getChildView("Creator:")->setEnabled(TRUE); // <FS:Ansariel> Doesn't exist as of 2015-11-26
@@ -727,7 +708,6 @@ void LLSidepanelTaskInfo::refresh()
 		getChild<LLUICtrl>("checkbox for sale")->setTentative( 				is_for_sale_mixed);
 		getChildView("sale type")->setEnabled(num_for_sale && can_transfer && !is_sale_price_mixed);
 
-		//getChildView("Next owner can:")->setEnabled(TRUE); // <FS:Ansariel> Doesn't exist as of 2015-11-26
 		getChildView("checkbox next owner can modify")->setEnabled(base_mask_on & PERM_MODIFY);
 		getChildView("checkbox next owner can copy")->setEnabled(base_mask_on & PERM_COPY);
 		getChildView("checkbox next owner can transfer")->setEnabled(next_owner_mask_on & PERM_COPY);
@@ -737,7 +717,6 @@ void LLSidepanelTaskInfo::refresh()
 		getChildView("checkbox for sale")->setEnabled(FALSE);
 		getChildView("sale type")->setEnabled(FALSE);
 
-		//getChildView("Next owner can:")->setEnabled(FALSE); // <FS:Ansariel> Doesn't exist as of 2015-11-26
 		getChildView("checkbox next owner can modify")->setEnabled(FALSE);
 		getChildView("checkbox next owner can copy")->setEnabled(FALSE);
 		getChildView("checkbox next owner can transfer")->setEnabled(FALSE);

@@ -370,7 +370,7 @@ void downloadGridlistComplete( LLSD const &aData )
 
 	llofstream out_file;
 	out_file.open(filename.c_str());
-	LLSDSerialize::toPrettyXML( aData, out_file);
+	LLSDSerialize::toPrettyXML( data, out_file);
 	out_file.close();
 	LL_INFOS() << "GridListRequest: got new list." << LL_ENDL;
 	sGridListRequestReady = true;
@@ -378,7 +378,17 @@ void downloadGridlistComplete( LLSD const &aData )
 
 void downloadGridlistError( LLSD const &aData, std::string const &aURL )
 {
-	LL_WARNS() << "Failed to download grid list from " << aURL << LL_ENDL;
+	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(aData);
+
+	if (status.getType() == HTTP_NOT_MODIFIED)
+	{
+		LL_INFOS("fsdata") << "Didn't download grid list from " << aURL << " - no newer version available" << LL_ENDL;
+	}
+	else
+	{
+		LL_WARNS() << "Failed to download grid list from " << aURL << LL_ENDL;
+	}
+
 	sGridListRequestReady = true;
 }
 
@@ -1172,7 +1182,6 @@ bool idle_startup()
 			// <FS:Zi> Moved this to initBase() in llviewerwindow.cpp to get the edit menu set up
 			//         before any text widget uses it
 			// initialize_spellcheck_menu();
-			// initialize_edit_menu();
 			// </FS:Zi>
 			init_menus();
 		}

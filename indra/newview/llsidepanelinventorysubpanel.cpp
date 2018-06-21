@@ -50,8 +50,7 @@ LLSidepanelInventorySubpanel::LLSidepanelInventorySubpanel(const LLPanel::Params
   : LLPanel(p),
 	mIsDirty(TRUE),
 	mIsEditing(FALSE),
-	mCancelBtn(NULL),
-	mSaveBtn(NULL)
+	mCancelBtn(NULL)
 {
 }
 
@@ -63,24 +62,11 @@ LLSidepanelInventorySubpanel::~LLSidepanelInventorySubpanel()
 // virtual
 BOOL LLSidepanelInventorySubpanel::postBuild()
 {
-	// <FS:Ansariel> Doesn't exist on every sub panel
-	//mSaveBtn = getChild<LLButton>("save_btn");
-	//mSaveBtn->setClickedCallback(boost::bind(&LLSidepanelInventorySubpanel::onSaveButtonClicked, this));
-
-	//mCancelBtn = getChild<LLButton>("cancel_btn");
-	//mCancelBtn->setClickedCallback(boost::bind(&LLSidepanelInventorySubpanel::onCancelButtonClicked, this));
-	mSaveBtn = findChild<LLButton>("save_btn");
-	if (mSaveBtn)
-	{
-		mSaveBtn->setClickedCallback(boost::bind(&LLSidepanelInventorySubpanel::onSaveButtonClicked, this));
-	}
-
 	mCancelBtn = findChild<LLButton>("cancel_btn");
 	if (mCancelBtn)
 	{
 		mCancelBtn->setClickedCallback(boost::bind(&LLSidepanelInventorySubpanel::onCancelButtonClicked, this));
 	}
-	// </FS:Ansariel>
 	return TRUE;
 }
 
@@ -131,31 +117,15 @@ void LLSidepanelInventorySubpanel::dirty()
 
 void LLSidepanelInventorySubpanel::updateVerbs()
 {
-	// <FS:Ansariel> Doesn't exist on every sub panel
-	//mSaveBtn->setVisible(mIsEditing);
-	//mCancelBtn->setVisible(mIsEditing);
-	if (mSaveBtn)
-	{
-		mSaveBtn->setVisible(mIsEditing);
-	}
 	if (mCancelBtn)
 	{
 		mCancelBtn->setVisible(mIsEditing);
 	}
-	// </FS:Ansariel>
 }
 
 void LLSidepanelInventorySubpanel::onEditButtonClicked()
 {
 	setIsEditing(TRUE);
-	refresh();
-	updateVerbs();
-}
-
-void LLSidepanelInventorySubpanel::onSaveButtonClicked()
-{
-	save();
-	setIsEditing(FALSE);
 	refresh();
 	updateVerbs();
 }

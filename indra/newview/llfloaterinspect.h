@@ -40,6 +40,7 @@ class LLUICtrl;
 // [RLVa:KB] - Checked: RLVa-2.0.1
 class LLSelectNode;
 // [/RLVa:KB]
+class LLMenuButton; // <FS:Ansariel> FIRE-22292: Configurable columns
 
 class LLFloaterInspect : public LLFloater
 {
@@ -88,6 +89,19 @@ private:
 	LLSafeHandle<LLObjectSelection> mObjectSelection;
 	boost::signals2::connection mOwnerNameCacheConnection;
 	boost::signals2::connection mCreatorNameCacheConnection;
+
+	// <FS:Ansariel> FIRE-22292: Configurable columns
+	void						onColumnDisplayModeChanged();
+	void						onColumnVisibilityChecked(const LLSD& userdata);
+	bool						onEnableColumnVisibilityChecked(const LLSD& userdata);
+
+	LLMenuButton*				mOptionsButton;
+	LLHandle<LLView>			mOptionsMenuHandle;
+
+	std::map<std::string, U32>	mColumnBits;
+	S32							mLastResizeDelta;
+	boost::signals2::connection	mFSInspectColumnConfigConnection;
+	// </FS:Ansariel>
 };
 
 #endif //LL_LLFLOATERINSPECT_H

@@ -117,7 +117,6 @@ protected:
 	void 						onWearButtonClicked();
 	void 						onPlayButtonClicked();
 	void 						onTeleportButtonClicked();
-	//void 						onOverflowButtonClicked(); // <FS:Ansariel> Doesn't exist as of 2015-11-26
 public:
 	void 						onBackButtonClicked();
 
@@ -127,7 +126,6 @@ private:
 	LLButton*					mWearBtn;
 	LLButton*					mPlayBtn;
 	LLButton*					mTeleportBtn;
-	//LLButton*					mOverflowBtn; // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	LLButton*					mShopBtn;
 
 	bool						mInboxEnabled;

@@ -107,12 +107,14 @@ VRAM: [VRAM_USAGE] KB
          label=""
          name="creation_date_sort"
          width="-1" />
-		 <scroll_list.commit_callback
-		   function="Inspect.SelectObject" />
+         <scroll_list.commit_callback
+         function="Inspect.SelectObject" />
     </scroll_list>
     <button
      follows="left|bottom"
      height="23"
+     image_selected="Toolbar_Middle_Selected"
+     image_unselected="Toolbar_Middle_Off"
      label="See Owner Profile..."
      layout="topleft"
      left="4"
@@ -120,20 +122,43 @@ VRAM: [VRAM_USAGE] KB
      tool_tip="See profile of the highlighted object&apos;s owner"
      top_pad="4"
      width="150">
-		<button.commit_callback
-		function="Inspect.OwnerProfile" />
-	</button>
+        <button.commit_callback
+        function="Inspect.OwnerProfile" />
+    </button>
     <button
      follows="left|bottom"
      height="23"
+     image_selected="Toolbar_Middle_Selected"
+     image_unselected="Toolbar_Middle_Off"
      label="See Creator Profile..."
      layout="topleft"
-     left_pad="5"
+     left_pad="2"
      name="button creator"
      tool_tip="See profile of the highlighted object&apos;s original creator"
      top_delta="0"
      width="150">
-		<button.commit_callback
-		function="Inspect.CreatorProfile" />
-	</button>
+        <button.commit_callback
+        function="Inspect.CreatorProfile" />
+    </button>
+    <menu_button
+     follows="left|bottom"
+     height="23"
+     image_hover_unselected="Toolbar_Middle_Over"
+     image_overlay="Conv_toolbar_sort"
+     image_selected="Toolbar_Middle_Selected"
+     image_unselected="Toolbar_Middle_Off"
+     layout="topleft"
+     left_pad="2"
+     name="options_btn"
+     tool_tip="Options"
+     top_delta="0"
+     width="31" />
+    <icon
+     follows="left|right"
+     image_name="Toolbar_Middle_Off"
+     left_pad="2"
+     name="dummy_icon"
+     top_delta="0"
+     height="23"
+     right="-4"/>
 </floater>

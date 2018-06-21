@@ -256,10 +256,24 @@ void LLPanelLandAudio::onBtnStreamAdd()
 	if (!music_url.empty())
 	{
 		LLSD streamlist = gSavedSettings.getLLSD("FSStreamList");
-		streamlist["version"] = 1;
-		streamlist["audio"].append(music_url);
-		gSavedSettings.setLLSD("FSStreamList", streamlist);
-		refresh();
+
+		bool has_url = false;
+		for (LLSD::array_const_iterator it = streamlist["audio"].beginArray(); it != streamlist["audio"].endArray(); ++it)
+		{
+			if ((*it).asString() == music_url)
+			{
+				has_url = true;
+				break;
+			}
+		}
+
+		if (!has_url)
+		{
+			streamlist["version"] = 1;
+			streamlist["audio"].append(music_url);
+			gSavedSettings.setLLSD("FSStreamList", streamlist);
+			refresh();
+		}
 	}
 }
 

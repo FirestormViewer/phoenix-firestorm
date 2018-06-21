@@ -818,6 +818,29 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 
 	if (obj)
 	{
+		
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.0)
+		items.push_back(std::string("Copy Separator"));
+
+		items.push_back(std::string("Cut"));
+		if (!isItemMovable() || !isItemRemovable() || isLibraryItem())
+		{
+			disabled_items.push_back(std::string("Cut"));
+		}
+
+		items.push_back(std::string("Copy"));
+		if (!isItemCopyable() && !isItemLinkable())
+		{
+			disabled_items.push_back(std::string("Copy"));
+		}
+// [/SL:KB]
+		//items.push_back(std::string("Copy Separator"));
+		//items.push_back(std::string("Copy"));
+		//if (!isItemCopyable())
+		//{
+		//	disabled_items.push_back(std::string("Copy"));
+		//}
+
 		if (obj->getIsLinkType())
 		{
 			items.push_back(std::string("Find Original"));
@@ -864,14 +887,6 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 				}
 			}
 // [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.0)
-			//items.push_back(std::string("Copy Separator"));
-			//
-			//items.push_back(std::string("Copy"));
-			//if (!isItemCopyable())
-			//{
-			//	disabled_items.push_back(std::string("Copy"));
-			//}
-
 			//items.push_back(std::string("Cut"));
 			//if (!isItemMovable() || !isItemRemovable())
 			//{
@@ -895,22 +910,6 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
                 }
 			}
 		}
-
-// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.0)
-		items.push_back(std::string("Copy Separator"));
-
-		items.push_back(std::string("Cut"));
-		if (!isItemMovable() || !isItemRemovable() || isLibraryItem())
-		{
-			disabled_items.push_back(std::string("Cut"));
-		}
-
-		items.push_back(std::string("Copy"));
-		if (!isItemCopyable() && !isItemLinkable())
-		{
-			disabled_items.push_back(std::string("Copy"));
-		}
-// [/SL:KB]
 	}
 
 	// Don't allow items to be pasted directly into the COF or the inbox
@@ -2324,19 +2323,15 @@ BOOL LLItemBridge::isItemCopyable() const
 
 */
 
-//		// You can never copy a link.
-//		if (item->getIsLinkType())
 // [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
 		// We'll allow copying a link if:
 		//   - its target is available
 		//   - it doesn't point to another link [see LLViewerInventoryItem::getLinkedItem() which returns NULL in that case]
 		if (item->getIsLinkType())
-// [/SL:KB]
 		{
 			return (NULL != item->getLinkedItem());
 		}
 
-// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
 		// User can copy the item if:
 		//   - the item (or its target in the case of a link) is "copy"
 		//   - and/or if the item (or its target in the case of a link) has a linkable asset type
@@ -4133,13 +4128,20 @@ void LLFolderBridge::perform_pasteFromClipboard()
                                     break;
                                 }
                             }
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
+//                            else if (item->getIsLinkType())
+//                            {
+//                                link_inventory_object(parent_id, item_id,
+//                                    LLPointer<LLInventoryCallback>(NULL));
+ //                           }
+// [/SL:KB]
                             else
                             {
 // [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
-					if (item->getPermissions().allowCopyBy(gAgent.getID()))
-					{
+                                if (item->getPermissions().allowCopyBy(gAgent.getID()))
+                                {
 // [/SL:KB]
-                                copy_inventory_item(
+                                    copy_inventory_item(
                                                     gAgent.getID(),
                                                     item->getPermissions().getOwner(),
                                                     item->getUUID(),
@@ -4147,15 +4149,15 @@ void LLFolderBridge::perform_pasteFromClipboard()
                                                     std::string(),
                                                     LLPointer<LLInventoryCallback>(NULL));
 // [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
-					}
-					else if (LLAssetType::lookupIsLinkType(item->getActualType()))
-					{
-						LLInventoryObject::const_object_list_t obj_array;
-						obj_array.push_back(LLConstPointer<LLInventoryObject>(item));
-						link_inventory_array(parent_id,
-												obj_array,
-												LLPointer<LLInventoryCallback>(NULL));
-					}
+                                }
+                                else if (LLAssetType::lookupIsLinkType(item->getActualType()))
+                                {
+                                    LLInventoryObject::const_object_list_t obj_array;
+                                    obj_array.push_back(LLConstPointer<LLInventoryObject>(item));
+                                    link_inventory_array(parent_id,
+                                                         obj_array,
+                                                         LLPointer<LLInventoryCallback>(NULL));
+                                }
 // [/SL:KB]
                             }
                         }
@@ -5721,7 +5723,7 @@ bool LLTextureBridge::canSaveTexture(void)
 		return false;
 	}
 	
-// [RLVa:KB] - Checked: RLVa-2.2
+// [RLVa:KB] - Checked: RLVa-2.2 (@viewtexture)
 	if (!RlvActions::canPreviewTextures())
 	{
 		return false;

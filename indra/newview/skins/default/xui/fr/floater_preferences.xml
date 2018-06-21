@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Preferences" title="Préférences">
 	<floater.string name="LoginToChange">Connectez-vous pour modifier l'option</floater.string>
+	<floater.string name="email_unverified_tooltip">
+		Veuillez vérifier votre adresse électronique pour autoriser les IM par courriel en vous rendant à l&apos;adresse https://accounts.secondlife.com/change_email/
+	</floater.string>
 	<button label="Appliquer" label_selected="Appliquer" name="Apply"/>
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Annuler" label_selected="Annuler" name="Cancel"/>

@@ -74,10 +74,10 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 Контроль скриптами (RLVa): [RLV_VERSION]
 Версия libcurl: [LIBCURL_VERSION]
 Версия декодера J2C: [J2C_VERSION]
-Версия драйвера звука: [AUDIO_DRIVER_VERSION]
+Версия аудиодрайвера: [AUDIO_DRIVER_VERSION] 
 [LIBCEF_VERSION]
-Версия LibVLC: [LIBVLC_VERSION]
-Версия голосового сервера: [VOICE_VERSION]
+Версия LibVLC: [LIBVLC_VERSION] 
+Версия речевого сервера: [VOICE_VERSION]
 	</string>
 	<string name="AboutSettings">
 		Режим настроек: [MODE]
@@ -1587,6 +1587,9 @@ support@secondlife.com.
 	</string>
 	<string name="InventoryNoMatchingItems">
 		Не нашли того, что вам нужно? Попробуйте [secondlife:///app/search/all/[SEARCH_TERM] Поиск].
+	</string>
+	<string name="InventoryNoMatchingRecentItems">
+		Не нашли то, что искали? Попробуйте на [secondlife:///app/inventory/filters Show filters].
 	</string>
 	<string name="PlacesNoMatchingItems">
 		Не нашли того, что вам нужно? Попробуйте [secondlife:///app/search/places/[SEARCH_TERM] Поиск].
