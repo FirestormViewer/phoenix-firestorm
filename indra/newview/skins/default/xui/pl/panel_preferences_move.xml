@@ -58,7 +58,7 @@
 				Ruch przy zmianie regionu:
 			</text>
 			<radio_group name="Region_Crossing_Movement">
-				<radio_item label="Przewiduj" name="move_projection" />
+				<radio_item label="Przewiduj" name="move_predict" />
 				<radio_item label="Zatrzymuj" name="move_stop" />
 			</radio_group>
 			<text name="movelock_lbl">
