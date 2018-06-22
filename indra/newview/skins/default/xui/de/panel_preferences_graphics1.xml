@@ -123,8 +123,8 @@
 			S3TC Aktivieren:
 		</text>
 		<check_box label="Textur-Komprimierung aktivieren (Erfordert Neustart)" name="texture compression" tool_tip="Komprimiert Texturen im Videospeicher und erlaubt dadurch eine höhrere Auflösung und/oder Laden von mehr Texturen auf Kosten der Textqualität."/>
-		<text name="Antialiasing:">
-			Antialiasing:
+		<text name="Antialiasing:" tool_tip="Eine Änderung dieser Einstellung kann auf bestimmter Hardware einen Neustart erfordern.">
+			Antialiasing (Neustart empfohlen):
 		</text>
 		<combo_box label="Antialiasing" name="fsaa">
 			<combo_box.item label="Deaktiviert" name="FSAADisabled"/>
