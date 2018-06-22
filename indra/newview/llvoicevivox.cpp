@@ -6357,6 +6357,7 @@ void LLVivoxVoiceClient::expireVoiceFonts()
 
 	LLSD args;
 	args["URL"] = LLTrans::getString("voice_morphing_url");
+	args["PREMIUM_URL"] = LLTrans::getString("premium_voice_morphing_url");
 
 	// Give a notification if any voice fonts have expired.
 	if (have_expired)

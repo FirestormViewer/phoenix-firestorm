@@ -179,6 +179,7 @@ public:
 	void onClickResetVoice();
 
 	void onClickSetCache();
+	void changeCachePath(const std::vector<std::string>& filenames, std::string proposed_name);
 	void onClickBrowseCache();
 	void onClickBrowseCrashLogs();
 	void onClickBrowseChatLogDir();
@@ -200,6 +201,7 @@ public:
 	void resetAllIgnored();
 	void setAllIgnored();
 	void onClickLogPath();
+	void changeLogPath(const std::vector<std::string>& filenames, std::string proposed_name);
 	bool moveTranscriptsAndLog();
 	//[FIX FIRE-2765 : SJ] Making sure Reset button resets works
 	void onClickResetLogPath();
