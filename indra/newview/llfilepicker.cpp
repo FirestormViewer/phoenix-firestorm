@@ -1090,6 +1090,8 @@ void LLFilePicker::chooser_responder(GtkWidget *widget, gint response, gpointer 
 	const char* cur_folder = gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(widget));
 	if (cur_folder != NULL)
 	{
+		// <FS> FIRE-14924: Remember last used directory
+		//picker->mContextToPathMap[picker->mCurContextName] = cur_folder;
 		if (picker->mCurContextName == "openfile")
 		{
 			gSavedSettings.setString("FSFilePickerOpenDirectory", cur_folder);
@@ -1098,6 +1100,7 @@ void LLFilePicker::chooser_responder(GtkWidget *widget, gint response, gpointer 
 		{
 			gSavedSettings.setString("FSFilePickerSaveDirectory", cur_folder);
 		}
+		// </FS>
 	}
 
 	gtk_widget_destroy(widget);
@@ -1135,6 +1138,15 @@ GtkWindow* LLFilePicker::buildFilePicker(bool is_save, bool is_folder, std::stri
 
 		// get the default path for this usage context if it's been
 		// seen before.
+		// <FS> FIRE-14924: Remember last used directory
+		//std::map<std::string,std::string>::iterator
+		//	this_path = mContextToPathMap.find(context);
+		//if (this_path != mContextToPathMap.end())
+		//{
+		//	gtk_file_chooser_set_current_folder
+		//		(GTK_FILE_CHOOSER(win),
+		//		 this_path->second.c_str());
+		//}
 		std::string this_path = "";
 		
 		if (context == "openfile")
@@ -1152,6 +1164,7 @@ GtkWindow* LLFilePicker::buildFilePicker(bool is_save, bool is_folder, std::stri
 				(GTK_FILE_CHOOSER(win),
 				 this_path.c_str());
 		}
+		// </FS>
 
 #  if LL_X11
 		// Make GTK tell the window manager to associate this
