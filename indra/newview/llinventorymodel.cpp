@@ -1046,7 +1046,10 @@ U32 LLInventoryModel::updateItem(const LLViewerInventoryItem* item, U32 mask)
 		LLUUID new_parent_id = item->getParentUUID();
 		bool update_parent_on_server = false;
 
-		if (new_parent_id.isNull())
+		// <FS:Ansariel> Fix attachments being to Lost&Found during logout
+		//if (new_parent_id.isNull())
+		if (new_parent_id.isNull() && !LLApp::isExiting())
+		// </FS:Ansariel>
 		{
 			// item with null parent will end in random location and then in Lost&Found,
 			// either move to default folder as if it is new item or don't move at all
