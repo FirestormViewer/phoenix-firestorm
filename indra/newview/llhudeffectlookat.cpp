@@ -564,7 +564,7 @@ void LLHUDEffectLookAt::render()
 		if ((hide_own || is_private) && ((LLVOAvatar*)(LLViewerObject*)mSourceObject)->isSelf())
 			return;
 
-		LLGLDisable gls_stencil(GL_STENCIL_TEST); // <FS:Ansariel> HUD items hidden by new mesh selection outlining
+		LLGLDisable gls_stencil(GL_STENCIL_TEST);
 
 		LLVector3 target = mTargetPos + ((LLVOAvatar*)(LLViewerObject*)mSourceObject)->mHeadp->getWorldPosition();
 		LLColor3 lookAtColor = (*mAttentions)[mTargetType].mColor;
