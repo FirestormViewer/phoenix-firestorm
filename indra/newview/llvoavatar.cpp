@@ -8207,7 +8207,7 @@ void LLVOAvatar::updateMeshVisibility()
 		}
 		else if (i == MESH_ID_EYELASH)
 		{
-			joint->setVisible(!bake_flag[BAKED_EYES], TRUE);
+			joint->setVisible(!bake_flag[BAKED_HEAD], TRUE);
 		}
 	}
 }
@@ -8428,6 +8428,33 @@ void LLVOAvatar::updateMeshTextures()
 		call_remove_missing = false;
 		removeMissingBakedTextures();	// May call back into this function if anything is removed
 		call_remove_missing = true;
+	}
+
+	//refresh bakes on any attached objects
+	for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
+		iter != mAttachmentPoints.end();
+		++iter)
+	{
+		LLViewerJointAttachment* attachment = iter->second;
+
+		for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
+			attachment_iter != attachment->mAttachedObjects.end();
+			++attachment_iter)
+		{
+			LLViewerObject* attached_object = (*attachment_iter);
+			attached_object->refreshBakeTexture();
+
+			LLViewerObject::const_child_list_t& child_list = attached_object->getChildren();
+			for (LLViewerObject::child_list_t::const_iterator iter = child_list.begin();
+				iter != child_list.end(); ++iter)
+			{
+				LLViewerObject* objectp = *iter;
+				if (objectp)
+				{
+					objectp->refreshBakeTexture();
+				}
+			}
+		}
 	}
 
 	
@@ -9275,36 +9302,39 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 	}
 
 	updateMeshTextures();
-
-	//refresh bakes on any attached objects
-	for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
-		iter != mAttachmentPoints.end();
-		++iter)
-	{
-		LLViewerJointAttachment* attachment = iter->second;
-
-		for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
-			attachment_iter != attachment->mAttachedObjects.end();
-			++attachment_iter)
-		{
-			LLViewerObject* attached_object = (*attachment_iter);
-			attached_object->refreshBakeTexture();
-
-			LLViewerObject::const_child_list_t& child_list = attached_object->getChildren();
-			for (LLViewerObject::child_list_t::const_iterator iter = child_list.begin();
-				iter != child_list.end(); ++iter)
-			{
-				LLViewerObject* objectp = *iter;
-				if (objectp)
-				{
-					objectp->refreshBakeTexture();
-				}
-			}
-		}
-	}
-
 	updateMeshVisibility();
 
+}
+
+LLViewerTexture* LLVOAvatar::getBakedTexture(const U8 te)
+{
+	if (te < 0 || te >= BAKED_NUM_INDICES)
+	{
+		return NULL;
+	}
+
+	BOOL is_layer_baked = isTextureDefined(mBakedTextureDatas[te].mTextureIndex);
+	
+	LLViewerTexLayerSet* layerset = NULL;
+	layerset = getTexLayerSet(te);
+	
+
+	if (!isUsingLocalAppearance() && is_layer_baked)
+	{
+		LLViewerFetchedTexture* baked_img = LLViewerTextureManager::staticCastToFetchedTexture(getImage(mBakedTextureDatas[te].mTextureIndex, 0), TRUE);
+		return baked_img;
+	}
+	else if (layerset && isUsingLocalAppearance())
+	{
+		layerset->createComposite();
+		layerset->setUpdatesEnabled(TRUE);
+
+		return layerset->getViewerComposite();
+	}
+
+	return NULL;
+
+	
 }
 
 // static
@@ -9543,6 +9573,7 @@ void LLVOAvatar::useBakedTexture( const LLUUID& id )
 			}
 		}
 	}
+
 	dirtyMesh();
 }
 
