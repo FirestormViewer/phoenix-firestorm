@@ -86,9 +86,7 @@
 
 #include "llworld.h" // <FS:Ansariel> For FIRE-1292
 #include "llsdutil.h"
-#ifdef OPENSIM
 #include "llviewernetwork.h"
-#endif // OPENSIM
 #include "fsfloaterbantime.h"
 #include "fsnamelistavatarmenu.h"
 #include "llfloaterauction.h"

@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Tekstura" name="Texture">
-	<panel.string name="string repeats per meter">
-		Powtórzenia na metr
-	</panel.string>
-	<panel.string name="string repeats per face">
-		Powtórzenia na stronę
-	</panel.string>
 	<text name="color label">
 		Kolor
 	</text>

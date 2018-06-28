@@ -2947,7 +2947,7 @@
       <key>Comment</key>
       <string>Render with camera offset from view frustum (rendering debug)</string>
       <key>Persist</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
@@ -11359,7 +11359,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Comment</key>
       <string>Enable strict GL debugging.</string>
       <key>Persist</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
@@ -11383,7 +11383,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Comment</key>
       <string>Enable strict pipeline debugging.</string>
       <key>Persist</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
@@ -24702,6 +24702,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>U32</string>
       <key>Value</key>
       <integer>1023</integer>
+    </map>
+    <key>FSFilePickerOpenDirectory</key>
+    <map>
+      <key>Comment</key>
+      <string>The last used directory for opening a file</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string />
+    </map>
+    <key>FSFilePickerSaveDirectory</key>
+    <map>
+      <key>Comment</key>
+      <string>The last used directory for saving a file</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string />
     </map>
   </map>
 </llsd>

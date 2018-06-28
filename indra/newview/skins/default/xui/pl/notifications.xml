@@ -4344,9 +4344,9 @@ Spróbuj ponownie za minutę.
 	<notification name="CantAttachObjectBeingRemoved">
 		Nie możesz odłączyć dodatku, ponieważ jest on już odłączony.
 	</notification>
-	<notification name="IllegalAttachment">
+	<!-- <notification name="IllegalAttachment">
 		Dodatek chciał się doczepić do punktu, jaki nie istnieje na awatarze. Został on zamiast tego dołączony do klatki piersiowej.
-	</notification>
+	</notification> -->
 	<notification name="CantDropItemTrialUser">
 		Nie możesz tutaj upuszczać obiektów; spróbuj w strefie Darmowej Próby.
 	</notification>
@@ -4579,7 +4579,7 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 		Błąd wewnętrzny uniemożliwił poprawną aktualizację danych przeglądarki. Stan konta L$ lub posiadane działki wyświetlane w przeglądarce mogą nie odzwierciedlać faktycznego stanu posiadania na serwerach.
 	</notification>
 	<notification name="LargePrimAgentIntersect">
-		Nie można utworzyć wielkich prim, które nachodzą na innych rezydentów. Spróbuj jeszcze raz, gdy przesuną się oni.
+		Nie można tworzyć wielkich prim, które nachodzą na innych rezydentów. Spróbuj jeszcze raz, gdy się oni przesuną.
 	</notification>
 	<notification name="RLVaChangeStrings">
 		Zmiany nie odniosą skutku, dopóki nie zrestartujesz [APP_NAME].
