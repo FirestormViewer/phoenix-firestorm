@@ -811,9 +811,7 @@ class WindowsManifest(ViewerManifest):
                 self.path("ortp.dll")
                 self.path("SLVoice.exe")
                 self.path("vivoxoal.dll")
-                self.path("vivoxplatform.dll")
                 self.path("vivoxsdk.dll")
-                self.path("zlib1.dll")
             with self.prefix(src=pkgdir, dst="voice_os"):
                 self.path("ca-bundle.crt")
         # </FS:Ansariel>
