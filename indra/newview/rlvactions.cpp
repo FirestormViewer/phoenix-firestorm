@@ -20,10 +20,12 @@
 #include "llviewercamera.h"
 #include "llvoavatarself.h"
 #include "llworld.h"
+
 #include "rlvactions.h"
 #include "rlvhelper.h"
 #include "rlvhandler.h"
 #include "rlvinventory.h"
+#include "rlvmodifiers.h"
 
 // ============================================================================
 // Camera
@@ -293,6 +295,21 @@ bool RlvActions::autoAcceptTeleportRequest(const LLUUID& idRequester)
 	return ((idRequester.notNull()) && (gRlvHandler.isException(RLV_BHVR_ACCEPTTPREQUEST, idRequester))) || (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTTPREQUEST));
 }
 
+bool RlvActions::canFly()
+{
+	return (!gRlvHandler.getCurrentCommand()) ? !gRlvHandler.hasBehaviour(RLV_BHVR_FLY) : !gRlvHandler.hasBehaviourExcept(RLV_BHVR_FLY, gRlvHandler.getCurrentObject());
+}
+
+bool RlvActions::canFly(const LLUUID& idRlvObjExcept)
+{
+	return !gRlvHandler.hasBehaviourExcept(RLV_BHVR_FLY, idRlvObjExcept);
+}
+
+bool RlvActions::canJump()
+{
+	return !gRlvHandler.hasBehaviour(RLV_BHVR_JUMP);
+}
+
 // ============================================================================
 // Teleporting
 //
@@ -300,22 +317,25 @@ bool RlvActions::autoAcceptTeleportRequest(const LLUUID& idRequester)
 bool RlvActions::canTeleportToLocal(const LLVector3d& posGlobal)
 {
 	// User can initiate a local teleport if:
-	//   - not restricted from "sit teleporting" (or the destination is within the allowed xy-radius)
-	//   - not restricted from teleporting locally (or the destination is within the allowed xy-radius)
 	//   - can stand up (or isn't sitting)
+	//   - not restricted from "sit teleporting" (or the destination is within the allowed xyz-radius)
+	//   - not restricted from teleporting locally (or the destination is within the allowed xy-radius)
 	// NOTE: if we're teleporting due to an active command we should disregard any restrictions from the same object
 	const LLUUID& idRlvObjExcept = gRlvHandler.getCurrentObject();
-	bool fCanStand = RlvActions::canStand(idRlvObjExcept);
-	if ( (fCanStand) && ((gRlvHandler.hasBehaviourExcept(RLV_BHVR_SITTP, gRlvHandler.getCurrentObject())) || (gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOCAL, gRlvHandler.getCurrentObject()))) )
+	bool fCanTeleport = RlvActions::canStand(idRlvObjExcept);
+	if ( (fCanTeleport) && (gRlvHandler.hasBehaviourExcept(RLV_BHVR_SITTP, idRlvObjExcept)) )
 	{
-		// User can stand up but is either @sittp or @tplocal restricted so we need to distance check
-		const F32 nDistSq = (LLVector2(posGlobal.mdV[0], posGlobal.mdV[1]) - LLVector2(gAgent.getPositionGlobal().mdV[0], gAgent.getPositionGlobal().mdV[1])).lengthSquared();
-		F32 nMaxDist = llmin(RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_TPLOCALDIST)->getValue<float>(), RLV_MODIFIER_TPLOCAL_DEFAULT);
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_SITTP))
-			nMaxDist = llmin(nMaxDist, RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SITTPDIST)->getValue<F32>());
-		return (nDistSq < nMaxDist * nMaxDist);
+		const F32 nDistSq = (posGlobal - gAgent.getPositionGlobal()).lengthSquared();
+		const F32 nSitTpDist = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SITTPDIST)->getValue<F32>();
+		fCanTeleport = nDistSq < nSitTpDist * nSitTpDist;
 	}
-	return fCanStand;
+	if ( (fCanTeleport) && (gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOCAL, idRlvObjExcept)) )
+	{
+		const F32 nDistSq = (LLVector2(posGlobal.mdV[0], posGlobal.mdV[1]) - LLVector2(gAgent.getPositionGlobal().mdV[0], gAgent.getPositionGlobal().mdV[1])).lengthSquared();
+		const F32 nTpLocalDist = llmin(RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_TPLOCALDIST)->getValue<float>(), RLV_MODIFIER_TPLOCAL_DEFAULT);
+		fCanTeleport = nDistSq < nTpLocalDist * nTpLocalDist;
+	}
+	return fCanTeleport;
 }
 
 bool RlvActions::canTeleportToLocation()

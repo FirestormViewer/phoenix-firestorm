@@ -1231,7 +1231,7 @@ class LLAdvancedToggleWireframe : public view_listener_t
 };
 
 // Called from rlvhandler.cpp
-void set_use_wireframe(BOOL useWireframe)
+void set_use_wireframe(bool useWireframe)
 	{
 		if (gUseWireframe == useWireframe)
 			return;
@@ -3115,11 +3115,20 @@ class LLAvatarCheckImpostorMode : public view_listener_t
 		switch (mode) 
 		{
 			case 0:
-				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_RENDER_NORMALLY);
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+				return LLRenderMuteList::instance().getSavedVisualMuteSetting(avatar->getID()) == LLVOAvatar::AV_RENDER_NORMALLY;
+// [/RLVa:KB]
+//				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_RENDER_NORMALLY);
 			case 1:
-				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_DO_NOT_RENDER);
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+				return LLRenderMuteList::instance().getSavedVisualMuteSetting(avatar->getID()) == LLVOAvatar::AV_DO_NOT_RENDER;
+// [/RLVa:KB]
+//				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_DO_NOT_RENDER);
 			case 2:
-				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_ALWAYS_RENDER);
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+				return LLRenderMuteList::instance().getSavedVisualMuteSetting(avatar->getID()) == LLVOAvatar::AV_ALWAYS_RENDER;
+// [/RLVa:KB]
+//				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_ALWAYS_RENDER);
 			default:
 				return false;
 		}

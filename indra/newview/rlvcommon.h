@@ -56,7 +56,7 @@ class RlvObject;
 
 struct RlvException;
 typedef boost::variant<std::string, LLUUID, S32, ERlvBehaviour> RlvExceptionOption;
-typedef boost::variant<int, float, LLVector3, LLUUID> RlvBehaviourModifierValue;
+typedef boost::variant<int, float, bool, LLVector3, LLUUID> RlvBehaviourModifierValue;
 
 class RlvGCTimer;
 
@@ -106,6 +106,8 @@ public:
 	static void initCompatibilityMode(std::string strCompatList);
 	static bool isCompatibilityModeObject(const LLUUID& idRlvObject);
 
+	static bool isAllowedExperience(const LLUUID& idExperience, U8 nMaturity);
+
 	static void initClass();
 	static void onChangedSettingMain(const LLSD& sdValue);
 protected:
@@ -121,9 +123,11 @@ protected:
 	 */
 protected:
 	static bool s_fCanOOC;
+	static U8   s_nExperienceMinMaturity;
 	static bool s_fLegacyNaming;
 	static bool s_fNoSetEnv;
 	static bool s_fTempAttach;
+	static std::list<std::string> s_BlockedExperiences;
 	static std::list<LLUUID>      s_CompatItemCreators;
 	static std::list<std::string> s_CompatItemNames;
 };
@@ -185,7 +189,6 @@ public:
 	static bool sendChatReply(S32 nChannel, const std::string& strUTF8Text);
 	static bool sendChatReply(const std::string& strChannel, const std::string& strUTF8Text);
 	static void sendIMMessage(const LLUUID& idTo, const std::string& strMsg, char chSplit);
-	static void teleportCallback(U64 hRegion, const LLVector3& posRegion, const LLVector3& vecLookAt);
 protected:
 	static bool m_fForceTp;															// @standtp
 };

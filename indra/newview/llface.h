@@ -221,6 +221,7 @@ public:
 	BOOL		switchTexture() ;
 
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+	bool        isDefaultTexture(U32 nChannel) const;
 	void		setDefaultTexture(U32 nChannel, bool fShowDefault) const;
 // [/SL:KB]
 

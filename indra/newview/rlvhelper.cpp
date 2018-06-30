@@ -25,6 +25,7 @@
 #include "rlvhelper.h"
 #include "rlvhandler.h"
 #include "rlvinventory.h"
+#include "rlvmodifiers.h"
 
 #include <boost/algorithm/string.hpp>
 
@@ -100,9 +101,10 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("editobj", RLV_BHVR_EDITOBJ));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("emote", RLV_BHVR_EMOTE));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("fartouch", RLV_BHVR_FARTOUCH));
-	addModifier(RLV_BHVR_FARTOUCH, RLV_MODIFIER_FARTOUCHDIST, new RlvBehaviourModifier("Fartouch Distance", RLV_MODIFIER_FARTOUCH_DEFAULT, true, new RlvBehaviourModifier_CompMin));
+	addModifier(RLV_BHVR_FARTOUCH, RLV_MODIFIER_FARTOUCHDIST, new RlvBehaviourModifier("Fartouch Distance", RLV_MODIFIER_FARTOUCH_DEFAULT, true, new RlvBehaviourModifierCompMin));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("fly", RLV_BHVR_FLY));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("interact", RLV_BHVR_INTERACT, RlvBehaviourInfo::BHVR_EXTENDED));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("jump", RLV_BHVR_JUMP));
 	addEntry(new RlvBehaviourInfo("notify",					RLV_BHVR_NOTIFY,				RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("permissive", RLV_BHVR_PERMISSIVE));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("recvchat", RLV_BHVR_RECVCHAT, RlvBehaviourInfo::BHVR_STRICT));
@@ -110,8 +112,8 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("recvemote", RLV_BHVR_RECVEMOTE, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("recvemotefrom", RLV_BHVR_RECVEMOTEFROM, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourProcessor<RLV_BHVR_RECVIM, RlvBehaviourRecvSendStartIMHandler>("recvim", RlvBehaviourInfo::BHVR_STRICT));
-	addModifier(RLV_BHVR_RECVIM, RLV_MODIFIER_RECVIMDISTMIN, new RlvBehaviourModifier("RecvIM Distance (Min)", F32_MAX, true, new RlvBehaviourModifier_CompMax));
-	addModifier(RLV_BHVR_RECVIM, RLV_MODIFIER_RECVIMDISTMAX, new RlvBehaviourModifier("RecvIM Distance (Max)", F32_MAX, true, new RlvBehaviourModifier_CompMin));
+	addModifier(RLV_BHVR_RECVIM, RLV_MODIFIER_RECVIMDISTMIN, new RlvBehaviourModifier("RecvIM Distance (Min)", F32_MAX, true, new RlvBehaviourModifierCompMax));
+	addModifier(RLV_BHVR_RECVIM, RLV_MODIFIER_RECVIMDISTMAX, new RlvBehaviourModifier("RecvIM Distance (Max)", F32_MAX, true, new RlvBehaviourModifierCompMin));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("recvimfrom", RLV_BHVR_RECVIMFROM, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourInfo("redirchat",				RLV_BHVR_REDIRCHAT,				RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourInfo("rediremote",				RLV_BHVR_REDIREMOTE,			RLV_TYPE_ADDREM));
@@ -122,8 +124,8 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourProcessor<RLV_BHVR_SENDCHANNELEXCEPT, RlvBehaviourSendChannelHandler>("sendchannel_except", RlvBehaviourInfo::BHVR_STRICT | RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("sendchat", RLV_BHVR_SENDCHAT));
 	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SENDIM, RlvBehaviourRecvSendStartIMHandler>("sendim", RlvBehaviourInfo::BHVR_STRICT));
-	addModifier(RLV_BHVR_SENDIM, RLV_MODIFIER_SENDIMDISTMIN, new RlvBehaviourModifier("SendIM Distance (Min)", F32_MAX, true, new RlvBehaviourModifier_CompMax));
-	addModifier(RLV_BHVR_SENDIM, RLV_MODIFIER_SENDIMDISTMAX, new RlvBehaviourModifier("SendIM Distance (Max)", F32_MAX, true, new RlvBehaviourModifier_CompMin));
+	addModifier(RLV_BHVR_SENDIM, RLV_MODIFIER_SENDIMDISTMIN, new RlvBehaviourModifier("SendIM Distance (Min)", F32_MAX, true, new RlvBehaviourModifierCompMax));
+	addModifier(RLV_BHVR_SENDIM, RLV_MODIFIER_SENDIMDISTMAX, new RlvBehaviourModifier("SendIM Distance (Max)", F32_MAX, true, new RlvBehaviourModifierCompMin));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("sendimto", RLV_BHVR_SENDIMTO, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("sendgesture", RLV_BHVR_SENDGESTURE, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETDEBUG, RLV_OPTION_NONE>("setdebug"));
@@ -146,11 +148,11 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showworldmap", RLV_BHVR_SHOWWORLDMAP));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("sit", RLV_BHVR_SIT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("sittp", RLV_BHVR_SITTP));
-	addModifier(RLV_BHVR_SITTP, RLV_MODIFIER_SITTPDIST, new RlvBehaviourModifier("SitTp Distance", RLV_MODIFIER_SITTP_DEFAULT, true, new RlvBehaviourModifier_CompMin));
+	addModifier(RLV_BHVR_SITTP, RLV_MODIFIER_SITTPDIST, new RlvBehaviourModifier("SitTp Distance", RLV_MODIFIER_SITTP_DEFAULT, true, new RlvBehaviourModifierCompMin));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("standtp", RLV_BHVR_STANDTP));
 	addEntry(new RlvBehaviourProcessor<RLV_BHVR_STARTIM, RlvBehaviourRecvSendStartIMHandler>("startim", RlvBehaviourInfo::BHVR_STRICT));
-	addModifier(RLV_BHVR_STARTIM, RLV_MODIFIER_STARTIMDISTMIN, new RlvBehaviourModifier("StartIM Distance (Min)", F32_MAX, true, new RlvBehaviourModifier_CompMax));
-	addModifier(RLV_BHVR_STARTIM, RLV_MODIFIER_STARTIMDISTMAX, new RlvBehaviourModifier("StartIM Distance (Max)", F32_MAX, true, new RlvBehaviourModifier_CompMin));
+	addModifier(RLV_BHVR_STARTIM, RLV_MODIFIER_STARTIMDISTMIN, new RlvBehaviourModifier("StartIM Distance (Min)", F32_MAX, true, new RlvBehaviourModifierCompMax));
+	addModifier(RLV_BHVR_STARTIM, RLV_MODIFIER_STARTIMDISTMAX, new RlvBehaviourModifier("StartIM Distance (Max)", F32_MAX, true, new RlvBehaviourModifierCompMin));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("startimto", RLV_BHVR_STARTIMTO, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("temprun", RLV_BHVR_TEMPRUN));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("touchall", RLV_BHVR_TOUCHALL));
@@ -165,7 +167,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("tplm", RLV_BHVR_TPLM));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("tploc", RLV_BHVR_TPLOC));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("tplocal", RLV_BHVR_TPLOCAL, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addModifier(RLV_BHVR_TPLOCAL, RLV_MODIFIER_TPLOCALDIST, new RlvBehaviourModifier("Local Teleport Distance", RLV_MODIFIER_TPLOCAL_DEFAULT, true, new RlvBehaviourModifier_CompMin));
+	addModifier(RLV_BHVR_TPLOCAL, RLV_MODIFIER_TPLOCALDIST, new RlvBehaviourModifier("Local Teleport Distance", RLV_MODIFIER_TPLOCAL_DEFAULT, true, new RlvBehaviourModifierCompMin));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("tplure", RLV_BHVR_TPLURE, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("tprequest", RLV_BHVR_TPREQUEST, RlvBehaviourInfo::BHVR_STRICT | RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("unsharedunwear",			RLV_BHVR_UNSHAREDUNWEAR,		RLV_TYPE_ADDREM));
@@ -174,35 +176,51 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("viewnote", RLV_BHVR_VIEWNOTE));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("viewscript", RLV_BHVR_VIEWSCRIPT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("viewtexture", RLV_BHVR_VIEWTEXTURE));
+
 	// Camera
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM, RLV_OPTION_NONE>("setcam"));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_avdist", RLV_BHVR_SETCAM_AVDIST));
+	addModifier(RLV_BHVR_SETCAM_AVDIST, RLV_MODIFIER_SETCAM_AVDIST, new RlvBehaviourModifier("Camera - Silhouette Distance", 0.0f, false, new RlvBehaviourModifierCompMax()));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_avdistmin", RLV_BHVR_SETCAM_AVDISTMIN, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addModifier(RLV_BHVR_SETCAM_AVDISTMIN, RLV_MODIFIER_SETCAM_AVDISTMIN, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_AVDISTMIN>("Camera - Avatar Distance (Min)", 0.0f, false, new RlvBehaviourModifier_CompMax()));
+	addModifier(RLV_BHVR_SETCAM_AVDISTMIN, RLV_MODIFIER_SETCAM_AVDISTMIN, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_AVDISTMIN>("Camera - Avatar Distance (Min)", 0.0f, false, new RlvBehaviourModifierCompMax()));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_avdistmax", RLV_BHVR_SETCAM_AVDISTMAX, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addModifier(RLV_BHVR_SETCAM_AVDISTMAX, RLV_MODIFIER_SETCAM_AVDISTMAX, new RlvBehaviourModifier("Camera - Avatar Distance (Max)", F32_MAX, false, new RlvBehaviourModifier_CompMin));
+	addModifier(RLV_BHVR_SETCAM_AVDISTMAX, RLV_MODIFIER_SETCAM_AVDISTMAX, new RlvBehaviourModifier("Camera - Avatar Distance (Max)", F32_MAX, false, new RlvBehaviourModifierCompMin));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_origindistmin", RLV_BHVR_SETCAM_ORIGINDISTMIN, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addModifier(RLV_BHVR_SETCAM_ORIGINDISTMIN, RLV_MODIFIER_SETCAM_ORIGINDISTMIN, new RlvBehaviourModifier("Camera - Focus Distance (Min)", 0.0f, true, new RlvBehaviourModifier_CompMax));
+	addModifier(RLV_BHVR_SETCAM_ORIGINDISTMIN, RLV_MODIFIER_SETCAM_ORIGINDISTMIN, new RlvBehaviourModifier("Camera - Focus Distance (Min)", 0.0f, true, new RlvBehaviourModifierCompMax));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_origindistmax", RLV_BHVR_SETCAM_ORIGINDISTMAX, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addModifier(RLV_BHVR_SETCAM_ORIGINDISTMAX, RLV_MODIFIER_SETCAM_ORIGINDISTMAX, new RlvBehaviourModifier("Camera - Focus Distance (Max)", F32_MAX, true, new RlvBehaviourModifier_CompMin));
+	addModifier(RLV_BHVR_SETCAM_ORIGINDISTMAX, RLV_MODIFIER_SETCAM_ORIGINDISTMAX, new RlvBehaviourModifier("Camera - Focus Distance (Max)", F32_MAX, true, new RlvBehaviourModifierCompMin));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_EYEOFFSET, RLV_OPTION_MODIFIER, RlvBehaviourCamEyeFocusOffsetHandler>("setcam_eyeoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addModifier(RLV_BHVR_SETCAM_EYEOFFSET, RLV_MODIFIER_SETCAM_EYEOFFSET, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_EYEOFFSET>("Camera - Eye Offset", LLVector3::zero, true, nullptr));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_FOCUSOFFSET, RLV_OPTION_MODIFIER, RlvBehaviourCamEyeFocusOffsetHandler>("setcam_focusoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addModifier(RLV_BHVR_SETCAM_FOCUSOFFSET, RLV_MODIFIER_SETCAM_FOCUSOFFSET, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOCUSOFFSET>("Camera - Focus Offset", LLVector3::zero, true, nullptr));
 	addEntry(new RlvBehaviourProcessor<RLV_BHVR_SETCAM_FOVMIN, RlvBehaviourSetCamFovHandler>("setcam_fovmin"));
-	addModifier(RLV_BHVR_SETCAM_FOVMIN, RLV_MODIFIER_SETCAM_FOVMIN, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMIN>("Camera - FOV (Min)", DEFAULT_FIELD_OF_VIEW, true, new RlvBehaviourModifier_CompMax));
+	addModifier(RLV_BHVR_SETCAM_FOVMIN, RLV_MODIFIER_SETCAM_FOVMIN, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMIN>("Camera - FOV (Min)", DEFAULT_FIELD_OF_VIEW, true, new RlvBehaviourModifierCompMax));
 	addEntry(new RlvBehaviourProcessor<RLV_BHVR_SETCAM_FOVMAX, RlvBehaviourSetCamFovHandler>("setcam_fovmax"));
-	addModifier(RLV_BHVR_SETCAM_FOVMAX, RLV_MODIFIER_SETCAM_FOVMAX, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMAX>("Camera - FOV (Max)", DEFAULT_FIELD_OF_VIEW, true, new RlvBehaviourModifier_CompMin));
+	addModifier(RLV_BHVR_SETCAM_FOVMAX, RLV_MODIFIER_SETCAM_FOVMAX, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMAX>("Camera - FOV (Max)", DEFAULT_FIELD_OF_VIEW, true, new RlvBehaviourModifierCompMin));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_MOUSELOOK, RLV_OPTION_NONE>("setcam_mouselook"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("setcam_textures", RLV_BHVR_SETCAM_TEXTURES));
 	addModifier(RLV_BHVR_SETCAM_TEXTURES, RLV_MODIFIER_SETCAM_TEXTURE, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_TEXTURE>("Camera - Forced Texture", IMG_DEFAULT, true, nullptr));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_UNLOCK, RLV_OPTION_NONE>("setcam_unlock"));
 	// Camera (compatibility shim - to be deprecated)
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("camavdist", RLV_BHVR_SETCAM_AVDIST, RlvBehaviourInfo::BHVR_SYNONYM | RlvBehaviourInfo::BHVR_DEPRECATED));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("camdistmin", RLV_BHVR_SETCAM_AVDISTMIN, RlvBehaviourInfo::BHVR_SYNONYM | RlvBehaviourInfo::BHVR_DEPRECATED));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("camdistmax", RLV_BHVR_SETCAM_AVDISTMAX, RlvBehaviourInfo::BHVR_SYNONYM | RlvBehaviourInfo::BHVR_DEPRECATED));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("camtextures", RLV_BHVR_SETCAM_TEXTURES, RlvBehaviourInfo::BHVR_SYNONYM | RlvBehaviourInfo::BHVR_DEPRECATED));
 	addEntry(new RlvBehaviourProcessor<RLV_BHVR_CAMZOOMMIN, RlvBehaviourCamZoomMinMaxHandler>("camzoommin", RlvBehaviourInfo::BHVR_DEPRECATED));
 	addEntry(new RlvBehaviourProcessor<RLV_BHVR_CAMZOOMMAX, RlvBehaviourCamZoomMinMaxHandler>("camzoommax", RlvBehaviourInfo::BHVR_DEPRECATED));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_UNLOCK, RLV_OPTION_NONE>("camunlock", RlvBehaviourInfo::BHVR_SYNONYM | RlvBehaviourInfo::BHVR_DEPRECATED));
+
+	// Overlay
+	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETOVERLAY, RLV_OPTION_NONE>("setoverlay", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addModifier(new RlvForceGenericProcessor<RLV_OPTION_MODIFIER>("setoverlay_alpha", RLV_BHVR_SETOVERLAY_ALPHA, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
+	            RLV_MODIFIER_OVERLAY_ALPHA, new RlvBehaviourModifier("Overlay - Alpha", 1.0f, false, new RlvBehaviourModifierComp()));
+	addModifier(new RlvForceGenericProcessor<RLV_OPTION_MODIFIER>("setoverlay_texture", RLV_BHVR_SETOVERLAY_TEXTURE, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
+				RLV_MODIFIER_OVERLAY_TEXTURE, new RlvBehaviourModifierHandler<RLV_MODIFIER_OVERLAY_TEXTURE>("Overlay - Texture", LLUUID::null, false, new RlvBehaviourModifierComp()));
+	addModifier(new RlvForceGenericProcessor<RLV_OPTION_MODIFIER>("setoverlay_tint", RLV_BHVR_SETOVERLAY_TINT, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
+				RLV_MODIFIER_OVERLAY_TINT, new RlvBehaviourModifier("Overlay - Tint", LLVector3(1.0f, 1.0f, 1.0f), false, new RlvBehaviourModifierComp()));
+	addModifier(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("setoverlay_touch", RLV_BHVR_SETOVERLAY_TOUCH, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
+				RLV_MODIFIER_OVERLAY_TOUCH, new RlvBehaviourModifier("Overlay - Touch", true, true, new RlvBehaviourModifierComp()));
+	addEntry(new RlvForceProcessor<RLV_BHVR_SETOVERLAY_TWEEN>("setoverlay_tween", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 
 	//
 	// Force-wear
@@ -241,6 +259,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	//
 	addEntry(new RlvBehaviourInfo("adjustheight",			RLV_BHVR_ADJUSTHEIGHT,			RLV_TYPE_FORCE));
 	addEntry(new RlvForceProcessor<RLV_BHVR_DETACHME>("detachme"));
+	addEntry(new RlvForceProcessor<RLV_BHVR_FLY>("fly"));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_FOCUS>("setcam_focus", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_EYEOFFSET, RlvForceCamEyeFocusOffsetHandler>("setcam_eyeoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_FOCUSOFFSET, RlvForceCamEyeFocusOffsetHandler>("setcam_focusoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
@@ -352,6 +371,23 @@ void RlvBehaviourDictionary::addModifier(ERlvBehaviour eBhvr, ERlvBehaviourModif
 	}
 }
 
+// Convenience function to add both the behaviour entry as well as the corresponding modifier entry
+void RlvBehaviourDictionary::addModifier(const RlvBehaviourInfo* pBhvrEntry, ERlvBehaviourModifier eModifier, RlvBehaviourModifier* pModifierEntry)
+{
+	addEntry(pBhvrEntry);
+	addModifier(pBhvrEntry->getBehaviourType(), eModifier, pModifierEntry);
+}
+
+// TODO: this shouldn't be in this class - find a better spot for it
+void RlvBehaviourDictionary::clearModifiers(const LLUUID& idRlvObj)
+{
+	for (int idxModifier = 0; idxModifier < RLV_MODIFIER_COUNT; idxModifier++)
+	{
+		if (m_BehaviourModifiers[idxModifier])
+			m_BehaviourModifiers[idxModifier]->clearValues(idRlvObj);
+	}
+}
+
 const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict) const
 {
 	bool fStrict = boost::algorithm::ends_with(strBhvr, "_sec");
@@ -418,10 +454,10 @@ void RlvBehaviourDictionary::toggleBehaviourFlag(const std::string& strBhvr, ERl
 // RlvBehaviourModifier
 //
 
-RlvBehaviourModifier::RlvBehaviourModifier(std::string strName, const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator)
+RlvBehaviourModifier::RlvBehaviourModifier(std::string strName, const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifierComp* pValueComparator)
 	: m_strName(strName), m_DefaultValue(defaultValue), m_fAddDefaultOnEmpty(fAddDefaultOnEmpty), m_pValueComparator(pValueComparator)
 {
-	m_pValueComparator = (pValueComparator) ? pValueComparator : new RlvBehaviourModifier_Comp();
+	m_pValueComparator = (pValueComparator) ? pValueComparator : new RlvBehaviourModifierComp();
 }
 
 RlvBehaviourModifier::~RlvBehaviourModifier()
@@ -433,17 +469,32 @@ RlvBehaviourModifier::~RlvBehaviourModifier()
 	}
 }
 
-bool RlvBehaviourModifier::addValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject)
+bool RlvBehaviourModifier::addValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idRlvObj, ERlvBehaviour eBhvr)
 {
 	if (modValue.which() == m_DefaultValue.which())
 	{
-		m_Values.insert((m_pValueComparator) ? std::lower_bound(m_Values.begin(), m_Values.end(), std::make_pair(modValue, idObject), boost::bind(&RlvBehaviourModifier_Comp::operator(), m_pValueComparator, _1, _2)) : m_Values.end(), std::make_pair(modValue, idObject));
+		m_Values.insert((m_pValueComparator) ? std::lower_bound(m_Values.begin(), m_Values.end(), std::make_tuple(modValue, idRlvObj, eBhvr), boost::bind(&RlvBehaviourModifierComp::operator(), m_pValueComparator, _1, _2)) : m_Values.end(), std::make_tuple(modValue, idRlvObj, eBhvr));
 		// NOTE: change signal needs to trigger before modifier handlers so cached values have a chance to update properly
 		m_ChangeSignal(getValue());
 		onValueChange();
 		return true;
 	}
 	return false;
+}
+
+void RlvBehaviourModifier::clearValues(const LLUUID& idRlvObj)
+{
+	size_t origCount = m_Values.size();
+	m_Values.erase(std::remove_if(m_Values.begin(), m_Values.end(),
+	                              [&idRlvObj](const RlvBehaviourModifierValueTuple& modValue) {
+									return (std::get<1>(modValue) == idRlvObj) && (std::get<2>(modValue) == RLV_BHVR_UNKNOWN);
+	                              }), m_Values.end());
+	RlvBehaviourModifierAnimator::instance().clearTweens(idRlvObj);
+	if (origCount != m_Values.size())
+	{
+		onValueChange();
+		m_ChangeSignal(getValue());
+	}
 }
 
 const LLUUID& RlvBehaviourModifier::getPrimaryObject() const
@@ -455,14 +506,19 @@ bool RlvBehaviourModifier::hasValue() const {
 	// If no primary object is set this returns "any value set"; otherwise it returns "any value set by the primary object"
 	if ( (!m_pValueComparator) || (m_pValueComparator->m_idPrimaryObject.isNull()) )
 		return !m_Values.empty();
-	return (!m_Values.empty()) ? m_Values.front().second == m_pValueComparator->m_idPrimaryObject : false;
+	return (!m_Values.empty()) ? std::get<1>(m_Values.front()) == m_pValueComparator->m_idPrimaryObject : false;
 }
 
-void RlvBehaviourModifier::removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject)
+bool RlvBehaviourModifier::hasValue(const LLUUID& idRlvObj) const
+{
+	return m_Values.end() != std::find_if(m_Values.begin(), m_Values.end(), [&idRlvObj](const RlvBehaviourModifierValueTuple& cmpValue) { return std::get<1>(cmpValue) == idRlvObj; });
+}
+
+void RlvBehaviourModifier::removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idRlvObj, ERlvBehaviour eBhvr)
 {
 	if ( (modValue.which() == m_DefaultValue.which()) )
 	{
-		auto itValue = std::find(m_Values.begin(), m_Values.end(), std::make_pair(modValue, idObject));
+		auto itValue = std::find(m_Values.begin(), m_Values.end(), std::make_tuple(modValue, idRlvObj, eBhvr));
 		if (m_Values.end() != itValue)
 		{
 			m_Values.erase(itValue);
@@ -477,9 +533,34 @@ void RlvBehaviourModifier::setPrimaryObject(const LLUUID& idPrimaryObject)
 	if (m_pValueComparator)
 	{
 		m_pValueComparator->m_idPrimaryObject = idPrimaryObject;
-		m_Values.sort(boost::bind(&RlvBehaviourModifier_Comp::operator(), m_pValueComparator, _1, _2));
+		m_Values.sort(boost::bind(&RlvBehaviourModifierComp::operator(), m_pValueComparator, _1, _2));
 		onValueChange();
 		m_ChangeSignal(getValue());
+	}
+}
+
+void RlvBehaviourModifier::setValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idRlvObj)
+{
+	if ( (modValue.which() == m_DefaultValue.which()) )
+	{
+		auto itValue = std::find_if(m_Values.begin(), m_Values.end(),
+		                            [&idRlvObj](const RlvBehaviourModifierValueTuple& cmpValue) {
+		                            	return (std::get<1>(cmpValue) == idRlvObj) && (std::get<2>(cmpValue) == RLV_BHVR_UNKNOWN);
+		                            });
+		if (m_Values.end() != itValue)
+		{
+			// The object already has a modifier value set => change it
+			std::get<0>(*itValue) = modValue;
+			if (m_pValueComparator)
+				m_Values.sort(boost::bind(&RlvBehaviourModifierComp::operator(), m_pValueComparator, _1, _2));
+			onValueChange();
+			m_ChangeSignal(getValue());
+		}
+		else
+		{
+			// The command doesn't have a modifier value yet => add it
+			addValue(modValue, idRlvObj, RLV_BHVR_UNKNOWN);
+		}
 	}
 }
 
@@ -621,6 +702,25 @@ bool RlvCommandOptionHelper::parseOption<int>(const std::string& strOption, int&
 		return false;
 	}
 	return true;
+}
+
+template<>
+bool RlvCommandOptionHelper::parseOption<bool>(const std::string& strOption, bool& fOption)
+{
+	try
+	{
+		// Try and parse it as a number first
+		int nOption = std::stoi(strOption);
+		fOption = (bool)nOption;
+		return (nOption == 0) || (nOption == 1);
+	}
+	catch (const std::invalid_argument&)
+	{
+		// Then try and parse it as true/false
+		std::istringstream ss(strOption);
+		ss >> std::boolalpha >> fOption;
+		return !ss.fail();
+	}
 }
 
 template<>

@@ -2671,6 +2671,13 @@ LLViewerTexture* LLFace::getTexture(U32 ch) const
 }
 
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+bool LLFace::isDefaultTexture(U32 nChannel) const
+{
+	// NOTE: mShowDiffTexture gets flipped before the clear (good) but also before the restore (bad) and hence can't
+	//       be used to tell whether we're usurping a texture channel for our own use
+	return (LLRender::DIFFUSE_MAP == nChannel) ? mOrigDiffTexture.notNull() : false;
+}
+
 void LLFace::setDefaultTexture(U32 nChannel, bool fShowDefault) const
 {
 	bool fUpdated = false;

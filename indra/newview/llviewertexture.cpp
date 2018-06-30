@@ -3518,6 +3518,14 @@ void LLViewerMediaTexture::addFace(U32 ch, LLFace* facep)
 		LLViewerTexture* tex = gTextureList.findImage(te->getID(), TEX_LIST_STANDARD);
 		if(tex)
 		{
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-5.2)
+			// See LLViewerMediaTexture::removeFace()
+			if (facep->isDefaultTexture(ch))
+			{
+				return;
+			}
+// [/SL:KB]
+
 			mTextureList.push_back(tex);//increase the reference number by one for tex to avoid deleting it.
 			return;
 		}
@@ -3537,9 +3545,15 @@ void LLViewerMediaTexture::addFace(U32 ch, LLFace* facep)
 }
 
 //virtual 
-void LLViewerMediaTexture::removeFace(U32 ch, LLFace* facep) 
+//void LLViewerMediaTexture::removeFace(U32 ch, LLFace* facep) 
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-5.2)
+void LLViewerMediaTexture::removeFace(U32 channel, LLFace* facep) 
+// [/SL:KB]
 {
-	LLViewerTexture::removeFace(ch, facep);
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-5.2)
+	LLViewerTexture::removeFace(channel, facep);
+// [/SL:KB]
+//	LLViewerTexture::removeFace(ch, facep);
 
 	const LLTextureEntry* te = facep->getTextureEntry();
 	if(te && te->getID().notNull())
@@ -3552,6 +3566,18 @@ void LLViewerMediaTexture::removeFace(U32 ch, LLFace* facep)
 			{
 				if(*iter == tex)
 				{
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-5.2)
+					// Switching to the default texture results in clearing the media textures on all prims;
+					// a side-effect is that we loose out on the reference to the original (non-media)
+					// texture potentially letting it dissapear from memory if this was the only reference to it
+					// (which is harmless, it just means we'll need to grab it from the cache or refetch it but
+					// the LL - debug - code at the bottom of addFace/removeFace disagrees so we'll hang on
+					// to it (and then block readding it a seond time higher up)
+					if (facep->isDefaultTexture(channel))
+					{
+						return;
+					}
+// [/SL:KB]
 					mTextureList.erase(iter); //decrease the reference number for tex by one.
 					return;
 				}
@@ -3596,6 +3622,13 @@ void LLViewerMediaTexture::removeFace(U32 ch, LLFace* facep)
 				}
 				if(i == end) //no hit for this texture, remove it.
 				{
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-5.2)
+					// See above
+					if (facep->isDefaultTexture(channel))
+					{
+						return;
+					}
+// [/SL:KB]
 					mTextureList.erase(iter); //decrease the reference number for tex by one.
 					return;
 				}
