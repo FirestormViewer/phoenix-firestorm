@@ -394,25 +394,25 @@ void LLPanelPermissions::refresh()
 //	LLSelectMgr::getInstance()->selectGetCreator(mCreatorID, creator_app_link);
 
 	// Style for creator and owner links (both group and agent)
-	LLStyle::Params style_params;
-	LLColor4 link_color = LLUIColorTable::instance().getColor("HTMLLinkColor");
-	style_params.color = link_color;
-	style_params.readonly_color = link_color;
-	style_params.is_link = true; // link will be added later
-	const LLFontGL* fontp = mLabelCreatorName->getFont();
-	style_params.font.name = LLFontGL::nameFromFont(fontp);
-	style_params.font.size = LLFontGL::sizeFromFont(fontp);
-	style_params.font.style = "UNDERLINE";
+	//LLStyle::Params style_params;
+	//LLColor4 link_color = LLUIColorTable::instance().getColor("HTMLLinkColor");
+	//style_params.color = link_color;
+	//style_params.readonly_color = link_color;
+	//style_params.is_link = true; // link will be added later
+	//const LLFontGL* fontp = mLabelCreatorName->getFont();
+	//style_params.font.name = LLFontGL::nameFromFont(fontp);
+	//style_params.font.size = LLFontGL::sizeFromFont(fontp);
+	//style_params.font.style = "UNDERLINE";
 
 	LLAvatarName av_name;
-	style_params.link_href = creator_app_link;
+	//style_params.link_href = creator_app_link;
 // [RLVa:KB] - Checked: RLVa-2.0.1
 	// Only anonymize the creator if all of the selection was created by the same avie who's also the owner or they're a nearby avie
 	if ( (RlvActions::isRlvEnabled()) && (creators_identical) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, mCreatorID)) && ( (mCreatorID == mOwnerID) || (RlvUtil::isNearbyAgent(mCreatorID))) )
 	{
 		creator_app_link = LLSLURL("agent", mCreatorID, "rlvanonym").getSLURLString();
 	}
-	mLabelCreatorName->setText(creator_app_link, style_params);
+	mLabelCreatorName->setText(creator_app_link);
 // [/RLVa:KB]
 //	if (LLAvatarNameCache::get(mCreatorID, &av_name))
 //	{
@@ -478,13 +478,13 @@ void LLPanelPermissions::refresh()
 			owner_id = mLastOwnerID;
 		}
 
-		style_params.link_href = owner_app_link;
+//		style_params.link_href = owner_app_link;
 // [RLVa:KB] - Checked: RLVa-2.0.1
 		if ( (RlvActions::isRlvEnabled()) && (owners_identical) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, mOwnerID)) )
 		{
 			owner_app_link = LLSLURL("agent", mOwnerID, "rlvanonym").getSLURLString();
 		}
-		mLabelOwnerName->setText(owner_app_link, style_params);
+		mLabelOwnerName->setText(owner_app_link);
 // [/RLVa:KB]
 //		if (LLAvatarNameCache::get(owner_id, &av_name))
 //		{
