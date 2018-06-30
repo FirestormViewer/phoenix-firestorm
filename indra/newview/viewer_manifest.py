@@ -290,7 +290,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         # a standard map of strings for replacing in the templates
         #<FS:TS> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
         channel_base = "Phoenix-" + CHANNEL_VENDOR_BASE
-        if self.fs_flavor() == 'oss':
+        if self.fs_is_opensim():
             channel_base = channel_base + "OS"
         #</FS:TS>
         substitution_strings = {
@@ -310,7 +310,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             app_suffix=self.channel_variant()
 
         #<FS:ND> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
-        if self.fs_flavor() == 'oss':
+        if self.fs_is_opensim():
             app_suffix = "OS" + app_suffix
         #</FS:ND>
 
@@ -324,7 +324,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
     
     def icon_path(self):
         # <FS:ND> Add -os for oss builds
-        if self.fs_flavor() == 'oss':
+        if self.fs_is_opensim():
             return "icons/" + self.channel_type() + "-os"
         # </FS:ND>
         return "icons/" + self.channel_type()
@@ -805,7 +805,7 @@ class WindowsManifest(ViewerManifest):
                 self.path("msvcr120.dll")
 
         # <FS:Ansariel> FIRE-22709: Local voice not working in OpenSim
-        if self.fs_flavor() == 'oss':
+        if self.fs_is_opensim():
             with self.prefix(src=os.path.join(relpkgdir, 'voice_os'), dst="voice_os"):
                 self.path("libsndfile-1.dll")
                 self.path("ortp.dll")
@@ -1738,7 +1738,7 @@ class DarwinManifest(ViewerManifest):
             # - Ambroff 2008-08-20
             #<FS:TS> Select proper directory based on flavor and build type
             dmg_template_prefix = 'firestorm'
-            if self.fs_flavor() == 'oss':
+            if self.fs_is_opensim():
                 dmg_template_prefix = 'firestormos'
             dmg_template = os.path.join(
                 'installers', 'darwin', '%s-%s-dmg' % (dmg_template_prefix, self.channel_type()))
