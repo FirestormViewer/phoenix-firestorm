@@ -804,6 +804,20 @@ class WindowsManifest(ViewerManifest):
                 self.path("msvcp120.dll")
                 self.path("msvcr120.dll")
 
+        # <FS:Ansariel> FIRE-22709: Local voice not working in OpenSim
+        if self.fs_flavor() == 'oss':
+            with self.prefix(src=os.path.join(relpkgdir, 'voice_os'), dst="voice_os"):
+                self.path("libsndfile-1.dll")
+                self.path("ortp.dll")
+                self.path("SLVoice.exe")
+                self.path("vivoxoal.dll")
+                self.path("vivoxplatform.dll")
+                self.path("vivoxsdk.dll")
+                self.path("zlib1.dll")
+            with self.prefix(src=pkgdir, dst="voice_os"):
+                self.path("ca-bundle.crt")
+        # </FS:Ansariel>
+
         if not self.is_packaging_viewer():
             self.package_file = "copied_deps"    
 
