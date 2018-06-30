@@ -28,14 +28,18 @@ uniform sampler2DRect diffuseRect;
 uniform sampler2DRect depthMap;
 uniform mat4 inv_proj;
 uniform vec2 screen_res;
+
 uniform vec4 avPosLocal;
+uniform vec4 rlvEffectParam1;
+uniform vec4 rlvEffectParam2;
+uniform vec4 rlvEffectParam3;
 
 vec4 getPosition_d(vec2 pos_screen, float depth)
 {
-	vec2 sc = pos_screen.xy*2.0;
+	vec2 sc = pos_screen.xy * 2.0;
 	sc /= screen_res;
-	sc -= vec2(1.0,1.0);
-	vec4 ndc = vec4(sc.x, sc.y, 2.0*depth-1.0, 1.0);
+	sc -= vec2(1.0, 1.0);
+	vec4 ndc = vec4(sc.x, sc.y, 2.0 * depth - 1.0, 1.0);
 	vec4 pos = inv_proj * ndc;
 	pos /= pos.w;
 	pos.w = 1.0;
@@ -44,30 +48,36 @@ vec4 getPosition_d(vec2 pos_screen, float depth)
 
 void main()
 {
-	vec2 tc = vary_fragcoord.xy;
+	vec2 fragTC = vary_fragcoord.xy;
+	float fragDepth = texture2DRect(depthMap, fragTC.xy).r;
+	vec3 fragPosLocal = getPosition_d(fragTC, fragDepth).xyz;
 
-	vec4 diffuse = texture2DRect(diffuseRect, tc);
-	vec3 col = diffuse.rgb;
-
-	float depth = texture2DRect(depthMap, tc.xy).r;
-	vec3 pos = getPosition_d(tc, depth).xyz;
-
+	vec3 fragColor = texture2DRect(diffuseRect, fragTC).rgb;
 	{
-		float cutoff = 20;
-		float cutoff2 = 45;
-		float minAlpha = 0.0f;
-		float maxAlpha = 0.95f;
-		vec3 fogColor = vec3(0., 0., 0.);
+		vec2 blendStart = rlvEffectParam1.xy;
+		vec2 blendEnd = rlvEffectParam1.zw;
+		vec3 blendColor = rlvEffectParam2.rgb;
 
-		float distance = length(pos.xyz - avPosLocal.xyz) ;
+		float cutoff = blendStart.y;
+		float cutoff2 = blendEnd.y;
+		float minAlpha = blendStart.x;
+		float maxAlpha = blendEnd.x;
 
-		float density = 1;
-		float fracDistance = (distance - cutoff) / (cutoff2 - cutoff);
-		float visionFactor = clamp((1 - maxAlpha) + (exp(-density * fracDistance) * (maxAlpha - minAlpha)), 0.0, 1.0);
-		col = mix(fogColor, col, visionFactor);
-		col *= 1 - ((distance - cutoff) / (cutoff2 - cutoff));
+		float distance = length(fragPosLocal.xyz - avPosLocal.xyz);
+		if (distance < cutoff)
+		{
+			discard;
+		}
+		else if (distance < cutoff2)
+		{
+			fragColor = mix(fragColor, blendColor, minAlpha + (distance - cutoff) * (maxAlpha - minAlpha) / (cutoff2 - cutoff));
+		}
+		else
+		{
+			fragColor = mix(fragColor, blendColor, maxAlpha);
+		}
 	}
 
-	frag_color.rgb = col;
+	frag_color.rgb = fragColor;
 	frag_color.a = 0.0;
 }

@@ -9049,6 +9049,7 @@ void LLPipeline::renderDeferredLighting()
 	mScreen.flush();
 						
 // [RLVa:KB] - @setsphere
+	if (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))
 	{
 		LL_RECORD_BLOCK_TIME(FTM_POST_DEFERRED_RLV);
 
@@ -9070,18 +9071,7 @@ void LLPipeline::renderDeferredLighting()
 			gGL.getTexUnit(nDepthChannel)->bind(&mDeferredDepth, TRUE);
 		}
 
-		if (isAgentAvatarValid())
-		{
-			LLVector4 avPos(gAgentAvatarp->getRenderPosition(), 1.0f);
-			glh::vec4f avPosGl(avPos.mV);
-
-			const glh::matrix4f& mvMatrix = gGL.getModelviewMatrix();
-			mvMatrix.mult_matrix_vec(avPosGl);
-
-			gDeferredRlvProgram.uniform4fv(LLShaderMgr::RLV_AVPOSLOCAL, 1, avPosGl.v);
-		}
-		gDeferredRlvProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, mScreen.getWidth(), mScreen.getHeight());
-		gDeferredRlvProgram.uniformMatrix4fv(LLShaderMgr::INVERSE_PROJECTION_MATRIX, 1, FALSE, glh_get_current_projection().inverse().m);
+		RlvActions::setEffectSphereShaderUniforms(&gDeferredRlvProgram, &mScreen);
 
 		gGL.matrixMode(LLRender::MM_PROJECTION);
 		gGL.pushMatrix();
