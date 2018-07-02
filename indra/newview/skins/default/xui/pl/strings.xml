@@ -5698,9 +5698,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="ExperiencePermissionShort12">
 		Uprawnienia
 	</string>
-	<string name="ExperiencePermissionShortUnknown">
-		Nieznane: [Permission]
-	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Rozmowy nie są zapisywane do dziennika. Jeśli chcesz zacząć je logować wybierz "Zapisywanie: tylko dziennik" lub "Zapisywanie: dziennik i logi rozmów" w Preferencje > Prywatność.
 	</string>
