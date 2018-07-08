@@ -822,7 +822,21 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
         // </FS:Ansariel>
         exe_path += "SLVoice.exe";
 #elif LL_DARWIN
-        exe_path += "../Resources/SLVoice";
+        // <FS:Ansariel/TS> FIRE-22709: Local voice not working in OpenSim
+        //exe_path += "../Resources/SLVoice";
+#ifdef OPENSIM
+        if (LLGridManager::instance().isInSecondLife())
+        {
+#endif
+            exe_path += "../Resources/SLVoice";
+#ifdef OPENSIM
+        }
+        else
+        {
+            exe_path += "../Resources/voice_os/SLVoice";
+        }
+#endif
+        // </FS:Ansariel/TS>
 #else
         // <FS:ND> On Linux the viewer can run SLVoice.exe through wine (https://www.winehq.org/)
         // exe_path += "SLVoice";
