@@ -10,9 +10,9 @@ if (NOT USESYSTEMLIBS)
   use_prebuilt_binary(slvoice)
   # <FS:Ansariel> FIRE-22709: Local voice not working in OpenSim
   if (OPENSIM)
-    if (WINDOWS)
+    if (WINDOWS OR DARWIN)
       use_prebuilt_binary(slvoice_os)
-    endif (WINDOWS)
+    endif (WINDOWS OR DARWIN)
   endif (OPENSIM)
   # </FS:Ansariel>
 #  use_prebuilt_binary(libidn)
