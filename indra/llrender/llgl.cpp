@@ -2572,5 +2572,11 @@ void LLGLSyncFence::wait()
 #endif
 }
 
-
+#if LL_WINDOWS
+// Expose desired use of high-performance graphics processor to Optimus driver
+extern "C" 
+{ 
+    _declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001; 
+}
+#endif
 

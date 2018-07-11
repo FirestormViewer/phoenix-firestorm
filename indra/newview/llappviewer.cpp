@@ -1275,8 +1275,10 @@ bool LLAppViewer::init()
 		}
 	}
 
-	// <FS:Ansariel> Disable VMP
+// do not pester devs who need to run the executable directly to debug
+#if LL_RELEASE_FOR_DOWNLOAD
 	// MAINT-8305: If we're processing a SLURL, skip the launcher check.
+	// <FS:Ansariel> Disable VMP
 	//if (gSavedSettings.getString("CmdLineLoginLocation").empty())
 	//{
 	//	const char* PARENT = getenv("PARENT");
@@ -1293,6 +1295,7 @@ bool LLAppViewer::init()
 	//	}
 	//}
 	// </FS:Ansariel>
+#endif
 
 #if LL_WINDOWS
 	if (gGLManager.mGLVersion < LLFeatureManager::getInstance()->getExpectedGLVersion())
