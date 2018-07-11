@@ -373,7 +373,6 @@
 		 height="10"
 		 layout="topleft"
 		 left="15"
-		 mouse_opaque="false"
 		 name="home_page_label_l"
 		 top_pad="5"
 		 width="500">
@@ -382,8 +381,6 @@
 		
 		<line_editor
 		 control_name="FSBrowserHomePage"
-		 border_style="line"
-		 border_thickness="1"
 		 follows="left|top"
 		 height="23"
 		 layout="topleft"
