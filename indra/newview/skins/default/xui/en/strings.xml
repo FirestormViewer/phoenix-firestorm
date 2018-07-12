@@ -2777,6 +2777,7 @@ Try enclosing path to the editor with double quotes.
   <string name="MovelockDisabled">Movelock disabled</string>
   <string name="MovelockEnabling">Enabling movelock...</string>
   <string name="MovelockDisabling">Disabling movelock...</string>
+  <string name="FlightAssistEnabled">Flight Assist is enabled</string>
 
   <string name="BusyResponse">busy response</string>
   

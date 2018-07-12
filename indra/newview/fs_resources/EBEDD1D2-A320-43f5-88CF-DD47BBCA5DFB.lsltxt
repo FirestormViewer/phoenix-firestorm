@@ -7,7 +7,7 @@
 //
 
     // Bridge platform
-    string BRIDGE_VERSION = "2.21"; // This should match fslslbridge.cpp
+    string BRIDGE_VERSION = "2.22"; // This should match fslslbridge.cpp
     string gLatestURL;
     integer gViewerIsFirestorm;
     integer gTryHandshakeOnce = TRUE;
@@ -26,10 +26,11 @@
     integer gRelockIsUserMoving;
 
     // Flight assist
-    float FLIGHT_CHECK_NORMAL = 1.0;
-    float FLIGHT_CHECK_SLOW = 5.0;
     integer gIsFlyingNow;
+    float FLIGHT_CHECK_NORMAL = 0.2;
+    float FLIGHT_CHECK_SLOW = 3.0;
     float gFlightAssistPushForce;
+    float gFlightAssistMinAltitude = 10;
 
     // OpenCollar/LockMeister AO interface
     integer gAO_EnabledOC;
@@ -254,7 +255,16 @@ default
 
         if (gFlightAssistPushForce > 0 && gIsFlyingNow)
         {
-            if (level & (CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN))
+
+            vector currentPosition = llGetPos();
+            float currentGroundLevel = llGround(ZERO_VECTOR);
+            float currentWaterLevel = llWater(ZERO_VECTOR);
+            if (currentGroundLevel < currentWaterLevel)
+            {
+                currentGroundLevel = currentWaterLevel;
+            }
+
+            if (currentPosition.z > currentGroundLevel + gFlightAssistMinAltitude && level & (CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN))
             {
                 vector pushingForce = ZERO_VECTOR;
                 // Forward / back
@@ -284,8 +294,9 @@ default
                 {
                     pushingForce += <0, 0, -gFlightAssistPushForce>;
                 }
-                llApplyImpulse(pushingForce, 1);
+                llApplyImpulse(llGetMassMKS() * pushingForce, 1);
             }
+
         }
 
     }
@@ -506,10 +517,10 @@ default
                     gFlightAssistPushForce = speed;
                     if (gFlightAssistPushForce > 0)
                     {
-                        if (gFlightAssistPushForce > 5.0)
+                        if (gFlightAssistPushForce > 15.0)
                         {
                             // No lightspeed please!
-                            gFlightAssistPushForce = 5.0;
+                            gFlightAssistPushForce = 15.0;
                         }
                         llSetTimerEvent(FLIGHT_CHECK_NORMAL);
                     }
