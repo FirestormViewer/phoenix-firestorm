@@ -115,7 +115,10 @@ protected:
 	LLLineEditor(const Params&);
 	friend class LLUICtrlFactory;
 	friend class LLFloaterEditUI;
-	void showContextMenu(S32 x, S32 y);
+	// <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
+	//void showContextMenu(S32 x, S32 y);
+	void showContextMenu(S32 x, S32 y, bool set_cursor_pos = true);
+	// </FS:Ansariel>
 public:
 	virtual ~LLLineEditor();
 
