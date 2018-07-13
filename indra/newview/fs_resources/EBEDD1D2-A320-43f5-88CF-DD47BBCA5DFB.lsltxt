@@ -7,7 +7,7 @@
 //
 
     // Bridge platform
-    string BRIDGE_VERSION = "2.22"; // This should match fslslbridge.cpp
+    string BRIDGE_VERSION = "2.23"; // This should match fslslbridge.cpp
     string gLatestURL;
     integer gViewerIsFirestorm;
     integer gTryHandshakeOnce = TRUE;
@@ -27,10 +27,9 @@
 
     // Flight assist
     integer gIsFlyingNow;
-    float FLIGHT_CHECK_NORMAL = 0.2;
+    float FLIGHT_CHECK_NORMAL = 0.5;
     float FLIGHT_CHECK_SLOW = 3.0;
     float gFlightAssistPushForce;
-    float gFlightAssistMinAltitude = 10;
 
     // OpenCollar/LockMeister AO interface
     integer gAO_EnabledOC;
@@ -131,11 +130,11 @@
     {
         if (yes)
         {
-            llSetForce((<0.0, 0.0, 9.8> * llGetMass()), 0);
+            llSetForce((<0.0, 0.0, 9.8> * llGetMass()), 1);
         }
         else
         {
-            llSetForce(ZERO_VECTOR, 0);
+            llSetForce(ZERO_VECTOR, 1);
         }
     }
 
@@ -255,16 +254,7 @@ default
 
         if (gFlightAssistPushForce > 0 && gIsFlyingNow)
         {
-
-            vector currentPosition = llGetPos();
-            float currentGroundLevel = llGround(ZERO_VECTOR);
-            float currentWaterLevel = llWater(ZERO_VECTOR);
-            if (currentGroundLevel < currentWaterLevel)
-            {
-                currentGroundLevel = currentWaterLevel;
-            }
-
-            if (currentPosition.z > currentGroundLevel + gFlightAssistMinAltitude && level & (CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN))
+            if (level & edge & (CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN))
             {
                 vector pushingForce = ZERO_VECTOR;
                 // Forward / back
@@ -294,9 +284,12 @@ default
                 {
                     pushingForce += <0, 0, -gFlightAssistPushForce>;
                 }
-                llApplyImpulse(llGetMassMKS() * pushingForce, 1);
+                llSetForce(llGetMassMKS() * pushingForce, 1);
             }
-
+            else if (~level & edge & (CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN))
+            {
+                flightHover(TRUE);
+            }
         }
 
     }
