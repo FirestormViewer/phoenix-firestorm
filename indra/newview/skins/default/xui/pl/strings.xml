@@ -5590,6 +5590,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="MovelockDisabling">
 		Wyłączanie blokady pozycji...
 	</string>
+	<string name="FlightAssistEnabled">
+		Pomocnik lotu jest włączony
+	</string>
 	<string name="BusyResponse">
 		Wiadomość zajętości
 	</string>

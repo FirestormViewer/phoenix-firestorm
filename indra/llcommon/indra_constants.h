@@ -93,6 +93,7 @@ const KEY KEY_ADD = 	0x95;
 const KEY KEY_SUBTRACT =0x96;
 const KEY KEY_MULTIPLY =0x97;
 const KEY KEY_DIVIDE =	0x98;
+const KEY KEY_CONTEXT_MENU = 0x99; // <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
 const KEY KEY_F1		= 0xA1;
 const KEY KEY_F2		= 0xA2;
 const KEY KEY_F3		= 0xA3;

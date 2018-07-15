@@ -6372,6 +6372,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="MovelockDisabling">
 		Deaktiviere Movelock...
 	</string>
+	<string name="FlightAssistEnabled">
+		Flug-Assistent ist aktiviert.
+	</string>
 	<string name="BusyResponse">
 		Beschäftigt-Nachricht
 	</string>
