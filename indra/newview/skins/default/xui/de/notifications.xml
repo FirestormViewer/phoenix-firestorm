@@ -3107,7 +3107,7 @@ Teleport anbieten?
 		&lt;nolink&gt;[NAME]&lt;/nolink&gt; hat Ihr Freundschaftsangebot abgelehnt.
 	</notification>
 	<notification name="FriendshipAcceptedByMe">
-		Ihr Freundschaftsangebot wurde angeommen.
+		Ihr Freundschaftsangebot wurde angenommen.
 	</notification>
 	<notification name="FriendshipDeclinedByMe">
 		Ihr Freundschaftsangebot wurde abgelehnt.

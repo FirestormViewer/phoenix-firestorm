@@ -256,6 +256,20 @@
         <spinner label="Z軸" name="Z pos" label_width="40" width="120"/>
         <check_box label="パーセントで設定" tool_tip="デフォルトではパーセントで設定、どの軸に対しても50%、つまり中央に設定されています。" name="FSPivotPercToggle"/>
 		<button label="デフォルトの作成権限" name="fs_default_creation_permissions" />
+		<text name="text_box_scripting_font" width="150">
+			スクリプトエディタのフォント:
+		</text>
+		<combo_box name="FSScriptingFontName" tool_tip="LSLスクリプトエディタで使用するフォントの名前">
+             <combo_item name="Monospace" value="Monospace" label="Monospace"/>
+             <combo_item name="Scripting" value="Scripting" label="Scripting"/>
+        </combo_box>
+        <combo_box name="FSScriptingFontSize" tool_tip="LSLスクリプトエディタで使用するフォントの大きさ">
+             <combo_item name="Monospace" label="Monospace"/>
+             <combo_item name="Scripting" label="Scripting"/>
+             <combo_item name="Small" label="小"/>
+             <combo_item name="Medium" label="中"/>
+             <combo_item name="Large" label="大"/>
+        </combo_box>
 		<check_box label="LSLプリプロセッサを有効にする" tool_tip="ここにチェックを入れるとLSLプリプロセッサが利用できるようになります。" name="preproc_checkbox" />
 		<check_box label="スクリプト最適化" tool_tip="ここにチェックを入れると、他のスクリプトファイルを読み込んだ時に、参照されていない無駄なコードを表示せずに読みやすさを最適化します。" name="preprocoptimizer_checkbox" />
 		<check_box label="switch()文の利用" tool_tip="ここにチェックを入れると、スクリプトの制御構造にswitch()文が利用できるようになります。" name="preprocswitch_checkbox" />
@@ -327,6 +341,7 @@
 アップロード先のフォルダを変更するには、インベントリ上でそのフォルダを右クリックして
 メニューから「デフォルトのフォルダとして使用」を選択して下さい。
 		</text>
+		<button name="reset_default_folders" label="デフォルトフォルダをリセット" />
 	</panel>
 
 </tab_container>

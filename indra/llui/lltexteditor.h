@@ -214,7 +214,10 @@ public:
 	void			setPassDelete(BOOL b) { mPassDelete = b; }
 
 protected:
-	void			showContextMenu(S32 x, S32 y);
+	// <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
+	//void			showContextMenu(S32 x, S32 y);
+	void			showContextMenu(S32 x, S32 y, bool set_cursor_pos = true);
+	// </FS:Ansariel>
 	void			drawPreeditMarker();
 
 	void 			assignEmbedded(const std::string &s);

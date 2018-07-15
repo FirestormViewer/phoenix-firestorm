@@ -10225,6 +10225,12 @@ void handle_cache_clear_immediately()
 void handle_web_content_test(const LLSD& param)
 {
 	std::string url = param.asString();
+	// <FS:LO> Add a user settable home page for the built in web browser
+	if (url == "HOME_PAGE")
+	{
+		url = gSavedSettings.getString("FSBrowserHomePage");
+	}
+	// </FS:LO>
 	LLWeb::loadURLInternal(url, LLStringUtil::null, LLStringUtil::null, true);
 }
 
@@ -11005,7 +11011,12 @@ void toggleWebBrowser(const LLSD& sdParam)
 	}
 	else
 	{
-		LLWeb::loadURLInternal(sdParam.asString());
+		std::string param = sdParam.asString();
+		if (param == "HOME_PAGE")
+		{
+			param = gSavedSettings.getString("FSBrowserHomePage");
+		}
+		LLWeb::loadURLInternal(param);
 	}
 }
 // </FS:Ansariel> For web browser toolbar button

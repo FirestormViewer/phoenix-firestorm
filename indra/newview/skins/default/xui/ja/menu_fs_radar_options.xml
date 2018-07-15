@@ -3,13 +3,25 @@
   
 	<menu_item_check label="ミニマップをレーダーの上に表示" name="ShowRadarMinimap" />
 	<menu_item_check label="設定した範囲内の結果を表示" name="LimitRadarByRange" />
+	<menu_item_check label="ミュート／ブラックリストにしたアバターも表示" name="FSRadarShowMutedAndDerendered" />
 	<context_menu label="名前の表示形式" name="radarNameFormat">
 		<menu_item_check label="表示名" name="radarFmtDN" />
 		<menu_item_check label="ユーザー名" name="radarFmtUN" />
 		<menu_item_check label="表示名 (ユーザー名)" name="radarFmtDNUN" />
 		<menu_item_check label="ユーザー名 (表示名)" name="radarFmtUNDN" />
 	</context_menu>
-  
+	<context_menu label="表示する項目" name="visible_columns">
+		<menu_item_check label="ボイス" name="voice_level" />
+		<menu_item_check label="同一SIM" name="in_region" />
+		<menu_item_check label="入力状態" name="typing_status" />
+		<menu_item_check label="着座状態" name="sitting_status" />
+		<menu_item_check label="支払情報" name="flags" />
+		<menu_item_check label="ノート" name="has_notes" />
+		<menu_item_check label="年齢" name="age" />
+		<menu_item_check label="表示時間" name="seen" />
+	</context_menu>
+	<menu_item_check label="距離で名前を色分け" name="radarColorNamesBasedOnDistance" />
+	
 	<menu_item_separator layout="topleft" />
 
 	<context_menu label="通知方法" name="report_to_menu">
@@ -24,8 +36,10 @@
 	<menu_item_check label="チャットレンジから出て行ったら通知" name="RadarReportChatRangeLeave" />
 	<menu_item_check label="同じSIMに入ってきたら通知" name="RadarReportSimRangeEnter" />
 	<menu_item_check label="同じSIMから出て行ったら通知" name="RadarReportSimRangeLeave" />
+	<menu_item_check label="アバターの年齢に問題があったら通知" name="RadarReportAgeAlert" />
 	<menu_item_check label="入ってきた通知をスクリプトに表示" name="RadarEnterChannelAlert" />
 	<menu_item_check label="出て行った通知をスクリプトに表示" name="RadarLeaveChannelAlert" />
+	<menu_item_check label="LSL クライアントブリッジでレーダーを強化" name="FSRadarEnhanceByBridge" />
 
 	<menu_item_separator layout="topleft" />
 

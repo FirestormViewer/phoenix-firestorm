@@ -967,8 +967,9 @@
          left="10"
          name="Antialiasing:"
          top_pad="10"
-         width="180">
-            Antialiasing:
+         width="220"
+          tool_tip="Changes to this setting may require a restart on some hardware.">
+          Antialiasing (restart recommended):
         </text>
         <combo_box
          control_name="RenderFSAASamples"

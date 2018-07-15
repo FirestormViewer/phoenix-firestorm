@@ -12,6 +12,7 @@
 		
 		<menu_item_check label="持ち物" name="Inventory"/>
 		<menu_item_check label="持ち物" name="ShowSidetrayInventory"/>
+		<menu_item_check label="お気に入りの服やHUD" name="WearableFavorites" />
 		<menu_item_call label="ピック..." name="Picks"/>
 		<menu_item_call label="体験..." name="Experiences"/>
 		
@@ -63,6 +64,7 @@
 		</menu>
 		-->
 		<menu_item_check label="HUD を表示" name="Show HUD Attachments"/>
+		<menu_item_check label="インターフェイスを表示" name="Show User Interface" />都
 		<menu_item_call label="管理者権限のリクエスト" name="Request Admin Options"/>
 		<menu_item_call label="管理者ステータス解除" name="Leave Admin Options"/>
 		<menu_item_call label="[APP_NAME] を終了" name="Quit"/>
@@ -161,6 +163,7 @@
 		<menu_item_call label="場所のプロフィール" name="Place Profile"/>
 		<menu_item_call label="土地情報" name="About Land"/>
 		<menu_item_call label="地域 / 不動産" name="RegionEstate"/>
+		<menu_item_call label="現在地をホームに設定" name="Set Home to Here"/>
 		<menu_item_call label="この土地を購入" name="Buy Land"/>
 		<menu_item_call label="自分の土地" name="My Land"/>
 		<menu label="表示" name="LandShow">
@@ -173,7 +176,6 @@
 			<menu_item_check label="アドバンスメニュー" name="Show Advanced Menu"/>
 		</menu>
 		<menu_item_call label="ホームにテレポート" name="Teleport Home"/>
-		<menu_item_call label="現在地をホームに設定" name="Set Home to Here"/>
 		<menu label="太陽" name="Environment Settings">
 			<menu_item_call label="日の出" name="Sunrise"/>
 			<menu_item_call label="正午" name="Noon"/>
@@ -337,9 +339,8 @@
 		</menu_item_call>
 		
 		<menu_item_call label="Firestormサポートグループに参加" name="firestorm_support_group"/>
-		<!-- added Mar.15, 2015 -->
 		<menu_item_call label="Firestorm 勉強会スケジュール" name="Firestorm Classes Schedule" />
-		<!-- added Mar.15, 2015 -->
+		<menu_item_call label="Firestorm イベントカレンダー" name="Firestorm Events Calendar" />
 		<menu_item_call label="[CURRENT_GRID] ヘルプ" name="current_grid_help"/>
 		<menu_item_call label="[CURRENT_GRID] について" name="current_grid_about"/>
 		<menu_item_call label="Grid status をチェック" name="Grid Status"/>
@@ -479,7 +480,9 @@
 			<menu_item_check label="マトリックスを表示する" name="Show Matrices"/>
 			<menu_item_check label="カーソルを乗せた場所の色を表示する" name="Show Color Under Cursor"/>
 			<menu_item_check label="メモリを表示：" name="Show Memory"/>
+			<!--
 			<menu_item_check label="プライベートメモリ情報を表示" name="Show Private Mem Info"/>
+			-->
 			<menu_item_check label="オブジェクトのアップデートを表示する" name="Show Updates"/>
 		</menu>
 		<menu label="エラー実行" name="Force Errors">
@@ -502,7 +505,7 @@
 		</menu>
 		<menu label="メタデータのレンダー" name="Render Metadata">
 			<menu_item_check label="バウンディングボックス" name="Bounding Boxes"/>
-			<menu_item_check label="Avatar Hitboxes" name="Avatar Hitboxes" />
+			<menu_item_check label="アバター・ヒットボックス" name="Avatar Hitboxes" />
 			<menu_item_check label="普通" name="Normals"/>
 			<menu_item_check label="オクトリー" name="Octree"/>
 			<menu_item_check label="シャドウ円錐" name="Shadow Frusta"/>
@@ -580,7 +583,7 @@
 		<menu label="UI" name="UI">
 			<menu_item_call label="メディアブラウザのテスト" name="Web Browser Test" />
 			<menu_item_check label="地域再起動のテスト..." name="Region Restart Test" />
-			<menu_item_call label="Web コンテンツブラウザ" name="Web Content Browser" shortcut="control|shift|Z" />
+			<menu_item_call label="Web コンテンツブラウザ" name="Web Content Browser" />
 			<menu_item_call label="FB 接続テスト" name="FB Connect Test" />
 			<menu_item_call label="SelectMgr をダンプ" name="Dump SelectMgr"/>
 			<menu_item_call label="持ち物の出力" name="Dump Inventory"/>

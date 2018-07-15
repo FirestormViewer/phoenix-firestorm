@@ -168,15 +168,19 @@
             <combo_box.item
              label="Flight Assist: Mild boost"
              name="flight_mild"
-             value="1.0" />
+             value="0.5" />
             <combo_box.item
              label="Flight Assist: Moderate boost"
              name="flight_moderate"
-             value="3.0" />
+             value="1.0" />
             <combo_box.item
              label="Flight Assist: Strong boost"
              name="flight_strong"
-             value="5.0" />
+             value="2.0" />
+            <combo_box.item
+             label="Flight Assist: Extreme boost"
+             name="flight_extreme"
+             value="15.0" />
         </combo_box>
 
     </panel>

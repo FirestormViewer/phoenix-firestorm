@@ -84,6 +84,8 @@
 		<text name="FSLegacyNotificationWellRequiresRestart">
 			（再起動が必要）
 		</text>
+		<check_box label="Linuxで既に使用されているショートカットを再配置（Linuxのみ、再起動が必要）" name="FSRemapLinuxShortcuts" tool_tip="ここにチェックを入れるとLinux OSで既に使用されているショートカット（Ctrl-Alt-Fx など）を再配置します。" />
+		<check_box label="統計ウィンドウにフォーカスが移動しないようにする" name="FSStatisticsNoFocus" tool_tip="ここにチェックを入れると他のウィンドウを閉じた時に、統計ウィンドウにフォーカスが遷移しないようにすることができます（但し、アイテムの表示レイアウトを変更したような場合はチェックを入れてもフォーカスが移ります）。" />
 		<slider label="ボタンの点滅回数：" tool_tip="何回ボタンを点滅させるかを設定します。" name="ButtonsFlashCount" />
 		<slider label="IMタブの点滅周期:" tool_tip="IMタブが１回点滅する時間を秒で設定します。IM通知に使用します。" name="ButtonFlashRate" />
 		<text name="ButtonFlashRateText">

@@ -3,9 +3,9 @@ import subprocess
 import tarfile
 
 class FSViewerManifest:
-    def fs_flavor( self ):
-        return self.args['viewer_flavor']  # [oss or hvk]
-    
+    def fs_is_opensim(self):
+        return self.args['viewer_flavor'] == 'oss' #Havok would be hvk
+
     def fs_splice_grid_substitution_strings( self, subst_strings ):
         ret = subst_strings
 
