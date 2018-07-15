@@ -138,6 +138,7 @@
 #include "llpathfindingmanager.h"
 #include "llstartup.h"
 #include "boost/unordered_map.hpp"
+#include <boost/regex.hpp>
 #include "llcleanup.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "fsavatarrenderpersistence.h"
@@ -10191,11 +10192,15 @@ void handle_report_bug(const LLSD& param)
 	
 	LLStringUtil::format_map_t replace;
 	// <FS:Ansariel> FIRE-14001: JIRA report is being cut off when using Help -> Report Bug
-	//replace["[ENVIRONMENT]"] = LLURI::escape(LLAppViewer::instance()->getViewerInfoString(true));
+	//std::string environment = LLAppViewer::instance()->getViewerInfoString(true);
+	//boost::regex regex;
+	//regex.assign("</?nolink>");
+	//std::string stripped_env = boost::regex_replace(environment, regex, "");
+
+	//replace["[ENVIRONMENT]"] = LLURI::escape(stripped_env);
 	LLSD sysinfo = FSData::getSystemInfo();
 	replace["[ENVIRONMENT]"] = LLURI::escape(sysinfo["Part1"].asString().substr(1) + sysinfo["Part2"].asString().substr(1));
 	// </FS:Ansariel>
-
 	LLSLURL location_url;
 	LLAgentUI::buildSLURL(location_url);
 	replace["[LOCATION]"] = LLURI::escape(location_url.getSLURLString());
