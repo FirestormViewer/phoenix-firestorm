@@ -51,7 +51,10 @@ void dump_avatar_and_skin_state(const std::string& reason, LLVOAvatar *avatar, c
         {
             LL_WARNS("Avatar") << "skin joint idx " << j << " name [" << skin->mJointNames[j] 
                                << "] num " << skin->mJointNums[j] << LL_ENDL;
-            const std::string& name = skin->mJointNames[j];
+            //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+            //const std::string& name = skin->mJointNames[j];
+            const std::string& name = skin->mJointNames[j].mName;
+            // </FS:ND>
             S32 joint_num = skin->mJointNums[j];
 
             LLJoint *name_joint = avatar->getJoint(name);
