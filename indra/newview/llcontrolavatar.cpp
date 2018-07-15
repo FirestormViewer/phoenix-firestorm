@@ -38,7 +38,8 @@ LLControlAvatar::LLControlAvatar(const LLUUID& id, const LLPCode pcode, LLViewer
     LLVOAvatar(id, pcode, regionp),
     mPlaying(false),
     mGlobalScale(1.0f),
-    mMarkedForDeath(false)
+    mMarkedForDeath(false),
+    mRootVolp(NULL)
 {
     mIsDummy = TRUE;
     mIsControlAvatar = true;
@@ -62,6 +63,8 @@ void LLControlAvatar::initInstance()
 	updateJointLODs();
 	updateGeometry(mDrawable);
 	hideSkirt();
+
+    mInitFlags |= 1<<4;
 }
 
 void LLControlAvatar::matchVolumeTransform()
@@ -129,13 +132,44 @@ void LLControlAvatar::matchVolumeTransform()
             // skeleton around in a smarter way, so name tags,
             // complexity info and such line up better. Should defer
             // this until avatars also get fixed.
-            setPositionAgent(vol_pos);
 
             LLQuaternion obj_rot = mRootVolp->getRotation();
-            LLQuaternion result_rot = obj_rot;
-            setRotation(result_rot);
-            mRoot->setWorldRotation(result_rot);
-            mRoot->setPosition(vol_pos + mPositionConstraintFixup);
+			LLMatrix3 bind_mat;
+
+            LLQuaternion bind_rot;
+#define MATCH_BIND_SHAPE
+#ifdef MATCH_BIND_SHAPE
+            // MAINT-8671 - based on a patch from Beq Janus
+	        const LLMeshSkinInfo* skin_info = mRootVolp->getSkinInfo();
+			if (skin_info)
+			{
+                LL_DEBUGS("BindShape") << getFullname() << " bind shape " << skin_info->mBindShapeMatrix << LL_ENDL;
+				LLMatrix3 bind_mat = skin_info->mBindShapeMatrix.getMat3();
+				for (auto i = 0; i < 3; i++)
+				{
+                    F32 len = 0.0f;
+					for (auto j = 0; j < 3; j++)
+					{
+                        len += bind_mat.mMatrix[i][j] * bind_mat.mMatrix[i][j];
+                    }
+                    if (len > 0.0f)
+                    {
+                        len = sqrt(len);
+                        for (auto j = 0; j < 3; j++)
+                        {
+                            bind_mat.mMatrix[i][j] /= len;
+                        }
+                    }
+				}
+                bind_mat.invert();
+                bind_rot = bind_mat.quaternion();
+                bind_rot.normalize();
+			}
+#endif
+			setRotation(bind_rot*obj_rot);
+            mRoot->setWorldRotation(bind_rot*obj_rot);
+			setPositionAgent(vol_pos);
+			mRoot->setPosition(vol_pos + mPositionConstraintFixup);
         }
     }
 }
@@ -284,7 +318,10 @@ void LLControlAvatar::updateDebugText()
         F32 est_tris = 0.f;
         F32 est_streaming_tris = 0.f;
         F32 streaming_cost = 0.f;
-        
+        std::string cam_dist_string = "";
+        S32 cam_dist_count = 0;
+        F32 lod_radius = mRootVolp->mLODRadius;
+
         for (std::vector<LLVOVolume*>::iterator it = volumes.begin();
              it != volumes.end(); ++it)
         {
@@ -319,6 +356,7 @@ void LLControlAvatar::updateDebugText()
                 {
                     // Rigged/animatable mesh
                     type_string += "R";
+                    lod_radius = volp->mLODRadius;
                 }
                 else if (volp->isMesh())
                 {
@@ -329,6 +367,12 @@ void LLControlAvatar::updateDebugText()
                 {
                     // Any other prim
                     type_string += "P";
+                }
+                if (cam_dist_count < 4)
+                {
+                    cam_dist_string += LLStringOps::getReadableNumber(volp->mLODDistance) + "/" +
+                        LLStringOps::getReadableNumber(volp->mLODAdjustedDistance) + " ";
+                    cam_dist_count++;
                 }
             }
             else
@@ -344,6 +388,7 @@ void LLControlAvatar::updateDebugText()
         addDebugText(llformat("flags %s", animated_object_flag_string.c_str()));
         addDebugText(llformat("tris %d (est %.1f, streaming %.1f), verts %d", total_tris, est_tris, est_streaming_tris, total_verts));
         addDebugText(llformat("pxarea %s rank %d", LLStringOps::getReadableNumber(getPixelArea()).c_str(), getVisibilityRank()));
+        addDebugText(llformat("lod_radius %s dists %s", LLStringOps::getReadableNumber(lod_radius).c_str(),cam_dist_string.c_str()));
         if (mPositionConstraintFixup.length() > 0.0f)
         {
             addDebugText(llformat("pos fix (%.1f %.1f %.1f)", 

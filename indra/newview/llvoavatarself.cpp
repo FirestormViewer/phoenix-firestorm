@@ -284,6 +284,8 @@ void LLVOAvatarSelf::initInstance()
 	// <FS:Ansariel> [Legacy Bake]
 	doPeriodically(check_for_unsupported_baked_appearance, 120.0);
 	doPeriodically(boost::bind(&LLVOAvatarSelf::checkStuckAppearance, this), 30.0);
+
+    mInitFlags |= 1<<2;
 }
 
 void LLVOAvatarSelf::setHoverIfRegionEnabled()
