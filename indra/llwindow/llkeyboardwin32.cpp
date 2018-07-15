@@ -116,6 +116,7 @@ LLKeyboardWin32::LLKeyboardWin32()
 	mTranslateKeyMap[VK_F11] = KEY_F11;
 	mTranslateKeyMap[VK_F12] = KEY_F12;
 	mTranslateKeyMap[VK_CLEAR] = KEY_PAD_CENTER;
+	mTranslateKeyMap[VK_APPS] = KEY_CONTEXT_MENU; // <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
 
 	// Build inverse map
 	std::map<U16, KEY>::iterator iter;

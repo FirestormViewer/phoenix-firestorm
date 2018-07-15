@@ -193,6 +193,18 @@
             <key>name</key>
             <string>windows</string>
           </map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>d5673fc7ad1ec9595a9b97537681e060</string>
+              <key>url</key>
+              <uri>http://downloads.phoenixviewer.com/slvoice_os-4.6.0017.22050.302004-darwin-302004.tar.bz2</uri>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
         </map>
       </map>
       <key>SDL</key>

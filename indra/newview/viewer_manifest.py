@@ -1525,6 +1525,21 @@ class DarwinManifest(ViewerManifest):
                                 ):
                     self.path2basename(relpkgdir, libfile)
 
+                # <FS:Ansariel/TS> FIRE-22709: Local voice not working in OpenSim
+                if self.fs_is_opensim():
+                    with self.prefix(src=os.path.join(relpkgdir, 'voice_os'), dst="voice_os"):
+                        self.path('libalut.dylib')
+                        self.path('libopenal.dylib')
+                        self.path('libortp.dylib')
+                        self.path('libsndfile.dylib')
+                        self.path('libvivoxoal.dylib')
+                        self.path('libvivoxsdk.dylib')
+                        self.path('libvivoxplatform.dylib')
+                        self.path('SLVoice')
+                    with self.prefix(src=pkgdir, dst="voice_os"):
+                        self.path("ca-bundle.crt")
+                # </FS:Ansariel/TS>
+
                 # dylibs that vary based on configuration
                 if self.args['configuration'].lower() == 'debug':
                     for libfile in (

@@ -36,7 +36,7 @@
 				Web ブラウザ:
 			</text>
 			<radio_group name="preferred_browser_behavior">
-				<radio_item label="全てのリンクに指定のブラウザ（Crome、FirefoxやIE）を使用" name="new_external" tool_tip="デフォルトのシステム Web ブラウザでヘルプや Web リンク先などを見ます。全画面で起動中にはおすすめしません。" />
+				<radio_item label="全てのリンクにシステムでデフォルトのブラウザを使用" name="new_external" tool_tip="デフォルトのシステム Web ブラウザでヘルプや Web リンク先などを見ます。全画面で起動中にはおすすめしません。" />
 				<radio_item label="SLのリンクにのみ内蔵ブラウザを使用" name="new_internal" tool_tip="デフォルトのシステム Web ブラウザでヘルプや Web リンク先などを見ます。リンデンラボやセカンドライフのリンクを見るのには内蔵のブラウザが使用されます。" />
 				<radio_item label="全てのリンクに内蔵ブラウザを使用" name="new_internal_all"/>
 			</radio_group>
@@ -51,10 +51,15 @@
 			</combo_box>
 			<button label="ブラウザキャッシュをクリア" name="ClearWebBrowserCache" />
 			<check_box label="プラグインを有効にする" name="browser_plugins_enabled" />
+			<!--
 			<check_box label="Cookie を受け入れる" name="cookies_enabled" />
+			-->
 			<check_box label="Javascript を有効にする" name="browser_javascript_enabled" />
 			<check_box label="メディアブラウザのポップアップを有効にする" name="media_popup_enabled" />
 			<button label="プロキシ設定を調整" name="set_proxy" />
+			<text name="home_page_label_l">
+				ブラウザのホームページ:
+			</text>
 		</panel>
 		
 		<panel label="ディレクトリ" name="tab-dir">

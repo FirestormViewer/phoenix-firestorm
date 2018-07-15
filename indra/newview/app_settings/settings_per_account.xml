@@ -900,7 +900,7 @@
     <key>UseLSLFlightAssist</key>
         <map>
         <key>Comment</key>
-            <string>Use the client LSL bridge for flight boost - boost power: 0.0 (disabled), 1.0 (low), 3.0 (standard), 5.0 (high).</string>
+            <string>Use the client LSL bridge for flight boost - boost power: 0.0 (disabled), 0.5 (mild), 1.0 (moderate), 2.0 (high), 15.0 (extreme).</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater  name="floater_fs_wearable_favorites" title="お気に入りの服やHUD">
+	<floater.string name="empty_list">
+		装着可能な服やHUDをドラッグしてリストに追加します。
+	</floater.string>
+	<floater.string name="search_no_items">
+		アイテムが見つかりませんでした。
+	</floater.string>
+
+	<panel name="buttons_panel">
+		<filter_editor label="フィルター" name="wearable_filter_input" />
+		<menu_button name="options_btn" tool_tip="お気に入りのオプション" />
+		<button name="remove_btn" tool_tip="お気に入りをリストから削除します" />
+	</panel>
+
+	<panel name="panel_fs_wearable_favorites">
+		<fs_wearable_favorites_items_list name="favorites_list" />
+	</panel>
+</floater>
