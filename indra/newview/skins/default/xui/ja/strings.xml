@@ -5444,10 +5444,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Report_Abuse_Label">
 		嫌がらせを報告
 	</string>
-	<!-- FS:Beq FIRE-20977 -->
-	<string name="Command_RFO_Label">
-		フレンドのみ表示
-	</string>
 	<string name="Command_Report_Abuse_Label">
 		嫌がらせの報告
 	</string>
@@ -5503,6 +5499,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
   <string name="Command_ResyncAnimations_Label">アニメーションの再同期</string>
 	<string name="Command_RegionTracker_Label">地域別アバター数</string>
 	<string name="Command_Group_Titles_Label">グループ肩書き</string>
+	<string name="Command_Wearable_Favorites_Label">お気に入りの服やHUD</string>
+	<string name="Command_RFO_Label">フレンドのみ表示</string>
+	<string name="Command_Beacons_Label">ビーコン</string>
 	
 	<string name="Command_AboutLand_Tooltip">
 		訪問先に関する情報
@@ -5582,11 +5581,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Report_Abuse_Tooltip">
 		嫌がらせの報告
 	</string>
-	<!-- FS:Beq FIRE-20977 -->
-	<string name="Command_RFO_Tooltip">
-		ビューワにフレンドのみ表示し、他のアバターは見えなくなります。一度この機能を有効にすると、他の人も見えるように戻すにはテレポートが必要になります。
-	</string>
-	<!-- FS:Beq RFO changes -->
 	<string name="Command_Search_Tooltip">
 		場所、イベント、人を検索
 	</string>
@@ -5687,7 +5681,14 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Group_Titles_Tooltip">
 		アクティブなグループタグを変更します
 	</string>
-
+	<string name="Command_Wearable_Favorites_Tooltip">
+		お気に入りの服やHUDの一覧を開きます</string>
+	<string name="Command_RFO_Tooltip">
+		ビューワにフレンドのみ表示し、他のアバターは見えなくなります。一度この機能を有効にすると、他の人も見えるように戻すにはテレポートが必要になります。
+	</string>
+	<string name="Command_Beacons_Tooltip">
+		ビーコンを表示
+	</string>
  	<string name="Toolbar_Bottom_Tooltip">
 		現在、下のツールバーにあります
 	</string>
@@ -5764,6 +5765,31 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	
 	<!-- Settings sanity checks -->
+	<string name="SanityCheckEquals">
+		設定コントロール「[CONTROL_NAME]」は [VALUE_1] であるべきです。
+	</string>
+	<string name="SanityCheckNotEquals">
+		設定コントロール「[CONTROL_NAME]」は [VALUE_1] であってはなりません。
+	</string>
+	<string name="SanityCheckLessThan">
+		設定コントロール「[CONTROL_NAME]は [VALUE_1] よりも小さな値であるべきです。
+	</string>
+	<string name="SanityCheckGreaterThan">
+		設定kontoro-ru [CONTROL_NAME]」は [VALUE_1] より大きな値であるべきです。
+	</string>
+	<string name="SanityCheckLessThanEquals">
+		設定コントロール「[CONTROL_NAME]」はl [VALUE_1] と同じか小さい値であるべきです。
+	</string>
+	<string name="SanityCheckGreaterThanEquals">
+		設定コントロール「[CONTROL_NAME]」は [VALUE_1] と同じか大きい値であるべきです。
+	</string>
+	<string name="SanityCheckBetween">
+		設定コントロール「[CONTROL_NAME]」は [VALUE_1] と [VALUE_2] の間の値であるべきです。
+	</string>
+	<string name="SanityCheckNotBetween">
+		設定コントロール「[CONTROL_NAME]」は [VALUE_1] と [VALUE_2] の間の値であってはいけません。
+	</string>
+	
 	<!-- Media filter options -->
 	<string name="MediaFilterActionAllow">許可</string>
 	<string name="MediaFilterActionDeny">拒否</string>
@@ -5771,10 +5797,43 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="MediaFilterConditionAlwaysLower">常に</string>
 	<string name="MediaFilterConditionNever">常に不</string>
 	<string name="MediaFilterConditionNeverLower">常に不</string>
+	<string name="MediaFilterMediaContentBlocked">
+		ドメイン [DOMAIN] のメディアはブロックされました。
+	</string>
+	<string name="MediaFilterMediaContentDomainAlwaysAllowed">
+		ドメイン [DOMAIN] のメディアは常に再生されます。
+	</string>
+	<string name="MediaFilterMediaContentDomainAlwaysBlocked">
+		ドメイン [DOMAIN] のメディアは絶対に再生されません。</string>
+	<string name="MediaFilterMediaContentUrlAlwaysAllowed">
+		URL [MEDIAURL] のメディアは常に再生されます。
+	</string>
+	<string name="MediaFilterMediaContentUrlAlwaysBlocked">
+		URL [MEDIAURL] のメディアは絶対に再生されません。
+	</string>
+  
+	<string name="MediaFilterAudioContentBlocked">
+		ドメイン [DOMAIN] の音声はブロックされました。
+	</string>
+	<string name="MediaFilterAudioContentDomainAlwaysAllowed">
+		ドメイン [DOMAIN] の音声は常に再生されます。
+	</string>
+	<string name="MediaFilterAudioContentDomainAlwaysBlocked">
+		ドメイン [DOMAIN] の音声は絶対に再生されません。
+	</string>
+	<string name="MediaFilterAudioContentUrlAlwaysAllowed">
+		URL [MEDIAURL] の音声は常に再生されます。
+	</string>
+	<string name="MediaFilterAudioContentUrlAlwaysBlocked">
+		URL [MEDIAURL] の音声は絶対に再生されません。</string>
+
+	<string name="MediaFilterBlacklist">ブラックリスト</string>
+	<string name="MediaFilterWhitelist">ホワイトリスト</string>
   
 	<!-- Replacement for hardcoded UI strings -->
-	<!-- CmdLine Response Strings-->
-	
+	<string name="UnknownRegion">（不明な地域）</string>
+	<string name="UnknownPosition">（不明な位置）</string>
+
 	<!-- NetMap double click action tooltip messages -->
 	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
 		[AGENT][REGION](ダブルクリックで世界地図を開きます。Shift‐ドラッグで水平・垂直移動します。)
@@ -5787,6 +5846,28 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	
 	<!-- Nearby Chat Collision Messages -->
+	<string name="Collision_Bump">
+		[NAME] がぶつかりました。
+	</string>
+	<string name="Collision_PushObject">
+		[NAME] がスクリプトであなたを押しました。
+	</string>
+	<string name="Collision_ObjectCollide">
+		[NAME] がオブジェクトであなたを撃ちました。
+	</string>
+	<string name="Collision_ScriptedObject">
+		[NAME] がスクリプト入りのオブジェクトであなたを撃ちました。
+	</string>
+	<string name="Collision_PhysicalObject">
+		[NAME] が物理オブジェクトであなたを撃ちました。
+	</string>
+  <string name="Collision_UnknownType">[NAME] caused a collision of unknown type.</string>
+
+	<string name="MovelockEnabled">ムーブメントロックが有効になりました</string>
+	<string name="MovelockDisabled">ムーブメントロックが解除されました</string>
+	<string name="MovelockEnabling">ムーブメントロックを起動中です...</string>
+	<string name="MovelockDisabling">ムーブメントロックを解除中です...</string>
+	<string name="FlightAssistEnabled">飛行アシストが有効になりました</string>
 
 	<string name="BusyResponse">
 		取り込み時の自動応答
@@ -5795,47 +5876,15 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="TeleportMaturityExceeded">
 		住人はこの地域（リージョン）を訪問できません。
 	</string>
+	
+	<!-- Spell check settings floater -->
 	<string name="UserDictionary">
 		[User]
 	</string>
-	<string name="logging_calls_disabled_log_empty">
-		会話はログに記録されていません。ログの記録を開始するには、「環境設定」&gt;「チャット」で「保存: ログのみ」または「保存: ログと会話のテキスト」を選択します。
-	</string>
-	<string name="logging_calls_disabled_log_not_empty">
-		これ以上の会話は記録されません。ログの記録を再開するには、「環境設定」&gt;「チャット」で「保存: ログのみ」または「保存: ログと会話のテキスト」を選択します。
-	</string>
-	<string name="logging_calls_enabled_log_empty">
-		ログイン時の会話はありません。誰かにご連絡した後、または誰かがあなたに連絡した後、ログエントリがここに表示されます。
-	</string>
-	<string name="loading_chat_logs">
-		ロード中...
-	</string>
 	
-	<!-- Presets graphic/camera -->
-	<string name="preset_combo_label">
-		- リストなし -
-	</string>
-	<string name="Default">
-		デフォルト
-	</string>
-	<string name="none_paren_cap">
-		（なし）
-	</string>
-	<string name="no_limit">
-		無制限
-	</string>
+	<!-- RLVa -->
 	
-	<string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">
-		この物理シェイプに含まれる三角形は小さすぎます。物理モデルを簡略化して下さい。
-	</string>
-	
-	<string name="Mav_Details_MAV_CONFIRMATION_DATA_MISMATCH">
-		この物理シェイプにはよくない確認データが含まれています。物理モデルを修正して下さい。
-	</string>
-
-	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
-		この物理シェイプは正しいバージョンではありません。物理モデルに正しいバージョンを設定して下さい。
-	</string>
+	<!-- Experience Tools strings -->
 	<string name="experience_tools_experience">
 		体験
 	</string>
@@ -5917,10 +5966,68 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="ExperiencePermissionShort12">
 		権限
 	</string>
-	<string name="ExperiencePermissionShortUnknown">
-		不明：[Permission]
+	
+	<!-- Conversation log messages -->
+	<string name="logging_calls_disabled_log_empty">
+		会話はログに記録されていません。ログの記録を開始するには、「環境設定」&gt;「チャット」で「保存: ログのみ」または「保存: ログと会話のテキスト」を選択します。
 	</string>
-	<!-- added Jun.30, 2013 -->
+	<string name="logging_calls_disabled_log_not_empty">
+		これ以上の会話は記録されません。ログの記録を再開するには、「環境設定」&gt;「チャット」で「保存: ログのみ」または「保存: ログと会話のテキスト」を選択します。
+	</string>
+	<string name="logging_calls_enabled_log_empty">
+		ログイン時の会話はありません。誰かにご連絡した後、または誰かがあなたに連絡した後、ログエントリがここに表示されます。
+	</string>
+	<string name="loading_chat_logs">
+		ロード中...
+	</string>
+	
+	<!-- Statistics -->
+	
+	<!-- Presets graphic/camera -->
+	<string name="preset_combo_label">
+		- リストなし -
+	</string>
+	<string name="Default">
+		デフォルト
+	</string>
+	<string name="none_paren_cap">
+		（なし）
+	</string>
+	<string name="no_limit">
+		無制限
+	</string>
+	
+	<string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">
+		この物理シェイプに含まれる三角形は小さすぎます。物理モデルを簡略化して下さい。
+	</string>
+	
+	<string name="Mav_Details_MAV_CONFIRMATION_DATA_MISMATCH">
+		この物理シェイプにはよくない確認データが含まれています。物理モデルを修正して下さい。
+	</string>
+
+	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
+		この物理シェイプは正しいバージョンではありません。物理モデルに正しいバージョンを設定して下さい。
+	</string>
+	
+	<string name="LoadCameraPositionNoneSaved">
+		カメラ視界は保存されていません。
+	</string>
+	<string name="LoadCameraPositionOutsideDrawDistance">
+		カメラの位置が描画距離を超えているため、カメラ視界を復元できませんでした。
+	</string>
+
+	<string name="DrawDistanceSteppingGestureObsolete">
+		コードが変更になったため、このジェスチャーを使用する必要がなくなりました。プログレッシブ距離別段階描画が有効になりました。</string>
+	<string name="FSCameraPositionCopied">カメラ位置 [POS] がクリップボードにコピーされました。</string>
+
+	<string name="FSCmdLineDrawDistanceSet">
+		描画距離が [DISTANCE]m に設定されました。
+	</string>
+
+	<!-- Build types for about floater -->
+	<string name="FSWithHavok">Havok 対応</string>
+	<string name="FSWithOpensim">OpenSim 対応</string>
+
 	<!-- Firestorm search -->
   <string name="not_found">&apos;[TEXT]&apos; は見つかりません</string>
   <string name="no_results">該当なし</string>
@@ -6033,11 +6140,17 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
   <string name="leaving_region">がこの地域を離れました。</string>
   <string name="avatar_age_alert">は年齢警告対象です。年齢：[AGE] 日</string>
 
-  <string name="export_fail_no_mesh">メッシュのエクスポートには現在対応していません。エクスポート処理を中止しました。</string>
+	<!--
+	<string name="export_fail_no_mesh">メッシュのエクスポートには現在対応していません。エクスポート処理を中止しました。</string>
+	-->
   <string name="TotalScriptCountChangeIncrease">この地域のスクリプト総数が [OLD_VALUE] から [NEW_VALUE] に急増しました。([DIFFERENCE])</string>
   <string name="TotalScriptCountChangeDecrease">この地域のスクリプト総数が [OLD_VALUE] から [NEW_VALUE] に激減しました。([DIFFERENCE])</string>
   <string name="preproc_toggle_warning">このエディタを一旦閉じて開き直すまでプリプロセッサの切り替えは有効になりません。</string>
 	
+	<!-- <FS:Cron> FIRE-9335 -->
+	<!-- <LSL Preprocessor -->
+	
+	<!-- <FS:Zi> Notify user about preferences settings changes to skin defaults -->
 	<string name="skin_defaults_starlight_location">Starlight スキンの初期設定により、メニューバーには現在いる場所が表示されません。</string>
 	<string name="skin_defaults_starlight_navbar">Starlight スキンの初期設定により、ナビゲーションバーが表示されます。</string>
 	
@@ -6062,6 +6175,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	
 	<string name="DoubleClickTeleportEnabled">ダブルクリック・テレポートが有効になりました。</string>
 	<string name="DoubleClickTeleportDisabled">ダブルクリック・テレポートが無効になりました。</string>
+	
+	<string name="AlwaysRunEnabled">「常に走る」が有効になりました。</string>
+	<string name="AlwaysRunDisabled">「常に走る」が解除されました。</string>
 	
 	<string name="FSRegionRestartInLocalChat">今いる地域は間もなく再起動します。このままこの地域にいるとログアウトされます。</string>
 	

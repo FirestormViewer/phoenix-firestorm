@@ -591,7 +591,7 @@
     <key>util.aditi.lindenlab.com</key>
         <map>
         <key>LastModified</key>
-            <date>2019-04-19T21:15:00Z</date>
+            <date>2018-06-22T22:15:00Z</date>
         <key>app_slurl_base</key>
             <string>secondlife:///app</string>
         <key>gridname</key>
@@ -605,7 +605,7 @@
                 <string>agent</string>
             </array>
         <key>loginpage</key>
-            <string>https://phoenixviewer.com/app/loginV3/</string>
+            <string>http://phoenixviewer.com/app/loginV3/</string>
         <key>loginuri</key>
             <array>
                 <string>https://login.aditi.lindenlab.com/cgi-bin/login.cgi</string>
@@ -622,7 +622,7 @@
     <key>util.agni.lindenlab.com</key>
         <map>
         <key>LastModified</key>
-            <date>2019-04-19T21:15:00Z</date>
+            <date>2018-06-22T22:15:00Z</date>
         <key>app_slurl_base</key>
             <string>secondlife:///app</string>
         <key>favorite</key>
@@ -638,7 +638,7 @@
                 <string>agent</string>
             </array>
         <key>loginpage</key>
-            <string>https://phoenixviewer.com/app/loginV3/</string>
+            <string>http://phoenixviewer.com/app/loginV3/</string>
         <key>loginuri</key>
             <array>
                 <string>https://login.agni.lindenlab.com/cgi-bin/login.cgi</string>

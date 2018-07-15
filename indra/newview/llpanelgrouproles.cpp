@@ -849,7 +849,7 @@ BOOL LLPanelGroupMembersSubTab::postBuildSubTab(LLView* root)
 
 	//mAllowedActionsList->setCommitOnSelectionChange(TRUE);
 	//mAllowedActionsList->setCommitCallback(boost::bind(&LLPanelGroupMembersSubTab::updateActionDescription, this));
-	if (!mMembersList || !mAssignedRolesList || !mAllowedActionsList || !mActionDescription) return FALSE;
+	if (!mMembersList || !mAssignedRolesList || !mAllowedActionsList) return FALSE;
 	// </FS:Ansariel>
 
 	// We want to be notified whenever a member is selected.

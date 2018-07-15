@@ -1548,7 +1548,7 @@ Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia 
 		Arrastra carpetas a esta sección para incluirlas en la lista de venta del [[MARKETPLACE_DASHBOARD_URL] Mercado].
 	</string>
 	<string name="InventoryItemsCount">
-		( [ITEMS_COUNT] Objetos)
+		([ITEMS]/[CATEGORIES] Objetos)
 	</string>
 	<string name="Marketplace Validation Warning Stock">
 		La carpeta de stock debe estar contenida en una carpeta de versión

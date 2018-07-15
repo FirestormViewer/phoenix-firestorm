@@ -732,8 +732,8 @@
          top_delta="0"
          name="Region_Crossing_Movement">
             <radio_item
-             label="Project"
-             name="move_projection"
+             label="Predict"
+             name="move_predict"
              top_delta="20"
              layout="topleft"
              height="16"

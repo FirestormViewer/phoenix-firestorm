@@ -98,6 +98,30 @@ private:
 	FSAreaSearch* mAreaSearchFloater;
 };
 
+class FSAreaSearchTouchTimer : public LLEventTimer
+{
+public:
+	FSAreaSearchTouchTimer(const LLUUID& object_id, F32 timeout) :
+		LLEventTimer(timeout),
+		mObjectID(object_id)
+	{
+	}
+
+	/*virtual*/ BOOL tick()
+	{
+		LLViewerObject* objectp = gObjectList.findObject(mObjectID);
+		if (objectp)
+		{
+			FSPanelAreaSearchList::touchObject(objectp);
+		}
+
+		return TRUE;
+	}
+
+private:
+	LLUUID	mObjectID;
+};
+
 FSAreaSearch::FSAreaSearch(const LLSD& key) :  
 	LLFloater(key),
 	mActive(false),
@@ -1615,6 +1639,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 	case 'l': // blacklist
 	{
 		std::vector<LLScrollListItem*> selected = mResultList->getAllSelected();
+		S32 cnt = 0;
 
 		for(std::vector<LLScrollListItem*>::iterator item_it = selected.begin();
 		  item_it != selected.end(); ++item_it)
@@ -1623,11 +1648,8 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 			{
 			case 't': // touch
 			{
-				LLViewerObject* objectp = gObjectList.findObject((*item_it)->getUUID());
-				if (objectp)
-				{
-					touchObject(objectp);
-				}
+				new FSAreaSearchTouchTimer((*item_it)->getUUID(), cnt * 0.2f);
+				cnt++;
 			}
 				break;
 			case 's': // script
@@ -1877,6 +1899,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 	return true;
 }
 
+// static
 void FSPanelAreaSearchList::touchObject(LLViewerObject* objectp)
 {
 	// *NOTE: Hope the packets arrive safely and in order or else

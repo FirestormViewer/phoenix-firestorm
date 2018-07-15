@@ -1181,10 +1181,22 @@ void LLFloaterWorldMap::buildAvatarIDList()
 	LLCollectMappableBuddies::buddy_map_t::iterator end;
 	it = collector.mMappable.begin();
 	end = collector.mMappable.end();
+	// <FS:Ansariel> Sort friend list alphabetically
+	//for( ; it != end; ++it)
+	//{
+	//	list->addSimpleElement((*it).second, ADD_BOTTOM, (*it).first);
+	//}
+
+	std::multimap<std::string, LLUUID> buddymap;
 	for( ; it != end; ++it)
 	{
-		list->addSimpleElement((*it).second, ADD_BOTTOM, (*it).first);
+		buddymap.insert(std::make_pair((*it).second, (*it).first));
 	}
+	for (std::multimap<std::string, LLUUID>::iterator bit = buddymap.begin(); bit != buddymap.end(); ++bit)
+	{
+		list->addSimpleElement((*bit).first, ADD_BOTTOM, (*bit).second);
+	}
+	// </FS:Ansariel>
 	
 	list->setCurrentByID( LLAvatarTracker::instance().getAvatarID() );
 	list->selectFirstItem();

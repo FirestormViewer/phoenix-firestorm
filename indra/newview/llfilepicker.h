@@ -182,7 +182,7 @@ private:
 	static void add_to_selectedfiles(gpointer data, gpointer user_data);
 	static void chooser_responder(GtkWidget *widget, gint response, gpointer user_data);
 	// we remember the last path that was accessed for a particular usage
-	std::map <std::string, std::string> mContextToPathMap;
+	//std::map <std::string, std::string> mContextToPathMap; // <FS> FIRE-14924: Remember last used directory
 	std::string mCurContextName;
 	// we also remember the extension of the last added file.
 	std::string mCurrentExtension;

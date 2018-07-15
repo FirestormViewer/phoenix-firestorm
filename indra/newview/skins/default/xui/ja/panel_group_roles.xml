@@ -38,10 +38,12 @@ Ctrl キーを押しながらメンバー名をクリックすると
 				<name_list.columns label="メンバー" name="name"/>
 				<name_list.columns label="寄付" name="donated"/>
 				<name_list.columns label="ログイン" name="online"/>
+				<name_list.columns label="肩書き" />
 			</name_list>
 			<button label="招待" name="member_invite"/>
 			<button label="追放" name="member_eject"/>
 			<button label="メンバーの立入禁止" name="member_ban"/>
+			<button name="export_list" label="リスト書き出し" />
 		</panel>
 		
 		<!-- ROLES sub tab -->
