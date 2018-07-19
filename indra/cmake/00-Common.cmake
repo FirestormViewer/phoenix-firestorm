@@ -109,6 +109,7 @@ if (LINUX)
   set(CMAKE_SKIP_RPATH TRUE)
 
   add_definitions(-D_FORTIFY_SOURCE=2)
+
   set(CMAKE_CXX_FLAGS "-Wno-deprecated -Wno-unused-but-set-variable -Wno-unused-variable ${CMAKE_CXX_FLAGS}")
 
   # gcc 4.3 and above don't like the LL boost and also

@@ -173,9 +173,9 @@ void LLTextureBar::draw()
 	{
 		color = LLColor4::green4;
 	}
-	else if (mImagep->getBoostLevel() > LLGLTexture::BOOST_NONE)
+	else if (mImagep->getBoostLevel() > LLGLTexture::BOOST_ALM)
 	{
-		color = LLColor4::magenta;
+		color = LLColor4::magenta; // except none and alm
 	}
 	else if (mImagep->getDecodePriority() <= 0.0f)
 	{
@@ -736,7 +736,7 @@ LLTextureView::~LLTextureView()
 typedef std::pair<F32,LLViewerFetchedTexture*> decode_pair_t;
 struct compare_decode_pair
 {
-	bool operator()(const decode_pair_t& a, const decode_pair_t& b)
+	bool operator()(const decode_pair_t& a, const decode_pair_t& b) const
 	{
 		return a.first > b.first;
 	}
