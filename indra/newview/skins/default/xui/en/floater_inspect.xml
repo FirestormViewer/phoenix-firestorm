@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  can_resize="true"
- height="300"
+ height="297"
  layout="topleft"
  min_height="300"
  min_width="610"
@@ -47,13 +47,14 @@ VRAM: [VRAM_USAGE] KB
       border_visible="true"
       allow_scroll="true"
       h_pad="2"
-      v_pad="0"
+      v_pad="2"
       read_only="true"
+      tab_stop="false"
       value="(loading...)"
       word_wrap="true"/>
     <scroll_list
      top="24"
-     height="242"
+     height="243"
      column_padding="0"
      draw_heading="true"
      follows="top|right|left|bottom"
