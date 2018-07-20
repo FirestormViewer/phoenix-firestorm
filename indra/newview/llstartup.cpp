@@ -316,6 +316,13 @@ void set_flags_and_update_appearance()
 // true when all initialization done.
 bool idle_startup()
 {
+	if (gViewerWindow == NULL)
+	{
+		// We expect window to be initialized
+		LL_WARNS_ONCE() << "gViewerWindow is not initialized" << LL_ENDL;
+		return false; // No world yet
+	}
+
 	const F32 PRECACHING_DELAY = gSavedSettings.getF32("PrecachingDelay");
 	static LLTimer timeout;
 
@@ -754,7 +761,6 @@ bool idle_startup()
 		if (gLoginMenuBarView == NULL)
 		{
 			LL_DEBUGS("AppInit") << "initializing menu bar" << LL_ENDL;
-			initialize_edit_menu();
 			initialize_spellcheck_menu();
 			init_menus();
 		}
@@ -982,9 +988,6 @@ bool idle_startup()
 		// Load Avatars icons cache
 		LLAvatarIconIDCache::getInstance()->load();
 		
-		// Load media plugin cookies
-		LLViewerMedia::loadCookieFile();
-
 		LLRenderMuteList::getInstance()->loadFromFile();
 
 		//-------------------------------------------------
@@ -1179,7 +1182,7 @@ bool idle_startup()
 
 						}
 					}
-					else 
+					else if (!message.empty())
 					{
 						// This wasn't a certificate error, so throw up the normal
 						// notificatioin message.

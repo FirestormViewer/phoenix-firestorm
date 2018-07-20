@@ -53,6 +53,7 @@
 #include "llviewershadermgr.h"
 #include "llviewertexture.h"
 #include "llvoavatar.h"
+#include "llsculptidsize.h"
 // [RLVa:KB] - Checked: RLVa-2.0.0
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -1233,6 +1234,12 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 {
 	LL_RECORD_BLOCK_TIME(FTM_FACE_GET_GEOM);
 	llassert(verify());
+
+	if (volume.getNumVolumeFaces() <= f) {
+        LL_WARNS() << "Attempt get volume face out of range! Total Faces: " << volume.getNumVolumeFaces() << " Attempt get access to: " << f << LL_ENDL;
+		return FALSE;
+	}
+
 	const LLVolumeFace &vf = volume.getVolumeFace(f);
 	S32 num_vertices = (S32)vf.mNumVertices;
 	S32 num_indices = (S32) vf.mNumIndices;
@@ -2724,12 +2731,27 @@ void LLFace::setDefaultTexture(U32 nChannel, bool fShowDefault) const
 
 void LLFace::setVertexBuffer(LLVertexBuffer* buffer)
 {
+	if (buffer)
+	{
+		LLSculptIDSize::instance().inc(mDrawablep, buffer->getSize() + buffer->getIndicesSize());
+	}
+
+	if (mVertexBuffer)
+	{
+		LLSculptIDSize::instance().dec(mDrawablep);
+	}
+
 	mVertexBuffer = buffer;
 	llassert(verify());
 }
 
 void LLFace::clearVertexBuffer()
 {
+	if (mVertexBuffer)
+	{
+		LLSculptIDSize::instance().dec(mDrawablep);
+	}
+
 	mVertexBuffer = NULL;
 }
 

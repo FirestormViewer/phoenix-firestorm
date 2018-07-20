@@ -2655,7 +2655,7 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>DebugShowPrivateMem</key>
+    <key>DEPRECATED: DebugShowPrivateMem</key>  <!-- deprecated (see MAINT-8091) -->
     <map>
       <key>Comment</key>
       <string>Show Private Mem Info</string>
@@ -4943,6 +4943,17 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>IgnoreFOVZoomForLODs</key>
+    <map>
+      <key>Comment</key>
+      <string>Ignore zoom effect(CTRL+0) when calculating lods.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>IgnoreAllNotifications</key>
     <map>
       <key>Comment</key>
@@ -5095,7 +5106,7 @@
 		<key>Type</key>
 		<string>Boolean</string>
 		<key>Value</key>
-		<integer>0</integer>
+		<integer>1</integer>
 	</map>
     <key>InventoryOutboxDisplayBoth</key>
     <map>
@@ -6705,10 +6716,10 @@
         <key>Value</key>
             <real>600.0</real>
         </map>
-    <key>MemoryPrivatePoolEnabled</key>
+    <key>MemoryPrivatePoolEnabled</key>  <!-- deprecated (see MAINT-8091) -->
     <map>
       <key>Comment</key>
-      <string>Enable the private memory pool management</string>
+      <string>DEPRECATED: Enable the private memory pool management</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -6716,10 +6727,10 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>MemoryPrivatePoolSize</key>
+    <key>MemoryPrivatePoolSize</key>  <!-- deprecated (see MAINT-8091) -->
     <map>
       <key>Comment</key>
-      <string>Size of the private memory pool in MB (min. value is 256)</string>
+      <string>DEPRECATED: Size of the private memory pool in MB (min. value is 256)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -8939,7 +8950,19 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-
+  <key>RenderNsightDebugSupport</key>
+  <map>
+    <key>Comment</key>
+    <string>
+      Disable features which prevent nVidia nSight from being usable with SL. Requires restart.
+    </string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>RenderLocalLights</key>
   <map>
     <key>Comment</key>
@@ -10477,9 +10500,9 @@
   <key>RenderAutoMuteByteLimit</key>
   <map>
     <key>Comment</key>
-    <string>OBSOLETE and UNUSED.</string>
+    <string>If avatar attachment size exceed this value (in bytes) attachment will not be rendered. Excludes attachments worn by own avatar.</string>
     <key>Persist</key>
-    <integer>0</integer>
+    <integer>1</integer>
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
@@ -12646,7 +12669,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>500.0</real>
+      <real>3000.0</real>
     </map>
     <key>UpdaterMaximumBandwidth</key>
     <map>
@@ -16469,6 +16492,17 @@
       (default to class 1)</string>
       <key>Persist</key>
       <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>CefVerboseLog</key>
+    <map>
+      <key>Comment</key>
+      <string>Enable/disable CEF verbose loggingk</string>
+      <key>Persist</key>
+      <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
