@@ -122,6 +122,7 @@ void LLSkinningUtil::scrubInvalidJoints(LLVOAvatar *avatar, LLMeshSkinInfo* skin
             LL_WARNS_ONCE("Avatar") << avatar->getFullname() << " mesh rigged to invalid joint" << skin->mJointNames[j].mName << LL_ENDL;
             skin->mJointNames[ j ] = JointKey::construct( "mPelvis" );
             //</FS:ND>
+            skin->mJointNumsInitialized = false; // force update after names change.
         }
     }
     skin->mInvalidJointsScrubbed = true;
@@ -164,10 +165,11 @@ void LLSkinningUtil::initSkinningMatrixPalette(
             LL_WARNS_ONCE("Avatar") << avatar->getFullname() 
                                     << " avatar build state: isBuilt() " << avatar->isBuilt() 
                                     << " mInitFlags " << avatar->mInitFlags << LL_ENDL;
+#if 0
             dump_avatar_and_skin_state("initSkinningMatrixPalette joint not found", avatar, skin);
+#endif
         }
     }
-    //dump_avatar_and_skin_state("initSkinningMatrixPalette finished OK", avatar, skin);
 }
 
 void LLSkinningUtil::checkSkinWeights(LLVector4a* weights, U32 num_vertices, const LLMeshSkinInfo* skin)
@@ -288,14 +290,13 @@ void LLSkinningUtil::initJointNums(LLMeshSkinInfo* skin, LLVOAvatar *avatar)
                 {
                     LL_WARNS_ONCE("Avatar") << avatar->getFullname() << " unable to find joint " << skin->mJointNames[j] << LL_ENDL;
                     LL_WARNS_ONCE("Avatar") << avatar->getFullname() << " avatar build state: isBuilt() " << avatar->isBuilt() << " mInitFlags " << avatar->mInitFlags << LL_ENDL;
+#if 0
                     dump_avatar_and_skin_state("initJointNums joint not found", avatar, skin);
+#endif
                 }
             }
         }
         skin->mJointNumsInitialized = true;
-        LL_WARNS("Avatar") << avatar->getFullname() << " jointNums initialized, avatar built " << avatar->isBuilt() 
-                           << " mInitFlags " << avatar->mInitFlags 
-                           << " num joints " << skin->mJointNames.size() << LL_ENDL;
     }
 }
 
