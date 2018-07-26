@@ -1497,7 +1497,7 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 		Pour mettre des dossiers en vente sur la [[MARKETPLACE_DASHBOARD_URL] Place du marché], faites-les glisser vers cette zone.
 	</string>
 	<string name="InventoryItemsCount">
-		( [ITEMS_COUNT] Articles )
+		( [ITEMS]/[CATEGORIES] Articles )
 	</string>
 	<string name="Marketplace Validation Warning Stock">
 		le dossier de stock doit être contenu dans un dossier de version

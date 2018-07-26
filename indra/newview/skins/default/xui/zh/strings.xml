@@ -1486,7 +1486,7 @@ http://secondlife.com/support 求助解決問題。
 		將資料夾拖曳到這個區域，即可在[[MARKETPLACE_DASHBOARD_URL] Marketplace]刊登出售。
 	</string>
 	<string name="InventoryItemsCount">
-		（[ITEMS_COUNT]個物項）
+		（[ITEMS]/[CATEGORIES]個物項）
 	</string>
 	<string name="Marketplace Validation Warning Stock">
 		限量資料夾必須放在版本資料夾裡
