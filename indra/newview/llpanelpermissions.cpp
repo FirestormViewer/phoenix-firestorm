@@ -1462,7 +1462,18 @@ void LLPanelPermissions::setAllSaleInfo()
 
         if (default_actions && old_sale_info.isForSale() != new_sale_info.isForSale())
         {
-            U8 new_click_action = new_sale_info.isForSale() ? CLICK_ACTION_BUY : CLICK_ACTION_TOUCH;
+            // <FS:Ansariel> FIRE-5273: Change default click action to buy only for modifiable objects
+            //U8 new_click_action = new_sale_info.isForSale() ? CLICK_ACTION_BUY : CLICK_ACTION_TOUCH;
+            struct f : public LLSelectedObjectFunctor
+            {
+                virtual bool apply(LLViewerObject* object)
+                {
+                    return object->permModify();
+                }
+            } modify_checks;
+            bool allow_modify = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&modify_checks);
+            U8 new_click_action = (new_sale_info.isForSale() && allow_modify) ? CLICK_ACTION_BUY : CLICK_ACTION_TOUCH;
+            // </FS:Ansariel>
             LLSelectMgr::getInstance()->selectionSetClickAction(new_click_action);
         }
     }

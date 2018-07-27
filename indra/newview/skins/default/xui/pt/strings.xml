@@ -1449,7 +1449,7 @@ http://secondlife.com/support para ajuda ao resolver este problema.
 		Arraste pastas para esta área para listá-las para venda no [Marketplace [MARKETPLACE_DASHBOARD_URL]].
 	</string>
 	<string name="InventoryItemsCount">
-		( [ITEMS_COUNT] Items )
+		( [ITEMS]/[CATEGORIES] Items )
 	</string>
 	<string name="Marketplace Validation Warning Stock">
 		a pasta de estoque deve estar em uma pasta de versões
