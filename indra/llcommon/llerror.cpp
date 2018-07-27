@@ -375,6 +375,7 @@ namespace
 	public:
 		std::ostringstream messageStream;
 		bool messageStreamInUse;
+		std::string mFatalMessage;
 
 		void addCallSite(LLError::CallSite&);
 		void invalidateCallSites();
@@ -699,11 +700,16 @@ namespace LLError
 		s->mCrashFunction = f;
 	}
 
-    FatalFunction getFatalFunction()
-    {
+	FatalFunction getFatalFunction()
+	{
 		SettingsConfigPtr s = Settings::getInstance()->getSettingsConfig();
-        return s->mCrashFunction;
-    }
+		return s->mCrashFunction;
+	}
+
+	std::string getFatalMessage()
+	{
+		return Globals::getInstance()->mFatalMessage;
+	}
 
 	void setTimeFunction(TimeFunction f)
 	{
@@ -1182,7 +1188,7 @@ namespace LLError
 		std::ostringstream prefix;
 		if( nd::logging::throttle( site.mFile, site.mLine, &prefix ) )
 			return;
-		
+
 		std::ostringstream message_stream;
 
 		if (site.mPrintOnce)
@@ -1207,14 +1213,19 @@ namespace LLError
 				s->mUniqueLogMessages[message] = 1;
 			}
 		}
-		
+
 		message_stream << message;
-		
-		writeToRecorders(site, message_stream.str());
-		
-		if (site.mLevel == LEVEL_ERROR  &&  s->mCrashFunction)
+		std::string message_line(message_stream.str());
+
+		writeToRecorders(site, message_line);
+
+		if (site.mLevel == LEVEL_ERROR)
 		{
-			s->mCrashFunction(message_stream.str());
+			g->mFatalMessage = message_line;
+			if (s->mCrashFunction)
+			{
+				s->mCrashFunction(message_line);
+			}
 		}
 	}
 }

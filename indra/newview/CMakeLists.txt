@@ -3,7 +3,14 @@
 project(viewer)
 
 include(00-Common)
+# DON'T move Linking.cmake to its place in the alphabetized list below: it
+# sets variables on which the 3p .cmake files depend.
+include(Linking)
+
 include(Boost)
+if (DEFINED ENV{BUGSPLAT_DB})
+  include(bugsplat)
+endif (DEFINED ENV{BUGSPLAT_DB})
 include(BuildPackagesInfo)
 include(BuildVersion)
 include(CMakeCopyIfDifferent)
@@ -38,7 +45,6 @@ include(LLUI)
 include(LLVFS)
 include(LLWindow)
 include(LLXML)
-include(Linking)
 include(NDOF)
 include(NVAPI)
 include(OPENAL)
@@ -109,6 +115,12 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
     )
+
+if (DEFINED ENV{BUGSPLAT_DB})
+  include_directories(
+    ${BUGSPLAT_INCLUDE_DIR}
+    )
+endif (DEFINED ENV{BUGSPLAT_DB})
 
 include_directories(SYSTEM
     ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
@@ -1652,6 +1664,14 @@ if (DARWIN)
 
   # This should be compiled with the viewer.
   LIST(APPEND viewer_SOURCE_FILES llappdelegate-objc.mm)
+  set_source_files_properties(
+    llappdelegate-objc.mm
+    PROPERTIES
+    COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
+    # BugsplatMac is a module, imported with @import. That language feature
+    # demands these switches.
+    COMPILE_FLAGS "-fmodules -fcxx-modules"
+    )
 
 # [FS] Growl libs
   LIST(APPEND viewer_SOURCE_FILES
@@ -1678,6 +1698,12 @@ if (DARWIN)
     ${COREAUDIO_LIBRARY}
     )
 
+  if (DEFINED ENV{BUGSPLAT_DB})
+    list(APPEND viewer_LIBRARIES
+      ${BUGSPLAT_LIBRARIES}
+      )
+  endif (DEFINED ENV{BUGSPLAT_DB})
+
   # Add resource files to the project.
   set(viewer_RESOURCE_FILES
     firestorm_icon.icns
@@ -1703,6 +1729,11 @@ endif (DARWIN)
 
 if (LINUX)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux.cpp)
+    set_source_files_properties(
+      llappviewerlinux.cpp
+      PROPERTIES
+      COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
+      )
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux_api_dbus.cpp)
 # [FS] Growl support
     LIST(APPEND viewer_HEADER_FILES desktopnotifierlinux.h growlmanager.h)
@@ -1737,6 +1768,11 @@ if (WINDOWS)
          llappviewerwin32.cpp
          llwindebug.cpp
          )
+    set_source_files_properties(
+      llappviewerwin32.cpp
+      PROPERTIES
+      COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
+      )
 
     list(APPEND viewer_HEADER_FILES
          llappviewerwin32.h
@@ -2075,6 +2111,11 @@ if (SDL_FOUND)
     )
 endif (SDL_FOUND)
 
+if (DEFINED ENV{BUGSPLAT_DB})
+  set_property(TARGET ${VIEWER_BINARY_NAME}
+    PROPERTY COMPILE_DEFINITIONS "LL_BUGSPLAT")
+endif (DEFINED ENV{BUGSPLAT_DB})
+
 # add package files
 file(GLOB EVENT_HOST_SCRIPT_GLOB_LIST
      ${CMAKE_CURRENT_SOURCE_DIR}/../viewer_components/*.py)
@@ -2232,21 +2273,6 @@ if (WINDOWS)
       windows-crash-logger
     )
 
-    # sets the 'working directory' for debugging from visual studio.
-    if (NOT UNATTENDED)
-        add_custom_command(
-            TARGET ${VIEWER_BINARY_NAME} POST_BUILD
-            COMMAND ${CMAKE_SOURCE_DIR}/tools/vstool/vstool.exe
-            ARGS
-              --solution
-              ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.sln
-              --workingdir
-              ${VIEWER_BINARY_NAME}
-              "${CMAKE_CURRENT_SOURCE_DIR}"
-            COMMENT "Setting the ${VIEWER_BINARY_NAME} working directory for debugging."
-            )
-    endif (NOT UNATTENDED)
-
     if (PACKAGE)
       add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/event_host.tar.bz2
@@ -2309,8 +2335,8 @@ else (WINDOWS)
 endif (WINDOWS)
 
 # *NOTE: - this list is very sensitive to ordering, test carefully on all
-# platforms if you change the releative order of the entries here.
-# In particular, cmake 2.6.4 (when buidling with linux/makefile generators)
+# platforms if you change the relative order of the entries here.
+# In particular, cmake 2.6.4 (when building with linux/makefile generators)
 # appears to sometimes de-duplicate redundantly listed dependencies improperly.
 # To work around this, higher level modules should be listed before the modules
 # that they depend upon. -brad
@@ -2384,6 +2410,12 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLAPPEARANCE_LIBRARIES}
     ${GROWL_LIBRARY}
     )
+
+if (DEFINED ENV{BUGSPLAT_DB})
+  target_link_libraries(${VIEWER_BINARY_NAME}
+    ${BUGSPLAT_LIBRARIES}
+    )
+endif (DEFINED ENV{BUGSPLAT_DB})
 	
 if (WINDOWS)
     target_link_libraries(${VIEWER_BINARY_NAME}
@@ -2479,25 +2511,35 @@ endif (NOT ENABLE_MEDIA_PLUGINS)
 endif (LINUX)
 
 if (DARWIN)
- # These all get set with PROPERTIES
-  set(product "Firestorm")
+  # These all get set with PROPERTIES. It's not that the property names are
+  # magically known to CMake -- it's that these names are referenced in the
+  # Info-SecondLife.plist file in the configure_file() directive below.
+  set(product "${VIEWER_CHANNEL}")
   # this is the setting for the Python wrapper, see SL-322 and WRAPPER line in Info-SecondLife.plist
   set(MACOSX_WRAPPER_EXECUTABLE_NAME "SL_Launcher")
-  set(MACOSX_BUNDLE_INFO_STRING "Firestorm Viewer")
+  set(MACOSX_BUNDLE_INFO_STRING "${VIEWER_CHANNEL}")
   set(MACOSX_BUNDLE_ICON_FILE "firestorm_icon.icns")
   set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.phoenixviewer.firestorm.viewer-${ND_VIEWER_FLAVOR}")
   set(MACOSX_BUNDLE_LONG_VERSION_STRING "${VIEWER_CHANNEL} ${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}")
   set(MACOSX_BUNDLE_BUNDLE_NAME "Firestorm")
-  set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${VIEWER_SHORT_VERSION}")
+  set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}")
   set(MACOSX_BUNDLE_BUNDLE_VERSION "${VIEWER_SHORT_VERSION}${VIEWER_MACOSX_PHASE}${VIEWER_REVISION}")
   set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2018 The Phoenix Firestorm Project, Inc.")
   set(MACOSX_BUNDLE_NSMAIN_NIB_FILE "Firestorm.nib")
   set(MACOSX_BUNDLE_NSPRINCIPAL_CLASS "LLNSApplication")
 
+  # https://blog.kitware.com/upcoming-in-cmake-2-8-12-osx-rpath-support/
+  set(CMAKE_MACOSX_RPATH 1)
+  
   set_target_properties(
     ${VIEWER_BINARY_NAME}
     PROPERTIES
     OUTPUT_NAME "${product}"
+    # From Contents/MacOS/SecondLife, look in Contents/Frameworks
+    INSTALL_RPATH "@loader_path/../Frameworks"
+    # SIGH, as of 2018-05-24 (cmake 3.11.1) the INSTALL_RPATH property simply
+    # does not work. Try this:
+    LINK_FLAGS "-rpath @loader_path/../Frameworks"
     MACOSX_BUNDLE_INFO_PLIST
     # <FS:CR> Use Firestorm plist
     #"${CMAKE_CURRENT_SOURCE_DIR}/Info-SecondLife.plist"
@@ -2573,7 +2615,7 @@ if (INSTALL)
   include(${CMAKE_CURRENT_SOURCE_DIR}/ViewerInstall.cmake)
 endif (INSTALL)
 
-if (PACKAGE)
+if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND NOT DEFINED ENV{BUGSPLAT_DB})
   set(SYMBOL_SEARCH_DIRS "")
   # Note that the path to VIEWER_SYMBOL_FILE must match that in ../../build.sh
   if (WINDOWS)
@@ -2592,8 +2634,8 @@ if (PACKAGE)
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/mac_crash_logger/${CMAKE_CFG_INTDIR}")
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/gstreamer010/${CMAKE_CFG_INTDIR}")
     set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-symbols-darwin-$ENV{AUTOBUILD_ADDRSIZE}.tar.bz2")
-##  set(VIEWER_EXE_GLOBS "'Second Life' SLPlugin mac-crash-logger")
-    set(VIEWER_EXE_GLOBS "'Firestorm' mac-crash-logger")
+##    set(VIEWER_EXE_GLOBS "'${product}' SLPlugin mac-crash-logger")
+    set(VIEWER_EXE_GLOBS "'${product}' mac-crash-logger")
     set(VIEWER_LIB_GLOB "*.dylib")
   endif (DARWIN)
   if (LINUX)
@@ -2605,7 +2647,6 @@ if (PACKAGE)
     set(VIEWER_COPY_MANIFEST copy_l_viewer_manifest)
   endif (LINUX)
 
-  if( RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING )
   if(CMAKE_CFG_INTDIR STREQUAL ".")
       set(LLBUILD_CONFIG ${CMAKE_BUILD_TYPE})
   else(CMAKE_CFG_INTDIR STREQUAL ".")
@@ -2632,8 +2673,7 @@ if (PACKAGE)
     add_dependencies(generate_breakpad_symbols "${VIEWER_COPY_MANIFEST}")
   endif (WINDOWS OR LINUX)
   add_dependencies(llpackage generate_breakpad_symbols)
-  endif(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING)
-endif (PACKAGE)
+endif ()
 
 if (LL_TESTS)
   # To add a viewer unit test, just add the test .cpp file below
