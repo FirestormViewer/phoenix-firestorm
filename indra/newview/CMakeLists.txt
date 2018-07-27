@@ -2273,6 +2273,23 @@ if (WINDOWS)
       windows-crash-logger
     )
 
+    # <FS:Ansariel> No Teamcity -> allow unattended
+    # sets the 'working directory' for debugging from visual studio.
+    if (NOT UNATTENDED)
+        add_custom_command(
+            TARGET ${VIEWER_BINARY_NAME} POST_BUILD
+            COMMAND ${CMAKE_SOURCE_DIR}/tools/vstool/vstool.exe
+            ARGS
+              --solution
+              ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.sln
+              --workingdir
+              ${VIEWER_BINARY_NAME}
+              "${CMAKE_CURRENT_SOURCE_DIR}"
+            COMMENT "Setting the ${VIEWER_BINARY_NAME} working directory for debugging."
+            )
+    endif (NOT UNATTENDED)
+    # </FS:Ansariel>
+
     if (PACKAGE)
       add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/event_host.tar.bz2
