@@ -9,6 +9,9 @@
  width="540"
  label="Crash Reports"
  name="crash_reports">
+    <panel.string name="PrivacyPolicyUrl">
+        https://www.firestormviewer.org/privacy-policy
+    </panel.string>
     <check_box
      layout="topleft"
      follows="top|left"
@@ -161,6 +164,6 @@
      top_pad="20"
      width="500"
      font.style="BOLD" >
-        Privacy policy: http://www.firestormviewer.org/privacy-policy
+        Privacy policy: [URL]
     </text>
 </panel>
