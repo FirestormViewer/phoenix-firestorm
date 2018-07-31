@@ -3832,6 +3832,13 @@ BOOL LLSelectMgr::selectGetEditMoveLinksetPermissions(bool &move, bool &modify)
         }
         move = move && this_object_movable;
         modify = modify && object->permModify();
+
+        // <FS:Ansariel> Optimize: Once move and modify are both false, there is no reason to continue checking - neither will become true again
+        if (!move && !modify)
+        {
+            return TRUE;
+        }
+        // </FS:Ansariel>
     }
 
     return TRUE;
