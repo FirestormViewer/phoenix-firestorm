@@ -956,7 +956,7 @@
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.04-darwin-182121607.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.07-darwin-182121607.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
