@@ -46,9 +46,9 @@ RequestExecutionLevel admin	# For when we write to Program Files
 ;; (these files are in the same place as the nsi template but the python script generates a new nsi file in the 
 ;; application directory so we have to add a path to these include files)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+!include "%%SOURCE%%\installers\windows\lang_en-us.nsi" # <FS:Ansariel> Make sure EN comes first as it will be default!
 !include "%%SOURCE%%\installers\windows\lang_da.nsi"
 !include "%%SOURCE%%\installers\windows\lang_de.nsi"
-!include "%%SOURCE%%\installers\windows\lang_en-us.nsi"
 !include "%%SOURCE%%\installers\windows\lang_es.nsi"
 !include "%%SOURCE%%\installers\windows\lang_fr.nsi"
 !include "%%SOURCE%%\installers\windows\lang_ja.nsi"
