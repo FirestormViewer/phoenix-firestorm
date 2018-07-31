@@ -966,11 +966,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>32c7ddbc7a5134c849c8c58323dac1cd</string>
+              <string>f388937522d6dd06faea142a89daf0fb</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.05-linux-181440917.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.07-linux-182120322.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -980,11 +980,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>eb04055057a549ac778c7f1391963dfe</string>
+              <string>d57e6eb0e194d23557db489e74db76ad</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.05-linux64-181440918.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.07-linux64-182120324.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
