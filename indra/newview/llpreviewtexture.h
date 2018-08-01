@@ -57,7 +57,7 @@ public:
 	virtual void		saveAs();
 	// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
 	//void				saveAs(EFileformatType format);
-	virtual void		saveAs(uuid_vec_t remaining_ids);
+	void				saveAs(uuid_vec_t remaining_ids);
 	void				saveAs(EFileformatType format, uuid_vec_t remaining_ids = uuid_vec_t());
 	// </FS:Ansariel<
 
