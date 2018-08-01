@@ -17,5 +17,5 @@
 	<text name="textInformation1" width="505">Sauf si précisé, les rapports ne contiennent que des informations nécessaires au plantage</text>
 	<text name="textInformation2" width="505">Les logs de Second Life ne seront pas envoyés, merci de commenter leur contenu et de les</text>
 	<text name="textInformation3">envoyer par email si vous pensez qu'ils pourraient contenir des infos. supplémentaires.</text>
-	<text name="textInformation4">Politique de confidentialité : http://www.firestormviewer.org/privacy-policy</text>
+	<text name="textInformation4">Politique de confidentialité : [URL]</text>
 </panel>

@@ -130,7 +130,7 @@
     {
         if (yes)
         {
-            llSetForce((<0.0, 0.0, 9.8> * llGetMass()), 1);
+            llSetForce((<0.0, 0.0, 9.8> * llGetMass()), 0);
         }
         else
         {

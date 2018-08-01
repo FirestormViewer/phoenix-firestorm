@@ -2677,6 +2677,12 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
     {
         LLAppearanceMgr::instance().removeItemsFromAvatar(ids);
     }
+    // <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
+    else if (action == "save_as") // "save_as" is only available for textures as of 01/08/2018
+    {
+        LLPreviewTexture::saveMultiple(ids);
+    }
+    // </FS:Ansariel>
     else
     {
         std::set<LLFolderViewItem*>::iterator set_iter;
