@@ -55,7 +55,11 @@ public:
 
 	virtual BOOL		canSaveAs() const;
 	virtual void		saveAs();
-	void				saveAs(EFileformatType format);
+	// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
+	//void				saveAs(EFileformatType format);
+	virtual void		saveAs(uuid_vec_t remaining_ids);
+	void				saveAs(EFileformatType format, uuid_vec_t remaining_ids = uuid_vec_t());
+	// </FS:Ansariel<
 
 	virtual void		loadAsset();
 	virtual EAssetStatus	getAssetStatus();
@@ -83,7 +87,7 @@ public:
 
 	// <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
 	//void				saveTextureToFile(const std::vector<std::string>& filenames);
-	void				saveTextureToFile(const std::vector<std::string>& filenames, EFileformatType format, loaded_callback_func callback);
+	void				saveTextureToFile(const std::vector<std::string>& filenames, EFileformatType format, loaded_callback_func callback, uuid_vec_t remaining_ids = uuid_vec_t());
 	// </FS:Ansariel>
 	
 	static void			onSaveAsBtn(LLUICtrl* ctrl, void* data);
@@ -102,6 +106,9 @@ public:
 	
 	// <FS:Ansariel> FIRE-20150: Add refresh button to texture preview
 	void onButtonRefresh();
+
+	// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
+	static void saveMultiple(uuid_vec_t ids);
 
 protected:
 	void				init();
