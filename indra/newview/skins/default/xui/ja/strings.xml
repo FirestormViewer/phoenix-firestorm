@@ -1479,7 +1479,7 @@ http://www.firestormviewer.org/support
 		[[MARKETPLACE_DASHBOARD_URL] マーケットプレイス]に販売するアイテムを一覧するには、フォルダをこのエリアにドラッグします。
 	</string>
 	<string name="InventoryItemsCount">
-		（[ITEMS_COUNT] 個のアイテム）
+		（[ITEMS]/[CATEGORIES] 個のアイテム）
 	</string>
 	<string name="Marketplace Validation Warning Stock">
 		バージョンフォルダに在庫フォルダが含まれなければなりません

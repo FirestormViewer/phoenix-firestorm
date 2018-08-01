@@ -4772,6 +4772,8 @@ BOOL LLPanelPreferenceCrashReports::postBuild()
 	LLCheckBoxCtrl* pSendName = getChild<LLCheckBoxCtrl>("checkSendName");
 	pSendName->set(gCrashSettings.getBOOL("CrashSubmitName"));
 
+	getChild<LLTextBox>("textInformation4")->setTextArg("[URL]", getString("PrivacyPolicyUrl"));
+
 	refresh();
 
 	return LLPanelPreference::postBuild();

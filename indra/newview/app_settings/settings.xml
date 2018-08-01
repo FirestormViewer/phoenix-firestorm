@@ -12604,7 +12604,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>RenderResolutionMultiplier</key>
     <map>
       <key>Comment</key>
-      <string>Multiplier for rendering 3D scene at reduced resolution.</string>
+      <string>Multiplier for rendering 3D scene at reduced resolution. Valid values: 0 &lt; RenderResolutionMultiplier &lt;= 1.0 </string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
