@@ -105,7 +105,7 @@
 		<text name="MeshDetailText">
 			メッシュ詳細：
 		</text>
-		<slider label="  オブジェクト：" name="ObjectMeshDetail"/>
+		<slider label="  オブジェクトとスカルプのLOD：" name="ObjectMeshDetail" tool_tip="レンダリグコストを下げるためにオブジェクトに低い詳細度を適用できる場合に使用します。高い値を設定するとラグが発生しますので、使用に当たっては注意が必要です。" />
 		<slider label="  フレキシプリム：" name="FlexibleMeshDetail"/>
 		<slider label="  樹木：" name="TreeMeshDetail"/>
 		<slider label="  アバター：" name="AvatarMeshDetail"/>
@@ -147,7 +147,7 @@
         <check_box label="OpenGL Vertex Buffer Objectsを有効化" name="vbo" tool_tip="最新のハードウェアでこの設定を有効にすると、パフォーマンスが向上します。しかし、旧型のハードウェアではVBOの実装が貧弱な場合が多く、この設定を有効にすることでクラッシュにつながるおそれがあります。" />
         <check_box label="VBOのストリームを有効にする" name="vbo_stream" tool_tip="VBOを有効にしている時に、このオプションをオフにするとパフォーマンスが向上する可能性があります。多くのAMDのGPUにおいて、このオプションをオフにしたことで顕著なパフォーマンスの向上が見られました。" />
         <check_box label="テクスチャの不可逆圧縮（再起動が必要）" name="texture compression" tool_tip="ビデオメモリ内のテクスチャを圧縮することで、色の品質が低下する代わりに、より高解像度のテクスチャやより多くのテクスチャを読み込むことを可能にします。" />
-        <text name="Antialiasing:">
+        <text name="Antialiasing:" tool_tip="ハードウェアによってはこの設定の変更を適用するには再起動が必要な場合があります。" >
             アンチエイリアス：
         </text>
         <combo_box label="Antialiasing" name="fsaa">
