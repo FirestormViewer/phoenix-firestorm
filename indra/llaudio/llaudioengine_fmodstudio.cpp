@@ -49,43 +49,6 @@ const U32 EXTRA_SOUND_CHANNELS = 10;
 
 FMOD_RESULT F_CALLBACK windDSPCallback(FMOD_DSP_STATE *dsp_state, float *inbuffer, float *outbuffer, unsigned int length, int inchannels, int *outchannels);
 
-// <FS> FIRE-11266 / BUG-3549 / MAINT-2983: Changing audio device now requires relog to restore sounds
-#if LL_WINDOWS
-FMOD_RESULT F_CALLBACK systemCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBACK_TYPE type, void *commanddata1, void *commanddata2, void* userdata)
-{
-	FMOD::System *sys = (FMOD::System *)system;
-	FMOD_RESULT result;
-	switch (type)
-	{
-		case FMOD_SYSTEM_CALLBACK_DEVICELISTCHANGED:
-		{
-			int drivers;
-			sys->getNumDrivers(&drivers);
-			
-			if (drivers <= 0)
-			{
-				break;
-			}
-			
-			for (int i = 0; i < drivers; ++i)
-			{
-				result = sys->setDriver(i);
-				if (result == FMOD_OK)
-				{
-					break;
-				}
-			}
-			break;
-		}
-			
-		default:
-			break;
-	}
-	return FMOD_OK;
-}
-#endif
-// </FS>
-
 FMOD::ChannelGroup *LLAudioEngine_FMODSTUDIO::mChannelGroups[LLAudioEngine::AUDIO_TYPE_COUNT] = {0};
 
 LLAudioEngine_FMODSTUDIO::LLAudioEngine_FMODSTUDIO(bool enable_profiler, U32 resample_method)
@@ -146,13 +109,6 @@ bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata)
 	// In this case, all sounds, PLUS wind and stream will be software.
 	result = mSystem->setSoftwareChannels(num_channels + EXTRA_SOUND_CHANNELS);
 	Check_FMOD_Error(result,"FMOD::System::setSoftwareChannels");
-
-	// <FS> FIRE-11266 / BUG-3549 / MAINT-2983: Changing audio device now requires relog to restore sounds
-#if LL_WINDOWS
-	result = mSystem->setCallback(systemCallback);
-	Check_FMOD_Error(result, "FMOD::System::setCallback");
-#endif
-	// </FS>
 
 	FMOD_ADVANCEDSETTINGS adv_settings = { };
 	adv_settings.cbSize = sizeof(FMOD_ADVANCEDSETTINGS);
