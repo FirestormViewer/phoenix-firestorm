@@ -1504,7 +1504,7 @@ Bu mesaj size gelmeye devam ederse lütfen http://support.secondlife.com adresin
 		Klasörleri [[MARKETPLACE_DASHBOARD_URL] Pazaryerinde] satılık olarak listelemek için bu alana sürükleyin.
 	</string>
 	<string name="InventoryItemsCount">
-		( [ITEMS_COUNT] Öğe )
+		( [ITEMS]/[CATEGORIES] Öğe )
 	</string>
 	<string name="Marketplace Validation Warning Stock">
 		stok klasörü bir sürüm klasöründe bulunmalıdır

@@ -1663,7 +1663,7 @@ support@secondlife.com.
 		Перетащите папки в эту область, чтобы выставить их на продажу в [[MARKETPLACE_DASHBOARD_URL] Торговом центре].
 	</string>
 	<string name="InventoryItemsCount">
-		( [ITEMS_COUNT] предметов(а))
+		( [ITEMS]/[CATEGORIES] предметов(а))
 	</string>
 	<string name="Marketplace Validation Warning Stock">
 		В папке версии должна быть папка запасов

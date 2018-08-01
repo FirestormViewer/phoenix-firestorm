@@ -28,6 +28,6 @@
 		falls sie zusätzliche Informationen zum Absturz enthalten.
 	</text>
 	<text name="textInformation4">
-        Datenschutzerklärung: http://www.firestormviewer.org/privacy-policy
-    </text>
+		Datenschutzerklärung: [URL]
+	</text>
 </panel>

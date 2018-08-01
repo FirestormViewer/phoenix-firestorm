@@ -35,6 +35,9 @@
 			<check_box label="Włącz Javascript" name="browser_javascript_enabled"/>
 			<check_box label="Włącz wyskakujące okienka przeglądarki mediów" name="media_popup_enabled"/>
 			<button label="Dostosuj ustawienia proxy" label_selected="Dostosuj ustawienia proxy" name="set_proxy"/>
+			<text name="home_page_label_l">
+				Strona startowa:
+			</text>
 		</panel>
 		<panel label="Lokalizacje" name="tab-dir">
 			<text name="cache_size_label_l">

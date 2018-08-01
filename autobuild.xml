@@ -167,6 +167,46 @@
           </map>
         </map>
       </map>
+      <key>slvoice_os</key>
+      <map>
+        <key>copyright</key>
+        <string>2010 Vivox, including audio coding using Polycom¨ Siren14TM (ITU-T Rec. G.722.1 Annex C)</string>
+        <key>description</key>
+        <string>Vivox SDK components compatible with OpenSim</string>
+        <key>license</key>
+        <string>Mixed</string>
+        <key>license_file</key>
+        <string>LICENSES/slvoice_os.txt</string>
+        <key>name</key>
+        <string>slvoice_os</string>
+        <key>platforms</key>
+        <map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>8d0a31f4653202cbd5ea1711be47e669</string>
+              <key>url</key>
+              <uri>http://downloads.phoenixviewer.com/slvoice_os-4.6.0017.22050.302004-windows-302004.tar.bz2</uri>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>d5673fc7ad1ec9595a9b97537681e060</string>
+              <key>url</key>
+              <uri>http://downloads.phoenixviewer.com/slvoice_os-4.6.0017.22050.302004-darwin-302004.tar.bz2</uri>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+        </map>
+      </map>
       <key>SDL</key>
       <map>
         <key>copyright</key>
@@ -912,11 +952,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5946db540ecd6da093d15c7f793359f9</string>
+              <string>d80d8924785719fcfbf8883830c35d87</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.05-darwin-181440931.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.07-darwin-182121607.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -926,11 +966,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>32c7ddbc7a5134c849c8c58323dac1cd</string>
+              <string>f388937522d6dd06faea142a89daf0fb</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.05-linux-181440917.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.07-linux-182120322.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -940,11 +980,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>eb04055057a549ac778c7f1391963dfe</string>
+              <string>d57e6eb0e194d23557db489e74db76ad</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.05-linux64-181440918.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.07-linux64-182120324.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -954,11 +994,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>79dca4b585181c18f983cb3adc4f9633</string>
+              <string>bcfd24c92d31dc0abac85e801560be4b</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.05-windows-181432216.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.07-windows-182030953.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -968,11 +1008,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9e2a8fa5e4bdb0a1eba8be3717029c31</string>
+              <string>4b1790fa49a361498ab3f3dd4fa57f25</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.05-windows64-181432218.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.07-windows64-182030954.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -2858,9 +2898,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c5404596040e5f6e66a09a6de5edeefa</string>
+              <string>e45ddfd82b5d18408f849c53800e468a</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.3.181412109-linux-181412109.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.8.182090947-linux-182090947.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2870,9 +2910,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>774e6a85deb149309f1ccf59d2f5c5a4</string>
+              <string>fc7ad14e06b4ac70a1d3849ef81ac844</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.3.181411657-linux64-181411657.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.8.182090946-linux64-182090946.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

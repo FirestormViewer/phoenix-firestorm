@@ -63,7 +63,7 @@
 				Bewegung beim Regionswechsel:
 			</text>
 			<radio_group name="Region_Crossing_Movement">
-				<radio_item label="Projektion" name="move_projection" width="85" />
+				<radio_item label="Vorhersage" name="move_predict" width="85" />
 				<radio_item label="Stop" name="move_stop" width="85" />
 			</radio_group>
 			<text name="movelock_lbl">

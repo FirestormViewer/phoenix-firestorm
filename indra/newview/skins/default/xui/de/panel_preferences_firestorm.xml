@@ -35,6 +35,7 @@
 			<combo_box.item label="Flug-Assistent: Sanfter Boost" name="flight_mild"/>
 			<combo_box.item label="Flug-Assistent: Moderater Boost" name="flight_moderate"/>
 			<combo_box.item label="Flug-Assistent: Starker Boost" name="flight_strong"/>
+			<combo_box.item label="Flug-Assistent: Extremer Boost" name="flight_extreme"/>
 		</combo_box>
 	</panel>
 
