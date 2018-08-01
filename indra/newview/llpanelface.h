@@ -181,7 +181,7 @@ protected:
 	static void		syncRepeatY(LLPanelFace* self, F32 scaleV);
 	static void		syncOffsetX(LLPanelFace* self, F32 offsetU);
 	static void		syncOffsetY(LLPanelFace* self, F32 offsetV);
-	static void 	syncMaterialRot(LLPanelFace* self, F32 rot);
+	static void 	syncMaterialRot(LLPanelFace* self, F32 rot, int te = -1);
 
 	static void		onCommitMaterialShinyScaleX(	LLUICtrl* ctrl, void* userdata);
 	static void		onCommitMaterialShinyScaleY(	LLUICtrl* ctrl, void* userdata);
@@ -307,7 +307,7 @@ private:
 		typename DataType,
 		typename SetValueType,
 		void (LLMaterial::*MaterialEditFunc)(SetValueType data) >
-	static void edit(LLPanelFace* p, DataType data)
+	static void edit(LLPanelFace* p, DataType data, int te = -1)
 	{
 		LLMaterialEditFunctor< DataType, SetValueType, MaterialEditFunc > edit(data);
 		struct LLSelectedTEEditMaterial : public LLSelectedTEMaterialFunctor
@@ -382,14 +382,14 @@ private:
 			LLMaterialEditFunctor< DataType, SetValueType, MaterialEditFunc >*	_edit;
 			LLPanelFace*																			_panel;
 		} editor(p, &edit);
-		LLSelectMgr::getInstance()->selectionSetMaterialParams(&editor);
+        LLSelectMgr::getInstance()->selectionSetMaterialParams(&editor, te);
 	}
 
 	template<
 		typename DataType,
-		typename ReturnType,
+		typename ReturnType,        
 		ReturnType (LLMaterial::* const MaterialGetFunc)() const  >
-	static void getTEMaterialValue(DataType& data_to_return, bool& identical,DataType default_value)
+	static void getTEMaterialValue(DataType& data_to_return, bool& identical,DataType default_value, bool has_tolerance = false, DataType tolerance = DataType())
 	{
 		DataType data_value = default_value;
 		struct GetTEMaterialVal : public LLSelectedTEGetFunctor<DataType>
@@ -414,7 +414,7 @@ private:
 			}
 			DataType _default;
 		} GetFunc(default_value);
-		identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue( &GetFunc, data_value);
+		identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue( &GetFunc, data_value, has_tolerance, tolerance);
 		data_to_return = data_value;
 	}
 
@@ -422,7 +422,7 @@ private:
 		typename DataType,
 		typename ReturnType, // some kids just have to different...
 		ReturnType (LLTextureEntry::* const TEGetFunc)() const >
-	static void getTEValue(DataType& data_to_return, bool& identical, DataType default_value)
+	static void getTEValue(DataType& data_to_return, bool& identical, DataType default_value, bool has_tolerance = false, DataType tolerance = DataType())
 	{
 		DataType data_value = default_value;
 		struct GetTEVal : public LLSelectedTEGetFunctor<DataType>
@@ -436,7 +436,7 @@ private:
 			}
 			DataType _default;
 		} GetTEValFunc(default_value);
-		identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue( &GetTEValFunc, data_value );
+		identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue( &GetTEValFunc, data_value, has_tolerance, tolerance );
 		data_to_return = data_value;
 	}
 
@@ -482,29 +482,29 @@ public:
 		DEF_EDIT_MAT_STATE
 	#endif
 
-	// Accessors for selected TE material state
-	//
-	#define DEF_GET_MAT_STATE(DataType,ReturnType,MaterialMemberFunc,DefaultValue)												\
-		static void MaterialMemberFunc(DataType& data, bool& identical)																\
-		{																																					\
-			getTEMaterialValue< DataType, ReturnType, &LLMaterial::MaterialMemberFunc >(data, identical,DefaultValue);	\
-		}
+    // Accessors for selected TE material state
+    //
+    #define DEF_GET_MAT_STATE(DataType,ReturnType,MaterialMemberFunc,DefaultValue,HasTolerance,Tolerance)                                           \
+        static void MaterialMemberFunc(DataType& data, bool& identical, bool has_tolerance = HasTolerance, DataType tolerance = Tolerance)          \
+        {                                                                                                                                           \
+            getTEMaterialValue< DataType, ReturnType, &LLMaterial::MaterialMemberFunc >(data, identical, DefaultValue, has_tolerance, tolerance);   \
+        }
 
-	// Mutators for selected TE material
-	//
-	#define DEF_EDIT_MAT_STATE(DataType,ReturnType,MaterialMemberFunc)																\
-		static void MaterialMemberFunc(LLPanelFace* p,DataType data)																	\
-		{																																					\
-			edit< DataType, ReturnType, &LLMaterial::MaterialMemberFunc >(p,data);													\
-		}
+    // Mutators for selected TE material
+    //
+    #define DEF_EDIT_MAT_STATE(DataType,ReturnType,MaterialMemberFunc)                                                  \
+        static void MaterialMemberFunc(LLPanelFace* p, DataType data, int te = -1)                                      \
+        {                                                                                                               \
+            edit< DataType, ReturnType, &LLMaterial::MaterialMemberFunc >(p, data, te);                                 \
+        }
 
-	// Accessors for selected TE state proper (legacy settings etc)
-	//
-	#define DEF_GET_TE_STATE(DataType,ReturnType,TexEntryMemberFunc,DefaultValue)													\
-		static void TexEntryMemberFunc(DataType& data, bool& identical)																\
-		{																																					\
-			getTEValue< DataType, ReturnType, &LLTextureEntry::TexEntryMemberFunc >(data, identical,DefaultValue);		\
-		}
+    // Accessors for selected TE state proper (legacy settings etc)
+    //
+    #define DEF_GET_TE_STATE(DataType,ReturnType,TexEntryMemberFunc,DefaultValue,HasTolerance,Tolerance)                                        \
+        static void TexEntryMemberFunc(DataType& data, bool& identical, bool has_tolerance = HasTolerance, DataType tolerance = Tolerance)      \
+        {                                                                                                                                       \
+            getTEValue< DataType, ReturnType, &LLTextureEntry::TexEntryMemberFunc >(data, identical, DefaultValue, has_tolerance, tolerance);   \
+        }
 
 	class LLSelectedTEMaterial
 	{
@@ -514,19 +514,19 @@ public:
 		static void getMaxNormalRepeats(F32& repeats, bool& identical);
 		static void getCurrentDiffuseAlphaMode(U8& diffuse_alpha_mode, bool& identical, bool diffuse_texture_has_alpha);
 
-		DEF_GET_MAT_STATE(LLUUID,const LLUUID&,getNormalID,LLUUID::null)
-		DEF_GET_MAT_STATE(LLUUID,const LLUUID&,getSpecularID,LLUUID::null)
-		DEF_GET_MAT_STATE(F32,F32,getSpecularRepeatX,1.0f)
-		DEF_GET_MAT_STATE(F32,F32,getSpecularRepeatY,1.0f)
-		DEF_GET_MAT_STATE(F32,F32,getSpecularOffsetX,0.0f)
-		DEF_GET_MAT_STATE(F32,F32,getSpecularOffsetY,0.0f)
-		DEF_GET_MAT_STATE(F32,F32,getSpecularRotation,0.0f)
+		DEF_GET_MAT_STATE(LLUUID,const LLUUID&,getNormalID,LLUUID::null, false, LLUUID::null)
+		DEF_GET_MAT_STATE(LLUUID,const LLUUID&,getSpecularID,LLUUID::null, false, LLUUID::null)
+		DEF_GET_MAT_STATE(F32,F32,getSpecularRepeatX,1.0f, true, 0.001f)
+		DEF_GET_MAT_STATE(F32,F32,getSpecularRepeatY,1.0f, true, 0.001f)
+		DEF_GET_MAT_STATE(F32,F32,getSpecularOffsetX,0.0f, true, 0.001f)
+		DEF_GET_MAT_STATE(F32,F32,getSpecularOffsetY,0.0f, true, 0.001f)
+		DEF_GET_MAT_STATE(F32,F32,getSpecularRotation,0.0f, true, 0.001f)
 
-		DEF_GET_MAT_STATE(F32,F32,getNormalRepeatX,1.0f)
-		DEF_GET_MAT_STATE(F32,F32,getNormalRepeatY,1.0f)
-		DEF_GET_MAT_STATE(F32,F32,getNormalOffsetX,0.0f)
-		DEF_GET_MAT_STATE(F32,F32,getNormalOffsetY,0.0f)
-		DEF_GET_MAT_STATE(F32,F32,getNormalRotation,0.0f)
+		DEF_GET_MAT_STATE(F32,F32,getNormalRepeatX,1.0f, true, 0.001f)
+		DEF_GET_MAT_STATE(F32,F32,getNormalRepeatY,1.0f, true, 0.001f)
+		DEF_GET_MAT_STATE(F32,F32,getNormalOffsetX,0.0f, true, 0.001f)
+		DEF_GET_MAT_STATE(F32,F32,getNormalOffsetY,0.0f, true, 0.001f)
+		DEF_GET_MAT_STATE(F32,F32,getNormalRotation,0.0f, true, 0.001f)
 
 		DEF_EDIT_MAT_STATE(U8,U8,setDiffuseAlphaMode);
 		DEF_EDIT_MAT_STATE(U8,U8,setAlphaMaskCutoff);
@@ -562,17 +562,17 @@ public:
 		static void getObjectScaleT(F32& scale_t, bool& identical);
 		static void getMaxDiffuseRepeats(F32& repeats, bool& identical);
 
-		DEF_GET_TE_STATE(U8,U8,getBumpmap,0)
-		DEF_GET_TE_STATE(U8,U8,getShiny,0)
-		DEF_GET_TE_STATE(U8,U8,getFullbright,0)
-		DEF_GET_TE_STATE(F32,F32,getRotation,0.0f)
-		DEF_GET_TE_STATE(F32,F32,getOffsetS,0.0f)
-		DEF_GET_TE_STATE(F32,F32,getOffsetT,0.0f)
-		DEF_GET_TE_STATE(F32,F32,getScaleS,1.0f)
-		DEF_GET_TE_STATE(F32,F32,getScaleT,1.0f)
-		DEF_GET_TE_STATE(F32,F32,getGlow,0.0f)
-		DEF_GET_TE_STATE(LLTextureEntry::e_texgen,LLTextureEntry::e_texgen,getTexGen,LLTextureEntry::TEX_GEN_DEFAULT)
-		DEF_GET_TE_STATE(LLColor4,const LLColor4&,getColor,LLColor4::white)		
+		DEF_GET_TE_STATE(U8,U8,getBumpmap,0, false, 0)
+		DEF_GET_TE_STATE(U8,U8,getShiny,0, false, 0)
+		DEF_GET_TE_STATE(U8,U8,getFullbright,0, false, 0)
+		DEF_GET_TE_STATE(F32,F32,getRotation,0.0f, true, 0.001f)
+		DEF_GET_TE_STATE(F32,F32,getOffsetS,0.0f, true, 0.001f)
+		DEF_GET_TE_STATE(F32,F32,getOffsetT,0.0f, true, 0.001f)
+		DEF_GET_TE_STATE(F32,F32,getScaleS,1.0f, true, 0.001f)
+		DEF_GET_TE_STATE(F32,F32,getScaleT,1.0f, true, 0.001f)
+		DEF_GET_TE_STATE(F32,F32,getGlow,0.0f, true, 0.001f)
+		DEF_GET_TE_STATE(LLTextureEntry::e_texgen,LLTextureEntry::e_texgen,getTexGen,LLTextureEntry::TEX_GEN_DEFAULT, false, LLTextureEntry::TEX_GEN_DEFAULT)
+		DEF_GET_TE_STATE(LLColor4,const LLColor4&,getColor,LLColor4::white, false, LLColor4::black);
 	};
 };
 
