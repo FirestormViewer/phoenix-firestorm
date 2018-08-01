@@ -3497,7 +3497,9 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 			LLStringUtil::format_map_t label_args;
 			label_args["COMPLEXITY"] = complexity_string;
 
-			addNameTagLine(format_string(complexity_label, label_args), complexity_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
+			static LLCachedControl<F32> max_attachment_area(gSavedSettings, "RenderAutoMuteSurfaceAreaLimit", 1000.0f);
+			bool surface_limit_exceeded = max_attachment_area > 0.f && mAttachmentSurfaceArea > max_attachment_area;
+			addNameTagLine(format_string(complexity_label, label_args) + (surface_limit_exceeded ? " \xE2\x96\xA0" : ""), complexity_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
 		}
 		// </FS:Ansariel>
 
