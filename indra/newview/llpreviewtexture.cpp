@@ -383,21 +383,32 @@ BOOL LLPreviewTexture::canSaveAs() const
 // virtual
 void LLPreviewTexture::saveAs()
 {
-	// <FS:PP> Allow to use user-defined default save format for textures
+	// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
 	// saveAs(LLPreviewTexture::FORMAT_TGA);
+	saveAs(uuid_vec_t());
+	// </FS:Ansariel>
+}
+
+// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
+void LLPreviewTexture::saveAs(uuid_vec_t remaining_ids)
+{
+	// <FS:PP> Allow to use user-defined default save format for textures
 	if (!gSavedSettings.getBOOL("FSTextureDefaultSaveAsFormat"))
 	{
-		saveAs(LLPreviewTexture::FORMAT_TGA);
+		saveAs(LLPreviewTexture::FORMAT_TGA, remaining_ids);
 	}
 	else
 	{
-		saveAs(LLPreviewTexture::FORMAT_PNG);
+		saveAs(LLPreviewTexture::FORMAT_PNG, remaining_ids);
 	}
 	// </FS:PP>
-	
 }
+// </FS:Ansariel>
 
-void LLPreviewTexture::saveAs(EFileformatType format)
+// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
+//void LLPreviewTexture::saveAs(EFileformatType format)
+void LLPreviewTexture::saveAs(EFileformatType format, uuid_vec_t remaining_ids)
+// </FS:Ansariel>
 {
 	if (mLoadingFullImage)
 		return;
@@ -422,13 +433,13 @@ void LLPreviewTexture::saveAs(EFileformatType format)
 	//std::string filename = getItem() ? LLDir::getScrubbedFileName(getItem()->getName()) : LLStringUtil::null;
 	//(new LLFilePickerReplyThread(boost::bind(&LLPreviewTexture::saveTextureToFile, this, _1), LLFilePicker::FFSAVE_TGAPNG, filename))->getFile();
 	std::string filename = getItem() ? checkFileExtension(LLDir::getScrubbedFileName(getItem()->getName()), format) : LLStringUtil::null;
-	(new LLFilePickerReplyThread(boost::bind(&LLPreviewTexture::saveTextureToFile, this, _1, format, callback), saveFilter, filename))->getFile();
+	(new LLFilePickerReplyThread(boost::bind(&LLPreviewTexture::saveTextureToFile, this, _1, format, callback, remaining_ids), saveFilter, filename))->getFile();
 	// </FS:Ansariel>
 }
 
 // <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
 //void LLPreviewTexture::saveTextureToFile(const std::vector<std::string>& filenames)
-void LLPreviewTexture::saveTextureToFile(const std::vector<std::string>& filenames, EFileformatType format, loaded_callback_func callback)
+void LLPreviewTexture::saveTextureToFile(const std::vector<std::string>& filenames, EFileformatType format, loaded_callback_func callback, uuid_vec_t remaining_ids)
 // </FS:Ansariel>
 {
 	const LLInventoryItem* item = getItem();
@@ -452,6 +463,9 @@ void LLPreviewTexture::saveTextureToFile(const std::vector<std::string>& filenam
 	mImage->setLoadedCallback(callback,
 	// </FS:Ansariel>
 		0, TRUE, FALSE, new LLUUID(mItemUUID), &mCallbackTextureList);
+
+	// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
+	saveMultiple(remaining_ids);
 }
 
 // virtual
@@ -1135,5 +1149,26 @@ void LLPreviewTexture::setObjectID(const LLUUID& object_id)
 void LLPreviewTexture::onButtonRefresh()
 {
 	destroy_texture(mImageID);
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
+//static
+void LLPreviewTexture::saveMultiple(uuid_vec_t ids)
+{
+	if (ids.empty())
+	{
+		return;
+	}
+
+	LLUUID next_id = ids.front();
+	ids.erase(ids.begin());
+
+	LLPreviewTexture* preview_texture = LLFloaterReg::getTypedInstance<LLPreviewTexture>("preview_texture", next_id);
+	if (preview_texture)
+	{
+		preview_texture->openToSave();
+		preview_texture->saveAs(ids);
+	}
 }
 // </FS:Ansariel>
