@@ -86,6 +86,7 @@ private:
 	void addSelectedObjects();
 	void populateObjectList();
 	void onClickExport();
+	void onExportFileSelected(const std::vector<std::string>& filenames);
 	void addTexturePreview();
 	S32 getNumExportableTextures();
 	void addObject(const LLViewerObject* prim, const std::string name);

@@ -325,15 +325,15 @@ LLSLURL::LLSLURL(const std::string& slurl)
 				// (or its a slurl.com or maps.secondlife.com URL).
 				std::string probe_grid;
 
-				std::string hyper = slurl_uri.hostNameAndPort();
-				std::string hyper_trimmed = LLGridManager::getInstance()->trimHypergrid(hyper);
-				if (hyper != hyper_trimmed)
+				std::string hypergrid = slurl_uri.hostNameAndPort();
+				std::string hyper_trimmed = LLGridManager::getInstance()->trimHypergrid(hypergrid);
+				if (hypergrid != hyper_trimmed)
 				{
 					mHypergrid = true;
-					path_array.insert(0,hyper);
+					path_array.insert(0, hypergrid);
 				}
 
-				probe_grid = LLGridManager::getInstance()->getGridByProbing(hyper);
+				probe_grid = LLGridManager::getInstance()->getGridByProbing(hypergrid);
 				if (probe_grid.empty())
 				{
 					probe_grid = LLGridManager::getInstance()->getGridByProbing(slurl_uri.hostName());
@@ -479,8 +479,8 @@ LLSLURL::LLSLURL(const std::string& slurl)
 }
 
 // Create a slurl for the middle of the region
-LLSLURL::LLSLURL(const std::string& grid, const std::string& region, bool hyper)
-: mHypergrid(hyper)
+LLSLURL::LLSLURL(const std::string& grid, const std::string& region, bool hypergrid)
+: mHypergrid(hypergrid)
 {
 	mGrid = grid;
 	mRegion = region;
@@ -490,8 +490,8 @@ LLSLURL::LLSLURL(const std::string& grid, const std::string& region, bool hyper)
 
 // create a slurl given the position.  The position will be modded with the region
 // width handling global positions as well
-LLSLURL::LLSLURL(const std::string& grid, const std::string& region, const LLVector3& position, bool hyper)
-: mHypergrid(hyper)
+LLSLURL::LLSLURL(const std::string& grid, const std::string& region, const LLVector3& position, bool hypergrid)
+: mHypergrid(hypergrid)
 {
 	mGrid = grid;
 	mRegion = region;
@@ -516,15 +516,15 @@ LLSLURL::LLSLURL(const std::string& grid, const std::string& region, const LLVec
 }
 
 // create a simstring
-LLSLURL::LLSLURL(const std::string& region, const LLVector3& position, bool hyper)
-: mHypergrid(hyper)
+LLSLURL::LLSLURL(const std::string& region, const LLVector3& position, bool hypergrid)
+: mHypergrid(hypergrid)
 {
 	*this = LLSLURL(LLGridManager::getInstance()->getGrid(), region, position);
 }
 
 // create a slurl from a global position
-LLSLURL::LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& global_position, bool hyper)
-: mHypergrid(hyper)
+LLSLURL::LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& global_position, bool hypergrid)
+: mHypergrid(hypergrid)
 {
 // <FS:CR> Aurora-sim var region teleports
 	//*this = LLSLURL(grid,
@@ -540,8 +540,8 @@ LLSLURL::LLSLURL(const std::string& grid, const std::string& region, const LLVec
 }
 
 // create a slurl from a global position
-LLSLURL::LLSLURL(const std::string& region, const LLVector3d& global_position, bool hyper)
-: mHypergrid(hyper)
+LLSLURL::LLSLURL(const std::string& region, const LLVector3d& global_position, bool hypergrid)
+: mHypergrid(hypergrid)
 {
 	*this = LLSLURL(LLGridManager::getInstance()->getGrid(), region, global_position);
 }

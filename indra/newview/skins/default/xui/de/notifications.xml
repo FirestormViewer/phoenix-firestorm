@@ -3358,14 +3358,20 @@ Klicken Sie auf  &apos;Akzeptieren &apos;, um dem Chat beizutreten, oder auf  &a
 	<notification name="VoiceEffectsExpired">
 		Ein oder mehrere Ihrer Voice-Morph-Abos ist/sind abgelaufen.
 [[URL] Hier klicken], um Ihr Abo zu erneuern.
+
+Falls Sie Premium-Mitglied sind, klicken Sie [[PREMIUM_URL] hier], um Ihren Voice-Morph-Vorteil zu erhalten.
 	</notification>
 	<notification name="VoiceEffectsExpiredInUse">
 		Das aktive Voice-Morph-Abo ist abgelaufen. Ihre normalen Voice-Einstellungen werden angewendet.
 [[URL] Hier klicken], um Ihr Abo zu erneuern.
+
+Falls Sie Premium-Mitglied sind, klicken Sie [[PREMIUM_URL] hier], um Ihren Voice-Morph-Vorteil zu erhalten.
 	</notification>
 	<notification name="VoiceEffectsWillExpire">
 		Ein oder mehrere Ihrer Voice-Morph-Abos werden in weniger als [INTERVAL] Tagen ablaufen.
 [[URL] Hier klicken], um Ihr Abo zu erneuern.
+
+Falls Sie Premium-Mitglied sind, klicken Sie [[PREMIUM_URL] hier], um Ihren Voice-Morph-Vorteil zu erhalten.
 	</notification>
 	<notification name="VoiceEffectsNew">
 		Neue Voice-Morph-Effekte sind erhältlich!
@@ -3416,6 +3422,9 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 	</notification>
 	<notification name="SnapshotToComputerFailed">
 		Fehler beim Speichern des Bildes unter [PATH]: Zu wenig Speicherplatz auf dem Medium. [NEED_MEMORY]KB werden benötigt, es stehen jedoch nur [FREE_MEMORY]KB zur Verfügung.
+	</notification>
+	<notification name="SnapshotToLocalDirNotExist">
+		Fehler beim Speichern des Bildes unter [PATH]: Verzeichnis existiert nicht.
 	</notification>
 	<notification name="PresetNotSaved">
 		Fehler beim Speichern der Voreinstellung [NAME].
@@ -4515,7 +4524,7 @@ Wählen Sie eine kleinere Landfläche aus.
 		Aufgrund eines internen Fehlers konnte Ihr Viewer nicht ordnungsgemäß aktualisiert werden.  Der in Ihrem Viewer angezeigte L$-Kontostand oder Parzellenbesitz stimmt möglicherweise nicht mit dem aktuellen Stand auf den Servern überein.
 	</notification>
 	<notification name="LargePrimAgentIntersect">
-		Große Prims, die sich mit anderen Einwohnern überschneiden, können nicht erstellt werden.  Bitte erneut versuchen, wenn sich die anderen Einwohnern bewegt haben.
+		Große Prims, die sich mit anderen Einwohnern überschneiden, können nicht erstellt werden. Bitte erneut versuchen, wenn sich die anderen Einwohner fort bewegt haben.
 	</notification>
 	<notification name="RLVaChangeStrings">
 		Änderungen werden erst nach einem Neustart von [APP_NAME] aktiv.
@@ -4957,10 +4966,6 @@ Warnung: Bitte verwende die Funktion zur Aufhebung der Flugbeschränkung verantw
 Die betretene Region verwendet eine andere Simulator-Version.
 Aktueller Simulator: [NEWVERSION]
 Vorheriger Simulator: [OLDVERSION]
-	</notification>
-
-	<notification name="CannotSaveSnapshot">
-Foto konnte nicht gespeichert werden.
 	</notification>
 
 	<notification name="RegExFail">
