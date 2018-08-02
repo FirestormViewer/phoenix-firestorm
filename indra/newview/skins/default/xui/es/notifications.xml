@@ -4547,7 +4547,7 @@ Prueba a seleccionar un terreno más pequeño.
 		Un error interno nos ha impedido actualizar tu visor correctamente. El saldo en L$ o las parcelas en propiedad presentadas en el visor podrían no coincidir con tu saldo real en los servidores.
 	</notification>
 	<notification name="LargePrimAgentIntersect">
-		No se pueden crear prims grandes que intersecten con otros residentes. Reinténtalo cuando se hayan movido otros residentes.
+		No se pudo crear primitivas grandes que se crucen con otros residentes. Por favor, vuelve a intentar cuando otros residentes se hayan desplazado.
 	</notification>
 	<notification name="PreferenceChatClearLog">
 		Esto eliminará los registros de conversaciones anteriores y las copias de seguridad de ese archivo.
@@ -5470,9 +5470,6 @@ Intento cancelado.
 		La región en la que has entrado funciona bajo una versión de simulador diferente.
 Simulador actual:   [NEWVERSION]
 Simulador anterior: [OLDVERSION]
-	</notification>
-	<notification name="CannotSaveSnapshot">
-		No se ha podido guardar la fotografía.
 	</notification>
 	<notification name="RegExFail">
 		Error en la expresión regular:

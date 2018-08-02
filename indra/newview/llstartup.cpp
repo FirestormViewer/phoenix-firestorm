@@ -294,6 +294,7 @@ static bool mLoginStatePastUI = false;
 
 const S32 DEFAULT_MAX_AGENT_GROUPS = 42;
 const S32 ALLOWED_MAX_AGENT_GROUPS = 500;
+const F32 STATE_AGENT_WAIT_TIMEOUT = 240; //seconds
 
 boost::scoped_ptr<LLEventPump> LLStartUp::sStateWatcher(new LLEventStream("StartupState"));
 boost::scoped_ptr<LLStartupListener> LLStartUp::sListener(new LLStartupListener());
@@ -696,9 +697,6 @@ bool idle_startup()
 
 		gSavedSettings.setS32("LastFeatureVersion", LLFeatureManager::getInstance()->getVersion());
 		gSavedSettings.setString("LastGPUString", thisGPU);
-
-		// <FS:Ansariel> Re-enable feature table download
-		LLFeatureManager::getInstance()->fetchHTTPTables();
 
 		std::string xml_file = LLUI::locateSkin("xui_version.xml");
 		LLXMLNodePtr root;
@@ -1468,6 +1466,14 @@ bool idle_startup()
 			gSavedPerAccountSettings.setString("InstantMessageLogPath", gDirUtilp->getChatLogsDir());
 		}
 		// </FS:KC>
+
+		// <FS:LO> FIRE-22853 Make snapshots to disk not remember path and filename if the user doesnt want them to.
+		if (!gSavedPerAccountSettings.getBOOL("FSRememberSnapshotPathSessions"))
+		{
+			gSavedPerAccountSettings.setString("SnapshotBaseDir", gSavedPerAccountSettings.getControl("SnapshotBaseDir")->getDefault().asString());
+			gSavedPerAccountSettings.setString("SnapshotBaseName", gSavedPerAccountSettings.getControl("SnapshotBaseName")->getDefault().asString());
+		}
+		// </FS:LO>
 // <FS:CR> Seperate user directories per grid on OS build
 #ifdef OPENSIM
 		gDirUtilp->setPerAccountChatLogsDir(userid, gridlabel);
@@ -2333,6 +2339,13 @@ bool idle_startup()
 			LLStartUp::setStartupState( STATE_INVENTORY_SEND );
 		}
 		display_startup();
+
+		if (!gAgentMovementCompleted && timeout.getElapsedTimeF32() > STATE_AGENT_WAIT_TIMEOUT)
+		{
+			LL_WARNS("AppInit") << "Backing up to login screen!" << LL_ENDL;
+			LLNotificationsUtil::add("LoginPacketNeverReceived", LLSD(), LLSD(), login_alert_status);
+			reset_login();
+		}
 		return FALSE;
 	}
 

@@ -138,6 +138,7 @@
 #include "llpathfindingmanager.h"
 #include "llstartup.h"
 #include "boost/unordered_map.hpp"
+#include <boost/regex.hpp>
 #include "llcleanup.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "fsavatarrenderpersistence.h"
@@ -4548,12 +4549,19 @@ class LLSelfSitDown : public view_listener_t
         }
     };
 
+
+
+bool show_sitdown_self()
+{
+	return isAgentAvatarValid() && !gAgentAvatarp->isSitting();
+}
+
 bool enable_sitdown_self()
 {
 // [RLVa:KB] - Checked: 2010-08-28 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
-	return isAgentAvatarValid() && !gAgentAvatarp->isSitting() && !gAgentAvatarp->isEditingAppearance() && !gAgent.getFlying() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT);
+	return show_sitdown_self() && !gAgentAvatarp->isEditingAppearance() && !gAgent.getFlying() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT);
 // [/RLVa:KB]
-//    return isAgentAvatarValid() && !gAgentAvatarp->isSitting() && !gAgentAvatarp->isEditingAppearance() && !gAgent.getFlying();
+//	return show_sitdown_self() && !gAgentAvatarp->isEditingAppearance() && !gAgent.getFlying();
 }
 
 // Force sit -KC
@@ -10254,11 +10262,15 @@ void handle_report_bug(const LLSD& param)
 	
 	LLStringUtil::format_map_t replace;
 	// <FS:Ansariel> FIRE-14001: JIRA report is being cut off when using Help -> Report Bug
-	//replace["[ENVIRONMENT]"] = LLURI::escape(LLAppViewer::instance()->getViewerInfoString(true));
+	//std::string environment = LLAppViewer::instance()->getViewerInfoString(true);
+	//boost::regex regex;
+	//regex.assign("</?nolink>");
+	//std::string stripped_env = boost::regex_replace(environment, regex, "");
+
+	//replace["[ENVIRONMENT]"] = LLURI::escape(stripped_env);
 	LLSD sysinfo = FSData::getSystemInfo();
 	replace["[ENVIRONMENT]"] = LLURI::escape(sysinfo["Part1"].asString().substr(1) + sysinfo["Part2"].asString().substr(1));
 	// </FS:Ansariel>
-
 	LLSLURL location_url;
 	LLAgentUI::buildSLURL(location_url);
 	replace["[LOCATION]"] = LLURI::escape(location_url.getSLURLString());
@@ -11613,7 +11625,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLSelfStandUp(), "Self.StandUp");
 	enable.add("Self.EnableStandUp", boost::bind(&enable_standup_self));
 	view_listener_t::addMenu(new LLSelfSitDown(), "Self.SitDown");
-	enable.add("Self.EnableSitDown", boost::bind(&enable_sitdown_self));
+	enable.add("Self.EnableSitDown", boost::bind(&enable_sitdown_self)); 
+	enable.add("Self.ShowSitDown", boost::bind(&show_sitdown_self));
 	view_listener_t::addMenu(new FSSelfForceSit(), "Self.ForceSit"); //KC
 	enable.add("Self.EnableForceSit", boost::bind(&enable_forcesit_self)); //KC
 	view_listener_t::addMenu(new FSSelfCheckForceSit(), "Self.getForceSit"); //KC

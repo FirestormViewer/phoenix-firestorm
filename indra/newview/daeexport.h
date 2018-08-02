@@ -131,6 +131,7 @@ private:
 	void refresh();
 	void dirty();
 	void onClickExport();
+	void onExportFileSelected(const std::vector<std::string>& filenames);
 	void onTextureExportCheck();
 	void onCommitTextureType();
 	void saveTextures();

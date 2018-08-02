@@ -200,6 +200,7 @@
 #include "llviewerdisplay.h"
 #include "llspatialpartition.h"
 #include "llviewerjoystick.h"
+#include "llviewermenufile.h" // LLFilePickerReplyThread
 #include "llviewernetwork.h"
 #include "llpostprocess.h"
 // <FS:Ansariel> [FS communication UI]
@@ -292,38 +293,6 @@ static LLCachedControl<std::string>	sSnapshotBaseName(LLCachedControl<std::strin
 static LLCachedControl<std::string>	sSnapshotDir(LLCachedControl<std::string>(gSavedPerAccountSettings, "SnapshotBaseDir", ""));
 
 LLTrace::SampleStatHandle<> LLViewerWindow::sMouseVelocityStat("Mouse Velocity");
-
-// <FS:Ansariel> Threaded filepickers
-class FSSnapshotSaveFilePicker : public LLFilePickerThread
-{
-public:
-	FSSnapshotSaveFilePicker(LLFilePicker::ESaveFilter filter, const std::string& default_name, boost::function<void (const std::string&)> notify_slot)
-		: LLFilePickerThread(filter, default_name)
-	{
-		mSignal.connect(notify_slot);
-	}
-
-	virtual void notify(const std::vector<std::string>& filenames)
-	{
-		if (!filenames.empty())
-		{
-			mSignal(filenames[0]);
-		}
-		else
-		{
-			mSignal(std::string());
-		}
-	}
-
-	static void open(LLFilePicker::ESaveFilter filter, const std::string& default_name, boost::function<void (const std::string&)> notify_slot)
-	{
-		(new FSSnapshotSaveFilePicker(filter, default_name, notify_slot))->getFile();
-	}
-
-protected:
-	boost::signals2::signal<void (const std::string&)> mSignal;
-};
-// </FS:Ansariel>
 
 class RecordToChatConsoleRecorder : public LLError::Recorder
 {
@@ -5569,204 +5538,141 @@ BOOL LLViewerWindow::mousePointOnLandGlobal(const S32 x, const S32 y, LLVector3d
 	return FALSE;
 }
 
-// <FS:Ansariel> Threaded filepickers
-void do_save_image(LLImageFormatted* image, const std::string& snapshot_dir, const std::string& base_name, const std::string& extension, boost::function<void(bool)> callback)
+// Saves an image to the harddrive as "SnapshotX" where X >= 1.
+void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, BOOL force_picker, const snapshot_saved_signal_t::slot_type& success_cb, const snapshot_saved_signal_t::slot_type& failure_cb)
 {
-	if (snapshot_dir.empty() || !LLFile::isdir(snapshot_dir))
+	if (!image)
 	{
-		if (callback)
-		{
-			callback(false);
-		}
+		LL_WARNS() << "No image to save" << LL_ENDL;
+		return;
+	}
+	std::string extension("." + image->getExtension());
+	LLImageFormatted* formatted_image = image;
+	// Get a base file location if needed.
+	if (force_picker || !isSnapshotLocSet())
+	{
+		std::string proposed_name(sSnapshotBaseName);
+
+		// getSaveFile will append an appropriate extension to the proposed name, based on the ESaveFilter constant passed in.
+		LLFilePicker::ESaveFilter pick_type;
+
+		if (extension == ".j2c")
+			pick_type = LLFilePicker::FFSAVE_J2C;
+		else if (extension == ".bmp")
+			pick_type = LLFilePicker::FFSAVE_BMP;
+		else if (extension == ".jpg")
+			pick_type = LLFilePicker::FFSAVE_JPEG;
+		else if (extension == ".png")
+			pick_type = LLFilePicker::FFSAVE_PNG;
+		else if (extension == ".tga")
+			pick_type = LLFilePicker::FFSAVE_TGA;
+		else
+			pick_type = LLFilePicker::FFSAVE_ALL;
+
+		(new LLFilePickerReplyThread(boost::bind(&LLViewerWindow::onDirectorySelected, this, _1, formatted_image, success_cb, failure_cb), pick_type, proposed_name,
+										boost::bind(&LLViewerWindow::onSelectionFailure, this, failure_cb)))->getFile();
+	}
+	else
+	{
+		saveImageLocal(formatted_image, success_cb, failure_cb);
+	}	
+}
+
+void LLViewerWindow::onDirectorySelected(const std::vector<std::string>& filenames, LLImageFormatted *image, const snapshot_saved_signal_t::slot_type& success_cb, const snapshot_saved_signal_t::slot_type& failure_cb)
+{
+	// Copy the directory + file name
+	std::string filepath = filenames[0];
+
+	gSavedPerAccountSettings.setString("SnapshotBaseName", gDirUtilp->getBaseFileName(filepath, true));
+	gSavedPerAccountSettings.setString("SnapshotBaseDir", gDirUtilp->getDirName(filepath));
+	saveImageLocal(image, success_cb, failure_cb);
+}
+
+void LLViewerWindow::onSelectionFailure(const snapshot_saved_signal_t::slot_type& failure_cb)
+{
+	failure_cb();
+}
+
+
+void LLViewerWindow::saveImageLocal(LLImageFormatted *image, const snapshot_saved_signal_t::slot_type& success_cb, const snapshot_saved_signal_t::slot_type& failure_cb)
+{
+	std::string lastSnapshotDir = LLViewerWindow::getLastSnapshotDir();
+	if (lastSnapshotDir.empty())
+	{
+		failure_cb();
 		return;
 	}
 
 // Check if there is enough free space to save snapshot
 #ifdef LL_WINDOWS
-	boost::filesystem::space_info b_space = boost::filesystem::space(utf8str_to_utf16str(snapshot_dir));
+	boost::filesystem::path b_path(utf8str_to_utf16str(lastSnapshotDir));
 #else
-	boost::filesystem::space_info b_space = boost::filesystem::space(snapshot_dir);
+	boost::filesystem::path b_path(lastSnapshotDir);
 #endif
-	if (b_space.free < image->getDataSize())
+	if (!boost::filesystem::is_directory(b_path))
 	{
-		if (callback)
-		{
-			callback(false);
-		}
+		LLSD args;
+		args["PATH"] = lastSnapshotDir;
+		LLNotificationsUtil::add("SnapshotToLocalDirNotExist", args);
+		resetSnapshotLoc();
+		failure_cb();
 		return;
 	}
+	boost::filesystem::space_info b_space = boost::filesystem::space(b_path);
+	if (b_space.free < image->getDataSize())
+	{
+		LLSD args;
+		args["PATH"] = lastSnapshotDir;
 
+		std::string needM_bytes_string;
+		LLResMgr::getInstance()->getIntegerString(needM_bytes_string, (image->getDataSize()) >> 10);
+		args["NEED_MEMORY"] = needM_bytes_string;
+
+		std::string freeM_bytes_string;
+		LLResMgr::getInstance()->getIntegerString(freeM_bytes_string, (b_space.free) >> 10);
+		args["FREE_MEMORY"] = freeM_bytes_string;
+
+		LLNotificationsUtil::add("SnapshotToComputerFailed", args);
+
+		failure_cb();
+	}
+	
 	// Look for an unused file name
+	BOOL is_snapshot_name_loc_set = isSnapshotLocSet();
 	std::string filepath;
 	S32 i = 1;
 	S32 err = 0;
-
+	std::string extension("." + image->getExtension());
 	do
 	{
-		filepath = snapshot_dir;
+		filepath = sSnapshotDir;
 		filepath += gDirUtilp->getDirDelimiter();
-		filepath += base_name;
-		filepath += llformat("_%.3d",i);
+		filepath += sSnapshotBaseName;
+
+		if (is_snapshot_name_loc_set)
+		{
+			filepath += llformat("_%.3d",i);
+		}		
+
 		filepath += extension;
 
 		llstat stat_info;
 		err = LLFile::stat( filepath, &stat_info );
 		i++;
 	}
-	while( -1 != err );  // search until the file is not found (i.e., stat() gives an error).
+	while( -1 != err  // Search until the file is not found (i.e., stat() gives an error).
+			&& is_snapshot_name_loc_set); // Or stop if we are rewriting.
 
 	LL_INFOS() << "Saving snapshot to " << filepath << LL_ENDL;
-
-	if (gSavedSettings.getBOOL("FSLogSnapshotsToLocal"))
+	if (image->save(filepath))
 	{
-		LLStringUtil::format_map_t args;
-		args["FILENAME"] = filepath;
-		report_to_nearby_chat(LLTrans::getString("SnapshotSavedToDisk", args));
+		playSnapshotAnimAndSound();
+		success_cb();
 	}
-
-	bool success = image->save(filepath);
-	if (callback)
-	{
-		callback(success);
-	}
-}
-
-void LLViewerWindow::saveImageCallback(const std::string& filename, LLImageFormatted* image, const std::string& extension, boost::function<void(bool)> callback)
-{
-	if (!filename.empty())
-	{
-		gSavedPerAccountSettings.setString("SnapshotBaseName", gDirUtilp->getBaseFileName(filename, true));
-		gSavedPerAccountSettings.setString("SnapshotBaseDir", gDirUtilp->getDirName(filename));
-
-		do_save_image(image, sSnapshotDir, sSnapshotBaseName, extension, callback);
-		return;
-	}
-
-	if (callback)
-	{
-		callback(false);
-	}
-}
-// </FS:Ansariel>
-
-// Saves an image to the harddrive as "SnapshotX" where X >= 1.
-// <FS:Ansariel> Threaded filepickers
-//BOOL LLViewerWindow::saveImageNumbered(LLImageFormatted *image, BOOL force_picker, BOOL& insufficient_memory)
-void LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picker, boost::function<void(bool)> callback)
-// </FS:Ansariel>
-{
-	// <FS:Ansariel> Threaded filepickers
-	//insufficient_memory = FALSE;
-
-	if (!image)
-	{
-		LL_WARNS() << "No image to save" << LL_ENDL;
-		// <FS:Ansariel> Threaded filepickers
-		//return FALSE;
-		if (callback)
-		{
-			callback(false);
-			return;
-		}
-		// </FS:Ansariel>
-	}
-
-	LLFilePicker::ESaveFilter pick_type;
-	std::string extension("." + image->getExtension());
-	if (extension == ".j2c")
-		pick_type = LLFilePicker::FFSAVE_J2C;
-	else if (extension == ".bmp")
-		pick_type = LLFilePicker::FFSAVE_BMP;
-	else if (extension == ".jpg")
-		pick_type = LLFilePicker::FFSAVE_JPEG;
-	else if (extension == ".png")
-		pick_type = LLFilePicker::FFSAVE_PNG;
-	else if (extension == ".tga")
-		pick_type = LLFilePicker::FFSAVE_TGA;
 	else
-		pick_type = LLFilePicker::FFSAVE_ALL; // ???
-	
-	// <FS:Ansariel> Threaded filepickers
-	//BOOL is_snapshot_name_loc_set = isSnapshotLocSet();
-
-	//// Get a base file location if needed.
-	//if (force_picker || !isSnapshotLocSet())
-	//{
-	//	std::string proposed_name( sSnapshotBaseName );
-
-	//	// getSaveFile will append an appropriate extension to the proposed name, based on the ESaveFilter constant passed in.
-
-	//	// pick a directory in which to save
-	//	LLFilePicker& picker = LLFilePicker::instance();
-	//	if (!picker.getSaveFile(pick_type, proposed_name))
-	//	{
-	//		// Clicked cancel
-	//		return FALSE;
-	//	}
-
-	//	// Copy the directory + file name
-	//	std::string filepath = picker.getFirstFile();
-
-	//	gSavedPerAccountSettings.setString("SnapshotBaseName", gDirUtilp->getBaseFileName(filepath, true));
-	//	gSavedPerAccountSettings.setString("SnapshotBaseDir", gDirUtilp->getDirName(filepath));
-	//}
-
-	//std::string snapshot_dir = sSnapshotDir;
-	//if(snapshot_dir.empty())
-	//{
-	//	return FALSE;
-	//}
-
-// Check if there is enough free space to save snapshot
-//#ifdef LL_WINDOWS
-//	boost::filesystem::space_info b_space = boost::filesystem::space(utf8str_to_utf16str(snapshot_dir));
-//#else
-//	boost::filesystem::space_info b_space = boost::filesystem::space(snapshot_dir);
-//#endif
-//	if (b_space.free < image->getDataSize())
-//	{
-//		insufficient_memory = TRUE;
-//		return FALSE;
-//	}
-	//// Look for an unused file name
-	//std::string filepath;
-	//S32 i = 1;
-	//S32 err = 0;
-
-	//do
-	//{
-	//	filepath = sSnapshotDir;
-	//	filepath += gDirUtilp->getDirDelimiter();
-	//	filepath += sSnapshotBaseName;
-
-	//	if (is_snapshot_name_loc_set)
-	//	{
-	//		filepath += llformat("_%.3d",i);
-	//	}		
-
-	//	filepath += extension;
-
-	//	llstat stat_info;
-	//	err = LLFile::stat( filepath, &stat_info );
-	//	i++;
-	//}
-	//while( -1 != err  // Search until the file is not found (i.e., stat() gives an error).
-	//		&& is_snapshot_name_loc_set); // Or stop if we are rewriting.
-
-	//LL_INFOS() << "Saving snapshot to " << filepath << LL_ENDL;
-	//return image->save(filepath);
-
-	// Get a base file location if needed.
-	if (force_picker || !isSnapshotLocSet() || !LLFile::isdir(sSnapshotDir()))
 	{
-		std::string proposed_name( sSnapshotBaseName );
-
-		FSSnapshotSaveFilePicker::open(pick_type, proposed_name, boost::bind(&LLViewerWindow::saveImageCallback, this, _1, image, extension, callback));
-		return;
+		failure_cb();
 	}
-
-	do_save_image(image, sSnapshotDir, sSnapshotBaseName, extension, callback);
-	// </FS:Ansariel>
 }
 
 void LLViewerWindow::resetSnapshotLoc()
