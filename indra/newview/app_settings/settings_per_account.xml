@@ -1202,5 +1202,16 @@
         <key>Value</key>
             <integer>0</integer>
         </map>
+     <key>FSRememberSnapshotPathSessions</key>
+        <map>
+        <key>Comment</key>
+            <string>If enabled, remember the path and filename of snapshots between sessions. Default (true)</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>1</integer>
+        </map>
     </map>
 </llsd>

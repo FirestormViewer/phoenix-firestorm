@@ -1468,6 +1468,14 @@ bool idle_startup()
 			gSavedPerAccountSettings.setString("InstantMessageLogPath", gDirUtilp->getChatLogsDir());
 		}
 		// </FS:KC>
+
+		// <FS:LO> FIRE-22853 Make snapshots to disk not remember path and filename if the user doesnt want them to.
+		if (!gSavedPerAccountSettings.getBOOL("FSRememberSnapshotPathSessions"))
+		{
+			gSavedPerAccountSettings.setString("SnapshotBaseDir", gSavedPerAccountSettings.getControl("SnapshotBaseDir")->getDefault().asString());
+			gSavedPerAccountSettings.setString("SnapshotBaseName", gSavedPerAccountSettings.getControl("SnapshotBaseName")->getDefault().asString());
+		}
+		// </FS:LO>
 // <FS:CR> Seperate user directories per grid on OS build
 #ifdef OPENSIM
 		gDirUtilp->setPerAccountChatLogsDir(userid, gridlabel);
