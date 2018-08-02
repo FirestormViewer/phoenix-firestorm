@@ -171,6 +171,7 @@ public:
 	// <FS:Ansariel> Sound cache
 	void setSoundCacheLocation(const LLStringExplicit& location);
 	void onClickSetSoundCache();
+	void changeSoundCachePath(const std::vector<std::string>& filenames, std::string proposed_name);
 	void onClickBrowseSoundCache();
 	void onClickResetSoundCache();
 	// </FS:Ansariel>
@@ -179,6 +180,7 @@ public:
 	void onClickResetVoice();
 
 	void onClickSetCache();
+	void changeCachePath(const std::vector<std::string>& filenames, std::string proposed_name);
 	void onClickBrowseCache();
 	void onClickBrowseCrashLogs();
 	void onClickBrowseChatLogDir();
@@ -195,11 +197,13 @@ public:
 	// void onClickSetSounds();	//<FS:KC> Handled centrally now
 	void onClickPreviewUISound(const LLSD& ui_sound_id); // <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 	void setPreprocInclude();
+	void changePreprocIncludePath(const std::vector<std::string>& filenames, std::string proposed_name);
 	void onClickEnablePopup();
 	void onClickDisablePopup();	
 	void resetAllIgnored();
 	void setAllIgnored();
 	void onClickLogPath();
+	void changeLogPath(const std::vector<std::string>& filenames, std::string proposed_name);
 	bool moveTranscriptsAndLog();
 	//[FIX FIRE-2765 : SJ] Making sure Reset button resets works
 	void onClickResetLogPath();
@@ -472,6 +476,7 @@ public:
 protected:
 	// <FS:Zi> Backup settings
 	void onClickSetBackupSettingsPath();
+	void changeBackupSettingsPath(const std::vector<std::string>& filenames, std::string proposed_name);
 	void onClickSelectAll();
 	void onClickDeselectAll();
 	void onClickBackupSettings();

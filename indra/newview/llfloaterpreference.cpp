@@ -1661,16 +1661,15 @@ void LLFloaterPreference::onClickSetCache()
 	
 	std::string proposed_name(cur_name);
 
-	LLDirPicker& picker = LLDirPicker::instance();
-	if (! picker.getDir(&proposed_name ) )
-	{
-		return; //Canceled!
-	}
+	(new LLDirPickerThread(boost::bind(&LLFloaterPreference::changeCachePath, this, _1, _2), proposed_name))->getFile();
+}
 
-	std::string dir_name = picker.getDirName();
-	if (!dir_name.empty() && dir_name != cur_name)
+void LLFloaterPreference::changeCachePath(const std::vector<std::string>& filenames, std::string proposed_name)
+{
+	std::string dir_name = filenames[0];
+	if (!dir_name.empty() && dir_name != proposed_name)
 	{
-		std::string new_top_folder(gDirUtilp->getBaseFileName(dir_name));	
+		std::string new_top_folder(gDirUtilp->getBaseFileName(dir_name));
 		LLNotificationsUtil::add("CacheWillBeMoved");
 		gSavedSettings.setString("NewCacheLocation", dir_name);
 		gSavedSettings.setString("NewCacheLocationTopFolder", new_top_folder);
@@ -1722,14 +1721,13 @@ void LLFloaterPreference::onClickSetSoundCache()
 	std::string cur_name(gSavedSettings.getString("FSSoundCacheLocation"));
 	std::string proposed_name(cur_name);
 
-	LLDirPicker& picker = LLDirPicker::instance();
-	if (! picker.getDir(&proposed_name ) )
-	{
-		return; //Canceled!
-	}
+	(new LLDirPickerThread(boost::bind(&LLFloaterPreference::changeSoundCachePath, this, _1, _2), proposed_name))->getFile();
+}
 
-	std::string dir_name = picker.getDirName();
-	if (!dir_name.empty() && dir_name != cur_name)
+void LLFloaterPreference::changeSoundCachePath(const std::vector<std::string>& filenames, std::string proposed_name)
+{
+	std::string dir_name = filenames[0];
+	if (!dir_name.empty() && dir_name != proposed_name)
 	{
 		gSavedSettings.setString("FSSoundCacheLocation", dir_name);
 		setSoundCacheLocation(dir_name);
@@ -1831,19 +1829,17 @@ void LLFloaterPreference::onClickClearSpamList()
 void LLFloaterPreference::setPreprocInclude()
 {
 	std::string cur_name(gSavedSettings.getString("_NACL_PreProcHDDIncludeLocation"));
-
 	std::string proposed_name(cur_name);
 
-	LLDirPicker& picker = LLDirPicker::instance();
-	if (! picker.getDir(&proposed_name ) )
-	{
-		return; //Canceled!
-	}
+	(new LLDirPickerThread(boost::bind(&LLFloaterPreference::changePreprocIncludePath, this, _1, _2), proposed_name))->getFile();
+}
 
-	std::string dir_name = picker.getDirName();
-	if (!dir_name.empty() && dir_name != cur_name)
+void LLFloaterPreference::changePreprocIncludePath(const std::vector<std::string>& filenames, std::string proposed_name)
+{
+	std::string dir_name = filenames[0];
+	if (!dir_name.empty() && dir_name != proposed_name)
 	{
-		std::string new_top_folder(gDirUtilp->getBaseFileName(dir_name));	
+		std::string new_top_folder(gDirUtilp->getBaseFileName(dir_name));
 		gSavedSettings.setString("_NACL_PreProcHDDIncludeLocation", dir_name);
 	}
 }
@@ -2848,25 +2844,21 @@ void LLFloaterPreference::onClickLogPath()
 	std::string proposed_name(gSavedPerAccountSettings.getString("InstantMessageLogPath"));	 
 	mPriorInstantMessageLogPath.clear();
 	
-	LLDirPicker& picker = LLDirPicker::instance();
-	//Launches a directory picker and waits for feedback
-	if (!picker.getDir(&proposed_name ) )
-	{
-		return; //Canceled!
-	}
 
-	//Gets the path from the directory picker
-	std::string dir_name = picker.getDirName();
-
-	//Path changed
-	if(proposed_name != dir_name)
-	{
-	gSavedPerAccountSettings.setString("InstantMessageLogPath", dir_name);
-		mPriorInstantMessageLogPath = proposed_name;
-	
-	// enable/disable 'Delete transcripts button
-	updateDeleteTranscriptsButton();
+	(new LLDirPickerThread(boost::bind(&LLFloaterPreference::changeLogPath, this, _1, _2), proposed_name))->getFile();
 }
+
+void LLFloaterPreference::changeLogPath(const std::vector<std::string>& filenames, std::string proposed_name)
+{
+	//Path changed
+	if (proposed_name != filenames[0])
+	{
+		gSavedPerAccountSettings.setString("InstantMessageLogPath", filenames[0]);
+		mPriorInstantMessageLogPath = proposed_name;
+
+		// enable/disable 'Delete transcripts button
+		updateDeleteTranscriptsButton();
+	}
 	//[FIX FIRE-2765 : SJ] Enable Reset button when own Chatlogdirectory is set
 	getChildView("reset_logpath")->setEnabled(TRUE);
 }
@@ -4883,16 +4875,17 @@ BOOL FSPanelPreferenceBackup::postBuild()
 void FSPanelPreferenceBackup::onClickSetBackupSettingsPath()
 {
 	std::string dir_name = gSavedSettings.getString("SettingsBackupPath");
-	LLDirPicker& picker = LLDirPicker::instance();
-	if (!picker.getDir(&dir_name))
-	{
-		// canceled
-		return;
-	}
+	(new LLDirPickerThread(boost::bind(&FSPanelPreferenceBackup::changeBackupSettingsPath, this, _1, _2), dir_name))->getFile();
+}
 
-	dir_name = picker.getDirName();
-	gSavedSettings.setString("SettingsBackupPath", dir_name);
-	getChild<LLLineEditor>("settings_backup_path")->setValue(dir_name);
+void FSPanelPreferenceBackup::changeBackupSettingsPath(const std::vector<std::string>& filenames, std::string proposed_name)
+{
+	std::string dir_name = filenames[0];
+	if (!dir_name.empty() && dir_name != proposed_name)
+	{
+		gSavedSettings.setString("SettingsBackupPath", dir_name);
+		getChild<LLLineEditor>("settings_backup_path")->setValue(dir_name);
+	}
 }
 
 void FSPanelPreferenceBackup::onClickBackupSettings()
