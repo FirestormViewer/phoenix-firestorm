@@ -81,6 +81,7 @@
 #include "lltrans.h"
 #include "llversioninfo.h"
 #include "llviewercontrol.h"
+#include "llviewermenufile.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
 #include "llviewertexturelist.h"
@@ -196,14 +197,14 @@ void ColladaExportFloater::updateUI()
 
 void ColladaExportFloater::onClickExport()
 {
-	LLFilePicker& file_picker = LLFilePicker::instance();
-	if (!file_picker.getSaveFile(LLFilePicker::FFSAVE_COLLADA, LLDir::getScrubbedFileName(mObjectName + ".dae")))
-	{
-		LL_INFOS() << "User closed the filepicker, aborting export!" << LL_ENDL;
-		return;
-	}
-	mFilename = file_picker.getFirstFile();
-	
+	(new LLFilePickerReplyThread(boost::bind(&ColladaExportFloater::onExportFileSelected, this, _1),
+		LLFilePicker::FFSAVE_COLLADA, LLDir::getScrubbedFileName(mObjectName + ".dae")))->getFile();
+}
+
+void ColladaExportFloater::onExportFileSelected(const std::vector<std::string>& filenames)
+{
+	mFilename = filenames[0];
+
 	if (gSavedSettings.getBOOL("DAEExportTextures"))
 	{
 		saveTextures();

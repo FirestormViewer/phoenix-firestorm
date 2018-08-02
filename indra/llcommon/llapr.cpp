@@ -259,6 +259,7 @@ void LLScopedLock::unlock()
 	if(mLocked)
 	{
 		mMutex->unlock();
+		mLocked = false;
 	}
 }
 

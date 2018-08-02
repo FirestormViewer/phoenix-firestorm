@@ -474,6 +474,7 @@
             </text>
 
             <button
+             enabled="false"
              follows="left|top"
              height="20"
              label="Linden Sale"

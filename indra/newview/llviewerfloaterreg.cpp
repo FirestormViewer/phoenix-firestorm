@@ -34,6 +34,7 @@
 #include "llcompilequeue.h"
 #include "llfasttimerview.h"
 #include "llfloaterabout.h"
+#include "llfloaterauction.h"
 #include "llfloaterautoreplacesettings.h"
 #include "llfloateravatar.h"
 #include "llfloateravatarpicker.h"
@@ -200,7 +201,6 @@
 #include "fspanelclassified.h"
 #include "lggbeamcolormapfloater.h"
 #include "lggbeammapfloater.h"
-#include "llfloaterauction.h"
 #include "llfloaterdisplayname.h"
 #include "llfloaterscriptrecover.h"
 #include "llfloatersearchreplace.h"
@@ -241,6 +241,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("about_land", "floater_about_land.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLand>);
 	LLFloaterReg::add("appearance", "floater_my_appearance.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);
 	LLFloaterReg::add("associate_listing", "floater_associate_listing.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterAssociateListing>);
+	LLFloaterReg::add("auction", "floater_auction.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterAuction>);
 	LLFloaterReg::add("avatar", "floater_avatar.xml",  (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterAvatar>);
 	LLFloaterReg::add("avatar_picker", "floater_avatar_picker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterAvatarPicker>);
 	// <FS:Ansariel> [FS Persisted Avatar Render Settings]
@@ -453,7 +454,6 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("animation_explorer", "floater_animation_explorer.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<AnimationExplorer>);
 	LLFloaterReg::add("animation_overrider", "floater_ao.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterAO>);
 	LLFloaterReg::add("area_search", "floater_fs_area_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSAreaSearch>);
-	LLFloaterReg::add("auction", "floater_auction.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterAuction>);
 	LLFloaterReg::add("export_collada", "floater_export_collada.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<ColladaExportFloater>);
 	LLFloaterReg::add("delete_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterDeleteQueue>);
 	LLFloaterReg::add("floater_profile", "floater_profile_view.xml",&LLFloaterReg::build<FSFloaterProfile>);

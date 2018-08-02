@@ -91,17 +91,15 @@ void LLFloaterScriptEdPrefs::getUIColor(LLUICtrl* ctrl, const LLSD& param)
 void LLFloaterScriptEdPrefs::setPreprocInclude()
 {
 	std::string cur_name(gSavedSettings.getString("_NACL_PreProcHDDIncludeLocation"));
-	
 	std::string proposed_name(cur_name);
-	
-	LLDirPicker& picker = LLDirPicker::instance();
-	if (!picker.getDir(&proposed_name ))
-	{
-		return; //Canceled!
-	}
-	
-	std::string dir_name = picker.getDirName();
-	if (!dir_name.empty() && dir_name != cur_name)
+
+	(new LLDirPickerThread(boost::bind(&LLFloaterScriptEdPrefs::changePreprocIncludePath, this, _1, _2), proposed_name))->getFile();
+}
+
+void LLFloaterScriptEdPrefs::changePreprocIncludePath(const std::vector<std::string>& filenames, std::string proposed_name)
+{
+	std::string dir_name = filenames[0];
+	if (!dir_name.empty() && dir_name != proposed_name)
 	{
 		std::string new_top_folder(gDirUtilp->getBaseFileName(dir_name));
 		gSavedSettings.setString("_NACL_PreProcHDDIncludeLocation", dir_name);
