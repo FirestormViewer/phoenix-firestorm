@@ -4625,9 +4625,6 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 Obecny symulator: [NEWVERSION]
 Poprzedni symulator: [OLDVERSION]
 	</notification>
-	<notification name="CannotSaveSnapshot">
-		Zapis zdjęcia zakończony niepowodzeniem.
-	</notification>
 	<notification name="RegExFail">
 		Błąd w wyrażeniu regularnym:
 [EWHAT]

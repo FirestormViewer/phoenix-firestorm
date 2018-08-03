@@ -70,11 +70,11 @@ public:
 
 	LLSLURL(): mType(INVALID)  { }
 	LLSLURL(const std::string& slurl);
-	LLSLURL(const std::string& grid, const std::string& region, bool hyper = false);
-	LLSLURL(const std::string& region, const LLVector3& position, bool hyper = false);
-	LLSLURL(const std::string& grid, const std::string& region, const LLVector3& position, bool hyper = false);
-	LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& global_position, bool hyper = false);
-	LLSLURL(const std::string& region, const LLVector3d& global_position, bool hyper = false);
+	LLSLURL(const std::string& grid, const std::string& region, bool hypergrid = false);
+	LLSLURL(const std::string& region, const LLVector3& position, bool hypergrid = false);
+	LLSLURL(const std::string& grid, const std::string& region, const LLVector3& position, bool hypergrid = false);
+	LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& global_position, bool hypergrid = false);
+	LLSLURL(const std::string& region, const LLVector3d& global_position, bool hypergrid = false);
 	LLSLURL(const std::string& command, const LLUUID&id, const std::string& verb);
 	LLSLURL(const LLSD& path_array, bool from_app);
 

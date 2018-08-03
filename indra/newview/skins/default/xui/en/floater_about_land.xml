@@ -524,6 +524,7 @@ Loading...
              name="Buy Land..."
              width="130" />
 			<button
+             enabled="false"
              follows="left|top"
              height="23"
              label="Linden Sale"
