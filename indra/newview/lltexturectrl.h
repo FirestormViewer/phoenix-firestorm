@@ -396,6 +396,8 @@ private:
 	set_image_asset_id_callback mSetImageAssetIDCallback;
 	set_on_update_image_stats_callback mOnUpdateImageStatsCallback;
 
+	BOOL mBakeTextureEnabled;
+
 	boost::signals2::connection mLocalBitmapsAddedCallbackConnection; // <FS:Ansariel> Threaded filepickers
 };
 
