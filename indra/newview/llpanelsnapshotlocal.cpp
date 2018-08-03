@@ -63,14 +63,14 @@ private:
 	/*virtual*/ LLSnapshotModel::ESnapshotType getSnapshotType();
 	/*virtual*/ void updateControls(const LLSD& info);
 
-	// <FS:Ansariel> Threaded filepickers
-	void saveLocalCallback(bool success);
-
 	S32 mLocalFormat;
 
 	void onFormatComboCommit(LLUICtrl* ctrl);
 	void onQualitySliderCommit(LLUICtrl* ctrl);
 	void onSaveFlyoutCommit(LLUICtrl* ctrl);
+
+	void onLocalSaved();
+	void onLocalCanceled();
 };
 
 static LLPanelInjector<LLPanelSnapshotLocal> panel_class("llpanelsnapshotlocal");
@@ -185,21 +185,21 @@ void LLPanelSnapshotLocal::onSaveFlyoutCommit(LLUICtrl* ctrl)
 	LLFloaterSnapshot* floater = LLFloaterSnapshot::getInstance();
 
 	floater->notify(LLSD().with("set-working", true));
-	// <FS:Ansariel> Threaded filepickers
-	//BOOL saved = floater->saveLocal();
-	//if (saved)
-	//{
-	//	LLFloaterSnapshot::postSave();
-	//	floater->notify(LLSD().with("set-finished", LLSD().with("ok", true).with("msg", "local")));
-	//}
-	//else
-	//{
-	//	cancel();
-	//	floater->notify(LLSD().with("set-finished", LLSD().with("ok", false).with("msg", "local")));
-	//}
-	floater->saveLocal(boost::bind(&LLPanelSnapshotLocal::saveLocalCallback, this, _1));
-	// </FS:Ansariel>
+	floater->saveLocal((boost::bind(&LLPanelSnapshotLocal::onLocalSaved, this)), (boost::bind(&LLPanelSnapshotLocal::onLocalCanceled, this)));
 }
+
+void LLPanelSnapshotLocal::onLocalSaved()
+{
+	mSnapshotFloater->postSave();
+	LLFloaterSnapshot::getInstance()->notify(LLSD().with("set-finished", LLSD().with("ok", true).with("msg", "local")));
+}
+
+void LLPanelSnapshotLocal::onLocalCanceled()
+{
+	//cancel(); // <FS:Ansariel> Don't go back to selection
+	LLFloaterSnapshot::getInstance()->notify(LLSD().with("set-finished", LLSD().with("ok", false).with("msg", "local")));
+}
+
 
 // <FS:Ansariel> Store settings at logout
 LLPanelSnapshotLocal::~LLPanelSnapshotLocal()
@@ -207,24 +207,6 @@ LLPanelSnapshotLocal::~LLPanelSnapshotLocal()
 	gSavedSettings.setS32("LastSnapshotToDiskResolution", getImageSizeComboBox()->getCurrentIndex());
 	gSavedSettings.setS32("LastSnapshotToDiskWidth", getTypedPreviewWidth());
 	gSavedSettings.setS32("LastSnapshotToDiskHeight", getTypedPreviewHeight());
-}
-// </FS:Ansariel>
-
-// <FS:Ansariel> Threaded filepickers
-void LLPanelSnapshotLocal::saveLocalCallback(bool success)
-{
-	LLFloaterSnapshot* floater = LLFloaterSnapshot::getInstance();
-
-	if (success)
-	{
-		mSnapshotFloater->postSave();
-		floater->notify(LLSD().with("set-finished", LLSD().with("ok", true).with("msg", "local")));
-	}
-	else
-	{
-		LLNotificationsUtil::add("CannotSaveSnapshot");
-		floater->notify(LLSD().with("set-ready", true));
-	}
 }
 
 LLSnapshotModel::ESnapshotType LLPanelSnapshotLocal::getSnapshotType()

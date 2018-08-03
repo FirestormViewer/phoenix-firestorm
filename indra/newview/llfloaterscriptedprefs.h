@@ -47,6 +47,7 @@ private:
 	
 	// <FS:Ansariel> Port old FS script prefs
 	void setPreprocInclude();
+	void changePreprocIncludePath(const std::vector<std::string>& filenames, std::string proposed_name);
 
 	LLScriptEditor* mEditor;
 };

@@ -63,6 +63,11 @@
 		<text name="static2">Droits accordés</text>
 		<scroll_list tool_tip="Consultez l'onglet des droits pour les détails des droits accordés" name="member_allowed_actions"/>
 	</panel>
+	<panel name="members_header">
+		<text_editor name="member_action_description">
+			Ce pouvoir permet « d&apos;expulser des membres de ce groupe ». Seul un propriétaire peut expulser un autre propriétaire.
+		</text_editor>
+	</panel>
 	<panel name="roles_footer">
 		<text name="role_name_label">Nom du rôle</text>
 		<text name="role_title_label">Titre du rôle</text>
@@ -75,6 +80,11 @@
 			<text name="allowed_abilities_label">Droits accordés</text>
 			<scroll_list name="role_allowed_actions" tool_tip="Consulter l'onglet des droits pour les détails de chaque droit accordé"/>
 		</panel>
+	</panel>
+	<panel name="roles_header">
+		<text_editor name="role_action_description">
+			Ce pouvoir permet « d&apos;expulser des membres de ce groupe ». Seul un propriétaire peut expulser un autre propriétaire.
+		</text_editor>
 	</panel>
 	<panel name="actions_footer">
 		<panel name="action_description_panel">

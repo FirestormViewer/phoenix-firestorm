@@ -77,6 +77,11 @@ Selecciona varios nombres manteniendo pulsada la tecla Ctrl y pulsando en cada u
 		</text>
 		<scroll_list name="member_allowed_actions" tool_tip="Para más detalles de cada capacidad, ver la pestaña Capacidades"/>
 	</panel>
+	<panel name="members_header">
+		<text_editor name="member_action_description">
+			Esta habilidad es &apos;Expulsar miembros de este grupo&apos;. Sólo un propietario puede expulsar a otro propietario.
+		</text_editor>
+	</panel>
 	<panel name="roles_footer">
 		<text name="role_name_label" width="90">
 			Nombre del rol:
@@ -99,6 +104,11 @@ Selecciona varios nombres manteniendo pulsada la tecla Ctrl y pulsando en cada u
 			</text>
 			<scroll_list name="role_allowed_actions" tool_tip="Para más detalles de cada capacidad, ver la pestaña Capacidades"/>
 		</panel>
+	</panel>
+	<panel name="roles_header">
+		<text_editor name="role_action_description">
+			Esta habilidad es &apos;Expulsar miembros de este grupo&apos;. Sólo un propietario puede expulsar a otro propietario.
+		</text_editor>
 	</panel>
 	<panel name="actions_footer">
 		<panel name="action_description_panel">

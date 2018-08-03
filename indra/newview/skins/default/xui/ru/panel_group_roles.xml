@@ -75,6 +75,11 @@
 		</text>
 		<scroll_list name="member_allowed_actions" tool_tip="Чтобы увидеть подробную информацию, выберите привилегию"/>
 	</panel>
+	<panel name="members_header">
+		<text_editor name="member_action_description">
+			Это возможность «Исключения участников из группы». Владельца может исключить только другой владелец.
+		</text_editor>
+	</panel>
 	<panel name="roles_footer">
 		<text name="role_name_label">
 			Роль
@@ -97,6 +102,11 @@
 			</text>
 			<scroll_list name="role_allowed_actions" tool_tip="Чтобы увидеть подробную информацию о привилегии, перейдите во вкладку 'Привилегии'"/>
 		</panel>
+	</panel>
+	<panel name="roles_header">
+		<text_editor name="role_action_description">
+			Это возможность «Исключения участников из группы». Владельца может исключить только другой владелец.
+		</text_editor>
 	</panel>
 	<panel name="actions_footer">
 		<panel name="action_description_panel">

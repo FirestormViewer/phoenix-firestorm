@@ -1178,6 +1178,10 @@
                  label="Zoom"
                  name="Zoom"
                  value="Zoom" />
+                <combo_box.item
+                 label="None"
+                 name="None"
+                 value="None" />
             </combo_box>
 			<view_border
 			 left="5"
