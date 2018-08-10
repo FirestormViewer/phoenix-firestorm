@@ -141,6 +141,8 @@
 		<integer_constant name="OSTPOBJ_STOPATTARRGET" desc="Flag for osTeleportObject, object is stopped at destination"/>
 		<integer_constant name="OSTPOBJ_STOPONFAIL" desc="Flag for osTeleportObject, object stops at start point if tp fails (still does nothing)"/>
 		<integer_constant name="OSTPOBJ_SETROT" desc="Flag for osTeleportObject, the rotation is the final object rotation, otherwise is a added rotation"/>
+
+		<integer_constant name="AGENT_LIST_EXCLUDENPC" desc="Bit mask option to llGetAgentList scope to exclude NPCs"/>
 	</keywords>
 	<functions>
 		<function name="osAddAgentToGroup" sleep="0.0" energy="10.0" desc="osAddAgentToGroup(key avatar, string group_name, string role_name);Adds the avatar to a group under a given role" />
