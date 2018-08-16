@@ -3236,14 +3236,17 @@ Wybierz Zablokuj żeby wyciszyć tą osobę.
 	<notification name="VoiceEffectsExpired">
 		Subskrypcja jednego lub więcej Przekształceń Głosu wygasła.
 [[URL] Kliknij tutaj] oby odnowić subskrypcję.
+Jeśli jesteś użytkownikiem premium, to [[PREMIUM_URL] kliknij tutaj] aby otrzymać swój perk Przekształceń Głosu.
 	</notification>
 	<notification name="VoiceEffectsExpiredInUse">
 		Czas aktywności Przekształcenia Głosu wygasł, normalne ustawienia Twojego głosu zostały zastosowane.
 [[URL] Kliknij tutaj] aby odnowić subskrypcję.
+Jeśli jesteś użytkownikiem premium, to [[PREMIUM_URL] kliknij tutaj] aby otrzymać swój perk Przekształceń Głosu.
 	</notification>
 	<notification name="VoiceEffectsWillExpire">
 		Jedno lub więcej z Twoich Przekształceń Głosu wygaśnie za mniej niż [INTERVAL] dni.
 [[URL] Kliknij tutaj] aby odnowić subskrypcję.
+Jeśli jesteś użytkownikiem premium, to [[PREMIUM_URL] kliknij tutaj] aby otrzymać swój perk Przekształceń Głosu.
 	</notification>
 	<notification name="VoiceEffectsNew">
 		Nowe Przekształcenia Głosu są dostępne!
@@ -3294,6 +3297,9 @@ Zostaną zablokowane na kilka sekund dla bezpieczeństwa.
 	</notification>
 	<notification name="SnapshotToComputerFailed">
 		Nie można zapisać zrzutu ekranu do [PATH]: Dysk jest pełny. Potrzeba [NEED_MEMORY]KB, ale wolnego jest [FREE_MEMORY]KB.
+	</notification>
+	<notification name="SnapshotToLocalDirNotExist">
+		Nie można zapisać zrzutu ekranu do [PATH]: Katalog nie istnieje.
 	</notification>
 	<notification name="PresetNotSaved">
 		Błąd podczas zapisywania ustawienia [NAME].

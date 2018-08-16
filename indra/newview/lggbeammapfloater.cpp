@@ -74,8 +74,8 @@ void lggBeamMapFloater::draw()
 	mContextConeOpacity = lerp(mContextConeOpacity, opacity(), LLCriticalDamp::getInterpolant(CONTEXT_FADE_TIME));
 
 	LLFloater::draw();
-	LLRect rec  = mBeamshapePanel->getRect();
-	
+	LLRect rec = mBeamshapePanel->getRect();
+
 	gGL.pushMatrix();
 	gGL.color4fv(LLColor4::white.mV);
 	gl_circle_2d(rec.getCenterX(), rec.getCenterY(), 2.0f, 30, false);
@@ -138,10 +138,8 @@ BOOL lggBeamMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 		a.y = y;
 		a.c = getChild<LLColorSwatchCtrl>("beam_color_swatch")->get();
 		mDots.push_back(a);
-
-		LL_DEBUGS() << "we got clicked at (" << x << ", " << y << " and color was " << a.c << LL_ENDL;
 	}
-	
+
 	return LLFloater::handleMouseDown(x, y, mask);
 }
 
@@ -205,13 +203,13 @@ void lggBeamMapFloater::onSaveCallback(const std::vector<std::string>& filenames
 {
 	std::string filename = filenames[0];
 
-	LLSD main;
-	main["scale"] = 8.0f / (mBeamshapePanel->getRect().getWidth());
-	main["data"] = getMyDataSerialized();
+	LLSD export_data;
+	export_data["scale"] = 8.0f / (mBeamshapePanel->getRect().getWidth());
+	export_data["data"] = getMyDataSerialized();
 
 	llofstream export_file;
 	export_file.open(filename.c_str());
-	LLSDSerialize::toPrettyXML(main, export_file);
+	LLSDSerialize::toPrettyXML(export_data, export_file);
 	export_file.close();
 	gSavedSettings.setString("FSBeamShape", gDirUtilp->getBaseFileName(filename, true));
 
@@ -220,7 +218,6 @@ void lggBeamMapFloater::onSaveCallback(const std::vector<std::string>& filenames
 		mFSPanel->refreshBeamLists();
 	}
 }
-
 
 void lggBeamMapFloater::onClickClear()
 {
@@ -235,21 +232,21 @@ void lggBeamMapFloater::onClickLoad()
 void lggBeamMapFloater::onLoadCallback(const std::vector<std::string>& filenames)
 {
 	mDots.clear();
-	LLSD mydata;
+	LLSD import_data;
 	llifstream importer(filenames[0].c_str());
-	LLSDSerialize::fromXMLDocument(mydata, importer);
-	LLSD myPicture = mydata["data"];
-	F32 scale = (F32)mydata["scale"].asReal();
+	LLSDSerialize::fromXMLDocument(import_data, importer);
+	LLSD picture = import_data["data"];
+	F32 scale = (F32)import_data["scale"].asReal();
 
-	for (LLSD::array_iterator it = myPicture.beginArray(); it != myPicture.endArray(); ++it)
+	for (LLSD::array_iterator it = picture.beginArray(); it != picture.endArray(); ++it)
 	{
 		LLRect rec = mBeamshapePanel->getRect();
 
-		LLSD beamData = *it;
+		LLSD beam_data = *it;
 		lggPoint p;
-		LLVector3 vec = LLVector3(beamData["offset"]);
+		LLVector3 vec = LLVector3(beam_data["offset"]);
 		vec *= scale / (8.0f / rec.getWidth());
-		LLColor4 color = LLColor4(beamData["color"]);
+		LLColor4 color = LLColor4(beam_data["color"]);
 		p.c = color;
 		p.x = (S32)(vec.mV[VY] + rec.getCenterX());
 		p.y = (S32)(vec.mV[VZ] + rec.getCenterY());
