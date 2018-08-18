@@ -1454,7 +1454,7 @@
        width="350" />
      <color_swatch
        visibility_control="MiniMapChatRing"
-       color="MapChatRingColor"
+       color="MapWhisperRingColor"
        can_apply_immediately="true"
        follows="left|top"
        height="24"
@@ -1462,6 +1462,41 @@
        layout="topleft"
        top_pad="8"
        left="40"
+       name="netmap_whisperring_color_swatch"
+       width="44">
+       <color_swatch.init_callback
+       function="Pref.getUIColor"
+       parameter="MapWhisperRingColor" />
+       <color_swatch.commit_callback
+       function="Pref.applyUIColor"
+       parameter="MapWhisperRingColor" />
+       <color_swatch.caption_text
+       height="0" />
+     </color_swatch>
+     <text
+       visibility_control="MiniMapChatRing"
+       type="string"
+       length="1"
+       follows="left|top"
+       height="10"
+       layout="topleft"
+       left_pad="5"
+       mouse_opaque="false"
+       name="netmap_whisperring_color_label"
+       top_delta="5"
+       width="95">
+       Whisper range
+     </text>
+     <color_swatch
+       visibility_control="MiniMapChatRing"
+       color="MapChatRingColor"
+       can_apply_immediately="true"
+       follows="left|top"
+       height="24"
+       label_height="0"
+       layout="topleft"
+       left_delta="100"
+       top_pad="-15"
        name="netmap_chatring_color_swatch"
        width="44">
        <color_swatch.init_callback
