@@ -1446,12 +1446,12 @@
      <check_box
        control_name="MiniMapChatRing"
        name="MiniMapChatRing"
-       label="Display rings on the mini map indicating the say and shout chat ranges:"
+       label="Display rings on the mini map indicating the whisper, say and shout chat ranges:"
        layout="topleft"
        top_pad="16"
        left="25"
        height="20"
-       width="350" />
+       width="475" />
      <color_swatch
        visibility_control="MiniMapChatRing"
        color="MapWhisperRingColor"
