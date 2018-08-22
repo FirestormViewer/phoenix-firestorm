@@ -5,7 +5,7 @@
  can_resize="false"
  can_drag_on_left="false"
  can_close="true"
- height="60"
+ height="75"
  layout="topleft"
  name="Ban duration"
  title="Ban duration"
@@ -48,6 +48,17 @@
      top="10"
      width="75">
         hours.
+    </text>
+    <text
+    type="string"
+    length="200"
+    follows="left|top"
+    height="15"
+    layout="topleft"
+    left="5"
+    name="info_textbox"
+    top_delta="20">
+       0 means forever.
     </text>
     <button
      follows="left|top"

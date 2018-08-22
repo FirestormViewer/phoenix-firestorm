@@ -40,7 +40,19 @@ class LLVOAvatar;
 
 // devices
 
-typedef std::vector<std::string> LLVoiceDeviceList;	
+class LLVoiceDevice
+{
+  public:
+    std::string display_name; // friendly value for the user
+    std::string full_name;  // internal value for selection
+
+    LLVoiceDevice(const std::string& display_name, const std::string& full_name)
+        :display_name(display_name)
+        ,full_name(full_name)
+    {
+    };
+};
+typedef std::vector<LLVoiceDevice> LLVoiceDeviceList;
 
 // <FS:Ansariel> Add callback for user volume change
 typedef boost::signals2::signal<void(const LLUUID&)> user_voice_volume_change_callback_t;
