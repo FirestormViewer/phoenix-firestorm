@@ -3850,7 +3850,7 @@ F32 LLViewerObject::recursiveGetEstTrianglesMax() const
 S32 LLViewerObject::getAnimatedObjectMaxTris() const
 {
     S32 max_tris = 0;
-    if (gSavedSettings.getBOOL("AnimatedObjectsIgnoreLimits")) // AXON REMOVE AFTER SERVER TESTING DONE
+    if (gSavedSettings.getBOOL("AnimatedObjectsIgnoreLimits")) 
     {
         max_tris = S32_MAX;
     }

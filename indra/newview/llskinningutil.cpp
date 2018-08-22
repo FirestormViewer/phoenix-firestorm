@@ -325,7 +325,7 @@ void LLSkinningUtil::updateRiggingInfo(const LLMeshSkinInfo* skin, LLVOAvatar *a
                     LLVector4 wght;
                     S32 idx[4];
                     F32 scale = 0.0f;
-                    // AXON unpacking of weights should be pulled into a common function and optimized if possible.
+                    // FIXME unpacking of weights should be pulled into a common function and optimized if possible.
                     for (U32 k = 0; k < 4; k++)
                     {
                         F32 w = weights[k];
@@ -350,7 +350,7 @@ void LLSkinningUtil::updateRiggingInfo(const LLMeshSkinInfo* skin, LLVOAvatar *a
                             {
                                 rig_info_tab[joint_num].setIsRiggedTo(true);
 
-                                // AXON can precompute these matMuls.
+                                // FIXME could precompute these matMuls.
                                 LLMatrix4a bind_shape;
                                 bind_shape.loadu(skin->mBindShapeMatrix);
                                 LLMatrix4a inv_bind;
@@ -386,6 +386,33 @@ void LLSkinningUtil::updateRiggingInfo(const LLMeshSkinInfo* skin, LLVOAvatar *a
         }
 
     }
+}
+
+// This is used for extracting rotation from a bind shape matrix that
+// already has scales baked in
+LLQuaternion LLSkinningUtil::getUnscaledQuaternion(const LLMatrix4& mat4)
+{
+    LLMatrix3 bind_mat = mat4.getMat3();
+    for (auto i = 0; i < 3; i++)
+    {
+        F32 len = 0.0f;
+        for (auto j = 0; j < 3; j++)
+        {
+            len += bind_mat.mMatrix[i][j] * bind_mat.mMatrix[i][j];
+        }
+        if (len > 0.0f)
+        {
+            len = sqrt(len);
+            for (auto j = 0; j < 3; j++)
+            {
+                bind_mat.mMatrix[i][j] /= len;
+            }
+        }
+    }
+    bind_mat.invert();
+    LLQuaternion bind_rot = bind_mat.quaternion();
+    bind_rot.normalize();
+    return bind_rot;
 }
 
 namespace FSSkinningUtil

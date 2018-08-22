@@ -1380,7 +1380,7 @@ void LLVOAvatar::calculateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
 
     S32 box_detail = gSavedSettings.getS32("AvatarBoundingBoxComplexity");
 
-    // AXON the update_min_max function used below assumes there is a
+    // FIXME the update_min_max function used below assumes there is a
     // known starting point, but in general there isn't. Ideally the
     // box update logic should be modified to handle the no-point-yet
     // case. For most models, starting with the pelvis is safe though.
@@ -1444,7 +1444,7 @@ void LLVOAvatar::calculateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
                      attachment_iter != attachment->mAttachedObjects.end();
                      ++attachment_iter)
                 {
-                    // AXON Don't we need to look at children of attached_object as well?
+                    // Don't we need to look at children of attached_object as well?
                     const LLViewerObject* attached_object = (*attachment_iter);
                     if (attached_object && !attached_object->isHUDAttachment())
                     {
@@ -1501,8 +1501,8 @@ void LLVOAvatar::calculateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
     // Stretch bounding box by rigged mesh joint boxes
     if (box_detail>=3)
     {
-        // AXON try to cache unless something has changed about attached rigged meshes.
-        // Needs more logic based on volume states.
+        // FIXME could try to cache unless something has changed about attached rigged meshes, 
+        // but needs more logic based on volume states.
 
         //if (mRiggingInfoTab.needsUpdate())
         {
@@ -6680,13 +6680,6 @@ void LLVOAvatar::rebuildAttachmentOverrides()
 // -----------------------------------------------------------------------------
 void LLVOAvatar::updateAttachmentOverrides()
 {
-    const bool paranoid_checking = false; 	// AXON remove when testing done
-
-    if (paranoid_checking)
-    {
-        //dumpArchetypeXML(getFullname() + "_paranoid_before");
-    }
-
     LLScopedContextString str("updateAttachmentOverrides " + getFullname());
 
     LL_DEBUGS("AnimatedObjects") << "updating" << LL_ENDL;
@@ -6741,7 +6734,7 @@ void LLVOAvatar::updateAttachmentOverrides()
     }
 
 
-    if (paranoid_checking)
+#ifdef ATTACHMENT_OVERRIDE_VALIDATION
     {
         std::vector<LLVector3OverrideMap> pos_overrides_by_joint;
         std::vector<LLVector3OverrideMap> scale_overrides_by_joint;
@@ -6792,9 +6785,10 @@ void LLVOAvatar::updateAttachmentOverrides()
         }
         if (mismatched)
         {
-            LL_WARNS() << "MISMATCHED ATTACHMENT OVERRIDES, compare paranoid log files" << LL_ENDL;
+            LL_WARNS() << "MISMATCHED ATTACHMENT OVERRIDES" << LL_ENDL;
         }
     }
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -7777,7 +7771,6 @@ U32 LLVOAvatar::getNumAnimatedObjectAttachments() const
 S32 LLVOAvatar::getMaxAnimatedObjectAttachments() const
 {
     S32 max_attach = 0;
-    // AXON REMOVE AFTER SERVER TESTING DONE
     if (gSavedSettings.getBOOL("AnimatedObjectsIgnoreLimits"))
     {
         max_attach = MAX_AGENT_ATTACHMENTS;
