@@ -48,12 +48,6 @@
 			<text name="avatar_shadows_label">
 				Cienie awatarów:
 			</text>
-			<combo_box name="AvatarShadowDetail">
-				<combo_box.item label="Brak" name="0"/>
-				<combo_box.item label="Uproszczone" name="1"/>
-				<combo_box.item label="Zoptymalizowane" name="2"/>
-				<combo_box.item label="Złożone" name="3"/>
-			</combo_box>
 			<text name="reflection_label">
 				Odbicia w wodzie:
 			</text>
