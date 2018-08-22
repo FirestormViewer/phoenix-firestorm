@@ -31,8 +31,8 @@ public:
 	virtual ~lggBeamColorMapFloater();
 
 	BOOL postBuild();
-	BOOL handleMouseDown(S32 x,S32 y,MASK mask);
-	BOOL handleRightMouseDown(S32 x,S32 y,MASK mask);
+	BOOL handleMouseDown(S32 x, S32 y, MASK mask);
+	BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
 
 	void setData(void* data);
 
@@ -48,12 +48,13 @@ protected:
 	void onSaveCallback(const std::vector<std::string>& filenames);
 	void onLoadCallback(const std::vector<std::string>& filenames);
 
+	F32  getHueFromLocation(S32 x, S32 y);
 	void fixOrder();
-	LLSD getMyDataSerialized();
+	LLSD getDataSerialized();
 
 	F32					mContextConeOpacity;
 	FSPanelPrefs*		mFSPanel;
-	lggBeamsColors		myData;
+	lggBeamsColors		mData;
 	LLSliderCtrl*		mColorSlider;
 	LLColorSwatchCtrl*	mBeamColorPreview;
 };
