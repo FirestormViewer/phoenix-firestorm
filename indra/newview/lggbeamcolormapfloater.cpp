@@ -54,7 +54,7 @@ void lggBeamColorMapFloater::draw()
 	static const std::string end_hue_label = getString("end_hue");
 
 	//set the color of the preview thing
-	LLColor4 bColor = LLColor4(lggBeamMaps::beamColorFromData(myData));
+	LLColor4 bColor = LLColor4(lggBeamMaps::beamColorFromData(mData));
 	mBeamColorPreview->set(bColor, TRUE);
 	
 	//Try draw rectangle attach beam
@@ -69,29 +69,25 @@ void lggBeamColorMapFloater::draw()
 		LLGLEnable(GL_CULL_FACE);
 		gGL.begin(LLRender::TRIANGLE_STRIP);
 		{
-			F32 r = bColor.mV[0];
-			F32 g = bColor.mV[1];
-			F32 b = bColor.mV[2];
-
-			gGL.color4f(r, g, b, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
+			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
 			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mTop);
-			gGL.color4f(r, g, b, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
+			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
 			gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
-			gGL.color4f(r, g, b, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
+			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
 			gGL.vertex2i(swatch_rect.mRight, swatch_rect.mTop);
-			gGL.color4f(r, g, b, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
+			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
 			gGL.vertex2i(local_rect.mRight, local_rect.mTop);
-			gGL.color4f(r, g, b, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
+			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
 			gGL.vertex2i(swatch_rect.mRight, swatch_rect.mBottom);
-			gGL.color4f(r, g, b, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
+			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
 			gGL.vertex2i(local_rect.mRight, local_rect.mBottom);
-			gGL.color4f(r, g, b, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
+			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
 			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mBottom);
-			gGL.color4f(r, g, b, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
+			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
 			gGL.vertex2i(local_rect.mLeft, local_rect.mBottom);
-			gGL.color4f(r, g, b, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
+			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
 			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mTop);
-			gGL.color4f(r, g, b, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
+			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
 			gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
 		}
 		gGL.end();
@@ -118,8 +114,8 @@ void lggBeamColorMapFloater::draw()
 			convertHueToX(i) + CORRECTION_X, 277 + CORRECTION_Y, output);
 	}
 
-	S32 X1 = convertHueToX(myData.mStartHue) + CORRECTION_X;
-	S32 X2 = convertHueToX(myData.mEndHue) + CORRECTION_X;
+	S32 X1 = convertHueToX(mData.mStartHue) + CORRECTION_X;
+	S32 X2 = convertHueToX(mData.mEndHue) + CORRECTION_X;
 	LLFontGL* font = LLFontGL::getFontSansSerifSmall();
 
 	gGL.color4fv(LLColor4::white.mV);
@@ -200,65 +196,63 @@ BOOL lggBeamColorMapFloater::postBuild()
 	return TRUE;
 }
 
-BOOL lggBeamColorMapFloater::handleMouseDown(S32 x,S32 y,MASK mask)
+BOOL lggBeamColorMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 {
-	if (y > (201 + CORRECTION_Y) &&  y < (277 + CORRECTION_Y))
+	F32 hue = getHueFromLocation(x, y);
+	if (hue != -1.f)
 	{
-		if (x < (6 + CORRECTION_X))
-		{
-			myData.mStartHue=0.0f;
-		}
-		else if (x > (402 + CORRECTION_X))
-		{
-			myData.mEndHue = 720.0f;
-		}
-		else
-		{
-			myData.mStartHue  = convertXToHue(x + CORRECTION_X);
-		}
-
+		mData.mStartHue = hue;
 		fixOrder();
+		
+		return TRUE;
 	}
-
-	LL_DEBUGS() << "we got clicked at (" << x << ", " << y << " yay! " << LL_ENDL;
 
 	return LLFloater::handleMouseDown(x, y, mask);
 }
 
 BOOL lggBeamColorMapFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
-	if (y > (201 + CORRECTION_Y) &&  y < (277 + CORRECTION_Y))
+	F32 hue = getHueFromLocation(x, y);
+	if (hue != -1.f)
 	{
-		if (x < (6 + CORRECTION_X))
-		{
-			myData.mStartHue = 0.0f;
-		}
-		else if (x > (402 + CORRECTION_X))
-		{
-			myData.mEndHue = 720.0f;
-		}
-		else
-		{
-			myData.mEndHue  = convertXToHue(x + CORRECTION_X);
-		}
-
+		mData.mEndHue = hue;
 		fixOrder();
+		
+		return TRUE;
 	}
-	LL_DEBUGS() << "we got right clicked at (" << x << ", " << y << " yay! " << LL_ENDL;
 
 	return LLFloater::handleRightMouseDown(x, y, mask);
 }
 
+F32 lggBeamColorMapFloater::getHueFromLocation(S32 x, S32 y)
+{
+	if (y > (201 + CORRECTION_Y) &&  y < (277 + CORRECTION_Y))
+	{
+		if (x < (6 + CORRECTION_X))
+		{
+			return 0.0f;
+		}
+		else if (x > (402 + CORRECTION_X))
+		{
+			return 720.0f;
+		}
+		else
+		{
+			return convertXToHue(x + CORRECTION_X);
+		}
+	}
+
+	return -1.f;
+}
+
 void lggBeamColorMapFloater::fixOrder()
 {
-	myData.mRotateSpeed = mColorSlider->getValueF32();
-	myData.mRotateSpeed /= 100.0f;
+	mData.mRotateSpeed = mColorSlider->getValueF32();
+	mData.mRotateSpeed /= 100.0f;
 
-	if(myData.mEndHue < myData.mStartHue)
+	if (mData.mEndHue < mData.mStartHue)
 	{
-		F32 temp = myData.mStartHue;
-		myData.mStartHue = myData.mEndHue;
-		myData.mEndHue = temp;
+		llswap(mData.mStartHue, mData.mEndHue);
 	}
 }
 
@@ -271,9 +265,9 @@ void lggBeamColorMapFloater::setData(void* data)
 	}
 }
 
-LLSD lggBeamColorMapFloater::getMyDataSerialized()
+LLSD lggBeamColorMapFloater::getDataSerialized()
 {
-	return myData.toLLSD();
+	return mData.toLLSD();
 }
 
 void lggBeamColorMapFloater::onClickSave()
@@ -286,11 +280,11 @@ void lggBeamColorMapFloater::onSaveCallback(const std::vector<std::string>& file
 {
 	std::string filename = filenames[0];
 
-	LLSD main = getMyDataSerialized();
+	LLSD export_data = getDataSerialized();
 
 	llofstream export_file;
 	export_file.open(filename.c_str());
-	LLSDSerialize::toPrettyXML(main, export_file);
+	LLSDSerialize::toPrettyXML(export_data, export_file);
 	export_file.close();
 
 	gSavedSettings.setString("FSBeamColorFile", gDirUtilp->getBaseFileName(filename, true));
@@ -314,10 +308,10 @@ void lggBeamColorMapFloater::onClickLoad()
 
 void lggBeamColorMapFloater::onLoadCallback(const std::vector<std::string>& filenames)
 {
-	LLSD minedata;
+	LLSD import_data;
 	llifstream importer(filenames[0].c_str());
-	LLSDSerialize::fromXMLDocument(minedata, importer);
+	LLSDSerialize::fromXMLDocument(import_data, importer);
 
-	myData = lggBeamsColors::fromLLSD(minedata);
-	childSetValue("BeamColor_Speed", myData.mRotateSpeed * 100.f);
+	mData = lggBeamsColors::fromLLSD(import_data);
+	childSetValue("BeamColor_Speed", mData.mRotateSpeed * 100.f);
 }

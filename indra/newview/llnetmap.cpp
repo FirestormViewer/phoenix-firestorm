@@ -308,6 +308,7 @@ void LLNetMap::draw()
 	//static LLUIColor map_track_disabled_color = LLUIColorTable::instance().getColor("MapTrackDisabledColor", LLColor4::white);
 	static LLUIColor map_frustum_color = LLUIColorTable::instance().getColor("MapFrustumColor", LLColor4::white);
 	static LLUIColor map_frustum_rotating_color = LLUIColorTable::instance().getColor("MapFrustumRotatingColor", LLColor4::white);
+	static LLUIColor map_whisper_ring_color = LLUIColorTable::instance().getColor("MapWhisperRingColor", LLColor4::blue); // <FS:LO> FIRE-17460 Add Whisper Chat Ring to Minimap
 	static LLUIColor map_chat_ring_color = LLUIColorTable::instance().getColor("MapChatRingColor", LLColor4::yellow);
 	static LLUIColor map_shout_ring_color = LLUIColorTable::instance().getColor("MapShoutRingColor", LLColor4::red);
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-08-17 (Catznip-3.3)
@@ -855,13 +856,19 @@ void LLNetMap::draw()
 
 			// Draw chat range ring(s)
 			static LLUICachedControl<bool> chat_ring("MiniMapChatRing", true);
+			// <FS:LO> FIRE-22954 Make each chat range ring in the minimap optional
+			static LLUICachedControl<bool> fs_whisper_ring("FSMiniMapWhisperRing", true);
+			static LLUICachedControl<bool> fs_chat_ring("FSMiniMapChatRing", true);
+			static LLUICachedControl<bool> fs_shout_ring("FSMiniMapShoutRing", true);
+			// </FS:LO>
 			if(chat_ring)
 			{
 // <FS:CR> Opensim
 				//drawRing(20.0, pos_map, map_chat_ring_color);
 				//drawRing(100.0, pos_map, map_shout_ring_color);
-				drawRing(LFSimFeatureHandler::getInstance()->sayRange(), pos_map, map_chat_ring_color);
-				drawRing(LFSimFeatureHandler::getInstance()->shoutRange(), pos_map, map_shout_ring_color);
+				if (fs_whisper_ring) drawRing(LFSimFeatureHandler::getInstance()->whisperRange(), pos_map, map_whisper_ring_color);
+				if (fs_chat_ring) drawRing(LFSimFeatureHandler::getInstance()->sayRange(), pos_map, map_chat_ring_color);
+				if (fs_shout_ring) drawRing(LFSimFeatureHandler::getInstance()->shoutRange(), pos_map, map_shout_ring_color);
 // </FS:CR> Opensim
 			}
 		}

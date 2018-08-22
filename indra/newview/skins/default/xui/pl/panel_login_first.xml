@@ -11,6 +11,9 @@
 					<text name="forgot_password_text">
 						Zapomniałem/am hasła
 					</text>
+					<text name="sign_up_text">
+						Dołącz
+					</text>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
