@@ -128,17 +128,18 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                                         Type='String',
                                         Value=''))
                 settings_install = {}
-                if 'sourceid' in self.args and self.args['sourceid']:
+                sourceid = self.args.get('sourceid')
+                if sourceid:
                     settings_install['sourceid'] = settings_template['sourceid'].copy()
-                    settings_install['sourceid']['Value'] = self.args['sourceid']
-                    print "Set sourceid in settings_install.xml to '%s'" % self.args['sourceid']
+                    settings_install['sourceid']['Value'] = sourceid
+                    print "Set sourceid in settings_install.xml to '%s'" % sourceid
 
-                if 'channel_suffix' in self.args and self.args['channel_suffix']:
+                if self.args.get('channel_suffix'):
                     settings_install['CmdLineChannel'] = settings_template['CmdLineChannel'].copy()
                     settings_install['CmdLineChannel']['Value'] = self.channel_with_pkg_suffix()
                     print "Set CmdLineChannel in settings_install.xml to '%s'" % self.channel_with_pkg_suffix()
 
-                if 'grid' in self.args and self.args['grid']:
+                if self.args.get('grid'):
                     settings_install['CmdLineGridChoice'] = settings_template['CmdLineGridChoice'].copy()
                     settings_install['CmdLineGridChoice']['Value'] = self.grid()
                     print "Set CmdLineGridChoice in settings_install.xml to '%s'" % self.grid()
@@ -250,8 +251,9 @@ class ViewerManifest(LLManifest,FSViewerManifest):
 
     def channel_with_pkg_suffix(self):
         fullchannel=self.channel()
-        if 'channel_suffix' in self.args and self.args['channel_suffix']:
-            fullchannel+=' '+self.args['channel_suffix']
+        channel_suffix = self.args.get('channel_suffix')
+        if channel_suffix:
+            fullchannel+=' '+channel_suffix
         return fullchannel
 
     def channel_variant(self):
@@ -282,12 +284,13 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         if self.channel_type() == 'release':
             suffix=suffix.replace('Release', '').strip()
         # for the base release viewer, suffix will now be null - for any other, append what remains
-        if len(suffix) > 0:
-            #suffix = "_"+ ("_".join(suffix.split()))
-            suffix = "_".join(suffix.split())
+        if suffix:
+            #suffix = "_".join([''] + suffix.split())
+            suffix = "_".join(suffix.split()) # <FS> Don't prepend underscore before suffix
         # the additional_packages mechanism adds more to the installer name (but not to the app name itself)
-        if 'channel_suffix' in self.args and self.args['channel_suffix']:
-            suffix+='_'+("_".join(self.args['channel_suffix'].split()))
+        # ''.split() produces empty list, so suffix only changes if
+        # channel_suffix is non-empty
+        suffix = "_".join([suffix] + self.args.get('channel_suffix', '').split())
         return suffix
 
     def installer_base_name(self):
@@ -694,6 +697,7 @@ class WindowsManifest(ViewerManifest):
 
         self.path(src="licenses-win32.txt", dst="licenses.txt")
         self.path("featuretable.txt")
+
         with self.prefix(src=pkgdir):
             self.path("ca-bundle.crt")
         self.path("VivoxAUP.txt")
@@ -1492,7 +1496,7 @@ class DarwinManifest(ViewerManifest):
             with self.prefix(dst="Resources"):
                 super(DarwinManifest, self).construct()
 
-                with self.prefix("cursors_mac"):
+                with self.prefix(src_dst="cursors_mac"):
                     self.path("*.tif")
 
                 self.path("licenses-mac.txt", dst="licenses.txt")
