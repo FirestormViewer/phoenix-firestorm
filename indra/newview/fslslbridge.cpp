@@ -93,14 +93,56 @@ FSLSLBridge::FSLSLBridge():
 					mpBridge(NULL),
 					mIsFirstCallDone(false),
 					mAllowDetach(false),
-					mFinishCreation(false)
+					mFinishCreation(false),
+					mTimerResult(FSLSLBridge::NO_TIMER)
 {
 	LL_INFOS("FSLSLBridge") << "Constructing FSLSLBridge" << LL_ENDL;
 	mCurrentFullName = llformat("%s%d.%d", FS_BRIDGE_NAME.c_str(), FS_BRIDGE_MAJOR_VERSION, FS_BRIDGE_MINOR_VERSION);
+
+	gIdleCallbacks.addFunction(onIdle, this);
 }
 
 FSLSLBridge::~FSLSLBridge()
 {
+	gIdleCallbacks.deleteFunction(onIdle, this);
+}
+
+void FSLSLBridge::onIdle(void* userdata)
+{
+	FSLSLBridge* instance = static_cast<FSLSLBridge*>(userdata);
+	if (instance)
+	{
+		switch (instance->mTimerResult)
+		{
+			case START_CREATION_FINISHED:
+				instance->finishCleanUpPreCreation();
+				instance->setTimerResult(NO_TIMER);
+				break;
+			case CLEANUP_FINISHED:
+				instance->finishBridge();
+				instance->setTimerResult(NO_TIMER);
+				break;
+			case REATTACH_FINISHED:
+				{
+					LLViewerInventoryItem* inv_object = gInventory.getItem(instance->mReattachBridgeUUID);
+					if (inv_object && instance->getBridge() && instance->getBridge()->getUUID() == inv_object->getUUID())
+					{
+						LLAttachmentsMgr::instance().addAttachmentRequest(inv_object->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
+					}
+					instance->mReattachBridgeUUID.setNull();
+					instance->setTimerResult(NO_TIMER);
+				}
+				break;
+			case NO_TIMER:
+			default:
+				break;
+		}
+	}
+}
+
+void FSLSLBridge::setTimerResult(TimerResult result)
+{
+	mTimerResult = result;
 }
 
 bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID)
@@ -979,7 +1021,8 @@ void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttac
 	if (mFinishCreation)
 	{
 		LL_INFOS("FSLSLBridge") << "Bridge detached to save settings. Starting re-attach timer..." << LL_ENDL;
-		new FSLSLBridgeReAttachTimer(object->getAttachmentItemID());
+		mReattachBridgeUUID = object->getAttachmentItemID();
+		new FSLSLBridgeReAttachTimer();
 		return;
 	}
 
@@ -1325,15 +1368,7 @@ void FSLSLBridge::checkBridgeScriptName()
 		return;
 	}
 	obj->saveScript(gInventory.getItem(mScriptItemID), TRUE, false);
-	FSLSLBridgeCleanupTimer* objTimer = new FSLSLBridgeCleanupTimer(1.0f);
-	objTimer->startTimer();
-}
-
-BOOL FSLSLBridgeCleanupTimer::tick()
-{
-	stopTimer();
-	FSLSLBridge::instance().finishBridge();
-	return TRUE;
+	new FSLSLBridgeCleanupTimer();
 }
 
 void FSLSLBridge::cleanUpBridge()
@@ -1590,16 +1625,21 @@ void FSLSLBridge::detachOtherBridges()
 	}
 }
 
-BOOL FSLSLBridgeReAttachTimer::tick()
+BOOL FSLSLBridgeCleanupTimer::tick()
 {
-	LL_INFOS("FSLSLBridge") << "Re-attaching bridge after creation..." << LL_ENDL;
-	mEventTimer.stop();
-	LLViewerInventoryItem* inv_object = gInventory.getItem(mBridgeUUID);
-	if (inv_object && FSLSLBridge::instance().mpBridge && FSLSLBridge::instance().mpBridge->getUUID() == inv_object->getUUID())
-	{
-		LLAttachmentsMgr::instance().addAttachmentRequest(inv_object->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
-	}
-
+	FSLSLBridge::instance().setTimerResult(FSLSLBridge::CLEANUP_FINISHED);
 	return TRUE;
 }
 
+BOOL FSLSLBridgeReAttachTimer::tick()
+{
+	LL_INFOS("FSLSLBridge") << "Re-attaching bridge after creation..." << LL_ENDL;
+	FSLSLBridge::instance().setTimerResult(FSLSLBridge::REATTACH_FINISHED);
+	return TRUE;
+}
+
+BOOL FSLSLBridgeStartCreationTimer::tick()
+{
+	FSLSLBridge::instance().setTimerResult(FSLSLBridge::START_CREATION_FINISHED);
+	return TRUE;
+}
