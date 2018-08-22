@@ -24714,6 +24714,39 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>https://duckduckgo.com</string>
     </map>
+    <key>FSMiniMapWhisperRing</key>
+    <map>
+      <key>Comment</key>
+      <string>Show whisper range ring on minimap</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSMiniMapChatRing</key>
+    <map>
+      <key>Comment</key>
+      <string>Show chat range ring on minimap</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSMiniMapShoutRing</key>
+    <map>
+      <key>Comment</key>
+      <string>Show shout range ring on minimap</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
   </map>
 </llsd>
 

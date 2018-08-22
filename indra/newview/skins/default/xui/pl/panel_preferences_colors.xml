@@ -162,7 +162,10 @@
 			<text name="MapAvatarMutedColor_label">
 				Wyciszeni
 			</text>
-			<check_box name="MiniMapChatRing" label="Pierścienie na minimapie symbolizujące zasięg czatu i krzyku"/>
+			<check_box name="MiniMapChatRing" label="Pierścienie na minimapie symbolizujące zasięg szeptu, czatu i krzyku"/>
+			<text name="netmap_whisperring_color_label">
+				Zasięg szeptu
+			</text>
 			<text name="netmap_chatring_color_label">
 				Zasięg czatu
 			</text>
