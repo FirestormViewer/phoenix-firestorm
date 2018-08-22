@@ -147,9 +147,6 @@ public:
 	void updateRiggedVertexBuffers(LLVOAvatar* avatar);
 
 	void renderRigged(LLVOAvatar* avatar, U32 type, bool glow = false);
-	// <FS:Ansariel> Chalice Yao's simple avatar shadows via Marine Kelley
-	void renderRiggedShadows(LLVOAvatar* avatar);
-	// </FS:Ansariel>
 	void renderRiggedSimple(LLVOAvatar* avatar);
 	void renderRiggedAlpha(LLVOAvatar* avatar);
 	void renderRiggedFullbrightAlpha(LLVOAvatar* avatar);

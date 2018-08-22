@@ -379,45 +379,6 @@
          word_wrap="true"
          layout="topleft"
          left_delta="-5"
-         name="avatar_shadows_label">
-          Avatar Shadows:
-        </text>
-        <combo_box
-         control_name="FSSimpleAvatarShadows"
-         height="23"
-         layout="topleft"
-         left_delta="5"
-         top_pad="3"
-         name="AvatarShadowDetail"
-         width="150">
-          <combo_box.item
-           label="None"
-           name="0"
-           value="0"/>
-          <combo_box.item
-           label="Simplified"
-           name="1"
-           value="1"/>
-          <combo_box.item
-           label="Optimized"
-           name="2"
-           value="2"/>
-          <combo_box.item
-           label="Complex"
-           name="3"
-           value="3"/>
-        </combo_box>
-
-        <text
-         type="string"
-         length="1"
-         top_pad="4"
-         follows="top|left"
-         height="12"
-         width="110"
-         word_wrap="true"
-         layout="topleft"
-         left_delta="-5"
          name="reflection_label">
           Water Reflections:
         </text>

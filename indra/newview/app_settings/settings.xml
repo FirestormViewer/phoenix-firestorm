@@ -24045,17 +24045,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>13</integer>
     </map>
-    <key>FSSimpleAvatarShadows</key>
-    <map>
-      <key>Comment</key>
-      <string>How to render deferred avatar shadows. 0=none, 1=simplified (no rigged mesh shadows), 2=optimized (slower but still faster than legacy when several avatars are around), 3=legacy (like the SL viewer, slow with complex rigged attachments).</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>U32</string>
-      <key>Value</key>
-      <integer>3</integer>
-    </map>
     <key>FSConfirmPayments</key>
     <map>
       <key>Comment</key>
