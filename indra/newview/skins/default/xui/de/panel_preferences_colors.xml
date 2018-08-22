@@ -166,11 +166,14 @@
 				Blockiert
 			</text>
 			<check_box name="MiniMapChatRing" label="Ringe auf der Minikarte für Darstellung der Sprech- und Rufreichweite anzeigen"/>
+			<text name="netmap_whisperring_color_label">
+				Flüstern
+			</text>
 			<text name="netmap_chatring_color_label">
-				Chat-Reichweite
+				Sprechen
 			</text>
 			<text name="netmap_shoutring_color_label">
-				Ruf-Reichweite
+				Rufen
 			</text>
 		</panel>
 		<panel label="Sonstige" name="tab-misc">

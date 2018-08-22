@@ -13,6 +13,9 @@
 			<text name="forgot_password_text">
 				Zapomniałem/am hasła
 			</text>
+			<text name="sign_up_text">
+				Dołącz
+			</text>
 			<combo_box label="Wybierz siatkę" name="server_combo" />
 		</layout_panel>
 	</layout_stack>

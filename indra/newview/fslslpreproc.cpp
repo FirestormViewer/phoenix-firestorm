@@ -1347,6 +1347,8 @@ void FSLSLPreprocessor::start_process()
 			ctx.add_macro_definition(def, false);
 			def = llformat("__SHORTFILE__=\"%s\"", name.c_str());
 			ctx.add_macro_definition(def, false);
+			def = llformat("__UNIXTIME__=%i", (S32)time_corrected());
+			ctx.add_macro_definition(def, false);
 
 			ctx.add_macro_definition("list(...)=((list)(__VA_ARGS__))", false);
 			ctx.add_macro_definition("float(...)=((float)(__VA_ARGS__))", false);
