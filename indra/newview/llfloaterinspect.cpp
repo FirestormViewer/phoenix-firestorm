@@ -524,6 +524,26 @@ void LLFloaterInspect::refresh()
 		row["columns"][10]["type"] = "text";
 		row["columns"][10]["value"] = format_res_string;
 
+		row["columns"][11]["column"] = "facecount_sort";
+		row["columns"][11]["type"] = "text";
+		row["columns"][11]["value"] = LLSD::Integer(obj->getObject()->getNumFaces());
+
+		row["columns"][12]["column"] = "vertexcount_sort";
+		row["columns"][12]["type"] = "text";
+		row["columns"][12]["value"] = LLSD::Integer(obj->getObject()->getNumVertices());
+
+		row["columns"][13]["column"] = "trianglecount_sort";
+		row["columns"][13]["type"] = "text";
+		row["columns"][13]["value"] = LLSD::Integer(obj->getObject()->getNumIndices() / 3);
+
+		row["columns"][14]["column"] = "tramcount_sort";
+		row["columns"][14]["type"] = "text";
+		row["columns"][14]["value"] = LLSD::Integer(texture_memory / 1024);
+
+		row["columns"][15]["column"] = "vramcount_sort";
+		row["columns"][15]["type"] = "text";
+		row["columns"][15]["value"] = LLSD::Integer(vram_memory / 1024);
+
 		primcount = sel_mgr.getSelection()->getObjectCount();
 		objcount = sel_mgr.getSelection()->getRootObjectCount();
 		fcount += obj->getObject()->getNumFaces();
