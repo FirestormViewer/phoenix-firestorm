@@ -81,7 +81,7 @@ private:
 
 void uploadDone(LLUUID itemId, LLUUID taskId, LLUUID newAssetId, LLSD response)
 {
-	FSLSLBridge::getInstance()->checkBridgeScriptName( );
+	FSLSLBridge::getInstance()->setTimerResult(FSLSLBridge::SCRIPT_UPLOAD_FINISHED);
 }
 
 //
@@ -132,6 +132,10 @@ void FSLSLBridge::onIdle(void* userdata)
 					instance->mReattachBridgeUUID.setNull();
 					instance->setTimerResult(NO_TIMER);
 				}
+				break;
+			case SCRIPT_UPLOAD_FINISHED:
+				instance->checkBridgeScriptName();
+				instance->setTimerResult(NO_TIMER);
 				break;
 			case NO_TIMER:
 			default:
