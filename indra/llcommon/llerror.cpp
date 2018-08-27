@@ -101,7 +101,7 @@ namespace {
         }
         
 		virtual void recordMessage(LLError::ELevel level,
-									const std::string& message)
+									const std::string& message) override
 		{
 			int syslogPriority = LOG_CRIT;
 			switch (level) {
@@ -157,7 +157,7 @@ namespace {
 		bool okay() { return mFile.good(); }
 		
 		virtual void recordMessage(LLError::ELevel level,
-									const std::string& message)
+									const std::string& message) override
 		{
             if (LLError::getAlwaysFlush())
             {
@@ -188,7 +188,7 @@ namespace {
         }
         
 		virtual void recordMessage(LLError::ELevel level,
-					   const std::string& message)
+					   const std::string& message) override
 		{
 			if (ANSI_PROBE == mUseANSI)
 				mUseANSI = (checkANSI() ? ANSI_YES : ANSI_NO);
@@ -256,7 +256,7 @@ namespace {
         }
         
 		virtual void recordMessage(LLError::ELevel level,
-								   const std::string& message)
+								   const std::string& message) override
 		{
 			mBuffer->addLine(message);
 		}
@@ -278,7 +278,7 @@ namespace {
         }
         
 		virtual void recordMessage(LLError::ELevel level,
-								   const std::string& message)
+								   const std::string& message) override
 		{
 			debugger_print(message);
 		}
