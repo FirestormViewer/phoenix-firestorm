@@ -4055,6 +4055,18 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>ReleaseFS</key>
             <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>bash</string>
+                <key>options</key>
+                <array>
+                  <string>../scripts/configure_firestorm.sh</string>
+                  <string>--build</string>
+                  <string>--version</string>
+                  <string>--opensim</string>
+                </array>
+              </map>
               <key>configure</key>
               <map>
                 <key>command</key>
@@ -4072,6 +4084,19 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>ReleaseFS_AVX</key>
             <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>bash</string>
+                <key>options</key>
+                <array>
+                  <string>../scripts/configure_firestorm.sh</string>
+                  <string>--build</string>
+                  <string>--version</string>
+                  <string>--opensim</string>
+                  <string>--avx</string>
+                </array>
+              </map>
               <key>configure</key>
               <map>
                 <key>command</key>
@@ -4090,6 +4115,19 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>ReleaseFS_AVX2</key>
             <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>bash</string>
+                <key>options</key>
+                <array>
+                  <string>../scripts/configure_firestorm.sh</string>
+                  <string>--build</string>
+                  <string>--version</string>
+                  <string>--opensim</string>
+                  <string>--avx2</string>
+                </array>
+              </map>
               <key>configure</key>
               <map>
                 <key>command</key>
@@ -4108,6 +4146,18 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>ReleaseFS_open</key>
             <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>bash</string>
+                <key>options</key>
+                <array>
+                  <string>../scripts/configure_firestorm.sh</string>
+                  <string>--build</string>
+                  <string>--version</string>
+                  <string>--opensim</string>
+                </array>
+              </map>
               <key>configure</key>
               <map>
                 <key>command</key>
@@ -4125,6 +4175,19 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>RelWithDebInfoFS</key>
             <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>bash</string>
+                <key>options</key>
+                <array>
+                  <string>../scripts/configure_firestorm.sh</string>
+                  <string>--btype RelWithDebInfo</string>
+                  <string>--build</string>
+                  <string>--version</string>
+                  <string>--opensim</string>
+                </array>
+              </map>
               <key>configure</key>
               <map>
                 <key>command</key>
@@ -4143,6 +4206,19 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>RelWithDebInfoFS_open</key>
             <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>bash</string>
+                <key>options</key>
+                <array>
+                  <string>../scripts/configure_firestorm.sh</string>
+                  <string>--btype RelWithDebInfo</string>
+                  <string>--build</string>
+                  <string>--version</string>
+                  <string>--opensim</string>
+                </array>
+              </map>
               <key>configure</key>
               <map>
                 <key>command</key>
@@ -4295,14 +4371,10 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <map>
               <key>build</key>
               <map>
-                <key>command</key>
-                <string>../scripts/configure_firestorm.sh</string>
                 <key>options</key>
                 <array>
-                  <string>--build</string>
                   <string>--package</string>
                   <string>--platform darwin</string>
-                  <string>--btype RelWithDebInfo</string>
                   <string>--fmodstudio</string>
                   <string>--kdu</string>
                 </array>
@@ -4313,7 +4385,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>--platform darwin</string>
                   <string>--package</string>
-                  <string>--btype RelWithDebInfo</string>
                   <string>--fmodstudio</string>
                   <string>--kdu</string>
                 </array>
@@ -4327,14 +4398,10 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <map>
               <key>build</key>
               <map>
-                <key>command</key>
-                <string>../scripts/configure_firestorm.sh</string>
                 <key>options</key>
                 <array>
-                  <string>--build</string>
                   <string>--package</string>
                   <string>--platform darwin</string>
-                  <string>--btype RelWithDebInfo</string>
                 </array>
               </map>
               <key>configure</key>
@@ -4343,7 +4410,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>--platform darwin</string>
                   <string>--package</string>
-                  <string>--btype RelWithDebInfo</string>
                 </array>
               </map>
               <key>name</key>
@@ -4353,11 +4419,8 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <map>
               <key>build</key>
               <map>
-                <key>command</key>
-                <string>../scripts/configure_firestorm.sh</string>
                 <key>options</key>
                 <array>
-                  <string>--build</string>
                   <string>--platform darwin</string>
                   <string>--fmodstudio</string>
                   <string>--kdu</string>
@@ -4511,19 +4574,14 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>default</string>
             </map>
-
             <key>RelWithDebInfoFS</key>
             <map>
               <key>build</key>
               <map>
-                <key>command</key>
-                <string>../scripts/configure_firestorm.sh</string>
                 <key>options</key>
                 <array>
-                  <string>--build</string>
                   <string>--platform linux</string>
                   <string>--package</string>
-                  <string>--btype RelWithDebInfo</string>
                 </array>
               </map>
               <key>configure</key>
@@ -4534,7 +4592,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>--fmodstudio</string>
                   <string>--platform linux</string>
                   <string>--package</string>
-                  <string>--btype RelWithDebInfo</string>
                 </array>
               </map>
               <key>default</key>
@@ -4546,14 +4603,10 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <map>
               <key>build</key>
               <map>
-                <key>command</key>
-                <string>../scripts/configure_firestorm.sh</string>
                 <key>options</key>
                 <array>
-                  <string>--build</string>
                   <string>--platform linux</string>
                   <string>--package</string>
-                  <string>--btype RelWithDebInfo</string>
                 </array>
               </map>
               <key>configure</key>
@@ -4562,7 +4615,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>--platform linux</string>
                   <string>--package</string>
-                  <string>--btype RelWithDebInfo</string>
                 </array>
               </map>
               <key>name</key>
@@ -4572,8 +4624,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <map>
               <key>build</key>
               <map>
-                <key>command</key>
-                <string>../scripts/configure_firestorm.sh</string>
                 <key>options</key>
                 <array>
                   <string>--build</string>
@@ -4596,8 +4646,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <map>
               <key>build</key>
               <map>
-                <key>command</key>
-                <string>../scripts/configure_firestorm.sh</string>
                 <key>options</key>
                 <array>
                   <string>--build</string>
@@ -4616,7 +4664,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>ReleaseFS_open</string>
             </map>
-
           </map>
           <key>name</key>
           <string>linux</string>
@@ -4771,23 +4818,12 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <map>
               <key>build</key>
               <map>
-                <key>arguments</key>
-                <array>
-                  <string>Firestorm.sln</string>
-                </array>
-                <key>command</key>
-                <string>msbuild.exe</string>
                 <key>options</key>
                 <array>
-                  <string>/p:Configuration=RelWithDebInfo</string>
-                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
-                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
-                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-                  <string>/t:Build</string>
-                  <string>/p:useenv=true</string>
-                  <string>/verbosity:normal</string>
-                  <string>/toolsversion:12.0</string>
-                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
+                  <string>--fmodstudio</string>
+                  <string>--kdu</string>
+                  <string>--version</string>
+                  <string>--platform windows</string>
                 </array>
               </map>
               <key>configure</key>
@@ -4797,7 +4833,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
-                  <string>--btype RelWithDebInfo</string>
                   <string>--platform windows</string>
                 </array>
               </map>
@@ -4810,23 +4845,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <map>
               <key>build</key>
               <map>
-                <key>arguments</key>
-                <array>
-                  <string>Firestorm.sln</string>
-                </array>
-                <key>command</key>
-                <string>msbuild.exe</string>
                 <key>options</key>
                 <array>
-                  <string>/p:Configuration=RelWithDebInfo</string>
-                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
-                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
-                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-                  <string>/t:Build</string>
-                  <string>/p:useenv=true</string>
-                  <string>/verbosity:normal</string>
-                  <string>/toolsversion:12.0</string>
-                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
+                  <string>--version</string>
+                  <string>--btype RelWithDebInfo</string>
+                  <string>--platform windows</string>
                 </array>
               </map>
               <key>configure</key>
@@ -4845,23 +4868,12 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <map>
               <key>build</key>
               <map>
-                <key>arguments</key>
-                <array>
-                  <string>Firestorm.sln</string>
-                </array>
-                <key>command</key>
-                <string>msbuild.exe</string>
                 <key>options</key>
                 <array>
-                  <string>/p:Configuration=Release</string>
-                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
-                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
-                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-                  <string>/t:Build</string>
-                  <string>/p:useenv=true</string>
-                  <string>/verbosity:normal</string>
-                  <string>/toolsversion:12.0</string>
-                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
+                  <string>--fmodstudio</string>
+                  <string>--kdu</string>
+                  <string>--version</string>
+                  <string>--platform windows</string>
                 </array>
               </map>
               <key>configure</key>
@@ -4881,30 +4893,18 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <map>
               <key>build</key>
               <map>
-                <key>arguments</key>
-                <array>
-                  <string>Firestorm.sln</string>
-                </array>
-                <key>command</key>
-                <string>msbuild.exe</string>
                 <key>options</key>
                 <array>
-                  <string>/p:Configuration=Release</string>
-                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
-                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
-                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-                  <string>/t:Build</string>
-                  <string>/p:useenv=true</string>
-                  <string>/verbosity:normal</string>
-                  <string>/toolsversion:12.0</string>
-                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
+                  <string>--fmodstudio</string>
+                  <string>--kdu</string>
+                  <string>--version</string>
+                  <string>--platform windows</string>
                 </array>
               </map>
               <key>configure</key>
               <map>
                 <key>options</key>
                 <array>
-                  <string>--avx</string>
                   <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
@@ -4918,30 +4918,18 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <map>
               <key>build</key>
               <map>
-                <key>arguments</key>
-                <array>
-                  <string>Firestorm.sln</string>
-                </array>
-                <key>command</key>
-                <string>msbuild.exe</string>
                 <key>options</key>
                 <array>
-                  <string>/p:Configuration=Release</string>
-                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
-                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
-                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-                  <string>/t:Build</string>
-                  <string>/p:useenv=true</string>
-                  <string>/verbosity:normal</string>
-                  <string>/toolsversion:12.0</string>
-                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
+                  <string>--fmodstudio</string>
+                  <string>--kdu</string>
+                  <string>--version</string>
+                  <string>--platform windows</string>
                 </array>
               </map>
               <key>configure</key>
               <map>
                 <key>options</key>
                 <array>
-                  <string>--avx2</string>
                   <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
@@ -4955,23 +4943,10 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <map>
               <key>build</key>
               <map>
-                <key>arguments</key>
-                <array>
-                  <string>Firestorm.sln</string>
-                </array>
-                <key>command</key>
-                <string>msbuild.exe</string>
                 <key>options</key>
                 <array>
-                  <string>/p:Configuration=Release</string>
-                  <string>/flp:LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log</string>
-                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err</string>
-                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-                  <string>/t:Build</string>
-                  <string>/p:useenv=true</string>
-                  <string>/verbosity:minimal</string>
-                  <string>/toolsversion:12.0</string>
-                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
+                  <string>--version</string>
+                  <string>--platform windows</string>
                 </array>
               </map>
               <key>configure</key>
