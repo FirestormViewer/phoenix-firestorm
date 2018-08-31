@@ -226,11 +226,10 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                             "Address Size":self.address_size,
                             "Update Service":"https://update.secondlife.com/update",
                             }
-            try:
-                build_data_dict["BugSplat DB"] = os.environ["BUGSPLAT_DB"]
-            except KeyError:
-                # skip the assignment if there's no BUGSPLAT_DB variable
-                pass
+            # Only store this if it's both present and non-empty
+            bugsplat_db = self.args.get('bugsplat')
+            if bugsplat_db:
+                build_data_dict["BugSplat DB"] = bugsplat_db
             build_data_dict = self.finish_build_data_dict(build_data_dict)
             with open(os.path.join(os.pardir,'build_data.json'), 'w') as build_data_handle:
                 json.dump(build_data_dict,build_data_handle)
@@ -664,14 +663,15 @@ class WindowsManifest(ViewerManifest):
             self.path("libhunspell.dll")
 
             # BugSplat
-            if(self.address_size == 64):
-                self.path("BsSndRpt64.exe")
-                self.path("BugSplat64.dll")
-                self.path("BugSplatRc64.dll")
-            else:
-                self.path("BsSndRpt.exe")
-                self.path("BugSplat.dll")
-                self.path("BugSplatRc.dll")
+            if self.args.get('bugsplat'):
+                if(self.address_size == 64):
+                    self.path("BsSndRpt64.exe")
+                    self.path("BugSplat64.dll")
+                    self.path("BugSplatRc64.dll")
+                else:
+                    self.path("BsSndRpt.exe")
+                    self.path("BugSplat.dll")
+                    self.path("BugSplatRc.dll")
 
             # Growl
             self.path("growl.dll")
@@ -1166,39 +1166,6 @@ class DarwinManifest(ViewerManifest):
 
                         # if ("package" in self.args['actions'] or 
                         #     "unpacked" in self.args['actions']):
-                        #     # only if we're engaging BugSplat
-                        #     if "BUGSPLAT_DB" in os.environ:
-                        #         # Create a symbol archive BEFORE stripping the
-                        #         # binary.
-                        #         self.run_command(['dsymutil', exepath])
-                        #         # This should produce a Second Life.dSYM bundle directory.
-                        #         try:
-                        #             # Now pretend we're Xcode making a .xcarchive file.
-                        #             # Put it as a sibling of the top-level .app.
-                        #             # From "Dave" at BugSplat support:
-                        #             # "More from our Mac lead: I think zipping
-                        #             # a folder containing the binary and
-                        #             # symbols would be sufficient. Assuming
-                        #             # symbol files are created with CMake. I'm
-                        #             # not sure if CMake strips symbols into
-                        #             # separate files at build time, and if so
-                        #             # they're in a supported format."
-                        #             xcarchive = os.path.join(parentdir,
-                        #                                      exename + '.xcarchive.zip')
-                        #             with zipfile.ZipFile(xcarchive, 'w',
-                        #                                  compression=zipfile.ZIP_DEFLATED) as zf:
-                        #                 print "Creating {}".format(xcarchive)
-                        #                 for base, dirs, files in os.walk(here):
-                        #                     for fn in files:
-                        #                         fullfn = os.path.join(base, fn)
-                        #                         relfn = os.path.relpath(fullfn, here)
-                        #                         print "  {}".format(relfn)
-                        #                        zf.write(fullfn, relfn)
-                        #         finally:
-                        #             # Whether or not we were able to create the
-                        #             # .xcarchive file, clean up the .dSYM bundle
-                        #             shutil.rmtree(self.dst_path_of(exename + '.dSYM'))
-
                             # # NOTE: the -S argument to strip causes it to keep
                             # # enough info for annotated backtraces (i.e. function
                             # # names in the crash log). 'strip' with no arguments
@@ -1214,13 +1181,11 @@ class DarwinManifest(ViewerManifest):
                     # # runs the executable, instead of launching the app)
                     # Info["CFBundleExecutable"] = exename
                     # Info["CFBundleIconFile"] = viewer_icon
-                    # try:
+                    # bugsplat_db = self.args.get('bugsplat')
+                    # if bugsplat_db:
                         # # https://www.bugsplat.com/docs/platforms/os-x#configuration
                         # Info["BugsplatServerURL"] = \
-                        #     "https://{BUGSPLAT_DB}.bugsplatsoftware.com/".format(**os.environ)
-                    # except KeyError:
-                        # # skip the assignment if there's no BUGSPLAT_DB variable
-                        # pass
+                            # "https://{}.bugsplat.com/".format(bugsplat_db)
                     # self.put_in_file(
                         # plistlib.writePlistToString(Info),
                         # os.path.basename(Info_plist),
@@ -1233,7 +1198,8 @@ class DarwinManifest(ViewerManifest):
                         # # Remember where we parked this car.
                         # CEF_framework = self.dst_path_of(CEF_framework)
 
-                        # self.path2basename(relpkgdir, "BugsplatMac.framework")
+                        # if self.args.get('bugsplat'):
+                            # self.path2basename(relpkgdir, "BugsplatMac.framework")
 
                     # with self.prefix(dst="Resources"):
                         # # defer cross-platform file copies until we're in the right
@@ -2461,4 +2427,8 @@ def symlinkf(src, dst):
 # </FS:Ansariel> Added back for Mac compatibility reason
 
 if __name__ == "__main__":
-    main()
+    extra_arguments = [
+        dict(name='bugsplat', description="""BugSplat database to which to post crashes,
+             if BugSplat crash reporting is desired""", default=''),
+        ]
+    main(extra=extra_arguments)

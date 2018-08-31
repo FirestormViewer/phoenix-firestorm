@@ -69,6 +69,25 @@
 
 - (void) applicationDidFinishLaunching:(NSNotification *)notification
 {
+	// Call constructViewer() first so our logging subsystem is in place. This
+	// risks missing crashes in the LLAppViewerMacOSX constructor, but for
+	// present purposes it's more important to get the startup sequence
+	// properly logged.
+	// Someday I would like to modify the logging system so that calls before
+	// it's initialized are cached in a std::ostringstream and then, once it's
+	// initialized, "played back" into whatever handlers have been set up.
+	constructViewer();
+
+#if defined(LL_BUGSPLAT)
+	// Engage BugsplatStartupManager *before* calling initViewer() to handle
+	// any crashes during initialization.
+	// https://www.bugsplat.com/docs/platforms/os-x#initialization
+	[BugsplatStartupManager sharedManager].autoSubmitCrashReport = YES;
+	[BugsplatStartupManager sharedManager].askUserDetails = NO;
+	[BugsplatStartupManager sharedManager].delegate = self;
+	[[BugsplatStartupManager sharedManager] start];
+#endif
+
 	frameTimer = nil;
 
 	[self languageUpdated];
@@ -86,14 +105,6 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(languageUpdated) name:@"NSTextInputContextKeyboardSelectionDidChangeNotification" object:nil];
 
  //   [[NSAppleEventManager sharedAppleEventManager] setEventHandler:self andSelector:@selector(handleGetURLEvent:withReplyEvent:) forEventClass:kInternetEventClass andEventID:kAEGetURL];
-
-#if defined(LL_BUGSPLAT)
-	// https://www.bugsplat.com/docs/platforms/os-x#initialization
-	[BugsplatStartupManager sharedManager].autoSubmitCrashReport = YES;
-	[BugsplatStartupManager sharedManager].askUserDetails = NO;
-	[BugsplatStartupManager sharedManager].delegate = self;
-	[[BugsplatStartupManager sharedManager] start];
-#endif
 }
 
 - (void) handleGetURLEvent:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent {
@@ -215,25 +226,75 @@
 
 - (NSString *)applicationLogForBugsplatStartupManager:(BugsplatStartupManager *)bugsplatStartupManager
 {
-    infos("Reached applicationLogForBugsplatStartupManager");
-    // Apparently this override method only contributes the User Description
-    // field of BugSplat's All Crashes table. Despite the method name, it
-    // would seem to be a bad place to try to stuff all of SecondLife.log.
-    return [NSString stringWithCString:getFatalMessage().c_str()
+    CrashMetadata& meta(CrashMetadata_instance());
+    // As of BugsplatMac 1.0.6, userName and userEmail properties are now
+    // exposed by the BugsplatStartupManager. Set them here, since the
+    // defaultUserNameForBugsplatStartupManager and
+    // defaultUserEmailForBugsplatStartupManager methods are called later, for
+    // the *current* run, rather than for the previous crashed run whose crash
+    // report we are about to send.
+    infos("applicationLogForBugsplatStartupManager setting userName = '" +
+          meta.agentFullname + '"');
+    bugsplatStartupManager.userName =
+        [NSString stringWithCString:meta.agentFullname.c_str()
+                           encoding:NSUTF8StringEncoding];
+    // Use the email field for OS version, just as we do on Windows, until
+    // BugSplat provides more metadata fields.
+    infos("applicationLogForBugsplatStartupManager setting userEmail = '" +
+          meta.OSInfo + '"');
+    bugsplatStartupManager.userEmail =
+        [NSString stringWithCString:meta.OSInfo.c_str()
+                           encoding:NSUTF8StringEncoding];
+    // This strangely-named override method's return value contributes the
+    // User Description metadata field.
+    infos("applicationLogForBugsplatStartupManager -> '" + meta.fatalMessage + "'");
+    return [NSString stringWithCString:meta.fatalMessage.c_str()
+                              encoding:NSUTF8StringEncoding];
+}
+
+- (NSString *)applicationKeyForBugsplatStartupManager:(BugsplatStartupManager *)bugsplatStartupManager signal:(NSString *)signal exceptionName:(NSString *)exceptionName exceptionReason:(NSString *)exceptionReason {
+    // TODO: exceptionName, exceptionReason
+
+    // Windows sends location within region as well, but that's because
+    // BugSplat for Windows intercepts crashes during the same run, and that
+    // information can be queried once. On the Mac, any metadata we have is
+    // written (and rewritten) to the static_debug_info.log file that we read
+    // at the start of the next viewer run. It seems ridiculously expensive to
+    // rewrite that file on every frame in which the avatar moves.
+    std::string regionName(CrashMetadata_instance().regionName);
+    infos("applicationKeyForBugsplatStartupManager -> '" + regionName + "'");
+    return [NSString stringWithCString:regionName.c_str()
+                              encoding:NSUTF8StringEncoding];
+}
+
+- (NSString *)defaultUserNameForBugsplatStartupManager:(BugsplatStartupManager *)bugsplatStartupManager {
+    std::string agentFullname(CrashMetadata_instance().agentFullname);
+    infos("defaultUserNameForBugsplatStartupManager -> '" + agentFullname + "'");
+    return [NSString stringWithCString:agentFullname.c_str()
+                              encoding:NSUTF8StringEncoding];
+}
+
+- (NSString *)defaultUserEmailForBugsplatStartupManager:(BugsplatStartupManager *)bugsplatStartupManager {
+    // Use the email field for OS version, just as we do on Windows, until
+    // BugSplat provides more metadata fields.
+    std::string OSInfo(CrashMetadata_instance().OSInfo);
+    infos("defaultUserEmailForBugsplatStartupManager -> '" + OSInfo + "'");
+    return [NSString stringWithCString:OSInfo.c_str()
                               encoding:NSUTF8StringEncoding];
 }
 
 - (void)bugsplatStartupManagerWillSendCrashReport:(BugsplatStartupManager *)bugsplatStartupManager
 {
-    infos("Reached bugsplatStartupManagerWillSendCrashReport");
+    infos("bugsplatStartupManagerWillSendCrashReport");
 }
 
 - (BugsplatAttachment *)attachmentForBugsplatStartupManager:(BugsplatStartupManager *)bugsplatStartupManager {
-    // We get the *old* log file pathname (for SecondLife.old) because it's on
-    // the run *following* the crash that BugsplatStartupManager notices that
-    // the previous run crashed and calls this override. By that time, we've
-    // already renamed SecondLife.log to SecondLife.old.
-    std::string logfile = getOldLogFilePathname();
+    std::string logfile = CrashMetadata_instance().logFilePathname;
+    // Still to do:
+    // userSettingsPathname
+    // staticDebugPathname
+    // but the BugsplatMac version 1.0.5 BugsplatStartupManagerDelegate API
+    // doesn't yet provide a way to attach more than one file.
     NSString *ns_logfile = [NSString stringWithCString:logfile.c_str()
                                               encoding:NSUTF8StringEncoding];
     NSData *data = [NSData dataWithContentsOfFile:ns_logfile];
@@ -244,7 +305,7 @@
         [[BugsplatAttachment alloc] initWithFilename:@"SecondLife.log"
                                       attachmentData:data
                                          contentType:@"text/plain"];
-    infos("attachmentForBugsplatStartupManager: attaching " + logfile);
+    infos("attachmentForBugsplatStartupManager attaching " + logfile);
     return attachment;
 }
 
