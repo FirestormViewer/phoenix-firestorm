@@ -1805,9 +1805,9 @@
        layout="topleft"
        left="30"
        height="12"
-       name="preferences_search_label"
+       name="area_search_beacon_color_label"
        top_pad="15"
-       width="220">
+       width="400">
        Area search beacon Color:
      </text>
      <color_swatch
