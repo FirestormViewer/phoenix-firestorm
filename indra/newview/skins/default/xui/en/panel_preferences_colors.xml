@@ -1453,6 +1453,7 @@
        height="20"
        width="350" />
      <check_box
+       visibility_control="MiniMapChatRing"
        control_name="FSMiniMapWhisperRing"
        name="FSMiniMapWhisperRing"
        follows="left|top"
@@ -1497,6 +1498,7 @@
        Whisper range
      </text>
      <check_box
+       visibility_control="MiniMapChatRing"
        control_name="FSMiniMapChatRing"
        name="FSMiniMapChatRing"
        follows="left|top"
@@ -1541,6 +1543,7 @@
        Chat range
      </text>
      <check_box
+       visibility_control="MiniMapChatRing"
        control_name="FSMiniMapShoutRing"
        name="FSMiniMapShoutRing"
        follows="left|top"
