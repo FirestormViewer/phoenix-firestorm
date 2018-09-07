@@ -1800,6 +1800,35 @@
         parameter="SearchableControlHighlightColor" />
      </color_swatch>
 
+     <text
+       follows="left|top"
+       layout="topleft"
+       left="30"
+       height="12"
+       name="preferences_search_label"
+       top_pad="15"
+       width="220">
+       Area search beacon Color:
+     </text>
+     <color_swatch
+     can_apply_immediately="true"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left="40"
+     top_pad="5"
+     name="area_search_beacon_color"
+     tool_tip="Choose area search beacon color"
+     width="44">
+        <color_swatch.init_callback
+        function="Pref.getUIColor"
+        parameter="AreaSearchBeaconColor" />
+        <color_swatch.commit_callback
+        function="Pref.applyUIColor"
+        parameter="AreaSearchBeaconColor" />
+     </color_swatch>
+
      <check_box
      control_name="FSScriptDialogNoTransparency"
      follows="left|top"
