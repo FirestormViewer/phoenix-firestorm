@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="incoming call" title="Chiamata in arrivo">
-	<floater.string name="lifetime">
-		5
-	</floater.string>
 	<floater.string name="localchat">
 		Chat vocale nei dintorni
 	</floater.string>
@@ -22,12 +19,12 @@
 		Vuoi abbandonare [CURRENT_CHAT] e aderire alla chiamata con &apos;[GROUP]&apos;?
 	</floater.string>
 	<floater.string name="VoiceInviteQuestionDefault">
-		Vuoi abbandonare [CURRENT_CHAT] e aderire a questa voice chat?
+		Vuoi abbandonare [CURRENT_CHAT] e aderire a questa chat vocale?
 	</floater.string>
 	<text name="question">
-		Se rispondi, verrà interrotto il collegamento dalla conversazione a voce corrente.
+		Se rispondi, verrà interrotto il collegamento dalla conversazione voce corrente.
 	</text>
-	<button label="Risposta" label_selected="Risposta" name="Accept"/>
-	<button label="Ignora" label_selected="Ignora" name="Reject"/>
+	<button label="Accetta" label_selected="Accetta" name="Accept"/>
+	<button label="Rifiuta" label_selected="Rifiuta" name="Reject"/>
 	<button label="Apri invece IM" name="Start IM"/>
 </floater>

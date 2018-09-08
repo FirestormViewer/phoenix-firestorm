@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- Side tray panel -->
 <panel label="Persone" name="people_panel">
 	<string name="no_recent_people" value="Nessuna persona recente. Stai cercando persone da frequentare? Prova la [secondlife:///app/search/people Ricerca] o la [secondlife:///app/worldmap Mappa del mondo]."/>
 	<string name="no_filtered_recent_people" value="Non riesci a trovare quello che cerchi? Prova [secondlife:///app/search/people/[SEARCH_TERM] Cerca]."/>
@@ -16,60 +15,78 @@ Stai cercando persone da frequentare? Prova la [secondlife:///app/worldmap Mappa
 	</string>
 	<string name="no_filtered_groups_msg" value="Non riesci a trovare quello che cerchi? Prova [secondlife:///app/search/groups/[SEARCH_TERM] Cerca]."/>
 	<string name="no_groups_msg" value="Stai cercando gruppi di cui far parte? Prova [secondlife:///app/search/groups Cerca]."/>
-	<string name="MiniMapToolTipMsg" value="[REGION](Fai doppio clic per aprire la Mappa, premi il tasto Maiusc e trascina per la panoramica)"/>
-	<string name="AltMiniMapToolTipMsg" value="[REGION](Fai doppio clic per teleportarti, premi il tasto Maiusc e trascina per la panoramica)"/>
-	<string name="AllFriendsTitle">
-		Tutto ([ALL])
-	</string>
-	<string name="OnlineFriendsTitle">
+	<string name="MiniMapToolTipMsg" value="[REGION](Fai doppio clic per aprire la mappa, premi il tasto Maiusc e trascina per la panoramica)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION](Fai doppio clic per teleport, premi il tasto Maiusc e trascina per la panoramica)"/>
+	<string name="GroupCountWithInfo" value="Fai parte di [COUNT] gruppi, puoi aderire ad altri [REMAINING].  [secondlife:/// Cerchi altro?]"/>
+	<panel.string name="empty_list">
+		Set di contatti vuoto.
+	</panel.string>
+	<panel.string name="no_sets">
+		Nessun set
+	</panel.string>
+	<panel.string name="all_sets">
+		Tutti i set
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Alias
+	</panel.string>
+	<panel.string name="AllFriendsTitle">
+		Tutti ([ALL])
+	</panel.string>
+	<panel.string name="OnlineFriendsTitle">
 		Online ([ONLINE])
-	</string>
+	</panel.string>
 	<tab_container name="tabs">
-		<panel label="NELLE VICINANZE" name="nearby_panel">
-			<panel label="bottom_panel" name="nearby_buttons_panel">
+		<panel label="Nelle vicinanze" name="nearby_panel">
+			<panel name="nearby_buttons_panel">
 				<filter_editor label="Filtro persone" name="nearby_filter_input"/>
-				<button name="gear_btn" tool_tip="Azioni per la persona selezionata:"/>
-				<menu_button name="nearby_view_btn" tool_tip="Opzioni Mostra/Ordina"/>
+				<button name="gear_btn" tool_tip="Azioni per la persona selezionata"/>
+				<menu_button name="nearby_view_btn" tool_tip="Opzioni mostra/ordina"/>
 				<button name="add_friend_btn" tool_tip="Offri amicizia a un residente"/>
 				<dnd_button name="nearby_del_btn" tool_tip="Rimuovi la persona selezionata dagli amici"/>
 			</panel>
 		</panel>
-		<panel label="AMICI" name="friends_panel">
+		<panel label="Amici" name="friends_panel">
 			<panel label="bottom_panel" name="friends_buttons_panel">
-				<filter_editor label="Filtro persone" name="friends_filter_input"/>
+				<filter_editor label="Filtra persone" name="friends_filter_input"/>
 				<button name="gear_btn" tool_tip="Azioni per la persona selezionata:"/>
-				<menu_button name="friends_view_btn" tool_tip="Opzioni Mostra/Ordina"/>
+				<menu_button name="friends_view_btn" tool_tip="Opzioni mostra/ordina"/>
 				<button name="friends_add_btn" tool_tip="Offri amicizia a un residente"/>
+				<button name="GlobalOnlineStatusToggle" tool_tip="Commuta visibilità online"/>
 				<dnd_button name="friends_del_btn" tool_tip="Rimuovi la persona selezionata dagli amici"/>
 			</panel>
-			<accordion name="friends_accordion">
-				<accordion_tab name="tab_online" title="Online"/>
-				<accordion_tab name="tab_all" title="Tutto"/>
-			</accordion>
+			<tab_container name="friends_accordion">
+				<panel name="tab_online" title="Online"/>
+				<panel name="tab_all" title="Tutti"/>
+				<panel name="tab_suggested_friends" title="Possibili amici"/>
+			</tab_container>
 		</panel>
-		<panel label="GRUPPI" name="groups_panel">
+		<panel label="Gruppi" name="groups_panel">
 			<panel label="bottom_panel" name="groups_buttons_panel">
-				<filter_editor label="Filtro gruppi" name="groups_filter_input"/>
-				<menu_button name="groups_gear_btn" tool_tip="Azioni per il gruppo selezionato:"/>
-				<menu_button name="groups_view_btn" tool_tip="Opzioni Mostra/Ordina"/>
-				<menu_button name="plus_btn" tool_tip="Aderisci al gruppo/Crea nuovo gruppo"/>
+				<filter_editor label="Filtra gruppi" name="groups_filter_input"/>
+				<menu_button name="groups_gear_btn" tool_tip="Azioni per il gruppo selezionato"/>
+				<menu_button name="groups_view_btn" tool_tip="Opzioni mostra/ordina"/>
+				<menu_button name="plus_btn" tool_tip="Aderisci al gruppo/crea nuovo gruppo"/>
 				<dnd_button name="minus_btn" tool_tip="Lascia il gruppo selezionato"/>
 			</panel>
 			<text name="groupcount">
 				Fai parte di [COUNT] gruppi e puoi iscriverti a [REMAINING] altri.
 			</text>
 		</panel>
-		<panel label="RECENTE" name="recent_panel">
+		<panel label="Recenti" name="recent_panel">
 			<panel label="bottom_panel" name="recent_buttons_panel">
-				<filter_editor label="Filtro persone" name="recent_filter_input"/>
-				<button name="gear_btn" tool_tip="Azioni per la persona selezionata:"/>
-				<menu_button name="recent_view_btn" tool_tip="Opzioni Mostra/Ordina"/>
+				<filter_editor label="Filtra persone" name="recent_filter_input"/>
+				<button name="gear_btn" tool_tip="Azioni per la persona selezionata"/>
+				<menu_button name="recent_view_btn" tool_tip="Opzioni mostra/ordina"/>
 				<button name="add_friend_btn" tool_tip="Offri amicizia a un residente"/>
 				<dnd_button name="recent_del_btn" tool_tip="Rimuovi la persona selezionata dagli amici"/>
 			</panel>
 		</panel>
-		<panel label="BLOCCATO" name="blocked_panel">
+		<panel label="Bloccati" name="blocked_panel">
 			<panel label="Residenti e oggetti bloccati" name="panel_block_list_sidetray"/>
+		</panel>
+		<panel label="Set contatti" name="contact_sets_panel">
+			<panel name="panel_people_contacts_sidetray" label="Set contatti"/>
 		</panel>
 	</tab_container>
 </panel>

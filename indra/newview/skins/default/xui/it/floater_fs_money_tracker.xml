@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="money_tracker">
-    <button name="Clear" label="Pulisci"/>
+<floater name="money_tracker" title="Traccia transazioni">
+	<name_list name="payment_list">
+		<name_list.columns name="time" label="Data" />
+		<name_list.columns name="name" label="Nome" />
+		<name_list.columns name="amount" label="Valore" />
+	</name_list>
+	<text name="summary">
+		Uscite: [PAID] L$ - Entrate: [RECEIVED] L$
+	</text>
+	<check_box label="Traccia anche chiuso" name="FSAlwaysTrackPayments" tool_tip="Traccia i pagamenti anche se questa finestra è chiusa." />
+	<button name="Clear" label="Cancella"/>
 </floater>

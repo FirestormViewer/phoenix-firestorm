@@ -3,35 +3,44 @@
 	<text name="region_text_lbl">
 		Regione:
 	</text>
-	<text left="70" name="region_text">
+	<text name="region_text" left_delta="60">
 		sconosciuta
 	</text>
+	<text name="estate_id_lbl">
+		ID Proprietà: 
+	</text>
+	<line_editor name="estate_id" initial_value="sconosciuto" width="85" />
 	<text name="version_channel_text_lbl">
 		Versione:
 	</text>
-	<text left="70" name="version_channel_text">
+	<text name="version_channel_text" left_delta="60">
 		sconosciuta
 	</text>
+	<text name="grid_position_lbl" width="100">
+		Posizione grid:
+	</text>
+	<line_editor name="grid_position_x" initial_value="scon"/>
+	<line_editor name="grid_position_y" initial_value="scon"/>
 	<text name="region_type_lbl">
 		Tipo:
 	</text>
-	<text left="70" name="region_type">
+	<text name="region_type" left_delta="60">
 		sconosciuto
 	</text>
-	<check_box label="Proibisci la modifica del terreno" name="block_terraform_check"/>
-	<check_box label="Impedisci il volo" name="block_fly_check"/>
-	<check_box label="Blocca il volo sul lotto" name="block_fly_over_check" tool_tip="Espandi il controllo dell&apos;accesso in alto per impedire il volo sopra un lotto"/>
-	<check_box label="Abilita i danni" name="allow_damage_check"/>
-	<check_box label="Limita gli urti" name="restrict_pushobject"/>
-	<check_box label="Abilita la rivendita del terreno" name="allow_land_resell_check"/>
+	<check_box label="Proibisci modifica del terreno" name="block_terraform_check"/>
+	<check_box label="Impedisci volo" name="block_fly_check"/>
+	<check_box label="Blocca sorvolo" name="block_fly_over_check" tool_tip="Espandi il controllo dell&apos;accesso in alto per impedire il volo sopra un lotto"/>
+	<check_box label="Abilita danni" name="allow_damage_check"/>
+	<check_box label="Limita urti" name="restrict_pushobject"/>
+	<check_box label="Abilita rivendita del terreno" name="allow_land_resell_check"/>
 	<check_box label="Abilita unione/suddivisione del terreno" name="allow_parcel_changes_check"/>
 	<check_box label="Proibisci che il terreno appaia nelle ricerche" name="block_parcel_search_check" tool_tip="Permetti che le persone vedano questa regione e le sue suddivisioni nei risultati delle ricerche"/>
-	<spinner label="Limite massimo di avatar" label_width="135" name="agent_limit_spin" width="190"/>
-	<spinner label="Bonus di oggetti" label_width="135" name="object_bonus_spin" width="190"/>
-	<text label="Maturità" name="access_text" width="120">
+	<spinner label="Limite massimo di avatar" label_width="150" name="agent_limit_spin" width="190"/>
+	<spinner label="Bonus di oggetti" label_width="150" name="object_bonus_spin" width="190"/>
+	<text label="Maturità" name="access_text" width="160">
 		Categoria di accesso:
 	</text>
-	<icons_combo_box label="Moderato" left="126" name="access_combo" width="74">
+	<icons_combo_box label="Moderato" left_delta="120" name="access_combo" width="120">
 		<icons_combo_box.item label="Adulti" name="Adult" value="42"/>
 		<icons_combo_box.item label="Moderato" name="Mature" value="21"/>
 		<icons_combo_box.item label="Generale" name="PG" value="13"/>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="script panel">
+	<panel.string name="loading">
+		Caricamento...
+	</panel.string>
+	<panel.string name="can_not_view">
+		Non puoi vedere né modificare questo script perché è stato impostato con permessi ristretti. Ci vogliono tutti i permessi per vedere o modificare uno script dentro un oggetto.
+	</panel.string>
+	<panel.string name="public_objects_can_not_run">
+		Gli oggetti pubblici non possono eseguire script
+	</panel.string>
+	<panel.string name="script_running">
+		Avviato
+	</panel.string>
+	<panel.string name="external_editor_not_set">
+		Scegliere un editor impostando la variabile d&apos;ambiente LL_SCRIPT_EDITOR o l&apos;impostazione ExternalEditor.
+	</panel.string>
+	<menu_bar name="script_menu">
+		<menu name="File">
+			<menu_item_call label="Salva" name="Save"/>
+			<menu_item_call label="Annulla tutte le modifiche" name="Revert All Changes"/>
+			<menu_item_call label="Carica da file..." name="LoadFromFile"/>
+			<menu_item_call label="Salva su file..." name="SaveToFile"/>
+			<menu_item_call label="Preferenze editor script..." name="ScriptPrefs"/>
+		</menu>
+		<menu label="Modifica" name="Edit">
+			<menu_item_call label="Annulla" name="Undo"/>
+			<menu_item_call label="Rifai" name="Redo"/>
+			<menu_item_call label="Taglia" name="Cut"/>
+			<menu_item_call label="Copia" name="Copy"/>
+			<menu_item_call label="Incolla" name="Paste"/>
+			<menu_item_call label="Selez tutto" name="Select All"/>
+			<menu_item_call label="Deselez" name="Deselect"/>
+			<menu_item_call label="Cerca/sostituisci..." name="Search / Replace..."/>
+			<menu_item_call label="Vai a riga..." name="Go to line..."/>
+		</menu>
+		<menu label="Aiuto" name="Help">
+			<menu_item_call label="Aiuto..." name="Help..."/>
+			<menu_item_call label="Parole chiave..." name="Keyword Help..."/>
+			<menu_item_call label="Biblioteca script..." name="Script Library"/>
+		</menu>
+	</menu_bar>
+	<layout_stack name="script_editor_button_bar">
+		<layout_panel name="script_editor_buttons_panel">
+			<button tool_tip="Salva script" name="save_btn"/>
+			<button tool_tip="Editor esterno script" name="Edit_btn"/>
+			<button tool_tip="Carica script da disco fisso" name="load_disk_btn"/>
+			<button tool_tip="Salva script su disco fisso" name="save_disk_btn"/>
+			<button tool_tip="Taglia" name="cut_btn"/>
+			<button tool_tip="Copia" name="copy_btn"/>
+			<button tool_tip="Incolla" name="paste_btn"/>
+			<button tool_tip="Annulla" name="undo_btn"/>
+			<button tool_tip="Rifai" name="redo_btn"/>
+			<button tool_tip="Cerca/sostituisci" name="search_btn"/>
+			<button tool_tip="Preferenze editor script" name="prefs_btn"/>
+		</layout_panel>
+	</layout_stack>
+	<tab_container name="Tabset">
+		<panel name="Script" label="Script">
+			<script_editor name="Script Editor">
+				Caricamento...
+			</script_editor>
+		</panel>
+		<panel name="Preprocessed" label="Preprocessore">
+			<fs_lsl_preproc_viewer name="Post Editor">
+				Caricamento...
+			</fs_lsl_preproc_viewer>
+		</panel>
+	</tab_container>
+	<combo_box label="Inserisci..." name="Insert..."/>
+	<text name="line_col" value="Riga 0, Colonna 0"/>
+	<button label="Modifica..." name="edit_btn_2"/>
+	<button label="Salva" label_selected="Salva" name="save_btn_2"/>
+</panel>

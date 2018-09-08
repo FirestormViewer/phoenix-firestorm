@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="buy currency" title="ACQUISTA L$">
+<floater name="buy currency" title="Acquista L$">
 	<floater.string name="buy_currency">
 		acquistare [LINDENS] L$ per circa [LOCALAMOUNT]
 	</floater.string>
@@ -21,12 +21,6 @@
 	<text name="currency_action" width="45">
 		Voglio acquistare
 	</text>
-	<text name="currency_label">
-		L$
-	</text>
-	<line_editor label="L$" name="currency_amt">
-		1234
-	</line_editor>
 	<text name="buying_label">
 		Al prezzo
 	</text>
@@ -35,9 +29,6 @@
 	</text>
 	<text name="getting_data">
 		Stima in corso...
-	</text>
-	<text name="buy_action">
-		[ACTION]
 	</text>
 	<text name="total_label">
 		Il mio saldo sarà
@@ -49,7 +40,7 @@
 		[http://www.secondlife.com/my/account/payment_method_management.php metodo di pagamento] | [http://www.secondlife.com/my/account/currency.php valuta]
 	</text>
 	<text name="exchange_rate_note">
-		Riscrivi l&apos;importo per vedere l&apos;ultimo tasso al cambio.
+		Riscrivi l&apos;importo per vedere l&apos;ultimo tasso di cambio.
 	</text>
 	<text name="purchase_warning_repurchase">
 		La conferma di questo acquisto compra solo L$, non 
@@ -61,7 +52,7 @@ l&apos;oggetto.
 	<button label="Acquista" name="buy_btn"/>
 	<button label="Annulla" name="cancel_btn"/>
 	<text left="5" name="info_cannot_buy" right="-5">
-		Non in grado di acquistare
+		Impossibile acquistare
 	</text>
 	<button label="Continua sul Web" name="error_web"/>
 </floater>

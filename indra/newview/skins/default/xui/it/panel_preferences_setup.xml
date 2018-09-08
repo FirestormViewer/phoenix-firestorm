@@ -1,46 +1,75 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Impostazione" name="Input panel">
+<panel label="Impostazioni" name="Input panel">
 	<tab_container name="max_bandwidth_layout">
 		<panel label="Rete" name="tab-conn">
 			<text name="Maximum bandwidth">
-				Capacità massima di banda ([http://wiki.phoenixviewer.com/fs_speedtest avete bisogno di un consiglio?]):
+				Capacità massima di banda ([http://wiki.phoenixviewer.com/fs_speedtest serve un consiglio?]):
+			</text>
+			<text name="NetworkPrefText1" >
+				Wi-Fi
+			</text>
+			<text name="NetworkPrefText2">
+				DSL
+			</text>
+			<text name="NetworkPrefText3">
+				Cavo
+			</text>
+			<text name="NetworkPrefText4">
+				Potrebbe dare problemi
 			</text>
 			<check_box label="Porta personalizzata" name="connection_port_enabled"/>
 			<spinner label="Numero porta:" name="connection_port" width="160" label_width="85"/>
+			<text name="Web:">
+				Browser web:
+			</text>
+			<radio_group name="preferred_browser_behavior">
+				<radio_item label="Usa il mio browser (Chrome, Firefox, IE) per tutti i link" name="new_external" tool_tip="Usa il browser di sistema per l&apos;aiuto, i link eccetera. Non raccomandato se si lavora a schermo intero."/>
+				<radio_item label="Usa il browser interno per i link di Second Life" name="new_internal" tool_tip="Usa il browser di sistema per l&apos;aiuto, i link eccetera. Il browser interno verrà usato solo per il link LindenLab/SecondLife." />
+				<radio_item label="Usa il browser interno per tutti i link" name="new_internal_all"/>
+			</radio_group>
 			<text name="numberwebfloaters_label">
 				Numero massimo di finestre nel browser Web integrato:
 			</text>
-			<combo_box tool_tip="Imposta il numero massimo di finestre apribili contemporaneamente nel browser integrato" name="web_number_combobox">
+			<combo_box tool_tip="Numero massimo di finestre apribili contemporaneamente nel browser integrato" name="web_number_combobox">
 				<combo_box.item label="Illimitate" name="web_unlimited"/>
-				<combo_box.item label="Una Finestra" name="web_1"/>
-				<combo_box.item label="Cinque Finestre" name="web_5"/>
-				<combo_box.item label="Dieci Finestre" name="web_10"/>
+				<combo_box.item label="Una finestra" name="web_1"/>
+				<combo_box.item label="Cinque finestre" name="web_5"/>
+				<combo_box.item label="Dieci finestre" name="web_10"/>
 			</combo_box>
+			<button label="Cancella cache browser" name="ClearWebBrowserCache"/>
 			<check_box label="Abilita plugin" name="browser_plugins_enabled"/>
 			<check_box label="Accetta cookie" name="cookies_enabled"/>
 			<check_box label="Abilita Javascript" name="browser_javascript_enabled"/>
-			<check_box label="Consenti pop-up nel browser media" name="media_popup_enabled"/>
+			<check_box label="Consenti pop-up nel browser" name="media_popup_enabled"/>
 			<button label="Regola impostazioni proxy" label_selected="Regola impostazioni proxy" name="set_proxy"/>
 		</panel>
-		<panel label="Posizione" name="tab-dir">
+		<panel label="Cartelle" name="tab-dir">
 			<text name="cache_size_label_l">
-				Grandezza Cache ([http://wiki.phoenixviewer.com/cache avete bisogno di un consiglio?]):
+				Dimensioni cache ([http://wiki.phoenixviewer.com/cache serve un consiglio?]):
 			</text>
+			<button label="Cancella cache inventario" name="ClearInventoryCache" left="350" width="150"/>
 			<text name="Cache location">
 				Posizione cache:
 			</text>
 			<button label="Apri" label_selected="Apri" name="open_cache"/>
-			<button label="Resetta" label_selected="Resetta" name="reset_cache"/>
-			<button label="Pulisci" label_selected="Pulisci" name="clear_cache"/>
+			<button label="Imposta" label_selected="Imposta" name="set_cache" width="60"/>
+			<button label="Ripristina" label_selected="Ripristina" width="60" name="reset_cache"/>
+			<button label="Svuota" label_selected="Svuota" left_pad="3" name="clear_cache" width="60"/>
+			<text name="Sound Cache location">
+				Posizione cache suono:
+			</text>
 			<button label="Apri" label_selected="Apri" name="open_sound_cache"/>
-			<button label="Resetta" label_selected="Resetta" name="reset_sound_cache"/>
+			<button label="Imposta" label_selected="Imposta" name="set_sound_cache" width="60"/>
+			<button label="Ripristina" label_selected="Ripristina" width="60" name="reset_sound_cache"/>
+			<check_box label="Non cancellare i file cache audio DSF all&apos;uscita" tool_tip="I file sonori decompressi nella cache non verranno cancellati all&apos;uscita. Questo potrebbe migliorare il funzionamento dei suoni. La cache però verrà probabilmente riempita molto velocemente, e non corrisponderà al limite max impostato. Opzione di solito disabilitata." name="keep_unpacked_cache"/>
 			<text name="log_path_desc">
-				Posizione Log cache:
+				Posizione log conversazioni:
 			</text>
 			<button label="Apri" label_selected="Apri" name="open_log_path_button-panelsetup"/>
-			<button label="Resetta" label_selected="Resetta" name="reset_logpath"/>
-			<button label="Apri Crash Log" label_selected="Apri Crash Log" name="browse_crashlogs"/>
-			<button label="Apri cartella impostazioni" label_selected="Apri cartella impostazioni" name="browse_settingsdir" width="150"/>
+			<button label="Imposta" label_selected="Imposta" name="log_path_button-panelsetup" width="60"/>
+			<button label="Ripristina" label_selected="Ripristina" width="60" name="reset_logpath"/>
+			<button label="Apri crash log" label_selected="Apri crash log" name="browse_crashlogs"/>
+			<button label="Apri cartella impostazioni" label_selected="Apri cartella impostazioni" name="browse_settingsdir" width="160"/>
 		</panel>
 	</tab_container>
 </panel>

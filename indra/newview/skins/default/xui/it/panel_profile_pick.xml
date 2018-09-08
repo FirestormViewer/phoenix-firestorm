@@ -6,7 +6,8 @@
     <line_editor name="pick_location">
         Caricamento...
     </line_editor>
+    <button label="Teleport" name="teleport_btn" />
     <button label="Mostra sulla mappa" width="115" name="show_on_map_btn" />
-    <button label="Imposta Qui" width="80" tool_tip="Imposta la posizione corrente per il picks" name="set_to_curr_location_btn" />
+    <button label="Aggiungi" width="80" tool_tip="Imposta la posizione corrente tra i preferiti" name="set_to_curr_location_btn" />
     <button label="Salva" name="save_changes_btn" />
 </panel>

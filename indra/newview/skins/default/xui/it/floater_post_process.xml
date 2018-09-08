@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Post-Process Floater" title="IMPOSTAZIONI DI POST-PRODUZIONE">
+<floater name="Post-Process Floater" title="Impostazioni di post-produzione">
 	<tab_container name="Post-Process Tabs">
-		<panel label="Filtro Colore" name="wmiColorFilterPanel">
+		<panel label="Filtro colore" name="wmiColorFilterPanel">
 			<check_box label="Abilita" name="wmiColorFilterToggle"/>
 			<text name="wmiColorFilterBrightnessText">
 				Luminosità
@@ -13,17 +13,13 @@
 				Contrasto
 			</text>
 			<text name="wmiColorFilterBaseText">
-				Colore Base Contrasto
+				Colore base contrasto
 			</text>
-			<slider label="R" name="wmiColorFilterBaseR"/>
-			<slider label="G" name="wmiColorFilterBaseG"/>
-			<slider label="B" name="wmiColorFilterBaseB"/>
-			<slider label="I" name="wmiColorFilterBaseI"/>
 		</panel>
-		<panel label="Visione Notturna" name="wmiNightVisionPanel">
+		<panel label="Visione notturna" name="wmiNightVisionPanel">
 			<check_box label="Abilita" name="wmiNightVisionToggle"/>
 			<text name="wmiNightVisionBrightMultText">
-				Amplificazione Multipla Luce
+				Amplificazione multipla luce
 			</text>
 			<text name="wmiNightVisionNoiseSizeText">
 				Ampiezza disturbo
@@ -47,7 +43,7 @@
 		<panel label="Extra" name="Extras">
 			<button label="Carica effetto" label_selected="Carica effetto" name="PPLoadEffect"/>
 			<button label="Salva effetto" label_selected="Salva effetto" name="PPSaveEffect"/>
-			<line_editor label="Nome Effetto" name="PPEffectNameEditor"/>
+			<line_editor label="Nome effetto" name="PPEffectNameEditor"/>
 		</panel>
 	</tab_container>
 </floater>

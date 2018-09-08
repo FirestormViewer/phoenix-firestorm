@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_about" title="BROWSER MULTIMEDIALE">
-	<floater.string name="home_page_url">
-		http://it.secondlife.com
-	</floater.string>
-	<floater.string name="support_page_url">
-		http://it.secondlife.com/support
-	</floater.string>
+<floater name="floater_about" title="Browser multimediale">
 	<layout_stack name="stack1">
 		<layout_panel name="nav_controls">
 			<button label="Indietro" name="back" width="75"/>
 			<button label="Avanti" left_delta="75" name="forward" width="70"/>
 			<button label="Ricarica" left_delta="75" name="reload"/>
-			<combo_box left_delta="75" name="address" width="510"/>
-			<button label="Vai" left_delta="515" name="go"/>
+			<button label="Vai" name="go"/>
+		</layout_panel>
+		<layout_panel name="time_controls">
+			<button label="indietro" name="rewind" />
+			<button label="pausa" name="pause" />
+			<button label="avanti" name="seek" />
 		</layout_panel>
 		<layout_panel name="parcel_owner_controls">
 			<button label="Invia la pagina attuale al lotto" name="assign"/>
 		</layout_panel>
 		<layout_panel name="external_controls">
+			<text name="plugin_fail_text">
+Il plugin per il contenuto web sta impiegando molto tempo ad aprirsi.
+Se non si carica, visitare:
+
+http://wiki.phoenixviewer.com/fs_media
+
+per cercare di risolvere il problema.
+			</text>
 			<button label="Apri nel web browser" name="open_browser"/>
 			<check_box label="Apri sempre nel web browser" name="open_always"/>
 			<button label="Chiudi" name="close"/>

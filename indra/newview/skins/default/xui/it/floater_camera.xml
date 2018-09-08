@@ -1,56 +1,35 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="camera_floater" title="CONTROLLI FOTOCAMERA">
+<floater name="camera_floater" title="Controlli fotocamera">
 	<floater.string name="rotate_tooltip">
-		Ruota la telecamera Intorno all&apos;Inquadratura
+		Ruota la telecamera intorno all&apos;inquadratura
 	</floater.string>
 	<floater.string name="zoom_tooltip">
 		Avvicina la telecamera nell&apos;inquadratura
 	</floater.string>
 	<floater.string name="move_tooltip">
-		Muovi la telecamera su e giù e a sinistra e destra
+		Muovi la telecamera su, giù, a sinistra e a destra
 	</floater.string>
-	<floater.string name="free_mode_title">
-		Vedi oggetto
-	</floater.string>
-	<panel name="controls">
-		<panel name="preset_views_list">
-			<panel_camera_item name="front_view">
-				<panel_camera_item.text name="front_view_text">
-					Visuale frontale
-				</panel_camera_item.text>
-			</panel_camera_item>
-			<panel_camera_item name="group_view">
-				<panel_camera_item.text name="side_view_text">
-					Visuale laterale
-				</panel_camera_item.text>
-			</panel_camera_item>
-			<panel_camera_item name="rear_view">
-				<panel_camera_item.text name="rear_view_text">
-					Visuale posteriore
-				</panel_camera_item.text>
-			</panel_camera_item>
-		</panel>
-		<panel name="camera_modes_list">
-			<panel_camera_item name="object_view">
-				<panel_camera_item.text name="object_view_text">
-					Visuale oggetto
-				</panel_camera_item.text>
-			</panel_camera_item>
-			<panel_camera_item name="mouselook_view">
-				<panel_camera_item.text name="mouselook_view_text">
-					Visuale soggettiva
-				</panel_camera_item.text>
-			</panel_camera_item>
-		</panel>
-		<panel name="zoom" tool_tip="Avvicina la telecamera nell&apos;inquadratura">
-			<joystick_rotate name="cam_rotate_stick" tool_tip="Ruota la visuale intorno al punto focale"/>
-			<slider_bar name="zoom_slider" tool_tip="Zoom verso il centro focale"/>
-			<joystick_track name="cam_track_stick" tool_tip="Sposta la visuale in su e in giù, a sinistra e a destra"/>
-		</panel>
+	<panel name="zoom">
+		<layout_stack name="camera_view_layout_stack">
+			<layout_panel name="camera_rotate_layout_panel">
+				<joystick_rotate name="cam_rotate_stick" tool_tip="Orbita la camera intorno al centro focale"/>
+			</layout_panel>
+			<layout_panel name="camera_zoom_layout_panel">
+				<slider_bar name="zoom_slider" tool_tip="Zoom verso il centro focale"/>
+			</layout_panel>
+			<layout_panel name="panel_track">
+				<joystick_track name="cam_track_stick" tool_tip="Muovi la camera su, giù, a sinistra e a destra"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+	<panel name="buttons_view">
+		<panel_camera_item name="front_view" tool_tip="Vista frontale"/>
+		<panel_camera_item name="group_view" tool_tip="Vista laterale"/>
+		<panel_camera_item name="rear_view" tool_tip="Vista posteriore"/>
 	</panel>
 	<panel name="buttons">
-		<button label="" name="presets_btn" tool_tip="Visuali predefinite"/>
-		<button label="" name="pan_btn" tool_tip="Ruota visuale - Ingrandisci - Panoramica"/>
-		<button label="" name="avatarview_btn" tool_tip="Modalità della fotocamera"/>
+		<panel_camera_item name="object_view" tool_tip="Vista oggetto"/>
+		<panel_camera_item name="mouselook_view" tool_tip="Vista mouselook"/>
+		<panel_camera_item name="reset_view" tool_tip="Ripristina vista"/>
 	</panel>
 </floater>
