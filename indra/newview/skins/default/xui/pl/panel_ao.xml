@@ -21,12 +21,12 @@
 		<spinner name="ao_cycle_time" tool_tip="Czas, po jakim animacja zmienia się na następną z listy. Ustaw na 0, aby wyłączyć automatyczny cykl animacji." />
 		<button name="ao_reload" label="Przeładuj" tool_tip="Przeładuj konfigurację Animatora." />
 		<layout_stack name="next_previous_buttons_stack">
-		<layout_panel name="next_previous_buttons_stack_left">
-		<button name="ao_previous" tool_tip="Poprzednia animacja obecnego stanu." />
-		</layout_panel>
-		<layout_panel name="next_previous_buttons_stack_right">
-		<button name="ao_next" tool_tip="Następna animacja obecnego stanu." />
-		</layout_panel>
+			<layout_panel name="next_previous_buttons_stack_left">
+				<button name="ao_previous" tool_tip="Poprzednia animacja obecnego stanu." />
+			</layout_panel>
+			<layout_panel name="next_previous_buttons_stack_right">
+				<button name="ao_next" tool_tip="Następna animacja obecnego stanu." />
+			</layout_panel>
 		</layout_stack>
 		<button name="ao_less" tool_tip="Pokazuj mniejszy interfejs Animatora." />
 	</panel>
