@@ -194,6 +194,10 @@
 				Podśw. wyników wyszukiwania w opcjach:
 			</text>
 			<color_swatch name="preferences_search_color" tool_tip="Wybierz kolor dla podświetlenia wyników wyszukiwania w opcjach"/>
+			<text name="area_search_beacon_color_label">
+				Emiter śledzenia (np. przeszukiwania obszaru):
+			</text>
+			<color_swatch name="area_search_beacon_color" tool_tip="Wybierz kolor emitera śledzenia, np. dla przeszukiwania obszaru" />
 			<check_box name="FSScriptDialogNoTransparency" label="Okna dialogowe skryptów zawsze na nieprzejrzystym tle"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Ogłoszenia grupowe zawsze na nieprzejrzystym tle"/>
 			<check_box name="override_pie_color_checkbox" label="Nadpisz przezroczystość i kolor tła menu kołowego:"/>

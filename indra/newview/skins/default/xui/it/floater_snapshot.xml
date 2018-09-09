@@ -1,70 +1,93 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Snapshot" title="ISTANTANEA">
+<floater name="Snapshot" title="Fotografa">
 	<floater.string name="unknown">
 		sconosciuto
 	</floater.string>
 	<string name="postcard_progress_str">
 		Invio e-mail in corso
 	</string>
+	<string name="facebook_progress_str">
+		Caricamento su Facebook
+	</string>
 	<string name="profile_progress_str">
-		Caricamento post
+		Caricamento in corso
 	</string>
 	<string name="inventory_progress_str">
-		Salva nell&apos;inventario
+		Salva in inventario
 	</string>
 	<string name="local_progress_str">
 		Salvataggio sul computer in corso
+	</string>
+	<string name="facebook_succeeded_str">
+		Pubblicazione sul profilo completata
 	</string>
 	<string name="profile_succeeded_str">
 		Immagine caricata
 	</string>
 	<string name="postcard_succeeded_str">
-		E-mail inviata.
+		E-mail inviata
 	</string>
 	<string name="inventory_succeeded_str">
-		Salvato nell&apos;inventario.
+		Salvata in inventario
 	</string>
 	<string name="local_succeeded_str">
-		Salvato sul computer.
+		Salvata sul computer
+	</string>
+	<string name="facebook_failed_str">
+		Pubblicazione sul profilo non riuscita.
 	</string>
 	<string name="profile_failed_str">
 		Caricamento immagine sul feed del profilo non riuscito.
 	</string>
 	<string name="postcard_failed_str">
-		Invio e-mail non riuscito.
+		Invio e-mail non riuscito
 	</string>
 	<string name="inventory_failed_str">
-		Non salvato nell&apos;inventario.
+		Non salvata in inventario
 	</string>
 	<string name="local_failed_str">
-		Non salvato sul computer.
+		Non salvata sul computer
 	</string>
-	<button label="AGGIORNA" name="new_snapshot_btn"/>
 	<view name="controls_container">
-	<panel name="advanced_options_panel">
-		<text name="layer_type_label">
-			Cattura:
+		<button label="Aggiorna" name="new_snapshot_btn"/>
+		<panel name="advanced_options_panel">
+			<text name="layer_type_label">
+				Cattura:
+			</text>
+			<combo_box label="Elementi immagine" name="layer_types">
+				<combo_box.item label="Colori" name="Colors"/>
+				<combo_box.item label="Profondità" name="Depth"/>
+				<combo_box.item label="Profondità (24 bit)" name="Depth24"/>
+			</combo_box>
+			<check_box label="Interfaccia" name="ui_check"/>
+			<check_box label="Credito L$" name="currency_check" />
+			<check_box label="Cattura schermo (tutto schermo)" name="freeze_frame_check"/>
+			<check_box label="Aggiornamento automatico" name="auto_snapshot_check"/>
+			<text name="filter_list_label">
+				Filtro:
+			</text>
+			<combo_box name="filters_combobox" tool_tip="Filtri immagine">
+				<combo_box.item label="Nessun filtro" name="NoFilter"/>
+			</combo_box>
+		</panel>
+		<panel name="succeeded_panel">
+			<text name="succeeded_lbl">
+				Completato
+			</text>
+		</panel>
+		<panel name="failed_panel">
+			<text name="failed_lbl">
+				Non completato
+			</text>
+		</panel>
+		<text name="working_lbl">
+			In corso
 		</text>
-		<combo_box label="Layer dell&apos;immagine" name="layer_types">
-			<combo_box.item label="Colori" name="Colors"/>
-			<combo_box.item label="Profondità" name="Depth"/>
-		</combo_box>
-		<check_box label="Interfaccia" name="ui_check"/>
-		<check_box label="HUD" name="hud_check"/>
-		<check_box label="Congela il frame (tutto schermo)" name="freeze_frame_check"/>
-		<check_box label="Aggiornamento automatico" name="auto_snapshot_check"/>
-		<text name="filter_list_label">
-			Filtro:
+		<text name="refresh_lbl">
+			Aggiorna per salvare
 		</text>
-		<combo_box name="filters_combobox" tool_tip="Filtri immagini">
-			<combo_box.item label="Nessun filtro" name="NoFilter"/>
-		</combo_box>
-	</panel>
 	</view>
 	<text name="image_res_text">
 		[WIDTH] px (larghezza) x [HEIGHT] px (altezza)
-	</text>
-	<text name="file_size_label">
-		[SIZE] KB
 	</text>
 </floater>

@@ -8,24 +8,62 @@
 	<pie_slice label="Compra" name="Buy..."/>
 	<pie_slice label="Prendi" name="Pie Object Take"/>
 	<pie_slice label="Paga" name="Pay..."/>
-	<pie_menu label="Avanti &gt;" name="Object Pie More 1">
+	<pie_menu label="Altro &gt;" name="Object Pie More 1">
 		<pie_slice label="Elimina" name="Delete"/>
 		<pie_slice label="Indossa" name="Wear"/>
 		<pie_slice label="Prendi copia" name="Take Copy"/>
-		<pie_menu label="HUD Indossati &gt;" name="Pie Object Attach HUD"/>
-		<pie_menu label="Indossato &gt;" name="Pie Object Attach"/>
-		<pie_menu label="Avanti &gt;" name="Object Pie More 2">
-			<pie_slice label="Aggiorna Tex" name="Texture Refresh"/>
-			<pie_slice label="Muta" name="Object Mute"/>
-			<pie_menu label="Script &gt;" name="ScriptsMenu">
-				<pie_slice label="Compila (Mono)" name="CompileMono"/>
-				<pie_slice label="Compila (LSL)" name="CompileLSL"/>
-				<pie_slice label="Resetta Script." name="Object Reset Scripts"/>
-				<pie_slice label="Attiva Script" name="Object Set Scripts to Running"/>
-				<pie_slice label="Ferma Script" name="Object Set Scripts to Not Running"/>
-				<pie_slice label="Rimuovi Script" name="Remove Scripts From Selection"/>
-				<pie_slice label="N.Script" name="ScriptInfo"/>
+		<pie_menu label="Attacca HUD &gt;" name="Pie Object Attach HUD"/>
+		<pie_menu label="Attacca &gt;" name="Pie Object Attach">
+			<pie_menu label="Schel. esteso&gt;" name="Enhanced Skeleton">
+				<pie_slice label="Ala dx" name="Right Wing"/>
+				<pie_slice label="Inguine" name="Groin"/>
+				<pie_slice label="Base coda" name="Tail Base"/>
+				<pie_slice label="Punta coda" name="Tail Tip"/>
+				<pie_slice label="Ala sx" name="Left Wing"/>
+				<pie_slice label="Piede post sx" name="Left Hind Foot"/>
+				<pie_slice label="Piede post dx" name="Right Hind Foot"/>
+				<pie_menu label="Altro &gt;" name="Enhanced Skeleton More">
+					<pie_slice label="Alt orecchio dx" name="Alt Right Ear"/>
+					<pie_slice label="Alt occhio dx" name="Alt Right Eye"/>
+					<pie_slice label="Lingua" name="Tongue"/>
+					<pie_slice label="Alt occhio sx" name="Alt Left Eye"/>
+					<pie_slice label="Alt orecchio sx" name="Alt Left Ear"/>
+					<pie_slice label="Anulare sx" name="Left Ring Finger"/>
+					<pie_slice label="Mandibola" name="Jaw"/>
+					<pie_slice label="Anulare dx" name="Right Ring Finger"/>
+				</pie_menu>
 			</pie_menu>
+		</pie_menu>
+		<pie_slice label="Restituisci" name="Return..."/>
+		<pie_menu label="Altro &gt;" name="Object Pie More 2">
+			<pie_slice label="Aggiorna tex" name="Texture Refresh"/>
+			<pie_menu name="DerenderMenu" label="De-rendi &gt;">
+				<pie_slice label="Lista nera" name="DerenderPermanent"/>
+				<pie_slice label="Temporaneo" name="Derender"/>
+			</pie_menu>
+			<pie_slice label="Segnala..." name="Report Abuse..."/>
+			<pie_menu name="ExportMenu" label="Esporta &gt;">
+				<pie_slice label="Salva copia" name="Backup"/>
+				<pie_slice label="Collada" name="Collada"/>
+			</pie_menu>
+			<pie_menu label="Pathfinding &gt;" name="Pathfinding">
+				<pie_slice label="Mostra nei linkset" name="show_in_linksets"/>
+				<pie_slice label="Mostra nei caratteri" name="show_in_characters"/>
+			</pie_menu>
+			<pie_menu name="mute_menu" label="Muta &gt;">
+				<pie_slice label="Oggetto" name="Object Mute"/>
+				<pie_slice label="Particelle" name="Mute Particle"/>
+			</pie_menu>
+			<pie_menu label="Script &gt;" name="ScriptsMenu">
+				<pie_slice label="Compila Mono" name="CompileMono"/>
+				<pie_slice label="Compila LSL" name="CompileLSL"/>
+				<pie_slice label="Ripristina" name="Object Reset Scripts"/>
+				<pie_slice label="Avvia" name="Object Set Scripts to Running"/>
+				<pie_slice label="Ferma" name="Object Set Scripts to Not Running"/>
+				<pie_slice label="Rimuovi" name="Remove Scripts From Selection"/>
+				<pie_slice label="Info" name="ScriptInfo"/>
+			</pie_menu>
+			<pie_slice label="Ispeziona" name="Object Inspect"/>
 		</pie_menu>
 		<pie_slice label="Compra" name="Buy..."/>
 	</pie_menu>

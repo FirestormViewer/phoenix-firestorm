@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_sound_devices" title="DISPOSITIVI AUDIO">
+<floater name="floater_sound_devices" title="Dispositivi audio">
 	<text name="voice_label">
 		Chat vocale
 	</text>
-	<check_box label="Abilitato" name="enable_voice"/>
+	<check_box label="Abilitata" name="enable_voice"/>
 </floater>

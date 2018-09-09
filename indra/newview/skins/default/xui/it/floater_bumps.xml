@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_bumps" title="COLLISIONI, SPINTE E COLPI">
+<floater name="floater_bumps" title="Collisioni, spinte e colpi">
 	<floater.string name="none_detected">
 		Nessuno rilevato
 	</floater.string>
@@ -17,8 +17,5 @@
 	</floater.string>
 	<floater.string name="physical_object_collide">
 		[TIME]  [NAME] ti ha colpito con un oggetto fisico
-	</floater.string>
-	<floater.string name="timeStr">
-		[[hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]]
 	</floater.string>
 </floater>

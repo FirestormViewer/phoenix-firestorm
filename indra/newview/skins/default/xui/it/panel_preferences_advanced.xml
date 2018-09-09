@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panel label="Avanzata" name="advanced">
-	<check_box label="Consenti più Viewer" name="allow_multiple_viewer_check"/>
-	<check_box label="Mostra selezione griglia all&apos;accesso" name="show_grid_selection_check"/>
-	<check_box label="Mostra menu Avanzato" name="show_advanced_menu_check"/>
+	<panel.string name="middle_mouse">
+		Tasto centrale mouse
+	</panel.string>
+	<check_box label="Consenti più viewer (può compromettere la stabilità e le prestazioni)" name="allow_multiple_viewer_check"/>
+	<check_box label="Mostra selezione grid all&apos;accesso (non tutte supportano Firestorm)" name="show_grid_selection_check"/>
+	<check_box label="Mostra menu Avanzato (a vostro rischio)" name="show_advanced_menu_check"/>
 	<check_box label="Mostra menu Sviluppatore" name="show_develop_menu_check"/>
+	<check_box label="Disabilita ricerca VRAM attraverso test WMI sui sistemi Windows" name="FSDisableWMIProbing"/>
+	<check_box tool_tip="Questa impostazione può ridurre il carico di resa per gli avatar lontani, ma può anche causare un rallentamento nelle loro animazioni" label="Abilita animation timesteps (sperimentale)" name="UseAnimationTimeSteps"/>
+	<text name="BackgroundYieldTimeText">
+		Quantità di tempo in millisecondi da lasciare in ogni frame alle altre applicazioni quando [APP_NAME] non è in primo piano (predefinito 40; 1 secondo = 1000 millisecondi):
+	</text>
 	<button label="Ripristina tutte le impostazioni" label_selected="Ripristina tutte le impostazioni" name="clear_settings"/>
 </panel>

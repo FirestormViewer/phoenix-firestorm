@@ -3,19 +3,19 @@
 	<text name="title">
 		Inventario
 	</text>
-	<text name="hint_lbl">
-		Salvare un&apos;immagine nell&apos;inventario costa L$[UPLOAD_COST]. Per salvare l&apos;immagine come texture, selezionare uno dei formati quadrati.
-	</text>
 	<combo_box label="Risoluzione" name="texture_size_combo">
-		<combo_box.item label="Finestra corrente (512x512)" name="CurrentWindow"/>
 		<combo_box.item label="Piccola (128x128)" name="Small(128x128)"/>
 		<combo_box.item label="Media (256x256)" name="Medium(256x256)"/>
 		<combo_box.item label="Grande (512x512)" name="Large(512x512)"/>
+		<combo_box.item label="Finestra attuale" name="CurrentWindow"/>
 		<combo_box.item label="Personalizza" name="Custom"/>
 	</combo_box>
-	<spinner label="Larghezza x altezza" name="inventory_snapshot_width"/>
-	<spinner label="" name="inventory_snapshot_height"/>
-	<check_box label="Mantieni le proporzioni" name="inventory_keep_aspect_check"/>
-	<button label="Annulla" name="cancel_btn"/>
+	<spinner label="L x A" name="inventory_snapshot_width"/>
+	<check_box label="Mantieni proporzioni" name="inventory_keep_aspect_check"/>
+	<check_box label="Temporaneo" name="inventory_temp_upload" />
+	<text name="hint_lbl">
+		Salvare in inventario costa L$[UPLOAD_COST]. Per salvare come texture, selezionare un formato quadrato.
+	</text>
+	<button label="&#x25B6; Seleziona" name="cancel_btn"/>
 	<button label="Salva" name="save_btn"/>
 </panel>

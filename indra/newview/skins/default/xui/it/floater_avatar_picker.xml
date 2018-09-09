@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="avatarpicker" title="SCEGLI RESIDENTE">
+<floater name="avatarpicker" title="Scegli persona">
 	<floater.string name="not_found">
 		&apos;[TEXT]&apos; non trovato
 	</floater.string>
@@ -15,7 +15,7 @@
 	<floater.string name="searching">
 		Ricerca...
 	</floater.string>
-	<string label="Seleziona" label_selected="Seleziona" name="Select">
+	<string label="Seleziona" name="Select">
 		Seleziona
 	</string>
 	<string name="Close">
@@ -45,16 +45,25 @@
 			<text name="InstructSelectResident">
 				Scegli una persona nei dintorni
 			</text>
-			<slider label="Range" name="near_me_range"/>
+			<slider label="Area" name="near_me_range"/>
 			<text name="meters">
-				Metri
+				metri
 			</text>
 			<fs_scroll_list name="NearMe">
 				<columns label="Nome" name="name"/>
 				<columns label="Nome utente" name="username"/>
 			</fs_scroll_list>
 		</panel>
+		<panel label="Cerca per UUID" name="SearchPanelUUID">
+			<text name="SearchByUUIDLabel">
+				Inserisci UUID residente:
+			</text>
+			<button label="Cerca" name="FindUUID"/>
+			<fs_scroll_list name="SearchResultsUUID">
+				<columns label="Nome" name="nameUUID"/>
+				<columns label="Nome utente" name="usernameUUID"/>
+			</fs_scroll_list>
+		</panel>
 	</tab_container>
-	<button label="OK" label_selected="OK" name="ok_btn"/>
 	<button label="Annulla" label_selected="Annulla" name="cancel_btn"/>
 </floater>

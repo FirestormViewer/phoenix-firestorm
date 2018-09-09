@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<multi_floater name="floater_im_box" title="CONVERSAZIONI">
-	<string name="collapse_icon" value="Conv_toolbar_collapse"/>
-	<string name="expand_icon" value="Conv_toolbar_expand"/>
+<multi_floater name="floater_im_box" title="Conversazioni">
 	<layout_stack name="conversations_stack">
 		<layout_panel name="conversations_layout_panel">
 			<layout_stack name="conversations_pane_buttons_stack">
 				<layout_panel name="conversations_pane_buttons_expanded">
-					<menu_button name="sort_btn" tool_tip="Opzioni Mostra/Ordina"/>
+					<menu_button name="sort_btn" tool_tip="Opzioni Mostra/ordina"/>
 					<button name="add_btn" tool_tip="Avvia una nuova conversazione"/>
 					<button name="speak_btn" tool_tip="Parla con le persone usando il microfono"/>
 				</layout_panel>
@@ -20,7 +18,7 @@
 				<panel name="stub_panel">
 					<button name="stub_collapse_btn" tool_tip="Minimizza questo pannello"/>
 					<text name="stub_textbox">
-						Questa conversazione in una finestra separata.   [secondlife:/// Ripristina conversazione.]
+						Questa conversazione in una finestra separata. [secondlife:/// Ripristina conversazione.]
 					</text>
 				</panel>
 			</panel_container>

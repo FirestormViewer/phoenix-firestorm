@@ -46,27 +46,53 @@
 		Salta (premi E)
 	</string>
 	<string name="crouch_tooltip">
-		Accovacciarsi (premi C)
-	</string>
-	<string name="walk_title">
-	</string>
-	<string name="run_title">
-	</string>
-	<string name="fly_title">
+		Chinati (premi C)
 	</string>
 	<panel name="panel_actions">
-		<button label="" label_selected="" name="turn left btn" tool_tip="Gira a sinistra (premi freccia sinistra o A)"/>
-		<joystick_slide name="move left btn" tool_tip="Cammina a sinistra (premi Maiusc + freccia sinistra o A)"/>
-		<button label="" label_selected="" name="turn right btn" tool_tip="Gira a destra (premi freccia destra o D)"/>
-		<joystick_slide name="move right btn" tool_tip="Cammina a destra (premi Maiusc + freccia destra o D)"/>
-		<joystick_turn name="forward btn" tool_tip="Cammina in avanti (premi freccia su o W)"/>
-		<joystick_turn name="backward btn" tool_tip="Cammina indietro (premi freccia giù o S)"/>
-		<button label="" label_selected="" name="move up btn" tool_tip="Vola in alto (premi E)"/>
-		<button label="" label_selected="" name="move down btn" tool_tip="Vola in basso (premi C)"/>
-	</panel>
-	<panel name="panel_modes">
-		<button label="" name="mode_walk_btn" tool_tip="Modalità cammina"/>
-		<button label="" name="mode_run_btn" tool_tip="Modalità corsa"/>
-		<button label="" name="mode_fly_btn" tool_tip="Modalità volo"/>
+		<layout_stack name="ls_vertical">
+			<layout_panel name="lp_row1">
+				<layout_stack name="ls_horizontal1">
+					<layout_panel name="lp_col1_1">
+						<button name="turn left btn" tool_tip="Gira a sinistra (premi freccia sinistra o A)" />
+					</layout_panel>
+					<layout_panel name="lp_col1_2">
+						<joystick_turn name="forward btn" tool_tip="Cammina in avanti (premi freccia su o W)" />
+					</layout_panel>
+					<layout_panel name="lp_col1_3">
+						<button name="turn right btn" tool_tip="Gira a destra (premi freccia destra o D)"/>
+					</layout_panel>
+					<layout_panel name="lp_col1_4">
+						<button name="move up btn" tool_tip="Vola in alto (premi E)" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="lp_row2">
+				<layout_stack name="ls_horizontal2">
+					<layout_panel name="lp_col2_1">
+						<joystick_slide name="move left btn" tool_tip="Cammina a sinistra (premi Maiusc + freccia sinistra o A)" />
+					</layout_panel>
+					<layout_panel name="lp_col2_2">
+						<joystick_turn name="backward btn" tool_tip="Cammina indietro (premi freccia giù o S)" />
+					</layout_panel>
+					<layout_panel name="lp_col2_3">
+						<joystick_slide name="move right btn" tool_tip="Cammina a destra (premi Maiusc + freccia destra o D)" />
+					</layout_panel>
+					<layout_panel name="lp_col2_4">
+						<button name="move down btn" tool_tip="Vola in basso (premi C)" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="lp_row3">
+				<layout_stack name="ls_horizontal3">
+					<layout_panel name="modes_container">
+						<panel name="panel_modes">
+							<button name="mode_walk_btn" tool_tip="Modalità cammina" />
+							<button name="mode_run_btn" tool_tip="Modalità corri" />
+							<button name="mode_fly_btn" tool_tip="Modalità vola" />
+						</panel>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>
 	</panel>
 </floater>

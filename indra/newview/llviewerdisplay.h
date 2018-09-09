@@ -46,4 +46,7 @@ extern BOOL gWindowResized;
 extern F32 gSavedDrawDistance;
 extern F32 gLastDrawDistanceStep;
 
+// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
+extern LLFrameTimer gPostTeleportFinishKillObjectDelayTimer;
+
 #endif // LL_LLVIEWERDISPLAY_H

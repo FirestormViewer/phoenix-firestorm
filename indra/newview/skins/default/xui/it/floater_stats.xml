@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Statistics" title="STATISTICHE">
+<floater name="Statistics" title="Statistiche">
 	<scroll_container name="statistics_scroll">
 		<container_view name="statistics_view">
 			<stat_view label="Di base" name="basic">
-				<stat_bar label="FPS" name="fps"/>
+				<stat_bar label="fotog/sec (FPS)" name="fps"/>
 				<stat_bar label="Dati UDP ricevuti" name="bandwidth"/>
 				<stat_bar label="Perdita pacchetti" name="packet_loss"/>
-				<stat_bar label="Tempo Ping Sim" name="ping"/>
+				<stat_bar label="Tempo ping sim" name="ping"/>
 			</stat_view>
-			<stat_view label="Avanzata" name="advanced">
+			<stat_view label="Avanzate" name="advanced">
 				<stat_view label="Render" name="render">
 					<stat_bar label="KTris per fotogramma" name="ktrisframe"/>
 					<stat_bar label="KTris per secondo" name="ktrissec"/>
-					<stat_bar label="Totale oggetti" name="totalobjs"/>
+					<stat_bar label="Totale oggetti" name="objs"/>
 					<stat_bar label="Oggetti nella cache" name="cachedobjs"/>
 					<stat_bar label="Nuovi oggetti" name="newobjs"/>
 					<stat_bar label="Hit rate della cache per l&apos;oggetto" name="object_cache_hits"/>
@@ -31,14 +31,13 @@
 					<stat_bar label="Memoria impegnata" name="glboundmemstat"/>
 				</stat_view>
 				<stat_view label="Utilizzo memoria" name="memory">
-					<stat_bar label="LLTrace" name="LLTrace"/>
 					<stat_bar label="Interfaccia utente" name="LLView"/>
 					<stat_bar label="Font" name="LLFontFreetype"/>
 					<stat_bar label="Inventario" name="LLInventoryObject"/>
-					<stat_bar label="Oggetti Viewer" name="LLViewerObject"/>
+					<stat_bar label="Oggetti viewer" name="LLViewerObject"/>
 					<stat_bar label="Dati gruppo octree" name="LLViewerOctreeGroup"/>
 					<stat_bar label="Dati octree" name="LLViewerOctreeEntry"/>
-					<stat_bar label="Cache oggetti Viewer" name="LLVOCacheEntry"/>
+					<stat_bar label="Cache oggetti viewer" name="LLVOCacheEntry"/>
 					<stat_bar label="Disegnabili" name="LLDrawable"/>
 					<stat_bar label="Dati viso" name="LLFace"/>
 					<stat_bar label="Info disegno" name="LLDrawInfo"/>
@@ -68,15 +67,26 @@
 					<stat_bar label="Oggetti a basso LOD" name="physicslodtasks"/>
 					<stat_bar label="Memoria allocata" name="physicsmemoryallocated"/>
 				</stat_view>
+				<stat_bar name="simagentups" label="Aggiornamento agenti/sec"/>
+				<stat_bar name="simmainagents" label="Agenti principali"/>
+				<stat_bar name="simchildagents" label="Agenti figli"/>
+				<stat_bar name="simobjects" label="Oggetti"/>
+				<stat_bar name="simactiveobjects" label="Oggetti attivi"/>
+				<stat_bar name="simactivescripts" label="Script attivi"/>
 				<stat_bar label="Script eseguiti" name="simpctscriptsrun"/>
+				<stat_bar name="simscripteps" label="Eventi script"/>
 				<stat_view label="Pathfinding" name="simpathfinding">
 					<stat_bar label="Tempo passaggio AI" name="simsimaistepmsec"/>
 					<stat_bar label="Passaggi silhouette saltati" name="simsimskippedsilhouettesteps"/>
 					<stat_bar label="Caratteri aggiornati" name="simsimpctsteppedcharacters"/>
 				</stat_view>
+				<stat_bar name="siminpps" unit_label="pac/sec" label="Pacchetti In"/>
+				<stat_bar name="simoutpps" unit_label="pac/sec" label="Pacchetti Out"/>
+				<stat_bar name="simpendingdownloads" label="Download in corso"/>
+				<stat_bar name="simpendinguploads" label="Upload in corso"/>
 				<stat_bar label="Totale dati non confermati (unacked)" name="simtotalunackedbytes"/>
-				<stat_view label="Orario" name="simperf">
-					<stat_bar label="Tempo totale Frame" name="simframemsec"/>
+				<stat_view label="Prestazioni sim" name="simperf">
+					<stat_bar label="Tempo totale frame" name="simframemsec"/>
 					<stat_bar label="Tempo netto" name="simnetmsec"/>
 					<stat_bar label="Tempo motore fisico" name="simsimphysicsmsec"/>
 					<stat_bar label="Tempo simulazione" name="simsimothermsec"/>
@@ -84,7 +94,7 @@
 					<stat_bar label="Tempo immagini" name="simimagesmsec"/>
 					<stat_bar label="Tempo script" name="simscriptmsec"/>
 					<stat_bar label="Tempo libero" name="simsparemsec"/>
-					<stat_view label="Dettagli orario" name="timedetails">
+					<stat_view label="Dettagli tempi" name="timedetails">
 						<stat_bar label="Passaggio fisica" name="simsimphysicsstepmsec"/>
 						<stat_bar label="Aggiorna forme fisica" name="simsimphysicsshapeupdatemsec"/>
 						<stat_bar label="Altro fisica" name="simsimphysicsothermsec"/>

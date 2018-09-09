@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_flickr" title="CONDIVIDI SU FLICKR">
+<floater name="floater_flickr" title="Carica su Flickr">
 	<panel name="background">
 		<tab_container name="tabs">
-			<panel label="FOTO" name="panel_flickr_photo"/>
-			<panel label="ACCOUNT" name="panel_flickr_account"/>
+			<panel label="Foto" name="panel_flickr_photo"/>
 		</tab_container>
 		<panel name="connection_status_panel">
 			<text name="connection_error_text">
-				Errore
+				Errore connessione
 			</text>
 			<text name="connection_loading_text">
 				Caricamento...

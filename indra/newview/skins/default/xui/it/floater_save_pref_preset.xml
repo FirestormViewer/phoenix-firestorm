@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Save Pref Preset" title="SALVA VALORE PREDEFINITO PREFERENZA">
+<floater name="Save Pref Preset" title="Salva impostazione preferenza">
 	<string name="title_graphic">
-		Salva valore predefinito grafica
+		Salva preset grafica
 	</string>
 	<string name="title_camera">
-		Salva valore predefinito videocamera
+		Salva preset camera
 	</string>
 	<text name="Preset">
-		Digita un nome per il valore predefinito o selezionane uno esistente.
+		Digita un nome per il preset o selezionane uno esistente.
 	</text>
 	<button label="Salva" name="save"/>
 	<button label="Annulla" name="cancel"/>

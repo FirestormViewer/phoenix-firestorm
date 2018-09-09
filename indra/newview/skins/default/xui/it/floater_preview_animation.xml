@@ -6,6 +6,6 @@
 	<text name="desc txt">
 		Descrizione:
 	</text>
-	<button label="Riproduci in Second Life" label_selected="Ferma" name="Inworld" tool_tip="Riproduci questa animazione così che gli altri possano vederla"/>
-	<button label="Riproduci localmente" label_selected="Ferma" name="Locally" tool_tip="Riproduci questa animazione così che solo tu possa vederla"/>
+	<button label="Riproduci in mondo" label_selected="Ferma" name="Inworld" tool_tip="Riproduci questa animazione così che gli altri possano vederla"/>
+	<button label="Riproduci in locale" label_selected="Ferma" name="Locally" tool_tip="Riproduci questa animazione così che solo tu possa vederla"/>
 </floater>

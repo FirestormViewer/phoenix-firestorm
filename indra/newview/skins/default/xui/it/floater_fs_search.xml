@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_search" title="Ricerca Firestorm">
+	<floater.string name="string.location">
+		Luogo: [LOCATION]
+	</floater.string>
+	<floater.string name="string.traffic">
+		Traffico: [DWELL]
+	</floater.string>
+	<floater.string name="string.area">
+		Area: [AREA]
+	</floater.string>
+	<floater.string name="string.members">
+		Membri: [MEMBER_COUNT]
+	</floater.string>
+	<floater.string name="string.founder">
+		Fondatore: [FOUNDER]
+	</floater.string>
+	<floater.string name="string.age">
+		Età: [AGE]
+	</floater.string>
+	<floater.string name="string.listing_price">
+		Prezzo: [LISTING_PRICE]
+	</floater.string>
+	<floater.string name="string.duration">
+		Durata: [DURATION]
+	</floater.string>
+	<floater.string name="string.covercharge">
+		Copertura: [COVERCHARGE]
+	</floater.string>
+	<tab_container name="ls_tabs">
+		<panel label="Cerca web" name="panel_ls_web" />
+		<panel label="Persone" name="panel_ls_people" />
+		<panel label="Gruppi" name="panel_ls_groups" />
+		<panel label="Luoghi" name="panel_ls_places" />
+		<panel label="Vendite terreno" name="panel_ls_land" />
+		<panel label="Eventi" name="panel_ls_events" />
+		<panel label="Inserzioni" name="panel_ls_classifieds" />
+	</tab_container>
+	<panel name="panel_ls_details">
+		<text_editor name="title" value="Nome non definito" />
+		<text_editor name="aux1" value="Campo info aggiuntive 1" />
+		<text_editor name="aux2" value="Campo info aggiuntive 2" />
+		<text_editor name="location" value="Info sul luogo" />
+		<button label="Apri profilo" name="people_profile_btn"/>
+		<button label="Manda IM" name="people_message_btn"/>
+		<button label="Aggiungi amico" name="people_friend_btn"/>
+		<button label="Apri profilo" name="group_profile_btn"/>
+		<button label="Entra in chat" name="group_message_btn"/>
+		<button label="Aggiungi gruppo" name="group_join_btn"/>
+		<button label="Teleport" name="teleport_btn"/>
+		<button label="Mostra in mappa"	name="map_btn"/>
+		<button label="Promemoria" name="event_reminder_btn"/>
+	</panel>
+</floater>

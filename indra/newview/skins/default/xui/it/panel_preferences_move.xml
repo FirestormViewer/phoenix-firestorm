@@ -1,84 +1,118 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Movimento" name="move_panel">
 	<tab_container name="tabs">
-		<!--Visualizza-->
-		<panel name="tab-view" label="Visualizza">
+		<panel name="tab-view" label="Vista">
 			<slider label="Angolo di visuale" name="camera_fov"/>
 			<slider label="Distanza" name="camera_offset_scale"/>
-			<slider label="TempoTraslazione" name="camera_transition_time"/>
+			<slider label="Transizione" name="camera_transition_time"/>
 			<slider label="Morbidezza" name="camera_position_smoothing"/>
-			<check_box label="Consenti movimento della Cam senza limiti" name="DisableCameraConstraints" tool_tip="Seleziona per poter spostare la camera senza alcun limite. Se non siete bravi a muovere la camera potreste avere dei cattivi risultati"/>
+			<check_box label="Consenti movimento della cam senza limiti" name="DisableCameraConstraints" tool_tip="Seleziona per poter spostare la camera senza alcun limite. Se non siete bravi a muovere la camera potreste avere dei cattivi risultati"/>
+			<check_box label="Non usare rotella del mouse per lo zoom della camera" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2">
 				Posizione automatica per:
 			</text>
-			<check_box label="Costruire/Modificare" name="edit_camera_movement" tool_tip="Utilizza il posizionamento automatico della fotocamera entrando o uscendo dalla modalità modifica"/>
+			<check_box label="Costruire/modificare" name="edit_camera_movement" tool_tip="Utilizza il posizionamento automatico della camera entrando o uscendo dalla modalità modifica"/>
 			<check_box label="Aspetto fisico" name="appearance_camera_movement" tool_tip="Utilizza il posizionamento automatico della camera in modalità modifica"/>
-			<check_box label="Aggiungi luminosità" name="EditAppearanceLighting" tool_tip="Quando si entra in Apparence verrà aggiunta una luce sull'avatar (Viewer 1.x style)"/>			
-			<check_box label="Cliccando il tuo avatar mantiene la posizione della telecamera" name="clickonavatarkeepscamera" tool_tip="Normalmente, cliccando sul tuo avatar la posizione della camera si resetta, spuntando questa opzione, si annulla tale effetto."/>
-			<check_box label="Ripristina posizione della telecamera dopo teleport (Dentro la stessa sim)" name="FSResetCameraOnTP" tool_tip="Normalmente, la posizione della cam viene resettata quando ci si teletrasporta, spuntando questa opzione, si annulla tale effetto."/>
-			<check_box label="Disabilita limite di zoom della telecamera" name="disableminzoomdist" tool_tip="Disabilita il limite di zoom nell'avvicinarsi ad un'oggetto"/>
-			<check_box label="Gira l'avatar dove puntava la cam quando la resetti" name="resetviewturnsavatar" tool_tip="Mantiene la linea di vista della fotocamera e ruota l'avatar, se la visuale viene resettata (quando premi ESC)."/>
-			<check_box label="Consente alla cam di spostarsi senza bloccarsi sui prim" name="ignorecameraconstraints" tool_tip="Ignora la 'spinta', che riceve la cam dal simulatore, quando ci si avvicina troppo ad un prim."/>
+			<check_box label="Aggiungi luminosità" name="EditAppearanceLighting" tool_tip="Quando si entra in Modifica aspetto verrà aggiunta una luce sull&apos;avatar (stile v1.x)"/>
+			<check_box label="Mostra suggerimenti visivi" name="FSAppearanceShowHints" tool_tip="Abilita i suggerimenti che evidenziano le parti dell&apos;avatar che vengono modificate."/>		
+			<check_box label="Mantieni la posizione della camera cliccando l&apos;avatar" name="clickonavatarkeepscamera" tool_tip="Normalmente, cliccando sul tuo avatar la posizione della camera si resetta, spuntando questa opzione, si annulla tale effetto."/>
+			<check_box label="Mantieni posizione telecamera dopo teleport (entro la stessa sim)" name="FSResetCameraOnTP" tool_tip="Normalmente, la posizione della cam viene resettata quando ci si teletrasporta, spuntando questa opzione, si annulla tale effetto."/>
+			<check_box label="Ripristina posizione camera quando si muove l&apos;avatar" name="FSResetCameraOnMovement"/>
+			<check_box label="Disabilita limite di zoom della telecamera" name="disableminzoomdist" tool_tip="Disabilita il limite di zoom nell&apos;avvicinarsi ad un&apos;oggetto"/>
+			<check_box label="Quando si ripristina la vista, gira l&apos;avatar verso la cam" name="resetviewturnsavatar" tool_tip="Mantiene la linea di vista della camera e ruota l&apos;avatar, se la visuale viene resettata (tasto ESC)."/>
+			<check_box label="Consente alla cam di spostarsi dentro ai prim" name="ignorecameraconstraints" tool_tip="Ignora la &apos;spinta&apos;, che riceve la cam dal simulatore, quando ci si avvicina troppo ad un prim."/>
 			<text name="ignorecameraconstraints_requires_restart">
 				(Richiesto riavvio)
 			</text>
+			<check_box label="Mostra il pannello controlli camera sempre opaco" name="FSAlwaysOpaqueCameraControls" />
+			<check_box label="Dopo il teleport mostra gli oggetti non visualizzati temporaneamente" name="FSTempDerenderUntilTeleport" tool_tip="If enabled, temporary derendered objects will stay derendered until teleport. If disabled, they stay derendered until the end of the session or get manually re-rendered via the asset blacklist window." />
 		</panel>
-		<!--Mouselook-->
 		<panel name="tab-mouselook" label="Mouselook">
-			<check_box label="Mostra in modalità Mouselook" name="first_person_avatar_visible"/>
-			<check_box label="Mostra istruzioni Mouselook" name="mouselook_instructions_visible" tool_tip="Quando si entra in Mouselook verranno visualizzate le istruzioni come nel viewer 1.x"/>
+			<check_box label="Abilita mouselook" name="EnableMouselook" tool_tip="Abilita la prospettiva in prima persona e il controllo della camera col mouse" />
+			<check_box label="Mostra avatar in modalità mouselook" name="first_person_avatar_visible"/>
+			<check_box label="Mostra interfaccia in mouselook" name="first_person_ui_visible"/>
+			<check_box label="Non chiudere conversazioni e radar entrando in mouselook" name="FSShowConvoAndRadarInML" />
+			<check_box	 label="Abilita menu contestuale in mouselook" name="FSEnableRightclickMenuInMouselook" tool_tip="Apre un menu contestuale in modo mouselook premendo ALT + mouse destro"/>
+			<check_box label="Esci da mouselook con la rotella del mouse" name="FSScrollWheelExitsMouselook" tool_tip="Esce da mouselook quando si gira la rotella del mouse"/>
+			<check_box label="Mostra istruzioni mouselook" name="mouselook_instructions_visible" tool_tip="Quando si entra in mouselook verranno visualizzate le istruzioni come nel viewer 1.x"/>
+			<check_box label="Mostra crocetta per mouselook" name="ShowCrosshairs" tool_tip="Mostra il mirino a crocetta quando in modalità mouselook"/>
+			<check_box label="Abilità funzioni combattimento" name="FSMouselookCombatFeatures"/>
+			<check_box label="Mostra marcatori bersaglio" name="ExodusMouselookIFF" />
+			<slider label="Distanza (m):" name="ExodusMouselookIFFRange" />
 			<text name="Mouse Sensitivity" width="170">
-				Sensibilità mouse in Mouselook:
+				Sensibilità mouse:
 			</text>
 			<check_box label="Inverti" name="invert_mouse"/>
 		</panel>
-		<!--Movimento-->
 		<panel name="tab-movement" label="Movimento">
-			<check_box label="Le frecce di direzione mi fanno sempre spostare" name="arrow_keys_move_avatar_check"/>
-			<check_box label="Premendo i tasti delle lettere permette movimento(es. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar" />
-			<check_box label="Usa la configurazione tastiera AZERTY" name="FSUseAzertyKeyboardLayout" />
-			<check_box label="Doppio click e tieni premuto per correre" name="tap_tap_hold_to_run"/>
-			<check_box label="Volare/Atterrare tenendo premuto Pag su/Pag giù" name="automatic_fly"/>
-			<check_box label="Girare l'avatar quando si cammina all'indietro" name="backwardsturnavatar" tool_tip="Gira l'avatar verso la telecamera quando cammini all'indietro"/>
+			<check_box label="Le frecce di direzione fanno sempre spostare" name="arrow_keys_move_avatar_check"/>
+			<check_box label="Premere i tasti delle lettere permette il movimento (es. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar" />
+			<check_box label="Usare tastiera AZERTY" name="FSUseAzertyKeyboardLayout" />
+			<check_box label="Doppio clic e tenere premuto per correre" name="tap_tap_hold_to_run"/>
+			<check_box label="Volare/atterrare tenendo premuto salta (PagSu)/chinati (PagGiù)" name="automatic_fly"/>
+			<check_box label="Blocca azione chinarsi (PagGiù)" name="crouch_toggle_mode"/>
+			<check_box label="Disabilita pausa per animazioni pre-salto e atterraggio" name="FSIgnoreFinishAnimation"/>
+			<check_box label="Quando si cammina all&apos;indietro, l&apos;avatar non si gira verso la camera nella vista locale" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Disables your avatar turning around to face the camera when you are walking backwards. This option affects only your local view and does not work with scripted AOs."/>
+			<check_box label="Gira avatar verso un oggetto selezionato" name="FSTurnAvatarToSelectedObject" tool_tip="Turns your avatar around to face the object you are currently selecting."/>
+			<text name="Region_Crossing_Movement_Label">
+				Movimenti quando si cambia regione:
+			</text>
+			<radio_group name="Region_Crossing_Movement">
+				<radio_item label="Predici" name="move_predict" />
+				<radio_item label="Ferma" name="move_stop" />
+			</radio_group>
+			<text name="movelock_lbl">
+				Se il blocco del movimento del Bridge LSL è attivo...
+			</text>
+			<check_box label="Blocca nuovamente la posizione dopo il cambio di regione" name="RelockMoveLockAfterRegionChange"/>
+			<check_box label="Blocca e sblocca la posizione dopo l&apos;inizio o la fine del movimento" name="RelockMoveLockAfterMovement" />
 			<text name="single_click_action_lbl">
-				Click singolo a terra:
+				Clic singolo a terra:
 			</text>
 			<combo_box name="single_click_action_combo">
 				<combo_box.item label="Nessuna azione" name="0"/>
-				<combo_box.item label="Muovimi al punto cliccato" name="1"/>
+				<combo_box.item label="Andare al punto cliccato" name="1"/>
 			</combo_box>
 			<text name="double_click_action_lbl">
-				Doppio Click a terra:
+				Doppio clic a terra:
 			</text>
 			<combo_box name="double_click_action_combo">
 				<combo_box.item label="Nessuna azione" name="0"/>
-				<combo_box.item label="Muovimi al punto cliccato" name="1"/>
+				<combo_box.item label="Andare al punto cliccato" name="1"/>
 				<combo_box.item label="Teleport al punto cliccato" name="2"/>
 			</combo_box>
-			<button label="Altri dispositivi" name="joystick_setup_button"/>
+			<button label="Configurazione joystick" name="joystick_setup_button"/>
 		</panel>
-		<!--Teleports-->
-		<panel name="tab-teleports">
-			<check_box label="Riprodurre effetto sonoro quando si effettua il Teleport" name="PlayTeleportSound"/>
-			<check_box label="Vola sempre dopo il teleport" name="FSFlyAfterTeleport"/>
-			<check_box label="Disabilita segnali Teleport" name="tp_beam_toggle" tool_tip="Disabilita tutti gli effetti del Teleport dopo essere arrivati a destinazione." />
-			<check_box label="Disabilita schermata Teleport" name="tp_screen_toggle" tool_tip="Disabilita la schermata nera durante tutti i Teleport." />
+		<panel name="tab-teleports" label="Teleport">
+			<check_box label="Effetto sonoro quando si effettua teleport" name="PlayTeleportSound"/>
+			<check_box label="Volare sempre dopo il teleport" name="FSFlyAfterTeleport"/>
+			<check_box label="Mostra sempre bottone Annulla" name="FSAlwaysShowTPCancel" tool_tip="Always show the TP cancel button even if the sim says it can&apos;t be canceled. The sim will always know if it can and will ignore cancel requests on death/god TPs anyways. This setting is ignored by RLVa (i.e. RLV restrictions can still disable it)."/>
+			<check_box label="Disabilita segnalatore teleport" name="tp_beam_toggle" tool_tip="Disabilita l&apos;indicatore del teleport all&apos;arrivo." />
+			<check_box label="Disabilita schermata teleport" name="tp_screen_toggle" tool_tip="Disabilita la schermata nera durante tutti i Teleport." />
+			<check_box label="Non chiudere la mappa durante il teleport" name="FSDoNotHideMapOnTeleport" tool_tip="Disables the automatic closing of the map when teleporting."/>
+			<check_box label="Mantieni &apos;Mostra solo amici&apos; anche dopo un teleport." name="FSRenderFriendsOnlyPersistsTP" tool_tip="Disables the automatic cancelling of the &apos;Show Friends Only&apos; function (default: off)"/>
 		</panel>
-		<!--Maps-->
-		<panel label="World Map &amp; Minimappa" name="tab-maps">
-			<check_box label="Abilita rotazione Minimappa" name="minimaprotate" tool_tip="Rotazione della minimappa quando fate girare il vostro avatar"/>
-			<check_box name="MiniMapChatRing" label="Visualizza il raggio della local chat sulla minimappa"/>
+		<panel label="Mappa &amp; minimappa" name="tab-maps">
+			<text name="minimap_options_label">
+				Opzioni minimappa:
+			</text>
+			<check_box label="Abilita rotazione minimappa" name="minimaprotate" tool_tip="Rotazione della minimappa quando si gira l&apos;avatar"/>
 			<text name="netmap_double_click_action_lbl" width="170">
-				Doppio click sulla Minimappa:
+				Doppio clic sulla minimappa:
 			</text>
 			<combo_box name="netmap_double_click_action_combo">
-				<combo_box.item label="Nessuna Azione" name="0"/>
-				<combo_box.item label="Apri la mappa" name="1"/>
+				<combo_box.item label="Nessuna azione" name="0"/>
+				<combo_box.item label="Aprire mappa" name="1"/>
 				<combo_box.item label="Teleport al punto cliccato" name="2"/>
 			</combo_box>
-			<check_box label="Filtra i Landmarks sulla World Map" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtra i Lanmarks doppi quando si effettua la visualizzazione del posto dalla World Map"/>
-			<check_box label="Mostra ulteriori informazioni sulla regione nella Mappa del mondo" name="FSAdvancedWorldmapRegionInfo" tool_tip="Mostra informazioni aggiuntive sulla Mappa del mondo(Numero degli avatar in sim e livello di accesso)."/>
-			<check_box label="Abilita doppio click teleport sulla Mappa del mondo" name="FSWorldMapDoubleclickTeleport" tool_tip="Abilita il doppio click per teleportarsi a destinazione sulla Mappa del mondo"/>
+			<slider label="Raggio dei preferiti:" name="FSMinimapPickScale" tool_tip="Controls the radius of the pick range on the minimap"/>
+			<text name="world_map_options_label">
+				Opzioni mappa:
+			</text>
+			<check_box label="Filtra segnaposto duplicati sulla mappa" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtra i segnaposto doppi quando si effettua la visualizzazione del posto dalla mappa"/>
+			<check_box label="Mostra ulteriori informazioni sulla regione nella mappa" name="FSAdvancedWorldmapRegionInfo" tool_tip="Mostra informazioni aggiuntive sulla Mappa del mondo(Numero degli avatar in sim e livello di accesso)."/>
+			<check_box top_pad="5" label="Mostra coordinate grid sulla mappa" name="FSShowRegionGridCoordinates" tool_tip="Mostra le coordinate della grid (in unità di regioni) sulla mappa."/>
+			<check_box label="Abilita teleport con doppio clic sulla mappa" name="FSWorldMapDoubleclickTeleport" tool_tip="Abilita il doppio clic per teleportarsi a destinazione sulla mappa"/>
 		</panel>
 	</tab_container>
 </panel>
