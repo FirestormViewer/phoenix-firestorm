@@ -50,7 +50,9 @@ class ManifestError(RuntimeError):
 
 class MissingError(ManifestError):
     """You specified a file that doesn't exist"""
-    pass
+    def __init__(self, msg):
+        self.msg = msg
+        super(MissingError, self).__init__(self.msg)
 
 def path_ancestors(path):
     drive, path = os.path.splitdrive(os.path.normpath(path))
@@ -247,14 +249,18 @@ def main(extra=[]):
     # Build base package.
     touch = args.get('touch')
     if touch:
-        print 'Creating base package'
+        print '================ Creating base package'
+    else:
+        print '================ Starting base copy'
     wm = LLManifest.for_platform(args['platform'], args.get('arch'))(args)
     wm.do(*args['actions'])
     # Store package file for later if making touched file.
     base_package_file = ""
     if touch:
-        print 'Created base package ', wm.package_file
+        print '================ Created base package ', wm.package_file
         base_package_file = "" + wm.package_file
+    else:
+        print '================ Finished base copy'
 
     # handle multiple packages if set
     # ''.split() produces empty list
@@ -281,17 +287,20 @@ def main(extra=[]):
             args['sourceid']       = os.environ.get(package_id + "_sourceid")
             args['dest'] = base_dest_template.format(package_id)
             if touch:
-                print 'Creating additional package for "', package_id, '" in ', args['dest']
+                print '================ Creating additional package for "', package_id, '" in ', args['dest']
+            else:
+                print '================ Starting additional copy for "', package_id, '" in ', args['dest']
             try:
                 wm = LLManifest.for_platform(args['platform'], args.get('arch'))(args)
                 wm.do(*args['actions'])
             except Exception as err:
                 sys.exit(str(err))
             if touch:
-                print 'Created additional package ', wm.package_file, ' for ', package_id
+                print '================ Created additional package ', wm.package_file, ' for ', package_id
                 with open(base_touch_template.format(package_id), 'w') as fp:
                     fp.write('set package_file=%s\n' % wm.package_file)
-    
+            else:
+                print '================ Finished additional copy "', package_id, '" in ', args['dest']
     # Write out the package file in this format, so that it can easily be called
     # and used in a .bat file - yeah, it sucks, but this is the simplest...
     if touch:
@@ -494,6 +503,19 @@ class LLManifest(object):
         """Returns the full path to a file or directory specified
         relative to the destination directory."""
         return os.path.join(self.get_dst_prefix(), relpath)
+
+    def _relative_dst_path(self, dstpath):
+        """
+        Returns the path to a file or directory relative to the destination directory.
+        This should only be used for generating diagnostic output in the path method.
+        """
+        dest_root=self.dst_prefix[0]
+        if dstpath.startswith(dest_root+os.path.sep):
+            return dstpath[len(dest_root)+1:]
+        elif dstpath.startswith(dest_root):
+            return dstpath[len(dest_root):]
+        else:
+            return dstpath
 
     def ensure_src_dir(self, reldir):
         """Construct the path for a directory relative to the
@@ -794,13 +816,13 @@ class LLManifest(object):
         return self.path(os.path.join(path, file), file)
 
     def path(self, src, dst=None):
-        sys.stdout.write("Processing %s => %s ... " % (src, dst))
         sys.stdout.flush()
         if src == None:
             raise ManifestError("No source file, dst is " + dst)
         if dst == None:
             dst = src
         dst = os.path.join(self.get_dst_prefix(), dst)
+        sys.stdout.write("Processing %s => %s ... " % (src, self._relative_dst_path(dst)))
 
         def try_path(src):
             # expand globs
@@ -820,22 +842,18 @@ class LLManifest(object):
                     count += self.process_file(src, dst)
             return count
 
-        for pfx in self.get_src_prefix(), self.get_artwork_prefix(), self.get_build_prefix():
+        try_prefixes = [self.get_src_prefix(), self.get_artwork_prefix(), self.get_build_prefix()]
+        tried=[]
+        count=0
+        while not count and try_prefixes: 
+            pfx = try_prefixes.pop(0)
             try:
                 count = try_path(os.path.join(pfx, src))
             except MissingError:
-                # If src isn't a wildcard, and if that file doesn't exist in
-                # this pfx, try next pfx.
-                count = 0
-                continue
-
-            # Here try_path() didn't raise MissingError. Did it process any files?
-            if count:
-                break
-            # Even though try_path() didn't raise MissingError, it returned 0
-            # files. src is probably a wildcard meant for some other pfx. Loop
-            # back to try the next.
-
+                tried.append(pfx)
+                if not try_prefixes:
+                    # no more prefixes left to try
+                    print "unable to find '%s'; looked in:\n  %s" % (src, '\n  '.join(tried))
         print "%d files" % count
 
         # Let caller check whether we processed as many files as expected. In

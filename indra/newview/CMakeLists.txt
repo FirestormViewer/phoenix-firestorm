@@ -2568,12 +2568,8 @@ if (DARWIN)
     )
 
   set(VIEWER_APP_BUNDLE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${product}.app")
-  # VIEWER_APP_EXECUTABLE was originally a prediction of the executable
-  # pathname that would result from running viewer_manifest.py, but CMake
-  # complained that there was no rule to make that executable. Try using the
-  # existing target.
-  set(VIEWER_APP_EXECUTABLE "${VIEWER_BINARY_NAME}")
-  set(VIEWER_APP_DSYM "${VIEWER_APP_EXECUTABLE}.dSYM")
+  set(VIEWER_APP_EXE "${VIEWER_APP_BUNDLE}/Contents/MacOS/${product}")
+  set(VIEWER_APP_DSYM "${VIEWER_APP_EXE}.dSYM")
   set(VIEWER_APP_XCARCHIVE "${VIEWER_APP_BUNDLE}/../${product}.xcarchive.zip")
 
   configure_file(
@@ -2698,9 +2694,9 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
       DEPENDS generate_breakpad_symbols.py
           VERBATIM)
 
-##    add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}" "${VIEWER_BINARY_NAME}" "${VIEWER_COPY_MANIFEST}")
+##    add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}" ${VIEWER_BINARY_NAME} "${VIEWER_COPY_MANIFEST}")
     add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}")
-    add_dependencies(generate_symbols "${VIEWER_BINARY_NAME}")
+    add_dependencies(generate_symbols ${VIEWER_BINARY_NAME})
     if (WINDOWS OR LINUX)
       add_dependencies(generate_symbols "${VIEWER_COPY_MANIFEST}")
     endif (WINDOWS OR LINUX)
@@ -2714,6 +2710,9 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
       execute_process(COMMAND "cygpath" "-u" "${VIEWER_SYMBOL_FILE}"
         OUTPUT_VARIABLE VIEWER_SYMBOL_FILE_CYGWIN
         OUTPUT_STRIP_TRAILING_WHITESPACE)
+      execute_process(COMMAND "cygpath" "-u" "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}"
+        OUTPUT_VARIABLE PARENT_DIRECTORY_CYGWIN
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
       add_custom_command(OUTPUT "${VIEWER_SYMBOL_FILE}"
         # Use of 'tar ...j' here assumes VIEWER_SYMBOL_FILE endswith .tar.bz2;
         # testing a string suffix is painful enough in CMake language that
@@ -2722,25 +2721,25 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
         ARGS
           "cjf"
           "${VIEWER_SYMBOL_FILE_CYGWIN}"
+          "-C"
+          "${PARENT_DIRECTORY_CYGWIN}"
           "secondlife-bin.pdb"
-        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}"
         DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/secondlife-bin.pdb"
         COMMENT "Packing viewer PDB into ${VIEWER_SYMBOL_FILE_CYGWIN}"
         )
-      add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}" "${VIEWER_BINARY_NAME}")
-      add_dependencies(generate_symbols "${VIEWER_BINARY_NAME}")
+      add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}" ${VIEWER_BINARY_NAME})
+      add_dependencies(generate_symbols ${VIEWER_BINARY_NAME})
     endif (WINDOWS)
     if (DARWIN)
       # Have to run dsymutil first, then pack up the resulting .dSYM directory
       add_custom_command(OUTPUT "${VIEWER_APP_DSYM}"
         COMMAND "dsymutil"
         ARGS
-          "${VIEWER_APP_EXECUTABLE}"
-        DEPENDS "${VIEWER_APP_EXECUTABLE}"
+          ${VIEWER_APP_EXE}
         COMMENT "Generating ${VIEWER_APP_DSYM}"
         )
       add_custom_target(dsym_generate DEPENDS "${VIEWER_APP_DSYM}")
-      add_dependencies(dsym_generate "${VIEWER_APP_EXECUTABLE}")
+      add_dependencies(dsym_generate ${VIEWER_BINARY_NAME})
       add_custom_command(OUTPUT "${VIEWER_SYMBOL_FILE}"
         # See above comments about "tar ...j"
         COMMAND "tar"
