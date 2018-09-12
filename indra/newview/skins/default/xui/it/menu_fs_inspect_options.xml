@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Descrizione" name="description"/>
+	<menu_item_check label="Nome proprietario" name="owner_name"/>
+	<menu_item_check label="Nome creatore" name="creator_name"/>
+	<menu_item_check label="Facce" name="facecount"/>
+	<menu_item_check label="Vertici" name="vertexcount"/>
+	<menu_item_check label="Triangoli" name="trianglecount"/>
+	<menu_item_check label="VRAM texture" name="tramcount"/>
+	<menu_item_check label="VRAM totale" name="vramcount" />
+	<menu_item_check label="Data creazione" name="creation_date"/>
+</toggleable_menu>

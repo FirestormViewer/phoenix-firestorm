@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_snapshot_profile">
 	<text name="title">
-		Profilo
+		Profilo web
 	</text>
 	<combo_box label="Risoluzione" name="profile_size_combo">
 		<combo_box.item label="Finestra attuale" name="CurrentWindow"/>
-		<combo_box.item label="640x480" name="640x480"/>
-		<combo_box.item label="800x600" name="800x600"/>
-		<combo_box.item label="1024x768" name="1024x768"/>
 		<combo_box.item label="Personalizza" name="Custom"/>
 	</combo_box>
-	<spinner label="Larghezza x altezza" name="profile_snapshot_width"/>
+	<spinner label="L x A" name="profile_snapshot_width"/>
 	<check_box label="Mantieni le proporzioni" name="profile_keep_aspect_check"/>
 	<text name="caption_label">
 		Didascalia:
 	</text>
-	<check_box initial_value="true" label="Includi luogo" name="add_location_cb"/>
-	<button label="Annulla" name="cancel_btn"/>
-	<button label="Post" name="post_btn"/>
+	<check_box label="Includi luogo" name="add_location_cb"/>
+	<button label="&#x25B6; Seleziona" name="cancel_btn"/>
+	<button label="Invia" name="post_btn"/>
 </panel>

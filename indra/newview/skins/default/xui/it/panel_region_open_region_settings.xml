@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Impostazioni regione" name="RegionSettings">
+	<spinner label="Distanza disegno predefinita" name="draw_distance" tool_tip="Distanza di disegno per tutta la regione"/>
+	<check_box label="Forza distanza disegno" name="force_draw_distance" tool_tip="Blocca la distanza di disegno per tutti gli avatar della regione. NOTA: potrebbe creare problemi di lag agli utenti con computer dalle basse prestazioni. (Predef: No)"/>
+	<spinner label="Massima distanza trascina" name="max_drag_distance" tool_tip="Distanza massima a cui si può trascinare un prim nella regione"/>
+	<spinner label="Dimensione massima prim" name="max_prim_scale" tool_tip="Dimensione massima di un prim costruito nella regione"/>
+	<spinner label="Dimensione minima prim" name="min_prim_scale" tool_tip="Dimensione minima di un prim costruito nella regione"/>
+	<spinner label="Dimens. massima prim fisico" name="max_phys_prim_scale" tool_tip="Dimensione massima di un prim fisico costruito nella regione"/>
+	<spinner label="Dimensione massima buco" name="max_hollow_size" tool_tip="Dimensione massima del buco in un prim costruito nella regione"/>
+	<spinner label="Dimensione minima buco" name="min_hole_size" tool_tip="Dimensione minima del buco in un prim costruito nella regione"/>
+	<spinner label="Massimo numero link" name="max_link_count" tool_tip="Numero massimo di oggetti non fisici che possono essere collegati nella regione"/>
+	<spinner label="Massimo num link fisico" name="max_link_count_phys" tool_tip="Numero massimo di oggetti fisici che possono essere collegati nella regione"/>
+	<spinner label="Max oggetti inventario da trasf" name="max_inventory_items_transfer" tool_tip="Numbero di oggetti che possono essere trasferiti in una sola volta. -1 è illimitato. (Predef: -1)"/>
+	<spinner label="Scala dettagli terreno" name="terrain_detail_scale" tool_tip="Scala dei dettagli del terreno nella regione"/>
+	<spinner label="Mostra etichette" name="show_tags" tool_tip="Modalità etichette nomi nella regione. (mostra etichette = 2, mostra brevemente = 1, non mostrare = 0)"/>
+	<spinner label="Gruppi max" name="max_groups" tool_tip="Numero di gruppi a cui ognuno può aderire. -1 è illimitato. (Predef: -1)"/>
+	<check_box label="Rendi acqua" name="render_water" tool_tip="Abilita la resa dell&apos;acqua nella regione (Predef: Sì)"/>
+	<check_box label="Permetti minimappa" name="allow_minimap" tool_tip="Permetti l&apos;uso della mini mappa nella regione (Predef: Sì)"/>
+	<check_box label="Permetti prim fisici" name="allow_physical_prims" tool_tip="Permette la creazione di prim fisici nella regione. (Predef: Sì)"/>
+	<check_box label="Attiva limiti max costruzione" name="enforce_max_build" tool_tip="Abilita i limiti di costruzione nella regione. (Predef: Sì)"/>
+	<check_box label="Permetti impostazioni ambiente per lotto" name="allow_parcel_windlight" tool_tip="Abilita le impostazioni d&apos;ambiente per i lotti della regione. (Predef: Sì)"/>
+	<button label="Applica" name="apply_ors_btn"/>
+</panel>

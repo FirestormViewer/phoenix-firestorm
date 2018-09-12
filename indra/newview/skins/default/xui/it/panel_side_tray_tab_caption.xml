@@ -3,5 +3,5 @@
 	<text name="sidetray_tab_title" value="Pannello laterale"/>
 	<button name="undock" tool_tip="Disàncora"/>
 	<button name="dock" tool_tip="Àncora"/>
-	<button name="show_help" tool_tip="Mostra Aiuto"/>
+	<button name="minimize" tool_tip="Minimizza"/>
 </panel>

@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="outgoing call" title="CHIAMATA IN CORSO">
-	<floater.string name="lifetime">
-		5
-	</floater.string>
+<floater name="outgoing call" title="Chiamata in corso">
 	<floater.string name="localchat">
 		Chat vocale nei dintorni
 	</floater.string>
@@ -22,7 +19,7 @@
 		Chiamata a [CALLEE_NAME]
 	</text>
 	<text name="noanswer">
-		Nessuna risposta.  Riprova più tardi.
+		Nessuna risposta.  Riprovare più tardi.
 	</text>
 	<text name="nearby">
 		Sei stato scollegato da [VOICE_CHANNEL_NAME].  [RECONNECT_NEARBY]

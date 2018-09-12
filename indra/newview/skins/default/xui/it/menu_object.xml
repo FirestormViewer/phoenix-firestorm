@@ -8,8 +8,21 @@
 	<menu_item_call label="Apri" name="Open"/>
 	<menu_item_call label="Siediti qui" name="Object Sit"/>
 	<menu_item_call label="Alzati" name="Object Stand Up"/>
-	<menu_item_call label="Profilo dell&apos;oggetto" name="Object Inspect"/>
-	<menu_item_call label="Zoom avanti" name="Zoom In"/>
+	<context_menu label="Oggetto" name="Object Features">
+		<menu_item_call label="Profilo" name="Object Inspect"/>
+		<menu_item_call label="Ispeziona" name="Object_Inspect_Floater"/>
+		<menu_item_call label="Info script" name="ScriptInfo"/>
+		<menu_item_call label="Collega" name="Object Link"/>
+		<menu_item_call label="Scollega" name="Object Unlink"/>
+		<menu_item_check label="Modifica parti collegate" name="Object Edit Linked Parts"/>
+		<menu_item_call label="Compila (Mono)" name="Mono"/>
+		<menu_item_call label="Compila (LSL)" name="LSL"/>
+		<menu_item_call label="Ripristina script" name="Object Reset Scripts"/>
+		<menu_item_call label="Avvia script" name="Object Set Scripts to Running"/>
+		<menu_item_call label="Ferma script" name="Object Set Scripts to Not Running"/>
+		<menu_item_call label="Rimuovi script" name="Remove Scripts From Selection"/>
+	</context_menu>
+	<menu_item_call label="Inquadra" name="Zoom In"/>
 	<menu_item_call label="Mostra nei set collegati" name="show_in_linksets"/>
 	<menu_item_call label="Mostra nei personaggi" name="show_in_characters"/>
 	<context_menu label="Metti" name="Put On">
@@ -22,12 +35,19 @@
 		<menu_item_call label="Segnala abuso" name="Report Abuse..."/>
 		<menu_item_call label="Blocca" name="Object Mute"/>
 		<menu_item_call label="Sblocca" name="Object Unmute"/>
-		<menu_item_call label="Restituisci" name="Return..."/>
 	</context_menu>
+	<menu_item_call label="Ricarica texture" name="Texture Refresh"/>
+	<menu_item_call label="De-rendi" name="Derender"/>
+	<menu_item_call label="De-rendi + lista nera" name="DerenderPermanent"/>
+	<menu_item_call label="Restituisci" name="Return..."/>
 	<menu_item_call label="Prendi" name="Pie Object Take"/>
 	<menu_item_call label="Prendi copia" name="Take Copy"/>
 	<menu_item_call label="Paga" name="Pay..."/>
 	<menu_item_call label="Acquista" name="Buy..."/>
+	<context_menu label="Esporta" name="Export Menu">
+		<menu_item_call label="Salva copia" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
 	<menu_item_call label="Elimina" name="Delete"/>
 	<menu_item_call label="Blocca proprietario particella" name="Mute Particle"/>
 </context_menu>

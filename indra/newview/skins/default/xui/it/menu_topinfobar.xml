@@ -2,6 +2,5 @@
 <menu name="menu_topinfobar">
 	<menu_item_check label="Mostra le coordinate" name="Show Coordinates"/>
 	<menu_item_check label="Mostra proprietà del lotto" name="Show Parcel Properties"/>
-	<menu_item_call label="Punto di riferimento" name="Landmark"/>
 	<menu_item_call label="Copia" name="Copy"/>
 </menu>

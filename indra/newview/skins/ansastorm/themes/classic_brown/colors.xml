@@ -1379,4 +1379,7 @@
   <color
       name="ChatHistoryMessageFromLog"
       reference="Gray" />
+  <color
+      name="AreaSearchBeaconColor"
+      reference="Blue_80" />
 </colors>

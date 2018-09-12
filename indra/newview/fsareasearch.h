@@ -223,8 +223,6 @@ private:
 	FSPanelAreaSearchAdvanced* mPanelAdvanced;
 
 	bool mBeacons;
-	LLColor4 mBeaconColor;
-	LLColor4 mBeaconTextColor;
 	
 	bool mExcludeAttachment;
 	bool mExcludeTemporary;

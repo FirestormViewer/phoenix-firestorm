@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="Outfit Gallery">
+	<string name="outfit_photo_string">
+		Foto dell&apos;abito "[OUTFIT_NAME]"
+	</string>
+	<string name="no_outfits_msg">
+		Non hai nessun abito. Prova la [secondlife:///app/search/all/ ricerca]
+	</string>
+	<string name="no_matched_outfits_msg">
+		Non trovi quel che cerchi? Prova la [secondlife:///app/search/all/[SEARCH_TERM] ricerca].
+	</string>
+	<text name="no_outfits_txt">
+		Ricerca in corso...
+	</text> 
+	<panel name="bottom_panel">
+		<menu_button tool_tip="Altre opzioni" name="options_gear_btn"/>
+		<text name="OutfitcountText">
+			[COUNT] abiti
+		</text>
+		<text name="avatar_complexity_label">
+			Complessità: [WEIGHT]
+		</text>
+		<button name="trash_btn" tool_tip="Cancella questo abito"/>
+	</panel>
+</panel>

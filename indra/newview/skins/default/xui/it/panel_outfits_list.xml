@@ -2,10 +2,16 @@
 <panel name="Outfits">
 	<accordion name="outfits_accordion">
 		<no_matched_tabs_text name="no_matched_outfits_msg" value="Non riesci a trovare quello che cerchi? Prova [secondlife:///app/search/all/[SEARCH_TERM] Cerca]."/>
-		<no_visible_tabs_text name="no_outfits_msg" value="Non hai ancora vestiario da indossare. Prova [secondlife:///app/search/all Cerca]."/>
+		<no_visible_tabs_text name="no_outfits_msg" value="Non hai ancora abiti da indossare. Prova [secondlife:///app/search/all Cerca]."/>
 	</accordion>
 	<panel name="bottom_panel">
 		<menu_button name="options_gear_btn" tool_tip="Mostra ulteriori opzioni"/>
-		<button name="trash_btn" tool_tip="Elimina il vestiario selezionato"/>
+		<text name="OutfitcountText">
+			[COUNT] abiti
+		</text>
+		<text name="avatar_complexity_label">
+			Complessità: [WEIGHT]
+		</text>
+		<button name="trash_btn" tool_tip="Elimina l&apos;abito selezionato"/>
 	</panel>
 </panel>

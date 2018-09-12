@@ -19,13 +19,10 @@
 		Il proprietario può:
 	</panel.string>
 	<panel.string name="acquiredDate">
-		[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
+		[wkday,datetime,local] [day,datetime,local]/[mth,datetime,local]/[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] 
 	</panel.string>
 	<panel.string name="origin_inventory">
 		(Inventario)
-	</panel.string>
-	<panel.string name="origin_inworld">
-		(in Second Life)
 	</panel.string>
 	<text name="title" value="Profilo articolo"/>
 	<text name="origin" value="(Inventario)"/>
@@ -38,7 +35,7 @@
 				Descrizione:
 			</text>
 			<text name="LabelCreatorTitle">
-				Ideatore:
+				Creatore:
 			</text>
 			<text name="LabelOwnerTitle">
 				Proprietario:
@@ -53,23 +50,23 @@
 				<text name="perm_modify">
 					Tu puoi:
 				</text>
-				<check_box label="Modifica" name="CheckOwnerModify"/>
-				<check_box label="Copia" name="CheckOwnerCopy"/>
-				<check_box label="Trasferisci" name="CheckOwnerTransfer"/>
+				<check_box label="Modificare" name="CheckOwnerModify"/>
+				<check_box label="Copiare" name="CheckOwnerCopy"/>
+				<check_box label="Trasferire" name="CheckOwnerTransfer"/>
 				<text name="AnyoneLabel">
 					Chiunque:
 				</text>
-				<check_box label="Copia" name="CheckEveryoneCopy"/>
+				<check_box label="Copiare" name="CheckEveryoneCopy"/>
 				<text name="GroupLabel">
 					Gruppo:
 				</text>
-				<check_box label="Condividi" name="CheckShareWithGroup" tool_tip="Consenti a tutti i membri del gruppo selezionato di condividere i tuoi diritti di modifica di questo oggetto. Per attivare le restrizioni per ruolo devi prima effettuare la cessione."/>
+				<check_box label="Condividere" name="CheckShareWithGroup" tool_tip="Consenti a tutti i membri del gruppo selezionato di condividere i tuoi diritti di modifica di questo oggetto. Per attivare le restrizioni per ruolo devi prima effettuare la cessione."/>
 				<text name="NextOwnerLabel">
 					Proprietario successivo:
 				</text>
-				<check_box label="Modifica" name="CheckNextOwnerModify"/>
-				<check_box label="Copia" name="CheckNextOwnerCopy"/>
-				<check_box label="Trasferisci" name="CheckNextOwnerTransfer" tool_tip="Il prossimo proprietario può regalare o rivendere questo oggetto"/>
+				<check_box label="Modificare" name="CheckNextOwnerModify"/>
+				<check_box label="Copiare" name="CheckNextOwnerCopy"/>
+				<check_box label="Trasferire" name="CheckNextOwnerTransfer" tool_tip="Il prossimo proprietario può regalare o rivendere questo oggetto"/>
 			</panel>
 			<check_box label="In vendita" name="CheckPurchase"/>
 			<combo_box name="ComboBoxSaleType">

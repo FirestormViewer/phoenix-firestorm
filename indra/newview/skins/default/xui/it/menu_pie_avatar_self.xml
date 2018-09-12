@@ -1,32 +1,64 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <pie_menu name="Self Pie">
-    <pie_slice label="Profilo" name="Profile..."/>
-    <pie_slice label="Gruppi" name="Groups..."/>
+    <pie_slice label="Profilo..." name="Profile..."/>
+    <pie_slice label="Gruppi..." name="Groups..."/>
     <pie_menu label="Rimuovi &gt;" name="Take Off &gt;">
         <pie_menu label="Vestiti &gt;" name="Clothes &gt;">
-            <pie_slice label="Maglietta" name="Shirt"/>
+            <pie_slice label="Camicia" name="Shirt"/>
             <pie_slice label="Pantaloni" name="Pants"/>
             <pie_slice label="Scarpe" name="Shoes"/>
-            <pie_slice label="Calzini" name="Socks"/>
+            <pie_slice label="Calze" name="Socks"/>
             <pie_slice label="Giacca" name="Jacket"/>
             <pie_slice label="Guanti" name="Gloves"/>
-            <pie_menu label="Avanti &gt;" name="Clothes More">
+            <pie_menu label="Altro &gt;" name="Clothes More">
                 <pie_slice label="Canottiera" name="Self Undershirt"/>
                 <pie_slice label="Rimuovi tutto" name="All Clothes"/>
-                <pie_slice label="Mutande" name="Self Underpants"/>
+                <pie_slice label="Slip" name="Self Underpants"/>
+                <pie_slice label="Tatuaggi" name="Self Tattoo"/>
+                <pie_slice label="Fisica" name="Self Physics"/>
+                <pie_slice label="Alfa" name="Self Alpha"/>
             </pie_menu>
             <pie_slice label="Gonna" name="Skirt"/>
         </pie_menu>
         <pie_menu name="Pie Object Detach HUD"/>
-        <pie_menu label="Rimuovi &gt;" name="Pie Object Detach"/>
-        <pie_slice label="Rimuovi tutto" name="Detach All"/>
+        <pie_menu label="Stacca &gt;" name="Pie Object Detach">
+            <pie_menu label="Scheletro est.&gt;" name="Enhanced Skeleton">
+                <pie_slice label="Ala dx" name="Right Wing"/>
+                <pie_slice label="Inguine" name="Groin"/>
+                <pie_slice label="Base coda" name="Tail Base"/>
+                <pie_slice label="Punta coda" name="Tail Tip"/>
+                <pie_slice label="Ala sx" name="Left Wing"/>
+                <pie_slice label="Piede post sx" name="Left Hind Foot"/>
+                <pie_menu label="Altro &gt;" name="Enhanced Skeleton More">
+                    <pie_slice label="Alt orecchio dx" name="Alt Right Ear"/>
+                    <pie_slice label="Alt occhio dx" name="Alt Right Eye"/>
+                    <pie_slice label="Lingua" name="Tongue"/>
+                    <pie_slice label="Alt occhio sx" name="Alt Left Eye"/>
+                    <pie_slice label="Alt orecchio sx" name="Alt Left Ear"/>
+                    <pie_slice label="Anulare sx" name="Left Ring Finger"/>
+                    <pie_slice label="Mandibola"  name="Jaw"/>
+                    <pie_slice label="Anulare dx" name="Right Ring Finger"/>
+                </pie_menu>
+                <pie_slice label="Piede post dx" name="Right Hind Foot"/>
+            </pie_menu>
+        </pie_menu>
+        <pie_slice label="Stacca tutto" name="Detach All"/>
     </pie_menu>
-    <pie_slice label="Siediti" name="Sit Down Here"/>
+    <pie_slice label="Siedi qui" name="Sit Down Here"/>
     <pie_slice label="Alzati" name="Stand Up"/>
-    <pie_slice label="N. Script" name="ScriptInfo"/>
-    <pie_menu name="Appearance &gt;">
-        <pie_slice label="Modifica Shape" name="Edit My Shape"/>
-        <pie_slice label="Aggiorna Tex" name="Texture Refresh"/>
-        <pie_slice label="Modifica Outfit" name="Edit My Outfit"/>
+    <pie_slice label="Info script" name="ScriptInfo"/>
+    <pie_slice label="Gesti..." name="Gestures"/>
+    <pie_menu name="Appearance &gt;" label="Aspetto &gt;">
+        <pie_slice label="Modifica forma" name="Edit My Shape"/>
+        <pie_slice label="Aggiorna tex" name="Texture Refresh"/>
+        <pie_slice label="Modifica abito" name="Edit My Outfit"/>
+        <pie_menu name="ResetMenu" label="Ripristina &gt;">
+            <pie_slice label="Schel. &amp; Anim." name="Reset Skeleton And Animations"/>
+            <pie_slice label="Scheletro" name="Reset Skeleton"/>
+            <pie_slice label="LOD mesh" name="Reset Mesh LOD"/>
+        </pie_menu>
+        <pie_slice label="Scarica XML" name="Dump XML"/>
+        <pie_slice label="Altezza" name="Hover Height"/>
     </pie_menu>
+    <pie_slice label="Mostra texture" name="Debug..."/>
 </pie_menu>
