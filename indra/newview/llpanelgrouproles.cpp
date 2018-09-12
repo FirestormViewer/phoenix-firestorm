@@ -861,6 +861,7 @@ BOOL LLPanelGroupMembersSubTab::postBuildSubTab(LLView* root)
 	//mMembersList->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
 	mMembersList->setContextMenu(&gFSNameListAvatarMenu);
 	// </FS:Ansariel>
+	mMembersList->setIsFriendCallback(LLAvatarActions::isFriend);
 	
 	LLSD row;
 	row["columns"][0]["column"] = "name";

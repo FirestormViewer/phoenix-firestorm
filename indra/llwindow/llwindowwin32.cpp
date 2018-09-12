@@ -758,8 +758,6 @@ void LLWindowWin32::close()
 
 	mDragDrop->reset();
 
-	// Make sure cursor is visible and we haven't mangled the clipping state.
-	setMouseClipping(FALSE);
 
 	// Go back to screen mode written in the registry.
 	if (mFullscreen)
@@ -769,13 +767,13 @@ void LLWindowWin32::close()
 
 	// Don't process events in our mainWindowProc any longer.
 	SetWindowLongPtr(mWindowHandle, GWLP_USERDATA, NULL);
-	if (mCallbacks)
+
+	// Make sure cursor is visible and we haven't mangled the clipping state.
+	showCursor();
+	setMouseClipping(FALSE);
+	if (gKeyboard)
 	{
-		mCallbacks->handleFocusLost(this);
-	}
-	else
-	{
-		showCursor();
+		gKeyboard->resetKeys();
 	}
 
 	// Clean up remaining GL state
