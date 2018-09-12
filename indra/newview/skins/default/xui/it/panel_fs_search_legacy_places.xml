@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Luoghi" name="panel_ls_places">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Termini da cercare:
+		</text>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_places">
+			<columns label="Nome" name="place_name"/>
+			<columns label="Traffico" name="dwell"/>
+		</scroll_list>
+		<button label="Prec" name="places_back"/>
+		<button label="Succ" name="places_next"/>
+	</panel>
+</panel>

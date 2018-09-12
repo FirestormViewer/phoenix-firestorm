@@ -82,28 +82,53 @@ VRAM: [VRAM_USAGE] KB
         <scroll_list.columns
          label="Faces"
          name="facecount"
-         width="45" />
+         width="45"
+         sort_column="facecount_sort"/>
         <scroll_list.columns
          label="Vertices"
          name="vertexcount"
-         width="55" />
+         width="55"
+         sort_column="vertexcount_sort"/>
         <scroll_list.columns
          label="Triangles"
          name="trianglecount"
-         width="55" />
+         width="55"
+         sort_column="trianglecount_sort"/>
         <scroll_list.columns
          label="TMem"
          name="tramcount"
-         width="55" />
+         width="55"
+         sort_column="tramcount_sort"/>
         <scroll_list.columns
          label="VRAM"
          name="vramcount"
-         width="55" />
+         width="55"
+         sort_column="vramcount_sort"/>
         <scroll_list.columns
          label="Creation Date"
          name="creation_date"
          dynamic_width="true"
          sort_column="creation_date_sort"/>
+        <scroll_list.columns
+         label=""
+         name="facecount_sort"
+         width="-1" />
+        <scroll_list.columns
+         label=""
+         name="vertexcount_sort"
+         width="-1" />
+        <scroll_list.columns
+         label=""
+         name="trianglecount_sort"
+         width="-1" />
+        <scroll_list.columns
+         label=""
+         name="tramcount_sort"
+         width="-1" />
+        <scroll_list.columns
+         label=""
+         name="vramcount_sort"
+         width="-1" />
         <scroll_list.columns
          label=""
          name="creation_date_sort"

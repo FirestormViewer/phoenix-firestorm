@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_notifications_tabbed" title="AVVISI">
+<floater name="floater_notifications_tabbed" title="Avvisi">
 	<floater.string name="system_tab_title">
 		Sistema ([COUNT])
 	</floater.string>
@@ -13,7 +13,7 @@
 		Gruppo ([COUNT])
 	</floater.string>
 	<string name="title_notification_tabbed_window">
-		AVVISI
+		Avvisi
 	</string>
 	<layout_stack name="TabButtonsStack">
 		<layout_panel name="TabButtonsLayoutPanel">
@@ -26,9 +26,6 @@
 			<layout_stack name="ButtonsStack">
 				<layout_panel name="CondenseAllButtonPanel">
 					<button label="Compatta tutti" name="collapse_all_button"/>
-				</layout_panel>
-				<layout_panel name="GapLayoutPanel">
-					<panel label="Pannello spaziatura" name="GapPanel"/>
 				</layout_panel>
 				<layout_panel name="DeleteAllButtonPanel">
 					<button label="Elimina tutti" name="delete_all_button"/>

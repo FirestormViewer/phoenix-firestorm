@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_import" title="Importa oggetto">
+	<floater.string name="floater_title">
+		Importa [FILENAME]
+	</floater.string>
+	<floater.string name="file_status">
+		[LINKSETS] linkset. [PRIMS] prim. [TEXTURES] texture.
+[SOUNDS] suoni. [ANIMATIONS] animazioni.
+	</floater.string>
+	<floater.string name="file_status_error">
+		Errore lettura file. Selezionarne un altro.
+	</floater.string>
+	<floater.string name="file_version_error">
+		Errore scansione file, formato o versione errata.
+	</floater.string>
+	<floater.string name="file_status_running">
+		Linkset [LINKSET] di [LINKSETS], prim [PRIM] di [PRIMS]
+	</floater.string>
+	<floater.string name="file_status_done">
+		Importazione terminata.
+	</floater.string>
+	<floater.string name="texture_uploading">
+		Caricamento texture [TEXTURE] di [TEXTURETOTAL].
+	</floater.string>
+	<floater.string name="sound_uploading">
+		Caricamento suono [SOUND] di [SOUNDTOTAL].
+	</floater.string>
+	<floater.string name="animation_uploading">
+		Caricamento animazione [ANIMATION] di [ANIMATIONTOTAL].
+	</floater.string>
+	<floater.string name="asset_uploading">
+		Caricamento asset [ASSET] di [ASSETTOTAL].
+	</floater.string>
+	<floater.string name="upload_cost">
+		Costo totale caricamento: $L [COST].
+	</floater.string>
+	<floater.string name="object">
+		oggetto
+	</floater.string>
+	<floater.string name="objects">
+		oggetti
+	</floater.string>
+	<text name="filename_text">
+		[FILENAME]
+	</text>
+	<text name="creation_date_text">
+		Creato il [DATE_STRING]
+	</text>
+	<text name="author_text">
+		da [AUTHOR] [GRID]
+	</text>
+	<text name="client_text">
+		Viewer: [CLIENT] v.[VERSION]
+	</text>
+	<text name="file_status_text">
+		Scegliere un file.
+	</text>
+	<check_box name="do_not_attach" label="Non attaccare l&apos;oggetto"/>
+	<check_box name="region_position" label="Ripristina posizione in regione"/>
+	<check_box name="upload_asset" label="Carica"/>
+	<check_box name="temp_asset" label="Temp" />
+	<button name="import_btn" label="Importa"/>
+</floater>

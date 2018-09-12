@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="modal container" title="">
-	<floater.string name="real_url">
-		http://secondlife.com/app/tos/
-	</floater.string>
-	<floater.string name="loading_url">
-		data:text/html,%3Chtml%3E%3Chead%3E%3C/head%3E%3Cbody text=%22000000%22%3E%3Ch2%3E Caricamento in corso %3Ca%20target%3D%22_external%22%20href%3D%22http%3A//secondlife.com/app/tos/%22%3ETerms%20of%20Service%3C/a%3E...%3C/h2%3E %3C/body%3E %3C/html%3E
-	</floater.string>
 	<text name="tos_heading">
-		Leggi i Termini e le Condizioni di Second Life, le clausole di riservatezza, i Termini del Servizio, compresi i requisiti per l&apos;utilizzo dell&apos;arbitrato e la rinuncia a qualunque ricorso di classe o gruppo per risolvere controversie.  Per continuare l&apos;accesso a [SECOND_LIFE], devi accettare le condizioni.
+		Sei pregato di leggere attentamente il regolamento (Terms and Conditions), le regole sulla privacy (Privacy Policy) e i termini di servizio (Terms of Service), inclusi i requisiti per l&apos;uso dell&apos;arbitrato e la rinuncia a qualsiasi azione di classe o di gruppo per la risoluzione delle controversie. 
+		Per continuare l&apos;accesso  devi accettare le condizioni.
 	</text>
 	<text name="external_tos_required">
 		Per continuare, visita https://my.secondlife.com e accedi per accettare i Termini del servizio. Grazie.
 	</text>
-	<check_box label="" name="agree_chk"/>
+	<check_box label="Ho letto e accetto le condizioni" name="agree_chk"/>
 	<text name="agree_list">
-		Ho letto e accettato i Termini e le Condizioni di Second Life, le clausole di riservatezza e i Termini del Servizio, compresi i requisiti per la risoluzione delle dispute.
-	</text>
+		Il regolamento (Terms and Conditions), le regole sulla privacy (Privacy Policy) e i termini di servizio (Terms of Service), inclusi i requisiti per la soluzione delle controversie.
+    </text>
 	<button label="Continua" label_selected="Continua" name="Continue"/>
 	<button label="Annulla" label_selected="Annulla" name="Cancel"/>
 </floater>

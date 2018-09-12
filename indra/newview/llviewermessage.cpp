@@ -4489,16 +4489,31 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 			{
 				// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
 				static LLCachedControl<bool> fsExperimentalLostAttachmentsFix(gSavedSettings, "FSExperimentalLostAttachmentsFix");
+				static LLCachedControl<F32> fsExperimentalLostAttachmentsFixKillDelay(gSavedSettings, "FSExperimentalLostAttachmentsFixKillDelay");
 				if (fsExperimentalLostAttachmentsFix &&
 					isAgentAvatarValid() &&
-					(gAgent.getTeleportState() != LLAgent::TELEPORT_NONE || gAgentAvatarp->isCrossingRegion()) && 
+					(gAgent.getTeleportState() != LLAgent::TELEPORT_NONE || gPostTeleportFinishKillObjectDelayTimer.getElapsedTimeF32() <= fsExperimentalLostAttachmentsFixKillDelay || gAgentAvatarp->isCrossingRegion()) && 
 					(objectp->isAttachment() || objectp->isTempAttachment()) &&
 					objectp->permYouOwner())
 				{
 					// Simply ignore the request and don't kill the object - this should work...
 					if (gSavedSettings.getBOOL("FSExperimentalLostAttachmentsFixReport"))
 					{
-						report_to_nearby_chat("Sim tried to kill attachment: " + objectp->getAttachmentItemName() + " (" + (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE ? "tp" : "crossing") + ")");
+						std::string reason;
+						if (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE)
+						{
+							reason = "tp";
+						}
+						else if (gAgentAvatarp->isCrossingRegion())
+						{
+							reason = "crossing";
+						}
+						else
+						{
+							reason = "timer";
+						}
+
+						report_to_nearby_chat("Sim tried to kill attachment: " + objectp->getAttachmentItemName() + " (" + reason + ")");
 					}
 					continue;
 				}

@@ -197,6 +197,10 @@
 				Farbe für Einstellungssuche:
 			</text>
 			<color_swatch name="preferences_search_color" tool_tip="Farbe für die Hervorhebung der Einstellungssuche"/>
+			<text name="area_search_beacon_color_label">
+				Farbe für Markierung der Umgebungssuche:
+			</text>
+			<color_swatch name="area_search_beacon_color" tool_tip="Farbe für Markierung der Umgebungssuche"/>
 			<check_box label="Zeige Skript-Dialoge auf undurchsichtigem Hintergrund" name="FSScriptDialogNoTransparency"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Zeige Gruppenmitteilungen auf undurchsichtigem Hintergrund"/>
 			<check_box label="Hintergrundfarbe und Deckkraft des Pie-Menüs übersteuern" name="override_pie_color_checkbox"/>

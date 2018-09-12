@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="contents" title="ACQUISTA COPIA DELL&apos;OGGETTO">
+<floater name="contents" title="Acquista copia dell&apos;oggetto">
 	<floater.string name="title_buy_text">
 		Compra
 	</floater.string>
 	<floater.string name="title_buy_copy_text">
-		Compra un copia di
+		Compra una copia di
 	</floater.string>
 	<floater.string name="no_copy_text">
 		(non copiabile)
@@ -19,10 +19,7 @@
 		Contiene:
 	</text>
 	<text name="buy_text">
-		Acquista per L$[AMOUNT] da:
-	</text>
-	<text name="buy_name_text">
-		[NAME]?
+		Acquistare per L$[AMOUNT] da:
 	</text>
 	<button label="Compra" label_selected="Compra" name="buy_btn"/>
 	<button label="Annulla" label_selected="Annulla" name="cancel_btn"/>

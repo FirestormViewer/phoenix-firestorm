@@ -15,6 +15,6 @@
 	<text name="status_caption_label">
 		A cosa stai pensando?
 	</text>
-	<button label="Post" name="post_status_btn"/>
+	<button label="Pubblica" name="post_status_btn"/>
 	<button label="Annulla" name="cancel_status_btn"/>
 </panel>

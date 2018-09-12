@@ -2,12 +2,9 @@
 <panel name="panel_postcard_settings">
 	<combo_box label="Risoluzione" name="postcard_size_combo">
 		<combo_box.item label="Finestra attuale" name="CurrentWindow"/>
-		<combo_box.item label="640x480" name="640x480"/>
-		<combo_box.item label="800x600" name="800x600"/>
-		<combo_box.item label="1024x768" name="1024x768"/>
 		<combo_box.item label="Personalizza" name="Custom"/>
 	</combo_box>
-	<spinner label="Larghezza x altezza" name="postcard_snapshot_width"/>
+	<spinner label="L x A" name="postcard_snapshot_width"/>
 	<check_box label="Mantieni le proporzioni" name="postcard_keep_aspect_check"/>
 	<slider label="Qualità:" name="image_quality_slider"/>
 </panel>

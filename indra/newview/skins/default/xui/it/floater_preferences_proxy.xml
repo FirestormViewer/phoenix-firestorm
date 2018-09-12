@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Proxy Settings Floater" title="Impostazioni proxy">
-	<check_box initial_value="false" label="Usa proxy HTTP per le pagine Web" name="web_proxy_enabled"/>
+	<check_box label="Usa proxy HTTP per le pagine Web" name="web_proxy_enabled"/>
 	<text name="http_proxy_label">
 		Proxy HTTP:
 	</text>
@@ -16,8 +16,8 @@
 		Autenticazione SOCKS:
 	</text>
 	<radio_group name="socks5_auth_type">
-		<radio_item label="Nessuna autenticazione" name="Socks5NoAuth" tool_tip="Il proxy Socks5 non richiede autenticazione." value="Nessuna"/>
-		<radio_item label="Nome utente e password" name="Socks5UserPass" tool_tip="Il proxy Socks5 richiede autenticazione con nome utente e password." value="NomePassword"/>
+		<radio_item label="Nessuna autenticazione" name="Socks5NoAuth" tool_tip="Il proxy Socks5 non richiede autenticazione."/>
+		<radio_item label="Nome utente e password" name="Socks5UserPass" tool_tip="Il proxy Socks5 richiede autenticazione con nome utente e password."/>
 	</radio_group>
 	<text name="socks5_username_label">
 		Nome utente:
@@ -35,6 +35,5 @@
 		<radio_item label="Usa proxy HTTP" name="OtherHTTPProxy" tool_tip="Il traffico HTTP non Web verrà inviato attraverso un proxy Web configurato." value="Web"/>
 		<radio_item label="Usa proxy SOCKS 5:" name="OtherSocksProxy" tool_tip="Il traffico HTTP non Web verrà inviato attraverso il proxy Socks 5 configurato." value="Socks"/>
 	</radio_group>
-	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Annulla" label_selected="Annulla" name="Cancel"/>
 </floater>

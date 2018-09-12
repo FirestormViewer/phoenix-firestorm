@@ -22,7 +22,7 @@
 		-- Nulla --
 	</floater.string>
 	<floater.string name="Title">
-		Gesture: [NAME]
+		Gesto: [NAME]
 	</floater.string>
 	<text name="desc_label">
 		Descrizione:
@@ -30,23 +30,23 @@
 	<text name="trigger_label">
 		Parole chiave:
 	</text>
-	<text name="replace_text" tool_tip="Sostituisci le parole chiave con questi termini. Per esempio, sostituire la parola chiave &apos;salve&apos; con &apos;ciao&apos; modificherà la chat &apos;Volevo solo dire salve&apos; in &apos;Volevo solo dire ciao&apos; e avvierà la gesture!">
+	<text name="replace_text" tool_tip="Sostituisci le parole chiave con questi termini. Per esempio, sostituire la parola chiave &apos;salve&apos; con &apos;ciao&apos; modificherà la chat &apos;Volevo solo dire salve&apos; in &apos;Volevo solo dire ciao&apos; e avvierà il gesto">
 		Sostituisci con:
 	</text>
-	<line_editor name="replace_editor" tool_tip="Sostituisci le parole chiave con questi termini. Per esempio, sostituire la parola chiave &apos;salve&apos; con &apos;ciao&apos; modificherà la chat &apos;Volevo solo dire salve&apos; in &apos;Volevo solo dire ciao&apos; e avvierà la gesture!"/>
+	<line_editor name="replace_editor" tool_tip="Sostituisci le parole chiave con questi termini. Per esempio, sostituire la parola chiave &apos;salve&apos; con &apos;ciao&apos; modificherà la chat &apos;Volevo solo dire salve&apos; in &apos;Volevo solo dire ciao&apos; e avvierà il gesto"/>
 	<text name="key_label" width="147">
 		Scorciatoia da tastiera:
 	</text>
 	<combo_box left_delta="150" label="Nessuno" name="modifier_combo" />
 	<combo_box label="Nessuno" name="key_combo" />
 	<text name="library_label">
-		Libreria:
+		Biblioteca:
 	</text>
 	<scroll_list name="library_list">
 		<scroll_list.rows name="action_animation" value="Animazione"/>
 		<scroll_list.rows name="action_sound" value="Suono"/>
 		<scroll_list.rows name="action_chat" value="Chat"/>
-		<scroll_list.rows name="action_wait" value="Attendi"/>
+		<scroll_list.rows name="action_wait" value="Attesa"/>
 	</scroll_list>
 	<button label="Aggiungi &gt;&gt;" name="add_btn"/>
 	<text name="steps_label">
@@ -59,7 +59,7 @@
 		(opzioni)
 	</text>
 	<radio_group name="animation_trigger_type">
-		<radio_item label="Attiva" name="start"/>
+		<radio_item label="Avvia" name="start"/>
 		<radio_item label="Ferma" name="stop"/>
 	</radio_group>
 	<check_box label="finché le animazioni sono eseguite" name="wait_anim_check"/>
@@ -68,7 +68,7 @@
 	<text name="help_label">
 		Tutte le fasi avvengono contemporaneamente, a meno che non aggiungi fasi di attesa.
 	</text>
-	<check_box label="Attiva" name="active_check" tool_tip="Le gesture attivate possono essere eseguite scrivendo in chat la parola chiave o premendo i tasti chiave. Le gesture generalmente si disattivano quando c&apos;è un conflitto nei relativi tasti."/>
+	<check_box label="Attiva" name="active_check" tool_tip="I gesti attivati possono essere eseguite scrivendo in chat la parola chiave o premendo i tasti chiave. I gesti generalmente si disattivano quando c&apos;è un conflitto nei relativi tasti."/>
 	<button label="Anteprima" name="preview_btn"/>
 	<button label="Salva" name="save_btn"/>
 </floater>
