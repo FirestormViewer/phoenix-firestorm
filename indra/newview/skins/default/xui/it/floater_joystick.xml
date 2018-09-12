@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Joystick" title="CONFIGURAZIONE JOYSTICK">
+<floater name="Joystick" title="Configurazione joystick">
 	<check_box label="Abilita Joystick:" name="enable_joystick"/>
 	<text left="120" name="joystick_type" width="380"/>
 	<spinner label="Mapping: asse X" label_width="140" left="12" name="JoystickAxis1" width="180"/>
@@ -57,14 +57,13 @@
 	<text name="Feathering">
 		Smussamento
 	</text>
-	<text  name="ZoomScale2">
+	<text name="ZoomScale2">
 		Regolazione dello zoom
 	</text>
 	<text name="ZoomDeadZone" width="140">
 		Angolo morto dello zoom
 	</text>
 	<button label="SpaceNavigator Defaults" name="SpaceNavigatorDefaults"/>
-	<button label="OK" label_selected="OK" name="ok_btn"/>
 	<button label="Annulla" label_selected="Annulla" name="cancel_btn"/>
 	<stat_view label="Monitor del Joystick" name="axis_view">
 		<stat_bar label="Assi 0" name="axis0"/>

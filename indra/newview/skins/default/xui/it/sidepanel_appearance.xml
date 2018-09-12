@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Vestiario" name="appearance panel">
-	<string name="No Outfit" value="Nessun vestiario"/>
+<panel label="Abiti" name="appearance panel">
+	<string name="No Outfit" value="Nessun abito"/>
 	<string name="Unsaved Changes" value="Modifiche non salvate"/>
-	<string name="Now Wearing" value="Abbigliamento attuale..."/>
-	<string name="Changing outfits" value="Cambio vestiti"/>
+	<string name="Now Wearing" value="Abito attuale..."/>
+	<string name="Changing outfits" value="Cambio abito"/>
 	<panel name="panel_currentlook">
-		<button label="M" name="editappearance_btn"/>
-		<button label="A" name="openoutfit_btn"/>
-		<text name="currentlook_status">
-			(Stato)
-		</text>
-		<button label="" name="edit_outfit_btn" tool_tip="Modifica questo vestiario"/>
+		<button label="" name="edit_outfit_btn" tool_tip="Modifica questo abito"/>
 	</panel>
-	<filter_editor label="Filtri per il vestiario" name="Filter"/>
+	<filter_editor label="Filtri per gli abiti" name="Filter"/>
 </panel>

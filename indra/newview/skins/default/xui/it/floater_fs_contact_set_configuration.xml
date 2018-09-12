@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_contact_set_configure" title="Impostazioni set contatti">
+	<floater.string name="title">
+		Impostazioni di [NAME]
+	</floater.string>
+	<panel name="top_panel">
+		<text name="set_label">
+			Impostazioni set contatti:
+		</text>
+		<button name="rename_btn" label="Rinomina"/>
+		<color_swatch name="set_swatch" tool_tip="Clic per scegliere colore"/>
+		<check_box label="Mostra notifiche" name="show_set_notifications"/>
+	</panel>
+	<panel name="bottom_panel">
+		<text name="global_label">
+			Impostazioni globali:
+		</text>
+		<color_swatch label="Colore predefinito set" name="global_swatch" tool_tip="Clic per scegliere colore"/>
+		<text name="label_online">
+			Notifiche online:
+		</text>
+		<check_box label="Mostra notifiche per TUTTI gli amici come finestre" name="ChatOnlineNotification"/>
+		<check_box label="Mostra notifiche per TUTTI gli amici in chat locale" name="OnlineOfflinetoNearbyChat"/>
+		<check_box label="Mostra notifiche per alcuni set come finestre" name="FSContactSetsNotificationToast"/>
+		<check_box label="Mostra notifiche per alcuni set in chat locale" name="FSContactSetsNotificationNearbyChat"/>
+		<text name="label_colors">
+			Colori scelti:
+		</text>
+		<check_box label="Colore icona mini-mappa in base al set" name="FSContactSetsColorizeMiniMap"/>
+		<check_box label="Colore tag nome in base al set" name="FSContactSetsColorizeNameTag"/>
+		<check_box label="Colore lista radar in base al set" name="FSContactSetsColorizeRadar"/>
+		<check_box label="Colore chat in base al set" name="FSContactSetsColorizeChat"/>
+	</panel>
+</floater>

@@ -54,6 +54,15 @@ class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLVOInventoryListene
 	~FSLSLBridge();
 
 public:
+	enum TimerResult
+	{
+		START_CREATION_FINISHED,
+		CLEANUP_FINISHED,
+		REATTACH_FINISHED,
+		SCRIPT_UPLOAD_FINISHED,
+		NO_TIMER
+	};
+
 	typedef boost::function<void(const LLSD &)> tCallback;
 
 	bool lslToViewer(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID);
@@ -84,6 +93,9 @@ public:
 
 	bool canDetach(const LLUUID& item_id);
 
+	static void onIdle(void* userdata);
+	void setTimerResult(TimerResult result);
+
 	// from LLVOInventoryListener
 	virtual void inventoryChanged(LLViewerObject* object,
 								LLInventoryObject::object_list_t* inventory,
@@ -102,10 +114,13 @@ private:
 	LLUUID					mBridgeFolderID;
 	LLUUID					mBridgeContainerFolderID;
 	LLUUID					mBridgeUUID;
+	LLUUID					mReattachBridgeUUID; // used when re-attachming the bridge after creation
 
 	bool					mIsFirstCallDone; //initialization conversation
 
 	uuid_vec_t				mAllowedDetachables;
+
+	TimerResult				mTimerResult;
 
 protected:
 	LLViewerInventoryItem* findInvObject(const std::string& obj_name, const LLUUID& catID);
@@ -177,33 +192,21 @@ protected:
 class FSLSLBridgeCleanupTimer : public LLEventTimer
 {
 public:
-	FSLSLBridgeCleanupTimer(F32 period) : LLEventTimer(period) {}
+	FSLSLBridgeCleanupTimer() : LLEventTimer(1.f) {}
 	BOOL tick();
-	void startTimer() { mEventTimer.start(); }
-	void stopTimer() { mEventTimer.stop(); }
 };
 
 class FSLSLBridgeReAttachTimer : public LLEventTimer
 {
 public:
-	FSLSLBridgeReAttachTimer(const LLUUID& bridge_uuid) :
-		LLEventTimer(5.f),
-		mBridgeUUID(bridge_uuid)
-		{}
+	FSLSLBridgeReAttachTimer() : LLEventTimer(5.f) {}
 	BOOL tick();
-
-protected:
-	LLUUID mBridgeUUID;
 };
 
 class FSLSLBridgeStartCreationTimer : public LLEventTimer
 {
 public:
 	FSLSLBridgeStartCreationTimer() : LLEventTimer(5.f) {}
-	BOOL tick()
-	{
-		FSLSLBridge::instance().finishCleanUpPreCreation();
-		return TRUE;
-	}
+	BOOL tick();
 };
 #endif // FS_LSLBRIDGE_H

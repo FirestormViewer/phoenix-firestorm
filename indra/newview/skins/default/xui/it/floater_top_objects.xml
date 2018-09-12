@@ -7,7 +7,7 @@
 		[COUNT] script richiedono un totale di [TIME] ms
 	</floater.string>
 	<floater.string name="scripts_score_label">
-		Ora
+		Tempo
 	</floater.string>
 	<floater.string name="top_colliders_title">
 		Oggetti con maggiori collisioni
@@ -34,7 +34,7 @@
 		<scroll_list.columns label="Punteggio" name="score" width="84"/>
 		<scroll_list.columns label="Nome" name="name" width="84"/>
 		<scroll_list.columns label="Proprietario" name="owner" width="84"/>
-		<scroll_list.columns label="Ubicazione" name="location" width="84"/>
+		<scroll_list.columns label="Luogo" name="location" width="84"/>
 		<scroll_list.columns label="Lotto" name="parcel"/>
 		<scroll_list.columns label="Data" name="time" width="84"/>
 		<scroll_list.columns label="URL" name="URLs"/>
@@ -44,7 +44,7 @@
 		ID oggetto:
 	</text>
 	<line_editor font="SansSerifSmall" name="id_editor"/>
-	<button label="Mostra segnali luminosi" name="show_beacon_btn"/>
+	<button label="Mostra faro" name="show_beacon_btn"/>
 	<text name="obj_name_text">
 		Nome dell&apos;oggetto:
 	</text>
@@ -62,6 +62,10 @@
 	<button label="Aggiorna" name="refresh_btn" width="150"/>
 	<button label="Restituisci selezionato" name="return_selected_btn" width="150"/>
 	<button label="Restituisci tutti" left="170" name="return_all_btn"/>
+	<button label="Teleport" name="teleport_to_btn"/>
+	<button label="Profilo" name="profile_btn"/>
 	<button label="Disabilita selezionato" name="disable_selected_btn" width="150"/>
-	<button label="Disabilita per tutti" left="170" name="disable_all_btn"/>
+	<button label="Disabilita tutti" left="170" name="disable_all_btn"/>
+	<button label="Info script" name="script_info_btn"/>
+	<button label="Espelli" name="estate_kick_btn"/>
 </floater>

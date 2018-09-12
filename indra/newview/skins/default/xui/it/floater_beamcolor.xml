@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="BeamColor" title="Rotazione colore marcatori">
+	<floater.string name="start_hue">
+		Tinta iniziale
+	</floater.string>
+	<floater.string name="end_hue">
+		Tinta finale
+	</floater.string>
+	<text name="beamcolor_text">
+Usare il mouse per scegliere i colori per
+l&apos;inizio e la fine del marcatore.
+Clic sinistro cambia colore iniziale.
+Clic destro cambia colore finale.
+	</text>
+	<color_swatch name="BeamColor_Preview" tool_tip="Clic per aprire la scelta colori" />
+	<text name="beamcolor_text2">
+		Anteprima
+	</text>
+	<slider name="BeamColor_Speed" label="Velocità rotazione:" tool_tip="Controlla la velocità della rotazione colori" />
+	<button label="Salva" name="BeamColor_Save" />
+	<button label="Carica" name="BeamColor_Load" />
+	<button label="Annulla" name="BeamColor_Cancel" />
+</floater>

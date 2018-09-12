@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Preferiti" name="panel_picks">
 	<string name="no_picks" value="Nessun luogo preferito"/>
-	<string name="no_classifieds" value="Nessun annuncio"/>
-	<accordion name="accordion">
-		<accordion_tab name="tab_picks" title="Preferiti"/>
-		<accordion_tab name="tab_classifieds" title="Annunci pubblicitari"/>
-	</accordion>
-	<panel label="bottom_panel" name="edit_panel">
-		<layout_stack name="edit_panel_ls">
-			<layout_panel name="gear_menu_btn">
-				<button name="new_btn" tool_tip="Crea un nuovo luogo preferito o annuncio in questo luogo"/>
-			</layout_panel>
-		</layout_stack>
+	<string name="no_classifieds" value="Nessuna inserzione"/>
+	<tab_container name="accordion">
+		<panel name="tab_picks" title="Preferiti"/>
+		<panel name="tab_classifieds" title="Inserzioni pubblicitarie"/>
+	</tab_container>
+	<panel name="edit_panel">
+		<button name="new_btn" tool_tip="Crea un nuovo luogo preferito o inserzione in questo luogo"/>
 	</panel>
 	<panel name="buttons_cucks">
 		<layout_stack name="buttons_cucks_ls">

@@ -1,63 +1,102 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Comunicazione" name="im">
+	<string name="AutoresponseItemNotSet">
+		Nessun oggetto impostato
+	</string>
+	<string name="AutoresponseItemNotAvailable">
+		Oggetto non disponibile
+	</string>
+	<string name="AutoresponseItemNotLoggedIn">
+		Accesso non effettuato
+	</string>
 	<tab_container label="Riservatezza" name="tabs">
 		<panel label="Generale" name="tab-general">
 			<panel.string name="log_in_to_change">
-				Accedi per modificare
+				Accedere per modificare
 			</panel.string>
-			<button label="Cancella Cronologia" tool_tip="Cancella immagine LogIn, ultimo luogo visitato, cronologia web di Firestorm, cronologia teleport, e la Texture cache." name="clear_cache"/>
+			<button label="Cancella cronologia" tool_tip="Cancella immagine accesso, ultimo luogo visitato, cronologia web di Firestorm, cronologia teleport e cache texture." name="clear_cache"/>
 			<text name="cache_size_label">
-				(Luoghi, Immagini, Web, Cronologia Ricerca)
+				(luoghi, immagini, web, cronologia ricerca)
 			</text>
-			<check_box label="Mostra il mio profilo info nei risultati di ricerca" name="online_searchresults"/>
+			<check_box label="Mostra le info dal profilo nei risultati di ricerca" name="online_searchresults"/>
 			<check_box label="Solo gli amici e i gruppi possono vedermi on-line" name="online_visibility"/>
 			<check_box label="Solo gli amici e i gruppi possono chiamarmi o inviarmi IMs" name="voice_call_friends_only_check"/>
-			<check_box label="Chiudi il microfono automaticamente quando finisco le chiamate" name="auto_disengage_mic_check"/>
-			<check_box label="Accetta automaticamente oggetti nell'inventario" name="Auto_Accept_New_Inventory"/>
-			<check_box label="Utilizza Inventario Legacy per i messaggi Accettare/Declinare" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Se abilitato, il viewer invierà solo i messaggi accetta e declina dopo aver premuto il pulsante corrispondente. Se disattivato, la risposta 'Accettato' verrà inviata automaticamente non appena l'offerta d'inventario è stata ricevuta. Questa opzione non ha effetto se le offerte d'inventario sono accettate automaticamente."/>
-			<check_box label="Mostra automaticamente l'oggetto ricevuto dopo averlo accettato" name="Show_In_Inventory"/>
-			<check_box label="Mostra automaticamente notecard, textures e landmarks dopo averli accettati" name="Show_New_Inventory"/>
-			<check_box label="Crea l'effetto particle quando dai un'oggetto dall'inventario ad un'altro residente" name="FSCreateGiveInventoryParticleEffect"/>
-			<check_box label="Mostra i miei Landmarks preferiti al Login" name="favorites_on_login_check"/>
-			<text name="Logs:">
-				Cronologia Chat (Log Chat):
-			</text>
-			<check_box label="Salva Log della chat locale sul mio Computer (Può causare Lag)" name="log_nearby_chat"/>
-			<check_box label="Salva Log degli IMs sul mio Computer" name="log_instant_messages"/>
-			<check_box label="Aggiungi l'orario nei Log delle Chat" name="show_timestamps_check_im"/>
-			<check_box label="Mostra anche i secondi con l'orario nei log delle Chat" name="seconds_in_timestamps"/>
-			<check_box label="Aggiungi la data nei Log delle Chat" name="logfile_name_datestamp"/>
-			<button label="Organizza lista Mute/Bloccati" name="block_list"/>
+			<check_box label="Mostra inviti per gruppi a cui ho già aderito" name="FSShowJoinedGroupInvitations"/>
+			<check_box label="Chiudi il microfono automaticamente quando finisce la chiamata" name="auto_disengage_mic_check"/>
+			<check_box label="Permetti agli script di leggere la mia lingua" name="LanguageIsPublic"/>
+			<check_box label="Mostra i preferiti all&apos;accesso (nel menu &apos;Vai a&apos;)" name="favorites_on_login_check"/>
+			<check_box label="Accetta automaticamente oggetti nell&apos;inventario" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Segnala oggetti accettati automaticamente nella chat locale" name="FSLogAutoAcceptInventoryToChat"/>
+			<check_box label="Usa messaggi speciali per accettare/declinare" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Se abilitato, il viewer invierà i messaggi accetta e declina solo dopo aver premuto il pulsante corrispondente. Se disattivato, la risposta &apos;Accettato&apos; verrà inviata automaticamente non appena l&apos;offerta d&apos;inventario è stata ricevuta. Questa opzione non ha effetto se le offerte d&apos;inventario sono accettate automaticamente."/>
+			<check_box label="Mostra automaticamente l&apos;oggetto ricevuto dopo averlo accettato" name="Show_In_Inventory"/>
+			<check_box label="Mostra automaticamente annotazioni, texture e segnaposto dopo averli accettati" name="Show_New_Inventory"/>
+			<check_box label="Mostra automaticamente le foto in inventario dopo lo scatto" name="FSOpenInventoryAfterSnapshot" />
+			<check_box label="Crea flusso di particelle quando si offre un&apos;oggetto ad un altro residente" name="FSCreateGiveInventoryParticleEffect"/>
+			<button label="Organizza lista muti/bloccati" name="block_list"/>
 		</panel>
-		<panel name="tab-lookat">
-			<check_box label="Mostra LookAt" name="showlookat" tool_tip="Abilita la croce che indica dove l'avatar sta guardando."/>
-			<text name="lookatshownames" tool_tip="Selezionare quale nome mostrare sul LookAt">
-				Quale nome mostrare per il LookAt:
+		<panel label="Log &amp; trascrizioni" name="tab-logging" >
+			<text name="logging_label">
+				Salvare:
+			</text>
+			<combo_box tool_tip="Log (conversazioni): La lista delle conversazioni aperte da una o dall&apos;altra parte. Trascrizioni: il testo delle conversazioni come appare sullo schermo." name="conversation_log_combo">
+				<item name="log_and_transcripts" label="Log e trascrizioni"/>
+				<item name="log_only" label="Solo log"/>
+				<item name="no_log_or_transcript" label="Niente"/>
+			</combo_box>
+			<button label="Cancella log..." name="clear_log"/>
+			<button label="Cancella trascrizioni..." name="delete_transcripts"/>
+			<check_box name="LogNearbyChat" label="Salva trascrizione chat locale" tool_tip="Registra la trascrizione della chat locale sul disco del computer"/>
+			<check_box label="Usare formato speciale per i nomi nelle trascrizioni" name="UseLegacyIMLogNames" tool_tip="Usa il vecchio formato dei nomi per le trascrizioni (Nome Utente) invece del nuovo (nome_utente)."/>
+			<check_box label="Aggiungere la data ai nomi dei file" name="LogFileNamewithDate" tool_tip="Aggiunge data e ora ai log di chat e IM col formato chat-AAAA-MM-GG e &apos;nomefile IM&apos;-AAAA-MM."/>
+			<check_box label="Usare il visualizzatore interno" name="FSUseBuiltInHistory" tool_tip="Usa il visualizzatore interno delle trascrizioni per leggerle. In alternativa verranno aperte con il programma di modifica testi predefinito del sistema."/>
+		</panel>
+		<panel name="tab-lookat" label="Sguardo">
+			<check_box label="Mostra sguardo" name="showlookat" tool_tip="Abilita la croce che indica dove l&apos;avatar sta guardando."/>
+			<text name="lookatshownames" tool_tip="Selezionare quale nome mostrare sullo sguardo">
+				Quale nome mostrare per lo sguardo:
 			</text>
 			<combo_box name="lookatshownames_combobox">
 				<combo_box.item label="Nessuno" name="None"/>
-				<combo_box.item label="Nome Completo" name="Complete_Name"/>
+				<combo_box.item label="Nome completo" name="Complete_Name"/>
+				<combo_box.item label="Display name" name="Display_Name"/>
+				<combo_box.item label="Legacy name" name="Legacy_Name"/>
+				<combo_box.item label="Nome utente" name="User_Name"/>
 			</combo_box>
+			<check_box label="Non mostrarmi il mio sguardo" name="LookAtHideOwn" tool_tip="Non mostra il mio sguardo sul mio schermo"/>
+			<check_box label="Traccia linea allo sguardo" name="ExodusLookAtLines" tool_tip="Traccia una linea dall&apos;avatar al crocino che indica l&apos;obiettivo dello sguardo"/>
 			<text name="mylookat">
-				Mio LookAt:
+				Mio sguardo:
 			</text>
-			<check_box label="Non mostrare a me il mio LookAt" name="LookAtHideOwn" tool_tip="Non mostra il mio LookAt sul mio schermo"/>
-			<check_box label="Non mostrare, a nessuno il mio LookAt" name="privatelookat" tool_tip="Fa in modo che gli altri non vedano cosa stai guardando"/>
-			<check_box label="Blocca la rotazione della testa dell'avatar" name="privateLocalLookat" tool_tip="Questa opzione blocca la testa dell'avatar in modo tale da non mostrare dove si sta guardando"/>
-			<check_box label="Non mostrare cosa sto Editando" name="privatepointat" tool_tip="Questa opzione fa in modo che nessuno veda cosa stai editando con il mio Raggio Indicatore"/>
+			<check_box label="Non mostrare a nessuno il mio sguardo" name="privatelookat" tool_tip="Fa in modo che gli altri non vedano cosa stai guardando"/>
+			<check_box label="Blocca la rotazione della testa dell&apos;avatar" name="privateLocalLookat" tool_tip="Questa opzione blocca la testa dell&apos;avatar in modo tale da non mostrare dove si sta guardando"/>
+			<check_box label="Non mostrare cosa sto selezionando" name="privatepointat" tool_tip="Questa opzione fa in modo che nessuno veda il punto di selezione"/>
 		</panel>
 		<panel label="Autorisposte 1" name="tab-autoresponse-1">
 			<text name="text_box3">
-				Risposta automatica quando sono su Occupato:
+				Risposta automatica quando Non disponibile (Occupato):
 			</text>
 			<text name="autorespond_response_label">
-				Risposta automatica per tutti i residenti quando l'Autorisposta è impostata su tutti:
+				Risposta automatica per tutti i residenti quando l&apos;autorisposta è impostata su tutti:
 			</text>
 			<text name="autorespond_nf_response_label">
-				Risposta automatica per tutti i residenti che non sono tuoi amici:
+				Risposta automatica per tutti i residenti che non sono amici:
 			</text>
-			<check_box label="Abilita risposta automatica agli avatar MUTATI" name="send_muted_av_response" tool_tip="Send the text below when someone you've muted sends you an IM."/>
+			<check_box label="Manda autorisposta quando Assente:" name="send_away_av_response" tool_tip="Inviare questo testo quando si riceve un IM in modalità assente."/>
+			<check_box label="Abilita risposta automatica agli avatar MUTI" name="send_muted_av_response" tool_tip="Send the text below when someone you&apos;ve muted sends you an IM."/>
 		</panel>
-		<panel label="Autorisposte 2" name="tab-autoresponse-2" />
+		<panel label="Autorisposte 2" name="tab-autoresponse-2">
+			<text name="autorespond_rto_response_label">
+				Risposta automatica a tutti quando in modalità Respingi offerte teleport:
+			</text>
+			<check_box label="Non rifiutare le offerte TP dagli amici (e invia risposta)" name="FSDontRejectTeleportOffersFromFriends"/>
+			<text name="autorespond_rfr_response_label">
+				Risposta automatica a tutti quando in modalità Respingi offerte amicizia:
+			</text>
+			<text name="autoresponse_item_label" width="190">
+				Oggetto spedito con auto-risposte:
+			</text>
+			<fs_copytrans_inventory_drop_target name="autoresponse_item" tool_tip="Trascinare qui un oggetto dall&apos;inventario." right="-100"/>
+			<button label="Cancella" name="clear_autoresponse_item" width="70"/>
+		</panel>
 	</tab_container>
 </panel>

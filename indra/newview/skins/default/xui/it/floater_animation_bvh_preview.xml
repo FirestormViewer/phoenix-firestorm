@@ -5,16 +5,11 @@
 	</floater.string>
 	<floater.string name="anim_too_long">
 		La lunghezza del file di animazione è di [LENGTH] secondi.
-
 La lunghezza massima dell&apos;animazione è [MAX_LENGTH] secondi.
 	</floater.string>
 	<floater.string name="failed_file_read">
 		Impossibile leggere il file di animazione.
-
 [STATUS]
-	</floater.string>
-	<floater.string name="E_ST_OK">
-		Ok
 	</floater.string>
 	<floater.string name="E_ST_EOF">
 		Fine prematura del file.
@@ -29,10 +24,10 @@ La lunghezza massima dell&apos;animazione è [MAX_LENGTH] secondi.
 		Intestazione HIERARCHY non valida.
 	</floater.string>
 	<floater.string name="E_ST_NO_JOINT">
-		Impossibile trovare la ROOT o JOINT.
+		Impossibile trovare ROOT o JOINT.
 	</floater.string>
 	<floater.string name="E_ST_NO_NAME">
-		Impossibile trovare il nome JOINT.
+		Impossibile trovare JOINT.
 	</floater.string>
 	<floater.string name="E_ST_NO_OFFSET">
 		Impossibile trovare OFFSET.
@@ -98,7 +93,7 @@ La lunghezza massima dell&apos;animazione è [MAX_LENGTH] secondi.
 		Impossibile ottenere i valori easeIn.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EASEOUT">
-		Cannot get ease Out values.
+		Impossibile ottenere i valori easeOut.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_HAND">
 		Impossibile ottenere il valore morph della mano.
@@ -107,7 +102,7 @@ La lunghezza massima dell&apos;animazione è [MAX_LENGTH] secondi.
 		Impossibile leggere il nome emote.
 	</floater.string>
 	<floater.string name="E_ST_BAD_ROOT">
-		Nome non corretto del root joint, usa &quot;hip&quot;.
+		Nome non corretto del root joint, si presume &quot;hip&quot;.
 	</floater.string>
 	<text name="name_label">
 		Nome:
@@ -116,9 +111,11 @@ La lunghezza massima dell&apos;animazione è [MAX_LENGTH] secondi.
 		Descrizione:
 	</text>
 	<spinner label="Priorità" name="priority" tool_tip="Definisce quali altre animazioni possono essere sostituite da questa animazione"/>
-	<check_box label="Ripetizione" name="loop_check" tool_tip="Riproduce questa animazione in ripetizione"/>
+	<check_box label="Ripetizione" name="loop_check" tool_tip="Riproduce questa animazione in continuazione"/>
 	<spinner label="Dentro(%)" name="loop_in_point" tool_tip="Imposta il punto sul quale ritorna l&apos;animazione"/>
 	<spinner label="Fuori(%)" name="loop_out_point" tool_tip="Imposta il punto sul quale termina l&apos;animazione"/>
+	<spinner label="Dentro (fr)" name="loop_in_frames" tool_tip="Imposta il punto sul quale ritorna l&apos;animazione, in frame" />
+	<spinner label="Fuori (fr)" name="loop_out_frames" tool_tip="Imposta il punto sul quale termina l&apos;animazione, in frame" />
 	<text name="hand_label">
 		Posa delle mani
 	</text>
@@ -171,16 +168,15 @@ La lunghezza massima dell&apos;animazione è [MAX_LENGTH] secondi.
 		<item label="Seduto" name="Sitting"/>
 		<item label="Volare" name="Flying"/>
 	</combo_box>
-	<spinner label="Transizione in ingresso (sec)" name="ease_in_time" tool_tip="Durata (in secondi) della fusione in entrata delle animazioni"/>
-	<spinner label="Transizione in uscita (sec)" name="ease_out_time" tool_tip="Durata (in secondi) della fusione in uscita delle animazioni"/>
-	<button name="play_btn" tool_tip="Riproduci la tua animazione"/>
-	<button name="pause_btn" tool_tip="Metti in pausa la tua animazione"/>
+	<spinner label="Transizione ingresso (sec)" name="ease_in_time" tool_tip="Durata (in secondi) della fusione in entrata delle animazioni"/>
+	<spinner label="Transizione uscita (sec)" name="ease_out_time" tool_tip="Durata (in secondi) della fusione in uscita delle animazioni"/>
+	<button name="play_btn" tool_tip="Riproduci l&apos; animazione"/>
+	<button name="pause_btn" tool_tip="Metti in pausa l&apos; animazione"/>
 	<button name="stop_btn" tool_tip="Interrompi la riproduzione dell&apos;animazione"/>
 	<text name="bad_animation_text">
-		Impossibile leggere il file di animazione.
-
-Consigliamo file BVH esportati da Poser 4.
+		Impossibile leggere il file di animazione. Consigliamo file BVH esportati da Poser 4.
 	</text>
+	<button label="Ricarica file" name="reload_btn" />
 	<button label="Carica ([AMOUNT] L$)" name="ok_btn"/>
 	<button label="Annulla" name="cancel_btn"/>
 </floater>

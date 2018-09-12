@@ -8,7 +8,7 @@
 		Generato con [COMPILER] versione [COMPILER_VERSION]
 	</floater.string>
 	<floater.string name="AboutPosition">
-		Tu sei a [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] in [REGION] che si trova a &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
+		Posizione: [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] in [REGION] che si trova a &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
 SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 (coordinate globali [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
 [SERVER_VERSION]
@@ -32,23 +32,23 @@ Versione libcurl: [LIBCURL_VERSION]
 Versione J2C Decoder: [J2C_VERSION]
 Versione Driver audio: [AUDIO_DRIVER_VERSION]
 Versione Qt Webkit: [QT_WEBKIT_VERSION]
-Versione Server voice: [VOICE_VERSION]
+Versione Server voce: [VOICE_VERSION]
 	</floater.string>
 	<floater.string name="none">
 		(nessuno)
 	</floater.string>
 	<floater.string name="AboutTraffic">
-		Pacchetti perduti: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%) Informazioni
+		Pacchetti persi: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%) Informazioni
 	</floater.string>
 	<floater.string name="ErrorFetchingServerReleaseNotesURL">
 		Errore nel recupero URL note rilascio versione
 	</floater.string>
 	<tab_container name="about_tab">
 		<panel label="Informazioni" name="support_panel">
-		    <text name="support_intro">    
-For the latest information about Firestorm, visit    
+			<text name="support_intro">
+Per le ultime informazioni su Firestorm, visitare
 http://www.firestormviewer.org
-    </text>
+			</text>
 			<button label="Copia negli appunti" name="copy_btn"/>
 			<button label="Cerca aggiornamenti" name="update_btn"/>
 		</panel>

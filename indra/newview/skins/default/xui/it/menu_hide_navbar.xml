@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="hide_navbar_menu">
-	<menu_item_check label="Mostra navigazione e barra dei Preferiti" name="ShowNavbarNavigationPanel"/>
-	<menu_item_check label="Mostra la barra dei Preferiti" name="ShowNavbarFavoritesPanel"/>
-	<menu_item_check label="Mostra barra della ricerca" name="ShowSearchTopBar"/>
-	<menu_item_check label="Mostra luogo nel Menu in alto" name="ShowMenuBarLocation"/>
+	<menu_item_check label="Mostra navigazione e barra dei preferiti" name="ShowNavbarNavigationPanel"/>
+	<menu_item_check label="Mostra barra di ricerca" name="ShowSearchTopBar"/>
+	<menu_item_check label="Mostra barra dei preferiti" name="ShowNavbarFavoritesPanel"/>
+	<menu_item_check label="Mostra luogo" name="ShowMenuBarLocation"/>
+	<menu_item_check label="Mostra canale simulatore" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Mostra ricerca nel menu" name="FSMenuSearch"/>
+	<menu_item_check label="Mostra saldo denaro" name="FSShowCurrencyBalanceInStatusbar"/>
+	<menu_item_check label="Mostra controlli media" name="FSEnableVolumeControls"/>
+	<menu_item_check label="Mostra FPS" name="FSStatusBarShowFPS"/>
+	<menu_item_check label="Mostra statistiche rete" name="ShowNetStats"/>
+	<menu_item_check label="Mostra coordinate" name="Coordinates"/>
+	<menu_item_check label="Mostra proprietà lotto" name="Parcel Properties"/>
 </menu>

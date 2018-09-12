@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="instant_message" name="panel_notify_textbox">
-	<string name="message_max_lines_count" value="14"/>
-	<panel label="info_panel" name="info_panel"/>
-	<panel label="info_panel" name="textbox_panel">
-		<text_editor name="message" value="messaggio"/>
+<panel name="panel_notify_textbox">
+	<panel label="info_panel" name="info_panel">
+		<text name="text_editor_box" value="testo informativo"/>
+	</panel>
+	<panel name="textbox_panel">
+		<text_editor name="message" value="messaggio" />
 	</panel>
 	<panel label="control_panel" name="control_panel">
 		<button label="Invia" name="btn_submit"/>

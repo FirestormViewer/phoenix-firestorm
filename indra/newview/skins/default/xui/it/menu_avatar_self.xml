@@ -2,36 +2,38 @@
 <context_menu name="Self Pie">
 	<menu_item_call label="Siedi" name="Sit Down Here"/>
 	<menu_item_call label="Alzati" name="Stand Up"/>
-	<context_menu label="Togli" name="Take Off &gt;">
-		<context_menu label="Abiti" name="Clothes &gt;">
+	<context_menu label="Togli &gt;" name="Take Off &gt;">
+		<context_menu label="Capi &gt;" name="Clothes &gt;">
 			<menu_item_call label="Camicia" name="Shirt"/>
 			<menu_item_call label="Pantaloni" name="Pants"/>
 			<menu_item_call label="Gonna" name="Skirt"/>
 			<menu_item_call label="Scarpe" name="Shoes"/>
-			<menu_item_call label="Calzini" name="Socks"/>
+			<menu_item_call label="Calze" name="Socks"/>
 			<menu_item_call label="Giacca" name="Jacket"/>
 			<menu_item_call label="Guanti" name="Gloves"/>
 			<menu_item_call label="Maglietta intima" name="Self Undershirt"/>
 			<menu_item_call label="Slip" name="Self Underpants"/>
 			<menu_item_call label="Tatuaggio" name="Self Tattoo"/>
 			<menu_item_call label="Fisica" name="Self Physics"/>
-			<menu_item_call label="Alpha (Trasparenza)" name="Self Alpha"/>
-			<menu_item_call label="Tutti gli abiti" name="All Clothes"/>
+			<menu_item_call label="Alfa (trasparenza)" name="Self Alpha"/>
+			<menu_item_call label="Tutti i capi" name="All Clothes"/>
 		</context_menu>
-		<context_menu label="HUD" name="Object Detach HUD"/>
 		<context_menu label="Stacca" name="Object Detach"/>
 		<menu_item_call label="Stacca tutto" name="Detach All"/>
 	</context_menu>
-	<menu_item_call label="Il mio aspetto" name="Chenge Outfit"/>
-	<menu_item_call label="Modifica il mio vestiario" name="Edit Outfit"/>
-	<menu_item_call label="Modifica la figura corporea" name="Edit My Shape"/>
+	<menu_item_call label="Cambia abito" name="Chenge Outfit"/>
+	<menu_item_call label="Modifica abito" name="Edit Outfit"/>
+	<menu_item_call label="Modifica corpo" name="Edit My Shape"/>
 	<menu_item_call label="Altezza di volo" name="Hover Height"/>
 	<menu_item_call label="Ripristina scheletro" name="Reset Skeleton"/>
-	<menu_item_call label="Ripristina scheletro e animazioni" name="Reset Skeleton And Animations"/>
-	<menu_item_call label="I miei amici..." name="Friends..."/>
-	<menu_item_call label="I miei gruppi" name="Groups..."/>
-	<menu_item_call label="Il mio profilo" name="Profile..."/>
-	<menu_item_call label="Debug delle texture" name="Debug..."/>
-	<menu_item_call label="Dump XML" name="Dump XML"/>
-	<menu_item_call label="Blocca proprietario particella" name="Mute Particle"/>
+	<menu_item_call label="Ripristina schel. e animazioni" name="Reset Skeleton And Animations"/>
+	<menu_item_call label="Ripristina LOD mesh" name="Reset Mesh LOD" />
+	<menu_item_call label="Amici..." name="Friends..."/>
+	<menu_item_call label="Gruppi" name="Groups..."/>
+	<menu_item_call label="Profilo" name="Profile..."/>
+	<menu_item_call label="Info script" name="ScriptInfo"/>
+	<menu_item_call label="Mostra texture" name="Debug..."/>
+	<menu_item_call label="Ricarica texture" name="Texture Refresh"/>
+	<menu_item_call label="Scarica XML" name="Dump XML"/>
+	<menu_item_call label="Blocca proprietario particelle" name="Mute Particle"/>
 </context_menu>

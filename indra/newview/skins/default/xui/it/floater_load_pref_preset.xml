@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Load Pref Preset" title="CARICA VALORE PREDEFINITO PREFERENZA">
+<floater name="Load Pref Preset" title="Carica impostazioni grafiche">
 	<string name="title_graphic">
-		Carica valore predefinito grafica
+		Carica preset grafica
 	</string>
 	<string name="title_camera">
-		Carica valore predefinito videocamera
+		Carica preset camera
 	</string>
 	<text name="Preset">
-		Seleziona un valore predefinito
+		Seleziona un preset
 	</text>
-	<button label="OK" name="ok"/>
 	<button label="Annulla" name="cancel"/>
 </floater>

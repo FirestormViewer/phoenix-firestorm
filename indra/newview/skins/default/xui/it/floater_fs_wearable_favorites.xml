@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_wearable_favorites" title="Abiti preferiti">
+	<floater.string name="empty_list">
+		Trascinare qui i capi da aggiungere alla lista.
+	</floater.string>
+	<floater.string name="search_no_items">
+		Nessun elemento corrisponde.
+	</floater.string>
+	<panel name="buttons_panel">
+		<filter_editor label="Filtra capi" name="wearable_filter_input"/>
+		<menu_button name="options_btn" tool_tip="Opzioni capi preferiti"/>
+		<button name="remove_btn" tool_tip="Rimuovi capo dalla lista dei preferiti"/>
+	</panel>
+</floater>

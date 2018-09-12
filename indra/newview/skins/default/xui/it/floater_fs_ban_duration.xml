@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="Ban duration" title="Durata bando">
+	<text name="duration_textbox" width="110">
+		Durata del bando:
+	</text>
+	<spinner name="ban_time" tool_tip="Per quanto tempo bandire, 0 vuol dire per sempre"/>
+	<text name="hours_textbox">
+		ore.
+	</text>
+	<text name="info_textbox">
+		0 significa per sempre.
+	</text>
+	<button label="Annulla" name="BanCancelButton" />
+</floater>
