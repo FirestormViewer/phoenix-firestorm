@@ -572,7 +572,7 @@
         <key>gridnick</key>
             <string>aditi</string>
         <key>helperuri</key>
-            <string>http://aditi-secondlife.webdev.lindenlab.com/helpers/</string>
+            <string>https://secondlife.aditi.lindenlab.com/helpers/</string>
         <key>login_identifier_types</key>
             <array>
                 <string>agent</string>
