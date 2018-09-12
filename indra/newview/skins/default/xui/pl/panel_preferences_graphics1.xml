@@ -45,9 +45,6 @@
 				<combo_box.item label="Słońce/Księżyc" name="1"/>
 				<combo_box.item label="Słońce/Księżyc + inne źródła" name="2"/>
 			</combo_box>
-			<text name="avatar_shadows_label">
-				Cienie awatarów:
-			</text>
 			<text name="reflection_label">
 				Odbicia w wodzie:
 			</text>

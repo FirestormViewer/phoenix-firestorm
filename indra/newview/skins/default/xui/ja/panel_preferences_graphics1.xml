@@ -56,9 +56,6 @@
 			<combo_box.item label="太陽/月" name="1"/>
 			<combo_box.item label="太陽/月とプロジェクタ" name="2"/>
 		</combo_box>
-		<text name="avatar_shadows_label">
-			アバターの影：
-		</text>
 		<text name="reflection_label">
 			水の反射：
 		</text>

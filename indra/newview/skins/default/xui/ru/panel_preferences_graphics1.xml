@@ -42,9 +42,6 @@
 				<combo_box.item label="Солнце / Луна" name="1"/>
 				<combo_box.item label="Солнце / Луна + Прожектора" name="2"/>
 			</combo_box>
-			<text name="avatar_shadows_label">
-				Тени аватара:
-			</text>
 			<text name="reflection_label">
 				Отражения в воде:
 			</text>
