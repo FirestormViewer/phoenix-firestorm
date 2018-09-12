@@ -17,6 +17,7 @@
 			<check_box label="プロフィールを検索結果に表示" name="online_searchresults"/>
 			<check_box label="私のオンライン状態を確認できるのは、フレンドとグループだけ" name="online_visibility"/>
 			<check_box label="私にコールしたりIMできるのは、フレンドとグループだけ" name="voice_call_friends_only_check" />
+			<check_box label="既に参加しているグループへの招待も表示する" name="FSShowJoinedGroupInvitations" />
 			<check_box label="コールが終了したら自動的にマイクのスイッチを切る" name="auto_disengage_mic_check"/>
 			<check_box label="スクリプトの入ったオブジェクトは現在の私の言語設定を確認できる" name="LanguageIsPublic" />
 			<check_box label="ログイン時にお気に入りのランドマークを表示（「開始地点」ドロップダウンメニュー経由）" name="favorites_on_login_check"/>

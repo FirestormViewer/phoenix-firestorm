@@ -49,6 +49,7 @@
 #include "llui.h"
 #include "llviewercontrol.h" // <FS:PP> For user-defined default save format for textures
 #include "llviewerinventory.h"
+#include "llviewermenufile.h" // LLFilePickerReplyThread
 #include "llviewertexture.h"
 #include "llviewertexturelist.h"
 #include "lluictrlfactory.h"
@@ -382,27 +383,35 @@ BOOL LLPreviewTexture::canSaveAs() const
 // virtual
 void LLPreviewTexture::saveAs()
 {
-	// <FS:PP> Allow to use user-defined default save format for textures
+	// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
 	// saveAs(LLPreviewTexture::FORMAT_TGA);
+	saveAs(uuid_vec_t());
+	// </FS:Ansariel>
+}
+
+// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
+void LLPreviewTexture::saveAs(uuid_vec_t remaining_ids)
+{
+	// <FS:PP> Allow to use user-defined default save format for textures
 	if (!gSavedSettings.getBOOL("FSTextureDefaultSaveAsFormat"))
 	{
-		saveAs(LLPreviewTexture::FORMAT_TGA);
+		saveAs(LLPreviewTexture::FORMAT_TGA, remaining_ids);
 	}
 	else
 	{
-		saveAs(LLPreviewTexture::FORMAT_PNG);
+		saveAs(LLPreviewTexture::FORMAT_PNG, remaining_ids);
 	}
 	// </FS:PP>
-	
 }
+// </FS:Ansariel>
 
-void LLPreviewTexture::saveAs(EFileformatType format)
+// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
+//void LLPreviewTexture::saveAs(EFileformatType format)
+void LLPreviewTexture::saveAs(EFileformatType format, uuid_vec_t remaining_ids)
+// </FS:Ansariel>
 {
-	if( mLoadingFullImage )
+	if (mLoadingFullImage)
 		return;
-
-	LLFilePicker& file_picker = LLFilePicker::instance();
-	const LLInventoryItem* item = getItem() ;
 
 	loaded_callback_func callback;
 	LLFilePicker::ESaveFilter saveFilter;
@@ -420,15 +429,21 @@ void LLPreviewTexture::saveAs(EFileformatType format)
 			break;
 	}
 
-	// <FS:Ansariel> FIRE-14111: File extension missing on Linux when saving a texture
-	//if( !file_picker.getSaveFile( saveFilter, item ? LLDir::getScrubbedFileName(item->getName()) : LLStringUtil::null) )
-	if( !file_picker.getSaveFile( saveFilter, item ? checkFileExtension(LLDir::getScrubbedFileName(item->getName()), format) : LLStringUtil::null) )
+	// <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
+	//std::string filename = getItem() ? LLDir::getScrubbedFileName(getItem()->getName()) : LLStringUtil::null;
+	//(new LLFilePickerReplyThread(boost::bind(&LLPreviewTexture::saveTextureToFile, this, _1), LLFilePicker::FFSAVE_TGAPNG, filename))->getFile();
+	std::string filename = getItem() ? checkFileExtension(LLDir::getScrubbedFileName(getItem()->getName()), format) : LLStringUtil::null;
+	(new LLFilePickerReplyThread(boost::bind(&LLPreviewTexture::saveTextureToFile, this, _1, format, callback, remaining_ids), saveFilter, filename))->getFile();
 	// </FS:Ansariel>
-	{
-		// User canceled or we failed to acquire save file.
-		return;
-	}
-	if(mPreviewToSave)
+}
+
+// <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
+//void LLPreviewTexture::saveTextureToFile(const std::vector<std::string>& filenames)
+void LLPreviewTexture::saveTextureToFile(const std::vector<std::string>& filenames, EFileformatType format, loaded_callback_func callback, uuid_vec_t remaining_ids)
+// </FS:Ansariel>
+{
+	const LLInventoryItem* item = getItem();
+	if (item && mPreviewToSave)
 	{
 		mPreviewToSave = FALSE;
 		LLFloaterReg::showTypedInstance<LLPreviewTexture>("preview_texture", item->getUUID());
@@ -436,15 +451,21 @@ void LLPreviewTexture::saveAs(EFileformatType format)
 
 	// remember the user-approved/edited file name.
 	// <FS:Ansariel> FIRE-14111: File extension missing on Linux when saving a texture
-	//mSaveFileName = file_picker.getFirstFile();
-	mSaveFileName = checkFileExtension(file_picker.getFirstFile(), format);
+	//mSaveFileName = filenames[0];
+	mSaveFileName = checkFileExtension(filenames[0], format);
 	// </FS:Ansariel>
 	mLoadingFullImage = TRUE;
 	getWindow()->incBusyCount();
 
-	mImage->forceToSaveRawImage(0) ;//re-fetch the raw image if the old one is removed.
-	mImage->setLoadedCallback( callback, 
-								0, TRUE, FALSE, new LLUUID( mItemUUID ), &mCallbackTextureList );
+	mImage->forceToSaveRawImage(0);//re-fetch the raw image if the old one is removed.
+	// <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
+	//mImage->setLoadedCallback(LLPreviewTexture::onFileLoadedForSave,
+	mImage->setLoadedCallback(callback,
+	// </FS:Ansariel>
+		0, TRUE, FALSE, new LLUUID(mItemUUID), &mCallbackTextureList);
+
+	// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
+	saveMultiple(remaining_ids);
 }
 
 // virtual
@@ -1128,5 +1149,26 @@ void LLPreviewTexture::setObjectID(const LLUUID& object_id)
 void LLPreviewTexture::onButtonRefresh()
 {
 	destroy_texture(mImageID);
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
+//static
+void LLPreviewTexture::saveMultiple(uuid_vec_t ids)
+{
+	if (ids.empty())
+	{
+		return;
+	}
+
+	LLUUID next_id = ids.front();
+	ids.erase(ids.begin());
+
+	LLPreviewTexture* preview_texture = LLFloaterReg::getTypedInstance<LLPreviewTexture>("preview_texture", next_id);
+	if (preview_texture)
+	{
+		preview_texture->openToSave();
+		preview_texture->saveAs(ids);
+	}
 }
 // </FS:Ansariel>

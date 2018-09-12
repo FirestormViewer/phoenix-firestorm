@@ -360,11 +360,34 @@
 		 label_selected="Adjust proxy settings"
 		 layout="topleft"
 		 left="15"
-		 top_pad="15"
+		 top_pad="5"
 		 name="set_proxy">
 			<button.commit_callback
 			  function="Pref.Proxy" />
 		</button>
+		
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="10"
+		 layout="topleft"
+		 left="15"
+		 name="home_page_label_l"
+		 top_pad="5"
+		 width="500">
+		   Browser home page:
+		</text>
+		
+		<line_editor
+		 control_name="FSBrowserHomePage"
+		 follows="left|top"
+		 height="23"
+		 layout="topleft"
+		 max_length_chars="4096"
+		 name="FSBrowserHomePage"
+		 top_pad="5"
+		 width="500" />
 
     </panel>
 

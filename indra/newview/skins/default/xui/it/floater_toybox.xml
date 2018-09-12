@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Toybox" title="PULSANTI BARRA STRUMENTI">
+<floater name="Toybox" title="Pulsanti barra strumenti">
 	<text name="toybox label 1">
 		Aggiungere o rimuovere pulsanti trascinandoli dentro o fuori dalle barre strumenti.
 	</text>
@@ -8,4 +8,5 @@
 	</text>
 	<button label="Cancella tutte le barre strumenti" label_selected="Cancella tutte le barre strumenti" name="btn_clear_all"/>
 	<button label="Ripristina predefiniti" label_selected="Ripristina predefiniti" name="btn_restore_defaults"/>
+	<check_box label="Blocca" name="check_toolbars_locked" tool_tip="Spuntare la casella per bloccare le barre strumenti in modo che i pulsanti non possano essere trascinati o rimossi per sbaglio."/>
 </floater>

@@ -70,9 +70,9 @@ Grafik Kartı: [GRAPHICS_CARD]
 	<string name="AboutLibs">
 libcurl Sürümü: [LIBCURL_VERSION]
 J2C Kod Çözücü Sürümü: [J2C_VERSION]
-Ses Sürücüsü Sürümü: [AUDIO_DRIVER_VERSION]
-CEF Sürümü: [LIBCEF_VERSION]
-LibVLC Sürümü: [LIBVLC_VERSION]
+Ses Sürücüsü Sürümü: [AUDIO_DRIVER_VERSION] 
+[LIBCEF_VERSION] 
+LibVLC Sürümü: [LIBVLC_VERSION] 
 Ses Sunucusu Sürümü: [VOICE_VERSION]
 	</string>
 	<string name="AboutTraffic">
@@ -1434,6 +1434,9 @@ http://secondlife.com/support adresini ziyaret edin.
 	<string name="InventoryNoMatchingItems">
 		Aradığınızı bulamadınız mı? [secondlife:///app/search/all/[SEARCH_TERM] Arama] ile bulmayı deneyin.
 	</string>
+	<string name="InventoryNoMatchingRecentItems">
+		Aradığınızı bulamadınız mı? [secondlife:///app/inventory/filters Show filters] seçeneğini deneyin.
+	</string>
 	<string name="PlacesNoMatchingItems">
 		Aradığınızı bulamadınız mı? [secondlife:///app/search/places/[SEARCH_TERM] Arama] ile bulmayı deneyin.
 	</string>
@@ -1501,7 +1504,7 @@ Bu mesaj size gelmeye devam ederse lütfen http://support.secondlife.com adresin
 		Klasörleri [[MARKETPLACE_DASHBOARD_URL] Pazaryerinde] satılık olarak listelemek için bu alana sürükleyin.
 	</string>
 	<string name="InventoryItemsCount">
-		( [ITEMS_COUNT] Öğe )
+		( [ITEMS]/[CATEGORIES] Öğe )
 	</string>
 	<string name="Marketplace Validation Warning Stock">
 		stok klasörü bir sürüm klasöründe bulunmalıdır

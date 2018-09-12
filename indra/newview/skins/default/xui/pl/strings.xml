@@ -45,12 +45,12 @@ Położenie: [REGION]
 	<string name="AboutSystem">
 Procesor (CPU): [CPU]
 Pamięć (Memory): [MEMORY_MB] MB
-Wersja OS (OS Version): [OS_VERSION]
+System operacyjny (OS Version): [OS_VERSION]
 Dostawca karty graficznej (Graphics Card Vendor): [GRAPHICS_CARD_VENDOR]
 Karta graficzna (Graphics Card): [GRAPHICS_CARD]
 	</string>
 	<string name="AboutDriver">
-		Sterownik karty graficznej Windows (Driver Version): [GRAPHICS_DRIVER_VERSION]
+		Sterownik karty graficznej (Driver Version): [GRAPHICS_DRIVER_VERSION]
 	</string>
 	<string name="AboutOGL">
 		Wersja OpenGL: [OPENGL_VERSION]
@@ -5590,6 +5590,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="MovelockDisabling">
 		Wyłączanie blokady pozycji...
 	</string>
+	<string name="FlightAssistEnabled">
+		Pomocnik lotu jest włączony
+	</string>
 	<string name="BusyResponse">
 		Wiadomość zajętości
 	</string>
@@ -5610,6 +5613,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="RLVaToggleDisabled">
 		wyłączone
+	</string>
+	<string name="RLVaStatusDisabled">
+		(wyłączone)
 	</string>
 	<string name="UserDictionary">
 		[Użytkownika]
@@ -5694,9 +5700,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="ExperiencePermissionShort12">
 		Uprawnienia
-	</string>
-	<string name="ExperiencePermissionShortUnknown">
-		Nieznane: [Permission]
 	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Rozmowy nie są zapisywane do dziennika. Jeśli chcesz zacząć je logować wybierz "Zapisywanie: tylko dziennik" lub "Zapisywanie: dziennik i logi rozmów" w Preferencje > Prywatność.

@@ -86,11 +86,10 @@
 
 #include "llworld.h" // <FS:Ansariel> For FIRE-1292
 #include "llsdutil.h"
-#ifdef OPENSIM
 #include "llviewernetwork.h"
-#endif // OPENSIM
 #include "fsfloaterbantime.h"
 #include "fsnamelistavatarmenu.h"
+#include "llfloaterauction.h"
 
 const F64 COVENANT_REFRESH_TIME_SEC = 60.0f;
 
@@ -515,6 +514,7 @@ BOOL LLPanelLandGeneral::postBuild()
 
 	mBtnStartAuction = getChild<LLButton>("Linden Sale...");
 	mBtnStartAuction->setClickedCallback(onClickStartAuction, this);
+	mBtnStartAuction->setEnabled(LLGridManager::instance().isInSecondLife()); // <FS:Ansariel> Restore land auction floater for OpenSim
 
 	mBtnScriptLimits = getChild<LLButton>("Scripts...");
 

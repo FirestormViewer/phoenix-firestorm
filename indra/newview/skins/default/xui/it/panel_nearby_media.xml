@@ -20,7 +20,6 @@
 		<button label="Accendi tutto" name="all_nearby_media_enable_btn" tool_tip="Accendi tutti i media nei dintorni"/>
 		<button name="open_prefs_btn" tool_tip="Accedi alle preferenze del media"/>
 		<button label="Più &gt;&gt;" label_selected="&lt;&lt; Meno" name="more_btn" tool_tip="Opzioni avanzate"/>
-		<button label="Più &gt;&gt;" label_selected="Meno &lt;&lt;" name="less_btn" tool_tip="Opzioni avanzate"/>
 	</panel>
 	<panel name="nearby_media_panel">
 		<text name="nearby_media_title">
@@ -54,7 +53,7 @@
 					<button name="pause_btn" tool_tip="Pausa media selezionato"/>
 				</layout_panel>
 				<layout_panel name="volume_slider_ctrl">
-					<slider_bar initial_value="0.5" name="volume_slider" tool_tip="Volume audio per il media selezionato"/>
+					<slider_bar name="volume_slider" tool_tip="Volume audio per il media selezionato"/>
 				</layout_panel>
 				<layout_panel name="mute">
 					<button name="mute_btn" tool_tip="Disattiva audio dei supporti selezionati"/>

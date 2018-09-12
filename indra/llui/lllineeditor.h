@@ -115,7 +115,10 @@ protected:
 	LLLineEditor(const Params&);
 	friend class LLUICtrlFactory;
 	friend class LLFloaterEditUI;
-	void showContextMenu(S32 x, S32 y);
+	// <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
+	//void showContextMenu(S32 x, S32 y);
+	void showContextMenu(S32 x, S32 y, bool set_cursor_pos = true);
+	// </FS:Ansariel>
 public:
 	virtual ~LLLineEditor();
 
@@ -220,6 +223,7 @@ public:
 	
 	void			setCommitOnFocusLost( BOOL b )	{ mCommitOnFocusLost = b; }
 	void			setRevertOnEsc( BOOL b )		{ mRevertOnEsc = b; }
+	void			setKeystrokeOnEsc(BOOL b)		{ mKeystrokeOnEsc = b; }
 
 	void setCursorColor(const LLColor4& c)			{ mCursorColor = c; }
 	const LLColor4& getCursorColor() const			{ return mCursorColor.get(); }
@@ -352,6 +356,7 @@ protected:
 
 	BOOL		mCommitOnFocusLost;
 	BOOL		mRevertOnEsc;
+	BOOL		mKeystrokeOnEsc;
 
 	keystroke_callback_t mKeystrokeCallback;
 

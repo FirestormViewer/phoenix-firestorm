@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="region_restarting" title="RIAVVIO REGIONE IN CORSO">
+<floater name="region_restarting" title="Riavvio regione in corso">
 	<string name="RegionName">
 		La regione in cui ti trovi ([NAME]) verrà riavviata tra breve.
 
@@ -13,11 +13,15 @@ Se rimani in questa regione verrai scollegato da Second Life.
 		<text name="region_name">
 			La regione in cui ti trovi (il nome di regione più lungo) verrà riavviata tra breve.
 
-Se rimani in questa regione verrai scollegato da Second Life.
+Se rimani in questa regione verrai disconnesso.
 		</text>
 		<text name="restart_seconds">
 			Secondi prima del riavvio
-     32767
+32767
 		</text>
+		<combo_box label="I miei segnaposto" name="landmark combo">
+			<combo_box.item label="I miei segnaposto" name="item1" />
+		</combo_box>
+		<button tool_tip="Teleport al luogo" name="teleport_btn" />
 	</panel>
 </floater>

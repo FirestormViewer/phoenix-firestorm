@@ -3236,14 +3236,17 @@ Wybierz Zablokuj żeby wyciszyć tą osobę.
 	<notification name="VoiceEffectsExpired">
 		Subskrypcja jednego lub więcej Przekształceń Głosu wygasła.
 [[URL] Kliknij tutaj] oby odnowić subskrypcję.
+Jeśli jesteś użytkownikiem premium, to [[PREMIUM_URL] kliknij tutaj] aby otrzymać swój perk Przekształceń Głosu.
 	</notification>
 	<notification name="VoiceEffectsExpiredInUse">
 		Czas aktywności Przekształcenia Głosu wygasł, normalne ustawienia Twojego głosu zostały zastosowane.
 [[URL] Kliknij tutaj] aby odnowić subskrypcję.
+Jeśli jesteś użytkownikiem premium, to [[PREMIUM_URL] kliknij tutaj] aby otrzymać swój perk Przekształceń Głosu.
 	</notification>
 	<notification name="VoiceEffectsWillExpire">
 		Jedno lub więcej z Twoich Przekształceń Głosu wygaśnie za mniej niż [INTERVAL] dni.
 [[URL] Kliknij tutaj] aby odnowić subskrypcję.
+Jeśli jesteś użytkownikiem premium, to [[PREMIUM_URL] kliknij tutaj] aby otrzymać swój perk Przekształceń Głosu.
 	</notification>
 	<notification name="VoiceEffectsNew">
 		Nowe Przekształcenia Głosu są dostępne!
@@ -3294,6 +3297,9 @@ Zostaną zablokowane na kilka sekund dla bezpieczeństwa.
 	</notification>
 	<notification name="SnapshotToComputerFailed">
 		Nie można zapisać zrzutu ekranu do [PATH]: Dysk jest pełny. Potrzeba [NEED_MEMORY]KB, ale wolnego jest [FREE_MEMORY]KB.
+	</notification>
+	<notification name="SnapshotToLocalDirNotExist">
+		Nie można zapisać zrzutu ekranu do [PATH]: Katalog nie istnieje.
 	</notification>
 	<notification name="PresetNotSaved">
 		Błąd podczas zapisywania ustawienia [NAME].
@@ -4344,9 +4350,9 @@ Spróbuj ponownie za minutę.
 	<notification name="CantAttachObjectBeingRemoved">
 		Nie możesz odłączyć dodatku, ponieważ jest on już odłączony.
 	</notification>
-	<notification name="IllegalAttachment">
+	<!-- <notification name="IllegalAttachment">
 		Dodatek chciał się doczepić do punktu, jaki nie istnieje na awatarze. Został on zamiast tego dołączony do klatki piersiowej.
-	</notification>
+	</notification> -->
 	<notification name="CantDropItemTrialUser">
 		Nie możesz tutaj upuszczać obiektów; spróbuj w strefie Darmowej Próby.
 	</notification>
@@ -4579,7 +4585,7 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 		Błąd wewnętrzny uniemożliwił poprawną aktualizację danych przeglądarki. Stan konta L$ lub posiadane działki wyświetlane w przeglądarce mogą nie odzwierciedlać faktycznego stanu posiadania na serwerach.
 	</notification>
 	<notification name="LargePrimAgentIntersect">
-		Nie można utworzyć wielkich prim, które nachodzą na innych rezydentów. Spróbuj jeszcze raz, gdy przesuną się oni.
+		Nie można tworzyć wielkich prim, które nachodzą na innych rezydentów. Spróbuj jeszcze raz, gdy się oni przesuną.
 	</notification>
 	<notification name="RLVaChangeStrings">
 		Zmiany nie odniosą skutku, dopóki nie zrestartujesz [APP_NAME].
@@ -4588,7 +4594,9 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 		[NAME_SLURL] zażądał, aby mu wysłać listę Twoich aktywnych ograniczeń RLV.
 		<form name="form">
 			<button name="Allow" text="Zezwól"/>
+			<button name="Always Allow" text="Zawsze zezwalaj"/>
 			<button name="Deny" text="Odmów"/>
+			<ignore name="ignore" text="Potwierdź przed wysłaniem komuś listy moich aktywnych ograniczeń RLV."/>
 		</form>
 	</notification>
 	<notification name="PreferenceChatClearLog">
@@ -4622,9 +4630,6 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 		Region, w którym się właśnie pojawiłeś/aś działa na innej wersji symulatora.
 Obecny symulator: [NEWVERSION]
 Poprzedni symulator: [OLDVERSION]
-	</notification>
-	<notification name="CannotSaveSnapshot">
-		Zapis zdjęcia zakończony niepowodzeniem.
 	</notification>
 	<notification name="RegExFail">
 		Błąd w wyrażeniu regularnym:

@@ -121,13 +121,9 @@ public:
 	};
 
 	// open the dialog. This is a modal operation
-// <FS:CR Threaded Filepickers>
-	//BOOL getSaveFile( ESaveFilter filter = FFSAVE_ALL, const std::string& filename = LLStringUtil::null );
-	BOOL getSaveFile( ESaveFilter filter = FFSAVE_ALL, const std::string& filename = LLStringUtil::null, bool blocking = true );
+	BOOL getSaveFile( ESaveFilter filter = FFSAVE_ALL, const std::string& filename = LLStringUtil::null, bool blocking = true);
 	BOOL getOpenFile( ELoadFilter filter = FFLOAD_ALL, bool blocking = true  );
-	//BOOL getMultipleOpenFiles( ELoadFilter filter = FFLOAD_ALL );
 	BOOL getMultipleOpenFiles( ELoadFilter filter = FFLOAD_ALL, bool blocking = true );
-// </FS:CR Threaded Filepickers>
 
 	// Get the filename(s) found. getFirstFile() sets the pointer to
 	// the start of the structure and allows the start of iteration.
@@ -186,7 +182,7 @@ private:
 	static void add_to_selectedfiles(gpointer data, gpointer user_data);
 	static void chooser_responder(GtkWidget *widget, gint response, gpointer user_data);
 	// we remember the last path that was accessed for a particular usage
-	std::map <std::string, std::string> mContextToPathMap;
+	//std::map <std::string, std::string> mContextToPathMap; // <FS> FIRE-14924: Remember last used directory
 	std::string mCurContextName;
 	// we also remember the extension of the last added file.
 	std::string mCurrentExtension;
@@ -209,7 +205,5 @@ public:
 	LLFilePicker();
 	~LLFilePicker();
 };
-
-const std::string upload_pick(void* data);
 
 #endif

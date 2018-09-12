@@ -786,6 +786,9 @@
      name="MapTrackDisabledColor"
      reference="BrickBrown" />
     <color
+     name="MapWhisperRingColor"
+     value="0 0 1 0.3" />
+    <color
      name="MapChatRingColor"
      value="1 1 0 0.3" />
     <color
@@ -1330,4 +1333,7 @@
   <color
       name="ChatHistoryMessageFromLog"
       reference="Gray" />
+  <color
+      name="AreaSearchBeaconColor"
+      reference="Blue_80" />
 </colors>

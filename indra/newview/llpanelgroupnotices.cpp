@@ -590,6 +590,13 @@ void LLPanelGroupNotices::processNotices(LLMessageSystem* msg)
 
 	mNoticesList->setNeedsSort(save_sort);
 	mNoticesList->updateSort();
+	// <FS:Ansariel> Don't do this while composing a new notice or you will lose it
+	//mNoticesList->selectFirstItem();
+	if (mPanelViewNotice->getVisible())
+	{
+		mNoticesList->selectFirstItem();
+	}
+	// </FS:Ansariel>
 }
 
 void LLPanelGroupNotices::onSelectNotice(LLUICtrl* ctrl, void* data)

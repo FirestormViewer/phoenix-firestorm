@@ -282,6 +282,10 @@ public:
 
 	static void onClickDownloadRaw(void*);
 	static void onClickUploadRaw(void*);
+	// <FS:Ansariel> Threaded filepickers
+	void onDownloadRawFilepickerCB(const std::vector<std::string>& filenames);
+	void onUploadRawFilepickerCB(const std::vector<std::string>& filenames);
+	// </FS:Ansariel>
 	static void onClickBakeTerrain(void*);
 	bool callbackBakeTerrain(const LLSD& notification, const LLSD& response);
 	bool callbackTextureHeights(const LLSD& notification, const LLSD& response);

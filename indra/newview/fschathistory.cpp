@@ -54,6 +54,7 @@
 #include "llstylemap.h"
 #include "llslurl.h"
 #include "lllayoutstack.h"
+#include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "lltoastnotifypanel.h"
 #include "lltooltip.h"
@@ -560,10 +561,24 @@ public:
 		registrar_enable.add("ObjectIcon.Visible", boost::bind(&FSChatHistoryHeader::onObjectIconContextMenuItemVisible, this, _2));
 
 		LLMenuGL* menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_avatar_icon.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-		mPopupMenuHandleAvatar = menu->getHandle();
+		if (menu)
+		{
+			mPopupMenuHandleAvatar = menu->getHandle();
+		}
+		else
+		{
+			LL_WARNS() << " Failed to create menu_avatar_icon.xml" << LL_ENDL;
+		}
 
 		menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_object_icon.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-		mPopupMenuHandleObject = menu->getHandle();
+		if (menu)
+		{
+			mPopupMenuHandleObject = menu->getHandle();
+		}
+		else
+		{
+			LL_WARNS() << " Failed to create menu_object_icon.xml" << LL_ENDL;
+		}
 
 		setDoubleClickCallback(boost::bind(&FSChatHistoryHeader::showInspector, this));
 
@@ -670,6 +685,11 @@ public:
 		}
 
 		mUserNameFont = mNameStyleParams.font();
+		if (!mUserNameTextBox)
+		{
+			mUserNameTextBox = getChild<LLTextBox>("user_name");
+			mTimeBoxTextBox = getChild<LLTextBox>("time_box");
+		}
 		mUserNameTextBox->setReadOnlyColor(mNameStyleParams.readonly_color());
 		mUserNameTextBox->setColor(mNameStyleParams.color());
 		mUserNameTextBox->setFont(mUserNameFont);
@@ -1536,22 +1556,47 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		LLNotificationPtr notification = LLNotificationsUtil::find(chat.mNotifId);
 		if (notification != NULL)
 		{
-			LLIMToastNotifyPanel* notify_box = new LLIMToastNotifyPanel(
-					notification, chat.mSessionID, LLRect::null, true, this);
+			bool create_toast = true;
+			if (notification->getName() == "OfferFriendship")
+			{
+				// We don't want multiple friendship offers to appear, this code checks if there are previous offers
+				// by iterating though all panels.
+				// Note: it might be better to simply add a "pending offer" flag somewhere
+				for (LLToastNotifyPanel::instance_iter ti(LLToastNotifyPanel::beginInstances())
+					, tend(LLToastNotifyPanel::endInstances()); ti != tend; ++ti)
+				{
+					LLToastNotifyPanel& panel = *ti;
+					LLIMToastNotifyPanel * imtoastp = dynamic_cast<LLIMToastNotifyPanel *>(&panel);
+					const std::string& notification_name = panel.getNotificationName();
+					if (notification_name == "OfferFriendship"
+						&& panel.isControlPanelEnabled()
+						&& imtoastp)
+					{
+						create_toast = false;
+						break;
+					}
+				}
+			}
 
-			//Prepare the rect for the view
-			LLRect target_rect = getDocumentView()->getRect();	// <FS:Zi> FIRE-8600: TAB out of chat history
-			// squeeze down the widget by subtracting padding off left and right
-			target_rect.mLeft += mLeftWidgetPad + getHPad();	// <FS:Zi> FIRE-8600: TAB out of chat history
-			target_rect.mRight -= mRightWidgetPad;
-			notify_box->reshape(target_rect.getWidth(),	notify_box->getRect().getHeight());
-			notify_box->setOrigin(target_rect.mLeft, notify_box->getRect().mBottom);
+			if (create_toast)
+			{
+				LLIMToastNotifyPanel* notify_box = new LLIMToastNotifyPanel(
+						notification, chat.mSessionID, LLRect::null, true, this);
 
-			LLInlineViewSegment::Params params;
-			params.view = notify_box;
-			params.left_pad = mLeftWidgetPad;
-			params.right_pad = mRightWidgetPad;
-			appendWidget(params, "\n", false);	// <FS:Zi> FIRE-8600: TAB out of chat history
+				//Prepare the rect for the view
+				LLRect target_rect = getDocumentView()->getRect();
+				// squeeze down the widget by subtracting padding off left and right
+				target_rect.mLeft += mLeftWidgetPad + getHPad();
+				target_rect.mRight -= mRightWidgetPad;
+				notify_box->reshape(target_rect.getWidth(),	notify_box->getRect().getHeight());
+				notify_box->setOrigin(target_rect.mLeft, notify_box->getRect().mBottom);
+
+				LLInlineViewSegment::Params params;
+				params.view = notify_box;
+				params.left_pad = mLeftWidgetPad;
+				params.right_pad = mRightWidgetPad;
+				appendWidget(params, "\n", false);
+			}
 		}
 	}
 

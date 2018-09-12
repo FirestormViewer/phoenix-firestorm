@@ -134,7 +134,7 @@ class LLLocalBitmapMgr
 		static void         doRebake();
 
 		// <FS:Ansariel> Threaded filepickers
-		static void         filePickerCallback(std::list<std::string> filenames);
+		static void         filePickerCallback(const std::vector<std::string>& filenames);
 		static boost::signals2::connection setBitmapsAddedCallback(const boost::signals2::signal<void ()>::slot_type& cb)
 		{
 			return sBitmapsAddedSignal.connect(cb);

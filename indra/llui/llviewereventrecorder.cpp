@@ -35,21 +35,21 @@ LLViewerEventRecorder::LLViewerEventRecorder() {
   // Remove any previous event log file
   // <FS:Ansariel> Name this properly and silence the warnings
   //std::string old_log_ui_events_to_llsd_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "SecondLife_Events_log.old");
-  //LLFile::remove(old_log_ui_events_to_llsd_file);
+  //LLFile::remove(old_log_ui_events_to_llsd_file, ENOENT);
   //
 
   //mLogFilename = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "SecondLife_Events_log.llsd");
-  //LLFile::rename(mLogFilename, old_log_ui_events_to_llsd_file);
+  //LLFile::rename(mLogFilename, old_log_ui_events_to_llsd_file, ENOENT);
   std::string old_log_ui_events_to_llsd_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, llformat("%s_Events_log.old", APP_NAME.c_str()));
   if (LLFile::isfile(old_log_ui_events_to_llsd_file))
   {
-	  LLFile::remove(old_log_ui_events_to_llsd_file);
+	  LLFile::remove(old_log_ui_events_to_llsd_file, ENOENT);
   }
 
   mLogFilename = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, llformat("%s_Events_log.llsd", APP_NAME.c_str()));
   if (LLFile::isfile(mLogFilename))
   {
-	  LLFile::rename(mLogFilename, old_log_ui_events_to_llsd_file);
+	  LLFile::rename(mLogFilename, old_log_ui_events_to_llsd_file, ENOENT);
   }
   // </FS:Ansariel>
 }

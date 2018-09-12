@@ -1876,6 +1876,13 @@ BOOL LLTextEditor::handleKeyHere(KEY key, MASK mask )
 		return FALSE;
 	}
 
+	// <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
+	if (key == KEY_CONTEXT_MENU)
+	{
+		showContextMenu(getLocalRect().getCenterX(), getLocalRect().getCenterY(), false);
+	}
+	// </FS:Ansariel>
+
 	if (mReadOnly && mScroller)
 	{
 		handled = (mScroller && mScroller->handleKeyHere( key, mask ))
@@ -2159,7 +2166,10 @@ void LLTextEditor::setEnabled(BOOL enabled)
 	}
 }
 
-void LLTextEditor::showContextMenu(S32 x, S32 y)
+// <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
+//void LLTextEditor::showContextMenu(S32 x, S32 y)
+void LLTextEditor::showContextMenu(S32 x, S32 y, bool set_cursor_pos)
+// </FS:Ansariel>
 {
 	if (!mContextMenu)
 	{
@@ -2186,7 +2196,8 @@ void LLTextEditor::showContextMenu(S32 x, S32 y)
 	S32 screen_x, screen_y;
 	localPointToScreen(x, y, &screen_x, &screen_y);
 
-	setCursorAtLocalPos(x, y, false);
+	if (set_cursor_pos) // <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
+		setCursorAtLocalPos(x, y, false);
 	if (hasSelection())
 	{
 		if ( (mCursorPos < llmin(mSelectionStart, mSelectionEnd)) || (mCursorPos > llmax(mSelectionStart, mSelectionEnd)) )
@@ -2633,13 +2644,13 @@ void LLTextEditor::updateLinkSegments()
 					}
 				}
 			}
-
+			
 			// if the link's label (what the user can edit) is a valid Url,
 			// then update the link's HREF to be the same as the label text.
 			// This lets users edit Urls in-place.
 			// <FS:Ansariel> FIRE-20054: Only update link's HREF to label text if the user can edit the text
-			//if (LLUrlRegistry::instance().hasUrl(url_label))
-			if (LLUrlRegistry::instance().hasUrl(url_label) && !getReadOnly())
+			//if (acceptsTextInput() && LLUrlRegistry::instance().hasUrl(url_label))
+			if (acceptsTextInput() && LLUrlRegistry::instance().hasUrl(url_label) && !getReadOnly())
 			// </FS:Ansariel>
 			{
 				std::string new_url = wstring_to_utf8str(url_label);

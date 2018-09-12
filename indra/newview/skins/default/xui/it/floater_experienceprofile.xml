@@ -3,15 +3,6 @@
 	<floater.string name="empty_slurl">
 		(nessuno)
 	</floater.string>
-	<floater.string name="maturity_icon_general">
-		&quot;Parcel_PG_Light&quot;
-	</floater.string>
-	<floater.string name="maturity_icon_moderate">
-		&quot;Parcel_M_Light&quot;
-	</floater.string>
-	<floater.string name="maturity_icon_adult">
-		&quot;Parcel_R_Light&quot;
-	</floater.string>
 	<text name="edit_title" value="Profilo esperienza"/>
 	<tab_container name="tab_container">
 		<panel name="panel_experience_info">
@@ -29,6 +20,11 @@
 						<layout_panel name="location panel">
 							<text name="Location">
 								Posizione:
+							</text>
+						</layout_panel>
+						<layout_panel name="marketplace panel">
+							<text name="Marketplace">
+								Marketplace:
 							</text>
 						</layout_panel>
 						<layout_panel name="owner panel">
@@ -73,7 +69,10 @@
 					</text>
 					<button label="Imposta come attuale" name="location_btn"/>
 					<button label="Cancella luogo" name="clear_btn"/>
-					<check_box label="Attiva esperienza" name="edit_enable_btn" tool_tip=""/>
+					<text name="edit_marketplace">
+						Marketplace:
+					</text>
+					<check_box label="Attiva esperienza" name="edit_enable_btn"/>
 					<check_box label="Nascondi nella ricerca" name="edit_private_btn"/>
 					<text name="changes" value="Le modifiche apportate alle esperienze potrebbero essere visibili su tutte le regioni solo dopo alcuni minuti."/>
 					<button label="Indietro" name="cancel_btn"/>

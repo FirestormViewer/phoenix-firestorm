@@ -59,7 +59,8 @@ Placa gráfica: [GRAPHICS_CARD]
 Versão libcurl: [LIBCURL_VERSION]
 Versão J2C Decoder: [J2C_VERSION]
 Versão do driver de áudio: [AUDIO_DRIVER_VERSION]
-Versão de CEF: [LIBCEF_VERSION]
+[LIBCEF_VERSION] 
+Versão do LibVLC: [LIBVLC_VERSION] 
 Versão do servidor de voz: [VOICE_VERSION]
 	</string>
 	<string name="AboutTraffic">
@@ -1379,6 +1380,9 @@ http://secondlife.com/support para ajuda ao resolver este problema.
 	<string name="InventoryNoMatchingItems">
 		Não encontrou o que procura? Tente buscar no [secondlife:///app/search/people/[SEARCH_TERM] Search].
 	</string>
+	<string name="InventoryNoMatchingRecentItems">
+		Não encontrou o que procura? Tente [secondlife:///app/inventory/filters Show filters].
+	</string>
 	<string name="PlacesNoMatchingItems">
 		Não encontrou o que procura? Tente buscar no [secondlife:///app/search/groups/[SEARCH_TERM] Search].
 	</string>
@@ -1445,7 +1449,7 @@ http://secondlife.com/support para ajuda ao resolver este problema.
 		Arraste pastas para esta área para listá-las para venda no [Marketplace [MARKETPLACE_DASHBOARD_URL]].
 	</string>
 	<string name="InventoryItemsCount">
-		( [ITEMS_COUNT] Items )
+		( [ITEMS]/[CATEGORIES] Items )
 	</string>
 	<string name="Marketplace Validation Warning Stock">
 		a pasta de estoque deve estar em uma pasta de versões

@@ -55,6 +55,7 @@
 #include "llversioninfo.h"
 #include "llviewermediafocus.h"
 #include "llviewercontrol.h"
+#include "llviewermenufile.h" // LLFilePickerThread
 #include "llviewernetwork.h"
 #include "llviewerparcelmedia.h"
 #include "llviewerparcelmgr.h"
@@ -81,6 +82,43 @@
 /*static*/ const char* LLViewerMedia::SHOW_MEDIA_WITHIN_PARCEL_SETTING = "MediaShowWithinParcel";
 /*static*/ const char* LLViewerMedia::SHOW_MEDIA_OUTSIDE_PARCEL_SETTING = "MediaShowOutsideParcel";
 
+
+class LLMediaFilePicker : public LLFilePickerThread // deletes itself when done
+{
+public:
+    LLMediaFilePicker(LLPluginClassMedia* plugin, LLFilePicker::ELoadFilter filter, bool get_multiple)
+        : LLFilePickerThread(filter, get_multiple),
+        mPlugin(plugin->getSharedPrt())
+    {
+    }
+
+    LLMediaFilePicker(LLPluginClassMedia* plugin, LLFilePicker::ESaveFilter filter, const std::string &proposed_name)
+        : LLFilePickerThread(filter, proposed_name),
+        mPlugin(plugin->getSharedPrt())
+    {
+    }
+
+    virtual void notify(const std::vector<std::string>& filenames)
+    {
+        mPlugin->sendPickFileResponse(mResponses);
+        mPlugin = NULL;
+    }
+
+private:
+    boost::shared_ptr<LLPluginClassMedia> mPlugin;
+};
+
+void init_threaded_picker_load_dialog(LLPluginClassMedia* plugin, LLFilePicker::ELoadFilter filter, bool get_multiple)
+{
+    (new LLMediaFilePicker(plugin, filter, get_multiple))->getFile(); // will delete itself
+}
+
+void init_threaded_picker_save_dialog(LLPluginClassMedia* plugin, LLFilePicker::ESaveFilter filter, std::string &proposed_name)
+{
+    (new LLMediaFilePicker(plugin, filter, proposed_name))->getFile(); // will delete itself
+}
+
+///////////////////////////////////////////////////////////////////////////////
 
 // Move this to its own file.
 
@@ -1545,6 +1583,7 @@ LLViewerMediaImpl::LLViewerMediaImpl(	  const LLUUID& texture_id,
 	mNavigateServerRequest(false),
 	mMediaSourceFailed(false),
 	mRequestedVolume(1.0f),
+	mPreviousVolume(1.0f),
 	mIsMuted(false),
 	mNeedsMuteCheck(false),
 	mPreviousMediaState(MEDIA_NONE),
@@ -1675,8 +1714,7 @@ void LLViewerMediaImpl::destroyMediaSource()
 	if(mMediaSource)
 	{
 		mMediaSource->setDeleteOK(true) ;
-		delete mMediaSource;
-		mMediaSource = NULL;
+		mMediaSource = NULL; // shared pointer
 	}
 }
 
@@ -1885,7 +1923,7 @@ bool LLViewerMediaImpl::initializePlugin(const std::string& media_type)
 			media_source->clear_cache();
 		}
 
-		mMediaSource = media_source;
+		mMediaSource.reset(media_source);
 		mMediaSource->setDeleteOK(false) ;
 		updateVolume();
 
@@ -2087,6 +2125,20 @@ void LLViewerMediaImpl::setVolume(F32 volume)
 {
 	mRequestedVolume = volume;
 	updateVolume();
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+void LLViewerMediaImpl::setMute(bool mute)
+{
+	if (mute)
+	{
+		mPreviousVolume = mRequestedVolume;
+		setVolume(0.0);
+	}
+	else
+	{
+		setVolume(mPreviousVolume);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -3340,37 +3392,9 @@ void LLViewerMediaImpl::handleMediaEvent(LLPluginClassMedia* plugin, LLPluginCla
 
 		case LLViewerMediaObserver::MEDIA_EVENT_PICK_FILE_REQUEST:
 		{
-			LLFilePicker& picker = LLFilePicker::instance();
-			std::vector<std::string> responses;
+			LL_DEBUGS("Media") << "Media event - file pick requested." <<  LL_ENDL;
 
-			bool pick_multiple_files = plugin->getIsMultipleFilePick();
-			if (pick_multiple_files == false)
-			{
-				picker.getOpenFile(LLFilePicker::FFLOAD_ALL);
-
-				std::string filename = picker.getFirstFile();
-				responses.push_back(filename);
-			}
-			else
-			{
-				if (picker.getMultipleOpenFiles())
-				{
-					std::string filename = picker.getFirstFile();
-
-					responses.push_back(filename);
-
-					while (!filename.empty())
-					{
-						filename = picker.getNextFile();
-
-						if (!filename.empty())
-						{
-							responses.push_back(filename);
-						}
-					}
-				}
-			}
-			plugin->sendPickFileResponse(responses);
+			init_threaded_picker_load_dialog(plugin, LLFilePicker::FFLOAD_ALL, plugin->getIsMultipleFilePick());
 		}
 		break;
 

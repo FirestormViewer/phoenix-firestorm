@@ -223,8 +223,6 @@ private:
 	FSPanelAreaSearchAdvanced* mPanelAdvanced;
 
 	bool mBeacons;
-	LLColor4 mBeaconColor;
-	LLColor4 mBeaconTextColor;
 	
 	bool mExcludeAttachment;
 	bool mExcludeTemporary;
@@ -286,7 +284,7 @@ public:
 	void setCounterText(LLStringUtil::format_map_t args);
 	void updateScrollList();
 	void updateName(LLUUID id, std::string name);
-	void touchObject(LLViewerObject* objectp);
+	static void touchObject(LLViewerObject* objectp);
 
 	FSScrollListCtrl* getResultList() { return mResultList; }
 	void updateResultListColumns();

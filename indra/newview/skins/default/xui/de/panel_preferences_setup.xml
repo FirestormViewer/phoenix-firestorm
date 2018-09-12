@@ -23,7 +23,7 @@
 				Web-Browser:
 			</text>
 			<radio_group name="preferred_browser_behavior">
-				<radio_item label="Standard-Webbrowser des Systems für alle Links verwenden" name="new_external" tool_tip="Standard-Webbrowser des Systems verwenden, um die Hilfe, Weblinks usw. anzuzeigen. Bei Vollbildmodus nicht empfohlen."/>
+				<radio_item label="Standard-Systembrowser für alle Links verwenden" name="new_external" tool_tip="Standard-Browser für Hilfe, Weblinks usw. verwenden. Im Vollbildmodus nicht empfohlen."/>
 				<radio_item label="Integrierten Browser nur für Second-Life-Links verwenden" name="new_internal" tool_tip="Integrierten Webbrowser verwenden, um die Hilfe, Weblinks usw. anzuzeigen. Dieser Browser öffnet als neues Fenster innerhalb von [APP_NAME]."/>
 				<radio_item label="Integrierten Browser für alle Links verwenden" name="new_internal_all" tool_tip="Integrierten Webbrowser verwenden, um die Hilfe, Weblinks usw. anzuzeigen. Dieser Browser öffnet als neues Fenster innerhalb von [APP_NAME]."/>
 			</radio_group>
@@ -41,6 +41,9 @@
 			<check_box label="Javascript aktivieren" name="browser_javascript_enabled"/>
 			<check_box label="Medienbrowser-Popups aktivieren" name="media_popup_enabled"/>
 			<button label="Proxy-Einstellungen ändern" label_selected="Proxy-Einstellungen ändern" name="set_proxy"/>
+			<text name="home_page_label_l">
+				Browser-Startseite:
+			</text>
 		</panel>
 		<panel label="Verzeichnisse" name="tab-dir">
 			<text name="cache_size_label_l">

@@ -22,7 +22,7 @@
 	<text name="AvatarPhysicsDetailText">
 		Mało
 	</text>
-	<text name="ShadersText">
+	<text name="HardwareText">
 		Sprzętowe
 	</text>
 	<slider label="Bufor pamięci tekstur (MB):" name="GraphicsCardTextureMemory" tool_tip="Ilość pamięci przeznaczona na tekstury. Domyślnie jest to maksymalna wielkość pamięci karty graficznej, ale nie więcej niż 512 MB na systemach 32 bitowych lub 2048 MB na 64 bitowych. Zmniejszenie tej wartości może spowodować wzrost wydajności, ale tekstury będą bardziej rozmazane." />
@@ -42,7 +42,7 @@
 	<text name="antialiasing restart">
 		(wymaga restartu)
 	</text>
-	<text name="AvatarText">
+	<text name="MeshText">
 		Mesz
 	</text>
 	<slider label="Szczegóły terenu:" name="TerrainMeshDetail" />

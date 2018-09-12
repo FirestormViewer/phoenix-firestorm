@@ -290,6 +290,10 @@ public:
     virtual void onReparent(LLViewerObject *old_parent, LLViewerObject *new_parent);
     virtual void afterReparent();
 
+    //virtual
+    void updateRiggingInfo();
+    S32 mLastRiggingInfoLOD;
+    
     // Functions that deal with media, or media navigation
     
     // Update this object's media data with the given media data array
@@ -381,7 +385,12 @@ public:
 	//</FS:Beq>
 	LLViewerTextureAnim *mTextureAnimp;
 	U8 mTexAnimMode;
+    F32 mLODDistance;
+    F32 mLODAdjustedDistance;
+    F32 mLODRadius;
+
 	F32 mVolumeSurfaceArea; // ZK LBG
+
 private:
 	friend class LLDrawable;
 	friend class LLFace;

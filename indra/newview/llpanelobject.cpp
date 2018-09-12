@@ -497,22 +497,9 @@ void LLPanelObject::getState( )
 	}
 
 	// can move or rotate only linked group with move permissions, or sub-object with move and modify perms
-
-    // AXON REVIEW BEFORE RELEASE, behavior during edit is glitchy.
-    // it's not entirely clear what the motivation is to have 3
-    // different rules for enablement. At least the difference between
-    // move and rotate looks like just a parens error, have updated accordingly.
-	// <FS:Ansariel> FS always had these without the check for !objectp->isAttachment(), so keep this for now
-	BOOL enable_move	= objectp->permMove() && !objectp->isPermanentEnforced() &&
-        ((root_objectp == NULL) || !root_objectp->isPermanentEnforced()) &&
-        //((objectp->permModify() && !objectp->isAttachment()) || !gSavedSettings.getBOOL("EditLinkedParts"));
-        (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
-	BOOL enable_scale	= objectp->permMove() && !objectp->isPermanentEnforced() &&
-        ((root_objectp == NULL) || !root_objectp->isPermanentEnforced()) && objectp->permModify();
-	BOOL enable_rotate	= objectp->permMove() && !objectp->isPermanentEnforced() &&
-        ((root_objectp == NULL) || !root_objectp->isPermanentEnforced()) &&
-        //((objectp->permModify() && !objectp->isAttachment()) || !gSavedSettings.getBOOL("EditLinkedParts"));
-        (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
+	BOOL enable_move	= objectp->permMove() && !objectp->isPermanentEnforced() && ((root_objectp == NULL) || !root_objectp->isPermanentEnforced()) && (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
+	BOOL enable_scale	= objectp->permMove() && !objectp->isPermanentEnforced() && ((root_objectp == NULL) || !root_objectp->isPermanentEnforced()) && objectp->permModify();
+	BOOL enable_rotate	= objectp->permMove() && !objectp->isPermanentEnforced() && ((root_objectp == NULL) || !root_objectp->isPermanentEnforced()) && (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
 
 	S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
 	BOOL single_volume = (LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
@@ -640,22 +627,6 @@ void LLPanelObject::getState( )
 	// BUG? Check for all objects being editable?
 	S32 roots_selected = LLSelectMgr::getInstance()->getSelection()->getRootObjectCount();
 	BOOL editable = root_objectp->permModify();
-
-	// Select Single Message
-	// <FS:Ansariel> We don't have those in FS (2013-04-28)
-	//getChildView("select_single")->setVisible( FALSE);
-	//getChildView("edit_object")->setVisible( FALSE);
-	//if (!editable || single_volume || selected_count <= 1)
-	//{
-	//	getChildView("edit_object")->setVisible( TRUE);
-	//	getChildView("edit_object")->setEnabled(TRUE);
-	//}
-	//else
-	//{
-	//	getChildView("select_single")->setVisible( TRUE);
-	//	getChildView("select_single")->setEnabled(TRUE);
-	//}
-	// </FS:Ansariel>
 
 	BOOL is_flexible = volobjp && volobjp->isFlexible();
 	BOOL is_permanent = root_objectp->flagObjectPermanent();
@@ -2572,12 +2543,6 @@ void LLPanelObject::clearCtrls()
 	mLabelTaper		->setEnabled( FALSE );
 	mLabelRadiusOffset->setEnabled( FALSE );
 	mLabelRevolutions->setEnabled( FALSE );
-
-	// <FS:Ansariel> We don't have those in Firestorm (2013-04-28)
-	//getChildView("select_single")->setVisible( FALSE);
-	//getChildView("edit_object")->setVisible( TRUE);	
-	//getChildView("edit_object")->setEnabled(FALSE);
-	// </FS:Ansariel>
 	
 	getChildView("scale_hole")->setEnabled(FALSE);
 	getChildView("scale_taper")->setEnabled(FALSE);

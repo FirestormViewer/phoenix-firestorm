@@ -30,7 +30,7 @@
 	</string>
 	<string name="AboutHeader">
 		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit) ([CHANNEL])
-[[VIEWER_RELEASE_NOTES_URL] [Notes de version]]
+[[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="AboutCompiler">
 		Compilé avec [COMPILER] version [COMPILER_VERSION]
@@ -59,7 +59,7 @@ Carte graphique : [GRAPHICS_CARD]
 Version libcurl : [LIBCURL_VERSION]
 Version J2C Decoder : [J2C_VERSION]
 Version Audio Driver : [AUDIO_DRIVER_VERSION]
-Version CEF : [LIBCEF_VERSION]
+[LIBCEF_VERSION]
 Version LibVLC : [LIBVLC_VERSION]
 Version serveur vocal : [VOICE_VERSION]
 	</string>
@@ -1427,6 +1427,9 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	<string name="InventoryNoMatchingItems">
 		Vous n&apos;avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/all/[SEARCH_TERM] Rechercher].
 	</string>
+	<string name="InventoryNoMatchingRecentItems">
+		Avez-vous trouvé ce que vous cherchiez ? Essayez [secondlife:///app/inventory/filters Show filters].
+	</string>
 	<string name="PlacesNoMatchingItems">
 		Vous n&apos;avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/places/[SEARCH_TERM] Rechercher].
 	</string>
@@ -1494,7 +1497,7 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 		Pour mettre des dossiers en vente sur la [[MARKETPLACE_DASHBOARD_URL] Place du marché], faites-les glisser vers cette zone.
 	</string>
 	<string name="InventoryItemsCount">
-		( [ITEMS_COUNT] Articles )
+		( [ITEMS]/[CATEGORIES] Articles )
 	</string>
 	<string name="Marketplace Validation Warning Stock">
 		le dossier de stock doit être contenu dans un dossier de version

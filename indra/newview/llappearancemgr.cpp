@@ -897,6 +897,9 @@ void LLWearableHoldingPattern::onAllComplete()
 //            {
 //                gAgentAvatarp->addAttachmentOverridesForObject(objectp);
 //            }
+//		}
+//		
+//		// Add new attachments to match those requested.
 //		LL_DEBUGS("Avatar") << self_av_string() << "Adding " << items_to_add.size() << " attachments" << LL_ENDL;
 //		LLAgentWearables::userAttachMultipleAttachments(items_to_add);
 	}

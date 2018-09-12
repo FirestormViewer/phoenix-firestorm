@@ -57,6 +57,7 @@ class LLVolumeTriangle;
 #include "llpointer.h"
 #include "llfile.h"
 #include "llalignedarray.h"
+#include "llrigginginfo.h"
 
 //============================================================================
 
@@ -874,8 +875,6 @@ public:
 	BOOL create(LLVolume* volume, BOOL partial_build = FALSE);
 	void createTangents();
 	
-	void appendFace(const LLVolumeFace& face, LLMatrix4& transform, LLMatrix4& normal_tranform);
-
 	void resizeVertices(S32 num_verts);
 	void allocateTangents(S32 num_verts);
 	void allocateWeights(S32 num_verts);
@@ -961,6 +960,10 @@ public:
 	LLVector4a* mWeights;
 
     mutable BOOL mWeightsScrubbed;
+
+    // Which joints are rigged to, and the bounding box of any rigged
+    // vertices per joint.
+    LLJointRiggingInfoTab mJointRiggingInfoTab;
     
 	LLOctreeNode<LLVolumeTriangle>* mOctree;
 

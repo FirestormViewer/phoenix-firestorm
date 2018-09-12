@@ -4,5 +4,5 @@
     <menu_item_call label="Modifica" name="classified_edit" />
     <menu_item_call label="Teleport" name="classified_teleport" />
     <menu_item_call label="Mappa" name="classified_map" />
-    <menu_item_call label="Cancellare" name="classified_delete" />
+    <menu_item_call label="Cancella" name="classified_delete" />
 </context_menu>

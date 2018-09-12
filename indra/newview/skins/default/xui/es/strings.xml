@@ -69,7 +69,7 @@ Versión de libcurl: [LIBCURL_VERSION]
 Versión de J2C Decoder: [J2C_VERSION]
 Versión de Audio Driver: [AUDIO_DRIVER_VERSION]
 [LIBCEF_VERSION]
-Versión de LibVLC: [LIBVLC_VERSION]
+Versión LibVLC: [LIBVLC_VERSION] 
 Versión del servidor de voz: [VOICE_VERSION]
 	</string>
 	<string name="AboutTraffic">
@@ -1478,6 +1478,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="InventoryNoMatchingItems">
 		¿No encuentras lo que buscas? Prueba con la [secondlife:///app/search/all/[SEARCH_TERM] Búsqueda].
 	</string>
+	<string name="InventoryNoMatchingRecentItems">
+		¿No encuentras lo que buscas? Intenta [secondlife:///app/inventory/filters Show filters].
+	</string>
 	<string name="PlacesNoMatchingItems">
 		¿No encuentras lo que buscas? Prueba con la [secondlife:///app/search/places/[SEARCH_TERM] Búsqueda].
 	</string>
@@ -1545,7 +1548,7 @@ Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia 
 		Arrastra carpetas a esta sección para incluirlas en la lista de venta del [[MARKETPLACE_DASHBOARD_URL] Mercado].
 	</string>
 	<string name="InventoryItemsCount">
-		( [ITEMS_COUNT] Objetos)
+		([ITEMS]/[CATEGORIES] Objetos)
 	</string>
 	<string name="Marketplace Validation Warning Stock">
 		La carpeta de stock debe estar contenida en una carpeta de versión

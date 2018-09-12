@@ -413,15 +413,47 @@
              function="ToggleControl"
              parameter="MiniMapAutoCenter" />
     </menu_item_check>
-    <menu_item_check
-       label="Chat Distance Ring"
-       name="Chat Distance Ring">
-          <menu_item_check.on_check
-             control="MiniMapChatRing" />
-          <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="MiniMapChatRing" />
-    </menu_item_check>
+    <menu
+     label="Chat Distance Rings"
+     name="Chat Distance Rings Menu">
+      <menu_item_check
+         label="Show Chat Distance Rings"
+         name="Chat Distance Rings">
+            <menu_item_check.on_check
+               control="MiniMapChatRing" />
+            <menu_item_check.on_click
+               function="ToggleControl"
+               parameter="MiniMapChatRing" />
+      </menu_item_check>
+      <menu_item_separator />
+      <menu_item_check
+         label="Show Whisper Distance Ring"
+         name="Whisper Distance Ring">
+            <menu_item_check.on_check
+               control="FSMiniMapWhisperRing" />
+            <menu_item_check.on_click
+               function="ToggleControl"
+               parameter="FSMiniMapWhisperRing" />
+      </menu_item_check>
+      <menu_item_check
+         label="Show Chat Distance Ring"
+         name="Chat Distance Ring">
+            <menu_item_check.on_check
+               control="FSMiniMapChatRing" />
+            <menu_item_check.on_click
+               function="ToggleControl"
+               parameter="FSMiniMapChatRing" />
+      </menu_item_check>
+      <menu_item_check
+         label="Show Shout Distance Ring"
+         name="Shout Distance Ring">
+            <menu_item_check.on_check
+               control="FSMiniMapShoutRing" />
+            <menu_item_check.on_click
+               function="ToggleControl"
+               parameter="FSMiniMapShoutRing" />
+      </menu_item_check>
+    </menu>
     <menu_item_separator />
     <menu_item_call
      label="Place Profile"

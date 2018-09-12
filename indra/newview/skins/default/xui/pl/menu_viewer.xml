@@ -14,6 +14,7 @@
 		<menu_item_call label="Biblioteka awatarów" name="Avatar Picker"/>
 		<menu label="Ruch" name="Movement">
 			<menu_item_call label="Usiądź" name="Sit Down Here"/>
+			<menu_item_call label="Wstań" name="Stand up"/>
 			<menu_item_check label="Zacznij latać" name="Fly"/>
 			<menu_item_call label="Przestań latać" name="Stop flying"/>
 			<menu_item_check label="Zawsze biegnij" name="Always Run"/>
@@ -89,6 +90,7 @@
 		<menu_item_call label="Profil miejsca" name="Place Profile"/>
 		<menu_item_call label="O działce" name="About Land"/>
 		<menu_item_call label="Region/Majątek" name="RegionEstate"/>
+		<menu_item_call label="Ustaw Miejsce Startu tu, gdzie stoję" name="Set Home to Here"/>
 		<menu_item_call label="Kup działkę" name="Buy Land"/>
 		<menu_item_call label="Moje działki" name="My Land"/>
 		<menu label="Pokaż więcej" name="LandShow">
@@ -101,7 +103,6 @@
 			<menu_item_check label="Menu Zaawansowane" name="Show Advanced Menu"/>
 		</menu>
 		<menu_item_call label="Teleportuj do Miejsca Startu" name="Teleport Home"/>
-		<menu_item_call label="Ustaw Miejsce Startu tu, gdzie stoję" name="Set Home to Here"/>
 		<menu label="Pozycja Słońca" name="Environment Settings">
 			<menu_item_check label="Wschód Słońca" name="Sunrise"/>
 			<menu_item_check label="Południe" name="Noon"/>

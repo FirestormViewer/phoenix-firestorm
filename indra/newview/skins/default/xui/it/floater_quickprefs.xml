@@ -1,51 +1,61 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="quickprefs">
+<floater name="quickprefs" title="Preferenze">
 	<panel name="quickprefs">
-		<text name="Draw Distance" tool_tip="Imposta la distanza massima in cui vengono caricati gli oggetti.">
-			Draw Distance:
+		<layout_stack name="wl_options_stack">
+			<layout_panel name="wl_options_panel">
+				<text name="HoverHeightLabel" tool_tip="Imposta l&apos;altezza da terra dell&apos;avatar">
+					Altezza da terra:
+				</text>
+				<text name="Maximum bandwidth" tool_tip="Imposta la banda di rete in Kbps (kilobits al secondo)">
+					Max banda:
+				</text>
+				<text name="Maximum complexity" tool_tip="Controlla oltre quale limite un avatar complesso viene mostrato come pupazzo">
+					Max complessità:
+				</text>
+				<text name="IndirectMaxComplexityText">
+					Ness. limite
+				</text>
+				<check_box control_name="UseEnvironmentFromRegion" label="Usa ambiente regione" name="UseRegionWindlight"/>
+				<text name="WL Sky" tool_tip="Preset ambiente per il cielo">
+					Am. cielo:
+				</text>
+				<text name="WL Water" tool_tip="Preset ambiente per l&apos;acqua">
+					Am. acqua:
+				</text>
+				<text name="Day Cycle" tool_tip="Preset ambiente per il ciclo giornaliero">
+					Ciclo:
+				</text>
+				<icon name="SkyDayCycle" tool_tip="Cambia l&apos;ora del giorno"/>
+				<button name="ResetToRegionDefault" tool_tip="Ripristina le impostazioni della regione" />
+				<button name="button_edit" tool_tip="Clic per modificare il controlli del pannello" control_name="QuickPrefsEditMode"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+	<panel name="edit_overlay_panel">
+		<button name="move_up_button" tool_tip="Muovere il controllo su di una riga"/>
+		<button name="add_new_button" tool_tip="Aggiungere un nuovo controllo"/>
+		<line_editor name="label_edit" tool_tip="Scrivere qui il titolo del controllo" label="Titolo:"/>
+		<button name="move_down_button" tool_tip="Muovere in controllo giù di una riga"/>
+		<combo_box name="control_name_combo" tool_tip="Scegliere il controllo dalla lista delle impostazioni debug">
+			<combo_box.item label="=== Scegliere ===" name="control_name_list_header"/>
+		</combo_box>
+		<text name="control_type_label">
+			Tipo:
 		</text>
-		<slider  name="DrawDistance"/>			
-		<text name="Particles" tool_tip="Il numero massimo di particle che verranno mostrate.">
-			Max. Particle:
-		</text>
-		<slider name="RenderMaxPartCount"/>
-		<text name="Avatar Physics LOD" tool_tip="Consente di impostare il livello di dettaglio della fisica dell'avatar.">
-			Fisica Avatar:
-		</text>
-		<slider name="RenderAvatarPhysicsLOD"/>		
-		<text name="LOD Factor" tool_tip="Consente di impostare il livello del dettaglio dei prim">
-			Fattore LOD:
-		</text>
-		<slider name="RenderVolumeLODFactor"/>		
-		<text name="Max Avatars" tool_tip="Il numero massimo di avatar che si devono caricare simultaneamente, oltre questo numero si attiva in automatico l'avatar impostor. Un valore basso migliora la velocità in luoghi affollati. [Default 12]">
-			Max. Avatar:
-		</text>
-		<slider name="RenderAvatarMaxVisible"/>		
-		<text name="Height Offset" tool_tip="Erlaubt das Verändern des Höhenabstandes des Avatars ohne die Form selbst zu verändern.">
-			Altezza Avatar:
-		</text>
-		<text name="Tag Offset" tool_tip="Consente di modificare l'altezza dell'avatar senza modificare la shape. Default 0">
-			Altezza Tag:
-		</text>
-		<slider name="FSNameTagZOffsetCorrection"/>		
-		<text name="name_tags_textbox">
-			Tag Nome:
-		</text>
-		<text name="lookat_textbox">
-			LookAt:
-		</text>
-		<text name="ShowColor_QP_Label" width="250">
-			Colore sotto il cursore:
-		</text>
-		<text name="WL Sky" tool_tip="Imposta il Windlight per il cielo.">
-			WL Cielo:
-		</text>
-		<combo_box name="WLPresetsCombo"/>
-		<text name="WL Water" tool_tip="Imposta il Windlight per l'acqua.">
-			WL Acqua:
-		</text>
-		<combo_box name="WaterPresetsCombo"/>
-		<icon name="SkyDayCycle"/>
-		<button name="ResetToRegionDefault" tool_tip="Reimposta il Windlight come è impostato nella Regione"/>
+		<combo_box name="control_type_combo_box" tool_tip="Scegliere il tipo di interfaccia da inserire per questo controllo">
+			<combo_box.item label="Spunta (checkbox)" name="Checkbox"/>
+			<combo_box.item label="Testo" name="Text"/>
+			<combo_box.item label="Spinner" name="Spinner"/>
+			<combo_box.item label="Cursore" name="Slider"/>
+			<combo_box.item label="Opzione (radio)" name="Radio"/>
+			<combo_box.item label="Colore 3" name="Color 3"/>
+			<combo_box.item label="Colore 4" name="Color 4"/>
+		</combo_box>
+		<check_box name="control_integer_checkbox" tool_tip="Attivare se l&apos;impostazione accetta solo valori interi" label="Interi" />
+		<spinner name="control_min_edit" tool_tip="Il valore più basso che si potrà impostare" label="Min:"/>
+		<spinner name="control_max_edit" tool_tip="Il valore più alto che si potrà impostare" label="Max:"/>
+		<spinner name="control_increment_edit" tool_tip="L&apos;incremento che si otterrà cliccando le frecce su/giù o scorrendo un cursore" label="Incr:"/>
+		<button name="Restore_Btn" tool_tip="Ripristina le impostazioni predefinite" label="Ripristina"/>
+		<button name="button_close" tool_tip="Chiudi il pannello di modifica"/>
 	</panel>
 </floater>

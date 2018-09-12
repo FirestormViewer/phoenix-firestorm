@@ -55,8 +55,9 @@
 #include "llvfile.h"
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
-#include "llviewerpartsource.h"
+#include "llviewermenufile.h"
 #include "llviewernetwork.h"
+#include "llviewerpartsource.h"
 #include "llviewerregion.h"
 #include "llviewertexturelist.h"
 #include "llvovolume.h"
@@ -1082,14 +1083,14 @@ void FSFloaterObjectExport::updateUI()
 
 void FSFloaterObjectExport::onClickExport()
 {
-	LLFilePicker& file_picker = LLFilePicker::instance();
-	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_EXPORT, LLDir::getScrubbedFileName(mObjectName + ".oxp")))
-	{
-		LL_INFOS() << "User closed the filepicker, aborting export!" << LL_ENDL;
-		return;
-	}
-	mFilename = file_picker.getFirstFile();
-	
+	(new LLFilePickerReplyThread(boost::bind(&FSFloaterObjectExport::onExportFileSelected, this, _1),
+		LLFilePicker::FFSAVE_EXPORT, LLDir::getScrubbedFileName(mObjectName + ".oxp")))->getFile();
+}
+
+void FSFloaterObjectExport::onExportFileSelected(const std::vector<std::string>& filenames)
+{
+	mFilename = filenames[0];
+
 	LLUIString title = getString("title_working");
 	title.setArg("[OBJECT]", mObjectName);
 	setTitle(title);

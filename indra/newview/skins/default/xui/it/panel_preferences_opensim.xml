@@ -1,26 +1,64 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="OpenSim" name="opensim_panel">
-	<panel name="grid_management_panel">
+<panel label="Opensim" name="opensim_panel">
+<tab_container label="Opensim" name="tabs">
+	<panel label="Gestione grid" name="grid_management_panel">
 		<text name="add_grid_text">
-			Aggiungi Nuova Grid
+			Aggiungi grid
 		</text>
-		<button label="Pulisci" width="60" name="clear_grid"/>
-		<button label="Applica" width="60" name="apply_new_grid" />
+		<line_editor name="add_grid" label="Inserire un URI di accesso"/>
+		<button label="Cancella" label_selected="Cancella" name="clear_grid" width="65"/>
+		<button label="Applica" name="apply_new_grid"/>
 		<text name="add_grid_text">
-			Gestisci Grid
+			Gestisci grid
 		</text>
 		<scroll_list name="grid_list">
-			<scroll_list.columns label="Nome Grid" name="grid_label"/>
+			<scroll_list.columns label="Nome grid" name="grid_label"/>
+			<scroll_list.columns label="URI accesso" name="login_uri" />
 		</scroll_list>
-		<button label="Aggiorna" name="refresh_grid"/>
-		<button label="Rimuovi" name="remove_grid"/>
+		<button label="Ricarica" name="refresh_grid"/>
+		<button label="Cancella" name="remove_grid"/>
+		<panel name="advanced_grid_panel">
+			<text name="grid_name_text">
+				Nome grid:
+			</text>
+			<text name="grid_uri_text">
+				URI della grid:
+			</text>
+			<text name="login_page_text">
+				Pagina accesso:
+			</text>
+			<button label="Salva" name="save_grid"/>
+			<text name="helper_uri_text">
+				Helper URI:
+			</text>
+			<text name="website_text">
+				Sito web grid:
+			</text>
+			<text name="support_text">
+				Supporto grid:
+			</text>
+			<text name="register_text">
+				Registrazione grid:
+			</text>
+			<text name="password_text">
+				URI password grid:
+			</text>
+			<text name="search_text">
+				URI ricerca grid:
+			</text>
+			<text name="message_text">
+				URI messaggi grid:
+			</text>
+		</panel>
 	</panel>
-	<panel name="debug_search_panel">
-		<check_box label="Ricerca di Debug" name="DebugSearch"/>
+	<panel label="Varie" name="opensim_misc_panel">
+		<check_box label="Abilita impostazioni Lightshare regione" name="Lightshare"/>
+		<check_box label="Ricerca debug" name="DebugSearch"/>
 		<text name="search_url_debug_text">
-			Sovrascrivi l'url di ricerca: (non sovrascrivere se è vuoto)
+			Reimposta la URL di ricerca attuale: (non reimposta se vuoto)
 		</text>
-		<button label="Pulisci" name="clear_search_url_debug"/>
-		<button label="Scegli" name="pick_current_search_url"/>
+		<button label="Cancella" label_selected="Clear" name="clear_search_url_debug" width="65"/>
+		<button label="Accetta" name="pick_current_search_url"/>
 	</panel>
+</tab_container>
 </panel>

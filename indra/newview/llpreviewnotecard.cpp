@@ -60,6 +60,7 @@
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 #include "llfloatersearchreplace.h"
 // [/SL:KB]
+#include "llautoreplace.h"
 
 ///----------------------------------------------------------------------------
 /// Class LLPreviewNotecard
@@ -83,6 +84,7 @@ LLPreviewNotecard::~LLPreviewNotecard()
 BOOL LLPreviewNotecard::postBuild()
 {
 	LLViewerTextEditor *ed = getChild<LLViewerTextEditor>("Notecard Editor");
+	ed->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5)); // <FS:Ansariel> FIRE-22810: Add autoreplace to notecards
 	ed->setNotecardInfo(mItemUUID, mObjectID, getKey());
 	ed->makePristine();
 

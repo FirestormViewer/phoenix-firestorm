@@ -18,6 +18,7 @@
 			<check_box label="制作・編集" name="edit_camera_movement" tool_tip="編集モードのオン・オフの切り替えに、自動カメラポジションを使います"/>
 			<check_box label="容姿" name="appearance_camera_movement" tool_tip="編集モードに入ったときに、自動カメラポジションを使います"/>
 			<check_box label="照明を追加する" name="EditAppearanceLighting" tool_tip="容姿の編集中に照明を追加することができます" />
+			<check_box label="ビジュアルヒントを表示" name="FSAppearanceShowHints" tool_tip="アバターの身体部位を修正中にビジュアルヒントの表示／非表示を切り替えます。" />
 			<check_box label="アバターをクリックしてもカメラの位置を変更しない" name="clickonavatarkeepscamera" tool_tip="通常、アバターをクリックするとカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>
 			<check_box label="（同じSIM内で）テレポートした後のカメラの位置を元に戻す" name="FSResetCameraOnTP" tool_tip="通常、テレポートする時にカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>
 			<check_box label="アバターが動く時にカメラの位置を元に戻す" name="FSResetCameraOnMovement" />
@@ -64,6 +65,13 @@
 			<check_box label="構えてからジャンプしたり、着地のポーズをしてから動き出すのをやめる" name="FSIgnoreFinishAnimation" />
 			<check_box label="画面上でアバターが後ろ向きに歩くのを許可する。（SLの仕様により、ローカルでのみ有効）" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="ここにチェックを入れると、後ろ向きに歩き出したアバターが、あなたの画面上ではそのまま後ろ向きに歩くように見えるようになります。この設定はあなたのビューワでの見せ方だけに影響しており、実際にアバターがそのような動きをしているわけではありません。動き出した時にその方向に振り返るのはセカンドライフ・ビューワのデフォルトの動きです。アバターがAOを使用していると、この動きをオーバーライドし、強制的にアバターを進行方向に振り返らせる可能性があります。" />
 			<check_box label="選択したオブジェクトの方にアバターが向くようにする" name="FSTurnAvatarToSelectedObject" tool_tip="選択しているオブジェクトの方向にアバターが顔をむけるようにします" />
+			<text name="Region_Crossing_Movement_Label">
+				SIM を跨ぐ時の動作:
+			</text>
+			<radio_group name="Region_Crossing_Movement">
+				<radio_item label="予告する" name="move_predict" />
+				<radio_item label="立ち止まる" name="move_stop" />
+			</radio_group>
 			<text name="movelock_lbl">
 				内蔵のLSL Bridgeのムーブメントロックが有効になっている場合...
 		</text>
@@ -99,7 +107,7 @@
 			-->
 			<check_box label="テレポートサウンドを鳴らす" name="PlayTeleportSound" />
 			<check_box label="テレポート後は常に飛行状態のままにする" name="FSFlyAfterTeleport" />
-			<check_box label="テレポートキャンセルボタンを常に表示" name="FSAlwaysShowTPCancel" tool_tip="シミュレータからキャンセルできない通知がある場合でも、常にテレポートキャンセルのボタンを表示します。結局のところ、シミュレータは例えばゴッド・テレポートのような強制テレポートの要求があった場合、それがキャンセルできるかどうかをわかっていて、できない場合はキャンセル指示を無視します。この設定はRLVaでは無効です（つまり、RLVの制約により、この機能は停止されています）。"/>
+			<check_box label="テレポートキャンセルボタンを常に表示" name="FSAlwaysShowTPCancel" tool_tip="シミュレータからキャンセルできない通知がある場合でも、常にテレポートキャンセルのボタンを表示します。結局のところ、シミュレータは例えばゴッド・テレポートのような強制テレポートの要求があった場合、それがキャンセルできるかどうかをわかっていて、できない場合はキャンセル指示を無視します。この設定はRestrainedLoveAPIでは無効です（つまり、RestrainedLoveAPIの制約により、この機能は停止されています）。"/>
 			<check_box label="テレポートビーコンオフ" name="tp_beam_toggle" tool_tip="テレポートが完了したら、目的地点に表示されるビーコンが消えるようにします。"/>
 			<check_box label="テレポート画面オフ" name="tp_screen_toggle" tool_tip="テレポートしている間表示される黒いテレポート画面を表示しないようにします。"/>
 			<check_box label="テレポートした時に世界地図を閉じない" name="FSDoNotHideMapOnTeleport" tool_tip="テレポートした時に世界地図が自動的に閉じる機能をオフにします。"/>

@@ -70,7 +70,7 @@
 		<radio_item label="面を選択" name="radio select face"/>
 		<radio_item label="揃える" name="radio align" />
 	</radio_group>
-	<check_box label="リンク部分を編集" name="checkbox edit linked parts"/>
+		<check_box label="リンク部分を編集" name="checkbox edit linked parts"/>
 	<button label="リンク" name="link_btn"/>
 	<button label="リンクを外す" name="unlink_btn"/>
 	<combo_box name="combobox grid mode" tool_tip="オブジェクトの配置に使うグリッドルーラの種類を選択">
@@ -182,13 +182,19 @@
 				制作者：
 			</text>
 			<text name="Creator Name">
-				Mrs. Esbee Linden (esbee.linden)
+				secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect TestString PleaseIgnore (please.ignore)
 			</text>
 			<text name="Owner:">
 				所有者：
 			</text>
 			<text name="Owner Name">
-				Mrs. Erica &quot;Moose&quot; Linden (erica.linden)
+				secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect TestString PleaseIgnore (please.ignore)
+			</text>
+			<text name="Last Owner:">
+				最後の所有者：
+			</text>
+			<text name="Last Owner Name">
+				secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect TestString PleaseIgnore (please.ignore)
 			</text>
 			<text name="Group:">
 				グループ：
@@ -368,6 +374,64 @@
 				<combo_box.item label="平面 （なし）" name="Plane"/>
 				<combo_box.item label="シリンダー" name="Cylinder"/>
 			</combo_box>
+			<text name="mesh_info_label">
+				メッシュ情報：
+			</text>
+			<text name="lod_label" value="LOD:" />
+			<text name="lod_num_tris" value="三角形の数" />
+			<text name="mesh_lod_label">
+高:
+中:
+低:
+最低:
+			</text>
+			<string name="mesh_lod_num_tris_values">
+[HIGHTRIS]
+[MIDTRIS]
+[LOWTRIS]
+[LOWESTTRIS]
+			</string>
+			<text name="mesh_lod_num_tris" value="--" />
+			<combo_box name="LOD_show_combo">
+				<combo_box.item label="デフォルト" name="Default" />
+				<combo_box.item label="高" name="High" />
+				<combo_box.item label="中" name="Medium" />
+				<combo_box.item label="低" name="Low" />
+				<combo_box.item label="最低" name="Lowest/Imposter" />
+			</combo_box>
+			<text name="ObjectLODbehaviourLabel" value="LODの動き:" />
+			<text name="object_radius" value="オブジェクトの半径:" />
+			<text name="object_radius_value" value="--" />
+			<text name="LOD_swap_factors_label" value="LODの要素" />
+			<text name="LOD_swap_defaults_label" value="デフォルト" tool_tip="殆どのビューワで適用されるデフォルトのLOD要素設定です。" />
+			<text name="LOD_swap_usr_label" tool_tip="RenderVolumeLODFactor から取得した現在の設定値" value="現在の設定" />
+			<text name="LOD_swap_label" value="LOD スワップ" />
+			<string name="ll_lod_tooltip_msg">
+				"リンデンラボの公式ビューワのデフォルト値 ([FACTOR])"
+			</string>
+			<text name="LOD_swap_ll_default" value="公式" />
+			<string name="fs_lod_tooltip_msg">
+				"Firestorm のデフォルト値 ([FACTOR])"
+			</string>
+			<text name="LOD_swap_fs_default" value="FS" />
+			<string name="user_lod_label_string">[FACTOR]</string>
+			<text name="LOD_swap_usr_current" tool_tip="現在のLOD要素" value="[FACTOR]" />
+			<text name="LOD_swap_LOD_Change_label">
+高 ↔ 中
+中 ↔ 低
+低 ↔ 最低
+			</text>
+			<string name="LODSwapFormatString">
+[HIGH2MED]
+[MED2LOW]
+[LOW2LOWEST]
+			</string>
+			<text name="LOD_swap_ll_values" />
+			<text name="LOD_swap_fs_values" value="--" />
+			<text name="LOD_swap_usr_values" value="--" />
+			<text name="LODSwapTableDscriptionsText" tool_tip="ベスト・プラクティス：クリエイターはどのビューワに対してもデフォルトの設定でLODの動きが最適になるようにすべきです。">
+				このテーブルはLODが変わる境界をカメラからのメートル単位の距離で表示します。
+			</text>
 		</panel>
 		<panel label="特徴" name="Features">
 			<panel.string name="None">

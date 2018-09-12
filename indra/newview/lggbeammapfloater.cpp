@@ -21,6 +21,7 @@
 #include "llfilepicker.h"
 #include "llsdserialize.h"
 #include "llviewercontrol.h"
+#include "llviewermenufile.h"
 
 const F32 CONTEXT_CONE_IN_ALPHA = 0.0f;
 const F32 CONTEXT_CONE_OUT_ALPHA = 1.f;
@@ -73,8 +74,8 @@ void lggBeamMapFloater::draw()
 	mContextConeOpacity = lerp(mContextConeOpacity, opacity(), LLCriticalDamp::getInterpolant(CONTEXT_FADE_TIME));
 
 	LLFloater::draw();
-	LLRect rec  = mBeamshapePanel->getRect();
-	
+	LLRect rec = mBeamshapePanel->getRect();
+
 	gGL.pushMatrix();
 	gGL.color4fv(LLColor4::white.mV);
 	gl_circle_2d(rec.getCenterX(), rec.getCenterY(), 2.0f, 30, false);
@@ -137,10 +138,8 @@ BOOL lggBeamMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 		a.y = y;
 		a.c = getChild<LLColorSwatchCtrl>("beam_color_swatch")->get();
 		mDots.push_back(a);
-
-		LL_DEBUGS() << "we got clicked at (" << x << ", " << y << " and color was " << a.c << LL_ENDL;
 	}
-	
+
 	return LLFloater::handleMouseDown(x, y, mask);
 }
 
@@ -196,27 +195,23 @@ LLSD lggBeamMapFloater::getMyDataSerialized()
 
 void lggBeamMapFloater::onClickSave()
 {
-	LLRect r = mBeamshapePanel->getRect();
-	LLFilePicker& picker = LLFilePicker::instance();
-	
-	std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "beams", ""));
-	std::string filename=path_name2 + "myNewBeam.xml";
-	if (!picker.getSaveFile(LLFilePicker::FFSAVE_BEAM, filename))
-	{
-		return;
-	}
-	
-	filename = path_name2 +gDirUtilp->getBaseFileName(picker.getFirstFile());
+	std::string filename(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "beams", "NewBeam.xml"));
+	(new LLFilePickerReplyThread(boost::bind(&lggBeamMapFloater::onSaveCallback, this, _1), LLFilePicker::FFSAVE_BEAM, filename))->getFile();
+}
 
-	LLSD main;
-	main["scale"] = 8.0f / (r.getWidth());
-	main["data"] = getMyDataSerialized();
+void lggBeamMapFloater::onSaveCallback(const std::vector<std::string>& filenames)
+{
+	std::string filename = filenames[0];
+
+	LLSD export_data;
+	export_data["scale"] = 8.0f / (mBeamshapePanel->getRect().getWidth());
+	export_data["data"] = getMyDataSerialized();
 
 	llofstream export_file;
 	export_file.open(filename.c_str());
-	LLSDSerialize::toPrettyXML(main, export_file);
+	LLSDSerialize::toPrettyXML(export_data, export_file);
 	export_file.close();
-	gSavedSettings.setString("FSBeamShape",gDirUtilp->getBaseFileName(filename, true));
+	gSavedSettings.setString("FSBeamShape", gDirUtilp->getBaseFileName(filename, true));
 
 	if (mFSPanel)
 	{
@@ -231,28 +226,27 @@ void lggBeamMapFloater::onClickClear()
 
 void lggBeamMapFloater::onClickLoad()
 {
-	LLFilePicker& picker = LLFilePicker::instance();
-	if (!picker.getOpenFile(LLFilePicker::FFLOAD_XML))
-	{
-		return;
-	}
+	(new LLFilePickerReplyThread(boost::bind(&lggBeamMapFloater::onLoadCallback, this, _1), LLFilePicker::FFLOAD_XML, false))->getFile();
+}
 
+void lggBeamMapFloater::onLoadCallback(const std::vector<std::string>& filenames)
+{
 	mDots.clear();
-	LLSD mydata;
-	llifstream importer(picker.getFirstFile().c_str());
-	LLSDSerialize::fromXMLDocument(mydata, importer);
-	LLSD myPicture = mydata["data"];
-	F32 scale = (F32)mydata["scale"].asReal();
+	LLSD import_data;
+	llifstream importer(filenames[0].c_str());
+	LLSDSerialize::fromXMLDocument(import_data, importer);
+	LLSD picture = import_data["data"];
+	F32 scale = (F32)import_data["scale"].asReal();
 
-	for (LLSD::array_iterator it = myPicture.beginArray(); it != myPicture.endArray(); ++it)
+	for (LLSD::array_iterator it = picture.beginArray(); it != picture.endArray(); ++it)
 	{
 		LLRect rec = mBeamshapePanel->getRect();
 
-		LLSD beamData = *it;
+		LLSD beam_data = *it;
 		lggPoint p;
-		LLVector3 vec = LLVector3(beamData["offset"]);
+		LLVector3 vec = LLVector3(beam_data["offset"]);
 		vec *= scale / (8.0f / rec.getWidth());
-		LLColor4 color = LLColor4(beamData["color"]);
+		LLColor4 color = LLColor4(beam_data["color"]);
 		p.c = color;
 		p.x = (S32)(vec.mV[VY] + rec.getCenterX());
 		p.y = (S32)(vec.mV[VZ] + rec.getCenterY());

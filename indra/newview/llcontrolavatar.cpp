@@ -33,12 +33,14 @@
 #include "llviewercontrol.h"
 #include "llmeshrepository.h"
 #include "llviewerregion.h"
+#include "llskinningutil.h"
 
 LLControlAvatar::LLControlAvatar(const LLUUID& id, const LLPCode pcode, LLViewerRegion* regionp) :
     LLVOAvatar(id, pcode, regionp),
     mPlaying(false),
     mGlobalScale(1.0f),
-    mMarkedForDeath(false)
+    mMarkedForDeath(false),
+    mRootVolp(NULL)
 {
     mIsDummy = TRUE;
     mIsControlAvatar = true;
@@ -62,6 +64,8 @@ void LLControlAvatar::initInstance()
 	updateJointLODs();
 	updateGeometry(mDrawable);
 	hideSkirt();
+
+    mInitFlags |= 1<<4;
 }
 
 void LLControlAvatar::matchVolumeTransform()
@@ -92,12 +96,62 @@ void LLControlAvatar::matchVolumeTransform()
         }
         else
         {
-            setPositionAgent(mRootVolp->getRenderPosition());
+
+            LLVector3 vol_pos = mRootVolp->getRenderPosition();
+            LLVector3 pos_box_offset;
+            LLVector3 box_offset;
+
+            // Fix up position if needed to prevent visual encroachment
+            if (box_valid_and_non_zero(getLastAnimExtents())) // wait for state to settle down
+            {
+                const F32 MAX_LEGAL_OFFSET = 3.0;
+                
+                // The goal here is to ensure that the extent of the avatar's 
+                // bounding box does not wander too far from the
+                // official position of the corresponding volume. We
+                // do this by tracking the distance and applying a
+                // correction to the control avatar position if
+                // needed.
+                LLVector3 uncorrected_extents[2];
+                uncorrected_extents[0] = getLastAnimExtents()[0] - mPositionConstraintFixup;
+                uncorrected_extents[1] = getLastAnimExtents()[1] - mPositionConstraintFixup;
+                pos_box_offset = point_to_box_offset(vol_pos, uncorrected_extents);
+                F32 offset_dist = pos_box_offset.length();
+                if (offset_dist > MAX_LEGAL_OFFSET)
+                {
+                    F32 target_dist = (offset_dist - MAX_LEGAL_OFFSET);
+                    box_offset = (target_dist/offset_dist)*pos_box_offset;
+                }
+            }
+
+            mPositionConstraintFixup = box_offset;
+
+            // Currently if you're doing something like playing an
+            // animation that moves the pelvis (on an avatar or
+            // animated object), the name tag and debug text will be
+            // left behind. Ideally setPosition() would follow the
+            // skeleton around in a smarter way, so name tags,
+            // complexity info and such line up better. Should defer
+            // this until avatars also get fixed.
+
             LLQuaternion obj_rot = mRootVolp->getRotation();
-            LLQuaternion result_rot = obj_rot;
-            setRotation(result_rot);
-            mRoot->setWorldRotation(result_rot);
-            mRoot->setPosition(mRootVolp->getRenderPosition());
+			LLMatrix3 bind_mat;
+
+            LLQuaternion bind_rot;
+#define MATCH_BIND_SHAPE
+#ifdef MATCH_BIND_SHAPE
+            // MAINT-8671 - based on a patch from Beq Janus
+	        const LLMeshSkinInfo* skin_info = mRootVolp->getSkinInfo();
+			if (skin_info)
+			{
+                LL_DEBUGS("BindShape") << getFullname() << " bind shape " << skin_info->mBindShapeMatrix << LL_ENDL;
+                bind_rot = LLSkinningUtil::getUnscaledQuaternion(skin_info->mBindShapeMatrix);
+			}
+#endif
+			setRotation(bind_rot*obj_rot);
+            mRoot->setWorldRotation(bind_rot*obj_rot);
+			setPositionAgent(vol_pos);
+			mRoot->setPosition(vol_pos + mPositionConstraintFixup);
         }
     }
 }
@@ -246,7 +300,10 @@ void LLControlAvatar::updateDebugText()
         F32 est_tris = 0.f;
         F32 est_streaming_tris = 0.f;
         F32 streaming_cost = 0.f;
-        
+        std::string cam_dist_string = "";
+        S32 cam_dist_count = 0;
+        F32 lod_radius = mRootVolp->mLODRadius;
+
         for (std::vector<LLVOVolume*>::iterator it = volumes.begin();
              it != volumes.end(); ++it)
         {
@@ -281,6 +338,7 @@ void LLControlAvatar::updateDebugText()
                 {
                     // Rigged/animatable mesh
                     type_string += "R";
+                    lod_radius = volp->mLODRadius;
                 }
                 else if (volp->isMesh())
                 {
@@ -291,6 +349,12 @@ void LLControlAvatar::updateDebugText()
                 {
                     // Any other prim
                     type_string += "P";
+                }
+                if (cam_dist_count < 4)
+                {
+                    cam_dist_string += LLStringOps::getReadableNumber(volp->mLODDistance) + "/" +
+                        LLStringOps::getReadableNumber(volp->mLODAdjustedDistance) + " ";
+                    cam_dist_count++;
                 }
             }
             else
@@ -306,6 +370,13 @@ void LLControlAvatar::updateDebugText()
         addDebugText(llformat("flags %s", animated_object_flag_string.c_str()));
         addDebugText(llformat("tris %d (est %.1f, streaming %.1f), verts %d", total_tris, est_tris, est_streaming_tris, total_verts));
         addDebugText(llformat("pxarea %s rank %d", LLStringOps::getReadableNumber(getPixelArea()).c_str(), getVisibilityRank()));
+        addDebugText(llformat("lod_radius %s dists %s", LLStringOps::getReadableNumber(lod_radius).c_str(),cam_dist_string.c_str()));
+        if (mPositionConstraintFixup.length() > 0.0f)
+        {
+            addDebugText(llformat("pos fix (%.1f %.1f %.1f)", 
+                                  mPositionConstraintFixup[0], mPositionConstraintFixup[1], mPositionConstraintFixup[2]));
+        }
+        
 #if 0
         std::string region_name = "no region";
         if (mRootVolp->getRegion())

@@ -3,28 +3,20 @@
 	<text name="region_text_lbl">
 		Regione:
 	</text>
-	<text name="region_text">
-		sconosciuto
+	<text name="region_text" left_delta="60">
+		sconosciuta
 	</text>
 	<spinner label="Altezza dell&apos;acqua" name="water_height_spin"/>
-	<spinner label="Limite di altezza del 
-terreno" name="terrain_raise_spin"/>
-	<spinner bottom_delta="-34" label="Limite di abbassamento 
-del terreno" name="terrain_lower_spin"/>
+	<spinner label="Limite altezza" name="terrain_raise_spin"/>
+	<spinner bottom_delta="-34" label="Limite profondità" name="terrain_lower_spin"/>
 	<text name="detail_texture_text">
-		Texture terreno (richiede file 512x512 / 1024x1024, 24 bit .tga)
+		Texture terreno (richiede file 512x512/1024x1024 24 bit TGA)
 	</text>
 	<text name="height_text_lbl">
 		1 (basso)
 	</text>
-	<text name="height_text_lbl2">
-		2
-	</text>
-	<text name="height_text_lbl3">
-		3
-	</text>
 	<text name="height_text_lbl4">
-		4 (Alto)
+		4 (alto)
 	</text>
 	<text name="height_text_lbl5">
 		Intervalli altitudine texture
@@ -33,7 +25,7 @@ del terreno" name="terrain_lower_spin"/>
 		Questi valori indicano la gamma di miscele per le texture di cui sopra.
 	</text>
 	<text name="height_text_lbl11">
-		Misurato in metri, il valore BASSO è la MASSIMA altezza della texture n. 1, e il valore ALTO è l&apos;altezza MINIMA della texture n. 4.
+		Misurato in metri, il valore BASSO è la MASSIMA altezza della texture 1 e il valore ALTO è l&apos;altezza MINIMA della texture 4.
 	</text>
 	<text name="height_text_lbl6">
 		Nordovest
@@ -41,22 +33,22 @@ del terreno" name="terrain_lower_spin"/>
 	<text name="height_text_lbl7">
 		Nordest
 	</text>
-	<spinner label="Basso" name="height_start_spin_1"/>
-	<spinner label="Basso" name="height_start_spin_3"/>
-	<spinner label="Alto" name="height_range_spin_1"/>
-	<spinner label="Alto" name="height_range_spin_3"/>
+	<spinner label="basso" name="height_start_spin_1"/>
+	<spinner label="basso" name="height_start_spin_3"/>
+	<spinner label="alto" name="height_range_spin_1"/>
+	<spinner label="alto" name="height_range_spin_3"/>
 	<text name="height_text_lbl8">
 		Sudovest
 	</text>
 	<text name="height_text_lbl9">
 		Sudest
 	</text>
-	<spinner label="Basso" name="height_start_spin_0"/>
-	<spinner label="Basso" name="height_start_spin_2"/>
-	<spinner label="Alto" name="height_range_spin_0"/>
-	<spinner label="Alto" name="height_range_spin_2"/>
-	<button label="Scarica terreno RAW..." name="download_raw_btn" tool_tip="Disponibile solo per i proprietari del terreno, non per i manager"/>
-	<button label="Carica terreno RAW..." name="upload_raw_btn" tool_tip="Disponibile solo per i proprietari del terreno, non per i manager"/>
-	<button label="Trasforma il terreno" name="bake_terrain_btn" tool_tip="Imposta il terreno corrente come punto medio per i limiti di innalzamento/abbassamento" width="170"/>
+	<spinner label="basso" name="height_start_spin_0"/>
+	<spinner label="basso" name="height_start_spin_2"/>
+	<spinner label="alto" name="height_range_spin_0"/>
+	<spinner label="alto" name="height_range_spin_2"/>
+	<button label="Scarica RAW terreno ..." name="download_raw_btn" tool_tip="Disponibile solo per i proprietari del terreno, non per i manager"/>
+	<button label="Carica RAW terreno..." name="upload_raw_btn" tool_tip="Disponibile solo per i proprietari del terreno, non per i manager"/>
+	<button label="Trasforma" name="bake_terrain_btn" tool_tip="Imposta il terreno corrente come punto medio per i limiti di innalzamento/abbassamento"/>
 	<button label="Applica" name="apply_btn"/>
 </panel>

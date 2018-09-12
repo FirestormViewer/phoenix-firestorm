@@ -125,6 +125,7 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 	mTextLeftEdge(0),		// computed in updateTextPadding() below
 	mTextRightEdge(0),		// computed in updateTextPadding() below
 	mCommitOnFocusLost( p.commit_on_focus_lost ),
+	mKeystrokeOnEsc(FALSE),
 	mRevertOnEsc( p.revert_on_esc ),
 	mKeystrokeCallback( p.keystroke_callback() ),
 	mIsSelecting( FALSE ),
@@ -1580,6 +1581,10 @@ BOOL LLLineEditor::handleSpecialKey(KEY key, MASK mask)
 		{
 			setText(mPrevText);
 			// Note, don't set handled, still want to loose focus (won't commit becase text is now unchanged)
+			if (mKeystrokeOnEsc)
+			{
+				onKeystroke();
+			}
 		}
 		break;
 		
@@ -1599,6 +1604,13 @@ BOOL LLLineEditor::handleKeyHere(KEY key, MASK mask )
 	if ( gFocusMgr.getKeyboardFocus() == this )
 	{
 		LLLineEditorRollback rollback( this );
+
+		// <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
+		if (key == KEY_CONTEXT_MENU)
+		{
+			showContextMenu(getLocalRect().getCenterX(), getLocalRect().getCenterY(), false);
+		}
+		// </FS:Ansariel>
 
 		if( !handled )
 		{
@@ -2688,7 +2700,10 @@ LLWString LLLineEditor::getConvertedText() const
 	return text;
 }
 
-void LLLineEditor::showContextMenu(S32 x, S32 y)
+// <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
+//void LLLineEditor::showContextMenu(S32 x, S32 y)
+void LLLineEditor::showContextMenu(S32 x, S32 y, bool set_cursor_pos)
+// </FS:Ansariel>
 {
 	//LLContextMenu* menu = static_cast<LLContextMenu*>(mContextMenuHandle.get());
 	// <FS:Ansariel> Delay context menu initialization if LLMenuGL::sMenuContainer is still NULL
@@ -2716,7 +2731,8 @@ void LLLineEditor::showContextMenu(S32 x, S32 y)
 		S32 screen_x, screen_y;
 		localPointToScreen(x, y, &screen_x, &screen_y);
 
-		setCursorAtLocalPos(x);
+		if (set_cursor_pos) // <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
+			setCursorAtLocalPos(x);
 		if (hasSelection())
 		{
 			if ( (mCursorPos < llmin(mSelectionStart, mSelectionEnd)) || (mCursorPos > llmax(mSelectionStart, mSelectionEnd)) )

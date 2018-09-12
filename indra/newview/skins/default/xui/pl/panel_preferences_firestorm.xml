@@ -31,6 +31,7 @@
             <combo_box.item label="Pomocnik lotu: Lekkie przyspieszanie" name="flight_mild" />
             <combo_box.item label="Pomocnik lotu: Umiarkowane przyspieszanie" name="flight_moderate" />
             <combo_box.item label="Pomocnik lotu: Silne przyspieszanie" name="flight_strong" />
+            <combo_box.item label="Pomocnik lotu: Ekstremalne przyspieszanie" name="flight_extreme" />
         </combo_box>
     </panel>
     <panel label="Ochrona" name="ProtectionTab">

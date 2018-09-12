@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="preview_conversation" title="CONVERSAZIONE:">
+<floater name="preview_conversation" title="Conversazione:">
 	<floater.string name="Title">
-		CONVERSAZIONE: [NAME]
+		Conversazione: [NAME]
 	</floater.string>
-	<text name="page_label" value="Pagina"/>
+	<text name="page_label" value="Pagina" width="45"/>
+	<button tool_tip="Apri conversazione esternamente" name="open_external_btn"/>
+	<button tool_tip="Cerca in questa conversazione" name="search_btn"/>
 </floater>

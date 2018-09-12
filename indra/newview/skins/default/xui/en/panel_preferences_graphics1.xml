@@ -665,7 +665,7 @@
 
         <slider
          control_name="RenderVolumeLODFactor"
-				 tool_tip="Controls when lower-detail objects can be used to reduce rendering cost. Higher values cause lag, use with care."
+         tool_tip="Controls when lower-detail objects can be used to reduce rendering cost. Higher values cause lag, use with care."
          follows="left|top"
          height="15"
          increment="0.125"
@@ -674,6 +674,7 @@
          label_width="140"
          layout="topleft"
          left_delta="0"
+         min_val="1"
          max_val="4"
          name="ObjectMeshDetail"
          show_text="true"
@@ -966,8 +967,9 @@
          left="10"
          name="Antialiasing:"
          top_pad="10"
-         width="180">
-            Antialiasing:
+         width="220"
+          tool_tip="Changes to this setting may require a restart on some hardware.">
+          Antialiasing (restart recommended):
         </text>
         <combo_box
          control_name="RenderFSAASamples"

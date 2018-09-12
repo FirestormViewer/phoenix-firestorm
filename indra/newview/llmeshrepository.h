@@ -179,6 +179,21 @@ public:
 
 };
 
+class RequestStats
+{
+public:
+    RequestStats() : mRetries(0) {};
+
+    void updateTime();
+    bool canRetry() const;
+    bool isDelayed() const;
+    U32 getRetries() { return mRetries; }
+
+private:
+    U32 mRetries;
+    LLFrameTimer mTimer;
+};
+
 class LLMeshRepoThread : public LLThread
 {
 public:
@@ -199,14 +214,14 @@ public:
 	mesh_header_map mMeshHeader;
 	
 	std::map<LLUUID, U32> mMeshHeaderSize;
-	
-	class HeaderRequest
+
+	class HeaderRequest : public RequestStats
 	{ 
 	public:
 		const LLVolumeParams mMeshParams;
 
 		HeaderRequest(const LLVolumeParams&  mesh_params)
-			: mMeshParams(mesh_params)
+			: RequestStats(), mMeshParams(mesh_params)
 		{
 		}
 
@@ -216,7 +231,7 @@ public:
 		}
 	};
 
-	class LODRequest
+	class LODRequest : public RequestStats
 	{
 	public:
 		LLVolumeParams  mMeshParams;
@@ -224,7 +239,7 @@ public:
 		F32 mScore;
 
 		LODRequest(const LLVolumeParams&  mesh_params, S32 lod)
-			: mMeshParams(mesh_params), mLOD(lod), mScore(0.f)
+			: RequestStats(), mMeshParams(mesh_params), mLOD(lod), mScore(0.f)
 		{
 		}
 	};
@@ -236,7 +251,22 @@ public:
 			return lhs.mScore > rhs.mScore; // greatest = first
 		}
 	};
-	
+
+	class UUIDBasedRequest : public RequestStats
+	{
+	public:
+		LLUUID mId;
+
+		UUIDBasedRequest(const LLUUID& id)
+			: RequestStats(), mId(id)
+		{
+        }
+
+        bool operator<(const UUIDBasedRequest& rhs) const
+        {
+            return mId < rhs.mId;
+        }
+	};
 
 	class LoadedMesh
 	{
@@ -253,16 +283,16 @@ public:
 	};
 
 	//set of requested skin info
-	std::set<LLUUID> mSkinRequests;
+	std::set<UUIDBasedRequest> mSkinRequests;
 	
 	// list of completed skin info requests
 	std::list<LLMeshSkinInfo> mSkinInfoQ;
 
 	//set of requested decompositions
-	std::set<LLUUID> mDecompositionRequests;
+	std::set<UUIDBasedRequest> mDecompositionRequests;
 
 	//set of requested physics shapes
-	std::set<LLUUID> mPhysicsShapeRequests;
+	std::set<UUIDBasedRequest> mPhysicsShapeRequests;
 
 	// list of completed Decomposition info requests
 	std::list<LLModel::Decomposition*> mDecompositionQ;
@@ -312,8 +342,8 @@ public:
 	void lockAndLoadMeshLOD(const LLVolumeParams& mesh_params, S32 lod);
 	void loadMeshLOD(const LLVolumeParams& mesh_params, S32 lod);
 
-	bool fetchMeshHeader(const LLVolumeParams& mesh_params);
-	bool fetchMeshLOD(const LLVolumeParams& mesh_params, S32 lod);
+	bool fetchMeshHeader(const LLVolumeParams& mesh_params, bool can_retry = true);
+	bool fetchMeshLOD(const LLVolumeParams& mesh_params, S32 lod, bool can_retry = true);
 	bool headerReceived(const LLVolumeParams& mesh_params, U8* data, S32 data_size);
 	EMeshProcessingResult lodReceived(const LLVolumeParams& mesh_params, S32 lod, U8* data, S32 data_size);
 	bool skinInfoReceived(const LLUUID& mesh_id, U8* data, S32 data_size);
@@ -675,7 +705,6 @@ public:
 
 extern LLMeshRepository gMeshRepo;
 
-// AXON make sure this is consistent with the final simulator-side values.
 const F32 ANIMATED_OBJECT_BASE_COST = 15.0f;
 const F32 ANIMATED_OBJECT_COST_PER_KTRI = 1.5f;
 

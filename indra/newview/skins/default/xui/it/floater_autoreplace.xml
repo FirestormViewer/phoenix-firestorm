@@ -23,16 +23,3 @@
 	<button label="Salva modifiche" name="autoreplace_save_changes" tool_tip="Salva tutte le modifiche."/>
 	<button label="Annulla" name="autoreplace_cancel" tool_tip="Annulla tutte le modifiche."/>
 </floater>
-<!--
-  <text 
-   top_pad="10"
-   left="10"
-   height="16"
-   width="260"
-   follows="left|top"
-   halign="center"
-   mouse_opaque="true"
-   name="autoreplace_text2">
-    Entries
-  </text>
--->

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_translation_settings" title="IMPOSTAZIONI TRADUZIONE CHAT">
+<floater name="floater_translation_settings" title="Impostazioni traduzione chat">
 	<string name="bing_api_key_not_verified">
 		appID Bing non verificato. Riprova.
 	</string>
@@ -12,7 +12,7 @@
 	<string name="google_api_key_verified">
 		Chiave API Google verificata.
 	</string>
-	<check_box label="Usa la traduzione meccanica durante le chat" name="translate_chat_checkbox"/>
+	<check_box label="Usa la traduzione automatica durante le chat" name="translate_chat_checkbox"/>
 	<text name="translate_language_label">
 		Traduci chat in:
 	</text>
@@ -39,20 +39,15 @@
 		Seleziona il servizio di traduzione:
 	</text>
 	<radio_group name="translation_service_rg">
-		<radio_item initial_value="bing" label="Bing Translator" name="bing"/>
-		<radio_item initial_value="google" label="Google Translate" name="google"/>
+		<radio_item label="Bing Translator" name="bing"/>
+		<radio_item label="Google Translate" name="google"/>
 	</radio_group>
-	<text name="bing_api_key_label">
-		Bing [http://www.bing.com/developers/createapp.aspx AppID]:
-	</text>
+	<line_editor default_text="Inserisci un AppID Bing e clicca su &quot;Verifica&quot;" name="bing_api_key" />
 	<button label="Verifica" name="verify_bing_api_key_btn"/>
-	<text name="google_api_key_label">
-		Google [http://code.google.com/apis/language/translate/v2/getting_started.html#auth API key]:
-	</text>
+	<line_editor default_text="Inserisci una chiave Google API e clicca su &quot;Verifica&quot;" name="google_api_key" />
 	<button label="Verifica" name="verify_google_api_key_btn"/>
 	<text name="google_links_text">
 		[http://code.google.com/apis/language/translate/v2/pricing.html Prezzi] | [https://code.google.com/apis/console Statistiche]
 	</text>
-	<button label="OK" name="ok_btn"/>
 	<button label="Annulla" name="cancel_btn"/>
 </floater>

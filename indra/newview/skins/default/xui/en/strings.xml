@@ -11,9 +11,9 @@
 	<string name="CAPITALIZED_APP_NAME">FIRESTORM</string>
 	<string name="SECOND_LIFE_GRID">Second Life Grid</string>
 	<string name="SUPPORT_SITE">Second Life Support Portal</string>
-	<string name="DOWNLOAD_URL">http://www.firestormviewer.org/downloads</string>
+	<string name="DOWNLOAD_URL">https://www.firestormviewer.org/downloads</string>
 	<string name="CURRENT_GRID"/> <!-- Will be set in fsgridhandler.cpp / llviewernetwork.cpp -->
-	<string name="VIEWER_GENERATION">Viewer 5</string>
+	<string name="VIEWER_GENERATION">Viewer 6</string>
 
 	<!-- starting up -->
 	<string name="StartupDetectingHardware">Detecting hardware...</string>
@@ -26,7 +26,7 @@
 
 	<!-- about dialog/support string-->
 	<string name="AboutHeader">
-[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]bit)
+[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit) ([CHANNEL]) [BUILD_TYPE]
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="AboutCompiler">Built with [COMPILER] version [COMPILER_VERSION]</string>
@@ -2777,6 +2777,7 @@ Try enclosing path to the editor with double quotes.
   <string name="MovelockDisabled">Movelock disabled</string>
   <string name="MovelockEnabling">Enabling movelock...</string>
   <string name="MovelockDisabling">Disabling movelock...</string>
+  <string name="FlightAssistEnabled">Flight Assist is enabled</string>
 
   <string name="BusyResponse">busy response</string>
   
@@ -2821,8 +2822,7 @@ Try enclosing path to the editor with double quotes.
   <string name="ExperiencePermissionShort10">Control Camera</string>
   <string name="ExperiencePermissionShort11">Teleport</string>
   <string name="ExperiencePermissionShort12">Permission</string>
-  <string name="ExperiencePermissionShortUnknown">Unknown: [Permission]</string>
-  
+
   <!-- Conversation log messages -->
   <string name="logging_calls_disabled_log_empty">
     Conversations are not being logged. To begin keeping a log, choose "Save: Log only" or "Save: Log and transcripts" under Preferences > Privacy.

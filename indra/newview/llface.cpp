@@ -841,17 +841,11 @@ bool less_than_max_mag(const LLVector4a& vec)
 }
 
 BOOL LLFace::genVolumeBBoxes(const LLVolume &volume, S32 f,
-								const LLMatrix4& mat_vert_in, BOOL global_volume)
+                             const LLMatrix4& mat_vert_in, BOOL global_volume)
 {
 	//get bounding box
 	if (mDrawablep->isState(LLDrawable::REBUILD_VOLUME | LLDrawable::REBUILD_POSITION | LLDrawable::REBUILD_RIGGED))
 	{
-		//VECTORIZE THIS
-		LLMatrix4a mat_vert;
-		mat_vert.loadu(mat_vert_in);
-
-		LLVector4a min,max;
-	
 		if (f >= volume.getNumVolumeFaces())
 		{
 			LL_WARNS() << "Generating bounding box for invalid face index!" << LL_ENDL;
@@ -859,41 +853,11 @@ BOOL LLFace::genVolumeBBoxes(const LLVolume &volume, S32 f,
 		}
 
 		const LLVolumeFace &face = volume.getVolumeFace(f);
-		min = face.mExtents[0];
-		max = face.mExtents[1];
-
-        LL_DEBUGS("RiggedBox") << "updating extents for face " << f << " starting extents " << mExtents[0] << ", " << mExtents[1] << LL_ENDL;
-        LL_DEBUGS("RiggedBox") << "updating extents for face " << f << " starting vf extents " << face.mExtents[0] << ", " << face.mExtents[1] << " num verts " << face.mNumVertices << LL_ENDL;
-
-// <FS:AW>		
-// 		llassert(less_than_max_mag(min));
-// 		llassert(less_than_max_mag(max));
-// </FS:AW>
-
-		//min, max are in volume space, convert to drawable render space
-
-		//get 8 corners of bounding box
-		LLVector4Logical mask[6];
-
-		for (U32 i = 0; i < 6; ++i)
-		{
-			mask[i].clear();
-		}
-
-		mask[0].setElement<2>(); //001
-		mask[1].setElement<1>(); //010
-		mask[2].setElement<1>(); //011
-		mask[2].setElement<2>();
-		mask[3].setElement<0>(); //100
-		mask[4].setElement<0>(); //101
-		mask[4].setElement<2>();
-		mask[5].setElement<0>(); //110
-		mask[5].setElement<1>();
-
-		LLVector4a v[8];
-
-		v[6] = min;
-		v[7] = max;
+		
+        LL_DEBUGS("RiggedBox") << "updating extents for face " << f 
+                               << " starting extents " << mExtents[0] << ", " << mExtents[1] 
+                               << " starting vf extents " << face.mExtents[0] << ", " << face.mExtents[1] 
+                               << " num verts " << face.mNumVertices << LL_ENDL;
 
         // MAINT-8264 - stray vertices, especially in low LODs, cause bounding box errors.
 		if (face.mNumVertices < 3) 
@@ -903,52 +867,38 @@ BOOL LLFace::genVolumeBBoxes(const LLVolume &volume, S32 f,
             return FALSE;
         }
         
-		for (U32 i = 0; i < 6; ++i)
-		{
-			v[i].setSelectWithMask(mask[i], min, max);
-		}
+		//VECTORIZE THIS
+		LLMatrix4a mat_vert;
+		mat_vert.loadu(mat_vert_in);
+        LLVector4a new_extents[2];
 
-		LLVector4a tv[8];
+		llassert(less_than_max_mag(face.mExtents[0]));
+		llassert(less_than_max_mag(face.mExtents[1]));
 
-        LL_DEBUGS("RiggedBox") << "updating extents for face " << f << " mat is " << mat_vert << LL_ENDL;
+		matMulBoundBox(mat_vert, face.mExtents, mExtents);
 
-		//transform bounding box into drawable space
-		for (U32 i = 0; i < 8; ++i)
-		{
-			mat_vert.affineTransform(v[i], tv[i]);
-            LL_DEBUGS("RiggedBox") << "updating extents for face " << f << " i " << i << " v and tv " << v[i] << ", " << tv[i] << LL_ENDL;
-		}
-	
-		//find bounding box
-		LLVector4a& newMin = mExtents[0];
-		LLVector4a& newMax = mExtents[1];
-
-		newMin = newMax = tv[0];
-
-		for (U32 i = 1; i < 8; ++i)
-		{
-			newMin.setMin(newMin, tv[i]);
-			newMax.setMax(newMax, tv[i]);
-		}
-        LL_DEBUGS("RiggedBox") << "updating extents for face " << f << " bbox gave extents " << mExtents[0] << ", " << mExtents[1] << LL_ENDL;
+        LL_DEBUGS("RiggedBox") << "updated extents for face " << f 
+                               << " bbox gave extents " << mExtents[0] << ", " << mExtents[1] << LL_ENDL;
 
 		if (!mDrawablep->isActive())
 		{	// Shift position for region
 			LLVector4a offset;
 			offset.load3(mDrawablep->getRegion()->getOriginAgent().mV);
-			newMin.add(offset);
-			newMax.add(offset);
-            LL_DEBUGS("RiggedBox") << "updating extents for face " << f << " not active, added offset " << offset << LL_ENDL;
+			mExtents[0].add(offset);
+			mExtents[1].add(offset);
+            LL_DEBUGS("RiggedBox") << "updating extents for face " << f 
+                                   << " not active, added offset " << offset << LL_ENDL;
 		}
 
-        LL_DEBUGS("RiggedBox") << "updated extents for face " << f << " to " << mExtents[0] << ", " << mExtents[1] << LL_ENDL;
+        LL_DEBUGS("RiggedBox") << "updated extents for face " << f 
+                               << " to " << mExtents[0] << ", " << mExtents[1] << LL_ENDL;
 		LLVector4a t;
-		t.setAdd(newMin,newMax);
+		t.setAdd(mExtents[0],mExtents[1]);
 		t.mul(0.5f);
 
 		mCenterLocal.set(t.getF32ptr());
 
-		t.setSub(newMax,newMin);
+		t.setSub(mExtents[1],mExtents[0]);
 		mBoundingSphereRadius = t.getLength3().getF32()*0.5f;
 
 		updateCenterAgent();
@@ -1155,7 +1105,7 @@ bool LLFace::canRenderAsMask()
 	{
 		return false;
 	}
-
+	
 	LLMaterial* mat = te->getMaterialParams();
 	if (mat && mat->getDiffuseAlphaMode() == LLMaterial::DIFFUSE_ALPHA_MODE_BLEND)
 	{
@@ -1296,6 +1246,12 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 {
 	LL_RECORD_BLOCK_TIME(FTM_FACE_GET_GEOM);
 	llassert(verify());
+
+	if (volume.getNumVolumeFaces() <= f) {
+        LL_WARNS() << "Attempt get volume face out of range! Total Faces: " << volume.getNumVolumeFaces() << " Attempt get access to: " << f << LL_ENDL;
+		return FALSE;
+	}
+
 	const LLVolumeFace &vf = volume.getVolumeFace(f);
 	S32 num_vertices = (S32)vf.mNumVertices;
 	S32 num_indices = (S32) vf.mNumIndices;
@@ -2774,6 +2730,13 @@ LLViewerTexture* LLFace::getTexture(U32 ch) const
 }
 
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+bool LLFace::isDefaultTexture(U32 nChannel) const
+{
+	// NOTE: mShowDiffTexture gets flipped before the clear (good) but also before the restore (bad) and hence can't
+	//       be used to tell whether we're usurping a texture channel for our own use
+	return (LLRender::DIFFUSE_MAP == nChannel) ? mOrigDiffTexture.notNull() : false;
+}
+
 void LLFace::setDefaultTexture(U32 nChannel, bool fShowDefault) const
 {
 	bool fUpdated = false;

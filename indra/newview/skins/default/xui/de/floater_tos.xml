@@ -14,7 +14,7 @@
 	</text>
 	<check_box label="Ich habe gelesen und stimme zu:" name="agree_chk"/>
 	<text name="agree_list">
-		Den Geschäftsbedingungen, Datenschutzbestimmungen und Servicebedingungen, einschließlich der Voraussetzungen zur Beilegung von Streitigkeiten
+		Den allgemeinen Geschäftsbedingungen, der Datenschutzrichtlinie und Servicebedingungen, inklusive den Anforderungen zur Streitschlichtung
 	</text>
 	<button label="Weiter" label_selected="Weiter" name="Continue"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="Cancel"/>

@@ -846,7 +846,7 @@ void LLPipeline::resizeScreenTexture()
 			resX /= RenderResolutionDivisor;
 			resY /= RenderResolutionDivisor;
 		}
-		else if (RenderResolutionMultiplier != 1.f)
+		else if (RenderResolutionMultiplier > 0.f && RenderResolutionMultiplier < 1.f)
 		{
 			resX *= RenderResolutionMultiplier;
 			resY *= RenderResolutionMultiplier;
@@ -1011,7 +1011,7 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 		resY /= res_mod;
 	}
 // [SL:KB] - Patch: Settings-RenderResolutionMultiplier | Checked: Catznip-5.4
-	else if (RenderResolutionMultiplier != 1.f)
+	else if (RenderResolutionMultiplier > 0.f && RenderResolutionMultiplier < 1.f)
 	{
 		resX *= RenderResolutionMultiplier;
 		resY *= RenderResolutionMultiplier;

@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  can_resize="true"
- height="300"
+ height="297"
  layout="topleft"
  min_height="300"
  min_width="610"
@@ -47,13 +47,14 @@ VRAM: [VRAM_USAGE] KB
       border_visible="true"
       allow_scroll="true"
       h_pad="2"
-      v_pad="0"
+      v_pad="2"
       read_only="true"
+      tab_stop="false"
       value="(loading...)"
       word_wrap="true"/>
     <scroll_list
      top="24"
-     height="242"
+     height="243"
      column_padding="0"
      draw_heading="true"
      follows="top|right|left|bottom"
@@ -81,23 +82,28 @@ VRAM: [VRAM_USAGE] KB
         <scroll_list.columns
          label="Faces"
          name="facecount"
-         width="45" />
+         width="45"
+         sort_column="facecount_sort"/>
         <scroll_list.columns
          label="Vertices"
          name="vertexcount"
-         width="55" />
+         width="55"
+         sort_column="vertexcount_sort"/>
         <scroll_list.columns
          label="Triangles"
          name="trianglecount"
-         width="55" />
+         width="55"
+         sort_column="trianglecount_sort"/>
         <scroll_list.columns
          label="TMem"
          name="tramcount"
-         width="55" />
+         width="55"
+         sort_column="tramcount_sort"/>
         <scroll_list.columns
          label="VRAM"
          name="vramcount"
-         width="55" />
+         width="55"
+         sort_column="vramcount_sort"/>
         <scroll_list.columns
          label="Creation Date"
          name="creation_date"
@@ -105,14 +111,36 @@ VRAM: [VRAM_USAGE] KB
          sort_column="creation_date_sort"/>
         <scroll_list.columns
          label=""
+         name="facecount_sort"
+         width="-1" />
+        <scroll_list.columns
+         label=""
+         name="vertexcount_sort"
+         width="-1" />
+        <scroll_list.columns
+         label=""
+         name="trianglecount_sort"
+         width="-1" />
+        <scroll_list.columns
+         label=""
+         name="tramcount_sort"
+         width="-1" />
+        <scroll_list.columns
+         label=""
+         name="vramcount_sort"
+         width="-1" />
+        <scroll_list.columns
+         label=""
          name="creation_date_sort"
          width="-1" />
-		 <scroll_list.commit_callback
-		   function="Inspect.SelectObject" />
+         <scroll_list.commit_callback
+         function="Inspect.SelectObject" />
     </scroll_list>
     <button
      follows="left|bottom"
      height="23"
+     image_selected="Toolbar_Middle_Selected"
+     image_unselected="Toolbar_Middle_Off"
      label="See Owner Profile..."
      layout="topleft"
      left="4"
@@ -120,20 +148,43 @@ VRAM: [VRAM_USAGE] KB
      tool_tip="See profile of the highlighted object&apos;s owner"
      top_pad="4"
      width="150">
-		<button.commit_callback
-		function="Inspect.OwnerProfile" />
-	</button>
+        <button.commit_callback
+        function="Inspect.OwnerProfile" />
+    </button>
     <button
      follows="left|bottom"
      height="23"
+     image_selected="Toolbar_Middle_Selected"
+     image_unselected="Toolbar_Middle_Off"
      label="See Creator Profile..."
      layout="topleft"
-     left_pad="5"
+     left_pad="2"
      name="button creator"
      tool_tip="See profile of the highlighted object&apos;s original creator"
      top_delta="0"
      width="150">
-		<button.commit_callback
-		function="Inspect.CreatorProfile" />
-	</button>
+        <button.commit_callback
+        function="Inspect.CreatorProfile" />
+    </button>
+    <menu_button
+     follows="left|bottom"
+     height="23"
+     image_hover_unselected="Toolbar_Middle_Over"
+     image_overlay="Conv_toolbar_sort"
+     image_selected="Toolbar_Middle_Selected"
+     image_unselected="Toolbar_Middle_Off"
+     layout="topleft"
+     left_pad="2"
+     name="options_btn"
+     tool_tip="Options"
+     top_delta="0"
+     width="31" />
+    <icon
+     follows="left|right"
+     image_name="Toolbar_Middle_Off"
+     left_pad="2"
+     name="dummy_icon"
+     top_delta="0"
+     height="23"
+     right="-4"/>
 </floater>

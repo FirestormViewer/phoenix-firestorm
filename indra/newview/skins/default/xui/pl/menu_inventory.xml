@@ -10,7 +10,6 @@
 	<menu_item_call label="Aktywuj" name="Marketplace Activate"/>
 	<menu_item_call label="Dezaktywuj" name="Marketplace Deactivate"/>
 	<menu_item_call label="Udostępnij" name="Share"/>
-	<menu_item_call label="Kupuj" name="Task Buy"/>
 	<menu_item_call label="Otwórz" name="Task Open"/>
 	<menu_item_call label="Odtwarzaj" name="Task Play"/>
 	<menu_item_call label="Właściwości" name="Task Properties"/>

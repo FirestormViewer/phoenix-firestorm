@@ -102,6 +102,7 @@
 // [RLVa:KB] - Checked: RLVa-2.0.1
 #include "rlvactions.h"
 #include "rlvhandler.h"
+#include "rlvmodifiers.h"
 // [/RLVa:KB]
 
 #include "llgesturemgr.h" //needed to trigger the voice gesticulations
@@ -123,6 +124,7 @@
 #include "lggcontactsets.h"
 #include "llcontrol.h"
 #include "llfilepicker.h"	// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
+#include "llviewermenufile.h"
 #include "llnetmap.h"
 #include "llviewernetwork.h"	// [FS:CR] isInSecondlife()
 #include "llsidepanelappearance.h"
@@ -724,6 +726,8 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mNeedsImpostorUpdate = TRUE;
 	mNeedsAnimUpdate = TRUE;
 
+	mNeedsExtentUpdate = true;
+
 	mImpostorDistance = 0;
 	mImpostorPixelArea = 0;
 
@@ -1057,7 +1061,7 @@ void LLVOAvatar::dumpBakedStatus()
 				const ETextureIndex index = baked_dict->mTextureIndex;
 				if (!inst->isTextureDefined(index))
 				{
-					LL_CONT << " " << LLAvatarAppearanceDictionary::getInstance()->getTexture(index)->mName;
+					LL_CONT << " " << (LLAvatarAppearanceDictionary::getInstance()->getTexture(index) ? LLAvatarAppearanceDictionary::getInstance()->getTexture(index)->mName : "");
 				}
 			}
 			LL_CONT << " ) " << inst->getUnbakedPixelAreaRank();
@@ -1264,6 +1268,8 @@ void LLVOAvatar::initInstance()
 	//VTPause();  // VTune
 	
 	mVoiceVisualizer->setVoiceEnabled( LLVoiceClient::getInstance()->getVoiceEnabled( mID ) );
+
+    mInitFlags |= 1<<1;
 }
 
 // virtual
@@ -1336,6 +1342,15 @@ void LLVOAvatar::updateSpatialExtents(LLVector4a& newMin, LLVector4a &newMax)
     {
         return;
     }
+
+    if (mNeedsExtentUpdate)
+    {
+        calculateSpatialExtents(newMin,newMax);
+        mLastAnimExtents[0].set(newMin.getF32ptr());
+        mLastAnimExtents[1].set(newMax.getF32ptr());
+        mNeedsExtentUpdate = false;
+    }
+          
 	if (isImpostor() && !needsImpostorUpdate())
 	{
 		LLVector3 delta = getRenderPosition() -
@@ -1346,101 +1361,195 @@ void LLVOAvatar::updateSpatialExtents(LLVector4a& newMin, LLVector4a &newMax)
 	}
 	else
 	{
-		getSpatialExtents(newMin,newMax);
-		mLastAnimExtents[0].set(newMin.getF32ptr());
-		mLastAnimExtents[1].set(newMax.getF32ptr());
+        newMin.load3(mLastAnimExtents[0].mV);
+        newMax.load3(mLastAnimExtents[1].mV);
 		LLVector4a pos_group;
 		pos_group.setAdd(newMin,newMax);
 		pos_group.mul(0.5f);
 		mImpostorOffset = LLVector3(pos_group.getF32ptr())-getRenderPosition();
 		mDrawable->setPositionGroup(pos_group);
 	}
-	
-	
 }
 
-void LLVOAvatar::getSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
+
+static LLTrace::BlockTimerStatHandle FTM_AVATAR_EXTENT_UPDATE("Avatar Update Extent");
+
+void LLVOAvatar::calculateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
 {
-	LLVector4a buffer(0.25f);
+    LL_RECORD_BLOCK_TIME(FTM_AVATAR_EXTENT_UPDATE);
+
+    S32 box_detail = gSavedSettings.getS32("AvatarBoundingBoxComplexity");
+
+    // FIXME the update_min_max function used below assumes there is a
+    // known starting point, but in general there isn't. Ideally the
+    // box update logic should be modified to handle the no-point-yet
+    // case. For most models, starting with the pelvis is safe though.
+    LLVector3 zero_pos;
 	LLVector4a pos;
-	pos.load3(getRenderPosition().mV);
-	newMin.setSub(pos, buffer);
-	newMax.setAdd(pos, buffer);
+    if (dist_vec(zero_pos, mPelvisp->getWorldPosition())<0.001)
+    {
+        // Don't use pelvis until av initialized
+        pos.load3(getRenderPosition().mV);
+    }
+    else
+    {
+        pos.load3(mPelvisp->getWorldPosition().mV);
+    }
+	newMin = pos;
+	newMax = pos;
 
-	float max_attachment_span = get_default_max_prim_scale() * 5.0f;
+	//stretch bounding box by joint positions. Doing this for
+	//control avs, where the polymeshes aren't maintained or
+	//displayed, can give inaccurate boxes due to joints stuck at (0,0,0).
+    if ((box_detail>=1) && !isControlAvatar())
+    {
+        for (polymesh_map_t::iterator i = mPolyMeshes.begin(); i != mPolyMeshes.end(); ++i)
+        {
+            LLPolyMesh* mesh = i->second;
+            for (S32 joint_num = 0; joint_num < mesh->mJointRenderData.size(); joint_num++)
+            {
+                LLVector4a trans;
+                trans.load3( mesh->mJointRenderData[joint_num]->mWorldMatrix->getTranslation().mV);
+                update_min_max(newMin, newMax, trans);
+            }
+        }
+
+    }
+
+	// Pad bounding box for starting joint, plus polymesh if
+	// applicable. Subsequent calcs should be accurate enough to not
+	// need padding.
+	LLVector4a padding(0.25);
+	newMin.sub(padding);
+	newMax.add(padding);
+
+
+	//stretch bounding box by static attachments
+    if (box_detail >= 2)
+    {
+        float max_attachment_span = get_default_max_prim_scale() * 5.0f;
 	
-	//stretch bounding box by joint positions
-	for (polymesh_map_t::iterator i = mPolyMeshes.begin(); i != mPolyMeshes.end(); ++i)
-	{
-		LLPolyMesh* mesh = i->second;
-		for (S32 joint_num = 0; joint_num < mesh->mJointRenderData.size(); joint_num++)
-		{
-			LLVector4a trans;
-			trans.load3( mesh->mJointRenderData[joint_num]->mWorldMatrix->getTranslation().mV);
-			update_min_max(newMin, newMax, trans);
-		}
-	}
+        for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
+             iter != mAttachmentPoints.end();
+             ++iter)
+        {
+            LLViewerJointAttachment* attachment = iter->second;
 
-	LLVector4a center, size;
-	center.setAdd(newMin, newMax);
-	center.mul(0.5f);
+            // <FS:Ansariel> Possible crash fix
+            //if (attachment->getValid())
+            if (attachment && attachment->getValid())
+            // </FS:Ansariel>
+            {
+                for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
+                     attachment_iter != attachment->mAttachedObjects.end();
+                     ++attachment_iter)
+                {
+                    // Don't we need to look at children of attached_object as well?
+                    const LLViewerObject* attached_object = (*attachment_iter);
+                    if (attached_object && !attached_object->isHUDAttachment())
+                    {
+                        const LLVOVolume *vol = dynamic_cast<const LLVOVolume*>(attached_object);
+                        if (vol && vol->isAnimatedObject())
+                        {
+                            // Animated objects already have a bounding box in their control av, use that. 
+                            // Could lag by a frame if there's no guarantee on order of processing for avatars.
+                            LLControlAvatar *cav = vol->getControlAvatar();
+                            if (cav)
+                            {
+                                LLVector4a cav_min;
+                                cav_min.load3(cav->mLastAnimExtents[0].mV);
+                                LLVector4a cav_max;
+                                cav_max.load3(cav->mLastAnimExtents[1].mV);
+                                update_min_max(newMin,newMax,cav_min);
+                                update_min_max(newMin,newMax,cav_max);
+                                continue;
+                            }
+                        }
+                        if (vol && vol->isRiggedMesh())
+                        {
+                            continue;
+                        }
+                        LLDrawable* drawable = attached_object->mDrawable;
+                        if (drawable && !drawable->isState(LLDrawable::RIGGED))
+                        {
+                            LLSpatialBridge* bridge = drawable->getSpatialBridge();
+                            if (bridge)
+                            {
+                                const LLVector4a* ext = bridge->getSpatialExtents();
+                                LLVector4a distance;
+                                distance.setSub(ext[1], ext[0]);
+                                LLVector4a max_span(max_attachment_span);
 
-	size.setSub(newMax,newMin);
-	size.mul(0.5f);
-
-	mPixelArea = LLPipeline::calcPixelArea(center, size, *LLViewerCamera::getInstance());
-
-	//stretch bounding box by attachments
-	for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
-		 iter != mAttachmentPoints.end();
-		 ++iter)
-	{
-		LLViewerJointAttachment* attachment = iter->second;
-
-		// <FS:Ansariel> Possible crash fix
-		//if (attachment->getValid())
-		if (attachment && attachment->getValid())
-		// </FS:Ansariel>
-		{
-			for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
-				 attachment_iter != attachment->mAttachedObjects.end();
-				 ++attachment_iter)
-			{
-				const LLViewerObject* attached_object = (*attachment_iter);
-				if (attached_object && !attached_object->isHUDAttachment())
-				{
-					LLDrawable* drawable = attached_object->mDrawable;
-					if (drawable && !drawable->isState(LLDrawable::RIGGED))
-					{
-						LLSpatialBridge* bridge = drawable->getSpatialBridge();
-						if (bridge)
-						{
-							const LLVector4a* ext = bridge->getSpatialExtents();
-							LLVector4a distance;
-							distance.setSub(ext[1], ext[0]);
-							LLVector4a max_span(max_attachment_span);
-
-							S32 lt = distance.lessThan(max_span).getGatheredBits() & 0x7;
+                                S32 lt = distance.lessThan(max_span).getGatheredBits() & 0x7;
 						
-							// Only add the prim to spatial extents calculations if it isn't a megaprim.
-							// max_attachment_span calculated at the start of the function 
-							// (currently 5 times our max prim size) 
-							if (lt == 0x7)
-							{
-								update_min_max(newMin,newMax,ext[0]);
-								update_min_max(newMin,newMax,ext[1]);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+                                // Only add the prim to spatial extents calculations if it isn't a megaprim.
+                                // max_attachment_span calculated at the start of the function 
+                                // (currently 5 times our max prim size) 
+                                if (lt == 0x7)
+                                {
+                                    update_min_max(newMin,newMax,ext[0]);
+                                    update_min_max(newMin,newMax,ext[1]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-	//pad bounding box	
+    // Stretch bounding box by rigged mesh joint boxes
+    if (box_detail>=3)
+    {
+        // FIXME could try to cache unless something has changed about attached rigged meshes, 
+        // but needs more logic based on volume states.
 
-	newMin.sub(buffer);
-	newMax.add(buffer);
+        //if (mRiggingInfoTab.needsUpdate())
+        {
+            updateRiggingInfo();
+            //mJointRiggingInfoTab.setNeedsUpdate(false);
+        }
+        for (S32 joint_num = 0; joint_num < LL_CHARACTER_MAX_ANIMATED_JOINTS; joint_num++)
+        {
+            LLJoint *joint = getJoint(joint_num);
+            LLJointRiggingInfo *rig_info = NULL;
+            if (joint_num < mJointRiggingInfoTab.size())
+            {
+                rig_info = &mJointRiggingInfoTab[joint_num];
+            }
+
+            if (joint && rig_info && rig_info->isRiggedTo())
+            {
+                LLViewerJointAttachment *as_joint_attach = dynamic_cast<LLViewerJointAttachment*>(joint);
+                if (as_joint_attach && as_joint_attach->getIsHUDAttachment())
+                {
+                    // Ignore bounding box of HUD joints
+                    continue;
+                }
+                LLMatrix4a mat;
+                LLVector4a new_extents[2];
+                mat.loadu(joint->getWorldMatrix());
+                matMulBoundBox(mat, rig_info->getRiggedExtents(), new_extents);
+                update_min_max(newMin, newMax, new_extents[0]);
+                update_min_max(newMin, newMax, new_extents[1]);
+                //if (isSelf())
+                //{
+                //    LL_INFOS() << joint->getName() << " extents " << new_extents[0] << "," << new_extents[1] << LL_ENDL;
+                //    LL_INFOS() << joint->getName() << " av box is " << newMin << "," << newMax << LL_ENDL;
+                //}
+            }
+        }
+    }
+
+    // Update pixel area
+    LLVector4a center, size;
+    center.setAdd(newMin, newMax);
+    center.mul(0.5f);
+    
+    size.setSub(newMax,newMin);
+    size.mul(0.5f);
+    
+    mPixelArea = LLPipeline::calcPixelArea(center, size, *LLViewerCamera::getInstance());
 }
 
 void render_sphere_and_line(const LLVector3& begin_pos, const LLVector3& end_pos, F32 sphere_scale, const LLVector3& occ_color, const LLVector3& visible_color)
@@ -1579,7 +1688,7 @@ void LLVOAvatar::renderBones()
         }
         else
         {
-            if (jointIsRiggedTo(jointp->getName()))
+            if (jointIsRiggedTo(jointp))
             {
                 occ_color = RIGGED_COLOR_OCCLUDED;
                 visible_color = RIGGED_COLOR_VISIBLE;
@@ -2453,6 +2562,9 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 		return;
 	}
 
+    // Update should be happening max once per frame.
+    mNeedsExtentUpdate = true;
+    
     LLScopedContextString str("avatar_idle_update " + getFullname());
     
 	checkTextureLoading() ;
@@ -2761,8 +2873,10 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
 			}
 			else
 			{
-				//VECTORIZE THIS
-				getSpatialExtents(ext[0], ext[1]);
+				ext[0].load3(mLastAnimExtents[0].mV);
+                ext[1].load3(mLastAnimExtents[1].mV);
+                // Expensive. Just call this once per frame, in updateSpatialExtents();
+                //calculateSpatialExtents(ext[0], ext[1]);
 				LLVector4a diff;
 				diff.setSub(ext[1], mImpostorExtents[1]);
 				if (diff.getLength3().getF32() > 0.05f)
@@ -3548,7 +3662,9 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 			LLStringUtil::format_map_t label_args;
 			label_args["COMPLEXITY"] = complexity_string;
 
-			addNameTagLine(format_string(complexity_label, label_args), complexity_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
+			static LLCachedControl<F32> max_attachment_area(gSavedSettings, "RenderAutoMuteSurfaceAreaLimit", 1000.0f);
+			bool surface_limit_exceeded = max_attachment_area > 0.f && mAttachmentSurfaceArea > max_attachment_area;
+			addNameTagLine(format_string(complexity_label, label_args) + (surface_limit_exceeded ? " \xE2\x96\xA0" : ""), complexity_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
 		}
 		// </FS:Ansariel>
 
@@ -3899,6 +4015,12 @@ bool LLVOAvatar::isVisuallyMuted()
         //    muted = true;
         //}
 		// </FS:Ansariel>
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+		else if (isRlvSilhouette())
+		{
+			muted = true;
+		}
+// [/RLVa:KB]
 		else
 		{
 			muted = isTooComplex();
@@ -3926,6 +4048,30 @@ bool LLVOAvatar::isInMuteList()
 	}
 	return muted;
 }
+
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+bool LLVOAvatar::isRlvSilhouette()
+{
+	if (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_AVDIST))
+		return false;
+
+	static RlvCachedBehaviourModifier<float> s_nSetCamAvDist(RLV_MODIFIER_SETCAM_AVDIST);
+
+	const F64 now = LLFrameTimer::getTotalSeconds();
+	if (now >= mCachedRlvSilhouetteUpdateTime)
+	{
+		const F64 SECONDS_BETWEEN_NEARBY_UPDATES = .5f;
+		bool fIsRlvSilhouette = dist_vec_squared(gAgent.getPositionGlobal(), getPositionGlobal()) > s_nSetCamAvDist() * s_nSetCamAvDist();
+		if (fIsRlvSilhouette != mCachedIsRlvSilhouette)
+		{
+			mCachedIsRlvSilhouette = fIsRlvSilhouette;
+			mNeedsImpostorUpdate = TRUE;
+		}
+		mCachedRlvSilhouetteUpdateTime = now + SECONDS_BETWEEN_NEARBY_UPDATES;
+	}
+	return mCachedIsRlvSilhouette;
+}
+// [/RLVa:KB]
 
 void LLVOAvatar::updateAppearanceMessageDebugText()
 {
@@ -4112,7 +4258,6 @@ void LLVOAvatar::updateAnimationDebugText()
                 {
                     name = LLUUID::null.asString();
                 }
-
                 output = llformat("%s - %d",
                                   name.c_str(),
                                   (U32)motionp->getPriority());
@@ -4322,7 +4467,6 @@ void LLVOAvatar::computeUpdatePeriod()
 	}
 
 }
-
 //------------------------------------------------------------------------
 // updateOrientation()
 // Factored out from updateCharacter()
@@ -5551,7 +5695,7 @@ void LLVOAvatar::collectLocalTextureUUIDs(std::set<LLUUID>& ids) const
 			if (imagep)
 			{
 				const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = LLAvatarAppearanceDictionary::getInstance()->getTexture((ETextureIndex)texture_index);
-				if (texture_dict->mIsLocalTexture)
+				if (texture_dict && texture_dict->mIsLocalTexture)
 				{
 					ids.insert(imagep->getID());
 				}
@@ -5708,8 +5852,8 @@ void LLVOAvatar::updateTextures()
 			if (imagep)
 			{
 				const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = LLAvatarAppearanceDictionary::getInstance()->getTexture((ETextureIndex)texture_index);
-				const EBakedTextureIndex baked_index = texture_dict->mBakedTextureIndex;
-				if (texture_dict->mIsLocalTexture)
+				const EBakedTextureIndex baked_index = texture_dict ? texture_dict->mBakedTextureIndex : EBakedTextureIndex::BAKED_NUM_INDICES;
+				if (texture_dict && texture_dict->mIsLocalTexture)
 				{
 					addLocalTextureStats((ETextureIndex)texture_index, imagep, texel_area_ratio, render_avatar, mBakedTextureDatas[baked_index].mIsUsed);
 				}
@@ -6201,6 +6345,11 @@ LLUUID LLVOAvatar::remapMotionID(const LLUUID& id)
 			if (use_new_walk_run)
 				result = ANIM_AGENT_RUN_NEW;
 		}
+		// keeps in sync with setSex() related code (viewer controls sit's sex)
+		else if (id == ANIM_AGENT_SIT_FEMALE)
+		{
+			result = ANIM_AGENT_SIT;
+		}
 	
 	}
 
@@ -6432,61 +6581,17 @@ bool LLVOAvatar::getRiggedMeshID(LLViewerObject* pVO, LLUUID& mesh_id)
 	return false;
 }
 
-bool LLVOAvatar::jointIsRiggedTo(const std::string& joint_name)
+bool LLVOAvatar::jointIsRiggedTo(const LLJoint *joint) const
 {
-	for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
-		 iter != mAttachmentPoints.end();
-		 ++iter)
-	{
-		LLViewerJointAttachment* attachment = iter->second;
-        for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
-             attachment_iter != attachment->mAttachedObjects.end();
-             ++attachment_iter)
-        {
-            const LLViewerObject* attached_object = (*attachment_iter);
-            if (attached_object && jointIsRiggedTo(joint_name, attached_object))
-            {
-                return true;
-            }
-        }
-	}
-    return false;
-}
-
-bool LLVOAvatar::jointIsRiggedTo(const std::string& joint_name, const LLViewerObject *vo)
-{
-	// Process all children
-	LLViewerObject::const_child_list_t& children = vo->getChildren();
-	for (LLViewerObject::const_child_list_t::const_iterator it = children.begin();
-		 it != children.end(); ++it)
-	{
-		LLViewerObject *childp = *it;
-        if (jointIsRiggedTo(joint_name,childp))
-        {
-            return true;
-        }
-	}
-
-	const LLVOVolume *vobj = dynamic_cast<const LLVOVolume*>(vo);
-	if (!vobj)
-	{
-		return false;
-	}
-
-	const LLMeshSkinInfo* pSkinData = vobj->getSkinInfo();
-
-	if ( vobj && vobj->isAttachment() && vobj->isMesh() && pSkinData )
-	{
-		//<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-		//if( std::find( pSkinData->mJointNames.begin(), pSkinData->mJointNames.end(), joint_name ) !=
-		// </FS:ND>
-		if( std::find( pSkinData->mJointNames.begin(), pSkinData->mJointNames.end(), JointKey::construct( joint_name ) ) !=
-				pSkinData->mJointNames.end() )
+    if (joint)
+    {
+        const LLJointRiggingInfoTab& tab = mJointRiggingInfoTab;
+        S32 joint_num = joint->getJointNum();
+        if (joint_num < tab.size() && tab[joint_num].isRiggedTo())
         {
             return true;
         }
     }
-
     return false;
 }
 
@@ -6494,8 +6599,6 @@ void LLVOAvatar::clearAttachmentOverrides()
 {
     LLScopedContextString str("clearAttachmentOverrides " + getFullname());
 
-    mActiveOverrideMeshes.clear();
-    
     for (S32 i=0; i<LL_CHARACTER_MAX_ANIMATED_JOINTS; i++)
     {
         LLJoint *pJoint = getJoint(i);
@@ -6516,6 +6619,9 @@ void LLVOAvatar::clearAttachmentOverrides()
         }
         postPelvisSetRecalc();	
     }
+
+    mActiveOverrideMeshes.clear();
+    onActiveOverrideMeshesChanged();
 }
 
 //-----------------------------------------------------------------------------
@@ -6574,13 +6680,6 @@ void LLVOAvatar::rebuildAttachmentOverrides()
 // -----------------------------------------------------------------------------
 void LLVOAvatar::updateAttachmentOverrides()
 {
-    const bool paranoid_checking = false; 	// AXON remove when testing done
-
-    if (paranoid_checking)
-    {
-        //dumpArchetypeXML(getFullname() + "_paranoid_before");
-    }
-
     LLScopedContextString str("updateAttachmentOverrides " + getFullname());
 
     LL_DEBUGS("AnimatedObjects") << "updating" << LL_ENDL;
@@ -6635,7 +6734,7 @@ void LLVOAvatar::updateAttachmentOverrides()
     }
 
 
-    if (paranoid_checking)
+#ifdef ATTACHMENT_OVERRIDE_VALIDATION
     {
         std::vector<LLVector3OverrideMap> pos_overrides_by_joint;
         std::vector<LLVector3OverrideMap> scale_overrides_by_joint;
@@ -6686,9 +6785,10 @@ void LLVOAvatar::updateAttachmentOverrides()
         }
         if (mismatched)
         {
-            LL_WARNS() << "MISMATCHED ATTACHMENT OVERRIDES, compare paranoid log files" << LL_ENDL;
+            LL_WARNS() << "MISMATCHED ATTACHMENT OVERRIDES" << LL_ENDL;
         }
     }
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -6770,8 +6870,6 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LL
 			bool fullRig = (jointCnt>=JOINT_COUNT_REQUIRED_FOR_FULLRIG) ? true : false;								
 			if ( fullRig && !mesh_overrides_loaded )
 			{								
-                mActiveOverrideMeshes.insert(mesh_id);
-                
 				for ( int i=0; i<jointCnt; ++i )
 				{
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
@@ -6821,6 +6919,8 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LL
                     }
                     
 				}
+                mActiveOverrideMeshes.insert(mesh_id);
+                onActiveOverrideMeshesChanged();
 			}							
 		}
 	}
@@ -6982,8 +7082,6 @@ void LLVOAvatar::removeAttachmentOverridesForObject(LLViewerObject *vo)
 //-----------------------------------------------------------------------------
 void LLVOAvatar::removeAttachmentOverridesForObject(const LLUUID& mesh_id)
 {	
-    mActiveOverrideMeshes.erase(mesh_id);
-
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
 //	LLJoint* pJointPelvis = getJoint( "mPelvis" );
 	LLJoint* pJointPelvis = getJoint( JointKey::construct( "mPelvis" ) );
@@ -7008,6 +7106,9 @@ void LLVOAvatar::removeAttachmentOverridesForObject(const LLUUID& mesh_id)
 	}	
 		
 	postPelvisSetRecalc();	
+
+    mActiveOverrideMeshes.erase(mesh_id);
+    onActiveOverrideMeshesChanged();
 }
 //-----------------------------------------------------------------------------
 // getCharacterPosition()
@@ -7239,7 +7340,26 @@ void LLVOAvatar::initAttachmentPoints(bool ignore_hud_joints)
 //-----------------------------------------------------------------------------
 void LLVOAvatar::updateVisualParams()
 {
-	setSex( (getVisualParamWeight( "male" ) > 0.5f) ? SEX_MALE : SEX_FEMALE );
+	ESex avatar_sex = (getVisualParamWeight("male") > 0.5f) ? SEX_MALE : SEX_FEMALE;
+	if (getSex() != avatar_sex)
+	{
+		if (mIsSitting && findMotion(avatar_sex == SEX_MALE ? ANIM_AGENT_SIT_FEMALE : ANIM_AGENT_SIT) != NULL)
+		{
+			// In some cases of gender change server changes sit motion with motion message,
+			// but in case of some avatars (legacy?) there is no update from server side,
+			// likely because server doesn't know about difference between motions
+			// (female and male sit ids are same server side, so it is likely unaware that it
+			// need to send update)
+			// Make sure motion is up to date
+			stopMotion(ANIM_AGENT_SIT);
+			setSex(avatar_sex);
+			startMotion(ANIM_AGENT_SIT);
+		}
+		else
+		{
+			setSex(avatar_sex);
+		}
+	}
 
 	LLCharacter::updateVisualParams();
 
@@ -7651,7 +7771,6 @@ U32 LLVOAvatar::getNumAnimatedObjectAttachments() const
 S32 LLVOAvatar::getMaxAnimatedObjectAttachments() const
 {
     S32 max_attach = 0;
-    // AXON REMOVE AFTER SERVER TESTING DONE
     if (gSavedSettings.getBOOL("AnimatedObjectsIgnoreLimits"))
     {
         max_attach = MAX_AGENT_ATTACHMENTS;
@@ -9898,17 +10017,17 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 	std::string outfilename = get_sequential_numbered_file_name(outprefix,".xml");
 	
 // <FS:CR> FIRE-8893  - Dump archetype xml to user defined location
-	LLFilePicker& file_picker = LLFilePicker::instance();
-	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_XML, outfilename))
-	{
-		return;
-	}
+	(new LLFilePickerReplyThread(boost::bind(&LLVOAvatar::dumpArchetypeXMLCallback, this, _1, group_by_wearables),
+		LLFilePicker::FFSAVE_XML, outfilename))->getFile();
+}
+
+void LLVOAvatar::dumpArchetypeXMLCallback(const std::vector<std::string>& filenames, bool group_by_wearables)
+{
 // </FS:CR>
-	
 	LLAPRFile outfile;
 // <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
 	//std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
-	std::string fullpath = file_picker.getFirstFile();
+	std::string fullpath = filenames[0];
 // </FS:CR>
 	if (APR_SUCCESS == outfile.open(fullpath, LL_APR_WB ))
 	{
@@ -9922,6 +10041,8 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 		apr_file_printf( file, "<?xml version=\"1.0\" encoding=\"US-ASCII\" standalone=\"yes\"?>\n" );
 		apr_file_printf( file, "<linden_genepool version=\"1.0\">\n" );
 		apr_file_printf( file, "\n\t<archetype name=\"???\">\n" );
+
+		bool agent_is_godlike = gAgent.isGodlikeWithoutAdminMenuFakery();
 
 		if (group_by_wearables)
 		{
@@ -9948,8 +10069,11 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 						LLViewerTexture* te_image = getImage((ETextureIndex)te, 0);
 						if( te_image )
 						{
-							std::string uuid_str;
-							te_image->getID().toString( uuid_str );
+							std::string uuid_str = LLUUID().asString();
+							if (agent_is_godlike)
+							{
+								te_image->getID().toString(uuid_str);
+							}
 							apr_file_printf( file, "\t\t<texture te=\"%i\" uuid=\"%s\"/>\n", te, uuid_str.c_str());
 						}
 					}
@@ -9971,8 +10095,11 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 				LLViewerTexture* te_image = getImage((ETextureIndex)te, 0);
 				if( te_image )
 				{
-					std::string uuid_str;
-					te_image->getID().toString( uuid_str );
+					std::string uuid_str = LLUUID().asString();
+					if (agent_is_godlike)
+					{
+						te_image->getID().toString(uuid_str);
+					}
 					apr_file_printf( file, "\t\t<texture te=\"%i\" uuid=\"%s\"/>\n", te, uuid_str.c_str());
 				}
 			}
@@ -10072,8 +10199,43 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 							 pelvis_fixup, mesh_id.asString().c_str());
 		}
 
-		apr_file_printf( file, "\t</archetype>\n" );
-		apr_file_printf( file, "\n</linden_genepool>\n" );
+        LLVector3 rp = getRootJoint()->getWorldPosition();
+        LLVector4a rpv;
+        rpv.load3(rp.mV);
+        
+        for (S32 joint_num = 0; joint_num < LL_CHARACTER_MAX_ANIMATED_JOINTS; joint_num++)
+        {
+            LLJoint *joint = getJoint(joint_num);
+            if (joint_num < mJointRiggingInfoTab.size())
+            {
+                LLJointRiggingInfo& rig_info = mJointRiggingInfoTab[joint_num];
+                if (rig_info.isRiggedTo())
+                {
+                    LLMatrix4a mat;
+                    LLVector4a new_extents[2];
+                    mat.loadu(joint->getWorldMatrix());
+                    matMulBoundBox(mat, rig_info.getRiggedExtents(), new_extents);
+                    LLVector4a rrp[2];
+                    rrp[0].setSub(new_extents[0],rpv);
+                    rrp[1].setSub(new_extents[1],rpv);
+                    apr_file_printf( file, "\t\t<joint_rig_info num=\"%d\" name=\"%s\" min=\"%f %f %f\" max=\"%f %f %f\" tmin=\"%f %f %f\" tmax=\"%f %f %f\"/>\n", 
+                                     joint_num,
+                                     joint->getName().c_str(),
+                                     rig_info.getRiggedExtents()[0][0],
+                                     rig_info.getRiggedExtents()[0][1],
+                                     rig_info.getRiggedExtents()[0][2],
+                                     rig_info.getRiggedExtents()[1][0],
+                                     rig_info.getRiggedExtents()[1][1],
+                                     rig_info.getRiggedExtents()[1][2],
+                                     rrp[0][0],
+                                     rrp[0][1],
+                                     rrp[0][2],
+                                     rrp[1][0],
+                                     rrp[1][1],
+                                     rrp[1][2] );
+                }
+            }
+        }
 
 		bool ultra_verbose = false;
 		if (isSelf() && ultra_verbose)
@@ -10081,6 +10243,10 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 			// show the cloned params inside the wearables as well.
 			gAgentAvatarp->dumpWearableInfo(outfile);
 		}
+
+		apr_file_printf( file, "\t</archetype>\n" );
+		apr_file_printf( file, "\n</linden_genepool>\n" );
+
 		LLSD args;
 		args["PATH"] = fullpath;
 		LLNotificationsUtil::add("AppearanceToXMLSaved", args);
@@ -10292,11 +10458,120 @@ BOOL LLVOAvatar::updateLOD()
 	return res;
 }
 
-void LLVOAvatar::updateLODRiggedAttachments( void )
+void LLVOAvatar::updateLODRiggedAttachments()
 {
 	updateLOD();
 	rebuildRiggedAttachments();
 }
+
+void showRigInfoTabExtents(LLVOAvatar *avatar, LLJointRiggingInfoTab& tab, S32& count_rigged, S32& count_box)
+{
+    count_rigged = count_box = 0;
+    LLVector4a zero_vec;
+    zero_vec.clear();
+    for (S32 i=0; i<tab.size(); i++)
+    {
+        if (tab[i].isRiggedTo())
+        {
+            count_rigged++;
+            LLJoint *joint = avatar->getJoint(i);
+            LL_DEBUGS("RigSpam") << "joint " << i << " name " << joint->getName() << " box " 
+                                 << tab[i].getRiggedExtents()[0] << ", " << tab[i].getRiggedExtents()[1] << LL_ENDL;
+            if ((!tab[i].getRiggedExtents()[0].equals3(zero_vec)) ||
+                (!tab[i].getRiggedExtents()[1].equals3(zero_vec)))
+            {
+                count_box++;
+            }
+       }
+    }
+}
+
+void LLVOAvatar::getAssociatedVolumes(std::vector<LLVOVolume*>& volumes)
+{
+	for ( LLVOAvatar::attachment_map_t::iterator iter = mAttachmentPoints.begin(); iter != mAttachmentPoints.end(); ++iter )
+	{
+		LLViewerJointAttachment* attachment = iter->second;
+		LLViewerJointAttachment::attachedobjs_vec_t::iterator attach_end = attachment->mAttachedObjects.end();
+		
+		for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attach_iter = attachment->mAttachedObjects.begin();
+			 attach_iter != attach_end; ++attach_iter)
+		{
+			LLViewerObject* attached_object =  *attach_iter;
+            LLVOVolume *volume = dynamic_cast<LLVOVolume*>(attached_object);
+            if (volume)
+            {
+                volumes.push_back(volume);
+                if (volume->isAnimatedObject())
+                {
+                    // For animated object attachment, don't need
+                    // the children. Will just get bounding box
+                    // from the control avatar.
+                    continue;
+                }
+            }
+            LLViewerObject::const_child_list_t& children = attached_object->getChildren();
+            for (LLViewerObject::const_child_list_t::const_iterator it = children.begin();
+                 it != children.end(); ++it)
+            {
+                LLViewerObject *childp = *it;
+                LLVOVolume *volume = dynamic_cast<LLVOVolume*>(childp);
+                if (volume)
+                {
+                    volumes.push_back(volume);
+                }
+            }
+        }
+    }
+
+    LLControlAvatar *control_av = dynamic_cast<LLControlAvatar*>(this);
+    if (control_av)
+    {
+        LLVOVolume *volp = control_av->mRootVolp;
+        if (volp)
+        {
+            volumes.push_back(volp);
+            LLViewerObject::const_child_list_t& children = volp->getChildren();
+            for (LLViewerObject::const_child_list_t::const_iterator it = children.begin();
+                 it != children.end(); ++it)
+            {
+                LLViewerObject *childp = *it;
+                LLVOVolume *volume = dynamic_cast<LLVOVolume*>(childp);
+                if (volume)
+                {
+                    volumes.push_back(volume);
+                }
+            }
+        }
+    }
+}
+
+// virtual
+void LLVOAvatar::updateRiggingInfo()
+{
+    LL_DEBUGS("RigSpammish") << getFullname() << " updating rig tab" << LL_ENDL;
+    mJointRiggingInfoTab.clear();
+    std::vector<LLVOVolume*> volumes;
+    getAssociatedVolumes(volumes);
+    for (std::vector<LLVOVolume*>::iterator it = volumes.begin(); it != volumes.end(); ++it)
+    {
+        LLVOVolume *vol = *it;
+        vol->updateRiggingInfo();
+        mJointRiggingInfoTab.merge(vol->mJointRiggingInfoTab);
+    }
+
+    //LL_INFOS() << "done update rig count is " << countRigInfoTab(mJointRiggingInfoTab) << LL_ENDL;
+    LL_DEBUGS("RigSpammish") << getFullname() << " after update rig tab:" << LL_ENDL;
+    S32 joint_count, box_count;
+    showRigInfoTabExtents(this, mJointRiggingInfoTab, joint_count, box_count);
+    LL_DEBUGS("RigSpammish") << "uses " << joint_count << " joints " << " nonzero boxes: " << box_count << LL_ENDL;
+}
+
+// virtual
+void LLVOAvatar::onActiveOverrideMeshesChanged()
+{
+    mJointRiggingInfoTab.setNeedsUpdate(true);
+}
+
 U32 LLVOAvatar::getPartitionType() const
 { 
 	// Avatars merely exist as drawables in the bridge partition
@@ -10863,9 +11138,21 @@ void LLVOAvatar::calcMutedAVColor()
 
     if (getVisualMuteSettings() == AV_DO_NOT_RENDER)
     {
-        // explicitly not-rendered avatars are light grey
-        new_color = LLColor4::grey3;
-        change_msg = " not rendered: color is grey3";
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+		 if (isRlvSilhouette())
+		 {
+			 new_color = LLColor4::silhouette;
+			 change_msg = " not rendered: color is silhouette";
+		 }
+		 else
+		 {
+// [/RLVa:KB]
+			// explicitly not-rendered avatars are light grey
+			 new_color = LLColor4::grey3;
+			 change_msg = " not rendered: color is grey3";
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+		 }
+// [/RLVa:KB]
     }
     else if (LLMuteList::getInstance()->isMuted(av_id)) // the user blocked them
     {
@@ -10873,8 +11160,11 @@ void LLVOAvatar::calcMutedAVColor()
         new_color = LLColor4::grey4;
         change_msg = " blocked: color is grey4";
     }
-    else if ( mMutedAVColor == LLColor4::white || mMutedAVColor == LLColor4::grey3 || mMutedAVColor == LLColor4::grey4 )
-    {
+//    else if ( mMutedAVColor == LLColor4::white || mMutedAVColor == LLColor4::grey3 || mMutedAVColor == LLColor4::grey4 )
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+	else if ( mMutedAVColor == LLColor4::white || mMutedAVColor == LLColor4::grey3 || mMutedAVColor == LLColor4::grey4 || mMutedAVColor == LLColor4::silhouette)
+// [/RLVa:KB]
+   {
         // select a color based on the first byte of the agents uuid so any muted agent is always the same color
         F32 color_value = (F32) (av_id.mData[0]);
         F32 spectrum = (color_value / 256.0);		// spectrum is between 0 and 1.f

@@ -292,9 +292,6 @@ void LLPanelVolume::getState( )
 	
 	if (is_light && editable && single_volume)
 	{
-		// <FS:Ansariel> We don't have that one in Firestorm (2013-04-28)
-		//getChildView("label color")->setEnabled(true);
-		// </FS:Ansariel>
 		//mLabelColor		 ->setEnabled( TRUE );
 		LLColorSwatchCtrl* LightColorSwatch = getChild<LLColorSwatchCtrl>("colorswatch");
 		if(LightColorSwatch)
@@ -337,9 +334,6 @@ void LLPanelVolume::getState( )
 		getChild<LLSpinCtrl>("Light Radius", true)->clear();
 		getChild<LLSpinCtrl>("Light Falloff", true)->clear();
 
-		// <FS:Ansariel> We don't have that one in Firestorm (2013-04-28)
-		//getChildView("label color")->setEnabled(false);	
-		// </FS:Ansariel>
 		LLColorSwatchCtrl* LightColorSwatch = getChild<LLColorSwatchCtrl>("colorswatch");
 		if(LightColorSwatch)
 		{
@@ -568,7 +562,6 @@ void LLPanelVolume::refresh()
 
 	BOOL visible = LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_DEFERRED) > 0 ? TRUE : FALSE;
 
-	//getChildView("label texture")->setVisible( visible); // <FS:Ansariel> Doesn't exist as of 2016-11-16
 	getChildView("Light FOV")->setVisible( visible);
 	getChildView("Light Focus")->setVisible( visible);
 	getChildView("Light Ambiance")->setVisible( visible);
@@ -609,11 +602,7 @@ void LLPanelVolume::clearCtrls()
 	getChildView("select_single")->setVisible(true);
 	getChildView("edit_object")->setEnabled(false);
 	getChildView("edit_object")->setVisible(false);
-	getChildView("Light Checkbox Ctrl")->setEnabled(false);
-	// <FS:Ansariel> We don't have that one in Firestorm (2013-04-28)
-	//getChildView("label color")->setEnabled(false);
-	//getChildView("label color")->setEnabled(false);
-	// </FS:Ansariel>
+	getChildView("Light Checkbox Ctrl")->setEnabled(false);;
 	LLColorSwatchCtrl* LightColorSwatch = getChild<LLColorSwatchCtrl>("colorswatch");
 	if(LightColorSwatch)
 	{

@@ -654,6 +654,28 @@
         <key>Value</key>
         <string></string>
       </map>
+      <key>SnapshotBaseDir</key>
+      <map>
+        <key>Comment</key>
+        <string>Path to last snapshot save location</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>String</string>
+        <key>Value</key>
+        <string></string>
+      </map>
+      <key>SnapshotBaseName</key>
+      <map>
+        <key>Comment</key>
+        <string>Pattern for naming snapshots</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>String</string>
+        <key>Value</key>
+        <string>Snapshot</string>
+      </map>
     
     <!-- Firestorm settings -->
     <key>DebugLookAt</key>
@@ -878,7 +900,7 @@
     <key>UseLSLFlightAssist</key>
         <map>
         <key>Comment</key>
-            <string>Use the client LSL bridge for flight boost - boost power: 0.0 (disabled), 1.0 (low), 3.0 (standard), 5.0 (high).</string>
+            <string>Use the client LSL bridge for flight boost - boost power: 0.0 (disabled), 0.5 (mild), 1.0 (moderate), 2.0 (high), 15.0 (extreme).</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>
@@ -1179,6 +1201,17 @@
             <string>Boolean</string>
         <key>Value</key>
             <integer>0</integer>
+        </map>
+     <key>FSRememberSnapshotPathSessions</key>
+        <map>
+        <key>Comment</key>
+            <string>If enabled, remember the path and filename of snapshots between sessions. Default (true)</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>1</integer>
         </map>
     </map>
 </llsd>

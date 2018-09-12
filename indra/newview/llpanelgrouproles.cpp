@@ -57,8 +57,9 @@
 #include "roles_constants.h"
 
 // [FS:CR] FIRE-12276
-#include "llfilepicker.h"
 #include "fsnamelistavatarmenu.h"
+#include "llfilepicker.h"
+#include "llviewermenufile.h"
 
 static LLPanelInjector<LLPanelGroupRoles> t_panel_group_roles("panel_group_roles");
 
@@ -479,20 +480,12 @@ BOOL LLPanelGroupSubTab::postBuild()
 {
 	// Hook up the search widgets.
 	bool recurse = true;
-	// <FS:Ansariel> Does not exist on all tabs!
-	//mSearchEditor = getChild<LLFilterEditor>("filter_input", recurse);
 
-	//if (!mSearchEditor) 
-	//	return FALSE;
-
-	//mSearchEditor->setCommitCallback(boost::bind(&LLPanelGroupSubTab::setSearchFilter, this, _2));
 	mSearchEditor = findChild<LLFilterEditor>("filter_input", recurse);
-
-	if (mSearchEditor)
+	if (mSearchEditor) // SubTab doesn't implement this, only some of derived classes
 	{
 		mSearchEditor->setCommitCallback(boost::bind(&LLPanelGroupSubTab::setSearchFilter, this, _2));
 	}
-	// </FS:Ansariel>
 
 	return LLPanelGroupTab::postBuild();
 }
@@ -843,18 +836,21 @@ BOOL LLPanelGroupMembersSubTab::postBuildSubTab(LLView* root)
 
 	// Look recursively from the parent to find all our widgets.
 	bool recurse = true;
-	// <FS:Ansariel> Might not exist
-	//mHeader = parent->getChild<LLPanel>("members_header", recurse);
-	//mFooter = parent->getChild<LLPanel>("members_footer", recurse);
 	mHeader = parent->findChild<LLPanel>("members_header", recurse);
 	mFooter = parent->findChild<LLPanel>("members_footer", recurse);
-	// </FS:Ansariel>
 
 	mMembersList 		= parent->getChild<LLNameListCtrl>("member_list", recurse);
 	mAssignedRolesList	= parent->getChild<LLScrollListCtrl>("member_assigned_roles", recurse);
 	mAllowedActionsList	= parent->getChild<LLScrollListCtrl>("member_allowed_actions", recurse);
+	// <FS:Ansariel> Undo changes from MAINT-2929
+	//mActionDescription = parent->getChild<LLTextEditor>("member_action_description", recurse);
 
+	//if (!mMembersList || !mAssignedRolesList || !mAllowedActionsList || !mActionDescription) return FALSE;
+
+	//mAllowedActionsList->setCommitOnSelectionChange(TRUE);
+	//mAllowedActionsList->setCommitCallback(boost::bind(&LLPanelGroupMembersSubTab::updateActionDescription, this));
 	if (!mMembersList || !mAssignedRolesList || !mAllowedActionsList) return FALSE;
+	// </FS:Ansariel>
 
 	// We want to be notified whenever a member is selected.
 	mMembersList->setCommitOnSelectionChange(TRUE);
@@ -932,6 +928,7 @@ void LLPanelGroupMembersSubTab::handleMemberSelect()
 
 	mAssignedRolesList->deleteAllItems();
 	mAllowedActionsList->deleteAllItems();
+	//mActionDescription->clear(); // <FS:Ansariel> Undo changes from MAINT-2929
 	
 	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
 	if (!gdatap) 
@@ -1432,6 +1429,7 @@ void LLPanelGroupMembersSubTab::activate()
 			update(GC_MEMBER_DATA);
 		}
 	}
+	//mActionDescription->clear(); // <FS:Ansariel> Undo changes from MAINT-2929
 }
 
 void LLPanelGroupMembersSubTab::deactivate()
@@ -1957,24 +1955,49 @@ bool LLPanelGroupMembersSubTab::handleBanCallback(const LLSD& notification, cons
 	return false;
 }
 
-// [FS:CR] FIRE-12276
-void LLPanelGroupMembersSubTab::onExportMembersToXML()
+void LLPanelGroupMembersSubTab::updateActionDescription()
 {
-	if (mPendingMemberUpdate) return;
-	
-	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
-	LLFilePicker& file_picker = LLFilePicker::instance();
-	if (!file_picker.getSaveFile(LLFilePicker::FFSAVE_CSV, LLDir::getScrubbedFileName(gdatap->mName + "_members.csv")))
+	mActionDescription->setText(std::string());
+	LLScrollListItem* action_item = mAllowedActionsList->getFirstSelected();
+	if (!action_item || !mAllowedActionsList->getCanSelect())
 	{
 		return;
 	}
-	std::string fullpath = file_picker.getFirstFile();
+
+	LLRoleAction* rap = (LLRoleAction*)action_item->getUserdata();
+	if (rap)
+	{
+		std::string desc = rap->mLongDescription.empty() ? rap->mDescription : rap->mLongDescription;
+		mActionDescription->setText(desc);
+	}
+}
+
+// [FS:CR] FIRE-12276
+void LLPanelGroupMembersSubTab::onExportMembersToXML()
+{
+	if (mPendingMemberUpdate)
+	{
+		return;
+	}
+	
+	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
+	(new LLFilePickerReplyThread(boost::bind(&LLPanelGroupMembersSubTab::onExportMembersToXMLCallback, this, _1),
+		LLFilePicker::FFSAVE_CSV, LLDir::getScrubbedFileName(gdatap->mName + "_members.csv")))->getFile();
+}
+
+void LLPanelGroupMembersSubTab::onExportMembersToXMLCallback(const std::vector<std::string>& filenames)
+{
+	std::string fullpath = filenames[0];
 	
 	LLAPRFile outfile;
-	outfile.open(fullpath, LL_APR_WB );
+	outfile.open(fullpath, LL_APR_WB);
 	LLAPRFile::tFiletype* file = outfile.getFileHandle();
-	if (!file) return;
+	if (!file)
+	{
+		return;
+	}
 	
+	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
 	apr_file_printf(file, "Group membership record for %s (avatar key, avatar name, last online, land contribution)", gdatap->mName.c_str());
 	
 	LLSD memberlist;
@@ -2060,17 +2083,14 @@ BOOL LLPanelGroupRolesSubTab::postBuildSubTab(LLView* root)
 
 	// Look recursively from the parent to find all our widgets.
 	bool recurse = true;
-	// <FS:Ansariel> Might not exist
-	//mHeader = parent->getChild<LLPanel>("roles_header", recurse);
-	//mFooter = parent->getChild<LLPanel>("roles_footer", recurse);
 	mHeader = parent->findChild<LLPanel>("roles_header", recurse);
 	mFooter = parent->findChild<LLPanel>("roles_footer", recurse);
-	// </FS:Ansariel>
 
 
 	mRolesList 		= parent->getChild<LLScrollListCtrl>("role_list", recurse);
 	mAssignedMembersList	= parent->getChild<LLNameListCtrl>("role_assigned_members", recurse);
 	mAllowedActionsList	= parent->getChild<LLScrollListCtrl>("role_allowed_actions", recurse);
+	//mActionDescription	= parent->getChild<LLTextEditor>("role_action_description", recurse); // <FS:Ansariel> Undo changes from MAINT-2929
 
 	mRoleName = parent->getChild<LLLineEditor>("role_name", recurse);
 	mRoleTitle = parent->getChild<LLLineEditor>("role_title", recurse);
@@ -2078,7 +2098,7 @@ BOOL LLPanelGroupRolesSubTab::postBuildSubTab(LLView* root)
 
 	mMemberVisibleCheck = parent->getChild<LLCheckBoxCtrl>("role_visible_in_list", recurse);
 
-	if (!mRolesList || !mAssignedMembersList || !mAllowedActionsList
+	if (!mRolesList || !mAssignedMembersList || !mAllowedActionsList //|| !mActionDescription // <FS:Ansariel> Undo changes from MAINT-2929
 		|| !mRoleName || !mRoleTitle || !mRoleDescription || !mMemberVisibleCheck)
 	{
 		LL_WARNS() << "ARG! element not found." << LL_ENDL;
@@ -2111,6 +2131,7 @@ BOOL LLPanelGroupRolesSubTab::postBuildSubTab(LLView* root)
 	mMemberVisibleCheck->setCommitCallback(onMemberVisibilityChange, this);
 
 	mAllowedActionsList->setCommitOnSelectionChange(TRUE);
+	//mAllowedActionsList->setCommitCallback(boost::bind(&LLPanelGroupRolesSubTab::updateActionDescription, this)); // <FS:Ansariel> Undo changes from MAINT-2929
 
 	mRoleName->setCommitOnFocusLost(TRUE);
 	mRoleName->setKeystrokeCallback(onPropertiesKey, this);
@@ -2130,6 +2151,7 @@ void LLPanelGroupRolesSubTab::activate()
 {
 	LLPanelGroupSubTab::activate();
 
+	//mActionDescription->clear(); // <FS:Ansariel> Undo changes from MAINT-2929
 	mRolesList->deselectAllItems();
 	mAssignedMembersList->deleteAllItems();
 	mAllowedActionsList->deleteAllItems();
@@ -2814,6 +2836,23 @@ void LLPanelGroupRolesSubTab::saveRoleChanges(bool select_saved_role)
 	}
 }
 
+void LLPanelGroupRolesSubTab::updateActionDescription()
+{
+	mActionDescription->setText(std::string());
+	LLScrollListItem* action_item = mAllowedActionsList->getFirstSelected();
+	if (!action_item || !mAllowedActionsList->getCanSelect())
+	{
+		return;
+	}
+
+	LLRoleAction* rap = (LLRoleAction*)action_item->getUserdata();
+	if (rap)
+	{
+		std::string desc = rap->mLongDescription.empty() ? rap->mDescription : rap->mLongDescription;
+		mActionDescription->setText(desc);
+	}
+}
+
 void LLPanelGroupRolesSubTab::setGroupID(const LLUUID& id)
 {
 	if(mRolesList) mRolesList->deleteAllItems();
@@ -2853,12 +2892,8 @@ BOOL LLPanelGroupActionsSubTab::postBuildSubTab(LLView* root)
 
 	// Look recursively from the parent to find all our widgets.
 	bool recurse = true;
-	// <FS:Ansariel> Might not exist
-	//mHeader = parent->getChild<LLPanel>("actions_header", recurse);
-	//mFooter = parent->getChild<LLPanel>("actions_footer", recurse);
 	mHeader = parent->findChild<LLPanel>("actions_header", recurse);
 	mFooter = parent->findChild<LLPanel>("actions_footer", recurse);
-	// </FS:Ansariel>
 
 	mActionDescription = parent->getChild<LLTextEditor>("action_description", recurse);
 
@@ -3064,14 +3099,10 @@ BOOL LLPanelGroupBanListSubTab::postBuildSubTab(LLView* root)
 
 	// Look recursively from the parent to find all our widgets.
 	bool recurse = true;
-	
-	// <FS:Ansariel> Might not exist
-	//mHeader	= parent->getChild<LLPanel>("banlist_header", recurse);
-	//mFooter	= parent->getChild<LLPanel>("banlist_footer", recurse);
-	mHeader	= parent->findChild<LLPanel>("banlist_header", recurse);
-	mFooter	= parent->findChild<LLPanel>("banlist_footer", recurse);
-	// </FS:Ansariel>
-	
+
+	mHeader = parent->findChild<LLPanel>("banlist_header", recurse);
+	mFooter = parent->findChild<LLPanel>("banlist_footer", recurse);
+
 	mBanList = parent->getChild<LLNameListCtrl>("ban_list", recurse);
 	
 	mCreateBanButton		= parent->getChild<LLButton>("ban_create", recurse);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_hair_panel">
 	<panel name="avatar_hair_color_panel">
-		<texture_picker label="Texture" name="Texture" tool_tip="Clicca per scegliere una fotografia"/>
+		<texture_picker label="Texture" name="Texture" tool_tip="Clic per scegliere una texture"/>
 	</panel>
 	<panel name="accordion_panel">
 		<accordion name="wearable_accordion">

@@ -290,7 +290,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         # a standard map of strings for replacing in the templates
         #<FS:TS> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
         channel_base = "Phoenix-" + CHANNEL_VENDOR_BASE
-        if self.fs_flavor() == 'oss':
+        if self.fs_is_opensim():
             channel_base = channel_base + "OS"
         #</FS:TS>
         substitution_strings = {
@@ -310,7 +310,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             app_suffix=self.channel_variant()
 
         #<FS:ND> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
-        if self.fs_flavor() == 'oss':
+        if self.fs_is_opensim():
             app_suffix = "OS" + app_suffix
         #</FS:ND>
 
@@ -324,7 +324,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
     
     def icon_path(self):
         # <FS:ND> Add -os for oss builds
-        if self.fs_flavor() == 'oss':
+        if self.fs_is_opensim():
             return "icons/" + self.channel_type() + "-os"
         # </FS:ND>
         return "icons/" + self.channel_type()
@@ -624,7 +624,6 @@ class WindowsManifest(ViewerManifest):
 
             # For textures
             self.path("openjpeg.dll")
-            self.path("openjp2.dll") # <FS:ND/> OpenJPEG2 if used
 
             # These need to be installed as a SxS assembly, currently a 'private' assembly.
             # See http://msdn.microsoft.com/en-us/library/ms235291(VS.80).aspx
@@ -803,6 +802,18 @@ class WindowsManifest(ViewerManifest):
             with self.prefix(src=os.path.join(os.pardir, '..', 'indra', 'newview', 'installers', 'windows_x64'), dst=""):
                 self.path("msvcp120.dll")
                 self.path("msvcr120.dll")
+
+        # <FS:Ansariel> FIRE-22709: Local voice not working in OpenSim
+        if self.fs_is_opensim():
+            with self.prefix(src=os.path.join(relpkgdir, 'voice_os'), dst="voice_os"):
+                self.path("libsndfile-1.dll")
+                self.path("ortp.dll")
+                self.path("SLVoice.exe")
+                self.path("vivoxoal.dll")
+                self.path("vivoxsdk.dll")
+            with self.prefix(src=pkgdir, dst="voice_os"):
+                self.path("ca-bundle.crt")
+        # </FS:Ansariel>
 
         if not self.is_packaging_viewer():
             self.package_file = "copied_deps"    
@@ -1513,6 +1524,21 @@ class DarwinManifest(ViewerManifest):
                                 ):
                     self.path2basename(relpkgdir, libfile)
 
+                # <FS:Ansariel/TS> FIRE-22709: Local voice not working in OpenSim
+                if self.fs_is_opensim():
+                    with self.prefix(src=os.path.join(relpkgdir, 'voice_os'), dst="voice_os"):
+                        self.path('libalut.dylib')
+                        self.path('libopenal.dylib')
+                        self.path('libortp.dylib')
+                        self.path('libsndfile.dylib')
+                        self.path('libvivoxoal.dylib')
+                        self.path('libvivoxsdk.dylib')
+                        self.path('libvivoxplatform.dylib')
+                        self.path('SLVoice')
+                    with self.prefix(src=pkgdir, dst="voice_os"):
+                        self.path("ca-bundle.crt")
+                # </FS:Ansariel/TS>
+
                 # dylibs that vary based on configuration
                 if self.args['configuration'].lower() == 'debug':
                     for libfile in (
@@ -1724,7 +1750,7 @@ class DarwinManifest(ViewerManifest):
             # - Ambroff 2008-08-20
             #<FS:TS> Select proper directory based on flavor and build type
             dmg_template_prefix = 'firestorm'
-            if self.fs_flavor() == 'oss':
+            if self.fs_is_opensim():
                 dmg_template_prefix = 'firestormos'
             dmg_template = os.path.join(
                 'installers', 'darwin', '%s-%s-dmg' % (dmg_template_prefix, self.channel_type()))

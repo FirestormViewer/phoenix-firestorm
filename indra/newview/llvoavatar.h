@@ -49,6 +49,7 @@
 #include "lldriverparam.h"
 #include "llviewertexlayer.h"
 #include "material_codes.h"		// LL_MCODE_END
+#include "llrigginginfo.h"
 #include "llviewerstats.h"
 #include "llvovolume.h"
 #include "llavatarrendernotifier.h"
@@ -162,7 +163,7 @@ public:
 	/*virtual*/ void   	 	 	setPixelAreaAndAngle(LLAgent &agent);
 	/*virtual*/ void   	 	 	updateRegion(LLViewerRegion *regionp);
 	/*virtual*/ void   	 	 	updateSpatialExtents(LLVector4a& newMin, LLVector4a &newMax);
-	/*virtual*/ void   	 	 	getSpatialExtents(LLVector4a& newMin, LLVector4a& newMax);
+	void			   	 	 	calculateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax);
 	/*virtual*/ BOOL   	 	 	lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
 												 S32 face = -1,                    // which face to check, -1 = ALL_SIDES
 												 BOOL pick_transparent = FALSE,
@@ -212,8 +213,7 @@ public:
 	void 					addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LLUUID>* meshes_seen = NULL, bool recursive = true);
 	void					removeAttachmentOverridesForObject(const LLUUID& mesh_id);
 	void					removeAttachmentOverridesForObject(LLViewerObject *vo);
-    bool					jointIsRiggedTo(const std::string& joint_name);
-    bool					jointIsRiggedTo(const std::string& joint_name, const LLViewerObject *vo);
+    bool					jointIsRiggedTo(const LLJoint *joint) const;
 	void					clearAttachmentOverrides();
 	void					rebuildAttachmentOverrides();
     void					updateAttachmentOverrides();
@@ -221,7 +221,13 @@ public:
     void                    getAttachmentOverrideNames(std::set<std::string>& pos_names, 
                                                        std::set<std::string>& scale_names) const;
 
+    void 					getAssociatedVolumes(std::vector<LLVOVolume*>& volumes);
+
+    // virtual
+    void 					updateRiggingInfo();
+
     std::set<LLUUID>		mActiveOverrideMeshes;
+    virtual void			onActiveOverrideMeshesChanged();
     
 	/*virtual*/ const LLUUID&	getID() const;
 	/*virtual*/ void			addDebugText(const std::string& text);
@@ -433,6 +439,9 @@ public:
 	U32 		renderImpostor(LLColor4U color = LLColor4U(255,255,255,255), S32 diffuse_channel = 0);
 	bool		isVisuallyMuted();
 	bool 		isInMuteList();
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+	bool        isRlvSilhouette();
+// [/RLVa:KB]
 	void		forceUpdateVisualMuteSettings();
 
 	enum VisualMuteSettings
@@ -442,7 +451,10 @@ public:
 		AV_ALWAYS_RENDER   = 2
 	};
 	void		setVisualMuteSettings(VisualMuteSettings set);
-	VisualMuteSettings  getVisualMuteSettings()						{ return mVisuallyMuteSetting;	};
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+	VisualMuteSettings  getVisualMuteSettings()						{ return (!isRlvSilhouette()) ? mVisuallyMuteSetting : AV_DO_NOT_RENDER; };
+// [/RLVa:KB]
+//	VisualMuteSettings  getVisualMuteSettings()						{ return mVisuallyMuteSetting;	};
 
 	U32 		renderRigid();
 	U32 		renderSkinned();
@@ -475,6 +487,10 @@ public:
 
 	bool		mCachedInMuteList;
 	F64			mCachedMuteListUpdateTime;
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+	mutable bool mCachedIsRlvSilhouette = false;
+	mutable F64  mCachedRlvSilhouetteUpdateTime = 0.f;
+// [/RLVa:KB]
 
 	VisualMuteSettings		mVisuallyMuteSetting;			// Always or never visually mute this AV
 
@@ -538,10 +554,14 @@ public:
 	static void updateImpostors();
 	LLRenderTarget mImpostor;
 	BOOL		mNeedsImpostorUpdate;
+    const LLVector3*  getLastAnimExtents() const { return mLastAnimExtents; }
 private:
 	LLVector3	mImpostorOffset;
 	LLVector2	mImpostorDim;
+    // This becomes true in the constructor and false after the first
+    // idleUpdateMisc(). Not clear it serves any purpose.
 	BOOL		mNeedsAnimUpdate;
+    bool		mNeedsExtentUpdate;
 	LLVector3	mImpostorAngle;
 	F32			mImpostorDistance;
 	F32			mImpostorPixelArea;
@@ -809,7 +829,6 @@ public:
 //-TT Patch: ReplaceWornItemsOnly
 //-TT
 protected:
-	//LLViewerJointAttachment* getTargetAttachmentPoint(LLViewerObject* viewer_object);
 	void 				lazyAttach();
 	void				rebuildRiggedAttachments( void );
 
@@ -1067,6 +1086,7 @@ private:
 public:
     void                getSortedJointNames(S32 joint_type, std::vector<std::string>& result) const;
 	void				dumpArchetypeXML(const std::string& prefix, bool group_by_wearables = false);
+	void				dumpArchetypeXMLCallback(const std::vector<std::string>& filenames, bool group_by_wearables); // <FS:Ansariel> Threaded filepickers
 	void 				dumpAppearanceMsgParams( const std::string& dump_prefix,
 												 const LLAppearanceMessageContents& contents);
 	static void			dumpBakedStatus();
