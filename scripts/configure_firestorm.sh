@@ -76,7 +76,7 @@ showUsage()
     echo "  --avx            : Build with Advanced Vector Extensions"
     echo "  --avx2           : Build with Advanced Vector Extensions 2"
     echo "  --crashreporting : Build with crash reporting enabled"
-    echo "  --testbuild <period> : Create time-limited test build"
+    echo "  --testbuild <days> : Create time-limited test build (build date + <days>)"
     echo "  --platform       : darwin | windows | linux"
     echo "  --jobs <num>     : Build with <num> jobs in parallel (Linux and Darwin only)"
     echo
