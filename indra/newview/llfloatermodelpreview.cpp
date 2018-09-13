@@ -1713,7 +1713,7 @@ void LLModelPreview::rebuildUploadData()
                 {
                     LLQuaternion bind_rot = LLSkinningUtil::getUnscaledQuaternion(high_lod_model->mSkinInfo.mBindShapeMatrix);
                     LLQuaternion identity;
-                    if (!bind_rot.isEqualEps(identity,0.01))
+                    if (!bind_rot.isEqualEps(identity,0.01f))
                     {
                         LL_WARNS() << "non-identity bind shape rot. mat is " << high_lod_model->mSkinInfo.mBindShapeMatrix 
                                    << " bind_rot " << bind_rot << LL_ENDL;
