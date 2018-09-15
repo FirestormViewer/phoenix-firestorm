@@ -31,7 +31,9 @@
 #include "llsyntaxid.h"
 #include "lllocalcliprect.h"
 
-const S32	UI_TEXTEDITOR_LINE_NUMBER_MARGIN = 32;
+// <FS:Ansariel> FIRE-23047: Increase width of line number column
+//const S32	UI_TEXTEDITOR_LINE_NUMBER_MARGIN = 32;
+const S32	UI_TEXTEDITOR_LINE_NUMBER_MARGIN = 40;
 
 static LLDefaultChildRegistry::Register<LLScriptEditor> r("script_editor");
 
