@@ -2,26 +2,37 @@
 <context_menu name="Avatar Pie">
 	<menu_item_call label="Vedi profilo" name="Profile..."/>
 	<menu_item_call label="Aggiungi amico" name="Add Friend"/>
-	<menu_item_call label="IM" name="Send IM..."/>
-	<menu_item_call label="Aggiungi Calling Card" name="Add Calling Card"/>
+	<menu_item_call label="Aggiungi a un set" name="Add to Set"/>
+	<menu_item_call label="Manda IM..." name="Send IM..."/>
+	<menu_item_call label="Aggiungi biglietto da visita" name="Add Calling Card"/>
 	<menu_item_call label="Chiama" name="Call"/>
-	<menu_item_call label="Invita al gruppo" name="Invite..."/>
+	<menu_item_call label="Invita..." name="Invite..."/>
 	<menu_item_call label="Ripristina scheletro" name="Reset Skeleton"/>
 	<menu_item_call label="Ripristina scheletro e animazioni" name="Reset Skeleton And Animations"/>
-	<context_menu label="Noie" name="Annoyance">
+	<menu_item_call label="Ripristina LOD mesh" name="Reset Mesh LOD"/>
+	<context_menu label="Blocca" name="Annoyance">
 		<menu_item_call label="Blocca" name="Avatar Mute"/>
+		<menu_item_call label="Sblocca" name="Avatar Unmute"/>
 		<menu_item_call label="Segnala" name="abuse"/>
 		<menu_item_call label="Congela" name="Freeze..."/>
 		<menu_item_call label="Espelli" name="Eject..."/>
 	</context_menu>
-	<menu_item_call label="Debug delle texture" name="Debug..."/>
-	<menu_item_call label="Dump XML" name="Dump XML"/>
-	<menu_item_call label="Zoom avanti" name="Zoom In"/>
-	<menu_item_call label="Ricarica Tex" name="Texture Refresh"/>
+	<menu_item_call label="Scarica XML" name="Dump XML"/>
+	<menu_item_call label="Inquadra" name="Zoom In"/>
 	<menu_item_call label="Paga" name="Pay..."/>
 	<menu_item_call label="Profilo dell&apos;oggetto" name="Object Inspect"/>
-	<menu_item_check label="Esegui il rendering normalmente" name="RenderNormally"/>
-	<menu_item_check label="Non eseguire il rendering" name="DoNotRender"/>
-	<menu_item_check label="Esegui il rendering completamente" name="AlwaysRenderFully"/>
-	<menu_item_call label="Blocca proprietario particella" name="Mute Particle"/>
+	<menu_item_check label="Rendi normalmente" name="RenderNormally"/>
+	<menu_item_check label="Non rendere" name="DoNotRender"/>
+	<menu_item_check label="Rendi sempre completamente" name="AlwaysRenderFully"/>
+	<menu_item_call label="Blocca proprietario particelle" name="Mute Particle"/>
+	<menu_item_call label="Ispeziona" name="Object_Inspect_Floater"/>
+	<menu_item_call label="Info script" name="ScriptInfo"/>
+	<menu_item_call label="De-rendi" name="Derender"/>
+	<menu_item_call label="De-rendi + lista nera" name="DerenderPermanent"/>
+	<menu_item_call label="Mostra texture" name="Debug..."/>
+	<menu_item_call label="Ricarica tex" name="Texture Refresh"/>
+	<context_menu label="Esporta" name="Export Menu">
+		<menu_item_call label="Salva copia" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>	
 </context_menu>

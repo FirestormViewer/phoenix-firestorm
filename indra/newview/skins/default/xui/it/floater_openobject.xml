@@ -1,13 +1,14 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="objectcontents" title="CONTENUTO DEGLI OGGETTI">
-	<text name="object_name">
-		[DESC]:
-	</text>
-	<text name="border_note">
-		Copia nell&apos;inventario e indossa
-	</text>
-	<button label="Aggiungi al vestiario" label_selected="Aggiungi al vestiario" name="copy_and_wear_button"/>
-	<button label="Sostituisci vestiario" label_selected="Sostituisci vestiario" name="copy_and_replace_button"/>
-	<button label="Crea solo la copia nell&apos;inventario" label_selected="Crea solo la copia nell&apos;inventario" name="copy_to_inventory_button"/>
-	<button label="Annulla" label_selected="Annulla" name="cancel_button"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="objectcontents" title="Contenuti oggetto">
+	<layout_stack name="button_bar_ls">
+		<layout_panel name="copy_btn_lp">
+			<flyout_button label="Copia in inventario" name="copy_flyout">
+				<flyout_button.item label="Sostituisci vestiti" name="replace" />
+				<flyout_button.item label="Aggiungi vestiti" name="add"/>
+			</flyout_button>
+		</layout_panel>
+		<layout_panel name="cancel_btn_lp">
+			<button label="Annulla" label_selected="Annulla" name="cancel_button"/>
+		</layout_panel>
+	</layout_stack>
 </floater>

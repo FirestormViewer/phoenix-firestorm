@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_script_colors" title="COLORI SCRIPT">
+<floater name="floater_script_colors" title="Colori script">
 	<text name="color_pickers_label">
 		Seleziona i colori desiderati:
 	</text>
@@ -12,11 +12,20 @@
 	<text name="background_label">
 		Sfondo
 	</text>
+	<text name="section_label">
+		Sezione
+	</text>
 	<text name="datatype_label">
 		Tipi di dati
 	</text>
 	<text name="event_label">
 		Eventi
+	</text>
+	<text name="comment_label">
+		Commento
+	</text>
+	<text name="function_label">
+		Funzione
 	</text>
 	<text name="string_literal_label">
 		Espressioni letterali stringa
@@ -24,14 +33,23 @@
 	<text name="constant_label">
 		Costante
 	</text>
+	<text name="i_constant_label">
+		Costante integer
+	</text>
+	<text name="s_constant_label">
+		Costante string
+	</text>
+	<text name="f_constant_label">
+		Costante float
+	</text>
+	<text name="c_constant_label">
+		Costante composta
+	</text>
 	<text name="flow_control_label">
 		Controllo di flusso
 	</text>
-	<text name="function_label">
-		Funzione
-	</text>
-	<text name="comment_label">
-		Commento
+	<text name="preprocessor_label">
+		Preprocessore
 	</text>
 	<script_editor name="Script Preview">
 		/* Uno script di esempio */
@@ -39,10 +57,28 @@ default
 {
     state_entry()
     {
-        // Comment
+        // Commento
         string greeting = &quot;Salve&quot;;
         llSay(PUBLIC_CHANNEL, greeting);
     }
 }
 	</script_editor>
+	<text name="prefs_label">
+		Opzioni editor script:
+	</text>
+	<check_box name="convert_tabs_to_spaces_checkbox" label="Converti tab a spazi" />
+	<check_box label="Abilita pre-processore LSL" tool_tip="Abilita il pre-processore LSL" name="preproc_checkbox" />
+	<check_box label="Ottimizza script" tool_tip="Il pre-processore ottimizza lo spazio occupato dagli script" name="preprocoptimizer_checkbox" />
+	<check_box label="Costrutto switch()" tool_tip="Il pre-processore abilita l&apos;uso dell&apos;istruzione switch() per il controllo di flusso" name="preprocswitch_checkbox" />
+	<check_box label="Liste lazy" tool_tip="Il pre-processore permette l&apos;uso di estensioni della sintassi per la manipolazione delle liste" name="preproclazy_checkbox" />
+	<check_box label="#include dal disco locale" tool_tip="Il pre-processore permette istruzioni #include per caricare file dal disco locale" name="preprocinclude_checkbox" />
+	<text name="lslpreprocinclude_textbox">
+		Percorso di #include del pre-processore:
+	</text>
+	<button	label_selected="Sfoglia" name="SetPreprocInclude"/>
+	<text name="advanced_label">
+		Opzioni avanzate:
+	</text>
+	<check_box name="FSllOwnerSayToScriptDebugWindow_checkbox" label="Indirizza llOwnerSay alla finestra debug degli script" />
+	<check_box name="FSScriptEditorRecompileButton_checkbox" label="Abilita bottone Ricompila (utile per script con #include)" />        
 </floater>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="BeamCreator" title="Creazione forma marcatore">
+	<text name="beamcreator_text">
+		Per creare un nuovo raggio marcatore, clic sinistro sul
+pannello qui sotto per definire un raggio del colore scelto.
+Clic destro per togliere il raggio. Clic su salva per concludere.
+	</text>
+	<color_swatch label="Colore raggio" name="beam_color_swatch" tool_tip="Clic per aprire il selettore dei colori per il punto" />
+	<button label="Salva" name="beamshape_save" />
+	<button label="Carica" name="beamshape_load" />
+	<button label="Cancella" name="beamshape_clear" />
+</floater>

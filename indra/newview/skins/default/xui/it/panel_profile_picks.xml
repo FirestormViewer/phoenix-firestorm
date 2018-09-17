@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_picks" label="Preferiti">
- <string name="no_picks" value="Nessun Preferito" />
+    <string name="no_picks" value="Nessun preferito" />
+    <string name="no_classifieds" value="Nessuna inserzione" />
     <text name="Tell everyone about your favorite places in Second Life.">
-        Di a tutti i tuoi loghi preferiti di [GRID]!
+        Fai conoscere a tutti i tuoi posti preferiti in [GRID]
     </text>
     <button name="new_btn" label="Nuovo..." />
     <button name="delete_btn" label="Elimina..." />

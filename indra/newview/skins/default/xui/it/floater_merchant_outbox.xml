@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_merchant_outbox" title="CASELLA IN USCITA DEL RIVENDITORE">
-	<string name="OutboxFolderCount1">
-		1 cartella
-	</string>
+<floater name="floater_merchant_outbox" title="Casella in uscita del rivenditore">
 	<string name="OutboxFolderCountN">
 		[NUM] cartelle
 	</string>

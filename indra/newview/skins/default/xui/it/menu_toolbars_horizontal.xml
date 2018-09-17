@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<context_menu name="Toolbars Popup">
+<context_menu name="Toolbars Popup" label="Barra preferiti">
   <menu_item_call label="Rimuovi pulsante" name="Remove button" />
   <menu_item_call label="Seleziona pulsanti..." name="Choose Buttons" />
   <menu_item_check label="Allinea a sinistra" name="left_aligned" />
@@ -11,4 +11,5 @@
   <menu_item_check label="Autodimensione pulsanti" name="layout_style_none" />
   <menu_item_check label="Dimensioni fisse pulsanti" name="layout_style_equalize" />
   <menu_item_check label="I pulsanti si adattano alla barra" name="layout_style_fill" />
+  <menu_item_check label="Blocca" name="toolbars_locked"/>
 </context_menu>

@@ -15,9 +15,6 @@
 	<floater.string name="messaging_not_enabled">
 		In questa regione non è attivata la funzione pathfinding
 	</floater.string>
-	<floater.string name="character_cpu_time">
-		[CPU_TIME] µs
-	</floater.string>
 	<floater.string name="character_owner_loading">
 		[Caricamento in corso]
 	</floater.string>
@@ -32,7 +29,6 @@
 			<scroll_list.columns label="Nome" name="name"/>
 			<scroll_list.columns label="Descrizione" name="description"/>
 			<scroll_list.columns label="Proprietario" name="owner"/>
-			<scroll_list.columns label="CPU" name="cpu_time"/>
 			<scroll_list.columns label="Altitudine" name="altitude"/>
 		</scroll_list>
 		<text name="messaging_status">
@@ -50,7 +46,7 @@
 		<check_box label="Mostra capsula fisica" name="show_physics_capsule"/>
 		<button label="Prendi" name="take_objects"/>
 		<button label="Prendi copia" name="take_copy_objects"/>
-		<button label="Teletrasportami alla posizione" name="teleport_me_to_object" tool_tip="Attivato solo se viene selezionato un personaggio."/>
+		<button label="Teleport alla posizione" name="teleport_me_to_object" tool_tip="Attivato solo se viene selezionato un personaggio."/>
 		<button label="Restituisci" name="return_objects"/>
 		<button label="Elimina" name="delete_objects"/>
 	</panel>

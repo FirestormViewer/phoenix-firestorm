@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="spellcheck_import" title="Imposta dizionario">
+<floater name="spellcheck_import" title="Importa dizionario">
 	<text name="import_dict">
 		Dizionario:
 	</text>

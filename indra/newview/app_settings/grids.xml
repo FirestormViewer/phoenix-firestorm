@@ -273,38 +273,11 @@
     <key>inworldz.com:8002</key>
         <map>
         <key>LastModified</key>
-            <date>2013-09-24T03:54:13.31Z</date>
-        <key>about</key>
-            <string>http://inworldz.com/</string>
-        <key>gridname</key>
-            <string>Inworldz</string>
-        <key>gridnick</key>
-            <string>Inworldz</string>
-        <key>help</key>
-            <string>http://inworldz.com/support.php</string>
-        <key>helperuri</key>
-            <string>http://inworldz.com/</string>
-        <key>login_identifier_types</key>
-            <array>
-                <string>agent</string>
-                <string>account</string>
-            </array>
-        <key>loginpage</key>
-            <string>http://inworldz.com/loginscreen.php</string>
-        <key>loginuri</key>
-            <array>
-                <string>http://login.inworldz.com:8002/</string>
-            </array>
+            <date>2018-08-23T21:00:00.00Z</date>
+        <key>DEPRECATED</key>
+            <string>TRUE</string>
         <key>name</key>
             <string>inworldz.com:8002</string>
-        <key>password</key>
-            <string>http://inworldz.com/loginerror.php?error=2</string>
-        <key>platform</key>
-            <string>OpenSim</string>
-        <key>register</key>
-            <string>http://inworldz.com/register.php</string>
-        <key>slurl_base</key>
-            <string>http://places.inworldz.com/</string>
         </map>
     <key>islandoasisgrid.biz:8002</key>
         <map>

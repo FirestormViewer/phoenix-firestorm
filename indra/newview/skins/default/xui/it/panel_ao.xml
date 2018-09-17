@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panel name="animation_overrider_outer_panel">
 	<panel name="animation_overrider_panel">
-		<combo_box name="ao_set_selection_combo" tool_tip="Seleziona un set di animazioni da modificare." />
-		<button name="ao_activate" tool_tip="Attiva questo set di animazioni ora." />
-		<check_box name="ao_default" tool_tip="Utilizza questo set di animazione di default." />
-		<button name="ao_add" tool_tip="Crea nuovo set di animazioni." />
-		<button name="ao_remove" tool_tip="Rimuovi questo set di animazioni." />
-		<check_box name="ao_sit_override" label="Forza Seduta" tool_tip="Se spuntata, questa opzione permetterà di sovrascrivere le sedute degli oggetti." />
-		<check_box name="ao_smart" label="Smart" tool_tip="Modalità Smart cerca di determinare se la sovrascrittura della seduta fosse in contrasto con l'animazione stessa dell'oggetto, in questo caso disabilita temporaneamente la Super Seduta." />
-		<check_box name="ao_disable_stands_in_mouselook" label="Disabilita Stands in Mouselook" tool_tip="Jeśli chcesz zachować własną animację stania w miejscu, będąc w trybie pierwszoosobowym (mouselook), to zaznacz tą opcję." />
-		<combo_box name="ao_state_selection_combo" tool_tip="Seleziona quale tipo di animazione si vuole modificare." />
+		<combo_box name="ao_set_selection_combo" tool_tip="Seleziona set di animazioni da modificare."/>
+		<button name="ao_activate" tool_tip="Attiva subito questo set."/>
+		<check_box name="ao_default" label="Predefinito" tool_tip="Attiva questo set all&apos;ingresso."/>
+		<button name="ao_add" tool_tip="Crea un nuovo set di animazioni."/>
+		<button name="ao_remove" tool_tip="Cancella questo set."/>
+		<check_box name="ao_sit_override" label="Sedute person." tool_tip="Attiva le sedute personali."/>
+		<check_box name="ao_smart" label="Intelligente" tool_tip="Cerca di capire se la seduta personale andrebbe in conflitto con le animazioni dell&apos;oggetto e in questo caso disabilita la propria seduta temporaneamente."/>
+		<check_box name="ao_disable_stands_in_mouselook" label="Disabilita pose in Mouselook" tool_tip="Permette di conservare le proprie pose anche in modalità mouselook."/>
+		<combo_box name="ao_state_selection_combo" tool_tip="Scegliere la posa da modificare."/>
 		<panel name="ao_animation_move_trash_panel">
-			<button name="ao_move_up" tool_tip="Spostare l'animazione selezionata verso l'alto nell'elenco." />
-			<button name="ao_move_down" tool_tip="Spostare l'animazione selezionato verso il basso nell'elenco." />
-			<button name="ao_trash" tool_tip="Rimuovere l'animazione selezionato dalla lista." />
+			<button name="ao_move_up" tool_tip="Muove l&apos;animazione in su nella lista."/>
+			<button name="ao_move_down" tool_tip="Muove l&apos;animazione in giù nella lista."/>
+			<button name="ao_trash" tool_tip="Toglie l&apos;animazione dalla lista."/>
 		</panel>
-		<check_box name="ao_cycle" label="Cicliche" tool_tip="Riproduce le animazioni in modo cliclico a seconda di quale funzione è richiamata." />
-		<check_box left_pad="15" name="ao_randomize" label="Ordine casuale" tool_tip="Riproduce le animazioni in modo casuale." />
-		<text name="ao_cycle_time_seconds_label" value="Tempo ciclo(secondi):" />
-		<spinner name="ao_cycle_time" tool_tip="Quanto tempo deve passare prima di passare all'animazione successiva. Impostare a 0 per disattivare l'animazione ciclica in automatico." />
-		<button name="ao_reload" label="Ricarica" tool_tip="Ricarica questo Set di animazioni." />
+		<check_box name="ao_cycle" label="Ciclo" tool_tip="Passa ad un&apos;animazione diversa nella lista ogni volta che viene attivato lo stato di animazione."/>
+		<check_box name="ao_randomize" label="Scegli a caso" tool_tip="Nel ciclo sceglie a caso l&apos;animazione successiva."/>
+		<text name="ao_cycle_time_seconds_label" value="Tempo ciclo (secondi):"/>
+		<spinner name="ao_cycle_time" tool_tip="Tempo prima di passare all&apos;animazione successiva nella lista. Per disattivare inserire 0."/>
+		<button name="ao_reload" label="Ricarica" tool_tip="Ricarica AO"/>
 		<layout_stack name="next_previous_buttons_stack">
-		<layout_panel name="next_previous_buttons_stack_left">
-		<button name="ao_previous" tool_tip="Animazione precedente." />
-		</layout_panel>
-		<layout_panel name="next_previous_buttons_stack_right">
-		<button name="ao_next" tool_tip="Animazione successiva." />
-		</layout_panel>
+			<layout_panel name="next_previous_buttons_stack_left">
+				<button name="ao_previous" tool_tip="Passa all&apos;animazione precedente per lo stato attuale."/>
+			</layout_panel>
+			<layout_panel name="next_previous_buttons_stack_right">
+				<button name="ao_next" tool_tip="Passa all&apos;animazione seguente per lo stato attuale."/>
+			</layout_panel>
 		</layout_stack>
-		<button name="ao_less" tool_tip="Mostra interfaccia piccola dell'AO." />
+		<button name="ao_less" tool_tip="Mostra una finestra più compatta."/>
 	</panel>
 	<panel name="ao_reload_cover">
 		<panel name="ao_reload_text_panel">
 			<text name="reload_label">
-				Caricamento config
+				Ricarica configurazione
 			</text>
 			<text name="wait_label">
-				Attendere...
+				Attendere
 			</text>
 		</panel>
 	</panel>
 	<panel name="animation_overrider_panel_small">
-	<combo_box name="ao_set_selection_combo_small" tool_tip="Scegli una serie di animazione da modificare." />
-	<button name="ao_more" tool_tip="Mostra interfaccia completa." />
-	<button name="ao_previous_small" tool_tip="Animazione precedente." />
-	<button name="ao_next_small" tool_tip="Animazione successiva." />
-	<check_box name="ao_sit_override_small" label="Seduta" tool_tip="Spunta questa se vuoi sovrascrivere l'animazione degli oggetti." />
+	<combo_box name="ao_set_selection_combo_small" tool_tip="Sceglie il set da modificare."/>
+	<button name="ao_more" tool_tip="Mostra l&apos;interfaccia completa di configurazione."/>
+	<button name="ao_previous_small" tool_tip="Passa all&apos;animazione precedente per lo stato attuale."/>
+	<button name="ao_next_small" tool_tip="Passa all&apos;animazione seguente per lo stato attuale."/>
+	<check_box name="ao_sit_override_small" label="Sedute" tool_tip="Abilita le animazioni personali per le sedute."/>
 	</panel>
 </panel>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="nearby_chat" title="Chat locale">
+	<floater.string name="chatbox_label">
+		Alla chat locale
+	</floater.string>
+	<layout_stack name="ls_control_panel">
+		<layout_panel name="lp_translate_btn">
+			<button tool_tip="Usa il servizio traduzioni selezionato" name="translate_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_history_btn">
+			<button tool_tip="Apri il log della chat locale" name="chat_history_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_history_muted_btn">
+			<button tool_tip="Inserisci anche la chat bloccata nel log" name="chat_history_muted_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_options_btn">
+			<menu_button tool_tip="Opzioni chat" name="chat_options_btn"/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ls_chat">
+		<layout_panel name="panel_im_control_lp">
+			<layout_stack name="im_panels">
+				<layout_panel name="unread_messages_holder">
+					<text name="unread_messages_text">
+						Messaggi non letti: [NUM]
+					</text>
+				</layout_panel>
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="input_button_layout_panel">
+							<spinner name="ChatChannel" tool_tip="Canale a cui mandare la chat. Abilitare in Preferenze -> Chat -> Scrittura -> Selezione canale nella barra chat"/>
+						</layout_panel>
+						<layout_panel name="chat_type_layout_panel">
+							<combo_box name="chat_type" tool_tip="sussurra = 10m, parla = 20m, grida = 100m">
+								<combo_box.item name="chat_type_whisper" label="Sussurra"/>
+								<combo_box.item name="chat_type_say" label="Parla"/>
+								<combo_box.item name="chat_type_shout" label="Grida"/>
+							</combo_box>
+							<button label="Invia" name="send_chat" tool_tip="sussurra = 10m, parla = 20m, grida = 100m"/>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Notice" name="notices_tab">
+<panel label="Avvisi" name="notices_tab">
 	<panel.string name="help_text">
-		Le notice sono un modo veloce per comunicare in un gruppo diffondendo un messaggio e recapitando un eventuale oggetto allegato. Le notice arrivano solo ai membri del gruppo il cui ruolo è abilitato a riceverli.
-Puoi disattivare la ricezione delle notice nella finestra principale.
+		Gli avvisi sono un modo veloce per comunicare in un gruppo diffondendo un messaggio e recapitando un eventuale oggetto allegato. Arrivano solo ai membri del gruppo il cui ruolo è abilitato a riceverli.
+Puoi disattivare la ricezione degli avvisi nella linguetta Generale.
 	</panel.string>
 	<panel.string name="no_notices_text">
 		Non ci sono avvisi precedenti
@@ -19,11 +19,11 @@ Massimo 200 per gruppo al giorno
 	<text name="notice_list_none_found">
 		Nessuno trovato
 	</text>
-	<button label="Nuova Notice" label_selected="Crea una nuova notice" name="create_new_notice" tool_tip="Crea un nuovo avviso" width="105"/>
+	<button label="Nuovo avviso" label_selected="Crea un nuovo avviso" name="create_new_notice" tool_tip="Crea un nuovo avviso" width="105"/>
 	<button name="refresh_notices" tool_tip="Aggiorna la lista degli avvisi"/>
-	<panel label="Crea una nuova notice" name="panel_create_new_notice">
+	<panel label="Crea nuovo avviso" name="panel_create_new_notice">
 		<text name="lbl">
-			Crea una notice
+			Crea un avviso
 		</text>
 		<text name="lbl3">
 			Oggetto:
@@ -37,14 +37,14 @@ Massimo 200 per gruppo al giorno
 		<text name="string">
 			Trascina e rilascia qui l&apos;oggetto da allegare:
 		</text>
-		<button label="Inventario" name="open_inventory" tool_tip="Apri l&apos;inventario"/>
 		<button label="Rimuovi" label_selected="Rimuovi allegato" name="remove_attachment" tool_tip="Rimuovi allegato dal tuo avviso"/>
+		<button label="Inventario" name="open_inventory" tool_tip="Apri l&apos;inventario"/>
 		<button label="Invia" label_selected="Invia" name="send_notice"/>
 		<group_drop_target name="drop_target" tool_tip="Trascina un oggetto dall&apos;inventario ín questa casella per spedirlo con questo avviso. Devi avere i diritti per la copia e il trasferimento per poter allegare l&apos;oggetto."/>
 	</panel>
-	<panel label="Vedi le notice precedenti" name="panel_view_past_notice">
+	<panel label="Vedi avvisi precedenti" name="panel_view_past_notice">
 		<text name="lbl6">
-			Notice archiviate
+			Avvisi archiviati
 		</text>
 		<text name="lbl7">
 			Per spedire un nuovo avviso, clicca sul pulsante +

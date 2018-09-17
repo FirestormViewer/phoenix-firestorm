@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="group_titles" title="Titoli guppi">
-	<floater.string name="NoGroupTitle" value="&lt;Nessun titolo gruppi;" />
+<floater name="group_titles" title="Titoli dei gruppi">
+	<floater.string name="NoGroupTitle" value="&lt;Nessun titolo gruppi&gt;" />
 	<scroll_list name="title_list">
 		<column name="grouptitle" label="Titolo" />
 		<column name="groupname" label="Gruppo" />
