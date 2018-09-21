@@ -603,6 +603,8 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		getChild<LLUICtrl>("ComboBoxSaleType")->setVisible(false);
 		getChild<LLUICtrl>("Edit Cost")->setEnabled(false);
 		getChild<LLUICtrl>("Edit Cost")->setVisible(false);
+		getChild<LLUICtrl>("CurrencySymbol")->setEnabled(false);
+		getChild<LLUICtrl>("CurrencySymbol")->setVisible(false);
 	}
 
 	// Set values.
