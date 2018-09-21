@@ -7,7 +7,7 @@
  name="floaterbulkperms"
  help_topic="floaterbulkperms"
  title="Adjust Content Permissions"
- width="300">
+ width="350">
     <floater.string
      name="nothing_to_modify_text">
         Selection contains no editable contents.
@@ -156,13 +156,26 @@
      name="icon_texture"
      tool_tip="Textures"
      left_pad="2" />
-
+  <check_box
+    control_name="BulkChangeIncludeSettings"
+    height="16"
+    name="check_settings"
+    left="175"
+    top="25"
+    width="16" />
+  <icon
+    height="16"
+    image_name="Inv_Settings"
+    mouse_opaque="true"
+    name="icon_setting"
+    tool_tip="Environment settings"
+    left_pad="2" />
     <button
       height="23"
     layout="topleft"
    name="check_all"
      label="√ All"
-     left="180"
+     left="230"
      top="26"
      width="115">
       <button.commit_callback

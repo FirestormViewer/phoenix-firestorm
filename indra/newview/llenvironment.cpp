@@ -502,7 +502,9 @@ void LLEnvironment::setEnvironment(LLEnvironment::EnvSelection_t env, const LLSe
     environment->setDay(pday, daylength, dayoffset);
     environment->setSkyTrack(mCurrentTrack);
     environment->animate();
-    /*TODO: readjust environment*/
+
+    if (!mSignalEnvChanged.empty())
+        mSignalEnvChanged(env);
 }
 
 
@@ -519,6 +521,8 @@ void LLEnvironment::setEnvironment(LLEnvironment::EnvSelection_t env, LLEnvironm
     environment->clear();
     environment->setSky((fixed.first) ? fixed.first : mEnvironments[ENV_DEFAULT]->getSky());
     environment->setWater((fixed.second) ? fixed.second : mEnvironments[ENV_DEFAULT]->getWater());
+    if (!mSignalEnvChanged.empty())
+        mSignalEnvChanged(env);
 
     /*TODO: readjust environment*/
 }
@@ -605,6 +609,10 @@ void LLEnvironment::clearEnvironment(LLEnvironment::EnvSelection_t env)
     }
 
     mEnvironments[env].reset();
+
+    if (!mSignalEnvChanged.empty())
+        mSignalEnvChanged(env);
+
     /*TODO: readjust environment*/
 }
 
@@ -968,10 +976,28 @@ void LLEnvironment::updateShaderUniforms(LLGLSLShader *shader)
 void LLEnvironment::recordEnvironment(S32 parcel_id, LLEnvironment::EnvironmentInfo::ptr_t envinfo)
 {
     if (envinfo->mParcelId == INVALID_PARCEL_ID)
-    {   // the returned info applies to an entire region.
-        LL_WARNS("LAPRAS") << "Setting Region environment" << LL_ENDL;
-        setEnvironment(ENV_REGION, envinfo->mDayCycle, envinfo->mDayLength, envinfo->mDayOffset);
-        mTrackAltitudes = envinfo->mAltitudes;
+    {
+        // the returned info applies to an entire region.
+        if (!envinfo->mDayCycle)
+        {
+            clearEnvironment(ENV_PARCEL);
+            setEnvironment(ENV_REGION, LLSettingsDay::GetDefaultAssetId(), LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET);
+            updateEnvironment();
+        }
+        else if (envinfo->mDayCycle->isTrackEmpty(LLSettingsDay::TRACK_WATER)
+                 || envinfo->mDayCycle->isTrackEmpty(LLSettingsDay::TRACK_GROUND_LEVEL))
+        {
+            LL_WARNS("LAPRAS") << "Invalid day cycle for region" << LL_ENDL;
+            clearEnvironment(ENV_PARCEL);
+            setEnvironment(ENV_REGION, LLSettingsDay::GetDefaultAssetId(), LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET);
+            updateEnvironment();
+        }
+        else
+        {
+            LL_INFOS("LAPRAS") << "Setting Region environment" << LL_ENDL;
+            setEnvironment(ENV_REGION, envinfo->mDayCycle, envinfo->mDayLength, envinfo->mDayOffset);
+            mTrackAltitudes = envinfo->mAltitudes;
+        }
 
         LL_WARNS("LAPRAS") << "Altitudes set to {" << mTrackAltitudes[0] << ", "<< mTrackAltitudes[1] << ", " << mTrackAltitudes[2] << ", " << mTrackAltitudes[3] << LL_ENDL;
     }
@@ -988,6 +1014,12 @@ void LLEnvironment::recordEnvironment(S32 parcel_id, LLEnvironment::EnvironmentI
         if (!envinfo->mDayCycle)
         {
             LL_WARNS("LAPRAS") << "Clearing environment on parcel #" << parcel_id << LL_ENDL;
+            clearEnvironment(ENV_PARCEL);
+        }
+        else if (envinfo->mDayCycle->isTrackEmpty(LLSettingsDay::TRACK_WATER)
+                 || envinfo->mDayCycle->isTrackEmpty(LLSettingsDay::TRACK_GROUND_LEVEL))
+        {
+            LL_WARNS("LAPRAS") << "Invalid day cycle for parcel #" << parcel_id << LL_ENDL;
             clearEnvironment(ENV_PARCEL);
         }
         else
@@ -1048,13 +1080,7 @@ void LLEnvironment::requestParcel(S32 parcel_id, environment_apply_fn cb)
             {
                 cb = [this](S32 pid, EnvironmentInfo::ptr_t envinfo)
                 {
-                    if (envinfo->mDayCycle) recordEnvironment(pid, envinfo);
-                    else
-                    {
-                        clearEnvironment(ENV_PARCEL);
-                        setEnvironment(ENV_REGION, LLSettingsDay::GetDefaultAssetId(), LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET);
-                        updateEnvironment();
-                    }
+                    recordEnvironment(pid, envinfo);
                 };
             }
 

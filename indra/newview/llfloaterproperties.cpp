@@ -586,6 +586,25 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		edit_cost->setEnabled(FALSE);
 	}
 
+	// Hide any properties that are not relevant to settings
+	if (is_settings)
+	{
+		getChild<LLUICtrl>("GroupLabel")->setEnabled(false);
+		getChild<LLUICtrl>("GroupLabel")->setVisible(false);
+		getChild<LLUICtrl>("CheckShareWithGroup")->setEnabled(false);
+		getChild<LLUICtrl>("CheckShareWithGroup")->setVisible(false);
+		getChild<LLUICtrl>("AnyoneLabel")->setEnabled(false);
+		getChild<LLUICtrl>("AnyoneLabel")->setVisible(false);
+		getChild<LLUICtrl>("CheckEveryoneCopy")->setEnabled(false);
+		getChild<LLUICtrl>("CheckEveryoneCopy")->setVisible(false);
+		getChild<LLUICtrl>("CheckPurchase")->setEnabled(false);
+		getChild<LLUICtrl>("CheckPurchase")->setVisible(false);
+		getChild<LLUICtrl>("ComboBoxSaleType")->setEnabled(false);
+		getChild<LLUICtrl>("ComboBoxSaleType")->setVisible(false);
+		getChild<LLUICtrl>("Edit Cost")->setEnabled(false);
+		getChild<LLUICtrl>("Edit Cost")->setVisible(false);
+	}
+
 	// Set values.
 	getChild<LLUICtrl>("CheckPurchase")->setValue(is_for_sale);
 	getChild<LLUICtrl>("CheckNextOwnerModify")->setValue(LLSD(BOOL(next_owner_mask & PERM_MODIFY)));
