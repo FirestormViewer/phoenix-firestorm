@@ -1126,7 +1126,7 @@ void FSLSLBridge::create_script_inner()
 							mCurrentFullName,
 							LLAssetType::AT_LSL_TEXT,
 							LLInventoryType::IT_LSL,
-							NOT_WEARABLE,
+							NO_INV_SUBTYPE,
 							PERM_ALL,
 							cb);
 

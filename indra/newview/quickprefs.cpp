@@ -39,8 +39,8 @@
 #include "llcolorswatch.h"
 #include "llcombobox.h"
 #include "llcubemap.h"
-#include "lldaycyclemanager.h"
-#include "llenvmanager.h"
+//#include "lldaycyclemanager.h" // [EEPMERGE]
+//#include "llenvmanager.h" // [EEPMERGE]
 #include "llf32uictrl.h"
 #include "llfeaturemanager.h"
 #include "llfloaterpreference.h" // for LLAvatarComplexityControls
@@ -55,9 +55,11 @@
 #include "llviewerregion.h"
 #include "llvoavatar.h"
 #include "llvoavatarself.h"
-#include "llwaterparammanager.h"
-#include "llwlparamset.h"
-#include "llwlparammanager.h"
+// [EEPMERGE]
+//#include "llwaterparammanager.h"
+//#include "llwlparamset.h"
+//#include "llwlparammanager.h"
+// [/EEPMERGE]
 #include "rlvhandler.h"
 #include <boost/foreach.hpp>
 
@@ -256,21 +258,26 @@ void FloaterQuickPrefs::initCallbacks()
 	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FloaterQuickPrefs::updateRlvRestrictions, this, _1, _2));
 	gSavedSettings.getControl("IndirectMaxNonImpostors")->getCommitSignal()->connect(boost::bind(&FloaterQuickPrefs::updateMaxNonImpostors, this, _2));
 
-	LLWLParamManager::instance().setPresetListChangeCallback(boost::bind(&FloaterQuickPrefs::reloadPresetsAndSelect, QP_PARAM_SKY));
-	LLWaterParamManager::instance().setPresetListChangeCallback(boost::bind(&FloaterQuickPrefs::reloadPresetsAndSelect, QP_PARAM_WATER));
-	LLDayCycleManager::instance().setModifyCallback(boost::bind(&FloaterQuickPrefs::reloadPresetsAndSelect, QP_PARAM_DAYCYCLE));
+	// [EEPMERGE]
+	//LLWLParamManager::instance().setPresetListChangeCallback(boost::bind(&FloaterQuickPrefs::reloadPresetsAndSelect, QP_PARAM_SKY));
+	//LLWaterParamManager::instance().setPresetListChangeCallback(boost::bind(&FloaterQuickPrefs::reloadPresetsAndSelect, QP_PARAM_WATER));
+	//LLDayCycleManager::instance().setModifyCallback(boost::bind(&FloaterQuickPrefs::reloadPresetsAndSelect, QP_PARAM_DAYCYCLE));
+	// [/EEPMERGE]
 }
 
 void FloaterQuickPrefs::loadDayCyclePresets()
 {
-	LLDayCycleManager::preset_name_list_t user_presets, sys_presets;
-	LLDayCycleManager::instance().getPresetNames(user_presets, sys_presets);
+	// [EEPMERGE]
+	//LLDayCycleManager::preset_name_list_t user_presets, sys_presets;
+	//LLDayCycleManager::instance().getPresetNames(user_presets, sys_presets);
+	// [/EEPMERGE]
 
 	mDayCyclePresetsCombo->operateOnAll(LLComboBox::OP_DELETE);
 	mDayCyclePresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT));
 	mDayCyclePresetsCombo->add(LLTrans::getString("QP_WL_None"), LLSD(PRESET_NAME_NONE));
 	mDayCyclePresetsCombo->addSeparator();
 
+#if 0 // [EEPMERGE]
 	// Add user presets.
 	for (LLDayCycleManager::preset_name_list_t::const_iterator it = user_presets.begin(); it != user_presets.end(); ++it)
 	{
@@ -295,12 +302,15 @@ void FloaterQuickPrefs::loadDayCyclePresets()
 			mDayCyclePresetsCombo->add(preset_name, LLSD(preset_name));
 		}
 	}
+#endif // [EEPMERGE]
 }
 
 void FloaterQuickPrefs::loadSkyPresets()
 {
-	LLWLParamManager::preset_name_list_t user_presets, sys_presets, region_presets;
-	LLWLParamManager::instance().getPresetNames(region_presets, user_presets, sys_presets);
+	// [EEPMERGE]
+	//LLWLParamManager::preset_name_list_t user_presets, sys_presets, region_presets;
+	//LLWLParamManager::instance().getPresetNames(region_presets, user_presets, sys_presets);
+	// [/EEPMERGE]
 
 	mWLPresetsCombo->operateOnAll(LLComboBox::OP_DELETE);
 	mWLPresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT));
@@ -308,6 +318,7 @@ void FloaterQuickPrefs::loadSkyPresets()
 	mWLPresetsCombo->addSeparator();
 
 	// Add user presets.
+#if 0 // [EEPMERGE]
 	for (LLWLParamManager::preset_name_list_t::const_iterator it = user_presets.begin(); it != user_presets.end(); ++it)
 	{
 		std::string preset_name = *it;
@@ -331,18 +342,22 @@ void FloaterQuickPrefs::loadSkyPresets()
 			mWLPresetsCombo->add(preset_name, LLSD(preset_name));
 		}
 	}
+#endif // [EEPMERGE]
 }
 
 void FloaterQuickPrefs::loadWaterPresets()
 {
-	std::list<std::string> user_presets, system_presets;
-	LLWaterParamManager::instance().getPresetNames(user_presets, system_presets);
+	// [EEPMERGE]
+	//std::list<std::string> user_presets, system_presets;
+	//LLWaterParamManager::instance().getPresetNames(user_presets, system_presets);
+	// [/EEPMERGE]
 
 	mWaterPresetsCombo->operateOnAll(LLComboBox::OP_DELETE);
 	mWaterPresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT));
 	mWaterPresetsCombo->addSeparator();
 
 	// Add user presets first.
+#if 0 // [EEPMERGE]
 	for (std::list<std::string>::const_iterator mIt = user_presets.begin(); mIt != user_presets.end(); ++mIt)
 	{
 		std::string preset_name = *mIt;
@@ -366,6 +381,7 @@ void FloaterQuickPrefs::loadWaterPresets()
 			mWaterPresetsCombo->add(preset_name, LLSD(preset_name));
 		}
 	}
+#endif // [EEPMERGE]
 }
 
 void FloaterQuickPrefs::loadPresets()
@@ -634,7 +650,8 @@ void FloaterQuickPrefs::selectSkyPreset(const std::string& preset_name)
 	if (isValidPresetName(preset_name))
 	{	
 		deactivateAnimator();
-		LLEnvManagerNew::instance().setUseSkyPreset(preset_name, (bool)gSavedSettings.getBOOL("FSInterpolateSky"));
+		// [EEPMERGE]
+		// LLEnvManagerNew::instance().setUseSkyPreset(preset_name, (bool)gSavedSettings.getBOOL("FSInterpolateSky"));
 	}
 }
 
@@ -643,7 +660,8 @@ void FloaterQuickPrefs::selectWaterPreset(const std::string& preset_name)
 	if (isValidPresetName(preset_name))
 	{
 		deactivateAnimator();
-		LLEnvManagerNew::instance().setUseWaterPreset(preset_name, (bool)gSavedSettings.getBOOL("FSInterpolateWater"));
+		// [EEPMERGE]
+		//LLEnvManagerNew::instance().setUseWaterPreset(preset_name, (bool)gSavedSettings.getBOOL("FSInterpolateWater"));
 	}
 }
 
@@ -652,21 +670,24 @@ void FloaterQuickPrefs::selectDayCyclePreset(const std::string& preset_name)
 	if (isValidPresetName(preset_name))
 	{
 		deactivateAnimator();
-		LLEnvManagerNew::instance().setUseDayCycle(preset_name, (bool)gSavedSettings.getBOOL("FSInterpolateSky"));
+		// [EEPMERGE]
+		//LLEnvManagerNew::instance().setUseDayCycle(preset_name, (bool)gSavedSettings.getBOOL("FSInterpolateSky"));
 	}
 }
 
 void FloaterQuickPrefs::onChangeUseRegionWindlight()
 {
-	LLEnvManagerNew &envmgr = LLEnvManagerNew::instance();
-	// reset all environmental settings to track the region defaults, make this reset 'sticky' like the other sun settings.
-	bool use_fixed_sky = !mUseRegionWindlight->get();
-	bool use_region_settings = !use_fixed_sky;
-	envmgr.setUserPrefs(envmgr.getWaterPresetName(),
-				envmgr.getSkyPresetName(),
-				envmgr.getDayCycleName(),
-				use_fixed_sky, use_region_settings,
-				(gSavedSettings.getBOOL("FSInterpolateSky") || gSavedSettings.getBOOL("FSInterpolateWater")));
+	// [EEPMERGE]
+	//LLEnvManagerNew &envmgr = LLEnvManagerNew::instance();
+	//// reset all environmental settings to track the region defaults, make this reset 'sticky' like the other sun settings.
+	//bool use_fixed_sky = !mUseRegionWindlight->get();
+	//bool use_region_settings = !use_fixed_sky;
+	//envmgr.setUserPrefs(envmgr.getWaterPresetName(),
+	//			envmgr.getSkyPresetName(),
+	//			envmgr.getDayCycleName(),
+	//			use_fixed_sky, use_region_settings,
+	//			(gSavedSettings.getBOOL("FSInterpolateSky") || gSavedSettings.getBOOL("FSInterpolateWater")));
+	// [/EEPMERGE]
 }
 
 void FloaterQuickPrefs::onChangeWaterPreset()
@@ -701,7 +722,8 @@ void FloaterQuickPrefs::onChangeDayCyclePreset()
 
 void FloaterQuickPrefs::deactivateAnimator()
 {
-	LLWLParamManager::instance().mAnimator.deactivate();
+	// [EEPMERGE]
+	//LLWLParamManager::instance().mAnimator.deactivate();
 }
 
 void FloaterQuickPrefs::onClickWaterPrev()
@@ -743,48 +765,54 @@ void FloaterQuickPrefs::onClickDayCycleNext()
 
 void FloaterQuickPrefs::draw()
 {
-	F32 val;
+	// [EEPMERGE]
+	//F32 val;
 
-	if (LLEnvManagerNew::instance().getUseRegionSettings() ||
-		LLEnvManagerNew::instance().getUseDayCycle())
-	{
-		val = (F32)(LLWLParamManager::instance().mAnimator.getDayTime() * 24.f);
-	}
-	else
-	{
-		val = sun_pos_to_time24(LLWLParamManager::instance().mCurParams.getSunAngle() / F_TWO_PI);
-	}
+	//if (LLEnvManagerNew::instance().getUseRegionSettings() ||
+	//	LLEnvManagerNew::instance().getUseDayCycle())
+	//{
+	//	val = (F32)(LLWLParamManager::instance().mAnimator.getDayTime() * 24.f);
+	//}
+	//else
+	//{
+	//	val = sun_pos_to_time24(LLWLParamManager::instance().mCurParams.getSunAngle() / F_TWO_PI);
+	//}
 
-	mWLSunPos->setCurSliderValue(val);
+	//mWLSunPos->setCurSliderValue(val);
+	// [/EEPMERGE]
 
 	LLTransientDockableFloater::draw();
 }
 
 void FloaterQuickPrefs::onSunMoved()
 {
-	if (LLEnvManagerNew::instance().getUseRegionSettings() ||
-		LLEnvManagerNew::instance().getUseDayCycle())
-	{
-		F32 val = mWLSunPos->getCurSliderValue() / 24.0f;
+	// [EEPMERGE]
+	//if (LLEnvManagerNew::instance().getUseRegionSettings() ||
+	//	LLEnvManagerNew::instance().getUseDayCycle())
+	//{
+	//	F32 val = mWLSunPos->getCurSliderValue() / 24.0f;
 
-		LLWLParamManager& mgr = LLWLParamManager::instance();
-		mgr.mAnimator.setDayTime((F64)val);
-		mgr.mAnimator.deactivate();
-		mgr.mAnimator.update(mgr.mCurParams);
-	}
-	else
-	{
-		deactivateAnimator();
-		F32 val = time24_to_sun_pos(mWLSunPos->getCurSliderValue()) * F_TWO_PI;
-		LLWLParamManager::instance().mCurParams.setSunAngle(val);
-	}
+	//	LLWLParamManager& mgr = LLWLParamManager::instance();
+	//	mgr.mAnimator.setDayTime((F64)val);
+	//	mgr.mAnimator.deactivate();
+	//	mgr.mAnimator.update(mgr.mCurParams);
+	//}
+	//else
+	//{
+	//	deactivateAnimator();
+	//	F32 val = time24_to_sun_pos(mWLSunPos->getCurSliderValue()) * F_TWO_PI;
+	//	LLWLParamManager::instance().mCurParams.setSunAngle(val);
+	//}
+	// [/EEPMERGE]
 }
 
 void FloaterQuickPrefs::onClickResetToRegionDefault()
 {
 	deactivateAnimator();
-	LLWLParamManager::instance().mAnimator.stopInterpolation();
-	LLEnvManagerNew::instance().useRegionSettings();
+	// [EEPMERGE]
+	//LLWLParamManager::instance().mAnimator.stopInterpolation();
+	//LLEnvManagerNew::instance().useRegionSettings();
+	// [/EEPMERGE]
 }
 
 // This method is invoked by LLEnvManagerNew when a particular preset is applied
@@ -816,6 +844,7 @@ void FloaterQuickPrefs::updateParam(EQuickPrefUpdateParam param, const std::stri
 // static
 void FloaterQuickPrefs::reloadPresetsAndSelect(EQuickPrefUpdateParam param)
 {
+#if 0 // [EEPMERGE]
 	FloaterQuickPrefs* qp_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>("quickprefs");
 	FloaterQuickPrefs* pt_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>(PHOTOTOOLS_FLOATER);
 
@@ -843,6 +872,7 @@ void FloaterQuickPrefs::reloadPresetsAndSelect(EQuickPrefUpdateParam param)
 	}
 
 	updateParam(param, preset_name);
+#endif // [EEPMERGE]
 }
 
 void FloaterQuickPrefs::setSelectedSky(const std::string& preset_name)

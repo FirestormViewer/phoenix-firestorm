@@ -31,7 +31,7 @@
 #define QUICKPREFS_H
 
 #include "lltransientdockablefloater.h"
-#include "llwlparamset.h"
+//#include "llwlparamset.h" // [EEPMERGE]
 #include "rlvdefines.h"
 
 const std::string PHOTOTOOLS_FLOATER = "phototools";

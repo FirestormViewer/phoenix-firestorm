@@ -150,9 +150,6 @@
 #include "llsdserialize.h" // KB: SkinsSelector
 #include "lltoolbarview.h"
 #include "llviewernetwork.h" // <FS:AW  opensim search support>
-#include "llwaterparammanager.h"
-#include "llwldaycycle.h"
-#include "llwlparammanager.h"
 #include "NACLantispam.h"
 #include "../llcrashlogger/llcrashlogger.h"
 #if LL_WINDOWS
@@ -1272,6 +1269,17 @@ void LLFloaterPreferenceGraphicsAdvanced::onVertexShaderEnable()
 	refreshEnabledGraphics();
 }
 
+void LLFloaterPreferenceGraphicsAdvanced::onAdvancedAtmosphericsEnable()
+{
+	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+	if (instance)
+	{
+		instance->refresh();
+	}
+
+	refreshEnabledGraphics();
+}
+
 void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledGraphics()
 {
 	refreshEnabledState();
@@ -2272,6 +2280,13 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
 
 	ctrl_ssao->setEnabled(enabled);
 	ctrl_dof->setEnabled(enabled);
+
+#if USE_ADVANCED_ATMOSPHERICS
+    LLCheckBoxCtrl* ctrl_advanced_atmo = getChild<LLCheckBoxCtrl>("UseAdvancedAtmo");
+
+    bool advanced_atmo_enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderUseAdvancedAtmospherics");
+    ctrl_advanced_atmo->setEnabled(advanced_atmo_enabled);
+#endif
 
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail");
 
@@ -4297,7 +4312,10 @@ void LLPanelPreferenceGraphics::setHardwareDefaults()
 LLFloaterPreferenceGraphicsAdvanced::LLFloaterPreferenceGraphicsAdvanced(const LLSD& key)
 	: LLFloater(key)
 {
-	mCommitCallbackRegistrar.add("Pref.VertexShaderEnable",		boost::bind(&LLFloaterPreferenceGraphicsAdvanced::onVertexShaderEnable, this));
+	mCommitCallbackRegistrar.add("Pref.VertexShaderEnable",		       boost::bind(&LLFloaterPreferenceGraphicsAdvanced::onVertexShaderEnable, this));
+#if USE_ADVANCED_ATMOSPHERICS
+    mCommitCallbackRegistrar.add("Pref.AdvancedAtmosphericsEnable",	   boost::bind(&LLFloaterPreferenceGraphicsAdvanced::onAdvancedAtmosphericsEnable, this));
+#endif
 	mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxNonImpostors", boost::bind(&LLFloaterPreferenceGraphicsAdvanced::updateMaxNonImpostors,this));
 	mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxComplexity",   boost::bind(&LLFloaterPreferenceGraphicsAdvanced::updateMaxComplexity,this));
 }

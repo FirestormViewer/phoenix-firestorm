@@ -1997,7 +1997,7 @@ void LLInventoryModel::addItem(LLViewerInventoryItem* item)
 		// For example, there is a known backwards compatibility issue in some viewer prototypes prior to when 
 		// the AT_LINK enum changed from 23 to 24.
 		if ((item->getType() == LLAssetType::AT_NONE)
-		    || LLAssetType::lookup(item->getType()) == LLAssetType::badLookup())
+		    || LLAssetType::lookup(item->getType()) == LLAssetType::BADLOOKUP)
 		{
 			LL_WARNS(LOG_INV) << "Got bad asset type for item [ name: " << item->getName()
 							  << " type: " << item->getType()
@@ -2778,6 +2778,7 @@ void LLInventoryModel::createCommonSystemCategories()
 	gInventory.findCategoryUUIDForType(LLFolderType::FT_FAVORITE,true);
 	gInventory.findCategoryUUIDForType(LLFolderType::FT_CALLINGCARD,true);
 	gInventory.findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS,true);
+    gInventory.findCategoryUUIDForType(LLFolderType::FT_SETTINGS, true);
 }
 
 struct LLUUIDAndName

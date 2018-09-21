@@ -726,6 +726,14 @@ void LLDrawPoolAvatar::beginRigid()
 		{	//eyeballs render with the specular shader
 			sVertexProgram->bind();
 			sVertexProgram->setMinimumAlpha(LLDrawPoolAvatar::sMinimumAlpha);
+            if (LLPipeline::sRenderingHUDs)
+	        {
+		        sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	        }
+	        else
+	        {
+		        sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	        }
 		}
 	}
 	else
@@ -776,6 +784,14 @@ void LLDrawPoolAvatar::beginDeferredRigid()
 	sDiffuseChannel = sVertexProgram->enableTexture(LLViewerShaderMgr::DIFFUSE_MAP);
 	sVertexProgram->bind();
 	sVertexProgram->setMinimumAlpha(LLDrawPoolAvatar::sMinimumAlpha);
+    if (LLPipeline::sRenderingHUDs)
+	{
+		sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	}
+	else
+	{
+		sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	}
 }
 
 void LLDrawPoolAvatar::endDeferredRigid()
@@ -819,6 +835,14 @@ void LLDrawPoolAvatar::beginSkinned()
 
 		sVertexProgram->bind();
 		sVertexProgram->enableTexture(LLViewerShaderMgr::BUMP_MAP);
+        if (LLPipeline::sRenderingHUDs)
+	    {
+		    sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	    }
+	    else
+	    {
+		    sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	    }
 		gGL.getTexUnit(0)->activate();
 	}
 	else
@@ -828,6 +852,14 @@ void LLDrawPoolAvatar::beginSkinned()
 			// software skinning, use a basic shader for windlight.
 			// TODO: find a better fallback method for software skinning.
 			sVertexProgram->bind();
+            if (LLPipeline::sRenderingHUDs)
+	        {
+		        sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	        }
+	        else
+	        {
+		        sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	        }
 		}
 	}
 
@@ -890,6 +922,14 @@ void LLDrawPoolAvatar::beginRiggedSimple()
 	{
 		sDiffuseChannel = 0;
 		sVertexProgram->bind();
+        if (LLPipeline::sRenderingHUDs)
+	    {
+		    sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	    }
+	    else
+	    {
+		    sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	    }
 	}
 }
 
@@ -955,6 +995,16 @@ void LLDrawPoolAvatar::beginRiggedGlow()
 		sVertexProgram->bind();
 
 		sVertexProgram->uniform1f(LLShaderMgr::TEXTURE_GAMMA, LLPipeline::sRenderDeferred ? 2.2f : 1.1f);
+
+        if (LLPipeline::sRenderingHUDs)
+	    {
+		    sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	    }
+	    else
+	    {
+		    sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	    }
+
 		//F32 gamma = gSavedSettings.getF32("RenderDeferredDisplayGamma");
 		static LLCachedControl<F32> gamma(gSavedSettings, "RenderDeferredDisplayGamma");
 		sVertexProgram->uniform1f(LLShaderMgr::DISPLAY_GAMMA, (gamma > 0.1f) ? 1.0f / gamma : (1.0f/2.2f));
@@ -1003,17 +1053,23 @@ void LLDrawPoolAvatar::beginRiggedFullbright()
 		sDiffuseChannel = 0;
 		sVertexProgram->bind();
 
-		if (LLPipeline::sRenderingHUDs || !LLPipeline::sRenderDeferred)
+        if (LLPipeline::sRenderingHUDs)
+        {            
+            sVertexProgram->uniform1f(LLShaderMgr::TEXTURE_GAMMA, 1.0f);
+            sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
+        }
+		else if (LLPipeline::sRenderDeferred)
 		{
-			sVertexProgram->uniform1f(LLShaderMgr::TEXTURE_GAMMA, 1.0f);
-		} 
-		else 
-		{
-			sVertexProgram->uniform1f(LLShaderMgr::TEXTURE_GAMMA, 2.2f);
-
+            sVertexProgram->uniform1f(LLShaderMgr::TEXTURE_GAMMA, 2.2f);
+            sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
 			//F32 gamma = gSavedSettings.getF32("RenderDeferredDisplayGamma");
 			static LLCachedControl<F32> gamma(gSavedSettings, "RenderDeferredDisplayGamma");
 			sVertexProgram->uniform1f(LLShaderMgr::DISPLAY_GAMMA, (gamma > 0.1f) ? 1.0f / gamma : (1.0f/2.2f));
+		} 
+		else 
+		{
+            sVertexProgram->uniform1f(LLShaderMgr::TEXTURE_GAMMA, 1.0f);
+            sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
 		}
 	}
 }
@@ -1056,6 +1112,14 @@ void LLDrawPoolAvatar::beginRiggedShinySimple()
 	if (sShaderLevel > 0 || gPipeline.canUseVertexShaders())
 	{
 		sVertexProgram->bind();
+        if (LLPipeline::sRenderingHUDs)
+	    {
+		    sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	    }
+	    else
+	    {
+		    sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	    }
 		LLDrawPoolBump::bindCubeMap(sVertexProgram, 2, sDiffuseChannel, cube_channel, false);
 	}
 }
@@ -1106,18 +1170,33 @@ void LLDrawPoolAvatar::beginRiggedFullbrightShiny()
 	if (sShaderLevel > 0 || gPipeline.canUseVertexShaders())
 	{
 		sVertexProgram->bind();
+        if (LLPipeline::sRenderingHUDs)
+	    {
+		    sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	    }
+	    else
+	    {
+		    sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	    }
 		LLDrawPoolBump::bindCubeMap(sVertexProgram, 2, sDiffuseChannel, cube_channel, false);
 
-		if (LLPipeline::sRenderingHUDs || !LLPipeline::sRenderDeferred)
+        if (LLPipeline::sRenderingHUDs)
 		{
 			sVertexProgram->uniform1f(LLShaderMgr::TEXTURE_GAMMA, 1.0f);
-		} 
-		else 
+            sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
+        }
+		else if (LLPipeline::sRenderDeferred)
 		{
-			sVertexProgram->uniform1f(LLShaderMgr::TEXTURE_GAMMA, 2.2f);
+            sVertexProgram->uniform1f(LLShaderMgr::TEXTURE_GAMMA, 2.2f);
 			//F32 gamma = gSavedSettings.getF32("RenderDeferredDisplayGamma");
 			static LLCachedControl<F32> gamma(gSavedSettings, "RenderDeferredDisplayGamma");
 			sVertexProgram->uniform1f(LLShaderMgr::DISPLAY_GAMMA, (gamma > 0.1f) ? 1.0f / gamma : (1.0f/2.2f));
+            sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
+        }
+        else
+        {
+			sVertexProgram->uniform1f(LLShaderMgr::TEXTURE_GAMMA, 1.0f);
+            sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
 		}
 	}
 }
@@ -1139,6 +1218,14 @@ void LLDrawPoolAvatar::beginDeferredRiggedSimple()
 	sVertexProgram = &gDeferredSkinnedDiffuseProgram;
 	sDiffuseChannel = 0;
 	sVertexProgram->bind();
+    if (LLPipeline::sRenderingHUDs)
+	{
+		sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	}
+	else
+	{
+		sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	}
 }
 
 void LLDrawPoolAvatar::endDeferredRiggedSimple()
@@ -1152,6 +1239,14 @@ void LLDrawPoolAvatar::beginDeferredRiggedBump()
 {
 	sVertexProgram = &gDeferredSkinnedBumpProgram;
 	sVertexProgram->bind();
+    if (LLPipeline::sRenderingHUDs)
+	{
+		sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	}
+	else
+	{
+		sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	}
 	normal_channel = sVertexProgram->enableTexture(LLViewerShaderMgr::BUMP_MAP);
 	sDiffuseChannel = sVertexProgram->enableTexture(LLViewerShaderMgr::DIFFUSE_MAP);
 }
@@ -1184,6 +1279,14 @@ void LLDrawPoolAvatar::beginDeferredRiggedMaterial(S32 pass)
 	}
 
 	sVertexProgram->bind();
+    if (LLPipeline::sRenderingHUDs)
+	{
+		sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	}
+	else
+	{
+		sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	}
 	normal_channel = sVertexProgram->enableTexture(LLViewerShaderMgr::BUMP_MAP);
 	specular_channel = sVertexProgram->enableTexture(LLViewerShaderMgr::SPECULAR_MAP);
 	sDiffuseChannel = sVertexProgram->enableTexture(LLViewerShaderMgr::DIFFUSE_MAP);
@@ -1217,7 +1320,15 @@ void LLDrawPoolAvatar::beginDeferredSkinned()
 
 	sVertexProgram->bind();
 	sVertexProgram->setMinimumAlpha(LLDrawPoolAvatar::sMinimumAlpha);
-	
+	if (LLPipeline::sRenderingHUDs)
+	{
+		sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	}
+	else
+	{
+		sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	}
+
 	sDiffuseChannel = sVertexProgram->enableTexture(LLViewerShaderMgr::DIFFUSE_MAP);
 	gGL.getTexUnit(0)->activate();
 }

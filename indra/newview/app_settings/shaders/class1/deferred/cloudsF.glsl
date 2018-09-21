@@ -22,7 +22,7 @@
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
- 
+/*[EXTRA_CODE_HERE]*/ 
 
 #ifdef DEFINE_GL_FRAGCOLOR
 out vec4 frag_data[3];
@@ -39,6 +39,8 @@ VARYING vec4 vary_CloudColorAmbient;
 VARYING float vary_CloudDensity;
 
 uniform sampler2D cloud_noise_texture;
+uniform sampler2D cloud_noise_texture_next;
+uniform float blend_factor;
 uniform vec4 cloud_pos_density1;
 uniform vec4 cloud_pos_density2;
 uniform vec4 gamma;
@@ -49,12 +51,14 @@ VARYING vec2 vary_texcoord2;
 VARYING vec2 vary_texcoord3;
 
 /// Soft clips the light with a gamma correction
-vec3 scaleSoftClip(vec3 light) {
-	//soft clip effect:
-	light = 1. - clamp(light, vec3(0.), vec3(1.));
-	light = 1. - pow(light, gamma.xxx);
+vec3 scaleSoftClip(vec3 light);
 
-	return light;
+vec4 cloudNoise(vec2 uv)
+{
+   vec4 a = texture2D(cloud_noise_texture, uv);
+   vec4 b = texture2D(cloud_noise_texture_next, uv);
+   vec4 cloud_noise_sample = mix(a, b, blend_factor);
+   return cloud_noise_sample;
 }
 
 void main()
@@ -77,17 +81,21 @@ void main()
 
 
 	// Compute alpha1, the main cloud opacity
-	float alpha1 = (texture2D(cloud_noise_texture, uv1).x - 0.5) + (texture2D(cloud_noise_texture, uv3).x - 0.5) * cloud_pos_density2.z;
+	float alpha1 = (cloudNoise(uv1).x - 0.5) + (cloudNoise(uv3).x - 0.5) * cloud_pos_density2.z;
 	alpha1 = min(max(alpha1 + cloudDensity, 0.) * 10. * cloud_pos_density1.z, 1.);
 
 	// And smooth
 	alpha1 = 1. - alpha1 * alpha1;
 	alpha1 = 1. - alpha1 * alpha1;	
 
+    if (alpha1 < 0.001f)
+    {
+        discard;
+    }
 
 	// Compute alpha2, for self shadowing effect
 	// (1 - alpha2) will later be used as percentage of incoming sunlight
-	float alpha2 = (texture2D(cloud_noise_texture, uv2).x - 0.5);
+	float alpha2 = (cloudNoise(uv2).x - 0.5);
 	alpha2 = min(max(alpha2 + cloudDensity, 0.) * 2.5 * cloud_pos_density1.z, 1.);
 
 	// And smooth

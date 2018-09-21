@@ -34,6 +34,7 @@
 #include "llpermissions.h"
 #include "lltimer.h"
 #include "v3math.h"
+#include "llsettingsdaycycle.h"
 
 // Grid out of which parcels taken is stepped every 4 meters.
 const F32 PARCEL_GRID_STEP_METERS	= 4.f;
@@ -510,6 +511,10 @@ public:
 					{ return mRegionDenyAgeUnverifiedOverride; }
     BOOL    getRegionAllowAccessOverride() const
                     { return mRegionAllowAccessoverride; }
+    BOOL    getRegionAllowEnvironmentOverride() const
+                    { return mRegionAllowEnvironmentOverride; }
+    S32     getParcelEnvironmentVersion() const 
+                    { return mCurrentEnvironmentVersion; }
 
 
 	BOOL	getAllowGroupAVSounds()	const	{ return mAllowGroupAVSounds;	} 
@@ -580,6 +585,9 @@ public:
 	void	setRegionDenyAnonymousOverride(BOOL override)	{ mRegionDenyAnonymousOverride = override; }
 	void	setRegionDenyAgeUnverifiedOverride(BOOL override)	{ mRegionDenyAgeUnverifiedOverride = override; }
     void    setRegionAllowAccessOverride(BOOL override) { mRegionAllowAccessoverride = override; }
+    void    setRegionAllowEnvironmentOverride(BOOL override) { mRegionAllowEnvironmentOverride = override; }
+
+    void    setParcelEnvironmentVersion(S32 version) { mCurrentEnvironmentVersion = version; }
 
 	// Accessors for parcel sellWithObjects
 	void	setPreviousOwnerID(LLUUID prev_owner)	{ mPreviousOwnerID = prev_owner; }
@@ -589,8 +597,7 @@ public:
 	LLUUID	getPreviousOwnerID() const		{ return mPreviousOwnerID; }
 	BOOL	getPreviouslyGroupOwned() const	{ return mPreviouslyGroupOwned; }
 	BOOL	getSellWithObjects() const		{ return (mParcelFlags & PF_SELL_PARCEL_OBJECTS) ? TRUE : FALSE; }
-	
-	
+
 protected:
 	LLUUID mID;
 	LLUUID				mOwnerID;
@@ -662,10 +669,13 @@ protected:
 	BOOL				mRegionDenyAnonymousOverride;
 	BOOL				mRegionDenyAgeUnverifiedOverride;
     BOOL                mRegionAllowAccessoverride;
+    BOOL                mRegionAllowEnvironmentOverride;
 	BOOL				mAllowGroupAVSounds;
 	BOOL				mAllowAnyAVSounds;
+    S32                 mCurrentEnvironmentVersion;
 	
-	
+    bool                mIsDefaultDayCycle;
+
 public:
 	// HACK, make private
 	S32					mLocalID;

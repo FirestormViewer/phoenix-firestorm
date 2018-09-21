@@ -188,8 +188,6 @@
 #include "llviewerparcelmgr.h"
 #include "llworldmapview.h"
 #include "llpostprocess.h"
-#include "llwlparammanager.h"
-#include "llwaterparammanager.h"
 
 #include "lldebugview.h"
 #include "llconsole.h"
@@ -225,6 +223,7 @@
 #include "llfloateroutfitsnapshot.h"
 #include "llfloatersnapshot.h"
 #include "llsidepanelinventory.h"
+#include "llatmosphere.h"
 
 // includes for idle() idleShutdown()
 #include "llviewercontrol.h"
@@ -844,7 +843,9 @@ bool LLAppViewer::init()
 
 	// initialize LLWearableType translation bridge.
 	// Memory will be cleaned up in ::cleanupClass()
-	LLWearableType::initClass(new LLUITranslationBridge());
+    LLTranslationBridge::ptr_t trans = std::make_shared<LLUITranslationBridge>();
+	LLWearableType::initClass(trans);
+    LLSettingsType::initClass(trans);
 
 	// initialize SSE options
 	LLVector4a::initClass();
@@ -1916,6 +1917,8 @@ void LLAppViewer::flushVFSIO()
 
 bool LLAppViewer::cleanup()
 {
+    LLAtmosphere::cleanupClass();
+
 	//ditch LLVOAvatarSelf instance
 	gAgentAvatarp = NULL;
 
@@ -5753,7 +5756,6 @@ void LLAppViewer::idle()
 	//
 	// Update weather effects
 	//
-	gSky.propagateHeavenlyBodies(gFrameDTClamped);				// moves sun, moon, and planets
 
 	// Update wind vector
 	LLVector3 wind_position_region;

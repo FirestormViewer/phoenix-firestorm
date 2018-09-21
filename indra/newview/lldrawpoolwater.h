@@ -37,18 +37,17 @@ class LLWaterSurface;
 class LLDrawPoolWater: public LLFacePool
 {
 protected:
-	LLPointer<LLViewerTexture> mHBTex[2];
-	LLPointer<LLViewerTexture> mWaterImagep;
-	LLPointer<LLViewerTexture> mOpaqueWaterImagep;
-	LLPointer<LLViewerTexture> mWaterNormp;
+	LLPointer<LLViewerTexture> mWaterImagep[2];	
+	LLPointer<LLViewerTexture> mWaterNormp[2];
+
+    LLPointer<LLViewerTexture> mOpaqueWaterImagep;
 
 public:
 	static BOOL sSkipScreenCopy;
 	static BOOL sNeedsReflectionUpdate;
 	static BOOL sNeedsDistortionUpdate;
-	static LLVector3 sLightDir;
-
-	static LLColor4 sWaterFogColor;
+// 	static LLVector3 sLightDir;
+//	static LLColor4 sWaterFogColor;
 	static F32 sWaterFogEnd;
 
 	enum
@@ -82,6 +81,10 @@ public:
 
 	void renderReflection(LLFace* face);
 	void shade();
+
+    void setTransparentTextures(const LLUUID& transparentTextureId, const LLUUID& nextTransparentTextureId);
+    void setOpaqueTexture(const LLUUID& opaqueTextureId);
+    void setNormalMaps(const LLUUID& normalMapId, const LLUUID& nextNormalMapId);
 
 protected:
 	void renderOpaqueLegacyWater();

@@ -490,6 +490,17 @@ static bool handleRenderDeferredChanged(const LLSD& newvalue)
 	return true;
 }
 
+static bool handleRenderUseAdvancedAtmosphericsChanged(const LLSD& newvalue)
+{
+	if (gPipeline.isInit())
+	{
+		LLPipeline::refreshCachedSettings();
+        // Need to reload shaders when changing atmospherics implementations...
+        LLViewerShaderMgr::instance()->setShaders();
+	}
+	return true;
+}
+
 // This looks a great deal like handleRenderDeferredChanged because
 // Advanced Lighting (Materials) implies bumps and shiny so disabling
 // bumps should further disable that feature.
@@ -1008,6 +1019,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderResolutionMultiplier")->getSignal()->connect(boost::bind(&handleRenderResolutionDivisorChanged, _2));
 // [/SL:KB]
 	gSavedSettings.getControl("RenderDeferred")->getSignal()->connect(boost::bind(&handleRenderDeferredChanged, _2));
+    gSavedSettings.getControl("RenderUseAdvancedAtmospherics")->getSignal()->connect(boost::bind(&handleRenderUseAdvancedAtmosphericsChanged, _2));
 	gSavedSettings.getControl("RenderShadowDetail")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderDeferredSSAO")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderPerformanceTest")->getSignal()->connect(boost::bind(&handleRenderPerfTestChanged, _2));

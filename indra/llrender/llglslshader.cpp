@@ -84,6 +84,9 @@ LLShaderFeatures::LLShaderFeatures()
     , hasObjectSkinning(false)
     , hasAtmospherics(false)
     , hasGamma(false)
+    , hasSrgb(false)
+    , encodesNormal(false)
+    , decodesNormal(false)
     , mIndexedTextureChannels(0)
     , disableTextureIndex(false)
     , hasAlphaMask(false)
@@ -410,6 +413,11 @@ BOOL LLGLSLShader::createShader(std::vector<LLStaticHashedString> * attributes,
     mDefines["OLD_SELECT"] = "1";
 #endif
     
+    if (mExtraLinkObject)
+    {
+        attachObject(mExtraLinkObject);
+    }
+
     //compile new source
     vector< pair<string,GLenum> >::iterator fileIter = mShaderFiles.begin();
     for ( ; fileIter != mShaderFiles.end(); fileIter++ )
@@ -569,7 +577,7 @@ BOOL LLGLSLShader::mapAttributes(const std::vector<LLStaticHashedString> * attri
                 mAttribute[i] = index;
 #endif
                 mAttributeMask |= 1 << i;
-                LL_DEBUGS("ShaderLoading") << "Attribute " << name << " assigned to channel " << index << LL_ENDL;
+                LL_DEBUGS("ShaderUniform") << "Attribute " << name << " assigned to channel " << index << LL_ENDL;
             }
         }
         if (attributes != NULL)
@@ -581,7 +589,7 @@ BOOL LLGLSLShader::mapAttributes(const std::vector<LLStaticHashedString> * attri
                 if (index != -1)
                 {
                     mAttribute[LLShaderMgr::instance()->mReservedAttribs.size() + i] = index;
-                    LL_DEBUGS("ShaderLoading") << "Attribute " << name << " assigned to channel " << index << LL_ENDL;
+                    LL_DEBUGS("ShaderUniform") << "Attribute " << name << " assigned to channel " << index << LL_ENDL;
                 }
             }
         }
@@ -666,7 +674,7 @@ void LLGLSLShader::mapUniform(GLint index, const vector<LLStaticHashedString> * 
         mUniformNameMap[location] = name;
         mUniformMap[hashedName] = location;
 
-        LL_DEBUGS("ShaderLoading") << "Uniform " << name << " is at location " << location << LL_ENDL;
+        LL_DEBUGS("ShaderUniform") << "Uniform " << name << " is at location " << location << LL_ENDL;
     
         //find the index of this uniform
         for (S32 i = 0; i < (S32) LLShaderMgr::instance()->mReservedUniforms.size(); i++)
@@ -714,7 +722,7 @@ GLint LLGLSLShader::mapUniformTextureChannel(GLint location, GLenum type)
         type == GL_SAMPLER_2D_MULTISAMPLE)
     {   //this here is a texture
         glUniform1iARB(location, mActiveTextureChannels);
-        LL_DEBUGS("ShaderLoading") << "Assigned to texture channel " << mActiveTextureChannels << LL_ENDL;
+        LL_DEBUGS("ShaderUniform") << "Assigned to texture channel " << mActiveTextureChannels << LL_ENDL;
         return mActiveTextureChannels++;
     }
     return -1;
@@ -767,18 +775,19 @@ BOOL LLGLSLShader::mapUniforms(const vector<LLStaticHashedString> * uniforms)
 	S32 diffuseMap = glGetUniformLocationARB(mProgramObject, "diffuseMap");
 	S32 specularMap = glGetUniformLocationARB(mProgramObject, "specularMap");
 	S32 bumpMap = glGetUniformLocationARB(mProgramObject, "bumpMap");
+    S32 altDiffuseMap = glGetUniformLocationARB(mProgramObject, "altDiffuseMap");
 	S32 environmentMap = glGetUniformLocationARB(mProgramObject, "environmentMap");
 
 	std::set<S32> skip_index;
 
-	if (-1 != diffuseMap && (-1 != specularMap || -1 != bumpMap || -1 != environmentMap))
+	if (-1 != diffuseMap && (-1 != specularMap || -1 != bumpMap || -1 != environmentMap || -1 != altDiffuseMap))
 	{
 		GLenum type;
 		GLsizei length;
 		GLint size = -1;
 		char name[1024];
 
-		diffuseMap = specularMap = bumpMap = environmentMap = -1;
+		diffuseMap = altDiffuseMap = specularMap = bumpMap = environmentMap = -1;
 
 		for (S32 i = 0; i < activeCount; i++)
 		{
@@ -798,12 +807,6 @@ BOOL LLGLSLShader::mapUniforms(const vector<LLStaticHashedString> * uniforms)
 				continue;
 			}
 
-			if (-1 == specularMap && std::string(name) == "specularMap")
-			{
-				specularMap = i;
-				continue;
-			}
-
 			if (-1 == bumpMap && std::string(name) == "bumpMap")
 			{
 				bumpMap = i;
@@ -813,6 +816,12 @@ BOOL LLGLSLShader::mapUniforms(const vector<LLStaticHashedString> * uniforms)
 			if (-1 == environmentMap && std::string(name) == "environmentMap")
 			{
 				environmentMap = i;
+				continue;
+			}
+
+            if (-1 == altDiffuseMap && std::string(name) == "altDiffuseMap")
+			{
+				altDiffuseMap = i;
 				continue;
 			}
 		}
@@ -857,7 +866,7 @@ BOOL LLGLSLShader::mapUniforms(const vector<LLStaticHashedString> * uniforms)
 
 	unbind();
 
-	LL_DEBUGS("ShaderLoading") << "Total Uniform Size: " << mTotalUniformSize << LL_ENDL;
+	LL_DEBUGS("ShaderUniform") << "Total Uniform Size: " << mTotalUniformSize << LL_ENDL;
 	return res;
 }
 

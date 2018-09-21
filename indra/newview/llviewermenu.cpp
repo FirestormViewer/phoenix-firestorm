@@ -55,9 +55,8 @@
 // [/SL:KB]
 #include "llcompilequeue.h"
 #include "llconsole.h"
-#include "lldaycyclemanager.h"
 #include "lldebugview.h"
-#include "llenvmanager.h"
+#include "llenvironment.h"
 #include "llfacebookconnect.h"
 #include "llfilepicker.h"
 #include "llfirstuse.h"
@@ -125,9 +124,6 @@
 #include "llworldmap.h"
 #include "pipeline.h"
 #include "llviewerjoystick.h"
-#include "llwaterparammanager.h"
-#include "llwlanimator.h"
-#include "llwlparammanager.h"
 #include "llfloatercamera.h"
 #include "lluilistener.h"
 #include "llappearancemgr.h"
@@ -140,6 +136,7 @@
 #include "boost/unordered_map.hpp"
 #include <boost/regex.hpp>
 #include "llcleanup.h"
+#include "llviewershadermgr.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "fsavatarrenderpersistence.h"
 #include "rlvactions.h"
@@ -10642,42 +10639,63 @@ class LLWorldEnvSettings : public view_listener_t
 			return true;
 // [/RLVa:KB]
 
-		std::string tod = userdata.asString();
+		std::string event_name = userdata.asString();
 		
-		if (tod == "editor")
+		if (event_name == "sunrise")
 		{
-			LLFloaterReg::toggleInstance("env_settings");
-			return true;
+            LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNRISE);
+            LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+            LLEnvironment::instance().updateEnvironment();
 		}
+		else if (event_name == "noon")
+		{
+            LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDDAY);
+            LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+            LLEnvironment::instance().updateEnvironment();
+        }
+		else if (event_name == "sunset")
+		{
+            LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNSET);
+            LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+            LLEnvironment::instance().updateEnvironment();
+        }
+		else if (event_name == "midnight")
+		{
+            LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDNIGHT);
+            LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+            LLEnvironment::instance().updateEnvironment();
+        }
+        else if (event_name == "region")
+		{
+            LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_LOCAL);
+            LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+            LLEnvironment::instance().updateEnvironment();
+        }
+        else if (event_name == "pause_clouds")
+        {
+            if (LLEnvironment::instance().isCloudScrollPaused())
+                LLEnvironment::instance().resumeCloudScroll();
+            else
+                LLEnvironment::instance().pauseCloudScroll();
+        }
+        else if (event_name == "my_environs")
+        {
+            LLUUID asset_id;
 
-		if (tod == "sunrise")
-		{
-			LLEnvManagerNew::instance().setUseSkyPreset("Sunrise");
-		}
-		else if (tod == "noon")
-		{
-			LLEnvManagerNew::instance().setUseSkyPreset("Midday");
-		}
-		else if (tod == "sunset")
-		{
-			LLEnvManagerNew::instance().setUseSkyPreset("Sunset");
-		}
-		else if (tod == "midnight")
-		{
-			LLEnvManagerNew::instance().setUseSkyPreset("Midnight");
-		}
-		else
-		{
-			LLEnvManagerNew &envmgr = LLEnvManagerNew::instance();
-			// reset all environmental settings to track the region defaults, make this reset 'sticky' like the other sun settings.
-			bool use_fixed_sky = false;
-			bool use_region_settings = true;
-			envmgr.setUserPrefs(envmgr.getWaterPresetName(),
-					    envmgr.getSkyPresetName(),
-					    envmgr.getDayCycleName(),
-					    use_fixed_sky, use_region_settings, false);
-		}
+            LLSettingsBase::ptr_t cur(LLEnvironment::instance().getCurrentDay());
+            if (!cur)
+            {
+                cur = LLEnvironment::instance().getCurrentSky();
+            } 
 
+            if (cur)
+            {
+                asset_id = cur->getAssetId();
+            }
+              
+            LLFloaterReg::showInstance("my_environments", LLSDMap("asset_id", LLSD::UUID(asset_id)));
+        }
+    
 		return true;
 	}
 };
@@ -10687,39 +10705,46 @@ class LLWorldEnableEnvSettings : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 		bool result = false;
-		std::string tod = userdata.asString();
+		std::string event_name = userdata.asString();
 
-		if (LLEnvManagerNew::instance().getUseRegionSettings())
+        if (event_name == "pause_clouds")
+        {
+            return LLEnvironment::instance().isCloudScrollPaused();
+        }
+
+        LLSettingsSky::ptr_t sky = LLEnvironment::instance().getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL);
+
+		if (!sky)
 		{
-			return (tod == "region");
+			return (event_name == "region");
 		}
 
-		if (LLEnvManagerNew::instance().getUseFixedSky())
+        std::string skyname = (sky) ? sky->getName() : "";
+        LLUUID skyid = (sky) ? sky->getAssetId() : LLUUID::null;
+
+		if (event_name == "sunrise")
 		{
-			if (tod == "sunrise")
-			{
-				result = (LLEnvManagerNew::instance().getSkyPresetName() == "Sunrise");
-			}
-			else if (tod == "noon")
-			{
-				result = (LLEnvManagerNew::instance().getSkyPresetName() == "Midday");
-			}
-			else if (tod == "sunset")
-			{
-				result = (LLEnvManagerNew::instance().getSkyPresetName() == "Sunset");
-			}
-			else if (tod == "midnight")
-			{
-				result = (LLEnvManagerNew::instance().getSkyPresetName() == "Midnight");
-			}
-			else if (tod == "region")
-			{
-				return false;
-			}
-			else
-			{
-				LL_WARNS() << "Unknown time-of-day item:  " << tod << LL_ENDL;
-			}
+            result = (skyid == LLEnvironment::KNOWN_SKY_SUNRISE);
+		}
+		else if (event_name == "noon")
+		{
+            result = (skyid == LLEnvironment::KNOWN_SKY_MIDDAY);
+		}
+		else if (event_name == "sunset")
+		{
+            result = (skyid == LLEnvironment::KNOWN_SKY_SUNSET);
+		}
+		else if (event_name == "midnight")
+		{
+            result = (skyid == LLEnvironment::KNOWN_SKY_MIDNIGHT);
+		}
+		else if (event_name == "region")
+		{
+			return false;
+		}
+		else
+		{
+			LL_WARNS() << "Unknown time-of-day item:  " << event_name << LL_ENDL;
 		}
 		return result;
 	}
@@ -10731,41 +10756,30 @@ class LLWorldEnvPreset : public view_listener_t
 	{
 		std::string item = userdata.asString();
 
+// *LAPRAS* These go away!  Keep for the moment.
 		if (item == "new_water")
 		{
-			LLFloaterReg::showInstance("env_edit_water", "new");
+            LLFloaterReg::showInstance("env_fixed_environmentent_water", "new");
 		}
 		else if (item == "edit_water")
 		{
-			LLFloaterReg::showInstance("env_edit_water", "edit");
-		}
-		else if (item == "delete_water")
-		{
-			LLFloaterReg::showInstance("env_delete_preset", "water");
-		}
+            LLFloaterReg::showInstance("env_fixed_environmentent_water", "edit");
+        }
 		else if (item == "new_sky")
 		{
-			LLFloaterReg::showInstance("env_edit_sky", "new");
-		}
+            LLFloaterReg::showInstance("env_fixed_environmentent_sky", "new");
+        }
 		else if (item == "edit_sky")
 		{
-			LLFloaterReg::showInstance("env_edit_sky", "edit");
-		}
-		else if (item == "delete_sky")
-		{
-			LLFloaterReg::showInstance("env_delete_preset", "sky");
-		}
+            LLFloaterReg::showInstance("env_fixed_environmentent_sky", "edit");
+        }
 		else if (item == "new_day_cycle")
 		{
-			LLFloaterReg::showInstance("env_edit_day_cycle", "new");
+            LLFloaterReg::showInstance("env_edit_extdaycycle", LLSDMap("edit_context", "inventory"));
 		}
 		else if (item == "edit_day_cycle")
 		{
-			LLFloaterReg::showInstance("env_edit_day_cycle", "edit");
-		}
-		else if (item == "delete_day_cycle")
-		{
-			LLFloaterReg::showInstance("env_delete_preset", "day_cycle");
+			LLFloaterReg::showInstance("env_edit_extdaycycle", LLSDMap("edit_context", "inventory"));
 		}
 		else
 		{
@@ -10780,30 +10794,6 @@ class LLWorldEnableEnvPreset : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		std::string item = userdata.asString();
-
-		if (item == "delete_water")
-		{
-			LLWaterParamManager::preset_name_list_t user_waters;
-			LLWaterParamManager::instance().getUserPresetNames(user_waters);
-			return !user_waters.empty();
-		}
-		else if (item == "delete_sky")
-		{
-			LLWLParamManager::preset_name_list_t user_skies;
-			LLWLParamManager::instance().getUserPresetNames(user_skies);
-			return !user_skies.empty();
-		}
-		else if (item == "delete_day_cycle")
-		{
-			LLDayCycleManager::preset_name_list_t user_days;
-			LLDayCycleManager::instance().getUserPresetNames(user_days);
-			return !user_days.empty();
-		}
-		else
-		{
-			LL_WARNS() << "Unknown item" << LL_ENDL;
-		}
 
 		return false;
 	}

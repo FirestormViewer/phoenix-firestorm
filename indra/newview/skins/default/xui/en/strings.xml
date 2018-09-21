@@ -366,6 +366,17 @@ Please try logging in again in a minute.</string>
 	<string name="BUTTON_HELP">Show Help</string>
 	<string name="BUTTON_SNOOZE">Snooze</string>
 
+	<!-- ToolTips for notecards -->
+	<string name="TooltipNotecardNotAllowedTypeDrop">
+Items of this type can't be attached
+to notecards on this region.
+	</string>
+	<string name="TooltipNotecardOwnerRestrictedDrop">
+Only items with unrestricted
+'next owner' permissions
+"can be attached to notecards.
+	</string>
+
 	<!-- searching - generic -->
 	<string name="Searching">Searching...</string>
 	<string name="NoneFound">None found.</string>
@@ -447,9 +458,10 @@ http://www.firestormviewer.org/support for help fixing this problem.
 	<string name="simstate">simstate</string>
 	<string name="favorite">favorite</string>
 	<string name="symbolic link">link</string>
-	<string name="symbolic folder link">folder link</string>
-  <string name="mesh">mesh</string>
-
+    <string name="settings blob">settings</string>
+    <string name="symbolic folder link">folder link</string>
+    <string name="mesh">mesh</string>
+  
 	<!-- llvoavatar. Displayed in the avatar chat bubble -->
 	<string name="AvatarEditingAppearance">(Editing Appearance)</string>
 	<string name="AvatarAway">Away</string>
@@ -1229,6 +1241,7 @@ If you continue to receive this message, please contact Second Life support for 
 	<!-- Environment settings -->
 	<string name="LocalSettings">Local Settings</string>
 	<string name="RegionSettings">Region Settings</string>
+	<string name="NoEnvironmentSettings">This Region does not support environmental settings.</string>
 
 	<!-- panel classified -->
 	<string name="ClassifiedClicksTxt">Clicks: [TELEPORT] teleport, [MAP] map, [PROFILE] profile</string>
@@ -2338,6 +2351,11 @@ Abuse Report</string>
   <string name="Female - Shrug">Female - Shrug</string>
   <string name="Female - Stick tougue out">Female - Stick tongue out</string>
   <string name="Female - Wow">Female - Wow</string>
+  <!-- settings -->
+  <string name="New Daycycle">New Daycycle</string>
+  <string name="New Water">New Water</string>
+  <string name="New Sky">New Sky</string>
+  
 
   <string name="/bow">/bow</string>
   <string name="/clap">/clap</string>

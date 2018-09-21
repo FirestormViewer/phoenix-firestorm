@@ -34,10 +34,13 @@ class LLGLSLShader;
 class LLDrawPoolWLSky : public LLDrawPool {
 public:
 
-	static const U32 SKY_VERTEX_DATA_MASK =	LLVertexBuffer::MAP_VERTEX |
-							LLVertexBuffer::MAP_TEXCOORD0;
-	static const U32 STAR_VERTEX_DATA_MASK =	LLVertexBuffer::MAP_VERTEX |
-		LLVertexBuffer::MAP_COLOR | LLVertexBuffer::MAP_TEXCOORD0;
+	static const U32 SKY_VERTEX_DATA_MASK =	LLVertexBuffer::MAP_VERTEX
+                                          | LLVertexBuffer::MAP_TEXCOORD0;
+	static const U32 STAR_VERTEX_DATA_MASK =	LLVertexBuffer::MAP_VERTEX
+                                              | LLVertexBuffer::MAP_COLOR
+                                              | LLVertexBuffer::MAP_TEXCOORD0;
+    static const U32 ADV_ATMO_SKY_VERTEX_DATA_MASK = LLVertexBuffer::MAP_VERTEX
+                                                   | LLVertexBuffer::MAP_TEXCOORD0;
 
 	LLDrawPoolWLSky(void);
 	/*virtual*/ ~LLDrawPoolWLSky();
@@ -48,6 +51,12 @@ public:
 	/*virtual*/ void beginDeferredPass(S32 pass);
 	/*virtual*/ void endDeferredPass(S32 pass);
 	/*virtual*/ void renderDeferred(S32 pass);
+
+
+    /*virtual*/ S32 getNumPostDeferredPasses() { return 1; }
+	/*virtual*/ void beginPostDeferredPass(S32 pass) {}
+	/*virtual*/ void endPostDeferredPass(S32 pass)   {}
+	/*virtual*/ void renderPostDeferred(S32 pass);
 
 	/*virtual*/ LLViewerTexture *getDebugTexture();
 	/*virtual*/ void beginRenderPass( S32 pass );
@@ -70,15 +79,16 @@ public:
 	static void cleanupGL();
 	static void restoreGL();
 private:
-	void renderDome(F32 camHeightLocal, LLGLSLShader * shader) const;
-	void renderSkyHaze(F32 camHeightLocal) const;
-	void renderStars(void) const;
-	void renderSkyClouds(F32 camHeightLocal) const;
-	void renderHeavenlyBodies();
+    void renderFsSky(const LLVector3& camPosLocal, F32 camHeightLocal, LLGLSLShader * shader) const;
+	void renderDome(const LLVector3& camPosLocal, F32 camHeightLocal, LLGLSLShader * shader) const;
+	void renderSkyHaze(const LLVector3& camPosLocal, F32 camHeightLocal) const;
 
-private:
-	static LLPointer<LLViewerTexture> sCloudNoiseTexture;
-	static LLPointer<LLImageRaw> sCloudNoiseRawImage;
+    void renderSkyHazeDeferred(const LLVector3& camPosLocal, F32 camHeightLocal) const;
+    void renderStarsDeferred(void) const;
+
+	void renderStars(void) const;
+	void renderSkyClouds(const LLVector3& camPosLocal, F32 camHeightLocal) const;
+	void renderHeavenlyBodies();
 };
 
 #endif // LL_DRAWPOOLWLSKY_H

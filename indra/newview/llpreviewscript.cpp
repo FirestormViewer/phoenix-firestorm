@@ -33,7 +33,6 @@
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
 #include "lldir.h"
-#include "llenvmanager.h"
 #include "llexternaleditor.h"
 #include "llfilepicker.h"
 #include "llfloaterreg.h"
@@ -2431,10 +2430,12 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
             // std::string buffer(mScriptEd->mEditor->getText());
 			std::string buffer(mScriptEd->getScriptText());
 			//</FS:KC> Script Preprocessor
-            LLBufferedAssetUploadInfo::invnUploadFinish_f proc = boost::bind(&LLPreviewLSL::finishedLSLUpload, _1, _4);
 
-            // LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(mItemUUID, buffer, proc));
-			LLResourceUploadInfo::ptr_t uploadInfo(new FSScriptAssetUpload(mItemUUID, buffer, proc, domono ));
+            //LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLScriptAssetUpload>(mItemUUID, buffer, proc
+            LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLScriptAssetUpload>(mItemUUID, buffer, 
+                [](LLUUID itemId, LLUUID, LLUUID, LLSD response) {
+                    LLPreviewLSL::finishedLSLUpload(itemId, response);
+                }));
 
             LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo); // <FS:ND> DoMono needs to be passed/set here.
         }
@@ -3063,11 +3064,13 @@ void LLLiveLSLEditor::saveIfNeeded(bool sync /*= true*/)
         // std::string buffer(mScriptEd->mEditor->getText());
 		std::string buffer(mScriptEd->getScriptText());
 		//</FS:KC> Script Preprocessor
-        LLBufferedAssetUploadInfo::taskUploadFinish_f proc = boost::bind(&LLLiveLSLEditor::finishLSLUpload, _1, _2, _3, _4, isRunning);
 
-        LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(mObjectUUID, mItemUUID, 
+        LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLScriptAssetUpload>(mObjectUUID, mItemUUID, 
                 monoChecked() ? LLScriptAssetUpload::MONO : LLScriptAssetUpload::LSL2, 
-                isRunning, mScriptEd->getAssociatedExperience(), buffer, proc));
+                isRunning, mScriptEd->getAssociatedExperience(), buffer, 
+                [isRunning](LLUUID itemId, LLUUID taskId, LLUUID newAssetId, LLSD response) { 
+                    LLLiveLSLEditor::finishLSLUpload(itemId, taskId, newAssetId, response, isRunning);
+                }));
 
         LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
     }

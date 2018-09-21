@@ -26,6 +26,7 @@
 #ifndef KC_WLINTERFACE_H
 #define KC_WLINTERFACE_H
 
+#if 0 // [EEPMERGE]
 #include "llsingleton.h"
 #include "lleventtimer.h"
 #include "llnotifications.h"
@@ -89,5 +90,5 @@ protected:
 	bool mDisabled; // control bool to clear all states after being disabled
 	bool mUsingParcelWLSkyDefault;
 };
-
+#endif // [EEPMERGE]
 #endif // KC_WLINTERFACE_H

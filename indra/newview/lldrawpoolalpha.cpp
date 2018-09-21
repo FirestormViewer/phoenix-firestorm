@@ -122,6 +122,14 @@ void LLDrawPoolAlpha::beginPostDeferredPass(S32 pass)
 		fullbright_shader->uniform1f(LLShaderMgr::DISPLAY_GAMMA, (gamma > 0.1f) ? 1.0f / gamma : (1.0f/2.2f));
 		fullbright_shader->unbind();
 
+        if (LLPipeline::sRenderingHUDs)
+	    {
+		    fullbright_shader->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	    }
+	    else
+	    {
+		    fullbright_shader->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	    }
 		//prime simple shader (loads shadow relevant uniforms)
 		gPipeline.bindDeferredShader(*simple_shader);
 
@@ -265,17 +273,49 @@ void LLDrawPoolAlpha::render(S32 pass)
 		{
 			if (LLPipeline::sImpostorRender)
 			{
-				fullbright_shader->bind();
+				fullbright_shader->bind();        
 				fullbright_shader->setMinimumAlpha(0.5f);
+                if (LLPipeline::sRenderingHUDs)
+	            {
+		            fullbright_shader->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	            }
+	            else
+	            {
+		            fullbright_shader->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	            }
 				simple_shader->bind();
 				simple_shader->setMinimumAlpha(0.5f);
+                if (LLPipeline::sRenderingHUDs)
+	            {
+		            simple_shader->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	            }
+	            else
+	            {
+		            simple_shader->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	            }
 			}				
 			else
 			{
 				fullbright_shader->bind();
 				fullbright_shader->setMinimumAlpha(0.f);
+                if (LLPipeline::sRenderingHUDs)
+	            {
+		            fullbright_shader->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	            }
+	            else
+	            {
+		            fullbright_shader->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	            }
 				simple_shader->bind();
 				simple_shader->setMinimumAlpha(0.f);
+                if (LLPipeline::sRenderingHUDs)
+	            {
+		            simple_shader->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	            }
+	            else
+	            {
+		            simple_shader->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	            }
 			}
 		}
 		else
@@ -638,7 +678,14 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 					{
 					// </FS:Ansariel>
 					emissive_shader->bind();
-
+					if (LLPipeline::sRenderingHUDs)
+	                {
+		                emissive_shader->uniform1i(LLShaderMgr::NO_ATMO, 1);
+	                }
+	                else
+	                {
+		                emissive_shader->uniform1i(LLShaderMgr::NO_ATMO, 0);
+	                }
 					params.mVertexBuffer->setBuffer((mask & ~LLVertexBuffer::MAP_COLOR) | LLVertexBuffer::MAP_EMISSIVE);
 					
 					// do the actual drawing, again

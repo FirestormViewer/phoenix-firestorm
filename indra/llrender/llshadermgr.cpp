@@ -35,11 +35,7 @@
 #include "OpenGL/OpenGL.h"
 #endif
 
-#ifdef LL_RELEASE_FOR_DOWNLOAD
 #define UNIFORM_ERRS LL_WARNS_ONCE("Shader")
-#else
-#define UNIFORM_ERRS LL_ERRS("Shader")
-#endif
 
 // Lots of STL stuff in here, using namespace std to keep things more readable
 using std::vector;
@@ -98,7 +94,7 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 		}
 	}
 
-	if (features->calculatesLighting || features->atmosphericHelpers)
+	if (features->calculatesLighting || features->calculatesAtmospherics)
 	{
 		if (!shader->attachObject("windlight/atmosphericsHelpersV.glsl"))
 		{
@@ -194,6 +190,14 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 		}
 	}
 
+    if (features->calculatesLighting || features->calculatesAtmospherics)
+	{
+		if (!shader->attachObject("windlight/atmosphericsHelpersF.glsl"))
+		{
+			return FALSE;
+		}
+	}
+
 	// NOTE order of shader object attaching is VERY IMPORTANT!!!
 	if (features->hasGamma)
 	{
@@ -202,7 +206,31 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 			return FALSE;
 		}
 	}
-	
+
+	if (features->hasSrgb)
+	{
+		if (!shader->attachObject("environment/srgbF.glsl"))
+		{
+			return FALSE;
+		}
+	}
+
+    if (features->encodesNormal)
+	{
+		if (!shader->attachObject("environment/encodeNormF.glsl"))
+		{
+			return FALSE;
+		}
+	}
+
+    if (features->decodesNormal)
+	{
+		if (!shader->attachObject("environment/decodeNormF.glsl"))
+		{
+			return FALSE;
+		}
+	}
+
 	if (features->hasAtmospherics)
 	{
 		if (!shader->attachObject("windlight/atmosphericsF.glsl"))
@@ -518,21 +546,30 @@ static std::string get_object_log(GLhandleARB ret)
 void LLShaderMgr::dumpObjectLog(GLhandleARB ret, BOOL warns, const std::string& filename) 
 {
 	std::string log = get_object_log(ret);
+    std::string fname = filename;
+    if (filename.empty())
+    {
+        fname = "unknown shader file";
+    }
 
-	if (log.length() > 0 || warns)
+	if (log.length() > 0)
 	{
-        LL_DEBUGS("ShaderLoading") << "Shader loading ";
-        
-		if (!filename.empty())
-		{
-            LL_CONT << "From " << filename << ":\n";
-		}
-        LL_CONT << log << LL_ENDL;
+        LL_WARNS("ShaderLoading") << "Shader loading from " << fname << ":\n" << LL_ENDL;
+        LL_WARNS("ShaderLoading") << log << LL_ENDL;
 	}
  }
 
 GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shader_level, GLenum type, boost::unordered_map<std::string, std::string>* defines, S32 texture_index_channels)
 {
+
+// endsure work-around for missing GLSL funcs gets propogated to feature shader files (e.g. srgbF.glsl)
+#if LL_DARWIN
+    if (defines)
+    {
+        (*defines)["OLD_SELECT"] = "1";
+    }
+#endif
+
 	GLenum error = GL_NO_ERROR;
 	if (gDebugGL)
 	{
@@ -1075,6 +1112,7 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("projection_matrix");
 	mReservedUniforms.push_back("inv_proj");
 	mReservedUniforms.push_back("modelview_projection_matrix");
+    mReservedUniforms.push_back("inv_modelview");
 	mReservedUniforms.push_back("normal_matrix");
 	mReservedUniforms.push_back("texture_matrix0");
 	mReservedUniforms.push_back("texture_matrix1");
@@ -1117,13 +1155,16 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("color");
 		
 	mReservedUniforms.push_back("diffuseMap");
+    mReservedUniforms.push_back("altDiffuseMap");
 	mReservedUniforms.push_back("specularMap");
 	mReservedUniforms.push_back("bumpMap");
+    mReservedUniforms.push_back("bumpMap2");
 	mReservedUniforms.push_back("environmentMap");
-	mReservedUniforms.push_back("cloude_noise_texture");
+	mReservedUniforms.push_back("cloud_noise_texture");
+    mReservedUniforms.push_back("cloud_noise_texture_next");
 	mReservedUniforms.push_back("fullbright");
 	mReservedUniforms.push_back("lightnorm");
-	mReservedUniforms.push_back("sunlight_color_copy");
+	mReservedUniforms.push_back("sunlight_color");
 	mReservedUniforms.push_back("ambient");
 	mReservedUniforms.push_back("blue_horizon");
 	mReservedUniforms.push_back("blue_density");
@@ -1183,6 +1224,7 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("spot_shadow_bias");
 	mReservedUniforms.push_back("spot_shadow_offset");
 	mReservedUniforms.push_back("sun_dir");
+    mReservedUniforms.push_back("moon_dir");
 	mReservedUniforms.push_back("shadow_res");
 	mReservedUniforms.push_back("proj_shadow_res");
 	mReservedUniforms.push_back("depth_cutoff");
@@ -1278,6 +1320,18 @@ void LLShaderMgr::initAttribsAndUniforms()
 
 	mReservedUniforms.push_back("origin");
 	mReservedUniforms.push_back("display_gamma");
+
+    mReservedUniforms.push_back("inscatter");
+    mReservedUniforms.push_back("sun_size");
+    mReservedUniforms.push_back("fog_color");
+
+    mReservedUniforms.push_back("transmittance_texture");
+    mReservedUniforms.push_back("scattering_texture");
+    mReservedUniforms.push_back("single_mie_scattering_texture");
+    mReservedUniforms.push_back("irradiance_texture");
+    mReservedUniforms.push_back("blend_factor");
+    mReservedUniforms.push_back("no_atmo");
+
 	llassert(mReservedUniforms.size() == END_RESERVED_UNIFORMS);
 
 	std::set<std::string> dupe_check;

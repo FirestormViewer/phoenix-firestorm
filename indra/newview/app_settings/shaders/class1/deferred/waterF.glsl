@@ -1,5 +1,5 @@
 /** 
- * @file waterF.glsl
+ * @file class1/deferred/waterF.glsl
  *
  * $LicenseInfo:firstyear=2007&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -37,6 +37,8 @@ vec3 scaleSoftClip(vec3 inColor);
 vec3 atmosTransport(vec3 inColor);
 
 uniform sampler2D bumpMap;   
+uniform sampler2D bumpMap2;
+uniform float blend_factor;
 uniform sampler2D screenTex;
 uniform sampler2D refTex;
 uniform sampler2DRectShadow shadowMap0;
@@ -69,47 +71,16 @@ VARYING vec4 littleWave;
 VARYING vec4 view;
 VARYING vec4 vary_position;
 
-vec3 srgb_to_linear(vec3 cs)
+vec3 srgb_to_linear(vec3 cs);
+vec2 encode_normal(vec3 n);
+
+vec3 BlendNormal(vec3 bump1, vec3 bump2)
 {
-	vec3 low_range = cs / vec3(12.92);
-	vec3 high_range = pow((cs+vec3(0.055))/vec3(1.055), vec3(2.4));
-	bvec3 lte = lessThanEqual(cs,vec3(0.04045));
-
-#ifdef OLD_SELECT
-	vec3 result;
-	result.r = lte.r ? low_range.r : high_range.r;
-	result.g = lte.g ? low_range.g : high_range.g;
-	result.b = lte.b ? low_range.b : high_range.b;
-    return result;
-#else
-	return mix(high_range, low_range, lte);
-#endif
-
-}
-
-vec3 linear_to_srgb(vec3 cl)
-{
-	cl = clamp(cl, vec3(0), vec3(1));
-	vec3 low_range  = cl * 12.92;
-	vec3 high_range = 1.055 * pow(cl, vec3(0.41666)) - 0.055;
-	bvec3 lt = lessThan(cl,vec3(0.0031308));
-
-#ifdef OLD_SELECT
-	vec3 result;
-	result.r = lt.r ? low_range.r : high_range.r;
-	result.g = lt.g ? low_range.g : high_range.g;
-	result.b = lt.b ? low_range.b : high_range.b;
-    return result;
-#else
-	return mix(high_range, low_range, lt);
-#endif
-
-}
-
-vec2 encode_normal(vec3 n)
-{
-	float f = sqrt(8 * n.z + 8);
-	return n.xy / f + 0.5;
+    //vec3 normal   = bump1.xyz * vec3( 2.0,  2.0, 2.0) - vec3(1.0, 1.0,  0.0);
+    //vec3 normal2  = bump2.xyz * vec3(-2.0, -2.0, 2.0) + vec3(1.0, 1.0, -1.0);
+    //vec3 n        = normalize(normal * dot(normal, normal2) - (normal2 * normal.z));
+    vec3 n = normalize(mix(bump1, bump2, blend_factor));
+    return n;
 }
 
 void main() 
@@ -121,9 +92,19 @@ void main()
 	vec3 viewVec = normalize(view.xyz);
 	
 	//get wave normals
-	vec3 wave1 = texture2D(bumpMap, vec2(refCoord.w, view.w)).xyz*2.0-1.0;
-	vec3 wave2 = texture2D(bumpMap, littleWave.xy).xyz*2.0-1.0;
-	vec3 wave3 = texture2D(bumpMap, littleWave.zw).xyz*2.0-1.0;
+	vec3 wave1_a = texture2D(bumpMap, vec2(refCoord.w, view.w)).xyz*2.0-1.0;
+	vec3 wave2_a = texture2D(bumpMap, littleWave.xy).xyz*2.0-1.0;
+	vec3 wave3_a = texture2D(bumpMap, littleWave.zw).xyz*2.0-1.0;
+
+
+	vec3 wave1_b = texture2D(bumpMap2, vec2(refCoord.w, view.w)).xyz*2.0-1.0;
+	vec3 wave2_b = texture2D(bumpMap2, littleWave.xy).xyz*2.0-1.0;
+	vec3 wave3_b = texture2D(bumpMap2, littleWave.zw).xyz*2.0-1.0;
+
+    vec3 wave1 = BlendNormal(wave1_a, wave1_b);
+    vec3 wave2 = BlendNormal(wave2_a, wave2_b);
+    vec3 wave3 = BlendNormal(wave3_a, wave3_b);
+
 	//get base fresnel components	
 	
 	vec3 df = vec3(
@@ -186,6 +167,7 @@ void main()
 	
 	//mix with reflection
 	// Note we actually want to use just df1, but multiplying by 0.999999 gets around an nvidia compiler bug
+    refcol.rgb = pow(refcol.rgb, vec3(0.45)); // boost the reflect color a little to get stars to show up SL-1475
 	color.rgb = mix(fb.rgb, refcol.rgb, df1 * 0.99999);
 	
 	vec4 pos = vary_position;

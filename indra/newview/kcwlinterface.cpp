@@ -25,6 +25,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#if 0// [EEPMERGE]
 #include "kcwlinterface.h"
 
 #include "llagent.h"
@@ -707,3 +708,4 @@ bool KCWindlightInterface::checkSettings()
 	mDisabled = false;
 	return false;
 }
+#endif // [EEPMERGE]

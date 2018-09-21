@@ -791,6 +791,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="mesh">
 		el modelo mesh
 	</string>
+    <string name="settings">
+        configuración
+    </string>
 	<string name="AvatarEditingAppearance">
 		(Editando Apariencia)
 	</string>

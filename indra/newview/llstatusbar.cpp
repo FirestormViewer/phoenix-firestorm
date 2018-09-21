@@ -1260,7 +1260,10 @@ void LLStatusBar::updateParcelIcons()
 		bool allow_damage	= vpm->allowAgentDamage(agent_region, current_parcel);
 		BOOL see_avatars	= current_parcel->getSeeAVs();
 		bool is_for_sale	= (!current_parcel->isPublic() && vpm->canAgentBuyParcel(current_parcel, false));
-		bool has_pwl		= KCWindlightInterface::instance().getWLset();
+		// [EEPMERGE]
+		//bool has_pwl		= KCWindlightInterface::instance().getWLset();
+		bool has_pwl		= false;
+		// [EEPMERGE]
 		bool has_lightshare	= FSLightshare::getInstance()->getState();
 		bool pathfinding_dynamic_enabled = agent_region->dynamicPathfindingEnabled();
 
@@ -1468,11 +1471,13 @@ void LLStatusBar::onInfoButtonClicked()
 
 void LLStatusBar::onParcelWLClicked()
 {
-	KCWindlightInterface::instance().onClickWLStatusButton();
+	// [EEPMERGE]
+	//KCWindlightInterface::instance().onClickWLStatusButton();
 }
 
 void LLStatusBar::onLightshareClicked()
 {
+	// [EEPMERGE] Might need to go
 	FSLightshare::getInstance()->processLightshareReset();
 }
 

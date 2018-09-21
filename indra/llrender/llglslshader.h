@@ -48,6 +48,9 @@ public:
 	bool hasObjectSkinning;
 	bool hasAtmospherics;
 	bool hasGamma;
+	bool hasSrgb;
+    bool encodesNormal;
+    bool decodesNormal;
 	S32 mIndexedTextureChannels;
 	bool disableTextureIndex;
 	bool hasAlphaMask;
@@ -210,6 +213,8 @@ public:
 	bool mTextureStateFetched;
 	std::vector<U32> mTextureMagFilter;
 	std::vector<U32> mTextureMinFilter;
+
+    GLhandleARB mExtraLinkObject = 0;
 
 private:
 	void unloadInternal();

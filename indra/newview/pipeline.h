@@ -61,14 +61,7 @@ bool compute_min_max(LLMatrix4& box, LLVector2& min, LLVector2& max); // Shouldn
 bool LLRayAABB(const LLVector3 &center, const LLVector3 &size, const LLVector3& origin, const LLVector3& dir, LLVector3 &coord, F32 epsilon = 0);
 bool setup_hud_matrices(); // use whole screen to render hud
 bool setup_hud_matrices(const LLRect& screen_region); // specify portion of screen (in pixels) to render hud attachments from (for picking)
-glh::matrix4f glh_copy_matrix(F32* src);
-glh::matrix4f glh_get_current_modelview();
-void glh_set_current_modelview(const glh::matrix4f& mat);
-glh::matrix4f glh_get_current_projection();
-void glh_set_current_projection(glh::matrix4f& mat);
-glh::matrix4f gl_ortho(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat znear, GLfloat zfar);
-glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar);
-glh::matrix4f gl_lookat(LLVector3 eye, LLVector3 center, LLVector3 up);
+
 
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_GEOMETRY;
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_GRASS;
@@ -167,6 +160,9 @@ public:
 	//downsample source to dest, taking the maximum depth value per pixel in source and writing to dest
 	// if source's depth buffer cannot be bound for reading, a scratch space depth buffer must be provided
 	void		downsampleDepthBuffer(LLRenderTarget& source, LLRenderTarget& dest, LLRenderTarget* scratch_space = NULL);
+
+	// Downsample depth buffer with gather and find local min/max depth values. Writes to a 16F RG render target.
+	void		downsampleMinMaxDepthBuffer(LLRenderTarget& source, LLRenderTarget& dest, LLRenderTarget* scratch_space = NULL);
 
 	void		doOcclusion(LLCamera& camera, LLRenderTarget& source, LLRenderTarget& dest, LLRenderTarget* scratch_space = NULL);
 	void		doOcclusion(LLCamera& camera);
@@ -552,6 +548,8 @@ public:
 
 	void updateCamera(bool reset = false);
 	
+	bool useAdvancedAtmospherics() const;
+
 	LLVector3				mFlyCamPosition;
 	LLQuaternion			mFlyCamRotation;
 
@@ -579,6 +577,7 @@ public:
 	static bool				sBakeSunlight;
 	static bool				sNoAlpha;
 	static bool				sUseTriStrips;
+	static bool				sUseAdvancedAtmospherics;
 	static bool				sUseFarClip;
 	static bool				sShadowRender;
 	static bool				sWaterReflections;
@@ -594,6 +593,7 @@ public:
 	static bool				sRenderAttachedLights;
 	static bool				sRenderAttachedParticles;
 	static bool				sRenderDeferred;
+    static bool				sRenderingWaterReflection;
 	static bool             sMemAllocationThrottled;
 	static S32				sVisibleLightCount;
 	static F32				sMinRenderSize;
@@ -634,12 +634,13 @@ public:
 	//sun shadow map
 	LLRenderTarget			mShadow[6];
 	LLRenderTarget			mShadowOcclusion[6];
-	std::vector<LLVector3>	mShadowFrustPoints[4];
-	LLVector4				mShadowError;
-	LLVector4				mShadowFOV;
-	LLVector3				mShadowFrustOrigin[4];
-	LLCamera				mShadowCamera[8];
-	LLVector3				mShadowExtents[4][2];
+	LLRenderTarget			mInscatter;
+	std::vector<LLVector3>		mShadowFrustPoints[4];
+	LLVector4			mShadowError;
+	LLVector4			mShadowFOV;
+	LLVector3			mShadowFrustOrigin[4];
+	LLCamera			mShadowCamera[8];
+	LLVector3			mShadowExtents[4][2];
 	glh::matrix4f			mSunShadowMatrix[6];
 	glh::matrix4f			mShadowModelview[6];
 	glh::matrix4f			mShadowProjection[6];
@@ -675,9 +676,12 @@ public:
 	U32					mTrueNoiseMap;
 	U32					mLightFunc;
 
-	LLColor4				mSunDiffuse;
-	LLVector3				mSunDir;
-	LLVector3				mTransformedSunDir;
+	LLColor4			mSunDiffuse;
+	LLVector4			mSunDir;
+    LLVector4			mMoonDir;
+
+	LLVector4			mTransformedSunDir;
+    LLVector4			mTransformedMoonDir;
 
 	bool					mInitialized;
 	bool					mVertexShadersEnabled;

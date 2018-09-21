@@ -48,16 +48,23 @@ public:
 	LLSky();
 	~LLSky();
 
-	void init(const LLVector3 &sun_direction);
-
+	void init();
 	void cleanup();
 
-	void setOverrideSun(BOOL override);
-	BOOL getOverrideSun() { return mOverrideSimSunPosition; }
-	void setSunDirection(const LLVector3 &sun_direction, const LLVector3 &sun_ang_velocity);
-	void setSunTargetDirection(const LLVector3 &sun_direction, const LLVector3 &sun_ang_velocity);
+    // These directions should be in CFR coord sys (+x at, +z up, +y right)
+    void setSunAndMoonDirectionsCFR(const LLVector3 &sun_direction, const LLVector3 &moon_direction);
+    void setSunDirectionCFR(const LLVector3 &sun_direction);
+    void setMoonDirectionCFR(const LLVector3 &moon_direction);
 
-	LLColor4 getFogColor() const;
+    void setSunTextures(const LLUUID& sun_texture, const LLUUID& sun_texture_next);
+    void setMoonTextures(const LLUUID& moon_texture, const LLUUID& moon_texture_next);
+    void setCloudNoiseTextures(const LLUUID& cloud_noise_texture, const LLUUID& cloud_noise_texture_next);
+    void setBloomTextures(const LLUUID& bloom_texture, const LLUUID& bloom_texture_next);
+
+    void setSunScale(F32 sun_scale);
+    void setMoonScale(F32 moon_scale);
+
+	LLColor4 getSkyFogColor() const;
 
 	void setCloudDensityAtAgent(F32 cloud_density);
 	void setWind(const LLVector3& wind);
@@ -66,26 +73,12 @@ public:
 	void updateCull();
 	void updateSky();
 
-	void propagateHeavenlyBodies(F32 dt);					// dt = seconds
-
 	S32  mLightingGeneration;
 	BOOL mUpdatedThisFrame;
 
 	void setFogRatio(const F32 fog_ratio);		// Fog distance as fraction of cull distance.
 	F32 getFogRatio() const;
 	LLColor4U getFadeColor() const;
-
-	LLVector3 getSunDirection() const;
-	LLVector3 getMoonDirection() const;
-	LLColor4 getSunDiffuseColor() const;
-	LLColor4 getMoonDiffuseColor() const;
-	LLColor4 getSunAmbientColor() const;
-	LLColor4 getMoonAmbientColor() const;
-	LLColor4 getTotalAmbientColor() const;
-	BOOL sunUp() const;
-
-	F32 getSunPhase() const;
-	void setSunPhase(const F32 phase);
 
 	void destroyGL();
 	void restoreGL();
@@ -94,25 +87,11 @@ public:
 public:
 	LLPointer<LLVOSky>		mVOSkyp;	// Pointer to the LLVOSky object (only one, ever!)
 	LLPointer<LLVOGround>	mVOGroundp;
-
 	LLPointer<LLVOWLSky>	mVOWLSkyp;
 
-	LLVector3 mSunTargDir;
-
-	// Legacy stuff
-	LLVector3 mSunDefaultPosition;
-
-	static const F32 NIGHTTIME_ELEVATION;	// degrees
-	static const F32 NIGHTTIME_ELEVATION_COS;
-
 protected:
-	BOOL			mOverrideSimSunPosition;
-
-	F32				mSunPhase;
-	LLColor4		mFogColor;				// Color to use for fog and haze
-
-	LLVector3		mLastSunDirection;
+    LLColor4 mFogColor;
 };
 
-extern LLSky    gSky;
+extern LLSky gSky;
 #endif

@@ -570,7 +570,7 @@ void ParticleEditor::onInjectButtonClicked()
 		"",
 		LLAssetType::AT_LSL_TEXT,
 		LLInventoryType::IT_LSL,
-		NOT_WEARABLE,
+		NO_INV_SUBTYPE,
 		perm.getMaskNextOwner(),
 		callback);
 

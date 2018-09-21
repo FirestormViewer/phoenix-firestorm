@@ -188,8 +188,6 @@
 #include "llnamebox.h"
 #include "llnameeditor.h"
 #include "llpostprocess.h"
-#include "llwlparammanager.h"
-#include "llwaterparammanager.h"
 #include "llagentlanguage.h"
 #include "llwearable.h"
 #include "llinventorybridge.h"
@@ -207,6 +205,8 @@
 #include "lltoolbarview.h"
 #include "llexperiencelog.h"
 #include "llcleanup.h"
+
+#include "llenvironment.h"
 
 #include "llstacktrace.h"
 
@@ -591,7 +591,6 @@ bool idle_startup()
 	static U32 first_sim_size_x = 256;
 	static U32 first_sim_size_y = 256;
 // </FS:CR> Aurora Sim
-	static LLVector3 initial_sun_direction(1.f, 0.f, 0.f);
 	static LLVector3 agent_start_position_region(10.f, 10.f, 10.f);		// default for when no space server
 
 	// last location by default
@@ -2189,8 +2188,8 @@ bool idle_startup()
 		LLGLState::checkStates();
 		LLGLState::checkTextureChannels();
 
-		LLEnvManagerNew::getInstance()->usePrefs(); // Load all presets and settings
-		gSky.init(initial_sun_direction);
+        LLEnvironment::instance().loadPreferences();
+		gSky.init();
 
 		LLGLState::checkStates();
 		LLGLState::checkTextureChannels();
@@ -4520,26 +4519,6 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		{
 			sInitialOutfitGender = flag;
 		}
-	}
-
-	LLSD global_textures = response["global-textures"][0];
-	if(global_textures.size())
-	{
-		// Extract sun and moon texture IDs.  These are used
-		// in the LLVOSky constructor, but I can't figure out
-		// how to pass them in.  JC
-		LLUUID id = global_textures["sun_texture_id"];
-		if(id.notNull())
-		{
-			gSunTextureID = id;
-		}
-
-		id = global_textures["moon_texture_id"];
-		if(id.notNull())
-		{
-			gMoonTextureID = id;
-		}
-
 	}
 
 	// set the location of the Agent Appearance service, from which we can request

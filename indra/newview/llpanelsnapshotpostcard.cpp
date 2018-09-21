@@ -208,7 +208,7 @@ void LLPanelSnapshotPostcard::sendPostcard()
     std::string url = gAgent.getRegion()->getCapability("SendPostcard");
     if (!url.empty())
     {
-        LLResourceUploadInfo::ptr_t uploadInfo(new LLPostcardUploadInfo(
+        LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLPostcardUploadInfo>(
             mAgentEmail, // <FS:Ansariel> For OpenSim compatibility; LLResourceUploadInfo will omit this in case of SL
             getChild<LLUICtrl>("name_form")->getValue().asString(),
             getChild<LLUICtrl>("to_form")->getValue().asString(),
@@ -216,7 +216,9 @@ void LLPanelSnapshotPostcard::sendPostcard()
             getChild<LLUICtrl>("msg_form")->getValue().asString(),
             mSnapshotFloater->getPosTakenGlobal(),
             mSnapshotFloater->getImageData(),
-            boost::bind(&LLPanelSnapshotPostcard::sendPostcardFinished, _4)));
+            [](LLUUID, LLUUID, LLUUID, LLSD response) {
+                LLPanelSnapshotPostcard::sendPostcardFinished(response);
+            }));
 
         LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
     }

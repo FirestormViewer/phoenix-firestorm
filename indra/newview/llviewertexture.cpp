@@ -113,8 +113,8 @@ const S32 MAX_CACHED_RAW_IMAGE_AREA = 64 * 64;
 const S32 MAX_CACHED_RAW_SCULPT_IMAGE_AREA = LLViewerTexture::sMaxSculptRez * LLViewerTexture::sMaxSculptRez;
 const S32 MAX_CACHED_RAW_TERRAIN_IMAGE_AREA = 128 * 128;
 const S32 DEFAULT_ICON_DIMENTIONS = 32;
-S32 LLViewerTexture::sMinLargeImageSize = 65536; //256 * 256.
-S32 LLViewerTexture::sMaxSmallImageSize = MAX_CACHED_RAW_IMAGE_AREA;
+U32 LLViewerTexture::sMinLargeImageSize = 65536; //256 * 256.
+U32 LLViewerTexture::sMaxSmallImageSize = MAX_CACHED_RAW_IMAGE_AREA;
 BOOL LLViewerTexture::sFreezeImageScalingDown = FALSE;
 F32 LLViewerTexture::sCurrentTime = 0.0f;
 F32  LLViewerTexture::sTexelPixelRatio = 1.0f;
@@ -1257,12 +1257,12 @@ void LLViewerFetchedTexture::loadFromFastCache()
 	{
 		return; //no need to access the fast cache.
 	}
-	mInFastCacheList = FALSE;
+    mInFastCacheList = FALSE;
 
 	mRawImage = LLAppViewer::getTextureCache()->readFromFastCache(getID(), mRawDiscardLevel);
 	if(mRawImage.notNull())
 	{
-		mFullWidth = mRawImage->getWidth() << mRawDiscardLevel;
+		mFullWidth  = mRawImage->getWidth()  << mRawDiscardLevel;
 		mFullHeight = mRawImage->getHeight() << mRawDiscardLevel;
 		setTexelsPerImage();
 
@@ -1277,20 +1277,20 @@ void LLViewerFetchedTexture::loadFromFastCache()
 		else
 		{
             if (mBoostLevel == LLGLTexture::BOOST_ICON)
+        {
+            S32 expected_width = mKnownDrawWidth > 0 ? mKnownDrawWidth : DEFAULT_ICON_DIMENTIONS;
+            S32 expected_height = mKnownDrawHeight > 0 ? mKnownDrawHeight : DEFAULT_ICON_DIMENTIONS;
+            if (mRawImage && (mRawImage->getWidth() > expected_width || mRawImage->getHeight() > expected_height))
             {
-                S32 expected_width = mKnownDrawWidth > 0 ? mKnownDrawWidth : DEFAULT_ICON_DIMENTIONS;
-                S32 expected_height = mKnownDrawHeight > 0 ? mKnownDrawHeight : DEFAULT_ICON_DIMENTIONS;
-                if (mRawImage && (mRawImage->getWidth() > expected_width || mRawImage->getHeight() > expected_height))
-                {
-                    // scale oversized icon, no need to give more work to gl
-                    mRawImage->scale(expected_width, expected_height);
-                }
+                // scale oversized icon, no need to give more work to gl
+                mRawImage->scale(expected_width, expected_height);
+            }
             }
 
-			mRequestedDiscardLevel = mDesiredDiscardLevel + 1;
-			mIsRawImageValid = TRUE;			
-			addToCreateTexture();
-		}
+		mRequestedDiscardLevel = mDesiredDiscardLevel + 1;
+		mIsRawImageValid = TRUE;			
+		addToCreateTexture();
+	}
 	}
 }
 
@@ -2117,7 +2117,7 @@ bool LLViewerFetchedTexture::updateFetch()
 				mIsFetched = TRUE;
 				tester->updateTextureLoadingStats(this, mRawImage, LLAppViewer::getTextureFetch()->isFromLocalCache(mID));
 			}
-			mRawDiscardLevel = fetch_discard;
+            mRawDiscardLevel = fetch_discard;
 			if ((mRawImage->getDataSize() > 0 && mRawDiscardLevel >= 0) &&
 				(current_discard < 0 || mRawDiscardLevel < current_discard))
 			{

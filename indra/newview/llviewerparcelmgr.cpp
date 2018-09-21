@@ -70,6 +70,8 @@
 #include "llcorehttputil.h"
 #include "kcwlinterface.h"
 
+#include "llenvironment.h"
+
 const F32 PARCEL_COLLISION_DRAW_SECS = 1.f;
 
 
@@ -680,6 +682,31 @@ LLParcelSelectionHandle LLViewerParcelMgr::getFloatingParcelSelection() const
 LLParcel *LLViewerParcelMgr::getAgentParcel() const
 {
 	return mAgentParcel;
+}
+
+
+LLParcel * LLViewerParcelMgr::getAgentOrSelectedParcel() const
+{
+    LLParcel *parcel(nullptr);
+
+    LLParcelSelectionHandle sel_handle(getFloatingParcelSelection());
+    if (sel_handle)
+    {
+        LLParcelSelection *selection(sel_handle.get());
+        if (selection)
+        {
+            parcel = selection->getParcel();
+            if (parcel && (parcel->getLocalID() == INVALID_PARCEL_ID))
+            {
+                parcel = NULL;
+            }
+        }
+    }
+
+    if (!parcel)
+        parcel = LLViewerParcelMgr::instance().getAgentParcel();
+
+    return parcel;
 }
 
 // Return whether the agent can build on the land they are on
@@ -1519,6 +1546,8 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
     BOOL	region_deny_transacted_override = false; // Deprecated
     BOOL	region_deny_age_unverified_override = false;
     BOOL    region_allow_access_override = true;
+    BOOL    region_allow_environment_override = true;
+    S32     parcel_environment_version = 0;
     BOOL	agent_parcel_update = false; // updating previous(existing) agent parcel
 
     S32		other_clean_time = 0;
@@ -1624,6 +1653,12 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
         msg->getBOOLFast(_PREHASH_RegionAllowAccessBlock, _PREHASH_RegionAllowAccessOverride, region_allow_access_override);
     }
 
+    if (msg->getNumberOfBlocks(_PREHASH_ParcelEnvironmentBlock))
+    {
+        msg->getS32Fast(_PREHASH_ParcelEnvironmentBlock, _PREHASH_ParcelEnvironmentVersion, parcel_environment_version);
+        msg->getBOOLFast(_PREHASH_ParcelEnvironmentBlock, _PREHASH_RegionAllowEnvironmentOverride, region_allow_environment_override);
+    }
+
 	msg->getS32("ParcelData", "OtherCleanTime", other_clean_time );
 
 	// Actually extract the data.
@@ -1640,6 +1675,8 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
                 agent_parcel_update = true;
             }
         }
+
+        bool environment_changed = (parcel->getParcelEnvironmentVersion() != parcel_environment_version);
 
 		parcel->init(owner_id,
 			FALSE, FALSE, FALSE,
@@ -1666,6 +1703,10 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 		parcel->setRegionDenyAnonymousOverride(region_deny_anonymous_override);
 		parcel->setRegionDenyAgeUnverifiedOverride(region_deny_age_unverified_override);
         parcel->setRegionAllowAccessOverride(region_allow_access_override);
+
+        parcel->setParcelEnvironmentVersion(parcel_environment_version);
+        parcel->setRegionAllowEnvironmentOverride(region_allow_environment_override);
+
 		parcel->unpackMessage(msg);
 
 		if (parcel == parcel_mgr.mAgentParcel)
@@ -1683,9 +1724,6 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 			// Let interesting parties know about agent parcel change.
 			LLViewerParcelMgr* instance = LLViewerParcelMgr::getInstance();
 
-			// Notify anything that wants to know when the agent changes parcels
-			gAgent.changeParcels();
-
 			if (instance->mTeleportInProgress)
 			{
 				instance->mTeleportInProgress = FALSE;
@@ -1699,12 +1737,21 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 					instance->mTeleportFinishedSignal(instance->mTeleportInProgressPosition, false);
 				}
 			}
-		}
-		else if (agent_parcel_update)
-		{
-			// updated agent parcel
-			parcel_mgr.mAgentParcel->unpackMessage(msg);
-		}
+
+            LL_WARNS("LAPRAS") << "Parcel environment version is " << parcel->getParcelEnvironmentVersion() << LL_ENDL;
+            // Notify anything that wants to know when the agent changes parcels
+            gAgent.changeParcels();
+        }
+        else if (agent_parcel_update)
+        {
+            // updated agent parcel
+            parcel_mgr.mAgentParcel->unpackMessage(msg);
+            if ((LLEnvironment::instance().isExtendedEnvironmentEnabled() && environment_changed))
+            {
+                LL_WARNS("LAPRAS") << "Parcel environment version is " << parcel->getParcelEnvironmentVersion() << LL_ENDL;
+                LLEnvironment::instance().requestParcel(local_id);
+            }
+        }
 	}
 
 	// Handle updating selections, if necessary.
@@ -1898,6 +1945,7 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 			}
 		}//if gAudiop
 	};
+
 }
 
 void LLViewerParcelMgr::optionally_start_music(const std::string& music_url)

@@ -504,7 +504,7 @@ void LLFriendCardsManager::syncFriendsFolder()
 							  gAgentID.asString(),
 							  LLAssetType::AT_CALLINGCARD,
 							  LLInventoryType::IT_CALLINGCARD,
-							  NOT_WEARABLE,
+                              NO_INV_SUBTYPE,
 							  PERM_MOVE | PERM_TRANSFER,
 							  NULL);
 	}
@@ -647,7 +647,7 @@ void create_agent_calling_card_name_cb(const LLAvatarName& av_name, const LLUUID
 		gAgentID.asString(),
 		LLAssetType::AT_CALLINGCARD,
 		LLInventoryType::IT_CALLINGCARD,
-		NOT_WEARABLE,
+		NO_INV_SUBTYPE,
 		PERM_MOVE | PERM_TRANSFER,
 		NULL);
 }

@@ -71,10 +71,11 @@ public:
 	typedef enum
 	{
 		TT_TEXTURE = 0,			// Standard 2D Texture
-		TT_RECT_TEXTURE,	// Non power of 2 texture
-		TT_CUBE_MAP,		// 6-sided cube map texture
+		TT_RECT_TEXTURE,	    // Non power of 2 texture
+		TT_CUBE_MAP,		    // 6-sided cube map texture
 		TT_MULTISAMPLE_TEXTURE, // see GL_ARB_texture_multisample
-		TT_NONE 		// No texture type is currently enabled
+        TT_TEXTURE_3D,          // standard 3D Texture
+		TT_NONE, 		        // No texture type is currently enabled        
 	} eTextureType;
 
 	typedef enum
@@ -274,10 +275,11 @@ public:
 
 	enum eTexIndex
 	{
-		DIFFUSE_MAP = 0,
-		NORMAL_MAP,
-		SPECULAR_MAP,
-		NUM_TEXTURE_CHANNELS,
+		DIFFUSE_MAP           = 0,
+        ALTERNATE_DIFFUSE_MAP = 1,
+		NORMAL_MAP            = 1,
+		SPECULAR_MAP          = 2,        
+		NUM_TEXTURE_CHANNELS  = 3,
 	};
 
 	enum eVolumeTexIndex
@@ -511,4 +513,24 @@ extern S32 gGLViewport[4];
 
 extern LLRender gGL;
 
+// This rotation matrix moves the default OpenGL reference frame 
+// (-Z at, Y up) to Cory's favorite reference frame (X at, Z up)
+const F32 OGL_TO_CFR_ROTATION[16] = {  0.f,  0.f, -1.f,  0.f, 	// -Z becomes X
+									  -1.f,  0.f,  0.f,  0.f, 	// -X becomes Y
+									   0.f,  1.f,  0.f,  0.f,	//  Y becomes Z
+									   0.f,  0.f,  0.f,  1.f };
+
+glh::matrix4f copy_matrix(F32* src);
+glh::matrix4f get_current_modelview();
+glh::matrix4f get_current_projection();
+glh::matrix4f get_last_modelview();
+glh::matrix4f get_last_projection();
+
+void copy_matrix(const glh::matrix4f& src, F32* dst);
+void set_current_modelview(const glh::matrix4f& mat);
+void set_current_projection(glh::matrix4f& mat);
+
+glh::matrix4f gl_ortho(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat znear, GLfloat zfar);
+glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar);
+glh::matrix4f gl_lookat(LLVector3 eye, LLVector3 center, LLVector3 up);
 #endif

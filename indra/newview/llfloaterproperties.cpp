@@ -271,6 +271,7 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 	BOOL is_complete = i->isFinished();
 	const BOOL cannot_restrict_permissions = LLInventoryType::cannotRestrictPermissions(i->getInventoryType());
 	const BOOL is_calling_card = (i->getInventoryType() == LLInventoryType::IT_CALLINGCARD);
+	const BOOL is_settings = (item->getInventoryType() == LLInventoryType::IT_SETTINGS);
 	const LLPermissions& perm = item->getPermissions();
 	const BOOL can_agent_manipulate = gAgent.allowOperation(PERM_OWNER, perm, 
 															GP_OBJECT_MANIPULATE);
@@ -566,7 +567,7 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 
 		getChildView("NextOwnerLabel")->setEnabled(TRUE);
 		getChildView("CheckNextOwnerModify")->setEnabled((base_mask & PERM_MODIFY) && !cannot_restrict_permissions);
-		getChildView("CheckNextOwnerCopy")->setEnabled((base_mask & PERM_COPY) && !cannot_restrict_permissions);
+		getChildView("CheckNextOwnerCopy")->setEnabled((base_mask & PERM_COPY) && !cannot_restrict_permissions && !is_settings);
 		getChildView("CheckNextOwnerTransfer")->setEnabled((next_owner_mask & PERM_COPY) && !cannot_restrict_permissions);
 
 		combo_sale_type->setEnabled(is_complete && is_for_sale);

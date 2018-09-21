@@ -417,6 +417,11 @@ void LLInventoryPanel::setFilterWearableTypes(U64 types)
 	getFilter().setFilterWearableTypes(types);
 }
 
+void LLInventoryPanel::setFilterSettingsTypes(U64 filter)
+{
+    getFilter().setFilterSettingsTypes(filter);
+}
+
 void LLInventoryPanel::setFilterSubString(const std::string& string)
 {
 	getFilter().setFilterSubString(string);
@@ -426,7 +431,6 @@ const std::string LLInventoryPanel::getFilterSubString()
 { 
 	return getFilter().getFilterSubString();
 }
-
 
 void LLInventoryPanel::setSortOrder(U32 order)
 {
@@ -1189,6 +1193,11 @@ void LLInventoryPanel::setSelectCallback(const boost::function<void (const std::
 void LLInventoryPanel::clearSelection()
 {
 	mSelectThisID.setNull();
+}
+
+LLInventoryPanel::selected_items_t LLInventoryPanel::getSelectedItems() const
+{
+    return mFolderRoot.get()->getSelectionList();
 }
 
 void LLInventoryPanel::onSelectionChange(const std::deque<LLFolderViewItem*>& items, BOOL user_action)
@@ -1962,6 +1971,7 @@ namespace LLInitParam
 		declare(LLFolderType::lookup(LLFolderType::FT_INBOX)            , LLFolderType::FT_INBOX);
 		declare(LLFolderType::lookup(LLFolderType::FT_OUTBOX)           , LLFolderType::FT_OUTBOX);
 		declare(LLFolderType::lookup(LLFolderType::FT_BASIC_ROOT)       , LLFolderType::FT_BASIC_ROOT);
+        declare(LLFolderType::lookup(LLFolderType::FT_SETTINGS)         , LLFolderType::FT_SETTINGS);
 		declare(LLFolderType::lookup(LLFolderType::FT_MARKETPLACE_LISTINGS)   , LLFolderType::FT_MARKETPLACE_LISTINGS);
 		declare(LLFolderType::lookup(LLFolderType::FT_MARKETPLACE_STOCK), LLFolderType::FT_MARKETPLACE_STOCK);
 		declare(LLFolderType::lookup(LLFolderType::FT_MARKETPLACE_VERSION), LLFolderType::FT_MARKETPLACE_VERSION);

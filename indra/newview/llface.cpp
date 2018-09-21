@@ -322,6 +322,11 @@ void LLFace::setDiffuseMap(LLViewerTexture* tex)
 	setTexture(LLRender::DIFFUSE_MAP, tex);
 }
 
+void LLFace::setAlternateDiffuseMap(LLViewerTexture* tex)
+{
+    setTexture(LLRender::ALTERNATE_DIFFUSE_MAP, tex);
+}
+
 void LLFace::setNormalMap(LLViewerTexture* tex)
 {
 	setTexture(LLRender::NORMAL_MAP, tex);
@@ -1720,7 +1725,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 				// that emboss mapping always shows up on the upward faces of cubes when 
 				// it's noon (since a lot of builders build with the sun forced to noon).
 				LLVector3   sun_ray  = gSky.mVOSkyp->mBumpSunDir;
-				LLVector3   moon_ray = gSky.getMoonDirection();
+				LLVector3   moon_ray = gSky.mVOSkyp->getMoon().getDirection();
 				LLVector3& primary_light_ray = (sun_ray.mV[VZ] > 0) ? sun_ray : moon_ray;
 
 				bump_s_primary_light_ray.load3((offset_multiple * s_scale * primary_light_ray).mV);

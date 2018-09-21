@@ -509,7 +509,7 @@ LLBufferedAssetUploadInfo::LLBufferedAssetUploadInfo(LLUUID itemId, LLAssetType:
     mTaskId(LLUUID::null),
     mContents(buffer),
     mInvnFinishFn(finish),
-    mTaskFinishFn(NULL),
+    mTaskFinishFn(nullptr),
     mStoredToVFS(false)
 {
     setItemId(itemId);
@@ -523,7 +523,7 @@ LLBufferedAssetUploadInfo::LLBufferedAssetUploadInfo(LLUUID itemId, LLPointer<LL
     mTaskId(LLUUID::null),
     mContents(),
     mInvnFinishFn(finish),
-    mTaskFinishFn(NULL),
+    mTaskFinishFn(nullptr),
     mStoredToVFS(false)
 {
     setItemId(itemId);
@@ -556,7 +556,7 @@ LLBufferedAssetUploadInfo::LLBufferedAssetUploadInfo(LLUUID taskId, LLUUID itemI
     mTaskUpload(true),
     mTaskId(taskId),
     mContents(buffer),
-    mInvnFinishFn(NULL),
+    mInvnFinishFn(nullptr),
     mTaskFinishFn(finish),
     mStoredToVFS(false)
 {
@@ -768,6 +768,10 @@ void LLViewerAssetUpload::AssetInventoryUploadCoproc(LLCoreHttpUtil::HttpCorouti
             if (uploadInfo->showUploadDialog())
                 LLUploadDialog::modalUploadFinished();
             return;
+        }
+        if (!result.has("success"))
+        {
+            result["success"] = LLSD::Boolean((ulstate == "complete") && status);
         }
 
         S32 uploadPrice = result["upload_price"].asInteger();//uploadInfo->getEconomyUploadCost();

@@ -144,6 +144,8 @@ public:
 	virtual ~LLInventoryPanel();
 
 public:
+    typedef std::set<LLFolderViewItem*> selected_items_t;
+
 	LLInventoryModel* getModel() { return mInventory; }
 	LLFolderViewModelInventory& getRootViewModel() { return mInventoryViewModel; }
 
@@ -169,6 +171,8 @@ public:
 	void setSelection(const LLUUID& obj_id, BOOL take_keyboard_focus);
 	void setSelectCallback(const boost::function<void (const std::deque<LLFolderViewItem*>& items, BOOL user_action)>& cb);
 	void clearSelection();
+    selected_items_t getSelectedItems() const;
+
 	bool isSelectionRemovable();
 	LLInventoryFilter& getFilter();
 	const LLInventoryFilter& getFilter() const;
@@ -177,8 +181,9 @@ public:
 	U32 getFilterObjectTypes() const;
 	void setFilterPermMask(PermissionMask filter_perm_mask);
 	U32 getFilterPermMask() const;
-	void setFilterWearableTypes(U64 filter);
-	void setFilterSubString(const std::string& string);
+    void setFilterWearableTypes(U64 filter);
+    void setFilterSettingsTypes(U64 filter);
+    void setFilterSubString(const std::string& string);
 	const std::string getFilterSubString();
 	void setSinceLogoff(BOOL sl);
 	void setHoursAgo(U32 hours);

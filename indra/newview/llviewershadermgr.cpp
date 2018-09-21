@@ -38,13 +38,13 @@
 #include "llviewercontrol.h"
 #include "pipeline.h"
 #include "llworld.h"
-#include "llwlparammanager.h"
-#include "llwaterparammanager.h"
 #include "llsky.h"
 #include "llvosky.h"
 #include "llrender.h"
 #include "lljoint.h"
 #include "llskinningutil.h"
+#include "llenvironment.h"
+#include "llatmosphere.h"
 
 #ifdef LL_RELEASE_FOR_DOWNLOAD
 #define UNIFORM_ERRS LL_WARNS_ONCE("Shader")
@@ -93,6 +93,8 @@ LLGLSLShader	gDebugProgram;
 LLGLSLShader	gClipProgram;
 LLGLSLShader	gDownsampleDepthProgram;
 LLGLSLShader	gDownsampleDepthRectProgram;
+LLGLSLShader	gDownsampleMinMaxDepthRectProgram;
+LLGLSLShader	gInscatterRectProgram;
 LLGLSLShader	gAlphaMaskProgram;
 LLGLSLShader	gBenchmarkProgram;
 
@@ -174,7 +176,8 @@ LLGLSLShader		gImpostorProgram;
 // WindLight shader handles
 LLGLSLShader			gWLSkyProgram;
 LLGLSLShader			gWLCloudProgram;
-
+LLGLSLShader			gWLSunProgram;
+LLGLSLShader			gWLMoonProgram;
 
 // Effects Shaders
 LLGLSLShader			gGlowProgram;
@@ -231,6 +234,8 @@ LLGLSLShader			gFXAAProgram;
 LLGLSLShader			gDeferredPostNoDoFProgram;
 LLGLSLShader			gDeferredWLSkyProgram;
 LLGLSLShader			gDeferredWLCloudProgram;
+LLGLSLShader			gDeferredWLSunProgram;
+LLGLSLShader			gDeferredWLMoonProgram;
 LLGLSLShader			gDeferredStarProgram;
 LLGLSLShader			gDeferredFullbrightShinyProgram;
 LLGLSLShader			gDeferredSkinnedFullbrightShinyProgram;
@@ -249,6 +254,8 @@ LLViewerShaderMgr::LLViewerShaderMgr() :
 	//ONLY shaders that need WL Param management should be added here
 	mShaderList.push_back(&gWLSkyProgram);
 	mShaderList.push_back(&gWLCloudProgram);
+    mShaderList.push_back(&gWLSunProgram);
+    mShaderList.push_back(&gWLMoonProgram);
 	mShaderList.push_back(&gAvatarProgram);
 	mShaderList.push_back(&gObjectShinyProgram);
 	mShaderList.push_back(&gObjectShinyNonIndexedProgram);
@@ -341,6 +348,8 @@ LLViewerShaderMgr::LLViewerShaderMgr() :
 	mShaderList.push_back(&gDeferredAvatarAlphaProgram);
 	mShaderList.push_back(&gDeferredWLSkyProgram);
 	mShaderList.push_back(&gDeferredWLCloudProgram);
+    mShaderList.push_back(&gDeferredWLMoonProgram);
+    mShaderList.push_back(&gDeferredWLSunProgram);
 }
 
 LLViewerShaderMgr::~LLViewerShaderMgr()
@@ -476,7 +485,7 @@ void LLViewerShaderMgr::setShaders()
 		S32 env_class = 2;
 		S32 obj_class = 2;
 		S32 effect_class = 2;
-		S32 wl_class = 2;
+		S32 wl_class = 3;
 		S32 water_class = 2;
 		S32 deferred_class = 0;
 		S32 transform_class = gGLManager.mHasTransformFeedback ? 1 : 0;
@@ -500,24 +509,23 @@ void LLViewerShaderMgr::setShaders()
 			{ //no shadows
 				deferred_class = 1;
 			}
-
-			//make sure hardware skinning is enabled
-			//gSavedSettings.setBOOL("RenderAvatarVP", TRUE);
-			
-			//make sure atmospheric shaders are enabled
-			//gSavedSettings.setBOOL("WindLightUseAtmosShaders", TRUE);
 		}
 
+        // clamp to WL class 2 if we have disabled adv atmo (class 3)
+        if (!gSavedSettings.getBOOL("RenderUseAdvancedAtmospherics"))
+        {
+            wl_class = llmin(wl_class, 2);
+        }
 
-		if (!(LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders")
-			  && gSavedSettings.getBOOL("WindLightUseAtmosShaders")))
+        bool hasWindLightShaders = LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders");
+        bool useWindLightShaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
+		if (!hasWindLightShaders || !useWindLightShaders)
 		{
 			// user has disabled WindLight in their settings, downgrade
 			// windlight shaders to stub versions.
 			wl_class = 1;
 		}
 
-		
 		// Trigger a full rebuild of the fallback skybox / cubemap if we've toggled windlight shaders
 		if (mVertexShaderLevel[SHADER_WINDLIGHT] != wl_class && gSky.mVOSkyp.notNull())
 		{
@@ -549,27 +557,67 @@ void LLViewerShaderMgr::setShaders()
 			if (loaded)
 			{
 				loaded = loadShadersWater();
+                if (loaded)
+                {
+                    LL_INFOS() << "Loaded water shaders." << LL_ENDL;
+                }
+                else
+                {
+                    LL_WARNS() << "Failed to load water shaders." << LL_ENDL;
+                }
 			}
 
 			if (loaded)
 			{
 				loaded = loadShadersWindLight();
+                if (loaded)
+                {
+                    LL_INFOS() << "Loaded windlight shaders." << LL_ENDL;
+                }
+                else
+                {
+                    LL_WARNS() << "Failed to load windlight shaders." << LL_ENDL;
+                }
 			}
 
 			if (loaded)
 			{
 				loaded = loadShadersEffects();
+                if (loaded)
+                {
+                    LL_INFOS() << "Loaded effects shaders." << LL_ENDL;
+                }
+                else
+                {
+                    LL_WARNS() << "Failed to load effects shaders." << LL_ENDL;
+                }
 			}
 
 			if (loaded)
 			{
 				loaded = loadShadersInterface();
+                if (loaded)
+                {
+                    LL_INFOS() << "Loaded interface shaders." << LL_ENDL;
+                }
+                else
+                {
+                    LL_WARNS() << "Failed to load interface shaders." << LL_ENDL;
+                }
 			}
 
 			if (loaded)
 
 		    {
 				loaded = loadTransformShaders();
+                if (loaded)
+                {
+                    LL_INFOS() << "Loaded transform shaders." << LL_ENDL;
+                }
+                else
+                {
+                    LL_WARNS() << "Failed to load transform shaders." << LL_ENDL;
+                }
 			}
 
 			if (loaded)
@@ -581,14 +629,10 @@ void LLViewerShaderMgr::setShaders()
 				if (gSavedSettings.getBOOL("RenderAvatarVP") && loadShadersObject())
 				{ //hardware skinning is enabled and rigged attachment shaders loaded correctly
 					BOOL avatar_cloth = gSavedSettings.getBOOL("RenderAvatarCloth");
-					S32 avatar_class = 1;
-				
-					// cloth is a class3 shader
-					if(avatar_cloth)
-					{
-						avatar_class = 3;
-					}
 
+					// cloth is a class3 shader
+					S32 avatar_class = avatar_cloth ? 3 : 1;
+				
 					// Set the actual level
 					mVertexShaderLevel[SHADER_AVATAR] = avatar_class;
 					loadShadersAvatar();
@@ -633,6 +677,7 @@ void LLViewerShaderMgr::setShaders()
 				if (gSavedSettings.getBOOL("WindLightUseAtmosShaders"))
 				{ //disable windlight and try again
 					gSavedSettings.setBOOL("WindLightUseAtmosShaders", FALSE);
+                    LL_WARNS() << "Falling back to no windlight shaders." << LL_ENDL;
 					reentrance = false;
 					setShaders();
 					return;
@@ -641,6 +686,7 @@ void LLViewerShaderMgr::setShaders()
 				if (gSavedSettings.getBOOL("VertexShaderEnable"))
 				{ //disable shaders outright and try again
 					gSavedSettings.setBOOL("VertexShaderEnable", FALSE);
+                    LL_WARNS() << "Falling back to no vertex shaders." << LL_ENDL;
 					reentrance = false;
 					setShaders();
 					return;
@@ -651,6 +697,7 @@ void LLViewerShaderMgr::setShaders()
 			{ //everything else succeeded but deferred failed, disable deferred and try again
 				LL_WARNS() << "Couldn't load deferred shaders - Deferred rendering disabled" << LL_ENDL; // FS:Ansariel> FIRE-20305: Debug output
 				gSavedSettings.setBOOL("RenderDeferred", FALSE);
+                LL_WARNS() << "Falling back to no deferred shaders." << LL_ENDL;
 				reentrance = false;
 				setShaders();
 				return;
@@ -703,6 +750,8 @@ void LLViewerShaderMgr::unloadShaders()
 	gClipProgram.unload();
 	gDownsampleDepthProgram.unload();
 	gDownsampleDepthRectProgram.unload();
+	gDownsampleMinMaxDepthRectProgram.unload();
+    gInscatterRectProgram.unload();
 	gBenchmarkProgram.unload();
 	gAlphaMaskProgram.unload();
 	gUIProgram.unload();
@@ -789,6 +838,8 @@ void LLViewerShaderMgr::unloadShaders()
 
 	gWLSkyProgram.unload();
 	gWLCloudProgram.unload();
+    gWLSunProgram.unload();
+    gWLMoonProgram.unload();
 
 	gPostColorFilterProgram.unload();
 	gPostNightVisionProgram.unload();
@@ -903,13 +954,17 @@ BOOL LLViewerShaderMgr::loadBasicShaders()
 		ch = llmax(LLGLSLShader::sIndexedTextureChannels-1, 1);
 	}
 
-	std::vector<S32> index_channels;
+	std::vector<S32> index_channels;    
 	index_channels.push_back(-1);	 shaders.push_back( make_pair( "windlight/atmosphericsVarsF.glsl",		mVertexShaderLevel[SHADER_WINDLIGHT] ) );
 	index_channels.push_back(-1);	 shaders.push_back( make_pair( "windlight/atmosphericsVarsWaterF.glsl",		mVertexShaderLevel[SHADER_WINDLIGHT] ) );
+    index_channels.push_back(-1);	 shaders.push_back( make_pair( "windlight/atmosphericsHelpersF.glsl",		mVertexShaderLevel[SHADER_WINDLIGHT] ) );
 	index_channels.push_back(-1);	 shaders.push_back( make_pair( "windlight/gammaF.glsl",					mVertexShaderLevel[SHADER_WINDLIGHT]) );
 	index_channels.push_back(-1);	 shaders.push_back( make_pair( "windlight/atmosphericsF.glsl",			mVertexShaderLevel[SHADER_WINDLIGHT] ) );
 	index_channels.push_back(-1);	 shaders.push_back( make_pair( "windlight/transportF.glsl",				mVertexShaderLevel[SHADER_WINDLIGHT] ) );	
 	index_channels.push_back(-1);	 shaders.push_back( make_pair( "environment/waterFogF.glsl",				mVertexShaderLevel[SHADER_WATER] ) );
+    index_channels.push_back(-1);	 shaders.push_back( make_pair( "environment/encodeNormF.glsl",				    mVertexShaderLevel[SHADER_ENVIRONMENT] ) );
+    index_channels.push_back(-1);	 shaders.push_back( make_pair( "environment/decodeNormF.glsl",				    mVertexShaderLevel[SHADER_ENVIRONMENT] ) );
+    index_channels.push_back(-1);	 shaders.push_back( make_pair( "environment/srgbF.glsl",				    mVertexShaderLevel[SHADER_ENVIRONMENT] ) );
 	index_channels.push_back(-1);	 shaders.push_back( make_pair( "lighting/lightNonIndexedF.glsl",					mVertexShaderLevel[SHADER_LIGHTING] ) );
 	index_channels.push_back(-1);	 shaders.push_back( make_pair( "lighting/lightAlphaMaskNonIndexedF.glsl",					mVertexShaderLevel[SHADER_LIGHTING] ) );
 	index_channels.push_back(-1);	 shaders.push_back( make_pair( "lighting/lightFullbrightNonIndexedF.glsl",			mVertexShaderLevel[SHADER_LIGHTING] ) );
@@ -1007,6 +1062,7 @@ BOOL LLViewerShaderMgr::loadShadersWater()
 		gWaterProgram.mShaderFiles.clear();
 		gWaterProgram.mShaderFiles.push_back(make_pair("environment/waterV.glsl", GL_VERTEX_SHADER_ARB));
 		gWaterProgram.mShaderFiles.push_back(make_pair("environment/waterF.glsl", GL_FRAGMENT_SHADER_ARB));
+        gWaterProgram.mShaderGroup = LLGLSLShader::SG_WATER;
 		gWaterProgram.mShaderLevel = mVertexShaderLevel[SHADER_WATER];
 		success = gWaterProgram.createShader(NULL, NULL);
 	}
@@ -1016,12 +1072,12 @@ BOOL LLViewerShaderMgr::loadShadersWater()
 		//load under water vertex shader
 		gUnderWaterProgram.mName = "Underwater Shader";
 		gUnderWaterProgram.mFeatures.calculatesAtmospherics = true;
+        gUnderWaterProgram.mFeatures.hasWaterFog = true;
 		gUnderWaterProgram.mShaderFiles.clear();
 		gUnderWaterProgram.mShaderFiles.push_back(make_pair("environment/waterV.glsl", GL_VERTEX_SHADER_ARB));
 		gUnderWaterProgram.mShaderFiles.push_back(make_pair("environment/underWaterF.glsl", GL_FRAGMENT_SHADER_ARB));
-		gUnderWaterProgram.mShaderLevel = mVertexShaderLevel[SHADER_WATER];
-		gUnderWaterProgram.mShaderGroup = LLGLSLShader::SG_WATER;
-		
+		gUnderWaterProgram.mShaderLevel = mVertexShaderLevel[SHADER_WATER];        
+		gUnderWaterProgram.mShaderGroup = LLGLSLShader::SG_WATER;		
 		success = gUnderWaterProgram.createShader(NULL, NULL);
 	}
 
@@ -1179,6 +1235,8 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredUnderWaterProgram.unload();
 		gDeferredWLSkyProgram.unload();
 		gDeferredWLCloudProgram.unload();
+        gDeferredWLSunProgram.unload();
+        gDeferredWLMoonProgram.unload();
 		gDeferredStarProgram.unload();
 		gDeferredFullbrightShinyProgram.unload();
 		gDeferredSkinnedFullbrightShinyProgram.unload();
@@ -1198,6 +1256,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	if (success)
 	{
 		gDeferredDiffuseProgram.mName = "Deferred Diffuse Shader";
+        gDeferredDiffuseProgram.mFeatures.encodesNormal = true;
 		gDeferredDiffuseProgram.mShaderFiles.clear();
 		gDeferredDiffuseProgram.mShaderFiles.push_back(make_pair("deferred/diffuseV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredDiffuseProgram.mShaderFiles.push_back(make_pair("deferred/diffuseIndexedF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1209,6 +1268,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	if (success)
 	{
 		gDeferredDiffuseAlphaMaskProgram.mName = "Deferred Diffuse Alpha Mask Shader";
+        gDeferredDiffuseAlphaMaskProgram.mFeatures.encodesNormal = true;
 		gDeferredDiffuseAlphaMaskProgram.mShaderFiles.clear();
 		gDeferredDiffuseAlphaMaskProgram.mShaderFiles.push_back(make_pair("deferred/diffuseV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredDiffuseAlphaMaskProgram.mShaderFiles.push_back(make_pair("deferred/diffuseAlphaMaskIndexedF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1220,6 +1280,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	if (success)
 	{
 		gDeferredNonIndexedDiffuseAlphaMaskProgram.mName = "Deferred Diffuse Non-Indexed Alpha Mask Shader";
+        gDeferredNonIndexedDiffuseAlphaMaskProgram.mFeatures.encodesNormal = true;
 		gDeferredNonIndexedDiffuseAlphaMaskProgram.mShaderFiles.clear();
 		gDeferredNonIndexedDiffuseAlphaMaskProgram.mShaderFiles.push_back(make_pair("deferred/diffuseV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredNonIndexedDiffuseAlphaMaskProgram.mShaderFiles.push_back(make_pair("deferred/diffuseAlphaMaskF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1230,6 +1291,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	if (success)
 	{
 		gDeferredNonIndexedDiffuseAlphaMaskNoColorProgram.mName = "Deferred Diffuse Non-Indexed Alpha Mask Shader";
+        gDeferredNonIndexedDiffuseAlphaMaskNoColorProgram.mFeatures.encodesNormal = true;
 		gDeferredNonIndexedDiffuseAlphaMaskNoColorProgram.mShaderFiles.clear();
 		gDeferredNonIndexedDiffuseAlphaMaskNoColorProgram.mShaderFiles.push_back(make_pair("deferred/diffuseNoColorV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredNonIndexedDiffuseAlphaMaskNoColorProgram.mShaderFiles.push_back(make_pair("deferred/diffuseAlphaMaskNoColorF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1240,6 +1302,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	if (success)
 	{
 		gDeferredNonIndexedDiffuseProgram.mName = "Non Indexed Deferred Diffuse Shader";
+        gDeferredNonIndexedDiffuseProgram.mFeatures.encodesNormal = true;
 		gDeferredNonIndexedDiffuseProgram.mShaderFiles.clear();
 		gDeferredNonIndexedDiffuseProgram.mShaderFiles.push_back(make_pair("deferred/diffuseV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredNonIndexedDiffuseProgram.mShaderFiles.push_back(make_pair("deferred/diffuseF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1252,6 +1315,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	{
 		gDeferredSkinnedDiffuseProgram.mName = "Deferred Skinned Diffuse Shader";
 		gDeferredSkinnedDiffuseProgram.mFeatures.hasObjectSkinning = true;
+        gDeferredSkinnedDiffuseProgram.mFeatures.encodesNormal = true;
 		gDeferredSkinnedDiffuseProgram.mShaderFiles.clear();
 		gDeferredSkinnedDiffuseProgram.mShaderFiles.push_back(make_pair("deferred/diffuseSkinnedV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredSkinnedDiffuseProgram.mShaderFiles.push_back(make_pair("deferred/diffuseF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1263,6 +1327,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	{
 		gDeferredSkinnedBumpProgram.mName = "Deferred Skinned Bump Shader";
 		gDeferredSkinnedBumpProgram.mFeatures.hasObjectSkinning = true;
+        gDeferredSkinnedBumpProgram.mFeatures.encodesNormal = true;
 		gDeferredSkinnedBumpProgram.mShaderFiles.clear();
 		gDeferredSkinnedBumpProgram.mShaderFiles.push_back(make_pair("deferred/bumpSkinnedV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredSkinnedBumpProgram.mShaderFiles.push_back(make_pair("deferred/bumpF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1278,6 +1343,14 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredSkinnedAlphaProgram.mFeatures.hasLighting = false;
 		gDeferredSkinnedAlphaProgram.mFeatures.isAlphaLighting = true;
 		gDeferredSkinnedAlphaProgram.mFeatures.disableTextureIndex = true;
+		gDeferredSkinnedAlphaProgram.mFeatures.hasSrgb = true;
+        gDeferredSkinnedAlphaProgram.mFeatures.decodesNormal = true;
+        gDeferredSkinnedAlphaProgram.mFeatures.encodesNormal = true;
+        gDeferredSkinnedAlphaProgram.mFeatures.calculatesAtmospherics = true;
+        gDeferredSkinnedAlphaProgram.mFeatures.hasAtmospherics = true;
+        gDeferredSkinnedAlphaProgram.mFeatures.hasTransport = true;
+        gDeferredSkinnedAlphaProgram.mFeatures.hasGamma = true;
+
 		gDeferredSkinnedAlphaProgram.mShaderFiles.clear();
 		gDeferredSkinnedAlphaProgram.mShaderFiles.push_back(make_pair("deferred/alphaV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredSkinnedAlphaProgram.mShaderFiles.push_back(make_pair("deferred/alphaF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1296,6 +1369,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	if (success)
 	{
 		gDeferredBumpProgram.mName = "Deferred Bump Shader";
+        gDeferredBumpProgram.mFeatures.encodesNormal = true;
 		gDeferredBumpProgram.mShaderFiles.clear();
 		gDeferredBumpProgram.mShaderFiles.push_back(make_pair("deferred/bumpV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredBumpProgram.mShaderFiles.push_back(make_pair("deferred/bumpF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1340,6 +1414,12 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 			bool has_skin = i & 0x10;
 			gDeferredMaterialProgram[i].addPermutation("HAS_SKIN",has_skin ? "1" : "0");
 
+			gDeferredMaterialProgram[i].mFeatures.hasSrgb = true;
+            gDeferredMaterialProgram[i].mFeatures.decodesNormal = true;
+            gDeferredMaterialProgram[i].mFeatures.encodesNormal = true;
+            gDeferredMaterialProgram[i].mFeatures.calculatesAtmospherics = true;
+            gDeferredMaterialProgram[i].mFeatures.hasAtmospherics = true;
+
 			if (has_skin)
 			{
 				gDeferredMaterialProgram[i].mFeatures.hasObjectSkinning = true;
@@ -1367,6 +1447,13 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 			bool has_skin = i & 0x10;
 			gDeferredMaterialWaterProgram[i].addPermutation("HAS_SKIN",has_skin ? "1" : "0");
 			gDeferredMaterialWaterProgram[i].addPermutation("WATER_FOG","1");
+
+			gDeferredMaterialWaterProgram[i].mFeatures.hasWaterFog = true;
+			gDeferredMaterialWaterProgram[i].mFeatures.hasSrgb = true;
+            gDeferredMaterialWaterProgram[i].mFeatures.decodesNormal = true;
+            gDeferredMaterialWaterProgram[i].mFeatures.encodesNormal = true;
+            gDeferredMaterialWaterProgram[i].mFeatures.calculatesAtmospherics = true;
+            gDeferredMaterialWaterProgram[i].mFeatures.hasAtmospherics = true;
 
 			if (has_skin)
 			{
@@ -1400,6 +1487,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	{
 		gDeferredTreeProgram.mName = "Deferred Tree Shader";
 		gDeferredTreeProgram.mShaderFiles.clear();
+        gDeferredTreeProgram.mFeatures.encodesNormal = true;
 		gDeferredTreeProgram.mShaderFiles.push_back(make_pair("deferred/treeV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredTreeProgram.mShaderFiles.push_back(make_pair("deferred/treeF.glsl", GL_FRAGMENT_SHADER_ARB));
 		gDeferredTreeProgram.mShaderLevel = mVertexShaderLevel[SHADER_DEFERRED];
@@ -1419,6 +1507,9 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	if (success)
 	{
 		gDeferredImpostorProgram.mName = "Deferred Impostor Shader";
+		gDeferredImpostorProgram.mFeatures.hasSrgb = true;
+        gDeferredImpostorProgram.mFeatures.decodesNormal = true;
+        gDeferredImpostorProgram.mFeatures.encodesNormal = true;
 		gDeferredImpostorProgram.mShaderFiles.clear();
 		gDeferredImpostorProgram.mShaderFiles.push_back(make_pair("deferred/impostorV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredImpostorProgram.mShaderFiles.push_back(make_pair("deferred/impostorF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1429,6 +1520,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	if (success)
 	{		
 		gDeferredLightProgram.mName = "Deferred Light Shader";
+        gDeferredLightProgram.mFeatures.decodesNormal = true;
 		gDeferredLightProgram.mShaderFiles.clear();
 		gDeferredLightProgram.mShaderFiles.push_back(make_pair("deferred/pointLightV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredLightProgram.mShaderFiles.push_back(make_pair("deferred/pointLightF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1442,6 +1534,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	if (success)
 	{
 			gDeferredMultiLightProgram[i].mName = llformat("Deferred MultiLight Shader %d", i);
+            gDeferredMultiLightProgram[i].mFeatures.decodesNormal = true;
 			gDeferredMultiLightProgram[i].mShaderFiles.clear();
 			gDeferredMultiLightProgram[i].mShaderFiles.push_back(make_pair("deferred/multiPointLightV.glsl", GL_VERTEX_SHADER_ARB));
 			gDeferredMultiLightProgram[i].mShaderFiles.push_back(make_pair("deferred/multiPointLightF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1455,6 +1548,8 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	{
 		gDeferredSpotLightProgram.mName = "Deferred SpotLight Shader";
 		gDeferredSpotLightProgram.mShaderFiles.clear();
+		gDeferredSpotLightProgram.mFeatures.hasSrgb = true;
+        gDeferredSpotLightProgram.mFeatures.decodesNormal = true;
 		gDeferredSpotLightProgram.mShaderFiles.push_back(make_pair("deferred/pointLightV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredSpotLightProgram.mShaderFiles.push_back(make_pair("deferred/spotLightF.glsl", GL_FRAGMENT_SHADER_ARB));
 		gDeferredSpotLightProgram.mShaderLevel = mVertexShaderLevel[SHADER_DEFERRED];
@@ -1465,6 +1560,8 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	if (success)
 	{
 		gDeferredMultiSpotLightProgram.mName = "Deferred MultiSpotLight Shader";
+		gDeferredMultiSpotLightProgram.mFeatures.hasSrgb = true;
+        gDeferredMultiSpotLightProgram.mFeatures.decodesNormal = true;
 		gDeferredMultiSpotLightProgram.mShaderFiles.clear();
 		gDeferredMultiSpotLightProgram.mShaderFiles.push_back(make_pair("deferred/multiPointLightV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredMultiSpotLightProgram.mShaderFiles.push_back(make_pair("deferred/multiSpotLightF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1492,6 +1589,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		}
 
 		gDeferredSunProgram.mName = "Deferred Sun Shader";
+        gDeferredSunProgram.mFeatures.decodesNormal = true;
 		gDeferredSunProgram.mShaderFiles.clear();
 		gDeferredSunProgram.mShaderFiles.push_back(make_pair(vertex, GL_VERTEX_SHADER_ARB));
 		gDeferredSunProgram.mShaderFiles.push_back(make_pair(fragment, GL_FRAGMENT_SHADER_ARB));
@@ -1503,6 +1601,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	if (success)
 	{
 		gDeferredBlurLightProgram.mName = "Deferred Blur Light Shader";
+        gDeferredBlurLightProgram.mFeatures.decodesNormal = true;
 		gDeferredBlurLightProgram.mShaderFiles.clear();
 		gDeferredBlurLightProgram.mShaderFiles.push_back(make_pair("deferred/blurLightV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredBlurLightProgram.mShaderFiles.push_back(make_pair("deferred/blurLightF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1519,6 +1618,12 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredAlphaProgram.mFeatures.hasLighting = false;
 		gDeferredAlphaProgram.mFeatures.isAlphaLighting = true;
 		gDeferredAlphaProgram.mFeatures.disableTextureIndex = true; //hack to disable auto-setup of texture channels
+        gDeferredAlphaProgram.mFeatures.hasSrgb = true;
+        gDeferredAlphaProgram.mFeatures.decodesNormal = true;
+        gDeferredAlphaProgram.mFeatures.encodesNormal = true;
+        gDeferredAlphaProgram.mFeatures.calculatesAtmospherics = true;
+        gDeferredAlphaProgram.mFeatures.hasAtmospherics = true;
+
 		if (mVertexShaderLevel[SHADER_DEFERRED] < 1)
 		{
 			gDeferredAlphaProgram.mFeatures.mIndexedTextureChannels = LLGLSLShader::sIndexedTextureChannels;
@@ -1545,11 +1650,14 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 
 	if (success)
 	{
-		gDeferredAlphaImpostorProgram.mName = "Deferred Alpha Shader";
+		gDeferredAlphaImpostorProgram.mName = "Deferred Alpha Impostor Shader";
 
 		gDeferredAlphaImpostorProgram.mFeatures.calculatesLighting = false;
 		gDeferredAlphaImpostorProgram.mFeatures.hasLighting = false;
 		gDeferredAlphaImpostorProgram.mFeatures.isAlphaLighting = true;
+		gDeferredAlphaImpostorProgram.mFeatures.hasSrgb = true;
+        gDeferredAlphaImpostorProgram.mFeatures.decodesNormal = true;
+        gDeferredAlphaImpostorProgram.mFeatures.encodesNormal = true;
 		gDeferredAlphaImpostorProgram.mFeatures.disableTextureIndex = true; //hack to disable auto-setup of texture channels
 		if (mVertexShaderLevel[SHADER_DEFERRED] < 1)
 		{
@@ -1584,6 +1692,13 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredAlphaWaterProgram.mFeatures.hasLighting = false;
 		gDeferredAlphaWaterProgram.mFeatures.isAlphaLighting = true;
 		gDeferredAlphaWaterProgram.mFeatures.disableTextureIndex = true; //hack to disable auto-setup of texture channels
+		gDeferredAlphaWaterProgram.mFeatures.hasWaterFog = true;
+		gDeferredAlphaWaterProgram.mFeatures.hasSrgb = true;
+        gDeferredAlphaWaterProgram.mFeatures.decodesNormal = true;
+        gDeferredAlphaWaterProgram.mFeatures.encodesNormal = true;
+        gDeferredAlphaWaterProgram.mFeatures.calculatesAtmospherics = true;
+        gDeferredAlphaWaterProgram.mFeatures.hasAtmospherics = true;
+
 		if (mVertexShaderLevel[SHADER_DEFERRED] < 1)
 		{
 			gDeferredAlphaWaterProgram.mFeatures.mIndexedTextureChannels = LLGLSLShader::sIndexedTextureChannels;
@@ -1616,6 +1731,8 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredAvatarEyesProgram.mFeatures.hasGamma = true;
 		gDeferredAvatarEyesProgram.mFeatures.hasTransport = true;
 		gDeferredAvatarEyesProgram.mFeatures.disableTextureIndex = true;
+        gDeferredAvatarEyesProgram.mFeatures.hasSrgb = true;
+        gDeferredAvatarEyesProgram.mFeatures.encodesNormal = true;
 		gDeferredAvatarEyesProgram.mShaderFiles.clear();
 		gDeferredAvatarEyesProgram.mShaderFiles.push_back(make_pair("deferred/avatarEyesV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredAvatarEyesProgram.mShaderFiles.push_back(make_pair("deferred/diffuseF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1629,6 +1746,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredFullbrightProgram.mFeatures.calculatesAtmospherics = true;
 		gDeferredFullbrightProgram.mFeatures.hasGamma = true;
 		gDeferredFullbrightProgram.mFeatures.hasTransport = true;
+		gDeferredFullbrightProgram.mFeatures.hasSrgb = true;
 		gDeferredFullbrightProgram.mFeatures.mIndexedTextureChannels = LLGLSLShader::sIndexedTextureChannels;
 		gDeferredFullbrightProgram.mShaderFiles.clear();
 		gDeferredFullbrightProgram.mShaderFiles.push_back(make_pair("deferred/fullbrightV.glsl", GL_VERTEX_SHADER_ARB));
@@ -1643,6 +1761,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredFullbrightAlphaMaskProgram.mFeatures.calculatesAtmospherics = true;
 		gDeferredFullbrightAlphaMaskProgram.mFeatures.hasGamma = true;
 		gDeferredFullbrightAlphaMaskProgram.mFeatures.hasTransport = true;
+		gDeferredFullbrightAlphaMaskProgram.mFeatures.hasSrgb = true;
 		gDeferredFullbrightAlphaMaskProgram.mFeatures.mIndexedTextureChannels = LLGLSLShader::sIndexedTextureChannels;
 		gDeferredFullbrightAlphaMaskProgram.mShaderFiles.clear();
 		gDeferredFullbrightAlphaMaskProgram.mShaderFiles.push_back(make_pair("deferred/fullbrightV.glsl", GL_VERTEX_SHADER_ARB));
@@ -1658,6 +1777,8 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredFullbrightWaterProgram.mFeatures.calculatesAtmospherics = true;
 		gDeferredFullbrightWaterProgram.mFeatures.hasGamma = true;
 		gDeferredFullbrightWaterProgram.mFeatures.hasTransport = true;
+		gDeferredFullbrightWaterProgram.mFeatures.hasWaterFog = true;
+		gDeferredFullbrightWaterProgram.mFeatures.hasSrgb = true;
 		gDeferredFullbrightWaterProgram.mFeatures.mIndexedTextureChannels = LLGLSLShader::sIndexedTextureChannels;
 		gDeferredFullbrightWaterProgram.mShaderFiles.clear();
 		gDeferredFullbrightWaterProgram.mShaderFiles.push_back(make_pair("deferred/fullbrightV.glsl", GL_VERTEX_SHADER_ARB));
@@ -1674,6 +1795,8 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredFullbrightAlphaMaskWaterProgram.mFeatures.calculatesAtmospherics = true;
 		gDeferredFullbrightAlphaMaskWaterProgram.mFeatures.hasGamma = true;
 		gDeferredFullbrightAlphaMaskWaterProgram.mFeatures.hasTransport = true;
+		gDeferredFullbrightAlphaMaskWaterProgram.mFeatures.hasWaterFog = true;
+		gDeferredFullbrightAlphaMaskWaterProgram.mFeatures.hasSrgb = true;
 		gDeferredFullbrightAlphaMaskWaterProgram.mFeatures.mIndexedTextureChannels = LLGLSLShader::sIndexedTextureChannels;
 		gDeferredFullbrightAlphaMaskWaterProgram.mShaderFiles.clear();
 		gDeferredFullbrightAlphaMaskWaterProgram.mShaderFiles.push_back(make_pair("deferred/fullbrightV.glsl", GL_VERTEX_SHADER_ARB));
@@ -1707,6 +1830,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredSkinnedFullbrightProgram.mFeatures.hasTransport = true;
 		gDeferredSkinnedFullbrightProgram.mFeatures.hasObjectSkinning = true;
 		gDeferredSkinnedFullbrightProgram.mFeatures.disableTextureIndex = true;
+		gDeferredSkinnedFullbrightProgram.mFeatures.hasSrgb = true;
 		gDeferredSkinnedFullbrightProgram.mShaderFiles.clear();
 		gDeferredSkinnedFullbrightProgram.mShaderFiles.push_back(make_pair("objects/fullbrightSkinnedV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredSkinnedFullbrightProgram.mShaderFiles.push_back(make_pair("deferred/fullbrightF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1750,10 +1874,12 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredWaterProgram.mFeatures.calculatesAtmospherics = true;
 		gDeferredWaterProgram.mFeatures.hasGamma = true;
 		gDeferredWaterProgram.mFeatures.hasTransport = true;
+        gDeferredWaterProgram.mFeatures.encodesNormal = true;
 		gDeferredWaterProgram.mShaderFiles.clear();
 		gDeferredWaterProgram.mShaderFiles.push_back(make_pair("deferred/waterV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredWaterProgram.mShaderFiles.push_back(make_pair("deferred/waterF.glsl", GL_FRAGMENT_SHADER_ARB));
 		gDeferredWaterProgram.mShaderLevel = mVertexShaderLevel[SHADER_DEFERRED];
+        gDeferredWaterProgram.mShaderGroup = LLGLSLShader::SG_WATER;
 		success = gDeferredWaterProgram.createShader(NULL, NULL);
 	}
 
@@ -1762,8 +1888,11 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		// load water shader
 		gDeferredUnderWaterProgram.mName = "Deferred Under Water Shader";
 		gDeferredUnderWaterProgram.mFeatures.calculatesAtmospherics = true;
+        gDeferredUnderWaterProgram.mFeatures.hasWaterFog = true;
 		gDeferredUnderWaterProgram.mFeatures.hasGamma = true;
 		gDeferredUnderWaterProgram.mFeatures.hasTransport = true;
+		gDeferredUnderWaterProgram.mFeatures.hasSrgb = true;
+        gDeferredUnderWaterProgram.mFeatures.encodesNormal = true;
 		gDeferredUnderWaterProgram.mShaderFiles.clear();
 		gDeferredUnderWaterProgram.mShaderFiles.push_back(make_pair("deferred/waterV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredUnderWaterProgram.mShaderFiles.push_back(make_pair("deferred/underWaterF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1775,6 +1904,13 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	{
 		gDeferredSoftenProgram.mName = "Deferred Soften Shader";
 		gDeferredSoftenProgram.mShaderFiles.clear();
+		gDeferredSoftenProgram.mFeatures.hasSrgb = true;
+        gDeferredSoftenProgram.mFeatures.decodesNormal = true;
+        gDeferredSoftenProgram.mFeatures.calculatesAtmospherics = true;
+        gDeferredSoftenProgram.mFeatures.hasAtmospherics = true;
+        gDeferredSoftenProgram.mFeatures.hasTransport = true;
+        gDeferredSoftenProgram.mFeatures.hasGamma = true;
+
 		gDeferredSoftenProgram.mShaderFiles.push_back(make_pair("deferred/softenLightV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredSoftenProgram.mShaderFiles.push_back(make_pair("deferred/softenLightF.glsl", GL_FRAGMENT_SHADER_ARB));
 
@@ -1798,6 +1934,13 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredSoftenWaterProgram.mShaderLevel = mVertexShaderLevel[SHADER_DEFERRED];
 		gDeferredSoftenWaterProgram.addPermutation("WATER_FOG", "1");
 		gDeferredSoftenWaterProgram.mShaderGroup = LLGLSLShader::SG_WATER;
+		gDeferredSoftenWaterProgram.mFeatures.hasWaterFog = true;
+		gDeferredSoftenWaterProgram.mFeatures.hasSrgb = true;
+        gDeferredSoftenWaterProgram.mFeatures.decodesNormal = true;
+        gDeferredSoftenWaterProgram.mFeatures.calculatesAtmospherics = true;
+        gDeferredSoftenWaterProgram.mFeatures.hasAtmospherics = true;
+        gDeferredSoftenWaterProgram.mFeatures.hasTransport = true;
+        gDeferredSoftenWaterProgram.mFeatures.hasGamma = true;
 
 		if (gSavedSettings.getBOOL("RenderDeferredSSAO"))
 		{ //if using SSAO, take screen space light map into account as if shadows are enabled
@@ -1868,6 +2011,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	if (success)
 	{
 		gTerrainProgram.mName = "Deferred Terrain Shader";
+        gDeferredTerrainProgram.mFeatures.encodesNormal = true;
 		gDeferredTerrainProgram.mShaderFiles.clear();
 		gDeferredTerrainProgram.mShaderFiles.push_back(make_pair("deferred/terrainV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredTerrainProgram.mShaderFiles.push_back(make_pair("deferred/terrainF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1879,6 +2023,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	{
 		gDeferredAvatarProgram.mName = "Avatar Shader";
 		gDeferredAvatarProgram.mFeatures.hasSkinning = true;
+        gDeferredAvatarProgram.mFeatures.encodesNormal = true;
 		gDeferredAvatarProgram.mShaderFiles.clear();
 		gDeferredAvatarProgram.mShaderFiles.push_back(make_pair("deferred/avatarV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredAvatarProgram.mShaderFiles.push_back(make_pair("deferred/avatarF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1895,6 +2040,14 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredAvatarAlphaProgram.mFeatures.hasLighting = false;
 		gDeferredAvatarAlphaProgram.mFeatures.isAlphaLighting = true;
 		gDeferredAvatarAlphaProgram.mFeatures.disableTextureIndex = true;
+		gDeferredAvatarAlphaProgram.mFeatures.hasSrgb = true;
+        gDeferredAvatarAlphaProgram.mFeatures.encodesNormal = true;
+        gDeferredAvatarAlphaProgram.mFeatures.decodesNormal = true;
+        gDeferredAvatarAlphaProgram.mFeatures.calculatesAtmospherics = true;
+        gDeferredAvatarAlphaProgram.mFeatures.hasAtmospherics = true;
+        gDeferredAvatarAlphaProgram.mFeatures.hasTransport = true;
+        gDeferredAvatarAlphaProgram.mFeatures.hasGamma = true;
+
 		gDeferredAvatarAlphaProgram.mShaderFiles.clear();
 		gDeferredAvatarAlphaProgram.mShaderFiles.push_back(make_pair("deferred/alphaV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredAvatarAlphaProgram.mShaderFiles.push_back(make_pair("deferred/alphaF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1912,6 +2065,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	if (success)
 	{
 		gDeferredPostGammaCorrectProgram.mName = "Deferred Gamma Correction Post Process";
+		gDeferredPostGammaCorrectProgram.mFeatures.hasSrgb = true;
 		gDeferredPostGammaCorrectProgram.mShaderFiles.clear();
 		gDeferredPostGammaCorrectProgram.mShaderFiles.push_back(make_pair("deferred/postDeferredNoTCV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredPostGammaCorrectProgram.mShaderFiles.push_back(make_pair("deferred/postDeferredGammaCorrect.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1973,23 +2127,71 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	{
 		gDeferredWLSkyProgram.mName = "Deferred Windlight Sky Shader";
 		//gWLSkyProgram.mFeatures.hasGamma = true;
-		gDeferredWLSkyProgram.mShaderFiles.clear();
+        gDeferredWLSkyProgram.mShaderFiles.clear();
+        gDeferredWLSkyProgram.mFeatures.hasGamma = true;
 		gDeferredWLSkyProgram.mShaderFiles.push_back(make_pair("deferred/skyV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredWLSkyProgram.mShaderFiles.push_back(make_pair("deferred/skyF.glsl", GL_FRAGMENT_SHADER_ARB));
-		gDeferredWLSkyProgram.mShaderLevel = mVertexShaderLevel[SHADER_DEFERRED];
+        gDeferredWLSkyProgram.mShaderLevel = mVertexShaderLevel[SHADER_WINDLIGHT];
 		gDeferredWLSkyProgram.mShaderGroup = LLGLSLShader::SG_SKY;
+        if (gAtmosphere && mVertexShaderLevel[SHADER_WINDLIGHT] > 1)
+        {
+            gDeferredWLSkyProgram.mExtraLinkObject = gAtmosphere->getAtmosphericShaderForLink();
+        }
 		success = gDeferredWLSkyProgram.createShader(NULL, NULL);
+        llassert(success);
 	}
 
-	if (success)
+    if (success)
 	{
 		gDeferredWLCloudProgram.mName = "Deferred Windlight Cloud Program";
 		gDeferredWLCloudProgram.mShaderFiles.clear();
+        gDeferredWLCloudProgram.mFeatures.hasGamma = true;
 		gDeferredWLCloudProgram.mShaderFiles.push_back(make_pair("deferred/cloudsV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredWLCloudProgram.mShaderFiles.push_back(make_pair("deferred/cloudsF.glsl", GL_FRAGMENT_SHADER_ARB));
 		gDeferredWLCloudProgram.mShaderLevel = mVertexShaderLevel[SHADER_DEFERRED];
 		gDeferredWLCloudProgram.mShaderGroup = LLGLSLShader::SG_SKY;
+        if (gAtmosphere && mVertexShaderLevel[SHADER_WINDLIGHT] >= 3)
+        {
+            gDeferredWLSkyProgram.mExtraLinkObject = gAtmosphere->getAtmosphericShaderForLink();
+        }
 		success = gDeferredWLCloudProgram.createShader(NULL, NULL);
+        llassert(success);
+	}
+
+    if (success)
+	{
+		gDeferredWLSunProgram.mName = "Deferred Windlight Sun Program";
+        gDeferredWLSunProgram.mFeatures.calculatesAtmospherics = true;
+		gDeferredWLSunProgram.mFeatures.hasTransport = true;
+        gDeferredWLSunProgram.mFeatures.hasGamma = true;
+		gDeferredWLSunProgram.mFeatures.hasAtmospherics = true;
+        gDeferredWLSunProgram.mFeatures.isFullbright = true;
+		gDeferredWLSunProgram.mFeatures.disableTextureIndex = true;
+		gDeferredWLSunProgram.mShaderFiles.clear();
+		gDeferredWLSunProgram.mShaderFiles.push_back(make_pair("deferred/sunDiscV.glsl", GL_VERTEX_SHADER_ARB));
+		gDeferredWLSunProgram.mShaderFiles.push_back(make_pair("deferred/sunDiscF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gDeferredWLSunProgram.mShaderLevel = mVertexShaderLevel[SHADER_DEFERRED];
+		gDeferredWLSunProgram.mShaderGroup = LLGLSLShader::SG_SKY;
+		success = gDeferredWLSunProgram.createShader(NULL, NULL);
+        llassert(success);
+	}
+
+    if (success)
+	{
+		gDeferredWLMoonProgram.mName = "Deferred Windlight Moon Program";
+        gDeferredWLMoonProgram.mFeatures.calculatesAtmospherics = true;
+		gDeferredWLMoonProgram.mFeatures.hasTransport = true;
+        gDeferredWLMoonProgram.mFeatures.hasGamma = true;
+		gDeferredWLMoonProgram.mFeatures.hasAtmospherics = true;
+        gDeferredWLMoonProgram.mFeatures.isFullbright = true;
+		gDeferredWLMoonProgram.mFeatures.disableTextureIndex = true;
+		gDeferredWLMoonProgram.mShaderFiles.clear();
+		gDeferredWLMoonProgram.mShaderFiles.push_back(make_pair("deferred/moonV.glsl", GL_VERTEX_SHADER_ARB));
+		gDeferredWLMoonProgram.mShaderFiles.push_back(make_pair("deferred/moonF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gDeferredWLMoonProgram.mShaderLevel = mVertexShaderLevel[SHADER_DEFERRED];
+		gDeferredWLMoonProgram.mShaderGroup = LLGLSLShader::SG_SKY;
+		success = gDeferredWLMoonProgram.createShader(NULL, NULL);
+        llassert(success);
 	}
 
 	if (success)
@@ -2254,6 +2456,7 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 		gObjectFullbrightNonIndexedProgram.mFeatures.hasTransport = true;
 		gObjectFullbrightNonIndexedProgram.mFeatures.isFullbright = true;
 		gObjectFullbrightNonIndexedProgram.mFeatures.disableTextureIndex = true;
+		gObjectFullbrightNonIndexedProgram.mFeatures.hasSrgb = true;
 		gObjectFullbrightNonIndexedProgram.mShaderFiles.clear();
 		gObjectFullbrightNonIndexedProgram.mShaderFiles.push_back(make_pair("objects/fullbrightV.glsl", GL_VERTEX_SHADER_ARB));
 		gObjectFullbrightNonIndexedProgram.mShaderFiles.push_back(make_pair("objects/fullbrightF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -2269,6 +2472,7 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 		gObjectFullbrightNonIndexedWaterProgram.mFeatures.hasWaterFog = true;		
 		gObjectFullbrightNonIndexedWaterProgram.mFeatures.hasTransport = true;
 		gObjectFullbrightNonIndexedWaterProgram.mFeatures.disableTextureIndex = true;
+		gObjectFullbrightNonIndexedWaterProgram.mFeatures.hasSrgb = true;
 		gObjectFullbrightNonIndexedWaterProgram.mShaderFiles.clear();
 		gObjectFullbrightNonIndexedWaterProgram.mShaderFiles.push_back(make_pair("objects/fullbrightV.glsl", GL_VERTEX_SHADER_ARB));
 		gObjectFullbrightNonIndexedWaterProgram.mShaderFiles.push_back(make_pair("objects/fullbrightWaterF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -2285,6 +2489,7 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 		gObjectEmissiveNonIndexedProgram.mFeatures.hasTransport = true;
 		gObjectEmissiveNonIndexedProgram.mFeatures.isFullbright = true;
 		gObjectEmissiveNonIndexedProgram.mFeatures.disableTextureIndex = true;
+		gObjectEmissiveNonIndexedProgram.mFeatures.hasSrgb = true;
 		gObjectEmissiveNonIndexedProgram.mShaderFiles.clear();
 		gObjectEmissiveNonIndexedProgram.mShaderFiles.push_back(make_pair("objects/emissiveV.glsl", GL_VERTEX_SHADER_ARB));
 		gObjectEmissiveNonIndexedProgram.mShaderFiles.push_back(make_pair("objects/fullbrightF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -2315,6 +2520,7 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 		gObjectFullbrightNoColorProgram.mFeatures.hasGamma = true;
 		gObjectFullbrightNoColorProgram.mFeatures.hasTransport = true;
 		gObjectFullbrightNoColorProgram.mFeatures.isFullbright = true;
+		gObjectFullbrightNoColorProgram.mFeatures.hasSrgb = true;
 		gObjectFullbrightNoColorProgram.mFeatures.disableTextureIndex = true;
 		gObjectFullbrightNoColorProgram.mShaderFiles.clear();
 		gObjectFullbrightNoColorProgram.mShaderFiles.push_back(make_pair("objects/fullbrightNoColorV.glsl", GL_VERTEX_SHADER_ARB));
@@ -2410,6 +2616,7 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 	{
 		gImpostorProgram.mName = "Impostor Shader";
 		gImpostorProgram.mFeatures.disableTextureIndex = true;
+		gImpostorProgram.mFeatures.hasSrgb = true;
 		gImpostorProgram.mShaderFiles.clear();
 		gImpostorProgram.mShaderFiles.push_back(make_pair("objects/impostorV.glsl", GL_VERTEX_SHADER_ARB));
 		gImpostorProgram.mShaderFiles.push_back(make_pair("objects/impostorF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -2498,6 +2705,7 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 		gObjectBumpProgram.mFeatures.hasAtmospherics = true;
 		gObjectBumpProgram.mFeatures.hasLighting = true;
 		gObjectBumpProgram.mFeatures.mIndexedTextureChannels = 0;*/
+        gObjectBumpProgram.mFeatures.encodesNormal = true;
 		gObjectBumpProgram.mShaderFiles.clear();
 		gObjectBumpProgram.mShaderFiles.push_back(make_pair("objects/bumpV.glsl", GL_VERTEX_SHADER_ARB));
 		gObjectBumpProgram.mShaderFiles.push_back(make_pair("objects/bumpF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -2555,6 +2763,7 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 		gObjectFullbrightProgram.mFeatures.hasGamma = true;
 		gObjectFullbrightProgram.mFeatures.hasTransport = true;
 		gObjectFullbrightProgram.mFeatures.isFullbright = true;
+		gObjectFullbrightProgram.mFeatures.hasSrgb = true;
 		gObjectFullbrightProgram.mFeatures.mIndexedTextureChannels = 0;
 		gObjectFullbrightProgram.mShaderFiles.clear();
 		gObjectFullbrightProgram.mShaderFiles.push_back(make_pair("objects/fullbrightV.glsl", GL_VERTEX_SHADER_ARB));
@@ -2586,6 +2795,7 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 		gObjectEmissiveProgram.mFeatures.hasGamma = true;
 		gObjectEmissiveProgram.mFeatures.hasTransport = true;
 		gObjectEmissiveProgram.mFeatures.isFullbright = true;
+		gObjectEmissiveProgram.mFeatures.hasSrgb = true;
 		gObjectEmissiveProgram.mFeatures.mIndexedTextureChannels = 0;
 		gObjectEmissiveProgram.mShaderFiles.clear();
 		gObjectEmissiveProgram.mShaderFiles.push_back(make_pair("objects/emissiveV.glsl", GL_VERTEX_SHADER_ARB));
@@ -2618,6 +2828,7 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 		gObjectFullbrightAlphaMaskProgram.mFeatures.hasTransport = true;
 		gObjectFullbrightAlphaMaskProgram.mFeatures.isFullbright = true;
 		gObjectFullbrightAlphaMaskProgram.mFeatures.hasAlphaMask = true;
+		gObjectFullbrightAlphaMaskProgram.mFeatures.hasSrgb = true;
 		gObjectFullbrightAlphaMaskProgram.mFeatures.mIndexedTextureChannels = 0;
 		gObjectFullbrightAlphaMaskProgram.mShaderFiles.clear();
 		gObjectFullbrightAlphaMaskProgram.mShaderFiles.push_back(make_pair("objects/fullbrightV.glsl", GL_VERTEX_SHADER_ARB));
@@ -2740,6 +2951,7 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 			gSkinnedObjectFullbrightProgram.mFeatures.hasObjectSkinning = true;
 			gSkinnedObjectFullbrightProgram.mFeatures.hasAlphaMask = true;			
 			gSkinnedObjectFullbrightProgram.mFeatures.disableTextureIndex = true;
+			gSkinnedObjectFullbrightProgram.mFeatures.hasSrgb = true;
 			gSkinnedObjectFullbrightProgram.mShaderFiles.clear();
 			gSkinnedObjectFullbrightProgram.mShaderFiles.push_back(make_pair("objects/fullbrightSkinnedV.glsl", GL_VERTEX_SHADER_ARB));
 			gSkinnedObjectFullbrightProgram.mShaderFiles.push_back(make_pair("objects/fullbrightF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -2756,6 +2968,7 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 			gSkinnedObjectEmissiveProgram.mFeatures.isFullbright = true;
 			gSkinnedObjectEmissiveProgram.mFeatures.hasObjectSkinning = true;
 			gSkinnedObjectEmissiveProgram.mFeatures.disableTextureIndex = true;
+			gSkinnedObjectEmissiveProgram.mFeatures.hasSrgb = true;
 			gSkinnedObjectEmissiveProgram.mShaderFiles.clear();
 			gSkinnedObjectEmissiveProgram.mShaderFiles.push_back(make_pair("objects/emissiveSkinnedV.glsl", GL_VERTEX_SHADER_ARB));
 			gSkinnedObjectEmissiveProgram.mShaderFiles.push_back(make_pair("objects/fullbrightF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -3287,16 +3500,6 @@ BOOL LLViewerShaderMgr::loadShadersInterface()
 
 	if (success)
 	{
-		gDownsampleDepthRectProgram.mName = "DownsampleDepthRect Shader";
-		gDownsampleDepthRectProgram.mShaderFiles.clear();
-		gDownsampleDepthRectProgram.mShaderFiles.push_back(make_pair("interface/downsampleDepthV.glsl", GL_VERTEX_SHADER_ARB));
-		gDownsampleDepthRectProgram.mShaderFiles.push_back(make_pair("interface/downsampleDepthRectF.glsl", GL_FRAGMENT_SHADER_ARB));
-		gDownsampleDepthRectProgram.mShaderLevel = mVertexShaderLevel[SHADER_INTERFACE];
-		success = gDownsampleDepthRectProgram.createShader(NULL, NULL);
-	}
-
-	if (success)
-	{
 		gAlphaMaskProgram.mName = "Alpha Mask Shader";
 		gAlphaMaskProgram.mShaderFiles.clear();
 		gAlphaMaskProgram.mShaderFiles.push_back(make_pair("interface/alphamaskV.glsl", GL_VERTEX_SHADER_ARB));
@@ -3315,21 +3518,35 @@ BOOL LLViewerShaderMgr::loadShadersInterface()
 }
 
 BOOL LLViewerShaderMgr::loadShadersWindLight()
-{	
+{
 	BOOL success = TRUE;
 
 	if (mVertexShaderLevel[SHADER_WINDLIGHT] < 2)
 	{
 		gWLSkyProgram.unload();
 		gWLCloudProgram.unload();
+        gWLSunProgram.unload();
+        gWLMoonProgram.unload();
+		gDownsampleMinMaxDepthRectProgram.unload();
+        gInscatterRectProgram.unload();
 		return TRUE;
 	}
+
+#if USE_ADVANCED_ATMOSPHERICS
+// disabled until we can determine why low-end machines crash during this init...
+    if (mVertexShaderLevel[SHADER_WINDLIGHT] > 1)
+    {
+        // Prepare precomputed atmospherics textures using libatmosphere
+        LLAtmosphere::initClass();
+    }
+#endif
 
 	if (success)
 	{
 		gWLSkyProgram.mName = "Windlight Sky Shader";
 		//gWLSkyProgram.mFeatures.hasGamma = true;
 		gWLSkyProgram.mShaderFiles.clear();
+        gWLSkyProgram.mFeatures.hasGamma = true;
 		gWLSkyProgram.mShaderFiles.push_back(make_pair("windlight/skyV.glsl", GL_VERTEX_SHADER_ARB));
 		gWLSkyProgram.mShaderFiles.push_back(make_pair("windlight/skyF.glsl", GL_FRAGMENT_SHADER_ARB));
 		gWLSkyProgram.mShaderLevel = mVertexShaderLevel[SHADER_WINDLIGHT];
@@ -3342,11 +3559,48 @@ BOOL LLViewerShaderMgr::loadShadersWindLight()
 		gWLCloudProgram.mName = "Windlight Cloud Program";
 		//gWLCloudProgram.mFeatures.hasGamma = true;
 		gWLCloudProgram.mShaderFiles.clear();
+        gWLCloudProgram.mFeatures.hasGamma = true;
 		gWLCloudProgram.mShaderFiles.push_back(make_pair("windlight/cloudsV.glsl", GL_VERTEX_SHADER_ARB));
 		gWLCloudProgram.mShaderFiles.push_back(make_pair("windlight/cloudsF.glsl", GL_FRAGMENT_SHADER_ARB));
 		gWLCloudProgram.mShaderLevel = mVertexShaderLevel[SHADER_WINDLIGHT];
 		gWLCloudProgram.mShaderGroup = LLGLSLShader::SG_SKY;
 		success = gWLCloudProgram.createShader(NULL, NULL);
+	}
+
+    if (success)
+	{
+		gWLSunProgram.mName = "Windlight Sun Program";
+		gWLSunProgram.mShaderFiles.clear();
+		gWLSunProgram.mFeatures.calculatesAtmospherics = true;
+		gWLSunProgram.mFeatures.hasTransport = true;
+        gWLSunProgram.mFeatures.hasGamma = true;
+		gWLSunProgram.mFeatures.hasAtmospherics = true;
+        gWLSunProgram.mFeatures.isFullbright = true;
+		gWLSunProgram.mFeatures.disableTextureIndex = true;
+		gWLSunProgram.mShaderGroup = LLGLSLShader::SG_SKY;
+		gWLSunProgram.mShaderFiles.push_back(make_pair("windlight/sunDiscV.glsl", GL_VERTEX_SHADER_ARB));
+		gWLSunProgram.mShaderFiles.push_back(make_pair("windlight/sunDiscF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gWLSunProgram.mShaderLevel = mVertexShaderLevel[SHADER_WINDLIGHT];
+		gWLSunProgram.mShaderGroup = LLGLSLShader::SG_SKY;
+		success = gWLSunProgram.createShader(NULL, NULL);
+	}
+
+    if (success)
+	{
+		gWLMoonProgram.mName = "Windlight Moon Program";
+		gWLMoonProgram.mShaderFiles.clear();
+		gWLMoonProgram.mFeatures.calculatesAtmospherics = true;
+		gWLMoonProgram.mFeatures.hasTransport = true;
+        gWLMoonProgram.mFeatures.hasGamma = true;
+		gWLMoonProgram.mFeatures.hasAtmospherics = true;
+        gWLMoonProgram.mFeatures.isFullbright = true;
+		gWLMoonProgram.mFeatures.disableTextureIndex = true;
+		gWLMoonProgram.mShaderGroup = LLGLSLShader::SG_SKY;
+		gWLMoonProgram.mShaderFiles.push_back(make_pair("windlight/moonV.glsl", GL_VERTEX_SHADER_ARB));
+		gWLMoonProgram.mShaderFiles.push_back(make_pair("windlight/moonF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gWLMoonProgram.mShaderLevel = mVertexShaderLevel[SHADER_WINDLIGHT];
+		gWLMoonProgram.mShaderGroup = LLGLSLShader::SG_SKY;
+		success = gWLMoonProgram.createShader(NULL, NULL);
 	}
 
 	return success;
@@ -3448,8 +3702,7 @@ std::string LLViewerShaderMgr::getShaderDirPrefix(void)
 
 void LLViewerShaderMgr::updateShaderUniforms(LLGLSLShader * shader)
 {
-	LLWLParamManager::getInstance()->updateShaderUniforms(shader);
-	LLWaterParamManager::getInstance()->updateShaderUniforms(shader);
+    LLEnvironment::instance().updateShaderUniforms(shader);
 }
 
 LLViewerShaderMgr::shader_iter LLViewerShaderMgr::beginShaders() const

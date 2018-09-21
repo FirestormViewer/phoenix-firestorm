@@ -17,9 +17,9 @@
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
 #include "llagentcamera.h"
-#include "lldaycyclemanager.h"
+// #include "lldaycyclemanager.h" // [EEPMERGE]
 #include "llvoavatarself.h"
-#include "llwlparammanager.h"
+//#include "llwlparammanager.h" // [EEPMERGE]
 
 #include "rlvextensions.h"
 #include "rlvhandler.h"
@@ -27,6 +27,7 @@
 
 // ============================================================================
 
+#if 0// [EEPMERGE]
 class RlvWindLightControl
 {
 public:
@@ -370,6 +371,7 @@ bool RlvWindLight::setValue(const std::string& strRlvName, const std::string& st
 	}
 	return false;
 }
+#endif // [EEPMERGE]
 
 // ============================================================================
 
@@ -444,16 +446,19 @@ bool RlvExtGetSet::processCommand(const RlvCommand& rlvCmd, ERlvCmdRet& eRet)
 			bool fError = false;
 			if ( ("get" == strGetSet) && (RLV_TYPE_REPLY == rlvCmd.getParamType()) )
 			{
-				RlvUtil::sendChatReply(rlvCmd.getParam(), RlvWindLight::instance().getValue(strSetting, fError));
+				// [EEPMERGE]
+				//RlvUtil::sendChatReply(rlvCmd.getParam(), RlvWindLight::instance().getValue(strSetting, fError));
 				eRet = (!fError) ? RLV_RET_SUCCESS : RLV_RET_FAILED_UNKNOWN;
 				return true;
 			}
 			else if ( ("set" == strGetSet) && (RLV_TYPE_FORCE == rlvCmd.getParamType()) )
 			{
-				if (!gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETENV, rlvCmd.getObjectID()))
-					eRet = (RlvWindLight::instance().setValue(strSetting, rlvCmd.getOption())) ? RLV_RET_SUCCESS : RLV_RET_FAILED_UNKNOWN;
-				else
-					eRet = RLV_RET_FAILED_LOCK;
+				// [EEPMERGE]
+				//if (!gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETENV, rlvCmd.getObjectID()))
+				//	eRet = (RlvWindLight::instance().setValue(strSetting, rlvCmd.getOption())) ? RLV_RET_SUCCESS : RLV_RET_FAILED_UNKNOWN;
+				//else
+				//	eRet = RLV_RET_FAILED_LOCK;
+				// [/EEPMERGE]
 				return true;
 			}
 		}

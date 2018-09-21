@@ -157,6 +157,7 @@ public:
 
 	//LLParcel *getParcelSelection() const;
 	LLParcel *getAgentParcel() const;
+    LLParcel *getAgentOrSelectedParcel() const;
 
 	BOOL	inAgentParcel(const LLVector3d &pos_global) const;
 
