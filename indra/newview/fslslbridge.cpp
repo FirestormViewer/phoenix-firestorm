@@ -79,11 +79,6 @@ private:
 	std::string sName;
 };
 
-void uploadDone(LLUUID itemId, LLUUID taskId, LLUUID newAssetId, LLSD response)
-{
-	FSLSLBridge::getInstance()->setTimerResult(FSLSLBridge::SCRIPT_UPLOAD_FINISHED);
-}
-
 //
 //
 // Bridge functionality
@@ -1259,7 +1254,10 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 		const std::string fName = prepUploadFile(buffer);
 		if (!fName.empty())
 		{
-			LLResourceUploadInfo::ptr_t uploadInfo(new FSMonoScriptAssetUpload(	inv_item,  buffer, uploadDone ));
+			LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<FSMonoScriptAssetUpload>(inv_item, buffer, 
+				[](LLUUID itemId, LLUUID, LLUUID, LLSD response) {
+					FSLSLBridge::getInstance()->setTimerResult(FSLSLBridge::SCRIPT_UPLOAD_FINISHED);
+				}));
 			LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
 
 			LL_INFOS("FSLSLBridge") << "updating script ID for bridge" << LL_ENDL;

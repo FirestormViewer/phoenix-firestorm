@@ -577,11 +577,6 @@ void ParticleEditor::onInjectButtonClicked()
 	setCanClose(FALSE);
 }
 
-void scriptUploadDone( LLUUID itemId, LLUUID taskId, LLUUID newAssetId, LLSD response, ParticleEditor *aEditor )
-{
-	aEditor->scriptInjectReturned();
-}
-
 void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 {
 	setCanClose(TRUE);
@@ -608,8 +603,10 @@ void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 	{
 		std::string script = createScript();
 
-		LLBufferedAssetUploadInfo::taskUploadFinish_f proc = boost::bind(scriptUploadDone, _1, _2, _3, _4, this );
-		LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(mObject->getID(), inventoryItemID, LLScriptAssetUpload::MONO, true, LLUUID::null, script, proc));
+		LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLScriptAssetUpload>(mObject->getID(), inventoryItemID, LLScriptAssetUpload::MONO, true, LLUUID::null, script,
+			[this](LLUUID itemId, LLUUID, LLUUID, LLSD response) {
+				this->scriptInjectReturned();
+			}));
 		LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
 
 		mMainPanel->setEnabled(FALSE);
