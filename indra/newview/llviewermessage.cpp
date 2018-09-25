@@ -5117,7 +5117,7 @@ void process_object_animation(LLMessageSystem *mesgsys, void **user_data)
     if (!avatarp->mPlaying)
     {
         avatarp->mPlaying = true;
-        if (!avatarp->mRootVolp->isAnySelected())
+        //if (!avatarp->mRootVolp->isAnySelected())
         {
             avatarp->updateVolumeGeom();
             avatarp->mRootVolp->recursiveMarkForUpdate(TRUE);
