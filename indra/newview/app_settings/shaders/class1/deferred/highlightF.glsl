@@ -1,9 +1,9 @@
 /** 
- * @file attachmentAlphaMaskShadowF.glsl
+ * @file highlightF.glsl
  *
- * $LicenseInfo:firstyear=2005&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2007&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2005, Linden Research, Inc.
+ * Copyright (C) 2007, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,43 +22,21 @@
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
-
+ 
 #ifdef DEFINE_GL_FRAGCOLOR
-out vec4 frag_color;
+out vec4 frag_data[3];
 #else
-#define frag_color gl_FragColor
+#define frag_data gl_FragData
 #endif
 
-uniform float minimum_alpha;
-
+uniform vec4 color;
 uniform sampler2D diffuseMap;
 
-VARYING vec4 post_pos;
 VARYING vec2 vary_texcoord0;
-VARYING float pos_w;
-VARYING float target_pos_x;
-VARYING vec4 vertex_color;
 
 void main() 
 {
-	float alpha = texture2D(diffuseMap, vary_texcoord0.xy).a;
-
-	if (alpha < 0.05) // treat as totally transparent
-	{
-		discard;
-	}
-
-	if (alpha < minimum_alpha) // treat as semi-transparent
-	{
-	  //if (fract(0.5*floor(target_pos_x / pos_w )) < 0.25)
-	  {
-	    discard;
-	  }
-	}
-
-	frag_color = vec4(1,1,1,1);
-
-#if !DEPTH_CLAMP	
-	gl_FragDepth = max(post_pos.z/post_pos.w*0.5+0.5, 0.0);
-#endif
+	frag_data[0] = color*texture2D(diffuseMap, vary_texcoord0.xy);
+	frag_data[1] = vec4(0.0);
+	frag_data[2] = vec4(0.0, 1.0, 0.0, 1.0);
 }

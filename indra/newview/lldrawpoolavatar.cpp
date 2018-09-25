@@ -2008,6 +2008,9 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
         S32 offset = face->getIndicesStart();
 		U32 count = face->getIndicesCount();
 
+        U16 start = face->getGeomStart();
+		U16 end = start + face->getGeomCount()-1;			
+
 		LLDrawable* drawable = face->getDrawable();
 		if (!drawable)
 		{
@@ -2060,27 +2063,21 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
             bool is_alpha_blend = false;
             bool is_alpha_mask  = false;
 
-            if (mat)
-            {                
-                switch (LLMaterial::eDiffuseAlphaMode(mat->getDiffuseAlphaMode()))
+            LLViewerTexture* tex = face->getTexture(LLRender::DIFFUSE_MAP);
+            if (tex)
+            {
+                if (tex->getIsAlphaMask())
                 {
-                    case LLMaterial::DIFFUSE_ALPHA_MODE_MASK:
-                    {
-                        is_alpha_mask = true;
-                    }
-                    break;
+                    is_alpha_mask = true;
+                }
+            }
 
-                    case LLMaterial::DIFFUSE_ALPHA_MODE_BLEND:
-                    {
-                        is_alpha_blend = true;
-                    }
-                    break;
-
-                    case LLMaterial::DIFFUSE_ALPHA_MODE_EMISSIVE:
-                    case LLMaterial::DIFFUSE_ALPHA_MODE_DEFAULT:
-                    case LLMaterial::DIFFUSE_ALPHA_MODE_NONE:
-                    default:
-                        break;
+            if (tex)
+            {
+                LLGLenum image_format = tex->getPrimaryFormat();
+                if (!is_alpha_mask && (image_format == GL_RGBA || image_format == GL_ALPHA))
+                {
+                    is_alpha_blend = true;
                 }
             }
 
@@ -2092,17 +2089,31 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
                 }
             }
 
-            LLViewerTexture* tex = face->getTexture(LLRender::DIFFUSE_MAP);
-            if (tex)
-            {
-                LLGLenum image_format = tex->getPrimaryFormat();
-                if (tex->getIsAlphaMask())
+            if (mat)
+            {                
+                switch (LLMaterial::eDiffuseAlphaMode(mat->getDiffuseAlphaMode()))
                 {
-                    is_alpha_mask = true;
-                }
-                else if (!is_alpha_mask && (image_format == GL_RGBA || image_format == GL_ALPHA))
-                {
-                    is_alpha_blend = true;
+                    case LLMaterial::DIFFUSE_ALPHA_MODE_MASK:
+                    {
+                        is_alpha_mask  = true;
+                        is_alpha_blend = false;
+                    }
+                    break;
+
+                    case LLMaterial::DIFFUSE_ALPHA_MODE_BLEND:
+                    {
+                        is_alpha_blend = true;
+                        is_alpha_mask  = false;
+                    }
+                    break;
+
+                    case LLMaterial::DIFFUSE_ALPHA_MODE_EMISSIVE:
+                    case LLMaterial::DIFFUSE_ALPHA_MODE_DEFAULT:
+                    case LLMaterial::DIFFUSE_ALPHA_MODE_NONE:
+                    default:
+                        is_alpha_blend = false;
+                        is_alpha_mask  = false;
+                        break;
                 }
             }
 
@@ -2171,9 +2182,6 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 			{
 				data_mask &= ~LLVertexBuffer::MAP_WEIGHT4;
 			}
-
-			U16 start = face->getGeomStart();
-			U16 end = start + face->getGeomCount()-1;			
 
 			/*if (glow)
 			{

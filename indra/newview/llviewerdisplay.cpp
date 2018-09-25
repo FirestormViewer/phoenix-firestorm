@@ -800,7 +800,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		static LLCullResult result;
 		LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
-		LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater() ? TRUE : FALSE;
+		LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater();
 		gPipeline.updateCull(*LLViewerCamera::getInstance(), result, water_clip);
 		stop_glerror();
 
@@ -1010,7 +1010,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		//	gGL.popMatrix();
 		//}
 
-		LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater() ? TRUE : FALSE;
+		LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater();
 
 // <FS:CR> Aurora Sim
 		if (!LLWorld::getInstance()->getAllowRenderWater())
