@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Import Collada" title="Importa scena">
+<floater name="Import Collada" title="Importa file Collada">
 	<text name="mesh count">
-		Reticoli: [COUNT]
+		Mesh: [COUNT]
 	</text>
 	<text name="texture count">
 		Texture: [COUNT]
@@ -10,7 +10,6 @@
 		Stato: [STATUS]
 	</text>
 	<button label="Annulla" name="cancel"/>
-	<button label="OK" name="ok"/>
 	<string name="status_idle">
 		Pausa
 	</string>

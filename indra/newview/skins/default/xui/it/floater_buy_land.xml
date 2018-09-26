@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="buy land" title="ACQUISTA TERRENO">
+<floater name="buy land" title="Acquista terreno">
 	<floater.string name="can_resell">
 		Può essere rivenduto.
 	</floater.string>
 	<floater.string name="can_not_resell">
-		Può non essere rivenduto.
+		Non può essere rivenduto.
 	</floater.string>
 	<floater.string name="can_change">
 		Può essere unito o suddiviso.
@@ -53,10 +53,10 @@ Prova a scegliere una superficie più piccola.
 		Si &apos;e verificato un errore mentre si stavano ottenendo le informazioni sull&apos;acquisto del terreno.
 	</floater.string>
 	<floater.string name="buying_will">
-		Acuistando il terreno:
+		Acquistando il terreno:
 	</floater.string>
 	<floater.string name="buying_for_group">
-		Acuistando il terreno per il gruppo:
+		Acquistando il terreno per il gruppo:
 	</floater.string>
 	<floater.string name="cannot_buy_now">
 		Non puoi comprare ora:
@@ -99,12 +99,7 @@ consente [AMOUNT2] oggetti
 		venduta con oggetti
 	</floater.string>
 	<floater.string name="sold_without_objects">
-		Oggetti non inclusi
-	</floater.string>
-	<floater.string name="info_price_string">
-		L$ [PRICE]
-([PREZZO_PER_MQ] L$/m²)
-[VENDUTO_CON_OGGETTI]
+		oggetti non inclusi nella vendita
 	</floater.string>
 	<floater.string name="insufficient_land_credits">
 		Il gruppo [GROUP] avrà bisogno di contributi di crediti di utilizzo terreno sufficienti a coprire il terreno prima che l&apos;acquisto sia completato.
@@ -160,7 +155,6 @@ consente [AMOUNT2] oggetti
 	<text name="covenant_text">
 		Devi accettare il regolamento della regione:
 	</text>
-	<text left="470" name="covenant_timestamp_text"/>
 	<text_editor name="covenant_editor">
 		Attendi...
 	</text_editor>
@@ -168,32 +162,26 @@ consente [AMOUNT2] oggetti
 	<text name="info_parcel_label">
 		Terreno:
 	</text>
-	<text name="info_parcel">
-		Scotopteryx 138,204
-	</text>
 	<text name="info_size_label">
 		Grandezza:
-	</text>
-	<text name="info_size">
-		1024 m²
 	</text>
 	<text name="info_price_label">
 		Prezzo:
 	</text>
 	<text name="info_price">
 		L$ 1500
-( 1.1 L$/m²)
+(1.1 L$/m²)
 venduto con oggetti
 	</text>
 	<text name="info_action">
-		Comprando questa terra:
+		Acquisto in corso:
 	</text>
 	<text name="error_message">
 		Qualcosa non è andato a buon fine.
 	</text>
 	<button label="Vai al sito" name="error_web"/>
 	<text name="account_action">
-		Trasforma il tuo avatar in un membro premium.
+		Aggiorna all&apos;abbonamento premium.
 	</text>
 	<text name="account_reason">
 		Solo i membri premium possono possedere terra.
@@ -211,7 +199,7 @@ venduto con oggetti
 Questo lotto consiste in 512 m² di terreno.
 	</text>
 	<text name="purchase_action">
-		Paga il residente Joe 4000 L$ per la terra
+		Paga a Joe Resident 4000 L$ per la terra
 	</text>
 	<text name="currency_reason">
 		Possiedi 2.100 L$.
@@ -219,16 +207,13 @@ Questo lotto consiste in 512 m² di terreno.
 	<text name="currency_action" width="106">
 		Compra ulteriori L$
 	</text>
-	<line_editor left="174" name="currency_amt" width="80">
-		1000
-	</line_editor>
 	<text name="currency_est">
 		per circa [LOCAL_AMOUNT]
 	</text>
 	<text name="currency_balance">
 		Possiedi 2.100 L$.
 	</text>
-	<check_box label="Rimuovi [AMOUNT] m² di contribuzione dal gruppo." name="remove_contribution"/>
 	<button label="Compra" name="buy_btn"/>
+	<check_box label="Rimuovi [AMOUNT] m² di contribuzione dal gruppo." name="remove_contribution"/>
 	<button label="Annulla" name="cancel_btn"/>
 </floater>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_placedetails" title="Segnaposto">
+	<string name="title_place">
+		Dettagli sul luogo
+	</string>
+	<string name="title_remote_place">
+		Dettagli sul luogo
+	</string>
+	<string name="title_remote_place_detail">
+		Dettagli sul luogo: [NAME]
+	</string>
+	<string name="title_landmark">
+		Segnaposto
+	</string>
+	<string name="title_landmark_detail">
+		Segnaposto: [NAME]
+	</string>
+	<string name="title_create_landmark">
+		Crea segnaposto
+	</string>
+	<string name="title_teleport_history_item">
+		Dettagli cronologia teleport: [NAME]
+	</string>
+	<panel name="button_panel">
+		<layout_stack name="bottom_bar_ls0">
+			<layout_panel name="lp1">
+				<layout_stack name="bottom_bar_ls1">
+					<layout_panel name="teleport_btn_lp">
+						<button label="Teleport" name="teleport_btn" tool_tip="Teleport al punto selezionato"/>
+					</layout_panel>
+					<layout_panel name="map_btn_lp">
+						<button label="Mappa" name="map_btn" tool_tip="Show the corresponding area on the World Map"/>
+					</layout_panel>
+					<layout_panel name="edit_btn_lp">
+						<button label="Modifica" name="edit_btn" tool_tip="Modifica questo segnaposto"/>
+					</layout_panel>
+					<layout_panel name="overflow_btn_lp">
+						<menu_button name="overflow_btn" tool_tip="Mostra altre opzioni"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>	
+		</layout_stack>
+		<layout_stack name="bottom_bar_ls1">
+			<layout_panel name="lp2">
+				<layout_stack name="bottom_bar_close_ls3">
+					<layout_panel name="close_btn_lp">
+						<button label="Chiudi" name="close_btn"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>	
+		<layout_stack name="bottom_bar_ls2">
+			<layout_panel name="save_btn_lp">
+				<button label="Salva" name="save_btn"/>
+			</layout_panel>
+			<layout_panel name="cancel_btn_lp">
+				<button label="Annulla" name="cancel_btn"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</floater>

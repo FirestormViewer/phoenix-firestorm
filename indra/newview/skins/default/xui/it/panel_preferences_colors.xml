@@ -1,77 +1,207 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Colori" name="colors_panel">
-	<text name="effects_color_textbox">
-		I miei effetti (raggio indicatore):
-	</text>
-	<text name="netmap_color_textbox">
-		Minimappa:
-	</text>
-	<color_swatch name="netmap_chatring_color_swatch" left_delta="190"/>
-	<text name="netmap_chatring_color_label" width="100">
-		Raggio Chat (20m)
-	</text>
-	<color_swatch name="netmap_shoutring_color_swatch" left_delta="110" tool_tip="Clicca per aprire il color picker e selezionare il tuo colore"/>
-	<text name="netmap_shoutring_color_label" width="110">
-		Raggio Urlo (100m)
-	</text>
-	<text name="font_colors">
-		Colori font della chat:
-	</text>
-	<text name="text_box1">
-		Io
-	</text>
-	<text name="text_box2">
-		Altri
-	</text>
-	<text name="text_box3">
-		Oggetti
-	</text>
-	<text name="text_box4">
-		Sistema
-	</text>
-	<text name="text_box5">
-		Errori
-	</text>
-	<text name="text_box6">
-		IM da oggetti
-	</text>
-	<text name="text_box7">
-		Proprietario
-	</text>
-	<text name="text_box8">
-		Nomi in evidenza
-	</text>
-	<text name="text_box9">
-		URL
-	</text>
-	<color_swatch top_pad="-20" name="direct" />
-	<text name="text_box10">
-		Diretto
-	</text>
-	<text name="ScriptDialogBgLabel" height="20" top_delta="0">
-		Sfondo Menu
-degli Oggetti
-	</text>
-	<color_swatch top_pad="-20" name="ScriptDialogFb" />
-	<text name="ScriptDialogFgLabel" height="20" top_delta="0" width="110">
-		Colore Scritta
-Menu degli Oggetti		
-	</text>
-	<text name="bubble_chat">
-		Colore sfondo etichetta nome (influenza anche Chat a vignetta):
-	</text>
-	<color_swatch name="background" tool_tip="Seleziona colore etichetta nome"/>
-	<slider label="Opacità:" name="bubble_chat_opacity" tool_tip="Seleziona opacità etichetta nome"/>
-	<text name="floater_opacity">
-		Opacità finestra:
-	</text>
-	<slider label="Attiva:" name="active"/>
-	<slider label="Disattivata:" name="inactive"/>
-	<check_box name="FSScriptDialogNoTransparency" label="Mostra lo Script Dialogs sempre con lo sfondo opaco"/>
-	<check_box name="FSGroupNotifyNoTransparency" label="Mostra le notice sempre con lo sfondo opaco"/>
-	<check_box name="override_pie_color_checkbox" label="Seleziona colore di sfondo e l'opacità del menu a torta:"/>
-	<color_swatch name="pie_bg_color_override" tool_tip="Seleziona il colore di sfondo del menu a torta (Menu del tasto destro)"/>
-	<color_swatch name="pie_selected_color_override" tool_tip="Seleziona il colore di selezione del menu a torta (Menu del tasto destro)"/>
-	<slider label="Opacità:" name="pie_menu_opacity" tool_tip="Imposta l'opacità del menu a torta"/>
-	<slider label="Sfumatura:" name="pie_menu_fade_out" tool_tip="Imposta la sfumatura del colore di selezione"/>
+<tab_container label="Color Prefs" name="color_tabs">
+	<panel label="Colori chat" name="tab-chat">
+		<text name="font_colors">
+			Colore messaggi chat:
+		</text>
+		<text name="user_label">
+			Mio testo
+		</text>
+		<text name="others_label">
+			Altri
+		</text>
+		<text name="text_box3">
+			Oggetti
+		</text>
+		<text name="friends_label">
+			Amici
+		</text>
+		<text name="linden_label">
+			Linden
+		</text>
+		<text name="muted_label">
+			Bloccati
+		</text>
+		<text name="system_label">
+			Sistema
+		</text>
+		<text name="script_error_label">
+			Errori
+		</text>
+		<text name="object_im_label">
+			IM Oggetti
+		</text>
+		<text name="llownersay_label">
+			OwnerSay
+		</text>
+		<text name="htmllink_label">
+			URL
+		</text>
+		<text name="uriquerypart_label">
+			Parte query URL
+		</text>
+		<text name="direct_label">
+			Diretti
+		</text>
+		<text name="header_colors">
+			Intestazioni chat:
+		</text>
+		<text name="chat_name_label">
+			Avatar
+		</text>
+		<text name="object_name_header_label">
+			Oggetti
+		</text>
+		<slider label="Diminuzione per distanza oltre limite:" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="Il fattore di diminuzione del colore scelto se il mittente è al di là della distanza di chat. (0=tanto, 1=poco)"/>
+		<check_box name="FSColorIMsDistinctly" label="Colora separatamente IM/gruppi in console:" />
+		<panel name="im_color_panel" >
+			<text name="console_im_label">
+				IM/gruppi
+			</text>
+		</panel>
+	</panel>
+	<panel label="Etichette nome" name="tab-nametag" >
+		<text name="nametag_colors">
+			Colore etichette nome:
+		</text>
+		<text name="self_tag_label">
+			Mia etichetta
+		</text>
+		<text name="friend_tag_label">
+			Amici
+		</text>
+		<text name="muted_tag_label">
+			Bloccati
+		</text>
+		<text name="linden_tag_label">
+			Linden Lab
+		</text>
+		<text name="match_tag_label">
+			Corrisponde
+		</text>
+		<text name="mismatch_tag_label">
+			Non corrisponde
+		</text>
+		<check_box name="FSColorUsername" label="Colora i nomi utente separatamente" tool_tip="Mostra i nomi utente con un colore diverso" />
+		<check_box name="NameTagShowFriends" label="Colora il nome degli amici separatamente" tool_tip="Mostra le etichette degli amici con un colore diverso" />
+		<text name="username_tag_label">
+			Nome utente
+		</text>
+		<text name="bubble_chat">
+			Etichetta nome / Fumetto chat:
+		</text>
+		<slider label="Opacità etichetta:" name="bubble_chat_opacity" tool_tip="Scegliere l&apos;opacità dell&apos;etichetta del nome"/>
+		<slider label="Distanza Z:" name="FSNameTagZOffsetCorrection" tool_tip="Cambia l&apos;altezza dell&apos;etichetta sopra all&apos;avatar. Valore predefinito zero."/>
+		<check_box name="FSTagShowDistance" label="Mostra distanza" tool_tip="Mostra la distanza dall&apos;avatar nell&apos;etichetta del nome"/>
+		<check_box name="FSTagShowDistanceColors" label="Colora l&apos;etichetta in base alla distanza:"/>
+		<panel name="distance_panel">
+			<text name="chat_distance_tag_label">
+				Distanza chat
+			</text>
+			<text name="whisper_distance_tag_label">
+				Distanza sussurro
+			</text>
+			<text name="shout_tag_label">
+				Distanza grido
+			</text>
+			<text name="beyond_shout_distance_tag_label">
+				Oltre distanza grido
+			</text>
+		</panel>
+		<panel name="client_tags_panel">
+			<text name="client_tags_colors">
+				Colora etichette client: (solo OpenSim/AuroraSim)
+			</text>
+			<text name="whattagstoshow">
+				Etichette che si vogliono vedere
+			</text>
+			<combo_box name="ClientTagsVisibility">
+				<combo_box.item name="No Viewertags" label="Nessuna etichetta"/>
+				<combo_box.item name="TPVD Viewer" label="Viewer TPVD (da una lista)"/>
+				<combo_box.item name="All known Viewers" label="Tutti viewer conosciuti (da una lista)"/>
+				<combo_box.item name="All Viewers" label="Tutti i viewer"/>
+			</combo_box>
+			<text name="colorbasedonviewer">
+				Colore basato sul viewer
+			</text>
+			<combo_box name="ColorClienttags">
+				<combo_box.item name="Color not based on Viewer" label="Colore non basato sul viewer" />
+				<combo_box.item name="Single color per Viewer" label="Colore singolo per viewer" />
+				<combo_box.item name="Multiple colors per Viewer" label="Diversi colori per viewer" />
+				<combo_box.item name="Userdefined color" label="Colori a piacere"/>
+			</combo_box>
+			<text name="listtodisplayviewertags_txt">
+				Usa una lista per le etichette
+			</text>
+			<combo_box name="UseLegacyClienttags">
+				<combo_box.item name="Don't use a list" label="Non usare una lista" />
+				<combo_box.item name="Local Clienttags" label="Usa lista locale" />
+				<combo_box.item name="Download Clienttags" label="Scarica lista all&apos;avvio" />
+			</combo_box>
+		</panel>
+	</panel>
+	<panel label="Minimappa" name="tab-minimap">
+		<slider label="Opacità sfondo:" name="FSMiniMapOpacity"/>
+		<text name="netmap_pickradius_textbox">
+			Raggio preferiti:
+		</text>
+		<text name="netmap_dots_textbox">
+			Punti minimappa:
+		</text>
+		<text name="MapAvatarSelfColor_label">
+			Io
+		</text>
+		<text name="MapAvatarColor_label">
+			Altri
+		</text>
+		<text name="MapAvatarFriendColor_label">
+			Amici
+		</text>
+		<text name="MapAvatarLindenColor_label">
+			Linden Lab
+		</text>
+		<text name="MapAvatarMutedColor_label">
+			Bloccati
+		</text>
+		<check_box name="MiniMapChatRing" label="Mostra cerchi sulla mappa indicanti le zone sussurro, chat e grido" />
+		<text name="netmap_chatring_color_label">
+			Zona chat
+		</text>
+		<text name="netmap_shoutring_color_label">
+			Zona grido
+		</text>
+	</panel>
+	<panel label="Varie" name="tab-misc" >
+		<text name="effects_color_textbox">
+			Effetto selezione (particelle):
+		</text>
+		<text name="ScriptDialogFgLabel">
+			Dialogo script f/s:
+		</text>
+		<text name="floater_opacity">
+			Opacità finestre a scomparsa:
+		</text>
+		<slider label="Attive:" name="active"/>
+		<slider label="Inattive:" name="inactive"/>
+		<text name="console_opacity">
+			Opacità console:
+		</text>
+		<color_swatch name="console_background" tool_tip="Scegliere colore sfondo"/>
+		<slider label="Opacità:" name="console_background_opacity" tool_tip="Regolare l&apos;opacità dello sfondo della console"/>
+		<text name="preferences_search_label">
+			Colore evidenza ricerca nelle Preferenze:
+		</text>
+		<color_swatch name="preferences_search_color" tool_tip="Scegliere il colore"/>
+		<check_box name="FSScriptDialogNoTransparency" label="Finestre dialogo degli script sempre con sfondo opaco" />
+		<check_box name="FSGroupNotifyNoTransparency" label="Notizie di gruppo sempre con sfondo opaco" />
+		<check_box name="override_pie_color_checkbox" label="Reimposta colore di sfondo e opacità per menu circolare:" />
+		<panel name="tab-colorize" >
+			<color_swatch name="pie_bg_color_override" tool_tip="Colore di sfondo menu circolare"/>
+			<color_swatch name="pie_selected_color_override" tool_tip="Colore selezione menu circolare"/>
+			<slider name="pie_menu_opacity" label="Opacità:" tool_tip="Opacità menu circolare"/>
+			<slider name="pie_menu_fade_out" label="Sfumatura:" tool_tip="Sfumatura esterna menu circolare"/>
+		</panel>
+	</panel>
+</tab_container>
 </panel>

@@ -1453,6 +1453,7 @@
        height="20"
        width="350" />
      <check_box
+       visibility_control="MiniMapChatRing"
        control_name="FSMiniMapWhisperRing"
        name="FSMiniMapWhisperRing"
        follows="left|top"
@@ -1497,6 +1498,7 @@
        Whisper range
      </text>
      <check_box
+       visibility_control="MiniMapChatRing"
        control_name="FSMiniMapChatRing"
        name="FSMiniMapChatRing"
        follows="left|top"
@@ -1541,6 +1543,7 @@
        Chat range
      </text>
      <check_box
+       visibility_control="MiniMapChatRing"
        control_name="FSMiniMapShoutRing"
        name="FSMiniMapShoutRing"
        follows="left|top"
@@ -1813,6 +1816,35 @@
         <color_swatch.commit_callback
         function="Pref.applyUIColor"
         parameter="SearchableControlHighlightColor" />
+     </color_swatch>
+
+     <text
+       follows="left|top"
+       layout="topleft"
+       left="30"
+       height="12"
+       name="area_search_beacon_color_label"
+       top_pad="15"
+       width="400">
+       Area search beacon Color:
+     </text>
+     <color_swatch
+     can_apply_immediately="true"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left="40"
+     top_pad="5"
+     name="area_search_beacon_color"
+     tool_tip="Choose area search beacon color"
+     width="44">
+        <color_swatch.init_callback
+        function="Pref.getUIColor"
+        parameter="AreaSearchBeaconColor" />
+        <color_swatch.commit_callback
+        function="Pref.applyUIColor"
+        parameter="AreaSearchBeaconColor" />
      </color_swatch>
 
      <check_box

@@ -143,8 +143,6 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mFilterPermModify(false),
 	mFilterPermTransfer(false),
 	mFilterAgentParcelOnly(false),
-	mBeaconColor(),
-	mBeaconTextColor(),
 	mBeacons(false),
 	mExcludeAttachment(true),
 	mExcludeTemporary(true),
@@ -197,10 +195,7 @@ BOOL FSAreaSearch::postBuild()
 			mTab->removeTabPanel(advanced_tab);
 		}
 	}
-
-	// TODO: add area search settings to the color.xml file
-	mBeaconColor = LLUIColorTable::getInstance()->getColor("PathfindingLinksetBeaconColor");
-	mBeaconTextColor = LLUIColorTable::getInstance()->getColor("PathfindingDefaultBeaconTextColor");
+	
 
 	return LLFloater::postBuild();
 }
@@ -215,6 +210,8 @@ void FSAreaSearch::draw()
 	LLFloater::draw();
 	
 	static LLCachedControl<S32> beacon_line_width(gSavedSettings, "DebugBeaconLineWidth");
+	static LLUIColor mBeaconColor = LLUIColorTable::getInstance()->getColor("AreaSearchBeaconColor");
+	static LLUIColor mBeaconTextColor = LLUIColorTable::getInstance()->getColor("PathfindingDefaultBeaconTextColor");
 	
 	if (mBeacons)
 	{

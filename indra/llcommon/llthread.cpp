@@ -236,11 +236,12 @@ void LLThread::shutdown()
             // This thread just wouldn't stop, even though we gave it time
             //LL_WARNS() << "LLThread::~LLThread() exiting thread before clean exit!" << LL_ENDL;
             // Put a stake in its heart.
-            delete mRecorder;
-
 			// ND: There is no such thing as to terminate a std::thread, we detach it so no wait will happen.
 			// Otherwise craft something platform specific with std::thread::native_handle
 			mThreadp->detach();
+            delete mRecorder;
+            mRecorder = NULL;
+            mStatus = STOPPED;
             return;
         }
 		mThreadp = NULL;

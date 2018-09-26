@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="sell land" title="VENDI TERRENO">
+<floater name="sell land" title="Vendi terreno">
 	<scroll_container name="profile_scroll">
 		<panel name="scroll_content_panel">
 			<text name="info_parcel_label">
 				Lotto:
 			</text>
-			<text left="82" name="info_parcel">
-				NOME DEL LOTTO
-			</text>
 			<text name="info_size_label">
 				Dimensioni:
-			</text>
-			<text left="82" name="info_size">
-				[AREA] m²
 			</text>
 			<text bottom_delta="-57" height="28" name="info_action">
 				Per vendere questo lotto:
@@ -23,12 +17,6 @@
 			<text name="price_text">
 				Scegli un prezzo adeguato.
 			</text>
-			<text name="price_ld">
-				L$
-			</text>
-			<line_editor name="price">
-				0
-			</line_editor>
 			<text name="price_per_m">
 				([PER_METER] L$ per m²)
 			</text>
@@ -39,7 +27,7 @@
 				Scegli se vendere a chiunque o ad un determinato acquirente.
 			</text>
 			<combo_box name="sell_to">
-				<combo_box.item label="- Seleziona uno -" name="--selectone--"/>
+				<combo_box.item label="- Seleziona -" name="--selectone--"/>
 				<combo_box.item label="Chiunque" name="Anyone"/>
 				<combo_box.item label="Persona specifica:" name="Specificuser:"/>
 			</combo_box>
@@ -52,7 +40,7 @@
 			</text>
 			<radio_group bottom_delta="-58" name="sell_objects">
 				<radio_item label="No, mantieni la proprietà degli oggetti" name="no"/>
-				<radio_item label="Si, vendi gli oggetti con la terra" name="yes"/>
+				<radio_item label="Sì, vendi gli oggetti con la terra" name="yes"/>
 			</radio_group>
 			<button label="Mostra oggetti" name="show_objects"/>
 			<text name="nag_message_label" font="SansSerifSmallBold" left="9">

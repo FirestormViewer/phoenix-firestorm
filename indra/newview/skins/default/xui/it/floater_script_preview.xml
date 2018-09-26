@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="preview lsl text" title="SCRIPT: SCRIPT DI ROTAZIONE">
+<floater name="preview lsl text" title="Script: rotazione">
 	<floater.string name="Title">
-		SCRIPT: [NAME]
+		Script: [NAME]
 	</floater.string>
 	<text name="desc txt">
 		Descrizione:

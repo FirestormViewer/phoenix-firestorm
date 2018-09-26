@@ -203,9 +203,9 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	mHoveredColor(p.hovered_color()),
 	mSearchColumn(p.search_column),
 	mColumnPadding(p.column_padding),
-	// <FS:Ansariel> Fix for FS-specific people list (radar)
-	//mContextMenuType(MENU_NONE)
 	mContextMenuType(MENU_NONE),
+	mIsFriendSignal(NULL),
+	// <FS:Ansariel> Fix for FS-specific people list (radar)
 	mFilterColumn(-1),
 	mIsFiltered(false),
 	mPersistSortOrder(p.persist_sort_order),
@@ -386,6 +386,7 @@ LLScrollListCtrl::~LLScrollListCtrl()
 	mItemList.clear();
 	std::for_each(mColumns.begin(), mColumns.end(), DeletePairedPointer());
 	mColumns.clear();
+	delete mIsFriendSignal;
 }
 
 
@@ -2065,6 +2066,19 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 				menu_name, LLMenuGL::sMenuContainer, LLMenuHolderGL::child_registry_t::instance());
 			if (mPopupMenu)
 			{
+				if (mIsFriendSignal)
+				{
+					bool isFriend = *(*mIsFriendSignal)(uuid);
+					LLView* addFriendButton = mPopupMenu->getChild<LLView>("add_friend");
+					LLView* removeFriendButton = mPopupMenu->getChild<LLView>("remove_friend");
+
+					if (addFriendButton && removeFriendButton)
+					{
+						addFriendButton->setEnabled(!isFriend);
+						removeFriendButton->setEnabled(isFriend);
+					}
+				}
+
 				mPopupMenu->show(x, y);
 				LLMenuGL::showPopup(this, mPopupMenu, x, y);
 				return TRUE;
@@ -3407,6 +3421,15 @@ void LLScrollListCtrl::onFocusLost()
 	mSearchString.clear();
 
 	LLUICtrl::onFocusLost();
+}
+
+boost::signals2::connection LLScrollListCtrl::setIsFriendCallback(const is_friend_signal_t::slot_type& cb)
+{
+	if (!mIsFriendSignal)
+	{
+		mIsFriendSignal = new is_friend_signal_t();
+	}
+	return mIsFriendSignal->connect(cb);
 }
 
 // <FS:Ansariel> Fix for FS-specific people list (radar)

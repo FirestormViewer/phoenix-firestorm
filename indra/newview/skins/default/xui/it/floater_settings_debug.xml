@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="settings_debug" title="PARAMETRI DI DEBUG">
-	<radio_group name="boolean_combo">
-		<radio_item label="VERO" name="TRUE" />
-		<radio_item label="FALSO" name="FALSE" />
-	</radio_group>
-	<color_swatch label="Colore" name="val_color_swatch"/>
-	<spinner label="x" name="val_spinner_1"/>
-	<spinner label="x" name="val_spinner_2"/>
-	<spinner label="x" name="val_spinner_3"/>
-	<spinner label="x" name="val_spinner_4"/>
-	<button label="Reimposta i valori di default" name="default_btn" width="210"/>
+<floater name="settings_debug" title="Parametri di debug">
+	<panel name="debug_settings_search_panel">
+		<search_editor label="Cerca qui" name="search_settings_input" tool_tip="Scrivi i termini che stai cercando. Verranno mostrate anche corrispondenze parziali sul nome o sul commento dell&apos;impostazione."/>
+	</panel>
+	<panel name="debug_settings_values_panel">
+		<text_editor name="comment_text" tool_tip="Commento sull&apos;impostazione. Spesso dà info utili sugli effetti dell&apos;impostazione."/>
+		<radio_group name="boolean_combo">
+			<radio_item label="VERO" name="TRUE" />
+			<radio_item label="FALSO" name="FALSE" />
+		</radio_group>
+		<color_swatch label="Colore" name="val_color_swatch"/>
+		<button label="Copia" name="copy_btn" tool_tip="Copia il nome dell&apos;impostazione negli appunti."/>
+		<button label="Ripristina" name="default_btn" tool_tip="Riporta questa impostazione al suo valore predefinito."/>
+	</panel>
 </floater>

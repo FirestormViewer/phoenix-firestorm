@@ -1,17 +1,87 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="godtools floater" title="GOD TOOLS">
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="godtools floater" title="God Tools">
 	<tab_container name="GodTools Tabs">
-		<panel label="Grid" name="grid"/>
-		<panel label="Region" name="region">
-			<text name="Region Name:">
-				Nome regione:
-			</text>
-			<check_box label="Reset Home On Teleport" name="check reset home" tool_tip="Quando un residente esce con un teleport, reimposta la sua posizione di base sul luogo di destinazione."/>
+		<panel label="Grid" name="grid">
+			<button label="Vuota la cache della mappa in questa regione" name="Flush This Region&apos;s Map Visibility Caches"/>
 		</panel>
-		<panel label="Objects" name="objects">
+		<panel label="Regione" name="region">
 			<text name="Region Name:">
 				Nome regione:
 			</text>
+			<check_box label="Preludio" name="check prelude" tool_tip="Imposta questa regione come un preludio"/>
+			<check_box label="Sole fisso" name="check fixed sun" tool_tip="Blocca la posizione del sole (come in Regione/Estate &gt; Terreno)"/>
+			<check_box label="Ripristina casa dopo teleport" name="check reset home" tool_tip="Quando un residente si sposta col TP, ripristina la posizione casa alla destinazione"/>
+			<check_box label="Visibile" name="check visible" tool_tip="La regione è visibile ai non-god"/>
+			<check_box label="Danni" name="check damage" tool_tip="Abilita i danni in questa regione"/>
+			<check_box label="Blocca tracciamento traffico" name="block dwell" tool_tip="Impedisce alla regione di calcolare il traffico"/>
+			<check_box label="Blocca terraform" name="block terraform" tool_tip="Impedisce agli utenti di terraformare"/>
+			<check_box label="Sandbox" name="is sandbox" tool_tip="Specifica se la regione è una sandbox"/>
+			<button label="Imposta terreno" name="Bake Terrain" tool_tip="Salva il terreno attuale come predefinito"/>
+			<button label="Ripristina terreno" name="Revert Terrain" tool_tip="Sostituisce il terreno attuale con quello predefinito"/>
+			<button label="Scambia terreno" name="Swap Terrain" tool_tip="Scambia il terreno attuale con quello predefinito"/>
+			<text name="estate id">
+				ID regione:
+			</text>
+			<text name="parent id">
+				ID genitore:
+			</text>
+			<line_editor name="parentestate" tool_tip="Regione genitore di questa regione"/>
+			<text name="Grid Pos: ">
+				Pos. grid:
+			</text>
+			<line_editor name="gridposx" tool_tip="Posizione x nella grid della regione"/>
+			<line_editor name="gridposy" tool_tip="Posizione y nella grid della regione"/>
+			<text name="Redirect to Grid: ">
+				Redir. a grid:
+			</text>
+			<text name="billable factor text">
+				Fatt. fatturazione:
+			</text>
+			<text name="land cost text">
+				L$ per m²:
+			</text>
+			<button label="Ricarica" name="Refresh" tool_tip="Ricarica le informazioni qui sopra"/>
+			<button label="Applica" name="Apply" tool_tip="Applica le modifiche fatte sopra"/>
+			<button label="Scegli regione" name="Select Region" tool_tip="Seleziona tutta la regione con l&apos;attrezzo Terreno"/>
+			<button label="Autosalva ora" name="Autosave now" tool_tip="Salva lo stato nella cartella di salvataggio automatico in formato gzip"/>
+		</panel>
+		<panel label="Oggetti" name="objects">
+			<panel.string name="no_target">
+				(nessuno)
+			</panel.string>
+			<text name="Region Name:">
+				Nome regione:
+			</text>
+			<check_box label="Disabilita script" name="disable scripts" tool_tip="Disabilita gli script nella regione"/>
+			<check_box label="Disabilita collisioni" name="disable collisions" tool_tip="Disabilita le collisioni tra oggetti nella regione" width="140"/>
+			<check_box label="Disabilita fisica" name="disable physics" tool_tip="Disabilita la fisica in tutta la regione" left_delta="140"/>
+			<button label="Applica" name="Apply" tool_tip="Applica le modifiche fatte"/>
+			<button label="Imposta utente" name="Set Target" tool_tip="Imposta utente per la cancellazione di oggetti"/>
+			<text name="target_avatar_name">
+				(nessuno)
+			</text>
+			<button label="Cancella gli oggetti con script su terreni altrui" name="Delete Target&apos;s Scripted Objects On Others Land" tool_tip="Cancella tutti gli oggetti con script in possesso dell&apos;utente, su un terreno non di proprietà dell&apos;utente. Gli oggetti (no copia) verranno restituiti."/>
+			<button label="Cancella gli oggetti con script su *qualsiasi* terreno" name="Delete Target&apos;s Scripted Objects On *Any* Land" tool_tip="Delete all scripted objects owned by the target in this region. (no copy) objects will be returned."/>
+			<button label="Cancella *TUTTI* gli oggetti dell&apos;utente" name="Delete *ALL* Of Target&apos;s Objects" tool_tip="Delete all objects owned by the target in this region. (no copy) objects will be returned."/>
+			<button label="Collisioni pesanti" name="Get Top Colliders" tool_tip="Gets list of objects experiencing the most narrowphase callbacks"/>
+			<button label="Script pesanti" name="Get Top Scripts" tool_tip="Gets list of objects spending the most time running scripts"/>
+			<button label="Elenco script" name="Scripts digest" tool_tip="Gets a list of all scripts and number of occurences of each"/>
+		</panel>
+		<panel label="Richieste" name="request">
+			<text name="Destination:">
+				Destinazione:
+			</text>
+			<combo_box name="destination">
+				<combo_box.item label="Selezione" name="item1"/>
+				<combo_box.item label="Propria regione" name="item2"/>
+			</combo_box>
+			<text name="Request:">
+				Richiesta:
+			</text>
+			<text name="Parameter:">
+				Parametro:
+			</text>
+			<button label="Esegui" name="Make Request"/>
 		</panel>
 	</tab_container>
 </floater>

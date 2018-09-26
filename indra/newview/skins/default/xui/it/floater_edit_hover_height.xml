@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="HoverHeight" title="IMPOSTA ALTEZZA DI VOLO">
+<floater name="HoverHeight" title="Imposta altezza da terra">
 	<slider label="Altezza" name="HoverHeightSlider"/>
 </floater>
