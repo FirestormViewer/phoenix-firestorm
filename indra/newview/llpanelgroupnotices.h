@@ -65,6 +65,8 @@ public:
 
 	void refreshNotices();
 
+	void clearNoticeList();
+
 	virtual void setGroupID(const LLUUID& id);
 
 private:
@@ -113,6 +115,8 @@ private:
 	std::string		mNoNoticesStr;
 
 	LLOfferInfo* mInventoryOffer;
+
+	LLUUID mPrevSelectedNotice;
 
 	static std::map<LLUUID,LLPanelGroupNotices*>	sInstances;
 };
