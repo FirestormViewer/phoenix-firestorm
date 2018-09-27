@@ -1400,7 +1400,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 
 			if (material && editable)
 			{
-				LL_DEBUGS("Materials: OnMatererialsLoaded:") << material->asLLSD() << LL_ENDL;
+				LL_DEBUGS("Materials") << material->asLLSD() << LL_ENDL;
 
 				// Alpha
 				LLCtrlSelectionInterface* combobox_alphamode =

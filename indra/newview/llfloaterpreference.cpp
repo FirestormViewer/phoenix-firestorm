@@ -4285,6 +4285,18 @@ void LLPanelPreferenceGraphics::cancel()
 void LLPanelPreferenceGraphics::saveSettings()
 {
 	resetDirtyChilds();
+	// <FS:Ansariel> Improved graphics preferences; We don't need this
+	//std::string preset_graphic_active = gSavedSettings.getString("PresetGraphicActive");
+	//if (preset_graphic_active.empty())
+	//{
+	//	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+	//	if (instance)
+	//	{
+	//		//don't restore previous preset after closing Preferences
+	//		instance->saveGraphicsPreset(preset_graphic_active);
+	//	}
+	//}
+	// </FS:Ansariel>
 	LLPanelPreference::saveSettings();
 }
 void LLPanelPreferenceGraphics::setHardwareDefaults()

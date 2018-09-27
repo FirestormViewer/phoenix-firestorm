@@ -758,9 +758,6 @@ void LLWindowWin32::close()
 
 	mDragDrop->reset();
 
-	// Make sure cursor is visible and we haven't mangled the clipping state.
-	setMouseClipping(FALSE);
-	showCursor();
 
 	// Go back to screen mode written in the registry.
 	if (mFullscreen)
@@ -768,9 +765,23 @@ void LLWindowWin32::close()
 		resetDisplayResolution();
 	}
 
+	// Don't process events in our mainWindowProc any longer.
+	SetWindowLongPtr(mWindowHandle, GWLP_USERDATA, NULL);
+
+	// Make sure cursor is visible and we haven't mangled the clipping state.
+	showCursor();
+	setMouseClipping(FALSE);
+	if (gKeyboard)
+	{
+		gKeyboard->resetKeys();
+	}
+
 	// Clean up remaining GL state
-	LL_DEBUGS("Window") << "Shutting down GL" << LL_ENDL;
-	gGLManager.shutdownGL();
+	if (gGLManager.mInited)
+	{
+		LL_INFOS("Window") << "Cleaning up GL" << LL_ENDL;
+		gGLManager.shutdownGL();
+	}
 
 	LL_DEBUGS("Window") << "Releasing Context" << LL_ENDL;
 	if (mhRC)
@@ -791,16 +802,16 @@ void LLWindowWin32::close()
 	// Restore gamma to the system values.
 	restoreGamma();
 
-	if (mhDC && !ReleaseDC(mWindowHandle, mhDC))
+	if (mhDC)
 	{
-		LL_WARNS("Window") << "Release of mhDC failed" << LL_ENDL;
+		if (!ReleaseDC(mWindowHandle, mhDC))
+		{
+			LL_WARNS("Window") << "Release of mhDC failed" << LL_ENDL;
+		}
 		mhDC = NULL;
 	}
 
 	LL_DEBUGS("Window") << "Destroying Window" << LL_ENDL;
-	
-	// Don't process events in our mainWindowProc any longer.
-	SetWindowLongPtr(mWindowHandle, GWLP_USERDATA, NULL);
 
 	// Make sure we don't leave a blank toolbar button.
 	ShowWindow(mWindowHandle, SW_HIDE);
