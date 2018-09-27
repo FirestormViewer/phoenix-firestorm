@@ -564,7 +564,7 @@
     <key>util.aditi.lindenlab.com</key>
         <map>
         <key>LastModified</key>
-            <date>2018-06-22T22:15:00Z</date>
+            <date>2018-09-26T20:15:00Z</date>
         <key>app_slurl_base</key>
             <string>secondlife:///app</string>
         <key>gridname</key>
@@ -572,7 +572,7 @@
         <key>gridnick</key>
             <string>aditi</string>
         <key>helperuri</key>
-            <string>http://aditi-secondlife.webdev.lindenlab.com/helpers/</string>
+            <string>https://secondlife.aditi.lindenlab.com/helpers/</string>
         <key>login_identifier_types</key>
             <array>
                 <string>agent</string>

@@ -29,7 +29,10 @@
 #include "llphysicsshapebuilderutil.h"
 
 /* static */
-void LLPhysicsShapeBuilderUtil::determinePhysicsShape( const LLPhysicsVolumeParams& volume_params, const LLVector3& scale, PhysicsShapeSpecification& specOut )
+// <FS:Beq> FIRE-23053 - analysed mesh physics is not correctly displayed for thin meshes
+//void LLPhysicsShapeBuilderUtil::determinePhysicsShape( const LLPhysicsVolumeParams& volume_params, const LLVector3& scale, PhysicsShapeSpecification& specOut )
+void LLPhysicsShapeBuilderUtil::determinePhysicsShape(const LLPhysicsVolumeParams& volume_params, const LLVector3& scale, bool hasDecomp, PhysicsShapeSpecification& specOut)
+//</FS:Beq>
 {
 	const LLProfileParams& profile_params = volume_params.getProfileParams();
 	const LLPathParams& path_params = volume_params.getPathParams();
@@ -203,7 +206,9 @@ void LLPhysicsShapeBuilderUtil::determinePhysicsShape( const LLPhysicsVolumePara
 	{
 		//<FS:Beq> [BUG-134006] Viewer code is not aligned to server code when calculating physics shape for thin objects.
 		specOut.mType = PhysicsShapeSpecification::INVALID;
-		if (volume_params.isMeshSculpt()){
+		// <FS:Beq> FIRE-23053 - add decomp check analysed mesh physics is not correctly displayed for thin meshes
+		//		if (volume_params.isMeshSculpt()){
+		if (volume_params.isMeshSculpt() && !hasDecomp){
 			static const float SHAPE_BUILDER_CONVEXIFICATION_SIZE_MESH = 0.5;
 			// it's a mesh and only one size is smaller than min. 
 			for (S32 i = 0; i < 3; ++i)

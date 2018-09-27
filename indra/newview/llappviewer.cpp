@@ -3458,6 +3458,12 @@ void LLAppViewer::initStrings()
 		// translation strings into this one.
 		LLTrans::setDefaultArg(brackets, LLTrans::getString(nobrackets));
 	}
+
+	// <FS:Ansariel> Set version number in VIEWER_GENERATION default substitute automatically
+	LLStringUtil:: format_map_t gen_args;
+	gen_args["[VERSION]"] = llformat("%d", LLVersionInfo::getMajor());
+	LLTrans::setDefaultArg("[VIEWER_GENERATION]", LLTrans::getString("VIEWER_GENERATION", gen_args));
+	// </FS:Ansariel>
 }
 
 //
@@ -3772,7 +3778,7 @@ LLSD LLAppViewer::getViewerInfo() const
 	}
 	else
 	{
-		LL_WARNS("Driver version")<< "Cannot get driver version from getDriverVersionWMI" << LL_ENDL;
+		LL_WARNS("DriverVersion")<< "Cannot get driver version from getDriverVersionWMI" << LL_ENDL;
 		LLSD driver_info = gDXHardware.getDisplayInfo();
 		if (driver_info.has("DriverVersion"))
 		{

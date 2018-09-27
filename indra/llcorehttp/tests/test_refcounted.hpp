@@ -154,5 +154,4 @@ namespace tut
 	}
 }
 #endif
-
 #endif	// TEST_LLCOREINT_REF_COUNTED_H_

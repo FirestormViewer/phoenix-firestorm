@@ -1102,13 +1102,6 @@ void LLOutfitGallery::refreshOutfit(const LLUUID& category_id)
                     updates["name"] = new_name;
                     update_inventory_item(inv_id, updates, NULL);
                     mOutfitRenamePending.setNull();
-                    // <FS:Ansariel> FIRE-20526: Outfit snapshot upload closes inventory; No idea what purpose serves closing the inventory window here
-                    //LLFloater* inv_floater = LLFloaterReg::getInstance("inventory");
-                    //if (inv_floater)
-                    //{
-                    //    inv_floater->closeFloater();
-                    //}
-                    // </FS:Ansariel>
                     LLFloater* appearance_floater = LLFloaterReg::getInstance("appearance");
                     if (appearance_floater)
                     {
@@ -1241,7 +1234,7 @@ void LLOutfitGallery::uploadOutfitImage(const std::vector<std::string>& filename
             LLFloaterPerms::getNextOwnerPerms("Uploads"),
             LLFloaterPerms::getGroupPerms("Uploads"),
             LLFloaterPerms::getEveryonePerms("Uploads"),
-            upload_pending_name, LLAssetStorage::LLStoreAssetCallback(), expected_upload_cost, nruserdata);
+            upload_pending_name, LLAssetStorage::LLStoreAssetCallback(), expected_upload_cost, nruserdata, false);
         mOutfitLinkPending = outfit_id;
     }
     delete unit;

@@ -3429,6 +3429,9 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 	<notification name="PresetNotSaved">
 		Fehler beim Speichern der Voreinstellung [NAME].
 	</notification>
+	<notification name="DefaultPresetNotSaved">
+		Standard-Voreinstellung kann nicht überschrieben werden.
+	</notification>
 	<notification name="PresetNotDeleted">
 		Fehler beim Löschen der Voreinstellung [NAME].
 	</notification>
