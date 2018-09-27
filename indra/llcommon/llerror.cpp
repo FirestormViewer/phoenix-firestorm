@@ -1253,7 +1253,10 @@ namespace LLError
 			}
 		}
 		
-		addEscapedMessage(message_stream, message);
+		// <FS:Ansriel> Fix log output - we don't need an escaped output
+		//addEscapedMessage(message_stream, message);
+		message_stream << message;
+		// </FS:Ansariel>
 
 		writeToRecorders(site, message_stream.str());
 		
