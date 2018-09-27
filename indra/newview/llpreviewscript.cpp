@@ -861,7 +861,7 @@ void LLScriptEdCore::updateButtonBar()
 	mLoadFromDiskBtn->setEnabled(mEditor->canLoadOrSaveToFile());
 	//<FS:Kadah> Recompile button
 	static LLCachedControl<bool> FSScriptEditorRecompileButton(gSavedSettings, "FSScriptEditorRecompileButton");
-	mSaveBtn2->setEnabled((hasChanged() && !mScriptRemoved) || (mLSLProc && FSScriptEditorRecompileButton && !mCompiling));
+	mSaveBtn2->setEnabled((hasChanged() || (mLSLProc && FSScriptEditorRecompileButton && !mCompiling && mHasScriptData)) && !mScriptRemoved);
 	mSaveBtn2->setLabel((!mLSLProc || !FSScriptEditorRecompileButton || hasChanged()) ? LLTrans::getString("save_file_verb") : LLTrans::getString("recompile_script_verb"));
 	//</FS:Kadah>
 }

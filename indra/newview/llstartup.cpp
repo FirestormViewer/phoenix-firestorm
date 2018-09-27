@@ -393,28 +393,10 @@ void downloadGridlistError( LLSD const &aData, std::string const &aURL )
 	sGridListRequestReady = true;
 }
 
- void downloadGridstatusComplete( LLSD const &aData )
+ void downloadGridstatusComplete(LLSD const &aData)
 {
 	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
-    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
-
-    const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
-
-	if( status.getType() < 200 && status.getType() >= 300 && status.getType() != HTTP_NOT_MODIFIED)
-	{
-		if (status.getType() == HTTP_INTERNAL_ERROR)
-		{
-			report_to_nearby_chat(LLTrans::getString("SLGridStatusTimedOut"));
-		}
-		else
-		{
-			LLStringUtil::format_map_t args;
-			args["STATUS"] = llformat("%d", status.getType());
-			report_to_nearby_chat(LLTrans::getString("SLGridStatusOtherError", args));
-		}
-		LL_WARNS("SLGridStatusResponder") << "Error - status " << status.getType() << LL_ENDL;
-		return;
-	}
+	const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
 
 	if (rawData.size() == 0)
 	{
@@ -502,6 +484,23 @@ void downloadGridlistError( LLSD const &aData, std::string const &aURL )
 	{
 		report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
 		LL_WARNS("SLGridStatusResponder") << "Error - output without </item>" << LL_ENDL;
+	}
+}
+
+void downloadGridstatusError(LLSD const &aData, std::string const &aURL)
+{
+	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(aData);
+	LL_WARNS("SLGridStatusResponder") << "Error - status " << status.getType() << LL_ENDL;
+
+	if (status.getType() == HTTP_INTERNAL_ERROR)
+	{
+		report_to_nearby_chat(LLTrans::getString("SLGridStatusTimedOut"));
+	}
+	else
+	{
+		LLStringUtil::format_map_t args;
+		args["STATUS"] = llformat("%d", status.getType());
+		report_to_nearby_chat(LLTrans::getString("SLGridStatusOtherError", args));
 	}
 }
 // </FS:PP>
@@ -3085,9 +3084,8 @@ bool idle_startup()
 		// <FS:PP>
 		if (gSavedSettings.getBOOL("AutoQueryGridStatus"))
 		{
-			FSCoreHttpUtil::callbackHttpGetRaw( gSavedSettings.getString("AutoQueryGridStatusURL"),
-												downloadGridstatusComplete );
-
+			FSCoreHttpUtil::callbackHttpGetRaw(gSavedSettings.getString("AutoQueryGridStatusURL"),
+				downloadGridstatusComplete, [](const LLSD& data) { downloadGridstatusError(data, gSavedSettings.getString("AutoQueryGridStatusURL")); });
 		}
 		// </FS:PP>
 

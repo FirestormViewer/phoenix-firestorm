@@ -3044,7 +3044,7 @@ void LLViewerRegion::unpackRegionHandshake()
 void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 {
 	capabilityNames.append("AbuseCategories");
-	//capabilityNames.append("AcceptFriendship");
+	capabilityNames.append("AcceptFriendship");
 	capabilityNames.append("AcceptGroupInvite"); // ReadOfflineMsgs recieved messages only!!!
 	capabilityNames.append("AgentPreferences");
 	capabilityNames.append("AgentState");
@@ -3055,7 +3055,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("ChatSessionRequest");
 	capabilityNames.append("CopyInventoryFromNotecard");
 	capabilityNames.append("CreateInventoryCategory");
-	//capabilityNames.append("DeclineFriendship");
+	capabilityNames.append("DeclineFriendship");
 	capabilityNames.append("DeclineGroupInvite"); // ReadOfflineMsgs recieved messages only!!!
 	capabilityNames.append("DispatchRegionInfo");
 	capabilityNames.append("DirectDelivery");
@@ -3120,7 +3120,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("ParcelVoiceInfoRequest");
 	capabilityNames.append("ProductInfoRequest");
 	capabilityNames.append("ProvisionVoiceAccountRequest");
-	capabilityNames.append("ReadOfflineMsgs"); // Only use with AcceptGroupInvite AcceptFriendship
+	capabilityNames.append("ReadOfflineMsgs"); // Requires to respond reliably: AcceptFriendship, AcceptGroupInvite, DeclineFriendship, DeclineGroupInvite
 	capabilityNames.append("RemoteParcelRequest");
 	capabilityNames.append("RenderMaterials");
 	capabilityNames.append("RequestTextureDownload");
