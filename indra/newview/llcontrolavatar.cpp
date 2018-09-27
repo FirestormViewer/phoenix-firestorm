@@ -113,7 +113,7 @@ void LLControlAvatar::getNewConstraintFixups(LLVector3& new_pos_fixup, F32& new_
         }
         else if (offset_dist < max_legal_offset-1 && mPositionConstraintFixup.length()>0.01f)
         {
-            new_pos_fixup = mPositionConstraintFixup * 0.9;
+            new_pos_fixup = mPositionConstraintFixup * 0.9f;
             LL_DEBUGS("ConstraintFix") << getFullname() << " pos fixup reduced " 
                                       << new_pos_fixup << " was " << mPositionConstraintFixup << LL_ENDL;
         }
