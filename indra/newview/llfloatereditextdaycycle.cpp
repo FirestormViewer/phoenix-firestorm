@@ -184,7 +184,7 @@ BOOL LLFloaterEditExtDayCycle::postBuild()
     mFlyoutControl->setAction([this](LLUICtrl *ctrl, const LLSD &data) { onButtonApply(ctrl, data); });
 
     getChild<LLButton>(BTN_CANCEL, true)->setCommitCallback([this](LLUICtrl *ctrl, const LLSD &data) { onClickCloseBtn(); });
-    mTimeSlider->setCommitCallback([this](LLUICtrl *ctrl, const LLSD &data) { onTimeSliderMoved(); });
+    mTimeSlider->setCommitCallback([this](LLUICtrl *ctrl, const LLSD &data) { onTimeSliderCallback(); });
     mAddFrameButton->setCommitCallback([this](LLUICtrl *ctrl, const LLSD &data) { onAddTrack(); });
     mDeleteFrameButton->setCommitCallback([this](LLUICtrl *ctrl, const LLSD &data) { onRemoveTrack(); });
     mImportButton->setCommitCallback([this](LLUICtrl *, const LLSD &){ onButtonImport(); });
@@ -517,7 +517,9 @@ void LLFloaterEditExtDayCycle::onButtonApply(LLUICtrl *ctrl, const LLSD &data)
     }
     else if (ctrl_action == ACTION_SAVEAS)
     {
-        doApplyCreateNewInventory(dayclone);
+        LLSD args;
+        args["DESC"] = dayclone->getName();
+        LLNotificationsUtil::add("SaveSettingAs", args, LLSD(), boost::bind(&LLFloaterEditExtDayCycle::onSaveAsCommit, this, _1, _2, dayclone));
     }
     else if ((ctrl_action == ACTION_APPLY_LOCAL) ||
         (ctrl_action == ACTION_APPLY_PARCEL) ||
@@ -535,6 +537,16 @@ void LLFloaterEditExtDayCycle::onButtonApply(LLUICtrl *ctrl, const LLSD &data)
     }
 }
 
+void LLFloaterEditExtDayCycle::onSaveAsCommit(const LLSD& notification, const LLSD& response, const LLSettingsDay::ptr_t &day)
+{
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    if (0 == option)
+    {
+        std::string settings_name = response["message"].asString();
+        LLStringUtil::trim(settings_name);
+        doApplyCreateNewInventory(day, settings_name);
+    }
+}
 
 void LLFloaterEditExtDayCycle::onClickCloseBtn(bool app_quitting /*= false*/)
 {
@@ -786,8 +798,9 @@ void LLFloaterEditExtDayCycle::checkAndConfirmSettingsLoss(on_confirm_fn cb)
     }
 }
 
-void LLFloaterEditExtDayCycle::onTimeSliderMoved()
+void LLFloaterEditExtDayCycle::onTimeSliderCallback()
 {
+    stopPlay();
     selectFrame(mTimeSlider->getCurSliderValue(), LLSettingsDay::DEFAULT_FRAME_SLOP_FACTOR);
 }
 
@@ -1231,19 +1244,19 @@ void LLFloaterEditExtDayCycle::reblendSettings()
     mWaterBlender->setPosition(position);    
 }
 
-void LLFloaterEditExtDayCycle::doApplyCreateNewInventory(const LLSettingsDay::ptr_t &day)
+void LLFloaterEditExtDayCycle::doApplyCreateNewInventory(const LLSettingsDay::ptr_t &day, std::string settings_name)
 {
     // This method knows what sort of settings object to create.
     LLUUID parent_id = mInventoryItem ? mInventoryItem->getParentUUID() : gInventory.findCategoryUUIDForType(LLFolderType::FT_SETTINGS);
 
-    LLSettingsVOBase::createInventoryItem(day, parent_id, 
+    LLSettingsVOBase::createInventoryItem(day, parent_id, settings_name,
             [this](LLUUID asset_id, LLUUID inventory_id, LLUUID, LLSD results) { onInventoryCreated(asset_id, inventory_id, results); });
 }
 
 void LLFloaterEditExtDayCycle::doApplyUpdateInventory(const LLSettingsDay::ptr_t &day)
 {
     if (mInventoryId.isNull())
-        LLSettingsVOBase::createInventoryItem(day, gInventory.findCategoryUUIDForType(LLFolderType::FT_SETTINGS),
+        LLSettingsVOBase::createInventoryItem(day, gInventory.findCategoryUUIDForType(LLFolderType::FT_SETTINGS), std::string(),
                 [this](LLUUID asset_id, LLUUID inventory_id, LLUUID, LLSD results) { onInventoryCreated(asset_id, inventory_id, results); });
     else
         LLSettingsVOBase::updateInventoryItem(day, mInventoryId,

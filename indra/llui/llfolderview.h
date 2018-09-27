@@ -92,7 +92,8 @@ public:
 								allow_multiselect,
 								show_empty_message,
 								use_ellipses,
-								show_item_link_overlays;
+								show_item_link_overlays,
+								suppress_folder_menu;
 		Mandatory<LLFolderViewModelInterface*>	view_model;
 		Optional<LLFolderViewGroupedItemModel*> grouped_item_model;
         Mandatory<std::string>   options_menu;
@@ -264,6 +265,8 @@ protected:
 
 	void closeRenamer( void );
 
+	bool isFolderSelected();
+
 	bool selectFirstItem();
 	bool selectLastItem();
 	
@@ -287,7 +290,8 @@ protected:
 									mDragAndDropThisFrame,
 									mShowItemLinkOverlays,
 									mShowSelectionContext,
-									mShowSingleSelection;
+									mShowSingleSelection,
+									mSuppressFolderMenu;
 
 	// Renaming variables and methods
 	LLFolderViewItem*				mRenameItem;  // The item currently being renamed

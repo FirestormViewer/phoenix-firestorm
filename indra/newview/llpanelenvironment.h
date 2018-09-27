@@ -71,6 +71,7 @@ protected:
     static const std::string    SLD_DAYLENGTH;
     static const std::string    SLD_DAYOFFSET;
     static const std::string    SLD_ALTITUDES;
+    static const std::string    ICN_GROUND;
     static const std::string    CHK_ALLOWOVERRIDE;
     static const std::string    BTN_APPLY;
     static const std::string    BTN_CANCEL;
@@ -104,6 +105,7 @@ protected:
     bool                        getIsDirtyFlag(U32 flag) const      { return ((mDirtyFlag & flag) != 0); }
     U32                         getDirtyFlag() const                { return mDirtyFlag; }
     void                        updateAltLabel(const std::string &alt_name, U32 sky_index, F32 alt_value);
+    void                        readjustAltLabels();
 
     void                        onSwitchDefaultSelection();
     void                        onSldDayLengthChanged(F32 value);
@@ -130,7 +132,7 @@ protected:
 
     LLFloaterSettingsPicker *   getSettingsPicker(bool create = true);
     LLFloaterEditExtDayCycle *  getEditFloater(bool create = true);
-    void                        updateEditFloater(const LLEnvironment::EnvironmentInfo::ptr_t &nextenv);
+    void                        updateEditFloater(const LLEnvironment::EnvironmentInfo::ptr_t &nextenv, bool enable);
 
     void                        setCrossRegion(bool val) { mCrossRegion = val; }
     void                        setNoSelection(bool val) { mNoSelection = val; }

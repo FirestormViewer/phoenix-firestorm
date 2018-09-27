@@ -161,7 +161,7 @@
                             top_pad="6"
                             name="sld_day_length"
                             min_val="4"
-                            max_val="178"
+                            max_val="168"
                             width="180" />
                     <text
                             type="string"
@@ -244,7 +244,7 @@
                     width="17"
                     orientation="vertical"
                     increment="10"
-                    initial_value="100"
+                    min_val="100"
                     max_val="4000"
                     layout="topleft"
                     left="15"
@@ -277,7 +277,7 @@
                         height="12"
                         layout="topleft"
                         left_pad="3"
-                        top_delta="0"
+                        top_delta="2"
                         width="200"
                         name="ground">
                     Ground
