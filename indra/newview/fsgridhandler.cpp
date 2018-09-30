@@ -179,8 +179,8 @@ void LLGridManager::initGrids()
 {
 	mGridList = LLSD();
 
-	std::string grid_file  = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,  "grids.xml");
 #ifndef SINGLEGRID
+	std::string grid_file  = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,  "grids.xml");
 	std::string grid_user_file = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,  "grids.user.xml");
 	std::string grid_remote_file = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,  "grids.remote.xml");
 
