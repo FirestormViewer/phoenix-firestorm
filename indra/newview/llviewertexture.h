@@ -128,6 +128,8 @@ public:
 	virtual BOOL isMissingAsset() const ;
 	virtual void dump();	// debug info to LL_INFOS()
 	
+    virtual BOOL isViewerMediaTexture() const { return false; }
+
 	/*virtual*/ bool bindDefaultImage(const S32 stage = 0) ;
 	/*virtual*/ bool bindDebugImage(const S32 stage = 0) ;
 	/*virtual*/ void forceImmediateUpdate() ;
@@ -617,6 +619,8 @@ public:
 	void setPlaying(BOOL playing) ;
 	BOOL isPlaying() const {return mIsPlaying;}
 	void setMediaImpl() ;
+
+    virtual BOOL isViewerMediaTexture() const { return true; }
 
 	void initVirtualSize() ;	
 	void invalidateMediaImpl() ;

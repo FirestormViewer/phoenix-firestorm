@@ -436,6 +436,7 @@ void LLFloaterEditExtDayCycle::refresh()
 
 void LLFloaterEditExtDayCycle::setEditDayCycle(const LLSettingsDay::ptr_t &pday)
 {
+    mExpectingAssetId.setNull();
     mEditDay = pday->buildDeepCloneAndUncompress();
 
     if (mEditDay->isTrackEmpty(LLSettingsDay::TRACK_WATER))
@@ -463,6 +464,7 @@ void LLFloaterEditExtDayCycle::setEditDefaultDayCycle()
 {
     mInventoryItem = nullptr;
     mInventoryId.setNull();
+    mExpectingAssetId = LLSettingsDay::GetDefaultAssetId();
     LLSettingsVOBase::getSettingsAsset(LLSettingsDay::GetDefaultAssetId(),
         [this](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat) { onAssetLoaded(asset_id, settings, status); });
 }
@@ -1086,18 +1088,19 @@ void LLFloaterEditExtDayCycle::loadInventoryItem(const LLUUID  &inventoryId)
     mCanCopy = mInventoryItem->getPermissions().allowCopyBy(gAgent.getID());
     mCanMod = mInventoryItem->getPermissions().allowModifyBy(gAgent.getID());
 
+    mExpectingAssetId = mInventoryItem->getAssetUUID();
     LLSettingsVOBase::getSettingsAsset(mInventoryItem->getAssetUUID(),
         [this](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat) { onAssetLoaded(asset_id, settings, status); });
 }
 
 void LLFloaterEditExtDayCycle::onAssetLoaded(LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status)
 {
-    if ((mInventoryItem && mInventoryItem->getAssetUUID() != asset_id)
-        || (!mInventoryItem && LLSettingsDay::GetDefaultAssetId() != asset_id))
+    if (asset_id != mExpectingAssetId)
     {
-        LL_WARNS("ENVDAYEDIT") << "Discarding obsolete asset callback" << LL_ENDL;
+        LL_WARNS("ENVDAYEDIT") << "Expecting {" << mExpectingAssetId << "} got {" << asset_id << "} - throwing away." << LL_ENDL;
         return;
     }
+    mExpectingAssetId.setNull();
 
     if (!settings || status)
     {
@@ -1271,13 +1274,7 @@ void LLFloaterEditExtDayCycle::doApplyEnvironment(const std::string &where, cons
     }
     else if (where == ACTION_APPLY_PARCEL)
     {
-        LLParcelSelectionHandle handle(LLViewerParcelMgr::instance().getParcelSelection());
-        LLParcel *parcel(nullptr);
-
-        if (handle)
-            parcel = handle->getParcel();
-        if (!parcel || (parcel->getLocalID() == INVALID_PARCEL_ID))
-            parcel = LLViewerParcelMgr::instance().getAgentParcel();
+        LLParcel *parcel(LLViewerParcelMgr::instance().getAgentOrSelectedParcel());
 
         if ((!parcel) || (parcel->getLocalID() == INVALID_PARCEL_ID))
         {
@@ -1413,19 +1410,7 @@ bool LLFloaterEditExtDayCycle::canApplyRegion() const
 
 bool LLFloaterEditExtDayCycle::canApplyParcel() const
 {
-    LLParcelSelectionHandle handle(LLViewerParcelMgr::instance().getParcelSelection());
-    LLParcel *parcel(nullptr);
-
-    if (handle)
-        parcel = handle->getParcel();
-    if (!parcel)
-        parcel = LLViewerParcelMgr::instance().getAgentParcel();
-
-    if (!parcel)
-        return false;
-
-    return parcel->allowTerraformBy(gAgent.getID()) &&
-        LLEnvironment::instance().isExtendedEnvironmentEnabled();
+    return LLEnvironment::instance().canAgentUpdateParcelEnvironment();
 }
 
 void LLFloaterEditExtDayCycle::startPlay()
@@ -1545,6 +1530,16 @@ void LLFloaterEditExtDayCycle::onAssetLoadedForFrame(LLUUID asset_id, LLSettings
 {
     std::function<void()> cb = [this, settings, frame, track]()
     {
+        if ((mEditDay->getSettingsNearKeyframe(frame, mCurrentTrack, LLSettingsDay::DEFAULT_FRAME_SLOP_FACTOR)).second)
+        {
+            LL_WARNS("ENVDAYEDIT") << "Attempt to add new frame too close to existing frame." << LL_ENDL;
+            return;
+        }
+        if (!mFramesSlider->canAddSliders())
+        {
+            LL_WARNS("ENVDAYEDIT") << "Attempt to add new frame when slider is full." << LL_ENDL;
+            return;
+        }
         mEditDay->setSettingsAtKeyframe(settings, frame, track);
         reblendSettings();
         synchronizeTabs();
@@ -1564,30 +1559,26 @@ void LLFloaterEditExtDayCycle::onAssetLoadedForFrame(LLUUID asset_id, LLSettings
         inv_item = picker->findItem(asset_id, false, false);
     }
 
-    if (inv_item)
+    if (inv_item
+        && mInventoryItem
+        && mInventoryItem->getPermissions().allowOperationBy(PERM_TRANSFER, gAgent.getID())
+        && !inv_item->getPermissions().allowOperationBy(PERM_TRANSFER, gAgent.getID()))
     {
-        if (mInventoryItem->getPermissions().allowOperationBy(PERM_TRANSFER, gAgent.getID()))
+        LLSD args;
+
+        // create and show confirmation textbox
+        LLNotificationsUtil::add("SettingsMakeNoTrans", args, LLSD(),
+            [this, cb](const LLSD&notif, const LLSD&resp)
         {
-            if (!inv_item->getPermissions().allowOperationBy(PERM_TRANSFER, gAgent.getID()))
+            S32 opt = LLNotificationsUtil::getSelectedOption(notif, resp);
+            if (opt == 0)
             {
-                LLSD args;
-
-                // create and show confirmation textbox
-                LLNotificationsUtil::add("SettingsMakeNoTrans", args, LLSD(),
-                    [this, cb](const LLSD&notif, const LLSD&resp)
-                    {
-                        S32 opt = LLNotificationsUtil::getSelectedOption(notif, resp);
-                        if (opt == 0)
-                        {
-                            mMakeNoTrans = true;
-                            mEditDay->setFlag(LLSettingsBase::FLAG_NOTRANS);
-                            cb();
-                        }
-                    });
-                return;
+                mMakeNoTrans = true;
+                mEditDay->setFlag(LLSettingsBase::FLAG_NOTRANS);
+                cb();
             }
-        }
-
+        });
+        return;
     }
     
     cb();
