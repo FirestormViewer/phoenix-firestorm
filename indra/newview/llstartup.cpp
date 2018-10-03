@@ -892,6 +892,7 @@ bool idle_startup()
 		// </FS:Techwolf Lupindo>
 
 // <AW: opensim>
+#ifndef SINGLEGRID
 		if(!gSavedSettings.getBOOL("GridListDownload"))
 		{
 			sGridListRequestReady = true;
@@ -911,6 +912,10 @@ bool idle_startup()
 			std::string url = gSavedSettings.getString("GridListDownloadURL");
 			FSCoreHttpUtil::callbackHttpGet(url, last_modified, boost::bind(downloadGridlistComplete, _1), boost::bind(downloadGridlistError, _1, url));
 		}
+#else
+		sGridListRequestReady = true;
+#endif
+
 #ifdef OPENSIM // <FS:AW optional opensim support>
 		// Fetch grid infos as needed
 		LLGridManager::getInstance()->initGrids();
@@ -1653,7 +1658,7 @@ bool idle_startup()
 		// This call to LLLoginInstance::connect() starts the 
 		// authentication process.
 		login->connect(gUserCredential);
-#ifdef OPENSIM // <FS:AW optional opensim support>
+#if defined(OPENSIM) && !defined(SINGLEGRID) // <FS:AW optional opensim support>
 // <AW: opensim>
 		LLGridManager::getInstance()->saveGridList();
 // </AW: opensim>
