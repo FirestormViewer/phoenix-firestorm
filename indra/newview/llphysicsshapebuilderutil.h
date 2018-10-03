@@ -133,8 +133,10 @@ public:
 		// Offset of shape from origin of primitive's reference frame
 		LLVector3	mCenter;
 	};
-
-	static void determinePhysicsShape( const LLPhysicsVolumeParams& volume_params, const LLVector3& scale, PhysicsShapeSpecification& specOut );
+	// <FS:Beq> FIRE-23053 - analysed mesh physics is not correctly displayed for thin meshes
+	//	static void determinePhysicsShape( const LLPhysicsVolumeParams& volume_params, const LLVector3& scale, PhysicsShapeSpecification& specOut );
+	static void determinePhysicsShape(const LLPhysicsVolumeParams& volume_params, const LLVector3& scale, bool hasDecomp, PhysicsShapeSpecification& specOut);
+	//</FS:Beq>
 };
 
 #endif //LL_PHYSICS_SHAPE_BUILDER_H
