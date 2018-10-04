@@ -12,9 +12,8 @@ FALSE=1
 
 # args ../indra
 #                  <string>-DCMAKE_BUILD_TYPE:STRING=Release</string>
-#                  <string>-DWORD_SIZE:STRING=32</string>
+#                  <string>-DADDRESS_SIZE:STRING=32</string>
 #                  <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
-#                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
 #                  <string>-DUSE_KDU=TRUE</string>
 #                  <string>-DFMODSTUDIO:BOOL=ON</string>
 #                  <string>-DFMODEX:BOOL=ON</string>
@@ -37,6 +36,7 @@ WANTS_KDU=$FALSE
 WANTS_FMODSTUDIO=$FALSE
 WANTS_FMODEX=$FALSE
 WANTS_OPENSIM=$TRUE
+WANTS_SINGLEGRID=$FALSE
 WANTS_AVX=$FALSE
 WANTS_AVX2=$FALSE
 WANTS_TESTBUILD=$FALSE
@@ -49,6 +49,7 @@ LL_ARGS_PASSTHRU=""
 JOBS="0"
 WANTS_NINJA=$FALSE
 TESTBUILD_PERIOD="0"
+SINGLEGRID_URI=""
 
 ###
 ### Helper Functions
@@ -60,25 +61,26 @@ showUsage()
     echo "Usage: "
     echo "========================"
     echo
-    echo "  --clean          : Remove past builds & configuration"
-    echo "  --config         : Generate a new architecture-specific config"
-    echo "  --build          : Build Firestorm"
-    echo "  --version        : Update version number"
+    echo "  --clean            : Remove past builds & configuration"
+    echo "  --config           : Generate a new architecture-specific config"
+    echo "  --build            : Build Firestorm"
+    echo "  --version          : Update version number"
     echo "  --chan  [Release|Beta|Private]   : Private is the default, sets channel"
     echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
-    echo "  --kdu            : Build with KDU"
-    echo "  --package        : Build installer"
-    echo "  --no-package     : Build without installer (Overrides --package)"
-    echo "  --fmodstudio     : Build with FMOD Studio"
-    echo "  --fmodex         : Build with FMOD Ex"
-    echo "  --opensim        : Build with OpenSim support (Disables Havok features)"
-    echo "  --no-opensim     : Build without OpenSim support (Overrides --opensim)"
-    echo "  --avx            : Build with Advanced Vector Extensions"
-    echo "  --avx2           : Build with Advanced Vector Extensions 2"
-    echo "  --crashreporting : Build with crash reporting enabled"
+    echo "  --kdu              : Build with KDU"
+    echo "  --package          : Build installer"
+    echo "  --no-package       : Build without installer (Overrides --package)"
+    echo "  --fmodstudio       : Build with FMOD Studio"
+    echo "  --fmodex           : Build with FMOD Ex"
+    echo "  --opensim          : Build with OpenSim support (Disables Havok features)"
+    echo "  --no-opensim       : Build without OpenSim support (Overrides --opensim)"
+    echo "  --singlegrid <uri> : Build without OpenSim support (Overrides --opensim)"
+    echo "  --avx              : Build with Advanced Vector Extensions"
+    echo "  --avx2             : Build with Advanced Vector Extensions 2"
+    echo "  --crashreporting   : Build with crash reporting enabled"
     echo "  --testbuild <days> : Create time-limited test build (build date + <days>)"
-    echo "  --platform       : darwin | windows | linux"
-    echo "  --jobs <num>     : Build with <num> jobs in parallel (Linux and Darwin only)"
+    echo "  --platform         : darwin | windows | linux"
+    echo "  --jobs <num>       : Build with <num> jobs in parallel (Linux and Darwin only)"
     echo
     echo "All arguments not in the above list will be passed through to LL's configure/build"
     echo
@@ -88,7 +90,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package no-package fmodstudio fmodex ninja jobs: platform: kdu opensim no-opensim avx avx2 crashreporting testbuild: help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodstudio fmodex ninja jobs: platform: kdu opensim no-opensim singlegrid: avx avx2 crashreporting testbuild: help chan: btype:" "$@" ; do
 
           #ensure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -110,6 +112,9 @@ getArgs()
           fmodex)         WANTS_FMODEX=$TRUE;;
           opensim)        WANTS_OPENSIM=$TRUE;;
           no-opensim)     WANTS_OPENSIM=$FALSE;;
+          singlegrid)     WANTS_SINGLEGRID=$TRUE
+                          SINGLEGRID_URI="$OPTARG"
+                          ;;
           avx)            WANTS_AVX=$TRUE;;
           avx2)           WANTS_AVX2=$TRUE;;
           crashreporting) WANTS_CRASHREPORTING=$TRUE;;
@@ -287,25 +292,34 @@ if [ ! -d `dirname "$LOG"` ] ; then
         mkdir -p `dirname "$LOG"`
 fi
 
-echo -e "configure_firestorm.py" > $LOG
-echo -e "       PLATFORM: '$PLATFORM'"                 | tee -a $LOG
-echo -e "            KDU: `b2a $WANTS_KDU`"            | tee -a $LOG
-echo -e "     FMODSTUDIO: `b2a $WANTS_FMODSTUDIO`"     | tee -a $LOG
-echo -e "         FMODEX: `b2a $WANTS_FMODEX`"         | tee -a $LOG
-echo -e "        OPENSIM: `b2a $WANTS_OPENSIM`"        | tee -a $LOG
-echo -e "            AVX: `b2a $WANTS_AVX`"            | tee -a $LOG
-echo -e "           AVX2: `b2a $WANTS_AVX2`"           | tee -a $LOG
-echo -e " CRASHREPORTING: `b2a $WANTS_CRASHREPORTING`" | tee -a $LOG
-echo -e "      TESTBUILD: `b2a $WANTS_TESTBUILD`"      | tee -a $LOG
-echo -e "        PACKAGE: `b2a $WANTS_PACKAGE`"        | tee -a $LOG
-echo -e "          CLEAN: `b2a $WANTS_CLEAN`"          | tee -a $LOG
-echo -e "          BUILD: `b2a $WANTS_BUILD`"          | tee -a $LOG
-echo -e "         CONFIG: `b2a $WANTS_CONFIG`"         | tee -a $LOG
-echo -e "          NINJA: `b2a $WANTS_NINJA`"          | tee -a $LOG
-echo -e "       PASSTHRU: $LL_ARGS_PASSTHRU"           | tee -a $LOG
-echo -e "          BTYPE: $BTYPE"                      | tee -a $LOG
+echo -e "configure_firestorm.sh" > $LOG
+echo -e "       PLATFORM: '$PLATFORM'"                                         | tee -a $LOG
+echo -e "            KDU: `b2a $WANTS_KDU`"                                    | tee -a $LOG
+echo -e "     FMODSTUDIO: `b2a $WANTS_FMODSTUDIO`"                             | tee -a $LOG
+echo -e "         FMODEX: `b2a $WANTS_FMODEX`"                                 | tee -a $LOG
+echo -e "        OPENSIM: `b2a $WANTS_OPENSIM`"                                | tee -a $LOG
+if [ $WANTS_SINGLEGRID -eq $TRUE ] ; then
+    echo -e "     SINGLEGRID: `b2a $WANTS_SINGLEGRID` ($SINGLEGRID_URI)"       | tee -a $LOG
+else
+    echo -e "     SINGLEGRID: `b2a $WANTS_SINGLEGRID`"                         | tee -a $LOG
+fi
+echo -e "            AVX: `b2a $WANTS_AVX`"                                    | tee -a $LOG
+echo -e "           AVX2: `b2a $WANTS_AVX2`"                                   | tee -a $LOG
+echo -e " CRASHREPORTING: `b2a $WANTS_CRASHREPORTING`"                         | tee -a $LOG
+if [ $WANTS_TESTBUILD -eq $TRUE ] ; then
+    echo -e "      TESTBUILD: `b2a $WANTS_TESTBUILD` ($TESTBUILD_PERIOD days)" | tee -a $LOG
+else
+    echo -e "      TESTBUILD: `b2a $WANTS_TESTBUILD`"                          | tee -a $LOG
+fi
+echo -e "        PACKAGE: `b2a $WANTS_PACKAGE`"                                | tee -a $LOG
+echo -e "          CLEAN: `b2a $WANTS_CLEAN`"                                  | tee -a $LOG
+echo -e "          BUILD: `b2a $WANTS_BUILD`"                                  | tee -a $LOG
+echo -e "         CONFIG: `b2a $WANTS_CONFIG`"                                 | tee -a $LOG
+echo -e "          NINJA: `b2a $WANTS_NINJA`"                                  | tee -a $LOG
+echo -e "       PASSTHRU: $LL_ARGS_PASSTHRU"                                   | tee -a $LOG
+echo -e "          BTYPE: $BTYPE"                                              | tee -a $LOG
 if [ $PLATFORM == "linux" -o $PLATFORM == "darwin" ] ; then
-    echo -e "           JOBS: $JOBS"                       | tee -a $LOG
+    echo -e "           JOBS: $JOBS"                                           | tee -a $LOG
 fi
 echo -e "       Logging to $LOG"
 
@@ -313,15 +327,15 @@ if [ $PLATFORM == "windows" ]
 then
     if [ -z "${AUTOBUILD_VSVER}" ]
     then
-        echo "AUTOBUILD_VSVER not set, this can lead to autobuild picking a higher VS version than desired."
-        echo "If you see this happen you should set the variable to e.g. 120 for Visual Studio 2013"
+        echo "AUTOBUILD_VSVER not set, this can lead to Autobuild picking a higher VS version than desired."
+        echo "If you see this happen you should set the variable to e.g. 120 for Visual Studio 2013."
     fi
 fi
 
 if [ -z "$AUTOBUILD_VARIABLES_FILE" ]
 then
     echo "AUTOBUILD_VARIABLES_FILE not set."
-    echo "In order to run autobuild it needs to be set to point to a correct variables file"
+    echo "In order to run autobuild it needs to be set to point to a correct variables file."
     exit 1
 fi
 
@@ -411,6 +425,11 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     else
         OPENSIM="-DOPENSIM:BOOL=OFF"
     fi
+    if [ $WANTS_SINGLEGRID -eq $TRUE ] ; then
+        SINGLEGRID="-DSINGLEGRID:BOOL=ON -DSINGLEGRID_URI:STRING=$SINGLEGRID_URI"
+    else
+        SINGLEGRID="-DSINGLEGRID:BOOL=OFF"
+    fi
     if [ $WANTS_AVX -eq $TRUE ] ; then
         AVX_OPTIMIZATION="-DUSE_AVX_OPTIMIZATION:BOOL=ON"
     else
@@ -474,7 +493,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         UNATTENDED="-DUNATTENDED=ON"
     fi
 
-    cmake -G "$TARGET" ../indra $CHANNEL $FMODSTUDIO $FMODEX $KDU $OPENSIM $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TESTBUILD $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
+    cmake -G "$TARGET" ../indra $CHANNEL $FMODSTUDIO $FMODEX $KDU $OPENSIM $SINGLEGRID $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TESTBUILD $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
     if [ $PLATFORM == "windows" ] ; then
