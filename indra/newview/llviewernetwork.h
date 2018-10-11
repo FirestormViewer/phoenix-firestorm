@@ -32,7 +32,11 @@ const std::string SECOND_LIFE_MAIN_LABEL = "Second Life";
 const std::string SECOND_LIFE_BETA_LABEL = "Second Life Beta";
 
 // @TODO this really should be private, but is used in llslurl
+#if defined(OPENSIM) && defined(SINGLEGRID)
+const std::string MAINGRID = SINGLEGRID_URI;
+#else
 const std::string MAINGRID = "util.agni.lindenlab.com";
+#endif
 
 // <FS:AW optional opensim support>
 #ifdef OPENSIM
