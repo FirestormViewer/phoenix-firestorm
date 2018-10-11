@@ -184,27 +184,25 @@ void LLStreamingAudio_FMODSTUDIO::update()
 	{
 		FMOD::Sound *sound = NULL;
 
-		// <DKO> FmodEX Error checking
-		//if(mFMODInternetStreamChannelp->getCurrentSound(&sound) == FMOD_OK && sound)
 		if (!Check_FMOD_Error(mFMODInternetStreamChannelp->getCurrentSound(&sound), "FMOD::Channel::getCurrentSound") && sound)
-		// </FS:CR>
 		{
 			FMOD_TAG tag;
 			S32 tagcount, dirtytagcount;
 
-			// <DKO> FmodEX Error checking
-			//if(sound->getNumTags(&tagcount, &dirtytagcount) == FMOD_OK && dirtytagcount)
 			if (!Check_FMOD_Error(sound->getNumTags(&tagcount, &dirtytagcount), "FMOD::Sound::getNumTags") && dirtytagcount)
-			// </FS:CR>
 			{
+				LL_DEBUGS("StreamMetadata") << "Tag count: " << tagcount << "  Dirty tag count: " << dirtytagcount << LL_ENDL;
+
 				// <DKO> Stream metadata - originally by Shyotl Khur
 				mMetadata.clear();
 				mNewMetadata = true;
 				// </DKO>
 				for(S32 i = 0; i < tagcount; ++i)
 				{
-					if(sound->getTag(NULL, i, &tag) != FMOD_OK)
+					if(Check_FMOD_Error(sound->getTag(NULL, i, &tag), "FMOD::Sound::getTag"))
 						continue;
+
+					LL_DEBUGS("StreamMetadata") << "Tag name: " << tag.name << " - Tag type: " << tag.type << " - Tag data type: " << tag.datatype << LL_ENDL;
 
 					std::string name = tag.name;
 					switch(tag.type)
@@ -219,6 +217,12 @@ void LLStreamingAudio_FMODSTUDIO::update()
 						{
 							if(name == "Title") name = "TITLE";
 							else if(name == "WM/AlbumArtist") name = "ARTIST";
+							break;
+						}
+						case(FMOD_TAGTYPE_VORBISCOMMENT):
+						{
+							if(name == "title") name = "TITLE";
+							else if(name == "artist") name == "ARTIST";
 							break;
 						}
 						case(FMOD_TAGTYPE_FMOD):
@@ -250,6 +254,13 @@ void LLStreamingAudio_FMODSTUDIO::update()
 						case(FMOD_TAGDATATYPE_STRING):
 						{
 							std::string out = rawstr_to_utf8(std::string((char*)tag.data,tag.datalen));
+							(mMetadata)[name]=out;
+							LL_DEBUGS("StreamMetadata") << tag.name << ": " << out << LL_ENDL;
+							break;
+						}
+						case(FMOD_TAGDATATYPE_STRING_UTF8):
+						{
+							std::string out((char*)tag.data);
 							(mMetadata)[name]=out;
 							LL_DEBUGS("StreamMetadata") << tag.name << ": " << out << LL_ENDL;
 							break;
