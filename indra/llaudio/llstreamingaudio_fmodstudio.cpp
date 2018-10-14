@@ -222,7 +222,7 @@ void LLStreamingAudio_FMODSTUDIO::update()
 						case(FMOD_TAGTYPE_VORBISCOMMENT):
 						{
 							if(name == "title") name = "TITLE";
-							else if(name == "artist") name == "ARTIST";
+							else if(name == "artist") name = "ARTIST";
 							break;
 						}
 						case(FMOD_TAGTYPE_FMOD):
