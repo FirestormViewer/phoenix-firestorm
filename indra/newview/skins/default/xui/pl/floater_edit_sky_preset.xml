@@ -28,7 +28,7 @@
 				<text name="BHText" tool_tip="Horyzont błękitu: Kolor nieba. W ujęciu meteorologicznym to ustawienie wpływa na 'rozpraszanie atmosferyczne'.">
 					Kolor
 				</text>
-				<text name="BDensText2" tool_tip="Gęstość błękitu: Wpływa na ogólne nasycenie kolorów nieba. Jeśli przesuniesz suwak Intensywności (I) na prawo, to kolory staną się jaśniejsze i bardziej żywe. W miarę przesuwania go w lewo kolory będą stawać się ciemniejsze, w końcu zanikną w czerń i biel. Jeśli chcesz lepiej dostroić balans kolorów nieba możesz skonfigurować poszczególne elementy nasycenia za pomocą wartości kolorów czerwonego, zielonego i niebieskiego.">
+				<text name="BDensText2" tool_tip="Gęstość błękitu: Wpływa na ogólne nasycenie kolorów nieba. Jeśli przesuniesz suwak Intensywności w górę, to kolory staną się jaśniejsze i bardziej żywe. W miarę przesuwania go w dół kolory będą stawać się ciemniejsze, w końcu zanikną w czerń i biel. Jeśli chcesz lepiej dostroić balans kolorów nieba możesz skonfigurować poszczególne elementy nasycenia za pomocą wartości kolorów czerwonego, zielonego i niebieskiego.">
 					Gęstość
 				</text>
 			</panel>
