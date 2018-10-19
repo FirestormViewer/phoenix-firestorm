@@ -337,6 +337,8 @@ private:
  	//for "Show my Favorite Landmarks at Login"
 	static void handleFavoritesOnLoginChanged(LLUICtrl* checkbox, const LLSD& value);
 
+	static void toggleMuteWhenMinimized();
+
 	// <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
 	void onEnableGrowlChanged();
 	// <FS:Ansariel> Flash chat toolbar button notification
