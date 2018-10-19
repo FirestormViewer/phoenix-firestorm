@@ -3304,6 +3304,9 @@ Zostaną zablokowane na kilka sekund dla bezpieczeństwa.
 	<notification name="PresetNotSaved">
 		Błąd podczas zapisywania ustawienia [NAME].
 	</notification>
+	<notification name="DefaultPresetNotSaved">
+		Nie można zastąpić domyślnego ustawienia.
+	</notification>
 	<notification name="PresetNotDeleted">
 		Błąd podczas usuwania ustawienia [NAME].
 	</notification>

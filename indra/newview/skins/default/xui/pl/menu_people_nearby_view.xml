@@ -3,6 +3,7 @@
 	<menu_item_check label="Sortuj według ostatnich rozmówców" name="sort_by_recent_speakers" />
 	<menu_item_check label="Sortuj według imion" name="sort_name" />
 	<menu_item_check label="Sortuj według odległości" name="sort_distance" />
+	<menu_item_check label="Sortuj według ostatniego przybycia" name="sort_arrival" />
 	<menu_item_check name="view_icons" label="Pokazuj ikonki" />
 	<menu_item_check name="view_map" label="Pokazuj mapę" />
 </toggleable_menu>

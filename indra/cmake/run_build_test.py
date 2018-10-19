@@ -173,7 +173,7 @@ def translate_rc(rc):
         try:
             table = get_windows_table()
             symbol, desc = table[hexrc]
-        except Exception, err:
+        except Exception as err:
             log.error("(%s -- carrying on)" % err)
             log.error("terminated with rc %s (%s)" % (rc, hexrc))
         else:

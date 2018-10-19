@@ -157,7 +157,7 @@
 				 left="5"
 				 name="BDensText2"
 				 top_pad="10"
-				 tool_tip="Blue Density: Affects the overall color saturation of your sky. If you move the Intensity (I) slider to the right, your colors will become brighter and more vibrant. If you move it all the way to the left, your colors will become duller, eventually fading to black and white. If you'd like to fine-tune your sky's color balance, you can control individual elements of saturation by using the Red/Green/Blue values." 
+				 tool_tip="Blue Density: Affects the overall color saturation of your sky. If you move the Intensity slider up, your colors will become brighter and more vibrant. If you move it all the way down, your colors will become duller, eventually fading to black and white. If you'd like to fine-tune your sky's color balance, you can control individual elements of saturation by using the Red/Green/Blue values." 
 				 width="50">
 					BlueDen
 				</text>
@@ -840,7 +840,7 @@
 				<slider
 				 can_edit_text="false"
 				 control_name="WLCloudScrollY"
-				 decimal_digits="1"
+				 decimal_digits="2"
 				 follows="left|top"
 				 height="16"
 				 increment="0.1"

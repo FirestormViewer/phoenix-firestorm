@@ -179,16 +179,20 @@ void LLGridManager::initGrids()
 {
 	mGridList = LLSD();
 
+#ifndef SINGLEGRID
 	std::string grid_file  = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,  "grids.xml");
 	std::string grid_user_file = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,  "grids.user.xml");
 	std::string grid_remote_file = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,  "grids.remote.xml");
 
 	mGridFile = grid_user_file;
+#endif
 
 	initSystemGrids();
+#ifndef SINGLEGRID
 	initGridList(grid_file, FINISH);
 	initGridList(grid_remote_file, FINISH);
 	initGridList(grid_user_file, FINISH);
+#endif
 
 	if(!mCommandLineDone)
 	{
@@ -263,6 +267,7 @@ void LLGridManager::initCmdLineGrids()
 	// set it as the 'selected' grid.
 	std::string grid;
 
+#ifndef SINGLEGRID
 	std::string cmd_line_grid = gSavedSettings.getString("CmdLineGridChoice");
 	if (!cmd_line_grid.empty())
 	{
@@ -294,7 +299,8 @@ void LLGridManager::initCmdLineGrids()
 		grid = gSavedSettings.getString("CurrentGrid");
 		LL_DEBUGS("GridManager") << "Setting grid from last selection " << grid << LL_ENDL;
 	}
-	
+#endif
+
 	if (grid.empty())
 	{
 		// no grid was specified so default to maingrid
@@ -1290,6 +1296,7 @@ void LLGridManager::saveGridList()
 	LLSDSerialize::toPrettyXML(output_grid_list, llsd_xml);
 	llsd_xml.close();
 }
+
 //<AW opensim>
 std::string LLGridManager::trimHypergrid(const std::string& trim)
 {

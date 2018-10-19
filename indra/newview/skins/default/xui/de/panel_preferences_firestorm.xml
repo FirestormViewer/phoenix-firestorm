@@ -58,6 +58,7 @@
 		</text>
 		<check_box label="Große Objekte mit großem Texturbereich ausblenden. Schwellwert: " name="RenderVolumeSAProtection" tool_tip="Diese Funktion schützt vor Objekte mit einem sehr großen Texturbereich, die oftmals dazu verwendet werden, den Viewer zum Absturz zu bringen. Standardwert ist 5000. Falls Objekte nicht angezeigt werden, sollte eventuell dieser Wert erhöht werden."/>
 		<check_box label="Spam-Schutz aktivieren" name="UseAntiSpam"/>
+		<check_box label="Spam-Schutz auch für eigene Objekte aktivieren" name="FSUseAntiSpamMine" tool_tip="Diese Option aktiviert den Spam-Schutz auch für eigene Objekte."/>
 		<text name="AntiSpamText1" width="250">
 			Max. Anzahl Zeilen pro Nachricht:
 		</text>
