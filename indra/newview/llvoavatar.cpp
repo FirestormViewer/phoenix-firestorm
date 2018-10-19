@@ -10607,7 +10607,7 @@ void LLVOAvatar::updateRiggingInfo()
 {
     LL_RECORD_BLOCK_TIME(FTM_AVATAR_RIGGING_INFO_UPDATE);
 
-    LL_DEBUGS("RigSpammish") << getFullname() << " updating rig tab" << LL_ENDL;
+    //LL_DEBUGS("RigSpammish") << getFullname() << " updating rig tab" << LL_ENDL; // <FS:Ansariel> Performance tweak
 
     std::vector<LLVOVolume*> volumes;
 
@@ -10620,7 +10620,11 @@ void LLVOAvatar::updateRiggingInfo()
 	{
 		LL_RECORD_BLOCK_TIME(FTM_AVATAR_RIGGING_KEY_UPDATE);
 		// Get current rigging info key
-		for (std::vector<LLVOVolume*>::iterator it = volumes.begin(); it != volumes.end(); ++it)
+		// <FS:Ansariel> Performance tweak
+		//for (std::vector<LLVOVolume*>::iterator it = volumes.begin(); it != volumes.end(); ++it)
+		std::vector<LLVOVolume*>::iterator vol_end = volumes.end();
+		for (std::vector<LLVOVolume*>::iterator it = volumes.begin(); it != vol_end; ++it)
+		// </FS:Ansariel>
 		{
 			LLVOVolume *vol = *it;
 			if (vol->isMesh() && vol->getVolume())
@@ -10639,9 +10643,16 @@ void LLVOAvatar::updateRiggingInfo()
 	}
 
 	// Something changed. Update.
-	mLastRiggingInfoKey = curr_rigging_info_key;
+	// <FS:Ansariel> Performance tweak
+	//mLastRiggingInfoKey = curr_rigging_info_key;
+	mLastRiggingInfoKey.swap(curr_rigging_info_key);
+	// </FS:Ansariel>
     mJointRiggingInfoTab.clear();
-    for (std::vector<LLVOVolume*>::iterator it = volumes.begin(); it != volumes.end(); ++it)
+    // <FS:Ansariel> Performance tweak
+    //for (std::vector<LLVOVolume*>::iterator it = volumes.begin(); it != volumes.end(); ++it)
+    std::vector<LLVOVolume*>::iterator vol_end = volumes.end();
+    for (std::vector<LLVOVolume*>::iterator it = volumes.begin(); it != vol_end; ++it)
+    // </FS:Ansariel>
     {
         LLVOVolume *vol = *it;
         vol->updateRiggingInfo();
@@ -10649,10 +10660,10 @@ void LLVOAvatar::updateRiggingInfo()
     }
 
     //LL_INFOS() << "done update rig count is " << countRigInfoTab(mJointRiggingInfoTab) << LL_ENDL;
-    LL_DEBUGS("RigSpammish") << getFullname() << " after update rig tab:" << LL_ENDL;
+    //LL_DEBUGS("RigSpammish") << getFullname() << " after update rig tab:" << LL_ENDL; // <FS:Ansariel> Performance tweak
     S32 joint_count, box_count;
     showRigInfoTabExtents(this, mJointRiggingInfoTab, joint_count, box_count);
-    LL_DEBUGS("RigSpammish") << "uses " << joint_count << " joints " << " nonzero boxes: " << box_count << LL_ENDL;
+    //LL_DEBUGS("RigSpammish") << "uses " << joint_count << " joints " << " nonzero boxes: " << box_count << LL_ENDL; // <FS:Ansariel> Performance tweak
 }
 
 // virtual
