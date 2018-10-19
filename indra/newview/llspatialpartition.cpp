@@ -53,6 +53,9 @@
 #include "llvolumemgr.h"
 #include "lltextureatlas.h"
 #include "llviewershadermgr.h"
+#include "llcontrolavatar.h"
+
+//#pragma optimize("", off)
 
 #include "llvotree.h"
 
@@ -2183,7 +2186,24 @@ void renderBoundingBox(LLDrawable* drawable, BOOL set_color = TRUE)
                     	gGL.diffuseColor4f(0,0.5f,0,1); // dark green
 						break;
 				default:
-                    	gGL.diffuseColor4f(1,0,1,1); // magenta
+						LLControlAvatar *cav = dynamic_cast<LLControlAvatar*>(drawable->getVObj()->asAvatar());
+						if (cav)
+						{
+							bool has_pos_constraint = (cav->mPositionConstraintFixup != LLVector3());
+							bool has_scale_constraint = (cav->mScaleConstraintFixup != 1.0f);
+							if (has_pos_constraint || has_scale_constraint)
+							{
+								gGL.diffuseColor4f(1,0,0,1); 
+							}
+							else
+							{
+								gGL.diffuseColor4f(0,1,0.5,1); 
+							}
+						}
+						else
+						{
+							gGL.diffuseColor4f(1,0,1,1); // magenta
+						}
 						break;
 			}
 		}

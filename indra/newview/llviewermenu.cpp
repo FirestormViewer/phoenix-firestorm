@@ -1116,10 +1116,7 @@ class LLAdvancedSetDisplayTextureDensity : public view_listener_t
 //////////////////
 // INFO DISPLAY //
 //////////////////
-// <FS:Ansariel> Need an unsigned long here
-//U32 info_display_from_string(std::string info_display)
 U64 info_display_from_string(std::string info_display)
-// </FS:Ansariel>
 {
 	if ("verify" == info_display)
 	{
@@ -1237,6 +1234,10 @@ U64 info_display_from_string(std::string info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_TRIANGLE_COUNT;
 	}
+	else if ("impostors" == info_display)
+	{
+		return LLPipeline::RENDER_DEBUG_IMPOSTORS;
+	}
 	else if ("texture size" == info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_TEXTURE_SIZE;
@@ -1252,10 +1253,7 @@ class LLAdvancedToggleInfoDisplay : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		// <FS:Ansariel> Need an unsigned long here
-		//U32 info_display = info_display_from_string( userdata.asString() );
 		U64 info_display = info_display_from_string( userdata.asString() );
-		// </FS:Ansariel>
 
 		LL_INFOS("ViewerMenu") << "toggle " << userdata.asString() << LL_ENDL;
 		
@@ -1273,10 +1271,7 @@ class LLAdvancedCheckInfoDisplay : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		// <FS:Ansariel> Need an unsigned long here
-		//U32 info_display = info_display_from_string( userdata.asString() );
 		U64 info_display = info_display_from_string( userdata.asString() );
-		// </FS:Ansariel>
 		bool new_value = false;
 
 		if ( info_display != 0 )

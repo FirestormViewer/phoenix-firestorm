@@ -6992,10 +6992,7 @@ bool LLPipeline::toggleRenderTypeControlNegated(S32 type)
 }
 
 //static
-// <FS:Ansariel> Need an unsigned long here
-//void LLPipeline::toggleRenderDebug(U32 bit)
 void LLPipeline::toggleRenderDebug(U64 bit)
-// </FS:Ansariel>
 {
 	if (gPipeline.hasRenderDebugMask(bit))
 	{
@@ -7010,10 +7007,7 @@ void LLPipeline::toggleRenderDebug(U64 bit)
 
 
 //static
-// <FS:Ansariel> Need an unsigned long here
-//bool LLPipeline::toggleRenderDebugControl(U32 bit)
 bool LLPipeline::toggleRenderDebugControl(U64 bit)
-// </FS:Ansariel>
 {
 	return gPipeline.hasRenderDebugMask(bit);
 }
@@ -11871,6 +11865,7 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 
 	avatar->mNeedsImpostorUpdate = FALSE;
 	avatar->cacheImpostorValues();
+	avatar->mLastImpostorUpdateFrameTime = gFrameTimeSeconds;
 
 	LLVertexBuffer::unbind();
 	LLGLState::checkStates();
