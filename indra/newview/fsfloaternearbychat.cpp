@@ -73,6 +73,9 @@
 #include "llviewerwindow.h"
 #include "llworld.h"
 #include "rlvhandler.h"
+// <FS:TS> FIRE-23123: Don't log newline spam even from own objects
+#include "NACLantispam.h"
+// </FS:TS> FIRE-23123
 
 S32 FSFloaterNearbyChat::sLastSpecialChatChannel = 0;
 
@@ -275,6 +278,13 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 			(chat.mChatType == CHAT_TYPE_IM && chat.mSourceType == CHAT_SOURCE_OBJECT) ||
 			gSavedSettings.getBOOL("FSLogIMInChatHistory"))
 		{
+			// <FS:TS> FIRE-23123: Don't log newline flood even from own objects
+			static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
+			if (useAntiSpam && NACLAntiSpamRegistry::instance().checkNewlineFlood(ANTISPAM_QUEUE_CHAT, chat.mFromID, chat.mText))
+			{
+				return;
+			}
+			// </FS:TS> FIRE-23123
 			LLLogChat::saveHistory("chat", from_name, chat.mFromID, chat.mText);
 		}
 	}

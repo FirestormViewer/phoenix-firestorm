@@ -254,12 +254,17 @@ void LLStreamingAudio_FMODEX::update()
 			// </FS:CR>
 			{
 				// <FS:CR> Stream metadata - originally by Shyotl Khur
+				LL_DEBUGS("StreamMetadata") << "Tag count: " << tagcount << "  Dirty tag count: " << dirtytagcount << LL_ENDL;
+
 				mMetadata.clear();
 				mNewMetadata = true;
 				// </FS:CR>
 				for(S32 i = 0; i < tagcount; ++i)
 				{
-					if(sound->getTag(NULL, i, &tag) != FMOD_OK)
+					// <FS:Ansariel> FmodEX Error checking
+					//if(sound->getTag(NULL, i, &tag) != FMOD_OK)
+					if(Check_FMOD_Error(sound->getTag(NULL, i, &tag), "FMOD::Sound::getTag"))
+					// </FS:Ansariel>
 						continue;
 
 					// <FS:CR> Stream metadata - originally by Shyotl Khur
@@ -272,6 +277,7 @@ void LLStreamingAudio_FMODEX::update()
 					//	}
 					//	continue;
 					//}
+					LL_DEBUGS("StreamMetadata") << "Tag name: " << tag.name << " - Tag type: " << tag.type << " - Tag data type: " << tag.datatype << LL_ENDL;
 					std::string name = tag.name;
 					switch(tag.type)
 					{
@@ -285,6 +291,12 @@ void LLStreamingAudio_FMODEX::update()
 						{
 							if(name == "Title") name = "TITLE";
 							else if(name == "WM/AlbumArtist") name = "ARTIST";
+							break;
+						}
+						case(FMOD_TAGTYPE_VORBISCOMMENT):
+						{
+							if(name == "title") name = "TITLE";
+							else if(name == "artist") name = "ARTIST";
 							break;
 						}
 						case(FMOD_TAGTYPE_FMOD):
@@ -316,6 +328,13 @@ void LLStreamingAudio_FMODEX::update()
 						case(FMOD_TAGDATATYPE_STRING):
 						{
 							std::string out = rawstr_to_utf8(std::string((char*)tag.data,tag.datalen));
+							(mMetadata)[name]=out;
+							LL_DEBUGS("StreamMetadata") << tag.name << ": " << out << LL_ENDL;
+							break;
+						}
+						case(FMOD_TAGDATATYPE_STRING_UTF8):
+						{
+							std::string out((char*)tag.data);
 							(mMetadata)[name]=out;
 							LL_DEBUGS("StreamMetadata") << tag.name << ": " << out << LL_ENDL;
 							break;

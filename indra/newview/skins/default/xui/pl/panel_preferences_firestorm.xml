@@ -48,9 +48,10 @@
         </radio_group>
         <text name="SurfaceAreaThreshholdLabel">
          Chroń przed lagowaniem od tekstur (może psuć obiekty):
-         </text>
-         <check_box label="Ukrywaj duże obiekty, z dużym poteksturowanym obszarem. Próg: " name="RenderVolumeSAProtection" tool_tip="Chroni przed obiektami z bardzo dużymi teksturami nałożonymi na ogromne powierzchnie często stworzone po to, aby spowodować awarię Przeglądarki. Domyślnie to 5000 metrów kwadratowych, ale jeśli jakieś -normalne- obiekty się nie renderują, a ta opcja jest włączona, to możesz zwiększyć limit." />
-         <check_box label="Włącz antyspam" name="UseAntiSpam" />
+        </text>
+        <check_box label="Ukrywaj duże obiekty, z dużym poteksturowanym obszarem. Próg: " name="RenderVolumeSAProtection" tool_tip="Chroni przed obiektami z bardzo dużymi teksturami nałożonymi na ogromne powierzchnie często stworzone po to, aby spowodować awarię Przeglądarki. Domyślnie to 5000 metrów kwadratowych, ale jeśli jakieś -normalne- obiekty się nie renderują, a ta opcja jest włączona, to możesz zwiększyć limit." />
+        <check_box label="Włącz antyspam" name="UseAntiSpam" />
+        <check_box label="Włącz antyspam nawet dla Twoich własnych obiektów" name="FSUseAntiSpamMine" tool_tip="Włączenie tej opcji spowoduje aktywowanie ochrony antyspamowej nawet dla Twoich własnych obiektów."/>
         <text name="AntiSpamText1">
            Maks. ilość linii w poj. wiadomości:
         </text>
