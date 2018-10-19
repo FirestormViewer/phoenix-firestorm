@@ -1083,7 +1083,17 @@
          left_delta="5"
          name="TexturesHTTP"
          top_pad="6"
-         width="256"/>
+         width="400"/>
+        <check_box
+         control_name="FSRestrictMaxTextureSize"
+         height="16"
+         label="Restrict maximum texture resolution to 512px (64bit only; requires Restart)"
+         tool_tip="Set this restrict the maximum display resolution for inworld textures to 512px. This allows displaying more textures before exceeding the available texture memory and observing blurry textures."
+         layout="topleft"
+         left_delta="0"
+         name="FSRestrictMaxTextureSize"
+         top_pad="2"
+         width="400"/>
 
       <!-- New Texture detail 5 is lowest, 0 is highest -->
         <text
@@ -1092,7 +1102,7 @@
          top_pad="8"
          follows="top|left"
          height="18"
-         width="180"
+         width="150"
          word_wrap="true"
          layout="topleft"
          left_delta="0"
@@ -1104,7 +1114,7 @@
          height="23"
          layout="topleft"
          follows="left|top"
-         left_delta="175"
+         left_pad="5"
          top_pad="-23"
          name="TextureDetail"
          width="150">

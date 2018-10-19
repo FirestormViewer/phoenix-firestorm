@@ -1944,6 +1944,18 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	}
 #endif
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> Max texture resolution
+#if ADDRESS_SIZE == 64
+	if (gSavedSettings.getBOOL("FSRestrictMaxTextureSize"))
+	{
+		DESIRED_NORMAL_FETCHED_TEXTURE_SIZE = (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT / 2;
+	}
+#else
+	gSavedSettings.setBOOL("FSRestrictMaxTextureSize", TRUE);
+#endif
+	LL_INFOS() << "Maximum fetched texture size: " << DESIRED_NORMAL_FETCHED_TEXTURE_SIZE << "px" << LL_ENDL;
+	// </FS:Ansariel>
 		
 	// Init the image list.  Must happen after GL is initialized and before the images that
 	// LLViewerWindow needs are requested.
@@ -4193,8 +4205,7 @@ void renderHullPhysics(LLModel::PhysicsMesh& mesh, const LLColor4& color, const 
 // Draw a physics shape with the edges highlighted in 'line_color'
 void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_color, LLVolume* vol, LLModel::Decomposition * decomp)
 {
-	// TODO: Didn't we already disable this in the outer scope?
-	//Need to because crash on ATI 3800 (and similar cards) MAINT-5018 
+// Not required here, we already disable this in the outer scope
 //	LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
 
 	LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
@@ -4321,6 +4332,140 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 	}
 }
 
+void renderNonMeshHullPhysics(LLVOVolume* vovolume, LLVolume* volume, LLColor4 color, LLColor4 line_color, LLVector3 center, LLVector3 size)
+{
+	LLVolumeParams volume_params = volume->getParams();
+	S32 detail = get_physics_detail(volume_params, vovolume->getScale());
+
+	LLVolume* phys_volume = LLPrimitive::sVolumeManager->refVolume(volume_params, detail);
+
+	if (!phys_volume->mHullPoints)
+	{ //build convex hull
+		std::vector<LLVector3> pos;
+		std::vector<U16> index;
+
+		S32 index_offset = 0;
+		// Build a vector of vertices in the visible LOD model determined by 'detail' 
+		for (S32 i = 0; i < phys_volume->getNumVolumeFaces(); ++i)
+		{
+			const LLVolumeFace& face = phys_volume->getVolumeFace(i);
+			if (index_offset + face.mNumVertices > 65535)
+			{
+				continue;
+			}
+
+			for (S32 j = 0; j < face.mNumVertices; ++j)
+			{
+				pos.push_back(LLVector3(face.mPositions[j].getF32ptr()));
+			}
+
+			for (S32 j = 0; j < face.mNumIndices; ++j)
+			{
+				index.push_back(face.mIndices[j] + index_offset);
+			}
+
+			index_offset += face.mNumVertices;
+		}
+		// use the array of vertices to construct a single hull based 
+		if (!pos.empty() && !index.empty() && LLConvexDecomposition::getInstance()) // ND: FIRE-3427
+		{
+			LLCDMeshData mesh;
+			mesh.mIndexBase = &index[0];
+			mesh.mVertexBase = pos[0].mV;
+			mesh.mNumVertices = pos.size();
+			mesh.mVertexStrideBytes = 12;
+			mesh.mIndexStrideBytes = 6;
+			mesh.mIndexType = LLCDMeshData::INT_16;
+
+			mesh.mNumTriangles = index.size() / 3;
+
+			LLCDMeshData res;
+			LLCDResult retval;
+			if ((retval = LLConvexDecomposition::getInstance()->generateSingleHullMeshFromMesh(&mesh, &res)))
+			{
+				LL_WARNS() << "ConvexDecomp Failed (generateSingleHullMeshFromMesh): " << retval << LL_ENDL;
+			}
+
+			//copy res into phys_volume
+			phys_volume->mHullPoints = (LLVector4a*)ll_aligned_malloc_16(sizeof(LLVector4a)*res.mNumVertices);
+			phys_volume->mNumHullPoints = res.mNumVertices;
+
+			S32 idx_size = (res.mNumTriangles * 3 * 2 + 0xF) & ~0xF;
+			phys_volume->mHullIndices = (U16*)ll_aligned_malloc_16(idx_size);
+			phys_volume->mNumHullIndices = res.mNumTriangles * 3;
+
+			const F32* v = res.mVertexBase;
+
+			for (S32 i = 0; i < res.mNumVertices; ++i)
+			{
+				F32* p = (F32*)((U8*)v + i*res.mVertexStrideBytes);
+				phys_volume->mHullPoints[i].load3(p);
+			}
+
+			if (res.mIndexType == LLCDMeshData::INT_16)
+			{
+				for (S32 i = 0; i < res.mNumTriangles; ++i)
+				{
+					U16* idx = (U16*)(((U8*)res.mIndexBase) + i*res.mIndexStrideBytes);
+
+					phys_volume->mHullIndices[i * 3 + 0] = idx[0];
+					phys_volume->mHullIndices[i * 3 + 1] = idx[1];
+					phys_volume->mHullIndices[i * 3 + 2] = idx[2];
+				}
+			}
+			else
+			{
+				for (S32 i = 0; i < res.mNumTriangles; ++i)
+				{
+					U32* idx = (U32*)(((U8*)res.mIndexBase) + i*res.mIndexStrideBytes);
+
+					phys_volume->mHullIndices[i * 3 + 0] = (U16)idx[0];
+					phys_volume->mHullIndices[i * 3 + 1] = (U16)idx[1];
+					phys_volume->mHullIndices[i * 3 + 2] = (U16)idx[2];
+				}
+			}
+		}
+	}
+	//pragma endregion Build the mesh data for a convex hull for a PRIM that is explcitly in CONVEX_HULL mode
+	// Now that we've got the hulldecomp let's draw it
+
+	// <FS:Ansariel> Crash fix due to invalid calls to drawElements by Drake Arconis
+	//if (phys_volume->mHullPoints)
+	if (phys_volume->mHullPoints && phys_volume->mHullIndices && phys_volume->mNumHullPoints > 0 && phys_volume->mNumHullIndices > 0)
+		//pragma region ConvexPrimDrawHull
+		// </FS:Ansariel>
+	{
+		//render hull
+		// TODO: (BEQ) Find out why is this not a call to render_hull? it probably could be if the data is in the right form
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+		gGL.diffuseColor4fv(line_color.mV);
+		LLVertexBuffer::unbind();
+
+		llassert(!LLGLSLShader::sNoFixedFunction || LLGLSLShader::sCurBoundShader != 0);
+
+		// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
+		//LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
+		LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
+
+		gGL.diffuseColor4fv(color.mV);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
+		//LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
+		LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
+
+	}
+	else
+	{
+		// if we don't have a physics convex model then draw a magenta box
+		gGL.diffuseColor4f(1, 0, 1, 1);
+		drawBoxOutline(center, size);
+	}
+	//pragma endregion
+	LLPrimitive::sVolumeManager->unrefVolume(phys_volume);
+}
+
 void renderOnePhysicsShape(LLViewerObject* objectp)
 {
 	// sanity check this we have a drawable.
@@ -4357,9 +4502,20 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 
 	// Set physics_spec to cache the info about the physics shape of our volume.
 	LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification physics_spec;
-	LLPhysicsShapeBuilderUtil::determinePhysicsShape(physics_params, vovolume->getScale(), physics_spec);
+	LLUUID mesh_id;
+	LLModel::Decomposition* decomp = nullptr;
+	bool hasConvexDecomp = FALSE;
 
-	U32 type = physics_spec.getType();
+	// If we are a mesh and the mesh has a hul decomp (is analysed) then set hasDecomp to true
+	if (vovolume->isMesh()){
+		mesh_id = volume_params.getSculptID();
+		decomp = gMeshRepo.getDecomposition(mesh_id);
+		if (decomp && !decomp->mHull.empty()){ hasConvexDecomp = TRUE; }
+	}
+
+	LLPhysicsShapeBuilderUtil::determinePhysicsShape(physics_params, vovolume->getScale(), hasConvexDecomp, physics_spec);
+
+	U32 physicsShapeType = physics_spec.getType();
 	/*
 	Primitive types
 	BOX,
@@ -4385,7 +4541,6 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 		gGL.multMatrix((F32*)objectp->getRenderMatrix().mMatrix);
 	}
 
-	//gGL.pushMatrix();
 	gGL.multMatrix((F32*)vovolume->getRelativeXform().mMatrix);
 
 //pragma region PhysicsRenderSettings
@@ -4419,26 +4574,19 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 	LLVector3 center(0, 0, 0);
 	LLVector3 size(0.25f, 0.25f, 0.25f);
 
-	if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::USER_MESH)
-//pragma region PhysicsShapeUserMesh
+	if (physicsShapeType == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::USER_MESH)
 	{
-		// 	USER_MESH,		A user mesh. May or may not contain a convex decomposition.
-		LLUUID mesh_id = volume_params.getSculptID();
-		LLModel::Decomposition* decomp = gMeshRepo.getDecomposition(mesh_id);
-
+		// USER_MESH,		A user mesh. May or may not contain a convex decomposition.
 		// do we have a Mesh physics loaded yet?
 		if (decomp)
-		{ 
-// TODO: REMOVE			gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-
-			if (!decomp->mHull.empty())
-//pragma region PhysicsShapeUserMeshHulls
-			{ 
+		{
+			if (hasConvexDecomp) // analysed mesh - we will build a mesh  representation and cache it in the mMesh vector
+			{
 				// This Model contains a hull based physics. This equates to "analysed" mesh physics in the uploader.
 				if (decomp->mMesh.empty())
 				{
 					// build a mesh representation of the hulls (does nothing if Havok not present)
-					gMeshRepo.buildPhysicsMesh(*decomp); 
+					gMeshRepo.buildPhysicsMesh(*decomp);
 				}
 
 				for (U32 i = 0; i < decomp->mMesh.size(); ++i)
@@ -4446,18 +4594,14 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 					renderHullPhysics(decomp->mMesh[i], color, line_color);
 				}
 			}
-//pragma endregion Physics mesh is analysed into hulls
 			else if (!decomp->mPhysicsShapeMesh.empty())
-//pragma region PhysicsShapeUserMeshTriangles
 			{
 				// This model has triangular mesh (non-analysed)
 				renderMeshPhysicsTriangles(color, line_color, volume, decomp);
 			}
-//pragma endregion Physics mesh is non-analysed
 			else
-			//no mesh or decomposition, render base hull
-//pragma region PhysicsShapeUserMeshBaseHull
-			{ 
+			{
+				//no mesh or decomposition, render base hull
 				renderMeshBaseHullPhysics(vovolume, data_mask, color, line_color);
 
 				if (decomp->mPhysicsShapeMesh.empty())
@@ -4466,169 +4610,31 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 					gMeshRepo.fetchPhysicsShape(mesh_id);
 				}
 			}
-//pragma endregion No physics mesh is defined so use the default base convex hull
 		}
 		else
-// No physics when expected, probably Havok broken/missing or asset still downloading
-//pragma region PhysicsShapeUserMeshMissingData
 		{
-			// all else fails then orange wireframe box.
+			// No physics when expected, probably Havok broken/missing or asset still downloading
+			// all else fails then ORANGE wireframe box.
 			// This typically means you are running without Havok
 			gGL.diffuseColor3f(1, 1, 0);
 			drawBoxOutline(center, size);
 		}
-//pragma endregion No physics when expected, probably Havok broken/missing or asset still downloading
 	}
-//pragma endregion Object has a user provided mesh for physics and is not in CONVEX_HULL mode.
-	else if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::USER_CONVEX ||
-		type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::PRIM_CONVEX)
-//pragma region PhysicsShapeConvex
+	else if (physicsShapeType == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::USER_CONVEX ||
+		physicsShapeType == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::PRIM_CONVEX)
 	{
+		// the owner of the object has selected convex, or we have forced it convex for other reasons
 		if (vovolume->isMesh())
-//pragma region PhysicsShapeConvexMesh
 		{
 			renderMeshBaseHullPhysics(vovolume, data_mask, color, line_color);
 		}
-//pragma endregion This is a mesh object but the user has set it to Convex, so lets draw the base hull
 		else
-//pragma region PhysicsShapeConvexPrim
 		{
-			LLVolumeParams volume_params = volume->getParams();
-			S32 detail = get_physics_detail(volume_params, vovolume->getScale());
-			LLVolume* phys_volume = LLPrimitive::sVolumeManager->refVolume(volume_params, detail);
-//pragma region ConvexPrimBuildHull
-			if (!phys_volume->mHullPoints)
-			{ //build convex hull
-				std::vector<LLVector3> pos;
-				std::vector<U16> index;
-
-				S32 index_offset = 0;
-				// Build a vector of vertices in the visible LOD model determined by 'detail' 
-				for (S32 i = 0; i < phys_volume->getNumVolumeFaces(); ++i)
-				{
-					const LLVolumeFace& face = phys_volume->getVolumeFace(i);
-					if (index_offset + face.mNumVertices > 65535)
-					{
-						continue;
-					}
-
-					for (S32 j = 0; j < face.mNumVertices; ++j)
-					{
-						pos.push_back(LLVector3(face.mPositions[j].getF32ptr()));
-					}
-
-					for (S32 j = 0; j < face.mNumIndices; ++j)
-					{
-						index.push_back(face.mIndices[j] + index_offset);
-					}
-
-					index_offset += face.mNumVertices;
-				}
-				// use the array of vertices to construct a single hull based 
-				if (!pos.empty() && !index.empty() && LLConvexDecomposition::getInstance()) // ND: FIRE-3427
-				{
-					LLCDMeshData mesh;
-					mesh.mIndexBase = &index[0];
-					mesh.mVertexBase = pos[0].mV;
-					mesh.mNumVertices = pos.size();
-					mesh.mVertexStrideBytes = 12;
-					mesh.mIndexStrideBytes = 6;
-					mesh.mIndexType = LLCDMeshData::INT_16;
-
-					mesh.mNumTriangles = index.size() / 3;
-
-					LLCDMeshData res;
-					LLCDResult retval;
-					if ((retval = LLConvexDecomposition::getInstance()->generateSingleHullMeshFromMesh(&mesh, &res)))
-					{
-						LL_WARNS() << "ConvexDecomp Failed (generateSingleHullMeshFromMesh): " << retval << LL_ENDL;
-					}
-
-					//copy res into phys_volume
-					phys_volume->mHullPoints = (LLVector4a*)ll_aligned_malloc_16(sizeof(LLVector4a)*res.mNumVertices);
-					phys_volume->mNumHullPoints = res.mNumVertices;
-
-					S32 idx_size = (res.mNumTriangles * 3 * 2 + 0xF) & ~0xF;
-					phys_volume->mHullIndices = (U16*)ll_aligned_malloc_16(idx_size);
-					phys_volume->mNumHullIndices = res.mNumTriangles * 3;
-
-					const F32* v = res.mVertexBase;
-
-					for (S32 i = 0; i < res.mNumVertices; ++i)
-					{
-						F32* p = (F32*)((U8*)v + i*res.mVertexStrideBytes);
-						phys_volume->mHullPoints[i].load3(p);
-					}
-
-					if (res.mIndexType == LLCDMeshData::INT_16)
-					{
-						for (S32 i = 0; i < res.mNumTriangles; ++i)
-						{
-							U16* idx = (U16*)(((U8*)res.mIndexBase) + i*res.mIndexStrideBytes);
-
-							phys_volume->mHullIndices[i * 3 + 0] = idx[0];
-							phys_volume->mHullIndices[i * 3 + 1] = idx[1];
-							phys_volume->mHullIndices[i * 3 + 2] = idx[2];
-						}
-					}
-					else
-					{
-						for (S32 i = 0; i < res.mNumTriangles; ++i)
-						{
-							U32* idx = (U32*)(((U8*)res.mIndexBase) + i*res.mIndexStrideBytes);
-
-							phys_volume->mHullIndices[i * 3 + 0] = (U16)idx[0];
-							phys_volume->mHullIndices[i * 3 + 1] = (U16)idx[1];
-							phys_volume->mHullIndices[i * 3 + 2] = (U16)idx[2];
-						}
-					}
-				}
-			}
-//pragma endregion Build the mesh data for a convex hull for a PRIM that is explcitly in CONVEX_HULL mode
-			// Now that we've got the hulldecomp let's draw it
-
-			// <FS:Ansariel> Crash fix due to invalid calls to drawElements by Drake Arconis
-			//if (phys_volume->mHullPoints)
-			if (phys_volume->mHullPoints && phys_volume->mHullIndices && phys_volume->mNumHullPoints > 0 && phys_volume->mNumHullIndices > 0)
-//pragma region ConvexPrimDrawHull
-				// </FS:Ansariel>
-			{
-				//render hull
-				// TODO: (BEQ) Find out why is this not a call to render_hull? it probably could be if the data is in the right form
-
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-				gGL.diffuseColor4fv(line_color.mV);
-				LLVertexBuffer::unbind();
-
-				llassert(!LLGLSLShader::sNoFixedFunction || LLGLSLShader::sCurBoundShader != 0);
-
-				// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-				//LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
-				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
-
-				gGL.diffuseColor4fv(color.mV);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-				//LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
-				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
-
-			}
-			else
-			{
-				// if we don't have a physics convex model then draw a magenta box
-				gGL.diffuseColor4f(1, 0, 1, 1);
-				drawBoxOutline(center, size);
-			}
-//pragma endregion
-			LLPrimitive::sVolumeManager->unrefVolume(phys_volume);
+			renderNonMeshHullPhysics(vovolume, volume, color, line_color, center, size);
 		}
-//pragma endregion The physics shape is a convex hull for a prim
 	}
-//pragma endregion The physics shape is a convex hull (mesh or prim)
-
-//pragma region PhysicsShapePrimHavokNative
-	else if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::BOX)
+	// vvvv Physics shape is a Havok primitive, either box, sphere or cylinder (object must be a prim)
+	else if (physicsShapeType == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::BOX)
 	{
 		LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -4641,7 +4647,7 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 		gGL.diffuseColor4fv(color.mV);
 		drawBox(center, scale);
 	}
-	else if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::SPHERE)
+	else if (physicsShapeType == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::SPHERE)
 	{
 		LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -4659,7 +4665,7 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 		pushVerts(sphere);
 		LLPrimitive::sVolumeManager->unrefVolume(sphere);
 	}
-	else if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::CYLINDER)
+	else if (physicsShapeType == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::CYLINDER)
 	{
 		LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -4677,9 +4683,8 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 		pushVerts(cylinder);
 		LLPrimitive::sVolumeManager->unrefVolume(cylinder);
 	}
-//pragma endregion Physics shape is a Havok primitive, either box, sphere or cylinder (object must be a prim)
-	else if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::PRIM_MESH)
-//pragma region PhysicsShapePrimTriangles
+	else if (physicsShapeType == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::PRIM_MESH)
+	//PhysicsShapePrimTriangles - Physics shape for this prim is triangular mesh (typically when prim is cut/hollow etc)
 	{
 		LLVolumeParams volume_params = volume->getParams();
 		// TODO: (Beq) refactor? detail is reused, we ought to be able to pull this out in a wider scope.
@@ -4704,9 +4709,8 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 		}
 		LLPrimitive::sVolumeManager->unrefVolume(phys_volume);
 	}
-//pragma endregion Physics shape for this prim is triangular mesh (typically when prim is cut/hollow etc)
-	else if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::PRIM_CONVEX)
-//pragma region PhysicsShapePrimConvex
+	else if (physicsShapeType == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::PRIM_CONVEX)
+	// PhysicsShapePrimConvex - Physics shape for prim is inherently convex or convexified due to scale
 	{
 		LLVolumeParams volume_params = volume->getParams();
 		S32 detail = get_physics_detail(volume_params, vovolume->getScale());
@@ -4714,7 +4718,7 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 		LLVolume* phys_volume = LLPrimitive::sVolumeManager->refVolume(volume_params, detail);
 
 		if (phys_volume->mHullPoints && phys_volume->mHullIndices)
-		// We have the huill details so just draw them
+			// We have the hull details so just draw them
 		{
 			// TODO: (Beq) refactor this!! yet another flavour of drawing the same crap. Can we ratioanlise the arguments
 			// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
@@ -4756,20 +4760,18 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 		}
 		LLPrimitive::sVolumeManager->unrefVolume(phys_volume);
 	}
-//pragma endregion Physics shape for prim is inherently convex or convexified due to scale
-//pragma region PhysicsShapeSculpt
-	else if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::SCULPT)
+	// PhysicsShapeSculpt - Sculpts are not supported at present (what happened to "you must render something"?)
+	else if (physicsShapeType == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::SCULPT)
 	{
 		//TODO: implement sculpted prim physics display
 	}
-//pragma endregion Sculpts are not supported at present (what happened to "you must render something"?)
 	else
 	{
 		LL_ERRS() << "Unhandled type" << LL_ENDL;
 	}
 
 }
-//pragma endregion Firestorm additions that add the ability to visualise the physics shape in edit mode.
+// End Firestorm additions that add the ability to visualise the physics shape in edit mode.
 //</FS:Beq> Physics display in edit mode changes
 
 // Draws the selection outlines for the currently selected objects
@@ -4830,6 +4832,7 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 
 			if (showPhysicsShapeInEdit)
 			{
+				// setup opengl common parameters before we iterate over each object
 				gGL.pushMatrix();
 				//Need to because crash on ATI 3800 (and similar cards) MAINT-5018 
 				LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
@@ -4838,9 +4841,9 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 				{
 					gDebugProgram.bind();
 				}
-				gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-				glClearColor(0, 0, 0, 0);
-				gGL.setColorMask(true, true);
+				gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE); // no textures needed
+				glClearColor(0, 0, 0, 0); // bg black
+				gGL.setColorMask(true, true); // write color and alpha info
 				gGL.color4f(1.f, 1.f, 1.f, 0.5);
 				gGL.matrixMode(LLRender::MM_MODELVIEW);
 				LLGLEnable gls_blend(GL_BLEND);

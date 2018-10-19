@@ -944,6 +944,7 @@ namespace LLError
 
 namespace
 {
+	/* <FS:LO> Hide the log sanitize function so gcc doesnt complain.
     void addEscapedMessage(std::ostream& out, const std::string& message)
     {
         size_t written_out = 0;
@@ -981,7 +982,7 @@ namespace
             // write whatever was left
             out << message.substr(written_out, std::string::npos);
         }
-    }
+    } </FS:LO> */
 
 	void writeToRecorders(const LLError::CallSite& site, const std::string& escaped_message, bool show_location = true, bool show_time = true, bool show_tags = true, bool show_level = true, bool show_function = true)
 	{
@@ -1253,7 +1254,10 @@ namespace LLError
 			}
 		}
 		
-		addEscapedMessage(message_stream, message);
+		// <FS:Ansriel> Fix log output - we don't need an escaped output
+		//addEscapedMessage(message_stream, message);
+		message_stream << message;
+		// </FS:Ansariel>
 
 		writeToRecorders(site, message_stream.str());
 		

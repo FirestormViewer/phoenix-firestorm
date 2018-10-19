@@ -176,7 +176,7 @@
 					Blauer Horizont
 				</text>
 				<color_swatch left_delta="105" name="WLBlueHorizon" width="135"/>
-				<text name="BDensText2" width="100" tool_tip="Farbintensität: Beeinflusst die Farbsättigung des Himmels. Wird der Regler für die Intensität (I) nach rechts verschoben, werden die Farben heller und lebhafter. Beim Verschieben nach links werden die Farben matter. Eine Feineinstellung der einzelnen Elemente kann über die Werte für Rot/Grün/Blau vorgenommen werden.">
+				<text name="BDensText2" width="100" tool_tip="Farbintensität: Beeinflusst die Farbsättigung des Himmels. Wird der Regler für die Intensität nach oben verschoben, werden die Farben heller und lebhafter. Beim Verschieben nach unten werden die Farben matter. Eine Feineinstellung der einzelnen Elemente kann über die Werte für Rot/Grün/Blau vorgenommen werden.">
 					Farbintensität
 				</text>
 				<color_swatch left_delta="105" name="WLBlueDensity" width="135"/>
