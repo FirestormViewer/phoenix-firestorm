@@ -7569,12 +7569,15 @@ class LLAvatarResetSkeleton: public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-		LLVOAvatar* avatar = NULL;
-        LLViewerObject *obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
-        if (obj)
-        {
-            avatar = obj->getAvatar();
-        }
+        // <FS:Ansariel> Fix reset skeleton not working
+		//LLVOAvatar* avatar = NULL;
+        //LLViewerObject *obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+        //if (obj)
+        //{
+        //    avatar = obj->getAvatar();
+        //}
+        LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+        // </FS:Ansariel>
 		if(avatar)
         {
             avatar->resetSkeleton(false);
