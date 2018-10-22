@@ -1976,9 +1976,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>814bec3fa5045a18dce2bc4ce78b585d</string>
+              <string>1b87073540bf081136e60777d99f09f2</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.4-darwin-180792321.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.5-darwin-182950050.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
