@@ -1944,6 +1944,18 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	}
 #endif
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> Max texture resolution
+#if ADDRESS_SIZE == 64
+	if (gSavedSettings.getBOOL("FSRestrictMaxTextureSize"))
+	{
+		DESIRED_NORMAL_FETCHED_TEXTURE_SIZE = (U32)LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT / 2;
+	}
+#else
+	gSavedSettings.setBOOL("FSRestrictMaxTextureSize", TRUE);
+#endif
+	LL_INFOS() << "Maximum fetched texture size: " << DESIRED_NORMAL_FETCHED_TEXTURE_SIZE << "px" << LL_ENDL;
+	// </FS:Ansariel>
 		
 	// Init the image list.  Must happen after GL is initialized and before the images that
 	// LLViewerWindow needs are requested.

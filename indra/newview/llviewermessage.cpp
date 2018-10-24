@@ -2940,21 +2940,37 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 
 		// NaCl - Newline flood protection
 		static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
+		// <FS:TS> FIRE-23138: Add option to antispam user's own objects
+		bool deferred_spam_check = false;
+		static LLCachedControl<bool> useAntiSpamMine(gSavedSettings, "FSUseAntiSpamMine");
 		if (useAntiSpam)
 		{
 			bool doCheck = true;
-			if (owner_id.isNull() || gAgentID == owner_id)
+			if (owner_id.isNull())
 			{
 				doCheck = false;
 			}
-			if (doCheck && chatter && chatter->permYouOwner())
+			if (doCheck && !useAntiSpamMine)
 			{
-				doCheck = false;
+				if (gAgentID == owner_id)
+				{
+					doCheck = false;
+					}
+				if (doCheck && chatter && chatter->permYouOwner())
+				{
+					doCheck = false;
+				}
+				if (doCheck && NACLAntiSpamRegistry::instance().checkNewlineFlood(ANTISPAM_QUEUE_CHAT, owner_id, mesg))
+				{
+					return;
+				}
 			}
-			if (doCheck && NACLAntiSpamRegistry::instance().checkNewlineFlood(ANTISPAM_QUEUE_CHAT, owner_id, mesg))
+			if (doCheck && useAntiSpamMine)
 			{
-				return;
+				// If it's the user's object, defer the check so RLV commands still work
+				deferred_spam_check = true;
 			}
+			// </FS:TS> FIRE-23138
 		}
 		// NaCl End
 
@@ -3222,6 +3238,12 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				LL_WARNS("Messaging") << "Unknown type " << chat.mChatType << " in chat!" << LL_ENDL;
 				break;
 			}
+			// <FS:TS> FIRE-23138: Enable spam checking for user's own objects
+			if (deferred_spam_check && NACLAntiSpamRegistry::instance().checkNewlineFlood(ANTISPAM_QUEUE_CHAT, from_id, mesg))
+			{
+				return;
+			}
+			// </FS:TS> FIRE-23138
 
 			chat.mText += mesg;
 		}

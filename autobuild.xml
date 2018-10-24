@@ -2042,9 +2042,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>814bec3fa5045a18dce2bc4ce78b585d</string>
+              <string>1b87073540bf081136e60777d99f09f2</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.4-darwin-180792321.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.5-darwin-182950050.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2066,9 +2066,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fa8a0db7f4900663f5d58eaac2b782b5</string>
+              <string>daa35834257d08b59e876388d1244de8</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.4-linux-180892203.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.5-linux-182931105.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2078,9 +2078,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fa8a0db7f4900663f5d58eaac2b782b5</string>
+              <string>daa35834257d08b59e876388d1244de8</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.4-linux-180892203.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.5-linux-182931105.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2090,9 +2090,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>be46f22a4fbf7bd06c2fcd65cd434ed1</string>
+              <string>adb0069c89321cd0ef32a64ecf6d8592</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.4-windows-180791827.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.5-windows-182841805.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2102,9 +2102,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>be46f22a4fbf7bd06c2fcd65cd434ed1</string>
+              <string>adb0069c89321cd0ef32a64ecf6d8592</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.4-windows-180791827.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.5-windows-182841805.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>

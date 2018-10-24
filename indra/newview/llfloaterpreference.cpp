@@ -1995,6 +1995,10 @@ void LLFloaterPreference::refreshEnabledState()
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem.value());
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem.value());
 
+#if ADDRESS_SIZE == 32
+	childSetEnabled("FSRestrictMaxTextureSize", false);
+#endif
+
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderVBOEnable") ||
 		!gGLManager.mHasVertexBufferObject)
 	{
