@@ -1287,8 +1287,8 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("refTex");
 	mReservedUniforms.push_back("eyeVec");
 	mReservedUniforms.push_back("time");
-	mReservedUniforms.push_back("d1");
-	mReservedUniforms.push_back("d2");
+	mReservedUniforms.push_back("waveDir1");
+	mReservedUniforms.push_back("waveDir2");
 	mReservedUniforms.push_back("lightDir");
 	mReservedUniforms.push_back("specular");
 	mReservedUniforms.push_back("lightExp");
@@ -1331,6 +1331,14 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("irradiance_texture");
     mReservedUniforms.push_back("blend_factor");
     mReservedUniforms.push_back("no_atmo");
+    mReservedUniforms.push_back("moisture_level");
+    mReservedUniforms.push_back("droplet_radius");
+    mReservedUniforms.push_back("ice_level");
+    mReservedUniforms.push_back("rainbow_map");
+    mReservedUniforms.push_back("halo_map");
+    mReservedUniforms.push_back("moon_brightness");
+    mReservedUniforms.push_back("moon_phase");
+    mReservedUniforms.push_back("cloud_variance");
 
 	llassert(mReservedUniforms.size() == END_RESERVED_UNIFORMS);
 

@@ -34,6 +34,7 @@
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
 #include "llloadingindicator.h"
+#include "lllocalbitmaps.h"
 #include "llmultisliderctrl.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
@@ -346,7 +347,7 @@ void LLFloaterEditExtDayCycle::onOpen(const LLSD& key)
         getChild<LLButton>(track_tabs[idx + 1], true)->setLabel(formatted_label.getString());
     }
 
-    for (int i = 2; i < LLSettingsDay::TRACK_MAX; i++) //skies #2 through #4
+    for (U32 i = 2; i < LLSettingsDay::TRACK_MAX; i++) //skies #2 through #4
     {
         getChild<LLButton>(track_tabs[i])->setEnabled(extended_env);
     }
@@ -513,6 +514,81 @@ void LLFloaterEditExtDayCycle::onButtonApply(LLUICtrl *ctrl, const LLSD &data)
         return;
     }
 
+    // brute-force local texture scan
+    for (U32 i = 0; i <= LLSettingsDay::TRACK_MAX; i++)
+    {
+        LLSettingsDay::CycleTrack_t &day_track = dayclone->getCycleTrack(i);
+
+        LLSettingsDay::CycleTrack_t::iterator iter = day_track.begin();
+        LLSettingsDay::CycleTrack_t::iterator end = day_track.end();
+        S32 frame_num = 0;
+
+        while (iter != end)
+        {
+            frame_num++;
+            std::string desc;
+            bool is_local = false; // because getString can be empty
+            if (i == LLSettingsDay::TRACK_WATER)
+            {
+                LLSettingsWater::ptr_t water = std::static_pointer_cast<LLSettingsWater>(iter->second);
+                if (water)
+                {
+                    // LLViewerFetchedTexture and check for FTT_LOCAL_FILE or check LLLocalBitmapMgr
+                    if (LLLocalBitmapMgr::isLocal(water->getNormalMapID()))
+                    {
+                        desc = LLTrans::getString("EnvironmentNormalMap");
+                        is_local = true;
+                    }
+                    else if (LLLocalBitmapMgr::isLocal(water->getTransparentTextureID()))
+                    {
+                        desc = LLTrans::getString("EnvironmentTransparent");
+                        is_local = true;
+                    }
+                }
+            }
+            else
+            {
+                LLSettingsSky::ptr_t sky = std::static_pointer_cast<LLSettingsSky>(iter->second);
+                if (sky)
+                {
+                    if (LLLocalBitmapMgr::isLocal(sky->getSunTextureId()))
+                    {
+                        desc = LLTrans::getString("EnvironmentSun");
+                        is_local = true;
+                    }
+                    else if (LLLocalBitmapMgr::isLocal(sky->getMoonTextureId()))
+                    {
+                        desc = LLTrans::getString("EnvironmentMoon");
+                        is_local = true;
+                    }
+                    else if (LLLocalBitmapMgr::isLocal(sky->getCloudNoiseTextureId()))
+                    {
+                        desc = LLTrans::getString("EnvironmentCloudNoise");
+                        is_local = true;
+                    }
+                    else if (LLLocalBitmapMgr::isLocal(sky->getBloomTextureId()))
+                    {
+                        desc = LLTrans::getString("EnvironmentBloom");
+                        is_local = true;
+                    }
+                }
+            }
+
+            if (is_local)
+            {
+                LLSD args;
+                LLButton* button = getChild<LLButton>(track_tabs[i], true);
+                args["TRACK"] = button->getCurrentLabel();
+                args["FRAME"] = iter->first * 100; // %
+                args["FIELD"] = desc;
+                args["FRAMENO"] = frame_num;
+                LLNotificationsUtil::add("WLLocalTextureDayBlock", args);
+                return;
+            }
+            iter++;
+        }
+    }
+
     if (ctrl_action == ACTION_SAVE)
     {
         doApplyUpdateInventory(dayclone);
@@ -553,7 +629,7 @@ void LLFloaterEditExtDayCycle::onSaveAsCommit(const LLSD& notification, const LL
 void LLFloaterEditExtDayCycle::onClickCloseBtn(bool app_quitting /*= false*/)
 {
     if (!app_quitting)
-        checkAndConfirmSettingsLoss([this](){ closeFloater(); });
+        checkAndConfirmSettingsLoss([this](){ closeFloater(); clearDirtyFlag(); });
     else
         closeFloater();
 }
@@ -565,14 +641,14 @@ void LLFloaterEditExtDayCycle::onButtonImport()
 
 void LLFloaterEditExtDayCycle::onButtonLoadFrame()
 {
-    LLUUID curassetId;
+    LLUUID curitemId = mInventoryId;
 
-    if (mCurrentEdit)
+    if (mCurrentEdit && curitemId.notNull())
     { 
-        curassetId = mCurrentEdit->getAssetId();
+        curitemId = LLFloaterSettingsPicker::findItemID(mCurrentEdit->getAssetId(), false, false);
     }
     
-    doOpenInventoryFloater((mCurrentTrack == LLSettingsDay::TRACK_WATER) ? LLSettingsType::ST_WATER : LLSettingsType::ST_SKY, curassetId);
+    doOpenInventoryFloater((mCurrentTrack == LLSettingsDay::TRACK_WATER) ? LLSettingsType::ST_WATER : LLSettingsType::ST_SKY, curitemId);
 }
 
 void LLFloaterEditExtDayCycle::onAddTrack()
@@ -817,7 +893,7 @@ void LLFloaterEditExtDayCycle::selectTrack(U32 track_index, bool force )
         return;
     }
 
-    for (int i = 0; i < LLSettingsDay::TRACK_MAX; i++) // use max value
+    for (U32 i = 0; i < LLSettingsDay::TRACK_MAX; i++) // use max value
     {
         getChild<LLButton>(track_tabs[i], true)->setToggleState(i == mCurrentTrack);
     }
@@ -999,7 +1075,7 @@ void LLFloaterEditExtDayCycle::updateTimeAndLabel()
     // Update blender here:
 }
 
-void LLFloaterEditExtDayCycle::addSliderFrame(const F32 frame, LLSettingsBase::ptr_t &setting, bool update_ui)
+void LLFloaterEditExtDayCycle::addSliderFrame(const F32 frame, const LLSettingsBase::ptr_t &setting, bool update_ui)
 {
     // multi slider distinguishes elements by key/name in string format
     // store names to map to be able to recall dependencies
@@ -1101,6 +1177,7 @@ void LLFloaterEditExtDayCycle::onAssetLoaded(LLUUID asset_id, LLSettingsBase::pt
         return;
     }
     mExpectingAssetId.setNull();
+    clearDirtyFlag();
 
     if (!settings || status)
     {
@@ -1455,6 +1532,7 @@ void LLFloaterEditExtDayCycle::onIdlePlay(void* user_data)
     self->mSkyBlender->setPosition(new_frame);
     self->mWaterBlender->setPosition(new_frame);
     self->synchronizeTabs();
+    self->updateTimeAndLabel();
 
 }
 
@@ -1485,7 +1563,7 @@ void LLFloaterEditExtDayCycle::clearDirtyFlag()
 
 }
 
-void LLFloaterEditExtDayCycle::doOpenInventoryFloater(LLSettingsType::type_e type, LLUUID currasset)
+void LLFloaterEditExtDayCycle::doOpenInventoryFloater(LLSettingsType::type_e type, LLUUID curritem)
 {
 //  LLUI::sWindow->setCursor(UI_CURSOR_WAIT);
     LLFloaterSettingsPicker *picker = static_cast<LLFloaterSettingsPicker *>(mInventoryFloater.get());
@@ -1502,7 +1580,7 @@ void LLFloaterEditExtDayCycle::doOpenInventoryFloater(LLSettingsType::type_e typ
     }
 
     picker->setSettingsFilter(type);
-    picker->setSettingsAssetId(currasset);
+    picker->setSettingsItemId(curritem);
     picker->openFloater();
     picker->setFocus(TRUE);
 }
@@ -1517,16 +1595,19 @@ void LLFloaterEditExtDayCycle::doCloseInventoryFloater(bool quitting)
     }
 }
 
-void LLFloaterEditExtDayCycle::onPickerCommitSetting(LLUUID asset_id)
+void LLFloaterEditExtDayCycle::onPickerCommitSetting(LLUUID item_id)
 {
     LLSettingsBase::TrackPosition frame(mTimeSlider->getCurSliderValue());
     S32 track = mCurrentTrack;
-
-    LLSettingsVOBase::getSettingsAsset(asset_id,
-        [this, track, frame](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat) { onAssetLoadedForFrame(asset_id, settings, status, track, frame); });
+    LLViewerInventoryItem *itemp = gInventory.getItem(item_id);
+    if (itemp)
+    {
+        LLSettingsVOBase::getSettingsAsset(itemp->getAssetUUID(),
+            [this, track, frame, item_id](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat) { onAssetLoadedForFrame(item_id, asset_id, settings, status, track, frame); });
+    }
 }
 
-void LLFloaterEditExtDayCycle::onAssetLoadedForFrame(LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, S32 track, LLSettingsBase::TrackPosition frame)
+void LLFloaterEditExtDayCycle::onAssetLoadedForFrame(LLUUID item_id, LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, S32 track, LLSettingsBase::TrackPosition frame)
 {
     std::function<void()> cb = [this, settings, frame, track]()
     {
@@ -1541,6 +1622,7 @@ void LLFloaterEditExtDayCycle::onAssetLoadedForFrame(LLUUID asset_id, LLSettings
             return;
         }
         mEditDay->setSettingsAtKeyframe(settings, frame, track);
+        addSliderFrame(frame, settings, false);
         reblendSettings();
         synchronizeTabs();
     };
@@ -1551,13 +1633,7 @@ void LLFloaterEditExtDayCycle::onAssetLoadedForFrame(LLUUID asset_id, LLSettings
         return;
     }
 
-    LLFloaterSettingsPicker *picker = static_cast<LLFloaterSettingsPicker *>(mInventoryFloater.get());
-    LLInventoryItem *inv_item(nullptr);
-
-    if (picker)
-    {
-        inv_item = picker->findItem(asset_id, false, false);
-    }
+    LLInventoryItem *inv_item = gInventory.getItem(item_id);
 
     if (inv_item
         && mInventoryItem

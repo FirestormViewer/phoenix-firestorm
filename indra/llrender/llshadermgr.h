@@ -239,6 +239,17 @@ public:
         BLEND_FACTOR,
 
         NO_ATMO,
+        MOISTURE_LEVEL,
+        DROPLET_RADIUS,
+        ICE_LEVEL,
+        RAINBOW_MAP,
+        HALO_MAP,
+
+        MOON_BRIGHTNESS,
+        MOON_PHASE,
+
+        CLOUD_VARIANCE,
+
 		END_RESERVED_UNIFORMS
 	} eGLSLReservedUniforms;
 

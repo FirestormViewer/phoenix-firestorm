@@ -22,7 +22,7 @@
                 auto_resize="true"
                 user_resize="false"
                 visible="true"
-                height="14">
+                height="12">
             <slider
                     decimal_digits="6"
                     follows="left|top"
@@ -101,7 +101,7 @@
                 auto_resize="true"
                 user_resize="false"
                 visible="true"
-                height="16">
+                height="14">
             <slider
                     decimal_digits="6"
                     follows="left|top"
@@ -195,7 +195,7 @@
                 auto_resize="true"
                 user_resize="false"
                 visible="true"
-                height="14">
+                height="12">
             <slider
                     decimal_digits="6"
                     follows="left|top"

@@ -37,6 +37,7 @@
 #include "llsliderctrl.h"
 #include "lltabcontainer.h"
 #include "llfilepicker.h"
+#include "lllocalbitmaps.h"
 #include "llsettingspicker.h"
 #include "llviewermenufile.h" // LLFilePickerReplyThread
 #include "llviewerparcelmgr.h"
@@ -51,6 +52,7 @@
 #include "llenvironment.h"
 #include "llagent.h"
 #include "llparcel.h"
+#include "lltrans.h"
 
 #include "llsettingsvo.h"
 #include "llinventorymodel.h"
@@ -290,21 +292,12 @@ void LLFloaterFixedEnvironment::checkAndConfirmSettingsLoss(LLFloaterFixedEnviro
     }
 }
 
-void LLFloaterFixedEnvironment::onPickerCommitSetting(LLUUID asset_id)
+void LLFloaterFixedEnvironment::onPickerCommitSetting(LLUUID item_id)
 {
-    mInventoryItem = NULL;
-    mInventoryId.setNull();
-    if (!mInventoryFloater.isDead())
-    {
-        LLFloaterSettingsPicker *picker = static_cast<LLFloaterSettingsPicker *>(mInventoryFloater.get());
-        if (picker)
-        {
-            mInventoryId = picker->findItemID(asset_id, false);
-            mInventoryItem = gInventory.getItem(mInventoryId);
-        }
-    }
+    mInventoryId = item_id;
+    mInventoryItem = gInventory.getItem(mInventoryId);
 
-    LLSettingsVOBase::getSettingsAsset(asset_id,
+    LLSettingsVOBase::getSettingsAsset(mInventoryItem->getAssetUUID(),
         [this](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat) { onAssetLoaded(asset_id, settings, status); });
 }
 
@@ -315,6 +308,8 @@ void LLFloaterFixedEnvironment::onAssetLoaded(LLUUID asset_id, LLSettingsBase::p
         LL_WARNS("ENVIRONMENT") << "Discarding obsolete asset callback" << LL_ENDL;
         return;
     }
+
+    clearDirtyFlag();
 
     if (!settings || status)
     {
@@ -348,6 +343,62 @@ void LLFloaterFixedEnvironment::onButtonImport()
 void LLFloaterFixedEnvironment::onButtonApply(LLUICtrl *ctrl, const LLSD &data)
 {
     std::string ctrl_action = ctrl->getName();
+
+    std::string local_desc;
+    bool is_local = false; // because getString can be empty
+    if (mSettings->getSettingsType() == "water")
+    {
+        LLSettingsWater::ptr_t water = std::static_pointer_cast<LLSettingsWater>(mSettings);
+        if (water)
+        {
+            // LLViewerFetchedTexture and check for FTT_LOCAL_FILE or check LLLocalBitmapMgr
+            if (LLLocalBitmapMgr::isLocal(water->getNormalMapID()))
+            {
+                local_desc = LLTrans::getString("EnvironmentNormalMap");
+                is_local = true;
+            }
+            else if (LLLocalBitmapMgr::isLocal(water->getTransparentTextureID()))
+            {
+                local_desc = LLTrans::getString("EnvironmentTransparent");
+                is_local = true;
+            }
+        }
+    }
+    else if (mSettings->getSettingsType() == "sky")
+    {
+        LLSettingsSky::ptr_t sky = std::static_pointer_cast<LLSettingsSky>(mSettings);
+        if (sky)
+        {
+            if (LLLocalBitmapMgr::isLocal(sky->getSunTextureId()))
+            {
+                local_desc = LLTrans::getString("EnvironmentSun");
+                is_local = true;
+            }
+            else if (LLLocalBitmapMgr::isLocal(sky->getMoonTextureId()))
+            {
+                local_desc = LLTrans::getString("EnvironmentMoon");
+                is_local = true;
+            }
+            else if (LLLocalBitmapMgr::isLocal(sky->getCloudNoiseTextureId()))
+            {
+                local_desc = LLTrans::getString("EnvironmentCloudNoise");
+                is_local = true;
+            }
+            else if (LLLocalBitmapMgr::isLocal(sky->getBloomTextureId()))
+            {
+                local_desc = LLTrans::getString("EnvironmentBloom");
+                is_local = true;
+            }
+        }
+    }
+
+    if (is_local)
+    {
+        LLSD args;
+        args["FIELD"] = local_desc;
+        LLNotificationsUtil::add("WLLocalTextureFixedBlock", args);
+        return;
+    }
 
     if (ctrl_action == ACTION_SAVE)
     {
@@ -385,7 +436,7 @@ void LLFloaterFixedEnvironment::onSaveAsCommit(const LLSD& notification, const L
 void LLFloaterFixedEnvironment::onClickCloseBtn(bool app_quitting)
 {
     if (!app_quitting)
-        checkAndConfirmSettingsLoss([this](){ closeFloater(); });
+        checkAndConfirmSettingsLoss([this](){ closeFloater(); clearDirtyFlag(); });
     else
         closeFloater();
 }
@@ -718,7 +769,7 @@ void LLFloaterFixedEnvironmentSky::loadSkySettingFromFile(const std::vector<std:
 
     loadInventoryItem(LLUUID::null);
 
-    clearDirtyFlag();
+    setDirtyFlag();
     LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_EDIT, legacysky);
     setEditSettings(legacysky);
     LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST, true);

@@ -89,6 +89,9 @@ public:
 
     void                        setEditDayCycle(const LLSettingsDay::ptr_t &pday);
     void                        setEditDefaultDayCycle();
+    LLUUID                      getEditingAssetId() { return mEditDay ? mEditDay->getAssetId() : LLUUID::null; }
+    LLUUID                      getEditingInventoryId() { return mInventoryId; }
+
 
     BOOL			            handleKeyUp(KEY key, MASK mask, BOOL called_from_parent) override;
 
@@ -130,7 +133,7 @@ private:
 	void                        updateButtons();
 	void                        updateSlider(); //generate sliders from current track
 	void                        updateTimeAndLabel();
-	void                        addSliderFrame(const F32 frame, LLSettingsBase::ptr_t &setting, bool update_ui = true);
+	void                        addSliderFrame(const F32 frame, const LLSettingsBase::ptr_t &setting, bool update_ui = true);
 	void                        removeCurrentSliderFrame();
 
     void                        loadInventoryItem(const LLUUID  &inventoryId);
@@ -145,10 +148,10 @@ private:
     void                        onInventoryCreated(LLUUID asset_id, LLUUID inventory_id, LLSD results);
     void                        onInventoryUpdated(LLUUID asset_id, LLUUID inventory_id, LLSD results);
 
-    void                        doOpenInventoryFloater(LLSettingsType::type_e type, LLUUID currasset);
+    void                        doOpenInventoryFloater(LLSettingsType::type_e type, LLUUID curritem);
     void                        doCloseInventoryFloater(bool quitting = false);
-    void                        onPickerCommitSetting(LLUUID asset_id);
-    void                        onAssetLoadedForFrame(LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, S32 track, LLSettingsBase::TrackPosition frame);
+    void                        onPickerCommitSetting(LLUUID item_id);
+    void                        onAssetLoadedForFrame(LLUUID item_id, LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, S32 track, LLSettingsBase::TrackPosition frame);
 
     bool                        canUseInventory() const;
     bool                        canApplyRegion() const;

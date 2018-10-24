@@ -41,7 +41,7 @@ namespace
 }
 
 //=========================================================================
-const std::string LLSettingsWater::SETTING_BLUR_MULTIPILER("blur_multiplier");
+const std::string LLSettingsWater::SETTING_BLUR_MULTIPLIER("blur_multiplier");
 const std::string LLSettingsWater::SETTING_FOG_COLOR("water_fog_color");
 const std::string LLSettingsWater::SETTING_FOG_DENSITY("water_fog_density");
 const std::string LLSettingsWater::SETTING_FOG_MOD("underwater_fog_mod");
@@ -55,7 +55,7 @@ const std::string LLSettingsWater::SETTING_SCALE_BELOW("scale_below");
 const std::string LLSettingsWater::SETTING_WAVE1_DIR("wave1_direction");
 const std::string LLSettingsWater::SETTING_WAVE2_DIR("wave2_direction");
 
-const std::string LLSettingsWater::SETTING_LEGACY_BLUR_MULTIPILER("blurMultiplier");
+const std::string LLSettingsWater::SETTING_LEGACY_BLUR_MULTIPLIER("blurMultiplier");
 const std::string LLSettingsWater::SETTING_LEGACY_FOG_COLOR("waterFogColor");
 const std::string LLSettingsWater::SETTING_LEGACY_FOG_DENSITY("waterFogDensity");
 const std::string LLSettingsWater::SETTING_LEGACY_FOG_MOD("underWaterFogMod");
@@ -68,7 +68,7 @@ const std::string LLSettingsWater::SETTING_LEGACY_SCALE_BELOW("scaleBelow");
 const std::string LLSettingsWater::SETTING_LEGACY_WAVE1_DIR("wave1Dir");
 const std::string LLSettingsWater::SETTING_LEGACY_WAVE2_DIR("wave2Dir");
 
-const LLUUID LLSettingsWater::DEFAULT_ASSET_ID("ce4cfe94-700a-292c-7c22-a2d9201bd661");
+const LLUUID LLSettingsWater::DEFAULT_ASSET_ID("59d1a851-47e7-0e5f-1ed7-6b715154f41a");
 
 static const LLUUID DEFAULT_TRANSPARENT_WATER_TEXTURE("2bfd3884-7e27-69b9-ba3a-3e673f680004");
 static const LLUUID DEFAULT_OPAQUE_WATER_TEXTURE("43c32285-d658-1793-c123-bf86315de055");
@@ -97,7 +97,7 @@ LLSD LLSettingsWater::defaults(const LLSettingsBase::TrackPosition& position)
         F32 normal_scale_offset = (position * 0.5f) - 0.25f;
 
         // Magic constants copied form defaults.xml 
-        dfltsetting[SETTING_BLUR_MULTIPILER] = LLSD::Real(0.04000f);
+        dfltsetting[SETTING_BLUR_MULTIPLIER] = LLSD::Real(0.04000f);
         dfltsetting[SETTING_FOG_COLOR] = LLColor3(0.0156f, 0.1490f, 0.2509f).getValue();
         dfltsetting[SETTING_FOG_DENSITY] = LLSD::Real(2.0f);
         dfltsetting[SETTING_FOG_MOD] = LLSD::Real(0.25f);
@@ -121,9 +121,9 @@ LLSD LLSettingsWater::translateLegacySettings(LLSD legacy)
 {
     LLSD newsettings(defaults());
 
-    if (legacy.has(SETTING_LEGACY_BLUR_MULTIPILER))
+    if (legacy.has(SETTING_LEGACY_BLUR_MULTIPLIER))
     {
-        newsettings[SETTING_BLUR_MULTIPILER] = LLSD::Real(legacy[SETTING_LEGACY_BLUR_MULTIPILER].asReal());
+        newsettings[SETTING_BLUR_MULTIPLIER] = LLSD::Real(legacy[SETTING_LEGACY_BLUR_MULTIPLIER].asReal());
     }
     if (legacy.has(SETTING_LEGACY_FOG_COLOR))
     {
@@ -212,14 +212,14 @@ LLSettingsWater::validation_list_t LLSettingsWater::validationList()
         // a parameter without first wrapping it in a pure LLSD object will result 
         // in deeply nested arrays like this [[[[[[[[[[v1,v2,v3]]]]]]]]]]
 
-        validation.push_back(Validator(SETTING_BLUR_MULTIPILER, true, LLSD::TypeReal,
+        validation.push_back(Validator(SETTING_BLUR_MULTIPLIER, true, LLSD::TypeReal,
             boost::bind(&Validator::verifyFloatRange, _1, LLSD(LLSDArray(-0.5f)(0.5f)))));
         validation.push_back(Validator(SETTING_FOG_COLOR, true, LLSD::TypeArray,
             boost::bind(&Validator::verifyVectorMinMax, _1,
                 LLSD(LLSDArray(0.0f)(0.0f)(0.0f)(1.0f)),
                 LLSD(LLSDArray(1.0f)(1.0f)(1.0f)(1.0f)))));
         validation.push_back(Validator(SETTING_FOG_DENSITY, true, LLSD::TypeReal,
-            boost::bind(&Validator::verifyFloatRange, _1, LLSD(LLSDArray(1.0f)(1024.0f)))));
+            boost::bind(&Validator::verifyFloatRange, _1, LLSD(LLSDArray(-10.0f)(10.0f)))));
         validation.push_back(Validator(SETTING_FOG_MOD, true, LLSD::TypeReal,
             boost::bind(&Validator::verifyFloatRange, _1, LLSD(LLSDArray(1.0f)(1024.0f)))));
         validation.push_back(Validator(SETTING_FRESNEL_OFFSET, true, LLSD::TypeReal,

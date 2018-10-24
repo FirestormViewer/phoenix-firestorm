@@ -177,6 +177,13 @@ void LLDrawPoolWLSky::renderSkyHazeDeferred(const LLVector3& camPosLocal, F32 ca
         sky_shader->bindTexture(LLShaderMgr::ILLUMINANCE_TEX, gAtmosphere->getIlluminance());
 
         LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+
+        LLViewerTexture* rainbow_tex = gSky.mVOSkyp->getRainbowTex();
+        LLViewerTexture* halo_tex  = gSky.mVOSkyp->getHaloTex();
+
+        sky_shader->bindTexture(LLShaderMgr::RAINBOW_MAP, rainbow_tex);
+        sky_shader->bindTexture(LLShaderMgr::HALO_MAP,  halo_tex);
+
         LLVector3 sun_dir  = LLEnvironment::instance().getSunDirection();
         LLVector3 moon_dir = LLEnvironment::instance().getMoonDirection();
 
@@ -184,6 +191,14 @@ void LLDrawPoolWLSky::renderSkyHazeDeferred(const LLVector3& camPosLocal, F32 ca
         sky_shader->uniform1f(LLShaderMgr::SUN_SIZE, sunSize);
         sky_shader->uniform3fv(LLShaderMgr::DEFERRED_SUN_DIR, 1, sun_dir.mV);
         sky_shader->uniform3fv(LLShaderMgr::DEFERRED_MOON_DIR, 1, moon_dir.mV);
+
+        F32 moisture_level  = (float)psky->getSkyMoistureLevel();
+        F32 droplet_radius  = (float)psky->getSkyDropletRadius();
+        F32 ice_level       = (float)psky->getSkyIceLevel();
+
+        sky_shader->uniform1f(LLShaderMgr::MOISTURE_LEVEL, moisture_level);
+        sky_shader->uniform1f(LLShaderMgr::DROPLET_RADIUS, droplet_radius);
+        sky_shader->uniform1f(LLShaderMgr::ICE_LEVEL, ice_level);
 
         llassert(sky_shader->getUniformLocation(LLShaderMgr::INVERSE_PROJECTION_MATRIX));
 
@@ -196,7 +211,7 @@ void LLDrawPoolWLSky::renderSkyHazeDeferred(const LLVector3& camPosLocal, F32 ca
 
         LLGLDisable cull(GL_CULL_FACE);
         renderFsSky(camPosLocal, camHeightLocal, sky_shader);
-        
+
 		sky_shader->unbind();
 	}
 }
@@ -209,6 +224,22 @@ void LLDrawPoolWLSky::renderSkyHaze(const LLVector3& camPosLocal, F32 camHeightL
 	{
         LLGLDisable blend(GL_BLEND);
         sky_shader->bind();
+
+        LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+
+        LLViewerTexture* rainbow_tex = gSky.mVOSkyp->getRainbowTex();
+        LLViewerTexture* halo_tex  = gSky.mVOSkyp->getHaloTex();
+
+        sky_shader->bindTexture(LLShaderMgr::RAINBOW_MAP, rainbow_tex);
+        sky_shader->bindTexture(LLShaderMgr::HALO_MAP,  halo_tex);
+
+        F32 moisture_level  = (float)psky->getSkyMoistureLevel();
+        F32 droplet_radius  = (float)psky->getSkyDropletRadius();
+        F32 ice_level       = (float)psky->getSkyIceLevel();
+
+        sky_shader->uniform1f(LLShaderMgr::MOISTURE_LEVEL, moisture_level);
+        sky_shader->uniform1f(LLShaderMgr::DROPLET_RADIUS, droplet_radius);
+        sky_shader->uniform1f(LLShaderMgr::ICE_LEVEL, ice_level);
 
         /// Render the skydome
         renderDome(origin, camHeightLocal, sky_shader);	
@@ -295,6 +326,8 @@ void LLDrawPoolWLSky::renderStarsDeferred(void) const
 {
 	LLGLSPipelineSkyBox gls_sky;
 	LLGLEnable blend(GL_BLEND);
+    LLGLDepthTest depth_test(GL_TRUE, GL_FALSE, GL_LESS);
+
 	gGL.setSceneBlendType(LLRender::BT_ADD_WITH_ALPHA);
 
     F32 star_alpha = LLEnvironment::instance().getCurrentSky()->getStarBrightness() / 500.0f;
@@ -356,6 +389,7 @@ void LLDrawPoolWLSky::renderSkyClouds(const LLVector3& camPosLocal, F32 camHeigh
 {
 	if (gPipeline.canUseWindLightShaders() && gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_CLOUDS) && gSky.mVOSkyp->getCloudNoiseTex())
 	{
+        LLGLDepthTest depth(GL_TRUE, GL_TRUE);
 		LLGLEnable blend(GL_BLEND);
 		gGL.setSceneBlendType(LLRender::BT_ALPHA);
 		
@@ -364,8 +398,13 @@ void LLDrawPoolWLSky::renderSkyClouds(const LLVector3& camPosLocal, F32 camHeigh
         cloud_shader->bindTexture(LLShaderMgr::CLOUD_NOISE_MAP, gSky.mVOSkyp->getCloudNoiseTex());
         cloud_shader->bindTexture(LLShaderMgr::CLOUD_NOISE_MAP_NEXT, gSky.mVOSkyp->getCloudNoiseTexNext());
 
-        F32 blend_factor = LLEnvironment::instance().getCurrentSky()->getBlendFactor();
+        LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+
+        F32 blend_factor   = psky ? psky->getBlendFactor()   : 0.0f;
+        F32 cloud_variance = psky ? psky->getCloudVariance() : 0.0f;
+
         cloud_shader->uniform1f(LLShaderMgr::BLEND_FACTOR, blend_factor);
+        cloud_shader->uniform1f(LLShaderMgr::CLOUD_VARIANCE, cloud_variance);
 
 		/// Render the skydome
         renderDome(camPosLocal, camHeightLocal, cloud_shader);
@@ -470,6 +509,12 @@ void LLDrawPoolWLSky::renderHeavenlyBodies()
                 moon_shader->bindTexture(LLShaderMgr::ALTERNATE_DIFFUSE_MAP, tex_b, LLTexUnit::TT_TEXTURE);
             }
 
+            LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+
+            F32 moon_brightness = (float)psky->getMoonBrightness();
+
+            moon_shader->uniform1f(LLShaderMgr::MOON_BRIGHTNESS,  moon_brightness);
+
             moon_shader->uniform4fv(LLShaderMgr::DIFFUSE_COLOR, 1, color.mV);                
             moon_shader->uniform1f(LLShaderMgr::BLEND_FACTOR, blend_factor);
 
@@ -508,22 +553,21 @@ void LLDrawPoolWLSky::renderDeferred(S32 pass)
     if (gPipeline.canUseWindLightShaders())
     {
         {
+            // Disable depth-writes for sky, but re-enable depth writes for the cloud
+            // rendering below so the cloud shader can write out depth for the stars to test against         
             LLGLDepthTest depth(GL_TRUE, GL_FALSE);
 
             if (gPipeline.useAdvancedAtmospherics())
             {
-                //LLGLSquashToFarClip far_clip(get_current_projection());
 	            renderSkyHazeDeferred(origin, camHeightLocal);
             }
             else
             {
-                // Disable depth-test for sky, but re-enable depth writes for the cloud
-                // rendering below so the cloud shader can write out depth for the stars to test against            
-                renderSkyHaze(origin, camHeightLocal);   
-		    
+                renderSkyHaze(origin, camHeightLocal);
             }
             renderHeavenlyBodies();
         }
+
         renderSkyClouds(origin, camHeightLocal);
     }    
     gGL.setColorMask(true, true);

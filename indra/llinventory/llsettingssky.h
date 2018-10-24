@@ -42,6 +42,8 @@ class LLSettingsSky: public LLSettingsBase
 public:
     static const std::string SETTING_AMBIENT;
     static const std::string SETTING_BLOOM_TEXTUREID;
+    static const std::string SETTING_RAINBOW_TEXTUREID;
+    static const std::string SETTING_HALO_TEXTUREID;
     static const std::string SETTING_BLUE_DENSITY;
     static const std::string SETTING_BLUE_HORIZON;
     static const std::string SETTING_DENSITY_MULTIPLIER;
@@ -55,6 +57,8 @@ public:
     static const std::string SETTING_CLOUD_SCROLL_RATE;
     static const std::string SETTING_CLOUD_SHADOW;
     static const std::string SETTING_CLOUD_TEXTUREID;
+    static const std::string SETTING_CLOUD_VARIANCE;
+
     static const std::string SETTING_DOME_OFFSET;
     static const std::string SETTING_DOME_RADIUS;
     static const std::string SETTING_GAMMA;
@@ -64,6 +68,8 @@ public:
     static const std::string SETTING_MOON_ROTATION;
     static const std::string SETTING_MOON_SCALE;
     static const std::string SETTING_MOON_TEXTUREID;
+    static const std::string SETTING_MOON_BRIGHTNESS;
+
     static const std::string SETTING_STAR_BRIGHTNESS;
     static const std::string SETTING_SUNLIGHT_COLOR;
     static const std::string SETTING_SUN_ROTATION;
@@ -87,6 +93,9 @@ public:
         static const std::string SETTING_DENSITY_PROFILE_LINEAR_TERM;
         static const std::string SETTING_DENSITY_PROFILE_CONSTANT_TERM;
         
+    static const std::string SETTING_SKY_MOISTURE_LEVEL;
+    static const std::string SETTING_SKY_DROPLET_RADIUS;
+    static const std::string SETTING_SKY_ICE_LEVEL;
 
     static const std::string SETTING_LEGACY_HAZE;
 
@@ -117,6 +126,10 @@ public:
     F32 getSunArcRadians() const;
     F32 getMieAnisotropy() const;   
 
+    F32 getSkyMoistureLevel() const;
+    F32 getSkyDropletRadius() const;
+    F32 getSkyIceLevel() const;
+
     // Return first (only) profile layer represented in LLSD
     LLSD getRayleighConfig() const;
     LLSD getMieConfig() const;
@@ -128,10 +141,22 @@ public:
     LLSD getAbsorptionConfigs() const;
 
     LLUUID getBloomTextureId() const;
+    LLUUID getRainbowTextureId() const;
+    LLUUID getHaloTextureId() const;
 
     void setRayleighConfigs(const LLSD& rayleighConfig);
     void setMieConfigs(const LLSD& mieConfig);
     void setAbsorptionConfigs(const LLSD& absorptionConfig);
+
+    void setPlanetRadius(F32 radius);
+    void setSkyBottomRadius(F32 radius);
+    void setSkyTopRadius(F32 radius);
+    void setSunArcRadians(F32 radians);
+    void setMieAnisotropy(F32 aniso_factor);
+
+    void setSkyMoistureLevel(F32 moisture_level);
+    void setSkyDropletRadius(F32 radius);
+    void setSkyIceLevel(F32 ice_level);
 
     //---------------------------------------------------------------------
     LLColor3 getAmbientColor() const;
@@ -161,6 +186,9 @@ public:
     F32 getCloudShadow() const;
     void setCloudShadow(F32 val);
     
+    F32 getCloudVariance() const;
+    void setCloudVariance(F32 val);
+
     F32 getDomeOffset() const;
     F32 getDomeRadius() const;
 
@@ -183,6 +211,9 @@ public:
 
     LLUUID getMoonTextureId() const;
     void setMoonTextureId(LLUUID id);
+
+    F32  getMoonBrightness() const;
+    void setMoonBrightness(F32 brightness_factor);
 
     F32 getStarBrightness() const;
     void setStarBrightness(F32 val);
@@ -258,6 +289,8 @@ public:
     static LLUUID GetDefaultMoonTextureId();
     static LLUUID GetDefaultCloudNoiseTextureId();
     static LLUUID GetDefaultBloomTextureId();
+    static LLUUID GetDefaultRainbowTextureId();
+    static LLUUID GetDefaultHaloTextureId();
 
     static LLSD createDensityProfileLayer(
                     F32 width,
@@ -312,6 +345,8 @@ private:
     LLUUID      mNextMoonTextureId;
     LLUUID      mNextCloudTextureId;
     LLUUID      mNextBloomTextureId;
+    LLUUID      mNextRainbowTextureId;
+    LLUUID      mNextHaloTextureId;
 
     typedef std::map<std::string, S32> mapNameToUniformId_t;
 

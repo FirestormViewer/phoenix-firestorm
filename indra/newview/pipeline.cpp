@@ -88,6 +88,7 @@
 #include "llvocache.h"
 #include "llvoground.h"
 #include "llvosky.h"
+#include "llvowlsky.h"
 #include "llvotree.h"
 #include "llvovolume.h"
 #include "llvosurfacepatch.h"
@@ -2630,7 +2631,20 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
 		sCull->pushDrawable(gSky.mVOGroundp->mDrawable);
 	}
 	
+    if (hasRenderType(LLPipeline::RENDER_TYPE_WL_SKY) && 
+		gPipeline.canUseWindLightShaders() &&
+		gSky.mVOWLSkyp.notNull() && 
+		gSky.mVOWLSkyp->mDrawable.notNull())
+	{
+		gSky.mVOWLSkyp->mDrawable->setVisible(camera);
+		sCull->pushDrawable(gSky.mVOWLSkyp->mDrawable);
+	}
 	
+    if (hasRenderType(LLPipeline::RENDER_TYPE_WATER))
+    {
+        LLWorld::getInstance()->precullWaterObjects(camera, sCull, hasRenderType(LLPipeline::RENDER_TYPE_VOIDWATER));
+    }
+
 	gGL.matrixMode(LLRender::MM_PROJECTION);
 	gGL.popMatrix();
 	gGL.matrixMode(LLRender::MM_MODELVIEW);

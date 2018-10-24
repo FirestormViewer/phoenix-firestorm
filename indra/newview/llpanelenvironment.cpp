@@ -48,6 +48,8 @@
 #include "llcallbacklist.h"
 #include "llviewerparcelmgr.h"
 
+#include "llinventorymodel.h"
+
 //=========================================================================
 namespace 
 {
@@ -114,6 +116,7 @@ const std::string alt_labels[] = {
 LLPanelEnvironmentInfo::LLPanelEnvironmentInfo(): 
     mCurrentEnvironment(),
     mDirtyFlag(0),
+    mEditorLastParcelId(INVALID_PARCEL_ID),
     mCrossRegion(false),
     mNoSelection(false),
     mNoEnvironment(false),
@@ -201,15 +204,15 @@ void LLPanelEnvironmentInfo::refresh()
         return;
     }
 
+    S32 rdo_selection = 0;
     if ((!mCurrentEnvironment->mDayCycle) ||
         ((mCurrentEnvironment->mParcelId == INVALID_PARCEL_ID) && (mCurrentEnvironment->mDayCycle->getAssetId() == LLSettingsDay::GetDefaultAssetId() )))
     {
-        getChild<LLRadioGroup>(RDG_ENVIRONMENT_SELECT)->setSelectedIndex(0);
         getChild<LLUICtrl>(EDT_INVNAME)->setValue("");
     }
     else if (!mCurrentEnvironment->mDayCycle->getAssetId().isNull())
     {
-        getChild<LLRadioGroup>(RDG_ENVIRONMENT_SELECT)->setSelectedIndex(1);
+        rdo_selection = 1;
 
         LLUUID asset_id = mCurrentEnvironment->mDayCycle->getAssetId();
 
@@ -222,18 +225,21 @@ void LLPanelEnvironmentInfo::refresh()
     }
     else
     {   // asset id is null so this is a custom environment
-        getChild<LLRadioGroup>(RDG_ENVIRONMENT_SELECT)->setSelectedIndex(2);
+        rdo_selection = 2;
         getChild<LLUICtrl>(EDT_INVNAME)->setValue("");
     }
+    getChild<LLRadioGroup>(RDG_ENVIRONMENT_SELECT)->setSelectedIndex(rdo_selection);
 
     F32Hours daylength(mCurrentEnvironment->mDayLength);
     F32Hours dayoffset(mCurrentEnvironment->mDayOffset);
 
-    if (dayoffset.value() > 8.0f)
+    if (dayoffset.value() > 12.0f)
         dayoffset -= F32Hours(24.0);
 
     getChild<LLSliderCtrl>(SLD_DAYLENGTH)->setValue(daylength.value());
     getChild<LLSliderCtrl>(SLD_DAYOFFSET)->setValue(dayoffset.value());
+    getChild<LLSliderCtrl>(SLD_DAYLENGTH)->setEnabled(canEdit() && (rdo_selection != 0) && !mCurrentEnvironment->mIsLegacy);
+    getChild<LLSliderCtrl>(SLD_DAYOFFSET)->setEnabled(canEdit() && (rdo_selection != 0) && !mCurrentEnvironment->mIsLegacy);
    
     udpateApparentTimeOfDay();
 
@@ -256,15 +262,7 @@ void LLPanelEnvironmentInfo::refresh()
 
 std::string LLPanelEnvironmentInfo::getInventoryNameForAssetId(LLUUID asset_id) 
 {
-    LLFloaterSettingsPicker *picker = getSettingsPicker();
-
-    if (!picker)
-    {   
-        LL_WARNS("ENVPANEL") << "Couldn't instantiate picker." << LL_ENDL;
-        return std::string();
-    }
-
-    std::string name(picker->findItemName(asset_id, false, false));
+    std::string name(LLFloaterSettingsPicker::findItemName(asset_id, false, false));
 
     if (name.empty())
         return getString(STR_LABEL_UNKNOWNINV);
@@ -331,11 +329,15 @@ void LLPanelEnvironmentInfo::updateEditFloater(const LLEnvironment::EnvironmentI
         else
             dayeditor->closeFloater();
     }
-    else
+    else if (dayeditor->getEditingAssetId() != nextenv->mDayCycle->getAssetId()
+            || mEditorLastParcelId != nextenv->mParcelId
+            || mEditorLastRegionId != nextenv->mRegionId)
     {
         // Ignore dirty
         // If parcel selection changed whatever we do except saving to inventory with
         // old settings will be invalid.
+        mEditorLastParcelId = nextenv->mParcelId;
+        mEditorLastRegionId = nextenv->mRegionId;
         dayeditor->setEditDayCycle(nextenv->mDayCycle);
     }
 }
@@ -389,6 +391,8 @@ bool LLPanelEnvironmentInfo::setControlsEnabled(bool enabled)
     getChild<LLUICtrl>(BTN_EDIT)->setEnabled(enabled);
     getChild<LLUICtrl>(SLD_DAYLENGTH)->setEnabled(enabled && (rdo_selection != 0) && !is_legacy);
     getChild<LLUICtrl>(SLD_DAYOFFSET)->setEnabled(enabled && (rdo_selection != 0) && !is_legacy);
+    getChild<LLUICtrl>(SLD_ALTITUDES)->setEnabled(enabled && isRegion() && !is_legacy);
+    getChild<LLUICtrl>(ICN_GROUND)->setColor((enabled && isRegion() && !is_legacy) ? LLColor4::white : LLColor4::grey % 0.8f);
     getChild<LLUICtrl>(PNL_ENVIRONMENT_ALTITUDES)->setEnabled(enabled && isRegion() && !is_legacy);
     getChild<LLUICtrl>(CHK_ALLOWOVERRIDE)->setEnabled(enabled && isRegion() && !is_legacy);
     getChild<LLUICtrl>(BTN_APPLY)->setEnabled(enabled && (mDirtyFlag != 0));
@@ -614,8 +618,13 @@ void LLPanelEnvironmentInfo::onBtnSelect()
     LLFloaterSettingsPicker *picker = getSettingsPicker();
     if (picker)
     {
+        LLUUID item_id;
+        if (mCurrentEnvironment && mCurrentEnvironment->mDayCycle)
+        {
+            item_id = LLFloaterSettingsPicker::findItemID(mCurrentEnvironment->mDayCycle->getAssetId(), false, false);
+        }
         picker->setSettingsFilter(LLSettingsType::ST_NONE);
-        picker->setSettingsAssetId((mCurrentEnvironment && mCurrentEnvironment->mDayCycle) ? mCurrentEnvironment->mDayCycle->getAssetId() : LLUUID::null);
+        picker->setSettingsItemId(item_id);
         picker->openFloater();
         picker->setFocus(TRUE);
     }
@@ -710,13 +719,17 @@ void LLPanelEnvironmentInfo::onIdlePlay(void *data)
     ((LLPanelEnvironmentInfo *)data)->udpateApparentTimeOfDay();
 }
 
-void LLPanelEnvironmentInfo::onPickerCommitted(LLUUID asset_id)
+void LLPanelEnvironmentInfo::onPickerCommitted(LLUUID item_id)
 {
-    LLSettingsVOBase::getSettingsAsset(asset_id, [this](LLUUID, LLSettingsBase::ptr_t settings, S32 status, LLExtStat) { 
-        if (status)
-            return;
-        onPickerAssetDownloaded(settings);
-    });
+    LLInventoryItem *itemp = gInventory.getItem(item_id);
+    if (itemp)
+    {
+        LLSettingsVOBase::getSettingsAsset(itemp->getAssetUUID(), [this](LLUUID, LLSettingsBase::ptr_t settings, S32 status, LLExtStat) {
+            if (status)
+                return;
+            onPickerAssetDownloaded(settings);
+        });
+    }
 }
 
 void LLPanelEnvironmentInfo::onEditCommitted(LLSettingsDay::ptr_t newday)

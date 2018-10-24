@@ -102,7 +102,7 @@
                     background_visible="true"
                     bg_alpha_color="DkGray2"
                     border="true">
-                <inventory_panel
+                <asset_filtered_inv_panel
                        left="0"
                        top="0"
                        right="-1"
@@ -110,7 +110,8 @@
                        allow_multi_select="false"
                        follows="all"
                        layout="topleft"
-                       name="pnl_settings"/>
+                       name="pnl_settings"
+                       filter_asset_type="settings"/>
             </panel>
         </layout_panel>
         <layout_panel
@@ -125,8 +126,8 @@
                     label="Show Empty Folders"
                     layout="topleft"
                     name="chk_showfolders"
-                    top="0"
-                    left_delta="-3"
+                    top="2"
+                    left_delta="-1"
                     width="200" />
         </layout_panel>
         <layout_panel
@@ -139,7 +140,7 @@
             <panel
                     background_visible="true"
                     bevel_style="none"
-                    top_pad="0"
+                    top_pad="1"
                     follows="top|left|right"
                     height="30"
                     label="bottom_panel"
@@ -183,7 +184,7 @@
                         layout="topleft"
                         name="btn_del"
                         right="-5"
-                        tool_tip="Delete this setting"
+                        tool_tip="Remove selected item"
                         top_delta="0"
                         width="18" />
             </panel>

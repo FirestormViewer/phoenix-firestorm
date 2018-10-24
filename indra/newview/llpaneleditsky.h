@@ -76,6 +76,10 @@ private:
     void                    onDensityMultipChanged();
     void                    onDistanceMultipChanged();
     void                    onMaxAltChanged();
+    void                    onMoistureLevelChanged();
+    void                    onDropletRadiusChanged();
+    void                    onIceLevelChanged();
+
 };
 
 class LLPanelSettingsSkyCloudTab : public LLPanelSettingsSky
@@ -95,6 +99,7 @@ private:
     void                    onCloudColorChanged();
     void                    onCloudCoverageChanged();
     void                    onCloudScaleChanged();
+    void                    onCloudVarianceChanged();
     void                    onCloudScrollChanged();
     void                    onCloudMapChanged();
     void                    onCloudDensityChanged();
@@ -123,6 +128,7 @@ private:
     void                    onSunImageChanged();
     void                    onMoonRotationChanged();
     void                    onMoonScaleChanged();
+    void                    onMoonBrightnessChanged();
     void                    onMoonImageChanged();
 };
 

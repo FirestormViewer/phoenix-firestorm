@@ -120,7 +120,7 @@ protected:
 
     void                        udpateApparentTimeOfDay();
 
-    void                        onPickerCommitted(LLUUID asset_id);
+    void                        onPickerCommitted(LLUUID item_id);
     void                        onEditCommitted(LLSettingsDay::ptr_t newday);
     void                        onPickerAssetDownloaded(LLSettingsBase::ptr_t settings);
     void                        onEnvironmentReceived(S32 parcel_id, LLEnvironment::EnvironmentInfo::ptr_t envifo);
@@ -171,6 +171,8 @@ private:
     LLHandle<LLFloater>             mSettingsFloater;
     LLHandle<LLFloater>             mEditFloater;
     S32                             mDirtyFlag;
+    S32                             mEditorLastParcelId;
+    LLUUID                          mEditorLastRegionId;
     bool                            mCrossRegion;
     bool                            mNoSelection;
     bool                            mNoEnvironment;
