@@ -2620,6 +2620,9 @@ void LLAppViewer::initLoggingAndGetLastDuration()
 	LLError::setFatalFunction(errorCallback);
 	//LLError::setTimeFunction(getRuntime);
 
+	// <FS:Ansariel> Remove old CEF log file (defined in dullahan.h)
+	LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "cef_log.txt"));
+
 	// Remove the last ".old" log file.
 	std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
 							     APP_NAME + ".old");
@@ -2862,9 +2865,6 @@ bool LLAppViewer::initConfiguration()
 	}
 	//</FS:Techwolf Lupindo>
 
-	// <FS:Ansariel> Debug setting to disable log throttle
-	nd::logging::setThrottleEnabled(gSavedSettings.getBOOL("FSEnableLogThrottle"));
-
 	initStrings(); // setup paths for LLTrans based on settings files only
 	// - set procedural settings
 	// Note: can't use LL_PATH_PER_SL_ACCOUNT for any of these since we haven't logged in yet
@@ -3026,6 +3026,8 @@ bool LLAppViewer::initConfiguration()
 	//Todo, find a cleaner way of doing this via the various set_default arguments.
 	loadSettingsFromDirectory("User");
 	
+	// <FS:Ansariel> Debug setting to disable log throttle
+	nd::logging::setThrottleEnabled(gSavedSettings.getBOOL("FSEnableLogThrottle"));
 
 	// - apply command line settings
 	if (! clp.notify())
