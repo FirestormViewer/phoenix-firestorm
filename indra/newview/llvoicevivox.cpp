@@ -824,41 +824,41 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
     {
 #ifndef VIVOXDAEMON_REMOTEHOST
         // Launch the voice daemon
-        std::string exe_path = gDirUtilp->getExecutableDir();
-        exe_path += gDirUtilp->getDirDelimiter();
+        std::string exe_path = gDirUtilp->getAppRODataDir();
 #if LL_WINDOWS
         // <FS:Ansariel> FIRE-22709: Local voice not working in OpenSim
 #ifdef OPENSIM
         if (!LLGridManager::instance().isInSecondLife())
         {
-            exe_path += "voice_os" + gDirUtilp->getDirDelimiter();
+            gDirUtilp->append(exe_path, "voice_os" + gDirUtilp->getDirDelimiter() + "SLVoice.exe");
         }
+        else
 #endif
         // </FS:Ansariel>
-        exe_path += "SLVoice.exe";
+        gDirUtilp->append(exe_path, "SLVoice.exe");
 #elif LL_DARWIN
         // <FS:Ansariel/TS> FIRE-22709: Local voice not working in OpenSim
-        //exe_path += "../Resources/SLVoice";
+        //gDirUtilp->append(exe_path, "SLVoice");
 #ifdef OPENSIM
         if (LLGridManager::instance().isInSecondLife())
         {
 #endif
-            exe_path += "../Resources/SLVoice";
+            gDirUtilp->append(exe_path, "SLVoice");
 #ifdef OPENSIM
         }
         else
         {
-            exe_path += "../Resources/voice_os/SLVoice";
+            gDirUtilp->append(exe_path, "voice_os/SLVoice");
         }
 #endif
         // </FS:Ansariel/TS>
 #else
         // <FS:ND> On Linux the viewer can run SLVoice.exe through wine (https://www.winehq.org/)
-        // exe_path += "SLVoice";
+        //gDirUtilp->append(exe_path, "SLVoice");
         if( !viewerUsesWineForVoice() )
-            exe_path += "SLVoice"; // native version
+            gDirUtilp->append(exe_path, "SLVoice"); // native version
         else
-            exe_path += "win32/SLVoice.exe"; // use bundled win32 version
+            gDirUtilp->append(exe_path, "win32/SLVoice"); // use bundled win32 version
         // </FS:ND>
 #endif
         // See if the vivox executable exists

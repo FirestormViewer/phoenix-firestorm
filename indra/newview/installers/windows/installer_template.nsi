@@ -341,7 +341,7 @@ SetOutPath "$INSTDIR"
 CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\$INSTSHORTCUT.lnk" \
 				"$INSTDIR\$VIEWER_EXE" "$SHORTCUT_LANG_PARAM"
 				# <FS:Ansariel> Remove VMP
-				#"$INSTDIR\$INSTEXE" "$SHORTCUT_LANG_PARAM" "$INSTDIR\$VIEWER_EXE"
+				#"$INSTDIR\$VIEWER_EXE" "$SHORTCUT_LANG_PARAM" "$INSTDIR\$VIEWER_EXE"
 
 
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Create Account.url" \
@@ -365,11 +365,11 @@ SetOutPath "$INSTDIR"
 CreateShortCut "$DESKTOP\$INSTSHORTCUT.lnk" \
         "$INSTDIR\$VIEWER_EXE" "$SHORTCUT_LANG_PARAM"
         # <FS:Ansariel> Remove VMP
-        #"$INSTDIR\$INSTEXE" "$SHORTCUT_LANG_PARAM" "$INSTDIR\$VIEWER_EXE"
+        #"$INSTDIR\$VIEWER_EXE" "$SHORTCUT_LANG_PARAM" "$INSTDIR\$VIEWER_EXE"
 CreateShortCut "$INSTDIR\$INSTSHORTCUT.lnk" \
         "$INSTDIR\$VIEWER_EXE" "$SHORTCUT_LANG_PARAM"
         # <FS:Ansariel> Remove VMP
-        #"$INSTDIR\$INSTEXE" "$SHORTCUT_LANG_PARAM" "$INSTDIR\$VIEWER_EXE"
+        #"$INSTDIR\$VIEWER_EXE" "$SHORTCUT_LANG_PARAM" "$INSTDIR\$VIEWER_EXE"
 CreateShortCut "$INSTDIR\Uninstall $INSTSHORTCUT.lnk" \
 				'"$INSTDIR\uninst.exe"' ''
 
@@ -377,7 +377,6 @@ CreateShortCut "$INSTDIR\Uninstall $INSTSHORTCUT.lnk" \
 WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "" "$INSTDIR"
 WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Version" "${VERSION_LONG}"
 WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Shortcut" "$INSTSHORTCUT"
-#WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Exe" "$INSTEXE"
 WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Exe" "$VIEWER_EXE"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "Publisher" "The Phoenix Firestorm Project, Inc."
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLInfoAbout" "http://www.firestormviewer.org"
@@ -395,11 +394,9 @@ ${Else}
 ${EndIf}
 
 # from FS:Ansariel
-#WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayIcon" '"$INSTDIR\$INSTEXE"'
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayIcon" '"$INSTDIR\$VIEWER_EXE"'
 
 # BUG-2707 Disable SEHOP for installed viewer.
-#WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$INSTEXE" "DisableExceptionChainValidation" 1
 WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$VIEWER_EXE" "DisableExceptionChainValidation" 1
 WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "NoModify" 1
 WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "NoRepair" 1
@@ -419,11 +416,8 @@ WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info\DefaultIcon" "" '"$INSTDIR\$
 # URL param must be last item passed to viewer, it ignores subsequent params to avoid parameter injection attacks.
 WriteRegExpandStr HKEY_CLASSES_ROOT "x-grid-location-info\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
 
-# Only allow Launcher to be the icon
-# <FS:Ansariel> Remove VMP
-#WriteRegStr HKEY_CLASSES_ROOT "Applications\$INSTEXE" "IsHostApp" ""
-#WriteRegStr HKEY_CLASSES_ROOT "Applications\${VIEWER_EXE}" "NoStartPage" ""
-# </FS:Ansariel> Remove VMP
+WriteRegStr HKEY_CLASSES_ROOT "Applications\$VIEWER_EXE" "IsHostApp" ""
+##WriteRegStr HKEY_CLASSES_ROOT "Applications\${VIEWER_EXE}" "NoStartPage" ""
 
 # <FS:CR> Register hop:// protocol registry info
 WriteRegStr HKEY_CLASSES_ROOT "hop" "(default)" "URL:Second Life"
@@ -453,7 +447,6 @@ Section Uninstall
 # Start with some default values.
 StrCpy $INSTPROG "${INSTNAME}"
 StrCpy $INSTEXE "${INSTEXE}"
-StrCpy $VIEWER_EXE "${VIEWER_EXE}" # <FS:Ansariel> Disable VMP
 StrCpy $INSTSHORTCUT "${SHORTCUT}"
 
 # Make sure the user can install/uninstall
@@ -469,13 +462,9 @@ Call un.CloseSecondLife
 DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG"
 DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG"
 # BUG-2707 Remove entry that disabled SEHOP
-# <FS:Ansariel> Disable VMP
-#DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$INSTEXE"
-DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$VIEWER_EXE"
-# <FS:Ansariel> Remove VMP
-#DeleteRegKey HKEY_CLASSES_ROOT "Applications\$INSTEXE"
-#DeleteRegKey HKEY_CLASSES_ROOT "Applications\${VIEWER_EXE}"
-# </FS:Ansariel> Remove VMP
+DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\${VIEWER_EXE}"
+##DeleteRegKey HKEY_CLASSES_ROOT "Applications\$INSTEXE"
+DeleteRegKey HKEY_CLASSES_ROOT "Applications\${VIEWER_EXE}"
 
 # Clean up shortcuts
 Delete "$SMPROGRAMS\$INSTSHORTCUT\*.*"
@@ -754,7 +743,7 @@ FunctionEnd
 ;; After install completes, launch app
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function .onInstSuccess
-Call CheckWindowsServPack		# Warn if not on the latest SP before asking to launch.
+        Call CheckWindowsServPack		# Warn if not on the latest SP before asking to launch.
         # <FS:Ansariel> Disable VMP
         #Push $R0
         #Push $0
@@ -797,7 +786,22 @@ label_ask_launch:
         IDYES label_launch IDNO label_no_launch
 
 label_launch:
-	# Assumes SetOutPath $INSTDIR
+        # Assumes SetOutPath $INSTDIR
+        # Run INSTEXE (our updater), passing VIEWER_EXE plus the command-line
+        # arguments built into our shortcuts. This gives the updater a chance
+        # to verify that the viewer we just installed is appropriate for the
+        # running system -- or, if not, to download and install a different
+        # viewer. For instance, if a user running 32-bit Windows installs a
+        # 64-bit viewer, it cannot run on this system. But since the updater
+        # is a 32-bit executable even in the 64-bit viewer package, the
+        # updater can detect the problem and adapt accordingly.
+        # Once everything is in order, the updater will run the specified
+        # viewer with the specified params.
+        # Quote the updater executable and the viewer executable because each
+        # must be a distinct command-line token, but DO NOT quote the language
+        # string because it must decompose into separate command-line tokens.
+        # <FS:Ansariel> No updater, thanks!
+        # Exec '"$INSTDIR\$INSTEXE" precheck "$INSTDIR\$VIEWER_EXE" $SHORTCUT_LANG_PARAM'
 	Exec '"$WINDIR\explorer.exe" "$INSTDIR\$INSTSHORTCUT.lnk"'
 label_no_launch:
         Pop $R0

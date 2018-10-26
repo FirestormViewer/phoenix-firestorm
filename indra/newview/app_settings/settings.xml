@@ -6366,6 +6366,17 @@
       <key>Value</key>
       <real>96.0</real>
     </map>
+    <key>ForceAddressSize</key>
+    <map>
+      <key>Comment</key>
+      <string>Force Windows update to 32-bit or 64-bit viewer.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>ForceAssetFail</key>
     <map>
       <key>Comment</key>
@@ -17210,19 +17221,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>1.0</real>
     </map>
-    <key>VerboseLogs</key>
-    <map>
-      <key>Comment</key>
-      <string>Display source file and line number for each log item for debugging purposes</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
     <key>VertexShaderEnable</key>
     <map>
       <key>Comment</key>
@@ -21080,7 +21078,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>if true, disables running the GPU benchmark at startup
       (default to class 1)</string>
       <key>Persist</key>
-      <integer>0</integer>
+      <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
