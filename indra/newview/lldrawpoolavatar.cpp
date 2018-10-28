@@ -1864,9 +1864,13 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(
 		LLVector4a* norm = has_normal ? (LLVector4a*) normal.get() : NULL;
 		
 		//build matrix palette
-		LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
-        U32 count = LLSkinningUtil::getMeshJointCount(skin);
-        LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, count, skin, avatar);
+		//<FS:Beq> per frame cache of skinning matrices
+		//LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
+        //U32 count = LLSkinningUtil::getMeshJointCount(skin);
+		//LLSkinningUtil::initSkinningMatrixPalette(mat, count, skin, avatar);
+		U32 count = LLSkinningUtil::getMeshJointCount(skin);
+		auto mat = getCacheSkinningMats(face, skin, count, avatar);
+		//</FS:Beq>
         LLSkinningUtil::checkSkinWeights(weights, buffer->getNumVerts(), skin);
 
 		LLMatrix4a bind_shape_matrix;
@@ -1901,6 +1905,23 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(
 		}
 	}
 }
+
+//<FS:Beq> cache per frame Skinning mats
+LLMatrix4a* LLDrawPoolAvatar::getCacheSkinningMats(LLFace * face, const LLMeshSkinInfo* skin, U32 count, LLVOAvatar* avatar)
+{
+	if (LLFrameTimer::getFrameCount() != face->mLastSkinningMatCacheFrame)
+	{
+//		LL_DEBUGS("Skinning") << "Call InitSkinningMatrixPalette for @" << (U64)face << " type=[" << type << "]" << LL_ENDL;
+		face->mLastSkinningMatCacheFrame = LLFrameTimer::getFrameCount();
+		LLSkinningUtil::initSkinningMatrixPalette(face->mSkinningMatCache, count, skin, avatar);
+	}
+	else
+	{
+//		LL_DEBUGS("Skinning") << "Avoiding InitSkinningMatrixPalette for face @" << (U64)face << " type=[" << type << "]" << LL_ENDL;
+	}
+	return face->mSkinningMatCache;
+}
+//</FS:Beq>
 
 void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 {
@@ -1956,11 +1977,16 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 		{
 			if (sShaderLevel > 0)
 			{
-                // upload matrix palette to shader
-				LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
-				U32 count = LLSkinningUtil::getMeshJointCount(skin);
-                LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, count, skin, avatar);
+				// upload matrix palette to shader
 
+				//<FS:Beq> per frame cache of skinning matrices
+				//LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
+				//U32 count = LLSkinningUtil::getMeshJointCount(skin);
+				//LLSkinningUtil::initSkinningMatrixPalette(mat, count, skin, avatar);
+				U32 count = LLSkinningUtil::getMeshJointCount(skin);
+				auto mat = getCacheSkinningMats(face, skin, count, avatar);
+				//</FS:Beq>
+				
 				stop_glerror();
 
 				F32 mp[LL_MAX_JOINTS_PER_MESH_OBJECT*12];
@@ -2152,9 +2178,14 @@ void LLDrawPoolAvatar::renderRiggedShadows(LLVOAvatar* avatar)
 			if (sShaderLevel > 0)
 			{
 				// upload matrix palette to shader
-				LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
+
+				//<FS:Beq> per frame cache of skinning matrices
+				//LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
+				//U32 count = LLSkinningUtil::getMeshJointCount(skin);
+				//LLSkinningUtil::initSkinningMatrixPalette(mat, count, skin, avatar);
 				U32 count = LLSkinningUtil::getMeshJointCount(skin);
-				LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, count, skin, avatar);
+				auto mat = getCacheSkinningMats(face, skin, count, avatar);
+				//</FS:Beq>
 
 				stop_glerror();
 

@@ -64,7 +64,9 @@ public:
     /*virtual*/ BOOL isDead();
 
 	static LLMatrix4& getModelView();
-
+	//<FS:Beq> per frame cache 
+	static 	LLMatrix4a* getCacheSkinningMats(LLFace* face, const LLMeshSkinInfo* skin, U32 count, LLVOAvatar* avatar);
+	//</FS:Beq>
 	/*virtual*/ LLDrawPool *instancePool();
 
 	/*virtual*/ S32  getNumPasses();
