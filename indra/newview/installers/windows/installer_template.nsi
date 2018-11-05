@@ -123,6 +123,9 @@ SetOverwrite on							# Overwrite files by default
 !include MultiUser.nsh
 !include MUI2.nsh
 
+!define MUI_BGCOLOR FFFFFF
+!insertmacro MUI_FUNCTION_GUIINIT
+
 UninstallText $(UninstallTextMsg)
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
 !insertmacro MULTIUSER_PAGE_INSTALLMODE
