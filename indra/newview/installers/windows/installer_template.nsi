@@ -78,9 +78,6 @@ LangString LanguageCode ${LANG_TRADCHINESE}  "zh"
 
 Name ${INSTNAME}
 
-LicenseText "Vivox Voice System License Agreement"
-LicenseData "VivoxAUP.txt"
-
 ;SubCaption 0 $(LicenseSubTitleSetup)	# Override "license agreement" text
 
 !define MUI_ICON   "%%SOURCE%%\installers\windows\firestorm_icon.ico"
@@ -128,6 +125,7 @@ SetOverwrite on							# Overwrite files by default
 
 UninstallText $(UninstallTextMsg)
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
+!insertmacro MUI_PAGE_LICENSE "VivoxAUP.txt"
 !insertmacro MULTIUSER_PAGE_INSTALLMODE
 !define MUI_PAGE_CUSTOMFUNCTION_PRE dirPre
 !define MUI_PAGE_CUSTOMFUNCTION_LEAVE dirLeave # <FS:Ansariel> Optional start menu entry
