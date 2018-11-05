@@ -929,10 +929,10 @@ class WindowsManifest(ViewerManifest):
 
         if(self.address_size == 64):
             engage_registry="SetRegView 64"
-            program_files="$PROGRAMFILES64"
+            program_files="!define MULTIUSER_USE_PROGRAMFILES64"
         else:
             engage_registry="SetRegView 32"
-            program_files="$PROGRAMFILES32"
+            program_files=""
 
         tempfile = "firestorm_setup_tmp.nsi"
 
@@ -1124,7 +1124,7 @@ class DarwinManifest(ViewerManifest):
                     # self.path("libndofdev.dylib")
                     # self.path("libhunspell-1.3.0.dylib")   
 
-                # with self.prefix("cursors_mac"):
+                # with self.prefix(src_dst="cursors_mac"):
                     # self.path("*.tif")
 
                 # self.path("licenses-mac.txt", dst="licenses.txt")
@@ -1372,7 +1372,7 @@ class DarwinManifest(ViewerManifest):
             with self.prefix(dst="Resources"):
                 super(DarwinManifest, self).construct()
 
-                with self.prefix("cursors_mac"):
+                with self.prefix(src_dst="cursors_mac"):
                     self.path("*.tif")
 
                 self.path("licenses-mac.txt", dst="licenses.txt")
