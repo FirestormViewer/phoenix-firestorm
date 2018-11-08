@@ -278,7 +278,7 @@ int	LLFile::rename(const std::string& filename, const std::string& newname, int 
 		LL_INFOS("LLFile") << "Rename failure (" << error_number << ") - " << filename << " to " << newname << LL_ENDL;
 		if (EXDEV == error_number)
 		{
-			if (copy(filename, newname) == 0)
+			if (copy(filename, newname)==true) // sigh in their wisdom LL decided that copy returns bool true not 0 whjen no error. using == true to make that clear.
 			{
 				LL_INFOS("LLFile") << "Rename across mounts not supported; copying+unlinking the file instead." << LL_ENDL;
 				rc = LLFile::remove(filename);
