@@ -2898,9 +2898,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e45ddfd82b5d18408f849c53800e468a</string>
+              <string>246ed298944fd5200e4cac3703d6e075</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.8.182090947-linux-182090947.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.9.183150124-linux-183150124.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2910,9 +2910,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fc7ad14e06b4ac70a1d3849ef81ac844</string>
+              <string>db8a7126178e7230fd6917a28cd67bd7</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.8.182090946-linux64-182090946.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.9.183150121-linux64-183150121.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
