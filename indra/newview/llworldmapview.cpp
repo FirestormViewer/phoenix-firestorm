@@ -1928,9 +1928,12 @@ BOOL LLWorldMapView::handleDoubleClick( S32 x, S32 y, MASK mask )
 			{
 				// <FS:Ansariel> Show parcel details instead of search with possible useless result
 				//LLVector3d pos_global = viewPosToGlobal(x, y);
-				//LLSimInfo* info = LLWorldMap::getInstance()->simInfoFromPosGlobal(pos_global);
-				//LLFloaterReg::hideInstance("world_map");
-				//LLFloaterReg::showInstance("search", LLSD().with("category", "land").with("query", info->getName()));
+				//std::string sim_name;
+				//if (LLWorldMap::getInstance()->simNameFromPosGlobal(pos_global, sim_name))
+				//{
+				//	LLFloaterReg::hideInstance("world_map");
+				//	LLFloaterReg::showInstance("search", LLSD().with("category", "land").with("query", sim_name));
+				//}
 				LLFloaterReg::hideInstance("world_map");
 				LLUrlAction::executeSLURL(LLSLURL("parcel", id, "about").getSLURLString());
 				// </FS:Ansariel>
