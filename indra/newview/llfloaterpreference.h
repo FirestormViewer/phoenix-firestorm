@@ -331,8 +331,10 @@ protected:
 private:
 	//for "Only friends and groups can call or IM me"
 	static void showFriendsOnlyWarning(LLUICtrl*, const LLSD&);
+    //for  "Allow Multiple Viewers"
+    static void showMultipleViewersWarning(LLUICtrl*, const LLSD&);
 
-	static void showCustomPortWarning(LLUICtrl*, const LLSD&); // -WoLf
+	static void showCustomPortWarning(LLUICtrl*, const LLSD&); // <FS:WoLf>
 
  	//for "Show my Favorite Landmarks at Login"
 	static void handleFavoritesOnLoginChanged(LLUICtrl* checkbox, const LLSD& value);
