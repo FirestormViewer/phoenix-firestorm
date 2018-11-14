@@ -1687,6 +1687,14 @@ BOOL LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32
     }
 }
 
+BOOL LLViewerWindow::handleWindowDidChangeScreen(LLWindow *window)
+{
+	LLCoordScreen window_rect;
+	mWindow->getSize(&window_rect);
+	reshape(window_rect.mX, window_rect.mY);
+	return TRUE;
+}
+
 void LLViewerWindow::handlePingWatchdog(LLWindow *window, const char * msg)
 {
 	LLAppViewer::instance()->pingMainloopTimeout(msg);
@@ -3477,12 +3485,12 @@ void LLViewerWindow::moveCursorToCenter()
 		S32 x = getWorldViewWidthScaled() / 2;
 		S32 y = getWorldViewHeightScaled() / 2;
 	
+		LLUI::setMousePositionScreen(x, y);
+		
 		//on a forced move, all deltas get zeroed out to prevent jumping
 		mCurrentMousePoint.set(x,y);
 		mLastMousePoint.set(x,y);
-		mCurrentMouseDelta.set(0,0);	
-
-		LLUI::setMousePositionScreen(x, y);	
+		mCurrentMouseDelta.set(0,0);
 	}
 }
 
