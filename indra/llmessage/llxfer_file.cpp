@@ -362,40 +362,44 @@ S32 LLXfer_File::processEOF()
 	{
 		if (LLFile::rename(mTempFilename,mLocalFilename))
 		{
-#if !LL_WINDOWS
-			S32 error_number = errno;
-			LL_INFOS("Xfer") << "Rename failure (" << error_number << ") - "
-					<< mTempFilename << " to " << mLocalFilename << LL_ENDL;
-			if(EXDEV == error_number)
-			{
-				if(copy_file(mTempFilename, mLocalFilename) == 0)
-				{
-					LL_INFOS("Xfer") << "Rename across mounts; copying+unlinking the file instead." << LL_ENDL;
-					unlink(mTempFilename.c_str());
-				}
-				else
-				{
-					LL_WARNS("Xfer") << "Copy failure - " << mTempFilename << " to "
-							<< mLocalFilename << LL_ENDL;
-				}
-			}
-			else
-			{
-				//LLFILE* fp = LLFile::fopen(mTempFilename, "r");
-				//LL_WARNS() << "File " << mTempFilename << " does "
-				//		<< (!fp ? "not" : "" ) << " exit." << LL_ENDL;
-				//if(fp) fclose(fp);
-				//fp = LLFile::fopen(mLocalFilename, "r");
-				//LL_WARNS() << "File " << mLocalFilename << " does "
-				//		<< (!fp ? "not" : "" ) << " exit." << LL_ENDL;
-				//if(fp) fclose(fp);
-				LL_WARNS("Xfer") << "Rename fatally failed, can only handle EXDEV ("
-						<< EXDEV << ")" << LL_ENDL;
-			}
-#else
+//<FS:Beq> FIRE-21669/FIRE-11276 : move similar fucntionality down into LLFile
+//#if !LL_WINDOWS
+//			S32 error_number = errno;
+//			LL_INFOS("Xfer") << "Rename failure (" << error_number << ") - "
+//					<< mTempFilename << " to " << mLocalFilename << LL_ENDL;
+//			if(EXDEV == error_number)
+//			{
+//				if(copy_file(mTempFilename, mLocalFilename) == 0)
+//				{
+//					LL_INFOS("Xfer") << "Rename across mounts; copying+unlinking the file instead." << LL_ENDL;
+//					unlink(mTempFilename.c_str());
+//				}
+//				else
+//				{
+//					LL_WARNS("Xfer") << "Copy failure - " << mTempFilename << " to "
+//							<< mLocalFilename << LL_ENDL;
+//				}
+//			}
+//			else
+//			{
+//				//LLFILE* fp = LLFile::fopen(mTempFilename, "r");
+//				//LL_WARNS() << "File " << mTempFilename << " does "
+//				//		<< (!fp ? "not" : "" ) << " exit." << LL_ENDL;
+//				//if(fp) fclose(fp);
+//				//fp = LLFile::fopen(mLocalFilename, "r");
+//				//LL_WARNS() << "File " << mLocalFilename << " does "
+//				//		<< (!fp ? "not" : "" ) << " exit." << LL_ENDL;
+//				//if(fp) fclose(fp);
+//				LL_WARNS("Xfer") << "Rename fatally failed, can only handle EXDEV ("
+//						<< EXDEV << ")" << LL_ENDL;
+//			}
+//#else
+//			LL_WARNS("Xfer") << "Rename failure - " << mTempFilename << " to "
+//					<< mLocalFilename << LL_ENDL;
+//#endif
+//</FS:Beq>
 			LL_WARNS("Xfer") << "Rename failure - " << mTempFilename << " to "
 					<< mLocalFilename << LL_ENDL;
-#endif
 		}
 	}
 
