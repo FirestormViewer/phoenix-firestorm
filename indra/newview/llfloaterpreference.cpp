@@ -726,7 +726,7 @@ BOOL LLFloaterPreference::postBuild()
 // [/SL:KB]
 
 // <FS:AW  opensim preferences>
-#ifndef OPENSIM// <FS:AW optional opensim support/>
+#if !defined(OPENSIM) || defined(SINGLEGRID)// <FS:AW optional opensim support/>
 	// Hide the opensim tab if opensim isn't enabled
 	LLTabContainer* tab_container = getChild<LLTabContainer>("pref core");
 	if (tab_container)
@@ -2015,6 +2015,10 @@ void LLFloaterPreference::refreshEnabledState()
 	S32Megabytes max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting(false, mem_multiplier);
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem.value());
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem.value());
+
+#if ADDRESS_SIZE == 32
+	childSetEnabled("FSRestrictMaxTextureSize", false);
+#endif
 
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderVBOEnable") ||
 		!gGLManager.mHasVertexBufferObject)

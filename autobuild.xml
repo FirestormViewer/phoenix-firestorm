@@ -952,11 +952,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f6834ad22f311cf1e7091b90339531c0</string>
+              <string>e137cd0eacda5df6204150b3bb51a971</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.08-darwin-182341402.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.09-darwin-183011234.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -966,11 +966,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4fc2133e8ad5bb206671e7f9dffc7d2d</string>
+              <string>55abf769c33f10f9badb06eff85951f3</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.08-linux-182341500.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.09-linux-183002243.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -980,11 +980,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>05f7f1790a3c57ec9741bd45bade9c43</string>
+              <string>2318b66522d1247ae7887d39bcab4ec7</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.08-linux64-182341501.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.09-linux64-183002242.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -994,11 +994,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ccce662b1f3d31868093c6a25fdee3f5</string>
+              <string>1693b43fbab6699e26d9f2767c336539</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.08-windows-182340821.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.09-windows-183001324.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1008,11 +1008,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d796487f8504586309981f4eaa12e985</string>
+              <string>2483cdd2b241bda235e7bbe7040e862f</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.08-windows64-182340822.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.09-windows64-183001326.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -1976,9 +1976,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>814bec3fa5045a18dce2bc4ce78b585d</string>
+              <string>1b87073540bf081136e60777d99f09f2</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.4-darwin-180792321.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.5-darwin-182950050.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2000,9 +2000,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fa8a0db7f4900663f5d58eaac2b782b5</string>
+              <string>daa35834257d08b59e876388d1244de8</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.4-linux-180892203.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.5-linux-182931105.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2012,9 +2012,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fa8a0db7f4900663f5d58eaac2b782b5</string>
+              <string>daa35834257d08b59e876388d1244de8</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.4-linux-180892203.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.5-linux-182931105.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2024,9 +2024,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>be46f22a4fbf7bd06c2fcd65cd434ed1</string>
+              <string>adb0069c89321cd0ef32a64ecf6d8592</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.4-windows-180791827.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.5-windows-182841805.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2036,9 +2036,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>be46f22a4fbf7bd06c2fcd65cd434ed1</string>
+              <string>adb0069c89321cd0ef32a64ecf6d8592</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.4-windows-180791827.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.5-windows-182841805.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -2898,9 +2898,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e45ddfd82b5d18408f849c53800e468a</string>
+              <string>246ed298944fd5200e4cac3703d6e075</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.8.182090947-linux-182090947.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.9.183150124-linux-183150124.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2910,9 +2910,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fc7ad14e06b4ac70a1d3849ef81ac844</string>
+              <string>db8a7126178e7230fd6917a28cd67bd7</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.8.182090946-linux64-182090946.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.9.183150121-linux64-183150121.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

@@ -227,6 +227,9 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	
 	LLComboBox* server_choice_combo = getChild<LLComboBox>("server_combo");
 	server_choice_combo->setCommitCallback(boost::bind(&FSPanelLogin::onSelectServer, this));
+#ifdef SINGLEGRID
+	server_choice_combo->setEnabled(FALSE);
+#endif
 	
 	updateServer();
 	if(LLStartUp::getStartSLURL().getType() != LLSLURL::LOCATION)

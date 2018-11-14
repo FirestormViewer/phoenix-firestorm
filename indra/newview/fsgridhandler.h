@@ -30,6 +30,7 @@
 #define FS_GRIDHANDLER_H
 
 #include "../llxml/llxmlnode.h"
+#include "llsingleton.h"
 
 #include <boost/function.hpp>
 #include <boost/signals2.hpp>
