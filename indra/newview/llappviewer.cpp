@@ -2600,6 +2600,9 @@ void LLAppViewer::initLoggingAndGetLastDuration()
 	LLError::setFatalFunction(errorCallback);
 	//LLError::setTimeFunction(getRuntime);
 
+	// <FS:Ansariel> Remove old CEF log file (defined in dullahan.h)
+	LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "cef_log.txt"));
+
 	// Remove the last ".old" log file.
 	std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
 							     APP_NAME + ".old");

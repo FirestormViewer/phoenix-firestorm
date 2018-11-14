@@ -268,6 +268,39 @@ int	LLFile::rename(const std::string& filename, const std::string& newname, int 
 	int rc = _wrename(utf16filename.c_str(),utf16newname.c_str());
 #else
 	int rc = ::rename(filename.c_str(),newname.c_str());
+	//<FS:Beq> FIRE-21669 & FIRE-11276 cross volume link rename workaround.
+	// Note: This workaround generalises the solution previously applied in llxfer_file.
+	// In doing this we add more failure modes to the operation, the copy can fail, the unlink can fail, in fact the copy can fail for multiple reasons.
+	// "A common mistake that people make when trying to design something completely foolproof is to underestimate the ingenuity of complete fools." - Douglas Adams, Mostly harmless
+	if (rc)
+	{
+		S32 error_number = errno;
+		LL_INFOS("LLFile") << "Rename failure (" << error_number << ") - " << filename << " to " << newname << LL_ENDL;
+		if (EXDEV == error_number)
+		{
+			if (copy(filename, newname)==true) // sigh in their wisdom LL decided that copy returns bool true not 0 whjen no error. using == true to make that clear.
+			{
+				LL_INFOS("LLFile") << "Rename across mounts not supported; copying+unlinking the file instead." << LL_ENDL;
+				rc = LLFile::remove(filename);
+				if (rc)
+				{
+					LL_WARNS("LLFile") << "unlink failed during copy/unlink workaround. Please check for stray file: " << filename << LL_ENDL;
+				}
+			}
+			else
+			{
+				LL_WARNS("LLFile") << "Copy failure during rename workaround for rename " << filename << " to " << newname << " (check both filenames and maunally rectify)" << LL_ENDL;
+			}
+			rc=0; // We need to reset rc here to avoid the higher level function taking corrective action on what could be bad files. 
+		}
+		else
+		{
+			LL_WARNS("LLFile") << "Rename fatally failed, no workaround attempted for errno="
+				<< errno << "." << LL_ENDL;
+			// rc will propogate alllowing corrective action above. Not entirely happy with this but it is what already happens so we're not making it worse.
+		}
+	}
+	//</FS:Beq>
 #endif
 	return warnif(STRINGIZE("rename to '" << newname << "' from"), filename, rc, supress_error);
 }
