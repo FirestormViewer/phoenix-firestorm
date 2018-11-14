@@ -137,7 +137,15 @@ void FloaterAO::updateList()
 		currentSetName = AOEngine::instance().getCurrentSetName();
 	}
 
+	// Lambda provides simple Alpha sorting, note this is case sensitive.
+	auto sortRuleLambda = [](const AOSet* s1, const AOSet* s2) -> bool
+	{
+		return s1->getName() < s2->getName();
+	};
+
 	mSetList=AOEngine::instance().getSetList();
+	std::sort(mSetList.begin(), mSetList.end(), sortRuleLambda);
+
 	mSetSelector->removeall();
 	mSetSelectorSmall->removeall();
 	mSetSelector->clear();
