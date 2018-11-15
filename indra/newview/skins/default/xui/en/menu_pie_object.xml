@@ -283,36 +283,47 @@
             function="Object.Return" />
         <pie_slice.on_enable
             function="Object.EnableReturn" />
-        </pie_slice>
+    </pie_slice>
 
     <pie_menu
         label="More &gt;"
         name="Object Pie More 2">
-
-        <pie_slice
-            enabled="true"
-            label="Tex Refresh"
-            name="Texture Refresh">
-            <pie_slice.on_click
-                function="Object.TexRefresh" />
-        </pie_slice>
+        <pie_menu
+            name="ResetMenu"
+            label="Reset &gt;">
+            <pie_slice
+                enabled="true"
+                label="Tex Refresh"
+                name="Texture Refresh">
+                <pie_slice.on_click
+                    function="Object.TexRefresh" />
+            </pie_slice>
+            <pie_slice
+                 label="Skeleton"
+                 name="Reset Skeleton">
+                    <pie_slice.on_click
+                        function="Avatar.ResetSkeleton" />
+                    <pie_slice.on_visible
+                     function="Avatar.EnableResetSkeleton"/>
+            </pie_slice>
+        </pie_menu>
         <pie_menu
             name="DerenderMenu"
             label="Derender &gt;">
-			<pie_slice
-				enabled="true"
-				label="Blacklist"
-				name="DerenderPermanent">
-				<pie_slice.on_click
-					function="Object.DerenderPermanent" />
-			</pie_slice>
-			<pie_slice
-				enabled="true"
-				label="Temporary"
-				name="Derender">
-				<pie_slice.on_click
-					function="Object.Derender" />
-			</pie_slice>
+            <pie_slice
+                enabled="true"
+                label="Blacklist"
+                name="DerenderPermanent">
+                <pie_slice.on_click
+                    function="Object.DerenderPermanent" />
+            </pie_slice>
+            <pie_slice
+                enabled="true"
+                label="Temporary"
+                name="Derender">
+                <pie_slice.on_click
+                    function="Object.Derender" />
+            </pie_slice>
         </pie_menu>
         <pie_slice
             enabled="false"
@@ -343,6 +354,14 @@
                     function="Object.ExportCollada" />
                 <pie_slice.on_enable
                     function="Object.EnableExport" />
+            </pie_slice>
+            <pie_slice
+                 label="Dump XML"
+                 name="Dump XML">
+                    <pie_slice.on_click
+                     function="Advanced.AppearanceToXML" />
+                    <pie_slice.on_visible
+                     function="Advanced.EnableAppearanceToXML"/>
             </pie_slice>
         </pie_menu>
 
@@ -397,89 +416,89 @@
                 function="EnableMuteParticle" />
         </pie_slice>
     </pie_menu>
-		
-		<pie_menu
-			label="Scripts &gt;"
-			name="ScriptsMenu">
-			
-			<pie_slice
-				enabled="false"
-				label="Compile (Mono)"
-				name="CompileMono">
-				<pie_slice.on_click
-					function="Tools.SelectedScriptAction"
-					parameter="compile mono" />
-				<pie_slice.on_enable
-					function="EditableSelectedMono" />
-			</pie_slice>
+        
+        <pie_menu
+            label="Scripts &gt;"
+            name="ScriptsMenu">
+            
+            <pie_slice
+                enabled="false"
+                label="Compile (Mono)"
+                name="CompileMono">
+                <pie_slice.on_click
+                    function="Tools.SelectedScriptAction"
+                    parameter="compile mono" />
+                <pie_slice.on_enable
+                    function="EditableSelectedMono" />
+            </pie_slice>
 
-			<pie_slice
-				enabled="false"
-				label="Compile (LSL)"
-				name="CompileLSL">
-				<pie_slice.on_click
-					function="Tools.SelectedScriptAction"
-					parameter="compile lsl" />
-				<pie_slice.on_enable
-					function="EditableSelected" />
-			</pie_slice>
+            <pie_slice
+                enabled="false"
+                label="Compile (LSL)"
+                name="CompileLSL">
+                <pie_slice.on_click
+                    function="Tools.SelectedScriptAction"
+                    parameter="compile lsl" />
+                <pie_slice.on_enable
+                    function="EditableSelected" />
+            </pie_slice>
 
-			<pie_slice
-				enabled="false"
-				label="Reset Scripts"
-				name="Object Reset Scripts">
-				<pie_slice.on_click
-					function="Tools.SelectedScriptAction"
-					parameter="reset" />
-				<pie_slice.on_enable
-					function="EditableSelected" />
-			</pie_slice>
+            <pie_slice
+                enabled="false"
+                label="Reset Scripts"
+                name="Object Reset Scripts">
+                <pie_slice.on_click
+                    function="Tools.SelectedScriptAction"
+                    parameter="reset" />
+                <pie_slice.on_enable
+                    function="EditableSelected" />
+            </pie_slice>
 
-			<pie_slice
-				enabled="false"
-				label="Run Scripts"
-				name="Object Set Scripts to Running">
-				<pie_slice.on_click
-					function="Tools.SelectedScriptAction"
-					parameter="start" />
-				<pie_slice.on_enable
-					function="EditableSelected" />
-			</pie_slice>
+            <pie_slice
+                enabled="false"
+                label="Run Scripts"
+                name="Object Set Scripts to Running">
+                <pie_slice.on_click
+                    function="Tools.SelectedScriptAction"
+                    parameter="start" />
+                <pie_slice.on_enable
+                    function="EditableSelected" />
+            </pie_slice>
 
-			<pie_slice
-				enabled="false"
-				label="Stop Scripts"
-				name="Object Set Scripts to Not Running">
-				<pie_slice.on_click
-					function="Tools.SelectedScriptAction"
-					parameter="stop" />
-				<pie_slice.on_enable
-					function="EditableSelected" />
-			</pie_slice>
+            <pie_slice
+                enabled="false"
+                label="Stop Scripts"
+                name="Object Set Scripts to Not Running">
+                <pie_slice.on_click
+                    function="Tools.SelectedScriptAction"
+                    parameter="stop" />
+                <pie_slice.on_enable
+                    function="EditableSelected" />
+            </pie_slice>
 
-			<pie_slice
-				enabled="false"
-				label="Remove Scripts"
-				name="Remove Scripts From Selection">
-				<pie_slice.on_click
-					function="Tools.SelectedScriptAction"
-					parameter="delete" />
-				<pie_slice.on_enable
-					function="EditableSelected" />
-			</pie_slice>
-			
-			<pie_slice
-				enabled="true"
-				label="Script Info"
-				name="ScriptInfo">
-				<pie_slice.on_click
-					function="Tools.ScriptInfo" />
+            <pie_slice
+                enabled="false"
+                label="Remove Scripts"
+                name="Remove Scripts From Selection">
+                <pie_slice.on_click
+                    function="Tools.SelectedScriptAction"
+                    parameter="delete" />
+                <pie_slice.on_enable
+                    function="EditableSelected" />
+            </pie_slice>
+            
+            <pie_slice
+                enabled="true"
+                label="Script Info"
+                name="ScriptInfo">
+                <pie_slice.on_click
+                    function="Tools.ScriptInfo" />
                 <pie_slice.on_enable
                     function="Object.EnableScriptInfo" />
-			</pie_slice>
-		
-		</pie_menu>
-		
+            </pie_slice>
+        
+        </pie_menu>
+        
         <pie_slice
             label="Inspect"
             name="Object Inspect">
