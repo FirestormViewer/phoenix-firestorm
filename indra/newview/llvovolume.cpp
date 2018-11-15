@@ -1641,7 +1641,11 @@ BOOL LLVOVolume::updateLOD()
 
 	if (lod_changed)
 	{
-        if (debugLoggingEnabled("AnimatedObjectsLinkset"))
+		//<FS:Beq> avoid unfortunate sleep during trylock by static check
+		//if(debugLoggingEnabled("AnimatedObjectsLinkset"))
+		static auto debug_logging_on = debugLoggingEnabled("AnimatedObjectsLinkset");
+        if (debug_logging_on)
+		//</FS:Beq>
         {
             if (isAnimatedObject() && isRiggedMesh())
             {
@@ -4615,8 +4619,12 @@ const LLMatrix4& LLVOVolume::getWorldMatrix(LLXformMatrix* xform) const
 
 void LLVOVolume::markForUpdate(BOOL priority)
 { 
-    if (debugLoggingEnabled("AnimatedObjectsLinkset"))
-    {
+	//<FS:Beq> avoid unfortunate sleep during trylock by static check
+	//if(debugLoggingEnabled("AnimatedObjectsLinkset"))
+	static auto debug_logging_on = debugLoggingEnabled("AnimatedObjectsLinkset");
+	if (debug_logging_on)
+	//</FS:Beq>
+	{
         if (isAnimatedObject() && isRiggedMesh())
         {
             std::string vobj_name = llformat("Vol%p", this);
@@ -4941,6 +4949,7 @@ static LLTrace::BlockTimerStatHandle FTM_RIGGED_OCTREE("Octree");
 
 void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, const LLVolume* volume)
 {
+
 	bool copy = false;
 	if (volume->getNumVolumeFaces() != getNumVolumeFaces())
 	{ 
@@ -4982,7 +4991,10 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 
 	LLMatrix4a mat[kMaxJoints];
 	U32 maxJoints = LLSkinningUtil::getMeshJointCount(skin);
-    LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, maxJoints, skin, avatar);
+	//<FS:Beq> Skinning Matrix caching
+	//LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4)mat, maxJoints, skin, avatar);
+	LLSkinningUtil::initSkinningMatrixPalette(mat, maxJoints, skin, avatar);
+	//</FS:Beq>
 
     S32 rigged_vert_count = 0;
     S32 rigged_face_count = 0;
@@ -5669,7 +5681,10 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 				continue;
 			}
 
-            std::string vobj_name = llformat("Vol%p", vobj);
+//<FS:Beq> Stop doing stupid stuff we don;t need to.
+// Moving this inside a debug enabled check
+//			std::string vobj_name = llformat("Vol%p", vobj);
+//</FS:Beq>
 
 			if (vobj->isMesh() &&
 				((vobj->getVolume() && !vobj->getVolume()->isMeshAssetLoaded()) || !gMeshRepo.meshRezEnabled()))
@@ -5683,26 +5698,37 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 				const LLVector3& scale = vobj->getScale();
 				group->mSurfaceArea += volume->getSurfaceArea() * llmax(llmax(scale.mV[0], scale.mV[1]), scale.mV[2]);
 			}
-
-            bool is_mesh = vobj->isMesh();
-            F32 est_tris = vobj->getEstTrianglesMax();
+//<FS:Beq> Stop doing stupid stuff we don;t need on the critical path
+            //bool is_mesh = vobj->isMesh();
+            //F32 est_tris = vobj->getEstTrianglesMax();
 
             vobj->updateControlAvatar();
-            
-            LL_DEBUGS("AnimatedObjectsLinkset") << vobj_name << " rebuilding, isAttachment: " << (U32) vobj->isAttachment()
-                                                << " is_mesh " << is_mesh
-                                                << " est_tris " << est_tris
-                                                << " is_animated " << vobj->isAnimatedObject()
-                                                << " can_animate " << vobj->canBeAnimatedObject() 
-                                                << " cav " << vobj->getControlAvatar() 
-                                                << " lod " << vobj->getLOD()
-                                                << " drawable rigged " << (drawablep->isState(LLDrawable::RIGGED))
-                                                << " drawable state " << drawablep->getState()
-                                                << " playing " << (U32) (vobj->getControlAvatar() ? vobj->getControlAvatar()->mPlaying : false)
-                                                << " frame " << LLFrameTimer::getFrameCount()
-                                                << LL_ENDL;
+			// Also avoid unfortunate sleep during trylock by static check
+			//if(debugLoggingEnabled("AnimatedObjectsLinkset"))
+			static auto debug_logging_on = debugLoggingEnabled("AnimatedObjectsLinkset");
+			if (debug_logging_on)
+			//</FS:Beq>
+			{
+				std::string vobj_name = llformat("Vol%p", vobj);
+				bool is_mesh = vobj->isMesh();
+				F32 est_tris = vobj->getEstTrianglesMax();
 
-			llassert_always(vobj);
+	            LL_DEBUGS("AnimatedObjectsLinkset") << vobj_name << " rebuilding, isAttachment: " << (U32) vobj->isAttachment()
+	                                                << " is_mesh " << is_mesh
+	                                                << " est_tris " << est_tris
+	                                                << " is_animated " << vobj->isAnimatedObject()
+	                                                << " can_animate " << vobj->canBeAnimatedObject() 
+	                                                << " cav " << vobj->getControlAvatar() 
+	                                                << " lod " << vobj->getLOD()
+	                                                << " drawable rigged " << (drawablep->isState(LLDrawable::RIGGED))
+	                                                << " drawable state " << drawablep->getState()
+	                                                << " playing " << (U32) (vobj->getControlAvatar() ? vobj->getControlAvatar()->mPlaying : false)
+	                                                << " frame " << LLFrameTimer::getFrameCount()
+	                                                << LL_ENDL;
+			}
+			//<FS:Beq> Pointless. We already checked this and have used it.
+			//llassert_always(vobj);
+
 
 			// <FS:AO> Z's protection auto-derender code
 			if (enableVolumeSAPProtection())
@@ -6242,8 +6268,12 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 			if (drawablep && !drawablep->isDead() && drawablep->isState(LLDrawable::REBUILD_ALL) && !drawablep->isState(LLDrawable::RIGGED) )
 			{
 				LLVOVolume* vobj = drawablep->getVOVolume();
-                if (debugLoggingEnabled("AnimatedObjectsLinkset"))
-                {
+				//<FS:Beq> avoid unfortunate sleep during trylock by static check
+				//if(debugLoggingEnabled("AnimatedObjectsLinkset"))
+				static auto debug_logging_on = debugLoggingEnabled("AnimatedObjectsLinkset");
+				if (debug_logging_on)
+				//</FS:Beq>
+				{
                     if (vobj->isAnimatedObject() && vobj->isRiggedMesh())
                     {
                         std::string vobj_name = llformat("Vol%p", vobj);

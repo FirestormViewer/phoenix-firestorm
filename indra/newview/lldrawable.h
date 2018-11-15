@@ -66,7 +66,9 @@ class LLDrawable
 public:
 	LLDrawable(const LLDrawable& rhs) 
 	:	LLTrace::MemTrackable<LLDrawable, 16>("LLDrawable"),
-		LLViewerOctreeEntryData(rhs)
+		LLViewerOctreeEntryData(rhs),
+		mLastSkinningMatCacheFrame(0),
+		mCacheSize(0)
 	{
 		*this = rhs;
 	}
@@ -78,6 +80,12 @@ public:
 	}
 
 	static void initClass();
+
+	//<FS:Beq>	per frame matrix cache
+	U32 mLastSkinningMatCacheFrame;
+	LLMatrix4a* mSkinningMatCache;
+	U32 mCacheSize;
+	//</FS:Beq>
 
 	LLDrawable(LLViewerObject *vobj, bool new_entry = false);
 	
