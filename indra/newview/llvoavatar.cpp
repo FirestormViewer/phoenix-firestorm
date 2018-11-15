@@ -1390,9 +1390,10 @@ static LLTrace::BlockTimerStatHandle FTM_AVATAR_EXTENT_UPDATE("Av Upd Extent");
 void LLVOAvatar::calculateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
 {
     LL_RECORD_BLOCK_TIME(FTM_AVATAR_EXTENT_UPDATE);
-
-    S32 box_detail = gSavedSettings.getS32("AvatarBoundingBoxComplexity");
-
+//<FS:Beq> not called as often as it used to be but still no harm in optimising
+//    S32 box_detail = gSavedSettings.getS32("AvatarBoundingBoxComplexity");
+	static const LLCachedControl<S32> box_detail(gSavedSettings, "AvatarBoundingBoxComplexity");
+//<FS:Beq>
     // FIXME the update_min_max function used below assumes there is a
     // known starting point, but in general there isn't. Ideally the
     // box update logic should be modified to handle the no-point-yet
@@ -2569,7 +2570,21 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 	}
 
     // Update should be happening max once per frame.
-	const S32 upd_freq = 4; // force update every upd_freq frames.
+	// <FS:Beq> enable dynamic spreading of the BB calculations
+	//const S32 upd_freq = 4; // force update every upd_freq frames.
+	static LLCachedControl<S32> refreshPeriod(gSavedSettings, "AvatarExtentRefreshPeriodBatch");
+	static LLCachedControl<S32> refreshMaxPerPeriod(gSavedSettings, "AvatarExtentRefreshMaxPerBatch");
+	static S32 upd_freq = refreshPeriod; // initialise to a reasonable defauilt of 1 batch
+	static S32 lastRecalibrationFrame{ 0 };
+
+	const S32 thisFrame = LLDrawable::getCurrentFrame(); 
+	if (thisFrame - lastRecalibrationFrame >= upd_freq)
+	{
+		// Only update at the start of a cycle. .
+		upd_freq = (((gObjectList.getAvatarCount() - 1) / refreshMaxPerPeriod) + 1)*refreshPeriod;
+		lastRecalibrationFrame = thisFrame;
+	}
+	//</FS:Beq>
 	if ((mLastAnimExtents[0]==LLVector3())||
 		(mLastAnimExtents[1])==LLVector3())
 	{
@@ -2577,7 +2592,10 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 	}
 	else
 	{
-		mNeedsExtentUpdate = ((LLDrawable::getCurrentFrame()+mID.mData[0])%upd_freq==0);
+		//<FS:Beq> enable dynamic spreading of the BB calculations
+		//mNeedsExtentUpdate = ((LLDrawable::getCurrentFrame()+mID.mData[0]) % upd_freq == 0);
+		mNeedsExtentUpdate = ((thisFrame + mID.mData[0]) % upd_freq == 0);
+		//</FS:Beq>
 	}
     
     LLScopedContextString str("avatar_idle_update " + getFullname());
@@ -10661,8 +10679,10 @@ void LLVOAvatar::updateRiggingInfo()
 
     //LL_INFOS() << "done update rig count is " << countRigInfoTab(mJointRiggingInfoTab) << LL_ENDL;
     //LL_DEBUGS("RigSpammish") << getFullname() << " after update rig tab:" << LL_ENDL; // <FS:Ansariel> Performance tweak
-    S32 joint_count, box_count;
-    showRigInfoTabExtents(this, mJointRiggingInfoTab, joint_count, box_count);
+	//<FS:Beq> remove debug only stuff on hot path
+    //S32 joint_count, box_count;
+    //showRigInfoTabExtents(this, mJointRiggingInfoTab, joint_count, box_count);
+	//</FS:Beq>
     //LL_DEBUGS("RigSpammish") << "uses " << joint_count << " joints " << " nonzero boxes: " << box_count << LL_ENDL; // <FS:Ansariel> Performance tweak
 }
 
