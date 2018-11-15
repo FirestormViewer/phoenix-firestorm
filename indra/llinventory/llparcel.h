@@ -103,6 +103,9 @@ const U32 RT_SELL	= 0x1 << 5;
 
 const S32 INVALID_PARCEL_ID = -1;
 
+// if Region settings are used, parcel env. version is -1
+const S32 INVALID_PARCEL_ENVIRONMENT_VERSION = -2;
+
 // Timeouts for parcels
 // default is 21 days * 24h/d * 60m/h * 60s/m *1000000 usec/s = 1814400000000
 const U64 DEFAULT_USEC_CONVERSION_TIMEOUT = U64L(1814400000000);

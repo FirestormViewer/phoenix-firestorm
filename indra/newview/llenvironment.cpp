@@ -69,6 +69,8 @@ namespace
     const std::string KEY_DAYCYCLE("day_cycle");
     const std::string KEY_DAYHASH("day_hash");
     const std::string KEY_DAYLENGTH("day_length");
+    const std::string KEY_DAYNAME("day_name");
+    const std::string KEY_DAYNAMES("day_names");
     const std::string KEY_DAYOFFSET("day_offset");
     const std::string KEY_ISDEFAULT("is_default");
     const std::string KEY_PARCELID("parcel_id");
@@ -885,6 +887,7 @@ void LLEnvironment::updateCloudScroll()
 
 }
 
+// static
 void LLEnvironment::updateGLVariablesForSettings(LLGLSLShader *shader, const LLSettingsBase::ptr_t &psetting)
 {
     LL_RECORD_BLOCK_TIME(FTM_SHADER_PARAM_UPDATE);
@@ -894,62 +897,19 @@ void LLEnvironment::updateGLVariablesForSettings(LLGLSLShader *shader, const LLS
     for (auto &it: params)
     {
         LLSD value;
-        
-        bool found_in_settings = psetting->mSettings.has(it.first);
-        bool found_in_legacy_settings = !found_in_settings && psetting->mSettings.has(LLSettingsSky::SETTING_LEGACY_HAZE) && psetting->mSettings[LLSettingsSky::SETTING_LEGACY_HAZE].has(it.first);
-
-        if (found_in_settings)
-        {
-            value = psetting->mSettings[it.first];
-        }
-        else if (found_in_legacy_settings)
+        // legacy first since it contains ambient color and we prioritize value from legacy, see getAmbientColor()
+        if (psetting->mSettings.has(LLSettingsSky::SETTING_LEGACY_HAZE) && psetting->mSettings[LLSettingsSky::SETTING_LEGACY_HAZE].has(it.first))
         {
             value = psetting->mSettings[LLSettingsSky::SETTING_LEGACY_HAZE][it.first];
         }
-        else if (psetting->getSettingsType() == "sky")
+        else if (psetting->mSettings.has(it.first))
         {
-            // Legacy atmospherics is a special case,
-            // these values either have non zero defaults when they are not present
-            // in LLSD or need to be acounted for (reset) even if they are not present
-            // Todo: consider better options, for example make LLSettingsSky init these options
-            // Todo: we should reset shaders for all missing fields, not just these ones
-            LLSettingsSky::ptr_t skyp = std::static_pointer_cast<LLSettingsSky>(psetting);
-            if (it.first == LLSettingsSky::SETTING_BLUE_DENSITY)
-            {
-                value = skyp->getBlueDensity().getValue();
-            }
-            else if (it.first == LLSettingsSky::SETTING_BLUE_HORIZON)
-            {
-                value = skyp->getBlueHorizon().getValue();
-            }
-            else if (it.first == LLSettingsSky::SETTING_DENSITY_MULTIPLIER)
-            {
-                value = skyp->getDensityMultiplier();
-            }
-            else if (it.first == LLSettingsSky::SETTING_DISTANCE_MULTIPLIER)
-            {
-                value = skyp->getDistanceMultiplier();
-            }
-            else if (it.first == LLSettingsSky::SETTING_HAZE_DENSITY)
-            {
-                value = skyp->getHazeDensity();
-            }
-            else if (it.first == LLSettingsSky::SETTING_HAZE_HORIZON)
-            {
-                value = skyp->getHazeHorizon();
-            }
-            else if (it.first == LLSettingsSky::SETTING_AMBIENT)
-            {
-                value = skyp->getAmbientColor().getValue();
-            }
-            else
-            {
-                continue;
-            }
+            value = psetting->mSettings[it.first];
         }
         else
         {
-            continue;
+            // We need to reset shaders, use defaults
+            value = it.second.getDefaultValue();
         }
 
         LLSD::Type setting_type = value.type();
@@ -957,16 +917,16 @@ void LLEnvironment::updateGLVariablesForSettings(LLGLSLShader *shader, const LLS
         switch (setting_type)
         {
         case LLSD::TypeInteger:
-            shader->uniform1i(it.second, value.asInteger());
+            shader->uniform1i(it.second.getShaderKey(), value.asInteger());
             //_WARNS("RIDER") << "pushing '" << (*it).first << "' as " << value << LL_ENDL;
             break;
         case LLSD::TypeReal:
-            shader->uniform1f(it.second, value.asReal());
+            shader->uniform1f(it.second.getShaderKey(), value.asReal());
             //_WARNS("RIDER") << "pushing '" << (*it).first << "' as " << value << LL_ENDL;
             break;
 
         case LLSD::TypeBoolean:
-            shader->uniform1i(it.second, value.asBoolean() ? 1 : 0);
+            shader->uniform1i(it.second.getShaderKey(), value.asBoolean() ? 1 : 0);
             //_WARNS("RIDER") << "pushing '" << (*it).first << "' as " << value << LL_ENDL;
             break;
 
@@ -974,8 +934,7 @@ void LLEnvironment::updateGLVariablesForSettings(LLGLSLShader *shader, const LLS
         {
             LLVector4 vect4(value);
             //_WARNS("RIDER") << "pushing '" << (*it).first << "' as " << vect4 << LL_ENDL;
-            shader->uniform4fv(it.second, 1, vect4.mV);
-
+            shader->uniform4fv(it.second.getShaderKey(), 1, vect4.mV);
             break;
         }
 
@@ -1014,7 +973,7 @@ void LLEnvironment::updateShaderUniforms(LLGLSLShader *shader)
     }    
 }
 
-void LLEnvironment::recordEnvironment(S32 parcel_id, LLEnvironment::EnvironmentInfo::ptr_t envinfo)
+void LLEnvironment::recordEnvironment(S32 parcel_id, LLEnvironment::EnvironmentInfo::ptr_t envinfo, LLSettingsBase::Seconds transition)
 {
     if (envinfo->mParcelId == INVALID_PARCEL_ID)
     {
@@ -1068,8 +1027,8 @@ void LLEnvironment::recordEnvironment(S32 parcel_id, LLEnvironment::EnvironmentI
             setEnvironment(ENV_PARCEL, envinfo->mDayCycle, envinfo->mDayLength, envinfo->mDayOffset);
         }
     }
-    
-    updateEnvironment();
+
+    updateEnvironment(transition);
 }
 
 //=========================================================================
@@ -1083,7 +1042,7 @@ void LLEnvironment::updateRegion(const LLSettingsDay::ptr_t &pday, S32 day_lengt
     updateParcel(INVALID_PARCEL_ID, pday, day_length, day_offset, altitudes, cb);
 }
 
-void LLEnvironment::updateRegion(const LLUUID &asset_id, S32 day_length, S32 day_offset, LLEnvironment::altitudes_vect_t altitudes, environment_apply_fn cb)
+void LLEnvironment::updateRegion(const LLUUID &asset_id, std::string display_name, S32 day_length, S32 day_offset, LLEnvironment::altitudes_vect_t altitudes, environment_apply_fn cb)
 {
     if (!isExtendedEnvironmentEnabled())
     {
@@ -1092,7 +1051,7 @@ void LLEnvironment::updateRegion(const LLUUID &asset_id, S32 day_length, S32 day
         return;
     }
 
-    updateParcel(INVALID_PARCEL_ID, asset_id, day_length, day_offset, altitudes, cb);
+    updateParcel(INVALID_PARCEL_ID, asset_id, display_name, day_length, day_offset, altitudes, cb);
 }
 
 void LLEnvironment::updateRegion(const LLSettingsSky::ptr_t &psky, S32 day_length, S32 day_offset, LLEnvironment::altitudes_vect_t altitudes, environment_apply_fn cb)
@@ -1119,9 +1078,10 @@ void LLEnvironment::requestParcel(S32 parcel_id, environment_apply_fn cb)
         {
             if (!cb)
             {
-                cb = [this](S32 pid, EnvironmentInfo::ptr_t envinfo)
+                LLSettingsBase::Seconds transition = LLViewerParcelMgr::getInstance()->getTeleportInProgress() ? TRANSITION_FAST : TRANSITION_DEFAULT;
+                cb = [this, transition](S32 pid, EnvironmentInfo::ptr_t envinfo)
                 {
-                    recordEnvironment(pid, envinfo);
+                    recordEnvironment(pid, envinfo, transition);
                 };
             }
 
@@ -1134,7 +1094,8 @@ void LLEnvironment::requestParcel(S32 parcel_id, environment_apply_fn cb)
 
     if (!cb)
     {
-        cb = [this](S32 pid, EnvironmentInfo::ptr_t envinfo) { recordEnvironment(pid, envinfo); };
+        LLSettingsBase::Seconds transition = LLViewerParcelMgr::getInstance()->getTeleportInProgress() ? TRANSITION_FAST : TRANSITION_DEFAULT;
+        cb = [this, transition](S32 pid, EnvironmentInfo::ptr_t envinfo) { recordEnvironment(pid, envinfo, transition); };
     }
 
     std::string coroname =
@@ -1142,12 +1103,12 @@ void LLEnvironment::requestParcel(S32 parcel_id, environment_apply_fn cb)
         [this, parcel_id, cb]() { coroRequestEnvironment(parcel_id, cb); });
 }
 
-void LLEnvironment::updateParcel(S32 parcel_id, const LLUUID &asset_id, S32 day_length, S32 day_offset, LLEnvironment::altitudes_vect_t altitudes, environment_apply_fn cb)
+void LLEnvironment::updateParcel(S32 parcel_id, const LLUUID &asset_id, std::string display_name, S32 day_length, S32 day_offset, LLEnvironment::altitudes_vect_t altitudes, environment_apply_fn cb)
 {
+    UpdateInfo::ptr_t updates(std::make_shared<UpdateInfo>(asset_id, display_name, day_length, day_offset, altitudes));
     std::string coroname =
         LLCoros::instance().launch("LLEnvironment::coroUpdateEnvironment",
-        [this, parcel_id, asset_id, day_length, day_offset, altitudes, cb]() { coroUpdateEnvironment(parcel_id, NO_TRACK,
-            LLSettingsDay::ptr_t(), asset_id, day_length, day_offset, altitudes, cb); });
+        [this, parcel_id, updates, cb]() { coroUpdateEnvironment(parcel_id, NO_TRACK, updates, cb); });
 }
 
 void LLEnvironment::onUpdateParcelAssetLoaded(LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, S32 parcel_id, S32 day_length, S32 day_offset, LLEnvironment::altitudes_vect_t altitudes)
@@ -1192,10 +1153,11 @@ void LLEnvironment::updateParcel(S32 parcel_id, const LLSettingsWater::ptr_t &pw
 
 void LLEnvironment::updateParcel(S32 parcel_id, const LLSettingsDay::ptr_t &pday, S32 day_length, S32 day_offset, LLEnvironment::altitudes_vect_t altitudes, environment_apply_fn cb)
 {
+    UpdateInfo::ptr_t updates(std::make_shared<UpdateInfo>(pday, day_length, day_offset, altitudes));
+
     std::string coroname =
         LLCoros::instance().launch("LLEnvironment::coroUpdateEnvironment",
-        [this, parcel_id, pday, day_length, day_offset, altitudes, cb]() { coroUpdateEnvironment(parcel_id, NO_TRACK,
-            pday, LLUUID::null, day_length, day_offset, altitudes, cb); });
+        [this, parcel_id, updates, cb]() { coroUpdateEnvironment(parcel_id, NO_TRACK, updates, cb); });
 }
 
 
@@ -1264,8 +1226,7 @@ void LLEnvironment::coroRequestEnvironment(S32 parcel_id, LLEnvironment::environ
 //     }
 }
 
-void LLEnvironment::coroUpdateEnvironment(S32 parcel_id, S32 track_no, LLSettingsDay::ptr_t pday, 
-        LLUUID settings_asset, S32 day_length, S32 day_offset, LLEnvironment::altitudes_vect_t altitudes, LLEnvironment::environment_apply_fn apply)
+void LLEnvironment::coroUpdateEnvironment(S32 parcel_id, S32 track_no, UpdateInfo::ptr_t updates, environment_apply_fn apply)
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
@@ -1276,45 +1237,34 @@ void LLEnvironment::coroUpdateEnvironment(S32 parcel_id, S32 track_no, LLSetting
     if (url.empty())
         return;
 
-//     if (day_length < 1)
-//     {
-//         day_length = getEnvironmentDayLength((parcel_id == INVALID_PARCEL_ID) ? ENV_REGION : ENV_PARCEL).value();
-//         if ((day_length < 1) && (parcel_id != INVALID_PARCEL_ID))
-//             day_length = getEnvironmentDayLength(ENV_REGION).value();
-//     }
-// 
-//     if (day_offset < 1)
-//     {
-//         day_offset = getEnvironmentDayOffset((parcel_id == INVALID_PARCEL_ID) ? ENV_REGION : ENV_PARCEL).value();
-//         if ((day_offset < 1) && (parcel_id != INVALID_PARCEL_ID))
-//             day_offset = getEnvironmentDayOffset(ENV_REGION).value();
-//     }
-
     LLSD body(LLSD::emptyMap());
     body[KEY_ENVIRONMENT] = LLSD::emptyMap();
 
     if (track_no == NO_TRACK)
     {   // day length and offset are only applicable if we are addressing the entire day cycle.
-        if (day_length > 0)
-            body[KEY_ENVIRONMENT][KEY_DAYLENGTH] = day_length;
-        if (day_offset > 0)
-            body[KEY_ENVIRONMENT][KEY_DAYOFFSET] = day_offset;
+        if (updates->mDayLength > 0)
+            body[KEY_ENVIRONMENT][KEY_DAYLENGTH] = updates->mDayLength;
+        if (updates->mDayOffset > 0)
+            body[KEY_ENVIRONMENT][KEY_DAYOFFSET] = updates->mDayOffset;
 
-        if ((parcel_id == INVALID_PARCEL_ID) && (altitudes.size() == 3))
+        if ((parcel_id == INVALID_PARCEL_ID) && (updates->mAltitudes.size() == 3))
         {   // only test for altitude changes if we are changing the region.
             body[KEY_ENVIRONMENT][KEY_TRACKALTS] = LLSD::emptyArray();
             for (S32 i = 0; i < 3; ++i)
             {
-                body[KEY_ENVIRONMENT][KEY_TRACKALTS][i] = altitudes[i];
+                body[KEY_ENVIRONMENT][KEY_TRACKALTS][i] = updates->mAltitudes[i];
             }
         }
     }
 
-    if (pday)
-        body[KEY_ENVIRONMENT][KEY_DAYCYCLE] = pday->getSettings();
-    else if (!settings_asset.isNull())
-        body[KEY_ENVIRONMENT][KEY_DAYASSET] = settings_asset;
-
+    if (updates->mDayp)
+        body[KEY_ENVIRONMENT][KEY_DAYCYCLE] = updates->mDayp->getSettings();
+    else if (!updates->mSettingsAsset.isNull())
+    {
+        body[KEY_ENVIRONMENT][KEY_DAYASSET] = updates->mSettingsAsset;
+        if (!updates->mDayName.empty())
+            body[KEY_ENVIRONMENT][KEY_DAYNAME] = updates->mDayName;
+    }
 
     LL_WARNS("LAPRAS") << "Body = " << body << LL_ENDL;
 
@@ -1444,7 +1394,9 @@ LLEnvironment::EnvironmentInfo::EnvironmentInfo():
     mDayCycle(),
     mAltitudes({ { 0.0, 0.0, 0.0, 0.0 } }),
     mIsDefault(false),
-    mIsLegacy(false)
+    mIsLegacy(false),
+    mDayCycleName(),
+    mNameList()
 {
 }
 
@@ -1482,6 +1434,22 @@ LLEnvironment::EnvironmentInfo::ptr_t LLEnvironment::EnvironmentInfo::extract(LL
     if (environment.has(KEY_DAYASSET))
     {
         pinfo->mAssetId = environment[KEY_DAYASSET].asUUID();
+    }
+
+    if (environment.has(KEY_DAYNAMES))
+    {
+        LLSD daynames = environment[KEY_DAYNAMES];
+        if (daynames.isArray())
+        {
+            for (S32 index = 0; index < pinfo->mNameList.size(); ++index)
+            {
+                pinfo->mNameList[index] = daynames[index].asString();
+            }
+        }
+        else if (daynames.isString())
+        {
+            pinfo->mDayCycleName = daynames.asString();
+        }
     }
 
     return pinfo;

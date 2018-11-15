@@ -41,15 +41,6 @@ uniform sampler2D bumpMap2;
 uniform float blend_factor;
 uniform sampler2D screenTex;
 uniform sampler2D refTex;
-uniform sampler2DRectShadow shadowMap0;
-uniform sampler2DRectShadow shadowMap1;
-uniform sampler2DRectShadow shadowMap2;
-uniform sampler2DRectShadow shadowMap3;
-uniform sampler2D noiseMap;
-
-uniform mat4 shadow_matrix[6];
-uniform vec4 shadow_clip;
-
 uniform float sunAngle;
 uniform float sunAngle2;
 uniform vec3 lightDir;
@@ -73,6 +64,7 @@ VARYING vec4 vary_position;
 
 vec3 srgb_to_linear(vec3 cs);
 vec2 encode_normal(vec3 n);
+vec3 scaleSoftClipFrag(vec3 l);
 
 vec3 BlendNormal(vec3 bump1, vec3 bump2)
 {
@@ -175,7 +167,7 @@ void main()
 	color.rgb += spec * specular;
 	
 	color.rgb = atmosTransport(color.rgb);
-	color.rgb = scaleSoftClip(color.rgb);
+	color.rgb = scaleSoftClipFrag(color.rgb);
 	color.a   = spec * sunAngle2;
 
 	vec3 screenspacewavef = normalize((norm_mat*vec4(wavef, 1.0)).xyz);

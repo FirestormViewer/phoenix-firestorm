@@ -156,22 +156,26 @@ LLSettingsSky::validation_list_t legacyHazeValidationList()
     static LLSettingsBase::validation_list_t legacyHazeValidation;
     if (legacyHazeValidation.empty())
     {
+        legacyHazeValidation.push_back(LLSettingsBase::Validator(LLSettingsSky::SETTING_AMBIENT,             false,  LLSD::TypeArray, 
+            boost::bind(&LLSettingsBase::Validator::verifyVectorMinMax, _1,
+                LLSD(LLSDArray(0.0f)(0.0f)(0.0f)("*")),
+                LLSD(LLSDArray(3.0f)(3.0f)(3.0f)("*")))));
         legacyHazeValidation.push_back(LLSettingsBase::Validator(LLSettingsSky::SETTING_BLUE_DENSITY,        false,  LLSD::TypeArray, 
             boost::bind(&LLSettingsBase::Validator::verifyVectorMinMax, _1,
                 LLSD(LLSDArray(0.0f)(0.0f)(0.0f)("*")),
-                LLSD(LLSDArray(2.0f)(2.0f)(2.0f)("*")))));
+                LLSD(LLSDArray(3.0f)(3.0f)(3.0f)("*")))));
         legacyHazeValidation.push_back(LLSettingsBase::Validator(LLSettingsSky::SETTING_BLUE_HORIZON,        false,  LLSD::TypeArray, 
             boost::bind(&LLSettingsBase::Validator::verifyVectorMinMax, _1,
                 LLSD(LLSDArray(0.0f)(0.0f)(0.0f)("*")),
-                LLSD(LLSDArray(2.0f)(2.0f)(2.0f)("*")))));
+                LLSD(LLSDArray(3.0f)(3.0f)(3.0f)("*")))));
         legacyHazeValidation.push_back(LLSettingsBase::Validator(LLSettingsSky::SETTING_HAZE_DENSITY,        false,  LLSD::TypeReal,  
-            boost::bind(&LLSettingsBase::Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0f)(4.0f)))));
+            boost::bind(&LLSettingsBase::Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0f)(5.0f)))));
         legacyHazeValidation.push_back(LLSettingsBase::Validator(LLSettingsSky::SETTING_HAZE_HORIZON,        false,  LLSD::TypeReal,  
-            boost::bind(&LLSettingsBase::Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0f)(1.0f)))));
+            boost::bind(&LLSettingsBase::Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0f)(5.0f)))));
         legacyHazeValidation.push_back(LLSettingsBase::Validator(LLSettingsSky::SETTING_DENSITY_MULTIPLIER,  false,  LLSD::TypeReal,  
-            boost::bind(&LLSettingsBase::Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0001f)(0.9f)))));
+            boost::bind(&LLSettingsBase::Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0001f)(2.0f)))));
         legacyHazeValidation.push_back(LLSettingsBase::Validator(LLSettingsSky::SETTING_DISTANCE_MULTIPLIER, false,  LLSD::TypeReal,
-            boost::bind(&LLSettingsBase::Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0f)(100.0f)))));
+            boost::bind(&LLSettingsBase::Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0001f)(1000.0f)))));
     }
     return legacyHazeValidation;
 }
@@ -434,11 +438,56 @@ void LLSettingsSky::blend(const LLSettingsBase::ptr_t &end, F64 blendf)
     LLSettingsSky::ptr_t other = PTR_NAMESPACE::dynamic_pointer_cast<LLSettingsSky>(end);
     if (other)
     {
-        LLSD blenddata = interpolateSDMap(mSettings, other->mSettings, blendf);
+        if (other->mSettings.has(SETTING_LEGACY_HAZE))
+        {
+            if (!mSettings.has(SETTING_LEGACY_HAZE) || !mSettings[SETTING_LEGACY_HAZE].has(SETTING_AMBIENT))
+            {
+                // Special case since SETTING_AMBIENT is both in outer and legacy maps, we prioritize legacy one
+                // see getAmbientColor(), we are about to replaceSettings(), so we are free to set it
+                setAmbientColor(getAmbientColor());
+            }
+        }
+        else
+        {
+            if (mSettings.has(SETTING_LEGACY_HAZE) && mSettings[SETTING_LEGACY_HAZE].has(SETTING_AMBIENT))
+            {
+                // Special case due to ambient's duality
+                // We need to match 'other's' structure for interpolation.
+                // We are free to change mSettings, since we are about to reset it
+                mSettings[SETTING_AMBIENT] = getAmbientColor().getValue();
+                mSettings[SETTING_LEGACY_HAZE].erase(SETTING_AMBIENT);
+            }
+        }
+
+        LLUUID cloud_noise_id = getCloudNoiseTextureId();
+        LLUUID cloud_noise_id_next = other->getCloudNoiseTextureId();
+        F64 cloud_shadow = 0;
+        if (!cloud_noise_id.isNull() && cloud_noise_id_next.isNull())
+        {
+            // If there is no cloud texture in destination, reduce coverage to imitate disappearance
+            // See LLDrawPoolWLSky::renderSkyClouds... we don't blend present texture with null
+            // Note: Probably can be done by shader
+            cloud_shadow = lerp(mSettings[SETTING_CLOUD_SHADOW].asReal(), (F64)0.f, blendf);
+            cloud_noise_id_next = cloud_noise_id;
+        }
+        else if (cloud_noise_id.isNull() && !cloud_noise_id_next.isNull())
+        {
+            // Source has no cloud texture, reduce initial coverage to imitate appearance
+            // use same texture as destination
+            cloud_shadow = lerp((F64)0.f, other->mSettings[SETTING_CLOUD_SHADOW].asReal(), blendf);
+            setCloudNoiseTextureId(cloud_noise_id_next);
+        }
+        else
+        {
+            cloud_shadow = lerp(mSettings[SETTING_CLOUD_SHADOW].asReal(), other->mSettings[SETTING_CLOUD_SHADOW].asReal(), blendf);
+        }
+
+        LLSD blenddata = interpolateSDMap(mSettings, other->mSettings, other->getParameterMap(), blendf);
+        blenddata[SETTING_CLOUD_SHADOW] = LLSD::Real(cloud_shadow);
         replaceSettings(blenddata);
         mNextSunTextureId = other->getSunTextureId();
         mNextMoonTextureId = other->getMoonTextureId();
-        mNextCloudTextureId = other->getCloudNoiseTextureId();
+        mNextCloudTextureId = cloud_noise_id_next;
         mNextBloomTextureId = other->getBloomTextureId();
         mNextRainbowTextureId = other->getRainbowTextureId();
         mNextHaloTextureId = other->getHaloTextureId();
@@ -461,6 +510,7 @@ LLSettingsSky::stringset_t LLSettingsSky::getSkipInterpolateKeys() const
         skipSet.insert(SETTING_RAYLEIGH_CONFIG);
         skipSet.insert(SETTING_MIE_CONFIG);
         skipSet.insert(SETTING_ABSORPTION_CONFIG);
+        skipSet.insert(SETTING_CLOUD_SHADOW);
     }
 
     return skipSet;
@@ -493,28 +543,6 @@ LLSettingsSky::validation_list_t LLSettingsSky::validationList()
         // copy constructor for LLSDArray.  Directly binding the LLSDArray as 
         // a parameter without first wrapping it in a pure LLSD object will result 
         // in deeply nested arrays like this [[[[[[[[[[v1,v2,v3]]]]]]]]]]
-        validation.push_back(Validator(SETTING_BLUE_DENSITY,        false,  LLSD::TypeArray, 
-            boost::bind(&Validator::verifyVectorMinMax, _1,
-                LLSD(LLSDArray(0.0f)(0.0f)(0.0f)("*")),
-                LLSD(LLSDArray(2.0f)(2.0f)(2.0f)("*")))));
-        validation.push_back(Validator(SETTING_BLUE_HORIZON,        false,  LLSD::TypeArray, 
-            boost::bind(&Validator::verifyVectorMinMax, _1,
-                LLSD(LLSDArray(0.0f)(0.0f)(0.0f)("*")),
-                LLSD(LLSDArray(2.0f)(2.0f)(2.0f)("*")))));
-        validation.push_back(Validator(SETTING_HAZE_DENSITY,        false,  LLSD::TypeReal,  
-            boost::bind(&Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0f)(5.0f)))));
-        validation.push_back(Validator(SETTING_HAZE_HORIZON,        false,  LLSD::TypeReal,  
-            boost::bind(&Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0f)(5.0f)))));
-        validation.push_back(Validator(SETTING_AMBIENT, false, LLSD::TypeArray,
-            boost::bind(&Validator::verifyVectorMinMax, _1,
-                LLSD(LLSDArray(0.0f)(0.0f)(0.0f)("*")),
-                LLSD(LLSDArray(3.0f)(3.0f)(3.0f)("*")))));
-        validation.push_back(Validator(SETTING_DENSITY_MULTIPLIER,  false,  LLSD::TypeReal,  
-            boost::bind(&Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0001f)(2.0f)))));
-        validation.push_back(Validator(SETTING_DISTANCE_MULTIPLIER, false,  LLSD::TypeReal,  
-            boost::bind(&Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0001f)(1000.0f)))));
-
-
         validation.push_back(Validator(SETTING_BLOOM_TEXTUREID,     true,  LLSD::TypeUUID));
         validation.push_back(Validator(SETTING_RAINBOW_TEXTUREID,   false,  LLSD::TypeUUID));
         validation.push_back(Validator(SETTING_HALO_TEXTUREID,      false,  LLSD::TypeUUID));
@@ -735,6 +763,10 @@ LLSD LLSettingsSky::translateLegacyHazeSettings(const LLSD& legacy)
 // AdvancedAtmospherics TODO
 // These need to be translated into density profile info in the new settings format...
 // LEGACY_ATMOSPHERICS    
+    if (legacy.has(SETTING_AMBIENT))
+    {
+        legacyhazesettings[SETTING_AMBIENT] = LLColor3(legacy[SETTING_AMBIENT]).getValue();
+    }
     if (legacy.has(SETTING_BLUE_DENSITY))
     {
         legacyhazesettings[SETTING_BLUE_DENSITY] = LLColor3(legacy[SETTING_BLUE_DENSITY]).getValue();
@@ -776,10 +808,6 @@ LLSD LLSettingsSky::translateLegacySettings(const LLSD& legacy)
         newsettings[SETTING_LEGACY_HAZE] = legacyhazesettings;
     }
 
-    if (legacy.has(SETTING_AMBIENT))
-    {
-        newsettings[SETTING_AMBIENT] = LLColor3(legacy[SETTING_AMBIENT]).getValue();
-    }
     if (legacy.has(SETTING_CLOUD_COLOR))
     {
         newsettings[SETTING_CLOUD_COLOR] = LLColor3(legacy[SETTING_CLOUD_COLOR]).getValue();
@@ -921,9 +949,6 @@ void LLSettingsSky::calculateHeavenlyBodyPositions()  const
         LL_WARNS("SETTINGS") << "Zero length sun direction. Wailing and gnashing of teeth may follow... or not." << LL_ENDL;
     if (mMoonDirection.lengthSquared() < 0.01f)
         LL_WARNS("SETTINGS") << "Zero length moon direction. Wailing and gnashing of teeth may follow... or not." << LL_ENDL;
-
-    llassert(mSunDirection.lengthSquared() > 0.01f);
-    llassert(mMoonDirection.lengthSquared() > 0.01f);
 }
 
 LLVector3 LLSettingsSky::getLightDirection() const
@@ -945,6 +970,7 @@ LLVector3 LLSettingsSky::getLightDirection() const
 
 LLColor3 LLSettingsSky::getAmbientColor() const
 {
+    // Todo: this causes complications, preferably to get rid of this duality
     if (mSettings.has(SETTING_LEGACY_HAZE) && mSettings[SETTING_LEGACY_HAZE].has(SETTING_AMBIENT))
     {
         return LLColor3(mSettings[SETTING_LEGACY_HAZE][SETTING_AMBIENT]);

@@ -69,14 +69,12 @@ vec3 srgb_to_linear(vec3 cs);
 vec3 linear_to_srgb(vec3 cl);
 vec3 decode_normal (vec2 enc);
 
-vec3 atmosFragAmbient(vec3 l, vec3 ambient);
 vec3 atmosFragLighting(vec3 l, vec3 additive, vec3 atten);
-vec3 scaleFragSoftClip(vec3 l);
-vec3 atmosFragAffectDirectionalLight(float intensity, vec3 sunlit);
-vec3 fullbrightFragAtmosTransport(vec3 l, vec3 additive, vec3 atten);
-vec3 fullbrightScaleSoftClipFrag(vec3 l, vec3 atten);
-
+vec3 fullbrightAtmosTransportFrag(vec3 l, vec3 additive, vec3 atten);
 void calcFragAtmospherics(vec3 inPositionEye, float ambFactor, out vec3 sunlit, out vec3 amblit, out vec3 additive, out vec3 atten);
+
+vec3 scaleSoftClip(vec3 l);
+vec3 fullbrightScaleSoftClip(vec3 l);
 
 vec4 getPosition_d(vec2 pos_screen, float depth)
 {
@@ -123,22 +121,20 @@ void main()
 	vec3 col;
 	float bloom = 0.0;
 	{
-                vec3 sunlit;
-                vec3 amblit;
-                vec3 additive;
-                vec3 atten;
+        vec3 sunlit;
+        vec3 amblit;
+        vec3 additive;
+        vec3 atten;
 		calcFragAtmospherics(pos.xyz, 1.0, sunlit, amblit, additive, atten);
 	
-		col = atmosFragAmbient(vec3(0), amblit);
 		float ambient = min(abs(dot(norm.xyz, sun_dir.xyz)), 1.0);
 		ambient *= 0.5;
 		ambient *= ambient;
-		ambient = (1.0-ambient);
+		ambient = (1.0 - ambient);
 
-		col.rgb *= ambient;
-
-		col += atmosFragAffectDirectionalLight(final_da, sunlit);
-	
+		col = amblit;
+        col *= ambient;
+		col += (final_da * sunlit);        
 		col *= diffuse.rgb;
 	
 		vec3 refnormpersp = normalize(reflect(pos.xyz, norm.xyz));
@@ -149,7 +145,6 @@ void main()
 			//
 			
 			float sa = dot(refnormpersp, sun_dir.xyz);
-
 			vec3 dumbshiny = sunlit*(texture2D(lightFunc, vec2(sa, spec.a)).r);
 			
 			// add the two types of shiny together
@@ -174,13 +169,12 @@ void main()
 				
 		if (norm.w < 0.5)
 		{
-            vec3 add = additive;
-			col = mix(atmosFragLighting(col, add, atten), fullbrightFragAtmosTransport(col, atten, add), diffuse.a);
-			col = mix(scaleFragSoftClip(col), fullbrightScaleSoftClipFrag(col, atten), diffuse.a);
+			col = mix(atmosFragLighting(col, additive, atten), fullbrightAtmosTransportFrag(col, additive, atten), diffuse.a);
+			col = mix(scaleSoftClip(col), fullbrightScaleSoftClip(col), diffuse.a);
 		}
 
 		#ifdef WATER_FOG
-			vec4 fogged = applyWaterFogView(pos,vec4(col, bloom));
+			vec4 fogged = applyWaterFogView(pos.xyz,vec4(col, bloom));
 			col = fogged.rgb;
 			bloom = fogged.a;
 		#endif

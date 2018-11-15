@@ -1,5 +1,5 @@
 /** 
- * @file softenLightF.glsl
+ * @file class2/deferred/softenLightF.glsl
  *
  * $LicenseInfo:firstyear=2007&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -49,6 +49,7 @@ uniform vec4 morphFactor;
 uniform vec3 camPosLocal;
 //uniform vec4 camPosWorld;
 uniform vec4 gamma;
+uniform vec4 lightnorm;
 uniform vec4 sunlight_color;
 uniform vec4 ambient;
 uniform vec4 blue_horizon;
@@ -72,17 +73,20 @@ VARYING vec2 vary_fragcoord;
 uniform mat4 inv_proj;
 uniform vec2 screen_res;
 
+uniform int no_atmo;
+
 vec3 srgb_to_linear(vec3 cs);
 vec3 linear_to_srgb(vec3 cl);
 vec3 decode_normal (vec2 enc);
 
-vec3 atmosFragAmbient(vec3 l, vec3 ambient);
-vec3 atmosFragLighting(vec3 l, vec3 additive, vec3 atten);
-vec3 scaleFragSoftClip(vec3 l);
-vec3 atmosFragAffectDirectionalLight(float intensity, vec3 sunlit);
 void calcFragAtmospherics(vec3 inPositionEye, float ambFactor, out vec3 sunlit, out vec3 amblit, out vec3 additive, out vec3 atten);
-vec3 fullbrightFragAtmosTransport(vec3 l, vec3 additive, vec3 atten);
-vec3 fullbrightScaleSoftClipFrag(vec3 l, vec3 atten);
+vec3 atmosFragLighting(vec3 l, vec3 additive, vec3 atten);
+vec3 fullbrightScaleSoftClipFrag(vec3 l);
+vec3 scaleSoftClipFrag(vec3 l);
+
+vec3 atmosTransportFrag(vec3 light, vec3 additive, vec3 atten);
+vec3 fullbrightAtmosTransportFrag(vec3 light, vec3 additive, vec3 atten);
+vec3 fullbrightShinyAtmosTransportFrag(vec3 light, vec3 additive, vec3 atten);
 
 vec4 getPosition_d(vec2 pos_screen, float depth)
 {
@@ -121,7 +125,6 @@ void main()
 	float light_gamma = 1.0/1.3;
 	da = pow(da, light_gamma);
 
-
 	vec4 diffuse = texture2DRect(diffuseRect, tc);
 
 	//convert to gamma space
@@ -136,27 +139,23 @@ void main()
 		scol_ambocc = pow(scol_ambocc, vec2(light_gamma));
 
 		float scol = max(scol_ambocc.r, diffuse.a); 
-
-		
-
 		float ambocc = scol_ambocc.g;
 
-                vec3 sunlit;
-                vec3 amblit;
-                vec3 additive;
-                vec3 atten;
+        vec3 sunlit;
+        vec3 amblit;
+        vec3 additive;
+        vec3 atten;
 	
 		calcFragAtmospherics(pos.xyz, ambocc, sunlit, amblit, additive, atten);
-	
-		col = atmosFragAmbient(vec3(0), amblit);
+
 		float ambient = min(abs(dot(norm.xyz, sun_dir.xyz)), 1.0);
 		ambient *= 0.5;
 		ambient *= ambient;
 		ambient = (1.0-ambient);
 
-		col.rgb *= ambient;
+		col.rgb = ambient * ((col * 0.5) + amblit);
 
-		col += atmosFragAffectDirectionalLight(max(min(da, scol), 0.0), sunlit);
+		col += sunlit * max(min(da, scol), 0.0);
 	
 		col *= diffuse.rgb;
 	
@@ -173,7 +172,6 @@ void main()
 			bloom = dot(spec_contrib, spec_contrib) / 6;
 			col += spec_contrib;
 		}
-	
 		
 		col = mix(col, diffuse.rgb, diffuse.a);
 
@@ -186,13 +184,12 @@ void main()
 						
 		if (norm.w < 0.5)
 		{
-            vec3 add = additive;
-			col = mix(atmosFragLighting(col, add, atten), fullbrightFragAtmosTransport(col, atten, add), diffuse.a);
-			col = mix(scaleFragSoftClip(col), fullbrightScaleSoftClipFrag(col, atten), diffuse.a);
+			col = mix(atmosFragLighting(col, additive, atten), fullbrightAtmosTransportFrag(col, additive, atten), diffuse.a);
+			col = mix(scaleSoftClipFrag(col), fullbrightScaleSoftClipFrag(col), diffuse.a);
 		}
 
 		#ifdef WATER_FOG
-			vec4 fogged = applyWaterFogView(pos,vec4(col, bloom));
+			vec4 fogged = applyWaterFogView(pos.xyz,vec4(col, bloom));
 			col = fogged.rgb;
 			bloom = fogged.a;
 		#endif

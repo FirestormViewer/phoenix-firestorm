@@ -1,7 +1,7 @@
 /** 
- * @file lightFuncSpecularV.glsl
+ * @file class2/deferred/indirect.glsl
  *
- * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2018&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2007, Linden Research, Inc.
  * 
@@ -22,37 +22,11 @@
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
- 
-float calcDirectionalSpecular(vec3 view, vec3 n, vec3 l)
-{
-	return pow(max(dot(reflect(view, n),l), 0.0),8.0);
-}
 
-float calcDirectionalLightSpecular(inout vec4 specular, vec3 view, vec3 n, vec3 l, vec3 lightCol, float da)
-{
-	
-	specular.rgb += calcDirectionalSpecular(view,n,l)*lightCol*da;
-	return max(dot(n,l),0.0);
-}
+float calcAmbientOcclusion(vec4 pos, vec3 norm, vec2 pos_screen);
 
-vec3 calcPointLightSpecular(inout vec4 specular, vec3 view, vec3 v, vec3 n, vec3 l, float r, float pw, vec3 lightCol)
+vec3 getIndirect(vec3 ambient, vec3 norm, vec4 pos, vec2 pos_screen)
 {
-	//get light vector
-	vec3 lv = l-v;
-	
-	//get distance
-	float d = length(lv);
-	
-	//normalize light vector
-	lv *= 1.0/d;
-	
-	//distance attenuation
-	float da = clamp(1.0/(r * d), 0.0, 1.0);
-	
-	//angular attenuation
-	
-	da *= calcDirectionalLightSpecular(specular, view, n, lv, lightCol, da);
-	
-	return da*lightCol;	
+    return ambient * calcAmbientOcclusion(pos, norm, pos_screen);
 }
 

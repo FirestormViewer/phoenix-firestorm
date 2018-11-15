@@ -3693,6 +3693,7 @@ void LLPanelRegionEnvironment::refreshFromSource()
 {
     LLHandle<LLPanel> that_h = getHandle();
 
+    mCurEnvVersion = INVALID_PARCEL_ENVIRONMENT_VERSION;
     LLEnvironment::instance().requestRegion(
         [that_h](S32 parcel_id, LLEnvironment::EnvironmentInfo::ptr_t envifo) { _onEnvironmentReceived(that_h, parcel_id, envifo); });
 

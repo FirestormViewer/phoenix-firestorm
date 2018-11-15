@@ -264,7 +264,7 @@ LLPanelLandCovenant* LLFloaterLand::getCurrentPanelLandCovenant()
 // static
 void LLFloaterLand::refreshAll()
 {
-	LLFloaterLand* land_instance = LLFloaterReg::getTypedInstance<LLFloaterLand>("about_land");
+	LLFloaterLand* land_instance = LLFloaterReg::findTypedInstance<LLFloaterLand>("about_land");
 	if(land_instance)
 	{
 		land_instance->refresh();
@@ -3587,6 +3587,7 @@ void LLPanelLandEnvironment::refreshFromSource()
 
         LLHandle<LLPanel> that_h = getHandle();
 
+        mCurEnvVersion = INVALID_PARCEL_ENVIRONMENT_VERSION;
         LLEnvironment::instance().requestParcel(parcel->getLocalID(),
             [that_h](S32 parcel_id, LLEnvironment::EnvironmentInfo::ptr_t envifo) 
             {  

@@ -25,17 +25,13 @@
  */
 
 #include "linden_common.h"
-
 #include "llshadermgr.h"
-
-#include "llfile.h"
 #include "llrender.h"
+#include "llfile.h"
 
 #if LL_DARWIN
 #include "OpenGL/OpenGL.h"
 #endif
-
-#define UNIFORM_ERRS LL_WARNS_ONCE("Shader")
 
 // Lots of STL stuff in here, using namespace std to keep things more readable
 using std::vector;
@@ -175,6 +171,8 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 	// Attach Fragment Shader Features Next
 	///////////////////////////////////////
 
+// NOTE order of shader object attaching is VERY IMPORTANT!!!
+
 	if(features->calculatesAtmospherics)
 	{
 		if (features->hasWaterFog)
@@ -198,7 +196,22 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 		}
 	}
 
-	// NOTE order of shader object attaching is VERY IMPORTANT!!!
+    if (features->isDeferred || features->hasShadows)
+	{
+		if (!shader->attachObject("deferred/deferredUtil.glsl"))
+		{
+			return FALSE;
+		}
+	}
+
+    if (features->hasIndirect)
+	{
+		if (!shader->attachObject("deferred/indirect.glsl"))
+		{
+			return FALSE;
+		}
+	}
+
 	if (features->hasGamma)
 	{
 		if (!shader->attachObject("windlight/gammaF.glsl"))
@@ -543,6 +556,16 @@ static std::string get_object_log(GLhandleARB ret)
 	return res;
 }
 
+//dump shader source for debugging
+void LLShaderMgr::dumpShaderSource(U32 shader_code_count, GLcharARB** shader_code_text)
+{	
+	for (GLuint i = 0; i < shader_code_count; i++)
+	{
+		LL_SHADER_LOADING_WARNS() << i << ": " << shader_code_text[i] << LL_ENDL;
+	}
+    LL_SHADER_LOADING_WARNS() << LL_ENDL;
+}
+
 void LLShaderMgr::dumpObjectLog(GLhandleARB ret, BOOL warns, const std::string& filename) 
 {
 	std::string log = get_object_log(ret);
@@ -554,8 +577,8 @@ void LLShaderMgr::dumpObjectLog(GLhandleARB ret, BOOL warns, const std::string& 
 
 	if (log.length() > 0)
 	{
-        LL_WARNS("ShaderLoading") << "Shader loading from " << fname << ":\n" << LL_ENDL;
-        LL_WARNS("ShaderLoading") << log << LL_ENDL;
+        LL_SHADER_LOADING_WARNS() << "Shader loading from " << fname << ":\n" << LL_ENDL;
+        LL_SHADER_LOADING_WARNS() << log << LL_ENDL;
 	}
  }
 
@@ -576,11 +599,11 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 		error = glGetError();
 		if (error != GL_NO_ERROR)
 		{
-			LL_WARNS("ShaderLoading") << "GL ERROR entering loadShaderFile(): " << error << LL_ENDL;
+			LL_SHADER_LOADING_WARNS() << "GL ERROR entering loadShaderFile(): " << error << LL_ENDL;
 		}
 	}
 	
-	LL_DEBUGS("ShaderLoading") << "Loading shader file: " << filename << " class " << shader_level << LL_ENDL;
+	//LL_SHADER_LOADING_WARNS() << "Loading shader file: " << filename << " class " << shader_level << LL_ENDL;
 
 	if (filename.empty()) 
 	{
@@ -594,6 +617,7 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 	S32 try_gpu_class = shader_level;
 	S32 gpu_class;
 
+    std::string open_file_name;
 	//find the most relevant file
 	for (gpu_class = try_gpu_class; gpu_class > 0; gpu_class--)
 	{	//search from the current gpu class down to class 1 to find the most relevant shader
@@ -601,18 +625,33 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 		fname << getShaderDirPrefix();
 		fname << gpu_class << "/" << filename;
 		
- 		LL_DEBUGS("ShaderLoading") << "Looking in " << fname.str() << LL_ENDL;
-		file = LLFile::fopen(fname.str(), "r");		/* Flawfinder: ignore */
+        open_file_name = fname.str();
+
+        /*
+        Would be awesome, if we didn't have shaders that re-use files
+        with different environments to say, add skinning, etc
+        can't depend on cached version to have evaluate ifdefs identically...
+        if we can define a deterministic hash for the shader based on
+        all the inputs, maybe we can save some time here.
+        if (mShaderObjects.count(filename) > 0)
+        {
+            return mShaderObjects[filename];
+        }
+
+        */
+
+ 		LL_DEBUGS("ShaderLoading") << "Looking in " << open_file_name << LL_ENDL;
+		file = LLFile::fopen(open_file_name, "r");		/* Flawfinder: ignore */
 		if (file)
 		{
-			LL_DEBUGS("ShaderLoading") << "Loading file: shaders/class" << gpu_class << "/" << filename << " (Want class " << gpu_class << ")" << LL_ENDL;
+			LL_DEBUGS("ShaderLoading") << "Loading file: " << open_file_name << " (Want class " << gpu_class << ")" << LL_ENDL;            
 			break; // done
 		}
 	}
 	
 	if (file == NULL)
 	{
-		LL_WARNS("ShaderLoading") << "GLSL Shader file not found: " << filename << LL_ENDL;
+		LL_SHADER_LOADING_WARNS() << "GLSL Shader file not found: " << open_file_name << LL_ENDL;
 		return 0;
 	}
 
@@ -691,7 +730,7 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 		extra_code_text[extra_code_count++] = strdup("#define texture2D texture\n");
 		extra_code_text[extra_code_count++] = strdup("#define textureCube texture\n");
 		extra_code_text[extra_code_count++] = strdup("#define texture2DLod textureLod\n");
-		extra_code_text[extra_code_count++] = strdup("#define	shadow2D(a,b) vec2(texture(a,b))\n");
+		extra_code_text[extra_code_count++] = strdup("#define shadow2D(a,b) vec2(texture(a,b))\n");
 		
 		if (major_version > 1 || minor_version >= 40)
 		{ //GLSL 1.40 replaces texture2DRect et al with texture
@@ -942,38 +981,8 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 			{
 				//an error occured, print log
 				LL_WARNS("ShaderLoading") << "GLSL Compilation Error:" << LL_ENDL;
-				dumpObjectLog(ret, TRUE, filename);
-#if LL_WINDOWS
-				std::stringstream ostr;
-				//dump shader source for debugging
-				for (GLuint i = 0; i < shader_code_count; i++)
-				{
-					ostr << i << ": " << shader_code_text[i];
-
-					if (i % 128 == 0)
-					{ //dump every 128 lines
-
-						LL_WARNS("ShaderLoading") << "\n" << ostr.str() << LL_ENDL;
-						ostr = std::stringstream();
-					}
-
-				}
-
-				LL_WARNS("ShaderLoading") << "\n" << ostr.str() << LL_ENDL;
-#else
-				std::string str;
-				
-				for (GLuint i = 0; i < shader_code_count; i++) {
-					str.append(shader_code_text[i]);
-					
-					if (i % 128 == 0)
-					{
-						LL_WARNS("ShaderLoading") << str << LL_ENDL;
-						str = "";
-					}
-				}
-#endif
-
+				dumpObjectLog(ret, TRUE, open_file_name);
+                dumpShaderSource(shader_code_count, shader_code_text);
 				ret = 0;
 			}
 		}
@@ -1002,7 +1011,7 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 		if (shader_level > 1)
 		{
 			shader_level--;
-			return loadShaderFile(filename,shader_level,type, defines, texture_index_channels);
+			return loadShaderFile(filename, shader_level, type, defines, texture_index_channels);
 		}
 		LL_WARNS("ShaderLoading") << "Failed to load " << filename << LL_ENDL;	
 	}
@@ -1018,7 +1027,7 @@ BOOL LLShaderMgr::linkProgramObject(GLhandleARB obj, BOOL suppress_errors)
 	if (!suppress_errors && success == GL_FALSE) 
 	{
 		//an error occured, print log
-		LL_WARNS("ShaderLoading") << "GLSL Linker Error:" << LL_ENDL;
+		LL_SHADER_LOADING_WARNS() << "GLSL Linker Error:" << LL_ENDL;
 	}
 
 #if LL_DARWIN
@@ -1051,7 +1060,7 @@ BOOL LLShaderMgr::linkProgramObject(GLhandleARB obj, BOOL suppress_errors)
 		CGLGetParameter(ctx, kCGLCPGPUFragmentProcessing, &fragmentGPUProcessing);
 		if (!fragmentGPUProcessing || !vertexGPUProcessing)
 		{
-			LL_WARNS("ShaderLoading") << "GLSL Linker: Running in Software:" << LL_ENDL;
+			LL_SHADER_LOADING_WARNS() << "GLSL Linker: Running in Software:" << LL_ENDL;
 			success = GL_FALSE;
 			suppress_errors = FALSE;		
 		}
@@ -1062,7 +1071,7 @@ BOOL LLShaderMgr::linkProgramObject(GLhandleARB obj, BOOL suppress_errors)
 	LLStringUtil::toLower(log);
 	if (log.find("software") != std::string::npos)
 	{
-		LL_WARNS("ShaderLoading") << "GLSL Linker: Running in Software:" << LL_ENDL;
+		LL_SHADER_LOADING_WARNS() << "GLSL Linker: Running in Software:" << LL_ENDL;
 		success = GL_FALSE;
 		suppress_errors = FALSE;
 	}
@@ -1078,7 +1087,7 @@ BOOL LLShaderMgr::validateProgramObject(GLhandleARB obj)
 	glGetObjectParameterivARB(obj, GL_OBJECT_VALIDATE_STATUS_ARB, &success);
 	if (success == GL_FALSE)
 	{
-		LL_WARNS("ShaderLoading") << "GLSL program not valid: " << LL_ENDL;
+		LL_SHADER_LOADING_WARNS() << "GLSL program not valid: " << LL_ENDL;
 		dumpObjectLog(obj);
 	}
 	else
@@ -1337,8 +1346,11 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("rainbow_map");
     mReservedUniforms.push_back("halo_map");
     mReservedUniforms.push_back("moon_brightness");
-    mReservedUniforms.push_back("moon_phase");
     mReservedUniforms.push_back("cloud_variance");
+
+    mReservedUniforms.push_back("sh_input_r");
+    mReservedUniforms.push_back("sh_input_g");
+    mReservedUniforms.push_back("sh_input_b");
 
 	llassert(mReservedUniforms.size() == END_RESERVED_UNIFORMS);
 

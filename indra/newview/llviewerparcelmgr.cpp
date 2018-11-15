@@ -1733,7 +1733,6 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 
 			if (instance->mTeleportInProgress)
 			{
-				instance->mTeleportInProgress = FALSE;
 				if(instance->mTeleportInProgressPosition.isNull())
 				{
 					//initial update
@@ -1748,6 +1747,7 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
             LL_WARNS("LAPRAS") << "Parcel environment version is " << parcel->getParcelEnvironmentVersion() << LL_ENDL;
             // Notify anything that wants to know when the agent changes parcels
             gAgent.changeParcels();
+            instance->mTeleportInProgress = FALSE;
         }
         else if (agent_parcel_update)
         {
@@ -2674,6 +2674,12 @@ void LLViewerParcelMgr::onTeleportFinished(bool local, const LLVector3d& new_pos
 void LLViewerParcelMgr::onTeleportFailed()
 {
 	mTeleportFailedSignal();
+}
+
+bool  LLViewerParcelMgr::getTeleportInProgress()
+{
+    return mTeleportInProgress // case where parcel data arrives after teleport
+        || gAgent.getTeleportState() > LLAgent::TELEPORT_NONE; // For LOCAL, no mTeleportInProgress
 }
 
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
