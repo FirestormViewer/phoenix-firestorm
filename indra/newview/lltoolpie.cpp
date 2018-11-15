@@ -120,9 +120,9 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
     mMouseOutsideSlop = FALSE;
 	mMouseDownX = x;
 	mMouseDownY = y;
-    LLTimer pick_timer;
-    BOOL pick_rigged = false; //gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
-	mPick = gViewerWindow->pickImmediate(x, y, FALSE, FALSE);
+	LLTimer pick_timer;
+	BOOL pick_rigged = false; //gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
+	mPick = gViewerWindow->pickImmediate(x, y, FALSE, pick_rigged);
 	LLViewerObject *object = mPick.getObject();
 	LLViewerObject *parent = object ? object->getRootEdit() : NULL;
 	if (!object
@@ -136,7 +136,7 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 		// Todo: we need a more consistent set of rules to work with
 		mPick = gViewerWindow->pickImmediate(x, y, TRUE /*transparent*/, pick_rigged);
 	}
-    LL_INFOS() << "pick_rigged is " << (S32) pick_rigged << " pick time elapsed " << pick_timer.getElapsedTimeF32() << LL_ENDL;
+	LL_INFOS() << "pick_rigged is " << (S32) pick_rigged << " pick time elapsed " << pick_timer.getElapsedTimeF32() << LL_ENDL;
 
 	mPick.mKeyMask = mask;
 
