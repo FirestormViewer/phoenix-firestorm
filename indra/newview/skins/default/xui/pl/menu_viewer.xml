@@ -426,6 +426,7 @@
 			<menu_item_check label="Obszary tekstur" name="Texture Area"/>
 			<menu_item_check label="Obszary powierzchni" name="Face Area"/>
 			<menu_item_check label="Poziomy detali" name="LOD Info"/>
+			<menu_item_check label="Liczba trójkątów" name="Triangle Count" />
 			<menu_item_check label="Kolejka budowania" name="Build Queue"/>
 			<menu_item_check label="Światła" name="Lights"/>
 			<menu_item_check label="Cząsteczki" name="Particles"/>
@@ -551,6 +552,7 @@
 			<menu_item_check label="Pokaż szkielet kolizji" name="Show Collision Skeleton"/>
 			<menu_item_check label="Pokaż kości" name="Show Bones"/>
 			<menu_item_check label="Wyświetl cel Agenta" name="Display Agent Target"/>
+			<menu_item_check label="Pokaż zakresy dla awatarów zastępczych" name="Show Impostor Extents" />
 			<menu_item_call label="Zrzut przyłączonych dodatków" name="Dump Attachments"/>
 			<menu_item_call label="Debugowanie tekstur awatara" name="Debug Avatar Textures" shortcut=""/>
 			<menu_item_call label="Zrzut lokalnych tekstur" name="Dump Local Textures"/>

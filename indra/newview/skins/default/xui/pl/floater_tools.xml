@@ -430,6 +430,7 @@ Nis ↔ Najniż
 			<text name="edit_object">
 				Edytuj cechy obiektu:
 			</text>
+			<check_box label="Animowany mesz" name="Animated Mesh Checkbox Ctrl" tool_tip="Umożliwia niezależne animowanie obiektów riggowanych" />
 			<check_box label="Elastyczność" name="Flexible1D Checkbox Ctrl" tool_tip="Elastyczność wzdłuż osi Z (tylko po stronie klienta)"/>
 			<spinner label="Gładkość" name="FlexNumSections"/>
 			<spinner label="Ciężar" name="FlexGravity"/>
