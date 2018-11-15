@@ -2,6 +2,7 @@
 <floater name="Model Preview" title="Ładowanie modelu">
   <string name="no_havok">ładowanie meszy z fizyką</string>
   <string name="status_parse_error">Błąd: Problem z parsowaniem Dae, zobacz log.</string>
+  <string name="status_bind_shape_orientation">Uwaga: Macierz powiązań kształtu nie jest w standardowej orientacji X-forward.</string>
   <string name="status_material_mismatch">Błąd: Materiał nie jest podzbiorem modelu referencyjnego.</string>
   <string name="status_reading_file">Wczytywanie...</string>
   <string name="status_generating_meshes">Generowanie meszy...</string>

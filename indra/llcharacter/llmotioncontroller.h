@@ -148,12 +148,16 @@ public:
 	void pauseAllMotions();
 	void unpauseAllMotions();
 	BOOL isPaused() const { return mPaused; }
+    S32 getPausedFrame() const { return mPausedFrame; }
 
 	void setTimeStep(F32 step);
+    F32 getTimeStep() const { return mTimeStep; }
 
 	void setTimeFactor(F32 time_factor);
 	F32 getTimeFactor() const { return mTimeFactor; }
 
+    F32 getAnimTime() const { return mAnimTime; }
+    
 	// <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
 	void setUpdateFactor(F32 update_factor) { mUpdateFactor = update_factor; }
 
@@ -222,7 +226,7 @@ protected:
 	F32					mLastTime;
 	BOOL				mHasRunOnce;
 	BOOL				mPaused;
-	F32					mPauseTime;
+	S32					mPausedFrame;
 	F32					mTimeStep;
 	S32					mTimeStepCount;
 	F32					mLastInterp;
