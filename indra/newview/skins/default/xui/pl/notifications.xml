@@ -4272,6 +4272,9 @@ Spróbuj ponownie za minutę.
 	<notification name="CantCreateObjectRegionFull">
 		Nie można utworzyć żądanego obiektu. Region jest pełny.
 	</notification>
+	<notification name="CantCreateAnimatedObjectTooLarge">
+		Nie można utworzyć żądanego obiektu animowanego, ponieważ przekracza on limit trójkątów riggowania.
+	</notification>
 	<notification name="CantAttackMultipleObjOneSpot">
 		Nie możesz podłączyć wielu obiektów do jednego punktu.
 	</notification>
@@ -4319,6 +4322,21 @@ Spróbuj ponownie za minutę.
 	</notification>
 	<notification name="CantChangeShape">
 		Nie masz pozwolenia na zmianę tego kształtu.
+	</notification>
+	<notification name="NoPermsTooManyAttachedAnimatedObjects">
+		Operacja spowodowałaby przekroczenie limitu liczby dołączonych animowanych obiektów.
+	</notification>
+	<notification name="NoPermsLinkAnimatedObjectTooLarge">
+		Nie można połączyć tych obiektów, ponieważ powstały animowany obiekt przekroczyłby limit trójkątów riggowania.
+	</notification>
+	<notification name="NoPermsSetFlagAnimatedObjectTooLarge">
+		Nie można przekształcić tego obiektu w animowany obiekt, ponieważ przekroczyłby limit trójkątów riggowania.
+	</notification>
+	<notification name="CantChangeAnimatedObjectStateInsufficientLand">
+		Nie można zmienić stanu animowanego obiektu dla tej rzeczy, ponieważ spowodowałoby to przekroczenie limitu działki.
+	</notification>
+	<notification name="ErrorNoMeshData">
+		Błąd serwera: nie można ukończyć tej operacji, ponieważ dane meszu nie zostały załadowane.
 	</notification>
 	<notification name="NoAccessToClaimObjects">
 		Twoje uprawnienia nie pozwalają Ci na żądanie obiektów w tym miejscu.

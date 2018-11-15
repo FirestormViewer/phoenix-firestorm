@@ -120,9 +120,11 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
     mMouseOutsideSlop = FALSE;
 	mMouseDownX = x;
 	mMouseDownY = y;
-
+    LLTimer pick_timer;
+    BOOL pick_rigged = false; //gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
 	//left mouse down always picks transparent (but see handleMouseUp)
-	mPick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE);
+	mPick = gViewerWindow->pickImmediate(x, y, TRUE, pick_rigged);
+    LL_INFOS() << "pick_rigged is " << (S32) pick_rigged << " pick time elapsed " << pick_timer.getElapsedTimeF32() << LL_ENDL;
 	mPick.mKeyMask = mask;
 
 	mMouseButtonDown = true;
@@ -137,10 +139,10 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 BOOL LLToolPie::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	// don't pick transparent so users can't "pay" transparent objects
-	// <FS:Ansariel> FIRE-1396: Allow selecting transparent objects
-	//mPick = gViewerWindow->pickImmediate(x, y, /*BOOL pick_transparent*/ FALSE, /*BOOL pick_rigged*/ TRUE, /*BOOL pick_particle*/ TRUE);
-	mPick = gViewerWindow->pickImmediate(x, y, /*BOOL pick_transparent*/ gSavedSettings.getBOOL("FSEnableRightclickOnTransparentObjects"), /*BOOL pick_rigged*/ TRUE, /*BOOL pick_particle*/ TRUE);
-	// </FS:Ansariel>
+	mPick = gViewerWindow->pickImmediate(x, y,
+                                         /*BOOL pick_transparent*/ gSavedSettings.getBOOL("FSEnableRightclickOnTransparentObjects"), // FALSE, // <FS:Ansariel> FIRE-1396: Allow selecting transparent objects
+                                         /*BOOL pick_rigged*/ TRUE,
+                                         /*BOOL pick_particle*/ TRUE);
 	mPick.mKeyMask = mask;
 
 	// claim not handled so UI focus stays same
@@ -588,7 +590,8 @@ void LLToolPie::selectionPropertiesReceived()
 
 BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 {
-	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE, FALSE);
+    BOOL pick_rigged = false; //gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
+	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE, pick_rigged);
 	LLViewerObject *parent = NULL;
 	LLViewerObject *object = mHoverPick.getObject();
 // [RLVa:KB] - Checked: RLVa-1.1.0
@@ -649,7 +652,7 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 	else
 	{
 		// perform a separate pick that detects transparent objects since they respond to 1-click actions
-		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE);
+		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE, pick_rigged);
 
 		LLViewerObject* click_action_object = click_action_pick.getObject();
 
@@ -741,6 +744,7 @@ BOOL LLToolPie::handleMouseUp(S32 x, S32 y, MASK mask)
         LLPickInfo savedPick = mPick;
         mPick = gViewerWindow->pickImmediate(savedPick.mMousePt.mX, savedPick.mMousePt.mY,
                                              FALSE /* ignore transparent */,
+                                             FALSE /* ignore rigged */,
                                              FALSE /* ignore particles */);
 
 //        if (!mPick.mPosGlobal.isExactlyZero()			// valid coordinates for pick
@@ -844,6 +848,7 @@ BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
         LLPickInfo savedPick = mPick;
         mPick = gViewerWindow->pickImmediate(savedPick.mMousePt.mX, savedPick.mMousePt.mY,
                                              FALSE /* ignore transparent */,
+                                             FALSE /* ignore rigged */,
                                              FALSE /* ignore particles */);
 
         if(mPick.mPickType == LLPickInfo::PICK_OBJECT)
@@ -2106,8 +2111,7 @@ BOOL LLToolPie::handleRightClickPick()
 		gMenuHolder->setObjectSelection(LLSelectMgr::getInstance()->getSelection());
 
 		bool is_other_attachment = (object->isAttachment() && !object->isHUDAttachment() && !object->permYouOwner());
-		if (object->isAvatar() 
-			|| is_other_attachment)
+		if (object->isAvatar() || is_other_attachment)
 		{
 			// Find the attachment's avatar
 			while( object && object->isAttachment())
