@@ -1869,7 +1869,7 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(
         //U32 count = LLSkinningUtil::getMeshJointCount(skin);
 		//LLSkinningUtil::initSkinningMatrixPalette(mat, count, skin, avatar);
 		U32 count = LLSkinningUtil::getMeshJointCount(skin);
-		auto mat = getCacheSkinningMats(face, skin, count, avatar);
+		auto mat = getCacheSkinningMats(drawable, skin, count, avatar);
 		//</FS:Beq>
         LLSkinningUtil::checkSkinWeights(weights, buffer->getNumVerts(), skin);
 
@@ -1907,19 +1907,28 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(
 }
 
 //<FS:Beq> cache per frame Skinning mats
-LLMatrix4a* LLDrawPoolAvatar::getCacheSkinningMats(LLFace * face, const LLMeshSkinInfo* skin, U32 count, LLVOAvatar* avatar)
+LLMatrix4a* LLDrawPoolAvatar::getCacheSkinningMats(LLDrawable* drawable, const LLMeshSkinInfo* skin,
+                                                   U32 count, LLVOAvatar* avatar)
 {
-	if (LLFrameTimer::getFrameCount() != face->mLastSkinningMatCacheFrame)
+	if (drawable->mCacheSize < count || !drawable->mSkinningMatCache)
 	{
-//		LL_DEBUGS("Skinning") << "Call InitSkinningMatrixPalette for @" << (U64)face << " type=[" << type << "]" << LL_ENDL;
-		face->mLastSkinningMatCacheFrame = LLFrameTimer::getFrameCount();
-		LLSkinningUtil::initSkinningMatrixPalette(face->mSkinningMatCache, count, skin, avatar);
+		delete[](drawable->mSkinningMatCache);
+		drawable->mCacheSize = count;
+		drawable->mSkinningMatCache = new LLMatrix4a[count];
+	}
+
+	if (drawable->mSkinningMatCache && LLFrameTimer::getFrameCount() != drawable->mLastSkinningMatCacheFrame)
+	{
+//		LL_DEBUGS("Skinning") << "Call InitSkinningMatrixPalette for drawable @" << (U64)drawable << LL_ENDL;
+		//<FS:Beq> add caching of matrix pallette as high up the stack as we can
+		drawable->mLastSkinningMatCacheFrame = LLFrameTimer::getFrameCount();
+		LLSkinningUtil::initSkinningMatrixPalette(drawable->mSkinningMatCache, count, skin, avatar);
 	}
 	else
 	{
-//		LL_DEBUGS("Skinning") << "Avoiding InitSkinningMatrixPalette for face @" << (U64)face << " type=[" << type << "]" << LL_ENDL;
+//		LL_DEBUGS("Skinning") << "Avoiding InitSkinningMatrixPalette for drawable @" << (U64)drawable << LL_ENDL;
 	}
-	return face->mSkinningMatCache;
+	return drawable->mSkinningMatCache;
 }
 //</FS:Beq>
 
@@ -1984,7 +1993,7 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 				//U32 count = LLSkinningUtil::getMeshJointCount(skin);
 				//LLSkinningUtil::initSkinningMatrixPalette(mat, count, skin, avatar);
 				U32 count = LLSkinningUtil::getMeshJointCount(skin);
-				auto mat = getCacheSkinningMats(face, skin, count, avatar);
+				auto mat = getCacheSkinningMats(drawable, skin, count, avatar);
 				//</FS:Beq>
 				
 				stop_glerror();
@@ -2184,7 +2193,7 @@ void LLDrawPoolAvatar::renderRiggedShadows(LLVOAvatar* avatar)
 				//U32 count = LLSkinningUtil::getMeshJointCount(skin);
 				//LLSkinningUtil::initSkinningMatrixPalette(mat, count, skin, avatar);
 				U32 count = LLSkinningUtil::getMeshJointCount(skin);
-				auto mat = getCacheSkinningMats(face, skin, count, avatar);
+				auto mat = getCacheSkinningMats(drawable, skin, count, avatar);
 				//</FS:Beq>
 
 				stop_glerror();

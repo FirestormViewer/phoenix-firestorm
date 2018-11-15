@@ -172,7 +172,10 @@ void LLSkinningUtil::scrubInvalidJoints(LLVOAvatar *avatar, LLMeshSkinInfo* skin
 //		}
 //	}
 //}
-static LLTrace::BlockTimerStatHandle FTM_SKINNING_INIT("Init Skinning Mats");
+
+#ifndef LL_RELEASE_FOR_DOWNLOAD
+static LLTrace::BlockTimerStatHandle FTM_SKINNING_INIT("Init Skinning Mats"); 
+#endif
 
 void LLSkinningUtil::initSkinningMatrixPalette(
     LLMatrix4a* mat,
@@ -194,11 +197,27 @@ void LLSkinningUtil::initSkinningMatrixPalette(
 	for (S32 j = 0; j < count; ++j)
     {
         LLJoint *joint = avatar->getJoint(skin->mJointNums[j]);
-		llassert_always(joint != nullptr);
+		if (joint != nullptr){
+			bind[j].loadu(skin->mInvBindMatrix[j]);
+			world[j].loadu(joint->getWorldMatrix());
+			matMul(bind[j], world[j], mat[j]);
+		}
+		else
+		{
+			mat[j].loadu(skin->mInvBindMatrix[j]);
+			// This  shouldn't  happen   -  in  mesh  upload,  skinned
+			// rendering  should  be disabled  unless  all joints  are
+			// valid.  In other  cases of  skinned  rendering, invalid
+			// joints should already have  been removed during scrubInvalidJoints().
+			// Beq note - Oct 2018 Animesh - Many rigged meshes still fail here. ('mElbowLeeft' typo in the rigging data)
+			LL_WARNS_ONCE("Avatar") << avatar->getFullname()
+				<< " rigged to invalid joint name " << skin->mJointNames[j]
+				<< " num " << skin->mJointNums[j] << LL_ENDL;
+			LL_WARNS_ONCE("Avatar") << avatar->getFullname()
+				<< " avatar build state: isBuilt() " << avatar->isBuilt()
+				<< " mInitFlags " << avatar->mInitFlags << LL_ENDL;
 
-	    bind[j].loadu(skin->mInvBindMatrix[j]);
-        world[j].loadu(joint->getWorldMatrix());
-        matMul(bind[j],world[j],mat[j]);
+		}
 //LL_DEBUGS("Skinning") << "[" << avatar->getFullname() << "] joint(" << skin->mJointNames[j] << ") matices bind(" << bind << ") world(" << world << ")" << LL_ENDL;
     }
 }

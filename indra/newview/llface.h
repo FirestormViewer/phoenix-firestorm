@@ -263,11 +263,6 @@ public:
 	F32			mLastMoveTime;
 	LLMatrix4*	mTextureMatrix;
 	LLMatrix4*	mSpecMapMatrix;
-	//<FS:Beq>	per frame matrix cache
-	U32 mLastSkinningMatCacheFrame;
-	// TODO: we could dynamically create this using count to save memory.
-	LLMatrix4a mSkinningMatCache[LL_MAX_JOINTS_PER_MESH_OBJECT];
-	//</FS:Beq>
 	LLMatrix4*	mNormalMapMatrix;
 	LLDrawInfo* mDrawInfo;
 

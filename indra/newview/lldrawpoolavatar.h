@@ -28,6 +28,7 @@
 #define LL_LLDRAWPOOLAVATAR_H
 
 #include "lldrawpool.h"
+#include "fsareasearch.h"
 
 class LLVOAvatar;
 class LLGLSLShader;
@@ -65,7 +66,8 @@ public:
 
 	static LLMatrix4& getModelView();
 	//<FS:Beq> per frame cache 
-	static 	LLMatrix4a* getCacheSkinningMats(LLFace* face, const LLMeshSkinInfo* skin, U32 count, LLVOAvatar* avatar);
+	static LLMatrix4a* getCacheSkinningMats(LLDrawable* drawable, const LLMeshSkinInfo* skin, U32 count,
+	                                        LLVOAvatar* avatar);
 	//</FS:Beq>
 	/*virtual*/ LLDrawPool *instancePool();
 
