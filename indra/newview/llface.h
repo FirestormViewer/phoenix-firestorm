@@ -39,6 +39,7 @@
 #include "llvertexbuffer.h"
 #include "llviewertexture.h"
 #include "lldrawable.h"
+#include "lljoint.h"
 
 class LLFacePool;
 class LLVolume;
@@ -268,7 +269,6 @@ public:
 
 private:
 	LLPointer<LLVertexBuffer> mVertexBuffer;
-		
 	U32			mState;
 	LLFacePool*	mDrawPoolp;
 	U32			mPoolType;

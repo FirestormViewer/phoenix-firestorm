@@ -36,6 +36,10 @@
 		</pie_menu>
 		<pie_slice label="Zurückgeben" name="Return..."/>
 		<pie_menu label="Mehr &gt;" name="Object Pie More 2">
+			<pie_menu name="ResetMenu" label="Zurücksetz. &gt;">
+				<pie_slice label="Tex Refresh" name="Texture Refresh"/>
+				<pie_slice label="Skelett" name="Reset Skeleton"/>
+			</pie_menu>
 			<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">
 				<pie_slice label="Blacklist" name="DerenderPermanent"/>
 				<pie_slice label="Temporär" name="Derender"/>
@@ -44,6 +48,7 @@
 			<pie_menu name="ExportMenu" label="Speichern als &gt;">
 				<pie_slice label="Backup" name="Backup"/>
 				<pie_slice label="Collada" name="Collada"/>
+				<pie_slice label="XML ausgeben" name="Dump XML"/>
 			</pie_menu>
 			<pie_menu label="Pathfinding &gt;" name="Pathfinding">
 				<pie_slice label="In Linksets" name="show_in_linksets"/>

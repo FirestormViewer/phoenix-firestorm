@@ -1279,6 +1279,11 @@ void LLInventoryPanel::onSelectionChange(const std::deque<LLFolderViewItem*>& it
 			LLFolderViewModelItemInventory* fve_listener = static_cast<LLFolderViewModelItemInventory*>(folder_item->getViewModelItem());
 			if (fve_listener && (fve_listener->getInventoryType() == LLInventoryType::IT_CATEGORY))
 			{
+				if (fve_listener->getInventoryObject() && fve_listener->getInventoryObject()->getIsLinkType())
+				{
+					return;
+				}
+
 				if(prev_folder_item)
 				{
 					LLFolderBridge* prev_bridge = dynamic_cast<LLFolderBridge*>(prev_folder_item->getViewModelItem());

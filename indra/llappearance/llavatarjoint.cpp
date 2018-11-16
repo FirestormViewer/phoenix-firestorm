@@ -181,7 +181,11 @@ BOOL LLAvatarJoint::updateLOD(F32 pixel_area, BOOL activate)
 	for (child_list_t::iterator iter = mChildren.begin();
 		 iter != mChildren.end(); ++iter)
 	{
-		LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+//<FS:Beq> Make this s static cast. The dynamic cast must be working or it would have been crashing on the nullptr in the next line.
+//		LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+		LLAvatarJoint* joint = static_cast<LLAvatarJoint*>(*iter);
+//</FS:Beq>
+
 		F32 jointLOD = joint->getLOD();
 		
 		if (found_lod || jointLOD == DEFAULT_AVATAR_JOINT_LOD)

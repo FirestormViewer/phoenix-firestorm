@@ -508,7 +508,7 @@ void LLDrawPoolAvatar::renderShadow(S32 pass)
 	}
 	LLVOAvatar *avatarp = (LLVOAvatar *)facep->getDrawable()->getVObj().get();
 
-	if (avatarp->isDead() || avatarp->mIsDummy || avatarp->mDrawable.isNull())
+	if (avatarp->isDead() || avatarp->isUIAvatar() || avatarp->mDrawable.isNull())
 	{
 		return;
 	}
@@ -1975,9 +1975,13 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(
 		LLVector4a* norm = has_normal ? (LLVector4a*) normal.get() : NULL;
 		
 		//build matrix palette
-		LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
-        U32 count = LLSkinningUtil::getMeshJointCount(skin);
-        LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, count, skin, avatar);
+		//<FS:Beq> per frame cache of skinning matrices
+		//LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
+        //U32 count = LLSkinningUtil::getMeshJointCount(skin);
+		//LLSkinningUtil::initSkinningMatrixPalette(mat, count, skin, avatar);
+		U32 count = LLSkinningUtil::getMeshJointCount(skin);
+		auto mat = getCacheSkinningMats(drawable, skin, count, avatar);
+		//</FS:Beq>
         LLSkinningUtil::checkSkinWeights(weights, buffer->getNumVerts(), skin);
 
 		LLMatrix4a bind_shape_matrix;
@@ -2013,9 +2017,35 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(
 	}
 }
 
+//<FS:Beq> cache per frame Skinning mats
+LLMatrix4a* LLDrawPoolAvatar::getCacheSkinningMats(LLDrawable* drawable, const LLMeshSkinInfo* skin,
+                                                   U32 count, LLVOAvatar* avatar)
+{
+	if (drawable->mCacheSize < count || !drawable->mSkinningMatCache)
+	{
+		delete[](drawable->mSkinningMatCache);
+		drawable->mCacheSize = count;
+		drawable->mSkinningMatCache = new LLMatrix4a[count];
+	}
+
+	if (drawable->mSkinningMatCache && LLFrameTimer::getFrameCount() != drawable->mLastSkinningMatCacheFrame)
+	{
+//		LL_DEBUGS("Skinning") << "Call InitSkinningMatrixPalette for drawable @" << (U64)drawable << LL_ENDL;
+		//<FS:Beq> add caching of matrix pallette as high up the stack as we can
+		drawable->mLastSkinningMatCacheFrame = LLFrameTimer::getFrameCount();
+		LLSkinningUtil::initSkinningMatrixPalette(drawable->mSkinningMatCache, count, skin, avatar);
+	}
+	else
+	{
+//		LL_DEBUGS("Skinning") << "Avoiding InitSkinningMatrixPalette for drawable @" << (U64)drawable << LL_ENDL;
+	}
+	return drawable->mSkinningMatCache;
+}
+//</FS:Beq>
+
 void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 {
-	if (avatar->isSelf() && !gAgent.needsRenderAvatar())
+	if (!avatar->shouldRenderRigged())
 	{
 		return;
 	}
@@ -2046,13 +2076,7 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 			continue;
 		}
 
-		LLUUID mesh_id = volume->getParams().getSculptID();
-		if (mesh_id.isNull())
-		{
-			continue;
-		}
-
-		const LLMeshSkinInfo* skin = gMeshRepo.getSkinInfo(mesh_id, vobj);
+		const LLMeshSkinInfo* skin = vobj->getSkinInfo();
 		if (!skin)
 		{
 			continue;
@@ -2073,11 +2097,16 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 		{
 			if (sShaderLevel > 0)
 			{
-                // upload matrix palette to shader
-				LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
-				U32 count = LLSkinningUtil::getMeshJointCount(skin);
-                LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, count, skin, avatar);
+				// upload matrix palette to shader
 
+				//<FS:Beq> per frame cache of skinning matrices
+				//LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
+				//U32 count = LLSkinningUtil::getMeshJointCount(skin);
+				//LLSkinningUtil::initSkinningMatrixPalette(mat, count, skin, avatar);
+				U32 count = LLSkinningUtil::getMeshJointCount(skin);
+				auto mat = getCacheSkinningMats(drawable, skin, count, avatar);
+				//</FS:Beq>
+				
 				stop_glerror();
 
 				F32 mp[LL_MAX_JOINTS_PER_MESH_OBJECT*12];
@@ -2254,13 +2283,7 @@ void LLDrawPoolAvatar::renderRiggedShadows(LLVOAvatar* avatar)
 			continue;
 		}
 
-		LLUUID mesh_id = volume->getParams().getSculptID();
-		if (mesh_id.isNull())
-		{
-			continue;
-		}
-
-		const LLMeshSkinInfo* skin = gMeshRepo.getSkinInfo(mesh_id, vobj);
+		const LLMeshSkinInfo* skin = vobj->getSkinInfo();
 		if (!skin)
 		{
 			continue;
@@ -2275,9 +2298,14 @@ void LLDrawPoolAvatar::renderRiggedShadows(LLVOAvatar* avatar)
 			if (sShaderLevel > 0)
 			{
 				// upload matrix palette to shader
-				LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
+
+				//<FS:Beq> per frame cache of skinning matrices
+				//LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
+				//U32 count = LLSkinningUtil::getMeshJointCount(skin);
+				//LLSkinningUtil::initSkinningMatrixPalette(mat, count, skin, avatar);
 				U32 count = LLSkinningUtil::getMeshJointCount(skin);
-				LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, count, skin, avatar);
+				auto mat = getCacheSkinningMats(drawable, skin, count, avatar);
+				//</FS:Beq>
 
 				stop_glerror();
 
@@ -2412,13 +2440,7 @@ void LLDrawPoolAvatar::updateRiggedVertexBuffers(LLVOAvatar* avatar)
 				continue;
 			}
 
-			LLUUID mesh_id = volume->getParams().getSculptID();
-			if (mesh_id.isNull())
-			{
-				continue;
-			}
-
-			const LLMeshSkinInfo* skin = gMeshRepo.getSkinInfo(mesh_id, vobj);
+			const LLMeshSkinInfo* skin = vobj->getSkinInfo();
 			if (!skin)
 			{
 				continue;
@@ -2539,11 +2561,16 @@ LLColor3 LLDrawPoolAvatar::getDebugColor() const
 
 void LLDrawPoolAvatar::addRiggedFace(LLFace* facep, U32 type)
 {
+    llassert (facep->isState(LLFace::RIGGED));
+    llassert(getType() == LLDrawPool::POOL_AVATAR);
+    if (facep->getPool() && facep->getPool() != this)
+    {
+        LL_ERRS() << "adding rigged face that's already in another pool" << LL_ENDL;
+    }
 	if (type >= NUM_RIGGED_PASSES)
 	{
 		LL_ERRS() << "Invalid rigged face type." << LL_ENDL;
 	}
-
 	if (facep->getRiggedIndex(type) != -1)
 	{
 		LL_ERRS() << "Tried to add a rigged face that's referenced elsewhere." << LL_ENDL;
@@ -2556,6 +2583,12 @@ void LLDrawPoolAvatar::addRiggedFace(LLFace* facep, U32 type)
 
 void LLDrawPoolAvatar::removeRiggedFace(LLFace* facep)
 {
+    llassert (facep->isState(LLFace::RIGGED));
+    llassert(getType() == LLDrawPool::POOL_AVATAR);
+    if (facep->getPool() != this)
+    {
+        LL_ERRS() << "Tried to remove a rigged face from the wrong pool" << LL_ENDL;
+    }
 	facep->setPool(NULL);
 
 	for (U32 i = 0; i < NUM_RIGGED_PASSES; ++i)

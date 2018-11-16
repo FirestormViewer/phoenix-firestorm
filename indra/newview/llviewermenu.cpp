@@ -1113,7 +1113,7 @@ class LLAdvancedSetDisplayTextureDensity : public view_listener_t
 //////////////////
 // INFO DISPLAY //
 //////////////////
-U32 info_display_from_string(std::string info_display)
+U64 info_display_from_string(std::string info_display)
 {
 	if ("verify" == info_display)
 	{
@@ -1227,6 +1227,14 @@ U32 info_display_from_string(std::string info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_TEXEL_DENSITY;
 	}
+	else if ("triangle count" == info_display)
+	{
+		return LLPipeline::RENDER_DEBUG_TRIANGLE_COUNT;
+	}
+	else if ("impostors" == info_display)
+	{
+		return LLPipeline::RENDER_DEBUG_IMPOSTORS;
+	}
 	else if ("texture size" == info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_TEXTURE_SIZE;
@@ -1242,7 +1250,7 @@ class LLAdvancedToggleInfoDisplay : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		U32 info_display = info_display_from_string( userdata.asString() );
+		U64 info_display = info_display_from_string( userdata.asString() );
 
 		LL_INFOS("ViewerMenu") << "toggle " << userdata.asString() << LL_ENDL;
 		
@@ -1260,7 +1268,7 @@ class LLAdvancedCheckInfoDisplay : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		U32 info_display = info_display_from_string( userdata.asString() );
+		U64 info_display = info_display_from_string( userdata.asString() );
 		bool new_value = false;
 
 		if ( info_display != 0 )
@@ -1818,7 +1826,24 @@ class LLAdvancedEnableAppearanceToXML : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		return gSavedSettings.getBOOL("DebugAvatarAppearanceMessage");
+        LLViewerObject *obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+        if (obj && obj->isAnimatedObject() && obj->getControlAvatar())
+        {
+            return gSavedSettings.getBOOL("DebugAnimatedObjects");
+        }
+        else if (obj && obj->isAttachment() && obj->getAvatar())
+        {
+            return gSavedSettings.getBOOL("DebugAvatarAppearanceMessage");
+        }
+        else if (obj && obj->isAvatar())
+        {
+            // This has to be a non-control avatar, because control avs are invisible and unclickable.
+            return gSavedSettings.getBOOL("DebugAvatarAppearanceMessage");
+        }
+		else
+		{
+			return false;
+		}
 	}
 };
 
@@ -1827,13 +1852,34 @@ class LLAdvancedAppearanceToXML : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 		std::string emptyname;
-		LLVOAvatar* avatar =
-			find_avatar_from_object( LLSelectMgr::getInstance()->getSelection()->getPrimaryObject() );
-		if (!avatar)
-		{
+        LLViewerObject *obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+        LLVOAvatar *avatar = NULL;
+        if (obj)
+        {
+            if (obj->isAvatar())
+            {
+                avatar = obj->asAvatar();
+            }
+            else
+            {
+                // If there is a selection, find the associated
+                // avatar. Normally there's only one obvious choice. But
+                // what should be returned if the object is in an attached
+                // animated object? getAvatar() will give the skeleton of
+                // the animated object. getAvatarAncestor() will give the
+                // actual human-driven avatar.
+                avatar = obj->getAvatar();
+            }
+        }
+        else
+        {
+            // If no selection, use the self avatar.
 			avatar = gAgentAvatarp;
-		}
-		avatar->dumpArchetypeXML(emptyname);
+        }
+        if (avatar)
+        {
+            avatar->dumpArchetypeXML(emptyname);
+        }
 		return true;
 	}
 };
@@ -7520,7 +7566,15 @@ class LLAvatarResetSkeleton: public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-		LLVOAvatar* avatar = find_avatar_from_object( LLSelectMgr::getInstance()->getSelection()->getPrimaryObject() );
+        // <FS:Ansariel> Fix reset skeleton not working
+		//LLVOAvatar* avatar = NULL;
+        //LLViewerObject *obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+        //if (obj)
+        //{
+        //    avatar = obj->getAvatar();
+        //}
+        LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+        // </FS:Ansariel>
 		if(avatar)
         {
             avatar->resetSkeleton(false);
@@ -7528,6 +7582,20 @@ class LLAvatarResetSkeleton: public view_listener_t
         return true;
     }
 };
+
+class LLAvatarEnableResetSkeleton: public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        LLViewerObject *obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+        if (obj && obj->getAvatar())
+        {
+            return true;
+        }
+        return false;
+    }
+};
+
 
 class LLAvatarResetSkeletonAndAnimations : public view_listener_t
 {
@@ -8557,7 +8625,7 @@ class LLAttachmentEnableDrop : public view_listener_t
 		// Do not enable drop if all faces of object are not enabled
 		if (object && LLSelectMgr::getInstance()->getSelection()->contains(object,SELECT_ALL_TES ))
 		{
-    		S32 attachmentID  = ATTACHMENT_ID_FROM_STATE(object->getState());
+    		S32 attachmentID  = ATTACHMENT_ID_FROM_STATE(object->getAttachmentState());
 			attachment = get_if_there(gAgentAvatarp->mAttachmentPoints, attachmentID, (LLViewerJointAttachment*)NULL);
 
 			if (attachment)
@@ -11595,6 +11663,7 @@ void initialize_menus()
 
 	view_listener_t::addMenu(new LLAvatarToggleMyProfile(), "Avatar.ToggleMyProfile");
 	view_listener_t::addMenu(new LLAvatarResetSkeleton(), "Avatar.ResetSkeleton");
+	view_listener_t::addMenu(new LLAvatarEnableResetSkeleton(), "Avatar.EnableResetSkeleton");
 	view_listener_t::addMenu(new LLAvatarResetSkeletonAndAnimations(), "Avatar.ResetSkeletonAndAnimations");
 	enable.add("Avatar.IsMyProfileOpen", boost::bind(&my_profile_visible));
 

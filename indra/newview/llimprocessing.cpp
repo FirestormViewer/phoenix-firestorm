@@ -2116,11 +2116,17 @@ void LLIMProcessing::requestOfflineMessages()
     {
         std::string cap_url = gAgent.getRegionCapability("ReadOfflineMsgs");
 
+        // <FS:Ansariel> Optional legacy offline messages
+        if (!gSavedSettings.getBOOL("FSUseReadOfflineMsgsCap"))
+        {
+            cap_url = "";
+        }
+        // </FS:Ansariel>
+
         // Auto-accepted inventory items may require the avatar object
         // to build a correct name.  Likewise, inventory offers from
         // muted avatars require the mute list to properly mute.
         if (cap_url.empty()
-            || gSavedSettings.getBOOL("FSUseReadOfflineMsgsCap") // <FS:Ansariel> Optional legacy offline messages
             || gAgent.getRegionCapability("AcceptFriendship").empty()
             || gAgent.getRegionCapability("AcceptGroupInvite").empty())
         {

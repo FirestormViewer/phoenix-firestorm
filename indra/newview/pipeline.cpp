@@ -3540,6 +3540,22 @@ void LLPipeline::markRebuild(LLDrawable *drawablep, LLDrawable::EDrawableFlags f
 {
 	if (drawablep && !drawablep->isDead() && assertInitialized())
 	{
+		//<FS:Beq> avoid unfortunate sleep during trylock by static check
+		//if(debugLoggingEnabled("AnimatedObjectsLinkset"))
+		static auto debug_logging_on = debugLoggingEnabled("AnimatedObjectsLinkset");
+		if (debug_logging_on)
+		//</FS:Beq>
+		{
+            LLVOVolume *vol_obj = drawablep->getVOVolume();
+            if (vol_obj && vol_obj->isAnimatedObject() && vol_obj->isRiggedMesh())
+            {
+                std::string vobj_name = llformat("Vol%p", vol_obj);
+                F32 est_tris = vol_obj->getEstTrianglesMax();
+                LL_DEBUGS("AnimatedObjectsLinkset") << vobj_name << " markRebuild, tris " << est_tris 
+                                                    << " priority " << (S32) priority << " flag " << std::hex << flag << LL_ENDL; 
+            }
+        }
+    
 		if (!drawablep->isState(LLDrawable::BUILT))
 		{
 			priority = true;
@@ -7047,7 +7063,7 @@ bool LLPipeline::toggleRenderTypeControlNegated(S32 type)
 }
 
 //static
-void LLPipeline::toggleRenderDebug(U32 bit)
+void LLPipeline::toggleRenderDebug(U64 bit)
 {
 	if (gPipeline.hasRenderDebugMask(bit))
 	{
@@ -7062,7 +7078,7 @@ void LLPipeline::toggleRenderDebug(U32 bit)
 
 
 //static
-bool LLPipeline::toggleRenderDebugControl(U32 bit)
+bool LLPipeline::toggleRenderDebugControl(U64 bit)
 {
 	return gPipeline.hasRenderDebugMask(bit);
 }
@@ -11976,6 +11992,7 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 
 	avatar->mNeedsImpostorUpdate = FALSE;
 	avatar->cacheImpostorValues();
+	avatar->mLastImpostorUpdateFrameTime = gFrameTimeSeconds;
 
 	LLVertexBuffer::unbind();
 	LLGLState::checkStates();

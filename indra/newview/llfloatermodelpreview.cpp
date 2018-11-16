@@ -736,6 +736,11 @@ void LLFloaterModelPreview::draw()
 			childSetTextArg("status", "[STATUS]", getString("status_parse_error"));
 			toggleCalculateButton(false);
 		}
+        else
+        if (mModelPreview->getLoadState() == LLModelLoader::WARNING_BIND_SHAPE_ORIENTATION)
+        {
+			childSetTextArg("status", "[STATUS]", getString("status_bind_shape_orientation"));
+        }
 		else
 		{
 			childSetTextArg("status", "[STATUS]", getString("status_idle"));
@@ -1442,7 +1447,11 @@ U32 LLModelPreview::calcResourceCost()
 
 			F32 radius = scale.length()*0.5f*debug_scale;
 
-			streaming_cost += LLMeshRepository::getStreamingCost(ret, radius);
+            LLMeshCostData costs;
+            if (gMeshRepo.getCostData(ret, costs))
+            {
+                streaming_cost += costs.getRadiusBasedStreamingCost(radius);
+            }
 		}
 	}
 
@@ -1698,6 +1707,19 @@ void LLModelPreview::rebuildUploadData()
 						mFMP->childDisable( "calculate_btn" );
 					}
 				}
+                LLFloaterModelPreview* fmp = (LLFloaterModelPreview*) mFMP;
+                bool upload_skinweights = fmp && fmp->childGetValue("upload_skin").asBoolean();
+                if (upload_skinweights && high_lod_model->mSkinInfo.mJointNames.size() > 0)
+                {
+                    LLQuaternion bind_rot = LLSkinningUtil::getUnscaledQuaternion(high_lod_model->mSkinInfo.mBindShapeMatrix);
+                    LLQuaternion identity;
+                    if (!bind_rot.isEqualEps(identity,0.01f))
+                    {
+                        LL_WARNS() << "non-identity bind shape rot. mat is " << high_lod_model->mSkinInfo.mBindShapeMatrix 
+                                   << " bind_rot " << bind_rot << LL_ENDL;
+                        setLoadState( LLModelLoader::WARNING_BIND_SHAPE_ORIENTATION );
+                    }
+                }
 			}
 			instance.mTransform = mat;
 			mUploadData.push_back(instance);
@@ -1847,9 +1869,17 @@ void LLModelPreview::getJointAliases( JointMap& joint_map)
     //Joint names and aliases come from avatar_skeleton.xml
     
     joint_map = av->getJointAliases();
-    for (S32 i = 0; i < av->mNumCollisionVolumes; i++)
+
+    std::vector<std::string> cv_names, attach_names;
+    av->getSortedJointNames(1, cv_names);
+    av->getSortedJointNames(2, attach_names);
+    for (std::vector<std::string>::iterator it = cv_names.begin(); it != cv_names.end(); ++it)
     {
-        joint_map[av->mCollisionVolumes[i].getName()] = av->mCollisionVolumes[i].getName();
+        joint_map[*it] = *it;
+    }
+    for (std::vector<std::string>::iterator it = attach_names.begin(); it != attach_names.end(); ++it)
+    {
+        joint_map[*it] = *it;
     }
 }
 
@@ -3627,16 +3657,11 @@ void LLModelPreview::update()
 //-----------------------------------------------------------------------------
 void LLModelPreview::createPreviewAvatar( void )
 {
-	mPreviewAvatar = (LLVOAvatar*)gObjectList.createObjectViewer( LL_PCODE_LEGACY_AVATAR, gAgent.getRegion() );
+	mPreviewAvatar = (LLVOAvatar*)gObjectList.createObjectViewer( LL_PCODE_LEGACY_AVATAR, gAgent.getRegion(), LLViewerObject::CO_FLAG_UI_AVATAR );
 	if ( mPreviewAvatar )
 	{
 		mPreviewAvatar->createDrawable( &gPipeline );
-		mPreviewAvatar->mIsDummy = TRUE;
 		mPreviewAvatar->mSpecialRenderMode = 1;
-		mPreviewAvatar->setPositionAgent( LLVector3::zero );
-		mPreviewAvatar->slamPosition();
-		mPreviewAvatar->updateJointLODs();
-		mPreviewAvatar->updateGeometry( mPreviewAvatar->mDrawable );
 		mPreviewAvatar->startMotion( ANIM_AGENT_STAND );
 		mPreviewAvatar->hideSkirt();
 	}
@@ -4293,12 +4318,16 @@ BOOL LLModelPreview::render()
 							//quick 'n dirty software vertex skinning
 
 							//build matrix palette
-
+							//<FS:Beq> use Mat4a part of the caching changes, no point in using the cache itself in the preview though.
+							//LLMatrix4 mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
 							LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
-                            const LLMeshSkinInfo *skin = &model->mSkinInfo;
+							const LLMeshSkinInfo *skin = &model->mSkinInfo;
 							U32 count = LLSkinningUtil::getMeshJointCount(skin);
-                            LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, count,
-                                                                        skin, getPreviewAvatar());
+							//LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, count,
+							//											skin, getPreviewAvatar());
+                            LLSkinningUtil::initSkinningMatrixPalette(mat, count,
+                                                                      skin, getPreviewAvatar());
+							//</FS:Beq>
                             LLMatrix4a bind_shape_matrix;
                             bind_shape_matrix.loadu(skin->mBindShapeMatrix);
                             U32 max_joints = LLSkinningUtil::getMaxJointCount();
