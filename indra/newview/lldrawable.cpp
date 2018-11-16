@@ -168,10 +168,6 @@ void LLDrawable::unload()
 		}
 		facep->clearState(LLFace::RIGGED);
 	}
-	//<FS:Beq> ckinning matrix caching
-	delete[] mSkinningMatCache;
-	mSkinningMatCache = nullptr;
-	//</FS:Beq>
 	pVVol->markForUpdate(TRUE);
 }
 
@@ -206,8 +202,14 @@ void LLDrawable::destroy()
 
 	std::for_each(mFaces.begin(), mFaces.end(), DeletePointer());
 	mFaces.clear();
-		
-	
+
+	// <FS:Beq> close up potential memory leak
+	if (mSkinningMatCache)
+	{
+		ll_aligned_free_16(mSkinningMatCache);
+	}
+	// </FS:Beq>
+
 	/*if (!(sNumZombieDrawables % 10))
 	{
 		LL_INFOS() << "- Zombie drawables: " << sNumZombieDrawables << LL_ENDL;

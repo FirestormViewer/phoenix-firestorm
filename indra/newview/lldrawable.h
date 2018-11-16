@@ -82,8 +82,8 @@ public:
 	static void initClass();
 
 	//<FS:Beq>	per frame matrix cache
+	LL_ALIGN_16(LLMatrix4a* mSkinningMatCache);
 	U32 mLastSkinningMatCacheFrame;
-	LLMatrix4a* mSkinningMatCache;
 	U32 mCacheSize;
 	//</FS:Beq>
 
