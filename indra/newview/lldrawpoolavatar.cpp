@@ -2023,9 +2023,14 @@ LLMatrix4a* LLDrawPoolAvatar::getCacheSkinningMats(LLDrawable* drawable, const L
 {
 	if (drawable->mCacheSize < count || !drawable->mSkinningMatCache)
 	{
-		delete[](drawable->mSkinningMatCache);
+//		delete[](drawable->mSkinningMatCache);
+		if (drawable->mSkinningMatCache)
+		{
+			ll_aligned_free_16(drawable->mSkinningMatCache);
+		}
 		drawable->mCacheSize = count;
-		drawable->mSkinningMatCache = new LLMatrix4a[count];
+//		drawable->mSkinningMatCache = new LLMatrix4a[count];
+		drawable->mSkinningMatCache = (LLMatrix4a*)ll_aligned_malloc_16(sizeof(LLMatrix4a)*count);
 	}
 
 	if (drawable->mSkinningMatCache && LLFrameTimer::getFrameCount() != drawable->mLastSkinningMatCacheFrame)
