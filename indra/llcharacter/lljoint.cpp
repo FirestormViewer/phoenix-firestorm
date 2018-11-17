@@ -450,13 +450,6 @@ void LLJoint::addAttachmentPosOverride( const LLVector3& pos, const LLUUID& mesh
 	{
 		return;
 	}
-    // BENTO
-    // Not clear pelvis overrides are meaningful/useful.
-    //if (mName == "mPelvis")
-    //{
-    //    return;
-    //}
-
     LLVector3 before_pos;
     LLUUID before_mesh_id;
     bool has_active_override_before = hasAttachmentPosOverride( before_pos, before_mesh_id );
@@ -903,7 +896,7 @@ void LLJoint::setWorldRotation( const LLQuaternion& rot )
 //--------------------------------------------------------------------
 const LLVector3& LLJoint::getScale()
 {
-	return mXform.getScale();	
+    return mXform.getScale();
 }
 
 //--------------------------------------------------------------------
