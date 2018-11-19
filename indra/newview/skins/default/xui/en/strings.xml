@@ -2628,6 +2628,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Group_Titles_Label">Group Titles</string>
   <string name="Command_Wearable_Favorites_Label">Favorite Wearables</string>
   <string name="Command_RFO_Label">Show Friends Only</string>
+  <string name="Command_DAO_Label">Derender Animesh</string>
   <string name="Command_Beacons_Label">Beacons</string>
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
@@ -2691,6 +2692,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Group_Titles_Tooltip">Change active group tag</string>
   <string name="Command_Wearable_Favorites_Tooltip">Open the list of favorite wearables</string>
   <string name="Command_RFO_Tooltip">Show only your friends in the viewer, all other avatars will be removed. Once enabled a TP is required to restore visibility of others.</string>
+  <string name="Command_DAO_Tooltip">Derender Animated Objects (aka Animesh) - Temporarily derenders all currently visible Animesh (attached and free roaming). Derendered animesh will reappear after a TP</string>
   <string name="Command_Beacons_Tooltip">Show beacons</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>

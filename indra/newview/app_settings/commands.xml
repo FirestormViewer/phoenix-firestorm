@@ -286,6 +286,13 @@
          is_running_parameters="FSRenderFriendsOnly"
          checkbox_control="FSRenderFriendsOnlyPersistsTP"
            />
+  <command name="derender_animated_objects"
+           available_in_toybox="true"
+           icon="derender_animated_objects"
+           label_ref="Command_DAO_Label"
+           tooltip_ref="Command_DAO_Tooltip"
+           execute_function="Tools.DerenderAnimatedObjects"
+  />
   <command name="view"
            available_in_toybox="true"
            icon="Command_View_Icon"
