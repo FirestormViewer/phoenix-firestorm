@@ -1198,22 +1198,6 @@ FSLSLBridgeScriptCallback::~FSLSLBridgeScriptCallback()
 {
 }
 
-class FSMonoScriptAssetUpload: public LLScriptAssetUpload
-{
-public:
-	FSMonoScriptAssetUpload(LLUUID itemId, std::string buffer, invnUploadFinish_f finish)
-	: LLScriptAssetUpload( itemId, buffer, finish)
-	{
-	}
-
-	virtual LLSD generatePostBody()
-	{
-		LLSD body = LLScriptAssetUpload::generatePostBody();
-		body["target"] = "mono";
-		return body;
-	}
-};
-
 void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 {
 	if (inv_item.isNull() || !FSLSLBridge::instance().getBridgeCreating())
@@ -1238,7 +1222,7 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 	gInventory.updateItem(item);
 	gInventory.notifyObservers();
 
-	LLViewerObject* obj(NULL);
+	LLViewerObject* obj(nullptr);
 
 	if (FSLSLBridge::instance().isBridgeValid())
 	{
@@ -1259,7 +1243,7 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 		const std::string fName = prepUploadFile(buffer);
 		if (!fName.empty())
 		{
-			LLResourceUploadInfo::ptr_t uploadInfo(new FSMonoScriptAssetUpload(	inv_item,  buffer, uploadDone ));
+			LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(obj->getID(), inv_item, LLScriptAssetUpload::MONO, true, LLUUID::null, buffer, uploadDone));
 			LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
 
 			LL_INFOS("FSLSLBridge") << "updating script ID for bridge" << LL_ENDL;
