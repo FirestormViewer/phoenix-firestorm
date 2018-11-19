@@ -2914,6 +2914,28 @@ Try enclosing path to the editor with double quotes.
   <string name="fsbridge_created">Bridge created.</string>
   <string name="fsbridge_script_info">Script info: '[OBJECT_NAME]': [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] running scripts, [OBJECT_SCRIPT_MEMORY] KB allowed memory size limit, [OBJECT_SCRIPT_TIME] ms of CPU time consumed.[PATHFINDING_TEXT]</string>
   <string name="fsbridge_script_info_pf">Average CPU time used for pathfinding navigation: [OBJECT_CHARACTER_TIME] ms.</string>
+  <string name="fsbridge_script_info_ext">
+Inspecting: [INSPECTING_KEY]
+Description: [OBJECT_DESC]
+Root prim: [OBJECT_ROOT]
+Prim count: [OBJECT_PRIM_COUNT]
+Prim equivalence: [OBJECT_PRIM_EQUIVALENCE]
+Inventory items: [OBJECT_TOTAL_INVENTORY_COUNT]
+Velocity: [OBJECT_VELOCITY]
+Position: [OBJECT_POS]
+Rotation: [OBJECT_ROT]
+Rotational velocity: [OBJECT_OMEGA] (radians per second)
+Creator: [OBJECT_CREATOR]
+Owner: [OBJECT_OWNER]
+Previous owner: [OBJECT_LAST_OWNER_ID]
+Rezzed by: [OBJECT_REZZER_KEY]
+Group: [OBJECT_GROUP]
+Creation time: [OBJECT_CREATION_TIME]
+Pathfinding type: [OBJECT_PATHFINDING_TYPE]
+Attachment point: [OBJECT_ATTACHED_POINT]
+Temporarily attached: [OBJECT_TEMP_ATTACHED]
+Your current position: [AVATAR_POS]
+  </string>
   <string name="fsbridge_error_scriptinfonotfound">Script info: Object to check is invalid or out of range.</string>
   <string name="fsbridge_error_scriptinfomalformed">Script info: Received malformed response from bridge. Try again.</string>
   <string name="fsbridge_error_injection">NOTICE: One or more scripts have been added to your Firestorm bridge! If you did not expect this message, use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to re-create your bridge now.</string>

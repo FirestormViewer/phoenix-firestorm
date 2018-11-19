@@ -7406,7 +7406,7 @@ void handle_script_info()
 	{
 		object_id = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject()->mID;
 		LL_INFOS() << "Reporting Script Info for object: " << object_id.asString() << LL_ENDL;
-		FSLSLBridge::instance().viewerToLSL("getScriptInfo|" + object_id.asString());
+		FSLSLBridge::instance().viewerToLSL("getScriptInfo|" + object_id.asString() + "|" + (gSavedSettings.getBOOL("FSScriptInfoExtended") ? "1" : "0"));
 	}
 }
 

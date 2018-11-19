@@ -1693,6 +1693,15 @@
          tool_tip="If enabled, you can preview animations during the upload process on your own avatar"
          name="FSUploadAnimationOnOwnAvatar"
          control_name="FSUploadAnimationOnOwnAvatar"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Extend basic script info feature with various details useful for builders"
+         tool_tip="If enabled, extend basic script info feature with various details useful for builders"
+         name="FSScriptInfoExtended"
+         enabled_control="UseLSLBridge"
+         control_name="FSScriptInfoExtended"/>
     </panel>
 
     <!--Uploads-->

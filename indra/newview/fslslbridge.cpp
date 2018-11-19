@@ -52,7 +52,7 @@
 static const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
 static const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
 static const U32 FS_BRIDGE_MAJOR_VERSION = 2;
-static const U32 FS_BRIDGE_MINOR_VERSION = 23;
+static const U32 FS_BRIDGE_MINOR_VERSION = 24;
 static const U32 FS_MAX_MINOR_VERSION = 99;
 static const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 static const std::string FS_STATE_ATTRIBUTE = "state=";
@@ -352,7 +352,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			while (std::getline(strStreamGetScriptInfo, scriptInfoToken, ','))
 			{
 				LLStringUtil::trim(scriptInfoToken);
-				if (scriptInfoArrayCount == 0)
+				if (scriptInfoArrayCount == 0 || scriptInfoArrayCount == 6 || scriptInfoArrayCount == 11 || scriptInfoArrayCount == 12 || scriptInfoArrayCount == 13 || scriptInfoArrayCount == 14 || scriptInfoArrayCount == 24)
 				{
 					// First value, OBJECT_NAME, should be passed from Bridge as encoded in base64
 					// Encoding eliminates problems with special characters and commas for CSV
@@ -368,14 +368,14 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 					}
 					else
 					{
-						LL_WARNS("FSLSLBridge") << "ScriptInfo - OBJECT_NAME cannot be decoded" << LL_ENDL;
+						LL_WARNS("FSLSLBridge") << "ScriptInfo - value with index " << scriptInfoArrayCount << " cannot be decoded" << LL_ENDL;
 					}
 				}
 				scriptInfoArray.append(scriptInfoToken);
 				++scriptInfoArrayCount;
 			}
 
-			if (scriptInfoArrayCount == 6)
+			if (scriptInfoArrayCount == 6 || scriptInfoArrayCount == 26)
 			{
 				LLStringUtil::format_map_t args;
 				args["OBJECT_NAME"] = scriptInfoArray[0].asString();
@@ -394,6 +394,31 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 					args["PATHFINDING_TEXT"] = "";
 				}
 				report_to_nearby_chat(format_string(LLTrans::getString("fsbridge_script_info"), args));
+				if (scriptInfoArrayCount == 26)
+				{
+					LLStringUtil::format_map_t args3;
+					args3["OBJECT_DESC"] = scriptInfoArray[6].asString();
+					args3["OBJECT_ROOT"] = scriptInfoArray[7].asString();
+					args3["OBJECT_PRIM_COUNT"] = scriptInfoArray[8].asString();
+					args3["OBJECT_PRIM_EQUIVALENCE"] = scriptInfoArray[9].asString();
+					args3["OBJECT_TOTAL_INVENTORY_COUNT"] = scriptInfoArray[10].asString();
+					args3["OBJECT_VELOCITY"] = scriptInfoArray[11].asString();
+					args3["OBJECT_POS"] = scriptInfoArray[12].asString();
+					args3["OBJECT_ROT"] = scriptInfoArray[13].asString();
+					args3["OBJECT_OMEGA"] = scriptInfoArray[14].asString();
+					args3["OBJECT_CREATOR"] = scriptInfoArray[15].asString();
+					args3["OBJECT_OWNER"] = scriptInfoArray[16].asString();
+					args3["OBJECT_LAST_OWNER_ID"] = scriptInfoArray[17].asString();
+					args3["OBJECT_REZZER_KEY"] = scriptInfoArray[18].asString();
+					args3["OBJECT_GROUP"] = scriptInfoArray[19].asString();
+					args3["OBJECT_CREATION_TIME"] = scriptInfoArray[20].asString();
+					args3["OBJECT_PATHFINDING_TYPE"] = scriptInfoArray[21].asString();
+					args3["OBJECT_ATTACHED_POINT"] = scriptInfoArray[22].asString();
+					args3["OBJECT_TEMP_ATTACHED"] = scriptInfoArray[23].asString();
+					args3["AVATAR_POS"] = scriptInfoArray[24].asString();
+					args3["INSPECTING_KEY"] = scriptInfoArray[25].asString();
+					report_to_nearby_chat(format_string(LLTrans::getString("fsbridge_script_info_ext"), args3));
+				}
 			}
 			else
 			{

@@ -5884,6 +5884,28 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="fsbridge_script_info_pf">
 		Średni czas CPU zużyty do obsługi nawigacji odnajdywania ścieżek: [OBJECT_CHARACTER_TIME] ms.
 	</string>
+	<string name="fsbridge_script_info_ext">
+		Sprawdzanie: [INSPECTING_KEY]
+Opis: [OBJECT_DESC]
+Prima główna: [OBJECT_ROOT]
+Liczba primów: [OBJECT_PRIM_COUNT]
+Równowartość w primach: [OBJECT_PRIM_EQUIVALENCE]
+Elementów wewnątrz: [OBJECT_TOTAL_INVENTORY_COUNT]
+Prędkość: [OBJECT_VELOCITY]
+Pozycja: [OBJECT_POS]
+Rotacja: [OBJECT_ROT]
+Prędkość obrotowa: [OBJECT_OMEGA] (radian na sekundę)
+Twórca: [OBJECT_CREATOR]
+Właściciel: [OBJECT_OWNER]
+Poprzedni właściciel: [OBJECT_LAST_OWNER_ID]
+Zrezzowany przez: [OBJECT_REZZER_KEY]
+Grupa: [OBJECT_GROUP]
+Czas utworzenia: [OBJECT_CREATION_TIME]
+Typ odnajdywania ścieżki: [OBJECT_PATHFINDING_TYPE]
+Punkt dołączenia: [OBJECT_ATTACHED_POINT]
+Tymczasowo dołączone: [OBJECT_TEMP_ATTACHED]
+Twoja aktualna pozycja: [AVATAR_POS]
+	</string>
 	<string name="fsbridge_error_scriptinfonotfound">
 		Info o skryptach: Obiekt do sprawdzenia jest nieprawidłowy lub poza zasięgiem.
 	</string>
