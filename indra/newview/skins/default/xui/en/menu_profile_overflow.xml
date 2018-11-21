@@ -54,6 +54,13 @@
      function="Profile.EnableUnblock" />
   </menu_item_call>-->
   <menu_item_call
+   label="Add to Contact Set"
+   layout="topleft"
+   name="add_to_contact_set">
+    <menu_item_call.on_click
+     function="Profile.AddToContactSet" />
+  </menu_item_call>
+  <menu_item_call
    label="Copy Name"
    layout="topleft"
    name="copy_name_to_clipboard">
