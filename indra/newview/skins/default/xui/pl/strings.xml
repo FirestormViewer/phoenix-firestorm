@@ -5885,16 +5885,16 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Średni czas CPU zużyty do obsługi nawigacji odnajdywania ścieżek: [OBJECT_CHARACTER_TIME] ms.
 	</string>
 	<string name="fsbridge_script_info_ext">
-		Sprawdzanie: [INSPECTING_KEY]
+ID obiektu: [INSPECTING_KEY]
 Opis: [OBJECT_DESC]
 Prima główna: [OBJECT_ROOT]
 Liczba primów: [OBJECT_PRIM_COUNT]
-Równowartość w primach: [OBJECT_PRIM_EQUIVALENCE]
+Wpływ na działkę: [OBJECT_PRIM_EQUIVALENCE]
 Elementów wewnątrz: [OBJECT_TOTAL_INVENTORY_COUNT]
 Prędkość: [OBJECT_VELOCITY]
 Pozycja: [OBJECT_POS]
 Rotacja: [OBJECT_ROT]
-Prędkość obrotowa: [OBJECT_OMEGA] (radian na sekundę)
+Prędkość kątowa: [OBJECT_OMEGA] (radian na sekundę)
 Twórca: [OBJECT_CREATOR]
 Właściciel: [OBJECT_OWNER]
 Poprzedni właściciel: [OBJECT_LAST_OWNER_ID]
