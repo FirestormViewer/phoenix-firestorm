@@ -1365,7 +1365,8 @@
         height="100">
         <text
           layout="topleft"
-          left="3">
+          left="3"
+          name="price_breakdown_title">
           Price Breakdown
         </text>
         <view_border
@@ -1442,11 +1443,12 @@ Lowest:
         border="true"
         layout="topleft"
         left_pad="265"
-        name="price_breakdown_panel"
+        name="physics_breakdown_panel"
         width="120"
         height="100">
         <text
           layout="topleft"
+          name="physics_breakdown_title"
           left="3">
           Physics Costs
         </text>
@@ -1456,7 +1458,7 @@ Lowest:
           height="0"
           layout="topleft"
           left="3"
-          name="price_breakdown_border"
+          name="physics_breakdown_border"
           top_pad="5"
           width="110"/>
         <text
