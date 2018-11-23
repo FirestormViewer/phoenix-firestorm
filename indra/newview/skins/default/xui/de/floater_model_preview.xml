@@ -64,6 +64,12 @@
 	<string name="phys_status_vertex_limit_exceeded">
 		Einige physische Hüllen überschreiten die Vertexbeschränkungen.
 	</string>
+	<string name="phys_status_degenerate_triangles">
+		Das Physik-Netz ist zu dicht - kleine dünne Dreiecke entfernen (siehe Vorschau)
+	</string>
+	<string name="phys_status_no_havok">
+		Die OpenSim-Version unterstützt kein Hochladen von Physik in Second Life.
+	</string>
 	<string name="layer_all">
 		Alle
 	</string>
@@ -74,7 +80,7 @@
 		Vereinfachung läuft...
 	</string>
 	<string name="tbd">
-		noch nicht festgelegt
+		folgt
 	</string>
 	<panel name="left_panel">
 		<panel name="model_name_representation_panel">
@@ -193,7 +199,7 @@
 			<panel label="Physik" name="physics_panel">
 				<panel name="physics geometry">
 					<text name="first_step_name">
-						Schritt 1: Detailstufe
+						Schritt 1: Physik-Modell wählen
 					</text>
 					<combo_box name="physics_lod_combo" tool_tip="Detailstufe für Physikform">
 						<combo_item name="choose_one">
@@ -219,7 +225,7 @@
 				</panel>
 				<panel name="physics analysis">
 					<text name="method_label">
-						Schritt 2: Analysieren
+						Schritt 2: Zu Hüllen konvertieren (optional)
 					</text>
 					<text name="analysis_method_label">
 						Methode:
@@ -305,13 +311,13 @@
 			<button label="Hochladen" name="ok_btn" tool_tip="Auf Simulator hochladen"/>
 			<button label="Einstellungen löschen und Formular zurücksetzen" name="reset_btn" width="280"/>
 			<text name="upload_fee">
-				Gebühr für Hochladen: [FEE] L$
+				Uploadkost.: [FEE] L$
 			</text>
 			<text name="prim_weight">
-				Auswirkung auf Land: [EQ]
+				Land-Impakt: [EQ]
 			</text>
 			<text name="download_weight">
-				Herunterladen: [ST]
+				Herunterl.: [ST]
 			</text>
 			<text name="physics_weight">
 				Physik: [PH]
@@ -319,7 +325,38 @@
 			<text name="server_weight">
 				Server: [SIM]
 			</text>
-			<text name="warning_title">
+			<panel name="price_breakdown_panel">
+				<text name="price_breakdown_title">
+					Kosten-Aufstellung
+				</text>
+				<text name="price_breakdown_labels">
+Download:
+Physik:
+Instanzen:
+Texturen:
+Model:
+				</text>
+			</panel>
+			<!-- 
+			<text name="streaming_breakdown_labels">
+Streaming/Download:
+Hoch:
+Mittel:
+Niedrig:
+Niedrigste:
+			</text>
+			-->
+			<panel name="physics_breakdown_panel">
+				<text name="physics_breakdown_title">
+					Physik-Kosten
+				</text>
+				<text name="physics_breakdown_labels">
+Basis-Hülle:
+Mesh:
+Analysiert:
+				</text>
+			</panel>
+			<text name="warning_title" width="60">
 				HINWEIS:
 			</text>
 			<text name="warning_message">
@@ -330,31 +367,35 @@
 			</text>
 		</panel>
 	</panel>
-	<text name="lod_label">
-		Vorschau:
-	</text>
 	<panel name="right_panel">
-		<combo_box name="preview_lod_combo" tool_tip="Detailstufe zur Anzeige in Vorschaudarstellung">
-			<combo_item name="high">
-				Hoch
-			</combo_item>
-			<combo_item name="medium">
-				Mittel
-			</combo_item>
-			<combo_item name="low">
-				Niedrig
-			</combo_item>
-			<combo_item name="lowest">
-				Niedrigste
-			</combo_item>
-		</combo_box>
+		<text name="lod_label">
+			Vorschau:
+		</text>
+		<panel name="right_upper_panel">
+			<combo_box name="preview_lod_combo" tool_tip="Detailstufe zur Anzeige in Vorschaudarstellung">
+				<combo_item name="high">
+					Hoch
+				</combo_item>
+				<combo_item name="medium">
+					Mittel
+				</combo_item>
+				<combo_item name="low">
+					Niedrig
+				</combo_item>
+				<combo_item name="lowest">
+					Niedrigste
+				</combo_item>
+			</combo_box>
+		</panel>
+	</panel>
+	<panel name="lower_right_panel">
 		<text name="label_display">
 			Anzeige...
 		</text>
 		<check_box label="Kanten" name="show_edges"/>
 		<check_box label="Physik" name="show_physics"/>
 		<check_box label="Texturen" name="show_textures"/>
-		<check_box label="Skingewichte" name="show_skin_weight"/>
+		<check_box label="Skingew." name="show_skin_weight"/>
 		<check_box label="Gelenke" name="show_joint_positions"/>
 		<text name="physics_explode_label">
 			Vorschaudehnung:

@@ -5829,6 +5829,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_RFO_Label">
 		Nur Freunde anzeigen
 	</string>
+	<string name="Command_DAO_Label">
+		Animesh nicht anzeigen
+	</string>
 	<string name="Command_Beacons_Label">
 		Ortungssignale
 	</string>
@@ -6014,6 +6017,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_RFO_Tooltip">
 		Nur Freunde im Viewer darstellen. Nach Deaktivierung ist ein Teleport erforderlich, um andere Avatare wieder darzustellen.
+	</string>
+	<string name="Command_DAO_Tooltip">
+		Animesh-Objekte nicht darstellen - Stellt Animesh-Objekte temporär nicht dar. Nach Deaktivierung ist ein Teleport erforderlich, um entsprechende Objekte wieder darzustellen.
 	</string>
 	<string name="Command_Beacons_Tooltip">
 		Ortungssignale anzeigen
