@@ -192,7 +192,7 @@ protected:
 class FSLSLBridgeCleanupTimer : public LLEventTimer
 {
 public:
-	FSLSLBridgeCleanupTimer() : LLEventTimer(1.f) {}
+	FSLSLBridgeCleanupTimer() : LLEventTimer(12.f) {}
 	BOOL tick();
 };
 
