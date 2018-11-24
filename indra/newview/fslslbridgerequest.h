@@ -28,8 +28,8 @@
 #ifndef FS_LSLBRIDGEREQUEST_H
 #define FS_LSLBRIDGEREQUEST_H
 
-void FSLSLBridgeRequest_Success( LLSD const &aData );
-void FSLSLBridgeRequest_Failure( LLSD const &aData );
-void FSLSLBridgeRequestRadarPos_Success( LLSD const &aData );
+void FSLSLBridgeRequest_Success(LLSD const &aData);
+void FSLSLBridgeRequest_Failure(LLSD const &aData);
+void FSLSLBridgeRequestRadarPos_Success(LLSD const &aData);
 
 #endif // FS_LSLBRIDGEREQUEST_H

@@ -63,10 +63,10 @@ public:
 		NO_TIMER
 	};
 
-	typedef boost::function<void(const LLSD &)> tCallback;
+	typedef std::function<void(const LLSD &)> Callback_t;
 
 	bool lslToViewer(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID);
-	bool viewerToLSL(const std::string& message, tCallback = NULL );
+	bool viewerToLSL(const std::string& message, Callback_t = nullptr);
 
 	bool updateBoolSettingValue(const std::string& msgVal);
 	bool updateBoolSettingValue(const std::string& msgVal, bool contentVal);
@@ -83,7 +83,7 @@ public:
 	void setBridge(LLViewerInventoryItem* item) { mpBridge = item; };
 	LLViewerInventoryItem* getBridge() { return mpBridge; };
 	bool canUseBridge();
-	bool isBridgeValid() const { return NULL != mpBridge; }
+	bool isBridgeValid() const { return nullptr != mpBridge; }
 
 	void checkBridgeScriptName();
 	std::string currentFullName() { return mCurrentFullName; }
@@ -147,22 +147,22 @@ protected:
 class FSLSLBridgeRezCallback : public LLInventoryCallback
 {
 public:
-	FSLSLBridgeRezCallback();
+	FSLSLBridgeRezCallback() {}
 	void fire(const LLUUID& inv_item);
 
 protected:
-	~FSLSLBridgeRezCallback();
+	~FSLSLBridgeRezCallback() {}
 };
 
 class FSLSLBridgeScriptCallback : public LLInventoryCallback
 {
 public:
-	FSLSLBridgeScriptCallback();
+	FSLSLBridgeScriptCallback() {}
 	void fire(const LLUUID& inv_item);
-	std::string prepUploadFile( std::string& );
+	std::string prepUploadFile(std::string& aBuffer);
 
 protected:
-	~FSLSLBridgeScriptCallback();
+	~FSLSLBridgeScriptCallback() {}
 };
 
 class FSLSLBridgeInventoryObserver : public LLInventoryFetchDescendentsObserver
@@ -174,7 +174,6 @@ public:
 
 protected:
 	~FSLSLBridgeInventoryObserver() {}
-
 };
 
 class FSLSLBridgeInventoryPreCreationCleanupObserver : public LLInventoryFetchDescendentsObserver
@@ -185,9 +184,7 @@ public:
 
 protected:
 	~FSLSLBridgeInventoryPreCreationCleanupObserver() {}
-
 };
-
 
 class FSLSLBridgeCleanupTimer : public LLEventTimer
 {
