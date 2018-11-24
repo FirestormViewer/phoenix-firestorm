@@ -5224,6 +5224,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_RFO_Label">
 		Renderuj tylko znajomych
 	</string>
+	<string name="Command_DAO_Label">
+		Derenderuj animesz
+	</string>
 	<string name="Command_Beacons_Label">
 		Emitery
 	</string>
@@ -5403,6 +5406,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_RFO_Tooltip">
 		Renderuj tylko Twoich znajomych w przeglądarce, wszystkie inne awatary będą niewidoczne. Teleportacja jest wymagana aby przywrócić widzialność innych osób, jeśli włączysz tą opcję.
+	</string>
+	<string name="Command_DAO_Tooltip">
+		Derenderuj animowane obiekty (znane też jako animesz) - Tymczasowo derenderuj wszystkie aktualnie widoczne animowane mesze (dołączone i wolnostojące). Zderenderowane animesze pojawią się ponownie po teleportacji.
 	</string>
 	<string name="Command_Beacons_Tooltip">
 		Pokaż emitery
