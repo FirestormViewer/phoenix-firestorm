@@ -6053,6 +6053,12 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="fs_preprocessor_error">
 		[ERR_NAME] ([LINENUMBER]): wystąpił nieoczekiwany wyjątek.
 	</string>
+	<string name="fs_preprocessor_lsl2_directive_override">
+		Wykryto dyrektywę kompiluj-jako-LSL2 nadpisującą ustawienia preferencji.
+	</string>
+	<string name="fs_preprocessor_mono_directive_override">
+		Wykryto dyrektywę kompiluj-jako-Mono nadpisującą ustawienia preferencji.
+	</string>
 	<string name="fs_preprocessor_optimizer_start">
 		Optymalizacja funkcji i zmiennych globalnych zdefiniowanych przez użytkownika.
 	</string>
