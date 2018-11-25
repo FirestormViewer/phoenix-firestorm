@@ -6694,6 +6694,12 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="fs_preprocessor_error">
 		[ERR_NAME] ([LINENUMBER]): Unerwarteter Ausnahmefehler aufgetreten.
 	</string>
+	<string name="fs_preprocessor_lsl2_directive_override">
+		Erkannte LSL2-Kompilierungsdirektive übersteuert Voreinstellung.
+	</string>
+	<string name="fs_preprocessor_mono_directive_override">
+		Erkannte Mono-Kompilierungsdirektive übersteuert Voreinstellung.
+	</string>
 	<!-- LSL Optimizer -->
 	<string name="fs_preprocessor_optimizer_start">
 		Entfernung von nicht-referenzierten benutzerdefinierten Funktionen und globalen Variablen.

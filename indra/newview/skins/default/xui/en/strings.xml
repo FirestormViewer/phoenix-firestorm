@@ -2999,6 +2999,8 @@ Your current position: [AVATAR_POS]
   <string name="fs_preprocessor_lexing_exception">[SEVERITY]: [ERR_NAME] ([LINENUMBER]): [ERR_DESC]</string>
   <string name="fs_preprocessor_exception">[ERR_NAME] ([LINENUMBER]): exception caught: [ERR_DESC]</string>
   <string name="fs_preprocessor_error">[ERR_NAME] ([LINENUMBER]): unexpected exception caught.</string>
+  <string name="fs_preprocessor_lsl2_directive_override">Detected compile-as-LSL2 directive overriding preference setting.</string>
+  <string name="fs_preprocessor_mono_directive_override">Detected compile-as-Mono directive overriding preference setting.</string>
   <!-- LSL Optimizer -->
   <string name="fs_preprocessor_optimizer_start">Optimizing out unreferenced user-defined functions and global variables.</string>
   <string name="fs_preprocessor_optimizer_regex_err">Not a valid regular expression: '[WHAT]'; LSL optimization skipped.</string>
