@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<context_menu name="Picks">
+<context_menu name="Preferiti">
 	<menu_item_call label="Informazioni" name="pick_info"/>
 	<menu_item_call label="Modifica" name="pick_edit"/>
 	<menu_item_call label="Teleport" name="pick_teleport"/>
