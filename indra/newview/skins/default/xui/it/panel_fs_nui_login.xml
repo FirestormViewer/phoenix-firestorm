@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_login">
     <panel.string name="forgot_password_url">
-    http://secondlife.com/account/request.php
+        http://secondlife.com/account/request.php?lang=it
     </panel.string>
     <layout_stack name="ui_stack">
         <layout_panel name="ui_container">
@@ -10,17 +10,17 @@
                     <layout_stack name="1st_row_stack">
                         <layout_panel name="login">
                             <combo_box label="Nome utente" tool_tip="Nome utente scelto per la registrazione, come carlorossi12 o Stella Marina" name="username_combo"/>
-                            <check_box control_name="FSRememberUsername" label="Ricorda nome utente" name="remember_username_check"/>
+                            <check_box label="Ricorda nome utente" name="remember_username_check"/>
                         </layout_panel> <!-- login -->
                         <layout_panel name="delete_container">
                             <button tool_tip="Cancella questo utente" name="remove_user_btn"/>
                         </layout_panel> <!-- delete_container -->
                         <layout_panel name="password_container">
                             <line_editor name="password_edit" label="Password"/>
-                            <check_box control_name="RememberPassword" label="Ricorda password" top_pad="10" name="remember_check"/>
+                            <check_box label="Ricorda password" top_pad="10" name="remember_check"/>
                         </layout_panel> <!-- password_container -->
                         <layout_panel name="start_location_panel">
-                            <combo_box control_name="NextLoginLocation" label="Luogo di avvio" name="start_location_combo">
+                            <combo_box label="Luogo di avvio" name="start_location_combo">
                                 <combo_box.item label="Ultimo luogo" name="MyLastLocation" />
                                 <combo_box.item label="Casa" name="MyHome"/>
                                 <combo_box.item label="&lt;Inserire luogo&gt;" name="Typeregionname" />
@@ -40,10 +40,7 @@
                                 Interfaccia:
                             </text>
                             <combo_box tool_tip="Scegliere lo stile di visualizzazione preferito per impostare di conseguenza le opzioni." name="mode_combo">
-                                <combo_box.item label="Firestorm" name="Firestorm" />
-                                <combo_box.item label="Phoenix"  name="Phoenix" />
                                 <combo_box.item label="Hybrid" name="Hybrid" />
-                                <combo_box.item label="Latency" name="Latency" />
                                 <combo_box.item label="Text" name="Text" />
                             </combo_box>
                         </layout_panel>
