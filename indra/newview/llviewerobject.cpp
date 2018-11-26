@@ -393,16 +393,16 @@ void LLViewerObject::markDead()
 		LLUUID mesh_id;
         {
             LLVOAvatar *av = getAvatar();
-            if (av && LLVOAvatar::getRiggedMeshID(this,mesh_id))
-            {
-                // This case is needed for indirectly attached mesh objects.
+		if (av && LLVOAvatar::getRiggedMeshID(this,mesh_id))
+		{
+			// This case is needed for indirectly attached mesh objects.
                 av->updateAttachmentOverrides();
             }
         }
         if (getControlAvatar())
         {
             unlinkControlAvatar();
-        }
+		}
 
 		// Mark itself as dead
 		mDead = TRUE;
@@ -1172,10 +1172,10 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 	F32 time_dilation = 1.f;
 	if(mesgsys != NULL)
 	{
-        U16 time_dilation16;
-        mesgsys->getU16Fast(_PREHASH_RegionData, _PREHASH_TimeDilation, time_dilation16);
-        time_dilation = ((F32) time_dilation16) / 65535.f;
-        mRegionp->setTimeDilation(time_dilation);
+	U16 time_dilation16;
+	mesgsys->getU16Fast(_PREHASH_RegionData, _PREHASH_TimeDilation, time_dilation16);
+	time_dilation = ((F32) time_dilation16) / 65535.f;
+	mRegionp->setTimeDilation(time_dilation);
 	}
 
 	// this will be used to determine if we've really changed position
@@ -4675,13 +4675,70 @@ void LLViewerObject::sendTEUpdate() const
 	msg->sendReliable( regionp->getHost() );
 }
 
+LLViewerTexture* LLViewerObject::getBakedTextureForMagicId(const LLUUID& id)
+{
+	if (!LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(id))
+	{
+		return NULL;
+	}
+
+	LLVOAvatar* avatar = getAvatar();
+	if (avatar)
+	{
+		LLAvatarAppearanceDefines::EBakedTextureIndex texIndex = LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::assetIdToBakedTextureIndex(id);
+		LLViewerTexture* bakedTexture = avatar->getBakedTexture(texIndex);
+		if (bakedTexture == NULL || bakedTexture->isMissingAsset())
+		{
+			return LLViewerTextureManager::getFetchedTexture(IMG_DEFAULT, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+		}
+		else
+		{
+			return bakedTexture;
+		}
+	}
+	else
+	{
+		return LLViewerTextureManager::getFetchedTexture(id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+	}
+
+}
+
+void LLViewerObject::updateAvatarMeshVisibility(const LLUUID& id, const LLUUID& old_id)
+{
+	if (id == old_id)
+	{
+		return;
+	}
+
+	if (!LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(old_id) && !LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(id))
+	{
+		return;
+	}
+
+	LLVOAvatar* avatar = getAvatar();
+	if (avatar)
+	{
+		avatar->updateMeshVisibility();
+	}
+}
+
 void LLViewerObject::setTE(const U8 te, const LLTextureEntry &texture_entry)
 {
+	LLUUID old_image_id;
+	if (getTE(te))
+	{
+		old_image_id = getTE(te)->getID();
+	}
+		
 	LLPrimitive::setTE(te, texture_entry);
 
 		const LLUUID& image_id = getTE(te)->getID();
-		mTEImages[te] = LLViewerTextureManager::getFetchedTexture(image_id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+	LLViewerTexture* bakedTexture = getBakedTextureForMagicId(image_id);
+	mTEImages[te] = bakedTexture ? bakedTexture : LLViewerTextureManager::getFetchedTexture(image_id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+
 	
+	updateAvatarMeshVisibility(image_id,old_image_id);
+
 	if (getTE(te)->getMaterialParams().notNull())
 	{
 		const LLUUID& norm_id = getTE(te)->getMaterialParams()->getNormalID();
@@ -4692,12 +4749,31 @@ void LLViewerObject::setTE(const U8 te, const LLTextureEntry &texture_entry)
 	}
 }
 
+void LLViewerObject::refreshBakeTexture()
+{
+	for (int face_index = 0; face_index < getNumTEs(); face_index++)
+	{
+		LLTextureEntry* tex_entry = getTE(face_index);
+		if (tex_entry && LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(tex_entry->getID()))
+		{
+			const LLUUID& image_id = tex_entry->getID();
+			LLViewerTexture* bakedTexture = getBakedTextureForMagicId(image_id);
+			changeTEImage(face_index, bakedTexture);
+		}
+	}
+}
+
 void LLViewerObject::setTEImage(const U8 te, LLViewerTexture *imagep)
 {
 	if (mTEImages[te] != imagep)
 	{
-		mTEImages[te] = imagep;
+		LLUUID old_image_id = getTE(te) ? getTE(te)->getID() : LLUUID::null;
+		
 		LLPrimitive::setTETexture(te, imagep->getID());
+
+		LLViewerTexture* baked_texture = getBakedTextureForMagicId(imagep->getID());
+		mTEImages[te] = baked_texture ? baked_texture : imagep;
+		updateAvatarMeshVisibility(imagep->getID(), old_image_id);
 		setChanged(TEXTURE);
 		if (mDrawable.notNull())
 		{
@@ -4708,13 +4784,16 @@ void LLViewerObject::setTEImage(const U8 te, LLViewerTexture *imagep)
 
 S32 LLViewerObject::setTETextureCore(const U8 te, LLViewerTexture *image)
 {
+	LLUUID old_image_id = getTE(te)->getID();
 	const LLUUID& uuid = image->getID();
 	S32 retval = 0;
 	if (uuid != getTE(te)->getID() ||
 		uuid == LLUUID::null)
 	{
 		retval = LLPrimitive::setTETexture(te, uuid);
-		mTEImages[te] = image;
+		LLViewerTexture* baked_texture = getBakedTextureForMagicId(uuid);
+		mTEImages[te] = baked_texture ? baked_texture : image;
+		updateAvatarMeshVisibility(uuid,old_image_id);
 		setChanged(TEXTURE);
 		if (mDrawable.notNull())
 		{
@@ -4805,7 +4884,7 @@ S32 LLViewerObject::setTETexture(const U8 te, const LLUUID& uuid)
 	// Invalid host == get from the agent's sim
 	LLViewerFetchedTexture *image = LLViewerTextureManager::getFetchedTexture(
 		uuid, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, LLHost());
-	return setTETextureCore(te,image);
+		return setTETextureCore(te, image);
 }
 
 S32 LLViewerObject::setTENormalMap(const U8 te, const LLUUID& uuid)
