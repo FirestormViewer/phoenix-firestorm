@@ -4715,6 +4715,11 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	msg->getU64Fast(_PREHASH_SoundData, _PREHASH_Handle, region_handle);
 	msg->getVector3Fast(_PREHASH_SoundData, _PREHASH_Position, pos_local);
 	msg->getF32Fast(_PREHASH_SoundData, _PREHASH_Gain, gain);
+	static LLCachedControl<F32> maxGain(gSavedSettings, "FSMaxCollisionGain",1.0, "Limit the maximum volume that can be specified for collisions");
+	if (gain>maxGain)
+	{
+		gain = maxGain;
+	}
 
 	// adjust sound location to true global coords
 	LLVector3d	pos_global = from_region_handle(region_handle);
