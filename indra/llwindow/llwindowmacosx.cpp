@@ -43,6 +43,7 @@
 #include <CoreServices/CoreServices.h>
 
 extern BOOL gDebugWindowProc;
+BOOL gHiDPISupport = TRUE;
 
 const S32	BITS_PER_PIXEL = 32;
 const S32	MAX_NUM_RESOLUTIONS = 32;
@@ -837,7 +838,6 @@ void LLWindowMacOSX::gatherInput()
 
 BOOL LLWindowMacOSX::getPosition(LLCoordScreen *position)
 {
-	float rect[4];
 	S32 err = -1;
 
 	if(mFullscreen)
@@ -848,10 +848,12 @@ BOOL LLWindowMacOSX::getPosition(LLCoordScreen *position)
 	}
 	else if(mWindow)
 	{
-		getContentViewBounds(mWindow, rect);
+		const CGPoint & pos = getContentViewBoundsPosition(mWindow);
 
-		position->mX = rect[0];
-		position->mY = rect[1];
+		position->mX = pos.x;
+		position->mY = pos.y;
+
+		err = noErr;
 	}
 	else
 	{
@@ -873,7 +875,7 @@ BOOL LLWindowMacOSX::getSize(LLCoordScreen *size)
 	}
 	else if(mWindow)
 	{
-		const CGSize & sz = getDeviceContentViewSize(mWindow, mGLView);
+		const CGSize & sz = gHiDPISupport ? getDeviceContentViewSize(mWindow, mGLView) : getContentViewBoundsSize(mWindow);
 
 		size->mX = sz.width;
 		size->mY = sz.height;
@@ -898,7 +900,7 @@ BOOL LLWindowMacOSX::getSize(LLCoordWindow *size)
 	}
 	else if(mWindow)
 	{
-		const CGSize & sz = getDeviceContentViewSize(mWindow, mGLView);
+		const CGSize & sz = gHiDPISupport ? getDeviceContentViewSize(mWindow, mGLView) : getContentViewBoundsSize(mWindow);
 		
 		size->mX = sz.width;
 		size->mY = sz.height;
@@ -1110,6 +1112,9 @@ BOOL LLWindowMacOSX::setCursorPosition(const LLCoordWindow position)
 	// trigger mouse move callback
 	LLCoordGL gl_pos;
 	convertCoords(position, &gl_pos);
+	float scale = getDeviceScaleFactor();
+	gl_pos.mX *= scale;
+	gl_pos.mY *= scale;
 	mCallbacks->handleMouseMove(this, gl_pos, (MASK)0);
 
 	return result;
@@ -1954,7 +1959,7 @@ MASK LLWindowMacOSX::modifiersToMask(S16 modifiers)
 
 F32 LLWindowMacOSX::getDeviceScaleFactor()
 {
-    return ::getDeviceUnitSize(mGLView);
+	return gHiDPISupport ? ::getDeviceUnitSize(mGLView) : LLWindow::getDeviceScaleFactor();
 }
 
 #if LL_OS_DRAGDROP_ENABLED
