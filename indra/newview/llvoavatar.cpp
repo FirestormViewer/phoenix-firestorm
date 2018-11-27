@@ -211,7 +211,7 @@ const F32 NAMETAG_VERTICAL_SCREEN_OFFSET = 25.f;
 const F32 NAMETAG_VERT_OFFSET_WEIGHT = 0.17f;
 
 const U32 LLVOAvatar::VISUAL_COMPLEXITY_UNKNOWN = 0;
-const F32 LLVOAvatar::VISUAL_COMPLEXITY_UPDATE_SECONDS = 10.0;
+const F32 LLVOAvatar::VISUAL_COMPLEXITY_UPDATE_SECONDS = 10.0f;
 const F64 HUD_OVERSIZED_TEXTURE_DATA_SIZE = 1024 * 1024;
 
 enum ERenderName
@@ -11083,7 +11083,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 	static LLCachedControl<F32> max_complexity_setting(gSavedSettings,"MaxAttachmentComplexity");
 	F32 max_attachment_complexity = max_complexity_setting;
 	max_attachment_complexity = llmax(max_attachment_complexity, DEFAULT_MAX_ATTACHMENT_COMPLEXITY);
-	const F32 visual_complexity_change_threshold = 0.05; // Changes to self will not be displayed unless they exceed this threshold.
+	const F32 visual_complexity_change_threshold = 0.05f; // Changes to self will not be displayed unless they exceed this threshold.
 
 	// Diagnostic list of all textures on our avatar
 	// <FS:Ansariel> Disable useless diagnostics
