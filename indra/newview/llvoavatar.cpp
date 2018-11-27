@@ -211,6 +211,7 @@ const F32 NAMETAG_VERTICAL_SCREEN_OFFSET = 25.f;
 const F32 NAMETAG_VERT_OFFSET_WEIGHT = 0.17f;
 
 const U32 LLVOAvatar::VISUAL_COMPLEXITY_UNKNOWN = 0;
+const F32 LLVOAvatar::VISUAL_COMPLEXITY_UPDATE_SECONDS = 10.0;
 const F64 HUD_OVERSIZED_TEXTURE_DATA_SIZE = 1024 * 1024;
 
 enum ERenderName
@@ -10919,7 +10920,6 @@ void LLVOAvatar::idleUpdateRenderComplexity()
 void LLVOAvatar::updateVisualComplexity()
 {
 	LL_DEBUGS("AvatarRender") << "avatar " << getID() << " appearance changed" << LL_ENDL;
-	// Set the cache time to in the past so it's updated ASAP
 	mVisualComplexityStale = true;
 }
 
@@ -11083,13 +11083,18 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 	static LLCachedControl<F32> max_complexity_setting(gSavedSettings,"MaxAttachmentComplexity");
 	F32 max_attachment_complexity = max_complexity_setting;
 	max_attachment_complexity = llmax(max_attachment_complexity, DEFAULT_MAX_ATTACHMENT_COMPLEXITY);
+	const F32 visual_complexity_change_threshold = 0.05; // Changes to self will not be displayed unless they exceed this threshold.
 
 	// Diagnostic list of all textures on our avatar
 	// <FS:Ansariel> Disable useless diagnostics
 	//static std::set<LLUUID> all_textures;
 
-	if (mVisualComplexityStale)
+	bool needs_update = mVisualComplexityStale &&
+		(mVisualComplexity==VISUAL_COMPLEXITY_UNKNOWN ||
+		 mVisualComplexityUpdateTimer.getElapsedTimeF32()>VISUAL_COMPLEXITY_UPDATE_SECONDS);
+	if (needs_update)
 	{
+		
 		// <FS:Ansariel> Show per-item complexity in COF
 		std::map<LLUUID, U32> item_complexity;
 		std::map<LLUUID, U32> temp_item_complexity;
@@ -11205,26 +11210,56 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		//}
 		// </FS:Ansariel>
 
-        if ( cost != mVisualComplexity )
-        {
-            LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
-                                      << " complexity updated was " << mVisualComplexity << " now " << cost
-                                      << " reported " << mReportedVisualComplexity
-                                      << LL_ENDL;
-        }
-        else
-        {
-            LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
-                                      << " complexity updated no change " << mVisualComplexity
-                                      << " reported " << mReportedVisualComplexity
-                                      << LL_ENDL;
-        }
-		mVisualComplexity = cost;
+		bool cost_changed = false;
+		if ( mVisualComplexity == VISUAL_COMPLEXITY_UNKNOWN)
+		{
+			LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
+									  << " complexity initialized to " << cost
+									  << " reported " << mReportedVisualComplexity
+									  << LL_ENDL;
+			cost_changed = true;
+		}
+		else
+		{
+			if ( cost != mVisualComplexity )
+			{
+				F32 top_val = (1.0f+visual_complexity_change_threshold)*mVisualComplexity;
+				F32 bottom_val = (1.0f/(1.0f+visual_complexity_change_threshold))*mVisualComplexity;
+				if (isSelf() && cost > bottom_val && cost < top_val)
+				{
+					LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
+											  << " self complexity change from " << mVisualComplexity << " to " << cost
+											  << " is below threshold, not updated"
+											  << " reported " << mReportedVisualComplexity
+											  << LL_ENDL;
+				}
+				else
+				{
+					LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
+											  << " complexity updated was " << mVisualComplexity << " now " << cost
+											  << " reported " << mReportedVisualComplexity
+											  << LL_ENDL;
+					cost_changed = true;
+				}
+			}
+			else
+			{
+				LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
+										  << " complexity updated no change " << mVisualComplexity
+										  << " reported " << mReportedVisualComplexity
+										  << LL_ENDL;
+			}
+		}
+		if (cost_changed)
+		{
+			mVisualComplexity = cost;
+		}
 		mVisualComplexityStale = false;
+		mVisualComplexityUpdateTimer.reset();
 
         static LLCachedControl<U32> show_my_complexity_changes(gSavedSettings, "ShowMyComplexityChanges", 20);
 
-        if (isSelf() && show_my_complexity_changes)
+        if (isSelf() && cost_changed && show_my_complexity_changes)
         {
             // Avatar complexity
             LLAvatarRenderNotifier::getInstance()->updateNotificationAgent(mVisualComplexity);
