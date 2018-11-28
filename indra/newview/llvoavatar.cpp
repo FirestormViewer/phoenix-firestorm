@@ -212,6 +212,8 @@ const F32 NAMETAG_VERT_OFFSET_WEIGHT = 0.17f;
 
 const U32 LLVOAvatar::VISUAL_COMPLEXITY_UNKNOWN = 0;
 const F32 LLVOAvatar::VISUAL_COMPLEXITY_UPDATE_SECONDS = 10.0f;
+const F32 VISUAL_COMPLEXITY_FRAC_CHANGE_THRESH = 0.05f; // Changes to self will not be displayed unless they exceed this fraction of previous value.
+const F32 VISUAL_COMPLEXITY_ABS_CHANGE_THRESH = 1000; // ... and this absolute amount of change.
 const F64 HUD_OVERSIZED_TEXTURE_DATA_SIZE = 1024 * 1024;
 
 enum ERenderName
@@ -11083,7 +11085,6 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 	static LLCachedControl<F32> max_complexity_setting(gSavedSettings,"MaxAttachmentComplexity");
 	F32 max_attachment_complexity = max_complexity_setting;
 	max_attachment_complexity = llmax(max_attachment_complexity, DEFAULT_MAX_ATTACHMENT_COMPLEXITY);
-	const F32 visual_complexity_change_threshold = 0.05f; // Changes to self will not be displayed unless they exceed this threshold.
 
 	// Diagnostic list of all textures on our avatar
 	// <FS:Ansariel> Disable useless diagnostics
@@ -11223,13 +11224,17 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		{
 			if ( cost != mVisualComplexity )
 			{
-				F32 top_val = (1.0f+visual_complexity_change_threshold)*mVisualComplexity;
-				F32 bottom_val = (1.0f/(1.0f+visual_complexity_change_threshold))*mVisualComplexity;
+				F32 top_val = (1.0f+VISUAL_COMPLEXITY_FRAC_CHANGE_THRESH)*mVisualComplexity;
+				F32 bottom_val = (1.0f/(1.0f+VISUAL_COMPLEXITY_FRAC_CHANGE_THRESH))*mVisualComplexity;
+				top_val = llmax(top_val, mVisualComplexity + VISUAL_COMPLEXITY_ABS_CHANGE_THRESH);
+				bottom_val = llmax(0.f, llmin(bottom_val, mVisualComplexity - VISUAL_COMPLEXITY_ABS_CHANGE_THRESH));
 				if (isSelf() && cost > bottom_val && cost < top_val)
 				{
 					LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
 											  << " self complexity change from " << mVisualComplexity << " to " << cost
-											  << " is below threshold, not updated"
+											  << " is within range "
+											  << "(" << bottom_val << "," << top_val << ")" 
+											  << ", not updated."
 											  << " reported " << mReportedVisualComplexity
 											  << LL_ENDL;
 				}
