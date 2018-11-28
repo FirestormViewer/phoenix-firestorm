@@ -339,6 +339,7 @@ private:
 
 	LLFloater*  mFMP;
 
+	LLPointer<LLViewerFetchedTexture> mUVGuideTexture; // <FS:Beq> Add UV Guide texture overlay
 	BOOL        mNeedsUpdate;
 	bool		mDirty;
 	bool		mGenLOD;

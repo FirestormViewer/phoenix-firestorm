@@ -336,6 +336,7 @@ BOOL LLFloaterModelPreview::postBuild()
 	getChild<LLCheckBoxCtrl>("show_textures")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_skin_weight")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_joint_positions")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
+	getChild<LLCheckBoxCtrl>("show_uv_guide")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1)); // <FS:Beq> - Add UV guide overlay to pmesh preview
 
 	childDisable("upload_skin");
 	childDisable("upload_joints");
@@ -478,16 +479,7 @@ void LLFloaterModelPreview::onViewOptionChecked(LLUICtrl* ctrl)
 {
 	if (mModelPreview)
 	{
-		// <FS:Beq> only show explode when phsyics is on
-		//		mModelPreview->mViewOption[ctrl->getName()] = !mModelPreview->mViewOption[ctrl->getName()];
-		auto name = ctrl->getName();
-		mModelPreview->mViewOption[name] = !mModelPreview->mViewOption[name];
-		if (name == "show_physics")
-		{
-			auto enabled = mModelPreview->mViewOption[name];
-			childSetEnabled("physics_explode", enabled);
-			childSetVisible("physics_explode", enabled);
-		}
+		mModelPreview->mViewOption[ctrl->getName()] = !mModelPreview->mViewOption[ctrl->getName()];
 		mModelPreview->refresh();
 	}
 }
@@ -1381,6 +1373,7 @@ LLModelPreview::LLModelPreview(S32 width, S32 height, LLFloater* fmp)
 	mBuildQueueMode = GLOD_QUEUE_GREEDY;
 	mBuildBorderMode = GLOD_BORDER_UNLOCK;
 	mBuildOperator = GLOD_OPERATOR_EDGE_COLLAPSE;
+	mUVGuideTexture = LLViewerTextureManager::getFetchedTextureFromFile(gSavedSettings.getString("FSMeshPreviewUVGuideFile"), FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_PREVIEW); // <FS:Beq> - Add UV guide overlay to pmesh preview
 
 	for (U32 i = 0; i < LLModel::NUM_LODS; ++i)
 	{
@@ -3090,15 +3083,9 @@ void LLModelPreview::updateStatusMessages()
 	}
 
 	// <FS:Beq> flag degenerates here rather than deferring to a MAV error later
-	mFMP->childSetVisible("physics_status_message_text", mHasDegenerate); //display or clear
-	auto degenerateIcon = mFMP->getChild<LLIconCtrl>("physics_status_message_icon");
-	degenerateIcon->setVisible(mHasDegenerate);
 	if (mHasDegenerate)
 	{
 		has_physics_error |= PhysicsError::DEGENERATE;
-		mFMP->childSetValue("physics_status_message_text", mFMP->getString("phys_status_degenerate_triangles"));
-		LLUIImagePtr img = LLUI::getUIImage("ModelImport_Status_Error");
-		degenerateIcon->setImage(img);
 	}
 	// </FS:Beq>
 
@@ -3209,14 +3196,17 @@ void LLModelPreview::updateStatusMessages()
 
 	//warn if hulls have more than 256 points in them
 	BOOL physExceededVertexLimit = FALSE;
-	for (U32 i = 0; mModelNoErrors && i < mModel[LLModel::LOD_PHYSICS].size(); ++i)
+	for (U32 i = 0; mModelNoErrors && (i < mModel[LLModel::LOD_PHYSICS].size()); ++i)
 	{
 		LLModel* mdl = mModel[LLModel::LOD_PHYSICS][i];
 
 		if (mdl)
 		{
-			for (U32 j = 0; j < mdl->mPhysics.mHull.size(); ++j)
-			{
+			// <FS:Beq> Better error handling
+			auto num_hulls = mdl->mPhysics.mHull.size();
+			for (U32 j = 0; j < num_hulls; ++j)
+			{		
+			// </FS:Beq>
 				if (mdl->mPhysics.mHull[j].size() > 256)
 				{
 					physExceededVertexLimit = TRUE;
@@ -3224,6 +3214,13 @@ void LLModelPreview::updateStatusMessages()
 					break;
 				}
 			}
+			// <FS:Beq> Better error handling
+			if (num_hulls > 256) // decomp cannot have more than 256 hulls (http://wiki.secondlife.com/wiki/Mesh/Mesh_physics)
+			{
+				LL_INFOS() << "Physical model " << mdl->mLabel << " exceeds 256 hull limitation." << LL_ENDL;
+				has_physics_error |= PhysicsError::TOOMANYHULLS;
+			}
+			// </FS:Beq>
 		}
 	}
 
@@ -3232,18 +3229,67 @@ void LLModelPreview::updateStatusMessages()
 		has_physics_error |= PhysicsError::TOOMANYVERTSINHULL;
 	}
 
-	if (!(has_physics_error & PhysicsError::DEGENERATE)){ // only update this field (incluides clearing it) if it is not already in use.
-		mFMP->childSetVisible("physics_status_message_text", physExceededVertexLimit);
-		LLIconCtrl* physStatusIcon = mFMP->getChild<LLIconCtrl>("physics_status_message_icon");
-		physStatusIcon->setVisible(physExceededVertexLimit);
-		if (physExceededVertexLimit)
+// <FS:Beq> standardise error handling
+	//if (!(has_physics_error & PhysicsError::DEGENERATE)){ // only update this field (incluides clearing it) if it is not already in use.
+	//	mFMP->childSetVisible("physics_status_message_text", physExceededVertexLimit);
+	//	LLIconCtrl* physStatusIcon = mFMP->getChild<LLIconCtrl>("physics_status_message_icon");
+	//	physStatusIcon->setVisible(physExceededVertexLimit);
+	//	if (physExceededVertexLimit)
+	//	{
+	//		mFMP->childSetValue("physics_status_message_text", mFMP->getString("phys_status_vertex_limit_exceeded"));
+	//		LLUIImagePtr img = LLUI::getUIImage("ModelImport_Status_Warning");
+	//		physStatusIcon->setImage(img);
+	//	}
+	//}
+#ifdef OPENSIM 
+	has_physics_error |= PhysicsError::NOHAVOK;
+#endif 
+
+	auto physStatusIcon = mFMP->getChild<LLIconCtrl>("physics_status_message_icon");
+
+	if (has_physics_error != PhysicsError::NONE)
+	{
+		mFMP->childSetVisible("physics_status_message_text", true); //display or clear
+		physStatusIcon->setVisible(true);
+		// The order here is important. 
+		if (has_physics_error & PhysicsError::TOOMANYHULLS)
+		{
+			mFMP->childSetValue("physics_status_message_text", mFMP->getString("phys_status_hull_limit_exceeded"));
+			LLUIImagePtr img = LLUI::getUIImage("ModelImport_Status_Error");
+			physStatusIcon->setImage(img);
+		}
+		else if (has_physics_error & PhysicsError::TOOMANYVERTSINHULL)
 		{
 			mFMP->childSetValue("physics_status_message_text", mFMP->getString("phys_status_vertex_limit_exceeded"));
+			LLUIImagePtr img = LLUI::getUIImage("ModelImport_Status_Error");
+			physStatusIcon->setImage(img);
+		}
+		else if (has_physics_error & PhysicsError::DEGENERATE)
+		{
+			mFMP->childSetValue("physics_status_message_text", mFMP->getString("phys_status_degenerate_triangles"));
+			LLUIImagePtr img = LLUI::getUIImage("ModelImport_Status_Error");
+			physStatusIcon->setImage(img);
+		}
+		else if (has_physics_error & PhysicsError::NOHAVOK)
+		{
+			mFMP->childSetValue("physics_status_message_text", mFMP->getString("phys_status_no_havok"));
+			LLUIImagePtr img = LLUI::getUIImage("ModelImport_Status_Warning");
+			physStatusIcon->setImage(img);
+		}
+		else
+		{
+			// This should not happen
+			mFMP->childSetValue("physics_status_message_text", mFMP->getString("phys_status_unknown_error"));
 			LLUIImagePtr img = LLUI::getUIImage("ModelImport_Status_Warning");
 			physStatusIcon->setImage(img);
 		}
 	}
-
+	else
+	{
+		mFMP->childSetVisible("physics_status_message_text", false); //display or clear
+		physStatusIcon->setVisible(false);
+	}
+// </FS:Beq>
 	if (getLoadState() >= LLModelLoader::ERROR_PARSING)
 	{
 		mModelNoErrors = false;
@@ -3276,7 +3322,7 @@ void LLModelPreview::updateStatusMessages()
 	//if (!mModelNoErrors || mHasDegenerate)
 	//{
 	//	mFMP->childDisable("ok_btn");
-	if (!mModelNoErrors || mHasDegenerate)
+	if (!mModelNoErrors || (has_physics_error > PhysicsError::NOHAVOK)) // block for all cases of phsyics error except NOHAVOK
 	{
 		mFMP->childDisable("ok_btn");
 		mFMP->childDisable("calculate_btn");
@@ -3355,14 +3401,41 @@ void LLModelPreview::updateStatusMessages()
 				mViewOption["show_physics"] = true;
 				fmp->childSetValue("show_physics", true);
 			}
+			// <FS:Beq> handle hiding of hull only explode slider
+			//else
+			//{
+			//	fmp->disableViewOption("show_physics");
+			//	mViewOption["show_physics"] = false;
+			//	fmp->childSetValue("show_physics", false);
+
+			//}
+			mViewOption["show_physics"] = true;
+			if (phys_hulls > 0)
+			{
+				fmp->enableViewOption("physics_explode");
+				fmp->enableViewOption("exploder_label");
+				fmp->childSetVisible("physics_explode", true);
+				fmp->childSetVisible("exploder_label", true);
+			}
+			else
+			{
+				fmp->disableViewOption("physics_explode");
+				fmp->disableViewOption("exploder_label");
+				fmp->childSetVisible("physics_explode", false);
+				fmp->childSetVisible("exploder_label", false);
+			}
 		}
 		else
 		{
 			fmp->disableViewOption("show_physics");
+			fmp->childSetVisible("physics_explode", false);
+			fmp->disableViewOption("physics_explode");
+			fmp->childSetVisible("exploder_label", false);
+			fmp->disableViewOption("exploder_label");
 			mViewOption["show_physics"] = false;
 			fmp->childSetValue("show_physics", false);
-
 		}
+		// </FS:Beq>
 
 		//bool use_hull = fmp->childGetValue("physics_use_hull").asBoolean();
 
@@ -3404,7 +3477,6 @@ void LLModelPreview::updateStatusMessages()
 			{
 				fmp->childEnable("Simplify");
 			}
-		
 			// <FS:Ansariel> Enable mesh analysis in SL only for now
 			//if (phys_tris || phys_hulls > 0)
 			//{
@@ -3418,29 +3490,30 @@ void LLModelPreview::updateStatusMessages()
 			fmp->childEnable("simplify_cancel");
 			fmp->childEnable("decompose_cancel");
 		}
-	}
+		// <FS:Beq> move the closing bracket for the if(fmp) to prevent possible crash 
+		//	}
 
-	
-	LLCtrlSelectionInterface* iface = fmp->childGetSelectionInterface("physics_lod_combo");
-	S32 which_mode = 0; 
-	S32 file_mode = 1;
-	if (iface)
-	{
-		which_mode = iface->getFirstSelectedIndex();
-		file_mode = iface->getItemCount() - 1;
-	}
+		LLCtrlSelectionInterface* iface = fmp->childGetSelectionInterface("physics_lod_combo");
+		S32 which_mode = 0;
+		S32 file_mode = 1;
+		if (iface)
+		{
+			which_mode = iface->getFirstSelectedIndex();
+			file_mode = iface->getItemCount() - 1;
+		}
 
-	if (which_mode == file_mode)
-	{
-		mFMP->childEnable("physics_file");
-		mFMP->childEnable("physics_browse");
+		if (which_mode == file_mode)
+		{
+			mFMP->childEnable("physics_file");
+			mFMP->childEnable("physics_browse");
+		}
+		else
+		{
+			mFMP->childDisable("physics_file");
+			mFMP->childDisable("physics_browse");
+		}
 	}
-	else
-	{
-		mFMP->childDisable("physics_file");
-		mFMP->childDisable("physics_browse");
-	}
-
+	// </FS:Beq>
 	LLSpinCtrl* crease = mFMP->getChild<LLSpinCtrl>("crease_angle");
 	
 	if (mRequestedCreaseAngle[mPreviewLOD] == -1.f)
@@ -3921,6 +3994,7 @@ BOOL LLModelPreview::render()
 	bool skin_weight = mViewOption["show_skin_weight"];
 	bool textures = mViewOption["show_textures"];
 	bool physics = mViewOption["show_physics"];
+	bool uv_guide = mViewOption["show_uv_guide"]; // <FS:Beq> Add UV guide overlay in mesh preview
 
 	// <FS:Beq> Extra configurability, to be exposed later as controls?
 	static LLCachedControl<LLColor4> canvas_col(gSavedSettings, "MeshPreviewCanvasColor");
@@ -4200,16 +4274,31 @@ BOOL LLModelPreview::render()
 									mTextureSet.insert(tex);
 								}
 							}
+						// <FS:Beq> improved mesh uploader
+						//	else
+						//	{
+						//		gGL.diffuseColor4f(1,1,1,1);
+						//	}
+						}
+						else if (uv_guide)
+						{
+							if(mUVGuideTexture)
+							{
+								if (mUVGuideTexture->getDiscardLevel() > -1)
+								{
+									gGL.getTexUnit(0)->bind(mUVGuideTexture, true);
+								}
+							}
+							gGL.diffuseColor4fv(static_cast<LLColor4>(base_col).mV);
+
 						}
 						else
 						{
-						// <FS:Beq> improved mesh uploader
-						//	gGL.diffuseColor4f(1,1,1,1);
+							//	gGL.diffuseColor4f(1,1,1,1);
 							gGL.diffuseColor4fv(static_cast<LLColor4>(base_col).mV);
 						// </FS:Beq>
 
 						}
-
 						buffer->drawRange(LLRender::TRIANGLES, 0, buffer->getNumVerts()-1, buffer->getNumIndices(), 0);
 						gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 						// <FS:Beq> improved mesh uploader
