@@ -139,7 +139,6 @@
 		<menu_item_call label="Ustawienia renderowania awatarów" name="Avatar Render Settings"/>
 		<menu_item_check label="Zawsze renderuj znajomych normalnie" name="Always show Friends normally"/>
 		<menu_item_check label="Renderuj tylko znajomych" name="Render Friends Only"/>
-		<menu_item_call label="Derenderuj cały animowany mesz" name="Derender Animesh"/>
 	</menu>
 	<menu label="Buduj" name="BuildTools">
 		<menu_item_check label="Pokaż narzędzia budowania" name="Show Build Tools"/>
@@ -460,6 +459,7 @@
 			<menu_item_check label="Automatyczne maski alpha (bez opóźniania)" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="Tekstury animacji" name="Animation Textures"/>
 			<menu_item_check label="Wyłącz tekstury" name="Disable Textures"/>
+			<menu_item_call label="Derenderuj cały animowany mesz" name="Derender Animesh"/>
 			<menu_item_check label="Maksymalna rozdzielczość tekstur (niebezpieczne)" name="Full Res Textures"/>
 			<menu_item_check label="Renderowania przyłączonego światła" name="Render Attached Lights"/>
 			<menu_item_check label="Renderowanie przyłączonych cząsteczek" name="Render Attached Particles"/>

@@ -20,9 +20,11 @@
   <string name="mesh_status_too_many_vertices">Poziomy detali mają za dużo wierzchołków.</string>
   <string name="mesh_status_missing_lod">Brakuje poziomu detali.</string>
   <string name="mesh_status_invalid_material_list">Materiały LOD nie są podzbiorem modelu referencyjnego.</string>
-  <string name="phys_status_vertex_limit_exceeded">Pewne fizyczne powłoki przekroczyły ograniczenia wierzchołków.</string>
+  <string name="phys_status_vertex_limit_exceeded">Pewne fizyczne powłoki przekroczyły limit wierzchołków (256); Spróbuj 'analizy'.</string>
+  <string name="phys_status_hull_limit_exceeded">Pewne modele przekroczyły limit powłok (256); Spróbuj 'upraszczania'.</string>
   <string name="phys_status_degenerate_triangles">Mesz fizyki zbyt gęsty; Usuń małe cienkie trójkąty (zobacz podgląd)</string>
-  <string name="phys_status_no_havok">Wersja OpenSim nie oferuje przesyłania danych fizyki do SL.</string>
+  <string name="phys_status_no_havok">Wersja OpenSim nie jest zalecana do przesyłania fizyki do SL. Wyniki mogą być nieprzewidywalne.</string>
+  <string name="phys_status_unknown_error">Wykryto nierozpoznany błąd.</string>
   <string name="layer_all">Wszystko</string>
   <string name="decomposing">Analizowanie...</string>
   <string name="simplifying">Upraszczanie...</string>
@@ -183,8 +185,18 @@
            </radio_group>
            <check_box label="Blokuj skalowanie gdy stawy ustawione" name="lock_scale_if_joint_position" />
            <text name="pelvis_offset_label">
-             Przesunięcie Z (podnieś/obniż awatara):
+             Przesunięcie osi Z:
            </text>
+           <panel name="avatar_model_hint_panel">
+             <text name="avatar_model_hint_text">
+Wskazówka:
+Wiele rzeczy w tym samym punkcie podnosi ryzyko rozłączeń podczas teleportów i zmian regionów.
+
+Zbyt wiele rzeczy niepotrzebnie używa wartości domyślnej (prawa ręka).
+
+Rozważ użycie innego punktu, aby rzeczy działały bardziej niezawodnie.
+             </text>
+           </panel>
      </panel>
     </tab_container>
     <panel name="weights_and_warning_panel">
@@ -236,6 +248,28 @@ Mesz:
 Analiza:
            </text>
        </panel>
+       <panel name="preview_controls_panel">
+           <panel name="preview_controls_inner_panel">
+                <text name="preview_controls_title">
+                    Narzędzia podglądu
+                </text>
+                <combo_box name="preview_lod_combo" tool_tip="Poziom detali (LOD) do wyświetlania w podglądzie">
+                    <combo_item name="high">Wysoki</combo_item>
+                    <combo_item name="medium">Średni</combo_item>
+                    <combo_item name="low">Niski</combo_item>
+                    <combo_item name="lowest">Najniższy</combo_item>
+                </combo_box>
+           </panel>
+           <check_box label="Brzegi" name="show_edges" />
+           <check_box label="Tekstury" name="show_textures" />
+           <check_box label="Pomoc UV" name="show_uv_guide" />
+           <check_box label="Fizyka" name="show_physics" />
+           <text name="exploder_label">
+            Rozpiętość
+           </text>
+           <check_box label="Wagi" name="show_skin_weight" />
+           <check_box label="Stawy" name="show_joint_positions" />
+       </panel>
        <text name="warning_title">
          UWAGA:
        </text>
@@ -247,24 +281,6 @@ Analiza:
 <panel name="right_panel">
     <text name="lod_label">
         Podgląd:
-    </text>
-    <panel name="right_upper_panel">
-       <combo_box name="preview_lod_combo" tool_tip="Poziom detali (LOD) do wyświetlania w podglądzie">
-          <combo_item name="high">Wysoki</combo_item>
-          <combo_item name="medium">Średni</combo_item>
-          <combo_item name="low">Niski</combo_item>
-          <combo_item name="lowest">Najniższy</combo_item>
-       </combo_box>
-    </panel>
-</panel>
-<panel name="lower_right_panel">
-    <check_box label="Krawędzie" name="show_edges"/>
-    <check_box label="Fizyka" name="show_physics"/>
-    <check_box label="Tekstury" name="show_textures"/>
-    <check_box label="Wagi" name="show_skin_weight"/>
-    <check_box label="Stawy" name="show_joint_positions"/>
-    <text name="physics_explode_label">
-      Rozpiętość podglądu:
     </text>
 </panel>
 </floater>
