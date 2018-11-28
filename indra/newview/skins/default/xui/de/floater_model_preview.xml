@@ -62,13 +62,19 @@
 		Detailstufenmaterial ist keine Teilmenge des Referenzmodells.
 	</string>
 	<string name="phys_status_vertex_limit_exceeded">
-		Einige physische Hüllen überschreiten die Vertexbeschränkungen.
+		Einige physische Hüllen überschreiten die Vertex-Limits (256). Probieren Sie andere Analyse-Methode.
+	</string>
+	<string name="phys_status_hull_limit_exceeded">
+		Einige Modelle überschreiten das Hüllen-Limit (256). Probieren Sie Vereinfachen“.
 	</string>
 	<string name="phys_status_degenerate_triangles">
 		Das Physik-Netz ist zu dicht - kleine dünne Dreiecke entfernen (siehe Vorschau)
 	</string>
 	<string name="phys_status_no_havok">
-		Die OpenSim-Version unterstützt kein Hochladen von Physik in Second Life.
+		Die OpenSim-Version unterstützt kein Hochladen von Physik in Second Life. Unvorhersehbare Ergebnisse möglich!
+	</string>
+	<string name="phys_status_unknown_error">
+		Ein unbekannter Fehler ist aufgetreten.
 	</string>
 	<string name="layer_all">
 		Alle
@@ -303,6 +309,16 @@
 					Z-Offset (Avatar anheben oder senken):
 				</text>
 				<spinner name="pelvis_offset" value="0.0"/>
+				<panel name="avatar_model_hint_panel">
+					<text name="avatar_model_hint_text">
+						Hinweis:
+Mehrere Anhänge an einem Anhängepunkt erhöhen das Risiko von Verbindungstrennungen während Teleports &amp; Regionsübergängen.
+
+Zu viele Objekte nutzen den Standard (Rechte Hand) unnötigerweise.
+
+Bitte denken Sie für zuverlässigere Anhänge über einen anderen Anhängepunkt nach.
+					</text>
+				</panel>
 			</panel>
 		</tab_container>
 		<panel name="weights_and_warning_panel">
@@ -356,6 +372,40 @@ Mesh:
 Analysiert:
 				</text>
 			</panel>
+			<panel name="preview_controls_panel">
+				<panel name="preview_controls_inner_panel">
+					<text name="preview_controls_title">
+						Vorschau-Einstellungen:
+					</text>
+					<combo_box name="preview_lod_combo" tool_tip="Detailstufe zur Anzeige in Vorschaudarstellung">
+						<combo_item name="high">
+							Hoch
+						</combo_item>
+						<combo_item name="medium">
+							Mittel
+						</combo_item>
+						<combo_item name="low">
+							Niedrig
+						</combo_item>
+						<combo_item name="lowest">
+							Niedrigste
+						</combo_item>
+					</combo_box>
+				</panel>
+				<text name="label_display">
+					Anzeige...
+				</text>
+				<check_box label="Kanten" name="show_edges"/>
+				<check_box label="Texturen" name="show_textures"/>
+				<check_box label="UV-Hilfe" name="show_uv_guide"/>
+				<check_box label="Physik" name="show_physics"/>
+				<check_box label="Skingew." name="show_skin_weight"/>
+				<check_box label="Gelenke" name="show_joint_positions"/>
+				<text name="exploder_label" width="105">
+					Vorschaudehnung:
+				</text>
+				<slider name="physics_explode" width="80"/>
+			</panel>
 			<text name="warning_title" width="60">
 				HINWEIS:
 			</text>
@@ -371,34 +421,7 @@ Analysiert:
 		<text name="lod_label">
 			Vorschau:
 		</text>
-		<panel name="right_upper_panel">
-			<combo_box name="preview_lod_combo" tool_tip="Detailstufe zur Anzeige in Vorschaudarstellung">
-				<combo_item name="high">
-					Hoch
-				</combo_item>
-				<combo_item name="medium">
-					Mittel
-				</combo_item>
-				<combo_item name="low">
-					Niedrig
-				</combo_item>
-				<combo_item name="lowest">
-					Niedrigste
-				</combo_item>
-			</combo_box>
-		</panel>
 	</panel>
 	<panel name="lower_right_panel">
-		<text name="label_display">
-			Anzeige...
-		</text>
-		<check_box label="Kanten" name="show_edges"/>
-		<check_box label="Physik" name="show_physics"/>
-		<check_box label="Texturen" name="show_textures"/>
-		<check_box label="Skingew." name="show_skin_weight"/>
-		<check_box label="Gelenke" name="show_joint_positions"/>
-		<text name="physics_explode_label">
-			Vorschaudehnung:
-		</text>
 	</panel>
 </floater>

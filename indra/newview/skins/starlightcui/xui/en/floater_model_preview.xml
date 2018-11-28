@@ -36,9 +36,9 @@
   <string name="mesh_status_invalid_material_list">LOD materials are not a subset of reference model.</string>
   <string name="phys_status_vertex_limit_exceeded">Some physical hulls exceed the vertex limit (256); try an alternative 'Analyze Method'.</string>
   <string name="phys_status_hull_limit_exceeded">Some models exceed the hull limit (256); try 'simplify'.</string>
-  <string name="phys_status_degenerate_triangles">Physics mesh too dense; remove the small, thin triangles (see preview.)</string>
+  <string name="phys_status_degenerate_triangles">Physics mesh too dense; remove the small, thin triangles (see preview).</string>
   <string name="phys_status_no_havok">The OpenSim version is not recommended for physics upload in SL. Results may be unpredictable.</string>
-  <string name="phys_status_unknown_error">An unrecognised error was detected.</string>
+  <string name="phys_status_unknown_error">An unrecognized error was detected.</string>
   <string name="layer_all">All</string> <!-- Text to display in physics layer combo box for "all layers" -->
   <string name="decomposing">Analyzing...</string>
   <string name="simplifying">Simplifying...</string>
@@ -1189,7 +1189,6 @@
              follows="top|left"
              name="upload_textures"
              label="Include textures"
-             label_text.text_color="White"
              left="20"
              top_pad="20"/>
            <view_border
@@ -1214,21 +1213,18 @@
              follows="top|left"
              height="15"
              label="Include skin weight"
-             label_text.text_color="White"
              name="upload_skin"
              top_pad="15"/>
            <check_box
              follows="top|left"
              height="15"
              label="Include joint positions"
-             label_text.text_color="White"
              name="upload_joints"
              top_pad="15"/>
            <check_box
              follows="top|left"
              height="15"
              label="Lock scale if joint position defined"
-             label_text.text_color="White"
              name="lock_scale_if_joint_position"
              top_pad="15"/>
            <text
@@ -1270,7 +1266,7 @@
            word_wrap="true"
            type="string">
            Tip:
-Multiple attachments on an attachment point increases the likelihood of disconnects during Teleports &amp; region crossings.
+Multiple attachments on an attachment point increases the likelihood of disconnects during teleports &amp; region crossings.
 
 Too many items use the default (right hand) unnecessarily.
 
@@ -1524,13 +1520,15 @@ Analysed:
         border="true"
         name="preview_controls_panel"
         width="260">
-        <panel height="18" >
+        <panel
+          name="preview_controls_inner_panel"
+          height="18">
           <text
             height="18"
             layout="topleft"
             name="preview_controls_title"
             left="3"
-            width="120">
+            width="150">
             Preview controls
           </text>
           <combo_box
@@ -1562,7 +1560,6 @@ Analysed:
           <check_box
             follows="top|left"
             label="Edges"
-            label_text.text_color="White"
             layout="topleft"
             name="show_edges"
             width="70"
@@ -1571,14 +1568,12 @@ Analysed:
           <check_box
             follows="top|left"
             label="Textures"
-            label_text.text_color="White"
             layout="topleft"
             name="show_textures"
             left_pad="0"/>
           <check_box
             follows="top|left"
             label="UV guide"
-            label_text.text_color="White"
             layout="topleft"
             name="show_uv_guide"
             left_pad="0"/>
@@ -1588,13 +1583,15 @@ Analysed:
             left="0"
             width="70"
             label="Physics"
-            label_text.text_color="White"
             name="show_physics"/>
           <text
             layout="topleft"
+            follows="top|left"
             left_pad="2"
             height="16"
-            name="exploder_label">Explode hulls</text>
+            name="exploder_label">
+                Explode hulls
+          </text>
           <slider
             name="physics_explode"
             show_text="false"
@@ -1609,7 +1606,6 @@ Analysed:
             follows="top|left"
             top_pad="15"
             label="Weights"
-            label_text.text_color="White"
             layout="topleft"
             width="70"
             name="show_skin_weight"
@@ -1619,7 +1615,6 @@ Analysed:
             label="Joints"
             height="0"
             layout="topleft"
-            label_text.text_color="White"
             name="show_joint_positions"
             left_pad="0"/>
       </panel>
