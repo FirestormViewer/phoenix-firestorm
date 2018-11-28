@@ -4862,6 +4862,7 @@ void process_attached_sound(LLMessageSystem *msg, void **user_data)
 
 	msg->getF32Fast(_PREHASH_DataBlock, _PREHASH_Gain, gain);
 	msg->getU8Fast(_PREHASH_DataBlock, _PREHASH_Flags, flags);
+	gain = llclampf(gain); // <FS> INT-141: Clamp gain to valid range
 
 	LLViewerObject *objectp = gObjectList.findObject(object_id);
 	if (objectp)
@@ -4900,6 +4901,7 @@ void process_attached_sound_gain_change(LLMessageSystem *mesgsys, void **user_da
 	}
 
  	mesgsys->getF32Fast(_PREHASH_DataBlock, _PREHASH_Gain, gain);
+	gain = llclampf(gain); // <FS> INT-141: Clamp gain to valid range
 
 	objectp->adjustAudioGain(gain);
 }
