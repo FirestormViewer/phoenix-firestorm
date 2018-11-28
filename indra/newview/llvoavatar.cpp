@@ -11090,9 +11090,12 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 	// <FS:Ansariel> Disable useless diagnostics
 	//static std::set<LLUUID> all_textures;
 
-	bool needs_update = mVisualComplexityStale &&
-		(mVisualComplexity==VISUAL_COMPLEXITY_UNKNOWN ||
-		 mVisualComplexityUpdateTimer.getElapsedTimeF32()>VISUAL_COMPLEXITY_UPDATE_SECONDS);
+	// <FS:Beq> remove the timer based complexity updates
+	//bool needs_update = mVisualComplexityStale &&
+	//	(mVisualComplexity==VISUAL_COMPLEXITY_UNKNOWN ||
+	//	 mVisualComplexityUpdateTimer.getElapsedTimeF32()>VISUAL_COMPLEXITY_UPDATE_SECONDS);
+	bool needs_update = mVisualComplexityStale;
+
 	if (needs_update)
 	{
 		
@@ -11260,7 +11263,8 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 			mVisualComplexity = cost;
 		}
 		mVisualComplexityStale = false;
-		mVisualComplexityUpdateTimer.reset();
+		// </FS:Beq> Remove the timer for now.
+		//		mVisualComplexityUpdateTimer.reset();
 
         static LLCachedControl<U32> show_my_complexity_changes(gSavedSettings, "ShowMyComplexityChanges", 20);
 

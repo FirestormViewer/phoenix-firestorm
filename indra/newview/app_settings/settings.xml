@@ -6548,6 +6548,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSEnableAggressiveComplexityUpdates</key>
+    <map>
+      <key>Comment</key>
+      <string>Enable avctive complexity calculations. This may have a significant detrimental performance impact if enabled.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>FullScreenAspectRatio</key>
     <map>
       <key>Comment</key>
