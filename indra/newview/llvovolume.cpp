@@ -5613,7 +5613,11 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
         vobj = bridge->mDrawable->getVObj();
         vol_obj = dynamic_cast<LLVOVolume*>(vobj);
 	}
-    if (vol_obj)
+	// <FS:Beq> option to reduce the number of complexity updates
+	// if (vol_obj)
+	static LLCachedControl< bool >aggressiveComplexityUpdates(gSavedSettings, "FSEnableAggressiveComplexityUpdates", false);
+    if (aggressiveComplexityUpdates && vol_obj)
+	// </FS:Beq>
     {
         vol_obj->updateVisualComplexity();
     }
