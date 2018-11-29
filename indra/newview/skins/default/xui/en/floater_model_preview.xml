@@ -1259,18 +1259,16 @@
          >
          <text 
            left="5"
-           width="200"
+           width="190"
            height="165"
            name="avatar_model_hint_text" 
            wrap="true" 
            word_wrap="true"
            type="string">
            Tip:
-Multiple attachments on an attachment point increases the likelihood of disconnects during teleports &amp; region crossings.
-
 Too many items use the default (right hand) unnecessarily.
 
-For more reliable attachments, please consider using a different attachment point.
+Please consider using an attachment point close to the item's position on the body.
          </text>
        </panel>
      </panel>
