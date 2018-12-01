@@ -1711,6 +1711,12 @@ void LLViewerFetchedTexture::processTextureStats()
 		else
 		{
 			U32 desired_size = MAX_IMAGE_SIZE_DEFAULT; // MAX_IMAGE_SIZE_DEFAULT = 1024 and max size ever is 2048
+			// <FS:Ansariel> Keep restriction on "fetched" (seems to be HUD) textures as well
+			if (mBoostLevel <= LLGLTexture::BOOST_SCULPTED)
+			{
+				desired_size = DESIRED_NORMAL_TEXTURE_SIZE;
+			}
+			// </FS:Ansariel>
 			if(!mKnownDrawWidth || !mKnownDrawHeight || mFullWidth <= mKnownDrawWidth || mFullHeight <= mKnownDrawHeight)
 			{
 				if (mFullWidth > desired_size || mFullHeight > desired_size)
