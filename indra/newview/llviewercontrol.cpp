@@ -291,7 +291,7 @@ static bool handleAnisotropicChanged(const LLSD& newvalue)
 
 static bool handleVolumeLODChanged(const LLSD& newvalue)
 {
-	LLVOVolume::sLODFactor = (F32) newvalue.asReal();
+	LLVOVolume::sLODFactor = llmin((F32) newvalue.asReal(), MAX_LOD_FACTOR);
 	LLVOVolume::sDistanceFactor = 1.f-LLVOVolume::sLODFactor * 0.1f;
 
 	// <FS:PP> Warning about too high LOD on LOD change
@@ -306,13 +306,13 @@ static bool handleVolumeLODChanged(const LLSD& newvalue)
 
 static bool handleAvatarLODChanged(const LLSD& newvalue)
 {
-	LLVOAvatar::sLODFactor = (F32) newvalue.asReal();
+	LLVOAvatar::sLODFactor = llmin((F32) newvalue.asReal(), MAX_LOD_FACTOR);
 	return true;
 }
 
 static bool handleAvatarPhysicsLODChanged(const LLSD& newvalue)
 {
-	LLVOAvatar::sPhysicsLODFactor = (F32) newvalue.asReal();
+	LLVOAvatar::sPhysicsLODFactor = llmin((F32) newvalue.asReal(), MAX_LOD_FACTOR);
 	return true;
 }
 

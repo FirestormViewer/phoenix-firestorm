@@ -1492,8 +1492,6 @@ void LLModelPreview::rebuildUploadData()
 
 	std::string requested_name = mFMP->getChild<LLUICtrl>("description_form")->getValue().asString();
 
-	std::string metric = mFMP->getChild<LLUICtrl>("model_category_combo")->getValue().asString();
-
 	LLSpinCtrl* scale_spinner = mFMP->getChild<LLSpinCtrl>("import_scale");
 
 	F32 scale = scale_spinner->getValue().asReal();
@@ -1534,7 +1532,6 @@ void LLModelPreview::rebuildUploadData()
 			if (base_model && !requested_name.empty())
 			{
 				base_model->mRequestedLabel = requested_name;
-				base_model->mMetric = metric;
 			}
 
 			for (int i = LLModel::NUM_LODS - 1; i >= LLModel::LOD_IMPOSTOR; i--)

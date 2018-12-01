@@ -6364,7 +6364,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		[day,datetime,utc]/[mth,datetime,utc]/[year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
 	</string>
 	<string name="NotificationItemDateStringSLT">
-		[day,datetime,slt]/[mthnum,datetime,slt]/[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]
+		[day,datetime,slt]/[mthnum,datetime,slt]/[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt] [timezone,datetime,slt]
 	</string>
 	<string name="Pie_av_render_normally">
 		Normalmente

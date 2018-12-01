@@ -637,12 +637,12 @@ static void settings_to_globals()
 	// </FS:Ansariel>
 	LLImageGL::sGlobalUseAnisotropic	= gSavedSettings.getBOOL("RenderAnisotropic");
 	LLImageGL::sCompressTextures		= gSavedSettings.getBOOL("RenderCompressTextures");
-	LLVOVolume::sLODFactor				= gSavedSettings.getF32("RenderVolumeLODFactor");
+	LLVOVolume::sLODFactor				= llmin(gSavedSettings.getF32("RenderVolumeLODFactor"), MAX_LOD_FACTOR);
 	LLVOVolume::sDistanceFactor			= 1.f-LLVOVolume::sLODFactor * 0.1f;
 	LLVolumeImplFlexible::sUpdateFactor = gSavedSettings.getF32("RenderFlexTimeFactor");
 	LLVOTree::sTreeFactor				= gSavedSettings.getF32("RenderTreeLODFactor");
-	LLVOAvatar::sLODFactor				= gSavedSettings.getF32("RenderAvatarLODFactor");
-	LLVOAvatar::sPhysicsLODFactor		= gSavedSettings.getF32("RenderAvatarPhysicsLODFactor");
+	LLVOAvatar::sLODFactor				= llmin(gSavedSettings.getF32("RenderAvatarLODFactor"), MAX_LOD_FACTOR);
+	LLVOAvatar::sPhysicsLODFactor		= llmin(gSavedSettings.getF32("RenderAvatarPhysicsLODFactor"), MAX_LOD_FACTOR);
 	LLVOAvatar::updateImpostorRendering(gSavedSettings.getU32("RenderAvatarMaxNonImpostors"));
 	LLVOAvatar::sVisibleInFirstPerson	= gSavedSettings.getBOOL("FirstPersonAvatarVisible");
 	// clamp auto-open time to some minimum usable value
@@ -6334,11 +6334,8 @@ void LLAppViewer::resumeMainloopTimeout( char const* state, F32 secs)
 	{
 		if(secs < 0.0f)
 		{
-			// <FS:ND> Gets called often in display loop
-			// secs = gSavedSettings.getF32("MainloopTimeoutDefault");
-			static LLCachedControl< F32 > MainloopTimeoutDefault( gSavedSettings, "MainloopTimeoutDefault" );
-			secs = MainloopTimeoutDefault;
-			// </FS:ND>
+			static LLCachedControl<F32> mainloop_timeout(gSavedSettings, "MainloopTimeoutDefault", 60);
+			secs = mainloop_timeout;
 		}
 
 		mMainloopTimeout->setTimeout(secs);
@@ -6368,11 +6365,8 @@ void LLAppViewer::pingMainloopTimeout( char const* state, F32 secs)
 	{
 		if(secs < 0.0f)
 		{
-			// <FS:ND> Gets called often in display loop
-			// secs = gSavedSettings.getF32("MainloopTimeoutDefault");
-			static LLCachedControl< F32 > MainloopTimeoutDefault( gSavedSettings, "MainloopTimeoutDefault" );
-			secs = MainloopTimeoutDefault;
-			// </FS:ND>
+			static LLCachedControl<F32> mainloop_timeout(gSavedSettings, "MainloopTimeoutDefault", 60);
+			secs = mainloop_timeout;
 		}
 
 		mMainloopTimeout->setTimeout(secs);

@@ -686,23 +686,19 @@ void LLViewerMedia::updateMedia(void *dummy_arg)
 
 	std::vector<LLViewerMediaImpl*> proximity_order;
 
+	static LLCachedControl<bool> inworld_media_enabled(gSavedSettings, "AudioStreamingMedia", true);
+	static LLCachedControl<bool> inworld_audio_enabled(gSavedSettings, "AudioStreamingMusic", true);
 	// <FS:Ansariel> Replace frequently called gSavedSettings
-	//bool inworld_media_enabled = gSavedSettings.getBOOL("AudioStreamingMedia");
-	//bool inworld_audio_enabled = gSavedSettings.getBOOL("AudioStreamingMusic");
 	//U32 max_instances = gSavedSettings.getU32("PluginInstancesTotal");
 	//U32 max_normal = gSavedSettings.getU32("PluginInstancesNormal");
 	//U32 max_low = gSavedSettings.getU32("PluginInstancesLow");
 	//F32 max_cpu = gSavedSettings.getF32("PluginInstancesCPULimit");
 
-	static LLCachedControl<bool> sAudioStreamingMedia(gSavedSettings, "AudioStreamingMedia");
-	static LLCachedControl<bool> sAudioStreamingMusic(gSavedSettings, "AudioStreamingMusic");
 	static LLCachedControl<U32> sPluginInstancesTotal(gSavedSettings, "PluginInstancesTotal");
 	static LLCachedControl<U32> sPluginInstancesNormal(gSavedSettings, "PluginInstancesNormal");
 	static LLCachedControl<U32> sPluginInstancesLow(gSavedSettings, "PluginInstancesLow");
 	static LLCachedControl<F32> sPluginInstancesCPULimit(gSavedSettings, "PluginInstancesCPULimit");
 
-	bool inworld_media_enabled = sAudioStreamingMedia;
-	bool inworld_audio_enabled = sAudioStreamingMusic;
 	U32 max_instances = sPluginInstancesTotal();
 	U32 max_normal = sPluginInstancesNormal();
 	U32 max_low = sPluginInstancesLow();
@@ -968,7 +964,8 @@ void LLViewerMedia::setAllMediaEnabled(bool val)
 				LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
 		}
 		
-//		if (gSavedSettings.getBOOL("AudioStreamingMusic") &&
+//		static LLCachedControl<bool> audio_streaming_music(gSavedSettings, "AudioStreamingMusic", true);
+//		if (audio_streaming_music &&
 //			!LLViewerMedia::isParcelAudioPlaying() &&
 //			gAudiop && 
 //			LLViewerMedia::hasParcelAudio())
@@ -1040,7 +1037,8 @@ void LLViewerMedia::setAllMediaPaused(bool val)
             LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
         }
 
-        if (gSavedSettings.getBOOL("AudioStreamingMusic") &&
+        static LLCachedControl<bool> audio_streaming_music(gSavedSettings, "AudioStreamingMusic", true);
+        if (audio_streaming_music &&
             !LLViewerMedia::isParcelAudioPlaying() &&
             gAudiop &&
             LLViewerMedia::hasParcelAudio())
