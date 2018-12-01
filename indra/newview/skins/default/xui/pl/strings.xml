@@ -5224,6 +5224,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_RFO_Label">
 		Renderuj tylko znajomych
 	</string>
+	<string name="Command_DAO_Label">
+		Derenderuj animesz
+	</string>
 	<string name="Command_Beacons_Label">
 		Emitery
 	</string>
@@ -5403,6 +5406,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_RFO_Tooltip">
 		Renderuj tylko Twoich znajomych w przeglądarce, wszystkie inne awatary będą niewidoczne. Teleportacja jest wymagana aby przywrócić widzialność innych osób, jeśli włączysz tą opcję.
+	</string>
+	<string name="Command_DAO_Tooltip">
+		Derenderuj animowane obiekty (znane też jako animesz) - Tymczasowo derenderuj wszystkie aktualnie widoczne animowane mesze (dołączone i wolnostojące). Zderenderowane animesze pojawią się ponownie po teleportacji.
 	</string>
 	<string name="Command_Beacons_Tooltip">
 		Pokaż emitery
@@ -5884,6 +5890,28 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="fsbridge_script_info_pf">
 		Średni czas CPU zużyty do obsługi nawigacji odnajdywania ścieżek: [OBJECT_CHARACTER_TIME] ms.
 	</string>
+	<string name="fsbridge_script_info_ext">
+ID obiektu: [INSPECTING_KEY]
+Opis: [OBJECT_DESC]
+Prima główna: [OBJECT_ROOT]
+Liczba primów: [OBJECT_PRIM_COUNT]
+Wpływ na działkę: [OBJECT_PRIM_EQUIVALENCE]
+Elementów wewnątrz: [OBJECT_TOTAL_INVENTORY_COUNT]
+Prędkość: [OBJECT_VELOCITY]
+Pozycja: [OBJECT_POS]
+Rotacja: [OBJECT_ROT]
+Prędkość kątowa: [OBJECT_OMEGA] (radian na sekundę)
+Twórca: [OBJECT_CREATOR]
+Właściciel: [OBJECT_OWNER]
+Poprzedni właściciel: [OBJECT_LAST_OWNER_ID]
+Zrezzowany przez: [OBJECT_REZZER_KEY]
+Grupa: [OBJECT_GROUP]
+Czas utworzenia: [OBJECT_CREATION_TIME]
+Typ odnajdywania ścieżki: [OBJECT_PATHFINDING_TYPE]
+Punkt dołączenia: [OBJECT_ATTACHED_POINT]
+Tymczasowo dołączone: [OBJECT_TEMP_ATTACHED]
+Twoja aktualna pozycja: [AVATAR_POS]
+	</string>
 	<string name="fsbridge_error_scriptinfonotfound">
 		Info o skryptach: Obiekt do sprawdzenia jest nieprawidłowy lub poza zasięgiem.
 	</string>
@@ -6024,6 +6052,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="fs_preprocessor_error">
 		[ERR_NAME] ([LINENUMBER]): wystąpił nieoczekiwany wyjątek.
+	</string>
+	<string name="fs_preprocessor_lsl2_directive_override">
+		Wykryto dyrektywę kompiluj-jako-LSL2 nadpisującą ustawienia preferencji.
+	</string>
+	<string name="fs_preprocessor_mono_directive_override">
+		Wykryto dyrektywę kompiluj-jako-Mono nadpisującą ustawienia preferencji.
 	</string>
 	<string name="fs_preprocessor_optimizer_start">
 		Optymalizacja funkcji i zmiennych globalnych zdefiniowanych przez użytkownika.

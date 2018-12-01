@@ -7406,7 +7406,7 @@ void handle_script_info()
 	{
 		object_id = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject()->mID;
 		LL_INFOS() << "Reporting Script Info for object: " << object_id.asString() << LL_ENDL;
-		FSLSLBridge::instance().viewerToLSL("getScriptInfo|" + object_id.asString());
+		FSLSLBridge::instance().viewerToLSL("getScriptInfo|" + object_id.asString() + "|" + (gSavedSettings.getBOOL("FSScriptInfoExtended") ? "1" : "0"));
 	}
 }
 
@@ -10619,6 +10619,17 @@ class LLEditEnableTakeOff : public view_listener_t
 	}
 };
 
+// <FS:Beq> Xmas present for Ansa, Animesh kill switch
+class FSDerenderAnimatedObjects : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		gObjectList.killAnimatedObjects();
+		return true;
+	}
+};
+
+// </FS:Beq>
 class LLEditTakeOff : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -11400,6 +11411,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLToolsSelectedScriptAction(), "Tools.SelectedScriptAction");
 	view_listener_t::addMenu(new FSToolsResyncAnimations(), "Tools.ResyncAnimations");	// <FS:CR> Resync Animations
 	view_listener_t::addMenu(new FSToolsUndeform(), "Tools.Undeform");	// <FS:CR> FIRE-4345: Undeform
+	view_listener_t::addMenu(new FSDerenderAnimatedObjects(), "Tools.DerenderAnimatedObjects");	// <FS:Beq> Animesh Kill switch
 
 	view_listener_t::addMenu(new LLToolsEnableToolNotPie(), "Tools.EnableToolNotPie");
 	view_listener_t::addMenu(new LLToolsEnableSelectNextPart(), "Tools.EnableSelectNextPart");

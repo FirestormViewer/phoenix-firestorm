@@ -3480,8 +3480,12 @@ void LLPipeline::markRebuild(LLDrawable *drawablep, LLDrawable::EDrawableFlags f
 {
 	if (drawablep && !drawablep->isDead() && assertInitialized())
 	{
-        if (debugLoggingEnabled("AnimatedObjectsLinkset"))
-        {
+		//<FS:Beq> avoid unfortunate sleep during trylock by static check
+		//if(debugLoggingEnabled("AnimatedObjectsLinkset"))
+		static auto debug_logging_on = debugLoggingEnabled("AnimatedObjectsLinkset");
+		if (debug_logging_on)
+		//</FS:Beq>
+		{
             LLVOVolume *vol_obj = drawablep->getVOVolume();
             if (vol_obj && vol_obj->isAnimatedObject() && vol_obj->isRiggedMesh())
             {
@@ -6718,7 +6722,7 @@ void LLPipeline::enableLightsPreview()
 	light->enable();
 	light->setPosition(light_pos);
 	light->setDiffuse(diffuse0);
-	light->setAmbient(LLColor4::black);
+	light->setAmbient(ambient);
 	light->setSpecular(specular0);
 	light->setSpotExponent(0.f);
 	light->setSpotCutoff(180.f);
@@ -6729,7 +6733,7 @@ void LLPipeline::enableLightsPreview()
 	light->enable();
 	light->setPosition(light_pos);
 	light->setDiffuse(diffuse1);
-	light->setAmbient(LLColor4::black);
+	light->setAmbient(ambient);
 	light->setSpecular(specular1);
 	light->setSpotExponent(0.f);
 	light->setSpotCutoff(180.f);
@@ -6739,7 +6743,7 @@ void LLPipeline::enableLightsPreview()
 	light->enable();
 	light->setPosition(light_pos);
 	light->setDiffuse(diffuse2);
-	light->setAmbient(LLColor4::black);
+	light->setAmbient(ambient);
 	light->setSpecular(specular2);
 	light->setSpotExponent(0.f);
 	light->setSpotCutoff(180.f);

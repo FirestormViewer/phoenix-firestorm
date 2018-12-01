@@ -5829,6 +5829,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_RFO_Label">
 		Nur Freunde anzeigen
 	</string>
+	<string name="Command_DAO_Label">
+		Animesh nicht anzeigen
+	</string>
 	<string name="Command_Beacons_Label">
 		Ortungssignale
 	</string>
@@ -6014,6 +6017,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_RFO_Tooltip">
 		Nur Freunde im Viewer darstellen. Nach Deaktivierung ist ein Teleport erforderlich, um andere Avatare wieder darzustellen.
+	</string>
+	<string name="Command_DAO_Tooltip">
+		Animesh-Objekte nicht darstellen - Stellt Animesh-Objekte temporär nicht dar. Nach Deaktivierung ist ein Teleport erforderlich, um entsprechende Objekte wieder darzustellen.
 	</string>
 	<string name="Command_Beacons_Tooltip">
 		Ortungssignale anzeigen
@@ -6517,6 +6523,28 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="fsbridge_script_info_pf">
 		Durchschnittlich beanspruchte CPU-Zeit für Pathfinding-Navigation: [OBJECT_CHARACTER_TIME] ms.
 	</string>
+	<string name="fsbridge_script_info_ext">
+Objekt-ID: [INSPECTING_KEY]
+Beschreibung: [OBJECT_DESC]
+Wurzel-Prim: [OBJECT_ROOT]
+Primanzahl: [OBJECT_PRIM_COUNT]
+Auswirkung auf Land: [OBJECT_PRIM_EQUIVALENCE]
+Inventar-Objekte: [OBJECT_TOTAL_INVENTORY_COUNT]
+Geschwindigkeit: [OBJECT_VELOCITY]
+Position: [OBJECT_POS]
+Rotation: [OBJECT_ROT]
+Winkelgeschwindigkeit: [OBJECT_OMEGA] (Rad pro Sekunde)
+Ersteller: [OBJECT_CREATOR]
+Besitzer: [OBJECT_OWNER]
+Vorheriger Besitzer: [OBJECT_LAST_OWNER_ID]
+Gerezt von: [OBJECT_REZZER_KEY]
+Gruppe: [OBJECT_GROUP]
+Erstellungszeit: [OBJECT_CREATION_TIME]
+Pathfinding-Typ: [OBJECT_PATHFINDING_TYPE]
+Angehängt an: [OBJECT_ATTACHED_POINT]
+Temporär angehängt: [OBJECT_TEMP_ATTACHED]
+Ihre aktuelle Position: [AVATAR_POS]
+	</string>
 	<string name="fsbridge_error_scriptinfonotfound">
 		Skript-Info: Zu prüfendes Objekt ungültig oder außer Reichweite.
 	</string>
@@ -6665,6 +6693,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="fs_preprocessor_error">
 		[ERR_NAME] ([LINENUMBER]): Unerwarteter Ausnahmefehler aufgetreten.
+	</string>
+	<string name="fs_preprocessor_lsl2_directive_override">
+		Erkannte LSL2-Kompilierungsdirektive übersteuert Voreinstellung.
+	</string>
+	<string name="fs_preprocessor_mono_directive_override">
+		Erkannte Mono-Kompilierungsdirektive übersteuert Voreinstellung.
 	</string>
 	<!-- LSL Optimizer -->
 	<string name="fs_preprocessor_optimizer_start">

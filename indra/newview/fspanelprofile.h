@@ -195,34 +195,19 @@ protected:
 	void pay();
 
 	/**
-	 * opens inventory and IM for sharing items
-	 */
-	void share();
-
-	/**
 	 * Add/remove resident to/from your block list.
 	 */
 	void toggleBlock();
 
 	void updateButtons();
 
-	void kick();
-	void freeze();
-	void unfreeze();
-	void csr();
-
-	bool enableCall();
-
 	void onAddFriendButtonClick();
 	void onIMButtonClick();
-	void onCallButtonClick();
 	void onTeleportButtonClick();
 
 	void onCopyToClipboard();
 	void onCopyURI();
-	void onCopyKey();
 	void onGroupInvite();
-	void onReport();
 
 	bool isGrantedToSeeOnlineStatus();
 

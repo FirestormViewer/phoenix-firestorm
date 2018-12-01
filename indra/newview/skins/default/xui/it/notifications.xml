@@ -4054,7 +4054,6 @@ Riprova tra un minuto.
 	</notification>
 	<notification name="NoEnterRegionMaybeFull">
 		Non puoi entrare nella regione "[NAME]".
-Potrebbe essere piena o in fase di riavvio.
 	</notification>
 	<notification name="SaveBackToInvDisabled">
 		Opzione Salva nell&apos;inventario disattivata

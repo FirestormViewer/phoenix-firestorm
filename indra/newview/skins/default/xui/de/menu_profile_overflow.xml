@@ -4,6 +4,7 @@
 	<menu_item_call label="Bezahlen" name="pay"/>
 	<menu_item_call label="Teilen" name="share"/>
 	<menu_item_call label="Anrufen" name="call"/>
+	<menu_item_call label="Zu Kontakt-Set hinzufügen" name="add_to_contact_set"/>
 	<menu_item_call label="Name kopieren" name="copy_name_to_clipboard"/>
 	<menu_item_call label="URI kopieren" name="copy_uri_to_clipboard"/>
 	<menu_item_call label="UUID kopieren" name="copy_key_to_clipboard"/>
