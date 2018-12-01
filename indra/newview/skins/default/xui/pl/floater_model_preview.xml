@@ -190,11 +190,9 @@
            <panel name="avatar_model_hint_panel">
              <text name="avatar_model_hint_text">
 Wskazówka:
-Wiele rzeczy w tym samym punkcie podnosi ryzyko rozłączeń podczas teleportów i zmian regionów.
-
 Zbyt wiele rzeczy niepotrzebnie używa wartości domyślnej (prawa ręka).
 
-Rozważ użycie innego punktu, aby rzeczy działały bardziej niezawodnie.
+Rozważ użycie innego punktu doczepienia, bliżej do pozycji obiektu na ciele.
              </text>
            </panel>
      </panel>

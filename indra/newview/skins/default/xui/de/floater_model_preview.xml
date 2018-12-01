@@ -312,11 +312,9 @@
 				<panel name="avatar_model_hint_panel">
 					<text name="avatar_model_hint_text">
 						Hinweis:
-Mehrere Anhänge an einem Anhängepunkt erhöhen das Risiko von Verbindungstrennungen während Teleports &amp; Regionsübergängen.
+Zu viele Objekte nutzen unnötigerweise den Standard-Anhängepunkt (Rechte Hand).
 
-Zu viele Objekte nutzen den Standard (Rechte Hand) unnötigerweise.
-
-Bitte denken Sie für zuverlässigere Anhänge über einen anderen Anhängepunkt nach.
+Bitte ziehen Sie einen anderen Anhängepunkt nahe der Objektposition in Betracht.
 					</text>
 				</panel>
 			</panel>
