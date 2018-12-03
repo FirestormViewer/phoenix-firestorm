@@ -33,17 +33,19 @@
 
 #include "apr_base64.h" // For getScriptInfo()
 #include "llagent.h"
-#include "llattachmentsmgr.h"
 #include "llappearancemgr.h"
+#include "llattachmentsmgr.h"
+#include "llavatarappearance.h"
 #include "llinventoryfunctions.h"
 #include "llmaniptranslate.h"
 #include "llpreviewscript.h"
 #include "llselectmgr.h"
+#include "llsdutil.h"
+#include "llslurl.h"
 #include "lltrans.h"
+#include "llviewerassetupload.h"
 #include "llviewercontrol.h"
 #include "llviewerregion.h"
-#include "llviewerassetupload.h"
-#include "llsdutil.h"
 
 #if OPENSIM
 #include "llviewernetwork.h"
@@ -401,15 +403,15 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 					args3["OBJECT_POS"] = scriptInfoArray[12].asString();
 					args3["OBJECT_ROT"] = scriptInfoArray[13].asString();
 					args3["OBJECT_OMEGA"] = scriptInfoArray[14].asString();
-					args3["OBJECT_CREATOR"] = scriptInfoArray[15].asString();
-					args3["OBJECT_OWNER"] = scriptInfoArray[16].asString();
-					args3["OBJECT_LAST_OWNER_ID"] = scriptInfoArray[17].asString();
+					args3["OBJECT_CREATOR"] = LLSLURL("agent", scriptInfoArray[15].asUUID(), "inspect").getSLURLString();
+					args3["OBJECT_OWNER"] = scriptInfoArray[16].asUUID().isNull() ? LLTrans::getString("GroupOwned") : LLSLURL("agent", scriptInfoArray[16].asUUID(), "inspect").getSLURLString();
+					args3["OBJECT_LAST_OWNER_ID"] = scriptInfoArray[17].asUUID().notNull() ? LLSLURL("agent", scriptInfoArray[17].asUUID(), "inspect").getSLURLString() : "---";
 					args3["OBJECT_REZZER_KEY"] = scriptInfoArray[18].asString();
-					args3["OBJECT_GROUP"] = scriptInfoArray[19].asString();
+					args3["OBJECT_GROUP"] = scriptInfoArray[19].asUUID().notNull() ? LLSLURL("group", scriptInfoArray[19].asUUID(), "inspect").getSLURLString() : "---";
 					args3["OBJECT_CREATION_TIME"] = scriptInfoArray[20].asString();
 					args3["OBJECT_PATHFINDING_TYPE"] = scriptInfoArray[21].asString();
-					args3["OBJECT_ATTACHED_POINT"] = scriptInfoArray[22].asString();
-					args3["OBJECT_TEMP_ATTACHED"] = scriptInfoArray[23].asString();
+					args3["OBJECT_ATTACHED_POINT"] = (scriptInfoArray[22].asInteger() < 1 || scriptInfoArray[22].asInteger() > 255) ? "---" : LLTrans::getString(LLAvatarAppearance::getAttachmentPointName(scriptInfoArray[22].asInteger()));
+					args3["OBJECT_TEMP_ATTACHED"] = scriptInfoArray[23].asInteger() == 1 ? LLTrans::getString("Yes") : LLTrans::getString("No");
 					args3["AVATAR_POS"] = scriptInfoArray[24].asString();
 					args3["INSPECTING_KEY"] = scriptInfoArray[25].asString();
 					report_to_nearby_chat(format_string(LLTrans::getString("fsbridge_script_info_ext"), args3));
