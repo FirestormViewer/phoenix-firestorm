@@ -6904,4 +6904,10 @@ Ihre aktuelle Position: [AVATAR_POS]
 
 [ASSET_NAME]
 	</string>
+	<string name="Yes">
+		Ja
+	</string>
+	<string name="No">
+		Nein
+	</string>
 </strings>

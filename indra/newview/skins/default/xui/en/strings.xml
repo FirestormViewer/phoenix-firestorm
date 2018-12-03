@@ -3108,7 +3108,8 @@ Your current position: [AVATAR_POS]
   <string name="mode_settings_text.xml">Text</string>
 
   <string name="Asset_Uploading">Uploading...
-
 [ASSET_NAME]
   </string>
+  <string name="Yes">Yes</string>
+  <string name="No">No</string>
 </strings>
