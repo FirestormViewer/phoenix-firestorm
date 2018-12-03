@@ -64,14 +64,6 @@
 const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
 const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
 
-#if LL_DARWIN
-size_t strnlen(const char *s, size_t n)
-{
-	const char *p = (const char *)memchr(s, 0, n);
-	return(p ? p-s : n);
-}
-#endif
-
 FSData::FSData() :
 	mLegacySearch(true),
 	mFSDataDone(false),
