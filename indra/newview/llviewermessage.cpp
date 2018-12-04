@@ -299,6 +299,12 @@ bool friendship_offer_callback(const LLSD& notification, const LLSD& response)
 
 		    // This will also trigger an onlinenotification if the user is online
             std::string url = gAgent.getRegionCapability("AcceptFriendship");
+            // <FS:Ansariel> This only seems to work for offline FRs if FSUseReadOfflineMsgsCap has been used
+            if (!gSavedSettings.getBOOL("FSUseReadOfflineMsgsCap"))
+            {
+                url = "";
+            }
+            // </FS:Ansariel>
             LL_DEBUGS("Friendship") << "Cap string: " << url << LL_ENDL;
             if (!url.empty() && payload.has("online") && payload["online"].asBoolean() == false)
             {
@@ -338,6 +344,12 @@ bool friendship_offer_callback(const LLSD& notification, const LLSD& response)
 			    // We no longer notify other viewers, but we DO still send
                 // the rejection to the simulator to delete the pending userop.
                 std::string url = gAgent.getRegionCapability("DeclineFriendship");
+                // <FS:Ansariel> This only seems to work for offline FRs if FSUseReadOfflineMsgsCap has been used
+                if (!gSavedSettings.getBOOL("FSUseReadOfflineMsgsCap"))
+                {
+                    url = "";
+                }
+                // </FS:Ansariel>
                 LL_DEBUGS("Friendship") << "Cap string: " << url << LL_ENDL;
                 if (!url.empty() && payload.has("online") && payload["online"].asBoolean() == false)
                 {
