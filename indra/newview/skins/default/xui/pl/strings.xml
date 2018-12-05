@@ -6253,7 +6253,12 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="Asset_Uploading">
 		Ładowanie na serwer...
-
 [ASSET_NAME]
+	</string>
+	<string name="Yes">
+		Tak
+	</string>
+	<string name="No">
+		Nie
 	</string>
 </strings>
