@@ -4830,6 +4830,12 @@ LLViewerTexture* LLViewerObject::getBakedTextureForMagicId(const LLUUID& id)
 		return NULL;
 	}
 
+	LLViewerObject *root = getRootEdit();
+	if (root && root->isAnimatedObject())
+	{
+		return LLViewerTextureManager::getFetchedTexture(id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+	}
+
 	LLVOAvatar* avatar = getAvatar();
 	if (avatar)
 	{
