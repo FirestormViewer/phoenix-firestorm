@@ -2632,6 +2632,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Group_Titles_Label">Group Titles</string>
   <string name="Command_Wearable_Favorites_Label">Favorite Wearables</string>
   <string name="Command_RFO_Label">Show Friends Only</string>
+  <string name="Command_DAO_Label">Derender Animesh</string>
   <string name="Command_Beacons_Label">Beacons</string>
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
@@ -2695,6 +2696,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Group_Titles_Tooltip">Change active group tag</string>
   <string name="Command_Wearable_Favorites_Tooltip">Open the list of favorite wearables</string>
   <string name="Command_RFO_Tooltip">Show only your friends in the viewer, all other avatars will be removed. Once enabled a TP is required to restore visibility of others.</string>
+  <string name="Command_DAO_Tooltip">Derender Animated Objects (aka Animesh) - Temporarily derenders all currently visible Animesh (attached and free roaming). Derendered animesh will reappear after a TP</string>
   <string name="Command_Beacons_Tooltip">Show beacons</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
@@ -2918,6 +2920,28 @@ Try enclosing path to the editor with double quotes.
   <string name="fsbridge_created">Bridge created.</string>
   <string name="fsbridge_script_info">Script info: '[OBJECT_NAME]': [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] running scripts, [OBJECT_SCRIPT_MEMORY] KB allowed memory size limit, [OBJECT_SCRIPT_TIME] ms of CPU time consumed.[PATHFINDING_TEXT]</string>
   <string name="fsbridge_script_info_pf">Average CPU time used for pathfinding navigation: [OBJECT_CHARACTER_TIME] ms.</string>
+  <string name="fsbridge_script_info_ext">
+Object ID: [INSPECTING_KEY]
+Description: [OBJECT_DESC]
+Root prim: [OBJECT_ROOT]
+Prim count: [OBJECT_PRIM_COUNT]
+Land impact: [OBJECT_PRIM_EQUIVALENCE]
+Inventory items: [OBJECT_TOTAL_INVENTORY_COUNT]
+Velocity: [OBJECT_VELOCITY]
+Position: [OBJECT_POS]
+Rotation: [OBJECT_ROT]
+Angular velocity: [OBJECT_OMEGA] (radians per second)
+Creator: [OBJECT_CREATOR]
+Owner: [OBJECT_OWNER]
+Previous owner: [OBJECT_LAST_OWNER_ID]
+Rezzed by: [OBJECT_REZZER_KEY]
+Group: [OBJECT_GROUP]
+Creation time: [OBJECT_CREATION_TIME]
+Pathfinding type: [OBJECT_PATHFINDING_TYPE]
+Attachment point: [OBJECT_ATTACHED_POINT]
+Temporarily attached: [OBJECT_TEMP_ATTACHED]
+Your current position: [AVATAR_POS]
+  </string>
   <string name="fsbridge_error_scriptinfonotfound">Script info: Object to check is invalid or out of range.</string>
   <string name="fsbridge_error_scriptinfomalformed">Script info: Received malformed response from bridge. Try again.</string>
   <string name="fsbridge_error_injection">NOTICE: One or more scripts have been added to your Firestorm bridge! If you did not expect this message, use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to re-create your bridge now.</string>
@@ -2979,6 +3003,8 @@ Try enclosing path to the editor with double quotes.
   <string name="fs_preprocessor_lexing_exception">[SEVERITY]: [ERR_NAME] ([LINENUMBER]): [ERR_DESC]</string>
   <string name="fs_preprocessor_exception">[ERR_NAME] ([LINENUMBER]): exception caught: [ERR_DESC]</string>
   <string name="fs_preprocessor_error">[ERR_NAME] ([LINENUMBER]): unexpected exception caught.</string>
+  <string name="fs_preprocessor_lsl2_directive_override">Detected compile-as-LSL2 directive overriding preference setting.</string>
+  <string name="fs_preprocessor_mono_directive_override">Detected compile-as-Mono directive overriding preference setting.</string>
   <!-- LSL Optimizer -->
   <string name="fs_preprocessor_optimizer_start">Optimizing out unreferenced user-defined functions and global variables.</string>
   <string name="fs_preprocessor_optimizer_regex_err">Not a valid regular expression: '[WHAT]'; LSL optimization skipped.</string>
@@ -3086,7 +3112,8 @@ Try enclosing path to the editor with double quotes.
   <string name="mode_settings_text.xml">Text</string>
 
   <string name="Asset_Uploading">Uploading...
-
 [ASSET_NAME]
   </string>
+  <string name="Yes">Yes</string>
+  <string name="No">No</string>
 </strings>

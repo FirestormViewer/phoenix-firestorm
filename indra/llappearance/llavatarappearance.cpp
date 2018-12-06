@@ -2195,3 +2195,19 @@ LLAvatarAppearance::LLMaskedMorph::LLMaskedMorph(LLVisualParam *morph_target, BO
 		target->addPendingMorphMask();
 	}
 }
+
+// <FS:Ansariel> Get attachment point name from ID
+//static
+std::string LLAvatarAppearance::getAttachmentPointName(S32 attachmentPointId)
+{
+	for (auto attachmentPoint : sAvatarXmlInfo->mAttachmentInfoList)
+	{
+		if (attachmentPoint->mAttachmentID == attachmentPointId)
+		{
+			return attachmentPoint->mName;
+		}
+	}
+
+	return std::string();
+}
+// </FS:Ansariel>

@@ -475,6 +475,11 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 		{
 			retval |= MEDIA_FLAGS_CHANGED;
 		}
+		if (result && getRootEdit()->isAttachment() && getAvatarAncestor()==gAgentAvatarp )
+		{
+			LL_INFOS("AvatarRender") << "Volume attached to self av has updated TE properties. ARC may change accordingly. Change flags "
+									 << result << LL_ENDL; 
+		}
 	}
 	else
 	{
@@ -614,6 +619,11 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 				if (result & TEM_CHANGE_MEDIA)
 				{
 					retval |= MEDIA_FLAGS_CHANGED;
+				}
+				if (result && getRootEdit()->isAttachment() && getAvatarAncestor()==gAgentAvatarp )
+				{
+					LL_INFOS("AvatarRender") << "Volume attached to self av has updated TE properties. ARC may change accordingly. Change flags "
+											 << result << LL_ENDL; 
 				}
 			}
 		}
@@ -5603,7 +5613,11 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
         vobj = bridge->mDrawable->getVObj();
         vol_obj = dynamic_cast<LLVOVolume*>(vobj);
 	}
-    if (vol_obj)
+	// <FS:Beq> option to reduce the number of complexity updates
+	// if (vol_obj)
+	static LLCachedControl< bool >aggressiveComplexityUpdates(gSavedSettings, "FSEnableAggressiveComplexityUpdates", false);
+    if (aggressiveComplexityUpdates && vol_obj)
+	// </FS:Beq>
     {
         vol_obj->updateVisualComplexity();
     }

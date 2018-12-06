@@ -996,7 +996,7 @@ void LLViewerObjectList::update(LLAgent &agent)
 	const F64 frame_time = LLFrameTimer::getElapsedSeconds();
 	
 	LLViewerObject *objectp = NULL;	
-	
+
 	// Make a copy of the list in case something in idleUpdate() messes with it
 	static std::vector<LLViewerObject*> idle_list;
 
@@ -1017,7 +1017,7 @@ void LLViewerObjectList::update(LLAgent &agent)
 				{
                     idle_list.push_back( objectp );
                 }
-			else
+				else
 				{
 					idle_list[idle_count] = objectp;
 				}
@@ -1503,6 +1503,29 @@ BOOL LLViewerObjectList::killObject(LLViewerObject *objectp)
 	return FALSE;
 }
 
+// <FS:Beq> Animated Objects kill switch
+void LLViewerObjectList::killAnimatedObjects()
+{
+	LLViewerObject *objectp;
+
+	for (auto iter = mObjects.begin(); iter != mObjects.end(); ++iter)
+	{
+		objectp = *iter;
+
+		if (objectp->isAnimatedObject())
+		{
+			killObject(objectp);
+			if (LLViewerRegion::sVOCacheCullingEnabled && objectp->getRegion())
+			{
+				objectp->getRegion()->killCacheEntry(objectp->getLocalID());
+			}
+		}
+	}
+
+	cleanDeadObjects(FALSE);
+}
+// </FS:Beq>
+
 void LLViewerObjectList::killObjects(LLViewerRegion *regionp)
 {
 	LLViewerObject *objectp;
@@ -1667,9 +1690,9 @@ void LLViewerObjectList::updateActive(LLViewerObject *objectp)
 				mActiveObjects.push_back(objectp);
 				objectp->setListIndex(mActiveObjects.size()-1);
 			objectp->setOnActiveList(TRUE);
-		}
-		else
-		{
+			}
+			else
+			{
 				llassert(idx < mActiveObjects.size());
 				llassert(mActiveObjects[idx] == objectp);
 
@@ -1810,6 +1833,7 @@ void LLViewerObjectList::repartitionObjects()
 	for (vobj_list_t::iterator iter = mObjects.begin(); iter != mObjects.end(); ++iter)
 	{
 		LLViewerObject* objectp = *iter;
+
 		if (!objectp->isDead())
 		{
 			LLDrawable* drawable = objectp->mDrawable;

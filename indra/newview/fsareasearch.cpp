@@ -1650,7 +1650,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 			}
 				break;
 			case 's': // script
-				FSLSLBridge::instance().viewerToLSL("getScriptInfo|" + (*item_it)->getUUID().asString());
+				FSLSLBridge::instance().viewerToLSL("getScriptInfo|" + (*item_it)->getUUID().asString() + "|" + (gSavedSettings.getBOOL("FSScriptInfoExtended") ? "1" : "0"));
 				break;
 			case 'l': // blacklist
 			{

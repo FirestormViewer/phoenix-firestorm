@@ -24,11 +24,11 @@
 	<panel name="menu_search_panel">
 		<search_editor label="Ricerca nei menu" name="search_menu_edit" tool_tip="Scrivi qui i termini da cercare. Verranno visualizzate anche corrispondenze parziali con le voci di menu." />
 	</panel>
-	<panel name="balance_bg" left="-308">
+	<panel name="balance_bg">
 		<text name="balance" tool_tip="Clicca per aggiornare il tuo saldo in L$" value="L$ ??"/>
 		<button label="Compra L$" name="buyL" tool_tip="Clicca per acquistare più L$"/>
 	</panel>
-	<panel name="time_and_media_bg" width="206">
+	<panel name="time_and_media_bg">
 		<text name="TimeText" tool_tip="Orario attuale (Pacifico)"/>
 		<button name="stream_toggle_btn" tool_tip="Attiva/ferma musica nel lotto"/>
 		<button name="media_toggle_btn" tool_tip="Attiva/ferma tutti i media (musica, video, pagine Web)"/>

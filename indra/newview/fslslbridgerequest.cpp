@@ -36,28 +36,28 @@
 
 
 //If we get back a normal response, handle it here
-void FSLSLBridgeRequest_Success( LLSD const &aData )
+void FSLSLBridgeRequest_Success(LLSD const &aData)
 {
-	LL_DEBUGS() << ll_pretty_print_sd( aData ) << LL_ENDL;
+	LL_DEBUGS("FSLSLBridge") << ll_pretty_print_sd(aData) << LL_ENDL;
 	//do not use - infinite loop, only here for testing.
 	//FSLSLBridge::instance().viewerToLSL("Response_to_response|" + strContent);
 }
 
 //If we get back an error (not found, etc...), handle it here
-void FSLSLBridgeRequest_Failure( LLSD const &aData  )
+void FSLSLBridgeRequest_Failure(LLSD const &aData)
 {
-	LL_WARNS() << "FSLSLBridgeRequest::error(" << ll_pretty_print_sd( aData ) << ")" << LL_ENDL;
+	LL_WARNS("FSLSLBridge") << "FSLSLBridgeRequest::error(" << ll_pretty_print_sd(aData) << ")" << LL_ENDL;
 }
 
-void FSLSLBridgeRequestRadarPos_Success( LLSD const &aData )
+void FSLSLBridgeRequestRadarPos_Success(LLSD const &aData)
 {
 	FSRadar* radar = FSRadar::getInstance();
-	LL_DEBUGS() << ll_pretty_print_sd( aData ) << LL_ENDL;
-	if (radar && aData.has( LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_CONTENT ) )
+	LL_DEBUGS("FSLSLBridge") << ll_pretty_print_sd(aData) << LL_ENDL;
+	if (radar && aData.has(LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_CONTENT))
 	{
-		std::string strContent = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_CONTENT ].asString();
-		//LL_INFOS() << "Got info: " << strContent << LL_ENDL;
-		// AO: parse content into pairs of [agent UUID,agent zHeight] , update our peoplepanel radar for each one
+		std::string strContent = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_CONTENT].asString();
+		//LL_INFOS("FSLSLBridge") << "Got info: " << strContent << LL_ENDL;
+		// AO: parse content into pairs of [agent UUID,agent zHeight] , update our radar for each one
 		
 		LLUUID targetAv;
 		F32 targetZ;
@@ -74,9 +74,8 @@ void FSLSLBridgeRequestRadarPos_Success( LLSD const &aData )
 			if (entry)
 			{
 				entry->setZOffset(targetZ);
-				//LL_INFOS() << targetAv << " ::: " << targetZ << LL_ENDL;
+				//LL_INFOS("FSLSLBridge") << targetAv << " ::: " << targetZ << LL_ENDL;
 			}
 		}
 	}
 }
-
