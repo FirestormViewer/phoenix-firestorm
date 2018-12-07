@@ -459,6 +459,7 @@
 			<menu_item_check label="Automatyczne maski alpha (bez opóźniania)" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="Tekstury animacji" name="Animation Textures"/>
 			<menu_item_check label="Wyłącz tekstury" name="Disable Textures"/>
+			<menu_item_call label="Derenderuj cały animowany mesz" name="Derender Animesh"/>
 			<menu_item_check label="Maksymalna rozdzielczość tekstur (niebezpieczne)" name="Full Res Textures"/>
 			<menu_item_check label="Renderowania przyłączonego światła" name="Render Attached Lights"/>
 			<menu_item_check label="Renderowanie przyłączonych cząsteczek" name="Render Attached Particles"/>

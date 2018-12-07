@@ -75,6 +75,7 @@ public:
 	LLViewerObject *replaceObject(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp); // TomY: hack to switch VO instances on the fly
 	
 	BOOL killObject(LLViewerObject *objectp);
+	void killAnimatedObjects();
 
 	void killObjects(LLViewerRegion *regionp); // Kill all objects owned by a particular region.
 	void killAllObjects();
@@ -152,7 +153,6 @@ public:
 	boost::signals2::connection setNewObjectCallback(new_object_callback_t cb);
 	new_object_signal_t mNewObjectSignal;
 	// </FS:CR>
-
 	////////////////////////////////////////////
 	//
 	// Only accessed by markDead in LLViewerObject
@@ -162,6 +162,10 @@ public:
 
 	S32 getOrphanParentCount() const { return (S32) mOrphanParents.size(); }
 	S32 getOrphanCount() const { return mNumOrphans; }
+	//<FS:Beq> need avatar count for dynamic BB load balancing
+	S32 getAvatarCount() const { return mNumAvatars; }
+	//</FS:Beq>
+
 	void orphanize(LLViewerObject *childp, U32 parent_id, U32 ip, U32 port);
 	void findOrphans(LLViewerObject* objectp, U32 ip, U32 port);
 
@@ -208,6 +212,9 @@ protected:
 	std::vector<U64>	mOrphanParents;	// LocalID/ip,port of orphaned objects
 	std::vector<OrphanInfo> mOrphanChildren;	// UUID's of orphaned objects
 	S32 mNumOrphans;
+	//<FS:Beq> need avatar count for dynamic BB load balancing
+	S32 mNumAvatars;
+	//</FS:Beq>
 
 	typedef std::vector<LLPointer<LLViewerObject> > vobj_list_t;
 

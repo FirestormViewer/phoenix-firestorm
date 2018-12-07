@@ -471,6 +471,7 @@
 			<menu_item_check label="Automatische Alpha-Masken (nicht aufgeschoben)" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="Animationstexturen" name="Animation Textures"/>
 			<menu_item_check label="Texturen deaktivieren" name="Disable Textures"/>
+			<menu_item_call label="Animesh nicht anzeigen" name="Derender Animesh"/>
 			<menu_item_check label="Texturen in Vollauflösung (gefährlich)" name="Full Res Textures"/>
 			<menu_item_check label="Angehängte Lichter rendern" name="Render Attached Lights"/>
 			<menu_item_check label="Angehängte Partikel rendern" name="Render Attached Particles"/>

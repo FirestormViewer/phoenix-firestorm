@@ -211,6 +211,9 @@ const F32 NAMETAG_VERTICAL_SCREEN_OFFSET = 25.f;
 const F32 NAMETAG_VERT_OFFSET_WEIGHT = 0.17f;
 
 const U32 LLVOAvatar::VISUAL_COMPLEXITY_UNKNOWN = 0;
+const F32 LLVOAvatar::VISUAL_COMPLEXITY_UPDATE_SECONDS = 10.0f;
+const F32 VISUAL_COMPLEXITY_FRAC_CHANGE_THRESH = 0.05f; // Changes to self will not be displayed unless they exceed this fraction of previous value.
+const F32 VISUAL_COMPLEXITY_ABS_CHANGE_THRESH = 1000; // ... and this absolute amount of change.
 const F64 HUD_OVERSIZED_TEXTURE_DATA_SIZE = 1024 * 1024;
 
 enum ERenderName
@@ -1390,9 +1393,10 @@ static LLTrace::BlockTimerStatHandle FTM_AVATAR_EXTENT_UPDATE("Av Upd Extent");
 void LLVOAvatar::calculateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
 {
     LL_RECORD_BLOCK_TIME(FTM_AVATAR_EXTENT_UPDATE);
-
-    S32 box_detail = gSavedSettings.getS32("AvatarBoundingBoxComplexity");
-
+//<FS:Beq> not called as often as it used to be but still no harm in optimising
+//    S32 box_detail = gSavedSettings.getS32("AvatarBoundingBoxComplexity");
+	static const LLCachedControl<S32> box_detail(gSavedSettings, "AvatarBoundingBoxComplexity");
+//<FS:Beq>
     // FIXME the update_min_max function used below assumes there is a
     // known starting point, but in general there isn't. Ideally the
     // box update logic should be modified to handle the no-point-yet
@@ -2569,7 +2573,21 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 	}
 
     // Update should be happening max once per frame.
-	const S32 upd_freq = 4; // force update every upd_freq frames.
+	// <FS:Beq> enable dynamic spreading of the BB calculations
+	//const S32 upd_freq = 4; // force update every upd_freq frames.
+	static LLCachedControl<S32> refreshPeriod(gSavedSettings, "AvatarExtentRefreshPeriodBatch");
+	static LLCachedControl<S32> refreshMaxPerPeriod(gSavedSettings, "AvatarExtentRefreshMaxPerBatch");
+	static S32 upd_freq = refreshPeriod; // initialise to a reasonable defauilt of 1 batch
+	static S32 lastRecalibrationFrame{ 0 };
+
+	const S32 thisFrame = LLDrawable::getCurrentFrame(); 
+	if (thisFrame - lastRecalibrationFrame >= upd_freq)
+	{
+		// Only update at the start of a cycle. .
+		upd_freq = (((gObjectList.getAvatarCount() - 1) / refreshMaxPerPeriod) + 1)*refreshPeriod;
+		lastRecalibrationFrame = thisFrame;
+	}
+	//</FS:Beq>
 	if ((mLastAnimExtents[0]==LLVector3())||
 		(mLastAnimExtents[1])==LLVector3())
 	{
@@ -2577,7 +2595,10 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 	}
 	else
 	{
-		mNeedsExtentUpdate = ((LLDrawable::getCurrentFrame()+mID.mData[0])%upd_freq==0);
+		//<FS:Beq> enable dynamic spreading of the BB calculations
+		//mNeedsExtentUpdate = ((LLDrawable::getCurrentFrame()+mID.mData[0]) % upd_freq == 0);
+		mNeedsExtentUpdate = ((thisFrame + mID.mData[0]) % upd_freq == 0);
+		//</FS:Beq>
 	}
     
     LLScopedContextString str("avatar_idle_update " + getFullname());
@@ -10661,8 +10682,10 @@ void LLVOAvatar::updateRiggingInfo()
 
     //LL_INFOS() << "done update rig count is " << countRigInfoTab(mJointRiggingInfoTab) << LL_ENDL;
     //LL_DEBUGS("RigSpammish") << getFullname() << " after update rig tab:" << LL_ENDL; // <FS:Ansariel> Performance tweak
-    S32 joint_count, box_count;
-    showRigInfoTabExtents(this, mJointRiggingInfoTab, joint_count, box_count);
+	//<FS:Beq> remove debug only stuff on hot path
+    //S32 joint_count, box_count;
+    //showRigInfoTabExtents(this, mJointRiggingInfoTab, joint_count, box_count);
+	//</FS:Beq>
     //LL_DEBUGS("RigSpammish") << "uses " << joint_count << " joints " << " nonzero boxes: " << box_count << LL_ENDL; // <FS:Ansariel> Performance tweak
 }
 
@@ -10899,7 +10922,6 @@ void LLVOAvatar::idleUpdateRenderComplexity()
 void LLVOAvatar::updateVisualComplexity()
 {
 	LL_DEBUGS("AvatarRender") << "avatar " << getID() << " appearance changed" << LL_ENDL;
-	// Set the cache time to in the past so it's updated ASAP
 	mVisualComplexityStale = true;
 }
 
@@ -11068,8 +11090,15 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 	// <FS:Ansariel> Disable useless diagnostics
 	//static std::set<LLUUID> all_textures;
 
-	if (mVisualComplexityStale)
+	// <FS:Beq> remove the timer based complexity updates
+	//bool needs_update = mVisualComplexityStale &&
+	//	(mVisualComplexity==VISUAL_COMPLEXITY_UNKNOWN ||
+	//	 mVisualComplexityUpdateTimer.getElapsedTimeF32()>VISUAL_COMPLEXITY_UPDATE_SECONDS);
+	bool needs_update = mVisualComplexityStale;
+
+	if (needs_update)
 	{
+		
 		// <FS:Ansariel> Show per-item complexity in COF
 		std::map<LLUUID, U32> item_complexity;
 		std::map<LLUUID, U32> temp_item_complexity;
@@ -11185,26 +11214,61 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		//}
 		// </FS:Ansariel>
 
-        if ( cost != mVisualComplexity )
-        {
-            LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
-                                      << " complexity updated was " << mVisualComplexity << " now " << cost
-                                      << " reported " << mReportedVisualComplexity
-                                      << LL_ENDL;
-        }
-        else
-        {
-            LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
-                                      << " complexity updated no change " << mVisualComplexity
-                                      << " reported " << mReportedVisualComplexity
-                                      << LL_ENDL;
-        }
-		mVisualComplexity = cost;
+		bool cost_changed = false;
+		if ( mVisualComplexity == VISUAL_COMPLEXITY_UNKNOWN)
+		{
+			LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
+									  << " complexity initialized to " << cost
+									  << " reported " << mReportedVisualComplexity
+									  << LL_ENDL;
+			cost_changed = true;
+		}
+		else
+		{
+			if ( cost != mVisualComplexity )
+			{
+				F32 top_val = (1.0f+VISUAL_COMPLEXITY_FRAC_CHANGE_THRESH)*mVisualComplexity;
+				F32 bottom_val = (1.0f/(1.0f+VISUAL_COMPLEXITY_FRAC_CHANGE_THRESH))*mVisualComplexity;
+				top_val = llmax(top_val, mVisualComplexity + VISUAL_COMPLEXITY_ABS_CHANGE_THRESH);
+				bottom_val = llmax(0.f, llmin(bottom_val, mVisualComplexity - VISUAL_COMPLEXITY_ABS_CHANGE_THRESH));
+				if (isSelf() && cost > bottom_val && cost < top_val)
+				{
+					LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
+											  << " self complexity change from " << mVisualComplexity << " to " << cost
+											  << " is within range "
+											  << "(" << bottom_val << "," << top_val << ")" 
+											  << ", not updated."
+											  << " reported " << mReportedVisualComplexity
+											  << LL_ENDL;
+				}
+				else
+				{
+					LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
+											  << " complexity updated was " << mVisualComplexity << " now " << cost
+											  << " reported " << mReportedVisualComplexity
+											  << LL_ENDL;
+					cost_changed = true;
+				}
+			}
+			else
+			{
+				LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
+										  << " complexity updated no change " << mVisualComplexity
+										  << " reported " << mReportedVisualComplexity
+										  << LL_ENDL;
+			}
+		}
+		if (cost_changed)
+		{
+			mVisualComplexity = cost;
+		}
 		mVisualComplexityStale = false;
+		// </FS:Beq> Remove the timer for now.
+		//		mVisualComplexityUpdateTimer.reset();
 
         static LLCachedControl<U32> show_my_complexity_changes(gSavedSettings, "ShowMyComplexityChanges", 20);
 
-        if (isSelf() && show_my_complexity_changes)
+        if (isSelf() && cost_changed && show_my_complexity_changes)
         {
             // Avatar complexity
             LLAvatarRenderNotifier::getInstance()->updateNotificationAgent(mVisualComplexity);
