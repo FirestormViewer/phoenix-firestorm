@@ -11765,7 +11765,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderAnimateRes</key>
   <map>
     <key>Comment</key>
-    <string>Animate rezing prims.</string>
+    <string>(Obsolete) Does nothing Animate rezing prims.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
