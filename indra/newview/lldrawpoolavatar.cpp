@@ -1923,7 +1923,9 @@ LLMatrix4a* LLDrawPoolAvatar::getCacheSkinningMats(LLDrawable* drawable, const L
 	}
 	
 	static LLCachedControl<bool> disableMatCache(gSavedSettings, "FSDisableRiggedMeshMatrixCaching"); // <FS:Beq> FIRE-23331 - disable matrix caching during appearance update due to weird side effects
-	if (disableMatCache || (drawable->mSkinningMatCache && LLFrameTimer::getFrameCount() != drawable->mLastSkinningMatCacheFrame))
+	if (disableMatCache ||
+		(avatar->isSelf() && avatar->isEditingAppearance()) ||
+		(drawable->mSkinningMatCache && LLFrameTimer::getFrameCount() != drawable->mLastSkinningMatCacheFrame))
 	{
 //		LL_DEBUGS("Skinning") << "Call InitSkinningMatrixPalette for drawable @" << (U64)drawable << LL_ENDL;
 		//<FS:Beq> add caching of matrix pallette as high up the stack as we can

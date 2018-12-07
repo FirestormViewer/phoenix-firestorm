@@ -3211,7 +3211,6 @@ void LLVOAvatarSelf::onCustomizeStart(bool disable_camera_switch)
 		
 		gAgentAvatarp->mIsEditingAppearance = true;
 		gAgentAvatarp->mUseLocalAppearance = true;
-		gSavedSettings.setBOOL("FSDisableRiggedMeshMatrixCaching", true); 		// <FS:Beq> FIRE-23331 - disable matrix caching during appearance update due to weird side effects
 		if (gSavedSettings.getBOOL("AppearanceCameraMovement") && !disable_camera_switch)
 		{
 			gAgentCamera.changeCameraToCustomizeAvatar();
@@ -3235,7 +3234,6 @@ void LLVOAvatarSelf::onCustomizeEnd(bool disable_camera_switch)
 	if (isAgentAvatarValid())
 	{
 		gAgentAvatarp->mIsEditingAppearance = false;
-		gSavedSettings.setBOOL("FSDisableRiggedMeshMatrixCaching", false); 		// <FS:Beq> FIRE-23331 - disable matrix caching during appearance update due to weird side effects
 		// <FS:Ansariel> [Legacy Bake]
 		if (gAgentAvatarp->getRegion() && !gAgentAvatarp->getRegion()->getCentralBakeVersion())
 		{
