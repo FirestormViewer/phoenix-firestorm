@@ -11227,35 +11227,38 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		{
 			if ( cost != mVisualComplexity )
 			{
-				F32 top_val = (1.0f+VISUAL_COMPLEXITY_FRAC_CHANGE_THRESH)*mVisualComplexity;
-				F32 bottom_val = (1.0f/(1.0f+VISUAL_COMPLEXITY_FRAC_CHANGE_THRESH))*mVisualComplexity;
-				top_val = llmax(top_val, mVisualComplexity + VISUAL_COMPLEXITY_ABS_CHANGE_THRESH);
-				bottom_val = llmax(0.f, llmin(bottom_val, mVisualComplexity - VISUAL_COMPLEXITY_ABS_CHANGE_THRESH));
-				if (isSelf() && cost > bottom_val && cost < top_val)
-				{
-					LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
-											  << " self complexity change from " << mVisualComplexity << " to " << cost
-											  << " is within range "
-											  << "(" << bottom_val << "," << top_val << ")" 
-											  << ", not updated."
-											  << " reported " << mReportedVisualComplexity
-											  << LL_ENDL;
-				}
-				else
-				{
-					LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
-											  << " complexity updated was " << mVisualComplexity << " now " << cost
-											  << " reported " << mReportedVisualComplexity
-											  << LL_ENDL;
-					cost_changed = true;
-				}
-			}
-			else
-			{
-				LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
-										  << " complexity updated no change " << mVisualComplexity
-										  << " reported " << mReportedVisualComplexity
-										  << LL_ENDL;
+				// <FS:Beq> remove the threshold calcs
+				// F32 top_val = (1.0f+VISUAL_COMPLEXITY_FRAC_CHANGE_THRESH)*mVisualComplexity;
+				// F32 bottom_val = (1.0f/(1.0f+VISUAL_COMPLEXITY_FRAC_CHANGE_THRESH))*mVisualComplexity;
+				// top_val = llmax(top_val, mVisualComplexity + VISUAL_COMPLEXITY_ABS_CHANGE_THRESH);
+				// bottom_val = llmax(0.f, llmin(bottom_val, mVisualComplexity - VISUAL_COMPLEXITY_ABS_CHANGE_THRESH));
+
+				//	if (isSelf() && cost > bottom_val && cost < top_val)
+				//	{
+				//		LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
+				//								  << " self complexity change from " << mVisualComplexity << " to " << cost
+				//								  << " is within range "
+				//								  << "(" << bottom_val << "," << top_val << ")" 
+				//								  << ", not updated."
+				//								  << " reported " << mReportedVisualComplexity
+				//								  << LL_ENDL;
+				//	}
+				//	else
+				//	{
+				//		LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
+				//								  << " complexity updated was " << mVisualComplexity << " now " << cost
+				//								  << " reported " << mReportedVisualComplexity
+				//								  << LL_ENDL;
+				//		cost_changed = true;
+				//	}
+				//}
+				//else
+				//{
+				//	LL_DEBUGS("AvatarRender") << "Avatar "<< getID()
+				//							  << " complexity updated no change " << mVisualComplexity
+				//							  << " reported " << mReportedVisualComplexity
+				//							  << LL_ENDL;
+				cost_changed = true;
 			}
 		}
 		if (cost_changed)
