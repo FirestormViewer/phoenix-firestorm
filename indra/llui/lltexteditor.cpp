@@ -786,14 +786,30 @@ BOOL LLTextEditor::handleRightMouseDown(S32 x, S32 y, MASK mask)
 // [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-12 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
 	setCursorAtLocalPos(x, y, FALSE);
 // [/SL:KB]
+
+	bool show_menu = false;
+
 	// Prefer editor menu if it has selection. See EXT-6806.
-	if (hasSelection() || !LLTextBase::handleRightMouseDown(x, y, mask))
+	if (hasSelection())
 	{
-		if(getShowContextMenu())
+		S32 click_pos = getDocIndexFromLocalCoord(x, y, FALSE);
+		if (click_pos > mSelectionStart && click_pos < mSelectionEnd)
 		{
-			showContextMenu(x, y);
+			show_menu = true;
 		}
 	}
+
+	// Let segments handle the click, if nothing does, show editor menu
+	if (!show_menu && !LLTextBase::handleRightMouseDown(x, y, mask))
+	{
+		show_menu = true;
+	}
+
+	if (show_menu && getShowContextMenu())
+	{
+		showContextMenu(x, y);
+	}
+
 	return TRUE;
 }
 

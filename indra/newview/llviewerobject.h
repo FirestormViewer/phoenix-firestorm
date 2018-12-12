@@ -629,7 +629,7 @@ private:
     U32 checkMediaURL(const std::string &media_url);
 	
 	// Motion prediction between updates
-	void interpolateLinearMotion(const F64SecondsImplicit & time, const F32SecondsImplicit & dt);
+	void interpolateLinearMotion(const F64SecondsImplicit & frame_time, const F32SecondsImplicit & dt);
 
 	static void initObjectDataMap();
 
@@ -868,6 +868,7 @@ protected:
 
 	static void setPhaseOutUpdateInterpolationTime(F32 value)	{ sPhaseOutUpdateInterpolationTime = (F64Seconds) value;	}
 	static void setMaxUpdateInterpolationTime(F32 value)		{ sMaxUpdateInterpolationTime = (F64Seconds) value;	}
+	static void setMaxRegionCrossingInterpolationTime(F32 value)		{ sMaxRegionCrossingInterpolationTime = (F64Seconds) value; }
 
 	static void	setVelocityInterpolate(BOOL value)		{ sVelocityInterpolate = value;	}
 	static void	setPingInterpolate(BOOL value)			{ sPingInterpolate = value;	}
@@ -877,6 +878,7 @@ private:
 
 	static F64Seconds sPhaseOutUpdateInterpolationTime;	// For motion interpolation
 	static F64Seconds sMaxUpdateInterpolationTime;			// For motion interpolation
+	static F64Seconds sMaxRegionCrossingInterpolationTime;			// For motion interpolation
 
 	static BOOL sVelocityInterpolate;
 	static BOOL sPingInterpolate;
