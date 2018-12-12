@@ -228,6 +228,10 @@ protected:
 	static LLAvatarSkeletonInfo* 					sAvatarSkeletonInfo;
 	static LLAvatarXmlInfo* 						sAvatarXmlInfo;
 
+// <FS:Ansariel> Get attachment point name from ID
+public:
+	static std::string getAttachmentPointName(S32 attachmentPointId);
+// </FS:Ansariel>
 
 /**                    Skeleton
  **                                                                            **
