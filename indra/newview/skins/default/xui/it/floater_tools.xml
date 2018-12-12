@@ -428,6 +428,7 @@ Bas ↔ Min
 			<text name="edit_object">
 				Modifica caratteristiche oggetto:
 			</text>
+			<check_box label="Mesh animato" name="Animated Mesh Checkbox Ctrl" tool_tip="Permetti agli oggetti mesh con rig di essere animati in modo indipendente"/>
 			<check_box label="Flessibilità" name="Flexible1D Checkbox Ctrl" tool_tip="Consenti all&apos;oggetto di flettersi lungo l&apos;asse Z (solo lato client)"/>
 			<spinner label="Morbidezza" name="FlexNumSections"/>
 			<spinner label="Gravità" name="FlexGravity"/>
@@ -464,6 +465,7 @@ Bas ↔ Min
 			<spinner label="Densità in kg/m^3" name="Physics Density"/>
 			<spinner label="Restituzione" name="Physics Restitution"/>
 		</panel>
+		<panel label="Texture" name="Texture"/>
 		<panel label="Contenuto" name="Contents">
 			<button label="Nuovo script" label_selected="Nuovo script" name="button new script"/>
 			<button label="Permessi" name="button permissions"/>

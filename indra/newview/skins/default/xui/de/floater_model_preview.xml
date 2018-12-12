@@ -8,7 +8,7 @@
 		Fehler: Fehler beim DAE-Parsen – Details siehe Protokoll.
 	</string>
 	<string name="status_bind_shape_orientation">
-		Warnung: Bind-Shape-Matrix ist nicht in Standard-X-Forward-Orientierung.
+		Warnung: Verbundform-Matrix befindet sich nicht in Standard-X-Vorwärtsrichtung.
 	</string>
 	<string name="status_material_mismatch">
 		Fehler: Das Material des Modells ist keine Teilmenge des Referenzmodells.
