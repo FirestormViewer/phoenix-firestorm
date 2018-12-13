@@ -2550,36 +2550,8 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
 
-	//setup a clip plane in projection matrix for reflection renders (prevents flickering from occlusion culling)
-	LLViewerRegion* region = gAgent.getRegion();
-	LLPlane plane;
-
-	if (planep)
-	{
-		plane = *planep;
-	}
-	else 
-	{
-		if (region)
-		{
-			LLVector3 pnorm;
-			F32 height = region->getWaterHeight();
-			if (water_clip < 0)
-			{ //camera is above water, clip plane points up
-				pnorm.setVec(0,0,1);
-				plane.setVec(pnorm, -height);
-			}
-			else if (water_clip > 0)
-			{	//camera is below water, clip plane points down
-				pnorm = LLVector3(0,0,-1);
-				plane.setVec(pnorm, height);
-			}
-		}
-	}
-	
-	glh::matrix4f modelview = get_last_modelview();
-	glh::matrix4f proj = get_last_projection();
-	LLGLUserClipPlane clip(plane, modelview, proj, water_clip != 0 && LLPipeline::sReflectionRender);
+// 	glh::matrix4f modelview = get_last_modelview();
+// 	glh::matrix4f proj = get_last_projection();
 
 	LLGLDepthTest depth(GL_TRUE, GL_FALSE);
 
@@ -2600,21 +2572,14 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
 		mCubeVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
 	}
 	
+    camera.disableUserClipPlane();
+
 	for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin(); 
 			iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
 	{
 		LLViewerRegion* region = *iter;
-		if (water_clip != 0)
-		{
-			LLPlane plane(LLVector3(0,0, (F32) -water_clip), (F32) water_clip*region->getWaterHeight());
-			camera.setUserClipPlane(plane);
-		}
-		else
-		{
-			camera.disableUserClipPlane();
-		}
-
-		for (U32 i = 0; i < LLViewerRegion::NUM_PARTITIONS; i++)
+    
+    	for (U32 i = 0; i < LLViewerRegion::NUM_PARTITIONS; i++)
 		{
 			LLSpatialPartition* part = region->getSpatialPartition(i);
 			if (part)
@@ -4753,6 +4718,7 @@ void LLPipeline::renderGeom(LLCamera& camera, bool forceVBOUpdate)
 				// Render debugging beacons.
 				gObjectList.renderObjectBeacons();
 				gObjectList.resetObjectBeacons();
+				gSky.addSunMoonBeacons();
 			}
 			else
 			{
@@ -6183,6 +6149,13 @@ void LLPipeline::setupAvatarLights(bool for_edit)
 {
 	assertInitialized();
 
+    LLEnvironment& environment = LLEnvironment::instance();
+    LLSettingsSky::ptr_t psky = environment.getCurrentSky();
+
+    bool sun_up         = environment.getIsSunUp();
+    bool moon_up        = environment.getIsMoonUp();
+    bool sun_is_primary = sun_up || !moon_up;
+
 	if (for_edit)
 	{
 		LLColor4 diffuse(1.f, 1.f, 1.f, 0.f);
@@ -6217,13 +6190,14 @@ void LLPipeline::setupAvatarLights(bool for_edit)
 	}
 	else if (gAvatarBacklight) // Always true (unless overridden in a devs .ini)
 	{
-        LLVector3 sun_dir = LLVector3(mSunDir);
-		LLVector3 opposite_pos = -sun_dir;
-		LLVector3 orthog_light_pos = sun_dir % LLVector3::z_axis;
+        LLVector3 light_dir = sun_is_primary ? LLVector3(mSunDir) : LLVector3(mMoonDir);
+		LLVector3 opposite_pos = -light_dir;
+		LLVector3 orthog_light_pos = light_dir % LLVector3::z_axis;
 		LLVector4 backlight_pos = LLVector4(lerp(opposite_pos, orthog_light_pos, 0.3f), 0.0f);
 		backlight_pos.normalize();
-			
-		LLColor4 light_diffuse = mSunDiffuse;
+
+		LLColor4 light_diffuse = sun_is_primary ? mSunDiffuse : mMoonDiffuse;
+
 		LLColor4 backlight_diffuse(1.f - light_diffuse.mV[VRED], 1.f - light_diffuse.mV[VGREEN], 1.f - light_diffuse.mV[VBLUE], 1.f);
 		F32 max_component = 0.001f;
 		for (S32 i = 0; i < 3; i++)
@@ -6454,6 +6428,10 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
 		gGL.setAmbientLightColor(ambient);
 	}
 
+    bool sun_up         = environment.getIsSunUp();
+    bool moon_up        = environment.getIsMoonUp();
+    bool sun_is_primary = sun_up || !moon_up;
+
 	// Light 0 = Sun or Moon (All objects)
 	{
         LLVector4 sun_dir(environment.getSunDirection(), 0.0f);
@@ -6461,15 +6439,8 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
 
         mSunDir.setVec(sun_dir);
         mMoonDir.setVec(moon_dir);
-
-		if (environment.getIsSunUp())
-		{			
-			mSunDiffuse.setVec(psky->getSunDiffuse());
-		}
-		else
-		{
-			mSunDiffuse.setVec(psky->getMoonDiffuse());
-		}
+        mSunDiffuse.setVec(psky->getSunDiffuse());
+        mMoonDiffuse.setVec(psky->getMoonDiffuse());
 
 		F32 max_color = llmax(mSunDiffuse.mV[0], mSunDiffuse.mV[1], mSunDiffuse.mV[2]);
 		if (max_color > 1.f)
@@ -6478,19 +6449,21 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
 		}
 		mSunDiffuse.clamp();
 
-		LLColor4 light_diffuse = mSunDiffuse;
+        max_color = llmax(mMoonDiffuse.mV[0], mMoonDiffuse.mV[1], mMoonDiffuse.mV[2]);
+		if (max_color > 1.f)
+		{
+			mMoonDiffuse *= 1.f/max_color;
+		}
+		mMoonDiffuse.clamp();
+
+		LLColor4  light_diffuse = sun_is_primary ? mSunDiffuse : mMoonDiffuse;
+        LLVector4 light_dir     = sun_is_primary ? mSunDir     : mMoonDir;
 
 		mHWLightColors[0] = light_diffuse;
 
 		LLLightState* light = gGL.getLight(0);
-        if (environment.getIsSunUp())
-		{
-		    light->setPosition(mSunDir);
-        }
-        else
-        {
-            light->setPosition(mMoonDir);
-        }
+        light->setPosition(light_dir);
+
 		light->setDiffuse(light_diffuse);
 		light->setAmbient(LLColor4::black);
 		light->setSpecular(LLColor4::black);
@@ -8716,17 +8689,32 @@ void LLPipeline::renderDeferredLighting()
 		vert[0].set(-1,1,0);
 		vert[1].set(-1,-3,0);
 		vert[2].set(3,1,0);
+
+        const LLEnvironment& environment = LLEnvironment::instance();
+
+        bool sun_up  = environment.getIsSunUp();
+        bool moon_up = environment.getIsMoonUp();
 		
 		{
 			setupHWLights(NULL); //to set mSun/MoonDir;
 			glh::vec4f tc(mSunDir.mV);
 			mat.mult_matrix_vec(tc);
-			mTransformedSunDir.set(tc.v);
-            mTransformedSunDir.normalize();
 
             glh::vec4f tc_moon(mMoonDir.mV);
             mTransformedMoonDir.set(tc_moon.v);
             mTransformedMoonDir.normalize();
+
+            bool sun_is_primary = sun_up || !moon_up;            
+            if (sun_is_primary)
+            {
+                mTransformedSunDir.set(tc.v);
+                mTransformedSunDir.normalize();
+            }
+            else
+            {
+                mTransformedSunDir.set(tc_moon.v);
+                mTransformedSunDir.normalize();
+            }            
 		}
 
 		gGL.pushMatrix();
@@ -9285,6 +9273,7 @@ void LLPipeline::renderDeferredLighting()
 			// Render debugging beacons.
 			gObjectList.renderObjectBeacons();
 			gObjectList.resetObjectBeacons();
+			gSky.addSunMoonBeacons();
 		}
 	}
 
@@ -9339,16 +9328,31 @@ void LLPipeline::renderDeferredLightingToRT(LLRenderTarget* target)
 		vert[1].set(-1,-3,0);
 		vert[2].set(3,1,0);
 		
+        const LLEnvironment& environment = LLEnvironment::instance();
+
+        bool sun_up  = environment.getIsSunUp();
+        bool moon_up = environment.getIsMoonUp();
+
 		{
 			setupHWLights(NULL); //to set mSun/MoonDir;
 			glh::vec4f tc(mSunDir.mV);
 			mat.mult_matrix_vec(tc);
-			mTransformedSunDir.set(tc.v);
-            mTransformedSunDir.normalize();
 
             glh::vec4f tc_moon(mMoonDir.mV);
             mTransformedMoonDir.set(tc_moon.v);
             mTransformedMoonDir.normalize();
+
+            bool sun_is_primary = sun_up || !moon_up;            
+            if (sun_is_primary)
+            {
+                mTransformedSunDir.set(tc.v);
+                mTransformedSunDir.normalize();
+            }
+            else
+            {
+                mTransformedSunDir.set(tc_moon.v);
+                mTransformedSunDir.normalize();
+            }
 		}
 
 		gGL.pushMatrix();
@@ -10064,23 +10068,19 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
         camera.setOriginAndLookAt(reflect_origin, LLVector3::z_axis, reflect_interest_point);
 
 		//plane params
-		LLVector3 pnorm;
-		F32 plane_d;
-
+		LLVector3 pnorm;      
 		S32 water_clip = 0;
 		if (!LLViewerCamera::getInstance()->cameraUnderWater())
 		{ //camera is above water, clip plane points up
 			pnorm.setVec(0,0,1);
-            plane_d = -water_height;
-			plane.setVec(pnorm, -distance_to_water);
-			water_clip = -1;
+			plane.setVec(pnorm, -water_height);
+			water_clip = 1;
 		}
 		else
 		{	//camera is below water, clip plane points down
 			pnorm = LLVector3(0,0,-1);
-            plane_d = water_height;
-			plane.setVec(pnorm, distance_to_water);
-			water_clip = 1;
+			plane.setVec(pnorm, water_height);
+			water_clip = -1;
 		}
 
 		bool materials_in_water = false;
@@ -10197,7 +10197,7 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
 
 					LLGLUserClipPlane clip_plane(plane, mat, projection);
 					LLGLDisable cull(GL_CULL_FACE);
-					updateCull(camera, ref_result, -water_clip, &plane);
+					updateCull(camera, ref_result, water_clip, &plane);
 					stateSort(camera, ref_result);
 				}	
 
@@ -10340,8 +10340,6 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
 		gPipeline.popRenderTypeMask();
 		LLDrawPoolWater::sNeedsReflectionUpdate = FALSE;
 		LLDrawPoolWater::sNeedsDistortionUpdate = FALSE;
-		LLPlane npnorm(-pnorm, -plane_d);
-		LLViewerCamera::getInstance()->setUserClipPlane(npnorm);
 		
 		LLGLState::checkStates();
 
@@ -10933,17 +10931,20 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 	//LLVector3 n = RenderShadowNearDist;
 	//F32 nearDist[] = { n.mV[0], n.mV[1], n.mV[2], n.mV[2] };
 
-    LLVector3 sun_dir(mSunDir);
+    LLEnvironment& environment = LLEnvironment::instance();
+    LLSettingsSky::ptr_t psky = environment.getCurrentSky();
+
+    LLVector3 caster_dir(environment.getIsSunUp() ? mSunDir : mMoonDir);
 
 	//put together a universal "near clip" plane for shadow frusta
 	LLPlane shadow_near_clip;
 	{        
 		LLVector3 p = gAgent.getPositionAgent();
-		p += sun_dir * RenderFarClip*2.f;
-		shadow_near_clip.setVec(p, sun_dir);
+		p += caster_dir * RenderFarClip*2.f;
+		shadow_near_clip.setVec(p, caster_dir);
 	}
 
-	LLVector3 lightDir = -sun_dir;
+	LLVector3 lightDir = -caster_dir;
 	lightDir.normVec();
 
 	glh::vec3f light_dir(lightDir.mV);
@@ -11046,9 +11047,15 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 
 	// convenience array of 4 near clip plane distances
 	F32 dist[] = { near_clip, mSunClipPlanes.mV[0], mSunClipPlanes.mV[1], mSunClipPlanes.mV[2], mSunClipPlanes.mV[3] };
-	
 
-	if (mSunDiffuse == LLColor4::black)
+    bool sun_up         = environment.getIsSunUp();
+    bool moon_up        = environment.getIsMoonUp();
+    bool sun_is_primary = sun_up || !moon_up;
+    bool ignore_shadows = (sun_is_primary && (mSunDiffuse == LLColor4::black))
+                       || (moon_up        && (mMoonDiffuse == LLColor4::black))
+                       || !(sun_up || moon_up);
+
+	if (ignore_shadows)
 	{ //sun diffuse is totally black, shadows don't matter
 		LLGLDepthTest depth(GL_TRUE);
 

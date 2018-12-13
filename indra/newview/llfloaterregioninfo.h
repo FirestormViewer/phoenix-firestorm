@@ -102,6 +102,7 @@ public:
 	// from LLPanel
 	virtual void refresh();
 	
+	void onRegionChanged();
 	void requestRegionInfo();
 	void requestMeshRezInfo();
 	void enableTopButtons();
@@ -126,6 +127,8 @@ protected:
     LLPanelRegionEnvironment *mEnvironmentPanel;
 	//static S32 sRequestSerial;	// serial # of last EstateOwnerRequest
 	static LLUUID sRequestInvoice;
+private:
+    boost::signals2::connection mRegionChangedCallback;
 };
 
 

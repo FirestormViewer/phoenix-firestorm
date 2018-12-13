@@ -1394,6 +1394,7 @@ char const* const _PREHASH_AppearanceHover = LLMessageStringTable::getInstance()
 char const* const _PREHASH_HoverHeight = LLMessageStringTable::getInstance()->getString("HoverHeight");
 char const* const _PREHASH_Experience = LLMessageStringTable::getInstance()->getString("Experience");
 char const* const _PREHASH_ExperienceID = LLMessageStringTable::getInstance()->getString("ExperienceID");
+char const* const _PREHASH_LargeGenericMessage = LLMessageStringTable::getInstance()->getString("LargeGenericMessage");
 
 // <FS:CR> Aurora Sim
 char const* const _PREHASH_RegionSizeX = LLMessageStringTable::getInstance()->getString("RegionSizeX");

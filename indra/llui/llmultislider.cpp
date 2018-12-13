@@ -113,9 +113,9 @@ LLMultiSlider::LLMultiSlider(const LLMultiSlider::Params& p)
 		setMouseUpCallback(initCommitCallback(p.mouse_up_callback));
 	}
 
-    if (p.overlap_threshold.isProvided())
+	if (p.overlap_threshold.isProvided() && p.overlap_threshold > mIncrement)
     {
-        mOverlapThreshold = p.overlap_threshold;
+        mOverlapThreshold = p.overlap_threshold - mIncrement;
     }
     else
     {
@@ -354,17 +354,17 @@ const std::string& LLMultiSlider::addSlider(F32 val)
 	return mCurSlider;
 }
 
-void LLMultiSlider::addSlider(F32 val, const std::string& name)
+bool LLMultiSlider::addSlider(F32 val, const std::string& name)
 {
 	F32 initVal = val;
 
 	if(mValue.size() >= mMaxNumSliders) {
-		return;
+		return false;
 	}
 
 	bool foundOne = findUnusedValue(initVal);
 	if(!foundOne) {
-		return;
+		return false;
 	}
 
 	// add a new thumb rect
@@ -383,6 +383,8 @@ void LLMultiSlider::addSlider(F32 val, const std::string& name)
 
 	// move the slider
 	setSliderValue(mCurSlider, initVal, TRUE);
+
+	return true;
 }
 
 bool LLMultiSlider::findUnusedValue(F32& initVal)

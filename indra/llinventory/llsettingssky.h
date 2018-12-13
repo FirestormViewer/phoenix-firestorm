@@ -118,6 +118,7 @@ public:
     
     virtual void replaceSettings(LLSD settings) SETTINGS_OVERRIDE;
 
+    void replaceWithSky(LLSettingsSky::ptr_t pother);
     static LLSD defaults(const LLSettingsBase::TrackPosition& position = 0.0f);
 
     F32 getPlanetRadius() const;
@@ -272,6 +273,8 @@ public:
     bool getIsMoonUp() const;
 
     LLVector3 getLightDirection() const;
+    LLColor3  getLightDiffuse() const;
+
     LLVector3 getSunDirection() const;
     LLVector3 getMoonDirection() const;
     LLColor4U getFadeColor() const;
