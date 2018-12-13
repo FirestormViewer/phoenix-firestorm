@@ -6229,6 +6229,28 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Die Physikform hat keine korrekte Version. Legen Sie die korrekte Version für das Physikmodell fest.
 	</string>
 
+	<string name="couldnt_resolve_host">
+		DNS konnten den Host-Namen ([HOSTNAME]) nicht auflösen.
+Bitte prüfen Sie, ob Sie die Webseite www.secondlife.com öffnen
+können. Falls ja, aber Sie weiterhin diesen Fehler erhalten,
+öffnen Sie bitte die Support-Webseite und melden das Problem.
+	</string>
+	<string name="ssl_peer_certificate">
+		Der Login-Server konnte nicht via SSL zertifiziert werden.
+Falls Sie weiterhin diesen Fehler erhalten, öffnen Sie die
+Support-Webseite von SecondLife.com and melden das Problem.
+	</string>
+	<string name="ssl_connect_error">
+		Oft bedeutet dies, dass die Uhrzeit ihres Computers nicht korrekt ist.
+Bitte prüfen Sie in den Systemeinstellungen, dass Datum und Uhrzeit
+korrekt eingestellt sind.
+Prüfen Sie bitte auch, ob Ihr Netzwerk und IhreFirewall korrekt konfiguriert sind.
+Falls Sie weiterhin diesen Fehler erhalten, öffnen Sie die
+Support-Webseite von SecondLife.com and melden das Problem.
+
+[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 Knowledge Base]
+	</string>
+
 <!-- Firestorm-specific translations -->
 	<string name="MediaFilterActionAllow">
 		erlauben

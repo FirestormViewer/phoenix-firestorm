@@ -2860,9 +2860,9 @@ Try enclosing path to the editor with double quotes.
 
   <!-- CURL error messages -->
   <string name="couldnt_resolve_host">
-DNS could not resolve the host name([HOSTNAME]).
+DNS could not resolve the host name ([HOSTNAME]).
 Please verify that you can connect to the www.secondlife.com
-web site.  If you can, but continue to receive this error,
+web site. If you can, but continue to receive this error,
 please go to the support section and report this problem.
   </string>
   <string name="ssl_peer_certificate">
