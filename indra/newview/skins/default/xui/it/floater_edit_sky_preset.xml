@@ -28,7 +28,7 @@
 				<text name="BHText" tool_tip="Orizzonte blu: colore del cielo. In termini meteorologici, questa impostazione riguarda la &apos;diffrazione atmosferica&apos;.">
 					OrzBlu
 				</text>
-				<text name="BDensText2" tool_tip="Densità blu: Modifica la saturazione generale del colore del cielo. Muovendo il cursore Intensità (I) verso destra il colore diventa più chiaro e brillante. Muovendo verso sinistra il colore è più opaco fino ad arrivare al bianco e nero. Per regolare più finemente il bilanciamento dei colori si possono modificare i singoli elementi della saturazione con i valori Rosso/Verde/Blu.">
+				<text name="BDensText2" tool_tip="Densità blu: Modifica la saturazione generale del colore del cielo. Muovendo il cursore Intensità (I) verso l&apos;alto il colore diventa più chiaro e brillante. Muovendo verso il basso il colore è più opaco fino ad arrivare al bianco e nero. Per regolare più finemente il bilanciamento dei colori si possono modificare i singoli elementi della saturazione con i valori Rosso/Verde/Blu.">
 					DenBlu
 				</text>
 			</panel>

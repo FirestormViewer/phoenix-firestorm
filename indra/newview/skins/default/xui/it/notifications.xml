@@ -3321,6 +3321,9 @@ Per sicurezza, verranno bloccati per alcuni secondi.
 	<notification name="PresetNotSaved">
 		Errore nel salvataggio del preset [NAME].
 	</notification>
+	<notification name="DefaultPresetNotSaved">
+		Impossibile sovrascrivere l’impostazione predefinita.
+	</notification>
 	<notification name="PresetNotDeleted">
 		Errore nella cancellazione del preset [NAME].
 	</notification>
@@ -4054,7 +4057,6 @@ Riprova tra un minuto.
 	</notification>
 	<notification name="NoEnterRegionMaybeFull">
 		Non puoi entrare nella regione "[NAME]".
-Potrebbe essere piena o in fase di riavvio.
 	</notification>
 	<notification name="SaveBackToInvDisabled">
 		Opzione Salva nell&apos;inventario disattivata
@@ -4286,6 +4288,9 @@ Potrebbe essere piena o in fase di riavvio.
 	<notification name="CantCreateObjectRegionFull">
 		Impossibile creare l&apos;oggetto richiesto. La regione è piena.
 	</notification>
+	<notification name="CantCreateAnimatedObjectTooLarge">
+		Impossibile unire questi oggetti poichè l’oggetto animato che ne risulterebbe sarebbe superiore al limite triangolo con rig.
+	</notification>
 	<notification name="CantAttackMultipleObjOneSpot">
 		Non puoi attaccare più oggetti a un singolo punto.
 	</notification>
@@ -4333,6 +4338,21 @@ Potrebbe essere piena o in fase di riavvio.
 	</notification>
 	<notification name="CantChangeShape">
 		Non ti è consentito modificare questa forma.
+	</notification>
+	<notification name="NoPermsTooManyAttachedAnimatedObjects">
+		L’operazione farebbe superare il limite consentito al numero di oggetti animati allegati.
+	</notification>
+	<notification name="NoPermsLinkAnimatedObjectTooLarge">
+		Impossibile unire questi oggetti poichè l’oggetto animato che ne risulterebbe sarebbe superiore al limite triangolo con rig.
+	</notification>
+	<notification name="NoPermsSetFlagAnimatedObjectTooLarge">
+		Impossibile unire questi oggetti poichè l’oggetto animato che ne risulterebbe sarebbe superiore al limite triangolo con rig.
+	</notification>
+	<notification name="CantChangeAnimatedObjectStateInsufficientLand">
+		Impossibile cambiare lo stato dell’oggetto animato poichè andrebbe oltre il limite del lotto.
+	</notification>
+	<notification name="ErrorNoMeshData">
+		Errore del server: impossibile completare l’operazione poichè i dati mesh non sono stati caricati.
 	</notification>
 	<notification name="NoAccessToClaimObjects">
 		Le tue autorizzazioni di accesso non ti permettono di richiedere oggetti in questa posizione.

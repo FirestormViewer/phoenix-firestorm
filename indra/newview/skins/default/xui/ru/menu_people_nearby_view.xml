@@ -3,6 +3,8 @@
 	<menu_item_check label="Сортировать по последнему говорившему" name="sort_by_recent_speakers" />
 	<menu_item_check label="Сортировать по имени" name="sort_name" />
 	<menu_item_check label="Сортировать по отдаленности" name="sort_distance" />
-	<menu_item_check name="view_icons" label="Показать иконки" />
-	<menu_item_check name="view_map" label="Показать на карте" />
+	<menu_item_check label="Сортировать по недавно поступившим" name="sort_arrival"/>
+	<menu_item_check label="Показывать значки людей" name="view_icons"/>
+	<menu_item_check label="Смотреть карту" name="view_map"/>
+	<menu_item_check label="Скрывать имена пользователей" name="view_usernames"/>
 </toggleable_menu>

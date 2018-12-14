@@ -1684,6 +1684,7 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
 {
 	std::string av_name;
 	LLStringUtil::toLower(partial_name);
+	LLStringUtil::replaceString(partial_name, ".", " ");
 
 	FSRadar* radar = FSRadar::getInstance();
 	if (radar)

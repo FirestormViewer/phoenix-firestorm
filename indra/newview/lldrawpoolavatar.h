@@ -28,6 +28,7 @@
 #define LL_LLDRAWPOOLAVATAR_H
 
 #include "lldrawpool.h"
+#include "fsareasearch.h"
 
 class LLVOAvatar;
 class LLGLSLShader;
@@ -57,6 +58,7 @@ public:
 
     ~LLDrawPoolAvatar();
     /*virtual*/ BOOL isDead();
+
     typedef enum
 	{
 		RIGGED_MATERIAL=0,
@@ -180,6 +182,11 @@ typedef enum
 	LLDrawPoolAvatar();
 
 	static LLMatrix4& getModelView();
+
+	//<FS:Beq> per frame cache 
+	static LLMatrix4a* getCacheSkinningMats(LLDrawable* drawable, const LLMeshSkinInfo* skin, U32 count,
+	                                        LLVOAvatar* avatar);
+	//</FS:Beq>
 
 	/*virtual*/ LLDrawPool *instancePool();
 

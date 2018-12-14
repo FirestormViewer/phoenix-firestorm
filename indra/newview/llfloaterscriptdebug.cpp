@@ -167,9 +167,12 @@ void LLFloaterScriptDebug::addScriptLine(const LLChat& chat)
 		{
 			if(objectp->isHUDAttachment())
 			{
-				((LLViewerObject*)gAgentAvatarp)->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
-				// <FS:Ansariel> Mark script error icons
-				((LLViewerObject*)gAgentAvatarp)->getIcon()->setScriptError();
+				if (isAgentAvatarValid())
+				{
+					((LLViewerObject*)gAgentAvatarp)->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
+					// <FS:Ansariel> Mark script error icons
+					((LLViewerObject*)gAgentAvatarp)->getIcon()->setScriptError();
+				}
 			}
 			else
 			{
