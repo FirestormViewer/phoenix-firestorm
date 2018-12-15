@@ -370,7 +370,6 @@
 			<menu_item_check label="Mostrar matrices" name="Show Matrices"/>
 			<menu_item_check label="Color bajo el cursor" name="Show Color Under Cursor"/>
 			<menu_item_check label="Memoria" name="Show Memory"/>
-			<menu_item_check label="Mostrar información de memoria privada" name="Show Private Mem Info"/>
 			<menu_item_check label="Actualizaciones a objetos" name="Show Updates"/>
 		</menu>
 		<menu label="Forzar un error" name="Force Errors">
@@ -405,6 +404,7 @@
 			<menu_item_check label="Área de textura" name="Texture Area"/>
 			<menu_item_check label="Área de cara" name="Face Area"/>
 			<menu_item_check label="Información sobre el nivel de detalle" name="LOD Info"/>
+			<menu_item_check label="Recuento de triángulo" name="Triangle Count"/>
 			<menu_item_check label="Cola de construcción" name="Build Queue"/>
 			<menu_item_check label="Luces" name="Lights"/>
 			<menu_item_check label="Armazón de colisión" name="Collision Skeleton"/>
@@ -531,6 +531,7 @@
 			<menu_item_check label="Mostrar armazón de colisión" name="Show Collision Skeleton"/>
 			<menu_item_check label="Mostrar los huesos" name="Show Bones"/>
 			<menu_item_check label="Mostrar objetivo del avatar" name="Display Agent Target"/>
+			<menu_item_check label="Mostrar las medidas impostoras" name="Show Impostor Extents"/>
 			<menu_item_call label="Volcar objetos anexados" name="Dump Attachments"/>
 			<menu_item_call label="Depurar texturas del avatar" name="Debug Avatar Textures"/>
 			<menu_item_call label="Volcar texturas locales" name="Dump Local Textures"/>

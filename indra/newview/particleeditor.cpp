@@ -544,7 +544,7 @@ void ParticleEditor::onInjectButtonClicked()
 	if (categoryID.isNull())
 	{
 		std::string scriptFolderName = LLFolderType::lookup(LLFolderType::FT_LSL_TEXT);
-		gInventory.findCategoryByName(scriptFolderName);
+		categoryID = gInventory.findCategoryByName(scriptFolderName);
 	}
 
 	// if still no valid folder found bail out and complain

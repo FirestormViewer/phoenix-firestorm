@@ -53,7 +53,6 @@
 #include "llvocache.h"
 #include "llcontrolavatar.h"
 #include "lldrawpoolavatar.h"
-#include "llskinningutil.h"
 
 const F32 MIN_INTERPOLATE_DISTANCE_SQUARED = 0.001f * 0.001f;
 const F32 MAX_INTERPOLATE_DISTANCE_SQUARED = 10.f * 10.f;

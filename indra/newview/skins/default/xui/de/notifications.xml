@@ -3430,7 +3430,7 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 		Fehler beim Speichern der Voreinstellung [NAME].
 	</notification>
 	<notification name="DefaultPresetNotSaved">
-		Standard-Voreinstellung kann nicht überschrieben werden.
+		Die Standard-Voreinstellung kann nicht überschrieben werden.
 	</notification>
 	<notification name="PresetNotDeleted">
 		Fehler beim Löschen der Voreinstellung [NAME].
@@ -4216,7 +4216,7 @@ Sie ist voll oder startet in Kürze neu.
 		Angefordertes Objekt kann nicht erstellt werden. Die Region ist voll.
 	</notification>
 	<notification name="CantCreateAnimatedObjectTooLarge">
-		Angefordertes animiertes Objekt kann nicht erstellt werden, da es das Limit für geriggte Dreiecke übersteigt.
+		Das gewünschte animierte Objekt kann nicht erstellt werden, da es das Limit für geriggte Dreiecke überschreitet.
 	</notification>
 	<notification name="CantAttackMultipleObjOneSpot">
 		Sie können nicht mehrere Objekte an ein und derselben Stelle anhängen.
@@ -4267,19 +4267,19 @@ Sie ist voll oder startet in Kürze neu.
 		Sie können diese Form nicht ändern.
 	</notification>
 	<notification name="NoPermsTooManyAttachedAnimatedObjects">
-		Durch diese Aktion würde die Anzahl an animierten Objekten das Limit überschreiten.
+		Durch den Vorgang würde die Anzahl der angehängten animierten Objekte das zulässige Limit überschreiten.
 	</notification>
 	<notification name="NoPermsLinkAnimatedObjectTooLarge">
-		Objekte können nicht verknüpft werden, da das resultierende animierte Objekt das Limit für geriggte Dreiecke überschreiten würde.
+		Diese Objekte können nicht verknüpft werden, da das hieraus resultierende animierte Objekt das Limit für geriggte Dreiecke überschreiten würde.
 	</notification>
 	<notification name="NoPermsSetFlagAnimatedObjectTooLarge">
-		Objekt kann nicht in ein animiertes Objekt geändert werden, da es das Limit für geriggte Dreiecke überschreiten würde.
+		Dieses Objekt kann nicht in ein animiertes Objekt umgewandelt werden, da es das Limit für geriggte Dreiecke überschreiten würde.
 	</notification>
 	<notification name="CantChangeAnimatedObjectStateInsufficientLand">
-		Zustand für animiertes Objekt kann nicht geändert werden, da es das Parzellen-Limit überschreiten würde.
+		Der Status der animierten Objekte für dieses Objekt kann nicht geändert werden, da hierdurch die Parzellenlimits überschritten würden.
 	</notification>
 	<notification name="ErrorNoMeshData">
-		Server-Fehler: Aktionen kann nicht abgeschlossen werden, da die Mesh-Daten nicht gelanden sind.
+		Serverfehler: Dieser Vorgang kann nicht abgeschlossen werden, da die Netzdaten nicht geladen sind.
 	</notification>
 	<notification name="NoAccessToClaimObjects">
 		Ihr Zugangsberechtigungen gestatten nicht das Beanspruchen von Objekten an dieser Stelle.

@@ -884,16 +884,6 @@ void LLFloaterPreference::onDoNotDisturbResponseChanged()
 
 LLFloaterPreference::~LLFloaterPreference()
 {
-	/* Dead code - "windowsize combo" is not in any of the skin files, except for the
-	 * dutch translation, which hints at a removed control. Apart from that, I don't
-	 * even understand what this code does O.o -Zi
-	// clean up user data
-	LLComboBox* ctrl_window_size = getChild<LLComboBox>("windowsize combo");
-	for (S32 i = 0; i < ctrl_window_size->getItemCount(); i++)
-	{
-		ctrl_window_size->setCurrentByIndex(i);
-	}*/
-
 	LLConversationLog::instance().removeObserver(this);
 
 	delete mSearchData;
@@ -3710,6 +3700,12 @@ BOOL LLPanelPreference::postBuild()
 	{
 		getChild<LLCheckBoxCtrl>("voice_call_friends_only_check")->setCommitCallback(boost::bind(&showFriendsOnlyWarning, _1, _2));
 	}
+	// <FS:Ansariel> Disable running multiple viewers warning
+	//if (hasChild("allow_multiple_viewer_check", TRUE))
+	//{
+	//	getChild<LLCheckBoxCtrl>("allow_multiple_viewer_check")->setCommitCallback(boost::bind(&showMultipleViewersWarning, _1, _2));
+	//}
+	// </FS:Ansariel>
 	if (hasChild("favorites_on_login_check", TRUE))
 	{
 		getChild<LLCheckBoxCtrl>("favorites_on_login_check")->setCommitCallback(boost::bind(&handleFavoritesOnLoginChanged, _1, _2));
@@ -3718,6 +3714,11 @@ BOOL LLPanelPreference::postBuild()
 		bool show_favorites_at_login = FSPanelLogin::getShowFavorites();
 		// </FS:Ansariel> [FS Login Panel]
 		getChild<LLCheckBoxCtrl>("favorites_on_login_check")->setValue(show_favorites_at_login);
+	}
+	if (hasChild("mute_chb_label", TRUE))
+	{
+		getChild<LLTextBox>("mute_chb_label")->setShowCursorHand(false);
+		getChild<LLTextBox>("mute_chb_label")->setClickedCallback(boost::bind(&toggleMuteWhenMinimized));
 	}
 
 	//////////////////////PanelAdvanced ///////////////////
@@ -3843,6 +3844,14 @@ void LLPanelPreference::saveSettings()
 	}	
 }
 
+void LLPanelPreference::showMultipleViewersWarning(LLUICtrl* checkbox, const LLSD& value)
+{
+    if (checkbox && checkbox->getValue())
+    {
+        LLNotificationsUtil::add("AllowMultipleViewers");
+    }
+}
+
 void LLPanelPreference::showFriendsOnlyWarning(LLUICtrl* checkbox, const LLSD& value)
 {
 	if (checkbox && checkbox->getValue())
@@ -3867,6 +3876,12 @@ void LLPanelPreference::handleFavoritesOnLoginChanged(LLUICtrl* checkbox, const 
 			LLNotificationsUtil::add("FavoritesOnLogin");
 		}
 	}
+}
+
+void LLPanelPreference::toggleMuteWhenMinimized()
+{
+	std::string mute("MuteWhenMinimized");
+	gSavedSettings.setBOOL(mute, !gSavedSettings.getBOOL(mute));
 }
 
 // <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
