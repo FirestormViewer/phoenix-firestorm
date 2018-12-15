@@ -941,7 +941,7 @@ void handleRenderFriendsOnlyChanged(const LLSD& newvalue)
 		{
 			LLVOAvatar* avatar = (LLVOAvatar*)*iter;
 
-			if (avatar->getID() != gAgentID && !LLAvatarActions::isFriend(avatar->getID()))
+			if (avatar->getID() != gAgentID && !LLAvatarActions::isFriend(avatar->getID()) && !avatar->isControlAvatar())
 			{
 				gObjectList.killObject(avatar);
 				if (LLViewerRegion::sVOCacheCullingEnabled && avatar->getRegion())

@@ -46,7 +46,7 @@ extern S32Megabytes gMaxVideoRam;
 // </FS:Ansariel>
 
 // <FS:Ansariel> Max texture resolution
-extern U32 DESIRED_NORMAL_FETCHED_TEXTURE_SIZE;
+extern U32 DESIRED_NORMAL_TEXTURE_SIZE;
 
 class LLFace;
 class LLImageGL ;

@@ -41,5 +41,5 @@
 		</combo_box>
 	</panel>
 	<button label="OK" name="ok_btn"/>
-	<button label="取り消し" name="cancel_btn"/>
+	<button label="キャンセル" name="cancel_btn"/>
 </floater>

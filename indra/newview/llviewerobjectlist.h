@@ -75,6 +75,7 @@ public:
 	LLViewerObject *replaceObject(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp); // TomY: hack to switch VO instances on the fly
 	
 	BOOL killObject(LLViewerObject *objectp);
+	void killAnimatedObjects();
 
 	void killObjects(LLViewerRegion *regionp); // Kill all objects owned by a particular region.
 	void killAllObjects();

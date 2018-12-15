@@ -7,7 +7,7 @@
 //
 
     // Bridge platform
-    string BRIDGE_VERSION = "2.23"; // This should match fslslbridge.cpp
+    string BRIDGE_VERSION = "2.24"; // This should match fslslbridge.cpp
     string gLatestURL;
     integer gViewerIsFirestorm;
     integer gTryHandshakeOnce = TRUE;
@@ -491,15 +491,40 @@ default
 
             else if (cmd == "getScriptInfo")
             {
-                list details = llGetObjectDetails(llList2Key(commandList, 1), ([OBJECT_NAME, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME, OBJECT_CHARACTER_TIME]));
-                if (llGetListLength(details) == 6)
+
+                key targetkey = llList2Key(commandList, 1);
+                integer extended = llList2Integer(commandList, 2);
+                integer elements;
+                list details;
+                vector currentPosition;
+
+                if (extended)
                 {
-                    llOwnerSay("<bridgeGetScriptInfo>" + llList2CSV([llStringToBase64(llStringTrim(llList2String(details, 0), STRING_TRIM)), llList2String(details, 1), llList2String(details, 2), llList2Integer(details, 3) / 1024, llList2Float(details, 4) * 1000.0, llList2Float(details, 5) * 1000.0]) + "</bridgeGetScriptInfo>");
+                    currentPosition = llGetPos();
+                    details = llGetObjectDetails(targetkey, ([OBJECT_NAME, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME, OBJECT_CHARACTER_TIME, OBJECT_DESC, OBJECT_ROOT, OBJECT_PRIM_COUNT, OBJECT_PRIM_EQUIVALENCE, OBJECT_TOTAL_INVENTORY_COUNT, OBJECT_VELOCITY, OBJECT_POS, OBJECT_ROT, OBJECT_OMEGA, OBJECT_CREATOR, OBJECT_OWNER, OBJECT_LAST_OWNER_ID, OBJECT_REZZER_KEY, OBJECT_GROUP, OBJECT_CREATION_TIME, OBJECT_PATHFINDING_TYPE, OBJECT_ATTACHED_POINT, OBJECT_TEMP_ATTACHED]));
+                    details = details + [currentPosition, targetkey];
+                    elements = 26;
+                }
+                else
+                {
+                    details = llGetObjectDetails(targetkey, ([OBJECT_NAME, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME, OBJECT_CHARACTER_TIME]));
+                    elements = 6;
+                }
+
+                if (llGetListLength(details) == elements)
+                {
+                    list returnedList = [llStringToBase64(llStringTrim(llList2String(details, 0), STRING_TRIM)), llList2String(details, 1), llList2String(details, 2), llList2Integer(details, 3) / 1024, llList2Float(details, 4) * 1000.0, llList2Float(details, 5) * 1000.0];
+                    if (extended)
+                    {
+                        returnedList = returnedList + [llStringToBase64(llStringTrim(llList2String(details, 6), STRING_TRIM)), llList2String(details, 7), llList2Integer(details, 8), llList2Integer(details, 9), llList2Integer(details, 10), llStringToBase64(llList2String(details, 11)), llStringToBase64(llList2String(details, 12) + " (" + (string)llVecDist(llList2Vector(details, 12), currentPosition) + " m)"), llStringToBase64(llList2String(details, 13) + " (" + (string)(RAD_TO_DEG * llRot2Euler(llList2Rot(details, 13))) + ")"), llStringToBase64(llList2String(details, 14)), llList2Key(details, 15), llList2Key(details, 16), llList2Key(details, 17), llList2Key(details, 18), llList2Key(details, 19), llList2String(details, 20), llList2Integer(details, 21), llList2Integer(details, 22), llList2Integer(details, 23), llStringToBase64(llList2String(details, 24)), llList2Key(details, 25)];
+                    }
+                    llOwnerSay("<bridgeGetScriptInfo>" + llList2CSV(returnedList) + "</bridgeGetScriptInfo>");
                 }
                 else
                 {
                     llOwnerSay("<bridgeError error=scriptinfonotfound>");
                 }
+
             }
 
             else if (cmd == "UseLSLFlightAssist")

@@ -140,7 +140,6 @@
 	</menu>
 	<menu label="Строить" name="BuildTools">
 		<menu_item_check label="Строить" name="Show Build Tools"/>
-		<menu label="Выбор инструмента строительства" name="Select Tool">
 		<menu label="Выберите элементы" name="Select Elements">
 			<menu_item_call label="Выбрать следующую часть или лицо" name="Select Next Part or Face"/>
 			<menu_item_call label="Выбрать предыдущую часть или лицо" name="Select Previous Part or Face"/>
@@ -386,7 +385,6 @@
 			<menu_item_check label="Показать матрицы" name="Show Matrices"/>
 			<menu_item_check label="Показать цвет под курсором" name="Show Color Under Cursor"/>
 			<menu_item_check label="Показать память" name="Show Memory"/>
-			<menu_item_check label="Показать закрытые данные о памяти" name="Show Private Mem Info"/>
 			<menu_item_check label="Показать обновления объектов" name="Show Updates"/>
 		</menu>
 		<menu label="Принудительно вызвать ошибку" name="Force Errors">
@@ -422,6 +420,7 @@
 			<menu_item_check label="Площадь текстуры" name="Texture Area"/>
 			<menu_item_check label="Площадь грани" name="Face Area"/>
 			<menu_item_check label="Информация об уровнях детализации" name="LOD Info"/>
+			<menu_item_check label="Üçgen Sayısı" name="Triangle Count"/>
 			<menu_item_check label="Строительство очереди" name="Build Queue"/>
 			<menu_item_check label="Освещение" name="Lights"/>
 			<menu_item_check label="Частицы" name="Particles"/>
@@ -549,6 +548,7 @@
 			<menu_item_check label="Показать скелет" name="Show Collision Skeleton"/>
 			<menu_item_check label="Показать кости" name="Show Bones"/>
 			<menu_item_check label="Отобразить действие агента" name="Display Agent Target"/>
+			<menu_item_check label="Düşük Grafik Özellikli Avatar Kapsamını Göster" name="Show Impostor Extents"/>
 			<menu_item_call label="Дамп присоединений" name="Dump Attachments"/>
 			<menu_item_call label="Отладка текстур аватара" name="Debug Avatar Textures" shortcut="control|alt|shift|A"/>
 			<menu_item_call label="Дамп локальных текстур" name="Dump Local Textures"/>

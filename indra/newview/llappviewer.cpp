@@ -2839,7 +2839,7 @@ bool LLAppViewer::initConfiguration()
 	
 	//<FS:Techwolf Lupindo>
 	// load defaults overide here. Can not use settings_files.xml as path is different then above loading of defaults.
-	std::string fsdata_defaults = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "fsdata_defaults.xml");
+	std::string fsdata_defaults = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, llformat("fsdata_defaults.%s.xml", LLVersionInfo::getShortVersion().c_str()));
 	std::string fsdata_global = "Global";
 	LLControlGroup* settings_group = LLControlGroup::getInstance(fsdata_global);
 	if(settings_group && settings_group->loadFromFile(fsdata_defaults, set_defaults))

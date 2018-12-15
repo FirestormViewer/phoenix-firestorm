@@ -2357,8 +2357,8 @@ class FSScriptAssetUpload: public LLScriptAssetUpload
 {
 	bool m_bMono;
 public:
-    FSScriptAssetUpload( LLUUID itemId, std::string buffer, invnUploadFinish_f finish, bool a_bMono )
-	: LLScriptAssetUpload( itemId, buffer, finish )
+	FSScriptAssetUpload(LLUUID itemId, std::string buffer, invnUploadFinish_f finish, bool a_bMono)
+	: LLScriptAssetUpload(itemId, buffer, finish)
 	{
 		m_bMono = a_bMono;
 	}
@@ -2366,7 +2366,7 @@ public:
 	virtual LLSD generatePostBody()
 	{
 		LLSD body = LLScriptAssetUpload::generatePostBody();
-		if( m_bMono )
+		if (m_bMono)
 			body["target"] = "mono";
 		else
 			body["target"] = "lsl2";
@@ -2406,38 +2406,50 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
 
 	// NaCL - LSL Preprocessor
 	mScriptEd->enableSave(FALSE); // Clear the enable save flag (FIRE-10173)
-	BOOL domono = FSLSLPreprocessor::mono_directive(mScriptEd->getScriptText());
-	if(domono == FALSE)
+	bool domono = gSavedSettings.getBOOL("FSSaveInventoryScriptsAsMono");
+	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 	{
-		LLSD row;
-		if(gSavedSettings.getBOOL("_NACL_SaveInventoryScriptsAsMono"))
+		bool mono_directive = FSLSLPreprocessor::mono_directive(mScriptEd->getScriptText(), domono);
+
+		if (mono_directive != domono)
 		{
-			row["columns"][0]["value"] = "Detected compile-as-LSL2 directive, but debug setting SaveInventoryScriptsAsMono overrided it.";
-			domono = TRUE;
-		}else row["columns"][0]["value"] = "Detected compile-as-LSL2 directive";
-		//domono = FALSE;
-		row["columns"][0]["font"] = "SANSSERIF_SMALL";
-		mScriptEd->mErrorList->addElement(row);
+			std::string message;
+			if (mono_directive)
+			{
+				message = LLTrans::getString("fs_preprocessor_mono_directive_override");
+			}
+			else
+			{
+				message = LLTrans::getString("fs_preprocessor_lsl2_directive_override");
+			}
+			domono = mono_directive;
+			mScriptEd->mErrorList->addCommentText(message);
+		}
 	}
 	// NaCl End
+
     if(inv_item)
     {
         getWindow()->incBusyCount();
         mPendingUploads++;
         if (!url.empty())
         {
-			//<FS:KC> Script Preprocessor
+            //<FS:KC> Script Preprocessor
             // std::string buffer(mScriptEd->mEditor->getText());
-			std::string buffer(mScriptEd->getScriptText());
-			//</FS:KC> Script Preprocessor
+            std::string buffer(mScriptEd->getScriptText());
+            //</FS:KC> Script Preprocessor
 
-            //LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLScriptAssetUpload>(mItemUUID, buffer, proc
-            LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLScriptAssetUpload>(mItemUUID, buffer, 
+            //LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLScriptAssetUpload>(mItemUUID, buffer, 
+            //    [](LLUUID itemId, LLUUID, LLUUID, LLSD response) {
+            //        LLPreviewLSL::finishedLSLUpload(itemId, response);
+            //    }));
+            LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<FSScriptAssetUpload>(mItemUUID, buffer, 
                 [](LLUUID itemId, LLUUID, LLUUID, LLSD response) {
                     LLPreviewLSL::finishedLSLUpload(itemId, response);
-                }));
+                },
+                domono));
 
-            LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo); // <FS:ND> DoMono needs to be passed/set here.
+            LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
         }
     }
 }

@@ -162,15 +162,6 @@ void FSPanelProfileTab::setApplyProgress(bool started)
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
-bool enable_god()
-{
-	return gAgent.isGodlike();
-}
-
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-
 FSPanelProfileSecondLife::FSPanelProfileSecondLife()
  : FSPanelProfileTab()
  , mStatusText(NULL)
@@ -217,16 +208,17 @@ BOOL FSPanelProfileSecondLife::postBuild()
 	mStatusText->setVisible(FALSE);
 
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
-	registrar.add("Profile.Call",					boost::bind(&FSPanelProfileSecondLife::onCallButtonClick, this));
-	registrar.add("Profile.Share",					boost::bind(&FSPanelProfileSecondLife::share, this));
-	registrar.add("Profile.Kick",					boost::bind(&FSPanelProfileSecondLife::kick, this));
-	registrar.add("Profile.Freeze",					boost::bind(&FSPanelProfileSecondLife::freeze, this));
-	registrar.add("Profile.Unfreeze",				boost::bind(&FSPanelProfileSecondLife::unfreeze, this));
-	registrar.add("Profile.CSR",					boost::bind(&FSPanelProfileSecondLife::csr, this));
-	registrar.add("Profile.CopyNameToClipboard",	boost::bind(&FSPanelProfileSecondLife::onCopyToClipboard, this));
-	registrar.add("Profile.CopyURI",				boost::bind(&FSPanelProfileSecondLife::onCopyURI, this));
-	registrar.add("Profile.CopyKey",				boost::bind(&FSPanelProfileSecondLife::onCopyKey, this));
-	registrar.add("Profile.Report",					boost::bind(&FSPanelProfileSecondLife::onReport, this));
+	registrar.add("Profile.Call",					[this](LLUICtrl*, const LLSD&) { LLAvatarActions::startCall(getAvatarId()); });
+	registrar.add("Profile.AddToContactSet",		[this](LLUICtrl*, const LLSD&) { LLAvatarActions::addToContactSet(getAvatarId()); });
+	registrar.add("Profile.Share",					[this](LLUICtrl*, const LLSD&) { LLAvatarActions::share(getAvatarId()); });
+	registrar.add("Profile.Kick",					[this](LLUICtrl*, const LLSD&) { LLAvatarActions::kick(getAvatarId()); });
+	registrar.add("Profile.Freeze",					[this](LLUICtrl*, const LLSD&) { LLAvatarActions::freeze(getAvatarId()); });
+	registrar.add("Profile.Unfreeze",				[this](LLUICtrl*, const LLSD&) { LLAvatarActions::unfreeze(getAvatarId()); });
+	registrar.add("Profile.CSR",					[this](LLUICtrl*, const LLSD&) { LLAvatarName av_name; LLAvatarNameCache::get(getAvatarId(), &av_name); std::string name = av_name.getUserName(); LLAvatarActions::csr(getAvatarId(), name); });
+	registrar.add("Profile.CopyNameToClipboard",	[this](LLUICtrl*, const LLSD&) { onCopyToClipboard(); });
+	registrar.add("Profile.CopyURI",				[this](LLUICtrl*, const LLSD&) { onCopyURI(); });
+	registrar.add("Profile.CopyKey",				[this](LLUICtrl*, const LLSD&) { LLClipboard::instance().copyToClipboard(utf8str_to_wstring(getAvatarId().asString()), 0, getAvatarId().asString().size() ); });
+	registrar.add("Profile.Report",					[this](LLUICtrl*, const LLSD&) { LLAvatarActions::report(getAvatarId()); });
 
 	mAddFriendButton->setCommitCallback(boost::bind(&FSPanelProfileSecondLife::onAddFriendButtonClick, this));
 	mIMButton->setCommitCallback(boost::bind(&FSPanelProfileSecondLife::onIMButtonClick, this));
@@ -239,8 +231,8 @@ BOOL FSPanelProfileSecondLife::postBuild()
 	mDisplayNameButton->setCommitCallback(boost::bind(&FSPanelProfileSecondLife::onClickSetName, this));
 
 	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable;
-	enable.add("Profile.EnableCall",				boost::bind(&FSPanelProfileSecondLife::enableCall, this));
-	enable.add("Profile.EnableGod",					boost::bind(&enable_god));
+	enable.add("Profile.EnableCall",				[this](LLUICtrl*, const LLSD&) { return mVoiceStatus; });
+	enable.add("Profile.EnableGod",					[](LLUICtrl*, const LLSD&) { return gAgent.isGodlike(); });
 
 	mGroupList->setDoubleClickCallback(boost::bind(&FSPanelProfileSecondLife::openGroupProfile, this));
 	mGroupList->setReturnCallback(boost::bind(&FSPanelProfileSecondLife::openGroupProfile, this));
@@ -582,44 +574,11 @@ void FSPanelProfileSecondLife::pay()
 	LLAvatarActions::pay(getAvatarId());
 }
 
-void FSPanelProfileSecondLife::share()
-{
-	LLAvatarActions::share(getAvatarId());
-}
-
 void FSPanelProfileSecondLife::toggleBlock()
 {
 	LLAvatarActions::toggleBlock(getAvatarId());
 
 	updateButtons();
-}
-
-bool FSPanelProfileSecondLife::enableCall()
-{
-	return mVoiceStatus;
-}
-
-void FSPanelProfileSecondLife::kick()
-{
-	LLAvatarActions::kick(getAvatarId());
-}
-
-void FSPanelProfileSecondLife::freeze()
-{
-	LLAvatarActions::freeze(getAvatarId());
-}
-
-void FSPanelProfileSecondLife::unfreeze()
-{
-	LLAvatarActions::unfreeze(getAvatarId());
-}
-
-void FSPanelProfileSecondLife::csr()
-{
-	LLAvatarName av_name;
-	LLAvatarNameCache::get(getAvatarId(), &av_name);
-	std::string name = av_name.getUserName();
-	LLAvatarActions::csr(getAvatarId(), name);
 }
 
 void FSPanelProfileSecondLife::onAddFriendButtonClick()
@@ -637,11 +596,6 @@ void FSPanelProfileSecondLife::onTeleportButtonClick()
 	LLAvatarActions::offerTeleport(getAvatarId());
 }
 
-void FSPanelProfileSecondLife::onCallButtonClick()
-{
-	LLAvatarActions::startCall(getAvatarId());
-}
-
 void FSPanelProfileSecondLife::onCopyToClipboard()
 {
 	std::string name = getChild<LLUICtrl>("complete_name")->getValue().asString();
@@ -654,19 +608,9 @@ void FSPanelProfileSecondLife::onCopyURI()
 	LLClipboard::instance().copyToClipboard(utf8str_to_wstring(name), 0, name.size() );
 }
 
-void FSPanelProfileSecondLife::onCopyKey()
-{
-	LLClipboard::instance().copyToClipboard(utf8str_to_wstring(getAvatarId().asString()), 0, getAvatarId().asString().size() );
-}
-
 void FSPanelProfileSecondLife::onGroupInvite()
 {
 	LLAvatarActions::inviteToGroup(getAvatarId());
-}
-
-void FSPanelProfileSecondLife::onReport()
-{
-	LLAvatarActions::report(getAvatarId());
 }
 
 // virtual, called by LLAvatarTracker

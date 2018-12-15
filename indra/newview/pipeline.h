@@ -911,7 +911,7 @@ public:
 	static F32 RenderShadowResolutionScale;
 	static bool RenderLocalLights;
 	static bool RenderDelayCreation;
-	static bool RenderAnimateRes;
+//	static bool RenderAnimateRes; <FS:Beq> FIRE-23122 BUG-225920 Remove broken RenderAnimateRes functionality.
 	static bool FreezeTime;
 	static S32 DebugBeaconLineWidth;
 	static F32 RenderHighlightBrightness;

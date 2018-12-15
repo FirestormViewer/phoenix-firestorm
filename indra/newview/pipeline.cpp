@@ -152,7 +152,7 @@ bool LLPipeline::RenderDeferredSSAO;
 F32 LLPipeline::RenderShadowResolutionScale;
 bool LLPipeline::RenderLocalLights;
 bool LLPipeline::RenderDelayCreation;
-bool LLPipeline::RenderAnimateRes;
+//bool LLPipeline::RenderAnimateRes; <FS:Beq> FIRE-23122 BUG-225920 Remove broken RenderAnimateRes functionality.
 bool LLPipeline::FreezeTime;
 S32 LLPipeline::DebugBeaconLineWidth;
 F32 LLPipeline::RenderHighlightBrightness;
@@ -574,7 +574,7 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("RenderShadowResolutionScale");
 	connectRefreshCachedSettingsSafe("RenderLocalLights");
 	connectRefreshCachedSettingsSafe("RenderDelayCreation");
-	connectRefreshCachedSettingsSafe("RenderAnimateRes");
+//	connectRefreshCachedSettingsSafe("RenderAnimateRes"); <FS:Beq> FIRE-23122 BUG-225920 Remove broken RenderAnimateRes functionality.
 	connectRefreshCachedSettingsSafe("FreezeTime");
 	connectRefreshCachedSettingsSafe("DebugBeaconLineWidth");
 	connectRefreshCachedSettingsSafe("RenderHighlightBrightness");
@@ -1185,7 +1185,7 @@ void LLPipeline::refreshCachedSettings()
 	RenderShadowResolutionScale = gSavedSettings.getF32("RenderShadowResolutionScale");
 	RenderLocalLights = gSavedSettings.getBOOL("RenderLocalLights");
 	RenderDelayCreation = gSavedSettings.getBOOL("RenderDelayCreation");
-	RenderAnimateRes = gSavedSettings.getBOOL("RenderAnimateRes");
+//	RenderAnimateRes = gSavedSettings.getBOOL("RenderAnimateRes"); <FS:Beq> FIRE-23122 BUG-225920 Remove broken RenderAnimateRes functionality.
 	FreezeTime = gSavedSettings.getBOOL("FreezeTime");
 	DebugBeaconLineWidth = gSavedSettings.getS32("DebugBeaconLineWidth");
 	RenderHighlightBrightness = gSavedSettings.getF32("RenderHighlightBrightness");
@@ -2006,14 +2006,15 @@ void LLPipeline::createObject(LLViewerObject* vobj)
 
 	markRebuild(drawablep, LLDrawable::REBUILD_ALL, TRUE);
 
-	if (drawablep->getVOVolume() && RenderAnimateRes)
-	{
-		// fun animated res
-		drawablep->updateXform(TRUE);
-		drawablep->clearState(LLDrawable::MOVE_UNDAMPED);
-		drawablep->setScale(LLVector3(0,0,0));
-		drawablep->makeActive();
-	}
+	// <FS:Beq> FIRE-23122 BUG-225920 Remove broken RenderAnimateRes functionality.
+	//if (drawablep->getVOVolume() && RenderAnimateRes)
+	//{
+	//	// fun animated res
+	//	drawablep->updateXform(TRUE);
+	//	drawablep->clearState(LLDrawable::MOVE_UNDAMPED);
+	//	drawablep->setScale(LLVector3(0,0,0));
+	//	drawablep->makeActive();
+	//}
 }
 
 
@@ -6762,7 +6763,7 @@ void LLPipeline::enableLightsPreview()
 	light->enable();
 	light->setPosition(light_pos);
 	light->setDiffuse(diffuse0);
-	light->setAmbient(LLColor4::black);
+	light->setAmbient(ambient);
 	light->setSpecular(specular0);
 	light->setSpotExponent(0.f);
 	light->setSpotCutoff(180.f);
@@ -6773,7 +6774,7 @@ void LLPipeline::enableLightsPreview()
 	light->enable();
 	light->setPosition(light_pos);
 	light->setDiffuse(diffuse1);
-	light->setAmbient(LLColor4::black);
+	light->setAmbient(ambient);
 	light->setSpecular(specular1);
 	light->setSpotExponent(0.f);
 	light->setSpotCutoff(180.f);
@@ -6783,7 +6784,7 @@ void LLPipeline::enableLightsPreview()
 	light->enable();
 	light->setPosition(light_pos);
 	light->setDiffuse(diffuse2);
-	light->setAmbient(LLColor4::black);
+	light->setAmbient(ambient);
 	light->setSpecular(specular2);
 	light->setSpotExponent(0.f);
 	light->setSpotCutoff(180.f);
@@ -8937,7 +8938,8 @@ void LLPipeline::renderDeferredLighting()
 					}
 
 					const LLViewerObject *vobj = drawablep->getVObj();
-					if(vobj && vobj->getAvatar() && vobj->getAvatar()->isInMuteList())
+					if(vobj && vobj->getAvatar()
+						&& (vobj->getAvatar()->isTooComplex() || vobj->getAvatar()->isInMuteList()))
 					{
 						continue;
 					}
