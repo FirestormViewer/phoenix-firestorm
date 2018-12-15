@@ -68,6 +68,8 @@ public:
 	/*virtual*/ LLSD	getValue() const;
 	/*virtual*/ BOOL	setTextArg( const std::string& key, const LLStringExplicit& text );
 
+	void			setShowCursorHand(bool show_cursor) { mShowCursorHand = show_cursor; }
+
 	// <COLOSI opensim multi-currency support>
  	// Set all LLUIStrings to dirty after currency symbol change to force them to be updated.
 	void updateCurrencySymbols() { mText.updateCurrencySymbols(); LLTextBase::setText(mText.getString()); mLabel.updateCurrencySymbols(); }
@@ -78,6 +80,7 @@ protected:
 
 	LLUIString			mText;
 	callback_t			mClickedCallback;
+	bool				mShowCursorHand;
 // <FS:ND> Searchable text for UI filter
 protected:
 	virtual std::string _getSearchText() const
