@@ -38,7 +38,6 @@
 /* boost: will not compile unless equivalent is undef'd, beware. */
 #include "fix_macros.h"
 #include <boost/filesystem.hpp>
-#include <boost/foreach.hpp>
 
 #include "llappviewer.h"
 #include "llagent.h"
@@ -64,15 +63,6 @@
 
 const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
 const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
-const F32 HTTP_TIMEOUT = 30.f;
-
-#if LL_DARWIN
-size_t strnlen(const char *s, size_t n)
-{
-	const char *p = (const char *)memchr(s, 0, n);
-	return(p ? p-s : n);
-}
-#endif
 
 FSData::FSData() :
 	mLegacySearch(true),
@@ -306,7 +296,7 @@ void downloadError(LLSD const &aData, std::string const &aURL)
 void FSData::startDownload()
 {
 	mFSdataFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "fsdata.xml");
-	mFSdataDefaultsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "fsdata_defaults.xml");
+	mFSdataDefaultsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, llformat("fsdata_defaults.%s.xml", LLVersionInfo::getShortVersion().c_str()));
 	mClientTagsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
 
 	{
@@ -341,8 +331,8 @@ void FSData::startDownload()
 	}
 
 #if OPENSIM
-	std::string filenames[] = {"scriptlibrary_ossl.xml", "scriptlibrary_aa.xml"};
-	BOOST_FOREACH(std::string script_name, filenames)
+	std::string filenames[] = { "scriptlibrary_ossl.xml", "scriptlibrary_aa.xml" };
+	for (auto const& script_name : filenames)
 	{
 		std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, script_name);
 		time_t last_modified = 0;

@@ -10,10 +10,10 @@
 		Cancella ciclo giornata
 	</string>
 	<string name="label_water">
-		Valori predefiniti:
+		Valore predefinito:
 	</string>
 	<string name="label_sky">
-		Valori predefiniti:
+		Valore predefinito:
 	</string>
 	<string name="label_day_cycle">
 		Ciclo giornata:
@@ -28,7 +28,7 @@
 		-Seleziona un preset-
 	</string>
 	<text name="label">
-		Preset:
+		Valore predefinito:
 	</text>
 	<button label="Elimina" name="delete"/>
 	<button label="Annulla" name="cancel"/>

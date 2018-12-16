@@ -28,6 +28,7 @@
 
 #include "lltoastscripttextbox.h"
 
+#include "lldbstrings.h"
 #include "lllslconstants.h"
 #include "llnotifications.h"
 #include "llstyle.h"
@@ -35,15 +36,15 @@
 #include "llviewertexteditor.h"
 
 const S32 LLToastScriptTextbox::DEFAULT_MESSAGE_MAX_LINE_COUNT= 14;
-#include "lldbstrings.h"
+// *TODO: magic numbers - copied from lltoastnotifypanel.cpp(50) which was copied from llnotify.cpp(250)
+const S32 MAX_LENGTH = 512 + 20 + DB_FIRST_NAME_BUF_SIZE + DB_LAST_NAME_BUF_SIZE + DB_INV_ITEM_NAME_BUF_SIZE;
 
 LLToastScriptTextbox::LLToastScriptTextbox(const LLNotificationPtr& notification)
 :	LLToastPanel(notification)
 {
 	buildFromFile( "panel_notify_textbox.xml");
 
-	mInfoText = getChild<LLTextBox>("text_editor_box");
-	const S32 MAX_LENGTH = 512 + 20 + DB_FIRST_NAME_BUF_SIZE + DB_LAST_NAME_BUF_SIZE + DB_INV_ITEM_NAME_BUF_SIZE; 
+	mInfoText = getChild<LLTextEditor>("text_editor_box");
 	mInfoText->setMaxTextLength(MAX_LENGTH);
 	mInfoText->setValue(notification->getMessage());
 

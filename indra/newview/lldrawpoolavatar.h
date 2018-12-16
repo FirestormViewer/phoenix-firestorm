@@ -35,7 +35,7 @@ class LLFace;
 class LLMeshSkinInfo;
 class LLVolume;
 class LLVolumeFace;
-
+class LLDrawable;
 
 class LLDrawPoolAvatar : public LLFacePool
 {
@@ -64,7 +64,10 @@ public:
     /*virtual*/ BOOL isDead();
 
 	static LLMatrix4& getModelView();
-
+	//<FS:Beq> per frame cache 
+	static LLMatrix4a* getCacheSkinningMats(LLDrawable* drawable, const LLMeshSkinInfo* skin, U32 count,
+	                                        LLVOAvatar* avatar);
+	//</FS:Beq>
 	/*virtual*/ LLDrawPool *instancePool();
 
 	/*virtual*/ S32  getNumPasses();

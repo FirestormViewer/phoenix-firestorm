@@ -273,6 +273,7 @@
 			<text name="select_single">Sélectionnez un prim pour changer ses attributs.</text>
 			<text name="edit_object">Modifier les attributs de l'objet :</text>
 			<check_box label="Flexible Path" name="Flexible1D Checkbox Ctrl" tool_tip="Permet à l'objet de se plier le long de l'axe Z (côté client uniquement)"/>
+			<check_box label="Maillage animé" name="Animated Mesh Checkbox Ctrl" tool_tip="Permet aux objets maillés calés d&apos;être animés indépendamment"/>
 			<spinner label="Souplesse" name="FlexNumSections"/>
 			<spinner label="Gravité" name="FlexGravity"/>
 			<spinner label="Élasticité" name="FlexFriction"/>

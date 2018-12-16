@@ -94,7 +94,10 @@ void LLDrawable::incrementVisible()
 LLDrawable::LLDrawable(LLViewerObject *vobj, bool new_entry)
 :	LLViewerOctreeEntryData(LLViewerOctreeEntry::LLDRAWABLE),
 	LLTrace::MemTrackable<LLDrawable, 16>("LLDrawable"),
-	mVObjp(vobj)
+	mVObjp(vobj),
+	mSkinningMatCache(nullptr),
+	mLastSkinningMatCacheFrame(0),
+	mCacheSize(0)
 {
 	init(new_entry); 
 }
@@ -140,7 +143,7 @@ void LLDrawable::init(bool new_entry)
 
 		llassert(!vo_entry->getGroup()); //not in the object cache octree.
 	}
-	
+
 	llassert(!vo_entry || vo_entry->getEntry() == mEntry);
 
 	initVisible(sCurVisible - 2);//invisible for the current frame and the last frame.
@@ -164,7 +167,6 @@ void LLDrawable::unload()
 		}
 		facep->clearState(LLFace::RIGGED);
 	}
-
 	pVVol->markForUpdate(TRUE);
 }
 
@@ -199,8 +201,14 @@ void LLDrawable::destroy()
 
 	std::for_each(mFaces.begin(), mFaces.end(), DeletePointer());
 	mFaces.clear();
-		
-	
+
+	// <FS:Beq> close up potential memory leak
+	if (mSkinningMatCache)
+	{
+		ll_aligned_free_16(mSkinningMatCache);
+	}
+	// </FS:Beq>
+
 	/*if (!(sNumZombieDrawables % 10))
 	{
 		LL_INFOS() << "- Zombie drawables: " << sNumZombieDrawables << LL_ENDL;
