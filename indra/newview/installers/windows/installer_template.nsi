@@ -69,14 +69,14 @@ RequestExecutionLevel highest           # match MULTIUSER_EXECUTIONLEVEL
 LangString LanguageCode ${LANG_GERMAN}   "de"
 LangString LanguageCode ${LANG_ENGLISH}  "en"
 LangString LanguageCode ${LANG_SPANISH}  "es"
-LangString LanguageCode ${LANG_FRENCH}   "fr"
+##LangString LanguageCode ${LANG_FRENCH}   "fr"
 LangString LanguageCode ${LANG_JAPANESE} "ja"
 LangString LanguageCode ${LANG_ITALIAN}  "it"
-##LangString LanguageCode ${LANG_POLISH}   "pl"
-LangString LanguageCode ${LANG_PORTUGUESEBR} "pt"
+LangString LanguageCode ${LANG_POLISH}   "pl"
+##LangString LanguageCode ${LANG_PORTUGUESEBR} "pt"
 LangString LanguageCode ${LANG_RUSSIAN}  "ru"
-LangString LanguageCode ${LANG_TURKISH}  "tr"
-LangString LanguageCode ${LANG_TRADCHINESE}  "zh"
+##LangString LanguageCode ${LANG_TURKISH}  "tr"
+##LangString LanguageCode ${LANG_TRADCHINESE}  "zh"
 
 # This placeholder is replaced by viewer_manifest.py
 %%INST_VARS%%
