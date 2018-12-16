@@ -18,8 +18,7 @@
 ;;
 ;; Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
 ;;
-;; NSIS Unicode 2.46.5 or higher required
-;; http://www.scratchpaper.com/
+;; NSIS 3 or higher required for Unicode support
 ;;
 ;; Author: James Cook, TankMaster Finesmith, Don Kjer, Callum Prentice
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -27,6 +26,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Compiler flags
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Unicode true
 SetOverwrite on				# Overwrite files
 SetCompress auto			# Compress if saves space
 SetCompressor /solid lzma	# Compress whole installer as one block
@@ -46,28 +46,33 @@ RequestExecutionLevel highest           # match MULTIUSER_EXECUTIONLEVEL
 ;; (these files are in the same place as the nsi template but the python script generates a new nsi file in the 
 ;; application directory so we have to add a path to these include files)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-!include "%%SOURCE%%\installers\windows\lang_en-us.nsi" # <FS:Ansariel> Make sure EN comes first as it will be default!
-!include "%%SOURCE%%\installers\windows\lang_da.nsi"
+;; Ansariel notes: "Under certain circumstances the installer will fall back
+;; to the first defined (aka default) language version. So you want to include
+;; en-us as first language file."
+!include "%%SOURCE%%\installers\windows\lang_en-us.nsi"
+
+# Danish and Polish no longer supported by the viewer itself
+##!include "%%SOURCE%%\installers\windows\lang_da.nsi"
 !include "%%SOURCE%%\installers\windows\lang_de.nsi"
 !include "%%SOURCE%%\installers\windows\lang_es.nsi"
 !include "%%SOURCE%%\installers\windows\lang_fr.nsi"
 !include "%%SOURCE%%\installers\windows\lang_ja.nsi"
 !include "%%SOURCE%%\installers\windows\lang_it.nsi"
-!include "%%SOURCE%%\installers\windows\lang_pl.nsi"
+##!include "%%SOURCE%%\installers\windows\lang_pl.nsi"
 !include "%%SOURCE%%\installers\windows\lang_pt-br.nsi"
 !include "%%SOURCE%%\installers\windows\lang_ru.nsi"
 !include "%%SOURCE%%\installers\windows\lang_tr.nsi"
 !include "%%SOURCE%%\installers\windows\lang_zh.nsi"
 
 # *TODO: Move these into the language files themselves
-LangString LanguageCode ${LANG_DANISH}   "da"
+##LangString LanguageCode ${LANG_DANISH}   "da"
 LangString LanguageCode ${LANG_GERMAN}   "de"
 LangString LanguageCode ${LANG_ENGLISH}  "en"
 LangString LanguageCode ${LANG_SPANISH}  "es"
 LangString LanguageCode ${LANG_FRENCH}   "fr"
 LangString LanguageCode ${LANG_JAPANESE} "ja"
 LangString LanguageCode ${LANG_ITALIAN}  "it"
-LangString LanguageCode ${LANG_POLISH}   "pl"
+##LangString LanguageCode ${LANG_POLISH}   "pl"
 LangString LanguageCode ${LANG_PORTUGUESEBR} "pt"
 LangString LanguageCode ${LANG_RUSSIAN}  "ru"
 LangString LanguageCode ${LANG_TURKISH}  "tr"
@@ -114,12 +119,14 @@ SetOverwrite on							# Overwrite files by default
 # should make MultiUser.nsh initialization read existing INSTDIR from registry
 !define MULTIUSER_INSTALLMODE_INSTDIR_REGISTRY_KEY "${INSTNAME_KEY}"
 !define MULTIUSER_INSTALLMODE_INSTDIR_REGISTRY_VALUENAME ""
-# should make MultiUser.nsh initialization write $MultiUser.InstallMode to registry
-!define MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_KEY "${INSTNAME_KEY}"
-!define MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_VALUENAME "InstallMode"
+# Don't set MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_KEY and
+# MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_VALUENAME to cause the installer to
+# write $MultiUser.InstallMode to the registry, because when the user installs
+# multiple viewers with the same channel (same ${INSTNAME}, hence same
+# ${INSTNAME_KEY}), the registry entry is overwritten. Instead we'll write a
+# little file into the install directory -- see .onInstSuccess and un.onInit.
 !include MultiUser.nsh
 !include MUI2.nsh
-
 !define MUI_BGCOLOR FFFFFF
 !insertmacro MUI_FUNCTION_GUIINIT
 
@@ -242,8 +249,6 @@ lbl_configure_default_lang:
     # </FS:Ansariel>
     StrCmp $SKIP_DIALOGS "true" lbl_return
 
-# <FS:Ansariel> Commented out; Warning in build log about not being used
-;lbl_build_menu:
 	Push ""
 # Use separate file so labels can be UTF-16 but we can still merge changes into this ASCII file. JC
     !include "%%SOURCE%%\installers\windows\language_menu.nsi"
@@ -267,7 +272,21 @@ FunctionEnd
 ;; Prep Uninstaller Section
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function un.onInit
-!insertmacro MULTIUSER_UNINIT
+    # Save $INSTDIR -- it appears to have the correct value before
+    # MULTIUSER_UNINIT, but then gets munged by MULTIUSER_UNINIT?!
+    Push $INSTDIR
+    !insertmacro MULTIUSER_UNINIT
+    Pop $INSTDIR
+
+    # Now read InstallMode.txt from $INSTDIR
+    Push $0
+    ClearErrors
+    FileOpen $0 "$INSTDIR\InstallMode.txt" r
+    IfErrors skipread
+    FileRead $0 $MultiUser.InstallMode
+    FileClose $0
+skipread:
+    Pop $0
 
 %%ENGAGEREGISTRY%%
 
@@ -276,10 +295,10 @@ Function un.onInit
     IfErrors lbl_end
 	StrCpy $LANGUAGE $0
 lbl_end:
-    Return
 
-    # Does MultiUser.nsh init read back
-    # MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_KEY into $MultiUser.InstallMode?
+##  MessageBox MB_OK "After restoring:$\n$$INSTDIR = '$INSTDIR'$\n$$MultiUser.InstallMode = '$MultiUser.InstallMode'$\n$$LANGUAGE = '$LANGUAGE'"
+
+    Return
 
 FunctionEnd
 
@@ -474,8 +493,10 @@ StrCpy $INSTSHORTCUT "${SHORTCUT}"
 # MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_VALUENAME
 # Couln't get NSIS to expand $MultiUser.InstallMode into the function name at Call time
 ${If} $MultiUser.InstallMode == 'AllUsers'
+##MessageBox MB_OK "Uninstalling for all users"
   Call un.MultiUser.InstallMode.AllUsers
 ${Else}
+##MessageBox MB_OK "Uninstalling for current user"
   Call un.MultiUser.InstallMode.CurrentUser
 ${EndIf}
 
@@ -688,6 +709,9 @@ Function un.ProgramFiles
 # This placeholder is replaced by the complete list of files to uninstall by viewer_manifest.py
 %%DELETE_FILES%%
 
+# our InstallMode.txt
+Delete "$INSTDIR\InstallMode.txt"
+
 # Optional/obsolete files.  Delete won't fail if they don't exist.
 Delete "$INSTDIR\autorun.bat"
 Delete "$INSTDIR\dronesettings.ini"
@@ -737,7 +761,12 @@ FunctionEnd
 ;; After install completes, launch app
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function .onInstSuccess
-        Call CheckWindowsServPack		# Warn if not on the latest SP before asking to launch.
+        Push $0
+        FileOpen $0 "$INSTDIR\InstallMode.txt" w
+        # No newline -- this is for our use, not for users to read.
+        FileWrite $0 "$MultiUser.InstallMode"
+        FileClose $0
+        Pop $0
         # <FS:Ansariel> Disable VMP
         #Push $R0
         #Push $0
@@ -760,24 +789,21 @@ Function .onInstSuccess
         #Pop $0
         #Pop $R0
         # </FS:Ansariel>
-        Push $R0					# Option value, unused# 
-	# <FS:PP> Disable autorun
-	# StrCmp $SKIP_AUTORUN "true" +2;
-# Assumes SetOutPath $INSTDIR
-	# Exec '"$WINDIR\explorer.exe" "$INSTDIR\$INSTEXE"'
-	# Pop $R0
-    StrCmp $SKIP_DIALOGS "true" label_launch 
 
-    ${GetOptions} $COMMANDLINE "/AUTOSTART" $R0
-    # If parameter was there (no error) just launch
-    # Otherwise ask
-    IfErrors label_ask_launch label_launch
+        Call CheckWindowsServPack		# Warn if not on the latest SP before asking to launch.
+        # <FS:PP> Disable autorun
+        #StrCmp $SKIP_AUTORUN "true" +2;
+        StrCmp $SKIP_DIALOGS "true" label_launch
+
+        ${GetOptions} $COMMANDLINE "/AUTOSTART" $R0
+        # If parameter was there (no error) just launch
+        # Otherwise ask
+        IfErrors label_ask_launch label_launch
 
 label_ask_launch:
-    # Don't launch by default when silent
-    IfSilent label_no_launch
-	MessageBox MB_YESNO $(InstSuccesssQuestion) \
-        IDYES label_launch IDNO label_no_launch
+        # Don't launch by default when silent
+        IfSilent label_no_launch
+        MessageBox MB_YESNO $(InstSuccesssQuestion) IDYES label_launch IDNO label_no_launch
 
 label_launch:
         # Assumes SetOutPath $INSTDIR
@@ -796,10 +822,9 @@ label_launch:
         # string because it must decompose into separate command-line tokens.
         # <FS:Ansariel> No updater, thanks!
         # Exec '"$INSTDIR\$INSTEXE" precheck "$INSTDIR\$VIEWER_EXE" $SHORTCUT_LANG_PARAM'
-	Exec '"$WINDIR\explorer.exe" "$INSTDIR\$INSTSHORTCUT.lnk"'
+        Exec '"$WINDIR\explorer.exe" "$INSTDIR\$INSTSHORTCUT.lnk"'
 label_no_launch:
-        Pop $R0
-	# </FS:PP>
+        # </FS:PP>
 FunctionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
