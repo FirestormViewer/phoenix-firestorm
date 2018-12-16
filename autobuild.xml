@@ -994,11 +994,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1693b43fbab6699e26d9f2767c336539</string>
+              <string>7b0c03048a29da5dd170f42fde407c45</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.09-windows-183001324.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.10-windows-183502049.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1008,11 +1008,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2483cdd2b241bda235e7bbe7040e862f</string>
+              <string>aff6f11c8675e55677059e8b92a8d4d8</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.09-windows64-183001326.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.10-windows64-183502050.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
