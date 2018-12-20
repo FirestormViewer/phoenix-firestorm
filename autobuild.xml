@@ -2000,9 +2000,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>daa35834257d08b59e876388d1244de8</string>
+              <string>544cc1f91d27be5fd3bffba3f686b3fa</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.5-linux-182931105.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.6-linux-183540937.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2012,9 +2012,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>daa35834257d08b59e876388d1244de8</string>
+              <string>544cc1f91d27be5fd3bffba3f686b3fa</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.5-linux-182931105.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.6-linux-183540937.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
