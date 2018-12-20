@@ -124,7 +124,7 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
     BOOL pick_rigged = false; //gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
 	//left mouse down always picks transparent (but see handleMouseUp)
 	mPick = gViewerWindow->pickImmediate(x, y, TRUE, pick_rigged);
-    LL_INFOS() << "pick_rigged is " << (S32) pick_rigged << " pick time elapsed " << pick_timer.getElapsedTimeF32() << LL_ENDL;
+    LL_DEBUGS() << "pick_rigged is " << (S32) pick_rigged << " pick time elapsed " << pick_timer.getElapsedTimeF32() << LL_ENDL;
 	mPick.mKeyMask = mask;
 
 	mMouseButtonDown = true;
