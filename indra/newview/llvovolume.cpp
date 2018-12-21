@@ -477,8 +477,12 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 		}
 		if (result && getRootEdit()->isAttachment() && getAvatarAncestor()==gAgentAvatarp )
 		{
-			LL_INFOS("AvatarRender") << "Volume attached to self av has updated TE properties. ARC may change accordingly. Change flags "
-									 << result << LL_ENDL; 
+// <FS:Beq> Reduce log spam
+//			LL_INFOS("AvatarRender") << "Volume attached to self av has updated TE properties. ARC may change accordingly. Change flags "
+//									 << result << LL_ENDL; 
+			LL_DEBUGS("AvatarRender") << "Volume attached to self av has updated TE properties. ARC may change accordingly. Change flags "
+									 << result << LL_ENDL;
+// </FS:Beq>
 		}
 	}
 	else
@@ -622,8 +626,12 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 				}
 				if (result && getRootEdit()->isAttachment() && getAvatarAncestor()==gAgentAvatarp )
 				{
-					LL_INFOS("AvatarRender") << "Volume attached to self av has updated TE properties. ARC may change accordingly. Change flags "
-											 << result << LL_ENDL; 
+					// <FS:Beq> Reduce log spam
+					//			LL_INFOS("AvatarRender") << "Volume attached to self av has updated TE properties. ARC may change accordingly. Change flags "
+					//									 << result << LL_ENDL; 
+					LL_DEBUGS("AvatarRender") << "Volume attached to self av has updated TE properties. ARC may change accordingly. Change flags "
+						<< result << LL_ENDL;
+					// </FS:Beq>
 				}
 			}
 		}
