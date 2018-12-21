@@ -178,6 +178,9 @@ Wybierz pojedynczy obiekt i spróbuj jeszcze raz.
 	<notification name="FavoritesOnLogin">
 		Pamiętaj: kiedy włączysz tą opcję to każdy kto używa tego komputera będzie mógł zobaczyć Twoją listę ulubionych miejsc.
 	</notification>
+	<notification name="AllowMultipleViewers">
+		Uruchamianie kilku przeglądarek Second Life nie podlega wsparciu. Może prowadzić do kolizji pamięci podręcznej tekstur, jej uszkodzeń, pogorszenia efektów wizualnych oraz wydajności.
+	</notification>
 	<notification name="GrantModifyRights">
 		Udzielenie praw modyfikacji innemu Rezydentowi umożliwia modyfikację, usuwanie lub wzięcie JAKIEGOKOLWIEK z Twoich obiektów. Używaj tej opcji z rozwagą!
 Czy chcesz udzielić prawa do modyfikacji [NAME]?

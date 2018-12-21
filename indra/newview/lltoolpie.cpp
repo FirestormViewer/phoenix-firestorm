@@ -136,7 +136,8 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 		// Todo: we need a more consistent set of rules to work with
 		mPick = gViewerWindow->pickImmediate(x, y, TRUE /*transparent*/, pick_rigged);
 	}
-	LL_INFOS() << "pick_rigged is " << (S32) pick_rigged << " pick time elapsed " << pick_timer.getElapsedTimeF32() << LL_ENDL;
+	//LL_INFOS() << "pick_rigged is " << (S32) pick_rigged << " pick time elapsed " << pick_timer.getElapsedTimeF32() << LL_ENDL; // </FS:LO> Clean up log spam left over from SL-713, MAINT-7709.
+	LL_DEBUGS() << "pick_rigged is " << (S32) pick_rigged << " pick time elapsed " << pick_timer.getElapsedTimeF32() << LL_ENDL;
 
 	mPick.mKeyMask = mask;
 
