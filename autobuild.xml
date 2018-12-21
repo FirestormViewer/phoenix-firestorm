@@ -966,11 +966,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>55abf769c33f10f9badb06eff85951f3</string>
+              <string>72e66d901b65cfa0a1eed40a601b3a4a</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.09-linux-183002243.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.10-linux-183502018.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -980,11 +980,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2318b66522d1247ae7887d39bcab4ec7</string>
+              <string>f8926d117409177003d4e8092d0acc62</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.09-linux64-183002242.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.10-linux64-183502017.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -994,11 +994,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1693b43fbab6699e26d9f2767c336539</string>
+              <string>7b0c03048a29da5dd170f42fde407c45</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.09-windows-183001324.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.10-windows-183502049.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1008,11 +1008,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2483cdd2b241bda235e7bbe7040e862f</string>
+              <string>aff6f11c8675e55677059e8b92a8d4d8</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.09-windows64-183001326.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.10-windows64-183502050.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -2000,9 +2000,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>daa35834257d08b59e876388d1244de8</string>
+              <string>544cc1f91d27be5fd3bffba3f686b3fa</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.5-linux-182931105.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.6-linux-183540937.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2012,9 +2012,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>daa35834257d08b59e876388d1244de8</string>
+              <string>544cc1f91d27be5fd3bffba3f686b3fa</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.5-linux-182931105.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.6-linux-183540937.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2024,9 +2024,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>adb0069c89321cd0ef32a64ecf6d8592</string>
+              <string>a369edcd42d975b49328df1163c2eee7</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.5-windows-182841805.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.6-windows-183521837.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2036,9 +2036,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>adb0069c89321cd0ef32a64ecf6d8592</string>
+              <string>a369edcd42d975b49328df1163c2eee7</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.5-windows-182841805.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.6-windows-183521837.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>

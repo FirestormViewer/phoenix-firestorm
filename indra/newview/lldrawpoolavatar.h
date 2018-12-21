@@ -28,7 +28,6 @@
 #define LL_LLDRAWPOOLAVATAR_H
 
 #include "lldrawpool.h"
-#include "fsareasearch.h"
 
 class LLVOAvatar;
 class LLGLSLShader;
@@ -36,7 +35,7 @@ class LLFace;
 class LLMeshSkinInfo;
 class LLVolume;
 class LLVolumeFace;
-
+class LLDrawable;
 
 class LLDrawPoolAvatar : public LLFacePool
 {

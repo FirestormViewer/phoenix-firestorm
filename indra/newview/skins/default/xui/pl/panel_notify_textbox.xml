@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_notify_textbox">
-	<panel name="info_panel">
-		<text name="text_editor_box" value="informacja" />
-	</panel> 
 	<panel name="textbox_panel">  
 		<text_editor name="message" value="wiadomość" />
 	</panel>
