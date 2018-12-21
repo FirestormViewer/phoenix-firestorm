@@ -397,6 +397,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 			return "no active behaviours";
 		case RLV_RET_FAILED_BLOCKED:
 			return "blocked object";
+		case RLV_RET_FAILED_THROTTLED:
+			return "throttled";
 		// The following are identified by the chat verb
 		case RLV_RET_RETAINED:
 		case RLV_RET_SUCCESS:
