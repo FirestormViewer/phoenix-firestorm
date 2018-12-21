@@ -68,6 +68,8 @@ public:
 	bool hasBehaviourExcept(ERlvBehaviour eBhvr, const std::string& strOption, const LLUUID& idObj) const;
 	// Returns TRUE if at least one object in the linkset with specified root ID contains the specified behaviour (and optional option)
 	bool hasBehaviourRoot(const LLUUID& idObjRoot, ERlvBehaviour eBhvr, const std::string& strOption = LLStringUtil::null) const;
+	// Returns TRUE if the specified object is the only object containing the specified behaviour
+	bool ownsBehaviour(const LLUUID& idObj, ERlvBehaviour eBhvr) const;
 
 	// Adds or removes an exception for the specified behaviour
 	void addException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption);
@@ -141,6 +143,7 @@ public:
 	static bool setEnabled(bool fEnable);
 protected:
 	// Command specific helper functions (NOTE: these generally do not perform safety checks)
+	bool checkActiveGroupThrottle(const LLUUID& idRlvObj);                                      // @setgroup=force
 	void clearOverlayImage();                                                                   // @setoverlay=n
 	void setActiveGroup(const LLUUID& idGroup);                                                 // @setgroup=force
 	void setActiveGroupRole(const LLUUID& idGroup, const std::string& strRole);                 // @setgroup=force
@@ -256,6 +259,7 @@ protected:
 	mutable LLVector3d                      m_posSitSource;					// @standtp=n (mutable because onForceXXX handles are all declared as const)
 	mutable LLUUID                          m_idAgentGroup;					// @setgroup=n
 	std::pair<LLUUID, std::string>          m_PendingGroupChange;			// @setgroup=force
+	std::pair<LLTimer, LLUUID>              m_GroupChangeExpiration;        // @setgroup=force
 	LLPointer<LLViewerFetchedTexture>       m_pOverlayImage = nullptr;		// @setoverlay=n
 	int                                     m_nOverlayOrigBoost = 0;		// @setoverlay=n
 
