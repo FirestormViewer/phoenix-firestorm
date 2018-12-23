@@ -3232,6 +3232,9 @@ Per sicurezza, verranno bloccati per alcuni secondi.
 	<notification name="PresetNotSaved">
 		Errore durante il salvataggio del valore predefinito [NAME].
 	</notification>
+	<notification name="DefaultPresetNotSaved">
+		Impossibile sovrascrivere l’impostazione predefinita.
+	</notification>
 	<notification name="PresetNotDeleted">
 		Errore durante l&apos;eliminazione del valore predefinito [NAME].
 	</notification>
@@ -3992,6 +3995,9 @@ Riprova tra un minuto.
 	<notification name="CantCreateObjectRegionFull">
 		Impossibile creare l&apos;oggetto richiesto. La regione è piena.
 	</notification>
+	<notification name="CantCreateAnimatedObjectTooLarge">
+		Impossibile unire questi oggetti poichè l’oggetto animato che ne risulterebbe sarebbe superiore al limite triangolo con rig.
+	</notification>
 	<notification name="CantAttackMultipleObjOneSpot">
 		Non puoi collegare più oggetti a un singolo luogo.
 	</notification>
@@ -4039,6 +4045,21 @@ Riprova tra un minuto.
 	</notification>
 	<notification name="CantChangeShape">
 		Non ti è consentito modificare questa forma.
+	</notification>
+	<notification name="NoPermsTooManyAttachedAnimatedObjects">
+		L’operazione farebbe superare il limite consentito al numero di oggetti animati allegati.
+	</notification>
+	<notification name="NoPermsLinkAnimatedObjectTooLarge">
+		Impossibile unire questi oggetti poichè l’oggetto animato che ne risulterebbe sarebbe superiore al limite triangolo con rig.
+	</notification>
+	<notification name="NoPermsSetFlagAnimatedObjectTooLarge">
+		Impossibile unire questi oggetti poichè l’oggetto animato che ne risulterebbe sarebbe superiore al limite triangolo con rig.
+	</notification>
+	<notification name="CantChangeAnimatedObjectStateInsufficientLand">
+		Impossibile cambiare lo stato dell’oggetto animato poichè andrebbe oltre il limite del lotto.
+	</notification>
+	<notification name="ErrorNoMeshData">
+		Errore del server: impossibile completare l’operazione poichè i dati mesh non sono stati caricati.
 	</notification>
 	<notification name="NoAccessToClaimObjects">
 		Le tue autorizzazioni di accesso non ti permettono di richiedere oggetti in questa posizione.
@@ -4301,7 +4322,7 @@ Prova a selezionare un pezzo di terreno più piccolo.
 		Un errore interno ha impedito l&apos;aggiornamento del Viewer.  Il saldo in L$ o i lotti posseduti mostrati nel Viewer potrebbero non corrispondere ai valori correnti sui server.
 	</notification>
 	<notification name="LargePrimAgentIntersect">
-		Non puoi creare prim grandi che intersecano altri giocatori.  Riprova quando gli altri giocatori si sono spostati.
+		Impossibile creare prim larghi che si intersechino con altri residenti. Si prega di riprovare quando gli altri residenti si saranno mossi.
 	</notification>
 	<notification name="PreferenceChatClearLog">
 		Verranno cancellati i registri delle conversazioni precedenti e tutti gli eventuali backup di quel file.

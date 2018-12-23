@@ -220,7 +220,6 @@ Ansariel Hiller
 	STORM-2151
 	MAINT-6917
 	MAINT-8085
-	STORM-2122
 Aralara Rajal
 Arare Chantilly
 	CHUIBUG-191
@@ -343,6 +342,8 @@ Celierra Darling
 Chantal Harvey
 Charles Courtois
 Charlie Sazaland
+Chaser Zaks
+    BUG-225599
 Cherry Cheevers
 ChickyBabes Zuzu
 Christopher  Organiser
@@ -367,6 +368,7 @@ Cinder Roxley
     STORM-2037
     STORM-2053
     STORM-2113
+    STORM-2116
     STORM-2127
     STORM-2144
 Clara Young

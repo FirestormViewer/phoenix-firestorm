@@ -42,6 +42,7 @@
 #include "llagentlanguage.h"
 #include "llagentui.h"
 #include "llagentwearables.h"
+#include "lldirpicker.h"
 #include "llfloaterimcontainer.h"
 #include "llimprocessing.h"
 #include "llwindow.h"
@@ -1085,8 +1086,10 @@ bool LLAppViewer::init()
 		}
 	}
 
+// don't nag developers who need to run the executable directly
+#if LL_RELEASE_FOR_DOWNLOAD
 	// MAINT-8305: If we're processing a SLURL, skip the launcher check.
-	if (gSavedSettings.getString("CmdLineLoginLocation").empty())
+	if (gSavedSettings.getString("CmdLineLoginLocation").empty() && !beingDebugged())
 	{
 		const char* PARENT = getenv("PARENT");
 		if (! (PARENT && std::string(PARENT) == "SL_Launcher"))
@@ -1101,6 +1104,7 @@ bool LLAppViewer::init()
 			LLNotificationsUtil::add("RunLauncher");
 		}
 	}
+#endif
 
 #if LL_WINDOWS
 	if (gGLManager.mGLVersion < LLFeatureManager::getInstance()->getExpectedGLVersion())
@@ -1580,6 +1584,11 @@ bool LLAppViewer::doFrame()
 			saveFinalSnapshot();
 		}
 
+		if (LLVoiceClient::instanceExists())
+		{
+			LLVoiceClient::getInstance()->terminate();
+		}
+
 		delete gServicePump;
 
 		destroyMainloopTimeout();
@@ -1678,11 +1687,6 @@ bool LLAppViewer::cleanup()
 
     // Give any remaining SLPlugin instances a chance to exit cleanly.
     LLPluginProcessParent::shutdown();
-
-	if (LLVoiceClient::instanceExists())
-	{
-		LLVoiceClient::getInstance()->terminate();
-	}
 
 	disconnectViewer();
 
@@ -1796,6 +1800,8 @@ bool LLAppViewer::cleanup()
 	// Cleanup Inventory after the UI since it will delete any remaining observers
 	// (Deleted observers should have already removed themselves)
 	gInventory.cleanupInventory();
+
+	LLCoros::getInstance()->printActiveCoroutines();
 
 	LL_INFOS() << "Cleaning up Selections" << LL_ENDL;
 
@@ -1983,6 +1989,7 @@ bool LLAppViewer::cleanup()
 	mAppCoreHttp.cleanup();
 
 	SUBSYSTEM_CLEANUP(LLFilePickerThread);
+	SUBSYSTEM_CLEANUP(LLDirPickerThread);
 
 	//MUST happen AFTER SUBSYSTEM_CLEANUP(LLCurl)
 	delete sTextureCache;
@@ -2153,6 +2160,7 @@ bool LLAppViewer::initThreads()
 	gMeshRepo.init();
 
 	LLFilePickerThread::initClass();
+	LLDirPickerThread::initClass();
 
 	// *FIX: no error handling here!
 	return true;
@@ -3120,7 +3128,7 @@ LLSD LLAppViewer::getViewerInfo() const
 	}
 	else
 	{
-		LL_WARNS("Driver version")<< "Cannot get driver version from getDriverVersionWMI" << LL_ENDL;
+		LL_WARNS("DriverVersion")<< "Cannot get driver version from getDriverVersionWMI" << LL_ENDL;
 		LLSD driver_info = gDXHardware.getDisplayInfo();
 		if (driver_info.has("DriverVersion"))
 		{
@@ -3920,12 +3928,6 @@ void LLAppViewer::requestQuit()
 		gAgentAvatarp->updateAvatarRezMetrics(true); // force a last packet to be sent.
 	}
 
-	// Try to send last batch of avatar rez metrics.
-	if (!gDisconnected && isAgentAvatarValid())
-	{
-		gAgentAvatarp->updateAvatarRezMetrics(true); // force a last packet to be sent.
-	}
-
 	LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral*)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_POINT, TRUE);
 	effectp->setPositionGlobal(gAgent.getPositionGlobal());
 	effectp->setColor(LLColor4U(gAgent.getEffectColor()));
@@ -4594,7 +4596,7 @@ void LLAppViewer::idle()
 	LLSmoothInterpolation::updateInterpolants();
 	LLMortician::updateClass();
 	LLFilePickerThread::clearDead();  //calls LLFilePickerThread::notify()
-
+	LLDirPickerThread::clearDead();
 	F32 dt_raw = idle_timer.getElapsedTimeAndResetF32();
 
 	// Cap out-of-control frame times

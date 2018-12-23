@@ -29,6 +29,7 @@
 
 #include "llerror.h"
 #include "llerrorcontrol.h"
+#include "llsdutil.h"
 
 #include <cctype>
 #ifdef __GNUC__
@@ -40,6 +41,7 @@
 # include <unistd.h>
 #endif // !LL_WINDOWS
 #include <vector>
+#include "string.h"
 
 #include "llapp.h"
 #include "llapr.h"
@@ -88,9 +90,14 @@ namespace {
 		{
 			closelog();
 		}
-		
+
+        virtual bool enabled() override
+        {
+            return LLError::getEnabledLogTypesMask() & 0x01;
+        }
+        
 		virtual void recordMessage(LLError::ELevel level,
-									const std::string& message)
+									const std::string& message) override
 		{
 			int syslogPriority = LOG_CRIT;
 			switch (level) {
@@ -118,6 +125,13 @@ namespace {
 			{
 				LL_INFOS() << "Error setting log file to " << filename << LL_ENDL;
 			}
+            else
+            {
+                if (!LLError::getAlwaysFlush())
+                {
+                    mFile.sync_with_stdio(false);
+                }
+            }
 			mWantsTime = true;
             mWantsTags = true;
 		}
@@ -127,12 +141,28 @@ namespace {
 			mFile.close();
 		}
 		
+        virtual bool enabled() override
+        {
+#ifdef LL_RELEASE_FOR_DOWNLOAD
+            return 1;
+#else
+            return LLError::getEnabledLogTypesMask() & 0x02;
+#endif
+        }
+        
 		bool okay() { return mFile.good(); }
 		
 		virtual void recordMessage(LLError::ELevel level,
-									const std::string& message)
+									const std::string& message) override
 		{
-			mFile << message << std::endl;
+            if (LLError::getAlwaysFlush())
+            {
+                mFile << message << std::endl;
+            }
+            else
+            {
+                mFile << message << "\n";
+            }
 		}
 	
 	private:
@@ -148,8 +178,13 @@ namespace {
 			mWantsTime = timestamp;
 		}
 		
+        virtual bool enabled() override
+        {
+            return LLError::getEnabledLogTypesMask() & 0x04;
+        }
+        
 		virtual void recordMessage(LLError::ELevel level,
-					   const std::string& message)
+					   const std::string& message) override
 		{
 			if (ANSI_PROBE == mUseANSI)
 				mUseANSI = (checkANSI() ? ANSI_YES : ANSI_NO);
@@ -208,8 +243,13 @@ namespace {
 	public:
 		RecordToFixedBuffer(LLLineBuffer* buffer) : mBuffer(buffer) { }
 		
+        virtual bool enabled() override
+        {
+            return LLError::getEnabledLogTypesMask() & 0x08;
+        }
+        
 		virtual void recordMessage(LLError::ELevel level,
-								   const std::string& message)
+								   const std::string& message) override
 		{
 			mBuffer->addLine(message);
 		}
@@ -225,8 +265,13 @@ namespace {
 		RecordToWinDebug()
 		{}
 
+        virtual bool enabled() override
+        {
+            return LLError::getEnabledLogTypesMask() & 0x10;
+        }
+        
 		virtual void recordMessage(LLError::ELevel level,
-								   const std::string& message)
+								   const std::string& message) override
 		{
 			debugger_print(message);
 		}
@@ -249,23 +294,13 @@ namespace LLError
 	{
 #ifdef __GNUC__
 		// GCC: type_info::name() returns a mangled class name,st demangle
-
-		static size_t abi_name_len = 100;
-		static char* abi_name_buf = (char*)malloc(abi_name_len);
-			// warning: above is voodoo inferred from the GCC manual,
-			// do NOT change
-
-		int status;
-			// We don't use status, and shouldn't have to pass apointer to it
-			// but gcc 3.3 libstc++'s implementation of demangling is broken
-			// and fails without.
-			
-		char* name = abi::__cxa_demangle(mangled,
-										abi_name_buf, &abi_name_len, &status);
-			// this call can realloc the abi_name_buf pointer (!)
-
-		return name ? name : mangled;
-
+        // passing nullptr, 0 forces allocation of a unique buffer we can free
+        // fixing MAINT-8724 on OSX 10.14
+		int status = -1;
+		char* name = abi::__cxa_demangle(mangled, nullptr, 0, &status);
+        std::string result(name ? name : mangled);
+        free(name);
+        return result;
 #elif LL_WINDOWS
 		// DevStudio: type_info::name() includes the text "class " at the start
 
@@ -403,7 +438,7 @@ namespace
 			 i != callSites.end();
 			 ++i)
 		{
-			(*i)->invalidate();
+            (*i)->invalidate();
 		}
 		
 		callSites.clear();
@@ -422,7 +457,11 @@ namespace LLError
 		bool                                mPrintLocation;
 
 		LLError::ELevel                     mDefaultLevel;
-		
+
+        bool 								mLogAlwaysFlush;
+
+        U32 								mEnabledLogTypesMask;
+
 		LevelMap                            mFunctionLevelMap;
 		LevelMap                            mClassLevelMap;
 		LevelMap                            mFileLevelMap;
@@ -463,6 +502,8 @@ namespace LLError
 		: LLRefCount(),
 		mPrintLocation(false),
 		mDefaultLevel(LLError::LEVEL_DEBUG),
+		mLogAlwaysFlush(true),
+		mEnabledLogTypesMask(255),
 		mFunctionLevelMap(),
 		mClassLevelMap(),
 		mFileLevelMap(),
@@ -540,21 +581,16 @@ namespace LLError
 		mTags(new const char* [tag_count]),
 		mTagCount(tag_count)
 	{
-		for (int i = 0; i < tag_count; i++)
-		{
-			mTags[i] = tags[i];
-		}
-
 		switch (mLevel)
 		{
-		case LEVEL_DEBUG:		mLevelString = "DEBUG:";	break;
-		case LEVEL_INFO:		mLevelString = "INFO:";		break;
-		case LEVEL_WARN:		mLevelString = "WARNING:";	break;
-		case LEVEL_ERROR:		mLevelString = "ERROR:";	break;
-		default:				mLevelString = "XXX:";		break;
+        case LEVEL_DEBUG: mLevelString = "DEBUG";   break;
+        case LEVEL_INFO:  mLevelString = "INFO";    break;
+        case LEVEL_WARN:  mLevelString = "WARNING"; break;
+        case LEVEL_ERROR: mLevelString = "ERROR";   break;
+        default:          mLevelString = "XXX";     break;
 		};
 
-		mLocationString = llformat("%s(%d) :", abbreviateFile(mFile).c_str(), mLine);
+		mLocationString = llformat("%s(%d)", abbreviateFile(mFile).c_str(), mLine);
 #if LL_WINDOWS
 		// DevStudio: __FUNCTION__ already includes the full class name
 #else
@@ -568,13 +604,23 @@ namespace LLError
 			mFunctionString = className(mClassInfo) + "::";
 		}
 #endif
-		mFunctionString += std::string(mFunction) + ":";
-        const std::string tag_hash("#");
+		mFunctionString += std::string(mFunction);
+
+		for (int i = 0; i < tag_count; i++)
+		{
+            if (strchr(tags[i], ' '))
+            {
+                LL_ERRS() << "Space is not allowed in a log tag at " << mLocationString << LL_ENDL;
+            }
+			mTags[i] = tags[i];
+		}
+
+        mTagString.append("#");
+        // always construct a tag sequence; will be just a single # if no tag
 		for (size_t i = 0; i < mTagCount; i++)
 		{
-            mTagString.append(tag_hash);
 			mTagString.append(mTags[i]);
-            mTagString.append((i == mTagCount - 1) ? ";" : ",");
+            mTagString.append("#");
 		}
 	}
 
@@ -622,6 +668,8 @@ namespace
 		LLError::Settings::getInstance()->reset();
 		
 		LLError::setDefaultLevel(LLError::LEVEL_INFO);
+        LLError::setAlwaysFlush(true);
+        LLError::setEnabledLogTypesMask(0xFFFFFFFF);
 		LLError::setFatalFunction(LLError::crashAndLoop);
 		LLError::setTimeFunction(LLError::utcTime);
 
@@ -693,6 +741,30 @@ namespace LLError
 	{
 		SettingsConfigPtr s = Settings::getInstance()->getSettingsConfig();
 		return s->mDefaultLevel;
+	}
+
+	void setAlwaysFlush(bool flush)
+	{
+		SettingsConfigPtr s = Settings::getInstance()->getSettingsConfig();
+		s->mLogAlwaysFlush = flush;
+	}
+
+	bool getAlwaysFlush()
+	{
+		SettingsConfigPtr s = Settings::getInstance()->getSettingsConfig();
+		return s->mLogAlwaysFlush;
+	}
+
+	void setEnabledLogTypesMask(U32 mask)
+	{
+		SettingsConfigPtr s = Settings::getInstance()->getSettingsConfig();
+		s->mEnabledLogTypesMask = mask;
+	}
+
+	U32 getEnabledLogTypesMask()
+	{
+		SettingsConfigPtr s = Settings::getInstance()->getSettingsConfig();
+		return s->mEnabledLogTypesMask;
 	}
 
 	void setFunctionLevel(const std::string& function_name, ELevel level)
@@ -775,7 +847,15 @@ namespace LLError
 		
 		setPrintLocation(config["print-location"]);
 		setDefaultLevel(decodeLevel(config["default-level"]));
-		
+        if (config.has("log-always-flush"))
+        {
+            setAlwaysFlush(config["log-always-flush"]);
+        }
+        if (config.has("enabled-log-types-mask"))
+        {
+            setEnabledLogTypesMask(config["enabled-log-types-mask"].asInteger());
+        }
+        
 		LLSD sets = config["settings"];
 		LLSD::array_const_iterator a, end;
 		for (a = sets.beginArray(), end = sets.endArray(); a != end; ++a)
@@ -909,7 +989,46 @@ namespace LLError
 
 namespace
 {
-	void writeToRecorders(const LLError::CallSite& site, const std::string& message, bool show_location = true, bool show_time = true, bool show_tags = true, bool show_level = true, bool show_function = true)
+    void addEscapedMessage(std::ostream& out, const std::string& message)
+    {
+        size_t written_out = 0;
+        size_t all_content = message.length();
+        size_t escape_char_index; // always relative to start of message
+        // Use find_first_of to find the next character in message that needs escaping
+        for ( escape_char_index = message.find_first_of("\\\n\r");
+              escape_char_index != std::string::npos && written_out < all_content;
+              // record what we've written this iteration, scan for next char that needs escaping
+              written_out = escape_char_index + 1, escape_char_index = message.find_first_of("\\\n\r", written_out)
+             )
+        {
+            // found a character that needs escaping, so write up to that with the escape prefix
+            // note that escape_char_index is relative to the start, not to the written_out offset
+            out << message.substr(written_out, escape_char_index - written_out) << '\\';
+
+            // write out the appropriate second character in the escape sequence
+            char found = message[escape_char_index];
+            switch ( found )
+            {
+            case '\\':
+                out << '\\';
+                break;
+            case '\n':
+                out << 'n';
+                break;
+            case '\r':
+                out << 'r';
+                break;
+            }
+        }
+
+        if ( written_out < all_content ) // if the loop above didn't write everything
+        {
+            // write whatever was left
+            out << message.substr(written_out, std::string::npos);
+        }
+    }
+
+	void writeToRecorders(const LLError::CallSite& site, const std::string& escaped_message)
 	{
 		LLError::ELevel level = site.mLevel;
 		LLError::SettingsConfigPtr s = LLError::Settings::getInstance()->getSettingsConfig();
@@ -919,35 +1038,45 @@ namespace
 			++i)
 		{
 			LLError::RecorderPtr r = *i;
-			
+
+            if (!r->enabled())
+            {
+                continue;
+            }
+            
 			std::ostringstream message_stream;
 
-			if (show_time && r->wantsTime() && s->mTimeFunction != NULL)
+			if (r->wantsTime() && s->mTimeFunction != NULL)
 			{
-				message_stream << s->mTimeFunction() << " ";
+				message_stream << s->mTimeFunction();
 			}
-
-			if (show_level && r->wantsLevel())
+            message_stream << " ";
+            
+			if (r->wantsLevel())
             {
-				message_stream << site.mLevelString << " ";
+				message_stream << site.mLevelString;
             }
+            message_stream << " ";
 				
-			if (show_tags && r->wantsTags())
+			if (r->wantsTags())
 			{
 				message_stream << site.mTagString;
 			}
+            message_stream << " ";
 
-            if (show_location && (r->wantsLocation() || level == LLError::LEVEL_ERROR || s->mPrintLocation))
+            if (r->wantsLocation() || level == LLError::LEVEL_ERROR || s->mPrintLocation)
             {
-                message_stream << site.mLocationString << " ";
+                message_stream << site.mLocationString;
             }
+            message_stream << " ";
 
-			if (show_function && r->wantsFunctionName())
+			if (r->wantsFunctionName())
 			{
-				message_stream << site.mFunctionString << " ";
+				message_stream << site.mFunctionString;
 			}
+            message_stream << " : ";
 
-			message_stream << message;
+			message_stream << escaped_message;
 
 			r->recordMessage(level, message_stream.str());
 		}
@@ -1048,6 +1177,7 @@ namespace {
 
 namespace LLError
 {
+
 	bool Log::shouldLog(CallSite& site)
 	{
 		LogLock lock;
@@ -1190,11 +1320,6 @@ namespace LLError
 			delete out;
 		}
 
-		if (site.mLevel == LEVEL_ERROR)
-		{
-			writeToRecorders(site, "error", true, true, true, false, false);
-		}
-		
 		std::ostringstream message_stream;
 
 		if (site.mPrintOnce)
@@ -1220,8 +1345,8 @@ namespace LLError
 			}
 		}
 		
-		message_stream << message;
-		
+		addEscapedMessage(message_stream, message);
+
 		writeToRecorders(site, message_stream.str());
 		
 		if (site.mLevel == LEVEL_ERROR  &&  s->mCrashFunction)
@@ -1518,18 +1643,16 @@ namespace LLError
 
 bool debugLoggingEnabled(const std::string& tag)
 {
-    const char* tags[] = {tag.c_str()};
-    ::size_t tag_count = 1;
-    LLError::CallSite _site(LLError::LEVEL_DEBUG, __FILE__, __LINE__, 
-                            typeid(_LL_CLASS_TO_LOG), __FUNCTION__, false, tags, tag_count);
-    if (LL_UNLIKELY(_site.shouldLog()))
-    {
-        return true;
-    }
-    else
+    LogLock lock;
+    if (!lock.ok())
     {
         return false;
     }
+        
+    LLError::SettingsConfigPtr s = LLError::Settings::getInstance()->getSettingsConfig();
+    LLError::ELevel level = LLError::LEVEL_DEBUG;
+    bool res = checkLevelMap(s->mTagLevelMap, tag, level);
+    return res;
 }
 
 
