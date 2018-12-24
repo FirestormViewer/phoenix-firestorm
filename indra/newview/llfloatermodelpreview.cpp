@@ -3063,19 +3063,35 @@ void LLModelPreview::updateStatusMessages()
 						U16 index_a = face.mIndices[k+0];
 						U16 index_b = face.mIndices[k+1];
 						U16 index_c = face.mIndices[k+2];
+						// <FS:Beq> FIRE-23367/23387 - Allow forced empty triangle placeholders created by the LOD processing.
+						//	LLVector4a v1; v1.setMul(face.mPositions[index_a], scale);
+						//	LLVector4a v2; v2.setMul(face.mPositions[index_b], scale);
+						//	LLVector4a v3; v3.setMul(face.mPositions[index_c], scale);
 
-						LLVector4a v1; v1.setMul(face.mPositions[index_a], scale);
-						LLVector4a v2; v2.setMul(face.mPositions[index_b], scale);
-						LLVector4a v3; v3.setMul(face.mPositions[index_c], scale);
-
-						if (ll_is_degenerate(v1,v2,v3))
+						//	if (ll_is_degenerate(v1, v2, v3))
+						//	{
+						//		mHasDegenerate = true;// <FS:Beq> make has_degenerate a member 
+						//	}
+						//	else
+						//	{
+						//		k += 3;
+						//	}
+						if (index_c == 0 && index_b == 0 && index_a == 0) // test in reverse as 3rd index is less likely to be 0 in a normal case
 						{
-							mHasDegenerate = true;// <FS:Beq> make has_degenerate a member 
+							LL_DEBUGS("MeshValidation") << "Empty placeholder triangle (3 identical index 0 verts) ignored" << LL_ENDL;
 						}
 						else
 						{
-							k += 3;
+							LLVector4a v1; v1.setMul(face.mPositions[index_a], scale);
+							LLVector4a v2; v2.setMul(face.mPositions[index_b], scale);
+							LLVector4a v3; v3.setMul(face.mPositions[index_c], scale);
+							if (ll_is_degenerate(v1, v2, v3))
+							{
+								mHasDegenerate = true;// <FS:Beq> make has_degenerate a member 
+							}
 						}
+						k += 3;
+						// </FS:Beq>
 					}
 				}
 			}
