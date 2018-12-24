@@ -3338,7 +3338,7 @@ void LLModelPreview::updateStatusMessages()
 	//if (!mModelNoErrors || mHasDegenerate)
 	//{
 	//	mFMP->childDisable("ok_btn");
-	if (!mModelNoErrors || (has_physics_error > PhysicsError::NOHAVOK)) // block for all cases of phsyics error except NOHAVOK
+	if ((gSavedSettings.getBOOL("FSIgnoreClientsideMeshValidation")==FALSE) && (!mModelNoErrors || (has_physics_error > PhysicsError::NOHAVOK))) // block for all cases of phsyics error except NOHAVOK
 	{
 		mFMP->childDisable("ok_btn");
 		mFMP->childDisable("calculate_btn");
