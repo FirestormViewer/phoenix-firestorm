@@ -2471,8 +2471,8 @@ URL: [MEDIAURL]
 	<notification name="AudioAlert"> 
 		Questo lotto fornisce musica da :
 
-Dominio: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Dominio: [AUDIODOMAIN]
+URL: [AUDIOURL]
 		<form name="form">
 			<button name="Allow" text="Permetti"/>
 			<button name="Deny" text="Nega"/>
@@ -2481,8 +2481,8 @@ URL: [MEDIAURL]
 	<notification name="AudioAlert2"> 
 		Ricordare la scelta fatta e [LCONDITION] permettere la musica da questa fonte?
 
-Dominio: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Dominio: [AUDIODOMAIN]
+URL: [AUDIOURL]
 		<form name="form">
 			<button name="Do Now" text="[ACTION] adesso"/>
 			<button name="RememberDomain" text="[CONDITION] permetti questo dominio"/>
@@ -2492,8 +2492,8 @@ URL: [MEDIAURL]
 	<notification name="AudioAlertSingle"> 
 		Ricordare la scelta fatta e [LCONDITION] permettere la musica da questa fonte?
 
-Dominio: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Dominio: [AUDIODOMAIN]
+URL: [AUDIOURL]
 		<form name="form">
 			<button name="Allow" text="Permetti"/>
 			<button name="Deny" text="Nega"/>
