@@ -1400,6 +1400,8 @@ bool LLAppViewer::doFrame()
 
 		// canonical per-frame event
 		mainloop.post(newFrame);
+		// give listeners a chance to run
+		llcoro::suspend();
 
 		if (!LLApp::isExiting())
 		{
