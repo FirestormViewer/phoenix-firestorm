@@ -9029,7 +9029,7 @@
   <key>MeshPreviewBaseColor</key>
   <map>
     <key>Comment</key>
-    <string>Canvas colour for the Mesh uploader</string>
+    <string>Diffuse colour for the Mesh uploader when textures not shown</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
