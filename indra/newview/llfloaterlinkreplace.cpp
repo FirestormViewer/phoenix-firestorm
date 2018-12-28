@@ -108,10 +108,11 @@ void LLFloaterLinkReplace::onTargetItemDrop(const LLUUID& target_item_id)
 	{
 		mTargetEditor->setItem(nullptr);
 		mTargetEditor->setText(getString("DeleteNotReplace"));
-		mTargetUUID = LLUUID::null;
+		mTargetUUID.setNull();
 	}
 	// </FS:Beq>
 }
+
 // <FS:Beq> FIRE-17695 - Delete links capability
 void LLFloaterLinkReplace::onDeleteOnlyToggle()
 {
@@ -121,13 +122,15 @@ void LLFloaterLinkReplace::onDeleteOnlyToggle()
 	childSetVisible("target_label", !enabled);
 	childSetVisible("delete_text", enabled);
 	mDeleteOnly = enabled;
-	if (mDeleteOnly){
+	if (mDeleteOnly)
+	{
 		mTargetEditor->setItem(nullptr);
-		mTargetUUID = LLUUID::null;
+		mTargetUUID.setNull();
 	}
 	checkEnableStart();
 }
 // </FS:Beq>
+
 void LLFloaterLinkReplace::updateFoundLinks()
 {
 	LLInventoryModel::item_array_t items;
@@ -157,9 +160,9 @@ void LLFloaterLinkReplace::checkEnableStart()
 	}
 	// <FS:Beq> FIRE-17695 - Delete links capability
 	//	mStartBtn->setEnabled(mRemainingItems > 0 && mSourceUUID.notNull() && mTargetUUID.notNull() && mSourceUUID != mTargetUUID);
-	auto enable=bool{ mRemainingItems > 0 && (
+	bool enable =  mRemainingItems > 0 && (
 			(mDeleteOnly && mSourceUUID.notNull() ) ||
-			(mSourceUUID.notNull() && mTargetUUID.notNull() && mSourceUUID != mTargetUUID)) };
+			(mSourceUUID.notNull() && mTargetUUID.notNull() && mSourceUUID != mTargetUUID));
 
 	mStartBtn->setEnabled(enable);
 	// </FS:Beq>
@@ -202,29 +205,11 @@ void LLFloaterLinkReplace::onStartClicked()
 
 	if (mRemainingInventoryItems.size() > 0)
 	{
-		// <FS:Beq> FIRE-17695 - option to bulk delete links.
-		// LLViewerInventoryItem* target_item = gInventory.getItem(mTargetUUID);
-		//if (target_item)
-		//{
-		//	mRemainingItems = (U32)mRemainingInventoryItems.size();
-
-		//	LLStringUtil::format_map_t args;
-		//	args["NUM"] = llformat("%d", mRemainingItems);
-		//	mStatusText->setText(getString("ItemsRemaining", args));
-
-		//	mStartBtn->setEnabled(FALSE);
-		//	mRefreshBtn->setEnabled(FALSE);
-
-		//	mEventTimer.start();
-		//	tick();
-		//}
-		//else
-		//{
-		//	mStatusText->setText(getString("TargetNotFound"));
-		//	LL_WARNS() << "Link replace target not found." << LL_ENDL;
-		//}
 		LLViewerInventoryItem* target_item = gInventory.getItem(mTargetUUID);
+		// <FS:Beq> FIRE-17695 - option to bulk delete links.
+		//if (target_item)
 		if (target_item || mDeleteOnly)
+		// </FS:Beq>
 		{
 			mRemainingItems = (U32)mRemainingInventoryItems.size();
 
@@ -243,7 +228,6 @@ void LLFloaterLinkReplace::onStartClicked()
 			mStatusText->setText(getString("TargetNotFound"));
 			LL_WARNS() << "Link replace target not found." << LL_ENDL;
 		}
-		// </FS:Beq>
 	}
 }
 

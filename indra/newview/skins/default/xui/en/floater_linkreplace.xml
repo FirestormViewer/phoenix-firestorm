@@ -27,9 +27,9 @@
 	<string name="ReplaceFinished">
 		Finished replacing inventory links.
 	</string>
-  <string name="DeleteNotReplace">
-    No replacement.
-  </string>
+	<string name="DeleteNotReplace">
+		No replacement.
+	</string>
 	<text
 	 type="string"
 	 follows="left|top"
@@ -52,18 +52,18 @@
 	 top_delta="-3"
 	 right="-10"
 	 tool_tip="Drag and drop the current inventory item here that should be replaced."/>
-  <text
-    type="string"
-    follows="left|top"
-    font="SanSerif"
-    height="23"
-    layout="topleft"
-    top_pad="10"
-    left="10"
-    right="-10"
-    name="delete_text">
-    Links to this item will be removed.
-  </text>
+	<text
+	 type="string"
+	 follows="left|top"
+	 font="SanSerif"
+	 height="23"
+	 layout="topleft"
+	 top_pad="10"
+	 left="10"
+	 right="-10"
+	 name="delete_text">
+		Links to this item will be removed.
+	</text>
 	<text
 	 type="string"
 	 follows="left|top"
@@ -86,16 +86,15 @@
 	 top_delta="-3"
 	 right="-10"
 	 tool_tip="Drag and drop new inventory item here."/>
-  <check_box
-    follows="top|left"
-    height="20"
-    label="Delete links only"
-    left="10"
-    right="-10"
-    layout="topleft"
-    top_pad="10"
-    control_name="DeleteLinksOnly"
-    name="delete_links_only"/>
+	<check_box
+	 follows="top|left"
+	 height="20"
+	 label="Delete links only"
+	 left="10"
+	 right="-10"
+	 layout="topleft"
+	 top_pad="5"
+	 name="delete_links_only"/>
 	<text
 	 type="string"
 	 follows="left|top|right"
@@ -103,7 +102,7 @@
 	 height="20"
 	 layout="topleft"
 	 left="10"
-   right="-10"
+	 right="-10"
 	 name="status_text"
 	 top_pad="10">
 		Ready...
