@@ -9,6 +9,12 @@
 	<floater.string name="maturity_icon_adult">
 		&quot;Parcel_R_Dark&quot;
 	</floater.string>
+	<floater.string name="Hours">
+		[HOURS] Std.
+	</floater.string>
+	<floater.string name="Hour">
+		Std.
+	</floater.string>
 	<floater.string name="Minutes">
 		[MINUTES] Min.
 	</floater.string>
@@ -20,6 +26,9 @@
 	</floater.string>
 	<floater.string name="Remaining">
 		Restzeit
+	</floater.string>
+	<floater.string name="Always">
+		Permanent
 	</floater.string>
 	<tab_container name="landtab" width="489">
 		<panel label="Allgemein" name="land_general_panel">
@@ -486,9 +495,12 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="Verbannen" name="BanCheck">
-					Immer verbannt ([COUNT]/[MAX])
+					Verbannt ([COUNT]/[MAX])
 				</text>
-				<name_list name="BannedList" tool_tip="([LISTED] aufgeführt, [MAX] max)"/>
+				<name_list name="BannedList" tool_tip="([LISTED] aufgeführt, [MAX] max)">
+					<columns label="Name" name="name"/>
+					<columns label="Dauer" name="duration"/>
+				</name_list>
 				<button label="Hinzufügen" name="add_banned"/>
 				<button label="Entfernen" label_selected="Entfernen" name="remove_banned"/>
 			</panel>
