@@ -52,12 +52,16 @@ LLFloaterLinkReplace::~LLFloaterLinkReplace()
 
 BOOL LLFloaterLinkReplace::postBuild()
 {
+	childSetVisible("delete_text", false); // <FS:Beq> FIRE-17695 - Delete links capability
 	mStartBtn = getChild<LLButton>("btn_start");
 	mStartBtn->setCommitCallback(boost::bind(&LLFloaterLinkReplace::onStartClicked, this));
 
 	mRefreshBtn = getChild<LLButton>("btn_refresh");
 	mRefreshBtn->setCommitCallback(boost::bind(&LLFloaterLinkReplace::checkEnableStart, this));
-
+	// <FS:Beq> FIRE-17695 - Delete links capability
+	mDeleteOnlyToggle = getChild<LLCheckBoxCtrl>("delete_links_only");
+	mDeleteOnlyToggle->setCommitCallback(boost::bind(&LLFloaterLinkReplace::onDeleteOnlyToggle, this));
+	// </FS:Beq>
 	mSourceEditor = getChild<LLInventoryLinkReplaceDropTarget>("source_uuid_editor");
 	mTargetEditor = getChild<LLInventoryLinkReplaceDropTarget>("target_uuid_editor");
 
@@ -92,9 +96,40 @@ void LLFloaterLinkReplace::onSourceItemDrop(const LLUUID& source_item_id)
 
 void LLFloaterLinkReplace::onTargetItemDrop(const LLUUID& target_item_id)
 {
-	mTargetUUID = target_item_id;
+	// <FS:Beq> FIRE-17695 - option to bulk delete links.
+	//mTargetUUID = target_item_id;
+	//checkEnableStart();
+	if (!mDeleteOnly)
+	{
+		mTargetUUID = target_item_id;
+		checkEnableStart();
+	}
+	else
+	{
+		mTargetEditor->setItem(nullptr);
+		mTargetEditor->setText(getString("DeleteNotReplace"));
+		mTargetUUID.setNull();
+	}
+	// </FS:Beq>
+}
+
+// <FS:Beq> FIRE-17695 - Delete links capability
+void LLFloaterLinkReplace::onDeleteOnlyToggle()
+{
+	auto enabled = mDeleteOnlyToggle->getValue().asBoolean();
+	mTargetEditor->setEnabled(!enabled);
+	mTargetEditor->setVisible(!enabled);
+	childSetVisible("target_label", !enabled);
+	childSetVisible("delete_text", enabled);
+	mDeleteOnly = enabled;
+	if (mDeleteOnly)
+	{
+		mTargetEditor->setItem(nullptr);
+		mTargetUUID.setNull();
+	}
 	checkEnableStart();
 }
+// </FS:Beq>
 
 void LLFloaterLinkReplace::updateFoundLinks()
 {
@@ -123,19 +158,35 @@ void LLFloaterLinkReplace::checkEnableStart()
 	{
 		updateFoundLinks();
 	}
+	// <FS:Beq> FIRE-17695 - Delete links capability
+	//	mStartBtn->setEnabled(mRemainingItems > 0 && mSourceUUID.notNull() && mTargetUUID.notNull() && mSourceUUID != mTargetUUID);
+	bool enable =  mRemainingItems > 0 && (
+			(mDeleteOnly && mSourceUUID.notNull() ) ||
+			(mSourceUUID.notNull() && mTargetUUID.notNull() && mSourceUUID != mTargetUUID));
 
-	mStartBtn->setEnabled(mRemainingItems > 0 && mSourceUUID.notNull() && mTargetUUID.notNull() && mSourceUUID != mTargetUUID);
+	mStartBtn->setEnabled(enable);
+	// </FS:Beq>
 }
 
 void LLFloaterLinkReplace::onStartClicked()
 {
 	LL_INFOS() << "Starting inventory link replace" << LL_ENDL;
-
-	if (mSourceUUID.isNull() || mTargetUUID.isNull())
+	// <FS:Beq> FIRE-17695 - option to bulk delete links.
+	// if (mSourceUUID.isNull() || mTargetUUID.isNull())
+	if (!mDeleteOnly && (mSourceUUID.isNull() || mTargetUUID.isNull()))
+	// </FS:Beq>
 	{
 		LL_WARNS() << "Cannot replace. Either source or target UUID is null." << LL_ENDL;
 		return;
 	}
+
+	// <FS:Beq> FIRE-17695 - option to bulk delete links.
+	if (!mDeleteOnly && mSourceUUID.isNull())
+	{
+		LL_WARNS() << "Cannot delete links. Source UUID is null." << LL_ENDL;
+		return;
+	}
+	// </FS:Beq> 
 
 	if (mSourceUUID == mTargetUUID)
 	{
@@ -155,7 +206,10 @@ void LLFloaterLinkReplace::onStartClicked()
 	if (mRemainingInventoryItems.size() > 0)
 	{
 		LLViewerInventoryItem* target_item = gInventory.getItem(mTargetUUID);
-		if (target_item)
+		// <FS:Beq> FIRE-17695 - option to bulk delete links.
+		//if (target_item)
+		if (target_item || mDeleteOnly)
+		// </FS:Beq>
 		{
 			mRemainingItems = (U32)mRemainingInventoryItems.size();
 
@@ -307,26 +361,63 @@ void LLFloaterLinkReplace::processBatch(LLInventoryModel::item_array_t items)
 
 		if (source_item->getParentUUID() != cof_folder_id)
 		{
+			// <FS:Beq> FIRE-17695 bulk delete unwanted links
+			//bool is_outfit_folder = gInventory.isObjectDescendentOf(source_item->getParentUUID(), outfit_folder_id);
+			//// If either the new or old item in the COF is a wearable, we need to update wearable ordering after the link has been replaced
+			//bool needs_wearable_ordering_update = (is_outfit_folder && source_item->getType() == LLAssetType::AT_CLOTHING) || target_item->getType() == LLAssetType::AT_CLOTHING;
+			//// Other items in the COF need a description update (description of the actual link item must be empty)
+			//bool needs_description_update = is_outfit_folder && target_item->getType() != LLAssetType::AT_CLOTHING;
+
+			//LL_DEBUGS() << "is_outfit_folder = " << (is_outfit_folder ? "true" : "false") << LL_NEWLINE
+			//	<< "needs_wearable_ordering_update = " << (needs_wearable_ordering_update ? "true" : "false") << LL_NEWLINE
+			//	<< "needs_description_update = " << (needs_description_update ? "true" : "false") << LL_ENDL;
+
+			//LLInventoryObject::const_object_list_t obj_array;
+			//obj_array.push_back(LLConstPointer<LLInventoryObject>(target_item));
+			//LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(&LLFloaterLinkReplace::linkCreatedCallback,
+			//																								getDerivedHandle<LLFloaterLinkReplace>(),
+			//																								source_item->getUUID(),
+			//																								target_item->getUUID(),
+			//																								needs_wearable_ordering_update,
+			//																								needs_description_update,
+			//																								(is_outfit_folder ? source_item->getParentUUID() : LLUUID::null) ));
+			//link_inventory_array(source_item->getParentUUID(), obj_array, cb);
+
 			bool is_outfit_folder = gInventory.isObjectDescendentOf(source_item->getParentUUID(), outfit_folder_id);
 			// If either the new or old item in the COF is a wearable, we need to update wearable ordering after the link has been replaced
-			bool needs_wearable_ordering_update = (is_outfit_folder && source_item->getType() == LLAssetType::AT_CLOTHING) || target_item->getType() == LLAssetType::AT_CLOTHING;
+			bool needs_wearable_ordering_update = (is_outfit_folder && source_item->getType() == LLAssetType::AT_CLOTHING) || (!mDeleteOnly && target_item->getType() == LLAssetType::AT_CLOTHING);
 			// Other items in the COF need a description update (description of the actual link item must be empty)
-			bool needs_description_update = is_outfit_folder && target_item->getType() != LLAssetType::AT_CLOTHING;
+			bool needs_description_update = !mDeleteOnly && is_outfit_folder && target_item->getType() != LLAssetType::AT_CLOTHING;
 
 			LL_DEBUGS() << "is_outfit_folder = " << (is_outfit_folder ? "true" : "false") << LL_NEWLINE
 				<< "needs_wearable_ordering_update = " << (needs_wearable_ordering_update ? "true" : "false") << LL_NEWLINE
 				<< "needs_description_update = " << (needs_description_update ? "true" : "false") << LL_ENDL;
 
-			LLInventoryObject::const_object_list_t obj_array;
-			obj_array.push_back(LLConstPointer<LLInventoryObject>(target_item));
-			LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(&LLFloaterLinkReplace::linkCreatedCallback,
-																											getDerivedHandle<LLFloaterLinkReplace>(),
-																											source_item->getUUID(),
-																											target_item->getUUID(),
-																											needs_wearable_ordering_update,
-																											needs_description_update,
-																											(is_outfit_folder ? source_item->getParentUUID() : LLUUID::null) ));
-			link_inventory_array(source_item->getParentUUID(), obj_array, cb);
+			if (!mDeleteOnly)
+			{
+				LLInventoryObject::const_object_list_t obj_array;
+				obj_array.push_back(LLConstPointer<LLInventoryObject>(target_item));
+				LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(&LLFloaterLinkReplace::linkCreatedCallback,
+					getDerivedHandle<LLFloaterLinkReplace>(),
+					source_item->getUUID(),
+					target_item->getUUID(),
+					needs_wearable_ordering_update,
+					needs_description_update,
+					(is_outfit_folder ? source_item->getParentUUID() : LLUUID::null)));
+				link_inventory_array(source_item->getParentUUID(), obj_array, cb);
+			}
+			else
+			{
+				LLUUID outfit_update_folder_id = LLUUID::null;
+				if (needs_wearable_ordering_update)
+				{
+					outfit_update_folder_id = outfit_folder_id;
+				}
+				LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(&LLFloaterLinkReplace::itemRemovedCallback, getDerivedHandle<LLFloaterLinkReplace>(), outfit_update_folder_id));
+				remove_inventory_object(source_item->getUUID(), cb);
+				LL_INFOS() << "Requested delete of " << source_item->getUUID() << LL_ENDL;
+			}
+			// </FS:Beq>
 		}
 		else
 		{

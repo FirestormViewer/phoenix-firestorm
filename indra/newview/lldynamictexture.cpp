@@ -131,7 +131,7 @@ void LLViewerDynamicTexture::preRender(BOOL clear_depth)
 	//llassert(mFullWidth <= 512);
 	gPipeline.allocatePhysicsBuffer();
 	llassert(mFullWidth <= static_cast<S32>(gPipeline.mPhysicsDisplay.getWidth()));
-	llassert(mFullWidth <= static_cast<S32>(gPipeline.mPhysicsDisplay.getHeight()));
+	llassert(mFullHeight <= static_cast<S32>(gPipeline.mPhysicsDisplay.getHeight()));
 
 //	if (gGLManager.mHasFramebufferObject && gPipeline.mWaterDis.isComplete() && !gGLManager.mIsATI)
 	if (gGLManager.mHasFramebufferObject && gPipeline.mPhysicsDisplay.isComplete() && !gGLManager.mIsATI)
