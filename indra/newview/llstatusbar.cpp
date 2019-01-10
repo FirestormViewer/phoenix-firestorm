@@ -82,13 +82,14 @@
 #include "llparcel.h"
 #include "llstring.h"
 #include "message.h"
+#include "llsearchableui.h"
+#include "llsearcheditor.h"
 
 // system includes
 #include <iomanip>
 
 // Firestorm includes
 #include "fslightshare.h"
-#include "fssearchableui.h"
 #include "kcwlinterface.h"
 #include "llagentui.h"
 #include "llaudioengine.h"
@@ -185,13 +186,12 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mShowParcelIcons(TRUE),
 	mSquareMetersCredit(0),
 	mSquareMetersCommitted(0),
+	mFilterEdit(NULL),			// Edit for filtering
+	mSearchPanel(NULL),			// Panel for filtering
 	mPathfindingFlashOn(TRUE),	// <FS:Zi> Pathfinding rebake functions
 	mAudioStreamEnabled(FALSE),	// <FS:Zi> Media/Stream separation
 	mRebakeStuck(FALSE),		// <FS:LO> FIRE-7639 - Stop the blinking after a while
 	mNearbyIcons(FALSE),		// <FS:Ansariel> Script debug
-	mSearchData(NULL),			// <FS:ND/> Hook up and init for filtering
-	mFilterEdit(NULL),			// <FS:ND/> Edit for filtering
-	mSearchPanel(NULL),			// <FS:ND/> Panel for filtering
 	mIconPresets(NULL),
 	mMediaToggle(NULL),
 	mMouseEnterPresetsConnection(),
@@ -413,6 +413,16 @@ BOOL LLStatusBar::postBuild()
 	mPanelNearByMedia->setFollows(FOLLOWS_TOP|FOLLOWS_RIGHT);
 	mPanelNearByMedia->setVisible(FALSE);
 
+	// Hook up and init for filtering
+	mFilterEdit = getChild<LLSearchEditor>( "search_menu_edit" );
+	mSearchPanel = getChild<LLPanel>( "menu_search_panel" );
+
+	mSearchPanel->setVisible(gSavedSettings.getBOOL("FSMenuSearch"));
+	mFilterEdit->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
+	mFilterEdit->setCommitCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
+	collectSearchableItems();
+	gSavedSettings.getControl("FSMenuSearch")->getCommitSignal()->connect(boost::bind(&LLStatusBar::updateMenuSearchVisibility, this, _2));
+
 	// <FS:Ansariel> Script debug
 	mScriptOut = getChild<LLIconCtrl>("scriptout");
 	mScriptOut->setMouseDownCallback(boost::bind(&LLFloaterScriptDebug::show, LLUUID::null));
@@ -446,8 +456,6 @@ BOOL LLStatusBar::postBuild()
 	mBalancePanel = getChild<LLPanel>("balance_bg");
 	mTimeMediaPanel = getChild<LLPanel>("time_and_media_bg");
 
-	mFilterEdit = getChild<LLSearchEditor>("search_menu_edit");
-	mSearchPanel = getChild<LLPanel>("menu_search_panel");
 	mFPSText = getChild<LLTextBox>("FPSText");
 	mVolumeIconsWidth = mBtnVolume->getRect().mRight - mStreamToggle->getRect().mLeft;
 
@@ -478,14 +486,6 @@ BOOL LLStatusBar::postBuild()
 	{
 		updateNetstatVisibility(LLSD(FALSE));
 	}
-
-	// <FS:ND> Hook up and init for filtering
-	mSearchPanel->setVisible(gSavedSettings.getBOOL("FSMenuSearch"));
-	mFilterEdit->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
-	mFilterEdit->setCommitCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
-	collectSearchableItems();
-	gSavedSettings.getControl("FSMenuSearch")->getCommitSignal()->connect(boost::bind(&LLStatusBar::updateMenuSearchVisibility, this, _2));
-	// </FS:ND>
 
 	// <FS:Ansariel> FIRE-14482: Show FPS in status bar
 	gSavedSettings.getControl("FSStatusBarShowFPS")->getSignal()->connect(boost::bind(&LLStatusBar::onShowFPSChanged, this, _2));
@@ -673,6 +673,7 @@ void LLStatusBar::setVisibleForMouselook(bool visible)
 	// mBtnVolume->setVisible(visible);
 	// mStreamToggle->setVisible(visible);		// ## Zi: Media/Stream separation
 	// mMediaToggle->setVisible(visible);
+	mSearchPanel->setVisible(visible && gSavedSettings.getBOOL("FSMenuSearch"));
 	BOOL FSEnableVolumeControls = gSavedSettings.getBOOL("FSEnableVolumeControls");
 	mBtnVolume->setVisible(visible && FSEnableVolumeControls);
 	mStreamToggle->setVisible(visible && FSEnableVolumeControls); // ## Zi: Media/Stream separation
@@ -682,7 +683,6 @@ void LLStatusBar::setVisibleForMouselook(bool visible)
 	mSGBandwidth->setVisible(visible && showNetStats);
 	mSGPacketLoss->setVisible(visible && showNetStats);
 	mBandwidthButton->setVisible(visible && showNetStats); // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
-	mSearchPanel->setVisible(visible && gSavedSettings.getBOOL("FSMenuSearch"));
 	mTimeMediaPanel->setVisible(visible);
 	setBackgroundVisible(visible);
 	mIconPresets->setVisible(visible);
@@ -738,12 +738,11 @@ void LLStatusBar::setBalance(S32 balance)
 		balance_bg_view->setShape(balance_bg_rect);
 	}
 
-	// FS:ND> If the search panel is shown, move this according to the new balance width. Parcel text will reshape itself in setParcelInfoText
+	// If the search panel is shown, move this according to the new balance width. Parcel text will reshape itself in setParcelInfoText
 	if (mSearchPanel && mSearchPanel->getVisible())
 	{
 		updateMenuSearchPosition();
 	}
-	// </FS:ND>
 
 	if (mBalance && (fabs((F32)(mBalance - balance)) > gSavedSettings.getF32("UISndMoneyChangeThreshold")))
 	{
@@ -1048,6 +1047,74 @@ BOOL can_afford_transaction(S32 cost)
 void LLStatusBar::onVolumeChanged(const LLSD& newvalue)
 {
 	refresh();
+}
+
+void LLStatusBar::onUpdateFilterTerm()
+{
+	LLWString searchValue = utf8str_to_wstring( mFilterEdit->getValue() );
+	LLWStringUtil::toLower( searchValue );
+
+	if( !mSearchData || mSearchData->mLastFilter == searchValue )
+		return;
+
+	mSearchData->mLastFilter = searchValue;
+
+	mSearchData->mRootMenu->hightlightAndHide( searchValue );
+	gMenuBarView->needsArrange();
+}
+
+void collectChildren( LLMenuGL *aMenu, ll::statusbar::SearchableItemPtr aParentMenu )
+{
+	for( U32 i = 0; i < aMenu->getItemCount(); ++i )
+	{
+		LLMenuItemGL *pMenu = aMenu->getItem( i );
+
+		ll::statusbar::SearchableItemPtr pItem( new ll::statusbar::SearchableItem );
+		pItem->mCtrl = pMenu;
+		pItem->mMenu = pMenu;
+		pItem->mLabel = utf8str_to_wstring( pMenu->ll::ui::SearchableControl::getSearchText() );
+		LLWStringUtil::toLower( pItem->mLabel );
+		aParentMenu->mChildren.push_back( pItem );
+
+		LLMenuItemBranchGL *pBranch = dynamic_cast< LLMenuItemBranchGL* >( pMenu );
+		if( pBranch )
+			collectChildren( pBranch->getBranch(), pItem );
+	}
+
+}
+
+void LLStatusBar::collectSearchableItems()
+{
+	mSearchData.reset( new ll::statusbar::SearchData );
+	ll::statusbar::SearchableItemPtr pItem( new ll::statusbar::SearchableItem );
+	mSearchData->mRootMenu = pItem;
+	collectChildren( gMenuBarView, pItem );
+}
+
+void LLStatusBar::updateMenuSearchVisibility(const LLSD& data)
+{
+	bool visible = data.asBoolean();
+	mSearchPanel->setVisible(visible);
+	if (!visible)
+	{
+		mFilterEdit->setText(LLStringUtil::null);
+		onUpdateFilterTerm();
+	}
+	else
+	{
+		updateMenuSearchPosition();
+	}
+}
+
+void LLStatusBar::updateMenuSearchPosition()
+{
+	const S32 HPAD = 12;
+	LLRect balanceRect = getChildView("balance_bg")->getRect();
+	LLRect searchRect = mSearchPanel->getRect();
+	S32 w = searchRect.getWidth();
+	searchRect.mLeft = balanceRect.mLeft - w - HPAD;
+	searchRect.mRight = searchRect.mLeft + w;
+	mSearchPanel->setShape( searchRect );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1583,75 +1650,6 @@ void LLStatusBar::onMouseEnterParcelInfo()
 void LLStatusBar::onMouseLeaveParcelInfo()
 {
 	mParcelInfoText->setColor(LLUIColorTable::instance().getColor("ParcelNormalColor"));
-}
-
-void LLStatusBar::onUpdateFilterTerm()
-{
-	LLWString searchValue = utf8str_to_wstring( mFilterEdit->getValue() );
-	LLWStringUtil::toLower( searchValue );
-
-	if( !mSearchData || mSearchData->mLastFilter == searchValue )
-		return;
-
-	mSearchData->mLastFilter = searchValue;
-
-	mSearchData->mRootMenu->hightlightAndHide( searchValue );
-	gMenuBarView->needsArrange();
-}
-
-void collectChildren( LLMenuGL *aMenu, nd::statusbar::SearchableItemPtr aParentMenu )
-{
-	for( U32 i = 0; i < aMenu->getItemCount(); ++i )
-	{
-		LLMenuItemGL *pMenu = aMenu->getItem( i );
-
-		nd::statusbar::SearchableItemPtr pItem( new nd::statusbar::SearchableItem );
-		pItem->mCtrl = pMenu;
-		pItem->mMenu = pMenu;
-		pItem->mLabel = utf8str_to_wstring( pMenu->nd::ui::SearchableControl::getSearchText() );
-		LLWStringUtil::toLower( pItem->mLabel );
-		aParentMenu->mChildren.push_back( pItem );
-
-		LLMenuItemBranchGL *pBranch = dynamic_cast< LLMenuItemBranchGL* >( pMenu );
-		if( pBranch )
-			collectChildren( pBranch->getBranch(), pItem );
-	}
-
-}
-
-void LLStatusBar::collectSearchableItems()
-{
-	mSearchData = new nd::statusbar::SearchData;
-	nd::statusbar::SearchableItemPtr pItem( new nd::statusbar::SearchableItem );
-	mSearchData->mRootMenu = pItem;
-	collectChildren( gMenuBarView, pItem );
-}
-
-void LLStatusBar::updateMenuSearchVisibility(const LLSD& data)
-{
-	bool visible = data.asBoolean();
-	mSearchPanel->setVisible(visible);
-	if (!visible)
-	{
-		mFilterEdit->setText(LLStringUtil::null);
-		onUpdateFilterTerm();
-	}
-	else
-	{
-		updateMenuSearchPosition();
-	}
-	update();
-}
-
-void LLStatusBar::updateMenuSearchPosition()
-{
-	const S32 HPAD = 12;
-	LLRect balanceRect = getChildView("balance_bg")->getRect();
-	LLRect searchRect = mSearchPanel->getRect();
-	S32 w = searchRect.getWidth();
-	searchRect.mLeft = balanceRect.mLeft - w - HPAD;
-	searchRect.mRight = searchRect.mLeft + w;
-	mSearchPanel->setShape( searchRect );
 }
 
 void LLStatusBar::onPopupRolloverChanged(const LLSD& newvalue)

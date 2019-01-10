@@ -1298,18 +1298,16 @@ void LLTextBase::draw()
 		gl_rect_2d(text_rect, bg_color % alpha, TRUE);
 	}
 
-	// <FS:ND> Draw highlighted if needed
-	if( nd::ui::SearchableControl::getHighlighted() )
+	// Draw highlighted if needed
+	if( ll::ui::SearchableControl::getHighlighted() )
 	{
-		LLColor4 bg_color = nd::ui::SearchableControl::getHighlightColor();
+		LLColor4 bg_color = ll::ui::SearchableControl::getHighlightColor();
 		LLRect bg_rect = mVisibleTextRect;
-		if (mScroller)
-			bg_rect.intersectWith(text_rect);
+		if( mScroller )
+			bg_rect.intersectWith( text_rect );
 
-		gl_rect_2d(text_rect, bg_color, TRUE);
+		gl_rect_2d( text_rect, bg_color, TRUE );
 	}
-	// <FS:ND>
-
 
 	bool should_clip = mClip || mScroller != NULL;
 	// <FS:Zi> Fix text bleeding at top edge of scrolling text editors

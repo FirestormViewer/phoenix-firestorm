@@ -1,43 +1,44 @@
 /**
- * $LicenseInfo:firstyear=2014&license=fsviewerlgpl$
- * Phoenix Firestorm Viewer Source Code
- * Copyright (C) 2014, Nicky Dasmijn
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation;
- * version 2.1 of the License only.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
- * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
- * http://www.firestormviewer.org
- * $/LicenseInfo$
- */
+* @file llsearchableui.cpp
+*
+* $LicenseInfo:firstyear=2019&license=viewerlgpl$
+* Second Life Viewer Source Code
+* Copyright (C) 2019, Linden Research, Inc.
+*
+* This library is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation;
+* version 2.1 of the License only.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
+* $/LicenseInfo$
+*/
 
 #include "llviewerprecompiledheaders.h"
-#include "fssearchableui.h"
+#include "llsearchableui.h"
 
 #include "llview.h"
 #include "lltabcontainer.h"
 #include "llmenugl.h"
 
-nd::prefs::SearchableItem::~SearchableItem()
+ll::prefs::SearchableItem::~SearchableItem()
 {}
 
-void nd::prefs::SearchableItem::setNotHighlighted()
+void ll::prefs::SearchableItem::setNotHighlighted()
 {
 	mCtrl->setHighlighted( false );
 }
 
-bool nd::prefs::SearchableItem::hightlightAndHide( LLWString const &aFilter )
+bool ll::prefs::SearchableItem::hightlightAndHide( LLWString const &aFilter )
 {
 	if( mCtrl->getHighlighted() )
 		return true;
@@ -61,13 +62,18 @@ bool nd::prefs::SearchableItem::hightlightAndHide( LLWString const &aFilter )
 	return false;
 }
 
-nd::prefs::PanelData::~PanelData()
+ll::prefs::PanelData::~PanelData()
 {}
 
-bool nd::prefs::PanelData::hightlightAndHide( LLWString const &aFilter )
+bool ll::prefs::PanelData::hightlightAndHide( LLWString const &aFilter )
 {
 	for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
 		(*itr)->setNotHighlighted( );
+
+	if (aFilter.empty())
+	{
+		return true;
+	}
 
 	bool bVisible(false);
 	for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
@@ -79,7 +85,7 @@ bool nd::prefs::PanelData::hightlightAndHide( LLWString const &aFilter )
 	return bVisible;
 }
 
-bool nd::prefs::TabContainerData::hightlightAndHide( LLWString const &aFilter )
+bool ll::prefs::TabContainerData::hightlightAndHide( LLWString const &aFilter )
 {
 	for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
 		(*itr)->setNotHighlighted( );
@@ -99,13 +105,13 @@ bool nd::prefs::TabContainerData::hightlightAndHide( LLWString const &aFilter )
 	return bVisible;
 }
 
-nd::statusbar::SearchableItem::SearchableItem()
+ll::statusbar::SearchableItem::SearchableItem()
 	: mMenu(0)
 	, mCtrl(0)
 	, mWasHiddenBySearch( false )
 { }
 
-void nd::statusbar::SearchableItem::setNotHighlighted( )
+void ll::statusbar::SearchableItem::setNotHighlighted( )
 {
 	for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
 		(*itr)->setNotHighlighted( );
@@ -119,7 +125,7 @@ void nd::statusbar::SearchableItem::setNotHighlighted( )
 	}
 }
 
-bool nd::statusbar::SearchableItem::hightlightAndHide( LLWString const &aFilter )
+bool ll::statusbar::SearchableItem::hightlightAndHide( LLWString const &aFilter )
 {
 	if( mMenu && !mMenu->getVisible() && !mWasHiddenBySearch )
 		return false;
