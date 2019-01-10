@@ -344,6 +344,11 @@ void FSFloaterSearch::onTabChange()
 		mDetailsPanel->setVisible(false);
 		mPanelWeb->resetFocusOnLoad();
 	}
+	// <KC> If on legacy preople search and skin uses full profile preview, hide preview panel
+	else if (active_panel == mPanelPeople && mPanelProfile)
+	{
+		mDetailsPanel->setVisible(false);
+	}
 	else
 	{
 		mDetailsPanel->setVisible(mHasSelection);

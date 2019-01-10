@@ -438,7 +438,7 @@ void inventory_offer_handler(LLOfferInfo* info)
                 itemp = (LLViewerInventoryItem*)gInventory.getItem(info->mObjectID);
             }
 
-            LLOpenAgentOffer* open_agent_offer = new LLOpenAgentOffer(info->mObjectID, info->mFromName);
+            LLOpenAgentOffer* open_agent_offer = new LLOpenAgentOffer(info->mObjectID, info->mFromName, false);
             open_agent_offer->startFetch();
             if(catp || (itemp && itemp->isFinished()))
             {
