@@ -99,6 +99,7 @@ public:
 	static bool getHideLockedAttach()			{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDATTACH, false); }
 	static bool getHideLockedInventory()		{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDINVENTORY, false); }
 	static bool getSharedInvAutoRename()		{ return rlvGetSetting<bool>(RLV_SETTING_SHAREDINVAUTORENAME, true); }
+	static bool getSplitRedirectChat()          { return rlvGetSetting<bool>(RLV_SETTING_SPLITREDIRECTCHAT, false); }
 
 	static bool getLoginLastLocation()			{ return rlvGetPerUserSetting<bool>(RLV_SETTING_LOGINLASTLOCATION, true); }
 	static void updateLoginLastLocation();
@@ -188,6 +189,7 @@ public:
 	static bool isValidReplyChannel(S32 nChannel, bool fLoopback = false);
 	static bool sendChatReply(S32 nChannel, const std::string& strUTF8Text);
 	static bool sendChatReply(const std::string& strChannel, const std::string& strUTF8Text);
+	static bool sendChatReplySplit(S32 nChannel, const std::string& strUTF8Text, char chSplit = ' ');
 	static void sendIMMessage(const LLUUID& idTo, const std::string& strMsg, char chSplit);
 protected:
 	static bool m_fForceTp;															// @standtp
