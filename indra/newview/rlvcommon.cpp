@@ -642,6 +642,20 @@ bool RlvUtil::sendChatReply(S32 nChannel, const std::string& strUTF8Text)
 	return true;
 }
 
+bool RlvUtil::sendChatReplySplit(S32 nChannel, const std::string& strMsg, char chSplit)
+{
+	std::list<std::string> msgList;
+	utf8str_split(msgList, strMsg, MAX_MSG_STR_LEN, chSplit);
+	for (const std::string& strMsg : msgList)
+	{
+		if (!sendChatReply(nChannel, strMsg))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 void RlvUtil::sendIMMessage(const LLUUID& idRecipient, const std::string& strMsg, char chSplit)
 {
 	const LLUUID idSession = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL, idRecipient);

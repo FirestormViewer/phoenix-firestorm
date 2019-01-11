@@ -1211,7 +1211,12 @@ bool RlvHandler::redirectChatOrEmote(const std::string& strUTF8Text) const
 	{
 		S32 nChannel = boost::get<S32>(itRedir->second.varOption);
 		if (RlvActions::canSendChannel(nChannel))
-			RlvUtil::sendChatReply(nChannel, strUTF8Text);
+		{
+			if (!RlvSettings::getSplitRedirectChat())
+				RlvUtil::sendChatReply(nChannel, strUTF8Text);
+			else
+				RlvUtil::sendChatReplySplit(nChannel, strUTF8Text);
+		}
 	}
 
 	return true;
