@@ -3014,8 +3014,12 @@ void LLWindowWin32::flashIcon(F32 seconds)
 		flash_info.cbSize = sizeof(FLASHWINFO);
 		flash_info.hwnd = mWindowHandle;
 		flash_info.dwFlags = FLASHW_TRAY;
-		flash_info.uCount = UINT(seconds / ICON_FLASH_TIME);
-		flash_info.dwTimeout = DWORD(1000.f * ICON_FLASH_TIME); // milliseconds
+		// <FS:Ansariel> FIRE-23498: Tray icon flash functions randomly
+		//flash_info.uCount = UINT(seconds / ICON_FLASH_TIME);
+		//flash_info.dwTimeout = DWORD(1000.f * ICON_FLASH_TIME); // milliseconds
+		flash_info.uCount = UINT(ll_round(seconds / ICON_FLASH_TIME));
+		flash_info.dwTimeout = DWORD(ll_round(1000.f * ICON_FLASH_TIME)); // milliseconds
+		// </FS:Ansariel>
 		FlashWindowEx(&flash_info);
 	}
 }
