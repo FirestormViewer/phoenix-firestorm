@@ -18,9 +18,6 @@
 	<string name="ReplaceFinished">
 		Ersetzen von Inventar-Links beendet.
 	</string>
-	<string name="DeleteNotReplace">
-		Keine Ersetzung.
-	</string>
 	<text name="source_label">
 		Alt:
 	</text>
