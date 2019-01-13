@@ -2716,6 +2716,8 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 				flash_info.cbSize = sizeof(FLASHWINFO);
 				flash_info.hwnd = window_imp->mWindowHandle;
 				flash_info.dwFlags = FLASHW_STOP;
+				flash_info.uCount = 0;
+				flash_info.dwTimeout = 0;
 				FlashWindowEx(&flash_info);
 			}
 			// </FS:Ansariel>
