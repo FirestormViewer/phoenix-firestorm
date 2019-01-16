@@ -9,7 +9,7 @@
 # also defined, but not for general use are
 #  BREAKPAD_EXCEPTION_HANDLER_LIBRARY, where to find the Google BreakPad library.
 
-FIND_PATH(BREAKPAD_EXCEPTION_HANDLER_INCLUDE_DIR google_breakpad/client/linux/handler/exception_handler.h)
+FIND_PATH(BREAKPAD_EXCEPTION_HANDLER_INCLUDE_DIR breakpad/client/linux/handler/exception_handler.h)
 
 SET(BREAKPAD_EXCEPTION_HANDLER_NAMES ${BREAKPAD_EXCEPTION_HANDLER_NAMES} breakpad_client)
 FIND_LIBRARY(BREAKPAD_EXCEPTION_HANDLER_LIBRARY
