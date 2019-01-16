@@ -340,6 +340,9 @@ public:
 	// returns TRUE is any node is currenly worn as an attachment
 	BOOL isAttachment();
 
+    bool checkAnimatedObjectEstTris();
+    bool checkAnimatedObjectLinkable();
+    
 	// Apply functors to various subsets of the selected objects
 	// If firstonly is FALSE, returns the AND of all apply() calls.
 	// Else returns TRUE immediately if any apply() call succeeds (i.e. OR with early exit)
@@ -675,6 +678,11 @@ public:
 	// returns TRUE if all the nodes are valid. Accumulates
 	// permissions in the parameter.
 	BOOL selectGetPermissions(LLPermissions& perm);
+
+	// returns TRUE if all the nodes are valid. Depends onto "edit linked" state
+	// Children in linksets are a bit special - they require not only move permission
+	// but also modify if "edit linked" is set, since you move them relative to parent
+	BOOL selectGetEditMoveLinksetPermissions(bool &move, bool &modify);
 	
 	// Get a bunch of useful sale information for the object(s) selected.
 	// "_mixed" is true if not all objects have the same setting.
@@ -742,6 +750,8 @@ public:
 
 	LLVector3d		getSelectionCenterGlobal() const	{ return mSelectionCenterGlobal; }
 	void			updateSelectionCenter();
+
+    void pauseAssociatedAvatars();
 
 	void resetAgentHUDZoom();
 	void setAgentHUDZoom(F32 target_zoom, F32 current_zoom);
@@ -844,7 +854,7 @@ private:
 	LLFrameTimer			mEffectsTimer;
 	BOOL					mForceSelection;
 
-	LLAnimPauseRequest		mPauseRequest;
+    std::vector<LLAnimPauseRequest>	mPauseRequests;
 };
 
 // *DEPRECATED: For callbacks or observers, use

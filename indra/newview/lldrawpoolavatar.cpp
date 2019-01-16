@@ -109,6 +109,32 @@ LLDrawPoolAvatar::LLDrawPoolAvatar() :
 {
 }
 
+LLDrawPoolAvatar::~LLDrawPoolAvatar()
+{
+    if (!isDead())
+    {
+        LL_WARNS() << "Destroying avatar drawpool that still contains faces" << LL_ENDL;
+    }
+}
+
+// virtual
+BOOL LLDrawPoolAvatar::isDead()
+{
+    if (!LLFacePool::isDead())
+    {
+        return FALSE;
+    }
+    
+	for (U32 i = 0; i < NUM_RIGGED_PASSES; ++i)
+    {
+        if (mRiggedFace[i].size() > 0)
+        {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+ 
 //-----------------------------------------------------------------------------
 // instancePool()
 //-----------------------------------------------------------------------------
@@ -467,7 +493,7 @@ void LLDrawPoolAvatar::renderShadow(S32 pass)
 	}
 	LLVOAvatar *avatarp = (LLVOAvatar *)facep->getDrawable()->getVObj().get();
 
-	if (avatarp->isDead() || avatarp->mIsDummy || avatarp->mDrawable.isNull())
+	if (avatarp->isDead() || avatarp->isUIAvatar() || avatarp->mDrawable.isNull())
 	{
 		return;
 	}
@@ -1574,6 +1600,11 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(
 	LLPointer<LLVertexBuffer> buffer = face->getVertexBuffer();
 	LLDrawable* drawable = face->getDrawable();
 
+	if (drawable->getVOVolume() && drawable->getVOVolume()->isNoLOD())
+	{
+		return;
+	}
+
 	U32 data_mask = face->getRiggedVertexBufferDataMask();
 
     if (!vol_face.mWeightsScrubbed)
@@ -1621,7 +1652,9 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(
 		return;
 	}
 
-	if (sShaderLevel <= 0 && face->mLastSkinTime < avatar->getLastSkinTime())
+	if (!buffer.isNull() && 
+		sShaderLevel <= 0 && 
+		face->mLastSkinTime < avatar->getLastSkinTime())
 	{
 		//perform software vertex skinning for this face
 		LLStrider<LLVector3> position;
@@ -1676,7 +1709,7 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(
 
 void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 {
-	if (avatar->isSelf() && !gAgent.needsRenderAvatar())
+	if (!avatar->shouldRenderRigged())
 	{
 		return;
 	}
@@ -1707,13 +1740,7 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 			continue;
 		}
 
-		LLUUID mesh_id = volume->getParams().getSculptID();
-		if (mesh_id.isNull())
-		{
-			continue;
-		}
-
-		const LLMeshSkinInfo* skin = gMeshRepo.getSkinInfo(mesh_id, vobj);
+		const LLMeshSkinInfo* skin = vobj->getSkinInfo();
 		if (!skin)
 		{
 			continue;
@@ -1914,7 +1941,7 @@ void LLDrawPoolAvatar::updateRiggedVertexBuffers(LLVOAvatar* avatar)
 
 			LLVOVolume* vobj = drawable->getVOVolume();
 
-			if (!vobj)
+			if (!vobj || vobj->isNoLOD())
 			{
 				continue;
 			}
@@ -1927,13 +1954,7 @@ void LLDrawPoolAvatar::updateRiggedVertexBuffers(LLVOAvatar* avatar)
 				continue;
 			}
 
-			LLUUID mesh_id = volume->getParams().getSculptID();
-			if (mesh_id.isNull())
-			{
-				continue;
-			}
-
-			const LLMeshSkinInfo* skin = gMeshRepo.getSkinInfo(mesh_id, vobj);
+			const LLMeshSkinInfo* skin = vobj->getSkinInfo();
 			if (!skin)
 			{
 				continue;
@@ -2054,11 +2075,16 @@ LLColor3 LLDrawPoolAvatar::getDebugColor() const
 
 void LLDrawPoolAvatar::addRiggedFace(LLFace* facep, U32 type)
 {
+    llassert (facep->isState(LLFace::RIGGED));
+    llassert(getType() == LLDrawPool::POOL_AVATAR);
+    if (facep->getPool() && facep->getPool() != this)
+    {
+        LL_ERRS() << "adding rigged face that's already in another pool" << LL_ENDL;
+    }
 	if (type >= NUM_RIGGED_PASSES)
 	{
 		LL_ERRS() << "Invalid rigged face type." << LL_ENDL;
 	}
-
 	if (facep->getRiggedIndex(type) != -1)
 	{
 		LL_ERRS() << "Tried to add a rigged face that's referenced elsewhere." << LL_ENDL;
@@ -2071,6 +2097,12 @@ void LLDrawPoolAvatar::addRiggedFace(LLFace* facep, U32 type)
 
 void LLDrawPoolAvatar::removeRiggedFace(LLFace* facep)
 {
+    llassert (facep->isState(LLFace::RIGGED));
+    llassert(getType() == LLDrawPool::POOL_AVATAR);
+    if (facep->getPool() != this)
+    {
+        LL_ERRS() << "Tried to remove a rigged face from the wrong pool" << LL_ENDL;
+    }
 	facep->setPool(NULL);
 
 	for (U32 i = 0; i < NUM_RIGGED_PASSES; ++i)

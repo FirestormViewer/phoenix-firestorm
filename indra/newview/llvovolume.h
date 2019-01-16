@@ -35,6 +35,8 @@
 #include "m3math.h"		// LLMatrix3
 #include "m4math.h"		// LLMatrix4
 #include <map>
+#include <set>
+
 
 class LLViewerTextureAnim;
 class LLDrawPool;
@@ -62,6 +64,8 @@ public:
 	}
 
 	void update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, const LLVolume* src_volume);
+
+    std::string mExtraDebugText;
 };
 
 // Base class for implementations of the volume - Primitive, Flexible Object, etc.
@@ -125,15 +129,19 @@ public:
 
 				void	generateSilhouette(LLSelectNode* nodep, const LLVector3& view_point);
 	/*virtual*/	BOOL	setParent(LLViewerObject* parent);
-				S32		getLOD() const							{ return mLOD; }
+				S32		getLOD() const						{ return mLOD; }
+				void	setNoLOD()							{ mLOD = NO_LOD; mLODChanged = TRUE; }
+				bool	isNoLOD() const						{ return NO_LOD == mLOD; }
 	const LLVector3		getPivotPositionAgent() const;
 	const LLMatrix4&	getRelativeXform() const				{ return mRelativeXform; }
 	const LLMatrix3&	getRelativeXformInvTrans() const		{ return mRelativeXformInvTrans; }
 	/*virtual*/	const LLMatrix4	getRenderMatrix() const;
 				typedef std::map<LLUUID, S32> texture_cost_t;
 				U32 	getRenderCost(texture_cost_t &textures) const;
-				F32		getStreamingCost(S32* bytes, S32* visible_bytes, F32* unscaled_value) const;
-	/*virtual*/	F32		getStreamingCost(S32* bytes = NULL, S32* visible_bytes = NULL) { return getStreamingCost(bytes, visible_bytes, NULL); }
+    /*virtual*/	F32		getEstTrianglesMax() const;
+    /*virtual*/	F32		getEstTrianglesStreamingCost() const;
+    /* virtual*/ F32	getStreamingCost() const;
+    /*virtual*/ bool getCostData(LLMeshCostData& costs) const;
 
 	/*virtual*/ U32		getTriangleCount(S32* vcount = NULL) const;
 	/*virtual*/ U32		getHighLODTriangleCount();
@@ -159,7 +167,8 @@ public:
 	/*virtual*/ F32  	getRadius() const						{ return mVObjRadius; };
 				const LLMatrix4& getWorldMatrix(LLXformMatrix* xform) const;
 
-				void	markForUpdate(BOOL priority)			{ LLViewerObject::markForUpdate(priority); mVolumeChanged = TRUE; }
+				void	markForUpdate(BOOL priority);
+				void	markForUnload()							{ LLViewerObject::markForUnload(TRUE); mVolumeChanged = TRUE; }
 				void    faceMappingChanged()                    { mFaceMappingChanged=TRUE; };
 
 	/*virtual*/ void	onShift(const LLVector4a &shift_vector); // Called when the drawable shifts
@@ -202,10 +211,10 @@ public:
 	/*virtual*/ BOOL 	setMaterial(const U8 material);
 
 				void	setTexture(const S32 face);
-				S32     getIndexInTex() const {return mIndexInTex ;}
+				S32     getIndexInTex(U32 ch) const {return mIndexInTex[ch];}
 	/*virtual*/ BOOL	setVolume(const LLVolumeParams &volume_params, const S32 detail, bool unique_volume = false);
 				void	updateSculptTexture();
-				void    setIndexInTex(S32 index) { mIndexInTex = index ;}
+				void    setIndexInTex(U32 ch, S32 index) { mIndexInTex[ch] = index ;}
 				void	sculpt();
 	 static     void    rebuildMeshAssetCallback(LLVFS *vfs,
 														  const LLUUID& asset_uuid,
@@ -259,12 +268,29 @@ public:
 	virtual BOOL isFlexible() const;
 	virtual BOOL isSculpted() const;
 	virtual BOOL isMesh() const;
+	virtual BOOL isRiggedMesh() const;
 	virtual BOOL hasLightTexture() const;
 
+    
 	BOOL isVolumeGlobal() const;
 	BOOL canBeFlexible() const;
 	BOOL setIsFlexible(BOOL is_flexible);
 
+    const LLMeshSkinInfo* getSkinInfo() const;
+    
+    // Extended Mesh Properties
+    U32 getExtendedMeshFlags() const;
+    void onSetExtendedMeshFlags(U32 flags);
+    void setExtendedMeshFlags(U32 flags);
+    bool canBeAnimatedObject() const;
+    bool isAnimatedObject() const;
+    virtual void onReparent(LLViewerObject *old_parent, LLViewerObject *new_parent);
+    virtual void afterReparent();
+
+    //virtual
+    void updateRiggingInfo();
+    S32 mLastRiggingInfoLOD;
+    
     // Functions that deal with media, or media navigation
     
     // Update this object's media data with the given media data array
@@ -298,7 +324,10 @@ public:
 	bool hasMedia() const;
 	
 	LLVector3 getApproximateFaceNormal(U8 face_id);
-	
+
+    // Flag any corresponding avatars as needing update.
+    void updateVisualComplexity();
+    
 	void notifyMeshLoaded();
 	
 	// Returns 'true' iff the media data for this object is in flight
@@ -327,7 +356,7 @@ public:
 	void clearRiggedVolume();
 
 protected:
-	S32	computeLODDetail(F32	distance, F32 radius);
+	S32	computeLODDetail(F32 distance, F32 radius, F32 lod_factor);
 	BOOL calcLOD();
 	LLFace* addFace(S32 face_index);
 	void updateTEData();
@@ -351,6 +380,9 @@ public:
 
 	LLViewerTextureAnim *mTextureAnimp;
 	U8 mTexAnimMode;
+    F32 mLODDistance;
+    F32 mLODAdjustedDistance;
+    F32 mLODRadius;
 private:
 	friend class LLDrawable;
 	friend class LLFace;
@@ -370,7 +402,7 @@ private:
 	LLPointer<LLViewerFetchedTexture> mLightTexture;
 	media_list_t mMediaImplList;
 	S32			mLastFetchedMediaVersion; // as fetched from the server, starts as -1
-	S32 mIndexInTex;
+	S32 mIndexInTex[LLRender::NUM_VOLUME_TEXTURE_CHANNELS];
 	S32 mMDCImplCount;
 
 	LLPointer<LLRiggedVolume> mRiggedVolume;

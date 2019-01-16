@@ -289,7 +289,11 @@ bool LLImageDXT::decode(LLImageRaw* raw_image, F32 time)
 		return false;
 	}
 
-	raw_image->resize(width, height, ncomponents);
+	if (!raw_image->resize(width, height, ncomponents))
+	{
+		setLastError("llImageDXT failed to resize image!");
+		return false;
+	}
 	memcpy(raw_image->getData(), data, image_size);	/* Flawfinder: ignore */
 
 	return true;
@@ -430,7 +434,7 @@ bool LLImageDXT::convertToDXR()
 	S32 nmips = calcNumMips(width,height);
 	S32 total_bytes = getDataSize();
 	U8* olddata = getData();
-	U8* newdata = (U8*)ALLOCATE_MEM(LLImageBase::getPrivatePool(), total_bytes);
+	U8* newdata = (U8*)ll_aligned_malloc_16(total_bytes);
 	if (!newdata)
 	{
 		LL_ERRS() << "Out of memory in LLImageDXT::convertToDXR()" << LL_ENDL;

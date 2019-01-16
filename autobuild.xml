@@ -556,9 +556,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bbdea742f2a89bcd6360e61e01d6be93</string>
+              <string>118987b1a5b56214cfdbd0c763e180da</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8207/32592/dullahan-1.1.820_3.3071.1637.gcb6cf75-darwin64-508196.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/15127/97748/dullahan-1.1.1080_3.3325.1750.gaabe4c4-darwin64-513449.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -568,9 +568,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>31e11a74e0d3f1e5e4036cb5fea8d944</string>
+              <string>2ecc71350b30a1057091b9cd7af18b1c</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8209/32599/dullahan-1.1.820_3.3071.1634.g9cc59c8-windows-508196.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/15128/97755/dullahan-1.1.1080_3.3325.1750.gaabe4c4-windows-513449.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -580,16 +580,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f965d244e7921c06ee79b68a4abcea3b</string>
+              <string>2ed3e49388514dafb907c59a209d580e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/8208/32602/dullahan-1.1.820_3.3071.1634.g9cc59c8-windows64-508196.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/15129/97760/dullahan-1.1.1080_3.3325.1750.gaabe4c4-windows64-513449.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.1.820_3.3071.1634.g9cc59c8</string>
+        <string>1.1.1080_3.3325.1750.gaabe4c4</string>
       </map>
       <key>elfio</key>
       <map>
@@ -1694,9 +1694,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7b769c4284bdbd5fce536395d1eab695</string>
+              <string>3855bd40f950e3c22739ae8f3ee2afc9</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/4054/11304/kdu-7.9.1.504041-darwin-504041.tar.bz2</string>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/15258/98444/kdu-7.10.4.513518-darwin-513518.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1706,9 +1706,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a48db5cf79a4631090bfc968572d9953</string>
+              <string>d1521becaf21bf7233173722af63f57d</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/4052/11292/kdu-7.9.1.504041-darwin64-504041.tar.bz2</string>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/15257/98440/kdu-7.10.4.513518-darwin64-513518.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1718,9 +1718,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ed952c0cb86329e63a8db190953962d8</string>
+              <string>43d7a6a69a54534a736f132e9c81795b</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/kdu_3p-update-kdu/rev/296932/arch/Linux/installer/kdu-7.2.296932-linux-296932.tar.bz2</string>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/15255/98451/kdu-7.10.4.513518-linux-513518.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1730,9 +1730,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>99b0b22f87cebdd02c4cc954a7b3b465</string>
+              <string>a705a665810a71e7b0114a97ae9a2224</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/4053/11298/kdu-7.9.1.504041-linux64-504041.tar.bz2</string>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/15256/98457/kdu-7.10.4.513518-linux64-513518.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1742,9 +1742,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f3ff5982b3b5f02738044432dd77a2c1</string>
+              <string>0e5b37a03a3f873d15142473b193ec5f</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/4055/11310/kdu-7.9.1.504041-windows-504041.tar.bz2</string>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/15259/98463/kdu-7.10.4.513518-windows-513518.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1754,16 +1754,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3010fa35f412b36296342b07de06f1ca</string>
+              <string>da3b1ea90797b189d80ab5d50fdf05d4</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/4056/11316/kdu-7.9.1.504041-windows64-504041.tar.bz2</string>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/15260/98469/kdu-7.10.4.513518-windows64-513518.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>7.9.1.504041</string>
+        <string>7.A.4.513518</string>
       </map>
       <key>libhunspell</key>
       <map>
@@ -2526,9 +2526,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bb8bed08fd5973a040c509ef8b545ec8</string>
+              <string>2c17cfd900c88914e06947fe0f1fdae4</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/490/1046/ogg_vorbis-1.2.2-1.3.2.500397-darwin64-500397.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/25395/199641/ogg_vorbis-1.3.3-1.3.6.520171-darwin64-520171.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2562,9 +2562,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f7edf86dcf2d9be7bee98c91256fa569</string>
+              <string>1818627d4d1f05b49709717e240bdcf4</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/512/1108/ogg_vorbis-1.2.2-1.3.2.500397-windows-500397.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/25396/199634/ogg_vorbis-1.3.3-1.3.6.520171-windows-520171.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2574,16 +2574,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>497ec6ac26c2e136ee65acbed86cb2ef</string>
+              <string>d124788c798684c890c1803fca541a10</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/511/1105/ogg_vorbis-1.2.2-1.3.2.500397-windows64-500397.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/25397/199631/ogg_vorbis-1.3.3-1.3.6.520171-windows64-520171.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.2.2-1.3.2.500397</string>
+        <string>1.3.3-1.3.6.520171</string>
       </map>
       <key>open-libndofdev</key>
       <map>
@@ -3032,9 +3032,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b1b0134bc55f55a7c1a04ee78d70c64d</string>
+              <string>a605ec940768c878527d3b8f2ff61288</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/12438/73598/slvoice-4.9.0002.27586.511884-darwin64-511884.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/21421/157284/slvoice-4.9.0002.30313.517593-darwin64-517593.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3068,9 +3068,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ec50c31efce74bdedee470b5388aeeec</string>
+              <string>5a78539626b5f23522d0b466247f48b4</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/12434/73576/slvoice-4.9.0002.27586.511884-windows-511884.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/21422/157291/slvoice-4.9.0002.30313.517593-windows-517593.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3080,16 +3080,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4bf45d641bf5b2bd6b2cc39edcb01a6e</string>
+              <string>1f8e09c053c00d9dc44ea74568e63dc1</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/12433/73570/slvoice-4.9.0002.27586.511884-windows64-511884.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/21423/157298/slvoice-4.9.0002.30313.517593-windows64-517593.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>4.9.0002.27586.511884</string>
+        <string>4.9.0002.30313.517593</string>
       </map>
       <key>tut</key>
       <map>
@@ -3260,9 +3260,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f1248b6692dcbb1a42db87ca8d9fed93</string>
+              <string>ce95944fb842849108102263a25fc794</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/13982/87166/viewer_manager-1.0.512801-darwin64-512801.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/23237/178332/viewer_manager-1.0.518840-darwin64-518840.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3284,9 +3284,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c174ecc0893f8c193571b1dc80b823ad</string>
+              <string>642f847a9ac45551af65a55826974334</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/13983/87172/viewer_manager-1.0.512801-windows-512801.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/23236/178338/viewer_manager-1.0.518840-windows-518840.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3297,7 +3297,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>source_type</key>
         <string>hg</string>
         <key>version</key>
-        <string>1.0.512801</string>
+        <string>1.0.518840</string>
       </map>
       <key>vlc-bin</key>
       <map>
@@ -3316,9 +3316,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c5e6d9440e3a4a12102dd2bbb703963e</string>
+              <string>e5635e173c75dc0675b48ab5f5e4868b</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/2225/4736/vlc_bin-2.2.4.502214-darwin64-502214.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/12143/71451/vlc_bin-2.2.8.511703-darwin64-511703.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3340,9 +3340,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>dc37f7cc77a62891bb9ae46c9e19f95e</string>
+              <string>add560654a53cb1c554044a4fac3c718</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/1219/2834/vlc_bin-2.2.4.501207-windows-501207.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/12144/71458/vlc_bin-2.2.8.511703-windows-511703.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3352,16 +3352,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>148ee599afeba9794de14ca433389504</string>
+              <string>94bf04b49acc1e1bf2c06e2232f8a083</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/1218/2829/vlc_bin-2.2.4.501207-windows64-501207.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/12145/71463/vlc_bin-2.2.8.511703-windows64-511703.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.2.4.502214</string>
+        <string>2.2.8.511703</string>
       </map>
       <key>xmlrpc-epi</key>
       <map>
@@ -3548,6 +3548,8 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
     </map>
     <key>package_description</key>
     <map>
+      <key>canonical_repo</key>
+      <string>https://bitbucket.org/lindenlab/viewer-release</string>
       <key>copyright</key>
       <string>Copyright (c) 2014, Linden Research, Inc.</string>
       <key>description</key>
@@ -3662,10 +3664,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <map>
                 <key>command</key>
                 <string>xcodebuild</string>
-                <key>filters</key>
-                <array>
-                  <string>setenv</string>
-                </array>
                 <key>options</key>
                 <array>
                   <string>-configuration</string>
@@ -3722,10 +3720,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <map>
                 <key>command</key>
                 <string>xcodebuild</string>
-                <key>filters</key>
-                <array>
-                  <string>setenv</string>
-                </array>
                 <key>options</key>
                 <array>
                   <string>-configuration</string>

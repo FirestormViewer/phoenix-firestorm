@@ -702,6 +702,9 @@ L$ が不足しているのでこのグループに参加することができ�
 		</url>
 		<usetemplate ignoretext="使用中のコンピューターのハードウェアがサポートされていないとき" name="okcancelignore" notext="いいえ" yestext="はい"/>
 	</notification>
+	<notification name="RunLauncher">
+		ビューワ実行ファイルを直接実行しないでください。代わりに、既存のショートカットの内のどれかをアップデートし、SL_Launcher を実行してください。
+	</notification>
 	<notification name="OldGPUDriver">
 		グラフィックスチップに最新のドライバがある可能性があります。グラフィックドライバを更新することにより、大幅にパフォーマンスが向上します。
 
@@ -1610,153 +1613,13 @@ SHA1 フィンガープリント： [MD5_DIGEST]
 		未加工の地形ファイルをダウンロードしました：
 [DOWNLOAD_PATH]
 	</notification>
-	<notification name="DownloadWindowsMandatory">
-		[APP_NAME] の最新バージョンがご利用可能です。
-[MESSAGE]
-[APP_NAME] をご利用になるにはこのアップデートは必須です。
-		<usetemplate name="okcancelbuttons" notext="終了" yestext="ダウンロード"/>
-	</notification>
-	<notification name="DownloadWindows">
-		[APP_NAME] のアップデートバージョンがご利用可能です。
-[MESSAGE]
-このアップデートは必須ではありませんが、パフォーマンス向上のためにインストールをおすすめします。
-		<usetemplate name="okcancelbuttons" notext="続行" yestext="ダウンロード"/>
-	</notification>
-	<notification name="DownloadWindowsReleaseForDownload">
-		[APP_NAME] のアップデートバージョンがご利用可能です。
-[MESSAGE]
-このアップデートは必須ではありませんが、パフォーマンス向上のためにインストールをおすすめします。
-		<usetemplate name="okcancelbuttons" notext="続行" yestext="ダウンロード"/>
-	</notification>
-	<notification name="DownloadLinuxMandatory">
-		[APP_NAME] の最新バージョンがご利用可能です。
-[MESSAGE]
-[APP_NAME] をご利用になるにはこのアップデートは必須です。
-		<usetemplate name="okcancelbuttons" notext="終了" yestext="ダウンロード"/>
-	</notification>
-	<notification name="DownloadLinux">
-		[APP_NAME] のアップデートバージョンがご利用可能です。
-[MESSAGE]
-このアップデートは必須ではありませんが、パフォーマンス向上のためにインストールをおすすめします。
-		<usetemplate name="okcancelbuttons" notext="続ける" yestext="ダウンロード"/>
-	</notification>
-	<notification name="DownloadLinuxReleaseForDownload">
-		[APP_NAME] のアップデートバージョンがご利用可能です。
-[MESSAGE]
-このアップデートは必須ではありませんが、パフォーマンス向上のためにインストールをおすすめします。
-		<usetemplate name="okcancelbuttons" notext="続ける" yestext="ダウンロード"/>
-	</notification>
-	<notification name="DownloadMacMandatory">
-		[APP_NAME] の最新バージョンがご利用可能です。
-[MESSAGE]
-[APP_NAME] をご利用になるにはこのアップデートは必須です。
-
-あなたのアプリケーションフォルダにダウンロードしますか？
-		<usetemplate name="okcancelbuttons" notext="終了" yestext="ダウンロード"/>
-	</notification>
-	<notification name="DownloadMac">
-		[APP_NAME] のアップデートバージョンがご利用可能です。
-[MESSAGE]
-このアップデートは必須ではありませんが、パフォーマンス向上のためにインストールをおすすめします。
-
-あなたのアプリケーションフォルダにダウンロードしますか？
-		<usetemplate name="okcancelbuttons" notext="続行" yestext="ダウンロード"/>
-	</notification>
-	<notification name="DownloadMacReleaseForDownload">
-		[APP_NAME] のアップデートバージョンがご利用可能です。
-[MESSAGE]
-このアップデートは必須ではありませんが、パフォーマンス向上のためにインストールをおすすめします。
-
-あなたのアプリケーションフォルダにダウンロードしますか？
-		<usetemplate name="okcancelbuttons" notext="続行" yestext="ダウンロード"/>
-	</notification>
-	<notification name="FailedUpdateInstall">
-		ビューワのアップデートをインストール中にエラーが発生しました。
-http://secondlife.com/download から最新バージョンをダウンロードしてインストールしてください。
+	<notification name="RequiredUpdate">
+		ログインするには、バージョン [VERSION] が必要です。このアップデートは自動的に行われるものですが、まだ実行されてないようです。https://secondlife.com/support/downloads/ からダウンロードしてください。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="FailedRequiredUpdateInstall">
-		必要なアップデートをインストールできませんでした。 
-[APP_NAME] がアップデートされるまでログインできません。
-
-http://secondlife.com/download から最新バージョンをダウンロードしてインストールしてください。
+	<notification name="LoginFailedUnknown">
+		申し訳ありませんが、不明な理由によってログインに失敗しました。このメッセージが何度も出る場合は、[SUPPORT_SITE] をご確認ください。
 		<usetemplate name="okbutton" yestext="終了"/>
-	</notification>
-	<notification name="UpdaterServiceNotRunning">
-		お使いの Second Life に必要なアップデートがインストールされていません。
-
-このアップデートは、http://www.secondlife.com/downloads からダウンロードして、今すぐインストールできます。
-		<usetemplate name="okcancelbuttons" notext="終了" yestext="今すぐダウンロードしてインストール"/>
-	</notification>
-	<notification name="DownloadBackgroundTip">
-		お使いの [APP_NAME] に必要なアップデートをダウンロードしました。
-バージョン [VERSION] [[RELEASE_NOTES_FULL_URL] このアップデートに関する情報]
-		<usetemplate name="okcancelbuttons" notext="後で実行" yestext="今すぐインストールして [APP_NAME] を再起動"/>
-	</notification>
-	<notification name="DownloadBackgroundDialog">
-		お使いの [APP_NAME] に必要なアップデートをダウンロードしました。
-バージョン [VERSION] [[RELEASE_NOTES_FULL_URL] このアップデートに関する情報]
-		<usetemplate name="okcancelbuttons" notext="後で実行" yestext="今すぐインストールして [APP_NAME] を再起動"/>
-	</notification>
-	<notification name="RequiredUpdateDownloadedVerboseDialog">
-		必要なソフトウェアのアップデートをダウンロードしました。
-バージョン [VERSION] [[INFO_URL] このアップデートに関する情報]
-
-アップデートをインストールするには [APP_NAME] を再起動する必要があります。
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="RequiredUpdateDownloadedDialog">
-		アップデートをインストールするには [APP_NAME] を再起動する必要があります。
-[[INFO_URL] このアップデートに関する情報]
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="OtherChannelDownloadBackgroundTip">
-		お使いの [APP_NAME] に必要なアップデートをダウンロードしました。
-バージョン [VERSION] 
-この試験的なビューアが [NEW_CHANNEL] ビューアに置き換えられています;
-このアップデートの詳細については、[[INFO_URL] を参照してください]
-		<usetemplate name="okcancelbuttons" notext="後で実行" yestext="今すぐインストールして [APP_NAME] を再起動"/>
-	</notification>
-	<notification name="OtherChannelDownloadBackgroundDialog">
-		お使いの [APP_NAME] に必要なアップデートをダウンロードしました。
-バージョン [VERSION]
-この試験的なビューアが [NEW_CHANNEL] ビューアに置き換えられています;
-[[INFO_URL] このアップデートに関する情報] を参照
-		<usetemplate name="okcancelbuttons" notext="後で実行" yestext="今すぐインストールして [APP_NAME] を再起動"/>
-	</notification>
-	<notification name="OtherChannelRequiredUpdateDownloadedVerboseDialog">
-		必要なソフトウェアのアップデートをダウンロードしました。
-バージョン [VERSION]
-この試験的なビューアが [NEW_CHANNEL] ビューアに置き換えられています;
-[[INFO_URL] このアップデートに関する情報] を参照
-
-アップデートをインストールするには [APP_NAME] を再起動する必要があります。
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="OtherChannelRequiredUpdateDownloadedDialog">
-		アップデートをインストールするには [APP_NAME] を再起動する必要があります。
-この試験的なビューアが [NEW_CHANNEL] ビューアに置き換えられています;
-[[INFO_URL] このアップデートに関する情報] を参照
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="UpdateDownloadInProgress">
-		アップデートを利用できます。
-バックグラウンドでアップデートをダウンロードしています。準備ができ次第、インストールを完了するために、ビューワを再起動するように求めるメッセージが表示されます。
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="UpdateDownloadComplete">
-		アップデートがダウンロードされました。再起動中にインストールされます。
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="UpdateCheckError">
-		アップデートの確認中にエラーが発生しました。
-あとでもう一度お試しください。
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="UpdateViewerUpToDate">
-		ご利用のビューワは最新です!
-最新の機能と修正を今すぐ試したい場合は、代替ビューワページ (http://wiki.secondlife.com/wiki/Linden_Lab_Official:Alternate_Viewers) をチェックしてください。
-		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="DeedObjectToGroup">
 		このオブジェクトを譲渡するとグループは以下のことが可能です：
@@ -2531,7 +2394,7 @@ Linden Lab
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmEmptyTrash">
-		[COUNT] アイテムが完全に削除されます。ごみ箱の項目をすべて削除しますか？
+		[COUNT] 個のアイテムとフォルダーが完全に削除されます。ごみ箱の項目をすべて削除しますか？
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="OK"/>
 	</notification>
 	<notification name="TrashIsFull">
@@ -3407,6 +3270,9 @@ M キーを押して変更します。
 	<notification name="PresetNotSaved">
 		プリセット [NAME] の保存エラー。
 	</notification>
+	<notification name="DefaultPresetNotSaved">
+		デフォルトの事前設定を上書きすることはできません。
+	</notification>
 	<notification name="PresetNotDeleted">
 		プリセット [NAME] の削除エラー。
 	</notification>
@@ -3536,12 +3402,22 @@ M キーを押して変更します。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect">
-		ボイスサーバーに接続できません：
+		ボイスサーバーに接続できません： 音声に許可される必要のある 
 
 [HOSTID]
 
-ボイスチャットによるコミュニケーションが利用できません。
+ポート: 
+:TCP:80, 443 
+:UDP:3478, 3479, 5060, 5062, 6250, 12000-32000
+
 お使いのネットワークやファイアウォールの設定を確認してください。
+お使いのルーターの SIP ALG 機能をすべて無効にしてください。
+
+ボイスチャットによるコミュニケーションが利用できません。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="NoVoiceConnect-GIAB">
+		ボイスサーバーに接続できません。ボイスチャットによるコミュニケーションが利用できません。お使いのネットワークやファイアウォールの設定を確認してください。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AvatarRezLeftNotification">
@@ -4155,6 +4031,9 @@ M キーを押して変更します。
 	<notification name="CantCreateObjectRegionFull">
 		リクエストされたオブジェクトを作成できません。リージョンが埋まっています。
 	</notification>
+	<notification name="CantCreateAnimatedObjectTooLarge">
+		リグ入三角形の限度数を超えるため、リクエストされたアニメーションオブジェクトを作成することができません。
+	</notification>
 	<notification name="CantAttackMultipleObjOneSpot">
 		1 つの場所に複数のオブジェクトを着用することはできません。
 	</notification>
@@ -4202,6 +4081,21 @@ M キーを押して変更します。
 	</notification>
 	<notification name="CantChangeShape">
 		あなたにはこのシェイプを変更する許可がありません。
+	</notification>
+	<notification name="NoPermsTooManyAttachedAnimatedObjects">
+		この操作を行うと、装着されたアニメーションオブジェクトが限度数を超えます。
+	</notification>
+	<notification name="NoPermsLinkAnimatedObjectTooLarge">
+		結果として、アニメーションオブジェクトがリグ入り三角形の限度数を超えるため、これらのオブジェクトを結合できません。
+	</notification>
+	<notification name="NoPermsSetFlagAnimatedObjectTooLarge">
+		リグ入り三角形の限度数を超えるため、このオブジェクトをアニメーションオブジェクトにすることはできません。
+	</notification>
+	<notification name="CantChangeAnimatedObjectStateInsufficientLand">
+		このオブジェクトをアニメーションオブジェクトの状態に変えると、区画の限度数を超えるため変更できません。
+	</notification>
+	<notification name="ErrorNoMeshData">
+		サーバーエラー： メッシュデータが読み込まれていないため、この操作を完了できません。
 	</notification>
 	<notification name="NoAccessToClaimObjects">
 		現在のアクセス権限では、ここにオブジェクトを取得できません。
@@ -4464,7 +4358,7 @@ M キーを押して変更します。
 		内部エラーが発生したため、ビューワを正しく更新できませんでした。ビューワに表示されるリンデンドルの残高または区画の所有は、サーバー上の実際の残高を反映していない可能性があります。
 	</notification>
 	<notification name="LargePrimAgentIntersect">
-		他のプレイヤーの関心を引く大きなプリムを作成できません。他のプレイヤーが移動したときに再試行してください。
+		他の住民と交差する大きなプリムを作成することはできません。他の住民が移動した場合は再度お試しください。
 	</notification>
 	<notification name="PreferenceChatClearLog">
 		これにより、過去の会話のログ、およびそのファイルのすべてのバックアップが削除されます。

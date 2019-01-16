@@ -46,6 +46,7 @@
 #include "llundo.h"
 #include "lluuid.h"
 #include "llvolume.h"
+#include "llcontrolavatar.h"
 #include "message.h"
 #include "object_flags.h"
 #include "llquaternion.h"
@@ -645,6 +646,10 @@ void LLSelectMgr::confirmUnlinkObjects(const LLSD& notification, const LLSD& res
 // otherwise. this allows the handle_link method to more finely check
 // the selection and give an error message when the uer has a
 // reasonable expectation for the link to work, but it will fail.
+//
+// For animated objects, there's additional check that if the
+// selection includes at least one animated object, the total mesh
+// triangle count cannot exceed the designated limit.
 bool LLSelectMgr::enableLinkObjects()
 {
 	bool new_value = false;
@@ -669,6 +674,10 @@ bool LLSelectMgr::enableLinkObjects()
 			new_value = LLSelectMgr::getInstance()->getSelection()->applyToRootObjects(&func, firstonly);
 		}
 	}
+    if (!LLSelectMgr::getInstance()->getSelection()->checkAnimatedObjectLinkable())
+    {
+        new_value = false;
+    }
 	return new_value;
 }
 
@@ -3676,6 +3685,39 @@ void LLSelectMgr::selectForceDelete()
 		SEND_ONLY_ROOTS);
 }
 
+BOOL LLSelectMgr::selectGetEditMoveLinksetPermissions(bool &move, bool &modify)
+{
+    move = true;
+    modify = true;
+    bool selecting_linked_set = !gSavedSettings.getBOOL("EditLinkedParts");
+
+    for (LLObjectSelection::iterator iter = getSelection()->begin();
+        iter != getSelection()->end(); iter++)
+    {
+        LLSelectNode* nodep = *iter;
+        LLViewerObject* object = nodep->getObject();
+        if (!object || !nodep->mValid)
+        {
+            move = false;
+            modify = false;
+            return FALSE;
+        }
+
+        LLViewerObject *root_object = object->getRootEdit();
+        bool this_object_movable = false;
+        if (object->permMove() && !object->isPermanentEnforced() &&
+            ((root_object == NULL) || !root_object->isPermanentEnforced()) &&
+            (object->permModify() || selecting_linked_set))
+        {
+            this_object_movable = true;
+        }
+        move = move && this_object_movable;
+        modify = modify && object->permModify();
+    }
+
+    return TRUE;
+}
+
 void LLSelectMgr::selectGetAggregateSaleInfo(U32 &num_for_sale,
 											 BOOL &is_for_sale_mixed, 
 											 BOOL &is_sale_price_mixed,
@@ -6271,92 +6313,107 @@ void pushWireframe(LLDrawable* drawable)
 
 void LLSelectNode::renderOneWireframe(const LLColor4& color)
 {
-	//Need to because crash on ATI 3800 (and similar cards) MAINT-5018 
-	LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
+    //Need to because crash on ATI 3800 (and similar cards) MAINT-5018 
+    LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
 
-	LLViewerObject* objectp = getObject();
-	if (!objectp)
-	{
-		return;
-	}
+    LLViewerObject* objectp = getObject();
+    if (!objectp)
+    {
+        return;
+    }
 
-	LLDrawable* drawable = objectp->mDrawable;
-	if(!drawable)
-	{
-		return;
-	}
+    LLDrawable* drawable = objectp->mDrawable;
+    if (!drawable)
+    {
+        return;
+    }
 
-	LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
+    LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
 
-	if (shader)
-	{
-		gDebugProgram.bind();
-	}
+    if (shader)
+    {
+        gDebugProgram.bind();
+    }
 
-	gGL.matrixMode(LLRender::MM_MODELVIEW);
-	gGL.pushMatrix();
-	
-	BOOL is_hud_object = objectp->isHUDAttachment();
+    gGL.matrixMode(LLRender::MM_MODELVIEW);
+    gGL.pushMatrix();
 
-	if (drawable->isActive())
-	{
-		gGL.loadMatrix(gGLModelView);
-		gGL.multMatrix((F32*) objectp->getRenderMatrix().mMatrix);
-	}
-	else if (!is_hud_object)
-	{
-		gGL.loadIdentity();
-		gGL.multMatrix(gGLModelView);
-		LLVector3 trans = objectp->getRegion()->getOriginAgent();		
-		gGL.translatef(trans.mV[0], trans.mV[1], trans.mV[2]);		
-	}
-	
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	
-	if (LLSelectMgr::sRenderHiddenSelections) // && gFloaterTools && gFloaterTools->getVisible())
-	{
-		gGL.blendFunc(LLRender::BF_SOURCE_COLOR, LLRender::BF_ONE);
-		LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE, GL_GEQUAL);
-		if (shader)
-		{
-			gGL.diffuseColor4f(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], 0.4f);
-			pushWireframe(drawable);
-		}
-		else
-		{
-			LLGLEnable fog(GL_FOG);
-			glFogi(GL_FOG_MODE, GL_LINEAR);
-			float d = (LLViewerCamera::getInstance()->getPointOfInterest()-LLViewerCamera::getInstance()->getOrigin()).magVec();
-			LLColor4 fogCol = color * (F32)llclamp((LLSelectMgr::getInstance()->getSelectionCenterGlobal()-gAgentCamera.getCameraPositionGlobal()).magVec()/(LLSelectMgr::getInstance()->getBBoxOfSelection().getExtentLocal().magVec()*4), 0.0, 1.0);
-			glFogf(GL_FOG_START, d);
-			glFogf(GL_FOG_END, d*(1 + (LLViewerCamera::getInstance()->getView() / LLViewerCamera::getInstance()->getDefaultFOV())));
-			glFogfv(GL_FOG_COLOR, fogCol.mV);
+    BOOL is_hud_object = objectp->isHUDAttachment();
 
-			gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
-			{
-				gGL.diffuseColor4f(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], 0.4f);
-				pushWireframe(drawable);
-			}
-		}
-	}
+    if (drawable->isActive())
+    {
+        gGL.loadMatrix(gGLModelView);
+        gGL.multMatrix((F32*)objectp->getRenderMatrix().mMatrix);
+    }
+    else if (!is_hud_object)
+    {
+        gGL.loadIdentity();
+        gGL.multMatrix(gGLModelView);
+        LLVector3 trans = objectp->getRegion()->getOriginAgent();
+        gGL.translatef(trans.mV[0], trans.mV[1], trans.mV[2]);
+    }
 
-	gGL.flush();
-	gGL.setSceneBlendType(LLRender::BT_ALPHA);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	gGL.diffuseColor4f(color.mV[VRED]*2, color.mV[VGREEN]*2, color.mV[VBLUE]*2, LLSelectMgr::sHighlightAlpha*2);
-	
-	LLGLEnable offset(GL_POLYGON_OFFSET_LINE);
-	glPolygonOffset(3.f, 3.f);
-	glLineWidth(3.f);
-	pushWireframe(drawable);
-	glLineWidth(1.f);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	gGL.popMatrix();
+    if (LLSelectMgr::sRenderHiddenSelections) // && gFloaterTools && gFloaterTools->getVisible())
+    {
+        gGL.blendFunc(LLRender::BF_SOURCE_COLOR, LLRender::BF_ONE);
+        LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE, GL_GEQUAL);
+        if (shader)
+        {
+            gGL.diffuseColor4f(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], 0.4f);
+            pushWireframe(drawable);
+        }
+        else
+        {
+            LLGLEnable fog(GL_FOG);
+            glFogi(GL_FOG_MODE, GL_LINEAR);
+            float d = (LLViewerCamera::getInstance()->getPointOfInterest() - LLViewerCamera::getInstance()->getOrigin()).magVec();
+            LLColor4 fogCol = color * (F32)llclamp((LLSelectMgr::getInstance()->getSelectionCenterGlobal() - gAgentCamera.getCameraPositionGlobal()).magVec() / (LLSelectMgr::getInstance()->getBBoxOfSelection().getExtentLocal().magVec() * 4), 0.0, 1.0);
+            glFogf(GL_FOG_START, d);
+            glFogf(GL_FOG_END, d*(1 + (LLViewerCamera::getInstance()->getView() / LLViewerCamera::getInstance()->getDefaultFOV())));
+            glFogfv(GL_FOG_COLOR, fogCol.mV);
 
-	if (shader)
-	{
-		shader->bind();
-	}
+            gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+            {
+                gGL.diffuseColor4f(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], 0.4f);
+                pushWireframe(drawable);
+            }
+        }
+    }
+
+    gGL.flush();
+    gGL.setSceneBlendType(LLRender::BT_ALPHA);
+
+    gGL.diffuseColor4f(color.mV[VRED] * 2, color.mV[VGREEN] * 2, color.mV[VBLUE] * 2, LLSelectMgr::sHighlightAlpha * 2);
+
+    {
+        bool wireframe_selection = gFloaterTools && gFloaterTools->getVisible();
+
+        LLGLDisable depth(wireframe_selection ? 0 : GL_BLEND);
+        LLGLEnable stencil(wireframe_selection ? 0 : GL_STENCIL_TEST);
+
+        if (!wireframe_selection)
+        { //modify wireframe into outline selection mode
+            glStencilFunc(GL_NOTEQUAL, 2, 0xffff);
+            glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+        }
+
+        LLGLEnable offset(GL_POLYGON_OFFSET_LINE);
+        glPolygonOffset(3.f, 3.f);
+        glLineWidth(5.f);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        pushWireframe(drawable);
+    }
+
+    glLineWidth(1.f);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    gGL.popMatrix();
+
+    if (shader)
+    {
+        shader->bind();
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -6611,7 +6668,10 @@ S32 get_family_count(LLViewerObject *parent)
 
 //-----------------------------------------------------------------------------
 // updateSelectionCenter
-//-----------------------------------------------------------------------------
+//
+// FIXME this is a grab bag of functionality only some of which has to do
+// with the selection center
+// -----------------------------------------------------------------------------
 void LLSelectMgr::updateSelectionCenter()
 {
 	const F32 MOVE_SELECTION_THRESHOLD = 1.f;		//  Movement threshold in meters for updating selection
@@ -6629,22 +6689,11 @@ void LLSelectMgr::updateSelectionCenter()
 		mSelectionCenterGlobal.clearVec();
 		mShowSelection = FALSE;
 		mSelectionBBox = LLBBox(); 
-		mPauseRequest = NULL;
 		resetAgentHUDZoom();
-
 	}
 	else
 	{
 		mSelectedObjects->mSelectType = getSelectTypeForObject(object);
-
-		if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT && isAgentAvatarValid() && object->getParent() != NULL)
-		{
-			mPauseRequest = gAgentAvatarp->requestPause();
-		}
-		else
-		{
-			mPauseRequest = NULL;
-		}
 
 		if (mSelectedObjects->mSelectType != SELECT_TYPE_HUD && isAgentAvatarValid())
 		{
@@ -6722,6 +6771,59 @@ void LLSelectMgr::updateSelectionCenter()
 	{
 		gEditMenuHandler = NULL;
 	}
+
+    pauseAssociatedAvatars();
+}
+
+//-----------------------------------------------------------------------------
+// pauseAssociatedAvatars
+//
+// If the selection includes an attachment or an animated object, the
+// associated avatars should pause their animations until they are no
+// longer selected.
+//-----------------------------------------------------------------------------
+void LLSelectMgr::pauseAssociatedAvatars()
+{
+    mPauseRequests.clear();
+
+    for (LLObjectSelection::iterator iter = mSelectedObjects->begin();
+         iter != mSelectedObjects->end(); iter++)
+    {
+        LLSelectNode* node = *iter;
+        LLViewerObject* object = node->getObject();
+        if (!object)
+            continue;
+			
+        mSelectedObjects->mSelectType = getSelectTypeForObject(object);
+
+        if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT && 
+            isAgentAvatarValid() && object->getParent() != NULL)
+        {
+            if (object->isAnimatedObject())
+            {
+                // Is an animated object attachment.
+                // Pause both the control avatar and the avatar it's attached to.
+                if (object->getControlAvatar())
+                {
+                    mPauseRequests.push_back(object->getControlAvatar()->requestPause());
+                }
+                mPauseRequests.push_back(gAgentAvatarp->requestPause());
+            }
+            else
+            {
+                // Is a regular attachment. Pause the avatar it's attached to.
+                mPauseRequests.push_back(gAgentAvatarp->requestPause());
+            }
+        }
+        else
+        {
+            if (object && object->isAnimatedObject() && object->getControlAvatar())
+            {
+                // Is a non-attached animated object. Pause the control avatar.
+                mPauseRequests.push_back(object->getControlAvatar()->requestPause());
+            }
+        }
+    }
 }
 
 void LLSelectMgr::updatePointAt()
@@ -7198,10 +7300,16 @@ F32 LLObjectSelection::getSelectedObjectStreamingCost(S32* total_bytes, S32* vis
 		
 		if (object)
 		{
-			S32 bytes = 0;
-			S32 visible = 0;
-			cost += object->getStreamingCost(&bytes, &visible);
+			cost += object->getStreamingCost();
 
+            S32 bytes = 0;
+            S32 visible = 0;
+            LLMeshCostData costs;
+            if (object->getCostData(costs))
+            {
+                bytes = costs.getSizeTotal();
+                visible = costs.getSizeByLOD(object->getLOD());
+            }
 			if (total_bytes)
 			{
 				*total_bytes += bytes;
@@ -7356,6 +7464,31 @@ bool LLObjectSelection::applyToObjects(LLSelectedObjectFunctor* func)
 		result = result && r;
 	}
 	return result;
+}
+
+bool LLObjectSelection::checkAnimatedObjectEstTris()
+{
+    F32 est_tris = 0;
+    F32 max_tris = 0;
+    S32 anim_count = 0;
+	for (root_iterator iter = root_begin(); iter != root_end(); ++iter)
+	{
+		LLViewerObject* object = (*iter)->getObject();
+		if (!object)
+			continue;
+        if (object->isAnimatedObject())
+        {
+            anim_count++;
+        }
+        est_tris += object->recursiveGetEstTrianglesMax();
+        max_tris = llmax((F32)max_tris,(F32)object->getAnimatedObjectMaxTris());
+	}
+	return anim_count==0 || est_tris <= max_tris;
+}
+
+bool LLObjectSelection::checkAnimatedObjectLinkable()
+{
+    return checkAnimatedObjectEstTris();
 }
 
 bool LLObjectSelection::applyToRootObjects(LLSelectedObjectFunctor* func, bool firstonly)

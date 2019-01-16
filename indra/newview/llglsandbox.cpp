@@ -920,7 +920,7 @@ public:
 		// unbind
 		if (texUnit)
 		{
-			texUnit->unbind(LLTexUnit::TT_TEXTURE);
+				texUnit->unbind(LLTexUnit::TT_TEXTURE);
 		}
 		// ensure that we delete these textures regardless of how we exit
 		LLImageGL::deleteTextures(source.size(), &source[0]);
@@ -966,15 +966,6 @@ private:
 //-----------------------------------------------------------------------------
 F32 gpu_benchmark()
 {
-#if LL_WINDOWS
-	if (gGLManager.mIsIntel
-		&& std::string::npos != LLOSInfo::instance().getOSStringSimple().find("Microsoft Windows 8")) // or 8.1
-	{ // don't run benchmark on Windows 8/8.1 based PCs with Intel GPU (MAINT-8197)
-		LL_WARNS() << "Skipping gpu_benchmark() for Intel graphics on Windows 8." << LL_ENDL;
-		return -1.f;
-	}
-#endif
-
 	if (!gGLManager.mHasShaderObjects || !gGLManager.mHasTimerQuery)
 	{ // don't bother benchmarking the fixed function
       // or venerable drivers which don't support accurate timing anyway
@@ -1060,7 +1051,7 @@ F32 gpu_benchmark()
     delete [] pixels;
 
 	//make a dummy triangle to draw with
-	LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0, GL_STATIC_DRAW_ARB);
+	LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0, GL_STREAM_DRAW_ARB);
 
 	if (!buff->allocateBuffer(3, 0, true))
 	{

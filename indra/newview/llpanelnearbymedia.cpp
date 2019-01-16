@@ -526,6 +526,7 @@ void LLPanelNearByMedia::removeListItem(const LLUUID &id)
 	if (NULL == mMediaList) return;
 	
 	mMediaList->deleteSingleItem(mMediaList->getItemIndex(id));
+	mMediaList->updateLayout();
 }
 
 void LLPanelNearByMedia::refreshParcelItems()
@@ -1047,7 +1048,7 @@ void LLPanelNearByMedia::updateControls()
 			else {
 				showBasicControls(!impl->isMediaDisabled(), 
 								  ! impl->isParcelMedia(),  // include_zoom
-								  LLViewerMediaFocus::getInstance()->isZoomed(),
+								  LLViewerMediaFocus::getInstance()->isZoomedOnMedia(impl->getMediaTextureID()),
 								  impl->getVolume() == 0.0,
 								  impl->getVolume());
 			}
@@ -1167,12 +1168,12 @@ void LLPanelNearByMedia::onClickSelectedMediaMute()
 			F32 volume = impl->getVolume();
 			if(volume > 0.0)
 			{
-				impl->setVolume(0.0);
+				impl->setMute(true);
 			}
 			else if (mVolumeSlider->getValueF32() == 0.0)
 			{
-				impl->setVolume(1.0);
-				mVolumeSlider->setValue(1.0);
+				impl->setMute(false);
+				mVolumeSlider->setValue(impl->getVolume());
 			}
 			else 
 			{
