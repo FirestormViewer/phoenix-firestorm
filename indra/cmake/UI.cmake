@@ -18,7 +18,7 @@ if (USESYSTEMLIBS)
         libpng
         pango
         pangoft2
-        pangox
+        #pangox
         pangoxft
         sdl
         )
