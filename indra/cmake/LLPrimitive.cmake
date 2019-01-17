@@ -59,13 +59,13 @@ else()
   pkg_check_modules( LIBPCRECPP REQUIRED libpcrecpp )
 
   find_library( COLLADADOM_LIBRARY collada14dom )
-  find_path( COLLADADOM_INCLUDE_DIR collada/dae.h )
+  find_path( COLLADADOM_INCLUDE_DIR colladadom/dae.h )
 
   if( COLLADADOM_INCLUDE_DIR STREQUAL "COLLADADOM_INCLUDE_DIR-NOTFOUND" )
     message( FATAL_ERROR "Cannot find colladadom include dir" )
   endif()
   
-  set( COLLADADOM_INCLUDE_DIRS ${COLLADADOM_INCLUDE_DIR}/collada ${COLLADADOM_INCLUDE_DIR}/collada/1.4 )
+  set( COLLADADOM_INCLUDE_DIRS ${COLLADADOM_INCLUDE_DIR}/colladadom ${COLLADADOM_INCLUDE_DIR}/colladadom/1.4 )
 
   set(LLPRIMITIVE_LIBRARIES 
       llprimitive
