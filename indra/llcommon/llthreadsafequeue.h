@@ -75,7 +75,7 @@ public:
 	
 	// If the pool is set to NULL one will be allocated and managed by this
 	// queue.
-	LLThreadSafeQueue( U32 capacity = 1024);
+	LLThreadSafeQueue(U32 capacity = 1024);
 	
 	// Add an element to the front of queue (will block if the queue has
 	// reached capacity).
@@ -115,8 +115,8 @@ private:
 
 
 template<typename ElementT>
-LLThreadSafeQueue<ElementT>::LLThreadSafeQueue( U32 capacity):
-	mCapacity( capacity )
+LLThreadSafeQueue<ElementT>::LLThreadSafeQueue(U32 capacity):
+	mCapacity(capacity)
 {
 	; // No op.
 }
@@ -125,18 +125,18 @@ LLThreadSafeQueue<ElementT>::LLThreadSafeQueue( U32 capacity):
 template<typename ElementT>
 void LLThreadSafeQueue<ElementT>::pushFront(ElementT const & element)
 {
-	while( true )
+	while (true)
 	{
 		{
-			LLMutexLock lck( &mLock );
-			if( mStorage.size() < mCapacity )
+			LLMutexLock lck(&mLock);
+			if (mStorage.size() < mCapacity)
 			{
-				mStorage.push_front( element );
+				mStorage.push_front(element);
 				mLock.signal();
 				return;
 			}
 		}
-		ms_sleep( 100 );
+		ms_sleep(100);
 	}
 }
 
@@ -144,14 +144,14 @@ void LLThreadSafeQueue<ElementT>::pushFront(ElementT const & element)
 template<typename ElementT>
 bool LLThreadSafeQueue<ElementT>::tryPushFront(ElementT const & element)
 {
-	LLMutexTrylock lck( &mLock );
-	if( !lck.isLocked() )
+	LLMutexTrylock lck(&mLock);
+	if (!lck.isLocked())
 		return false;
 
-	if( mStorage.size() >= mCapacity )
+	if (mStorage.size() >= mCapacity)
 		return false;
 
-	mStorage.push_front( element );
+	mStorage.push_front(element);
 	mLock.signal();
 	return true;
 }
@@ -160,10 +160,10 @@ bool LLThreadSafeQueue<ElementT>::tryPushFront(ElementT const & element)
 template<typename ElementT>
 ElementT LLThreadSafeQueue<ElementT>::popBack(void)
 {
-	while( true )
+	while (true)
 	{
 		mLock.wait();
-		if( !mStorage.empty() )
+		if (!mStorage.empty())
 		{
 			ElementT value = mStorage.back();
 			mStorage.pop_back();
@@ -176,11 +176,11 @@ ElementT LLThreadSafeQueue<ElementT>::popBack(void)
 template<typename ElementT>
 bool LLThreadSafeQueue<ElementT>::tryPopBack(ElementT & element)
 {
-	LLMutexTrylock lck( &mLock );
+	LLMutexTrylock lck(&mLock);
 
-	if( !lck.isLocked() )
+	if (!lck.isLocked())
 		return false;
-	if( mStorage.empty() )
+	if (mStorage.empty())
 		return false;
 
 	element = mStorage.back();
@@ -194,7 +194,7 @@ size_t LLThreadSafeQueue<ElementT>::size(void)
 {
 	// Nicky: apr_queue_size is/was NOT threadsafe. I still play it safe here and rather lock the storage
 
-	LLMutexLock lck( &mLock );
+	LLMutexLock lck(&mLock);
 	return mStorage.size();
 }
 

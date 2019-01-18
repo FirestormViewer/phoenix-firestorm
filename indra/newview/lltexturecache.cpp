@@ -825,6 +825,10 @@ void LLTextureCacheWorker::endWork(S32 param, bool aborted)
 
 LLTextureCache::LLTextureCache(bool threaded)
 	: LLWorkerThread("TextureCache", threaded),
+	  mWorkersMutex(),
+	  mHeaderMutex(),
+	  mListMutex(),
+	  mFastCacheMutex(),
 	  mHeaderAPRFile(NULL),
 	  mReadOnly(TRUE), //do not allow to change the texture cache until setReadOnly() is called.
 	  mTexturesSizeTotal(0),

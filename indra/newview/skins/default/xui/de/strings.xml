@@ -6228,27 +6228,26 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
 		Die Physikform hat keine korrekte Version. Legen Sie die korrekte Version für das Physikmodell fest.
 	</string>
-
 	<string name="couldnt_resolve_host">
-		DNS konnten den Host-Namen ([HOSTNAME]) nicht auflösen.
-Bitte prüfen Sie, ob Sie die Webseite www.secondlife.com öffnen
-können. Falls ja, aber Sie weiterhin diesen Fehler erhalten,
-öffnen Sie bitte die Support-Webseite und melden das Problem.
+		Der DNS konnte den Hostnamen ([HOSTNAME]) nicht auflösen Prüfen 
+Sie bitte, ob Sie die Website www.secondlife.com aufrufen können. Wenn Sie die 
+Website aufrufen können, jedoch weiterhin diese Fehlermeldung erhalten, 
+besuchen Sie bitte den Support-Bereich und melden Sie das Problem.
 	</string>
 	<string name="ssl_peer_certificate">
-		Der Login-Server konnte nicht via SSL zertifiziert werden.
-Falls Sie weiterhin diesen Fehler erhalten, öffnen Sie die
-Support-Webseite von SecondLife.com and melden das Problem.
+		Der Anmeldeserver konnte sich nicht per SSL verifizieren. 
+Wenn Sie diese Fehlermeldung weiterhin erhalten, besuchen 
+Sie bitte den Support-Bereich der Website Secondlife.com 
+und melden Sie das Problem.
 	</string>
 	<string name="ssl_connect_error">
-		Oft bedeutet dies, dass die Uhrzeit ihres Computers nicht korrekt ist.
-Bitte prüfen Sie in den Systemeinstellungen, dass Datum und Uhrzeit
-korrekt eingestellt sind.
-Prüfen Sie bitte auch, ob Ihr Netzwerk und IhreFirewall korrekt konfiguriert sind.
-Falls Sie weiterhin diesen Fehler erhalten, öffnen Sie die
-Support-Webseite von SecondLife.com and melden das Problem.
+		Die Ursache hierfür ist häufig eine falsch eingestellte Uhrzeit auf Ihrem Computer. 
+Bitte vergewissern Sie sich, dass Datum und Uhrzeit in der Systemsteuerung korrekt 
+eingestellt sind. Überprüfen Sie außerdem, ob Ihre Netzwerk- und Firewall-Einstellungen 
+korrekt sind. Wenn Sie diese Fehlermeldung weiterhin erhalten, besuchen Sie bitte den 
+Support-Bereich der Website Secondlife.com und melden Sie das Problem. 
 
-[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 Knowledge Base]
+[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 Knowledge-Base]
 	</string>
 
 <!-- Firestorm-specific translations -->

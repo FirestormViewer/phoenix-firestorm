@@ -119,24 +119,24 @@ void LLThread::registerThreadID()
 void  LLThread::threadRun()
 {
 #ifdef LL_WINDOWS
-	set_thread_name( -1, mName.c_str() );
+	set_thread_name(-1, mName.c_str());
 #endif
 
     // for now, hard code all LLThreads to report to single master thread recorder, which is known to be running on main thread
-	mRecorder = new LLTrace::ThreadRecorder( *LLTrace::get_master_thread_recorder() );
+    mRecorder = new LLTrace::ThreadRecorder( *LLTrace::get_master_thread_recorder() );
 
-	sThreadID = mID;
+    sThreadID = mID;
 
     // Run the user supplied function
     do 
     {
         try
         {
-			run();
+            run();
         }
         catch (const LLContinueError &e)
         {
-			LL_WARNS( "THREAD" ) << "ContinueException on thread '" << mName <<
+            LL_WARNS("THREAD") << "ContinueException on thread '" << mName <<
                 "' reentering run(). Error what is: '" << e.what() << "'" << LL_ENDL;
             //output possible call stacks to log file.
             LLError::LLCallStacks::print();
@@ -172,7 +172,7 @@ LLThread::LLThread(const std::string& name, apr_pool_t *poolp) :
 {
 
     mID = ++sIDIter;
-	
+
     mRunCondition = new LLCondition();
     mDataLock = new LLMutex();
     mLocalAPRFilePoolp = NULL ;
@@ -204,7 +204,7 @@ void LLThread::shutdown()
 
     // Warning!  If you somehow call the thread destructor from itself,
     // the thread will die in an unclean fashion!
-	if( mThreadp )
+    if (mThreadp)
     {
         if (!isStopped())
         {
@@ -236,15 +236,15 @@ void LLThread::shutdown()
             // This thread just wouldn't stop, even though we gave it time
             //LL_WARNS() << "LLThread::~LLThread() exiting thread before clean exit!" << LL_ENDL;
             // Put a stake in its heart.
-			// ND: There is no such thing as to terminate a std::thread, we detach it so no wait will happen.
-			// Otherwise craft something platform specific with std::thread::native_handle
-			mThreadp->detach();
+            // ND: There is no such thing as to terminate a std::thread, we detach it so no wait will happen.
+            // Otherwise craft something platform specific with std::thread::native_handle
+            mThreadp->detach();
             delete mRecorder;
             mRecorder = NULL;
             mStatus = STOPPED;
             return;
         }
-		mThreadp = NULL;
+        mThreadp = NULL;
     }
 
     delete mRunCondition;
@@ -270,15 +270,15 @@ void LLThread::start()
     // Set thread state to running
     mStatus = RUNNING;
 
-	try
-	{
-		mThreadp = new std::thread( std::bind( &LLThread::threadRun, this ) );
-		//mThreadp->detach();
-	}
-	catch( std::system_error& ex )
-	{
-		mStatus = STOPPED;
-		LL_WARNS() << "failed to start thread " << mName << " " << ex.what() << LL_ENDL;
+    try
+    {
+         mThreadp = new std::thread( std::bind( &LLThread::threadRun, this ) );
+        //mThreadp->detach();
+    }
+    catch( std::system_error& ex )
+    {
+        mStatus = STOPPED;
+        LL_WARNS() << "failed to start thread " << mName << " " << ex.what() << LL_ENDL;
     }
 }
 

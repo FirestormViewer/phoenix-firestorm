@@ -1196,6 +1196,8 @@ void LLDeleteHistoryThread::run()
 
 LLActionThread::LLActionThread(const std::string& name)
 	: LLThread(name),
+	mMutex(),
+	mRunCondition(),
 	mFinished(false)
 {
 }

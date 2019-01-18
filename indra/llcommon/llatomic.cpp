@@ -1,10 +1,9 @@
 /** 
- * @file llrefcount.cpp
- * @brief Base class for reference counted objects for use with LLPointer
+ * @file llatomic.cpp
  *
- * $LicenseInfo:firstyear=2002&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2018&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2018, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,33 +22,8 @@
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
-#include "linden_common.h"
 
-#include "llrefcount.h"
+// <FS:Ansariel> Fix LNK4221 compiler warning
+//#include "llatomic.h"
 
-#include "llerror.h"
-
-LLRefCount::LLRefCount(const LLRefCount& other)
-:	mRef(0)
-{
-}
-
-LLRefCount& LLRefCount::operator=(const LLRefCount&)
-{
-	// do nothing, since ref count is specific to *this* reference
-	return *this;
-}
-
-LLRefCount::LLRefCount() :
-	mRef(0)
-{
-}
-
-LLRefCount::~LLRefCount()
-{ 
-	if (mRef != 0)
-	{
-		LL_ERRS() << "deleting non-zero reference" << LL_ENDL;
-	}
-}
-
+//============================================================================

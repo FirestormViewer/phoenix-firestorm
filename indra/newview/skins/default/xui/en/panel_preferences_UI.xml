@@ -657,7 +657,7 @@
 		 left="10"
 		 name="show_search_menu_check"
 		 width="270"
-		 control_name="FSMenuSearch"/>
+		 control_name="MenuSearch"/>
 		<check_box
 		 top_pad="4"
 		 follows="left|top"

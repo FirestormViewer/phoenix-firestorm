@@ -465,10 +465,10 @@ void LLFloaterModelPreview::initModelPreview()
 	{
 		delete mModelPreview;
 	}
-	
+
 	S32 tex_width = 512;
 	S32 tex_height = 512;
-	
+
 	S32 max_width = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mScreenWidth);
 	S32 max_height = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mScreenHeight);
 	
@@ -480,8 +480,8 @@ void LLFloaterModelPreview::initModelPreview()
 	{
 		tex_height <<= 1;
 	}
-	
-	mModelPreview = new LLModelPreview(tex_width, tex_height, this);	
+
+	mModelPreview = new LLModelPreview(tex_width, tex_height, this);
 	mModelPreview->setPreviewTarget(16.f);
 	mModelPreview->setDetailsCallback(boost::bind(&LLFloaterModelPreview::setDetails, this, _1, _2, _3, _4, _5));
 	mModelPreview->setModelUpdatedCallback(boost::bind(&LLFloaterModelPreview::toggleCalculateButton, this, _1));
@@ -1364,7 +1364,7 @@ void LLFloaterModelPreview::onMouseCaptureLostModelPreview(LLMouseHandler* handl
 //-----------------------------------------------------------------------------
 
 LLModelPreview::LLModelPreview(S32 width, S32 height, LLFloater* fmp)
-: LLViewerDynamicTexture(width, height, 3, ORDER_MIDDLE, FALSE)
+: LLViewerDynamicTexture(width, height, 3, ORDER_MIDDLE, FALSE), LLMutex()
 , mLodsQuery()
 , mLodsWithParsingError()
 , mPelvisZOffset( 0.0f )

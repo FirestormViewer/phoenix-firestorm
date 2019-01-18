@@ -417,11 +417,11 @@ BOOL LLStatusBar::postBuild()
 	mFilterEdit = getChild<LLSearchEditor>( "search_menu_edit" );
 	mSearchPanel = getChild<LLPanel>( "menu_search_panel" );
 
-	mSearchPanel->setVisible(gSavedSettings.getBOOL("FSMenuSearch"));
+	mSearchPanel->setVisible(gSavedSettings.getBOOL("MenuSearch"));
 	mFilterEdit->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
 	mFilterEdit->setCommitCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
 	collectSearchableItems();
-	gSavedSettings.getControl("FSMenuSearch")->getCommitSignal()->connect(boost::bind(&LLStatusBar::updateMenuSearchVisibility, this, _2));
+	gSavedSettings.getControl("MenuSearch")->getCommitSignal()->connect(boost::bind(&LLStatusBar::updateMenuSearchVisibility, this, _2));
 
 	// <FS:Ansariel> Script debug
 	mScriptOut = getChild<LLIconCtrl>("scriptout");
@@ -673,7 +673,7 @@ void LLStatusBar::setVisibleForMouselook(bool visible)
 	// mBtnVolume->setVisible(visible);
 	// mStreamToggle->setVisible(visible);		// ## Zi: Media/Stream separation
 	// mMediaToggle->setVisible(visible);
-	mSearchPanel->setVisible(visible && gSavedSettings.getBOOL("FSMenuSearch"));
+	mSearchPanel->setVisible(visible && gSavedSettings.getBOOL("MenuSearch"));
 	BOOL FSEnableVolumeControls = gSavedSettings.getBOOL("FSEnableVolumeControls");
 	mBtnVolume->setVisible(visible && FSEnableVolumeControls);
 	mStreamToggle->setVisible(visible && FSEnableVolumeControls); // ## Zi: Media/Stream separation

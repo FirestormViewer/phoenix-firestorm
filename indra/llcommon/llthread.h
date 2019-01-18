@@ -100,7 +100,7 @@ public:
 private:
     bool                mPaused;
     
-	void threadRun(  );
+    void threadRun(  );
 
 protected:
     std::string         mName;

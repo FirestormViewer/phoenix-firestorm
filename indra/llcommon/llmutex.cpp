@@ -24,27 +24,22 @@
  */
 
 #include "linden_common.h"
-#include "llapr.h"
-
-#include "apr_portable.h"
 
 #include "llmutex.h"
 #include "llthread.h"
+#include "lltimer.h"
 
 //============================================================================
 
 LLMutex::LLMutex() :
- mCount(0), mLockingThread(NO_THREAD)
+ mCount(0),
+ mLockingThread(NO_THREAD)
 {
 }
 
 
 LLMutex::~LLMutex()
 {
-#if MUTEX_DEBUG
-	//bad assertion, the subclass LLSignal might be "locked", and that's OK
-	//llassert_always(!isLocked()); // better not be locked!
-#endif
 }
 
 
@@ -92,7 +87,9 @@ void LLMutex::unlock()
 bool LLMutex::isLocked()
 {
 	if (!mMutex.try_lock())
+	{
 		return true;
+	}
 	else
 	{
 		mMutex.unlock();
@@ -119,8 +116,10 @@ bool LLMutex::trylock()
 	}
 	
 	if (!mMutex.try_lock())
+	{
 		return false;
-
+	}
+	
 #if MUTEX_DEBUG
 	// Have to have the lock before we can access the debug info
 	U32 id = LLThread::currentID();
@@ -135,23 +134,26 @@ bool LLMutex::trylock()
 
 //============================================================================
 
-LLCondition::LLCondition()
+LLCondition::LLCondition() :
+	LLMutex()
 {
 }
+
 
 LLCondition::~LLCondition()
 {
 }
 
+
 void LLCondition::wait()
 {
-	std::unique_lock< std::mutex > lock( mMutex );
-	mCond.wait( lock );
+	std::unique_lock< std::mutex > lock(mMutex);
+	mCond.wait(lock);
 }
 
 void LLCondition::signal()
 {
-	mCond.notify_one() ;
+	mCond.notify_one();
 }
 
 void LLCondition::broadcast()
@@ -159,5 +161,68 @@ void LLCondition::broadcast()
 	mCond.notify_all();
 }
 
+
+
+LLMutexTrylock::LLMutexTrylock(LLMutex* mutex)
+    : mMutex(mutex),
+    mLocked(false)
+{
+    if (mMutex)
+        mLocked = mMutex->trylock();
+}
+
+LLMutexTrylock::LLMutexTrylock(LLMutex* mutex, U32 aTries, U32 delay_ms)
+    : mMutex(mutex),
+    mLocked(false)
+{
+    if (!mMutex)
+        return;
+
+    for (U32 i = 0; i < aTries; ++i)
+    {
+        mLocked = mMutex->trylock();
+        if (mLocked)
+            break;
+        ms_sleep(delay_ms);
+    }
+}
+
+LLMutexTrylock::~LLMutexTrylock()
+{
+    if (mMutex && mLocked)
+        mMutex->unlock();
+}
+
+
+//---------------------------------------------------------------------
+//
+// LLScopedLock
+//
+LLScopedLock::LLScopedLock(std::mutex* mutex) : mMutex(mutex)
+{
+	if(mutex)
+	{
+		mutex->lock();
+		mLocked = true;
+	}
+	else
+	{
+		mLocked = false;
+	}
+}
+
+LLScopedLock::~LLScopedLock()
+{
+	unlock();
+}
+
+void LLScopedLock::unlock()
+{
+	if(mLocked)
+	{
+		mMutex->unlock();
+		mLocked = false;
+	}
+}
 
 //============================================================================

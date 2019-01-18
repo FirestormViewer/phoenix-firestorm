@@ -83,10 +83,10 @@
          name="FSMenuSearch">
            <on_click
              function="ToggleControl"
-             parameter="FSMenuSearch" /> 
+             parameter="MenuSearch" /> 
              <on_check
              function="CheckControl"
-             parameter="FSMenuSearch" />
+             parameter="MenuSearch" />
     </menu_item_check>
     <menu_item_check
          label="Show Currency Balance"
