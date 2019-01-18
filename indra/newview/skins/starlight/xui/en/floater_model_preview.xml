@@ -4,9 +4,9 @@
  can_drag_on_left="false"
  can_minimize="true"
  can_resize="true"
- height="585"
- min_height="585"
- width="1024"
+  height="575"
+  min_height="600"
+  width="1024"
   top="0"
  min_width="1024"
  name="Model Preview"
@@ -1278,7 +1278,7 @@ For more reliable attachments, please consider using a different attachment poin
     <panel
      follows="top|left|bottom"
      layout="topleft"
-     height="184"
+     height="197"
      left="4"
      border="true"
      name="weights_and_warning_panel"
@@ -1643,7 +1643,7 @@ Analysed:
          visible="false">
          You dont have rights to upload mesh models. [[VURL] Find out how] to get certified.
        </text>
-       <text text_color="Yellow" layout="topleft" top_delta="5" left="6" name="status">
+       <text text_color="Yellow" layout="topleft" top_pad="-1" left="6" name="status">
 [STATUS]
        </text>
     </panel>

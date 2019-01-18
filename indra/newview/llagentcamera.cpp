@@ -942,7 +942,9 @@ void LLAgentCamera::cameraZoomIn(const F32 fraction)
 	new_distance = llmax(new_distance, min_zoom);
 	}	
 
-	F32 max_distance = getCameraMaxZoomDistance();
+	// <FS:Ansariel> FIRE-23470: Fix camera controls zoom glitch
+	//F32 max_distance = getCameraMaxZoomDistance();
+	F32 max_distance = getCameraMaxZoomDistance(true);
 
 	max_distance = llmin(max_distance, current_distance * 4.f); //Scaled max relative to current distance.  MAINT-3154
 	
@@ -1019,7 +1021,9 @@ void LLAgentCamera::cameraOrbitIn(const F32 meters)
 		new_distance = llmax(new_distance, min_zoom);
 		}
 
-		F32 max_distance = getCameraMaxZoomDistance();
+		// <FS:Ansariel> FIRE-23470: Fix camera controls zoom glitch
+		//F32 max_distance = getCameraMaxZoomDistance();
+		F32 max_distance = getCameraMaxZoomDistance(true);
 
 		if (new_distance > max_distance)
 		{
@@ -2090,12 +2094,15 @@ LLVector3 LLAgentCamera::getCameraOffsetInitial()
 	return convert_from_llsd<LLVector3>(mCameraOffsetInitial[mCameraPreset]->get(), TYPE_VEC3, "");
 }
 
-F32 LLAgentCamera::getCameraMaxZoomDistance()
+// <FS:Ansariel> FIRE-23470: Fix camera controls zoom glitch
+//F32 LLAgentCamera::getCameraMaxZoomDistance()
+F32 LLAgentCamera::getCameraMaxZoomDistance(bool allow_disabled_constraints /* = false*/)
+// </FS:Ansariel>
 {
     // Ignore "DisableCameraConstraints", we don't want to be out of draw range when we focus onto objects or avatars
     // Freeing the camera movement some more... ok, a lot -KC
     static LLCachedControl<bool> disable_constraints(gSavedSettings,"DisableCameraConstraints");
-    return disable_constraints ? INT_MAX : llmin(MAX_CAMERA_DISTANCE_FROM_OBJECT,
+    return (allow_disabled_constraints && disable_constraints) ? INT_MAX : llmin(MAX_CAMERA_DISTANCE_FROM_OBJECT,
                  mDrawDistance - 1, // convenience, don't hit draw limit when focusing on something
                  LLWorld::getInstance()->getRegionWidthInMeters() - CAMERA_FUDGE_FROM_OBJECT);
 }

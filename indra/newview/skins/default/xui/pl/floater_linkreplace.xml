@@ -18,9 +18,6 @@
 	<string name="ReplaceFinished">
 		Zakończono zastępowanie linków.
 	</string>
-	<string name="DeleteNotReplace">
-		Brak zmian.
-	</string>
 	<text name="source_label">
 		Stary:
 	</text>

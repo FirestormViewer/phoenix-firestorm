@@ -27,9 +27,6 @@
 	<string name="ReplaceFinished">
 		Finished replacing inventory links.
 	</string>
-	<string name="DeleteNotReplace">
-		No replacement.
-	</string>
 	<text
 	 type="string"
 	 follows="left|top"
