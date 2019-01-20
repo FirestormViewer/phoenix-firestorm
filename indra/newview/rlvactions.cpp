@@ -216,7 +216,7 @@ bool RlvActions::canShowName(EShowNamesContext eContext, const LLUUID& idAgent)
 			case SNC_DEFAULT:
 			case SNC_TELEPORTOFFER:
 			case SNC_TELEPORTREQUEST:
-				return gRlvHandler.isException(RLV_BHVR_SHOWNAMES, idAgent);
+				return gRlvHandler.isException(RLV_BHVR_SHOWNAMES, idAgent) || (gAgentID == idAgent);
 		}
 	}
 	return false;

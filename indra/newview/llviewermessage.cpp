@@ -2478,7 +2478,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				{
 					RlvUtil::filterNames(chat.mFromName);
 				}
-				else if (chat.mFromID != gAgent.getID())
+				else if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, chat.mFromID))
 				{
 					chat.mFromName = RlvStrings::getAnonym(chat.mFromName);
 					chat.mRlvNamesFiltered = TRUE;
