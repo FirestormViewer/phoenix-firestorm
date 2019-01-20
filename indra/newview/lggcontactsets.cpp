@@ -36,6 +36,7 @@
 #include "llviewercontrol.h"
 #include "llvoavatar.h"
 #include "fsdata.h"
+#include "rlvactions.h"
 #include "rlvhandler.h"
 
 const F32 COLOR_DAMPENING = 0.8f;
@@ -314,7 +315,7 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 {
 	static LLCachedControl<bool> legacy_radar_friend(gSavedSettings, "FSLegacyRadarFriendColoring");
 	static LLCachedControl<bool> legacy_radar_linden(gSavedSettings, "FSLegacyRadarLindenColoring");
-	bool rlv_shownames = gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+	bool rlv_shownames = !RlvActions::canShowName(RlvActions::SNC_DEFAULT, uuid);
 	LLColor4 color = cur_color;
 	
 	if (uuid == gAgent.getID())
@@ -503,7 +504,7 @@ bool LGGContactSets::hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGC
 // handle all settings and rlv that would prevent us from showing the cs color
 bool LGGContactSets::hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type, LLColor4& color)
 {
-	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+	if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, friend_id))
 	{
 		return false; // don't show colors if we cant show names
 	}
