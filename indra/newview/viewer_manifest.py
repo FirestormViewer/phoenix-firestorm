@@ -1495,7 +1495,7 @@ class LinuxManifest(ViewerManifest):
 
         # plugins
         with self.prefix(src="../media_plugins", dst="bin/llplugin"):
-            self.path("gstreamer010/libmedia_plugin_gstreamer010.so",
+            self.path("gstreamer10/libmedia_plugin_gstreamer10.so",
                       "libmedia_plugin_gstreamer.so")
             self.path2basename("libvlc", "libmedia_plugin_libvlc.so")
 
@@ -1551,6 +1551,8 @@ class LinuxManifest(ViewerManifest):
     def strip_binaries(self):
         if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
             print "* Going strip-crazy on the packaged binaries, since this is a RELEASE build"
+            if not os.path.isdir( os.path.join( self.get_dst_prefix(), "lib") ):
+                os.mkdir( os.path.join( self.get_dst_prefix(), "lib") )
             # makes some small assumptions about our packaged dir structure
             self.run_command(
                 ["find"] +
