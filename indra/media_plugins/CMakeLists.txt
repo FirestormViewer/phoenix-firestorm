@@ -7,6 +7,7 @@ if (LINUX)
     #add_subdirectory(libvlc)
     add_subdirectory(example)
     add_subdirectory(gstreamer10)
+    add_subdirectory(cef)
 endif (LINUX)
 
 if (DARWIN)
