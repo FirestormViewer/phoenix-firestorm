@@ -1664,7 +1664,7 @@ class LinuxManifest(ViewerManifest):
                 ["find"] +
                 [os.path.join(self.get_dst_prefix(), dir) for dir in ('bin', 'lib')] +
                 ['-type', 'f', '!', '-name', '*.py', '!', '-name', 'SL_Launcher',
-                 '!', '-name', 'update_install', '-exec', 'strip', '-S', '{}', ';'])
+                 '!', '-name', 'update_install', '!', '-name', '*.bin', '!', '-name', '*.pak', '-exec', 'strip', '-S', '{}', ';'])
 
 class Linux_i686_Manifest(LinuxManifest):
     address_size = 32
