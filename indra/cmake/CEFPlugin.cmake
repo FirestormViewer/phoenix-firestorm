@@ -3,7 +3,7 @@ include(Linking)
 include(Prebuilt)
 
 if (USESYSTEMLIBS)
-    set(CEFPLUGIN OFF CACHE BOOL
+    set(CEFPLUGIN ON CACHE BOOL
         "CEFPLUGIN support for the llplugin/llmedia test apps.")
 else (USESYSTEMLIBS)
     use_prebuilt_binary(dullahan)
@@ -37,4 +37,9 @@ elseif (DARWIN)
        )
 
 elseif (LINUX)
+  set(CEF_PLUGIN_LIBRARIES
+    dullahan
+    cef
+    cef_dll_wrapper.a
+    )
 endif (WINDOWS)
