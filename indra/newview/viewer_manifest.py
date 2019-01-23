@@ -1631,6 +1631,7 @@ class LinuxManifest(ViewerManifest):
         snapStage = os.environ.get( "SNAPCRAFT_STAGE" )
         if snapStage != None:
             print( "Building snap package, not calling tar to bundle" )
+            self.package_file = "<none>"
             return
 
         self.package_file = installer_name + '.tar.bz2'
