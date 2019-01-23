@@ -37,9 +37,18 @@ elseif (DARWIN)
        )
 
 elseif (LINUX)
-  set(CEF_PLUGIN_LIBRARIES
-    dullahan
-    cef
-    cef_dll_wrapper.a
-    )
+
+  if (USESYSTEMLIBS)
+    find_library( LIB_DULLAHAN "dullahan" )
+    find_library( LIB_CEF "cef" )
+    find_library( LIB_CEF_WRAPPER "cef_dll_wrapper" )
+    set(CEF_PLUGIN_LIBRARIES ${LIB_DULLAHAN}  ${LIB_CEF}  ${LIB_CEF_WRAPPER} )
+  else()
+    set(CEF_PLUGIN_LIBRARIES
+      dullahan
+      cef
+      cef_dll_wrapper.a
+      )
+endif()
+
 endif (WINDOWS)
