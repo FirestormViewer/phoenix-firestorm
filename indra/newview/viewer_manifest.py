@@ -1541,7 +1541,7 @@ class LinuxManifest(ViewerManifest):
         if snapStage != None:
             pkgBase = os.path.join( snapStage, "resources" )
 
-        with self.prefix(src=pkgBase), dst="bin"):
+        with self.prefix(src=pkgBase, dst="bin"):
             self.path( "cef.pak" )
             self.path( "cef_extensions.pak" )
             self.path( "cef_100_percent.pak" )
@@ -1627,6 +1627,12 @@ class LinuxManifest(ViewerManifest):
             self.run_command(['find', self.get_dst_prefix(),
                               '-type', 'f', '-perm', old,
                               '-exec', 'chmod', new, '{}', ';'])
+
+        snapStage = os.environ.get( "SNAPCRAFT_STAGE" )
+        if snapStage != None:
+            print( "Building snap package, not calling tar to bundle" )
+            return
+
         self.package_file = installer_name + '.tar.bz2'
 
         # temporarily move directory tree so that it has the right
