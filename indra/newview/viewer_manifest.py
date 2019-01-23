@@ -1498,7 +1498,8 @@ class LinuxManifest(ViewerManifest):
             self.path("gstreamer10/libmedia_plugin_gstreamer10.so",
                       "libmedia_plugin_gstreamer.so")
             self.path2basename("libvlc", "libmedia_plugin_libvlc.so")
-
+            self.path("cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
+            
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
             self.path( "plugins.dat" )
             self.path( "*/*.so" )
@@ -1506,6 +1507,105 @@ class LinuxManifest(ViewerManifest):
         with self.prefix(src=os.path.join(pkgdir, 'lib' ), dst="lib"):
             self.path( "libvlc*.so*" )
 
+        snapStage = os.environ.get( "SNAPCRAFT_STAGE" )
+        if snapStage != None:
+            print( "Building snap package" )
+
+        pkgBase = os.path.join(os.pardir, 'packages', 'lib', 'release')
+        if snapStage != None:
+            pkgBase = os.path.join( snapStage, "lib" )
+
+        # CEF files 
+        with self.prefix(src=pkgBase, dst="lib"):
+            self.path( "libcef.so" )
+            self.path( "libllceflib.so" )
+            
+        pkgBase = os.path.join( pkgBase, "swiftshader" )
+
+        with self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
+            self.path( "*.so" )
+
+        pkgBase = os.path.join(os.pardir, 'packages', 'bin', 'release')
+        if snapStage != None:
+            pkgBase = os.path.join( snapStage, "lib" )
+
+        with self.prefix(src=pkgBase, dst="bin"):
+            self.path( "chrome-sandbox" )
+            self.path( "dullahan_host" )
+            self.path( "natives_blob.bin" )
+            self.path( "snapshot_blob.bin" )
+            self.path( "v8_context_snapshot.bin" )
+            self.path( "libffmpegsumo.so" )
+
+        pkgBase = os.path.join(os.pardir, 'packages', 'resources')
+        if snapStage != None:
+            pkgBase = os.path.join( snapStage, "resources" )
+
+        with self.prefix(src=pkgBase), dst="bin"):
+            self.path( "cef.pak" )
+            self.path( "cef_extensions.pak" )
+            self.path( "cef_100_percent.pak" )
+            self.path( "cef_200_percent.pak" )
+            self.path( "devtools_resources.pak" )
+            self.path( "icudtl.dat" )
+
+        pkgBase = os.path.join( pkgBase, "locales" )
+
+        with self.prefix(src=pkgBase, dst=os.path.join('bin', 'locales')):
+            self.path("am.pak")
+            self.path("ar.pak")
+            self.path("bg.pak")
+            self.path("bn.pak")
+            self.path("ca.pak")
+            self.path("cs.pak")
+            self.path("da.pak")
+            self.path("de.pak")
+            self.path("el.pak")
+            self.path("en-GB.pak")
+            self.path("en-US.pak")
+            self.path("es-419.pak")
+            self.path("es.pak")
+            self.path("et.pak")
+            self.path("fa.pak")
+            self.path("fi.pak")
+            self.path("fil.pak")
+            self.path("fr.pak")
+            self.path("gu.pak")
+            self.path("he.pak")
+            self.path("hi.pak")
+            self.path("hr.pak")
+            self.path("hu.pak")
+            self.path("id.pak")
+            self.path("it.pak")
+            self.path("ja.pak")
+            self.path("kn.pak")
+            self.path("ko.pak")
+            self.path("lt.pak")
+            self.path("lv.pak")
+            self.path("ml.pak")
+            self.path("mr.pak")
+            self.path("ms.pak")
+            self.path("nb.pak")
+            self.path("nl.pak")
+            self.path("pl.pak")
+            self.path("pt-BR.pak")
+            self.path("pt-PT.pak")
+            self.path("ro.pak")
+            self.path("ru.pak")
+            self.path("sk.pak")
+            self.path("sl.pak")
+            self.path("sr.pak")
+            self.path("sv.pak")
+            self.path("sw.pak")
+            self.path("ta.pak")
+            self.path("te.pak")
+            self.path("th.pak")
+            self.path("tr.pak")
+            self.path("uk.pak")
+            self.path("vi.pak")
+            self.path("zh-CN.pak")
+            self.path("zh-TW.pak")
+            
         # llcommon
         if not self.path("../llcommon/libllcommon.so", "lib/libllcommon.so"):
             print "Skipping llcommon.so (assuming llcommon was linked statically)"
