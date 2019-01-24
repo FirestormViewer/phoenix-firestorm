@@ -323,8 +323,7 @@ bool LLPluginSharedMemory::create(size_t size)
   {
     mName = "snap.";
     mName += pSnapName;
-    mName += ".";
-    mName += SHM_OPEN_SHARED_MEMORY_PREFIX_STRING;
+    mName += ".LL";
   }
   else
    mName = SHM_OPEN_SHARED_MEMORY_PREFIX_STRING;
