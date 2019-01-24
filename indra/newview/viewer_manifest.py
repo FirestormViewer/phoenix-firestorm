@@ -1510,6 +1510,10 @@ class LinuxManifest(ViewerManifest):
         snapStage = os.environ.get( "SNAPCRAFT_STAGE" )
         if snapStage != None:
             print( "Building snap package" )
+        else:
+            snapStage = os.environ.get( "FLATPAK_DEST" )
+            if snapStage != None:
+                print( "Building flatpak package" )
 
         pkgBase = os.path.join(os.pardir, 'packages', 'lib', 'release')
         if snapStage != None:
@@ -1628,8 +1632,7 @@ class LinuxManifest(ViewerManifest):
                               '-type', 'f', '-perm', old,
                               '-exec', 'chmod', new, '{}', ';'])
 
-        snapStage = os.environ.get( "SNAPCRAFT_STAGE" )
-        if snapStage != None:
+        if os.environ.get( "SNAPCRAFT_STAGE" ) or os.environ.get( "FLATPAK_DEST" ):
             print( "Building snap package, not calling tar to bundle" )
             self.package_file = "<none>"
             return
