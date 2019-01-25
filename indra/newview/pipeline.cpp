@@ -122,9 +122,9 @@
 
 #include "llenvironment.h"
 
-#if LL_WINDOWS
-#pragma optimize("", off)
-#endif
+//#if LL_WINDOWS
+//#pragma optimize("", off)
+//#endif
 
 #ifdef _DEBUG
 // Debug indices is disabled for now for debug performance - djs 4/24/02
