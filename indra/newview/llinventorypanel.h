@@ -252,6 +252,8 @@ public:
 	void setSelectionByID(const LLUUID& obj_id, BOOL take_keyboard_focus);
 	void updateSelection();
 
+	void setSuppressOpenItemAction(bool supress_open_item) { mSuppressOpenItemAction = supress_open_item; }
+
 	LLFolderViewModelInventory* getFolderViewModel() { return &mInventoryViewModel; }
 	const LLFolderViewModelInventory* getFolderViewModel() const { return &mInventoryViewModel; }
     
@@ -273,6 +275,7 @@ protected:
 	bool 						mShowItemLinkOverlays; // Shows link graphic over inventory item icons
 	bool						mShowEmptyMessage;
 	bool						mSuppressFolderMenu;
+	bool						mSuppressOpenItemAction;
 
 	LLHandle<LLFolderView>      mFolderRoot;
 	LLScrollContainer*			mScroller;

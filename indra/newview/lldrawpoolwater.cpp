@@ -121,7 +121,7 @@ LLDrawPool *LLDrawPoolWater::instancePool()
 
 void LLDrawPoolWater::prerender()
 {
-	mVertexShaderLevel = (gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps) ? LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_WATER) : 0;
+	mShaderLevel = (gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps) ? LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_WATER) : 0;
 }
 
 S32 LLDrawPoolWater::getNumPasses()
@@ -190,7 +190,7 @@ void LLDrawPoolWater::render(S32 pass)
 
 	LLGLEnable blend(GL_BLEND);
 
-	if ((mVertexShaderLevel > 0) && !sSkipScreenCopy)
+	if ((mShaderLevel > 0) && !sSkipScreenCopy)
 	{
 		shade();
 		return;
@@ -590,12 +590,34 @@ void LLDrawPoolWater::shade()
 	}	
 
 	//bind normal map
-	S32 bumpTex = shader->enableTexture(LLViewerShaderMgr::BUMP_MAP);
+	S32 bumpTex  = shader->enableTexture(LLViewerShaderMgr::BUMP_MAP);
+    S32 bumpTex2 = shader->enableTexture(LLViewerShaderMgr::BUMP_MAP2);
+
+    LLViewerTexture* tex_a = mWaterNormp[0];
+    LLViewerTexture* tex_b = mWaterNormp[1];
+
+    F32 blend_factor = LLEnvironment::instance().getCurrentWater()->getBlendFactor();
+	
+    if (tex_a && (!tex_b || (tex_a == tex_b)))
+    {
+		gGL.getTexUnit(bumpTex)->bind(tex_a);
+        gGL.getTexUnit(bumpTex2)->unbind(LLTexUnit::TT_TEXTURE);
+        blend_factor = 0; // only one tex provided, no blending
+    }
+    else if (tex_b && !tex_a)
+    {
+        gGL.getTexUnit(bumpTex)->bind(tex_b);
+        gGL.getTexUnit(bumpTex2)->unbind(LLTexUnit::TT_TEXTURE);
+        blend_factor = 0; // only one tex provided, no blending
+    }
+    else if (tex_b != tex_a)
+    {
+        gGL.getTexUnit(bumpTex)->bind(tex_a);
+        gGL.getTexUnit(bumpTex2)->bind(tex_b);
+    }
 
     if (mWaterNormp[0])
     {
-	    gGL.getTexUnit(bumpTex)->bind(mWaterNormp[0]) ;
-
 		// <FS:Zi> Render speedup for water parameters
 	    //if (gSavedSettings.getBOOL("RenderWaterMipNormal"))
 		if (mRenderWaterMipNormal)
@@ -611,10 +633,6 @@ void LLDrawPoolWater::shade()
 
     if (mWaterNormp[1])
     {
-        bumpTex = shader->enableTexture(LLViewerShaderMgr::BUMP_MAP2);
-
-        gGL.getTexUnit(bumpTex)->bind(mWaterNormp[1]) ;
-
 	    if (gSavedSettings.getBOOL("RenderWaterMipNormal"))
 	    {
             mWaterNormp[1]->setFilteringOption(LLTexUnit::TFO_ANISOTROPIC);
@@ -625,6 +643,8 @@ void LLDrawPoolWater::shade()
 	    }
 	}
 
+    shader->uniform1f(LLShaderMgr::BLEND_FACTOR, blend_factor);
+
     shader->uniform3fv(LLShaderMgr::WATER_FOGCOLOR, 1, pwater->getWaterFogColor().mV);
     shader->uniform1f(LLShaderMgr::WATER_FOGDENSITY, pwater->getWaterFogDensity());
 	
@@ -632,7 +652,7 @@ void LLDrawPoolWater::shade()
 	S32 screentex = shader->enableTexture(LLShaderMgr::WATER_SCREENTEX);
 	gGL.getTexUnit(screentex)->bind(&gPipeline.mWaterDis);	
 
-	if (mVertexShaderLevel == 1)
+	if (mShaderLevel == 1)
 	{
         LLColor4 fog_color(pwater->getWaterFogColor(), 0.f);
         fog_color[3] = pwater->getWaterFogDensity();

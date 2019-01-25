@@ -2331,7 +2331,7 @@ bool LLAvatarActions::callbackEstateBan(const LLSD& notification, const LLSD& re
 				}
 			}
 
-			LLFloaterRegionInfo::nextInvoice();
+			LLEstateInfoModel::instance().nextInvoice();
 			LLPanelEstateInfo::sendEstateAccessDelta(flags, itAgent->asUUID());
 		}
 	}

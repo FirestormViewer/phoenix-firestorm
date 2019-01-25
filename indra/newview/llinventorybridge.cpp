@@ -7680,7 +7680,7 @@ void LLSettingsBridge::performAction(LLInventoryModel* model, std::string action
         S32 parcel_id = parcel->getLocalID();
 
         LL_WARNS("LAPRAS") << "Applying asset ID " << asset_id << " to parcel " << parcel_id << LL_ENDL;
-        LLEnvironment::instance().updateParcel(parcel_id, asset_id, name, -1, -1);
+        LLEnvironment::instance().updateParcel(parcel_id, asset_id, name, LLEnvironment::NO_TRACK, -1, -1);
         LLEnvironment::instance().setSharedEnvironment();
     }
     else
@@ -7692,7 +7692,10 @@ void LLSettingsBridge::openItem()
     LLViewerInventoryItem* item = getItem();
     if (item)
     {
-        LLInvFVBridgeAction::doAction(item->getType(), mUUID, getInventoryModel());
+        if (item->getPermissions().getOwner() != gAgent.getID())
+            LLNotificationsUtil::add("NoEditFromLibrary");
+        else
+            LLInvFVBridgeAction::doAction(item->getType(), mUUID, getInventoryModel());
     }
 }
 

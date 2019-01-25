@@ -276,17 +276,17 @@ public:
 	void renderGeomDeferred(LLCamera& camera);
 	void renderGeomPostDeferred(LLCamera& camera, bool do_occlusion=true);
 	void renderGeomShadow(LLCamera& camera);
-	void bindDeferredShader(LLGLSLShader& shader, U32 light_index = 0, U32 noise_map = 0xFFFFFFFF);
+	void bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_target = nullptr);
 	void setupSpotLight(LLGLSLShader& shader, LLDrawable* drawablep);
 
 	void unbindDeferredShader(LLGLSLShader& shader);
-	void renderDeferredLighting();
-	void renderDeferredLightingToRT(LLRenderTarget* target);
+	void renderDeferredLighting(LLRenderTarget* light_target);
 	
 	void generateWaterReflection(LLCamera& camera);
 	void generateSunShadow(LLCamera& camera);
     LLRenderTarget* getShadowTarget(U32 i);
 
+    void generateSkyIndirect();
 	void generateHighlight(LLCamera& camera);
 	void renderHighlight(const LLViewerObject* obj, F32 fade);
 	void setHighlightObject(LLDrawable* obj) { mHighlightObject = obj; }
@@ -545,7 +545,8 @@ public:
 		RENDER_DEBUG_TEXEL_DENSITY		=  0x40000000,
 		RENDER_DEBUG_TRIANGLE_COUNT		=  0x80000000,
 		RENDER_DEBUG_IMPOSTORS			= 0x100000000,
-		RENDER_DEBUG_TEXTURE_SIZE		= 0x200000000
+        RENDER_DEBUG_SH                  = 0x200000000,
+		RENDER_DEBUG_TEXTURE_SIZE		= 0x400000000
 	};
 
 public:
@@ -590,6 +591,7 @@ public:
 	static bool				sDynamicLOD;
 	static bool				sPickAvatar;
 	static bool				sReflectionRender;
+    static bool				sDistortionRender;
 	static bool				sImpostorRender;
 	static bool				sImpostorRenderAlphaDepthPass;
 	static bool				sUnderWaterRender;
@@ -599,11 +601,11 @@ public:
 	static bool				sRenderAttachedLights;
 	static bool				sRenderAttachedParticles;
 	static bool				sRenderDeferred;
-    static bool				sRenderingWaterReflection;
 	static bool             sMemAllocationThrottled;
 	static S32				sVisibleLightCount;
 	static F32				sMinRenderSize;
 	static bool				sRenderingHUDs;
+    static F32              sDistortionWaterClipPlaneMargin;
 	static F32        		sVolumeSAFrame;
 
 	static bool				sRenderParticles; // <FS:LO> flag to hold correct, user selected, status of particles
@@ -640,42 +642,40 @@ public:
 	//sun shadow map
 	LLRenderTarget			mShadow[6];
 	LLRenderTarget			mShadowOcclusion[6];
-	LLRenderTarget			mInscatter;
-	std::vector<LLVector3>		mShadowFrustPoints[4];
-	LLVector4			mShadowError;
-	LLVector4			mShadowFOV;
-	LLVector3			mShadowFrustOrigin[4];
-	LLCamera			mShadowCamera[8];
-	LLVector3			mShadowExtents[4][2];
+
+	std::vector<LLVector3>  mShadowFrustPoints[4];
+	LLVector4			    mShadowError;
+	LLVector4			    mShadowFOV;
+	LLVector3			    mShadowFrustOrigin[4];
+	LLCamera			    mShadowCamera[8];
+	LLVector3			    mShadowExtents[4][2];
 	glh::matrix4f			mSunShadowMatrix[6];
 	glh::matrix4f			mShadowModelview[6];
 	glh::matrix4f			mShadowProjection[6];
-	glh::matrix4f			mGIMatrix;
-	glh::matrix4f			mGIMatrixProj;
-	glh::matrix4f			mGIModelview;
-	glh::matrix4f			mGIProjection;
-	glh::matrix4f			mGINormalMatrix;
-	glh::matrix4f			mGIInvProj;
-	LLVector2				mGIRange;
-	F32						mGILightRadius;
-	
-	LLPointer<LLDrawable>				mShadowSpotLight[2];
-	F32									mSpotLightFade[2];
-	LLPointer<LLDrawable>				mTargetShadowSpotLight[2];
+    glh::matrix4f           mReflectionModelView;
+
+	LLPointer<LLDrawable>	mShadowSpotLight[2];
+	F32						mSpotLightFade[2];
+	LLPointer<LLDrawable>	mTargetShadowSpotLight[2];
 
 	LLVector4				mSunClipPlanes;
 	LLVector4				mSunOrthoClipPlanes;
-
 	LLVector2				mScreenScale;
 
 	//water reflection texture
 	LLRenderTarget				mWaterRef;
-
+    LLRenderTarget				mWaterDeferredScreen;
+    LLRenderTarget				mWaterDeferredDepth;
+    LLRenderTarget				mWaterOcclusionDepth;
+    LLRenderTarget			    mWaterDeferredLight;
 	//water distortion texture (refraction)
 	LLRenderTarget				mWaterDis;
 
 	//texture for making the glow
 	LLRenderTarget				mGlow[3];
+
+    // texture for SH indirect sky contribution
+	LLRenderTarget				mSkySH;
 
 	//noise map
 	U32					mNoiseMap;

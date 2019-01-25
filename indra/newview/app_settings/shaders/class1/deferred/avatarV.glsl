@@ -68,7 +68,7 @@ void main()
 	norm = normalize(norm);
 	
 // <FS> Fix avatar cloth failing to work in deferred
-#if AVATAR_CLOTH
+#ifdef AVATAR_CLOTH
 	//wind
 	vec4 windEffect;
 	windEffect = vec4(dot(norm, gWindDir.xyz));	

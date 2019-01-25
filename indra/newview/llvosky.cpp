@@ -243,6 +243,16 @@ LLHeavenBody::LLHeavenBody(const F32 rad)
 	mColorCached.setToBlack();
 }
 
+const LLQuaternion& LLHeavenBody::getRotation() const
+{
+    return mRotation;
+}
+
+void LLHeavenBody::setRotation(const LLQuaternion& rot)
+{
+    mRotation = rot;
+}
+
 const LLVector3& LLHeavenBody::getDirection() const
 {
     return mDirection;
@@ -738,6 +748,9 @@ void LLVOSky::updateDirections(void)
     mSun.setDirection(psky->getSunDirection());
 	mMoon.setDirection(psky->getMoonDirection());
 
+    mSun.setRotation(psky->getSunRotation());
+	mMoon.setRotation(psky->getMoonRotation());
+
     mSun.setColor(psky->getSunlightColor());
 	mMoon.setColor(psky->getMoonDiffuse());
 
@@ -1074,7 +1087,7 @@ BOOL LLVOSky::updateGeometry(LLDrawable *drawable)
 	if (mFace[FACE_REFLECTION] == NULL)
 	{
 		LLDrawPoolWater *poolp = (LLDrawPoolWater*) gPipeline.getPool(LLDrawPool::POOL_WATER);
-		if (gPipeline.getPool(LLDrawPool::POOL_WATER)->getVertexShaderLevel() != 0)
+		if (gPipeline.getPool(LLDrawPool::POOL_WATER)->getShaderLevel() != 0)
 		{
 			mFace[FACE_REFLECTION] = drawable->addFace(poolp, NULL);
 		}
@@ -1177,7 +1190,7 @@ BOOL LLVOSky::updateGeometry(LLDrawable *drawable)
 	}
 	
     bool above_water = (height_above_water > 0);
-    bool render_ref  = above_water && gPipeline.getPool(LLDrawPool::POOL_WATER)->getVertexShaderLevel() == 0;
+    bool render_ref  = above_water && gPipeline.getPool(LLDrawPool::POOL_WATER)->getShaderLevel() == 0;
     setDrawRefl(above_water ? (sun_flag ? 0 : 1) : -1);
     if (render_ref)
 	{        
@@ -1199,11 +1212,13 @@ bool LLVOSky::updateHeavenlyBodyGeometry(LLDrawable *drawable, F32 scale, const 
 	S32 index_offset;
 	LLFace *facep;
 
-	LLVector3 to_dir   = hb.getDirection();
+    LLQuaternion rot    = hb.getRotation();
+	LLVector3 to_dir    = LLVector3::x_axis * rot;
+    LLVector3 hb_right  = LLVector3::y_axis * rot;
+	LLVector3 hb_up     = LLVector3::z_axis * rot;
+
 	LLVector3 draw_pos = to_dir * HEAVENLY_BODY_DIST;
 
-	LLVector3 hb_right = to_dir % LLVector3::z_axis;
-	LLVector3 hb_up = hb_right % to_dir;
 	hb_right.normalize();
 	hb_up.normalize();
 

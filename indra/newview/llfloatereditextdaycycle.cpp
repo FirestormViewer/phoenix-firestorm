@@ -85,6 +85,9 @@ namespace {
     const std::string BTN_DELFRAME("delete_frame");
     const std::string BTN_IMPORT("btn_import");
     const std::string BTN_LOADFRAME("btn_load_frame");
+    const std::string BTN_CLONETRACK("copy_track");
+    const std::string BTN_LOADTRACK("load_track");
+    const std::string BTN_CLEARTRACK("clear_track");
     const std::string SLDR_TIME("WLTimeSlider");
     const std::string SLDR_KEYFRAMES("WLDayCycleFrames");
     const std::string VIEW_SKY_SETTINGS("frame_settings_sky");
@@ -113,6 +116,11 @@ namespace {
     const std::string ACTION_APPLY_REGION("apply_region");
 
     const F32 DAY_CYCLE_PLAY_TIME_SECONDS = 60;
+
+    const std::string STR_COMMIT_PARCEL("commit_parcel");
+    const std::string STR_COMMIT_REGION("commit_region");
+    //---------------------------------------------------------------------
+
 }
 
 //=========================================================================
@@ -172,7 +180,10 @@ LLFloaterEditExtDayCycle::LLFloaterEditExtDayCycle(const LLSD &key) :
     mIsDirty(false),
     mCanCopy(false),
     mCanMod(false),
-    mMakeNoTrans(false)
+    mMakeNoTrans(false),
+    mCloneTrack(nullptr),
+    mLoadTrack(nullptr),
+    mClearTrack(nullptr)
 {
 
     mCommitCallbackRegistrar.add(EVNT_DAYTRACK, [this](LLUICtrl *ctrl, const LLSD &data) { onTrackSelectionCallback(data); });
@@ -206,16 +217,24 @@ BOOL LLFloaterEditExtDayCycle::postBuild()
     mCurrentTimeLabel = getChild<LLTextBox>(LBL_CURRENT_TIME, true);
     mImportButton = getChild<LLButton>(BTN_IMPORT, true);
     mLoadFrame = getChild<LLButton>(BTN_LOADFRAME, true);
+    mCloneTrack = getChild<LLButton>(BTN_CLONETRACK, true);
+    mLoadTrack = getChild<LLButton>(BTN_LOADTRACK, true);
+    mClearTrack = getChild<LLButton>(BTN_CLEARTRACK, true);
 
     mFlyoutControl = new LLFlyoutComboBtnCtrl(this, BTN_SAVE, BTN_FLYOUT, XML_FLYOUTMENU_FILE, false);
     mFlyoutControl->setAction([this](LLUICtrl *ctrl, const LLSD &data) { onButtonApply(ctrl, data); });
 
     getChild<LLButton>(BTN_CANCEL, true)->setCommitCallback([this](LLUICtrl *ctrl, const LLSD &data) { onClickCloseBtn(); });
     mTimeSlider->setCommitCallback([this](LLUICtrl *ctrl, const LLSD &data) { onTimeSliderCallback(); });
-    mAddFrameButton->setCommitCallback([this](LLUICtrl *ctrl, const LLSD &data) { onAddTrack(); });
-    mDeleteFrameButton->setCommitCallback([this](LLUICtrl *ctrl, const LLSD &data) { onRemoveTrack(); });
+    mAddFrameButton->setCommitCallback([this](LLUICtrl *ctrl, const LLSD &data) { onAddFrame(); });
+    mDeleteFrameButton->setCommitCallback([this](LLUICtrl *ctrl, const LLSD &data) { onRemoveFrame(); });
     mImportButton->setCommitCallback([this](LLUICtrl *, const LLSD &){ onButtonImport(); });
     mLoadFrame->setCommitCallback([this](LLUICtrl *, const LLSD &){ onButtonLoadFrame(); });
+
+    mCloneTrack->setCommitCallback([this](LLUICtrl *, const LLSD&){ onCloneTrack(); });
+    mLoadTrack->setCommitCallback([this](LLUICtrl *, const LLSD&){  onLoadTrack();});
+    mClearTrack->setCommitCallback([this](LLUICtrl *, const LLSD&){ onClearTrack(); });
+
 
     mFramesSlider->setCommitCallback([this](LLUICtrl *, const LLSD &data) { onFrameSliderCallback(data); });
     mFramesSlider->setDoubleClickCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask){ onFrameSliderDoubleClick(x, y, mask); });
@@ -267,8 +286,6 @@ BOOL LLFloaterEditExtDayCycle::postBuild()
         if (panel)
             panel->setOnDirtyFlagChanged([this](LLPanel *, bool val) { onPanelDirtyFlagChanged(val); });
     }
-
-    //getChild<LLButton>("sky1_track", true)->setToggleState(true);
 
 	return TRUE;
 }
@@ -349,6 +366,17 @@ void LLFloaterEditExtDayCycle::onOpen(const LLSD& key)
             getChild<LLTextBox>("p" + llformat("%d", i), true)->setTextArg("[DSC]", std::string());
         }
         mCurrentTimeLabel->setTextArg("[DSC]", std::string());
+    }
+
+    // Adjust Time&Percentage labels' location according to length
+    LLRect label_rect = getChild<LLTextBox>("p0", true)->getRect();
+    F32 slider_width = mFramesSlider->getRect().getWidth();
+    for (int i = 1; i < max_elm; i++)
+    {
+        LLTextBox *pcnt_label = getChild<LLTextBox>("p" + llformat("%d", i), true);
+        LLRect new_rect = pcnt_label->getRect();
+        new_rect.mLeft = label_rect.mLeft + (S32)(slider_width * (F32)i / (F32)(max_elm - 1)) - (S32)(pcnt_label->getTextPixelWidth() / 2);
+        pcnt_label->setRect(new_rect);
     }
 
     // Altitudes&Track labels
@@ -440,6 +468,17 @@ void LLFloaterEditExtDayCycle::refresh()
     bool show_commit = ((mEditContext == CONTEXT_PARCEL) || (mEditContext == CONTEXT_REGION));
     bool show_apply = (mEditContext == CONTEXT_INVENTORY);
 
+    if (show_commit)
+    {
+        std::string commit_text;
+        if (mEditContext == CONTEXT_PARCEL)
+            commit_text = getString(STR_COMMIT_PARCEL);
+        else
+            commit_text = getString(STR_COMMIT_REGION);
+
+        mFlyoutControl->setMenuItemLabel(ACTION_COMMIT, commit_text);
+    }
+
     mFlyoutControl->setMenuItemVisible(ACTION_COMMIT, show_commit);
     mFlyoutControl->setMenuItemVisible(ACTION_SAVE, is_inventory_avail);
     mFlyoutControl->setMenuItemVisible(ACTION_SAVEAS, is_inventory_avail);
@@ -495,6 +534,20 @@ void LLFloaterEditExtDayCycle::setEditDefaultDayCycle()
         [this](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat) { onAssetLoaded(asset_id, settings, status); });
 }
 
+std::string LLFloaterEditExtDayCycle::getEditName() const
+{
+    if (mEditDay)
+        return mEditDay->getName();
+    return "new";
+}
+
+void LLFloaterEditExtDayCycle::setEditName(const std::string &name)
+{
+    if (mEditDay)
+        mEditDay->setName(name);
+    getChild<LLLineEditor>(TXT_DAY_NAME)->setText(name);
+}
+
 /* virtual */
 BOOL LLFloaterEditExtDayCycle::handleKeyUp(KEY key, MASK mask, BOOL called_from_parent)
 {
@@ -526,7 +579,6 @@ BOOL LLFloaterEditExtDayCycle::handleKeyUp(KEY key, MASK mask, BOOL called_from_
     }
     return LLFloater::handleKeyUp(key, mask, called_from_parent);
 }
-
 
 void LLFloaterEditExtDayCycle::onButtonApply(LLUICtrl *ctrl, const LLSD &data)
 {
@@ -697,11 +749,11 @@ void LLFloaterEditExtDayCycle::onButtonLoadFrame()
     { 
         curitemId = LLFloaterSettingsPicker::findItemID(mCurrentEdit->getAssetId(), false, false);
     }
-    
+
     doOpenInventoryFloater((mCurrentTrack == LLSettingsDay::TRACK_WATER) ? LLSettingsType::ST_WATER : LLSettingsType::ST_SKY, curitemId);
 }
 
-void LLFloaterEditExtDayCycle::onAddTrack()
+void LLFloaterEditExtDayCycle::onAddFrame()
 {
     LLSettingsBase::Seconds frame(mTimeSlider->getCurSliderValue());
     LLSettingsBase::ptr_t setting;
@@ -736,7 +788,7 @@ void LLFloaterEditExtDayCycle::onAddTrack()
     updateTabs();
 }
 
-void LLFloaterEditExtDayCycle::onRemoveTrack()
+void LLFloaterEditExtDayCycle::onRemoveFrame()
 {
     std::string sldr_key = mFramesSlider->getCurSlider();
     if (sldr_key.empty())
@@ -745,6 +797,48 @@ void LLFloaterEditExtDayCycle::onRemoveTrack()
     }
     removeCurrentSliderFrame();
     updateTabs();
+}
+
+
+void LLFloaterEditExtDayCycle::onCloneTrack()
+{
+
+}
+
+
+void LLFloaterEditExtDayCycle::onLoadTrack()
+{
+    LLUUID curitemId = mInventoryId;
+
+    if (mCurrentEdit && curitemId.notNull())
+    {
+        curitemId = LLFloaterSettingsPicker::findItemID(mCurrentEdit->getAssetId(), false, false);
+    }
+
+    doOpenInventoryFloater(LLSettingsType::ST_DAYCYCLE, curitemId);
+}
+
+
+void LLFloaterEditExtDayCycle::onClearTrack()
+{
+    if (mCurrentTrack > 1)
+        mEditDay->getCycleTrack(mCurrentTrack).clear();
+    else
+    {
+        LLSettingsDay::CycleTrack_t &track(mEditDay->getCycleTrack(mCurrentTrack));
+
+        auto first = track.begin();
+        auto last = track.end();
+        ++first;
+        track.erase(first, last);
+    }
+
+    updateEditEnvironment();
+    LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_EDIT, LLEnvironment::TRANSITION_INSTANT);
+    LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_INSTANT);
+    synchronizeTabs();
+    updateTabs();
+    refresh();
 }
 
 void LLFloaterEditExtDayCycle::onCommitName(class LLLineEditor* caller, void* user_data)
@@ -861,7 +955,7 @@ void LLFloaterEditExtDayCycle::onFrameSliderCallback(const LLSD &data)
 void LLFloaterEditExtDayCycle::onFrameSliderDoubleClick(S32 x, S32 y, MASK mask)
 {
     stopPlay();
-    onAddTrack();
+    onAddFrame();
 }
 
 void LLFloaterEditExtDayCycle::onFrameSliderMouseDown(S32 x, S32 y, MASK mask)
@@ -932,6 +1026,34 @@ void LLFloaterEditExtDayCycle::onTimeSliderCallback()
     selectFrame(mTimeSlider->getCurSliderValue(), LLSettingsDay::DEFAULT_FRAME_SLOP_FACTOR);
 }
 
+void LLFloaterEditExtDayCycle::cloneTrack(U32 source_index, U32 dest_index)
+{
+    cloneTrack(mEditDay, source_index, dest_index);
+}
+
+void LLFloaterEditExtDayCycle::cloneTrack(const LLSettingsDay::ptr_t &source_day, U32 source_index, U32 dest_index)
+{
+    if (source_index == LLSettingsDay::TRACK_WATER || dest_index == LLSettingsDay::TRACK_WATER)
+    {
+        LL_WARNS() << "water track can't be source or destination for copying" << LL_ENDL;
+        return;
+    }
+
+    // don't use replaceCycleTrack because we will end up with references, but we need to clone
+    mEditDay->clearCycleTrack(dest_index); // because source can be empty
+    LLSettingsDay::CycleTrack_t source_track = source_day->getCycleTrack(source_index);
+
+    for (auto &track_frame : source_track)
+    {
+        LLSettingsSky::ptr_t psky = std::static_pointer_cast<LLSettingsSky>(track_frame.second);
+        mEditDay->setSettingsAtKeyframe(psky->buildDerivedClone(), track_frame.first, dest_index);
+    }
+
+    updateSlider();
+    updateTabs();
+    updateButtons();
+}
+
 void LLFloaterEditExtDayCycle::selectTrack(U32 track_index, bool force )
 {
     if (track_index < LLSettingsDay::TRACK_MAX)
@@ -951,6 +1073,10 @@ void LLFloaterEditExtDayCycle::selectTrack(U32 track_index, bool force )
     bool show_water = (mCurrentTrack == LLSettingsDay::TRACK_WATER);
     mSkyTabLayoutContainer->setVisible(!show_water);
     mWaterTabLayoutContainer->setVisible(show_water);
+
+    std::string iconname = (show_water) ? "Inv_SettingsWater" : "Inv_SettingsSky";
+
+    mFramesSlider->setSliderThumbImage(iconname);
     updateSlider();
     updateLabels();
 }
@@ -1082,6 +1208,39 @@ void LLFloaterEditExtDayCycle::updateButtons()
     mAddFrameButton->setEnabled(!mIsPlaying && isAddingFrameAllowed() && mCanMod);
     mDeleteFrameButton->setEnabled(!mIsPlaying && isRemovingFrameAllowed() && mCanMod);
     mLoadFrame->setEnabled(!mIsPlaying && mCanMod);
+
+    bool can_clone(false);
+    bool can_load(true);
+    bool can_clear(true);
+
+    if (mCurrentTrack == 0)
+    {
+        can_clone = false;
+    }
+    else
+    {
+        for (S32 track = 1; track < LLSettingsDay::TRACK_MAX; ++track)
+        {
+            if (track == mCurrentTrack)
+                continue;
+            can_clone |= !mEditDay->getCycleTrack(track).empty();
+        }
+    }
+
+    can_clear = (mCurrentTrack > 1) ? (!mEditDay->getCycleTrack(mCurrentTrack).empty()) : (mEditDay->getCycleTrack(mCurrentTrack).size() > 1);
+    mCloneTrack->setEnabled(can_clone && false);
+    mCloneTrack->setVisible(false);
+    mLoadTrack->setEnabled(can_load);
+    mClearTrack->setEnabled(can_clear);
+
+    // update track buttons
+    bool extended_env = LLEnvironment::instance().isExtendedEnvironmentEnabled();
+    for (S32 track = 0; track < LLSettingsDay::TRACK_MAX; ++track)
+    {
+        LLButton* button = getChild<LLButton>(track_tabs[track], true);
+        button->setEnabled(extended_env);
+        button->setToggleState(track == mCurrentTrack);
+    }
 }
 
 void LLFloaterEditExtDayCycle::updateSlider()
@@ -1432,7 +1591,7 @@ void LLFloaterEditExtDayCycle::doApplyEnvironment(const std::string &where, cons
 
         if (mInventoryItem && !isDirty())
         {
-            LLEnvironment::instance().updateParcel(parcel->getLocalID(), mInventoryItem->getAssetUUID(), mInventoryItem->getName(), -1, -1);
+            LLEnvironment::instance().updateParcel(parcel->getLocalID(), mInventoryItem->getAssetUUID(), mInventoryItem->getName(), LLEnvironment::NO_TRACK, -1, -1);
         }
         else
         {
@@ -1443,7 +1602,7 @@ void LLFloaterEditExtDayCycle::doApplyEnvironment(const std::string &where, cons
     {
         if (mInventoryItem && !isDirty())
         {
-            LLEnvironment::instance().updateRegion(mInventoryItem->getAssetUUID(), mInventoryItem->getName(), -1, -1);
+            LLEnvironment::instance().updateRegion(mInventoryItem->getAssetUUID(), mInventoryItem->getName(), LLEnvironment::NO_TRACK, -1, -1);
         }
         else
         {
@@ -1664,17 +1823,18 @@ void LLFloaterEditExtDayCycle::doOpenInventoryFloater(LLSettingsType::type_e typ
     if (!picker)
     {
         picker = new LLFloaterSettingsPicker(this,
-            LLUUID::null, "SELECT SETTINGS");
+            LLUUID::null);
 
         mInventoryFloater = picker->getHandle();
 
-        picker->setCommitCallback([this](LLUICtrl *, const LLSD &data){ onPickerCommitSetting(data.asUUID()); });
+        picker->setCommitCallback([this](LLUICtrl *, const LLSD &data){ onPickerCommitSetting(data["ItemId"].asUUID(), data["Track"].asInteger()); });
     }
 
     picker->setSettingsFilter(type);
     picker->setSettingsItemId(curritem);
     picker->openFloater();
     picker->setFocus(TRUE);
+    picker->setTrackWater(mCurrentTrack == LLSettingsDay::TRACK_WATER);
 }
 
 void LLFloaterEditExtDayCycle::doCloseInventoryFloater(bool quitting)
@@ -1687,25 +1847,39 @@ void LLFloaterEditExtDayCycle::doCloseInventoryFloater(bool quitting)
     }
 }
 
-void LLFloaterEditExtDayCycle::onPickerCommitSetting(LLUUID item_id)
+void LLFloaterEditExtDayCycle::onPickerCommitSetting(LLUUID item_id, S32 track)
 {
     LLSettingsBase::TrackPosition frame(mTimeSlider->getCurSliderValue());
-    S32 track = mCurrentTrack;
     LLViewerInventoryItem *itemp = gInventory.getItem(item_id);
     if (itemp)
     {
         LLSettingsVOBase::getSettingsAsset(itemp->getAssetUUID(),
-            [this, track, frame, item_id](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat) { onAssetLoadedForFrame(item_id, asset_id, settings, status, track, frame); });
+            [this, track, frame, item_id](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat) { onAssetLoadedForInsertion(item_id, asset_id, settings, status, track, mCurrentTrack, frame); });
     }
 }
 
-void LLFloaterEditExtDayCycle::onAssetLoadedForFrame(LLUUID item_id, LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, S32 track, LLSettingsBase::TrackPosition frame)
+void LLFloaterEditExtDayCycle::onAssetLoadedForInsertion(LLUUID item_id, LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, S32 source_track, S32 dest_track, LLSettingsBase::TrackPosition frame)
 {
-    std::function<void()> cb = [this, settings, frame, track]()
+    std::function<void()> cb = [this, settings, frame, source_track, dest_track]()
     {
-        if (mFramesSlider->getCurSlider().empty())
+        if (settings->getSettingsType() == "daycycle")
         {
-            if ((mEditDay->getSettingsNearKeyframe(frame, mCurrentTrack, LLSettingsDay::DEFAULT_FRAME_SLOP_FACTOR)).second)
+            // Load full track
+            LLSettingsDay::ptr_t pday = std::dynamic_pointer_cast<LLSettingsDay>(settings);
+            if (dest_track == LLSettingsDay::TRACK_WATER)
+            {
+                cloneTrack(pday, LLSettingsDay::TRACK_WATER, LLSettingsDay::TRACK_WATER);
+            }
+            else
+            {
+                cloneTrack(pday, source_track, dest_track);
+            }
+        }
+        else
+        {
+            // load single frame
+
+            if ((mEditDay->getSettingsNearKeyframe(frame, dest_track, LLSettingsDay::DEFAULT_FRAME_SLOP_FACTOR)).second)
             {
                 LL_WARNS("ENVDAYEDIT") << "Attempt to add new frame too close to existing frame." << LL_ENDL;
                 return;
@@ -1715,23 +1889,36 @@ void LLFloaterEditExtDayCycle::onAssetLoadedForFrame(LLUUID item_id, LLUUID asse
                 LL_WARNS("ENVDAYEDIT") << "Attempt to add new frame when slider is full." << LL_ENDL;
                 return;
             }
-            mEditDay->setSettingsAtKeyframe(settings, frame, track);
-            addSliderFrame(frame, settings, false);
-            reblendSettings();
-            synchronizeTabs();
-        }
-        else
-        {
-            if (mCurrentTrack == LLSettingsDay::TRACK_WATER)
+            // Don't forget to clone (we might reuse/load it couple times)
+            if (settings->getSettingsType() == "sky")
             {
-                mEditDay->setWaterAtKeyframe(std::static_pointer_cast<LLSettingsWater>(settings), frame);
+                // Load sky to frame
+                if (dest_track != LLSettingsDay::TRACK_WATER)
+                {
+                    mEditDay->setSettingsAtKeyframe(settings->buildDerivedClone(), frame, dest_track);
+                    addSliderFrame(frame, settings, false);
+                }
+                else
+                {
+                    LL_WARNS("ENVDAYEDIT") << "Trying to load day settings as sky" << LL_ENDL;
+                }
             }
-            else
+            else if (settings->getSettingsType() == "water")
             {
-                mEditDay->setSkyAtKeyframe(std::static_pointer_cast<LLSettingsSky>(settings), frame, track);
+                // Load water to frame
+                if (dest_track == LLSettingsDay::TRACK_WATER)
+                {
+                    mEditDay->setSettingsAtKeyframe(settings->buildDerivedClone(), frame, dest_track);
+                    addSliderFrame(frame, settings, false);
+                }
+                else
+                {
+                    LL_WARNS("ENVDAYEDIT") << "Trying to load water settings as sky" << LL_ENDL;
+                }
             }
-            updateTabs();
         }
+        reblendSettings();
+        synchronizeTabs();
     };
 
     if (!settings || status)

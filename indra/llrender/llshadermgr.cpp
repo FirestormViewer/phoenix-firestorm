@@ -196,10 +196,26 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 		}
 	}
 
-#if USE_DEFERRED_SHADER_API
-    if (features->isDeferred || features->hasShadows)
+    // we want this BEFORE shadows and AO because those facilities use pos/norm access
+    if (features->isDeferred || features->hasShadows || features->hasAmbientOcclusion)
 	{
 		if (!shader->attachObject("deferred/deferredUtil.glsl"))
+		{
+			return FALSE;
+		}
+	}
+
+    if (features->hasShadows)
+	{
+		if (!shader->attachObject("deferred/shadowUtil.glsl"))
+		{
+			return FALSE;
+		}
+	}
+
+    if (features->hasAmbientOcclusion)
+	{
+		if (!shader->attachObject("deferred/aoUtil.glsl"))
 		{
 			return FALSE;
 		}
@@ -212,7 +228,6 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 			return FALSE;
 		}
 	}
-#endif
 
 	if (features->hasGamma)
 	{
@@ -1353,6 +1368,8 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("sh_input_r");
     mReservedUniforms.push_back("sh_input_g");
     mReservedUniforms.push_back("sh_input_b");
+
+    mReservedUniforms.push_back("sun_up_factor");
 
 	llassert(mReservedUniforms.size() == END_RESERVED_UNIFORMS);
 

@@ -55,8 +55,6 @@
 #include "llviewershadermgr.h"
 #include "llcontrolavatar.h"
 
-//#pragma optimize("", off)
-
 #include "llvotree.h"
 
 static LLTrace::BlockTimerStatHandle FTM_FRUSTUM_CULL("Frustum Culling");

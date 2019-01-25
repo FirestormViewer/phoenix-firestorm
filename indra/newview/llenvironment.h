@@ -48,7 +48,7 @@ class LLParcel;
 //-------------------------------------------------------------------------
 class LLEnvironment : public LLSingleton<LLEnvironment>
 {
-    LLSINGLETON(LLEnvironment);
+    LLSINGLETON_C11(LLEnvironment);
     LOG_CLASS(LLEnvironment);
 
 public:
@@ -153,9 +153,9 @@ public:
     LLSettingsDay::ptr_t        getEnvironmentDay(EnvSelection_t env);
     LLSettingsDay::Seconds      getEnvironmentDayLength(EnvSelection_t env);
     LLSettingsDay::Seconds      getEnvironmentDayOffset(EnvSelection_t env);
-    fixedEnvironment_t          getEnvironmentFixed(EnvSelection_t env);
-    LLSettingsSky::ptr_t        getEnvironmentFixedSky(EnvSelection_t env)      { return getEnvironmentFixed(env).first; };
-    LLSettingsWater::ptr_t      getEnvironmentFixedWater(EnvSelection_t env)    { return getEnvironmentFixed(env).second; };
+    fixedEnvironment_t          getEnvironmentFixed(EnvSelection_t env, bool resolve = false);
+    LLSettingsSky::ptr_t        getEnvironmentFixedSky(EnvSelection_t env, bool resolve = false)      { return getEnvironmentFixed(env, resolve).first; };
+    LLSettingsWater::ptr_t      getEnvironmentFixedWater(EnvSelection_t env, bool resolve = false)    { return getEnvironmentFixed(env, resolve).second; };
 
     void                        updateEnvironment(LLSettingsBase::Seconds transition = TRANSITION_DEFAULT, bool forced = false);
 
@@ -201,13 +201,14 @@ public:
     connection_t                setEnvironmentChanged(env_changed_fn cb)    { return mSignalEnvChanged.connect(cb); }
 
     void                        requestRegion(environment_apply_fn cb = environment_apply_fn());
-    void                        updateRegion(const LLUUID &asset_id, std::string display_name, S32 day_length, S32 day_offset, altitudes_vect_t altitudes = altitudes_vect_t(), environment_apply_fn cb = environment_apply_fn());
+    void                        updateRegion(const LLUUID &asset_id, std::string display_name, S32 track_num, S32 day_length, S32 day_offset, altitudes_vect_t altitudes = altitudes_vect_t(), environment_apply_fn cb = environment_apply_fn());
     void                        updateRegion(const LLSettingsDay::ptr_t &pday, S32 day_length, S32 day_offset, altitudes_vect_t altitudes = altitudes_vect_t(), environment_apply_fn cb = environment_apply_fn());
     void                        updateRegion(const LLSettingsSky::ptr_t &psky, S32 day_length, S32 day_offset, altitudes_vect_t altitudes = altitudes_vect_t(), environment_apply_fn cb = environment_apply_fn());
     void                        updateRegion(const LLSettingsWater::ptr_t &pwater, S32 day_length, S32 day_offset, altitudes_vect_t altitudes = altitudes_vect_t(), environment_apply_fn cb = environment_apply_fn());
     void                        resetRegion(environment_apply_fn cb = environment_apply_fn());
     void                        requestParcel(S32 parcel_id, environment_apply_fn cb = environment_apply_fn());
-    void                        updateParcel(S32 parcel_id, const LLUUID &asset_id, std::string display_name, S32 day_length, S32 day_offset, altitudes_vect_t altitudes = altitudes_vect_t(), environment_apply_fn cb = environment_apply_fn());
+    void                        updateParcel(S32 parcel_id, const LLUUID &asset_id, std::string display_name, S32 track_num, S32 day_length, S32 day_offset, altitudes_vect_t altitudes = altitudes_vect_t(), environment_apply_fn cb = environment_apply_fn());
+    void                        updateParcel(S32 parcel_id, const LLSettingsDay::ptr_t &pday, S32 track_num, S32 day_length, S32 day_offset, altitudes_vect_t altitudes = altitudes_vect_t(), environment_apply_fn cb = environment_apply_fn());
     void                        updateParcel(S32 parcel_id, const LLSettingsDay::ptr_t &pday, S32 day_length, S32 day_offset, altitudes_vect_t altitudes = altitudes_vect_t(), environment_apply_fn cb = environment_apply_fn());
     void                        updateParcel(S32 parcel_id, const LLSettingsSky::ptr_t &psky, S32 day_length, S32 day_offset, altitudes_vect_t altitudes = altitudes_vect_t(), environment_apply_fn cb = environment_apply_fn());
     void                        updateParcel(S32 parcel_id, const LLSettingsWater::ptr_t &pwater, S32 day_length, S32 day_offset, altitudes_vect_t altitudes = altitudes_vect_t(), environment_apply_fn cb = environment_apply_fn());
@@ -298,7 +299,9 @@ public:
     DayInstance::ptr_t          getSharedEnvironmentInstance();
 
 protected:
-    virtual void                initSingleton();
+    virtual void                initSingleton() override;
+    virtual void                cleanupSingleton() override;
+
 
 private:
     LLVector4 toCFR(const LLVector3 vec) const;
@@ -359,8 +362,8 @@ private:
 
     LLSD                        mSkyOverrides;
     LLSD                        mWaterOverrides;
-    LLSD                        mSkyOverrideBlends;
-    LLSD                        mWaterOverrideBlends;
+    typedef std::map<std::string, LLUUID> experience_overrides_t;
+    experience_overrides_t      mExperienceOverrides;
 
     DayInstance::ptr_t          getEnvironmentInstance(EnvSelection_t env, bool create = false);
 
@@ -380,7 +383,10 @@ private:
             mDayOffset(day_offset),
             mAltitudes(altitudes),
             mDayName()
-        {}
+        {
+            if (mDayp)
+                mDayName = mDayp->getName();
+        }
 
         UpdateInfo(LLUUID settings_asset, std::string name, S32 day_length, S32 day_offset, altitudes_vect_t altitudes) :
             mDayp(),
@@ -398,31 +404,6 @@ private:
         altitudes_vect_t        mAltitudes;
         std::string             mDayName;
     };
-
-    struct ExpBlendValue
-    {
-        ExpBlendValue(F32Seconds transition, const std::string &keyname, LLSD value, bool blendin, S32 index = -1) :
-            mTransition(transition),
-            mTimeRemaining(transition),
-            mKeyName(keyname),
-            mValue(value),
-            mValueInitial(),
-            mIndex(index),
-            mBlendIn(blendin)
-        {}
-
-        F32Seconds      mTransition;
-        F32Seconds      mTimeRemaining;
-        std::string     mKeyName;
-        LLSD            mValue;
-        LLSD            mValueInitial;
-        S32             mIndex;
-        bool            mBlendIn;
-
-        typedef std::shared_ptr<ExpBlendValue>  ptr_t;
-    };
-
-    typedef std::deque<ExpBlendValue>   exerienceBlendValues_t;
 
     void                        coroRequestEnvironment(S32 parcel_id, environment_apply_fn apply);
     void                        coroUpdateEnvironment(S32 parcel_id, S32 track_no, UpdateInfo::ptr_t updates, environment_apply_fn apply);
@@ -442,17 +423,9 @@ private:
     void                        clearExperienceEnvironment(LLUUID experience_id, F32 transition_time);
     void                        setExperienceEnvironment(LLUUID experience_id, LLUUID asset_id, F32 transition_time);
     void                        setExperienceEnvironment(LLUUID experience_id, LLSD environment, F32 transition_time);
-    void                        setInstanceBackup(bool dobackup);
 
-    void injectSettings(LLUUID experience_id, exerienceBlendValues_t &blends, LLSD injections, LLSettingsBase::Seconds transition, bool blendin);
+    void                        listenExperiencePump(const LLSD &message);
 
-    void                        applyInjectedSettings(DayInstance::ptr_t environment, F32Seconds delta);
-    void                        applyInjectedValues(LLSettingsBase::ptr_t psetting, LLSD injection);
-    void                        blendInjectedValues(LLSettingsBase::ptr_t psetting, exerienceBlendValues_t &blends, LLSD &overrides, F32Seconds delta);
-
-    exerienceBlendValues_t      mSkyExperienceBlends;
-    exerienceBlendValues_t      mWaterExperienceBlends;
-    bool                        mMakeBackups;
 };
 
 class LLTrackBlenderLoopingManual : public LLSettingsBlender

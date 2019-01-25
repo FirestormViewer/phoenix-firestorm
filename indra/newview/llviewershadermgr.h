@@ -48,7 +48,7 @@ public:
 	void initAttribsAndUniforms(void);
 	void setShaders();
 	void unloadShaders();
-	S32 getVertexShaderLevel(S32 type);
+    S32  getShaderLevel(S32 type);
 	BOOL loadBasicShaders();
 	BOOL loadShadersEffects();
 	BOOL loadShadersDeferred();
@@ -60,7 +60,7 @@ public:
 	BOOL loadShadersWindLight();
 	BOOL loadTransformShaders();
 
-	std::vector<S32> mVertexShaderLevel;
+	std::vector<S32> mShaderLevel;
 	S32	mMaxAvatarShaderLevel;
 
 	enum EShaderClass
@@ -261,6 +261,7 @@ extern LLGLSLShader			gImpostorProgram;
 // WindLight shader handles
 extern LLGLSLShader			gWLSkyProgram;
 extern LLGLSLShader			gWLCloudProgram;
+extern LLGLSLShader			gWLCloudShadowProgram;
 extern LLGLSLShader			gWLSunProgram;
 extern LLGLSLShader			gWLMoonProgram;
 
@@ -318,6 +319,7 @@ extern LLGLSLShader			gDeferredAvatarEyesProgram;
 extern LLGLSLShader			gDeferredAvatarAlphaProgram;
 extern LLGLSLShader			gDeferredWLSkyProgram;
 extern LLGLSLShader			gDeferredWLCloudProgram;
+extern LLGLSLShader			gDeferredWLCloudShadowProgram;
 extern LLGLSLShader			gDeferredWLSunProgram;
 extern LLGLSLShader			gDeferredWLMoonProgram;
 extern LLGLSLShader			gDeferredStarProgram;
@@ -325,6 +327,10 @@ extern LLGLSLShader			gDeferredFullbrightShinyProgram;
 extern LLGLSLShader			gDeferredSkinnedFullbrightShinyProgram;
 extern LLGLSLShader			gDeferredSkinnedFullbrightProgram;
 extern LLGLSLShader			gNormalMapGenProgram;
+
+extern LLGLSLShader			gDeferredGenSkyShProgram;
+extern LLGLSLShader			gDeferredGatherSkyShProgram;
+extern LLGLSLShader			gDeferredShVisProgram;
 
 // Deferred materials shaders
 extern LLGLSLShader			gDeferredMaterialProgram[LLMaterial::SHADER_COUNT*2];

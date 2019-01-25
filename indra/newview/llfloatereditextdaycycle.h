@@ -92,6 +92,8 @@ public:
 
     void                        setEditDayCycle(const LLSettingsDay::ptr_t &pday);
     void                        setEditDefaultDayCycle();
+    std::string                 getEditName() const;
+    void                        setEditName(const std::string &name);
     LLUUID                      getEditingAssetId() { return mEditDay ? mEditDay->getAssetId() : LLUUID::null; }
     LLUUID                      getEditingInventoryId() { return mInventoryId; }
 
@@ -109,8 +111,11 @@ private:
     virtual void                onClickCloseBtn(bool app_quitting = false) override;
     void                        onButtonImport();
     void                        onButtonLoadFrame();
-    void                        onAddTrack();
-	void                        onRemoveTrack();
+    void                        onAddFrame();
+	void                        onRemoveFrame();
+    void                        onCloneTrack();
+    void                        onLoadTrack();
+    void                        onClearTrack();
 	void                        onCommitName(class LLLineEditor* caller, void* user_data);
 	void                        onTrackSelectionCallback(const LLSD& user_data);
 	void                        onPlayActionCallback(const LLSD& user_data);
@@ -127,6 +132,8 @@ private:
 
     void                        checkAndConfirmSettingsLoss(on_confirm_fn cb);
 
+    void                        cloneTrack(U32 source_index, U32 dest_index);
+    void                        cloneTrack(const LLSettingsDay::ptr_t &source_day, U32 source_index, U32 dest_index);
 	void                        selectTrack(U32 track_index, bool force = false);
 	void                        selectFrame(F32 frame, F32 slop_factor);
 	void                        clearTabs();
@@ -145,18 +152,24 @@ private:
 
     void                        doImportFromDisk();
     void                        loadSettingFromFile(const std::vector<std::string>& filenames);
-    void doApplyCreateNewInventory(const LLSettingsDay::ptr_t &day, std::string settings_name);
-    void doApplyUpdateInventory(const LLSettingsDay::ptr_t &day);
-    void doApplyEnvironment(const std::string &where, const LLSettingsDay::ptr_t &day);
-    void doApplyCommit(LLSettingsDay::ptr_t day);
+    void                        doApplyCreateNewInventory(const LLSettingsDay::ptr_t &day, std::string settings_name);
+    void                        doApplyUpdateInventory(const LLSettingsDay::ptr_t &day);
+    void                        doApplyEnvironment(const std::string &where, const LLSettingsDay::ptr_t &day);
+    void                        doApplyCommit(LLSettingsDay::ptr_t day);
     void                        onInventoryCreated(LLUUID asset_id, LLUUID inventory_id);
     void                        onInventoryCreated(LLUUID asset_id, LLUUID inventory_id, LLSD results);
     void                        onInventoryUpdated(LLUUID asset_id, LLUUID inventory_id, LLSD results);
 
     void                        doOpenInventoryFloater(LLSettingsType::type_e type, LLUUID curritem);
     void                        doCloseInventoryFloater(bool quitting = false);
-    void                        onPickerCommitSetting(LLUUID item_id);
-    void                        onAssetLoadedForFrame(LLUUID item_id, LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, S32 track, LLSettingsBase::TrackPosition frame);
+    void                        onPickerCommitSetting(LLUUID item_id, S32 track);
+    void                        onAssetLoadedForInsertion(LLUUID item_id,
+                                                          LLUUID asset_id,
+                                                          LLSettingsBase::ptr_t settings,
+                                                          S32 status,
+                                                          S32 source_track,
+                                                          S32 dest_track,
+                                                          LLSettingsBase::TrackPosition dest_frame);
 
     bool                        canUseInventory() const;
     bool                        canApplyRegion() const;
@@ -192,6 +205,9 @@ private:
     LLButton*                   mDeleteFrameButton;
     LLButton*                   mImportButton;
     LLButton*                   mLoadFrame;
+    LLButton *                  mCloneTrack;
+    LLButton *                  mLoadTrack;
+    LLButton *                  mClearTrack;
     LLMultiSliderCtrl*	        mTimeSlider;
     LLMultiSliderCtrl*          mFramesSlider;
     LLView*                     mSkyTabLayoutContainer;

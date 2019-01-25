@@ -239,11 +239,11 @@ LLFloaterSettingsPicker * LLFloaterFixedEnvironment::getSettingsPicker()
     if (!picker)
     {
         picker = new LLFloaterSettingsPicker(this,
-            LLUUID::null, "SELECT SETTINGS");
+            LLUUID::null);
 
         mInventoryFloater = picker->getHandle();
 
-        picker->setCommitCallback([this](LLUICtrl *, const LLSD &data){ onPickerCommitSetting(data.asUUID()); });
+        picker->setCommitCallback([this](LLUICtrl *, const LLSD &data){ onPickerCommitSetting(data["ItemId"].asUUID() /*data["Track"]*/); });
     }
 
     return picker;
@@ -549,7 +549,7 @@ void LLFloaterFixedEnvironment::doApplyEnvironment(const std::string &where)
 
         if (mInventoryItem && !isDirty())
         {
-            LLEnvironment::instance().updateParcel(parcel->getLocalID(), mInventoryItem->getAssetUUID(), mInventoryItem->getName(), -1, -1);
+            LLEnvironment::instance().updateParcel(parcel->getLocalID(), mInventoryItem->getAssetUUID(), mInventoryItem->getName(), LLEnvironment::NO_TRACK, -1, -1);
         }
         else if (mSettings->getSettingsType() == "sky")
         {
@@ -564,7 +564,7 @@ void LLFloaterFixedEnvironment::doApplyEnvironment(const std::string &where)
     {
         if (mInventoryItem && !isDirty())
         {
-            LLEnvironment::instance().updateRegion(mInventoryItem->getAssetUUID(), mInventoryItem->getName(), -1, -1);
+            LLEnvironment::instance().updateRegion(mInventoryItem->getAssetUUID(), mInventoryItem->getName(), LLEnvironment::NO_TRACK, -1, -1);
         }
         else if (mSettings->getSettingsType() == "sky")
         {

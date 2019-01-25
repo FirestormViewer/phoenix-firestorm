@@ -36,6 +36,7 @@
 #include "llparcel.h"
 #include "llsettingspicker.h"
 #include "llfloatereditextdaycycle.h"
+#include "llestateinfomodel.h"
 
 class LLViewerRegion;
 
@@ -62,17 +63,15 @@ public:
 protected:
     LOG_CLASS(LLPanelEnvironmentInfo);
 
-    static const std::string    RDG_ENVIRONMENT_SELECT;
-    static const std::string    RDO_USEDEFAULT;
-    static const std::string    RDO_USEINV;
-    static const std::string    RDO_USECUSTOM;
-    static const std::string    EDT_INVNAME;
     static const std::string    BTN_SELECTINV;
     static const std::string    BTN_EDIT;
+    static const std::string    BTN_USEDEFAULT;
+    static const std::string    BTN_RST_ALTITUDES;
     static const std::string    SLD_DAYLENGTH;
     static const std::string    SLD_DAYOFFSET;
     static const std::string    SLD_ALTITUDES;
     static const std::string    ICN_GROUND;
+    static const std::string    ICN_WATER;
     static const std::string    CHK_ALLOWOVERRIDE;
     static const std::string    BTN_APPLY;
     static const std::string    BTN_CANCEL;
@@ -91,6 +90,10 @@ protected:
     static const std::string    STR_NO_PARCEL;
     static const std::string    STR_CROSS_REGION;
     static const std::string    STR_LEGACY;
+    static const std::string    STR_DISALLOWED;
+    static const std::string    STR_TOO_SMALL;
+
+    static const S32            MINIMUM_PARCEL_SIZE;
 
     static const U32            DIRTY_FLAG_DAYCYCLE;
     static const U32            DIRTY_FLAG_DAYLENGTH;
@@ -99,38 +102,42 @@ protected:
 
     static const U32            DIRTY_FLAG_MASK;
 
-    bool setControlsEnabled(bool enabled);
-    void                        setApplyProgress(bool started);
+    bool                        setControlsEnabled(bool enabled);
     void                        setDirtyFlag(U32 flag);
     void                        clearDirtyFlag(U32 flag);
     bool                        getIsDirty() const                  { return (mDirtyFlag != 0); }
     bool                        getIsDirtyFlag(U32 flag) const      { return ((mDirtyFlag & flag) != 0); }
     U32                         getDirtyFlag() const                { return mDirtyFlag; }
-    void                        updateAltLabel(const std::string &alt_name, U32 sky_index, F32 alt_value);
+    void                        updateAltLabel(const std::string &alt_prefix, U32 sky_index, F32 alt_value);
     void                        readjustAltLabels();
 
-    void                        onSwitchDefaultSelection();
     void                        onSldDayLengthChanged(F32 value);
     void                        onSldDayOffsetChanged(F32 value);
     void                        onAltSliderCallback(LLUICtrl *cntrl, const LLSD &data);
-    void                        onBtnApply();
-    void                        onBtnReset();
+    void                        onAltSliderMouseUp();
+
     void                        onBtnEdit();
     void                        onBtnSelect();
-
-    virtual void                doApply();
+    void                        onBtnDefault();
+    void                        onBtnRstAltitudes();
 
     void                        udpateApparentTimeOfDay();
 
-    void                        onPickerCommitted(LLUUID item_id);
+    void                        onPickerCommitted(LLUUID item_id, std::string source);
+    void                        onPickerCommitted(LLUUID item_id, S32 track_num = LLEnvironment::NO_TRACK);
     void                        onEditCommitted(LLSettingsDay::ptr_t newday);
+    void                        onDayLenOffsetMouseUp();
+
     void                        onPickerAssetDownloaded(LLSettingsBase::ptr_t settings);
     void                        onEnvironmentReceived(S32 parcel_id, LLEnvironment::EnvironmentInfo::ptr_t envifo);
     static void                 _onEnvironmentReceived(LLHandle<LLPanel> that_h, S32 parcel_id, LLEnvironment::EnvironmentInfo::ptr_t envifo);
 
+    virtual bool                isLargeEnough() = 0;
     virtual void                refreshFromSource() = 0;
 
     std::string                 getInventoryNameForAssetId(LLUUID asset_id);
+
+    std::string                 getNameForTrackIndex(S32 index);
 
     LLFloaterSettingsPicker *   getSettingsPicker(bool create = true);
     LLFloaterEditExtDayCycle *  getEditFloater(bool create = true);
@@ -148,28 +155,33 @@ protected:
     {
     public:
         AltitudeData() :
-            mAltitudeIndex(0), mLabelIndex(0), mAltitude(0)
+            mTrackIndex(0), mLabelIndex(0), mAltitude(0)
         {}
-        AltitudeData(U32 altitude_index, U32 label_index, F32 altitude) :
-            mAltitudeIndex(altitude_index), mLabelIndex(label_index), mAltitude(altitude)
+        AltitudeData(U32 track_index, U32 label_index, F32 altitude) :
+            mTrackIndex(track_index), mLabelIndex(label_index), mAltitude(altitude)
         {}
 
-        U32 mAltitudeIndex;
+        U32 mTrackIndex;
         U32 mLabelIndex;
         F32 mAltitude;
     };
     typedef std::map<std::string, AltitudeData>      altitudes_data_t;
-    altitudes_data_t                        mAltitudes;
-    S32                                     mCurEnvVersion; // used to filter duplicate callbacks/refreshes
+    altitudes_data_t                mAltitudes;
+    S32                             mCurEnvVersion; // used to filter duplicate callbacks/refreshes
 
+protected:
+    typedef boost::signals2::connection connection_t;
+
+    void                            refreshFromEstate();
+    bool                            mAllowOverride;
 
 private:
-    static void                 onIdlePlay(void *);
-
-    typedef boost::signals2::connection connection_t;
+    static void                     onIdlePlay(void *);
 
     connection_t                    mCommitConnection;
     connection_t                    mChangeMonitor;
+    connection_t                    mUpdateConnection;
+
     LLHandle<LLFloater>             mSettingsFloater;
     LLHandle<LLFloater>             mEditFloater;
     S32                             mDirtyFlag;
@@ -178,6 +190,7 @@ private:
     bool                            mCrossRegion;
     bool                            mNoSelection;
     bool                            mNoEnvironment;
+
 };
 
 class LLSettingsDropTarget : public LLView
@@ -199,11 +212,12 @@ public:
         void* cargo_data,
         EAcceptance* accept,
         std::string& tooltip_msg);
-    void setPanel(LLPanelEnvironmentInfo* panel) { mEnvironmentInfoPanel = panel; };
+    void setPanel(LLPanelEnvironmentInfo* panel, std::string track) { mEnvironmentInfoPanel = panel;  mTrack = track; };
     void setDndEnabled(bool dnd_enabled) { mDndEnabled = dnd_enabled; };
 
 protected:
     LLPanelEnvironmentInfo* mEnvironmentInfoPanel;
+    std::string mTrack;
     bool                    mDndEnabled;
 };
 #endif // LL_LLPANELENVIRONMENT_H

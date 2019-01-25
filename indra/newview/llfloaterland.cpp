@@ -157,6 +157,11 @@ public:
                         LLPanelLandEnvironment(LLSafeHandle<LLParcelSelection>& parcelp);
     
     virtual bool        isRegion() const override { return false; }
+    virtual bool        isLargeEnough() override 
+    { 
+        LLParcel *parcelp = mParcel->getParcel();
+        return ((parcelp) ? (parcelp->getArea() >= MINIMUM_PARCEL_SIZE) : false);
+    }   
 
     virtual BOOL        postBuild() override;
     virtual void        refresh() override;
@@ -3527,9 +3532,10 @@ BOOL LLPanelLandEnvironment::postBuild()
     if (!LLPanelEnvironmentInfo::postBuild())
         return FALSE;
 
-    getChild<LLUICtrl>(RDO_USEDEFAULT)->setLabelArg("[USEDEFAULT]", getString(STR_LABEL_USEREGION));
+    getChild<LLUICtrl>(BTN_USEDEFAULT)->setLabelArg("[USEDEFAULT]", getString(STR_LABEL_USEREGION));
     getChild<LLUICtrl>(CHK_ALLOWOVERRIDE)->setVisible(FALSE);
-    getChild<LLUICtrl>(PNL_ENVIRONMENT_ALTITUDES)->setVisible(FALSE);
+    getChild<LLUICtrl>(PNL_ENVIRONMENT_ALTITUDES)->setVisible(TRUE);
+
     return TRUE;
 }
 
@@ -3637,7 +3643,8 @@ bool LLPanelLandEnvironment::canEdit()
     LLParcel *parcel = getParcel();
     if (!parcel)
         return false;
-    return LLEnvironment::instance().canAgentUpdateParcelEnvironment(parcel);
+
+    return LLEnvironment::instance().canAgentUpdateParcelEnvironment(parcel) && mAllowOverride;
 }
 
 S32 LLPanelLandEnvironment::getParcelId() 

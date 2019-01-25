@@ -5082,10 +5082,12 @@ Unchecking this option may remove restrictions that parcel owners have added to 
    icon="alertmodal.tga"
    name="EstateParcelEnvironmentOverride"
    type="alertmodal">
-Unchecking this option may remove any custom environments that parcel owners have added to their parcels. Please discuss with your parcel owners as needed.
+Unchecking this option will remove any custom environments that parcel owners have added to their parcels. Please discuss with your parcel owners as needed.
+Do you wish to proceed?
     <tag>confirm</tag>
     <usetemplate
-     name="okbutton"
+     name="okcancelbuttons"
+     notext="Cancel"
      yestext="OK"/>
   </notification>
   
@@ -13143,4 +13145,14 @@ Are you sure you want to continue?
      yestext="Yes"/>
   </notification>
   
+  <notification
+   icon="notify.tga"
+   name="NoEditFromLibrary"
+   persist="true"
+   type="alertmodal">
+You may not edit settings directly from the libary.  
+Please copy to your own inventory and try again.
+  <tag>fail</tag>
+  </notification>
+
 </notifications>

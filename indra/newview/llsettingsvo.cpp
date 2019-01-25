@@ -154,23 +154,24 @@ void LLSettingsVOBase::createInventoryItem(const LLSettingsBase::ptr_t &settings
 
 void LLSettingsVOBase::onInventoryItemCreated(const LLUUID &inventoryId, LLSettingsBase::ptr_t settings, inventory_result_fn callback)
 {
+    LLViewerInventoryItem *pitem = gInventory.getItem(inventoryId);
+    if (pitem)
+    {
+        LLPermissions perm = pitem->getPermissions();
+        if (perm.getMaskEveryone() != PERM_COPY)
+        {
+            perm.setMaskEveryone(PERM_COPY);
+            pitem->setPermissions(perm);
+            pitem->updateServer(FALSE);
+        }
+    }
     if (!settings)
     {   // The item was created as new with no settings passed in.  Simulator should have given it the default for the type... check ID, 
         // no need to upload asset.
         LLUUID asset_id;
-        LLViewerInventoryItem *pitem = gInventory.getItem(inventoryId);
-
         if (pitem)
         {
             asset_id = pitem->getAssetUUID();
-
-            LLPermissions perm = pitem->getPermissions();
-            if (perm.getMaskEveryone() != PERM_COPY)
-            {
-                perm.setMaskEveryone(PERM_COPY);
-                pitem->setPermissions(perm);
-                pitem->updateServer(FALSE);
-            }
         }
         if (callback)
             callback(asset_id, inventoryId, LLUUID::null, LLSD());
@@ -661,7 +662,7 @@ void LLSettingsVOSky::applySpecial(void *ptarget)
 {
     LLGLSLShader *shader = (LLGLSLShader *)ptarget;
 
-    LLVector4 light_direction = LLEnvironment::instance().getClampedSunNorm();
+    LLVector4 light_direction = LLEnvironment::instance().getClampedLightNorm();
 
     if (shader->mShaderGroup == LLGLSLShader::SG_DEFAULT)
 	{        
@@ -677,8 +678,11 @@ void LLSettingsVOSky::applySpecial(void *ptarget)
         shader->uniform4fv(LLShaderMgr::CLOUD_POS_DENSITY1, 1, vect_c_p_d1.mV);
 	}
 
+    F32 g = getGamma();
+
     shader->uniform1f(LLShaderMgr::SCENE_LIGHT_STRENGTH, mSceneLightStrength);
-    shader->uniform4f(LLShaderMgr::GAMMA, getGamma(), 0.0, 0.0, 1.0);
+    shader->uniform4f(LLShaderMgr::GAMMA, g, 0.0, 0.0, 1.0);
+    shader->uniform1f(LLShaderMgr::DISPLAY_GAMMA, g);
 }
 
 LLSettingsSky::parammapping_t LLSettingsVOSky::getParameterMap() const

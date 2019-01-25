@@ -62,16 +62,12 @@ VARYING vec4 littleWave;
 VARYING vec4 view;
 VARYING vec4 vary_position;
 
-vec3 srgb_to_linear(vec3 cs);
 vec2 encode_normal(vec3 n);
 vec3 scaleSoftClipFrag(vec3 l);
 
 vec3 BlendNormal(vec3 bump1, vec3 bump2)
 {
-    //vec3 normal   = bump1.xyz * vec3( 2.0,  2.0, 2.0) - vec3(1.0, 1.0,  0.0);
-    //vec3 normal2  = bump2.xyz * vec3(-2.0, -2.0, 2.0) + vec3(1.0, 1.0, -1.0);
-    //vec3 n        = normalize(normal * dot(normal, normal2) - (normal2 * normal.z));
-    vec3 n = normalize(mix(bump1, bump2, blend_factor));
+    vec3 n = mix(bump1, bump2, blend_factor);
     return n;
 }
 
@@ -153,7 +149,7 @@ void main()
 	spec = pow(spec, 128.0);
 
 	//figure out distortion vector (ripply)   
-	vec2 distort2 = distort+wavef.xy*refScale/max(dmod*df1, 1.0);
+	vec2 distort2 = distort+wavef.xy*refScale * 0.33/max(dmod*df1, 1.0);
 		
 	vec4 fb = texture2D(screenTex, distort2);
 	

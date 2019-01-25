@@ -49,6 +49,7 @@ static LLStaticHashedString sCamPosLocal("camPosLocal");
 static LLStaticHashedString sCustomAlpha("custom_alpha");
 
 static LLGLSLShader* cloud_shader = NULL;
+static LLGLSLShader* cloud_shadow_shader = NULL;
 static LLGLSLShader* sky_shader   = NULL;
 static LLGLSLShader* sun_shader   = NULL;
 static LLGLSLShader* moon_shader  = NULL;
@@ -122,6 +123,29 @@ void LLDrawPoolWLSky::endDeferredPass(S32 pass)
     cloud_shader = nullptr;
     sun_shader   = nullptr;
     moon_shader  = nullptr;
+}
+
+S32 LLDrawPoolWLSky::getNumShadowPasses() { return 0; }
+
+void LLDrawPoolWLSky::beginShadowPass(S32 pass)
+{
+    cloud_shadow_shader = LLPipeline::sRenderDeferred ? &gDeferredWLCloudShadowProgram : &gWLCloudShadowProgram;
+}
+
+void LLDrawPoolWLSky::endShadowPass(S32 pass)
+{
+    cloud_shadow_shader = nullptr;
+}
+
+void LLDrawPoolWLSky::renderShadow(S32 pass)
+{
+    if (cloud_shadow_shader)
+    {
+        const F32 camHeightLocal = LLEnvironment::instance().getCamHeight();
+        LLVector3 const & origin = LLViewerCamera::getInstance()->getOrigin();
+
+        renderSkyClouds(origin, camHeightLocal, cloud_shadow_shader);
+    }
 }
 
 void LLDrawPoolWLSky::renderFsSky(const LLVector3& camPosLocal, F32 camHeightLocal, LLGLSLShader * shader) const
@@ -209,6 +233,8 @@ void LLDrawPoolWLSky::renderSkyHazeAdvanced(const LLVector3& camPosLocal, F32 ca
 
 	    sky_shader->uniformMatrix4fv(LLShaderMgr::INVERSE_PROJECTION_MATRIX, 1, FALSE, inv_proj.m);
 
+        sky_shader->uniform1f(LLShaderMgr::SUN_UP_FACTOR, psky->getIsSunUp() ? 1.0f : 0.0f);
+
         sky_shader->uniform3f(sCamPosLocal, camPosLocal.mV[0], camPosLocal.mV[1], camPosLocal.mV[2]);
 
         renderFsSky(camPosLocal, camHeightLocal, sky_shader);
@@ -242,6 +268,8 @@ void LLDrawPoolWLSky::renderSkyHazeDeferred(const LLVector3& camPosLocal, F32 ca
         sky_shader->uniform1f(LLShaderMgr::MOISTURE_LEVEL, moisture_level);
         sky_shader->uniform1f(LLShaderMgr::DROPLET_RADIUS, droplet_radius);
         sky_shader->uniform1f(LLShaderMgr::ICE_LEVEL, ice_level);
+
+        sky_shader->uniform1f(LLShaderMgr::SUN_UP_FACTOR, psky->getIsSunUp() ? 1.0f : 0.0f);
 
         /// Render the skydome
         renderDome(origin, camHeightLocal, sky_shader);	
@@ -376,7 +404,7 @@ void LLDrawPoolWLSky::renderStarsDeferred(void) const
 
     gDeferredStarProgram.uniform1f(LLShaderMgr::BLEND_FACTOR, blend_factor);
 
-    if (LLPipeline::sRenderingWaterReflection)
+    if (LLPipeline::sReflectionRender)
     {
         star_alpha = 1.0f;
     }
@@ -452,7 +480,7 @@ void LLDrawPoolWLSky::renderSkyCloudsAdvanced(const LLVector3& camPosLocal, F32 
 
         cloudshader->uniform1f(LLShaderMgr::BLEND_FACTOR, blend_factor);
         cloudshader->uniform1f(LLShaderMgr::CLOUD_VARIANCE, cloud_variance);
-
+        cloudshader->uniform1f(LLShaderMgr::SUN_UP_FACTOR, psky->getIsSunUp() ? 1.0f : 0.0f);
         cloudshader->uniform3f(sCamPosLocal, camPosLocal.mV[0], camPosLocal.mV[1], camPosLocal.mV[2]);
 
 		/// Render the skydome
@@ -507,6 +535,7 @@ void LLDrawPoolWLSky::renderSkyCloudsDeferred(const LLVector3& camPosLocal, F32 
 
         cloudshader->uniform1f(LLShaderMgr::BLEND_FACTOR, blend_factor);
         cloudshader->uniform1f(LLShaderMgr::CLOUD_VARIANCE, cloud_variance);
+        cloudshader->uniform1f(LLShaderMgr::SUN_UP_FACTOR, psky->getIsSunUp() ? 1.0f : 0.0f);
 
 		/// Render the skydome
         renderDome(camPosLocal, camHeightLocal, cloudshader);
