@@ -2118,7 +2118,7 @@ bool LLTextureCache::writeToFastCache(LLUUID image_id, S32 id, LLPointer<LLImage
             catch (...)
             {
                 removeFromCache(image_id);
-                LL_ERRS() << "Failed to cache image: " << image_id
+                LL_WARNS() << "Failed to cache image: " << image_id
                     << " local id: " << id
                     << " Exception: " << boost::current_exception_diagnostic_information()
                     << " Image new width: " << w

@@ -3445,7 +3445,7 @@ Porty, które muszą być otwarte dla połączeń głosowych, to:
 Proszę sprawdź swoją sieć i ustawienia firewall.
 Wyłącz wszelkie funkcjonalności SIP ALG (Application Layer Gateway) w swoim routerze.
 
-[http://wiki.phoenixviewer.com/fs_voice Więcej wskazówek można znaleźć tutaj]
+[https://wiki.phoenixviewer.com/fs_voice]
 		<usetemplate name="okignore" ignoretext="Ostrzegaj mnie, gdy przeglądarka nie może połączyć się z serwerem głosu" />
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
@@ -3454,7 +3454,7 @@ Wyłącz wszelkie funkcjonalności SIP ALG (Application Layer Gateway) w swoim r
 Komunikacja głosowa nie będzie dostępna.
 Proszę sprawdź swoją sieć i ustawienia firewall.
 
-[http://wiki.phoenixviewer.com/fs_voice Więcej wskazówek można znaleźć tutaj]
+[https://wiki.phoenixviewer.com/fs_voice]
 	</notification>
 	<notification name="AvatarRezLeftNotification">
 		( [EXISTENCE] sekund w Second Life)

@@ -200,6 +200,21 @@ bool RlvHandler::hasBehaviourRoot(const LLUUID& idObjRoot, ERlvBehaviour eBhvr, 
 	return false;
 }
 
+bool RlvHandler::ownsBehaviour(const LLUUID& idObj, ERlvBehaviour eBhvr) const
+{
+	bool fHasBhvr = false;
+	for (const auto& objEntry : m_Objects)
+	{
+		if (objEntry.second.hasBehaviour(eBhvr, false))
+		{
+			if (objEntry.first != idObj)
+				return false;
+			fHasBhvr = true;
+		}
+	}
+	return fHasBhvr;
+}
+
 // ============================================================================
 // Behaviour exception handling
 //
@@ -652,6 +667,24 @@ void RlvHandler::onIMQueryListResponse(const LLSD& sdNotification, const LLSD sd
 // ============================================================================
 // Command specific helper functions - @setgroup
 //
+
+bool RlvHandler::checkActiveGroupThrottle(const LLUUID& idRlvObj)
+{
+	bool fAllow = m_GroupChangeExpiration.first.checkExpirationAndReset(llmax(RLV_SETGROUP_THROTTLE, 5.f));
+	if (fAllow)
+	{
+		// (Un)owned expiration resets the last lock owner
+		m_GroupChangeExpiration.second.setNull();
+	}
+	else if ( (!fAllow) && (m_GroupChangeExpiration.second.isNull()) && (ownsBehaviour(idRlvObj, RLV_BHVR_SETGROUP)) )
+	{
+		// The current lock owner wants to change the active group (title) before the expiration - allow once
+		m_GroupChangeExpiration.second = idRlvObj;
+		m_GroupChangeExpiration.first.setTimerExpirySec(llmax(RLV_SETGROUP_THROTTLE, 5.f));
+		fAllow = true;
+	}
+	return fAllow;
+}
 
 void RlvHandler::changed(const LLUUID& idGroup, LLGroupChange change)
 {
@@ -1179,7 +1212,12 @@ bool RlvHandler::redirectChatOrEmote(const std::string& strUTF8Text) const
 	{
 		S32 nChannel = boost::get<S32>(itRedir->second.varOption);
 		if (RlvActions::canSendChannel(nChannel))
-			RlvUtil::sendChatReply(nChannel, strUTF8Text);
+		{
+			if (!RlvSettings::getSplitRedirectChat())
+				RlvUtil::sendChatReply(nChannel, strUTF8Text);
+			else
+				RlvUtil::sendChatReplySplit(nChannel, strUTF8Text);
+		}
 	}
 
 	return true;
@@ -2925,6 +2963,9 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCm
 
 	if (fValid)
 	{
+		if (!gRlvHandler.checkActiveGroupThrottle(rlvCmd.getObjectID()))
+			return RLV_RET_FAILED_THROTTLED;
+
 		if (optionList.size() == 1)
 			gRlvHandler.setActiveGroup(idGroup);
 		else if (optionList.size() == 2)
@@ -3664,21 +3705,7 @@ void RlvHandler::renderOverlay()
 		const LLVector3 overlayTint = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TINT)->getValue<LLVector3>();
 		gGL.color4f(overlayTint.mV[0], overlayTint.mV[1], overlayTint.mV[2], llclamp(RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_ALPHA)->getValue<float>(), 0.0f, 1.0f));
 
-		gGL.begin(LLRender::TRIANGLE_STRIP);
-			gGL.texCoord2f(1.f, 1.f);
-			gGL.vertex2i(nWidth, nHeight);
-			gGL.texCoord2f(0.f, 1.f);
-			gGL.vertex2i(0, nHeight);
-			gGL.texCoord2f(0.f, 0.f);
-			gGL.vertex2i(0, 0);
-
-			gGL.texCoord2f(1.f, 1.f);
-			gGL.vertex2i(nWidth, nHeight);
-			gGL.texCoord2f(0.f, 0.f);
-			gGL.vertex2i(0, 0);
-			gGL.texCoord2f(1.f, 0.f);
-			gGL.vertex2i(nWidth, 0);
-		gGL.end();
+		gl_rect_2d_simple_tex(nWidth, nHeight);
 
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 

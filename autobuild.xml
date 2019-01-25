@@ -1042,11 +1042,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e137cd0eacda5df6204150b3bb51a971</string>
+              <string>177f3e948368aa09803ffae0884acc12</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.09-darwin-183011234.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.10-darwin-183562214.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2066,9 +2066,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1b87073540bf081136e60777d99f09f2</string>
+              <string>9a08c678a8c6c3c10bb913219b7931b6</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.5-darwin-182950050.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.6-darwin-183562147.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2078,9 +2078,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1b87073540bf081136e60777d99f09f2</string>
+              <string>9a08c678a8c6c3c10bb913219b7931b6</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.5-darwin-182950050.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.6-darwin-183562147.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2922,9 +2922,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ee185657aed3a7fcabcd9a1335a6050b</string>
+              <string>0d3db04b9b10085b100b345c68381cb0</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.2.2-1.3.2.180871245-linux-180871245.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.3.3-1.3.6.183570207-linux-183570207.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2934,9 +2934,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ec5fd10d3a504e528b61d339522ca0f9</string>
+              <string>5e23c312d37367bb2d23dad395891b00</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.2.2-1.3.2.180841550-linux64-180841550.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.3.3-1.3.6.183570202-linux64-183570202.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3971,7 +3971,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
       <key>canonical_repo</key>
       <string>https://bitbucket.org/lindenlab/viewer-release</string>
       <key>copyright</key>
-      <string>Copyright (c) 2018, The Phoenix Firestorm Project, Inc.</string>
+      <string>Copyright (c) 2019, The Phoenix Firestorm Project, Inc.</string>
       <key>description</key>
       <string>Firestorm Viewer</string>
       <key>license</key>
