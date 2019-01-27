@@ -688,24 +688,26 @@ bool LGGContactSets::notifyForFriend(const LLUUID& friend_id)
 	return false;
 }
 
-void LGGContactSets::addFriendToSet(const LLUUID& friend_id, const std::string& set_name)
+void LGGContactSets::addToSet(const uuid_vec_t& avatar_ids, const std::string& set_name)
 {
-	if (friend_id.notNull() && isValidSet(set_name))
+	for (auto const& avatar_id : avatar_ids)
 	{
-		mContactSets[set_name]->mFriends.insert(friend_id);
-		saveToDisk();
-		mChangedSignal(UPDATED_MEMBERS);
-	}
-}
+		if (!LLAvatarTracker::instance().isBuddy(avatar_id))
+		{
+			mExtraAvatars.insert(avatar_id);
+		}
 
-void LGGContactSets::addNonFriendToList(const LLUUID& non_friend_id)
-{
-	mExtraAvatars.insert(non_friend_id);
+		if (isValidSet(set_name))
+		{
+			mContactSets[set_name]->mFriends.insert(avatar_id);
+		}
+	}
+
 	saveToDisk();
 	mChangedSignal(UPDATED_MEMBERS);
 }
 
-void LGGContactSets::removeNonFriendFromList(const LLUUID& non_friend_id)
+void LGGContactSets::removeNonFriendFromList(const LLUUID& non_friend_id, bool save_changes /*= true*/)
 {
 	uuid_set_t::iterator found = mExtraAvatars.find(non_friend_id);
 	if (found != mExtraAvatars.end())
@@ -714,21 +716,24 @@ void LGGContactSets::removeNonFriendFromList(const LLUUID& non_friend_id)
 
 		if (!LLAvatarTracker::instance().isBuddy(non_friend_id))
 		{
-			clearPseudonym(non_friend_id);
-			removeFriendFromAllSets(non_friend_id);
+			clearPseudonym(non_friend_id, save_changes);
+			removeFriendFromAllSets(non_friend_id, save_changes);
 		}
 
-		saveToDisk();
-		mChangedSignal(UPDATED_MEMBERS);
+		if (save_changes)
+		{
+			saveToDisk();
+			mChangedSignal(UPDATED_MEMBERS);
+		}
 	}
 }
 
-void LGGContactSets::removeFriendFromAllSets(const LLUUID& friend_id)
+void LGGContactSets::removeFriendFromAllSets(const LLUUID& friend_id, bool save_changes /*= true*/)
 {
 	string_vec_t sets = getFriendSets(friend_id);
 	for (string_vec_t::const_iterator itr = sets.begin(); itr != sets.end(); ++itr)
 	{
-		removeFriendFromSet(friend_id, (*itr));
+		removeFriendFromSet(friend_id, (*itr), save_changes);
 	}
 }
 
@@ -801,7 +806,7 @@ std::string LGGContactSets::getPseudonym(const LLUUID& friend_id)
 	return std::string();
 }
 
-void LGGContactSets::clearPseudonym(const LLUUID& friend_id)
+void LGGContactSets::clearPseudonym(const LLUUID& friend_id, bool save_changes /*= true*/)
 {
 	uuid_map_t::iterator found = mPseudonyms.find(friend_id);
 	if (found != mPseudonyms.end())
@@ -812,7 +817,7 @@ void LGGContactSets::clearPseudonym(const LLUUID& friend_id)
 		LLVOAvatar::invalidateNameTag(friend_id);
 		if (!LLAvatarTracker::instance().isBuddy(friend_id) && LGGContactSets::getInstance()->getFriendSets(friend_id).size() == 0)
 		{
-			LGGContactSets::getInstance()->removeNonFriendFromList(friend_id);
+			LGGContactSets::getInstance()->removeNonFriendFromList(friend_id, save_changes);
 		}
 
 		avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(friend_id);
@@ -825,7 +830,10 @@ void LGGContactSets::clearPseudonym(const LLUUID& friend_id)
 			mAvatarNameCacheConnections.erase(it);
 		}
 		mAvatarNameCacheConnections[friend_id] = LLAvatarNameCache::get(friend_id, boost::bind(&LGGContactSets::onAvatarNameCache, this, _1));
-		saveToDisk();
+		if (save_changes)
+		{
+			saveToDisk();
+		}
 	}
 }
 
@@ -891,23 +899,26 @@ void LGGContactSets::removeDisplayName(const LLUUID& friend_id)
 	setPseudonym(friend_id, CS_PSEUDONYM);
 }
 
-void LGGContactSets::removeFriendFromSet(const LLUUID& friend_id, const std::string& set_name)
+void LGGContactSets::removeFriendFromSet(const LLUUID& friend_id, const std::string& set_name, bool save_changes /*= true*/)
 {
 	if (set_name == CS_SET_EXTRA_AVS)
 	{
-		return removeNonFriendFromList(friend_id);
+		return removeNonFriendFromList(friend_id, save_changes);
 	}
 	else if (set_name == CS_SET_PSEUDONYM)
 	{
-		return clearPseudonym(friend_id);
+		return clearPseudonym(friend_id, save_changes);
 	}
 
 	ContactSet* set = getContactSet(set_name);
 	if (set)
 	{
 		set->mFriends.erase(friend_id);
-		saveToDisk();
-		mChangedSignal(UPDATED_MEMBERS);
+		if (save_changes)
+		{
+			saveToDisk();
+			mChangedSignal(UPDATED_MEMBERS);
+		}
 	}
 }
 
@@ -1062,20 +1073,25 @@ bool LGGContactSets::handleRemoveAvatarFromSetCallback(const LLSD& notification,
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if (option == 0)
 	{
-		for(LLSD::array_const_iterator it = notification["payload"]["ids"].beginArray();
+		for (LLSD::array_const_iterator it = notification["payload"]["ids"].beginArray();
 			it != notification["payload"]["ids"].endArray();
 			++it)
 		{
 			LLUUID id = it->asUUID();
-			std::string set = notification["payload"]["contact_set"].asString();
-			LGGContactSets::getInstance()->removeFriendFromSet(id, set);
+			std::string set_name = notification["payload"]["contact_set"].asString();
+
+			LGGContactSets::getInstance()->removeFriendFromSet(id, set_name, false);
+
 			if (!LLAvatarTracker::instance().isBuddy(id) &&
 				LGGContactSets::getInstance()->getFriendSets(id).size() == 0 &&
 				!LGGContactSets::getInstance()->hasPseudonym(id))
 			{
-				LGGContactSets::getInstance()->removeNonFriendFromList(id);
+				LGGContactSets::getInstance()->removeNonFriendFromList(id, false);
 			}
 		}
+
+		LGGContactSets::getInstance()->saveToDisk();
+		LGGContactSets::getInstance()->mChangedSignal(UPDATED_MEMBERS);
 	}
 	return false;
 }
