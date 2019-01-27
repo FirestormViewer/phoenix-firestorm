@@ -976,7 +976,7 @@ void LGGContactSets::removeSet(const std::string& set_name)
 
 		for (uuid_vec_t::iterator nf_it = non_friends_for_removal.begin(); nf_it != non_friends_for_removal.end(); ++nf_it)
 		{
-			LGGContactSets::getInstance()->removeNonFriendFromList(*nf_it);
+			LGGContactSets::getInstance()->removeNonFriendFromList(*nf_it, false);
 		}
 
 		delete found->second;
@@ -1073,6 +1073,8 @@ bool LGGContactSets::handleRemoveAvatarFromSetCallback(const LLSD& notification,
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if (option == 0)
 	{
+		LGGContactSets& instance = LGGContactSets::instance();
+
 		for (LLSD::array_const_iterator it = notification["payload"]["ids"].beginArray();
 			it != notification["payload"]["ids"].endArray();
 			++it)
@@ -1080,18 +1082,18 @@ bool LGGContactSets::handleRemoveAvatarFromSetCallback(const LLSD& notification,
 			LLUUID id = it->asUUID();
 			std::string set_name = notification["payload"]["contact_set"].asString();
 
-			LGGContactSets::getInstance()->removeFriendFromSet(id, set_name, false);
+			instance.removeFriendFromSet(id, set_name, false);
 
 			if (!LLAvatarTracker::instance().isBuddy(id) &&
-				LGGContactSets::getInstance()->getFriendSets(id).size() == 0 &&
-				!LGGContactSets::getInstance()->hasPseudonym(id))
+				instance.getFriendSets(id).size() == 0 &&
+				!instance.hasPseudonym(id))
 			{
-				LGGContactSets::getInstance()->removeNonFriendFromList(id, false);
+				instance.removeNonFriendFromList(id, false);
 			}
 		}
 
-		LGGContactSets::getInstance()->saveToDisk();
-		LGGContactSets::getInstance()->mChangedSignal(UPDATED_MEMBERS);
+		instance.saveToDisk();
+		instance.mChangedSignal(UPDATED_MEMBERS);
 	}
 	return false;
 }
