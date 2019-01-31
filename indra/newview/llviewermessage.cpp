@@ -1539,7 +1539,7 @@ bool check_asset_previewable(const LLAssetType::EType asset_type)
 
 // <FS:Ansariel> FIRE-15886
 //void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_name)
-void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_name, bool from_agent /* = false*/)
+void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_name, bool from_agent_manual /* = false*/)
 {
 	for (uuid_vec_t::const_iterator obj_iter = objects.begin();
 		 obj_iter != objects.end();
@@ -1659,7 +1659,7 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 		// Highlight item
 		// <FS:Ansariel> Only show if either ShowInInventory is true OR it is an inventory
 		//               offer from an agent and the asset is not previewable
-		const BOOL auto_open = gSavedSettings.getBOOL("ShowInInventory") || (from_agent && !check_asset_previewable(asset_type));
+		const BOOL auto_open = gSavedSettings.getBOOL("ShowInInventory") || (from_agent_manual && !check_asset_previewable(asset_type));
 			//gSavedSettings.getBOOL("ShowInInventory") && // don't open if showininventory is false
 			//!from_name.empty(); // don't open if it's not from anyone.
 		// <FS:Ansariel> Don't mess with open inventory panels when ShowInInventory is FALSE
@@ -1973,7 +1973,10 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 				// ShowNewInventory that is actually changable by the user!
 				//if (gSavedSettings.getBOOL("ShowOfferedInventory"))
 				{
-					LLOpenAgentOffer* open_agent_offer = new LLOpenAgentOffer(mObjectID, from_string);
+					// <FS:Ansariel> FIRE-23476: Don't select inventory offer in inventory if AutoAcceptNewInventory && !ShowInInventory && ShowNewInventory
+					//LLOpenAgentOffer* open_agent_offer = new LLOpenAgentOffer(mObjectID, from_string);
+					LLOpenAgentOffer* open_agent_offer = new LLOpenAgentOffer(mObjectID, from_string, true);
+					// </FS:Ansariel>
 					open_agent_offer->startFetch();
 					if(catp || (itemp && itemp->isFinished()))
 					{
@@ -3039,7 +3042,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 						RlvUtil::filterNames(chat.mFromName);
 					}
 				}
-				else if (chat.mFromID != gAgent.getID())
+				else if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, chat.mFromID))
 				{
 					LLAvatarName av_name;
 					if (LLAvatarNameCache::get(chat.mFromID, &av_name))

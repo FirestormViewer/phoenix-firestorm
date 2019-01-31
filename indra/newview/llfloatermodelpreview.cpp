@@ -465,11 +465,23 @@ void LLFloaterModelPreview::initModelPreview()
 	{
 		delete mModelPreview;
 	}
-	// <FS:Beq> mesh uploader changes to allow higher resolution render
-	//	mModelPreview = new LLModelPreview(512, 512, this);
-	auto size = gSavedSettings.getS32("PreviewRenderSize");
-	mModelPreview = new LLModelPreview(size, size, this );
-	// </FS:Beq>
+	
+	S32 tex_width = 512;
+	S32 tex_height = 512;
+	
+	S32 max_width = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mScreenWidth);
+	S32 max_height = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mScreenHeight);
+	
+	while ((tex_width << 1) <= max_width)
+	{
+		tex_width <<= 1;
+	}
+	while ((tex_height << 1) <= max_height)
+	{
+		tex_height <<= 1;
+	}
+	
+	mModelPreview = new LLModelPreview(tex_width, tex_height, this);	
 	mModelPreview->setPreviewTarget(16.f);
 	mModelPreview->setDetailsCallback(boost::bind(&LLFloaterModelPreview::setDetails, this, _1, _2, _3, _4, _5));
 	mModelPreview->setModelUpdatedCallback(boost::bind(&LLFloaterModelPreview::toggleCalculateButton, this, _1));
@@ -3063,19 +3075,35 @@ void LLModelPreview::updateStatusMessages()
 						U16 index_a = face.mIndices[k+0];
 						U16 index_b = face.mIndices[k+1];
 						U16 index_c = face.mIndices[k+2];
+						// <FS:Beq> FIRE-23367/23387 - Allow forced empty triangle placeholders created by the LOD processing.
+						//	LLVector4a v1; v1.setMul(face.mPositions[index_a], scale);
+						//	LLVector4a v2; v2.setMul(face.mPositions[index_b], scale);
+						//	LLVector4a v3; v3.setMul(face.mPositions[index_c], scale);
 
-						LLVector4a v1; v1.setMul(face.mPositions[index_a], scale);
-						LLVector4a v2; v2.setMul(face.mPositions[index_b], scale);
-						LLVector4a v3; v3.setMul(face.mPositions[index_c], scale);
-
-						if (ll_is_degenerate(v1,v2,v3))
+						//	if (ll_is_degenerate(v1, v2, v3))
+						//	{
+						//		mHasDegenerate = true;// <FS:Beq> make has_degenerate a member 
+						//	}
+						//	else
+						//	{
+						//		k += 3;
+						//	}
+						if (index_c == 0 && index_b == 0 && index_a == 0) // test in reverse as 3rd index is less likely to be 0 in a normal case
 						{
-							mHasDegenerate = true;// <FS:Beq> make has_degenerate a member 
+							LL_DEBUGS("MeshValidation") << "Empty placeholder triangle (3 identical index 0 verts) ignored" << LL_ENDL;
 						}
 						else
 						{
-							k += 3;
+							LLVector4a v1; v1.setMul(face.mPositions[index_a], scale);
+							LLVector4a v2; v2.setMul(face.mPositions[index_b], scale);
+							LLVector4a v3; v3.setMul(face.mPositions[index_c], scale);
+							if (ll_is_degenerate(v1, v2, v3))
+							{
+								mHasDegenerate = true;// <FS:Beq> make has_degenerate a member 
+							}
 						}
+						k += 3;
+						// </FS:Beq>
 					}
 				}
 			}
@@ -3322,7 +3350,7 @@ void LLModelPreview::updateStatusMessages()
 	//if (!mModelNoErrors || mHasDegenerate)
 	//{
 	//	mFMP->childDisable("ok_btn");
-	if (!mModelNoErrors || (has_physics_error > PhysicsError::NOHAVOK)) // block for all cases of phsyics error except NOHAVOK
+	if ((gSavedSettings.getBOOL("FSIgnoreClientsideMeshValidation")==FALSE) && (!mModelNoErrors || (has_physics_error > PhysicsError::NOHAVOK))) // block for all cases of phsyics error except NOHAVOK
 	{
 		mFMP->childDisable("ok_btn");
 		mFMP->childDisable("calculate_btn");

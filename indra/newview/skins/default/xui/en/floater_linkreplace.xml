@@ -5,7 +5,7 @@
  positioning="centered"
  title="Replace Inventory Links"
  width="333"
- height="130"
+ height="150"
  save_rect="true"
  can_minimize="true"
  can_close="true">
@@ -52,13 +52,25 @@
 	<text
 	 type="string"
 	 follows="left|top"
+	 font="SanSerif"
+	 height="23"
+	 layout="topleft"
+	 top_pad="10"
+	 left="10"
+	 right="-10"
+	 name="delete_text">
+		Links to this item will be removed.
+	</text>
+	<text
+	 type="string"
+	 follows="left|top"
 	 font="SansSerif"
 	 height="23"
 	 layout="topleft"
 	 left="10"
 	 width="35"
 	 name="target_label"
-	 top_pad="10">
+	 top_delta="0">
 		New:
 	</text>
 	<inventory_link_replace_drop_target
@@ -71,6 +83,15 @@
 	 top_delta="-3"
 	 right="-10"
 	 tool_tip="Drag and drop new inventory item here."/>
+	<check_box
+	 follows="top|left"
+	 height="20"
+	 label="Delete links only"
+	 left="10"
+	 right="-10"
+	 layout="topleft"
+	 top_pad="5"
+	 name="delete_links_only"/>
 	<text
 	 type="string"
 	 follows="left|top|right"

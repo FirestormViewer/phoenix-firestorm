@@ -2471,8 +2471,8 @@ URL: [MEDIAURL]
 	<notification name="AudioAlert"> 
 		Questo lotto fornisce musica da :
 
-Dominio: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Dominio: [AUDIODOMAIN]
+URL: [AUDIOURL]
 		<form name="form">
 			<button name="Allow" text="Permetti"/>
 			<button name="Deny" text="Nega"/>
@@ -2481,8 +2481,8 @@ URL: [MEDIAURL]
 	<notification name="AudioAlert2"> 
 		Ricordare la scelta fatta e [LCONDITION] permettere la musica da questa fonte?
 
-Dominio: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Dominio: [AUDIODOMAIN]
+URL: [AUDIOURL]
 		<form name="form">
 			<button name="Do Now" text="[ACTION] adesso"/>
 			<button name="RememberDomain" text="[CONDITION] permetti questo dominio"/>
@@ -2492,8 +2492,8 @@ URL: [MEDIAURL]
 	<notification name="AudioAlertSingle"> 
 		Ricordare la scelta fatta e [LCONDITION] permettere la musica da questa fonte?
 
-Dominio: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Dominio: [AUDIODOMAIN]
+URL: [AUDIOURL]
 		<form name="form">
 			<button name="Allow" text="Permetti"/>
 			<button name="Deny" text="Nega"/>
@@ -3457,7 +3457,7 @@ Consigliamo di controllare le impostazioni di rete e del firewall.
 Disabilitare tutte le funzioni SIP ALG sul router.
 
 Le comunicazioni tramite voce non saranno disponibili.
-[http://wiki.phoenixviewer.com/fs_voice Vedi altri suggerimenti e soluzioni]
+[https://wiki.phoenixviewer.com/fs_voice]
 		<usetemplate ignoretext="Avvisami quando non è possibile la connessione con il server voce" name="okignore"/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
@@ -3465,7 +3465,7 @@ Le comunicazioni tramite voce non saranno disponibili.
 
 Le comunicazioni tramite voce non saranno disponibili.
 Consigliamo di controllare le impostazioni di rete e del firewall.
-[http://wiki.phoenixviewer.com/fs_voice Vedi altri suggerimenti e soluzioni]
+[https://wiki.phoenixviewer.com/fs_voice]
 	</notification>
 	<notification name="AvatarRezLeftNotification">
 		( presente da [EXISTENCE] secondi )

@@ -34,7 +34,6 @@
 #include "fspanelcontactsets.h"
 #include "llnotificationsutil.h"
 #include "llslurl.h"
-#include <boost/foreach.hpp>
 
 FSFloaterAddToContactSet::FSFloaterAddToContactSet(const LLSD& target)
 :	LLFloater(target)
@@ -91,14 +90,7 @@ void FSFloaterAddToContactSet::onClickAdd()
 		mAgentIDs.push_back(mAgentID);
 	}
 
-	for (uuid_vec_t::iterator it = mAgentIDs.begin(); it != mAgentIDs.end(); ++it)
-	{
-		if (!LLAvatarTracker::instance().isBuddy(*it))
-		{
-			LGGContactSets::getInstance()->addNonFriendToList(*it);
-		}
-		LGGContactSets::getInstance()->addFriendToSet(*it, set);
-	}
+	LGGContactSets::instance().addToSet(mAgentIDs, set);
 
 	if (mHasMultipleAgents)
 	{
@@ -130,12 +122,17 @@ void FSFloaterAddToContactSet::onClickAddSet()
 void FSFloaterAddToContactSet::updateSets(LGGContactSets::EContactSetUpdate type)
 {
 	if (type)
+	{
 		populateContactSets();
+	}
 }
 
 void FSFloaterAddToContactSet::populateContactSets()
 {
-	if (!mContactSetsCombo) return;
+	if (!mContactSetsCombo)
+	{
+		return;
+	}
 	
 	mContactSetsCombo->clearRows();
 	std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllContactSets();
@@ -145,7 +142,7 @@ void FSFloaterAddToContactSet::populateContactSets()
 	}
 	else
 	{
-		BOOST_FOREACH(const std::string& set_name, contact_sets)
+		for (auto const& set_name : contact_sets)
 		{
 			mContactSetsCombo->add(set_name);
 		}
