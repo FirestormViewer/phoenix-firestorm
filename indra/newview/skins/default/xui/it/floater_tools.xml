@@ -400,12 +400,8 @@ Min:
         <text name="LOD_swap_defaults_label" value="Predef" tool_tip="Il fattore LOD che verrà applicato dalla maggioranza dei viewer."/>
         <text name="LOD_swap_usr_label" tool_tip="L&apos;impostazione attuale, presa da RenderVolumeLODFactor" value="Attuale" width="38"/>
         <text name="LOD_swap_label" value="Soglia"/>
-        <string name="ll_lod_tooltip_msg">
-          "Predefinito per Linden Lab Second Life Viewer ([FACTOR])"
-        </string>
-        <string name="fs_lod_tooltip_msg">
-          "Predefinito per Firestorm Viewer ([FACTOR])"
-        </string>
+        <string name="ll_lod_tooltip_msg">Predefinito per Linden Lab Second Life Viewer ([FACTOR])</string>
+        <string name="fs_lod_tooltip_msg">Predefinito per Firestorm Viewer ([FACTOR])</string>
         <text name="LOD_swap_usr_current" tool_tip="Your current LOD Factor"/>
         <text name="LOD_swap_LOD_Change_label">
 Alt ↔ Med

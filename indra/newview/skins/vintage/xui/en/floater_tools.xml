@@ -2616,7 +2616,7 @@ Lowest:
           value="LOD Swap"
           visible="false"
           width="60" />
-        <string name="ll_lod_tooltip_msg">"Linden Lab Second Life Viewer default ([FACTOR])"</string>
+        <string name="ll_lod_tooltip_msg">Linden Lab Second Life Viewer default ([FACTOR])</string>
         <text
           follows="left|top"
           height="16"
@@ -2628,7 +2628,7 @@ Lowest:
           value="LL"
           visible="false"
           width="30" />
-        <string name="fs_lod_tooltip_msg">"Firestorm Viewer default ([FACTOR])"</string>
+        <string name="fs_lod_tooltip_msg">Firestorm Viewer default ([FACTOR])</string>
         <text
           follows="left|top"
           height="16"
