@@ -1818,6 +1818,7 @@ BOOL LLKeyframeMotion::deserialize(LLDataPacker& dp, const LLUUID& asset_id)
 				LL_WARNS() << "not a valid source constraint volume " << str
 						   << " for animation " << asset_id << LL_ENDL;
 				delete constraintp;
+				delete mJointMotionList; // <FS:Beq> avoid mem-leak as per others
 				return FALSE;
 			}
 
@@ -1864,6 +1865,7 @@ BOOL LLKeyframeMotion::deserialize(LLDataPacker& dp, const LLUUID& asset_id)
 					LL_WARNS() << "not a valid target constraint volume " << str
 							   << " for animation " << asset_id << LL_ENDL;
 					delete constraintp;
+					delete mJointMotionList; // <FS:Beq> avoid mem-leak as per others
 					return FALSE;
 				}
 			}
