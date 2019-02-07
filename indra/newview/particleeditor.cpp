@@ -301,6 +301,7 @@ void ParticleEditor::onParameterChange()
 	if (mWindCheckBox->getValue().asBoolean())				flags |= LLPartData::LL_PART_WIND_MASK;
 	if (mRibbonCheckBox->getValue().asBoolean())			flags |= LLPartData::LL_PART_RIBBON_MASK;
 	mParticles.mPartData.setFlags(flags);
+	mParticles.setUseNewAngle();
 
 	mParticles.mTargetUUID = mTargetKeyInput->getValue().asUUID();
 

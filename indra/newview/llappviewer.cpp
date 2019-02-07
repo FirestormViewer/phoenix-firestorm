@@ -483,6 +483,7 @@ void init_default_trans_args()
 	default_trans_args.insert("create_account_url");
 	default_trans_args.insert("DOWNLOAD_URL"); //<FS:CR> Viewer download url
 	default_trans_args.insert("VIEWER_GENERATION"); // <FS:Ansariel> Viewer generation (major version number)
+	default_trans_args.insert("APP_NAME_ABBR"); // <FS:Ansariel> Appreviated application title
 }
 
 //----------------------------------------------------------------------------
