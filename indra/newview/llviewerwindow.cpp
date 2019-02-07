@@ -1674,16 +1674,10 @@ BOOL LLViewerWindow::handleDeviceChange(LLWindow *window)
 
 BOOL LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height)
 {
-    // <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
-    if (!gSavedSettings.getBOOL("FSEnableAutomaticUIScaling"))
-    {
-        return FALSE;
-    }
-    // </FS:Ansariel>
-
     if (ui_scale_factor >= MIN_UI_SCALE && ui_scale_factor <= MAX_UI_SCALE)
     {
-        gSavedSettings.setF32("LastSystemUIScaleFactor", ui_scale_factor);
+        // <FS:Ansariel> Fix display scaling
+        //gSavedSettings.setF32("LastSystemUIScaleFactor", ui_scale_factor);
         LLViewerWindow::reshape(window_width, window_height);
         mResDirty = true;
         return TRUE;
@@ -1766,7 +1760,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	mStatesDirty(false),
 	mCurrResolutionIndex(0),
 	mProgressView(NULL),
-	mSystemUIScaleFactorChanged(false),
+	//mSystemUIScaleFactorChanged(false), // <FS:Ansariel> Fix display scaling
 	mProgressViewMini(NULL)
 {
 	// gKeyboard is still NULL, so it doesn't do LLWindowListener any good to
@@ -1866,19 +1860,14 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	}
 #endif
 
-	// <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
+	// <FS:Ansariel> Fix display scaling
 	//if (p.first_run || gSavedSettings.getF32("LastSystemUIScaleFactor") != system_scale_factor)
-#if !LL_WINDOWS
-	gSavedSettings.setBOOL("FSEnableAutomaticUIScaling", FALSE); // Always disable on non-Windows systems for now
-#endif
-	if (gSavedSettings.getBOOL("FSEnableAutomaticUIScaling") && (p.first_run || gSavedSettings.getF32("LastSystemUIScaleFactor") != system_scale_factor))
+	//{
+	//	mSystemUIScaleFactorChanged = !p.first_run;
+	//	gSavedSettings.setF32("LastSystemUIScaleFactor", system_scale_factor);
+	//	gSavedSettings.setF32("UIScaleFactor", system_scale_factor);
+	//}
 	// </FS:Ansariel>
-	{
-		mSystemUIScaleFactorChanged = !p.first_run;
-		gSavedSettings.setF32("LastSystemUIScaleFactor", system_scale_factor);
-		gSavedSettings.setF32("UIScaleFactor", system_scale_factor);
-	}
-
 
 	// Get the real window rect the window was created with (since there are various OS-dependent reasons why
 	// the size of a window or fullscreen context may have been adjusted slightly...)
@@ -2018,10 +2007,12 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 }
 
 //static
-void LLViewerWindow::showSystemUIScaleFactorChanged()
-{
-	LLNotificationsUtil::add("SystemUIScaleFactorChanged", LLSD(), LLSD(), onSystemUIScaleFactorChanged);
-}
+// <FS:Ansariel> Fix display scaling
+//void LLViewerWindow::showSystemUIScaleFactorChanged()
+//{
+//	LLNotificationsUtil::add("SystemUIScaleFactorChanged", LLSD(), LLSD(), onSystemUIScaleFactorChanged);
+//}
+// </FS:Ansariel>
 
 std::string LLViewerWindow::getLastSnapshotDir()
 {
@@ -2029,26 +2020,21 @@ std::string LLViewerWindow::getLastSnapshotDir()
 }
 
 //static
-bool LLViewerWindow::onSystemUIScaleFactorChanged(const LLSD& notification, const LLSD& response)
-{
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	if(option == 0)
-	{
-		LLFloaterReg::toggleInstanceOrBringToFront("preferences");
-		LLFloater* pref_floater = LLFloaterReg::getInstance("preferences");
-		LLTabContainer* tab_container = pref_floater->getChild<LLTabContainer>("pref core");
-		// <FS:Ansariel> Adjusted for Firestorm
-		//tab_container->selectTabByName("advanced1");
-		tab_container->selectTabByName("ui");
-		LLPanel* ui_panel = tab_container->getCurrentPanel();
-		LLTabContainer* ui_tab_container = ui_panel->getChild<LLTabContainer>("tabs");
-		ui_tab_container->selectTabByName("ui-2d-overlay");
-		// </FS:Ansariel>
-
-	}
-	return false; 
-}
-
+// <FS:Ansariel> Fix display scaling
+//bool LLViewerWindow::onSystemUIScaleFactorChanged(const LLSD& notification, const LLSD& response)
+//{
+//	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+//	if(option == 0)
+//	{
+//		LLFloaterReg::toggleInstanceOrBringToFront("preferences");
+//		LLFloater* pref_floater = LLFloaterReg::getInstance("preferences");
+//		LLTabContainer* tab_container = pref_floater->getChild<LLTabContainer>("pref core");
+//		tab_container->selectTabByName("advanced1");
+//
+//	}
+//	return false; 
+//}
+// </FS:Ansariel>
 
 void LLViewerWindow::initGLDefaults()
 {

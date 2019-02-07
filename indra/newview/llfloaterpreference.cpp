@@ -788,7 +788,6 @@ BOOL LLFloaterPreference::postBuild()
 
 	// <FS:Ansariel> Disable options only available on Windows and not on other platforms
 #ifndef LL_WINDOWS
-	childSetEnabled("FSEnableAutomaticUIScaling", FALSE);
 	childSetEnabled("FSDisableWMIProbing", FALSE);
 #endif
 	// </FS:Ansariel>

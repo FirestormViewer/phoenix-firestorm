@@ -424,12 +424,14 @@ public:
 	const LLVector2& getDisplayScale() const { return mDisplayScale; }
 	void			calcDisplayScale();
 	static LLRect 	calcScaledRect(const LLRect & rect, const LLVector2& display_scale);
-//-TT Window Title Access
+	// <FS:TT> Window Title Access
 	void			setTitle(const std::string& win_title);
-//-TT
+	// </FS:TT>
 
-	bool getSystemUIScaleFactorChanged() { return mSystemUIScaleFactorChanged; }
-	static void showSystemUIScaleFactorChanged();
+	// <FS:Ansariel> Fix display scaling
+	//bool getSystemUIScaleFactorChanged() { return mSystemUIScaleFactorChanged; }
+	//static void showSystemUIScaleFactorChanged();
+	// </FS:Ansariel>
 	static std::string getLastSnapshotDir();
 
 private:
@@ -445,7 +447,8 @@ private:
 	S32				getChatConsoleBottomPad(); // Vertical padding for child console rect, varied by bottom clutter
 	LLRect			getChatConsoleRect(); // Get optimal cosole rect.
 
-	static bool onSystemUIScaleFactorChanged(const LLSD& notification, const LLSD& response);
+	// <FS:Ansariel> Fix display scaling
+	//static bool onSystemUIScaleFactorChanged(const LLSD& notification, const LLSD& response);
 private:
 	LLWindow*		mWindow;						// graphical window object
 	bool			mActive;
@@ -520,7 +523,8 @@ private:
 	LLPointer<LLViewerObject>	mDragHoveredObject;
 
 	static LLTrace::SampleStatHandle<>	sMouseVelocityStat;
-	bool mSystemUIScaleFactorChanged; // system UI scale factor changed from last run
+	// <FS:Ansariel> Fix display scaling
+	//bool mSystemUIScaleFactorChanged; // system UI scale factor changed from last run
 };
 
 //
