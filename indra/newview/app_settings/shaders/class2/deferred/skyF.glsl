@@ -34,6 +34,8 @@ uniform vec3 camPosLocal;
 
 uniform vec4 lightnorm;
 uniform vec4 sunlight_color;
+uniform vec4 moonlight_color;
+uniform int sun_up_factor;
 uniform vec4 ambient;
 uniform vec4 blue_horizon;
 uniform vec4 blue_density;
@@ -45,7 +47,7 @@ uniform float density_multiplier;
 uniform float max_y;
 
 uniform vec4 glow;
-uniform float sun_up_factor;
+uniform float sun_moon_glow_factor;
 
 uniform vec4 cloud_color;
 
@@ -112,7 +114,7 @@ void main()
     vec4 temp2 = vec4(0.);
     vec4 blue_weight;
     vec4 haze_weight;
-    vec4 sunlight = sunlight_color;
+    vec4 sunlight = (sun_up_factor == 1) ? sunlight_color : moonlight_color;
     vec4 light_atten;
 
 
@@ -153,7 +155,7 @@ void main()
     // Add "minimum anti-solar illumination"
     temp2.x += .25;
 
-    temp2.x *= sun_up_factor;
+    temp2.x *= sun_moon_glow_factor;
 
     // Haze color above cloud
     vec4 color = (    blue_horizon * blue_weight * (sunlight + ambient)

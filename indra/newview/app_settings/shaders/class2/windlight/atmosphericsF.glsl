@@ -29,6 +29,8 @@ vec3 getAtmosAttenuation();
 uniform vec4 gamma;
 uniform vec4 lightnorm;
 uniform vec4 sunlight_color;
+uniform vec4 moonlight_color;
+uniform int sun_up_factor;
 uniform vec4 ambient;
 uniform vec4 blue_horizon;
 uniform vec4 blue_density;
@@ -42,7 +44,7 @@ uniform vec4 glow;
 uniform float scene_light_strength;
 uniform mat3 ssao_effect_mat;
 uniform int no_atmo;
-uniform float sun_up_factor;
+uniform float sun_moon_glow_factor;
 
 vec3 scaleSoftClipFrag(vec3 light);
 
@@ -75,7 +77,7 @@ void calcFragAtmospherics(vec3 inPositionEye, float ambFactor, out vec3 sunlit, 
     vec3 temp2 = vec3(0);
     vec4 blue_weight;
     vec4 haze_weight;
-    vec4 sunlight = sunlight_color;
+    vec4 sunlight = (sun_up_factor == 1) ? sunlight_color : moonlight_color;
     vec4 light_atten;
 
     //sunlight attenuation effect (hue and brightness) due to atmosphere
@@ -119,7 +121,7 @@ void calcFragAtmospherics(vec3 inPositionEye, float ambFactor, out vec3 sunlit, 
     //add "minimum anti-solar illumination"
     temp2.x += .25;
 
-    temp2.x *= sun_up_factor;
+    temp2.x *= sun_moon_glow_factor;
     
     //increase ambient when there are more clouds
     vec4 tmpAmbient = ambient + (vec4(1.) - ambient) * cloud_shadow * 0.5;

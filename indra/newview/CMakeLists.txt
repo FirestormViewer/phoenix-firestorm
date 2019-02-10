@@ -721,6 +721,7 @@ set(viewer_SOURCE_FILES
     lltoolselectland.cpp
     lltoolselectrect.cpp
     lltracker.cpp
+    lltrackpicker.cpp
     lltransientdockablefloater.cpp
     lltransientfloatermgr.cpp
     lltranslate.cpp
@@ -1470,6 +1471,7 @@ set(viewer_HEADER_FILES
     lltoolselectland.h
     lltoolselectrect.h
     lltracker.h
+    lltrackpicker.h
     lltransientdockablefloater.h
     lltransientfloatermgr.h
     lltranslate.h

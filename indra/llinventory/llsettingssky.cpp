@@ -34,7 +34,7 @@
 
 //=========================================================================
 namespace {
-    const F32 NIGHTTIME_ELEVATION = -8.0f; // degrees
+    const F32 NIGHTTIME_ELEVATION = 8.0f; // degrees
     const F32 NIGHTTIME_ELEVATION_SIN = (F32)sinf(NIGHTTIME_ELEVATION * DEG_TO_RAD);
     const LLUUID IMG_BLOOM1("3c59f7fe-9dc8-47f9-8aaf-a9dd1fbc3bef");
     const LLUUID IMG_RAINBOW("11b4c57c-56b3-04ed-1f82-2004363882e4");
@@ -140,7 +140,7 @@ const std::string LLSettingsSky::SETTING_SKY_ICE_LEVEL("ice_level");
 const LLUUID LLSettingsSky::DEFAULT_ASSET_ID("eb3a7080-831f-9f37-10f0-7b1f9ea4043c");
 
 static const LLUUID DEFAULT_SUN_ID("32bfbcea-24b1-fb9d-1ef9-48a28a63730f"); // dataserver
-static const LLUUID DEFAULT_MOON_ID("db13b827-7e6a-7ace-bed4-4419ee00984d"); // dataserver
+static const LLUUID DEFAULT_MOON_ID("d07f6eed-b96a-47cd-b51d-400ad4a1c428"); // dataserver
 static const LLUUID DEFAULT_CLOUD_ID("1dc1368f-e8fe-f02d-a08d-9d9f11c1af6b");
 
 const std::string LLSettingsSky::SETTING_LEGACY_HAZE("legacy_haze");
@@ -809,6 +809,7 @@ LLSD LLSettingsSky::translateLegacyHazeSettings(const LLSD& legacy)
 
 LLSD LLSettingsSky::translateLegacySettings(const LLSD& legacy)
 {
+    bool converted_something(false);
     LLSD newsettings(defaults());
 
     // Move legacy haze parameters to an inner map
@@ -818,23 +819,28 @@ LLSD LLSettingsSky::translateLegacySettings(const LLSD& legacy)
     if (legacyhazesettings.size() > 0)
     {
         newsettings[SETTING_LEGACY_HAZE] = legacyhazesettings;
+        converted_something |= true;
     }
 
     if (legacy.has(SETTING_CLOUD_COLOR))
     {
         newsettings[SETTING_CLOUD_COLOR] = LLColor3(legacy[SETTING_CLOUD_COLOR]).getValue();
+        converted_something |= true;
     }
     if (legacy.has(SETTING_CLOUD_POS_DENSITY1))
     {
         newsettings[SETTING_CLOUD_POS_DENSITY1] = LLColor3(legacy[SETTING_CLOUD_POS_DENSITY1]).getValue();
+        converted_something |= true;
     }
     if (legacy.has(SETTING_CLOUD_POS_DENSITY2))
     {
         newsettings[SETTING_CLOUD_POS_DENSITY2] = LLColor3(legacy[SETTING_CLOUD_POS_DENSITY2]).getValue();
+        converted_something |= true;
     }
     if (legacy.has(SETTING_CLOUD_SCALE))
     {
         newsettings[SETTING_CLOUD_SCALE] = LLSD::Real(legacy[SETTING_CLOUD_SCALE][0].asReal());
+        converted_something |= true;
     }
     if (legacy.has(SETTING_CLOUD_SCROLL_RATE))
     {
@@ -851,53 +857,64 @@ LLSD LLSettingsSky::translateLegacySettings(const LLSD& legacy)
         }
 
         newsettings[SETTING_CLOUD_SCROLL_RATE] = cloud_scroll.getValue();
+        converted_something |= true;
     }
     if (legacy.has(SETTING_CLOUD_SHADOW))
     {
         newsettings[SETTING_CLOUD_SHADOW] = LLSD::Real(legacy[SETTING_CLOUD_SHADOW][0].asReal());
+        converted_something |= true;
     }
     
 
     if (legacy.has(SETTING_GAMMA))
     {
         newsettings[SETTING_GAMMA] = legacy[SETTING_GAMMA][0].asReal();
+        converted_something |= true;
     }
     if (legacy.has(SETTING_GLOW))
     {
         newsettings[SETTING_GLOW] = LLColor3(legacy[SETTING_GLOW]).getValue();
+        converted_something |= true;
     }
 
     if (legacy.has(SETTING_MAX_Y))
     {
         newsettings[SETTING_MAX_Y] = LLSD::Real(legacy[SETTING_MAX_Y][0].asReal());
+        converted_something |= true;
     }
     if (legacy.has(SETTING_STAR_BRIGHTNESS))
     {
         newsettings[SETTING_STAR_BRIGHTNESS] = LLSD::Real(legacy[SETTING_STAR_BRIGHTNESS].asReal() * 250.0f);
+        converted_something |= true;
     }
     if (legacy.has(SETTING_SUNLIGHT_COLOR))
     {
         newsettings[SETTING_SUNLIGHT_COLOR] = LLColor4(legacy[SETTING_SUNLIGHT_COLOR]).getValue();
+        converted_something |= true;
     }
 
     if (legacy.has(SETTING_PLANET_RADIUS))
     {
         newsettings[SETTING_PLANET_RADIUS] = LLSD::Real(legacy[SETTING_PLANET_RADIUS].asReal());
+        converted_something |= true;
     }
 
     if (legacy.has(SETTING_SKY_BOTTOM_RADIUS))
     {
         newsettings[SETTING_SKY_BOTTOM_RADIUS] = LLSD::Real(legacy[SETTING_SKY_BOTTOM_RADIUS].asReal());
+        converted_something |= true;
     }
 
     if (legacy.has(SETTING_SKY_TOP_RADIUS))
     {
         newsettings[SETTING_SKY_TOP_RADIUS] = LLSD::Real(legacy[SETTING_SKY_TOP_RADIUS].asReal());
+        converted_something |= true;
     }
 
     if (legacy.has(SETTING_SUN_ARC_RADIANS))
     {
         newsettings[SETTING_SUN_ARC_RADIANS] = LLSD::Real(legacy[SETTING_SUN_ARC_RADIANS].asReal());
+        converted_something |= true;
     }
 
     if (legacy.has(SETTING_LEGACY_EAST_ANGLE) && legacy.has(SETTING_LEGACY_SUN_ANGLE))
@@ -912,7 +929,11 @@ LLSD LLSettingsSky::translateLegacySettings(const LLSD& legacy)
 
         newsettings[SETTING_SUN_ROTATION]  = sunquat.getValue();
         newsettings[SETTING_MOON_ROTATION] = moonquat.getValue();
+        converted_something |= true;
     }
+
+    if (!converted_something)
+        return LLSD();
 
     return newsettings;
 }
@@ -931,16 +952,38 @@ void LLSettingsSky::updateSettings()
     calculateLightSettings();
 }
 
+F32 LLSettingsSky::getSunMoonGlowFactor() const
+{
+    LLVector3 sunDir = getSunDirection();
+    LLVector3 moonDir = getMoonDirection();
+
+    // sun glow at full iff moon is not up
+    if (sunDir.mV[VZ] > -NIGHTTIME_ELEVATION_SIN)
+    {
+        if (moonDir.mV[2] <= 0.0f)
+        {
+            return 1.0f;
+        }
+    }
+
+    if (moonDir.mV[2] > 0.0f)
+    {
+        return moonDir.mV[VZ] / 3.0f; // ramp moon glow at moonset
+    }
+
+    return 0.0f;
+}
+
 bool LLSettingsSky::getIsSunUp() const
 {
     LLVector3 sunDir = getSunDirection();
-    return sunDir.mV[2] > NIGHTTIME_ELEVATION_SIN;
+    return (sunDir.mV[2] >= 0.0f) || ((sunDir.mV[2] > -NIGHTTIME_ELEVATION_SIN) && !getIsMoonUp());
 }
 
 bool LLSettingsSky::getIsMoonUp() const
 {
     LLVector3 moonDir = getMoonDirection();
-    return moonDir.mV[2] > NIGHTTIME_ELEVATION_SIN;
+    return moonDir.mV[2] > 0.0f;
 }
 
 void LLSettingsSky::calculateHeavenlyBodyPositions()  const
@@ -1195,12 +1238,6 @@ LLVector3 LLSettingsSky::getMoonDirection() const
     return mMoonDirection;
 }
 
-LLColor4U LLSettingsSky::getFadeColor() const
-{
-    update();
-    return mFadeColor;
-}
-
 LLColor4 LLSettingsSky::getMoonAmbient() const
 {
     update();
@@ -1262,12 +1299,9 @@ void LLSettingsSky::calculateLightSettings() const
     mSunDiffuse = gammaCorrect(componentMult(sunlight, light_transmittance));       
     mSunAmbient = gammaCorrect(componentMult(tmpAmbient, light_transmittance) * 0.5);
 
-    mMoonDiffuse  = gammaCorrect(componentMult(LLColor3::white, light_transmittance));
-    mMoonAmbient  = gammaCorrect(componentMult(LLColor3::white, light_transmittance) * 0.5f);
+    mMoonDiffuse  = gammaCorrect(componentMult(LLColor3::white, light_transmittance) * 0.5f);
+    mMoonAmbient  = gammaCorrect(componentMult(LLColor3::white, light_transmittance) * 0.25f);
     mTotalAmbient = mSunAmbient;
-
-    mFadeColor = mTotalAmbient + (mSunDiffuse + mMoonDiffuse) * 0.5f;
-    mFadeColor.setAlpha(0);
 }
 
 LLUUID LLSettingsSky::GetDefaultAssetId()

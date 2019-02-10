@@ -170,6 +170,20 @@ namespace
         return llclamp(position, 0.0f, 1.0f);
     }
 
+    inline LLSettingsBase::BlendFactor convert_time_to_blend_factor(const LLSettingsBase::Seconds& time, const LLSettingsBase::Seconds& len, LLSettingsDay::CycleTrack_t &track)
+    {
+        LLSettingsBase::TrackPosition position = convert_time_to_position(time, len);
+        LLSettingsDay::TrackBound_t bounds(get_bounding_entries(track, position));
+
+        LLSettingsBase::TrackPosition spanlength(get_wrapping_distance((*bounds.first).first, (*bounds.second).first));
+        if (position < (*bounds.first).first)
+            position += 1.0;
+
+        LLSettingsBase::TrackPosition start = position - (*bounds.first).first;
+
+        return static_cast<LLSettingsBase::BlendFactor>(start / spanlength);
+    }
+
     //---------------------------------------------------------------------
     class LLTrackBlenderLoopingTime : public LLSettingsBlenderTimeDelta
     {
@@ -186,12 +200,14 @@ namespace
             // must happen prior to getBoundingEntries call...
             mTrackNo = selectTrackNumber(trackno);
 
-            LLSettingsDay::TrackBound_t initial = getBoundingEntries(getAdjustedNow());
+            LLSettingsBase::Seconds now(getAdjustedNow());
+            LLSettingsDay::TrackBound_t initial = getBoundingEntries(now);
 
             mInitial = (*initial.first).second;
             mFinal = (*initial.second).second;
             mBlendSpan = getSpanTime(initial);
 
+            initializeTarget(now);
             setOnFinished([this](const LLSettingsBlender::ptr_t &){ onFinishedSpan(); });
         }
 
@@ -246,6 +262,16 @@ namespace
             LLSettingsBase::TrackPosition position = convert_time_to_position(time, mCycleLength);
             LLSettingsDay::TrackBound_t bounds = get_bounding_entries(wtrack, position);
             return bounds;
+        }
+
+        void initializeTarget(LLSettingsBase::Seconds time)
+        {
+            LLSettingsBase::BlendFactor blendf(convert_time_to_blend_factor(time, mCycleLength, mDay->getCycleTrack(mTrackNo)));
+
+            blendf = llclamp(blendf, 0.0, 0.999);
+            setTimeSpent(LLSettingsBase::Seconds(blendf * mBlendSpan));
+
+            setBlendFactor(blendf);
         }
 
         LLSettingsBase::Seconds getAdjustedNow() const
@@ -615,6 +641,25 @@ namespace
 
     typedef LLSettingsInjected<LLSettingsVOSky>   LLSettingsInjectedSky;
     typedef LLSettingsInjected<LLSettingsVOWater> LLSettingsInjectedWater;
+
+#if 0
+    //=====================================================================
+    class DayInjection : public LLEnvironment::DayInstance
+    {
+    public:
+        typedef std::shared_ptr<DayInjection> ptr_t;
+
+        DayInjection(LLEnvironment::EnvSelection_t env) :
+            LLEnvironment::DayInstance(env)
+        {
+        }
+
+        virtual     ~DayInjection() { };
+
+    protected:
+    private:
+    };
+#endif
 }
 
 //=========================================================================
@@ -827,6 +872,17 @@ bool LLEnvironment::isInventoryEnabled() const
 void LLEnvironment::onRegionChange()
 {
     clearExperienceEnvironment(LLUUID::null, TRANSITION_DEFAULT);
+
+    LLViewerRegion* cur_region = gAgent.getRegion();
+    if (!cur_region)
+    {
+        return;
+    }
+    if (!cur_region->capabilitiesReceived())
+    {
+        cur_region->setCapabilitiesReceivedCallback([](LLUUID region_id) {  LLEnvironment::instance().requestRegion(); });
+        return;
+    }
     requestRegion();
 }
 
@@ -1539,6 +1595,7 @@ void LLEnvironment::requestParcel(S32 parcel_id, environment_apply_fn cb)
                 LLSettingsBase::Seconds transition = LLViewerParcelMgr::getInstance()->getTeleportInProgress() ? TRANSITION_FAST : TRANSITION_DEFAULT;
                 cb = [this, transition](S32 pid, EnvironmentInfo::ptr_t envinfo)
                 {
+                    clearEnvironment(ENV_PARCEL);
                     recordEnvironment(pid, envinfo, transition);
                 };
             }
@@ -1972,31 +2029,46 @@ LLEnvironment::EnvironmentInfo::ptr_t LLEnvironment::EnvironmentInfo::extractLeg
 }
 
 //=========================================================================
-LLSettingsWater::ptr_t LLEnvironment::createWaterFromLegacyPreset(const std::string filename)
+LLSettingsWater::ptr_t LLEnvironment::createWaterFromLegacyPreset(const std::string filename, LLSD &messages)
 {
     std::string name(gDirUtilp->getBaseFileName(LLURI::unescape(filename), true));
     std::string path(gDirUtilp->getDirName(filename));
 
-    LLSettingsWater::ptr_t water = LLSettingsVOWater::buildFromLegacyPresetFile(name, path);
+    LLSettingsWater::ptr_t water = LLSettingsVOWater::buildFromLegacyPresetFile(name, path, messages);
+
+    if (!water)
+    {
+        messages["NAME"] = name;
+        messages["FILE"] = filename;
+    }
     return water;
 }
 
-LLSettingsSky::ptr_t LLEnvironment::createSkyFromLegacyPreset(const std::string filename)
+LLSettingsSky::ptr_t LLEnvironment::createSkyFromLegacyPreset(const std::string filename, LLSD &messages)
 {
     std::string name(gDirUtilp->getBaseFileName(LLURI::unescape(filename), true));
     std::string path(gDirUtilp->getDirName(filename));
 
-    LLSettingsSky::ptr_t sky = LLSettingsVOSky::buildFromLegacyPresetFile(name, path);
+    LLSettingsSky::ptr_t sky = LLSettingsVOSky::buildFromLegacyPresetFile(name, path, messages);
+    if (!sky)
+    {
+        messages["NAME"] = name;
+        messages["FILE"] = filename;
+    }
     return sky;
-
 }
 
-LLSettingsDay::ptr_t LLEnvironment::createDayCycleFromLegacyPreset(const std::string filename)
+LLSettingsDay::ptr_t LLEnvironment::createDayCycleFromLegacyPreset(const std::string filename, LLSD &messages)
 {
     std::string name(gDirUtilp->getBaseFileName(LLURI::unescape(filename), true));
     std::string path(gDirUtilp->getDirName(filename));
 
-    LLSettingsDay::ptr_t day = LLSettingsVODay::buildFromLegacyPresetFile(name, path);
+    LLSettingsDay::ptr_t day = LLSettingsVODay::buildFromLegacyPresetFile(name, path, messages);
+    if (!day)
+    {
+        messages["NAME"] = name;
+        messages["FILE"] = filename;
+    }
     return day;
 }
 

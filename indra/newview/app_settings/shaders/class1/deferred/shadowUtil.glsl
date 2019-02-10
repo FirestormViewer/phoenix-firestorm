@@ -25,18 +25,12 @@
 
 uniform sampler2DRect   normalMap;
 uniform sampler2DRect   depthMap;
-uniform sampler2D       noiseMap;
 uniform sampler2DShadow shadowMap0;
 uniform sampler2DShadow shadowMap1;
 uniform sampler2DShadow shadowMap2;
 uniform sampler2DShadow shadowMap3;
 uniform sampler2DShadow shadowMap4;
 uniform sampler2DShadow shadowMap5;
-
-uniform float ssao_radius;
-uniform float ssao_max_radius;
-uniform float ssao_factor;
-uniform float ssao_factor_inv;
 
 uniform vec3 sun_dir;
 uniform vec3 moon_dir;
@@ -45,47 +39,28 @@ uniform vec2 proj_shadow_res;
 uniform mat4 shadow_matrix[6];
 uniform vec4 shadow_clip;
 uniform float shadow_bias;
-
+uniform float shadow_offset;
 uniform float spot_shadow_bias;
 uniform float spot_shadow_offset;
-
 uniform mat4 inv_proj;
 uniform vec2 screen_res;
+uniform int sun_up_factor;
 
-vec3 decode_normal(vec2 enc);
-
-float pcfShadowLegacy(sampler2DShadow shadowMap, vec4 stc)
+float pcfShadow(sampler2DShadow shadowMap, vec3 norm, vec4 stc, float bias_mul, vec2 pos_screen, vec3 light_dir)
 {
-	stc.xyz /= stc.w;
-	stc.z += shadow_bias;
-		
-	stc.x = floor(stc.x*shadow_res.x + fract(stc.y*shadow_res.y*12345))/shadow_res.x; // add some chaotic jitter to X sample pos according to Y to disguise the snapping going on here
-	
-	float cs = shadow2D(shadowMap, stc.xyz).x;
-	float shadow = cs;
-	
+    stc.xyz /= stc.w;
+    stc.z += shadow_bias * bias_mul* 2.0;
+    stc.x = floor(stc.x*shadow_res.x + fract(stc.y*pos_screen.y*pos_screen.x))/shadow_res.x; // add some chaotic jitter to X sample pos according to Y to disguise the snapping going on here
+    
+    float cs = shadow2D(shadowMap, stc.xyz).x;
+    float shadow = cs * 4.0;
+    
     shadow += shadow2D(shadowMap, stc.xyz+vec3(2.0/shadow_res.x, 1.5/shadow_res.y, 0.0)).x;
     shadow += shadow2D(shadowMap, stc.xyz+vec3(1.0/shadow_res.x, -1.5/shadow_res.y, 0.0)).x;
     shadow += shadow2D(shadowMap, stc.xyz+vec3(-1.0/shadow_res.x, 1.5/shadow_res.y, 0.0)).x;
     shadow += shadow2D(shadowMap, stc.xyz+vec3(-2.0/shadow_res.x, -1.5/shadow_res.y, 0.0)).x;
                        
-    return shadow*0.2;
-}
-
-float pcfShadow(sampler2DShadow shadowMap, vec4 stc, float bias_scale, vec2 pos_screen)
-{
-    stc.xyz /= stc.w;
-    stc.z += shadow_bias * bias_scale;
- 
-    stc.x = floor(stc.x*pos_screen.x + fract(stc.y*pos_screen.y*0.666666666))/shadow_res.x; // add some chaotic jitter to X sample pos according to Y to disguise the snapping going on here
-    
-    float cs = shadow2D(shadowMap, stc.xyz).x;
-    float shadow = cs;
-    shadow += shadow2D(shadowMap, stc.xyz+vec3(2.0/shadow_res.x, 1.5/shadow_res.y, 0.0)).x;
-    shadow += shadow2D(shadowMap, stc.xyz+vec3(1.0/shadow_res.x, -1.5/shadow_res.y, 0.0)).x;
-    shadow += shadow2D(shadowMap, stc.xyz+vec3(-1.0/shadow_res.x, 1.5/shadow_res.y, 0.0)).x;
-    shadow += shadow2D(shadowMap, stc.xyz+vec3(-2.0/shadow_res.x, -1.5/shadow_res.y, 0.0)).x;
-    return shadow*0.2;
+    return shadow * 0.125;
 }
 
 float pcfSpotShadow(sampler2DShadow shadowMap, vec4 stc, float bias_scale, vec2 pos_screen)
@@ -109,23 +84,18 @@ float pcfSpotShadow(sampler2DShadow shadowMap, vec4 stc, float bias_scale, vec2 
 
 float sampleDirectionalShadow(vec3 pos, vec3 norm, vec2 pos_screen)
 {
+    float shadow = 0.0f;
+    vec3 light_dir = (sun_up_factor == 1) ? sun_dir : moon_dir;
+
     float dp_sun = max(0.0, dot(sun_dir.xyz, norm));
     float dp_moon = max(0.0, dot(moon_dir.xyz, norm));
-    float dp_directional_light = max(dp_sun,dp_moon);
+    float dp_directional_light = (sun_up_factor == 1) ? dp_sun : dp_moon;
           dp_directional_light = clamp(dp_directional_light, 0.0, 1.0);
 
-    vec3 light_dir = (dp_moon > dp_sun) ? moon_dir : sun_dir;
-    vec3 offset = light_dir * (1.0-dp_directional_light);
-    vec3 shadow_pos = pos.xyz + (offset * shadow_bias);
-
-    float shadow = 0.0f;
-    vec4 spos = vec4(shadow_pos,1.0);
-
-    // if we know this point is facing away from the sun then we know it's in shadow without having to do a squirrelly shadow-map lookup
-    if (dp_directional_light <= 0.0)
-    {
-        return 0.0;
-    }
+    vec3 shadow_pos = pos.xyz;
+    vec3 offset = abs(light_dir.xyz) * (1.0 - dp_directional_light* 0.8);
+    shadow_pos += offset;
+    vec4 spos = vec4(shadow_pos.xyz, 1.0);
 
     if (spos.z > -shadow_clip.w)
     {   
@@ -141,7 +111,7 @@ float sampleDirectionalShadow(vec3 pos, vec3 norm, vec2 pos_screen)
             
             float w = 1.0;
             w -= max(spos.z-far_split.z, 0.0)/transition_domain.z;
-            shadow += pcfShadowLegacy(shadowMap3, lpos)*w;
+            shadow += pcfShadow(shadowMap3, norm, lpos, 4.0, pos_screen, light_dir)*w;
             weight += w;
             shadow += max((pos.z+shadow_clip.z)/(shadow_clip.z-shadow_clip.w)*2.0-1.0, 0.0);
         }
@@ -153,7 +123,7 @@ float sampleDirectionalShadow(vec3 pos, vec3 norm, vec2 pos_screen)
             float w = 1.0;
             w -= max(spos.z-far_split.y, 0.0)/transition_domain.y;
             w -= max(near_split.z-spos.z, 0.0)/transition_domain.z;
-            shadow += pcfShadowLegacy(shadowMap2, lpos)*w;
+            shadow += pcfShadow(shadowMap2, norm, lpos, 2.0, pos_screen, light_dir)*w;
             weight += w;
         }
 
@@ -164,7 +134,7 @@ float sampleDirectionalShadow(vec3 pos, vec3 norm, vec2 pos_screen)
             float w = 1.0;
             w -= max(spos.z-far_split.x, 0.0)/transition_domain.x;
             w -= max(near_split.y-spos.z, 0.0)/transition_domain.y;
-            shadow += pcfShadowLegacy(shadowMap1, lpos)*w;
+            shadow += pcfShadow(shadowMap1, norm, lpos, 1.0, pos_screen, light_dir)*w;
             weight += w;
         }
 
@@ -175,14 +145,14 @@ float sampleDirectionalShadow(vec3 pos, vec3 norm, vec2 pos_screen)
             float w = 1.0;
             w -= max(near_split.x-spos.z, 0.0)/transition_domain.x;
                 
-            shadow += pcfShadowLegacy(shadowMap0, lpos)*w;
+            shadow += pcfShadow(shadowMap0, norm, lpos, 1.0, pos_screen, light_dir)*w;
             weight += w;
         }
 
         shadow /= weight;
     }
 
-    return min(dp_directional_light, shadow);
+    return shadow;
 }
 
 float sampleSpotShadow(vec3 pos, vec3 norm, int index, vec2 pos_screen)
@@ -201,11 +171,19 @@ float sampleSpotShadow(vec3 pos, vec3 norm, int index, vec2 pos_screen)
         float weight = 0.0;
 
         {
-            lpos = shadow_matrix[4 + index]*spos;
             float w = 1.0;
             w -= max(spos.z-far_split.z, 0.0)/transition_domain.z;
-        
-            shadow += pcfSpotShadow((index == 0) ? shadowMap4 : shadowMap5, lpos, 0.8, spos.xy)*w;
+
+            if (index == 0)
+            {        
+                lpos = shadow_matrix[4]*spos;
+                shadow += pcfSpotShadow(shadowMap4, lpos, 0.8, spos.xy)*w;
+            }
+            else
+            {
+                lpos = shadow_matrix[5]*spos;
+                shadow += pcfSpotShadow(shadowMap5, lpos, 0.8, spos.xy)*w;
+            }
             weight += w;
             shadow += max((pos.z+shadow_clip.z)/(shadow_clip.z-shadow_clip.w)*2.0-1.0, 0.0);
         }

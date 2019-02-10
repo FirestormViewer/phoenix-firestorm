@@ -117,7 +117,8 @@ LLFloaterFixedEnvironment::LLFloaterFixedEnvironment(const LLSD &key) :
     mInventoryItem(nullptr),
     mIsDirty(false),
     mCanCopy(false),
-    mCanMod(false)
+    mCanMod(false),
+    mCanTrans(false)
 {
 }
 
@@ -257,6 +258,7 @@ void LLFloaterFixedEnvironment::loadInventoryItem(const LLUUID  &inventoryId)
         mInventoryId.setNull();
         mCanMod = true;
         mCanCopy = true;
+        mCanTrans = true;
         return;
     }
 
@@ -288,6 +290,7 @@ void LLFloaterFixedEnvironment::loadInventoryItem(const LLUUID  &inventoryId)
 
     mCanCopy = mInventoryItem->getPermissions().allowCopyBy(gAgent.getID());
     mCanMod = mInventoryItem->getPermissions().allowModifyBy(gAgent.getID());
+    mCanTrans = mInventoryItem->getPermissions().allowOperationBy(PERM_TRANSFER, gAgent.getID());
 
     LLSettingsVOBase::getSettingsAsset(mInventoryItem->getAssetUUID(),
         [this](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat) { onAssetLoaded(asset_id, settings, status); });
@@ -348,9 +351,25 @@ void LLFloaterFixedEnvironment::onAssetLoaded(LLUUID asset_id, LLSettingsBase::p
     if (mInventoryItem)
         mSettings->setName(mInventoryItem->getName());
 
+    if (mCanCopy)
+        settings->clearFlag(LLSettingsBase::FLAG_NOCOPY);
+    else
+        settings->setFlag(LLSettingsBase::FLAG_NOCOPY);
+
+    if (mCanMod)
+        settings->clearFlag(LLSettingsBase::FLAG_NOMOD);
+    else
+        settings->setFlag(LLSettingsBase::FLAG_NOMOD);
+
+    if (mCanTrans)
+        settings->clearFlag(LLSettingsBase::FLAG_NOTRANS);
+    else
+        settings->setFlag(LLSettingsBase::FLAG_NOTRANS);
+
     updateEditEnvironment();
     syncronizeTabs();
     refresh();
+    LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST);
 }
 
 void LLFloaterFixedEnvironment::onNameChanged(const std::string &name)
@@ -729,15 +748,15 @@ void LLFloaterFixedEnvironmentWater::doImportFromDisk()
 
 void LLFloaterFixedEnvironmentWater::loadWaterSettingFromFile(const std::vector<std::string>& filenames)
 {
+    LLSD messages;
     if (filenames.size() < 1) return;
     std::string filename = filenames[0];
     LL_WARNS("LAPRAS") << "Selected file: " << filename << LL_ENDL;
-    LLSettingsWater::ptr_t legacywater = LLEnvironment::createWaterFromLegacyPreset(filename);
+    LLSettingsWater::ptr_t legacywater = LLEnvironment::createWaterFromLegacyPreset(filename, messages);
 
     if (!legacywater)
     {   
-        LLSD args(LLSDMap("FILE", filename));
-        LLNotificationsUtil::add("WLImportFail", args);
+        LLNotificationsUtil::add("WLImportFail", messages);
         return;
     }
 
@@ -818,14 +837,14 @@ void LLFloaterFixedEnvironmentSky::loadSkySettingFromFile(const std::vector<std:
 {
     if (filenames.size() < 1) return;
     std::string filename = filenames[0];
+    LLSD messages;
 
     LL_WARNS("LAPRAS") << "Selected file: " << filename << LL_ENDL;
-    LLSettingsSky::ptr_t legacysky = LLEnvironment::createSkyFromLegacyPreset(filename);
+    LLSettingsSky::ptr_t legacysky = LLEnvironment::createSkyFromLegacyPreset(filename, messages);
 
     if (!legacysky)
     {   
-        LLSD args(LLSDMap("FILE", filename));
-        LLNotificationsUtil::add("WLImportFail", args);
+        LLNotificationsUtil::add("WLImportFail", messages);
 
         return;
     }

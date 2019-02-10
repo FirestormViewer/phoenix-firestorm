@@ -1,5 +1,7 @@
-/**
- * @file decodeNormF.glsl
+/** 
+ * @file lltrackpicker.h
+ * @author AndreyK Productengine
+ * @brief LLTrackPicker class header file including related functions
  *
  * $LicenseInfo:firstyear=2018&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -23,14 +25,34 @@
  * $/LicenseInfo$
  */
 
-vec3 decode_normal (vec2 enc)
-{
-    vec2 fenc = enc*4-2;
-    float f = dot(fenc,fenc);
-    float g = sqrt(1-f/4);
-    vec3 n;
-    n.xy = fenc*g;
-    n.z = 1-f/2;
-    return n;
-}
+#ifndef LL_TRACKPICKER_H
+#define LL_TRACKPICKER_H
 
+#include "llfloater.h"
+
+
+//=========================================================================
+
+class LLFloaterTrackPicker : public LLFloater
+{
+public:
+    LLFloaterTrackPicker(LLView * owner, const LLSD &params = LLSD());
+    virtual ~LLFloaterTrackPicker() override;
+
+    virtual BOOL postBuild() override;
+    virtual void onClose(bool app_quitting) override;
+    void         showPicker(const LLSD &args);
+
+    virtual void            draw() override;
+
+    void         onButtonCancel();
+    void         onButtonSelect();
+
+private:
+    void                    onFocusLost() override;
+
+    F32              mContextConeOpacity;
+    LLHandle<LLView> mOwnerHandle;
+};
+
+#endif  // LL_TRACKPICKER_H

@@ -56,45 +56,9 @@ void lggBeamColorMapFloater::draw()
 	//set the color of the preview thing
 	LLColor4 bColor = LLColor4(lggBeamMaps::beamColorFromData(mData));
 	mBeamColorPreview->set(bColor, TRUE);
-	
-	//Try draw rectangle attach beam
-	LLRect swatch_rect;
-	LLButton* createButton = mFSPanel->getChild<LLButton>("BeamColor_new");
-	
-	createButton->localRectToOtherView(createButton->getLocalRect(), &swatch_rect, this);
-	LLRect local_rect = getLocalRect();
-	if (gFocusMgr.childHasKeyboardFocus(this) && mFSPanel->isInVisibleChain() && mContextConeOpacity > 0.001f)
-	{
-		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-		LLGLEnable(GL_CULL_FACE);
-		gGL.begin(LLRender::TRIANGLE_STRIP);
-		{
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mRight, swatch_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mRight, local_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mRight, swatch_rect.mBottom);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mRight, local_rect.mBottom);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mBottom);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mLeft, local_rect.mBottom);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
-		}
-		gGL.end();
-	}
 
-	static LLCachedControl<F32> opacity(gSavedSettings, "PickerContextOpacity");
-	mContextConeOpacity = lerp(mContextConeOpacity, opacity(), LLCriticalDamp::getInterpolant(CONTEXT_FADE_TIME));
+	static LLCachedControl<F32> max_opacity(gSavedSettings, "PickerContextOpacity", 0.4f);
+	drawConeToOwner(mContextConeOpacity, max_opacity, mFSPanel->getChild<LLButton>("BeamColor_new"), CONTEXT_FADE_TIME, CONTEXT_CONE_IN_ALPHA, CONTEXT_CONE_OUT_ALPHA);
 
 	//Draw Base Stuff
 	LLFloater::draw();
@@ -180,8 +144,6 @@ lggBeamColorMapFloater::lggBeamColorMapFloater(const LLSD& seed) : LLFloater(see
 
 BOOL lggBeamColorMapFloater::postBuild()
 {
-	setCanMinimize(FALSE);
-
 	getChild<LLUICtrl>("BeamColor_Save")->setCommitCallback(boost::bind(&lggBeamColorMapFloater::onClickSave, this));
 	getChild<LLUICtrl>("BeamColor_Load")->setCommitCallback(boost::bind(&lggBeamColorMapFloater::onClickLoad, this));
 	getChild<LLUICtrl>("BeamColor_Cancel")->setCommitCallback(boost::bind(&lggBeamColorMapFloater::onClickCancel, this));
@@ -256,9 +218,9 @@ void lggBeamColorMapFloater::fixOrder()
 	}
 }
 
-void lggBeamColorMapFloater::setData(void* data)
+void lggBeamColorMapFloater::setData(FSPanelPrefs* data)
 {
-	mFSPanel = (FSPanelPrefs*)data;
+	mFSPanel = data;
 	if (mFSPanel)
 	{
 		gFloaterView->getParentFloater(mFSPanel)->addDependentFloater(this);

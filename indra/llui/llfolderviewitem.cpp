@@ -599,6 +599,7 @@ BOOL LLFolderViewItem::handleHover( S32 x, S32 y, MASK mask )
 			LLFolderView* root = getRoot();
 
 //		if( (x - mDragStartX) * (x - mDragStartX) + (y - mDragStartY) * (y - mDragStartY) > drag_and_drop_threshold() * drag_and_drop_threshold() 
+//			&& root->getAllowDrag()
 //			&& root->getCurSelectedItem()
 //			&& root->startDrag())
 //		{
@@ -622,10 +623,8 @@ BOOL LLFolderViewItem::handleHover( S32 x, S32 y, MASK mask )
 		localPointToScreen(x, y, &screen_x, &screen_y);
 
 		bool can_drag = true;
-		if ( (root->isOverDragThreshold(screen_x, screen_y)) && (root->getCurSelectedItem()) )
+		if (root->isOverDragThreshold(screen_x, screen_y) && root->getAllowDrag() && root->getCurSelectedItem())
 		{
-			//<FS:TS> Silence compiler warning
-			//if (can_drag = root->startDrag())
 			if ((can_drag = root->startDrag()))
 			{
 					// RN: when starting drag and drop, clear out last auto-open

@@ -48,6 +48,7 @@
 #include "pipeline.h"
 #include "llviewershadermgr.h"
 #include "llrender.h"
+#include "llenvironment.h"
 
 const F32 DETAIL_SCALE = 1.f/16.f;
 int DebugDetailMap = 0;
@@ -157,6 +158,18 @@ S32 LLDrawPoolTerrain::getDetailMode()
 	return sDetailMode;
 }
 
+void LLDrawPoolTerrain::boostTerrainDetailTextures()
+{
+    // Hack! Get the region that this draw pool is rendering from!
+	LLViewerRegion *regionp = mDrawFace[0]->getDrawable()->getVObj()->getRegion();
+	LLVLComposition *compp = regionp->getComposition();
+	for (S32 i = 0; i < 4; i++)
+	{
+		compp->mDetailTextures[i]->setBoostLevel(LLGLTexture::BOOST_TERRAIN);
+		compp->mDetailTextures[i]->addTextureStats(1024.f*1024.f); // assume large pixel area
+	}
+}
+
 void LLDrawPoolTerrain::render(S32 pass)
 {
 	LL_RECORD_BLOCK_TIME(FTM_RENDER_TERRAIN);
@@ -166,14 +179,7 @@ void LLDrawPoolTerrain::render(S32 pass)
 		return;
 	}
 
-	// Hack! Get the region that this draw pool is rendering from!
-	LLViewerRegion *regionp = mDrawFace[0]->getDrawable()->getVObj()->getRegion();
-	LLVLComposition *compp = regionp->getComposition();
-	for (S32 i = 0; i < 4; i++)
-	{
-		compp->mDetailTextures[i]->setBoostLevel(LLGLTexture::BOOST_TERRAIN);
-		compp->mDetailTextures[i]->addTextureStats(1024.f*1024.f); // assume large pixel area
-	}
+	boostTerrainDetailTextures();
 
 	LLOverrideFaceColor override(this, 1.f, 1.f, 1.f, 1.f);
 
@@ -252,6 +258,8 @@ void LLDrawPoolTerrain::renderDeferred(S32 pass)
 		return;
 	}
 
+    boostTerrainDetailTextures();
+
 	renderFullShader();
 
 	// Special-case for land ownership feedback
@@ -268,6 +276,9 @@ void LLDrawPoolTerrain::beginShadowPass(S32 pass)
 	LLFacePool::beginRenderPass(pass);
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 	gDeferredShadowProgram.bind();
+
+    LLEnvironment& environment = LLEnvironment::instance();
+    gDeferredShadowProgram.uniform1i(LLShaderMgr::SUN_UP_FACTOR, environment.getIsSunUp() ? 1 : 0);
 }
 
 void LLDrawPoolTerrain::endShadowPass(S32 pass)
