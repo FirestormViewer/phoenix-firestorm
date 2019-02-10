@@ -127,7 +127,7 @@ private:
 	void					onTeleportButtonClicked();
 	void					onPayButtonClicked();
 	void					onDeleteFriendButtonClicked();
-	void					onAddFriendWizButtonClicked();
+	void					onAddFriendWizButtonClicked(LLUICtrl* ctrl);
 	void					onContactSetsButtonClicked();
 	void					onMapButtonClicked();
 	
