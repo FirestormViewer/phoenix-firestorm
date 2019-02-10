@@ -43,6 +43,7 @@ BOOL lggBeamMapFloater::postBuild()
 	getChild<LLUICtrl>("beamshape_save")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickSave, this));
 	getChild<LLUICtrl>("beamshape_clear")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickClear, this));
 	getChild<LLUICtrl>("beamshape_load")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickLoad, this));
+	getChild<LLUICtrl>("cancel")->setCommitCallback(boost::bind(&lggBeamMapFloater::closeFloater, this, false));
 
 	getChild<LLColorSwatchCtrl>("back_color_swatch")->setCommitCallback(boost::bind(&lggBeamMapFloater::onBackgroundChange, this));
 	getChild<LLColorSwatchCtrl>("beam_color_swatch")->setColor(LLColor4::red);
