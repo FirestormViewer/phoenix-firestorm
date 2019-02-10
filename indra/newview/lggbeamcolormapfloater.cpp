@@ -57,7 +57,7 @@ BOOL lggBeamColorMapFloater::postBuild()
 {
 	getChild<LLUICtrl>("BeamColor_Save")->setCommitCallback(boost::bind(&lggBeamColorMapFloater::onClickSave, this));
 	getChild<LLUICtrl>("BeamColor_Load")->setCommitCallback(boost::bind(&lggBeamColorMapFloater::onClickLoad, this));
-	getChild<LLUICtrl>("BeamColor_Cancel")->setCommitCallback(boost::bind(&lggBeamColorMapFloater::onClickCancel, this));
+	getChild<LLUICtrl>("BeamColor_Cancel")->setCommitCallback(boost::bind(&lggBeamColorMapFloater::closeFloater, this, false));
 
 	mColorSlider = getChild<LLSliderCtrl>("BeamColor_Speed");
 	mColorSlider->setCommitCallback(boost::bind(&lggBeamColorMapFloater::onClickSlider, this));
@@ -256,11 +256,6 @@ void lggBeamColorMapFloater::onSaveCallback(const std::vector<std::string>& file
 	{
 		mFSPanel->refreshBeamLists();
 	}
-	closeFloater();
-}
-
-void lggBeamColorMapFloater::onClickCancel()
-{
 	closeFloater();
 }
 
