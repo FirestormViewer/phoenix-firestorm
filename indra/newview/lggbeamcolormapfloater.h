@@ -53,6 +53,9 @@ protected:
 	LLSD getDataSerialized();
 
 	F32					mContextConeOpacity;
+	F32					mContextConeInAlpha;
+	F32					mContextConeOutAlpha;
+	F32					mContextConeFadeTime;
 	FSPanelPrefs*		mFSPanel;
 	lggBeamsColors		mData;
 	LLSliderCtrl*		mColorSlider;

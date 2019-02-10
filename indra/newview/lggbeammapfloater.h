@@ -59,6 +59,9 @@ private:
 
 	std::vector<lggPoint>	mDots;
 	F32						mContextConeOpacity;
+	F32						mContextConeInAlpha;
+	F32						mContextConeOutAlpha;
+	F32						mContextConeFadeTime;
 	FSPanelPrefs*			mFSPanel;
 	LLPanel*				mBeamshapePanel;
 };
