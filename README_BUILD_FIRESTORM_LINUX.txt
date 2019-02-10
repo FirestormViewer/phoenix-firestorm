@@ -1,7 +1,5 @@
 First, make sure gcc-4.7 and g++-4.7 are installed.
 
-32bit build platforms are better tested at this point and strongly recommended.
-
 Ensure you can build a stock viewer-development try as described in the SL wiki. Before asking for any help 
 compiling Firestorm, make sure you can build viewer-development first. If you try and skip this step, you may
 receive  much less help. http://wiki.secondlife.com/wiki/Compiling_the_viewer_(Linux)

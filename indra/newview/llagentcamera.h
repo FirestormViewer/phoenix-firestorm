@@ -121,7 +121,10 @@ private:
 	/** Determines default camera offset depending on the current camera preset */
 	LLVector3 getCameraOffsetInitial();
 	/** Determines maximum camera distance from target for mouselook, opposite to LAND_MIN_ZOOM */
-	F32 getCameraMaxZoomDistance();
+	// <FS:Ansariel> FIRE-23470: Fix camera controls zoom glitch
+	//F32 getCameraMaxZoomDistance();
+	F32 getCameraMaxZoomDistance(bool allow_disabled_constraints = false);
+	// </FS:Ansariel>
 
 	/** Camera preset in Third Person Mode */
 	ECameraPreset mCameraPreset; 

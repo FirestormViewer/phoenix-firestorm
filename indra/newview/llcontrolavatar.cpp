@@ -60,6 +60,8 @@ LLControlAvatar::LLControlAvatar(const LLUUID& id, const LLPCode pcode, LLViewer
 // virtual
 LLControlAvatar::~LLControlAvatar()
 {
+	// Should already have been unlinked before destruction
+	llassert(!mRootVolp);
 }
 
 // virtual
@@ -336,6 +338,7 @@ LLControlAvatar *LLControlAvatar::createControlAvatar(LLVOVolume *obj)
 void LLControlAvatar::markForDeath()
 {
     mMarkedForDeath = true;
+	mVolumep = nullptr;
 }
 
 void LLControlAvatar::idleUpdate(LLAgent &agent, const F64 &time)

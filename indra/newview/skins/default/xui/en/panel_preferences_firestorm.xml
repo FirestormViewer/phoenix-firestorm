@@ -313,6 +313,7 @@
          left="20"
          label="Enable Spam Protection even for objects owned by you"
          control_name="FSUseAntiSpamMine"
+         enabled_control="UseAntiSpam"
          follows="left|top"
          height="16"
          name="FSUseAntiSpamMine"
