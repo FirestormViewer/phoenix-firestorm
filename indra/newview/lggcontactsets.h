@@ -66,7 +66,7 @@ public:
 	std::string getPseudonym(const LLUUID& friend_id);
 	bool hasPseudonym(const LLUUID& friend_id);
 	bool hasPseudonym(uuid_vec_t ids);
-	void clearPseudonym(const LLUUID& friend_id);
+	void clearPseudonym(const LLUUID& friend_id, bool save_changes = true);
 
 	void removeDisplayName(const LLUUID& friend_id);
 	bool hasDisplayNameRemoved(const LLUUID& friend_id);
@@ -75,9 +75,9 @@ public:
 	string_vec_t getFriendSets(const LLUUID& friend_id);
 	string_vec_t getAllContactSets();
 
-	void addFriendToSet(const LLUUID& friend_id, const std::string& set_name);
-	void removeFriendFromSet(const LLUUID& friend_id, const std::string& set_name);
-	void removeFriendFromAllSets(const LLUUID& friend_id);
+	void addToSet(const uuid_vec_t&, const std::string& set_name);
+	void removeFriendFromSet(const LLUUID& friend_id, const std::string& set_name, bool save_changes = true);
+	void removeFriendFromAllSets(const LLUUID& friend_id, bool save_changes = true);
 	bool isFriendInSet(const LLUUID& friend_id, const std::string& set_name);
 	bool hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type);
 	bool hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type, LLColor4& color);
@@ -87,8 +87,7 @@ public:
 	void removeSet(const std::string& set_name);
 	bool isValidSet(const std::string& set_name);
 
-	void addNonFriendToList(const LLUUID& non_friend_id);
-	void removeNonFriendFromList(const LLUUID& non_friend_id);
+	void removeNonFriendFromList(const LLUUID& non_friend_id, bool save_changes = true);
 	bool isNonFriend(const LLUUID& non_friend_id);
 	bool isFriendInSet(const LLUUID& friend_id);
 	uuid_vec_t getListOfNonFriends();

@@ -2574,7 +2574,7 @@ LLUUID find_possible_item_for_regeneration(const LLViewerInventoryItem *target_i
 		 ++item_iter)
 	{
 	    const LLViewerInventoryItem *item = (*item_iter);
-		if (true) return item->getUUID();
+		if (item) return item->getUUID();
 	}
 	return LLUUID::null;
 }
