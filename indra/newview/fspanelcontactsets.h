@@ -43,13 +43,13 @@ public:
 	FSPanelContactSets();
 	BOOL postBuild();
 	void refreshSetList();
-	
+
 private:
 	~FSPanelContactSets();
-	
+
 	void onSelectAvatar();
 	void generateAvatarList(const std::string& contact_set);
-	void onClickAddAvatar();
+	void onClickAddAvatar(LLUICtrl* ctrl);
 	void handlePickerCallback(const uuid_vec_t& ids, const std::string& set);
 	void onClickRemoveAvatar();
 	void onClickOpenProfile();
@@ -57,20 +57,20 @@ private:
 	void onClickOfferTeleport();
 	void onClickAddSet();
 	void onClickRemoveSet();
-	void onClickConfigureSet();
+	void onClickConfigureSet(LLUICtrl* ctrl);
 	void onClickRemoveDisplayName();
 	void onClickSetPseudonym();
 	void onClickRemovePseudonym();
-	
+
 	void refreshContactSets();
 	void removeAvatarFromSet();
 	void resetControls();
-	
+
 	void updateSets(LGGContactSets::EContactSetUpdate type);
 	boost::signals2::connection mContactSetChangedConnection;
-	
+
 	uuid_vec_t mAvatarSelections;
-	
+
 	LLComboBox* mContactSetCombo;
 	LLAvatarList* mAvatarList;
 };

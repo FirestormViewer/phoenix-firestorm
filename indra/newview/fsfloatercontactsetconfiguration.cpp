@@ -28,18 +28,28 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+
 #include "fsfloatercontactsetconfiguration.h"
+
 #include "lggcontactsets.h"
+#include "llbutton.h"
 #include "llcheckboxctrl.h"
 #include "llcolorswatch.h"
 #include "lllineeditor.h"
-#include "llbutton.h"
 #include "llnotificationsutil.h"
+#include "llviewercontrol.h"
 
 FSFloaterContactSetConfiguration::FSFloaterContactSetConfiguration(const LLSD& target_set)
-:	LLFloater(target_set)
+:	LLFloater(target_set),
+	mContextConeOpacity(0.f),
+	mContextConeInAlpha(0.f),
+	mContextConeOutAlpha(0.f),
+	mContextConeFadeTime(0.f)
 {
 	mContactSet = target_set.asString();
+	mContextConeInAlpha = gSavedSettings.getF32("ContextConeInAlpha");
+	mContextConeOutAlpha = gSavedSettings.getF32("ContextConeOutAlpha");
+	mContextConeFadeTime = gSavedSettings.getF32("ContextConeFadeTime");
 }
 
 BOOL FSFloaterContactSetConfiguration::postBuild()
@@ -57,19 +67,26 @@ BOOL FSFloaterContactSetConfiguration::postBuild()
 	{
 		mSetSwatch->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetColor, this));
 	}
-	
+
 	mGlobalSwatch = getChild<LLColorSwatchCtrl>("global_swatch");
 	if (mGlobalSwatch)
 	{
 		mGlobalSwatch->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitDefaultColor, this));
 	}
-	
+
 	mNotificationCheckBox = getChild<LLCheckBoxCtrl>("show_set_notifications");
 	if (mNotificationCheckBox)
 	{
 		mNotificationCheckBox->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetNotifications, this));
 	}
 	return TRUE;
+}
+
+void FSFloaterContactSetConfiguration::draw()
+{
+	static LLCachedControl<F32> max_opacity(gSavedSettings, "PickerContextOpacity", 0.4f);
+	drawConeToOwner(mContextConeOpacity, max_opacity, mFrustumOrigin.get(), mContextConeFadeTime, mContextConeInAlpha, mContextConeOutAlpha);
+	LLFloater::draw();
 }
 
 void FSFloaterContactSetConfiguration::onOpen(const LLSD& target_set)
@@ -118,4 +135,12 @@ void FSFloaterContactSetConfiguration::updateTitle()
 	LLStringUtil::format_map_t map;
 	map["NAME"] = mContactSet;
 	setTitle(getString("title", map));
+}
+
+void FSFloaterContactSetConfiguration::setFrustumOrigin(LLView* frustumOrigin)
+{
+	if (frustumOrigin)
+	{
+		mFrustumOrigin = frustumOrigin->getHandle();
+	}
 }

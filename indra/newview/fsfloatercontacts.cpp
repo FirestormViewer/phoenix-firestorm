@@ -125,7 +125,7 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsTab->childSetAction("map_btn", 				boost::bind(&FSFloaterContacts::onMapButtonClicked,				this));
 	mFriendsTab->childSetAction("pay_btn",				boost::bind(&FSFloaterContacts::onPayButtonClicked,				this));
 	mFriendsTab->childSetAction("remove_btn",			boost::bind(&FSFloaterContacts::onDeleteFriendButtonClicked,	this));
-	mFriendsTab->childSetAction("add_btn",				boost::bind(&FSFloaterContacts::onAddFriendWizButtonClicked,	this));
+	mFriendsTab->childSetAction("add_btn",				boost::bind(&FSFloaterContacts::onAddFriendWizButtonClicked,	this, _1));
 	mFriendsTab->setDefaultBtn("im_btn");
 
 	mFriendsTab->getChild<LLTextBox>("friend_count")->setTextArg("COUNT", llformat("%d", mFriendsList->getItemCount()));
@@ -372,10 +372,10 @@ void FSFloaterContacts::onAvatarPicked(const uuid_vec_t& ids, const std::vector<
 	}
 }
 
-void FSFloaterContacts::onAddFriendWizButtonClicked()
+void FSFloaterContacts::onAddFriendWizButtonClicked(LLUICtrl* ctrl)
 {
 	// Show add friend wizard.
-	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSFloaterContacts::onAvatarPicked, _1, _2), FALSE, TRUE);
+	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSFloaterContacts::onAvatarPicked, _1, _2), FALSE, TRUE, TRUE, "", ctrl);
 	// Need to disable 'ok' button when friend occurs in selection
 	if (picker)
 	{
