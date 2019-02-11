@@ -1515,6 +1515,11 @@ class LinuxManifest(ViewerManifest):
             if snapStage != None:
                 print( "Building flatpak package" )
 
+        if snapStage == None:
+            data = open( "/proc/1/cgroup", "r" ).readlines()[0]
+            if "docker" in data:
+                snapStage = "/usr"
+
         pkgBase = os.path.join(os.pardir, 'packages', 'lib', 'release')
         if snapStage != None:
             pkgBase = os.path.join( snapStage, "lib" )
