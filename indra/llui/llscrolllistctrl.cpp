@@ -2492,6 +2492,17 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
 					}
 				}
 				break;
+			// <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
+			case KEY_CONTEXT_MENU:
+				{
+					LLScrollListItem* selected_item = getFirstSelected();
+					if (selected_item)
+					{
+						handleRightMouseDown(selected_item->getRect().getCenterX(), selected_item->getRect().getCenterY(), MASK_NONE);
+					}
+					break;
+				}
+			// </FS:Ansariel>
 			default:
 				break;
 			}

@@ -308,6 +308,7 @@
         <check_box label="オブジェクトを掴んで移動するのにCtrl+マウスを使用" tool_tip="チェックを入れると、オブジェクトを掴んで移動するのに、Ctrlキーを押しながらマウスで操作できるようになります。" name="FSEnableGrab" />
         <check_box label="制作モードにおいて、CAPSロックの状態でテクスチャの面をクリック-ドラッグまたはクリック-スケールする" tool_tip="チェックを入れると、制作モードでCAPSロックオンの状態で、テクスチャの面をクリック-ドラッグ、クリック-スケールできるようになります。この機能はまだ実験段階ですので、ご利用には十分な注意を払って下さい。" name="FSExperimentalDragTexture" />
 		<check_box label="アップロード中にアニメーションを自分のアバターで確認" tool_tip="ここにチェックを入れると、アニメーションのアップロード処理中に自分のアバターでそのアニメーションを再生して確認できます。" name="FSUploadAnimationOnOwnAvatar" />
+		<check_box label="スクリプト情報の詳細を拡張" tool_tip="ここにチェックを入れると、スクリプト情報の基本機能を拡張して、制作者には有益な様々な詳細情報が得られるようになります。" name="FSScriptInfoExtended" />
 
 	</panel>
 	

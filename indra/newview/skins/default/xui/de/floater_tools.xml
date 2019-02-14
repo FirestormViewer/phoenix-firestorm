@@ -439,10 +439,9 @@ Niedrigste:
 			<text name="LOD_swap_defaults_label" value="Standard" tool_tip="Dieser Standard-LOD-Faktor wird von den meisten Viewern angewendet."/>
 			<text name="LOD_swap_usr_label" value="Ihrer" tool_tip="Ihre aktuelle Einstellung basierend auf RenderVolumeLODFactor."/>
 			<text name="LOD_swap_label" value="Wechsel" tool_tip="Ihre aktuelle Einstellung basierend auf RenderVolumeLODFactor."/>
-			<string name="ll_lod_tooltip_msg">"Linden Lab Second-Life-Viewer-Standard ([FACTOR])"</string>
+			<string name="ll_lod_tooltip_msg">Linden Lab Second-Life-Viewer-Standard ([FACTOR])</string>
 			<text name="LOD_swap_ll_default" value="LL"/>
-			<string name="fs_lod_tooltip_msg">"Firestorm-Viewer-Standard ([FACTOR])"</string>
-			<text name="LOD_swap_fs_default" value="FS"/>
+			<string name="fs_lod_tooltip_msg">[APP_NAME]-Viewer-Standard ([FACTOR])</string>
 			<text name="LOD_swap_usr_current" tool_tip="Ihr aktueller LOD-Faktor."/>
 			<text name="LOD_swap_LOD_Change_label">
 				Hoch ↔ Mit

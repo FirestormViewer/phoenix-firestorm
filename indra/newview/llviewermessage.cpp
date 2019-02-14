@@ -3042,7 +3042,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 						RlvUtil::filterNames(chat.mFromName);
 					}
 				}
-				else if (chat.mFromID != gAgent.getID())
+				else if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, chat.mFromID))
 				{
 					LLAvatarName av_name;
 					if (LLAvatarNameCache::get(chat.mFromID, &av_name))
@@ -4578,7 +4578,7 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 							reason = "timer";
 						}
 
-						report_to_nearby_chat("Sim tried to kill attachment: " + objectp->getAttachmentItemName() + " (" + reason + ")");
+						report_to_nearby_chat("Region \"" + regionp->getName() + "\" tried to kill attachment: " + objectp->getAttachmentItemName() + " (" + reason + ") - Agent region: \"" + gAgent.getRegion()->getName() + "\"");
 					}
 					continue;
 				}

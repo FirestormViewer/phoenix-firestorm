@@ -1396,6 +1396,17 @@
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>RLVaSplitRedirectChat</key>
+    <map>
+      <key>Comment</key>
+      <string>Splits long nearby chat lines across multiple messages when @redir* restricted.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <boolean>0</boolean>
+    </map>
     <key>RLVaTopLevelMenu</key>
     <map>
       <key>Comment</key>
@@ -24720,13 +24731,13 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSStaticEyesUUID</key>
     <map>
       <key>Comment</key>
-      <string>Animation UUID to used to stop idle eye moment (Default uses priority 2)</string>
+      <string>Animation UUID to used to stop idle eye moment (Default is priority 2: 592a9fb4-5e02-77bb-e1e5-da4d17d27336, for priority 5 use: 3f0469e9-b434-70c0-ee52-a493aa039d22)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>eff31dd2-1b65-5a03-5e37-15aca8e53ab7</string>
+      <string>592a9fb4-5e02-77bb-e1e5-da4d17d27336</string>
     </map>
     <key>FSEnableLogThrottle</key>
     <map>
@@ -24893,7 +24904,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <integer>3.0</integer>
+      <real>3.0</real>
     </map>
     <key>FSExperimentalLostAttachmentsFixReport</key>
     <map>

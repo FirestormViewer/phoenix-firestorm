@@ -1211,7 +1211,12 @@ bool RlvHandler::redirectChatOrEmote(const std::string& strUTF8Text) const
 	{
 		S32 nChannel = boost::get<S32>(itRedir->second.varOption);
 		if (RlvActions::canSendChannel(nChannel))
-			RlvUtil::sendChatReply(nChannel, strUTF8Text);
+		{
+			if (!RlvSettings::getSplitRedirectChat())
+				RlvUtil::sendChatReply(nChannel, strUTF8Text);
+			else
+				RlvUtil::sendChatReplySplit(nChannel, strUTF8Text);
+		}
 	}
 
 	return true;
@@ -3698,21 +3703,7 @@ void RlvHandler::renderOverlay()
 		const LLVector3 overlayTint = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TINT)->getValue<LLVector3>();
 		gGL.color4f(overlayTint.mV[0], overlayTint.mV[1], overlayTint.mV[2], llclamp(RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_ALPHA)->getValue<float>(), 0.0f, 1.0f));
 
-		gGL.begin(LLRender::TRIANGLE_STRIP);
-			gGL.texCoord2f(1.f, 1.f);
-			gGL.vertex2i(nWidth, nHeight);
-			gGL.texCoord2f(0.f, 1.f);
-			gGL.vertex2i(0, nHeight);
-			gGL.texCoord2f(0.f, 0.f);
-			gGL.vertex2i(0, 0);
-
-			gGL.texCoord2f(1.f, 1.f);
-			gGL.vertex2i(nWidth, nHeight);
-			gGL.texCoord2f(0.f, 0.f);
-			gGL.vertex2i(0, 0);
-			gGL.texCoord2f(1.f, 0.f);
-			gGL.vertex2i(nWidth, 0);
-		gGL.end();
+		gl_rect_2d_simple_tex(nWidth, nHeight);
 
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
