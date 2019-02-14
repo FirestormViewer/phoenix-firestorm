@@ -38,17 +38,17 @@
 	<text name="GroupLabel">
 		Gruppe:
 	</text>
-	<check_box label="Teilen" name="share_with_group"/>
+	<check_box label="Teilen" name="share_with_group" tool_tip="Jedem Mitglied der gewählten Gruppe erlauben Ihre Bearbeiten-Berechtigungen für dieses Objekt zu teilen. Sie müssen das Objekt übertragen, um die Rollen-Beschränkungen zu aktivieren."/>
 	<text name="AnyoneLabel">
 		Jeder:
 	</text>
-	<check_box label="Kopieren" name="everyone_copy"/>
+	<check_box label="Kopieren" name="everyone_copy" tool_tip="Jeder kann eine Kopie des Objektes nehmen. Das Objekt und der komplette Inhalt müssen Kopier- und Transferieren-Berechtigungen besitzen."/>
 	<text name="NextOwnerLabel">
 		Nächster Eigent.:
 	</text>
-	<check_box label="Bearbeiten" name="next_owner_modify"/>
-	<check_box label="Kopieren" name="next_owner_copy"/>
-	<check_box initial_value="true" label="Transferieren" name="next_owner_transfer" tool_tip="Nächster Eigentümer kann dieses Objekt weitergeben oder -verkaufen"/>
+	<check_box label="Bearbeiten" name="next_owner_modify" tool_tip="Nächster Eigentümer kann Eigenschaften wie Name oder Größe von diesem Objekt bearbeiten."/>
+	<check_box label="Kopieren" name="next_owner_copy" tool_tip="Nächster Eigentümer kann beliebig viele Kopien von diesem Objekt erstellen. Die Ersteller-Informationen bleiben erhalten und die Kopien können keine weitergehenden Berechtigungen als das Orginal besitzen."/>
+	<check_box initial_value="true" label="Transferieren" name="next_owner_transfer" tool_tip="Nächster Eigentümer kann dieses Objekt weitergeben oder -verkaufen."/>
 	<button label="OK" name="ok"/>
 	<button label="Anwenden" name="apply"/>
 	<button label="Abbrechen" name="close"/>

@@ -59,7 +59,7 @@
 				<text name="AnyoneLabel">
 					Jeder:
 				</text>
-				<check_box label="Kopieren" name="CheckEveryoneCopy"/>
+				<check_box label="Kopieren" name="CheckEveryoneCopy" tool_tip="Jeder kann eine Kopie des Objektes nehmen. Das Objekt und der komplette Inhalt müssen Kopier- und Transferieren-Berechtigungen besitzen."/>
 				<text name="GroupLabel">
 					Gruppe:
 				</text>
@@ -67,9 +67,9 @@
 				<text name="NextOwnerLabel">
 					Nächster Eigentümer:
 				</text>
-				<check_box label="Bearbeiten" name="CheckNextOwnerModify"/>
-				<check_box label="Kopieren" name="CheckNextOwnerCopy"/>
-				<check_box label="Übertragen" name="CheckNextOwnerTransfer" tool_tip="Nächster Eigentümer kann dieses Objekt weitergeben oder -verkaufen"/>
+				<check_box label="Bearbeiten" name="CheckNextOwnerModify" tool_tip="Nächster Eigentümer kann Eigenschaften wie Name oder Größe von diesem Objekt bearbeiten."/>
+				<check_box label="Kopieren" name="CheckNextOwnerCopy" tool_tip="Nächster Eigentümer kann beliebig viele Kopien von diesem Objekt erstellen. Die Ersteller-Informationen bleiben erhalten und die Kopien können keine weitergehenden Berechtigungen als das Orginal besitzen."/>
+				<check_box label="Übertragen" name="CheckNextOwnerTransfer" tool_tip="Nächster Eigentümer kann dieses Objekt weitergeben oder -verkaufen."/>
 			</panel>
 			<check_box label="Zum Verkauf" name="CheckPurchase"/>
 			<combo_box name="ComboBoxSaleType">

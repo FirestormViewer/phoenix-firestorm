@@ -245,14 +245,14 @@
 				<text name="Anyone can:">
 					Jeder:
 				</text>
-				<check_box label="Bewegen" name="checkbox allow everyone move"/>
-				<check_box label="Kopieren" name="checkbox allow everyone copy"/>
-				<check_box label="Exportieren" name="checkbox allow export"/>
+				<check_box label="Bewegen" name="checkbox allow everyone move" tool_tip="Jeder kann das Onjekt bewegen."/>
+				<check_box label="Kopieren" name="checkbox allow everyone copy" tool_tip="Jeder kann eine Kopie des Objektes nehmen. Das Objekt und der komplette Inhalt müssen Kopier- und Transferieren-Berechtigungen besitzen."/>
+				<check_box label="Exportieren" name="checkbox allow export" tool_tip="Jeder kann das Objekt exportieren."/>
 				<text name="Next owner can:">
 					Nächster Eigentümer:
 				</text>
-				<check_box label="Ändern" name="checkbox next owner can modify"/>
-				<check_box label="Kopieren" name="checkbox next owner can copy"/>
+				<check_box label="Ändern" name="checkbox next owner can modify" tool_tip="Nächster Eigentümer kann Eigenschaften wie Name oder Größe von diesem Objekt bearbeiten."/>
+				<check_box label="Kopieren" name="checkbox next owner can copy" tool_tip="Nächster Eigentümer kann beliebig viele Kopien von diesem Objekt erstellen. Die Ersteller-Informationen bleiben erhalten und die Kopien können keine weitergehenden Berechtigungen als das Orginal besitzen."/>
 				<check_box label="Transferieren" name="checkbox next owner can transfer" tool_tip="Nächster Eigentümer kann dieses Objekt weitergeben oder -verkaufen"/>
 				<text name="B:">
 					B:

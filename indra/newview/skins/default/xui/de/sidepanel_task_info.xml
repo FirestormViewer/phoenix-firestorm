@@ -39,13 +39,13 @@
 		<panel name="perms_inv">
 			<text name="perm_modify">Sie können dieses Objekt bearbeiten.</text>
 			<text name="Anyone can:">Jeder:</text>
-			<check_box label="Kopieren" name="checkbox allow everyone copy"/>
-			<check_box label="Bewegen" name="checkbox allow everyone move"/>
+			<check_box label="Kopieren" name="checkbox allow everyone copy" tool_tip="Jeder kann eine Kopie des Objektes nehmen. Das Objekt und der komplette Inhalt müssen Kopier- und Transferieren-Berechtigungen besitzen."/>
+			<check_box label="Bewegen" name="checkbox allow everyone move" tool_tip="Jeder kann das Onjekt bewegen."/>
 			<text name="GroupLabel">Gruppe:</text>
 			<check_box label="Teilen" name="checkbox share with group" tool_tip="Mit allen Mitgliedern der zugeordneten Gruppe, Ihre Berechtigungen dieses Objekt zu ändern, teilen. Sie müssen Übereignen, um Rollenbeschränkungen zu aktivieren."/>
 			<text name="NextOwnerLabel">Nächster Eigentümer:</text>
-			<check_box label="Bearbeiten" name="checkbox next owner can modify"/>
-			<check_box label="Kopieren" name="checkbox next owner can copy"/>
+			<check_box label="Bearbeiten" name="checkbox next owner can modify" tool_tip="Nächster Eigentümer kann beliebig viele Kopien von diesem Objekt erstellen. Die Ersteller-Informationen bleiben erhalten und die Kopien können keine weitergehenden Berechtigungen als das Orginal besitzen."/>
+			<check_box label="Kopieren" name="checkbox next owner can copy" tool_tip="Nächster Eigentümer kann beliebig viele Kopien von diesem Objekt erstellen. Die Ersteller-Informationen bleiben erhalten und die Kopien können keine weitergehenden Berechtigungen als das Orginal besitzen."/>
 			<check_box label="Transferieren" name="checkbox next owner can transfer" tool_tip="Nächster Eigentümer kann dieses Objekt weitergeben oder -verkaufen"/>
 		</panel>
 		<check_box label="Zum Verkauf" name="checkbox for sale"/>
