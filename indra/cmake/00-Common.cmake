@@ -127,7 +127,7 @@ if (LINUX)
       )
 
   # force this platform to accept TOS via external browser
-  add_definitions(-DEXTERNAL_TOS)
+  #add_definitions(-DEXTERNAL_TOS)
 
   add_definitions(-DAPPID=secondlife)
   add_compile_options(-fvisibility=hidden)
@@ -146,6 +146,7 @@ if (LINUX)
     set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory")
   endif (NOT USESYSTEMLIBS)
 
+  set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
   set(CMAKE_CXX_FLAGS_DEBUG "-fno-inline ${CMAKE_CXX_FLAGS_DEBUG}")
 endif (LINUX)
 
