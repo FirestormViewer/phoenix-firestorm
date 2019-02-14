@@ -29,11 +29,9 @@
 
 #include "llapp.h"
 #include "llapr.h"
-#include "apr_thread_cond.h"
 #include "boost/intrusive_ptr.hpp"
 #include "llmutex.h"
 #include "llrefcount.h"
-
 #include <thread>
 
 LL_COMMON_API void assert_main_thread();
@@ -99,15 +97,17 @@ public:
     
 private:
     bool                mPaused;
+    std::thread::native_handle_type mNativeHandle; // for termination in case of issues
     
-    void threadRun(  );
+    // static function passed to APR thread creation routine
+    void threadRun();
 
 protected:
     std::string         mName;
     class LLCondition*  mRunCondition;
     LLMutex*            mDataLock;
 
-    std::thread         *mThreadp;
+    std::thread        *mThreadp;
     EThreadStatus       mStatus;
     U32                 mID;
     LLTrace::ThreadRecorder* mRecorder;

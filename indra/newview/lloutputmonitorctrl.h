@@ -72,9 +72,11 @@ public:
 
 	void			setPower(F32 val);
 	F32				getPower(F32 val) const { return mPower; }
-	
+
+	bool			getIsMuted() const { return (mIsMuted || mIsModeratorMuted); }
+	void			setIsModeratorMuted(bool val) { mIsModeratorMuted = val; }
+
 	// <FS:CR> FS Communications UI
-	bool			getIsMuted() const { return mIsMuted; }
 	void			setIsMuted(bool val) { mIsMuted = val; }
 	// </FS:CR>
 	
@@ -136,6 +138,7 @@ private:
 
 	F32				mPower;
 	bool			mIsAgentControl;
+	bool			mIsModeratorMuted;
 	bool			mIsMuted;
 	bool			mIsTalking;
 	bool			mShowParticipantsSpeaking;
