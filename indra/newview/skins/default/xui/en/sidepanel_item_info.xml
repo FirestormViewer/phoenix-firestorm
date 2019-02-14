@@ -351,7 +351,7 @@
           layout="topleft"
           left_pad="0"
           name="CheckEveryoneCopy"
-          tool_tip="Anyone can take a copy of the object . Object and all of its contents must be copy and transfer permissive."
+          tool_tip="Anyone can take a copy of the object. Object and all of its contents must be copy and transfer permissive."
           top_delta="-2"
           width="150" />
         <text

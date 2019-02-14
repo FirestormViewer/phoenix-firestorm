@@ -1330,6 +1330,7 @@ even though the user gets a free copy.
              layout="topleft"
              left_pad="0"
              name="checkbox allow export"
+             tool_tip="Anyone can export this Object."
              width="90" />
             <text
                type="string"

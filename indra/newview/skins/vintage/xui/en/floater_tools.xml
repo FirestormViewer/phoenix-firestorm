@@ -1323,6 +1323,14 @@ even though the user gets a free copy.
              name="checkbox allow everyone copy"
              tool_tip="Anyone can take a copy of the object. Object and all of its contents must be copy and transfer permissive."
              width="90" />
+            <check_box
+             height="19"
+             label="Export"
+             layout="topleft"
+             left_pad="0"
+             name="checkbox allow export"
+             tool_tip="Anyone can export this Object."
+             width="90" />
             <text
                type="string"
                follows="left|top"
