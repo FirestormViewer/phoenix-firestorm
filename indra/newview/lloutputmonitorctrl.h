@@ -76,10 +76,6 @@ public:
 	bool			getIsMuted() const { return (mIsMuted || mIsModeratorMuted); }
 	void			setIsModeratorMuted(bool val) { mIsModeratorMuted = val; }
 
-	// <FS:CR> FS Communications UI
-	void			setIsMuted(bool val) { mIsMuted = val; }
-	// </FS:CR>
-	
 	// For the current user, need to know the PTT state to show
 	// correct button image.
 	void			setIsAgentControl(bool val) { mIsAgentControl = val; }
