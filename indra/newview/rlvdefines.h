@@ -79,6 +79,7 @@ const S32 RLVa_VERSION_PATCH = 0;
 #define RLV_PUTINV_PREFIX				"#RLV/~"
 #define RLV_PUTINV_SEPARATOR			"/"
 #define RLV_PUTINV_MAXDEPTH				4
+#define RLV_SETGROUP_THROTTLE           60.f
 #define RLV_SETROT_OFFSET				F_PI_BY_TWO		// @setrot is off by 90 degrees with the rest of SL
 #define RLV_STRINGS_FILE				"rlva_strings.xml"
 
@@ -314,6 +315,7 @@ enum ERlvCmdRet {
 	RLV_RET_FAILED_DEPRECATED,		// Command failed (deprecated and no longer supported)
 	RLV_RET_FAILED_NOBEHAVIOUR,		// Command failed (force modifier on an object with no active restrictions)
 	RLV_RET_FAILED_BLOCKED,			// Command failed (object is blocked)
+	RLV_RET_FAILED_THROTTLED,       // Command failed (throttled)
 	RLV_RET_NO_PROCESSOR			// Command doesn't have a template processor define (legacy code)
 };
 #define RLV_RET_SUCCEEDED(eCmdRet)  (((eCmdRet) & RLV_RET_SUCCESS) == RLV_RET_SUCCESS)
@@ -376,6 +378,7 @@ enum ERlvAttachGroupType
 #define RLV_SETTING_LOGINLASTLOCATION	"RLVaLoginLastLocation"
 #define RLV_SETTING_SHAREDINVAUTORENAME	"RLVaSharedInvAutoRename"
 #define RLV_SETTING_SHOWASSERTIONFAIL	"RLVaShowAssertionFailures"
+#define RLV_SETTING_SPLITREDIRECTCHAT   "RLVaSplitRedirectChat"
 #define RLV_SETTING_TOPLEVELMENU		"RLVaTopLevelMenu"
 #define RLV_SETTING_WEARREPLACEUNLOCKED	"RLVaWearReplaceUnlocked"
 

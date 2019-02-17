@@ -87,8 +87,6 @@
 #include "llcombobox.h"
 #include "lllayoutstack.h"
 
-#include <boost/foreach.hpp>
-
 const F32 FRIEND_LIST_UPDATE_TIMEOUT =	0.5f;
 const F32 NEARBY_LIST_UPDATE_INTERVAL =	1.f;
 const U32 MAX_SELECTIONS = 20;
@@ -1878,7 +1876,7 @@ void LLPanelPeople::refreshContactSets()
 	std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllContactSets();
 	if (!contact_sets.empty())
 	{
-		BOOST_FOREACH(const std::string& set_name, contact_sets)
+		for (auto const& set_name : contact_sets)
 		{
 			mContactSetCombo->add(set_name);
 		}
@@ -1932,7 +1930,7 @@ void LLPanelPeople::generateContactList(const std::string& contact_set)
 	else if (!LGGContactSets::getInstance()->isInternalSetName(contact_set))
 	{
 		LGGContactSets::ContactSet* group = LGGContactSets::getInstance()->getContactSet(contact_set);
-		BOOST_FOREACH(const LLUUID id, group->mFriends)
+		for (auto const& id : group->mFriends)
 		{
 			avatars.push_back(id);
 		}
@@ -2018,14 +2016,14 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
 		uuid_vec_t selected_uuids;
 		getCurrentItemIDs(selected_uuids);
 		if (selected_uuids.empty()) return;
-		
+
 		LLSD payload, args;
 		std::string set = mContactSetCombo->getValue().asString();
 		S32 selected_size = selected_uuids.size();
 		args["SET_NAME"] = set;
 		args["TARGET"] = (selected_size > 1 ? llformat("%d", selected_size) : LLSLURL("agent", selected_uuids.front(), "about").getSLURLString());
 		payload["contact_set"] = set;
-		BOOST_FOREACH(const LLUUID& id, selected_uuids)
+		for (auto const& id : selected_uuids)
 		{
 			payload["ids"].append(id);
 		}
@@ -2044,7 +2042,7 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
 		getCurrentItemIDs(selected_uuids);
 		if (selected_uuids.empty()) return;
 		
-		BOOST_FOREACH(const LLUUID& id, selected_uuids)
+		for (auto const& id : selected_uuids)
 		{
 			LLAvatarActions::showProfile(id);
 		}
@@ -2069,7 +2067,7 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
 		uuid_vec_t selected_uuids;
 		getCurrentItemIDs(selected_uuids);
 		if (selected_uuids.empty()) return;
-		
+
 		LLAvatarActions::offerTeleport(selected_uuids);
 	}
 	else if (chosen_item == "set_pseudonym")
@@ -2077,7 +2075,7 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
 		uuid_vec_t selected_uuids;
 		getCurrentItemIDs(selected_uuids);
 		if (selected_uuids.empty()) return;
-		
+
 		LLSD payload, args;
 		args["AVATAR"] = LLSLURL("agent", selected_uuids.front(), "about").getSLURLString();
 		payload["id"] = selected_uuids.front();
@@ -2088,8 +2086,8 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
 		uuid_vec_t selected_uuids;
 		getCurrentItemIDs(selected_uuids);
 		if (selected_uuids.empty()) return;
-		
-		BOOST_FOREACH(const LLUUID& id, selected_uuids)
+
+		for (auto const& id : selected_uuids)
 		{
 			if (LGGContactSets::getInstance()->hasPseudonym(id))
 			{
@@ -2102,8 +2100,8 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
 		uuid_vec_t selected_uuids;
 		getCurrentItemIDs(selected_uuids);
 		if (selected_uuids.empty()) return;
-		
-		BOOST_FOREACH(const LLUUID& id, selected_uuids)
+
+		for (auto const& id : selected_uuids)
 		{
 			if (!LGGContactSets::getInstance()->hasDisplayNameRemoved(id))
 			{
@@ -2115,14 +2113,12 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
 
 void LLPanelPeople::handlePickerCallback(const uuid_vec_t& ids, const std::string& set)
 {
-	if (ids.empty() || !mContactSetCombo) return;
-	
-	BOOST_FOREACH(const LLUUID& id, ids)
+	if (ids.empty() || !mContactSetCombo)
 	{
-		if (!LLAvatarTracker::instance().isBuddy(id))
-			LGGContactSets::getInstance()->addNonFriendToList(id);
-		LGGContactSets::getInstance()->addFriendToSet(id, set);
+		return;
 	}
+
+	LGGContactSets::instance().addToSet(ids, set);
 }
 // [/FS:CR]
 

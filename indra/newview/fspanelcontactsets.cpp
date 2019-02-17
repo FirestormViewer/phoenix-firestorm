@@ -41,8 +41,6 @@
 #include "llpanelpeoplemenus.h"
 #include "llslurl.h"
 
-#include <boost/foreach.hpp>
-
 const U32 MAX_SELECTIONS = 20;
 static LLPanelInjector<FSPanelContactSets> t_panel_contact_sets("contact_sets_panel");
 
@@ -56,7 +54,9 @@ FSPanelContactSets::FSPanelContactSets() : LLPanel()
 FSPanelContactSets::~FSPanelContactSets()
 {
 	if (mContactSetChangedConnection.connected())
+	{
 		mContactSetChangedConnection.disconnect();
+	}
 }
 
 BOOL FSPanelContactSets::postBuild()
@@ -72,14 +72,14 @@ BOOL FSPanelContactSets::postBuild()
 	childSetAction("set_pseudonym_btn",		boost::bind(&FSPanelContactSets::onClickSetPseudonym,	this));
 	childSetAction("remove_pseudonym_btn",	boost::bind(&FSPanelContactSets::onClickRemovePseudonym,	this));
 	childSetAction("remove_displayname_btn", boost::bind(&FSPanelContactSets::onClickRemoveDisplayName,	this));
-	
+
 	mContactSetCombo = getChild<LLComboBox>("combo_sets");
 	if (mContactSetCombo)
 	{
 		mContactSetCombo->setCommitCallback(boost::bind(&FSPanelContactSets::refreshSetList, this));
 		refreshContactSets();
 	}
-	
+
 	mAvatarList = getChild<LLAvatarList>("contact_list");
 	if (mAvatarList)
 	{
@@ -88,7 +88,7 @@ BOOL FSPanelContactSets::postBuild()
 		mAvatarList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
 		generateAvatarList(mContactSetCombo->getValue().asString());
 	}
-	
+
 	return TRUE;
 }
 
@@ -101,13 +101,16 @@ void FSPanelContactSets::onSelectAvatar()
 
 void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
 {
-	if (!mAvatarList) return;
-	
+	if (!mAvatarList)
+	{
+		return;
+	}
+
 	mAvatarList->clear();
 	mAvatarList->setDirty(true, true);
 
 	uuid_vec_t& avatars = mAvatarList->getIDs();
-	
+
 	if (contact_set == CS_SET_ALL_SETS)
 	{
 		avatars = LGGContactSets::getInstance()->getListOfNonFriends();
@@ -146,7 +149,7 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
 	else if (!LGGContactSets::getInstance()->isInternalSetName(contact_set))
 	{
 		LGGContactSets::ContactSet* group = LGGContactSets::getInstance()->getContactSet(contact_set);	// UGLY!
-		BOOST_FOREACH(const LLUUID id, group->mFriends)
+		for (auto const& id : group->mFriends)
 		{
 			avatars.push_back(id);
 		}
@@ -190,13 +193,16 @@ void FSPanelContactSets::updateSets(LGGContactSets::EContactSetUpdate type)
 
 void FSPanelContactSets::refreshContactSets()
 {
-	if (!mContactSetCombo) return;
-	
+	if (!mContactSetCombo)
+	{
+		return;
+	}
+
 	mContactSetCombo->clearRows();
 	std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllContactSets();
 	if (!contact_sets.empty())
 	{
-		BOOST_FOREACH(const std::string& set_name, contact_sets)
+		for(auto const& set_name : contact_sets)
 		{
 			mContactSetCombo->add(set_name);
 		}
@@ -222,32 +228,35 @@ void FSPanelContactSets::onClickAddAvatar()
 	LLFloater* avatar_picker = LLFloaterAvatarPicker::show(boost::bind(&FSPanelContactSets::handlePickerCallback, this, _1, mContactSetCombo->getValue().asString()),
 														   TRUE, TRUE, TRUE, root_floater->getName());
 	if (root_floater && avatar_picker)
+	{
 		root_floater->addDependentFloater(avatar_picker);
+	}
 }
 
 void FSPanelContactSets::handlePickerCallback(const uuid_vec_t& ids, const std::string& set)
 {
-	if (ids.empty() || !mContactSetCombo) return;
-	
-	BOOST_FOREACH(const LLUUID& id, ids)
+	if (ids.empty() || !mContactSetCombo)
 	{
-		if (!LLAvatarTracker::instance().isBuddy(id))
-			LGGContactSets::getInstance()->addNonFriendToList(id);
-		LGGContactSets::getInstance()->addFriendToSet(id, set);
+		return;
 	}
+
+	LGGContactSets::instance().addToSet(ids, set);
 }
 
 void FSPanelContactSets::onClickRemoveAvatar()
 {
-	if (!(mAvatarList && mContactSetCombo)) return;
-	
+	if (!(mAvatarList && mContactSetCombo))
+	{
+		return;
+	}
+
 	LLSD payload, args;
 	std::string set = mContactSetCombo->getValue().asString();
 	S32 selected_size = mAvatarSelections.size();
 	args["SET_NAME"] = set;
 	args["TARGET"] = (selected_size > 1 ? llformat("%d", selected_size) : LLSLURL("agent", mAvatarSelections.front(), "about").getSLURLString());
 	payload["contact_set"] = set;
-	BOOST_FOREACH(const LLUUID& id, mAvatarSelections)
+	for (auto const& id : mAvatarSelections)
 	{
 		payload["ids"].append(id);
 	}
@@ -278,7 +287,7 @@ void FSPanelContactSets::onClickConfigureSet()
 
 void FSPanelContactSets::onClickOpenProfile()
 {
-	BOOST_FOREACH(const LLUUID& id, mAvatarSelections)
+	for (auto const& id : mAvatarSelections)
 	{
 		LLAvatarActions::showProfile(id);
 	}
@@ -311,7 +320,7 @@ void FSPanelContactSets::onClickSetPseudonym()
 
 void FSPanelContactSets::onClickRemovePseudonym()
 {
-	BOOST_FOREACH(const LLUUID& id, mAvatarSelections)
+	for (auto const& id : mAvatarSelections)
 	{
 		if (LGGContactSets::getInstance()->hasPseudonym(id))
 		{
@@ -322,7 +331,7 @@ void FSPanelContactSets::onClickRemovePseudonym()
 
 void FSPanelContactSets::onClickRemoveDisplayName()
 {
-	BOOST_FOREACH(const LLUUID& id, mAvatarSelections)
+	for (auto const& id : mAvatarSelections)
 	{
 		if (!LGGContactSets::getInstance()->hasDisplayNameRemoved(id))
 		{

@@ -9266,7 +9266,7 @@ Please check your network and firewall setup.
 Disable any SIP ALG feature in your router.
 
 Voice communications will not be available.
-[http://wiki.phoenixviewer.com/fs_voice More troubleshooting tips can be found here]
+[https://wiki.phoenixviewer.com/fs_voice]
     <tag>voice</tag>
   <tag>fail</tag>
     <usetemplate
@@ -9283,7 +9283,7 @@ We're having trouble connecting to your voice server.
 
 Voice communications will not be available.
 Please check your network and firewall setup.
-[http://wiki.phoenixviewer.com/fs_voice More troubleshooting tips can be found here]
+[https://wiki.phoenixviewer.com/fs_voice]
     <tag>voice</tag>
   <tag>fail</tag>
     <usetemplate
