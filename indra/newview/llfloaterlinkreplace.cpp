@@ -41,7 +41,8 @@ LLFloaterLinkReplace::LLFloaterLinkReplace(const LLSD& key)
 	mRemainingItems(0),
 	mSourceUUID(LLUUID::null),
 	mTargetUUID(LLUUID::null),
-	mBatchSize(gSavedSettings.getU32("LinkReplaceBatchSize"))
+	mBatchSize(gSavedSettings.getU32("LinkReplaceBatchSize")),
+	mDeleteOnly(false) // <FS:Ansariel> FIRE-17695 - Delete links capability
 {
 	mEventTimer.stop();
 }
@@ -96,21 +97,8 @@ void LLFloaterLinkReplace::onSourceItemDrop(const LLUUID& source_item_id)
 
 void LLFloaterLinkReplace::onTargetItemDrop(const LLUUID& target_item_id)
 {
-	// <FS:Beq> FIRE-17695 - option to bulk delete links.
-	//mTargetUUID = target_item_id;
-	//checkEnableStart();
-	if (!mDeleteOnly)
-	{
-		mTargetUUID = target_item_id;
-		checkEnableStart();
-	}
-	else
-	{
-		mTargetEditor->setItem(nullptr);
-		mTargetEditor->setText(getString("DeleteNotReplace"));
-		mTargetUUID.setNull();
-	}
-	// </FS:Beq>
+	mTargetUUID = target_item_id;
+	checkEnableStart();
 }
 
 // <FS:Beq> FIRE-17695 - Delete links capability

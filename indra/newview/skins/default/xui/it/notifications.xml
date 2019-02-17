@@ -3481,7 +3481,7 @@ Consigliamo di controllare le impostazioni di rete e del firewall.
 Disabilitare tutte le funzioni SIP ALG sul router.
 
 Le comunicazioni tramite voce non saranno disponibili.
-[http://wiki.phoenixviewer.com/fs_voice Vedi altri suggerimenti e soluzioni]
+[https://wiki.phoenixviewer.com/fs_voice]
 		<usetemplate ignoretext="Avvisami quando non è possibile la connessione con il server voce" name="okignore"/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
@@ -3489,7 +3489,7 @@ Le comunicazioni tramite voce non saranno disponibili.
 
 Le comunicazioni tramite voce non saranno disponibili.
 Consigliamo di controllare le impostazioni di rete e del firewall.
-[http://wiki.phoenixviewer.com/fs_voice Vedi altri suggerimenti e soluzioni]
+[https://wiki.phoenixviewer.com/fs_voice]
 	</notification>
 	<notification name="AvatarRezLeftNotification">
 		( presente da [EXISTENCE] secondi )
