@@ -32,7 +32,7 @@ SetCompress auto			# Compress if saves space
 SetCompressor /solid lzma	# Compress whole installer as one block
 SetDatablockOptimize off	# Only saves us 0.1%, not worth it
 XPStyle on                  # Add an XP manifest to the installer
-RequestExecutionLevel highest           # match MULTIUSER_EXECUTIONLEVEL
+RequestExecutionLevel admin	# For when we write to Program Files
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Project flags
@@ -107,18 +107,20 @@ SetOverwrite on							# Overwrite files by default
 !define MSUNINSTALL_KEY "${MSCURRVER_KEY}\Uninstall\${INSTNAME}"
 
 # from http://nsis.sourceforge.net/Docs/MultiUser/Readme.html
-# Highest level permitted for user: Admin for Admin, Standard for Standard
-!define MULTIUSER_EXECUTIONLEVEL Highest
+### Highest level permitted for user: Admin for Admin, Standard for Standard
+##!define MULTIUSER_EXECUTIONLEVEL Highest
+!define MULTIUSER_EXECUTIONLEVEL Admin
 !define MULTIUSER_MUI
-# Look for /AllUsers or /CurrentUser switches
-!define MULTIUSER_INSTALLMODE_COMMANDLINE
+### Look for /AllUsers or /CurrentUser switches
+##!define MULTIUSER_INSTALLMODE_COMMANDLINE
 # appended to $PROGRAMFILES, as affected by MULTIUSER_USE_PROGRAMFILES64
 !define MULTIUSER_INSTALLMODE_INSTDIR "${INSTNAME}"
 # expands to !define MULTIUSER_USE_PROGRAMFILES64 or nothing
 %%PROGRAMFILES%%
 # should make MultiUser.nsh initialization read existing INSTDIR from registry
-!define MULTIUSER_INSTALLMODE_INSTDIR_REGISTRY_KEY "${INSTNAME_KEY}"
-!define MULTIUSER_INSTALLMODE_INSTDIR_REGISTRY_VALUENAME ""
+## SL-10506: don't
+##!define MULTIUSER_INSTALLMODE_INSTDIR_REGISTRY_KEY "${INSTNAME_KEY}"
+##!define MULTIUSER_INSTALLMODE_INSTDIR_REGISTRY_VALUENAME ""
 # Don't set MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_KEY and
 # MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_VALUENAME to cause the installer to
 # write $MultiUser.InstallMode to the registry, because when the user installs
@@ -133,7 +135,7 @@ SetOverwrite on							# Overwrite files by default
 UninstallText $(UninstallTextMsg)
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
 !insertmacro MUI_PAGE_LICENSE "VivoxAUP.txt"
-!insertmacro MULTIUSER_PAGE_INSTALLMODE
+##!insertmacro MULTIUSER_PAGE_INSTALLMODE
 !define MUI_PAGE_CUSTOMFUNCTION_PRE dirPre
 !define MUI_PAGE_CUSTOMFUNCTION_LEAVE dirLeave # <FS:Ansariel> Optional start menu entry
 !insertmacro MUI_PAGE_DIRECTORY
@@ -201,9 +203,20 @@ Function .onInit
 
 %%ENGAGEREGISTRY%%
 
-# Setting MULTIUSER_INSTALLMODE_INSTDIR_REGISTRY_KEY and
+# SL-10506: Setting MULTIUSER_INSTALLMODE_INSTDIR_REGISTRY_KEY and
 # MULTIUSER_INSTALLMODE_INSTDIR_REGISTRY_VALUENAME should
 # read the current location of the install for this version into INSTDIR.
+# However, SL-10506 complains about the resulting behavior, so the logic below
+# is adapted from before we introduced MultiUser.nsh.
+
+# if $0 is empty, this is the first time for this viewer name
+ReadRegStr $0 SHELL_CONTEXT "${INSTNAME_KEY}" ""
+
+# viewer with this name was installed before
+${If} $0 != ""
+	# use the value we got from registry as install location
+    StrCpy $INSTDIR $0
+${EndIf}
 
 Call CheckCPUFlags							# Make sure we have SSE2 support
 Call CheckWindowsVersion					# Don't install On unsupported systems
@@ -355,6 +368,7 @@ StrCpy $INSTEXE "${INSTEXE}"
 StrCpy $VIEWER_EXE "${VIEWER_EXE}"
 StrCpy $INSTSHORTCUT "${SHORTCUT}"
 
+Call CheckIfAdministrator		# Make sure the user can install/uninstall
 Call CloseSecondLife			# Make sure Second Life not currently running
 Call CheckWillUninstallV2		# Check if Second Life is already installed
 
@@ -491,7 +505,7 @@ StrCpy $INSTSHORTCUT "${SHORTCUT}"
 # SetShellVarContext per the mode saved at install time in registry at
 # MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_KEY
 # MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_VALUENAME
-# Couln't get NSIS to expand $MultiUser.InstallMode into the function name at Call time
+# Couldn't get NSIS to expand $MultiUser.InstallMode into the function name at Call time
 ${If} $MultiUser.InstallMode == 'AllUsers'
 ##MessageBox MB_OK "Uninstalling for all users"
   Call un.MultiUser.InstallMode.AllUsers
@@ -526,6 +540,36 @@ Call un.ProgramFiles
 Call un.UserSettingsFiles
 
 SectionEnd
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make sure the user can install
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Function CheckIfAdministrator
+    DetailPrint $(CheckAdministratorInstDP)
+    UserInfo::GetAccountType
+    Pop $R0
+    StrCmp $R0 "Admin" lbl_is_admin
+        MessageBox MB_OK $(CheckAdministratorInstMB)
+        Quit
+lbl_is_admin:
+    Return
+
+FunctionEnd
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make sure the user can uninstall
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Function un.CheckIfAdministrator
+    DetailPrint $(CheckAdministratorUnInstDP)
+    UserInfo::GetAccountType
+    Pop $R0
+    StrCmp $R0 "Admin" lbl_is_admin
+        MessageBox MB_OK $(CheckAdministratorUnInstMB)
+        Quit
+lbl_is_admin:
+    Return
+
+FunctionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Function CheckWillUninstallV2               
