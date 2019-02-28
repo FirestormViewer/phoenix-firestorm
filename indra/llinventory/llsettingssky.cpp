@@ -954,7 +954,7 @@ void LLSettingsSky::updateSettings()
 
 F32 LLSettingsSky::getSunMoonGlowFactor() const
 {
-    LLVector3 sunDir = getSunDirection();
+    LLVector3 sunDir  = getSunDirection();
     LLVector3 moonDir = getMoonDirection();
 
     // sun glow at full iff moon is not up
@@ -968,7 +968,7 @@ F32 LLSettingsSky::getSunMoonGlowFactor() const
 
     if (moonDir.mV[2] > 0.0f)
     {
-        return moonDir.mV[VZ] / 3.0f; // ramp moon glow at moonset
+        return 0.25f;
     }
 
     return 0.0f;
@@ -996,9 +996,6 @@ void LLSettingsSky::calculateHeavenlyBodyPositions()  const
 
     mSunDirection.normalize();
     mMoonDirection.normalize();
-
-    //LL_WARNS("LAPRAS") << "Sun info:  Rotation=" << sunq  << " Vector=" << mSunDirection  << LL_ENDL;
-    //LL_WARNS("LAPRAS") << "Moon info: Rotation=" << moonq << " Vector=" << mMoonDirection << LL_ENDL;
 
     if (mSunDirection.lengthSquared() < 0.01f)
         LL_WARNS("SETTINGS") << "Zero length sun direction. Wailing and gnashing of teeth may follow... or not." << LL_ENDL;

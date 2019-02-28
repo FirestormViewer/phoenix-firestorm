@@ -350,15 +350,25 @@ namespace
 
         LLSettingsInjected(typename SETTINGT::ptr_t source) :
             SETTINGT(),
-            mSource(source)
+            mSource(source),
+            mLastSourceHash(0),
+            mLastHash(0)
         {}
 
         virtual ~LLSettingsInjected() {};
 
-//         typename SETTINGT::ptr_t buildClone() const override;
-
         typename SETTINGT::ptr_t getSource() const                    { return this->mSource; }
-        void setSource(const typename SETTINGT::ptr_t &source)        { this->mSource = source; this->setDirtyFlag(true); }
+        void setSource(const typename SETTINGT::ptr_t &source)        
+        {
+            if (source.get() == this) // do not set a source to itself.
+                return;
+            this->mSource = source; 
+            this->setDirtyFlag(true); 
+            this->mLastSourceHash = 0; 
+        }
+
+        virtual bool isDirty() const override { return SETTINGT::isDirty() || (this->mSource->isDirty()); }
+        virtual bool isVeryDirty() const override { return SETTINGT::isVeryDirty() || (this->mSource->isVeryDirty()); }
 
         void injectSetting(const std::string keyname, LLSD value, LLUUID experience_id, F32Seconds transition)
         {
@@ -377,32 +387,46 @@ namespace
             }
         }
 
-        void removeInjection(const std::string keyname, LLUUID experience)
+        void removeInjection(const std::string keyname, LLUUID experience, LLSettingsBase::Seconds transition)
         {
             auto it = mInjections.begin();
             while (it != mInjections.end())
             {
-                if (((*it)->mKeyName == keyname) &&
+                if ((keyname.empty() || ((*it)->mKeyName == keyname)) &&
                     (experience.isNull() || (experience == (*it)->mExperience)))
                 {
+                    if (transition != LLEnvironment::TRANSITION_INSTANT)
+                    {
+                        typename Injection::ptr_t injection = std::make_shared<Injection>(transition, keyname, (*it)->mLastValue, false, LLUUID::null);
+                        mInjections.push_front(injection); // push them in at the front so we don't check them again.
+                    }
                     mInjections.erase(it++);
                 }
                 else
-                {
                     ++it;
-                }
             }
 
             for (auto itexp = mOverrideExps.begin(); itexp != mOverrideExps.end();)
             {
                 if (experience.isNull() || ((*itexp).second == experience))
                 {
+                    if (transition != LLEnvironment::TRANSITION_INSTANT)
+                    {
+                        typename Injection::ptr_t injection = std::make_shared<Injection>(transition, (*itexp).first, mOverrideValues[(*itexp).first], false, LLUUID::null);
+                        mInjections.push_front(injection);
+                    }
                     mOverrideValues.erase((*itexp).first);
                     mOverrideExps.erase(itexp++);
                 }
                 else
                     ++itexp;
             }
+            std::stable_sort(mInjections.begin(), mInjections.end(), [](const typename Injection::ptr_t &a, const typename Injection::ptr_t &b) { return a->mTimeRemaining < b->mTimeRemaining; });
+        }
+
+        void removeInjections(LLUUID experience_id, LLSettingsBase::Seconds transition)
+        {
+            removeInjection(std::string(), experience_id, transition);
         }
 
         void injectExperienceValues(LLSD values, LLUUID experience_id, typename LLSettingsBase::Seconds transition)
@@ -414,47 +438,9 @@ namespace
             this->setDirtyFlag(true);
         }
 
-    protected:
-        struct Injection
+        void applyInjections(LLSettingsBase::Seconds delta)
         {
-            Injection(typename LLSettingsBase::Seconds transition, const std::string &keyname, LLSD value, bool blendin, LLUUID experince, S32 index = -1) :
-                mTransition(transition),
-                mTimeRemaining(transition),
-                mKeyName(keyname),
-                mValue(value),
-                mExperience(experince),
-                mIndex(index),
-                mBlendIn(blendin),
-                mFirstTime(true)
-            {}
-
-            typename LLSettingsBase::Seconds    mTransition;
-            typename LLSettingsBase::Seconds    mTimeRemaining;
-            std::string                         mKeyName;
-            LLSD                                mValue;
-            LLUUID                              mExperience;
-            S32                                 mIndex;
-            bool                                mBlendIn;
-            bool                                mFirstTime;
-
-            typedef std::shared_ptr<Injection>  ptr_t;
-        };
-
-
-        virtual void updateSettings() override
-        {
-            static LLFrameTimer timer;
-
-            typename LLSettingsBase::Seconds delta(timer.getElapsedTimeAndResetF32());
-
-            resetSpecial();
-
-            if (mSource && mSource->isDirty())
-            {
-                mSource->updateSettings();
-            }
-
-            this->mSettings = mSource->getSettings();
+            this->mSettings = this->mSource->getSettings();
 
             for (auto ito = mOverrideValues.beginMap(); ito != mOverrideValues.endMap(); ++ito)
             {
@@ -484,7 +470,6 @@ namespace
                 {
                     if ((*it)->mBlendIn)
                     {
-                        LL_WARNS("LAPRAS") << "Done blending '" << key_name << "' after " << (*it)->mTransition.value() - (*it)->mTimeRemaining.value() << " value now=" << target << LL_ENDL;
                         mOverrideValues[key_name] = target;
                         mOverrideExps[key_name] = (*it)->mExperience;
                         this->mSettings[key_name] = target;
@@ -500,9 +485,19 @@ namespace
                 }
                 else if (skips.find(key_name) == skips.end())
                 {
-                    this->mSettings[key_name] = this->interpolateSDValue(key_name, value, target, this->getParameterMap(), mix, slerps);
-//                     LL_WARNS("LAPRAS") << "...blending '" << key_name << "' by " << mix << "% now=" << mSettings[key_name] << LL_ENDL;
+                    if (!(*it)->mBlendIn)
+                        mix = 1.0 - mix;
+                    (*it)->mLastValue = this->interpolateSDValue(key_name, value, target, this->getParameterMap(), mix, slerps);
+                    this->mSettings[key_name] = (*it)->mLastValue;
                 }
+            }
+
+            size_t hash = this->getHash();
+
+            if (hash != mLastHash)
+            {
+                this->setDirtyFlag(true);
+                mLastHash = hash;
             }
 
             it = mInjections.begin();
@@ -510,9 +505,64 @@ namespace
 
             if (it != mInjections.begin())
             {
-
                 mInjections.erase(mInjections.begin(), mInjections.end());
             }
+
+        }
+
+        bool hasInjections() const
+        {
+            return (!mInjections.empty() || (mOverrideValues.size() > 0));
+        }
+
+    protected:
+        struct Injection
+        {
+            Injection(typename LLSettingsBase::Seconds transition, const std::string &keyname, LLSD value, bool blendin, LLUUID experince, S32 index = -1) :
+                mTransition(transition),
+                mTimeRemaining(transition),
+                mKeyName(keyname),
+                mValue(value),
+                mExperience(experince),
+                mIndex(index),
+                mBlendIn(blendin),
+                mFirstTime(true)
+            {}
+
+            typename LLSettingsBase::Seconds    mTransition;
+            typename LLSettingsBase::Seconds    mTimeRemaining;
+            std::string                         mKeyName;
+            LLSD                                mValue;
+            LLSD                                mLastValue;
+            LLUUID                              mExperience;
+            S32                                 mIndex;
+            bool                                mBlendIn;
+            bool                                mFirstTime;
+
+            typedef std::shared_ptr<Injection>  ptr_t;
+        };
+
+
+        virtual void updateSettings() override
+        {
+            static LLFrameTimer timer;
+
+            if (!this->mSource)
+                return;
+
+            // clears the dirty flag on this object.  Need to prevent triggering 
+            // more calls into this updateSettings
+            LLSettingsBase::updateSettings();
+
+            resetSpecial();
+
+            if (this->mSource->isDirty())
+            {
+                this->mSource->updateSettings();
+            }
+
+            typename LLSettingsBase::Seconds delta(timer.getElapsedTimeAndResetF32());
+
 
             SETTINGT::updateSettings();
 
@@ -528,6 +578,8 @@ namespace
         typedef std::map<std::string, LLUUID>   key_to_expid_t;
         typedef std::deque<typename Injection::ptr_t>    injections_t;
 
+        size_t                      mLastSourceHash;
+        size_t                      mLastHash;
         typename SETTINGT::ptr_t    mSource;
         injections_t                mInjections;
         LLSD                        mOverrideValues;
@@ -636,30 +688,87 @@ namespace
         {
             setBlendFactor(mix);
         }
-
     }
 
     typedef LLSettingsInjected<LLSettingsVOSky>   LLSettingsInjectedSky;
     typedef LLSettingsInjected<LLSettingsVOWater> LLSettingsInjectedWater;
 
-#if 0
     //=====================================================================
     class DayInjection : public LLEnvironment::DayInstance
     {
+        friend class InjectedTransition;
+
     public:
         typedef std::shared_ptr<DayInjection> ptr_t;
+        typedef std::weak_ptr<DayInjection> wptr_t;
 
-        DayInjection(LLEnvironment::EnvSelection_t env) :
-            LLEnvironment::DayInstance(env)
-        {
-        }
+                                            DayInjection(LLEnvironment::EnvSelection_t env);
+        virtual                             ~DayInjection();
 
-        virtual     ~DayInjection() { };
+        virtual bool                        applyTimeDelta(const LLSettingsBase::Seconds& delta) override;
+
+        void                                setInjectedDay(const LLSettingsDay::ptr_t &pday, LLUUID experience_id, LLSettingsBase::Seconds transition);
+        void                                setInjectedSky(const LLSettingsSky::ptr_t &psky, LLUUID experience_id, LLSettingsBase::Seconds transition);
+        void                                setInjectedWater(const LLSettingsWater::ptr_t &pwater, LLUUID experience_id, LLSettingsBase::Seconds transition);
+
+        void                                injectSkySettings(LLSD settings, LLUUID experience_id, LLSettingsBase::Seconds transition);
+        void                                injectWaterSettings(LLSD settings, LLUUID experience_id, LLSettingsBase::Seconds transition);
+
+        void                                clearInjections(LLUUID experience_id, LLSettingsBase::Seconds transition_time);
+
+        virtual void                        animate() override;
+
+        LLEnvironment::DayInstance::ptr_t   getBaseDayInstance() const  { return mBaseDayInstance; }
+        void                                setBaseDayInstance(const LLEnvironment::DayInstance::ptr_t &baseday);
+
+        S32                                 countExperiencesActive() const { return mActiveExperiences.size(); }
+
+        bool                                isOverriddenSky() const { return !mSkyExperience.isNull(); }
+        bool                                isOverriddenWater() const { return !mWaterExperience.isNull(); }
+
+        bool                                hasInjections() const;
+
+        void                                testExperiencesOnParcel(S32 parcel_id);
+    private:
+        static void                         testExperiencesOnParcelCoro(wptr_t that, S32 parcel_id);
+
+
+        void                                animateSkyChange(LLSettingsSky::ptr_t psky, LLSettingsBase::Seconds transition);
+        void                                animateWaterChange(LLSettingsWater::ptr_t pwater, LLSettingsBase::Seconds transition);
+
+        void                                onEnvironmentChanged(LLEnvironment::EnvSelection_t env);
+        void                                onParcelChange();
+
+        void                                checkExperience();
+
+
+        LLEnvironment::DayInstance::ptr_t   mBaseDayInstance;
+
+        LLSettingsInjectedSky::ptr_t        mInjectedSky;
+        LLSettingsInjectedWater::ptr_t      mInjectedWater;
+        std::set<LLUUID>                    mActiveExperiences;
+        LLUUID                              mDayExperience;
+        LLUUID                              mSkyExperience;
+        LLUUID                              mWaterExperience;
+        LLEnvironment::connection_t         mEnvChangeConnection;
+        boost::signals2::connection         mParcelChangeConnection;
+    };
+
+    class InjectedTransition : public LLEnvironment::DayTransition
+    {
+    public:
+                                    InjectedTransition(const DayInjection::ptr_t &injection, const LLSettingsSky::ptr_t &skystart, const LLSettingsWater::ptr_t &waterstart, DayInstance::ptr_t &end, LLSettingsDay::Seconds time):
+                                        LLEnvironment::DayTransition(skystart, waterstart, end, time),
+                                        mInjection(injection)
+                                    { }
+        virtual                     ~InjectedTransition() { };
+
+        virtual void                animate() override;
 
     protected:
-    private:
+        DayInjection::ptr_t         mInjection;
     };
-#endif
+
 }
 
 //=========================================================================
@@ -871,7 +980,11 @@ bool LLEnvironment::isInventoryEnabled() const
 
 void LLEnvironment::onRegionChange()
 {
+//     if (gAgent.getRegionCapability("ExperienceQuery").empty())
+//     {
+//     // for now environmental experiences do not survive region crossings
     clearExperienceEnvironment(LLUUID::null, TRANSITION_DEFAULT);
+//     }
 
     LLViewerRegion* cur_region = gAgent.getRegion();
     if (!cur_region)
@@ -950,7 +1063,10 @@ LLEnvironment::DayInstance::ptr_t LLEnvironment::getEnvironmentInstance(LLEnviro
             environment = environment->clone();
         else
         {
-            environment = std::make_shared<DayInstance>(env);
+            if (env == ENV_PUSH)
+                environment = std::make_shared<DayInjection>(env);
+            else
+                environment = std::make_shared<DayInstance>(env);
         }
         mEnvironments[env] = environment;
     }
@@ -1048,19 +1164,11 @@ void LLEnvironment::setEnvironment(LLEnvironment::EnvSelection_t env, const LLSe
     else if (settings->getSettingsType() == "sky")
     {
         fixedEnvironment_t fixedenv(std::static_pointer_cast<LLSettingsSky>(settings), LLSettingsWater::ptr_t());
-//         if (environment)
-//         {
-//             fixedenv.second = environment->getWater();
-//         }
         setEnvironment(env, fixedenv);
     }
     else if (settings->getSettingsType() == "water")
     {
         fixedEnvironment_t fixedenv(LLSettingsSky::ptr_t(), std::static_pointer_cast<LLSettingsWater>(settings));
-//         if (environment)
-//         {
-//             fixedenv.first = environment->getSky();
-//         }
         setEnvironment(env, fixedenv);
     }
 }
@@ -1240,12 +1348,19 @@ void LLEnvironment::updateEnvironment(LLSettingsBase::Seconds transition, bool f
 
     if ((mCurrentEnvironment != pinstance) || forced)
     {
-        DayInstance::ptr_t trans = std::make_shared<DayTransition>(
-            mCurrentEnvironment->getSky(), mCurrentEnvironment->getWater(), pinstance, transition);
-
-        trans->animate();
-
-        mCurrentEnvironment = trans;
+        if (transition != TRANSITION_INSTANT)
+        {
+	        DayInstance::ptr_t trans = std::make_shared<DayTransition>(
+	            mCurrentEnvironment->getSky(), mCurrentEnvironment->getWater(), pinstance, transition);
+	
+	        trans->animate();
+	
+	        mCurrentEnvironment = trans;
+        }
+        else
+        {
+            mCurrentEnvironment = pinstance;
+        }
     }
 }
 
@@ -1358,8 +1473,12 @@ void LLEnvironment::update(const LLViewerCamera * cam)
 
     F32Seconds delta(timer.getElapsedTimeAndResetF32());
 
-    mCurrentEnvironment->applyTimeDelta(delta);
+    {
+        DayInstance::ptr_t keeper = mCurrentEnvironment;    
+        // make sure the current environment does not go away until applyTimeDelta is done.
+        mCurrentEnvironment->applyTimeDelta(delta);
 
+    }
     // update clouds, sun, and general
     updateCloudScroll();
 
@@ -1501,39 +1620,38 @@ void LLEnvironment::recordEnvironment(S32 parcel_id, LLEnvironment::EnvironmentI
         else if (envinfo->mDayCycle->isTrackEmpty(LLSettingsDay::TRACK_WATER)
                  || envinfo->mDayCycle->isTrackEmpty(LLSettingsDay::TRACK_GROUND_LEVEL))
         {
-            LL_WARNS("LAPRAS") << "Invalid day cycle for region" << LL_ENDL;
+            LL_WARNS("ENVIRONMENT") << "Invalid day cycle for region" << LL_ENDL;
             clearEnvironment(ENV_PARCEL);
             setEnvironment(ENV_REGION, LLSettingsDay::GetDefaultAssetId(), LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, envinfo->mEnvVersion);
             updateEnvironment();
         }
         else
         {
-            LL_INFOS("LAPRAS") << "Setting Region environment" << LL_ENDL;
             setEnvironment(ENV_REGION, envinfo->mDayCycle, envinfo->mDayLength, envinfo->mDayOffset, envinfo->mEnvVersion);
             mTrackAltitudes = envinfo->mAltitudes;
         }
 
-        LL_WARNS("LAPRAS") << "Altitudes set to {" << mTrackAltitudes[0] << ", "<< mTrackAltitudes[1] << ", " << mTrackAltitudes[2] << ", " << mTrackAltitudes[3] << LL_ENDL;
+        LL_DEBUGS("ENVIRONMENT") << "Altitudes set to {" << mTrackAltitudes[0] << ", "<< mTrackAltitudes[1] << ", " << mTrackAltitudes[2] << ", " << mTrackAltitudes[3] << LL_ENDL;
     }
     else
     {
         LLParcel *parcel = LLViewerParcelMgr::instance().getAgentParcel();
-        LL_WARNS("LAPRAS") << "Have parcel environment #" << envinfo->mParcelId << LL_ENDL;
+        LL_DEBUGS("ENVIRONMENT") << "Have parcel environment #" << envinfo->mParcelId << LL_ENDL;
         if (parcel && (parcel->getLocalID() != parcel_id))
         {
-            LL_WARNS("ENVIRONMENT") << "Requested parcel #" << parcel_id << " agent is on " << parcel->getLocalID() << LL_ENDL;
+            LL_DEBUGS("ENVIRONMENT") << "Requested parcel #" << parcel_id << " agent is on " << parcel->getLocalID() << LL_ENDL;
             return;
         }
 
         if (!envinfo->mDayCycle)
         {
-            LL_WARNS("LAPRAS") << "Clearing environment on parcel #" << parcel_id << LL_ENDL;
+            LL_DEBUGS("ENVIRONMENT") << "Clearing environment on parcel #" << parcel_id << LL_ENDL;
             clearEnvironment(ENV_PARCEL);
         }
         else if (envinfo->mDayCycle->isTrackEmpty(LLSettingsDay::TRACK_WATER)
                  || envinfo->mDayCycle->isTrackEmpty(LLSettingsDay::TRACK_GROUND_LEVEL))
         {
-            LL_WARNS("LAPRAS") << "Invalid day cycle for parcel #" << parcel_id << LL_ENDL;
+            LL_WARNS("ENVIRONMENT") << "Invalid day cycle for parcel #" << parcel_id << LL_ENDL;
             clearEnvironment(ENV_PARCEL);
         }
         else
@@ -1543,6 +1661,27 @@ void LLEnvironment::recordEnvironment(S32 parcel_id, LLEnvironment::EnvironmentI
     }
 
     updateEnvironment(transition);
+}
+
+void LLEnvironment::adjustRegionOffset(F32 adjust)
+{
+    if (isExtendedEnvironmentEnabled())
+    {
+        LL_WARNS("ENVIRONMENT") << "Attempt to adjust region offset on EEP region.  Legacy regions only." << LL_ENDL;
+    }
+
+    if (mEnvironments[ENV_REGION])
+    {
+        F32 day_length = mEnvironments[ENV_REGION]->getDayLength();
+        F32 day_offset = mEnvironments[ENV_REGION]->getDayOffset();
+
+        F32 day_adjustment = adjust * day_length;
+
+        day_offset += day_adjustment;
+        if (day_offset < 0.0f)
+            day_offset = day_length + day_offset;
+        mEnvironments[ENV_REGION]->setDayOffset(LLSettingsBase::Seconds(day_offset));
+    }
 }
 
 //=========================================================================
@@ -1700,7 +1839,7 @@ void LLEnvironment::coroRequestEnvironment(S32 parcel_id, LLEnvironment::environ
     if (url.empty())
         return;
 
-    LL_WARNS("LAPRAS") << "Requesting for parcel_id=" << parcel_id << LL_ENDL;
+    LL_DEBUGS("ENVIRONMENT") << "Requesting for parcel_id=" << parcel_id << LL_ENDL;
 
     if (parcel_id != INVALID_PARCEL_ID)
     {
@@ -1710,24 +1849,14 @@ void LLEnvironment::coroRequestEnvironment(S32 parcel_id, LLEnvironment::environ
         url += query.str();
     }
 
-    LL_WARNS("LAPRAS") << "url=" << url << LL_ENDL;
-
     LLSD result = httpAdapter->getAndSuspend(httpRequest, url);
     // results that come back may contain the new settings
-
-//     LLSD notify;
 
     LLSD httpResults = result["http_result"];
     LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
     if (!status)
     {
-        LL_WARNS("WindlightCaps") << "Couldn't retrieve environment settings for " << ((parcel_id == INVALID_PARCEL_ID) ? ("region!") : ("parcel!")) << LL_ENDL;
-
-//         std::stringstream msg;
-//         msg << status.toString() << " (Code " << status.toTerseString() << ")";
-//         notify = LLSD::emptyMap();
-//         notify["FAIL_REASON"] = msg.str();
-
+        LL_WARNS("ENVIRONMENT") << "Couldn't retrieve environment settings for " << ((parcel_id == INVALID_PARCEL_ID) ? ("region!") : ("parcel!")) << LL_ENDL;
     }
     else
     {
@@ -1739,11 +1868,6 @@ void LLEnvironment::coroRequestEnvironment(S32 parcel_id, LLEnvironment::environ
         }
     }
 
-//     if (!notify.isUndefined())
-//     {
-//         LLNotificationsUtil::add("WLRegionApplyFail", notify);
-//         //LLEnvManagerNew::instance().onRegionSettingsApplyResponse(false);
-//     }
 }
 
 void LLEnvironment::coroUpdateEnvironment(S32 parcel_id, S32 track_no, UpdateInfo::ptr_t updates, environment_apply_fn apply)
@@ -1786,7 +1910,7 @@ void LLEnvironment::coroUpdateEnvironment(S32 parcel_id, S32 track_no, UpdateInf
             body[KEY_ENVIRONMENT][KEY_DAYNAME] = updates->mDayName;
     }
 
-    LL_WARNS("LAPRAS") << "Body = " << body << LL_ENDL;
+    //_WARNS("ENVIRONMENT") << "Body = " << body << LL_ENDL;
 
     if ((parcel_id != INVALID_PARCEL_ID) || (track_no != NO_TRACK))
     {
@@ -1814,10 +1938,10 @@ void LLEnvironment::coroUpdateEnvironment(S32 parcel_id, S32 track_no, UpdateInf
 
     LLSD httpResults = result["http_result"];
     LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
-    LL_WARNS("LAPRAS") << "success=" << result["success"] << LL_ENDL;
+
     if ((!status) || !result["success"].asBoolean())
     {
-        LL_WARNS("WindlightCaps") << "Couldn't update Windlight settings for " << ((parcel_id == INVALID_PARCEL_ID) ? ("region!") : ("parcel!")) << LL_ENDL;
+        LL_WARNS("ENVIRONMENT") << "Couldn't update Windlight settings for " << ((parcel_id == INVALID_PARCEL_ID) ? ("region!") : ("parcel!")) << LL_ENDL;
 
         notify = LLSD::emptyMap();
         notify["FAIL_REASON"] = result["message"].asString();
@@ -1876,10 +2000,10 @@ void LLEnvironment::coroResetEnvironment(S32 parcel_id, S32 track_no, environmen
 
     LLSD httpResults = result["http_result"];
     LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
-    LL_WARNS("LAPRAS") << "success=" << result["success"] << LL_ENDL;
+
     if ((!status) || !result["success"].asBoolean())
     {
-        LL_WARNS("WindlightCaps") << "Couldn't reset Windlight settings in " << ((parcel_id == INVALID_PARCEL_ID) ? ("region!") : ("parcel!")) << LL_ENDL;
+        LL_WARNS("ENVIRONMENT") << "Couldn't reset Windlight settings in " << ((parcel_id == INVALID_PARCEL_ID) ? ("region!") : ("parcel!")) << LL_ENDL;
 
         notify = LLSD::emptyMap();
         notify["FAIL_REASON"] = result["message"].asString();
@@ -2174,7 +2298,7 @@ void LLEnvironment::handleEnvironmentPush(LLSD &message)
 
 void LLEnvironment::handleEnvironmentPushClear(LLUUID experience_id, LLSD &message, F32 transition)
 {
-    clearExperienceEnvironment(experience_id, transition);
+    clearExperienceEnvironment(experience_id, LLSettingsBase::Seconds(transition));
 }
 
 void LLEnvironment::handleEnvironmentPushFull(LLUUID experience_id, LLSD &message, F32 transition)
@@ -2194,12 +2318,12 @@ void LLEnvironment::handleEnvironmentPushPartial(LLUUID experience_id, LLSD &mes
     setExperienceEnvironment(experience_id, settings, LLSettingsBase::Seconds(transition));
 }
 
-void LLEnvironment::clearExperienceEnvironment(LLUUID experience_id, F32 transition_time)
+void LLEnvironment::clearExperienceEnvironment(LLUUID experience_id, LLSettingsBase::Seconds transition_time)
 {
-    if (hasEnvironment(ENV_PUSH))
+    DayInjection::ptr_t injection = std::dynamic_pointer_cast<DayInjection>(getEnvironmentInstance(ENV_PUSH));
+    if (injection)
     {
-        clearEnvironment(ENV_PUSH);
-        updateEnvironment(LLSettingsBase::Seconds(transition_time));
+        injection->clearInjections(experience_id, transition_time);
     }
 
 }
@@ -2216,14 +2340,48 @@ void LLEnvironment::setExperienceEnvironment(LLUUID experience_id, LLUUID asset_
     LLSettingsVOBase::getSettingsAsset(asset_id,
         [this, experience_id, transition_time](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat)
     {
-        // individual settings will be overridden by the settings.  No need to keep injections.
-        onSetEnvAssetLoaded(ENV_PUSH, asset_id, settings,
-            LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, 
-            LLSettingsBase::Seconds(transition_time), status, NO_VERSION);
+        onSetExperienceEnvAssetLoaded(experience_id, settings, transition_time, status);
     });
 
 
 }
+
+void LLEnvironment::onSetExperienceEnvAssetLoaded(LLUUID experience_id, LLSettingsBase::ptr_t settings, F32 transition_time, S32 status)
+{
+    DayInjection::ptr_t environment = std::dynamic_pointer_cast<DayInjection>(getEnvironmentInstance(ENV_PUSH));
+    bool updateenvironment(false);
+
+    if (!settings || status)
+    {
+        LLSD args;
+        args["DESC"] = experience_id.asString();
+        LLNotificationsUtil::add("FailedToFindSettings", args);
+        return;
+    }
+
+    if (!environment)
+    {
+        environment = std::dynamic_pointer_cast<DayInjection>(getEnvironmentInstance(ENV_PUSH, true));
+        updateenvironment = true;
+    }
+
+    if (settings->getSettingsType() == "daycycle")
+    {
+        environment->setInjectedDay(std::static_pointer_cast<LLSettingsDay>(settings), experience_id, LLSettingsBase::Seconds(transition_time));
+    }
+    else if (settings->getSettingsType() == "sky")
+    {
+        environment->setInjectedSky(std::static_pointer_cast<LLSettingsSky>(settings), experience_id, LLSettingsBase::Seconds(transition_time));
+    }
+    else if (settings->getSettingsType() == "water")
+    {
+        environment->setInjectedWater(std::static_pointer_cast<LLSettingsWater>(settings), experience_id, LLSettingsBase::Seconds(transition_time));
+    }
+
+    if (updateenvironment)
+        updateEnvironment(TRANSITION_INSTANT, true);
+}
+
 
 void LLEnvironment::setExperienceEnvironment(LLUUID experience_id, LLSD data, F32 transition_time)
 {
@@ -2232,64 +2390,36 @@ void LLEnvironment::setExperienceEnvironment(LLUUID experience_id, LLSD data, F3
 
     if (sky.isUndefined() && water.isUndefined())
     {
-        clearExperienceEnvironment(experience_id, transition_time);
+        clearExperienceEnvironment(experience_id, LLSettingsBase::Seconds(transition_time));
         return;
     }
 
-    LLSettingsInjectedSky::ptr_t pinjectedsky;
-    LLSettingsInjectedWater::ptr_t pinjectedwater;
+    DayInjection::ptr_t environment = std::dynamic_pointer_cast<DayInjection>(getEnvironmentInstance(ENV_PUSH));
+    bool updateenvironment(false);
 
-    fixedEnvironment_t pushenv = getEnvironmentFixed(ENV_PUSH, true);
+    if (!environment)
+    {
+        environment = std::dynamic_pointer_cast<DayInjection>(getEnvironmentInstance(ENV_PUSH, true));
+        updateenvironment = true;
+    }
 
     if (!sky.isUndefined())
     {
-        bool newsky(false);
-
-        if (pushenv.first)
-        {
-            pinjectedsky = std::dynamic_pointer_cast<LLSettingsInjectedSky>(pushenv.first);
-        }
-        if (!pinjectedsky)
-        {
-            pinjectedsky = std::make_shared<LLSettingsInjectedSky>(pushenv.first);
-            newsky = true;
-        }
-
-        pinjectedsky->injectExperienceValues(sky, experience_id, F32Seconds(transition_time));
-        if (!newsky)
-            pinjectedsky.reset();
+        environment->injectSkySettings(sky, experience_id, LLSettingsBase::Seconds(transition_time));
     }
 
     if (!water.isUndefined())
     {
-        bool newwater(false);
-        if (pushenv.second)
-        {
-            pinjectedwater = std::dynamic_pointer_cast<LLSettingsInjectedWater>(pushenv.second);
-        }
-        if (!pinjectedwater)
-        {
-            pinjectedwater = std::make_shared<LLSettingsInjectedWater>(pushenv.second);
-            newwater = true;
-        }
-
-        pinjectedwater->injectExperienceValues(water, experience_id, F32Seconds(transition_time));
-        if (!newwater)
-            pinjectedwater.reset();
+        environment->injectWaterSettings(sky, experience_id, LLSettingsBase::Seconds(transition_time));
     }
 
-    if (pinjectedsky || pinjectedwater)
-    {
-        setEnvironment(ENV_PUSH, pinjectedsky, pinjectedwater);
-        updateEnvironment(TRANSITION_INSTANT);
-    }
+    if (updateenvironment)
+        updateEnvironment(TRANSITION_INSTANT, true);
 
 }
 
 void LLEnvironment::listenExperiencePump(const LLSD &message)
 {
-    LL_WARNS("LAPRAS") << "Have experience event: " << message << LL_ENDL;
-
     LLUUID experience_id = message["experience"];
     LLSD data = message[experience_id.asString()];
     std::string permission(data["permission"].asString());
@@ -2312,8 +2442,7 @@ LLEnvironment::DayInstance::DayInstance(EnvSelection_t env) :
     mInitialized(false),
     mType(TYPE_INVALID),
     mSkyTrack(1),
-    mEnv(env),
-    mBackup(false)
+    mEnv(env)
 { }
 
 
@@ -2335,8 +2464,10 @@ LLEnvironment::DayInstance::ptr_t LLEnvironment::DayInstance::clone() const
     return environment;
 }
 
-void LLEnvironment::DayInstance::applyTimeDelta(const LLSettingsBase::Seconds& delta)
+bool LLEnvironment::DayInstance::applyTimeDelta(const LLSettingsBase::Seconds& delta)
 {
+    ptr_t keeper(shared_from_this());   // makes sure that this does not go away while it is being worked on.
+
     bool changed(false);
     if (!mInitialized)
         initialize();
@@ -2345,14 +2476,11 @@ void LLEnvironment::DayInstance::applyTimeDelta(const LLSettingsBase::Seconds& d
         changed |= mBlenderSky->applyTimeDelta(delta);
     if (mBlenderWater)
         changed |= mBlenderWater->applyTimeDelta(delta);
-    if (mBackup && changed)
-        backup();
+    return changed;
 }
 
 void LLEnvironment::DayInstance::setDay(const LLSettingsDay::ptr_t &pday, LLSettingsDay::Seconds daylength, LLSettingsDay::Seconds dayoffset)
 {
-    if (mType == TYPE_FIXED)
-        LL_WARNS("ENVIRONMENT") << "Fixed day instance changed to Cycled" << LL_ENDL;
     mType = TYPE_CYCLED;
     mInitialized = false;
 
@@ -2372,8 +2500,6 @@ void LLEnvironment::DayInstance::setDay(const LLSettingsDay::ptr_t &pday, LLSett
 
 void LLEnvironment::DayInstance::setSky(const LLSettingsSky::ptr_t &psky)
 {
-    if (mType == TYPE_CYCLED)
-        LL_WARNS("ENVIRONMENT") << "Cycled day instance changed to FIXED" << LL_ENDL;
     mType = TYPE_FIXED;
     mInitialized = false;
 
@@ -2383,8 +2509,6 @@ void LLEnvironment::DayInstance::setSky(const LLSettingsSky::ptr_t &psky)
     mSky->mReplaced |= different_sky;
     mSky->update();
     mBlenderSky.reset();
-    if (mBackup)
-        backup();
 
     if (gAtmosphere)
     {
@@ -2396,16 +2520,12 @@ void LLEnvironment::DayInstance::setSky(const LLSettingsSky::ptr_t &psky)
 
 void LLEnvironment::DayInstance::setWater(const LLSettingsWater::ptr_t &pwater)
 {
-    if (mType == TYPE_CYCLED)
-        LL_WARNS("ENVIRONMENT") << "Cycled day instance changed to FIXED" << LL_ENDL;
     mType = TYPE_FIXED;
     mInitialized = false;
 
     mWater = pwater;
     mWater->update();
     mBlenderWater.reset();
-    if (mBackup)
-        backup();
 }
 
 void LLEnvironment::DayInstance::initialize()
@@ -2440,58 +2560,21 @@ void LLEnvironment::DayInstance::setSkyTrack(S32 trackno)
     }
 }
 
-
 void LLEnvironment::DayInstance::setBlenders(const LLSettingsBlender::ptr_t &skyblend, const LLSettingsBlender::ptr_t &waterblend)
 {
     mBlenderSky = skyblend;
     mBlenderWater = waterblend;
 }
 
-
-void LLEnvironment::DayInstance::setBackup(bool backupval)
+LLSettingsBase::TrackPosition LLEnvironment::DayInstance::getProgress() const
 {
-    if (backupval == mBackup)
-        return;
+    LLSettingsBase::Seconds now(LLDate::now().secondsSinceEpoch());
+    now += mDayOffset;
 
-    mBackup = backupval;
-    LLSettingsSky::ptr_t psky = getSky();
-    if (mBackup)
-    {
-        backup();
-    }
-    else
-    {
-        restore();
-        mBackupSky = LLSD();
-        mBackupWater = LLSD();
-    }
-}
+    if ((mDayLength <= 0) || !mDayCycle)
+        return -1.0f;   // no actual day cycle.
 
-void LLEnvironment::DayInstance::backup()
-{
-    if (!mBackup)
-        return;
-
-    if (mSky)
-    {
-        mBackupSky = mSky->cloneSettings();
-    }
-    if (mWater)
-    {
-        mBackupWater = mWater->cloneSettings();
-    }
-}
-
-void LLEnvironment::DayInstance::restore()
-{
-    if (!mBackupSky.isUndefined() && mSky)
-    {
-        mSky->replaceSettings(mBackupSky);
-    }
-    if (!mBackupWater.isUndefined() && mWater)
-    {
-        mWater->replaceSettings(mBackupWater);
-    }
+    return convert_time_to_position(now, mDayLength);
 }
 
 LLSettingsBase::TrackPosition LLEnvironment::DayInstance::secondsToKeyframe(LLSettingsDay::Seconds seconds)
@@ -2551,10 +2634,13 @@ LLEnvironment::DayTransition::DayTransition(const LLSettingsSky::ptr_t &skystart
     
 }
 
-void LLEnvironment::DayTransition::applyTimeDelta(const LLSettingsBase::Seconds& delta)
+bool LLEnvironment::DayTransition::applyTimeDelta(const LLSettingsBase::Seconds& delta)
 {
-    mNextInstance->applyTimeDelta(delta);
-    DayInstance::applyTimeDelta(delta);
+    bool changed(false);
+
+    changed = mNextInstance->applyTimeDelta(delta);
+    changed |= DayInstance::applyTimeDelta(delta);
+    return changed;
 }
 
 void LLEnvironment::DayTransition::animate() 
@@ -2659,3 +2745,413 @@ F64 LLTrackBlenderLoopingManual::getSpanLength(const LLSettingsDay::TrackBound_t
 }
 
 //=========================================================================
+namespace
+{
+    DayInjection::DayInjection(LLEnvironment::EnvSelection_t env):
+        LLEnvironment::DayInstance(env),
+        mBaseDayInstance(),
+        mInjectedSky(),
+        mInjectedWater(),
+        mActiveExperiences(),
+        mDayExperience(),
+        mSkyExperience(),
+        mWaterExperience(),
+        mEnvChangeConnection(),
+        mParcelChangeConnection()
+    {
+        mInjectedSky = std::make_shared<LLSettingsInjectedSky>(LLEnvironment::instance().getCurrentSky());
+        mInjectedWater = std::make_shared<LLSettingsInjectedWater>(LLEnvironment::instance().getCurrentWater());
+        mBaseDayInstance = LLEnvironment::instance().getSharedEnvironmentInstance();
+        mSky = mInjectedSky;
+        mWater = mInjectedWater;
+
+        mEnvChangeConnection = LLEnvironment::instance().setEnvironmentChanged([this](LLEnvironment::EnvSelection_t env, S32) { onEnvironmentChanged(env); });
+        mParcelChangeConnection = gAgent.addParcelChangedCallback([this]() { onParcelChange(); });
+    }
+
+    DayInjection::~DayInjection()
+    {
+        if (mEnvChangeConnection.connected())
+            mEnvChangeConnection.disconnect();
+        if (mParcelChangeConnection.connected())
+            mParcelChangeConnection.disconnect();
+    }
+
+
+    bool DayInjection::applyTimeDelta(const LLSettingsBase::Seconds& delta)
+    {
+        bool changed(false);
+
+        if (mBaseDayInstance)
+            changed |= mBaseDayInstance->applyTimeDelta(delta);
+        mInjectedSky->applyInjections(delta);
+        mInjectedWater->applyInjections(delta);
+        changed |= LLEnvironment::DayInstance::applyTimeDelta(delta);
+        if (changed)
+        {
+            mInjectedSky->setDirtyFlag(true);
+            mInjectedWater->setDirtyFlag(true);
+        }
+        mInjectedSky->update();
+        mInjectedWater->update();
+
+        if (!hasInjections())
+        {   // There are no injections being managed.  This should really go away.
+            LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_PUSH);
+            LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_INSTANT);
+        }
+
+        return changed;
+    }
+
+    void DayInjection::setBaseDayInstance(const LLEnvironment::DayInstance::ptr_t &baseday) 
+    { 
+        mBaseDayInstance = baseday;
+
+        if (mSkyExperience.isNull())
+            mInjectedSky->setSource(mBaseDayInstance->getSky());
+        if (mWaterExperience.isNull())
+            mInjectedWater->setSource(mBaseDayInstance->getWater());
+    }
+
+
+    bool DayInjection::hasInjections() const
+    {
+        return (!mSkyExperience.isNull() || !mWaterExperience.isNull() || !mDayExperience.isNull() ||
+            mBlenderSky || mBlenderWater || mInjectedSky->hasInjections() || mInjectedWater->hasInjections());
+    }
+
+
+    void DayInjection::testExperiencesOnParcel(S32 parcel_id)
+    {
+        LLCoros::instance().launch("DayInjection::testExperiencesOnParcel",
+            [this, parcel_id]() { DayInjection::testExperiencesOnParcelCoro(std::static_pointer_cast<DayInjection>(this->shared_from_this()), parcel_id); });
+
+    }
+
+    void DayInjection::setInjectedDay(const LLSettingsDay::ptr_t &pday, LLUUID experience_id, LLSettingsBase::Seconds transition)
+    {
+        mSkyExperience = experience_id;
+        mWaterExperience = experience_id;
+        mDayExperience = experience_id;
+
+        mBaseDayInstance = mBaseDayInstance->clone();
+        mBaseDayInstance->setEnvironmentSelection(LLEnvironment::ENV_NONE);
+        mBaseDayInstance->setDay(pday, mBaseDayInstance->getDayLength(), mBaseDayInstance->getDayOffset());
+        animateSkyChange(mBaseDayInstance->getSky(), transition);
+        animateWaterChange(mBaseDayInstance->getWater(), transition);
+
+        mActiveExperiences.insert(experience_id);
+    }
+
+    void DayInjection::setInjectedSky(const LLSettingsSky::ptr_t &psky, LLUUID experience_id, LLSettingsBase::Seconds transition)
+    {
+        mSkyExperience = experience_id;
+        mActiveExperiences.insert(experience_id);
+        checkExperience();
+        animateSkyChange(psky, transition);
+    }
+
+    void DayInjection::setInjectedWater(const LLSettingsWater::ptr_t &pwater, LLUUID experience_id, LLSettingsBase::Seconds transition)
+    {
+        mWaterExperience = experience_id;
+        mActiveExperiences.insert(experience_id);
+        checkExperience();
+        animateWaterChange(pwater, transition);
+    }
+
+    void DayInjection::injectSkySettings(LLSD settings, LLUUID experience_id, LLSettingsBase::Seconds transition)
+    {
+        mInjectedSky->injectExperienceValues(settings, experience_id, transition);
+        mActiveExperiences.insert(experience_id);
+    }
+
+    void DayInjection::injectWaterSettings(LLSD settings, LLUUID experience_id, LLSettingsBase::Seconds transition)
+    {
+        mInjectedWater->injectExperienceValues(settings, experience_id, transition);
+        mActiveExperiences.insert(experience_id);
+    }
+
+    void DayInjection::clearInjections(LLUUID experience_id, LLSettingsBase::Seconds transition_time)
+    {
+        if ((experience_id.isNull() && !mDayExperience.isNull()) || (experience_id == mDayExperience))
+        {
+            mDayExperience.setNull();
+            if (mSkyExperience == experience_id)
+                mSkyExperience.setNull();
+            if (mWaterExperience == experience_id)
+                mWaterExperience.setNull();
+
+            mBaseDayInstance = LLEnvironment::instance().getSharedEnvironmentInstance();
+
+            if (mSkyExperience.isNull())
+                animateSkyChange(mBaseDayInstance->getSky(), transition_time);
+            if (mWaterExperience.isNull())
+                animateWaterChange(mBaseDayInstance->getWater(), transition_time);
+        }
+
+        if ((experience_id.isNull() && !mSkyExperience.isNull()) || (experience_id == mSkyExperience))
+        {
+            mSkyExperience.setNull();
+            animateSkyChange(mBaseDayInstance->getSky(), transition_time);
+        }
+        if ((experience_id.isNull() && !mWaterExperience.isNull()) || (experience_id == mWaterExperience))
+        {
+            mWaterExperience.setNull();
+            animateWaterChange(mBaseDayInstance->getWater(), transition_time);
+        }
+
+        mInjectedSky->removeInjections(experience_id, transition_time);
+        mInjectedWater->removeInjections(experience_id, transition_time);
+
+        if (experience_id.isNull())
+            mActiveExperiences.clear();
+        else
+            mActiveExperiences.erase(experience_id);
+
+        if ((transition_time == LLEnvironment::TRANSITION_INSTANT) && (countExperiencesActive() == 0))
+        {   // Only do this if instant and there are no other experiences injecting values.
+            // (otherwise will be handled after transition)
+            LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_PUSH);
+            LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_INSTANT);
+        }
+    }
+
+
+    void DayInjection::testExperiencesOnParcelCoro(wptr_t that, S32 parcel_id)
+    {
+        LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
+        LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
+            httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("testExperiencesOnParcelCoro", httpPolicy));
+        LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+        std::string url = gAgent.getRegionCapability("ExperienceQuery");
+
+        if (url.empty())
+        {
+            LL_WARNS("ENVIRONMENT") << "No experience query cap." << LL_ENDL;
+            return; // no checking in this region.
+        }
+
+        {
+            ptr_t thatlock(that);
+            std::stringstream fullurl;
+
+            if (!thatlock)
+                return;
+
+            fullurl << url << "?";
+            fullurl << "parcelid=" << parcel_id;
+
+            for (auto it = thatlock->mActiveExperiences.begin(); it != thatlock->mActiveExperiences.end(); ++it)
+            {
+                if (it != thatlock->mActiveExperiences.begin())
+                    fullurl << ",";
+                else
+                    fullurl << "&experiences=";
+                fullurl << (*it).asString();
+            }
+            url = fullurl.str();
+        }
+
+        LLSD result = httpAdapter->getAndSuspend(httpRequest, url);
+        LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+        LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+
+        if (!status)
+        {
+            LL_WARNS() << "Unable to retrieve experience status for parcel." << LL_ENDL;
+            return;
+        }
+
+        {
+            LLParcel* parcel = LLViewerParcelMgr::instance().getAgentParcel();
+            if (!parcel)
+                return;
+
+            if (parcel_id != parcel->getLocalID())
+            {
+                // Agent no longer on queried parcel.
+                return;
+            }
+        }
+
+
+        LLSD experiences = result["experiences"];
+        {
+            ptr_t thatlock(that);
+            if (!thatlock)
+                return;
+
+            for (LLSD::map_iterator itr = experiences.beginMap(); itr != experiences.endMap(); ++itr)
+            {
+                if (!((*itr).second.asBoolean()))
+                    thatlock->clearInjections(LLUUID((*itr).first), LLEnvironment::TRANSITION_FAST);
+
+            }
+        }
+    }
+
+    void DayInjection::animateSkyChange(LLSettingsSky::ptr_t psky, LLSettingsBase::Seconds transition)
+    {
+        if (mInjectedSky.get() == psky.get())
+        {   // An attempt to animate to itself... don't do it.
+            return;
+        }
+        if (transition == LLEnvironment::TRANSITION_INSTANT)
+        {
+            mBlenderSky.reset();
+            mInjectedSky->setSource(psky);
+        }
+        else
+        {
+            LLSettingsSky::ptr_t start_sky(mInjectedSky->getSource()->buildClone());
+            LLSettingsSky::ptr_t target_sky(start_sky->buildClone());
+            mInjectedSky->setSource(target_sky);
+
+            mBlenderSky = std::make_shared<LLSettingsBlenderTimeDelta>(target_sky, start_sky, psky, transition);
+            mBlenderSky->setOnFinished(
+                [this, psky](LLSettingsBlender::ptr_t blender) 
+                {
+                    mBlenderSky.reset();
+                    mInjectedSky->setSource(psky);
+                    setSky(mInjectedSky);
+                    if (!mBlenderWater && (countExperiencesActive() == 0))
+                    {
+                        LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_PUSH);
+                        LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_INSTANT);
+                    }
+                });
+        }
+    }
+
+    void DayInjection::animateWaterChange(LLSettingsWater::ptr_t pwater, LLSettingsBase::Seconds transition)
+    {
+        if (mInjectedWater.get() == pwater.get())
+        {   // An attempt to animate to itself. Bad idea.
+            return;
+        }
+        if (transition == LLEnvironment::TRANSITION_INSTANT)
+        { 
+            mBlenderWater.reset();
+            mInjectedWater->setSource(pwater);
+        }
+        else
+        {
+            LLSettingsWater::ptr_t start_Water(mInjectedWater->getSource()->buildClone());
+            LLSettingsWater::ptr_t scratch_Water(start_Water->buildClone());
+            mInjectedWater->setSource(scratch_Water);
+
+            mBlenderWater = std::make_shared<LLSettingsBlenderTimeDelta>(scratch_Water, start_Water, pwater, transition);
+            mBlenderWater->setOnFinished(
+                [this, pwater](LLSettingsBlender::ptr_t blender) 
+                {
+                    mBlenderWater.reset();
+                    mInjectedWater->setSource(pwater);
+                    setWater(mInjectedWater);
+                    if (!mBlenderSky && (countExperiencesActive() == 0))
+                    {
+                        LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_PUSH);
+                        LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_INSTANT);
+                    }
+                });
+        }
+    }
+
+    void DayInjection::onEnvironmentChanged(LLEnvironment::EnvSelection_t env)
+    {
+        if (env >= LLEnvironment::ENV_PARCEL)
+        {
+            LLEnvironment::EnvSelection_t base_env(mBaseDayInstance->getEnvironmentSelection());
+            LLEnvironment::DayInstance::ptr_t nextbase = LLEnvironment::instance().getSharedEnvironmentInstance();
+
+            if ((base_env == LLEnvironment::ENV_NONE) || (nextbase == mBaseDayInstance) || 
+                    (!mSkyExperience.isNull() && !mWaterExperience.isNull()))
+            {   // base instance completely overridden, or not changed no transition will happen
+                return;
+            }
+
+            LL_WARNS("PUSHENV") << "Underlying environment has changed (" << env << ")! Base env is type " << base_env << LL_ENDL;
+
+            LLEnvironment::DayInstance::ptr_t trans = std::make_shared<InjectedTransition>(std::static_pointer_cast<DayInjection>(shared_from_this()),
+                mBaseDayInstance->getSky(), mBaseDayInstance->getWater(), nextbase, LLEnvironment::TRANSITION_DEFAULT);
+
+            trans->animate();
+            setBaseDayInstance(trans);
+        }
+    }
+
+    void DayInjection::onParcelChange()
+    {
+        S32 parcel_id(INVALID_PARCEL_ID);
+        LLParcel* parcel = LLViewerParcelMgr::instance().getAgentParcel();
+
+        if (!parcel)
+            return;
+
+        parcel_id = parcel->getLocalID();
+
+        testExperiencesOnParcel(parcel_id);
+    }
+
+    void DayInjection::checkExperience()
+    {
+        if ((!mDayExperience.isNull()) && (mSkyExperience != mDayExperience) && (mWaterExperience != mDayExperience))
+        {   // There was a day experience but we've replaced it with a water and a sky experience. 
+            mDayExperience.setNull();
+            mBaseDayInstance = LLEnvironment::instance().getSharedEnvironmentInstance();
+        }
+    }
+
+    void DayInjection::animate()
+    {
+
+    }
+
+    void InjectedTransition::animate()
+    {
+        mNextInstance->animate();
+
+        if (!mInjection->isOverriddenSky())
+        {
+            mSky = mStartSky->buildClone();
+            mBlenderSky = std::make_shared<LLSettingsBlenderTimeDelta>(mSky, mStartSky, mNextInstance->getSky(), mTransitionTime);
+            mBlenderSky->setOnFinished(
+                [this](LLSettingsBlender::ptr_t blender) {
+                mBlenderSky.reset();
+
+                if (!mBlenderSky && !mBlenderSky)
+                    mInjection->setBaseDayInstance(mNextInstance);
+                else
+                    mInjection->mInjectedSky->setSource(mNextInstance->getSky());
+            });
+        }
+        else
+        {
+            mSky = mInjection->getSky();
+            mBlenderSky.reset();
+        }
+
+        if (!mInjection->isOverriddenWater())
+        {
+            mWater = mStartWater->buildClone();
+            mBlenderWater = std::make_shared<LLSettingsBlenderTimeDelta>(mWater, mStartWater, mNextInstance->getWater(), mTransitionTime);
+            mBlenderWater->setOnFinished(
+                [this](LLSettingsBlender::ptr_t blender) {
+                mBlenderWater.reset();
+
+                if (!mBlenderSky && !mBlenderWater)
+                    mInjection->setBaseDayInstance(mNextInstance);
+                else
+                    mInjection->mInjectedWater->setSource(mNextInstance->getWater());
+            });
+        }
+        else
+        {
+            mWater = mInjection->getWater();
+            mBlenderWater.reset();
+        }
+
+    }
+
+}
+

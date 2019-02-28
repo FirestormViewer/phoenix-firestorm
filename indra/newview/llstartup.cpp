@@ -1490,20 +1490,6 @@ bool idle_startup()
 		// NaCl - Antispam
 		NACLAntiSpamRegistry::instance();
 		// NaCl End
-
-		//good a place as any to create user windlight directories
-		std::string user_windlight_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight", ""));
-		LLFile::mkdir(user_windlight_path_name.c_str());		
-
-		std::string user_windlight_skies_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/skies", ""));
-		LLFile::mkdir(user_windlight_skies_path_name.c_str());
-
-		std::string user_windlight_water_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/water", ""));
-		LLFile::mkdir(user_windlight_water_path_name.c_str());
-
-		std::string user_windlight_days_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/days", ""));
-		LLFile::mkdir(user_windlight_days_path_name.c_str());
-
 		// <FS:Ansariel> Create user fonts directory
 		std::string user_fonts_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "fonts", ""));
 		LLFile::mkdir(user_fonts_path_name.c_str());
@@ -1514,7 +1500,6 @@ bool idle_startup()
 		// <FS:Techwolf Lupindo> load per grid data
 		FSData::instance().downloadAgents();
 		// </FS:Techwolf Lupindo>
-
 		if (show_connect_box)
 		{
 			LLSLURL slurl;

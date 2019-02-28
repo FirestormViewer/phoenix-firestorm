@@ -75,6 +75,7 @@ extern LLTrace::BlockTimerStatHandle FTM_RENDER_UI;
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_WATER;
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_WL_SKY;
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_ALPHA;
+extern LLTrace::BlockTimerStatHandle FTM_RENDER_ALPHA_DEFERRED;
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_CHARACTERS;
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_BUMP;
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_MATERIALS;
@@ -281,7 +282,8 @@ public:
 
 	void unbindDeferredShader(LLGLSLShader& shader);
 	void renderDeferredLighting(LLRenderTarget* light_target);
-	
+	void postDeferredGammaCorrect(LLRenderTarget* screen_target);
+
 	void generateWaterReflection(LLCamera& camera);
 	void generateSunShadow(LLCamera& camera);
     LLRenderTarget* getShadowTarget(U32 i);

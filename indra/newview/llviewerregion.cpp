@@ -3095,6 +3095,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("IsExperienceAdmin");
 	capabilityNames.append("IsExperienceContributor");
 	capabilityNames.append("RegionExperiences");
+    capabilityNames.append("ExperienceQuery");
 	// <FS:Ansariel> [UDP Assets]
 	capabilityNames.append("GetMesh");
 	capabilityNames.append("GetMesh2");

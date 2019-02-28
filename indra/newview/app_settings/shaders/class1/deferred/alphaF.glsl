@@ -60,7 +60,7 @@ VARYING vec4 vertex_color;
 
 uniform mat4 inv_proj;
 uniform vec2 screen_res;
-
+uniform int sun_up_factor;
 uniform vec4 light_position[8];
 uniform vec3 light_direction[8];
 uniform vec4 light_attenuation[8]; 
@@ -70,16 +70,26 @@ uniform vec3 light_diffuse[8];
 vec4 applyWaterFogView(vec3 pos, vec4 color);
 #endif
 
+vec3 srgb_to_linear(vec3 c);
+vec3 linear_to_srgb(vec3 c);
+
 vec2 encode_normal (vec3 n);
-vec3 scaleSoftClip(vec3 l);
-vec3 atmosFragAmbient(vec3 light, vec3 sunlit);
+vec3 scaleSoftClipFrag(vec3 l);
 vec3 atmosFragLighting(vec3 light, vec3 additive, vec3 atten);
-vec3 atmosFragAffectDirectionalLight(float light, vec3 sunlit);
+
+#if defined(VERT_ATMOSPHERICS)
+vec3 getSunlitColor();
+vec3 getAmblitColor();
+vec3 getAdditiveColor();
+vec3 getAtmosAttenuation();
+void calcAtmospherics(vec3 inPositionEye, float ambFactor);
+#else
 void calcFragAtmospherics(vec3 inPositionEye, float ambFactor, out vec3 sunlit, out vec3 amblit, out vec3 atten, out vec3 additive);
+#endif
 
 float sampleDirectionalShadow(vec3 pos, vec3 norm, vec2 pos_screen);
 
-vec3 calcPointLightOrSpotLight(vec3 light_col, vec3 diffuse, vec3 v, vec3 n, vec4 lp, vec3 ln, float la, float fa, float is_pointlight, float ambiance)
+vec3 calcPointLightOrSpotLight(vec3 light_col, vec3 diffuse, vec3 v, vec3 n, vec4 lp, vec3 ln, float la, float fa, float is_pointlight, float ambiance ,float shadow)
 {
     //get light vector
     vec3 lv = lp.xyz-v;
@@ -96,23 +106,25 @@ vec3 calcPointLightOrSpotLight(vec3 light_col, vec3 diffuse, vec3 v, vec3 n, vec
         vec3 norm = normalize(n);
 
         da = max(0.0, dot(norm, lv));
+        da = clamp(da, 0.0, 1.0);
  
         //distance attenuation
         float dist = d/la;
         float dist_atten = clamp(1.0-(dist-1.0*(1.0-fa))/fa, 0.0, 1.0);
         dist_atten *= dist_atten;
-        dist_atten *= 2.0;
 
         // spotlight coefficient.
         float spot = max(dot(-ln, lv), is_pointlight);
         da *= spot*spot; // GL_SPOT_EXPONENT=2
 
         // to match spotLight (but not multiSpotLight) *sigh*
-        float lit = max(da * dist_atten,0.0);
+        float lit = max(min(da, shadow) * dist_atten,0.0);
         col = lit * light_col * diffuse;
 
-        float amb_da = (da*da*0.5 + 0.25) * ambiance;
+        float amb_da = ambiance;
         amb_da *= dist_atten;
+        amb_da += (da*0.5) * ambiance;
+        amb_da += (da*da*0.5 + 0.5) * ambiance;
         amb_da = min(amb_da, 1.0f - lit);
 
         col.rgb += amb_da * light_col * diffuse;
@@ -138,12 +150,10 @@ void main()
     vec4 diff = texture2D(diffuseMap,vary_texcoord0.xy);
 #endif
 
-// <FS> Fix impostors failing to render with alpha correctly
-//#ifdef FOR_IMPOSTOR
-//    vec4 color;
-//    color.rgb = diff.rgb;
-//    color.a = 1.0;
-// </FS>
+#ifdef FOR_IMPOSTOR
+    vec4 color;
+    color.rgb = diff.rgb;
+    color.a = 1.0;
 
 #ifdef USE_VERTEX_COLOR
     float final_alpha = diff.a * vertex_color.a;
@@ -151,10 +161,6 @@ void main()
 #else
     float final_alpha = diff.a;
 #endif
-// <FS> Fix impostors failing to render with alpha correctly
-#ifdef FOR_IMPOSTOR
-    vec4 color = vec4(diff.rgb,final_alpha);
-// </FS>
     
     // Insure we don't pollute depth with invis pixels in impostor rendering
     //
@@ -164,52 +170,59 @@ void main()
     }
 #else
     
-// <FS> Fix impostors failing to render with alpha correctly
-//#ifdef USE_VERTEX_COLOR
-//    float final_alpha = diff.a * vertex_color.a;
-//    diff.rgb *= vertex_color.rgb;
-//#else
-//    float final_alpha = diff.a;
-//#endif
-// </FS>
+#ifdef USE_VERTEX_COLOR
+    float final_alpha = diff.a * vertex_color.a;
+    diff.rgb *= vertex_color.rgb;
+#else
+    float final_alpha = diff.a;
+#endif
+
+    diff.rgb = srgb_to_linear(diff.rgb);
+
     vec3 sunlit;
     vec3 amblit;
     vec3 additive;
     vec3 atten;
+
+#if defined(VERT_ATMOSPHERICS)
+    sunlit = getSunlitColor();
+    amblit = getAmblitColor();
+    additive = getAdditiveColor();
+    atten = getAtmosAttenuation();
+#else
     calcFragAtmospherics(pos.xyz, 1.0, sunlit, amblit, additive, atten);
+#endif
 
     vec2 abnormal   = encode_normal(norm.xyz);
 
-    float sun_da  = dot(norm.xyz, sun_dir.xyz);
-    float moon_da = dot(norm.xyz, moon_dir.xyz);
-
-    float final_da = max(sun_da, moon_da);
-          final_da = min(final_da, shadow);
-          final_da = clamp(final_da, 0.0f, 1.0f);
-      final_da = pow(final_da, display_gamma);
+    vec3 light_dir = (sun_up_factor == 1) ? sun_dir: moon_dir;
+    float da = dot(norm.xyz, light_dir.xyz);
+          da = clamp(da, 0.0, 1.0);
 
     vec4 color = vec4(0,0,0,0);
 
-    color.rgb = atmosFragAmbient(color.rgb, amblit);
+    color.rgb = amblit;
     color.a   = final_alpha;
 
-    float ambient = abs(final_da);
+    float ambient = abs(da);
     ambient *= 0.5;
     ambient *= ambient;
-    ambient = (1.0-ambient);
+    ambient = 1.0 - ambient * smoothstep(0.0, 0.3, shadow);
+
+    vec3 sun_contrib = min(da, shadow) * sunlit;
 
     color.rgb *= ambient;
-    color.rgb += (final_da * sunlit);
+    color.rgb += sun_contrib;
     color.rgb *= diff.rgb;
 
     //color.rgb = mix(diff.rgb, color.rgb, final_alpha);
     
     color.rgb = atmosFragLighting(color.rgb, additive, atten);
-    color.rgb = scaleSoftClip(color.rgb);
+    color.rgb = scaleSoftClipFrag(color.rgb);
 
     vec4 light = vec4(0,0,0,0);
 
-   #define LIGHT_LOOP(i) light.rgb += calcPointLightOrSpotLight(light_diffuse[i].rgb, diff.rgb, pos.xyz, norm, light_position[i], light_direction[i].xyz, light_attenuation[i].x, light_attenuation[i].y, light_attenuation[i].z, light_attenuation[i].w);
+   #define LIGHT_LOOP(i) light.rgb += calcPointLightOrSpotLight(light_diffuse[i].rgb, diff.rgb, pos.xyz, norm, light_position[i], light_direction[i].xyz, light_attenuation[i].x, light_attenuation[i].y, light_attenuation[i].z, light_attenuation[i].w, shadow);
 
     LIGHT_LOOP(1)
     LIGHT_LOOP(2)
@@ -223,9 +236,12 @@ void main()
     //
     color.rgb += light.rgb;
 
+    color.rgb = linear_to_srgb(color.rgb);
+
+#endif
+
 #ifdef WATER_FOG
     color = applyWaterFogView(pos.xyz, color);
-#endif
 #endif
 
     frag_color = color;

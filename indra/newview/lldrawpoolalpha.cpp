@@ -94,7 +94,7 @@ S32 LLDrawPoolAlpha::getNumPostDeferredPasses()
 
 void LLDrawPoolAlpha::beginPostDeferredPass(S32 pass) 
 { 
-	LL_RECORD_BLOCK_TIME(FTM_RENDER_ALPHA);
+	LL_RECORD_BLOCK_TIME(FTM_RENDER_ALPHA_DEFERRED);
 
 	if (pass == 0)
 	{
@@ -120,20 +120,14 @@ void LLDrawPoolAlpha::beginPostDeferredPass(S32 pass)
 		fullbright_shader->bind();
 		fullbright_shader->uniform1f(LLShaderMgr::TEXTURE_GAMMA, 2.2f); 
 		fullbright_shader->uniform1f(LLShaderMgr::DISPLAY_GAMMA, (gamma > 0.1f) ? 1.0f / gamma : (1.0f/2.2f));
-		fullbright_shader->unbind();
+        fullbright_shader->uniform1i(LLShaderMgr::NO_ATMO, LLPipeline::sRenderingHUDs ? 1 : 0);
+	    fullbright_shader->setMinimumAlpha(LLPipeline::sImpostorRender ? 0.5f : 0.0f);
+        fullbright_shader->unbind();
 
-        if (LLPipeline::sRenderingHUDs)
-	    {
-		    fullbright_shader->uniform1i(LLShaderMgr::NO_ATMO, 1);
-	    }
-	    else
-	    {
-		    fullbright_shader->uniform1i(LLShaderMgr::NO_ATMO, 0);
-	    }
 		//prime simple shader (loads shadow relevant uniforms)
 		gPipeline.bindDeferredShader(*simple_shader);
-
-		simple_shader->uniform1f(LLShaderMgr::DISPLAY_GAMMA, (gamma > 0.1f) ? 1.0f / gamma : (1.0f/2.2f));
+		simple_shader->uniform1f(LLShaderMgr::DISPLAY_GAMMA, (gamma > 0.1f) ? 1.0f / gamma : (1.0f/2.2f));       
+        simple_shader->setMinimumAlpha(LLPipeline::sImpostorRender ? 0.5f : 0.0f);
 	}
 	else if (!LLPipeline::sImpostorRender)
 	{
@@ -175,6 +169,8 @@ void LLDrawPoolAlpha::beginPostDeferredPass(S32 pass)
 
 void LLDrawPoolAlpha::endPostDeferredPass(S32 pass) 
 { 
+    LL_RECORD_BLOCK_TIME(FTM_RENDER_ALPHA_DEFERRED);
+
 	if (pass == 1 && !LLPipeline::sImpostorRender)
 	{
 		gPipeline.mDeferredDepth.flush();
@@ -188,6 +184,7 @@ void LLDrawPoolAlpha::endPostDeferredPass(S32 pass)
 
 void LLDrawPoolAlpha::renderPostDeferred(S32 pass) 
 { 
+    LL_RECORD_BLOCK_TIME(FTM_RENDER_ALPHA_DEFERRED);
 	render(pass); 
 }
 
@@ -200,6 +197,18 @@ void LLDrawPoolAlpha::beginRenderPass(S32 pass)
 		simple_shader = &gObjectSimpleImpostorProgram;
 		fullbright_shader = &gObjectFullbrightProgram;
 		emissive_shader = &gObjectEmissiveProgram;
+
+        if (mShaderLevel > 0)
+		{
+            fullbright_shader->bind();
+			fullbright_shader->setMinimumAlpha(0.5f);
+			simple_shader->bind();
+			simple_shader->setMinimumAlpha(0.5f);
+        }
+        else
+        {
+            gGL.setAlphaRejectSettings(LLRender::CF_GREATER, 0.5f); //OK
+        }
 	}
 	else if (LLPipeline::sUnderWaterRender)
 	{
@@ -214,12 +223,20 @@ void LLDrawPoolAlpha::beginRenderPass(S32 pass)
 		emissive_shader = &gObjectEmissiveProgram;
 	}
 
-	if (mShaderLevel > 0)
+    if (!LLPipeline::sImpostorRender)
 	{
-		// Start out with no shaders.
-		current_shader = target_shader = NULL;
-		LLGLSLShader::bindNoShader();
-	}
+        if (mShaderLevel > 0)
+	    {
+			fullbright_shader->bind();
+			fullbright_shader->setMinimumAlpha(0.f);
+			simple_shader->bind();
+			simple_shader->setMinimumAlpha(0.f);
+		}
+        else
+        {
+            gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT); //OK
+        }
+    }
 	gPipeline.enableLightsDynamic();
 }
 
@@ -269,66 +286,7 @@ void LLDrawPoolAlpha::render(S32 pass)
 		mAlphaDFactor = LLRender::BF_ONE_MINUS_SOURCE_ALPHA;       // }
 		gGL.blendFunc(mColorSFactor, mColorDFactor, mAlphaSFactor, mAlphaDFactor);
 
-		if (mShaderLevel > 0)
-		{
-			if (LLPipeline::sImpostorRender)
-			{
-				fullbright_shader->bind();        
-				fullbright_shader->setMinimumAlpha(0.5f);
-                if (LLPipeline::sRenderingHUDs)
-	            {
-		            fullbright_shader->uniform1i(LLShaderMgr::NO_ATMO, 1);
-	            }
-	            else
-	            {
-		            fullbright_shader->uniform1i(LLShaderMgr::NO_ATMO, 0);
-	            }
-				simple_shader->bind();
-				simple_shader->setMinimumAlpha(0.5f);
-                if (LLPipeline::sRenderingHUDs)
-	            {
-		            simple_shader->uniform1i(LLShaderMgr::NO_ATMO, 1);
-	            }
-	            else
-	            {
-		            simple_shader->uniform1i(LLShaderMgr::NO_ATMO, 0);
-	            }
-			}				
-			else
-			{
-				fullbright_shader->bind();
-				fullbright_shader->setMinimumAlpha(0.f);
-                if (LLPipeline::sRenderingHUDs)
-	            {
-		            fullbright_shader->uniform1i(LLShaderMgr::NO_ATMO, 1);
-	            }
-	            else
-	            {
-		            fullbright_shader->uniform1i(LLShaderMgr::NO_ATMO, 0);
-	            }
-				simple_shader->bind();
-				simple_shader->setMinimumAlpha(0.f);
-                if (LLPipeline::sRenderingHUDs)
-	            {
-		            simple_shader->uniform1i(LLShaderMgr::NO_ATMO, 1);
-	            }
-	            else
-	            {
-		            simple_shader->uniform1i(LLShaderMgr::NO_ATMO, 0);
-	            }
-			}
-		}
-		else
-		{
-			if (LLPipeline::sImpostorRender)
-			{
-				gGL.setAlphaRejectSettings(LLRender::CF_GREATER, 0.5f); //OK
-			}
-			else
-			{
-				gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT); //OK
-			}
-		}
+		
 	}
 
 	if (mShaderLevel > 0)
@@ -676,14 +634,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 					{
 					// </FS:Ansariel>
 					emissive_shader->bind();
-					if (LLPipeline::sRenderingHUDs)
-	                {
-		                emissive_shader->uniform1i(LLShaderMgr::NO_ATMO, 1);
-	                }
-	                else
-	                {
-		                emissive_shader->uniform1i(LLShaderMgr::NO_ATMO, 0);
-	                }
+					
 					params.mVertexBuffer->setBuffer((mask & ~LLVertexBuffer::MAP_COLOR) | LLVertexBuffer::MAP_EMISSIVE);
 					
 					// do the actual drawing, again
