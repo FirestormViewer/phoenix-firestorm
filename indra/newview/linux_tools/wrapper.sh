@@ -20,9 +20,6 @@ exportMutliArchDRIPath() {
 ## These options are for self-assisted troubleshooting during this beta
 ## testing phase; you should not usually need to touch them.
 
-## AO: TCMALLOC Tuning as suggested by Henri Beauchamp for more aggressive garbage collection
-export TCMALLOC_RELEASE_RATE=10000
-
 ## - Avoids using any FMOD Ex audio driver.
 #export LL_BAD_FMODEX_DRIVER=x
 
@@ -123,23 +120,6 @@ test -x ./etc/register_secondlifeprotocol.sh && ./etc/register_secondlifeprotoco
 ##  subprocesses that care.
 export SAVED_LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 
-# if [ -n "$LL_TCMALLOC" ]; then
-#    tcmalloc_libs='/usr/lib/libtcmalloc.so.0 /usr/lib/libstacktrace.so.0 /lib/libpthread.so.0'
-#    all=1
-#    for f in $tcmalloc_libs; do
-#        if [ ! -f $f ]; then
-#	    all=0
-#	fi
-#    done
-#    if [ $all != 1 ]; then
-#        echo 'Cannot use tcmalloc libraries: components missing' 1>&2
-#    else
-#	export LD_PRELOAD=$(echo $tcmalloc_libs | tr ' ' :)
-#	if [ -z "$HEAPCHECK" -a -z "$HEAPPROFILE" ]; then
-#	    export HEAPCHECK=${HEAPCHECK:-normal}
-#	fi
-#    fi
-#fi
 
 if ! test -f FS_No_LD_Hacks.txt; then
 
@@ -158,8 +138,13 @@ if [ -f ${LLSSL} ]
 then
 	export LD_PRELOAD="${LD_PRELOAD}:${LLSSL}"
 fi
-# <FS:ND> End of hack; God will kill a kitten for this :(
 
+fi
+
+if test -f lib/libjemalloc.so
+then
+	echo "Using jemalloc"
+	export LD_PRELOAD="${LD_PRELOAD}:lib/libjemalloc.so"
 fi
 
 export FS_CEF_PRELOAD="libcef.so"
