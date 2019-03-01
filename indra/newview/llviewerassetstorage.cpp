@@ -472,7 +472,10 @@ void LLViewerAssetStorage::assetRequestCoro(
         LL_WARNS_ONCE("ViewerAsset") << "capsRecv got event" << LL_ENDL;
         LL_WARNS_ONCE("ViewerAsset") << "region " << gAgent.getRegion() << " mViewerAssetUrl " << mViewerAssetUrl << LL_ENDL;
     }
-    if (mViewerAssetUrl.empty() && gAgent.getRegion())
+	// <FS:Beq> FIRE-23657 [OPENSIM] Update the Viewer Asset Url irrespective of previous setting (Fix provided by Liru Færs)
+	// if (mViewerAssetUrl.empty() && gAgent.getRegion())
+	if (gAgent.getRegion())
+	// </FS:Beq>
     {
         mViewerAssetUrl = gAgent.getRegion()->getViewerAssetUrl();
     }

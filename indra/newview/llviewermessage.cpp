@@ -2304,7 +2304,7 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 			{
 				// <FS:Ansariel> This breaks object owner name parsing
 				//log_message = "<nolink>" + chatHistory_string + "</nolink> " + LLTrans::getString("InvOfferGaveYou") + " " + getSanitizedDescription() + LLTrans::getString(".");
-				log_message = chatHistory_string + LLTrans::getString("InvOfferGaveYou") + " " + getSanitizedDescription() + LLTrans::getString(".");
+				log_message = chatHistory_string + " " + LLTrans::getString("InvOfferGaveYou") + " " + getSanitizedDescription() + LLTrans::getString(".");
 				// </FS:Ansariel>
 				LLSD args;
 				args["MESSAGE"] = log_message;
@@ -4578,7 +4578,7 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 							reason = "timer";
 						}
 
-						report_to_nearby_chat("Sim tried to kill attachment: " + objectp->getAttachmentItemName() + " (" + reason + ")");
+						report_to_nearby_chat("Region \"" + regionp->getName() + "\" tried to kill attachment: " + objectp->getAttachmentItemName() + " (" + reason + ") - Agent region: \"" + gAgent.getRegion()->getName() + "\"");
 					}
 					continue;
 				}

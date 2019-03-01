@@ -1943,7 +1943,25 @@ BOOL LLTextureCtrl::handleUnicodeCharHere(llwchar uni_char)
 {
 	if( ' ' == uni_char )
 	{
-		showPicker(TRUE);
+		// <FS:Ansariel> Texture preview mode
+		//showPicker(TRUE);
+		if (!mPreviewMode)
+		{
+			showPicker(TRUE);
+			//grab textures first...
+			LLInventoryModelBackgroundFetch::instance().start(gInventory.findCategoryUUIDForType(LLFolderType::FT_TEXTURE));
+			//...then start full inventory fetch.
+			LLInventoryModelBackgroundFetch::instance().start();
+		}
+		else if (!mIsMasked)
+		{
+			// Open the preview floater for the texture
+			LLSD params;
+			params["uuid"] = getValue();
+			params["preview_only"] = TRUE;
+			LLFloaterReg::showInstance("preview_texture", params, TRUE);
+		}
+		// </FS:Ansariel>
 		return TRUE;
 	}
 	return LLUICtrl::handleUnicodeCharHere(uni_char);

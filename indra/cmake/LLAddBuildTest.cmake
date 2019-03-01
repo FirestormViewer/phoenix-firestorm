@@ -1,4 +1,5 @@
 # -*- cmake -*-
+include(00-Common)
 include(LLTestCommand)
 
 # <FS:ND> Google Mock/Test is not used
