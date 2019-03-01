@@ -3,6 +3,36 @@
 <map>
     <key>installables</key>
     <map>
+      <key>jemalloc</key>
+      <map>
+		<key>copyright</key>
+		<string>Copyright (C) 2002-present Jason Evans jasone@canonware.com.</string>
+		<key>description</key>
+		<string>jemalloc is a general purpose malloc(3) implementation that emphasizes fragmentation avoidance and scalable concurrency support.</string>
+		<key>license</key>
+		<string>jemalloc (BSD derived)</string>
+		<key>license_file</key>
+		<string>LICENSES/jemalloc.txt</string>
+		<key>name</key>
+		<string>jemalloc</string>
+        <key>platforms</key>
+        <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>aa31ee4c6315cb26bf6e2191b69598f5</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/jemalloc-5.1.0-linux64-190582149.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>5.1.0</string>
+      </map>
       <key>dullahan-gcc5</key>
       <map>
         <key>copyright</key>

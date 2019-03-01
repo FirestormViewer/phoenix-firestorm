@@ -2069,6 +2069,11 @@ class LinuxManifest(ViewerManifest):
                 print "tcmalloc files not found, skipping"
                 pass
 
+            try:
+                self.path("libjemalloc.so*")
+            except:
+                pass
+
           # Vivox runtimes
           # Currentelly, the 32-bit ones will work with a 64-bit client.
           with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="bin"):

@@ -690,7 +690,7 @@ void LLFloaterWorldMap::processParcelInfo(const LLParcelData& parcel_data, const
 									 ll_round(region_y),
 									 ll_round((F32)pos_global.mdV[VZ]));
 
-	LLTracker::trackLocation(pos_global, parcel_data.name, full_name);
+	LLTracker::trackLocation(pos_global, parcel_data.name.empty() ? getString("UnnamedParcel") : parcel_data.name, full_name);
 }
 
 void LLFloaterWorldMap::requestParcelInfo(const LLVector3d& pos_global)
