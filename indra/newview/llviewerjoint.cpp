@@ -144,7 +144,10 @@ U32 LLViewerJoint::render( F32 pixelArea, BOOL first_pass, BOOL is_dummy )
 	for (child_list_t::iterator iter = mChildren.begin();
 		 iter != mChildren.end(); ++iter)
 	{
-		LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+//		LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+// [SL:KB] - Patch: Viewer-OptimizationAnimesh | Checked: Catznip-6.0
+		LLAvatarJoint* joint = static_cast<LLAvatarJoint*>(*iter);
+// [/SL:KB]
 		F32 jointLOD = joint->getLOD();
 		if (pixelArea >= jointLOD || sDisableLOD)
 		{

@@ -277,6 +277,7 @@
 			<menu_item_check label="コピー可のオブジェクトだけを選択する" name="Select Only Copyable Objects" />
 			<menu_item_check label="範囲内を選択する" name="Select By Surrounding"/>
 			<menu_item_check label="グループ所有のオブジェクトを含める" name="Include Group-Owned Objects" />
+			<menu_item_check label="編集時に物理形状を表示" name="Show Physics Shape" />
 			<menu_item_check label="選択外形を表示" name="Show Selection Outlines"/>
 			<menu_item_check label="隠れた位置の選択も表示する" name="Show Hidden Selection"/>
 			<menu_item_check label="選択した光の半径範囲を表示する" name="Show Light Radius for Selection"/>
@@ -545,7 +546,8 @@
 			<menu_item_check label="自動アルファマスク（遅延なし）" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="アニメーションテクスチャ" name="Animation Textures"/>
 			<menu_item_check label="テクスチャを無効にする" name="Disable Textures"/>
-			<menu_item_check label="フル解像度テクスチャ (dangerous)" name="Full Res Textures"/>
+			<menu_item_call label="全てのアニメーションメッシュを表示しない" name="Derender Animesh" />
+			<menu_item_check label="フル解像度テクスチャ (危険)" name="Full Res Textures"/>
 			<menu_item_check label="装着された光源を描画する" name="Render Attached Lights"/>
 			<menu_item_check label="取り付けられたパーティクルを描画する" name="Render Attached Particles"/>
 			<menu_item_check label="マウスオーバーで強調表示する" name="Hover Glow Objects"/>
