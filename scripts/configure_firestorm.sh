@@ -466,7 +466,11 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
             BUILD_DIR=`pwd`
         fi
         # This name is consumed by indra/newview/CMakeLists.txt
-        VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/$BTYPE/firestorm-symbols-${PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
+        if [ $PLATFORM == "linux" ] ; then
+			VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/firestorm-symbols-${PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
+		else
+			VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/$BTYPE/firestorm-symbols-${PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
+		fi			
         CRASH_REPORTING="-DRELEASE_CRASH_REPORTING:BOOL=ON"
     else
         CRASH_REPORTING="-DRELEASE_CRASH_REPORTING:BOOL=OFF"
