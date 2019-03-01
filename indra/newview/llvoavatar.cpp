@@ -868,7 +868,8 @@ BOOL LLVOAvatar::isFullyBaked()
 	for (U32 i = 0; i < mBakedTextureDatas.size(); i++)
 	{
 		if (!isTextureDefined(mBakedTextureDatas[i].mTextureIndex)
-			&& ( (i != BAKED_SKIRT) || isWearingWearableType(LLWearableType::WT_SKIRT) ) )
+			&& ((i != BAKED_SKIRT) || isWearingWearableType(LLWearableType::WT_SKIRT))
+			&& (i != BAKED_LEFT_ARM) && (i != BAKED_LEFT_LEG) && (i != BAKED_AUX1) && (i != BAKED_AUX2) && (i != BAKED_AUX3))
 		{
 			return FALSE;
 		}
@@ -8295,16 +8296,7 @@ BOOL LLVOAvatar::isWearingWearableType(LLWearableType::EType type) const
 			if (texture_dict->mIsUsedByBakedTexture)
 			{
 				const EBakedTextureIndex baked_index = texture_dict->mBakedTextureIndex;
-
-				if (type == LLWearableType::WT_SKIRT)
-				{
-					return (LLAvatarAppearance::isWearingWearableType(type) && isTextureDefined(LLAvatarAppearanceDictionary::getInstance()->getBakedTexture(baked_index)->mTextureIndex));
-				}
-				else
-				{
-					return isTextureDefined(LLAvatarAppearanceDictionary::getInstance()->getBakedTexture(baked_index)->mTextureIndex);
-				}
-				
+				return isTextureDefined(LLAvatarAppearanceDictionary::getInstance()->getBakedTexture(baked_index)->mTextureIndex);
 			}
 			return FALSE;
 		}
