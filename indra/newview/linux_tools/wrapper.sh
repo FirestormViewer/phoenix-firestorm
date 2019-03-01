@@ -141,10 +141,11 @@ fi
 
 fi
 
-if test -f lib/libjemalloc.so
+FSJEMALLOC="$(pwd)/lib/libjemalloc.so"
+if [ -f ${FSJEMALLOC} ]
 then
 	echo "Using jemalloc"
-	export LD_PRELOAD="${LD_PRELOAD}:lib/libjemalloc.so"
+	export LD_PRELOAD="${LD_PRELOAD}:${FSJEMALLOC}"
 fi
 
 export FS_CEF_PRELOAD="libcef.so"
