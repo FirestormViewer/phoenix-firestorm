@@ -1899,7 +1899,7 @@ class LinuxManifest(ViewerManifest):
                 self.path("firestorm_256.BMP","ll_icon.BMP")
 
         # plugins
-        with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'media_plugins', dst="bin/llplugin")):
+        with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'media_plugins'), dst="bin/llplugin"):
             self.path("gstreamer010/libmedia_plugin_gstreamer010.so",
                       "libmedia_plugin_gstreamer.so")
             self.path2basename("libvlc", "libmedia_plugin_libvlc.so")
@@ -2245,6 +2245,10 @@ class Linux_x86_64_Manifest(LinuxManifest):
 
     def construct(self):
         super(Linux_x86_64_Manifest, self).construct()
+
+        pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
+        relpkgdir = os.path.join(pkgdir, "lib", "release")
+        debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
         if self.is_packaging_viewer():
           with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
