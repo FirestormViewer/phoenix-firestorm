@@ -55,14 +55,14 @@ RequestExecutionLevel admin	# For when we write to Program Files
 ##!include "%%SOURCE%%\installers\windows\lang_da.nsi"
 !include "%%SOURCE%%\installers\windows\lang_de.nsi"
 !include "%%SOURCE%%\installers\windows\lang_es.nsi"
-!include "%%SOURCE%%\installers\windows\lang_fr.nsi"
+##!include "%%SOURCE%%\installers\windows\lang_fr.nsi"
 !include "%%SOURCE%%\installers\windows\lang_ja.nsi"
 !include "%%SOURCE%%\installers\windows\lang_it.nsi"
-##!include "%%SOURCE%%\installers\windows\lang_pl.nsi"
-!include "%%SOURCE%%\installers\windows\lang_pt-br.nsi"
+!include "%%SOURCE%%\installers\windows\lang_pl.nsi" ;<FS:Ansariel> Polish is supported
+##!include "%%SOURCE%%\installers\windows\lang_pt-br.nsi"
 !include "%%SOURCE%%\installers\windows\lang_ru.nsi"
-!include "%%SOURCE%%\installers\windows\lang_tr.nsi"
-!include "%%SOURCE%%\installers\windows\lang_zh.nsi"
+##!include "%%SOURCE%%\installers\windows\lang_tr.nsi"
+##!include "%%SOURCE%%\installers\windows\lang_zh.nsi"
 
 # *TODO: Move these into the language files themselves
 ##LangString LanguageCode ${LANG_DANISH}   "da"
@@ -506,13 +506,16 @@ StrCpy $INSTSHORTCUT "${SHORTCUT}"
 # MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_KEY
 # MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_VALUENAME
 # Couldn't get NSIS to expand $MultiUser.InstallMode into the function name at Call time
-${If} $MultiUser.InstallMode == 'AllUsers'
+# <FS:Ansariel> Replaced this with Call un.CheckIfAdministrator since there currently is no InstallMode
+##${If} $MultiUser.InstallMode == 'AllUsers'
 ##MessageBox MB_OK "Uninstalling for all users"
-  Call un.MultiUser.InstallMode.AllUsers
-${Else}
+##  Call un.MultiUser.InstallMode.AllUsers
+##${Else}
 ##MessageBox MB_OK "Uninstalling for current user"
-  Call un.MultiUser.InstallMode.CurrentUser
-${EndIf}
+##  Call un.MultiUser.InstallMode.CurrentUser
+##${EndIf}
+Call un.CheckIfAdministrator
+# </FS:Ansariel>
 
 # Make sure we're not running
 Call un.CloseSecondLife
