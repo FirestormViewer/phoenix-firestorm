@@ -30,14 +30,10 @@
 
 #include "lldir_win32.h"
 #include "llerror.h"
-#include "llrand.h"		// for gLindenLabRandomNumber
+#include "llstring.h"
+#include "stringize.h"
+#include "llfile.h"
 #include <shlobj.h>
-// <FS:Ansariel> Remove VMP
-#include <Knownfolders.h>
-#include <iostream>
-#include <map>
-#include <Objbase.h>                // CoTaskMemFree()
-// </FS:Ansariel> Remove VMP
 #include <fstream>
 
 #include <direct.h>
@@ -49,55 +45,87 @@
 #define PACKVERSION(major,minor) MAKELONG(minor,major)
 DWORD GetDllVersion(LPCTSTR lpszDllName);
 
-// <FS:Ansariel> Remove VMP
-namespace {
+namespace
+{ // anonymous
+    enum class prst { INIT, OPEN, SKIP } state = prst::INIT;
+    // This is called so early that we can't count on static objects being
+    // properly constructed yet, so declare a pointer instead of an instance.
+    std::ofstream* prelogf = nullptr;
 
-std::string getKnownFolderPath(const std::string& desc, REFKNOWNFOLDERID folderid)
-{
-    // https://msdn.microsoft.com/en-us/library/windows/desktop/bb762188(v=vs.85).aspx
-    PWSTR wstrptr = 0;
-    HRESULT result = SHGetKnownFolderPath(
-        folderid,
-        KF_FLAG_DEFAULT,            // no flags
-        NULL,                       // current user, no impersonation
-        &wstrptr);
-    if (result == S_OK)
+    void prelog(const std::string& message)
     {
-        std::string utf8 = utf16str_to_utf8str(llutf16string(wstrptr));
-        // have to free the returned pointer after copying its data
-        CoTaskMemFree(wstrptr);
-        return utf8;
+        boost::optional<std::string> prelog_name;
+
+        switch (state)
+        {
+        case prst::INIT:
+            // assume we failed, until we succeed
+            state = prst::SKIP;
+
+            prelog_name = LLStringUtil::getoptenv("PRELOG");
+            if (! prelog_name)
+                // no PRELOG variable set, carry on
+                return;
+            prelogf = new llofstream(*prelog_name, std::ios_base::app);
+            if (! (prelogf && prelogf->is_open()))
+                // can't complain to anybody; how?
+                return;
+            // got the log file open, cool!
+            state = prst::OPEN;
+            (*prelogf) << "========================================================================"
+                       << std::endl;
+            // fall through, don't break
+
+        case prst::OPEN:
+            (*prelogf) << message << std::endl;
+            break;
+
+        case prst::SKIP:
+            // either PRELOG isn't set, or we failed to open that pathname
+            break;
+        }
     }
-
-    // gack, no logging yet!
-    // at least say something to a developer trying to debug this...
-    static std::map<HRESULT, const char*> codes
-    {
-        { E_FAIL, "E_FAIL; known folder does not have a path?" },
-        { E_INVALIDARG, "E_INVALIDARG; not present on system?" }
-    };
-    auto found = codes.find(result);
-    const char* text = (found == codes.end())? "unknown" : found->second;
-    std::cout << "*** SHGetKnownFolderPath(" << desc << ") failed with "
-              << result << " (" << text << ")\n";
-    return {};
-}
-
 } // anonymous namespace
-// </FS:Ansariel> Remove VMP
+
+#define PRELOG(expression) prelog(STRINGIZE(expression))
 
 LLDir_Win32::LLDir_Win32()
 {
 	// set this first: used by append() and add() methods
 	mDirDelimiter = "\\";
 
+	WCHAR w_str[MAX_PATH];
 	// Application Data is where user settings go. We rely on $APPDATA being
-	// correct; in fact the VMP makes a point of setting it properly, since
-	// Windows itself botches the job for non-ASCII usernames (MAINT-8087).
-	// <FS:Ansariel> Remove VMP
-	//mOSUserDir = ll_safe_string(getenv("APPDATA"));
-	mOSUserDir = getKnownFolderPath("RoamingAppData", FOLDERID_RoamingAppData);
-	// </FS:Ansariel> Remove VMP
+	// correct.
+	auto APPDATA = LLStringUtil::getoptenv("APPDATA");
+	if (APPDATA)
+	{
+		mOSUserDir = *APPDATA;
+	}
+	PRELOG("APPDATA='" << mOSUserDir << "'");
+	// On Windows, we could have received a plain-ASCII pathname in which
+	// non-ASCII characters have been munged to '?', or the pathname could
+	// have been badly encoded and decoded such that we now have garbage
+	// instead of a valid path. Check that mOSUserDir actually exists.
+	if (mOSUserDir.empty() || ! fileExists(mOSUserDir))
+	{
+		PRELOG("APPDATA does not exist");
+		//HRESULT okay = SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, w_str);
+		wchar_t *pwstr = NULL;
+		HRESULT okay = SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &pwstr);
+		PRELOG("SHGetKnownFolderPath(FOLDERID_RoamingAppData) returned " << okay);
+		if (SUCCEEDED(okay) && pwstr)
+		{
+			// But of course, only update mOSUserDir if SHGetKnownFolderPath() works.
+			mOSUserDir = ll_convert_wide_to_string(pwstr);
+			// Not only that: update our environment so that child processes
+			// will see a reasonable value as well.
+			_wputenv_s(L"APPDATA", pwstr);
+			// SHGetKnownFolderPath() contract requires us to free pwstr
+			CoTaskMemFree(pwstr);
+			PRELOG("mOSUserDir='" << mOSUserDir << "'");
+		}
+	}
 
 	// We want cache files to go on the local disk, even if the
 	// user is on a network with a "roaming profile".
@@ -107,12 +135,34 @@ LLDir_Win32::LLDir_Win32()
 	//
 	// We used to store the cache in AppData\Roaming, and the installer
 	// cleans up that version on upgrade.  JC
-	// <FS:Ansariel> Remove VMP
-	//mOSCacheDir = ll_safe_string(getenv("LOCALAPPDATA"));
-	mOSCacheDir = getKnownFolderPath("LocalAppData", FOLDERID_LocalAppData);
-	// </FS:Ansariel> Remove VMP
+	auto LOCALAPPDATA = LLStringUtil::getoptenv("LOCALAPPDATA");
+	if (LOCALAPPDATA)
+	{
+		mOSCacheDir = *LOCALAPPDATA;
+	}
+	PRELOG("LOCALAPPDATA='" << mOSCacheDir << "'");
+	// Windows really does not deal well with pathnames containing non-ASCII
+	// characters. See above remarks about APPDATA.
+	if (mOSCacheDir.empty() || ! fileExists(mOSCacheDir))
+	{
+		PRELOG("LOCALAPPDATA does not exist");
+		//HRESULT okay = SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, w_str);
+		wchar_t *pwstr = NULL;
+		HRESULT okay = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &pwstr);
+		PRELOG("SHGetKnownFolderPath(FOLDERID_LocalAppData) returned " << okay);
+		if (SUCCEEDED(okay) && pwstr)
+		{
+			// But of course, only update mOSCacheDir if SHGetKnownFolderPath() works.
+			mOSCacheDir = ll_convert_wide_to_string(pwstr);
+			// Update our environment so that child processes will see a
+			// reasonable value as well.
+			_wputenv_s(L"LOCALAPPDATA", pwstr);
+			// SHGetKnownFolderPath() contract requires us to free pwstr
+			CoTaskMemFree(pwstr);
+			PRELOG("mOSCacheDir='" << mOSCacheDir << "'");
+		}
+	}
 
-	WCHAR w_str[MAX_PATH];
 	if (GetTempPath(MAX_PATH, w_str))
 	{
 		if (wcslen(w_str))	/* Flawfinder: ignore */ 
