@@ -121,7 +121,11 @@ void LLAvatarJoint::setSkeletonComponents( U32 comp, BOOL recursive )
 		for (child_list_t::iterator iter = mChildren.begin();
 			 iter != mChildren.end(); ++iter)
 		{
-			LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+//			LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+// [SL:KB] - Patch: Viewer-OptimizationAnimesh | Checked: Catznip-6.0
+			// Dynamic cast is pointless if the result isn't actually checked (and if we know it won't fail we can just static cast)
+			LLAvatarJoint* joint = static_cast<LLAvatarJoint*>(*iter);
+// [/SL:KB]
 			joint->setSkeletonComponents(comp, recursive);
 		}
 	}
@@ -147,7 +151,10 @@ void LLAvatarJoint::updateFaceSizes(U32 &num_vertices, U32& num_indices, F32 pix
 	for (child_list_t::iterator iter = mChildren.begin();
 		 iter != mChildren.end(); ++iter)
 	{
-		LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+//		LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+// [SL:KB] - Patch: Viewer-OptimizationAnimesh | Checked: Catznip-6.0
+		LLAvatarJoint* joint = static_cast<LLAvatarJoint*>(*iter);
+// [/SL:KB]
 		joint->updateFaceSizes(num_vertices, num_indices, pixel_area);
 	}
 }
@@ -157,7 +164,10 @@ void LLAvatarJoint::updateFaceData(LLFace *face, F32 pixel_area, BOOL damp_wind,
 	for (child_list_t::iterator iter = mChildren.begin();
 		 iter != mChildren.end(); ++iter)
 	{
-		LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+//		LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+// [SL:KB] - Patch: Viewer-OptimizationAnimesh | Checked: Catznip-6.0
+		LLAvatarJoint* joint = static_cast<LLAvatarJoint*>(*iter);
+// [/SL:KB]
 		joint->updateFaceData(face, pixel_area, damp_wind, terse_update);
 	}
 }
@@ -167,7 +177,10 @@ void LLAvatarJoint::updateJointGeometry()
 	for (child_list_t::iterator iter = mChildren.begin();
 		 iter != mChildren.end(); ++iter)
 	{
-		LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+//		LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+// [SL:KB] - Patch: Viewer-OptimizationAnimesh | Checked: Catznip-6.0
+		LLAvatarJoint* joint = static_cast<LLAvatarJoint*>(*iter);
+// [/SL:KB]
 		joint->updateJointGeometry();
 	}
 }
@@ -214,7 +227,10 @@ void LLAvatarJoint::dump()
 	for (child_list_t::iterator iter = mChildren.begin();
 		 iter != mChildren.end(); ++iter)
 	{
-		LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+//		LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+// [SL:KB] - Patch: Viewer-OptimizationAnimesh | Checked: Catznip-6.0
+		LLAvatarJoint* joint = static_cast<LLAvatarJoint*>(*iter);
+// [/SL:KB]
 		joint->dump();
 	}
 }
