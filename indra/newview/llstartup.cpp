@@ -1234,12 +1234,6 @@ bool idle_startup()
 				}
 			}
 			display_startup();
-			// <FS:Ansariel> Fix display scaling
-			//if (gViewerWindow->getSystemUIScaleFactorChanged())
-			//{
-			//	LLViewerWindow::showSystemUIScaleFactorChanged();
-			//}
-			// </FS:Ansariel>
 			LLStartUp::setStartupState( STATE_LOGIN_WAIT );		// Wait for user input
 		}
 		else
