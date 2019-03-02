@@ -402,7 +402,7 @@ void LLApp::setupErrorHandling(bool second_instance, EMiniDumpType minidump_type
 
 #if LL_WINDOWS
 
-#if LL_SEND_CRASH_REPORTS
+#if LL_SEND_CRASH_REPORTS && ! defined(LL_BUGSPLAT)
 	EnableCrashingOnCrashes();
 
 	// This sets a callback to handle w32 signals to the console window.
@@ -481,8 +481,15 @@ void LLApp::setupErrorHandling(bool second_instance, EMiniDumpType minidump_type
 			mExceptionHandler->set_handle_debug_exceptions(true);
 		}
 	}
-#endif
-#else
+#endif // LL_SEND_CRASH_REPORTS && ! defined(LL_BUGSPLAT)
+#else  // ! LL_WINDOWS
+
+#if defined(LL_BUGSPLAT)
+	// Don't install our own signal handlers -- BugSplat needs to hook them,
+	// or it's completely ineffectual.
+	bool installHandler = false;
+
+#else // ! LL_BUGSPLAT
 	//
 	// Start up signal handling.
 	//
@@ -490,9 +497,11 @@ void LLApp::setupErrorHandling(bool second_instance, EMiniDumpType minidump_type
 	// thread, asynchronous signals can be delivered to any thread (in theory)
 	//
 	setup_signals();
-	
+
 	// Add google breakpad exception handler configured for Darwin/Linux.
 	bool installHandler = true;
+#endif // ! LL_BUGSPLAT
+
 #if LL_DARWIN
 	// For the special case of Darwin, we do not want to install the handler if
 	// the process is being debugged as the app will exit with value ABRT (6) if
@@ -525,7 +534,7 @@ void LLApp::setupErrorHandling(bool second_instance, EMiniDumpType minidump_type
 		// installing the handler.
 		installHandler = true;
 	}
-	#endif
+	#endif // ! LL_RELEASE_FOR_DOWNLOAD
 
 	if(installHandler && (mExceptionHandler == 0))
 	{
@@ -541,9 +550,9 @@ void LLApp::setupErrorHandling(bool second_instance, EMiniDumpType minidump_type
 		google_breakpad::MinidumpDescriptor desc(mDumpPath);
 	    mExceptionHandler = new google_breakpad::ExceptionHandler(desc, NULL, unix_minidump_callback, NULL, true, -1);
 	}
-#endif
+#endif // LL_LINUX
 
-#endif
+#endif // ! LL_WINDOWS
 	startErrorThread();
 }
 
