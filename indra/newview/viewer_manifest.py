@@ -185,7 +185,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                     self.path("*/xui/*/*.xml")
                     self.path("*/xui/*/widgets/*.xml")
                     self.path("*/themes/*/colors.xml")
-                    with self.prefix(src="*/themes/*/textures"):
+                    with self.prefix(src_dst="*/themes/*/textures"):
                         self.path("*/*.tga")
                         self.path("*/*.j2c")
                         self.path("*/*.jpg")
