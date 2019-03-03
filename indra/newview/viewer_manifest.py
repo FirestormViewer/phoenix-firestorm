@@ -1925,7 +1925,7 @@ class LinuxManifest(ViewerManifest):
             self.path( "libcef.so" )
             self.path( "libllceflib.so" )
             
-        with self.prefix(src=os.path.join(pkgdir, 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
             self.path( "*.so" )
 
         with self.prefix(src=os.path.join(pkgdir, 'bin', 'release'), dst="bin"):
