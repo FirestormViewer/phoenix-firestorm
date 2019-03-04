@@ -2,8 +2,8 @@
 include(Prebuilt)
 
 #if (USESYSTEMLIBS)
-#  set(BREAKPAD_EXCEPTION_HANDLER_FIND_REQUIRED ON)
-#  include(FindGoogleBreakpad)
+  set(BREAKPAD_EXCEPTION_HANDLER_FIND_REQUIRED ON)
+  include(FindGoogleBreakpad)
 #else (USESYSTEMLIBS)
   use_prebuilt_binary(google_breakpad)
   if (DARWIN)
