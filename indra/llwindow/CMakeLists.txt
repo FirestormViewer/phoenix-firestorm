@@ -203,6 +203,6 @@ if (SDL_FOUND)
     )
 endif (SDL_FOUND)
 
-# ND: What kind of sorcery is this supposed to be, link llwindow against itself? cmake does not like this a bit.
-#  target_link_libraries (llwindow ${llwindow_LINK_LIBRARIES})
-
+if (NOT USESYSTEMLIBS)
+target_link_libraries (llwindow ${llwindow_LINK_LIBRARIES})
+endif()
