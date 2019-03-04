@@ -1920,15 +1920,36 @@ class LinuxManifest(ViewerManifest):
         with self.prefix(src=os.path.join(pkgdir, 'lib' ), dst="lib"):
             self.path( "libvlc*.so*" )
 
+        snapStage = os.environ.get( "SNAPCRAFT_STAGE" )
+        if snapStage != None:
+            print( "Building snap package" )
+        else:
+            snapStage = os.environ.get( "FLATPAK_DEST" )
+            if snapStage != None:
+                print( "Building flatpak package" )
+
+        if snapStage == None:
+            data = open( "/proc/1/cgroup", "r" ).readlines()[0]
+            if "docker" in data:
+                snapStage = "/usr"
+
+        pkgBase = os.path.join(os.pardir, 'packages', 'lib', 'release')
+        if snapStage != None:
+            pkgBase = os.path.join( snapStage, "lib" )
+            
         # CEF files 
-        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
+        with self.prefix(src=pkgBase, dst="lib"):
             self.path( "libcef.so" )
             self.path( "libllceflib.so" )
             
-        with self.prefix(src=os.path.join(pkgdir, 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
+        pkgBase = os.path.join( pkgBase, "swiftshader" )
+        with self.prefix(src=pkgBase, dst=os.path.join("bin", "swiftshader") ):
             self.path( "*.so" )
 
-        with self.prefix(src=os.path.join(pkgdir, 'bin', 'release'), dst="bin"):
+        pkgBase = os.path.join(os.pardir, 'packages', 'bin', 'release')
+        if snapStage != None:
+            pkgBase = os.path.join( snapStage, "lib" )
+        with self.prefix(src=os.path.join(pkgBase, dst="bin"):
             self.path( "chrome-sandbox" )
             self.path( "dullahan_host" )
             self.path( "natives_blob.bin" )
@@ -1936,7 +1957,11 @@ class LinuxManifest(ViewerManifest):
             self.path( "v8_context_snapshot.bin" )
             self.path( "libffmpegsumo.so" )
 
-        with self.prefix(src=os.path.join(pkgdir, 'resources'), dst="bin"):
+        pkgBase = os.path.join(os.pardir, 'packages', 'resources')
+        if snapStage != None:
+            pkgBase = os.path.join( snapStage, "resources" )
+
+        with self.prefix(src=pkgBase, dst="bin"):
             self.path( "cef.pak" )
             self.path( "cef_extensions.pak" )
             self.path( "cef_100_percent.pak" )
@@ -1944,7 +1969,9 @@ class LinuxManifest(ViewerManifest):
             self.path( "devtools_resources.pak" )
             self.path( "icudtl.dat" )
 
-        with self.prefix(src=os.path.join(pkgdir, 'resources', 'locales'), dst=os.path.join('bin', 'locales')):
+        pkgBase = os.path.join( pkgBase, "locales" )
+
+        with self.prefix(src=pkgBase, dst=os.path.join('bin', 'locales')):
             self.path("am.pak")
             self.path("ar.pak")
             self.path("bg.pak")
@@ -2107,6 +2134,12 @@ class LinuxManifest(ViewerManifest):
             self.run_command(['find', self.get_dst_prefix(),
                               '-type', 'f', '-perm', old,
                               '-exec', 'chmod', new, '{}', ';'])
+
+        if os.environ.get( "SNAPCRAFT_STAGE" ) or os.environ.get( "FLATPAK_DEST" ):
+            print( "Building snap package, not calling tar to bundle" )
+            self.package_file = "<none>"
+            return
+
         self.package_file = installer_name + '.tar.xz'
 
         # temporarily move directory tree so that it has the right
