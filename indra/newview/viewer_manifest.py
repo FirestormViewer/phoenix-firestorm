@@ -1933,7 +1933,7 @@ class LinuxManifest(ViewerManifest):
             if "docker" in data:
                 snapStage = "/usr"
 
-        pkgBase = os.path.join(os.pardir, 'packages', 'lib', 'release')
+        pkgBase = os.path.join( pkgdir, 'lib', 'release')
         if snapStage != None:
             pkgBase = os.path.join( snapStage, "lib" )
             
@@ -1946,10 +1946,10 @@ class LinuxManifest(ViewerManifest):
         with self.prefix(src=pkgBase, dst=os.path.join("bin", "swiftshader") ):
             self.path( "*.so" )
 
-        pkgBase = os.path.join(os.pardir, 'packages', 'bin', 'release')
+        pkgBase = os.path.join(pkgdir, 'bin', 'release')
         if snapStage != None:
             pkgBase = os.path.join( snapStage, "lib" )
-        with self.prefix(src=os.path.join(pkgBase, dst="bin"):
+        with self.prefix(pkgBase, dst="bin"):
             self.path( "chrome-sandbox" )
             self.path( "dullahan_host" )
             self.path( "natives_blob.bin" )
@@ -1957,7 +1957,7 @@ class LinuxManifest(ViewerManifest):
             self.path( "v8_context_snapshot.bin" )
             self.path( "libffmpegsumo.so" )
 
-        pkgBase = os.path.join(os.pardir, 'packages', 'resources')
+        pkgBase = os.path.join(pkgdir, 'resources')
         if snapStage != None:
             pkgBase = os.path.join( snapStage, "resources" )
 
@@ -2027,8 +2027,8 @@ class LinuxManifest(ViewerManifest):
             self.path("zh-TW.pak")
 
         # llcommon
-        if not self.path("../llcommon/libllcommon.so", "lib/libllcommon.so"):
-            print "Skipping llcommon.so (assuming llcommon was linked statically)"
+        #if not self.path("../llcommon/libllcommon.so", "lib/libllcommon.so"):
+        #    print "Skipping llcommon.so (assuming llcommon was linked statically)"
 
         self.path("featuretable_linux.txt")
 
@@ -2323,9 +2323,9 @@ class Linux_x86_64_Manifest(LinuxManifest):
             self.path2basename("../llplugin/slplugin", "SLPlugin")
 
         # plugins
-        with self.prefix(dst="bin/llplugin"):
-            self.path2basename("../media_plugins/webkit", "libmedia_plugin_webkit.so")
-            self.path("../media_plugins/gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
+        #with self.prefix(dst="bin/llplugin"):
+        #    self.path2basename("../media_plugins/webkit", "libmedia_plugin_webkit.so")
+        #    self.path("../media_plugins/gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
 
         self.path("secondlife-i686.supp")
 
