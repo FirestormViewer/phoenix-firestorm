@@ -1,9 +1,8 @@
 # -*- cmake -*-
 
-#if (USESYSTEMLIBS)
-#  set(GLOD_FIND_REQUIRED true)
-#  include(FindGLOD)
-#else (USESYSTEMLIBS)
+if (USESYSTEMLIBS)
+  include(FindGLOD)
+else (USESYSTEMLIBS)
   include(Prebuilt)
   use_prebuilt_binary(glod)
 set(GLOD_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include)
@@ -12,4 +11,4 @@ if(LINUX)
 else()
   set(GLOD_LIBRARIES GLOD)
 endif()
-#endif (USESYSTEMLIBS)
+endif (USESYSTEMLIBS)

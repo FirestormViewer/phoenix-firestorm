@@ -80,6 +80,15 @@
 #pragma warning (disable:4702)
 #endif
 
+// ND: Disable some warnings on newer GCC versions.
+#if LL_LINUX
+#if (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ ) >= 40800
+   #pragma GCC diagnostic ignored "-Wuninitialized"
+   #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+ #endif
+#endif
+// </FS:ND>
+
 #include <boost/lexical_cast.hpp>
 
 #if LL_MSVC
