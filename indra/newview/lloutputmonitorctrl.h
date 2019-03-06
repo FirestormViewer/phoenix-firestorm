@@ -63,6 +63,9 @@ protected:
 	LLOutputMonitorCtrl(const Params&);
 	friend class LLUICtrlFactory;
 
+	// <FS:Ansariel> Option to not hide it if speaker ID is set to null
+	bool	mAlwaysVisible;
+
 public:
 	virtual ~LLOutputMonitorCtrl();
 
@@ -169,12 +172,12 @@ public:
 		Params();
 	};
 
-    NearbyVoiceMonitor(const Params& p);
+	NearbyVoiceMonitor(const Params& p);
 
 	void draw();
 
 protected:
-	BOOL mAutoHide;
+	bool mAutoHide;
 	LLLocalSpeakerMgr* mSpeakerMgr;
 };
 

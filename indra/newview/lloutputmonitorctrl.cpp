@@ -77,7 +77,8 @@ LLOutputMonitorCtrl::LLOutputMonitorCtrl(const LLOutputMonitorCtrl::Params& p)
 	mIsModeratorMuted(false),
 	mIsAgentControl(false),
 	mIndicatorToggled(false),
-	mShowParticipantsSpeaking(false)
+	mShowParticipantsSpeaking(false),
+	mAlwaysVisible(false) // <FS:Ansariel> Option to not hide it if speaker ID is set to null
 {
 	//static LLUIColor output_monitor_muted_color = LLUIColorTable::instance().getColor("OutputMonitorMutedColor", LLColor4::orange);
 	//static LLUIColor output_monitor_overdriven_color = LLUIColorTable::instance().getColor("OutputMonitorOverdrivenColor", LLColor4::red);
@@ -297,7 +298,9 @@ void LLOutputMonitorCtrl::setSpeakerId(const LLUUID& speaker_id, const LLUUID& s
 	if (speaker_id.isNull() && mSpeakerId.notNull())
 	{
 		LLSpeakingIndicatorManager::unregisterSpeakingIndicator(mSpeakerId, this);
-        switchIndicator(false);
+		// <FS:Ansariel> Option to not hide it if speaker ID is set to null
+		if (!mAlwaysVisible)
+            switchIndicator(false);
         mSpeakerId = speaker_id;
 	}
 
@@ -384,7 +387,7 @@ void LLOutputMonitorCtrl::notifyParentVisibilityChanged()
 static LLDefaultChildRegistry::Register<NearbyVoiceMonitor> r2("nearby_voice_monitor");
 
 NearbyVoiceMonitor::Params::Params()
-:	auto_hide("auto_hide",false)
+:	auto_hide("auto_hide", false)
 {
 }
 
@@ -392,39 +395,37 @@ NearbyVoiceMonitor::NearbyVoiceMonitor(const NearbyVoiceMonitor::Params& p)
 :	LLOutputMonitorCtrl(p),
 	mAutoHide(p.auto_hide)
 {
-	 mSpeakerMgr=LLLocalSpeakerMgr::getInstance();
+	mAlwaysVisible = true;
+	mSpeakerMgr = LLLocalSpeakerMgr::getInstance();
 }
 
 void NearbyVoiceMonitor::draw()
 {
 	LLSpeakerMgr::speaker_list_t speaker_list;
 	LLUUID id;
-	BOOL draw=FALSE;
+	bool draw = false;
 
-	id.setNull();
 	mSpeakerMgr->update(TRUE);
 	mSpeakerMgr->getSpeakerList(&speaker_list, FALSE);
 
-	for (LLSpeakerMgr::speaker_list_t::iterator i = speaker_list.begin(); i != speaker_list.end(); ++i)
+	for (LLSpeakerMgr::speaker_list_t::const_iterator it = speaker_list.begin(); it != speaker_list.end(); ++it)
 	{
-		LLPointer<LLSpeaker> s = *i;
-		if (s->mSpeechVolume > 0 || s->mStatus == LLSpeaker::STATUS_SPEAKING)
+		LLPointer<LLSpeaker> speaker = *it;
+		if (speaker->mSpeechVolume > 0.f || speaker->mStatus == LLSpeaker::STATUS_SPEAKING)
 		{
-			draw=TRUE;
-			id = s->mID;
+			draw = true;
+			id = speaker->mID;
 			break;
 		}
 	}
 
 	setSpeakerId(id);
-	switchIndicator(true); // Ansa: Make sure the output monitor is visible at all times
 
-	if(!mAutoHide || draw)
+	if (!mAutoHide || draw)
 	{
 		LLOutputMonitorCtrl::draw();
 	}
 }
-
 // </FS:Zi> Add new control to have a nearby voice output monitor
 //////////////////////////////////////////////////////////////////////////
 
