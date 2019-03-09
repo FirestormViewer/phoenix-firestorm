@@ -824,7 +824,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
     {
 #ifndef VIVOXDAEMON_REMOTEHOST
         // Launch the voice daemon
-#ifdef LL_LINUX
+#if defined(LL_WINDOWS) || defined(LL_LINUX)
         std::string exe_path = gDirUtilp->getExecutableDir();
 #else
         std::string exe_path = gDirUtilp->getAppRODataDir();
