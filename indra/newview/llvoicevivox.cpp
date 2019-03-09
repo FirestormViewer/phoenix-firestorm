@@ -824,7 +824,11 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
     {
 #ifndef VIVOXDAEMON_REMOTEHOST
         // Launch the voice daemon
+#ifdef LL_LINUX
+        std::string exe_path = gDirUtilp->getExecutableDir();
+#else
         std::string exe_path = gDirUtilp->getAppRODataDir();
+#endif
 #if LL_WINDOWS
         // <FS:Ansariel> FIRE-22709: Local voice not working in OpenSim
 #ifdef OPENSIM
