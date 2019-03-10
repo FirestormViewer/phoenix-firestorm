@@ -215,7 +215,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 self.path("*.tga")
 
             # File in the newview/ directory
-            self.path("gpu_table.txt")
+            # self.path("gpu_table.txt")
 
             #build_data.json.  Standard with exception handling is fine.  If we can't open a new file for writing, we have worse problems
             #platform is computed above with other arg parsing
@@ -1356,14 +1356,14 @@ class DarwinManifest(ViewerManifest):
         idnadir = os.path.join(pkgdir, "lib", "python", "idna")
 
         with self.prefix(dst="Contents"):  # everything goes in Contents
-            self.path("Info.plist", dst="Info.plist")
+            # self.path("Info.plist", dst="Info.plist")
 
             # copy additional libs in <bundle>/Contents/MacOS/
             self.path(os.path.join(relpkgdir, "libndofdev.dylib"), dst="Resources/libndofdev.dylib")
-            self.path(os.path.join(relpkgdir, "libhunspell-1.3.0.dylib"), dst="Resources/libhunspell-1.3.0.dylib")   
+            # self.path(os.path.join(relpkgdir, "libhunspell-1.3.0.dylib"), dst="Resources/libhunspell-1.3.0.dylib")   
 
             # Growl Frameworks
-            self.path("../packages/Frameworks/Growl", dst="Frameworks/Growl")
+            # self.path("../packages/Frameworks/Growl", dst="Frameworks/Growl")
 
             # most everything goes in the Resources directory
             with self.prefix(dst="Resources"):
@@ -1432,18 +1432,18 @@ class DarwinManifest(ViewerManifest):
                 # in our bundled sub-apps. For each of these we'll create a
                 # symlink from sub-app/Contents/Resources to the real .dylib.
                 # Need to get the llcommon dll from any of the build directories as well.
-                libfile = "libllcommon.dylib"
-                dylibs = path_optional(self.find_existing_file(os.path.join(os.pardir,
-                                                               "llcommon",
-                                                               self.args['configuration'],
-                                                               libfile),
-                                                               os.path.join(relpkgdir, libfile)),
-                                       dst=libfile)
+                # libfile = "libllcommon.dylib"
+                # dylibs = path_optional(self.find_existing_file(os.path.join(os.pardir,
+                #                                               "llcommon",
+                #                                               self.args['configuration'],
+                #                                               libfile),
+                #                                               os.path.join(relpkgdir, libfile)),
+                #                       dst=libfile)
 
                 for libfile in (
-                                "libapr-1.0.dylib",
-                                "libaprutil-1.0.dylib",
-                                "libcollada14dom.dylib",
+                                # "libapr-1.0.dylib",
+                                # "libaprutil-1.0.dylib",
+                                # "libcollada14dom.dylib",
                                 "libexpat.1.dylib",
                                 "libexception_handler.dylib",
                                 "libGLOD.dylib",
@@ -1453,17 +1453,18 @@ class DarwinManifest(ViewerManifest):
                                 "libnghttp2.*dylib",
                                 "libgrowl.dylib",
                                 "libgrowl++.dylib",
-                                "libLeap.dylib",
+                                # "libLeap.dylib",
                                 ):
-                    dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+                    # dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+                    dylibs = path_optional(os.path.join(relpkgdir, libfile), libfile)
 
                 # SLVoice and vivox lols, no symlinks needed
                 for libfile in (
-                                'libalut.dylib',
-                                'libopenal.dylib',
-                                'libortp.dylib',
-                                'libsndfile.dylib',
-                                'libvivoxoal.dylib',
+                                # 'libalut.dylib',
+                                # 'libopenal.dylib',
+                                # 'libortp.dylib',
+                                # 'libsndfile.dylib',
+                                # 'libvivoxoal.dylib',
                                 'libvivoxsdk.dylib',
                                 'libvivoxplatform.dylib',
                                 'SLVoice',
@@ -1473,8 +1474,8 @@ class DarwinManifest(ViewerManifest):
                 # <FS:Ansariel/TS> FIRE-22709: Local voice not working in OpenSim
                 if self.fs_is_opensim():
                     with self.prefix(src=os.path.join(relpkgdir, 'voice_os'), dst="voice_os"):
-                        self.path('libalut.dylib')
-                        self.path('libopenal.dylib')
+                        # self.path('libalut.dylib')
+                        # self.path('libopenal.dylib')
                         self.path('libortp.dylib')
                         self.path('libsndfile.dylib')
                         self.path('libvivoxoal.dylib')
@@ -1498,16 +1499,16 @@ class DarwinManifest(ViewerManifest):
                         dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
                 # dylibs that vary based on configuration
-                if self.args['configuration'].lower() == 'debug':
-                    for libfile in (
-                                "libfmodexL.dylib",
-                                ):
-                        dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
-                else:
-                    for libfile in (
-                                "libfmodex.dylib",
-                                ):
-                        dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+                # if self.args['configuration'].lower() == 'debug':
+                #    for libfile in (
+                #                "libfmodexL.dylib",
+                #                ):
+                #        dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
+                # else:
+                #    for libfile in (
+                #                "libfmodex.dylib",
+                #                ):
+                #        dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
                 
                 # our apps
                 executable_path = {}
@@ -1535,19 +1536,19 @@ class DarwinManifest(ViewerManifest):
 
                 #<FS:TS> Moved from the x86_64 specific version because code
                 # below that does symlinking and path fixup depends on it.
-                with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'bin_x86')):
-                    self.path("SLPlugin.app", "SLPlugin.app")
+                # with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'bin_x86')):
+                #    self.path("SLPlugin.app", "SLPlugin.app")
 	
-                    with self.prefix(src_dst="llplugin"):
-                        self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
-                        self.path("media_plugin_cef.dylib", "media_plugin_cef.dylib")
+                #    with self.prefix(src_dst="llplugin"):
+                #        self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
+                #        self.path("media_plugin_cef.dylib", "media_plugin_cef.dylib")
 
                 # Dullahan helper apps go inside SLPlugin.app
                 with self.prefix(dst="SLPlugin.app/Contents/Frameworks"):
                     helperappfile = 'DullahanHelper.app'
                     self.path2basename(relpkgdir, helperappfile)
 
-                    pluginframeworkpath = self.dst_path_of('Chromium Embedded Framework.framework');
+                    # pluginframeworkpath = self.dst_path_of('Chromium Embedded Framework.framework');
                     # Putting a Frameworks directory under Contents/MacOS
                     # isn't canonical, but the path baked into Dullahan
                     # Helper.app/Contents/MacOS/DullahanHelper is:
@@ -1590,8 +1591,8 @@ class DarwinManifest(ViewerManifest):
                                  '"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % dylibexecutablepath)
 
                 #<FS:TS> Copy in prebuilt framework if it's there
-                with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'bin_x86', 'Frameworks'), dst="Frameworks"):
-                    self.path("Chromium Embedded Framework.framework")
+                # with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'bin_x86', 'Frameworks'), dst="Frameworks"):
+                #     self.path("Chromium Embedded Framework.framework")
 
             # CEF framework goes inside Second Life.app/Contents/Frameworks
             with self.prefix(dst="Frameworks"):
@@ -1625,8 +1626,8 @@ class DarwinManifest(ViewerManifest):
                 # from SLPlugin.app/Contents/Frameworks/Chromium Embedded
                 # Framework.framework back to Second
                 # Life.app/Contents/Frameworks/Chromium Embedded Framework.framework
-                origin, target = pluginframeworkpath, frameworkpath
-                symlinkf(target, origin)
+                # origin, target = pluginframeworkpath, frameworkpath
+                # symlinkf(target, origin)
                 # from SLPlugin.app/Contents/Frameworks/Dullahan
                 # Helper.app/Contents/MacOS/Frameworks/Chromium Embedded
                 # Framework.framework back to
