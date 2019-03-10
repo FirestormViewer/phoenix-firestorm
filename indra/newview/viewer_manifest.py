@@ -1440,9 +1440,10 @@ class DarwinManifest(ViewerManifest):
                 #                                               os.path.join(relpkgdir, libfile)),
                 #                       dst=libfile)
 
+                dylibs = []
                 for libfile in (
-                                # "libapr-1.0.dylib",
-                                # "libaprutil-1.0.dylib",
+                                "libapr-1.0.dylib",
+                                "libaprutil-1.0.dylib",
                                 # "libcollada14dom.dylib",
                                 "libexpat.1.dylib",
                                 "libexception_handler.dylib",
@@ -1455,8 +1456,7 @@ class DarwinManifest(ViewerManifest):
                                 "libgrowl++.dylib",
                                 # "libLeap.dylib",
                                 ):
-                    # dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
-                    dylibs = path_optional(os.path.join(relpkgdir, libfile), libfile)
+                    dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
                 # SLVoice and vivox lols, no symlinks needed
                 for libfile in (
@@ -1548,7 +1548,7 @@ class DarwinManifest(ViewerManifest):
                     helperappfile = 'DullahanHelper.app'
                     self.path2basename(relpkgdir, helperappfile)
 
-                    # pluginframeworkpath = self.dst_path_of('Chromium Embedded Framework.framework');
+                    pluginframeworkpath = self.dst_path_of('Chromium Embedded Framework.framework');
                     # Putting a Frameworks directory under Contents/MacOS
                     # isn't canonical, but the path baked into Dullahan
                     # Helper.app/Contents/MacOS/DullahanHelper is:
@@ -1626,8 +1626,8 @@ class DarwinManifest(ViewerManifest):
                 # from SLPlugin.app/Contents/Frameworks/Chromium Embedded
                 # Framework.framework back to Second
                 # Life.app/Contents/Frameworks/Chromium Embedded Framework.framework
-                # origin, target = pluginframeworkpath, frameworkpath
-                # symlinkf(target, origin)
+                origin, target = pluginframeworkpath, frameworkpath
+                symlinkf(target, origin)
                 # from SLPlugin.app/Contents/Frameworks/Dullahan
                 # Helper.app/Contents/MacOS/Frameworks/Chromium Embedded
                 # Framework.framework back to
