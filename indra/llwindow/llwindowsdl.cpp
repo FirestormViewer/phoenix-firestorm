@@ -735,6 +735,7 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 #endif // LL_X11
 
 
+	SDL_StartTextInput();
 	//make sure multisampling is disabled by default
 	glDisable(GL_MULTISAMPLE_ARB);
 	
@@ -774,6 +775,7 @@ void LLWindowSDL::destroyContext()
 {
 	LL_INFOS() << "destroyContext begins" << LL_ENDL;
 
+	SDL_StopTextInput();
 #if LL_X11
 	mSDL_Display = NULL;
 	mSDL_XWindowID = None;
@@ -1746,6 +1748,14 @@ void LLWindowSDL::gatherInput()
                 break;
             }
 
+			case SDL_TEXTINPUT:
+			{
+				auto string = utf8str_to_utf16str( event.text.text );
+				for( auto key: string )
+					handleUnicodeUTF16( key, gKeyboard->currentMask(FALSE));
+				break;
+			}
+			
             case SDL_KEYDOWN:
 				mKeyScanCode = event.key.keysym.scancode;
 				mKeyVirtualKey = event.key.keysym.sym;
@@ -1757,10 +1767,11 @@ void LLWindowSDL::gatherInput()
 				if (SDLCheckGrabbyKeys(event.key.keysym.sym, TRUE) != 0)
 					SDLReallyCaptureInput(TRUE);
 
-				if (event.key.keysym.sym)
 				{
-					handleUnicodeUTF16(event.key.keysym.sym,
-									   gKeyboard->currentMask(FALSE));
+					KEY dummyKey{};
+
+					if( gKeyboard->translateKey( mSDLSym, &dummyKey ) )
+						handleUnicodeUTF16( mSDLSym, gKeyboard->currentMask(FALSE));
 				}
 				break;
 
