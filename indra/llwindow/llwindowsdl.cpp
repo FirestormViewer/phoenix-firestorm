@@ -1752,7 +1752,13 @@ void LLWindowSDL::gatherInput()
 			{
 				auto string = utf8str_to_utf16str( event.text.text );
 				for( auto key: string )
+				{
+					mKeyScanCode = string[0];
+					mKeyVirtualKey = string[0];
+					mKeyModifiers = SDL_GetModState();
+					mSDLSym = string[0];
 					handleUnicodeUTF16( key, gKeyboard->currentMask(FALSE));
+				}
 				break;
 			}
 			
@@ -1760,9 +1766,9 @@ void LLWindowSDL::gatherInput()
 				mKeyScanCode = event.key.keysym.scancode;
 				mKeyVirtualKey = event.key.keysym.sym;
 				mKeyModifiers = event.key.keysym.mod;
-				mSDLSym = event.key.keysym.sym;  // <FS:ND/> Store the SDL Keysym too.
+				mSDLSym = event.key.keysym.sym & ~SDLK_SCANCODE_MASK;  // <FS:ND/> Store the SDL Keysym too.
 			
-				gKeyboard->handleKeyDown(event.key.keysym.sym, event.key.keysym.mod);
+				// gKeyboard->handleKeyDown(event.key.keysym.sym, event.key.keysym.mod);
 				// part of the fix for SL-13243
 				if (SDLCheckGrabbyKeys(event.key.keysym.sym, TRUE) != 0)
 					SDLReallyCaptureInput(TRUE);
@@ -1771,7 +1777,10 @@ void LLWindowSDL::gatherInput()
 					KEY dummyKey{};
 
 					if( gKeyboard->translateKey( mSDLSym, &dummyKey ) )
+					{
+						gKeyboard->handleKeyDown(event.key.keysym.sym, event.key.keysym.mod);
 						handleUnicodeUTF16( mSDLSym, gKeyboard->currentMask(FALSE));
+					}
 				}
 				break;
 
@@ -1779,12 +1788,20 @@ void LLWindowSDL::gatherInput()
 				mKeyScanCode = event.key.keysym.scancode;
 				mKeyVirtualKey = event.key.keysym.sym;
 				mKeyModifiers = event.key.keysym.mod;
-				mSDLSym = event.key.keysym.sym;  // <FS:ND/> Store the SDL Keysym too.
+				mSDLSym = event.key.keysym.sym & ~SDLK_SCANCODE_MASK;  // <FS:ND/> Store the SDL Keysym too.
 
 				if (SDLCheckGrabbyKeys(event.key.keysym.sym, FALSE) == 0)
 					SDLReallyCaptureInput(FALSE); // part of the fix for SL-13243
 
-				gKeyboard->handleKeyUp(event.key.keysym.sym, event.key.keysym.mod);
+				// gKeyboard->handleKeyUp(event.key.keysym.sym, event.key.keysym.mod);
+				{
+					KEY dummyKey{};
+
+					if( gKeyboard->translateKey( mSDLSym, &dummyKey ) )
+					{
+						gKeyboard->handleKeyUp(event.key.keysym.sym, event.key.keysym.mod);
+					}
+				}
 				break;
 
             case SDL_MOUSEBUTTONDOWN:

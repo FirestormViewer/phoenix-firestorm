@@ -40,20 +40,25 @@ LLKeyboardSDL::LLKeyboardSDL()
 	// Virtual key mappings from SDL_keysym.h ...
 
 	// SDL maps the letter keys to the ASCII you'd expect, but it's lowercase...
-	U16 cur_char;
-	for (cur_char = 'A'; cur_char <= 'Z'; cur_char++)
-	{
-		mTranslateKeyMap[cur_char] = cur_char;
-	}
-	for (cur_char = 'a'; cur_char <= 'z'; cur_char++)
-	{
-		mTranslateKeyMap[cur_char] = (cur_char - 'a') + 'A';
-	}
 
-	for (cur_char = '0'; cur_char <= '9'; cur_char++)
-	{
-		mTranslateKeyMap[cur_char] = cur_char;
-	}
+	// <FS:ND> Those are handled by SDL2 via text input, do not map them
+	
+	// U16 cur_char;
+	// for (cur_char = 'A'; cur_char <= 'Z'; cur_char++)
+	// {
+	// 	mTranslateKeyMap[cur_char] = cur_char;
+	// }
+	// for (cur_char = 'a'; cur_char <= 'z'; cur_char++)
+	// {
+	// 	mTranslateKeyMap[cur_char] = (cur_char - 'a') + 'A';
+	// }
+	// 
+	// for (cur_char = '0'; cur_char <= '9'; cur_char++)
+	// {
+	// 	mTranslateKeyMap[cur_char] = cur_char;
+	// }
+
+	// </FS:ND
 
 	// These ones are translated manually upon keydown/keyup because
 	// SDL doesn't handle their numlock transition.
@@ -68,7 +73,7 @@ LLKeyboardSDL::LLKeyboardSDL()
 	//mTranslateKeyMap[SDLK_KP3] = KEY_PAGE_DOWN;
 	//mTranslateKeyMap[SDLK_KP0] = KEY_INSERT;
 
-	mTranslateKeyMap[SDLK_SPACE] = ' ';
+	// mTranslateKeyMap[SDLK_SPACE] = ' '; 	// <FS:ND/> Those are handled by SDL2 via text input, do not map them
 	mTranslateKeyMap[SDLK_RETURN] = KEY_RETURN;
 	mTranslateKeyMap[SDLK_LEFT] = KEY_LEFT;
 	mTranslateKeyMap[SDLK_RIGHT] = KEY_RIGHT;
@@ -111,17 +116,17 @@ LLKeyboardSDL::LLKeyboardSDL()
 	mTranslateKeyMap[SDLK_F10] = KEY_F10;
 	mTranslateKeyMap[SDLK_F11] = KEY_F11;
 	mTranslateKeyMap[SDLK_F12] = KEY_F12;
-	mTranslateKeyMap[SDLK_PLUS]   = '=';
-	mTranslateKeyMap[SDLK_COMMA]  = ',';
-	mTranslateKeyMap[SDLK_MINUS]  = '-';
-	mTranslateKeyMap[SDLK_PERIOD] = '.';
-	mTranslateKeyMap[SDLK_BACKQUOTE] = '`';
-	mTranslateKeyMap[SDLK_SLASH] = KEY_DIVIDE;
-	mTranslateKeyMap[SDLK_SEMICOLON] = ';';
-	mTranslateKeyMap[SDLK_LEFTBRACKET] = '[';
-	mTranslateKeyMap[SDLK_BACKSLASH] = '\\';
-	mTranslateKeyMap[SDLK_RIGHTBRACKET] = ']';
-	mTranslateKeyMap[SDLK_QUOTE] = '\'';
+	// mTranslateKeyMap[SDLK_PLUS]   = '='; // <FS:ND/> Those are handled by SDL2 via text input, do not map them
+	// mTranslateKeyMap[SDLK_COMMA]  = ','; // <FS:ND/> Those are handled by SDL2 via text input, do not map them
+	// mTranslateKeyMap[SDLK_MINUS]  = '-'; // <FS:ND/> Those are handled by SDL2 via text input, do not map them
+	// mTranslateKeyMap[SDLK_PERIOD] = '.'; // <FS:ND/> Those are handled by SDL2 via text input, do not map them
+	// mTranslateKeyMap[SDLK_BACKQUOTE] = '`'; // <FS:ND/> Those are handled by SDL2 via text input, do not map them
+	// mTranslateKeyMap[SDLK_SLASH] = KEY_DIVIDE; // <FS:ND/> Those are handled by SDL2 via text input, do not map them
+	// mTranslateKeyMap[SDLK_SEMICOLON] = ';'; // <FS:ND/> Those are handled by SDL2 via text input, do not map them
+	// mTranslateKeyMap[SDLK_LEFTBRACKET] = '['; // <FS:ND/> Those are handled by SDL2 via text input, do not map them
+	// mTranslateKeyMap[SDLK_BACKSLASH] = '\\'; // <FS:ND/> Those are handled by SDL2 via text input, do not map them
+	// mTranslateKeyMap[SDLK_RIGHTBRACKET] = ']'; // <FS:ND/> Those are handled by SDL2 via text input, do not map them
+	// mTranslateKeyMap[SDLK_QUOTE] = '\''; // <FS:ND/> Those are handled by SDL2 via text input, do not map them
 
 	// Build inverse map
 	for (auto iter = mTranslateKeyMap.begin(); iter != mTranslateKeyMap.end(); iter++)
