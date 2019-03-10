@@ -192,11 +192,11 @@ endif (llwindow_HEADER_FILES)
     ${viewer_SOURCE_FILES}
     )
 
-if (SDL_FOUND)
+if (SDL2_FOUND OR SDL_FOUND )
   set_property(TARGET llwindow
     PROPERTY COMPILE_DEFINITIONS LL_SDL=1
     )
-endif (SDL_FOUND)
+endif ()
 
 if (NOT USESYSTEMLIBS)
 target_link_libraries (llwindow ${llwindow_LINK_LIBRARIES})

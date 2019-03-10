@@ -20,7 +20,7 @@ if (USESYSTEMLIBS)
         pangoft2
         #pangox
         pangoxft
-        sdl
+        sdl2
         )
   endif (LINUX)
 
