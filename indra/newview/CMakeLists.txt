@@ -2539,7 +2539,7 @@ if (DARWIN)
   # Info-SecondLife.plist file in the configure_file() directive below.
   #set(product "${VIEWER_CHANNEL}")
   set(product "Firestorm")
-  set(MACOSX_EXECUTABLE_NAME "${VIEWER_CHANNEL}")
+  set(MACOSX_EXECUTABLE_NAME "Firestorm")
   set(MACOSX_BUNDLE_INFO_STRING "Firestorm Viewer")
   set(MACOSX_BUNDLE_ICON_FILE "firestorm_icon.icns")
   set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.phoenixviewer.firestorm.viewer-${ND_VIEWER_FLAVOR}")
