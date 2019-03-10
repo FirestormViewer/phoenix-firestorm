@@ -2476,7 +2476,7 @@ else (NOT ENABLE_MEDIA_PLUGINS)
     SLPlugin
     media_plugin_cef
     media_plugin_gstreamer10
-    media_plugin_libvlc
+    #media_plugin_libvlc
     llcommon
     )
 endif (NOT ENABLE_MEDIA_PLUGINS)
