@@ -30,6 +30,7 @@
 #include "llkeyboardsdl.h"
 #include "llwindowcallbacks.h"
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_keycode.h"
 
 LLKeyboardSDL::LLKeyboardSDL()
 {
@@ -323,6 +324,132 @@ U16 LLKeyboardSDL::inverseTranslateNumpadKey(const KEY translated_key)
 {
 	return inverseTranslateKey(translated_key);
 }
+
+// <FS:ND> Compatibility shim for SDL2 > SDL1.
+// The dullahan plugin still expects SDL1 codes. Temporarily map those SDL keyes till the plugin is updated
+enum class SDL1Keys: U32 {
+	SDLK_UNKNOWN	= 0,
+	SDLK_BACKSPACE	= 8,
+	SDLK_TAB		= 9,
+	SDLK_CLEAR		= 12,
+	SDLK_RETURN		= 13,
+	SDLK_PAUSE		= 19,
+	SDLK_ESCAPE		= 27,
+	SDLK_DELETE		= 127,
+	SDLK_KP_PERIOD	= 266,
+	SDLK_KP_DIVIDE	= 267,
+	SDLK_KP_MULTIPLY= 268,
+	SDLK_KP_MINUS	= 269,
+	SDLK_KP_PLUS	= 270,
+	SDLK_KP_ENTER	= 271,
+	SDLK_KP_EQUALS	= 272,
+	SDLK_UP			= 273,
+	SDLK_DOWN		= 274,
+	SDLK_RIGHT		= 275,
+	SDLK_LEFT		= 276,
+	SDLK_INSERT		= 277,
+	SDLK_HOME		= 278,
+	SDLK_END		= 279,
+	SDLK_PAGEUP		= 280,
+	SDLK_PAGEDOWN	= 281,
+	SDLK_F1			= 282,
+	SDLK_F2			= 283,
+	SDLK_F3			= 284,
+	SDLK_F4			= 285,
+	SDLK_F5			= 286,
+	SDLK_F6			= 287,
+	SDLK_F7			= 288,
+	SDLK_F8			= 289,
+	SDLK_F9			= 290,
+	SDLK_F10		= 291,
+	SDLK_F11		= 292,
+	SDLK_F12		= 293,
+	SDLK_F13		= 294,
+	SDLK_F14		= 295,
+	SDLK_F15		= 296,
+	SDLK_CAPSLOCK	= 301,
+	SDLK_RSHIFT		= 303,
+	SDLK_LSHIFT		= 304,
+	SDLK_RCTRL		= 305,
+	SDLK_LCTRL		= 306,
+	SDLK_RALT		= 307,
+	SDLK_LALT		= 308,
+	SDLK_MODE		= 313,		/**< "Alt Gr" key */
+	SDLK_HELP		= 315,
+	SDLK_SYSREQ		= 317,
+	SDLK_MENU		= 319,
+	SDLK_POWER		= 320,		/**< Power Macintosh power key */
+	SDLK_UNDO		= 322,		/**< Atari keyboard has Undo */
+};
+
+std::map< U32, U32 > mSDL2_to_SDL1;
+
+U32 LLKeyboardSDL::mapSDL2toSDL1( U32 aSymbol )
+{
+	if( mSDL2_to_SDL1.empty() )
+	{
+		mSDL2_to_SDL1[ SDLK_UNKNOWN    ] = (U32)SDL1Keys::SDLK_UNKNOWN;
+		mSDL2_to_SDL1[ SDLK_BACKSPACE  ] = (U32)SDL1Keys::SDLK_BACKSPACE;
+		mSDL2_to_SDL1[ SDLK_TAB        ] = (U32)SDL1Keys::SDLK_TAB;
+		mSDL2_to_SDL1[ SDLK_CLEAR      ] = (U32)SDL1Keys::SDLK_CLEAR;
+		mSDL2_to_SDL1[ SDLK_RETURN     ] = (U32)SDL1Keys::SDLK_RETURN;
+		mSDL2_to_SDL1[ SDLK_PAUSE      ] = (U32)SDL1Keys::SDLK_PAUSE;
+		mSDL2_to_SDL1[ SDLK_ESCAPE     ] = (U32)SDL1Keys::SDLK_ESCAPE;
+		mSDL2_to_SDL1[ SDLK_DELETE     ] = (U32)SDL1Keys::SDLK_DELETE;
+		mSDL2_to_SDL1[ SDLK_KP_PERIOD  ] = (U32)SDL1Keys::SDLK_KP_PERIOD;
+		mSDL2_to_SDL1[ SDLK_KP_DIVIDE  ] = (U32)SDL1Keys::SDLK_KP_DIVIDE;
+		mSDL2_to_SDL1[ SDLK_KP_MULTIPLY] = (U32)SDL1Keys::SDLK_KP_MULTIPLY;
+		mSDL2_to_SDL1[ SDLK_KP_MINUS   ] = (U32)SDL1Keys::SDLK_KP_MINUS;
+		mSDL2_to_SDL1[ SDLK_KP_PLUS    ] = (U32)SDL1Keys::SDLK_KP_PLUS;
+		mSDL2_to_SDL1[ SDLK_KP_ENTER   ] = (U32)SDL1Keys::SDLK_KP_ENTER;
+		mSDL2_to_SDL1[ SDLK_KP_EQUALS  ] = (U32)SDL1Keys::SDLK_KP_EQUALS;
+		mSDL2_to_SDL1[ SDLK_UP         ] = (U32)SDL1Keys::SDLK_UP;
+		mSDL2_to_SDL1[ SDLK_DOWN       ] = (U32)SDL1Keys::SDLK_DOWN;
+		mSDL2_to_SDL1[ SDLK_RIGHT      ] = (U32)SDL1Keys::SDLK_RIGHT;
+		mSDL2_to_SDL1[ SDLK_LEFT       ] = (U32)SDL1Keys::SDLK_LEFT;
+		mSDL2_to_SDL1[ SDLK_INSERT     ] = (U32)SDL1Keys::SDLK_INSERT;
+		mSDL2_to_SDL1[ SDLK_HOME       ] = (U32)SDL1Keys::SDLK_HOME;
+		mSDL2_to_SDL1[ SDLK_END        ] = (U32)SDL1Keys::SDLK_END;
+		mSDL2_to_SDL1[ SDLK_PAGEUP     ] = (U32)SDL1Keys::SDLK_PAGEUP;
+		mSDL2_to_SDL1[ SDLK_PAGEDOWN   ] = (U32)SDL1Keys::SDLK_PAGEDOWN;
+		mSDL2_to_SDL1[ SDLK_F1         ] = (U32)SDL1Keys::SDLK_F1;
+		mSDL2_to_SDL1[ SDLK_F2         ] = (U32)SDL1Keys::SDLK_F2;
+		mSDL2_to_SDL1[ SDLK_F3         ] = (U32)SDL1Keys::SDLK_F3;
+		mSDL2_to_SDL1[ SDLK_F4         ] = (U32)SDL1Keys::SDLK_F4;
+		mSDL2_to_SDL1[ SDLK_F5         ] = (U32)SDL1Keys::SDLK_F5;
+		mSDL2_to_SDL1[ SDLK_F6         ] = (U32)SDL1Keys::SDLK_F6;
+		mSDL2_to_SDL1[ SDLK_F7         ] = (U32)SDL1Keys::SDLK_F7;
+		mSDL2_to_SDL1[ SDLK_F8         ] = (U32)SDL1Keys::SDLK_F8;
+		mSDL2_to_SDL1[ SDLK_F9         ] = (U32)SDL1Keys::SDLK_F9;
+		mSDL2_to_SDL1[ SDLK_F10        ] = (U32)SDL1Keys::SDLK_F10;
+		mSDL2_to_SDL1[ SDLK_F11        ] = (U32)SDL1Keys::SDLK_F11;
+		mSDL2_to_SDL1[ SDLK_F12        ] = (U32)SDL1Keys::SDLK_F12;
+		mSDL2_to_SDL1[ SDLK_F13        ] = (U32)SDL1Keys::SDLK_F13;
+		mSDL2_to_SDL1[ SDLK_F14        ] = (U32)SDL1Keys::SDLK_F14;
+		mSDL2_to_SDL1[ SDLK_F15        ] = (U32)SDL1Keys::SDLK_F15;
+		mSDL2_to_SDL1[ SDLK_CAPSLOCK   ] = (U32)SDL1Keys::SDLK_CAPSLOCK;
+		mSDL2_to_SDL1[ SDLK_RSHIFT     ] = (U32)SDL1Keys::SDLK_RSHIFT;
+		mSDL2_to_SDL1[ SDLK_LSHIFT     ] = (U32)SDL1Keys::SDLK_LSHIFT;
+		mSDL2_to_SDL1[ SDLK_RCTRL      ] = (U32)SDL1Keys::SDLK_RCTRL;
+		mSDL2_to_SDL1[ SDLK_LCTRL      ] = (U32)SDL1Keys::SDLK_LCTRL;
+		mSDL2_to_SDL1[ SDLK_RALT       ] = (U32)SDL1Keys::SDLK_RALT;
+		mSDL2_to_SDL1[ SDLK_LALT       ] = (U32)SDL1Keys::SDLK_LALT;
+		mSDL2_to_SDL1[ SDLK_MODE       ] = (U32)SDL1Keys::SDLK_MODE;
+		mSDL2_to_SDL1[ SDLK_HELP       ] = (U32)SDL1Keys::SDLK_HELP;       		
+		mSDL2_to_SDL1[ SDLK_SYSREQ     ] = (U32)SDL1Keys::SDLK_SYSREQ;     
+		mSDL2_to_SDL1[ SDLK_MENU       ] = (U32)SDL1Keys::SDLK_MENU;       
+		mSDL2_to_SDL1[ SDLK_POWER      ] = (U32)SDL1Keys::SDLK_POWER;
+		mSDL2_to_SDL1[ SDLK_UNDO       ] = (U32)SDL1Keys::SDLK_UNDO;
+	}
+	
+	auto itr = mSDL2_to_SDL1.find( aSymbol );
+	if( itr != mSDL2_to_SDL1.end() )
+		return itr->second;
+
+	return aSymbol;
+}
+
+// </FS:ND> Compatibility shim for SDL2 > SDL1.
 
 #endif
 

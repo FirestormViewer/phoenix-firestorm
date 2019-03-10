@@ -50,6 +50,9 @@ protected:
 private:
 	std::map<U32, KEY> mTranslateNumpadMap;  // special map for translating OS keys to numpad keys
 	std::map<KEY, U32> mInvTranslateNumpadMap; // inverse of the above
+
+public:
+	static U32 mapSDL2toSDL1( U32 );
 };
 
 #endif

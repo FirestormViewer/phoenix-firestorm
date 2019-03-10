@@ -1764,11 +1764,11 @@ void LLWindowSDL::gatherInput()
 			
             case SDL_KEYDOWN:
 				mKeyScanCode = event.key.keysym.scancode;
-				mKeyVirtualKey = event.key.keysym.sym;
+				mKeyVirtualKey = LLKeyboardSDL::mapSDL2toSDL1( event.key.keysym.sym );
 				mKeyModifiers = event.key.keysym.mod;
-				mSDLSym = event.key.keysym.sym & ~SDLK_SCANCODE_MASK;  // <FS:ND/> Store the SDL Keysym too.
-			
-				// gKeyboard->handleKeyDown(event.key.keysym.sym, event.key.keysym.mod);
+				mSDLSym = LLKeyboardSDL::mapSDL2toSDL1( event.key.keysym.sym );
+
+				gKeyboard->handleKeyDown(event.key.keysym.sym, event.key.keysym.mod);
 				// part of the fix for SL-13243
 				if (SDLCheckGrabbyKeys(event.key.keysym.sym, TRUE) != 0)
 					SDLReallyCaptureInput(TRUE);
@@ -1777,31 +1777,20 @@ void LLWindowSDL::gatherInput()
 					KEY dummyKey{};
 
 					if( gKeyboard->translateKey( mSDLSym, &dummyKey ) )
-					{
-						gKeyboard->handleKeyDown(event.key.keysym.sym, event.key.keysym.mod);
 						handleUnicodeUTF16( mSDLSym, gKeyboard->currentMask(FALSE));
-					}
 				}
 				break;
 
             case SDL_KEYUP:
 				mKeyScanCode = event.key.keysym.scancode;
-				mKeyVirtualKey = event.key.keysym.sym;
+				mKeyVirtualKey = LLKeyboardSDL::mapSDL2toSDL1( event.key.keysym.sym );
 				mKeyModifiers = event.key.keysym.mod;
-				mSDLSym = event.key.keysym.sym & ~SDLK_SCANCODE_MASK;  // <FS:ND/> Store the SDL Keysym too.
+				mSDLSym = LLKeyboardSDL::mapSDL2toSDL1( event.key.keysym.sym );
 
 				if (SDLCheckGrabbyKeys(event.key.keysym.sym, FALSE) == 0)
 					SDLReallyCaptureInput(FALSE); // part of the fix for SL-13243
 
-				// gKeyboard->handleKeyUp(event.key.keysym.sym, event.key.keysym.mod);
-				{
-					KEY dummyKey{};
-
-					if( gKeyboard->translateKey( mSDLSym, &dummyKey ) )
-					{
-						gKeyboard->handleKeyUp(event.key.keysym.sym, event.key.keysym.mod);
-					}
-				}
+				gKeyboard->handleKeyUp(event.key.keysym.sym, event.key.keysym.mod);
 				break;
 
             case SDL_MOUSEBUTTONDOWN:
