@@ -2111,11 +2111,11 @@ add_executable(${VIEWER_BINARY_NAME}
     ${viewer_SOURCE_FILES}
     )
 
-if (SDL_FOUND)
+if (SDL_FOUND OR SDL2_FOUND)
   set_property(TARGET ${VIEWER_BINARY_NAME}
     PROPERTY COMPILE_DEFINITIONS LL_SDL=1
     )
-endif (SDL_FOUND)
+endif ()
 
 if (BUGSPLAT_DB)
   set_property(TARGET ${VIEWER_BINARY_NAME}
