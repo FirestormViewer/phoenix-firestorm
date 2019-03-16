@@ -1034,11 +1034,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5b69c9bf9290ab643bbd810206490a44</string>
+              <string>30795e5ffa33613fa6397c9e33d18e42</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.11-linux64-190370442.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.12-linux64-190751836.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
