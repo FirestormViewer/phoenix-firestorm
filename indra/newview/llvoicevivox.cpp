@@ -824,7 +824,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
     {
 #ifndef VIVOXDAEMON_REMOTEHOST
         // Launch the voice daemon
-#ifdef LL_LINUX
+#if defined(LL_WINDOWS) || defined(LL_LINUX)
         std::string exe_path = gDirUtilp->getExecutableDir();
 #else
         std::string exe_path = gDirUtilp->getAppRODataDir();
@@ -1590,6 +1590,11 @@ bool LLVivoxVoiceClient::addAndJoinSession(const sessionStatePtr_t &nextSession)
     bool joined(false);
 
     LLSD timeoutResult(LLSDMap("session", "timeout"));
+
+    // We are about to start a whole new session.  Anything that MIGHT still be in our 
+    // maildrop is going to be stale and cause us much wailing and gnashing of teeth.  
+    // Just flush it all out and start new.
+    voicePump.flush();
 
     // It appears that I need to wait for BOTH the SessionGroup.AddSession response and the SessionStateChangeEvent with state 4
     // before continuing from this state.  They can happen in either order, and if I don't wait for both, things can get stuck.

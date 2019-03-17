@@ -302,7 +302,7 @@
 			</text>
 			<line_editor tool_tip="Würfelt - cmd [Anzahl Würfel] [Seiten pro Würfel] [Modifizierer-Typ (optional)] [Modifizierer-Wert (optional). Beispiel: cmd 1 20, cmd 1 20 + 5. Auslassen der Parameter entspricht cmd 1 6 (Standardwürfel)" name="FSCmdLineRollDice"/>
 			<text name="FSCmdLinePos_txt">
-				Teleport in Region (Befehl: cmd x z y)
+				Teleport innerhalb Region (Befehl: cmd x z y)
 			</text>
 			<text name="FSCmdLineGround_txt">
 				Teleport zur Oberfläche (Befehl: cmd)
