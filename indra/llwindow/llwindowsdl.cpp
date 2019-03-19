@@ -250,7 +250,6 @@ LLWindowSDL::LLWindowSDL(LLWindowCallbacks* callbacks,
 	mFlashing = FALSE;
 #endif // LL_X11
 
-	mKeyScanCode = 0;
 	mKeyVirtualKey = 0;
 	mKeyModifiers = KMOD_NONE;
 }
@@ -1738,6 +1737,11 @@ void LLWindowSDL::gatherInput()
     {
         switch (event.type)
         {
+			case SDL_MOUSEWHEEL:
+				if( event.wheel.y != 0 )
+					mCallbacks->handleScrollWheel(this, event.wheel.y);
+				break;
+				
             case SDL_MOUSEMOTION:
             {
                 LLCoordWindow winCoord(event.button.x, event.button.y);
@@ -1753,44 +1757,39 @@ void LLWindowSDL::gatherInput()
 				auto string = utf8str_to_utf16str( event.text.text );
 				for( auto key: string )
 				{
-					mKeyScanCode = string[0];
 					mKeyVirtualKey = string[0];
 					mKeyModifiers = SDL_GetModState();
-					mSDLSym = string[0];
-					handleUnicodeUTF16( key, gKeyboard->currentMask(FALSE));
+					handleUnicodeUTF16( key, mKeyModifiers );
 				}
 				break;
 			}
 			
             case SDL_KEYDOWN:
-				mKeyScanCode = event.key.keysym.scancode;
-				mKeyVirtualKey = LLKeyboardSDL::mapSDL2toSDL1( event.key.keysym.sym );
+				mKeyVirtualKey = event.key.keysym.sym;
 				mKeyModifiers = event.key.keysym.mod;
-				mSDLSym = LLKeyboardSDL::mapSDL2toSDL1( event.key.keysym.sym );
 
-				gKeyboard->handleKeyDown(event.key.keysym.sym, event.key.keysym.mod);
+				gKeyboard->handleKeyDown(mKeyVirtualKey, mKeyModifiers );
+
+				// <FS:ND> Slightly hacky :| To make the viewer honor enter (eg to accept form input) we've to not only send handleKeyDown but also send a
+				// invoke handleUnicodeUTF16 in case the user hits return.
+				// Note that we cannot blindly use handleUnicodeUTF16 for each SDL_KEYDOWN. Doing so will create bogus keyboard input (like % for cursor left).
+				if( mKeyVirtualKey == SDLK_RETURN )
+					handleUnicodeUTF16( mKeyVirtualKey, mKeyModifiers );
+
 				// part of the fix for SL-13243
 				if (SDLCheckGrabbyKeys(event.key.keysym.sym, TRUE) != 0)
 					SDLReallyCaptureInput(TRUE);
 
-				{
-					KEY dummyKey{};
-
-					if( gKeyboard->translateKey( mSDLSym, &dummyKey ) )
-						handleUnicodeUTF16( mSDLSym, gKeyboard->currentMask(FALSE));
-				}
 				break;
 
             case SDL_KEYUP:
-				mKeyScanCode = event.key.keysym.scancode;
-				mKeyVirtualKey = LLKeyboardSDL::mapSDL2toSDL1( event.key.keysym.sym );
+				mKeyVirtualKey = event.key.keysym.sym;
 				mKeyModifiers = event.key.keysym.mod;
-				mSDLSym = LLKeyboardSDL::mapSDL2toSDL1( event.key.keysym.sym );
 
-				if (SDLCheckGrabbyKeys(event.key.keysym.sym, FALSE) == 0)
+				if (SDLCheckGrabbyKeys(mKeyVirtualKey, FALSE) == 0)
 					SDLReallyCaptureInput(FALSE); // part of the fix for SL-13243
 
-				gKeyboard->handleKeyUp(event.key.keysym.sym, event.key.keysym.mod);
+				gKeyboard->handleKeyUp(mKeyVirtualKey,mKeyModifiers);
 				break;
 
             case SDL_MOUSEBUTTONDOWN:
@@ -2365,7 +2364,7 @@ static void color_changed_callback(GtkWidget *widget,
 */
 LLSD LLWindowSDL::getNativeKeyData()
 {
-        LLSD result = LLSD::emptyMap();
+	LLSD result = LLSD::emptyMap();
 
 	U32 modifiers = 0; // pretend-native modifiers... oh what a tangled web we weave!
 
@@ -2383,11 +2382,11 @@ LLSD LLWindowSDL::getNativeKeyData()
 	// *todo: test ALTs - I don't have a case for testing these.  Do you?
 	// *todo: NUM? - I don't care enough right now (and it's not a GDK modifier).
 
-        result["scan_code"] = (S32)mKeyScanCode;
-        result["virtual_key"] = (S32)mKeyVirtualKey;
+	result["virtual_key"] = (S32)mKeyVirtualKey;
+	result["virtual_key_win"] = (S32)LLKeyboardSDL::mapSDL2toWin( mKeyVirtualKey );
 	result["modifiers"] = (S32)modifiers;
-	result[ "sdl_sym" ] = (S32)mSDLSym;  // <FS:ND/> Store the SDL Keysym too.
-        return result;
+	
+	return result;
 }
 
 

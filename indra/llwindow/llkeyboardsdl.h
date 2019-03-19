@@ -52,7 +52,7 @@ private:
 	std::map<KEY, U32> mInvTranslateNumpadMap; // inverse of the above
 
 public:
-	static U32 mapSDL2toSDL1( U32 );
+	static U32 mapSDL2toWin( U32 );
 };
 
 #endif
