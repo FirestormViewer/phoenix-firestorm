@@ -1562,8 +1562,12 @@ class DarwinManifest(ViewerManifest):
                                          'Frameworks/Chromium Embedded Framework.framework')
 
                 helperexecutablepath = self.dst_path_of('SLPlugin.app/Contents/Frameworks/DullahanHelper.app/Contents/MacOS/DullahanHelper')
+                #<FS:TS> Fix unannounced change in DullahanHelper app as supplied
+                # self.run_command_shell('install_name_tool -change '
+                #                  '"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
+                #                  '"@executable_path/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % helperexecutablepath)
                 self.run_command_shell('install_name_tool -change '
-                                 '"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
+                                 '"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
                                  '"@executable_path/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % helperexecutablepath)
 
                 # SLPlugin plugins
