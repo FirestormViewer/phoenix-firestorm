@@ -1463,7 +1463,7 @@ class DarwinManifest(ViewerManifest):
                 for libfile in (
                                 # 'libalut.dylib',
                                 # 'libopenal.dylib',
-                                # 'libortp.dylib',
+                                'libortp.dylib',
                                 # 'libsndfile.dylib',
                                 # 'libvivoxoal.dylib',
                                 'libvivoxsdk.dylib',
