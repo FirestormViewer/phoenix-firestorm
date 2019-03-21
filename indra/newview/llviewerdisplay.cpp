@@ -138,7 +138,7 @@ void display_startup()
 	{
 		return; 
 	}
-	
+
 	gPipeline.updateGL();
 
 	// Update images?
@@ -828,11 +828,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 			if (!for_snapshot)
 			{
-				if (gFrameCount > 1)
-				{ //for some reason, ATI 4800 series will error out if you 
-				  //try to generate a shadow before the first frame is through
-					gPipeline.generateSunShadow(*LLViewerCamera::getInstance());
-				}
+                gPipeline.generateSunShadow(*LLViewerCamera::getInstance());
 
 				LLVertexBuffer::unbind();
 
@@ -1142,14 +1138,14 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			}
 		}
 
-        if (LLPipeline::sRenderDeferred && gAtmosphere && gSavedSettings.getBOOL("RenderUseAdvancedAtmospherics"))
-        {
-            gPipeline.generateSkyIndirect();
-        }
-
 		if (LLPipeline::sRenderDeferred)
 		{
 			gPipeline.renderDeferredLighting(&gPipeline.mScreen);
+		}
+
+		if (to_texture)
+		{
+			gPipeline.renderBloom(gSnapshot, zoom_factor, subfield);
 		}
 
 		LLPipeline::sUnderWaterRender = FALSE;
@@ -1162,7 +1158,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		LLAppViewer::instance()->pingMainloopTimeout("Display:RenderUI");
 		if (!for_snapshot)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_RENDER_UI);
 			render_ui();
 			swap();
 		}
@@ -1407,6 +1402,8 @@ bool setup_hud_matrices(const LLRect& screen_region)
 
 void render_ui(F32 zoom_factor, int subfield)
 {
+    LL_RECORD_BLOCK_TIME(FTM_RENDER_UI);
+
 	LLGLState::checkStates();
 	
 	glh::matrix4f saved_view = get_current_modelview();
@@ -1420,6 +1417,7 @@ void render_ui(F32 zoom_factor, int subfield)
 	
 	if(LLSceneMonitor::getInstance()->needsUpdate())
 	{
+        LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_SCENE_MON);
 		gGL.pushMatrix();
 		gViewerWindow->setup2DRender();
 		LLSceneMonitor::getInstance()->compare();
@@ -1428,14 +1426,7 @@ void render_ui(F32 zoom_factor, int subfield)
 	}
 
 	{
-		BOOL to_texture = gPipeline.canUseVertexShaders() &&
-							LLPipeline::sRenderGlow;
-
-		if (to_texture)
-		{
-			gPipeline.renderBloom(gSnapshot, zoom_factor, subfield);
-		}
-		
+        LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_HUD);
 		render_hud_elements();
 // [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)
 		if (gRlvHandler.isEnabled())
@@ -1456,10 +1447,9 @@ void render_ui(F32 zoom_factor, int subfield)
 		gGL.color4f(1,1,1,1);
 		if (gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
 		{
-			LL_RECORD_BLOCK_TIME(FTM_RENDER_UI);
-
 			if (!gDisconnected)
 			{
+                LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_3D);
 				render_ui_3d();
 				LLGLState::checkStates();
 			}
@@ -1468,12 +1458,14 @@ void render_ui(F32 zoom_factor, int subfield)
 				render_disconnected_background();
 			}
 
+            LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_2D);
 			render_ui_2d();
 			LLGLState::checkStates();
 		}
 		gGL.flush();
 
 		{
+            LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_DEBUG_TEXT);
 			gViewerWindow->setup2DRender();
 			gViewerWindow->updateDebugText();
 			gViewerWindow->drawDebugText();

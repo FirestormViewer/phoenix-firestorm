@@ -13,7 +13,6 @@ include(LLVFS)
 include(LLWindow)
 include(LLXML)
 include(LLVFS)
-include(Atmosphere)
 
 include_directories(
     ${FREETYPE_INCLUDE_DIRS}
@@ -25,7 +24,6 @@ include_directories(
     ${LLWINDOW_INCLUDE_DIRS}
     ${LLXML_INCLUDE_DIRS}
     ${LLVFS_INCLUDE_DIRS}
-    ${ATMOSPHERE_INCLUDE_DIR}
     )
 include_directories(SYSTEM
     ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
@@ -109,9 +107,7 @@ if (BUILD_HEADLESS)
     ${LLXML_LIBRARIES}
     ${LLVFS_LIBRARIES}
     ${LLWINDOW_HEADLESS_LIBRARIES}
-    ${LIBATMOSPHERE_LIBRARIES}
-    ${OPENGL_HEADLESS_LIBRARIES}
-    )
+    ${OPENGL_HEADLESS_LIBRARIES})
 
 endif (BUILD_HEADLESS)
 
@@ -134,7 +130,5 @@ target_link_libraries(llrender
     ${LLVFS_LIBRARIES}
     ${LLWINDOW_LIBRARIES}
     ${FREETYPE_LIBRARIES}
-    ${LIBATMOSPHERE_LIBRARIES}
-    ${OPENGL_LIBRARIES}
-    )
+    ${OPENGL_LIBRARIES})
 

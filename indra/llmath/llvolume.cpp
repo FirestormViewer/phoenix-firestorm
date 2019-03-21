@@ -2228,7 +2228,6 @@ BOOL LLVolume::generate()
 			{
 				rot_mat.rotate(*profile++, tmp);
 				dst->setAdd(tmp,offset);
-				
 				++dst;
 			}
 		}

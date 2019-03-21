@@ -231,7 +231,7 @@ public:
         SUN_SIZE,
         FOG_COLOR,
 
-        // precomputed textures from libatmosphere
+        // precomputed textures
         TRANSMITTANCE_TEX,
         SCATTER_TEX,
         SINGLE_MIE_SCATTER_TEX,

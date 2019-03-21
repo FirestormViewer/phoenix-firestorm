@@ -248,28 +248,6 @@ BOOL LLFloaterEditExtDayCycle::postBuild()
     S32 tab_count = tab_container->getTabCount();
 
     LLSettingsEditPanel *panel = nullptr;
-
-    // Add or remove density tab as necessary
-    // Must be before operation on all tabs below
-    if (gSavedSettings.getBOOL("RenderUseAdvancedAtmospherics"))
-    {
-        panel = dynamic_cast<LLPanelSettingsSky*>(tab_container->findChildView("panel_settings_sky_density"));
-        if (!panel)
-        {
-            panel = new LLPanelSettingsSkyDensityTab;
-            panel->buildFromFile("panel_settings_sky_density.xml");
-            tab_container->addTabPanel(LLTabContainer::TabPanelParams().panel(panel).select_tab(false));
-        }
-    }
-    else
-    {
-        panel = dynamic_cast<LLPanelSettingsSky*>(tab_container->findChildView("panel_settings_sky_density"));
-        if (panel)
-        {
-            tab_container->removeTabPanel(panel);
-        }
-        delete panel;
-    }
     
     for (S32 idx = 0; idx < tab_count; ++idx)
     {
@@ -760,14 +738,7 @@ void LLFloaterEditExtDayCycle::onButtonImport()
 
 void LLFloaterEditExtDayCycle::onButtonLoadFrame()
 {
-    LLUUID curitemId = mInventoryId;
-
-    if (mCurrentEdit && curitemId.notNull())
-    { 
-        curitemId = LLFloaterSettingsPicker::findItemID(mCurrentEdit->getAssetId(), false, false);
-    }
-
-    doOpenInventoryFloater((mCurrentTrack == LLSettingsDay::TRACK_WATER) ? LLSettingsType::ST_WATER : LLSettingsType::ST_SKY, curitemId);
+    doOpenInventoryFloater((mCurrentTrack == LLSettingsDay::TRACK_WATER) ? LLSettingsType::ST_WATER : LLSettingsType::ST_SKY, LLUUID::null);
 }
 
 void LLFloaterEditExtDayCycle::onAddFrame()
@@ -956,19 +927,9 @@ void LLFloaterEditExtDayCycle::onFrameSliderCallback(const LLSD &data)
 {
     std::string curslider = mFramesSlider->getCurSlider();
 
-    F32 sliderpos(0.0);
-
-
-    if (curslider.empty())
+    if (!curslider.empty() && mEditDay)
     {
-        S32 x(0), y(0);
-        LLUI::getMousePositionLocal(mFramesSlider, &x, &y);
-
-        sliderpos = mFramesSlider->getSliderValueFromPos(x, y);
-    }
-    else
-    {
-        sliderpos = mFramesSlider->getCurSliderValue();
+        F32 sliderpos = mFramesSlider->getCurSliderValue();
 
         keymap_t::iterator it = mSliderKeyMap.find(curslider);
         if (it != mSliderKeyMap.end())
@@ -1261,29 +1222,6 @@ void LLFloaterEditExtDayCycle::updateSkyTabs(const LLSettingsSkyPtr_t &p_sky)
     {
         panel->setSky(p_sky);
     }
-
-    if (gSavedSettings.getBOOL("RenderUseAdvancedAtmospherics"))
-    {
-        panel = dynamic_cast<LLPanelSettingsSky*>(tab_container->findChildView("panel_settings_sky_density"));
-        if (!panel)
-        {
-            panel = new LLPanelSettingsSkyDensityTab;
-            panel->buildFromFile("panel_settings_sky_density.xml");
-            panel->setOnDirtyFlagChanged([this](LLPanel *, bool value) { onPanelDirtyFlagChanged(value); });
-            tab_container->addTabPanel(LLTabContainer::TabPanelParams().panel(panel).select_tab(false));
-        }
-        panel->setSky(std::static_pointer_cast<LLSettingsSky>(p_sky));
-    }
-    else
-    {
-        panel = dynamic_cast<LLPanelSettingsSky*>(tab_container->findChildView("panel_settings_sky_density"));
-        if (panel)
-        {
-            tab_container->removeTabPanel(panel);
-            delete panel;
-        }
-    }
-
 }
 
 void LLFloaterEditExtDayCycle::updateLabels()
@@ -1580,7 +1518,11 @@ void LLFloaterEditExtDayCycle::synchronizeTabs()
     LLTabContainer * tabs = mWaterTabLayoutContainer->getChild<LLTabContainer>(TABS_WATER);
     if (mCurrentTrack == LLSettingsDay::TRACK_WATER)
     {
-        if (!mFramesSlider->getCurSlider().empty())
+        if (!mEditDay)
+        {
+            canedit = false;
+        }
+        else if (!mFramesSlider->getCurSlider().empty())
         {
             canedit = !mIsPlaying;
             // either search mEditDay or retrieve from mSliderKeyMap
@@ -1609,7 +1551,11 @@ void LLFloaterEditExtDayCycle::synchronizeTabs()
     tabs = mSkyTabLayoutContainer->getChild<LLTabContainer>(TABS_SKYS);
     if (mCurrentTrack != LLSettingsDay::TRACK_WATER)
     {
-        if (!mFramesSlider->getCurSlider().empty())
+        if (!mEditDay)
+        {
+            canedit = false;
+        }
+        else if (!mFramesSlider->getCurSlider().empty())
         {
             canedit = !mIsPlaying;
             // either search mEditDay or retrieve from mSliderKeyMap

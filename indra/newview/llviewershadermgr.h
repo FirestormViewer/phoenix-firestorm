@@ -166,8 +166,6 @@ extern LLGLSLShader			gDebugProgram;
 extern LLGLSLShader			gClipProgram;
 extern LLGLSLShader			gDownsampleDepthProgram;
 extern LLGLSLShader			gDownsampleDepthRectProgram;
-extern LLGLSLShader			gDownsampleMinMaxDepthRectProgram;
-extern LLGLSLShader			gInscatterRectProgram;
 extern LLGLSLShader			gBenchmarkProgram;
 
 //output tex0[tc0] + tex1[tc1]
@@ -262,7 +260,6 @@ extern LLGLSLShader			gImpostorProgram;
 // WindLight shader handles
 extern LLGLSLShader			gWLSkyProgram;
 extern LLGLSLShader			gWLCloudProgram;
-extern LLGLSLShader			gWLCloudShadowProgram;
 extern LLGLSLShader			gWLSunProgram;
 extern LLGLSLShader			gWLMoonProgram;
 
@@ -321,7 +318,6 @@ extern LLGLSLShader			gDeferredAvatarEyesProgram;
 extern LLGLSLShader			gDeferredAvatarAlphaProgram;
 extern LLGLSLShader			gDeferredWLSkyProgram;
 extern LLGLSLShader			gDeferredWLCloudProgram;
-extern LLGLSLShader			gDeferredWLCloudShadowProgram;
 extern LLGLSLShader			gDeferredWLSunProgram;
 extern LLGLSLShader			gDeferredWLMoonProgram;
 extern LLGLSLShader			gDeferredStarProgram;
@@ -329,10 +325,6 @@ extern LLGLSLShader			gDeferredFullbrightShinyProgram;
 extern LLGLSLShader			gDeferredSkinnedFullbrightShinyProgram;
 extern LLGLSLShader			gDeferredSkinnedFullbrightProgram;
 extern LLGLSLShader			gNormalMapGenProgram;
-
-extern LLGLSLShader			gDeferredGenSkyShProgram;
-extern LLGLSLShader			gDeferredGatherSkyShProgram;
-extern LLGLSLShader			gDeferredShVisProgram;
 
 // Deferred materials shaders
 extern LLGLSLShader			gDeferredMaterialProgram[LLMaterial::SHADER_COUNT*2];

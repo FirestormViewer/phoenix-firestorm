@@ -41,14 +41,7 @@ vec4 applyWaterFogView(vec3 pos, vec4 color);
 vec3 atmosFragLighting(vec3 l, vec3 additive, vec3 atten);
 vec3 scaleSoftClipFrag(vec3 l);
 
-#if defined(VERT_ATMOSPHERICS)
-vec3 getSunlitColor();
-vec3 getAmblitColor();
-vec3 getAdditiveColor();
-vec3 getAtmosAttenuation();
-#else
 void calcFragAtmospherics(vec3 inPositionEye, float ambFactor, out vec3 sunlit, out vec3 amblit, out vec3 additive, out vec3 atten);
-#endif
 
 vec3 srgb_to_linear(vec3 cs);
 vec3 linear_to_srgb(vec3 cs);
@@ -61,7 +54,9 @@ out vec4 frag_color;
 #define frag_color gl_FragColor
 #endif
 
+#ifdef HAS_SUN_SHADOW
 float sampleDirectionalShadow(vec3 pos, vec3 norm, vec2 pos_screen);
+#endif
 
 uniform samplerCube environmentMap;
 uniform sampler2D     lightFunc;
@@ -117,9 +112,8 @@ vec3 calcPointLightOrSpotLight(vec3 light_col, vec3 npos, vec3 diffuse, vec4 spe
         //angular attenuation
         da = dot(n, lv);
         da *= clamp(da, 0.0, 1.0);
-        da *= pow(da, 1.0 / 1.3);
         
-        float lit = max(min(da,shadow) * dist_atten, 0.0);
+        float lit = max(da * dist_atten, 0.0);
 
         col = light_col*lit*diffuse;
 
@@ -172,11 +166,11 @@ out vec4 frag_data[3];
 
 uniform sampler2D diffuseMap;
 
-#if HAS_NORMAL_MAP
+#ifdef HAS_NORMAL_MAP
 uniform sampler2D bumpMap;
 #endif
 
-#if HAS_SPECULAR_MAP
+#ifdef HAS_SPECULAR_MAP
 uniform sampler2D specularMap;
 
 VARYING vec2 vary_texcoord2;
@@ -189,7 +183,7 @@ uniform vec4 specular_color;  // specular color RGB and specular exponent (gloss
 uniform float minimum_alpha;
 #endif
 
-#if HAS_NORMAL_MAP
+#ifdef HAS_NORMAL_MAP
 VARYING vec3 vary_mat0;
 VARYING vec3 vary_mat1;
 VARYING vec3 vary_mat2;
@@ -221,14 +215,14 @@ void main()
     vec3 gamma_diff = diffcol.rgb;
 #endif
 
-#if HAS_SPECULAR_MAP
+#ifdef HAS_SPECULAR_MAP
     vec4 spec = texture2D(specularMap, vary_texcoord2.xy);
     spec.rgb *= specular_color.rgb;
 #else
     vec4 spec = vec4(specular_color.rgb, 1.0);
 #endif
 
-#if HAS_NORMAL_MAP
+#ifdef HAS_NORMAL_MAP
     vec4 norm = texture2D(bumpMap, vary_texcoord1.xy);
 
     norm.xyz = norm.xyz * 2 - 1;
@@ -255,7 +249,7 @@ void main()
 #endif
 
     vec4 final_specular = spec;
-#if HAS_SPECULAR_MAP
+#ifdef HAS_SPECULAR_MAP
     vec4 final_normal = vec4(encode_normal(normalize(tnorm)), env_intensity * spec.a, 0.0);
     final_specular.a = specular_color.a * norm.a;
 #else
@@ -268,8 +262,12 @@ void main()
         //forward rendering, output just lit RGBA
     vec3 pos = vary_position;
 
-    float shadow = sampleDirectionalShadow(pos.xyz, norm.xyz, pos_screen);
+    float shadow = 1.0f;
 
+#ifdef HAS_SUN_SHADOW
+    shadow = sampleDirectionalShadow(pos.xyz, norm.xyz, pos_screen);
+#endif
+    
     spec = final_specular;
     vec4 diffuse = final_color;
 
@@ -285,14 +283,7 @@ void main()
     vec3 additive;
     vec3 atten;
 
-#if defined(VERT_ATMOSPHERICS)
-    sunlit   = getSunlitColor();
-    amblit   = getAmblitColor();
-    additive = getAdditiveColor();
-    atten    = getAtmosAttenuation();
-#else
     calcFragAtmospherics(pos.xyz, 1.0, sunlit, amblit, additive, atten);
-#endif
 
     vec3 refnormpersp = normalize(reflect(pos.xyz, norm.xyz));
 
@@ -302,15 +293,15 @@ void main()
     da = clamp(da, 0.0, 1.0);
     da = pow(da, 1.0 / 1.3);
 
-    col.rgb = amblit;
-    
     float ambient = abs(da);
     ambient *= 0.5;
     ambient *= ambient;
-    ambient = 1.0 - ambient * smoothstep(0.0, 0.3, shadow);
+    ambient = 1.0 - ambient;
 
-    vec3 sun_contrib = min(da, shadow) * sunlit;
+    float final_da = min(da, shadow);
+    vec3 sun_contrib = final_da * sunlit;
    
+    col.rgb = amblit;
     col.rgb *= ambient;
     col.rgb += sun_contrib;
     col.rgb *= diffuse.rgb;
@@ -322,7 +313,7 @@ void main()
         // the old infinite-sky shiny reflection
         //
                 
-        float sa = dot(refnormpersp, sun_dir.xyz);
+        float sa = dot(refnormpersp, light_dir.xyz);
 
         vec3 dumbshiny = sunlit*shadow*(texture2D(lightFunc, vec2(sa, spec.a)).r);
                             
@@ -359,8 +350,6 @@ vec3 post_spec = col.rgb;
     col = atmosFragLighting(col, additive, atten);
     col = scaleSoftClipFrag(col);
 
-vec3 post_atmo= col.rgb;
-
     vec3 npos = normalize(-pos.xyz);
             
     vec3 light = vec3(0,0,0);
@@ -376,8 +365,6 @@ vec3 post_atmo= col.rgb;
         LIGHT_LOOP(7)
 
     col.rgb += light.rgb;
-
-vec3 post_lighting = col.rgb;
 
     glare = min(glare, 1.0);
     float al = max(diffcol.a,glare)*vertex_color.a;

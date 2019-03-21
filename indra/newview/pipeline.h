@@ -75,7 +75,6 @@ extern LLTrace::BlockTimerStatHandle FTM_RENDER_UI;
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_WATER;
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_WL_SKY;
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_ALPHA;
-extern LLTrace::BlockTimerStatHandle FTM_RENDER_ALPHA_DEFERRED;
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_CHARACTERS;
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_BUMP;
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_MATERIALS;
@@ -85,6 +84,11 @@ extern LLTrace::BlockTimerStatHandle FTM_STATESORT;
 extern LLTrace::BlockTimerStatHandle FTM_PIPELINE;
 extern LLTrace::BlockTimerStatHandle FTM_CLIENT_COPY;
 
+extern LLTrace::BlockTimerStatHandle FTM_RENDER_UI_HUD;
+extern LLTrace::BlockTimerStatHandle FTM_RENDER_UI_3D;
+extern LLTrace::BlockTimerStatHandle FTM_RENDER_UI_2D;
+extern LLTrace::BlockTimerStatHandle FTM_RENDER_UI_DEBUG_TEXT;
+extern LLTrace::BlockTimerStatHandle FTM_RENDER_UI_SCENE_MON;
 
 class LLPipeline
 {
@@ -161,9 +165,6 @@ public:
 	//downsample source to dest, taking the maximum depth value per pixel in source and writing to dest
 	// if source's depth buffer cannot be bound for reading, a scratch space depth buffer must be provided
 	void		downsampleDepthBuffer(LLRenderTarget& source, LLRenderTarget& dest, LLRenderTarget* scratch_space = NULL);
-
-	// Downsample depth buffer with gather and find local min/max depth values. Writes to a 16F RG render target.
-	void		downsampleMinMaxDepthBuffer(LLRenderTarget& source, LLRenderTarget& dest, LLRenderTarget* scratch_space = NULL);
 
 	void		doOcclusion(LLCamera& camera, LLRenderTarget& source, LLRenderTarget& dest, LLRenderTarget* scratch_space = NULL);
 	void		doOcclusion(LLCamera& camera);
@@ -288,7 +289,6 @@ public:
 	void generateSunShadow(LLCamera& camera);
     LLRenderTarget* getShadowTarget(U32 i);
 
-    void generateSkyIndirect();
 	void generateHighlight(LLCamera& camera);
 	void renderHighlight(const LLViewerObject* obj, F32 fade);
 	void setHighlightObject(LLDrawable* obj) { mHighlightObject = obj; }
@@ -547,8 +547,7 @@ public:
 		RENDER_DEBUG_TEXEL_DENSITY		=  0x40000000,
 		RENDER_DEBUG_TRIANGLE_COUNT		=  0x80000000,
 		RENDER_DEBUG_IMPOSTORS			= 0x100000000,
-        RENDER_DEBUG_SH                  = 0x200000000,
-		RENDER_DEBUG_TEXTURE_SIZE		= 0x400000000
+		RENDER_DEBUG_TEXTURE_SIZE		= 0x200000000
 	};
 
 public:
@@ -557,8 +556,6 @@ public:
 
 	void updateCamera(bool reset = false);
 	
-	bool useAdvancedAtmospherics() const;
-
 	LLVector3				mFlyCamPosition;
 	LLQuaternion			mFlyCamRotation;
 
@@ -586,7 +583,6 @@ public:
 	static bool				sBakeSunlight;
 	static bool				sNoAlpha;
 	static bool				sUseTriStrips;
-	static bool				sUseAdvancedAtmospherics;
 	static bool				sUseFarClip;
 	static bool				sShadowRender;
 	static bool				sWaterReflections;
@@ -631,6 +627,10 @@ public:
 	LLRenderTarget			mDeferredLight;
 	LLRenderTarget			mHighlight;
 	LLRenderTarget			mPhysicsDisplay;
+
+    LLCullResult            mSky;
+    LLCullResult            mReflectedObjects;
+    LLCullResult            mRefractedObjects;
 
 	//utility buffer for rendering post effects, gets abused by renderDeferredLighting
 	LLPointer<LLVertexBuffer> mDeferredVB;
@@ -688,6 +688,7 @@ public:
     LLColor4			mMoonDiffuse;
 	LLVector4			mSunDir;
     LLVector4			mMoonDir;
+    bool                mNeedsShadowTargetClear;
 
 	LLVector4			mTransformedSunDir;
     LLVector4			mTransformedMoonDir;

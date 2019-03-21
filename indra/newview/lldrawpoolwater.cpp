@@ -88,7 +88,6 @@ void LLDrawPoolWater::setOpaqueTexture(const LLUUID& opaqueTextureId)
     LLSettingsWater::ptr_t pwater = LLEnvironment::instance().getCurrentWater();
     mOpaqueWaterImagep = LLViewerTextureManager::getFetchedTexture(opaqueTextureId);
     mOpaqueWaterImagep->addTextureStats(1024.f*1024.f);
-
 }
 
 void LLDrawPoolWater::setNormalMaps(const LLUUID& normalMapId, const LLUUID& nextNormalMapId)
@@ -282,9 +281,9 @@ void LLDrawPoolWater::render(S32 pass)
     glDisable(GL_TEXTURE_GEN_S); //texture unit 1
 	glDisable(GL_TEXTURE_GEN_T); //texture unit 1
 
-    gGL.getTexUnit(1)->activate();
-	gGL.getTexUnit(1)->unbind(LLTexUnit::TT_TEXTURE);
-	gGL.getTexUnit(1)->disable();
+    gGL.getTexUnit(2)->activate();
+	gGL.getTexUnit(2)->unbind(LLTexUnit::TT_TEXTURE);
+	gGL.getTexUnit(2)->disable();
 
 	glDisable(GL_TEXTURE_GEN_S); //texture unit 1
 	glDisable(GL_TEXTURE_GEN_T); //texture unit 1
@@ -645,7 +644,7 @@ void LLDrawPoolWater::shade2(bool edge, LLGLSLShader* shader, const LLColor3& li
                         bool edge_patch = water->getIsEdgePatch();
                         if (edge_patch)
                         {
-                            sNeedsReflectionUpdate = TRUE;
+                            //sNeedsReflectionUpdate = TRUE;
                             face->renderIndexed();
                         }
                     }

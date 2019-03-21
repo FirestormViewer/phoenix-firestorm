@@ -297,9 +297,18 @@ namespace
 
         void onFinishedSpan()
         {
-            LLSettingsDay::TrackBound_t next = getBoundingEntries(getAdjustedNow());
+            LLSettingsBase::Seconds adjusted_now = getAdjustedNow();
+            LLSettingsDay::TrackBound_t next = getBoundingEntries(adjusted_now);
             LLSettingsBase::Seconds nextspan = getSpanTime(next);
+
             reset((*next.first).second, (*next.second).second, nextspan);
+
+            // Recalculate (reinitialize) position. Because:
+            // - 'delta' from applyTimeDelta accumulates errors (probably should be fixed/changed to absolute time)
+            // - freezes and lag can result in reset being called too late, so we need to add missed time
+            // - occasional time corrections can happen
+            // - some transition switches can happen outside applyTimeDelta thus causing 'desync' from 'delta' (can be fixed by getting rid of delta)
+            initializeTarget(adjusted_now);
         }
     };
 
@@ -882,6 +891,14 @@ LLSettingsWater::ptr_t LLEnvironment::getCurrentWater() const
     return pwater;
 }
 
+void LayerConfigToDensityLayer(const LLSD& layerConfig, DensityLayer& layerOut)
+{
+    layerOut.constant_term  = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_CONSTANT_TERM].asReal();
+    layerOut.exp_scale      = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_EXP_SCALE_FACTOR].asReal();
+    layerOut.exp_term       = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_EXP_TERM].asReal();
+    layerOut.linear_term    = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_LINEAR_TERM].asReal();
+    layerOut.width          = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_WIDTH].asReal();
+}
 
 void LLEnvironment::getAtmosphericModelSettings(AtmosphericModelSettings& settingsOut, const LLSettingsSky::ptr_t &psky)
 {
@@ -894,13 +911,9 @@ void LLEnvironment::getAtmosphericModelSettings(AtmosphericModelSettings& settin
     settingsOut.m_rayleighProfile.clear();
     for (LLSD::array_iterator itf = rayleigh.beginArray(); itf != rayleigh.endArray(); ++itf)
     {
-        atmosphere::DensityProfileLayer layer;
+        DensityLayer layer;
         LLSD& layerConfig = (*itf);
-        layer.constant_term     = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_CONSTANT_TERM].asReal();
-        layer.exp_scale         = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_EXP_SCALE_FACTOR].asReal();
-        layer.exp_term          = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_EXP_TERM].asReal();
-        layer.linear_term       = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_LINEAR_TERM].asReal();
-        layer.width             = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_WIDTH].asReal();
+        LayerConfigToDensityLayer(layerConfig, layer);
         settingsOut.m_rayleighProfile.push_back(layer);
     }
 
@@ -908,13 +921,9 @@ void LLEnvironment::getAtmosphericModelSettings(AtmosphericModelSettings& settin
     settingsOut.m_mieProfile.clear();
     for (LLSD::array_iterator itf = mie.beginArray(); itf != mie.endArray(); ++itf)
     {
-        atmosphere::DensityProfileLayer layer;
+        DensityLayer layer;
         LLSD& layerConfig = (*itf);
-        layer.constant_term     = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_CONSTANT_TERM].asReal();
-        layer.exp_scale         = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_EXP_SCALE_FACTOR].asReal();
-        layer.exp_term          = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_EXP_TERM].asReal();
-        layer.linear_term       = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_LINEAR_TERM].asReal();
-        layer.width             = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_WIDTH].asReal();
+        LayerConfigToDensityLayer(layerConfig, layer);
         settingsOut.m_mieProfile.push_back(layer);
     }
     settingsOut.m_mieAnisotropy = psky->getMieAnisotropy();
@@ -923,13 +932,9 @@ void LLEnvironment::getAtmosphericModelSettings(AtmosphericModelSettings& settin
     settingsOut.m_absorptionProfile.clear();
     for (LLSD::array_iterator itf = absorption.beginArray(); itf != absorption.endArray(); ++itf)
     {
-        atmosphere::DensityProfileLayer layer;
+        DensityLayer layer;
         LLSD& layerConfig = (*itf);
-        layer.constant_term     = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_CONSTANT_TERM].asReal();
-        layer.exp_scale         = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_EXP_SCALE_FACTOR].asReal();
-        layer.exp_term          = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_EXP_TERM].asReal();
-        layer.linear_term       = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_LINEAR_TERM].asReal();
-        layer.width             = layerConfig[LLSettingsSky::SETTING_DENSITY_PROFILE_WIDTH].asReal();
+        LayerConfigToDensityLayer(layerConfig, layer);
         settingsOut.m_absorptionProfile.push_back(layer);
     }
 }

@@ -64,8 +64,8 @@ void calcAtmospherics(vec3 inPositionEye) {
     setPositionEye(P);
     
     //(TERRAIN) limit altitude
-    //if (P.y > max_y) P *= (max_y / P.y);
-    //if (P.y < -max_y) P *= (-max_y / P.y);
+    if (P.y > max_y) P *= (max_y / P.y);
+    if (P.y < -max_y) P *= (-max_y / P.y);
 
     vec3 tmpLightnorm = lightnorm.xyz;
 
@@ -91,7 +91,11 @@ void calcAtmospherics(vec3 inPositionEye) {
 
     //(TERRAIN) compute sunlight from lightnorm only (for short rays like terrain)
     temp2.y = max(0.0, tmpLightnorm.y);
-    temp2.y = 1. / temp2.y;
+    if (temp2.y > 0.001f)
+    {
+        temp2.y = 1. / temp2.y;
+    }
+    temp2.y = max(0.001f, temp2.y);
     sunlight *= exp( - light_atten * temp2.y);
 
     // main atmospheric scattering line integral
@@ -134,20 +138,10 @@ void calcAtmospherics(vec3 inPositionEye) {
           + tmpAmbient));
     additive = normalize(additive);
 
-    //haze color
-    //setAdditiveColor(
-    //  vec3(blue_horizon * blue_weight * (sunlight*(1.-cloud_shadow) + tmpAmbient)
-    //  + (haze_horizon * haze_weight) * (sunlight*(1.-cloud_shadow) * temp2.x
-    //    + tmpAmbient)));
-    
     //brightness of surface both sunlight and ambient
     setSunlitColor(vec3(sunlight * .5));
     setAmblitColor(vec3(tmpAmbient * .25));
     setAdditiveColor(additive * vec3(1.0 - exp(-temp2.z * distance_multiplier)) * 0.5);
-
-    // vary_SunlitColor = vec3(0);
-    // vary_AmblitColor = vec3(0);
-    // vary_AdditiveColor = vec4(Pn, 1.0);
 
     /*
     const float cloudShadowScale = 100.;

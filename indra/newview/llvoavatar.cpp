@@ -10708,7 +10708,7 @@ void LLVOAvatar::updateImpostors()
 		iter != instances_copy.end(); ++iter)
 	{
 		LLVOAvatar* avatar = (LLVOAvatar*) *iter;
-		if (!avatar->isDead() && avatar->isVisible()
+		if (avatar && !avatar->isDead() && avatar->isVisible()
 			&& (
                 // <FS:Ansariel> Fix LL impostor hacking; Generate new impostor if update is needed
                 //(avatar->isImpostor() || LLVOAvatar::AV_DO_NOT_RENDER == avatar->getVisualMuteSettings()) && avatar->needsImpostorUpdate())

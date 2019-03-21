@@ -120,10 +120,10 @@ void main()
     
         calcFragAtmospherics(pos.xyz, ambocc, sunlit, amblit, additive, atten);
 
-        float ambient = min(abs(da), 1.0);
+        float ambient = abs(da);
         ambient *= 0.5;
         ambient *= ambient;
-        ambient = 1.0 - ambient * smoothstep(0.0, 0.3, scol);
+        ambient = 1.0 - ambient;
 
         vec3 sun_contrib = min(da,scol) * sunlit;
 
@@ -137,8 +137,8 @@ void main()
         if (spec.a > 0.0) // specular reflection
         {
             // the old infinite-sky shiny reflection
-            float sa = dot(refnormpersp, sun_dir.xyz);
-            vec3 dumbshiny = sunlit*scol_ambocc.r*(texture2D(lightFunc, vec2(sa, spec.a)).r);
+            float sa = dot(refnormpersp, light_dir.xyz);
+            vec3 dumbshiny = sunlit*scol*(texture2D(lightFunc, vec2(sa, spec.a)).r);
             
             // add the two types of shiny together
             vec3 spec_contrib = dumbshiny * spec.rgb;
@@ -155,6 +155,8 @@ void main()
             col = mix(col.rgb, refcol, envIntensity); 
         }
                 
+
+vec3 a = col.rgb;
         if (norm.w < 0.5)
         {
             col = mix(atmosFragLighting(col, additive, atten), fullbrightAtmosTransportFrag(col, additive, atten), diffuse.a);
@@ -166,8 +168,9 @@ void main()
             col = fogged.rgb;
             bloom = fogged.a;
         #endif
-    }
 
+//col.rgb = a;
+    }
     frag_color.rgb = col.rgb;
     frag_color.a = bloom;
 }
