@@ -185,7 +185,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                     self.path("*/xui/*/*.xml")
                     self.path("*/xui/*/widgets/*.xml")
                     self.path("*/themes/*/colors.xml")
-                    with self.prefix(src="*/themes/*/textures"):
+                    with self.prefix(src_dst="*/themes/*/textures"):
                         self.path("*/*.tga")
                         self.path("*/*.j2c")
                         self.path("*/*.jpg")
@@ -215,7 +215,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 self.path("*.tga")
 
             # File in the newview/ directory
-            self.path("gpu_table.txt")
+            # self.path("gpu_table.txt")
 
             #build_data.json.  Standard with exception handling is fine.  If we can't open a new file for writing, we have worse problems
             #platform is computed above with other arg parsing
@@ -724,7 +724,7 @@ class WindowsManifest(ViewerManifest):
                 self.path("dullahan_host.exe")
                 self.path("natives_blob.bin")
                 self.path("snapshot_blob.bin")
-                self.path("widevinecdmadapter.dll")
+                self.path("v8_context_snapshot.bin")
 
             # MSVC DLLs needed for CEF and have to be in same directory as plugin
             with self.prefix(src=os.path.join(self.args['build'], os.pardir,
@@ -1345,7 +1345,8 @@ class DarwinManifest(ViewerManifest):
 
     def construct(self):
         # copy over the build result (this is a no-op if run within the xcode script)
-        self.path(self.args['configuration'] + "/Firestorm.app", dst="")
+        # self.path(os.path.join(self.args['configuration'], self.channel()+".app"), dst="")
+        self.path(os.path.join(self.args['configuration'], "Firestorm.app"), dst="")
 
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
         relpkgdir = os.path.join(pkgdir, "lib", "release")
@@ -1356,14 +1357,14 @@ class DarwinManifest(ViewerManifest):
         idnadir = os.path.join(pkgdir, "lib", "python", "idna")
 
         with self.prefix(dst="Contents"):  # everything goes in Contents
-            self.path("Info.plist", dst="Info.plist")
+            # self.path("Info.plist", dst="Info.plist")
 
             # copy additional libs in <bundle>/Contents/MacOS/
             self.path(os.path.join(relpkgdir, "libndofdev.dylib"), dst="Resources/libndofdev.dylib")
-            self.path(os.path.join(relpkgdir, "libhunspell-1.3.0.dylib"), dst="Resources/libhunspell-1.3.0.dylib")   
+            # self.path(os.path.join(relpkgdir, "libhunspell-1.3.0.dylib"), dst="Resources/libhunspell-1.3.0.dylib")   
 
             # Growl Frameworks
-            self.path("../packages/Frameworks/Growl", dst="Frameworks/Growl")
+            # self.path("../packages/Frameworks/Growl", dst="Frameworks/Growl")
 
             # most everything goes in the Resources directory
             with self.prefix(dst="Resources"):
@@ -1432,18 +1433,19 @@ class DarwinManifest(ViewerManifest):
                 # in our bundled sub-apps. For each of these we'll create a
                 # symlink from sub-app/Contents/Resources to the real .dylib.
                 # Need to get the llcommon dll from any of the build directories as well.
-                libfile = "libllcommon.dylib"
-                dylibs = path_optional(self.find_existing_file(os.path.join(os.pardir,
-                                                               "llcommon",
-                                                               self.args['configuration'],
-                                                               libfile),
-                                                               os.path.join(relpkgdir, libfile)),
-                                       dst=libfile)
+                # libfile = "libllcommon.dylib"
+                # dylibs = path_optional(self.find_existing_file(os.path.join(os.pardir,
+                #                                               "llcommon",
+                #                                               self.args['configuration'],
+                #                                               libfile),
+                #                                               os.path.join(relpkgdir, libfile)),
+                #                       dst=libfile)
 
+                dylibs = []
                 for libfile in (
                                 "libapr-1.0.dylib",
                                 "libaprutil-1.0.dylib",
-                                "libcollada14dom.dylib",
+                                # "libcollada14dom.dylib",
                                 "libexpat.1.dylib",
                                 "libexception_handler.dylib",
                                 "libGLOD.dylib",
@@ -1453,17 +1455,17 @@ class DarwinManifest(ViewerManifest):
                                 "libnghttp2.*dylib",
                                 "libgrowl.dylib",
                                 "libgrowl++.dylib",
-                                "libLeap.dylib",
+                                # "libLeap.dylib",
                                 ):
                     dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
                 # SLVoice and vivox lols, no symlinks needed
                 for libfile in (
-                                'libalut.dylib',
-                                'libopenal.dylib',
+                                # 'libalut.dylib',
+                                # 'libopenal.dylib',
                                 'libortp.dylib',
-                                'libsndfile.dylib',
-                                'libvivoxoal.dylib',
+                                # 'libsndfile.dylib',
+                                # 'libvivoxoal.dylib',
                                 'libvivoxsdk.dylib',
                                 'libvivoxplatform.dylib',
                                 'SLVoice',
@@ -1473,8 +1475,8 @@ class DarwinManifest(ViewerManifest):
                 # <FS:Ansariel/TS> FIRE-22709: Local voice not working in OpenSim
                 if self.fs_is_opensim():
                     with self.prefix(src=os.path.join(relpkgdir, 'voice_os'), dst="voice_os"):
-                        self.path('libalut.dylib')
-                        self.path('libopenal.dylib')
+                        # self.path('libalut.dylib')
+                        # self.path('libopenal.dylib')
                         self.path('libortp.dylib')
                         self.path('libsndfile.dylib')
                         self.path('libvivoxoal.dylib')
@@ -1498,16 +1500,16 @@ class DarwinManifest(ViewerManifest):
                         dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
                 # dylibs that vary based on configuration
-                if self.args['configuration'].lower() == 'debug':
-                    for libfile in (
-                                "libfmodexL.dylib",
-                                ):
-                        dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
-                else:
-                    for libfile in (
-                                "libfmodex.dylib",
-                                ):
-                        dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+                # if self.args['configuration'].lower() == 'debug':
+                #    for libfile in (
+                #                "libfmodexL.dylib",
+                #                ):
+                #        dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
+                # else:
+                #    for libfile in (
+                #                "libfmodex.dylib",
+                #                ):
+                #        dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
                 
                 # our apps
                 executable_path = {}
@@ -1535,12 +1537,12 @@ class DarwinManifest(ViewerManifest):
 
                 #<FS:TS> Moved from the x86_64 specific version because code
                 # below that does symlinking and path fixup depends on it.
-                with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'bin_x86')):
-                    self.path("SLPlugin.app", "SLPlugin.app")
+                # with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'bin_x86')):
+                #    self.path("SLPlugin.app", "SLPlugin.app")
 	
-                    with self.prefix(src_dst="llplugin"):
-                        self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
-                        self.path("media_plugin_cef.dylib", "media_plugin_cef.dylib")
+                #    with self.prefix(src_dst="llplugin"):
+                #        self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
+                #        self.path("media_plugin_cef.dylib", "media_plugin_cef.dylib")
 
                 # Dullahan helper apps go inside SLPlugin.app
                 with self.prefix(dst="SLPlugin.app/Contents/Frameworks"):
@@ -1560,8 +1562,12 @@ class DarwinManifest(ViewerManifest):
                                          'Frameworks/Chromium Embedded Framework.framework')
 
                 helperexecutablepath = self.dst_path_of('SLPlugin.app/Contents/Frameworks/DullahanHelper.app/Contents/MacOS/DullahanHelper')
+                #<FS:TS> Fix unannounced change in DullahanHelper app as supplied
+                # self.run_command_shell('install_name_tool -change '
+                #                  '"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
+                #                  '"@executable_path/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % helperexecutablepath)
                 self.run_command_shell('install_name_tool -change '
-                                 '"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
+                                 '"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
                                  '"@executable_path/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % helperexecutablepath)
 
                 # SLPlugin plugins
@@ -1590,8 +1596,8 @@ class DarwinManifest(ViewerManifest):
                                  '"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % dylibexecutablepath)
 
                 #<FS:TS> Copy in prebuilt framework if it's there
-                with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'bin_x86', 'Frameworks'), dst="Frameworks"):
-                    self.path("Chromium Embedded Framework.framework")
+                # with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'bin_x86', 'Frameworks'), dst="Frameworks"):
+                #     self.path("Chromium Embedded Framework.framework")
 
             # CEF framework goes inside Second Life.app/Contents/Frameworks
             with self.prefix(dst="Frameworks"):
@@ -1899,7 +1905,7 @@ class LinuxManifest(ViewerManifest):
                 self.path("firestorm_256.BMP","ll_icon.BMP")
 
         # plugins
-        with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'media_plugins', dst="bin/llplugin")):
+        with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'media_plugins'), dst="bin/llplugin"):
             self.path("gstreamer010/libmedia_plugin_gstreamer010.so",
                       "libmedia_plugin_gstreamer.so")
             self.path2basename("libvlc", "libmedia_plugin_libvlc.so")
@@ -1925,7 +1931,7 @@ class LinuxManifest(ViewerManifest):
             self.path( "libcef.so" )
             self.path( "libllceflib.so" )
             
-        with self.prefix(src=os.path.join(pkgdir, 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
             self.path( "*.so" )
 
         with self.prefix(src=os.path.join(pkgdir, 'bin', 'release'), dst="bin"):
@@ -2245,6 +2251,10 @@ class Linux_x86_64_Manifest(LinuxManifest):
 
     def construct(self):
         super(Linux_x86_64_Manifest, self).construct()
+
+        pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
+        relpkgdir = os.path.join(pkgdir, "lib", "release")
+        debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
         if self.is_packaging_viewer():
           with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):

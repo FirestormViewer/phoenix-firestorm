@@ -57,7 +57,7 @@
 	</text>
 	<check_box name="do_not_attach" label="Objekt nicht anziehen"/>
 	<check_box name="region_position" label="An Regionsposition wiederherst."/>
-	<check_box name="upload_asset" label="Hochladen"/>
+	<check_box name="upload_asset" label="Inhalte hochladen"/>
 	<check_box name="temp_asset" label="Temporär"/>
 	<button name="import_btn" label="Importieren"/>
 </floater>

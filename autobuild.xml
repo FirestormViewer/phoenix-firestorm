@@ -52,9 +52,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>cffd8a7f9d8e55ecd50c72cc39b41f3d</string>
+              <string>3156400f22047d6e194884970842f571</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.1.1080_3.3325.1750.gaabe4c4-linux64-181420123.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.1.1313_3.3626.1895.g7001d56-linux64-190760044.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -904,9 +904,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>118987b1a5b56214cfdbd0c763e180da</string>
+              <string>23aeaf23e7db2484a1850017141860dd</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/15127/97748/dullahan-1.1.1080_3.3325.1750.gaabe4c4-darwin64-513449.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/34069/283470/dullahan-1.1.1320_3.3626.1895.g7001d56-darwin64-525361.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -928,9 +928,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c01b1a180f6c12d00d359996ecd1cf52</string>
+              <string>ccee21f79ca1628c38c55295cd2544e6</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1080_3.3325.1750.gaabe4c4-linux64-181051505.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1313_3.3626.1895.g7001d56-linux64-190760005.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -940,9 +940,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>acf7ce31ef174df000889516767b5a1d</string>
+              <string>71fa66203326aca918796e874976c080</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1080_3.3325.1750.gaabe4c4-windows-181191512.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/34070/283477/dullahan-1.1.1320_3.3626.1895.g7001d56-windows-525361.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -952,16 +952,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bcafca464648fb949f1b02edce0fb488</string>
+              <string>c7162e4805f50a3609f5dc63d0cf2bc0</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1080_3.3325.1750.gaabe4c4-windows64-181191514.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/34071/283480/dullahan-1.1.1320_3.3626.1895.g7001d56-windows64-525361.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.1.1080_3.3325.1750.gaabe4c4</string>
+        <string>1.1.1320_3.3626.1895.g7001d56</string>
       </map>
       <key>elfio</key>
       <map>
@@ -1096,11 +1096,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>177f3e948368aa09803ffae0884acc12</string>
+              <string>d10a431d6dbd90f4ab900e4650e65b5c</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.10-darwin-183562214.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.12-darwin-190751902.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1124,11 +1124,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5b69c9bf9290ab643bbd810206490a44</string>
+              <string>30795e5ffa33613fa6397c9e33d18e42</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.11-linux64-190370442.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-1.10.12-linux64-190751836.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1138,11 +1138,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a635ed64f929404f7735e733d08ebeb9</string>
+              <string>35fe52bc6b78ed954fe649c31df13a3c</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.11-windows-190371728.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.12-windows-190751143.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1152,18 +1152,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f4c6ad04419e9cd5f7010e879f8e1d7a</string>
+              <string>9329deb7581ed08b52a694975de2ae54</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.11-windows64-190371729.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-1.10.12-windows64-190751144.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.10.04</string>
+        <string>1.10.12</string>
       </map>
       <key>fmodex</key>
       <map>
@@ -2159,7 +2159,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>7.A.4</string>
+        <string>7.A.6</string>
       </map>
       <key>libhunspell</key>
       <map>

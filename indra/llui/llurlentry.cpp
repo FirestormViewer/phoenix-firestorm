@@ -241,8 +241,14 @@ LLUrlEntryHTTP::LLUrlEntryHTTP()
 	: LLUrlEntryBase()
 {
 	// <FS:Ansariel> FIRE-1715: Links using FTP protocol are not recognized
+	// <FS:ND> using \S causes FIRE-23012, the obvious strategy would be to update boost (viewer uses 1.57,
+	// current is 1.69 as of 2019-03-03). 
+	// Unfortunately updating boost is not possible due to the viewer still relying on the old coroutine implementation.
+	// The second best solution is to use [^\s] for now
 	//mPattern = boost::regex("https?://([^\\s/?\\.#]+\\.?)+\\.\\w+(:\\d+)?(/\\S*)?",
-  	mPattern = boost::regex("(https?|ftp)://([^\\s/?\\.#]+\\.?)+\\.\\w+(:\\d+)?(/\\S*)?",
+  	//mPattern = boost::regex("(https?|ftp)://([^\\s/?\\.#]+\\.?)+\\.\\w+(:\\d+)?(/\\S*)?",
+    mPattern = boost::regex("(https?|ftp)://([^\\s/?\\.#]+\\.?)+\\.\\w+(:\\d+)?(/[^\\s]*)?",
+	// </FS:ND>
 	// </FS:Ansariel>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_http.xml";
