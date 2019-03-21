@@ -1480,7 +1480,7 @@ BOOL LLWindowSDL::SDLReallyCaptureInput(BOOL capture)
 	else
 		mReallyCapturedCount = 0;
 	
-	bool wantGrab, newGrab;
+	bool wantGrab;
 	if (mReallyCapturedCount <= 0) // uncapture
 	{
 		wantGrab = false;
@@ -1495,9 +1495,11 @@ BOOL LLWindowSDL::SDLReallyCaptureInput(BOOL capture)
 		LL_WARNS() << "ReallyCapture count was < 0" << LL_ENDL;
 	}
 
+	bool newGrab = wantGrab;
+	
+#if LL_X11
 	if (!mFullscreen) /* only bother if we're windowed anyway */
 	{
-#if LL_X11
 		if (mSDL_Display)
 		{
 			/* we dirtily mix raw X11 with SDL so that our pointer
@@ -1512,8 +1514,6 @@ BOOL LLWindowSDL::SDLReallyCaptureInput(BOOL capture)
 			int result;
 			if (wantGrab == true)
 			{
-				//LL_INFOS() << "X11 POINTER GRABBY" << LL_ENDL;
-				//newGrab = SDL_WM_GrabInput(wantGrab);
 				maybe_lock_display();
 				result = XGrabPointer(mSDL_Display, mSDL_XWindowID,
 						      True, 0, GrabModeAsync,
@@ -1526,9 +1526,7 @@ BOOL LLWindowSDL::SDLReallyCaptureInput(BOOL capture)
 					newGrab = false;
 			} else if (wantGrab == false)
 			{
-				//LL_INFOS() << "X11 POINTER UNGRABBY" << LL_ENDL;
 				newGrab = false;
-				//newGrab = SDL_WM_GrabInput(false);
 				
 				maybe_lock_display();
 				XUngrabPointer(mSDL_Display, CurrentTime);
@@ -1538,12 +1536,8 @@ BOOL LLWindowSDL::SDLReallyCaptureInput(BOOL capture)
 			} else // not actually running on X11, for some reason
 				newGrab = wantGrab;
 		}
-#endif // LL_X11
-	} else {
-		// pretend we got what we wanted, when really we don't care.
-		newGrab = wantGrab;
 	}
-	
+#endif // LL_X11
 	// return boolean success for whether we ended up in the desired state
 	return (capture && newGrab) || (!capture && !newGrab);
 }
