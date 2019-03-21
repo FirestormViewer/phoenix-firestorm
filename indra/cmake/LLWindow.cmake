@@ -19,7 +19,7 @@ else (USESYSTEMLIBS)
     use_prebuilt_binary(SDL)
     set (SDL_FOUND TRUE)
     set (SDL_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/i686-linux)
-    set (SDL_LIBRARY SDL2 directfb fusion direct X11)
+    set (SDL_LIBRARY SDL2 X11)
   endif (LINUX)
 endif (USESYSTEMLIBS)
 
