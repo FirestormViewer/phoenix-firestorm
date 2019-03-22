@@ -1500,17 +1500,17 @@ class DarwinManifest(ViewerManifest):
                         dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
                 # dylibs that vary based on configuration
-                # if self.args['configuration'].lower() == 'debug':
-                #    for libfile in (
-                #                "libfmodexL.dylib",
-                #                ):
-                #        dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
-                # else:
-                #    for libfile in (
-                #                "libfmodex.dylib",
-                #                ):
-                #        dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
-                
+                if self.args['configuration'].lower() == 'debug':
+                   for libfile in (
+                               "libfmodexL.dylib",
+                               ):
+                       dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
+                else:
+                   for libfile in (
+                               "libfmodex.dylib",
+                               ):
+                       dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+
                 # our apps
                 executable_path = {}
                 for app_bld_dir, app in (("mac_crash_logger", "mac-crash-logger.app"),
