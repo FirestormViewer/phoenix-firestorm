@@ -724,7 +724,7 @@ class WindowsManifest(ViewerManifest):
                 self.path("dullahan_host.exe")
                 self.path("natives_blob.bin")
                 self.path("snapshot_blob.bin")
-                self.path("widevinecdmadapter.dll")
+                self.path("v8_context_snapshot.bin")
 
             # MSVC DLLs needed for CEF and have to be in same directory as plugin
             with self.prefix(src=os.path.join(self.args['build'], os.pardir,
@@ -1463,7 +1463,7 @@ class DarwinManifest(ViewerManifest):
                 for libfile in (
                                 # 'libalut.dylib',
                                 # 'libopenal.dylib',
-                                # 'libortp.dylib',
+                                'libortp.dylib',
                                 # 'libsndfile.dylib',
                                 # 'libvivoxoal.dylib',
                                 'libvivoxsdk.dylib',
@@ -1500,17 +1500,17 @@ class DarwinManifest(ViewerManifest):
                         dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
                 # dylibs that vary based on configuration
-                # if self.args['configuration'].lower() == 'debug':
-                #    for libfile in (
-                #                "libfmodexL.dylib",
-                #                ):
-                #        dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
-                # else:
-                #    for libfile in (
-                #                "libfmodex.dylib",
-                #                ):
-                #        dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
-                
+                if self.args['configuration'].lower() == 'debug':
+                   for libfile in (
+                               "libfmodexL.dylib",
+                               ):
+                       dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
+                else:
+                   for libfile in (
+                               "libfmodex.dylib",
+                               ):
+                       dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+
                 # our apps
                 executable_path = {}
                 for app_bld_dir, app in (("mac_crash_logger", "mac-crash-logger.app"),
@@ -1562,8 +1562,12 @@ class DarwinManifest(ViewerManifest):
                                          'Frameworks/Chromium Embedded Framework.framework')
 
                 helperexecutablepath = self.dst_path_of('SLPlugin.app/Contents/Frameworks/DullahanHelper.app/Contents/MacOS/DullahanHelper')
+                #<FS:TS> Fix unannounced change in DullahanHelper app as supplied
+                # self.run_command_shell('install_name_tool -change '
+                #                  '"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
+                #                  '"@executable_path/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % helperexecutablepath)
                 self.run_command_shell('install_name_tool -change '
-                                 '"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
+                                 '"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
                                  '"@executable_path/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % helperexecutablepath)
 
                 # SLPlugin plugins

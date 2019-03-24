@@ -80,9 +80,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b2d2a51bca4e3c3acc98eaab881a652e</string>
+              <string>08358023ceab8b055af5c3594b3dcc2c</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.1.1313_3.3626.1895.g7001d56-linux64-190772217.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.1.1320_3.3626.1895.g7001d56-linux64-190811112.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -842,9 +842,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>118987b1a5b56214cfdbd0c763e180da</string>
+              <string>23aeaf23e7db2484a1850017141860dd</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/15127/97748/dullahan-1.1.1080_3.3325.1750.gaabe4c4-darwin64-513449.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/34069/283470/dullahan-1.1.1320_3.3626.1895.g7001d56-darwin64-525361.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -866,9 +866,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0f83072d15c7265b21d33b677a511efc</string>
+              <string>607f824220ac11cdc7ae9b5297f5f57a</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1313_3.3626.1895.g7001d56-linux64-190772141.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1320_3.3626.1895.g7001d56-linux64-190811046.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -878,9 +878,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>acf7ce31ef174df000889516767b5a1d</string>
+              <string>71fa66203326aca918796e874976c080</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1080_3.3325.1750.gaabe4c4-windows-181191512.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/34070/283477/dullahan-1.1.1320_3.3626.1895.g7001d56-windows-525361.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -890,16 +890,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bcafca464648fb949f1b02edce0fb488</string>
+              <string>c7162e4805f50a3609f5dc63d0cf2bc0</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1080_3.3325.1750.gaabe4c4-windows64-181191514.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/34071/283480/dullahan-1.1.1320_3.3626.1895.g7001d56-windows64-525361.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.1.1080_3.3325.1750.gaabe4c4</string>
+        <string>1.1.1320_3.3626.1895.g7001d56</string>
       </map>
       <key>elfio</key>
       <map>
