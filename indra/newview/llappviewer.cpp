@@ -1356,8 +1356,10 @@ bool LLAppViewer::init()
 //	// ForceAddressSize
 //	updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
 //
-//	// Run the updater. An exception from launching the updater should bother us.
-//	LLLeap::create(updater, true);
+//	if (!beingDebugged())
+//	{
+//		LLLeap::create(updater, true);
+//	}
 	// </FS:Ansariel>
 
 	// Iterate over --leap command-line options. But this is a bit tricky: if

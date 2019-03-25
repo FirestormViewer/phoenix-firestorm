@@ -82,8 +82,10 @@ public:
 	// For the current user, need to know the PTT state to show
 	// correct button image.
 	void			setIsAgentControl(bool val) { mIsAgentControl = val; }
-
 	void			setIsTalking(bool val) { mIsTalking = val; }
+
+	// switchIndicator controls visibility, 'active channel' governs if we are allowed to show indicator
+	void			setIsActiveChannel(bool val);
 
 	void			setShowParticipantsSpeaking(bool show) { mShowParticipantsSpeaking = show; }
 
@@ -140,6 +142,7 @@ private:
 	bool			mIsModeratorMuted;
 	bool			mIsMuted;
 	bool			mIsTalking;
+	bool			mIsActiveChannel;
 	bool			mShowParticipantsSpeaking;
 	LLPointer<LLUIImage> mImageMute;
 	LLPointer<LLUIImage> mImageOff;

@@ -968,7 +968,8 @@
              name="Object Name"
              select_on_focus="true"
              top_delta="0"
-             width="190" />
+             width="190"
+             tool_tip="The name is limited to 63 characters. Longer prim names are cut short. Names can only consist of printable characters found in the ASCII-7 (non-extended) character set, with the exception of the vertical bar/pipe &apos;|&apos;." />
             <text
              follows="left|top"
              height="10"
@@ -986,7 +987,8 @@
              name="Object Description"
              select_on_focus="true"
              top_delta="0"
-             width="190" />
+             width="190"
+             tool_tip="When people have &apos;Hover Tips on All Objects&apos; selected in the viewer's settings, they'll see the object description pop-up for any object under their mouse pointer. The prim description is limited to 127 bytes any string longer then that will be truncated." />
             <text
              type="string"
              left="10"
@@ -1153,7 +1155,8 @@
              name="clickaction"
              width="148"
              top_delta="-4"
-             left_pad="10">
+             left_pad="10"
+             tool_tip="A click action enables you to interact with an object with a single left click. Each click action has a special cursor indicating what it does. Some click actions have requirements to function. For example Touch and Pay require scripts" >
                 <combo_box.item
                  label="Touch  (default)"
                  name="Touch/grab(default)"
@@ -1199,7 +1202,8 @@
              layout="topleft"
              name="checkbox for sale"
              left="7"
-             width="100" />
+             width="100"
+             tool_tip="Lets people buy this object, its content or it copy inworld for specified price." />
   <!-- NEW SALE TYPE COMBO BOX -->
       <combo_box
             left_pad="8"
@@ -1212,7 +1216,8 @@
             max_chars="20"
             mouse_opaque="true"
             name="sale type"
-            width="168">
+            width="168"
+            tool_tip="Select whether purchaser will receive a copy, copy of the content or item itself." >
         <combo_box.item
            name="Copy"
            label="Copy"
@@ -1244,7 +1249,8 @@ even though the user gets a free copy.
       width="165"
       min_val="0"
       height="20"
-      max_val="999999999" />
+      max_val="999999999"
+      tool_tip="Object cost." />
 	<button
 	 left_pad="10"
 	 enabled="false"
