@@ -34,9 +34,11 @@
 			<text name="LabelItemNameTitle">
 				Name:
 			</text>
+			<line_editor name="LabelItemName" tool_tip="Der Name is limitiert auf 63 Buchstaben. Längere Namen werden abgeschnitten. Namen können nur aus darstellbaren Zeichen des ASCII-7-Zeichensatzes mit Ausnahme des vertikalen Strichs „|“ bestehen." />
 			<text name="LabelItemDescTitle">
 				Beschreibung:
 			</text>
+			<line_editor name="LabelItemDesc" tool_tip="Wenn Einwohner „Schwebe-Tipps für alle Objekte“ aktiviert haben, sehen sie die Objekt-Beschreibung für das Objekt, das sich unterhalb des Mauszeigers befindet. Die Beschreibung ist auf 127 Bytes limitiert und längere Beschreibungstexte werden automatisch abgeschnitten." />
 			<text name="LabelCreatorTitle">
 				Ersteller:
 			</text>
@@ -71,13 +73,13 @@
 				<check_box label="Kopieren" name="CheckNextOwnerCopy" tool_tip="Nächster Eigentümer kann beliebig viele Kopien von diesem Objekt erstellen. Die Ersteller-Informationen bleiben erhalten und die Kopien können keine weitergehenden Berechtigungen als das Orginal besitzen."/>
 				<check_box label="Übertragen" name="CheckNextOwnerTransfer" tool_tip="Nächster Eigentümer kann dieses Objekt weitergeben oder -verkaufen."/>
 			</panel>
-			<check_box label="Zum Verkauf" name="CheckPurchase"/>
-			<combo_box name="ComboBoxSaleType">
+			<check_box label="Zum Verkauf" name="CheckPurchase" tool_tip="Erlaubt es Einwohnern dieses Objekt, den Inhalt oder eine Kopie zum eingestellten Preis zu kaufen."/>
+			<combo_box name="ComboBoxSaleType" tool_tip="Stellt ein, ob der Käufer eine Kopie, den Inhalt oder das Objekt selbst erhält.">
 				<combo_box.item label="Kopie" name="Copy"/>
 				<combo_box.item label="Inhalt" name="Contents"/>
 				<combo_box.item label="Original" name="Original"/>
 			</combo_box>
-			<spinner label="Preis: L$" name="Edit Cost"/>
+			<spinner label="Preis: L$" name="Edit Cost" tool_tip="Preis des Objekts."/>
 		</panel>
 	</scroll_container>
 	<panel name="button_panel">

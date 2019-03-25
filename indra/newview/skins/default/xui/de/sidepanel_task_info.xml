@@ -19,7 +19,9 @@
 	<scroll_container name="item_profile_scroll">
 	<panel label="" name="properties_panel">
 		<text name="Name:">Name:</text>
+		<line_editor name="Object Name" tool_tip="Der Name is limitiert auf 63 Buchstaben. Längere Namen werden abgeschnitten. Namen können nur aus darstellbaren Zeichen des ASCII-7-Zeichensatzes mit Ausnahme des vertikalen Strichs „|“ bestehen." />
 		<text name="Description:">Beschreibung:</text>
+		<line_editor name="Object Description" tool_tip="Wenn Einwohner „Schwebe-Tipps für alle Objekte“ aktiviert haben, sehen sie die Objekt-Beschreibung für das Objekt, das sich unterhalb des Mauszeigers befindet. Die Beschreibung ist auf 127 Bytes limitiert und längere Beschreibungstexte werden automatisch abgeschnitten." />
 		<text name="CreatorNameLabel">Ersteller:</text>
 		<text name="Owner:">Eigentümer:</text>
 		<text name="Group_label">Gruppe:</text>
@@ -27,7 +29,7 @@
 		<name_box initial_value="Wird geladen..." name="Group Name Proxy"/>
 		<button label="Übertragung" label_selected="Übertragung" name="button deed" tool_tip="Eine Übertragung bedeutet, dass das Objekt mit den Berechtigungen „Nächster Eigentümer“ weitergegeben wird. Mit der Gruppe geteilte Objekte können von einem Gruppen-Officer übertragen werden."/>
 		<text name="label click action">Bei Linksklick:</text>
-		<combo_box name="clickaction">
+		<combo_box name="clickaction" tool_tip="Eine Klickaktion erlaubt es, mit einem einfachen Linksklick mit einem Objekt zu interagieren. Jede Aktion besitzt einen speziellen Mauszeiger, der darauf hinweist, welche Aktion ausgeführt wird. Einige Aktionen sind an bestimmte Voraussetzungen geknüpft. Zum Beispiel benötigen „Berühren“ und „Objekt bezahlen“ Skripte.">
 			<combo_box.item label="Berühren" name="Touch/grab(default)"/>
 			<combo_box.item label="Sitzen" name="Sitonobject"/>
 			<combo_box.item label="Kaufen" name="Buyobject"/>
@@ -48,13 +50,13 @@
 			<check_box label="Kopieren" name="checkbox next owner can copy" tool_tip="Nächster Eigentümer kann beliebig viele Kopien von diesem Objekt erstellen. Die Ersteller-Informationen bleiben erhalten und die Kopien können keine weitergehenden Berechtigungen als das Orginal besitzen."/>
 			<check_box label="Transferieren" name="checkbox next owner can transfer" tool_tip="Nächster Eigentümer kann dieses Objekt weitergeben oder -verkaufen"/>
 		</panel>
-		<check_box label="Zum Verkauf" name="checkbox for sale"/>
-		<combo_box name="sale type">
+		<check_box label="Zum Verkauf" name="checkbox for sale" tool_tip="Erlaubt es Einwohnern dieses Objekt, den Inhalt oder eine Kopie zum eingestellten Preis zu kaufen."/>
+		<combo_box name="sale type" tool_tip="Stellt ein, ob der Käufer eine Kopie, den Inhalt oder das Objekt selbst erhält.">
 			<combo_box.item label="Kopieren" name="Copy"/>
 			<combo_box.item label="Inhalt" name="Contents"/>
 			<combo_box.item label="Original" name="Original"/>
 		</combo_box>
-		<spinner label="Preis: L$" name="Edit Cost"/>
+		<spinner label="Preis: L$" name="Edit Cost" tool_tip="Preis des Objekts."/>
 		<check_box label="In Suche anzeigen" name="search_check" tool_tip="Dieses Objekt in Suchergebnissen anzeigen"/>
 		<text name="pathfinding_attributes_label">Pathfinding-Attribute:</text>
 		<text name="B:">B:</text>
@@ -67,16 +69,16 @@
 	</scroll_container>
 	<layout_stack name="buttons_ls">
 		<layout_panel name="open_btn_panel">
-			<button label="Öffnen" name="open_btn"/>
+			<button label="Öffnen" name="open_btn" tool_tip="Öffnen, um den Inhalt des Objekts anzuzeigen."/>
 		</layout_panel>
 		<layout_panel name="pay_btn_panel">
-			<button label="Bezahlen" name="pay_btn"/>
+			<button label="Bezahlen" name="pay_btn" tool_tip="Öffnet das Bezahlen-Fenster. Das Objekt muss über ein Bezahlen-Skript verfügen."/>
 		</layout_panel>
 		<layout_panel name="buy_btn_panel">
-			<button label="Kaufen" name="buy_btn"/>
+			<button label="Kaufen" name="buy_btn" tool_tip="Öffnet das Kaufen-Fenster. Das Objekt muss hierfür zum Verkauf stehen."/>
 		</layout_panel>
 		<layout_panel name="details_btn_panel">
-			<button label="Details" name="details_btn"/>
+			<button label="Details" name="details_btn" tool_tip="Öffnet das Detail-Fenster für das Objekt."/>
 		</layout_panel>
 	</layout_stack>
 </panel>
