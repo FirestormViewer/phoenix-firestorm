@@ -2215,7 +2215,7 @@
 	  height="14"
 	  name="FSCmdLinePos_txt"
 	  width="280">
-	  Teleport within sim (usage: cmd x y z)
+	  Teleport within region (usage: cmd x y z)
 	</text>
 	<line_editor
 	  enabled_control="FSCmdLine"
@@ -2348,7 +2348,7 @@
 	  height="14"
 	  name="FSCmdLineMapTo_txt"
 	  width="280">
-	  Teleport to sim x (usage: cmd simname)
+	  Teleport to region x (usage: cmd regionname)
 	</text>
 	<line_editor
 	  enabled_control="FSCmdLine"
@@ -2365,7 +2365,7 @@
 	  top_pad="2"
 	  follows="left|top"
 	  height="14"
-	  label="Use same position between sims"
+	  label="Use same position between regions"
 	  name="toggle"
 	  width="270"
 	  control_name="FSCmdLineMapToKeepPos"/>

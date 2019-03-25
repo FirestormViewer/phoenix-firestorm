@@ -65,8 +65,8 @@ showUsage()
     echo "  --config                 : Generate a new architecture-specific config"
     echo "  --build                  : Build Firestorm"
     echo "  --version                : Update version number"
-    echo "  --chan  [Release|Beta|Private]   : Private is the default, sets channel"
-    echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
+    echo "  --chan  [Release|Beta|Private]         : Private is the default, sets channel"
+    echo "  --btype [Release|RelWithDebInfo|Debug] : Release is default, whether to use symbols"
     echo "  --kdu                    : Build with KDU"
     echo "  --package                : Build installer"
     echo "  --no-package             : Build without installer (Overrides --package)"
@@ -81,6 +81,7 @@ showUsage()
     echo "  --testbuild <days>       : Create time-limited test build (build date + <days>)"
     echo "  --platform <platform>    : Build for specified platform (darwin | windows | linux)"
     echo "  --jobs <num>             : Build with <num> jobs in parallel (Linux and Darwin only)"
+    echo "  --ninja                  : Build using Ninja (Linux only)"
     echo
     echo "All arguments not in the above list will be passed through to LL's configure/build."
     echo
@@ -466,7 +467,11 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
             BUILD_DIR=`pwd`
         fi
         # This name is consumed by indra/newview/CMakeLists.txt
-        VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/$BTYPE/firestorm-symbols-${PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
+        if [ $PLATFORM == "linux" ] ; then
+            VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/firestorm-symbols-${PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
+        else
+            VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/$BTYPE/firestorm-symbols-${PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
+        fi
         CRASH_REPORTING="-DRELEASE_CRASH_REPORTING:BOOL=ON"
     else
         CRASH_REPORTING="-DRELEASE_CRASH_REPORTING:BOOL=OFF"
