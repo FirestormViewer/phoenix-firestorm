@@ -76,9 +76,9 @@ LLOutputMonitorCtrl::LLOutputMonitorCtrl(const LLOutputMonitorCtrl::Params& p)
 	mSpeakerId(p.speaker_id),
 	mIsModeratorMuted(false),
 	mIsAgentControl(false),
-	mIsActiveChannel(false),
 	mIndicatorToggled(false),
 	mShowParticipantsSpeaking(false),
+	mChannelState(INACTIVE_CHANNEL),
 	mAlwaysVisible(false) // <FS:Ansariel> Option to not hide it if speaker ID is set to null
 {
 	//static LLUIColor output_monitor_muted_color = LLUIColorTable::instance().getColor("OutputMonitorMutedColor", LLColor4::orange);
@@ -296,8 +296,13 @@ BOOL LLOutputMonitorCtrl::handleMouseUp(S32 x, S32 y, MASK mask)
 
 void LLOutputMonitorCtrl::setIsActiveChannel(bool val)
 {
-    mIsActiveChannel = val;
-    if (!val)
+    setChannelState(val ? ACTIVE_CHANNEL : INACTIVE_CHANNEL);
+}
+
+void LLOutputMonitorCtrl::setChannelState(EChannelState state)
+{
+    mChannelState = state;
+    if (state == INACTIVE_CHANNEL)
     {
         // switchIndicator will set it to TRUE when channel becomes active
         setVisible(FALSE);
@@ -356,7 +361,7 @@ void LLOutputMonitorCtrl::onChange()
 void LLOutputMonitorCtrl::switchIndicator(bool switch_on)
 {
     // <FS:Ansariel> [FS communication UI]
-    //if (mIsActiveChannel && getVisible() != (BOOL)switch_on)
+    //if ((mChannelState != INACTIVE_CHANNEL) && (getVisible() != (BOOL)switch_on))
     if (getVisible() != (BOOL)switch_on)
     // </FS:Ansariel> [FS communication UI]
     {
