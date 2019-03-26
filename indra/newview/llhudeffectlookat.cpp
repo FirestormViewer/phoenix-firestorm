@@ -532,17 +532,23 @@ BOOL LLHUDEffectLookAt::setLookAt(ELookAtType target_type, LLViewerObject *objec
 		if (object)
 		{
 			//mTargetOffsetGlobal.setVec(position); </FS:LO> FIRE-23524 Option to limit look at target to a sphere around the avatar's head.
-            if(lookAtShouldClamp){
-                if(mTargetObject->isAvatar() && ((LLVOAvatar*)(LLViewerObject*)mTargetObject)->isSelf()){
+            if(lookAtShouldClamp)
+			{
+                if(mTargetObject->isAvatar() && ((LLVOAvatar*)(LLViewerObject*)mTargetObject)->isSelf())
+				{
                     //We use this branch and mimic our mouse/first person look pose.
                     mTargetOffsetGlobal.setVec(gAgent.getPosGlobalFromAgent(gAgentAvatarp->mHeadp->getWorldPosition() + position));
                     mTargetObject = NULL;
-                }else{
+                }
+				else
+				{
                     //Otherwise, mimic looking at the object.
                     mTargetOffsetGlobal.setVec(object->getPositionGlobal() + (LLVector3d)(position * object->getRotationRegion()));
                     mTargetObject = NULL;
                 }
-            }else{
+            }
+			else
+			{
                 mTargetOffsetGlobal.setVec(position);
             }
 		}
@@ -552,7 +558,8 @@ BOOL LLHUDEffectLookAt::setLookAt(ELookAtType target_type, LLViewerObject *objec
 		}
 		
 		//<FS:LO> FIRE-23524 Option to limit look at target to a sphere around the avatar's head.
-        if(lookAtShouldClamp){
+        if(lookAtShouldClamp)
+		{
             static LLCachedControl<F32> s_Radius(gSavedSettings, "FSLookAtTargetMaxDistance");
             
             LLVector3d headPosition = gAgent.getPosGlobalFromAgent(gAgentAvatarp->mHeadp->getWorldPosition());
@@ -570,8 +577,9 @@ BOOL LLHUDEffectLookAt::setLookAt(ELookAtType target_type, LLViewerObject *objec
             BOOL lookAtChanged = (target_type != mTargetType);
             
             // lookat position has moved a certain amount and we haven't just sent an update
-            lookAtChanged = lookAtChanged || ((dist_vec_squared(gAgent.getPosAgentFromGlobal(mTargetOffsetGlobal), mLastSentOffsetGlobal) > MIN_DELTAPOS_FOR_UPDATE_SQUARED) && 
-                ((current_time - mLastSendTime) > (1.f / MAX_SENDS_PER_SEC)));
+            lookAtChanged = lookAtChanged ||
+				((dist_vec_squared(gAgent.getPosAgentFromGlobal(mTargetOffsetGlobal), mLastSentOffsetGlobal) > MIN_DELTAPOS_FOR_UPDATE_SQUARED) && 
+				 ((current_time - mLastSendTime) > (1.f / MAX_SENDS_PER_SEC)));
 
             if (lookAtChanged)
             {
@@ -581,7 +589,7 @@ BOOL LLHUDEffectLookAt::setLookAt(ELookAtType target_type, LLViewerObject *objec
                 setNeedsSendToSim(TRUE);
             }
         }
-		</FS:LO> FIRE-23524 Option to limit look at target to a sphere around the avatar's head.
+		//</FS:LO> FIRE-23524 Option to limit look at target to a sphere around the avatar's head.
         
 		mKillTime = mTimer.getElapsedTimeF32() + mDuration;
 
