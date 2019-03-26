@@ -76,6 +76,10 @@
 			<check_box label="Eigenen Kamerafokus nicht an andere senden" name="privatelookat" tool_tip="Verhindert, dass der eigene Kamerafokus an andere gesendet wird."/>
 			<check_box label="Eigenen Kamerafokus auch lokal nicht setzen" name="privateLocalLookat" tool_tip="Verhindert, dass der Kopf des eigenen Avatars sich zum fokussierten Punkt der Kamera dreht. Die Kopfbewegung muss zwangsläufig nicht nicht anderen sichtbar sein, unabhängig wie diese Option gesetzt ist!"/>
 			<check_box label="Eigene Bearbeitungsauswahl nicht an andere senden" name="privatepointat" tool_tip="Verhindert, dass die eigene Auswahl an andere gesendet wird."/>
+			<check_box label="Distanz beschränken (vom eigenen Kopf aus):" name="LimitLookAt" width="270" tool_tip="Beschränkt die Distanz auf die angegebene Entfernung vom eigenen Kopf aus gemessen."/>
+			<text name="LimitLookAtDistanceMeterText">
+				m
+			</text>
 		</panel>
 
 		<!--Autoresponse1-->

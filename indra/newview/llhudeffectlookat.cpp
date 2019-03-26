@@ -477,120 +477,131 @@ BOOL LLHUDEffectLookAt::setLookAt(ELookAtType target_type, LLViewerObject *objec
 	F32 current_time  = mTimer.getElapsedTimeF32();
 
 	//<FS:LO> FIRE-23524 Option to limit look at target to a sphere around the avatar's head.
-	/*// type of lookat behavior or target object has changed
-	BOOL lookAtChanged = (target_type != mTargetType) || (object != mTargetObject);
+	//// type of lookat behavior or target object has changed
+	//BOOL lookAtChanged = (target_type != mTargetType) || (object != mTargetObject);
 
-	// lookat position has moved a certain amount and we haven't just sent an update
-	lookAtChanged = lookAtChanged || ((dist_vec_squared(position, mLastSentOffsetGlobal) > MIN_DELTAPOS_FOR_UPDATE_SQUARED) && 
-		((current_time - mLastSendTime) > (1.f / MAX_SENDS_PER_SEC)));
+	//// lookat position has moved a certain amount and we haven't just sent an update
+	//lookAtChanged = lookAtChanged || ((dist_vec_squared(position, mLastSentOffsetGlobal) > MIN_DELTAPOS_FOR_UPDATE_SQUARED) && 
+	//	((current_time - mLastSendTime) > (1.f / MAX_SENDS_PER_SEC)));
 
-	if (lookAtChanged)
+	//if (lookAtChanged)
+	//{
+	//	mLastSentOffsetGlobal = position;
+	//	F32 timeout = (*mAttentions)[target_type].mTimeout;
+	//	setDuration(timeout);
+	//	setNeedsSendToSim(TRUE);
+	//}
+ //
+	//if (target_type == LOOKAT_TARGET_CLEAR)
+	//{
+	//	clearLookAtTarget();
+	//}
+	//else
+	//{
+	//	mTargetType = target_type;
+	//	mTargetObject = object;
+	//	if (object)
+	//	{
+	//		mTargetOffsetGlobal.setVec(position);
+	//	}
+	//	else
+	//	{
+	//		mTargetOffsetGlobal = gAgent.getPosGlobalFromAgent(position);
+	//	}
+	//}
+
+	static LLCachedControl<bool> s_EnableLimiter(gSavedSettings, "FSLookAtTargetLimitDistance");
+	bool lookAtShouldClamp = s_EnableLimiter &&
+						(*mAttentions)[mTargetType].mName != "None" &&
+						(*mAttentions)[mTargetType].mName != "Idle" &&
+						(*mAttentions)[mTargetType].mName != "AutoListen";
+
+	if (!lookAtShouldClamp) //We do a similar but seperate calculation if we are doing limited distances
 	{
-		mLastSentOffsetGlobal = position;
-		F32 timeout = (*mAttentions)[target_type].mTimeout;
-		setDuration(timeout);
-		setNeedsSendToSim(TRUE);
+		// type of lookat behavior or target object has changed
+		bool lookAtChanged = (target_type != mTargetType) || (object != mTargetObject);
+
+		// lookat position has moved a certain amount and we haven't just sent an update
+		lookAtChanged = lookAtChanged || ((dist_vec_squared(position, mLastSentOffsetGlobal) > MIN_DELTAPOS_FOR_UPDATE_SQUARED) && 
+			((current_time - mLastSendTime) > (1.f / MAX_SENDS_PER_SEC)));
+
+		if (lookAtChanged)
+		{
+			mLastSentOffsetGlobal = position;
+			F32 timeout = (*mAttentions)[target_type].mTimeout;
+			setDuration(timeout);
+			setNeedsSendToSim(TRUE);
+		}
 	}
-	*/
 
-    static LLCachedControl<bool> s_EnableLimiter(gSavedSettings, "FSLookAtTargetLimitDistance");
-    
-    BOOL lookAtShouldClamp = s_EnableLimiter &&
-                        (*mAttentions)[mTargetType].mName != "None" &&
-                        (*mAttentions)[mTargetType].mName != "Idle" &&
-                        (*mAttentions)[mTargetType].mName != "AutoListen";
-    
-    if (!lookAtShouldClamp) //We do a similar but seperate calculation if we are doing limited distances
-    {
-        // type of lookat behavior or target object has changed
-        BOOL lookAtChanged = (target_type != mTargetType) || (object != mTargetObject);
-
-        // lookat position has moved a certain amount and we haven't just sent an update
-        lookAtChanged = lookAtChanged || ((dist_vec_squared(position, mLastSentOffsetGlobal) > MIN_DELTAPOS_FOR_UPDATE_SQUARED) && 
-            ((current_time - mLastSendTime) > (1.f / MAX_SENDS_PER_SEC)));
-
-        if (lookAtChanged)
-        {
-            mLastSentOffsetGlobal = position;
-            F32 timeout = (*mAttentions)[target_type].mTimeout;
-            setDuration(timeout);
-            setNeedsSendToSim(TRUE);
-        }
-    }
-	//</FS:LO> FIRE-23524 Option to limit look at target to a sphere around the avatar's head.
-    
-    
 	if (target_type == LOOKAT_TARGET_CLEAR)
 	{
 		clearLookAtTarget();
 	}
 	else
 	{
-        
 		mTargetType = target_type;
 		mTargetObject = object;
 		if (object)
 		{
-			//mTargetOffsetGlobal.setVec(position); </FS:LO> FIRE-23524 Option to limit look at target to a sphere around the avatar's head.
-            if(lookAtShouldClamp)
+			if (lookAtShouldClamp)
 			{
-                if(mTargetObject->isAvatar() && ((LLVOAvatar*)(LLViewerObject*)mTargetObject)->isSelf())
+				if (mTargetObject->isAvatar() && ((LLVOAvatar*)(LLViewerObject*)mTargetObject)->isSelf())
 				{
-                    //We use this branch and mimic our mouse/first person look pose.
-                    mTargetOffsetGlobal.setVec(gAgent.getPosGlobalFromAgent(gAgentAvatarp->mHeadp->getWorldPosition() + position));
-                    mTargetObject = NULL;
-                }
+					//We use this branch and mimic our mouse/first person look pose.
+					mTargetOffsetGlobal.setVec(gAgent.getPosGlobalFromAgent(gAgentAvatarp->mHeadp->getWorldPosition() + position));
+					mTargetObject = NULL;
+				}
 				else
 				{
-                    //Otherwise, mimic looking at the object.
-                    mTargetOffsetGlobal.setVec(object->getPositionGlobal() + (LLVector3d)(position * object->getRotationRegion()));
-                    mTargetObject = NULL;
-                }
-            }
+					//Otherwise, mimic looking at the object.
+					mTargetOffsetGlobal.setVec(object->getPositionGlobal() + (LLVector3d)(position * object->getRotationRegion()));
+					mTargetObject = NULL;
+				}
+			}
 			else
 			{
-                mTargetOffsetGlobal.setVec(position);
-            }
+				mTargetOffsetGlobal.setVec(position);
+			}
 		}
 		else
 		{
 			mTargetOffsetGlobal = gAgent.getPosGlobalFromAgent(position);
 		}
-		
-		//<FS:LO> FIRE-23524 Option to limit look at target to a sphere around the avatar's head.
-        if(lookAtShouldClamp)
-		{
-            static LLCachedControl<F32> s_Radius(gSavedSettings, "FSLookAtTargetMaxDistance");
-            
-            LLVector3d headPosition = gAgent.getPosGlobalFromAgent(gAgentAvatarp->mHeadp->getWorldPosition());
-            float distance = dist_vec(mTargetOffsetGlobal, headPosition);
-            
-            if (distance > s_Radius)
-            {
-                LLVector3d vecDistFromObjectToHead = mTargetOffsetGlobal - headPosition;
-                vecDistFromObjectToHead *= s_Radius / distance;
-                mTargetOffsetGlobal.setVec(headPosition + vecDistFromObjectToHead);
-            }
-            
-            //Do the changed calculation except this time for limited distances
-            // type of lookat behavior or target object has changed
-            BOOL lookAtChanged = (target_type != mTargetType);
-            
-            // lookat position has moved a certain amount and we haven't just sent an update
-            lookAtChanged = lookAtChanged ||
-				((dist_vec_squared(gAgent.getPosAgentFromGlobal(mTargetOffsetGlobal), mLastSentOffsetGlobal) > MIN_DELTAPOS_FOR_UPDATE_SQUARED) && 
-				 ((current_time - mLastSendTime) > (1.f / MAX_SENDS_PER_SEC)));
 
-            if (lookAtChanged)
-            {
-                mLastSentOffsetGlobal = gAgent.getPosAgentFromGlobal(mTargetOffsetGlobal);
-                F32 timeout = (*mAttentions)[target_type].mTimeout;
-                setDuration(timeout);
-                setNeedsSendToSim(TRUE);
-            }
-        }
+		if (lookAtShouldClamp)
+		{
+			static LLCachedControl<F32> s_Radius(gSavedSettings, "FSLookAtTargetMaxDistance");
+
+			LLVector3d headPosition = gAgent.getPosGlobalFromAgent(gAgentAvatarp->mHeadp->getWorldPosition());
+			float distance = dist_vec(mTargetOffsetGlobal, headPosition);
+
+			if (distance > s_Radius)
+			{
+				LLVector3d vecDistFromObjectToHead = mTargetOffsetGlobal - headPosition;
+				vecDistFromObjectToHead *= s_Radius / distance;
+				mTargetOffsetGlobal.setVec(headPosition + vecDistFromObjectToHead);
+			}
+
+			//Do the changed calculation except this time for limited distances
+			// type of lookat behavior or target object has changed
+			bool lookAtChanged = (target_type != mTargetType);
+
+			// lookat position has moved a certain amount and we haven't just sent an update
+			lookAtChanged = lookAtChanged ||
+				((dist_vec_squared(gAgent.getPosAgentFromGlobal(mTargetOffsetGlobal), mLastSentOffsetGlobal) > MIN_DELTAPOS_FOR_UPDATE_SQUARED) && 
+					((current_time - mLastSendTime) > (1.f / MAX_SENDS_PER_SEC)));
+
+			if (lookAtChanged)
+			{
+				mLastSentOffsetGlobal = gAgent.getPosAgentFromGlobal(mTargetOffsetGlobal);
+				F32 timeout = (*mAttentions)[target_type].mTimeout;
+				setDuration(timeout);
+				setNeedsSendToSim(TRUE);
+			}
+		}
 		//</FS:LO> FIRE-23524 Option to limit look at target to a sphere around the avatar's head.
-        
+
 		mKillTime = mTimer.getElapsedTimeF32() + mDuration;
 
 		update();
