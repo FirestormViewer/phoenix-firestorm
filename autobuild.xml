@@ -52,9 +52,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3156400f22047d6e194884970842f571</string>
+              <string>08358023ceab8b055af5c3594b3dcc2c</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.1.1313_3.3626.1895.g7001d56-linux64-190760044.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.1.1320_3.3626.1895.g7001d56-linux64-190811112.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -838,9 +838,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ccee21f79ca1628c38c55295cd2544e6</string>
+              <string>607f824220ac11cdc7ae9b5297f5f57a</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1313_3.3626.1895.g7001d56-linux64-190760005.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1320_3.3626.1895.g7001d56-linux64-190811046.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
