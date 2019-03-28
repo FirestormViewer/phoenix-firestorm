@@ -318,7 +318,6 @@ S32 LLFontFreetype::getNumFaces(const std::string& filename)
 		num_faces = mFTFace->num_faces;
 	
 	FT_Done_Face(mFTFace);
-	clearFontStreams();
 	mFTFace = NULL;
 
 // #ifdef LL_WINDOWS
