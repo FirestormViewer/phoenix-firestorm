@@ -205,7 +205,7 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 
 	openArgs.flags = FT_OPEN_MEMORY;
 
-	error = FT_Open_Face( gFTLibrary, &openArgs, 0, &mFTFace );
+	error = FT_Open_Face( gFTLibrary, &openArgs, face_n, &mFTFace );
 // </FS:ND>
 
 	if (error)
