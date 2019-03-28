@@ -48,7 +48,7 @@ class LLSpinCtrl;
 class LLTextBox;
 
 #define PRESET_NAME_REGION_DEFAULT "__Regiondefault__"
-#define PRESET_NAME_SKY_DAY_CYCLE "__Sky_Day_Cycle__"
+#define PRESET_NAME_DAY_CYCLE "__Day_Cycle__"
 #define PRESET_NAME_NONE "__None__"
 
 typedef enum e_quickpref_update_param
@@ -67,24 +67,23 @@ private:
 	~FloaterQuickPrefs();
 	void onSunMoved();
 
-	void selectSkyPreset(const std::string& preset_name);
-	void selectWaterPreset(const std::string& preset_name);
-	void selectDayCyclePreset(const std::string& preset_name);
+	void selectSkyPreset(const LLSD& preset);
+	void selectWaterPreset(const LLSD& preset);
+	void selectDayCyclePreset(const LLSD& preset);
 
 	bool isValidPresetName(const std::string& preset_name);
-	std::string stepComboBox(LLComboBox* ctrl, bool forward);
+	void stepComboBox(LLComboBox* ctrl, bool forward);
 
 	void initCallbacks();
 	void loadPresets();
-	void loadDayCyclePresets();
-	void loadSkyPresets();
-	void loadWaterPresets();
+	void loadDayCyclePresets(const std::multimap<std::string, LLUUID>& daycycle_map);
+	void loadSkyPresets(const std::multimap<std::string, LLUUID>& sky_map);
+	void loadWaterPresets(const std::multimap<std::string, LLUUID>& water_map);
 
 	void onChangeUseRegionWindlight();
 	void onChangeWaterPreset();
 	void onChangeSkyPreset();
 	void onChangeDayCyclePreset();
-	void deactivateAnimator();
 	void onClickSkyPrev();
 	void onClickSkyNext();
 	void onClickWaterPrev();
@@ -107,6 +106,7 @@ public:
 	void setSelectedSky(const std::string& preset_name);
 	void setSelectedWater(const std::string& preset_name);
 	void setSelectedDayCycle(const std::string& preset_name);
+	void setSelectedEnvironment();
 
 	// Phototools additions
 	void refreshSettings();
