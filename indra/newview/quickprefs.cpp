@@ -64,21 +64,21 @@
 #include <boost/foreach.hpp>
 
 
-static F32 sun_pos_to_time24(F32 sun_pos)
-{
-	return fmodf(sun_pos * 24.0f + 6.f, 24.0f);
-}
-
-static F32 time24_to_sun_pos(F32 time)
-{
-	F32 ret = time - 6.f;
-	if (ret < 0.f)
-	{
-		ret += 24.f;
-	}
-
-	return (ret / 24.f);
-}
+// static F32 sun_pos_to_time24(F32 sun_pos)
+// {
+// 	return fmodf(sun_pos * 24.0f + 6.f, 24.0f);
+// }
+// 
+// static F32 time24_to_sun_pos(F32 time)
+// {
+// 	F32 ret = time - 6.f;
+// 	if (ret < 0.f)
+// 	{
+// 		ret += 24.f;
+// 	}
+// 
+// 	return (ret / 24.f);
+// }
 
 
 FloaterQuickPrefs::QuickPrefsXML::QuickPrefsXML()
