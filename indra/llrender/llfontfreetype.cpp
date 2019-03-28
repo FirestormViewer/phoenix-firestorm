@@ -49,6 +49,8 @@
 #include "llfontbitmapcache.h"
 #include "llgl.h"
 
+#include "llapr.h"
+
 FT_Render_Mode gFontRenderMode = FT_RENDER_MODE_NORMAL;
 
 LLFontManager *gFontManagerp = NULL;
@@ -86,6 +88,7 @@ LLFontManager::LLFontManager()
 LLFontManager::~LLFontManager()
 {
 	FT_Done_FreeType(gFTLibrary);
+	unloadAllFonts(); 	// <FS:ND> FIRE-7570. Only load/mmap fonts once. Release everything here.
 }
 
 
@@ -181,20 +184,37 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 	}
 	
 	int error;
-#ifdef LL_WINDOWS
-	error = ftOpenFace(filename, face_n);
-#else
-	error = FT_New_Face( gFTLibrary,
-						 filename.c_str(),
-						 0,
-						 &mFTFace);
-#endif
+
+// <FS:ND> FIRE-7570. Only load/mmap fonts once.
+	
+// #ifdef LL_WINDOWS
+// 	error = ftOpenFace(filename, face_n);
+// #else
+// 	error = FT_New_Face( gFTLibrary,
+// 						 filename.c_str(),
+// 						 0,
+// 						 &mFTFace);
+//#endif
+
+	FT_Open_Args openArgs;
+	memset( &openArgs, 0, sizeof( openArgs ) );
+	openArgs.memory_base = gFontManagerp->loadFont( filename, openArgs.memory_size );
+
+	if( !openArgs.memory_base )
+		return FALSE;
+
+	openArgs.flags = FT_OPEN_MEMORY;
+
+	error = FT_Open_Face( gFTLibrary, &openArgs, 0, &mFTFace );
+// </FS:ND>
 
 	if (error)
 	{
-#ifdef LL_WINDOWS
-		clearFontStreams();
-#endif
+// <FS:ND> FIRE-7570. Only load/mmap fonts once.
+// #ifdef LL_WINDOWS
+// 		clearFontStreams();
+// #endif
+// </FS:ND>
 		return FALSE;
 	}
 
@@ -211,9 +231,11 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 	{
 		// Clean up freetype libs.
 		FT_Done_Face(mFTFace);
-#ifdef LL_WINDOWS
-		clearFontStreams();
-#endif
+// <FS:ND> FIRE-7570. Only load/mmap fonts once.
+// #ifdef LL_WINDOWS
+// 		clearFontStreams();
+// #endif
+// </FS:ND>
 		mFTFace = NULL;
 		return FALSE;
 	}
@@ -280,23 +302,43 @@ S32 LLFontFreetype::getNumFaces(const std::string& filename)
 
 	S32 num_faces = 1;
 
-#ifdef LL_WINDOWS
-	int error = ftOpenFace(filename, 0);
-		
-	if (error)
-	{
+// <FS:ND> FIRE-7570. Only load/mmap fonts once.
+	FT_Open_Args openArgs;
+	memset( &openArgs, 0, sizeof( openArgs ) );
+	openArgs.memory_base = gFontManagerp->loadFont( filename, openArgs.memory_size );
+	if( !openArgs.memory_base )
 		return 0;
-	}
+
+	openArgs.flags = FT_OPEN_MEMORY;
+
+	int error = FT_Open_Face( gFTLibrary, &openArgs, 0, &mFTFace );
+	if (error)
+		return 0;
 	else
-	{
 		num_faces = mFTFace->num_faces;
-	}
 	
 	FT_Done_Face(mFTFace);
 	clearFontStreams();
 	mFTFace = NULL;
-#endif
 
+// #ifdef LL_WINDOWS
+// 	int error = ftOpenFace(filename, 0);
+// 		
+// 	if (error)
+// 	{
+// 		return 0;
+// 	}
+// 	else
+// 	{
+// 		num_faces = mFTFace->num_faces;
+// 	}
+// 	
+// 	FT_Done_Face(mFTFace);
+// 	clearFontStreams();
+// 	mFTFace = NULL;
+// #endif
+
+// </FS:ND>
 	return num_faces;
 }
 
@@ -770,4 +812,67 @@ void LLFontFreetype::setSubImageLuminanceAlpha(U32 x, U32 y, U32 bitmap_num, U32
 		}
 	}
 }
+
+// <FS:ND> FIRE-7570. Only load/mmap fonts once.
+
+namespace nd
+{
+	namespace fonts
+	{
+		class LoadedFont
+		{
+		public:
+			LoadedFont( std::string aName , std::vector<U8> const &aAddress, long aSize )
+				: mAddress( aAddress )
+			{
+				mName = aName;
+				mSize = aSize;
+				mRefs = 1;
+			}
+
+			std::string mName;
+			std::vector<U8> mAddress;
+			long mSize;
+			U32  mRefs;
+		};
+	}
+}
+
+U8 const* LLFontManager::loadFont( std::string const &aFilename, long &a_Size)
+{
+	a_Size = 0;
+
+	std::map< std::string, std::shared_ptr<nd::fonts::LoadedFont> >::iterator itr = m_LoadedFonts.find( aFilename );
+	if( itr != m_LoadedFonts.end() )
+	{
+		++itr->second->mRefs;
+		a_Size = itr->second->mSize;
+		return &itr->second->mAddress[0];
+	}
+
+	llstat oStat;
+
+	if( 0 != LLFile::stat( aFilename, &oStat ) || 0 == oStat.st_size )
+		return 0;
+
+	a_Size = oStat.st_size;
+	std::vector< U8 > pBuffer;
+	pBuffer.resize( a_Size );
+
+	if( a_Size != LLAPRFile::readEx( aFilename, &pBuffer[0], 0, a_Size ) )
+	{
+		a_Size = 0;
+		return nullptr;
+	}
+
+	auto pCache = std::make_shared<nd::fonts::LoadedFont>( aFilename,  pBuffer, a_Size );
+	itr = m_LoadedFonts.insert( std::make_pair( aFilename, pCache ) ).first;
+	return &itr->second->mAddress[ 0 ];
+}
+
+void LLFontManager::unloadAllFonts()
+{
+	m_LoadedFonts.clear();
+}
+// </FS:ND>
 
