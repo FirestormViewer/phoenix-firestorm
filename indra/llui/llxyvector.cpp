@@ -209,7 +209,7 @@ void LLXYVector::draw()
         mGhostY = pointY;
     }
 
-    if (abs(mValueX) >= mIncrementX || abs(mValueY) >= mIncrementY)
+    if (llabs(mValueX) >= mIncrementX || llabs(mValueY) >= mIncrementY)
     {
         // draw the vector arrow
         drawArrow(centerX, centerY, pointX, pointY, mArrowColor);
