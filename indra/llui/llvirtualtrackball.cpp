@@ -359,17 +359,17 @@ BOOL LLVirtualTrackball::handleHover(S32 x, S32 y, MASK mask)
             F32 rotX = x - mPrevX;
             F32 rotY = y - mPrevY;
 
-            if (abs(rotX) > 1)
+            if (llabs(rotX) > 1)
             {
                 F32 direction = (rotX < 0) ? -1 : 1;
-                delta.setAngleAxis(mIncrementMouse * abs(rotX), 0, direction, 0);  // changing X - rotate around Y axis
+                delta.setAngleAxis(mIncrementMouse * llabs(rotX), 0, direction, 0);  // changing X - rotate around Y axis
                 mValue *= delta;
             }
 
-            if (abs(rotY) > 1)
+            if (llabs(rotY) > 1)
             {
                 F32 direction = (rotY < 0) ? 1 : -1; // reverse for Y (value increases from bottom to top)
-                delta.setAngleAxis(mIncrementMouse * abs(rotY), direction, 0, 0);  // changing Y - rotate around X axis
+                delta.setAngleAxis(mIncrementMouse * llabs(rotY), direction, 0, 0);  // changing Y - rotate around X axis
                 mValue *= delta;
             }
         }
