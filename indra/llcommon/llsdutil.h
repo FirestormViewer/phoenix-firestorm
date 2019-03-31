@@ -454,8 +454,11 @@ LLSD llsd_shallow(LLSD value, LLSD filter = LLSD());
 
 
 // Specialization for generating a hash value from an LLSD block. 
-template <>
-struct boost::hash<LLSD>
+// <FS:ND> GCC 4.9 does not like the specialization in form of boost::hash but rather wants a namespace
+// template <>
+// struct boost::hash<LLSD>
+namespace boost { template <> struct hash<LLSD>
+// </FS:ND>
 {
     typedef LLSD argument_type;
     typedef std::size_t result_type;
@@ -516,5 +519,6 @@ struct boost::hash<LLSD>
         return seed;
     }
 };
+} // <FS:ND/> close namespace
 
 #endif // LL_LLSDUTIL_H
