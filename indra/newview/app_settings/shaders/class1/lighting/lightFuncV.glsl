@@ -28,7 +28,7 @@
 
 float calcDirectionalLight(vec3 n, vec3 l)
 {
-	float a = max(dot(n,l),0.0);
+	float a = max(dot(n,normalize(l)),0.0);
 	return a;
 }
 
@@ -52,7 +52,7 @@ float calcPointLightOrSpotLight(vec3 v, vec3 n, vec4 lp, vec3 ln, float la, floa
 	da *= spot*spot; // GL_SPOT_EXPONENT=2
 
 	//angular attenuation
-	da *= calcDirectionalLight(n, -lv);
+	da *= calcDirectionalLight(n, lv);
 
 	return da;	
 }

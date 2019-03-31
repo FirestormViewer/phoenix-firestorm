@@ -1281,7 +1281,7 @@ void LLSettingsSky::calculateLightSettings() const
 
     // and vary_sunlight will work properly with moon light
     F32 lighty = lightnorm[1];
-    if(fabs(lighty) > 0.001f)
+    if(lighty > 0.001f)
     {
         lighty = 1.f / lighty;
     }
@@ -1295,8 +1295,15 @@ void LLSettingsSky::calculateLightSettings() const
     mSunDiffuse = gammaCorrect(componentMult(sunlight, light_transmittance));
     mSunAmbient = gammaCorrect(componentMult(tmpAmbient, light_transmittance) * 0.5);
 
-    mMoonDiffuse  = gammaCorrect(componentMult(LLColor3::white, light_transmittance) * 0.5f);
-    mMoonAmbient  = gammaCorrect(componentMult(LLColor3::white, light_transmittance) * 0.25f);
+    F32 moon_brightness = getMoonBrightness();
+
+    LLColor3 moonlight_a(0.66, 0.66, 0.66);
+    LLColor3 moonlight_b(0.66, 0.66, 1.0);
+
+    LLColor3 moonlight = lerp(moonlight_b, moonlight_a, moon_brightness);
+    
+    mMoonDiffuse  = gammaCorrect(componentMult(moonlight, light_transmittance) * moon_brightness * 0.25f);
+    mMoonAmbient  = gammaCorrect(componentMult(moonlight_b, light_transmittance) * 0.0125f);
     mTotalAmbient = mSunAmbient;
 }
 

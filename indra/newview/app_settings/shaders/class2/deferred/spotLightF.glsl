@@ -143,21 +143,21 @@ void main()
 	vec3 pos = getPosition(frag.xy).xyz;
 	vec3 lv = trans_center.xyz-pos.xyz;
 	float dist = length(lv);
+
+    if (dist >= size)
+    {
+        discard;
+    }
 	dist /= size;
-	if (dist > 1.0)
-	{
-		discard;
-	}
-	
+
 	float shadow = 1.0;
 	
 	if (proj_shadow_idx >= 0)
 	{
 		vec4 shd = texture2DRect(lightMap, frag.xy);
-		float sh[2];
-		sh[0] = shd.b;
-		sh[1] = shd.a;
-		shadow = min(sh[proj_shadow_idx]+shadow_fade, 1.0);
+        shadow = (proj_shadow_idx == 0) ? shd.b : shd.a;
+        shadow += shadow_fade;
+		shadow = clamp(shadow, 0.0, 1.0);        
 	}
 	
 	vec3 norm = texture2DRect(normalMap, frag.xy).xyz;
@@ -226,9 +226,7 @@ void main()
 		vec4 amb_plcol = texture2DLodAmbient(projectionMap, proj_tc.xy, proj_lod);
 							
 		amb_da += (da*da*0.5+0.5)*(1.0-shadow)*proj_ambiance;
-				
 		amb_da *= dist_atten * noise;
-			
 		amb_da = min(amb_da, 1.0-lit);
 			
 		col += amb_da*color.rgb*diff_tex.rgb*amb_plcol.rgb*amb_plcol.a;
@@ -254,8 +252,9 @@ void main()
 		if (nh > 0.0)
 		{
 			float scol = fres*texture2D(lightFunc, vec2(nh, spec.a)).r*gt/(nh*da);
-			col += dlit*scol*spec.rgb*shadow;
-			//col += spec.rgb;
+			vec3 speccol = dlit*scol*spec.rgb*shadow;
+            speccol = max(speccol, vec3(0));
+			col += speccol;
 		}
 	}	
 	
