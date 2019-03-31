@@ -93,10 +93,6 @@
 			<check_box label="Autoaplicar las configuraciones WL de los terrenos de mis amigos" name="FSWLWhitelistFriends"/>
 			<check_box label="Autoaplicar las configuraciones WL de los terrenos de mis grupos" name="FSWLWhitelistGroups"/>
 			<check_box label="Autoaplicar las configuraciones WL de cualquier parcela" name="FSWLWhitelistAll"/>
-			<text name="could_texture_text" width="225">
-				Textura de nube (reinicio recomendado):
-			</text>
-			<combo_box name="cloud_combo" tool_tip="Selecciona la textura de nube que quieres usar."/>
 		</panel>
 		<panel label="Constr. 1" name="BuildTab">
 			<text name="text_box_objprams" left="17">

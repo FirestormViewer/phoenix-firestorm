@@ -116,10 +116,6 @@
             <check_box label="Applica automaticamente le impostazioni ambiente dai terreni di amici" name="FSWLWhitelistFriends" />
             <check_box label="Applica automaticamente le impostazioni ambiente dai terreni dei miei gruppi" name="FSWLWhitelistGroups" />
             <check_box label="Applica automaticamente le impostazioni ambiente da qualunque terreno" name="FSWLWhitelistAll" />
-            <text name="could_texture_text">
-                Texture nuvole (riavvio consigliato):
-            </text>
-            <combo_box name="cloud_combo" tool_tip="Scegliere la texture desiderata per le nuvole."/>
         </panel>
         <panel label="Costr. 1" name="BuildTab">
             <text name="text_box_objprams" width="250">

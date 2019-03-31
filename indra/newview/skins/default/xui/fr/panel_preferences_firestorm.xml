@@ -78,8 +78,6 @@
 			<check_box label="Appliquer automatiquement les paramètres WL des terrains de mes amis" name="FSWLWhitelistFriends"/>
 			<check_box label="Appliquer automatiquement les paramètres WL des terrains de de mes groupes" name="FSWLWhitelistGroups"/>
 			<check_box label="Appliquer automatiquement les paramètres WL de tous les terrains" name="FSWLWhitelistAll"/>
-			<text name="could_texture_text" width="240">Texture des nuages (Redémarrage requis) :</text>
-			<combo_box name="cloud_combo" tool_tip="Sélectionnez la texture des nuages que vous souhaitez utiliser."/>
 		</panel>
 		<panel label="Construction 1" name="BuildTab">
 			<text name="text_box_objprams">Dimensions par défaut</text>

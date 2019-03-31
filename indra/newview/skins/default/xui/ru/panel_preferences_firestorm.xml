@@ -114,10 +114,6 @@
         <check_box label="Автоматически применять настройки окружающей среды от друзей" name="FSWLWhitelistFriends" />
         <check_box label="Автоматически применять настройки окружающей среды от групп" name="FSWLWhitelistGroups" />
         <check_box label="Автоматически применять настройки окружающей среды от любого участка" name="FSWLWhitelistAll" />
-        <text name="could_texture_text">
-         Текстуры облаков:
-        </text>
-        <combo_box name="cloud_combo" tool_tip="Выберите текстуру, которая вам нравится" />
     </panel>
     <panel label="Строить 1" name="BuildTab">
         <text name="text_box_objprams">

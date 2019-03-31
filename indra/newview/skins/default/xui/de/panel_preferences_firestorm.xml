@@ -133,10 +133,6 @@
 		<check_box label="WL-Einstellungen von Freunden automatisch übernehmen" name="FSWLWhitelistFriends"/>
 		<check_box label="WL-Einstellungen von Land im Besitz meiner Gruppen automatisch übernehmen" name="FSWLWhitelistGroups"/>
 		<check_box label="WL-Einstellungen von allen Parzellen automatisch übernehmen" name="FSWLWhitelistAll"/>
-		<text name="could_texture_text">
-			Wolken-Textur (Neustart empfohlen)
-		</text>
-		<combo_box name="cloud_combo" tool_tip="Wolken-Textur auswählen, die im Viewer verwendet werden soll."/>
 	</panel>
 
 	<!--Build 1-->

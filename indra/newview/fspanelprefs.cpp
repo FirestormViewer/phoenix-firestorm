@@ -35,7 +35,6 @@
 #include "llagent.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
-#include "lldiriterator.h"
 #include "llfloaterreg.h"
 #include "llinventorymodel.h"
 #include "llstartup.h"
@@ -69,8 +68,6 @@ BOOL FSPanelPrefs::postBuild()
 
 	getChild<LLUICtrl>("reset_default_folders")->setCommitCallback(boost::bind(&FSPanelPrefs::onResetDefaultFolders, this));
 
-	populateCloudCombo();
-	
 	LLTextureCtrl* tex_ctrl = getChild<LLTextureCtrl>("texture control");
 	tex_ctrl->setCommitCallback(boost::bind(&FSPanelPrefs::onCommitTexture, this, _2));
 	tex_ctrl->setDefaultImageAssetID(LLUUID(gSavedSettings.getString("DefaultObjectTexture")));
@@ -220,23 +217,6 @@ void FSPanelPrefs::onBeamDelete()
 		}
 	}
 	refreshBeamLists();
-}
-
-void FSPanelPrefs::populateCloudCombo()
-{
-	LLComboBox* cloud_combo = findChild<LLComboBox>("cloud_combo");
-	if (cloud_combo)
-	{
-		const std::string cloudDir(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight" + gDirUtilp->getDirDelimiter() + "clouds"));
-
-		LLDirIterator dir_iter(cloudDir, "*.tga");
-		std::string file;
-		while (dir_iter.next(file))
-		{
-			cloud_combo->add(file);
-		}
-		cloud_combo->setSimple(gSavedSettings.getString("FSCloudTexture"));
-	}
 }
 
 void FSPanelPrefs::onCommitTexture(const LLSD& data)

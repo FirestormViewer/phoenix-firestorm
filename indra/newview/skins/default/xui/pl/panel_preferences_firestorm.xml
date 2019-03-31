@@ -117,10 +117,6 @@
         <check_box label="Automatycznie stosuj ustawienia WL na działkach znajomych" name="FSWLWhitelistFriends" />
         <check_box label="Automatycznie stosuj ustawienia WL na działkach moich grup" name="FSWLWhitelistGroups" />
         <check_box label="Automatycznie stosuj ustawienia WL na wszystkich działkach" name="FSWLWhitelistAll" />
-        <text name="could_texture_text">
-         Tekstura chmur (restart zalecany):
-        </text>
-        <combo_box name="cloud_combo" tool_tip="Wybierz teksturę chmur, jakiej chcesz użyć." />
     </panel>
     <panel label="Buduj 1" name="BuildTab">
         <text name="text_box_objprams">
