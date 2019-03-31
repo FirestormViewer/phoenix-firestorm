@@ -171,16 +171,6 @@
             No Limit
         </text>
  <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
-        <check_box
-            control_name="UseEnvironmentFromRegion"
-            follows="left|top"
-            height="20"
-            label="Use Region Windlight"
-            layout="topleft"
-            left="2"
-            name="UseRegionWindlight"
-            top_pad="0"
-            width="200" />
         <text
             type="string"
             length="1"

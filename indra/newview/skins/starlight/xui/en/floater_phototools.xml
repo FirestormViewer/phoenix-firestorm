@@ -97,16 +97,6 @@
 				 tool_tip="This will enable full WindLight functionality (atmospheric shaders). If you cannot enable this feature, ensure that Basic Shaders are enabled below."
 				 width="110">
 				</check_box>
-				<check_box
-				 control_name="UseEnvironmentFromRegion"
-				 follows="left|top"
-				 height="16"
-				 label="Use Region Windlight"
-				 layout="topleft"
-				 left="5"
-				 name="UseRegionWindlight"
-				 top_pad="2"
-				 width="240"/>
 			</panel>
 
 			<panel
