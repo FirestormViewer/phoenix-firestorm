@@ -15,7 +15,6 @@
 				<text name="IndirectMaxComplexityText">
 					Nielimit.
 				</text>
-				<check_box label="Używaj Windlight regionu" name="UseRegionWindlight" />
 				<text name="WL Sky" tool_tip="Ustawienia systemu Windlight dla Twojego nieba">
 					Niebo WL:
 				</text>

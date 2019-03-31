@@ -199,7 +199,6 @@ void FloaterQuickPrefs::onOpen(const LLSD& key)
 
 void FloaterQuickPrefs::initCallbacks()
 {
-	getChild<LLUICtrl>("UseRegionWindlight")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeUseRegionWindlight, this));
 	getChild<LLUICtrl>("WaterPresetsCombo")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeWaterPreset, this));
 	getChild<LLUICtrl>("WLPresetsCombo")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeSkyPreset, this));
 	getChild<LLUICtrl>("DCPresetsCombo")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeDayCyclePreset, this));
@@ -572,7 +571,6 @@ BOOL FloaterQuickPrefs::postBuild()
 	mWLPresetsCombo = getChild<LLComboBox>("WLPresetsCombo");
 	mDayCyclePresetsCombo = getChild<LLComboBox>("DCPresetsCombo");
 	mWLSunPos = getChild<LLMultiSliderCtrl>("WLSunPos");
-	mUseRegionWindlight = getChild<LLCheckBoxCtrl>("UseRegionWindlight");
 	mWLSunPos->addSlider(12.f);
 
 	initCallbacks();
@@ -792,21 +790,6 @@ void FloaterQuickPrefs::selectDayCyclePreset(const LLSD& preset)
 	LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
 	LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
 	LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST, true);
-}
-
-void FloaterQuickPrefs::onChangeUseRegionWindlight()
-{
-	// [EEPMERGE]
-	//LLEnvManagerNew &envmgr = LLEnvManagerNew::instance();
-	//// reset all environmental settings to track the region defaults, make this reset 'sticky' like the other sun settings.
-	//bool use_fixed_sky = !mUseRegionWindlight->get();
-	//bool use_region_settings = !use_fixed_sky;
-	//envmgr.setUserPrefs(envmgr.getWaterPresetName(),
-	//			envmgr.getSkyPresetName(),
-	//			envmgr.getDayCycleName(),
-	//			use_fixed_sky, use_region_settings,
-	//			(gSavedSettings.getBOOL("FSInterpolateSky") || gSavedSettings.getBOOL("FSInterpolateWater")));
-	// [/EEPMERGE]
 }
 
 void FloaterQuickPrefs::onChangeWaterPreset()
@@ -1229,7 +1212,6 @@ void FloaterQuickPrefs::enableWindlightButtons(BOOL enable)
 	childSetEnabled("WWPrevPreset", enable);
 	childSetEnabled("WWNextPreset", enable);
 	childSetEnabled("ResetToRegionDefault", enable);
-	childSetEnabled("UseRegionWindlight", enable);
 	childSetEnabled("DCPresetsCombo", enable);
 	childSetEnabled("DCPrevPreset", enable);
 	childSetEnabled("DCNextPreset", enable);

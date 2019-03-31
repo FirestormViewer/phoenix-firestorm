@@ -5,7 +5,6 @@
 			<layout_panel name="wl_options_panel">
 				<text name="HoverHeightLabel" tool_tip="Règle la hauteur de votre avatar">Voltigement</text>
 				<text name="Maximum bandwidth" tool_tip="Règle la bande passante en Kbps (kilobits par seconde)">Bande passante</text>
-				<check_box label="Params. Environnementaux de la région" name="UseRegionWindlight"/>
 				<text name="WL Sky" tool_tip="Paramètres atmosphériques">Env. ciel</text>
 				<text name="WL Water" tool_tip="Paramètres aquatiques">Env. eau</text>
 				<text name="Day Cycle" tool_tip="Paramètres du cycle journalier">Jour/Nuit</text>

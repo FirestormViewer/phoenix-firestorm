@@ -80,7 +80,6 @@ private:
 	void loadSkyPresets(const std::multimap<std::string, LLUUID>& sky_map);
 	void loadWaterPresets(const std::multimap<std::string, LLUUID>& water_map);
 
-	void onChangeUseRegionWindlight();
 	void onChangeWaterPreset();
 	void onChangeSkyPreset();
 	void onChangeDayCyclePreset();
@@ -120,7 +119,6 @@ private:
 	LLComboBox*			mWLPresetsCombo;
 	LLComboBox*			mWaterPresetsCombo;
 	LLComboBox*			mDayCyclePresetsCombo;
-	LLCheckBoxCtrl*		mUseRegionWindlight;
 
 	// Phototools additions
 	LLCheckBoxCtrl*		mCtrlShaderEnable;
