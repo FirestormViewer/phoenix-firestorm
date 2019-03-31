@@ -5,7 +5,7 @@
     can_resize="false"
     can_dock="true"
     can_close="true"
-    height="201"
+    height="183"
     width="260"
     layout="topleft"
     name="quickprefs"
@@ -59,7 +59,7 @@
       left="0"
       top_pad="0"
       width="260"
-      height="175"
+      height="157"
       orientation="vertical">
 
      <layout_panel
@@ -67,7 +67,7 @@
       follows="all"
       name="wl_options_panel"
       invisibility_control="QuickPrefsEditMode"
-      height="175">
+      height="157">
         <text
             type="string"
             length="1"
@@ -171,16 +171,6 @@
             No Limit
         </text>
  <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
-        <check_box
-            control_name="UseEnvironmentFromRegion"
-            follows="left|top"
-            height="20"
-            label="Use Region Windlight"
-            layout="topleft"
-            left="2"
-            name="UseRegionWindlight"
-            top_pad="0"
-            width="200" />
         <text
             type="string"
             length="1"

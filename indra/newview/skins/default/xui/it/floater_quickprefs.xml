@@ -15,7 +15,6 @@
 				<text name="IndirectMaxComplexityText">
 					Ness. limite
 				</text>
-				<check_box control_name="UseEnvironmentFromRegion" label="Usa ambiente regione" name="UseRegionWindlight"/>
 				<text name="WL Sky" tool_tip="Preset ambiente per il cielo">
 					Am. cielo:
 				</text>

@@ -7,7 +7,6 @@
 					Ancho de banda:
 				</text>
 				<slider name="max_bandwidth"/>
-				<check_box label="Usar WL de la región" name="UseRegionWindlight" width="200"/>
 				<text name="WL Sky" tool_tip="Preselecciones Windlight para el cielo" width="120">
 					Cielo WL:
 				</text>

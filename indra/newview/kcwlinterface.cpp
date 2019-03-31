@@ -62,7 +62,7 @@ KCWindlightInterface::KCWindlightInterface() :
 	mDisabled(false),
 	mUsingParcelWLSkyDefault(false)
 {
-	if (!gSavedSettings.getBOOL("FSWLParcelEnabled") || !gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways"))
+	if (!gSavedSettings.getBOOL("FSWLParcelEnabled"))
 	{
 		mEventTimer.stop();
 		mDisabled = true;
@@ -684,8 +684,7 @@ void KCWindlightInterface::setWL_Status(bool pwl_status)
 bool KCWindlightInterface::checkSettings()
 {
 	static LLCachedControl<bool> sFSWLParcelEnabled(gSavedSettings, "FSWLParcelEnabled");
-	static LLCachedControl<bool> sUseEnvironmentFromRegionAlways(gSavedSettings, "UseEnvironmentFromRegionAlways");
-	if (!sFSWLParcelEnabled || !sUseEnvironmentFromRegionAlways ||
+	if (!sFSWLParcelEnabled ||
 		(rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)))
 	{
 		// The setting changed, clear everything
