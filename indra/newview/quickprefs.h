@@ -71,7 +71,7 @@ private:
 	void selectWaterPreset(const LLSD& preset);
 	void selectDayCyclePreset(const LLSD& preset);
 
-	bool isValidPresetName(const std::string& preset_name);
+	bool isValidPreset(const LLSD& preset);
 	void stepComboBox(LLComboBox* ctrl, bool forward);
 
 	void initCallbacks();

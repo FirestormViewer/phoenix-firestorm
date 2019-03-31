@@ -737,12 +737,13 @@ void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_pa
 }
 
 
-bool FloaterQuickPrefs::isValidPresetName(const std::string& preset_name)
+bool FloaterQuickPrefs::isValidPreset(const LLSD& preset)
 {
-	return (!preset_name.empty() &&
-		preset_name != PRESET_NAME_REGION_DEFAULT &&
-		preset_name != PRESET_NAME_DAY_CYCLE &&
-		preset_name != PRESET_NAME_NONE);
+	return (!preset.asString().empty() &&
+		!preset.asUUID().isNull() &&
+		preset.asString() != PRESET_NAME_REGION_DEFAULT &&
+		preset.asString() != PRESET_NAME_DAY_CYCLE &&
+		preset.asString() != PRESET_NAME_NONE);
 }
 
 void FloaterQuickPrefs::stepComboBox(LLComboBox* ctrl, bool forward)
@@ -750,10 +751,11 @@ void FloaterQuickPrefs::stepComboBox(LLComboBox* ctrl, bool forward)
 	S32 increment = (forward ? 1 : -1);
 	S32 lastitem = ctrl->getItemCount() - 1;
 	S32 curid = ctrl->getCurrentIndex();
-	std::string preset_name;
-	std::string start_preset_name;
+	S32 startid = curid;
+    // std::string preset_name;
+	// std::string start_preset_name;
 
-	start_preset_name = ctrl->getSelectedItemLabel();
+	// start_preset_name = ctrl->getSelectedValue().asString();
 	do
 	{
 		curid += increment;
@@ -766,9 +768,10 @@ void FloaterQuickPrefs::stepComboBox(LLComboBox* ctrl, bool forward)
 			curid = 0;
 		}
 		ctrl->setCurrentByIndex(curid);
-		preset_name = ctrl->getSelectedItemLabel();
+		// preset_name = ctrl->getSelectedValue().asString();
 	}
-	while (!isValidPresetName(preset_name) && preset_name != start_preset_name);
+	while (!isValidPreset(ctrl->getSelectedValue()) && curid != startid);
+	// while (!isValidPreset(ctrl->getSelectedValue()) && preset_name != start_preset_name);
 }
 
 void FloaterQuickPrefs::selectSkyPreset(const LLSD& preset)
@@ -794,8 +797,7 @@ void FloaterQuickPrefs::selectDayCyclePreset(const LLSD& preset)
 
 void FloaterQuickPrefs::onChangeWaterPreset()
 {
-	std::string preset_name = mWaterPresetsCombo->getSelectedItemLabel();
-	if (!isValidPresetName(preset_name))
+	if (!isValidPreset(mWaterPresetsCombo->getSelectedValue()))
 	{
 		stepComboBox(mWaterPresetsCombo, true);
 	}
@@ -804,8 +806,7 @@ void FloaterQuickPrefs::onChangeWaterPreset()
 
 void FloaterQuickPrefs::onChangeSkyPreset()
 {
-	std::string preset_name = mWLPresetsCombo->getSelectedItemLabel();
-	if (!isValidPresetName(preset_name))
+	if (!isValidPreset(mWLPresetsCombo->getSelectedValue()))
 	{
 		stepComboBox(mWLPresetsCombo, true);
 	}
@@ -814,8 +815,7 @@ void FloaterQuickPrefs::onChangeSkyPreset()
 
 void FloaterQuickPrefs::onChangeDayCyclePreset()
 {
-	std::string preset_name = mDayCyclePresetsCombo->getSelectedItemLabel();
-	if (!isValidPresetName(preset_name))
+	if (!isValidPreset(mDayCyclePresetsCombo->getSelectedValue()))
 	{
 		stepComboBox(mDayCyclePresetsCombo, true);
 	}
@@ -904,10 +904,12 @@ void FloaterQuickPrefs::onSunMoved()
 
 void FloaterQuickPrefs::onClickResetToRegionDefault()
 {
-	// [EEPMERGE]
-	//LLWLParamManager::instance().mAnimator.stopInterpolation();
-	//LLEnvManagerNew::instance().useRegionSettings();
-	// [/EEPMERGE]
+    mWLPresetsCombo->setValue(LLSD(PRESET_NAME_REGION_DEFAULT));
+	mWaterPresetsCombo->setValue(LLSD(PRESET_NAME_REGION_DEFAULT));
+
+	LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_LOCAL);
+    LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+    LLEnvironment::instance().updateEnvironment();
 }
 
 // This method is invoked by LLEnvManagerNew when a particular preset is applied
@@ -985,6 +987,7 @@ void FloaterQuickPrefs::setSelectedDayCycle(const std::string& preset_name)
 {
 	mDayCyclePresetsCombo->setValue(LLSD(preset_name));
 	mWLPresetsCombo->setValue(LLSD(PRESET_NAME_DAY_CYCLE));
+	mWaterPresetsCombo->setValue(LLSD(PRESET_NAME_DAY_CYCLE));
 }
 
 // Phototools additions
