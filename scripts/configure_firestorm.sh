@@ -374,8 +374,8 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
         fi
 
     elif [ $PLATFORM == "windows" ] ; then
-        rm -rf build-vc120-${AUTOBUILD_ADDRSIZE}
-        mkdir -p build-vc120-${AUTOBUILD_ADDRSIZE}/logs
+        rm -rf build-vc${AUTOBUILD_VSVER:-120}-${AUTOBUILD_ADDRSIZE}
+        mkdir -p build-vc${AUTOBUILD_VSVER:-120}-${AUTOBUILD_ADDRSIZE}/logs
 
     elif [ $PLATFORM == "linux32" ] ; then
         if [ "${AUTOBUILD_ADDRSIZE}" == "64" ]
