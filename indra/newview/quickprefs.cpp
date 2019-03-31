@@ -912,66 +912,6 @@ void FloaterQuickPrefs::onClickResetToRegionDefault()
     LLEnvironment::instance().updateEnvironment();
 }
 
-// This method is invoked by LLEnvManagerNew when a particular preset is applied
-// static
-void FloaterQuickPrefs::updateParam(EQuickPrefUpdateParam param, const std::string& preset_name)
-{
-	FloaterQuickPrefs* qp_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>("quickprefs");
-	FloaterQuickPrefs* pt_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>(PHOTOTOOLS_FLOATER);
-
-	switch (param)
-	{
-		case QP_PARAM_SKY:
-			qp_floater->setSelectedSky(preset_name);
-			pt_floater->setSelectedSky(preset_name);
-			break;
-		case QP_PARAM_WATER:
-			qp_floater->setSelectedWater(preset_name);
-			pt_floater->setSelectedWater(preset_name);
-			break;
-		case QP_PARAM_DAYCYCLE:
-			qp_floater->setSelectedDayCycle(preset_name);
-			pt_floater->setSelectedDayCycle(preset_name);
-			break;
-		default:
-			break;
-	}
-}
-
-// static
-void FloaterQuickPrefs::reloadPresetsAndSelect(EQuickPrefUpdateParam param)
-{
-#if 0 // [EEPMERGE]
-	FloaterQuickPrefs* qp_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>("quickprefs");
-	FloaterQuickPrefs* pt_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>(PHOTOTOOLS_FLOATER);
-
-	std::string preset_name;
-
-	switch (param)
-	{
-		case QP_PARAM_SKY:
-			qp_floater->loadSkyPresets();
-			pt_floater->loadSkyPresets();
-			preset_name = LLEnvManagerNew::instance().getSkyPresetName();
-			break;
-		case QP_PARAM_WATER:
-			qp_floater->loadWaterPresets();
-			pt_floater->loadWaterPresets();
-			preset_name = LLEnvManagerNew::instance().getWaterPresetName();
-			break;
-		case QP_PARAM_DAYCYCLE:
-			qp_floater->loadDayCyclePresets();
-			pt_floater->loadDayCyclePresets();
-			preset_name = LLEnvManagerNew::instance().getDayCycleName();
-			break;
-		default:
-			break;
-	}
-
-	updateParam(param, preset_name);
-#endif // [EEPMERGE]
-}
-
 void FloaterQuickPrefs::setSelectedSky(const std::string& preset_name)
 {
 	mWLPresetsCombo->setValue(LLSD(preset_name));
