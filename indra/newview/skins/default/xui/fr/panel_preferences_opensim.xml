@@ -28,7 +28,6 @@
 			</panel>
 		</panel>
 		<panel label="Divers" name="opensim_misc_panel">
-			<check_box label="Activer les paramètres d'éclairage partagé par région" name="Lightshare"/>
 			<check_box label="Recherche de débogage" name="DebugSearch"/>
 			<text name="search_url_debug_text">Écrase la page actuelle de recherche : (Inactif si vide)</text>
 			<button label="Effacer" label_selected="Effacer" name="clear_search_url_debug"/>

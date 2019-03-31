@@ -182,7 +182,6 @@ set(viewer_SOURCE_FILES
     fsfloatervramusage.cpp
     fsfloaterwearablefavorites.cpp
     fskeywords.cpp
-    fslightshare.cpp
     fslslbridge.cpp
     fslslbridgerequest.cpp
     fslslpreproc.cpp
@@ -938,7 +937,6 @@ set(viewer_HEADER_FILES
     fsfloaterwearablefavorites.h
     fsgridhandler.h
     fskeywords.h
-    fslightshare.h
     fslslbridge.h
     fslslbridgerequest.h
     fslslpreproc.h

@@ -220,11 +220,6 @@ private:
 	 */
 	void onParcelWLClicked();
 
-	/** <FS:CR> FIRE-5118 - Lightshare support
-	 * Handles clicks on the lightshare icon.
-	 */
-	void onLightshareClicked();
-	
 	/**
 	 * Called when agent changes the parcel.
 	 */
@@ -361,9 +356,6 @@ private:
 	LLIconCtrl*				mParcelIcon[ICON_COUNT];
 	LLParcelChangeObserver*	mParcelChangedObserver;
 	LLButton* 				mPWLBtn;
-	// <FS:CR> FIRE-5118 - Lightshare support
-	LLButton*				mLightshareBtn;
-	// </FS:CR>
 	LLPanel*				mBalancePanel;
 	LLButton*				mBuyParcelBtn;
 	LLPanel*				mTimeMediaPanel;

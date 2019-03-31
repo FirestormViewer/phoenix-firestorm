@@ -87,7 +87,6 @@
 #include <iomanip>
 
 // Firestorm includes
-#include "fslightshare.h"
 #include "fssearchableui.h"
 #include "kcwlinterface.h"
 #include "llagentui.h"
@@ -437,11 +436,6 @@ BOOL LLStatusBar::postBuild()
 
 	mPWLBtn = getChild<LLButton>("status_wl_btn");
 	mPWLBtn->setClickedCallback(boost::bind(&LLStatusBar::onParcelWLClicked, this));
-	
-	// <FS:CR> FIRE-5118 - Lightshare support
-	mLightshareBtn = getChild<LLButton>("status_lightshare_btn");
-	mLightshareBtn->setClickedCallback(boost::bind(&LLStatusBar::onLightshareClicked, this));
-	// </FS:CR>
 
 	mBalancePanel = getChild<LLPanel>("balance_bg");
 	mTimeMediaPanel = getChild<LLPanel>("time_and_media_bg");
@@ -1264,7 +1258,6 @@ void LLStatusBar::updateParcelIcons()
 		//bool has_pwl		= KCWindlightInterface::instance().getWLset();
 		bool has_pwl		= false;
 		// [EEPMERGE]
-		bool has_lightshare	= FSLightshare::getInstance()->getState();
 		bool pathfinding_dynamic_enabled = agent_region->dynamicPathfindingEnabled();
 
 		bool pathfinding_navmesh_dirty = LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded();
@@ -1298,8 +1291,6 @@ void LLStatusBar::updateParcelIcons()
 		mBuyParcelBtn->setVisible(is_for_sale);
 		mPWLBtn->setVisible(has_pwl);
 		mPWLBtn->setEnabled(has_pwl);
-		mLightshareBtn->setVisible(has_lightshare);
-		mLightshareBtn->setEnabled(has_lightshare);
 		mScriptOut->setVisible(LLHUDIcon::scriptIconsNearby());
 	}
 	else
@@ -1311,8 +1302,7 @@ void LLStatusBar::updateParcelIcons()
 		mDamageText->setVisible(false);
 		mBuyParcelBtn->setVisible(false);
 		mPWLBtn->setVisible(false);
-		mLightshareBtn->setVisible(false);
-		mScriptOut->setVisible(FALSE);
+		mScriptOut->setVisible(false);
 	}
 
 	layoutParcelIcons();
@@ -1350,7 +1340,6 @@ void LLStatusBar::layoutParcelIcons()
 	}
 	left = layoutWidget(mBuyParcelBtn, left);
 	left = layoutWidget(mPWLBtn, left);
-	left = layoutWidget(mLightshareBtn, left);
 
 	LLRect infoTextRect = mParcelInfoText->getRect();
 	infoTextRect.mLeft = left;
@@ -1473,12 +1462,6 @@ void LLStatusBar::onParcelWLClicked()
 {
 	// [EEPMERGE]
 	//KCWindlightInterface::instance().onClickWLStatusButton();
-}
-
-void LLStatusBar::onLightshareClicked()
-{
-	// [EEPMERGE] Might need to go
-	FSLightshare::getInstance()->processLightshareReset();
 }
 
 void LLStatusBar::onBuyLandClicked()

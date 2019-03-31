@@ -3,7 +3,6 @@
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Le terrain est à vendre"/>
 		<button name="status_wl_btn" tool_tip="Le terrain possède des réglages WL"/>
-		<button name="status_lightshare_btn" tool_tip="Paramètres Lightshare"/>
 		<text tool_tip="Nom du terrain dans lequel vous vous situez. Cliquez pour plus d'informations." name="parcel_info_text"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">Paquet perdu</panel.string>

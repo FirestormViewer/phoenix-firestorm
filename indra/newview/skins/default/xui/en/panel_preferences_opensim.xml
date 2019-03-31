@@ -382,16 +382,6 @@
 	label="Miscellaneous"
 	name="opensim_misc_panel">
 	  <check_box
-      control_name="FSOpenSimLightshare"
-      height="16"
-      initial_value="true"
-      label="Enable region Lightshare settings"
-      layout="topleft"
-      left="30"
-      name="Lightshare"
-      top="12"
-      width="256" />
-	  <check_box
       control_name="DebugSearch"
       height="16"
       initial_value="false"
@@ -399,7 +389,7 @@
       layout="topleft"
       left="30"
       name="DebugSearch"
-      top_pad="1"
+      top="12"
       width="256" />
 	  <text
 		  type="string"

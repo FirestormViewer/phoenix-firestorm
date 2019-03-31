@@ -144,7 +144,6 @@
 #include "fsfloaterplacedetails.h"
 #include "fsradar.h"
 #include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
-#include "fslightshare.h" // <FS:CR> FIRE-5118 - Lightshare support
 #include "fslslbridge.h"
 #include "fsmoneytracker.h"
 #include "llfloaterbump.h"
@@ -3668,9 +3667,6 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 		LLWorldMap::getInstance()->cancelTracking();
 	}
 
-	// <FS:CR> FIRE-5118 - Lightshare support
-	FSLightshare::getInstance()->processLightshareReset();
-	// </FS:CR>
 /*
 	// send camera update to new region
 	gAgentCamera.updateCamera();

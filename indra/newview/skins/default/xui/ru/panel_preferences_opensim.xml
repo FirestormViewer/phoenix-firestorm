@@ -52,7 +52,6 @@
 			</panel>
 		</panel>
 		<panel label="Разное" name="opensim_misc_panel">
-			<check_box label="Включить настройки освещения региона" name="Lightshare" />
 			<check_box label="Отладка поиска" name="DebugSearch" />
 			<text name="search_url_debug_text">
 				Замена текущего url поиска: (без замены если пусто)
