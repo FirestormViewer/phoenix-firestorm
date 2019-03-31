@@ -5,7 +5,7 @@
     can_resize="false"
     can_dock="true"
     can_close="true"
-    height="201"
+    height="183"
     width="260"
     layout="topleft"
     name="quickprefs"
@@ -59,7 +59,7 @@
       left="0"
       top_pad="0"
       width="260"
-      height="175"
+      height="157"
       orientation="vertical">
 
      <layout_panel
@@ -67,7 +67,7 @@
       follows="all"
       name="wl_options_panel"
       invisibility_control="QuickPrefsEditMode"
-      height="175">
+      height="157">
         <text
             type="string"
             length="1"
