@@ -384,6 +384,8 @@ with the same filename but different name
   <texture name="Inv_InboxClosed"		file_name="icons/Inv_SysClosed.png" />
   <texture name="Inv_OutboxOpen"		file_name="icons/Inv_SysOpen.png" />
   <texture name="Inv_OutboxClosed"		file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_SettingsOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_SettingsClosed"	file_name="icons/Inv_SysClosed.png" />
   
  <!-- Firstorm virtual system folders -->
   <texture name="Inv_FirestormOpen"		file_name="icons/Inv_SysOpen.png" />
