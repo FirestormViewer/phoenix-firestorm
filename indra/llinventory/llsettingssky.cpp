@@ -720,9 +720,9 @@ LLSD LLSettingsSky::defaults(const LLSettingsBase::TrackPosition& position)
         moonquat = convert_azimuth_and_altitude_to_quat(altitude + (F_PI * 0.125f), azimuth + (F_PI * 0.125f));
 
         // Magic constants copied form dfltsetting.xml 
-        dfltsetting[SETTING_CLOUD_COLOR]        = LLColor4(0.4099, 0.4099, 0.4099, 0.0).getValue();
-        dfltsetting[SETTING_CLOUD_POS_DENSITY1] = LLColor4(1.0000, 0.5260, 1.0000, 0.0).getValue();
-        dfltsetting[SETTING_CLOUD_POS_DENSITY2] = LLColor4(1.0000, 0.5260, 1.0000, 0.0).getValue();
+        dfltsetting[SETTING_CLOUD_COLOR]        = LLColor4(0.4099f, 0.4099f, 0.4099f, 0.0f).getValue();
+        dfltsetting[SETTING_CLOUD_POS_DENSITY1] = LLColor4(1.0000f, 0.5260f, 1.0000f, 0.0f).getValue();
+        dfltsetting[SETTING_CLOUD_POS_DENSITY2] = LLColor4(1.0000f, 0.5260f, 1.0000f, 0.0f).getValue();
         dfltsetting[SETTING_CLOUD_SCALE]        = LLSD::Real(0.4199);
         dfltsetting[SETTING_CLOUD_SCROLL_RATE]  = LLSDArray(0.0f)(0.0f);
         dfltsetting[SETTING_CLOUD_SHADOW]       = LLSD::Real(0.2699);
@@ -731,14 +731,14 @@ LLSD LLSettingsSky::defaults(const LLSettingsBase::TrackPosition& position)
         dfltsetting[SETTING_DOME_OFFSET]        = LLSD::Real(0.96f);
         dfltsetting[SETTING_DOME_RADIUS]        = LLSD::Real(15000.f);
         dfltsetting[SETTING_GAMMA]              = LLSD::Real(1.0);
-        dfltsetting[SETTING_GLOW]               = LLColor4(5.000, 0.0010, -0.4799, 1.0).getValue();
+        dfltsetting[SETTING_GLOW]               = LLColor4(5.000f, 0.0010f, -0.4799f, 1.0f).getValue();
     
         dfltsetting[SETTING_MAX_Y]              = LLSD::Real(1605);
         dfltsetting[SETTING_MOON_ROTATION]      = moonquat.getValue();
         dfltsetting[SETTING_MOON_BRIGHTNESS]    = LLSD::Real(0.5f);
 
         dfltsetting[SETTING_STAR_BRIGHTNESS]    = LLSD::Real(256.0000);
-        dfltsetting[SETTING_SUNLIGHT_COLOR]     = LLColor4(0.7342, 0.7815, 0.8999, 0.0).getValue();
+        dfltsetting[SETTING_SUNLIGHT_COLOR]     = LLColor4(0.7342f, 0.7815f, 0.8999f, 0.0f).getValue();
         dfltsetting[SETTING_SUN_ROTATION]       = sunquat.getValue();
 
         dfltsetting[SETTING_BLOOM_TEXTUREID]    = GetDefaultBloomTextureId();
@@ -1297,8 +1297,8 @@ void LLSettingsSky::calculateLightSettings() const
 
     F32 moon_brightness = getMoonBrightness();
 
-    LLColor3 moonlight_a(0.66, 0.66, 0.66);
-    LLColor3 moonlight_b(0.66, 0.66, 1.0);
+    LLColor3 moonlight_a(0.66f, 0.66f, 0.66f);
+    LLColor3 moonlight_b(0.66f, 0.66f, 1.0f);
 
     LLColor3 moonlight = lerp(moonlight_b, moonlight_a, moon_brightness);
     
