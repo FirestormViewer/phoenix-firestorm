@@ -1134,6 +1134,9 @@ bool LLAppViewer::init()
 
 	gGLActive = FALSE;
 
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.0
+#ifdef LL_RELEASE_FOR_DOWNLOAD
+// [/SL:KB]
 	LLProcess::Params updater;
 	updater.desc = "updater process";
 	// Because it's the updater, it MUST persist beyond the lifespan of the
@@ -1161,7 +1164,10 @@ bool LLAppViewer::init()
 
 	// Run the updater. An exception from launching the updater should bother us.
 	LLLeap::create(updater, true);
-
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.0
+#endif // LL_RELEASE_FOR_DOWNLOAD
+// [/SL:KB]
+ 
 	// Iterate over --leap command-line options. But this is a bit tricky: if
 	// there's only one, it won't be an array at all.
 	LLSD LeapCommand(gSavedSettings.getLLSD("LeapCommand"));
