@@ -112,6 +112,7 @@ public:
 	/*virtual*/ void allowLanguageTextInput(LLPreeditor *preeditor, BOOL b);
 	/*virtual*/ void interruptLanguageTextInput();
 	/*virtual*/ void spawnWebBrowser(const std::string& escaped_url, bool async);
+	/*virtual*/ F32 getSystemUISize();
 	/*virtual*/ void openFile(const std::string& file_name);
 	/*virtual*/ void setTitle(const std::string& title);
 
@@ -138,7 +139,7 @@ protected:
 		BOOL ignore_pixel_depth,
 		//U32 fsaa_samples);
 		U32 fsaa_samples, BOOL useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
-	~LLWindowMacOSX();
+		~LLWindowMacOSX();
 
 	//void	initCursors();
 	void	initCursors(BOOL useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
