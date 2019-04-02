@@ -1537,10 +1537,6 @@ Se il messaggio si ripresenta, controllare su [SUPPORT_SITE].
 		L&apos;apertura di pagine da una sorgente sconosciuta può mettere a rischio il computer.
 		<usetemplate ignoretext="Lancia il browser per consultare una pagina web" name="okcancelignore" notext="Annulla" />
 	</notification>
-	<notification name="SystemUIScaleFactorChanged">
-		Il fattore di scala dell&apos; interfaccia è stato modificato. Aprire la pagina delle impostazioni?
-		<usetemplate name="okcancelbuttons" notext="Annulla" />
-	</notification>
 	<notification name="WebLaunchJoinNow">
 		Vuoi andare su [http://secondlife.com/account/ Dashboard] per gestire il tuo account?
 		<usetemplate ignoretext="Lancia il browser per gestire il mio account" name="okcancelignore" notext="Annulla" />
