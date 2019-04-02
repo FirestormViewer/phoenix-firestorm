@@ -43,6 +43,16 @@ typedef struct FT_FaceRec_* LLFT_Face;
 struct FT_StreamRec_;
 typedef struct FT_StreamRec_ LLFT_Stream;
 
+// <FS:ND> FIRE-7570. Only load/mmap fonts once.
+namespace nd
+{
+	namespace fonts
+	{
+		class LoadedFont;
+	}
+}
+// </FS:ND>
+
 class LLFontManager
 {
 public:
@@ -52,6 +62,14 @@ public:
 private:
 	LLFontManager();
 	~LLFontManager();
+// <FS:ND> FIRE-7570. Only load/mmap fonts once.
+public:
+	U8 const *loadFont( std::string const &aFilename, long &a_Size );
+
+private:
+	void unloadAllFonts();
+	std::map< std::string, std::shared_ptr<nd::fonts::LoadedFont> > m_LoadedFonts;
+// </FS:ND>
 };
 
 struct LLFontGlyphInfo
