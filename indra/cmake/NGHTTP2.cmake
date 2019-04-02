@@ -9,7 +9,9 @@ else (USESYSTEMLIBS)
   use_prebuilt_binary(nghttp2)
   if (WINDOWS)
     set(NGHTTP2_LIBRARIES 
-      ${ARCH_PREBUILT_DIRS_RELEASE}/nghttp2.lib
+      # <FS:Ansariel> ARCH_PREBUILT_DIRS_RELEASE is "." and would cause searching for the lib in the wrong place when not using VS
+      #${ARCH_PREBUILT_DIRS_RELEASE}/nghttp2.lib
+      nghttp2.lib
       )
   elseif (DARWIN)
     set(NGHTTP2_LIBRARIES libnghttp2.dylib)

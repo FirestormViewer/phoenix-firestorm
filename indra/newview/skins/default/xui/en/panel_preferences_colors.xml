@@ -1458,7 +1458,6 @@
        name="FSMiniMapWhisperRing"
        follows="left|top"
        height="24"
-       label_height="0"
        layout="topleft"
        top_pad="8"
        left="40" />
@@ -1503,7 +1502,6 @@
        name="FSMiniMapChatRing"
        follows="left|top"
        height="24"
-       label_height="0"
        layout="topleft"
        left_delta="100"
        top_pad="-20" />
@@ -1548,7 +1546,6 @@
        name="FSMiniMapShoutRing"
        follows="left|top"
        height="24"
-       label_height="0"
        layout="topleft"
        left_delta="100"
        top_pad="-20" />

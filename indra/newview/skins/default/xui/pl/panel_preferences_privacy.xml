@@ -70,6 +70,7 @@
 			<check_box label="Nie pokazuj innym, gdzie patrzę" name="privatelookat" tool_tip="Zapobiega wysyłaniu na serwer informacji o własnym celu spojrzenia"/>
 			<check_box label="Nie pokazuj celu mojego spojrzenia nawet na moim własnym ekranie" name="privateLocalLookat" tool_tip="Zapobiega poruszaniu głową i skupianiu wzroku Twojego awatara na Twoim własnym ekranie. Ten ruch nie musi być widoczny dla innych nawet gdy ta opcja jest wyłączona."/>
 			<check_box label="Nie pokazuj innym celów moich wskazań" name="privatepointat" tool_tip="Zapobiega wysyłaniu innym celów wskazanych myszką"/>
+			<check_box label="Ogranicz odległość (od głowy):" width="270" name="LimitLookAt" tool_tip="Ogranicza Twoje cele spojrzeń, dookoła Twojej głowy, bazując na tej odległości." />
 		</panel>
 		<panel label="Autoodpowiedzi 1" name="tab-autoresponse-1">
 			<text name="text_box3">

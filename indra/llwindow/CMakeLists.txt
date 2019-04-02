@@ -75,7 +75,7 @@ if (LINUX)
       ${LLMATH_LIBRARIES}
       ${LLRENDER_LIBRARIES}
       ${LLVFS_LIBRARIES}
-      ${LLWINDOW_LIBRARIES}
+      #${LLWINDOW_LIBRARIES} # <FS:Ansariel> Don't link to itself - causes CMP0038
       ${LLXML_LIBRARIES}
       ${UI_LIBRARIES}     # for GTK
       ${SDL_LIBRARY}
@@ -186,11 +186,6 @@ if (llwindow_HEADER_FILES)
 endif (llwindow_HEADER_FILES)
 
   list(APPEND viewer_SOURCE_FILES ${viewer_HEADER_FILES})
-
-  #<FS:TS> Turn off complaint about library linking to itself in Cmake 3
-  if(POLICY CMP0038)
-    cmake_policy(SET CMP0038 OLD)
-  endif(POLICY CMP0038)
 
   add_library (llwindow
     ${llwindow_SOURCE_FILES}
