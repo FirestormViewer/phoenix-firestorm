@@ -33,7 +33,6 @@
 		<text name="UI Size:" width="100">
 			Grandezza UI:
 		</text>
-		<check_box label="Rileva automaticamente il fattore di scala" name="FSEnableAutomaticUIScaling" tool_tip="Tenta di rilevare il fattore di scala ottimale basandosi sulle impostazioni del SO. Disponibile solo in Windows."/>
 		<text name="ScriptDialogsPerObjectLabel" width="180">
 			Quanti menu script per oggetto:
 		</text>

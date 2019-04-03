@@ -159,6 +159,10 @@ LLGLSLShader		gHighlightProgram;
 LLGLSLShader		gHighlightNormalProgram;
 LLGLSLShader		gHighlightSpecularProgram;
 
+LLGLSLShader		gDeferredHighlightProgram;
+LLGLSLShader		gDeferredHighlightNormalProgram;
+LLGLSLShader		gDeferredHighlightSpecularProgram;
+
 LLGLSLShader		gPathfindingProgram;
 LLGLSLShader		gPathfindingNoNormalsProgram;
 
@@ -213,7 +217,11 @@ LLGLSLShader			gDeferredShadowProgram;
 LLGLSLShader			gDeferredShadowCubeProgram;
 LLGLSLShader			gDeferredShadowAlphaMaskProgram;
 LLGLSLShader			gDeferredAvatarShadowProgram;
+LLGLSLShader			gDeferredAvatarAlphaShadowProgram;
+LLGLSLShader			gDeferredAvatarAlphaMaskShadowProgram;
 LLGLSLShader			gDeferredAttachmentShadowProgram;
+LLGLSLShader			gDeferredAttachmentAlphaShadowProgram;
+LLGLSLShader			gDeferredAttachmentAlphaMaskShadowProgram;
 LLGLSLShader			gDeferredAlphaProgram;
 LLGLSLShader			gDeferredAlphaImpostorProgram;
 LLGLSLShader			gDeferredAlphaWaterProgram;
@@ -474,7 +482,7 @@ void LLViewerShaderMgr::setShaders()
 		S32 env_class = 2;
 		S32 obj_class = 2;
 		S32 effect_class = 2;
-		S32 wl_class = 2;
+		S32 wl_class = 1;
 		S32 water_class = 2;
 		S32 deferred_class = 0;
 		S32 transform_class = gGLManager.mHasTransformFeedback ? 1 : 0;
@@ -504,7 +512,7 @@ void LLViewerShaderMgr::setShaders()
                 break; 
             }
         }
-        
+
         if (doingWindLight)
         {
             // user has disabled WindLight in their settings, downgrade
@@ -1287,6 +1295,10 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredSkinnedFullbrightShinyProgram.unload();
 		gDeferredSkinnedFullbrightProgram.unload();
 
+        gDeferredHighlightProgram.unload();
+        gDeferredHighlightNormalProgram.unload();
+        gDeferredHighlightSpecularProgram.unload();
+
 		gNormalMapGenProgram.unload();
 		for (U32 i = 0; i < LLMaterial::SHADER_COUNT*2; ++i)
 		{
@@ -1297,6 +1309,36 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	}
 
 	BOOL success = TRUE;
+
+    if (success)
+	{
+		gDeferredHighlightProgram.mName = "Deferred Highlight Shader";
+		gDeferredHighlightProgram.mShaderFiles.clear();
+		gDeferredHighlightProgram.mShaderFiles.push_back(make_pair("interface/highlightV.glsl", GL_VERTEX_SHADER_ARB));
+		gDeferredHighlightProgram.mShaderFiles.push_back(make_pair("deferred/highlightF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gDeferredHighlightProgram.mShaderLevel = mShaderLevel[SHADER_INTERFACE];		
+		success = gDeferredHighlightProgram.createShader(NULL, NULL);
+	}
+
+	if (success)
+	{
+		gDeferredHighlightNormalProgram.mName = "Deferred Highlight Normals Shader";
+		gDeferredHighlightNormalProgram.mShaderFiles.clear();
+		gDeferredHighlightNormalProgram.mShaderFiles.push_back(make_pair("interface/highlightNormV.glsl", GL_VERTEX_SHADER_ARB));
+		gDeferredHighlightNormalProgram.mShaderFiles.push_back(make_pair("deferred/highlightF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gDeferredHighlightNormalProgram.mShaderLevel = mShaderLevel[SHADER_INTERFACE];		
+		success = gHighlightNormalProgram.createShader(NULL, NULL);
+	}
+
+	if (success)
+	{
+		gDeferredHighlightSpecularProgram.mName = "Deferred Highlight Spec Shader";
+		gDeferredHighlightSpecularProgram.mShaderFiles.clear();
+		gDeferredHighlightSpecularProgram.mShaderFiles.push_back(make_pair("interface/highlightSpecV.glsl", GL_VERTEX_SHADER_ARB));
+		gDeferredHighlightSpecularProgram.mShaderFiles.push_back(make_pair("deferred/highlightF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gDeferredHighlightSpecularProgram.mShaderLevel = mShaderLevel[SHADER_INTERFACE];		
+		success = gDeferredHighlightSpecularProgram.createShader(NULL, NULL);
+	}
 
 	if (success)
 	{
@@ -2193,6 +2235,32 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		llassert(success);
 	}
 
+	// <FS:Ansariel> Possible intentional revert in LL-EEP - keeping change from LMR for now
+    if (success)
+	{
+		gDeferredAvatarAlphaShadowProgram.mName = "Deferred Avatar Alpha Shadow Shader";
+		gDeferredAvatarAlphaShadowProgram.mFeatures.hasSkinning = true;
+		gDeferredAvatarAlphaShadowProgram.mShaderFiles.clear();
+		gDeferredAvatarAlphaShadowProgram.mShaderFiles.push_back(make_pair("deferred/avatarAlphaShadowV.glsl", GL_VERTEX_SHADER_ARB));
+		gDeferredAvatarAlphaShadowProgram.mShaderFiles.push_back(make_pair("deferred/avatarAlphaShadowF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gDeferredAvatarAlphaShadowProgram.addPermutation("DEPTH_CLAMP", gGLManager.mHasDepthClamp ? "1" : "0");
+		gDeferredAvatarAlphaShadowProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+		success = gDeferredAvatarAlphaShadowProgram.createShader(NULL, NULL);
+	}
+
+    if (success)
+	{
+		gDeferredAvatarAlphaMaskShadowProgram.mName = "Deferred Avatar Alpha Mask Shadow Shader";
+		gDeferredAvatarAlphaMaskShadowProgram.mFeatures.hasSkinning  = true;
+		gDeferredAvatarAlphaMaskShadowProgram.mShaderFiles.clear();
+		gDeferredAvatarAlphaMaskShadowProgram.mShaderFiles.push_back(make_pair("deferred/avatarAlphaShadowV.glsl", GL_VERTEX_SHADER_ARB));
+		gDeferredAvatarAlphaMaskShadowProgram.mShaderFiles.push_back(make_pair("deferred/avatarAlphaMaskShadowF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gDeferredAvatarAlphaMaskShadowProgram.addPermutation("DEPTH_CLAMP", gGLManager.mHasDepthClamp ? "1" : "0");
+		gDeferredAvatarAlphaMaskShadowProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+		success = gDeferredAvatarAlphaMaskShadowProgram.createShader(NULL, NULL);
+	}
+	// </FS:Ansariel>
+
 	if (success)
 	{
 		gDeferredAttachmentShadowProgram.mName = "Deferred Attachment Shadow Shader";
@@ -2209,6 +2277,32 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		success = gDeferredAttachmentShadowProgram.createShader(NULL, NULL);
 		llassert(success);
 	}
+    
+	// <FS:Ansariel> Possible intentional revert in LL-EEP - keeping change from LMR for now
+    if (success)
+	{
+		gDeferredAttachmentAlphaShadowProgram.mName = "Deferred Attachment Alpha Shadow Shader";
+		gDeferredAttachmentAlphaShadowProgram.mFeatures.hasObjectSkinning = true;
+		gDeferredAttachmentAlphaShadowProgram.mShaderFiles.clear();
+		gDeferredAttachmentAlphaShadowProgram.mShaderFiles.push_back(make_pair("deferred/attachmentAlphaShadowV.glsl", GL_VERTEX_SHADER_ARB));
+		gDeferredAttachmentAlphaShadowProgram.mShaderFiles.push_back(make_pair("deferred/attachmentAlphaShadowF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gDeferredAttachmentAlphaShadowProgram.addPermutation("DEPTH_CLAMP", gGLManager.mHasDepthClamp ? "1" : "0");
+		gDeferredAttachmentAlphaShadowProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+		success = gDeferredAttachmentAlphaShadowProgram.createShader(NULL, NULL);
+	}
+
+    if (success)
+	{
+		gDeferredAttachmentAlphaMaskShadowProgram.mName = "Deferred Attachment Alpha Mask Shadow Shader";
+		gDeferredAttachmentAlphaMaskShadowProgram.mFeatures.hasObjectSkinning = true;
+		gDeferredAttachmentAlphaMaskShadowProgram.mShaderFiles.clear();
+		gDeferredAttachmentAlphaMaskShadowProgram.mShaderFiles.push_back(make_pair("deferred/attachmentAlphaShadowV.glsl", GL_VERTEX_SHADER_ARB));
+		gDeferredAttachmentAlphaMaskShadowProgram.mShaderFiles.push_back(make_pair("deferred/attachmentAlphaMaskShadowF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gDeferredAttachmentAlphaMaskShadowProgram.addPermutation("DEPTH_CLAMP", gGLManager.mHasDepthClamp ? "1" : "0");
+		gDeferredAttachmentAlphaMaskShadowProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+		success = gDeferredAttachmentAlphaMaskShadowProgram.createShader(NULL, NULL);
+	}
+	// </FS:Ansariel>
 
 	if (success)
 	{
@@ -2545,6 +2639,7 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 		gObjectSimpleNonIndexedProgram.mFeatures.hasAtmospherics = true;
 		gObjectSimpleNonIndexedProgram.mFeatures.hasLighting = true;
 		gObjectSimpleNonIndexedProgram.mFeatures.disableTextureIndex = true;
+		gObjectSimpleNonIndexedProgram.mFeatures.hasAlphaMask = true; // <FS:Ansariel> Possible intentional revert in LL-EEP - keeping change from LMR for now
 		gObjectSimpleNonIndexedProgram.mShaderFiles.clear();
 		gObjectSimpleNonIndexedProgram.mShaderFiles.push_back(make_pair("objects/simpleV.glsl", GL_VERTEX_SHADER_ARB));
 		gObjectSimpleNonIndexedProgram.mShaderFiles.push_back(make_pair("objects/simpleF.glsl", GL_FRAGMENT_SHADER_ARB));

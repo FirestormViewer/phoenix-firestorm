@@ -2565,7 +2565,10 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
         LLVOCachePartition* vo_part = region->getVOCachePartition();
         if(vo_part)
         {
-            bool do_occlusion_cull = can_use_occlusion && use_occlusion && !gUseWireframe/* && !gViewerWindow->getProgressView()->getVisible()*/;
+            // <FS:Ansariel> Possible intentional revert in LL-EEP - keeping change from LMR for now
+            //bool do_occlusion_cull = can_use_occlusion && use_occlusion && !gUseWireframe/* && !gViewerWindow->getProgressView()->getVisible()*/;
+            bool do_occlusion_cull = can_use_occlusion && use_occlusion && !gUseWireframe && 0 > water_clip /* && !gViewerWindow->getProgressView()->getVisible()*/;
+            // </FS:Ansariel>
             vo_part->cull(camera, do_occlusion_cull);
         }
     }
@@ -2718,9 +2721,12 @@ void LLPipeline::downsampleDepthBuffer(LLRenderTarget& source, LLRenderTarget& d
 
 	if (scratch_space)
 	{
+        GLint bits = 0;
+        bits |= (source.hasStencil() && dest.hasStencil()) ? GL_STENCIL_BUFFER_BIT : 0;
+        bits |= GL_DEPTH_BUFFER_BIT;
 		scratch_space->copyContents(source, 
 									0, 0, source.getWidth(), source.getHeight(), 
-									0, 0, scratch_space->getWidth(), scratch_space->getHeight(), source.hasStencil() ? (GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT) : GL_COLOR_BUFFER_BIT, GL_NEAREST);
+									0, 0, scratch_space->getWidth(), scratch_space->getHeight(), bits, GL_NEAREST);
 	}
 
 	dest.bindTarget();
@@ -10306,10 +10312,29 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 
     bool sun_up         = environment.getIsSunUp();
     bool moon_up        = environment.getIsMoonUp();
-    bool ignore_shadows = (shadow_detail == 0) 
-                       || (sun_up  && (mSunDiffuse == LLColor4::black))
-                       || (moon_up && (mMoonDiffuse == LLColor4::black))
-                       || !(sun_up || moon_up);
+
+    bool ignore_shadows = (shadow_detail == 0); // explicitly disabled shadows
+
+    // no sun or moon, no shadows
+    if (!sun_up && !moon_up)
+    {
+        ignore_shadows |= true;
+    }
+    // only moon and moon is black
+    else if (!sun_up && moon_up & (mMoonDiffuse == LLColor4::black))
+    {
+        ignore_shadows |= true;
+    }
+    // only sun and sun is black
+    else if (!moon_up && sun_up && (mSunDiffuse == LLColor4::black))
+    {
+        ignore_shadows |= true;
+    }
+    // both up, but both black
+    else if ((mSunDiffuse == LLColor4::black) && (mMoonDiffuse == LLColor4::black))
+    {
+        ignore_shadows |= true;
+    }
 
     if (ignore_shadows)
     { //sun diffuse is totally black, shadows don't matter

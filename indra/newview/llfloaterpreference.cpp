@@ -785,7 +785,6 @@ BOOL LLFloaterPreference::postBuild()
 
 	// <FS:Ansariel> Disable options only available on Windows and not on other platforms
 #ifndef LL_WINDOWS
-	childSetEnabled("FSEnableAutomaticUIScaling", FALSE);
 	childSetEnabled("FSDisableWMIProbing", FALSE);
 #endif
 	// </FS:Ansariel>
@@ -4148,6 +4147,9 @@ BOOL LLPanelPreferenceGraphics::postBuild()
 		combo->remove("8x");
 		combo->remove("16x");
 	}
+
+	LLCheckBoxCtrl *use_HiDPI = getChild<LLCheckBoxCtrl>("use HiDPI");
+	use_HiDPI->setEnabled(FALSE);
 #endif
 	// </FS:Ansariel>
 
@@ -4366,6 +4368,9 @@ BOOL LLFloaterPreferenceGraphicsAdvanced::postBuild()
         combo->remove("8x");
         combo->remove("16x");
     }
+	
+	LLCheckBoxCtrl *use_HiDPI = getChild<LLCheckBoxCtrl>("use HiDPI");
+	use_HiDPI->setVisible(FALSE);
 #endif
 
     return TRUE;

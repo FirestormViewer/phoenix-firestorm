@@ -1693,17 +1693,8 @@ BOOL LLViewerWindow::handleDeviceChange(LLWindow *window)
 
 BOOL LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height)
 {
-    // <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
-    if (!gSavedSettings.getBOOL("FSEnableAutomaticUIScaling"))
-    {
-        return FALSE;
-    }
-    // </FS:Ansariel>
-
     if (ui_scale_factor >= MIN_UI_SCALE && ui_scale_factor <= MAX_UI_SCALE)
     {
-        gSavedSettings.setF32("LastSystemUIScaleFactor", ui_scale_factor);
-        gSavedSettings.setF32("UIScaleFactor", ui_scale_factor);
         LLViewerWindow::reshape(window_width, window_height);
         mResDirty = true;
         return TRUE;
@@ -1713,6 +1704,14 @@ BOOL LLViewerWindow::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32
         LL_WARNS() << "DPI change caused UI scale to go out of bounds: " << ui_scale_factor << LL_ENDL;
         return FALSE;
     }
+}
+
+BOOL LLViewerWindow::handleWindowDidChangeScreen(LLWindow *window)
+{
+	LLCoordScreen window_rect;
+	mWindow->getSize(&window_rect);
+	reshape(window_rect.mX, window_rect.mY);
+	return TRUE;
 }
 
 void LLViewerWindow::handlePingWatchdog(LLWindow *window, const char * msg)
@@ -1778,7 +1777,6 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	mStatesDirty(false),
 	mCurrResolutionIndex(0),
 	mProgressView(NULL),
-	mSystemUIScaleFactorChanged(false),
 	mProgressViewMini(NULL)
 {
 	// gKeyboard is still NULL, so it doesn't do LLWindowListener any good to
@@ -1859,38 +1857,9 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	LLCoordScreen scr;
     mWindow->getSize(&scr);
 
-	// <FS:Ansariel> Settings don't exist anymore as of 28-11-2017
-  //  if(p.fullscreen && ( scr.mX!=p.width || scr.mY!=p.height))
-  //  {
-		//LL_WARNS() << "Fullscreen has forced us in to a different resolution now using "<<scr.mX<<" x "<<scr.mY<<LL_ENDL;
-		//gSavedSettings.setS32("FullScreenWidth",scr.mX);
-		//gSavedSettings.setS32("FullScreenHeight",scr.mY);
-  //  }
-	// </FS:Ansariel>
-
-	F32 system_scale_factor = mWindow->getSystemUISize();
-	if (system_scale_factor < MIN_UI_SCALE || system_scale_factor > MAX_UI_SCALE)
-	{
-		// reset to default;
-		system_scale_factor = 1.f;
-	}
-	// <FS:Ansariel> FIRE-20416: Option for automatic UI scaling
-	//if (p.first_run || gSavedSettings.getF32("LastSystemUIScaleFactor") != system_scale_factor)
-#if !LL_WINDOWS
-	gSavedSettings.setBOOL("FSEnableAutomaticUIScaling", FALSE); // Always disable on non-Windows systems for now
-#endif
-	if (gSavedSettings.getBOOL("FSEnableAutomaticUIScaling") && (p.first_run || gSavedSettings.getF32("LastSystemUIScaleFactor") != system_scale_factor))
-	// </FS:Ansariel>
-	{
-		mSystemUIScaleFactorChanged = !p.first_run;
-		gSavedSettings.setF32("LastSystemUIScaleFactor", system_scale_factor);
-		gSavedSettings.setF32("UIScaleFactor", system_scale_factor);
-	}
-
-
 	// Get the real window rect the window was created with (since there are various OS-dependent reasons why
 	// the size of a window or fullscreen context may have been adjusted slightly...)
-	F32 ui_scale_factor = llclamp(gSavedSettings.getF32("UIScaleFactor"), MIN_UI_SCALE, MAX_UI_SCALE);
+	F32 ui_scale_factor = llclamp(gSavedSettings.getF32("UIScaleFactor"), MIN_UI_SCALE, MAX_UI_SCALE) * mWindow->getSystemUISize();
 	
 	mDisplayScale.setVec(llmax(1.f / mWindow->getPixelAspectRatio(), 1.f), llmax(mWindow->getPixelAspectRatio(), 1.f));
 	mDisplayScale *= ui_scale_factor;
@@ -2020,38 +1989,10 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	mWorldViewRectScaled = calcScaledRect(mWorldViewRectRaw, mDisplayScale);
 }
 
-//static
-void LLViewerWindow::showSystemUIScaleFactorChanged()
-{
-	LLNotificationsUtil::add("SystemUIScaleFactorChanged", LLSD(), LLSD(), onSystemUIScaleFactorChanged);
-}
-
 std::string LLViewerWindow::getLastSnapshotDir()
 {
     return sSnapshotDir;
 }
-
-//static
-bool LLViewerWindow::onSystemUIScaleFactorChanged(const LLSD& notification, const LLSD& response)
-{
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	if(option == 0)
-	{
-		LLFloaterReg::toggleInstanceOrBringToFront("preferences");
-		LLFloater* pref_floater = LLFloaterReg::getInstance("preferences");
-		LLTabContainer* tab_container = pref_floater->getChild<LLTabContainer>("pref core");
-		// <FS:Ansariel> Adjusted for Firestorm
-		//tab_container->selectTabByName("advanced1");
-		tab_container->selectTabByName("ui");
-		LLPanel* ui_panel = tab_container->getCurrentPanel();
-		LLTabContainer* ui_tab_container = ui_panel->getChild<LLTabContainer>("tabs");
-		ui_tab_container->selectTabByName("ui-2d-overlay");
-		// </FS:Ansariel>
-
-	}
-	return false; 
-}
-
 
 void LLViewerWindow::initGLDefaults()
 {
@@ -3500,12 +3441,12 @@ void LLViewerWindow::moveCursorToCenter()
 		S32 x = getWorldViewWidthScaled() / 2;
 		S32 y = getWorldViewHeightScaled() / 2;
 	
+		LLUI::setMousePositionScreen(x, y);
+		
 		//on a forced move, all deltas get zeroed out to prevent jumping
 		mCurrentMousePoint.set(x,y);
 		mLastMousePoint.set(x,y);
 		mCurrentMouseDelta.set(0,0);	
-
-		LLUI::setMousePositionScreen(x, y);	
 	}
 }
 
@@ -6647,7 +6588,7 @@ F32	LLViewerWindow::getWorldViewAspectRatio() const
 
 void LLViewerWindow::calcDisplayScale()
 {
-	F32 ui_scale_factor = llclamp(gSavedSettings.getF32("UIScaleFactor"), MIN_UI_SCALE, MAX_UI_SCALE);
+	F32 ui_scale_factor = llclamp(gSavedSettings.getF32("UIScaleFactor"), MIN_UI_SCALE, MAX_UI_SCALE) * mWindow->getSystemUISize();
 	LLVector2 display_scale;
 	display_scale.setVec(llmax(1.f / mWindow->getPixelAspectRatio(), 1.f), llmax(mWindow->getPixelAspectRatio(), 1.f));
 	display_scale *= ui_scale_factor;
