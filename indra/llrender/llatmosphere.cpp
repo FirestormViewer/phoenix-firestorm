@@ -96,8 +96,8 @@ AtmosphericModelSettings::AtmosphericModelSettings()
     // decreasing linearly from 1 to 0 between 25 and 40km. This is an approximate
     // profile from http://www.kln.ac.lk/science/Chemistry/Teaching_Resources/
     // Documents/Introduction%20to%20atmospheric%20chemistry.pdf (page 10).
-    m_absorptionProfile.push_back(DensityLayer(25000.0, 0.0, 0.0, 1.0 / 15000.0, -2.0 / 3.0));
-    m_absorptionProfile.push_back(DensityLayer(0.0, 0.0, 0.0, -1.0 / 15000.0, 8.0 / 3.0));
+    m_absorptionProfile.push_back(DensityLayer(25000.0f, 0.0f, 0.0f, 1.0f / 15000.0f, -2.0f / 3.0f));
+    m_absorptionProfile.push_back(DensityLayer(0.0f, 0.0f, 0.0f, -1.0f / 15000.0f, 8.0f / 3.0f));
 }
 
 AtmosphericModelSettings::AtmosphericModelSettings(

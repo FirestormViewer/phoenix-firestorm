@@ -1593,11 +1593,11 @@ void LLEnvironment::updateGLVariablesForSettings(LLGLSLShader *shader, const LLS
 
     if (LLPipeline::sRenderDeferred && !LLPipeline::sReflectionRender && !LLPipeline::sUnderWaterRender)
     {
-        shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 2.2);
+        shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 2.2f);
     }
     else 
     {
-        shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 1.0);
+        shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 1.0f);
     }
 
 }
