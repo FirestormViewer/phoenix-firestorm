@@ -108,7 +108,7 @@ LLTexUnit::LLTexUnit(S32 index)
 	mCurrColorOp(TBO_MULT), mCurrAlphaOp(TBO_MULT),
 	mCurrColorSrc1(TBS_TEX_COLOR), mCurrColorSrc2(TBS_PREV_COLOR),
 	mCurrAlphaSrc1(TBS_TEX_ALPHA), mCurrAlphaSrc2(TBS_PREV_ALPHA),
-	mCurrColorScale(1), mCurrAlphaScale(1), mCurrTexture(0),
+    mCurrColorScale(1), mCurrAlphaScale(1), mCurrTexture(0), mTexColorSpace(TCS_LINEAR),
 	mHasMipMaps(false),
 	mIndex(index)
 {
@@ -165,6 +165,8 @@ void LLTexUnit::refreshState(void)
 		setTextureCombiner(mCurrColorOp, mCurrColorSrc1, mCurrColorSrc2, false);
 		setTextureCombiner(mCurrAlphaOp, mCurrAlphaSrc1, mCurrAlphaSrc2, true);
 	}
+
+    setTextureColorSpace(mTexColorSpace);
 }
 
 void LLTexUnit::activate(void)
@@ -194,7 +196,6 @@ void LLTexUnit::enable(eTextureType type)
 			stop_glerror();
 		}
 		mCurrTexType = type;
-
 		gGL.flush();
 		if (!LLGLSLShader::sNoFixedFunction && 
 			type != LLTexUnit::TT_MULTISAMPLE_TEXTURE &&
@@ -222,6 +223,8 @@ void LLTexUnit::disable(void)
 		{
 			glDisable(sGLTextureType[mCurrTexType]);
 		}
+
+        setTextureColorSpace(TCS_LINEAR);
 		
 		mCurrTexType = TT_NONE;
 	}
@@ -258,7 +261,8 @@ bool LLTexUnit::bind(LLTexture* texture, bool for_rendering, bool forceBind)
 						gl_tex->mTexOptionsDirty = false;
 						setTextureAddressMode(gl_tex->mAddressMode);
 						setTextureFilteringOption(gl_tex->mFilterOption);
-					}
+                    }
+                    setTextureColorSpace(mTexColorSpace);
 				}
 			}
 			else
@@ -333,6 +337,7 @@ bool LLTexUnit::bind(LLImageGL* texture, bool for_rendering, bool forceBind)
 			setTextureFilteringOption(texture->mFilterOption);
 			stop_glerror();
 		}
+        setTextureColorSpace(mTexColorSpace);
 	}
 
 	stop_glerror();
@@ -358,7 +363,7 @@ bool LLTexUnit::bind(LLCubeMap* cubeMap)
 		{
 			activate();
 			enable(LLTexUnit::TT_CUBE_MAP);
-			mCurrTexture = cubeMap->mImages[0]->getTexName();
+            mCurrTexture = cubeMap->mImages[0]->getTexName();
 			glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, mCurrTexture);
 			mHasMipMaps = cubeMap->mImages[0]->mHasMipMaps;
 			cubeMap->mImages[0]->updateBindStats(cubeMap->mImages[0]->mTextureMemory);
@@ -367,7 +372,8 @@ bool LLTexUnit::bind(LLCubeMap* cubeMap)
 				cubeMap->mImages[0]->mTexOptionsDirty = false;
 				setTextureAddressMode(cubeMap->mImages[0]->mAddressMode);
 				setTextureFilteringOption(cubeMap->mImages[0]->mFilterOption);
-			}
+            }
+            setTextureColorSpace(mTexColorSpace);
 			return true;
 		}
 		else
@@ -418,7 +424,8 @@ bool LLTexUnit::bindManual(eTextureType type, U32 texture, bool hasMips)
 		enable(type);
 		mCurrTexture = texture;
 		glBindTexture(sGLTextureType[type], texture);
-		mHasMipMaps = hasMips;
+        mHasMipMaps = hasMips;
+        setTextureColorSpace(mTexColorSpace);
 	}
 	return true;
 }
@@ -438,6 +445,9 @@ void LLTexUnit::unbind(eTextureType type)
 	if (mCurrTexType == type)
 	{
 		mCurrTexture = 0;
+
+        // Always make sure our texture color space is reset to linear.  SRGB sampling should be opt-in in the vast majority of cases.  Also prevents color space "popping".
+        mTexColorSpace = TCS_LINEAR;
 		if (LLGLSLShader::sNoFixedFunction && type == LLTexUnit::TT_TEXTURE)
 		{
 			glBindTexture(sGLTextureType[type], sWhiteTexture);
@@ -839,6 +849,23 @@ void LLTexUnit::debugTextureUnit(void)
 		U32 set_unit = (activeTexture - GL_TEXTURE0_ARB);
 		LL_WARNS() << "Incorrect Texture Unit!  Expected: " << set_unit << " Actual: " << mIndex << LL_ENDL;
 	}
+}
+
+void LLTexUnit::setTextureColorSpace(eTextureColorSpace space) {
+    mTexColorSpace = space;
+    if (gGLManager.mHasTexturesRGBDecode) {
+
+        if (space == TCS_SRGB) {
+            glTexParameteri(sGLTextureType[mCurrTexType], GL_TEXTURE_SRGB_DECODE_EXT, GL_DECODE_EXT);
+        }
+        else {
+            glTexParameteri(sGLTextureType[mCurrTexType], GL_TEXTURE_SRGB_DECODE_EXT, GL_SKIP_DECODE_EXT);
+        }
+
+        if (gDebugGL) {
+            assert_glerror();
+        }
+    }
 }
 
 LLLightState::LLLightState(S32 index)
