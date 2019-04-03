@@ -1621,10 +1621,6 @@
 Открытие сайтов от неизвестных источников может нанести вред вашему компьютеру
 		<usetemplate ignoretext="Запустить браузер для просмотра веб-страницы" name="okcancelignore" notext="Отмена" yestext="OK"/>
 	</notification>
-	<notification name="SystemUIScaleFactorChanged">
-		Со времени последнего запуска изменился системный коэффициент размера интерфейса. Открыть страницу настроек размера интерфейса?
-		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
-	</notification>
 	<notification name="WebLaunchJoinNow">
 		Перейти на [http://secondlife.com/account/ личный кабинет] для управления вашим аккаунтом?
 		<usetemplate ignoretext="Запустить браузер для управления аккаунтом" name="okcancelignore" notext="Отмена" yestext="OK"/>

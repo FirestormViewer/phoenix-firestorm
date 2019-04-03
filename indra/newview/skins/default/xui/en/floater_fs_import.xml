@@ -142,7 +142,7 @@
       width="90"
       enabled="false"
       name="upload_asset"
-      label="Upload"
+      label="Upload Content"
       top_pad="1" >
 	<check_box.commit_callback
 	    function="Import.UploadAsset" />

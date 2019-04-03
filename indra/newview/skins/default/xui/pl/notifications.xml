@@ -1518,8 +1518,20 @@ Wybierz obiekt na sprzedaż i spróbuj jeszcze raz.
 	</notification>
 	<notification name="RequiredUpdate">
 		Do zalogowania się wymagana jest wersja [VERSION].
-Wygląda na to, że nie została ona zaktualizowana.
 Pobierz ją z https://secondlife.com/support/downloads/
+	</notification>
+	<notification name="PauseForUpdate">
+		Do zalogowania się wymagana jest wersja [VERSION].
+Kliknij OK, aby pobrać i zainstalować.
+	</notification>
+	<notification name="OptionalUpdateReady">
+		Wersja [VERSION] została pobrana i jest gotowa do zainstalowania.
+Kliknij OK, aby zainstalować.
+	</notification>
+	<notification name="PromptOptionalUpdate">
+		Wersja [VERSION] została pobrana i jest gotowa do zainstalowania.
+Kontynuować?
+		<usetemplate canceltext="Nie teraz" name="yesnocancelbuttons" notext="Pomiń" yestext="Instaluj" />
 	</notification>
 	<notification name="LoginFailedUnknown">
 		Przepraszamy, ale nie udało się zalogować - powód jest nieznany.

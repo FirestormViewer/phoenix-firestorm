@@ -32,7 +32,6 @@
         <text name="UI Size:" width="120">
             Skalowanie interfejsu:
         </text>
-        <check_box label="Autodetekcja mnożnika skalowania interfejsu" name="FSEnableAutomaticUIScaling" tool_tip="Gdy włączysz tą opcję, to przeglądarka będzie starała się wykryć poprawny mnożnik bazując na skalowaniu ustawionym w systemie operacyjnym. Obecnie ta funkcjonalność jest dostępna tylko w Windows." />
         <text name="ScriptDialogsPerObjectLabel" width="185">
             Komunikatów skryptów na obiekt:
         </text>

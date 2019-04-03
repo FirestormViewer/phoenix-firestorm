@@ -240,9 +240,9 @@ void LLTextureBar::draw()
 		{ "REQ", LLColor4::yellow },// SEND_HTTP_REQ
 		{ "HTP", LLColor4::green },	// WAIT_HTTP_REQ
 		{ "DEC", LLColor4::yellow },// DECODE_IMAGE
-		{ "DEC", LLColor4::green }, // DECODE_IMAGE_UPDATE
+		{ "DEU", LLColor4::green }, // DECODE_IMAGE_UPDATE
 		{ "WRT", LLColor4::purple },// WRITE_TO_CACHE
-		{ "WRT", LLColor4::orange },// WAIT_ON_WRITE
+		{ "WWT", LLColor4::orange },// WAIT_ON_WRITE
 		{ "END", LLColor4::red },   // DONE
 #define LAST_STATE 14
 		{ "CRE", LLColor4::magenta }, // LAST_STATE+1
@@ -550,6 +550,25 @@ void LLGLTexMemBar::draw()
 	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*6,
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 
+    LLTrace::Recording& recording = LLViewerStats::instance().getRecording();
+
+    F64 cacheHits     = recording.getSampleCount(LLTextureFetch::sCacheHit);
+    F64 cacheAttempts = recording.getSampleCount(LLTextureFetch::sCacheAttempt);
+
+	F32 cacheHitRate = (cacheAttempts > 0.0) ? F32((cacheHits / cacheAttempts) * 100.0f) : 0.0f;
+
+    U32 cacheReadLatMin = U32(recording.getMin(LLTextureFetch::sCacheReadLatency).value() * 1000.0f);
+    U32 cacheReadLatMed = U32(recording.getMean(LLTextureFetch::sCacheReadLatency).value() * 1000.0f);
+    U32 cacheReadLatMax = U32(recording.getMax(LLTextureFetch::sCacheReadLatency).value() * 1000.0f);
+
+    U32 texDecodeLatMin = U32(recording.getMin(LLTextureFetch::sTexDecodeLatency).value() * 1000.0f);
+    U32 texDecodeLatMed = U32(recording.getMean(LLTextureFetch::sTexDecodeLatency).value() * 1000.0f);
+    U32 texDecodeLatMax = U32(recording.getMax(LLTextureFetch::sTexDecodeLatency).value() * 1000.0f);
+
+    U32 texFetchLatMin = U32(recording.getMin(LLTextureFetch::sTexFetchLatency).value() * 1000.0f);
+    U32 texFetchLatMed = U32(recording.getMean(LLTextureFetch::sTexFetchLatency).value() * 1000.0f);
+    U32 texFetchLatMax = U32(recording.getMax(LLTextureFetch::sTexFetchLatency).value() * 1000.0f);
+
 	text = llformat("GL Tot: %d/%d MB Bound: %d/%d MB FBO: %d MB Raw Tot: %d MB Bias: %.2f Cache: %.1f/%.1f MB",
 					total_mem.value(),
 					max_total_mem.value(),
@@ -563,8 +582,8 @@ void LLGLTexMemBar::draw()
 	//, cache_entries, cache_max_entries
 
 	// <FS:Ansariel> Texture memory bars
-	//LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*5,
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*6,
+	//LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*6,
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*7,
 	// </FS:Ansariel>
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 
@@ -572,7 +591,7 @@ void LLGLTexMemBar::draw()
 	S32 bar_left = 0;
 	S32 bar_width = 200;
 	S32 bar_space = 32;
-	S32 top = line_height*5 - 2 + v_offset;
+	S32 top = line_height*6 - 2 + v_offset;
 	S32 bottom = top - 6;
 	S32 left = bar_left;
 	S32 right = left + bar_width;
@@ -584,7 +603,7 @@ void LLGLTexMemBar::draw()
 		
 	left = bar_left;
 	text = "GL";
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*5,
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*6,
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 	
 	left = bar_left+20;
@@ -612,7 +631,7 @@ void LLGLTexMemBar::draw()
 
 	left = bar_left;
 	text = "Bound";
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*5,
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*6,
 									 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 	left = bar_left + 42;
 	right = left + bar_width;
@@ -650,6 +669,21 @@ void LLGLTexMemBar::draw()
 					res_wait,
 					LLViewerTextureList::sNumFastCacheReads);
 					// </FS:Ansariel>
+
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*5,
+											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
+
+    text = llformat("CacheHitRate: %3.2f Read: %d/%d/%d Decode: %d/%d/%d Fetch: %d/%d/%d",
+                    cacheHitRate,
+                    cacheReadLatMin,
+                    cacheReadLatMed,
+                    cacheReadLatMax,
+                    texDecodeLatMin,
+                    texDecodeLatMed,
+                    texDecodeLatMax,
+                    texFetchLatMin,
+                    texFetchLatMed,
+                    texFetchLatMax);
 
 	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*4,
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
@@ -747,8 +781,8 @@ LLRect LLGLTexMemBar::getRequiredRect()
 {
 	LLRect rect;
 	// <FS:Ansariel> Texture memory bars
-	//rect.mTop = 68; //LLFontGL::getFontMonospace()->getLineHeight() * 6;
-	rect.mTop = 83;
+	//rect.mTop = 78; //LLFontGL::getFontMonospace()->getLineHeight() * 6;
+	rect.mTop = 93;
 	// </FS:Ansariel>
 	return rect;
 }
