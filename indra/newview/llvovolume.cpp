@@ -475,15 +475,6 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 		{
 			retval |= MEDIA_FLAGS_CHANGED;
 		}
-		if (result && getRootEdit()->isAttachment() && getAvatarAncestor()==gAgentAvatarp )
-		{
-// <FS:Beq> Reduce log spam
-//			LL_INFOS("AvatarRender") << "Volume attached to self av has updated TE properties. ARC may change accordingly. Change flags "
-//									 << result << LL_ENDL; 
-			LL_DEBUGS("AvatarRender") << "Volume attached to self av has updated TE properties. ARC may change accordingly. Change flags "
-									 << result << LL_ENDL;
-// </FS:Beq>
-		}
 	}
 	else
 	{
@@ -623,15 +614,6 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 				if (result & TEM_CHANGE_MEDIA)
 				{
 					retval |= MEDIA_FLAGS_CHANGED;
-				}
-				if (result && getRootEdit()->isAttachment() && getAvatarAncestor()==gAgentAvatarp )
-				{
-					// <FS:Beq> Reduce log spam
-					//			LL_INFOS("AvatarRender") << "Volume attached to self av has updated TE properties. ARC may change accordingly. Change flags "
-					//									 << result << LL_ENDL; 
-					LL_DEBUGS("AvatarRender") << "Volume attached to self av has updated TE properties. ARC may change accordingly. Change flags "
-						<< result << LL_ENDL;
-					// </FS:Beq>
 				}
 			}
 		}
@@ -5249,7 +5231,10 @@ static LLTrace::BlockTimerStatHandle FTM_REGISTER_FACE("Register Face");
 void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep, U32 type)
 {
 	LL_RECORD_BLOCK_TIME(FTM_REGISTER_FACE);
-	if (type == LLRenderPass::PASS_ALPHA && facep->getTextureEntry()->getMaterialParams().notNull() && !facep->getVertexBuffer()->hasDataType(LLVertexBuffer::TYPE_TANGENT))
+	if (   type == LLRenderPass::PASS_ALPHA 
+		&& facep->getTextureEntry()->getMaterialParams().notNull() 
+		&& !facep->getVertexBuffer()->hasDataType(LLVertexBuffer::TYPE_TANGENT)
+		&& LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 1)
 	{
 		LL_WARNS_ONCE("RenderMaterials") << "Oh no! No binormals for this alpha blended face!" << LL_ENDL;
 	}

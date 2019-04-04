@@ -306,7 +306,6 @@ public:
                                                      // </FS:Ansariel>
 	void			calculateUpdateRenderComplexity();
 	static const U32 VISUAL_COMPLEXITY_UNKNOWN;
-	static const F32 VISUAL_COMPLEXITY_UPDATE_SECONDS;
 	void			updateVisualComplexity();
 	
 	U32				getVisualComplexity()			{ return mVisualComplexity;				};		// Numbers calculated here by rendering AV
@@ -486,7 +485,6 @@ public:
 	// the isTooComplex method uses these mutable values to avoid recalculating too frequently
 	mutable U32  mVisualComplexity;
 	mutable bool mVisualComplexityStale;
-	mutable LLFrameTimer mVisualComplexityUpdateTimer;
 	U32          mReportedVisualComplexity; // from other viewers through the simulator
 
 	bool		mCachedInMuteList;
