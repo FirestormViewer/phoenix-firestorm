@@ -2541,9 +2541,10 @@ if (DARWIN)
   # These all get set with PROPERTIES. It's not that the property names are
   # magically known to CMake -- it's that these names are referenced in the
   # Info-SecondLife.plist file in the configure_file() directive below.
-  set(product "${VIEWER_CHANNEL}")
-  set(MACOSX_EXECUTABLE_NAME "${VIEWER_CHANNEL}")
-  set(MACOSX_BUNDLE_INFO_STRING "${VIEWER_CHANNEL}")
+  #set(product "${VIEWER_CHANNEL}")
+  set(product "Firestorm")
+  set(MACOSX_EXECUTABLE_NAME "Firestorm")
+  set(MACOSX_BUNDLE_INFO_STRING "Firestorm Viewer")
   set(MACOSX_BUNDLE_ICON_FILE "firestorm_icon.icns")
   set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.phoenixviewer.firestorm.viewer-${ND_VIEWER_FLAVOR}")
   set(MACOSX_BUNDLE_LONG_VERSION_STRING "${VIEWER_CHANNEL} ${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}")

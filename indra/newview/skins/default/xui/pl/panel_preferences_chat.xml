@@ -288,7 +288,7 @@
 			</text>
 			<line_editor tool_tip="Rzut kostką - cmd [ilość kostek] [ilość ścianek] [typ modyfikatora (opcjonalne)] [wartość modyfikatora (opcjonalne)]. Przykład: cmd 1 20, cmd 2 40 + 5. Brak parametrów jest równy cmd 1 6 (zwykła kostka)." name="FSCmdLineRollDice" />
 			<text name="FSCmdLinePos_txt">
-				Teleport wewn. sima (użycie: cmd x y z)
+				Teleport wewn. regionu (użycie: cmd x y z)
 			</text>
 			<text name="FSCmdLineGround_txt">
 				Teleport do ziemi (użycie: cmd)
@@ -310,7 +310,7 @@
 				Teleport do Miejsca Startu (użycie: cmd)
 			</text>
 			<text name="FSCmdLineMapTo_txt">
-				Teleport do sima x (użycie: cmd nazwa)
+				Teleport do regionu x (użycie: cmd nazwa)
 			</text>
 			<check_box label="Ta sama pozycja między regionami" name="toggle" />
 		</panel>

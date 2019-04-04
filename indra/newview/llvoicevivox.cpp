@@ -824,7 +824,11 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
     {
 #ifndef VIVOXDAEMON_REMOTEHOST
         // Launch the voice daemon
+#if defined(LL_WINDOWS) || defined(LL_LINUX)
+        std::string exe_path = gDirUtilp->getExecutableDir();
+#else
         std::string exe_path = gDirUtilp->getAppRODataDir();
+#endif
 #if LL_WINDOWS
         // <FS:Ansariel> FIRE-22709: Local voice not working in OpenSim
 #ifdef OPENSIM
@@ -858,7 +862,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
         if( !viewerUsesWineForVoice() )
             gDirUtilp->append(exe_path, "SLVoice"); // native version
         else
-            gDirUtilp->append(exe_path, "win32/SLVoice"); // use bundled win32 version
+            gDirUtilp->append(exe_path, "win32/SLVoice.exe"); // use bundled win32 version
         // </FS:ND>
 #endif
         // See if the vivox executable exists
@@ -1586,6 +1590,11 @@ bool LLVivoxVoiceClient::addAndJoinSession(const sessionStatePtr_t &nextSession)
     bool joined(false);
 
     LLSD timeoutResult(LLSDMap("session", "timeout"));
+
+    // We are about to start a whole new session.  Anything that MIGHT still be in our 
+    // maildrop is going to be stale and cause us much wailing and gnashing of teeth.  
+    // Just flush it all out and start new.
+    voicePump.flush();
 
     // It appears that I need to wait for BOTH the SessionGroup.AddSession response and the SessionStateChangeEvent with state 4
     // before continuing from this state.  They can happen in either order, and if I don't wait for both, things can get stuck.
