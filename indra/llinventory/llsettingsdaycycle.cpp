@@ -113,6 +113,7 @@ const LLSettingsDay::Seconds LLSettingsDay::MAXIMUM_DAYLENGTH(604800); // 7 days
 const LLSettingsDay::Seconds LLSettingsDay::MINIMUM_DAYOFFSET(0);
 const LLSettingsDay::Seconds LLSettingsDay::DEFAULT_DAYOFFSET(57600);  // +16 hours == -8 hours (SLT time offset)
 const LLSettingsDay::Seconds LLSettingsDay::MAXIMUM_DAYOFFSET(86400);  // 24 hours
+const LLSettingsDay::Seconds LLSettingsDay::INVALID_DAYOFFSET(-1);     // KC
 
 const S32 LLSettingsDay::TRACK_WATER(0);   // water track is 0
 const S32 LLSettingsDay::TRACK_GROUND_LEVEL(1);

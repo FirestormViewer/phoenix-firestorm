@@ -58,6 +58,7 @@ public:
     static const Seconds MINIMUM_DAYOFFSET;
     static const Seconds DEFAULT_DAYOFFSET;
     static const Seconds MAXIMUM_DAYOFFSET;
+    static const Seconds INVALID_DAYOFFSET; // KC
 
     static const S32     TRACK_WATER;
     static const S32     TRACK_GROUND_LEVEL;

@@ -313,6 +313,12 @@ public:
     DayInstance::ptr_t          getSelectedEnvironmentInstance();
     DayInstance::ptr_t          getSharedEnvironmentInstance();
 
+//<KC: Environment hacks>
+public:
+    LLSettingsDay::Seconds  getDayOffset() const    { return (mCurrentEnvironment) ? mCurrentEnvironment->getDayOffset() : LLSettingsDay::INVALID_DAYOFFSET; }
+    void                    setDayOffset(LLSettingsBase::Seconds offset)    { if (mCurrentEnvironment) mCurrentEnvironment->setDayOffset(offset); }
+//</KC: Environment hacks>
+
 protected:
     virtual void                initSingleton() override;
     virtual void                cleanupSingleton() override;

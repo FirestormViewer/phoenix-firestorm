@@ -59,6 +59,7 @@
 #include "rlvhandler.h"
 #include <boost/foreach.hpp>
 
+const LLVector3 VectorZero(1.0f, 0.0f, 0.0f);
 
 // static F32 sun_pos_to_time24(F32 sun_pos)
 // {
@@ -571,7 +572,8 @@ BOOL FloaterQuickPrefs::postBuild()
 	mWLPresetsCombo = getChild<LLComboBox>("WLPresetsCombo");
 	mDayCyclePresetsCombo = getChild<LLComboBox>("DCPresetsCombo");
 	mWLSunPos = getChild<LLMultiSliderCtrl>("WLSunPos");
-	mWLSunPos->addSlider(12.f);
+    mWLSunPos->addSlider(0);
+    mWLSunPos->setMaxValue(LLSettingsDay::MAXIMUM_DAYOFFSET);
 
 	initCallbacks();
 	loadPresets();
@@ -858,7 +860,6 @@ void FloaterQuickPrefs::onClickDayCycleNext()
 	selectDayCyclePreset(mDayCyclePresetsCombo->getSelectedValue());
 }
 
-
 void FloaterQuickPrefs::draw()
 {
 	// [EEPMERGE]
@@ -876,6 +877,28 @@ void FloaterQuickPrefs::draw()
 
 	//mWLSunPos->setCurSliderValue(val);
 	// [/EEPMERGE]
+    
+    // Quick hack to see if this is viable - KC
+    LLSettingsDay::Seconds day_offset = LLEnvironment::instance().getDayOffset();
+    if (day_offset > LLSettingsDay::INVALID_DAYOFFSET)
+    {
+        mWLSunPos->setCurSliderValue(day_offset);
+    }
+    
+    // The fallowing kind of works for sun position, conflicts with above
+    // - Slider tick does not work properly
+    
+    // LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+    // LLQuaternion sunq = psky->getSunRotation();
+    // LLVector3 draw_point = VectorZero * sunq;
+    
+    // LL_INFOS() << "draw_point VX: " << draw_point.mV[VX] << LL_ENDL;
+    // LL_INFOS() << "draw_point VY: " << draw_point.mV[VY] << LL_ENDL;
+    
+    // draw_point.mV[VX] = draw_point.mV[VX] * 24.f;
+    // // draw_point.mV[VY] = draw_point.mV[VY] * 24.f;
+
+    // mWLSunPos->setCurSliderValue(draw_point.mV[VX]);
 
 	LLTransientDockableFloater::draw();
 }
@@ -900,6 +923,40 @@ void FloaterQuickPrefs::onSunMoved()
 	//	LLWLParamManager::instance().mCurParams.setSunAngle(val);
 	//}
 	// [/EEPMERGE]
+    
+    // Quick hack to see if this is viable - KC
+    if (LLEnvironment::instance().getDayOffset() > LLSettingsDay::INVALID_DAYOFFSET)
+    {
+        LLSettingsDay::Seconds day_offset(mWLSunPos->getCurSliderValue());
+        LLEnvironment::instance().setDayOffset(day_offset);
+    }
+    
+    
+    // The fallowing kind of works for sun position, conflicts with above
+    // - Sometimes it seems that only the light source moves and not the visual sun
+    
+    // LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+    // LLQuaternion sunq = psky->getSunRotation();
+    
+    // F32 altitude = mWLSunPos->getCurSliderValue() / 24.0f;
+    // // F32 azimuth = mWLSunPos->getCurSliderValue() / 24.0f;
+    
+    // LLVector3 draw_point = VectorZero * sunq;
+    // if (draw_point.mV[VZ] >= 0.f)
+    // {
+        // if (is_approx_zero(altitude)) // don't change the hemisphere
+        // {
+            // altitude = F_APPROXIMATELY_ZERO;
+        // }
+        // altitude *= -1;
+    // }
+
+    // sunq.setAngleAxis(altitude, 0, 1, 0);
+    // // LLQuaternion az_quat;
+    // // az_quat.setAngleAxis(azimuth, 0, 0, 1);
+    // // sunq *= az_quat;
+
+    // psky->setSunRotation(sunq);
 }
 
 void FloaterQuickPrefs::onClickResetToRegionDefault()
