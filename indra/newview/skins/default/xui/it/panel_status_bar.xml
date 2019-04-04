@@ -2,7 +2,6 @@
 <panel name="status">
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Il lotto è in vendita"/>
-		<button name="status_wl_btn" tool_tip="Il lotto ha impostazioni ambiente"/>
 		<text tool_tip="Nome del lotto su cui ti trovi. Clic per aprire le informazioni sul lotto." name="parcel_info_text" value="(caricamento...)"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">

@@ -72,13 +72,6 @@
 			<check_box label="Autoriser OpenCollar à activer ou désactiver l'AO intégré" name="BridgeIntegrationOC"/>
 			<check_box label="Autoriser LockMeister à activer ou désactiver l'AO intégré" name="BridgeIntegrationLM"/>
 		</panel>
-		<panel label="Windlight" name="WindlightTab">
-			<text name="FSWLshare_txt">Partage des Windlights Firestorm</text>
-			<check_box label="Activer le partage Windlight par terrain de Firestorm " name="FSWLParcelEnabled"/>
-			<check_box label="Appliquer automatiquement les paramètres WL des terrains de mes amis" name="FSWLWhitelistFriends"/>
-			<check_box label="Appliquer automatiquement les paramètres WL des terrains de de mes groupes" name="FSWLWhitelistGroups"/>
-			<check_box label="Appliquer automatiquement les paramètres WL de tous les terrains" name="FSWLWhitelistAll"/>
-		</panel>
 		<panel label="Construction 1" name="BuildTab">
 			<text name="text_box_objprams">Dimensions par défaut</text>
 			<text name="text_box_objprams2">Paramètres</text>

@@ -109,15 +109,6 @@
         <check_box label="Zezwól protokołowi OpenCollar na włączanie lub wyłączanie wbudowanego Animatora" name="BridgeIntegrationOC" />
         <check_box label="Zezwól protokołowi LockMeister na włączanie lub wyłączanie wbudowanego Animatora" name="BridgeIntegrationLM" />
     </panel>
-    <panel label="Windlight" name="WindlightTab">
-        <text name="FSWLshare_txt" width="350">
-          Dzielenie się WL Firestorma dla działek
-        </text>
-        <check_box label="Używaj dzielenia się WL Firestorma dla działek" name="FSWLParcelEnabled" />
-        <check_box label="Automatycznie stosuj ustawienia WL na działkach znajomych" name="FSWLWhitelistFriends" />
-        <check_box label="Automatycznie stosuj ustawienia WL na działkach moich grup" name="FSWLWhitelistGroups" />
-        <check_box label="Automatycznie stosuj ustawienia WL na wszystkich działkach" name="FSWLWhitelistAll" />
-    </panel>
     <panel label="Buduj 1" name="BuildTab">
         <text name="text_box_objprams">
          Domyślny rozmiar

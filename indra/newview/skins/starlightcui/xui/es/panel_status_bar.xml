@@ -2,7 +2,6 @@
 <panel name="status">
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="La parcela está en venta"/>
-		<button name="status_wl_btn" tool_tip="La parcela tiene configuración WL"/>
 		<text tool_tip="Nombre de la parcela en la que te encuentras. Haz clic para obtener información sobre la misma." name="parcel_info_text" value="(cargando...)"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">

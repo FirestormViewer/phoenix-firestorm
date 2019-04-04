@@ -108,7 +108,6 @@
 
 // Firestorm includes
 #include "fslslbridge.h"
-//#include "kcwlinterface.h" // [EEPMERGE]
 #include "llpresetsmanager.h"
 #include "NACLantispam.h"
 
@@ -4559,10 +4558,6 @@ bool LLAgent::teleportCore(bool is_local)
 			gLastDrawDistanceStep = 32.0f;
 		}
 		// </FS:Ansariel>
-
-		//<FS:KC> bit of a hack
-		// [EEPMERGE]
-		//KCWindlightInterface::instance().setTPing(true);
 	}
 	make_ui_sound("UISndTeleportOut");
 	

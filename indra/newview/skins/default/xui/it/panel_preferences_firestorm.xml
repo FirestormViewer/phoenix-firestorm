@@ -108,15 +108,6 @@
             <check_box label="Permetti al protocollo OpenCollar di abilitare/disabilitare l&apos;AO interno" name="BridgeIntegrationOC"/>
             <check_box label="Permetti al protocollo LockMeister di abilitare/disabilitare l&apos;AO interno" name="BridgeIntegrationLM"/>
         </panel>
-        <panel label="Ambiente" name="WindlightTab">
-            <text name="FSWLshare_txt">
-                Condivisione parametri ambiente Firestorm
-            </text>
-            <check_box label="Abilita ambiente Firestorm" name="FSWLParcelEnabled" />
-            <check_box label="Applica automaticamente le impostazioni ambiente dai terreni di amici" name="FSWLWhitelistFriends" />
-            <check_box label="Applica automaticamente le impostazioni ambiente dai terreni dei miei gruppi" name="FSWLWhitelistGroups" />
-            <check_box label="Applica automaticamente le impostazioni ambiente da qualunque terreno" name="FSWLWhitelistAll" />
-        </panel>
         <panel label="Costr. 1" name="BuildTab">
             <text name="text_box_objprams" width="250">
                 Misure alla creazione

@@ -85,15 +85,6 @@
 			<button left="277" name="PhoenixBeamPrev_Phoenix"/>
 			<slider name="FSBeamShapeScale" label="Escala:" tool_tip="Cambia la escala de la forma utilizada para el rayo con forma Phoenix" left_delta=""/>
 		</panel>
-		<panel label="Windlight" name="WindlightTab">
-			<text name="FSWLshare_txt">
-				Compartición WL de Firestorm:
-			</text>
-			<check_box label="Usar compartición de Windlight de parcela" name="FSWLParcelEnabled"/>
-			<check_box label="Autoaplicar las configuraciones WL de los terrenos de mis amigos" name="FSWLWhitelistFriends"/>
-			<check_box label="Autoaplicar las configuraciones WL de los terrenos de mis grupos" name="FSWLWhitelistGroups"/>
-			<check_box label="Autoaplicar las configuraciones WL de cualquier parcela" name="FSWLWhitelistAll"/>
-		</panel>
 		<panel label="Constr. 1" name="BuildTab">
 			<text name="text_box_objprams" left="17">
 				Tamaño por defecto

@@ -5212,17 +5212,6 @@ el servidor está lleno.
 		No puedes eliminar la red [REMOVE_GRID] mientras estás conectado/a a ella.
 		<usetemplate ignoretext="Advertir que la red en uso no puede ser eliminada." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
-	<notification name="FSWL">
-		&apos;[PARCEL_NAME]&apos;, propiedad de [OWNER_NAME], quisiera cambiar tu configuración visual (Windlight).
-		<form name="form">
-			<button name="Allow" text="Permitir"/>
-			<button name="Ignore" text="Ignorar"/>
-		</form>
-	</notification>
-	<notification name="FSWLClear">
-		Restablecer la configuración WL para &apos;[PARCEL_NAME]&apos; a la configuración por defecto de la región?
-		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Sí"/>
-	</notification>
 	<notification name="NewAOSet">
 		Especifica un nombre para la nueva configuración de AO:
 (El nombre NO puede contener los caracteres ":" o "|").

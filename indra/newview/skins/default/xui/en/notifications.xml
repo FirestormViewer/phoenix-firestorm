@@ -10049,36 +10049,6 @@ You can not remove [REMOVE_GRID] while being connected to it.
   </notification>
 <!-- </FS:AW  grid management-->
 
-  <notification
-   icon="notify.tga"
-   label="Apply Windlight settings"
-   name="FSWL"
-   type="notify">
-&apos;[PARCEL_NAME]&apos;, owned by [OWNER_NAME], would like to change your Windlight visual environment settings.
-    <form name="form">
-      <button
-       index="0"
-       name="Allow"
-       text="Allow"/>
-      <button
-       index="1"
-       name="Ignore"
-       text="Ignore"/>
-    </form>
-  </notification>
-  
-  <notification
-   icon="notify.tga"
-   label="Reset Windlight settings"
-   name="FSWLClear"
-   type="notify">
-Reset WL settings for &apos;[PARCEL_NAME]&apos; to region default?
-    <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="Yes"/>
-  </notification>
-
 <!-- ## Zi: Animation Overrider -->
   <notification
    icon="alertmodal.tga"

@@ -132,19 +132,6 @@
     top="2"
     tool_tip="Parcel is for sale" 
     width="16"/>
-   <button
-    follows="right|top"
-    height="16"
-    hover_glow_amount="0.15"
-    image_disabled="Parcel_Windlight"
-    image_disabled_selected="Parcel_Windlight"
-    image_selected="Parcel_Windlight"
-    image_unselected="Parcel_Windlight"
-    left="208"
-    name="status_wl_btn"
-    top="2"
-    tool_tip="Parcel has WL settings" 
-    width="16"/>
   <icon
     follows="right|top"
     height="13"
