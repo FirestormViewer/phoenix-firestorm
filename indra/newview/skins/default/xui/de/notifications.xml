@@ -4620,19 +4620,6 @@ Möchten Sie diesen Vorgang wirklich fortsetzen?
 		<usetemplate ignoretext="Sind Sie sicher, dass Sie die Transferierbarkeit der Einstellungen aufgeben möchten?" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
 
-  <notification name="FSWL" label="Windlight-Umgebungseinstellungen anpassen">
-„[PARCEL_NAME]“, im Besitz von [OWNER_NAME], möchte deine visuellen Windlight-Umgebungseinstellungen ändern.
-    <form name="form">
-      <button name="Allow" text="Zulassen"/>
-      <button name="Ignore" text="Ignorieren"/>
-    </form>
-  </notification>
-  
-  <notification name="FSWLClear" label="Windlight-Umgebungseinstellungen zurücksetzen">
-Windlight-Umgebungseinstellungen für „[PARCEL_NAME]“ auf Regionsstandard zurücksetzen?
-    <usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Ja"/>
-  </notification>
-	
 <!-- ## Zi: Animation Overrider -->
   <notification name="NewAOSet">
 Bitte einen Namen für das neue Animationsset eingeben:

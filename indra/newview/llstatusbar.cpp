@@ -88,7 +88,6 @@
 
 // Firestorm includes
 #include "fssearchableui.h"
-#include "kcwlinterface.h"
 #include "llagentui.h"
 #include "llaudioengine.h"
 #include "llclipboard.h"
@@ -433,9 +432,6 @@ BOOL LLStatusBar::postBuild()
 
 	mBuyParcelBtn = getChild<LLButton>("buy_land_btn");
 	mBuyParcelBtn->setClickedCallback(boost::bind(&LLStatusBar::onBuyLandClicked, this));
-
-	mPWLBtn = getChild<LLButton>("status_wl_btn");
-	mPWLBtn->setClickedCallback(boost::bind(&LLStatusBar::onParcelWLClicked, this));
 
 	mBalancePanel = getChild<LLPanel>("balance_bg");
 	mTimeMediaPanel = getChild<LLPanel>("time_and_media_bg");
@@ -1254,10 +1250,6 @@ void LLStatusBar::updateParcelIcons()
 		bool allow_damage	= vpm->allowAgentDamage(agent_region, current_parcel);
 		BOOL see_avatars	= current_parcel->getSeeAVs();
 		bool is_for_sale	= (!current_parcel->isPublic() && vpm->canAgentBuyParcel(current_parcel, false));
-		// [EEPMERGE]
-		//bool has_pwl		= KCWindlightInterface::instance().getWLset();
-		bool has_pwl		= false;
-		// [EEPMERGE]
 		bool pathfinding_dynamic_enabled = agent_region->dynamicPathfindingEnabled();
 
 		bool pathfinding_navmesh_dirty = LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded();
@@ -1289,8 +1281,6 @@ void LLStatusBar::updateParcelIcons()
 		mParcelIcon[PATHFINDING_DISABLED_ICON]->setVisible(!pathfinding_navmesh_dirty && !pathfinding_dynamic_enabled && !is_opensim);
 		mDamageText->setVisible(allow_damage);
 		mBuyParcelBtn->setVisible(is_for_sale);
-		mPWLBtn->setVisible(has_pwl);
-		mPWLBtn->setEnabled(has_pwl);
 		mScriptOut->setVisible(LLHUDIcon::scriptIconsNearby());
 	}
 	else
@@ -1301,7 +1291,6 @@ void LLStatusBar::updateParcelIcons()
 		}
 		mDamageText->setVisible(false);
 		mBuyParcelBtn->setVisible(false);
-		mPWLBtn->setVisible(false);
 		mScriptOut->setVisible(false);
 	}
 
@@ -1339,7 +1328,6 @@ void LLStatusBar::layoutParcelIcons()
 		left = layoutWidget(mParcelIcon[i], left);
 	}
 	left = layoutWidget(mBuyParcelBtn, left);
-	left = layoutWidget(mPWLBtn, left);
 
 	LLRect infoTextRect = mParcelInfoText->getRect();
 	infoTextRect.mLeft = left;
@@ -1456,12 +1444,6 @@ void LLStatusBar::onInfoButtonClicked()
 		return;
 	}
 	LLFloaterReg::showInstance("about_land");
-}
-
-void LLStatusBar::onParcelWLClicked()
-{
-	// [EEPMERGE]
-	//KCWindlightInterface::instance().onClickWLStatusButton();
 }
 
 void LLStatusBar::onBuyLandClicked()

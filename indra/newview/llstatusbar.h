@@ -216,11 +216,6 @@ private:
 	// </FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
 
 	/**
-	 * Handles clicks on the parcel wl info button.
-	 */
-	void onParcelWLClicked();
-
-	/**
 	 * Called when agent changes the parcel.
 	 */
 	void onAgentParcelChange();
@@ -355,7 +350,6 @@ private:
 	LLTextBox* 				mDamageText;
 	LLIconCtrl*				mParcelIcon[ICON_COUNT];
 	LLParcelChangeObserver*	mParcelChangedObserver;
-	LLButton* 				mPWLBtn;
 	LLPanel*				mBalancePanel;
 	LLButton*				mBuyParcelBtn;
 	LLPanel*				mTimeMediaPanel;

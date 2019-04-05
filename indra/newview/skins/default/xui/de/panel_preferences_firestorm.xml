@@ -123,18 +123,6 @@
 		<check_box label="LockMeister-Protokoll erlauben den integrierten AO zu aktiviere/deaktivieren" name="BridgeIntegrationLM"/>
 	</panel>
 
-
-	<!--Windlight-->
-	<panel label="Windlight" name="WindlightTab">
-		<text name="FSWLshare_txt">
-			Firestorm Windlight-Sharing:
-		</text>
-		<check_box label="Firestorm Windlight-Sharing für Parzellen aktivieren" name="FSWLParcelEnabled"/>
-		<check_box label="WL-Einstellungen von Freunden automatisch übernehmen" name="FSWLWhitelistFriends"/>
-		<check_box label="WL-Einstellungen von Land im Besitz meiner Gruppen automatisch übernehmen" name="FSWLWhitelistGroups"/>
-		<check_box label="WL-Einstellungen von allen Parzellen automatisch übernehmen" name="FSWLWhitelistAll"/>
-	</panel>
-
 	<!--Build 1-->
 	<panel label="Bauen 1" name="BuildTab">
 		<text name="text_box_objprams" left="10">

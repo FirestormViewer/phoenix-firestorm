@@ -106,15 +106,6 @@
         <check_box label="Разрешить протокол OpenCollar, чтобы разрешить или запретить строить в AO" name="BridgeIntegrationOC" />
         <check_box label="Разрешить протокол LockMeister, чтобы разрешить или запретить строить в AO" name="BridgeIntegrationLM" />
     </panel>
-    <panel label="Окружение (Windlight)" name="WindlightTab">
-        <text name="FSWLshare_txt" width="350">
-          Совместная окружающая среда Firestorm
-        </text>
-        <check_box label="Использовать совместная окружающую среду Firestorm для участка" name="FSWLParcelEnabled" />
-        <check_box label="Автоматически применять настройки окружающей среды от друзей" name="FSWLWhitelistFriends" />
-        <check_box label="Автоматически применять настройки окружающей среды от групп" name="FSWLWhitelistGroups" />
-        <check_box label="Автоматически применять настройки окружающей среды от любого участка" name="FSWLWhitelistAll" />
-    </panel>
     <panel label="Строить 1" name="BuildTab">
         <text name="text_box_objprams">
          Начальный размер

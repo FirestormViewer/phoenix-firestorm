@@ -828,62 +828,6 @@
 
     </panel>
 
-    <!--Windlight-->
-    <panel
-     top_pad="5"
-     bottom="-1"
-     left="1"
-     right="-1"
-     follows="all"
-     label="Windlight"
-     name="WindlightTab">
-        <text
-         top_pad="10"
-         left="10"
-         follows="left|top"
-         height="12"
-         name="FSWLshare_txt"
-         width="250">
-          Firestorm WL Share
-        </text>
-        <check_box
-         top_pad="8"
-         label="Use Firestorm Parcel Windlight Sharing"
-         control_name="FSWLParcelEnabled"
-         follows="left|top"
-         height="16"
-         name="FSWLParcelEnabled"
-         width="256" />
-        <check_box
-         top_pad="5"
-         left="15"
-         label="Auto apply WL settings from friend's land"
-         control_name="FSWLWhitelistFriends"
-         enabled_control="FSWLParcelEnabled"
-         follows="left|top"
-         height="16"
-         name="FSWLWhitelistFriends"
-         width="256" />
-        <check_box
-         top_pad="5"
-         label="Auto apply WL settings from my groups' land"
-         control_name="FSWLWhitelistGroups"
-         enabled_control="FSWLParcelEnabled"
-         follows="left|top"
-         height="16"
-         name="FSWLWhitelistGroups"
-         width="256" />
-        <check_box
-         top_pad="5"
-         label="Auto apply WL settings from any parcel"
-         control_name="FSWLWhitelistAll"
-         enabled_control="FSWLParcelEnabled"
-         follows="left|top"
-         height="16"
-         name="FSWLWhitelistAll"
-         width="256" />
-    </panel>
-
     <!--Build 1-->
     <panel
      top_pad="5"

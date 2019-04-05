@@ -212,7 +212,6 @@ set(viewer_SOURCE_FILES
     fssearchableui.cpp
     fsslurlcommand.cpp
     groupchatlistener.cpp
-    kcwlinterface.cpp
     lggbeamcolormapfloater.cpp
     lggbeammapfloater.cpp
     lggbeammaps.cpp
@@ -969,7 +968,6 @@ set(viewer_HEADER_FILES
     fsslurlcommand.h
     groupchatlistener.h
     llaccountingcost.h
-    kcwlinterface.h
     lggbeamcolormapfloater.h
     lggbeammapfloater.h
     lggbeammaps.h
