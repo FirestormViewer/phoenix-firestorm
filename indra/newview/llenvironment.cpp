@@ -2442,6 +2442,7 @@ LLEnvironment::DayInstance::DayInstance(EnvSelection_t env) :
     mWater(),
     mDayLength(LLSettingsDay::DEFAULT_DAYLENGTH),
     mDayOffset(LLSettingsDay::DEFAULT_DAYOFFSET),
+    mDayOffsetOverride(LLSettingsDay::MINIMUM_DAYOFFSET), // KC
     mBlenderSky(),
     mBlenderWater(),
     mInitialized(false),
@@ -2551,6 +2552,7 @@ void LLEnvironment::DayInstance::clear()
     mWater.reset();
     mDayLength = LLSettingsDay::DEFAULT_DAYLENGTH;
     mDayOffset = LLSettingsDay::DEFAULT_DAYOFFSET;
+    mDayOffsetOverride = LLSettingsDay::MINIMUM_DAYOFFSET; // KC
     mBlenderSky.reset();
     mBlenderWater.reset();
     mSkyTrack = 1;
@@ -2574,7 +2576,8 @@ void LLEnvironment::DayInstance::setBlenders(const LLSettingsBlender::ptr_t &sky
 LLSettingsBase::TrackPosition LLEnvironment::DayInstance::getProgress() const
 {
     LLSettingsBase::Seconds now(LLDate::now().secondsSinceEpoch());
-    now += mDayOffset;
+    // now += mDayOffset;
+    now += mDayOffset + mDayOffsetOverride; // KC
 
     if ((mDayLength <= 0) || !mDayCycle)
         return -1.0f;   // no actual day cycle.
@@ -2591,7 +2594,8 @@ void LLEnvironment::DayInstance::animate()
 {
     LLSettingsBase::Seconds now(LLDate::now().secondsSinceEpoch());
 
-    now += mDayOffset;
+    // now += mDayOffset;
+    now += mDayOffset + mDayOffsetOverride; // KC
 
     if (!mDayCycle)
         return;
@@ -2607,7 +2611,8 @@ void LLEnvironment::DayInstance::animate()
     {
         mWater = LLSettingsVOWater::buildDefaultWater();
         mBlenderWater = std::make_shared<LLTrackBlenderLoopingTime>(mWater, mDayCycle, 0, 
-            mDayLength, mDayOffset, DEFAULT_UPDATE_THRESHOLD);
+            // mDayLength, mDayOffset, DEFAULT_UPDATE_THRESHOLD);
+            mDayLength, mDayOffset + mDayOffsetOverride, DEFAULT_UPDATE_THRESHOLD); // KC
     }
 
     // sky, initialize to track 1
@@ -2622,7 +2627,8 @@ void LLEnvironment::DayInstance::animate()
     {
         mSky = LLSettingsVOSky::buildDefaultSky();
         mBlenderSky = std::make_shared<LLTrackBlenderLoopingTime>(mSky, mDayCycle, 1, 
-            mDayLength, mDayOffset, DEFAULT_UPDATE_THRESHOLD);
+            // mDayLength, mDayOffset, DEFAULT_UPDATE_THRESHOLD);
+            mDayLength, mDayOffset + mDayOffsetOverride, DEFAULT_UPDATE_THRESHOLD); // KC
         mBlenderSky->switchTrack(mSkyTrack, 0.0);
     }
 }

@@ -65,6 +65,8 @@ class FloaterQuickPrefs : public LLTransientDockableFloater
 private:
 	FloaterQuickPrefs(const LLSD& key);
 	~FloaterQuickPrefs();
+
+    void onDayOffset();
 	void onSunMoved();
 
 	void selectSkyPreset(const LLSD& preset);
@@ -111,9 +113,15 @@ public:
 
 	void dockToToolbarButton();
 
+    static void onIdle(void* user_data);
+    void updateSun();
+    virtual void onVisibilityChange(BOOL new_visibility) override;
+
 private:
 
-	LLMultiSliderCtrl*	mWLSunPos;
+	LLMultiSliderCtrl*	mWLDayOffset;
+    LLSlider*	        mWLSunAltitude;
+    LLSlider*	        mWLSunAzimuth;
 	LLComboBox*			mWLPresetsCombo;
 	LLComboBox*			mWaterPresetsCombo;
 	LLComboBox*			mDayCyclePresetsCombo;
