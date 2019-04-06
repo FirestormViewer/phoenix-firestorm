@@ -1841,16 +1841,15 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	LLCoordScreen scr;
     mWindow->getSize(&scr);
 
-	// <FS:Ansariel> Reset UI scale factor on first run if OS's display scaling is not 100%
-	if (gSavedSettings.getBOOL("FSResetUIScaleOnFirstRun"))
+	// Reset UI scale factor on first run if OS's display scaling is not 100%
+	if (gSavedSettings.getBOOL("ResetUIScaleOnFirstRun"))
 	{
 		if (mWindow->getSystemUISize() != 1.f)
 		{
 			gSavedSettings.setF32("UIScaleFactor", 1.f);
 		}
-		gSavedSettings.setBOOL("FSResetUIScaleOnFirstRun", FALSE);
+		gSavedSettings.setBOOL("ResetUIScaleOnFirstRun", FALSE);
 	}
-	// </FS:Ansariel>
 
 	// Get the real window rect the window was created with (since there are various OS-dependent reasons why
 	// the size of a window or fullscreen context may have been adjusted slightly...)
