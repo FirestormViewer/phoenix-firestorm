@@ -46,6 +46,7 @@ class LLSlider;
 class LLSliderCtrl;
 class LLSpinCtrl;
 class LLTextBox;
+class LLVirtualTrackball;
 
 #define PRESET_NAME_REGION_DEFAULT "__Regiondefault__"
 #define PRESET_NAME_DAY_CYCLE "__Day_Cycle__"
@@ -97,6 +98,9 @@ private:
 	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
 	void enableWindlightButtons(BOOL enable);
 
+    void updateSun();
+    void updateDayOffset();
+
 public:
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void draw();
@@ -113,15 +117,11 @@ public:
 
 	void dockToToolbarButton();
 
-    static void onIdle(void* user_data);
-    void updateSun();
-    virtual void onVisibilityChange(BOOL new_visibility) override;
-
 private:
 
+    // Windlight controls
 	LLMultiSliderCtrl*	mWLDayOffset;
-    LLSlider*	        mWLSunAltitude;
-    LLSlider*	        mWLSunAzimuth;
+    LLVirtualTrackball* mWLSunRot;
 	LLComboBox*			mWLPresetsCombo;
 	LLComboBox*			mWaterPresetsCombo;
 	LLComboBox*			mDayCyclePresetsCombo;

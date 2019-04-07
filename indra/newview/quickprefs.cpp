@@ -57,26 +57,10 @@
 #include "llviewerregion.h"
 #include "llvoavatar.h"
 #include "llvoavatarself.h"
+#include "llvirtualtrackball.h"
 #include "rlvhandler.h"
 #include <boost/foreach.hpp>
 
-const LLVector3 VectorZero(1.0f, 0.0f, 0.0f);
-
-// static F32 sun_pos_to_time24(F32 sun_pos)
-// {
-// 	return fmodf(sun_pos * 24.0f + 6.f, 24.0f);
-// }
-// 
-// static F32 time24_to_sun_pos(F32 time)
-// {
-// 	F32 ret = time - 6.f;
-// 	if (ret < 0.f)
-// 	{
-// 		ret += 24.f;
-// 	}
-// 
-// 	return (ret / 24.f);
-// }
 
 std::string unescape_name(const std::string& name);
 class FSSettingsCollector : public LLInventoryCollectFunctor
@@ -211,9 +195,8 @@ void FloaterQuickPrefs::initCallbacks()
 	getChild<LLUICtrl>("DCPrevPreset")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickDayCyclePrev, this));
 	getChild<LLUICtrl>("DCNextPreset")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickDayCycleNext, this));
 	getChild<LLUICtrl>("ResetToRegionDefault")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickResetToRegionDefault, this));
-	getChild<LLMultiSliderCtrl>("WLSunPos")->setSliderMouseUpCallback(boost::bind(&FloaterQuickPrefs::onDayOffset, this));
-	getChild<LLUICtrl>("SunAltitude")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onSunMoved, this));
-	getChild<LLUICtrl>("SunAzimuth")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onSunMoved, this));
+	getChild<LLMultiSliderCtrl>("time_offset")->setSliderMouseUpCallback(boost::bind(&FloaterQuickPrefs::onDayOffset, this));
+    getChild<LLUICtrl>("sun_rotation")->setCommitCallback([this](LLUICtrl *, const LLSD &) { onSunMoved(); });
 
 	// Phototools additions
 	if (getIsPhototools())
@@ -522,6 +505,8 @@ void FloaterQuickPrefs::setSelectedEnvironment()
 		default:
 			break;
 	}
+
+    updateDayOffset();
 }
 
 BOOL FloaterQuickPrefs::postBuild()
@@ -574,12 +559,9 @@ BOOL FloaterQuickPrefs::postBuild()
 	mWaterPresetsCombo = getChild<LLComboBox>("WaterPresetsCombo");
 	mWLPresetsCombo = getChild<LLComboBox>("WLPresetsCombo");
 	mDayCyclePresetsCombo = getChild<LLComboBox>("DCPresetsCombo");
-	mWLDayOffset = getChild<LLMultiSliderCtrl>("WLSunPos");
+    mWLSunRot = getChild<LLVirtualTrackball>("sun_rotation");
+	mWLDayOffset = getChild<LLMultiSliderCtrl>("time_offset");
     mWLDayOffset->addSlider(0);
-    // mWLDayOffset->setMaxValue(LLSettingsDay::MAXIMUM_DAYOFFSET);
-    
-    mWLSunAltitude = getChild<LLSlider>("SunAltitude");
-    mWLSunAzimuth = getChild<LLSlider>("SunAzimuth");
     
 
 	initCallbacks();
@@ -869,22 +851,12 @@ void FloaterQuickPrefs::onClickDayCycleNext()
 
 void FloaterQuickPrefs::draw()
 {
-	// [EEPMERGE]
-	//F32 val;
+    updateSun();
+    LLTransientDockableFloater::draw();
+}
 
-	//if (LLEnvManagerNew::instance().getUseRegionSettings() ||
-	//	LLEnvManagerNew::instance().getUseDayCycle())
-	//{
-	//	val = (F32)(LLWLParamManager::instance().mAnimator.getDayTime() * 24.f);
-	//}
-	//else
-	//{
-	//	val = sun_pos_to_time24(LLWLParamManager::instance().mCurParams.getSunAngle() / F_TWO_PI);
-	//}
-
-	//mWLSunPos->setCurSliderValue(val);
-	// [/EEPMERGE]
-
+void FloaterQuickPrefs::updateDayOffset()
+{
     // KC: Limit day cycle offset max to day length if less than a full real day
     LLSettingsDay::Seconds day_length = LLEnvironment::instance().getDayLength();
     if (day_length > LLSettingsDay::MINIMUM_DAYOFFSET)
@@ -897,105 +869,38 @@ void FloaterQuickPrefs::draw()
         {
             mWLDayOffset->setMaxValue(LLSettingsDay::MAXIMUM_DAYOFFSET);
         }
+        mWLDayOffset->setCurSliderValue(LLEnvironment::instance().getDayOffsetOverride());
     }
-
-    updateSun();
-
-    LLTransientDockableFloater::draw();
+    else
+    {
+        mWLDayOffset->setCurSliderValue(0);
+    }
 }
 
-void FloaterQuickPrefs::onIdle(void* user_data)
-{
-    FloaterQuickPrefs* floater_quickprefs = (FloaterQuickPrefs*)user_data;
-    floater_quickprefs->updateSun();
-}
+const F32 SUN_ROTATION_PRECISION = 0.1f;
 
 void FloaterQuickPrefs::updateSun()
 {
-    // The fallowing kind of works for sun position, conflicts with above
-    // - Slider tick does not work properly
     LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
-    LLQuaternion sunq = psky->getSunRotation();
-
-    F32 azimuth, altitude;
-    sunq.getAzimuthAndAltitude(azimuth, altitude);
-
-    // LLVector3 draw_point = VectorZero * sunq;
-
-    // LL_INFOS() << "draw_point VX: " << draw_point.mV[VX] << LL_ENDL;
-    // LL_INFOS() << "draw_point VY: " << draw_point.mV[VY] << LL_ENDL;
-    // LL_WARNS() << "==== altitude: " << altitude << "  azimuth: " << azimuth << LL_ENDL;
-
-    // draw_point.mV[VX] = draw_point.mV[VX] * 24.f;
-    // draw_point.mV[VY] = draw_point.mV[VY] * 24.f;
-
-    // mWLSunAltitude->setValue(draw_point.mV[VX]);
-    // mWLSunAzimuth->setValue(draw_point.mV[VX]);
-    mWLSunAltitude->setValue(altitude);
-    mWLSunAzimuth->setValue(azimuth);
+    mWLSunRot->setRotation(psky->getSunRotation());
 }
 
 void FloaterQuickPrefs::onDayOffset()
 {
-	// [EEPMERGE]
-	//if (LLEnvManagerNew::instance().getUseRegionSettings() ||
-	//	LLEnvManagerNew::instance().getUseDayCycle())
-	//{
-	//	F32 val = mWLSunPos->getCurSliderValue() / 24.0f;
-
-	//	LLWLParamManager& mgr = LLWLParamManager::instance();
-	//	mgr.mAnimator.setDayTime((F64)val);
-	//	mgr.mAnimator.deactivate();
-	//	mgr.mAnimator.update(mgr.mCurParams);
-	//}
-	//else
-	//{
-	//	deactivateAnimator();
-	//	F32 val = time24_to_sun_pos(mWLSunPos->getCurSliderValue()) * F_TWO_PI;
-	//	LLWLParamManager::instance().mCurParams.setSunAngle(val);
-	//}
-	// [/EEPMERGE]
-    
-    // Quick hack to see if this is viable - KC
+    //KC: Forces the environment time by an additional offset
     if (LLEnvironment::instance().getDayOffset() > LLSettingsDay::INVALID_DAYOFFSET)
     {
         LLSettingsDay::Seconds day_offset(mWLDayOffset->getCurSliderValue());
         LLEnvironment::instance().setDayOffsetOverride(day_offset);
+        LLEnvironment::instance().updateEnvironment();
     }
-    
-    updateSun();
 }
 
 void FloaterQuickPrefs::onSunMoved()
 {
-    // The fallowing kind of works for sun position, conflicts with above
-    // - Sometimes it seems that only the light source moves and not the visual sun
-
     LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
-    LLQuaternion sunq = psky->getSunRotation();
-
-    F32 altitude = mWLSunAltitude->getValueF32();
-    F32 azimuth  = mWLSunAzimuth->getValueF32();
-
-    LLVector3 draw_point = VectorZero * sunq;
-    if (draw_point.mV[VZ] >= 0.f)
-    {
-        if (is_approx_zero(altitude)) // don't change the hemisphere
-        {
-            altitude = F_APPROXIMATELY_ZERO;
-        }
-        altitude *= -1;
-    }
-
-    // sunq.setAngleAxis(altitude, 0, 1, 0);
-    // LLQuaternion az_quat;
-    // az_quat.setAngleAxis(azimuth, 0, 0, 1);
-    // sunq *= az_quat;
-    sunq.setFromAzimuthAndAltitude(azimuth, altitude);
-
-    psky->setSunRotation(sunq);
-    
-    updateSun();
+    psky->setSunRotation(mWLSunRot->getRotation());
+    psky->updateSettings();
 }
 
 void FloaterQuickPrefs::onClickResetToRegionDefault()
@@ -1004,6 +909,7 @@ void FloaterQuickPrefs::onClickResetToRegionDefault()
 	mWaterPresetsCombo->setValue(LLSD(PRESET_NAME_REGION_DEFAULT));
 
     LLEnvironment::instance().setDayOffsetOverride(LLSettingsDay::MINIMUM_DAYOFFSET);
+    mWLDayOffset->setCurSliderValue(0);
 	LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_LOCAL);
     LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
     LLEnvironment::instance().updateEnvironment();
@@ -1256,7 +1162,8 @@ void FloaterQuickPrefs::enableWindlightButtons(BOOL enable)
 	childSetEnabled("DCPrevPreset", enable);
 	childSetEnabled("DCNextPreset", enable);
 	//<FS:TS> FIRE-13448: Quickprefs daycycle slider allows evading @setenv=n
-	childSetEnabled("WLSunPos", enable);
+	childSetEnabled("time_offset", enable);
+	childSetEnabled("sun_rotation", enable);
 	//</FS:TS> FIRE-13448
 
 	if (getIsPhototools())
@@ -2253,19 +2160,6 @@ void FloaterQuickPrefs::dockToToolbarButton()
 		setCanDock(false);
 		setDockControl(NULL);
 	}
-}
-
-void FloaterQuickPrefs::onVisibilityChange(BOOL new_visibility)
-{
-    if (new_visibility)
-    {
-        gIdleCallbacks.addFunction(onIdle, this);
-    }
-    else
-    {
-        gIdleCallbacks.deleteFunction(onIdle, this);
-    }
-
 }
 
 void FloaterQuickPrefs::onAvatarZOffsetSliderMoved()
