@@ -862,7 +862,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
         if( !viewerUsesWineForVoice() )
             gDirUtilp->append(exe_path, "SLVoice"); // native version
         else
-            gDirUtilp->append(exe_path, "win32/SLVoice"); // use bundled win32 version
+            gDirUtilp->append(exe_path, "win32/SLVoice.exe"); // use bundled win32 version
         // </FS:ND>
 #endif
         // See if the vivox executable exists

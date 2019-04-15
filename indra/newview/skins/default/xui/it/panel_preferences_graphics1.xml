@@ -46,15 +46,6 @@
 				<combo_box.item label="Sole/Luna" name="1"/>
 				<combo_box.item label="Sole/Luna + altre fonti" name="2"/>
 			</combo_box>
-			<text name="avatar_shadows_label">
-				Ombre avatar:
-			</text>
-			<combo_box name="AvatarShadowDetail">
-				<combo_box.item label="Nessuna" name="0"/>
-				<combo_box.item label="Semplificate" name="1"/>
-				<combo_box.item label="Ottimizzate" name="2"/>
-				<combo_box.item label="Complesse" name="3"/>
-			</combo_box>
 			<text name="reflection_label">
 				Riflessi nell’acqua:
 			</text>
