@@ -81,6 +81,9 @@ Erweitertes Beleuchtungsmodell: [ALMSTATUS]
 Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 VFS (Cache) Erstellungszeit: [VFS_DATE]
 	</string>
+	<string name="AboutOSXHiDPI">
+HiDPI-Display-Modus: [HIDPI]
+	</string>
 	<string name="AboutLibs">
 RestrainedLove API: [RLV_VERSION]
 libcurl-Version: [LIBCURL_VERSION]
