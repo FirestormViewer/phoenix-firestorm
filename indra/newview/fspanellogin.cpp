@@ -794,7 +794,10 @@ void FSPanelLogin::closePanel()
 {
 	if (sInstance)
 	{
-		FSPanelLogin::sInstance->getParent()->removeChild( FSPanelLogin::sInstance );
+		if (FSPanelLogin::sInstance->getParent())
+		{
+			FSPanelLogin::sInstance->getParent()->removeChild( FSPanelLogin::sInstance );
+		}
 
 		delete sInstance;
 		sInstance = NULL;

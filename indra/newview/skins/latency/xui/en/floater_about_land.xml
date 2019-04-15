@@ -163,6 +163,7 @@
              layout="topleft"
              left="10"
              name="Description:"
+             spellcheck="true"
              width="100">
                 Description:
             </text>

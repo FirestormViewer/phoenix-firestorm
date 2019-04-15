@@ -1363,11 +1363,14 @@ bool LLAppViewer::init()
 //	updater.args.add(gSavedSettings.getString("UpdaterServiceURL"));
 //	// ForceAddressSize
 //	updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
-//
-//	if (!beingDebugged())
-//	{
-//		LLLeap::create(updater, true);
-//	}
+//#if !LL_RELEASE_FOR_DOWNLOAD && !LL_SEND_CRASH_REPORTS
+//    // This is neither a release package, nor crash-reporting enabled test build
+//    // Note: pointless to launch on Windows - it shouldn't expect secondlife-bin.exe
+//    LL_WARNS("LLLeap") << "Launching without version checker" << LL_ENDL;
+//#else
+//	// Run the updater. An exception from launching the updater should bother us.
+//	LLLeap::create(updater, true);
+//#endif
 	// </FS:Ansariel>
 
 	// Iterate over --leap command-line options. But this is a bit tricky: if
@@ -3838,6 +3841,10 @@ LLSD LLAppViewer::getViewerInfo() const
     //info["VFS_TIME"] = LLTrans::getString("AboutTime", substitution);
 	// </FS>
 
+#if LL_DARWIN
+    info["HIDPI"] = gHiDPISupport;
+#endif
+
 	// Libraries
 
 	info["J2C_VERSION"] = LLImageJ2C::getEngineInfo();
@@ -4046,6 +4053,9 @@ std::string LLAppViewer::getViewerInfoString(bool default_string) const
 	}
 	support << "\n" << LLTrans::getString("AboutOGL", args, default_string);
 	//support << "\n\n" << LLTrans::getString("AboutSettings", args, default_string); // <FS> Custom sysinfo
+#if LL_DARWIN
+	support << "\n" << LLTrans::getString("AboutOSXHiDPI", args, default_string);
+#endif
 	support << "\n\n" << LLTrans::getString("AboutLibs", args, default_string);
 	// <FS> Custom sysinfo
 	if (info.has("BANDWIDTH")) //For added info in help floater

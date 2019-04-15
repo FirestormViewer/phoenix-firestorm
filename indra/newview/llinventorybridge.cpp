@@ -2316,6 +2316,16 @@ BOOL LLItemBridge::isItemCopyable() const
 	LLViewerInventoryItem* item = getItem();
 	if (item)
 	{
+/*
+		// Can't copy worn objects.
+		// Worn objects are tied to their inworld conterparts
+		// Copy of modified worn object will return object with obsolete asset and inventory
+		if(get_is_item_worn(mUUID))
+		{
+			return FALSE;
+		}
+*/
+
 // [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
 		// We'll allow copying a link if:
 		//   - its target is available

@@ -29,6 +29,7 @@
 
 #include "llpreview.h"
 #include "llassetstorage.h"
+#include "llpreviewscript.h"
 #include "lliconctrl.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -81,6 +82,8 @@ public:
 	// asset system. :(
 	void refreshFromInventory(const LLUUID& item_id = LLUUID::null);
 
+	void syncExternal();
+
 	// <FS:Ansariel> FIRE-9039: Close notecard after choosing "Save" in close confirmation
 	void checkCloseAfterSave();
 
@@ -88,7 +91,7 @@ protected:
 
 	void updateTitleButtons() override;
 	void loadAsset() override;
-	bool saveIfNeeded(LLInventoryItem* copyitem = NULL);
+	bool saveIfNeeded(LLInventoryItem* copyitem = NULL, bool sync = true);
 
 	void deleteNotecard();
 
@@ -100,6 +103,8 @@ protected:
 	static void onClickSave(void* data);
 
 	static void onClickDelete(void* data);
+
+	static void onClickEdit(void* data);
 
 	static void onSaveComplete(const LLUUID& asset_uuid,
 							   void* user_data,
@@ -113,6 +118,12 @@ protected:
 	// <FS:Ansariel> FIRE-13969: Search button
 	void onSearchButtonClicked();
 
+    void openInExternalEditor();
+    bool onExternalChange(const std::string& filename);
+    bool loadNotecardText(const std::string& filename);
+    bool writeToFile(const std::string& filename);
+    std::string getTmpFileName();
+
 protected:
 	LLViewerTextEditor* mEditor;
 	LLButton* mSaveBtn;
@@ -120,6 +131,8 @@ protected:
 	LLUUID mAssetID;
 
 	LLUUID mObjectID;
+
+	LLLiveLSLFile* mLiveFile;
 };
 
 

@@ -750,7 +750,10 @@ void LLPanelLogin::closePanel()
 {
 	if (sInstance)
 	{
-		LLPanelLogin::sInstance->getParent()->removeChild( LLPanelLogin::sInstance );
+		if (LLPanelLogin::sInstance->getParent())
+		{
+			LLPanelLogin::sInstance->getParent()->removeChild(LLPanelLogin::sInstance);
+		}
 
 		delete sInstance;
 		sInstance = NULL;

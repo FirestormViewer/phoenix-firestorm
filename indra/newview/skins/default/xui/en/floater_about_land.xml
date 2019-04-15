@@ -173,6 +173,7 @@
              layout="topleft"
              left_pad="2"
              name="Description"
+             spellcheck="true"
              top_delta="0"
              width="365"
              word_wrap="true" />

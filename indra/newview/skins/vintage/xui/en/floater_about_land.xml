@@ -163,6 +163,7 @@
              layout="topleft"
              left="10"
              name="Description:"
+             spellcheck="true"
              width="100">
                 Description:
             </text>
@@ -172,6 +173,7 @@
              layout="topleft"
              left_pad="3"
              name="Description"
+             spellcheck="true"
              top_delta="0"
              right="-10"
              word_wrap="true" />

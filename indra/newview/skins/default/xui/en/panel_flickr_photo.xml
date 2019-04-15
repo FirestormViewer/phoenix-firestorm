@@ -224,6 +224,7 @@
              top_pad="0"
              max_length="700"
              name="photo_description"
+             spellcheck="true"
              type="string"
              word_wrap="true">
             </text_editor>
