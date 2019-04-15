@@ -144,11 +144,6 @@ private:
 									mLegendRect;
 	LLFrameTimer					mHighlightTimer;
 	LLTrace::PeriodicRecording		mRecording;
-
-	// <FS:LO> Making the ledgend part of fast timers scrollable
-	bool mOverLegend;
-	S32 mScrollOffset;
-	// </FS:LO>
 };
 
 #endif
