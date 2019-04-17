@@ -879,10 +879,11 @@ BOOL LLWindowMacOSX::getSize(LLCoordScreen *size)
 
 		size->mX = sz.width;
 		size->mY = sz.height;
+        err = noErr;
 	}
 	else
 	{
-		LL_ERRS() << "LLWindowMacOSX::getPosition(): no window and not fullscreen!" << LL_ENDL;
+		LL_ERRS() << "LLWindowMacOSX::getSize(): no window and not fullscreen!" << LL_ENDL;
 	}
 
 	return (err == noErr);
@@ -904,10 +905,13 @@ BOOL LLWindowMacOSX::getSize(LLCoordWindow *size)
 		
 		size->mX = sz.width;
 		size->mY = sz.height;
+        err = noErr;
+        
+        
 	}
 	else
 	{
-		LL_ERRS() << "LLWindowMacOSX::getPosition(): no window and not fullscreen!" << LL_ENDL;
+		LL_ERRS() << "LLWindowMacOSX::getSize(): no window and not fullscreen!" << LL_ENDL;
 	}
 	
 	return (err == noErr);
