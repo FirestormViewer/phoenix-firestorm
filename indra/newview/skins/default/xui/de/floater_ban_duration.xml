@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="ban_duration" title="Verbannungsdauer">
+	<text name="duration_textbox">
+		Verbannungsdauer:
+	</text>
+	<radio_group name="ban_duration_radio">
+		<radio_item label="Permanent" name="always_radio"/>
+		<radio_item label="Temporär" name="temporary_radio"/>
+	</radio_group>
+	<text name="hours_textbox">
+		Stunden.
+	</text>
+	<button label="Ok" name="ok_btn"/>
+	<button label="Abbrechen" name="cancel_btn"/>
+</floater>

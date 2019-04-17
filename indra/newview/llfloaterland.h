@@ -396,7 +396,7 @@ public:
 	void onClickAddAccess();
 	void onClickAddBanned();
 	void callbackAvatarCBBanned(const uuid_vec_t& ids);
-	void callbackAvatarCBBannedTimed(const LLUUID& id, S32 time); //<FS:LO> Add ability to do time based temp bans
+	void callbackAvatarCBBanned2(const uuid_vec_t& ids, S32 duration);
 	void callbackAvatarCBAccess(const uuid_vec_t& ids);
 
 protected:

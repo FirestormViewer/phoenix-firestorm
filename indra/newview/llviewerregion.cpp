@@ -3079,6 +3079,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("DispatchRegionInfo");
 	capabilityNames.append("DirectDelivery");
 	capabilityNames.append("EnvironmentSettings");
+	capabilityNames.append("EstateAccess");
 // <FS:CR> Aurora Sim
 	capabilityNames.append("DispatchOpenRegionSettings");
 // </FS:CR> Aurora Sim
