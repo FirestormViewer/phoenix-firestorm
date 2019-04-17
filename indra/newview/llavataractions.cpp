@@ -2332,7 +2332,7 @@ bool LLAvatarActions::callbackEstateBan(const LLSD& notification, const LLSD& re
 			}
 
 			LLFloaterRegionInfo::nextInvoice();
-			LLPanelEstateInfo::sendEstateAccessDelta(flags, itAgent->asUUID());
+			LLPanelEstateAccess::sendEstateAccessDelta(flags, itAgent->asUUID());
 		}
 	}
 	return false;
