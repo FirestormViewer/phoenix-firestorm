@@ -815,6 +815,11 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", gSavedPerAccountSettings.getF32("AvatarHoverOffsetZ") - 0.05f);
 				return false;
 			}
+			else if (command == "/zoffset_reset")
+			{
+				gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", 0.f);
+				return false;
+			}
 			else if (command == sFSCmdLineOfferTp())
 			{
 				LLUUID target_key;
