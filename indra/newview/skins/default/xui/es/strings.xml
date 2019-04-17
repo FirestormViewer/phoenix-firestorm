@@ -2302,7 +2302,7 @@ Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia 
 		Tórax
 	</string>
 	<string name="ATTACH_HEAD">
-		Cabeza
+		Cráneo
 	</string>
 	<string name="ATTACH_LSHOULDER">
 		Hombro izquierdo
@@ -2323,7 +2323,7 @@ Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia 
 		Pie derecho
 	</string>
 	<string name="ATTACH_BACK">
-		Espalda
+		Columna
 	</string>
 	<string name="ATTACH_PELVIS">
 		Pelvis
@@ -2380,7 +2380,7 @@ Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia 
 		Pantorrilla izquierda
 	</string>
 	<string name="ATTACH_BELLY">
-		Vientre
+		Abdomen
 	</string>
 	<string name="ATTACH_LEFT_PEC">
 		Pectoral izquierdo

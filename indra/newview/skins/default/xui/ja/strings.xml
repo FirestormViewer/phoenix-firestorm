@@ -2242,7 +2242,7 @@ http://www.firestormviewer.org/support
 		胸部
 	</string>
 	<string name="ATTACH_HEAD">
-		頭
+		頭蓋
 	</string>
 	<string name="ATTACH_LSHOULDER">
 		左肩
@@ -2263,7 +2263,7 @@ http://www.firestormviewer.org/support
 		右足
 	</string>
 	<string name="ATTACH_BACK">
-		背中
+		背骨
 	</string>
 	<string name="ATTACH_PELVIS">
 		骨盤
@@ -2293,13 +2293,13 @@ http://www.firestormviewer.org/support
 		右腕（上）
 	</string>
 	<string name="ATTACH_RLARM">
-		右腕（下）
+		右前腕
 	</string>
 	<string name="ATTACH_LUARM">
 		左腕（上）
 	</string>
 	<string name="ATTACH_LLARM">
-		左腕（下）
+		左前腕
 	</string>
 	<string name="ATTACH_RHIP">
 		右腰
@@ -2320,7 +2320,7 @@ http://www.firestormviewer.org/support
 		左脚（下）
 	</string>
 	<string name="ATTACH_BELLY">
-		お腹
+		腹
 	</string>
 	<string name="ATTACH_LEFT_PEC">
 		左胸筋

@@ -9,6 +9,7 @@
 		<menu_item_check label="Abiti preferiti" name="WearableFavorites"/>
 		<menu_item_call label="Preferiti" name="Picks"/>
 		<menu_item_call label="Esperienze" name="Experiences"/>
+		<menu_item_call label="I miei Script..." name="MyScripts"/>
 		<menu_item_call label="Profilo" name="Profile"/>
 		<menu_item_check label="Aspetto" name="ChangeOutfit"/>
 		<menu_item_call label="Scelta avatar" name="Avatar Picker"/>
