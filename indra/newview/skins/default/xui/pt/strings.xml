@@ -2185,7 +2185,7 @@ http://secondlife.com/support para ajuda ao resolver este problema.
 		Peito
 	</string>
 	<string name="ATTACH_HEAD">
-		Cabeça
+		Crânio
 	</string>
 	<string name="ATTACH_LSHOULDER">
 		Ombro esquerdo
@@ -2206,7 +2206,7 @@ http://secondlife.com/support para ajuda ao resolver este problema.
 		Pé direito
 	</string>
 	<string name="ATTACH_BACK">
-		Atrás
+		Coluna
 	</string>
 	<string name="ATTACH_PELVIS">
 		Pélvis
@@ -2263,7 +2263,7 @@ http://secondlife.com/support para ajuda ao resolver este problema.
 		Perna esquerda
 	</string>
 	<string name="ATTACH_BELLY">
-		Barriga
+		Estômago
 	</string>
 	<string name="ATTACH_LEFT_PEC">
 		Peitorais E

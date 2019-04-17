@@ -2401,7 +2401,7 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 		Petto
 	</string>
 	<string name="ATTACH_HEAD">
-		Testa
+		Cranio
 	</string>
 	<string name="ATTACH_LSHOULDER">
 		Spalla sx
@@ -2422,7 +2422,7 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 		Piede dx
 	</string>
 	<string name="ATTACH_BACK">
-		Schiena
+		Spina dorsale
 	</string>
 	<string name="ATTACH_PELVIS">
 		Pelvi
@@ -2479,7 +2479,7 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 		Polpaccio sx
 	</string>
 	<string name="ATTACH_BELLY">
-		Addome
+		Stomaco
 	</string>
 	<string name="ATTACH_LEFT_PEC">
 		Petto sx

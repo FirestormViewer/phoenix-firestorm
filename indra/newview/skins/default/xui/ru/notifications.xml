@@ -1584,8 +1584,24 @@
 [DOWNLOAD_PATH].
 	</notification>
 	<notification name="RequiredUpdate">
-		Для входа необходима версия \[VERSION]. Для вас обновление должно было произведено автоматически, но по какой-то причине этого не произошло. Скачайте обновление с веб-сайта https://secondlife.com/support/downloads/
+		Для входа необходима версия \[VERSION]. 
+Скачайте обновление с веб-сайта https://secondlife.com/support/downloads/
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="PauseForUpdate">
+		Для входа необходима версия \[VERSION]. 
+Нажмите OK для загрузки и установки.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OptionalUpdateReady">
+		Версия \[VERSION] загружена и готова к установке. 
+Нажмите OK для установки.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="PromptOptionalUpdate">
+		Версия \[VERSION] загружена и готова к установке. 
+Продолжить?
+		<usetemplate canceltext="Не сейчас" name="yesnocancelbuttons" notext="Пропустить" yestext="Установить"/>
 	</notification>
 	<notification name="LoginFailedUnknown">
 		Извините, ошибка входа по неустановленной причине. Если данное сообщение повторится, посетите веб-сайт [SUPPORT_SITE].
@@ -3222,15 +3238,6 @@ URL: [MEDIAURL]
 		<form name="form">
 			<button name="Grant" text="Разрешить доступ"/>
 			<button name="Deny" text="Запретить"/>
-		</form>
-	</notification>
-	<notification name="UnknownScriptQuestion">
-		Объект &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&quot; владельца &quot;[NAME]&quot; требует разрешения на выполнение скрипта; разрешение не распознается клиентом и не будет предоставлено
-
-Для получения этого разрешения установите последнюю версию клиента из [DOWNLOADURL].
-		<form name="form">
-			<button name="Deny" text="OK"/>
-			<button name="Mute" text="Блокировать"/>
 		</form>
 	</notification>
 	<notification name="ScriptDialog">

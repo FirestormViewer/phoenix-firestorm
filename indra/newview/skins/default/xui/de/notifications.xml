@@ -1615,8 +1615,24 @@ Geben Sie das Objekt zum Verkauf frei und versuchen Sie es erneut.
 [DOWNLOAD_PATH].
 	</notification>
 	<notification name="RequiredUpdate">
-		Für die Anmeldung ist Version [VERSION] erforderlich. Diese sollte für Sie aktualisiert worden sein, was offenbar nicht geschehen ist. Bitte laden Sie die Datei unter https://secondlife.com/support/downloads/ herunter.
+		Für die Anmeldung ist Version [VERSION] erforderlich. 
+Bitte laden Sie die Datei unter https://secondlife.com/support/downloads/ herunter.
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="PauseForUpdate">
+		Für die Anmeldung ist Version [VERSION] erforderlich. 
+Klicken Sie zum Herunterladen und Installieren auf OK.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OptionalUpdateReady">
+		Version [VERSION] wurde heruntergeladen und ist bereit zur Installation. 
+Klicken Sie zur Installation auf OK.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="PromptOptionalUpdate">
+		Version [VERSION] wurde heruntergeladen und ist bereit zur Installation. 
+Fortfahren?
+		<usetemplate canceltext="Nicht jetzt" name="yesnocancelbuttons" notext="Überspringen" yestext="Installieren"/>
 	</notification>
 	<notification name="LoginFailedUnknown">
 		Die Anmeldung ist aus nicht bekannten Gründen leider fehlgeschlagen. Falls diese Meldung weiterhin angezeigt wird, besuchen Sie bitte die [SUPPORT_SITE].
