@@ -71,7 +71,7 @@ vec3 getNorm(vec2 pos_screen);
 vec3 atmosFragLighting(vec3 l, vec3 additive, vec3 atten);
 vec3 fullbrightAtmosTransportFrag(vec3 l, vec3 additive, vec3 atten);
 
-void calcFragAtmospherics(vec3 inPositionEye, float ambFactor, out vec3 sunlit, out vec3 amblit, out vec3 additive, out vec3 atten);
+void calcAtmosphericVars(vec3 inPositionEye, float ambFactor, out vec3 sunlit, out vec3 amblit, out vec3 additive, out vec3 atten);
 
 vec3 scaleSoftClipFrag(vec3 l);
 
@@ -86,13 +86,15 @@ void main()
     float envIntensity = norm.z;
     norm.xyz = getNorm(tc);
     
+    float light_gamma = 1.0/1.3;
     vec3 light_dir = (sun_up_factor == 1) ? sun_dir : moon_dir;
     
     float da = dot(normalize(norm.xyz), light_dir.xyz);
-          da = clamp(da, 0.0, 1.0);
+          da = clamp(da, -1.0, 1.0);
 
-    float light_gamma = 1.0/1.3;
-	      da = pow(da, light_gamma);
+    float final_da = da;
+          final_da = clamp(final_da, 0.0, 1.0);
+	      final_da = pow(final_da, light_gamma);
 
     vec4 diffuse = texture2DRect(diffuseRect, tc);
 
@@ -105,32 +107,54 @@ void main()
         vec3 additive;
         vec3 atten;
 
-        calcFragAtmospherics(pos.xyz, 1.0, sunlit, amblit, additive, atten);
-
-        float ambient = min(abs(da), 1.0);
+        calcAtmosphericVars(pos.xyz, 1.0, sunlit, amblit, additive, atten);
+        sunlit *= 0.5;
+        float ambient = da;
         ambient *= 0.5;
         ambient *= ambient;
+        ambient = max(0.66, ambient);
         ambient = 1.0 - ambient;
 
-        vec3 sun_contrib = da * sunlit;
+        vec3 sun_contrib = final_da * sunlit;
 
         col.rgb = amblit;
         col.rgb *= ambient;
+
+vec3 post_ambient = col.rgb;
+
         col.rgb += sun_contrib;
+
+vec3 post_sunlight = col.rgb;
+
         col.rgb *= diffuse.rgb;
+
+vec3 post_diffuse = col.rgb;
 
         vec3 refnormpersp = normalize(reflect(pos.xyz, norm.xyz));
 
         if (spec.a > 0.0) // specular reflection
         {
-            // the old infinite-sky shiny reflection
-            float sa = dot(refnormpersp, light_dir.xyz);
-            vec3 dumbshiny = sunlit*(texture2D(lightFunc, vec2(sa, spec.a)).r);
-            
-            // add the two types of shiny together
-            vec3 spec_contrib = dumbshiny * spec.rgb;
-            bloom = dot(spec_contrib, spec_contrib) / 6;
-            col += spec_contrib;
+            vec3 npos = -normalize(pos.xyz);
+
+            //vec3 ref = dot(pos+lv, norm);
+            vec3 h = normalize(light_dir.xyz+npos);
+            float nh = dot(norm.xyz, h);
+            float nv = dot(norm.xyz, npos);
+            float vh = dot(npos, h);
+            float sa = nh;
+            float fres = pow(1 - dot(h, npos), 5)*0.4+0.5;
+
+            float gtdenom = 2 * nh;
+            float gt = max(0, min(gtdenom * nv / vh, gtdenom * da / vh));
+                                    
+            if (nh > 0.0)
+            {
+                float scol = fres*texture2D(lightFunc, vec2(nh, spec.a)).r*gt/(nh*da);
+                vec3 speccol = sun_contrib*scol*spec.rgb;
+                speccol = clamp(speccol, vec3(0), vec3(1));
+                bloom = dot(speccol, speccol) / 6;
+                col += speccol;
+            }
         }
         
         col.rgb += diffuse.a * diffuse.rgb;
@@ -142,7 +166,7 @@ void main()
             col = mix(col.rgb, refcol, envIntensity); 
         }
                 
-        if (norm.w < 0.5)
+        if (norm.w < 1)
         {
             col = atmosFragLighting(col, additive, atten);
             col = scaleSoftClipFrag(col);
@@ -153,6 +177,8 @@ void main()
             col = fogged.rgb;
             bloom = fogged.a;
         #endif
+
+//col.rgb = post_diffuse;
     }
 
     frag_color.rgb = col.rgb;

@@ -1,9 +1,9 @@
 /** 
- * @file atmosphericsF.glsl
+ * @file class1\windlight\atmosphericsFuncs.glsl
  *
- * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2005&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2007, Linden Research, Inc.
+ * Copyright (C) 2019, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,10 +22,6 @@
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
-
-vec3 getAdditiveColor();
-vec3 getAtmosAttenuation();
-
 uniform vec4 gamma;
 uniform vec4 lightnorm;
 uniform vec4 sunlight_color;
@@ -46,26 +42,11 @@ uniform mat3 ssao_effect_mat;
 uniform int no_atmo;
 uniform float sun_moon_glow_factor;
 
-vec3 srgb_to_linear(vec3 c);
-vec3 scaleSoftClipFrag(vec3 light);
-
-vec3 atmosFragLighting(vec3 light, vec3 additive, vec3 atten)
-{
-    if (no_atmo == 1)
-    {
-        return light;
-    }
-    light *= atten.r;
-    light += additive;
-    return light * 2.0;
+vec3 nothing() {
+    return vec3(0, 0, 0);
 }
 
-vec3 atmosLighting(vec3 light)
-{
-    return atmosFragLighting(light, getAdditiveColor(), getAtmosAttenuation());
-}
-
-void calcFragAtmospherics(vec3 inPositionEye, float ambFactor, out vec3 sunlit, out vec3 amblit, out vec3 additive, out vec3 atten) {
+void calcAtmosphericVars(vec3 inPositionEye, float ambFactor, out vec3 sunlit, out vec3 amblit, out vec3 additive, out vec3 atten) {
 
     vec3 P = inPositionEye;
    
@@ -120,7 +101,7 @@ void calcFragAtmospherics(vec3 inPositionEye, float ambFactor, out vec3 sunlit, 
     temp2.x = dot(Pn, tmpLightnorm.xyz);
     temp2.x = 1. - temp2.x;
         //temp2.x is 0 at the sun and increases away from sun
-    temp2.x = max(temp2.x, .03);    //was glow.y
+    temp2.x = max(temp2.x, .001);    //was glow.y
         //set a minimum "angle" (smaller glow.y allows tighter, brighter hotspot)
     temp2.x *= glow.x;
         //higher glow.x gives dimmer glow (because next step is 1 / "angle")
@@ -148,13 +129,12 @@ void calcFragAtmospherics(vec3 inPositionEye, float ambFactor, out vec3 sunlit, 
     //haze color
         additive =
         vec3(blue_horizon * blue_weight * (sunlight*(1.-cloud_shadow) + tmpAmbient)
-                  + (haze_horizon * haze_weight) * (sunlight*(1.-cloud_shadow) * temp2.x
+      + (haze_horizon * haze_weight) * (sunlight*(1.-cloud_shadow) * temp2.x
           + tmpAmbient));
 
     //brightness of surface both sunlight and ambient
-    sunlit = vec3(sunlight.rgb);
-    amblit = vec3(tmpAmbient * .25);
+    sunlit = sunlight.rgb;
+    amblit = tmpAmbient.rgb * .25;
     additive  = normalize(additive);
     additive *= vec3(1.0 - exp(-temp2.z * distance_multiplier)) * 0.5;
 }
-

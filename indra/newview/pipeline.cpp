@@ -2565,10 +2565,7 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
         LLVOCachePartition* vo_part = region->getVOCachePartition();
         if(vo_part)
         {
-            // <FS:Ansariel> Possible intentional revert in LL-EEP - keeping change from LMR for now
-            //bool do_occlusion_cull = can_use_occlusion && use_occlusion && !gUseWireframe/* && !gViewerWindow->getProgressView()->getVisible()*/;
             bool do_occlusion_cull = can_use_occlusion && use_occlusion && !gUseWireframe && 0 > water_clip /* && !gViewerWindow->getProgressView()->getVisible()*/;
-            // </FS:Ansariel>
             vo_part->cull(camera, do_occlusion_cull);
         }
     }
@@ -4652,6 +4649,7 @@ void LLPipeline::renderGeom(LLCamera& camera, bool forceVBOUpdate)
 				// Render debugging beacons.
 				gObjectList.renderObjectBeacons();
 				gObjectList.resetObjectBeacons();
+                gSky.addSunMoonBeacons();
 			}
 			else
 			{
@@ -6465,7 +6463,7 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
 			{
 				F32 size = light_radius*1.5f;
 				light_state->setLinearAttenuation(size);
-				light_state->setQuadraticAttenuation(light->getLightFalloff()*0.5f+1.f);
+				light_state->setQuadraticAttenuation(light->getLightFalloff()*0.5f);
 			}
 			else
 			{
@@ -8806,6 +8804,7 @@ void LLPipeline::renderDeferredLighting(LLRenderTarget* screen_target)
 
             LLEnvironment& environment = LLEnvironment::instance();
             soften_shader.uniform1i(LLShaderMgr::SUN_UP_FACTOR, environment.getIsSunUp() ? 1 : 0);
+            soften_shader.uniform4fv(LLShaderMgr::LIGHTNORM, 1, environment.getClampedLightNorm().mV);
 
             {
                 LLGLDepthTest depth(GL_FALSE);
@@ -9474,7 +9473,7 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
         S32 occlusion = LLPipeline::sUseOcclusion;
 
         //disable occlusion culling for reflection map for now
-        //LLPipeline::sUseOcclusion = 0;
+        LLPipeline::sUseOcclusion = 0;
 
         glh::matrix4f current = get_current_modelview();
 
@@ -10480,6 +10479,7 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 
         //far_clip = llmin(far_clip, 128.f);
         far_clip = llmin(far_clip, camera.getFar());
+        far_clip = llmax(far_clip, 256.0f);
 
         F32 range = far_clip-near_clip;
 

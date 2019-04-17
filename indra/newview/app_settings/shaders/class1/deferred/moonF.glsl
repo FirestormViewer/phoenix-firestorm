@@ -44,6 +44,8 @@ uniform sampler2D altDiffuseMap;
 uniform float blend_factor; // interp factor between moon A/B
 VARYING vec2 vary_texcoord0;
 
+vec3 srgb_to_linear(vec3 c);
+
 void main() 
 {
     vec4 moonA = texture2D(diffuseMap, vary_texcoord0.xy);
@@ -58,12 +60,14 @@ void main()
 
     vec3 exp = vec3(1.0 - mix * moon_brightness) * 2.0  - 1.0;
     c.rgb = pow(c.rgb, exp);
+    c.rgb = srgb_to_linear(c.rgb);
+
     //c.rgb *= moonlight_color.rgb;
 
     frag_data[0] = vec4(c.rgb, c.a);
     frag_data[1] = vec4(0.0);
     frag_data[2] = vec4(0.0f);
 
-    gl_FragDepth = 0.99985f;
+    gl_FragDepth = 0.999985f;
 }
 
