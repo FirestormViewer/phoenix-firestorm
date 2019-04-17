@@ -24,6 +24,15 @@
  *
  */
 
+// <FS:ND> Disable some warnings on newer GCC versions. (Camd with GCC >= 8.2
+#if LL_LINUX
+ #pragma GCC diagnostic ignored "-Wuninitialized"
+ #if (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ ) >= 80200
+   #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+ #endif
+#endif
+// </FS:ND>
+
 #include "linden_common.h"
 
 #include "llcalc.h"
