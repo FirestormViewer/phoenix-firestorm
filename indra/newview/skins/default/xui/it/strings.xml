@@ -2358,6 +2358,18 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 	<string name="RegionInfoListTypeBannedAgents">
 		utenti sempre banditi
 	</string>
+	<string name="RegionInfoAllEstates">
+		tutte le proprietà immobiliari
+	</string>
+	<string name="RegionInfoManagedEstates">
+		proprietà immobiliari che gestisci
+	</string>
+	<string name="RegionInfoThisEstate">
+		questa proprietà immobiliare
+	</string>
+	<string name="AndNMore">
+		e [EXTRA_COUNT] ancora
+	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		Memoria script del lotto
 	</string>
