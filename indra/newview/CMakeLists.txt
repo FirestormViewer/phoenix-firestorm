@@ -151,6 +151,7 @@ set(viewer_SOURCE_FILES
     llcommunicationchannel.cpp
     llcompilequeue.cpp
     llconfirmationmanager.cpp
+    llcontrolavatar.cpp
     llconversationlog.cpp
     llconversationloglist.cpp
     llconversationloglistitem.cpp
@@ -604,6 +605,7 @@ set(viewer_SOURCE_FILES
     lltransientfloatermgr.cpp
     lltranslate.cpp
     lltwitterconnect.cpp
+    lluiavatar.cpp
     lluilistener.cpp
     lluploaddialog.cpp
     llurl.cpp
@@ -773,6 +775,7 @@ set(viewer_HEADER_FILES
     llcommunicationchannel.h
     llcompilequeue.h
     llconfirmationmanager.h
+    llcontrolavatar.h
     llconversationlog.h
     llconversationloglist.h
     llconversationloglistitem.h
@@ -1220,6 +1223,7 @@ set(viewer_HEADER_FILES
     lltranslate.h
     lltwitterconnect.h
     lluiconstants.h
+    lluiavatar.h
     lluilistener.h
     lluploaddialog.h
     lluploadfloaterobservers.h
@@ -1959,7 +1963,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${viewer_LIBRARIES}
     ${BOOST_PROGRAM_OPTIONS_LIBRARY}
     ${BOOST_REGEX_LIBRARY}
-    ${BOOST_COROUTINE_LIBRARY}
+    ${BOOST_FIBER_LIBRARY}
     ${BOOST_CONTEXT_LIBRARY}
     ${DBUSGLIB_LIBRARIES}
     ${OPENGL_LIBRARIES}
@@ -2334,7 +2338,7 @@ if (LL_TESTS)
     ${OPENSSL_LIBRARIES}
     ${CRYPTO_LIBRARIES}
     ${LIBRT_LIBRARY}
-    ${BOOST_COROUTINE_LIBRARY}
+    ${BOOST_FIBER_LIBRARY}
     ${BOOST_CONTEXT_LIBRARY}
   )
 
