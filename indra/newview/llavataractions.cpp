@@ -2298,8 +2298,8 @@ bool LLAvatarActions::callbackEstateBan(const LLSD& notification, const LLSD& re
 				}
 			}
 
-			LLEstateInfoModel::instance().nextInvoice();
-			LLPanelEstateInfo::sendEstateAccessDelta(flags, itAgent->asUUID());
+			LLFloaterRegionInfo::nextInvoice();
+			LLPanelEstateAccess::sendEstateAccessDelta(flags, itAgent->asUUID());
 		}
 	}
 	return false;

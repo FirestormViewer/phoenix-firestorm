@@ -22,6 +22,7 @@
 		
 		<menu label="ムーブメント" name="Movement">
 			<menu_item_call label="座る" name="Sit Down Here"/>
+			<menu_item_call label="立ち上がる" name="Stand up"/>
 			<menu_item_check label="飛ぶ" name="Fly"/>
 			<!-- added Mar.15, 2015 -->
 			<menu_item_call label="着地する" name="Stop flying" />

@@ -15,8 +15,13 @@
 	<text name="estate_owner">
 		(desconocido)
 	</text>
-	<view_border name="wb1" width="505"/>
-	<check_box label="Permitir el acceso público" name="externally_visible_check"/>
+	<radio_group name="externally_visible_radio">
+		<radio_item label="Permitir únicamente a los residentes y grupos indicados en la pestaña Acceso" name="estate_restricted_access"/>
+		<radio_item label="Cualquiera puede visitar" name="estate_public_access"/>
+	</radio_group>
+	<check_box label="Debe ser mayor de 18" name="limit_age_verified" tool_tip="Para poder acceder a este estado, los Residentes deben ser mayores de 18 años. Para más información, consulta [SUPPORT_SITE]."/>
+	<check_box label="Debe haber información archivada sobre el pago" name="limit_payment" tool_tip="Para poder acceder a este estado los Residentes deben haber aportado información de pago en su cuenta. Para más información, ver [SUPPORT_SITE]."/>
+	<check_box label="Los propietarios de parcelas pueden ser más restrictivos" name="parcel_access_override"/>
 	<check_box label="Permitir el chat de voz" name="voice_chat_check"/>
 	<check_box label="Permitir el teleporte a cualquier punto" name="allow_direct_teleport"/>
 	<button label="Aplicar" name="apply_btn"/>

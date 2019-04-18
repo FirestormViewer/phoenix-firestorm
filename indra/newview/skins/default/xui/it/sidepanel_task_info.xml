@@ -107,6 +107,24 @@
 		<text name="pathfinding_attributes_label">
 			Attributi pathfinding:
 		</text>
+		<text name="B:">
+			B:
+		</text>
+		<text name="O:">
+			O:
+		</text>
+		<text name="G:">
+			G:
+		</text>
+		<text name="E:">
+			E:
+		</text>
+		<text name="N:">
+			N:
+		</text>
+		<text name="F:">
+			F:
+		</text>
 	</panel>
 	</scroll_container>
 	<layout_stack name="buttons_ls">

@@ -1548,10 +1548,6 @@ Jeśli ciągle widzisz tą wiadomość sprawdź [SUPPORT_SITE].
 Otwieranie stron internetowych z nieznanego źródła może narazić Twój komputer na niebezpieczeństwo.
 		<usetemplate ignoretext="Uruchom przeglądarkę internetową by zobaczyć stronę" name="okcancelignore" notext="Anuluj" />
 	</notification>
-	<notification name="SystemUIScaleFactorChanged">
-		Mnożnik systemowego skalowania interfejsu uległ zmianie od ostatniego uruchomienia. Czy chcesz otworzyć ustawienia i skorygować skalowanie interfejsu w przeglądarce?
-		<usetemplate name="okcancelbuttons" notext="Anuluj" />
-	</notification>
 	<notification name="WebLaunchJoinNow">
 		By dokonać zmian i aktualizacji swojego konta, odwiedź [http://secondlife.com/account/ Tablicę].
 		<usetemplate ignoretext="Uruchom przeglądarkę internetową by dokonać zmian w konfiguracji mojego konta" name="okcancelignore" notext="Anuluj" />

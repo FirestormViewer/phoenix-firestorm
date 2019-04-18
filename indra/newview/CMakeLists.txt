@@ -159,7 +159,6 @@ set(viewer_SOURCE_FILES
     fsfloateraddtocontactset.cpp
     fsfloaterassetblacklist.cpp
     fsfloateravatarrendersettings.cpp
-    fsfloaterbantime.cpp
     fsfloaterblocklist.cpp
     fsfloatercontacts.cpp
     fsfloatercontactsetconfiguration.cpp
@@ -330,6 +329,7 @@ set(viewer_SOURCE_FILES
     llfloateravatarpicker.cpp
     llfloateravatarrendersettings.cpp
     llfloateravatartextures.cpp
+    llfloaterbanduration.cpp
     llfloaterbeacons.cpp
     llfloaterbigpreview.cpp
     llfloaterbuildoptions.cpp
@@ -913,7 +913,6 @@ set(viewer_HEADER_FILES
     fsfloateraddtocontactset.h
     fsfloaterassetblacklist.h
     fsfloateravatarrendersettings.h
-    fsfloaterbantime.h
     fsfloaterblocklist.h
     fsfloatercontacts.h
     fsfloatercontactsetconfiguration.h
@@ -1087,6 +1086,7 @@ set(viewer_HEADER_FILES
     llfloateravatarpicker.h
     llfloateravatarrendersettings.h
     llfloateravatartextures.h
+    llfloaterbanduration.h
     llfloaterbeacons.h
     llfloaterbigpreview.h
     llfloaterbuildoptions.h

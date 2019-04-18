@@ -1,29 +1,52 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Domaine" name="Estate">
-	<text name="estate_help_text">Les modifications de paramètre dans cet onglet affecteront toutes les régions de ce domaine.</text>
-	<text name="estate_text">Domaine :</text>
-	<text name="estate_name">(inconnu)</text>
-	<text name="owner_text">Propriétaire du domaine :</text>
-	<text name="estate_owner">(inconnu)</text>
-	<check_box label="Autoriser l'accès public" name="externally_visible_check"/>
-	<check_box label="Autoriser le chat vocal" name="voice_chat_check"/>
+	<text bottom="-34" name="estate_help_text">
+		Les modifications des paramètres de cet 
+onglet affecteront toutes les régions du 
+domaine.
+	</text>
+	<text bottom_delta="-34" name="estate_text" top_pad="8">
+		Domaine :
+	</text>
+	<text name="estate_name">
+		(inconnu)
+	</text>
+	<text name="owner_text">
+		Propriétaire :
+	</text>
+	<text name="estate_owner">
+		(inconnu)
+	</text>
+	<radio_group name="externally_visible_radio">
+		<radio_item label="Autoriser uniquement les résidents et les groupes indiqués dans l&apos;onglet Accès" name="estate_restricted_access"/>
+		<radio_item label="Visite ouverte à tous" name="estate_public_access"/>
+	</radio_group>
+	<check_box label="Doit avoir plus de 18 ans" name="limit_age_verified" tool_tip="Pour accéder à ce domaine, les résidents doivent avoir au moins 18 ans. Consultez le [SUPPORT_SITE] pour plus d&apos;informations."/>
+	<check_box label="Les infos de paiement doivent être enregistrées" name="limit_payment" tool_tip="Pour pouvoir accéder à ce domaine, les résidents doivent avoir enregistré des informations de paiement. Consultez le [SUPPORT_SITE] pour plus d&apos;informations."/>
+	<check_box label="Les propriétaires de terrain peuvent imposer plus de restrictions" name="parcel_access_override"/>
+	<check_box label="Autoriser les chats vocaux" name="voice_chat_check"/>
 	<check_box label="Autoriser la téléportation directe" name="allow_direct_teleport"/>
 	<button label="Appliquer" name="apply_btn"/>
-	<text name="Only Allow">N'autoriser l'accès aux résidents qui :</text>
-	<check_box label="Ont saisi leurs informations de paiement" name="limit_payment" tool_tip="Les résidents doivent avoir enregistré leurs informations de paiement pour accéder à ce terrain. Consultez le [SUPPORT_SITE] pour plus d'informations."/>
-	<check_box label="Sont majeurs" name="limit_age_verified" tool_tip="Les résidents doivent être majeurs pour accéder à ce terrain. Consultez le [SUPPORT_SITE] pour plus d'informations."/>
-	<text name="estate_manager_label">Gérants du domaine :</text>
-	<text name="allow_resident_label">Résidents autorisés :</text>
+	<text name="estate_manager_label">
+		Gérants du domaine :
+	</text>
+	<text name="allow_resident_label">
+		Toujours autorisé :
+	</text>
 	<button label="Ajouter..." name="add_estate_manager_btn"/>
 	<button label="Supprimer..." name="remove_estate_manager_btn"/>
 	<button label="Ajouter..." name="add_allowed_avatar_btn"/>
 	<button label="Supprimer..." name="remove_allowed_avatar_btn"/>
-	<text name="allow_group_label">Groupes autorisés :</text>
-	<text name="ban_resident_label">Résidents bannis :</text>
+	<text name="allow_group_label">
+		Groupes toujours autorisés :
+	</text>
+	<text name="ban_resident_label">
+		Toujours interdit :
+	</text>
 	<button label="Ajouter..." name="add_allowed_group_btn"/>
 	<button label="Supprimer..." name="remove_allowed_group_btn"/>
 	<button label="Ajouter..." name="add_banned_avatar_btn"/>
 	<button label="Supprimer..." name="remove_banned_avatar_btn"/>
-	<button label="Envoyer un message au domaine..." name="message_estate_btn"/>
-	<button label="Expulser un résident du domaine..." name="kick_user_from_estate_btn"/>
+	<button label="Message au domaine..." name="message_estate_btn"/>
+	<button label="Éjecter du domaine..." name="kick_user_from_estate_btn"/>
 </panel>

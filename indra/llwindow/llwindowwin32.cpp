@@ -4096,9 +4096,7 @@ void LLWindowWin32::setDPIAwareness()
 
 F32 LLWindowWin32::getSystemUISize()
 {
-	// <FS:Ansariel> Type fix
-	//float scale_value = 0;
-	F32 scale_value = 0.f;
+	F32 scale_value = 1.f;
 	HWND hWnd = (HWND)getPlatformWindow();
 	HDC hdc = GetDC(hWnd);
 	HMONITOR hMonitor;
