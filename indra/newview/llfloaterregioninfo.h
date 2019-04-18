@@ -307,7 +307,7 @@ class LLPanelEstateInfo : public LLPanelRegionInfo
 {
 public:
 	static void initDispatch(LLDispatcher& dispatch);
-
+	
 	void onChangeFixedSun();
 	void onChangeUseGlobalTime();
 	void onChangeAccessOverride();
@@ -462,7 +462,7 @@ private:
 
 class LLPanelEstateAccess : public LLPanelRegionInfo
 {
-	LOG_CLASS(LLPanelEnvironmentInfo);
+	LOG_CLASS(LLPanelEstateAccess);
 
 public:
 	LLPanelEstateAccess();

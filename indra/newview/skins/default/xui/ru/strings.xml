@@ -2704,6 +2704,9 @@ support@secondlife.com.
 	<string name="NoEnvironmentSettings">
 		Этот регион не поддерживает параметры среды.
 	</string>
+	<string name="NoEnvironmentSettings">
+		Этот регион не поддерживает параметры среды.
+	</string>
 	<string name="ClassifiedClicksTxt">
 		Нажатия: [TELEPORT] телепортация, [MAP] карта, [PROFILE] профиль
 	</string>
