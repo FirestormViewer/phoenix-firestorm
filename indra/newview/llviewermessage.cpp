@@ -3654,13 +3654,14 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 			LLViewerObject *objectp = gObjectList.findObject(id);
 			if (objectp)
 			{
-//// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
-//				if ( (objectp->isAttachment()) && (gAgentAvatarp) && (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE) && (objectp->permYouOwner()) )
-//				{
-//					gAgentAvatarp->addPendingDetach(objectp->getRootEdit()->getID());
-//					continue;
-//				}
-//// [/SL:KB]
+// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
+				if ( (objectp->isAttachment()) && (!objectp->isTempAttachment()) && (LLAgent::TELEPORT_NONE != gAgent.getTeleportState()) &&
+					 (gAgentAvatarp) && (objectp->permYouOwner()) && (gSavedSettings.getBOOL("BlockAttachmentKillsOnTeleport")) )
+				{
+					//gAgentAvatarp->addPendingDetach(objectp->getRootEdit()->getID());
+					continue;
+				}
+// [/SL:KB]
 
 				// Display green bubble on kill
 				if ( gShowObjectUpdates )
