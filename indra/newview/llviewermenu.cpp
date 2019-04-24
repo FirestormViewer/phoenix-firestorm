@@ -58,7 +58,6 @@
 #include "lldaycyclemanager.h"
 #include "lldebugview.h"
 #include "llenvmanager.h"
-#include "llfacebookconnect.h"
 #include "llfilepicker.h"
 #include "llfirstuse.h"
 #include "llfloaterabout.h"

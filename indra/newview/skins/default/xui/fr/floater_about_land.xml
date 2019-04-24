@@ -167,7 +167,7 @@
 			<check_box label="Contenu Modéré" name="MatureCheck" tool_tip=" "/>
 			<text name="Snapshot:">Photo :</text>
 			<texture_picker name="snapshot_ctrl" tool_tip="Cliquez pour sélectionner une image"/>
-			<text name="allow_label5">Les avatars sur d'autres terrains peuvent voir et dialoguer avec ceux sur ce terrain</text>
+			<text name="allow_see_label">Les avatars sur d'autres terrains peuvent voir et dialoguer avec ceux sur ce terrain</text>
 			<check_box name="SeeAvatarsCheck" tool_tip="Permet aux avatars sur d'autres terrains de voir et de dialoguer avec ceux sur ce terrain, et inversement."/>
 			<text name="landing_point">Lieu d'arrivée : [LANDING]</text>
 			<button label="Définir" label_selected="Définir" name="Set" tool_tip="Définit le lieu d'arrivée où les visiteurs arrivent. Définit le lieu à l'emplacement actuel de votre avatar."/>

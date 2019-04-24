@@ -4,6 +4,7 @@
   <font name="default" comment="default font files (global fallbacks)">
     <file>NotoSans.ttf</file>
     <os name="Windows">
+      <file>MSNeoGothic.ttf</file>
       <file>meiryo.TTC</file>
       <file>YuGothR.ttc</file>
       <file>MSGOTHIC.TTC</file>

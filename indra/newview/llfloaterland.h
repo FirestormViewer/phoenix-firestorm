@@ -338,6 +338,7 @@ private:
 	static void onCommitAny(LLUICtrl* ctrl, void *userdata);
 	static void onClickSet(void* userdata);
 	static void onClickClear(void* userdata);
+	static void toggleSeeAvatars(void* userdata);
 
 	// <FS:Ansariel> FIRE-10043: Teleport to LP button
 	void onClickTeleport();

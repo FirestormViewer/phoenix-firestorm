@@ -2052,6 +2052,13 @@ BOOL LLPanelLandOptions::postBuild()
 	mSeeAvatarsCtrl = getChild<LLCheckBoxCtrl>( "SeeAvatarsCheck");
 	childSetCommitCallback("SeeAvatarsCheck", onCommitAny, this);
 
+	if (hasChild("allow_see_label", TRUE))
+	{
+		getChild<LLTextBox>("allow_see_label")->setShowCursorHand(false);
+		getChild<LLTextBox>("allow_see_label")->setSoundFlags(LLView::MOUSE_UP);
+		getChild<LLTextBox>("allow_see_label")->setClickedCallback(boost::bind(&toggleSeeAvatars, this));
+	}
+
 	mCheckShowDirectory = getChild<LLCheckBoxCtrl>( "ShowDirectoryCheck");
 	childSetCommitCallback("ShowDirectoryCheck", onCommitAny, this);
 
@@ -2557,6 +2564,17 @@ void LLPanelLandOptions::onClickClear(void* userdata)
 	LLViewerParcelMgr::getInstance()->sendParcelPropertiesUpdate(selected_parcel);
 
 	self->refresh();
+}
+
+void LLPanelLandOptions::toggleSeeAvatars(void* userdata)
+{
+	LLPanelLandOptions* self = (LLPanelLandOptions*)userdata;
+	if (self)
+	{
+		self->getChild<LLCheckBoxCtrl>("SeeAvatarsCheck")->toggle();
+		self->getChild<LLCheckBoxCtrl>("SeeAvatarsCheck")->setBtnFocus();
+		self->onCommitAny(NULL, userdata);
+	}
 }
 
 // <FS:Ansariel> FIRE-10043: Teleport to LP button

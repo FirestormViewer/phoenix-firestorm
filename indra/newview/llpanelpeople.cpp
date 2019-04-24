@@ -54,7 +54,6 @@
 #include "llcallingcard.h"			// for LLAvatarTracker
 #include "llcallbacklist.h"
 #include "llerror.h"
-#include "llfacebookconnect.h"
 #include "llfloateravatarpicker.h"
 #include "llfriendcard.h"
 #include "llgroupactions.h"
@@ -555,7 +554,6 @@ public:
 
 LLPanelPeople::LLPanelPeople()
 	:	LLPanel(),
-		mTryToConnectToFacebook(true),
 		mTabContainer(NULL),
 		mOnlineFriendList(NULL),
 		mAllFriendList(NULL),
@@ -685,14 +683,12 @@ BOOL LLPanelPeople::postBuild()
 	// updater is active only if panel is visible to user.
 	friends_tab->setVisibleCallback(boost::bind(&Updater::setActive, mFriendListUpdater, _2));
     friends_tab->setVisibleCallback(boost::bind(&LLPanelPeople::removePicker, this));
-	friends_tab->setVisibleCallback(boost::bind(&LLPanelPeople::updateFacebookList, this, _2));
 
 	// <FS:Ansariel> FIRE-4740: Friend counter in people panel
 	mFriendsTabContainer = friends_tab->findChild<LLTabContainer>("friends_accordion");
 	// <FS:Ansariel> Firestorm radar
 	mOnlineFriendList = friends_tab->getChild<LLAvatarList>("avatars_online");
 	mAllFriendList = friends_tab->getChild<LLAvatarList>("avatars_all");
-	mSuggestedFriends = friends_tab->getChild<LLAvatarList>("suggested_friends");
 	mOnlineFriendList->setNoItemsCommentText(getString("no_friends_online"));
 	mOnlineFriendList->setShowIcons("FriendsListShowIcons");
 	// <FS:Ansariel> Firestorm radar
@@ -752,7 +748,6 @@ BOOL LLPanelPeople::postBuild()
 	mRecentList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
 	mAllFriendList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
 	mOnlineFriendList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
-	mSuggestedFriends->setContextMenu(&LLPanelPeopleMenus::gSuggestedFriendsContextMenu);
 
 	setSortOrder(mRecentList,		(ESortOrder)gSavedSettings.getU32("RecentPeopleSortOrder"),	false);
 	setSortOrder(mAllFriendList,	(ESortOrder)gSavedSettings.getU32("FriendsSortOrder"),		false);
@@ -859,7 +854,7 @@ void LLPanelPeople::updateFriendListHelpText()
 
 	// Seems sometimes all_friends can be empty because of issue with Inventory loading (clear cache, slow connection...)
 	// So, lets check all lists to avoid overlapping the text with online list. See EXT-6448.
-	bool any_friend_exists = mAllFriendList->filterHasMatches() || mOnlineFriendList->filterHasMatches() || mSuggestedFriends->filterHasMatches();
+	bool any_friend_exists = mAllFriendList->filterHasMatches() || mOnlineFriendList->filterHasMatches();
 	no_friends_text->setVisible(!any_friend_exists);
 	if (no_friends_text->getVisible())
 	{
@@ -926,7 +921,6 @@ void LLPanelPeople::updateFriendList()
 	mAllFriendList->setDirty(true, !mAllFriendList->filterHasMatches());
 	//update trash and other buttons according to a selected item
 	updateButtons();
-	updateSuggestedFriendList();
 	showFriendsAccordionsIfNeeded();
 
 	// <FS:Ansariel> FIRE-4740: Friend counter in people panel
@@ -939,36 +933,6 @@ void LLPanelPeople::updateFriendList()
 		mFriendsTabContainer->setPanelTitle(1, getString("AllFriendsTitle", args));
 	}
 	// </FS:Ansariel>
-}
-
-bool LLPanelPeople::updateSuggestedFriendList()
-{
-	const LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
-	uuid_vec_t& suggested_friends = mSuggestedFriends->getIDs();
-	suggested_friends.clear();
-
-	//Add suggested friends
-	LLSD friends = LLFacebookConnect::instance().getContent();
-	for (LLSD::array_const_iterator i = friends.beginArray(); i != friends.endArray(); ++i)
-	{
-		LLUUID agent_id = (*i).asUUID();
-		bool second_life_buddy = agent_id.notNull() ? av_tracker.isBuddy(agent_id) : false;
-
-		if(!second_life_buddy)
-		{
-			//FB+SL but not SL friend
-			if (agent_id.notNull())
-			{
-				suggested_friends.push_back(agent_id);
-			}
-		}
-	}
-
-	//Force a refresh when there aren't any filter matches (prevent displaying content that shouldn't display)
-	mSuggestedFriends->setDirty(true, !mSuggestedFriends->filterHasMatches());
-	showFriendsAccordionsIfNeeded();
-
-	return false;
 }
 
 void LLPanelPeople::updateNearbyList()
@@ -1003,51 +967,6 @@ void LLPanelPeople::updateRecentList()
 
 	LLRecentPeople::instance().get(mRecentList->getIDs());
 	mRecentList->setDirty();
-}
-
-bool LLPanelPeople::onConnectedToFacebook(const LLSD& data)
-{
-	LLSD::Integer connection_state = data.get("enum").asInteger();
-
-	if (connection_state == LLFacebookConnect::FB_CONNECTED)
-	{
-		LLFacebookConnect::instance().loadFacebookFriends();
-	}
-	else if(connection_state == LLFacebookConnect::FB_NOT_CONNECTED)
-	{
-		updateSuggestedFriendList();
-	};
-
-	return false;
-}
-
-void LLPanelPeople::updateFacebookList(bool visible)
-{
-	if (visible)
-	{
-		LLEventPumps::instance().obtain("FacebookConnectContent").stopListening("LLPanelPeople"); // just in case it is already listening
-		LLEventPumps::instance().obtain("FacebookConnectContent").listen("LLPanelPeople", boost::bind(&LLPanelPeople::updateSuggestedFriendList, this));
-
-		LLEventPumps::instance().obtain("FacebookConnectState").stopListening("LLPanelPeople"); // just in case it is already listening
-		LLEventPumps::instance().obtain("FacebookConnectState").listen("LLPanelPeople", boost::bind(&LLPanelPeople::onConnectedToFacebook, this, _1));
-
-		if (LLFacebookConnect::instance().isConnected())
-		{
-			LLFacebookConnect::instance().loadFacebookFriends();
-		}
-		else if(mTryToConnectToFacebook)
-		{
-			LLFacebookConnect::instance().checkConnectionToFacebook();
-			mTryToConnectToFacebook = false;
-		}
-    
-		updateSuggestedFriendList();
-	}
-	else
-	{
-		LLEventPumps::instance().obtain("FacebookConnectState").stopListening("LLPanelPeople");
-		LLEventPumps::instance().obtain("FacebookConnectContent").stopListening("LLPanelPeople");
-	}
 }
 
 void LLPanelPeople::updateButtons()
@@ -1300,12 +1219,10 @@ void LLPanelPeople::onFilterEdit(const std::string& search_string)
 
 		mOnlineFriendList->setNameFilter(filter);
 		mAllFriendList->setNameFilter(filter);
-		mSuggestedFriends->setNameFilter(filter);
 
 	// <FS:Ansariel> Friend list accordion replacement
 	//setAccordionCollapsedByUser("tab_online", false);
 	//setAccordionCollapsedByUser("tab_all", false);
-	//	setAccordionCollapsedByUser("tab_suggested_friends", false);
 	// </FS:Ansariel> Friend list accordion replacement
 		showFriendsAccordionsIfNeeded();
 
@@ -1778,13 +1695,12 @@ void LLPanelPeople::showFriendsAccordionsIfNeeded()
 		// Expand and show accordions if needed, else - hide them
 		//showAccordion("tab_online", mOnlineFriendList->filterHasMatches());
 		//showAccordion("tab_all", mAllFriendList->filterHasMatches());
-		//showAccordion("tab_suggested_friends", mSuggestedFriends->filterHasMatches());
 
 		//// Rearrange accordions
 		//LLAccordionCtrl* accordion = getChild<LLAccordionCtrl>("friends_accordion");
 		//accordion->arrange();
 
-		childSetVisible("friends_accordion", (mAllFriendList->filterHasMatches() || mSuggestedFriends->filterHasMatches()));
+		childSetVisible("friends_accordion", mAllFriendList->filterHasMatches());
 		// </FS:Ansariel> Friend list accordion replacement
 
 		// *TODO: new no_matched_tabs_text attribute was implemented in accordion (EXT-7368).

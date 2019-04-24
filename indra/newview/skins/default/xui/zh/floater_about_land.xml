@@ -351,7 +351,7 @@
 				快照：
 			</text>
 			<texture_picker name="snapshot_ctrl" tool_tip="點按以挑選圖片"/>
-			<text name="allow_label5">
+			<text name="allow_see_label">
 				其他地段的化身可以看見本地段裡的化身，並與之交談
 			</text>
 			<check_box label="察看化身" name="SeeAvatarsCheck" tool_tip="允許其他地段的化身看到本地段包括你在內的化身，並可互相交談。"/>
