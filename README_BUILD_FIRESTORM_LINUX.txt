@@ -20,16 +20,16 @@ Available premade firestorm-specific build targets:
 	RelWithDebInfoFS_open (no KDU, no FMODEX)
 
 To build firestorm:
-	autobuild build -c ReleaseFS                        
+	autobuild build -A64 -c ReleaseFS                        
 
 Other examples:
-	autobuild configure -c ReleaseFS  		    # basic configuration step, don't build, just configure
-	autobuild configure -c ReleaseFS -- --clean	    # clean the output area first, then configure
-	autobuild configure -c ReleaseFS -- --chan Private-Yourname   # configure with a custom channel
+	autobuild configure -A64 -c ReleaseFS  		    # basic configuration step, don't build, just configure
+	autobuild configure -A64 -c ReleaseFS -- --clean	    # clean the output area first, then configure
+	autobuild configure -A64 -c ReleaseFS -- --chan Private-Yourname   # configure with a custom channel
 
-	autobuild build -c ReleaseFS --no-configure		# default quick rebuild
-	autobuild build -c ReleaseFS --no-configure -- --clean	# Clean rebuild
-	autobuild build -c ReleaseFS -- --package		# Complete a build and package it into a tarball
+	autobuild build -A64 -c ReleaseFS --no-configure		# default quick rebuild
+	autobuild build -A64 -c ReleaseFS --no-configure -- --clean	# Clean rebuild
+	autobuild build -A64 -c ReleaseFS -- --package		# Complete a build and package it into a tarball
 
 Any of the configure options can also be used (and do the same thing) with the build options.
 Typical LL autobuild configure options should also work, as long as they don't duplicate configuration we are
@@ -37,9 +37,9 @@ already doing.
 
 
 Logs:
-        Look for logs in build-linux-i686/logs
+        Look for logs in build-linux-x86_64/logs
 
 Output:
-        Look for output in build-linux-i686/newview/Release
+        Look for output in build-linux-x86_64/newview/Release
 
 
