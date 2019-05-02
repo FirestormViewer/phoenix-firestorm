@@ -71,13 +71,8 @@ uniform vec2 screen_res;
 
 uniform mat4 inv_proj;
 
-vec3 srgb_to_linear(vec3 cs);
 vec3 getNorm(vec2 pos_screen);
-
-vec4 correctWithGamma(vec4 col)
-{
-	return vec4(srgb_to_linear(col.rgb), col.a);
-}
+vec3 scaleDownLight(vec3 c);
 
 vec4 texture2DLodSpecular(sampler2D projectionMap, vec2 tc, float lod)
 {
@@ -218,7 +213,7 @@ void main()
 		
 			col = dlit*lit*diff_tex*shadow;
 
-			amb_da += (da*0.5+0.5) /* * (1.0-shadow) */ * proj_ambiance;
+			amb_da += (da*0.5+0.5) * (1.0-shadow) * proj_ambiance;
 		}
 		
 		//float diff = clamp((proj_range-proj_focus)/proj_range, 0.0, 1.0);
@@ -227,8 +222,10 @@ void main()
 		amb_da += (da*da*0.5+0.5)*(1.0-shadow)*proj_ambiance;
 		amb_da *= dist_atten * noise;
 		amb_da = min(amb_da, 1.0-lit);
-			
-		col += amb_da*color.rgb*diff_tex.rgb*amb_plcol.rgb*amb_plcol.a;
+	
+#ifndef NO_AMBIANCE		
+	    col += amb_da*color.rgb*diff_tex.rgb*amb_plcol.rgb*amb_plcol.a;
+#endif
 	}
 	
 
@@ -292,6 +289,8 @@ void main()
 	
 	//not sure why, but this line prevents MATBUG-194
 	col = max(col, vec3(0.0));
+
+    col = scaleDownLight(col);
 
 	frag_color.rgb = col;	
 	frag_color.a = 0.0;

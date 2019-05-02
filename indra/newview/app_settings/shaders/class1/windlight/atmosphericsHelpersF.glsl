@@ -1,5 +1,5 @@
 /** 
- * @file atmosphericsHelpersF.glsl 
+ * @file class1\windlight\atmosphericsHelpersF.glsl 
  *
  * $LicenseInfo:firstyear=2005&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -27,10 +27,10 @@ uniform vec4 sunlight_color;
 uniform vec4 light_ambient;
 uniform int no_atmo;
 
-vec3 atmosAmbient(vec3 light)
+vec3 atmosAmbient()
 {
-    if (no_atmo == 1) return light + vec3(0.66);
-    return light + light_ambient.rgb;
+    if (no_atmo == 1) return vec3(0.16);
+    return light_ambient.rgb;
 }
 
 vec3 atmosAffectDirectionalLight(float lightIntensity)

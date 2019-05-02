@@ -75,6 +75,7 @@ VARYING vec2 vary_fragcoord;
 
 VARYING vec3 vary_position;
 
+uniform mat4 proj_mat;
 uniform mat4 inv_proj;
 uniform vec2 screen_res;
 
@@ -82,6 +83,8 @@ uniform vec4 light_position[8];
 uniform vec3 light_direction[8];
 uniform vec4 light_attenuation[8]; 
 uniform vec3 light_diffuse[8];
+
+float getAmbientClamp();
 
 vec3 calcPointLightOrSpotLight(vec3 light_col, vec3 npos, vec3 diffuse, vec4 spec, vec3 v, vec3 n, vec4 lp, vec3 ln, float la, float fa, float is_pointlight, inout float glare, float ambiance)
 {
@@ -95,6 +98,18 @@ vec3 calcPointLightOrSpotLight(vec3 light_col, vec3 npos, vec3 diffuse, vec4 spe
 
     vec3 col = vec3(0,0,0);
 
+    vec4 proj_tc = proj_mat * lp;
+
+    if (proj_tc.z < 0
+     || proj_tc.z > 1
+     || proj_tc.x < 0
+     || proj_tc.x > 1 
+     || proj_tc.y < 0
+     || proj_tc.y > 1)
+    {
+        return col;
+    }
+
     if (d > 0.0)
     {
         //normalize light vector
@@ -105,7 +120,11 @@ vec3 calcPointLightOrSpotLight(vec3 light_col, vec3 npos, vec3 diffuse, vec4 spe
         fa += 1.0f;
         float dist_atten = ( fa > 0) ? clamp(1.0-(dist-1.0*(1.0-fa))/fa, 0.0, 1.0) : 1.0f;
         dist_atten *= dist_atten;
-        dist_atten *= 2.0f;
+
+        if (dist_atten <= 0)
+        {
+            return col;
+        }
 
         // spotlight coefficient.
         float spot = max(dot(-ln, lv), is_pointlight);
@@ -118,17 +137,18 @@ vec3 calcPointLightOrSpotLight(vec3 light_col, vec3 npos, vec3 diffuse, vec4 spe
 
         float lit = max(da * dist_atten, 0.0);
 
-        col = light_col*lit*diffuse;
-        
         float amb_da = ambiance;
         if (da > 0)
         {
+            col = light_col*lit*diffuse;
             amb_da += (da*0.5 + 0.5) * ambiance;
         }
         amb_da += (da*da*0.5+0.5) * ambiance;
         amb_da = min(amb_da, 1.0f - lit);
 
+#ifndef NO_AMBIANCE
         col.rgb += amb_da * 0.5 * light_col * diffuse;
+#endif
 
         if (spec.a > 0.0)
         {
@@ -159,7 +179,6 @@ vec3 calcPointLightOrSpotLight(vec3 light_col, vec3 npos, vec3 diffuse, vec4 spe
     }
 
     return max(col, vec3(0.0,0.0,0.0)); 
-
 }
 
 #else
@@ -300,12 +319,10 @@ void main()
 
     float final_da = da;
           final_da = clamp(final_da, 0.0, 1.0);
-          final_da = pow(final_da, 1.0 / 1.3);
 
     float ambient = da;
     ambient *= 0.5;
     ambient *= ambient;
-    ambient = max(0.66, ambient);
     ambient = 1.0 - ambient;
 
     vec3 sun_contrib = min(final_da, shadow) * sunlit;
@@ -370,6 +387,8 @@ vec3 post_spec = col.rgb;
         glare += cur_glare;
     }
 
+vec3 post_env = col.rgb;
+
     col = atmosFragLighting(col, additive, atten);
     col = scaleSoftClipFrag(col);
 
@@ -377,7 +396,9 @@ vec3 post_spec = col.rgb;
             
     vec3 light = vec3(0,0,0);
 
-    vec3 prelight_linearish_maybe = srgb_to_linear(col.rgb);
+vec3 post_atmo = col.rgb;
+
+    //col.rgb = srgb_to_linear(col.rgb);
 
  #define LIGHT_LOOP(i) light.rgb += calcPointLightOrSpotLight(light_diffuse[i].rgb, npos, diffuse.rgb, final_specular, pos.xyz, norm.xyz, light_position[i], light_direction[i].xyz, light_attenuation[i].x, light_attenuation[i].y, light_attenuation[i].z, glare, light_attenuation[i].w * 0.5);
 
@@ -388,10 +409,6 @@ vec3 post_spec = col.rgb;
         LIGHT_LOOP(5)
         LIGHT_LOOP(6)
         LIGHT_LOOP(7)
-
-vec3 light_linear = light.rgb;
-
-    col.rgb += light.rgb;
 
 vec3 postlight_linear = col.rgb;
 
@@ -404,9 +421,11 @@ vec3 postlight_linear = col.rgb;
     al = temp.a;
 #endif
 
-//col.rgb = light_linear;
+//col.rgb = post_atmo;
 
     col.rgb = linear_to_srgb(col.rgb);
+
+    col.rgb += light.rgb;
 
     frag_color.rgb = col.rgb;
     frag_color.a   = al;

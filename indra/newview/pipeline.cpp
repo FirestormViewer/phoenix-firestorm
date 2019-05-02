@@ -427,6 +427,11 @@ LLPipeline::LLPipeline() :
 	mNoiseMap = 0;
 	mTrueNoiseMap = 0;
 	mLightFunc = 0;
+
+    for(U32 i = 0; i < 8; i++)
+    {
+        mHWLightColors[i] = LLColor4::black;
+    }
 }
 
 void LLPipeline::connectRefreshCachedSettingsSafe(const std::string name)
@@ -2540,10 +2545,6 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
     
     camera.disableUserClipPlane();
 
-    bool use_far_clip = LLPipeline::sUseFarClip;
-
-    LLPipeline::sUseFarClip = false;
-
     for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin(); 
             iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
     {
@@ -2570,14 +2571,10 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
         }
     }
 
-    LLPipeline::sUseFarClip = use_far_clip;
-
 	if (bound_shader)
 	{
 		gOcclusionCubeProgram.unbind();
 	}
-
-	camera.disableUserClipPlane();
 
 	if (hasRenderType(LLPipeline::RENDER_TYPE_SKY) && 
 		gSky.mVOSkyp.notNull() && 
@@ -8430,7 +8427,7 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
             {
                 stop_glerror();
                 gGL.getTexUnit(channel)->bind(getShadowTarget(i), TRUE);
-                gGL.getTexUnit(channel)->setTextureFilteringOption(LLTexUnit::TFO_BILINEAR);
+                gGL.getTexUnit(channel)->setTextureFilteringOption(LLTexUnit::TFO_ANISOTROPIC);
                 gGL.getTexUnit(channel)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
                 stop_glerror();
             
@@ -8452,7 +8449,7 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
 			if (shadow_target)
 			{
 				gGL.getTexUnit(channel)->bind(shadow_target, TRUE);
-				gGL.getTexUnit(channel)->setTextureFilteringOption(LLTexUnit::TFO_BILINEAR);
+				gGL.getTexUnit(channel)->setTextureFilteringOption(LLTexUnit::TFO_ANISOTROPIC);
 				gGL.getTexUnit(channel)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
 				stop_glerror();
 			
@@ -10839,10 +10836,10 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
             set_current_modelview(view[j]);
             set_current_projection(proj[j]);
 
-            LLViewerCamera::updateFrustumPlanes(shadow_cam, FALSE, FALSE, TRUE);
-
-            //shadow_cam.ignoreAgentFrustumPlane(LLCamera::AGENT_PLANE_NEAR);
+            shadow_cam.ignoreAgentFrustumPlane(LLCamera::AGENT_PLANE_NEAR);
             shadow_cam.getAgentPlane(LLCamera::AGENT_PLANE_NEAR).set(shadow_near_clip);
+
+            LLViewerCamera::updateFrustumPlanes(shadow_cam, FALSE, FALSE, TRUE);
 
             //translate and scale to from [-1, 1] to [0, 1]
             glh::matrix4f trans(0.5f, 0.f, 0.f, 0.5f,

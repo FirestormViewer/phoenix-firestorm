@@ -33,9 +33,8 @@
 #include "v3colorutil.h"
 
 //=========================================================================
-namespace {
-    const F32 NIGHTTIME_ELEVATION = 8.0f; // degrees
-    const F32 NIGHTTIME_ELEVATION_SIN = (F32)sinf(NIGHTTIME_ELEVATION * DEG_TO_RAD);
+namespace
+{
     const LLUUID IMG_BLOOM1("3c59f7fe-9dc8-47f9-8aaf-a9dd1fbc3bef");
     const LLUUID IMG_RAINBOW("11b4c57c-56b3-04ed-1f82-2004363882e4");
     const LLUUID IMG_HALO("12149143-f599-91a7-77ac-b52a3c0f59cd");
@@ -954,19 +953,16 @@ void LLSettingsSky::updateSettings()
 
 F32 LLSettingsSky::getSunMoonGlowFactor() const
 {
-    LLVector3 sunDir  = getSunDirection();
-    LLVector3 moonDir = getMoonDirection();
-
     // sun glow at full iff moon is not up
-    if (sunDir.mV[VZ] > -NIGHTTIME_ELEVATION_SIN)
+    if (getIsSunUp())
     {
-        if (moonDir.mV[2] <= 0.0f)
+        if (!getIsMoonUp())
         {
             return 1.0f;
         }
     }
 
-    if (moonDir.mV[2] > 0.0f)
+    if (getIsMoonUp())
     {
         return 0.25f;
     }
@@ -977,13 +973,13 @@ F32 LLSettingsSky::getSunMoonGlowFactor() const
 bool LLSettingsSky::getIsSunUp() const
 {
     LLVector3 sunDir = getSunDirection();
-    return (sunDir.mV[2] >= 0.0f) || ((sunDir.mV[2] > -NIGHTTIME_ELEVATION_SIN) && !getIsMoonUp());
+    return sunDir.mV[2] >= 0.0f;
 }
 
 bool LLSettingsSky::getIsMoonUp() const
 {
     LLVector3 moonDir = getMoonDirection();
-    return moonDir.mV[2] > 0.0f;
+    return moonDir.mV[2] >= 0.0f;
 }
 
 void LLSettingsSky::calculateHeavenlyBodyPositions()  const
@@ -1180,29 +1176,34 @@ void LLSettingsSky::setHazeHorizon(F32 val)
     setDirtyFlag(true);
 }
 
+// Get total from rayleigh and mie density values for normalization
+LLColor3 LLSettingsSky::getTotalDensity() const
+{
+    LLColor3    blue_density = getBlueDensity();
+    F32         haze_density = getHazeDensity();
+    LLColor3 total_density = blue_density + smear(haze_density);
+    return total_density;
+}
+
 // Sunlight attenuation effect (hue and brightness) due to atmosphere
 // this is used later for sunlight modulation at various altitudes
 LLColor3 LLSettingsSky::getLightAttenuation(F32 distance) const
 {
-// LEGACY_ATMOSPHERICS
-    LLColor3    blue_density = getBlueDensity();
-    F32         haze_density = getHazeDensity();
     F32         density_multiplier = getDensityMultiplier();
-    LLColor3    density = (blue_density * 1.0 + smear(haze_density * 0.25f));
-    LLColor3    light_atten = density * density_multiplier * distance;
+    LLColor3    blue_density       = getBlueDensity();
+    F32         haze_density       = getHazeDensity();
+    // Approximate line integral over requested distance
+    LLColor3    light_atten = (blue_density * 1.0 + smear(haze_density * 0.25f)) * density_multiplier * distance;
     return light_atten;
 }
 
 LLColor3 LLSettingsSky::getLightTransmittance() const
 {
-// LEGACY_ATMOSPHERICS
-    LLColor3    blue_density = getBlueDensity();
-    F32         haze_density = getHazeDensity();
-    F32         density_multiplier = getDensityMultiplier();
-    LLColor3 temp1 = blue_density + smear(haze_density);
-    // Transparency (-> temp1)
-    temp1 = componentExp((temp1 * -1.f) * density_multiplier);
-    return temp1;
+    LLColor3 total_density      = getTotalDensity();
+    F32      density_multiplier = getDensityMultiplier();
+    // Transparency (-> density) from Beer's law
+    LLColor3 transmittance = componentExp(total_density * -density_multiplier);
+    return transmittance;
 }
 
 LLColor3 LLSettingsSky::gammaCorrect(const LLColor3& in) const
@@ -1262,42 +1263,46 @@ void LLSettingsSky::calculateLightSettings() const
 {
     // Initialize temp variables
     LLColor3    sunlight = getSunlightColor();
-    LLColor3    ambient = getAmbientColor();
+    LLColor3    ambient  = getAmbientColor();
+
     F32         cloud_shadow = getCloudShadow();
     LLVector3   lightnorm = getLightDirection();
 
     // Sunlight attenuation effect (hue and brightness) due to atmosphere
     // this is used later for sunlight modulation at various altitudes
-    F32      max_y = getMaxY();
-    LLColor3 light_atten = getLightAttenuation(max_y);
-    LLColor3 light_transmittance = getLightTransmittance();
+    F32         max_y               = getMaxY();
+    LLColor3    light_atten         = getLightAttenuation(max_y);
+    LLColor3    light_transmittance = getLightTransmittance();
 
     // and vary_sunlight will work properly with moon light
-    F32 lighty = lightnorm[1];
-    if(lighty > 0.001f)
+    const F32 LIMIT = FLT_EPSILON * 8.0f;
+
+    F32 lighty = fabs(lightnorm[2]);
+    if(lighty >= LIMIT)
     {
         lighty = 1.f / lighty;
     }
-    lighty = llmax(0.001f, lighty);
+    lighty = llmax(LIMIT, lighty);
     componentMultBy(sunlight, componentExp((light_atten * -1.f) * lighty));
 
     //increase ambient when there are more clouds
-    LLColor3 tmpAmbient = ambient + (smear(1.f) - ambient) * cloud_shadow * 0.5f;
+    LLColor3 tmpAmbient = ambient + (smear(1.f) - ambient) * cloud_shadow;
 
     //brightness of surface both sunlight and ambient
-    mSunDiffuse = gammaCorrect(componentMult(sunlight, light_transmittance));
-    mSunAmbient = gammaCorrect(componentMult(tmpAmbient, light_transmittance) * 0.5);
+    mSunDiffuse = gammaCorrect(componentMult(sunlight,   light_transmittance));
+    mSunAmbient = gammaCorrect(componentMult(tmpAmbient, light_transmittance));
 
     F32 moon_brightness = getMoonBrightness();
 
     LLColor3 moonlight_a(0.66f, 0.66f, 0.66f);
     LLColor3 moonlight_b(0.66f, 0.66f, 1.0f);
 
-    LLColor3 moonlight = lerp(moonlight_b, moonlight_a, moon_brightness);
-    
+    LLColor3 moonlight = lerp(moonlight_b, moonlight_a, moon_brightness);    
+    componentMultBy(moonlight, componentExp((light_atten * -1.f) * lighty));
+
     mMoonDiffuse  = gammaCorrect(componentMult(moonlight, light_transmittance) * moon_brightness * 0.25f);
     mMoonAmbient  = gammaCorrect(componentMult(moonlight_b, light_transmittance) * 0.0125f);
-    mTotalAmbient = mSunAmbient;
+    mTotalAmbient = mSunAmbient + mMoonAmbient;
 }
 
 LLUUID LLSettingsSky::GetDefaultAssetId()

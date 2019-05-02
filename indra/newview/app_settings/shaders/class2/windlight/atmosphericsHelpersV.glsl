@@ -1,5 +1,5 @@
 /**
- * @file atmosphericsHelpersV.glsl
+ * @file class2\wl\atmosphericsHelpersV.glsl
  *
  * $LicenseInfo:firstyear=2005&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -35,10 +35,10 @@ vec3 getPositionEye();
 uniform float scene_light_strength;
 uniform int no_atmo;
 
-vec3 atmosAmbient(vec3 light)
+vec3 atmosAmbient()
 {
-    if (no_atmo == 1) return light + vec3(0.66);
-    return getAmblitColor() + light / 2.0;
+    if (no_atmo == 1) return vec3(0.66);
+    return getAmblitColor();
 }
 
 vec3 atmosAffectDirectionalLight(float lightIntensity)

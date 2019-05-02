@@ -42,8 +42,9 @@ uniform mat3 ssao_effect_mat;
 uniform int no_atmo;
 uniform float sun_moon_glow_factor;
 
-vec3 nothing() {
-    return vec3(0, 0, 0);
+float getAmbientClamp()
+{
+    return 0.66f;
 }
 
 void calcAtmosphericVars(vec3 inPositionEye, float ambFactor, out vec3 sunlit, out vec3 amblit, out vec3 additive, out vec3 atten) {
@@ -66,9 +67,12 @@ void calcAtmosphericVars(vec3 inPositionEye, float ambFactor, out vec3 sunlit, o
     vec4 sunlight = (sun_up_factor == 1) ? sunlight_color : moonlight_color;
     vec4 light_atten;
 
+    float dens_mul = density_multiplier;
+    float dist_mul = distance_multiplier * 0.1;
+
     //sunlight attenuation effect (hue and brightness) due to atmosphere
     //this is used later for sunlight modulation at various altitudes
-    light_atten = (blue_density + vec4(haze_density * 0.25)) * (density_multiplier * max_y);
+    light_atten = (blue_density + vec4(haze_density * 0.25)) * (dens_mul * max_y);
         //I had thought blue_density and haze_density should have equal weighting,
         //but attenuation due to haze_density tends to seem too strong
 
@@ -78,20 +82,20 @@ void calcAtmosphericVars(vec3 inPositionEye, float ambFactor, out vec3 sunlit, o
 
     //(TERRAIN) compute sunlight from lightnorm only (for short rays like terrain)
     temp2.y = max(0.0, tmpLightnorm.y);
-    if (temp2.y > 0.001f)
+    if (abs(temp2.y) > 0.000001f)
     {
-        temp2.y = 1. / temp2.y;
+        temp2.y = 1. / abs(temp2.y);
     }
-    temp2.y = max(0.001f, temp2.y);
+    temp2.y = max(0.0000001f, temp2.y);
     sunlight *= exp(-light_atten * temp2.y);
 
     // main atmospheric scattering line integral
-    temp2.z = Plen * density_multiplier;
+    temp2.z = Plen * dens_mul;
 
     // Transparency (-> temp1)
-    // ATI Bugfix -- can't store temp1*temp2.z*distance_multiplier in a variable because the ati
+    // ATI Bugfix -- can't store temp1*temp2.z*dist_mul in a variable because the ati
     // compiler gets confused.
-    temp1 = exp(-temp1 * temp2.z * distance_multiplier);
+    temp1 = exp(-temp1 * temp2.z * dist_mul);
 
     //final atmosphere attenuation factor
     atten = temp1.rgb;
@@ -103,9 +107,9 @@ void calcAtmosphericVars(vec3 inPositionEye, float ambFactor, out vec3 sunlit, o
         //temp2.x is 0 at the sun and increases away from sun
     temp2.x = max(temp2.x, .001);    //was glow.y
         //set a minimum "angle" (smaller glow.y allows tighter, brighter hotspot)
-    temp2.x *= glow.x;
+    temp2.x *= glow.x * 1.8;
         //higher glow.x gives dimmer glow (because next step is 1 / "angle")
-    temp2.x = pow(temp2.x, glow.z);
+    temp2.x = pow(temp2.x, glow.z * 0.2);
         //glow.z should be negative, so we're doing a sort of (1 / "angle") function
 
     //add "minimum anti-solar illumination"
@@ -135,6 +139,5 @@ void calcAtmosphericVars(vec3 inPositionEye, float ambFactor, out vec3 sunlit, o
     //brightness of surface both sunlight and ambient
     sunlit = sunlight.rgb;
     amblit = tmpAmbient.rgb * .25;
-    additive  = normalize(additive);
-    additive *= vec3(1.0 - exp(-temp2.z * distance_multiplier)) * 0.5;
+    additive *= vec3(1.0 - temp1);
 }

@@ -69,11 +69,13 @@ vec4 applyWaterFogView(vec3 pos, vec4 color);
 
 vec3 getNorm(vec2 pos_screen);
 vec3 atmosFragLighting(vec3 l, vec3 additive, vec3 atten);
-vec3 fullbrightAtmosTransportFrag(vec3 l, vec3 additive, vec3 atten);
 
+float getAmbientClamp();
 void calcAtmosphericVars(vec3 inPositionEye, float ambFactor, out vec3 sunlit, out vec3 amblit, out vec3 additive, out vec3 atten);
 
 vec3 scaleSoftClipFrag(vec3 l);
+vec3 srgb_to_linear(vec3 c);
+vec3 linear_to_srgb(vec3 c);
 
 vec4 getPositionWithDepth(vec2 pos_screen, float depth);
 
@@ -94,9 +96,11 @@ void main()
 
     float final_da = da;
           final_da = clamp(final_da, 0.0, 1.0);
-	      final_da = pow(final_da, light_gamma);
+	      //final_da = pow(final_da, light_gamma);
 
-    vec4 diffuse = texture2DRect(diffuseRect, tc);
+    vec4 gamma_diff = texture2DRect(diffuseRect, tc);
+    vec4 diffuse = gamma_diff;
+         diffuse.rgb = srgb_to_linear(gamma_diff.rgb);
 
     vec4 spec = texture2DRect(specularRect, vary_fragcoord.xy);
     vec3 col;
@@ -108,11 +112,10 @@ void main()
         vec3 atten;
 
         calcAtmosphericVars(pos.xyz, 1.0, sunlit, amblit, additive, atten);
-        sunlit *= 0.5;
+
         float ambient = da;
         ambient *= 0.5;
         ambient *= ambient;
-        ambient = max(0.66, ambient);
         ambient = 1.0 - ambient;
 
         vec3 sun_contrib = final_da * sunlit;
@@ -126,7 +129,7 @@ vec3 post_ambient = col.rgb;
 
 vec3 post_sunlight = col.rgb;
 
-        col.rgb *= diffuse.rgb;
+        col.rgb *= gamma_diff.rgb;
 
 vec3 post_diffuse = col.rgb;
 
@@ -156,7 +159,9 @@ vec3 post_diffuse = col.rgb;
                 col += speccol;
             }
         }
-        
+       
+ vec3 post_spec = col.rgb;
+ 
         col.rgb += diffuse.a * diffuse.rgb;
 
         if (envIntensity > 0.0)
@@ -172,13 +177,13 @@ vec3 post_diffuse = col.rgb;
             col = scaleSoftClipFrag(col);
         }
 
+vec3 post_atmo = col.rgb;
+
         #ifdef WATER_FOG
             vec4 fogged = applyWaterFogView(pos.xyz,vec4(col, bloom));
             col = fogged.rgb;
             bloom = fogged.a;
         #endif
-
-//col.rgb = post_diffuse;
     }
 
     frag_color.rgb = col.rgb;

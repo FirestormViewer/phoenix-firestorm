@@ -1,5 +1,5 @@
 /** 
- * @file avatarV.glsl
+ * @file class3\lighting\lightV.glsl
  *
  * $LicenseInfo:firstyear=2007&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -22,49 +22,17 @@
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
+ 
 
-uniform mat4 projection_matrix;
 
-ATTRIBUTE vec3 position;
-ATTRIBUTE vec3 normal;
-ATTRIBUTE vec2 texcoord0;
+// All lights, no specular highlights
+vec3 atmosAmbient();
+vec4 sumLights(vec3 pos, vec3 norm, vec4 color);
 
-VARYING vec4 vertex_color;
-VARYING vec2 vary_texcoord0;
-
-uniform vec4 color;
-
-vec4 calcLighting(vec3 pos, vec3 norm, vec4 color);
-mat4 getSkinnedTransform();
-void calcAtmospherics(vec3 inPositionEye);
-
-void main()
+vec4 calcLighting(vec3 pos, vec3 norm, vec4 color)
 {
-	vary_texcoord0 = texcoord0;
-				
-	vec4 pos;
-	vec3 norm;
-	
-	vec4 pos_in = vec4(position.xyz, 1.0);
-
-	mat4 trans = getSkinnedTransform();
-	pos.x = dot(trans[0], pos_in);
-	pos.y = dot(trans[1], pos_in);
-	pos.z = dot(trans[2], pos_in);
-	pos.w = 1.0;
-	
-	norm.x = dot(trans[0].xyz, normal);
-	norm.y = dot(trans[1].xyz, normal);
-	norm.z = dot(trans[2].xyz, normal);
-	norm = normalize(norm);
-		
-	gl_Position = projection_matrix * pos;
-	
-	calcAtmospherics(pos.xyz);
-
-	vec4 col = calcLighting(pos.xyz, norm, color);
-	vertex_color = col; 
-
+	vec4 c = sumLights(pos, norm, color) * 2.0;
+    c.rgb += atmosAmbient() * color.rgb * 0.5;
+    return c; 
 }
-
 

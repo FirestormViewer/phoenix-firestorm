@@ -58,6 +58,7 @@ VARYING vec3 vary_norm;
 VARYING vec4 vertex_color;
 #endif
 
+uniform mat4 proj_mat;
 uniform mat4 inv_proj;
 uniform vec2 screen_res;
 uniform int sun_up_factor;
@@ -83,15 +84,29 @@ void calcAtmosphericVars(vec3 inPositionEye, float ambFactor, out vec3 sunlit, o
 float sampleDirectionalShadow(vec3 pos, vec3 norm, vec2 pos_screen);
 #endif
 
+float getAmbientClamp();
+
 vec3 calcPointLightOrSpotLight(vec3 light_col, vec3 diffuse, vec3 v, vec3 n, vec4 lp, vec3 ln, float la, float fa, float is_pointlight, float ambiance)
 {
     //get light vector
     vec3 lv = lp.xyz-v;
-    
+
+    vec4 proj_tc = proj_mat * lp;
+
     //get distance
     float d = length(lv);
     float da = 1.0;
     vec3 col = vec3(0);
+    if (proj_tc.z < 0
+     || proj_tc.z > 1
+     || proj_tc.x < 0
+     || proj_tc.x > 1
+     || proj_tc.y < 0
+     || proj_tc.y > 1)
+    {
+        return col;
+    }
+
     if (d > 0.0)
     {
         //normalize light vector
@@ -115,18 +130,19 @@ vec3 calcPointLightOrSpotLight(vec3 light_col, vec3 diffuse, vec3 v, vec3 n, vec
         // to match spotLight (but not multiSpotLight) *sigh*
         float lit = max(da * dist_atten,0.0);
 
-        col = lit * light_col * diffuse;
-
         float amb_da = ambiance;
         if (da > 0)
         {
+            col = lit * light_col * diffuse;
             amb_da += (da*0.5+0.5) * ambiance;
         }
         amb_da += (da*da*0.5 + 0.5) * ambiance;
         amb_da *= dist_atten;
         amb_da = min(amb_da, 1.0f - lit);
 
+#ifndef NO_AMBIANCE
         col.rgb += amb_da * 0.5 * light_col * diffuse;
+#endif
 
         // no spec for alpha shader...
     }
@@ -181,6 +197,8 @@ void main()
     float final_alpha = diff.a;
 #endif
 
+    vec3 gamma_diff = diff.rgb;
+
     diff.rgb = srgb_to_linear(diff.rgb);
 
     vec3 sunlit;
@@ -189,7 +207,6 @@ void main()
     vec3 atten;
 
     calcAtmosphericVars(pos.xyz, 1.0, sunlit, amblit, additive, atten);
-    sunlit *= 0.5;
 
     vec2 abnormal = encode_normal(norm.xyz);
 
@@ -199,7 +216,6 @@ void main()
  
     float final_da = da;
           final_da = clamp(final_da, 0.0f, 1.0f);
-		  final_da = pow(final_da, 1.0/1.3);
 
     vec4 color = vec4(0,0,0,0);
 
@@ -209,7 +225,6 @@ void main()
     float ambient = da;
     ambient *= 0.5;
     ambient *= ambient;
-    ambient = max(0.66, ambient); // keeps shadows dark
     ambient = 1.0 - ambient;
 
     vec3 sun_contrib = min(final_da, shadow) * sunlit;
@@ -226,14 +241,16 @@ vec3 post_sunlight = color.rgb;
 
 vec3 post_diffuse = color.rgb;
 
-    //color.rgb = mix(diff.rgb, color.rgb, final_alpha);
-    
+    color.rgb = mix(diff.rgb, color.rgb, final_alpha);
+
+    //color.rgb = srgb_to_linear(color.rgb);
+
     color.rgb = atmosFragLighting(color.rgb, additive, atten);
     color.rgb = scaleSoftClipFrag(color.rgb);
 
-    vec4 light = vec4(0,0,0,0);
+vec3 post_atmo = color.rgb;
 
-vec3 prelight_linearish_maybe = srgb_to_linear(color.rgb);
+    vec4 light = vec4(0,0,0,0);
 
    #define LIGHT_LOOP(i) light.rgb += calcPointLightOrSpotLight(light_diffuse[i].rgb, diff.rgb, pos.xyz, norm, light_position[i], light_direction[i].xyz, light_attenuation[i].x, light_attenuation[i].y, light_attenuation[i].z, light_attenuation[i].w * 0.5);
 
@@ -245,17 +262,9 @@ vec3 prelight_linearish_maybe = srgb_to_linear(color.rgb);
     LIGHT_LOOP(6)
     LIGHT_LOOP(7)
 
-vec3 light_linear = light.rgb;
-
-    // keep it linear
-    //
-    color.rgb += light.rgb;
-
-vec3 postlight_linear = color.rgb;
-
-//color.rgb = light_linear;
-
     color.rgb = linear_to_srgb(color.rgb);
+
+    color.rgb += light.rgb;
 #endif
 
 #ifdef WATER_FOG
