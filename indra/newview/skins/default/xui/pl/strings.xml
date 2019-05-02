@@ -2328,6 +2328,18 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="RegionInfoListTypeBannedAgents">
 		zawsze zbanowani rezydenci
 	</string>
+	<string name="RegionInfoAllEstates">
+		wszystkie majątki
+	</string>
+	<string name="RegionInfoManagedEstates">
+		zarządzane majątki
+	</string>
+	<string name="RegionInfoThisEstate">
+		ten majątek
+	</string>
+	<string name="AndNMore">
+		i [EXTRA_COUNT] więcej
+	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		Pamięć skryptów działki
 	</string>

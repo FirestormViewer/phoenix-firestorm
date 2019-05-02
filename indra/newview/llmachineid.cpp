@@ -217,6 +217,20 @@ S32 LLMachineID::init()
 
             // Get the value of the Name property
             hr = pclsObj->Get(L"SerialNumber", 0, &vtProp, 0, 0);
+
+            // <FS:ND> On some systems it can happen that the serial is either unset or does not return a string.
+            // In that case try to get the next enumator and try again.
+            // Without this condition the viewer will crash. With it at worst the affected system will use 0*16 as the machineid.
+            if( FAILED(hr) || !vtProp.bstrVal || vtProp.vt != VT_BSTR )
+            {
+                std::stringstream strHr;
+                strHr << std::hex << hr;
+                LL_WARNS() << "pclsObj->Get(L'SerialNumber') failed with hr" << strHr.str().c_str() << " and vtProp.vt = " << (U32)vtProp.vt << LL_ENDL;
+                pclsObj->Release();
+                continue;
+            }
+            // </FS:ND>
+
             LL_INFOS("AppInit") << " Serial Number : " << vtProp.bstrVal << LL_ENDL;
             // use characters in the returned Serial Number to create a byte array of size len
             BSTR serialNumber ( vtProp.bstrVal);
