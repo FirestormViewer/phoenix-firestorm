@@ -217,20 +217,13 @@ S32 LLMachineID::init()
 
             // Get the value of the Name property
             hr = pclsObj->Get(L"SerialNumber", 0, &vtProp, 0, 0);
-
-            // <FS:ND> On some systems it can happen that the serial is either unset or does not return a string.
-            // In that case try to get the next enumator and try again.
-            // Without this condition the viewer will crash. With it at worst the affected system will use 0*16 as the machineid.
-            if( FAILED(hr) || !vtProp.bstrVal || vtProp.vt != VT_BSTR )
+            if (FAILED(hr))
             {
-                std::stringstream strHr;
-                strHr << std::hex << hr;
-                LL_WARNS() << "pclsObj->Get(L'SerialNumber') failed with hr" << strHr.str().c_str() << " and vtProp.vt = " << (U32)vtProp.vt << LL_ENDL;
+                LL_WARNS() << "Failed to get SerialNumber. Error code = 0x" << hex << hres << LL_ENDL;
                 pclsObj->Release();
+                pclsObj = NULL;
                 continue;
             }
-            // </FS:ND>
-
             LL_INFOS("AppInit") << " Serial Number : " << vtProp.bstrVal << LL_ENDL;
 
             // use characters in the returned Serial Number to create a byte array of size len
@@ -238,11 +231,11 @@ S32 LLMachineID::init()
             unsigned int serial_size = SysStringLen(serialNumber);
             unsigned int j = 0;
 
-            while (j < serial_size)
+            while (j < serial_size && vtProp.bstrVal[j] != 0)
             {
                 for (unsigned int i = 0; i < len; i++)
                 {
-                    if (j >= serial_size)
+                    if (j >= serial_size || vtProp.bstrVal[j] == 0)
                         break;
 
                     static_unique_id[i] = (unsigned int)(static_unique_id[i] + serialNumber[j]);

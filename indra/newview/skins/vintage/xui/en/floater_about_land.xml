@@ -1508,6 +1508,7 @@ Only large parcels can be listed in search.
              length="1"
              follows="left|bottom"
              height="14"
+             text_readonly_color="LabelDisabledColor"
              layout="topleft"
              left="10"
              name="Snapshot:"

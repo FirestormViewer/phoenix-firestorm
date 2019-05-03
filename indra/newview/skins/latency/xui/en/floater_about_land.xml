@@ -1472,6 +1472,7 @@ Only large parcels can be listed in search.
              type="string"
              length="1"
              follows="left|right|top"
+             text_readonly_color="LabelDisabledColor"
              height="14"
              layout="topleft"
              top_pad="15"

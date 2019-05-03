@@ -362,6 +362,7 @@ private:
 	LLTextureCtrl*	mSnapshotCtrl;
 
 	LLTextBox*		mLocationText;
+	LLTextBox*		mSeeAvatarsText;
 	LLButton*		mSetBtn;
 	LLButton*		mClearBtn;
 	// <FS:Ansariel> FIRE-10043: Teleport to LP button
