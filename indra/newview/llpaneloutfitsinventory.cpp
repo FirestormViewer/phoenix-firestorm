@@ -259,6 +259,11 @@ void LLPanelOutfitsInventory::onSave()
 // <FS:Ansariel> FIRE-17626: Attachment count in appearance floater
 void LLPanelOutfitsInventory::onCOFChanged()
 {
+	if (!isAgentAvatarValid())
+	{
+		return;
+	}
+
 	const LLUUID cof = LLAppearanceMgr::instance().getCOF();
 	LLInventoryModel::item_array_t obj_items;
 	LLInventoryModel::cat_array_t cats;
@@ -268,7 +273,7 @@ void LLPanelOutfitsInventory::onCOFChanged()
 
 	LLStringUtil::format_map_t args;
 	args["COUNT"] = llformat("%d", attachments);
-	args["MAX"] = llformat("%d", MAX_AGENT_ATTACHMENTS);
+	args["MAX"] = llformat("%d", gAgentAvatarp->getMaxAttachments());
 	std::string title = getString("cof_tab_label", args);
 	mAppearanceTabs->setPanelTitle(mAppearanceTabs->getIndexForPanel(mCurrentOutfitPanel), title);
 }

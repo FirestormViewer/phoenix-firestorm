@@ -1363,11 +1363,18 @@ bool LLAppViewer::init()
 //	updater.args.add(gSavedSettings.getString("UpdaterServiceURL"));
 //	// ForceAddressSize
 //	updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
-//
-//	if (!beingDebugged())
+//#if LL_WINDOWS && !LL_RELEASE_FOR_DOWNLOAD && !LL_SEND_CRASH_REPORTS
+//	// This is neither a release package, nor crash-reporting enabled test build
+//	// try to run version updater, but don't bother if it fails (file might be missing)
+//	LLLeap *leap_p = LLLeap::create(updater, false);
+//	if (!leap_p)
 //	{
-//		LLLeap::create(updater, true);
+//		LL_WARNS("LLLeap") << "Failed to run LLLeap" << LL_ENDL;
 //	}
+//#else
+// 	// Run the updater. An exception from launching the updater should bother us.
+//	LLLeap::create(updater, true);
+//#endif
 	// </FS:Ansariel>
 
 	// Iterate over --leap command-line options. But this is a bit tricky: if
