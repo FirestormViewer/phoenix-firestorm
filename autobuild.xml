@@ -758,9 +758,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>93257fce19120c01751362775a01b925</string>
+              <string>cba1feed7f6bb671d791a517fddf205a</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/1545/3481/fmodex-4.44.64.501533-darwin64-501533.tar.bz2</string>
+              <string>https://downloads.catznip.com/packages/fmodex-44461-darwin-201601300040-r23.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
