@@ -73,7 +73,6 @@
       Max Content Rating:
     </text>
     <icons_combo_box
-      control_name="FSExperienceSearchMaturityRating"
       follows="left|top"
       height="20"
       label="Moderate"
