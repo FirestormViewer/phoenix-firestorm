@@ -830,17 +830,27 @@
              height="14"
              left_pad="0"
              top_delta="-15"
-             label="Copy"
-             name="copytextures"
+             label="Align"
+             name="button align textures"
+             tool_tip="Align current texture layers"
              width="84" />
             <button
              layout="topleft"
              follows="right|top"
              top_pad="0"
+             label="Copy"
+             name="copytextures"
              height="14"
+             width="40" />
+            <button
+             layout="topleft"
+             follows="right|top"
+             height="14"
+             left_pad="4"
+             top_delta="0"
              label="Paste"
              name="pastetextures"
-             width="84" />
+             width="40" />
             <web_browser
              visible="false"
              enabled="false"
