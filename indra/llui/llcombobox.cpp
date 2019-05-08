@@ -246,7 +246,14 @@ LLScrollListItem* LLComboBox::add(const std::string& name, EAddPosition pos, BOO
 	item->setEnabled(enabled);
 	if (!mAllowTextEntry && mLabel.empty())
 	{
-		selectFirstItem();
+		if (mControlVariable)
+		{
+			setValue(mControlVariable->getValue()); // selects the appropriate item
+		}
+		else
+		{
+			selectFirstItem();
+		}
 	}
 	return item;
 }
@@ -258,7 +265,14 @@ LLScrollListItem* LLComboBox::add(const std::string& name, const LLUUID& id, EAd
 	item->setEnabled(enabled);
 	if (!mAllowTextEntry && mLabel.empty())
 	{
-		selectFirstItem();
+		if (mControlVariable)
+		{
+			setValue(mControlVariable->getValue()); // selects the appropriate item
+		}
+		else
+		{
+			selectFirstItem();
+		}
 	}
 	return item;
 }
@@ -271,7 +285,14 @@ LLScrollListItem* LLComboBox::add(const std::string& name, void* userdata, EAddP
 	item->setUserdata( userdata );
 	if (!mAllowTextEntry && mLabel.empty())
 	{
-		selectFirstItem();
+		if (mControlVariable)
+		{
+			setValue(mControlVariable->getValue()); // selects the appropriate item
+		}
+		else
+		{
+			selectFirstItem();
+		}
 	}
 	return item;
 }
@@ -283,7 +304,14 @@ LLScrollListItem* LLComboBox::add(const std::string& name, LLSD value, EAddPosit
 	item->setEnabled(enabled);
 	if (!mAllowTextEntry && mLabel.empty())
 	{
-		selectFirstItem();
+		if (mControlVariable)
+		{
+			setValue(mControlVariable->getValue()); // selects the appropriate item
+		}
+		else
+		{
+			selectFirstItem();
+		}
 	}
 	return item;
 }

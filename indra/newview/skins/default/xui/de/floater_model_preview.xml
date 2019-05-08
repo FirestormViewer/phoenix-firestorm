@@ -339,7 +339,7 @@ Bitte ziehen Sie einen anderen Anhängepunkt nahe der Objektposition in Betracht
 			<text name="server_weight">
 				Server: [SIM]
 			</text>
-			<panel name="price_breakdown_panel">
+			<panel name="physics_costs_panel">
 				<text name="price_breakdown_title">
 					Kosten-Aufstellung
 				</text>

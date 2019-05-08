@@ -660,43 +660,10 @@ void LLLogChat::findTranscriptFiles(std::string pattern, std::vector<std::string
 	while (iter.next(filename))
 	{
 		std::string fullname = gDirUtilp->add(dirname, filename);
-
-		LLFILE * filep = LLFile::fopen(fullname, "rb");
-		if (NULL != filep)
+		if (isTranscriptFileFound(fullname))
 		{
-			if(makeLogFileName("chat")== fullname)
-			{
-				//Add Nearby chat history to the list of transcriptions
-				list_of_transcriptions.push_back(gDirUtilp->add(dirname, filename));
-				LLFile::close(filep);
-				continue;
-			}
-			char buffer[LOG_RECALL_SIZE];
-
-			fseek(filep, 0, SEEK_END);			// seek to end of file
-			S32 bytes_to_read = ftell(filep);	// get current file pointer
-			fseek(filep, 0, SEEK_SET);			// seek back to beginning of file
-
-			// limit the number characters to read from file
-			if (bytes_to_read >= LOG_RECALL_SIZE)
-			{
-				bytes_to_read = LOG_RECALL_SIZE - 1;
-			}
-
-			if (bytes_to_read > 0 && NULL != fgets(buffer, bytes_to_read, filep))
-			{
-				//matching a timestamp
-				boost::match_results<std::string::const_iterator> matches;
-				// <FS:Ansariel> Seconds in timestamp
-				//if (boost::regex_match(std::string(buffer), matches, TIMESTAMP))
-				if (boost::regex_match(std::string(buffer), matches, TIMESTAMP) || boost::regex_match(std::string(buffer), matches, TIMESTAMP_AND_SEC))
-				// </FS:Ansariel>
-				{
-					list_of_transcriptions.push_back(gDirUtilp->add(dirname, filename));
-				}
-			}
-			LLFile::close(filep);
-		}
+			list_of_transcriptions.push_back(fullname);
+		}		
 	}
 }
 
@@ -849,57 +816,13 @@ void LLLogChat::deleteTranscripts()
 // static
 bool LLLogChat::isTranscriptExist(const LLUUID& avatar_id, bool is_group)
 {
-	// <FS:Ansariel> FIRE-13725 / CHUIBUG-222: Viewer freezes when opening preferences or right-clicking on friends' names
-	//std::vector<std::string> list_of_transcriptions;
-	//LLLogChat::getListOfTranscriptFiles(list_of_transcriptions);
-
-	//if (list_of_transcriptions.size() > 0)
-	//{
-	//	LLAvatarName avatar_name;
-	//	LLAvatarNameCache::get(avatar_id, &avatar_name);
-	//	// <FS:Ansariel> [Legacy IM logfile names]
-	//	//std::string avatar_user_name = avatar_name.getAccountName();
-	//	std::string avatar_user_name;
-	//	if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
-	//	{
-	//		avatar_user_name = avatar_name.getUserName();
-	//		avatar_user_name = avatar_user_name.substr(0, avatar_user_name.find(" Resident"));;
-	//	}
-	//	else
-	//	{
-	//		avatar_user_name = avatar_name.getAccountName();
-	//		std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
-	//	}
-	//	// <//FS:Ansariel> [Legacy IM logfile names]
-	//	if(!is_group)
-	//	{
-	//		//std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
-	//		BOOST_FOREACH(std::string& transcript_file_name, list_of_transcriptions)
-	//		{
-	//			if (std::string::npos != transcript_file_name.find(avatar_user_name))
-	//			{
-	//				return true;
-	//			}
-	//		}
-	//	}
-	//	else
-	//	{
-	//		std::string file_name;
-	//		gCacheName->getGroupName(avatar_id, file_name);
-	//		file_name = makeLogFileName(file_name);
-	//		BOOST_FOREACH(std::string& transcript_file_name, list_of_transcriptions)
-	//		{
-	//			if (transcript_file_name == file_name)
-	//			{
-	//				return true;
-	//			}
-	//		}
-	//	}
-
-	//}
-	std::string file_name;
-	if (!is_group)
+	//LLAvatarName avatar_name;
+	//LLAvatarNameCache::get(avatar_id, &avatar_name);
+	//std::string avatar_user_name = avatar_name.getAccountName();
+	if(!is_group)
 	{
+		// <FS:Ansariel> [Legacy IM logfile names]
+		//std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
 		LLAvatarName avatar_name;
 		LLAvatarNameCache::get(avatar_id, &avatar_name);
 		std::string avatar_user_name;
@@ -913,60 +836,68 @@ bool LLLogChat::isTranscriptExist(const LLUUID& avatar_id, bool is_group)
 			avatar_user_name = avatar_name.getAccountName();
 			std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
 		}
-		file_name = makeLogFileName(avatar_user_name);
+		// </FS:Ansariel> [Legacy IM logfile names]
+		return isTranscriptFileFound(makeLogFileName(avatar_user_name));
 	}
 	else
 	{
+		std::string file_name;
 		gCacheName->getGroupName(avatar_id, file_name);
 		file_name = makeLogFileName(file_name);
+		return isTranscriptFileFound(makeLogFileName(file_name));
 	}
-	if ( (!file_name.empty()) && (LLFile::isfile(file_name)) )
-	{
-		return true;
-	}
-	// </FS:Ansariel>
-
 	return false;
 }
 
 bool LLLogChat::isNearbyTranscriptExist()
 {
-	// <FS:Ansariel> FIRE-13725 / CHUIBUG-222: Viewer freezes when opening preferences or right-clicking on friends' names
-	//std::vector<std::string> list_of_transcriptions;
-	//LLLogChat::getListOfTranscriptFiles(list_of_transcriptions);
-
-	//std::string file_name;
-	//file_name = makeLogFileName("chat");
-	//BOOST_FOREACH(std::string& transcript_file_name, list_of_transcriptions)
-	//{
-	//   	if (transcript_file_name == file_name)
-	//   	{
-	//		return true;
-	//	 }
-	//}
-	std::string strFilePath = makeLogFileName("chat");
-	if ( (!strFilePath.empty()) && (LLFile::isfile(strFilePath)) )
-	{
-		return true;
-	}
-	// </FS:Ansariel>
-	return false;
+	return isTranscriptFileFound(makeLogFileName("chat"));;
 }
 
 bool LLLogChat::isAdHocTranscriptExist(std::string file_name)
 {
-	std::vector<std::string> list_of_transcriptions;
-	LLLogChat::getListOfTranscriptFiles(list_of_transcriptions);
+	return isTranscriptFileFound(makeLogFileName(file_name));;
+}
 
-	file_name = makeLogFileName(file_name);
-	BOOST_FOREACH(std::string& transcript_file_name, list_of_transcriptions)
+// static
+bool LLLogChat::isTranscriptFileFound(std::string fullname)
+{
+	bool result = false;
+	LLFILE * filep = LLFile::fopen(fullname, "rb");
+	if (NULL != filep)
 	{
-	   	if (transcript_file_name == file_name)
-	   	{
-	   		return true;
+		if (makeLogFileName("chat") == fullname)
+		{
+			LLFile::close(filep);
+			return true;
 		}
+		char buffer[LOG_RECALL_SIZE];
+
+		fseek(filep, 0, SEEK_END);			// seek to end of file
+		S32 bytes_to_read = ftell(filep);	// get current file pointer
+		fseek(filep, 0, SEEK_SET);			// seek back to beginning of file
+
+		// limit the number characters to read from file
+		if (bytes_to_read >= LOG_RECALL_SIZE)
+		{
+			bytes_to_read = LOG_RECALL_SIZE - 1;
+		}
+
+		if (bytes_to_read > 0 && NULL != fgets(buffer, bytes_to_read, filep))
+		{
+			//matching a timestamp
+			boost::match_results<std::string::const_iterator> matches;
+			// <FS:Ansariel> Seconds in timestamp
+			//if (boost::regex_match(std::string(buffer), matches, TIMESTAMP))
+			if (boost::regex_match(std::string(buffer), matches, TIMESTAMP) || boost::regex_match(std::string(buffer), matches, TIMESTAMP_AND_SEC))
+			// </FS:Ansariel>
+			{
+				result = true;
+			}
+		}
+		LLFile::close(filep);
 	}
-	return false;
+	return result;
 }
 
 //*TODO mark object's names in a special way so that they will be distinguishable form avatar name 
@@ -1196,6 +1127,8 @@ void LLDeleteHistoryThread::run()
 
 LLActionThread::LLActionThread(const std::string& name)
 	: LLThread(name),
+	mMutex(),
+	mRunCondition(),
 	mFinished(false)
 {
 }

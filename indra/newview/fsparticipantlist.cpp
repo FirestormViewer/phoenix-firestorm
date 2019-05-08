@@ -54,7 +54,7 @@ static void update_speaker_indicator(const LLAvatarList* const avatar_list, cons
 	if (item)
 	{
 		LLOutputMonitorCtrl* indicator = item->getChild<LLOutputMonitorCtrl>("speaking_indicator");
-		indicator->setIsMuted(is_muted);
+		indicator->setIsModeratorMuted(is_muted);
 	}
 }
 

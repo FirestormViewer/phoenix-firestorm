@@ -296,8 +296,8 @@ namespace LLInitParam
 class LLTextBase 
 :	public LLUICtrl,
 	protected LLEditMenuHandler,
-	public LLSpellCheckMenuHandler
-	, public nd::ui::SearchableControl
+	public LLSpellCheckMenuHandler,
+	public ll::ui::SearchableControl
 {
 public:
 	friend class LLTextSegment;
@@ -671,6 +671,11 @@ protected:
 	void							appendAndHighlightTextImpl(const std::string &new_text, S32 highlight_part, const LLStyle::Params& style_params, bool underline_on_hover_only = false);
 	S32 normalizeUri(std::string& uri);
 	
+protected:
+	virtual std::string _getSearchText() const
+	{
+		return mLabel.getString() + getToolTip();
+	}
 
 protected:
 	// text segmentation and flow
@@ -770,14 +775,6 @@ protected:
 	LLUIString					mLabel;	// text label that is visible when no user text provided
 	// <FS:Ansariel> Optional icon position
 	LLTextBaseEnums::EIconPositioning	mIconPositioning;
-
-// <FS:ND> Searchable text for UI filter
-protected:
-	virtual std::string _getSearchText() const
-	{
-		return mLabel.getString() + getToolTip();
-	}
-// </FS:ND>
 };
 
 #endif

@@ -24,10 +24,10 @@
  *
  */
 
-// <FS:ND> Disable some warnings on newer GCC versions. (Camd with GCC >= 8.2
+// <FS:ND> Disable some warnings on newer GCC versions. (Camd with GCC >= 7.3
 #if LL_LINUX
  #pragma GCC diagnostic ignored "-Wuninitialized"
- #if (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ ) >= 80200
+ #if (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ ) >= 70300
    #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
  #endif
 #endif

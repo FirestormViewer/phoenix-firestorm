@@ -548,7 +548,7 @@ void FSFloaterVoiceControls::setModeratorMutedVoice(bool moderator_muted)
 	{
 		LLNotificationsUtil::add("VoiceIsMutedByModerator");
 	}
-	mSpeakingIndicator->setIsMuted(moderator_muted);
+	mSpeakingIndicator->setIsModeratorMuted(moderator_muted);
 }
 
 void FSFloaterVoiceControls::onModeratorNameCache(const LLAvatarName& av_name)

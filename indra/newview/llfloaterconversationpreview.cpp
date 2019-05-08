@@ -58,6 +58,7 @@ LLFloaterConversationPreview::LLFloaterConversationPreview(const LLSD& session_i
 	mPageSize(gSavedSettings.getS32("ConversationHistoryPageSize")),
 	mAccountName(session_id[LL_FCP_ACCOUNT_NAME]),
 	mCompleteName(session_id[LL_FCP_COMPLETE_NAME]),
+	mMutex(),
 	mShowHistory(false),
 	mMessages(NULL),
 	mHistoryThreadsBusy(false),

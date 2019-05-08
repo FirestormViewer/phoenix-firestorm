@@ -28,6 +28,7 @@
 #ifndef LL_LLINSTANCETRACKER_H
 #define LL_LLINSTANCETRACKER_H
 
+#include <atomic>
 #include <map>
 #include <typeinfo>
 
@@ -120,12 +121,12 @@ protected:
 		void decrementDepth();
 		U32 getDepth();
 	private:
-	#ifdef LL_WINDOWS
+#ifdef LL_WINDOWS
 		std::atomic_uint32_t sIterationNestDepth;
-	#else
+#else
 		std::atomic_uint sIterationNestDepth;
-	#endif
-    };
+#endif
+	};
 };
 
 LL_COMMON_API void assert_main_thread();

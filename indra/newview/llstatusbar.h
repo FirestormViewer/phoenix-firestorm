@@ -31,15 +31,6 @@
 
 // <FS:Ansariel> Pathfinding support
 #include "llpathfindingnavmesh.h"
-#include "llsearcheditor.h"
-
-namespace nd
-{
-	namespace statusbar
-	{
-		struct SearchData;
-	}
-}
 
 // "Constants" loaded from settings.xml at start time
 extern S32 STATUS_BAR_HEIGHT;
@@ -58,6 +49,7 @@ class LLPanelPresetsPulldown;
 class LLPanelVolumePulldown;
 class LLPanelNearByMedia;
 class LLIconCtrl;
+class LLSearchEditor;
 class LLParcelChangeObserver;
 class LLPanel;
 
@@ -97,6 +89,13 @@ public:
 	U32		mPing;
 };
 
+namespace ll
+{
+	namespace statusbar
+	{
+		struct SearchData;
+	}
+}
 class LLStatusBar
 :	public LLPanel
 {
@@ -174,6 +173,15 @@ private:
 	static void onClickVolume(void* data); // <FS:Ansariel> Open popup panels on click if FSStatusBarMenuButtonPopupOnRollover is disabled
 
 	static void onClickBalance(void* data);
+
+	LLSearchEditor *mFilterEdit;
+	LLPanel *mSearchPanel;
+	void onUpdateFilterTerm();
+
+	std::unique_ptr< ll::statusbar::SearchData > mSearchData;
+	void collectSearchableItems();
+	void updateMenuSearchVisibility( const LLSD& data );
+	void updateMenuSearchPosition();
 	
 	class LLParcelChangeObserver;
 
@@ -399,17 +407,6 @@ private:
 	void	onMouseEnterParcelInfo();
 	void	onMouseLeaveParcelInfo();
 // </FS:Zi>
-
-	// <FS:ND> Seach in menu
-	LLSearchEditor *mFilterEdit;
-	LLPanel *mSearchPanel;
-	void onUpdateFilterTerm();
-
-	nd::statusbar::SearchData *mSearchData;
-	void collectSearchableItems();
-	void updateMenuSearchVisibility(const LLSD& data);
-	void updateMenuSearchPosition();
-	// </FS:ND>
 
 	std::string mCurrentLocationString;
 };

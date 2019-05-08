@@ -38,14 +38,6 @@
 #include "llconversationlog.h"
 #include "llsearcheditor.h"
 
-namespace nd
-{
-	namespace prefs
-	{
-		struct SearchData;
-	}
-}
-
 class LLConversationLogObserver;
 class LLPanelPreference;
 class LLPanelLCD;
@@ -58,6 +50,14 @@ class LLTextBox;
 class LLComboBox;
 class LLLineEditor;
 class LLSpinCtrl;
+
+namespace ll
+{
+	namespace prefs
+	{
+		struct SearchData;
+	}
+}
 
 typedef std::map<std::string, std::string> notifications_map;
 
@@ -275,6 +275,7 @@ private:
 	void onDeleteTranscriptsResponse(const LLSD& notification, const LLSD& response);
 	void updateDeleteTranscriptsButton();
 	void updateMaxComplexity();
+	static bool loadFromFilename(const std::string& filename, std::map<std::string, std::string> &label_map);
 
 	static std::string sSkin;
 	notifications_map mNotificationOptions;
@@ -294,9 +295,9 @@ private:
 	LOG_CLASS(LLFloaterPreference);
 
 	LLSearchEditor *mFilterEdit;
-	void onUpdateFilterTerm(bool force = false);
+	std::unique_ptr< ll::prefs::SearchData > mSearchData;
 
-	nd::prefs::SearchData *mSearchData;
+	void onUpdateFilterTerm( bool force = false );
 	void collectSearchableItems();
 };
 

@@ -78,9 +78,7 @@ void setup_signals();
 void default_unix_signal_handler(int signum, siginfo_t *info, void *);
 
 #if LL_LINUX
-
 #include "google_breakpad/minidump_descriptor.h"
-
 static bool unix_minidump_callback(const google_breakpad::MinidumpDescriptor& minidump_desc, 
                                    void* context, 
                                    bool succeeded);

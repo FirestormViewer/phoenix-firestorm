@@ -32,7 +32,6 @@
 #include "llsd.h"
 #include <atomic>
 // Forward declarations
-
 class LLErrorThread;
 class LLLiveFile;
 #if LL_LINUX
