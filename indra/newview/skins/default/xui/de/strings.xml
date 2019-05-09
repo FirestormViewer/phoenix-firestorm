@@ -2501,7 +2501,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 		Brust
 	</string>
 	<string name="ATTACH_HEAD">
-		Kopf
+		Schädel
 	</string>
 	<string name="ATTACH_LSHOULDER">
 		Linke Schulter
@@ -2522,7 +2522,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 		Rechter Fuß
 	</string>
 	<string name="ATTACH_BACK">
-		Hinten
+		Wirbelsäule
 	</string>
 	<string name="ATTACH_PELVIS">
 		Becken
@@ -6264,6 +6264,27 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
 		Die Physikform hat keine korrekte Version. Legen Sie die korrekte Version für das Physikmodell fest.
 	</string>
+	<string name="couldnt_resolve_host">
+		Der DNS konnte den Hostnamen ([HOSTNAME]) nicht auflösen Prüfen 
+Sie bitte, ob Sie die Website www.secondlife.com aufrufen können. Wenn Sie die 
+Website aufrufen können, jedoch weiterhin diese Fehlermeldung erhalten, 
+besuchen Sie bitte den Support-Bereich und melden Sie das Problem.
+	</string>
+	<string name="ssl_peer_certificate">
+		Der Anmeldeserver konnte sich nicht per SSL verifizieren. 
+Wenn Sie diese Fehlermeldung weiterhin erhalten, besuchen 
+Sie bitte den Support-Bereich der Website Secondlife.com 
+und melden Sie das Problem.
+	</string>
+	<string name="ssl_connect_error">
+		Die Ursache hierfür ist häufig eine falsch eingestellte Uhrzeit auf Ihrem Computer. 
+Bitte vergewissern Sie sich, dass Datum und Uhrzeit in der Systemsteuerung korrekt 
+eingestellt sind. Überprüfen Sie außerdem, ob Ihre Netzwerk- und Firewall-Einstellungen 
+korrekt sind. Wenn Sie diese Fehlermeldung weiterhin erhalten, besuchen Sie bitte den 
+Support-Bereich der Website Secondlife.com und melden Sie das Problem. 
+
+[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 Knowledge-Base]
+	</string>
 
 <!-- Firestorm-specific translations -->
 	<string name="MediaFilterActionAllow">
@@ -6916,7 +6937,7 @@ Ihre aktuelle Position: [AVATAR_POS]
 		[day,datetime,utc].[mth,datetime,utc].[year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
 	</string>
 	<string name="NotificationItemDateStringSLT">
-		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt] [timezone,datetime,slt]
 	</string>
 	<string name="Pie_av_render_normally">
 		Normal

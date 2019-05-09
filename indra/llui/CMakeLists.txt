@@ -145,7 +145,6 @@ set(llui_HEADER_FILES
     CMakeLists.txt
 
     fsregistrarutils.h
-	fssearchablecontrol.h
 
     llaccordionctrl.h
     llaccordionctrltab.h
@@ -207,6 +206,7 @@ set(llui_HEADER_FILES
     llresizehandle.h
     llresmgr.h
     llrngwriter.h
+    llsearchablecontrol.h
     llsearcheditor.h 
     llscrollbar.h
     llscrollcontainer.h

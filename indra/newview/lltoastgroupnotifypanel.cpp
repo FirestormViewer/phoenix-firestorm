@@ -101,10 +101,9 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(const LLNotificationPtr& notifi
 	//						+LLTrans::getString("TimeMth")+"] ["
 	//						+LLTrans::getString("TimeDay")+"] ["
 	//						+LLTrans::getString("TimeYear")+"] ["
-	//						+LLTrans::getString("TimeHour12")+"]:["
+	//						+LLTrans::getString("TimeHour")+"]:["
 	//						+LLTrans::getString("TimeMin")+"]:["
 	//						+LLTrans::getString("TimeSec")+"] ["
-	//						+LLTrans::getString("TimeAMPM")+"] ["
 	//						+LLTrans::getString("TimeTimezone")+"]";
 	std::string timeStr = LLTrans::getString("GroupNoticesToastDateString");
 	// </FS:Ansariel>

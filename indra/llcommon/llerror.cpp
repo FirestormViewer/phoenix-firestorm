@@ -56,9 +56,6 @@
 #include "nd/ndlogthrottle.h"
 
 namespace {
-	LLMutex gLogMutex;
-	LLMutex gCallStacksLogMutex ;
-
 #if LL_WINDOWS
 	void debugger_print(const std::string& s)
 	{
@@ -1190,6 +1187,9 @@ namespace
 }
 
 namespace {
+	LLMutex gLogMutex;
+	LLMutex gCallStacksLogMutex;
+
 	bool checkLevelMap(const LevelMap& map, const std::string& key,
 						LLError::ELevel& level)
 	{
@@ -1241,8 +1241,8 @@ namespace LLError
 
 	bool Log::shouldLog(CallSite& site)
 	{
-		LLMutexTrylock lock( &gLogMutex,5);
-		if (!lock.isLocked() )
+		LLMutexTrylock lock(&gLogMutex, 5);
+		if (!lock.isLocked())
 		{
 			return false;
 		}
@@ -1527,69 +1527,6 @@ namespace LLError
 	char** LLCallStacks::sBuffer = NULL ;
 	S32    LLCallStacks::sIndex  = 0 ;
 
-#define SINGLE_THREADED 1
-
-	class CallStacksLogLock
-	{
-	public:
-		CallStacksLogLock();
-		~CallStacksLogLock();
-
-#if SINGLE_THREADED
-		bool ok() const { return true; }
-#else
-		bool ok() const { return mOK; }
-	private:
-		bool mLocked;
-		bool mOK;
-#endif
-	};
-	
-#if SINGLE_THREADED
-	CallStacksLogLock::CallStacksLogLock()
-	{
-	}
-	CallStacksLogLock::~CallStacksLogLock()
-	{
-	}
-#else
-	CallStacksLogLock::CallStacksLogLock()
-		: mLocked(false), mOK(false)
-	{
-		if (!gCallStacksLogMutexp)
-		{
-			mOK = true;
-			return;
-		}
-		
-		const int MAX_RETRIES = 5;
-		for (int attempts = 0; attempts < MAX_RETRIES; ++attempts)
-		{
-			apr_status_t s = apr_thread_mutex_trylock(gCallStacksLogMutexp);
-			if (!APR_STATUS_IS_EBUSY(s))
-			{
-				mLocked = true;
-				mOK = true;
-				return;
-			}
-
-			ms_sleep(1);
-		}
-
-		// We're hosed, we can't get the mutex.  Blah.
-		std::cerr << "CallStacksLogLock::CallStacksLogLock: failed to get mutex for log"
-					<< std::endl;
-	}
-	
-	CallStacksLogLock::~CallStacksLogLock()
-	{
-		if (mLocked)
-		{
-			apr_thread_mutex_unlock(gCallStacksLogMutexp);
-		}
-	}
-#endif
-
 	//static
    void LLCallStacks::allocateStackBuffer()
    {
@@ -1618,8 +1555,8 @@ namespace LLError
    //static
    void LLCallStacks::push(const char* function, const int line)
    {
-	   CallStacksLogLock lock;
-       if (!lock.ok())
+       LLMutexTrylock lock(&gCallStacksLogMutex, 5);
+       if (!lock.isLocked())
        {
            return;
        }
@@ -1653,8 +1590,8 @@ namespace LLError
    //static
    void LLCallStacks::end(std::ostringstream* _out)
    {
-	   CallStacksLogLock lock;
-       if (!lock.ok())
+       LLMutexTrylock lock(&gCallStacksLogMutex, 5);
+       if (!lock.isLocked())
        {
            return;
        }
@@ -1675,8 +1612,8 @@ namespace LLError
    //static
    void LLCallStacks::print()
    {
-	   CallStacksLogLock lock;
-       if (!lock.ok())
+       LLMutexTrylock lock(&gCallStacksLogMutex, 5);
+       if (!lock.isLocked())
        {
            return;
        }
@@ -1713,7 +1650,7 @@ namespace LLError
 
 bool debugLoggingEnabled(const std::string& tag)
 {
-    LLMutexTrylock lock(&gLogMutex,5);
+    LLMutexTrylock lock(&gLogMutex, 5);
     if (!lock.isLocked())
     {
         return false;

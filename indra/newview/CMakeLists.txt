@@ -208,7 +208,6 @@ set(viewer_SOURCE_FILES
     fsradarmenu.cpp
     fsscriptlibrary.cpp
     fsscrolllistctrl.cpp
-    fssearchableui.cpp
     fsslurlcommand.cpp
     groupchatlistener.cpp
     lggbeamcolormapfloater.cpp
@@ -385,6 +384,7 @@ set(viewer_SOURCE_FILES
     llfloatermemleak.cpp
     llfloatermodelpreview.cpp
     llfloatermodeluploadbase.cpp
+    llfloatermyscripts.cpp
     llfloatermyenvironment.cpp
     llfloaternamedesc.cpp
     llfloaternotificationsconsole.cpp
@@ -660,6 +660,7 @@ set(viewer_SOURCE_FILES
     llscrollingpanelparam.cpp
     llscrollingpanelparambase.cpp
     llsculptidsize.cpp
+    llsearchableui.cpp
     llsearchcombobox.cpp
     llsearchhistory.cpp
     llsecapi.cpp
@@ -963,7 +964,6 @@ set(viewer_HEADER_FILES
     fsradarmenu.h
     fsscriptlibrary.h
     fsscrolllistctrl.h
-    fssearchableui.h
     fsslurl.h
     fsslurlcommand.h
     groupchatlistener.h
@@ -1145,6 +1145,7 @@ set(viewer_HEADER_FILES
     llfloatermemleak.h
     llfloatermodelpreview.h
     llfloatermodeluploadbase.h
+    llfloatermyscripts.h
     llfloatermyenvironment.h
     llfloaternamedesc.h
     llfloaternotificationsconsole.h
@@ -1408,6 +1409,7 @@ set(viewer_HEADER_FILES
     llscrollingpanelparam.h
     llscrollingpanelparambase.h
     llsculptidsize.h
+    llsearchableui.h
     llsearchcombobox.h
     llsearchhistory.h
     llsecapi.h
@@ -1954,6 +1956,7 @@ endif (WINDOWS)
 # from within the IDE.
 set(viewer_XUI_FILES
     skins/default/colors.xml
+    skins/default/default_languages.xml
     skins/default/textures/textures.xml
     )
 file(GLOB DEFAULT_XUI_FILE_GLOB_LIST
@@ -2271,22 +2274,14 @@ if (WINDOWS)
       windows-crash-logger
     )
 
-    # <FS:Ansariel> No Teamcity -> allow unattended
     # sets the 'working directory' for debugging from visual studio.
-    if (NOT UNATTENDED)
-        add_custom_command(
-            TARGET ${VIEWER_BINARY_NAME} POST_BUILD
-            COMMAND ${CMAKE_SOURCE_DIR}/tools/vstool/vstool.exe
-            ARGS
-              --solution
-              ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.sln
-              --workingdir
-              ${VIEWER_BINARY_NAME}
-              "${CMAKE_CURRENT_SOURCE_DIR}"
-            COMMENT "Setting the ${VIEWER_BINARY_NAME} working directory for debugging."
-            )
-    endif (NOT UNATTENDED)
-    # </FS:Ansariel>
+    # Condition for version can be moved to requirements once build agents will be updated (see TOOL-3865)
+    if ((NOT UNATTENDED) AND (${CMAKE_VERSION} VERSION_GREATER "3.7.2"))
+        set_property(
+          TARGET ${VIEWER_BINARY_NAME}
+          PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+          )
+    endif ((NOT UNATTENDED) AND (${CMAKE_VERSION} VERSION_GREATER "3.7.2"))
 
     if (PACKAGE)
       add_custom_command(

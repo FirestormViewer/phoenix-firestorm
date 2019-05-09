@@ -28,6 +28,7 @@
 
 #include "linden_common.h"
 #include "llapr.h"
+#include "llmutex.h"
 #include "apr_dso.h"
 #include "llthreadlocalstorage.h"
 
@@ -44,10 +45,14 @@ void ll_init_apr()
 	apr_initialize();
 	
 	if (!gAPRPoolp)
+	{
 		apr_pool_create(&gAPRPoolp, NULL);
+	}
 
 	if(!LLAPRFile::sAPRFilePoolp)
+	{
 		LLAPRFile::sAPRFilePoolp = new LLVolatileAPRPool(FALSE) ;
+	}
 
 	LLThreadLocalPointerBase::initAllThreadLocalStorage();
 	gAPRInitialized = true;
@@ -64,9 +69,6 @@ void ll_cleanup_apr()
 	gAPRInitialized = false;
 
 	LL_INFOS("APR") << "Cleaning up APR" << LL_ENDL;
-
-	// Clean up the logging mutex
-	// All other threads NEED to be done before we clean up APR, so this is okay.
 
 	LLThreadLocalPointerBase::destroyAllThreadLocalStorage();
 
@@ -144,9 +146,7 @@ apr_pool_t* LLAPRPool::getAPRPool()
 LLVolatileAPRPool::LLVolatileAPRPool(BOOL is_local, apr_pool_t *parent, apr_size_t size, BOOL releasePoolFlag) 
 				  : LLAPRPool(parent, size, releasePoolFlag),
 				  mNumActiveRef(0),
-				  mNumTotalRef(0),
-				  mMutexPool(NULL),
-				  mMutexp(NULL)
+				  mNumTotalRef(0)
 {
 	//create mutex
 
@@ -161,15 +161,14 @@ LLVolatileAPRPool::LLVolatileAPRPool(BOOL is_local, apr_pool_t *parent, apr_size
 	// </FS:ND>
 
 	{
-		apr_pool_create(&mMutexPool, NULL); // Create a pool for mutex
-		mMutexp = new std::mutex();
+		mMutexp.reset(new std::mutex());
 	}
 }
 
 LLVolatileAPRPool::~LLVolatileAPRPool()
 {
-	delete mMutexp;
-	mMutexp = nullptr;
+	//delete mutex
+    mMutexp.reset();
 }
 
 //
@@ -183,7 +182,7 @@ apr_pool_t* LLVolatileAPRPool::getAPRPool()
 
 apr_pool_t* LLVolatileAPRPool::getVolatileAPRPool() 
 {	
-	LLScopedLock lock(mMutexp) ;
+	LLScopedLock lock(mMutexp.get()) ;
 
 	mNumTotalRef++ ;
 	mNumActiveRef++ ;
@@ -198,7 +197,7 @@ apr_pool_t* LLVolatileAPRPool::getVolatileAPRPool()
 
 void LLVolatileAPRPool::clearVolatileAPRPool() 
 {
-	LLScopedLock lock(mMutexp) ;
+    LLScopedLock lock(mMutexp.get());
 
 	if(mNumActiveRef > 0)
 	{
@@ -231,36 +230,6 @@ void LLVolatileAPRPool::clearVolatileAPRPool()
 BOOL LLVolatileAPRPool::isFull()
 {
 	return mNumTotalRef > FULL_VOLATILE_APR_POOL ;
-}
-//---------------------------------------------------------------------
-//
-// LLScopedLock
-//
-LLScopedLock::LLScopedLock(std::mutex* mutex) : mMutex(mutex)
-{
-	if(mutex)
-	{
-		mutex->lock();
-		mLocked = true;
-	}
-	else
-	{
-		mLocked = false;
-	}
-}
-
-LLScopedLock::~LLScopedLock()
-{
-	unlock();
-}
-
-void LLScopedLock::unlock()
-{
-	if(mLocked)
-	{
-		mMutex->unlock();
-		mLocked = false;
-	}
 }
 
 //---------------------------------------------------------------------

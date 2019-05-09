@@ -2257,7 +2257,7 @@ http://www.firestormviewer.org/support
 		胸部
 	</string>
 	<string name="ATTACH_HEAD">
-		頭
+		頭蓋
 	</string>
 	<string name="ATTACH_LSHOULDER">
 		左肩
@@ -2278,7 +2278,7 @@ http://www.firestormviewer.org/support
 		右足
 	</string>
 	<string name="ATTACH_BACK">
-		背中
+		背骨
 	</string>
 	<string name="ATTACH_PELVIS">
 		骨盤
@@ -2308,13 +2308,13 @@ http://www.firestormviewer.org/support
 		右腕（上）
 	</string>
 	<string name="ATTACH_RLARM">
-		右腕（下）
+		右前腕
 	</string>
 	<string name="ATTACH_LUARM">
 		左腕（上）
 	</string>
 	<string name="ATTACH_LLARM">
-		左腕（下）
+		左前腕
 	</string>
 	<string name="ATTACH_RHIP">
 		右腰
@@ -2335,7 +2335,7 @@ http://www.firestormviewer.org/support
 		左脚（下）
 	</string>
 	<string name="ATTACH_BELLY">
-		お腹
+		腹
 	</string>
 	<string name="ATTACH_LEFT_PEC">
 		左胸筋
@@ -6022,6 +6022,27 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 
 	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
 		この物理シェイプは正しいバージョンではありません。物理モデルに正しいバージョンを設定して下さい。
+	</string>
+	<string name="couldnt_resolve_host">
+		DNS がホスト名 ([HOSTNAME]) を解決できませんでした。
+www.secondlife.com のウェブサイトに接続できるかご確認ください。
+接続できても、このエラーが継続的に起こる場合は、
+サポートセクションから問題を報告してください。
+	</string>
+	<string name="ssl_peer_certificate">
+		ログインサーバーが SSL 経由で確認できませんでした。
+このエラーが継続的に起こる場合は、
+Secondlife.com のサポートセクションから
+問題を報告してください。
+	</string>
+	<string name="ssl_connect_error">
+		この問題の多くは、お使いのコンピュータの時計が正しく設定されていないために起こります。
+コントロールパネルから時刻と日付が正しく設定されているかご確認ください。
+お使いのネットワークとファイアウォールも正しく設定されているかお確かめください。
+このエラーが継続的に起こる場合は、Secondlife.com のサポートセクションから
+問題を報告してください。
+
+[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 ナレッジベース]
 	</string>
 	
 	<string name="LoadCameraPositionNoneSaved">

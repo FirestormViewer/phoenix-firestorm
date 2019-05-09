@@ -305,6 +305,13 @@
 	             function="Advanced.ToggleInfoDisplay"
 	             parameter="avatardrawinfo" />
 	        </menu_item_check>
+      <menu_item_call
+        label="Scripts"
+        name="MyScripts">
+        <menu_item_call.on_click
+          function="Floater.Toggle"
+          parameter="my_scripts"/>
+      </menu_item_call>
 	        <menu_item_call
              label="Lag Meter"
              name="Lag Meter">

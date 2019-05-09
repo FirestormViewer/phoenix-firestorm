@@ -35,6 +35,7 @@
 #define LL_FASTTIMER_USE_RDTSC 1
 
 #define LL_RECORD_BLOCK_TIME(timer_stat) const LLTrace::BlockTimer& LL_GLUE_TOKENS(block_time_recorder, __LINE__)(LLTrace::timeThisBlock(timer_stat)); (void)LL_GLUE_TOKENS(block_time_recorder, __LINE__);
+
 namespace LLTrace
 {
 // use to create blocktimer rvalue to be captured in a reference so that the BlockTimer lives to the end of the block.

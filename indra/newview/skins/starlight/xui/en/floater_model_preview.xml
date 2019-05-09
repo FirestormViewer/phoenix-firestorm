@@ -1385,7 +1385,7 @@ For more reliable attachments, please consider using a different attachment poin
         top_pad="5"
         layout="topleft"
         left="6"
-        name="price_breakdown_panel"
+        name="physics_costs_panel"
         width="120"
         height="100">
         <text
