@@ -356,7 +356,7 @@ attributedStringInfo getSegments(NSAttributedString *str)
     NSPoint mPoint = gHiDPISupport ? [self convertPointToBacking:[theEvent locationInWindow]] : [theEvent locationInWindow];
     mMousePos[0] = mPoint.x;
     mMousePos[1] = mPoint.y;
- 
+
     // Apparently people still use this?
     if ([theEvent modifierFlags] & NSCommandKeyMask &&
         !([theEvent modifierFlags] & NSControlKeyMask) &&

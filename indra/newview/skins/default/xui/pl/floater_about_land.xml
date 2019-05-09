@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floaterland" title="O działce">
+	<floater.string name="Hours">
+		[HOURS] godz.
+	</floater.string>
+	<floater.string name="Hour">
+		godz.
+	</floater.string>
 	<floater.string name="Minutes">
 		[MINUTES] min.
 	</floater.string>
@@ -11,6 +17,9 @@
 	</floater.string>
 	<floater.string name="Remaining">
 		pozostało
+	</floater.string>
+	<floater.string name="Always">
+		Zawsze
 	</floater.string>
 	<tab_container name="landtab">
 		<panel label="Ogólne" name="land_general_panel">
@@ -431,10 +440,13 @@ teksturę:
 				<button label="Usuń" label_selected="Usuń" name="remove_allowed"/>
 			</panel>
 			<panel name="Banned_layout_panel">
-				<text label="Zawsze banuj" name="BanCheck">
-					Zawsze banuj ([COUNT]/[MAX])
+				<text label="Banuj" name="BanCheck">
+					Zbanowani ([COUNT]/[MAX])
 				</text>
-				<name_list name="BannedList" tool_tip="([LISTED] na liście, [MAX] maksimum)"/>
+				<name_list name="BannedList" tool_tip="([LISTED] na liście, [MAX] maksimum)">
+					<columns label="Imię" name="name" />
+					<columns label="Czas" name="duration" />
+				</name_list>
 				<button label="Dodaj" name="add_banned"/>
 				<button label="Usuń" label_selected="Usuń" name="remove_banned"/>
 			</panel>

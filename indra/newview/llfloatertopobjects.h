@@ -79,12 +79,10 @@ private:
 	static void onDoubleClickObjectsList(void* data);
 	void onClickShowBeacon();
 
-	void doToObjects(int action, bool all);
+	void returnObjects(bool all);
 
 	void onReturnAll();
 	void onReturnSelected();
-	void onDisableAll();
-	void onDisableSelected();
 
 	// <FS:Ansariel> TP to object
 	void onTeleportToObject();
@@ -99,7 +97,6 @@ private:
 	void onAvatarCheck(const LLUUID& avatar_id, const LLAvatarName av_name);
 
 	static bool callbackReturnAll(const LLSD& notification, const LLSD& response);
-	static bool callbackDisableAll(const LLSD& notification, const LLSD& response);
 
 	void onGetByOwnerName();
 	void onGetByObjectName();
@@ -120,12 +117,6 @@ private:
 	BOOL mInitialized;
 
 	F32 mtotalScore;
-
-	enum
-	{
-		ACTION_RETURN = 0,
-		ACTION_DISABLE
-	};
 
 	static LLFloaterTopObjects* sInstance;
 };
