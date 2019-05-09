@@ -6345,7 +6345,8 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
         gGL.setAmbientLightColor(ambient);
     }
 
-    bool sun_up = environment.getIsSunUp();
+    bool sun_up  = environment.getIsSunUp();
+    bool moon_up = environment.getIsMoonUp();
 
     // Light 0 = Sun or Moon (All objects)
     {
@@ -6354,7 +6355,9 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
 
         mSunDir.setVec(sun_dir);
         mMoonDir.setVec(moon_dir);
-        mSunDiffuse.setVec(psky->getSunDiffuse());
+
+        // calculates diffuse sunlight per-pixel downstream, just provide setting sunlight_color
+        mSunDiffuse.setVec(psky->getSunlightColor());
         mMoonDiffuse.setVec(psky->getMoonDiffuse());
 
         F32 max_color = llmax(mSunDiffuse.mV[0], mSunDiffuse.mV[1], mSunDiffuse.mV[2]);
@@ -6370,6 +6373,15 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
             mMoonDiffuse *= 1.f/max_color;
         }
         mMoonDiffuse.clamp();
+
+        // prevent underlighting from having neither lightsource facing us
+        if (!sun_up && !moon_up)
+        {
+            mSunDiffuse.setVec(LLColor4(0.0, 0.0, 0.0, 1.0));
+            mMoonDiffuse.setVec(LLColor4(0.0, 0.0, 0.0, 1.0));
+            mSunDir.setVec(LLVector4(0.0, 1.0, 0.0, 0.0));
+            mMoonDir.setVec(LLVector4(0.0, 1.0, 0.0, 0.0));
+        }
 
         LLVector4 light_dir = sun_up ? mSunDir : mMoonDir;
 
