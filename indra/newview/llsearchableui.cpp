@@ -70,10 +70,12 @@ bool ll::prefs::PanelData::hightlightAndHide( LLWString const &aFilter )
 	for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
 		(*itr)->setNotHighlighted( );
 
-	if (aFilter.empty())
-	{
-		return true;
-	}
+	// <FS:Ansariel> FIRE-23969: This breaks prefs search - and isn't needed on FS
+	//if (aFilter.empty())
+	//{
+	//	return true;
+	//}
+	// </FS:Ansariel>
 
 	bool bVisible(false);
 	for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
