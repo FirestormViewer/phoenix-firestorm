@@ -572,12 +572,12 @@ static void settings_to_globals()
 	LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
 	LLImageGL::sGlobalUseAnisotropic	= gSavedSettings.getBOOL("RenderAnisotropic");
 	LLImageGL::sCompressTextures		= gSavedSettings.getBOOL("RenderCompressTextures");
-	LLVOVolume::sLODFactor				= gSavedSettings.getF32("RenderVolumeLODFactor");
+	LLVOVolume::sLODFactor				= llclamp(gSavedSettings.getF32("RenderVolumeLODFactor"), 0.01f, MAX_LOD_FACTOR);
 	LLVOVolume::sDistanceFactor			= 1.f-LLVOVolume::sLODFactor * 0.1f;
 	LLVolumeImplFlexible::sUpdateFactor = gSavedSettings.getF32("RenderFlexTimeFactor");
 	LLVOTree::sTreeFactor				= gSavedSettings.getF32("RenderTreeLODFactor");
-	LLVOAvatar::sLODFactor				= gSavedSettings.getF32("RenderAvatarLODFactor");
-	LLVOAvatar::sPhysicsLODFactor		= gSavedSettings.getF32("RenderAvatarPhysicsLODFactor");
+	LLVOAvatar::sLODFactor				= llclamp(gSavedSettings.getF32("RenderAvatarLODFactor"), 0.f, MAX_AVATAR_LOD_FACTOR);
+	LLVOAvatar::sPhysicsLODFactor		= llclamp(gSavedSettings.getF32("RenderAvatarPhysicsLODFactor"), 0.f, MAX_AVATAR_LOD_FACTOR);
 	LLVOAvatar::updateImpostorRendering(gSavedSettings.getU32("RenderAvatarMaxNonImpostors"));
 	LLVOAvatar::sVisibleInFirstPerson	= gSavedSettings.getBOOL("FirstPersonAvatarVisible");
 	// clamp auto-open time to some minimum usable value
@@ -1142,9 +1142,6 @@ bool LLAppViewer::init()
 
 	gGLActive = FALSE;
 
-// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.0
-#ifdef LL_RELEASE_FOR_DOWNLOAD
-// [/SL:KB]
 	LLProcess::Params updater;
 	updater.desc = "updater process";
 	// Because it's the updater, it MUST persist beyond the lifespan of the
@@ -1170,12 +1167,19 @@ bool LLAppViewer::init()
 	// ForceAddressSize
 	updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
 
-	// Run the updater. An exception from launching the updater should bother us.
+#if LL_WINDOWS && !LL_RELEASE_FOR_DOWNLOAD && !LL_SEND_CRASH_REPORTS
+	// This is neither a release package, nor crash-reporting enabled test build
+	// try to run version updater, but don't bother if it fails (file might be missing)
+	LLLeap *leap_p = LLLeap::create(updater, false);
+	if (!leap_p)
+	{
+		LL_WARNS("LLLeap") << "Failed to run LLLeap" << LL_ENDL;
+	}
+#else
+ 	// Run the updater. An exception from launching the updater should bother us.
 	LLLeap::create(updater, true);
-// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.0
-#endif // LL_RELEASE_FOR_DOWNLOAD
-// [/SL:KB]
- 
+#endif
+
 	// Iterate over --leap command-line options. But this is a bit tricky: if
 	// there's only one, it won't be an array at all.
 	LLSD LeapCommand(gSavedSettings.getLLSD("LeapCommand"));
@@ -2174,7 +2178,7 @@ bool LLAppViewer::initThreads()
 
 	if (LLTrace::BlockTimer::sLog || LLTrace::BlockTimer::sMetricLog)
 	{
-		LLTrace::BlockTimer::setLogLock(new LLMutex(NULL));
+		LLTrace::BlockTimer::setLogLock(new LLMutex());
 		mFastTimerLogThread = new LLFastTimerLogThread(LLTrace::BlockTimer::sLogName);
 		mFastTimerLogThread->start();
 	}
@@ -5475,7 +5479,8 @@ void LLAppViewer::resumeMainloopTimeout(const std::string& state, F32 secs)
 	{
 		if(secs < 0.0f)
 		{
-			secs = gSavedSettings.getF32("MainloopTimeoutDefault");
+			static LLCachedControl<F32> mainloop_timeout(gSavedSettings, "MainloopTimeoutDefault", 60);
+			secs = mainloop_timeout;
 		}
 
 		mMainloopTimeout->setTimeout(secs);
@@ -5502,7 +5507,8 @@ void LLAppViewer::pingMainloopTimeout(const std::string& state, F32 secs)
 	{
 		if(secs < 0.0f)
 		{
-			secs = gSavedSettings.getF32("MainloopTimeoutDefault");
+			static LLCachedControl<F32> mainloop_timeout(gSavedSettings, "MainloopTimeoutDefault", 60);
+			secs = mainloop_timeout;
 		}
 
 		mMainloopTimeout->setTimeout(secs);
