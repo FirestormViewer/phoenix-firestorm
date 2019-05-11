@@ -76,6 +76,7 @@
 #include "llsdserialize.h"
 #include "llsliderctrl.h"
 #include "llspinctrl.h"
+#include "lltabcontainer.h"
 #include "lltoggleablemenu.h"
 #include "lltrans.h"
 #include "llvfile.h"
@@ -83,6 +84,7 @@
 #include "llcallbacklist.h"
 #include "llviewerobjectlist.h"
 #include "llanimationstates.h"
+#include "llviewertexteditor.h"
 #include "llviewernetwork.h"
 #include "llviewershadermgr.h"
 // <AW: opensim-limits>
@@ -110,6 +112,8 @@ const double RETAIN_COEFFICIENT = 100;
 // should be represented by Smooth combobox with only 10 values.
 // So this const is used as a size of Smooth combobox list.
 const S32 SMOOTH_VALUES_NUMBER = 10;
+
+const F32 SKIN_WEIGHT_CAMERA_DISTANCE = 16.f;
 
 void drawBoxOutline(const LLVector3& pos, const LLVector3& size);
 
@@ -267,7 +271,9 @@ void FindModel(LLModelLoader::scene& scene, const std::string& name_to_match, LL
 LLFloaterModelPreview::LLFloaterModelPreview(const LLSD& key) :
 LLFloaterModelUploadBase(key),
 mUploadBtn(NULL),
-mCalculateBtn(NULL)
+mCalculateBtn(NULL),
+mUploadLogText(NULL),
+mTabContainer(NULL)
 {
 	sInstance = this;
 	mLastMouseX = 0;
@@ -334,7 +340,7 @@ BOOL LLFloaterModelPreview::postBuild()
 	getChild<LLCheckBoxCtrl>("show_edges")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_physics")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_textures")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
-	getChild<LLCheckBoxCtrl>("show_skin_weight")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
+	getChild<LLCheckBoxCtrl>("show_skin_weight")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onShowSkinWeightChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_joint_positions")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_uv_guide")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1)); // <FS:Beq> - Add UV guide overlay to pmesh preview
 
@@ -428,6 +434,13 @@ BOOL LLFloaterModelPreview::postBuild()
 
 	mUploadBtn = getChild<LLButton>("ok_btn");
 	mCalculateBtn = getChild<LLButton>("calculate_btn");
+	mUploadLogText = getChild<LLViewerTextEditor>("log_text");
+	mTabContainer = getChild<LLTabContainer>("import_tab");
+
+	// Disable Logs tab untill it has something to show
+	LLPanel* panel = mTabContainer->getPanelByName("logs_panel");
+	S32 index = mTabContainer->getIndexForPanel(panel);
+	mTabContainer->enableTabButton(index, false);
 
 	if (LLConvexDecomposition::getInstance() != NULL)
 	{
@@ -495,6 +508,15 @@ void LLFloaterModelPreview::onUploadOptionChecked(LLUICtrl* ctrl)
 		mModelPreview->mViewOption[name] = !mModelPreview->mViewOption[name];
 	}
 	toggleCalculateButton(true);
+}
+
+void LLFloaterModelPreview::onShowSkinWeightChecked(LLUICtrl* ctrl)
+{
+	if (mModelPreview)
+	{
+		mModelPreview->mCameraOffset.clearVec();
+		onViewOptionChecked(ctrl);
+	}
 }
 
 void LLFloaterModelPreview::onViewOptionChecked(LLUICtrl* ctrl)
@@ -745,7 +767,6 @@ void LLFloaterModelPreview::draw3dPreview()
 	gGL.color3f(1.f, 1.f, 1.f);
 
 	gGL.getTexUnit(0)->bind(mModelPreview);
-
 
 
 	LLView* preview_panel = getChild<LLView>("preview_panel");
@@ -1369,6 +1390,64 @@ void LLFloaterModelPreview::onMouseCaptureLostModelPreview(LLMouseHandler* handl
 }
 
 //-----------------------------------------------------------------------------
+// addStringToLog()
+//-----------------------------------------------------------------------------
+// static
+void LLFloaterModelPreview::addStringToLog(const std::string& str, bool flash)
+{
+    if (sInstance)
+    {
+        sInstance->addStringToLogTab(str, flash);
+    }
+}
+
+// static
+void LLFloaterModelPreview::addStringToLog(const std::ostringstream& strm, bool flash)
+{
+    if (sInstance)
+    {
+        sInstance->addStringToLogTab(strm.str(), flash);
+    }
+}
+
+//-----------------------------------------------------------------------------
+// addStringToLogTab()
+//-----------------------------------------------------------------------------
+void LLFloaterModelPreview::addStringToLogTab(const std::string& str, bool flash)
+{
+    if (str.empty())
+    {
+        return;
+    }
+
+    LLWString text = utf8str_to_wstring(str);
+    S32 add_text_len = text.length() + 1; // newline
+    S32 editor_max_len = mUploadLogText->getMaxTextLength();
+    if (add_text_len > editor_max_len)
+    {
+        return;
+    }
+
+    LLPanel* panel = mTabContainer->getPanelByName("logs_panel");
+    S32 index = mTabContainer->getIndexForPanel(panel);
+    mTabContainer->enableTabButton(index, true);
+
+    // Make sure we have space for new string
+    S32 editor_text_len = mUploadLogText->getLength();
+    while (editor_max_len < (editor_text_len + add_text_len))
+    {
+        editor_text_len -= mUploadLogText->removeFirstLine();
+    }
+
+    mUploadLogText->appendText(str, true);
+
+    if (flash && mTabContainer->getCurrentPanel() != panel)
+    {
+        mTabContainer->setTabPanelFlashing(panel, true);
+    }
+}
+
+//-----------------------------------------------------------------------------
 // LLModelPreview
 //-----------------------------------------------------------------------------
 
@@ -1809,8 +1888,14 @@ void LLModelPreview::rebuildUploadData()
                     LLQuaternion identity;
                     if (!bind_rot.isEqualEps(identity,0.01f))
                     {
-                        LL_WARNS() << "non-identity bind shape rot. mat is " << high_lod_model->mSkinInfo.mBindShapeMatrix 
-                                   << " bind_rot " << bind_rot << LL_ENDL;
+                        std::ostringstream out;
+                        out << "non-identity bind shape rot. mat is ";
+                        out << high_lod_model->mSkinInfo.mBindShapeMatrix;
+                        out << " bind_rot ";
+                        out << bind_rot;
+                        LL_WARNS() << out.str() << LL_ENDL;
+
+                        LLFloaterModelPreview::addStringToLog(out, false);
                         setLoadState( LLModelLoader::WARNING_BIND_SHAPE_ORIENTATION );
                     }
                 }
@@ -1985,7 +2070,11 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
 
 	if (lod < LLModel::LOD_IMPOSTOR || lod > LLModel::NUM_LODS - 1)
 	{
-		LL_WARNS() << "Invalid level of detail: " << lod << LL_ENDL;
+		std::ostringstream out;
+		out << "Invalid level of detail: ";
+		out << lod;
+		LL_WARNS() << out.str() << LL_ENDL;
+		LLFloaterModelPreview::addStringToLog(out, true);
 		assert(lod >= LLModel::LOD_IMPOSTOR && lod < LLModel::NUM_LODS);
 		return;
 	}
@@ -2362,7 +2451,12 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
 
 								if (importerDebug)
 								{
-									LL_WARNS() << "Loded model name " << mModel[loaded_lod][idx]->mLabel << " for LOD " << loaded_lod << " doesn't match the base model. Renaming to " << name << LL_ENDL;
+									std::ostringstream out;
+									out << "Loded model name " << mModel[loaded_lod][idx]->mLabel;
+									out << " for LOD " << loaded_lod;
+									out << " doesn't match the base model. Renaming to " << name;
+									LL_WARNS() << out.str() << LL_ENDL;
+									LLFloaterModelPreview::addStringToLog(out, false);
 								}
 
 								mModel[loaded_lod][idx]->mLabel = name;
@@ -2520,7 +2614,10 @@ void LLModelPreview::genLODs(S32 which_lod, U32 decimation, bool enforce_tri_lim
 	// Allow LoD from -1 to LLModel::LOD_PHYSICS
 	if (which_lod < -1 || which_lod > LLModel::NUM_LODS - 1)
 	{
-		LL_WARNS() << "Invalid level of detail: " << which_lod << LL_ENDL;
+		std::ostringstream out;
+		out << "Invalid level of detail: " << which_lod;
+		LL_WARNS() << out.str() << LL_ENDL;
+		LLFloaterModelPreview::addStringToLog(out, false);
 		assert(which_lod >= -1 && which_lod < LLModel::NUM_LODS);
 		return;
 	}
@@ -3571,7 +3668,10 @@ void LLModelPreview::updateLodControls(S32 lod)
 {
 	if (lod < LLModel::LOD_IMPOSTOR || lod > LLModel::LOD_HIGH)
 	{
-		LL_WARNS() << "Invalid level of detail: " << lod << LL_ENDL;
+		std::ostringstream out;
+		out << "Invalid level of detail: " << lod;
+		LL_WARNS() << out.str() << LL_ENDL;
+		LLFloaterModelPreview::addStringToLog(out, false);
 		assert(lod >= LLModel::LOD_IMPOSTOR && lod <= LLModel::LOD_HIGH);
 		return;
 	}
@@ -3767,9 +3867,12 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
 			if (!vb->allocateBuffer(num_vertices, num_indices, TRUE))
 			{
 				// We are likely to crash due this failure, if this happens, find a way to gracefully stop preview
-				LL_WARNS() << "Failed to allocate Vertex Buffer for model preview "
-					<< num_vertices << " vertices and "
-					<< num_indices << " indices" << LL_ENDL;
+									std::ostringstream out;
+									out << "Failed to allocate Vertex Buffer for model preview ";
+									out << num_vertices << " vertices and ";
+									out << num_indices << " indices";
+									LL_WARNS() << out.str() << LL_ENDL;
+									LLFloaterModelPreview::addStringToLog(out, true);
 			}
 
 			LLStrider<LLVector3> vertex_strider;
@@ -3921,8 +4024,11 @@ void LLModelPreview::loadedCallback(
 	LLModelPreview* pPreview = static_cast< LLModelPreview* >(opaque);
 	if (pPreview && !LLModelPreview::sIgnoreLoadedCallback)
 	{
-		pPreview->loadModelCallback(lod);
-	}	
+		LLFloaterModelPreview::addStringToLog(pPreview->mModelLoader->logOut(), true);
+		pPreview->mModelLoader->clearLog();
+		pPreview->loadModelCallback(lod); // removes mModelLoader in some cases
+	}
+
 }
 
 void LLModelPreview::stateChangedCallback(U32 state,void* opaque)
@@ -4185,10 +4291,9 @@ BOOL LLModelPreview::render()
 
 	if (skin_weight)
 	{
-		target_pos = getPreviewAvatar()->getPositionAgent();
+		target_pos = getPreviewAvatar()->getPositionAgent() + offset;
 		z_near = 0.01f;
 		z_far = 1024.f;
-		mCameraDistance = 16.f;
 
 		//render avatar previews every frame
 		refresh();
@@ -4206,8 +4311,9 @@ BOOL LLModelPreview::render()
 	LLQuaternion(mCameraYaw, LLVector3::z_axis);
 
 	LLQuaternion av_rot = camera_rot;
+	F32 camera_distance = skin_weight ? SKIN_WEIGHT_CAMERA_DISTANCE : mCameraDistance;
 	LLViewerCamera::getInstance()->setOriginAndLookAt(
-													  target_pos + ((LLVector3(mCameraDistance, 0.f, 0.f) + offset) * av_rot),		// camera
+													  target_pos + ((LLVector3(camera_distance, 0.f, 0.f) + offset) * av_rot),		// camera
 													  LLVector3::z_axis,																	// up
 													  target_pos);											// point of interest
 
@@ -4319,8 +4425,8 @@ BOOL LLModelPreview::render()
 						else
 						{
 							gGL.diffuseColor4fv(static_cast<LLColor4>(base_col).mV);
-
 						}
+
 						buffer->drawRange(LLRender::TRIANGLES, 0, buffer->getNumVerts()-1, buffer->getNumIndices(), 0);
 						gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 						gGL.diffuseColor4fv(static_cast<LLColor4>(edge_col).mV);
@@ -4550,7 +4656,7 @@ BOOL LLModelPreview::render()
 			target_pos = getPreviewAvatar()->getPositionAgent();
 
 			LLViewerCamera::getInstance()->setOriginAndLookAt(
-															  target_pos + ((LLVector3(mCameraDistance, 0.f, 0.f) + offset) * av_rot),		// camera
+															  target_pos + ((LLVector3(camera_distance, 0.f, 0.f) + offset) * av_rot),		// camera
 															  LLVector3::z_axis,																	// up
 															  target_pos);											// point of interest
 
@@ -4718,8 +4824,10 @@ void LLModelPreview::zoom(F32 zoom_amt)
 
 void LLModelPreview::pan(F32 right, F32 up)
 {
-	mCameraOffset.mV[VY] = llclamp(mCameraOffset.mV[VY] + right * mCameraDistance / mCameraZoom, -1.f, 1.f);
-	mCameraOffset.mV[VZ] = llclamp(mCameraOffset.mV[VZ] + up * mCameraDistance / mCameraZoom, -1.f, 1.f);
+	bool skin_weight = mViewOption["show_skin_weight"];
+	F32 camera_distance = skin_weight ? SKIN_WEIGHT_CAMERA_DISTANCE : mCameraDistance;
+	mCameraOffset.mV[VY] = llclamp(mCameraOffset.mV[VY] + right * camera_distance / mCameraZoom, -1.f, 1.f);
+	mCameraOffset.mV[VZ] = llclamp(mCameraOffset.mV[VZ] + up * camera_distance / mCameraZoom, -1.f, 1.f);
 }
 
 void LLModelPreview::setPreviewLOD(S32 lod)
@@ -4970,8 +5078,6 @@ void LLFloaterModelPreview::resetUploadOptions()
 		childSetValue("lod_file_" + lod_name[lod], "");
 	}
 
-	getChild<LLComboBox>("physics_lod_combo")->setCurrentByIndex(0);
-
 	for(auto& p : mDefaultDecompParams)
 	{
 		std::string ctrl_name(p.first);
@@ -4981,6 +5087,8 @@ void LLFloaterModelPreview::resetUploadOptions()
 			ctrl->setValue(p.second);
 		}
 	}
+	getChild<LLComboBox>("physics_lod_combo")->setCurrentByIndex(0);
+	getChild<LLComboBox>("Cosine%")->setCurrentByIndex(0);
 }
 
 void LLFloaterModelPreview::onModelPhysicsFeeReceived(const LLSD& result, std::string upload_url)
@@ -5023,7 +5131,11 @@ void LLFloaterModelPreview::handleModelPhysicsFeeReceived()
 
 void LLFloaterModelPreview::setModelPhysicsFeeErrorStatus(S32 status, const std::string& reason)
 {
-	LL_WARNS() << "LLFloaterModelPreview::setModelPhysicsFeeErrorStatus(" << status << " : " << reason << ")" << LL_ENDL;
+	std::ostringstream out;
+	out << "LLFloaterModelPreview::setModelPhysicsFeeErrorStatus(" << status;
+	out << " : " << reason << ")";
+	LL_WARNS() << out.str() << LL_ENDL;
+	LLFloaterModelPreview::addStringToLog(out, false);
 	doOnIdleOneTime(boost::bind(&LLFloaterModelPreview::toggleCalculateButton, this, true));
 }
 

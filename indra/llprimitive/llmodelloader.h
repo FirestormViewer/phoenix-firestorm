@@ -185,6 +185,9 @@ public:
 		return name != NULL && mJointMap.find(name) != mJointMap.end();
 	}
 
+	std::string logOut() { return mWarningStream.str(); }
+	void clearLog() { mWarningStream.clear(); }
+
 protected:
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
 	std::vector< std::string > toStringVector( std::vector< JointKey > const &aIn ) const
@@ -211,6 +214,8 @@ protected:
 	bool		mNoOptimize;
 
 	JointTransformMap	mJointTransformMap;
+
+	std::ostringstream mWarningStream; // preview floater will pull logs from here
 
 	static std::list<LLModelLoader*> sActiveLoaderList;
 	static bool isAlive(LLModelLoader* loader) ;
