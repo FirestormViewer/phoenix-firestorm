@@ -1247,8 +1247,7 @@ Please consider using an attachment point close to the item's position on the bo
       <panel
        label="Log"
        layout="topleft"
-       name="logs_panel"
-       title="Log">
+       name="logs_panel">
         <view_border
          bevel_style="none"
          follows="top|left"
