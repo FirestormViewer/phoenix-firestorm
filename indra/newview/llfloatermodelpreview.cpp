@@ -410,19 +410,22 @@ BOOL LLFloaterModelPreview::postBuild()
 	{
 		validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php", current_grid.c_str());
 	}
-#ifndef HAVOK_TPV // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	else
 	{
 		// TODO: Opensim: Set it to something reasonable
 		validate_url = LLGridManager::getInstance()->getLoginPage();
 	}
+#endif // OPENSIM <FS:AW optional opensim support>
 	// </Ansariel>
+
 // <FS:CR> Show an alert dialog if using the Opensim viewer as functionality will be limited without Havok
+#ifndef HAVOK_TPV
 	LLSD args;
 	args["FEATURE"] = getString("no_havok");
 	LLNotificationsUtil::add("NoHavok", args);
+#endif
 // </FS:CR>
-#endif // OPENSIM <FS:AW optional opensim support>
 
 	getChild<LLTextBox>("warning_message")->setTextArg("[VURL]", validate_url);
 
