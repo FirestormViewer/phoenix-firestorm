@@ -2055,7 +2055,7 @@ bool LLAppViewer::cleanup()
 	// <FS:ND> FIRE-8385 Crash on exit in Havok. It is hard to say why it happens, as we only have the binary Havok blob. This is a hack around it.
 	// Due to the fact the process is going to die anyway, the OS will clean up any reources left by not calling quitSystem.
 	// The OpenSim version does not use Havok, it is okay to call shutdown then.
-#ifdef OPENSIM
+#ifndef HAVOK_TPV
 	// shut down Havok
 	LLPhysicsExtensions::quitSystem();
 #endif // </FS:ND>
@@ -3694,10 +3694,12 @@ LLSD LLAppViewer::getViewerInfo() const
     //}
 
 // <FS:CR> FIRE-8273: Add Open-sim indicator to About floater
-#ifdef OPENSIM
+#if defined OPENSIM
 	info["BUILD_TYPE"] = LLTrans::getString("FSWithOpensim");
-#else
+#elif defined HAVOK_TPV
 	info["BUILD_TYPE"] = LLTrans::getString("FSWithHavok");
+#else
+	info["BUILD_TYPE"] = std::string();
 #endif // OPENSIM
 // </FS:CR>
 	info["SKIN"] = gSavedSettings.getString("FSInternalSkinCurrent");

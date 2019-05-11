@@ -410,7 +410,7 @@ BOOL LLFloaterModelPreview::postBuild()
 	{
 		validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php", current_grid.c_str());
 	}
-#ifdef OPENSIM // <FS:AW optional opensim support>
+#ifndef HAVOK_TPV // <FS:AW optional opensim support>
 	else
 	{
 		// TODO: Opensim: Set it to something reasonable
