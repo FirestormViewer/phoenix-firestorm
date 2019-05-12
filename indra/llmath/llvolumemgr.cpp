@@ -48,7 +48,7 @@ LLVolumeMgr::LLVolumeMgr()
 {
 	// the LLMutex magic interferes with easy unit testing,
 	// so you now must manually call useMutex() to use it
-	//mDataMutex = new LLMutex(gAPRPoolp);
+	//mDataMutex = new LLMutex();
 }
 
 LLVolumeMgr::~LLVolumeMgr()

@@ -47,7 +47,7 @@ class LLViewBorder;
 
 class LLCheckBoxCtrl
 : public LLUICtrl
-, public nd::ui::SearchableControl
+, public ll::ui::SearchableControl
 {
 public:
 	struct Params 
@@ -97,6 +97,8 @@ public:
 	// LLCheckBoxCtrl interface
 	virtual BOOL		toggle()				{ return mButton->toggleState(); }		// returns new state
 
+	void				setBtnFocus() { mButton->setFocus(TRUE); }
+
 	void				setEnabledColor( const LLColor4 &color ) { mTextEnabledColor = color; }
 	void				setDisabledColor( const LLColor4 &color ) { mTextDisabledColor = color; }
 
@@ -124,6 +126,18 @@ private:
 // </FS:Ansariel>
 
 protected:
+	virtual std::string _getSearchText() const
+	{
+		return getLabel() + getToolTip();
+	}
+
+	virtual void onSetHighlight() const // When highlight, really do highlight the label
+	{
+		if( mLabel )
+			mLabel->ll::ui::SearchableControl::setHighlighted( ll::ui::SearchableControl::getHighlighted() );
+	}
+
+protected:
 	// note: value is stored in toggle state of button
 	LLButton*		mButton;
 	LLTextBox*		mLabel;
@@ -131,20 +145,6 @@ protected:
 
 	LLUIColor		mTextEnabledColor;
 	LLUIColor		mTextDisabledColor;
-
-// <FS:ND> Searchable text for UI filter
-protected:
-	virtual std::string _getSearchText() const
-	{
-		return getLabel() + getToolTip();
-	}
-
-	virtual void onSetHighlight( ) const // When highlight, really do highlight the label
-	{
-		if( mLabel )
-			mLabel-> nd::ui::SearchableControl::setHighlighted( nd::ui::SearchableControl::getHighlighted() );
-	}
-// </FS:ND>
 };
 
 // Build time optimization, generate once in .cpp file

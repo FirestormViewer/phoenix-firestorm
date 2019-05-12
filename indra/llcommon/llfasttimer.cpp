@@ -72,7 +72,6 @@ bool        BlockTimer::sMetricLog       = false;
 #endif
 #if LL_LINUX || LL_SOLARIS || LL_DARWIN // AO: Add LL_DARWIN to this list now
 U64         BlockTimer::sClockResolution = 1000000000; // Nanosecond resolution
-
 #else
 U64         BlockTimer::sClockResolution = 1000000; // Microsecond resolution
 #endif

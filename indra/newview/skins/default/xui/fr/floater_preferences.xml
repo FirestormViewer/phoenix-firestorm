@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Preferences" title="Préférences">
-	<floater.string name="LoginToChange">Connectez-vous pour modifier l'option</floater.string>
+<floater name="Preferences" title="PRÉFÉRENCES">
 	<floater.string name="email_unverified_tooltip">
 		Veuillez vérifier votre adresse électronique pour autoriser les IM par courriel en vous rendant à l&apos;adresse https://accounts.secondlife.com/change_email/
 	</floater.string>
-	<button label="Appliquer" label_selected="Appliquer" name="Apply"/>
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Annuler" label_selected="Annuler" name="Cancel"/>
-	<panel name="search_panel"><search_editor label="Recherche d'un paramètre" name="search_prefs_edit" tool_tip="Saisissez-ici le paramètre que vous recherchez. Les résultats affichés seront ceux qui contiennent votre recherche dans le nom de l'option ou dans ses commentaires."/></panel>
+	<panel name="search_panel">
+		<search_editor label="Paramètres de recherche" name="search_prefs_edit" tool_tip="Tapez le terme de recherche qui vous intéresse ici. Les résultats seront affichés pour les correspondances partielles de texte intégral dans le nom ou le commentaire du paramètre."/>
+	</panel>
 	<tab_container name="pref core">
 		<panel label="Général" name="general"/>
-		<panel label="Conversations" name="chat"/>
-		<panel label="Couleurs" name="colors"/>
-		<panel label="Graphismes" name="display"/>
-		<panel label="Audio &amp; Médias" name="audio"/>
-		<panel label="Réseau &amp; Dossiers" name="input"/>
-		<panel label="Affichage/Déplact." name="move"/>
+		<panel label="Graphiques" name="display"/>
+		<panel label="Son et Média" name="audio"/>
+		<panel label="Chat" name="chat"/>
+		<panel label="Affichage/Déplacement" name="move"/>
 		<panel label="Notifications" name="msgs"/>
+		<panel label="Couleurs" name="colors"/>
 		<panel label="Confidentialité" name="im"/>
-		<panel label="Avancés" name="advanced1"/>
-		<panel label="Interface" name="ui"/>
-		<panel label="Thèmes" name="skins"/>
-		<panel label="Rapports d'erreurs" name="crashreports"/>
-		<panel label="Firestorm" name="firestorm"/>
-		<panel label="Grilles" name="opensim"/>
-		<panel label="Sauvegarde" name="backup"/>
+		<panel label="Configuration" name="input"/>
+		<panel label="Avancées" name="advanced1"/>
+		<panel label="Chargements" name="uploads"/>
 	</tab_container>
 </floater>

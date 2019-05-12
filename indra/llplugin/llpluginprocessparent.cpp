@@ -81,7 +81,8 @@ protected:
 
 };
 
-LLPluginProcessParent::LLPluginProcessParent(LLPluginProcessParentOwner *owner)
+LLPluginProcessParent::LLPluginProcessParent(LLPluginProcessParentOwner *owner):
+	mIncomingQueueMutex()
 {
 	if(!sInstancesMutex)
 	{

@@ -306,7 +306,7 @@
 					<radio_item label="Mann (schlank)" name="2"/>
 				</radio_group>
 				<text name="pelvis_offset_label">
-					Z-Offset (Avatar anheben oder senken):
+					Z-Offset (Av. anheben / senken):
 				</text>
 				<spinner name="pelvis_offset" value="0.0"/>
 				<panel name="avatar_model_hint_panel">
@@ -339,7 +339,7 @@ Bitte ziehen Sie einen anderen Anhängepunkt nahe der Objektposition in Betracht
 			<text name="server_weight">
 				Server: [SIM]
 			</text>
-			<panel name="price_breakdown_panel">
+			<panel name="physics_costs_panel">
 				<text name="price_breakdown_title">
 					Kosten-Aufstellung
 				</text>

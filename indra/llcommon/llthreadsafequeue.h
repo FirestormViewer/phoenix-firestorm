@@ -28,10 +28,20 @@
 #define LL_LLTHREADSAFEQUEUE_H
 
 #include "llexception.h"
-#include "llmutex.h"
-#include "lltimer.h"
-#include <string>
 #include <deque>
+#include <string>
+
+#if LL_WINDOWS
+#pragma warning (push)
+#pragma warning (disable:4265)
+#endif
+// 'std::_Pad' : class has virtual functions, but destructor is not virtual
+#include <mutex>
+#include <condition_variable>
+
+#if LL_WINDOWS
+#pragma warning (pop)
+#endif
 
 //
 // A general queue exception.
@@ -62,8 +72,6 @@ public:
 	}
 };
 
-
-
 //
 // Implements a thread safe FIFO.
 //
@@ -75,7 +83,7 @@ public:
 	
 	// If the pool is set to NULL one will be allocated and managed by this
 	// queue.
-	LLThreadSafeQueue( U32 capacity = 1024);
+	LLThreadSafeQueue(U32 capacity = 1024);
 	
 	// Add an element to the front of queue (will block if the queue has
 	// reached capacity).
@@ -104,99 +112,102 @@ public:
 
 private:
 	std::deque< ElementT > mStorage;
-	LLCondition mLock;;
-	U32 mCapacity; // Really needed?
+	U32 mCapacity;
+
+	std::mutex mLock;
+	std::condition_variable mCapacityCond;
+	std::condition_variable mEmptyCond;
 };
-
-
 
 // LLThreadSafeQueue
 //-----------------------------------------------------------------------------
 
-
 template<typename ElementT>
-LLThreadSafeQueue<ElementT>::LLThreadSafeQueue( U32 capacity):
-	mCapacity( capacity )
+LLThreadSafeQueue<ElementT>::LLThreadSafeQueue(U32 capacity) :
+mCapacity(capacity)
 {
-	; // No op.
 }
 
 
 template<typename ElementT>
 void LLThreadSafeQueue<ElementT>::pushFront(ElementT const & element)
 {
-	while( true )
-	{
-		{
-			LLMutexLock lck( &mLock );
-			if( mStorage.size() < mCapacity )
-			{
-				mStorage.push_front( element );
-				mLock.signal();
-				return;
-			}
-		}
-		ms_sleep( 100 );
-	}
+    while (true)
+    {
+        std::unique_lock<std::mutex> lock1(mLock);
+
+        if (mStorage.size() < mCapacity)
+        {
+            mStorage.push_front(element);
+            mEmptyCond.notify_one();
+            return;
+        }
+
+        // Storage Full. Wait for signal.
+        mCapacityCond.wait(lock1);
+    }
 }
 
 
 template<typename ElementT>
 bool LLThreadSafeQueue<ElementT>::tryPushFront(ElementT const & element)
 {
-	LLMutexTrylock lck( &mLock );
-	if( !lck.isLocked() )
-		return false;
+    std::unique_lock<std::mutex> lock1(mLock, std::defer_lock);
+    if (!lock1.try_lock())
+        return false;
 
-	if( mStorage.size() >= mCapacity )
-		return false;
+    if (mStorage.size() >= mCapacity)
+        return false;
 
-	mStorage.push_front( element );
-	mLock.signal();
-	return true;
+    mStorage.push_front(element);
+    mEmptyCond.notify_one();
+    return true;
 }
 
 
 template<typename ElementT>
 ElementT LLThreadSafeQueue<ElementT>::popBack(void)
 {
-	while( true )
-	{
-		mLock.wait();
-		if( !mStorage.empty() )
-		{
-			ElementT value = mStorage.back();
-			mStorage.pop_back();
-			return value;
-		}
-	}
+    while (true)
+    {
+        std::unique_lock<std::mutex> lock1(mLock);
+
+        if (!mStorage.empty())
+        {
+            ElementT value = mStorage.back();
+            mStorage.pop_back();
+            mCapacityCond.notify_one();
+            return value;
+        }
+
+        // Storage empty. Wait for signal.
+        mEmptyCond.wait(lock1);
+    }
 }
 
 
 template<typename ElementT>
 bool LLThreadSafeQueue<ElementT>::tryPopBack(ElementT & element)
 {
-	LLMutexTrylock lck( &mLock );
+    std::unique_lock<std::mutex> lock1(mLock, std::defer_lock);
+    if (!lock1.try_lock())
+        return false;
 
-	if( !lck.isLocked() )
-		return false;
-	if( mStorage.empty() )
-		return false;
+    if (mStorage.empty())
+        return false;
 
-	element = mStorage.back();
-	mStorage.pop_back();
-	return true;
+    element = mStorage.back();
+    mStorage.pop_back();
+    mCapacityCond.notify_one();
+    return true;
 }
 
 
 template<typename ElementT>
 size_t LLThreadSafeQueue<ElementT>::size(void)
 {
-	// Nicky: apr_queue_size is/was NOT threadsafe. I still play it safe here and rather lock the storage
-
-	LLMutexLock lck( &mLock );
-	return mStorage.size();
+    std::lock_guard<std::mutex> lock(mLock);
+    return mStorage.size();
 }
-
 
 #endif

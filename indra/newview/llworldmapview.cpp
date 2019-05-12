@@ -117,7 +117,6 @@ std::map<std::string,std::string> LLWorldMapView::sStringsMap;
 const F32 DRAW_TEXT_THRESHOLD = 96.f;		// Don't draw text under that resolution value (res = width region in meters)
 const S32 DRAW_SIMINFO_THRESHOLD = 3;		// Max level for which we load or display sim level information (level in LLWorldMipmap sense)
 const S32 DRAW_LANDFORSALE_THRESHOLD = 2;	// Max level for which we load or display land for sale picture data (level in LLWorldMipmap sense)
-const S32 DRAW_MATURITY_THRESHOLD = 1;		// Ansariel: Max level for which the maturity level will be shown (level in LLWorldMipmap sense)
 
 // When on, draw an outline for each mipmap tile gotten from S3
 #define DEBUG_DRAW_TILE 0
@@ -543,9 +542,27 @@ void LLWorldMapView::draw()
 			std::string mesg;
 			{
 				mesg = info->getName();
+			}
+//			if (!mesg.empty())
+// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
+			if ( (!mesg.empty()) && (RlvActions::canShowLocation()) )
+// [/RLVa:KB]
+			{
+				font->renderUTF8(
+					mesg, 0,
+					//llfloor(left + 3), llfloor(bottom + 2),
+					llfloor(left + 3.f), llfloor(bottom + (drawAdvancedRegionInfo ? 16.f : 2.f)),
+					LLColor4::white,
+					LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW,
+					S32_MAX, //max_chars
+					sMapScale, //max_pixels
+					NULL,
+					TRUE); //use ellipses
 
 				if (drawAdvancedRegionInfo)
 				{
+					std::string advanced_info = "(";
+
 					// Only show agent count when region is online
 					if (!info->isDown())
 					{
@@ -557,29 +574,22 @@ void LLWorldMapView::draw()
 						}
 						if (agent_count > 0)
 						{
-							mesg += llformat(" (%d)", agent_count);
+							advanced_info += llformat("%d - ", agent_count);
 						}
 					}
 				
-					// Let the LLSimInfo instance do the translation;
-					// it knows everything needed for this, including
-					// offline status!
-					if (level <= DRAW_MATURITY_THRESHOLD)
-					{
-						mesg += llformat(" (%s)", info->getAccessString().c_str());
-					}
+					advanced_info += llformat("%s)", info->getAccessString().c_str());
+
+					font->renderUTF8(
+						advanced_info, 0,
+						llfloor(left + 3.f), llfloor(bottom + 2.f),
+						LLColor4::white,
+						LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW,
+						S32_MAX, //max_chars
+						sMapScale, //max_pixels
+						NULL,
+						TRUE); //use ellipses
 				}
-			}
-//			if (!mesg.empty())
-// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
-			if ( (!mesg.empty()) && (RlvActions::canShowLocation()) )
-// [/RLVa:KB]
-			{
-				font->renderUTF8(
-					mesg, 0,
-					llfloor(left + 3), llfloor(bottom + 2),
-					LLColor4::white,
-					LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW);
 			}
 // <FS:CR> Show the grid coordinates (in units of regions)
 			if (sDrawRegionGridCoordinates)
@@ -587,8 +597,7 @@ void LLWorldMapView::draw()
 				LLVector3d origin = info->getGlobalOrigin();
 				std::ostringstream coords;
 				coords << "(" << origin.mdV[VX] / REGION_WIDTH_METERS << "," << origin.mdV[VY] / REGION_WIDTH_METERS << ")";
-				//mesg += coords.str();
-				font->renderUTF8(coords.str(), 0, llfloor(left + 3), llfloor(bottom + 16), LLColor4::white,
+				font->renderUTF8(coords.str(), 0, llfloor(left + 3), llfloor(bottom + (drawAdvancedRegionInfo ? 30.f : 16.f)), LLColor4::white,
 								 LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW);
 			}
 // </FS:CR>
@@ -1933,9 +1942,12 @@ BOOL LLWorldMapView::handleDoubleClick( S32 x, S32 y, MASK mask )
 			{
 				// <FS:Ansariel> Show parcel details instead of search with possible useless result
 				//LLVector3d pos_global = viewPosToGlobal(x, y);
-				//LLSimInfo* info = LLWorldMap::getInstance()->simInfoFromPosGlobal(pos_global);
-				//LLFloaterReg::hideInstance("world_map");
-				//LLFloaterReg::showInstance("search", LLSD().with("category", "land").with("query", info->getName()));
+				//std::string sim_name;
+				//if (LLWorldMap::getInstance()->simNameFromPosGlobal(pos_global, sim_name))
+				//{
+				//	LLFloaterReg::hideInstance("world_map");
+				//	LLFloaterReg::showInstance("search", LLSD().with("category", "land").with("query", sim_name));
+				//}
 				LLFloaterReg::hideInstance("world_map");
 				LLUrlAction::executeSLURL(LLSLURL("parcel", id, "about").getSLURLString());
 				// </FS:Ansariel>

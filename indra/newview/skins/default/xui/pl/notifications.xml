@@ -1502,6 +1502,30 @@ Zamień teksturę [TEXTURE_NUM] na 24-bitową teksturę o wymiarze 1024x1024 lub
 	<notification name="ProblemAddingEstateManagerBanned">
 		Nie możesz dodać zbanowanego rezydenta do listy zarządców Majątku.
 	</notification>
+	<notification name="ProblemBanningEstateManager">
+		Nie można dodać zarządcy Majątku [AGENT] do listy zbanowanych.
+	</notification>
+	<notification name="GroupIsAlreadyInList">
+		&lt;nolink&gt;[GROUP]&lt;/nolink&gt; już jest na liście dostępu grup.
+	</notification>
+	<notification name="AgentIsAlreadyInList">
+		[AGENT] już jest na Twojej liście: [LIST_TYPE].
+	</notification>
+	<notification name="AgentsAreAlreadyInList">
+		[AGENT] już są na Twojej liście: [LIST_TYPE].
+	</notification>
+	<notification name="AgentWasAddedToList">
+		[AGENT] został/a dodany/a do listy: [LIST_TYPE] w: [ESTATE].
+	</notification>
+	<notification name="AgentsWereAddedToList">
+		[AGENT] zostali dodani do listy: [LIST_TYPE] w: [ESTATE].
+	</notification>
+	<notification name="AgentWasRemovedFromList">
+		[AGENT] został/a usunięty/a z listy: [LIST_TYPE] w: [ESTATE].
+	</notification>
+	<notification name="AgentsWereRemovedFromList">
+		[AGENT] zostali usunięci z listy: [LIST_TYPE] w: [ESTATE].
+	</notification>
 	<notification name="CanNotChangeAppearanceUntilLoaded">
 		Nie możesz zmienić wyglądu podczas ładowania ubrań i kształtu.
 	</notification>
