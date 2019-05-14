@@ -24,22 +24,22 @@
 	<button label="√ Wszystkie" name="check_all"/>
 	<button label="Żadne" label_selected="Żadne" name="check_none"/>
 	<text name="newperms">
-		Reguluj prawa zawartości na
+		Ustaw prawa zawartości na
 	</text>
 	<text name="GroupLabel">
 		Grupa:
 	</text>
-	<check_box label="Udostępnij" name="share_with_group"/>
+	<check_box label="Udostępnij" name="share_with_group" tool_tip="Pozwól członkom grupy na dzielenie praw do modyfikacji tego obiektu. Musisz przypisać obiekt, aby uaktywnić ograniczenia dla ról." />
 	<text name="AnyoneLabel">
 		Każdy:
 	</text>
-	<check_box label="Kopiowanie" name="everyone_copy"/>
+	<check_box label="Kopiowanie" name="everyone_copy" tool_tip="Każdy może wziąć kopię obiektu. Obiekt i cała jego zawartość muszą być kopiowalne i transferowalne." />
 	<text name="NextOwnerLabel">
 		Nast. właściciel:
 	</text>
-	<check_box label="Modyfikacja" name="next_owner_modify"/>
-	<check_box label="Kopiowanie" name="next_owner_copy"/>
-	<check_box label="Transferowanie" name="next_owner_transfer" tool_tip="Następny Właściciel może oddać lub sprzedać ten obiekt."/>
+	<check_box label="Modyfikacja" name="next_owner_modify" tool_tip="Następny właściciel może edytować właściwości, takie jak nazwa lub rozmiar tego obiektu." />
+	<check_box label="Kopiowanie" name="next_owner_copy" tool_tip="Następny właściciel może wykonać nieograniczoną liczbę kopii tego obiektu. Kopie przechowują informacje o twórcy i nigdy nie mogą mieć większych zezwoleń niż kopiowany element." />
+	<check_box label="Transferowanie" name="next_owner_transfer" tool_tip="Następny właściciel może oddać lub sprzedać ten obiekt."/>
 	<button label="Zastosuj" name="apply"/>
 	<button label="Anuluj" name="close"/>
 </floater>
