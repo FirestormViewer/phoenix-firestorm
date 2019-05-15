@@ -111,7 +111,6 @@ pre_build()
      -DPACKAGE:BOOL=ON \
      -DUNATTENDED:BOOL=ON \
      -DHAVOK:BOOL="$HAVOK" \
-     -DCMAKE_SYSTEM_VERSION:STRING="10.0" \
      -DRELEASE_CRASH_REPORTING:BOOL="$RELEASE_CRASH_REPORTING" \
      -DVIEWER_CHANNEL:STRING="${viewer_channel}" \
      -DGRID:STRING="\"$viewer_grid\"" \
