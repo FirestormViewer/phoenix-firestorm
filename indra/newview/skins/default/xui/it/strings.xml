@@ -5610,6 +5610,12 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="Command_Fly_Tooltip">
 		Attiva/disattiva il volo (Home)
 	</string>
+	<string name="Command_Stop_Animations_Label">
+		Ferma animazioni
+	</string>
+	<string name="Command_Stop_Animations_Tooltip">
+		Ferma animazioni
+	</string>
 	<string name="Retain%">
 		Mantieni%
 	</string>
