@@ -1979,6 +1979,7 @@ Only large parcels can be listed in search.
              layout="topleft"
              left="10"
              name="public_access"
+             tool_tip=""
              label="Anyone can visit (Unchecking this will create ban lines)"
              top="12" 
              width="278" />

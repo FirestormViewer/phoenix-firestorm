@@ -5950,6 +5950,12 @@ void handle_take()
 				LL_DEBUGS("HandleTake") << "Destination folder is descendent of library folder - setting to null UUID" << LL_ENDL;
 			}
 
+			// check inbox
+			const LLUUID inbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX);
+			if (category_id == inbox_id || gInventory.isObjectDescendentOf(category_id, inbox_id))
+			{
+				category_id.setNull();
+			}
 		}
 	}
 	if(category_id.isNull())

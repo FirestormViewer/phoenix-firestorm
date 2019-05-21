@@ -44,6 +44,7 @@
 #include "roles_constants.h"
 #include "llscrollbar.h"
 #include "llselectmgr.h"
+#include "lltrans.h"
 #include "llviewertexteditor.h"
 #include "llvfile.h"
 #include "llviewerinventory.h"
@@ -809,7 +810,7 @@ void LLPreviewNotecard::openInExternalEditor()
         {
             if (status == LLExternalEditor::EC_NOT_SPECIFIED) // Use custom message for this error.
             {
-                msg = getString("external_editor_not_set");
+                msg = LLTrans::getString("ExternalEditorNotSet");
             }
             else
             {
