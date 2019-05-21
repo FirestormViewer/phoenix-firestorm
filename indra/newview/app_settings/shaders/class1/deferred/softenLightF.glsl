@@ -106,8 +106,7 @@ void main()
         float ambient = da;
         ambient *= 0.5;
         ambient *= ambient;
-        //ambient = max(getAmbientClamp(), ambient);
-        ambient = 1.0 - ambient;
+        ambient = min(getAmbientClamp(), 1.0 - ambient);
 
         vec3 sun_contrib = final_da * sunlit;
 
@@ -144,17 +143,17 @@ vec3 post_diffuse = color.rgb;
             if (nh > 0.0)
             {
                 float scontrib = fres*texture2D(lightFunc, vec2(nh, spec.a)).r*gt/(nh*da);
-                vec3 speccol = sun_contrib*scontrib*spec.rgb*0.25;
-                speccol = clamp(speccol, vec3(0), vec3(1));
-                bloom += dot(speccol, speccol);
-                color += speccol;
+                vec3 sp = sun_contrib*scontrib / 16.0;
+                sp = clamp(sp, vec3(0), vec3(1));
+                bloom += dot(sp, sp) / 6.0;
+                color += sp * spec.rgb;
             }
         }
        
  vec3 post_spec = color.rgb;
  
 #ifndef WATER_FOG
-        color.rgb += diffuse_srgb.a * diffuse_srgb.rgb;
+        color.rgb = mix(color.rgb, diffuse_srgb.rgb, diffuse_srgb.a);
 #endif
 
         if (envIntensity > 0.0)

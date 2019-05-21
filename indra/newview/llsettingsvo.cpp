@@ -566,14 +566,8 @@ void LLSettingsVOSky::convertAtmosphericsToLegacy(LLSD& legacy, LLSD& settings)
         legacy[SETTING_BLUE_DENSITY] = ensure_array_4(legacyhaze[SETTING_BLUE_DENSITY], 1.0);
         legacy[SETTING_BLUE_HORIZON] = ensure_array_4(legacyhaze[SETTING_BLUE_HORIZON], 1.0);
 
-        F32 density_multiplier = legacyhaze[SETTING_DENSITY_MULTIPLIER].asReal();
-        density_multiplier = (density_multiplier < 0.0001f) ? 0.0001f : density_multiplier;
-        density_multiplier *= 0.9f / 2.0f; // take 0 - 2.0 range to 0 - 0.9 range
-        legacy[SETTING_DENSITY_MULTIPLIER] = LLSDArray(density_multiplier)(0.0f)(0.0f)(1.0f);
-
-        F32 distance_multiplier = legacyhaze[SETTING_DISTANCE_MULTIPLIER].asReal();
-        distance_multiplier *= 0.1f; // take 0 - 1000 range to 0 - 100 range
-        legacy[SETTING_DISTANCE_MULTIPLIER] = LLSDArray(distance_multiplier)(0.0f)(0.0f)(1.0f);
+        legacy[SETTING_DENSITY_MULTIPLIER] = LLSDArray(legacyhaze[SETTING_DENSITY_MULTIPLIER].asReal())(0.0f)(0.0f)(1.0f);
+        legacy[SETTING_DISTANCE_MULTIPLIER] = LLSDArray(legacyhaze[SETTING_DISTANCE_MULTIPLIER].asReal())(0.0f)(0.0f)(1.0f);
 
         legacy[SETTING_HAZE_DENSITY]        = LLSDArray(legacyhaze[SETTING_HAZE_DENSITY])(0.0f)(0.0f)(1.0f);
         legacy[SETTING_HAZE_HORIZON]        = LLSDArray(legacyhaze[SETTING_HAZE_HORIZON])(0.0f)(0.0f)(1.0f);
@@ -942,9 +936,13 @@ void LLSettingsVOWater::applySpecial(void *ptarget)
         shader->uniform1f(LLShaderMgr::WATER_FOGKS, waterFogKS);
 
         F32 eyedepth = LLViewerCamera::getInstance()->getOrigin().mV[2] - water_height;
+        bool underwater = LLPipeline::sUnderWaterRender || (eyedepth <= 0.0f);
 
-        F32 waterFogDensity = env.getCurrentWater()->getModifiedWaterFogDensity(LLPipeline::sUnderWaterRender || (eyedepth <= 0.0f));
+        F32 waterFogDensity = env.getCurrentWater()->getModifiedWaterFogDensity(underwater);
         shader->uniform1f(LLShaderMgr::WATER_FOGDENSITY, waterFogDensity);
+
+        LLColor4 fog_color(env.getCurrentWater()->getWaterFogColor(), 0.0f);
+        shader->uniform4fv(LLShaderMgr::WATER_FOGCOLOR, 1, fog_color.mV);
 
         F32 blend_factor = env.getCurrentWater()->getBlendFactor();
         shader->uniform1f(LLShaderMgr::BLEND_FACTOR, blend_factor);
@@ -976,9 +974,8 @@ LLSettingsWater::parammapping_t LLSettingsVOWater::getParameterMap() const
 
     if (param_map.empty())
     {
-        LLSD water_defaults = LLSettingsWater::defaults();
-        param_map[SETTING_FOG_COLOR] = DefaultParam(LLShaderMgr::WATER_FOGCOLOR, water_defaults[SETTING_FOG_COLOR]);
-
+        //LLSD water_defaults = LLSettingsWater::defaults();
+        //param_map[SETTING_FOG_COLOR] = DefaultParam(LLShaderMgr::WATER_FOGCOLOR, water_defaults[SETTING_FOG_COLOR]);
         // let this get set by LLSettingsVOWater::applySpecial so that it can properly reflect the underwater modifier
         //param_map[SETTING_FOG_DENSITY] = DefaultParam(LLShaderMgr::WATER_FOGDENSITY, water_defaults[SETTING_FOG_DENSITY]);
     }

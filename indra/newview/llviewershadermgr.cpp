@@ -2100,7 +2100,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredWaterProgram.mFeatures.hasGamma = true;
 		gDeferredWaterProgram.mFeatures.hasTransport = true;
 		gDeferredWaterProgram.mFeatures.encodesNormal = true;
-		//gDeferredWaterProgram.mFeatures.hasShadows = true;
+        gDeferredWaterProgram.mFeatures.hasSrgb = true;
 
 		gDeferredWaterProgram.mShaderFiles.clear();
 		gDeferredWaterProgram.mShaderFiles.push_back(make_pair("deferred/waterV.glsl", GL_VERTEX_SHADER_ARB));
@@ -2253,32 +2253,6 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		llassert(success);
 	}
 
-	// <FS:Ansariel> Possible intentional revert in LL-EEP - keeping change from LMR for now
-    if (success)
-	{
-		gDeferredAvatarAlphaShadowProgram.mName = "Deferred Avatar Alpha Shadow Shader";
-		gDeferredAvatarAlphaShadowProgram.mFeatures.hasSkinning = true;
-		gDeferredAvatarAlphaShadowProgram.mShaderFiles.clear();
-		gDeferredAvatarAlphaShadowProgram.mShaderFiles.push_back(make_pair("deferred/avatarAlphaShadowV.glsl", GL_VERTEX_SHADER_ARB));
-		gDeferredAvatarAlphaShadowProgram.mShaderFiles.push_back(make_pair("deferred/avatarAlphaShadowF.glsl", GL_FRAGMENT_SHADER_ARB));
-		gDeferredAvatarAlphaShadowProgram.addPermutation("DEPTH_CLAMP", gGLManager.mHasDepthClamp ? "1" : "0");
-		gDeferredAvatarAlphaShadowProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
-		success = gDeferredAvatarAlphaShadowProgram.createShader(NULL, NULL);
-	}
-
-    if (success)
-	{
-		gDeferredAvatarAlphaMaskShadowProgram.mName = "Deferred Avatar Alpha Mask Shadow Shader";
-		gDeferredAvatarAlphaMaskShadowProgram.mFeatures.hasSkinning  = true;
-		gDeferredAvatarAlphaMaskShadowProgram.mShaderFiles.clear();
-		gDeferredAvatarAlphaMaskShadowProgram.mShaderFiles.push_back(make_pair("deferred/avatarAlphaShadowV.glsl", GL_VERTEX_SHADER_ARB));
-		gDeferredAvatarAlphaMaskShadowProgram.mShaderFiles.push_back(make_pair("deferred/avatarAlphaMaskShadowF.glsl", GL_FRAGMENT_SHADER_ARB));
-		gDeferredAvatarAlphaMaskShadowProgram.addPermutation("DEPTH_CLAMP", gGLManager.mHasDepthClamp ? "1" : "0");
-		gDeferredAvatarAlphaMaskShadowProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
-		success = gDeferredAvatarAlphaMaskShadowProgram.createShader(NULL, NULL);
-	}
-	// </FS:Ansariel>
-
 	if (success)
 	{
 		gDeferredAvatarAlphaShadowProgram.mName = "Deferred Avatar Alpha Shadow Shader";
@@ -2321,32 +2295,6 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		success = gDeferredAttachmentShadowProgram.createShader(NULL, NULL);
 		llassert(success);
 	}
-    
-	// <FS:Ansariel> Possible intentional revert in LL-EEP - keeping change from LMR for now
-    if (success)
-	{
-		gDeferredAttachmentAlphaShadowProgram.mName = "Deferred Attachment Alpha Shadow Shader";
-		gDeferredAttachmentAlphaShadowProgram.mFeatures.hasObjectSkinning = true;
-		gDeferredAttachmentAlphaShadowProgram.mShaderFiles.clear();
-		gDeferredAttachmentAlphaShadowProgram.mShaderFiles.push_back(make_pair("deferred/attachmentAlphaShadowV.glsl", GL_VERTEX_SHADER_ARB));
-		gDeferredAttachmentAlphaShadowProgram.mShaderFiles.push_back(make_pair("deferred/attachmentAlphaShadowF.glsl", GL_FRAGMENT_SHADER_ARB));
-		gDeferredAttachmentAlphaShadowProgram.addPermutation("DEPTH_CLAMP", gGLManager.mHasDepthClamp ? "1" : "0");
-		gDeferredAttachmentAlphaShadowProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
-		success = gDeferredAttachmentAlphaShadowProgram.createShader(NULL, NULL);
-	}
-
-    if (success)
-	{
-		gDeferredAttachmentAlphaMaskShadowProgram.mName = "Deferred Attachment Alpha Mask Shadow Shader";
-		gDeferredAttachmentAlphaMaskShadowProgram.mFeatures.hasObjectSkinning = true;
-		gDeferredAttachmentAlphaMaskShadowProgram.mShaderFiles.clear();
-		gDeferredAttachmentAlphaMaskShadowProgram.mShaderFiles.push_back(make_pair("deferred/attachmentAlphaShadowV.glsl", GL_VERTEX_SHADER_ARB));
-		gDeferredAttachmentAlphaMaskShadowProgram.mShaderFiles.push_back(make_pair("deferred/attachmentAlphaMaskShadowF.glsl", GL_FRAGMENT_SHADER_ARB));
-		gDeferredAttachmentAlphaMaskShadowProgram.addPermutation("DEPTH_CLAMP", gGLManager.mHasDepthClamp ? "1" : "0");
-		gDeferredAttachmentAlphaMaskShadowProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
-		success = gDeferredAttachmentAlphaMaskShadowProgram.createShader(NULL, NULL);
-	}
-	// </FS:Ansariel>
 
 	if (success)
 	{
@@ -2713,7 +2661,6 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 		gObjectSimpleNonIndexedProgram.mFeatures.hasLighting = true;
         gObjectSimpleNonIndexedProgram.mFeatures.hasAlphaMask = true; // Fix for MAINT-8836
 		gObjectSimpleNonIndexedProgram.mFeatures.disableTextureIndex = true;
-		gObjectSimpleNonIndexedProgram.mFeatures.hasAlphaMask = true; // <FS:Ansariel> Possible intentional revert in LL-EEP - keeping change from LMR for now
 		gObjectSimpleNonIndexedProgram.mShaderFiles.clear();
 		gObjectSimpleNonIndexedProgram.mShaderFiles.push_back(make_pair("objects/simpleV.glsl", GL_VERTEX_SHADER_ARB));
 		gObjectSimpleNonIndexedProgram.mShaderFiles.push_back(make_pair("objects/simpleF.glsl", GL_FRAGMENT_SHADER_ARB));
