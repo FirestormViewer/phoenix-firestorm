@@ -36,6 +36,11 @@ else (OPENSIM)
   endif()
   message("compiling without OpenSim support")
 endif (OPENSIM)
+
+if (HAVOK_TPV)
+  add_definitions(-DHAVOK_TPV=1)
+  message("compiling with Havok libraries")
+endif (HAVOK_TPV)
 #</FS:AW optional opensim support>
 
 #<FS:Ansariel> Support for test builds
