@@ -391,7 +391,10 @@ void callWindowFocus()
 
 void callWindowUnfocus()
 {
-	gWindowImplementation->getCallbacks()->handleFocusLost(gWindowImplementation);
+	if ( gWindowImplementation && gWindowImplementation->getCallbacks() )
+	{
+		gWindowImplementation->getCallbacks()->handleFocusLost(gWindowImplementation);
+	}
 }
 
 void callWindowHide()
