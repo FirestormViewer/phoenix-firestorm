@@ -33,19 +33,6 @@
         <text name="name_label">
           Nazwa modelu:
         </text>
-        <text name="model_category_label">
-          Ten model to...
-        </text>
-        <combo_box name="model_category_combo">
-          <combo_item name="Choose one" label="Wybierz..."/>
-          <combo_item name="Avatar shape" label="Kształt awatara"/>
-          <combo_item name="Avatar attachment" label="Dodatek awatara"/>
-          <combo_item name="Moving object (vehicle, animal)" label="Poruszający się obiekt (pojazd, zwierzę)"/>
-          <combo_item name="Building Component" label="Element budynku"/>
-          <combo_item name="Large, non moving etc" label="Duży obiekt, statyczny"/>
-          <combo_item name="Smaller, non-moving etc" label="Mały obiekt, statyczny"/>
-          <combo_item name="Not really any of these" label="Żadne z powyższych"/>
-         </combo_box>
     </panel>
     <tab_container name="import_tab">
         <panel label="Poziom detali" name="lod_panel" title="Poziom detali">

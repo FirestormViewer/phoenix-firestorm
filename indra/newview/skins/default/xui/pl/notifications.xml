@@ -639,7 +639,7 @@ Możesz podnieść jakość grafiki pod Ustawienia &gt; Grafika.
 	</notification>
 	<notification name="CannotCopyWarning">
 		Nie masz pozwolenia na kopiowanie następujących obiektów:
-[ITEMS]
+&lt;nolink&gt;[ITEMS]&lt;/nolink&gt;
 i stracisz je w momencie przekazania. Czy na pewno chcesz oddać te obiekty?
 		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>
 	</notification>
@@ -3152,15 +3152,6 @@ Zanim zezwolisz na dostęp upewnij się, że wiesz jaki to obiekt i dlaczego pyt
 			<button name="Deny" text="Odmów"/>
 		</form>
 	</notification>
-	<notification name="UnknownScriptQuestion">
-		Zezwolenia, o jakie prosi skrypt z &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, którego właścicielem jest &apos;[NAME]&apos;, nie są rozpoznawane przez przeglądarkę i nie mogą zostać udzielone.
-
-Aby ich udzielić prosimy zaktualizować przeglądarkę do najnowszej wersji z [DOWNLOADURL].
-		<form name="form">
-			<button name="Deny" text="Ok, odmów jednorazowo"/>
-			<button name="Mute" text="Zablokuj/Wycisz"/>
-		</form>
-	</notification>
 	<notification name="ScriptDialog">
 		&apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; - [NAME]
 [MESSAGE]
@@ -4017,13 +4008,13 @@ Anulowano.
 		Nie możesz tworzyć drzew i trawy na ziemi, która nie należy do Ciebie.
 	</notification>
 	<notification name="NoCopyPermsNoObject">
-		Kopiowanie nie powiodło się, ponieważ nie masz zezwoleń na kopiowanie obiektu '[OBJ_NAME]'.
+		Kopiowanie nie powiodło się, ponieważ nie masz zezwoleń na kopiowanie obiektu &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt;.
 	</notification>
 	<notification name="NoTransPermsNoObject">
-		Kopiowanie nie powiodło się, ponieważ obiekt '[OBJ_NAME]' nie może zostać przetransferowany do Ciebie.
+		Kopiowanie nie powiodło się, ponieważ obiekt &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt; nie może zostać przetransferowany do Ciebie.
 	</notification>
 	<notification name="AddToNavMeshNoCopy">
-		Kopiowanie nie powiodło się, ponieważ obiekt '[OBJ_NAME]' ma wpływ na Navmesh.
+		Kopiowanie nie powiodło się, ponieważ obiekt &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt; ma wpływ na Navmesh.
 	</notification>
 	<notification name="DupeWithNoRootsSelected">
 		Wybrano duplikat bez obiektów głównych.
@@ -4070,34 +4061,34 @@ Spróbuj ponownie za minutę.
 		Zabieranie z powrotem do Szafy zostało wyłączone.
 	</notification>
 	<notification name="NoExistNoSaveToContents">
-		Nie można zapisać '[OBJ_NAME]' do zawartości obiektu, ponieważ obiekt z którego został zrezzowany już nie istnieje.
+		Nie można zapisać &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt; do zawartości obiektu, ponieważ obiekt z którego został zrezzowany już nie istnieje.
 	</notification>
 	<notification name="NoModNoSaveToContents">
-		Nie można zapisać '[OBJ_NAME]' do zawartości obiektu, ponieważ nie masz praw do modyfikacji obiektu '[DEST_NAME]'.
+		Nie można zapisać &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt; do zawartości obiektu, ponieważ nie masz praw do modyfikacji obiektu &lt;nolink&gt;'[DEST_NAME]'&lt;/nolink&gt;.
 	</notification>
 	<notification name="NoSaveBackToInvDisabled">
-		Nie można zabrać '[OBJ_NAME]' z powrotem do Szafy -- ta operacja została wyłączona.
+		Nie można zabrać &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt; z powrotem do Szafy -- ta operacja została wyłączona.
 	</notification>
 	<notification name="NoCopyNoSelCopy">
-		Nie możesz skopiować tego, co jest zaznaczone, ponieważ nie masz prawa do skopiowania obiektu '[OBJ_NAME]'.
+		Nie możesz skopiować tego, co jest zaznaczone, ponieważ nie masz prawa do skopiowania obiektu &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt;.
 	</notification>
 	<notification name="NoTransNoSelCopy">
-		Nie możesz skopiować tego, co jest zaznaczone, ponieważ obiektu '[OBJ_NAME]' nie można transferować.
+		Nie możesz skopiować tego, co jest zaznaczone, ponieważ obiektu &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt; nie można transferować.
 	</notification>
 	<notification name="NoTransNoCopy">
-		Nie możesz skopiować tego, co jest zaznaczone, ponieważ obiektu '[OBJ_NAME]' nie można transferować.
+		Nie możesz skopiować tego, co jest zaznaczone, ponieważ obiektu &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt; nie można transferować.
 	</notification>
 	<notification name="NoPermsNoRemoval">
-		Usunięcie obiektu '[OBJ_NAME]' z symulatora zostało wzbronione przez system zezwoleń.
+		Usunięcie obiektu &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt; z symulatora zostało wzbronione przez system zezwoleń.
 	</notification>
 	<notification name="NoModNoSaveSelection">
-		Nie możesz zapisać tego, co jest zaznaczone, ponieważ nie masz prawa do modyfikacji obiektu '[OBJ_NAME]'.
+		Nie możesz zapisać tego, co jest zaznaczone, ponieważ nie masz prawa do modyfikacji obiektu &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt;.
 	</notification>
 	<notification name="NoCopyNoSaveSelection">
-		Nie możesz zapisać tego, co jest zaznaczone, ponieważ obiektu '[OBJ_NAME]' nie można kopiować.
+		Nie możesz zapisać tego, co jest zaznaczone, ponieważ obiektu &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt; nie można kopiować.
 	</notification>
 	<notification name="NoModNoTaking">
-		Nie możesz zabrać tego, co jest zaznaczone, ponieważ nie masz prawa do modyfikacji obiektu '[OBJ_NAME]'.
+		Nie możesz zabrać tego, co jest zaznaczone, ponieważ nie masz prawa do modyfikacji obiektu &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt;.
 	</notification>
 	<notification name="RezDestInternalError">
 		Błąd wewnętrzny: Nieznany typ lokalizacji docelowej.

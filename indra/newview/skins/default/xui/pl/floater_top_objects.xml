@@ -4,7 +4,7 @@
 		Główne skrypty
 	</floater.string>
 	<floater.string name="top_scripts_text">
-		[COUNT] skryptów zabiera w sumie [TIME] ms
+		[COUNT] skryptów zabiera w sumie [TIME] ms i używa [MEMORY] KB pamięci
 	</floater.string>
 	<floater.string name="scripts_score_label">
 		Czas
@@ -61,8 +61,6 @@
 	<button label="Zwróć wszystko" name="return_all_btn"/>
 	<button label="Teleportuj do" name="teleport_to_btn"/>
 	<button label="Profil" name="profile_btn"/>
-	<button label="Dezakt. wybrane" name="disable_selected_btn"/>
-	<button label="Dezakt. wszystko" name="disable_all_btn"/>
 	<button label="O skryptach" name="script_info_btn"/>
 	<button label="Majątek: wyrzuć" name="estate_kick_btn"/>
 </floater>
