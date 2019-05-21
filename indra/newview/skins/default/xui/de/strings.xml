@@ -5311,7 +5311,7 @@ Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und F
 		Keine Objekte in diesem Outfit
 	</string>
 	<string name="ExternalEditorNotSet">
-		Wählen Sie über die Einstellung „ExternalEditor“ einen Editor aus
+		Wählen Sie über die Umgebungsvariable „LL_SCRIPT_EDITOR“ oder die Einstellung „ExternalEditor“ einen Editor aus.
 	</string>
 	<string name="ExternalEditorNotFound">
 		Angegebener externer Editor nicht gefunden.
