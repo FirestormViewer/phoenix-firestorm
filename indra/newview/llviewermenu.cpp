@@ -5951,11 +5951,13 @@ void handle_take()
 			}
 
 			// check inbox
-			const LLUUID inbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX);
-			if (category_id == inbox_id || gInventory.isObjectDescendentOf(category_id, inbox_id))
-			{
-				category_id.setNull();
-			}
+			// <FS:Ansariel> Undo the SL-1579 fail
+			//const LLUUID inbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX);
+			//if (category_id == inbox_id || gInventory.isObjectDescendentOf(category_id, inbox_id))
+			//{
+			//	category_id.setNull();
+			//}
+			// </FS:Ansariel>
 		}
 	}
 	if(category_id.isNull())
