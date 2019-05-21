@@ -1147,7 +1147,7 @@ F32 gpu_benchmark()
 	const S32 samples = 64;
 
 	//time limit, allocation operations shouldn't take longer then 30 seconds, same for actual benchmark.
-	const F32 time_limit = 30;
+	const F32 time_limit = 30.f;
 
 	ShaderProfileHelper initProfile;
 	
@@ -1239,7 +1239,7 @@ F32 gpu_benchmark()
 	buff->setBuffer(LLVertexBuffer::MAP_VERTEX);
 	glFinish();
 
-	F32 time_passed = 0; // seconds
+	F32 time_passed = 0.f; // seconds
 	for (S32 c = -1; c < samples && time_passed < time_limit; ++c)
 	{
 		LLTimer timer;
