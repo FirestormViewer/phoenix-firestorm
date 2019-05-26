@@ -846,7 +846,7 @@ bool LLLogChat::isTranscriptExist(const LLUUID& avatar_id, bool is_group)
 		file_name = makeLogFileName(file_name);
 		return isTranscriptFileFound(makeLogFileName(file_name));
 	}
-	return false;
+	//return false; // <FS:Beq> Unreachable code 
 }
 
 bool LLLogChat::isNearbyTranscriptExist()
