@@ -2000,9 +2000,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9a08c678a8c6c3c10bb913219b7931b6</string>
+              <string>534ea1079513a56a78c99bc08179c87c</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.6-darwin-183562147.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.7-darwin-191472236.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2012,9 +2012,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9a08c678a8c6c3c10bb913219b7931b6</string>
+              <string>534ea1079513a56a78c99bc08179c87c</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.6-darwin-183562147.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.A.7-darwin-191472236.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
