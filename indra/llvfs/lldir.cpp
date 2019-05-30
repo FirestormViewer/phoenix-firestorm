@@ -961,12 +961,9 @@ std::string LLDir::getForbiddenFileChars()
 {
 	return "\\/:*?\"<>|";
 }
-// <FS:CR> Seperate user directories per grid on OS build
-#ifdef OPENSIM
+// <FS:CR> Seperate user directories per grid
+//void LLDir::setLindenUserDir(const std::string &username)
 void LLDir::setLindenUserDir(const std::string &username, const std::string &gridname)
-#else
-void LLDir::setLindenUserDir(const std::string &username)
-#endif // OPENSIM
 // </FS:CR>
 {
 	// if the username isn't set, that's bad
@@ -977,21 +974,17 @@ void LLDir::setLindenUserDir(const std::string &username)
 		std::string userlower(username);
 		LLStringUtil::toLower(userlower);
 		LLStringUtil::replaceChar(userlower, ' ', '_');
-// <FS:CR> Seperate user directories per grid on OS build
-#ifdef OPENSIM
+// <FS:CR> Seperate user directories per grid
 		std::string gridlower(gridname);
 		LLStringUtil::toLower(gridlower);
 		LLStringUtil::replaceChar(gridlower, ' ', '_');
-#endif // OPENSIM
 // </FS:CR>
 		mLindenUserDir = add(getOSUserAppDir(), userlower);
-// <FS:CR> Seperate user directories per grid on OS build		
-#ifdef OPENSIM
+// <FS:CR> Seperate user directories per grid
 		if (!gridname.empty() && gridlower != "second_life")
 		{
 			mLindenUserDir += "." + gridlower;
 		}
-#endif // OPENSIM
 // </FS:CR>
 	}
 	else
@@ -1019,12 +1012,9 @@ void LLDir::updatePerAccountChatLogsDir()
 	mPerAccountChatLogsDir = add(getChatLogsDir(), mUserName);
 }
 
-// <FS:CR> Seperate user directories per grid on OS build
-#ifdef OPENSIM
+// <FS:CR> Seperate user directories per grid
+//void LLDir::setPerAccountChatLogsDir(const std::string &username)
 void LLDir::setPerAccountChatLogsDir(const std::string &username, const std::string &gridname)
-#else
-void LLDir::setPerAccountChatLogsDir(const std::string &username)
-#endif // OPENSIM
 // <//FS:CR>
 {
 	// if both first and last aren't set, assume we're grabbing the cached dir
@@ -1035,24 +1025,19 @@ void LLDir::setPerAccountChatLogsDir(const std::string &username)
 		std::string userlower(username);
 		LLStringUtil::toLower(userlower);
 		LLStringUtil::replaceChar(userlower, ' ', '_');
-// <FS:CR> Seperate user directories per grid on OS build
-#ifdef OPENSIM
+// <FS:CR> Seperate user directories per grid
 		std::string gridlower(gridname);
 		LLStringUtil::toLower(gridlower);
 		LLStringUtil::replaceChar(gridlower, ' ', '_');
-#endif // OPENSIM
 // </FS:CR>
 		mUserName = userlower;
 		updatePerAccountChatLogsDir();
-// <FS:CR> Seperate user directories per grid on OS build
-#ifdef OPENSIM
+// <FS:CR> Seperate user directories per grid
 		if (!gridname.empty() && gridlower != "second_life")
 		{
 			mPerAccountChatLogsDir += "." + gridlower;
 		}
-#endif // OPENSIM
 // </FS:CR>
-				
 	}
 	else
 	{
