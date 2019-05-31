@@ -2180,9 +2180,6 @@ void LLFloaterPreference::refreshEnabledState()
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail");
 
 	ctrl_shadow->setEnabled(enabled);
-	
-	LLComboBox* ctrl_avatar_shadow = getChild<LLComboBox>("AvatarShadowDetail");
-	ctrl_avatar_shadow->setEnabled(enabled && ctrl_shadow->getValue().asInteger() > 0);
 
 	// now turn off any features that are unavailable
 	disableUnavailableSettings();
@@ -2394,7 +2391,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
-	LLComboBox* ctrl_avatar_shadow = getChild<LLComboBox>("AvatarShadowDetail");
 	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
 
 	// if vertex shaders off, disable all shader related products
@@ -2419,9 +2415,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-		
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
@@ -2445,9 +2438,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
 
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
-		
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
 
@@ -2464,9 +2454,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-		
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
@@ -2490,9 +2477,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 	}
 
 	// disabled reflections
@@ -2514,9 +2498,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		//deferred needs AvatarVP, disable deferred
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-		
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
@@ -5718,9 +5699,9 @@ void LLFloaterPreference::populateFontSelectionCombo()
 // </FS:Kadah>
 
 // <FS:AW optional opensim support>
-#ifdef OPENSIM
 static LLPanelInjector<LLPanelPreferenceOpensim> t_pref_opensim("panel_preference_opensim");
 
+#ifdef OPENSIM
 LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference(),
 	mGridListControl(NULL)
 {
@@ -5931,7 +5912,21 @@ void LLPanelPreferenceOpensim::onClickPickDebugSearchURL()
 
 	LLNotificationsUtil::add("ConfirmPickDebugSearchURL", LLSD(), LLSD(),callback_pick_debug_search );
 }
-#endif // OPENSIM
+#else
+void no_cb()
+{ }
+
+LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference()
+{
+	mCommitCallbackRegistrar.add("Pref.ClearDebugSearchURL", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.PickDebugSearchURL", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.AddGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.ClearGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.RefreshGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.RemoveGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.SaveGrid", boost::bind(&no_cb));
+}
+#endif
 // <FS:AW optional opensim support>
 
 // <FS:Ansariel> Output device selection

@@ -499,12 +499,13 @@ private:
 	LOG_CLASS(FSPanelPreferenceBackup);
 };
 
-#ifdef OPENSIM // <FS:AW optional opensim support>
 // <FS:AW  opensim preferences>
 class LLPanelPreferenceOpensim : public LLPanelPreference
 {
 public:
 	LLPanelPreferenceOpensim();
+
+#ifdef OPENSIM
 // <FS:AW  grid management>
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void apply();
@@ -539,11 +540,11 @@ private:
 	LLLineEditor* mEditorPassword;
 	LLLineEditor* mEditorSearch;
 	LLLineEditor* mEditorGridMessage;
+#endif
 
 	LOG_CLASS(LLPanelPreferenceOpensim);
 };
 // </FS:AW  opensim preferences>
-#endif // OPENSIM // <FS:AW optional opensim support>
 
 // <FS:Ansariel> Output device selection
 class FSPanelPreferenceSounds : public LLPanelPreference
