@@ -71,6 +71,12 @@ public:
 	typedef F32 MIXBUFFERFORMAT;
 
 	FMOD::System *getSystem()				const {return mSystem;}
+
+	/*virtual*/ std::map<LLUUID, std::string> getDevices();
+	/*virtual*/ void setDevice(const LLUUID& device_uuid);
+
+	LLUUID getSelectedDeviceUUID() const { return mSelectedDeviceUUID; }
+
 protected:
 	/*virtual*/ LLAudioBuffer *createBuffer(); // Get a free buffer, or flush an existing one if you have to.
 	/*virtual*/ LLAudioChannel *createChannel(); // Create a new audio channel.
@@ -86,6 +92,8 @@ protected:
 	FMOD::System *mSystem;
 	bool mEnableProfiler;
 	U32 mResampleMethod;
+
+	LLUUID mSelectedDeviceUUID;
 
 public:
 	static FMOD::ChannelGroup *mChannelGroups[LLAudioEngine::AUDIO_TYPE_COUNT];
