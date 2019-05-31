@@ -39,7 +39,6 @@
 #include "llfloater.h"
 #include "lltrans.h"
 
-
 //----------------------------------------------------------------------------
 
 // Implementation Notes:
@@ -224,6 +223,7 @@ LLTabContainer::Params::Params()
 	last_tab("last_tab"),
 	use_custom_icon_ctrl("use_custom_icon_ctrl", false),
 	open_tabs_on_drag_and_drop("open_tabs_on_drag_and_drop", false),
+	enable_tabs_flashing("enable_tabs_flashing", false),
 	tab_icon_ctrl_pad("tab_icon_ctrl_pad", 0),
 	use_ellipses("use_ellipses"),
 	label_shadow("label_shadow",false),		// no drop shadowed labels by default -Zi
@@ -1247,6 +1247,9 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
 		    p.pad_left( mLabelPadLeft );
 		    p.pad_right(2);
 		}
+
+		// inits flash timer
+		p.button_flash_enable = mEnableTabsFlashing;
 
 		// <FS:Ansariel> Enable tab flashing
 		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));

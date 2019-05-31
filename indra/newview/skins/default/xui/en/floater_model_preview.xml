@@ -87,7 +87,8 @@
       height="300"
       width="635"
       name="import_tab"
-      tab_position="top">
+      tab_position="top"
+      enable_tabs_flashing="true">
       <!-- LOD PANEL -->
         <panel
          help_topic="upload_model_lod"
@@ -741,7 +742,7 @@
               left="3"
               name="physics_tab_border"
               top_pad="0"
-              width="619"/>
+              width="629"/>
                 <panel
                   bg_alpha_color="0 0 0 0"
                   bg_opaque_color="0 0 0 0.3"
@@ -1116,7 +1117,7 @@
           left="3"
           name="border"
           top_pad="0"
-          width="619"/>
+          width="629"/>
            <text
              follows="top|left"
              height="16"
@@ -1243,6 +1244,39 @@ Please consider using an attachment point close to the item's position on the bo
          </text>
        </panel>
      </panel>
+      <panel
+       label="Log"
+       layout="topleft"
+       name="logs_panel">
+        <view_border
+         bevel_style="none"
+         follows="top|left"
+         height="275"
+         layout="topleft"
+         left="3"
+         name="log_tab_border"
+         top_pad="0"
+         width="629" />
+        <text_editor
+         type="string"
+         length="1"
+         embedded_items="false"
+         follows="top|left"
+         font="SansSerif"
+         ignore_tab="false"
+         layout="topleft"
+         height="267"
+         left="4"
+         top="4"
+         right="-11"
+         max_length="65536"
+         name="log_text"
+         parse_urls="true"
+         spellcheck="false"
+         read_only="true"
+         word_wrap="true">
+        </text_editor>
+      </panel>
     </tab_container>
     <panel
      follows="top|left|bottom"

@@ -318,6 +318,7 @@ Bitte ziehen Sie einen anderen Anhängepunkt nahe der Objektposition in Betracht
 					</text>
 				</panel>
 			</panel>
+			<panel label="Protokoll" name="logs_panel" />
 		</tab_container>
 		<panel name="weights_and_warning_panel">
 			<button label="Gewichte und Gebühr berechnen" name="calculate_btn" tool_tip="Gewichte und Gebühr berechnen" width="200"/>
