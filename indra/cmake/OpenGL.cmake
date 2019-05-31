@@ -5,7 +5,9 @@ include(Prebuilt)
 
 # <FS:TS> Shut cmake up about OpenGL library preference. This can
 # be either LEGACY or GLVND.
-SET(OpenGL_GL_PREFERENCE LEGACY)
+if (LINUX)
+  SET(OpenGL_GL_PREFERENCE LEGACY)
+endif (LINUX)
 
 if (BUILD_HEADLESS)
   SET(OPENGL_glu_LIBRARY GLU)
