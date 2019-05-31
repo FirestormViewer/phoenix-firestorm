@@ -140,6 +140,7 @@
 #include "fsfloaterimcontainer.h"
 #include "growlmanager.h"
 #include "lfsimfeaturehandler.h"
+#include "llaudioengine.h" // <FS:Ansariel> Output device selection
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
 #include "lleventtimer.h"
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
@@ -5930,6 +5931,103 @@ void LLPanelPreferenceOpensim::onClickPickDebugSearchURL()
 
 	LLNotificationsUtil::add("ConfirmPickDebugSearchURL", LLSD(), LLSD(),callback_pick_debug_search );
 }
-
 #endif // OPENSIM
 // <FS:AW optional opensim support>
+
+// <FS:Ansariel> Output device selection
+static LLPanelInjector<FSPanelPreferenceSounds> t_pref_sounds("panel_preference_sounds");
+
+FSPanelPreferenceSounds::FSPanelPreferenceSounds() :
+	LLPanelPreference(),
+	mOutputDevicePanel(nullptr),
+	mOutputDeviceComboBox(nullptr),
+	mOutputDeviceListChangedConnection()
+{ }
+
+FSPanelPreferenceSounds::~FSPanelPreferenceSounds()
+{
+	if (mOutputDeviceListChangedConnection.connected())
+	{
+		mOutputDeviceListChangedConnection.disconnect();
+	}
+}
+
+BOOL FSPanelPreferenceSounds::postBuild()
+{
+	mOutputDevicePanel = findChild<LLPanel>("output_device_settings_panel");
+	mOutputDeviceComboBox = findChild<LLComboBox>("sound_output_device");
+
+#ifdef LL_FMODSTUDIO
+	if (gAudiop && mOutputDevicePanel && mOutputDeviceComboBox)
+	{
+		gSavedSettings.getControl("FSOutputDeviceUUID")->getSignal()->connect(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceChanged, this, _2));
+
+		mOutputDeviceListChangedConnection = gAudiop->setOutputDeviceListChangedCallback(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceListChanged, this, _1));
+		onOutputDeviceListChanged(gAudiop->getDevices());
+
+		mOutputDeviceComboBox->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceSelectionChanged, this, _2));
+	}
+#else
+	if (mOutputDevicePanel)
+	{
+		mOutputDevicePanel->setVisible(FALSE);
+	}
+#endif
+
+	return LLPanelPreference::postBuild();
+}
+
+void FSPanelPreferenceSounds::onOutputDeviceChanged(const LLSD& new_value)
+{
+	mOutputDeviceComboBox->setSelectedByValue(new_value.asUUID(), TRUE);
+}
+
+void FSPanelPreferenceSounds::onOutputDeviceSelectionChanged(const LLSD& new_value)
+{
+	gSavedSettings.setString("FSOutputDeviceUUID", mOutputDeviceComboBox->getSelectedValue().asString());
+}
+
+void FSPanelPreferenceSounds::onOutputDeviceListChanged(LLAudioEngine::output_device_map_t output_devices)
+{
+	LLUUID selected_device(gSavedSettings.getString("FSOutputDeviceUUID"));
+	mOutputDeviceComboBox->removeall();
+
+	if (output_devices.empty())
+	{
+		LL_INFOS() << "No output devices available" << LL_ENDL;
+		mOutputDeviceComboBox->add(mOutputDevicePanel->getString("output_no_device"), LLUUID::null);
+
+		if (selected_device != LLUUID::null)
+		{
+			LL_INFOS() << "Non-default device selected - adding unavailable for " << selected_device << LL_ENDL;
+			mOutputDeviceComboBox->add(mOutputDevicePanel->getString("output_device_unavailable"), selected_device);
+		}
+	}
+	else
+	{
+		bool selected_device_found = false;
+
+		mOutputDeviceComboBox->add(mOutputDevicePanel->getString("output_default_text"), LLUUID::null);
+		selected_device_found = selected_device == LLUUID::null;
+
+		for (auto device : output_devices)
+		{
+			mOutputDeviceComboBox->add(device.second.empty() ? mOutputDevicePanel->getString("output_name_no_device") : device.second, device.first);
+
+			if (!selected_device_found && device.first == selected_device)
+			{
+				LL_INFOS() << "Found selected device \"" << device.second << "\" (" << device.first << ")" << LL_ENDL;
+				selected_device_found = true;
+			}
+		}
+
+		if (!selected_device_found)
+		{
+			LL_INFOS() << "Selected device " << selected_device << " NOT found - adding unavailable" << LL_ENDL;
+			mOutputDeviceComboBox->add(mOutputDevicePanel->getString("output_device_unavailable"), selected_device);
+		}
+	}
+
+	mOutputDeviceComboBox->setSelectedByValue(selected_device, TRUE);
+}
+// </FS:Ansariel>

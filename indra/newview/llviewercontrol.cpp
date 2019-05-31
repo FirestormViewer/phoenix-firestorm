@@ -954,6 +954,16 @@ void handleFSStatisticsNoFocusChanged(const LLSD& newvalue)
 }
 // </FS:LO>
 
+// <FS:Ansariel> Output device selection
+void handleOutputDeviceChanged(const LLSD& newvalue)
+{
+	if (gAudiop)
+	{
+		gAudiop->setDevice(newvalue.asUUID());
+	}
+}
+// </FS:Ansariel>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1192,6 +1202,9 @@ void settings_setup_listeners()
 	// <FS:LO> Add ability for the statistics window to not be able to receive focus
 	gSavedSettings.getControl("FSStatisticsNoFocus")->getSignal()->connect(boost::bind(&handleFSStatisticsNoFocusChanged, _2));
 	// </FS:LO>
+
+	// <FS:Ansariel> Output device selection
+	gSavedSettings.getControl("FSOutputDeviceUUID")->getSignal()->connect(boost::bind(&handleOutputDeviceChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL

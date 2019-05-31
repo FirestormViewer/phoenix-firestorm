@@ -38,6 +38,8 @@
 #include "llconversationlog.h"
 #include "llsearcheditor.h"
 
+#include "llaudioengine.h" // <FS:Ansariel> Output device selection
+
 class LLConversationLogObserver;
 class LLPanelPreference;
 class LLPanelLCD;
@@ -542,6 +544,28 @@ private:
 };
 // </FS:AW  opensim preferences>
 #endif // OPENSIM // <FS:AW optional opensim support>
+
+// <FS:Ansariel> Output device selection
+class FSPanelPreferenceSounds : public LLPanelPreference
+{
+public:
+	FSPanelPreferenceSounds();
+	virtual ~FSPanelPreferenceSounds();
+
+	BOOL postBuild();
+
+private:
+	LLPanel*	mOutputDevicePanel;
+	LLComboBox*	mOutputDeviceComboBox;
+
+	void onOutputDeviceChanged(const LLSD& new_value);
+	void onOutputDeviceSelectionChanged(const LLSD& new_value);
+	void onOutputDeviceListChanged(LLAudioEngine::output_device_map_t output_devices);
+	boost::signals2::connection mOutputDeviceListChangedConnection;
+
+	LOG_CLASS(FSPanelPreferenceSounds);
+};
+// </FS:Ansariel>
 
 class LLFloaterPreferenceProxy : public LLFloater
 {
