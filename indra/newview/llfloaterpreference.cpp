@@ -5952,7 +5952,7 @@ BOOL FSPanelPreferenceSounds::postBuild()
 	mOutputDevicePanel = findChild<LLPanel>("output_device_settings_panel");
 	mOutputDeviceComboBox = findChild<LLComboBox>("sound_output_device");
 
-#ifdef LL_FMODSTUDIO
+#if LL_FMODSTUDIO || LL_FMODEX
 	if (gAudiop && mOutputDevicePanel && mOutputDeviceComboBox)
 	{
 		gSavedSettings.getControl("FSOutputDeviceUUID")->getSignal()->connect(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceChanged, this, _2));
