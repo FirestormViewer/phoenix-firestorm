@@ -967,6 +967,7 @@ BOOL LLScrollListCtrl::selectItemRange( S32 first_index, S32 last_index )
 		// <FS:Ansariel> Fix for FS-specific people list (radar)
 		if (isFiltered(itemp))
 		{
+			iter++ ;
 			continue;
 		}
 		// </FS:Ansariel> Fix for FS-specific people list (radar)
