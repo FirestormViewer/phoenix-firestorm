@@ -3366,6 +3366,19 @@ ERlvCmdRet RlvReplyHandler<RLV_BHVR_GETCOMMAND>::onCommand(const RlvCommand& rlv
 	return RLV_RET_SUCCESS;
 }
 
+// Handles: @getheightoffset=<channel>
+template<> template<>
+ERlvCmdRet RlvReplyHandler<RLV_BHVR_GETHEIGHTOFFSET>::onCommand(const RlvCommand& rlvCmd, std::string& strReply)
+{
+	if (!rlvCmd.getOption().empty())
+		return RLV_RET_FAILED_OPTION;
+	else if (!isAgentAvatarValid())
+		return RLV_RET_FAILED_UNKNOWN;
+
+	strReply = llformat("%.2f", gAgentAvatarp->getHoverOffset()[VZ] * 100);
+	return RLV_RET_SUCCESS;
+}
+
 // Checked: 2010-03-09 (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
 ERlvCmdRet RlvHandler::onGetInv(const RlvCommand& rlvCmd, std::string& strReply) const
 {
