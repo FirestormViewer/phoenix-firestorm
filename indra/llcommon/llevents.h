@@ -264,6 +264,11 @@ public:
     void flush();
 
     /**
+     * Disconnect listeners from all known LLEventPump instances
+     */
+    void clear();
+
+    /**
      * Reset all known LLEventPump instances
      * workaround for DEV-35406 crash on shutdown
      */
@@ -587,7 +592,9 @@ public:
 
 private:
     friend class LLEventPumps;
-
+    /// flush queued events
+    virtual void flush() {}
+    virtual void clear();
     virtual void reset();
 
 

@@ -149,7 +149,7 @@ if (LL_TESTS)
                           ${PYTHON_EXECUTABLE}
                           "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_llcorehttp_peer.py"
                           )
-
+ 
 if (DARWIN)
   # Path inside the app bundle where we'll need to copy libraries
   set(LL_TEST_DESTINATION_DIR
@@ -198,6 +198,7 @@ endif (DARWIN)
       )
 
   set(example_libs
+      ${LEGACY_STDIO_LIBS}
       ${LLCOREHTTP_LIBRARIES}
       ${WINDOWS_LIBRARIES}
       ${LLMESSAGE_LIBRARIES}
