@@ -592,8 +592,6 @@ public:
 
 private:
     friend class LLEventPumps;
-    /// flush queued events
-    virtual void flush() {}
     virtual void clear();
     virtual void reset();
 
