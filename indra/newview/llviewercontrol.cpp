@@ -291,7 +291,7 @@ static bool handleAnisotropicChanged(const LLSD& newvalue)
 
 static bool handleVolumeLODChanged(const LLSD& newvalue)
 {
-	LLVOVolume::sLODFactor = (F32) newvalue.asReal();
+	LLVOVolume::sLODFactor = llclamp((F32) newvalue.asReal(), 0.01f, MAX_LOD_FACTOR);
 	LLVOVolume::sDistanceFactor = 1.f-LLVOVolume::sLODFactor * 0.1f;
 
 	// <FS:PP> Warning about too high LOD on LOD change
@@ -306,13 +306,13 @@ static bool handleVolumeLODChanged(const LLSD& newvalue)
 
 static bool handleAvatarLODChanged(const LLSD& newvalue)
 {
-	LLVOAvatar::sLODFactor = (F32) newvalue.asReal();
+	LLVOAvatar::sLODFactor = llclamp((F32) newvalue.asReal(), 0.f, MAX_AVATAR_LOD_FACTOR);
 	return true;
 }
 
 static bool handleAvatarPhysicsLODChanged(const LLSD& newvalue)
 {
-	LLVOAvatar::sPhysicsLODFactor = (F32) newvalue.asReal();
+	LLVOAvatar::sPhysicsLODFactor = llclamp((F32) newvalue.asReal(), 0.f, MAX_AVATAR_LOD_FACTOR);
 	return true;
 }
 
@@ -954,6 +954,16 @@ void handleFSStatisticsNoFocusChanged(const LLSD& newvalue)
 }
 // </FS:LO>
 
+// <FS:Ansariel> Output device selection
+void handleOutputDeviceChanged(const LLSD& newvalue)
+{
+	if (gAudiop)
+	{
+		gAudiop->setDevice(newvalue.asUUID());
+	}
+}
+// </FS:Ansariel>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1192,6 +1202,9 @@ void settings_setup_listeners()
 	// <FS:LO> Add ability for the statistics window to not be able to receive focus
 	gSavedSettings.getControl("FSStatisticsNoFocus")->getSignal()->connect(boost::bind(&handleFSStatisticsNoFocusChanged, _2));
 	// </FS:LO>
+
+	// <FS:Ansariel> Output device selection
+	gSavedSettings.getControl("FSOutputDeviceUUID")->getSignal()->connect(boost::bind(&handleOutputDeviceChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL

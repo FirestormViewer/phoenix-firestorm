@@ -48,6 +48,7 @@
 //#include "imdebug.h"
 #include "llfontbitmapcache.h"
 #include "llgl.h"
+#include "llapr.h"
 
 FT_Render_Mode gFontRenderMode = FT_RENDER_MODE_NORMAL;
 

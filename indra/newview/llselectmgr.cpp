@@ -197,7 +197,7 @@ LLSelectMgr::LLSelectMgr()
 	sHighlightThickness	= gSavedSettings.getF32("SelectionHighlightThickness");
 	sHighlightUScale	= gSavedSettings.getF32("SelectionHighlightUScale");
 	sHighlightVScale	= gSavedSettings.getF32("SelectionHighlightVScale");
-	sHighlightAlpha		= gSavedSettings.getF32("SelectionHighlightAlpha");
+	sHighlightAlpha		= gSavedSettings.getF32("SelectionHighlightAlpha") * 2;
 	sHighlightAlphaTest	= gSavedSettings.getF32("SelectionHighlightAlphaTest");
 	sHighlightUAnim		= gSavedSettings.getF32("SelectionHighlightUAnim");
 	sHighlightVAnim		= gSavedSettings.getF32("SelectionHighlightVAnim");
@@ -2183,29 +2183,33 @@ void LLSelectMgr::selectionSetGlow(F32 glow)
 	mSelectedObjects->applyToObjects( &func2 );
 }
 
-void LLSelectMgr::selectionSetMaterialParams(LLSelectedTEMaterialFunctor* material_func)
+void LLSelectMgr::selectionSetMaterialParams(LLSelectedTEMaterialFunctor* material_func, int te)
 {
 	struct f1 : public LLSelectedTEFunctor
 	{
 		LLMaterialPtr mMaterial;
-		f1(LLSelectedTEMaterialFunctor* material_func) : _material_func(material_func) {}
+		f1(LLSelectedTEMaterialFunctor* material_func, int te) : _material_func(material_func), _specific_te(te) {}
 
-		bool apply(LLViewerObject* object, S32 face)
+		bool apply(LLViewerObject* object, S32 te)
 		{
-			if (object && object->permModify() && _material_func)
-			{
-				LLTextureEntry* tep = object->getTE(face);
-				if (tep)
-				{
-					LLMaterialPtr current_material = tep->getMaterialParams();
-					_material_func->apply(object, face, tep, current_material);
-				}
-			}
+            if (_specific_te == -1 || (te == _specific_te))
+            {
+			    if (object && object->permModify() && _material_func)
+			    {
+				    LLTextureEntry* tep = object->getTE(te);
+				    if (tep)
+				    {
+					    LLMaterialPtr current_material = tep->getMaterialParams();
+					    _material_func->apply(object, te, tep, current_material);
+				    }
+			    }
+            }
 			return true;
 		}
 
 		LLSelectedTEMaterialFunctor* _material_func;
-	} func1(material_func);
+        int _specific_te;
+	} func1(material_func, te);
 	mSelectedObjects->applyToTEs( &func1 );
 
 	struct f2 : public LLSelectedObjectFunctor
@@ -6037,6 +6041,7 @@ void LLSelectMgr::renderSilhouettes(BOOL for_hud)
 		gGL.translatef(-hud_bbox.getCenterLocal().mV[VX] + (depth *0.5f), 0.f, 0.f);
 		gGL.scalef(cur_zoom, cur_zoom, cur_zoom);
 	}
+
 	if (mSelectedObjects->getNumNodes())
 	{
 		LLUUID inspect_item_id= LLUUID::null;
@@ -6054,6 +6059,12 @@ void LLSelectMgr::renderSilhouettes(BOOL for_hud)
 			}
 		}
 
+		bool wireframe_selection = (gFloaterTools && gFloaterTools->getVisible()) || LLSelectMgr::sRenderHiddenSelections;
+		F32 fogCfx = (F32)llclamp((LLSelectMgr::getInstance()->getSelectionCenterGlobal() - gAgentCamera.getCameraPositionGlobal()).magVec() / (LLSelectMgr::getInstance()->getBBoxOfSelection().getExtentLocal().magVec() * 4), 0.0, 1.0);
+
+        static LLColor4 sParentColor = LLColor4(sSilhouetteParentColor[VRED], sSilhouetteParentColor[VGREEN], sSilhouetteParentColor[VBLUE], LLSelectMgr::sHighlightAlpha);
+        static LLColor4 sChildColor = LLColor4(sSilhouetteChildColor[VRED], sSilhouetteChildColor[VGREEN], sSilhouetteChildColor[VBLUE], LLSelectMgr::sHighlightAlpha);
+
 		LLUUID focus_item_id = LLViewerMediaFocus::getInstance()->getFocusedObjectID();
 		// <FS:Ansariel> Improve selection silhouette rendering speed by Drake Arconis
 		//for (S32 pass = 0; pass < 2; pass++)
@@ -6062,38 +6073,117 @@ void LLSelectMgr::renderSilhouettes(BOOL for_hud)
 				 iter != mSelectedObjects->end(); iter++)
 			{
 				LLSelectNode* node = *iter;
+                
+                if (getTEMode() && !node->hasSelectedTE())
+                    continue;
+
 				LLViewerObject* objectp = node->getObject();
 				if (!objectp)
 					continue;
-				if (objectp->isHUDAttachment() != for_hud)
-				{
-					continue;
-				}
-				if (objectp->getID() == focus_item_id)
-				{
-					node->renderOneSilhouette(gFocusMgr.getFocusColor());
-				}
-				else if(objectp->getID() == inspect_item_id)
-				{
-					node->renderOneSilhouette(sHighlightInspectColor);
-				}
-				else if (node->isTransient())
-				{
-					BOOL oldHidden = LLSelectMgr::sRenderHiddenSelections;
-					LLSelectMgr::sRenderHiddenSelections = FALSE;
-					node->renderOneSilhouette(sContextSilhouetteColor);
-					LLSelectMgr::sRenderHiddenSelections = oldHidden;
-				}
-				else if (objectp->isRootEdit())
-				{
-					node->renderOneSilhouette(sSilhouetteParentColor);
-				}
-				else
-				{
-					node->renderOneSilhouette(sSilhouetteChildColor);
-				}
-			}
-		}
+
+                if (objectp->mDrawable 
+                    && objectp->mDrawable->getVOVolume() 
+                    && objectp->mDrawable->getVOVolume()->isMesh())
+                {
+                    //Need to because crash on ATI 3800 (and similar cards) MAINT-5018 
+                    LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
+
+                    LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
+
+                    if (shader)
+                    {
+                        gDebugProgram.bind();
+                    }
+
+                    gGL.matrixMode(LLRender::MM_MODELVIEW);
+                    gGL.pushMatrix();
+
+                    BOOL is_hud_object = objectp->isHUDAttachment();
+
+                    if (objectp->mDrawable->isActive())
+                    {
+                        gGL.loadMatrix(gGLModelView);
+                        gGL.multMatrix((F32*)objectp->getRenderMatrix().mMatrix);
+                    }
+                    else if (!is_hud_object)
+                    {
+                        gGL.loadIdentity();
+                        gGL.multMatrix(gGLModelView);
+                        LLVector3 trans = objectp->getRegion()->getOriginAgent();
+                        gGL.translatef(trans.mV[0], trans.mV[1], trans.mV[2]);
+                    }
+
+                    LLColor4 hlColor = objectp->isRootEdit() ? sParentColor : sChildColor;
+                    bool bRenderHidenSelection = node->isTransient() ? false : LLSelectMgr::sRenderHiddenSelections;
+
+
+                    LLVOVolume* vobj = objectp->mDrawable->getVOVolume();
+                    if (vobj)
+                    {
+                        LLVertexBuffer::unbind();
+                        gGL.pushMatrix();
+                        gGL.multMatrix((F32*)vobj->getRelativeXform().mMatrix);
+
+                        if (objectp->mDrawable->isState(LLDrawable::RIGGED))
+                        {
+                            vobj->updateRiggedVolume();
+                        }
+                    }
+
+                    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+                    S32 num_tes = llmin((S32)objectp->getNumTEs(), (S32)objectp->getNumFaces()); // avatars have TEs but no faces
+                    for (S32 te = 0; te < num_tes; ++te)
+                    {
+                        if (node->isTESelected(te))
+                        {
+                            objectp->mDrawable->getFace(te)->renderOneWireframe(hlColor, fogCfx, wireframe_selection, bRenderHidenSelection, nullptr != shader);
+                        }
+                    }
+
+                    gGL.popMatrix();
+                    gGL.popMatrix();
+
+                    glLineWidth(1.f);
+                    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+                    if (shader)
+                    {
+                        shader->bind();
+                    }
+                }
+                else
+                {
+                    if (objectp->isHUDAttachment() != for_hud)
+                    {
+                        continue;
+                    }
+                    if (objectp->getID() == focus_item_id)
+                    {
+                        node->renderOneSilhouette(gFocusMgr.getFocusColor());
+                    }
+                    else if (objectp->getID() == inspect_item_id)
+                    {
+                        node->renderOneSilhouette(sHighlightInspectColor);
+                    }
+                    else if (node->isTransient())
+                    {
+                        BOOL oldHidden = LLSelectMgr::sRenderHiddenSelections;
+                        LLSelectMgr::sRenderHiddenSelections = FALSE;
+                        node->renderOneSilhouette(sContextSilhouetteColor);
+                        LLSelectMgr::sRenderHiddenSelections = oldHidden;
+                    }
+                    else if (objectp->isRootEdit())
+                    {
+                        node->renderOneSilhouette(sSilhouetteParentColor);
+                    }
+                    else
+                    {
+                        node->renderOneSilhouette(sSilhouetteChildColor);
+                    }
+                }
+			} //for all selected node's
+		} //for pass
 	}
 
 	if (mHighlightedObjects->getNumNodes())
@@ -6257,7 +6347,7 @@ void LLSelectNode::selectTE(S32 te_index, BOOL selected)
 	mLastTESelected = te_index;
 }
 
-BOOL LLSelectNode::isTESelected(S32 te_index)
+BOOL LLSelectNode::isTESelected(S32 te_index) const
 {
 	if (te_index < 0 || te_index >= mObject->getNumTEs())
 	{
@@ -6266,17 +6356,12 @@ BOOL LLSelectNode::isTESelected(S32 te_index)
 	return (mTESelectMask & (0x1 << te_index)) != 0;
 }
 
-S32 LLSelectNode::getLastSelectedTE()
+S32 LLSelectNode::getLastSelectedTE() const
 {
 	if (!isTESelected(mLastTESelected))
 	{
 		return -1;
 	}
-	return mLastTESelected;
-}
-
-S32 LLSelectNode::getLastOperatedTE()
-{
 	return mLastTESelected;
 }
 
@@ -6479,157 +6564,6 @@ BOOL LLSelectNode::allowOperationOnNode(PermissionBit op, U64 group_proxy_power)
 	return (mPermissions->allowOperationBy(op, proxy_agent_id, group_id));
 }
 
-
-//helper function for pushing relevant vertices from drawable to GL
-void pushWireframe(LLDrawable* drawable)
-{
-	LLVOVolume* vobj = drawable->getVOVolume();
-	if (vobj)
-	{
-		LLVertexBuffer::unbind();
-		gGL.pushMatrix();
-		gGL.multMatrix((F32*) vobj->getRelativeXform().mMatrix);
-
-		LLVolume* volume = NULL;
-
-		if (drawable->isState(LLDrawable::RIGGED))
-		{
-				vobj->updateRiggedVolume();
-				volume = vobj->getRiggedVolume();
-		}
-		else
-		{
-			volume = vobj->getVolume();
-		}
-
-		if (volume)
-		{
-			for (S32 i = 0; i < volume->getNumVolumeFaces(); ++i)
-			{
-				const LLVolumeFace& face = volume->getVolumeFace(i);
-				// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-				//LLVertexBuffer::drawElements(LLRender::TRIANGLES, face.mPositions, NULL, face.mNumIndices, face.mIndices);
-				LLVertexBuffer::drawElements(LLRender::TRIANGLES, face.mNumVertices, face.mPositions, NULL, face.mNumIndices, face.mIndices);
-			}
-		}
-
-		gGL.popMatrix();
-	}
-	
-}
-
-void LLSelectNode::renderOneWireframe(const LLColor4& color) 
-{
-    //Need to because crash on ATI 3800 (and similar cards) MAINT-5018 
-    LLGLDisable multisample(LLPipeline::RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
-
-    LLViewerObject* objectp = getObject();
-    if (!objectp)
-    {
-        return;
-    }
-
-    LLDrawable* drawable = objectp->mDrawable;
-    if (!drawable)
-    {
-        return;
-    }
-
-    LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
-
-    if (shader)
-    {
-        gDebugProgram.bind();
-    }
-
-    gGL.matrixMode(LLRender::MM_MODELVIEW);
-    gGL.pushMatrix();
-
-    BOOL is_hud_object = objectp->isHUDAttachment();
-
-    if (drawable->isActive())
-    {
-        gGL.loadMatrix(gGLModelView);
-        gGL.multMatrix((F32*)objectp->getRenderMatrix().mMatrix);
-    }
-    else if (!is_hud_object)
-    {
-        gGL.loadIdentity();
-        gGL.multMatrix(gGLModelView);
-        LLVector3 trans = objectp->getRegion()->getOriginAgent();
-        gGL.translatef(trans.mV[0], trans.mV[1], trans.mV[2]);
-    }
-
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-    bool wireframe_selection = (gFloaterTools && gFloaterTools->getVisible()) || LLSelectMgr::sRenderHiddenSelections;
-
-    if (LLSelectMgr::sRenderHiddenSelections)
-    {
-        gGL.blendFunc(LLRender::BF_SOURCE_COLOR, LLRender::BF_ONE);
-        LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE, GL_GEQUAL);
-        if (shader)
-        {
-            gGL.diffuseColor4f(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], 0.4f);
-            pushWireframe(drawable);
-        }
-        else
-        {
-            // <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
-            if (!LLGLSLShader::sNoFixedFunction)
-            {
-            // </FS:Ansariel>
-                LLGLEnable fog(GL_FOG);
-                glFogi(GL_FOG_MODE, GL_LINEAR);
-                float d = (LLViewerCamera::getInstance()->getPointOfInterest() - LLViewerCamera::getInstance()->getOrigin()).magVec();
-                LLColor4 fogCol = color * (F32)llclamp((LLSelectMgr::getInstance()->getSelectionCenterGlobal() - gAgentCamera.getCameraPositionGlobal()).magVec() / (LLSelectMgr::getInstance()->getBBoxOfSelection().getExtentLocal().magVec() * 4), 0.0, 1.0);
-                glFogf(GL_FOG_START, d);
-                glFogf(GL_FOG_END, d*(1 + (LLViewerCamera::getInstance()->getView() / LLViewerCamera::getInstance()->getDefaultFOV())));
-                glFogfv(GL_FOG_COLOR, fogCol.mV);
-            // <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
-            }
-            // </FS:Ansariel>
-
-            gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
-            {
-                gGL.diffuseColor4f(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], 0.4f);
-                pushWireframe(drawable);
-            }
-        }
-    }
-
-    gGL.flush();
-    gGL.setSceneBlendType(LLRender::BT_ALPHA);
-
-    gGL.diffuseColor4f(color.mV[VRED] * 2, color.mV[VGREEN] * 2, color.mV[VBLUE] * 2, LLSelectMgr::sHighlightAlpha * 2);
-
-    {
-        LLGLDisable depth(wireframe_selection ? 0 : GL_BLEND);
-        LLGLEnable stencil(wireframe_selection ? 0 : GL_STENCIL_TEST);
-
-        if (!wireframe_selection)
-        { //modify wireframe into outline selection mode
-            glStencilFunc(GL_NOTEQUAL, 2, 0xffff);
-            glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-        }
-
-        LLGLEnable offset(GL_POLYGON_OFFSET_LINE);
-        glPolygonOffset(3.f, 3.f);
-        glLineWidth(5.f);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        pushWireframe(drawable);
-    }
-
-    glLineWidth(1.f);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    gGL.popMatrix();
-
-    if (shader)
-    {
-        shader->bind();
-    }
-}
-
 //-----------------------------------------------------------------------------
 // renderOneSilhouette()
 //-----------------------------------------------------------------------------
@@ -6659,7 +6593,8 @@ void LLSelectNode::renderOneSilhouette(const LLColor4 &aColor)
 	LLVOVolume* vobj = drawable->getVOVolume();
 	if (vobj && vobj->isMesh())
 	{
-		renderOneWireframe(color);
+		//This check (if(...)) with assert here just for ensure that this situation will not happens, and can be removed later. For example on the next release.
+		llassert(!"renderOneWireframe() was removed SL-10194");
 		return;
 	}
 
@@ -6790,7 +6725,7 @@ void LLSelectNode::renderOneSilhouette(const LLColor4 &aColor)
 				gGL.texCoord2fv(tc[0].mV);
 				gGL.vertex3fv( v[0].mV ); 
 				
-				gGL.color4f(color.mV[VRED]*2, color.mV[VGREEN]*2, color.mV[VBLUE]*2, LLSelectMgr::sHighlightAlpha*2);
+				gGL.color4f(color.mV[VRED]*2, color.mV[VGREEN]*2, color.mV[VBLUE]*2, LLSelectMgr::sHighlightAlpha);
 				gGL.texCoord2fv( tc[1].mV );
 				gGL.vertex3fv( v[1].mV );
 
@@ -6800,7 +6735,7 @@ void LLSelectNode::renderOneSilhouette(const LLColor4 &aColor)
 
 				gGL.vertex3fv( v[2].mV );
 
-				gGL.color4f(color.mV[VRED]*2, color.mV[VGREEN]*2, color.mV[VBLUE]*2, LLSelectMgr::sHighlightAlpha*2);
+				gGL.color4f(color.mV[VRED]*2, color.mV[VGREEN]*2, color.mV[VBLUE]*2, LLSelectMgr::sHighlightAlpha);
 				gGL.texCoord2fv( tc[1].mV );
 				gGL.vertex3fv( v[1].mV );
 
@@ -8417,3 +8352,40 @@ BOOL LLSelectMgr::selectGetNoIndividual()
 	return TRUE;
 }
 // </FS:Zi>
+
+template<>
+bool LLCheckIdenticalFunctor<F32>::same(const F32& a, const F32& b, const F32& tolerance)
+{
+    F32 delta = (a - b);
+    F32 abs_delta = fabs(delta);
+    return abs_delta <= tolerance;
+}
+
+#define DEF_DUMMY_CHECK_FUNCTOR(T)                                                  \
+template<>                                                                          \
+bool LLCheckIdenticalFunctor<T>::same(const T& a, const T& b, const T& tolerance)   \
+{                                                                                   \
+    (void)tolerance;                                                                \
+    return a == b;                                                                  \
+}
+
+DEF_DUMMY_CHECK_FUNCTOR(LLUUID)
+DEF_DUMMY_CHECK_FUNCTOR(LLGLenum)
+DEF_DUMMY_CHECK_FUNCTOR(LLTextureEntry)
+DEF_DUMMY_CHECK_FUNCTOR(LLTextureEntry::e_texgen)
+DEF_DUMMY_CHECK_FUNCTOR(bool)
+DEF_DUMMY_CHECK_FUNCTOR(U8)
+DEF_DUMMY_CHECK_FUNCTOR(int)
+DEF_DUMMY_CHECK_FUNCTOR(LLColor4)
+DEF_DUMMY_CHECK_FUNCTOR(LLMediaEntry)
+DEF_DUMMY_CHECK_FUNCTOR(LLPointer<LLMaterial>)
+DEF_DUMMY_CHECK_FUNCTOR(std::string)
+DEF_DUMMY_CHECK_FUNCTOR(std::vector<std::string>)
+
+template<>
+bool LLCheckIdenticalFunctor<class LLFace *>::same(class LLFace* const & a, class LLFace* const & b, class LLFace* const & tolerance)   \
+{                                                                                   \
+    (void)tolerance;                                                                \
+    return a == b;                                                                  \
+}
+

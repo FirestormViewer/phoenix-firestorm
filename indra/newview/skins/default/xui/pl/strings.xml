@@ -2325,6 +2325,18 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="RegionInfoListTypeBannedAgents">
 		zawsze zbanowani rezydenci
 	</string>
+	<string name="RegionInfoAllEstates">
+		wszystkie majątki
+	</string>
+	<string name="RegionInfoManagedEstates">
+		zarządzane majątki
+	</string>
+	<string name="RegionInfoThisEstate">
+		ten majątek
+	</string>
+	<string name="AndNMore">
+		i [EXTRA_COUNT] więcej
+	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		Pamięć skryptów działki
 	</string>
@@ -2368,7 +2380,7 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 		Klatka piersiowa
 	</string>
 	<string name="ATTACH_HEAD">
-		Głowa
+		Czaszka
 	</string>
 	<string name="ATTACH_LSHOULDER">
 		Lewe ramię
@@ -2389,7 +2401,7 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 		Prawa stopa
 	</string>
 	<string name="ATTACH_BACK">
-		Plecy
+		Kręgosłup
 	</string>
 	<string name="ATTACH_PELVIS">
 		Miednica
@@ -2419,13 +2431,13 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 		Prawe górne ramię
 	</string>
 	<string name="ATTACH_RLARM">
-		Prawe dolne ramię
+		Prawe przedramię
 	</string>
 	<string name="ATTACH_LUARM">
 		Lewe górne ramię
 	</string>
 	<string name="ATTACH_LLARM">
-		Lewe dolne ramię
+		Lewe przedramię
 	</string>
 	<string name="ATTACH_RHIP">
 		Biodro prawe
@@ -5743,6 +5755,27 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
 		Kształt fizyczny zawiera niepoprawną wersję. Ustaw poprawną wersję dla modelu fizycznego.
 	</string>
+	<string name="couldnt_resolve_host">
+		DNS nie mógł znaleźć nazwy hosta ([HOSTNAME]).
+Sprawdź, czy możesz połączyć się z www.secondlife.com
+Jeśli możesz, ale nadal otrzymujesz ten błąd, to przejdź
+do sekcji pomocy technicznej i zgłoś ten problem.
+	</string>
+	<string name="ssl_peer_certificate">
+		Serwer logowania nie mógł zweryfikować się poprzez SSL.
+Jeśli nadal będziesz otrzymywać ten błąd, to przejdź
+do sekcji wsparcia witryny SecondLife.com i zgłoś problem.
+	</string>
+	<string name="ssl_connect_error">
+		Często oznacza to, że zegar komputera jest ustawiony nieprawidłowo.
+Przejdź do Panelu Sterowania i upewnij się, że godzina i data
+są ustawione prawidłowo.
+Sprawdź również, czy twoja sieć i zapora są poprawnie skonfigurowane.
+Jeśli nadal będziesz otrzymywać ten błąd, to przejdź
+do sekcji wsparcia witryny SecondLife.com i zgłoś problem.
+
+[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 Knowledge Base]
+	</string>
 	<string name="LoadCameraPositionNoneSaved">
 		Żadne ustawienie kamery nie zostało jeszcze zapisane.
 	</string>
@@ -5855,19 +5888,19 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Most LSL nie został utworzony. Skrypt Mostu nie może zostać utworzony.
 	</string>
 	<string name="fsbridge_failure_creation_bad_name">
-		Most LSL nie został utworzony, bo jest nazwany niepoprawnie. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+		Most LSL nie został utworzony, bo jest nazwany niepoprawnie. Spróbuj stworzyć go na nowo ('Kondycja awatara' w menu 'Awatar' na górze).
 	</string>
 	<string name="fsbridge_failure_creation_null">
-		Most LSL nie został utworzony, bo nie może zostać znaleziony w Szafie. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+		Most LSL nie został utworzony, bo nie może zostać znaleziony w Szafie. Spróbuj stworzyć go na nowo ('Kondycja awatara' w menu 'Awatar' na górze).
 	</string>
 	<string name="fsbridge_failure_attach_wrong_object">
-		Most LSL nie mógł zostać założony na awatara, bo nie jest w aktualnej wersji. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+		Most LSL nie mógł zostać założony na awatara, bo nie jest w aktualnej wersji. Spróbuj stworzyć go na nowo ('Kondycja awatara' w menu 'Awatar' na górze).
 	</string>
 	<string name="fsbridge_failure_attach_wrong_location">
-		Most LSL nie mógł zostać założony na awatara, bo nie został znaleziony w odpowiednim miejscu Szafy. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+		Most LSL nie mógł zostać założony na awatara, bo nie został znaleziony w odpowiednim miejscu Szafy. Spróbuj stworzyć go na nowo ('Kondycja awatara' w menu 'Awatar' na górze).
 	</string>
 	<string name="fsbridge_failure_attach_point_in_use">
-		Most LSL nie mógł zostać założony na awatara, bo coś innego używa punktu zaczepu dodatku zarezerwowanego dla niego. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+		Most LSL nie mógł zostać założony na awatara, bo coś innego używa punktu zaczepu dodatku zarezerwowanego dla niego. Spróbuj stworzyć go na nowo ('Kondycja awatara' w menu 'Awatar' na górze).
 	</string>
 	<string name="fsbridge_failure_not_found">
 		Obiekt Mostu LSL nie mógł zostać znaleziony. Nie można kontynuować procesu jego tworzenia, kończę operację.
@@ -5876,7 +5909,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Wewnątrz Mostu LSL znaleziono nieoczekiwane elementy.
 	</string>
 	<string name="fsbridge_warning_not_finished">
-		Proces tworzenia Mostu LSL nie dobiegł do końca. Być może będzie trzeba utworzyć go na nowo, aby zadział ('Naprawa awatara' w menu 'Awatar' na górze).
+		Proces tworzenia Mostu LSL nie dobiegł do końca. Być może będzie trzeba utworzyć go na nowo, aby zadział ('Kondycja awatara' w menu 'Awatar' na górze).
 	</string>
 	<string name="fsbridge_detached">
 		Most LSL został odłączony od awatara.
@@ -5919,10 +5952,10 @@ Twoja aktualna pozycja: [AVATAR_POS]
 		Info o skryptach: Otrzymano uszkodzoną odpowiedź od Mostu LSL. Spróbuj ponownie.
 	</string>
 	<string name="fsbridge_error_injection">
-		UWAGA: Jeden lub więcej skryptów zostało dodanych do Twojego Mostu LSL Firestorma! Jeśli ta wiadomość jest niespodziewana, to stwórz teraz Most LSL na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+		UWAGA: Jeden lub więcej skryptów zostało dodanych do Twojego Mostu LSL Firestorma! Jeśli ta wiadomość jest niespodziewana, to stwórz teraz Most LSL na nowo ('Kondycja awatara' w menu 'Awatar' na górze).
 	</string>
 	<string name="fsbridge_error_wrongvm">
-		UWAGA: Skrypt Mostu LSL używa starej maszyny wirtualnej LSO (16 KB limitu pamięci) zamiast nowej Mono, co stwarza wysokie prawdopodobieństwo kolizji sterty i stosu oraz awarii Mostu poprzez wyczerpanie się pamięci. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze). Jeśli ten komunikat pojawi się ponownie spróbuj jeszcze raz w innym regionie.
+		UWAGA: Skrypt Mostu LSL używa starej maszyny wirtualnej LSO (16 KB limitu pamięci) zamiast nowej Mono, co stwarza wysokie prawdopodobieństwo kolizji sterty i stosu oraz awarii Mostu poprzez wyczerpanie się pamięci. Spróbuj stworzyć go na nowo ('Kondycja awatara' w menu 'Awatar' na górze). Jeśli ten komunikat pojawi się ponownie spróbuj jeszcze raz w innym regionie.
 	</string>
 	<string name="QP Draw Distance">
 		Pole widzenia
@@ -6225,7 +6258,7 @@ Twoja aktualna pozycja: [AVATAR_POS]
 		[day,datetime,utc].[mth,datetime,utc].[year,datetime,utc], [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
 	</string>
 	<string name="NotificationItemDateStringSLT">
-		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt]
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt] [timezone,datetime,slt]
 	</string>
 	<string name="Pie_av_render_normally">
 		Normalnie

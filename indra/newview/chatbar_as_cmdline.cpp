@@ -815,6 +815,11 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", gSavedPerAccountSettings.getF32("AvatarHoverOffsetZ") - 0.05f);
 				return false;
 			}
+			else if (command == "/zoffset_reset")
+			{
+				gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", 0.f);
+				return false;
+			}
 			else if (command == sFSCmdLineOfferTp())
 			{
 				LLUUID target_key;
@@ -893,19 +898,42 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 			{
 				if (revised_text.length() > command.length() + 1) //Typing this command with no argument was causing a crash. -Madgeek
 				{
-					LLVector3d agentPos = gAgent.getPositionGlobal();
-					S32 agent_x = ll_round( (F32)fmod( agentPos.mdV[VX], (F64)REGION_WIDTH_METERS ) );
-					S32 agent_y = ll_round( (F32)fmod( agentPos.mdV[VY], (F64)REGION_WIDTH_METERS ) );
-					S32 agent_z = ll_round( (F32)agentPos.mdV[VZ] );
-					std::string region_name = LLWeb::escapeURL(revised_text.substr(command.length() + 1));
-					std::string url;
-
-					if (!sFSCmdLineMapToKeepPos)
+					size_t found = revised_text.find("|");
+					std::string region_name;
+					std::string cords;
+					S32 agent_x, agent_y, agent_z;
+					if (found != std::string::npos)
 					{
-						agent_x = 128;
-						agent_y = 128;
-						agent_z = 0;
+						region_name = revised_text.substr(command.length() + 1);
+						found = region_name.find("|");
+						cords = region_name.substr(found+1);
+						LLStringUtil::trim(cords);
+						region_name = region_name.substr(0, found);
+						LLStringUtil::trim(region_name);
+						region_name = LLWeb::escapeURL(region_name);
+						i.str(cords);
+						if (!((i >> agent_x) && (i >> agent_y) && (i >> agent_z)))
+						{
+							agent_x = 128;
+							agent_y = 128;
+							agent_z = 0;
+						}
 					}
+					else
+					{
+						region_name = LLWeb::escapeURL(revised_text.substr(command.length() + 1));
+						LLVector3d agentPos = gAgent.getPositionGlobal();
+						agent_x = ll_round((F32)fmod(agentPos.mdV[VX], (F64)REGION_WIDTH_METERS));
+						agent_y = ll_round((F32)fmod(agentPos.mdV[VY], (F64)REGION_WIDTH_METERS));
+						agent_z = ll_round((F32)agentPos.mdV[VZ]);
+						if (!sFSCmdLineMapToKeepPos)
+						{
+							agent_x = 128;
+							agent_y = 128;
+							agent_z = 0;
+						}
+					}
+					std::string url;
 
 					url = llformat("secondlife:///app/teleport/%s/%d/%d/%d", region_name.c_str(), agent_x, agent_y, agent_z);
 					LLURLDispatcher::dispatch(url, "clicked", NULL, true);

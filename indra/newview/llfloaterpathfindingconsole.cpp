@@ -58,7 +58,7 @@
 #include "pipeline.h"
 
 // <FS:CR> For NoHavok alert
-#ifdef OPENSIM
+#ifndef HAVOK_TPV
 #include "llnotificationsutil.h"
 #endif // OPENSIM
 // </FS:CR>
@@ -251,7 +251,7 @@ void LLFloaterPathfindingConsole::onOpen(const LLSD& pKey)
 		switchIntoTestPathMode();
 	}
 // <FS:CR> Show an alert dialog if using the Opensim viewer as functionality will be limited without Havok
-#ifdef OPENSIM
+#ifndef HAVOK_TPV
 	LLSD args;
 	args["FEATURE"] = getString("no_havok");
 	LLNotificationsUtil::add("NoHavok", args);

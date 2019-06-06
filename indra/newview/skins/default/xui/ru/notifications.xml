@@ -241,6 +241,10 @@
 		Примечание. После включения этой опции все пользователи данного компьютера смогут увидеть список ваших избранных мест.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="AllowMultipleViewers">
+		Запуск нескольких приложений Second Life Viewer не поддерживается. Это может привести к конфликтам кэша текстур, повреждению и снижению производительности и визуального отображения.
+		<usetemplate name="okbutton" yestext="ОК"/>
+	</notification>
 	<notification name="GrantModifyRights">
 		Предоставление другому жителю прав на изменение позволит ему изменять, удалять или брать ЛЮБЫЕ ваши объекты. Будьте ОЧЕНЬ осторожны с предоставлением такого разрешения.
 Дать пользователю [NAME] права на изменение?
@@ -680,9 +684,9 @@
 		Вам не разрешено изменять ландшафт участока [PARCEL].
 	</notification>
 	<notification name="CannotCopyWarning">
-		У вас нет разрешения на копирование следующих предметов:
-[ITEMS]
-Если вы отдадите эти вещи, их больше не будет в вашем инвентаре. Вы действительно хотите предложить эти предметы?
+		У вас нет разрешения на копирование следующих предметов: 
+&lt;nolink&gt;[ITEMS]&lt;/nolink&gt; 
+и они пропадут из вашего инвентаря, если вы их отдадите. Вы действительно хотите предложить эти предметы?
 		<usetemplate name="okcancelbuttons" notext="Нет" yestext="Да"/>
 	</notification>
 	<notification name="CannotGiveItem">
@@ -1565,6 +1569,30 @@
 	<notification name="ProblemAddingEstateManagerBanned">
 		Невозможно добавить заблокированного жителя в список менеджеров землевладения.
 	</notification>
+	<notification name="ProblemBanningEstateManager">
+		Невозможно добавить заблокированного жителя в список менеджеров землевладения [AGENT].
+	</notification>
+	<notification name="GroupIsAlreadyInList">
+		&lt;nolink&gt;\[GROUP]&lt;/nolink&gt; уже находится в списке допущенных групп.
+	</notification>
+	<notification name="AgentIsAlreadyInList">
+		[AGENT] уже находится на вашем [LIST_TYPE] листе.
+	</notification>
+	<notification name="AgentsAreAlreadyInList">
+		[AGENT] уже находится на вашем [LIST_TYPE] листе.
+	</notification>
+	<notification name="AgentWasAddedToList">
+		[AGENT] был добавлен в [LIST_TYPE] лист [ESTATE].
+	</notification>
+	<notification name="AgentsWereAddedToList">
+		[AGENT] был добавлен в [LIST_TYPE] лист [ESTATE].
+	</notification>
+	<notification name="AgentWasRemovedFromList">
+		[AGENT] был удален из [LIST_TYPE] листа [ESTATE].
+	</notification>
+	<notification name="AgentsWereRemovedFromList">
+		[AGENT] был удален из [LIST_TYPE] листа [ESTATE].
+	</notification>
 	<notification name="CanNotChangeAppearanceUntilLoaded">
 		Нельзя изменять внешность, пока загружаются одежда и фигура.
 	</notification>
@@ -1580,8 +1608,24 @@
 [DOWNLOAD_PATH].
 	</notification>
 	<notification name="RequiredUpdate">
-		Для входа необходима версия \[VERSION]. Для вас обновление должно было произведено автоматически, но по какой-то причине этого не произошло. Скачайте обновление с веб-сайта https://secondlife.com/support/downloads/
+		Для входа необходима версия \[VERSION]. 
+Скачайте обновление с веб-сайта https://secondlife.com/support/downloads/
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="PauseForUpdate">
+		Для входа необходима версия \[VERSION]. 
+Нажмите OK для загрузки и установки.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OptionalUpdateReady">
+		Версия \[VERSION] загружена и готова к установке. 
+Нажмите OK для установки.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="PromptOptionalUpdate">
+		Версия \[VERSION] загружена и готова к установке. 
+Продолжить?
+		<usetemplate canceltext="Не сейчас" name="yesnocancelbuttons" notext="Пропустить" yestext="Установить"/>
 	</notification>
 	<notification name="LoginFailedUnknown">
 		Извините, ошибка входа по неустановленной причине. Если данное сообщение повторится, посетите веб-сайт [SUPPORT_SITE].
@@ -1596,10 +1640,6 @@
 		Открыть браузер для просмотра этого контента?
 Открытие сайтов от неизвестных источников может нанести вред вашему компьютеру
 		<usetemplate ignoretext="Запустить браузер для просмотра веб-страницы" name="okcancelignore" notext="Отмена" yestext="OK"/>
-	</notification>
-	<notification name="SystemUIScaleFactorChanged">
-		Со времени последнего запуска изменился системный коэффициент размера интерфейса. Открыть страницу настроек размера интерфейса?
-		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">
 		Перейти на [http://secondlife.com/account/ личный кабинет] для управления вашим аккаунтом?
@@ -1895,7 +1935,7 @@
 		<usetemplate canceltext="Отмена" name="yesnocancelbuttons" notext="Для всех землевладений" yestext="Для этого землевладения"/>
 	</notification>
 	<notification label="Выбрать землевладение" name="EstateBannedAgentRemove">
-		Удалить этого жителя из списка запрета доступа только для этого землевладения или для [ALL_ESTATES]?
+		Удалить этого жителя из списка заблокированного доступа только для этого землевладения или для [ALL_ESTATES]?
 		<usetemplate canceltext="Отмена" name="yesnocancelbuttons" notext="Для всех землевладений" yestext="Для этого землевладения"/>
 	</notification>
 	<notification label="Выбрать землевладение" name="EstateManagerAdd">
@@ -3224,15 +3264,6 @@ URL: [MEDIAURL]
 			<button name="Deny" text="Запретить"/>
 		</form>
 	</notification>
-	<notification name="UnknownScriptQuestion">
-		Объект &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&quot; владельца &quot;[NAME]&quot; требует разрешения на выполнение скрипта; разрешение не распознается клиентом и не будет предоставлено
-
-Для получения этого разрешения установите последнюю версию клиента из [DOWNLOADURL].
-		<form name="form">
-			<button name="Deny" text="OK"/>
-			<button name="Mute" text="Блокировать"/>
-		</form>
-	</notification>
 	<notification name="ScriptDialog">
 		[NAME] – &quot;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&quot;
 [MESSAGE]
@@ -3337,16 +3368,22 @@ URL: [MEDIAURL]
 		Не удалось подключиться к [VOICE_CHANNEL_NAME], повторите попытку позже. Будет установлено подключение к общему голосовому чату.
 	</notification>
 	<notification name="VoiceEffectsExpired">
-		Истек срок действия одного или нескольких типов изменения голоса, на которые вы подписаны.
-[[URL] Нажмите здесь], чтобы обновить подписку.
+		Истек срок действия подписки на один или несколько типов анимационного изменения голоса. 
+[[URL] Щелкните здесь], чтобы обновить подписку. 
+
+Если вы - владелец премиум-аккаунта, [[PREMIUM_URL] щелкните здесь], чтобы получить право на анимационное изменение голоса.
 	</notification>
 	<notification name="VoiceEffectsExpiredInUse">
-		Истек срок действия активного типа изменения голоса, применены настройки вашего обычного голоса.
-[[URL] Нажмите здесь], чтобы обновить подписку.
+		Истек срок действия анимационного изменения голоса, действуют настройки вашего обычного голоса. 
+[[URL] Щелкните здесь], чтобы обновить подписку. 
+
+Если вы - владелец премиум-аккаунта, [[PREMIUM_URL] щелкните здесь], чтобы получить право на анимационное изменение голоса.
 	</notification>
 	<notification name="VoiceEffectsWillExpire">
-		Срок действия одного или нескольких ваших типов изменения голоса истекает через [INTERVAL] дней или раньше.
-[[URL] Нажмите здесь], чтобы обновить подписку.
+		Срок действия одного или нескольких ваших типов анимационного изменения голоса истекает через [INTERVAL] дней или раньше. 
+[[URL] Щелкните здесь], чтобы обновить подписку. 
+
+Если вы - владелец премиум-аккаунта, [[PREMIUM_URL] щелкните здесь], чтобы получить право на анимационное изменение голоса.
 	</notification>
 	<notification name="VoiceEffectsNew">
 		Появились новые типы изменения голоса!
@@ -3394,6 +3431,9 @@ URL: [MEDIAURL]
 	</notification>
 	<notification name="AppearanceToXMLFailed">
 		Не удалось сохранить внешность в XML.
+	</notification>
+	<notification name="SnapshotToLocalDirNotExist">
+		Не удалось сохранить моментальный снимок на [PATH]: Каталог не существует.
 	</notification>
 	<notification name="PresetNotSaved">
 		Ошибка при сохранении пресета [NAME].

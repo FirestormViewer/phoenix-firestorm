@@ -1022,6 +1022,9 @@ bool idle_startup()
 				bool init = gAudiop->init(kAUDIO_NUM_SOURCES, window_handle);
 				if(init)
 				{
+					// <FS:Ansariel> Output device selection
+					gAudiop->setDevice(LLUUID(gSavedSettings.getString("FSOutputDeviceUUID")));
+
 					gAudiop->setMuted(TRUE);
 				}
 				else
@@ -1234,10 +1237,6 @@ bool idle_startup()
 				}
 			}
 			display_startup();
-			if (gViewerWindow->getSystemUIScaleFactorChanged())
-			{
-				LLViewerWindow::showSystemUIScaleFactorChanged();
-			}
 			LLStartUp::setStartupState( STATE_LOGIN_WAIT );		// Wait for user input
 		}
 		else
@@ -1403,13 +1402,10 @@ bool idle_startup()
 
 		// create necessary directories
 		// *FIX: these mkdir's should error check
-// <FS:CR> Seperate user directories per grid on OS build
-#ifdef OPENSIM
+// <FS:CR> Seperate user directories per grid
+		//gDirUtilp->setLindenUserDir(userid, gridlabel);
 		std::string gridlabel = LLGridManager::getInstance()->getGridLabel();
-		gDirUtilp->setLindenUserDir(userid, gridlabel);
-#else
-		gDirUtilp->setLindenUserDir(userid);
-#endif // OPENSIM
+		gDirUtilp->setLindenUserDir(userid, LLGridManager::getInstance()->getGridLabel());
 // </FS:CR>
 		LLFile::mkdir(gDirUtilp->getLindenUserDir());
 
@@ -1477,13 +1473,10 @@ bool idle_startup()
 			gSavedPerAccountSettings.setString("SnapshotBaseName", gSavedPerAccountSettings.getControl("SnapshotBaseName")->getDefault().asString());
 		}
 		// </FS:LO>
-// <FS:CR> Seperate user directories per grid on OS build
-#ifdef OPENSIM
+// <FS:CR> Seperate user directories per grid
+		//gDirUtilp->setPerAccountChatLogsDir(userid);
 		gDirUtilp->setPerAccountChatLogsDir(userid, gridlabel);
-#else
-		gDirUtilp->setPerAccountChatLogsDir(userid);
-#endif // OPENSIM
-// </FS:CR>		
+// </FS:CR>
 		LLFile::mkdir(gDirUtilp->getChatLogsDir());
 		LLFile::mkdir(gDirUtilp->getPerAccountChatLogsDir());
 

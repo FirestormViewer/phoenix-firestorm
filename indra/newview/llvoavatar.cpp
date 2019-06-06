@@ -7805,12 +7805,33 @@ U32 LLVOAvatar::getNumAttachments() const
 }
 
 //-----------------------------------------------------------------------------
+// getMaxAttachments()
+//-----------------------------------------------------------------------------
+S32 LLVOAvatar::getMaxAttachments() const
+{
+	const S32 MAX_AGENT_ATTACHMENTS = 38;
+
+	S32 max_attach = MAX_AGENT_ATTACHMENTS;
+	
+	if (gAgent.getRegion())
+	{
+		LLSD features;
+		gAgent.getRegion()->getSimulatorFeatures(features);
+		if (features.has("MaxAgentAttachments"))
+		{
+			max_attach = features["MaxAgentAttachments"].asInteger();
+		}
+	}
+	return max_attach;
+}
+
+//-----------------------------------------------------------------------------
 // canAttachMoreObjects()
 // Returns true if we can attach <n> more objects.
 //-----------------------------------------------------------------------------
 BOOL LLVOAvatar::canAttachMoreObjects(U32 n) const
 {
-	return (getNumAttachments() + n) <= MAX_AGENT_ATTACHMENTS;
+	return (getNumAttachments() + n) <= getMaxAttachments();
 }
 
 //-----------------------------------------------------------------------------
@@ -7838,7 +7859,7 @@ S32 LLVOAvatar::getMaxAnimatedObjectAttachments() const
     S32 max_attach = 0;
     if (gSavedSettings.getBOOL("AnimatedObjectsIgnoreLimits"))
     {
-        max_attach = MAX_AGENT_ATTACHMENTS;
+        max_attach = getMaxAttachments(); 
     }
     else
     {
@@ -11413,17 +11434,6 @@ BOOL LLVOAvatar::isTextureVisible(LLAvatarAppearanceDefines::ETextureIndex type,
 	}
 	else
 	{
-		// <FS:Ansariel> Chalice Yao's simple avatar shadows via Marine Kelley
-		if (LLPipeline::sShadowRender)
-		{
-			static LLCachedControl<U32> fsSimpleAvatarShadows(gSavedSettings, "FSSimpleAvatarShadows", 3);
-			if (fsSimpleAvatarShadows == 1)
-			{
-				return TRUE;
-			}
-		}
-		// </FS:Ansariel>
-
 		// baked textures can use TE images directly
 		return ((isTextureDefined(type) || isSelf())
 				&& (getTEImage(type)->getID() != IMG_INVISIBLE 

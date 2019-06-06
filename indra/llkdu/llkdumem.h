@@ -47,6 +47,7 @@
 #include "include_kdu_xxxx.h"
 
 #include "kdu_sample_processing.h"
+#include "kdu_utils.h"
 #include "image_local.h"
 #include "stdtypes.h"
 

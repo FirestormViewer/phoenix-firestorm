@@ -204,6 +204,7 @@ LLWorkerClass::LLWorkerClass(LLWorkerThread* workerthread, const std::string& na
 	  mWorkerClassName(name),
 	  mRequestHandle(LLWorkerThread::nullHandle()),
 	  mRequestPriority(LLWorkerThread::PRIORITY_NORMAL),
+	  mMutex(),
 	  mWorkFlags(0)
 {
 	if (!mWorkerThread)

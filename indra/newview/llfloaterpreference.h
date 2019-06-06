@@ -38,13 +38,7 @@
 #include "llconversationlog.h"
 #include "llsearcheditor.h"
 
-namespace nd
-{
-	namespace prefs
-	{
-		struct SearchData;
-	}
-}
+#include "llaudioengine.h" // <FS:Ansariel> Output device selection
 
 class LLConversationLogObserver;
 class LLPanelPreference;
@@ -57,6 +51,14 @@ class LLSD;
 class LLTextBox;
 class LLComboBox;
 class LLLineEditor;
+
+namespace ll
+{
+	namespace prefs
+	{
+		struct SearchData;
+	}
+}
 
 typedef std::map<std::string, std::string> notifications_map;
 
@@ -272,6 +274,7 @@ private:
 	void onDeleteTranscriptsResponse(const LLSD& notification, const LLSD& response);
 	void updateDeleteTranscriptsButton();
 	void updateMaxComplexity();
+	static bool loadFromFilename(const std::string& filename, std::map<std::string, std::string> &label_map);
 
 	static std::string sSkin;
 	notifications_map mNotificationOptions;
@@ -290,9 +293,9 @@ private:
 	LOG_CLASS(LLFloaterPreference);
 
 	LLSearchEditor *mFilterEdit;
-	void onUpdateFilterTerm(bool force = false);
+	std::unique_ptr< ll::prefs::SearchData > mSearchData;
 
-	nd::prefs::SearchData *mSearchData;
+	void onUpdateFilterTerm( bool force = false );
 	void collectSearchableItems();
 };
 
@@ -496,12 +499,13 @@ private:
 	LOG_CLASS(FSPanelPreferenceBackup);
 };
 
-#ifdef OPENSIM // <FS:AW optional opensim support>
 // <FS:AW  opensim preferences>
 class LLPanelPreferenceOpensim : public LLPanelPreference
 {
 public:
 	LLPanelPreferenceOpensim();
+
+#ifdef OPENSIM
 // <FS:AW  grid management>
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void apply();
@@ -536,11 +540,33 @@ private:
 	LLLineEditor* mEditorPassword;
 	LLLineEditor* mEditorSearch;
 	LLLineEditor* mEditorGridMessage;
+#endif
 
 	LOG_CLASS(LLPanelPreferenceOpensim);
 };
 // </FS:AW  opensim preferences>
-#endif // OPENSIM // <FS:AW optional opensim support>
+
+// <FS:Ansariel> Output device selection
+class FSPanelPreferenceSounds : public LLPanelPreference
+{
+public:
+	FSPanelPreferenceSounds();
+	virtual ~FSPanelPreferenceSounds();
+
+	BOOL postBuild();
+
+private:
+	LLPanel*	mOutputDevicePanel;
+	LLComboBox*	mOutputDeviceComboBox;
+
+	void onOutputDeviceChanged(const LLSD& new_value);
+	void onOutputDeviceSelectionChanged(const LLSD& new_value);
+	void onOutputDeviceListChanged(LLAudioEngine::output_device_map_t output_devices);
+	boost::signals2::connection mOutputDeviceListChangedConnection;
+
+	LOG_CLASS(FSPanelPreferenceSounds);
+};
+// </FS:Ansariel>
 
 class LLFloaterPreferenceProxy : public LLFloater
 {

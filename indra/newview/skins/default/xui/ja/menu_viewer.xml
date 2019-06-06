@@ -15,13 +15,14 @@
 		<menu_item_check label="お気に入りの服やHUD" name="WearableFavorites" />
 		<menu_item_call label="ピック..." name="Picks"/>
 		<menu_item_call label="体験..." name="Experiences"/>
-		
+		<menu_item_call label="スクリプト…" name="MyScripts"/>
 		<menu_item_call label="プロフィール" name="Profile"/>
 		<menu_item_check label="容姿" name="ChangeOutfit"/>
 		<menu_item_call label="アバターを選択..." name="Avatar Picker"/>
 		
 		<menu label="ムーブメント" name="Movement">
 			<menu_item_call label="座る" name="Sit Down Here"/>
+			<menu_item_call label="立ち上がる" name="Stand up"/>
 			<menu_item_check label="飛ぶ" name="Fly"/>
 			<!-- added Mar.15, 2015 -->
 			<menu_item_call label="着地する" name="Stop flying" />

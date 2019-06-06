@@ -131,14 +131,16 @@
 #include "llfeaturemanager.h"
 #include "llviewertexturelist.h"
 
+#include "llsearchableui.h"
+
 // Firestorm Includes
 #include "exogroupmutelist.h"
 #include "fsavatarrenderpersistence.h"
 #include "fsdroptarget.h"
 #include "fsfloaterimcontainer.h"
-#include "fssearchableui.h"
 #include "growlmanager.h"
 #include "lfsimfeaturehandler.h"
+#include "llaudioengine.h" // <FS:Ansariel> Output device selection
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
 #include "lleventtimer.h"
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
@@ -178,6 +180,25 @@ static const F32 MAX_ARC_LIMIT = 350000.0f;
 static const F32 MIN_ARC_LOG = log(MIN_ARC_LIMIT);
 static const F32 MAX_ARC_LOG = log(MAX_ARC_LIMIT);
 static const F32 ARC_LIMIT_MAP_SCALE = (MAX_ARC_LOG - MIN_ARC_LOG) / (MAX_INDIRECT_ARC_LIMIT - MIN_INDIRECT_ARC_LIMIT);
+
+struct LabelDef : public LLInitParam::Block<LabelDef>
+{
+    Mandatory<std::string> name;
+    Mandatory<std::string> value;
+
+    LabelDef()
+        : name("name"),
+        value("value")
+    {}
+};
+
+struct LabelTable : public LLInitParam::Block<LabelTable>
+{
+    Multiple<LabelDef> labels;
+    LabelTable()
+        : labels("label")
+    {}
+};
 
 class LLVoiceSetKeyDialog : public LLModalDialog
 {
@@ -472,8 +493,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mOriginalIMViaEmail(false),
 	mLanguageChanged(false),
 	mAvatarDataInitialized(false),
-	mClickActionDirty(false),
-	mSearchData(NULL) // <FS:ND> Hook up and init for filtering
+	mClickActionDirty(false)
 {
 	LLConversationLog::instance().addObserver(this);
 
@@ -547,6 +567,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	mCommitCallbackRegistrar.add("Pref.ClearLog",				boost::bind(&LLConversationLog::onClearLog, &LLConversationLog::instance()));
 	mCommitCallbackRegistrar.add("Pref.DeleteTranscripts",      boost::bind(&LLFloaterPreference::onDeleteTranscripts, this));
+	mCommitCallbackRegistrar.add("UpdateFilter", boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this, false)); // <FS:ND/> Hook up for filtering
 
 	// <Firestorm Callbacks>
 	mCommitCallbackRegistrar.add("NACL.AntiSpamUnblock",		boost::bind(&LLFloaterPreference::onClickClearSpamList, this));
@@ -578,8 +599,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	// <FS:Ansariel> FIRE-2912: Reset voice button
 	mCommitCallbackRegistrar.add("Pref.ResetVoice",						boost::bind(&LLFloaterPreference::onClickResetVoice, this));
-
-	mCommitCallbackRegistrar.add("UpdateFilter", boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this, false)); // <FS:ND/> Hook up for filtering
 }
 
 void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType type )
@@ -711,6 +730,33 @@ BOOL LLFloaterPreference::postBuild()
 	LLSliderCtrl* fov_slider = getChild<LLSliderCtrl>("camera_fov");
 	fov_slider->setMinValue(LLViewerCamera::getInstance()->getMinView());
 	fov_slider->setMaxValue(LLViewerCamera::getInstance()->getMaxView());
+	
+	// Hook up and init for filtering
+	mFilterEdit = getChild<LLSearchEditor>("search_prefs_edit");
+	mFilterEdit->setKeystrokeCallback(boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this, false));
+
+	// Load and assign label for 'default language'
+	std::string user_filename = gDirUtilp->getExpandedFilename(LL_PATH_DEFAULT_SKIN, "default_languages.xml");
+	std::map<std::string, std::string> labels;
+	if (loadFromFilename(user_filename, labels))
+	{
+		std::string system_lang = gSavedSettings.getString("SystemLanguage");
+		std::map<std::string, std::string>::iterator iter = labels.find(system_lang);
+		if (iter != labels.end())
+		{
+			getChild<LLComboBox>("language_combobox")->add(iter->second, LLSD("default"), ADD_TOP, true);
+		}
+		else
+		{
+			LL_WARNS() << "Language \"" << system_lang << "\" is not in default_languages.xml" << LL_ENDL;
+			getChild<LLComboBox>("language_combobox")->add("System default", LLSD("default"), ADD_TOP, true);
+		}
+	}
+	else
+	{
+		LL_WARNS() << "Failed to load labels from " << user_filename << ". Using default." << LL_ENDL;
+		getChild<LLComboBox>("language_combobox")->add("System default", LLSD("default"), ADD_TOP, true);
+	}
 
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-06-11 (Catznip-2.6.c) | Added: Catznip-2.6.0c
 #ifndef LL_SEND_CRASH_REPORTS
@@ -752,11 +798,6 @@ BOOL LLFloaterPreference::postBuild()
 	populateFontSelectionCombo();
 	// </FS:Kadah>
 
-	// <FS:ND> Hook up and init for filtering
-	mFilterEdit = getChild<LLSearchEditor>("search_prefs_edit");
-	mFilterEdit->setKeystrokeCallback(boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this, false));
-	// </FS:ND>
-
 	// <FS:Ansariel> Update label for max. non imposters and max complexity
 	gSavedSettings.getControl("IndirectMaxNonImpostors")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateMaxNonImpostorsLabel, this, _2));
 	gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateMaxComplexityLabel, this, _2));
@@ -788,7 +829,6 @@ BOOL LLFloaterPreference::postBuild()
 
 	// <FS:Ansariel> Disable options only available on Windows and not on other platforms
 #ifndef LL_WINDOWS
-	childSetEnabled("FSEnableAutomaticUIScaling", FALSE);
 	childSetEnabled("FSDisableWMIProbing", FALSE);
 #endif
 	// </FS:Ansariel>
@@ -885,8 +925,6 @@ void LLFloaterPreference::onDoNotDisturbResponseChanged()
 LLFloaterPreference::~LLFloaterPreference()
 {
 	LLConversationLog::instance().removeObserver(this);
-
-	delete mSearchData;
 }
 
 void LLFloaterPreference::draw()
@@ -1233,17 +1271,17 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	//exceptions_btn->setEnabled(started);
 	// </FS:Ansariel>
 
-	// <FS:ND> Hook up and init for filtering
 	collectSearchableItems();
 	if (!mFilterEdit->getText().empty())
 	{
 		mFilterEdit->setText(LLStringExplicit(""));
 		onUpdateFilterTerm(true);
 
+		// <FS:ND> Hook up and init for filtering
 		if (!tabcontainer->selectTab(gSavedSettings.getS32("LastPrefTab")))
 			tabcontainer->selectFirstTab();
+		// </FS:ND>
 	}
-	// </FS:ND>
 }
 
 void LLFloaterPreference::onVertexShaderEnable()
@@ -2142,9 +2180,6 @@ void LLFloaterPreference::refreshEnabledState()
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail");
 
 	ctrl_shadow->setEnabled(enabled);
-	
-	LLComboBox* ctrl_avatar_shadow = getChild<LLComboBox>("AvatarShadowDetail");
-	ctrl_avatar_shadow->setEnabled(enabled && ctrl_shadow->getValue().asInteger() > 0);
 
 	// now turn off any features that are unavailable
 	disableUnavailableSettings();
@@ -2356,7 +2391,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
-	LLComboBox* ctrl_avatar_shadow = getChild<LLComboBox>("AvatarShadowDetail");
 	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
 
 	// if vertex shaders off, disable all shader related products
@@ -2381,9 +2415,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-		
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
@@ -2407,9 +2438,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
 
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
-		
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
 
@@ -2426,9 +2454,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-		
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
@@ -2452,9 +2477,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 	}
 
 	// disabled reflections
@@ -2476,9 +2498,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		//deferred needs AvatarVP, disable deferred
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-		
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
@@ -3205,6 +3224,45 @@ void LLFloaterPreference::updateMaxComplexity()
         getChild<LLTextBox>("IndirectMaxComplexityText"));
 }
 
+bool LLFloaterPreference::loadFromFilename(const std::string& filename, std::map<std::string, std::string> &label_map)
+{
+    LLXMLNodePtr root;
+
+    if (!LLXMLNode::parseFile(filename, root, NULL))
+    {
+        LL_WARNS() << "Unable to parse file " << filename << LL_ENDL;
+        return false;
+    }
+
+    if (!root->hasName("labels"))
+    {
+        LL_WARNS() << filename << " is not a valid definition file" << LL_ENDL;
+        return false;
+    }
+
+    LabelTable params;
+    LLXUIParser parser;
+    parser.readXUI(root, params, filename);
+
+    if (params.validateBlock())
+    {
+        for (LLInitParam::ParamIterator<LabelDef>::const_iterator it = params.labels.begin();
+            it != params.labels.end();
+            ++it)
+        {
+            LabelDef label_entry = *it;
+            label_map[label_entry.name] = label_entry.value;
+        }
+    }
+    else
+    {
+        LL_WARNS() << filename << " failed to load" << LL_ENDL;
+        return false;
+    }
+
+    return true;
+}
+
 void LLFloaterPreferenceGraphicsAdvanced::updateMaxComplexity()
 {
 	// Called when the IndirectMaxComplexity control changes
@@ -3681,6 +3739,7 @@ BOOL LLPanelPreference::postBuild()
 	if (hasChild("mute_chb_label", TRUE))
 	{
 		getChild<LLTextBox>("mute_chb_label")->setShowCursorHand(false);
+		getChild<LLTextBox>("mute_chb_label")->setSoundFlags(LLView::MOUSE_UP);
 		getChild<LLTextBox>("mute_chb_label")->setClickedCallback(boost::bind(&toggleMuteWhenMinimized));
 	}
 
@@ -3845,6 +3904,11 @@ void LLPanelPreference::toggleMuteWhenMinimized()
 {
 	std::string mute("MuteWhenMinimized");
 	gSavedSettings.setBOOL(mute, !gSavedSettings.getBOOL(mute));
+	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+	if (instance)
+	{
+		instance->getChild<LLCheckBoxCtrl>("mute_when_minimized")->setBtnFocus();
+	}
 }
 
 // <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
@@ -4140,6 +4204,9 @@ BOOL LLPanelPreferenceGraphics::postBuild()
 		combo->remove("8x");
 		combo->remove("16x");
 	}
+
+	LLCheckBoxCtrl *use_HiDPI = getChild<LLCheckBoxCtrl>("use HiDPI");
+	use_HiDPI->setEnabled(FALSE);
 #endif
 	// </FS:Ansariel>
 
@@ -4175,6 +4242,11 @@ void LLPanelPreferenceGraphics::onPresetsListChange()
 	//if (instance && !gSavedSettings.getString("PresetGraphicActive").empty())
 	//{
 	//	instance->saveSettings(); //make cancel work correctly after changing the preset
+	//}
+	//else
+	//{
+	//	std::string dummy;
+	//	instance->saveGraphicsPreset(dummy);
 	//}
 }
 
@@ -4358,6 +4430,9 @@ BOOL LLFloaterPreferenceGraphicsAdvanced::postBuild()
         combo->remove("8x");
         combo->remove("16x");
     }
+	
+	LLCheckBoxCtrl *use_HiDPI = getChild<LLCheckBoxCtrl>("use HiDPI");
+	use_HiDPI->setVisible(FALSE);
 #endif
 
     return TRUE;
@@ -4560,6 +4635,113 @@ void LLFloaterPreferenceProxy::onChangeSocksSettings()
 		otherHttpProxy->selectFirstItem();
 	}
 
+}
+
+void LLFloaterPreference::onUpdateFilterTerm(bool force)
+{
+	LLWString seachValue = utf8str_to_wstring( mFilterEdit->getValue() );
+	LLWStringUtil::toLower( seachValue );
+
+	if( !mSearchData || (mSearchData->mLastFilter == seachValue && !force))
+		return;
+
+	mSearchData->mLastFilter = seachValue;
+
+	if( !mSearchData->mRootTab )
+		return;
+
+	mSearchData->mRootTab->hightlightAndHide( seachValue );
+	LLTabContainer *pRoot = getChild< LLTabContainer >( "pref core" );
+	if( pRoot )
+		pRoot->selectFirstTab();
+}
+
+void collectChildren( LLView const *aView, ll::prefs::PanelDataPtr aParentPanel, ll::prefs::TabContainerDataPtr aParentTabContainer )
+{
+	if( !aView )
+		return;
+
+	llassert_always( aParentPanel || aParentTabContainer );
+
+	LLView::child_list_const_iter_t itr = aView->beginChild();
+	LLView::child_list_const_iter_t itrEnd = aView->endChild();
+
+	while( itr != itrEnd )
+	{
+		LLView *pView = *itr;
+		ll::prefs::PanelDataPtr pCurPanelData = aParentPanel;
+		ll::prefs::TabContainerDataPtr pCurTabContainer = aParentTabContainer;
+		if( !pView )
+			continue;
+		LLPanel const *pPanel = dynamic_cast< LLPanel const *>( pView );
+		LLTabContainer const *pTabContainer = dynamic_cast< LLTabContainer const *>( pView );
+		ll::ui::SearchableControl const *pSCtrl = dynamic_cast< ll::ui::SearchableControl const *>( pView );
+
+		if( pTabContainer )
+		{
+			pCurPanelData.reset();
+
+			pCurTabContainer = ll::prefs::TabContainerDataPtr( new ll::prefs::TabContainerData );
+			pCurTabContainer->mTabContainer = const_cast< LLTabContainer *>( pTabContainer );
+			pCurTabContainer->mLabel = pTabContainer->getLabel();
+			pCurTabContainer->mPanel = 0;
+
+			if( aParentPanel )
+				aParentPanel->mChildPanel.push_back( pCurTabContainer );
+			if( aParentTabContainer )
+				aParentTabContainer->mChildPanel.push_back( pCurTabContainer );
+		}
+		else if( pPanel )
+		{
+			pCurTabContainer.reset();
+
+			pCurPanelData = ll::prefs::PanelDataPtr( new ll::prefs::PanelData );
+			pCurPanelData->mPanel = pPanel;
+			pCurPanelData->mLabel = pPanel->getLabel();
+
+			llassert_always( aParentPanel || aParentTabContainer );
+
+			if( aParentTabContainer )
+				aParentTabContainer->mChildPanel.push_back( pCurPanelData );
+			else if( aParentPanel )
+				aParentPanel->mChildPanel.push_back( pCurPanelData );
+		}
+		else if( pSCtrl && pSCtrl->getSearchText().size() )
+		{
+			ll::prefs::SearchableItemPtr item = ll::prefs::SearchableItemPtr( new ll::prefs::SearchableItem() );
+			item->mView = pView;
+			item->mCtrl = pSCtrl;
+
+			item->mLabel = utf8str_to_wstring( pSCtrl->getSearchText() );
+			LLWStringUtil::toLower( item->mLabel );
+
+			llassert_always( aParentPanel || aParentTabContainer );
+
+			if( aParentPanel )
+				aParentPanel->mChildren.push_back( item );
+			if( aParentTabContainer )
+				aParentTabContainer->mChildren.push_back( item );
+		}
+		collectChildren( pView, pCurPanelData, pCurTabContainer );
+		++itr;
+	}
+}
+
+void LLFloaterPreference::collectSearchableItems()
+{
+	mSearchData.reset( nullptr );
+	LLTabContainer *pRoot = getChild< LLTabContainer >( "pref core" );
+	if( mFilterEdit && pRoot )
+	{
+		mSearchData.reset(new ll::prefs::SearchData() );
+
+		ll::prefs::TabContainerDataPtr pRootTabcontainer = ll::prefs::TabContainerDataPtr( new ll::prefs::TabContainerData );
+		pRootTabcontainer->mTabContainer = pRoot;
+		pRootTabcontainer->mLabel = pRoot->getLabel();
+		mSearchData->mRootTab = pRootTabcontainer;
+
+		collectChildren( this, ll::prefs::PanelDataPtr(), pRootTabcontainer );
+	}
 }
 
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-16 (Catznip-2.6.0a) | Added: Catznip-2.4.0b
@@ -5517,9 +5699,9 @@ void LLFloaterPreference::populateFontSelectionCombo()
 // </FS:Kadah>
 
 // <FS:AW optional opensim support>
-#ifdef OPENSIM
 static LLPanelInjector<LLPanelPreferenceOpensim> t_pref_opensim("panel_preference_opensim");
 
+#ifdef OPENSIM
 LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference(),
 	mGridListControl(NULL)
 {
@@ -5730,116 +5912,117 @@ void LLPanelPreferenceOpensim::onClickPickDebugSearchURL()
 
 	LLNotificationsUtil::add("ConfirmPickDebugSearchURL", LLSD(), LLSD(),callback_pick_debug_search );
 }
+#else
+void no_cb()
+{ }
 
-#endif // OPENSIM
+LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference()
+{
+	mCommitCallbackRegistrar.add("Pref.ClearDebugSearchURL", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.PickDebugSearchURL", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.AddGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.ClearGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.RefreshGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.RemoveGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.SaveGrid", boost::bind(&no_cb));
+}
+#endif
 // <FS:AW optional opensim support>
 
-// <FS:ND> Code to filter/search in the prefs panel
-void LLFloaterPreference::onUpdateFilterTerm(bool force)
+// <FS:Ansariel> Output device selection
+static LLPanelInjector<FSPanelPreferenceSounds> t_pref_sounds("panel_preference_sounds");
+
+FSPanelPreferenceSounds::FSPanelPreferenceSounds() :
+	LLPanelPreference(),
+	mOutputDevicePanel(nullptr),
+	mOutputDeviceComboBox(nullptr),
+	mOutputDeviceListChangedConnection()
+{ }
+
+FSPanelPreferenceSounds::~FSPanelPreferenceSounds()
 {
-	LLWString seachValue = utf8str_to_wstring( mFilterEdit->getValue() );
-	LLWStringUtil::toLower( seachValue );
-
-	if( !mSearchData || (mSearchData->mLastFilter == seachValue && !force))
-		return;
-
-	mSearchData->mLastFilter = seachValue;
-
-	if( !mSearchData->mRootTab )
-		return;
-
-	mSearchData->mRootTab->hightlightAndHide( seachValue );
-	LLTabContainer *pRoot = getChild< LLTabContainer >( "pref core" );
-	if( pRoot )
-		pRoot->selectFirstTab();
-}
-
-void collectChildren( LLView const *aView, nd::prefs::PanelDataPtr aParentPanel, nd::prefs::TabContainerDataPtr aParentTabContainer )
-{
-	if( !aView )
-		return;
-
-	llassert_always( aParentPanel || aParentTabContainer );
-
-	LLView::child_list_const_iter_t itr = aView->beginChild();
-	LLView::child_list_const_iter_t itrEnd = aView->endChild();
-
-	while( itr != itrEnd )
+	if (mOutputDeviceListChangedConnection.connected())
 	{
-		LLView *pView = *itr;
-		nd::prefs::PanelDataPtr pCurPanelData = aParentPanel;
-		nd::prefs::TabContainerDataPtr pCurTabContainer = aParentTabContainer;
-		if( !pView )
-			continue;
-		LLPanel const *pPanel = dynamic_cast< LLPanel const *>( pView );
-		LLTabContainer const *pTabContainer = dynamic_cast< LLTabContainer const *>( pView );
-		nd::ui::SearchableControl const *pSCtrl = dynamic_cast< nd::ui::SearchableControl const *>( pView );
-
-		if( pTabContainer )
-		{
-			pCurPanelData.reset();
-
-			pCurTabContainer = nd::prefs::TabContainerDataPtr( new nd::prefs::TabContainerData );
-			pCurTabContainer->mTabContainer = const_cast< LLTabContainer *>( pTabContainer );
-			pCurTabContainer->mLabel = pTabContainer->getLabel();
-			pCurTabContainer->mPanel = 0;
-
-			if( aParentPanel )
-				aParentPanel->mChildPanel.push_back( pCurTabContainer );
-			if( aParentTabContainer )
-				aParentTabContainer->mChildPanel.push_back( pCurTabContainer );
-		}
-		else if( pPanel )
-		{
-			pCurTabContainer.reset();
-
-			pCurPanelData = nd::prefs::PanelDataPtr( new nd::prefs::PanelData );
-			pCurPanelData->mPanel = pPanel;
-			pCurPanelData->mLabel = pPanel->getLabel();
-
-			llassert_always( aParentPanel || aParentTabContainer );
-
-			if( aParentTabContainer )
-				aParentTabContainer->mChildPanel.push_back( pCurPanelData );
-			else if( aParentPanel )
-				aParentPanel->mChildPanel.push_back( pCurPanelData );
-		}
-		else if( pSCtrl && pSCtrl->getSearchText().size() )
-		{
-			nd::prefs::SearchableItemPtr item = nd::prefs::SearchableItemPtr( new nd::prefs::SearchableItem() );
-			item->mView = pView;
-			item->mCtrl = pSCtrl;
-
-			item->mLabel = utf8str_to_wstring( pSCtrl->getSearchText() );
-			LLWStringUtil::toLower( item->mLabel );
-
-			llassert_always( aParentPanel || aParentTabContainer );
-
-			if( aParentPanel )
-				aParentPanel->mChildren.push_back( item );
-			if( aParentTabContainer )
-				aParentTabContainer->mChildren.push_back( item );
-		}
-		collectChildren( pView, pCurPanelData, pCurTabContainer );
-		++itr;
+		mOutputDeviceListChangedConnection.disconnect();
 	}
 }
 
-void LLFloaterPreference::collectSearchableItems()
+BOOL FSPanelPreferenceSounds::postBuild()
 {
-	delete mSearchData;
-	mSearchData = NULL;
-	LLTabContainer *pRoot = getChild< LLTabContainer >( "pref core" );
-	if( mFilterEdit && pRoot )
+	mOutputDevicePanel = findChild<LLPanel>("output_device_settings_panel");
+	mOutputDeviceComboBox = findChild<LLComboBox>("sound_output_device");
+
+#if LL_FMODSTUDIO || LL_FMODEX
+	if (gAudiop && mOutputDevicePanel && mOutputDeviceComboBox)
 	{
-		mSearchData = new nd::prefs::SearchData();
+		gSavedSettings.getControl("FSOutputDeviceUUID")->getSignal()->connect(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceChanged, this, _2));
 
-		nd::prefs::TabContainerDataPtr pRootTabcontainer = nd::prefs::TabContainerDataPtr( new nd::prefs::TabContainerData );
-		pRootTabcontainer->mTabContainer = pRoot;
-		pRootTabcontainer->mLabel = pRoot->getLabel();
-		mSearchData->mRootTab = pRootTabcontainer;
+		mOutputDeviceListChangedConnection = gAudiop->setOutputDeviceListChangedCallback(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceListChanged, this, _1));
+		onOutputDeviceListChanged(gAudiop->getDevices());
 
-		collectChildren( this, nd::prefs::PanelDataPtr(), pRootTabcontainer );
+		mOutputDeviceComboBox->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceSelectionChanged, this, _2));
 	}
+#else
+	if (mOutputDevicePanel)
+	{
+		mOutputDevicePanel->setVisible(FALSE);
+	}
+#endif
+
+	return LLPanelPreference::postBuild();
 }
-// </FS:ND>
+
+void FSPanelPreferenceSounds::onOutputDeviceChanged(const LLSD& new_value)
+{
+	mOutputDeviceComboBox->setSelectedByValue(new_value.asUUID(), TRUE);
+}
+
+void FSPanelPreferenceSounds::onOutputDeviceSelectionChanged(const LLSD& new_value)
+{
+	gSavedSettings.setString("FSOutputDeviceUUID", mOutputDeviceComboBox->getSelectedValue().asString());
+}
+
+void FSPanelPreferenceSounds::onOutputDeviceListChanged(LLAudioEngine::output_device_map_t output_devices)
+{
+	LLUUID selected_device(gSavedSettings.getString("FSOutputDeviceUUID"));
+	mOutputDeviceComboBox->removeall();
+
+	if (output_devices.empty())
+	{
+		LL_INFOS() << "No output devices available" << LL_ENDL;
+		mOutputDeviceComboBox->add(mOutputDevicePanel->getString("output_no_device"), LLUUID::null);
+
+		if (selected_device != LLUUID::null)
+		{
+			LL_INFOS() << "Non-default device selected - adding unavailable for " << selected_device << LL_ENDL;
+			mOutputDeviceComboBox->add(mOutputDevicePanel->getString("output_device_unavailable"), selected_device);
+		}
+	}
+	else
+	{
+		bool selected_device_found = false;
+
+		mOutputDeviceComboBox->add(mOutputDevicePanel->getString("output_default_text"), LLUUID::null);
+		selected_device_found = selected_device == LLUUID::null;
+
+		for (auto device : output_devices)
+		{
+			mOutputDeviceComboBox->add(device.second.empty() ? mOutputDevicePanel->getString("output_name_no_device") : device.second, device.first);
+
+			if (!selected_device_found && device.first == selected_device)
+			{
+				LL_INFOS() << "Found selected device \"" << device.second << "\" (" << device.first << ")" << LL_ENDL;
+				selected_device_found = true;
+			}
+		}
+
+		if (!selected_device_found)
+		{
+			LL_INFOS() << "Selected device " << selected_device << " NOT found - adding unavailable" << LL_ENDL;
+			mOutputDeviceComboBox->add(mOutputDevicePanel->getString("output_device_unavailable"), selected_device);
+		}
+	}
+
+	mOutputDeviceComboBox->setSelectedByValue(selected_device, TRUE);
+}
+// </FS:Ansariel>

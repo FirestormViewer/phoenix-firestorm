@@ -9,7 +9,7 @@ https://accounts.secondlife.com/change_email/
 	</floater.string>
 	<button label="Annulla" label_selected="Annulla" name="Cancel"/>
 	<panel name="search_panel">
-		<search_editor label="Impostazioni ricerca" name="search_prefs_edit" tool_tip="Scrivere qui i termini da cercare. Verranno evidenziati i risultati anche parziali, nei nomi o nei commenti."/>
+		<search_editor label="Ricerca Impostazioni" name="search_prefs_edit" tool_tip="Digita qui il termine della tua ricerca. I risultati verranno mostrati secondo la concordanza parziale o totale con il nome dell&apos;impostazione."/>
 	</panel>
 	<tab_container name="pref core">
 		<panel label="Generale" name="general"/>

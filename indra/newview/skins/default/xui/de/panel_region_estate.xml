@@ -17,52 +17,14 @@
 	</text>
 	
 	<radio_group name="externally_visible_radio" width="310">
-		<radio_item label="Nur unten gelistete Einwohner &amp; Gruppen erlauben" name="estate_restricted_access"/>
+		<radio_item label="Nur Einwohner und Gruppen zulassen, die im Reiter &quot;Zugang&quot; aufgelistet sind." name="estate_restricted_access"/>
 		<radio_item label="Zugang für jeden" name="estate_public_access"/>
 	</radio_group>
 	<check_box label="18 Jahre oder älter sind" name="limit_age_verified" tool_tip="Um diesen Grundbesitz besuchen zu können, müssen Einwohner mindestens 18 Jahre oder älter sein. Weitere Informationen finden Sie auf [SUPPORT_SITE]."/>
 	<check_box label="Zahlungsinformationen hinterlegt haben" name="limit_payment" tool_tip="Um diesen Grundbesitz besuchen zu können, müssen Einwohner Zahlungsinformationen hinterlegt haben. Weitere Informationen finden Sie auf [SUPPORT_SITE]."/>
 	<check_box label="Parzellen-Eigentümer können restriktiver sein" name="parcel_access_override"/>
-	<check_box label="Voice-Chat erlauben" name="voice_chat_check" left="325"/>
-	<button label="Übernehmen" name="apply_btn"/>
-	<button label="Hinzufügen..." name="add_estate_manager_btn"/>
-	<button label="Entfernen..." name="remove_estate_manager_btn"/>
-	<check_box label="Globale Zeit verwenden" name="use_global_time_check"/>
-	<button label="?" name="use_global_time_help"/>
-	<check_box label="Sonne fest" name="fixed_sun_check"/>
-	<button label="?" name="fixed_sun_help"/>
-	<slider label="Phase" name="sun_hour_slider"/>
-	<check_box label="Freien Zugang erlauben" name="externally_visible_check"/>
-	<button label="?" name="externally_visible_help"/>
+	<check_box label="Voice-Chat erlauben" name="voice_chat_check"/>
 	<check_box label="Direktteleport zulassen" name="allow_direct_teleport"/>
-	<button label="?" name="allow_direct_teleport_help"/>
-	<text name="region_text_lbl">
-		Zugang nach Zahlungsstatus verweigern:
-	</text>
-	<check_box label="Verweigern - keine archivierte Zahlungsinfo" name="deny_anonymous"/>
-	<check_box label="Verweigern - Zahlungsinfo archiviert" name="deny_identified"/>
-	<check_box label="Verweigern - Zahlungsinfo verwendet" name="deny_transacted"/>
-	<text name="estate_manager_label">
-		Grundbesitzverwalter:
-	</text>
-	<text name="allow_resident_label">
-		Zulässige Einwohner:
-	</text>
-	<button label="?" name="allow_resident_help"/>
-	<button label="Hinzufügen..." name="add_allowed_avatar_btn"/>
-	<button label="Entfernen..." name="remove_allowed_avatar_btn"/>
-	<text name="allow_group_label">
-		Zulässige Gruppen:
-	</text>
-	<button label="?" name="allow_group_help"/>
-	<button label="Hinzufügen..." name="add_allowed_group_btn"/>
-	<button label="Entfernen..." name="remove_allowed_group_btn"/>
-	<text name="ban_resident_label">
-		Verbannte Einwohner:
-	</text>
-	<button label="?" name="ban_resident_help"/>
-	<button label="Hinzufügen..." name="add_banned_avatar_btn"/>
-	<button label="Entfernen..." name="remove_banned_avatar_btn"/>
 	<button label="Nachricht an Grundbesitz" name="message_estate_btn"/>
 	<button label="Einwohner hinauswerfen" name="kick_user_from_estate_btn"/>
 </panel>

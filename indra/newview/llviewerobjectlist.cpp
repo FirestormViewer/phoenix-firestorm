@@ -940,6 +940,7 @@ void LLViewerObjectList::update(LLAgent &agent)
 	static LLCachedControl<bool> pingInterpolate(gSavedSettings, "PingInterpolate");
 	static LLCachedControl<F32> interpolationTime(gSavedSettings, "InterpolationTime");
 	static LLCachedControl<F32> interpolationPhaseOut(gSavedSettings, "InterpolationPhaseOut");
+	static LLCachedControl<F32> regionCrossingInterpolationTime(gSavedSettings, "RegionCrossingInterpolationTime");
 	static LLCachedControl<bool> animateTextures(gSavedSettings, "AnimateTextures");
 	static LLCachedControl<bool> freezeTime(gSavedSettings, "FreezeTime");
 	// </FS:Ansariel> Speed up debug settings
@@ -951,11 +952,13 @@ void LLViewerObjectList::update(LLAgent &agent)
 	//
 	//F32 interp_time = gSavedSettings.getF32("InterpolationTime");
 	//F32 phase_out_time = gSavedSettings.getF32("InterpolationPhaseOut");
+	//F32 region_interp_time = llclamp(gSavedSettings.getF32("RegionCrossingInterpolationTime"), 0.5f, 5.f);
 	LLViewerObject::setVelocityInterpolate(velocityInterpolate);
 	LLViewerObject::setPingInterpolate(pingInterpolate);
 	
 	F32 interp_time = (F32)interpolationTime;
 	F32 phase_out_time = (F32)interpolationPhaseOut;
+	F32 region_interp_time = llclamp(regionCrossingInterpolationTime(), 0.5f, 5.f);
 	// </FS:Ansariel> Speed up debug settings
 	if (interp_time < 0.0 || 
 		phase_out_time < 0.0 ||
@@ -967,6 +970,7 @@ void LLViewerObjectList::update(LLAgent &agent)
 	}
 	LLViewerObject::setPhaseOutUpdateInterpolationTime( interp_time );
 	LLViewerObject::setMaxUpdateInterpolationTime( phase_out_time );
+	LLViewerObject::setMaxRegionCrossingInterpolationTime(region_interp_time);
 
 	// <FS:Ansariel> Speed up debug settings
 	//gAnimateTextures = gSavedSettings.getBOOL("AnimateTextures");

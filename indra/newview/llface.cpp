@@ -36,6 +36,8 @@
 #include "llmatrix4a.h"
 #include "v3color.h"
 
+#include "lldefs.h"
+
 #include "lldrawpoolavatar.h"
 #include "lldrawpoolbump.h"
 #include "llgl.h"
@@ -630,6 +632,91 @@ void LLFace::renderSelected(LLViewerTexture *imagep, const LLColor4& color)
 	}
 }
 
+
+void renderFace(LLDrawable* drawable, LLFace *face)
+{
+    LLVOVolume* vobj = drawable->getVOVolume();
+    if (vobj)
+    {
+        LLVolume* volume = NULL;
+
+        if (drawable->isState(LLDrawable::RIGGED))
+        {
+            volume = vobj->getRiggedVolume();
+        }
+        else
+        {
+            volume = vobj->getVolume();
+        }
+
+        if (volume)
+        {
+            const LLVolumeFace& vol_face = volume->getVolumeFace(face->getTEOffset());
+            // <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
+            //LLVertexBuffer::drawElements(LLRender::TRIANGLES, vol_face.mPositions, NULL, vol_face.mNumIndices, vol_face.mIndices);
+            LLVertexBuffer::drawElements(LLRender::TRIANGLES, vol_face.mNumVertices, vol_face.mPositions, NULL, vol_face.mNumIndices, vol_face.mIndices);
+        }
+    }
+}
+
+void LLFace::renderOneWireframe(const LLColor4 &color, F32 fogCfx, bool wireframe_selection, bool bRenderHiddenSelections, bool shader)
+{
+    if (bRenderHiddenSelections)
+    {
+        gGL.blendFunc(LLRender::BF_SOURCE_COLOR, LLRender::BF_ONE);
+        LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE, GL_GEQUAL);
+        if (shader)
+        {
+            gGL.diffuseColor4f(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], 0.4f);
+            renderFace(mDrawablep, this);
+        }
+        else
+        {
+            // <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
+            if (!LLGLSLShader::sNoFixedFunction)
+            {
+            // </FS:Ansariel>
+            LLGLEnable fog(GL_FOG);
+            glFogi(GL_FOG_MODE, GL_LINEAR);
+            float d = (LLViewerCamera::getInstance()->getPointOfInterest() - LLViewerCamera::getInstance()->getOrigin()).magVec();
+            LLColor4 fogCol = color * fogCfx;
+            glFogf(GL_FOG_START, d);
+            glFogf(GL_FOG_END, d*(1 + (LLViewerCamera::getInstance()->getView() / LLViewerCamera::getInstance()->getDefaultFOV())));
+            glFogfv(GL_FOG_COLOR, fogCol.mV);
+            // <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
+            }
+            // </FS:Ansariel>
+
+            gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+            {
+                gGL.diffuseColor4f(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], 0.4f);
+                renderFace(mDrawablep, this);
+            }
+        }
+    }
+
+    gGL.flush();
+    gGL.setSceneBlendType(LLRender::BT_ALPHA);
+
+    gGL.diffuseColor4f(color.mV[VRED] * 2, color.mV[VGREEN] * 2, color.mV[VBLUE] * 2, color.mV[VALPHA]);
+
+    {
+        LLGLDisable depth(wireframe_selection ? 0 : GL_BLEND);
+        LLGLEnable stencil(wireframe_selection ? 0 : GL_STENCIL_TEST);
+
+        if (!wireframe_selection)
+        { //modify wireframe into outline selection mode
+            glStencilFunc(GL_NOTEQUAL, 2, 0xffff);
+            glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+        }
+
+        LLGLEnable offset(GL_POLYGON_OFFSET_LINE);
+        glPolygonOffset(3.f, 3.f);
+        glLineWidth(5.f);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        renderFace(mDrawablep, this);
+    }
+}
 
 /* removed in lieu of raycast uv detection
 void LLFace::renderSelectedUV()

@@ -306,6 +306,10 @@ extern BOOL gRandomizeFramerate;
 extern BOOL gPeriodicSlowFrame;
 extern BOOL gDebugGL;
 
+#if LL_DARWIN
+extern BOOL gHiDPISupport;
+#endif
+
 ////////////////////////////////////////////////////////////
 // All from the last globals push...
 
@@ -638,12 +642,12 @@ static void settings_to_globals()
 	// </FS:Ansariel>
 	LLImageGL::sGlobalUseAnisotropic	= gSavedSettings.getBOOL("RenderAnisotropic");
 	LLImageGL::sCompressTextures		= gSavedSettings.getBOOL("RenderCompressTextures");
-	LLVOVolume::sLODFactor				= gSavedSettings.getF32("RenderVolumeLODFactor");
+	LLVOVolume::sLODFactor				= llclamp(gSavedSettings.getF32("RenderVolumeLODFactor"), 0.01f, MAX_LOD_FACTOR);
 	LLVOVolume::sDistanceFactor			= 1.f-LLVOVolume::sLODFactor * 0.1f;
 	LLVolumeImplFlexible::sUpdateFactor = gSavedSettings.getF32("RenderFlexTimeFactor");
 	LLVOTree::sTreeFactor				= gSavedSettings.getF32("RenderTreeLODFactor");
-	LLVOAvatar::sLODFactor				= gSavedSettings.getF32("RenderAvatarLODFactor");
-	LLVOAvatar::sPhysicsLODFactor		= gSavedSettings.getF32("RenderAvatarPhysicsLODFactor");
+	LLVOAvatar::sLODFactor				= llclamp(gSavedSettings.getF32("RenderAvatarLODFactor"), 0.f, MAX_AVATAR_LOD_FACTOR);
+	LLVOAvatar::sPhysicsLODFactor		= llclamp(gSavedSettings.getF32("RenderAvatarPhysicsLODFactor"), 0.f, MAX_AVATAR_LOD_FACTOR);
 	LLVOAvatar::updateImpostorRendering(gSavedSettings.getU32("RenderAvatarMaxNonImpostors"));
 	LLVOAvatar::sVisibleInFirstPerson	= gSavedSettings.getBOOL("FirstPersonAvatarVisible");
 	// clamp auto-open time to some minimum usable value
@@ -659,6 +663,10 @@ static void settings_to_globals()
 	gDebugWindowProc = gSavedSettings.getBOOL("DebugWindowProc");
 	gShowObjectUpdates = gSavedSettings.getBOOL("ShowObjectUpdates");
 	LLWorldMapView::sMapScale = gSavedSettings.getF32("MapScale");
+	
+#if LL_DARWIN
+	gHiDPISupport = gSavedSettings.getBOOL("RenderHiDPI");
+#endif
 }
 
 static void settings_modify()
@@ -1355,9 +1363,18 @@ bool LLAppViewer::init()
 //	updater.args.add(gSavedSettings.getString("UpdaterServiceURL"));
 //	// ForceAddressSize
 //	updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
-//
-//	// Run the updater. An exception from launching the updater should bother us.
+//#if LL_WINDOWS && !LL_RELEASE_FOR_DOWNLOAD && !LL_SEND_CRASH_REPORTS
+//	// This is neither a release package, nor crash-reporting enabled test build
+//	// try to run version updater, but don't bother if it fails (file might be missing)
+//	LLLeap *leap_p = LLLeap::create(updater, false);
+//	if (!leap_p)
+//	{
+//		LL_WARNS("LLLeap") << "Failed to run LLLeap" << LL_ENDL;
+//	}
+//#else
+// 	// Run the updater. An exception from launching the updater should bother us.
 //	LLLeap::create(updater, true);
+//#endif
 	// </FS:Ansariel>
 
 	// Iterate over --leap command-line options. But this is a bit tricky: if
@@ -2038,7 +2055,7 @@ bool LLAppViewer::cleanup()
 	// <FS:ND> FIRE-8385 Crash on exit in Havok. It is hard to say why it happens, as we only have the binary Havok blob. This is a hack around it.
 	// Due to the fact the process is going to die anyway, the OS will clean up any reources left by not calling quitSystem.
 	// The OpenSim version does not use Havok, it is okay to call shutdown then.
-#ifdef OPENSIM
+#ifndef HAVOK_TPV
 	// shut down Havok
 	LLPhysicsExtensions::quitSystem();
 #endif // </FS:ND>
@@ -3677,10 +3694,12 @@ LLSD LLAppViewer::getViewerInfo() const
     //}
 
 // <FS:CR> FIRE-8273: Add Open-sim indicator to About floater
-#ifdef OPENSIM
+#if defined OPENSIM
 	info["BUILD_TYPE"] = LLTrans::getString("FSWithOpensim");
-#else
+#elif defined HAVOK_TPV
 	info["BUILD_TYPE"] = LLTrans::getString("FSWithHavok");
+#else
+	info["BUILD_TYPE"] = std::string();
 #endif // OPENSIM
 // </FS:CR>
 	info["SKIN"] = gSavedSettings.getString("FSInternalSkinCurrent");
@@ -3721,20 +3740,15 @@ LLSD LLAppViewer::getViewerInfo() const
 	}
 
 	// return a URL to the release notes for this viewer, such as:
-	// http://wiki.secondlife.com/wiki/Release_Notes/Second Life Beta Viewer/2.1.0.123456
+	// https://releasenotes.secondlife.com/viewer/2.1.0.123456.html
 	std::string url = LLTrans::getString("RELEASE_NOTES_BASE_URL");
 	// <FS:Ansariel> FIRE-13993: Leave out channel so we can use a URL like
 	//                           http://wiki.phoenixviewer.com/firestorm_change_log_x.y.z.rev
 	//if (! LLStringUtil::endsWith(url, "/"))
 	//	url += "/";
-	//std::string channel = LLVersionInfo::getChannel();
-	//if (LLStringUtil::endsWith(boost::to_lower_copy(channel), " edu")) // Release Notes url shouldn't include the EDU parameter
-	//{
-	//	boost::erase_tail(channel, 4);
-	//}
-	//url += LLURI::escape(channel) + "/";
-	// </FS:Ansariel>
+	//url += LLURI::escape(LLVersionInfo::getVersion()) + ".html";
 	url += LLURI::escape(LLVersionInfo::getVersion());
+	// </FS:Ansariel>
 
 	info["VIEWER_RELEASE_NOTES_URL"] = url;
 
@@ -6350,11 +6364,8 @@ void LLAppViewer::resumeMainloopTimeout( char const* state, F32 secs)
 	{
 		if(secs < 0.0f)
 		{
-			// <FS:ND> Gets called often in display loop
-			// secs = gSavedSettings.getF32("MainloopTimeoutDefault");
-			static LLCachedControl< F32 > MainloopTimeoutDefault( gSavedSettings, "MainloopTimeoutDefault" );
-			secs = MainloopTimeoutDefault;
-			// </FS:ND>
+			static LLCachedControl<F32> mainloop_timeout(gSavedSettings, "MainloopTimeoutDefault", 60);
+			secs = mainloop_timeout;
 		}
 
 		mMainloopTimeout->setTimeout(secs);
@@ -6384,11 +6395,8 @@ void LLAppViewer::pingMainloopTimeout( char const* state, F32 secs)
 	{
 		if(secs < 0.0f)
 		{
-			// <FS:ND> Gets called often in display loop
-			// secs = gSavedSettings.getF32("MainloopTimeoutDefault");
-			static LLCachedControl< F32 > MainloopTimeoutDefault( gSavedSettings, "MainloopTimeoutDefault" );
-			secs = MainloopTimeoutDefault;
-			// </FS:ND>
+			static LLCachedControl<F32> mainloop_timeout(gSavedSettings, "MainloopTimeoutDefault", 60);
+			secs = mainloop_timeout;
 		}
 
 		mMainloopTimeout->setTimeout(secs);

@@ -433,7 +433,7 @@ public:
 			}
 		}
 #ifndef OPENSIM	// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
-		else 
+		else if (parent)
 		{
 			//it's not in here, give it to the root
 			OCT_ERRS << "Octree insertion failed, starting over from root!" << LL_ENDL;
@@ -447,6 +447,13 @@ public:
 			}
 
 			node->insert(data);
+		}
+		else
+		{
+			// It's not in here, and we are root.
+			// LLOctreeRoot::insert() should have expanded
+			// root by now, something is wrong
+			OCT_ERRS << "Octree insertion failed! Root expansion failed." << LL_ENDL;
 		}
 #endif	// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
 
@@ -800,9 +807,14 @@ public:
 			{
 				LLOctreeNode<T>::insert(data);
 			}
-			else
+			else if (node->isInside(data->getPositionGroup()))
 			{
 				node->insert(data);
+			}
+			else
+			{
+				// calling node->insert(data) will return us to root
+				OCT_ERRS << "Failed to insert data at child node" << LL_ENDL;
 			}
 		}
 		else if (this->getChildCount() == 0)

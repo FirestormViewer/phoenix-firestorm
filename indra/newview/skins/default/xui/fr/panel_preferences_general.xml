@@ -2,7 +2,6 @@
 <panel name="general_panel" label="Général">
 	<text name="language_textbox">Langue :</text>
 	<combo_box name="language_combobox">
-		<combo_box.item label="Identique au système" name="System Default Language"/>
 		<combo_box.item label="English (Anglais)" name="English"/>
 		<combo_box.item label="Deutsch (Allemand)" name="Deutsch(German)"/>
 		<combo_box.item label="Español (Espagnol) - Beta" name="Spanish"/>

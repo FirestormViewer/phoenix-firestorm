@@ -271,17 +271,6 @@
          top_pad="-14"
          width="390" />
 
-        <check_box
-         control_name="FSEnableAutomaticUIScaling"
-         height="16"
-         label="Automatically detect UI scaling factor"
-         layout="topleft"
-         left="10"
-         name="FSEnableAutomaticUIScaling"
-         tool_tip="If enabled, the viewer will try to detect the correct factor based on the scaling set in the operating system. This feature is currently only available on Windows."
-         top_pad="5"
-         width="256" />
-
       <text
        type="string"
        left="10"
@@ -657,7 +646,7 @@
 		 left="10"
 		 name="show_search_menu_check"
 		 width="270"
-		 control_name="FSMenuSearch"/>
+		 control_name="MenuSearch"/>
 		<check_box
 		 top_pad="4"
 		 follows="left|top"

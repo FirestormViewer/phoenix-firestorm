@@ -36,22 +36,22 @@
 #include <boost/noncopyable.hpp>
 #include "llwin32headerslean.h"
 #include "apr_thread_proc.h"
-
 #include "apr_getopt.h"
 #include "apr_signal.h"
-#include <atomic>
+
+#include "llstring.h"
 
 #if LL_WINDOWS
-#pragma warning(disable:4265)
+#pragma warning (push)
+#pragma warning (disable:4265)
 #endif
+// warning C4265: 'std::_Pad' : class has virtual functions, but destructor is not virtual
 
 #include <mutex>
 
 #if LL_WINDOWS
-#pragma warning(default:4265)
+#pragma warning (pop)
 #endif
-
-#include "llstring.h"
 
 struct apr_dso_handle_t;
 /**
@@ -127,84 +127,8 @@ private:
 	S32 mNumActiveRef ; //number of active pointers pointing to the apr_pool.
 	S32 mNumTotalRef ;  //number of total pointers pointing to the apr_pool since last creating.  
 
-	std::mutex *mMutexp;
-	apr_pool_t         *mMutexPool;
+	std::unique_ptr<std::mutex> mMutexp;
 } ;
-
-/** 
- * @class LLScopedLock
- * @brief Small class to help lock and unlock mutexes.
- *
- * This class is used to have a stack level lock once you already have
- * an apr mutex handy. The constructor handles the lock, and the
- * destructor handles the unlock. Instances of this class are
- * <b>not</b> thread safe.
- */
-class LL_COMMON_API LLScopedLock : private boost::noncopyable
-{
-public:
-	/**
-	 * @brief Constructor which accepts a mutex, and locks it.
-	 *
-	 * @param mutex An allocated APR mutex. If you pass in NULL,
-	 * this wrapper will not lock.
-	 */
-	LLScopedLock( std::mutex* mutex );
-
-	/**
-	 * @brief Destructor which unlocks the mutex if still locked.
-	 */
-	~LLScopedLock();
-
-	/** 
-	 * @brief Check lock.
-	 */
-	bool isLocked() const { return mLocked; }
-
-	/** 
-	 * @brief This method unlocks the mutex.
-	 */
-	void unlock();
-
-protected:
-	bool mLocked;
-	std::mutex* mMutex;
-};
-
-template <typename Type, typename AtomicType = std::atomic< Type > > class LLAtomicBase
-{
-public:
-	LLAtomicBase() {};
-	LLAtomicBase( Type x ) { mData.store( x ); };
-	~LLAtomicBase() {};
-
-	operator const Type() { return mData; }
-	
-	Type	CurrentValue() const { return mData; }
-
-	Type operator =( Type x) { mData.store( x ); return mData; }
-	void operator -=(Type x) { mData -= x; }
-	void operator +=(Type x) { mData += x; }
-	Type operator ++(int) { return mData++; }
-	Type operator --(int) { return mData--; }
-
-	Type operator ++() { return ++mData; }
-	Type operator --() { return --mData; }
-	
-private:
-	AtomicType mData;
-};
-
-// ND: Typedefs for specialized versions. Using std::atomic_(u)int32_t to get the optimzed implementation.
-#ifdef LL_WINDOWS
-typedef LLAtomicBase<U32, std::atomic_uint32_t> LLAtomicU32;
-typedef LLAtomicBase<S32, std::atomic_int32_t> LLAtomicS32;
-#else
-typedef LLAtomicBase<U32, std::atomic_uint> LLAtomicU32;
-typedef LLAtomicBase<S32, std::atomic_int> LLAtomicS32;
-#endif
-
-typedef LLAtomicBase<bool, std::atomic_bool> LLAtomicBool;
 
 // File IO convenience functions.
 // Returns NULL if the file fails to open, sets *sizep to file size if not NULL

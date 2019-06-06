@@ -45,15 +45,6 @@
 			<combo_box.item label="Sonne/Mond" name="1"/>
 			<combo_box.item label="Sonne/Mond + Projektoren" name="2"/>
 		</combo_box>
-		<text name="avatar_shadows_label">
-			Avatar-Schatten:
-		</text>
-		<combo_box name="AvatarShadowDetail">
-			<combo_box.item label="Keine" name="0"/>
-			<combo_box.item label="Vereinfacht" name="1"/>
-			<combo_box.item label="Optimiert" name="2"/>
-			<combo_box.item label="Komplex" name="3"/>
-		</combo_box>
 		<text name="reflection_label">
 			Wasserreflexionen:
 		</text>
@@ -123,6 +114,7 @@
 			S3TC Aktivieren:
 		</text>
 		<check_box label="Textur-Komprimierung aktivieren (Erfordert Neustart)" name="texture compression" tool_tip="Komprimiert Texturen im Videospeicher und erlaubt dadurch eine höhrere Auflösung und/oder Laden von mehr Texturen auf Kosten der Textqualität."/>
+		<check_box label="Unterstützung für HiDPI-Displays aktivieren (nur Mac OSX; erfordert Neustart)" name="use HiDPI" tool_tip="Aktiviert OpenGL für High-Resolution Drawing."/>
 		<text name="Antialiasing:" tool_tip="Eine Änderung dieser Einstellung kann auf bestimmter Hardware einen Neustart erfordern.">
 			Antialiasing (Neustart empfohlen):
 		</text>

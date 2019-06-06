@@ -2358,6 +2358,18 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 	<string name="RegionInfoListTypeBannedAgents">
 		utenti sempre banditi
 	</string>
+	<string name="RegionInfoAllEstates">
+		tutte le proprietà immobiliari
+	</string>
+	<string name="RegionInfoManagedEstates">
+		proprietà immobiliari che gestisci
+	</string>
+	<string name="RegionInfoThisEstate">
+		questa proprietà immobiliare
+	</string>
+	<string name="AndNMore">
+		e [EXTRA_COUNT] ancora
+	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		Memoria script del lotto
 	</string>
@@ -2401,7 +2413,7 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 		Petto
 	</string>
 	<string name="ATTACH_HEAD">
-		Testa
+		Cranio
 	</string>
 	<string name="ATTACH_LSHOULDER">
 		Spalla sx
@@ -2422,7 +2434,7 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 		Piede dx
 	</string>
 	<string name="ATTACH_BACK">
-		Schiena
+		Spina dorsale
 	</string>
 	<string name="ATTACH_PELVIS">
 		Pelvi
@@ -2479,7 +2491,7 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 		Polpaccio sx
 	</string>
 	<string name="ATTACH_BELLY">
-		Addome
+		Stomaco
 	</string>
 	<string name="ATTACH_LEFT_PEC">
 		Petto sx
@@ -6364,7 +6376,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		[day,datetime,utc]/[mth,datetime,utc]/[year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
 	</string>
 	<string name="NotificationItemDateStringSLT">
-		[day,datetime,slt]/[mthnum,datetime,slt]/[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]
+		[day,datetime,slt]/[mthnum,datetime,slt]/[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt] [timezone,datetime,slt]
 	</string>
 	<string name="Pie_av_render_normally">
 		Normalmente
@@ -6394,5 +6406,26 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Caricamento...
 
 [ASSET_NAME]
+	</string>
+	<string name="couldnt_resolve_host">
+		Il DNS non ha potuto risolvere il nome dell’host([HOSTNAME]). 
+Verifica di riuscire a connetterti al sito web www.secondlife.com. 
+Se riesci ma continui a ricevere questo errore, visita la sezione 
+Assistenza e segnala il problema.
+	</string>
+	<string name="ssl_peer_certificate">
+		Il server per il login non ha potuto effettuare la verifica tramite SSL. 
+Se continui a ricevere questo errore, visita 
+la sezione Assistenza nel sito SecondLife.com 
+e segnala il problema.
+	</string>
+	<string name="ssl_connect_error">
+		Spesso l’errore è dovuto all’orologio del computer, impostato incorrettamente. 
+Vai al Pannello di Controllo e assicurati che data e ora siano 
+esatte. Controlla anche che il network e il firewall siano impostati 
+correttamente. Se continui a ricevere questo errore, visita la sezione 
+Assistenza nel sito SecondLife.com e segnala il problema. 
+
+[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 Base conoscenze]
 	</string>
 </strings>
