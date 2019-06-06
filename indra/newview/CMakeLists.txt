@@ -2382,6 +2382,9 @@ endif (WINDOWS)
 # modern version.
 
 target_link_libraries(${VIEWER_BINARY_NAME}
+    ${LEGACY_STDIO_LIBS}
+    ${PNG_PRELOAD_ARCHIVES}
+    ${ZLIB_PRELOAD_ARCHIVES}
     ${URIPARSER_PRELOAD_ARCHIVES}
     ${GOOGLE_PERFTOOLS_LIBRARIES}
     ${LLAUDIO_LIBRARIES}
@@ -2406,6 +2409,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${viewer_LIBRARIES}
     ${BOOST_PROGRAM_OPTIONS_LIBRARY}
     ${BOOST_REGEX_LIBRARY}
+    ${BOOST_FIBER_LIBRARY}
     ${BOOST_WAVE_LIBRARY} #FS specific
     ${BOOST_THREAD_LIBRARY} #FS specific
     ${BOOST_CONTEXT_LIBRARY}
@@ -2694,7 +2698,7 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
       DEPENDS generate_breakpad_symbols.py
           VERBATIM)
 
-##    add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}" ${VIEWER_BINARY_NAME} "${VIEWER_COPY_MANIFEST}")
+  add_custom_target(generate_breakpad_symbols DEPENDS "${VIEWER_SYMBOL_FILE}" "${VIEWER_BINARY_NAME}" "${VIEWER_COPY_MANIFEST}")
     add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}")
     add_dependencies(generate_symbols ${VIEWER_BINARY_NAME})
     if (WINDOWS OR LINUX)
@@ -2924,7 +2928,7 @@ if (LL_TESTS)
     ${OPENSSL_LIBRARIES}
     ${CRYPTO_LIBRARIES}
     ${LIBRT_LIBRARY}
-    ${BOOST_COROUTINE_LIBRARY}
+    ${BOOST_FIBER_LIBRARY}
     ${BOOST_CONTEXT_LIBRARY}
   )
 

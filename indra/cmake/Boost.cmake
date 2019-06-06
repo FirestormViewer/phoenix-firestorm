@@ -7,8 +7,8 @@ set(Boost_FIND_REQUIRED ON)
 if (USESYSTEMLIBS)
   include(FindBoost)
 
-# <FS:TS> boost::context isn't used, so don't try to include it
-# set(BOOST_CONTEXT_LIBRARY boost_context-mt)
+  set(BOOST_CONTEXT_LIBRARY boost_context-mt)
+  set(BOOST_FIBER_LIBRARY boost_fiber-mt)
   set(BOOST_FILESYSTEM_LIBRARY boost_filesystem-mt)
   set(BOOST_PROGRAM_OPTIONS_LIBRARY boost_program_options-mt)
   set(BOOST_REGEX_LIBRARY boost_regex-mt)
@@ -56,9 +56,9 @@ else (USESYSTEMLIBS)
       set(BOOST_CONTEXT_LIBRARY 
           optimized libboost_context-mt
           debug libboost_context-mt-gd)
-      set(BOOST_COROUTINE_LIBRARY 
-          optimized libboost_coroutine-mt
-          debug libboost_coroutine-mt-gd)
+      set(BOOST_FIBER_LIBRARY 
+          optimized libboost_fiber-mt
+          debug libboost_fiber-mt-gd)
       set(BOOST_FILESYSTEM_LIBRARY 
           optimized libboost_filesystem-mt
           debug libboost_filesystem-mt-gd)
@@ -85,9 +85,9 @@ else (USESYSTEMLIBS)
     set(BOOST_CONTEXT_LIBRARY
         optimized boost_context-mt
         debug boost_context-mt-d)
-    set(BOOST_COROUTINE_LIBRARY
-        optimized boost_coroutine-mt
-        debug boost_coroutine-mt-d)
+    set(BOOST_FIBER_LIBRARY
+        optimized boost_fiber-mt
+        debug boost_fiber-mt-d)
     set(BOOST_FILESYSTEM_LIBRARY
         optimized boost_filesystem-mt
         debug boost_filesystem-mt-d)
@@ -113,9 +113,9 @@ else (USESYSTEMLIBS)
     set(BOOST_CONTEXT_LIBRARY
         optimized boost_context-mt
         debug boost_context-mt-d)
-    set(BOOST_COROUTINE_LIBRARY
-        optimized boost_coroutine-mt
-        debug boost_coroutine-mt-d)
+    set(BOOST_FIBER_LIBRARY
+        optimized boost_fiber-mt
+        debug boost_fiber-mt-d)
     set(BOOST_FILESYSTEM_LIBRARY
         optimized boost_filesystem-mt
         debug boost_filesystem-mt-d)

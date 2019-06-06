@@ -886,6 +886,7 @@ void LLWearableHoldingPattern::onAllComplete()
 						   << mResolved << " wearable items " << LL_ENDL;
 		LLAppearanceMgr::instance().updateAgentWearables(this);
 		
+// <FS:ND/> Merge; Changed in FS but not tagged with any FS: comment explaining by whom and the purpose
 //		// Restore attachment pos overrides for the attachments that
 //		// are remaining in the outfit.
 //		for (LLAgentWearables::llvo_vec_t::iterator it = objects_to_retain.begin();

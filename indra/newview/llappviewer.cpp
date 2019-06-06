@@ -984,7 +984,6 @@ bool LLAppViewer::init()
 	initMaxHeapSize() ;
 	LLCoros::instance().setStackSize(gSavedSettings.getS32("CoroutineStackSize"));
 
-
 	// Although initLoggingAndGetLastDuration() is the right place to mess with
 	// setFatalFunction(), we can't query gSavedSettings until after
 	// initConfiguration().
@@ -1688,6 +1687,8 @@ bool LLAppViewer::doFrame()
 
 		// canonical per-frame event
 		mainloop.post(newFrame);
+		// give listeners a chance to run
+		llcoro::suspend();
 
 		if (!LLApp::isExiting())
 		{

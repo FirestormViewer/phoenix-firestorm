@@ -15,6 +15,11 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(Variables)
 include(BuildVersion)
 
+set(LEGACY_STDIO_LIBS)
+if (WINDOWS)
+      set(LEGACY_STDIO_LIBS legacy_stdio_definitions)
+endif (WINDOWS)
+
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
       "Build type.  One of: Debug Release RelWithDebInfo" FORCE)
@@ -93,6 +98,7 @@ if (WINDOWS AND EXISTS ${LIBS_CLOSED_DIR}copy_win_scripts)
 endif (WINDOWS AND EXISTS ${LIBS_CLOSED_DIR}copy_win_scripts)
 
 add_custom_target(viewer)
+
 add_subdirectory(${LIBS_OPEN_PREFIX}llcrashlogger)
 add_subdirectory(${LIBS_OPEN_PREFIX}llplugin)
 add_subdirectory(${LIBS_OPEN_PREFIX}llui)

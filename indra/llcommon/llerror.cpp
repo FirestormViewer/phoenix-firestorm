@@ -651,31 +651,6 @@ namespace LLError
 		}
 	}
 
-#ifdef LL_LINUX
-  // <FS:ND> Temp hack to get the old linux havok stub to link
-  CallSite::CallSite(LLError::ELevel level,
-		     char const* file,
-		     int line,
-		     std::type_info const& class_info,
-		     char const* function,
-		     char const*,
-		     char const*,
-		     bool)
-    : mLevel(level),
-      mFile(file),
-      mLine(line),
-      mClassInfo(class_info), 
-      mFunction(function),
-      mCached(false), 
-      mShouldLog(false), 
-      mPrintOnce(false),
-      mTags(0),
-      mTagCount(0)
-  {
-  }
-  // </FS:ND>
-#endif
-
 	CallSite::~CallSite()
 	{
 		delete []mTags;
@@ -696,10 +671,10 @@ namespace
 		// console log.  It's generally considered bad form to spam too much
 		// there.
 		
-		// If stdin is a tty, assume the user launched from the command line and
-		// therefore wants to see stderr.  Otherwise, assume we've been launched
-		// from the finder and shouldn't spam stderr.
-		return isatty(0);
+		// If stderr is a tty, assume the user launched from the command line or
+		// debugger and therefore wants to see stderr.  Otherwise, assume we've
+		// been launched from the finder and shouldn't spam stderr.
+		return isatty(STDERR_FILENO);
 #else
 		return true;
 #endif
@@ -1382,9 +1357,11 @@ namespace LLError
 		}
 
 
+		// <FS:ND> Log throttling
 		std::ostringstream prefix;
 		if( nd::logging::throttle( site.mFile, site.mLine, &prefix ) )
 			return;
+		// </FS:ND>
 
 		if (site.mPrintOnce)
 		{

@@ -60,8 +60,6 @@
 #include "rlvactions.h"
 #include "rlvhandler.h"
 
-using namespace boost;
-
 static const F32 FS_RADAR_LIST_UPDATE_INTERVAL = 1.f;
 
 /**

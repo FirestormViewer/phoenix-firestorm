@@ -33,8 +33,6 @@
 #include "llagent.h"
 #include "rlvhandler.h"
 
-using namespace boost;
-
 FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	: mID(avid),
 	mName(avid.asString()),
