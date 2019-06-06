@@ -657,6 +657,11 @@ std::string utf8str_removeCRLF(const std::string& utf8str)
 }
 
 #if LL_WINDOWS
+std::string ll_convert_wide_to_string(const wchar_t* in)
+{
+	return ll_convert_wide_to_string(in, CP_UTF8);
+}
+
 std::string ll_convert_wide_to_string(const wchar_t* in, unsigned int code_page)
 {
 	std::string out;
