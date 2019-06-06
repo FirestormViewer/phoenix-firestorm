@@ -114,9 +114,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7ffe5a6165e6808e0674754b56545034</string>
+              <string>7649dd9c2075b0cbda5b80b4edb9b90e</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-windows-201505061845-r74.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-windows-vs2017-1906061512.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -126,9 +126,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a2baf97f950cc16af9fe5cf316b7fa4d</string>
+              <string>9e2a24005a4751c3dc4655ac077e35c0</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201412081952-windows-x64-201412081952.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-windows64-vs2017-1906061512.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -176,9 +176,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>315e6d3917b1b1327033eb41f868e828</string>
+              <string>29a573c4d27d617345030cf28860ea2e</string>
               <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows-201601022248-r16.tar.bz2</uri>
+              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows-vs2017-1906061512.tar.bz2</uri>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -188,9 +188,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5b1d8e9d3f4fd4fcc6b090d2e9bfd23d</string>
+              <string>a333b335104b3d0df14b9be005ef1571</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows-x64-201601022251-r16.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows64-vs2017-1906061512.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -1424,11 +1424,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e3659aa7b670a8fbdfb1b820254abb44</string>
+              <string>e1f8da12a2b7a6c31830b4bb86d31ed6</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201703081158-windows-201703081158.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.vs2017-1906061512-windows-vs2017-1906061512.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1438,9 +1438,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7eceae7977650ebc6124a9dfee3c4d84</string>
+              <string>e906cf08bfbfbd9d4fc78557e021e7d0</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.201703081200-windows64-201703081200.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.vs2017-1906061512-windows64-vs2017-1906061512.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -2046,9 +2046,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a86b3a2fba5d62c42c26fd17ef7804d6</string>
+              <string>a33b5a416daba549898b215f3e4ae7ea</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.7-windows-191472028.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.7-windows-vs2017-1906061512.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2058,9 +2058,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a86b3a2fba5d62c42c26fd17ef7804d6</string>
+              <string>a33b5a416daba549898b215f3e4ae7ea</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.7-windows-191472028.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.7-windows-vs2017-1906061512.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
