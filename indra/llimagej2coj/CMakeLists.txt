@@ -2,6 +2,9 @@
 
 project(llimagej2coj)
 
+# <FS:ND> when using KDU, why compile the OpenJPEG library?
+if (NOT USE_KDU)
+
 include(00-Common)
 include(LLCommon)
 include(LLImage)
@@ -29,9 +32,9 @@ set_source_files_properties(${llimagej2coj_HEADER_FILES}
 list(APPEND llimagej2coj_SOURCE_FILES ${llimagej2coj_HEADER_FILES})
 
 add_library (llimagej2coj ${llimagej2coj_SOURCE_FILES})
-
 target_link_libraries(
     llimagej2coj
     ${OPENJPEG_LIBRARIES}
     )
 
+endif()
