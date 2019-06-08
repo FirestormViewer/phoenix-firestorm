@@ -1006,39 +1006,25 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>33d23a2167b58bd880f2cd3ce63501d7</string>
+              <string>46c6881c26c05d9ab0c2b3bb7c4697f8</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.13-darwin-191311419.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.00.01-darwin-191591326.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>7c0f5ff940be5b5a9c08446351d2c588</string>
-              <key>hash_algorithm</key>
-              <string>md5</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.11-linux-190370440.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d1ef7f3d30bf2126620a37630b615ecf</string>
+              <string>31bb00cc4514778a3cd083baebbf0f60</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-1.10.13-linux64-191311416.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.00.01-linux-191591325.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
