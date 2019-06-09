@@ -140,6 +140,7 @@
 #include "fsfloaterimcontainer.h"
 #include "growlmanager.h"
 #include "lfsimfeaturehandler.h"
+#include "llaudioengine.h" // <FS:Ansariel> Output device selection
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
 #include "lleventtimer.h"
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
@@ -2179,9 +2180,6 @@ void LLFloaterPreference::refreshEnabledState()
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail");
 
 	ctrl_shadow->setEnabled(enabled);
-	
-	LLComboBox* ctrl_avatar_shadow = getChild<LLComboBox>("AvatarShadowDetail");
-	ctrl_avatar_shadow->setEnabled(enabled && ctrl_shadow->getValue().asInteger() > 0);
 
 	// now turn off any features that are unavailable
 	disableUnavailableSettings();
@@ -2393,7 +2391,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
-	LLComboBox* ctrl_avatar_shadow = getChild<LLComboBox>("AvatarShadowDetail");
 	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
 
 	// if vertex shaders off, disable all shader related products
@@ -2418,9 +2415,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-		
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
@@ -2444,9 +2438,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
 
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
-		
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
 
@@ -2463,9 +2454,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-		
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
@@ -2489,9 +2477,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 	}
 
 	// disabled reflections
@@ -2513,9 +2498,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		//deferred needs AvatarVP, disable deferred
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-		
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
@@ -5717,9 +5699,9 @@ void LLFloaterPreference::populateFontSelectionCombo()
 // </FS:Kadah>
 
 // <FS:AW optional opensim support>
-#ifdef OPENSIM
 static LLPanelInjector<LLPanelPreferenceOpensim> t_pref_opensim("panel_preference_opensim");
 
+#ifdef OPENSIM
 LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference(),
 	mGridListControl(NULL)
 {
@@ -5930,6 +5912,117 @@ void LLPanelPreferenceOpensim::onClickPickDebugSearchURL()
 
 	LLNotificationsUtil::add("ConfirmPickDebugSearchURL", LLSD(), LLSD(),callback_pick_debug_search );
 }
+#else
+void no_cb()
+{ }
 
-#endif // OPENSIM
+LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference()
+{
+	mCommitCallbackRegistrar.add("Pref.ClearDebugSearchURL", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.PickDebugSearchURL", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.AddGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.ClearGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.RefreshGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.RemoveGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.SaveGrid", boost::bind(&no_cb));
+}
+#endif
 // <FS:AW optional opensim support>
+
+// <FS:Ansariel> Output device selection
+static LLPanelInjector<FSPanelPreferenceSounds> t_pref_sounds("panel_preference_sounds");
+
+FSPanelPreferenceSounds::FSPanelPreferenceSounds() :
+	LLPanelPreference(),
+	mOutputDevicePanel(nullptr),
+	mOutputDeviceComboBox(nullptr),
+	mOutputDeviceListChangedConnection()
+{ }
+
+FSPanelPreferenceSounds::~FSPanelPreferenceSounds()
+{
+	if (mOutputDeviceListChangedConnection.connected())
+	{
+		mOutputDeviceListChangedConnection.disconnect();
+	}
+}
+
+BOOL FSPanelPreferenceSounds::postBuild()
+{
+	mOutputDevicePanel = findChild<LLPanel>("output_device_settings_panel");
+	mOutputDeviceComboBox = findChild<LLComboBox>("sound_output_device");
+
+#if LL_FMODSTUDIO || LL_FMODEX
+	if (gAudiop && mOutputDevicePanel && mOutputDeviceComboBox)
+	{
+		gSavedSettings.getControl("FSOutputDeviceUUID")->getSignal()->connect(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceChanged, this, _2));
+
+		mOutputDeviceListChangedConnection = gAudiop->setOutputDeviceListChangedCallback(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceListChanged, this, _1));
+		onOutputDeviceListChanged(gAudiop->getDevices());
+
+		mOutputDeviceComboBox->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceSelectionChanged, this, _2));
+	}
+#else
+	if (mOutputDevicePanel)
+	{
+		mOutputDevicePanel->setVisible(FALSE);
+	}
+#endif
+
+	return LLPanelPreference::postBuild();
+}
+
+void FSPanelPreferenceSounds::onOutputDeviceChanged(const LLSD& new_value)
+{
+	mOutputDeviceComboBox->setSelectedByValue(new_value.asUUID(), TRUE);
+}
+
+void FSPanelPreferenceSounds::onOutputDeviceSelectionChanged(const LLSD& new_value)
+{
+	gSavedSettings.setString("FSOutputDeviceUUID", mOutputDeviceComboBox->getSelectedValue().asString());
+}
+
+void FSPanelPreferenceSounds::onOutputDeviceListChanged(LLAudioEngine::output_device_map_t output_devices)
+{
+	LLUUID selected_device(gSavedSettings.getString("FSOutputDeviceUUID"));
+	mOutputDeviceComboBox->removeall();
+
+	if (output_devices.empty())
+	{
+		LL_INFOS() << "No output devices available" << LL_ENDL;
+		mOutputDeviceComboBox->add(mOutputDevicePanel->getString("output_no_device"), LLUUID::null);
+
+		if (selected_device != LLUUID::null)
+		{
+			LL_INFOS() << "Non-default device selected - adding unavailable for " << selected_device << LL_ENDL;
+			mOutputDeviceComboBox->add(mOutputDevicePanel->getString("output_device_unavailable"), selected_device);
+		}
+	}
+	else
+	{
+		bool selected_device_found = false;
+
+		mOutputDeviceComboBox->add(mOutputDevicePanel->getString("output_default_text"), LLUUID::null);
+		selected_device_found = selected_device == LLUUID::null;
+
+		for (auto device : output_devices)
+		{
+			mOutputDeviceComboBox->add(device.second.empty() ? mOutputDevicePanel->getString("output_name_no_device") : device.second, device.first);
+
+			if (!selected_device_found && device.first == selected_device)
+			{
+				LL_INFOS() << "Found selected device \"" << device.second << "\" (" << device.first << ")" << LL_ENDL;
+				selected_device_found = true;
+			}
+		}
+
+		if (!selected_device_found)
+		{
+			LL_INFOS() << "Selected device " << selected_device << " NOT found - adding unavailable" << LL_ENDL;
+			mOutputDeviceComboBox->add(mOutputDevicePanel->getString("output_device_unavailable"), selected_device);
+		}
+	}
+
+	mOutputDeviceComboBox->setSelectedByValue(selected_device, TRUE);
+}
+// </FS:Ansariel>

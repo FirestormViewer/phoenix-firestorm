@@ -414,6 +414,61 @@
          name="money_change_threshold"
          width="75" />
 
+        <panel
+         background_visible="false"
+         border="false"
+         follows="top|left|right"
+         height="100"
+         layout="topleft"
+         left="10"
+         right="-5"
+         name="output_device_settings_panel"
+         top_pad="5">
+            <panel.string
+             name="output_default_text">
+             Default
+            </panel.string>
+            <panel.string
+             name="output_no_device">
+             No device available
+            </panel.string>
+            <panel.string
+             name="output_name_no_device">
+             Unnamed device
+            </panel.string>
+            <panel.string
+             name="output_device_unavailable">
+             Unavailable device
+            </panel.string>
+            <icon
+             height="18"
+             image_name="Parcel_Voice_Light"
+             left_delta="4"
+             name="output_speaker_icon"
+             mouse_opaque="false"
+             top="7"
+             visible="true"
+             width="18" />
+            <text
+             type="string"
+             length="1"
+             follows="left|top"
+             height="16"
+             layout="topleft"
+             left_pad="3"
+             name="output_label"
+             width="90">
+                Output device:
+            </text>
+            <combo_box
+             height="23"
+             layout="topleft"
+             left_pad="0"
+             max_chars="128"
+             name="sound_output_device"
+             top_delta="-5"
+             right="-5" />
+        </panel>
     </panel>
 
     <!-- Media -->
