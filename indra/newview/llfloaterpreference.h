@@ -200,6 +200,10 @@ public:
 	void onClickPreviewUISound(const LLSD& ui_sound_id); // <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 	void setPreprocInclude();
 	void changePreprocIncludePath(const std::vector<std::string>& filenames, std::string proposed_name);
+	// <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
+	void setExternalEditor();
+	void changeExternalEditorPath(const std::vector<std::string>& filenames);
+	// </FS:LO>
 	void onClickEnablePopup();
 	void onClickDisablePopup();	
 	void resetAllIgnored();
