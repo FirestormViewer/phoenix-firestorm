@@ -224,6 +224,10 @@
 			Include-Verzeichnis für Präprozessor:
 		</text>
 		<button label="Durchsuchen" label_selected="Durchsuchen" name="SetPreprocInclude"/>
+		<text name="externaleditor_textbox">
+			Externer Editor:
+		</text>
+		<button label="Durchsuchen" label_selected="Durchsuchen" name="SetExternalEditor"/>
 	</panel>
 
 	<!--Build 2-->
