@@ -221,6 +221,14 @@ including the Everyone and Owner Roles.
              name="role_create"
              width="120" />
             <button
+             follows="bottom|left"
+             height="23"
+             label="Copy Role"
+             layout="topleft"
+             left_pad="10"
+             name="role_copy"
+             width="120" />
+            <button
              height="23"
              follows="top|left"
              label="Delete Role"
