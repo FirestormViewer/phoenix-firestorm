@@ -54,6 +54,7 @@ definieren, darunter  &apos;Jeder &apos; und  &apos;Eigentümer &apos;.
 				<name_list.columns label="#" name="members"/>
 			</name_list>
 			<button label="Neue Rolle" name="role_create"/>
+			<button label="Rolle kopieren" name="role_copy"/>
 			<button label="Rolle löschen" name="role_delete"/>
 		</panel>
 		<panel label="Fähigkeiten" name="actions_sub_tab" tool_tip="Sie können eine Beschreibung der Fähigkeit anzeigen und welche Rollen bzw. Mitglieder über diese Fähigkeit verfügen.">
