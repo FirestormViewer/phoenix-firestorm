@@ -27,7 +27,25 @@
 		<text name="money_change_threshold_label" tool_tip="Spielt einen Soundbenachrichtung ab, wenn der angegebene Geldbetrag empfangen oder ausgegeben wird." width="160">
 			Schwellwert für L$-Änderung:
 		</text>
-    </panel>
+		<panel name="output_device_settings_panel">
+			<panel.string name="output_default_text">
+				Standard
+			</panel.string>
+			<panel.string name="output_no_device">
+				Kein Gerät vorhanden
+			</panel.string>
+			<panel.string name="output_name_no_device">
+				Unbenanntes Gerät
+			</panel.string>
+			<panel.string name="output_device_unavailable">
+				Gerät nicht verfügbar
+			</panel.string>
+			<text name="output_label">
+				Ausgabegerät:
+			</text>
+		</panel>
+
+	</panel>
 	
 	<!-- Media -->
 	<panel label="Medien" name="Media Media Panel">

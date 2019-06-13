@@ -201,6 +201,10 @@
           Ścieżka dołączania preprocesora:
         </text>
         <button label="Przeglądaj" label_selected="Przeglądaj" name="SetPreprocInclude" />
+        <text name="externaleditor_textbox">
+          Zewnętrzny edytor:
+        </text>
+        <button label="Przeglądaj" label_selected="Przeglądaj" name="SetExternalEditor" />
     </panel>
     <panel label="Buduj 2" name="BuildTab2">
         <check_box label="Podświetlanie wybranych primów" tool_tip="Gdy odznaczysz tą opcję, to żółte/niebieskie podświetlenia krawędzi nie są renderowane - zwiększa wydajność, gdy zaznaczonych jest wiele primów." name="FSBuildPrefsRenderHighlight_toggle" />

@@ -1137,7 +1137,17 @@ void LLGroupMgr::processGroupPropertiesReply(LLMessageSystem* msg, void** data)
 	
 	group_datap->mGroupPropertiesDataComplete = true;
 	group_datap->mChanged = TRUE;
-
+	// <FS:Beq> FIRE-19734/BUG-227094 stop persistent notification recovery spam
+	auto request = LLGroupMgr::getInstance()->mPropRequests.find(group_id);
+	if (request != LLGroupMgr::getInstance()->mPropRequests.end())
+	{
+		LLGroupMgr::getInstance()->mPropRequests.erase(request);
+	}
+	else
+	{
+		LL_DEBUGS() << "GroupPropertyResponse received with no pending request. Response was slow." << LL_ENDL;
+	}
+	//</FS:Beq>
 	LLGroupMgr::getInstance()->notifyObservers(GC_PROPERTIES);
 }
 
@@ -1507,6 +1517,30 @@ LLGroupMgrGroupData* LLGroupMgr::createGroupData(const LLUUID& id)
 	return group_datap;
 }
 
+// <FS:Beq> FIRE-19734/BUG-227094 stop persistent notification recovery spam
+bool LLGroupMgr::hasPendingPropertyRequest(const LLUUID & id)
+{
+	auto existing_req = LLGroupMgr::getInstance()->mPropRequests.find(id);
+	if (existing_req != LLGroupMgr::getInstance()->mPropRequests.end())
+	{
+		if (gFrameTime - existing_req->second < MIN_GROUP_PROPERTY_REQUEST_FREQ)
+		{
+			return true;
+		}
+		else
+		{
+			LLGroupMgr::getInstance()->mPropRequests.erase(existing_req);
+		}
+	}
+	return false;
+}
+
+void LLGroupMgr::addPendingPropertyRequest(const LLUUID& id)
+{
+	LLGroupMgr::getInstance()->mPropRequests[id] = gFrameTime;
+}
+//</FS:Beq>
+
 void LLGroupMgr::notifyObservers(LLGroupChange gc)
 {
 	for (group_map_t::iterator gi = mGroups.begin(); gi != mGroups.end(); ++gi)
@@ -1592,7 +1626,13 @@ void LLGroupMgr::sendGroupPropertiesRequest(const LLUUID& group_id)
 	LL_DEBUGS() << "LLGroupMgr::sendGroupPropertiesRequest" << LL_ENDL;
 	// This will happen when we get the reply
 	//LLGroupMgrGroupData* group_datap = createGroupData(group_id);
-	
+	// <FS:Beq> FIRE-19734/BUG-227094 stop persistent notification recovery spam
+	if (LLGroupMgr::getInstance()->hasPendingPropertyRequest(group_id))
+	{
+		LL_DEBUGS() << "LLGroupMgr::sendGroupPropertiesRequest suppressed repeat for " << group_id << LL_ENDL;
+		return;
+	}
+	// </FS:Beq> 
 	LLMessageSystem* msg = gMessageSystem;
 	msg->newMessage("GroupProfileRequest");
 	msg->nextBlock("AgentData");
@@ -1601,6 +1641,9 @@ void LLGroupMgr::sendGroupPropertiesRequest(const LLUUID& group_id)
 	msg->nextBlock("GroupData");
 	msg->addUUID("GroupID",group_id);
 	gAgent.sendReliableMessage();
+	// <FS:Beq> FIRE-19734/BUG-227094 stop persistent notification recovery spam
+	LLGroupMgr::getInstance()->addPendingPropertyRequest(group_id);
+	// </FS:Beq>
 }
 
 void LLGroupMgr::sendGroupMembersRequest(const LLUUID& group_id)

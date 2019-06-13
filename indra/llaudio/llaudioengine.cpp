@@ -1294,6 +1294,18 @@ void LLAudioEngine::assetCallback(LLVFS *vfs, const LLUUID &uuid, LLAssetType::E
 	gAudiop->startNextTransfer();
 }
 
+// <FS:Ansariel> Output device selection
+//virtual
+LLAudioEngine::output_device_map_t LLAudioEngine::getDevices()
+{
+	return output_device_map_t();
+}
+
+void LLAudioEngine::OnOutputDeviceListChanged(output_device_map_t output_device_map)
+{
+	mOutputDeviceListChangedCallback(output_device_map);
+}
+// </FS:Ansariel>
 
 //
 // LLAudioSource implementation
