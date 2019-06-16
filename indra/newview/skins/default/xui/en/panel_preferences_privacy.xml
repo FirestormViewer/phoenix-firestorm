@@ -505,7 +505,6 @@
      follows="all"
      label="Autoresponse 1"
      name="tab-autoresponse-1" >
-     
         <text
          type="string"
          length="1"
@@ -516,9 +515,9 @@
          mouse_opaque="false"
          name="autorespond_toggle_location_tip"
          top_pad="5"
-         width="450">
-           Note: To Activate the Autoresponse messages please set your online status via 
-Comm Menu > Online Status
+         width="450"
+         wrap="true">
+           Note: To activate the Autoresponse messages please set your online status via Comm Menu &gt; Online Status
         </text>
         <text
          type="string"
@@ -538,7 +537,7 @@ Comm Menu > Online Status
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"
-         height="55"
+         height="50"
          layout="topleft"
          left="35"
          top_pad="5"
@@ -566,7 +565,7 @@ Comm Menu > Online Status
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"
-         height="55"
+         height="50"
          layout="topleft"
          left="35"
          top_pad="5"
@@ -594,7 +593,7 @@ Comm Menu > Online Status
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"
-         height="55"
+         height="50"
          layout="topleft"
          left="35"
          top_pad="5"
@@ -620,7 +619,7 @@ Comm Menu > Online Status
         use_ellipses="false"
         commit_on_focus_lost = "true"
         follows="left|top"
-        height="55"
+        height="50"
         layout="topleft"
         left="35"
         top_pad="5"
