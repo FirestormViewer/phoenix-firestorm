@@ -13057,4 +13057,11 @@ If you do not agree to these terms of use, then no financial transactions should
     name="okignore"
     yestext="OK"/>
   </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="EnableHiDPI"
+   type="alertmodal">
+Enabling HiDPI support may have adverse effects and may impair performance.
+  </notification>
+
 </notifications>
