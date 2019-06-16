@@ -80,7 +80,7 @@ struct LLContextStatus
 LL_COMMON_API std::ostream& operator<<(std::ostream& s, const LLContextStatus& context_status);
 
 // <FS:Beq> Store the check to avoid the nasty mutex monster that lies within
-//#define dumpStack(tag) \ 
+//#define dumpStack(tag) \
 //    if (debugLoggingEnabled(tag)) \
 //    { \
 //        LLCallStack cs; \
