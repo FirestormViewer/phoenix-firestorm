@@ -80,21 +80,20 @@ struct LLContextStatus
 LL_COMMON_API std::ostream& operator<<(std::ostream& s, const LLContextStatus& context_status);
 
 // <FS:Beq> Store the check to avoid the nasty mutex monster that lies within
-// Note that this won't work quite as expected if called with a variable tag
-// No current use cases do this though, nor are they likely.
-/* #define dumpStack(tag) \ 
--    if (debugLoggingEnabled(tag)) \
--    { \
--        LLCallStack cs; \
--        LL_DEBUGS(tag) << "STACK:\n" << "====================\n" << cs << "====================" << LL_ENDL; \
--    }
-*/
+//#define dumpStack(tag) \ 
+//    if (debugLoggingEnabled(tag)) \
+//    { \
+//        LLCallStack cs; \
+//        LL_DEBUGS(tag) << "STACK:\n" << "====================\n" << cs << "====================" << LL_ENDL; \
+//    }
+#ifdef LL_RELEASE_FOR_DOWNLOAD
+#define dumpStack(tag)
+#else
 #define dumpStack(tag) \
-    { static auto _isTagEnabled = debugLoggingEnabled(tag); \
-		if (_isTagEnabled) \
-		{ \
-			LLCallStack cs; \
-			LL_DEBUGS(tag) << "STACK:\n" << "====================\n" << cs << "====================" << LL_ENDL; \
-		} \
-	}
+    if (debugLoggingEnabled(tag)) \
+    { \
+        LLCallStack cs; \
+        LL_DEBUGS(tag) << "STACK:\n" << "====================\n" << cs << "====================" << LL_ENDL; \
+    }
+#endif
 // </FS:Beq>
