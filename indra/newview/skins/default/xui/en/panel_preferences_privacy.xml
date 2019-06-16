@@ -510,12 +510,26 @@
          type="string"
          length="1"
          follows="left|top"
+         height="23"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="autorespond_toggle_location_tip"
+         top_pad="5"
+         width="450">
+           Note: To Activate the Autoresponse messages please set your online status via 
+Comm Menu > Online Status
+        </text>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
          height="13"
          layout="topleft"
          left="15"
          mouse_opaque="false"
          name="text_box3"
-         top="10"
+         top_pad="10"
          width="450">
           Automatic response when in UNAVAILABLE (ie, BUSY)  mode:
         </text>
