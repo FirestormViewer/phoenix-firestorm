@@ -5190,7 +5190,24 @@ void FSPanelPreferenceBackup::changeBackupSettingsPath(const std::vector<std::st
 
 void FSPanelPreferenceBackup::onClickBackupSettings()
 {
+	
+	LLSD args;
+	args["DIRECTORY"] = gSavedSettings.getString("SettingsBackupPath");
+	LLNotificationsUtil::add("SettingsConfirmBackup", args, LLSD(),
+		boost::bind(&FSPanelPreferenceBackup::doBackupSettings, this, _1, _2));
+}
+
+void FSPanelPreferenceBackup::doBackupSettings(const LLSD& notification, const LLSD& response)
+{
 	LL_INFOS("SettingsBackup") << "entered" << LL_ENDL;
+	
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if ( option == 1 ) // CANCEL
+	{
+		LL_INFOS("SettingsBackup") << "backup cancelled" << LL_ENDL;
+		return;
+	}
+	
 	// Get settings backup path
 	std::string dir_name = gSavedSettings.getString("SettingsBackupPath");
 
