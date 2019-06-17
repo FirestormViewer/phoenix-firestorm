@@ -56,7 +56,7 @@ Deja el cursor sobre las opciones para obtener más ayuda.
 				<check_box label="Cualquiera puede entrar" name="open_enrollement" tool_tip="Configura si se permite la entrada de nuevos miembros sin ser invitados."/>
 				<check_box label="Cuota de entrada" name="check_enrollment_fee" tool_tip="Configura si hay que pagar una cuota para entrar al grupo."/>
 				<spinner label="L$" name="spin_enrollment_fee" tool_tip="Si la opción &apos;Cuota de entrada&apos; está marcada, los nuevos miembros tienen que pagar esta cuota para unirse al grupo al grupo."/>
-				<combo_box name="group_mature_check" tool_tip="Establece si tu grupo contiene o difunde información clasificada como Moderada.">
+				<combo_box name="group_mature_check" tool_tip="La calificación de contenido designa el tipo de contenido y conducta que se permiten en un grupo.">
 					<combo_item name="select_mature">
 				- Selecciona el nivel de calificación -
 					</combo_item>

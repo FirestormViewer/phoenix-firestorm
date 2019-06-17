@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floaterland" title="Informazioni sul terreno">
+	<floater.string name="Hours">
+		[HOURS] ore.
+	</floater.string>
+	<floater.string name="Hour">
+		ora.
+	</floater.string>
 	<floater.string name="Minutes">
 		[MINUTES] min.
 	</floater.string>
@@ -11,6 +17,9 @@
 	</floater.string>
 	<floater.string name="Remaining">
 		rimanenti
+	</floater.string>
+	<floater.string name="Always">
+		Sempre
 	</floater.string>
 	<tab_container name="landtab">
 		<panel label="Generale" name="land_general_panel">
@@ -312,18 +321,18 @@ Solamente terreni più grandi possono essere abilitati nella ricerca.
 			<text name="allow_label2">
 				Creare oggetti:
 			</text>
-			<check_box label="Tutti i residenti" name="edit objects check"/>
-			<check_box label="Gruppo" name="edit group objects check"/>
+			<check_box label="Tutti i residenti" name="edit objects check" tool_tip="Se la casella è spuntata, i Residenti possono creare e rezzare oggetti sul tuo terreno."/>
+			<check_box label="Gruppo" name="edit group objects check" tool_tip="Se la casella è spuntata, i Residenti possono creare e rezzare oggetti sul tuo terreno."/>
 			<text name="allow_label3">
 				Inserire oggetti:
 			</text>
-			<check_box label="Tutti i residenti" name="all object entry check"/>
-			<check_box label="Gruppo" name="group object entry check"/>
+			<check_box label="Tutti i residenti" name="all object entry check" tool_tip="Se la casella è spuntata, i membri del lotto di gruppo possono muovere gli oggetti esistenti da altri lotti a questo."/>
+			<check_box label="Gruppo" name="group object entry check" tool_tip="Se la casella è spuntata, i membri del lotto di gruppo possono muovere gli oggetti esistenti da altri lotti a questo."/>
 			<text name="allow_label4">
 				Attivare script:
 			</text>
-			<check_box label="Tutti i residenti" name="check other scripts"/>
-			<check_box label="Gruppo" name="check group scripts"/>
+			<check_box label="Tutti i residenti" name="check other scripts" tool_tip="Se la casella è spuntata, i Residenti possono eseguire script sul tuo lotto, compresi gli allegati."/>
+			<check_box label="Gruppo" name="check group scripts" tool_tip="Se la casella è spuntata, i Residenti possono eseguire script sul tuo lotto, compresi gli allegati."/>
 			<check_box label="Sicuro (senza danno)" name="check safe" tool_tip="Se spuntato, imposta il terreno su &apos;sicuro&apos;, disabilitando i danni da combattimento. Se non spuntato, viene abilitato il combattimento con danni."/>
 			<check_box label="Nessuna spinta" name="PushRestrictCheck" tool_tip="Previeni i colpi. Selezionare questa opzione può essere utile per prevenire comportamenti dannosi sul tuo terreno."/>
 			<check_box label="Mostra nelle ricerche (L$30/sett.)" name="ShowDirectoryCheck" tool_tip="Fai vedere questo posto alla gente nei risultati di ricerca"/>
@@ -458,9 +467,12 @@ media:
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="Espelli" name="BanCheck">
-					Residenti con divieto ([COUNT]/[MAX])
+					Espulsi ([COUNT], max [MAX])
 				</text>
-				<name_list name="BannedList" tool_tip="([LISTED] in lista, [MAX] max)"/>
+				<name_list name="BannedList" tool_tip="([LISTED] in lista, [MAX] max)">
+					<columns label="Nome" name="name"/>
+					<columns label="Durata" name="duration"/>
+				</name_list>
 				<button label="Aggiungi" name="add_banned"/>
 				<button label="Rimuovi" name="remove_banned"/>
 			</panel>

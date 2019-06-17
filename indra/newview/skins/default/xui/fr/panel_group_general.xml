@@ -1,47 +1,58 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Général" name="general_tab">
 	<panel.string name="help_text">
-         L'onglet général contient les informations à propos de ce groupe, la liste des membres ainsi que les préférences et options.
- Passez votre souris au-dessus des options pour plus d'aide.
+		L&apos;onglet Général contient les informations générales et les préférences du groupe ainsi que la liste et les options des membres.
+
+Faites glisser le pointeur de la souris sur les options pour en savoir plus.
 	</panel.string>
-	<panel.string name="group_info_unchanged">Les informations générales du groupe ont changé</panel.string>
-	<panel.string name="incomplete_member_data_str">Récupération des données des membres</panel.string>
-	<panel name="group_general_panel">
-		<text name="group_key_label">UUID :</text>
-		<text_editor name="group_key" label="UUID du groupe"/>
-		<button name="copy_uri" label="Copier l'URI"/>
-		<text name="prepend_founded_by">Créé par :</text>
-		<button name="copy_name" label="Copier le nom"/>
-		<texture_picker name="insignia" tool_tip="Cliquer pour choisir une image"/>
-		<text_editor name="charter">Charte du groupe</text_editor>
-		<text name="join_cost_text">Rejoindre (00000L$)</text>
-		<button name="btn_join" label="Rejoindre"/>
-		<name_list name="visible_members" short_names="false">
-			<name_list.columns label="Membre" name="name"/>
-			<name_list.columns label="Titre" name="title"/>
-			<name_list.columns label="Statut" name="status"/>
-		</name_list>
-		<layout_stack name="group_preferences_layout">
-			<layout_panel name="user_preferences_container">
-				<text name="my_group_settngs_label">Mes préférences de groupe</text>
-				<check_box label="Afficher dans mon profil" name="list_groups_in_profile" tool_tip="Défini si vous voulez afficher ce groupe dans votre profil"/>
-				<check_box label="Recevoir les notices du groupe" name="receive_notices" tool_tip="Défini si vous voulez recevoir les notices de ce groupe. Décochez si vous recevez trop de notices."/>
-				<check_box label="Afficher le Chat du groupe" name="receive_chat" tool_tip="Défini si vous voulez participer aux Chat de ce groupe."/>
-				<text name="active_title_label">Titre actuel :</text>
-				<combo_box name="active_title" tool_tip="Défini le titre qui apparait près de votre nom d'avatar quand ce groupe est activé."/>
-			</layout_panel>
-			<layout_panel name="group_preferences_container">
-				<text name="group_settngs_label">Configuration du groupe</text>
-				<check_box name="show_in_group_list" tool_tip="Permettre de voir ce groupe dans les résultats de recherche" label="Afficher dans la recherche"/>
-				<check_box name="open_enrollement" label="Tous peuvent rejoindre" tool_tip="Défini si de nouveaux membres peuvent rejoindre ce groupe sans y avoir été invités."/>
-				<check_box name="check_enrollment_fee" tool_tip="Défini s'il y a des frais d'inscription pour rejoindre ce groupe" label="Coût pour rejoindre"/>
-				<spinner name="spin_enrollment_fee" tool_tip="Les nouveaux membres doivent payer ces frais d'inscription pour rejoindre ce groupe quand l'option est cochée." label="L$"/>
-				<combo_box name="group_mature_check" tool_tip="Défini le niveau de contenu classé">
-					<combo_item name="select_mature">- Contenu classé -</combo_item>
-					<combo_box.item label="Modéré" name="mature"/>
-					<combo_box.item label="Général" name="pg"/>
-				</combo_box>
-			</layout_panel>
-		</layout_stack>
+	<panel.string name="group_info_unchanged">
+		Le profil du groupe a changé.
+	</panel.string>
+	<panel.string name="incomplete_member_data_str">
+		Extraction des données du résident en cours
+	</panel.string>
+	<panel name="group_info_top">
+		<texture_picker label="" name="insignia" tool_tip="Cliquez pour sélectionner une image"/>
+		<text name="prepend_founded_by">
+			Fondateur :
+		</text>
+		<name_box initial_value="(récupération en cours)" name="founder_name"/>
+		<text name="join_cost_text">
+			Gratuit
+		</text>
+		<button label="REJOINDRE" name="btn_join"/>
+	</panel>
+	<text_editor name="charter">
+		Indiquez ici la charte de votre groupe
+	</text_editor>
+	<name_list name="visible_members">
+		<name_list.columns label="Membre" name="name" relwidth="0.40"/>
+		<name_list.columns label="Titre" name="title" relwidth="0.25"/>
+		<name_list.columns label="Statut" name="status"/>
+	</name_list>
+	<text name="my_group_settngs_label">
+		Moi
+	</text>
+	<text name="active_title_label">
+		Mon titre :
+	</text>
+	<combo_box name="active_title" tool_tip="Indique le titre qui apparaît en face du nom de votre avatar lorsque votre groupe est actif."/>
+	<check_box label="Recevoir les notices du groupe" name="receive_notices" tool_tip="Indique si vous souhaitez recevoir les notices envoyées au groupe.  Décochez si ce groupe vous envoie des spams."/>
+	<check_box label="Afficher dans mon profil" name="list_groups_in_profile" tool_tip="Indique si vous voulez afficher ce groupe dans votre profil"/>
+	<panel name="preferences_container">
+		<text name="group_settngs_label">
+			Groupe
+		</text>
+		<check_box label="Inscription ouverte à tous" name="open_enrollement" tool_tip="Indique si ce groupe autorise les nouveaux membres à le rejoindre sans y être invités."/>
+		<check_box label="Inscription payante" name="check_enrollment_fee" tool_tip="Indique s&apos;il faut payer des frais d&apos;inscription pour rejoindre ce groupe"/>
+		<spinner label="L$" name="spin_enrollment_fee" tool_tip="Les nouveaux membres doivent payer ces frais pour rejoindre le groupe quand l&apos;option Frais d&apos;inscription est cochée."/>
+		<combo_box name="group_mature_check" tool_tip="Il s&apos;agit du type de contenu et de comportement autorisé au sein d&apos;un groupe." width="195">
+			<combo_item name="select_mature">
+				- Catégorie de contenu -
+			</combo_item>
+			<combo_box.item label="Contenu Modéré" name="mature"/>
+			<combo_box.item label="Contenu Général" name="pg"/>
+		</combo_box>
+		<check_box initial_value="true" label="Afficher dans la recherche" name="show_in_group_list" tool_tip="Permettre aux autres résidents de voir ce groupe dans les résultats de recherche"/>
 	</panel>
 </panel>

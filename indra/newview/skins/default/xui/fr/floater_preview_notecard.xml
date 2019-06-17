@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="preview notecard" title="Note :">
-	<floater.string name="no_object">Impossible de trouver l'objet contenu dans cette note.</floater.string>
-	<floater.string name="not_allowed">Vous n'avez pas la permission d'afficher cette note.</floater.string>
-	<floater.string name="Title">Note : [NAME]</floater.string>
-	<text name="desc txt">Description :</text>
-	<text_editor name="Notecard Editor">Chargement...</text_editor>
-	<button name="Search" tool_tip="Rechercher &amp; Remplacer"/>
+<floater name="preview notecard" title="NOTE :">
+	<floater.string name="no_object">
+		Impossible de trouver l&apos;objet contenant cette note.
+	</floater.string>
+	<floater.string name="not_allowed">
+		Vous n&apos;avez pas le droit de voir cette note.
+	</floater.string>
+	<floater.string name="Title">
+		Note : [NAME]
+	</floater.string>
+	<text name="desc txt">
+		Description :
+	</text>
+	<text_editor name="Notecard Editor">
+		Chargement...
+	</text_editor>
+	<button label="Modifier..." label_selected="Modifier" name="Edit"/>
 	<button label="Enregistrer" label_selected="Enregistrer" name="Save"/>
 	<button label="Supprimer" label_selected="Supprimer" name="Delete"/>
 </floater>

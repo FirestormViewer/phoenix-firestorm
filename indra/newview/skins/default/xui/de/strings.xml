@@ -82,7 +82,7 @@ Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 VFS (Cache) Erstellungszeit: [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
-HiDPI-Display-Modus: [HIDPI]
+		HiDPI-Anzeigemodus: [HIDPI]
 	</string>
 	<string name="AboutLibs">
 RestrainedLove API: [RLV_VERSION]
@@ -1671,13 +1671,13 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
 	</string>
 	<string name="InventoryPlayAnimationTooltip">
-		Öffnet Fenster mit Abspieloptionen.
+		Fenster mit Spieloptionen öffnen.
 	</string>
 	<string name="InventoryPlayGestureTooltip">
-		Führt die ausgewählte Geste aus.
+		Ausgewählte Geste inworld ausführen.
 	</string>
 	<string name="InventoryPlaySoundTooltip">
-		Öffnet Fenster mit Abspieloptionen.
+		Fenster mit Spieloptionen öffnen.
 	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		Jeder kann Artikel im Marktplatz verkaufen.
@@ -5684,9 +5684,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Destinations_Label">
 		Ziele
 	</string>
-	<string name="Command_Facebook_Label">
-		Facebook
-	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
 	</string>
@@ -5879,9 +5876,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		Ziele von Interesse
-	</string>
-	<string name="Command_Facebook_Tooltip">
-		Auf Facebook posten
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Auf Flickr hochladen

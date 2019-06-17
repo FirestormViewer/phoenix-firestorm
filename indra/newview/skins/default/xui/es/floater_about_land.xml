@@ -9,6 +9,12 @@
 	<floater.string name="maturity_icon_adult">
 		&quot;Parcel_R_Dark&quot;
 	</floater.string>
+	<floater.string name="Hours">
+		[HOURS] hrs.
+	</floater.string>
+	<floater.string name="Hour">
+		hr.
+	</floater.string>
 	<floater.string name="Minutes">
 		[MINUTES] minutos
 	</floater.string>
@@ -20,6 +26,9 @@
 	</floater.string>
 	<floater.string name="Remaining">
 		restantes
+	</floater.string>
+	<floater.string name="Always">
+		Siempre
 	</floater.string>
 	<tab_container name="landtab">
 		<panel label="General" name="land_general_panel">
@@ -341,18 +350,18 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			<text name="allow_label2">
 				Crear objetos:
 			</text>
-			<check_box label="Cualquiera" name="edit objects check"/>
-			<check_box label="El grupo" name="edit group objects check"/>
+			<check_box label="Cualquiera" name="edit objects check" tool_tip="Si se selecciona, los residentes pueden crear y colocar objetos en tu tierra."/>
+			<check_box label="El grupo" name="edit group objects check" tool_tip="Si se selecciona, los miembros de un grupo con parcelas pueden crear y colocar objetos en tu tierra."/>
 			<text name="allow_label3">
 				Dejar objetos:
 			</text>
-			<check_box label="Cualquiera" name="all object entry check"/>
-			<check_box label="El grupo" name="group object entry check"/>
+			<check_box label="Cualquiera" name="all object entry check" tool_tip="Si se selecciona, los Residentes pueden mover objetos existentes de otras parcelas a esta."/>
+			<check_box label="El grupo" name="group object entry check" tool_tip="Si se selecciona, los miembros de un grupo con parcelas pueden mover objetos existentes de otras parcelas a esta."/>
 			<text name="allow_label4">
 				Ejecutar scripts:
 			</text>
-			<check_box label="Cualquiera" name="check other scripts"/>
-			<check_box label="El grupo" name="check group scripts"/>
+			<check_box label="Cualquiera" name="check other scripts" tool_tip="Si se selecciona, los Residentes pueden correr scripts en tu parcela, incluidos adjuntos."/>
+			<check_box label="El grupo" name="check group scripts" tool_tip="Si se selecciona, los miembros de un grupo con parcelas pueden correr scripts en tu parcela, incluidos adjuntos."/>
 			<check_box label="Seguro (sin daño)" name="check safe" tool_tip="Si se marca, convierte el terreno en &apos;seguro&apos;, desactivando el daño en combate. Si no, se activa el daño en combate."/>
 			<check_box label="Sin &apos;empujones&apos;" name="PushRestrictCheck" tool_tip="Previene scripts que empujen. Marcando esta opción prevendrá que en su terreno haya comportamientos destructivos." left_pad="42"/>
 			<check_box label="Mostrar en la búsqueda (30 L$/semana)" name="ShowDirectoryCheck" tool_tip="Permite que la parcela aparezca en resultados de búsqueda"/>
@@ -485,9 +494,12 @@ los medios:
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="Ban" name="BanCheck">
-					Residentes con el acceso prohibido ([COUNT]/[MAX])
+					Prohibido ([COUNT], max [MAX])
 				</text>
-				<name_list name="BannedList" tool_tip="([LISTED] listados de un máx. de [MAX])"/>
+				<name_list name="BannedList" tool_tip="([LISTED] listados de un máx. de [MAX])">
+					<columns label="Nombre" name="name"/>
+					<columns label="Duración" name="duration"/>
+				</name_list>
 				<button label="Añadir" name="add_banned"/>
 				<button label="Quitar" label_selected="Quitar" name="remove_banned"/>
 			</panel>
