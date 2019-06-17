@@ -658,7 +658,9 @@ void DAESaver::addPolygons(daeElement* mesh, const char* geomID, const char* mat
 		{
 			for (S32 i = 0; i < face->mNumIndices; i++)
 			{
-				U16 index = index_offset + face->mIndices[i];
+				// FIRE-24016 Allow >64k verts in exported mesh
+				// Contributed by Angus Boyd
+				U32 index = index_offset + face->mIndices[i];
 				(p->getValue()).append(index);
 				if (i % 3 == 0)
 				{

@@ -1901,6 +1901,7 @@ void LLFloaterPreference::changeExternalEditorPath(const std::vector<std::string
 	CFURLRef path_url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, path_cfstr, kCFURLPOSIXPathStyle, TRUE);			// turn it into a CFURLRef
 	CFBundleRef chosen_bundle = CFBundleCreate(kCFAllocatorDefault, path_url);												// get a handle for the bundle
 	CFRelease(path_url);	// [FS:CR] Don't leave a mess clean up our objects after we use them
+	LLSD args;
 	if (NULL != chosen_bundle)
 	{
 		CFDictionaryRef bundleInfoDict = CFBundleGetInfoDictionary(chosen_bundle);												// get the bundle's dictionary
@@ -1917,13 +1918,17 @@ void LLFloaterPreference::changeExternalEditorPath(const std::vector<std::string
 			else
 			{
 				std::string warning = "Unable to get CString from CFString for executable path";
-				popupAndPrintWarning(warning);
+				LL_WARNS() << warning << LL_ENDL;
+				args["MESSAGE"] = warning;
+				LLNotificationsUtil::add("GenericAlert", args);
 			}
 		}
 		else
 		{
 			std::string warning = "Unable to get bundle info dictionary from application bundle";
-			popupAndPrintWarning(warning);
+			LL_WARNS() << warning << LL_ENDL;
+			args["MESSAGE"] = warning;
+			LLNotificationsUtil::add("GenericAlert", args);
 		}
 	}
 	else
@@ -1931,7 +1936,9 @@ void LLFloaterPreference::changeExternalEditorPath(const std::vector<std::string
 		if (-1 != executable_path.find(".app"))	// only warn if this path actually had ".app" in it, i.e. it probably just wasn'nt an app bundle and that's okay
 		{
 			std::string warning = std::string("Unable to get bundle from path \"") + chosen_path + std::string("\"");
-			popupAndPrintWarning(warning);
+			LL_WARNS() << warning << LL_ENDL;
+			args["MESSAGE"] = warning;
+			LLNotificationsUtil::add("GenericAlert", args);
 		}
 	}
 

@@ -79,9 +79,23 @@ struct LLContextStatus
 
 LL_COMMON_API std::ostream& operator<<(std::ostream& s, const LLContextStatus& context_status);
 
+/* <FS:TS> gcc gets unhappy at what it thinks are multiline comments
+// <FS:Beq> Store the check to avoid the nasty mutex monster that lies within
+//#define dumpStack(tag) \
+//    if (debugLoggingEnabled(tag)) \
+//    { \
+//        LLCallStack cs; \
+//        LL_DEBUGS(tag) << "STACK:\n" << "====================\n" << cs << "====================" << LL_ENDL; \
+//    }
+*/
+#ifdef LL_RELEASE_FOR_DOWNLOAD
+#define dumpStack(tag)
+#else
 #define dumpStack(tag) \
     if (debugLoggingEnabled(tag)) \
     { \
         LLCallStack cs; \
         LL_DEBUGS(tag) << "STACK:\n" << "====================\n" << cs << "====================" << LL_ENDL; \
     }
+#endif
+// </FS:Beq>

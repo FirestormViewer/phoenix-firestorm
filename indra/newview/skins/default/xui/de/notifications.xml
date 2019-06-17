@@ -5270,4 +5270,7 @@ Weder Firestorm Viewer, Phoenix Firestorm Viewer Project Inc. noch dessen Team k
 Falls Sie diesen Nutzungsbestimmungen nicht zustimmen, sollten keinerlei finanzielle Transaktionen im Rahmen der Nutzung dieses Viewers durchgeführt werden.
 		<usetemplate ignoretext="Warnen, wenn eine Region die URL zum Währungsportal ändert" name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="EnableHiDPI">
+		HiDPI kann negative Effekte aufweisen und die Leistung beeinträchtigen.
+	</notification>
 </notifications>
