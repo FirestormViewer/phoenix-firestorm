@@ -12597,7 +12597,7 @@ The backup path could not be found.
    icon="alertmodal.tga"
    name="SettingsConfirmBackup"
    type="alertmodal">
-Are you sure you want to save a backup to this directory?:
+Are you sure you want to save a backup to this directory?
 [DIRECTORY]
 Any existing backups in that location will be overwritten!
     <usetemplate
