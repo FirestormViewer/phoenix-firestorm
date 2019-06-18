@@ -23790,7 +23790,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSPurgeInventoryCacheOnStartup</key>
     <map>
       <key>Comment</key>
-      <string>Clear the inventory cache of the specific agent (ID) at next startup</string>
+      <string>(Obsolete) Clear the inventory cache of the specific agent (ID) at next startup</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
