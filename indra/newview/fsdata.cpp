@@ -563,6 +563,16 @@ void FSData::processAgents(const LLSD& data)
 		}
 	}
 	
+    if (data.has("TestingGroups"))
+	{
+		const LLSD& testing_groups = data["TestingGroups"];
+		for(LLSD::map_const_iterator itr = testing_groups.beginMap(); itr != testing_groups.endMap(); ++itr)
+		{
+			mTestingGroup.insert(LLUUID(itr->first));
+			LL_DEBUGS("fsdata") << "Added " << itr->first << " to mTestingGroup" << LL_ENDL;
+		}
+	}
+    
 	// The presence of just the key is enough to determine that legacy search needs to be disabled on this grid.
 	if (data.has("DisableLegacySearch"))
 	{
@@ -821,9 +831,19 @@ LLSD FSData::allowedLogin()
 	}
 }
 
+bool FSData::isFirestormGroup(const LLUUID& id)
+{
+	return mSupportGroup.count(id) || mTestingGroup.count(id);
+}
+
 bool FSData::isSupportGroup(const LLUUID& id)
 {
-	return (mSupportGroup.count(id));
+	return mSupportGroup.count(id);
+}
+
+bool FSData::isTestingGroup(const LLUUID& id)
+{
+	return mTestingGroup.count(id);
 }
 
 bool FSData::isAgentFlag(const LLUUID& agent_id, flags_t flag)

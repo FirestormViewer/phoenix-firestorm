@@ -60,11 +60,14 @@ public:
 	};
 
 	std::set<LLUUID> mSupportGroup;
+	std::set<LLUUID> mTestingGroup;
 
 	bool isDeveloper(const LLUUID& avatar_id);
 	bool isSupport(const LLUUID& avatar_id);
 	bool isQA(const LLUUID& avatar_id);
+    bool isFirestormGroup(const LLUUID& id);
 	bool isSupportGroup(const LLUUID& id);
+    bool isTestingGroup(const LLUUID& id);
 
 	// returns -1 if agent is not found.
 	S32 getAgentFlags(const LLUUID& avatar_id);
