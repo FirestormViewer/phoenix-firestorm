@@ -502,7 +502,7 @@ LLSettingsSky::ptr_t LLSettingsVOSky::buildFromLegacyPresetFile(const std::strin
         return ptr_t();
     }
 
-    return buildFromLegacyPreset(name, legacy_data, messages);
+    return buildFromLegacyPreset(LLURI::unescape(name), legacy_data, messages);
 }
 
 
@@ -682,8 +682,8 @@ void LLSettingsVOSky::applySpecial(void *ptarget)
 
         LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
 
-        LLColor4 sunDiffuse = psky->getSunDiffuse();
-        LLColor4 moonDiffuse = psky->getMoonDiffuse();
+        LLColor4 sunDiffuse = psky->getSunlightColor();
+        LLColor4 moonDiffuse = psky->getMoonlightColor();
 
         F32 max_color = llmax(sunDiffuse.mV[0], sunDiffuse.mV[1], sunDiffuse.mV[2]);
         if (max_color > 1.f)
@@ -831,7 +831,7 @@ LLSettingsWater::ptr_t LLSettingsVOWater::buildFromLegacyPresetFile(const std::s
         return ptr_t();
     }
 
-    return buildFromLegacyPreset(name, legacy_data, messages);
+    return buildFromLegacyPreset(LLURI::unescape(name), legacy_data, messages);
 }
 
 
@@ -936,7 +936,7 @@ void LLSettingsVOWater::applySpecial(void *ptarget)
         shader->uniform1f(LLShaderMgr::WATER_FOGKS, waterFogKS);
 
         F32 eyedepth = LLViewerCamera::getInstance()->getOrigin().mV[2] - water_height;
-        bool underwater = LLPipeline::sUnderWaterRender || (eyedepth <= 0.0f);
+        bool underwater = (eyedepth <= 0.0f);
 
         F32 waterFogDensity = env.getCurrentWater()->getModifiedWaterFogDensity(underwater);
         shader->uniform1f(LLShaderMgr::WATER_FOGDENSITY, waterFogDensity);
@@ -947,10 +947,8 @@ void LLSettingsVOWater::applySpecial(void *ptarget)
         F32 blend_factor = env.getCurrentWater()->getBlendFactor();
         shader->uniform1f(LLShaderMgr::BLEND_FACTOR, blend_factor);
 
-        LLVector4 rotated_light_direction = LLEnvironment::instance().getRotatedLightNorm();
-        shader->uniform4fv(LLViewerShaderMgr::LIGHTNORM, 1, rotated_light_direction.mV);
-        shader->uniform3fv(LLShaderMgr::WL_CAMPOSLOCAL, 1, LLViewerCamera::getInstance()->getOrigin().mV);
-        shader->uniform1f(LLViewerShaderMgr::DISTANCE_MULTIPLIER, 0);
+        // update to normal lightnorm, water shader itself will use rotated lightnorm as necessary
+        shader->uniform4fv(LLShaderMgr::LIGHTNORM, 1, light_direction.mV);
     }
 }
 
@@ -1101,8 +1099,8 @@ LLSettingsDay::ptr_t LLSettingsVODay::buildFromLegacyPresetFile(const std::strin
         LL_WARNS("SETTINGS") << "Could not load legacy Windlight \"" << name << "\" from " << path << LL_ENDL;
         return ptr_t();
     }
-
-    return buildFromLegacyPreset(name, path, legacy_data, messages);
+    // Name for LLSettingsDay only, path to get related files from filesystem
+    return buildFromLegacyPreset(LLURI::unescape(name), path, legacy_data, messages);
 }
 
 

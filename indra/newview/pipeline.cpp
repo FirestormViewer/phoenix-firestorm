@@ -201,6 +201,7 @@ F32 LLPipeline::RenderShadowOffset;
 F32 LLPipeline::RenderShadowBias;
 F32 LLPipeline::RenderSpotShadowOffset;
 F32 LLPipeline::RenderSpotShadowBias;
+LLDrawable* LLPipeline::RenderSpotLight = nullptr;
 F32 LLPipeline::RenderEdgeDepthCutoff;
 F32 LLPipeline::RenderEdgeNormCutoff;
 LLVector3 LLPipeline::RenderShadowGaussian;
@@ -1247,7 +1248,7 @@ void LLPipeline::refreshCachedSettings()
 	exoPostProcess::instance().ExodusRenderPostSettingsUpdate();	// <FS:CR> Import Vignette from Exodus
 
 	RenderAutoHideSurfaceAreaLimit = gSavedSettings.getF32("RenderAutoHideSurfaceAreaLimit");
-	
+	RenderSpotLight = nullptr;
 	updateRenderDeferred();
 }
 
@@ -2238,7 +2239,8 @@ void check_references(LLSpatialGroup* group, LLDrawable* drawable)
 {
 	for (LLSpatialGroup::element_iter i = group->getDataBegin(); i != group->getDataEnd(); ++i)
 	{
-		if (drawable == (LLDrawable*)(*i)->getDrawable())
+        LLDrawable* drawablep = (LLDrawable*)(*i)->getDrawable();
+		if (drawable == drawablep)
 		{
 			LL_ERRS() << "LLDrawable deleted while actively reference by LLPipeline." << LL_ENDL;
 		}
@@ -2263,9 +2265,9 @@ void check_references(LLSpatialGroup* group, LLFace* face)
 		LLDrawable* drawable = (LLDrawable*)(*i)->getDrawable();
 		if(drawable)
 		{
-		check_references(drawable, face);
-	}			
-}
+		    check_references(drawable, face);
+	    }			
+    }
 }
 
 void LLPipeline::checkReferences(LLFace* face)
@@ -3507,7 +3509,8 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
 			group->setVisible();
 			for (LLSpatialGroup::element_iter i = group->getDataBegin(); i != group->getDataEnd(); ++i)
 			{
-				markVisible((LLDrawable*)(*i)->getDrawable(), camera);
+                LLDrawable* drawablep = (LLDrawable*)(*i)->getDrawable();
+				markVisible(drawablep, camera);
 			}
 
 			if (!sDelayVBUpdate)
@@ -3595,7 +3598,8 @@ void LLPipeline::stateSort(LLSpatialGroup* group, LLCamera& camera)
 	{
 		for (LLSpatialGroup::element_iter i = group->getDataBegin(); i != group->getDataEnd(); ++i)
 		{
-			stateSort((LLDrawable*)(*i)->getDrawable(), camera);
+            LLDrawable* drawablep = (LLDrawable*)(*i)->getDrawable();            
+			stateSort(drawablep, camera);
 		}
 
 		if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD)
@@ -3624,6 +3628,14 @@ void LLPipeline::stateSort(LLDrawable* drawablep, LLCamera& camera)
 		return;
 	}
 	
+    // SL-11353
+    // ignore our own geo when rendering spotlight shadowmaps...
+    // 
+    if (RenderSpotLight && drawablep == RenderSpotLight)
+    {
+        return;
+    }
+
 	if (LLSelectMgr::getInstance()->mHideSelectedObjects)
 	{
 //		if (drawablep->getVObj().notNull() &&
@@ -6338,22 +6350,15 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
     
     LLEnvironment& environment = LLEnvironment::instance();
     LLSettingsSky::ptr_t psky = environment.getCurrentSky();
-	
-	// Ambient
+
 	if (!LLGLSLShader::sNoFixedFunction)
 	{
-		gGL.syncMatrices();
-		LLColor4 ambient = psky->getTotalAmbient();
-		gGL.setAmbientLightColor(ambient);
+		gGL.syncMatrices();	
 	}
 
     // Ambient
-    if (!LLGLSLShader::sNoFixedFunction)
-    {
-        gGL.syncMatrices();
-        LLColor4 ambient = psky->getTotalAmbient();
-        gGL.setAmbientLightColor(ambient);
-    }
+    LLColor4 ambient = psky->getTotalAmbient();
+    gGL.setAmbientLightColor(ambient);
 
     bool sun_up  = environment.getIsSunUp();
     bool moon_up = environment.getIsMoonUp();
@@ -6366,18 +6371,8 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
         mSunDir.setVec(sun_dir);
         mMoonDir.setVec(moon_dir);
 
-        // calculates diffuse sunlight per-pixel downstream, just provide setting sunlight_color
-        if (canUseWindLightShaders())
-        {
-            mSunDiffuse.setVec(psky->getSunlightColor());
-        }
-        else
-        {
-            // not using atmo shaders, use CPU-generated attenuated sunlight diffuse...
-            mSunDiffuse.setVec(psky->getSunDiffuse());
-        }
-
-        mMoonDiffuse.setVec(psky->getMoonDiffuse());
+        mSunDiffuse.setVec(psky->getSunlightColor());
+        mMoonDiffuse.setVec(psky->getMoonlightColor());
 
         F32 max_color = llmax(mSunDiffuse.mV[0], mSunDiffuse.mV[1], mSunDiffuse.mV[2]);
         if (max_color > 1.f)
@@ -6404,15 +6399,15 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
 
         LLVector4 light_dir = sun_up ? mSunDir : mMoonDir;
 
-        mHWLightColors[0] = mSunDiffuse;
+        mHWLightColors[0] = sun_up ? mSunDiffuse : mMoonDiffuse;
 
         LLLightState* light = gGL.getLight(0);
         light->setPosition(light_dir);
 
         light->setSunPrimary(sun_up);
-        light->setDiffuse(mSunDiffuse);
+        light->setDiffuse(mHWLightColors[0]);
         light->setDiffuseB(mMoonDiffuse);
-        light->setAmbient(LLColor4::black);
+        light->setAmbient(psky->getTotalAmbient());
 		light->setSpecular(LLColor4::black);
 		light->setConstantAttenuation(1.f);
 		light->setLinearAttenuation(0.f);
@@ -6441,12 +6436,27 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
 			{
 				continue;
 			}
+
+            if (light->isAttachment())
+            {
+                if (!sRenderAttachedLights)
+                {
+                    continue;
+                }
+            }
+
+            const LLViewerObject *vobj = drawable->getVObj();
+            if(vobj && vobj->getAvatar() && vobj->getAvatar()->isInMuteList())
+            {
+                continue;
+            }
+
 			if (drawable->isState(LLDrawable::ACTIVE))
 			{
 				mLightMovingMask |= (1<<cur_light);
 			}
 			
-			LLColor4  light_color = light->getLightColor();
+			LLColor4  light_color = sRenderDeferred ? light->getLightSRGBColor() : light->getLightColor();
 			light_color.mV[3] = 0.0f;
 
 			F32 fade = iter->fade;
@@ -6467,13 +6477,27 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
 				light_color *= fade;
 			}
 
+            if (light_color.magVecSquared() < 0.001f)
+            {
+                continue;
+            }
+
 			LLVector3 light_pos(light->getRenderPosition());
 			LLVector4 light_pos_gl(light_pos, 1.0f);
 	
 			F32 light_radius = llmax(light->getLightRadius(), 0.001f);
+            F32 size = light_radius * (sRenderDeferred ? 1.5f : 1.0f);
 
-			F32 x = (3.f * (1.f + light->getLightFalloff())); // why this magic?  probably trying to match a historic behavior.
-			float linatten = x / (light_radius); // % of brightness at radius
+            if (size <= 0.001f)
+            {
+                continue;
+            }
+
+			F32 x = (3.f * (1.f + (light->getLightFalloff() * 2.0f))); // why this magic?  probably trying to match a historic behavior.
+			F32 linatten = x / (light_radius); // % of brightness at radius
+
+            // get falloff to match for forward deferred rendering lights
+            F32 falloff = light->getLightFalloff() + (sRenderDeferred ? 1.0 : 0.f);
 
 			mHWLightColors[cur_light] = light_color;
 			LLLightState* light_state = gGL.getLight(cur_light);
@@ -6483,10 +6507,9 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
 			light_state->setAmbient(LLColor4::black);
 			light_state->setConstantAttenuation(0.f);
 			if (sRenderDeferred)
-			{
-				F32 size = light_radius*1.5f;
+			{				
 				light_state->setLinearAttenuation(size);
-				light_state->setQuadraticAttenuation(light->getLightFalloff()*0.5f);
+				light_state->setQuadraticAttenuation(falloff);
 			}
 			else
 			{
@@ -6631,9 +6654,6 @@ void LLPipeline::enableLights(U32 mask)
 		}
 		mLightMask = mask;
 		stop_glerror();
-
-		LLColor4 ambient = LLEnvironment::instance().getCurrentSky()->getTotalAmbient();
-		gGL.setAmbientLightColor(ambient);
 	}
 }
 
@@ -6749,13 +6769,11 @@ void LLPipeline::enableLightsAvatarEdit(const LLColor4& color)
 	gGL.setAmbientLightColor(color);
 }
 
-void LLPipeline::enableLightsFullbright(const LLColor4& color)
+void LLPipeline::enableLightsFullbright()
 {
 	assertInitialized();
 	U32 mask = 0x1000; // Non-0 mask, set ambient
 	enableLights(mask);
-
-	gGL.setAmbientLightColor(color);
 }
 
 void LLPipeline::disableLights()
@@ -7690,7 +7708,7 @@ void LLPipeline::renderBloom(bool for_snapshot, F32 zoom_factor, int subfield)
 	LLGLDisable blend(GL_BLEND);
 	LLGLDisable cull(GL_CULL_FACE);
 	
-	enableLightsFullbright(LLColor4(1,1,1,1));
+	enableLightsFullbright();
 
 	gGL.matrixMode(LLRender::MM_PROJECTION);
 	gGL.pushMatrix();
@@ -7733,7 +7751,7 @@ void LLPipeline::renderBloom(bool for_snapshot, F32 zoom_factor, int subfield)
 		mScreen.bindTexture(0, 0, LLTexUnit::TFO_POINT);
 		
 		gGL.color4f(1,1,1,1);
-		gPipeline.enableLightsFullbright(LLColor4(1,1,1,1));
+		gPipeline.enableLightsFullbright();
 		// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
 		//gGL.begin(LLRender::TRIANGLE_STRIP);
 		//gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
@@ -8582,8 +8600,11 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
     
     shader.uniform4fv(LLShaderMgr::SUNLIGHT_COLOR, 1, mSunDiffuse.mV);
     shader.uniform4fv(LLShaderMgr::MOONLIGHT_COLOR, 1, mMoonDiffuse.mV);
+    
 
     LLEnvironment& environment = LLEnvironment::instance();
+    LLColor4 ambient(environment.getCurrentSky()->getTotalAmbient());
+    shader.uniform4fv(LLShaderMgr::AMBIENT, 1, ambient.mV);
     shader.uniform1i(LLShaderMgr::SUN_UP_FACTOR, environment.getIsSunUp() ? 1 : 0);
     shader.uniform1f(LLShaderMgr::SUN_MOON_GLOW_FACTOR, environment.getCurrentSky()->getSunMoonGlowFactor());
 
@@ -8960,7 +8981,7 @@ void LLPipeline::renderDeferredLighting(LLRenderTarget* screen_target)
                             gDeferredLightProgram.uniform3fv(LLShaderMgr::LIGHT_CENTER, 1, c);
                             gDeferredLightProgram.uniform1f(LLShaderMgr::LIGHT_SIZE, s);
                             gDeferredLightProgram.uniform3fv(LLShaderMgr::DIFFUSE_COLOR, 1, col.mV);
-                            gDeferredLightProgram.uniform1f(LLShaderMgr::LIGHT_FALLOFF, volume->getLightFalloff()*0.5f);
+                            gDeferredLightProgram.uniform1f(LLShaderMgr::LIGHT_FALLOFF, volume->getLightFalloff());
                             gGL.syncMatrices();
                             
                             mCubeVB->drawRange(LLRender::TRIANGLE_FAN, 0, 7, 8, get_box_fan_indices(camera, center));
@@ -8980,7 +9001,7 @@ void LLPipeline::renderDeferredLighting(LLRenderTarget* screen_target)
                         mat.mult_matrix_vec(tc);
                     
                         fullscreen_lights.push_back(LLVector4(tc.v[0], tc.v[1], tc.v[2], s));
-                        light_colors.push_back(LLVector4(col.mV[0], col.mV[1], col.mV[2], volume->getLightFalloff()*0.5f));
+                        light_colors.push_back(LLVector4(col.mV[0], col.mV[1], col.mV[2], volume->getLightFalloff()));
                     }
                 }
                 unbindDeferredShader(gDeferredLightProgram);
@@ -9016,7 +9037,7 @@ void LLPipeline::renderDeferredLighting(LLRenderTarget* screen_target)
                     gDeferredSpotLightProgram.uniform3fv(LLShaderMgr::LIGHT_CENTER, 1, c);
                     gDeferredSpotLightProgram.uniform1f(LLShaderMgr::LIGHT_SIZE, s);
                     gDeferredSpotLightProgram.uniform3fv(LLShaderMgr::DIFFUSE_COLOR, 1, col.mV);
-                    gDeferredSpotLightProgram.uniform1f(LLShaderMgr::LIGHT_FALLOFF, volume->getLightFalloff()*0.5f);
+                    gDeferredSpotLightProgram.uniform1f(LLShaderMgr::LIGHT_FALLOFF, volume->getLightFalloff());
                     gGL.syncMatrices();
                                         
                     mCubeVB->drawRange(LLRender::TRIANGLE_FAN, 0, 7, 8, get_box_fan_indices(camera, center));
@@ -9090,7 +9111,8 @@ void LLPipeline::renderDeferredLighting(LLRenderTarget* screen_target)
 
                     LLVector3 center = drawablep->getPositionAgent();
                     F32* c = center.mV;
-                    F32 s = volume->getLightRadius()*1.5f;
+                    F32 light_size_final = volume->getLightRadius()*1.5f;
+                    F32 light_falloff_final = volume->getLightFalloff();
 
                     sVisibleLightCount++;
 
@@ -9100,11 +9122,12 @@ void LLPipeline::renderDeferredLighting(LLRenderTarget* screen_target)
                     setupSpotLight(gDeferredMultiSpotLightProgram, drawablep);
 
                     LLColor3 col = volume->getLightSRGBColor();
+
                     
                     gDeferredMultiSpotLightProgram.uniform3fv(LLShaderMgr::LIGHT_CENTER, 1, tc.v);
-                    gDeferredMultiSpotLightProgram.uniform1f(LLShaderMgr::LIGHT_SIZE, s);
+                    gDeferredMultiSpotLightProgram.uniform1f(LLShaderMgr::LIGHT_SIZE, light_size_final);
                     gDeferredMultiSpotLightProgram.uniform3fv(LLShaderMgr::DIFFUSE_COLOR, 1, col.mV);
-                    gDeferredMultiSpotLightProgram.uniform1f(LLShaderMgr::LIGHT_FALLOFF, volume->getLightFalloff()*0.5f);
+                    gDeferredMultiSpotLightProgram.uniform1f(LLShaderMgr::LIGHT_FALLOFF, light_falloff_final);
                     mDeferredVB->drawArrays(LLRender::TRIANGLES, 0, 3);
                 }
 
@@ -9538,8 +9561,6 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
 
                     updateCull(camera, mSky);
                     stateSort(camera, mSky);
-                    gPipeline.grabReferences(mSky);
-
                     renderGeom(camera, TRUE);
 
                     gPipeline.popRenderTypeMask();
@@ -9573,9 +9594,7 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
                     LLGLDisable cull(GL_CULL_FACE);
                     updateCull(camera, mReflectedObjects, -water_clip, &plane);
                     stateSort(camera, mReflectedObjects);
-                    gPipeline.grabReferences(mReflectedObjects);                
                     renderGeom(camera);
-                    
                 }
                 gPipeline.popRenderTypeMask();
                 mWaterRef.flush();
@@ -9611,7 +9630,9 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
 
             if (LLPipeline::sUnderWaterRender)
             {
-                clearRenderTypeMask(LLPipeline::RENDER_TYPE_SKY,
+                clearRenderTypeMask(
+                                    LLPipeline::RENDER_TYPE_GROUND,
+									LLPipeline::RENDER_TYPE_SKY,
                                     LLPipeline::RENDER_TYPE_CLOUDS,
                                     LLPipeline::RENDER_TYPE_WL_SKY,
                                     END_RENDER_TYPES);      
@@ -9632,12 +9653,28 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
                 mWaterDis.bindTarget();
                 mWaterDis.getViewport(gGLViewport);
 
+                gGL.setColorMask(true, true);
+                mWaterDis.clear();
+                gGL.setColorMask(true, false);
+
+                if (detail < 4)
+                {
+                    clearRenderTypeMask(LLPipeline::RENDER_TYPE_PARTICLES, END_RENDER_TYPES);
+                    if (detail < 3)
+                    {
+                        clearRenderTypeMask(LLPipeline::RENDER_TYPE_AVATAR, END_RENDER_TYPES);
+                        if (detail < 2)
+                        {
+                            clearRenderTypeMask(LLPipeline::RENDER_TYPE_VOLUME, END_RENDER_TYPES);
+                        }
+                    }
+                }                    
+
                 F32 water_dist = water_height * LLPipeline::sDistortionWaterClipPlaneMargin;
 
                 //clip out geometry on the same side of water as the camera w/ enough margin to not include the water geo itself,
                 // but not so much as to clip out parts of avatars that should be seen under the water in the distortion map
                 LLPlane plane(-pnorm, water_dist);
-
                 LLGLUserClipPlane clip_plane(plane, current, projection);
 
                 gGL.setColorMask(true, true);
@@ -9652,8 +9689,6 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
 
                 updateCull(camera, mRefractedObjects, water_clip, &plane);
                 stateSort(camera, mRefractedObjects);
-                gPipeline.grabReferences(mRefractedObjects);
-
                 renderGeom(camera);
 
                 if (LLGLSLShader::sNoFixedFunction)
@@ -10969,7 +11004,11 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 
 			LLViewerCamera::sCurCameraID = (LLViewerCamera::eCameraID)(LLViewerCamera::CAMERA_SHADOW0 + i + 4);
 
+            RenderSpotLight = drawable;            
+
 			renderShadow(view[i+4], proj[i+4], shadow_cam, result[i], FALSE, FALSE, target_width);
+
+            RenderSpotLight = nullptr;
 
 			mShadow[i+4].flush();
  		}

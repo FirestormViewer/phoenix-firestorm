@@ -378,6 +378,17 @@ Only items with unrestricted
 "can be attached to notecards.
 	</string>
 
+	<!-- ToolTips for notecards -->
+	<string name="TooltipNotecardNotAllowedTypeDrop">
+Items of this type can't be attached
+to notecards on this region.
+	</string>
+	<string name="TooltipNotecardOwnerRestrictedDrop">
+Only items with unrestricted
+'next owner' permissions
+can be attached to notecards.
+	</string>
+
 	<!-- searching - generic -->
 	<string name="Searching">Searching...</string>
 	<string name="NoneFound">None found.</string>
@@ -433,11 +444,11 @@ Error in upload request.  Please visit
 http://www.firestormviewer.org/support for help fixing this problem.
 </string>
 
-    <!-- Settings errors -->
-    <string name="SettingValidationError">Validation failed for importing settings [NAME]</string>
-    <string name="SettingImportFileError">Could not open file [FILE]</string>
-    <string name="SettingParseFileError">Could not open file [FILE]</string>
-    <string name="SettingTranslateError">Could not translate legacy windlight [NAME]</string>
+	<!-- Settings errors -->
+	<string name="SettingValidationError">Validation failed for importing settings [NAME]</string>
+	<string name="SettingImportFileError">Could not open file [FILE]</string>
+	<string name="SettingParseFileError">Could not open file [FILE]</string>
+	<string name="SettingTranslateError">Could not translate legacy windlight [NAME]</string>
 	<!-- Asset Type human readable names:  these will replace variable [TYPE] in notification FailedToFindWearable* -->
 	<!-- Will also replace [OBJECTTYPE] in notifications: UserGiveItem, ObjectGiveItem -->
 	<string name="texture">texture</string>
@@ -464,9 +475,9 @@ http://www.firestormviewer.org/support for help fixing this problem.
 	<string name="simstate">simstate</string>
 	<string name="favorite">favorite</string>
 	<string name="symbolic link">link</string>
-    <string name="settings blob">settings</string>
-    <string name="symbolic folder link">folder link</string>
-    <string name="mesh">mesh</string>
+	<string name="symbolic folder link">folder link</string>
+	<string name="settings blob">settings</string>
+	<string name="mesh">mesh</string>
   
 	<!-- llvoavatar. Displayed in the avatar chat bubble -->
 	<string name="AvatarEditingAppearance">(Editing Appearance)</string>
@@ -599,7 +610,7 @@ http://www.firestormviewer.org/support for help fixing this problem.
 	<string name="ManageEstateSilently">Manage your estates silently</string>
 	<string name="ChangeYourDefaultAnimations">Change your default animations</string>
 	<string name="ForceSitAvatar">Force your avatar to sit</string>
-    <string name="ChangeEnvSettings">Change your environment settings</string>
+	<string name="ChangeEnvSettings">Change your environment settings</string>
 	<string name="SnapshotSavedToDisk">Snapshot saved: [FILENAME]</string>
 	
 	<string name="NotConnected">Not Connected</string>
@@ -2610,6 +2621,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Conversations_Label">Conversations</string>
   <string name="Command_Compass_Label">Compass</string>
   <string name="Command_Destinations_Label">Destinations</string>
+  <string name="Command_Environments_Label">My Environments</string>
   <string name="Command_Facebook_Label">Facebook</string>
   <string name="Command_Flickr_Label">Flickr</string>
   <string name="Command_Gestures_Label">Gestures</string>
@@ -2677,6 +2689,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Conversations_Tooltip">Converse with everyone (CTRL+T)</string>
   <string name="Command_Compass_Tooltip">Compass</string>
   <string name="Command_Destinations_Tooltip">Destinations of interest</string>
+  <string name="Command_Environments_Tooltip">My Environments</string>
   <string name="Command_Facebook_Tooltip">Post to Facebook</string>
   <string name="Command_Flickr_Tooltip">Upload to Flickr</string>
   <string name="Command_Gestures_Tooltip">Gestures for your avatar (CTRL+G)</string>
