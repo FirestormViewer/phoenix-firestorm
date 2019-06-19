@@ -917,18 +917,10 @@ BOOL FSFloaterIM::postBuild()
 	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 
 	bool isFSSupportGroup = FSData::getInstance()->isFirestormGroup(mSessionID);
-	
-	//Hide them first
-	childSetVisible("testing_panel", FALSE);
-	childSetVisible("support_panel", FALSE);
-	
-	//Then show them if they are relevant
-	if(FSData::getInstance()->isTestingGroup(mSessionID))
-		childSetVisible("testing_panel", TRUE);
-	
-    else if(FSData::getInstance()->isSupportGroup(mSessionID))
-		childSetVisible("support_panel", TRUE);
-	
+
+	childSetVisible("testing_panel", FSData::getInstance()->isTestingGroup(mSessionID));
+	childSetVisible("support_panel", FSData::getInstance()->isSupportGroup(mSessionID));
+
 	// <FS:Zi> Viewer version popup
 	if (isFSSupportGroup)
 	{
