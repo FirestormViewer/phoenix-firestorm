@@ -12595,6 +12595,19 @@ The backup path could not be found.
 
   <notification
    icon="alertmodal.tga"
+   name="SettingsConfirmBackup"
+   type="alertmodal">
+Are you sure you want to save a backup to this directory?
+[DIRECTORY]
+Any existing backups in that location will be overwritten!
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Save backup"/>
+  </notification>
+  
+  <notification
+   icon="alertmodal.tga"
    name="SettingsRestoreNeedsLogout"
    type="alertmodal">
 Settings restore requires a viewer restart. Do you want to restore your settings and quit the viewer now?
@@ -13056,6 +13069,12 @@ If you do not agree to these terms of use, then no financial transactions should
     ignoretext="When the region sets a new currency helper."
     name="okignore"
     yestext="OK"/>
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="EnableHiDPI"
+   type="alertmodal">
+Enabling HiDPI support may have adverse effects and may impair performance.
   </notification>
 
   <notification

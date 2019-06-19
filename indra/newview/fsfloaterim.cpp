@@ -386,8 +386,9 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 				utf8_text = FSCommon::applyMuPose(utf8_text);
 				
 				// <FS:Techwolf Lupindo> Support group chat prefix
-				static LLCachedControl<bool> chat_prefix(gSavedSettings, "FSSupportGroupChatPrefix2");
-				if (chat_prefix && FSData::getInstance()->isSupportGroup(mSessionID))
+				static LLCachedControl<bool> chat_prefix_support(gSavedSettings, "FSSupportGroupChatPrefix2");
+				static LLCachedControl<bool> chat_prefix_testing(gSavedSettings, "FSSupportGroupChatPrefixTesting");
+				if ((chat_prefix_support || chat_prefix_testing) && FSData::getInstance()->isFirestormGroup(mSessionID))
 				{
 					// <FS:PP> FIRE-7075: Skin indicator
 					static LLCachedControl<std::string> FSInternalSkinCurrent(gSavedSettings, "FSInternalSkinCurrent");
@@ -402,18 +403,46 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 						skin_indicator = skin_indicator.substr(0, 1); // "FS 4.4.1f os", "FS 4.4.1v", "FS 4.4.1a", "FS 4.4.1s os", "FS 4.4.1m os" etc.
 					}
 					// </FS:PP>
-
+					
+					//Address size check
 #if ADDRESS_SIZE == 32
-					std::string str_fs_tag = "FS ";
+					std::string str_address_size_tag = "32";
 #else
-					std::string str_fs_tag = "FS64 ";
+					std::string str_address_size_tag = "";
 #endif
-					std::string str_os_tag;
+					
+					//OpenSim check
+					std::string str_opensim_tag;
 #ifdef OPENSIM
-					str_os_tag = " os";
+					str_opensim_tag = " os";
 #endif
+					
+					//Operating System check
+#if LL_WINDOWS
+					std::string str_operating_system_tag = "W";
+#elif LL_LINUX
+					std::string str_operating_system_tag = "L";
+#elif LL_DARWIN
+					std::string str_operating_system_tag = "M";
+#endif
+					
+					//RLV check
+					static LLCachedControl<bool> chat_prefix_rlv(gSavedSettings, "RestrainedLove");
+					std::string str_rlv_enabled = "";
+					if(chat_prefix_rlv)
+						str_rlv_enabled = "*";
+					
+					
+					//Build it up
 					size_t insert_pos = is_irc_me_prefix(utf8_text) ? 4 : 0;
-					utf8_text.insert(insert_pos, ("(" + str_fs_tag + LLVersionInfo::getShortVersion() + skin_indicator + str_os_tag + ") "));
+					
+					//For testing/beta groups, we display the build version since it doesn't speed by and this might change often
+					if(chat_prefix_testing && FSData::getInstance()->isTestingGroup(mSessionID))
+						utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getBuildVersion() + skin_indicator + str_rlv_enabled + str_opensim_tag + ") "));
+					
+					//For release support groups, only display the short version(Major.Minor.Patch) since chat can speed by. This makes it easier on Support's eyes.
+					else if(chat_prefix_support && FSData::getInstance()->isSupportGroup(mSessionID))
+						utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getShortVersion() + skin_indicator + str_rlv_enabled + str_opensim_tag + ") "));
 				}
 				
 				// <FS:Techwolf Lupindo> Allow user to send system info.
@@ -887,8 +916,10 @@ BOOL FSFloaterIM::postBuild()
 
 	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 
-	bool isFSSupportGroup = FSData::getInstance()->isSupportGroup(mSessionID);
-	childSetVisible("support_panel", isFSSupportGroup);
+	bool isFSSupportGroup = FSData::getInstance()->isFirestormGroup(mSessionID);
+
+	childSetVisible("testing_panel", FSData::getInstance()->isTestingGroup(mSessionID));
+	childSetVisible("support_panel", FSData::getInstance()->isSupportGroup(mSessionID));
 
 	// <FS:Zi> Viewer version popup
 	if (isFSSupportGroup)
