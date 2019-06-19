@@ -13262,5 +13262,16 @@ Unable to load the track into [TRACK].
 Unable to load the track from [TRACK1] into [TRACK2].
   <tag>fail</tag>
   </notification>
+
+    <notification
+   icon="notify.tga"
+   name="NoValidEnvSettingFound"
+   persist="true"
+   type="alertmodal">
+No valid environment setting selected.
+
+Please note that "Region default" and "Day cycle based" cannot be selected!
+  <tag>fail</tag>
+  </notification>
   
 </notifications>

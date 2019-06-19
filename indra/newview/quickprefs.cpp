@@ -196,7 +196,7 @@ void FloaterQuickPrefs::initCallbacks()
 	getChild<LLUICtrl>("DCNextPreset")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickDayCycleNext, this));
 	getChild<LLUICtrl>("ResetToRegionDefault")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickResetToRegionDefault, this));
 	getChild<LLMultiSliderCtrl>("time_offset")->setSliderMouseUpCallback(boost::bind(&FloaterQuickPrefs::onDayOffset, this));
-    getChild<LLUICtrl>("sun_rotation")->setCommitCallback([this](LLUICtrl *, const LLSD &) { onSunMoved(); });
+	getChild<LLUICtrl>("sun_rotation")->setCommitCallback([this](LLUICtrl *, const LLSD &) { onSunMoved(); });
 
 	// Phototools additions
 	if (getIsPhototools())
@@ -506,7 +506,7 @@ void FloaterQuickPrefs::setSelectedEnvironment()
 			break;
 	}
 
-    updateDayOffset();
+	updateDayOffset();
 }
 
 BOOL FloaterQuickPrefs::postBuild()
@@ -559,10 +559,9 @@ BOOL FloaterQuickPrefs::postBuild()
 	mWaterPresetsCombo = getChild<LLComboBox>("WaterPresetsCombo");
 	mWLPresetsCombo = getChild<LLComboBox>("WLPresetsCombo");
 	mDayCyclePresetsCombo = getChild<LLComboBox>("DCPresetsCombo");
-    mWLSunRot = getChild<LLVirtualTrackball>("sun_rotation");
+	mWLSunRot = getChild<LLVirtualTrackball>("sun_rotation");
 	mWLDayOffset = getChild<LLMultiSliderCtrl>("time_offset");
-    mWLDayOffset->addSlider(0);
-    
+	mWLDayOffset->addSlider(0);
 
 	initCallbacks();
 	loadPresets();
@@ -743,10 +742,7 @@ void FloaterQuickPrefs::stepComboBox(LLComboBox* ctrl, bool forward)
 	S32 lastitem = ctrl->getItemCount() - 1;
 	S32 curid = ctrl->getCurrentIndex();
 	S32 startid = curid;
-    // std::string preset_name;
-	// std::string start_preset_name;
 
-	// start_preset_name = ctrl->getSelectedValue().asString();
 	do
 	{
 		curid += increment;
@@ -759,10 +755,8 @@ void FloaterQuickPrefs::stepComboBox(LLComboBox* ctrl, bool forward)
 			curid = 0;
 		}
 		ctrl->setCurrentByIndex(curid);
-		// preset_name = ctrl->getSelectedValue().asString();
 	}
 	while (!isValidPreset(ctrl->getSelectedValue()) && curid != startid);
-	// while (!isValidPreset(ctrl->getSelectedValue()) && preset_name != start_preset_name);
 }
 
 void FloaterQuickPrefs::selectSkyPreset(const LLSD& preset)
@@ -792,7 +786,15 @@ void FloaterQuickPrefs::onChangeWaterPreset()
 	{
 		stepComboBox(mWaterPresetsCombo, true);
 	}
-	selectWaterPreset(mWaterPresetsCombo->getSelectedValue());
+
+	if (isValidPreset(mWaterPresetsCombo->getSelectedValue()))
+	{
+		selectWaterPreset(mWaterPresetsCombo->getSelectedValue());
+	}
+	else
+	{
+		LLNotificationsUtil::add("NoValidEnvSettingFound");
+	}
 }
 
 void FloaterQuickPrefs::onChangeSkyPreset()
@@ -801,7 +803,15 @@ void FloaterQuickPrefs::onChangeSkyPreset()
 	{
 		stepComboBox(mWLPresetsCombo, true);
 	}
-	selectSkyPreset(mWLPresetsCombo->getSelectedValue());
+
+	if (isValidPreset(mWLPresetsCombo->getSelectedValue()))
+	{
+		selectSkyPreset(mWLPresetsCombo->getSelectedValue());
+	}
+	else
+	{
+		LLNotificationsUtil::add("NoValidEnvSettingFound");
+	}
 }
 
 void FloaterQuickPrefs::onChangeDayCyclePreset()
@@ -810,7 +820,15 @@ void FloaterQuickPrefs::onChangeDayCyclePreset()
 	{
 		stepComboBox(mDayCyclePresetsCombo, true);
 	}
-	selectDayCyclePreset(mDayCyclePresetsCombo->getSelectedValue());
+
+	if (isValidPreset(mDayCyclePresetsCombo->getSelectedValue()))
+	{
+		selectDayCyclePreset(mDayCyclePresetsCombo->getSelectedValue());
+	}
+	else
+	{
+		LLNotificationsUtil::add("NoValidEnvSettingFound");
+	}
 }
 
 void FloaterQuickPrefs::onClickWaterPrev()
@@ -851,68 +869,68 @@ void FloaterQuickPrefs::onClickDayCycleNext()
 
 void FloaterQuickPrefs::draw()
 {
-    updateSun();
-    LLTransientDockableFloater::draw();
+	updateSun();
+	LLTransientDockableFloater::draw();
 }
 
 void FloaterQuickPrefs::updateDayOffset()
 {
-    // KC: Limit day cycle offset max to day length if less than a full real day
-    LLSettingsDay::Seconds day_length = LLEnvironment::instance().getDayLength();
-    if (day_length > LLSettingsDay::MINIMUM_DAYOFFSET)
-    {
-        if (day_length < LLSettingsDay::MAXIMUM_DAYOFFSET)
-        {
-            mWLDayOffset->setMaxValue(day_length);
-        }
-        else
-        {
-            mWLDayOffset->setMaxValue(LLSettingsDay::MAXIMUM_DAYOFFSET);
-        }
-        mWLDayOffset->setCurSliderValue(LLEnvironment::instance().getDayOffsetOverride());
-    }
-    else
-    {
-        mWLDayOffset->setCurSliderValue(0);
-    }
+	// KC: Limit day cycle offset max to day length if less than a full real day
+	LLSettingsDay::Seconds day_length = LLEnvironment::instance().getDayLength();
+	if (day_length > LLSettingsDay::MINIMUM_DAYOFFSET)
+	{
+		if (day_length < LLSettingsDay::MAXIMUM_DAYOFFSET)
+		{
+			mWLDayOffset->setMaxValue(day_length);
+		}
+		else
+		{
+			mWLDayOffset->setMaxValue(LLSettingsDay::MAXIMUM_DAYOFFSET);
+		}
+		mWLDayOffset->setCurSliderValue(LLEnvironment::instance().getDayOffsetOverride());
+	}
+	else
+	{
+		mWLDayOffset->setCurSliderValue(0);
+	}
 }
 
 const F32 SUN_ROTATION_PRECISION = 0.1f;
 
 void FloaterQuickPrefs::updateSun()
 {
-    LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
-    mWLSunRot->setRotation(psky->getSunRotation());
+	LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+	mWLSunRot->setRotation(psky->getSunRotation());
 }
 
 void FloaterQuickPrefs::onDayOffset()
 {
-    //KC: Forces the environment time by an additional offset
-    if (LLEnvironment::instance().getDayOffset() > LLSettingsDay::INVALID_DAYOFFSET)
-    {
-        LLSettingsDay::Seconds day_offset(mWLDayOffset->getCurSliderValue());
-        LLEnvironment::instance().setDayOffsetOverride(day_offset);
-        LLEnvironment::instance().updateEnvironment();
-    }
+	//KC: Forces the environment time by an additional offset
+	if (LLEnvironment::instance().getDayOffset() > LLSettingsDay::INVALID_DAYOFFSET)
+	{
+		LLSettingsDay::Seconds day_offset(mWLDayOffset->getCurSliderValue());
+		LLEnvironment::instance().setDayOffsetOverride(day_offset);
+		LLEnvironment::instance().updateEnvironment();
+	}
 }
 
 void FloaterQuickPrefs::onSunMoved()
 {
-    LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
-    psky->setSunRotation(mWLSunRot->getRotation());
-    psky->updateSettings();
+	LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+	psky->setSunRotation(mWLSunRot->getRotation());
+	psky->updateSettings();
 }
 
 void FloaterQuickPrefs::onClickResetToRegionDefault()
 {
-    mWLPresetsCombo->setValue(LLSD(PRESET_NAME_REGION_DEFAULT));
+	mWLPresetsCombo->setValue(LLSD(PRESET_NAME_REGION_DEFAULT));
 	mWaterPresetsCombo->setValue(LLSD(PRESET_NAME_REGION_DEFAULT));
 
-    LLEnvironment::instance().setDayOffsetOverride(LLSettingsDay::MINIMUM_DAYOFFSET);
-    mWLDayOffset->setCurSliderValue(0);
+	LLEnvironment::instance().setDayOffsetOverride(LLSettingsDay::MINIMUM_DAYOFFSET);
+	mWLDayOffset->setCurSliderValue(0);
 	LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_LOCAL);
-    LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
-    LLEnvironment::instance().updateEnvironment();
+	LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+	LLEnvironment::instance().updateEnvironment();
 }
 
 void FloaterQuickPrefs::setSelectedSky(const std::string& preset_name)
@@ -936,19 +954,15 @@ void FloaterQuickPrefs::setSelectedDayCycle(const std::string& preset_name)
 // Phototools additions
 void FloaterQuickPrefs::refreshSettings()
 {
-	BOOL reflections = gSavedSettings.getBOOL("VertexShaderEnable") 
-		&& gGLManager.mHasCubeMap
-		&& LLCubeMap::sUseCubeMaps;
+	BOOL reflections = gSavedSettings.getBOOL("VertexShaderEnable") && gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps;
 	mCtrlReflectionDetail->setEnabled(reflections);
 
 	bool fCtrlShaderEnable = LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable");
-	mCtrlShaderEnable->setEnabled(
-		fCtrlShaderEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("VertexShaderEnable"))) );
+	mCtrlShaderEnable->setEnabled(fCtrlShaderEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("VertexShaderEnable"))) );
 	BOOL shaders = mCtrlShaderEnable->get();
 
 	bool fCtrlWindLightEnable = fCtrlShaderEnable && shaders;
-	mCtrlWindLight->setEnabled(
-		fCtrlWindLightEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders"))) );
+	mCtrlWindLight->setEnabled(fCtrlWindLightEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders"))) );
 
 	LLTextBox* sky_label = getChild<LLTextBox>("T_Sky_Detail");
 	LLSlider* sky_slider = getChild<LLSlider>("SB_Sky_Detail");
@@ -970,7 +984,7 @@ void FloaterQuickPrefs::refreshSettings()
 	mCtrlDeferred->setEnabled(enabled);
 
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO") && (mCtrlDeferred->get() ? TRUE : FALSE);
-		
+
 	mCtrlUseSSAO->setEnabled(enabled);
 	mCtrlUseDoF->setEnabled(enabled);
 
@@ -985,7 +999,7 @@ void FloaterQuickPrefs::refreshSettings()
 	{
 		mCtrlShaderEnable->setEnabled(FALSE);
 		mCtrlShaderEnable->setValue(FALSE);
-		
+
 		mCtrlWindLight->setEnabled(FALSE);
 		mCtrlWindLight->setValue(FALSE);
 
@@ -993,7 +1007,7 @@ void FloaterQuickPrefs::refreshSettings()
 		sky_slider->setEnabled(FALSE);
 		sky_spinner->setEnabled(FALSE);
 		sky_default_button->setEnabled(FALSE);
-		
+
 		mCtrlReflectionDetail->setEnabled(FALSE);
 		mCtrlReflectionDetail->setValue(0);
 
@@ -1012,7 +1026,7 @@ void FloaterQuickPrefs::refreshSettings()
 		mCtrlDeferred->setEnabled(FALSE);
 		mCtrlDeferred->setValue(FALSE);
 	}
-	
+
 	// disabled windlight
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
 	{
@@ -1060,14 +1074,14 @@ void FloaterQuickPrefs::refreshSettings()
 		mCtrlDeferred->setEnabled(FALSE);
 		mCtrlDeferred->setValue(FALSE);
 	}
-	
+
 	// disabled deferred SSAO
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO"))
 	{
 		mCtrlUseSSAO->setEnabled(FALSE);
 		mCtrlUseSSAO->setValue(FALSE);
 	}
-	
+
 	// disabled deferred shadows
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail"))
 	{
@@ -1105,7 +1119,7 @@ void FloaterQuickPrefs::refreshSettings()
 		mCtrlDeferred->setEnabled(FALSE);
 		mCtrlDeferred->setValue(FALSE);
 	}
-	
+
 	// <FS:CR> FIRE-9630 - Vignette UI controls
 	if (getIsPhototools())
 	{
