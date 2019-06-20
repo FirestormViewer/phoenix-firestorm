@@ -10451,6 +10451,14 @@ Reason: [SANITY_COMMENT]
 
 Current setting: [CURRENT_VALUE]
    <form name="form">
+      <button
+       index="0"
+       name="OK_okcancelignore"
+       text="Fix it"/>
+      <button
+       index="1"
+       name="Cancel_okcancelignore"
+       text="Keep it"/>
       <ignore name="ignore"
        text="A settings control has failed the sanity check."/>
     </form>

@@ -71,5 +71,18 @@ void SanityCheck::onSanity(LLControlVariable* controlp)
 	args["SANITY_MESSAGE"] = LLTrans::getString(checkType, map);
 	args["SANITY_COMMENT"] = controlp->getSanityComment();
 	args["CURRENT_VALUE"] = controlp->getValue().asString();
-	LLNotificationsUtil::add("SanityCheck", args);
+	LLNotificationsUtil::add("SanityCheck", args, LLSD(), boost::bind(SanityCheck::onFixIt, _1, _2, controlp));
+}
+
+void SanityCheck::onFixIt(const LLSD& notification, const LLSD& response, LLControlVariable* controlp)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option == 0) // Fix it
+	{
+		if (controlp)
+		{
+			controlp->resetToDefault(true);
+			return;
+		}
+	}
 }
