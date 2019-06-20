@@ -139,6 +139,10 @@ Marktplatzinitialisierung aufgrund eines System- oder Netzwerkfehlers fehlgeschl
         „[ERROR_CODE]“
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="MyOutfitsPasteFailed">
+		Ein oder mehrere Objekte können nicht innerhalb von „Outfits“ verwendet werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="MerchantPasteFailed">
 		Kopieren oder Verschieben von Marktplatz-Auflistungen fehlgeschlagen mit Fehler:
         

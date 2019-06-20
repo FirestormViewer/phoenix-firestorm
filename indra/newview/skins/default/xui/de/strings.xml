@@ -648,6 +648,11 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TooltipOutboxMixedStock">
 		Alle Objekte in einem Bestandsordner müssen vom gleichen Typ sein und die gleiche Berechtigung haben
 	</string>
+	<string name="TooltipOutfitNotInInventory">
+		Sie können nur Objekte oder Outfits aus Ihrem persönlichen Inventar zu „Outfits“ hinzufügen.
+	<string name="TooltipCantCreateOutfit">
+		Ein oder mehrere Objekte können nicht innerhalb von „Outfits“ verwendet werden.
+	</string>
 	<string name="TooltipDragOntoOwnChild">
 		Sie können einen Ordner nicht in einen seiner untergeordneten Ordner verschieben
 	</string>
