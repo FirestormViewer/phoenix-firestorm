@@ -10453,11 +10453,11 @@ Current setting: [CURRENT_VALUE]
    <form name="form">
       <button
        index="0"
-       name="OK_okcancelignore"
+       name="OK"
        text="Fix it"/>
       <button
        index="1"
-       name="Cancel_okcancelignore"
+       name="Cancel"
        text="Keep it"/>
       <ignore name="ignore"
        text="A settings control has failed the sanity check."/>
