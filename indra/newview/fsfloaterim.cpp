@@ -919,7 +919,7 @@ BOOL FSFloaterIM::postBuild()
 	bool isFSSupportGroup = FSData::getInstance()->isFirestormGroup(mSessionID);
 
 	childSetVisible("testing_panel", FSData::getInstance()->isTestingGroup(mSessionID));
-	childSetVisible("support_panel", FSData::getInstance()->isSupportGroup(mSessionID));
+	childSetVisible("support_panel", isFSSupportGroup);
 
 	// <FS:Zi> Viewer version popup
 	if (isFSSupportGroup)
