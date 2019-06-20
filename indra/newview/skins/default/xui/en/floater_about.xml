@@ -8,14 +8,14 @@
  help_topic="floater_about"
  save_rect="true"
  title="About [APP_NAME]"
- width="500">
+ width="515">
   
   <tab_container
     follows="all" 
     top="20"
     left="7"
     height="572" 
-    width="486" 
+    width="501" 
     name="about_tab"
     tab_position="top">
     <panel
@@ -46,7 +46,7 @@ http://www.firestormviewer.org
         max_length="65536"
         name="support_editor"
         top_pad="5"
-        width="474"
+        width="489"
         word_wrap="true" />
       <button
         follows="left|top" 
@@ -69,7 +69,7 @@ http://www.firestormviewer.org
         left="4"
         name="linden_intro"
         top="16"
-        width="474"
+        width="489"
         wrap="true">
 Firestorm would not be possible without the decision from Linden Lab to make their Second Life viewer source code available.
 
