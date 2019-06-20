@@ -85,6 +85,22 @@ const std::string &LLVersionInfo::getVersion()
 	return version;
 }
 
+//<FS:CZ>
+//static
+const std::string &LLVersionInfo::getBuildVersion()
+{
+	static std::string build_version("");
+	if (build_version.empty())
+	{
+		std::ostringstream stream;
+		stream << LLVersionInfo::getBuild();
+		// cache the version string
+		build_version = stream.str();
+	}
+	return build_version;
+}
+//</FS:CZ>
+
 //static
 const std::string &LLVersionInfo::getShortVersion()
 {

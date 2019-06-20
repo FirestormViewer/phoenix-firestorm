@@ -311,7 +311,12 @@ bool callback_clear_inventory_cache(const LLSD& notification, const LLSD& respon
 	if ( option == 0 ) // YES
 	{
 		// flag client texture cache for clearing next time the client runs
-		gSavedSettings.setString("FSPurgeInventoryCacheOnStartup", gAgentID.asString());
+
+		// use a marker file instead of a settings variable to prevent logout crashes and
+		// dual log ins from messing with the flag. -Zi
+		std::string delete_cache_marker = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, gAgentID.asString() + "_DELETE_INV_GZ");
+		FILE* fd = LLFile::fopen(delete_cache_marker, "w");
+		LLFile::close(fd);
 		LLNotificationsUtil::add("CacheWillClear");
 	}
 
@@ -5190,7 +5195,24 @@ void FSPanelPreferenceBackup::changeBackupSettingsPath(const std::vector<std::st
 
 void FSPanelPreferenceBackup::onClickBackupSettings()
 {
+	
+	LLSD args;
+	args["DIRECTORY"] = gSavedSettings.getString("SettingsBackupPath");
+	LLNotificationsUtil::add("SettingsConfirmBackup", args, LLSD(),
+		boost::bind(&FSPanelPreferenceBackup::doBackupSettings, this, _1, _2));
+}
+
+void FSPanelPreferenceBackup::doBackupSettings(const LLSD& notification, const LLSD& response)
+{
 	LL_INFOS("SettingsBackup") << "entered" << LL_ENDL;
+	
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if ( option == 1 ) // CANCEL
+	{
+		LL_INFOS("SettingsBackup") << "backup cancelled" << LL_ENDL;
+		return;
+	}
+	
 	// Get settings backup path
 	std::string dir_name = gSavedSettings.getString("SettingsBackupPath");
 
