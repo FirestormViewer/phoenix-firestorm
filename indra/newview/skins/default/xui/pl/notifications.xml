@@ -3911,6 +3911,8 @@ Powód: [SANITY_COMMENT]
 
 Obecne ustawienie: [CURRENT_VALUE]
 		<form name="form">
+			<button name="OK" text="Napraw"/>
+			<button name="Cancel" text="Zostaw"/>
 			<ignore name="ignore" text="Jakieś ustawienie nie przeszło kontroli spójności."/>
 		</form>
 	</notification>
