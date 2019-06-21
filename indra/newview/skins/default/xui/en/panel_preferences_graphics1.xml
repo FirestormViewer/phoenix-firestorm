@@ -1130,21 +1130,22 @@
          left_pad="5"
          top_pad="-23"
          name="TextureDetail"
-         width="150">
+         width="150"
+         tool_tip="Quality to load textures to, affects the setting TextureDiscardLevel"> <!-- To translators, do not try to translate the word TextureDiscardLevel -->
             <combo_box.item
-             label="Normal quality"
+             label="Normal (0) quality"
              name="0"
              value="0"/>
             <combo_box.item
-             label="Mid quality"
+             label="Mid (3) quality"
              name="3"
              value="3"/>
             <combo_box.item
-             label="Low quality"
+             label="Low (4) quality"
              name="4"
              value="4"/>
             <combo_box.item
-             label="No textures"
+             label="No (5) textures"
              name="5"
              value="5"/>
         </combo_box>

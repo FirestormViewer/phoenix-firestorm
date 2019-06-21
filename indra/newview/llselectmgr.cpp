@@ -3999,6 +3999,14 @@ BOOL LLSelectMgr::selectGetAggregateTexturePermissions(LLAggregatePermissions& r
 	return TRUE;
 }
 
+BOOL LLSelectMgr::isSelfAvatarSelected()
+{
+	if (mAllowSelectAvatar)
+	{
+		return (getSelection()->getObjectCount() == 1) && (getSelection()->getFirstRootObject() == gAgentAvatarp);
+	}
+	return FALSE;
+}
 
 //--------------------------------------------------------------------
 // Duplicate objects

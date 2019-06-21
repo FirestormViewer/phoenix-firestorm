@@ -41,6 +41,8 @@
 
 #include "lllistener.h"
 
+#include <boost/signals2.hpp> // <FS:Ansariel> Output device selection
+
 const F32 LL_WIND_UPDATE_INTERVAL = 0.1f;
 const F32 LL_WIND_UNDERWATER_CENTER_FREQ = 20.f;
 
@@ -193,6 +195,20 @@ public:
 	void startNextTransfer();
 	static void assetCallback(LLVFS *vfs, const LLUUID &uuid, LLAssetType::EType type, void *user_data, S32 result_code, LLExtStat ext_status);
 
+	// <FS:Ansariel> Output device selection
+	typedef std::map<LLUUID, std::string> output_device_map_t;
+	virtual output_device_map_t getDevices();
+	virtual void setDevice(const LLUUID& device_uuid) { };
+
+	typedef boost::signals2::signal<void(output_device_map_t output_device_map)> output_device_list_changed_callback_t;
+	boost::signals2::connection setOutputDeviceListChangedCallback(const output_device_list_changed_callback_t::slot_type& cb)
+	{
+		return mOutputDeviceListChangedCallback.connect(cb);
+	}
+
+	void OnOutputDeviceListChanged(output_device_map_t output_device_map);
+	// </FS:Ansariel>
+
 	friend class LLPipeline; // For debugging
 public:
 	F32 mMaxWindGain; // Hack.  Public to set before fade in?
@@ -257,6 +273,9 @@ protected:
 	F32 mNextWindUpdate;
 
 	LLFrameTimer mWindUpdateTimer;
+
+	// <FS:Ansariel> Output device selection
+	output_device_list_changed_callback_t mOutputDeviceListChangedCallback;
 
 private:
 	void setDefaults();

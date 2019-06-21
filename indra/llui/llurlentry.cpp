@@ -1574,7 +1574,7 @@ std::string LLUrlEntryJira::getUrl(const std::string &string) const
 		string.find("SLS") != std::string::npos ||
 		string.find("SUP") != std::string::npos )
 	{
-		return llformat("https://jira.phoenixviewer.com/browse/%s", string.c_str());
+		return llformat("https://jira.firestormviewer.org/browse/%s", string.c_str());
 	}
 	else
 	{
