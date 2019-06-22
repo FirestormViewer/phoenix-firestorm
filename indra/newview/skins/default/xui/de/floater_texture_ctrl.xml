@@ -35,7 +35,8 @@
 		<column name="unit_name" label="Name"/>
 		<column name="unit_id_HIDDEN" label="ID"/>
 	</scroll_list>
-		<column label="ID" name="unit_id_HIDDEN"/>
+	<line_editor name="TextureKey" tool_tip="Textur-UUID"/>
+	<button name="TextureKeyApply" label="UUID anwenden" tool_tip="Textur mit dieser UUID anwenden"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="Cancel"/>
 	<button label="OK" label_selected="OK" name="Select" left="135"/>
 </floater>
