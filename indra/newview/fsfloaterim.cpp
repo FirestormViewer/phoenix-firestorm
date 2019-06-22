@@ -427,9 +427,8 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 #endif
 					
 					//RLV check
-					static LLCachedControl<bool> chat_prefix_rlv(gSavedSettings, "RestrainedLove");
 					std::string str_rlv_enabled = "";
-					if(chat_prefix_rlv)
+					if(RlvHandler::isEnabled())
 						str_rlv_enabled = "*";
 					
 					
@@ -917,12 +916,15 @@ BOOL FSFloaterIM::postBuild()
 	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 
 	bool isFSSupportGroup = FSData::getInstance()->isFirestormGroup(mSessionID);
-
-	childSetVisible("testing_panel", FSData::getInstance()->isTestingGroup(mSessionID));
-	childSetVisible("support_panel", isFSSupportGroup);
+	bool isFSTestingGroup = FSData::getInstance()->isTestingGroup(mSessionID);
+	
+	//We can show the testing group button simply by checking testing group
+	childSetVisible("testing_panel", isFSTestingGroup);
+	//But we cannot with the support group button, because testing groups are also support groups
+	childSetVisible("support_panel", isFSSupportGroup && !isFSTestingGroup);
 
 	// <FS:Zi> Viewer version popup
-	if (isFSSupportGroup)
+	if (isFSSupportGroup || isFSTestingGroup)
 	{
 		// check if the dialog was set to ignore
 		LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate("FirstJoinSupportGroup");
@@ -2182,6 +2184,7 @@ BOOL FSFloaterIM::enableViewerVersionCallback(const LLSD& notification,const LLS
 	}
 
 	gSavedSettings.setBOOL("FSSupportGroupChatPrefix2",result);
+	gSavedSettings.setBOOL("FSSupportGroupChatPrefixTesting",result);
 	return result;
 }
 // </FS:Zi>
