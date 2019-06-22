@@ -248,7 +248,6 @@
         name="TextureKey"
         layout="topleft"
         label="00000000-0000-0000-0000-000000000000"
-        control_name="TextureKey"
         tool_tip="Texture Key"
         width="290"/>
     <button
@@ -259,7 +258,6 @@
         layout="topleft"
         left_pad="5"
         width="100"
-        sound_flags="0"
         tool_tip="Apply this UUID"/>
     <button
      follows="bottom"
