@@ -4854,6 +4854,14 @@ Grund: [SANITY_COMMENT]
 
 Aktueller Wert: [CURRENT_VALUE]
    <form name="form">
+      <button
+       index="0"
+       name="OK"
+       text="Beheben"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Beibehalten"/>
       <ignore name="ignore"
        text="Eine Einstellung hat die Prüfung auf einen sinnvollen Wert nicht bestanden."/>
     </form>

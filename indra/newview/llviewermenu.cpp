@@ -3119,6 +3119,67 @@ void destroy_texture(const LLUUID& id)		// will be used by the texture refresh f
 	LLAppViewer::getTextureCache()->removeFromCache(id);
 }
 
+void handle_object_tex_refresh(LLViewerObject* object, LLSelectNode* node)
+{
+	U8 te_count = object->getNumTEs();
+	// map from texture ID to list of faces using it
+	typedef std::map< LLUUID, std::vector<U8> > map_t;
+	map_t faces_per_texture;
+	for (U8 i = 0; i < te_count; ++i)
+	{
+		// "node" will be NULL when invoked from inventory menu,
+		// otherwise it will hold the root node of the selection and we
+		// need to make sure only to refresh the selected faces
+		if (node && !node->isTESelected(i)) continue;
+
+		LLViewerTexture* img = object->getTEImage(i);
+		faces_per_texture[img->getID()].push_back(i);
+
+		if (object->getTE(i)->getMaterialParams().notNull())
+		{
+			LLViewerTexture* norm_img = object->getTENormalMap(i);
+			faces_per_texture[norm_img->getID()].push_back(i);
+
+			LLViewerTexture* spec_img = object->getTESpecularMap(i);
+			faces_per_texture[spec_img->getID()].push_back(i);
+		}
+	}
+
+	map_t::iterator it;
+	for (it = faces_per_texture.begin(); it != faces_per_texture.end(); ++it)
+	{
+		destroy_texture(it->first);
+	}
+
+	// Refresh sculpt texture
+	if (object->isSculpted())
+	{
+		LLSculptParams *sculpt_params = (LLSculptParams *)object->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
+		if (sculpt_params)
+		{
+			LLUUID sculpt_uuid = sculpt_params->getSculptTexture();
+
+			LLViewerFetchedTexture* tx = LLViewerTextureManager::getFetchedTexture(sculpt_uuid);
+			if (tx)
+			{
+				S32 num_volumes = tx->getNumVolumes(LLRender::SCULPT_TEX);
+				const LLViewerTexture::ll_volume_list_t* pVolumeList = tx->getVolumeList(LLRender::SCULPT_TEX);
+
+				destroy_texture(sculpt_uuid);
+
+				for (S32 idxVolume = 0; idxVolume < num_volumes; ++idxVolume)
+				{
+					LLVOVolume* pVolume = pVolumeList->at(idxVolume);
+					if (pVolume)
+					{
+						pVolume->notifyMeshLoaded();
+					}
+				}
+			}
+		}
+	}
+}
+
 class LLObjectTexRefresh : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -3128,61 +3189,7 @@ class LLObjectTexRefresh : public view_listener_t
 			iter != LLSelectMgr::getInstance()->getSelection()->valid_end(); iter++)
 		{
 			LLSelectNode* node = *iter;
-
-			U8 te_count = node->getObject()->getNumTEs();
-			// map from texture ID to list of faces using it
-			typedef std::map< LLUUID, std::vector<U8> > map_t;
-			map_t faces_per_texture;
-			for (U8 i = 0; i < te_count; ++i)
-			{
-				if (!node->isTESelected(i)) continue;
-
-				LLViewerTexture* img = node->getObject()->getTEImage(i);
-				faces_per_texture[img->getID()].push_back(i);
-
-				if (node->getObject()->getTE(i)->getMaterialParams().notNull())
-				{
-					LLViewerTexture* norm_img = node->getObject()->getTENormalMap(i);
-					faces_per_texture[norm_img->getID()].push_back(i);
-
-					LLViewerTexture* spec_img = node->getObject()->getTESpecularMap(i);
-					faces_per_texture[spec_img->getID()].push_back(i);
-				}
-			}
-
-			map_t::iterator it;
-			for (it = faces_per_texture.begin(); it != faces_per_texture.end(); ++it)
-			{
-				destroy_texture(it->first);
-			}
-
-			// Refresh sculpt texture
-			if (node->getObject()->isSculpted())
-			{
-				LLSculptParams *sculpt_params = (LLSculptParams *)node->getObject()->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
-				if (sculpt_params)
-				{
-					LLUUID sculpt_uuid = sculpt_params->getSculptTexture();
-
-					LLViewerFetchedTexture* tx = LLViewerTextureManager::getFetchedTexture(sculpt_uuid);
-					if (tx)
-					{
-						S32 num_volumes = tx->getNumVolumes(LLRender::SCULPT_TEX);
-						const LLViewerTexture::ll_volume_list_t* pVolumeList = tx->getVolumeList(LLRender::SCULPT_TEX);
-
-						destroy_texture(sculpt_uuid);
-
-						for (S32 idxVolume = 0; idxVolume < num_volumes; ++idxVolume)
-						{
-							LLVOVolume* pVolume = pVolumeList->at(idxVolume);
-							if (pVolume)
-							{
-								pVolume->notifyMeshLoaded();
-							}
-						}
-					}
-				}
-			}
+			handle_object_tex_refresh(node->getObject(),node);
 		}
 
 		return true;

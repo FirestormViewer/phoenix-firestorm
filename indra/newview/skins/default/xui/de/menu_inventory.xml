@@ -110,6 +110,7 @@
 	<menu_item_call label="Berühren" name="Touch Attachment"/>
 	<menu_item_call label="In Gesamtansicht anzeigen" name="Show in Main Panel"/>
 	<menu_item_call label="Hinzufügen" name="Wearable Add"/>
+	<menu_item_call label="Texturen aktualisieren" name="Texture Refresh Attachment"/>
 	<menu_item_call label="Ausziehen" name="Take Off"/>
 	<menu_item_call label="In Marktplatz-Auflistungen kopieren" name="Marketplace Copy"/>
 	<menu_item_call label="In Marktplatz-Auflistungen verschieben" name="Marketplace Move"/>
