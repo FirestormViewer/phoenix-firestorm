@@ -927,12 +927,12 @@ BOOL FSFloaterIM::postBuild()
 	if (isFSSupportGroup || isFSTestingGroup)
 	{
 		// check if the dialog was set to ignore
-		LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate("FirstJoinSupportGroup");
+		LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate("FirstJoinSupportGroup2");
 		if (!templatep.get()->mForm->getIgnored())
 		{
 			// if not, give the user a choice, whether to enable the version prefix or not
 			LLSD args;
-			LLNotificationsUtil::add("FirstJoinSupportGroup", args, LLSD(),boost::bind(&FSFloaterIM::enableViewerVersionCallback, this, _1, _2));
+			LLNotificationsUtil::add("FirstJoinSupportGroup2", args, LLSD(),boost::bind(&FSFloaterIM::enableViewerVersionCallback, this, _1, _2));
 		}
 	}
 	// </FS:Zi> Viewer version popup

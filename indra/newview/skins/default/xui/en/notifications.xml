@@ -10499,7 +10499,7 @@ Your viewer cache is currently empty. Please be aware that you may experience sl
   <!-- <FS:Zi> Viewer version popup -->
   <notification
    icon="alertmodal.tga"
-   name="FirstJoinSupportGroup"
+   name="FirstJoinSupportGroup2"
    type="alertmodal">
 Welcome to the Phoenix/Firestorm Viewer Support Group!
 
