@@ -386,7 +386,7 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 				utf8_text = FSCommon::applyMuPose(utf8_text);
 				
 				// <FS:Techwolf Lupindo> Support group chat prefix
-				static LLCachedControl<bool> chat_prefix_support(gSavedSettings, "FSSupportGroupChatPrefix2");
+				static LLCachedControl<bool> chat_prefix_support(gSavedSettings, "FSSupportGroupChatPrefix3");
 				static LLCachedControl<bool> chat_prefix_testing(gSavedSettings, "FSSupportGroupChatPrefixTesting");
 				if ((chat_prefix_support || chat_prefix_testing) && FSData::getInstance()->isFirestormGroup(mSessionID))
 				{
@@ -2183,7 +2183,7 @@ BOOL FSFloaterIM::enableViewerVersionCallback(const LLSD& notification,const LLS
 		result=TRUE;
 	}
 
-	gSavedSettings.setBOOL("FSSupportGroupChatPrefix2",result);
+	gSavedSettings.setBOOL("FSSupportGroupChatPrefix3",result);
 	gSavedSettings.setBOOL("FSSupportGroupChatPrefixTesting",result);
 	return result;
 }

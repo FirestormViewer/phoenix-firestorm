@@ -442,7 +442,7 @@
         height="20"
         width="113"/>
       <check_box
-       control_name="FSSupportGroupChatPrefix2"
+       control_name="FSSupportGroupChatPrefix3"
        follows="left|top"
        height="19"
        label="Specify version"

@@ -1016,7 +1016,7 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
-  <key>FSSupportGroupChatPrefix2</key>
+  <key>FSSupportGroupChatPrefix3</key>
     <map>
       <key>Comment</key>
       <string>Adds (FS 1.2.3) to support group chat</string>
