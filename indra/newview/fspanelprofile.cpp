@@ -476,6 +476,12 @@ void FSPanelProfileSecondLife::fillCommonData(const LLAvatarData* avatar_data)
 	mDescriptionEdit->setValue(avatar_data->about_text);
 	mSecondLifePic->setValue(avatar_data->image_id);
 
+	LLViewerFetchedTexture* imagep = LLViewerTextureManager::getFetchedTexture(avatar_data->image_id);
+	if (!imagep->getFullHeight())
+	{
+		imagep->forceToRefetchTexture();
+	}
+
 	if (getSelfProfile())
 	{
 		mShowInSearchCheckbox->setValue((BOOL)(avatar_data->flags & AVATAR_ALLOW_PUBLISH));
