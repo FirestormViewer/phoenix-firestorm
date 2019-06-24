@@ -178,11 +178,32 @@ void LLFloaterTexturePicker::setImageID(const LLUUID& image_id, bool set_selecti
 			else
 			{
 				LLInventoryItem* itemp = gInventory.getItem(image_id);
-				if (itemp && !itemp->getPermissions().allowCopyBy(gAgent.getID()))
+				//<FS:Chaser> Texture UUID picker
+				//if (itemp && !itemp->getPermissions().allowCopyBy(gAgent.getID()))
+				if (itemp)
 				{
-					// no copy texture
-					getChild<LLUICtrl>("apply_immediate_check")->setValue(FALSE);
-					mNoCopyTextureSelected = TRUE;
+					BOOL copy = itemp->getPermissions().allowCopyBy(gAgent.getID());
+					BOOL mod = itemp->getPermissions().allowModifyBy(gAgent.getID());
+					BOOL xfer = itemp->getPermissions().allowOperationBy(PERM_TRANSFER, gAgent.getID());
+
+					if(!copy)
+					{
+						// no copy texture
+						getChild<LLUICtrl>("apply_immediate_check")->setValue(FALSE);
+						mNoCopyTextureSelected = TRUE;
+					}
+
+					//Verify permissions before revealing UUID.
+					//Replicates behaviour of "Copy UUID" on inventory. If you can't copy it there, you can't copy it here.
+					if(copy&&mod&&xfer)
+					{
+						getChild<LLLineEditor>("TextureKey")->setText(image_id.asString());
+					}
+					else
+					{
+						getChild<LLLineEditor>("TextureKey")->setText(LLUUID::null.asString());
+					}
+					//</FS:Chaser>
 				}
 			}
 
@@ -448,6 +469,9 @@ BOOL LLFloaterTexturePicker::postBuild()
 	}
 
 	getChild<LLUICtrl>("Pipette")->setCommitCallback( boost::bind(&LLFloaterTexturePicker::onBtnPipette, this));
+	//<FS:Chaser> UUID picker
+	childSetAction("TextureKeyApply", LLFloaterTexturePicker::onBtnApplyTexture,this);
+	//</FS:Chaser>
 	childSetAction("Cancel", LLFloaterTexturePicker::onBtnCancel,this);
 	childSetAction("Select", LLFloaterTexturePicker::onBtnSelect,this);
 
@@ -785,6 +809,17 @@ void LLFloaterTexturePicker::onBtnRevert(void* userdata)
 	self->mViewModel->resetDirty();
 }*/
 
+//<FS:Chaser> UUID texture picker
+// static
+void LLFloaterTexturePicker::onBtnApplyTexture(void* userdata)
+{
+	LLFloaterTexturePicker* self = (LLFloaterTexturePicker*) userdata;
+	self->setCanApply(true, true);
+	self->setImageID(LLUUID(self->getChild<LLLineEditor>("TextureKey")->getText()));
+	self->commitIfImmediateSet();
+}
+//</FS:Chaser>
+
 // static
 void LLFloaterTexturePicker::onBtnCancel(void* userdata)
 {
@@ -846,16 +881,39 @@ void LLFloaterTexturePicker::onSelectionChange(const std::deque<LLFolderViewItem
 			{
 				mTextureSelectedCallback(itemp);
 			}
-			if (!itemp->getPermissions().allowCopyBy(gAgent.getID()))
+			// <FS:Chaser> UUID texture picker uses extra permissions, so we do all the fancy stuff here
+			
+			BOOL copy = itemp->getPermissions().allowCopyBy(gAgent.getID());
+			BOOL mod = itemp->getPermissions().allowModifyBy(gAgent.getID());
+			BOOL xfer = itemp->getPermissions().allowOperationBy(PERM_TRANSFER, gAgent.getID());
+			
+			//if (!itemp->getPermissions().allowCopyBy(gAgent.getID()))
+			if (!copy)
 			{
 				mNoCopyTextureSelected = TRUE;
 			}
+			// </FS:Chaser>
 			// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
 			setCanApply(true, true);
 			// </FS:Ansariel>
 			setImageID(itemp->getAssetUUID(),false);
+			
+			// <FS:Chaser> UUID texture picker permissions continued
+			//We also have to set this here because above passes the asset ID, not the inventory ID.
+			//Verify permissions before revealing UUID.
+			//Replicates behaviour of "Copy UUID" on inventory. If you can't copy it there, you can't copy it here.
+			if(copy&&mod&&xfer)
+			{
+				getChild<LLLineEditor>("TextureKey")->setText(itemp->getAssetUUID().asString());
+			}
+			else
+			{
+				getChild<LLLineEditor>("TextureKey")->setText(LLUUID::null.asString());
+			}
+			// </FS:Chaser>
+			
 			mViewModel->setDirty(); // *TODO: shouldn't we be using setValue() here?
-
+			
 			if(!mPreviewSettingChanged)
 			{
 				mCanPreview = gSavedSettings.getBOOL("TextureLivePreview");

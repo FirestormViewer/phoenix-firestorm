@@ -322,6 +322,9 @@ public:
 	const LLUUID& getBlankImageAssetID() { return mBlankImageAssetID; }
 
 	static void		onBtnSetToDefault(void* userdata);
+	//<FS:Chaser> UUID texture picker
+	static void		onBtnApplyTexture(void* userdata);
+	//</FS:Chaser>
 	static void		onBtnSelect(void* userdata);
 	static void		onBtnCancel(void* userdata);
 	void			onBtnPipette();

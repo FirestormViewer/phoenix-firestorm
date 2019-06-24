@@ -386,7 +386,7 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 				utf8_text = FSCommon::applyMuPose(utf8_text);
 				
 				// <FS:Techwolf Lupindo> Support group chat prefix
-				static LLCachedControl<bool> chat_prefix_support(gSavedSettings, "FSSupportGroupChatPrefix2");
+				static LLCachedControl<bool> chat_prefix_support(gSavedSettings, "FSSupportGroupChatPrefix3");
 				static LLCachedControl<bool> chat_prefix_testing(gSavedSettings, "FSSupportGroupChatPrefixTesting");
 				if ((chat_prefix_support || chat_prefix_testing) && FSData::getInstance()->isFirestormGroup(mSessionID))
 				{
@@ -427,9 +427,8 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 #endif
 					
 					//RLV check
-					static LLCachedControl<bool> chat_prefix_rlv(gSavedSettings, "RestrainedLove");
 					std::string str_rlv_enabled = "";
-					if(chat_prefix_rlv)
+					if(RlvHandler::isEnabled())
 						str_rlv_enabled = "*";
 					
 					
@@ -917,20 +916,23 @@ BOOL FSFloaterIM::postBuild()
 	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 
 	bool isFSSupportGroup = FSData::getInstance()->isFirestormGroup(mSessionID);
-
-	childSetVisible("testing_panel", FSData::getInstance()->isTestingGroup(mSessionID));
-	childSetVisible("support_panel", isFSSupportGroup);
+	bool isFSTestingGroup = FSData::getInstance()->isTestingGroup(mSessionID);
+	
+	//We can show the testing group button simply by checking testing group
+	childSetVisible("testing_panel", isFSTestingGroup);
+	//But we cannot with the support group button, because testing groups are also support groups
+	childSetVisible("support_panel", isFSSupportGroup && !isFSTestingGroup);
 
 	// <FS:Zi> Viewer version popup
-	if (isFSSupportGroup)
+	if (isFSSupportGroup || isFSTestingGroup)
 	{
 		// check if the dialog was set to ignore
-		LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate("FirstJoinSupportGroup");
+		LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate("FirstJoinSupportGroup2");
 		if (!templatep.get()->mForm->getIgnored())
 		{
 			// if not, give the user a choice, whether to enable the version prefix or not
 			LLSD args;
-			LLNotificationsUtil::add("FirstJoinSupportGroup", args, LLSD(),boost::bind(&FSFloaterIM::enableViewerVersionCallback, this, _1, _2));
+			LLNotificationsUtil::add("FirstJoinSupportGroup2", args, LLSD(),boost::bind(&FSFloaterIM::enableViewerVersionCallback, this, _1, _2));
 		}
 	}
 	// </FS:Zi> Viewer version popup
@@ -2181,7 +2183,8 @@ BOOL FSFloaterIM::enableViewerVersionCallback(const LLSD& notification,const LLS
 		result=TRUE;
 	}
 
-	gSavedSettings.setBOOL("FSSupportGroupChatPrefix2",result);
+	gSavedSettings.setBOOL("FSSupportGroupChatPrefix3",result);
+	gSavedSettings.setBOOL("FSSupportGroupChatPrefixTesting",result);
 	return result;
 }
 // </FS:Zi>

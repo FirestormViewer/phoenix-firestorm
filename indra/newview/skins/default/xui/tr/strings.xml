@@ -5577,6 +5577,12 @@ Düzenleyici yolunu çift tırnakla çevrelemeyi deneyin.
 	<string name="Toolbar_Right_Tooltip">
 		şu anda sağ araç çubuğunuzda
 	</string>
+	<string name="Command_Stop_Animations_Label">
+		Beni Anime Etmeyi Durdur
+	</string>
+	<string name="Command_Stop_Animations_Tooltip">
+		Beni Anime Etmeyi Durdur
+	</string>
 	<string name="Retain%">
 		Koru %
 	</string>
