@@ -4329,7 +4329,8 @@ AO セット "[AO_SET_NAME]" の名前を変更できません。
 	</notification>
 
 	<!-- <FS:Zi> Viewer version popup -->
-	<notification name="FirstJoinSupportGroup">
+<!-- Commented out because without an update it would show false information!
+	<notification name="FirstJoinSupportGroup2">
 Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 
 よりスムーズにサポートが得られるように、ご使用になられているビューワのバージョンをグループに伝えることをお勧めします。このグループに送信するチャットの先頭にビューワのバージョンを自動的に表示することもできます。ご使用になられているビューワのバージョンが分かれば、グループのサポート・メンバーがすぐに有意義なアドバイスをすることができるようになります。
@@ -4344,6 +4345,7 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 			<ignore name="ignore" text="Phoenix/Firestorm サポート・グループに参加した時" />
 		</form>
 	</notification>
+--!
 	<!-- <FS:Zi> Viewer version popup -->
 
 	<notification name="ConfirmScriptModify">

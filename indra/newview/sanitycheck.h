@@ -35,6 +35,7 @@ public:
 	void init();
 
 	static void onSanity(LLControlVariable* controlp);
+	static void onFixIt(const LLSD& notification, const LLSD& response, LLControlVariable* controlp);
 };
 
 #endif // SANITYCHECK_H

@@ -73,6 +73,9 @@
 			<check_box label="Ogranicz odległość (od głowy):" width="270" name="LimitLookAt" tool_tip="Ogranicza Twoje cele spojrzeń, dookoła Twojej głowy, bazując na tej odległości." />
 		</panel>
 		<panel label="Autoodpowiedzi 1" name="tab-autoresponse-1">
+			<text name="autorespond_toggle_location_tip">
+				Notka: Aby aktywować Autoodpowiedzi ustaw swój status online w głównym menu: Komunikacja &gt; Status online
+			</text>
 			<text name="text_box3">
 				Gdy jestem zajęty/a:
 			</text>

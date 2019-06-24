@@ -51,25 +51,12 @@ FMOD_RESULT F_CALLBACK windDSPCallback(FMOD_DSP_STATE *dsp_state, float *inbuffe
 
 FMOD::ChannelGroup *LLAudioEngine_FMODSTUDIO::mChannelGroups[LLAudioEngine::AUDIO_TYPE_COUNT] = {0};
 
-LLAudioEngine_FMODSTUDIO::LLAudioEngine_FMODSTUDIO(bool enable_profiler, U32 resample_method)
-	: mInited(false)
-	, mWindGen(NULL)
-	, mWindDSPDesc(NULL)
-	, mWindDSP(NULL)
-	, mSystem(NULL)
-	, mEnableProfiler(enable_profiler)
-	, mResampleMethod(resample_method)
-{
-}
-
-LLAudioEngine_FMODSTUDIO::~LLAudioEngine_FMODSTUDIO()
-{
-}
-
 static inline bool Check_FMOD_Error(FMOD_RESULT result, const char *string)
 {
-	if(result == FMOD_OK)
+	if (result == FMOD_OK)
+	{
 		return false;
+	}
 
 	if (result != FMOD_ERR_INVALID_HANDLE)
 	{
@@ -81,6 +68,85 @@ static inline bool Check_FMOD_Error(FMOD_RESULT result, const char *string)
 	}
 
 	return true;
+}
+
+LLUUID FMOD_GUID_to_LLUUID(FMOD_GUID guid)
+{
+	return LLUUID(llformat("%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x", guid.Data1, guid.Data2, guid.Data3,
+					guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3], guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]));
+}
+
+void set_device(FMOD::System* system, const LLUUID& device_uuid)
+{
+	LL_INFOS() << "LLAudioEngine_FMODSTUDIO::setDevice with device_uuid=" << device_uuid << LL_ENDL;
+
+	int drivercount;
+	if (!Check_FMOD_Error(system->getNumDrivers(&drivercount), "FMOD::System::getNumDrivers") && drivercount > 0)
+	{
+		if (device_uuid.isNull())
+		{
+			LL_INFOS() << "Setting driver \"Default\"" << LL_ENDL;
+			Check_FMOD_Error(system->setDriver(0), "FMOD::System::setDriver");
+		}
+		else
+		{
+			FMOD_GUID guid;
+			int r_samplerate, r_channels;
+
+			for (int i = 0; i < drivercount; ++i)
+			{
+				system->getDriverInfo(i, NULL, 0, &guid, &r_samplerate, NULL, &r_channels);
+				LLUUID driver_guid = FMOD_GUID_to_LLUUID(guid);
+
+				if (driver_guid == device_uuid)
+				{
+					LL_INFOS() << "Setting driver " << i << ": " << driver_guid << LL_ENDL;
+					Check_FMOD_Error(system->setDriver(i), "FMOD::System::setDriver");
+					return;
+				}
+			}
+
+			LL_INFOS() << "Device not available (anymore) - falling back to default" << LL_ENDL;
+			Check_FMOD_Error(system->setDriver(0), "FMOD::System::setDriver");
+		}
+	}
+}
+
+FMOD_RESULT F_CALLBACK systemCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBACK_TYPE type, void *commanddata1, void *commanddata2, void* userdata)
+{
+	FMOD::System* sys = (FMOD::System*)system;
+	LLAudioEngine_FMODSTUDIO* audio_engine = (LLAudioEngine_FMODSTUDIO*)userdata;
+
+	switch (type)
+	{
+		case FMOD_SYSTEM_CALLBACK_DEVICELISTCHANGED:
+			LL_DEBUGS() << "FMOD system callback FMOD_SYSTEM_CALLBACK_DEVICELISTCHANGED" << LL_ENDL;
+			if (sys && audio_engine)
+			{
+				set_device(sys, audio_engine->getSelectedDeviceUUID());
+				audio_engine->OnOutputDeviceListChanged(audio_engine->getDevices());
+			}
+			break;
+		default:
+			break;
+	}
+	return FMOD_OK;
+}
+
+LLAudioEngine_FMODSTUDIO::LLAudioEngine_FMODSTUDIO(bool enable_profiler, U32 resample_method)
+	: mInited(false)
+	, mWindGen(NULL)
+	, mWindDSPDesc(NULL)
+	, mWindDSP(NULL)
+	, mSystem(NULL)
+	, mEnableProfiler(enable_profiler)
+	, mResampleMethod(resample_method)
+	, mSelectedDeviceUUID()
+{
+}
+
+LLAudioEngine_FMODSTUDIO::~LLAudioEngine_FMODSTUDIO()
+{
 }
 
 bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata)
@@ -109,6 +175,9 @@ bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata)
 	// In this case, all sounds, PLUS wind and stream will be software.
 	result = mSystem->setSoftwareChannels(num_channels + EXTRA_SOUND_CHANNELS);
 	Check_FMOD_Error(result,"FMOD::System::setSoftwareChannels");
+
+	Check_FMOD_Error(mSystem->setCallback(systemCallback), "FMOD::System::setCallback");
+	Check_FMOD_Error(mSystem->setUserData(this), "FMOD::System::setUserData");
 
 	FMOD_ADVANCEDSETTINGS adv_settings = { };
 	adv_settings.cbSize = sizeof(FMOD_ADVANCEDSETTINGS);
@@ -265,9 +334,43 @@ bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata)
 
 	LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init(): initialization complete." << LL_ENDL;
 
+	getDevices(); // Purely to print out available devices for debugging reasons
+
 	return true;
 }
 
+//virtual
+LLAudioEngine_FMODSTUDIO::output_device_map_t LLAudioEngine_FMODSTUDIO::getDevices()
+{
+	output_device_map_t driver_map;
+
+	int drivercount;
+	int r_samplerate, r_channels;
+	char r_name[512];
+	FMOD_GUID guid;
+
+	if (!Check_FMOD_Error(mSystem->getNumDrivers(&drivercount), "FMOD::System::getNumDrivers"))
+	{
+		for (int i = 0; i < drivercount; ++i)
+		{
+			memset(r_name, 0, 512);
+			mSystem->getDriverInfo(i, r_name, 511, &guid, &r_samplerate, NULL, &r_channels);
+			LLUUID driver_guid = FMOD_GUID_to_LLUUID(guid);
+			driver_map.insert(std::make_pair(driver_guid, r_name));
+
+			LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::getDevices(): r_name=\"" << r_name << "\" - guid: " << driver_guid << LL_ENDL;
+		}
+	}
+
+	return driver_map;
+}
+
+//virtual
+void LLAudioEngine_FMODSTUDIO::setDevice(const LLUUID& device_uuid)
+{
+	mSelectedDeviceUUID = device_uuid;
+	set_device(mSystem, device_uuid);
+}
 
 std::string LLAudioEngine_FMODSTUDIO::getDriverName(bool verbose)
 {

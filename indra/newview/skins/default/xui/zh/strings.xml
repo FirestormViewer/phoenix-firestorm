@@ -5533,6 +5533,12 @@ http://secondlife.com/support 求助解決問題。
 	<string name="Toolbar_Right_Tooltip">
 		目前位在你的右工具列
 	</string>
+	<string name="Command_Stop_Animations_Label">
+		停止我身上的動作
+	</string>
+	<string name="Command_Stop_Animations_Tooltip">
+		停止我身上的動作
+	</string>
 	<string name="Retain%">
 		保留%
 	</string>

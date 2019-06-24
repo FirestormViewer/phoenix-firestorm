@@ -170,10 +170,10 @@
 			<spinner tool_tip="-1 dla pełnej nazwy grupy, 0 aby wyłączyć" name="FSShowGroupNameLength"/>
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Otwórz okno Rozmów, gdy pojawia się wiadomość offline"/>
 			<check_box label="Ślij IM-y na mój e-mail, gdy jestem offline ([EMAIL])" name="send_im_to_email"/>
-			<check_box name="FSShowIMInChatHistory" label="Pokazuj IM w oknie czatu lokalnego"/>
-			<check_box name="FSLogIMInChatHistory" label="Zapisuj IM w oknie czatu"/>
-			<text name="FSIMChatHistoryFade_label" width="220">
-				Wygaszaj tekst IM w tło okna logu czatu
+			<check_box name="FSShowIMInChatHistory" label="Pokazuj IMy i czaty grup w oknie czatu lokalnego"/>
+			<check_box name="FSLogIMInChatHistory" label="Zapisuj IMy i czaty grup w czacie lokalnym"/>
+			<text name="FSIMChatHistoryFade_label" width="315">
+				Wyszarzanie tekstu wiadomości IM w tle okna logów czatu
 			</text>
 			<spinner tool_tip="0.25-1.0, 0.25 dla silnego wygaszania, 1 dla braku wygaszania" name="FSIMChatHistoryFade"/>
 			<check_box name="FSShowMessageCountInWindowTitle" label="Pokaż ilość nieprzeczytanych IM na belce tytułu okna Firestorma"/>

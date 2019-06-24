@@ -479,7 +479,7 @@
          initial_value="160"
          layout="topleft"
          max_val="32"
-         min_val="1"
+         min_val="4"
          name="LimitLookAtDistance"
          width="150" />
         <text
@@ -505,7 +505,20 @@
      follows="all"
      label="Autoresponse 1"
      name="tab-autoresponse-1" >
-     
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="autorespond_toggle_location_tip"
+         top_pad="5"
+         width="450"
+         wrap="true">
+           Note: To activate the Autoresponse messages please set your online status via Comm Menu &gt; Online Status
+        </text>
         <text
          type="string"
          length="1"
@@ -515,7 +528,7 @@
          left="15"
          mouse_opaque="false"
          name="text_box3"
-         top="10"
+         top_pad="10"
          width="450">
           Automatic response when in UNAVAILABLE (ie, BUSY)  mode:
         </text>
@@ -524,7 +537,7 @@
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"
-         height="55"
+         height="50"
          layout="topleft"
          left="35"
          top_pad="5"
@@ -552,7 +565,7 @@
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"
-         height="55"
+         height="50"
          layout="topleft"
          left="35"
          top_pad="5"
@@ -580,7 +593,7 @@
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"
-         height="55"
+         height="50"
          layout="topleft"
          left="35"
          top_pad="5"
@@ -606,7 +619,7 @@
         use_ellipses="false"
         commit_on_focus_lost = "true"
         follows="left|top"
-        height="55"
+        height="50"
         layout="topleft"
         left="35"
         top_pad="5"
