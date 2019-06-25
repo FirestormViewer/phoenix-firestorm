@@ -1325,8 +1325,14 @@ void LLVOAvatarSelf::idleUpdateTractorBeam()
 {
 	LLColor4U rgb = gLggBeamMaps.getCurrentColor(LLColor4U(gAgent.getEffectColor()));
 
+	// <FS:Ansariel> Private point at
+	static LLCachedControl<bool> private_pointat(gSavedSettings, "PrivatePointAtTarget", false);
+
 	// This is only done for yourself (maybe it should be in the agent?)
-	if (!needsRenderBeam() || !isBuilt())
+	// <FS:Ansariel> Private point at
+	//if (!needsRenderBeam() || !isBuilt())
+	if (!needsRenderBeam() || !isBuilt() || private_pointat)
+	// </FS:Ansariel>
 	{
 		mBeam = NULL;
 		gLggBeamMaps.stopBeamChat();

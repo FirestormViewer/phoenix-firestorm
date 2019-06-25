@@ -2995,19 +2995,24 @@ BOOL LLAgentCamera::setPointAt(EPointAtType target_type, LLViewerObject *object,
 	// <FS:Ansariel> Remember the current object point pointed at - we might need it later
 	mPointAtObject = object;
 
-	// disallow pointing at attachments and avatars
-	//this is the editing arm motion
+	// <FS:Ansariel> Private point at
 	static LLCachedControl<bool> private_pointat(gSavedSettings, "PrivatePointAtTarget", false);
-	if (object && (object->isAttachment() || object->isAvatar() || private_pointat))
+	if (private_pointat)
 	{
-		// <FS:Ansariel> Remove HUD effect if it still exists
 		if (mPointAt && !mPointAt->isDead())
 		{
 			mPointAt->clearPointAtTarget();
 			mPointAt->markDead();
 		}
-		// </FS:Ansariel>
 
+		return FALSE;
+	}
+	// </FS:Ansariel>
+
+	// disallow pointing at attachments and avatars
+	//this is the editing arm motion
+	if (object && (object->isAttachment() || object->isAvatar()))
+	{
 		return FALSE;
 	}
 	if (!mPointAt || mPointAt->isDead())
