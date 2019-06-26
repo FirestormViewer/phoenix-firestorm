@@ -419,7 +419,7 @@
       width="115"
       follows="left|top">
       <check_box
-       control_name="FSSupportGroupChatPrefix2"
+       control_name="FSSupportGroupChatPrefix3"
        follows="left|top"
        height="19"
        label="Specify version"

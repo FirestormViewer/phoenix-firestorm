@@ -792,6 +792,7 @@ with the same filename but different name
   <texture name="Group_Titles_Icon" file_name="toolbar_icons/group_titles.png" preload="true" />
   <texture name="Wearable_Favorites_Icon" file_name="toolbar_icons/wearable_favorites.png" preload="true" />
   <texture name="beacons" file_name="toolbar_icons/beacons.png" preload="true" />
+  <texture name="Stop_Animations_Icon" file_name="toolbar_icons/stop_animations.png" preload="true" />
 
   <texture name="skin ansastorm blood" file_name="skinspreview/ansa_blood.jpg" preload="true" />
   <texture name="skin ansastorm bright blue" file_name="skinspreview/ansa_blue.jpg" preload="true" />
