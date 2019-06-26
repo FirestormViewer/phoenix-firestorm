@@ -153,6 +153,9 @@ void LLFloaterTexturePicker::setImageID(const LLUUID& image_id, bool set_selecti
 		if (item_id.isNull())
 		{
 			mInventoryPanel->getRootFolder()->clearSelection();
+			//<FS:Chaser> Clear out the UUID instead of keeping the last value
+			getChild<LLLineEditor>("TextureKey")->setText(LLUUID::null.asString());
+			//</FS:Chaser>
 		}
 		else
 		{
