@@ -2129,7 +2129,10 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 					opener = discard_agent_offer;
 				}
 			}
-			else if (mIM == IM_GROUP_NOTICE)
+			// <FS:Ansariel> Make group notice attachment move to trash optional
+			//else if (mIM == IM_GROUP_NOTICE)
+			else if (mIM == IM_GROUP_NOTICE && gSavedSettings.getBOOL("FSDismissGroupNoticeAttachmentsToTrash"))
+			// </FS:Ansariel>
 			{
 				// group notice needs to request object to trash so that user will see it later
 				LLUUID trash = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
@@ -2155,7 +2158,10 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 		// In case of agent offers item has already been fetched and is in your inventory, we simply won't highlight it
 		// OR delete it if the notification gets killed, since we don't want that to be a vector for 
 		// losing inventory offers.
-		if (mIM == IM_GROUP_NOTICE)
+		// <FS:Ansariel> Make group notice attachment move to trash optional
+		//if (mIM == IM_GROUP_NOTICE)
+		if (mIM == IM_GROUP_NOTICE && gSavedSettings.getBOOL("FSDismissGroupNoticeAttachmentsToTrash"))
+		// </FS:Ansariel>
 		{
 			LLUUID trash = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
 			sendReceiveResponse(trash);
@@ -2279,7 +2285,6 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 	{
 		case IOR_ACCEPT:
 			destination = mFolderID;
-
 
 // [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1)
 			// Only treat the offer as 'Give to #RLV' if:
