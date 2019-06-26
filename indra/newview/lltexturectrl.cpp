@@ -182,8 +182,12 @@ void LLFloaterTexturePicker::setImageID(const LLUUID& image_id, bool set_selecti
 				{
 					getChild<LLLineEditor>("TextureKey")->setText(LLUUID::null.asString());
 				}
-				//</FS:Chaser>
 			}
+			else
+			{
+				getChild<LLLineEditor>("TextureKey")->setText(LLUUID::null.asString());
+			}
+			// </FS:Chaser>
 		}
 
 		if (set_selection)
@@ -879,6 +883,12 @@ void LLFloaterTexturePicker::onSelectionChange(const std::deque<LLFolderViewItem
 				commitIfImmediateSet();
 			}
 		}
+		// <FS:Chaser> Clear texture key when item cant be found
+		else
+		{
+			getChild<LLLineEditor>("TextureKey")->setText(LLUUID::null.asString());
+		}
+		// </FS:Chaser>
 	}
 }
 
