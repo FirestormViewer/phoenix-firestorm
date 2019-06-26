@@ -101,12 +101,20 @@ target_link_libraries(
   )
 
 # tests
-if (LL_TESTS)
+if (DARWIN)
+  # 2019-06-26: this test executable crashes on Mac trying to initialize std::atomic?!
+  set(LLCOREHTTP_TESTS_DFT OFF)
+else ()
+  set(LLCOREHTTP_TESTS_DFT ON)
+endif ()
+set(LLCOREHTTP_TESTS ${LLCOREHTTP_TESTS_DFT} CACHE BOOL
+    "Build and run llcorehttp integration tests specifically")
+if (LL_TESTS AND LLCOREHTTP_TESTS)
   SET(llcorehttp_TEST_SOURCE_FILES
       tests/test_allocator.cpp
       )
 
-  set(llcorehttp_TEST_HEADER_FILS
+  set(llcorehttp_TEST_HEADER_FILES
       tests/test_httpstatus.hpp
       tests/test_refcounted.hpp
       tests/test_httpoperation.hpp
@@ -149,7 +157,7 @@ if (LL_TESTS)
                           ${PYTHON_EXECUTABLE}
                           "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_llcorehttp_peer.py"
                           )
-
+ 
 if (DARWIN)
   # Path inside the app bundle where we'll need to copy libraries
   set(LL_TEST_DESTINATION_DIR
@@ -198,6 +206,7 @@ endif (DARWIN)
       )
 
   set(example_libs
+      ${LEGACY_STDIO_LIBS}
       ${LLCOREHTTP_LIBRARIES}
       ${WINDOWS_LIBRARIES}
       ${LLMESSAGE_LIBRARIES}
@@ -231,5 +240,4 @@ endif (DARWIN)
 
   target_link_libraries(http_texture_load ${example_libs})
 
-endif (LL_TESTS)
-
+endif (LL_TESTS AND LLCOREHTTP_TESTS)
