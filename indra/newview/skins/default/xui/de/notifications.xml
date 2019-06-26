@@ -1011,6 +1011,9 @@ Ihre Teleport-Anfrage kann nicht sofort bearbeitet werden. Versuchen Sie es in e
 	<notification name="expired_region_handoff">
 		Das System konnte Ihre Anfrage zum Regionswechsel nicht rechtzeitig bearbeiten. Versuchen Sie es in einigen Minuten erneut.
 	</notification>
+	<notification name="preexisting_tport">
+		Das System konnte Ihre Teleport-Anfrage nicht ausführen. Versuchen Sie es in einigen Minuten erneut.
+	</notification>
 	<notification name="no_host">
 		Teleport-Ziel wurde nicht gefunden. Das Ziel ist entweder im Moment nicht verfügbar oder existiert nicht mehr. Versuchen Sie es in einigen Minuten erneut.
 	</notification>
