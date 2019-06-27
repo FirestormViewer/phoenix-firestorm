@@ -78,14 +78,17 @@ fi
 export SDL_VIDEO_X11_DGAMOUSE=0
 
 ## - Works around a problem with misconfigured 64-bit systems not finding GL
-exportMutliArchDRIPath "i386"
 exportMutliArchDRIPath "amd64"
+
 if [ -z ${LIBGL_DRIVERS_PATH} ]
 then
-	export LIBGL_DRIVERS_PATH="/usr/lib64/dri:/usr/lib32/dri:/usr/lib/dri:/usr/lib/i386-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri"
+	export LIBGL_DRIVERS_PATH="/usr/lib64/dri:/usr/lib/dri:/usr/lib/x86_64-linux-gnu/dri"
 else
-	export LIBGL_DRIVERS_PATH="${LIBGL_DRIVERS_PATH}:/usr/lib64/dri:/usr/lib32/dri:/usr/lib/dri:/usr/lib/i386-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri"
+	export LIBGL_DRIVERS_PATH="${LIBGL_DRIVERS_PATH}:/usr/lib64/dri:/usr/lib/dri:/usr/lib/x86_64-linux-gnu/dri"
 fi
+
+export LIBGL_DRIVERS_PATH="${LIBGL_DRIVERS_PATH}:/usr/lib64/xorg/modules/dri"
+
 echo "LIBGL_DRIVERS_PATH is ${LIBGL_DRIVERS_PATH}"
 
 ## - The 'scim' GTK IM module widely crashes the viewer.  Avoid it.

@@ -458,8 +458,9 @@ void FSPanelProfileSecondLife::onAvatarNameCache(const LLUUID& agent_id, const L
 
 void FSPanelProfileSecondLife::fillCommonData(const LLAvatarData* avatar_data)
 {
-	//remove avatar id from cache to get fresh info
-	LLAvatarIconIDCache::getInstance()->remove(avatar_data->avatar_id);
+	// Refresh avatar id in cache with new info to prevent re-requests
+	// and to make sure icons in text will be up to date
+	LLAvatarIconIDCache::getInstance()->add(avatar_data->avatar_id, avatar_data->image_id);
 
 	LLStringUtil::format_map_t args;
 	{
@@ -474,6 +475,12 @@ void FSPanelProfileSecondLife::fillCommonData(const LLAvatarData* avatar_data)
 	getChild<LLUICtrl>("register_date")->setValue(register_date );
 	mDescriptionEdit->setValue(avatar_data->about_text);
 	mSecondLifePic->setValue(avatar_data->image_id);
+
+	LLViewerFetchedTexture* imagep = LLViewerTextureManager::getFetchedTexture(avatar_data->image_id);
+	if (!imagep->getFullHeight())
+	{
+		imagep->forceToRefetchTexture();
+	}
 
 	if (getSelfProfile())
 	{

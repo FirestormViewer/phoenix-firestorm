@@ -38,6 +38,7 @@ class LLView;
 class LLParcelSelection;
 class LLObjectSelection;
 class LLSelectNode;
+class LLViewerObject;
 
 // [RLVa:KB] - Checked: RLVa-2.0.0
 void set_use_wireframe(bool useWireframe);
@@ -103,6 +104,7 @@ void handle_object_build(void*);
 void handle_object_touch();
 bool enable_object_open();
 void handle_object_open();
+void handle_object_tex_refresh(LLViewerObject* object, LLSelectNode* node);
 
 bool visible_take_object();
 bool tools_visible_take_object();
