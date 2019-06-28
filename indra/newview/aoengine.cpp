@@ -81,6 +81,7 @@ AOEngine::~AOEngine()
 void AOEngine::init()
 {
 	BOOL do_enable = gSavedPerAccountSettings.getBOOL("UseAO");
+	BOOL do_enable_stands = gSavedPerAccountSettings.getBOOL("UseAOStands");
 	if (do_enable)
 	{
 		// enable_stands() calls enable(), but we need to set the
@@ -91,6 +92,7 @@ void AOEngine::init()
 	}
 	else
 	{
+		enable_stands(do_enable_stands);
 		enable(FALSE);
 	}
 }
