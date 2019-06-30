@@ -15,9 +15,9 @@ mailing list. We've created a non-KDU build target to make this easier. Everywhe
 "ReleaseFS_open" instead.  This will perform the same build, using openjpeg instead of KDU.
 
 Available premade firestorm-specific build targets:
-	ReleaseFS (includes KDU, FMODEX)
-	ReleaseFS_open (no KDU, no FMODEX)
-	RelWithDebInfoFS_open (no KDU, no FMODEX)
+	ReleaseFS (includes KDU, FMODSTUDIO)
+	ReleaseFS_open (no KDU, no FMODSTUDIO)
+	RelWithDebInfoFS_open (no KDU, no FMODSTUDIO)
 
 To build firestorm:
 	autobuild build -A64 -c ReleaseFS                        
