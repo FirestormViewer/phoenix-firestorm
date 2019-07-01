@@ -101,12 +101,13 @@ target_link_libraries(
   )
 
 # tests
-if (LL_TESTS)
+set(LLCOREHTTP_TESTS ON CACHE BOOL
+    "Build and run llcorehttp integration tests specifically")
+if (LL_TESTS AND LLCOREHTTP_TESTS)
   SET(llcorehttp_TEST_SOURCE_FILES
-      tests/test_allocator.cpp
       )
 
-  set(llcorehttp_TEST_HEADER_FILS
+  set(llcorehttp_TEST_HEADER_FILES
       tests/test_httpstatus.hpp
       tests/test_refcounted.hpp
       tests/test_httpoperation.hpp
@@ -232,5 +233,4 @@ endif (DARWIN)
 
   target_link_libraries(http_texture_load ${example_libs})
 
-endif (LL_TESTS)
-
+endif (LL_TESTS AND LLCOREHTTP_TESTS)
