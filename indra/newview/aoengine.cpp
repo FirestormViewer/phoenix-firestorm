@@ -53,6 +53,7 @@ AOEngine::AOEngine() :
 	mCurrentSet(NULL),
 	mDefaultSet(NULL),
 	mEnabled(FALSE),
+	mEnabledStands(FALSE),
 	mInMouselook(FALSE),
 	mUnderWater(FALSE),
 	mImportSet(NULL),
@@ -62,6 +63,7 @@ AOEngine::AOEngine() :
 	mLastOverriddenMotion(ANIM_AGENT_STAND)
 {
 	gSavedPerAccountSettings.getControl("UseAO")->getCommitSignal()->connect(boost::bind(&AOEngine::onToggleAOControl, this));
+	gSavedPerAccountSettings.getControl("UseAOStands")->getCommitSignal()->connect(boost::bind(&AOEngine::onToggleAOStandsControl, this));
 
 	mRegionChangeConnection = gAgent.addRegionChangedCallback(boost::bind(&AOEngine::onRegionChange, this));
 }
@@ -78,7 +80,21 @@ AOEngine::~AOEngine()
 
 void AOEngine::init()
 {
-	enable(mEnabled);
+	BOOL do_enable = gSavedPerAccountSettings.getBOOL("UseAO");
+	BOOL do_enable_stands = gSavedPerAccountSettings.getBOOL("UseAOStands");
+	if (do_enable)
+	{
+		// enable_stands() calls enable(), but we need to set the
+		// mEnabled variable properly
+		mEnabled = TRUE;
+		// Enabling the AO always enables stands to start with
+		enable_stands(TRUE);
+	}
+	else
+	{
+		enable_stands(do_enable_stands);
+		enable(FALSE);
+	}
 }
 
 // static
@@ -90,6 +106,16 @@ void AOEngine::onLoginComplete()
 void AOEngine::onToggleAOControl()
 {
 	enable(gSavedPerAccountSettings.getBOOL("UseAO"));
+	if (mEnabled)
+	{
+		// Enabling the AO always enables stands to start with
+		gSavedPerAccountSettings.setBOOL("UseAOStands", TRUE);
+	}
+}
+
+void AOEngine::onToggleAOStandsControl()
+{
+	enable_stands(gSavedPerAccountSettings.getBOOL("UseAOStands"));
 }
 
 void AOEngine::clear(bool aFromTimer)
@@ -226,6 +252,14 @@ void AOEngine::checkBelowWater(BOOL yes)
 	gAgent.sendAnimationRequest(override(mLastOverriddenMotion, TRUE), ANIM_REQUEST_START);
 }
 
+void AOEngine::enable_stands(BOOL yes)
+{
+	mEnabledStands = yes;
+	// let the main enable routine decide if we need to change animations
+	// but don't actually change the state of the enabled flag
+	enable(mEnabled);
+}
+
 void AOEngine::enable(BOOL yes)
 {
 	LL_DEBUGS("AOEngine") << "using " << mLastMotion << " enable " << yes << LL_ENDL;
@@ -258,6 +292,11 @@ void AOEngine::enable(BOOL yes)
 
 			if (mLastMotion == ANIM_AGENT_STAND)
 			{
+				if (!mEnabledStands)
+				{
+					LL_DEBUGS("AOEngine") << "Last motion was a STAND, but disabled for stands, ignoring." << LL_ENDL;
+					return;
+				}
 				stopAllStandVariants();
 			}
 			else if (mLastMotion == ANIM_AGENT_WALK)
@@ -421,6 +460,14 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, BOOL start)
 			mInMouselook)
 		{
 			LL_DEBUGS("AOEngine") << "(enabled AO, mouselook stand stopped) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
+			return animation;
+		}
+
+		// Don't override start and turning stands if stand override is disabled
+		if (!mEnabledStands &&
+			(motion == ANIM_AGENT_STAND || motion == ANIM_AGENT_TURNRIGHT || motion == ANIM_AGENT_TURNLEFT))
+		{
+			LL_DEBUGS("AOEngine") << "(enabled AO, stands disabled) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
 			return animation;
 		}
 

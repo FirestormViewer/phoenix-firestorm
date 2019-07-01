@@ -143,6 +143,7 @@
 #include "llaudioengine.h" // <FS:Ansariel> Output device selection
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
 #include "lleventtimer.h"
+#include "llviewermenufile.h" // <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
 #include "llline.h"
 #include "llpanelblockedlist.h"
@@ -160,6 +161,13 @@
 #if LL_WINDOWS
 #include <VersionHelpers.h>
 #endif
+
+// <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
+#if LL_DARWIN
+#include <CoreFoundation/CFURL.h>
+#include <CoreFoundation/CFBundle.h>	// [FS:CR]
+#endif
+// </FS:LO>
 
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 //const F32 BANDWIDTH_UPDATER_TIMEOUT = 0.5f;
@@ -303,7 +311,12 @@ bool callback_clear_inventory_cache(const LLSD& notification, const LLSD& respon
 	if ( option == 0 ) // YES
 	{
 		// flag client texture cache for clearing next time the client runs
-		gSavedSettings.setString("FSPurgeInventoryCacheOnStartup", gAgentID.asString());
+
+		// use a marker file instead of a settings variable to prevent logout crashes and
+		// dual log ins from messing with the flag. -Zi
+		std::string delete_cache_marker = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, gAgentID.asString() + "_DELETE_INV_GZ");
+		FILE* fd = LLFile::fopen(delete_cache_marker, "w");
+		LLFile::close(fd);
 		LLNotificationsUtil::add("CacheWillClear");
 	}
 
@@ -572,6 +585,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	// <Firestorm Callbacks>
 	mCommitCallbackRegistrar.add("NACL.AntiSpamUnblock",		boost::bind(&LLFloaterPreference::onClickClearSpamList, this));
 	mCommitCallbackRegistrar.add("NACL.SetPreprocInclude",		boost::bind(&LLFloaterPreference::setPreprocInclude, this));
+	// <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
+	mCommitCallbackRegistrar.add("Pref.SetExternalEditor",		boost::bind(&LLFloaterPreference::setExternalEditor, this));
 	//[ADD - Clear Settings : SJ]
 	mCommitCallbackRegistrar.add("Pref.ClearSettings",			boost::bind(&LLFloaterPreference::onClickClearSettings, this));
 	mCommitCallbackRegistrar.add("Pref.Online_Notices",			boost::bind(&LLFloaterPreference::onClickChatOnlineNotices, this));	
@@ -1872,6 +1887,83 @@ void LLFloaterPreference::changePreprocIncludePath(const std::vector<std::string
 	}
 }
 
+// <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
+void LLFloaterPreference::setExternalEditor()
+{
+	std::string cur_name(gSavedSettings.getString("ExternalEditor"));
+	std::string proposed_name(cur_name);
+
+	(new LLFilePickerReplyThread(boost::bind(&LLFloaterPreference::changeExternalEditorPath, this, _1), LLFilePicker::FFLOAD_EXE, false))->getFile();
+}
+
+void LLFloaterPreference::changeExternalEditorPath(const std::vector<std::string>& filenames)
+{
+	const std::string chosen_path = filenames[0];
+	std::string executable_path = chosen_path;
+#if LL_DARWIN
+	// on Mac, if it's an application bundle, figure out the actual path from the Info.plist file
+	CFStringRef path_cfstr = CFStringCreateWithCString(kCFAllocatorDefault, chosen_path.c_str(), kCFStringEncodingMacRoman);		// get path as a CFStringRef
+	CFURLRef path_url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, path_cfstr, kCFURLPOSIXPathStyle, TRUE);			// turn it into a CFURLRef
+	CFBundleRef chosen_bundle = CFBundleCreate(kCFAllocatorDefault, path_url);												// get a handle for the bundle
+	CFRelease(path_url);	// [FS:CR] Don't leave a mess clean up our objects after we use them
+	LLSD args;
+	if (NULL != chosen_bundle)
+	{
+		CFDictionaryRef bundleInfoDict = CFBundleGetInfoDictionary(chosen_bundle);												// get the bundle's dictionary
+		CFRelease(chosen_bundle);	// [FS:CR] Don't leave a mess clean up our objects after we use them
+		if (NULL != bundleInfoDict)
+		{
+			CFStringRef executable_cfstr = (CFStringRef)CFDictionaryGetValue(bundleInfoDict, CFSTR("CFBundleExecutable"));	// get the name of the actual executable (e.g. TextEdit or firefox-bin)
+			int max_file_length = 256;																						// (max file name length is 255 in OSX)
+			char executable_buf[max_file_length];
+			if (CFStringGetCString(executable_cfstr, executable_buf, max_file_length, kCFStringEncodingMacRoman))			// convert CFStringRef to char*
+			{
+				executable_path += std::string("/Contents/MacOS/") + std::string(executable_buf);							// append path to executable directory and then executable name to exec path
+			}
+			else
+			{
+				std::string warning = "Unable to get CString from CFString for executable path";
+				LL_WARNS() << warning << LL_ENDL;
+				args["MESSAGE"] = warning;
+				LLNotificationsUtil::add("GenericAlert", args);
+			}
+		}
+		else
+		{
+			std::string warning = "Unable to get bundle info dictionary from application bundle";
+			LL_WARNS() << warning << LL_ENDL;
+			args["MESSAGE"] = warning;
+			LLNotificationsUtil::add("GenericAlert", args);
+		}
+	}
+	else
+	{
+		if (-1 != executable_path.find(".app"))	// only warn if this path actually had ".app" in it, i.e. it probably just wasn'nt an app bundle and that's okay
+		{
+			std::string warning = std::string("Unable to get bundle from path \"") + chosen_path + std::string("\"");
+			LL_WARNS() << warning << LL_ENDL;
+			args["MESSAGE"] = warning;
+			LLNotificationsUtil::add("GenericAlert", args);
+		}
+	}
+
+#endif
+	{
+		std::string bin = executable_path;
+		if (!bin.empty())
+		{
+			// surround command with double quotes for the case if the path contains spaces
+			if (bin.find("\"") == std::string::npos)
+			{
+				bin = "\"" + bin + "\"";
+			}
+			executable_path = bin;
+		}
+	}
+	gSavedSettings.setString("ExternalEditor", executable_path);
+}
+// </FS:LO>
+
 //[FIX JIRA-1971 : SJ] Show an notify when Javascript setting change
 void LLFloaterPreference::onClickJavascript()
 {
@@ -2180,9 +2272,6 @@ void LLFloaterPreference::refreshEnabledState()
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail");
 
 	ctrl_shadow->setEnabled(enabled);
-	
-	LLComboBox* ctrl_avatar_shadow = getChild<LLComboBox>("AvatarShadowDetail");
-	ctrl_avatar_shadow->setEnabled(enabled && ctrl_shadow->getValue().asInteger() > 0);
 
 	// now turn off any features that are unavailable
 	disableUnavailableSettings();
@@ -2394,7 +2483,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
-	LLComboBox* ctrl_avatar_shadow = getChild<LLComboBox>("AvatarShadowDetail");
 	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
 
 	// if vertex shaders off, disable all shader related products
@@ -2419,9 +2507,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-		
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
@@ -2445,9 +2530,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
 
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
-		
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
 
@@ -2464,9 +2546,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-		
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
@@ -2490,9 +2569,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 	}
 
 	// disabled reflections
@@ -2514,9 +2590,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		//deferred needs AvatarVP, disable deferred
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-		
-		ctrl_avatar_shadow->setEnabled(FALSE);
-		ctrl_avatar_shadow->setValue(0);
 
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
@@ -5122,7 +5195,24 @@ void FSPanelPreferenceBackup::changeBackupSettingsPath(const std::vector<std::st
 
 void FSPanelPreferenceBackup::onClickBackupSettings()
 {
+	
+	LLSD args;
+	args["DIRECTORY"] = gSavedSettings.getString("SettingsBackupPath");
+	LLNotificationsUtil::add("SettingsConfirmBackup", args, LLSD(),
+		boost::bind(&FSPanelPreferenceBackup::doBackupSettings, this, _1, _2));
+}
+
+void FSPanelPreferenceBackup::doBackupSettings(const LLSD& notification, const LLSD& response)
+{
 	LL_INFOS("SettingsBackup") << "entered" << LL_ENDL;
+	
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if ( option == 1 ) // CANCEL
+	{
+		LL_INFOS("SettingsBackup") << "backup cancelled" << LL_ENDL;
+		return;
+	}
+	
 	// Get settings backup path
 	std::string dir_name = gSavedSettings.getString("SettingsBackupPath");
 
@@ -5718,9 +5808,9 @@ void LLFloaterPreference::populateFontSelectionCombo()
 // </FS:Kadah>
 
 // <FS:AW optional opensim support>
-#ifdef OPENSIM
 static LLPanelInjector<LLPanelPreferenceOpensim> t_pref_opensim("panel_preference_opensim");
 
+#ifdef OPENSIM
 LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference(),
 	mGridListControl(NULL)
 {
@@ -5931,11 +6021,25 @@ void LLPanelPreferenceOpensim::onClickPickDebugSearchURL()
 
 	LLNotificationsUtil::add("ConfirmPickDebugSearchURL", LLSD(), LLSD(),callback_pick_debug_search );
 }
-#endif // OPENSIM
+#else
+void no_cb()
+{ }
+
+LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference()
+{
+	mCommitCallbackRegistrar.add("Pref.ClearDebugSearchURL", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.PickDebugSearchURL", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.AddGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.ClearGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.RefreshGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.RemoveGrid", boost::bind(&no_cb));
+	mCommitCallbackRegistrar.add("Pref.SaveGrid", boost::bind(&no_cb));
+}
+#endif
 // <FS:AW optional opensim support>
 
 // <FS:Ansariel> Output device selection
-static LLPanelInjector<FSPanelPreferenceSounds> t_pref_opensim("panel_preference_sounds");
+static LLPanelInjector<FSPanelPreferenceSounds> t_pref_sounds("panel_preference_sounds");
 
 FSPanelPreferenceSounds::FSPanelPreferenceSounds() :
 	LLPanelPreference(),
@@ -5957,7 +6061,7 @@ BOOL FSPanelPreferenceSounds::postBuild()
 	mOutputDevicePanel = findChild<LLPanel>("output_device_settings_panel");
 	mOutputDeviceComboBox = findChild<LLComboBox>("sound_output_device");
 
-#ifdef LL_FMODSTUDIO
+#if LL_FMODSTUDIO || LL_FMODEX
 	if (gAudiop && mOutputDevicePanel && mOutputDeviceComboBox)
 	{
 		gSavedSettings.getControl("FSOutputDeviceUUID")->getSignal()->connect(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceChanged, this, _2));

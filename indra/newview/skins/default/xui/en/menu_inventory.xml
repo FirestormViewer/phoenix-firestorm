@@ -856,6 +856,14 @@
          parameter="touch" />
     </menu_item_call>
     <menu_item_call
+     label="Texture Refresh"
+     layout="topleft"
+     name="Texture Refresh Attachment">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="texture_refresh_attachment" />
+    </menu_item_call>
+    <menu_item_call
      label="Take Off"
      layout="topleft"
      name="Take Off">

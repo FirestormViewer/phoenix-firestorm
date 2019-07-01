@@ -5437,6 +5437,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Fly_Tooltip">
 		Włącz/wyłącz tryb latania (HOME)
 	</string>
+	<string name="Command_Stop_Animations_Label">
+		Zatrzymaj animacje
+	</string>
+	<string name="Command_Stop_Animations_Tooltip">
+		Zatrzymaj animacje
+	</string>
 	<string name="Retain%">
 		%Zachowania
 	</string>
