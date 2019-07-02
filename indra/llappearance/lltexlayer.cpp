@@ -1577,9 +1577,23 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 			}
 			alpha_data = new U8[width * height];
 			mAlphaCache[cache_index] = alpha_data;
-    
+
+			// <FS:ND> Tentative fix for BUG-225655/FIRE-24049.
+			// Using glReadPixels breaks the driver on 64 bit.
+			// Not sure yet why, as eg it works perfectly fine to capture the logout snapshot or for DebugShowColor.
+			// Disable this for now for review. as arguably having the risk for a wrong local (temporary)
+			// bake is better than not being able to login at all.
+			// No perfect solution though, but seems we're getting too close to release for a 100% perfect solution :(
+			
+			bool skipReadPixels = LLRender::sNsightDebugSupport;
+#if ADDRESS_SIZE == 64
+			skipReadPixels = gGLManager.mIsIntel;
+#endif
+ 
 			// nSight doesn't support use of glReadPixels
-			if (!LLRender::sNsightDebugSupport)
+			// if (!LLRender::sNsightDebugSupport)
+			if (!skipReadPixels)
+			// <//FS:ND>
 			{
 				// <FS:Ansariel> Format GL_ALPHA is invalid for glReadPixels
 				//glReadPixels(x, y, width, height, GL_ALPHA, GL_UNSIGNED_BYTE, alpha_data);
@@ -1592,6 +1606,7 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 				delete[] alpha_buffer;
 				// </FS:Ansariel>
 			}
+			else{ memset( alpha_data, 0, width*height ); } // <FS:ND/> Maybe at least clear the buffer if not filling it?
 		}
 		
 		getTexLayerSet()->getAvatarAppearance()->dirtyMesh();
