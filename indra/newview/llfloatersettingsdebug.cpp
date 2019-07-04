@@ -253,7 +253,7 @@ void LLFloaterSettingsDebug::onClickSanityWarning()
 {
 	// pass "true" to tell the sanity checker to pop up the warning, even when
 	// it was shown before and would be suppressed otherwise
-	SanityCheck::instance().onSanity(mCurrentControlVariable,true);
+	SanityCheck::instance().onSanity(mCurrentControlVariable, true);
 }
 
 void LLFloaterSettingsDebug::onCommitSettings()

@@ -51,21 +51,19 @@ void SanityCheck::init()
 }
 
 // static
-void SanityCheck::onSanity(LLControlVariable* controlp, BOOL disregardLastControl)
+void SanityCheck::onSanity(LLControlVariable* controlp, bool disregardLastControl /*= false*/)
 {
-	static LLControlVariable* lastControl = NULL;
+	static LLControlVariable* lastControl = nullptr;
 
 	if (controlp->isSane())
 	{
 		return;
 	}
 
-	BOOL wasIgnored = false;
-
-	if(disregardLastControl)
+	if (disregardLastControl)
 	{
 		// clear "ignored" status for this control, so it can actually show up
-		LLNotifications::instance().setIgnored(SANITY_CHECK,false);
+		LLNotifications::instance().setIgnored(SANITY_CHECK, false);
 	}
 	else if (controlp == lastControl)
 	{
