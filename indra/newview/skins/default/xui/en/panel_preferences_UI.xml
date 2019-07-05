@@ -253,7 +253,7 @@
          left="10"
          name="UI Size:"
          top_pad="8"
-         width="60">
+         width="80">
             UI Scaling:
         </text>
         <slider
@@ -271,10 +271,37 @@
          top_pad="-14"
          width="390" />
 
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="HUD Size:"
+         top_pad="5"
+         width="80">
+            HUD Scaling:
+        </text>
+        <slider
+         control_name="HUDScaleFactor"
+         decimal_digits="2"
+         follows="left|top"
+         height="17"
+         increment="0.1"
+         initial_value="1"
+         layout="topleft"
+         left_pad="0"
+         max_val="2.0"
+         min_val="1.0"
+         name="ui_scale_slider"
+         top_pad="-14"
+         width="390" />
+
       <text
        type="string"
        left="10"
-       top_pad="20"
+       top_pad="15"
        width="140"
        follows="left|top"
        height="16"
