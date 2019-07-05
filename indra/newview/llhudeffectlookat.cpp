@@ -516,7 +516,7 @@ BOOL LLHUDEffectLookAt::setLookAt(ELookAtType target_type, LLViewerObject *objec
 						(*mAttentions)[mTargetType].mName != "Idle" &&
 						(*mAttentions)[mTargetType].mName != "Respond" &&
 						(*mAttentions)[mTargetType].mName != "Conversation" &&
-						(*mAttentions)[mTargetType].mName != "Freelook" &&
+						(*mAttentions)[mTargetType].mName != "FreeLook" &&
 						(*mAttentions)[mTargetType].mName != "AutoListen";
 
 	if (!lookAtShouldClamp) //We do a similar but seperate calculation if we are doing limited distances

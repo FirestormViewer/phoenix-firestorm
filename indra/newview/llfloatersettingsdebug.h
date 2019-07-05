@@ -60,6 +60,7 @@ public:
 	void onClickDefault();
 	void onCopyToClipboard();
 	void onSanityCheck();
+	void onClickSanityWarning();
 	static void showControl(const std::string& control);
 
 private:
