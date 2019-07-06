@@ -639,5 +639,73 @@ void LLRenderTarget::getViewport(S32* viewport)
 	viewport[3] = mResY;
 }
 
+// <FS:ND> Determine version of intel driver. We know anything >= 24 is problematic with glReadPixels
+#ifdef LL_WINDOWS
+U32 getIntelDriverVersionMajor()
+{
+	if (!gGLManager.mIsIntel)
+		return 0;
 
+	std::string strVersion = gGLManager.mDriverVersionVendorString;
+	auto i = strVersion.find("Build ");
+	if (i != std::string::npos)
+	{
+		i += sizeof("Build");
+		while (isspace(strVersion[i]) && strVersion[i])
+			++i;
+		auto start = i;
+		while (strVersion[i] != '.' && strVersion[i])
+			i++;
 
+		if( strVersion[i] )
+		{
+			std::string strMajor(strVersion.begin() + start, strVersion.begin() + i);
+			U32 version = 0;
+			if (LLStringUtil::convertToU32(strMajor, version))
+				return version;
+		}
+	}
+
+	return 0;
+}
+#endif
+//</FD>ND>
+// <FS:ND> Copy the contents of this FBO into memory 
+void LLRenderTarget::copyContents(S32 x, S32 y, S32 w, S32 h, U32 format, U32 type, U8 *buffer)
+{
+#ifdef LL_WINDOWS
+	std::vector< GLenum > vErrors;
+	bool bIs64Bit = false;
+
+#if ADDRESS_SIZE == 64
+	bIs64Bit = true;
+#endif
+	
+	// BUG-225655/FIRE-24049 some drivers (Intel 64 bit >= 24.* are behaving buggy when glReadPixels is called with a bound FBO
+	if (mFBO && gGLManager.mIsIntel && bIs64Bit && getIntelDriverVersionMajor() >= 24 )
+	{
+		vErrors.push_back(glGetError());
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		vErrors.push_back(glGetError());
+		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+		vErrors.push_back(glGetError());
+	}
+	vErrors.push_back(glGetError());
+#endif
+
+	glReadPixels(x, y, w, h, (GLenum)format, (GLenum)type, buffer);
+
+#ifdef LL_WINDOWS
+	vErrors.push_back(glGetError());
+
+	std::stringstream strm;
+	for (GLenum err : vErrors )
+		strm << "0x" << std::hex << (U32)err << " ";
+
+	if (vErrors.end() != std::find_if(vErrors.begin(), vErrors.end(), [](GLenum err){return err != GL_NO_ERROR; }))
+	{
+		LL_WARNS() << "GL error occured: " << strm.str() << LL_ENDL;
+	}
+#endif
+}
+// </FS:ND>
