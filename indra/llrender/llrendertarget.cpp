@@ -640,7 +640,7 @@ void LLRenderTarget::getViewport(S32* viewport)
 }
 
 // <FS:ND> Determine version of intel driver. We know anything >= 24 is problematic with glReadPixels
-#ifdef LL_WINDOWS
+#if LL_WINDOWS && ADDRESS_SIZE == 64
 U32 getIntelDriverVersionMajor()
 {
 	if (!gGLManager.mIsIntel)
@@ -673,30 +673,87 @@ U32 getIntelDriverVersionMajor()
 // <FS:ND> Copy the contents of this FBO into memory 
 void LLRenderTarget::copyContents(S32 x, S32 y, S32 w, S32 h, U32 format, U32 type, U8 *buffer)
 {
-#ifdef LL_WINDOWS
-	std::vector< GLenum > vErrors;
-	bool bIs64Bit = false;
-
-#if ADDRESS_SIZE == 64
-	bIs64Bit = true;
-#endif
-	
-	// BUG-225655/FIRE-24049 some drivers (Intel 64 bit >= 24.* are behaving buggy when glReadPixels is called with a bound FBO
-	if (mFBO && gGLManager.mIsIntel && bIs64Bit && getIntelDriverVersionMajor() >= 24 )
+#if LL_WINDOWS && ADDRESS_SIZE == 64
+	// <FS:ND> If not Intel or driver < 24.*, be done with it
+	if (!gGLManager.mIsIntel || getIntelDriverVersionMajor() < 24)
 	{
+		glReadPixels(x, y, w, h, (GLenum)format, (GLenum)type, buffer);
+		return;
+	}
+
+	std::vector< GLenum > vErrors;
+	
+	// BUG-225655/FIRE-24049 some drivers (Intel 64 bit >= 24.* are behaving buggy when glReadPixels is called
+	if (mFBO)
+	{
+		// When a FBO is bound unbind/rebind it.
 		vErrors.push_back(glGetError());
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		vErrors.push_back(glGetError());
 		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 		vErrors.push_back(glGetError());
+
+		glReadPixels(x, y, w, h, (GLenum)format, (GLenum)type, buffer);
+		vErrors.push_back(glGetError());
 	}
-	vErrors.push_back(glGetError());
-#endif
+	else
+	{
+		llassert_always(type == GL_UNSIGNED_BYTE);
+		llassert_always(format == GL_RGBA || format == GL_ALPHA);
 
-	glReadPixels(x, y, w, h, (GLenum)format, (GLenum)type, buffer);
+		if (mUsage != LLTexUnit::TT_TEXTURE && mUsage != LLTexUnit::TT_RECT_TEXTURE )
+		{
+			LL_WARNS() << "Expected type TT_TEXTURE or TT_RECT_TEXTURE got 0x" << std::setw(8) << std::setfill('0') << std::hex << LLTexUnit::getInternalType(mUsage) <<
+						 " internal type 0x" << std::setw(8) << std::setfill('0') << std::hex << mUsage << LL_ENDL;
+		}
 
-#ifdef LL_WINDOWS
-	vErrors.push_back(glGetError());
+		// When using no FBO and avoid glReadPixels altogether, instead bind the texture and call glGetTexImage
+		vErrors.push_back(glGetError());
+		flush();
+		vErrors.push_back(glGetError());
+		gGL.getTexUnit(0)->bind(this);
+		vErrors.push_back(glGetError());
+
+		std::string sBuffer(mResX*mResY * 4, 0);
+
+		// Would be nice if GL_ALPHA would be allowed for glGetTexImage
+		glGetTexImage(LLTexUnit::getInternalType(mUsage), 0, GL_RGBA, GL_UNSIGNED_BYTE, &sBuffer[0]);
+		vErrors.push_back(glGetError());
+
+		// Now copy out the data.
+		// n.b. in case of:
+		//	format == GL_RGBA && x == 0 ** y == 0 and w == mResX && h == mResY
+		// would could safe all this and glGetTexImage right into buffer
+		U8 const *pBuffer = reinterpret_cast<U8 const*>(sBuffer.c_str());
+		pBuffer += (y * mResX * 4); // Adjust to skip to requested y coord
+		pBuffer += x * 4; // Skip to requested x coord
+
+		if (format == GL_RGBA)
+		{
+			for (S32 i = y; i < h; ++i)
+			{
+				std::memcpy(buffer, pBuffer, w * 4);
+				pBuffer += mResX * 4; // Skip one full row, row is already x adjusted
+				buffer += w * 4;
+			}
+		}
+		else if (format == GL_ALPHA)
+		{
+			for (S32 i = y; i < h; ++i)
+			{
+				for (S32 j = 0; j < w; ++j)
+				{
+					*buffer = pBuffer[3];
+					++buffer;
+					pBuffer += 4;
+				}
+				pBuffer += (mResX - w) * 4; // Skip to end of row
+				pBuffer += x * 4; // Skip to requested x coordinate again
+			}
+		}
+		gGL.getTexUnit(0)->disable();
+		vErrors.push_back(glGetError());
+	}
 
 	std::stringstream strm;
 	for (GLenum err : vErrors )
@@ -706,6 +763,9 @@ void LLRenderTarget::copyContents(S32 x, S32 y, S32 w, S32 h, U32 format, U32 ty
 	{
 		LL_WARNS() << "GL error occured: " << strm.str() << LL_ENDL;
 	}
+#else
+	// <FS:ND> Every other OS just gets glReadPixels
+	glReadPixels(x, y, w, h, (GLenum)format, (GLenum)type, buffer);
 #endif
 }
 // </FS:ND>
