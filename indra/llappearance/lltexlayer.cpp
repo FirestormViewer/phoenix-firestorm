@@ -1066,7 +1066,7 @@ LLTexLayer::~LLTexLayer()
 		 iter != mAlphaCache.end(); iter++ )
 	{
 		U8* alpha_data = iter->second;
-		delete [] alpha_data;
+		ll_aligned_free_32(alpha_data);
 	}
 
 }
@@ -1573,12 +1573,34 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 			{
 				alpha_cache_t::iterator iter2 = mAlphaCache.begin(); // arbitrarily grab the first entry
 				alpha_data = iter2->second;
-				delete [] alpha_data;
+                ll_aligned_free_32(alpha_data);
 				mAlphaCache.erase(iter2);
 			}
-			alpha_data = new U8[width * height];
-			mAlphaCache[cache_index] = alpha_data;
 			
+            // GPUs tend to be very uptight about memory alignment as the DMA used to convey
+            // said data to the card works better when well-aligned so plain old default-aligned heap mem is a no-no
+            //new U8[width * height];
+            size_t bytes_per_pixel = 1; // unsigned byte alpha channel only...
+            size_t row_size        = (width + 3) & ~0x3; // OpenGL 4-byte row align (even for things < 4 bpp...)
+            size_t pixels          = (row_size * height);
+            size_t mem_size        = pixels * bytes_per_pixel;
+
+            alpha_data = (U8*)ll_aligned_malloc_32(mem_size);
+
+			mAlphaCache[cache_index] = alpha_data;
+
+			// <FS:Ansariel> Use Nicky's Intel fix
+   //         bool skip_readback = LLRender::sNsightDebugSupport || gGLManager.mIsIntel; // nSight doesn't support use of glReadPixels
+
+			//if (!skip_readback)
+			//{
+			//	glReadPixels(x, y, width, height, GL_ALPHA, GL_UNSIGNED_BYTE, alpha_data);                
+			//}
+   //         else
+   //         {
+   //             ll_aligned_free_32(alpha_data);
+   //             alpha_data = nullptr;
+   //         }            
 			// nSight doesn't support use of glReadPixels
 			if (!LLRender::sNsightDebugSupport)
 			{
@@ -1598,6 +1620,7 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 				delete[] alpha_buffer;
 				// </FS:Ansariel>
 			}
+			// </FS:Ansariel>
 		}
 		
 		getTexLayerSet()->getAvatarAppearance()->dirtyMesh();

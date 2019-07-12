@@ -9657,19 +9657,6 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
                 mWaterDis.clear();
                 gGL.setColorMask(true, false);
 
-                if (detail < 4)
-                {
-                    clearRenderTypeMask(LLPipeline::RENDER_TYPE_PARTICLES, END_RENDER_TYPES);
-                    if (detail < 3)
-                    {
-                        clearRenderTypeMask(LLPipeline::RENDER_TYPE_AVATAR, END_RENDER_TYPES);
-                        if (detail < 2)
-                        {
-                            clearRenderTypeMask(LLPipeline::RENDER_TYPE_VOLUME, END_RENDER_TYPES);
-                        }
-                    }
-                }                    
-
                 F32 water_dist = water_height * LLPipeline::sDistortionWaterClipPlaneMargin;
 
                 //clip out geometry on the same side of water as the camera w/ enough margin to not include the water geo itself,
@@ -9685,6 +9672,14 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
                 if (camera_is_underwater)
                 {
                     clip_plane.disable();
+                }
+
+                // SL-11370 prevent Low/Low-Mid graphics from rendering distortion map contents it should not
+                if (!canUseWindLightShaders())
+                {
+                    clearRenderTypeMask(LLPipeline::RENDER_TYPE_PARTICLES, END_RENDER_TYPES);
+                    clearRenderTypeMask(LLPipeline::RENDER_TYPE_AVATAR, END_RENDER_TYPES);
+                    clearRenderTypeMask(LLPipeline::RENDER_TYPE_VOLUME, END_RENDER_TYPES);
                 }
 
                 updateCull(camera, mRefractedObjects, water_clip, &plane);

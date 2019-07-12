@@ -218,7 +218,7 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
 	sNumRenders = 0;
 	if (gGLManager.mIsDisabled || LLPipeline::sMemAllocationThrottled)
 	{
-		return TRUE;
+		return FALSE;
 	}
 
 	// <FS:Beq> changes to support higher resolution rendering in the preview
@@ -255,7 +255,7 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
 					result = TRUE;
 					sNumRenders++;
 				}
-				gGL.flush();
+				//gGL.flush();
 				LLVertexBuffer::unbind();
 				
 				dynamicTexture->postRender(result);
@@ -270,6 +270,8 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
 		gPipeline.mPhysicsDisplay.flush();
 		// </FS:Beq>
 	}
+
+    gGL.flush();
 
 	return ret;
 }
