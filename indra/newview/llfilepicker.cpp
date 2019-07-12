@@ -68,6 +68,7 @@ LLFilePicker LLFilePicker::sInstance;
 //#define IMPORT_FILTER L"Import (*.oxp; *.hpa)\0*.oxp;*.hpa\0"
 #define IMPORT_FILTER L"Import (*.oxp)\0*.oxp\0"
 // </FS:CR>
+#define EXE_FILTER L"Programs (*.exe)\0*.exe\0" // <FS:LO> fix file picker EXE filtering
 #endif
 
 #ifdef LL_DARWIN
@@ -178,12 +179,21 @@ BOOL LLFilePicker::setupFilter(ELoadFilter filter)
 	switch (filter)
 	{
     case FFLOAD_ALL:
-    case FFLOAD_EXE:
+		// <FS:LO> fix file picker EXE filtering
 		mOFN.lpstrFilter = L"All Files (*.*)\0*.*\0" \
 		SOUND_FILTER \
 		IMAGE_FILTER \
 		ANIM_FILTER \
 		L"\0";
+		break;
+	case FFLOAD_EXE:
+		// <FS:LO> fix file picker EXE filtering
+		/*mOFN.lpstrFilter = L"All Files (*.*)\0*.*\0" \
+		SOUND_FILTER \
+		IMAGE_FILTER \
+		ANIM_FILTER \*/
+		mOFN.lpstrFilter = EXE_FILTER \
+			L"\0";
 		break;
 	case FFLOAD_WAV:
 		mOFN.lpstrFilter = SOUND_FILTER \

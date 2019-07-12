@@ -5761,6 +5761,12 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		actualmente en tu barra de herramientas derecha
 	</string>
 	<string name="Command_Fly_Tooltip">Activar/desactivar el modo de vuelo</string>
+	<string name="Command_Stop_Animations_Label">
+		Detener mis animaciones
+	</string>
+	<string name="Command_Stop_Animations_Tooltip">
+		Detener mis animaciones
+	</string>
 	<string name="Retain%">
 		% retención
 	</string>

@@ -5464,6 +5464,12 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Toolbar_Right_Tooltip">
 		actuellement dans la barre d&apos;outils de droite
 	</string>
+	<string name="Command_Stop_Animations_Label">
+		Arrêter mon animation
+	</string>
+	<string name="Command_Stop_Animations_Tooltip">
+		Arrêter mon animation
+	</string>
 	<string name="Retain%">
 		Garder%
 	</string>

@@ -263,7 +263,7 @@ void downloadCompleteScript(LLSD const &aData, std::string const &aURL, std::str
 		LL_WARNS("fsdata") << "Could not read the script library data from "<< aURL << LL_ENDL;
 		return;
 	}
-		
+
 	LLAPRFile outfile ;
 	outfile.open(aFilename, LL_APR_WB);
 	if (!outfile.getFileHandle())
@@ -366,7 +366,7 @@ void FSData::downloadAgents()
 		// TODO: Let the opensim devs and opensim group figure out the best way
 		// to add "agents.xml" URL to the gridinfo protocol.
 		//getAgentsURL();
-		
+
 		// there is no need for assets.xml URL for opensim grids as the grid owner can just delete
 		// the bad asset itself.
 	}
@@ -376,7 +376,7 @@ void FSData::downloadAgents()
 		mAgentsURL = mBaseURL + "/" + "agents.xml";
 		mAssetsURL = mBaseURL + "/" + "assets.xml";
 	}
-	
+
 	if (!mAgentsURL.empty())
 	{
 		mAgentsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, filename_prefix + "_agents.xml");
@@ -424,7 +424,7 @@ void FSData::processData(const LLSD& fs_data)
 		LLSD::array_const_iterator iter = mRandomMOTDs.beginArray();
 		gAgent.mMOTD.assign((iter + (ll_rand((S32)mRandomMOTDs.size())))->asString());
 	}
-	
+
 	// If the event falls withen the current date, use that for MOTD instead.
 	if (fs_data.has("EventsMOTD"))
 	{
@@ -521,7 +521,7 @@ void FSData::processAgents(const LLSD& data)
 	if (data.has("Agents"))
 	{
 		const LLSD& agents = data["Agents"];
-		for(LLSD::map_const_iterator iter = agents.beginMap(); iter != agents.endMap(); ++iter)
+		for (LLSD::map_const_iterator iter = agents.beginMap(); iter != agents.endMap(); ++iter)
 		{
 			LLUUID key = LLUUID(iter->first);
 			mSupportAgents[key] = iter->second.asInteger();
@@ -556,13 +556,23 @@ void FSData::processAgents(const LLSD& data)
 	if (data.has("SupportGroups"))
 	{
 		const LLSD& support_groups = data["SupportGroups"];
-		for(LLSD::map_const_iterator itr = support_groups.beginMap(); itr != support_groups.endMap(); ++itr)
+		for (LLSD::map_const_iterator itr = support_groups.beginMap(); itr != support_groups.endMap(); ++itr)
 		{
 			mSupportGroup.insert(LLUUID(itr->first));
 			LL_DEBUGS("fsdata") << "Added " << itr->first << " to mSupportGroup" << LL_ENDL;
 		}
 	}
 	
+	if (data.has("TestingGroups"))
+	{
+		const LLSD& testing_groups = data["TestingGroups"];
+		for (LLSD::map_const_iterator itr = testing_groups.beginMap(); itr != testing_groups.endMap(); ++itr)
+		{
+			mTestingGroup.insert(LLUUID(itr->first));
+			LL_DEBUGS("fsdata") << "Added " << itr->first << " to mTestingGroup" << LL_ENDL;
+		}
+	}
+
 	// The presence of just the key is enough to determine that legacy search needs to be disabled on this grid.
 	if (data.has("DisableLegacySearch"))
 	{
@@ -663,8 +673,7 @@ LLSD FSData::resolveClientTag(const LLUUID& id, bool new_system, const LLColor4&
 			if (curtag.has("name")) curtag["tpvd"] = true;
 		}
 	}
-	
-	
+
 	// Filtering starts here:
 	//WS: If we have a tag using the new system, check if we want to display it's name and/or color
 	if (new_system)
@@ -676,6 +685,7 @@ LLSD FSData::resolveClientTag(const LLUUID& id, bool new_system, const LLColor4&
 			LLStringFn::replace_ascii_controlchars(clienttagname, LL_UNKNOWN_CHAR);
 			curtag["name"] = clienttagname;
 		}
+
 		if (color_client_tags >= 3 || curtag["tpvd"].asBoolean())
 		{
 			if (curtag["tpvd"].asBoolean() && color_client_tags < 3)
@@ -821,9 +831,19 @@ LLSD FSData::allowedLogin()
 	}
 }
 
+bool FSData::isFirestormGroup(const LLUUID& id)
+{
+	return isSupportGroup(id) || isTestingGroup(id);
+}
+
 bool FSData::isSupportGroup(const LLUUID& id)
 {
-	return (mSupportGroup.count(id));
+	return mSupportGroup.count(id);
+}
+
+bool FSData::isTestingGroup(const LLUUID& id)
+{
+	return mTestingGroup.count(id);
 }
 
 bool FSData::isAgentFlag(const LLUUID& agent_id, flags_t flag)

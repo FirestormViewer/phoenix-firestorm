@@ -3911,6 +3911,8 @@ Powód: [SANITY_COMMENT]
 
 Obecne ustawienie: [CURRENT_VALUE]
 		<form name="form">
+			<button name="OK" text="Napraw"/>
+			<button name="Cancel" text="Zostaw"/>
 			<ignore name="ignore" text="Jakieś ustawienie nie przeszło kontroli spójności."/>
 		</form>
 	</notification>
@@ -3926,10 +3928,10 @@ Obecne ustawienie: [CURRENT_VALUE]
 	<notification name="CacheEmpty">
 		Pamięć podręczna (bufor danych) Twojej Przeglądarki jest pusta. Miej na uwadze, że możesz przez jakiś czas odczuwać obniżoną wydajność i spowolnione doczytywanie obiektów z Szafy.
 	</notification>
-	<notification name="FirstJoinSupportGroup">
+	<notification name="FirstJoinSupportGroup2">
 		Witaj w grupie wsparcia Phoenix/Firestorm!
 
-Abyśmy mogli pomóc Ci lepiej zalecamy, aby Twoja Przeglądarka automatycznie prezentowała swoją wersję - będzie ona wyświetlana przed każdą Twoją wypowiedzią na tym czacie grupowym. Osoby z naszej załogi wsparcia będą mogły dać Ci bardziej sensowne porady, jeśli będą znać wersję Twojej Przeglądarki od razu.
+Abyśmy mogli pomóc Ci lepiej zalecamy, aby Twoja Przeglądarka automatycznie prezentowała swoją wersję - będzie ona wyświetlana przed każdą Twoją wypowiedzią na tym czacie grupowym. Informacja te obejmuje aktualną wersję, skórkę, system operacyjny i status RLVa. Osoby z naszej załogi wsparcia będą mogły dać Ci bardziej sensowne porady, jeśli będą znać wersję Twojej Przeglądarki od razu.
 
 Możesz włączyć lub wyłączyć tą funkcję w każdej chwili w górnej części okna czatu.
 
@@ -4710,6 +4712,12 @@ Poprzedni symulator: [OLDVERSION]
 	<notification name="BackupPathEmpty">
 		Ścieżka miejsca zapisu jest pusta. Proszę najpierw podać lokalizację, w jakiej będą zapisywanie i której będą przywracane kopie zapasowe.
 	</notification>
+	<notification name="SettingsConfirmBackup">
+		Czy na pewno chcesz zapisać kopię zapasową w tym katalogu?
+[DIRECTORY]
+Wszelkie istniejące kopie zapasowe w tej lokalizacji zostaną nadpisane!
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Zapisz kopię" />
+	</notification>
 	<notification name="SettingsRestoreNeedsLogout">
 		Przywrócenie ustawień wymaga ponownego uruchomienia przeglądarki. Czy chcesz teraz przywrócić ustawienia i wyłączyć ją?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Przywróć i wyłącz"/>
@@ -4882,6 +4890,9 @@ Mnożnik LOD >8: Brak widocznych efektów. Może powodować błędy.
 Należy pamiętać, że zakupy w walucie dokonywane za pośrednictwem Firestorm Viewer są transakcjami między Tobą (użytkownikiem) a dostawcą (-ami) lub sprzedawcą (-ami) waluty.
 Ani Firestorm Viewer, ani Phoenix Firestorm Viewer Project Inc., ani jego zespół nie ponoszą odpowiedzialności za jakiekolwiek koszty lub szkody wynikające bezpośrednio lub pośrednio z takich transakcji.
 Jeśli nie zgadzasz się z niniejszymi warunkami użytkowania, nie należy przeprowadzać transakcji finansowych za pomocą tej przeglądarki.
-	<usetemplate ignoretext="Kiedy region ustawia nowego pomocnika walutowego." name="okignore" />
+		<usetemplate ignoretext="Kiedy region ustawia nowego pomocnika walutowego." name="okignore" />
+	</notification>
+	<notification name="EnableHiDPI">
+		Włączenie obsługi HiDPI może mieć niekorzystne skutki i pogorszyć wydajność.
 	</notification>
 </notifications>

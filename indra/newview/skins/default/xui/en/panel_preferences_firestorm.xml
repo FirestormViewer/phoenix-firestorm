@@ -685,6 +685,7 @@
          left="15"
          name="SLPartBeam"
          width="250"
+         tool_tip="Disabling this setting will prevent selection beams from being rendered locally. It does not prevent selection beams being sent to other avatars. If you do not wish to show your selection, you can disable that via Preferences -&gt; Privacy -&gt; LookAt -&gt; Don't send my selection target hints."
          control_name="ShowSelectionBeam" />
 
         <check_box
@@ -1375,7 +1376,7 @@
         </button>
 
         <text
-         top_pad="80"
+         top_pad="10"
          left="8"
          follows="left|top"
          name="text_box_scripting_font"
@@ -1497,6 +1498,39 @@
          width="100">
          <button.commit_callback
           function="NACL.SetPreprocInclude" />
+        </button>
+        <text
+         follows="left|top"
+         height="16"
+         type="string"
+         length="1"
+         layout="topleft"
+         name="externaleditor_textbox"
+         left="10"
+         width="256">
+          External Editor:
+        </text>
+        <line_editor
+         control_name="ExternalEditor"
+         border_style="line"
+         border_thickness="1"
+         follows="left|top"
+         font="SansSerif"
+         height="23"
+         max_length_chars="4096"
+         name="externaleditor_location"
+         width="310" />
+        <button
+         follows="left|top"
+         height="23"
+         label="Browse"
+         label_selected="Browse"
+         left_pad="5"
+         name="SetExternalEditor"
+         top_delta="0"
+         width="100">
+         <button.commit_callback
+          function="Pref.SetExternalEditor" />
         </button>
   </panel>
 

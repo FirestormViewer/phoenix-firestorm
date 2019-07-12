@@ -1741,7 +1741,11 @@ if (LINUX)
     set_source_files_properties(
       llappviewerlinux.cpp
       PROPERTIES
-      COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
+# <FS:TS> The next line causes a full rebuild of the entire newview
+#         directory every time the Mercurial revision number changes.
+#         Instead of doing that, we use the configure tool to build
+#         fsversionstrings.h with the right numbers in it.
+#      COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
       )
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux_api_dbus.cpp)
 # [FS] Growl support
@@ -2101,7 +2105,10 @@ if (FMODEX)
   set(FMODWRAPPER_LIBRARY ${FMODEX_LIBRARY})
 endif (FMODEX)
 
-set_source_files_properties(llstartup.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
+# <FS:Ansariel> Output device selection
+# set_source_files_properties(llstartup.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
+set_source_files_properties(llstartup.cpp llfloaterpreference.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
+# </FS:Ansariel>
 
 list(APPEND viewer_SOURCE_FILES ${viewer_HEADER_FILES})
 

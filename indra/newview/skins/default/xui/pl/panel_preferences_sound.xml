@@ -25,6 +25,23 @@
 			<text name="money_change_threshold_label" tool_tip="Przeglądarka będzie odtwarzać 'dźwięk pieniędzy' tylko wtedy, gdy wydawana lub otrzymywana kwota jest wyższa niż wartość ustawiona tutaj.">
 				Próg zmiany ilości L$:
 			</text>
+			<panel name="output_device_settings_panel">
+				<panel.string name="output_default_text">
+					Domyślne
+				</panel.string>
+				<panel.string name="output_no_device">
+					Brak urządzenia
+				</panel.string>
+				<panel.string name="output_name_no_device">
+					Nienazwane urządzenie
+				</panel.string>
+				<panel.string name="output_device_unavailable">
+					Niedostępne urządzenie
+				</panel.string>
+				<text name="output_label" width="130">
+					Urządzenie wyjściowe:
+				</text>
+			</panel>
 		</panel>
 		<panel name="Media Media Panel">
 			<check_box label="Automatycznie odtwarzaj media" name="media_auto_play_btn" tool_tip="Zaznacz tę funkcję, aby automatycznie uruchamiać media."/>

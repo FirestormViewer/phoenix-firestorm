@@ -4045,7 +4045,8 @@ URL: [MEDIAURL]
 	<notification name="CacheEmpty">
 		Кэш вашего клиента очищен. Пожалуйста, помните, что вы можете испытать замедление работы клиента и высокую нагрузку в течение короткого времени, пока загружается контент.
 	</notification>
-	<notification name="FirstJoinSupportGroup">
+<!-- Commented out because without an update it would show false information!
+	<notification name="FirstJoinSupportGroup2">
 		Добро пожаловать в группу технической поддержки Firestorm!
 
 Для того, чтобы команде технической поддержки было проще, рекомендуется сообщить версию Вашего клиента в группе. Вы можете выбрать для отображения версии вашего клиента находясь непосредственно в группе. Наша команда технической поддержки может дать вам более корректную информацию, если они знают версию вашего клиента.
@@ -4059,8 +4060,8 @@ URL: [MEDIAURL]
 			<button name="Cancel_okcancelignore" text="Нет"/>
 			<ignore name="ignore" text="Присоединение к группе технической поддержки The Phoenix/Firestorm"/>
 		</form>
-
 	</notification>
+-->
 	<notification name="ConfirmScriptModify">
     Вы уверены, что хотите изменить скрипты в выбранных объектах?
 		<usetemplate ignoretext="Подтвердить прежде чем изменить скрипты в выбранных объектах" name="okcancelignore" notext="Отмена" yestext="OK"/>
