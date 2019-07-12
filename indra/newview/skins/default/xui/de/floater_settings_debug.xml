@@ -15,7 +15,8 @@
 		<spinner label="x" name="val_spinner_2"/>
 		<spinner label="x" name="val_spinner_3"/>
 		<spinner label="x" name="val_spinner_4"/>
+		<button name="sanity_warning_btn" tool_tip="Diese Einstellung hat die Plausibilitätsprüfung nicht bestanden - der Wert liegt außerhalb des empfohlenen Bereichs."/>
 		<button label="Kopieren" name="copy_btn" tool_tip="Kopiert den Namen der Einstellung in die Zwischenablage." width="60"/>
-		<button label="Standardwert" name="default_btn" width="85"/>
+		<button label="Standardwert" name="default_btn" tool_tip="Setzt den Wert dieser Einstellung auf den Standardwert zurück." width="85"/>
 	</panel>
 </floater>

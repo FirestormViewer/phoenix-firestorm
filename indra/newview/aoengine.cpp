@@ -81,6 +81,7 @@ AOEngine::~AOEngine()
 void AOEngine::init()
 {
 	BOOL do_enable = gSavedPerAccountSettings.getBOOL("UseAO");
+	BOOL do_enable_stands = gSavedPerAccountSettings.getBOOL("UseAOStands");
 	if (do_enable)
 	{
 		// enable_stands() calls enable(), but we need to set the
@@ -91,6 +92,7 @@ void AOEngine::init()
 	}
 	else
 	{
+		enable_stands(do_enable_stands);
 		enable(FALSE);
 	}
 }
@@ -189,14 +191,36 @@ void AOEngine::setLastOverriddenMotion(const LLUUID& motion)
 
 BOOL AOEngine::foreignAnimations(const LLUUID& seat)
 {
+	LL_DEBUGS("AOEngine") << "Checking for foreign animation on seat " << seat << LL_ENDL;
+
 	for (LLVOAvatar::AnimSourceIterator sourceIterator = gAgentAvatarp->mAnimationSources.begin();
 		sourceIterator != gAgentAvatarp->mAnimationSources.end(); ++sourceIterator)
 	{
+		LL_DEBUGS("AOEngine") << "Source " << sourceIterator->first << " runs animation " << sourceIterator->second << LL_ENDL;
+
 		if (sourceIterator->first != gAgentID)
 		{
-			if (seat.isNull() || sourceIterator->first == seat)
+			// special case when the AO gets disabled while sitting
+			if (seat.isNull())
 			{
 				return TRUE;
+			}
+
+			// find the source object where the animation came from
+			LLViewerObject* source=gObjectList.findObject(sourceIterator->first);
+
+			// proceed if it's not an attachment
+			if(!source->isAttachment())
+			{
+				// get the source's root prim
+				LLViewerObject* sourceRoot=dynamic_cast<LLViewerObject*>(source->getRoot());
+
+				// if the root prim is the same as the animation source, report back as TRUE
+				if (sourceRoot && source->getID() == seat)
+				{
+					LL_DEBUGS("AOEngine") << "foreign animation " << sourceIterator->second << " found on seat." << LL_ENDL;
+					return TRUE;
+				}
 			}
 		}
 	}
@@ -598,10 +622,6 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, BOOL start)
 		{
 			stopAllSitVariants();
 		}
-
-		LL_DEBUGS("AOEngine") << "stopping cycle timer for motion " <<  gAnimLibrary.animationName(motion) <<
-					" using animation " << animation <<
-					" in state " << state->mName << LL_ENDL;
 	}
 
 	return animation;
@@ -1626,6 +1646,17 @@ void AOEngine::setSmart(AOSet* set, BOOL yes)
 {
 	set->setSmart(yes);
 	set->setDirty(TRUE);
+
+	if (yes)
+	{
+		// make sure to restart the sit cancel timer to fix sit overrides when the object we are
+		// sitting on is playing its own animation
+		const LLViewerObject* agentRoot = dynamic_cast<LLViewerObject*>(gAgentAvatarp->getRoot());
+		if (agentRoot && agentRoot->getID() != gAgentID)
+		{
+			mSitCancelTimer.oneShot();
+		}
+	}
 }
 
 void AOEngine::setDisableStands(AOSet* set, BOOL yes)

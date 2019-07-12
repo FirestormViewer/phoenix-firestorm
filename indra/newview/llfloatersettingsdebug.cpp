@@ -60,7 +60,7 @@ LLFloaterSettingsDebug::LLFloaterSettingsDebug(const LLSD& key)
 	mCommitCallbackRegistrar.add("ClickDefault",	boost::bind(&LLFloaterSettingsDebug::onClickDefault, this));
 	mCommitCallbackRegistrar.add("UpdateFilter",	boost::bind(&LLFloaterSettingsDebug::onUpdateFilter, this));
 	mCommitCallbackRegistrar.add("ClickCopy",		boost::bind(&LLFloaterSettingsDebug::onCopyToClipboard, this));
-	mCommitCallbackRegistrar.add("ClickSanityIcon",	boost::bind(&LLFloaterSettingsDebug::onSanityCheck, this));
+	mCommitCallbackRegistrar.add("ClickSanityIcon",	boost::bind(&LLFloaterSettingsDebug::onClickSanityWarning, this));
 
 	// make sure that the first filter update succeeds
 	mOldSearchTerm = std::string("---");
@@ -247,6 +247,13 @@ void LLFloaterSettingsDebug::draw()
 void LLFloaterSettingsDebug::onSanityCheck()
 {
 	SanityCheck::instance().onSanity(mCurrentControlVariable);
+}
+
+void LLFloaterSettingsDebug::onClickSanityWarning()
+{
+	// pass "true" to tell the sanity checker to pop up the warning, even when
+	// it was shown before and would be suppressed otherwise
+	SanityCheck::instance().onSanity(mCurrentControlVariable, true);
 }
 
 void LLFloaterSettingsDebug::onCommitSettings()

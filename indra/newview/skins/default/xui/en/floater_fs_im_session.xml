@@ -442,7 +442,7 @@
         height="20"
         width="113"/>
       <check_box
-       control_name="FSSupportGroupChatPrefix2"
+       control_name="FSSupportGroupChatPrefix3"
        follows="left|top"
        height="19"
        label="Specify version"
@@ -450,7 +450,7 @@
        top="0"
        left_delta="5"
        name="FSSupportGroupChatPrefix_toggle"
-       tool_tip="Adds your current viewer version and skin information to the front of messages sent by you to this group which will assist support staff in correctly diagnosing your issues and improve accuracy in answering your questions"
+       tool_tip="Adds current viewer version, viewer skin, operating system and RLVa status to the front of messages sent by you to this group which will assist support staff in correctly diagnosing your issues and improve accuracy in answering your questions"
        width="110" />
   </layout_panel>
     <layout_panel
@@ -479,7 +479,7 @@
        top="0"
        left_delta="5"
        name="FSSupportGroupChatPrefixTesting_toggle"
-       tool_tip="Adds your current viewer build and skin information to the front of messages sent by you to this group which will assist support staff in correctly diagnosing your issues and improve accuracy in answering your questions. (This is seperate from the support groups)"
+       tool_tip="Adds current viewer version, viewer skin, operating system and RLVa status to the front of messages sent by you to this group which will assist support staff in correctly diagnosing your issues and improve accuracy in answering your questions. (This is seperate from the support groups)"
        width="100" />
   </layout_panel>
   <!-- END: FS Prefix -->

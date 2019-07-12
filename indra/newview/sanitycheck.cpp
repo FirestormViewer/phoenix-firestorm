@@ -22,10 +22,13 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llcontrol.h"
+#include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"
 #include "sanitycheck.h"
+
+#define SANITY_CHECK "SanityCheck"	// name of the notification we display
 
 void SanityCheck::init()
 {
@@ -37,7 +40,7 @@ void SanityCheck::init()
 		{
 			if (control->getSanityType() != SANITY_TYPE_NONE)
 			{
-				control->getSanitySignal()->connect(boost::bind(&SanityCheck::onSanity, _1));
+				control->getSanitySignal()->connect(boost::bind(&SanityCheck::onSanity, _1, false));
 				SanityCheck::instance().onSanity(control);
 			}
 		}
@@ -48,19 +51,28 @@ void SanityCheck::init()
 }
 
 // static
-void SanityCheck::onSanity(LLControlVariable* controlp)
+void SanityCheck::onSanity(LLControlVariable* controlp, bool disregardLastControl /*= false*/)
 {
-	static LLControlVariable* lastControl = NULL;
+	static LLControlVariable* lastControl = nullptr;
 
 	if (controlp->isSane())
+	{
 		return;
+	}
 
-	if (controlp == lastControl)
+	if (disregardLastControl)
+	{
+		// clear "ignored" status for this control, so it can actually show up
+		LLNotifications::instance().setIgnored(SANITY_CHECK, false);
+	}
+	else if (controlp == lastControl)
+	{
 		return;
+	}
 
 	lastControl = controlp;
 
-	std::string checkType = "SanityCheck" + LLControlGroup::sanityTypeEnumToString(controlp->getSanityType());
+	std::string checkType = SANITY_CHECK + LLControlGroup::sanityTypeEnumToString(controlp->getSanityType());
 	std::vector<LLSD> sanityValues = controlp->getSanityValues();
 
 	LLSD args;
@@ -71,7 +83,7 @@ void SanityCheck::onSanity(LLControlVariable* controlp)
 	args["SANITY_MESSAGE"] = LLTrans::getString(checkType, map);
 	args["SANITY_COMMENT"] = controlp->getSanityComment();
 	args["CURRENT_VALUE"] = controlp->getValue().asString();
-	LLNotificationsUtil::add("SanityCheck", args, LLSD(), boost::bind(SanityCheck::onFixIt, _1, _2, controlp));
+	LLNotificationsUtil::add(SANITY_CHECK, args, LLSD(), boost::bind(SanityCheck::onFixIt, _1, _2, controlp));
 }
 
 void SanityCheck::onFixIt(const LLSD& notification, const LLSD& response, LLControlVariable* controlp)
