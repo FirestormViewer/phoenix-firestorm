@@ -46,7 +46,10 @@
 			<button name="chat_options_btn" tool_tip="Chat-Optionen"/>
 		</layout_panel>
 		<layout_panel name="support_panel">
-			<check_box label="Version senden" name="FSSupportGroupChatPrefix_toggle" tool_tip="Fügt die aktuelle Viewer-Version und Oberfläche am Anfang jeder Nachricht hinzu, die an diese Gruppe gesendet werden, um die Support-Mitarbeiter dabei zu unterstützen, ein mögliches Problem besser zu diagnostizieren und die Genauigkeit der Antworten auf deine Fragen zu verbessern."/>
+			<check_box label="Version senden" name="FSSupportGroupChatPrefix_toggle" tool_tip="Fügt die aktuelle Viewer-Version, Viewer-Skin, das Betriebssystem und den RLVa-Status am Anfang jeder Nachricht hinzu, die an diese Gruppe gesendet werden, um die Support-Mitarbeiter dabei zu unterstützen, ein mögliches Problem besser zu diagnostizieren und die Genauigkeit der Antworten auf Ihre Fragen zu verbessern."/>
+		</layout_panel>
+		<layout_panel name="testing_panel">
+			<check_box label="Build senden" name="FSSupportGroupChatPrefixTesting_toggle" tool_tip="Fügt die aktuelle Viewer-Version, Viewer-Skin, das Betriebssystem und den RLVa-Status am Anfang jeder Nachricht hinzu, die an diese Gruppe gesendet werden, um die Support-Mitarbeiter dabei zu unterstützen, ein mögliches Problem besser zu diagnostizieren und die Genauigkeit der Antworten auf Ihre Fragen zu verbessern. (Diese Einstellung ist unabhängig von den Support-Gruppen.)"/>
 		</layout_panel>
 	</layout_stack>
 	<layout_stack name="chat_stack">

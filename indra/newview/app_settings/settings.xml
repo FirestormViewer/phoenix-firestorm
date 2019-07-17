@@ -1016,10 +1016,21 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
-  <key>FSSupportGroupChatPrefix2</key>
+  <key>FSSupportGroupChatPrefix3</key>
     <map>
       <key>Comment</key>
       <string>Adds (FS 1.2.3) to support group chat</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+  <key>FSSupportGroupChatPrefixTesting</key>
+    <map>
+      <key>Comment</key>
+      <string>Adds (W 56789f* os) to testing group chat</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -11464,7 +11475,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>1</integer>
+    <integer>0</integer>
   </map>
     <key>RenderPerformanceTest</key>
     <map>
@@ -13529,7 +13540,7 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Type</key>
 			<string>String</string>
 			<key>Value</key>
-			<string>https://jira.phoenixviewer.com/secure/CreateIssueDetails!init.jspa?pid=10005&amp;issuetype=1&amp;priority=3&amp;environment=[ENVIRONMENT]</string>
+			<string>https://jira.firestormviewer.org/secure/CreateIssueDetails!init.jspa?pid=10005&amp;issuetype=1&amp;priority=3&amp;environment=[ENVIRONMENT]</string>
 		</map>
 	<key>RevokePermsOnStopAnimation</key>
     <map>
@@ -15275,7 +15286,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <integer>0</integer>
       </array>
       <key>SanityComment</key>
-      <string>This might cause textures to look blurry and sculpties might fail to load properly.</string>
+      <string>This might cause textures to look blurry and sculpties might fail to load properly. Please see &quot;Preferences -&gt; Graphics -&gt; Rendering -&gt; Max Texture Quality Level&quot; to change.</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -23786,17 +23797,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
-    </map>
-    <key>FSPurgeInventoryCacheOnStartup</key>
-    <map>
-      <key>Comment</key>
-      <string>Clear the inventory cache of the specific agent (ID) at next startup</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string/>
     </map>
     <key>FSSoundCacheLocation</key>
     <map>

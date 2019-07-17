@@ -524,9 +524,9 @@ std::string LLUrlEntrySLURL::getLocation(const std::string &url) const
 //
 LLUrlEntrySecondlifeURL::LLUrlEntrySecondlifeURL()
 {                              
-	mPattern = boost::regex("((http://([-\\w\\.]*\\.)?(secondlife|lindenlab)\\.com)"
+	mPattern = boost::regex("((http://([-\\w\\.]*\\.)?(secondlife|lindenlab|tilia-inc)\\.com)"
 							"|"
-							"(https://([-\\w\\.]*\\.)?(secondlife|lindenlab)\\.com(:\\d{1,5})?))"
+							"(https://([-\\w\\.]*\\.)?(secondlife|lindenlab|tilia-inc)\\.com(:\\d{1,5})?))"
 							"\\/\\S*",
 		boost::regex::perl|boost::regex::icase);
 	
@@ -568,7 +568,7 @@ std::string LLUrlEntrySecondlifeURL::getTooltip(const std::string &url) const
 //
 LLUrlEntrySimpleSecondlifeURL::LLUrlEntrySimpleSecondlifeURL()
 {
-	mPattern = boost::regex("https?://([-\\w\\.]*\\.)?(secondlife|lindenlab)\\.com(?!\\S)",
+	mPattern = boost::regex("https?://([-\\w\\.]*\\.)?(secondlife|lindenlab|tilia-inc)\\.com(?!\\S)",
 		boost::regex::perl|boost::regex::icase);
 
 	mIcon = "Hand";
@@ -1574,7 +1574,7 @@ std::string LLUrlEntryJira::getUrl(const std::string &string) const
 		string.find("SLS") != std::string::npos ||
 		string.find("SUP") != std::string::npos )
 	{
-		return llformat("https://jira.phoenixviewer.com/browse/%s", string.c_str());
+		return llformat("https://jira.firestormviewer.org/browse/%s", string.c_str());
 	}
 	else
 	{

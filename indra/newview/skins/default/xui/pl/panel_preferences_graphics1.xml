@@ -132,11 +132,11 @@
 			<text name="TextureDetailLabel">
 				Maksymalny poziom jakości tekstur:
 			</text>
-			<combo_box name="TextureDetail">
-				<combo_box.item label="Normalna jakość" name="0"/>
-				<combo_box.item label="Średnia jakość" name="3"/>
-				<combo_box.item label="Niska jakość" name="4"/>
-				<combo_box.item label="Bez tekstur" name="5"/>
+			<combo_box name="TextureDetail" tool_tip="Jakość ładowanych tekstur, wpływa na ustawienie TextureDiscardLevel">
+				<combo_box.item label="Normalna jakość (0)" name="0"/>
+				<combo_box.item label="Średnia jakość (3)" name="3"/>
+				<combo_box.item label="Niska jakość (4)" name="4"/>
+				<combo_box.item label="Bez tekstur (5)" name="5"/>
 			</combo_box>
 			<text name="Alpha Mask Rendering">
 				Maski przezroczystości (alpha):
