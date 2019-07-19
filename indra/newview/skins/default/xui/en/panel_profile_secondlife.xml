@@ -208,13 +208,21 @@
     <layout_stack
      name="imagepositioner"
      top_pad="2"
-     left="59"
+     left="0"
      right="-1"
      height="158"
      follows="top|left|right"
      layout="topleft"
      orientation="horizontal"
     >
+        <layout_panel
+         name="resize_stack"
+         follows="all"
+         layout="topleft"
+         auto_resize="false"
+         user_resize="false"
+         width="55"
+        />
         <layout_panel
          name="image_stack"
          follows="all"
