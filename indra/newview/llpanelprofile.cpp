@@ -363,6 +363,7 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
     mUnblockButton->setVisible(!own_profile);
     mGroupList->setShowNone(!own_profile);
     mGiveInvPanel->setVisible(!own_profile);
+    mOverflowButton->setVisible(!own_profile); // <FS:Ansariel> Gear button
 
     mSecondLifePic->setOpenTexPreview(!own_profile);
 
