@@ -374,7 +374,10 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
         mGroupList->enableForAgent(false);
     }
 
-    if (own_profile && !getEmbedded() )
+    // <FS:Ansariel> Show display name button only if display names are enabled
+    //if (own_profile && !getEmbedded() )
+    if (own_profile && LLAvatarName::useDisplayNames() && !getEmbedded())
+    // </FS:Ansariel>
     {
         mNameLabel->setVisible(FALSE);
         mDisplayNameButton->setVisible(TRUE);
