@@ -36,7 +36,7 @@
         >
             <panel
              name="panel_profile_secondlife"
-             label="Second Life"
+             label="2nd Life"
              layout="topleft"
              class="panel_profile_secondlife"
              filename="panel_profile_secondlife.xml"
@@ -76,7 +76,7 @@
             />
             <panel
              name="panel_profile_firstlife"
-             label="Real Life"
+             label="1st Life"
              layout="topleft"
              class="panel_profile_firstlife"
              filename="panel_profile_firstlife.xml"

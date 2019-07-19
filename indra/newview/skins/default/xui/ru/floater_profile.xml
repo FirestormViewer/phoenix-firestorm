@@ -2,13 +2,13 @@
 <floater name="avatarinfo" title="Профиль">
 	<panel name="panel_profile_view">
 		<tab_container name="panel_profile_tabs">
-			<panel label="Second Life" name="panel_profile_secondlife"/>
-			<panel label="Веб" name="panel_profile_web"/>
-			<panel label="Круг интересов" name="panel_profile_interests"/>
-			<panel label="Подборка" name="panel_profile_picks"/>
-			<panel label="Объявление" name="panel_profile_classifieds"/>
-			<panel label="Реальная жизнь" name="panel_profile_firstlife"/>
-			<panel label="Примечания" name="panel_profile_notes"/>
+			<panel label="2я жизнь" name="panel_profile_secondlife" />
+			<panel label="Web" name="panel_profile_web" />
+			<panel label="Интересы" name="panel_profile_interests" />
+			<panel label="Места" name="panel_profile_picks" />
+			<panel label="Реклама" name="panel_profile_classified" />
+			<panel label="1я жизнь" name="panel_profile_firstlife" />
+			<panel label="Заметки" name="panel_profile_notes" />
 		</tab_container>
 		<button label="OK" name="ok_btn" tool_tip="Сохранить изменения в профиле и закрыть"/>
 		<button label="Отменить" label_selected="Отменить" name="cancel_btn"/>

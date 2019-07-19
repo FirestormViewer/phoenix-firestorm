@@ -325,6 +325,7 @@
              h_pad="3"
              read_only="true"
              translate="false"
+             icon_positioning="left"
              v_pad="4"
              max_length="254"
              />
