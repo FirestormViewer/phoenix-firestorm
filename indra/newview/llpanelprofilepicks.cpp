@@ -182,6 +182,11 @@ BOOL LLPanelProfilePicks::postBuild()
     // <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
     mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfilePicks::updateRlvRestrictions, this, _1, _2));
 
+    // <FS:Ansariel> Replace hardcoded "Second Life" with grid label
+    LLTextBox* intro_txt = getChild<LLTextBox>("Tell everyone about your favorite places in Second Life.");
+    intro_txt->setTextArg("[GRID]", LLTrans::getString("SECOND_LIFE"));
+    // </FS:Ansariel>
+
     return TRUE;
 }
 

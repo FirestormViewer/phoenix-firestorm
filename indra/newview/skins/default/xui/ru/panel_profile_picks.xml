@@ -2,7 +2,7 @@
 <panel label="Подборка" name="panel_picks">
 	<string name="no_picks" value="Нет подборки"/>
 	<text name="Tell everyone about your favorite places in Second Life.">
-		Сообщить всем о ваших избранных службах в Second Life.
+		Сообщить всем о ваших избранных службах в [GRID].
 	</text>
 	<button label="Новый..." name="new_btn"/>
 	<button label="Удалить..." name="delete_btn"/>

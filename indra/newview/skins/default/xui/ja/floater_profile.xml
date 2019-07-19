@@ -6,7 +6,7 @@
 			<panel label="ウェブ" name="panel_profile_web" />
 			<panel label="興味" name="panel_profile_interests" />
 			<panel label="ピック" name="panel_profile_picks" />
-			<panel label="広告" name="panel_profile_classified" />
+			<panel label="広告" name="panel_profile_classifieds" />
 			<panel label="リアルライフ" name="panel_profile_firstlife" />
 			<panel label="メモ" name="panel_profile_notes" />
 		</tab_container>

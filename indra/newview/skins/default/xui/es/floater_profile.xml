@@ -6,7 +6,7 @@
 			<panel label="Web" name="panel_profile_web"/>
 			<panel label="Intereses" name="panel_profile_interests"/>
 			<panel label="Destacados" name="panel_profile_picks"/>
-			<panel label="Clasificados" name="panel_profile_classified"/>
+			<panel label="Clasificados" name="panel_profile_classifieds"/>
 			<panel label="RL" name="panel_profile_firstlife"/>
 			<panel label="Notas" name="panel_profile_notes"/>
 		</tab_container>

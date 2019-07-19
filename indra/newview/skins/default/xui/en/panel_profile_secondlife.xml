@@ -131,14 +131,14 @@
        top="0"
        left="0"
        right="-1"
-       height="20"
+       height="16"
        follows="left|top|right"
        layout="topleft"
        allow_scroll="false"
        bg_visible="false"
        border_visible="true"
        h_pad="1"
-       v_pad="4"
+       v_pad="2"
        max_length="254"
       />
       <!--mouse_opaque="true"-->
@@ -207,7 +207,7 @@
 
     <layout_stack
      name="imagepositioner"
-     top_pad="6"
+     top_pad="2"
      left="59"
      right="-1"
      height="158"
@@ -371,7 +371,7 @@
      top_pad="7"
      left="0"
      right="-1"
-     height="120"
+     height="126"
      follows="all"
      layout="topleft"
      orientation="vertical"
@@ -381,7 +381,7 @@
        follows="all"
        layout="topleft"
        left="0"
-       height="105"
+       height="110"
        auto_resize="true"
        user_resize="false">
         <text
@@ -418,13 +418,13 @@
        follows="left|bottom"
        layout="topleft"
        left="0"
-       height="24"
+       height="22"
        auto_resize="false"
        user_resize="false">
         <text
          name="Give item:"
          value="Give item:"
-         top="6"
+         top="3"
          left="0"
          height="16"
          width="55"
@@ -445,7 +445,7 @@
         <text
          name="Give inventory"
          tool_tip="Drop inventory items here to give them to this person."
-         top_delta="0"
+         top_delta="2"
          left="60"
          right="-1"
          height="16"

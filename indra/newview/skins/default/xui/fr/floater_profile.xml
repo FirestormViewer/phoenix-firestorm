@@ -6,7 +6,7 @@
 			<panel label="Web" name="panel_profile_web"/>
 			<panel label="Intérêts" name="panel_profile_interests"/>
 			<panel label="Favoris" name="panel_profile_picks"/>
-			<panel label="Annonces" name="panel_profile_classified"/>
+			<panel label="Annonces" name="panel_profile_classifieds"/>
 			<panel label="Vie RL" name="panel_profile_firstlife"/>
 			<panel label="Notes" name="panel_profile_notes"/>
 		</tab_container>

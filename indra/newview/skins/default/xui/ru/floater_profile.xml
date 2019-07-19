@@ -6,7 +6,7 @@
 			<panel label="Web" name="panel_profile_web" />
 			<panel label="Интересы" name="panel_profile_interests" />
 			<panel label="Места" name="panel_profile_picks" />
-			<panel label="Реклама" name="panel_profile_classified" />
+			<panel label="Реклама" name="panel_profile_classifieds" />
 			<panel label="1я жизнь" name="panel_profile_firstlife" />
 			<panel label="Заметки" name="panel_profile_notes" />
 		</tab_container>

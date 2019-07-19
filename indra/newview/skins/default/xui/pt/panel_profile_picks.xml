@@ -2,7 +2,7 @@
 <panel label="Destaques" name="panel_picks">
 	<string name="no_picks" value="Nenhum"/>
 	<text name="Tell everyone about your favorite places in Second Life.">
-		Conte a todos sobre os seu lugares favoritos no Second Life.
+		Conte a todos sobre os seu lugares favoritos no [GRID].
 	</text>
 	<button label="Novo..." name="new_btn"/>
 	<button label="Excluir..." name="delete_btn"/>
