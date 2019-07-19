@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="簡覽" name="panel_profile">
 	<string name="status_online">
-		目前在線
+		Online
 	</string>
 	<string name="status_offline">
-		目前離線
-	</string>
-	<string name="CaptionTextAcctInfo">
-		[ACCTTYPE]
-[PAYMENTINFO]
+		Offline
 	</string>
 	<string name="payment_update_link_url">
 		http://www.secondlife.com/account/billing.php?lang=en
@@ -19,9 +15,6 @@
 	<string name="my_account_link_url" value="http://secondlife.com/account"/>
 	<string name="no_partner_text" value="無"/>
 	<string name="no_group_text" value="無"/>
-	<string name="RegisterDateFormat">
-		[REG_DATE]
-	</string>
 	<string name="name_text_args">
 		[NAME]
 	</string>
@@ -40,7 +33,7 @@
 	<layout_stack name="imagepositioner">
 		<layout_panel name="label_stack">
 			<text name="status" value="狀態不明"/>
-			<text name="label" value="Second Life生日："/>
+			<text name="label" value="生日："/>
 			<text name="label2" value="帳戶："/>
 			<text name="partner_label" value="伴侶："/>
 		</layout_panel>

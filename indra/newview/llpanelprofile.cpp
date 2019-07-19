@@ -66,6 +66,7 @@
 #include "llvoiceclient.h"
 #include "llweb.h"
 
+#include "fsdata.h"
 
 static LLPanelInjector<LLPanelProfileSecondLife> t_panel_profile_secondlife("panel_profile_secondlife");
 static LLPanelInjector<LLPanelProfileWeb> t_panel_web("panel_profile_web");
@@ -369,6 +370,9 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
 
     updateButtons();
 
+    // <FS:Ansariel> Display agent ID
+    getChild<LLUICtrl>("user_key")->setValue(avatar_id.asString());
+
     mAvatarNameCacheConnection = LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLPanelProfileSecondLife::onAvatarNameCache, this, _1, _2));
 }
 
@@ -509,6 +513,9 @@ void LLPanelProfileSecondLife::fillCommonData(const LLAvatarData* avatar_data)
     }
 
     args["[AGE]"] = LLDateUtil::ageFromDate( avatar_data->born_on, LLDate::now());
+    // <FS:Ansariel> Avatar age in days
+    args["[AGEDAYS]"] = LLSD((S32) (LLDate::now().secondsSinceEpoch() - avatar_data->born_on.secondsSinceEpoch()) / 86400).asString();
+    // </FS:Ansariel>
     std::string register_date = getString("RegisterDateFormat", args);
     getChild<LLUICtrl>("register_date")->setValue(register_date );
     mDescriptionEdit->setValue(avatar_data->about_text);
@@ -555,6 +562,63 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
     LLStringUtil::format_map_t args;
     args["[ACCTTYPE]"] = LLAvatarPropertiesProcessor::accountType(avatar_data);
     args["[PAYMENTINFO]"] = LLAvatarPropertiesProcessor::paymentInfo(avatar_data);
+
+    // <FS:Ansariel> FSData support
+    args["[FIRESTORM]"] = "";
+    args["[FSSUPP]"] = "";
+    args["[FSDEV]"] = "";
+    args["[FSQA]"] = "";
+    args["[FSGW]"] = "";
+    S32 flags = FSData::getInstance()->getAgentFlags(avatar_data->avatar_id);
+    if (flags != -1)
+    {
+        bool separator = false;
+        std::string text;
+        if (flags & (FSData::DEVELOPER | FSData::SUPPORT | FSData::QA | FSData::GATEWAY))
+        {
+            args["[FIRESTORM]"] = LLTrans::getString("APP_NAME");
+        }
+
+        if (flags & FSData::DEVELOPER)
+        {
+            text = getString("FSDev");
+            args["[FSDEV]"] = text;
+            separator = true;
+        }
+
+        if (flags & FSData::SUPPORT)
+        {
+            text = getString("FSSupp");
+            if (separator)
+            {
+                text = " /" + text;
+            }
+            args["[FSSUPP]"] = text;
+            separator = true;
+        }
+        
+        if (flags & FSData::QA)
+        {
+            text = getString("FSQualityAssurance");
+            if (separator)
+            {
+                text = " /" + text;
+            }
+            args["[FSQA]"] = text;
+            separator = true;
+        }
+
+        if (flags & FSData::GATEWAY)
+        {
+            text = getString("FSGW");
+            if (separator)
+            {
+                text = " /" + text;
+            }
+            args["[FSGW]"] = text;
+        }
+    }
+    // </FS:Ansariel>
 
     std::string caption_text = getString("CaptionTextAcctInfo", args);
     getChild<LLUICtrl>("acc_status_text")->setValue(caption_text);

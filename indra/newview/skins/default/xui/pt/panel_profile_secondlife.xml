@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Perfil" name="panel_profile">
 	<string name="status_online">
-		Atualmente Online
+		Online
 	</string>
 	<string name="status_offline">
-		Atualmente Offline
-	</string>
-	<string name="CaptionTextAcctInfo">
-		[ACCTTYPE]
-[PAYMENTINFO]
+		Offline
 	</string>
 	<string name="payment_update_link_url">
 		http://www.secondlife.com/account/billing.php?lang=en
@@ -19,9 +15,6 @@
 	<string name="my_account_link_url" value="http://secondlife.com/account"/>
 	<string name="no_partner_text" value="Nenhum"/>
 	<string name="no_group_text" value="Nenhum"/>
-	<string name="RegisterDateFormat">
-		[REG_DATE]
-	</string>
 	<string name="name_text_args">
 		[NAME]
 	</string>
@@ -40,7 +33,7 @@
 	<layout_stack name="imagepositioner">
 		<layout_panel name="label_stack">
 			<text name="status" value="Status desconhecido"/>
-			<text name="label" value="Aniversário Second Life:"/>
+			<text name="label" value="Aniversário:"/>
 			<text name="label2" value="Conta:"/>
 			<text name="partner_label" value="Parceiro(a):"/>
 		</layout_panel>

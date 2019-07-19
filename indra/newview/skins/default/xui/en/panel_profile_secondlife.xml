@@ -12,18 +12,19 @@
     <string
      name="status_online"
     >
-        Currently Online
+        Online
     </string>
     <string
      name="status_offline"
     >
-        Currently Offline
+        Offline
     </string>
     <string
      name="CaptionTextAcctInfo"
     >
        [ACCTTYPE]
 [PAYMENTINFO]
+[FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]
     </string>
     <string
      name="payment_update_link_url"
@@ -51,6 +52,7 @@
      name="RegisterDateFormat"
     >
         [REG_DATE]
+([AGE])
     </string>
     <string
      name="name_text_args"
@@ -92,7 +94,7 @@
      name="name_label"
      value="Name:"
      top="8"
-     left="6"
+     left="0"
      height="20"
      width="55"
      follows="left|top"
@@ -116,7 +118,7 @@
      name="name_holder"
      top_delta="0"
      left_pad="4"
-     right="-5"
+     right="-85"
      height="20"
      follows="left|top|right"
      layout="topleft"
@@ -157,10 +159,57 @@
        follows="top|right"
        layout="topleft" />
     </panel>
+
+    <text
+     top_pad="4"
+     left="0"
+     height="16"
+     width="55"
+     layout="topleft"
+     follows="left|top"
+     name="Key:"
+     halign="right"
+     value="Key:" />
+
+    <view_border
+     left_pad="4"
+     right="-86"
+     height="16"
+     layout="topleft"
+     follows="left|top|right"
+     name="info_border2"
+     bevel_style="in" />
+    <text_editor
+     bottom_delta="2"
+     left_delta="3"
+     right="-86"
+     height="16"
+     layout="topleft"
+     follows="left|top|right"
+     name="user_key"
+     bg_visible="false"
+     border_visible="false"
+     allow_scroll="false"
+     h_pad="0"
+     v_pad="0"
+     enabled="false"
+     max_length="254"
+     value="(loading...)" />
+
+    <text
+     left_pad="2"
+     right="-6"
+     height="16"
+     layout="topleft"
+     follows="top|right"
+     name="status"
+     halign="center"
+     value="" />
+
     <layout_stack
      name="imagepositioner"
      top_pad="6"
-     left_delta="0"
+     left="59"
      right="-1"
      height="158"
      follows="top|left|right"
@@ -198,22 +247,10 @@
          user_resize="false"
         >
             <text
-             name="status"
-             value="Status Unknown"
-             top="1"
-             left="4"
-             right="-6"
-             height="16"
-             follows="top|left"
-             layout="topleft"
-             halign="center"
-             text_color="LtGray_50"
-             />
-            <text
              name="label"
-             value="Second Life Birthdate:"
+             value="Birthdate:"
              top_pad="2"
-             right="-6"
+             right="-1"
              height="16"
              follows="top|left"
              layout="topleft"
@@ -223,14 +260,14 @@
              value="(loading...)"
              top_pad="0"
              left_delta="2"
-             right="-6"
-             height="16"
+             right="-1"
+             height="32"
              follows="top|left|right"
              layout="topleft"
              allow_scroll="false"
              bg_visible="false"
              border_visible="true"
-             h_pad="2"
+             h_pad="3"
              max_length="254"
              read_only="true"
              translate="false"
@@ -242,7 +279,7 @@
              value="Account:"
              top_pad="5"
              left_delta="-2"
-             right="-6"
+             right="-1"
              height="16"
              follows="top|left"
              layout="topleft"
@@ -251,14 +288,14 @@
              name="acc_status_text"
              top_pad="0"
              left_delta="2"
-             right="-6"
+             right="-1"
              height="44"
              follows="top|left|right"
              layout="topleft"
              allow_scroll="false"
              bg_visible="false"
              border_visible="true"
-             h_pad="2"
+             h_pad="3"
              read_only="true"
              translate="false"
              v_pad="2"
@@ -269,7 +306,7 @@
              value="Partner:"
              top_pad="5"
              left_delta="-2"
-             right="-6"
+             right="-1"
              height="16"
              follows="top|left"
              layout="topleft"
@@ -278,7 +315,7 @@
              name="partner_text"
              top_pad="0"
              left_delta="0"
-             right="-6"
+             right="-1"
              height="20"
              follows="top|left|right"
              layout="topleft"
@@ -286,7 +323,7 @@
              bg_visible="false"
              border_visible="true"
              parse_urls="true"
-             h_pad="1"
+             h_pad="3"
              read_only="true"
              translate="false"
              v_pad="4"
@@ -298,7 +335,7 @@
      name="Groups:"
      value="Groups:"
      top_pad="7"
-     left="6"
+     left="0"
      height="16"
      width="55"
      follows="left|top"
@@ -310,7 +347,7 @@
      label="+"
      tool_tip="Invite to Group"
      top_delta="20"
-     left="40"
+     left="35"
      height="20"
      width="20"
      follows="left|top"
@@ -320,22 +357,21 @@
     <group_list
      name="group_list"
      top_delta="-20"
-     left="66"
-     right="-7"
+     left="59"
+     right="-2"
      height="82"
      follows="left|top|right"
      layout="topleft"
      border_visible="true"
-     color="ScrollBgWriteableColor"
      for_agent="false"
     />
 
     <layout_stack
      name="aboutpositioner"
      top_pad="7"
-     left="6"
-     right="-6"
-     height="130"
+     left="0"
+     right="-1"
+     height="120"
      follows="all"
      layout="topleft"
      orientation="vertical"
@@ -363,7 +399,7 @@
          name="sl_description_edit"
          enabled="false"
          top="0"
-         left="60"
+         left="59"
          right="-1"
          bottom="-1"
          follows="all"
@@ -371,7 +407,7 @@
          bg_readonly_color="Transparent"
          border_visible="true"
          font="SansSerifSmall"
-         h_pad="2"
+         h_pad="3"
          max_length="510"
          parse_urls="true"
          word_wrap="true"
@@ -399,7 +435,7 @@
         <view_border
          name="drop_target_rect_vis"
          top_delta="0"
-         left="60"
+         left="59"
          right="-1"
          height="16"
          follows="left|bottom|right"
@@ -536,7 +572,7 @@
      label="Show in search"
      enabled="false"
      bottom="-30"
-     left="60"
+     left="55"
      height="16"
      width="130"
      follows="left|bottom"

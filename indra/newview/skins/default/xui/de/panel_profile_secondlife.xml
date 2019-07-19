@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Profil" name="panel_profile">
 	<string name="status_online">
-		Zurzeit online
+		Online
 	</string>
 	<string name="status_offline">
-		Zurzeit offline
-	</string>
-	<string name="CaptionTextAcctInfo">
-		[ACCTTYPE]
-[PAYMENTINFO]
+		Offline
 	</string>
 	<string name="payment_update_link_url">
 		http://www.secondlife.com/account/billing.php?lang=de
@@ -19,28 +15,26 @@
 	<string name="my_account_link_url" value="http://secondlife.com/account"/>
 	<string name="no_partner_text" value="Keine"/>
 	<string name="no_group_text" value="Keine"/>
-	<string name="RegisterDateFormat">
-		[REG_DATE]
-	</string>
 	<string name="name_text_args">
 		[NAME]
 	</string>
 	<string name="display_name_text_args">
 		[DISPLAY_NAME]
 	</string>
-	<string name="FSDev" value="Entwickler"/>
-	<string name="FSSupp" value="Support"/>
-	<string name="FSQualityAssurance" value="Fehlersuche"/>
-	<string name="FSGW" value="Gateway"/>
+	<string name="FSDev" value="-Entwickler"/>
+	<string name="FSSupp" value="-Support"/>
+	<string name="FSQualityAssurance" value="-Fehlersuche"/>
+	<string name="FSGW" value="-Gateway"/>
 	<text name="name_label" value="Name:"/>
 	<button label="Name:" name="set_name" tool_tip="Anzeigenamen festlegen"/>
 	<panel name="name_holder">
 		<text_editor name="complete_name" value="(wird geladen...)"/>
 	</panel>
+	<text name="Key:" value="UUID:"/>
 	<layout_stack name="imagepositioner">
 		<layout_panel name="label_stack">
 			<text name="status" value="Status unbekannt"/>
-			<text name="label" value="Second Life-Geburtsdatum:"/>
+			<text name="label" value="Geburtsdatum:"/>
 			<text name="label2" value="Konto:"/>
 			<text name="partner_label" value="Partner:"/>
 		</layout_panel>
@@ -52,7 +46,7 @@
 			<text name="About:" value="Info:"/>
 		</layout_panel>
 		<layout_panel name="give_stack">
-			<text name="Give item:" value="Objekt geben:"/>
+			<text name="Give item:" value="Teilen:"/>
 			<text name="Give inventory" tool_tip="Legen Sie hier Inventarobjekte ab, um Sie dieser Person zu geben.">
 				Inventarobjekt hier ablegen.
 			</text>
