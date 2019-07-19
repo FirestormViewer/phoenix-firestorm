@@ -180,7 +180,7 @@
 			 name="panel_profile_firstlife" />
 			<panel
 			 class="panel_fs_profile_notes"
-			 filename="panel_fsprofile_notes.xml"
+			 filename="panel_fs_profile_notes.xml"
 			 label="Notes"
 			 layout="topleft"
 			 help_topic="profile_notes_tab"
