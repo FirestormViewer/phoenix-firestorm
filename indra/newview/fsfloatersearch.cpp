@@ -32,7 +32,6 @@
 #include "fsavatarsearchmenu.h"
 #include "fsdispatchclassifiedclickthrough.h"
 #include "fspanelclassified.h"
-#include "fspanelprofile.h"
 #include "fsscrolllistctrl.h"
 #include "lfsimfeaturehandler.h"
 #include "llagent.h"
@@ -53,6 +52,7 @@
 #include "llloadingindicator.h"
 #include "lllogininstance.h"
 #include "llnotificationsutil.h"
+#include "llpanelprofile.h"
 #include "llpanelprofileclassifieds.h"
 #include "llparcel.h"
 #include "llproductinforequest.h"
@@ -297,7 +297,7 @@ BOOL FSFloaterSearch::postBuild()
 	mPanelWeb			= findChild<FSPanelSearchWeb>("panel_ls_web");
 
 	// <KC> If skin has legacy full profile view, use it
-	mPanelProfile = mPanelPeople->findChild<FSPanelProfile>("panel_profile_view");
+	mPanelProfile = mPanelPeople->findChild<LLPanelProfile>("panel_profile_view");
 	if (mPanelProfile)
 	{
 		mPanelProfile->setVisible(false);
@@ -384,7 +384,7 @@ void FSFloaterSearch::onSelectedItem(const LLUUID& selected_item, ESearchCategor
 					if (mPanelProfile)
 					{
 						mPanelProfile->setVisible(true);
-						mPanelProfile->onOpen(selected_item);
+						mPanelProfile->onOpen(LLSD().with("id", selected_item));
 					}
 					else
 					{

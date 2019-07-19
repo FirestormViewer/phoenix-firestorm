@@ -1575,7 +1575,10 @@ void LLPanelProfileNotes::processProperties(void* data, EAvatarProcessorType typ
         if (avatar_notes && getAvatarId() == avatar_notes->target_id)
         {
             mNotesEditor->setValue(avatar_notes->notes);
-            mNotesEditor->setEnabled(TRUE);
+            // <FS:Ansariel> Don't enable editor in embedded mode since there is no way to save them
+            //mNotesEditor->setEnabled(TRUE);
+            mNotesEditor->setEnabled(!getEmbedded());
+            // </FS:Ansariel>
             updateButtons();
 
             LLAvatarPropertiesProcessor::getInstance()->removeObserver(getAvatarId(),this);
