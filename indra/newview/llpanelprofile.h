@@ -205,6 +205,7 @@ private:
 	LLButton*			mIMButton;
 	LLMenuButton*		mCopyMenuButton;
 	LLPanel*			mGiveInvPanel;
+	LLMenuButton*		mOverflowButton; // <FS:Ansariel> Gear button
 
 	bool				mVoiceStatus;
 

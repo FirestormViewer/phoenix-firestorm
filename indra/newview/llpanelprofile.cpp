@@ -283,6 +283,7 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mIMButton               = getChild<LLButton>("im");
     mCopyMenuButton         = getChild<LLMenuButton>("copy_btn");
     mGiveInvPanel           = getChild<LLPanel>("give_stack");
+    mOverflowButton         = getChild<LLMenuButton>("overflow_btn"); // <FS:Ansariel> Gear button
 
     mStatusText->setVisible(FALSE);
     mCopyMenuButton->setVisible(FALSE);
@@ -307,6 +308,24 @@ BOOL LLPanelProfileSecondLife::postBuild()
 
     mGroupList->setDoubleClickCallback(boost::bind(&LLPanelProfileSecondLife::openGroupProfile, this));
     mGroupList->setReturnCallback(boost::bind(&LLPanelProfileSecondLife::openGroupProfile, this));
+
+    // <FS:Ansariel> Gear button
+    LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+    registrar.add("Profile.Call",					[this](LLUICtrl*, const LLSD&) { LLAvatarActions::startCall(getAvatarId()); });
+    registrar.add("Profile.AddToContactSet",		[this](LLUICtrl*, const LLSD&) { LLAvatarActions::addToContactSet(getAvatarId()); });
+    registrar.add("Profile.Share",					[this](LLUICtrl*, const LLSD&) { LLAvatarActions::share(getAvatarId()); });
+    registrar.add("Profile.Kick",					[this](LLUICtrl*, const LLSD&) { LLAvatarActions::kick(getAvatarId()); });
+    registrar.add("Profile.Freeze",					[this](LLUICtrl*, const LLSD&) { LLAvatarActions::freeze(getAvatarId()); });
+    registrar.add("Profile.Unfreeze",				[this](LLUICtrl*, const LLSD&) { LLAvatarActions::unfreeze(getAvatarId()); });
+    registrar.add("Profile.CSR",					[this](LLUICtrl*, const LLSD&) { LLAvatarName av_name; LLAvatarNameCache::get(getAvatarId(), &av_name); std::string name = av_name.getUserName(); LLAvatarActions::csr(getAvatarId(), name); });
+    registrar.add("Profile.CopyNameToClipboard",	[this](LLUICtrl*, const LLSD&) { onCommitMenu("complete_name"); });
+    registrar.add("Profile.CopyURI",				[this](LLUICtrl*, const LLSD&) { onCommitMenu("uri"); });
+    registrar.add("Profile.CopyKey",				[this](LLUICtrl*, const LLSD&) { onCommitMenu("id"); });
+    registrar.add("Profile.Report",					[this](LLUICtrl*, const LLSD&) { LLAvatarActions::report(getAvatarId()); });
+
+    LLToggleableMenu* profile_menu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_profile_overflow.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+    mOverflowButton->setMenu(profile_menu, LLMenuButton::MP_TOP_RIGHT);
+    // </FS:Ansariel>
 
     LLVoiceClient::getInstance()->addObserver((LLVoiceClientStatusObserver*)this);
     mCopyMenuButton->setMenu("menu_name_field.xml", LLMenuButton::MP_BOTTOM_RIGHT);
@@ -888,6 +907,16 @@ void LLPanelProfileSecondLife::onCommitMenu(const LLSD& userdata)
     {
         wstr = utf8str_to_wstring(av_name.getAccountName());
     }
+    // <FS:Ansariel> Gear button
+    else if (item_name == "complete_name")
+    {
+        wstr = utf8str_to_wstring(av_name.getCompleteName());
+    }
+    else if (item_name == "uri")
+    {
+        wstr = utf8str_to_wstring(LLSLURL("agent", getAvatarId(), "about").getSLURLString());
+    }
+    // </FS:Ansariel>
     else if (item_name == "id")
     {
         wstr = utf8str_to_wstring(getAvatarId().asString());

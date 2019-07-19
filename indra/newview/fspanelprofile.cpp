@@ -310,7 +310,7 @@ void FSPanelProfileSecondLife::onOpen(const LLSD& key)
 
 	mDescriptionEdit->setParseHTML(!own_profile && !getEmbedded());
 
-	FSDropTarget* drop_target = getChild<FSDropTarget>("drop_target");
+	LLProfileDropTarget* drop_target = getChild<LLProfileDropTarget>("drop_target");
 	drop_target->setVisible(!own_profile);
 	drop_target->setEnabled(!own_profile);
 
