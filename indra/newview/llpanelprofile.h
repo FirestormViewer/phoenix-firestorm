@@ -34,6 +34,7 @@
 #include "llpanelavatar.h"
 #include "llmediactrl.h"
 #include "llvoiceclient.h"
+#include "rlvhandler.h"
 
 // class LLPanelProfileClassifieds;
 // class LLTabContainer;
@@ -208,6 +209,11 @@ private:
 	bool				mVoiceStatus;
 
 	boost::signals2::connection	mAvatarNameCacheConnection;
+
+    // <FS:Ansariel> RLVa support
+    boost::signals2::connection mRlvBehaviorCallbackConnection;
+    void updateRlvRestrictions(ERlvBehaviour behavior);
+    // </FS:Ansariel>
 };
 
 

@@ -38,6 +38,8 @@
 #include "llcoros.h"
 #include "lleventcoro.h"
 
+#include "rlvhandler.h"
+
 class LLCheckBoxCtrl;
 class LLLineEditor;
 class LLMediaCtrl;
@@ -97,6 +99,11 @@ private:
 
     bool canAddNewClassified();
     bool canDeleteClassified();
+
+     // <FS:Ansariel> RLVa support
+    boost::signals2::connection mRlvBehaviorCallbackConnection;
+    void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+    // </FS:Ansariel>
 
     LLTabContainer* mTabContainer;
     LLUICtrl*       mNoItemsLabel;

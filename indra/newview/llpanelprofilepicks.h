@@ -33,6 +33,8 @@
 #include "llpanelavatar.h"
 #include "llremoteparcelrequest.h"
 
+#include "rlvhandler.h"
+
 class LLTabContainer;
 class LLTextureCtrl;
 class LLMediaCtrl;
@@ -76,6 +78,11 @@ private:
     void onClickNewBtn();
     void onClickDelete();
     void callbackDeletePick(const LLSD& notification, const LLSD& response);
+
+    // <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
+    boost::signals2::connection mRlvBehaviorCallbackConnection;
+    void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+    // </FS:Ansariel>
 
     bool canAddNewPick();
     bool canDeletePick();

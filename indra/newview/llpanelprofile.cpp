@@ -233,6 +233,7 @@ LLPanelProfileSecondLife::LLPanelProfileSecondLife()
  : LLPanelProfileTab()
  , mStatusText(NULL)
  , mAvatarNameCacheConnection()
+ , mRlvBehaviorCallbackConnection() // <FS:Ansariel> RLVa support
 {
 }
 
@@ -252,6 +253,13 @@ LLPanelProfileSecondLife::~LLPanelProfileSecondLife()
     {
         mAvatarNameCacheConnection.disconnect();
     }
+
+    // <FS:Ansariel> RLVa support
+    if (mRlvBehaviorCallbackConnection.connected())
+    {
+        mRlvBehaviorCallbackConnection.disconnect();
+    }
+    // </FS:Ansariel>
 }
 
 BOOL LLPanelProfileSecondLife::postBuild()
@@ -301,6 +309,9 @@ BOOL LLPanelProfileSecondLife::postBuild()
 
     LLVoiceClient::getInstance()->addObserver((LLVoiceClientStatusObserver*)this);
     mCopyMenuButton->setMenu("menu_name_field.xml", LLMenuButton::MP_BOTTOM_RIGHT);
+
+    // <FS:Ansariel> RLVa support
+    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfileSecondLife::updateRlvRestrictions, this, _1));
 
     return TRUE;
 }
@@ -730,17 +741,33 @@ void LLPanelProfileSecondLife::updateButtons()
 
         if (LLAvatarActions::isFriend(av_id))
         {
-            mTeleportButton->setEnabled(is_buddy_online);
+            // <FS:Ansariel> RLVa support
+            //mTeleportButton->setEnabled(is_buddy_online);
+            const LLRelationship* friend_status = LLAvatarTracker::instance().getBuddyInfo(av_id);
+            bool can_offer_tp = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) ||
+                                    (gRlvHandler.isException(RLV_BHVR_TPLURE, av_id, RLV_CHECK_PERMISSIVE) ||
+                                    friend_status->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION)));
+
+            mTeleportButton->setEnabled(is_buddy_online && can_offer_tp);
+            // </FS:Ansariel>
             //Disable "Add Friend" button for friends.
             mAddFriendButton->setEnabled(false);
         }
         else
         {
-            mTeleportButton->setEnabled(true);
+            // <FS:Ansariel> RLVa support
+            //mTeleportButton->setEnabled(true);
+            bool can_offer_tp = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) ||
+                                    gRlvHandler.isException(RLV_BHVR_TPLURE, av_id, RLV_CHECK_PERMISSIVE));
+            mTeleportButton->setEnabled(can_offer_tp);
+            // </FS:Ansariel>
             mAddFriendButton->setEnabled(true);
         }
 
-        bool enable_map_btn = (is_buddy_online && is_agent_mappable(av_id)) || gAgent.isGodlike();
+        // <FS:Ansariel> RLVa support
+        //bool enable_map_btn = (is_buddy_online && is_agent_mappable(av_id)) || gAgent.isGodlike();
+        bool enable_map_btn = ((is_buddy_online && is_agent_mappable(av_id)) || gAgent.isGodlike()) && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP);
+        // </FS:Ansariel>
         mShowOnMapButton->setEnabled(enable_map_btn);
 
         bool enable_block_btn = LLAvatarActions::canBlock(av_id) && !LLAvatarActions::isBlocked(av_id);
@@ -831,6 +858,16 @@ void LLPanelProfileSecondLife::onAvatarNameCacheSetName(const LLUUID& agent_id, 
 
     LLFloaterReg::showInstance("display_name");
 }
+
+// <FS:Ansariel> RLVa support
+void LLPanelProfileSecondLife::updateRlvRestrictions(ERlvBehaviour behavior)
+{
+    if (behavior == RLV_BHVR_SHOWLOC || behavior == RLV_BHVR_SHOWWORLDMAP)
+    {
+        updateButtons();
+    }
+}
+// </FS:Ansariel>
 
 //////////////////////////////////////////////////////////////////////////
 // LLPanelProfileWeb

@@ -137,11 +137,18 @@ LLPanelProfileClassifieds::LLPanelProfileClassifieds()
  : LLPanelProfileTab()
  , mClassifiedToSelectOnLoad(LLUUID::null)
  , mClassifiedEditOnLoad(false)
+ , mRlvBehaviorCallbackConnection() // <FS:Ansariel> RLVa support
 {
 }
 
 LLPanelProfileClassifieds::~LLPanelProfileClassifieds()
 {
+    // <FS:Ansariel> RLVa support
+    if (mRlvBehaviorCallbackConnection.connected())
+    {
+        mRlvBehaviorCallbackConnection.disconnect();
+    }
+    // </FS:Ansariel>
 }
 
 void LLPanelProfileClassifieds::onOpen(const LLSD& key)
@@ -197,6 +204,11 @@ BOOL LLPanelProfileClassifieds::postBuild()
 
     mNewButton->setCommitCallback(boost::bind(&LLPanelProfileClassifieds::onClickNewBtn, this));
     mDeleteButton->setCommitCallback(boost::bind(&LLPanelProfileClassifieds::onClickDelete, this));
+
+    // <FS:Ansariel> RLVa support
+    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfileClassifieds::updateRlvRestrictions, this, _1, _2));
+    mNewButton->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+    // </FS:Ansariel>
 
     return TRUE;
 }
@@ -330,7 +342,10 @@ void LLPanelProfileClassifieds::updateButtons()
 
     if (getSelfProfile() && !getEmbedded())
     {
+        // <FS:Ansariel> RLVa support
         mNewButton->setEnabled(canAddNewClassified());
+        mNewButton->setEnabled(canAddNewClassified() && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+        // </FS:Ansariel>
         mDeleteButton->setEnabled(canDeleteClassified());
     }
 }
@@ -373,6 +388,17 @@ void LLPanelProfileClassifieds::apply()
         }
     }
 }
+
+// <FS:Ansariel> RLVa support
+void LLPanelProfileClassifieds::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
+{
+    if (behavior == RLV_BHVR_SHOWLOC)
+    {
+        updateButtons();
+    }
+}
+// </FS:Ansariel> RLV support
+
 //-----------------------------------------------------------------------------
 // LLDispatchClassifiedClickThrough
 //-----------------------------------------------------------------------------

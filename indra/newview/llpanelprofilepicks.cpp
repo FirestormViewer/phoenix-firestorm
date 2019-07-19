@@ -116,11 +116,18 @@ LLPickHandler gPickHandler;
 LLPanelProfilePicks::LLPanelProfilePicks()
  : LLPanelProfileTab()
  , mPickToSelectOnLoad(LLUUID::null)
+ , mRlvBehaviorCallbackConnection() // <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
 {
 }
 
 LLPanelProfilePicks::~LLPanelProfilePicks()
 {
+    // <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
+    if (mRlvBehaviorCallbackConnection.connected())
+    {
+        mRlvBehaviorCallbackConnection.disconnect();
+    }
+    // </FS:Ansariel>
 }
 
 void LLPanelProfilePicks::onOpen(const LLSD& key)
@@ -171,6 +178,9 @@ BOOL LLPanelProfilePicks::postBuild()
 
     mNewButton->setCommitCallback(boost::bind(&LLPanelProfilePicks::onClickNewBtn, this));
     mDeleteButton->setCommitCallback(boost::bind(&LLPanelProfilePicks::onClickDelete, this));
+
+    // <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
+    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfilePicks::updateRlvRestrictions, this, _1, _2));
 
     return TRUE;
 }
@@ -309,7 +319,10 @@ void LLPanelProfilePicks::updateButtons()
 
     if (getSelfProfile() && !getEmbedded())
     {
-        mNewButton->setEnabled(canAddNewPick());
+        // <FS:Ansariel> RLVa support
+        //mNewButton->setEnabled(canAddNewPick());
+        mNewButton->setEnabled(canAddNewPick() && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+        // </FS:Ansariel>
         mDeleteButton->setEnabled(canDeletePick());
     }
 }
@@ -343,10 +356,23 @@ void LLPanelProfilePicks::updateData()
     }
 }
 
+// <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
+void LLPanelProfilePicks::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
+{
+    if (behavior == RLV_BHVR_SHOWLOC)
+    {
+        updateButtons();
+    }
+}
+
 bool LLPanelProfilePicks::canAddNewPick()
 {
     return (!LLAgentPicksInfo::getInstance()->isPickLimitReached() &&
-        mTabContainer->getTabCount() < LLAgentPicksInfo::getInstance()->getMaxNumberOfPicks());
+        // <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
+        //mTabContainer->getTabCount() < LLAgentPicksInfo::getInstance()->getMaxNumberOfPicks());
+        mTabContainer->getTabCount() < LLAgentPicksInfo::getInstance()->getMaxNumberOfPicks() &&
+        !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+        // </FS:Ansariel>
 }
 
 bool LLPanelProfilePicks::canDeletePick()
