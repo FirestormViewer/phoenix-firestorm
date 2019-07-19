@@ -743,7 +743,10 @@ void LLAvatarActions::share(const LLUUID& id)
 
 	LLSD key;
 	LLFloaterSidePanelContainer::showPanel("inventory", key);
-	LLFloaterReg::showInstance("im_container");
+	// <FS:Ansariel> [FS Communication UI]
+	//LLFloaterReg::showInstance("im_container");
+	LLFloaterReg::showInstance("fs_im_container");
+	// </FS:Ansariel> [FS Communication UI]
 
 	LLUUID session_id = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL,id);
 
