@@ -4879,9 +4879,6 @@ per la regione &quot;[REGION]&quot;
 	<notification name="SnoozeDurationInvalidInput">
 		Inserire un numero valido per la durata del blocco temporaneo chat.
 	</notification>
-	<notification name="PickLimitReached">
-		E' stato raggiunto il numero massimo di preferiti. Non se ne possono aggiungere altri.
-	</notification>
 	<notification name="GlobalOnlineStatusToggle">
 		A causa del carico sul server, la modifica collettiva dello stato di visibilità può impiegare tempo per diventare efficace. Ci vuole pazienza.
 		<usetemplate ignoretext="Informa che la modifica dello stato di visibilità può essere ritardata" name="okignore" />

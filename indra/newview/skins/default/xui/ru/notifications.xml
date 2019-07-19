@@ -5003,8 +5003,4 @@ URL: [MEDIAURL]
 		Пожалуйста, введите правильный номер!
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="PickLimitReached" label="">
-		Не удалось создать место, потому что максимальное количество мест уже были созданы.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
 </notifications>
