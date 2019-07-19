@@ -35,7 +35,7 @@
 		<layout_panel name="label_stack">
 			<text name="status" value="Status Desconocido"/>
 			<text name="label" value="Fecha de nacimiento:"/>
-			<text_editor name="user_key" value="(cargando...)"/>
+			<text_editor name="register_date" value="(cargando...)"/>
 			<text name="label2" value="Cuenta:"/>
 			<text name="partner_label" value="Compañero/a:"/>
 		</layout_panel>
