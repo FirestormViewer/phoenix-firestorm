@@ -207,7 +207,6 @@ BOOL LLPanelProfileClassifieds::postBuild()
 
     // <FS:Ansariel> RLVa support
     mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfileClassifieds::updateRlvRestrictions, this, _1, _2));
-    mNewButton->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
     // </FS:Ansariel>
 
     return TRUE;
@@ -343,7 +342,7 @@ void LLPanelProfileClassifieds::updateButtons()
     if (getSelfProfile() && !getEmbedded())
     {
         // <FS:Ansariel> RLVa support
-        mNewButton->setEnabled(canAddNewClassified());
+        //mNewButton->setEnabled(canAddNewClassified());
         mNewButton->setEnabled(canAddNewClassified() && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
         // </FS:Ansariel>
         mDeleteButton->setEnabled(canDeleteClassified());

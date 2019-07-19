@@ -33,7 +33,7 @@
      width="70"
      follows="left|top"
      layout="topleft"
-     visible="true"
+     visible="false"
     />
     <button
      name="delete_btn"
@@ -44,7 +44,7 @@
      width="70"
      follows="left|top"
      layout="topleft"
-     visible="true"
+     visible="false"
     />
     <tab_container
      name="tab_classifieds"
