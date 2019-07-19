@@ -30,10 +30,12 @@
 	<panel name="name_holder">
 		<text_editor name="complete_name" value="(caricamento in corso...)"/>
 	</panel>
+	<text_editor name="user_key" value="(caricamento in corso...)"/>
 	<layout_stack name="imagepositioner">
 		<layout_panel name="label_stack">
 			<text name="status" value="Stato Sconosciuto"/>
 			<text name="label" value="Compleanno:"/>
+			<text_editor name="register_date" value="(caricamento in corso...)"/>
 			<text name="label2" value="Account:"/>
 			<text name="partner_label" value="Partner:"/>
 		</layout_panel>

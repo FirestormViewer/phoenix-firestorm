@@ -30,10 +30,12 @@
 	<panel name="name_holder">
 		<text_editor name="complete_name" value="（載入中...）"/>
 	</panel>
+	<text_editor name="user_key" value="（載入中...）"/>
 	<layout_stack name="imagepositioner">
 		<layout_panel name="label_stack">
 			<text name="status" value="狀態不明"/>
 			<text name="label" value="生日："/>
+			<text_editor name="register_date" value="（載入中...）"/>
 			<text name="label2" value="帳戶："/>
 			<text name="partner_label" value="伴侶："/>
 		</layout_panel>

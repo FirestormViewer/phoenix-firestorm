@@ -13,7 +13,7 @@
 		http://www.secondlife.com/account/partners.php?lang=de
 	</string>
 	<string name="my_account_link_url" value="http://secondlife.com/account"/>
-	<string name="no_partner_text" value="Keine"/>
+	<string name="no_partner_text" value="Kein Partner"/>
 	<string name="no_group_text" value="Keine"/>
 	<string name="name_text_args">
 		[NAME]
@@ -31,10 +31,12 @@
 		<text_editor name="complete_name" value="(wird geladen...)"/>
 	</panel>
 	<text name="Key:" value="UUID:"/>
+	<text_editor name="user_key" value="(wird geladen...)"/>
 	<layout_stack name="imagepositioner">
 		<layout_panel name="label_stack">
 			<text name="status" value="Status unbekannt"/>
 			<text name="label" value="Geburtsdatum:"/>
+			<text_editor name="register_date" value="(wird geladen...)"/>
 			<text name="label2" value="Konto:"/>
 			<text name="partner_label" value="Partner:"/>
 		</layout_panel>

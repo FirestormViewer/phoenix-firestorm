@@ -30,10 +30,12 @@
 	<panel name="name_holder">
 		<text_editor name="complete_name" value="(загрузка…)"/>
 	</panel>
+	<text_editor name="user_key" value="(загрузка…)"/>
 	<layout_stack name="imagepositioner">
 		<layout_panel name="label_stack">
 			<text name="status" value="Статус неизвестен"/>
 			<text name="label" value="Возраст:"/>
+			<text_editor name="register_date" value="(загрузка…)"/>
 			<text name="label2" value="Аккаунт:"/>
 			<text name="partner_label" value="Партнер:"/>
 		</layout_panel>

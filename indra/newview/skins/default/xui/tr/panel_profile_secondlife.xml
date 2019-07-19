@@ -30,10 +30,12 @@
 	<panel name="name_holder">
 		<text_editor name="complete_name" value="(yükleniyor...)"/>
 	</panel>
+	<text_editor name="user_key" value="(yükleniyor...)"/>
 	<layout_stack name="imagepositioner">
 		<layout_panel name="label_stack">
 			<text name="status" value="Durum Bilinmiyor"/>
 			<text name="label" value="Doğum Tarihi:"/>
+			<text_editor name="register_date" value="(yükleniyor...)"/>
 			<text name="label2" value="Hesap:"/>
 			<text name="partner_label" value="Ortak:"/>
 		</layout_panel>

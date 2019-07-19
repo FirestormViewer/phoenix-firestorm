@@ -295,7 +295,7 @@
              h_pad="3"
              max_length="254"
              read_only="true"
-             translate="false"
+             translate="true"
              v_pad="2"
              word_wrap="true"
              />

@@ -30,10 +30,12 @@
 	<panel name="name_holder">
 		<text_editor name="complete_name" value="(ロード中...)"/>
 	</panel>
+	<text_editor name="user_key" value="(ロード中...)"/>
 	<layout_stack name="imagepositioner">
 		<layout_panel name="label_stack">
 			<text name="status" value="ステータス不明"/>
 			<text name="label" value="生年月日："/>
+			<text_editor name="register_date" value="(ロード中...)"/>
 			<text name="label2" value="アカウント："/>
 			<text name="partner_label" value="パートナー："/>
 		</layout_panel>
