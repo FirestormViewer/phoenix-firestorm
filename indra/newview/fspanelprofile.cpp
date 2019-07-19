@@ -1049,7 +1049,7 @@ void FSPanelProfileInterests::processProperties(void* data, EAvatarProcessorType
 {
 	if (APT_INTERESTS_INFO == type)
 	{
-		const FSInterestsData* interests_data = static_cast<const FSInterestsData*>(data);
+		const LLInterestsData* interests_data = static_cast<const LLInterestsData*>(data);
 		if (interests_data && getAvatarId() == interests_data->avatar_id)
 		{
 			for (S32 i = 0; i < WANT_CHECKS; ++i)
@@ -1106,7 +1106,7 @@ void FSPanelProfileInterests::apply()
 {
 	if (getIsLoaded() && getSelfProfile())
 	{
-		FSInterestsData interests_data = FSInterestsData();
+		LLInterestsData interests_data = LLInterestsData();
 
 		interests_data.want_to_mask = 0;
 		for (S32 i = 0; i < WANT_CHECKS; ++i)
@@ -1575,6 +1575,7 @@ void FSPanelPick::updateTabLabel(const std::string& title)
 
 FSPanelProfilePicks::FSPanelProfilePicks()
  : FSPanelProfileTab(),
+	mPickToSelectOnLoad(LLUUID::null),
 	mRlvBehaviorCallbackConnection()
 {
 }
@@ -1600,6 +1601,29 @@ void FSPanelProfilePicks::onOpen(const LLSD& key)
 
 		mDeleteButton->setVisible(TRUE);
 		mDeleteButton->setEnabled(FALSE);
+	}
+}
+
+void FSPanelProfilePicks::selectPick(const LLUUID& pick_id)
+{
+	if (getIsLoaded())
+	{
+		for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
+		{
+			FSPanelPick* pick_panel = dynamic_cast<FSPanelPick*>(mTabContainer->getPanelByIndex(tab_idx));
+			if (pick_panel)
+			{
+				if (pick_panel->getPickId() == pick_id)
+				{
+					mTabContainer->selectTabPanel(pick_panel);
+					break;
+				}
+			}
+		}
+	}
+	else
+	{
+		mPickToSelectOnLoad = pick_id;
 	}
 }
 
@@ -1685,14 +1709,16 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
 		LLAvatarPicks* avatar_picks = static_cast<LLAvatarPicks*>(data);
 		if (avatar_picks && getAvatarId() == avatar_picks->target_id)
 		{
-
-			LLUUID selected_id = LLUUID::null;
-			if (mTabContainer->getTabCount() > 0)
+			LLUUID selected_id = mPickToSelectOnLoad;
+			if (mPickToSelectOnLoad.isNull())
 			{
-				FSPanelPick* active_pick_panel = dynamic_cast<FSPanelPick*>(mTabContainer->getCurrentPanel());
-				if (active_pick_panel)
+				if (mTabContainer->getTabCount() > 0)
 				{
-					selected_id = active_pick_panel->getPickId();
+					FSPanelPick* active_pick_panel = dynamic_cast<FSPanelPick*>(mTabContainer->getCurrentPanel());
+					if (active_pick_panel)
+					{
+						selected_id = active_pick_panel->getPickId();
+					}
 				}
 			}
 
@@ -1715,6 +1741,11 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
 					panel(pick_panel).
 					select_tab(selected_id == pick_id).
 					label(pick_name));
+
+				if (selected_id == pick_id)
+				{
+					mPickToSelectOnLoad = LLUUID::null;
+				}
 			}
 
 			mNewButton->setEnabled(canAddNewPick());
@@ -2117,11 +2148,7 @@ BOOL FSPanelProfile::postBuild()
 
 void FSPanelProfile::processProperties(void* data, EAvatarProcessorType type)
 {
-	mTabContainer = getChild<LLTabContainer>("panel_profile_tabs");
-	if (mTabContainer)
-	{
-		mTabContainer->setCommitCallback(boost::bind(&FSPanelProfile::onTabChange, this));
-	}
+	mTabContainer->setCommitCallback(boost::bind(&FSPanelProfile::onTabChange, this));
 	
 	// Load data on currently opened tab as well
 	onTabChange();
@@ -2146,6 +2173,7 @@ void FSPanelProfile::onOpen(const LLSD& key)
 	
 	FSPanelProfileTab::onOpen(key);
 	
+	mTabContainer		= getChild<LLTabContainer>("panel_profile_tabs");
 	mPanelSecondlife	= findChild<FSPanelProfileSecondLife>(PANEL_SECONDLIFE);
 	mPanelWeb			= findChild<FSPanelProfileWeb>(PANEL_WEB);
 	mPanelInterests		= findChild<FSPanelProfileInterests>(PANEL_INTERESTS);
@@ -2219,3 +2247,27 @@ void FSPanelProfile::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarNam
 	mPanelSecondlife->onAvatarNameCache(agent_id, av_name);
 	mPanelWeb->onAvatarNameCache(agent_id, av_name);
 }
+
+void FSPanelProfile::showPick(const LLUUID& pick_id)
+{
+	if (pick_id.notNull())
+	{
+		mPanelPicks->selectPick(pick_id);
+	}
+	mTabContainer->selectTabPanel(mPanelPicks);
+}
+
+bool FSPanelProfile::isPickTabSelected()
+{
+	return (mTabContainer->getCurrentPanel() == mPanelPicks);
+}
+
+void FSPanelProfile::showClassified(const LLUUID& classified_id, bool edit)
+{
+	if (classified_id.notNull())
+	{
+		mPanelClassifieds->selectClassified(classified_id, edit);
+	}
+	mTabContainer->selectTabPanel(mPanelClassifieds);
+}
+

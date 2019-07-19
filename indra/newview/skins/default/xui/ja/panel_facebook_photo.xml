@@ -30,5 +30,5 @@
 		コメント (オプション):
 	</text>
 	<button label="投稿する" name="post_photo_btn"/>
-	<button label="取り消し" name="cancel_photo_btn"/>
+	<button label="キャンセル" name="cancel_photo_btn"/>
 </panel>

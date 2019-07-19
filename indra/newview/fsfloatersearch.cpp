@@ -53,7 +53,7 @@
 #include "llloadingindicator.h"
 #include "lllogininstance.h"
 #include "llnotificationsutil.h"
-#include "llpanelclassified.h"
+#include "llpanelprofileclassifieds.h"
 #include "llparcel.h"
 #include "llproductinforequest.h"
 #include "llqueryflags.h"
@@ -172,7 +172,7 @@ public:
 					LL_INFOS("Search") << "Classified stat request via capability" << LL_ENDL;
 					LLSD body;
 					body["classified_id"] = c_info->classified_id;
-					LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body, boost::bind(&LLPanelClassifiedInfo::handleSearchStatResponse, c_info->classified_id, _1));
+					LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body, boost::bind(&LLPanelProfileClassified::handleSearchStatResponse, c_info->classified_id, _1));
 				}
 			}
 		}

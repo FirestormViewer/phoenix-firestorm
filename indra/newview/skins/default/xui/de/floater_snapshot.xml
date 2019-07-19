@@ -7,7 +7,7 @@
 		E-Mail senden
 	</string>
 	<string name="facebook_progress_str">
-		Posten auf Facebook
+		Auf Facebook posten
 	</string>
 	<string name="profile_progress_str">
 		Posten
@@ -20,7 +20,7 @@
 	</string>
 	<string name="facebook_succeeded_str">
 		Bild hochgeladen
- 	</string>
+	</string>
 	<string name="profile_succeeded_str">
 		Bild hochgeladen
 	</string>
@@ -32,6 +32,9 @@
 	</string>
 	<string name="local_succeeded_str">
 		Auf Computer gespeichert!
+	</string>
+	<string name="facebook_failed_str">
+		Fehler beim Hochladen des Bilds in Ihre Facebook-Chronik.
 	</string>
 	<string name="profile_failed_str">
 		Fehler beim Hochladen des Bilds in Ihr Profil.

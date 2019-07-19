@@ -7,7 +7,7 @@
 		Invio e-mail in corso
 	</string>
 	<string name="facebook_progress_str">
-		Caricamento su Facebook
+		Pubblicazione su Facebook in corso
 	</string>
 	<string name="profile_progress_str">
 		Caricamento in corso
@@ -19,7 +19,7 @@
 		Salvataggio sul computer in corso
 	</string>
 	<string name="facebook_succeeded_str">
-		Pubblicazione sul profilo completata
+		Immagine caricata
 	</string>
 	<string name="profile_succeeded_str">
 		Immagine caricata
@@ -34,7 +34,7 @@
 		Salvata sul computer
 	</string>
 	<string name="facebook_failed_str">
-		Pubblicazione sul profilo non riuscita.
+		Caricamento immagine sul diario di Facebook non riuscito.
 	</string>
 	<string name="profile_failed_str">
 		Caricamento immagine sul feed del profilo non riuscito.

@@ -2691,6 +2691,9 @@ Prova a selezionare una parte di terreno più piccola.
 	<notification name="NoContentToSearch">
 		Seleziona almeno un tipo di contenuto per la ricerca (Generale, Moderato o Adulti).
 	</notification>
+	<notification name="FacebookConnect">
+		[MESSAGE]
+	</notification>
 	<notification name="EventNotification">
 		Notifica eventi:
 

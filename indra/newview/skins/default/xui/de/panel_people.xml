@@ -61,6 +61,7 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 				<button name="GlobalOnlineStatusToggle" tool_tip="Sichtbarkeit des Onlinestatus global umschalten"/>
 				<dnd_button name="friends_del_btn" tool_tip="Ausgewählte Person als Freund entfernen"/>
 			</panel>
+				<accordion_tab name="tab_suggested_friends" title="Potenzielle Freunde"/>
 		</panel>
 		<panel label="Gruppen" name="groups_panel">
 			<panel label="bottom_panel" name="groups_buttons_panel">

@@ -1,11 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<floater name="floater_facebook" title="Publier sur Facebook">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_facebook" title="PUBLIER SUR FACEBOOK">
 	<tab_container name="tabs">
-		<panel label="Statut" name="panel_facebook_status"/>
-		<panel label="Photo" name="panel_facebook_photo"/>
-		<panel label="Connexion" name="panel_facebook_place"/>
-		<panel label="Amis" name="panel_facebook_friends"/>
+		<panel label="STATUT" name="panel_facebook_status"/>
+		<panel label="PHOTO" name="panel_facebook_photo"/>
+		<panel label="INDIQUER VOTRE PRÉSENCE" name="panel_facebook_place"/>
+		<panel label="AMIS" name="panel_facebook_friends"/>
 	</tab_container>
-	<text name="connection_error_text">Erreur</text>
-	<text name="connection_loading_text">Chargement...</text>
+	<text name="connection_error_text">
+		Erreur
+	</text>
+	<text name="connection_loading_text">
+		En cours de chargement...
+	</text>
 </floater>

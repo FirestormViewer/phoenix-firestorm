@@ -394,9 +394,7 @@ public:
 	virtual void	onFocusReceived();
 	virtual void	onFocusLost();
 
-//<FS:KC - expose ParseHTML setting>
-                void        setParseHTML(bool parse_html) { mParseHTML = parse_html; }
-//</FS:KC - expose ParseHTML setting>
+    void        setParseHTML(bool parse_html) { mParseHTML = parse_html; }
 
 	// LLSpellCheckMenuHandler overrides
 	/*virtual*/ bool		getSpellCheck() const;

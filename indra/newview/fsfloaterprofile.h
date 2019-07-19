@@ -31,6 +31,8 @@
 #include "llavatarnamecache.h"
 #include "llfloater.h"
 
+class FSPanelProfile;
+
 class FSFloaterProfile : public LLFloater
 {
 	LOG_CLASS(FSFloaterProfile);
@@ -41,6 +43,11 @@ public:
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ BOOL postBuild();
 
+	void showPick(const LLUUID& pick_id = LLUUID::null);
+	bool isPickTabSelected();
+
+	void showClassified(const LLUUID& classified_id = LLUUID::null, bool edit = false);
+
 protected:
 	void onOKBtn();
 	void onCancelBtn();
@@ -48,6 +55,8 @@ protected:
 private:
 	LLAvatarNameCache::callback_connection_t mNameCallbackConnection;
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+
+	FSPanelProfile* mPanelProfile;
 
 	LLUUID mAvatarId;
 };

@@ -1,47 +1,77 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Snapshot" title="Photos">
-	<floater.string name="unknown">inconnu</floater.string>
-	<string name="postcard_progress_str">Envoi par mail</string>
-	<string name="facebook_progress_str">Publication sur Facebook</string>
-	<string name="profile_progress_str">Publication</string>
-	<string name="inventory_progress_str">Enregistrement dans l'inventaire</string>
-	<string name="local_progress_str">Enregistrement sur le disque</string>
-	<string name="facebook_succeeded_str">Image envoyée</string>
-	<string name="profile_succeeded_str">Image uploadée</string>
-	<string name="postcard_succeeded_str">Mail envoyé !</string>
-	<string name="inventory_succeeded_str">Enregistré dans l'inventaire !</string>
-	<string name="local_succeeded_str">Enregistré sur le disque !</string>
-	<string name="facebook_failed_str">Erreur lors de l'envoi de votre image sur votre Timeline Facebook.</string>
-	<string name="profile_failed_str">Erreur lors de l'envoi de l'image sur le flux de votre profil.</string>
-	<string name="postcard_failed_str">Erreur lors de l'envoi du mail.</string>
-	<string name="inventory_failed_str">Erreur lors de l'enregistrement dans l'inventaire.</string>
-	<string name="local_failed_str">Erreur lors de l'enregistrement sur le disque.</string>
-	<view name="controls_container">
-		<button label="Actualiser" name="new_snapshot_btn"/>
-		<panel name="advanced_options_panel">
-			<text name="layer_type_label">Capturer :</text>
-			<combo_box label="Qualité de l'image" name="layer_types">
-				<combo_box.item label="Couleurs" name="Colors"/>
-				<combo_box.item label="Profondeur" name="Depth"/>
-				<combo_box.item label="Profondeur (24 bits)" name="Depth24"/>
-			</combo_box>
-			<check_box label="Interface" name="ui_check"/>
-			<check_box label="Solde de L$" name="currency_check"/>
-			<check_box label="HUD" name="hud_check"/>
-			<check_box label="Figer l'écran (plein écran)" name="freeze_frame_check"/>
-			<check_box label="Actualisation automatique" name="auto_snapshot_check"/>
-			<text name="filter_list_label">Filtre :</text>
-			<combo_box name="filters_combobox" tool_tip="Filtres pour l'image"><combo_box.item label="Pas de filtre" name="NoFilter"/></combo_box>
-		</panel>
-		<panel name="succeeded_panel">
-			<text name="succeeded_lbl">Réussi</text>
-		</panel>
-		<panel name="failed_panel">
-			<text name="failed_lbl">Erreur</text>
-		</panel>
-		<text name="working_lbl">En cours</text>
-		<text name="refresh_lbl">Actualisez pour sauvegarder.</text>
-	</view>
-	<text name="image_res_text">[WIDTH]px (Largeur) x [HEIGHT]px (Hauteur)</text>
-	<text name="file_size_label">[SIZE] Ko</text>
+<floater name="Snapshot" title="PHOTO">
+	<floater.string name="unknown">
+		inconnu
+	</floater.string>
+	<string name="postcard_progress_str">
+		Envoi par e-mail
+	</string>
+	<string name="facebook_progress_str">
+		Publication sur Facebook
+	</string>
+	<string name="profile_progress_str">
+		Publication
+	</string>
+	<string name="inventory_progress_str">
+		Enregistrement dans l&apos;inventaire
+	</string>
+	<string name="local_progress_str">
+		Enregistrement sur l&apos;ordinateur
+	</string>
+	<string name="facebook_succeeded_str">
+		Image chargée
+	</string>
+	<string name="profile_succeeded_str">
+		Image chargée
+	</string>
+	<string name="postcard_succeeded_str">
+		Envoi par e-mail effectué !
+	</string>
+	<string name="inventory_succeeded_str">
+		Enregistrement dans l&apos;inventaire effectué !
+	</string>
+	<string name="local_succeeded_str">
+		Enregistrement sur l&apos;ordinateur effectué !
+	</string>
+	<string name="facebook_failed_str">
+		Échec de chargement de l&apos;image dans votre journal Facebook.
+	</string>
+	<string name="profile_failed_str">
+		Échec de chargement de l&apos;image sur le flux de votre profil.
+	</string>
+	<string name="postcard_failed_str">
+		Échec d&apos;envoi par e-mail.
+	</string>
+	<string name="inventory_failed_str">
+		Échec d&apos;enregistrement dans l&apos;inventaire.
+	</string>
+	<string name="local_failed_str">
+		Échec d&apos;enregistrement sur l&apos;ordinateur.
+	</string>
+	<button label="ACTUALISER" name="new_snapshot_btn"/>
+	<panel name="advanced_options_panel">
+		<text name="layer_type_label">
+			Capturer :
+		</text>
+		<combo_box label="Couches d&apos;images" name="layer_types">
+			<combo_box.item label="Couleurs" name="Colors"/>
+			<combo_box.item label="Profondeur" name="Depth"/>
+		</combo_box>
+		<check_box label="Interface" name="ui_check"/>
+		<check_box label="HUD" name="hud_check"/>
+		<check_box label="Arrêt sur image (plein écran)" name="freeze_frame_check"/>
+		<check_box label="Actualisation automatique" name="auto_snapshot_check"/>
+		<text name="filter_list_label">
+			Filtre :
+		</text>
+		<combo_box name="filters_combobox" tool_tip="Filtres d&apos;image">
+			<combo_box.item label="Aucun filtre" name="NoFilter"/>
+		</combo_box>
+	</panel>
+	<text name="image_res_text">
+		[WIDTH] px (largeur) x [HEIGHT] px (hauteur)
+	</text>
+	<text name="file_size_label">
+		[SIZE] Ko
+	</text>
 </floater>

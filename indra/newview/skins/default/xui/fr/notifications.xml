@@ -2597,6 +2597,9 @@ Veuillez sélectionner un terrain plus petit.
 	<notification name="SystemMessage">
 		[MESSAGE]
 	</notification>
+	<notification name="FacebookConnect">
+		[MESSAGE]
+	</notification>
 	<notification name="FlickrConnect">
 		[MESSAGE]
 	</notification>

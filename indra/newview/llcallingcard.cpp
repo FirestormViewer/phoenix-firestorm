@@ -712,10 +712,6 @@ void LLAvatarTracker::processChange(LLMessageSystem* msg)
 			if(mBuddyInfo.find(agent_related) != mBuddyInfo.end())
 			{
 				(mBuddyInfo[agent_related])->setRightsTo(new_rights);
-
-				// I'm not totally sure why it adds the agents id to the changed list
-				// nor why it doesn't add the friends's ID.
-				// Add the friend's id to the changed list for contacts list -KC
 				mChangedBuddyIDs.insert(agent_related);
 			}
 		}

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panel name="panel_facebook_photo">
-	<combo_box name="resolution_combobox" tool_tip="Risoluzione immagini">
+	<combo_box name="resolution_combobox" tool_tip="Risoluzione immagine">
 		<combo_box.item label="Finestra attuale" name="CurrentWindow"/>
 		<combo_box.item label="Personalizza" name="Custom"/>
 	</combo_box>
-	<combo_box name="filters_combobox" tool_tip="Filtri immagini">
+	<combo_box name="filters_combobox" tool_tip="Filtri immagine">
 		<combo_box.item label="Nessun filtro" name="NoFilter"/>
 	</combo_box>
 	<check_box label="Mantieni proporzioni" name="keep_aspect_ratio" />

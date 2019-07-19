@@ -17,5 +17,5 @@
 		今どんな気持ち？
 	</text>
 	<button label="投稿する" name="post_status_btn"/>
-	<button label="取り消し" name="cancel_status_btn"/>
+	<button label="キャンセル" name="cancel_status_btn"/>
 </panel>

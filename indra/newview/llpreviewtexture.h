@@ -92,6 +92,9 @@ public:
 	
 	static void			onSaveAsBtn(LLUICtrl* ctrl, void* data);
 
+	// <FS:Ansariel> Texture preview mode
+	//void				hideCtrlButtons();
+
 	/*virtual*/ void setObjectID(const LLUUID& object_id);
 
 	// <FS:Techwolf Lupindo> texture comment metadata reader
