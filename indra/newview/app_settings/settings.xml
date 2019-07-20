@@ -1016,7 +1016,7 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
-  <key>FSSupportGroupChatPrefix2</key>
+  <key>FSSupportGroupChatPrefix3</key>
     <map>
       <key>Comment</key>
       <string>Adds (FS 1.2.3) to support group chat</string>
@@ -15286,7 +15286,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <integer>0</integer>
       </array>
       <key>SanityComment</key>
-      <string>This might cause textures to look blurry and sculpties might fail to load properly. Please see &quot;Prefrences -&gt; Graphics -&gt; Rendering -&gt; Max Texture Quality Level&quot; to change.</string>
+      <string>This might cause textures to look blurry and sculpties might fail to load properly. Please see &quot;Preferences -&gt; Graphics -&gt; Rendering -&gt; Max Texture Quality Level&quot; to change.</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>

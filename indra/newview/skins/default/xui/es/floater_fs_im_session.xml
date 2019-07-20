@@ -42,7 +42,11 @@
 		</layout_panel>
 		<layout_panel name="support_panel" width="120">
 			<icon name="dummy_icon_support_group" width="118"/>
-			<check_box label="Especificar visor" name="FSSupportGroupChatPrefix_toggle" width="115" tool_tip="Añade tu versión actual de visor y la información de skin al principio de tus mensajes para ayudar al equipo de soporte a diagnosticar tus problemas correctamente y a mejorar la precisión en las respuestas a tus preguntas"/>
+			<check_box label="Especificar versión" name="FSSupportGroupChatPrefix_toggle" width="115" tool_tip="Añade la versión actual del visor, el skin del visor, el sistema operativo y el estatus del RLVa al principio de los mensajes enviados por usted a este grupo, lo cual asistirá al personal de apoyo a correctamente diagnosticar su problema, y a mejorar la precisión de las respuestas a sus preguntas"/>
+		</layout_panel>
+		<layout_panel name="testing_panel" width="120">
+			<icon name="dummy_icon_support_group" width="118"/>
+			<check_box label="Especificar compilación" name="FSSupportGroupChatPrefixTesting_toggle" width="115" tool_tip="Añade la compilación actual del visor, el skin del visor, el sistema operativo y el estatus del RLVa al principio de los mensajes enviados por usted a este grupo, lo cual asistirá al personal de apoyo a correctamente diagnosticar su problema, y a mejorar la precisión de las respuestas a sus preguntas"/>
 		</layout_panel>
 	</layout_stack>
 </floater>

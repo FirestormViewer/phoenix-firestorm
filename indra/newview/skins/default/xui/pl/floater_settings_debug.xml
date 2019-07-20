@@ -10,6 +10,7 @@
 			<radio_item label="FAŁSZ" name="FALSE" />
 		</radio_group>
 		<color_swatch label="Kolor" name="val_color_swatch"/>
+		<button name="sanity_warning_btn" tool_tip="To ustawienie debugowania nie wydaje się być poprawne; jego wartość leży poza zalecanym zakresem." />
 		<button label="Kopiuj" name="copy_btn" tool_tip="Skopiuj nazwę ustawienia do schowka."/>
 		<button label="Domyślnie" name="default_btn" tool_tip="Resetuj to ustawienie do wartości domyślnej."/>
 	</panel>
