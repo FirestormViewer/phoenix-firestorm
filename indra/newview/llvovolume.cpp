@@ -7000,7 +7000,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 						{
 							registerFace(group, facep, LLRenderPass::PASS_SIMPLE);
 						}
-				}
+				    }
 				}
 				
 				

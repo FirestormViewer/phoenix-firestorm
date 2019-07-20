@@ -820,6 +820,9 @@ void LLVertexBuffer::drawElements(U32 mode, const S32 num_vertices, const LLVect
 
 void LLVertexBuffer::validateRange(U32 start, U32 end, U32 count, U32 indices_offset) const
 {
+    llassert(start < (U32)mNumVerts);
+    llassert(end < (U32)mNumVerts);
+
 	if (start >= (U32) mNumVerts ||
 	    end >= (U32) mNumVerts)
 	{
@@ -839,6 +842,9 @@ void LLVertexBuffer::validateRange(U32 start, U32 end, U32 count, U32 indices_of
 		U16* idx = ((U16*) getIndicesPointer())+indices_offset;
 		for (U32 i = 0; i < count; ++i)
 		{
+            llassert(idx[i] >= start);
+            llassert(idx[i] <= end);
+
 			if (idx[i] < start || idx[i] > end)
 			{
 				LL_ERRS() << "Index out of range: " << idx[i] << " not in [" << start << ", " << end << "]" << LL_ENDL;
@@ -857,6 +863,7 @@ void LLVertexBuffer::validateRange(U32 start, U32 end, U32 count, U32 indices_of
 			for (U32 i = start; i < end; i++)
 			{
 				S32 idx = (S32) (v[i][3]+0.25f);
+                llassert(idx >= 0);
 				if (idx < 0 || idx >= shader->mFeatures.mIndexedTextureChannels)
 				{
 					LL_ERRS() << "Bad texture index found in vertex data stream." << LL_ENDL;
@@ -1108,17 +1115,28 @@ S32 LLVertexBuffer::determineUsage(S32 usage)
 	{ //only stream_draw and dynamic_draw are supported when using VBOs, dynamic draw is the default
 		if (ret_usage != GL_DYNAMIC_COPY_ARB)
 		{
-		if (sDisableVBOMapping)
-		{ //always use stream draw if VBO mapping is disabled
-			ret_usage = GL_STREAM_DRAW_ARB;
-		}
-		else
-		{
-			ret_usage = GL_DYNAMIC_DRAW_ARB;
-		}
-	}
+		    if (sDisableVBOMapping)
+		    { //always use stream draw if VBO mapping is disabled
+			    ret_usage = GL_STREAM_DRAW_ARB;
+		    }
+		    else
+		    {
+			    ret_usage = GL_DYNAMIC_DRAW_ARB;
+		    }
+	    }
 	}
 	
+    if (ret_usage == 0)
+    {
+            if (sDisableVBOMapping)
+		    { //always use stream draw if VBO mapping is disabled
+			    ret_usage = GL_STREAM_DRAW_ARB;
+		    }
+		    else
+		    {
+			    ret_usage = GL_DYNAMIC_DRAW_ARB;
+		    }
+    }
 	return ret_usage;
 }
 
@@ -1148,6 +1166,8 @@ LLVertexBuffer::LLVertexBuffer(U32 typemask, S32 usage)
 	mMappable(false),
 	mFence(NULL)
 {
+    llassert(mUsage != 0);
+
 	mMappable = (mUsage == GL_DYNAMIC_DRAW_ARB && !sDisableVBOMapping);
 
 	//zero out offsets
@@ -1673,10 +1693,10 @@ bool LLVertexBuffer::resizeBuffer(S32 newnverts, S32 newnindices)
 	llassert(newnverts >= 0);
 	llassert(newnindices >= 0);
 
-	bool sucsess = true;
+	bool success = true;
 
-	sucsess &= updateNumVerts(newnverts);		
-	sucsess &= updateNumIndices(newnindices);
+	success &= updateNumVerts(newnverts);		
+	success &= updateNumIndices(newnindices);
 	
 	if (useVBOs())
 	{
@@ -1688,13 +1708,13 @@ bool LLVertexBuffer::resizeBuffer(S32 newnverts, S32 newnindices)
 		}
 	}
 
-	return sucsess;
+	return success;
 }
 
 bool LLVertexBuffer::useVBOs() const
 {
 	//it's generally ineffective to use VBO for things that are streaming on apple
-	return (mUsage != 0);
+	return sEnableVBOs && (mUsage != 0);
 }
 
 //----------------------------------------------------------------------------

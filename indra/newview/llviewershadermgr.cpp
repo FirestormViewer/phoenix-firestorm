@@ -216,6 +216,7 @@ LLGLSLShader			gDeferredSoftenWaterProgram;
 LLGLSLShader			gDeferredShadowProgram;
 LLGLSLShader			gDeferredShadowCubeProgram;
 LLGLSLShader			gDeferredShadowAlphaMaskProgram;
+LLGLSLShader			gDeferredShadowFullbrightAlphaMaskProgram;
 LLGLSLShader			gDeferredAvatarShadowProgram;
 LLGLSLShader			gDeferredAvatarAlphaShadowProgram;
 LLGLSLShader			gDeferredAvatarAlphaMaskShadowProgram;
@@ -1309,6 +1310,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredShadowProgram.unload();
 		gDeferredShadowCubeProgram.unload();
         gDeferredShadowAlphaMaskProgram.unload();
+        gDeferredShadowFullbrightAlphaMaskProgram.unload();
 		gDeferredAvatarShadowProgram.unload();
         gDeferredAvatarAlphaShadowProgram.unload();
         gDeferredAvatarAlphaMaskShadowProgram.unload();
@@ -1499,6 +1501,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredSkinnedAlphaProgram.clearPermutations();
 		gDeferredSkinnedAlphaProgram.addPermutation("USE_DIFFUSE_TEX", "1");
 		gDeferredSkinnedAlphaProgram.addPermutation("HAS_SKIN", "1");
+        gDeferredSkinnedAlphaProgram.addPermutation("USE_VERTEX_COLOR", "1");
 
 		if (use_sun_shadow)
 		{
@@ -1965,7 +1968,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
         gDeferredAlphaProgram.mShaderFiles.push_back(make_pair("deferred/alphaF.glsl", GL_FRAGMENT_SHADER_ARB));
 
         gDeferredAlphaProgram.clearPermutations();
-
+        gDeferredAlphaProgram.addPermutation("USE_VERTEX_COLOR", "1");
         gDeferredAlphaProgram.addPermutation("USE_INDEXED_TEX", "1");
         if (use_sun_shadow)
         {
@@ -2026,6 +2029,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
         gDeferredAlphaImpostorProgram.clearPermutations();
         gDeferredAlphaImpostorProgram.addPermutation("USE_INDEXED_TEX", "1");
         gDeferredAlphaImpostorProgram.addPermutation("FOR_IMPOSTOR", "1");
+        gDeferredAlphaImpostorProgram.addPermutation("USE_VERTEX_COLOR", "1");
 
         if (use_sun_shadow)
         {
@@ -2074,6 +2078,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredAlphaWaterProgram.clearPermutations();
 		gDeferredAlphaWaterProgram.addPermutation("USE_INDEXED_TEX", "1");
 		gDeferredAlphaWaterProgram.addPermutation("WATER_FOG", "1");
+        gDeferredAlphaWaterProgram.addPermutation("USE_VERTEX_COLOR", "1");
 		if (use_sun_shadow)
 		{
 			gDeferredAlphaWaterProgram.addPermutation("HAS_SHADOW", "1");
@@ -2417,6 +2422,26 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	}
 
 	if (success)
+	{
+		gDeferredShadowFullbrightAlphaMaskProgram.mName = "Deferred Shadow Fullbright Alpha Mask Shader";
+		gDeferredShadowFullbrightAlphaMaskProgram.mFeatures.mIndexedTextureChannels = LLGLSLShader::sIndexedTextureChannels;
+
+		gDeferredShadowFullbrightAlphaMaskProgram.mShaderFiles.clear();
+		gDeferredShadowFullbrightAlphaMaskProgram.mShaderFiles.push_back(make_pair("deferred/shadowAlphaMaskV.glsl", GL_VERTEX_SHADER_ARB));
+		gDeferredShadowFullbrightAlphaMaskProgram.mShaderFiles.push_back(make_pair("deferred/shadowAlphaMaskF.glsl", GL_FRAGMENT_SHADER_ARB));
+
+        gDeferredShadowFullbrightAlphaMaskProgram.clearPermutations();
+		if (gGLManager.mHasDepthClamp)
+		{
+			gDeferredShadowFullbrightAlphaMaskProgram.addPermutation("DEPTH_CLAMP", "1");
+		}
+        gDeferredShadowFullbrightAlphaMaskProgram.addPermutation("IS_FULLBRIGHT", "1");
+		gDeferredShadowFullbrightAlphaMaskProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+		success = gDeferredShadowFullbrightAlphaMaskProgram.createShader(NULL, NULL);
+		llassert(success);
+	}
+    
+    if (success)
 	{
 		gDeferredShadowAlphaMaskProgram.mName = "Deferred Shadow Alpha Mask Shader";
 		gDeferredShadowAlphaMaskProgram.mFeatures.mIndexedTextureChannels = LLGLSLShader::sIndexedTextureChannels;
