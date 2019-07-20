@@ -59,7 +59,7 @@ static const std::string CLASSIFIED_NAME("classified_name");
 
 static FSDispatchClassifiedClickThrough sClassifiedClickThrough;
 
-static LLPanelInjector<FSPanelClassifieds> t_panel_classifieds("panel_profile_classified");
+static LLPanelInjector<FSPanelClassifieds> t_panel_fs_classifieds("panel_fs_profile_classified");
 
 //////////////////////////////////////////////////////////////////////////
 

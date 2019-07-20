@@ -218,9 +218,7 @@ set(viewer_SOURCE_FILES
     lggbeamscolors.cpp
     lggcontactsets.cpp
     lfsimfeaturehandler.cpp
-    llfloaterdisplayname.cpp
     llpanelopenregionsettings.cpp
-    llviewerdisplayname.cpp
     # <FS:Ansariel> [Legacy Bake]
     llagentwearablesfetch.cpp
 
@@ -349,6 +347,7 @@ set(viewer_SOURCE_FILES
     llfloaterdeleteenvpreset.cpp
     llfloaterdeleteprefpreset.cpp
     llfloaterdestinations.cpp
+    llfloaterdisplayname.cpp
     llfloatereditdaycycle.cpp
     llfloatereditsky.cpp
     llfloatereditwater.cpp
@@ -754,6 +753,7 @@ set(viewer_SOURCE_FILES
     llviewercontrol.cpp
     llviewercontrollistener.cpp
     llviewerdisplay.cpp
+    llviewerdisplayname.cpp
     llviewerfloaterreg.cpp
     llviewerfoldertype.cpp
     llviewergenericmessage.cpp
@@ -976,8 +976,6 @@ set(viewer_HEADER_FILES
     lggbeamscolors.h
     lggcontactsets.h
     lfsimfeaturehandler.h
-    llfloaterdisplayname.h
-    llviewerdisplayname.h
     # <FS:Ansariel> [Legacy Bake]
     llagentwearablesfetch.h
 
@@ -1107,6 +1105,7 @@ set(viewer_HEADER_FILES
     llfloaterdeleteprefpreset.h
     llfloaterdeleteenvpreset.h
     llfloaterdestinations.h
+    llfloaterdisplayname.h
     llfloatereditdaycycle.h
     llfloatereditsky.h
     llfloatereditwater.h
@@ -1507,6 +1506,7 @@ set(viewer_HEADER_FILES
     llviewercontrol.h
     llviewercontrollistener.h
     llviewerdisplay.h
+    llviewerdisplayname.h
     llviewerfloaterreg.h
     llviewerfoldertype.h
     llviewergenericmessage.h
