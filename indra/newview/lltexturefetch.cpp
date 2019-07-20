@@ -2628,7 +2628,10 @@ LLTextureFetch::LLTextureFetch(LLTextureCache* cache, LLImageDecodeThread* image
 	{
 		mFetchDebugger = new LLTextureFetchDebugger(this, cache, imagedecodethread) ;
 		mFetchSource = (e_tex_source)gSavedSettings.getS32("TextureFetchSource");
-		if(mFetchSource < 0 && mFetchSource >= INVALID_SOURCE)
+		// <FS:ND> && makes no sense at all (always false)
+		// if(mFetchSource < 0 && mFetchSource >= INVALID_SOURCE)
+		if(mFetchSource < 0 || mFetchSource >= INVALID_SOURCE)
+		// </FS:ND>
 		{
 			mFetchSource = LLTextureFetch::FROM_ALL;
 			gSavedSettings.setS32("TextureFetchSource", 0);
