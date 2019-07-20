@@ -1589,38 +1589,17 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 
 			mAlphaCache[cache_index] = alpha_data;
 
-			// <FS:Ansariel> Use Nicky's Intel fix
-   //         bool skip_readback = LLRender::sNsightDebugSupport || gGLManager.mIsIntel; // nSight doesn't support use of glReadPixels
+            bool skip_readback = LLRender::sNsightDebugSupport || gGLManager.mIsIntel; // nSight doesn't support use of glReadPixels
 
-			//if (!skip_readback)
-			//{
-			//	glReadPixels(x, y, width, height, GL_ALPHA, GL_UNSIGNED_BYTE, alpha_data);                
-			//}
-   //         else
-   //         {
-   //             ll_aligned_free_32(alpha_data);
-   //             alpha_data = nullptr;
-   //         }            
-			// nSight doesn't support use of glReadPixels
-			if (!LLRender::sNsightDebugSupport)
+			if (!skip_readback)
 			{
-				// <FS:Ansariel> Format GL_ALPHA is invalid for glReadPixels
-				//glReadPixels(x, y, width, height, GL_ALPHA, GL_UNSIGNED_BYTE, alpha_data);
-				
-				U8* alpha_buffer = new U8[width * height * 4];
-				if (!LLRenderTarget::getCurrentBoundTarget())
-					glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, alpha_buffer);
-				else
-					LLRenderTarget::getCurrentBoundTarget()->copyContents(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, alpha_buffer);
-
-				for (S32 i = 0; i < width * height; ++i)
-				{
-					alpha_data[i] = alpha_buffer[i * 4 + 3];
-				}
-				delete[] alpha_buffer;
-				// </FS:Ansariel>
+				glReadPixels(x, y, width, height, GL_ALPHA, GL_UNSIGNED_BYTE, alpha_data);                
 			}
-			// </FS:Ansariel>
+            else
+            {
+               ll_aligned_free_32(alpha_data);
+                alpha_data = nullptr;
+            }            
 		}
 		
 		getTexLayerSet()->getAvatarAppearance()->dirtyMesh();
