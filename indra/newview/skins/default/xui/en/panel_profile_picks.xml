@@ -72,13 +72,13 @@
     />
     <text
      name="picks_panel_text"
-     top="300"
-     left="110"
-     right="-110"
-     height="25"
+     top="55"
+     left="20"
+     right="-20"
+     height="100"
      follows="left|top|right"
      layout="topleft"
-     halign="center"
+     halign="left"
      mouse_opaque="false"
      wrap="true"
     >
