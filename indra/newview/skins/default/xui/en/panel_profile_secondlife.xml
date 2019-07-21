@@ -217,18 +217,37 @@
     <layout_stack
      name="imagepositioner"
      top_pad="2"
-     left="0"
+     left="4"
      right="-1"
      height="158"
      follows="top|left|right"
      layout="topleft"
      orientation="horizontal"
     >
+
+        <layout_panel
+         name="imagepositioner_resize_panel"
+         follows="all"
+         layout="topleft"
+         auto_resize="false"
+         user_resize="false"
+         width="213"
+         height="158">
+            <layout_stack
+             name="imagepositioner_resize_stack"
+             top="0"
+             left="0"
+             width="213"
+             height="158"
+             follows="all"
+             layout="topleft"
+             orientation="horizontal">
+
         <layout_panel
          name="resize_stack"
          follows="all"
          layout="topleft"
-         auto_resize="false"
+         auto_resize="true"
          user_resize="false"
          width="55"
         />
@@ -254,6 +273,10 @@
              default_image_name="None"
              fallback_image="Generic_Person_Large"
              />
+
+            </layout_panel>
+        </layout_stack>
+
         </layout_panel>
         <layout_panel
          name="label_stack"

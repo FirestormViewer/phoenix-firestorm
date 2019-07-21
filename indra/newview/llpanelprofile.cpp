@@ -333,12 +333,6 @@ BOOL LLPanelProfileSecondLife::postBuild()
     // <FS:Ansariel> RLVa support
     mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfileSecondLife::updateRlvRestrictions, this, _1));
 
-    // <FS:Ansariel> Better profile pic resize
-    mProfileResizePanel = getChild<LLPanel>("resize_stack");
-    mOriginalSecondLifePicWidth = mSecondLifePicLayout->getRect().getWidth();
-    mOriginalResizePanelWidth = mProfileResizePanel->getRect().getWidth();
-    // </FS:Ansariel>
-
     return TRUE;
 }
 
@@ -461,10 +455,6 @@ void LLPanelProfileSecondLife::resetData()
     mSecondLifePic->setValue(mSecondLifePic->getDefaultImageAssetID());
     LLRect imageRect = mSecondLifePicLayout->getRect();
     mSecondLifePicLayout->reshape(imageRect.getHeight(), imageRect.getHeight());
-    // <FS:Ansariel> Better profile pic resize
-    S32 diff = mSecondLifePicLayout->getRect().getWidth() - mOriginalSecondLifePicWidth;
-    mProfileResizePanel->reshape(mOriginalResizePanelWidth - diff, mProfileResizePanel->getRect().getHeight());
-    // </FS:Ansariel>
 
     mDescriptionEdit->setValue(LLStringUtil::null);
     mStatusText->setVisible(FALSE);
@@ -715,11 +705,6 @@ void LLPanelProfileSecondLife::onImageLoaded(BOOL success, LLViewerFetchedTextur
         // assume 3:4, for sake of firestorm
         mSecondLifePicLayout->reshape(imageRect.getHeight() * 4 / 3, imageRect.getHeight());
     }
-
-    // <FS:Ansariel> Better profile pic resize
-    S32 diff = mSecondLifePicLayout->getRect().getWidth() - mOriginalSecondLifePicWidth;
-    mProfileResizePanel->reshape(mOriginalResizePanelWidth - diff, mProfileResizePanel->getRect().getHeight());
-    // </FS:Ansariel>
 }
 
 //static

@@ -206,7 +206,6 @@ private:
 	LLMenuButton*		mCopyMenuButton;
 	LLPanel*			mGiveInvPanel;
 	LLMenuButton*		mOverflowButton; // <FS:Ansariel> Gear button
-	LLPanel*			mProfileResizePanel; // <FS:Ansariel> Better profile pic resize
 
 	bool				mVoiceStatus;
 
@@ -215,11 +214,6 @@ private:
 	// <FS:Ansariel> RLVa support
 	boost::signals2::connection mRlvBehaviorCallbackConnection;
 	void updateRlvRestrictions(ERlvBehaviour behavior);
-	// </FS:Ansariel>
-
-	// <FS:Ansariel> Better profile pic resize
-	S32 mOriginalSecondLifePicWidth;
-	S32 mOriginalResizePanelWidth;
 	// </FS:Ansariel>
 };
 
