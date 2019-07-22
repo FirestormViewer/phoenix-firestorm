@@ -527,7 +527,7 @@ void LLFloaterPay::onGive(give_money_ptr info)
 
     // <FS:Ansariel> FIRE-16092: Make payment confirmation customizable
     //if (amount > PAY_AMOUNT_NOTIFICATION && gStatusBar && gStatusBar->getBalance() > amount)
-    if (gSavedSettings.getBOOL("FSConfirmPayments") && amount > gSavedSettings.getS32("FSPaymentConfirmationThreshold") && gStatusBar && gStatusBar->getBalance() > amount)
+    if (gSavedSettings.getBOOL("FSConfirmPayments") && amount > gSavedSettings.getS32("FSPaymentConfirmationThreshold") && gStatusBar && gStatusBar->getBalance() >= amount)
     // </FS:Ansariel>
     {
         LLUUID payee_id = LLUUID::null;
@@ -553,11 +553,26 @@ void LLFloaterPay::onGive(give_money_ptr info)
             payee_id = floater->mTargetUUID;
         }
 
-        LLSD args;
-        args["TARGET"] = LLSLURL(is_group ? "group" : "agent", payee_id, "completename").getSLURLString();
-        args["AMOUNT"] = amount;
+        // <FS:Ansariel> FIRE-24208: Skip notification if paying yourself
+        //LLSD args;
+        //args["TARGET"] = LLSLURL(is_group ? "group" : "agent", payee_id, "completename").getSLURLString();
+        //args["AMOUNT"] = amount;
 
-        LLNotificationsUtil::add("PayConfirmation", args, LLSD(), boost::bind(&LLFloaterPay::payConfirmationCallback, _1, _2, info));
+        //LLNotificationsUtil::add("PayConfirmation", args, LLSD(), boost::bind(&LLFloaterPay::payConfirmationCallback, _1, _2, info));
+        if (is_group || payee_id != gAgentID)
+        {
+            LLSD args;
+            args["TARGET"] = LLSLURL(is_group ? "group" : "agent", payee_id, "completename").getSLURLString();
+            args["AMOUNT"] = amount;
+
+            LLNotificationsUtil::add("PayConfirmation", args, LLSD(), boost::bind(&LLFloaterPay::payConfirmationCallback, _1, _2, info));
+        }
+        else
+        {
+            floater->give(amount);
+            floater->closeFloater();
+        }
+        // </FS:Ansariel>
     }
     else
     {
