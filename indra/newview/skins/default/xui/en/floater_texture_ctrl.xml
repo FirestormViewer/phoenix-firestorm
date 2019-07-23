@@ -333,7 +333,7 @@
         tool_tip="Texture Key"
         width="290"/>
     <button
-        follows="left|top"
+        follows="bottom"
         name="TextureKeyApply"
         height="20"
         label="Apply UUID"
