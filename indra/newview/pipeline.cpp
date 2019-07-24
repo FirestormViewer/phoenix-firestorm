@@ -1339,7 +1339,7 @@ void LLPipeline::createGLBuffers()
     // Use FBO for bake tex
     // <FS:Ansariel> Allow higher resolution rendering in mesh render preview
     //mBake.allocate(512, 512, GL_RGBA, FALSE, FALSE, LLTexUnit::TT_TEXTURE, true);
-    mBake.allocate(1024, 1024, GL_RGBA, FALSE, FALSE, LLTexUnit::TT_TEXTURE, true);
+    mBake.allocate(1024, 1024, GL_RGBA, true, false, LLTexUnit::TT_TEXTURE, true);
     // <FS:Ansariel>
 
 	mHighlight.allocate(256,256,GL_RGBA, FALSE, FALSE);
