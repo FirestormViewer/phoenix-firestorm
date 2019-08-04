@@ -72,6 +72,7 @@ private:
 	bool onHTTPAuthCallback(const std::string host, const std::string realm, std::string& username, std::string& password);
 	void onCursorChangedCallback(dullahan::ECursorType type);
 	const std::vector<std::string> onFileDialog(dullahan::EFileDialogType dialog_type, const std::string dialog_title, const std::string default_file, const std::string dialog_accept_filter, bool& use_default);
+	bool onJSDialogCallback(const std::string origin_url, const std::string message_text, const std::string default_prompt_text);
 
 	void postDebugMessage(const std::string& msg);
 	void authResponse(LLPluginMessage &message);
@@ -249,6 +250,7 @@ void MediaPluginCEF::onRequestExitCallback()
 	LLPluginMessage message("base", "goodbye");
 	sendMessage(message);
 
+	// Will trigger delete on next staticReceiveMessage()
 	mDeleteMe = true;
 }
 
@@ -364,6 +366,14 @@ const std::vector<std::string> MediaPluginCEF::onFileDialog(dullahan::EFileDialo
 
 ////////////////////////////////////////////////////////////////////////////////
 //
+bool MediaPluginCEF::onJSDialogCallback(const std::string origin_url, const std::string message_text, const std::string default_prompt_text)
+{
+	// return true indicates we suppress the JavaScript alert UI entirely
+	return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
 void MediaPluginCEF::onCursorChangedCallback(dullahan::ECursorType type)
 {
 	std::string name = "";
@@ -445,8 +455,12 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			}
 			else if (message_name == "cleanup")
 			{
-				mVolumeCatcher.setVolume(0);
+				mVolumeCatcher.setVolume(0); // Hack: masks CEF exit issues
 				mCEFLib->requestExit();
+			}
+			else if (message_name == "force_exit")
+			{
+				mDeleteMe = true;
 			}
 			else if (message_name == "shm_added")
 			{
@@ -504,6 +518,7 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				mCEFLib->setOnFileDialogCallback(std::bind(&MediaPluginCEF::onFileDialog, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
 				mCEFLib->setOnCursorChangedCallback(std::bind(&MediaPluginCEF::onCursorChangedCallback, this, std::placeholders::_1));
 				mCEFLib->setOnRequestExitCallback(std::bind(&MediaPluginCEF::onRequestExitCallback, this));
+				mCEFLib->setOnJSDialogCallback(std::bind(&MediaPluginCEF::onJSDialogCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
 				dullahan::dullahan_settings settings;
 				settings.accept_language_list = mHostLanguage;

@@ -6322,7 +6322,7 @@ BOOL LLVOAvatar::processSingleAnimationStateChange( const LLUUID& anim_id, BOOL 
 		}
 		else
 		{
-			LL_WARNS() << "Failed to start motion!" << LL_ENDL;
+			LL_WARNS("Motion") << "Failed to start motion!" << LL_ENDL;
 		}
 	}
 	else //stop animation
@@ -6429,7 +6429,7 @@ LLUUID LLVOAvatar::remapMotionID(const LLUUID& id)
 //-----------------------------------------------------------------------------
 BOOL LLVOAvatar::startMotion(const LLUUID& id, F32 time_offset)
 {
-	LL_DEBUGS() << "motion requested " << id.asString() << " " << gAnimLibrary.animationName(id) << LL_ENDL;
+	LL_DEBUGS("Motion") << "motion requested " << id.asString() << " " << gAnimLibrary.animationName(id) << LL_ENDL;
 
 	// <FS:Zi> Animation Overrider
 	//LLUUID remap_id = remapMotionID(id, getSex());
@@ -6454,7 +6454,7 @@ BOOL LLVOAvatar::startMotion(const LLUUID& id, F32 time_offset)
 
 	if (remap_id != id)
 	{
-		LL_DEBUGS() << "motion resultant " << remap_id.asString() << " " << gAnimLibrary.animationName(remap_id) << LL_ENDL;
+		LL_DEBUGS("Motion") << "motion resultant " << remap_id.asString() << " " << gAnimLibrary.animationName(remap_id) << LL_ENDL;
 	}
 
 	if (isSelf() && remap_id == ANIM_AGENT_AWAY)
@@ -6470,7 +6470,7 @@ BOOL LLVOAvatar::startMotion(const LLUUID& id, F32 time_offset)
 //-----------------------------------------------------------------------------
 BOOL LLVOAvatar::stopMotion(const LLUUID& id, BOOL stop_immediate)
 {
-	LL_DEBUGS() << "motion requested " << id.asString() << " " << gAnimLibrary.animationName(id) << LL_ENDL;
+	LL_DEBUGS("Motion") << "Motion requested " << id.asString() << " " << gAnimLibrary.animationName(id) << LL_ENDL;
 
 	// <FS:Zi> Animation Overrider
 	//LLUUID remap_id = remapMotionID(id);
@@ -6495,7 +6495,7 @@ BOOL LLVOAvatar::stopMotion(const LLUUID& id, BOOL stop_immediate)
 	
 	if (remap_id != id)
 	{
-		LL_DEBUGS() << "motion resultant " << remap_id.asString() << " " << gAnimLibrary.animationName(remap_id) << LL_ENDL;
+		LL_DEBUGS("Motion") << "motion resultant " << remap_id.asString() << " " << gAnimLibrary.animationName(remap_id) << LL_ENDL;
 	}
 
 	if (isSelf())

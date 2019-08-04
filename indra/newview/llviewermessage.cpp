@@ -5051,6 +5051,8 @@ void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data)
 	S32 num_blocks = mesgsys->getNumberOfBlocksFast(_PREHASH_AnimationList);
 	S32 num_source_blocks = mesgsys->getNumberOfBlocksFast(_PREHASH_AnimationSourceList);
 
+	LL_DEBUGS("Messaging", "Motion") << "Processing " << num_blocks << " Animations" << LL_ENDL;
+
 	//clear animation flags
 	avatarp->mSignaledAnimations.clear();
 	
@@ -5062,8 +5064,6 @@ void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data)
 		{
 			mesgsys->getUUIDFast(_PREHASH_AnimationList, _PREHASH_AnimID, animation_id, i);
 			mesgsys->getS32Fast(_PREHASH_AnimationList, _PREHASH_AnimSequenceID, anim_sequence_id, i);
-
-			LL_DEBUGS("Messaging") << "Anim sequence ID: " << anim_sequence_id << LL_ENDL;
 
 			avatarp->mSignaledAnimations[animation_id] = anim_sequence_id;
 
@@ -5109,6 +5109,14 @@ void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data)
 						// </FS:Zi>
 					}
 				}
+				LL_DEBUGS("Messaging", "Motion") << "Anim sequence ID: " << anim_sequence_id
+									<< " Animation id: " << animation_id
+									<< " From block: " << object_id << LL_ENDL;
+			}
+			else
+			{
+				LL_DEBUGS("Messaging", "Motion") << "Anim sequence ID: " << anim_sequence_id
+									<< " Animation id: " << animation_id << LL_ENDL;
 			}
 		}
 	}
@@ -6380,12 +6388,27 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
             }
         }
 
-		// Error Notification can come with and without reason
-		if (notificationID == "JoinGroupError" && llsdBlock.has("reason"))
-		{
-			LLNotificationsUtil::add("JoinGroupErrorReason", llsdBlock);
-			return true;
-		}
+        // Error Notification can come with and without reason
+        if (notificationID == "JoinGroupError")
+        {
+            if (llsdBlock.has("reason"))
+            {
+                LLNotificationsUtil::add("JoinGroupErrorReason", llsdBlock);
+                return true;
+            }
+            if (llsdBlock.has("group_id"))
+            {
+                LLGroupData agent_gdatap;
+                bool is_member = gAgent.getGroupData(llsdBlock["group_id"].asUUID(), agent_gdatap);
+                if (is_member)
+                {
+                    LLSD args;
+                    args["reason"] = LLTrans::getString("AlreadyInGroup");
+                    LLNotificationsUtil::add("JoinGroupErrorReason", args);
+                    return true;
+                }
+            }
+        }
 
 		LLNotificationsUtil::add(notificationID, llsdBlock);
 		return true;

@@ -195,6 +195,7 @@ public:
 	void onClickSetKey();
 	void onClickClearKey(); // <FS:Ansariel> FIRE-3803: Clear voice toggle button
 	void setKey(KEY key);
+	void setMouse(LLMouseHandler::EClickType click);
 	void onClickSetMiddleMouse();
 	// void onClickSetSounds();	//<FS:KC> Handled centrally now
 	void onClickPreviewUISound(const LLSD& ui_sound_id); // <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
