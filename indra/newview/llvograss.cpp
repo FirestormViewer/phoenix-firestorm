@@ -299,23 +299,6 @@ void LLVOGrass::idleUpdate(LLAgent &agent, const F64 &time)
 		return;
 	}
 
-	if(LLVOTree::isTreeRenderingStopped()) //stop rendering grass
-	{
-		if(mNumBlades)
-		{
-			mNumBlades = 0 ;
-			gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_ALL, TRUE);
-		}
-		return;
-	}
-	else if(!mNumBlades)//restart grass rendering
-	{
-		mNumBlades = GRASS_MAX_BLADES ;
-		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_ALL, TRUE);
-		
-		return;
-	}
-
 	if (mPatch && (mLastPatchUpdateTime != mPatch->getLastUpdateTime()))
 	{
 		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, TRUE);
@@ -362,11 +345,15 @@ BOOL LLVOGrass::updateLOD()
 	{
 		return FALSE;
 	}
+
+    LLFace* face = mDrawable->getFace(0);
+
 	if(LLVOTree::isTreeRenderingStopped())
 	{
 		if(mNumBlades)
 		{
 			mNumBlades = 0 ;
+            face->setSize(0, 0);
 			gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_ALL, TRUE);
 		}
 		return TRUE ;
@@ -375,8 +362,6 @@ BOOL LLVOGrass::updateLOD()
 	{
 		mNumBlades = GRASS_MAX_BLADES;
 	}
-
-	LLFace* face = mDrawable->getFace(0);
 
 	F32 tan_angle = 0.f;
 	S32 num_blades = 0;

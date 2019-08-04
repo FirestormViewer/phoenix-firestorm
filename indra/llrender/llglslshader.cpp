@@ -347,8 +347,8 @@ void LLGLSLShader::unloadInternal()
     {
         GLhandleARB obj[1024];
         GLsizei count;
+        glGetAttachedObjectsARB(mProgramObject, 1024, &count, obj);
 
-        glGetAttachedObjectsARB(mProgramObject, sizeof(obj)/sizeof(obj[0]), &count, obj);
         for (GLsizei i = 0; i < count; i++)
         {
             glDetachObjectARB(mProgramObject, obj[i]);
@@ -357,8 +357,8 @@ void LLGLSLShader::unloadInternal()
             if (glIsProgramARB(obj[i]))
 #endif
 // </FS:Ansariel>
-                glDeleteObjectARB(obj[i]);
-            }
+            glDeleteObjectARB(obj[i]);
+        }
 
         glDeleteObjectARB(mProgramObject);
 

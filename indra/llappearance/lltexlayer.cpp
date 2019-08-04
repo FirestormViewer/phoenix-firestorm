@@ -44,7 +44,6 @@
 #include "llvertexbuffer.h"
 #include "llviewervisualparam.h"
 #include "llfasttimer.h"
-#include "llrendertarget.h" // <FS:ND/> For copyContents
 
 //#include "../tools/imdebug/imdebug.h"
 
@@ -1629,7 +1628,7 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 			}
             else
             {
-               ll_aligned_free_32(alpha_data);
+                ll_aligned_free_32(alpha_data);
                 alpha_data = nullptr;
             }
 

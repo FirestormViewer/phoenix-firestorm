@@ -133,7 +133,7 @@ void LLViewerDynamicTexture::preRender(BOOL clear_depth)
 	llassert(mFullHeight <= static_cast<S32>(gPipeline.mBake.getHeight()));
 	// </FS:Beq>
 
-	if (gGLManager.mHasFramebufferObject && gPipeline.mBake.isComplete() && !gGLManager.mIsATI)
+	if (gGLManager.mHasFramebufferObject && gPipeline.mBake.isComplete())
 	{ //using offscreen render target, just use the bottom left corner
 		mOrigin.set(0, 0);
 	}
@@ -217,16 +217,17 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
 	sNumRenders = 0;
 	if (gGLManager.mIsDisabled || LLPipeline::sMemAllocationThrottled)
 	{
-		return FALSE;
+		return TRUE;
 	}
 
-	bool use_fbo = gGLManager.mHasFramebufferObject && gPipeline.mBake.isComplete() && !gGLManager.mIsATI;
+	bool use_fbo = gGLManager.mHasFramebufferObject && gPipeline.mBake.isComplete();
 
 	if (use_fbo)
 	{
 		gPipeline.mBake.bindTarget();
         gPipeline.mBake.clear();
 	}
+
 	LLGLSLShader::bindNoShader();
 	LLVertexBuffer::unbind();
 	
@@ -253,15 +254,13 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
 					result = TRUE;
 					sNumRenders++;
 				}
-				//gGL.flush();
+				gGL.flush();
 				LLVertexBuffer::unbind();
 				dynamicTexture->setBoundTarget(nullptr);
 				dynamicTexture->postRender(result);
 			}
 		}
 	}
-
-    glFinish();
 
 	if (use_fbo)
 	{
