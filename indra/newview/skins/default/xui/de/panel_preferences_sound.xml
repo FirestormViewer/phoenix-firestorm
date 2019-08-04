@@ -3,6 +3,12 @@
 <panel.string name="middle_mouse">
 	Mittlere Maustaste
 </panel.string>
+<panel.string name="button4_mouse">
+	Maustaste 4
+</panel.string>
+<panel.string name="button5_mouse">
+	Maustaste 5
+</panel.string>
 <tab_container label="Firestorm Prefs" name="tabs">
     <!-- Sounds -->
     <panel label="Klänge" name="Media Sounds Panel">

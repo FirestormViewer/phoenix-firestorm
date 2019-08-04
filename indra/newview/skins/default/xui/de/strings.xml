@@ -650,6 +650,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="TooltipOutfitNotInInventory">
 		Sie können nur Objekte oder Outfits aus Ihrem persönlichen Inventar zu „Outfits“ hinzufügen.
+	</string>
 	<string name="TooltipCantCreateOutfit">
 		Ein oder mehrere Objekte können nicht innerhalb von „Outfits“ verwendet werden.
 	</string>
@@ -2408,6 +2409,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	</string>
 	<string name="NoGroupDataFound">
 		Für Gruppe wurden keine Gruppendaten gefunden
+	</string>
+	<string name="AlreadyInGroup">
+		Sie sind bereits Mitglied dieser Gruppe.
 	</string>
 	<string name="IMParentEstate">
 		parent estate
