@@ -1239,9 +1239,6 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	getChild<LLPanel>("client_tags_panel")->setVisible(in_opensim);
 // </FS:CR>
 
-	// <FS:Ansariel> Force HTTP features on SL
-	getChild<LLCheckBoxCtrl>("TexturesHTTP")->setEnabled(in_opensim);
-
 	// <FS:Ansariel> Group mutes backup
 	LLScrollListItem* groupmute_item = getChild<LLScrollListCtrl>("restore_per_account_files_list")->getItem(LLSD("groupmutes"));
 	groupmute_item->setEnabled(in_opensim);

@@ -1086,17 +1086,6 @@
             Texture Rendering:
         </text>
 
-      <!-- HTTP textures -->
-        <check_box
-         control_name="ImagePipelineUseHTTP"
-         height="16"
-         label="Use HTTP for receiving textures"
-         tool_tip="Set this to load textures using the HTTP protocol - unset it if you are having rendering problems and wish to the legacy UDP protocol."
-         layout="topleft"
-         left_delta="5"
-         name="TexturesHTTP"
-         top_pad="6"
-         width="400"/>
         <check_box
          control_name="FSRestrictMaxTextureSize"
          height="16"
