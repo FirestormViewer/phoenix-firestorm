@@ -214,9 +214,6 @@ void display_update_camera()
 	LLViewerCamera::getInstance()->setFar(final_far);
 	gViewerWindow->setup3DRender();
 	
-	// update all the sky/atmospheric/water settings
-    LLEnvironment::instance().update(LLViewerCamera::getInstance());
-
 	// Update land visibility too
 	LLWorld::getInstance()->setLandFarClip(final_far);
 }
@@ -271,6 +268,7 @@ static LLTrace::BlockTimerStatHandle FTM_HUD_UPDATE("HUD Update");
 static LLTrace::BlockTimerStatHandle FTM_DISPLAY_UPDATE_GEOM("Update Geom");
 static LLTrace::BlockTimerStatHandle FTM_TEXTURE_UNBIND("Texture Unbind");
 static LLTrace::BlockTimerStatHandle FTM_TELEPORT_DISPLAY("Teleport Display");
+static LLTrace::BlockTimerStatHandle FTM_EEP_UPDATE("Env Update");
 
 // Paint the display!
 void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
@@ -738,7 +736,13 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		stop_glerror();
 		display_update_camera();
 		stop_glerror();
-				
+
+		{
+			LL_RECORD_BLOCK_TIME(FTM_EEP_UPDATE);
+            // update all the sky/atmospheric/water settings
+            LLEnvironment::instance().update(LLViewerCamera::getInstance());
+		}
+
 		// *TODO: merge these two methods
 		{
 			LL_RECORD_BLOCK_TIME(FTM_HUD_UPDATE);
