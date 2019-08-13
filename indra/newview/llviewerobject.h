@@ -819,6 +819,7 @@ protected:
 	typedef std::list<LLInventoryCallbackInfo*> callback_list_t;
 	callback_list_t mInventoryCallbacks;
 	S16 mInventorySerialNum;
+	S16 mExpectedInventorySerialNum;
 
 	enum EInventoryRequestState
 	{
