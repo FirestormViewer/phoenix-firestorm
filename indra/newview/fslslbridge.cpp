@@ -54,7 +54,7 @@
 static const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
 static const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
 static const U32 FS_BRIDGE_MAJOR_VERSION = 2;
-static const U32 FS_BRIDGE_MINOR_VERSION = 24;
+static const U32 FS_BRIDGE_MINOR_VERSION = 25;
 static const U32 FS_MAX_MINOR_VERSION = 99;
 static const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 static const std::string FS_STATE_ATTRIBUTE = "state=";
@@ -320,10 +320,19 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 2) == "on")
 			{
 				gSavedPerAccountSettings.setBOOL("UseAO", TRUE);
+				gSavedPerAccountSettings.setBOOL("UseAOStands", TRUE);
 			}
 			else if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 3) == "off")
 			{
 				gSavedPerAccountSettings.setBOOL("UseAO", FALSE);
+			}
+			else if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 7) == "standon")
+			{
+				gSavedPerAccountSettings.setBOOL("UseAOStands", TRUE);
+			}
+			else if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 8) == "standoff")
+			{
+				gSavedPerAccountSettings.setBOOL("UseAOStands", FALSE);
 			}
 			else
 			{

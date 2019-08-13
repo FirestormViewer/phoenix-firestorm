@@ -99,6 +99,7 @@ class AOEngine
 		};
 
 		void enable(BOOL yes);
+		void enable_stands(BOOL yes);
 		const LLUUID override(const LLUUID& motion, BOOL start);
 		void tick();
 		void update();
@@ -184,6 +185,7 @@ class AOEngine
 		void onRegionChange();
 
 		void onToggleAOControl();
+		void onToggleAOStandsControl();
 		static void onNotecardLoadComplete(LLVFS* vfs, const LLUUID& assetUUID, LLAssetType::EType type,
 												void* userdata, S32 status, LLExtStat extStatus);
 		void parseNotecard(const char* buffer);
@@ -195,6 +197,7 @@ class AOEngine
 		AOSitCancelTimer mSitCancelTimer;
 
 		BOOL mEnabled;
+		BOOL mEnabledStands;
 		BOOL mInMouselook;
 		BOOL mUnderWater;
 

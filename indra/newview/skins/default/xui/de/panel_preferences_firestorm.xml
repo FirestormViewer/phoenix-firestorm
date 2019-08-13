@@ -108,7 +108,7 @@
 		<button name="BeamColor_new" label="Erstellen" tool_tip="Eine neue Farbeinstellung erstellen."/>
 		<button name="BeamColor_refresh" label="Aktualisieren" tool_tip="Aktualisiert die Liste mit Farbeinstellungen."/>
 		<slider name="FSMaxBeamsPerSecond" label="Updates/Sek:" tool_tip="Definiert wie viele Updates pro Sekunden gesendet werden sollen. [Standard: 40]"/>
-		<check_box label="Auswahlstrahl aktivieren" name="SLPartBeam"/>
+		<check_box label="Auswahlstrahl aktivieren" name="SLPartBeam" tool_tip="Das Deaktivieren dieser Einstellung verhindert die lokale Darstellung von Auswahlstrahlen. Das Senden der Auswahlinformationen an andere Avatare wird hierdurch nicht verhinden. Um keine Auswahlinformationen zu übertragen, können Sie diese unter Einstellungen -&gt; Privatsphäre -&gt; Kamerafokus -&gt; Eigene Bearbeitungsauswahl nicht an andere senden deaktivieren"/>
 		<check_box label="Auswahlinformationen an Chat senden" name="FSParticleChat" tool_tip="Sendet Informationen über die Auswahl (Start/Stop sowie globale Position) an Chat-Kanal 9000."/>
 
 		<combo_box name="FSBeamShape_combo" tool_tip="Erlaubt die Auswahl der Form für den Auswahlstrahl."/>

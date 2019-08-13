@@ -43,7 +43,10 @@
 			<menu_button tool_tip="Opcje czatu" name="chat_options_btn"/>
 		</layout_panel>
 		<layout_panel name="support_panel">
-			<check_box label="Dodawaj wersję" name="FSSupportGroupChatPrefix_toggle" tool_tip="Dodaje aktualną wersję przeglądarki oraz informację o skórce przed wiadomościami wysyłanymi przez Ciebie w tej grupie, co będzie pomagać członkom załogi wsparcia w prawidłowym diagnozowaniu Twoich problemów i poprawi dokładność odpowiedzi na Twoje pytania"/>
+			<check_box label="Dodawaj wersję" name="FSSupportGroupChatPrefix_toggle" tool_tip="Dodaje aktualną wersję przeglądarki, informację o skórce, system operacyjny i status RLVa przed wiadomościami wysyłanymi przez Ciebie w tej grupie, co będzie pomagać członkom załogi wsparcia w prawidłowym diagnozowaniu Twoich problemów i poprawi dokładność odpowiedzi na Twoje pytania"/>
+		</layout_panel>
+		<layout_panel name="testing_panel">
+			<check_box label="Dodawaj kompilację" name="FSSupportGroupChatPrefixTesting_toggle" tool_tip="Dodaje aktualną wersję przeglądarki, informację o skórce, system operacyjny i status RLVa przed wiadomościami wysyłanymi przez Ciebie w tej grupie, co będzie pomagać członkom załogi wsparcia w prawidłowym diagnozowaniu Twoich problemów i poprawi dokładność odpowiedzi na Twoje pytania (to oddzielne od grup wsparcia)" />
 		</layout_panel>
 	</layout_stack>
 	<layout_stack name="chat_stack">

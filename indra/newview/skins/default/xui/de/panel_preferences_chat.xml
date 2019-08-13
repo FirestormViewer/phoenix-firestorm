@@ -178,8 +178,8 @@
 			<spinner tool_tip="-1 für kompletten Gruppennamen, 0 für deaktiviert" name="FSShowGroupNameLength"/>
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Gespräche öffnen, wenn eine Offline-Nachricht empfangen wurde"/>
 			<check_box label="IMs per E-Mail zuschicken, wenn ich offline bin ([EMAIL])" name="send_im_to_email"/>
-			<check_box name="FSShowIMInChatHistory" label="Instant Messages im lokalem Chat anzeigen"/>
-			<check_box name="FSLogIMInChatHistory" label="IMs im lokalem Chat speichern" width="190"/>
+			<check_box name="FSShowIMInChatHistory" label="Instant Messages und Gruppenchats im lokalem Chat anzeigen"/>
+			<check_box name="FSLogIMInChatHistory" label="IMs und Gruppenchats im lokalem Chat speichern" width="190"/>
 			<text name="FSIMChatHistoryFade_label" width="320">
 				IM-Text vor dem Hintergrund des Chatverlaufs ausblenden
 			</text>

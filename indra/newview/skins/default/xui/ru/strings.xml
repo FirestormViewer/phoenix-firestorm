@@ -5962,6 +5962,12 @@ support@secondlife.com.
 	<string name="Command_Fly_Tooltip">
 		Переключение режима полета Включено/Выключено (Дом)
 	</string>
+	<string name="Command_Stop_Animations_Label">
+		Остановить анимации аватара
+	</string>
+	<string name="Command_Stop_Animations_Tooltip">
+		Остановить анимации аватара
+	</string>
 	<string name="Retain%">
 		Остаток%
 	</string>

@@ -108,6 +108,7 @@
 	<menu label="Dołącz do HUD-a" name="Attach To HUD"/>
 	<menu_item_call label="Edytuj" name="Wearable Edit"/>
 	<menu_item_call label="Dotknij" name="Touch Attachment"/>
+	<menu_item_call label="Odśwież tekstury" name="Texture Refresh Attachment" />
 	<menu_item_call label="Zdejmij" name="Take Off"/>
 	<menu_item_call label="Odłącz od siebie" name="Detach From Yourself"/>
 	<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy"/>

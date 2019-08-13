@@ -53,6 +53,7 @@ AOEngine::AOEngine() :
 	mCurrentSet(NULL),
 	mDefaultSet(NULL),
 	mEnabled(FALSE),
+	mEnabledStands(FALSE),
 	mInMouselook(FALSE),
 	mUnderWater(FALSE),
 	mImportSet(NULL),
@@ -62,6 +63,7 @@ AOEngine::AOEngine() :
 	mLastOverriddenMotion(ANIM_AGENT_STAND)
 {
 	gSavedPerAccountSettings.getControl("UseAO")->getCommitSignal()->connect(boost::bind(&AOEngine::onToggleAOControl, this));
+	gSavedPerAccountSettings.getControl("UseAOStands")->getCommitSignal()->connect(boost::bind(&AOEngine::onToggleAOStandsControl, this));
 
 	mRegionChangeConnection = gAgent.addRegionChangedCallback(boost::bind(&AOEngine::onRegionChange, this));
 }
@@ -78,7 +80,21 @@ AOEngine::~AOEngine()
 
 void AOEngine::init()
 {
-	enable(mEnabled);
+	BOOL do_enable = gSavedPerAccountSettings.getBOOL("UseAO");
+	BOOL do_enable_stands = gSavedPerAccountSettings.getBOOL("UseAOStands");
+	if (do_enable)
+	{
+		// enable_stands() calls enable(), but we need to set the
+		// mEnabled variable properly
+		mEnabled = TRUE;
+		// Enabling the AO always enables stands to start with
+		enable_stands(TRUE);
+	}
+	else
+	{
+		enable_stands(do_enable_stands);
+		enable(FALSE);
+	}
 }
 
 // static
@@ -90,6 +106,16 @@ void AOEngine::onLoginComplete()
 void AOEngine::onToggleAOControl()
 {
 	enable(gSavedPerAccountSettings.getBOOL("UseAO"));
+	if (mEnabled)
+	{
+		// Enabling the AO always enables stands to start with
+		gSavedPerAccountSettings.setBOOL("UseAOStands", TRUE);
+	}
+}
+
+void AOEngine::onToggleAOStandsControl()
+{
+	enable_stands(gSavedPerAccountSettings.getBOOL("UseAOStands"));
 }
 
 void AOEngine::clear(bool aFromTimer)
@@ -165,14 +191,36 @@ void AOEngine::setLastOverriddenMotion(const LLUUID& motion)
 
 BOOL AOEngine::foreignAnimations(const LLUUID& seat)
 {
+	LL_DEBUGS("AOEngine") << "Checking for foreign animation on seat " << seat << LL_ENDL;
+
 	for (LLVOAvatar::AnimSourceIterator sourceIterator = gAgentAvatarp->mAnimationSources.begin();
 		sourceIterator != gAgentAvatarp->mAnimationSources.end(); ++sourceIterator)
 	{
+		LL_DEBUGS("AOEngine") << "Source " << sourceIterator->first << " runs animation " << sourceIterator->second << LL_ENDL;
+
 		if (sourceIterator->first != gAgentID)
 		{
-			if (seat.isNull() || sourceIterator->first == seat)
+			// special case when the AO gets disabled while sitting
+			if (seat.isNull())
 			{
 				return TRUE;
+			}
+
+			// find the source object where the animation came from
+			LLViewerObject* source=gObjectList.findObject(sourceIterator->first);
+
+			// proceed if it's not an attachment
+			if(!source->isAttachment())
+			{
+				// get the source's root prim
+				LLViewerObject* sourceRoot=dynamic_cast<LLViewerObject*>(source->getRoot());
+
+				// if the root prim is the same as the animation source, report back as TRUE
+				if (sourceRoot && source->getID() == seat)
+				{
+					LL_DEBUGS("AOEngine") << "foreign animation " << sourceIterator->second << " found on seat." << LL_ENDL;
+					return TRUE;
+				}
 			}
 		}
 	}
@@ -226,6 +274,14 @@ void AOEngine::checkBelowWater(BOOL yes)
 	gAgent.sendAnimationRequest(override(mLastOverriddenMotion, TRUE), ANIM_REQUEST_START);
 }
 
+void AOEngine::enable_stands(BOOL yes)
+{
+	mEnabledStands = yes;
+	// let the main enable routine decide if we need to change animations
+	// but don't actually change the state of the enabled flag
+	enable(mEnabled);
+}
+
 void AOEngine::enable(BOOL yes)
 {
 	LL_DEBUGS("AOEngine") << "using " << mLastMotion << " enable " << yes << LL_ENDL;
@@ -258,6 +314,11 @@ void AOEngine::enable(BOOL yes)
 
 			if (mLastMotion == ANIM_AGENT_STAND)
 			{
+				if (!mEnabledStands)
+				{
+					LL_DEBUGS("AOEngine") << "Last motion was a STAND, but disabled for stands, ignoring." << LL_ENDL;
+					return;
+				}
 				stopAllStandVariants();
 			}
 			else if (mLastMotion == ANIM_AGENT_WALK)
@@ -424,6 +485,14 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, BOOL start)
 			return animation;
 		}
 
+		// Don't override start and turning stands if stand override is disabled
+		if (!mEnabledStands &&
+			(motion == ANIM_AGENT_STAND || motion == ANIM_AGENT_TURNRIGHT || motion == ANIM_AGENT_TURNLEFT))
+		{
+			LL_DEBUGS("AOEngine") << "(enabled AO, stands disabled) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
+			return animation;
+		}
+
 		// Do not start override sits if not selected
 		if (!mCurrentSet->getSitOverride() && motion == ANIM_AGENT_SIT)
 		{
@@ -553,10 +622,6 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, BOOL start)
 		{
 			stopAllSitVariants();
 		}
-
-		LL_DEBUGS("AOEngine") << "stopping cycle timer for motion " <<  gAnimLibrary.animationName(motion) <<
-					" using animation " << animation <<
-					" in state " << state->mName << LL_ENDL;
 	}
 
 	return animation;
@@ -1581,6 +1646,17 @@ void AOEngine::setSmart(AOSet* set, BOOL yes)
 {
 	set->setSmart(yes);
 	set->setDirty(TRUE);
+
+	if (yes)
+	{
+		// make sure to restart the sit cancel timer to fix sit overrides when the object we are
+		// sitting on is playing its own animation
+		const LLViewerObject* agentRoot = dynamic_cast<LLViewerObject*>(gAgentAvatarp->getRoot());
+		if (agentRoot && agentRoot->getID() != gAgentID)
+		{
+			mSitCancelTimer.oneShot();
+		}
+	}
 }
 
 void AOEngine::setDisableStands(AOSet* set, BOOL yes)

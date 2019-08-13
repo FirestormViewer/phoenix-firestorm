@@ -4850,6 +4850,14 @@ Grund: [SANITY_COMMENT]
 
 Aktueller Wert: [CURRENT_VALUE]
    <form name="form">
+      <button
+       index="0"
+       name="OK"
+       text="Beheben"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Beibehalten"/>
       <ignore name="ignore"
        text="Eine Einstellung hat die Prüfung auf einen sinnvollen Wert nicht bestanden."/>
     </form>
@@ -4955,14 +4963,15 @@ URL: [AUDIOURL]
 		</form>
 	</notification>
 
-	<notification name="FirstJoinSupportGroup">
+	<notification name="FirstJoinSupportGroup2">
 Willkommen in der Phoenix/Firestorm Viewer Support-Gruppe!
 
-Um den Support zu vereinfachen wird empfohlen, die aktuelle Version deines Viewers der Gruppe mitzuteilen. Du kannst daher entscheiden, ob du die Version deines Viewers jeder Nachrichtig in diesem Gruppenchat voranstellen möchtest. Unser Support-Team kann dir eine sinnvollere Hilfestellung geben, wenn es direkt weiß, welche Viewer-Version du benutzt.
+Um den Support zu vereinfachen wird empfohlen, die aktuelle Version Ihres Viewers der Gruppe mitzuteilen. Diese Information beinhaltet Viewer-Version, Viewer-Skin, Betriebssystem und RLVa-Status. Sie können daher entscheiden, ob Sie die Version Ihres Viewers jeder Nachricht in diesem Gruppenchat voranstellen möchten. Unser Support-Team kann Ihnen eine sinnvollere Hilfestellung geben, wenn es direkt weiß, welche Viewer-Version Sie benutzen.
 
 Diese Funktion kann jederzeit über die Checkbox innerhalb des Gruppenchat-Fensters aktiviert bzw. deaktiviert werden.
 
 Soll die automatische Anzeige der Viewer-Version aktiviert werden?
+
 		<form name="form">
 			<button name="OK_okcancelignore" text="Ja"/>
 			<button name="Cancel_okcancelignore" text="Nein"/>
@@ -5074,6 +5083,13 @@ Der Sicherungspfad konnte nicht gefunden oder erstellt werden.
 Der Sicherungspfad konnte nicht gefunden werden.
 	</notification>
 
+	<notification name="SettingsConfirmBackup">
+		Möchten Sie wirklich eine Sicherung in diesem Verzeichnis erstellen?
+[DIRECTORY]
+Bestehende Sicherungen in diesem Verzeichnis werden überschrieben!
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Sicherung erstellen"/>
+	</notification>
+
 	<notification name="SettingsRestoreNeedsLogout">
 Das Wiederherstellen von Einstellungen erfordert einen Neustart des Viewers. Sollen die Einstellungen jetzt wiederhergestellt und der Viewer beendet werden?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Wiederherstellen und beenden"/>
@@ -5103,7 +5119,7 @@ Export unerwartet fehlgeschlagen. Siehe Log-Datei für weitergehende Details.
 	</notification>
 
 	<notification name="ExportColladaSuccess">
-[OBJECT] erfolreich als [FILENAME] gespeichert.
+[OBJECT] erfolgreich als [FILENAME] gespeichert.
 	</notification>
 
 	<notification name="ExportColladaSuccess">
@@ -5269,5 +5285,8 @@ Bitte beachten Sie, dass es sich bei Käufen von Währung innerhalb des Firestor
 Weder Firestorm Viewer, Phoenix Firestorm Viewer Project Inc. noch dessen Team können für jegliche Kosten oder Schäden haftbar gemacht werden, die direkt oder indirekt aus solchen Transaktionen entstehen.
 Falls Sie diesen Nutzungsbestimmungen nicht zustimmen, sollten keinerlei finanzielle Transaktionen im Rahmen der Nutzung dieses Viewers durchgeführt werden.
 		<usetemplate ignoretext="Warnen, wenn eine Region die URL zum Währungsportal ändert" name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="EnableHiDPI">
+		HiDPI kann negative Effekte aufweisen und die Leistung beeinträchtigen.
 	</notification>
 </notifications>

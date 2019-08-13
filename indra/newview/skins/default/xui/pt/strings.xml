@@ -5409,6 +5409,12 @@ Tente colocar o caminho do editor entre aspas.
 	<string name="Toolbar_Right_Tooltip">
 		atualmente na sua barra de ferramentas direita
 	</string>
+	<string name="Command_Stop_Animations_Label">
+		Parar minha animação
+	</string>
+	<string name="Command_Stop_Animations_Tooltip">
+		Parar minha animação
+	</string>
 	<string name="Retain%">
 		Reter%
 	</string>

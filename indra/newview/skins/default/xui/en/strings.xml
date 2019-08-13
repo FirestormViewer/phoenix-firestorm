@@ -2700,6 +2700,8 @@ Try enclosing path to the editor with double quotes.
   <string name="Toolbar_Right_Tooltip" >currently in your right toolbar</string>
 
   <string name="Command_Fly_Tooltip">Toggle flying mode on/off (HOME)</string>
+  <string name="Command_Stop_Animations_Label">Stop Animations</string>
+  <string name="Command_Stop_Animations_Tooltip">Stop Animating my Avatar</string>
 
  <!-- Mesh UI terms -->
   <string name="Retain%">Retain%</string>

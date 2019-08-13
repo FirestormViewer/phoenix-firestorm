@@ -84,6 +84,9 @@
 
 		<!--Autoresponse1-->
 		<panel label="Autom. Antwort 1" name="tab-autoresponse-1">
+			<text name="autorespond_toggle_location_tip">
+				Hinweis: Zum Aktivieren der automatischen Antworten setzen Sie Ihren Online-Status über das Hauptmenü unter Unterhalten &gt; Online-Status
+			</text>
 			<text name="text_box3">
 				Automatische Antwort wenn im „Beschäftigt“-Modus:
 			</text>

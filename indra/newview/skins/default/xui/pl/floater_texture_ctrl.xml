@@ -31,6 +31,8 @@
 	<scroll_list name="l_name_list">
 		<column name="unit_name" label="Nazwa"/>
 	</scroll_list>
+	<line_editor name="TextureKey" tool_tip="Klucz UUID tekstury" />
+	<button name="TextureKeyApply" label="Ustaw UUID" tool_tip="Ustaw ten UUID" />
 	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>
 	<check_box label="Podgląd" name="apply_immediate_check"/>
 </floater>

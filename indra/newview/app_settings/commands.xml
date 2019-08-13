@@ -615,4 +615,12 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="beacons"
            />
+  <command name="stop_animations"
+           available_in_toybox="true"
+           icon="Stop_Animations_Icon"
+           label_ref="Command_Stop_Animations_Label"
+           tooltip_ref="Command_Stop_Animations_Tooltip"
+           execute_function="Tools.StopAllAnimations"
+           execute_parameters="stop"
+           />
 </commands>

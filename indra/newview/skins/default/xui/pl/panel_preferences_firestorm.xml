@@ -96,7 +96,7 @@
         <button name="BeamColor_new" label="Utwórz nowe" tool_tip="Utwórz nowe Ustawienie" />
         <button name="BeamColor_refresh" label="Odśwież listę" tool_tip="Odśwież listę Ustawień" />
         <slider name="FSMaxBeamsPerSecond" label="Aktualizacje/sek:" tool_tip="Ile aktualizacji wiązki wysyłać w ciągu sekundy. Domyślnie 40" />
-        <check_box label="Włącz wiązkę wyboru" name="SLPartBeam" />
+        <check_box label="Włącz wiązkę wyboru" name="SLPartBeam" tool_tip="Wyłączenie tego ustawienia spowoduje, że wiązki wyboru nie będą renderowane lokalnie. Nie zapobiega to wysyłaniu wiązek wyboru do innych awatarów. Jeśli nie chcesz pokazywać swojego wyboru, to możesz temu zapobiec w Ustawienia -&gt; Prywatność -&gt; Śledzenie spojrzeń -&gt; Nie pokazuj innym celów moich wskazań." />
         <check_box label="Wysyłaj dane selekcji na czat" name="FSParticleChat" tool_tip="Wysyła dane selekcji (rozpoczęcie jej lub zakończenie plus pozycję globalną) na kanał czatu 9000" />
         <combo_box name="FSBeamShape_combo" tool_tip="Wybierz kształt wiązki cząsteczek" />
         <button name="delete_beam" label="Usuń" tool_tip="Usuń tą wiązkę" />

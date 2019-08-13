@@ -218,9 +218,7 @@ set(viewer_SOURCE_FILES
     lggbeamscolors.cpp
     lggcontactsets.cpp
     lfsimfeaturehandler.cpp
-    llfloaterdisplayname.cpp
     llpanelopenregionsettings.cpp
-    llviewerdisplayname.cpp
     # <FS:Ansariel> [Legacy Bake]
     llagentwearablesfetch.cpp
 
@@ -349,6 +347,7 @@ set(viewer_SOURCE_FILES
     llfloaterdeleteenvpreset.cpp
     llfloaterdeleteprefpreset.cpp
     llfloaterdestinations.cpp
+    llfloaterdisplayname.cpp
     llfloatereditdaycycle.cpp
     llfloatereditsky.cpp
     llfloatereditwater.cpp
@@ -754,6 +753,7 @@ set(viewer_SOURCE_FILES
     llviewercontrol.cpp
     llviewercontrollistener.cpp
     llviewerdisplay.cpp
+    llviewerdisplayname.cpp
     llviewerfloaterreg.cpp
     llviewerfoldertype.cpp
     llviewergenericmessage.cpp
@@ -976,8 +976,6 @@ set(viewer_HEADER_FILES
     lggbeamscolors.h
     lggcontactsets.h
     lfsimfeaturehandler.h
-    llfloaterdisplayname.h
-    llviewerdisplayname.h
     # <FS:Ansariel> [Legacy Bake]
     llagentwearablesfetch.h
 
@@ -1107,6 +1105,7 @@ set(viewer_HEADER_FILES
     llfloaterdeleteprefpreset.h
     llfloaterdeleteenvpreset.h
     llfloaterdestinations.h
+    llfloaterdisplayname.h
     llfloatereditdaycycle.h
     llfloatereditsky.h
     llfloatereditwater.h
@@ -1507,6 +1506,7 @@ set(viewer_HEADER_FILES
     llviewercontrol.h
     llviewercontrollistener.h
     llviewerdisplay.h
+    llviewerdisplayname.h
     llviewerfloaterreg.h
     llviewerfoldertype.h
     llviewergenericmessage.h
@@ -1733,7 +1733,11 @@ if (LINUX)
     set_source_files_properties(
       llappviewerlinux.cpp
       PROPERTIES
-      COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
+# <FS:TS> The next line causes a full rebuild of the entire newview
+#         directory every time the Mercurial revision number changes.
+#         Instead of doing that, we use the configure tool to build
+#         fsversionstrings.h with the right numbers in it.
+#      COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
       )
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux_api_dbus.cpp)
 # [FS] Growl support

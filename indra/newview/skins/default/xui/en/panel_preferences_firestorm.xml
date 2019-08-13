@@ -685,6 +685,7 @@
          left="15"
          name="SLPartBeam"
          width="250"
+         tool_tip="Disabling this setting will prevent selection beams from being rendered locally. It does not prevent selection beams being sent to other avatars. If you do not wish to show your selection, you can disable that via Preferences -&gt; Privacy -&gt; LookAt -&gt; Don't send my selection target hints."
          control_name="ShowSelectionBeam" />
 
         <check_box

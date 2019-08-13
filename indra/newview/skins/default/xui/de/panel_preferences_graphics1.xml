@@ -146,14 +146,14 @@
 		<check_box label="HTTP für Laden von Texturen verwenden" tool_tip="Aktiviert das Laden von Texturen über das HTTP-Protokoll - deaktivieren wenn es Probleme mit schlecht oder nicht korrekt ladenden Texturen gibt und das veraltete UDP-Protokoll verwendet werden soll." name="TexturesHTTP"/>
 		<check_box label="Maximale Auflösung für Texturen auf 512px beschränken (nur 64bit; erfordert Neustart)" tool_tip="Beschränkt die maximale Auflösung für Inworld-Texturen auf 512px. Dies erlaubt die Darstellung von mehreren Texturen bevor der vorhandene Texturspeicher aufgebraucht ist und unscharfe Texturen dargestellt werden." name="FSRestrictMaxTextureSize"/>
 		<slider label="Max. Anzahl gleichzeitiger HTTP-GET-Anfragen" name="HTTPFetchMaxRequests"/>
-		<text name="TextureDetailLabel" width="215">
+		<text name="TextureDetailLabel" width="215" tool_tip="Qualitätslevel, auf das Texturen geladen werden. Beeinflusst die Einstellung TextureDiscardLevel">
 			Maximales Qualitätslevel für Texturen:
 		</text>
 		<combo_box name="TextureDetail">
-			<combo_box.item label="Normale Qualität" name="0"/>
-			<combo_box.item label="Mittlere Qualität" name="3"/>
-			<combo_box.item label="Geringe Qualität" name="4"/>
-			<combo_box.item label="Keine Texturen" name="5"/>
+			<combo_box.item label="Normale (0) Qualität" name="0"/>
+			<combo_box.item label="Mittlere (3) Qualität" name="3"/>
+			<combo_box.item label="Geringe (4) Qualität" name="4"/>
+			<combo_box.item label="Keine (5) Texturen" name="5"/>
 		</combo_box>
 		<text name="Alpha Mask Rendering">
 			Darstellung von Alpha-Masken:

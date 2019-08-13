@@ -10445,6 +10445,14 @@ Reason: [SANITY_COMMENT]
 
 Current setting: [CURRENT_VALUE]
    <form name="form">
+      <button
+       index="0"
+       name="OK"
+       text="Fix it"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Keep it"/>
       <ignore name="ignore"
        text="A settings control has failed the sanity check."/>
     </form>
@@ -10485,11 +10493,11 @@ Your viewer cache is currently empty. Please be aware that you may experience sl
   <!-- <FS:Zi> Viewer version popup -->
   <notification
    icon="alertmodal.tga"
-   name="FirstJoinSupportGroup"
+   name="FirstJoinSupportGroup2"
    type="alertmodal">
 Welcome to the Phoenix/Firestorm Viewer Support Group!
 
-To make support easier, it is recommended to announce your viewer's version to the group. You can choose to display your viewer's version in front of any chat you send to the group. Our support members can give you more meaningful advice right away if they know the viewer version you are on.
+To make support easier, it is recommended to announce your viewer's version to the group. This information includes current viewer version, viewer skin, operating system and RLVa status. You can choose to display your viewer's version in front of any chat you send to the group. Our support members can give you more meaningful advice right away if they know the viewer version you are on.
 
 You can enable and disable this function at any time using the checkbox in the group chat floater.
 
@@ -12589,6 +12597,19 @@ The backup path could not be found.
 
   <notification
    icon="alertmodal.tga"
+   name="SettingsConfirmBackup"
+   type="alertmodal">
+Are you sure you want to save a backup to this directory?
+[DIRECTORY]
+Any existing backups in that location will be overwritten!
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Save backup"/>
+  </notification>
+  
+  <notification
+   icon="alertmodal.tga"
    name="SettingsRestoreNeedsLogout"
    type="alertmodal">
 Settings restore requires a viewer restart. Do you want to restore your settings and quit the viewer now?
@@ -13051,4 +13072,11 @@ If you do not agree to these terms of use, then no financial transactions should
     name="okignore"
     yestext="OK"/>
   </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="EnableHiDPI"
+   type="alertmodal">
+Enabling HiDPI support may have adverse effects and may impair performance.
+  </notification>
+
 </notifications>

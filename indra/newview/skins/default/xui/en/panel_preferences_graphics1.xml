@@ -1086,17 +1086,6 @@
             Texture Rendering:
         </text>
 
-      <!-- HTTP textures -->
-        <check_box
-         control_name="ImagePipelineUseHTTP"
-         height="16"
-         label="Use HTTP for receiving textures"
-         tool_tip="Set this to load textures using the HTTP protocol - unset it if you are having rendering problems and wish to the legacy UDP protocol."
-         layout="topleft"
-         left_delta="5"
-         name="TexturesHTTP"
-         top_pad="6"
-         width="400"/>
         <check_box
          control_name="FSRestrictMaxTextureSize"
          height="16"
@@ -1130,21 +1119,22 @@
          left_pad="5"
          top_pad="-23"
          name="TextureDetail"
-         width="150">
+         width="150"
+         tool_tip="Quality to load textures to, affects the setting TextureDiscardLevel"> <!-- To translators, do not try to translate the word TextureDiscardLevel -->
             <combo_box.item
-             label="Normal quality"
+             label="Normal (0) quality"
              name="0"
              value="0"/>
             <combo_box.item
-             label="Mid quality"
+             label="Mid (3) quality"
              name="3"
              value="3"/>
             <combo_box.item
-             label="Low quality"
+             label="Low (4) quality"
              name="4"
              value="4"/>
             <combo_box.item
-             label="No textures"
+             label="No (5) textures"
              name="5"
              value="5"/>
         </combo_box>

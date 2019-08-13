@@ -7,7 +7,7 @@
 //
 
     // Bridge platform
-    string BRIDGE_VERSION = "2.24"; // This should match fslslbridge.cpp
+    string BRIDGE_VERSION = "2.25"; // This should match fslslbridge.cpp
     string gLatestURL;
     integer gViewerIsFirestorm;
     integer gTryHandshakeOnce = TRUE;
@@ -610,19 +610,29 @@ default
             else if ((zhaoPos = llSubStringIndex(msg, "ZHAO_")) >= 0)
             {
                 zhaoPos += 5;               // Skip past prefix
-                if (llGetSubString(msg, zhaoPos, zhaoPos + 4) == "AOOFF" || llGetSubString(msg, zhaoPos, zhaoPos + 7) == "STANDOFF")
+                if (llGetSubString(msg, zhaoPos, zhaoPos + 4) == "AOOFF")
                 {
                     aoState("off");
                 }
-                else if (llGetSubString(msg, zhaoPos, zhaoPos + 3) == "AOON" || llGetSubString(msg, zhaoPos, zhaoPos + 6) == "STANDON")
+                else if (llGetSubString(msg, zhaoPos, zhaoPos + 3) == "AOON")
                 {
                     aoState("on");
+                }
+                else if (llGetSubString(msg, zhaoPos, zhaoPos + 7) == "STANDOFF")
+                {
+                    aoState("standoff");
+                }
+                else if (llGetSubString(msg, zhaoPos, zhaoPos + 6) == "STANDON")
+                {
+                    aoState("standon");
                 }
             }
         }
 
         // LockMeister AO interface listen handler
-        else if (fromChan == AO_CHANNEL_LM && (key)llGetSubString(msg, 0, 35) == gOwner)
+        else if (fromChan == AO_CHANNEL_LM &&
+                 (key)llGetSubString(msg, 0, 35) == gOwner &&
+                 llList2Key(llGetObjectDetails(senderID, [OBJECT_ROOT]), 0) != gAO_CollarKey)
         {
             string command = llList2String(llParseStringKeepNulls(llGetSubString(msg, 36, -1), [ "|" ], []), 0);
             if (command == "booton")

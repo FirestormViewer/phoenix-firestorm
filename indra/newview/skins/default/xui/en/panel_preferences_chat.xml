@@ -1134,7 +1134,7 @@
 		 height="18"
 		 name="FSShowIMInChatHistory"
 		 control_name="FSShowIMInChatHistory"
-		 label="Show IMs in nearby chat window"/>
+		 label="Show IMs and Group Chat in Nearby Chat Window"/>
 		<check_box
 		 enabled_control="FSShowIMInChatHistory"
 		 layout="topleft"
@@ -1145,7 +1145,7 @@
 		 height="18"
 		 name="FSLogIMInChatHistory"
 		 control_name="FSLogIMInChatHistory"
-		 label="Save IMs in nearby chat"/>
+		 label="Save IMs and Group Chat in Nearby Chat"/>
 		<text
 		 top_pad="0"
 		 follows="left|top"

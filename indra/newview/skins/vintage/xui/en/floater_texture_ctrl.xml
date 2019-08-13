@@ -3,13 +3,13 @@
  legacy_header_height="18"
  can_minimize="false"
  can_resize="true"
- height="330"
+ height="360"
  layout="topleft"
  min_height="330"
  min_width="410"
  name="texture picker"
  help_topic="texture_picker"
- title="PICK: TEXTURE"
+ title="Pick: Texture"
  width="410">
  
 <!--  top static -->
@@ -248,6 +248,26 @@
     </scroll_list>
      
 <!-- bottom static -->
+    <line_editor
+        follows="bottom"
+        height="20"
+        left="7"
+        top="-55"
+        max_length_chars="256"
+        name="TextureKey"
+        layout="topleft"
+        label="00000000-0000-0000-0000-000000000000"
+        tool_tip="Texture Key"
+        width="290"/>
+    <button
+        follows="bottom"
+        name="TextureKeyApply"
+        height="20"
+        label="Apply UUID"
+        layout="topleft"
+        left_pad="5"
+        width="100"
+        tool_tip="Apply this UUID"/>
     <button
      follows="bottom"
      height="20"
@@ -268,16 +288,4 @@
      top_delta="0"
      name="Cancel"
      width="100" />
-<!-- FS:Ansariel - exists twice
-    <check_box
-     follows="left|bottom"
-     height="20"
-     initial_value="true"
-     label="Apply now"
-     layout="topleft"
-     left="4"
-     name="apply_immediate_check"
-     top_delta="0"
-     width="120" />
--->
 </floater>

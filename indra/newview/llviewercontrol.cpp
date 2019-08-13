@@ -964,6 +964,16 @@ void handleOutputDeviceChanged(const LLSD& newvalue)
 }
 // </FS:Ansariel>
 
+// <FS:TS> FIRE-24081: Disable HiDPI by default and warn if set
+void handleRenderHiDPIChanged(const LLSD& newvalue)
+{
+	if (newvalue)
+	{
+		LLNotificationsUtil::add("EnableHiDPI");
+	}
+}
+// </FS:TS> FIRE-24081
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1021,6 +1031,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderShadowDetail")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderDeferredSSAO")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderPerformanceTest")->getSignal()->connect(boost::bind(&handleRenderPerfTestChanged, _2));
+	gSavedSettings.getControl("RenderHiDPI")->getSignal()->connect(boost::bind(&handleRenderHiDPIChanged, _2));
 	gSavedSettings.getControl("TextureMemory")->getSignal()->connect(boost::bind(&handleVideoMemoryChanged, _2));
 	gSavedSettings.getControl("ChatConsoleFontSize")->getSignal()->connect(boost::bind(&handleChatFontSizeChanged, _2));
 	gSavedSettings.getControl("ChatPersistTime")->getSignal()->connect(boost::bind(&handleChatPersistTimeChanged, _2));

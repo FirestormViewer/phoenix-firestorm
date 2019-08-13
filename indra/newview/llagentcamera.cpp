@@ -2992,13 +2992,26 @@ bool LLAgentCamera::isfollowCamLocked()
 
 BOOL LLAgentCamera::setPointAt(EPointAtType target_type, LLViewerObject *object, LLVector3 position)
 {
-	// Ansariel: Remember the current object point pointed at - we might need it later
+	// <FS:Ansariel> Remember the current object point pointed at - we might need it later
 	mPointAtObject = object;
+
+	// <FS:Ansariel> Private point at
+	static LLCachedControl<bool> private_pointat(gSavedSettings, "PrivatePointAtTarget", false);
+	if (private_pointat)
+	{
+		if (mPointAt && !mPointAt->isDead())
+		{
+			mPointAt->clearPointAtTarget();
+			mPointAt->markDead();
+		}
+
+		return FALSE;
+	}
+	// </FS:Ansariel>
 
 	// disallow pointing at attachments and avatars
 	//this is the editing arm motion
-	static LLCachedControl<bool> private_pointat(gSavedSettings, "PrivatePointAtTarget", false);
-	if (object && (object->isAttachment() || object->isAvatar() || private_pointat))
+	if (object && (object->isAttachment() || object->isAvatar()))
 	{
 		return FALSE;
 	}

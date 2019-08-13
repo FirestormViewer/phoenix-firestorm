@@ -204,6 +204,7 @@
 			image_selected="PushButton_Selected_Press"
 			name="sanity_warning_btn"
 			right="-160"
+			tool_tip="This debug setting failed the sanity check; its value lies outside the recommended range."
 			top_pad="10"
 			visible="true"
 			width="22">

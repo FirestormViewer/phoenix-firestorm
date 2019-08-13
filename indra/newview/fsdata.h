@@ -46,7 +46,7 @@ public:
 	void addAgents();
 
 	LLSD resolveClientTag(const LLUUID& id, bool new_system, const LLColor4& new_system_color);
-	
+
 	enum flags_t
 	{
 		SUPPORT		= (1 << 0), //0x01 1
@@ -60,23 +60,26 @@ public:
 	};
 
 	std::set<LLUUID> mSupportGroup;
+	std::set<LLUUID> mTestingGroup;
 
 	bool isDeveloper(const LLUUID& avatar_id);
 	bool isSupport(const LLUUID& avatar_id);
 	bool isQA(const LLUUID& avatar_id);
+	bool isFirestormGroup(const LLUUID& id);
 	bool isSupportGroup(const LLUUID& id);
+	bool isTestingGroup(const LLUUID& id);
 
 	// returns -1 if agent is not found.
 	S32 getAgentFlags(const LLUUID& avatar_id);
 
 	LLSD allowedLogin();
-	
+
 	bool enableLegacySearch() {return mLegacySearch;}
 
 	std::string processRequestForInfo(const LLUUID& requester, const std::string& message, const std::string& name, const LLUUID& sessionid);
 	static LLSD getSystemInfo();
 	static void callbackReqInfo(const LLSD &notification, const LLSD &response);
-	
+
 	std::string getOpenSimMOTD() { return mOpenSimMOTD; }
 	void selectNextMOTD();
 

@@ -2141,6 +2141,34 @@ bool LLInventoryModel::loadSkeleton(
 	const LLSD& options,
 	const LLUUID& owner_id)
 {
+	// <FS:Zi> Purge inventory cache files marked by DELETE_INV_GZ marker files
+	std::string delete_cache_marker = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, owner_id.asString() + "_DELETE_INV_GZ");
+	LL_DEBUGS("LLInventoryModel") << "Checking for clear inventory cache marker: " << delete_cache_marker << LL_ENDL;
+
+	// if this marker exists, go ahead and delete the respective .inv and/or .inv.gz files
+	if (LLFile::isfile(delete_cache_marker))
+	{
+		LL_INFOS("LLInventoryModel") << "Clear inventory cache marker found: " << delete_cache_marker << LL_ENDL;
+
+		std::string inventory_filename = getInvCacheAddres(owner_id);
+		if (LLFile::isfile(inventory_filename))
+		{
+			LL_INFOS("LLInventoryModel") << "Purging inventory cache file: " << inventory_filename << LL_ENDL;
+			LLFile::remove(inventory_filename);
+		}
+
+		inventory_filename.append(".gz");
+		if (LLFile::isfile(inventory_filename))
+		{
+			LL_INFOS("LLInventoryModel") << "Purging inventory cache file: " << inventory_filename << LL_ENDL;
+			LLFile::remove(inventory_filename);
+		}
+
+		LL_INFOS("LLInventoryModel") << "Clear inventory cache marker removed: " << delete_cache_marker << LL_ENDL;
+		LLFile::remove(delete_cache_marker);
+	}
+	// </FS:Zi>
+
 	LL_DEBUGS(LOG_INV) << "importing inventory skeleton for " << owner_id << LL_ENDL;
 
 	typedef std::set<LLPointer<LLViewerInventoryCategory>, InventoryIDPtrLess> cat_set_t;

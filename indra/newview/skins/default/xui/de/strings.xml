@@ -5982,6 +5982,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Fly_Tooltip">
 		Flugmodus ein-/ausschalten (Pos1)
 	</string>
+ 	<string name="Command_Stop_Animations_Label">
+ 		Avatar-Animationen stoppen
+ 	</string>
+ 	<string name="Command_Stop_Animations_Tooltip">
+ 		Avatar-Animationen stoppen
+ 	</string>
 	<string name="Command_Groundsit_Tooltip">
 		Aktiviert/Deaktiviert erzwungenes Sitzen auf dem Boden (Strg+Alt+S)
 	</string>

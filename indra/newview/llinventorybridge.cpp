@@ -6787,6 +6787,37 @@ void handle_attachment_touch(const LLUUID& idItem)
 }
 // </FS:Ansariel>
 
+// <FS:Zi> Texture Refresh on worn attachments
+void handle_attachment_texture_refresh(const LLUUID& idItem)
+{
+	// get the associated worn attachment's UUID
+	const LLInventoryItem* pItem = gInventory.getItem(idItem);
+	if ( (!isAgentAvatarValid()) || (!pItem) )
+	{
+		return;
+	}
+
+	LLViewerObject* pAttachObj = gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID());
+	if (!pAttachObj)
+		return;
+
+	// iterate through the list of child prims, call texture refresh on each one of them
+	LLViewerObject::const_child_list_t& children = pAttachObj->getChildren();
+    for (LLViewerObject::child_list_t::const_iterator iter = children.begin();
+         iter != children.end(); iter++)
+    {
+        LLViewerObject* child = *iter;
+
+		// NULL means, we don't have individual texture faces selected,
+		// so refresh them all
+		handle_object_tex_refresh(child, NULL);
+    }
+
+    // texture refresh the root prim, too
+	handle_object_tex_refresh(pAttachObj, NULL);
+}
+// </FS:Zi>
+
 // virtual
 void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
 {
@@ -6833,6 +6864,12 @@ void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
 		handle_attachment_touch(mUUID);
 	}
 	// </FS:Ansariel>
+	// <FS:Zi> Texture Refresh on worn attachments
+	else if ("texture_refresh_attachment" == action)
+	{
+		handle_attachment_texture_refresh(mUUID);
+	}
+	// </FS:Zi>
 	else if (isRemoveAction(action))
 	{
 		LLAppearanceMgr::instance().removeItemFromAvatar(mUUID);
@@ -7022,6 +7059,13 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 				items.push_back(std::string("Touch Attachment"));
 				if ( ((flags & FIRST_SELECTED_ITEM) == 0) || (!enable_attachment_touch(mUUID)) )
 					disabled_items.push_back(std::string("Touch Attachment"));
+
+				// <FS:Zi> Texture Refresh on worn attachments
+				if (item->getType() == LLAssetType::AT_OBJECT)
+				{
+					items.push_back(std::string("Texture Refresh Attachment"));
+				}
+				// </FS:Zi>
 
 				items.push_back(std::string("Detach From Yourself"));
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a

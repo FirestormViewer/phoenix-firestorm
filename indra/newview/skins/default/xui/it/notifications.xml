@@ -3944,7 +3944,8 @@ Valore attuale: [CURRENT_VALUE]
 	<notification name="CacheEmpty">
 		La cache del viewer è vuota. Sono possibili rallentamenti nel framerate e nel caricamento dell&apos;inventario per un breve tempo, mentre vengono caricati i nuovi contenuti.
 	</notification>
-	<notification name="FirstJoinSupportGroup">
+<!-- Commented out because without an update it would show false information!
+	<notification name="FirstJoinSupportGroup2">
 		Benvenuti al gruppo di supporto di Phoenix/Firestorm!
 
 Per rendere il supporto più efficace, raccomandiamo di annunciare la versione del programma al gruppo. Il numero di versione può essere allegato ad ogni chat inviata al gruppo. I membri del gruppo di supporto possono dare suggerimenti più efficaci se conoscono la versione usata.
@@ -3958,6 +3959,7 @@ Abilitare l&apos;invio automatico della versione?
 			<ignore name="ignore" text="Iscrizione al gruppo di supporto Phoenix/Firestorm" save_option="true" />
 		</form>
 	</notification>
+-->
 	<notification name="ConfirmScriptModify">
 		Modificare gli script negli oggetti selezionati?
 		<usetemplate ignoretext="Conferma prima di modificare script nella selezione" name="okcancelignore" notext="Annulla" />

@@ -5716,6 +5716,12 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		飛行モードを開始、または停止する
 	</string>
 	<!-- added Jun.30, 2013 -->
+	<string name="Command_Stop_Animations_Label">
+		自分のアニメーションを停止する
+	</string>
+	<string name="Command_Stop_Animations_Tooltip">
+		自分のアニメーションを停止する
+	</string>
 	
  <!-- Mesh UI terms -->
 	<string name="Retain%">

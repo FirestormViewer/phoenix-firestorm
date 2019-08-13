@@ -56,6 +56,11 @@ public:
 	/// return the full viewer version as a string like "2.0.0.200030"
 	static const std::string &getVersion();
 
+//<FS:CZ>
+	/// return the full viewer version as a string like "200030"
+	static const std::string &getBuildVersion();
+//</FS:CZ>
+
 	/// return the viewer version as a string like "2.0.0"
 	static const std::string &getShortVersion();
 
