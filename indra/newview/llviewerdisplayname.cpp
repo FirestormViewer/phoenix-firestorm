@@ -58,30 +58,6 @@ namespace LLViewerDisplayName
 	void doNothing() { }
 }
 
-void LLViewerDisplayName::setDisplayNameCoro(const std::string& cap_url, const LLSD& body)
-{
-	LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
-	LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("SetDisplayNameCoro", httpPolicy));
-	LLCore::HttpHeaders::ptr_t httpHeaders(new LLCore::HttpHeaders);
-	LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
-
-	// People API can return localized error messages.  Indicate our
-	// language preference via header.
-	httpHeaders->append(HTTP_OUT_HEADER_ACCEPT_LANGUAGE, LLUI::getLanguage());
-
-	LLSD result = httpAdapter->postAndSuspend(httpRequest, cap_url, body, httpHeaders);
-
-	LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
-	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
-
-	if (!status)
-	{
-		LL_WARNS() << status.toString() << LL_ENDL;
-		LLViewerDisplayName::sSetDisplayNameSignal(false, "", LLSD());
-		LLViewerDisplayName::sSetDisplayNameSignal.disconnect_all_slots();
-	}
-}
-
 void LLViewerDisplayName::set(const std::string& display_name, const set_name_slot_t& slot)
 {
 	// TODO: simple validation here
@@ -110,7 +86,7 @@ void LLViewerDisplayName::set(const std::string& display_name, const set_name_sl
 	LLSD change_array = LLSD::emptyArray();
 	change_array.append(av_name.getDisplayName());
 	change_array.append(display_name);
-
+	
 	LL_INFOS() << "Set name POST to " << cap_url << LL_ENDL;
 
 	// Record our caller for when the server sends back a reply
@@ -121,8 +97,33 @@ void LLViewerDisplayName::set(const std::string& display_name, const set_name_sl
 	// communicates with the back-end.
 	LLSD body;
 	body["display_name"] = change_array;
+    LLCoros::instance().launch("LLViewerDisplayName::SetDisplayNameCoro",
+            boost::bind(&LLViewerDisplayName::setDisplayNameCoro, cap_url, body));
+}
 
-	LLCoros::instance().launch("SetDisplayNameCoro", boost::bind(&LLViewerDisplayName::setDisplayNameCoro, cap_url, body));
+void LLViewerDisplayName::setDisplayNameCoro(const std::string& cap_url, const LLSD& body)
+{
+    LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
+    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
+        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("SetDisplayNameCoro", httpPolicy));
+    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+    LLCore::HttpHeaders::ptr_t httpHeaders(new LLCore::HttpHeaders);
+
+    // People API can return localized error messages.  Indicate our
+    // language preference via header.
+    httpHeaders->append(HTTP_OUT_HEADER_ACCEPT_LANGUAGE, LLUI::getLanguage());
+
+    LLSD result = httpAdapter->postAndSuspend(httpRequest, cap_url, body, httpHeaders);
+
+    LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+
+    if (!status)
+    {
+        LL_WARNS() << "Unable to set display name. Status: " << status.toString() << LL_ENDL;
+        LLViewerDisplayName::sSetDisplayNameSignal(false, "", LLSD());
+        LLViewerDisplayName::sSetDisplayNameSignal.disconnect_all_slots();
+    }
 }
 
 class LLSetDisplayNameReply : public LLHTTPNode

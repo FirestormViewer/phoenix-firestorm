@@ -160,6 +160,10 @@ protected:
 	LLTexUnit::eTextureType mUsage;
 	
 	static LLRenderTarget* sBoundTarget;
+	// <FS:ND> Copy the contents of this FBO into memory 
+public:
+	void copyContents(S32 x, S32 y, S32 w, S32 h, U32 format, U32 type, U8 *buffer);
+	// </FS:ND>
 };
 
 #endif

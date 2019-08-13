@@ -34,7 +34,7 @@ class SanityCheck : public LLSingleton<SanityCheck>
 public:
 	void init();
 
-	static void onSanity(LLControlVariable* controlp);
+	static void onSanity(LLControlVariable* controlp, bool disregardLastControl = false);
 	static void onFixIt(const LLSD& notification, const LLSD& response, LLControlVariable* controlp);
 };
 

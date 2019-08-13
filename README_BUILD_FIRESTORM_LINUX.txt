@@ -1,4 +1,4 @@
-First, make sure gcc-4.7 and g++-4.7 are installed.
+First, make sure gcc-4.9 and g++-4.9 are installed.
 
 Ensure you can build a stock viewer-development try as described in the SL wiki. Before asking for any help 
 compiling Firestorm, make sure you can build viewer-development first. If you try and skip this step, you may
@@ -15,16 +15,16 @@ mailing list. We've created a non-KDU build target to make this easier. Everywhe
 "ReleaseFS_open" instead.  This will perform the same build, using openjpeg instead of KDU.
 
 Available premade firestorm-specific build targets:
-	ReleaseFS (includes KDU, FMODEX)
-	ReleaseFS_open (no KDU, no FMODEX)
-	RelWithDebInfoFS_open (no KDU, no FMODEX)
+	ReleaseFS (includes KDU, FMODSTUDIO)
+	ReleaseFS_open (no KDU, no FMODSTUDIO)
+	RelWithDebInfoFS_open (no KDU, no FMODSTUDIO)
 
 To build firestorm:
 	autobuild build -A64 -c ReleaseFS                        
 
 Other examples:
-	autobuild configure -A64 -c ReleaseFS  		    # basic configuration step, don't build, just configure
-	autobuild configure -A64 -c ReleaseFS -- --clean	    # clean the output area first, then configure
+	autobuild configure -A64 -c ReleaseFS  		                       # basic configuration step, don't build, just configure
+	autobuild configure -A64 -c ReleaseFS -- --clean	               # clean the output area first, then configure
 	autobuild configure -A64 -c ReleaseFS -- --chan Private-Yourname   # configure with a custom channel
 
 	autobuild build -A64 -c ReleaseFS --no-configure		# default quick rebuild

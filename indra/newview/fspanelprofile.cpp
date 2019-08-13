@@ -70,13 +70,13 @@
 #include "llviewerregion.h"
 #include "llvoiceclient.h"
 
-static LLPanelInjector<FSPanelProfileSecondLife> t_panel_profile_secondlife("panel_profile_secondlife");
-static LLPanelInjector<FSPanelProfileWeb> t_panel_web("panel_profile_web");
-static LLPanelInjector<FSPanelProfileInterests> t_panel_interests("panel_profile_interests");
-static LLPanelInjector<FSPanelProfilePicks> t_panel_picks("panel_profile_picks");
-static LLPanelInjector<FSPanelProfileFirstLife> t_panel_firstlife("panel_profile_firstlife");
-static LLPanelInjector<FSPanelAvatarNotes> t_panel_notes("panel_profile_notes");
-static LLPanelInjector<FSPanelProfile> t_panel_profile("panel_profile");
+static LLPanelInjector<FSPanelProfileSecondLife> t_panel_fs_profile_secondlife("panel_fs_profile_secondlife");
+static LLPanelInjector<FSPanelProfileWeb> t_panel_fs_web("panel_fs_profile_web");
+static LLPanelInjector<FSPanelProfileInterests> t_panel_fs_interests("panel_fs_profile_interests");
+static LLPanelInjector<FSPanelProfilePicks> t_panel_fs_picks("panel_fs_profile_picks");
+static LLPanelInjector<FSPanelProfileFirstLife> t_panel_fs_firstlife("panel_fs_profile_firstlife");
+static LLPanelInjector<FSPanelAvatarNotes> t_panel_fs_notes("panel_fs_profile_notes");
+static LLPanelInjector<FSPanelProfile> t_panel_fs_profile("panel_fs_profile");
 
 static const std::string PANEL_SECONDLIFE	= "panel_profile_secondlife";
 static const std::string PANEL_WEB			= "panel_profile_web";
@@ -1179,7 +1179,7 @@ FSPanelPick::FSPanelPick()
 FSPanelPick* FSPanelPick::create()
 {
 	FSPanelPick* panel = new FSPanelPick();
-	panel->buildFromFile("panel_profile_pick.xml");
+	panel->buildFromFile("panel_fs_profile_pick.xml");
 	return panel;
 }
 

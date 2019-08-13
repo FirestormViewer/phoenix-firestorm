@@ -95,14 +95,16 @@ void set_device(FMOD::System* system, const LLUUID& device_uuid)
 
 			for (int i = 0; i < drivercount; ++i)
 			{
-				system->getDriverInfo(i, NULL, 0, &guid, &r_samplerate, NULL, &r_channels);
-				LLUUID driver_guid = FMOD_GUID_to_LLUUID(guid);
-
-				if (driver_guid == device_uuid)
+				if (!Check_FMOD_Error(system->getDriverInfo(i, NULL, 0, &guid, &r_samplerate, NULL, &r_channels), "FMOD::System::getDriverInfo"))
 				{
-					LL_INFOS() << "Setting driver " << i << ": " << driver_guid << LL_ENDL;
-					Check_FMOD_Error(system->setDriver(i), "FMOD::System::setDriver");
-					return;
+					LLUUID driver_guid = FMOD_GUID_to_LLUUID(guid);
+
+					if (driver_guid == device_uuid)
+					{
+						LL_INFOS() << "Setting driver " << i << ": " << driver_guid << LL_ENDL;
+						Check_FMOD_Error(system->setDriver(i), "FMOD::System::setDriver");
+						return;
+					}
 				}
 			}
 
@@ -353,12 +355,14 @@ LLAudioEngine_FMODSTUDIO::output_device_map_t LLAudioEngine_FMODSTUDIO::getDevic
 	{
 		for (int i = 0; i < drivercount; ++i)
 		{
-			memset(r_name, 0, 512);
-			mSystem->getDriverInfo(i, r_name, 511, &guid, &r_samplerate, NULL, &r_channels);
-			LLUUID driver_guid = FMOD_GUID_to_LLUUID(guid);
-			driver_map.insert(std::make_pair(driver_guid, r_name));
+			memset(r_name, 0, sizeof(r_name));
+			if (!Check_FMOD_Error(mSystem->getDriverInfo(i, r_name, 511, &guid, &r_samplerate, NULL, &r_channels), "FMOD::System::getDriverInfo"))
+			{
+				LLUUID driver_guid = FMOD_GUID_to_LLUUID(guid);
+				driver_map.insert(std::make_pair(driver_guid, r_name));
 
-			LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::getDevices(): r_name=\"" << r_name << "\" - guid: " << driver_guid << LL_ENDL;
+				LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::getDevices(): r_name=\"" << r_name << "\" - guid: " << driver_guid << LL_ENDL;
+			}
 		}
 	}
 
