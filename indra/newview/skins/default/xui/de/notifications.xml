@@ -5145,7 +5145,7 @@ Export unerwartet fehlgeschlagen. Siehe Log-Datei für weitergehende Details.
 	</notification>
 
 	<notification name="ExportColladaSuccess">
-[OBJECT] erfolreich als [FILENAME] gespeichert.
+[OBJECT] erfolgreich als [FILENAME] gespeichert.
 	</notification>
 
 	<notification name="ExportColladaSuccess">
