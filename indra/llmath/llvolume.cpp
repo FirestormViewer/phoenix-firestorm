@@ -5323,6 +5323,28 @@ bool LLVolumeFace::cacheOptimize()
 	llassert(!mOptimized);
 	mOptimized = TRUE;
 
+	// <FS:ND> FIRE-23370/BUG-8801/MAIN-5060
+	// cacheOptimize will destroy triangles. This is due to LLVCacheVertexData pointing to vertices in the vector vertex_data.
+	// Once vertex_data is sorted (std::sort(triangle_data.begin(), triangle_data.end()) ) this will invalidate those pointers and
+	// LLVCacheVertexData suddenly does point to unrelated vertices. It is an interesting fact that this is no problem for the
+	// windows version.
+	//
+	// To solve the issue with the pointer invalidation it would make sense to use a std::vector< U16 > for triangle indices, sort this
+	// using
+	// std::sort( v.begin(), v.end(), [&triangle_data](U16 rhs, U16 lhs ){ return triangle_data[rhs].mScore > triangle_data[lhs].mScore; }
+	// Then access all LLVCacheTriangleData> via triangle_data[ v[ idx ] ].
+	//
+	// This will help indeed with the destroyed triangles; but the result will still not be perfect and there are problems with alpha due to
+	// what looks like z order.
+	//
+	// It is peculiar that none of this happens when compiling with MSVC.
+	// Sadly for Linux it seems to be a decision between two evils
+	// - Disable cacheOptimize and have correct meshes but potentially a bit of less FPS.
+	// - Enable/fix cacheOptimize, potentially have a bit higher FPS but broken meshes.
+	//
+	// Having meshes correctly seems to be a bit of a lesser evil. Then do some wider testing on different systems to test for any other potential sideeffects.
+	
+#ifndef LL_LINUX
 	LLVCacheLRU cache;
 	
 	if (mNumVertices < 3)
@@ -5553,6 +5575,8 @@ bool LLVolumeFace::cacheOptimize()
 
 	//std::string result = llformat("ACMR pre/post: %.3f/%.3f  --  %d triangles %d breaks", pre_acmr, post_acmr, mNumIndices/3, breaks);
 	//LL_INFOS() << result << LL_ENDL;
+
+#endif // <FS:ND/>
 
 	return true;
 }

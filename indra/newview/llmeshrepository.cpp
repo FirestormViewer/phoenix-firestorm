@@ -819,7 +819,18 @@ void log_upload_error(LLCore::HttpStatus status, const LLSD& content,
 	for (; mav_errors_it != mav_errors.end(); ++mav_errors_it)
 	{
 		std::string mav_details = "Mav_Details_" + *mav_errors_it;
-		details << "Message: '" << *mav_errors_it << "': " << LLTrans::getString(mav_details) << std::endl << std::endl;
+		// <FS:Ansariel> Details error can be some message already.
+		//details << "Message: '" << *mav_errors_it << "': " << LLTrans::getString(mav_details) << std::endl << std::endl;
+		std::string translated_details;
+		if (LLTrans::findString(translated_details, mav_details))
+		{
+			details << "Message: '" << *mav_errors_it << "': " << translated_details << std::endl << std::endl;
+		}
+		else
+		{
+			details << "Message: '" << *mav_errors_it << "'" << std::endl << std::endl;
+		}
+		// </FS:Ansariel>
 	}
 
 	std::string details_str = details.str();
