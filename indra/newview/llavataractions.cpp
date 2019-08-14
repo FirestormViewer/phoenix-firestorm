@@ -470,7 +470,7 @@ LLFloater* LLAvatarActions::getProfileFloater(const LLUUID& id)
 //<FS:KC legacy profiles>
 	if (!gSavedSettings.getBOOL("FSUseWebProfiles"))
 	{
-		FSFloaterProfile* browser = LLFloaterReg::findTypedInstance<FSFloaterProfile>("floater_profile", LLSD().with("id", id));
+		FSFloaterProfile* browser = LLFloaterReg::findTypedInstance<FSFloaterProfile>("fs_floater_profile", LLSD().with("id", id));
 		return browser;
 	}
 //</FS:KC legacy profiles>
@@ -494,7 +494,7 @@ void LLAvatarActions::showProfileLegacy(const LLUUID& id)
 {
 	if (id.notNull())
 	{
-		LLFloaterReg::showInstance("floater_profile", LLSD().with("id", id));
+		LLFloaterReg::showInstance("fs_floater_profile", LLSD().with("id", id));
 	}
 }
 //</FS:KC legacy profiles>
@@ -743,7 +743,10 @@ void LLAvatarActions::share(const LLUUID& id)
 
 	LLSD key;
 	LLFloaterSidePanelContainer::showPanel("inventory", key);
-	LLFloaterReg::showInstance("im_container");
+	// <FS:Ansariel> [FS Communication UI]
+	//LLFloaterReg::showInstance("im_container");
+	LLFloaterReg::showInstance("fs_im_container");
+	// </FS:Ansariel> [FS Communication UI]
 
 	LLUUID session_id = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL,id);
 
