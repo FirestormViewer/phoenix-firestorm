@@ -46,7 +46,7 @@
 #include "llfasttimer.h"
 
 //#include "../tools/imdebug/imdebug.h"
-
+#include "llrendertarget.h"
 using namespace LLAvatarAppearanceDefines;
 
 // runway consolidate
@@ -1595,8 +1595,27 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 			{
                 if (gGLManager.mIsIntel)
                 { // work-around for broken intel drivers which cannot do glReadPixels on an RGBA FBO
-                  // returning only the alpha portion without locking up downstream 
-                    U8* temp = (U8*)ll_aligned_malloc_32(mem_size << 2); // allocate same size, but RGBA
+                    // returning only the alpha portion without locking up downstream 
+
+                    // <FS:ND> glGetTexImagec will copy the whole texture, which might be   greater than width*height
+                    // Also what about the shenanigans with  passing bound_target around everywhere rather than use LLRenderTarget::getCurrentBoundTarget
+                    // Sometimes it also does happen that bound_target == nullptr but a render target ist bound
+                    //
+                    // U8* temp = (U8*)ll_aligned_malloc_32(mem_size << 2); // allocate same size, but RGBA
+
+                    U32 textureW{}, textureH{};
+
+                    if (bound_target)
+                    {
+                        textureW = bound_target->getWidth();
+                        textureH = bound_target->getHeight();
+                    }
+                    else if (LLRenderTarget::getCurrentBoundTarget())
+                    {
+                        textureW = LLRenderTarget::getCurrentBoundTarget()->getWidth();
+                        textureH = LLRenderTarget::getCurrentBoundTarget()->getHeight();
+                    }
+                    // </FS:ND>
 
                     if (bound_target)
                     {
@@ -1604,18 +1623,59 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
                     }
                     else
                     {
+                        // <FS:ND> Last resort if there is no bound render target
+                        // Maybe it would make sense to call
+                        // gGL.getTexUnit(0)->bind( LLRenderTarget::getCurrentBoundTarget ) in case  LLRenderTarget::getCurrentBoundTarget != nullptr rather than bindManual(TT_TEXTURE,0)
+                        // but seems to be fine without
+                        if (!textureW || !textureH)
+                        {
+                            LLGLint glTemp{};
+                            glGetTexLevelParameteriv(LLTexUnit::TT_TEXTURE, 0, GL_TEXTURE_WIDTH, (GLint*)&glTemp);
+                            textureW = glTemp;
+                            glGetTexLevelParameteriv(LLTexUnit::TT_TEXTURE, 0, GL_TEXTURE_HEIGHT, (GLint*)&glTemp);
+                            textureH = glTemp;
+                        }
+                        // </FS>ND>
+
                         gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE, 0);
                     }
+
+                    // <FS:ND> Check invariants and allocate memory
+                    llassert_always(textureH > 0);
+                    llassert_always(textureW > 0);
+                    llassert_always(textureH >= height);
+                    llassert_always(textureW >= width);
+                    llassert_always(x == 0);
+                    llassert_always(y == 0);
+
+                    // Not really needed to use aligned_malloc_32 here, but I suppose because we can and why not
+                    U8 *temp{ (U8*)ll_aligned_malloc_32(textureW * textureH * 4) };
+                    // </FS:ND>
 
                     glGetTexImage(LLTexUnit::getInternalType(LLTexUnit::TT_TEXTURE), 0, GL_RGBA, GL_UNSIGNED_BYTE, temp);
 
                     U8* alpha_cursor = alpha_data;
                     U8* pixel        = temp;
-                    for (int i = 0; i < pixels; i++)
+
+                    // <FS:ND> Copy out data. Buffer can be bigger than alpha_cursor, so need to skip pixel
+
+                    // for (int i = 0; i < pixels; i++)
+                    // {
+                    //    *alpha_cursor++ = pixel[3];
+                    //    pixel += 4;
+                    // }
+
+                    for (int i = 0; i < height; ++i)
                     {
-                        *alpha_cursor++ = pixel[3];
-                        pixel += 4;
+                        for (int j = 0; j < width; ++j)
+                        {
+                            *alpha_cursor++ = pixel[3];
+                            pixel += 4;
+                        }
+
+                        pixel += (textureW - width) * 4;;
                     }
+                    // </FS:ND>
 
                     gGL.getTexUnit(0)->disable();
 
