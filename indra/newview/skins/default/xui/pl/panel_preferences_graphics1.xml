@@ -127,7 +127,7 @@
 			<text name="Texture Rendering">
 				Rendering tekstur:
 			</text>
-			<check_box label="Pobieraj tekstury przez HTTP" tool_tip="Zaznacz tą opcję, aby ściągać tekstury poprzez protokół HTTP - odznacz ją, jeśli masz problemy z wyświetlaniem i chcesz wczytywać tekstury w taki sam sposób, jak przed lipcem 2010: na Viewerze 1." name="TexturesHTTP"/>
+			<!-- Removed in FIRE-24256, leaving it here for non-SL viewer version --> <check_box label="Pobieraj tekstury przez HTTP" tool_tip="Zaznacz tę opcję, aby ściągać tekstury poprzez protokół HTTP - odznacz ją, jeśli masz problemy z wyświetlaniem i chcesz wczytywać tekstury w taki sam sposób, jak przed lipcem 2010: na Viewerze 1." name="TexturesHTTP" />
 			<check_box label="Ogranicz maksymalną rozdzielczość tekstur do 512px (tylko 64bit; wymaga restartu)" tool_tip="Zaznacz tą opcję, aby ograniczyć maksymalną rozdzielczość tekstur w świecie do 512 pikseli. Pozwala to na wyświetlanie większej ilości tekstur zanim dostępna na nie pamięć zostanie przekroczona i zaczną się one rozmywać." name="FSRestrictMaxTextureSize" />
 			<text name="TextureDetailLabel">
 				Maksymalny poziom jakości tekstur:
