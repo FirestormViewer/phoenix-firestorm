@@ -284,7 +284,8 @@ std::string LLStartUp::sStartSLURLString;
 
 static LLPointer<LLCredential> gUserCredential;
 static std::string gDisplayName;
-static BOOL gRememberPassword = TRUE;     
+static bool gRememberPassword = true;
+static bool gRememberUser = true;
 
 static U64 gFirstSimHandle = 0;
 static LLHost gFirstSim;
@@ -1080,15 +1081,17 @@ bool idle_startup()
 			// <FS:Ansariel> Option to not save password if using login cmdline switch;
 			//               gLoginHandler.initializeLoginInfo() sets AutoLogin to TRUE,
 			//               so we end up here!
-			//gRememberPassword = TRUE;
+			//gRememberPassword = true;
+			//gRememberUser = true;
 			//gSavedSettings.setBOOL("RememberPassword", TRUE);                                                      
+			//gRememberUser = gSavedSettings.getBOOL("RememberUser");
 			if (gSavedSettings.getBOOL("FSLoginDontSavePassword"))
 			{
-				gRememberPassword = FALSE;
+				gRememberPassword = false;
 			}
 			else
 			{
-				gRememberPassword = TRUE;
+				gRememberPassword = true;
 				gSavedSettings.setBOOL("RememberPassword", TRUE);
 			}
 			// </FS:Ansariel>
@@ -1100,12 +1103,14 @@ bool idle_startup()
 		//{
 		//	// Console provided login&password
 		//	gRememberPassword = gSavedSettings.getBOOL("RememberPassword");
+		//	gRememberUser = gSavedSettings.getBOOL("RememberUser");
 		//	show_connect_box = false;
 		//}
 		// </FS:Ansariel>
 		else 
 		{
 			gRememberPassword = gSavedSettings.getBOOL("RememberPassword");
+			gRememberUser = gSavedSettings.getBOOL("RememberUser");
 			show_connect_box = TRUE;
 		}
 
@@ -1217,10 +1222,7 @@ bool idle_startup()
 			login_show();
 			// connect dialog is already shown, so fill in the names
 			// <FS:CR>
-			//if (gUserCredential.notNull() && !LLPanelLogin::isCredentialSet())
-			//{
-			//	LLPanelLogin::setFields( gUserCredential, gRememberPassword);
-			//}
+			//LLPanelLogin::populateFields( gUserCredential, gRememberUser, gRememberPassword);
 			if (gUserCredential.notNull() && !FSPanelLogin::isCredentialSet())
 			{
 				FSPanelLogin::setFields(gUserCredential, true);
@@ -1355,7 +1357,7 @@ bool idle_startup()
 			// TODO if not use viewer auth
 			// Load all the name information out of the login view
 			// <FS:Ansariel> [FS Login Panel]
-			//LLPanelLogin::getFields(gUserCredential, gRememberPassword); 
+			//LLPanelLogin::getFields(gUserCredential, gRememberUser, gRememberPassword);
 			FSPanelLogin::getFields(gUserCredential, gRememberPassword); 
 			// </FS:Ansariel> [FS Login Panel]
 			// end TODO
@@ -1369,14 +1371,24 @@ bool idle_startup()
 		// STATE_LOGIN_SHOW state if we've gone backwards
 		mLoginStatePastUI = true;
 
-		// save the credentials                                                                                        
-		std::string userid = "unknown";                                                                                
-		if(gUserCredential.notNull())                                                                                  
-		{  
-			userid = gUserCredential->userID();                                                                    
-		}
+		// save the credentials
+		std::string userid = "unknown";
+        if (gUserCredential.notNull())
+        {
+            userid = gUserCredential->userID();
+            // <FS:Ansariel> [FS Login Panel]
+            //if (gRememberUser)
+            //{
+            //    gSecAPIHandler->addToCredentialMap("login_list", gUserCredential, gRememberPassword);
+            //    // Legacy viewers use this method to store user credentials, newer viewers
+            //    // reuse it to be compatible and to remember last session
+            //    gSecAPIHandler->saveCredential(gUserCredential, gRememberPassword);
+            //}
+            // </FS:Ansariel> [FS Login Panel]
+        }
 		// <FS:Ansariel> Option to not save password if using login cmdline switch
 		//gSavedSettings.setBOOL("RememberPassword", gRememberPassword);                                                 
+		//gSavedSettings.setBOOL("RememberUser", gRememberUser);
 		if (!gSavedSettings.getBOOL("FSLoginDontSavePassword"))
 		{
 			gSavedSettings.setBOOL("RememberPassword", gRememberPassword);
