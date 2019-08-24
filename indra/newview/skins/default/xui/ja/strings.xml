@@ -2591,7 +2591,7 @@ http://www.firestormviewer.org/support
 	</string>
 	<string name="UnknownFileExtension">
 		不明の拡張子： %s
-使用可能な拡張子： .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
+使用可能な拡張子： .wav, .tga, .bmp, .jpg, .jpeg, or .anim
 	</string>
 	<string name="MuteObject2">
 		ブロック

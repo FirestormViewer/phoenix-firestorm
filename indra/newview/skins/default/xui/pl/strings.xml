@@ -2720,7 +2720,7 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	</string>
 	<string name="UnknownFileExtension">
 		Nieznane rozszerzenie pliku [.%s]
-Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .bvh
+Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .anim
 	</string>
 	<string name="MuteObject2">
 		Zablokuj
