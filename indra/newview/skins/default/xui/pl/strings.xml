@@ -679,6 +679,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TooltipFSHelpDebugSLUrl">
 		Kliknij aby otworzyć ustawienia debugowania dla tej opcji
 	</string>
+	<string name="TooltipFSUrlEntryWear">
+		Kliknij aby założyć zawartość folderu z Szafy
+	</string>
 	<string name="CurrentURL" value=" Obecny URL: [CurrentURL]"/>
 	<string name="TooltipEmail">
 		Kliknij aby utworzyć wiadomość e-mail
@@ -6299,5 +6302,8 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="No">
 		Nie
+	</string>
+	<string name="FSUrlEntryWearLabel">
+		Załóż folder z Szafy
 	</string>
 </strings>

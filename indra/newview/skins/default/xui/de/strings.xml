@@ -708,6 +708,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TooltipFSHelpDebugSLUrl">
 		Anklicken, um das Fenster mit Debug-Einstellungen für diese Einstellung zu öffnen
 	</string>
+	<string name="TooltipFSUrlEntryWear">
+		Anklicken, um den Inhalt eines Inventar-Ordners anzuziehen
+	</string>
 	<string name="CurrentURL" value=" CurrentURL: [CurrentURL]"/>
 	<string name="TooltipEmail">
 		Klicken, um eine E-Mail zu verfassen
@@ -6960,5 +6963,8 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="No">
 		Nein
+	</string>
+	<string name="FSUrlEntryWearLabel">
+		Inventar-Ordner anziehen
 	</string>
 </strings>
