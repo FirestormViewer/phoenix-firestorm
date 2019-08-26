@@ -85,6 +85,7 @@
 #include "llviewerinventory.h"
 #include "llcallstack.h"
 #include "llsculptidsize.h"
+#include "llavatarappearancedefines.h"
 // [RLVa:KB] - Checked: RLVa-2.0.0
 #include "rlvactions.h"
 #include "rlvlocks.h"
@@ -2637,7 +2638,13 @@ S32 LLVOVolume::setTEMaterialParams(const U8 te, const LLMaterialPtr pMaterialPa
 					case LLMaterial::DIFFUSE_ALPHA_MODE_EMISSIVE:
 					case LLMaterial::DIFFUSE_ALPHA_MODE_MASK:
 						{ //all of them modes available only for 32 bit textures
-							if(GL_RGBA != img_diffuse->getPrimaryFormat())
+							LLTextureEntry* tex_entry = getTE(te);
+							bool bIsBakedImageId = false;
+							if (tex_entry && LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(tex_entry->getID()))
+							{
+								bIsBakedImageId = true;
+							}
+							if (GL_RGBA != img_diffuse->getPrimaryFormat() && !bIsBakedImageId)
 							{
 								bSetDiffuseNone = true;
 							}
