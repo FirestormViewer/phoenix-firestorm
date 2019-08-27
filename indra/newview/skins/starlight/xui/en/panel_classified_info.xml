@@ -383,6 +383,7 @@
          max_length="1023"
          name="classified_desc"
          read_only="true"
+         trusted_content="false"
          top_pad="7"
          width="280"
          v_pad="0"
