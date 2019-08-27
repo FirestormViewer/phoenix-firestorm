@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="ban_duration" title="Czas trwania bana" width="220">
 	<text name="duration_textbox" width="110">
 		Czas trwania bana:
