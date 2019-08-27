@@ -384,6 +384,7 @@ void LLLocalBitmap::replaceIDs(LLUUID old_id, LLUUID new_id)
 	updateUserLayers(old_id, new_id, LLWearableType::WT_SKIRT);
 	updateUserLayers(old_id, new_id, LLWearableType::WT_SOCKS);
 	updateUserLayers(old_id, new_id, LLWearableType::WT_TATTOO);
+	updateUserLayers(old_id, new_id, LLWearableType::WT_UNIVERSAL);
 	updateUserLayers(old_id, new_id, LLWearableType::WT_UNDERPANTS);
 	updateUserLayers(old_id, new_id, LLWearableType::WT_UNDERSHIRT);
 }
@@ -758,7 +759,7 @@ LLAvatarAppearanceDefines::ETextureIndex LLLocalBitmap::getTexIndex(
 
 		case LLWearableType::WT_TATTOO:
 		{
-			switch(baked_texind)
+			switch (baked_texind)
 			{
 				case LLAvatarAppearanceDefines::BAKED_HEAD:
 				{
@@ -776,6 +777,75 @@ LLAvatarAppearanceDefines::ETextureIndex LLLocalBitmap::getTexIndex(
 					result = LLAvatarAppearanceDefines::TEX_UPPER_TATTOO;
 					break;
 				}
+				default:
+				{
+					break;
+				}
+			}
+			break;
+			
+		}
+		case LLWearableType::WT_UNIVERSAL:
+		{
+			switch (baked_texind)
+			{
+				
+				case LLAvatarAppearanceDefines::BAKED_SKIRT:
+				{
+					result = LLAvatarAppearanceDefines::TEX_SKIRT_TATTOO;
+					break;
+				}
+				case LLAvatarAppearanceDefines::BAKED_EYES:
+				{
+					result = LLAvatarAppearanceDefines::TEX_EYES_TATTOO;
+					break;
+				}
+				case LLAvatarAppearanceDefines::BAKED_HAIR:
+				{
+					result = LLAvatarAppearanceDefines::TEX_HAIR_TATTOO;
+					break;
+				}
+				case LLAvatarAppearanceDefines::BAKED_LEFT_ARM:
+				{
+					result = LLAvatarAppearanceDefines::TEX_LEFT_ARM_TATTOO;
+					break;
+				}
+				case LLAvatarAppearanceDefines::BAKED_LEFT_LEG:
+				{
+					result = LLAvatarAppearanceDefines::TEX_LEFT_LEG_TATTOO;
+					break;
+				}
+				case LLAvatarAppearanceDefines::BAKED_AUX1:
+				{
+					result = LLAvatarAppearanceDefines::TEX_AUX1_TATTOO;
+					break;
+				}
+				case LLAvatarAppearanceDefines::BAKED_AUX2:
+				{
+					result = LLAvatarAppearanceDefines::TEX_AUX2_TATTOO;
+					break;
+				}
+				case LLAvatarAppearanceDefines::BAKED_AUX3:
+				{
+					result = LLAvatarAppearanceDefines::TEX_AUX3_TATTOO;
+					break;
+				}
+				case LLAvatarAppearanceDefines::BAKED_UPPER:
+				{
+					result = LLAvatarAppearanceDefines::TEX_UPPER_UNIVERSAL_TATTOO;
+					break;
+				}
+				case LLAvatarAppearanceDefines::BAKED_LOWER:
+				{
+					result = LLAvatarAppearanceDefines::TEX_LOWER_UNIVERSAL_TATTOO;
+					break;
+				}
+				case LLAvatarAppearanceDefines::BAKED_HEAD:
+				{
+					result = LLAvatarAppearanceDefines::TEX_HEAD_UNIVERSAL_TATTOO;
+					break;
+				}
+
 
 				default:
 				{

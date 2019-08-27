@@ -610,6 +610,7 @@
 			<menu_item_call label="Rock" name="Skirt"/>
 			<menu_item_call label="Alpha" name="Alpha"/>
 			<menu_item_call label="Tätowierung" name="Tattoo"/>
+			<menu_item_call label="Universal" name="Universal"/>
 			<menu_item_call label="Physik" name="Physics"/>
 			<menu_item_call label="Alle Kleider" name="All Clothes"/>
 		</menu>

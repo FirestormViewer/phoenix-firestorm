@@ -67,6 +67,7 @@
      v_pad="3"
      h_pad="4"
      enabled="false"
+     trusted_content="false"
      max_length="1023"
      name="pick_desc"
      word_wrap="true"

@@ -98,6 +98,8 @@ private:
 	LLUrlEntryBase* mUrlEntryNoLink;
 	// <FS:Ansariel> Normalize only trusted URL
 	LLUrlEntryBase* mUrlEntryTrustedUrl;
+	// <FS:Ansariel> Wear folder SLUrl
+	LLUrlEntryBase* mUrlEntryWear;
 };
 
 #endif

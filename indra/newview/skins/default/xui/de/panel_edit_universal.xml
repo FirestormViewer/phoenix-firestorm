@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="edit_tattoo_panel">
-	<scroll_container name="avatar_tattoo_scroll">
-		<panel name="avatar_tattoo_color_panel">
+<panel name="edit_universal_panel">
+	<scroll_container name="avatar_universal_scroll">
+		<panel name="avatar_universal_color_panel">
 			<texture_picker label="Kopftattoo" name="Head Tattoo" tool_tip="Zum Auswählen eines Bildes hier klicken"/>
 			<texture_picker label="Obere Tattoos" name="Upper Tattoo" tool_tip="Zum Auswählen eines Bildes hier klicken"/>
 			<texture_picker label="Untere Tattoos" name="Lower Tattoo" tool_tip="Zum Auswählen eines Bildes hier klicken"/>

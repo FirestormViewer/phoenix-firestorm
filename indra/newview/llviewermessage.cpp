@@ -146,6 +146,7 @@
 #include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 #include "fslslbridge.h"
 #include "fsmoneytracker.h"
+#include "llattachmentsmgr.h"
 #include "llfloaterbump.h"
 #include "llfloaterreg.h"
 #include "llfriendcard.h"
@@ -183,6 +184,34 @@ const F32 OFFER_THROTTLE_TIME=10.f; //time period in seconds
 const U8 AU_FLAGS_NONE      		= 0x00;
 const U8 AU_FLAGS_HIDETITLE      	= 0x01;
 const U8 AU_FLAGS_CLIENT_AUTOPILOT	= 0x02;
+
+// <FS:Ansariel> Trigger refresh attachments if attachments get detached after TP finished
+class FSHelloToKokuaRefreshAttachmentsTimer : public LLEventTimer
+{
+public:
+	FSHelloToKokuaRefreshAttachmentsTimer() : LLEventTimer(5.f)
+	{
+		mEventTimer.stop();
+	}
+
+	BOOL tick()
+	{
+		if (gSavedSettings.getBOOL("FSExperimentalLostAttachmentsFixReport"))
+		{
+			report_to_nearby_chat("Refreshing attachments...");
+		}
+		mEventTimer.stop();
+		LLAttachmentsMgr::instance().refreshAttachments();
+		return FALSE;
+	}
+
+	void triggerRefresh()
+	{
+		mEventTimer.start();
+	}
+};
+FSHelloToKokuaRefreshAttachmentsTimer gFSRefreshAttachmentsTimer;
+// </FS:Ansariel>
 
 void accept_friendship_coro(std::string url, LLSD notification)
 {
@@ -4558,24 +4587,29 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 					objectp->permYouOwner())
 				{
 					// Simply ignore the request and don't kill the object - this should work...
+
+					std::string reason;
+					if (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE)
+					{
+						reason = "tp";
+					}
+					else if (gAgentAvatarp->isCrossingRegion())
+					{
+						reason = "crossing";
+					}
+					else
+					{
+						reason = "timer";
+						gFSRefreshAttachmentsTimer.triggerRefresh();
+					}
+					std::string message = "Region \"" + regionp->getName() + "\" tried to kill attachment: " + objectp->getAttachmentItemName() + " (" + reason + ") - Agent region: \"" + gAgent.getRegion()->getName() + "\"";
+					LL_WARNS("Messaging") << message << LL_ENDL;
+
 					if (gSavedSettings.getBOOL("FSExperimentalLostAttachmentsFixReport"))
 					{
-						std::string reason;
-						if (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE)
-						{
-							reason = "tp";
-						}
-						else if (gAgentAvatarp->isCrossingRegion())
-						{
-							reason = "crossing";
-						}
-						else
-						{
-							reason = "timer";
-						}
-
-						report_to_nearby_chat("Region \"" + regionp->getName() + "\" tried to kill attachment: " + objectp->getAttachmentItemName() + " (" + reason + ") - Agent region: \"" + gAgent.getRegion()->getName() + "\"");
+						report_to_nearby_chat(message);
 					}
+
 					continue;
 				}
 				// </FS:Ansariel>
