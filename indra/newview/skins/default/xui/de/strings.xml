@@ -711,6 +711,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TooltipFSHelpDebugSLUrl">
 		Anklicken, um das Fenster mit Debug-Einstellungen für diese Einstellung zu öffnen
 	</string>
+	<string name="TooltipFSUrlEntryWear">
+		Anklicken, um den Inhalt eines Inventar-Ordners anzuziehen
+	</string>
 	<string name="CurrentURL" value=" CurrentURL: [CurrentURL]"/>
 	<string name="TooltipEmail">
 		Klicken, um eine E-Mail zu verfassen
@@ -1460,6 +1463,9 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	<string name="tattoo">
 		Tätowierung
 	</string>
+	<string name="universal">
+		Universal
+	</string>
 	<string name="physics">
 		Physik
 	</string>
@@ -1501,6 +1507,9 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	</string>
 	<string name="tattoo_not_worn">
 		Tätowierung nicht getragen
+	</string>
+	<string name="universal_not_worn">
+		Universal nicht getragen
 	</string>
 	<string name="physics_not_worn">
 		Physik nicht getragen
@@ -1552,6 +1561,9 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	</string>
 	<string name="create_new_tattoo">
 		Neue Tätowierung erstellen
+	</string>
+	<string name="create_new_universal">
+		Neues Universal erstellen
 	</string>
 	<string name="create_new_physics">
 		Neue Physik erstellen
@@ -4998,6 +5010,9 @@ Missbrauchsbericht
 	<string name="New Tattoo">
 		Neue Tätowierung
 	</string>
+	<string name="New Universal">
+		Neues Universal
+	</string>
 	<string name="New Physics">
 		Neue Physik
 	</string>
@@ -6960,5 +6975,8 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="No">
 		Nein
+	</string>
+	<string name="FSUrlEntryWearLabel">
+		Inventar-Ordner anziehen
 	</string>
 </strings>
