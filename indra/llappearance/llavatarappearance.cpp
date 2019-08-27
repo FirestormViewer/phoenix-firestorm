@@ -1773,10 +1773,9 @@ void LLAvatarAppearance::makeJointAliases(LLAvatarBoneInfo *bone_info)
         mJointAliasMap[*i] = bone_name;
     }
 
-    LLAvatarBoneInfo::bones_t::const_iterator iter;
-    for (iter = bone_info->mChildren.begin(); iter != bone_info->mChildren.end(); ++iter)
+    for (LLAvatarBoneInfo* bone : bone_info->mChildren)
     {
-        makeJointAliases( *iter );
+        makeJointAliases(bone);
     }
 }
 
