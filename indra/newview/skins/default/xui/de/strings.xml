@@ -1460,6 +1460,9 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	<string name="tattoo">
 		Tätowierung
 	</string>
+	<string name="universal">
+		Universal
+	</string>
 	<string name="physics">
 		Physik
 	</string>
@@ -1501,6 +1504,9 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	</string>
 	<string name="tattoo_not_worn">
 		Tätowierung nicht getragen
+	</string>
+	<string name="universal_not_worn">
+		Universal nicht getragen
 	</string>
 	<string name="physics_not_worn">
 		Physik nicht getragen
@@ -1552,6 +1558,9 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	</string>
 	<string name="create_new_tattoo">
 		Neue Tätowierung erstellen
+	</string>
+	<string name="create_new_universal">
+		Neues Universal erstellen
 	</string>
 	<string name="create_new_physics">
 		Neue Physik erstellen
@@ -4988,6 +4997,9 @@ Missbrauchsbericht
 	</string>
 	<string name="New Tattoo">
 		Neue Tätowierung
+	</string>
+	<string name="New Universal">
+		Neues Universal
 	</string>
 	<string name="New Physics">
 		Neue Physik

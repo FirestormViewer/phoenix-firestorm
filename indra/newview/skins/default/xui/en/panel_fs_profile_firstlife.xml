@@ -49,6 +49,7 @@
      layout="topleft"
      follows="all"
      name="fl_description_edit"
+     trusted_content="false"
      enabled="false"
      max_length="253"
      word_wrap="true"

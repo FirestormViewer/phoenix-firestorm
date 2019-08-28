@@ -10,8 +10,9 @@
 		Wiele tekstur
 	</text>
 	<radio_group name="mode_selection">
-		<radio_item label="Szafa" name="inventory"/>
-		<radio_item label="Lokalna" name="local"/>
+		<radio_item label="Szafa" name="inventory" width="51" />
+		<radio_item label="Lokaln." name="local" width="60" />
+		<radio_item label="Wypiek." name="bake" />
 	</radio_group>
 	<text name="unknown">
 		Rozmiar:
@@ -31,6 +32,10 @@
 	<scroll_list name="l_name_list">
 		<column name="unit_name" label="Nazwa"/>
 	</scroll_list>
+	<combo_box name="l_bake_use_texture_combo_box" tool_tip="Wybierz teksturę dla wypiekania">
+		<combo_box.item label="Brak" name="None" />
+	</combo_box>
+	<check_box label="Ukryj region mesza bazowego" name="hide_base_mesh_region" />
 	<line_editor name="TextureKey" tool_tip="Klucz UUID tekstury" />
 	<button name="TextureKeyApply" label="Ustaw UUID" tool_tip="Ustaw ten UUID" />
 	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>
