@@ -45,6 +45,9 @@
 	<string name="edit_tattoo_title">
 		Edycja tatuażu
 	</string>
+	<string name="edit_universal_title">
+		Edycja warstwy uniwers.
+	</string>
 	<string name="edit_physics_title">
 		Edycja fizyki
 	</string>
@@ -92,6 +95,9 @@
 	</string>
 	<string name="tattoo_desc_text">
 		Tatuaż:
+	</string>
+	<string name="universal_desc_text">
+		Warstwa uniwers.:
 	</string>
 	<string name="physics_desc_text">
 		Fizyka:

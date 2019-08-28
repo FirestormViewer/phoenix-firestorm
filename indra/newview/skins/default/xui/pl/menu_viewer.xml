@@ -612,6 +612,7 @@
 			<menu_item_call label="Bielizna" name="Menu Underpants"/>
 			<menu_item_call label="Spódnica" name="Skirt"/>
 			<menu_item_call label="Tatuaż" name="Tattoo"/>
+			<menu_item_call label="Warstwa uniwersalna" name="Universal"/>
 			<menu_item_call label="Fizyka" name="Physics"/>
 			<menu_item_call label="Wszystkie ubrania" name="All Clothes"/>
 		</menu>

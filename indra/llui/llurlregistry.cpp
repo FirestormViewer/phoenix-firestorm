@@ -41,7 +41,7 @@ LLUrlRegistry::LLUrlRegistry()
 {
 //	mUrlEntry.reserve(20);
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-	mUrlEntry.reserve(27);
+	mUrlEntry.reserve(28);
 // [/RLVa:KB]
 
 	// Urls are matched in the order that they were registered
@@ -84,6 +84,9 @@ LLUrlRegistry::LLUrlRegistry()
 	registerUrl(new LLUrlEntryInventory());
     registerUrl(new LLUrlEntryExperienceProfile());
 	registerUrl(new FSHelpDebugUrlEntrySL()); // <FS:Ansariel> FS Help SLUrl
+	// <FS:Ansariel> Wear folder SLUrl
+	mUrlEntryWear = new FSUrlEntryWear();
+	registerUrl(mUrlEntryWear);
 	//LLUrlEntrySL and LLUrlEntrySLLabel have more common pattern, 
 	//so it should be registered in the end of list
 	registerUrl(new LLUrlEntrySL());
@@ -268,6 +271,13 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 				match_start = start;
 				match_end = end;
 				match_entry = url_entry;
+
+				// <FS:Ansariel> Wear folder SLUrl
+				if (mUrlEntryWear == *it)
+				{
+					break;
+				}
+				// </FS:Ansariel>
 			}
 		}
 	}

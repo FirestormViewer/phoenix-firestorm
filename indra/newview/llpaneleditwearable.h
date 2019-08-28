@@ -177,6 +177,7 @@ private:
 	LLPanel *mPanelSkirt;
 	LLPanel *mPanelAlpha;
 	LLPanel *mPanelTattoo;
+	LLPanel *mPanelUniversal;
 	LLPanel *mPanelPhysics;
 
 	typedef std::map<std::string, LLAvatarAppearanceDefines::ETextureIndex> string_texture_index_map_t;
