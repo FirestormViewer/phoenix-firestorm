@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <?xml version="1.0" ?>
 <llsd>
 <map>
@@ -1006,11 +1007,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>46c6881c26c05d9ab0c2b3bb7c4697f8</string>
+              <string>0fcdc89c60271eda1fb37879b0c4a373</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.00.01-darwin-191591326.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.00.03-darwin-192401637.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1020,11 +1021,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9111641e2b915c64529ed9624c1e9eb7</string>
+              <string>09f22b6a3ac41739073418bb6b8544d6</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.00.01-linux64-191601723.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.00.03-linux64-192401637.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
