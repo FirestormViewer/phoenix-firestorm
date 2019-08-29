@@ -18,9 +18,9 @@ if (USESYSTEMLIBS)
         libpng
         pango
         pangoft2
-        pangox
+        #pangox
         pangoxft
-        sdl
+        sdl2
         )
   endif (LINUX)
 
@@ -31,6 +31,7 @@ if (USESYSTEMLIBS)
     list(APPEND UI_LIBRARIES ${${pkg}_LIBRARIES})
     add_definitions(${${pkg}_CFLAGS_OTHERS})
   endforeach(pkg)
+  list(APPEND UI_LIBRARIES X11)
 else (USESYSTEMLIBS)
   if (LINUX)
     use_prebuilt_binary(gtk-atk-pango-glib)

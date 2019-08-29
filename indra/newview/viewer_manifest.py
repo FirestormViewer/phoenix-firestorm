@@ -1900,7 +1900,7 @@ class LinuxManifest(ViewerManifest):
 
         # plugins
         with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'media_plugins'), dst="bin/llplugin"):
-            self.path("gstreamer010/libmedia_plugin_gstreamer010.so",
+            self.path("gstreamer10/libmedia_plugin_gstreamer10.so",
                       "libmedia_plugin_gstreamer.so")
             self.path2basename("libvlc", "libmedia_plugin_libvlc.so")
             self.path("cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
@@ -1920,15 +1920,36 @@ class LinuxManifest(ViewerManifest):
         with self.prefix(src=os.path.join(pkgdir, 'lib' ), dst="lib"):
             self.path( "libvlc*.so*" )
 
+        snapStage = os.environ.get( "SNAPCRAFT_STAGE" )
+        if snapStage != None:
+            print( "Building snap package" )
+        else:
+            snapStage = os.environ.get( "FLATPAK_DEST" )
+            if snapStage != None:
+                print( "Building flatpak package" )
+
+        if snapStage == None:
+            data = open( "/proc/1/cgroup", "r" ).readlines()[0]
+            if "docker" in data:
+                snapStage = "/usr"
+
+        pkgBase = os.path.join( pkgdir, 'lib', 'release')
+        if snapStage != None:
+            pkgBase = os.path.join( snapStage, "lib" )
+            
         # CEF files 
-        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
+        with self.prefix(src=pkgBase, dst="lib"):
             self.path( "libcef.so" )
             self.path( "libllceflib.so" )
             
-        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
+        pkgBase = os.path.join( pkgBase, "swiftshader" )
+        with self.prefix(src=pkgBase, dst=os.path.join("bin", "swiftshader") ):
             self.path( "*.so" )
 
-        with self.prefix(src=os.path.join(pkgdir, 'bin', 'release'), dst="bin"):
+        pkgBase = os.path.join(pkgdir, 'bin', 'release')
+        if snapStage != None:
+            pkgBase = os.path.join( snapStage, "lib" )
+        with self.prefix(pkgBase, dst="bin"):
             self.path( "chrome-sandbox" )
             self.path( "dullahan_host" )
             self.path( "natives_blob.bin" )
@@ -1936,7 +1957,11 @@ class LinuxManifest(ViewerManifest):
             self.path( "v8_context_snapshot.bin" )
             self.path( "libffmpegsumo.so" )
 
-        with self.prefix(src=os.path.join(pkgdir, 'resources'), dst="bin"):
+        pkgBase = os.path.join(pkgdir, 'resources')
+        if snapStage != None:
+            pkgBase = os.path.join( snapStage, "resources" )
+
+        with self.prefix(src=pkgBase, dst="bin"):
             self.path( "cef.pak" )
             self.path( "cef_extensions.pak" )
             self.path( "cef_100_percent.pak" )
@@ -1944,7 +1969,9 @@ class LinuxManifest(ViewerManifest):
             self.path( "devtools_resources.pak" )
             self.path( "icudtl.dat" )
 
-        with self.prefix(src=os.path.join(pkgdir, 'resources', 'locales'), dst=os.path.join('bin', 'locales')):
+        pkgBase = os.path.join( pkgBase, "locales" )
+
+        with self.prefix(src=pkgBase, dst=os.path.join('bin', 'locales')):
             self.path("am.pak")
             self.path("ar.pak")
             self.path("bg.pak")
@@ -2000,8 +2027,8 @@ class LinuxManifest(ViewerManifest):
             self.path("zh-TW.pak")
 
         # llcommon
-        if not self.path("../llcommon/libllcommon.so", "lib/libllcommon.so"):
-            print "Skipping llcommon.so (assuming llcommon was linked statically)"
+        #if not self.path("../llcommon/libllcommon.so", "lib/libllcommon.so"):
+        #    print "Skipping llcommon.so (assuming llcommon was linked statically)"
 
         self.path("featuretable_linux.txt")
 
@@ -2030,7 +2057,7 @@ class LinuxManifest(ViewerManifest):
             self.path("libGLOD.so")
             self.path("libminizip.so")
             self.path("libuuid.so*")
-            self.path("libSDL-1.2.so*")
+            self.path("libSDL*")
             self.path("libdirectfb*.so*")
             self.path("libfusion*.so*")
             self.path("libdirect*.so*")
@@ -2107,6 +2134,12 @@ class LinuxManifest(ViewerManifest):
             self.run_command(['find', self.get_dst_prefix(),
                               '-type', 'f', '-perm', old,
                               '-exec', 'chmod', new, '{}', ';'])
+
+        if os.environ.get( "SNAPCRAFT_STAGE" ) or os.environ.get( "FLATPAK_DEST" ):
+            print( "Building snap package, not calling tar to bundle" )
+            self.package_file = "<none>"
+            return
+
         self.package_file = installer_name + '.tar.xz'
 
         # temporarily move directory tree so that it has the right
@@ -2131,6 +2164,8 @@ class LinuxManifest(ViewerManifest):
     def strip_binaries(self):
         if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
             print "* Going strip-crazy on the packaged binaries, since this is a RELEASE build"
+            if not os.path.isdir( os.path.join( self.get_dst_prefix(), "lib") ):
+                os.mkdir( os.path.join( self.get_dst_prefix(), "lib") )
             # makes some small assumptions about our packaged dir structure
             self.run_command(
                 ["find"] +
@@ -2162,7 +2197,7 @@ class Linux_i686_Manifest(LinuxManifest):
             self.path("libexpat.so.*")
             self.path("libGLOD.so")
             self.path("libuuid.so*")
-            self.path("libSDL-1.2.so.*")
+            self.path("libSDL*")
             self.path("libdirectfb-1.*.so.*")
             self.path("libfusion-1.*.so.*")
             self.path("libdirect-1.*.so.*")
@@ -2288,9 +2323,9 @@ class Linux_x86_64_Manifest(LinuxManifest):
             self.path2basename("../llplugin/slplugin", "SLPlugin")
 
         # plugins
-        with self.prefix(dst="bin/llplugin"):
-            self.path2basename("../media_plugins/webkit", "libmedia_plugin_webkit.so")
-            self.path("../media_plugins/gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
+        #with self.prefix(dst="bin/llplugin"):
+        #    self.path2basename("../media_plugins/webkit", "libmedia_plugin_webkit.so")
+        #    self.path("../media_plugins/gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
 
         self.path("secondlife-i686.supp")
 

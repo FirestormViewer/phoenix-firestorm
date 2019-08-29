@@ -342,7 +342,9 @@ if (DARWIN)
   target_link_libraries(llcommon ${CARBON_LIBRARY})
 endif (DARWIN)
 
+if( NOT USESYSTEMLIBS )
 add_dependencies(llcommon stage_third_party_libs)
+endif()
 
 if (LL_TESTS)
   include(LLAddBuildTest)

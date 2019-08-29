@@ -163,6 +163,17 @@ for ARG in "$@"; do
     fi
 done
 
+#<FS:ND> Hack, otherwise eg sscanf inside flatpak fails.
+# This happens if the locale is set (for example) to de_DE which uses , as a decimal separator.
+# There is code in the viewer which should handle this but when run from "flatpak run" it will not work.
+# Needs some more investigation; but at least this hack will allow the viewer to run.
+if [ ! -z "${FLATPAK_ID}" ]
+then
+	echo "Setting LC_NUMERIC to en_US.utf8 due to running inside flatpak"
+	export LC_NUMERIC=en_US.utf8
+fi
+#</FS:ND>
+
 # Run the program.
 # Don't quote $LL_WRAPPER because, if empty, it should simply vanish from the
 # command line. But DO quote "${ARGS[@]}": preserve separate args as

@@ -37,7 +37,7 @@ if(NOT ADDRESS_SIZE EQUAL 32)
   if(WINDOWS)
     ##add_definitions(/FIXED:NO)
   else(WINDOWS) # not windows therefore gcc LINUX and DARWIN
-    add_definitions(-fPIC)
+    add_definitions(-fPIC -Wno-literal-suffix)
   endif(WINDOWS)
 endif(NOT ADDRESS_SIZE EQUAL 32)
 
@@ -69,7 +69,7 @@ target_link_libraries(media_plugin_gstreamer010
 add_dependencies(media_plugin_gstreamer010
   ${LLPLUGIN_LIBRARIES}
   ${MEDIA_PLUGIN_BASE_LIBRARIES}
-  ${LLCOMMON_LIBRARIES}
+  llcommon
 )
 
 

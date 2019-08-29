@@ -23,7 +23,8 @@ if (HAVOK)
 
 elseif (HAVOK_TPV)
    use_prebuilt_binary(llphysicsextensions_tpv)
-   set(LLPHYSICSEXTENSIONS_LIBRARIES    llphysicsextensions_tpv)
+   #set(LLPHYSICSEXTENSIONS_LIBRARIES    llphysicsextensions_tpv)
+   set(LLPHYSICSEXTENSIONS_LIBRARIES   libhacd.a libnd_hacdConvexDecomposition.a libnd_Pathing.a )
 
    # <FS:ND> include paths for LLs version and ours are different.
    set(LLPHYSICSEXTENSIONS_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include/llphysicsextensions)

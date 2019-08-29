@@ -39,6 +39,11 @@
 
 static std::string getCurrentUserHome(char* fallback)
 {
+  // snap-package:
+  //  could use SNAP_USER_DATA (/home/nicky/snap/viewer-release/x1, whereas x1 is the release and thus will change, data is backed up/restored across snap refresh / snap revert)
+  //  could use SNAP_USER_COMMON (/home/nicky/snap/viewer-release/common, data is NOT backed up/restored across snap refresh / snap revert)
+  //  see https://docs.snapcraft.io/environment-variables/7983
+  
 	const uid_t uid = getuid();
 	struct passwd *pw;
 
@@ -171,7 +176,10 @@ void LLDir_Linux::initAppDirs(const std::string &app_name,
 		// traditionally on unixoids, MyApp gets ~/.myapp dir for data
 		mOSUserAppDir = mOSUserDir;
 		mOSUserAppDir += "/";
-		mOSUserAppDir += ".";
+		// When running as a snap package we canot use /home/<user>/.secondlife as strict-mode snaps do not get access to .dot files
+		// In that case we use /home/<user>/secondlife
+		if( nullptr == getenv( "SNAP_USER_DATA" ) )
+		    mOSUserAppDir += ".";
 		std::string lower_app_name(app_name);
 		LLStringUtil::toLower(lower_app_name);
 		mOSUserAppDir += lower_app_name;

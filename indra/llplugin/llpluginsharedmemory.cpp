@@ -318,7 +318,16 @@ bool LLPluginSharedMemory::unlink(void)
 
 bool LLPluginSharedMemory::create(size_t size)
 {
-	mName = SHM_OPEN_SHARED_MEMORY_PREFIX_STRING;
+  char const *pSnapName = getenv( "SNAP_NAME" );
+  if( pSnapName )
+  {
+    mName = "snap.";
+    mName += pSnapName;
+    mName += ".LL";
+  }
+  else
+   mName = SHM_OPEN_SHARED_MEMORY_PREFIX_STRING;
+  
 	mName += createName();
 	mSize = size;
 	

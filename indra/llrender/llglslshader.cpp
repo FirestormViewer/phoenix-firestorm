@@ -273,6 +273,7 @@ void LLGLSLShader::readProfileQuery(U32 count, U32 mode)
     glEndQueryARB(GL_TIME_ELAPSED);
     glEndQueryARB(GL_SAMPLES_PASSED);
 
+
     //<FS:TS> U64 and GLuint64 somehow turn out different on x86_64
     //U64 time_elapsed = 0;
     GLuint64 time_elapsed = 0;

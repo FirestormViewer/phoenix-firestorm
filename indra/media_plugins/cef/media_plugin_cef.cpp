@@ -833,12 +833,20 @@ void MediaPluginCEF::keyEvent(dullahan::EKeyEvent key_event, LLSD native_key_dat
 
 // <FS:ND> Keyboard handling for Linux.
 #if LL_LINUX
-	uint32_t native_scan_code = (uint32_t)(native_key_data["sdl_sym"].asInteger());
-	uint32_t native_virtual_key = (uint32_t)(native_key_data["virtual_key"].asInteger());
-	uint32_t native_modifiers = (uint32_t)(native_key_data["cef_modifiers"].asInteger());
-	if( native_scan_code == '\n' )
-		native_scan_code = '\r';
-	mCEFLib->nativeKeyboardEvent(key_event, native_scan_code, native_virtual_key, native_modifiers);
+	uint32_t native_virtual_key = (uint32_t)(native_key_data["virtual_key_win"].asInteger());
+	uint32_t native_modifiers = (uint32_t)(native_key_data["modifiers"].asInteger());
+
+	if( native_virtual_key == '\n' )
+		native_virtual_key = '\r';
+
+	mCEFLib->nativeKeyboardEventSDL2(key_event, native_virtual_key, native_modifiers, false);
+ 
+	// <FS:ND> Slightly hacky :| To make CEF honor enter (eg to accept form input) we've to not only send KE_KEY_UP/KE_KEY_DOWN
+	// but also a KE_KEY_CHAR event.
+	// Note that we cannot blindly send a KE_CHAR for each KE_KEY_UP. Doing so will create bogus keyboard input (like % for cursor left).
+	// Adding this just in llwindowsdl does not seem to fire an appropriate unicodeInput event down below, thus repeat this check here again :(
+	if( dullahan::KE_KEY_UP == key_event && native_virtual_key == '\r' )
+		mCEFLib->nativeKeyboardEventSDL2(dullahan::KE_KEY_CHAR, native_virtual_key, native_modifiers, false);
 #endif
 // </FS:ND>
 };
@@ -871,6 +879,17 @@ void MediaPluginCEF::unicodeInput(std::string event, LLSD native_key_data = LLSD
 	U64 lparam = ll_U32_from_sd(native_key_data["l_param"]);
 	mCEFLib->nativeKeyboardEventWin(msg, wparam, lparam);
 #endif
+// <FS:ND> Keyboard handling for Linux.
+#if LL_LINUX
+	uint32_t native_virtual_key = (uint32_t)(native_key_data["virtual_key_win"].asInteger());
+	uint32_t native_modifiers = (uint32_t)(native_key_data["modifiers"].asInteger());
+
+	if( native_virtual_key == '\n' )
+		native_virtual_key = '\r';
+	
+	mCEFLib->nativeKeyboardEventSDL2(dullahan::KE_KEY_CHAR, native_virtual_key, native_modifiers, false);
+#endif
+// </FS:ND>
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -1,10 +1,10 @@
 # -*- cmake -*-
 include(Prebuilt)
 
-#if (USESYSTEMLIBS)
-#  set(BREAKPAD_EXCEPTION_HANDLER_FIND_REQUIRED ON)
-#  include(FindGoogleBreakpad)
-#else (USESYSTEMLIBS)
+if (USESYSTEMLIBS)
+  set(BREAKPAD_EXCEPTION_HANDLER_FIND_REQUIRED ON)
+  include(FindGoogleBreakpad)
+else (USESYSTEMLIBS)
   use_prebuilt_binary(google_breakpad)
   if (DARWIN)
     set(BREAKPAD_EXCEPTION_HANDLER_LIBRARIES exception_handler)
@@ -18,5 +18,5 @@ include(Prebuilt)
   # yes, this does look dumb, no, it's not incorrect
   #
   set(BREAKPAD_INCLUDE_DIRECTORIES "${LIBS_PREBUILT_DIR}/include/google_breakpad" "${LIBS_PREBUILT_DIR}/include/google_breakpad/google_breakpad")
-#endif (USESYSTEMLIBS)
+endif (USESYSTEMLIBS)
 

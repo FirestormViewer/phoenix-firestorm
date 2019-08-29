@@ -3,7 +3,7 @@ include(Linking)
 include(Prebuilt)
 
 if (USESYSTEMLIBS)
-    set(CEFPLUGIN OFF CACHE BOOL
+    set(CEFPLUGIN ON CACHE BOOL
         "CEFPLUGIN support for the llplugin/llmedia test apps.")
 else (USESYSTEMLIBS)
   if (LINUX AND ( CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9.4 ) )
@@ -42,9 +42,18 @@ elseif (DARWIN)
        )
 
 elseif (LINUX)
+
+  if (USESYSTEMLIBS)
+    find_library( LIB_DULLAHAN "dullahan" )
+    find_library( LIB_CEF "cef" )
+    find_library( LIB_CEF_WRAPPER "cef_dll_wrapper" )
+    set(CEF_PLUGIN_LIBRARIES ${LIB_DULLAHAN}  ${LIB_CEF}  ${LIB_CEF_WRAPPER} )
+  else()
     set(CEF_PLUGIN_LIBRARIES
-        dullahan
-        cef
-        cef_dll_wrapper.a
-    )
+      dullahan
+      cef
+      cef_dll_wrapper.a
+      )
+endif()
+
 endif (WINDOWS)

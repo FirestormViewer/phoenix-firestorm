@@ -358,10 +358,9 @@ copy_if_different(
     )
 set(third_party_targets ${third_party_targets} ${out_targets})
 
-#<FS:TS> We need to do this regardless
-#if(NOT USESYSTEMLIBS)
+if(NOT USESYSTEMLIBS)
   add_custom_target(
       stage_third_party_libs ALL
       DEPENDS ${third_party_targets}
       )
-#endif(NOT USESYSTEMLIBS)
+endif(NOT USESYSTEMLIBS)

@@ -1,8 +1,10 @@
 /** 
- * @file llkeyboardheadless.h
- * @brief Handler for assignable key bindings
+ * @file llmediaimplgstreamer.h
+ * @author Tofu Linden
+ * @brief implementation that supports media playback via GStreamer.
  *
- * $LicenseInfo:firstyear=2004&license=viewerlgpl$
+ * @cond
+ * $LicenseInfo:firstyear=2007&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
  * 
@@ -22,32 +24,30 @@
  * 
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
+ * @endcond
  */
 
-#ifndef LL_LLKEYBOARDHEADLESS_H
-#define LL_LLKEYBOARDHEADLESS_H
+// header guard
+#ifndef llmediaimplgstreamer_h
+#define llmediaimplgstreamer_h
 
-#include "llkeyboard.h"
+#if LL_GSTREAMER010_ENABLED
 
-class LLKeyboardHeadless : public LLKeyboard
-{
-public:
-	LLKeyboardHeadless();
-	/*virtual*/ ~LLKeyboardHeadless() {};
+extern "C" {
+#include <stdio.h>
+#include <gst/gst.h>
 
-#ifdef LL_LINUX
-	/*virtual*/ BOOL	handleKeyUp(const U32 key, MASK mask);
-	/*virtual*/ BOOL	handleKeyDown(const U32 key, MASK mask);
-#else
-	/*virtual*/ BOOL	handleKeyUp(const U16 key, MASK mask);
-	/*virtual*/ BOOL	handleKeyDown(const U16 key, MASK mask);
-#endif	
-	/*virtual*/ void	resetMaskKeys();
-	/*virtual*/ MASK	currentMask(BOOL for_mouse_event);
-	/*virtual*/ void	scanKeyboard();
-#ifdef LL_DARWIN
-	/*virtual*/ void	handleModifier(MASK mask);
-#endif
-};
+#include "apr_pools.h"
+#include "apr_dso.h"
+}
 
-#endif
+
+extern "C" {
+gboolean llmediaimplgstreamer_bus_callback (GstBus     *bus,
+					    GstMessage *message,
+					    gpointer    data);
+}
+
+#endif // LL_GSTREAMER010_ENABLED
+
+#endif // llmediaimplgstreamer_h

@@ -75,14 +75,19 @@ public:
 	BOOL			getKeyDown(const KEY key) { return mKeyLevel[key]; }
 	BOOL			getKeyRepeated(const KEY key) { return mKeyRepeated[key]; }
 
-	BOOL			translateKey(const U16 os_key, KEY *translated_key);
-	U16				inverseTranslateKey(const KEY translated_key);
+	BOOL			translateKey(const U32 os_key, KEY *translated_key);
+	U32				inverseTranslateKey(const KEY translated_key);
 	BOOL			handleTranslatedKeyUp(KEY translated_key, U32 translated_mask);		// Translated into "Linden" keycodes
 	BOOL			handleTranslatedKeyDown(KEY translated_key, U32 translated_mask);	// Translated into "Linden" keycodes
 
 
+#if LL_LINUX
+	virtual BOOL	handleKeyUp(const U32 key, MASK mask) = 0;
+	virtual BOOL	handleKeyDown(const U32 key, MASK mask) = 0;
+#else
 	virtual BOOL	handleKeyUp(const U16 key, MASK mask) = 0;
 	virtual BOOL	handleKeyDown(const U16 key, MASK mask) = 0;
+#endif
 	
 #ifdef LL_DARWIN
 	// We only actually use this for OS X.
@@ -116,8 +121,8 @@ protected:
 	void 			addKeyName(KEY key, const std::string& name);
 
 protected:
-	std::map<U16, KEY>	mTranslateKeyMap;		// Map of translations from OS keys to Linden KEYs
-	std::map<KEY, U16>	mInvTranslateKeyMap;	// Map of translations from Linden KEYs to OS keys
+	std::map<U32, KEY>	mTranslateKeyMap;		// Map of translations from OS keys to Linden KEYs
+	std::map<KEY, U32>	mInvTranslateKeyMap;	// Map of translations from Linden KEYs to OS keys
 	LLWindowCallbacks *mCallbacks;
 
 	LLTimer			mKeyLevelTimer[KEY_COUNT];	// Time since level was set

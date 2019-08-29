@@ -3,7 +3,35 @@
 <map>
     <key>installables</key>
     <map>
-      <key>jemalloc</key>
+      <key>gstreamer10</key>
+      <map>
+		<key>copyright</key>
+		<string>Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;</string>
+		<key>license</key>
+		<string>LGPL</string>
+		<key>license_file</key>
+		<string>LICENSES/gstreamer.txt</string>
+		<key>name</key>
+		<string>gstreamer10</string>
+		<key>platforms</key>
+		<map>
+		  <key>linux</key>
+		  <map>
+			<key>archive</key>
+			<map>
+			  <key>hash</key>
+			  <string>01f39ecf80dae64e30402ac384035b3e</string>
+			  <key>url</key>
+			  <string>http://downloads.phoenixviewer.com/gstreamer10-1.6.3.201605191852-linux-201605191852.tar.bz2</string>
+			</map>
+			<key>name</key>
+			<string>linux</string>
+		  </map>
+		</map>
+		<key>version</key>
+		<string>0.10.6.294903</string>
+	  </map>
+	  <key>jemalloc</key>
       <map>
 		<key>copyright</key>
 		<string>Copyright (C) 2002-present Jason Evans jasone@canonware.com.</string>
@@ -268,9 +296,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>64c1dff0e19792acec7fd32556bf4d7b</string>
+              <string>f33a49af7e126d6e105b2e1b71462f43</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux64-181411635.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/SDL-2.0.9-linux64-190801246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2880,9 +2908,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>db8a7126178e7230fd6917a28cd67bd7</string>
+              <string>4813c6ca3daddf5b2e1725f40583c416</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.9.183150121-linux64-183150121.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.10.190831827-linux64-190831827.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

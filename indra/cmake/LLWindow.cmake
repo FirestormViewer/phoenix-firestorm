@@ -3,9 +3,10 @@
 include(Variables)
 include(GLEXT)
 include(Prebuilt)
+include(FindPkgConfig)
 
 if (USESYSTEMLIBS)
-  include(FindSDL)
+  pkg_check_modules(SDL2 REQUIRED sdl2)
 
   # This should be done by FindSDL.  Sigh.
   mark_as_advanced(
@@ -18,7 +19,7 @@ else (USESYSTEMLIBS)
     use_prebuilt_binary(SDL)
     set (SDL_FOUND TRUE)
     set (SDL_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/i686-linux)
-    set (SDL_LIBRARY SDL directfb fusion direct X11)
+    set (SDL_LIBRARY SDL2 X11)
   endif (LINUX)
 endif (USESYSTEMLIBS)
 
