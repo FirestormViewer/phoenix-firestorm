@@ -1172,14 +1172,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		
 		LLSpatialGroup::sNoDelete = FALSE;
 		
-		// <	FS:ND>FIRE-9943; resizeScreenTexture will try to disable deferred mode in low memory situations.
-		// Depending	 on the state of the pipeline. this can trigger illegal deletion of drawables.
-		// To work around th	at, resizeScreenTexture will just set a flag, which then later does trigger the change
-		// in shaders.
-		// RenderDeffered will be shut down here if needed.
-		gPipeline.disableDeferredOnLowMemory();
-		// </FS:ND>
-
 		gPipeline.clearReferences();
 
 		gPipeline.rebuildGroups();

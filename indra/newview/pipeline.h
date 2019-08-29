@@ -991,16 +991,6 @@ public:
 	static F32 CameraMaxCoF;
 	static F32 CameraDoFResScale;
 	static F32 RenderAutoHideSurfaceAreaLimit;
-
-
- 	// <FS:ND>FIRE-9943; resizeScreenTexture will try to disable deferred mode in low memory situations.
-	// Depending on the state of the pipeline. this can trigger illegal deletion of drawables.
-	// To work around that, resizeScreenTexture will just set a flag, which then later does trigger the change
-	// in shaders.
-	static bool TriggeredDisabledDeferred;
-
-	void disableDeferredOnLowMemory();
-	// </FS:ND>
 };
 
 void render_bbox(const LLVector3 &min, const LLVector3 &max);

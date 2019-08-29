@@ -11746,23 +11746,6 @@ void LLPipeline::restoreHiddenObject( const LLUUID& id )
 	}
 }
 
-// <FS:ND>FIRE-9943; resizeScreenTexture will try to disable deferred mode in low memory situations.
-// Depending on the state of the pipeline. this can trigger illegal deletion of drawables.
-// To work around that, resizeScreenTexture will just set a flag, which then later does trigger the change
-// in shaders.
-bool LLPipeline::TriggeredDisabledDeferred = false;
-
-void LLPipeline::disableDeferredOnLowMemory()
-{
-	if ( TriggeredDisabledDeferred )
-	{
-		TriggeredDisabledDeferred = false;
-		gSavedSettings.setBOOL("RenderDeferred", FALSE);
-		LLPipeline::refreshCachedSettings();
-	}
-}
-// </FS:ND>
-
 // <FS:Ansariel> Reset VB during TP
 void LLPipeline::initDeferredVB()
 {
