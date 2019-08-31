@@ -201,6 +201,8 @@ public:
 
 	LLViewerFetchedTexture* getTexture() { return mTexturep; }
 
+	void setBakeTextureEnabled(BOOL enabled);
+
 	// <FS:Ansariel> Mask texture if desired
 	void setIsMasked(BOOL masked) { mIsMasked = masked; }
 
@@ -240,6 +242,7 @@ private:
 	BOOL					 	mShowLoadingPlaceholder;
 	std::string				 	mLoadingPlaceholderString;
 	S32						 	mLabelWidth;
+	BOOL						mBakeTextureEnabled;
 
 	// <FS:Ansariel> Texture preview mode
 	BOOL						mPreviewMode;
@@ -342,7 +345,11 @@ public:
 	static void		onLocalScrollCommit(LLUICtrl* ctrl, void* userdata);
 	void			onLocalBitmapsAddedCallback(); // <FS:Ansariel> Threaded filepickers
 
+	static void		onBakeTextureSelect(LLUICtrl* ctrl, void *userdata);
+	static void		onHideBaseMeshRegionCheck(LLUICtrl* ctrl, void *userdata);
+
 	void 			setLocalTextureEnabled(BOOL enabled);
+	void 			setBakeTextureEnabled(BOOL enabled);
 
 protected:
 	LLPointer<LLViewerTexture> mTexturep;
@@ -385,11 +392,14 @@ private:
 	bool mCanPreview;
 	bool mPreviewSettingChanged;
 
+
 	texture_selected_callback mTextureSelectedCallback;
 	floater_close_callback mOnFloaterCloseCallback;
 	floater_commit_callback mOnFloaterCommitCallback;
 	set_image_asset_id_callback mSetImageAssetIDCallback;
 	set_on_update_image_stats_callback mOnUpdateImageStatsCallback;
+
+	BOOL mBakeTextureEnabled;
 
 	boost::signals2::connection mLocalBitmapsAddedCallbackConnection; // <FS:Ansariel> Threaded filepickers
 };

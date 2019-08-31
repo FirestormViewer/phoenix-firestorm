@@ -679,6 +679,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TooltipFSHelpDebugSLUrl">
 		Kliknij aby otworzyć ustawienia debugowania dla tej opcji
 	</string>
+	<string name="TooltipFSUrlEntryWear">
+		Kliknij aby założyć zawartość folderu z Szafy
+	</string>
 	<string name="CurrentURL" value=" Obecny URL: [CurrentURL]"/>
 	<string name="TooltipEmail">
 		Kliknij aby utworzyć wiadomość e-mail
@@ -1386,6 +1389,9 @@ http://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="tattoo">
 		Tatuaż
 	</string>
+	<string name="universal">
+		Warstwa uniwersalna
+	</string>
 	<string name="physics">
 		Fizyka
 	</string>
@@ -1427,6 +1433,9 @@ http://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
 	<string name="tattoo_not_worn">
 		Tatuaż nie jest założony
+	</string>
+	<string name="universal_not_worn">
+		Warstwa uniwersalna nie jest założona
 	</string>
 	<string name="physics_not_worn">
 		Fizyka nie jest założona
@@ -1479,8 +1488,11 @@ http://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="create_new_tattoo">
 		Nowy tatuaż
 	</string>
+	<string name="create_new_universal">
+		Nowa warstwa uniwersalna
+	</string>
 	<string name="create_new_physics">
-		Nową fizyka
+		Nowa fizyka
 	</string>
 	<string name="create_new_invalid">
 		nieprawidłowy
@@ -4796,6 +4808,9 @@ Raport o Nadużyciu
 	<string name="New Tattoo">
 		Nowy tatuaż
 	</string>
+	<string name="New Universal">
+		Nowa warstwa uniwersalna
+	</string>
 	<string name="New Physics">
 		Nowa fizyka
 	</string>
@@ -6299,5 +6314,8 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="No">
 		Nie
+	</string>
+	<string name="FSUrlEntryWearLabel">
+		Załóż folder z Szafy
 	</string>
 </strings>

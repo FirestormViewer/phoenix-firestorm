@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_tattoo_panel">
-	<panel name="avatar_tattoo_color_panel">
-		<texture_picker label="Tatouage facial" name="Head Tattoo" tool_tip="Cliquez pour sélectionner une image"/>
-		<texture_picker label="Tatouage du torse" name="Upper Tattoo" tool_tip="Cliquez pour sélectionner une image"/>
-		<texture_picker label="Tatouage des jambes" name="Lower Tattoo" tool_tip="Cliquez pour sélectionner une image"/>
-		<color_swatch label="Couleur/Teinte" name="Color/Tint" tool_tip="Cliquez pour ouvrir le sélecteur de couleurs"/>
-	</panel>
+	<scroll_container name="avatar_tattoo_scroll">
+		<panel name="avatar_tattoo_color_panel">
+			<texture_picker label="Tatouage facial" name="Head Tattoo" tool_tip="Cliquez pour sélectionner une image"/>
+			<texture_picker label="Tatouage du torse" name="Upper Tattoo" tool_tip="Cliquez pour sélectionner une image"/>
+			<texture_picker label="Tatouage des jambes" name="Lower Tattoo" tool_tip="Cliquez pour sélectionner une image"/>
+			<color_swatch label="Couleur/Teinte" name="Color/Tint" tool_tip="Cliquez pour ouvrir le sélecteur de couleurs"/>
+		</panel>
+	</scroll_container>
 </panel>
