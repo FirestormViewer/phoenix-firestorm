@@ -33,6 +33,7 @@
 
 // library includes
 #include "lldbstrings.h"
+#include "llcheckboxctrl.h"
 #include "lllslconstants.h"
 #include "llnotifications.h"
 #include "lluiconstants.h"
@@ -59,7 +60,7 @@ const LLFontGL* LLToastNotifyPanel::sFontSmall = NULL;
 LLToastNotifyPanel::button_click_signal_t LLToastNotifyPanel::sButtonClickSignal;
 
 LLToastNotifyPanel::LLToastNotifyPanel(const LLNotificationPtr& notification, const LLRect& rect, bool show_images) 
-:	LLToastPanel(notification),
+:	LLCheckBoxToastPanel(notification),
 	LLInstanceTracker<LLToastNotifyPanel, LLUUID, LLInstanceTrackerReplaceOnCollision>(notification->getID())
 {
 	init(rect, show_images);
@@ -434,6 +435,11 @@ void LLToastNotifyPanel::init( LLRect rect, bool show_images )
 	//.xml file intially makes info panel only follow left/right/top. This is so that when control buttons are added the info panel 
 	//can shift upward making room for the buttons inside mControlPanel. After the buttons are added, the info panel can then be set to follow 'all'.
 	mInfoPanel->setFollowsAll();
+
+    // Add checkboxes if nessesary.
+    setCheckBoxes(HPAD * 3, VPAD * 4, mInfoPanel);
+
+    // Snap to message, then to checkbox if present
 	// <FS:Ansariel> FIRE-17100: Customizable number of rows in a script dialog
 	//snapToMessageHeight(mTextBox, LLToastPanel::MAX_TEXT_LENGTH);
 	if (mIsScriptDialog)
@@ -447,6 +453,11 @@ void LLToastNotifyPanel::init( LLRect rect, bool show_images )
 		snapToMessageHeight(mTextBox, LLToastPanel::MAX_TEXT_LENGTH);
 	}
 	// </FS:Ansariel>
+    if (mCheck)
+    {
+        S32 new_panel_height = mCheck->getRect().getHeight() + getRect().getHeight();
+        reshape(getRect().getWidth(), new_panel_height);
+    }
 
 	// reshape the panel to its previous size
 	if (current_rect.notEmpty())
