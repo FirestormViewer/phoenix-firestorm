@@ -2711,32 +2711,6 @@ void LLViewerObject::interpolateLinearMotion(const F64SecondsImplicit& frame_tim
 			LLVector3d old_pos_global = mRegionp->getPosGlobalFromRegion(getPositionRegion());
 			new_pos_global = mRegionp->getPosGlobalFromRegion(new_pos);		// Re-fetch in case it got clipped above
 
-			// <FS> FIRE-21915: Fix bogus avatar movement on region crossing
-			// Clip new_pos to current region. Moves across region boundaries should not be extrapolated.
-			// Extrapolation across region boundaries is almost always wrong, and if the region being
-			// entered is slow to respond, very wrong.
-			// Probably don't need edge of world check below any more since we are clipping the predictor to the region.
-			static LLCachedControl<S32> fsExperimentalRegionCrossingMovementFix(gSavedSettings, "FSExperimentalRegionCrossingMovementFix");
-			if (fsExperimentalRegionCrossingMovementFix == 1)
-			{
-				bool clipped; // true if clipped at boundary
-				LLVector3d clip_pos_global_region = LLWorld::getInstance()->clipToRegion(mRegionp, old_pos_global, new_pos_global, clipped);
-				if (clipped)
-				{
-					// Was clipped, so we crossed a region boundary
-					//LL_INFOS() << "Beyond region edge, clipped predicted position to " << mRegionp->getPosRegionFromGlobal(clip_pos_global_region)
-					//	<< " from [" << getPositionRegion() << " .. " << new_pos << "]" << LL_ENDL;
-					new_pos = mRegionp->getPosRegionFromGlobal(clip_pos_global_region);
-					// Don't zero out velocity on the server. Telling the server affects scripts and audio.
-					//new_v.clear();
-					//setAcceleration(LLVector3::zero); // stop linear acceleration
-					LLVector3 new_angv;
-					new_angv.clear();
-					setAngularVelocity(new_angv); // stop rotation
-				}
-			}
-			// </FS>
-
 			// Clip the positions to known regions
 			LLVector3d clip_pos_global = LLWorld::getInstance()->clipToVisibleRegions(old_pos_global, new_pos_global);
 			if (clip_pos_global != new_pos_global)
@@ -2754,6 +2728,11 @@ void LLViewerObject::interpolateLinearMotion(const F64SecondsImplicit& frame_tim
 			}
 			else
 			{
+				// <FS:Ansariel> FIRE-24184: Replace previous region crossing movement fix with LL's version and add option to turn it off
+				static LLCachedControl<S32> fsExperimentalRegionCrossingMovementFix(gSavedSettings, "FSExperimentalRegionCrossingMovementFix");
+				if (fsExperimentalRegionCrossingMovementFix == 1)
+				{
+				// </FS:Ansariel>
 				// Check for how long we are crossing.
 				// Note: theoretically we can find time from velocity, acceleration and
 				// distance from border to new position, but it is not going to work
@@ -2775,6 +2754,9 @@ void LLViewerObject::interpolateLinearMotion(const F64SecondsImplicit& frame_tim
 					setAcceleration(LLVector3::zero);
 					mRegionCrossExpire = 0;
 				}
+				// <FS:Ansariel> FIRE-24184: Replace previous region crossing movement fix with LL's version and add option to turn it off
+				}
+				// </FS:Ansariel>
 			}
 		}
 		else
@@ -4852,20 +4834,97 @@ void LLViewerObject::sendTEUpdate() const
 	msg->sendReliable( regionp->getHost() );
 }
 
+LLViewerTexture* LLViewerObject::getBakedTextureForMagicId(const LLUUID& id)
+{
+	if (!LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(id))
+	{
+		return NULL;
+	}
+
+	LLViewerObject *root = getRootEdit();
+	if (root && root->isAnimatedObject())
+	{
+		return LLViewerTextureManager::getFetchedTexture(id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+	}
+
+	LLVOAvatar* avatar = getAvatar();
+	if (avatar)
+	{
+		LLAvatarAppearanceDefines::EBakedTextureIndex texIndex = LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::assetIdToBakedTextureIndex(id);
+		LLViewerTexture* bakedTexture = avatar->getBakedTexture(texIndex);
+		if (bakedTexture == NULL || bakedTexture->isMissingAsset())
+		{
+			return LLViewerTextureManager::getFetchedTexture(IMG_DEFAULT, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+		}
+		else
+		{
+			return bakedTexture;
+		}
+	}
+	else
+	{
+		return LLViewerTextureManager::getFetchedTexture(id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+	}
+
+}
+
+void LLViewerObject::updateAvatarMeshVisibility(const LLUUID& id, const LLUUID& old_id)
+{
+	if (id == old_id)
+	{
+		return;
+	}
+
+	if (!LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(old_id) && !LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(id))
+	{
+		return;
+	}
+
+	LLVOAvatar* avatar = getAvatar();
+	if (avatar)
+	{
+		avatar->updateMeshVisibility();
+	}
+}
+
 void LLViewerObject::setTE(const U8 te, const LLTextureEntry &texture_entry)
 {
+	LLUUID old_image_id;
+	if (getTE(te))
+	{
+		old_image_id = getTE(te)->getID();
+	}
+		
 	LLPrimitive::setTE(te, texture_entry);
 
 	const LLUUID& image_id = getTEref(te).getID();
-	mTEImages[te] = LLViewerTextureManager::getFetchedTexture(image_id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+	LLViewerTexture* bakedTexture = getBakedTextureForMagicId(image_id);
+	mTEImages[te] = bakedTexture ? bakedTexture : LLViewerTextureManager::getFetchedTexture(image_id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+
+	
+	updateAvatarMeshVisibility(image_id,old_image_id);
 	
 	if (getTEref(te).getMaterialParams().notNull())
 	{
 		const LLUUID& norm_id = getTEref(te).getMaterialParams()->getNormalID();
 		mTENormalMaps[te] = LLViewerTextureManager::getFetchedTexture(norm_id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_ALM, LLViewerTexture::LOD_TEXTURE);
-		
+
 		const LLUUID& spec_id = getTEref(te).getMaterialParams()->getSpecularID();
 		mTESpecularMaps[te] = LLViewerTextureManager::getFetchedTexture(spec_id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_ALM, LLViewerTexture::LOD_TEXTURE);
+	}
+}
+
+void LLViewerObject::refreshBakeTexture()
+{
+	for (int face_index = 0; face_index < getNumTEs(); face_index++)
+	{
+		LLTextureEntry* tex_entry = getTE(face_index);
+		if (tex_entry && LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(tex_entry->getID()))
+		{
+			const LLUUID& image_id = tex_entry->getID();
+			LLViewerTexture* bakedTexture = getBakedTextureForMagicId(image_id);
+			changeTEImage(face_index, bakedTexture);
+		}
 	}
 }
 
@@ -4873,9 +4932,13 @@ void LLViewerObject::setTEImage(const U8 te, LLViewerTexture *imagep)
 {
 	if (mTEImages[te] != imagep)
 	{
-		mTEImages[te] = imagep;
-
+		LLUUID old_image_id = getTE(te) ? getTE(te)->getID() : LLUUID::null;
+		
 		LLPrimitive::setTETexture(te, imagep->getID());
+
+		LLViewerTexture* baked_texture = getBakedTextureForMagicId(imagep->getID());
+		mTEImages[te] = baked_texture ? baked_texture : imagep;
+		updateAvatarMeshVisibility(imagep->getID(), old_image_id);
 		setChanged(TEXTURE);
 		if (mDrawable.notNull())
 		{
@@ -4886,13 +4949,16 @@ void LLViewerObject::setTEImage(const U8 te, LLViewerTexture *imagep)
 
 S32 LLViewerObject::setTETextureCore(const U8 te, LLViewerTexture *image)
 {
+	LLUUID old_image_id = getTEref(te).getID();
 	const LLUUID& uuid = image->getID();
 	S32 retval = 0;
 	if (uuid != getTEref(te).getID() ||
 		uuid == LLUUID::null)
 	{
 		retval = LLPrimitive::setTETexture(te, uuid);
-		mTEImages[te] = image;
+		LLViewerTexture* baked_texture = getBakedTextureForMagicId(uuid);
+		mTEImages[te] = baked_texture ? baked_texture : image;
+		updateAvatarMeshVisibility(uuid,old_image_id);
 		setChanged(TEXTURE);
 		if (mDrawable.notNull())
 		{
@@ -4983,7 +5049,7 @@ S32 LLViewerObject::setTETexture(const U8 te, const LLUUID& uuid)
 	// Invalid host == get from the agent's sim
 	LLViewerFetchedTexture *image = LLViewerTextureManager::getFetchedTexture(
 		uuid, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, LLHost());
-	return setTETextureCore(te,image);
+		return setTETextureCore(te, image);
 }
 
 S32 LLViewerObject::setTENormalMap(const U8 te, const LLUUID& uuid)

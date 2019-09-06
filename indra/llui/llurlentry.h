@@ -499,6 +499,20 @@ public:
 	/*virtual*/ std::string getLocation(const std::string &url) const;
 };
 
+// <FS:Ansariel> Wear folder SLUrl
+///
+/// FSUrlEntryWear Describes wear folder SLURL, e.g.
+/// secondlife:///app/wear_folder/?folder_id=bedd047e-a3d7-23e6-57bc-1ef367d848e7
+///
+class FSUrlEntryWear : public LLUrlEntryBase
+{
+public:
+	FSUrlEntryWear();
+	/*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
+};
+// </FS:Ansariel>
+
+
 // <FS:Ansariel> FS Help SLUrl
 ///
 /// FSHelpDebugUrlEntrySL Describes a Firestorm Help SLURL, e.g.
