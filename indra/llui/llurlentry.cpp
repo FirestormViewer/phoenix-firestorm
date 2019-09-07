@@ -524,9 +524,9 @@ std::string LLUrlEntrySLURL::getLocation(const std::string &url) const
 //
 LLUrlEntrySecondlifeURL::LLUrlEntrySecondlifeURL()
 {                              
-	mPattern = boost::regex("((http://([-\\w\\.]*\\.)?(secondlife|lindenlab)\\.com)"
+	mPattern = boost::regex("((http://([-\\w\\.]*\\.)?(secondlife|lindenlab|tilia-inc)\\.com)"
 							"|"
-							"(https://([-\\w\\.]*\\.)?(secondlife|lindenlab)\\.com(:\\d{1,5})?))"
+							"(https://([-\\w\\.]*\\.)?(secondlife|lindenlab|tilia-inc)\\.com(:\\d{1,5})?))"
 							"\\/\\S*",
 		boost::regex::perl|boost::regex::icase);
 	
@@ -568,7 +568,7 @@ std::string LLUrlEntrySecondlifeURL::getTooltip(const std::string &url) const
 //
 LLUrlEntrySimpleSecondlifeURL::LLUrlEntrySimpleSecondlifeURL()
 {
-	mPattern = boost::regex("https?://([-\\w\\.]*\\.)?(secondlife|lindenlab)\\.com(?!\\S)",
+	mPattern = boost::regex("https?://([-\\w\\.]*\\.)?(secondlife|lindenlab|tilia-inc)\\.com(?!\\S)",
 		boost::regex::perl|boost::regex::icase);
 
 	mIcon = "Hand";
@@ -1357,6 +1357,25 @@ std::string LLUrlEntryTeleport::getLocation(const std::string &url) const
 	// return the part of the Url after ///app/teleport
 	return ::getStringAfterToken(url, "app/teleport/");
 }
+
+// <FS:Ansariel> Wear folder SLUrl
+///
+/// FSUrlEntryWear Describes wear folder SLURL, e.g.
+/// secondlife:///app/wear_folder/?folder_id=bedd047e-a3d7-23e6-57bc-1ef367d848e7
+///
+FSUrlEntryWear::FSUrlEntryWear()
+{
+	mPattern = boost::regex("(hop|secondlife|inworldz|iw):///app/wear_folder/\\S+",
+							boost::regex::perl|boost::regex::icase);
+	mMenuName = "menu_url_slapp.xml";
+	mTooltip = LLTrans::getString("TooltipFSUrlEntryWear");
+}
+
+std::string FSUrlEntryWear::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
+{
+	return LLTrans::getString("FSUrlEntryWearLabel");
+}
+// </FS:Ansariel>
 
 //
 // LLUrlEntrySL Describes a generic SLURL, e.g., a Url that starts

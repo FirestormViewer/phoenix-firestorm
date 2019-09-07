@@ -23,8 +23,8 @@ To build firestorm:
 	autobuild build -A64 -c ReleaseFS                        
 
 Other examples:
-	autobuild configure -A64 -c ReleaseFS  		    # basic configuration step, don't build, just configure
-	autobuild configure -A64 -c ReleaseFS -- --clean	    # clean the output area first, then configure
+	autobuild configure -A64 -c ReleaseFS  		                       # basic configuration step, don't build, just configure
+	autobuild configure -A64 -c ReleaseFS -- --clean	               # clean the output area first, then configure
 	autobuild configure -A64 -c ReleaseFS -- --chan Private-Yourname   # configure with a custom channel
 
 	autobuild build -A64 -c ReleaseFS --no-configure		# default quick rebuild

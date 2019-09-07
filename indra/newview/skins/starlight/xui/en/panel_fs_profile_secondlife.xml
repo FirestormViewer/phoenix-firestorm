@@ -75,7 +75,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
 
         <loading_indicator
          top="4"
-         right="-30"
+         right="-10"
          height="23"
          width="23"
          layout="topleft"
@@ -87,7 +87,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          top="8"
          left="6"
          height="16"
-         width="55"
+         width="40"
          layout="topleft"
          follows="left|top"
          name="Name:"
@@ -95,18 +95,17 @@ KC: Use view_border's around text_editor's due to text render issues with border
          value="Name:" />
 
         <view_border
-	 visible="false"
          left_pad="4"
-         right="-28"
+         right="-86"
          height="16"
          layout="topleft"
          follows="left|top|right"
          name="info_border"
-         bevel_style="in" />
+         bevel_style="none" />
         <text_editor
          bottom_delta="2"
          left_delta="3"
-         right="-28"
+         right="-86"
          height="16"
          layout="topleft"
          follows="left|top|right"
@@ -131,12 +130,12 @@ KC: Use view_border's around text_editor's due to text render issues with border
          tool_tip="Set Display Name"
          visible="false"
          enabled="false" />
-
+		 
         <text
          top_pad="2"
          left="6"
          height="16"
-         width="55"
+         width="40"
          layout="topleft"
          follows="left|top"
          name="Key:"
@@ -144,21 +143,20 @@ KC: Use view_border's around text_editor's due to text render issues with border
          value="Key:" />
 
         <view_border
-	 visible="false"
          left_pad="4"
-         right="-6"
+         right="-86"
          height="16"
          layout="topleft"
-         follows="top|right"
+         follows="left|top|right"
          name="info_border2"
-         bevel_style="in" />
+         bevel_style="none" />
         <text_editor
          bottom_delta="2"
          left_delta="3"
+         right="-86"
          height="16"
-	 width="250"
          layout="topleft"
-         follows="top|left|right"
+         follows="left|top|right"
          name="user_key"
          bg_visible="false"
          border_visible="false"
@@ -171,7 +169,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
 
         <text
          left_pad="2"
-         right="-1"
+         right="-6"
          height="16"
          layout="topleft"
          follows="top|right"
@@ -203,7 +201,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
 
         <text
          top_pad="-179"
-         left_pad="10"
+         left_pad="4"
          right="-6"
          height="16"
          layout="topleft"
@@ -219,7 +217,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          name="info_border3"
          layout="topleft"
          follows="left|top|right"
-         bevel_style="in" />
+         bevel_style="none" />
         <text_editor
          top_delta="2"
          left_delta="2"
@@ -256,7 +254,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          layout="topleft"
          follows="left|top|right"
          name="acct_border"
-         bevel_style="in" />
+         bevel_style="none" />
         <text_editor
          top_delta="2"
          left_delta="2"
@@ -292,7 +290,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          layout="topleft"
          follows="left|top|right"
          name="info_border4"
-         bevel_style="in" />
+         bevel_style="none" />
         <text
          icon_positioning="left"
          top_delta="2"
@@ -317,6 +315,48 @@ KC: Use view_border's around text_editor's due to text render issues with border
          label_selected="&gt; &gt;"
          tool_tip="Open Full Size." />
 -->
+        <text
+         top_pad="8"
+         left="6"
+         height="16"
+         width="55"
+         layout="topleft"
+         follows="left|top"
+         name="Groups:"
+         halign="right"
+         value="Groups:" />
+
+        <button
+         top_delta="20"
+         left="40"
+         height="20"
+         width="20"
+         layout="topleft"
+         follows="left|top"
+         name="group_invite"
+         label="+"
+         label_selected="+"
+         tool_tip="Invite to Group" />
+
+        <view_border
+         top_delta="-20"
+         left="66"
+         right="-6"
+         height="80"
+         layout="topleft"
+         follows="left|top|right"
+         name="info_border_group_list"
+         bevel_style="none" />
+        <group_list
+         top_delta="1"
+         left_delta="1"
+         right="-7"
+         height="78"
+         layout="topleft"
+         follows="left|top|right"
+         name="group_list"
+         border_visible="false"
+         for_agent="false" />
 
         <text
          top_pad="8"
@@ -337,8 +377,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          layout="topleft"
          follows="all"
          name="info_border5"
-         bevel_style="in" />
-
+         bevel_style="none" />
         <text_editor
          top_delta="1"
          left_delta="1"
@@ -350,45 +389,11 @@ KC: Use view_border's around text_editor's due to text render issues with border
          border_visible="false"
          font="SansSerifSmall"
          enabled="false"
+         trusted_content="false"
          max_length="510"
          h_pad="2"
          word_wrap="true"
          parse_urls="true" />
-
-        <text
-         top_pad="8"
-         left="6"
-         height="16"
-         width="55"
-         layout="topleft"
-         follows="left|bottom"
-         name="Groups:"
-         halign="right"
-         value="Groups:" />
-
-        <button
-         top_delta="20"
-         left="40"
-         height="20"
-         width="20"
-         layout="topleft"
-         follows="left|bottom"
-         name="group_invite"
-         label="+"
-         label_selected="+"
-         tool_tip="Invite to Group" />
-
-        <group_list
-         top_delta="-20"
-         left="66"
-         right="-6"
-         height="80"
-         layout="topleft"
-         follows="left|bottom|right"
-         name="group_list"
-         border_visible="true"
-         for_agent="false" />
-
 
         <text
          top_pad="10"
@@ -408,7 +413,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          layout="topleft"
          follows="left|bottom|right"
          name="drop_target_rect_vis"
-         bevel_style="in" />
+         bevel_style="out" />
         <text
          top_delta="2"
          left_delta="0"
@@ -450,8 +455,6 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  name="show_on_map_btn"
                  label="Find on Map"
                  label_selected="Find on Map"
-		 image_overlay="Permission_Visible_Map"
-                 image_overlay_alignment="left"
                  tool_tip="Locate the Resident on the map" />
 
                 <button
@@ -462,8 +465,6 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  name="pay"
                  label="Pay"
                  label_selected="Pay"
-		 image_overlay="sale_icon_24x24"
-                 image_overlay_alignment="left"
                  tool_tip="Pay money to the Resident" />
 
             </layout_panel>
@@ -482,11 +483,9 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  layout="topleft"
                  follows="left|top|right"
                  name="teleport"
-                 label="Summon"
-                 label_selected="Summon Resident"
-		 image_overlay="teleport_icon_24x24"
-                 image_overlay_alignment="left"
-                 tool_tip="Offer to teleport this Resident to your location" />
+                 label="Offer Teleport"
+                 label_selected="Offer Teleport"
+                 tool_tip="Offer a teleport to the Resident" />
 
                 <button
                  top_pad="2"
@@ -494,10 +493,8 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  layout="topleft"
                  follows="left|top|right"
                  name="im"
-                 label="Chat"
-                 label_selected="Chat"
-		 image_overlay="toolbar_icons/chat.png"
-                 image_overlay_alignment="left"
+                 label="Instant Message"
+                 label_selected="Instant Message"
                  tool_tip="Open instant message session" />
 
             </layout_panel>
@@ -518,8 +515,6 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  name="add_friend"
                  label="Add Friend"
                  label_selected="Add Friend"
-                 image_overlay="friends_icon_24x24"
-                 image_overlay_alignment="left"
                  tool_tip="Offer friendship to the Resident" />
 
                 <button
@@ -529,8 +524,8 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  layout="topleft"
                  follows="left|top|right"
                  name="block"
-                 label="Mute"
-                 tool_tip="Mute this Resident" />
+                 label="Block"
+                 tool_tip="Block this Resident" />
 
                 <button
                  top_delta="0"
@@ -539,8 +534,8 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  layout="topleft"
                  follows="left|top|right"
                  name="unblock"
-                 label="Unmute"
-                 tool_tip="Unmute this Resident" />
+                 label="Unblock"
+                 tool_tip="Unblock this Resident" />
 
                 <menu_button
                  left_pad="4"
@@ -556,7 +551,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
         
         <check_box
          bottom="-30"
-         left="60"
+         left="63"
          height="16"
          width="130"
          layout="topleft"

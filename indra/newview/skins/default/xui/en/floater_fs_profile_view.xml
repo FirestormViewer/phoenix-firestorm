@@ -10,9 +10,11 @@
  can_resize="true"
  save_rect="true"
  name="avatarinfo"
- title="Profile" >
+ help_topic="panel_my_profile_tab"
+ title="Profile">
+ <!-- FS:Ansariel: Help topic set above is a dummy only - real topics are set for the panels down below! -->
 <panel
- class="panel_profile"
+ class="panel_fs_profile"
  top="0"
  left="0"
  follows="all"
@@ -30,52 +32,52 @@
      layout="topleft"
      name="panel_profile_tabs"
      tab_position="top"
-     tab_min_width="45">
+     tab_min_width="55">
         <panel
-         class="panel_profile_secondlife"
-         filename="panel_profile_secondlife.xml"
+         class="panel_fs_profile_secondlife"
+         filename="panel_fs_profile_secondlife.xml"
          label="2nd Life"
          layout="topleft"
          help_topic="profile_secondlife_tab"
          name="panel_profile_secondlife" />
         <panel
-         class="panel_profile_web"
-         filename="panel_profile_web.xml"
+         class="panel_fs_profile_web"
+         filename="panel_fs_profile_web.xml"
          label="Web"
          layout="topleft"
          help_topic="profile_web_tab"
          name="panel_profile_web" />
         <panel
-         class="panel_profile_interests"
-         filename="panel_profile_interests.xml"
+         class="panel_fs_profile_interests"
+         filename="panel_fs_profile_interests.xml"
          label="Interests"
          layout="topleft"
          help_topic="profile_interests_tab"
          name="panel_profile_interests" />
         <panel
-         class="panel_profile_picks"
-         filename="panel_profile_picks.xml"
+         class="panel_fs_profile_picks"
+         filename="panel_fs_profile_picks.xml"
          label="Picks"
          layout="topleft"
          help_topic="profile_picks_tab"
          name="panel_profile_picks" />
         <panel
-         class="panel_profile_classified"
-         filename="panel_profile_classified.xml"
+         class="panel_fs_profile_classified"
+         filename="panel_fs_profile_classified.xml"
          label="Classified"
          layout="topleft"
          help_topic="profile_classified_tab"
          name="panel_profile_classified" />
         <panel
-         class="panel_profile_firstlife"
-         filename="panel_profile_firstlife.xml"
+         class="panel_fs_profile_firstlife"
+         filename="panel_fs_profile_firstlife.xml"
          label="1st Life"
          layout="topleft"
          help_topic="profile_firstlife_tab"
          name="panel_profile_firstlife" />
         <panel
-         class="panel_profile_notes"
-         filename="panel_profile_notes.xml"
+         class="panel_fs_profile_notes"
+         filename="panel_fs_profile_notes.xml"
          label="Notes"
          layout="topleft"
          help_topic="profile_notes_tab"

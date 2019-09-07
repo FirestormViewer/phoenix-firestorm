@@ -510,14 +510,23 @@ BOOL LLHUDEffectLookAt::setLookAt(ELookAtType target_type, LLViewerObject *objec
 	//	}
 	//}
 
+	
+	// <FS:TS> FIRE-24175: Fix look at target clamping
+	bool isLookingAtSelf = false;
+	if(object){
+		isLookingAtSelf = object->isAvatar() && ((LLVOAvatar*)(LLViewerObject*)object)->isSelf();
+	}
 	static LLCachedControl<bool> s_EnableLimiter(gSavedSettings, "FSLookAtTargetLimitDistance");
 	bool lookAtShouldClamp = s_EnableLimiter &&
-						(*mAttentions)[mTargetType].mName != "None" &&
-						(*mAttentions)[mTargetType].mName != "Idle" &&
+						//(*mAttentions)[mTargetType].mName != "None" &&
+						//(*mAttentions)[mTargetType].mName != "Idle" &&
 						(*mAttentions)[mTargetType].mName != "Respond" &&
 						(*mAttentions)[mTargetType].mName != "Conversation" &&
-						(*mAttentions)[mTargetType].mName != "Freelook" &&
-						(*mAttentions)[mTargetType].mName != "AutoListen";
+						//(*mAttentions)[mTargetType].mName != "FreeLook" &&
+						//(*mAttentions)[mTargetType].mName != "AutoListen";
+						(*mAttentions)[mTargetType].mName != "AutoListen" &&
+						!isLookingAtSelf;
+	// </FS:TS> FIRE-24175
 
 	if (!lookAtShouldClamp) //We do a similar but seperate calculation if we are doing limited distances
 	{
@@ -549,18 +558,20 @@ BOOL LLHUDEffectLookAt::setLookAt(ELookAtType target_type, LLViewerObject *objec
 		{
 			if (lookAtShouldClamp)
 			{
-				if (mTargetObject->isAvatar() && ((LLVOAvatar*)(LLViewerObject*)mTargetObject)->isSelf())
-				{
-					//We use this branch and mimic our mouse/first person look pose.
-					mTargetOffsetGlobal.setVec(gAgent.getPosGlobalFromAgent(gAgentAvatarp->mHeadp->getWorldPosition() + position));
-					mTargetObject = NULL;
-				}
-				else
-				{
+			// <FS:TS> FIRE-24175: Fix look at target clamping
+				//if (mTargetObject->isAvatar() && ((LLVOAvatar*)(LLViewerObject*)mTargetObject)->isSelf())
+				//{
+				//	//We use this branch and mimic our mouse/first person look pose.
+				//	mTargetOffsetGlobal.setVec(gAgent.getPosGlobalFromAgent(gAgentAvatarp->mHeadp->getWorldPosition() + position));
+				//	mTargetObject = NULL;
+				//}
+				//else
+				//{
 					//Otherwise, mimic looking at the object.
 					mTargetOffsetGlobal.setVec(object->getPositionGlobal() + (LLVector3d)(position * object->getRotationRegion()));
 					mTargetObject = NULL;
-				}
+				//}
+			// </FS:TS> FIRE-24175
 			}
 			else
 			{

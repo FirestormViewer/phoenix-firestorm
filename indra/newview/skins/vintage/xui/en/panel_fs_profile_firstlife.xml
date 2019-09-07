@@ -64,6 +64,7 @@
      follows="all"
      name="fl_description_edit"
      enabled="false"
+     trusted_content="false"
      max_length="253"
      word_wrap="true"
      parse_urls="true" />
