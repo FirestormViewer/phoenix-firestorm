@@ -2707,6 +2707,9 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Fly_Tooltip">Toggle flying mode on/off (HOME)</string>
   <string name="Command_Stop_Animations_Label">Stop Animations</string>
   <string name="Command_Stop_Animations_Tooltip">Stop Animating my Avatar</string>
+  
+  <string name="Command_Discord_Label">Discord</string>
+  <string name="Command_Discord_Tooltip">Discord</string>
 
  <!-- Mesh UI terms -->
   <string name="Retain%">Retain%</string>
@@ -3145,4 +3148,5 @@ Your current position: [AVATAR_POS]
   <string name="Yes">Yes</string>
   <string name="No">No</string>
   <string name="FSUrlEntryWearLabel">Wear inventory folder</string>
+  <string name="FSDiscordAppName">via [APP_NAME]</string>
 </strings>

@@ -5874,6 +5874,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Beacons_Label">
 		Ortungssignale
 	</string>
+	<string name="Command_Stop_Animations_Label">
+		Avatar-Animationen stoppen
+	</string>
+	<string name="Command_Discord_Label">
+		Discord
+	</string>
 	<string name="Command_Appearance_Tooltip">
 		Avatar ändern
 	</string>
@@ -5997,12 +6003,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Fly_Tooltip">
 		Flugmodus ein-/ausschalten (Pos1)
 	</string>
- 	<string name="Command_Stop_Animations_Label">
- 		Avatar-Animationen stoppen
- 	</string>
- 	<string name="Command_Stop_Animations_Tooltip">
- 		Avatar-Animationen stoppen
- 	</string>
+	<string name="Command_Stop_Animations_Tooltip">
+		Avatar-Animationen stoppen
+	</string>
 	<string name="Command_Groundsit_Tooltip">
 		Aktiviert/Deaktiviert erzwungenes Sitzen auf dem Boden (Strg+Alt+S)
 	</string>
@@ -6068,6 +6071,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Beacons_Tooltip">
 		Ortungssignale anzeigen
+	</string>
+	<string name="Command_Discord_Tooltip">
+		Discord
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
@@ -6978,5 +6984,8 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="FSUrlEntryWearLabel">
 		Inventar-Ordner anziehen
+	</string>
+	<string name="FSDiscordAppName">
+		via [APP_NAME]
 	</string>
 </strings>

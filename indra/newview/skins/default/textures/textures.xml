@@ -1027,6 +1027,8 @@ with the same filename but different name
 
 <texture name="Icon_DialogStack" file_name="icons/Icon_DialogStack.png" preload="false" />
 
+<texture name="Command_Discord_Icon" file_name="toolbar_icons/discord.png" preload="true" />
+
 <!-- Higher Resolution 200px Loading Progress Indicator -->
 <texture name="ProgressLarge_1" file_name="icons/ProgressLarge_1.png" preload="true" />
 <texture name="ProgressLarge_2" file_name="icons/ProgressLarge_2.png" preload="true" />
