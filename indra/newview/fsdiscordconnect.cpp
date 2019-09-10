@@ -14,7 +14,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -143,8 +143,8 @@ void FSDiscordConnect::discordDisconnectCoro()
 //
 void FSDiscordConnect::discordConnectedCoro(bool autoConnect)
 {
-    if (autoConnect)
-    {
+	if (autoConnect)
+	{
 		setConnectionState(FSDiscordConnect::DISCORD_CONNECTION_IN_PROGRESS);
 		if (!checkMarkerFile())
 		{
@@ -154,7 +154,7 @@ void FSDiscordConnect::discordConnectedCoro(bool autoConnect)
 		{
 			setConnectionState(FSDiscordConnect::DISCORD_CONNECTION_FAILED);
 		}
-    }
+	}
 
 }
 
@@ -258,22 +258,22 @@ FSDiscordConnect::~FSDiscordConnect()
 
 void FSDiscordConnect::connectToDiscord()
 {
-    LLCoros::instance().launch("FSDiscordConnect::discordConnectCoro",
-        boost::bind(&FSDiscordConnect::discordConnectCoro, this));
+	LLCoros::instance().launch("FSDiscordConnect::discordConnectCoro",
+		boost::bind(&FSDiscordConnect::discordConnectCoro, this));
 }
 
 void FSDiscordConnect::disconnectFromDiscord()
 {
-    setConnectionState(FSDiscordConnect::DISCORD_DISCONNECTING);
+	setConnectionState(FSDiscordConnect::DISCORD_DISCONNECTING);
 
-    LLCoros::instance().launch("FSDiscordConnect::discordDisconnectCoro",
-        boost::bind(&FSDiscordConnect::discordDisconnectCoro, this));
+	LLCoros::instance().launch("FSDiscordConnect::discordDisconnectCoro",
+		boost::bind(&FSDiscordConnect::discordDisconnectCoro, this));
 }
 
 void FSDiscordConnect::checkConnectionToDiscord(bool auto_connect)
 {
-    LLCoros::instance().launch("FSDiscordConnect::discordConnectedCoro",
-        boost::bind(&FSDiscordConnect::discordConnectedCoro, this, auto_connect));
+	LLCoros::instance().launch("FSDiscordConnect::discordConnectedCoro",
+		boost::bind(&FSDiscordConnect::discordConnectedCoro, this, auto_connect));
 }
 
 bool FSDiscordConnect::Tick(const LLSD&)

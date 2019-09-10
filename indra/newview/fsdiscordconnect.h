@@ -14,7 +14,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -45,7 +45,7 @@ class FSDiscordConnect : public LLSingleton<FSDiscordConnect>
 	LLSINGLETON(FSDiscordConnect);
 	LOG_CLASS(FSDiscordConnect);
 public:
-    enum EConnectionState
+	enum EConnectionState
 	{
 		DISCORD_NOT_CONNECTED = 0,
 		DISCORD_CONNECTION_IN_PROGRESS = 1,
@@ -58,16 +58,16 @@ public:
 
 	void connectToDiscord();																				// Initiate the complete Discord connection. Please use checkConnectionToDiscord() in normal use.
 	void disconnectFromDiscord();																			// Disconnect from the Discord service.
-    void checkConnectionToDiscord(bool auto_connect = false);												// Check if connected to the Discord service. If not, call connectToDiscord().
+	void checkConnectionToDiscord(bool auto_connect = false);												// Check if connected to the Discord service. If not, call connectToDiscord().
 	
 	void storeInfo(const LLSD& info);
 	const LLSD& getInfo() const;
 	void clearInfo();
-    
-    void setConnectionState(EConnectionState connection_state);
+	
+	void setConnectionState(EConnectionState connection_state);
 	void setConnected(bool connected);
 	bool isConnected() { return mConnected; }
-    EConnectionState getConnectionState() { return mConnectionState; }
+	EConnectionState getConnectionState() { return mConnectionState; }
 
 	void updateRichPresence();
 
@@ -75,7 +75,7 @@ public:
 
 private:
 
-    EConnectionState mConnectionState;
+	EConnectionState mConnectionState;
 	bool mConnected;
 	LLSD mInfo;
 	bool mRefreshInfo;
@@ -84,9 +84,9 @@ private:
 	static boost::scoped_ptr<LLEventPump> sInfoWatcher;
 	static boost::scoped_ptr<LLEventPump> sContentWatcher;
 
-    void discordConnectCoro();
-    void discordDisconnectCoro();
-    void discordConnectedCoro(bool autoConnect);
+	void discordConnectCoro();
+	void discordDisconnectCoro();
+	void discordConnectedCoro(bool autoConnect);
 
 	bool checkMarkerFile();
 	void setMarkerFile();
