@@ -81,6 +81,9 @@ Erweitertes Beleuchtungsmodell: [ALMSTATUS]
 Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 VFS (Cache) Erstellungszeit: [VFS_DATE]
 	</string>
+	<string name="AboutOSXHiDPI">
+HiDPI-Display-Modus: [HIDPI]
+	</string>
 	<string name="AboutLibs">
 RestrainedLove API: [RLV_VERSION]
 libcurl-Version: [LIBCURL_VERSION]
@@ -1690,6 +1693,15 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	</string>
 	<string name="MarketplaceURL_LearnMore">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
+	</string>
+	<string name="InventoryPlayAnimationTooltip">
+		Öffnet Fenster mit Abspieloptionen.
+	</string>
+	<string name="InventoryPlayGestureTooltip">
+		Führt die ausgewählte Geste aus.
+	</string>
+	<string name="InventoryPlaySoundTooltip">
+		Öffnet Fenster mit Abspieloptionen.
 	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		Jeder kann Artikel im Marktplatz verkaufen.
@@ -5338,7 +5350,7 @@ Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und F
 		Keine Objekte in diesem Outfit
 	</string>
 	<string name="ExternalEditorNotSet">
-		Wählen Sie über die Einstellung „ExternalEditor“ einen Editor aus
+		Wählen Sie über die Umgebungsvariable „LL_SCRIPT_EDITOR“ oder die Einstellung „ExternalEditor“ einen Editor aus.
 	</string>
 	<string name="ExternalEditorNotFound">
 		Angegebener externer Editor nicht gefunden.
@@ -5886,6 +5898,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Beacons_Label">
 		Ortungssignale
 	</string>
+	<string name="Command_Stop_Animations_Label">
+		Avatar-Animationen stoppen
+	</string>
+	<string name="Command_Discord_Label">
+		Discord
+	</string>
 	<string name="Command_Appearance_Tooltip">
 		Avatar ändern
 	</string>
@@ -6009,12 +6027,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Fly_Tooltip">
 		Flugmodus ein-/ausschalten (Pos1)
 	</string>
- 	<string name="Command_Stop_Animations_Label">
- 		Avatar-Animationen stoppen
- 	</string>
- 	<string name="Command_Stop_Animations_Tooltip">
- 		Avatar-Animationen stoppen
- 	</string>
+	<string name="Command_Stop_Animations_Tooltip">
+		Avatar-Animationen stoppen
+	</string>
 	<string name="Command_Groundsit_Tooltip">
 		Aktiviert/Deaktiviert erzwungenes Sitzen auf dem Boden (Strg+Alt+S)
 	</string>
@@ -6080,6 +6095,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Beacons_Tooltip">
 		Ortungssignale anzeigen
+	</string>
+	<string name="Command_Discord_Tooltip">
+		Discord
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste

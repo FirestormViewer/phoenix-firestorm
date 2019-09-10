@@ -1364,25 +1364,6 @@ static void removeDuplicateItems(LLInventoryModel::item_array_t& items)
 	items = new_items;
 }
 
-// [SL:KB] - Patch: Appearance-WearableDuplicateAssets | Checked: 2015-06-30 (Catznip-3.7)
-static void removeDuplicateWearableItemsByAssetID(LLInventoryModel::item_array_t& items)
-{
-	std::set<LLUUID> idsAsset;
-	items.erase(std::remove_if(items.begin(), items.end(), 
-		[&idsAsset](const LLViewerInventoryItem* pItem)
-		{
-			if (pItem->isWearableType())
-			{
-				const LLUUID& idAsset = pItem->getAssetUUID();
-				if ( (idAsset.notNull()) &&  (idsAsset.end() != idsAsset.find(idAsset)) )
-					return true;
-				idsAsset.insert(idAsset);
-			}
-			return false;
-		}), items.end());
-}
-// [/SL:KB]
-
 //=========================================================================
 
 const std::string LLAppearanceMgr::sExpectedTextureName = "OutfitPreview";
@@ -2269,9 +2250,6 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 // [/RLVa:KB]
 	// Reduce wearables to max of one per type.
 	removeDuplicateItems(wear_items);
-// [SL:KB] - Patch: Appearance-WearableDuplicateAssets | Checked: 2011-07-24 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
-	removeDuplicateWearableItemsByAssetID(wear_items);
-// [/SL:KB]
 	filterWearableItems(wear_items, 0, LLAgentWearables::MAX_CLOTHING_LAYERS);
 
 	// - Attachments: include COF contents only if appending.
@@ -2684,10 +2662,6 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 	removeDuplicateItems(obj_items);
 	removeDuplicateItems(gest_items);
 	filterWearableItems(wear_items, LLAgentWearables::MAX_CLOTHING_LAYERS, LLAgentWearables::MAX_CLOTHING_LAYERS);
-// [/SL:KB]
-// [SL:KB] - Patch: Appearance-WearableDuplicateAssets | Checked: 2011-07-24 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
-	// Wearing two wearables that share the same asset causes some issues
-	removeDuplicateWearableItemsByAssetID(wear_items);
 // [/SL:KB]
 
 	dumpItemArray(wear_items,"asset_dump: wear_item");
@@ -3217,13 +3191,6 @@ void LLAppearanceMgr::addCOFItemLink(const LLInventoryItem *item,
 				// MULTI-WEARABLES: make sure we don't go over clothing limits
 				remove_inventory_item(inv_item->getUUID(), cb);
 			}
-// [SL:KB] - Patch: Appearance-WearableDuplicateAssets | Checked: 2011-07-24 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
-			else if ( (vitem->getWearableType() == wearable_type) && (vitem->getAssetUUID() == inv_item->getAssetUUID()) )
-			{
-				// Only allow one wearable per unique asset
-				linked_already = true;
-			}
-// [/SL:KB]
 		}
 	}
 

@@ -48,6 +48,7 @@
 //#include "imdebug.h"
 #include "llfontbitmapcache.h"
 #include "llgl.h"
+
 #include "llapr.h"
 
 FT_Render_Mode gFontRenderMode = FT_RENDER_MODE_NORMAL;
@@ -172,7 +173,7 @@ void ft_close_cb(FT_Stream stream) {
 }
 #endif
 
-BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 components, BOOL is_fallback)
+BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 components, BOOL is_fallback, S32 face_n)
 {
 	// Don't leak face objects.  This is also needed to deal with
 	// changed font file names.
@@ -184,46 +185,17 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 	
 	int error;
 
-// <FS:ND> FIRE-7570. Only load/mmap fonts once. loadFont will either load a font into memory, or reuse an already loaded font.
-//#ifdef LL_WINDOWS
-//	pFileStream = new llifstream(filename, std::ios::binary);
-//	if (pFileStream->is_open())
-//	{
-//		std::streampos beg = pFileStream->tellg();
-//		pFileStream->seekg(0, std::ios::end);
-//		std::streampos end = pFileStream->tellg();
-//		std::size_t file_size = end - beg;
-//		pFileStream->seekg(0, std::ios::beg);
-//
-//		pFtStream = new LLFT_Stream();
-//		pFtStream->base = 0;
-//		pFtStream->pos = 0;
-//		pFtStream->size = file_size;
-//		pFtStream->descriptor.pointer = pFileStream;
-//		pFtStream->read = ft_read_cb;
-//		pFtStream->close = ft_close_cb;
-//
-//		FT_Open_Args args;
-//		args.flags = FT_OPEN_STREAM;
-//		args.stream = (FT_StreamRec*)pFtStream;
-//
-//		error = FT_Open_Face(gFTLibrary,
-//							 &args,
-//							 0,
-//							 &mFTFace);
-//	}
-//	else
-//	{
-//		delete pFileStream;
-//		pFileStream = NULL;
-//		return FALSE;
-//	}
-//#else
-//	error = FT_New_Face( gFTLibrary,
-//						 filename.c_str(),
-//						 0,
-//						 &mFTFace);
+// <FS:ND> FIRE-7570. Only load/mmap fonts once.
+	
+// #ifdef LL_WINDOWS
+// 	error = ftOpenFace(filename, face_n);
+// #else
+// 	error = FT_New_Face( gFTLibrary,
+// 						 filename.c_str(),
+// 						 0,
+// 						 &mFTFace);
 //#endif
+
 	FT_Open_Args openArgs;
 	memset( &openArgs, 0, sizeof( openArgs ) );
 	openArgs.memory_base = gFontManagerp->loadFont( filename, openArgs.memory_size );
@@ -233,19 +205,15 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 
 	openArgs.flags = FT_OPEN_MEMORY;
 
-	error = FT_Open_Face( gFTLibrary, &openArgs, 0, &mFTFace );
+	error = FT_Open_Face( gFTLibrary, &openArgs, face_n, &mFTFace );
 // </FS:ND>
 
 	if (error)
 	{
-// <FS:ND> FIRE-7570. Only load/mmap fonts once. loadFont will either load a font into memory, or reuse an already loaded font.
-//#ifdef LL_WINDOWS
-//		pFileStream->close();
-//		delete pFileStream;
-//		delete pFtStream;
-//		pFileStream = NULL;
-//		pFtStream = NULL;
-//#endif
+// <FS:ND> FIRE-7570. Only load/mmap fonts once.
+// #ifdef LL_WINDOWS
+// 		clearFontStreams();
+// #endif
 // </FS:ND>
 		return FALSE;
 	}
@@ -263,14 +231,10 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 	{
 		// Clean up freetype libs.
 		FT_Done_Face(mFTFace);
-// <FS:ND> FIRE-7570. Only load/mmap fonts once. loadFont will either load a font into memory, or reuse an already loaded font.
-//#ifdef LL_WINDOWS
-//		pFileStream->close();
-//		delete pFileStream;
-//		delete pFtStream;
-//		pFileStream = NULL;
-//		pFtStream = NULL;
-//#endif
+// <FS:ND> FIRE-7570. Only load/mmap fonts once.
+// #ifdef LL_WINDOWS
+// 		clearFontStreams();
+// #endif
 // </FS:ND>
 		mFTFace = NULL;
 		return FALSE;
@@ -316,17 +280,106 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 	if(mFTFace->style_flags & FT_STYLE_FLAG_BOLD)
 	{
 		mStyle |= LLFontGL::BOLD;
-		mStyle &= ~LLFontGL::NORMAL;
 	}
 
 	if(mFTFace->style_flags & FT_STYLE_FLAG_ITALIC)
 	{
 		mStyle |= LLFontGL::ITALIC;
-		mStyle &= ~LLFontGL::NORMAL;
 	}
 
 	return TRUE;
 }
+
+S32 LLFontFreetype::getNumFaces(const std::string& filename)
+{
+	if (mFTFace)
+	{
+		FT_Done_Face(mFTFace);
+		mFTFace = NULL;
+	}
+
+	S32 num_faces = 1;
+
+// <FS:ND> FIRE-7570. Only load/mmap fonts once.
+	FT_Open_Args openArgs;
+	memset( &openArgs, 0, sizeof( openArgs ) );
+	openArgs.memory_base = gFontManagerp->loadFont( filename, openArgs.memory_size );
+	if( !openArgs.memory_base )
+		return 0;
+
+	openArgs.flags = FT_OPEN_MEMORY;
+
+	int error = FT_Open_Face( gFTLibrary, &openArgs, 0, &mFTFace );
+	if (error)
+		return 0;
+	else
+		num_faces = mFTFace->num_faces;
+	
+	FT_Done_Face(mFTFace);
+	mFTFace = NULL;
+
+// #ifdef LL_WINDOWS
+// 	int error = ftOpenFace(filename, 0);
+// 		
+// 	if (error)
+// 	{
+// 		return 0;
+// 	}
+// 	else
+// 	{
+// 		num_faces = mFTFace->num_faces;
+// 	}
+// 	
+// 	FT_Done_Face(mFTFace);
+// 	clearFontStreams();
+// 	mFTFace = NULL;
+// #endif
+
+// </FS:ND>
+	return num_faces;
+}
+
+#ifdef LL_WINDOWS
+S32 LLFontFreetype::ftOpenFace(const std::string& filename, S32 face_n)
+{
+	S32 error = -1;
+	pFileStream = new llifstream(filename, std::ios::binary);
+	if (pFileStream->is_open())
+	{
+		std::streampos beg = pFileStream->tellg();
+		pFileStream->seekg(0, std::ios::end);
+		std::streampos end = pFileStream->tellg();
+		std::size_t file_size = end - beg;
+		pFileStream->seekg(0, std::ios::beg);
+
+		pFtStream = new LLFT_Stream();
+		pFtStream->base = 0;
+		pFtStream->pos = 0;
+		pFtStream->size = file_size;
+		pFtStream->descriptor.pointer = pFileStream;
+		pFtStream->read = ft_read_cb;
+		pFtStream->close = ft_close_cb;
+
+		FT_Open_Args args;
+		args.flags = FT_OPEN_STREAM;
+		args.stream = (FT_StreamRec*)pFtStream;
+		error = FT_Open_Face(gFTLibrary, &args, face_n, &mFTFace);
+	}
+	return error;
+}
+
+void LLFontFreetype::clearFontStreams()
+{
+	if (pFileStream)
+	{
+		pFileStream->close();
+	}
+	delete pFileStream;
+	delete pFtStream;
+	pFileStream = NULL;
+	pFtStream = NULL;
+}
+#endif
 
 void LLFontFreetype::setFallbackFonts(const font_vector_t &font)
 {
@@ -766,20 +819,16 @@ namespace nd
 		class LoadedFont
 		{
 		public:
-			LoadedFont( std::string aName , U8 *aAddress, long aSize )
+			LoadedFont( std::string aName , std::vector<U8> const &aAddress, long aSize )
+				: mAddress( aAddress )
 			{
 				mName = aName;
-				mAddress = aAddress;
 				mSize = aSize;
 				mRefs = 1;
 			}
 
-			~LoadedFont()
-			{
-			}
-
 			std::string mName;
-			U8 *mAddress;
+			std::vector<U8> mAddress;
 			long mSize;
 			U32  mRefs;
 		};
@@ -790,12 +839,12 @@ U8 const* LLFontManager::loadFont( std::string const &aFilename, long &a_Size)
 {
 	a_Size = 0;
 
-	std::map< std::string, nd::fonts::LoadedFont* >::iterator itr = m_LoadedFonts.find( aFilename );
+	std::map< std::string, std::shared_ptr<nd::fonts::LoadedFont> >::iterator itr = m_LoadedFonts.find( aFilename );
 	if( itr != m_LoadedFonts.end() )
 	{
 		++itr->second->mRefs;
 		a_Size = itr->second->mSize;
-		return itr->second->mAddress;
+		return &itr->second->mAddress[0];
 	}
 
 	llstat oStat;
@@ -804,36 +853,23 @@ U8 const* LLFontManager::loadFont( std::string const &aFilename, long &a_Size)
 		return 0;
 
 	a_Size = oStat.st_size;
-	U8 *pBuffer = new U8[ a_Size ];
+	std::vector< U8 > pBuffer;
+	pBuffer.resize( a_Size );
 
-	if( a_Size != LLAPRFile::readEx( aFilename, pBuffer, 0, a_Size ) )
+	if( a_Size != LLAPRFile::readEx( aFilename, &pBuffer[0], 0, a_Size ) )
 	{
 		a_Size = 0;
-		delete []pBuffer;
-		return 0;
+		return nullptr;
 	}
 
-	m_LoadedFonts[ aFilename ] = new nd::fonts::LoadedFont( aFilename, pBuffer, a_Size );
-	return pBuffer;
-}
-
-void LLFontManager::unloadFont( std::string const &aFilename )
-{
-	std::map< std::string, nd::fonts::LoadedFont* >::iterator itr = m_LoadedFonts.find( aFilename );
-	if( itr != m_LoadedFonts.end() )
-		--itr->second->mRefs;
+	auto pCache = std::make_shared<nd::fonts::LoadedFont>( aFilename,  pBuffer, a_Size );
+	itr = m_LoadedFonts.insert( std::make_pair( aFilename, pCache ) ).first;
+	return &itr->second->mAddress[ 0 ];
 }
 
 void LLFontManager::unloadAllFonts()
 {
-	std::map< std::string, nd::fonts::LoadedFont* >::iterator itr = m_LoadedFonts.begin();
-
-	while( itr != m_LoadedFonts.end() )
-	{
-		delete []itr->second->mAddress;
-		delete itr->second;
-		m_LoadedFonts.erase( itr );
-		itr = m_LoadedFonts.begin();
-	}
+	m_LoadedFonts.clear();
 }
 // </FS:ND>
+

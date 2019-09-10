@@ -1044,6 +1044,9 @@ LLSD FSData::getSystemInfo()
 	sysinfo2 += llformat("Mode: %s\n", info["MODE"].asString().c_str());
 	sysinfo2 += llformat("Skin: %s (%s)\n", info["SKIN"].asString().c_str(), info["THEME"].asString().c_str());
 	sysinfo2 += llformat("Window Size: %sx%s px\n", info["WINDOW_WIDTH"].asString().c_str(), info["WINDOW_HEIGHT"].asString().c_str());
+#if LL_DARWIN
+	sysinfo2 += llformat("HiDPI: %s\n", info["HIDPI"].asBoolean() ? "Enabled" : "Disabled");
+#endif
 	sysinfo2 += llformat("Font: %s\n", info["FONT"].asString().c_str());
 	sysinfo2 += llformat("Font Size Adjustment: %d pt\n", info["FONT_SIZE"].asInteger());
 	sysinfo2 += llformat("Font Screen DPI: %d\n", info["FONT_SCREEN_DPI"].asInteger());

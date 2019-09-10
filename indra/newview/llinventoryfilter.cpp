@@ -62,6 +62,7 @@ LLInventoryFilter::FilterOps::FilterOps(const Params& p)
 	mHoursAgo(p.hours_ago),
 	mDateSearchDirection(p.date_search_direction),
 	mShowFolderState(p.show_folder_state),
+	mFilterCreatorType(p.creator_type),
 	mPermissions(p.permissions),
 	mFilterTypes(p.types),
 	mFilterUUID(p.uuid),
@@ -82,8 +83,7 @@ LLInventoryFilter::LLInventoryFilter(const Params& p)
 	mCurrentGeneration(0),
 	mFirstRequiredGeneration(0),
 	mFirstSuccessGeneration(0),
-	mSearchType(SEARCHTYPE_NAME),
-	mFilterCreatorType(FILTERCREATOR_ALL)
+	mSearchType(SEARCHTYPE_NAME)
 {
 	// <FS:Zi> Begin Multi-substring inventory search
 	mSubStringMatchOffsets.clear();
@@ -598,7 +598,7 @@ bool LLInventoryFilter::checkAgainstCreator(const LLFolderViewModelItemInventory
 {
 	if (!listener) return TRUE;
 	const BOOL is_folder = listener->getInventoryType() == LLInventoryType::IT_CATEGORY;
-	switch(mFilterCreatorType)
+	switch (mFilterOps.mFilterCreatorType)
 	{
 		case FILTERCREATOR_SELF:
 			if(is_folder) return FALSE;
@@ -713,9 +713,9 @@ void LLInventoryFilter::setSearchType(ESearchType type)
 
 void LLInventoryFilter::setFilterCreator(EFilterCreatorType type)
 {
-	if(mFilterCreatorType != type)
+	if (mFilterOps.mFilterCreatorType != type)
 	{
-		mFilterCreatorType = type;
+		mFilterOps.mFilterCreatorType = type;
 		setModified();
 	}
 }
@@ -1404,6 +1404,7 @@ void LLInventoryFilter::toParams(Params& params) const
 	params.filter_ops.hours_ago = getHoursAgo();
 	params.filter_ops.date_search_direction = getDateSearchDirection();
 	params.filter_ops.show_folder_state = getShowFolderState();
+	params.filter_ops.creator_type = getFilterCreatorType();
 	params.filter_ops.permissions = getFilterPermissions();
 	// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 	params.filter_ops.transferable = getFilterTransferable();
@@ -1425,6 +1426,7 @@ void LLInventoryFilter::fromParams(const Params& params)
 	//setDateRange(params.filter_ops.date_range.min_date,   params.filter_ops.date_range.max_date);
 	//setHoursAgo(params.filter_ops.hours_ago);
 	//setDateSearchDirection(params.filter_ops.date_search_direction);
+	//setFilterCreator(params.filter_ops.creator_type);
 	//setShowFolderState(params.filter_ops.show_folder_state);
 	//setFilterPermissions(params.filter_ops.permissions);
 	//setFilterSubString(params.substring);
@@ -1456,6 +1458,10 @@ void LLInventoryFilter::fromParams(const Params& params)
 	if (params.filter_ops.show_folder_state.isProvided())
 	{
 		setShowFolderState(params.filter_ops.show_folder_state);
+	}
+	if (params.filter_ops.creator_type.isProvided())
+	{
+		setFilterCreator(params.filter_ops.creator_type);
 	}
 	if (params.filter_ops.permissions.isProvided())
 	{
@@ -1539,6 +1545,11 @@ U64 LLInventoryFilter::getFilterLinks() const
 LLInventoryFilter::EFolderShow LLInventoryFilter::getShowFolderState() const
 { 
 	return mFilterOps.mShowFolderState; 
+}
+
+LLInventoryFilter::EFilterCreatorType LLInventoryFilter::getFilterCreatorType() const
+{
+	return mFilterOps.mFilterCreatorType;
 }
 
 bool LLInventoryFilter::isTimedOut()

@@ -130,6 +130,7 @@ public:
 			Optional<U32>				date_search_direction;
 			Optional<EFolderShow>		show_folder_state;
 			Optional<PermissionMask>	permissions;
+			Optional<EFilterCreatorType> creator_type;
 			Optional<bool>				transferable; // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 
 			Params()
@@ -144,6 +145,7 @@ public:
 				hours_ago("hours_ago", 0),
 				date_search_direction("date_search_direction", FILTERDATEDIRECTION_NEWER),
 				show_folder_state("show_folder_state", SHOW_NON_EMPTY_FOLDERS),
+				creator_type("creator_type", FILTERCREATOR_ALL),
 				permissions("permissions", PERM_NONE),
 				transferable("transferable", false) // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 			{}
@@ -164,8 +166,9 @@ public:
 		U32				mHoursAgo;
 		U32				mDateSearchDirection;
 
-		EFolderShow		mShowFolderState;
-		PermissionMask	mPermissions;
+		EFolderShow			mShowFolderState;
+		PermissionMask		mPermissions;
+		EFilterCreatorType	mFilterCreatorType;
 	};
 							
 	struct Params : public LLInitParam::Block<Params>
@@ -214,7 +217,6 @@ public:
 	void 				setSearchType(ESearchType type);
 	ESearchType			getSearchType() { return mSearchType; }
 	void 				setFilterCreator(EFilterCreatorType type);
-	EFilterCreatorType		getFilterCreator() { return mFilterCreatorType; }
 
 	void 				setFilterSubString(const std::string& string);
 	const std::string& 	getFilterSubString(BOOL trim = FALSE) const;
@@ -271,8 +273,9 @@ public:
 	// +-------------------------------------------------------------------+
 	// + Presentation
 	// +-------------------------------------------------------------------+
-	void 				setShowFolderState( EFolderShow state);
-	EFolderShow 		getShowFolderState() const;
+	void 					setShowFolderState( EFolderShow state);
+	EFolderShow 			getShowFolderState() const;
+	EFilterCreatorType		getFilterCreatorType() const;
 
 	void 				setEmptyLookupMessage(const std::string& message);
 	std::string			getEmptyLookupMessage() const;
@@ -358,7 +361,6 @@ private:
 	std::string 			mEmptyLookupMessage;
 
 	ESearchType 			mSearchType;
-	EFilterCreatorType		mFilterCreatorType;
 };
 
 #endif
