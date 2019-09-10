@@ -92,10 +92,10 @@
 		height="26"
 		word_wrap="true"
 		left="10"
-		name="dont_show_higher_label"
+		name="rating_label"
 		top_pad="5"
 		type="string">
-		Dont share region names to Discord if the maturity is higher than:
+		Share name of regions with following content rating to Discord:
 	</text>
 	<combo_box
 		follows="left|top"
@@ -115,6 +115,10 @@
 		 label="General"
 		 name="Desired_PG"
 		 value="13" />
+		<combo_box.item
+		 label="Don't share"
+		 name="Desired_None"
+		 value="0" />
 		 <commit_callback function="FSDiscord.Combo"/>
     </combo_box>
 	<text

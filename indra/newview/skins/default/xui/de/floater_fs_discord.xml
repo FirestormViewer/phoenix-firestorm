@@ -17,13 +17,14 @@
 	<check_box label="Automatisch beim Login verbinden" name="startup_check"/>
 	<button label="Verbinden..." name="connect_btn"/>
 	<button label="Trennen" name="disconnect_btn"/>
-	<text name="dont_show_higher_label">
-		Regionsnamen nicht mit Discord teilen, deren Alterseinstufung höher ist als:
+	<text name="rating_label">
+		Name von Regionen mit folgender Einstufung mit Discord teilen:
 	</text>
 	<combo_box name="maturity_desired_combobox">
 		<combo_box.item label="Generell, Moderate, Adult" name="Desired_Adult"/>
 		<combo_box.item label="Generell und Moderate" name="Desired_Mature"/>
 		<combo_box.item label="Generell" name="Desired_PG"/>
+		<combo_box.item label="Nicht teilen" name="Desired_None"/>
 	</combo_box>
 	<text name="dont_names_label">
 		Regionsnamen nicht mit Discord teilen, die unten aufgeführt sind:
