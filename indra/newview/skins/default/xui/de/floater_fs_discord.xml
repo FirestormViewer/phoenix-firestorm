@@ -27,7 +27,7 @@
 		<combo_box.item label="Nicht teilen" name="Desired_None"/>
 	</combo_box>
 	<text name="dont_names_label">
-		Regionsnamen nicht mit Discord teilen, die unten aufgeführt sind:
+		Name von Regionen nicht mit Discord teilen, die unten aufgeführt sind:
 	</text>
 	<text name="connection_status_text">
 		Wird geladen...

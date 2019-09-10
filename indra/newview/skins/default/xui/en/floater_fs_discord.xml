@@ -92,6 +92,7 @@
 		height="26"
 		word_wrap="true"
 		left="10"
+		right="-10"
 		name="rating_label"
 		top_pad="5"
 		type="string">
@@ -129,6 +130,7 @@
 		height="26"
 		word_wrap="true"
 		left="10"
+		right="-10"
 		name="dont_names_label"
 		top_pad="5"
 		type="string">
