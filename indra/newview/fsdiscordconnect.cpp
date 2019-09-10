@@ -230,8 +230,8 @@ void FSDiscordConnect::updateRichPresence()
 	discordPresence.largeImageKey = "secondlife_512";
 	discordPresence.largeImageText = "Second Life";
 	discordPresence.smallImageKey = "firestorm_512";
-	//const char* appname = std::string("via " + APP_NAME).c_str(); // No idea why this doesnt work, but discord receives random data from somewhere in the programs address space and not the text that it should
-	discordPresence.smallImageText = "via Firestorm"; // I hate to hardcode the word "Firestorm" cause of the above global, but this way works
+	std::string appName = std::string("via " + APP_NAME);
+	discordPresence.smallImageText = appName.c_str();
 
 	discordPresence.partyId = gAgent.getRegion()->getRegionID().asString().c_str();
 	discordPresence.partySize = gAgent.getRegion()->mMapAvatars.size();
