@@ -76,7 +76,7 @@ public:
 private:
 
     EConnectionState mConnectionState;
-	BOOL mConnected;
+	bool mConnected;
 	LLSD mInfo;
 	bool mRefreshInfo;
 	
