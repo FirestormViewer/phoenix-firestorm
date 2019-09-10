@@ -201,7 +201,7 @@ void FSDiscordConnect::updateRichPresence()
 	}
 	else
 	{
-		region_name = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+		region_name = "Hidden Region";
 	}
 
 	DiscordRichPresence discordPresence;
