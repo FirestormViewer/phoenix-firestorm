@@ -234,6 +234,11 @@ Please try logging in again in a minute.</string>
   <string name="SocialTwitterErrorConnecting">Problem connecting to Twitter</string>
   <string name="SocialTwitterErrorPosting">Problem posting to Twitter</string>
   <string name="SocialTwitterErrorDisconnecting">Problem disconnecting from Twitter</string>
+  
+  <!-- Firestorm social strings -->
+  <string name="SocialDiscordConnecting">Connecting to Discord</string>
+  <string name="SocialDiscordErrorConnecting">Error connecting to Discord</string>
+  <string name="SocialDiscordDisconnecting">Disconnecting from Discord</string>
     
 	<!-- SLShare: User Friendly Filter Names Translation -->
     <string name="BlackAndWhite">Black &amp; White</string>
@@ -2712,6 +2717,9 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Fly_Tooltip">Toggle flying mode on/off (HOME)</string>
   <string name="Command_Stop_Animations_Label">Stop Animations</string>
   <string name="Command_Stop_Animations_Tooltip">Stop Animating my Avatar</string>
+  
+  <string name="Command_Discord_Label">Discord</string>
+  <string name="Command_Discord_Tooltip">Discord</string>
 
  <!-- Mesh UI terms -->
   <string name="Retain%">Retain%</string>

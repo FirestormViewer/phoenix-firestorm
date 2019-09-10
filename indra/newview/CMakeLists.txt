@@ -60,6 +60,7 @@ include(URIPARSER)
 include(Growl)
 include(ColladaDom)
 include(jemalloc)
+include(Discord)
 
 # <FS:ND> if using ndPhysicsstub this variable will be unset, we don't need to build any stub code viewer side in that case
 if( LLPHYSICSEXTENSIONS_SRC_DIR )
@@ -1792,6 +1793,11 @@ if (WINDOWS)
 # [FS]
          )
 
+#<FS:LO> Discord rich presence
+    LIST(APPEND viewer_HEADER_FILES fsfloaterdiscord.h fsdiscordconnect.h)
+    LIST(APPEND viewer_SOURCE_FILES fsfloaterdiscord.cpp fsdiscordconnect.cpp)
+#</FS:LO>
+
     # precompiled header configuration
     # llviewerprecompiledheaders.cpp generates
     # the .pch file.
@@ -2432,6 +2438,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLPHYSICSEXTENSIONS_LIBRARIES}
     ${LLAPPEARANCE_LIBRARIES}
     ${GROWL_LIBRARY}
+    ${DISCORD_LIBRARY}
     )
 
 if (BUGSPLAT_DB)
