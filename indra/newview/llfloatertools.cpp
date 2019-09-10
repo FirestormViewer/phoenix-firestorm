@@ -699,18 +699,6 @@ void LLFloaterTools::refresh()
 		selection_info << getString("status_selectcount", selection_args);
 
 		getChild<LLTextBox>("selection_count")->setText(selection_info.str());
-
-		bool have_selection = !LLSelectMgr::getInstance()->getSelection()->isEmpty();
-		// <FS:Ansariel> FIRE-13838 / VWR-29517: Text and link from other tools is presented in Land tool from Build floater
-		//childSetVisible("selection_count",  have_selection);
-		//childSetVisible("remaining_capacity", have_selection);
-		//childSetVisible("selection_empty", !have_selection);
-		LLTool *tool = LLToolMgr::getInstance()->getCurrentTool();
-		bool land_visible = (tool == LLToolBrushLand::getInstance() || tool == LLToolSelectLand::getInstance() );
-		childSetVisible("selection_count", !land_visible && have_selection);
-		childSetVisible("remaining_capacity", !land_visible && have_selection);
-		childSetVisible("selection_empty", !land_visible && !have_selection);
-		// </FS:Ansariel>
 	}
 
 	// <FS> disable the object and prim counts if nothing selected

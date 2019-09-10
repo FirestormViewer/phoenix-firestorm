@@ -585,13 +585,6 @@
         </menu_item_check>
         <menu_item_separator/>
       <menu_item_call
-        label="Facebook..."
-        name="Facebook">
-        <menu_item_call.on_click
-          function="Floater.Toggle"
-          parameter="facebook"/>
-      </menu_item_call>
-      <menu_item_call
         label="Twitter..."
         name="Twitter">
         <menu_item_call.on_click
@@ -604,6 +597,13 @@
         <menu_item_call.on_click
           function="Floater.Toggle"
           parameter="flickr"/>
+      </menu_item_call>
+      <menu_item_call
+        label="Discord..."
+        name="Discord">
+        <menu_item_call.on_click
+          function="Floater.Toggle"
+          parameter="fs_discord"/>
       </menu_item_call>
         <menu_item_separator/>
         <menu
@@ -1491,8 +1491,6 @@
              shortcut="control|D">
             <menu_item_call.on_click
                function="Object.Duplicate" />
-            <menu_item_call.on_enable
-               function="Object.EnableDuplicate" />
           </menu_item_call>
 
           <menu_item_call

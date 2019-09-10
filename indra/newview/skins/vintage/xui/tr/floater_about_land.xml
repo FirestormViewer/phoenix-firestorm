@@ -373,7 +373,7 @@ Sadece büyük parseller aramada görünür.
 				Anlık Görüntü:
 			</text>
 			<texture_picker name="snapshot_ctrl" tool_tip="Bir resim seçmek için tıklayın"/>
-			<text top_pad="5" name="allow_label5">
+			<text top_pad="5" name="allow_see_label">
 				Başka parsellerdeki avatarlar bu parseldeki avatarları görebilir ve onlarla sohbet edebilir
 			</text>
 			<check_box top_pad="17" label="Avatarları Gör" name="SeeAvatarsCheck" tool_tip="Diğer parsellerdeki avatarların bu parseldeki avatarları görmesine ve onlarla sohbet etmesine, sizin de onları görüp, onlarla sohbet etmenize imkan tanır."/>

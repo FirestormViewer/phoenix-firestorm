@@ -349,7 +349,7 @@ Hover your mouse over the options for more help.
          layout="topleft" />
         <combo_box
          name="group_mature_check"
-         tool_tip="Sets whether your group contains information rated as Moderate"
+         tool_tip="Maturity ratings designate the type of content and behavior allowed in a group"
          left="0"
          top_pad="8"
          right="-1"

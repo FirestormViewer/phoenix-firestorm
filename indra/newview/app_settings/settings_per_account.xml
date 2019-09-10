@@ -676,6 +676,17 @@
         <key>Value</key>
         <string>Snapshot</string>
       </map>
+      <key>ExperienceSearchMaturity</key>
+      <map>
+        <key>Comment</key>
+        <string>Setting for the user's preferred Max Content rating for Experiences search (Default rating is General)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>U32</string>
+        <key>Value</key>
+        <integer>2</integer>
+      </map>
     
     <!-- Firestorm settings -->
     <key>DebugLookAt</key>
@@ -1223,6 +1234,39 @@
             <string>Boolean</string>
         <key>Value</key>
             <integer>1</integer>
+        </map>
+     <key>FSEnableDiscordIntegration</key>
+        <map>
+        <key>Comment</key>
+            <string>If enabled, well allow Firestorm to connect to discord if open and share location data with. Default (false)</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
+     <key>FSMaxSharedMaturity</key>
+        <map>
+        <key>Comment</key>
+            <string>Max maturity rating to share with Discord</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>U32</string>
+        <key>Value</key>
+            <integer>13</integer>
+        </map>
+     <key>FSBlacklistedRegionNames</key>
+        <map>
+        <key>Comment</key>
+            <string>List of region names to never share with Discord</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>LLSD</string>
+        <key>Value</key>
+        <array></array>
         </map>
     </map>
 </llsd>

@@ -4032,6 +4032,17 @@ void LLSelectMgr::selectDuplicate(const LLVector3& offset, BOOL select_copy)
 		make_ui_sound("UISndInvalidOp");
 		return;
 	}
+	if (!canDuplicate())
+	{
+		LLSelectNode* node = getSelection()->getFirstRootNode(NULL, true);
+		if (node)
+		{
+			LLSD args;
+			args["OBJ_NAME"] = node->mName;
+			LLNotificationsUtil::add("NoCopyPermsNoObject", args);
+			return;
+		}
+	}
 	LLDuplicateData	data;
 
 	data.offset = offset;
@@ -6994,11 +7005,31 @@ void LLSelectMgr::pauseAssociatedAvatars()
 			
         mSelectedObjects->mSelectType = getSelectTypeForObject(object);
 
-        if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT && 
-            // <FS:Ansariel> Chalice Yao's pause agent on attachment selection
-            //isAgentAvatarValid() && object->getParent() != NULL)
-            object->getParent() != NULL)
-            // </FS:Ansariel>
+        bool is_attached = false;
+        // <FS:Ansariel> Chalice Yao's pause agent on attachment selection
+        //if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT && 
+        //    isAgentAvatarValid())
+        if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT)
+        // </FS:Ansariel>
+        {
+            // Selection can be obsolete, confirm that this is an attachment
+            LLViewerObject* parent = (LLViewerObject*)object->getParent();
+            while (parent != NULL)
+            {
+                if (parent->isAvatar())
+                {
+                    is_attached = true;
+                    break;
+                }
+                else
+                {
+                    parent = (LLViewerObject*)parent->getParent();
+                }
+            }
+        }
+
+
+        if (is_attached)
         {
             if (object->isAnimatedObject())
             {
@@ -7060,14 +7091,12 @@ void LLSelectMgr::pauseAssociatedAvatars()
                 // </FS:Ansariel>
             }
         }
-        else
+        else if (object && object->isAnimatedObject() && object->getControlAvatar())
         {
-            if (object && object->isAnimatedObject() && object->getControlAvatar())
-            {
-                // Is a non-attached animated object. Pause the control avatar.
-                mPauseRequests.push_back(object->getControlAvatar()->requestPause());
-            }
+            // Is a non-attached animated object. Pause the control avatar.
+            mPauseRequests.push_back(object->getControlAvatar()->requestPause());
         }
+
     }
 }
 

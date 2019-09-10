@@ -387,7 +387,7 @@ Solamente terreni più grandi possono essere abilitati nella ricerca.
 				Fotografia:
 			</text>
 			<texture_picker label="" name="snapshot_ctrl" tool_tip="Clicca per scegliere una immagine"/>
-			<text name="allow_label5">
+			<text name="allow_see_label">
 				Mostra Avatar nel lotto e consenti chat da altri lotti
 			</text>
 			<check_box label="Vedi avatar" name="SeeAvatarsCheck" tool_tip="Consente ad avatar in altri lotti di vedere e chattare con avatar in questo lotto e viceversa."/>
