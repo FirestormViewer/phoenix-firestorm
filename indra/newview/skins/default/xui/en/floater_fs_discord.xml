@@ -17,10 +17,10 @@
 	  value="You are connected to Discord as:" />
   <string
 	  name="discord_disconnected"
-	  value="Not connected to Discord" />
-   <string name="SocialDiscordConnecting">Connecting to Discord</string>
-   <string name="SocialDiscordErrorConnecting">Error connecting to Discord</string>
-   <string name="SocialDiscordDisconnecting">Disconnecting from Discord</string>
+	  value="Not connected to Discord." />
+   <string name="SocialDiscordConnecting">Connecting to Discord...</string>
+   <string name="SocialDiscordErrorConnecting">Problem connecting to Discord</string>
+   <string name="SocialDiscordDisconnecting">Disconnecting from Discord...</string>
 	  <text
 	   layout="topleft"
 	   length="1"
@@ -52,7 +52,7 @@
 			 right="-10"
 			 visible="true"
 			 height="23"
-			 label="Automaticly connect to Discord on login?"
+			 label="Automatically connect on login"
 			 name="startup_check"
 			 width="210">
 			  <commit_callback function="FSDiscord.Allow"/>

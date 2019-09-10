@@ -298,7 +298,7 @@ void FSFloaterDiscord::draw()
 		case FSDiscordConnect::DISCORD_CONNECTION_IN_PROGRESS:
 			// Connection loading indicator
 			mStatusText->setVisible(true);
-			status_text = LLTrans::getString("SocialDiscordConnecting");
+			status_text = getString("SocialDiscordConnecting");
 			mStatusText->setValue(status_text);
 			break;
         case FSDiscordConnect::DISCORD_CONNECTED:
@@ -307,13 +307,13 @@ void FSFloaterDiscord::draw()
         case FSDiscordConnect::DISCORD_CONNECTION_FAILED:
             // Error connecting to the service
 			mStatusText->setVisible(true);
-            status_text = LLTrans::getString("SocialDiscordErrorConnecting");
+            status_text = getString("SocialDiscordErrorConnecting");
 			mStatusText->setValue(status_text);
             break;
 		case FSDiscordConnect::DISCORD_DISCONNECTING:
 			// Disconnecting loading indicator
 			mStatusText->setVisible(true);
-			status_text = LLTrans::getString("SocialDiscordDisconnecting");
+			status_text = getString("SocialDiscordDisconnecting");
 			mStatusText->setValue(status_text);
 			break;
         }
