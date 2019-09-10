@@ -130,7 +130,7 @@
 #include "llsidepanelappearance.h"
 #include "fsavatarrenderpersistence.h"
 
-#ifdef USE_DISCORD
+#ifdef HAS_DISCORD
 #include "fsdiscordconnect.h" // <FS:LO> tapping a place that happens on landing in world to start up discord
 #endif
 
@@ -3082,7 +3082,7 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 
 					// <FS:Zi> Animation Overrider
 					AOEngine::instance().onLoginComplete();
-#ifdef USE_DISCORD
+#ifdef HAS_DISCORD
 					// <FS:LO> tapping a place that happens on landing in world to start up discord
 					FSDiscordConnect::instance().checkConnectionToDiscord(gSavedPerAccountSettings.getBOOL("FSEnableDiscordIntegration"));
 #endif

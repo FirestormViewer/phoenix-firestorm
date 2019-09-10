@@ -180,7 +180,7 @@
 #include "fsfloateravatarrendersettings.h"
 #include "fsfloatercontacts.h"
 #include "fsfloatercontactsetconfiguration.h"
-#ifdef USE_DISCORD
+#ifdef HAS_DISCORD
 #include "fsfloaterdiscord.h"
 #endif
 #include "fsfloaterexport.h"
@@ -468,7 +468,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("fs_blocklist", "floater_fs_blocklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterBlocklist>);
 	LLFloaterReg::add("fs_add_contact", "floater_fs_contact_add.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAddToContactSet>);
 	LLFloaterReg::add("fs_contact_set_config", "floater_fs_contact_set_configuration.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterContactSetConfiguration>);
-#ifdef USE_DISCORD
+#ifdef HAS_DISCORD
 	LLFloaterReg::add("fs_discord", "floater_fs_discord.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterDiscord>);
 #endif
 	LLFloaterReg::add("fs_group", "floater_fs_group.xml",&LLFloaterReg::build<FSFloaterGroup>);
