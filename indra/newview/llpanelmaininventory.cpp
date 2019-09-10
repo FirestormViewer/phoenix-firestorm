@@ -1515,7 +1515,7 @@ void LLFloaterInventoryFinder::selectAllTypes(void* user_data)
 	self->getChild<LLUICtrl>("check_script")->setValue(TRUE);
 	self->getChild<LLUICtrl>("check_sound")->setValue(TRUE);
 	self->getChild<LLUICtrl>("check_texture")->setValue(TRUE);
-    self->getChild<LLUICtrl>("check_snapshot")->setValue(TRUE);
+	self->getChild<LLUICtrl>("check_snapshot")->setValue(TRUE);
     self->getChild<LLUICtrl>("check_settings")->setValue(TRUE);
 }
 

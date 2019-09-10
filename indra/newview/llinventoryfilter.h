@@ -47,18 +47,18 @@ public:
 
 	enum EFilterType	{
 		FILTERTYPE_NONE = 0,
-		FILTERTYPE_OBJECT = 0x1 << 0,	    // normal default search-by-object-type
-		FILTERTYPE_CATEGORY = 0x1 << 1,	    // search by folder type
-		FILTERTYPE_UUID	= 0x1 << 2,		    // find the object with UUID and any links to it
-		FILTERTYPE_DATE = 0x1 << 3,		    // search by date range
-		FILTERTYPE_WEARABLE = 0x1 << 4,	    // search by wearable type
+		FILTERTYPE_OBJECT = 0x1 << 0,	// normal default search-by-object-type
+		FILTERTYPE_CATEGORY = 0x1 << 1,	// search by folder type
+		FILTERTYPE_UUID	= 0x1 << 2,		// find the object with UUID and any links to it
+		FILTERTYPE_DATE = 0x1 << 3,		// search by date range
+		FILTERTYPE_WEARABLE = 0x1 << 4,	// search by wearable type
 		FILTERTYPE_EMPTYFOLDERS = 0x1 << 5,		// pass if folder is not a system folder to be hidden if empty
         FILTERTYPE_MARKETPLACE_ACTIVE = 0x1 << 6,		// pass if folder is a marketplace active folder
         FILTERTYPE_MARKETPLACE_INACTIVE = 0x1 << 7,		// pass if folder is a marketplace inactive folder
         FILTERTYPE_MARKETPLACE_UNASSOCIATED = 0x1 << 8,	// pass if folder is a marketplace non associated (no market ID) folder
         FILTERTYPE_MARKETPLACE_LISTING_FOLDER = 0x1 << 9,	// pass iff folder is a listing folder
         FILTERTYPE_NO_MARKETPLACE_ITEMS = 0x1 << 10,         // pass iff folder is not under the marketplace
-        FILTERTYPE_WORN = 0x1 << 11,        // pass if item is worn
+        FILTERTYPE_WORN = 0x1 << 11,     // pass if item is worn
         FILTERTYPE_SETTINGS = 0x1 << 12,    // pass if the item is a settings object
 		FILTERTYPE_TRANSFERABLE = 0x1 << 13 // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 	};
@@ -138,7 +138,7 @@ public:
 				object_types("object_types", 0xffffFFFFffffFFFFULL),
 				wearable_types("wearable_types", 0xffffFFFFffffFFFFULL),
                 settings_types("settings_types", 0xffffFFFFffffFFFFULL),
-                category_types("category_types", 0xffffFFFFffffFFFFULL),
+				category_types("category_types", 0xffffFFFFffffFFFFULL),
 				links("links", FILTERLINK_INCLUDE_LINKS),
 				uuid("uuid"),
 				date_range("date_range"),
@@ -154,11 +154,11 @@ public:
 		FilterOps(const Params& = Params());
 
 		U32 			mFilterTypes;
-        U64				mFilterObjectTypes,   // For _OBJECT
-                        mFilterWearableTypes,
+		U64				mFilterObjectTypes,   // For _OBJECT
+						mFilterWearableTypes,
                         mFilterSettingsTypes, // for _SETTINGS
-                        mFilterLinks,
-                        mFilterCategoryTypes; // For _CATEGORY
+						mFilterLinks,
+						mFilterCategoryTypes; // For _CATEGORY
 		LLUUID      	mFilterUUID; 		  // for UUID
 
 		time_t			mMinDate,

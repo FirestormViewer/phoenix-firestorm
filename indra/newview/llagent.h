@@ -208,7 +208,7 @@ public:
 protected:
 	void			propagate(const F32 dt); // ! BUG ! Should roll into updateAgentPosition
 private:
-	mutable LLVector3d  mPositionGlobal;
+	mutable LLVector3d mPositionGlobal;
 
     position_signal_t   mOnPositionChanged;
     LLVector3d          mLastTestGlobal;

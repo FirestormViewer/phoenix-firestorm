@@ -422,10 +422,10 @@ bool LLInventoryFilter::checkAgainstFilterType(const LLFolderViewModelItemInvent
         LLSettingsType::type_e type = listener->getSettingsType();
         if ((object_type == LLInventoryType::IT_SETTINGS) &&
             (((0x1LL << type) & mFilterOps.mFilterSettingsTypes) == 0))
-        {
-            return FALSE;
-        }
-    }
+		{
+			return FALSE;
+		}
+	}
 
 	// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 	////////////////////////////////////////////////////////////////////////////////

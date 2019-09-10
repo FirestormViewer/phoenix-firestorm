@@ -10781,44 +10781,44 @@ class LLWorldEnvSettings : public view_listener_t
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
             LLEnvironment::instance().updateEnvironment();
             defocusEnvFloaters();
-        }
+		}
 		else if (event_name == "sunset")
 		{
             LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNSET);
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
             LLEnvironment::instance().updateEnvironment();
             defocusEnvFloaters();
-        }
+		}
 		else if (event_name == "midnight")
 		{
             LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDNIGHT);
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
             LLEnvironment::instance().updateEnvironment();
             defocusEnvFloaters();
-        }
+		}
         else if (event_name == "region")
 		{
             LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_LOCAL);
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
             LLEnvironment::instance().updateEnvironment();
             defocusEnvFloaters();
-        }
+		}
         else if (event_name == "pause_clouds")
         {
             if (LLEnvironment::instance().isCloudScrollPaused())
                 LLEnvironment::instance().resumeCloudScroll();
-            else
+		else
                 LLEnvironment::instance().pauseCloudScroll();
         }
         else if (event_name == "adjust_tool")
-        {
+		{
             LLFloaterReg::showInstance("env_adjust_snapshot");
         }
         else if (event_name == "my_environs")
         {
             LLFloaterReg::showInstance("my_environments");
-        }
-    
+		}
+
 		return true;
 	}
 };
@@ -10831,9 +10831,9 @@ class LLWorldEnableEnvSettings : public view_listener_t
 		std::string event_name = userdata.asString();
 
         if (event_name == "pause_clouds")
-        {
+		{
             return LLEnvironment::instance().isCloudScrollPaused();
-        }
+		}
 
         LLSettingsSky::ptr_t sky = LLEnvironment::instance().getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL);
 
@@ -10846,27 +10846,27 @@ class LLWorldEnableEnvSettings : public view_listener_t
         LLUUID skyid = (sky) ? sky->getAssetId() : LLUUID::null;
 
 		if (event_name == "sunrise")
-		{
+			{
             result = (skyid == LLEnvironment::KNOWN_SKY_SUNRISE);
-		}
+			}
 		else if (event_name == "noon")
-		{
+			{
             result = (skyid == LLEnvironment::KNOWN_SKY_MIDDAY);
-		}
+			}
 		else if (event_name == "sunset")
-		{
+			{
             result = (skyid == LLEnvironment::KNOWN_SKY_SUNSET);
-		}
+			}
 		else if (event_name == "midnight")
-		{
+			{
             result = (skyid == LLEnvironment::KNOWN_SKY_MIDNIGHT);
-		}
+			}
 		else if (event_name == "region")
-		{
-			return false;
-		}
-		else
-		{
+			{
+				return false;
+			}
+			else
+			{
 			LL_WARNS() << "Unknown time-of-day item:  " << event_name << LL_ENDL;
 		}
 		return result;
@@ -10886,15 +10886,15 @@ class LLWorldEnvPreset : public view_listener_t
 		else if (item == "edit_water")
 		{
             LLFloaterReg::showInstance("env_fixed_environmentent_water", "edit");
-        }
+		}
 		else if (item == "new_sky")
 		{
             LLFloaterReg::showInstance("env_fixed_environmentent_sky", "new");
-        }
+		}
 		else if (item == "edit_sky")
 		{
             LLFloaterReg::showInstance("env_fixed_environmentent_sky", "edit");
-        }
+		}
 		else if (item == "new_day_cycle")
 		{
             LLFloaterReg::showInstance("env_edit_extdaycycle", LLSDMap("edit_context", "inventory"));

@@ -177,9 +177,8 @@ const std::string& LLInventoryIcon::getIconName(LLAssetType::EType asset_type,
 			break;
 		case LLAssetType::AT_MESH:
 			idx = LLInventoryType::ICONNAME_MESH;
-            break;
+			break;
         case LLAssetType::AT_SETTINGS:
-            // TODO: distinguish between Sky and Water settings.
             idx = assignSettingsIcon(misc_flag);
             break;
 		case LLAssetType::AT_UNKNOWN:

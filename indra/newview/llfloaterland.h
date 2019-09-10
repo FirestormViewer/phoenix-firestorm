@@ -106,7 +106,7 @@ protected:
 	static void* createPanelLandAccess(void* data);
 	static void* createPanelLandExperiences(void* data);
     static void* createPanelLandEnvironment(void* data);
-    static void* createPanelLandBan(void* data);
+	static void* createPanelLandBan(void* data);
 
 
 protected:

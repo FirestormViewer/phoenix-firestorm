@@ -745,7 +745,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		stop_glerror();
 		display_update_camera();
 		stop_glerror();
-
+				
 		{
 			LL_RECORD_BLOCK_TIME(FTM_EEP_UPDATE);
             // update all the sky/atmospheric/water settings

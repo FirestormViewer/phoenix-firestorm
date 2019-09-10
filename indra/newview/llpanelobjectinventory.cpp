@@ -1283,7 +1283,6 @@ LLSettingsType::type_e LLTaskSettingsBridge::getSettingsType() const
     return LLSettingsType::ST_NONE; 
 }
 
-
 ///----------------------------------------------------------------------------
 /// LLTaskInvFVBridge impl
 //----------------------------------------------------------------------------
@@ -1365,12 +1364,12 @@ LLTaskInvFVBridge* LLTaskInvFVBridge::createObjectBridge(LLPanelObjectInventory*
 						 object_id,
 						 object_name);
 		break;
-		break;
 	case LLAssetType::AT_SETTINGS:
 		new_bridge = new LLTaskSettingsBridge(panel,
 										  object_id,
 										  object_name,
                                           itemflags);
+		break;
 	default:
 		LL_INFOS() << "Unhandled inventory type (llassetstorage.h): "
 				<< (S32)type << LL_ENDL;
