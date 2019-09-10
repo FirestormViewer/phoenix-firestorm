@@ -1794,8 +1794,10 @@ if (WINDOWS)
          )
 
 #<FS:LO> Discord rich presence
+  if( USE_DISCORD )
     LIST(APPEND viewer_HEADER_FILES fsfloaterdiscord.h fsdiscordconnect.h)
     LIST(APPEND viewer_SOURCE_FILES fsfloaterdiscord.cpp fsdiscordconnect.cpp)
+  endif()
 #</FS:LO>
 
     # precompiled header configuration
@@ -2438,8 +2440,11 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLPHYSICSEXTENSIONS_LIBRARIES}
     ${LLAPPEARANCE_LIBRARIES}
     ${GROWL_LIBRARY}
-    ${DISCORD_LIBRARY}
     )
+
+if( USE_DISCORD )
+  target_link_libraries(${VIEWER_BINARY_NAME} ${DISCORD_LIBRARY} )
+endif()
 
 if (BUGSPLAT_DB)
   target_link_libraries(${VIEWER_BINARY_NAME}
