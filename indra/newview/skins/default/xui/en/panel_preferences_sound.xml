@@ -493,10 +493,9 @@
           follows="left|top"
           layout="topleft"
           height="15"
-          left="0"
+          left="28"
           top_pad="10"
-          width="120"
-          halign="right"
+          width="90"
           name="media_autoplay_label">
         Media auto-play
       </text>
