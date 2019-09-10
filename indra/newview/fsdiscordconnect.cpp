@@ -14,7 +14,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -143,8 +143,8 @@ void FSDiscordConnect::discordDisconnectCoro()
 //
 void FSDiscordConnect::discordConnectedCoro(bool autoConnect)
 {
-    if (autoConnect)
-    {
+	if (autoConnect)
+	{
 		setConnectionState(FSDiscordConnect::DISCORD_CONNECTION_IN_PROGRESS);
 		if (!checkMarkerFile())
 		{
@@ -154,7 +154,7 @@ void FSDiscordConnect::discordConnectedCoro(bool autoConnect)
 		{
 			setConnectionState(FSDiscordConnect::DISCORD_CONNECTION_FAILED);
 		}
-    }
+	}
 
 }
 
@@ -230,8 +230,8 @@ void FSDiscordConnect::updateRichPresence()
 	discordPresence.largeImageKey = "secondlife_512";
 	discordPresence.largeImageText = "Second Life";
 	discordPresence.smallImageKey = "firestorm_512";
-	//const char* appname = std::string("via " + APP_NAME).c_str(); // No idea why this doesnt work, but discord receives random data from somewhere in the programs address space and not the text that it should
-	discordPresence.smallImageText = "via Firestorm"; // I hate to hardcode the word "Firestorm" cause of the above global, but this way works
+	std::string appName = std::string("via " + APP_NAME);
+	discordPresence.smallImageText = appName.c_str();
 
 	discordPresence.partyId = gAgent.getRegion()->getRegionID().asString().c_str();
 	discordPresence.partySize = gAgent.getRegion()->mMapAvatars.size();
@@ -258,22 +258,22 @@ FSDiscordConnect::~FSDiscordConnect()
 
 void FSDiscordConnect::connectToDiscord()
 {
-    LLCoros::instance().launch("FSDiscordConnect::discordConnectCoro",
-        boost::bind(&FSDiscordConnect::discordConnectCoro, this));
+	LLCoros::instance().launch("FSDiscordConnect::discordConnectCoro",
+		boost::bind(&FSDiscordConnect::discordConnectCoro, this));
 }
 
 void FSDiscordConnect::disconnectFromDiscord()
 {
-    setConnectionState(FSDiscordConnect::DISCORD_DISCONNECTING);
+	setConnectionState(FSDiscordConnect::DISCORD_DISCONNECTING);
 
-    LLCoros::instance().launch("FSDiscordConnect::discordDisconnectCoro",
-        boost::bind(&FSDiscordConnect::discordDisconnectCoro, this));
+	LLCoros::instance().launch("FSDiscordConnect::discordDisconnectCoro",
+		boost::bind(&FSDiscordConnect::discordDisconnectCoro, this));
 }
 
 void FSDiscordConnect::checkConnectionToDiscord(bool auto_connect)
 {
-    LLCoros::instance().launch("FSDiscordConnect::discordConnectedCoro",
-        boost::bind(&FSDiscordConnect::discordConnectedCoro, this, auto_connect));
+	LLCoros::instance().launch("FSDiscordConnect::discordConnectedCoro",
+		boost::bind(&FSDiscordConnect::discordConnectedCoro, this, auto_connect));
 }
 
 bool FSDiscordConnect::Tick(const LLSD&)
