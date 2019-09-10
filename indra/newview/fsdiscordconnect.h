@@ -93,6 +93,7 @@ private:
 	void clearMarkerFile();
 
 	std::string mMarkerFilename;
+	time_t mConnectTime;
 };
 
 #endif // FS_FSDISCORDCONNECT_H

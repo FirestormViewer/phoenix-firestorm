@@ -76,7 +76,6 @@ bool FSDiscordConnect::checkMarkerFile()
 
 void FSDiscordConnect::setMarkerFile()
 {
-	//LLFile file = LLFile::fopen(mMarkerFilename, "w");
 	if (!checkMarkerFile())
 	{
 		return; // dont over-write another instances file
@@ -162,7 +161,7 @@ bool isRegionVisible(LLViewerRegion* region)
 {
 	U8 rating = region->getSimAccess();
 	bool visible = true;
-	if (!(rating <= gSavedPerAccountSettings.getU32("FSMaxSharedMaturity")))
+	if (rating > gSavedPerAccountSettings.getU32("FSMaxSharedMaturity"))
 	{
 		visible = false;
 	}
@@ -198,7 +197,7 @@ void FSDiscordConnect::updateRichPresence()
 		region_name += " ";
 		LLVector3 pos = gAgent.getPositionAgent();
 
-		region_name += llformat("(%.0f, %.0f, %.0f)", pos.mV[0], pos.mV[1], pos.mV[2]);
+		region_name += llformat("(%.0f, %.0f, %.0f)", pos.mV[VX], pos.mV[VY], pos.mV[VZ]);
 	}
 	else
 	{
@@ -226,6 +225,7 @@ void FSDiscordConnect::updateRichPresence()
 		name = RlvStrings::getAnonym(av_name);
 	}
 	discordPresence.details = name.c_str();
+	discordPresence.startTimestamp = mConnectTime;
 
 	discordPresence.largeImageKey = "secondlife_512";
 	discordPresence.largeImageText = "Second Life";
@@ -308,6 +308,7 @@ void FSDiscordConnect::setConnectionState(FSDiscordConnect::EConnectionState con
 	{
 		setMarkerFile();
 		setConnected(true);
+		mConnectTime = time_corrected();
 	}
 	else if(connection_state == DISCORD_NOT_CONNECTED)
 	{
