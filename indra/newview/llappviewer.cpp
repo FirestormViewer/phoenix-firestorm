@@ -68,6 +68,7 @@
 #include "llviewerwindow.h"
 #include "llviewerdisplay.h"
 #include "llviewermedia.h"
+#include "llviewerparcelaskplay.h"
 #include "llviewerparcelmedia.h"
 #include "llviewermediafocus.h"
 #include "llviewermessage.h"
@@ -2302,6 +2303,11 @@ bool LLAppViewer::cleanup()
 		gSavedPerAccountSettings.saveToFile(per_account_settings_file, TRUE);
 		LL_INFOS() << "Second time: Saved per-account settings to " <<
 		        per_account_settings_file << LL_ENDL;
+
+		if (LLViewerParcelAskPlay::instanceExists())
+		{
+			LLViewerParcelAskPlay::getInstance()->saveSettings();
+		}
 	}
 	// <FS:Zi> Backup Settings
 	}

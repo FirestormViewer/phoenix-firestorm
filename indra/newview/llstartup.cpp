@@ -166,6 +166,7 @@
 #include "llviewermessage.h"
 #include "llviewernetwork.h"
 #include "llviewerobjectlist.h"
+#include "llviewerparcelaskplay.h"
 #include "llviewerparcelmedia.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
@@ -2106,6 +2107,11 @@ bool idle_startup()
 		//LLFloaterIMContainer::getInstance();
 		FSFloaterIMContainer* floater_imcontainer = FSFloaterIMContainer::getInstance();
 		floater_imcontainer->initTabs();
+
+		if (gSavedSettings.getS32("ParcelMediaAutoPlayEnable") == 2)
+		{
+			LLViewerParcelAskPlay::getInstance()->loadSettings();
+		}
 
 		// <FS:ND> FIRE-3066: Force creation or FSFLoaterContacts here, this way it will register with LLAvatarTracker early enough.
 		// Otherwise it is only create if isChatMultriTab() == true and LLIMFloaterContainer::getInstance is called

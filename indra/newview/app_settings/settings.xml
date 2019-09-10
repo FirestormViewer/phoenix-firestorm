@@ -10199,11 +10199,11 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ParcelMediaAutoPlayEnable</key>
     <map>
       <key>Comment</key>
-      <string>Auto play parcel media when available</string>
+      <string>Auto play parcel media when available. 0 - Do not autoplay; 1- Autoplay; (2 - Ask; not supported)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>Boolean</string>
+      <string>S32</string>
       <key>Value</key>
       <integer>0</integer>
     </map>
