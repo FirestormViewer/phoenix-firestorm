@@ -230,7 +230,7 @@ void FSDiscordConnect::updateRichPresence()
 	discordPresence.largeImageKey = "secondlife_512";
 	discordPresence.largeImageText = "Second Life";
 	discordPresence.smallImageKey = "firestorm_512";
-	std::string appName = LLTrans::getString("FSDiscordAppName");
+	std::string appName = std::string("via " + APP_NAME);
 	discordPresence.smallImageText = appName.c_str();
 
 	discordPresence.partyId = gAgent.getRegion()->getRegionID().asString().c_str();
