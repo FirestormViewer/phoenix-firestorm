@@ -119,7 +119,6 @@
 	<menu_item_call label="Ausziehen" name="Take Off"/>
 	<menu_item_call label="Nur auf mich anwenden" name="Settings Apply Local"/>
 	<menu_item_call label="Auf Parzelle anwenden" name="Settings Apply Parcel"/>
-	<menu_item_call label="Auf Region anwenden" name="Settings Apply Region"/>
 	<menu_item_call label="In Marktplatz-Auflistungen kopieren" name="Marketplace Copy"/>
 	<menu_item_call label="In Marktplatz-Auflistungen verschieben" name="Marketplace Move"/>
 	<menu_item_call label="--keine Optionen--" name="--no options--"/>

@@ -207,6 +207,6 @@ LLInventoryType::EIconName LLInventoryIcon::assignWearableIcon(U32 misc_flag)
 
 LLInventoryType::EIconName LLInventoryIcon::assignSettingsIcon(U32 misc_flag)
 {
-    LLSettingsType::type_e settings_type = LLSettingsType::fromInventoryFlags(misc_flag);
-    return LLSettingsType::getIconName(settings_type);
+	LLSettingsType::type_e settings_type = LLSettingsType::fromInventoryFlags(misc_flag);
+	return LLSettingsType::getIconName(settings_type);
 }

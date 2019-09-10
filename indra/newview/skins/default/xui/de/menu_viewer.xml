@@ -118,6 +118,7 @@
 			<menu_item_check label="Mitternacht" name="Midnight"/>
 			<menu_item_check label="Gemeinsame Umgebung verwenden" name="Use Shared Environment"/>
 			<menu_item_call label="Meine Umgebungen..." name="my_environs"/>
+			<menu_item_call label="Persönliche Beleuchtung..." name="adjustment_tool"/>
 			<menu_item_check label="Wolken pausieren" name="pause_clouds"/>
 		</menu>
 		<menu label="Foto und Video" name="photo_and_video">
@@ -461,6 +462,9 @@
 			<menu_item_check label="Automatische Alpha-Masken (nicht aufgeschoben)" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="Animationstexturen" name="Animation Textures"/>
 			<menu_item_check label="Texturen deaktivieren" name="Disable Textures"/>
+			<menu_item_check label="Umgebung deaktivieren" name="Disable Ambient"/>
+			<menu_item_check label="Sonnenlicht deaktivieren" name="Disable Sunlight"/>
+			<menu_item_check label="Lokale Lichtquellen deaktivieren" name="Disable Local Lights"/>
 			<menu_item_call label="Animesh nicht anzeigen" name="Derender Animesh"/>
 			<menu_item_check label="Texturen in Vollauflösung (gefährlich)" name="Full Res Textures"/>
 			<menu_item_check label="Angehängte Lichter rendern" name="Render Attached Lights"/>

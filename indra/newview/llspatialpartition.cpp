@@ -1100,6 +1100,11 @@ public:
 
 	virtual bool earlyFail(LLViewerOctreeGroup* base_group)
 	{
+        if (LLPipeline::sReflectionRender)
+        {
+            return false;
+        }
+
 		LLSpatialGroup* group = (LLSpatialGroup*)base_group;
 		group->checkOcclusion();
 

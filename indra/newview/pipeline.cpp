@@ -123,6 +123,7 @@
 #include "llenvironment.h"
 
 #include "llenvironment.h"
+#include "llsettingsvo.h"
 
 #ifdef _DEBUG
 // Debug indices is disabled for now for debug performance - djs 4/24/02
@@ -2514,11 +2515,7 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
 
 	sCull->clear();
 
-	bool to_texture =	LLPipeline::sUseOcclusion > 1 &&
-						!hasRenderType(LLPipeline::RENDER_TYPE_HUD) && 
-						LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD &&
-						gPipeline.canUseVertexShaders() &&
-						sRenderGlow;
+	bool to_texture = LLPipeline::sUseOcclusion > 1 && gPipeline.canUseVertexShaders();
 
 	if (to_texture)
 	{
@@ -2568,7 +2565,10 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
         mCubeVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
     }
     
-    camera.disableUserClipPlane();
+    if (!sReflectionRender)
+    {
+        camera.disableUserClipPlane();
+    }
 
     for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin(); 
             iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
@@ -2592,6 +2592,7 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
         if(vo_part)
         {
             bool do_occlusion_cull = can_use_occlusion && use_occlusion && !gUseWireframe && 0 > water_clip /* && !gViewerWindow->getProgressView()->getVisible()*/;
+            do_occlusion_cull &= !sReflectionRender;
             vo_part->cull(camera, do_occlusion_cull);
         }
     }
@@ -2631,18 +2632,12 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
         sCull->pushDrawable(gSky.mVOWLSkyp->mDrawable);
     }
 
-// not currently enabled as it causes reflection/distortion map
-// rendering to occur every frame instead of periodically for visible near water
-#if PRECULL_WATER_OBJECTS
     bool render_water = !sReflectionRender && (hasRenderType(LLPipeline::RENDER_TYPE_WATER) || hasRenderType(LLPipeline::RENDER_TYPE_VOIDWATER));
 
     if (render_water)
     {
         LLWorld::getInstance()->precullWaterObjects(camera, sCull, render_water);
     }
-#endif
-
-	
 	
 	gGL.matrixMode(LLRender::MM_PROJECTION);
 	gGL.popMatrix();
@@ -8615,21 +8610,19 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
     shader.uniform1f(LLShaderMgr::DEFERRED_DEPTH_CUTOFF, RenderEdgeDepthCutoff);
     shader.uniform1f(LLShaderMgr::DEFERRED_NORM_CUTOFF, RenderEdgeNormCutoff);
     
-    shader.uniform4fv(LLShaderMgr::SUNLIGHT_COLOR, 1, mSunDiffuse.mV);
-    shader.uniform4fv(LLShaderMgr::MOONLIGHT_COLOR, 1, mMoonDiffuse.mV);
-    
-
-    LLEnvironment& environment = LLEnvironment::instance();
-    LLColor4 ambient(environment.getCurrentSky()->getTotalAmbient());
-    shader.uniform4fv(LLShaderMgr::AMBIENT, 1, ambient.mV);
-    shader.uniform1i(LLShaderMgr::SUN_UP_FACTOR, environment.getIsSunUp() ? 1 : 0);
-    shader.uniform1f(LLShaderMgr::SUN_MOON_GLOW_FACTOR, environment.getCurrentSky()->getSunMoonGlowFactor());
-
     if (shader.getUniformLocation(LLShaderMgr::DEFERRED_NORM_MATRIX) >= 0)
     {
         glh::matrix4f norm_mat = get_current_modelview().inverse().transpose();
         shader.uniformMatrix4fv(LLShaderMgr::DEFERRED_NORM_MATRIX, 1, FALSE, norm_mat.m);
     }
+
+    shader.uniform4fv(LLShaderMgr::SUNLIGHT_COLOR, 1, mSunDiffuse.mV);
+    shader.uniform4fv(LLShaderMgr::MOONLIGHT_COLOR, 1, mMoonDiffuse.mV);
+
+    LLEnvironment& environment = LLEnvironment::instance();
+    LLSettingsSky::ptr_t sky = environment.getCurrentSky();
+
+    static_cast<LLSettingsVOSky*>(sky.get())->updateShader(&shader);
 }
 
 LLColor3 pow3f(LLColor3 v, F32 f)
@@ -9495,7 +9488,7 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
         S32 detail = RenderReflectionDetail;
 
         F32 water_height      = gAgent.getRegion()->getWaterHeight(); 
-        F32 camera_height     = camera_in.getOrigin().mV[2];
+        F32 camera_height     = camera_in.getOrigin().mV[VZ];
         F32 distance_to_water = (water_height < camera_height) ? (camera_height - water_height) : (water_height - camera_height);
 
         LLVector3 reflection_offset      = LLVector3(0, 0, distance_to_water * 2.0f);
@@ -9530,7 +9523,7 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
 
         glh::matrix4f current = get_current_modelview();
 
-        if (!LLViewerCamera::getInstance()->cameraUnderWater())
+        if (!camera_is_underwater)
         {   //generate planar reflection map
             
             LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WATER0;
@@ -9639,8 +9632,6 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
                                 LLPipeline::RENDER_TYPE_GROUND,
                                 END_RENDER_TYPES);  
             
-            bool camera_is_underwater = LLViewerCamera::getInstance()->cameraUnderWater();
-
             // intentionally inverted so that distortion map contents (objects under the water when we're above it)
             // will properly include water fog effects
             LLPipeline::sUnderWaterRender = !camera_is_underwater;
@@ -9689,14 +9680,6 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
                 if (camera_is_underwater)
                 {
                     clip_plane.disable();
-                }
-
-                // SL-11370 prevent Low/Low-Mid graphics from rendering distortion map contents it should not
-                if (!canUseWindLightShaders())
-                {
-                    clearRenderTypeMask(LLPipeline::RENDER_TYPE_PARTICLES, END_RENDER_TYPES);
-                    clearRenderTypeMask(LLPipeline::RENDER_TYPE_AVATAR, END_RENDER_TYPES);
-                    clearRenderTypeMask(LLPipeline::RENDER_TYPE_VOLUME, END_RENDER_TYPES);
                 }
 
                 updateCull(camera, mRefractedObjects, water_clip, &plane);
