@@ -114,6 +114,7 @@
 		<panel label="Erweitert" name="area_search_advanced_panel">
 			<check_box name="double_click_touch" label="Doppelklick berührt Objekt"/>
 			<check_box name="double_click_buy" label="Doppelklick kauft Objekt"/>
+			<check_box name="double_click_sit" label="Doppelklick sitzt auf Objekt"/>
 		</panel>
 	</tab_container>
 </floater>
