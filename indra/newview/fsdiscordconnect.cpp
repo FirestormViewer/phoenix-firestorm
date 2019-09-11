@@ -80,7 +80,7 @@ void FSDiscordConnect::setMarkerFile()
 	{
 		return; // dont over-write another instances file
 	}
-	llofstream file = llofstream(mMarkerFilename.c_str());
+	llofstream file(mMarkerFilename.c_str());
 	file << gAgentID << std::endl;
 	file.close();
 }
