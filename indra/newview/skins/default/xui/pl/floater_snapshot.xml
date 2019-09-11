@@ -6,9 +6,6 @@
 	<string name="postcard_progress_str">
 		Wysyłanie maila
 	</string>
-	<string name="facebook_progress_str">
-		Wysyłanie na Facebooka
-	</string>
 	<string name="profile_progress_str">
 		Wysyłanie
 	</string>
@@ -17,9 +14,6 @@
 	</string>
 	<string name="local_progress_str">
 		Zapisywanie na komputer
-	</string>
-	<string name="facebook_succeeded_str">
-		Obraz załadowany
 	</string>
 	<string name="profile_succeeded_str">
 		Obraz załadowany
@@ -32,9 +26,6 @@
 	</string>
 	<string name="local_succeeded_str">
 		Zapisano na dysku!
-	</string>
-	<string name="facebook_failed_str">
-		Publikacja nie powiodła się.
 	</string>
 	<string name="profile_failed_str">
 		Publikacja nie powiodła się.

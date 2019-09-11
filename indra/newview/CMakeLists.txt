@@ -60,6 +60,7 @@ include(URIPARSER)
 include(Growl)
 include(ColladaDom)
 include(jemalloc)
+include(Discord)
 
 # <FS:ND> if using ndPhysicsstub this variable will be unset, we don't need to build any stub code viewer side in that case
 if( LLPHYSICSEXTENSIONS_SRC_DIR )
@@ -1686,6 +1687,13 @@ if (DARWIN)
          )
 # [FS]
 
+#<FS:LO> Discord rich presence
+  if( USE_DISCORD )
+    LIST(APPEND viewer_HEADER_FILES fsfloaterdiscord.h fsdiscordconnect.h)
+    LIST(APPEND viewer_SOURCE_FILES fsfloaterdiscord.cpp fsdiscordconnect.cpp)
+  endif()
+#</FS:LO>
+
   find_library(AGL_LIBRARY AGL)
   find_library(APPKIT_LIBRARY AppKit)
   find_library(COCOA_LIBRARY Cocoa)
@@ -1745,6 +1753,13 @@ if (LINUX)
     LIST(APPEND viewer_SOURCE_FILES desktopnotifierlinux.cpp growlmanager.cpp)
 # [FS] Growl support
 
+#<FS:LO> Discord rich presence
+  if( USE_DISCORD )
+    LIST(APPEND viewer_HEADER_FILES fsfloaterdiscord.h fsdiscordconnect.h)
+    LIST(APPEND viewer_SOURCE_FILES fsfloaterdiscord.cpp fsdiscordconnect.cpp)
+  endif()
+#</FS:LO>
+
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
 
     set(viewer_LIBRARIES
@@ -1787,6 +1802,13 @@ if (WINDOWS)
          growlnotifierwin.h
 # [FS]
          )
+
+#<FS:LO> Discord rich presence
+  if( USE_DISCORD )
+    LIST(APPEND viewer_HEADER_FILES fsfloaterdiscord.h fsdiscordconnect.h)
+    LIST(APPEND viewer_SOURCE_FILES fsfloaterdiscord.cpp fsdiscordconnect.cpp)
+  endif()
+#</FS:LO>
 
     # precompiled header configuration
     # llviewerprecompiledheaders.cpp generates
@@ -2429,6 +2451,10 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLAPPEARANCE_LIBRARIES}
     ${GROWL_LIBRARY}
     )
+
+if( USE_DISCORD )
+  target_link_libraries(${VIEWER_BINARY_NAME} ${DISCORD_LIBRARY} )
+endif()
 
 if (BUGSPLAT_DB)
   target_link_libraries(${VIEWER_BINARY_NAME}

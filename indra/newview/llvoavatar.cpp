@@ -130,6 +130,10 @@
 #include "llsidepanelappearance.h"
 #include "fsavatarrenderpersistence.h"
 
+#ifdef HAS_DISCORD
+#include "fsdiscordconnect.h" // <FS:LO> tapping a place that happens on landing in world to start up discord
+#endif
+
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
 extern F32 ANIM_SPEED_MAX;
@@ -3079,6 +3083,10 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 
 					// <FS:Zi> Animation Overrider
 					AOEngine::instance().onLoginComplete();
+#ifdef HAS_DISCORD
+					// <FS:LO> tapping a place that happens on landing in world to start up discord
+					FSDiscordConnect::instance().checkConnectionToDiscord(gSavedPerAccountSettings.getBOOL("FSEnableDiscordIntegration"));
+#endif
 				}
 				else
 				{
