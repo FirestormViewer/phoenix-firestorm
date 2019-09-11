@@ -355,9 +355,7 @@ bool HttpLibcurl::completeRequest(CURLM * multi_handle, CURL * handle, CURLcode 
 	}
     if (op->mStatus)
     {
-		//<FS:TS> The cURL library doc specifies that you need to pass
-		// a pointer to a long, not a pointer to an int, here.
-		//int http_status(HTTP_OK);
+        // note: CURLINFO_RESPONSE_CODE requires a long - https://curl.haxx.se/libcurl/c/CURLINFO_RESPONSE_CODE.html
         long http_status(HTTP_OK);
 
         if (handle)

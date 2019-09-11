@@ -175,6 +175,7 @@
              layout="topleft"
              left="10"
              name="Description:"
+             spellcheck="true"
              width="100">
                 Description:
             </text>
@@ -1298,6 +1299,7 @@ Only large parcels can be listed in search.
              top_delta="4"
              left_delta="100"
              name="edit objects check"
+             tool_tip="If checked, Residents can create and rez objects on your land."
              width="130" />
             <check_box
              follows="right|top"
@@ -1306,6 +1308,7 @@ Only large parcels can be listed in search.
              layout="topleft"
              left_pad="2"
              name="edit group objects check"
+             tool_tip="If checked, parcel group members can create and rez objects on your land."
              width="70" />
             <text
              type="string"
@@ -1324,6 +1327,7 @@ Only large parcels can be listed in search.
              label="Everyone"
              layout="topleft"
              name="all object entry check"
+             tool_tip="If checked, Residents can move existing objects from other parcels onto this parcel."
              top_delta="4"
              left_delta="100"
              width="130" />
@@ -1334,6 +1338,7 @@ Only large parcels can be listed in search.
              layout="topleft"
              left_pad="2"
              name="group object entry check"
+             tool_tip="If checked, parcel group members can move existing objects from other parcels onto this parcel."
              top_delta="0"
              width="70" />
             <text
@@ -1353,6 +1358,7 @@ Only large parcels can be listed in search.
              label="Everyone"
              layout="topleft"
              name="check other scripts"
+             tool_tip="If checked, Residents can run scripts on your parcel, including attachments."
              top_delta="4"
              left_delta="100"
              width="130" />
@@ -1363,6 +1369,7 @@ Only large parcels can be listed in search.
              layout="topleft"
              left_pad="2"
              name="check group scripts"
+             tool_tip="If checked, parcel group members can run scripts on your parcel, including attachments."
              top_delta="0"
              width="70" />
             <check_box
@@ -1465,11 +1472,12 @@ Only large parcels can be listed in search.
              type="string"
              length="1"
              follows="left|right|top"
+             text_readonly_color="LabelDisabledColor"
              height="14"
              layout="topleft"
              top_pad="15"
              left="10"
-             name="allow_label5"
+             name="allow_see_label"
              right="-10"
              word_wrap="true">
               Avatars on other parcels can:

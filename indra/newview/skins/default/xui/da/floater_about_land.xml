@@ -379,7 +379,7 @@ Kun større parceller kan vises i søgning.
 				Foto:
 			</text>
 			<texture_picker label="" name="snapshot_ctrl" tool_tip="Klik for at vælge et billede"/>
-      <text name="allow_label5">
+      <text name="allow_see_label">
         Tillad beboere på andre parceller til:
       </text>
       <check_box label="Se avatarer" name="SeeAvatarsCheck" tool_tip="Giver mulighed for beboere på andre parceller at se og chatte med beboere på denne parcel, og du kan se og chatte med dem." />

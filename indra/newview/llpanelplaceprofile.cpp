@@ -581,20 +581,8 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
 			mSaleToText->setText(getString("anyone"));
 		}
 
-		// <FS:ND> getString returns a temporary, taking the c_str will point to a location that is destroyed.
-		
-		// const U8* sign = (U8*)getString("price_text").c_str();
-		// const U8* sqm = (U8*)getString("area_text").c_str();
-
-		std::string ssign = getString("price_text");
-		std::string ssqm = getString("area_text");
-		const U8* sign = (U8*)ssign.c_str();
-		const U8* sqm = (U8*)ssqm.c_str();
-
-		// </FS:ND>
-		
-		mSalesPriceText->setText(llformat("%s%d ", sign, parcel->getSalePrice()));
-		mAreaText->setText(llformat("%d %s", area, sqm));
+		mSalesPriceText->setText(llformat("%s%d ", getString("price_text").c_str(), parcel->getSalePrice()));
+		mAreaText->setText(llformat("%d %s", area, getString("area_text").c_str()));
 		mTrafficText->setText(llformat("%.0f", dwell));
 
 		// Can't have more than region max tasks, regardless of parcel
@@ -602,10 +590,7 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
 		S32 primitives = llmin(ll_round(parcel->getMaxPrimCapacity() * parcel->getParcelPrimBonus()),
 							   (S32)region->getMaxTasks());
 
-		std::string available = getString("available");
-		std::string allocated = getString("allocated");
-
-		mPrimitivesText->setText(llformat("%d %s, %d %s", primitives, available.c_str(), parcel->getPrimCount(), allocated.c_str() ));
+		mPrimitivesText->setText(llformat("%d %s, %d %s", primitives, getString("available").c_str(), parcel->getPrimCount(), getString("allocated").c_str()));
 
 		if (parcel->getAllowOtherScripts())
 		{

@@ -111,8 +111,9 @@
 			<check_box name="show_last_owner" label="Ostatni właściciel"/>
 		</panel>
 		<panel label="Zaawansowane" name="area_search_advanced_panel">
-			<check_box name="double_click_touch" label="Podwójny klik myszką Dotyka obiekt"/>
-			<check_box name="double_click_buy" label="Podwójny klik myszką Kupuje obiekt"/>
+			<check_box name="double_click_touch" label="Podwójny klik myszką dotyka obiekt"/>
+			<check_box name="double_click_buy" label="Podwójny klik myszką kupuje obiekt"/>
+			<check_box name="double_click_sit" label="Podwójny klik myszką sadza na obiekcie"/>
 		</panel>
 	</tab_container>
 </floater>

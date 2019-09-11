@@ -71,8 +71,6 @@ public:
 	/*virtual*/ bool hasAccelerators() const { return true; }
 	// </FS:Ansariel>
 
-    bool mTryToConnectToFacebook;
-
 // [RLVa:KB] - Checked: RLVa-1.2.0
 	LLAvatarList* getNearbyList() { return mNearbyList; }
 	void          updateNearbyList();
@@ -101,10 +99,8 @@ private:
 	// methods indirectly called by the updaters
 	void					updateFriendListHelpText();
 	void					updateFriendList();
-	bool					updateSuggestedFriendList();
 //	void					updateNearbyList();
 	void					updateRecentList();
-	void					updateFacebookList(bool visible);
 
 	bool					isItemsFreeOfFriends(const uuid_vec_t& uuids);
 
@@ -152,8 +148,6 @@ private:
 
 	void					onFriendListRefreshComplete(LLUICtrl*ctrl, const LLSD& param);
 
-	bool					onConnectedToFacebook(const LLSD& data);
-
 	void					setAccordionCollapsedByUser(LLUICtrl* acc_tab, bool collapsed);
 	void					setAccordionCollapsedByUser(const std::string& name, bool collapsed);
 	bool					isAccordionCollapsedByUser(LLUICtrl* acc_tab);
@@ -162,7 +156,6 @@ private:
 	LLTabContainer*			mTabContainer;
 	LLAvatarList*			mOnlineFriendList;
 	LLAvatarList*			mAllFriendList;
-	LLAvatarList*			mSuggestedFriends;
 	LLAvatarList*			mNearbyList;
 	LLAvatarList*			mContactSetList;	// [FS:CR] Contact sets
 	// <FS:Ansariel> Firestorm radar

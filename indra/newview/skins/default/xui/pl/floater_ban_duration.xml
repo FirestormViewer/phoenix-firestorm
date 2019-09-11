@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="ban_duration" title="Czas trwania bana" width="220">
-	<text name="duration_textbox" width="110">
+<floater name="ban_duration" title="Czas trwania bana">
+	<text name="duration_textbox">
 		Czas trwania bana:
 	</text>
 	<radio_group name="ban_duration_radio">

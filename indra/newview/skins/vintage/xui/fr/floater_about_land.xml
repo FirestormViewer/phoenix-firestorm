@@ -388,7 +388,7 @@ Seules les parcelles de grande taille peuvent apparaître dans la recherche.
 				Photo :
 			</text>
 			<texture_picker label="" name="snapshot_ctrl" tool_tip="Cliquez pour sélectionner une image"/>
-			<text top_pad="5" name="allow_label5">
+			<text top_pad="5" name="allow_see_label">
 				Les avatars présents sur d&apos;autres parcelles peuvent voir et chatter avec les avatars présents sur cette parcelle.
 			</text>
 			<check_box top_pad="17" label="Voir les avatars" name="SeeAvatarsCheck" tool_tip="Permettre aux avatars présents sur d&apos;autres parcelles de voir et chatter avec les avatars présents sur cette parcelle et à vous de les voir et de chatter avec eux."/>

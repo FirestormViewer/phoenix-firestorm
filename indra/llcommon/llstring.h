@@ -1744,7 +1744,8 @@ bool LLStringUtilBase<T>::startsWith(
 	const string_type& substr)
 {
 	if(string.empty() || (substr.empty())) return false;
-	if(0 == string.find(substr)) return true;
+	if (substr.length() > string.length()) return false;
+	if (0 == string.compare(0, substr.length(), substr)) return true;
 	return false;
 }
 
@@ -1755,9 +1756,11 @@ bool LLStringUtilBase<T>::endsWith(
 	const string_type& substr)
 {
 	if(string.empty() || (substr.empty())) return false;
-	std::string::size_type idx = string.rfind(substr);
-	if(std::string::npos == idx) return false;
-	return (idx == (string.size() - substr.size()));
+	size_t sub_len = substr.length();
+	size_t str_len = string.length();
+	if (sub_len > str_len) return false;
+	if (0 == string.compare(str_len - sub_len, sub_len, substr)) return true;
+	return false;
 }
 
 // static
