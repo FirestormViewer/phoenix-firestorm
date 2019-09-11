@@ -296,6 +296,7 @@ private:
 	void onDoubleClick();
 	void onClickRefresh();
 	void buyObject(FSObjectProperties& details, LLViewerObject* objectp);
+	void sitOnObject(FSObjectProperties& details, LLViewerObject* objectp);
 	void onCommitCheckboxBeacons();
 
 	bool onContextMenuItemClick(const LLSD& userdata);
@@ -435,6 +436,7 @@ public:
 
 	LLCheckBoxCtrl* mCheckboxClickTouch;
 	LLCheckBoxCtrl* mCheckboxClickBuy;
+	LLCheckBoxCtrl* mCheckboxClickSit;
 
 private:
 	FSAreaSearch* mFSAreaSearch;

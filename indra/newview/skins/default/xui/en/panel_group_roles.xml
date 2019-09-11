@@ -248,6 +248,15 @@ including the Everyone and Owner Roles.
              layout="topleft" />
 
             <button
+             follows="bottom|left"
+             height="23"
+             label="Copy Role"
+             layout="topleft"
+             left_pad="4"
+             name="role_copy"
+             width="100" />
+
+            <button
              name="role_delete"
              label="Delete Role"
              left_pad="4"

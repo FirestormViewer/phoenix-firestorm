@@ -237,6 +237,58 @@
           </map>
         </map>
       </map>
+      <key>discord-rpc</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright 2019 Discord, Inc.</string>
+        <key>description</key>
+        <string>C++ library to interface with Discord's API</string>
+        <key>license</key>
+        <string>MIT</string>
+        <key>license_file</key>
+        <string>LICENSES/discord-rpc.txt</string>
+        <key>name</key>
+        <string>discord-rpc</string>
+        <key>platforms</key>
+        <map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>b760b4f3ab7794a897cf7f464d92e587</string>
+              <key>url</key>
+              <uri>http://downloads.phoenixviewer.com/discord_rpc-3.4.0-windows-192510505.tar.bz2</uri>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>cefa1cdb50a85e36114ca89df66c0b5a</string>
+              <key>url</key>
+              <uri>http://downloads.phoenixviewer.com/discord_rpc-3.4.0-linux64-192540843.tar.bz2</uri>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>3bc297a0fa47094bb52d361f80186387</string>
+              <key>url</key>
+              <uri>http://downloads.phoenixviewer.com/discord_rpc-3.4.0-darwin64-192522358.tar.bz2</uri>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+        </map>
+      </map>
       <key>SDL</key>
       <map>
         <key>copyright</key>
@@ -1006,11 +1058,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>46c6881c26c05d9ab0c2b3bb7c4697f8</string>
+              <string>0fcdc89c60271eda1fb37879b0c4a373</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.00.01-darwin-191591326.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.00.03-darwin-192401637.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1020,11 +1072,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9111641e2b915c64529ed9624c1e9eb7</string>
+              <string>09f22b6a3ac41739073418bb6b8544d6</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.00.01-linux64-191601723.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.00.03-linux64-192401637.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

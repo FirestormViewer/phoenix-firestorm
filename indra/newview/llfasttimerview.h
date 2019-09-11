@@ -33,6 +33,8 @@
 #include "lltracerecording.h"
 #include <deque>
 
+class LLScrollbar;
+
 class LLFastTimerView : public LLFloater
 {
 public:
@@ -145,10 +147,7 @@ private:
 	LLFrameTimer					mHighlightTimer;
 	LLTrace::PeriodicRecording		mRecording;
 
-	// <FS:LO> Making the ledgend part of fast timers scrollable
-	bool mOverLegend;
-	S32 mScrollOffset;
-	// </FS:LO>
+	LLScrollbar* 					mScrollBar;
 };
 
 #endif

@@ -62,15 +62,13 @@ public:
 private:
 	LLFontManager();
 	~LLFontManager();
-
 // <FS:ND> FIRE-7570. Only load/mmap fonts once.
 public:
 	U8 const *loadFont( std::string const &aFilename, long &a_Size );
-	void unloadFont( std::string const &aFilename );
 
 private:
 	void unloadAllFonts();
-	std::map< std::string, nd::fonts::LoadedFont* > m_LoadedFonts;
+	std::map< std::string, std::shared_ptr<nd::fonts::LoadedFont> > m_LoadedFonts;
 // </FS:ND>
 };
 
@@ -104,7 +102,14 @@ public:
 
 	// is_fallback should be true for fallback fonts that aren't used
 	// to render directly (Unicode backup, primarily)
-	BOOL loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 components, BOOL is_fallback);
+	BOOL loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 components, BOOL is_fallback, S32 face_n = 0);
+
+	S32 getNumFaces(const std::string& filename);
+
+#ifdef LL_WINDOWS
+	S32 ftOpenFace(const std::string& filename, S32 face_n);
+	void clearFontStreams();
+#endif
 
 	typedef std::vector<LLPointer<LLFontFreetype> > font_vector_t;
 
