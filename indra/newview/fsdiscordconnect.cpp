@@ -44,7 +44,7 @@
 
 #include "llfloaterreg.h"
 
-#include "discord-rpc\discord_rpc.h"
+#include "discord-rpc/discord_rpc.h"
 
 #include "boost/algorithm/string/case_conv.hpp"
 
