@@ -1419,6 +1419,11 @@ void FSPanelAreaSearchList::onDoubleClick()
 		{
 			touchObject(objectp);
 		}
+
+		if (mFSAreaSearch->getPanelAdvanced()->mCheckboxClickSit->get())
+		{
+			sitOnObject(details, objectp);
+		}
 	}
 }
 
@@ -1697,6 +1702,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 
 	case 'b': // buy
 	case 'p': // p_teleport
+	case 'u': // sit
 	case 'q': // q_zoom
 	{
 		if (mResultList->getNumSelected() == 1)
@@ -1712,6 +1718,9 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 					break;
 				case 'p': // p_teleport
 					gAgent.teleportViaLocation(objectp->getPositionGlobal());
+					break;
+				case 'u': // sit
+					sitOnObject(mFSAreaSearch->mObjectDetails[object_id], objectp);
 					break;
 				case 'q': // q_zoom
 				{
@@ -1932,6 +1941,32 @@ void FSPanelAreaSearchList::buyObject(FSObjectProperties& details, LLViewerObjec
 	{
 		LL_WARNS("FSAreaSearch") << "No LLSelectNode node" << LL_ENDL;
 	}
+}
+
+void FSPanelAreaSearchList::sitOnObject(FSObjectProperties& details, LLViewerObject* objectp)
+{
+	if ( (!RlvActions::isRlvEnabled()) || (RlvActions::canSit(objectp)) )
+	{
+        LLSelectMgr::getInstance()->deselectAll();
+        LLSelectMgr::getInstance()->selectObjectAndFamily(objectp);
+        LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->findNode(objectp);
+        if (node)
+        {
+            gMessageSystem->newMessageFast(_PREHASH_AgentRequestSit);
+            gMessageSystem->nextBlockFast(_PREHASH_AgentData);
+            gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+            gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+            gMessageSystem->nextBlockFast(_PREHASH_TargetObject);
+            gMessageSystem->addUUIDFast(_PREHASH_TargetID, objectp->mID);
+            gMessageSystem->addVector3Fast(_PREHASH_Offset, LLVector3::zero);
+            objectp->getRegion()->sendReliableMessage();
+        }
+        else
+        {
+            LL_WARNS("FSAreaSearch") << "No LLSelectNode node" << LL_ENDL;
+        }
+    }
+
 }
 
 //---------------------------------------------------------------------------
@@ -2232,6 +2267,7 @@ BOOL FSPanelAreaSearchAdvanced::postBuild()
 {
 	mCheckboxClickTouch = getChild<LLCheckBoxCtrl>("double_click_touch");
 	mCheckboxClickBuy = getChild<LLCheckBoxCtrl>("double_click_buy");
+	mCheckboxClickSit = getChild<LLCheckBoxCtrl>("double_click_sit");
 
 	return LLPanel::postBuild();
 }

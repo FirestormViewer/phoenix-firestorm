@@ -2,6 +2,7 @@
 <context_menu name="Object List popup">
 	<menu_item_call label="Info o skryptach" name="script_info" />
 	<menu_item_call label="Dotknij" name="touch_object" />
+	<menu_item_call label="Usiądź" name="sit_on_object" />
 	<menu_item_call label="Teleportuj do" name="teleport_to_object" />
 	<menu_item_call label="Przybliż" name="look_at_object" />
 	<menu_item_call label="Inspekcja obiektu" name="inspect_object" />

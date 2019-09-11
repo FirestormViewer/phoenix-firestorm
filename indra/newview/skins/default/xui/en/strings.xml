@@ -3149,5 +3149,4 @@ Your current position: [AVATAR_POS]
   <string name="Yes">Yes</string>
   <string name="No">No</string>
   <string name="FSUrlEntryWearLabel">Wear inventory folder</string>
-  <string name="FSDiscordAppName">via [APP_NAME]</string>
 </strings>

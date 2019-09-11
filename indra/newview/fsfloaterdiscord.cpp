@@ -73,11 +73,11 @@ void FSFloaterDiscord::onVisibilityChange(BOOL visible)
 		{
 			showDisconnectedLayout();
 		}
-        if ((FSDiscordConnect::instance().getConnectionState() == FSDiscordConnect::DISCORD_NOT_CONNECTED) ||
-            (FSDiscordConnect::instance().getConnectionState() == FSDiscordConnect::DISCORD_CONNECTION_FAILED))
-        {
-            FSDiscordConnect::instance().checkConnectionToDiscord();
-        }
+		if ((FSDiscordConnect::instance().getConnectionState() == FSDiscordConnect::DISCORD_NOT_CONNECTED) ||
+			(FSDiscordConnect::instance().getConnectionState() == FSDiscordConnect::DISCORD_CONNECTION_FAILED))
+		{
+			FSDiscordConnect::instance().checkConnectionToDiscord();
+		}
 	}
 	else
 	{
@@ -161,7 +161,7 @@ void FSFloaterDiscord::onDisconnect()
 }
 
 FSFloaterDiscord::FSFloaterDiscord(const LLSD& key) : LLFloater(key),
-mStatusText(NULL)
+mStatusText(nullptr)
 {
 	mCommitCallbackRegistrar.add("FSDiscord.Connect", boost::bind(&FSFloaterDiscord::onConnect, this));
 	mCommitCallbackRegistrar.add("FSDiscord.Disconnect", boost::bind(&FSFloaterDiscord::onDisconnect, this));
@@ -182,7 +182,7 @@ void FSFloaterDiscord::onAdd()
 {
 	std::string name = mBlacklistEntry->getText();
 	LLStringUtil::trim(name);
-	if (name == "")
+	if (name.empty())
 	{
 		return;
 	}
@@ -276,24 +276,24 @@ BOOL FSFloaterDiscord::postBuild()
 
 	mAllowCheckbox->set(gSavedPerAccountSettings.getBOOL("FSEnableDiscordIntegration"));
 
-    // Connection status widgets
-    mStatusText = getChild<LLTextBox>("connection_status_text");
+	// Connection status widgets
+	mStatusText = getChild<LLTextBox>("connection_status_text");
 
 	return LLFloater::postBuild();
 }
 
 void FSFloaterDiscord::draw()
 {
-    if (mStatusText)
-    {
-        mStatusText->setVisible(false);
-        FSDiscordConnect::EConnectionState connection_state = FSDiscordConnect::instance().getConnectionState();
-        std::string status_text;
-        
-        switch (connection_state)
-        {
-        case FSDiscordConnect::DISCORD_NOT_CONNECTED:
-            // No status displayed when first opening the panel and no connection done
+	if (mStatusText)
+	{
+		mStatusText->setVisible(false);
+		FSDiscordConnect::EConnectionState connection_state = FSDiscordConnect::instance().getConnectionState();
+		std::string status_text;
+		
+		switch (connection_state)
+		{
+		case FSDiscordConnect::DISCORD_NOT_CONNECTED:
+			// No status displayed when first opening the panel and no connection done
 			break;
 		case FSDiscordConnect::DISCORD_CONNECTION_IN_PROGRESS:
 			// Connection loading indicator
@@ -301,23 +301,23 @@ void FSFloaterDiscord::draw()
 			status_text = getString("SocialDiscordConnecting");
 			mStatusText->setValue(status_text);
 			break;
-        case FSDiscordConnect::DISCORD_CONNECTED:
-            // When successfully connected, no message is displayed
+		case FSDiscordConnect::DISCORD_CONNECTED:
+			// When successfully connected, no message is displayed
 			break;
-        case FSDiscordConnect::DISCORD_CONNECTION_FAILED:
-            // Error connecting to the service
+		case FSDiscordConnect::DISCORD_CONNECTION_FAILED:
+			// Error connecting to the service
 			mStatusText->setVisible(true);
-            status_text = getString("SocialDiscordErrorConnecting");
+			status_text = getString("SocialDiscordErrorConnecting");
 			mStatusText->setValue(status_text);
-            break;
+			break;
 		case FSDiscordConnect::DISCORD_DISCONNECTING:
 			// Disconnecting loading indicator
 			mStatusText->setVisible(true);
 			status_text = getString("SocialDiscordDisconnecting");
 			mStatusText->setValue(status_text);
 			break;
-        }
-    }
+		}
+	}
 	LLFloater::draw();
 }
 

@@ -21,7 +21,7 @@
 		<check_box label="Tylko aktywne" name="FSShowOnlyActiveGestures"/>
 		<button name="del_btn" tool_tip="Usuń gest"/>
 	</panel>
-	<button label="Edytuj" name="edit_btn"/>
-	<button label="Odtwarzaj" name="play_btn"/>
+	<button label="Edytuj" name="edit_btn" tool_tip="Otwórz okno edycji wybranego gestu." />
+	<button label="Odtwarzaj" name="play_btn" tool_tip="Odtwarzaj wybrany gest w świecie." />
 	<button label="Zatrzymaj" name="stop_btn"/>
 </floater>

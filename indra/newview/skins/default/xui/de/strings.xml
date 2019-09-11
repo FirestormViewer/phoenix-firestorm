@@ -6988,7 +6988,4 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="FSUrlEntryWearLabel">
 		Inventar-Ordner anziehen
 	</string>
-	<string name="FSDiscordAppName">
-		via [APP_NAME]
-	</string>
 </strings>
