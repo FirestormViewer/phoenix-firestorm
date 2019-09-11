@@ -477,7 +477,7 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void) scrollWheel:(NSEvent *)theEvent
 {
-	callScrollMoved(-[theEvent deltaY]);
+	callScrollMoved(-[theEvent deltaX], -[theEvent deltaY]);
 }
 
 - (void) mouseExited:(NSEvent *)theEvent
