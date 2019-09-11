@@ -22,6 +22,14 @@
 		 parameter="touch"/>
 	</menu_item_call>
 	<menu_item_call
+	 label="Sit"
+	 layout="topleft"
+	 name="sit_on_object">
+		<menu_item_call.on_click
+		 function="AreaSearch.Action"
+		 parameter="u_sit_on_object"/>
+	</menu_item_call>
+	<menu_item_call
 	 label="Teleport to"
 	 layout="topleft"
 	 name="teleport_to_object">
