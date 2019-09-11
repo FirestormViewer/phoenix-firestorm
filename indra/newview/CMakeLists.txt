@@ -1631,6 +1631,13 @@ configure_file(
 list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/exoflickrkeys.h)
 # </exodus>
 
+#<FS:LO> Discord rich presence
+  if (USE_DISCORD)
+    LIST(APPEND viewer_HEADER_FILES fsfloaterdiscord.h fsdiscordconnect.h)
+    LIST(APPEND viewer_SOURCE_FILES fsfloaterdiscord.cpp fsdiscordconnect.cpp)
+  endif (USE_DISCORD)
+#</FS:LO>
+
 # <FS:TS> Generate the version information header file.
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/fsversionvalues.h.in
@@ -1686,13 +1693,6 @@ if (DARWIN)
          growlnotifierwin.h
          )
 # [FS]
-
-#<FS:LO> Discord rich presence
-  if( USE_DISCORD )
-    LIST(APPEND viewer_HEADER_FILES fsfloaterdiscord.h fsdiscordconnect.h)
-    LIST(APPEND viewer_SOURCE_FILES fsfloaterdiscord.cpp fsdiscordconnect.cpp)
-  endif()
-#</FS:LO>
 
   find_library(AGL_LIBRARY AGL)
   find_library(APPKIT_LIBRARY AppKit)
@@ -1753,13 +1753,6 @@ if (LINUX)
     LIST(APPEND viewer_SOURCE_FILES desktopnotifierlinux.cpp growlmanager.cpp)
 # [FS] Growl support
 
-#<FS:LO> Discord rich presence
-  if( USE_DISCORD )
-    LIST(APPEND viewer_HEADER_FILES fsfloaterdiscord.h fsdiscordconnect.h)
-    LIST(APPEND viewer_SOURCE_FILES fsfloaterdiscord.cpp fsdiscordconnect.cpp)
-  endif()
-#</FS:LO>
-
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
 
     set(viewer_LIBRARIES
@@ -1802,13 +1795,6 @@ if (WINDOWS)
          growlnotifierwin.h
 # [FS]
          )
-
-#<FS:LO> Discord rich presence
-  if( USE_DISCORD )
-    LIST(APPEND viewer_HEADER_FILES fsfloaterdiscord.h fsdiscordconnect.h)
-    LIST(APPEND viewer_SOURCE_FILES fsfloaterdiscord.cpp fsdiscordconnect.cpp)
-  endif()
-#</FS:LO>
 
     # precompiled header configuration
     # llviewerprecompiledheaders.cpp generates
