@@ -134,7 +134,7 @@
 		name="dont_names_label"
 		top_pad="5"
 		type="string">
-		Dont share region names to Discord if they are listed below:
+		Don't share region names to Discord if they are listed below:
 	</text>
 	<scroll_list
      follows="top|left|right"

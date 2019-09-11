@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<floater name="floater_discord">
+	<string name="discord_connected" value="Połączony/a z Discord jako:" />
+	<string name="discord_disconnected" value="Brak połączenia z Discord." />
+	<string name="SocialDiscordConnecting">Łączenie z Discord...</string>
+	<string name="SocialDiscordErrorConnecting">Problem z połączeniem z Discord</string>
+	<string name="SocialDiscordDisconnecting">Odłączanie się od Discorda...</string>
+	<text name="account_caption_label">
+		Brak połączenia z Discord.
+	</text>
+	<check_box label="Połącz automatycznie przy logowaniu" name="startup_check" />
+	<button label="Połącz..." name="connect_btn" />
+	<button label="Odłącz" name="disconnect_btn" />
+	<text name="rating_label">
+		Podawaj Discordowi nazwy regionów, jeśli ich klasyfikacja to:
+	</text>
+	<combo_box name="maturity_desired_combobox">
+		<combo_box.item label="General (dla wszystkich), Moderate (umiarkowane), Adult (dla dorosłych)" name="Desired_Adult" />
+		<combo_box.item label="General (dla wszystkich), Moderate (umiarkowane)" name="Desired_Mature" />
+		<combo_box.item label="General (dla wszystkich)" name="Desired_PG" />
+		<combo_box.item label="Nie udostępniaj" name="Desired_None" />
+	</combo_box>
+	<text name="dont_names_label">
+		Nie podawaj Discordowi nazw regionów, jeśli są widoczne poniżej:
+	</text>
+	<text name="connection_status_text">
+		Wczytywanie...
+	</text>
+</floater>
