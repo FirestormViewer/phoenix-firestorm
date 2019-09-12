@@ -46,7 +46,7 @@ By otrzymać dodatkowe wskazówki przytrzymuj kursor ponad opcjami.
 		<check_box label="Wolny wstęp" name="open_enrollement" tool_tip="Grupa oferuje wolny wstęp dla każdego i nie wymaga zaproszenia."/>
 		<check_box label="Opłata wstępu" name="check_enrollment_fee" tool_tip="Ustaw opłatę za przyłączenie się do grupy."/>
 		<spinner name="spin_enrollment_fee" tool_tip="Nowe osoby muszą zapłacić tą sumę by dołączyć do grupy, jeśli 'Opłata wstępu' jest zaznaczona."/>
-		<combo_box name="group_mature_check" tool_tip="Wybierz jeżeli uważasz, że Twoja grupa klasyfikowana jest jako Moderate.">
+		<combo_box name="group_mature_check" tool_tip="Klasyfikacja dojrzałości oraz wieku określa rodzaje treści i zachowanie dozwolone w grupie.">
 			<combo_item name="select_mature">
 				- Wybierz klasyfikację wieku -
 			</combo_item>
