@@ -233,7 +233,8 @@ void FSDiscordConnect::updateRichPresence()
 	std::string appName = std::string("via " + APP_NAME);
 	discordPresence.smallImageText = appName.c_str();
 
-	discordPresence.partyId = gAgent.getRegion()->getRegionID().asString().c_str();
+	std::string regionId = gAgent.getRegion()->getRegionID().asString();
+	discordPresence.partyId = regionId.c_str();
 	discordPresence.partySize = gAgent.getRegion()->mMapAvatars.size();
 	discordPresence.partyMax = LLRegionInfoModel::instance().mAgentLimit;
 	Discord_UpdatePresence(&discordPresence);
