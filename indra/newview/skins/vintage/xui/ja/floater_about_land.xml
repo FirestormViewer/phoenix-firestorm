@@ -390,7 +390,7 @@
 				<combo_box.item label="その他" name="item12" />
 			</combo_box>
 			<check_box label="「Moderate」コンテンツ" name="MatureCheck" tool_tip=" " />
-			<text name="allow_label5">
+			<text name="allow_see_label">
 				他の区画にいるアバターへの許可：
 			</text>
 			<check_box label="この区画にいるアバターに会ってチャットできる" name="SeeAvatarsCheck" tool_tip="他の区画のアバターが、この区画にいるアバターに会ってチャットすることを許可し、あなたもそれらアバターに会ってチャットできるようにします。" />

@@ -190,7 +190,7 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 
 	mPasswordModified = FALSE;
 		
-	FSPanelLogin::sInstance = this;
+	sInstance = this;
 
 	LLView* login_holder = gViewerWindow->getLoginPanelHolder();
 	if (login_holder)
@@ -230,7 +230,8 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 #ifdef SINGLEGRID
 	server_choice_combo->setEnabled(FALSE);
 #endif
-	
+
+	std::string current_grid = LLGridManager::getInstance()->getGrid();
 	updateServer();
 	if(LLStartUp::getStartSLURL().getType() != LLSLURL::LOCATION)
 	{
@@ -245,26 +246,41 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	grid_mgr_help_text->setClickedCallback(onClickGridMgrHelp, NULL);
 
 	LLSLURL start_slurl(LLStartUp::getStartSLURL());
+	// The StartSLURL might have been set either by an explicit command-line
+	// argument (CmdLineLoginLocation) or by default.
+	// current_grid might have been set either by an explicit command-line
+	// argument (CmdLineGridChoice) or by default.
+	// If the grid specified by StartSLURL is the same as current_grid, the
+	// distinction is moot.
+	// If we have an explicit command-line SLURL, use that.
+	// If we DON'T have an explicit command-line SLURL but we DO have an
+	// explicit command-line grid, which is different from the default SLURL's
+	// -- do NOT override the explicit command-line grid with the grid from
+	// the default SLURL!
+	bool force_grid{ start_slurl.getGrid() != current_grid &&
+					 gSavedSettings.getString("CmdLineLoginLocation").empty() &&
+				   ! gSavedSettings.getString("CmdLineGridChoice").empty() };
 	if ( !start_slurl.isSpatial() ) // has a start been established by the command line or NextLoginLocation ? 
 	{
 		// no, so get the preference setting
 		std::string defaultStartLocation = gSavedSettings.getString("LoginLocation");
 		LL_INFOS("AppInit")<<"default LoginLocation '"<<defaultStartLocation<<"'"<<LL_ENDL;
 		LLSLURL defaultStart(defaultStartLocation);
-		if ( defaultStart.isSpatial() )
+		if ( defaultStart.isSpatial() && ! force_grid )
 		{
 			LLStartUp::setStartSLURL(defaultStart);
 		}
 		else
 		{
-			LL_INFOS("AppInit")<<"no valid LoginLocation, using home"<<LL_ENDL;
+			LL_INFOS("AppInit") << (force_grid? "--grid specified" : "no valid LoginLocation")
+								<< ", using home" << LL_ENDL;
 			LLSLURL homeStart(LLSLURL::SIM_LOCATION_HOME);
 			LLStartUp::setStartSLURL(homeStart);
 		}
 	}
-	else
+	else if (! force_grid)
 	{
-		FSPanelLogin::onUpdateStartSLURL(start_slurl); // updates grid if needed
+		onUpdateStartSLURL(start_slurl); // updates grid if needed
 	}
 	
 	childSetAction("remove_user_btn", onClickRemove, this);
@@ -377,7 +393,7 @@ void FSPanelLogin::setFocus(BOOL b)
 	{
 		if(b)
 		{
-			FSPanelLogin::giveFocus();
+			giveFocus();
 		}
 		else
 		{
@@ -794,7 +810,10 @@ void FSPanelLogin::closePanel()
 {
 	if (sInstance)
 	{
-		FSPanelLogin::sInstance->getParent()->removeChild( FSPanelLogin::sInstance );
+		if (FSPanelLogin::sInstance->getParent())
+		{
+			FSPanelLogin::sInstance->getParent()->removeChild( FSPanelLogin::sInstance );
+		}
 
 		delete sInstance;
 		sInstance = NULL;

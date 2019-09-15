@@ -324,7 +324,7 @@ Jedynie większe działki mogą być umieszczone w bazie wyszukiwarki.
 				Zdjęcie:
 			</text>
 			<texture_picker name="snapshot_ctrl" tool_tip="Kliknij by wybrać zdjęcie"/>
-			<text name="allow_label5">
+			<text name="allow_see_label">
 				Awatary na innych działkach mogą:
 			</text>
 			<check_box label="Rozmawiać/widzieć awatary na tej działce" name="SeeAvatarsCheck" tool_tip="Pozwala Rezydentom z innych działek widzieć i rozmawiać z Rezydentami na tej działce - oraz Tobie, widzieć ich i rozmawiać z nimi."/>

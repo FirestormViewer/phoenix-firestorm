@@ -281,6 +281,9 @@ public:
 	static void onCreateRole(void*);
 	void handleCreateRole();
 
+	static void onCopyRole(void*);
+	void handleCopyRole();
+
 	static void onDeleteRole(void*);
 	void handleDeleteRole();
 
@@ -308,6 +311,7 @@ protected:
 	LLCheckBoxCtrl* mMemberVisibleCheck;
 	LLButton*       mDeleteRoleButton;
 	LLButton*       mCreateRoleButton;
+	LLButton*       mCopyRoleButton;
 
 	LLUUID	mSelectedRole;
 	BOOL	mHasRoleChange;

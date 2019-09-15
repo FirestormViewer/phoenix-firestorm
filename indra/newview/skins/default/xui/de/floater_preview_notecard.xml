@@ -16,6 +16,7 @@
 		Wird geladen...
 	</text_editor>
 	<button tool_tip="Suchen &amp; Ersetzen" name="Search"/>
+	<button label="Bearbeiten..." label_selected="Bearbeiten" name="Edit"/>
 	<button label="Speichern" label_selected="Speichern" name="Save"/>
 	<button label="Löschen" label_selected="Löschen" name="Delete"/>
 </floater>

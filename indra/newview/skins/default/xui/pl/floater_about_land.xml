@@ -298,18 +298,18 @@ Jedynie większe działki mogą być umieszczone w bazie wyszukiwarki.
 			<text name="allow_label2">
 				Budowanie:
 			</text>
-			<check_box label="Wszyscy" name="edit objects check"/>
-			<check_box label="Grupa" name="edit group objects check"/>
+			<check_box label="Wszyscy" name="edit objects check" tool_tip="Gdy ta opcja jest włączona, to Rezydenci mogą tworzyć i rezzować obiekty na Twojej działce." />
+			<check_box label="Grupa" name="edit group objects check" tool_tip="Gdy ta opcja jest włączona, to osoby będące w grupie przypisanej do Twojej działki mogą na niej tworzyć i rezzować obiekty." />
 			<text name="allow_label3">
 				Nowe obiekty:
 			</text>
-			<check_box label="Wszyscy" name="all object entry check"/>
-			<check_box label="Grupa" name="group object entry check"/>
+			<check_box label="Wszyscy" name="all object entry check" tool_tip="Gdy ta opcja jest włączona, to Rezydenci mogą przenosić istniejące obiekty z innych działek na tę działkę." />
+			<check_box label="Grupa" name="group object entry check" tool_tip="Gdy ta opcja jest włączona, to osoby będące w grupie przypisanej do tej działki mogą na nią przenosić istniejące obiekty z innych działek." />
 			<text name="allow_label4">
 				Skrypty:
 			</text>
-			<check_box label="Wszyscy" name="check other scripts"/>
-			<check_box label="Grupa" name="check group scripts"/>
+			<check_box label="Wszyscy" name="check other scripts" tool_tip="Gdy ta opcja jest włączona, to Rezydenci mogą uruchamiać skrypty na Twojej działce, włączając w to te z dodatków." />
+			<check_box label="Grupa" name="check group scripts" tool_tip="Gdy ta opcja jest włączona, to osoby będące w grupie przypisanej do Twojej działki mogą na niej uruchamiać skrypty, włączając w to te z dodatków." />
 			<check_box label="Bezpieczna (brak uszkodzeń)" name="check safe" tool_tip="Wybrana - działka jest bezpieczna - uszkodzenia w walce są zablokowane. Nie jest wybrana - uszkodzenia w walce są włączone."/>
 			<check_box label="Popychanie niedozwolone" name="PushRestrictCheck" tool_tip="Nie pozwalaj skryptom na popychanie. Wybranie tej opcji może być przydatne do ograniczenia zakłóceń spokoju na Twojej działce."/>
 			<check_box label="Wyświetlaj w wyszukiwarce (30L$/tyg.)" name="ShowDirectoryCheck" tool_tip="Udostępnij ukazywanie się nazwy działki w wyszukiwarce"/>
@@ -333,7 +333,7 @@ Jedynie większe działki mogą być umieszczone w bazie wyszukiwarki.
 				Zdjęcie:
 			</text>
 			<texture_picker name="snapshot_ctrl" tool_tip="Kliknij by wybrać zdjęcie"/>
-			<text name="allow_label5">
+			<text name="allow_see_label">
 				Awatary na innych działkach mogą rozmawiać/widzieć awatary na tej działce
 			</text>
 			<check_box label="Widzieć awatary" name="SeeAvatarsCheck" tool_tip="Pozwala Rezydentom z innych działek widzieć i rozmawiać z Rezydentami na tej działce - oraz Tobie, widzieć ich i rozmawiać z nimi."/>

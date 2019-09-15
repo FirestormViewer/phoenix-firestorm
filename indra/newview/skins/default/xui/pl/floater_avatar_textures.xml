@@ -18,13 +18,16 @@ kompozytowe
 				<texture_picker label="Włosy" name="hair-baked"/>
 				<texture_picker label="Włosy" name="hair_grain"/>
 				<texture_picker label="Alpha włosów" name="hair_alpha"/>
+				<texture_picker label="Tatuaż włosów" name="hair_tattoo" />
 				<texture_picker label="Głowa" name="head-baked"/>
 				<texture_picker label="Makijaż" name="head_bodypaint"/>
 				<texture_picker label="Alpha głowy" name="head_alpha"/>
 				<texture_picker label="Tatuaż głowy" name="head_tattoo"/>
+				<texture_picker label="Tatuaż unw głowy" name="head_universal_tattoo" />
 				<texture_picker label="Oczy" name="eyes-baked"/>
 				<texture_picker label="Tęczówka" name="eyes_iris"/>
 				<texture_picker label="Alpha oczu" name="eyes_alpha"/>
+				<texture_picker label="Tatuaż oczu" name="eyes_tattoo" />
 				<texture_picker label="Górna cz. ciała" name="upper-baked"/>
 				<texture_picker label="Górny rys. ciała" name="upper_bodypaint"/>
 				<texture_picker label="Podkoszulek" name="upper_undershirt"/>
@@ -33,6 +36,7 @@ kompozytowe
 				<texture_picker label="Kurtka górna" name="upper_jacket"/>
 				<texture_picker label="Górna alpha" name="upper_alpha"/>
 				<texture_picker label="Górny tatuaż" name="upper_tattoo"/>
+				<texture_picker label="Górny unw tatuaż" name="upper_universal_tattoo" />
 				<texture_picker label="Dolna cz. ciała" name="lower-baked"/>
 				<texture_picker label="Dolny rys. ciała" name="lower_bodypaint"/>
 				<texture_picker label="Bielizna" name="lower_underpants"/>
@@ -42,8 +46,17 @@ kompozytowe
 				<texture_picker label="Kurtka" name="lower_jacket"/>
 				<texture_picker label="Dolna alpha" name="lower_alpha"/>
 				<texture_picker label="Dolny tatuaż" name="lower_tattoo"/>
+				<texture_picker label="Dolny unw tatuaż" name="lower_universal_tattoo" />
 				<texture_picker label="Spódnica" name="skirt-baked"/>
 				<texture_picker label="Spódnica" name="skirt"/>
+				<texture_picker label="Tatuaż: spódnica" name="skirt_tattoo" />
+				<texture_picker label="Lewe ramię" name="leftarm-baked" />
+				<texture_picker label="Tatuaż: l. ramię" name="leftarm_tattoo" />
+				<texture_picker label="Lewa noga" name="leftleg-baked" />
+				<texture_picker label="Tatuaż: l. noga" name="leftleg_tattoo" />
+				<texture_picker label="Tatuaż AUX 1" name="aux1_tattoo" />
+				<texture_picker label="Tatuaż AUX 2" name="aux2_tattoo" />
+				<texture_picker label="Tatuaż AUX 3" name="aux3_tattoo" />
 			</panel>
 		</panel>
 	</scroll_container>
