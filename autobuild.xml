@@ -256,12 +256,24 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b760b4f3ab7794a897cf7f464d92e587</string>
+              <string>c97507d081f25261ec14238ea80f5163</string>
               <key>url</key>
-              <uri>http://3p.firestormviewer.org/discord_rpc-3.4.0-windows-192510505.tar.bz2</uri>
+              <uri>http://3p.firestormviewer.org/discord_rpc-3.4.0-windows-192581529.tar.bz2</uri>
             </map>
             <key>name</key>
             <string>windows</string>
+          </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>f63f07d4c87fbbb698b9039583f08b76</string>
+              <key>url</key>
+              <uri>http://3p.firestormviewer.org/discord_rpc-3.4.0-windows64-192581529.tar.bz2</uri>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
           </map>
           <key>linux64</key>
           <map>
