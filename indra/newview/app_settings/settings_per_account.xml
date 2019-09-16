@@ -1268,5 +1268,16 @@
         <key>Value</key>
         <array></array>
         </map>
+     <key>FSShareNameToDiscord</key>
+        <map>
+        <key>Comment</key>
+            <string>If enabled, will allow Firestorm to share avatar user and display name with discord. Default (false)</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
     </map>
 </llsd>

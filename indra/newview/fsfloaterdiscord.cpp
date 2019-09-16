@@ -166,11 +166,17 @@ mStatusText(nullptr)
 	mCommitCallbackRegistrar.add("FSDiscord.Connect", boost::bind(&FSFloaterDiscord::onConnect, this));
 	mCommitCallbackRegistrar.add("FSDiscord.Disconnect", boost::bind(&FSFloaterDiscord::onDisconnect, this));
 	mCommitCallbackRegistrar.add("FSDiscord.Allow", boost::bind(&FSFloaterDiscord::onAllow, this));
+	mCommitCallbackRegistrar.add("FSDiscord.Name", boost::bind(&FSFloaterDiscord::onName, this));
 	mCommitCallbackRegistrar.add("FSDiscord.Combo", boost::bind(&FSFloaterDiscord::onCombo, this));
 	mCommitCallbackRegistrar.add("FSDiscord.Add", boost::bind(&FSFloaterDiscord::onAdd, this));
 	mCommitCallbackRegistrar.add("FSDiscord.Rem", boost::bind(&FSFloaterDiscord::onRemove, this));
 
 	setVisibleCallback(boost::bind(&FSFloaterDiscord::onVisibilityChange, this, _2));
+}
+
+void FSFloaterDiscord::onName()
+{
+	gSavedPerAccountSettings.setBOOL("FSShareNameToDiscord", mNameCheckbox->getValue().asBoolean());
 }
 
 void FSFloaterDiscord::onCombo()
@@ -258,6 +264,7 @@ BOOL FSFloaterDiscord::postBuild()
 	mDisconnectButton = getChild<LLButton>("disconnect_btn");
 	mConnectButton = getChild<LLButton>("connect_btn");
 	mAllowCheckbox = getChild<LLCheckBoxCtrl>("startup_check");
+	mNameCheckbox = getChild<LLCheckBoxCtrl>("name_check");
 	mMaturityCombo = getChild<LLComboBox>("maturity_desired_combobox");
 	mBlacklistedNames = getChild<LLScrollListCtrl>("blacklisted_names");
 	mBlacklistEntry = getChild<LLLineEditor>("blacklist_entry");
@@ -275,6 +282,8 @@ BOOL FSFloaterDiscord::postBuild()
 	mMaturityCombo->selectByValue((LLSD::Integer)gSavedPerAccountSettings.getU32("FSMaxSharedMaturity"));
 
 	mAllowCheckbox->set(gSavedPerAccountSettings.getBOOL("FSEnableDiscordIntegration"));
+
+	mNameCheckbox->set(gSavedPerAccountSettings.getBOOL("FSShareNameToDiscord"));
 
 	// Connection status widgets
 	mStatusText = getChild<LLTextBox>("connection_status_text");

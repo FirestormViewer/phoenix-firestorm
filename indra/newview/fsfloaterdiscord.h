@@ -51,6 +51,7 @@ private:
 	void onUseAnotherAccount();
 	void onDisconnect();
 	void onAllow();
+	void onName();
 	void onCombo();
 	void onAdd();
 	void onRemove();
@@ -65,6 +66,7 @@ private:
 	LLButton * mConnectButton;
 	LLButton * mDisconnectButton;
 	LLCheckBoxCtrl * mAllowCheckbox;
+	LLCheckBoxCtrl * mNameCheckbox;
 	LLComboBox * mMaturityCombo;
 	LLScrollListCtrl * mBlacklistedNames;
 	LLLineEditor * mBlacklistEntry;
