@@ -9,6 +9,7 @@
 		Brak połączenia z Discord.
 	</text>
 	<check_box label="Połącz automatycznie przy logowaniu" name="startup_check" />
+	<check_box label="Udostępniaj nazwę użytkownika" name="name_check" />
 	<button label="Połącz..." name="connect_btn" />
 	<button label="Odłącz" name="disconnect_btn" />
 	<text name="rating_label">
