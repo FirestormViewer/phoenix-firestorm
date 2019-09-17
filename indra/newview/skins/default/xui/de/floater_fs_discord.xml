@@ -15,6 +15,7 @@
 		Nicht mit Discord verbunden.
 	</text>
 	<check_box label="Automatisch beim Login verbinden" name="startup_check"/>
+	<check_box label="Name mit Discord teilen" name="name_check"/>
 	<button label="Verbinden..." name="connect_btn"/>
 	<button label="Trennen" name="disconnect_btn"/>
 	<text name="rating_label">
