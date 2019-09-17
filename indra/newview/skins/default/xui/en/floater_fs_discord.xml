@@ -1,121 +1,116 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <floater
-  positioning="cascading"
-  can_close="true"
-  can_resize="false"
-  help_topic="floater_discord"
-  layout="topleft"
-  name="floater_discord"
-  save_rect="true"
-  single_instance="true"
-  reuse_instance="true"
-  title="Discord"
-  height="485"
-  width="272">
-  <string
-	  name="discord_connected"
-	  value="You are connected to Discord as:" />
-  <string
-	  name="discord_disconnected"
-	  value="Not connected to Discord." />
-   <string name="SocialDiscordConnecting">Connecting to Discord...</string>
-   <string name="SocialDiscordErrorConnecting">Problem connecting to Discord</string>
-   <string name="SocialDiscordDisconnecting">Disconnecting from Discord...</string>
-	  <text
-	   layout="topleft"
-	   length="1"
-	   follows="top|left"
-	   font="SansSerif"
-	   height="16"
-	   left="10"
-	   name="account_caption_label"
-	   top="5"
-	   type="string">
+ positioning="cascading"
+ can_close="true"
+ can_resize="false"
+ help_topic="floater_discord"
+ layout="topleft"
+ name="floater_discord"
+ save_rect="true"
+ single_instance="true"
+ reuse_instance="true"
+ title="Discord"
+ height="485"
+ width="272">
+	<string name="discord_connected">You are connected to Discord as:</string>
+	<string name="discord_disconnected">Not connected to Discord.</string>
+	<string name="SocialDiscordConnecting">Connecting to Discord...</string>
+	<string name="SocialDiscordErrorConnecting">Problem connecting to Discord</string>
+	<string name="SocialDiscordDisconnecting">Disconnecting from Discord...</string>
+	<text
+	 layout="topleft"
+	 length="1"
+	 follows="top|left"
+	 font="SansSerif"
+	 height="16"
+	 left="10"
+	 name="account_caption_label"
+	 top="5"
+	 type="string">
 		Not connected to Discord.
-	  </text>
-	  <text
-	   layout="topleft"
-	   top_pad="2"
-	   length="1"
-	   follows="top|left"
-	   font="SansSerif"
-	   height="16"
-	   left="10"
-	   name="account_name_label"
-	   parse_urls="true"
-	   type="string"/>
-		<check_box
-			layout="topleft"
-			 follows="left|top|right"
-			 top_pad="9"
-			 left="10"
-			 right="-10"
-			 visible="true"
-			 height="23"
-			 label="Automatically connect on login"
-			 name="startup_check"
-			 width="210">
-			  <commit_callback function="FSDiscord.Allow"/>
-		</check_box>
-		<check_box
-			layout="topleft"
-			 follows="left|top|right"
-			 left="10"
-			 right="-10"
-			 visible="true"
-			 height="23"
-			 label="Share username"
-			 name="name_check"
-			 width="210">
-			  <commit_callback function="FSDiscord.Name"/>
-		</check_box>
-		<button
-		 layout="topleft"
-		 follows="left|top|right"
-		 top_pad="9"
-		 left="10"
-		 right="-10"
-		 visible="true"
-		 height="23"
-		 label="Connect..."
-		 name="connect_btn"
-		 width="210">
-		  <commit_callback function="FSDiscord.Connect"/>
-		</button>
+	</text>
+	<text
+	 layout="topleft"
+	 top_pad="2"
+	 length="1"
+	 follows="top|left"
+	 font="SansSerif"
+	 height="16"
+	 left="10"
+	 name="account_name_label"
+	 parse_urls="true"
+	 type="string"/>
+	<check_box
+	 control_name="FSEnableDiscordIntegration"
+	 layout="topleft"
+	 follows="left|top|right"
+	 top_pad="9"
+	 left="10"
+	 right="-10"
+	 visible="true"
+	 height="23"
+	 label="Automatically connect on login"
+	 name="startup_check"
+	 width="210"/>
+	<check_box
+	 control_name="FSShareNameToDiscord"
+	 layout="topleft"
+	 follows="left|top|right"
+	 left="10"
+	 right="-10"
+	 visible="true"
+	 height="23"
+	 label="Share username"
+	 name="name_check"
+	 width="210"/>
+	<button
+	 layout="topleft"
+	 follows="left|top|right"
+	 top_pad="9"
+	 left="10"
+	 right="-10"
+	 visible="true"
+	 height="23"
+	 label="Connect..."
+	 name="connect_btn"
+	 width="210">
+		<commit_callback function="FSDiscord.Connect"/>
+	</button>
 
-		<button
-		 layout="topleft"
-		 follows="left|top|right"
-		 top_delta="0"
-		 left="10"
-		 right="-10"
-		 height="23"
-		 label="Disconnect"
-		 name="disconnect_btn"
-		 width="210"
-		 visible="false">
-		  <commit_callback function="FSDiscord.Disconnect"/>
-		</button>
-	 <text
-		layout="topleft"
-		length="1"
-		follows="top|left"
-		font="SansSerif"
-		height="26"
-		word_wrap="true"
-		left="10"
-		right="-10"
-		name="rating_label"
-		top_pad="5"
-		type="string">
+	<button
+	 layout="topleft"
+	 follows="left|top|right"
+	 top_delta="0"
+	 left="10"
+	 right="-10"
+	 height="23"
+	 label="Disconnect"
+	 name="disconnect_btn"
+	 width="210"
+	 visible="false">
+		<commit_callback function="FSDiscord.Disconnect"/>
+	</button>
+	<text
+	 layout="topleft"
+	 length="1"
+	 follows="top|left"
+	 font="SansSerif"
+	 height="26"
+	 word_wrap="true"
+	 left="10"
+	 right="-10"
+	 name="rating_label"
+	 top_pad="5"
+	 type="string">
 		Share name of regions with following content rating to Discord:
 	</text>
 	<combo_box
-		follows="left|top"
-		height="23"
-		layout="topleft"
-		name="maturity_desired_combobox"
-		width="200">
+	 control_name="FSMaxSharedMaturity"
+	 follows="left|top"
+	 height="23"
+	 layout="topleft"
+	 name="maturity_desired_combobox"
+	 width="200">
 		<combo_box.item
 		 label="General, Moderate, Adult"
 		 name="Desired_Adult"
@@ -132,32 +127,31 @@
 		 label="Don't share"
 		 name="Desired_None"
 		 value="0" />
-		 <commit_callback function="FSDiscord.Combo"/>
-    </combo_box>
+	</combo_box>
 	<text
-		layout="topleft"
-		length="1"
-		follows="top|left"
-		font="SansSerif"
-		height="26"
-		word_wrap="true"
-		left="10"
-		right="-10"
-		name="dont_names_label"
-		top_pad="5"
-		type="string">
+	 layout="topleft"
+	 length="1"
+	 follows="top|left"
+	 font="SansSerif"
+	 height="26"
+	 word_wrap="true"
+	 left="10"
+	 right="-10"
+	 name="dont_names_label"
+	 top_pad="5"
+	 type="string">
 		Don't share region names to Discord if they are listed below:
 	</text>
 	<scroll_list
-     follows="top|left|right"
-     height="215"
-     layout="topleft"
-     left="10"
-     multi_select="true"
-     name="blacklisted_names"
-     sort_column="0"
-     sort_ascending="true"
-     width="250" />
+	 follows="top|left|right"
+	 height="215"
+	 layout="topleft"
+	 left="10"
+	 multi_select="true"
+	 name="blacklisted_names"
+	 sort_column="0"
+	 sort_ascending="true"
+	 width="250" />
 	<line_editor
 	 follows="left|top"
 	 bottom_delta="24"
@@ -165,8 +159,8 @@
 	 max_length_chars="256"
 	 name="blacklist_entry"
 	 width="202">
-	 <commit_callback function="FSDiscord.Add"/>
-	 </line_editor>
+		<commit_callback function="FSDiscord.Add"/>
+	</line_editor>
 	<button
 	 follows="left|top"
 	 height="20"
@@ -189,19 +183,19 @@
 	 width="20">
 		<commit_callback function="FSDiscord.Rem"/>
 	</button>
-     <text
-      name="connection_status_text"
-      type="string"
-      follows="left|bottom|right"
-      bottom_delta="20"
-      left="-262"
-      width="223"
-      height="20"
-      wrap="true"
-      halign="left"
-      valign="center"
-      text_color="EmphasisColor"
-      font="SansSerif">
-      Loading...
-    </text>
+	<text
+	 name="connection_status_text"
+	 type="string"
+	 follows="left|bottom|right"
+	 bottom_delta="20"
+	 left="-262"
+	 width="223"
+	 height="20"
+	 wrap="true"
+	 halign="left"
+	 valign="center"
+	 text_color="EmphasisColor"
+	 font="SansSerif">
+		Loading...
+	</text>
 </floater>

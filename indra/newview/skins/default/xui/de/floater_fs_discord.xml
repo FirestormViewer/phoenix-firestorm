@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <floater name="floater_discord" title="Discord">
-	<string name="discord_connected" value="Verbunden mit Discord als:" />
-	<string name="discord_disconnected" value="Nicht mit Discord verbunden." />
+	<string name="discord_connected">
+		Verbunden mit Discord als:
+	</string>
+	<string name="discord_disconnected">
+		Nicht mit Discord verbunden.
+	</string>
 	<string name="SocialDiscordConnecting">
 		Verbinde mit Discord...
 	</string>

@@ -28,12 +28,12 @@
 #define FS_FSFLOATERDISCORD_H
 
 #include "llfloater.h"
-#include "lltextbox.h"
 
 class LLCheckBoxCtrl;
 class LLComboBox;
 class LLScrollListCtrl;
 class LLLineEditor;
+class LLTextBox;
 
 class FSFloaterDiscord : public LLFloater
 {
@@ -48,11 +48,7 @@ private:
 	bool onDiscordConnectStateChange(const LLSD& data);
 	bool onDiscordConnectInfoChange();
 	void onConnect();
-	void onUseAnotherAccount();
 	void onDisconnect();
-	void onAllow();
-	void onName();
-	void onCombo();
 	void onAdd();
 	void onRemove();
 
@@ -61,20 +57,13 @@ private:
 	void showDisconnectedLayout();
 	void showConnectedLayout();
 
-	LLTextBox * mAccountCaptionLabel;
-	LLTextBox * mAccountNameLabel;
-	LLButton * mConnectButton;
-	LLButton * mDisconnectButton;
-	LLCheckBoxCtrl * mAllowCheckbox;
-	LLCheckBoxCtrl * mNameCheckbox;
-	LLComboBox * mMaturityCombo;
-	LLScrollListCtrl * mBlacklistedNames;
-	LLLineEditor * mBlacklistEntry;
-	LLButton * mAddBlacklist;
-	LLButton * mRemBlacklist;
-
-	LLTextBox* mStatusText;
+	LLTextBox*			mAccountCaptionLabel;
+	LLTextBox*			mAccountNameLabel;
+	LLButton*			mConnectButton;
+	LLButton*			mDisconnectButton;
+	LLScrollListCtrl*	mBlacklistedNames;
+	LLLineEditor*		mBlacklistEntry;
+	LLTextBox*			mStatusText;
 };
 
 #endif // FS_FSFLOATERDISCORD_H
-

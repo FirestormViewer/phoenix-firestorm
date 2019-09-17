@@ -29,16 +29,16 @@
 
 #include "fsfloaterdiscord.h"
 
+#include "fsdiscordconnect.h"
 #include "llagent.h"
 #include "llagentui.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
-#include "fsdiscordconnect.h"
 #include "llfloaterreg.h"
-#include "lltrans.h"
-#include "llviewerregion.h"
-#include "llviewercontrol.h"
 #include "lltabcontainer.h"
+#include "lltrans.h"
+#include "llviewercontrol.h"
+#include "llviewerregion.h"
 
 #include "boost/algorithm/string/case_conv.hpp"
 
@@ -48,7 +48,7 @@
 
 void FSFloaterDiscord::onVisibilityChange(BOOL visible)
 {
-	if(visible)
+	if (visible)
 	{
 		LLEventPumps::instance().obtain("DiscordConnectState").stopListening("FSDiscordAccountPanel");
 		LLEventPumps::instance().obtain("DiscordConnectState").listen("FSDiscordAccountPanel", boost::bind(&FSFloaterDiscord::onDiscordConnectStateChange, this, _1));
@@ -64,7 +64,7 @@ void FSFloaterDiscord::onVisibilityChange(BOOL visible)
 		}
 
 		//Connected
-		if(FSDiscordConnect::instance().isConnected())
+		if (FSDiscordConnect::instance().isConnected())
 		{
 			showConnectedLayout();
 		}
@@ -86,14 +86,9 @@ void FSFloaterDiscord::onVisibilityChange(BOOL visible)
 	}
 }
 
-void FSFloaterDiscord::onAllow()
-{
-	gSavedPerAccountSettings.setBOOL("FSEnableDiscordIntegration", mAllowCheckbox->get());
-}
-
 bool FSFloaterDiscord::onDiscordConnectStateChange(const LLSD& data)
 {
-	if(FSDiscordConnect::instance().isConnected())
+	if (FSDiscordConnect::instance().isConnected())
 	{
 		mAccountCaptionLabel->setText(getString("discord_connected"));
 		showConnectedLayout();
@@ -111,7 +106,7 @@ bool FSFloaterDiscord::onDiscordConnectInfoChange()
 {
 	LLSD info = FSDiscordConnect::instance().getInfo();
 
-	if(info.has("name"))
+	if (info.has("name"))
 	{
 		mAccountNameLabel->setText(info["name"].asString());
 	}
@@ -121,7 +116,7 @@ bool FSFloaterDiscord::onDiscordConnectInfoChange()
 
 void FSFloaterDiscord::showConnectButton()
 {
-	if(!mConnectButton->getVisible())
+	if (!mConnectButton->getVisible())
 	{
 		mConnectButton->setVisible(TRUE);
 		mDisconnectButton->setVisible(FALSE);
@@ -130,7 +125,7 @@ void FSFloaterDiscord::showConnectButton()
 
 void FSFloaterDiscord::hideConnectButton()
 {
-	if(mConnectButton->getVisible())
+	if (mConnectButton->getVisible())
 	{
 		mConnectButton->setVisible(FALSE);
 		mDisconnectButton->setVisible(TRUE);
@@ -140,7 +135,7 @@ void FSFloaterDiscord::hideConnectButton()
 void FSFloaterDiscord::showDisconnectedLayout()
 {
 	mAccountCaptionLabel->setText(getString("discord_disconnected"));
-	mAccountNameLabel->setText(std::string(""));
+	mAccountNameLabel->setText(std::string());
 	showConnectButton();
 }
 
@@ -161,27 +156,14 @@ void FSFloaterDiscord::onDisconnect()
 }
 
 FSFloaterDiscord::FSFloaterDiscord(const LLSD& key) : LLFloater(key),
-mStatusText(nullptr)
+	mStatusText(nullptr)
 {
 	mCommitCallbackRegistrar.add("FSDiscord.Connect", boost::bind(&FSFloaterDiscord::onConnect, this));
 	mCommitCallbackRegistrar.add("FSDiscord.Disconnect", boost::bind(&FSFloaterDiscord::onDisconnect, this));
-	mCommitCallbackRegistrar.add("FSDiscord.Allow", boost::bind(&FSFloaterDiscord::onAllow, this));
-	mCommitCallbackRegistrar.add("FSDiscord.Name", boost::bind(&FSFloaterDiscord::onName, this));
-	mCommitCallbackRegistrar.add("FSDiscord.Combo", boost::bind(&FSFloaterDiscord::onCombo, this));
 	mCommitCallbackRegistrar.add("FSDiscord.Add", boost::bind(&FSFloaterDiscord::onAdd, this));
 	mCommitCallbackRegistrar.add("FSDiscord.Rem", boost::bind(&FSFloaterDiscord::onRemove, this));
 
 	setVisibleCallback(boost::bind(&FSFloaterDiscord::onVisibilityChange, this, _2));
-}
-
-void FSFloaterDiscord::onName()
-{
-	gSavedPerAccountSettings.setBOOL("FSShareNameToDiscord", mNameCheckbox->getValue().asBoolean());
-}
-
-void FSFloaterDiscord::onCombo()
-{
-	gSavedPerAccountSettings.setU32("FSMaxSharedMaturity", mMaturityCombo->getSelectedValue().asInteger());
 }
 
 void FSFloaterDiscord::onAdd()
@@ -263,13 +245,8 @@ BOOL FSFloaterDiscord::postBuild()
 	mAccountNameLabel = getChild<LLTextBox>("account_name_label");
 	mDisconnectButton = getChild<LLButton>("disconnect_btn");
 	mConnectButton = getChild<LLButton>("connect_btn");
-	mAllowCheckbox = getChild<LLCheckBoxCtrl>("startup_check");
-	mNameCheckbox = getChild<LLCheckBoxCtrl>("name_check");
-	mMaturityCombo = getChild<LLComboBox>("maturity_desired_combobox");
 	mBlacklistedNames = getChild<LLScrollListCtrl>("blacklisted_names");
 	mBlacklistEntry = getChild<LLLineEditor>("blacklist_entry");
-	mAddBlacklist = getChild<LLButton>("blacklist_entry_add");
-	mRemBlacklist = getChild<LLButton>("blacklist_entry_rem");
 
 	LLSD list = gSavedPerAccountSettings.getLLSD("FSBlacklistedRegionNames");
 	for (LLSD::array_const_iterator iter = list.beginArray();
@@ -278,12 +255,6 @@ BOOL FSFloaterDiscord::postBuild()
 	{
 		mBlacklistedNames->addSimpleElement(iter->asString());
 	}
-
-	mMaturityCombo->selectByValue((LLSD::Integer)gSavedPerAccountSettings.getU32("FSMaxSharedMaturity"));
-
-	mAllowCheckbox->set(gSavedPerAccountSettings.getBOOL("FSEnableDiscordIntegration"));
-
-	mNameCheckbox->set(gSavedPerAccountSettings.getBOOL("FSShareNameToDiscord"));
 
 	// Connection status widgets
 	mStatusText = getChild<LLTextBox>("connection_status_text");
@@ -329,4 +300,3 @@ void FSFloaterDiscord::draw()
 	}
 	LLFloater::draw();
 }
-
