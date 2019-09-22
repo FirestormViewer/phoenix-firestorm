@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <floater name="floater_discord">
-	<string name="discord_connected" value="Połączony/a z Discord jako:" />
-	<string name="discord_disconnected" value="Brak połączenia z Discord." />
+	<string name="discord_connected">Połączony/a z Discord jako:</string>
+	<string name="discord_disconnected">Brak połączenia z Discord.</string>
 	<string name="SocialDiscordConnecting">Łączenie z Discord...</string>
 	<string name="SocialDiscordErrorConnecting">Problem z połączeniem z Discord</string>
 	<string name="SocialDiscordDisconnecting">Odłączanie się od Discorda...</string>
@@ -9,6 +9,7 @@
 		Brak połączenia z Discord.
 	</text>
 	<check_box label="Połącz automatycznie przy logowaniu" name="startup_check" />
+	<check_box label="Udostępniaj nazwę użytkownika" name="name_check" />
 	<button label="Połącz..." name="connect_btn" />
 	<button label="Odłącz" name="disconnect_btn" />
 	<text name="rating_label">
