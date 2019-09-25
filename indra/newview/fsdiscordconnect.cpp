@@ -48,9 +48,7 @@
 
 #include "boost/algorithm/string/case_conv.hpp"
 
-#ifndef DISCORD_API_KEY
-#define DISCORD_API_KEY ""
-#endif
+#include "fsdiscordkey.h"
 
 boost::scoped_ptr<LLEventPump> FSDiscordConnect::sStateWatcher(new LLEventStream("DiscordConnectState"));
 boost::scoped_ptr<LLEventPump> FSDiscordConnect::sInfoWatcher(new LLEventStream("DiscordConnectInfo"));
