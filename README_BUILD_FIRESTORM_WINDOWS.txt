@@ -52,4 +52,3 @@ Logs:
 
 Output:
     Look for output in build-vc120-32/newview/Release for 32bit builds and build-vc120-64/newview/Release for 64bit
-
