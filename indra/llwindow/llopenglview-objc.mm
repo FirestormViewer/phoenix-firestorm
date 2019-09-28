@@ -837,7 +837,9 @@ attributedStringInfo getSegments(NSAttributedString *str)
     [super setMarkedText:aString selectedRange:selectedRange replacementRange:replacementRange];
     if ([aString length] == 0)      // this means Input Widow becomes empty
     {
-        [_window orderOut:_window];     // Close this to avoid empty Input Window
+        //[_window orderOut:_window];     // Close this to avoid empty Input Window
+	// <FS:TS> Xcode 11 compile fix
+        [self.window orderOut:self.window];     // Close this to avoid empty Input Window
     }
 }
 
@@ -861,7 +863,9 @@ attributedStringInfo getSegments(NSAttributedString *str)
         (mKeyPressed >= 0xF700 && mKeyPressed <= 0xF8FF))
     {
         // this is case a) of above comment
-        [_window orderOut:_window];     // to avoid empty Input Window
+	// <FS:TS> Xcode 11 compile fix
+        //[_window orderOut:_window];     // to avoid empty Input Window
+        [self.window orderOut:self.window];     // to avoid empty Input Window
     }
 }
 
