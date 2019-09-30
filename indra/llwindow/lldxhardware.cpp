@@ -616,6 +616,7 @@ BOOL LLDXHardware::getInfo(BOOL vram_only, bool disable_wmi)
 	IDxDiagContainer *device_containerp = NULL;
 	IDxDiagContainer *file_containerp = NULL;
 	IDxDiagContainer *driver_containerp = NULL;
+	DWORD dw_device_count;
 
     // CoCreate a IDxDiagProvider*
 	LL_DEBUGS("AppInit") << "CoCreateInstance IID_IDxDiagProvider" << LL_ENDL;
@@ -666,8 +667,17 @@ BOOL LLDXHardware::getInfo(BOOL vram_only, bool disable_wmi)
 		hr = dx_diag_rootp->GetChildContainer(L"DxDiag_DisplayDevices", &devices_containerp);
 		if(FAILED(hr) || !devices_containerp)
 		{
+            // do not release 'dirty' devices_containerp at this stage, only dx_diag_rootp
+            devices_containerp = NULL; 
             goto LCleanup;
 		}
+
+        // make sure there is something inside
+        hr = devices_containerp->GetNumberOfChildContainers(&dw_device_count);
+        if (FAILED(hr) || dw_device_count == 0)
+        {
+            goto LCleanup;
+        }
 
 		// Get device 0
 		LL_DEBUGS("AppInit") << "devices_containerp->GetChildContainer" << LL_ENDL;
@@ -879,6 +889,7 @@ LLSD LLDXHardware::getDisplayInfo()
 	IDxDiagContainer *device_containerp = NULL;
 	IDxDiagContainer *file_containerp = NULL;
 	IDxDiagContainer *driver_containerp = NULL;
+	DWORD dw_device_count;
 
     // CoCreate a IDxDiagProvider*
 	LL_INFOS() << "CoCreateInstance IID_IDxDiagProvider" << LL_ENDL;
@@ -929,8 +940,17 @@ LLSD LLDXHardware::getDisplayInfo()
 		hr = dx_diag_rootp->GetChildContainer(L"DxDiag_DisplayDevices", &devices_containerp);
 		if(FAILED(hr) || !devices_containerp)
 		{
+            // do not release 'dirty' devices_containerp at this stage, only dx_diag_rootp
+            devices_containerp = NULL;
             goto LCleanup;
 		}
+
+        // make sure there is something inside
+        hr = devices_containerp->GetNumberOfChildContainers(&dw_device_count);
+        if (FAILED(hr) || dw_device_count == 0)
+        {
+            goto LCleanup;
+        }
 
 		// Get device 0
 		LL_INFOS() << "devices_containerp->GetChildContainer" << LL_ENDL;
@@ -983,6 +1003,10 @@ LLSD LLDXHardware::getDisplayInfo()
     }
 
 LCleanup:
+    if (ret.emptyMap())
+    {
+        LL_INFOS() << "Failed to get data, cleaning up" << LL_ENDL;
+    }
 	SAFE_RELEASE(file_containerp);
 	SAFE_RELEASE(driver_containerp);
 	SAFE_RELEASE(device_containerp);
