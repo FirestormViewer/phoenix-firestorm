@@ -6744,7 +6744,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://wiki.phoenixviewer.com/[TOPIC]</string>
+      <string>https://wiki.firestormviewer.org/[TOPIC]</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>
