@@ -210,6 +210,9 @@ set(GRID agni CACHE STRING "Target Grid")
 set(FLICKR_API_KEY "daaabff93a967e0f37fa18863bb43b29")
 set(FLICKR_API_SECRET "846f0958020b553e") 
 
+# Discord client key.
+set(DDISCORD_API_KEY "427641535253708801")
+
 set(ENABLE_SIGNING OFF CACHE BOOL "Enable signing the viewer")
 set(SIGNING_IDENTITY "" CACHE STRING "Specifies the signing identity to use, if necessary.")
 
