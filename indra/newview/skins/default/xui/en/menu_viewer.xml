@@ -604,8 +604,6 @@
         <menu_item_call.on_click
           function="Floater.Toggle"
           parameter="fs_discord"/>
-        <menu_item_call.on_visible
-          function="FSDiscordEnabled"/>
       </menu_item_call>
         <menu_item_separator/>
         <menu

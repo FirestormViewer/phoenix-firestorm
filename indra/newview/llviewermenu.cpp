@@ -11125,17 +11125,6 @@ class FSObjectExportCollada : public view_listener_t
 };
 // </FS:CR>
 
-// <FS:Ansariel> Discord integration
-bool enable_discord_integration()
-{
-#if HAS_DISCORD
-	return true;
-#else
-	return false;
-#endif
-}
-// </FS:Ansariel>
-
 // <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
 //         pick up the menu properly.
 void initialize_edit_menu()
@@ -11854,7 +11843,4 @@ void initialize_menus()
 	view_listener_t::addMenu(new FSObjectExportCollada(), "Object.ExportCollada");
 	enable.add("Object.EnableExport", boost::bind(&enable_export_object));
 	// </FS:Techwolf Lupindo>
-
-	// <FS:Ansariel> Discord integration
-	enable.add("FSDiscordEnabled", std::bind(&enable_discord_integration));
 }

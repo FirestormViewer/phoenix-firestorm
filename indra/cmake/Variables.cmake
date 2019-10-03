@@ -147,6 +147,9 @@ endif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   set(DARWIN 1)
 
+  set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "")
+  message(STATUS "CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY = '${CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY}'")
+
   string(REGEX MATCH "-mmacosx-version-min=([^ ]+)" scratch "$ENV{LL_BUILD}")
   set(CMAKE_OSX_DEPLOYMENT_TARGET "${CMAKE_MATCH_1}")
   message(STATUS "CMAKE_OSX_DEPLOYMENT_TARGET = '${CMAKE_OSX_DEPLOYMENT_TARGET}'")
@@ -209,6 +212,9 @@ set(GRID agni CACHE STRING "Target Grid")
 # Flickr API keys.
 set(FLICKR_API_KEY "daaabff93a967e0f37fa18863bb43b29")
 set(FLICKR_API_SECRET "846f0958020b553e") 
+
+# Discord client key.
+set(DDISCORD_API_KEY "427641535253708801")
 
 set(ENABLE_SIGNING OFF CACHE BOOL "Enable signing the viewer")
 set(SIGNING_IDENTITY "" CACHE STRING "Specifies the signing identity to use, if necessary.")

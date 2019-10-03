@@ -48,9 +48,7 @@
 
 #include "boost/algorithm/string/case_conv.hpp"
 
-#ifndef DISCORD_API_KEY
-#define DISCORD_API_KEY ""
-#endif
+#include "fsdiscordkey.h"
 
 boost::scoped_ptr<LLEventPump> FSDiscordConnect::sStateWatcher(new LLEventStream("DiscordConnectState"));
 boost::scoped_ptr<LLEventPump> FSDiscordConnect::sInfoWatcher(new LLEventStream("DiscordConnectInfo"));
@@ -207,10 +205,11 @@ void FSDiscordConnect::updateRichPresence()
 	DiscordRichPresence discordPresence;
 	memset(&discordPresence, 0, sizeof(discordPresence));
 	discordPresence.state = region_name.c_str();
-	LLAvatarName av_name;
-	std::string name;
-	if (RlvActions::canShowName(RlvActions::SNC_DEFAULT, gAgentID))
+
+	if (RlvActions::canShowName(RlvActions::SNC_DEFAULT, gAgentID) && gSavedPerAccountSettings.getBOOL("FSShareNameToDiscord"))
 	{
+		LLAvatarName av_name;
+		std::string name;
 		if (LLAvatarNameCache::get(gAgentID, &av_name))
 		{
 			name = av_name.getCompleteName(true, true);
@@ -219,12 +218,9 @@ void FSDiscordConnect::updateRichPresence()
 		{
 			name = gAgentUsername;
 		}
+		discordPresence.details = name.c_str();
 	}
-	else
-	{
-		name = RlvStrings::getAnonym(av_name);
-	}
-	discordPresence.details = name.c_str();
+	
 	discordPresence.startTimestamp = mConnectTime;
 
 	discordPresence.largeImageKey = "secondlife_512";

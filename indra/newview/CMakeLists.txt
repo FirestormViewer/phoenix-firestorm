@@ -1632,10 +1632,15 @@ list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/exoflickrkeys.h)
 # </exodus>
 
 #<FS:LO> Discord rich presence
-  if (USE_DISCORD)
-    LIST(APPEND viewer_HEADER_FILES fsfloaterdiscord.h fsdiscordconnect.h)
-    LIST(APPEND viewer_SOURCE_FILES fsfloaterdiscord.cpp fsdiscordconnect.cpp)
-  endif (USE_DISCORD)
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/fsdiscordkey.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/fsdiscordkey.h
+    @ONLY
+)
+list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/fsdiscordkey.h)
+LIST(APPEND viewer_HEADER_FILES fsfloaterdiscord.h fsdiscordconnect.h)
+LIST(APPEND viewer_SOURCE_FILES fsfloaterdiscord.cpp fsdiscordconnect.cpp)
 #</FS:LO>
 
 # <FS:TS> Generate the version information header file.
@@ -2446,9 +2451,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${GROWL_LIBRARY}
     )
 
-if( USE_DISCORD )
-  target_link_libraries(${VIEWER_BINARY_NAME} ${DISCORD_LIBRARY} )
-endif()
+target_link_libraries(${VIEWER_BINARY_NAME} ${DISCORD_LIBRARY} )
 
 if (BUGSPLAT_DB)
   target_link_libraries(${VIEWER_BINARY_NAME}
