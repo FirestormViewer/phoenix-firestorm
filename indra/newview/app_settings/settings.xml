@@ -6744,7 +6744,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://wiki.phoenixviewer.com/[TOPIC]</string>
+      <string>https://wiki.firestormviewer.org/[TOPIC]</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -18601,7 +18601,6 @@ Change of this parameter will affect the layout of buttons in notification toast
           <string>script_floater</string>
           <string>world_map</string>
           <string>preferences</string>
-          <string>facebook</string>
           <string>flickr</string>
           <string>twitter</string>
       </array>
@@ -24434,17 +24433,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-    <key>FSExperienceSearchMaturityRating</key>
-    <map>
-      <key>Comment</key>
-      <string>Setting for the user's preferred maturity level for experiences search (consts in indra_constants.h)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>U32</string>
-      <key>Value</key>
-      <integer>13</integer>
     </map>
     <key>FSConfirmPayments</key>
     <map>

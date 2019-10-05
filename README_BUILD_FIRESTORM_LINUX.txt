@@ -41,5 +41,3 @@ Logs:
 
 Output:
         Look for output in build-linux-x86_64/newview/Release
-
-

@@ -70,6 +70,9 @@ Zaawansowane oświetlenie (Advanced Lighting Model): [ALMSTATUS]
 Pamięć tekstur (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 Czas utworzenia VFS (cache) w UTC: [VFS_DATE]
 	</string>
+	<string name="AboutOSXHiDPI">
+		Tryb obrazu HiDPI: [HIDPI]
+	</string>
 	<string name="AboutLibs">
 RestrainedLove API: [RLV_VERSION]
 Wersja libcurl: [LIBCURL_VERSION]
@@ -347,24 +350,6 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="TestingDisconnect">
 		Testowanie rozłączenia klienta
-	</string>
-	<string name="SocialFacebookConnecting">
-		Łączenie z Facebookiem...
-	</string>
-	<string name="SocialFacebookPosting">
-		Wysyłanie...
-	</string>
-	<string name="SocialFacebookDisconnecting">
-		Rozłączanie z Facebookiem...
-	</string>
-	<string name="SocialFacebookErrorConnecting">
-		Problem z łączeniem z Facebookiem
-	</string>
-	<string name="SocialFacebookErrorPosting">
-		Problem z wysyłaniem na Facebooka
-	</string>
-	<string name="SocialFacebookErrorDisconnecting">
-		Problem z rozłączaniem z Facebookiem
 	</string>
 	<string name="SocialFlickrConnecting">
 		Łączenie z Flickr...
@@ -1592,6 +1577,15 @@ http://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
 	<string name="InventoryInboxNoItems">
 		Przedmioty zakupione na Marketplace pojawią się tutaj. Możesz następnie przeciągnąć je do głównej części Szafy.
+	</string>
+	<string name="InventoryPlayAnimationTooltip">
+		Otwórz okno z opcjami odtwarzania.
+	</string>
+	<string name="InventoryPlayGestureTooltip">
+		Odtwarzaj wybrany gest w świecie.
+	</string>
+	<string name="InventoryPlaySoundTooltip">
+		Otwórz okno z opcjami odtwarzania.
 	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		Każdy może sprzedawać przedmioty na Marketplace.
@@ -4582,9 +4576,6 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	<string name="share_alert">
 		Przeciągaj tutaj rzeczy z Szafy
 	</string>
-	<string name="facebook_post_success">
-		Wysłałeś/aś post na Facebooka.
-	</string>
 	<string name="flickr_post_success">
 		Wysłałeś/aś post na Flickr.
 	</string>
@@ -5031,7 +5022,7 @@ Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia 
 		W tym stroju nie ma elementów
 	</string>
 	<string name="ExternalEditorNotSet">
-		Wybierz edytor używając ustawień ExternalEditor.
+		Wybierz edytor poprzez ustawienie zmiennej środowiska LL_SCRIPT_EDITOR lub ustawienie ExternalEditor.
 	</string>
 	<string name="ExternalEditorNotFound">
 		Nie odnaleziono zewnętrznego edytora wskazanego przez Ciebie.
@@ -5280,9 +5271,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		Punkty, jakie mogą być interesujące
-	</string>
-	<string name="Command_Facebook_Tooltip">
-		Wyślij na Facebooka
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Wyślij na Flickr

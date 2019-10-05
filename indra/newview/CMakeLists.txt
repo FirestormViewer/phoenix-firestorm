@@ -60,6 +60,7 @@ include(URIPARSER)
 include(Growl)
 include(ColladaDom)
 include(jemalloc)
+include(Discord)
 
 # <FS:ND> if using ndPhysicsstub this variable will be unset, we don't need to build any stub code viewer side in that case
 if( LLPHYSICSEXTENSIONS_SRC_DIR )
@@ -312,7 +313,6 @@ set(viewer_SOURCE_FILES
     llexperiencelog.cpp
     llexternaleditor.cpp
     llface.cpp
-    llfacebookconnect.cpp
     llfasttimerview.cpp
     llfavoritesbar.cpp
     llfeaturemanager.cpp
@@ -357,7 +357,6 @@ set(viewer_SOURCE_FILES
     llfloaterexperiencepicker.cpp
     llfloaterexperienceprofile.cpp
     llfloaterexperiences.cpp
-    llfloaterfacebook.cpp
     llfloaterflickr.cpp
     llfloaterfonttest.cpp
     llfloatergesture.cpp
@@ -1072,7 +1071,6 @@ set(viewer_HEADER_FILES
     llexperiencelog.h
     llexternaleditor.h
     llface.h
-    llfacebookconnect.h
     llfasttimerview.h
     llfavoritesbar.h
     llfeaturemanager.h
@@ -1117,7 +1115,6 @@ set(viewer_HEADER_FILES
     llfloaterexperiencepicker.h
     llfloaterexperienceprofile.h
     llfloaterexperiences.h
-    llfloaterfacebook.h
     llfloaterflickr.h
     llfloaterfonttest.h
     llfloatergesture.h
@@ -1633,6 +1630,18 @@ configure_file(
 )
 list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/exoflickrkeys.h)
 # </exodus>
+
+#<FS:LO> Discord rich presence
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/fsdiscordkey.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/fsdiscordkey.h
+    @ONLY
+)
+list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/fsdiscordkey.h)
+LIST(APPEND viewer_HEADER_FILES fsfloaterdiscord.h fsdiscordconnect.h)
+LIST(APPEND viewer_SOURCE_FILES fsfloaterdiscord.cpp fsdiscordconnect.cpp)
+#</FS:LO>
 
 # <FS:TS> Generate the version information header file.
 configure_file(
@@ -2292,12 +2301,12 @@ if (WINDOWS)
 
     # sets the 'working directory' for debugging from visual studio.
     # Condition for version can be moved to requirements once build agents will be updated (see TOOL-3865)
-    if ((NOT UNATTENDED) AND (${CMAKE_VERSION} VERSION_GREATER "3.7.2"))
+    if (NOT UNATTENDED)
         set_property(
           TARGET ${VIEWER_BINARY_NAME}
           PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
           )
-    endif ((NOT UNATTENDED) AND (${CMAKE_VERSION} VERSION_GREATER "3.7.2"))
+    endif (NOT UNATTENDED)
 
     if (PACKAGE)
       add_custom_command(
@@ -2437,6 +2446,8 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLAPPEARANCE_LIBRARIES}
     ${GROWL_LIBRARY}
     )
+
+target_link_libraries(${VIEWER_BINARY_NAME} ${DISCORD_LIBRARY} )
 
 if (BUGSPLAT_DB)
   target_link_libraries(${VIEWER_BINARY_NAME}

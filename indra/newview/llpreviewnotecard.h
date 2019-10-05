@@ -29,6 +29,7 @@
 
 #include "llpreview.h"
 #include "llassetstorage.h"
+#include "llpreviewscript.h"
 #include "lliconctrl.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -50,21 +51,21 @@ public:
 	virtual ~LLPreviewNotecard();
 	
 	bool saveItem();
-	void setObjectID(const LLUUID& object_id);
+	void setObjectID(const LLUUID& object_id) override;
 
 	// llview
-	virtual void draw();
+	void draw() override;
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-	virtual bool hasAccelerators() const;
+	virtual bool hasAccelerators() const override;
 // [/SL:KB]
-	virtual BOOL handleKeyHere(KEY key, MASK mask);
-	virtual void setEnabled( BOOL enabled );
+	virtual BOOL handleKeyHere(KEY key, MASK mask) override;
+	virtual void setEnabled( BOOL enabled ) override;
 
 	// llfloater
-	virtual BOOL canClose();
+	BOOL canClose() override;
 
 	// llpanel
-	virtual BOOL postBuild();
+	BOOL postBuild() override;
 
 	// reach into the text editor, and grab the drag item
 	const LLInventoryItem* getDragItem();
@@ -81,14 +82,16 @@ public:
 	// asset system. :(
 	void refreshFromInventory(const LLUUID& item_id = LLUUID::null);
 
+	void syncExternal();
+
 	// <FS:Ansariel> FIRE-9039: Close notecard after choosing "Save" in close confirmation
 	void checkCloseAfterSave();
 
 protected:
 
-	void updateTitleButtons();
-	virtual void loadAsset();
-	bool saveIfNeeded(LLInventoryItem* copyitem = NULL);
+	void updateTitleButtons() override;
+	void loadAsset() override;
+	bool saveIfNeeded(LLInventoryItem* copyitem = NULL, bool sync = true);
 
 	void deleteNotecard();
 
@@ -100,6 +103,8 @@ protected:
 	static void onClickSave(void* data);
 
 	static void onClickDelete(void* data);
+
+	static void onClickEdit(void* data);
 
 	static void onSaveComplete(const LLUUID& asset_uuid,
 							   void* user_data,
@@ -113,6 +118,12 @@ protected:
 	// <FS:Ansariel> FIRE-13969: Search button
 	void onSearchButtonClicked();
 
+    void openInExternalEditor();
+    bool onExternalChange(const std::string& filename);
+    bool loadNotecardText(const std::string& filename);
+    bool writeToFile(const std::string& filename);
+    std::string getTmpFileName();
+
 protected:
 	LLViewerTextEditor* mEditor;
 	LLButton* mSaveBtn;
@@ -120,6 +131,8 @@ protected:
 	LLUUID mAssetID;
 
 	LLUUID mObjectID;
+
+	LLLiveLSLFile* mLiveFile;
 };
 
 
