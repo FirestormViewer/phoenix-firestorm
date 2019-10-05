@@ -480,8 +480,7 @@ bool idle_startup()
 			if (!found_template)
 			{
 				message_template_path =
-					gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE,
-												   "../Resources/app_settings",
+					gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,
 												   "message_template.msg");
 				found_template = LLFile::fopen(message_template_path.c_str(), "r");		/* Flawfinder: ignore */
 			}		
@@ -793,10 +792,6 @@ bool idle_startup()
 				}
 			}
 			display_startup();
-			if (gViewerWindow->getSystemUIScaleFactorChanged())
-			{
-				LLViewerWindow::showSystemUIScaleFactorChanged();
-			}
 			LLStartUp::setStartupState( STATE_LOGIN_WAIT );		// Wait for user input
 		}
 		else

@@ -44,6 +44,7 @@
 
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llappviewer.h"
 #include "llavatarrenderinfoaccountant.h"
 #include "llcallingcard.h"
 #include "llcommandhandler.h"
@@ -104,6 +105,18 @@ S32  LLViewerRegion::sNewObjectCreationThrottle = -1;
 typedef std::map<std::string, std::string> CapabilityMap;
 
 static void log_capabilities(const CapabilityMap &capmap);
+
+namespace
+{
+
+void newRegionEntry(LLViewerRegion& region)
+{
+    LL_INFOS("LLViewerRegion") << "Entering region [" << region.getName() << "]" << LL_ENDL;
+    gDebugInfo["CurrentRegion"] = region.getName();
+    LLAppViewer::instance()->writeDebugInfo();
+}
+
+} // anonymous namespace
 
 // support for secondlife:///app/region/{REGION} SLapps
 // N.B. this is defined to work exactly like the classic secondlife://{REGION}
@@ -252,6 +265,9 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
             return; // this error condition is not recoverable.
         }
 
+        // record that we just entered a new region
+        newRegionEntry(*regionp);
+
         // After a few attempts, continue login.  But keep trying to get the caps:
         if (mSeedCapAttempts >= mSeedCapMaxAttemptsBeforeLogin &&
             STATE_SEED_GRANTED_WAIT == LLStartUp::getStartupState())
@@ -374,6 +390,9 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCompleteCoro(U64 regionHandle)
             LL_WARNS("AppInit", "Capabilities") << "Failed to get seed capabilities, and can not determine url!" << LL_ENDL;
             break; // this error condition is not recoverable.
         }
+
+        // record that we just entered a new region
+        newRegionEntry(*regionp);
 
         LLSD capabilityNames = LLSD::emptyArray();
         buildCapabilityNames(capabilityNames);
@@ -2873,9 +2892,9 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("DispatchRegionInfo");
 	capabilityNames.append("DirectDelivery");
 	capabilityNames.append("EnvironmentSettings");
+	capabilityNames.append("EstateAccess");
 	capabilityNames.append("EstateChangeInfo");
 	capabilityNames.append("EventQueueGet");
-	capabilityNames.append("FacebookConnect");
 	capabilityNames.append("FlickrConnect");
 	capabilityNames.append("TwitterConnect");
 
@@ -3213,6 +3232,12 @@ bool LLViewerRegion::meshUploadEnabled() const
 {
 	return (mSimulatorFeatures.has("MeshUploadEnabled") &&
 		mSimulatorFeatures["MeshUploadEnabled"].asBoolean());
+}
+
+bool LLViewerRegion::bakesOnMeshEnabled() const
+{
+	return (mSimulatorFeatures.has("BakesOnMeshEnabled") &&
+		mSimulatorFeatures["BakesOnMeshEnabled"].asBoolean());
 }
 
 bool LLViewerRegion::meshRezEnabled() const
