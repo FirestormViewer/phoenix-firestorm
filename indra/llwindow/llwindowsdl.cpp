@@ -326,12 +326,6 @@ static int x11_detect_VRAM_kb_fp(FILE *fp, const char *prefix_str)
 
 static int x11_detect_VRAM_kb()
 {
-#if LL_SOLARIS && defined(__sparc)
-      //  NOTE: there's no Xorg server on SPARC so just return 0
-      //        and allow SDL to attempt to get the amount of VRAM
-      return(0);
-#else
-
 	std::string x_log_location("/var/log/");
 	std::string fname;
 	int rtn = 0; // 'could not detect'
@@ -412,7 +406,6 @@ static int x11_detect_VRAM_kb()
 		}
 	}
 	return rtn;
-#endif // LL_SOLARIS
 }
 #endif // LL_X11
 
@@ -474,7 +467,6 @@ void LLWindowSDL::tryFindFullscreenSize( int &width, int &height )
 	}
 }
 
-
 BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, BOOL fullscreen, BOOL disable_vsync)
 {
 	//bool			glneedsinit = false;
@@ -523,7 +515,33 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 	
 	mSDLFlags = sdlflags;
 
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+	GLint redBits{8}, greenBits{8}, blueBits{8}, alphaBits{8};
+	
+	GLint depthBits{(bits <= 16) ? 16 : 24}, stencilBits{8};
+
+	if (getenv("LL_GL_NO_STENCIL"))
+		stencilBits = 0;
+	
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, alphaBits);
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   redBits);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, greenBits);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,  blueBits);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, depthBits );
+
+	// We need stencil support for a few (minor) things.
+	if (stencilBits)
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, stencilBits);
+
+	// *FIX: try to toggle vsync here?
+
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+	if (mFSAASamples > 0)
+	{
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, mFSAASamples);
+	}
+	
 	mWindow = SDL_CreateWindow( mWindowTitle.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, mSDLFlags );
 
 	if( mWindow )
@@ -580,45 +598,14 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 		bmpsurface = NULL;
 	}
 
-	// note: these SetAttributes make Tom's 9600-on-AMD64 fail to
-	// get a visual, but it's broken anyway when it does, and without
-	// these SetAttributes we might easily get an avoidable substandard
-	// visual to work with on most other machines.
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE,  8);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE,8);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-#if !LL_SOLARIS
-        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, (bits <= 16) ? 16 : 24);
-	// We need stencil support for a few (minor) things.
-	if (!getenv("LL_GL_NO_STENCIL"))
-		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-#else
-	// NOTE- use smaller Z-buffer to enable more graphics cards
-        //     - This should not affect better GPUs and has been proven
-        //	 to provide 24-bit z-buffers when available.
-	//
-        // As the API states: 
-	//
-        // GLX_DEPTH_SIZE    Must be followed by a nonnegative
-        //                   minimum size specification.  If this
-        //                   value is zero, visuals with no depth
-        //                   buffer are preferred.  Otherwise, the
-        //                   largest available depth buffer of at
-        //                   least the minimum size is preferred.
+	SDL_GLContext glContext = SDL_GL_CreateContext( mWindow );
 
-        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-#endif
-        SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, (bits <= 16) ? 1 : 8);
-
-        // *FIX: try to toggle vsync here?
-
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-	if (mFSAASamples > 0)
+	if( glContext == 0 )
 	{
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, mFSAASamples);
+		LL_WARNS() << "Cannot create GL context " << SDL_GetError() << LL_ENDL;
+		return FALSE;
 	}
+
 	
 	// Detect video memory size.
 # if LL_X11
@@ -644,69 +631,38 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 	// explicitly unsupported cards.
 	//const char* RENDERER = (const char*) glGetString(GL_RENDERER);
 
-	GLint depthBits, stencilBits, redBits, greenBits, blueBits, alphaBits;
-
-	glGetIntegerv(GL_RED_BITS, &redBits);
-	glGetIntegerv(GL_GREEN_BITS, &greenBits);
-	glGetIntegerv(GL_BLUE_BITS, &blueBits);
-	glGetIntegerv(GL_ALPHA_BITS, &alphaBits);
-	glGetIntegerv(GL_DEPTH_BITS, &depthBits);
-	glGetIntegerv(GL_STENCIL_BITS, &stencilBits);
+	SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &redBits);
+	SDL_GL_GetAttribute(SDL_GL_GREEN_SIZE, &greenBits);
+	SDL_GL_GetAttribute(SDL_GL_BLUE_SIZE, &blueBits);
+	SDL_GL_GetAttribute(SDL_GL_ALPHA_SIZE, &alphaBits);
+	SDL_GL_GetAttribute(SDL_GL_DEPTH_SIZE, &depthBits);
+	SDL_GL_GetAttribute(SDL_GL_STENCIL_SIZE, &stencilBits);
 	
 	LL_INFOS() << "GL buffer:" << LL_ENDL;
-        LL_INFOS() << "  Red Bits " << S32(redBits) << LL_ENDL;
-        LL_INFOS() << "  Green Bits " << S32(greenBits) << LL_ENDL;
-        LL_INFOS() << "  Blue Bits " << S32(blueBits) << LL_ENDL;
-	LL_INFOS()	<< "  Alpha Bits " << S32(alphaBits) << LL_ENDL;
-	LL_INFOS()	<< "  Depth Bits " << S32(depthBits) << LL_ENDL;
-	LL_INFOS()	<< "  Stencil Bits " << S32(stencilBits) << LL_ENDL;
+	LL_INFOS() << "  Red Bits " << S32(redBits) << LL_ENDL;
+	LL_INFOS() << "  Green Bits " << S32(greenBits) << LL_ENDL;
+	LL_INFOS() << "  Blue Bits " << S32(blueBits) << LL_ENDL;
+	LL_INFOS() << "  Alpha Bits " << S32(alphaBits) << LL_ENDL;
+	LL_INFOS() << "  Depth Bits " << S32(depthBits) << LL_ENDL;
+	LL_INFOS() << "  Stencil Bits " << S32(stencilBits) << LL_ENDL;
 
 	GLint colorBits = redBits + greenBits + blueBits + alphaBits;
 	// fixme: actually, it's REALLY important for picking that we get at
 	// least 8 bits each of red,green,blue.  Alpha we can be a bit more
 	// relaxed about if we have to.
-#if LL_SOLARIS && defined(__sparc)
-//  again the __sparc required because Xsun support, 32bit are very pricey on SPARC
-	if(colorBits < 24)		//HACK:  on SPARC allow 24-bit color
-#else
 	if (colorBits < 32)
-#endif
 	{
 		close();
 		setupFailure(
-#if LL_SOLARIS && defined(__sparc)
-			"Second Life requires at least 24-bit color on SPARC to run in a window.\n"
-			"Please use fbconfig to set your default color depth to 24 bits.\n"
-			"You may also need to adjust the X11 setting in SMF.  To do so use\n"
-			"  'svccfg -s svc:/application/x11/x11-server setprop options/default_depth=24'\n"
-#else
 			"Second Life requires True Color (32-bit) to run in a window.\n"
 			"Please go to Control Panels -> Display -> Settings and\n"
 			"set the screen to 32-bit color.\n"
-#endif
 			"Alternately, if you choose to run fullscreen, Second Life\n"
 			"will automatically adjust the screen each time it runs.",
 			"Error",
 			OSMB_OK);
 		return FALSE;
 	}
-
-#if 0  // *FIX: we're going to brave it for now...
-	if (alphaBits < 8)
-	{
-		close();
-		setupFailure(
-			"Second Life is unable to run because it can't get an 8 bit alpha\n"
-			"channel.  Usually this is due to video card driver issues.\n"
-			"Please make sure you have the latest video card drivers installed.\n"
-			"Also be sure your monitor is set to True Color (32-bit) in\n"
-			"Control Panels -> Display -> Settings.\n"
-			"If you continue to receive this message, contact customer service.",
-			"Error",
-			OSMB_OK);
-		return FALSE;
-	}
-#endif
 
 #if LL_X11
 	/* Grab the window manager specific information */
