@@ -3608,7 +3608,7 @@ Bitte prüfen Sie Ihre Netzwerk- und Firewall-Konfiguration.
 Deaktivieren Sie alle SIP ALG-Funktionen in Ihrem Router. 
 
 Voice-Kommunikation ist leider nicht verfügbar.
-[https://wiki.phoenixviewer.com/fs_voice]
+[https://wiki.firestormviewer.org/fs_voice]
 		<usetemplate name="okignore" yestext="OK" ignoretext="Warnen, wenn keine Verbindung zum Voice-Server hergestellt werden kann."/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
@@ -3616,7 +3616,7 @@ Voice-Kommunikation ist leider nicht verfügbar.
 
 Voice-Kommunikation ist leider nicht verfügbar.
 Bitte überprüfen Sie Ihr Netzwerk- und Firewall-Setup.
-[https://wiki.phoenixviewer.com/fs_voice]
+[https://wiki.firestormviewer.org/fs_voice]
 		<usetemplate name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="AvatarRezLeftNotification">

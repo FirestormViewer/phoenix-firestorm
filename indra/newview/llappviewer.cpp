@@ -3733,7 +3733,7 @@ LLSD LLAppViewer::getViewerInfo() const
 	// https://releasenotes.secondlife.com/viewer/2.1.0.123456.html
 	std::string url = LLTrans::getString("RELEASE_NOTES_BASE_URL");
 	// <FS:Ansariel> FIRE-13993: Leave out channel so we can use a URL like
-	//                           http://wiki.phoenixviewer.com/firestorm_change_log_x.y.z.rev
+	//                           http://wiki.firestormviewer.org/firestorm_change_log_x.y.z.rev
 	//if (! LLStringUtil::endsWith(url, "/"))
 	//	url += "/";
 	//url += LLURI::escape(LLVersionInfo::getVersion()) + ".html";

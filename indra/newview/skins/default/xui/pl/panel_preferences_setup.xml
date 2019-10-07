@@ -3,7 +3,7 @@
 	<tab_container name="max_bandwidth_layout">
 		<panel label="Połączenie" name="tab-conn">
 			<text name="Maximum bandwidth">
-				Maksymalna przepustowość ([http://wiki.phoenixviewer.com/fs_speedtest potrzebujesz sugestii?]):
+				Maksymalna przepustowość ([http://wiki.firestormviewer.org/fs_speedtest potrzebujesz sugestii?]):
 			</text>
 			<text name="NetworkPrefText3">
 				Światłowód
@@ -41,7 +41,7 @@
 		</panel>
 		<panel label="Lokalizacje" name="tab-dir">
 			<text name="cache_size_label_l">
-				Rozmiar pamięci podręcznej ([http://wiki.phoenixviewer.com/cache potrzebujesz sugestii?]):
+				Rozmiar pamięci podręcznej ([http://wiki.firestormviewer.org/cache potrzebujesz sugestii?]):
 			</text>
 			<button label="Wyczyść bufor Szafy" name="ClearInventoryCache"/>
 			<text name="Cache location">
