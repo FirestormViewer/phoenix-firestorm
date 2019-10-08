@@ -346,6 +346,11 @@ void RlvStrings::saveToFile(const std::string& strFilePath)
 // Checked: 2009-11-11 (RLVa-1.1.0a) | Modified: RLVa-1.1.0a
 const std::string& RlvStrings::getAnonym(const std::string& strName)
 {
+	if (!rlv_handler_t::isEnabled())
+	{
+		return strName;
+	}
+
 	const char* pszName = strName.c_str(); U32 nHash = 0;
 	
 	// Test with 11,264 SL names showed a 3.33% - 3.82% occurance for each so we *should* get a very even spread
