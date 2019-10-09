@@ -376,7 +376,7 @@ Please try logging in again in a minute.</string>
 
 	<string name="ReleaseNotes">Release Notes</string>
 	<!-- Always mark translate="false" for strings that are nothing but URLs, as they don't need translation. -->
-	<string name="RELEASE_NOTES_BASE_URL" translate="false">http://wiki.phoenixviewer.com/firestorm_change_log_</string>
+	<string name="RELEASE_NOTES_BASE_URL" translate="false">http://wiki.firestormviewer.org/firestorm_change_log_</string>
 
 	<!-- Indicates something is being loaded. Maybe should be merged with RetrievingData -->
 	<string name="LoadingData">Loading...</string>

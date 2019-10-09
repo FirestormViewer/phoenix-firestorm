@@ -143,6 +143,12 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 		// !transparent_object check will be covered by transparent_object == visible_object.
 		mPick = transparent_pick;
 	}
+	// <FS:ND> FIRE-29031; Handle transparent being nullptr (due to RLVa?). visible_object cannot be invalid here or the if above had been entered
+	else if( !transp_object)
+	{
+		mPick = visible_pick;
+	}
+	// </FS:ND>
 	else
 	{
 		// Select between two non-null picks

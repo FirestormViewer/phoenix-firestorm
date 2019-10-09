@@ -1546,7 +1546,7 @@ void LLPanelObject::activateMeshFields(LLViewerObject * objectp)
 	childSetVisible("ObjectLODbehaviourLabel", true);
 
 	// Setup the LL defaults
-	factor = 1.125f; // LL default for most people http://wiki.phoenixviewer.com/support:whirly_fizzle#lod_comparison
+	factor = 1.125f; // LL default for most people http://wiki.firestormviewer.org/support:whirly_fizzle#lod_comparison
 	args["FACTOR"] = llformat("%.3f", factor);
 	tb = getChild<LLTextBox>("LOD_swap_ll_default");
 	tb->setToolTip(getString("ll_lod_tooltip_msg",args));
