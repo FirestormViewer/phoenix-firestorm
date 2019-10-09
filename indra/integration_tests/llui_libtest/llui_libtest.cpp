@@ -56,7 +56,7 @@ LLControlGroup gWarningSettings("Warnings"); // persists ignored dialogs/warning
 #include "llavatarname.h"
 
 // Stub for rlvGetAnonym
-const std::string& rlvGetAnonym(const LLAvatarName& avName)
+std::string rlvGetAnonym(const LLAvatarName& avName)
 {
 	static std::string strAnonym = "A resident";
 	return strAnonym;
