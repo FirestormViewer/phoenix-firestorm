@@ -348,7 +348,8 @@ const std::string& RlvStrings::getAnonym(const std::string& strName)
 {
 	if (!rlv_handler_t::isEnabled())
 	{
-		return strName;
+		static std::string strNobody = LLTrans::getString("AvatarNameNobody");
+		return strNobody;
 	}
 
 	const char* pszName = strName.c_str(); U32 nHash = 0;
