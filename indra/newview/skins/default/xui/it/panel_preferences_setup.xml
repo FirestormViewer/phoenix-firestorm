@@ -3,7 +3,7 @@
 	<tab_container name="max_bandwidth_layout">
 		<panel label="Rete" name="tab-conn">
 			<text name="Maximum bandwidth">
-				Capacità massima di banda ([http://wiki.phoenixviewer.com/fs_speedtest serve un consiglio?]):
+				Capacità massima di banda ([http://wiki.firestormviewer.org/fs_speedtest serve un consiglio?]):
 			</text>
 			<text name="NetworkPrefText1" >
 				Wi-Fi
@@ -45,7 +45,7 @@
 		</panel>
 		<panel label="Cartelle" name="tab-dir">
 			<text name="cache_size_label_l">
-				Dimensioni cache ([http://wiki.phoenixviewer.com/cache serve un consiglio?]):
+				Dimensioni cache ([http://wiki.firestormviewer.org/cache serve un consiglio?]):
 			</text>
 			<button label="Cancella cache inventario" name="ClearInventoryCache" left="350" width="150"/>
 			<text name="Cache location">

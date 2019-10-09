@@ -791,7 +791,9 @@ RMDir "$INSTDIR"
 IfFileExists "$INSTDIR" FOLDERFOUND NOFOLDER
 
 FOLDERFOUND:
-  MessageBox MB_OK $(DeleteProgramFilesMB) /SD IDOK IDOK NOFOLDER
+# Silent uninstall always removes all files (/SD IDYES)
+  MessageBox MB_YESNO $(DeleteProgramFilesMB) /SD IDYES IDNO NOFOLDER
+  RMDir /r "$INSTDIR"
 
 NOFOLDER:
 

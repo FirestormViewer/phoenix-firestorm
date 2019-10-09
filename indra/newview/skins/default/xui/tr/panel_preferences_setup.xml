@@ -3,7 +3,7 @@
 	<tab_container name="max_bandwidth_layout">
 		<panel label="Ağ" name="tab-conn">
 			<text name="Maximum bandwidth">
-				Maksimum bant genişliği ([http://wiki.phoenixviewer.com/fs_speedtest Bir öneri gerekiyor?]):
+				Maksimum bant genişliği ([http://wiki.firestormviewer.org/fs_speedtest Bir öneri gerekiyor?]):
 			</text>
 			<check_box label="Özel port" name="connection_port_enabled"/>
 			<spinner label="Port numarası:" name="connection_port" width="160" label_width="85"/>

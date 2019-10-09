@@ -3,7 +3,7 @@
 	<tab_container name="max_bandwidth_layout">
 		<panel label="Rede" name="tab-conn">
 			<text name="Maximum bandwidth">
-				Largura de banda máxima ([http://wiki.phoenixviewer.com/fs_speedtest você precisa de uma sugestão?]):
+				Largura de banda máxima ([http://wiki.firestormviewer.org/fs_speedtest você precisa de uma sugestão?]):
 			</text>
 			<check_box label="Personalizar porta" name="connection_port_enabled"/>
 			<spinner label="Número da porta:" name="connection_port" width="160" label_width="85"/>
