@@ -5293,22 +5293,15 @@ bool LLVolumeFace::cacheOptimize()
 	// LLVCacheVertexData suddenly does point to unrelated vertices. It is an interesting fact that this is no problem for the
 	// windows version.
 	//
-	// To solve the issue with the pointer invalidation it would make sense to use a std::vector< U16 > for triangle indices, sort this
-	// using
+	// To solve the issue with the pointer invalidation it use a std::vector< U16 > for triangle indices, sort this using
 	// std::sort( v.begin(), v.end(), [&triangle_data](U16 rhs, U16 lhs ){ return triangle_data[rhs].mScore > triangle_data[lhs].mScore; }
 	// Then access all LLVCacheTriangleData> via triangle_data[ v[ idx ] ].
 	//
-	// This will help indeed with the destroyed triangles; but the result will still not be perfect and there are problems with alpha due to
-	// what looks like z order.
-	//
-	// It is peculiar that none of this happens when compiling with MSVC.
-	// Sadly for Linux it seems to be a decision between two evils
-	// - Disable cacheOptimize and have correct meshes but potentially a bit of less FPS.
-	// - Enable/fix cacheOptimize, potentially have a bit higher FPS but broken meshes.
-	//
-	// Having meshes correctly seems to be a bit of a lesser evil. Then do some wider testing on different systems to test for any other potential sideeffects.
+	// Unfortunately this is a bit of a messy interwoven change all of this method, alternative is to copy a Linux specific version. Which
+	// won't be that great either
+	// NB The change really should be safe for Winows too, in fact it is surprising Windows does not suffer fro the sae bug. Just cannot test
+	// the windows versions right now.
 	
-#ifndef LL_LINUX
 	LLVCacheLRU cache;
 	
 	if (mNumVertices < 3)
@@ -5343,6 +5336,13 @@ bool LLVolumeFace::cacheOptimize()
 		triangle_data[tri_idx].mVertex[i%3] = &(vertex_data[idx]);
 	}
 
+// <FS:ND> FIRE-23370/BUG-8801/MAIN-5060
+#ifdef LL_LINUX
+	std::vector< U16 > v;
+	for (U32 j = 0; j < triangle_data.size(); ++j)
+		v.push_back( j );
+#endif
+	
 	/*F32 pre_acmr = 1.f;
 	//measure cache misses from before rebuild
 	{
@@ -5374,14 +5374,28 @@ bool LLVolumeFace::cacheOptimize()
 	}
 
 	//sort triangle data by score
+// <FS:ND> FIRE-23370/BUG-8801/MAIN-5060
+#ifndef LL_LINUX
 	std::sort(triangle_data.begin(), triangle_data.end());
-
+#else
+	std::sort( v.begin(), v.end(),
+			   [&triangle_data](U16 rhs, U16 lhs )
+			   { return triangle_data[rhs].mScore > triangle_data[lhs].mScore; }
+			   );
+#endif
+		
 	std::vector<U16> new_indices;
 
 	LLVCacheTriangleData* tri;
 
 	//prime pump by adding first triangle to cache;
+// <FS:ND> FIRE-23370/BUG-8801/MAIN-5060
+#ifndef LL_LINUX
 	tri = &(triangle_data[0]);
+#else
+	tri = &(triangle_data[v[0]]);
+#endif
+	
 	cache.addTriangle(tri);
 	new_indices.push_back(tri->mVertex[0]->mIdx);
 	new_indices.push_back(tri->mVertex[1]->mIdx);
@@ -5398,11 +5412,21 @@ bool LLVolumeFace::cacheOptimize()
 			breaks++;
 			for (U32 j = 0; j < triangle_data.size(); ++j)
 			{
+// <FS:ND> FIRE-23370/BUG-8801/MAIN-5060
+#ifndef LL_LINUX
 				if (triangle_data[j].mActive)
 				{
 					tri = &(triangle_data[j]);
 					break;
 				}
+#else
+				if (triangle_data[v[j]].mActive)
+				{
+					tri = &(triangle_data[v[j]]);
+					break;
+				}
+#endif
+
 			}
 		}	
 		
@@ -5533,8 +5557,6 @@ bool LLVolumeFace::cacheOptimize()
 
 	//std::string result = llformat("ACMR pre/post: %.3f/%.3f  --  %d triangles %d breaks", pre_acmr, post_acmr, mNumIndices/3, breaks);
 	//LL_INFOS() << result << LL_ENDL;
-
-#endif // <FS:ND/>
 
 	return true;
 }
