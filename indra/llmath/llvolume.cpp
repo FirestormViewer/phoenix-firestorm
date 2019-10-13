@@ -5338,7 +5338,7 @@ bool LLVolumeFace::cacheOptimize()
 
 // <FS:ND> FIRE-23370/BUG-8801/MAIN-5060
 #ifdef LL_LINUX
-	std::vector< U16 > v;
+	std::vector< U32 > v;
 	for (U32 j = 0; j < triangle_data.size(); ++j)
 		v.push_back( j );
 #endif
