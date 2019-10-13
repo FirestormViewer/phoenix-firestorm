@@ -429,7 +429,7 @@ void LLPanelPermissions::refresh()
 //	}
 //	getChild<LLAvatarIconCtrl>("Creator Icon")->setValue(mCreatorID);
 //	getChild<LLAvatarIconCtrl>("Creator Icon")->setVisible(TRUE);
-//	mLabelCreatorName->setEnabled(TRUE);
+	mLabelCreatorName->setEnabled(TRUE);
 
 	// Update owner text field
 	getChildView("Owner:")->setEnabled(TRUE);
