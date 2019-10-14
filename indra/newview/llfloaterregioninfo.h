@@ -99,6 +99,7 @@ public:
 	static LLPanelRegionTerrainInfo* getPanelRegionTerrain();
 	static LLPanelRegionExperiences* getPanelExperiences();
 	static LLPanelRegionGeneralInfo* getPanelGeneral();
+	static LLPanelRegionEnvironment* getPanelEnvironment();
 // <FS:CR> Aurora Sim - Region Settings Panel
 	static LLPanelRegionOpenSettingsInfo* getPanelOpenSettings();
 // </FS:CR> Aurora Sim - Region Settings Panel
@@ -111,6 +112,8 @@ public:
 	void requestMeshRezInfo();
 	void enableTopButtons();
 	void disableTopButtons();
+
+	static void updateEstateName(const std::string& estate_name);
 
 private:
 	

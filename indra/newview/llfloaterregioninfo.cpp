@@ -207,6 +207,8 @@ public:
 
     virtual S32         getParcelId() override { return INVALID_PARCEL_ID; }
 
+    static void         updateEstateName(const std::string& name);
+
 protected:
     static const U32    DIRTY_FLAG_OVERRIDE;
 
@@ -621,6 +623,16 @@ LLPanelRegionGeneralInfo* LLFloaterRegionInfo::getPanelGeneral()
 }
 
 // static
+LLPanelRegionEnvironment* LLFloaterRegionInfo::getPanelEnvironment()
+{
+	LLFloaterRegionInfo* floater = LLFloaterReg::getTypedInstance<LLFloaterRegionInfo>("region_info");
+	if (!floater) return NULL;
+	LLTabContainer* tab = floater->getChild<LLTabContainer>("region_panels");
+	LLPanelRegionEnvironment* panel = (LLPanelRegionEnvironment*)tab->getChild<LLPanel>("panel_env_info");
+	return panel;
+}
+
+// static
 LLPanelRegionTerrainInfo* LLFloaterRegionInfo::getPanelRegionTerrain()
 {
 	LLFloaterRegionInfo* floater = LLFloaterReg::getTypedInstance<LLFloaterRegionInfo>("region_info");
@@ -643,6 +655,13 @@ LLPanelRegionExperiences* LLFloaterRegionInfo::getPanelExperiences()
 	if (!floater) return NULL;
 	LLTabContainer* tab = floater->getChild<LLTabContainer>("region_panels");
 	return (LLPanelRegionExperiences*)tab->getChild<LLPanel>("Experiences");
+}
+
+void LLFloaterRegionInfo::updateEstateName(const std::string& estate_name)
+{
+	LLPanelEstateCovenant::updateEstateName(estate_name);
+	LLPanelEstateInfo::updateEstateName(estate_name);
+	LLPanelRegionEnvironment::updateEstateName(estate_name);
 }
 
 void LLFloaterRegionInfo::disableTabCtrls()
@@ -4052,6 +4071,15 @@ bool LLPanelRegionEnvironment::confirmUpdateEstateEnvironment(const LLSD& notifi
     return false;
 }
 
+void LLPanelRegionEnvironment::updateEstateName(const std::string& name)
+{
+	LLPanelRegionEnvironment* panelp = LLFloaterRegionInfo::getPanelEnvironment();
+	if (panelp)
+	{
+		panelp->getChildRef<LLTextBox>("estate_name").setText(name);
+	}
+}
+
 void LLPanelRegionEnvironment::onChkAllowOverride(bool value)
 {
     setDirtyFlag(DIRTY_FLAG_OVERRIDE);
@@ -4063,7 +4091,10 @@ void LLPanelRegionEnvironment::onChkAllowOverride(bool value)
     if (LLPanelEstateInfo::isLindenEstate())
         notification = "ChangeLindenEstate";
 
-    LLNotification::Params params(notification);
+	LLSD args;
+	args["ESTATENAME"] = LLEstateInfoModel::instance().getName();
+	LLNotification::Params params(notification);
+	params.substitutions(args);
     params.functor.function([this](const LLSD& notification, const LLSD& response) { confirmUpdateEstateEnvironment(notification, response); });
 
     if (!value || LLPanelEstateInfo::isLindenEstate())
