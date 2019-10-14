@@ -34,12 +34,6 @@
 
 class LLEventPump;
 
-/**
- * @class LLTwitterConnect
- *
- * Manages authentication to, and interaction with, a web service allowing the
- * the viewer to post status updates and upload photos to Twitter.
- */
 class FSDiscordConnect : public LLSingleton<FSDiscordConnect>
 {
 	LLSINGLETON(FSDiscordConnect);

@@ -183,7 +183,7 @@ most common problems when launching the Viewer (particularly
 loading shared libraries') may be solved by enabling 32-bit
 architecture and installing one or more 32-bit compatibility libraries.
 Consult the Firestorm wiki at
-http://wiki.phoenixviewer.com/32-bit_viewer_in_64-bit_linux
+http://wiki.firestormviewer.org/32-bit_viewer_in_64-bit_linux
 EOFMARKER
 	fi
 fi

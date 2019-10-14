@@ -487,7 +487,10 @@ void LLFace::setTextureIndex(U8 index)
 		}
 		else
 		{
+			// <FS:ND> Restore old test, as the new one would also crash on empty texture list, which is exactly what the original test did avoid
+			//if (mDrawInfo && mDrawInfo->mTextureList.size() <= 1)
 			if (mDrawInfo && !mDrawInfo->mTextureList.empty())
+			// </FS:ND>
 			{
 				LL_ERRS() << "Face with no texture index references indexed texture draw info." << LL_ENDL;
 			}

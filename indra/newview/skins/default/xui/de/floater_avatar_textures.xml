@@ -18,13 +18,16 @@ Texturen
 				<texture_picker label="Haare" name="hair-baked"/>
 				<texture_picker label="Haare" name="hair_grain"/>
 				<texture_picker label="Alpha: Haare" name="hair_alpha"/>
+				<texture_picker label="Haartätowierung" name="hair_tattoo"/>
 				<texture_picker label="Kopf" name="head-baked"/>
 				<texture_picker label="Make-Up" name="head_bodypaint"/>
 				<texture_picker label="Kopf: Alpha" name="head_alpha"/>
 				<texture_picker label="Kopftätowierung" name="head_tattoo"/>
+				<texture_picker label="Kopf: Uni. Tattoo" name="head_universal_tattoo"/>
 				<texture_picker label="Augen" name="eyes-baked"/>
 				<texture_picker label="Auge" name="eyes_iris"/>
 				<texture_picker label="Alpha: Augen" name="eyes_alpha"/>
+				<texture_picker label="Augen: Uni. Tattoo" name="eyes_alpha"/>
 				<texture_picker label="Oberkörper" name="upper-baked"/>
 				<texture_picker label="Oberkörperfarbe" name="upper_bodypaint"/>
 				<texture_picker label="Unterhemd" name="upper_undershirt"/>
@@ -33,6 +36,7 @@ Texturen
 				<texture_picker label="Oberjacke" name="upper_jacket"/>
 				<texture_picker label="Alpha: Oben" name="upper_alpha"/>
 				<texture_picker label="Obere Tätowierung" name="upper_tattoo"/>
+				<texture_picker label="Obere uni. Tät." name="upper_universal_tattoo"/>
 				<texture_picker label="Unterkörper" name="lower-baked"/>
 				<texture_picker label="Unterkörperfarbe" name="lower_bodypaint"/>
 				<texture_picker label="Unterhose" name="lower_underpants"/>
@@ -41,9 +45,21 @@ Texturen
 				<texture_picker label="Hose" name="lower_pants"/>
 				<texture_picker label="Jacke" name="lower_jacket"/>
 				<texture_picker label="Alpha: Unten" name="lower_alpha"/>
-				<texture_picker label="Untere Tätowierung" name="lower_tattoo"/>
+				<texture_picker label="Untere Tät." name="lower_tattoo"/>
+				<texture_picker label="Untere uni. Tät." name="lower_universal_tattoo"/>
 				<texture_picker label="Rock" name="skirt-baked"/>
 				<texture_picker label="Rock" name="skirt"/>
+				<texture_picker label="Rocktätowierung" name="skirt_tattoo"/>
+				<texture_picker label="Linker Arm" name="leftarm-baked"/>
+				<texture_picker label="L. Arm uni. Tät." name="leftarm_tattoo"/>
+				<texture_picker label="Linkes Bein" name="leftleg-baked"/>
+				<texture_picker label="L. Bein uni. Tät." name="leftleg_tattoo"/>
+				<texture_picker label="AUX 1" name="aux1-baked"/>
+				<texture_picker label="AUX 1-Tätow." name="aux1_tattoo"/>
+				<texture_picker label="AUX 2" name="aux2-baked"/>
+				<texture_picker label="AUX 2-Tätow." name="aux2_tattoo"/>
+				<texture_picker label="AUX 3" name="aux3-baked"/>
+				<texture_picker label="AUX 3-Tätow." name="aux3_tattoo"/>
 			</panel>
 		</panel>
 	</scroll_container>

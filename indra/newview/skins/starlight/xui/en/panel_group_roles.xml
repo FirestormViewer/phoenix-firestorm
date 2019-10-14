@@ -221,7 +221,7 @@ including the Everyone and Owner Roles.
              name="role_create"
              width="120" />
             <button
-             follows="bottom|left"
+             follows="top|left"
              height="23"
              label="Copy Role"
              layout="topleft"

@@ -6755,7 +6755,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://wiki.phoenixviewer.com/[TOPIC]</string>
+      <string>https://wiki.firestormviewer.org/[TOPIC]</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -6768,7 +6768,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://www.phoenixviewer.com/viewerfloater/howtofloater/index.html</string>
+      <string>https://wiki.firestormviewer.org/start#basic_functions</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>    
@@ -18726,7 +18726,6 @@ Change of this parameter will affect the layout of buttons in notification toast
           <string>script_floater</string>
           <string>world_map</string>
           <string>preferences</string>
-          <string>facebook</string>
           <string>flickr</string>
           <string>twitter</string>
       </array>

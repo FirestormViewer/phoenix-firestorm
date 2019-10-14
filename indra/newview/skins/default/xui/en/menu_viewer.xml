@@ -2070,7 +2070,7 @@
              <menu_item_call.on_click
              function="PromptShowURL"
              name="script_library_url"
-             parameter="WebLaunchExternalTarget,http://wiki.phoenixviewer.com" />
+             parameter="WebLaunchExternalTarget,http://wiki.firestormviewer.org" />
         </menu_item_call>
         
         <menu_item_call
@@ -2079,7 +2079,7 @@
             <menu_item_call.on_click
              function="PromptShowURL"
              name="wiki_troubleshooting_url"
-             parameter="WebLaunchExternalTarget,http://wiki.phoenixviewer.com/firestorm_troubleshooting" />
+             parameter="WebLaunchExternalTarget,http://wiki.firestormviewer.org/firestorm_troubleshooting" />
         </menu_item_call>
 	   
         <menu_item_call
@@ -2087,7 +2087,7 @@
          name="firestorm_support_group">
             <menu_item_call.on_click
              function="Advanced.WebBrowserTest"
-             parameter="http://wiki.phoenixviewer.com/firestorm_support_groups_join" />
+             parameter="http://wiki.firestormviewer.org/firestorm_support_groups_join" />
             <menu_item_call.on_visible
              function="GridCheck"
              parameter="secondlife" />
@@ -2099,7 +2099,7 @@
              <menu_item_call.on_click
              function="PromptShowURL"
              name="wiki_classes_url"
-             parameter="WebLaunchExternalTarget,http://wiki.phoenixviewer.com/firestorm_classes" />
+             parameter="WebLaunchExternalTarget,http://wiki.firestormviewer.org/firestorm_classes" />
         </menu_item_call>
 
         <menu_item_call
