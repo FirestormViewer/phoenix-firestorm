@@ -145,8 +145,8 @@ public:
 	static void loadFromFile(const std::string& strFilePath, bool fDefault);
 	static void saveToFile(const std::string& strFilePath);
 
-	static const std::string& getAnonym(const LLAvatarName& avName);		// @shownames
-	static const std::string& getAnonym(const std::string& strName);		// @shownames
+	static std::string getAnonym(const LLAvatarName& avName);		// @shownames
+	static std::string getAnonym(const std::string& strName);		// @shownames
 	static const std::string& getString(const std::string& strStringName);
 	static const char*        getStringFromReturnCode(ERlvCmdRet eRet);
 	static const std::string& getStringMapPath() { return m_StringMapPath; }
@@ -307,7 +307,7 @@ template<typename T> struct RlvPredValuesEqual
 //
 
 // Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-inline const std::string& RlvStrings::getAnonym(const LLAvatarName& avName)
+inline std::string RlvStrings::getAnonym(const LLAvatarName& avName)
 {
 	return getAnonym(avName.getLegacyName());
 }
