@@ -63,6 +63,9 @@ Tarjeta gráfica: [GRAPHICS_CARD]
 	<string name="AboutOGL">
 		Versión de OpenGL: [OPENGL_VERSION]
 	</string>
+	<string name="AboutOSXHiDPI">
+		Modo de visualización HiDPi: [HIDPI]
+	</string>
 	<string name="AboutLibs">
 RestrainedLove API: [RLV_VERSION]
 Versión de libcurl: [LIBCURL_VERSION]
@@ -1546,6 +1549,15 @@ pueden adjuntarse a las notas.
 	</string>
 	<string name="MarketplaceURL_LearnMore">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
+	</string>
+	<string name="InventoryPlayAnimationTooltip">
+		Abrir la ventana con las opciones del Juego
+	</string>
+	<string name="InventoryPlayGestureTooltip">
+		Realizar gesto seleccionado en el mundo.
+	</string>
+	<string name="InventoryPlaySoundTooltip">
+		Abrir la ventana con las opciones del Juego
 	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		Cualquier usuario puede vender objetos en el mercado.
@@ -5544,9 +5556,6 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Environments_Label">
 		Mis entornos
 	</string>
-	<string name="Command_Facebook_Label">
-		Facebook
-	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
 	</string>
@@ -5714,9 +5723,6 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="Command_Environments_Tooltip">
 		Mis entornos
-	</string>
-	<string name="Command_Facebook_Tooltip">
-		Publicar en Facebook
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Subir a Flickr

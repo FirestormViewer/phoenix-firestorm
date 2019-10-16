@@ -56,7 +56,7 @@
 				<check_box label="Любой может вступить" name="open_enrollement" tool_tip="Группа предлагает бесплатное вступление для всех, и не требует приглашения."/>
 				<check_box label="Стоимость вступления" name="check_enrollment_fee" tool_tip="Установите плату за вступление в группу."/>
 				<spinner name="spin_enrollment_fee" tool_tip="Новые участники должны заплптить эту сумму, чтобы вступить в группу, если выбрано 'Стоимость втупления'."/>
-				<combo_box name="group_mature_check" tool_tip="Выберите, если вы думаете, что ваша группа классифицируется как 'Умеренный'.">
+				<combo_box name="group_mature_check" tool_tip="Рейтинги зрелости определяют тип контента и поведение, разрешенное в группе">
 					<combo_item name="select_mature">
 						- Выберите классификацию возраста -
 					</combo_item>

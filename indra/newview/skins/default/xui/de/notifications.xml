@@ -139,6 +139,10 @@ Marktplatzinitialisierung aufgrund eines System- oder Netzwerkfehlers fehlgeschl
         „[ERROR_CODE]“
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="MyOutfitsPasteFailed">
+		Ein oder mehrere Objekte können nicht innerhalb von „Outfits“ verwendet werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="MerchantPasteFailed">
 		Kopieren oder Verschieben von Marktplatz-Auflistungen fehlgeschlagen mit Fehler:
         
@@ -1619,7 +1623,7 @@ Ersetzen Sie die Textur [TEXTURE_NUM] mit einer Bilddatei von maximal 1024x1024 
 		[AGENT] wurden zur [LIST_TYPE]-Liste von [ESTATE] hinzugefügt.
 	</notification>
 	<notification name="AgentWasRemovedFromList">
-		[AGENT] wurden von der [LIST_TYPE]-Liste von [ESTATE] entfernt.
+		[AGENT] wurde von der [LIST_TYPE]-Liste von [ESTATE] entfernt.
 	</notification>
 	<notification name="AgentsWereRemovedFromList">
 		[AGENT] wurden von der [LIST_TYPE]-Liste von [ESTATE] entfernt.

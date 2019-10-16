@@ -27,7 +27,7 @@
 		</panel>
 		<panel label="Zulässige Gruppen" name="allowed_groups_panel">
 			<panel label="top_panel" name="allowed_group_search_panel">
-				<filter_editor label="Zulässige Gruppen Suchen" name="allowed_group_search_input"/>
+				<filter_editor label="Zulässige Gruppen suchen" name="allowed_group_search_input"/>
 				<button label="Kopieren" name="copy_allowed_group_list_btn"/>
 			</panel>
 			<text name="allow_group_label">
