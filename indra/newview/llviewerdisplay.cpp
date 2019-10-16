@@ -85,6 +85,8 @@
 
 #include "llenvironment.h"
 
+#include "llenvironment.h"
+
 extern LLPointer<LLViewerTexture> gStartTexture;
 extern bool gShiftFrame;
 
@@ -681,7 +683,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 	if (gDisconnected)
 	{
 		LLAppViewer::instance()->pingMainloopTimeout("Display:Disconnected");
-		LL_RECORD_BLOCK_TIME(FTM_RENDER_UI);
 		render_ui();
 		swap();
 	}
@@ -1019,7 +1020,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		//	gGL.popMatrix();
 		//}
 
-		LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater();
+		LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater() ? TRUE : FALSE;
 
 // <FS:CR> Aurora Sim
 		if (!LLWorld::getInstance()->getAllowRenderWater())
@@ -1434,7 +1435,7 @@ void render_ui(F32 zoom_factor, int subfield)
 		{
 			gPipeline.renderBloom(gSnapshot, zoom_factor, subfield);
 		}
-
+		
 		LL_RECORD_BLOCK_TIME(FTM_RENDER_HUD);
 		render_hud_elements();
 // [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)

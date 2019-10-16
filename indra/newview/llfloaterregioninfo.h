@@ -113,8 +113,6 @@ public:
 	void enableTopButtons();
 	void disableTopButtons();
 
-	static void updateEstateName(const std::string& estate_name);
-
 private:
 	
 	LLFloaterRegionInfo(const LLSD& seed);

@@ -573,12 +573,12 @@ LLViewerObject* LLControlAvatar::lineSegmentIntersectRiggedAttachments(const LLV
         return NULL;
     }
 
-    LLViewerObject* hit = NULL;
+	LLViewerObject* hit = NULL;
 
-    if (lineSegmentBoundingBox(start, end))
-    {
-        LLVector4a local_end = end;
-        LLVector4a local_intersection;
+	if (lineSegmentBoundingBox(start, end))
+	{
+		LLVector4a local_end = end;
+		LLVector4a local_intersection;
         if (mRootVolp->lineSegmentIntersect(start, local_end, face, pick_transparent, pick_rigged, face_hit, &local_intersection, tex_coord, normal, tangent))
         {
             local_end = local_intersection;
@@ -597,20 +597,20 @@ LLViewerObject* LLControlAvatar::lineSegmentIntersectRiggedAttachments(const LLV
             {
                 LLVOVolume *volp = *vol_it;
                 if (mRootVolp != volp && volp->lineSegmentIntersect(start, local_end, face, pick_transparent, pick_rigged, face_hit, &local_intersection, tex_coord, normal, tangent))
-                {
-                    local_end = local_intersection;
-                    if (intersection)
-                    {
-                        *intersection = local_intersection;
-                    }
+        {
+            local_end = local_intersection;
+            if (intersection)
+            {
+                *intersection = local_intersection;
+            }
                     hit = volp;
                     break;
                 }
             }
         }
-    }
-
-    return hit;
+	}
+		
+	return hit;
 }
 
 // virtual
