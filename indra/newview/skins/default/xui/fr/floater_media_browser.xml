@@ -19,7 +19,7 @@
 			<text name="plugin_fail_text">
  Le plugin du navigateur web semble mettre du temps à s'ouvrir.
  Si le plugin ne se charge pas, veuillez visiter :
- http://wiki.phoenixviewer.com/fs_media
+ http://wiki.firestormviewer.org/fs_media
  pour plus d'informations concernant ce problème.
 			</text>
 			<button label="Ouvrir dans mon navigateur web" name="open_browser"/>

@@ -2,7 +2,7 @@
 <panel label="Initialisation" name="Input panel">
 	<tab_container name="max_bandwidth_layout" label="Initialisation">
 		<panel label="Connexion" name="tab-conn">
-			<text name="Maximum bandwidth">Bande passante maximale ([http://wiki.phoenixviewer.com/fs_speedtest Besoin d'aide ?]):</text>
+			<text name="Maximum bandwidth">Bande passante maximale ([http://wiki.firestormviewer.org/fs_speedtest Besoin d'aide ?]):</text>
 			<text name="text_box2">Kbps</text>
 			<text name="NetworkPrefText1">Wi-Fi</text>
 			<text name="NetworkPrefText2">DSL</text>
@@ -31,7 +31,7 @@
 			<button label="Configurer les paramètres proxy" label_selected="Configurer les paramètres proxy" name="set_proxy"/>
 		</panel>
 		<panel label="Dossiers" name="tab-dir">
-			<text name="cache_size_label_l">Taille du cache ([http://wiki.phoenixviewer.com/cache Besoin d'aide ?]) :</text>
+			<text name="cache_size_label_l">Taille du cache ([http://wiki.firestormviewer.org/cache Besoin d'aide ?]) :</text>
 			<text name="text_box5">Mo</text>
 			<button label="Vider le cache de l'inventaire" name="ClearInventoryCache" left="350" width="180"/>
 			<text name="Cache location">Emplacement du cache :</text>
