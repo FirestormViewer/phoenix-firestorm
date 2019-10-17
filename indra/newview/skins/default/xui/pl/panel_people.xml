@@ -58,7 +58,6 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 			<tab_container name="friends_accordion">
 				<panel name="tab_online" title="Dostępni" />
 				<panel name="tab_all" title="Wszyscy" />
-				<panel name="tab_suggested_friends" title="Sugerowani" />
 			</tab_container>
 		</panel>
 		<panel label="Grupy" name="groups_panel">

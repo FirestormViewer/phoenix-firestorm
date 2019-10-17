@@ -3,7 +3,7 @@
 	<tab_container name="max_bandwidth_layout">
 		<panel label="Conexión" name="tab-conn">
 			<text name="Maximum bandwidth">
-				Ancho de banda máximo ([http://wiki.phoenixviewer.com/fs_speedtest qué necesita una sugerencia?]):
+				Ancho de banda máximo ([http://wiki.firestormviewer.org/fs_speedtest qué necesita una sugerencia?]):
 			</text>
 			<check_box label="Personalizar el puerto" name="connection_port_enabled"/>
 			<spinner label="Nº del puerto:" name="connection_port" width="160" label_width="85"/>
@@ -27,7 +27,7 @@
 		</panel>
 		<panel label="Directorio" name="tab-dir">
 			<text name="cache_size_label_l">
-				Tamaño de la caché ([http://wiki.phoenixviewer.com/cache necesita una sugerencia?]):
+				Tamaño de la caché ([http://wiki.firestormviewer.org/cache necesita una sugerencia?]):
 			</text>
 			<text name="Cache location">
 				Directorio de la caché:

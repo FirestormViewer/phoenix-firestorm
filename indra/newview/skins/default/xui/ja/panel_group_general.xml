@@ -63,7 +63,7 @@
 				<check_box name="open_enrollement" label="誰でも入会できます" tool_tip="招待されなくても新規メンバーが加入できるかどうかを設定します。" />
 				<check_box name="check_enrollment_fee" tool_tip="入会費が必要かどうかを設定します。" label="入会費がかかります" />
 				<spinner name="spin_enrollment_fee" tool_tip="「入会費」にチェックが入っている場合、新規メンバーは指定された入会費を支払わなければグループに入れません。" label="L$" />
-				<combo_box name="group_mature_check" tool_tip="あなたのグループに「Moderate」にレート設定された情報があるかどうかを設定します。">
+				<combo_box name="group_mature_check" tool_tip="レーティング区分は、グループ内でどのようなコンテンツや行動が許されるかを指定するものです">
 					<combo_item name="select_mature" value="Select">
 						- レーティング区分を指定 -
 					</combo_item>

@@ -3,7 +3,7 @@
 	<tab_container name="max_bandwidth_layout">
 		<panel label="Netværk" name="tab-conn">
 			<text name="Maximum bandwidth">
-				Maksimum båndbredde ([http://wiki.phoenixviewer.com/fs_speedtest need a suggestion?]):
+				Maksimum båndbredde ([http://wiki.firestormviewer.org/fs_speedtest need a suggestion?]):
 			</text>
 			<check_box label="Speciel port" name="connection_port_enabled"/>
 			<spinner label="Port nummer:" name="connection_port"/>
@@ -14,7 +14,7 @@
 		</panel>
 		<panel label="Placering" name="tab-dir">
 			<text name="cache_size_label_l">
-				Cache størrelse ([http://wiki.phoenixviewer.com/cache need a suggestion?]):
+				Cache størrelse ([http://wiki.firestormviewer.org/cache need a suggestion?]):
 			</text>
 			<text name="Cache location">
 				Cache placering:

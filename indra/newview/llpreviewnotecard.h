@@ -56,7 +56,7 @@ public:
 	// llview
 	void draw() override;
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-	virtual bool hasAccelerators() const;
+	virtual bool hasAccelerators() const override;
 // [/SL:KB]
 	virtual BOOL handleKeyHere(KEY key, MASK mask) override;
 	virtual void setEnabled( BOOL enabled ) override;

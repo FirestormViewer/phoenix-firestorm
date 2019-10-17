@@ -136,6 +136,7 @@ void LLFloaterSearch::onOpen(const LLSD& key)
 
 // </FS:AW  opensim search support>
 	LLFloaterWebContent::onOpen(p);
+	mWebBrowser->setFocus(TRUE);
 	search(p.search);
 }
 
