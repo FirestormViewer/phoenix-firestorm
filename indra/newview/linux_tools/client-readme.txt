@@ -126,7 +126,7 @@ SOLUTION:- Usually this indicates that your graphics card does not meet
    <https://help.ubuntu.com/community/BinaryDriverHowto>
  * If your distribution does not make it easy, then you can download the
    required Linux drivers straight from your graphics card manufacturer:
-   - <http://wiki.phoenixviewer.com/phoenix_downloads#video_drivers>
+   - <https://wiki.firestormviewer.org/downloads#video_drivers>
 
 PROBLEM 2:- My whole system seems to hang when running Firestorm.
 SOLUTION:- This is typically a hardware/driver issue.  The first thing to
@@ -201,19 +201,19 @@ configuration options for advanced troubleshooters.
 
 We're pleased to have released Firestorm client's source code under
 an Open Source license compatible with the 'LGPL'.
-<http://wiki.phoenixviewer.com/phoenix_downloads#source_code>
+<https://wiki.firestormviewer.org/downloads#source_code>
 
 
 8. GETTING MORE HELP AND REPORTING PROBLEMS
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 For general help and support with Firestorm:
-<http://wiki.phoenixviewer.com>
+<http://wiki.firestormviewer.org>
 
 In-world discussion: 
 
 Main support: Join one of our in-world support groups.
-<http://wiki.phoenixviewer.com/firestorm_in-world_groups>
+<http://wiki.firestormviewer.org/firestorm_in-world_groups>
 
 There is also a 'Linux Client Users' group inside Second Life which 
 is free to join.  You can find it by pressing the 'Search' button at 
@@ -222,7 +222,7 @@ searching for 'Linux'.  This group is useful for discussing Linux
 issues with fellow Linux client users who are online.
 
 The Firestorm Issue Tracker:
-<http://jira.phoenixviewer.com/>
+<https://jira.firestormviewer.org/>
 This is the right place for finding known issues and reporting new
 bugs in all Firestorm releases if you find that the Troubleshooting
 section in this file hasn't helped.

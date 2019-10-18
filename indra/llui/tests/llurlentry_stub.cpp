@@ -37,7 +37,7 @@
 
 // [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 // Stub for rlvGetAnonym
-const std::string& rlvGetAnonym(const LLAvatarName& avName)
+std::string rlvGetAnonym(const LLAvatarName& avName)
 {
 	static std::string strAnonym = "A resident";
 	return strAnonym;

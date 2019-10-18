@@ -3816,12 +3816,12 @@ UDP: 3478, 3479, 5060, 5062, 6250, 12000-32000
 お使いのルーターの SIP ALG 機能をすべて無効にしてください。
 
 ボイスチャットによるコミュニケーションが利用できません。
-[https://wiki.phoenixviewer.com/fs_voice]
+[https://wiki.firestormviewer.org/fs_voice]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
 		ボイスサーバーに接続できません。ボイスチャットによるコミュニケーションが利用できません。お使いのネットワークやファイアウォールの設定を確認してください。
-[https://wiki.phoenixviewer.com/fs_voice]
+[https://wiki.firestormviewer.org/fs_voice]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AvatarRezLeftNotification">

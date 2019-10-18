@@ -519,17 +519,6 @@ attributedStringInfo getSegments(NSAttributedString *str)
     {
         [[self inputContext] handleEvent:theEvent];
     }
-    
-    // OS X intentionally does not send us key-up information on cmd-key combinations.
-    // This behaviour is not a bug, and only applies to cmd-combinations (no others).
-    // Since SL assumes we receive those, we fake it here.
-    // <FS:Ansariel> Cinder Roxley's fix for FIRE-11648
-    //if (mModifiers & NSCommandKeyMask && !mHasMarkedText)
-    //{
-    //    eventData.mKeyEvent = NativeKeyEventData::KEYUP;
-    //    callKeyUp([theEvent keyCode], mModifiers);
-    //}
-    // </FS:Ansariel>
 }
 
 - (void)flagsChanged:(NSEvent *)theEvent
@@ -837,7 +826,9 @@ attributedStringInfo getSegments(NSAttributedString *str)
     [super setMarkedText:aString selectedRange:selectedRange replacementRange:replacementRange];
     if ([aString length] == 0)      // this means Input Widow becomes empty
     {
-        [_window orderOut:_window];     // Close this to avoid empty Input Window
+        //[_window orderOut:_window];     // Close this to avoid empty Input Window
+	// <FS:TS> Xcode 11 compile fix
+        [self.window orderOut:self.window];     // Close this to avoid empty Input Window
     }
 }
 
@@ -861,7 +852,9 @@ attributedStringInfo getSegments(NSAttributedString *str)
         (mKeyPressed >= 0xF700 && mKeyPressed <= 0xF8FF))
     {
         // this is case a) of above comment
-        [_window orderOut:_window];     // to avoid empty Input Window
+	// <FS:TS> Xcode 11 compile fix
+        //[_window orderOut:_window];     // to avoid empty Input Window
+        [self.window orderOut:self.window];     // to avoid empty Input Window
     }
 }
 

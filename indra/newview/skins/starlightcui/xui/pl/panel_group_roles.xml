@@ -39,6 +39,7 @@ jedną lub wiele funkcji. Każda grupa może posiadać maksymalnie 10 funkcji,
 				<scroll_list.columns label="Tytuł" name="title"/>
 			</scroll_list>
 			<button label="Nowa funkcja" name="role_create"/>
+			<button label="Kopiuj funkcję" name="role_copy" />
 			<button label="Usuń funkcję" name="role_delete"/>
 		</panel>
 		<panel label="PRZYWILEJE" name="actions_sub_tab" tool_tip="Możesz sprawdzić szczegóły dotyczące danego przywileju oraz jakie funkcje oraz jakie osoby posiadają prawo korzystania z niego.">
