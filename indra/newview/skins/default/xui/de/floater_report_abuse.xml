@@ -55,7 +55,7 @@ Objekt:
 		<combo_box.item label="Unsittliches Verhalten &gt; Für Regionseinstufung unpassende Inhalte/Verhaltensweisen" name="Indecency__Mature_content_in_PG_region"/>
 		<combo_box.item label="Intoleranz" name="Intolerance"/>
 		<combo_box.item label="Land &gt; Unbefugte Nutzung &gt; Objekte oder Texturen" name="Land__Encroachment__Objects_textures"/>
-		<combo_box.item label="Verstoß gegen die Glücksspielerichtlinie" name="Wagering_gambling"/>
+		<combo_box.item label="Verstoß gegen die Geschicklichkeits-Spielerichtlinie" name="Wagering_gambling"/>
 	</combo_box>
 	<text name="abuser_name_title">
 		Name des Beschuldigten:

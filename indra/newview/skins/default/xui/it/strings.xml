@@ -70,6 +70,9 @@ Stato illuminazione (Advanced Lighting Model): [ALMSTATUS]
 Memoria texture (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 VFS (cache) creation time (UTC): [VFS_DATE]
 	</string>
+	<string name="AboutOSXHiDPI">
+		Modalità display HiDPI: [HIDPI]
+	</string>
 	<string name="AboutLibs">
 RestrainedLove API: [RLV_VERSION]
 libcurl Version: [LIBCURL_VERSION]
@@ -1598,6 +1601,15 @@ http://www.firestormviewer.org/support per avere aiuto nella soluzione.
 	</string>
 	<string name="InventoryInboxNoItems">
 		Gli acquisti dal Marketplace verranno mostrati qui. Potrai quindi trascinarli nel tuo inventario per usarli.
+	</string>
+	<string name="InventoryPlayAnimationTooltip">
+		Apri finestra con opzioni di Gioco.
+	</string>
+	<string name="InventoryPlayGestureTooltip">
+		Esegui il movimento selezionato nel mondo virtuale.
+	</string>
+	<string name="InventoryPlaySoundTooltip">
+		Apri finestra con opzioni di Gioco.
 	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		Chiunque può vendere oggetti nel Marketplace.
@@ -5453,9 +5465,6 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		Destinazioni interessanti
-	</string>
-	<string name="Command_Facebook_Tooltip">
-		Pubblica su Facebook
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Carica su Flickr

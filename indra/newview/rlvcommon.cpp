@@ -344,8 +344,11 @@ void RlvStrings::saveToFile(const std::string& strFilePath)
 }
 
 // Checked: 2009-11-11 (RLVa-1.1.0a) | Modified: RLVa-1.1.0a
-const std::string& RlvStrings::getAnonym(const std::string& strName)
+std::string RlvStrings::getAnonym(const std::string& strName)
 {
+	if (!rlv_handler_t::isEnabled())
+		return strName;
+
 	const char* pszName = strName.c_str(); U32 nHash = 0;
 	
 	// Test with 11,264 SL names showed a 3.33% - 3.82% occurance for each so we *should* get a very even spread
@@ -906,7 +909,7 @@ BOOL rlvEnableSharedWearEnabler(void* pParam)
 */
 
 // Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-const std::string& rlvGetAnonym(const LLAvatarName& avName)
+std::string rlvGetAnonym(const LLAvatarName& avName)
 {
 	return RlvStrings::getAnonym(avName);
 }

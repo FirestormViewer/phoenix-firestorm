@@ -37,21 +37,6 @@
 #include "llappviewermacosx-for-objc.h"
 #include <Carbon/Carbon.h> // Used for Text Input Services ("Safe" API - it's supported)
 
-// [Cinder] We need to override sendEvent in NSApplication and force those
-//          Apple bastards to send us Command keyUp events!
-@implementation LLNSApplication
-
-- (void)sendEvent:(NSEvent *)event {
-	// Fuck you, conventions!
-    if ([event type] == NSKeyUp && ([event modifierFlags] & NSCommandKeyMask))
-        [[self keyWindow] sendEvent:event];
-    else
-        [super sendEvent:event];
-}
-
-@end
-// [Cinder]
-
 @implementation LLAppDelegate
 
 @synthesize window;
@@ -357,5 +342,18 @@ struct AttachmentInfo
 }
 
 #endif // LL_BUGSPLAT
+
+@end
+
+@implementation LLApplication
+
+- (void)sendEvent:(NSEvent *)event
+{
+    [super sendEvent:event];
+    if ([event type] == NSKeyUp && ([event modifierFlags] & NSCommandKeyMask))
+    {   
+        [[self keyWindow] sendEvent:event];
+    }
+}
 
 @end

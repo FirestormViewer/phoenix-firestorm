@@ -70,6 +70,9 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	<string name="AboutOGL">
 		Версия OpenGL: [OPENGL_VERSION]
 	</string>
+	<string name="AboutOSXHiDPI">
+		Режим отображения HiDPI: [HIDPI]
+	</string>
 	<string name="AboutLibs">
 Контроль скриптами (RLVa): [RLV_VERSION]
 Версия libcurl: [LIBCURL_VERSION]
@@ -1620,6 +1623,15 @@ support@secondlife.com.
 	</string>
 	<string name="MarketplaceURL_LearnMore">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
+	</string>
+	<string name="InventoryPlayAnimationTooltip">
+		Откройте окно с настройками игры.
+	</string>
+	<string name="InventoryPlayGestureTooltip">
+		Выполните выбранный жест в игровом мире.
+	</string>
+	<string name="InventoryPlaySoundTooltip">
+		Откройте окно с настройками игры.
 	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		Любой желающий может продавать товары на Торговому центру.
@@ -5647,9 +5659,6 @@ support@secondlife.com.
 	<string name="Command_Destinations_Label">
 		Интересные места
 	</string>
-	<string name="Command_Facebook_Label">
-		Facebook
-	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
 	</string>
@@ -5817,9 +5826,6 @@ support@secondlife.com.
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		Интересные места
-	</string>
-	<string name="Command_Facebook_Tooltip">
-		Опубликовать в Facebook
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Загрузить на Flickr

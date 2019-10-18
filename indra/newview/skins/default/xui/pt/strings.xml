@@ -55,6 +55,9 @@ Placa gráfica: [GRAPHICS_CARD]
 	<string name="AboutOGL">
 		Versão OpenGL: [OPENGL_VERSION]
 	</string>
+	<string name="AboutOSXHiDPI">
+		HiDPI modo de exibição: [HIDPI]
+	</string>
 	<string name="AboutLibs">
 Versão libcurl: [LIBCURL_VERSION]
 Versão J2C Decoder: [J2C_VERSION]
@@ -1430,6 +1433,15 @@ http://secondlife.com/support para ajuda ao resolver este problema.
 	</string>
 	<string name="MarketplaceURL_LearnMore">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
+	</string>
+	<string name="InventoryPlayAnimationTooltip">
+		Abrir a janela com as opções do Jogo.
+	</string>
+	<string name="InventoryPlayGestureTooltip">
+		Executar o gesto selecionado no mundo.
+	</string>
+	<string name="InventoryPlaySoundTooltip">
+		Abrir a janela com as opções do Jogo.
 	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		Qualquer um pode vender itens no Mercado.
@@ -5271,9 +5283,6 @@ Tente colocar o caminho do editor entre aspas.
 	<string name="Command_Destinations_Label">
 		Destinos
 	</string>
-	<string name="Command_Facebook_Label">
-		Facebook
-	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
 	</string>
@@ -5363,9 +5372,6 @@ Tente colocar o caminho do editor entre aspas.
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		Destinos de interesse
-	</string>
-	<string name="Command_Facebook_Tooltip">
-		Publicar no Facebook
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Carregar no Flickr
