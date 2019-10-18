@@ -1239,7 +1239,7 @@
        height="15"
        name="netmap_pickradius_textbox"
        width="115">
-       Pick radius:
+       Pick radius opacity:
      </text>
      <color_swatch
        color="MapPickRadiusColor"
@@ -1271,6 +1271,7 @@
        min_val="0.00"
        name="MapPickRadiusTransparency"
        show_text="true"
+       tool_tip="Controls the opacity of the pick range on the minimap. The size of the pick range can be adjusted with the Pick radius setting."
        top_delta="5"
        width="233" />
      <text
