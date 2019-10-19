@@ -251,7 +251,7 @@ bool LLURLDispatcherImpl::dispatchRegion(const LLSLURL& slurl, const std::string
 #endif //OPENSIM
 // </FS:AW optional opensim support>
 	// Request a region handle by name
-	LLWorldMapMessage::getInstance()->sendNamedRegionRequest(hyper.getRegion(), LLURLDispatcherImpl::regionNameCallback, hyper.getSLURLString(), LLUI::sSettingGroups["config"]->getBOOL("SLURLTeleportDirectly"));	// don't teleport
+	LLWorldMapMessage::getInstance()->sendNamedRegionRequest(hyper.getRegion(), LLURLDispatcherImpl::regionNameCallback, hyper.getSLURLString(), LLUI::getInstance()->mSettingGroups["config"]->getBOOL("SLURLTeleportDirectly"));	// don't teleport
 	return true;
 }
 

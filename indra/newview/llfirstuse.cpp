@@ -41,37 +41,6 @@
 
 
 // static
-std::set<std::string> LLFirstUse::sConfigVariables;
-
-// static
-void LLFirstUse::addConfigVariable(const std::string& var)
-{
-	sConfigVariables.insert(var);
-}
-
-// static
-void LLFirstUse::disableFirstUse()
-{
-	// Set all first-use warnings to disabled
-	for (std::set<std::string>::iterator iter = sConfigVariables.begin();
-		 iter != sConfigVariables.end(); ++iter)
-	{
-		gWarningSettings.setBOOL(*iter, FALSE);
-	}
-}
-
-// static
-void LLFirstUse::resetFirstUse()
-{
-	// Set all first-use warnings to disabled
-	for (std::set<std::string>::iterator iter = sConfigVariables.begin();
-		 iter != sConfigVariables.end(); ++iter)
-	{
-		gWarningSettings.setBOOL(*iter, TRUE);
-	}
-}
-
-// static
 void LLFirstUse::otherAvatarChatFirst(bool enable)
 {
 	// <FS:Ansariel> [FS communication UI]

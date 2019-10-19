@@ -797,7 +797,7 @@ static void handleDecimalPrecisionChanged(const LLSD& newvalue)
 void handleLegacyTrimOptionChanged(const LLSD& newvalue)
 {
 	LLAvatarName::setTrimResidentSurname(newvalue.asBoolean());
-	LLAvatarNameCache::clearCache();
+	LLAvatarNameCache::getInstance()->clearCache();
 	LLVOAvatar::invalidateNameTags();
 	FSFloaterContacts::getInstance()->onDisplayNameChanged();
 	FSRadar::getInstance()->updateNames();
@@ -806,7 +806,7 @@ void handleLegacyTrimOptionChanged(const LLSD& newvalue)
 void handleUsernameFormatOptionChanged(const LLSD& newvalue)
 {
 	LLAvatarName::setUseLegacyFormat(newvalue.asBoolean());
-	LLAvatarNameCache::clearCache();
+	LLAvatarNameCache::getInstance()->clearCache();
 	LLVOAvatar::invalidateNameTags();
 	FSFloaterContacts::getInstance()->onDisplayNameChanged();
 	FSRadar::getInstance()->updateNames();

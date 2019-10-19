@@ -509,7 +509,7 @@ void FSParticipantList::update()
 bool FSParticipantList::isHovered()
 {
 	S32 x, y;
-	LLUI::getMousePositionScreen(&x, &y);
+	LLUI::getInstance()->getMousePositionScreen(&x, &y);
 	return mAvatarList->calcScreenRect().pointInRect(x, y);
 }
 

@@ -681,7 +681,7 @@ void LLComboBox::showList()
 	mButton->setToggleState(TRUE);
 	mList->setVisible(TRUE);
 	
-	LLUI::addPopup(this);
+	LLUI::getInstance()->addPopup(this);
 
 	setUseBoundingRect(TRUE);
 //	updateBoundingRect();
@@ -707,7 +707,7 @@ void LLComboBox::hideList()
 		mList->mouseOverHighlightNthItem(-1);
 
 		setUseBoundingRect(FALSE);
-		LLUI::removePopup(this);
+		LLUI::getInstance()->removePopup(this);
 //		updateBoundingRect();
 	}
 }
@@ -993,7 +993,7 @@ void LLComboBox::updateSelection()
 	}
 	// <FS:Ansariel> Allow fulltext search in comboboxes
 	//else if (mList->selectItemByPrefix(left_wstring, FALSE))
-	else if ((!LLUI::sSettingGroups["config"]->getBOOL("FSComboboxSubstringSearch") || mForceDisableFulltextSearch) && mList->selectItemByPrefix(left_wstring, FALSE))
+	else if ((!LLUI::getInstance()->mSettingGroups["config"]->getBOOL("FSComboboxSubstringSearch") || mForceDisableFulltextSearch) && mList->selectItemByPrefix(left_wstring, FALSE))
 	// </FS:Ansariel>
 	{
 		LLWString selected_item = utf8str_to_wstring(getSelectedItemLabel());
@@ -1006,7 +1006,7 @@ void LLComboBox::updateSelection()
 		mLastSelectedIndex = mList->getFirstSelectedIndex();
 	}
 	// <FS:Ansariel> Allow fulltext search in comboboxes
-	else if (LLUI::sSettingGroups["config"]->getBOOL("FSComboboxSubstringSearch") && !mForceDisableFulltextSearch && mList->selectItemBySubstring(left_wstring, FALSE))
+	else if (LLUI::getInstance()->mSettingGroups["config"]->getBOOL("FSComboboxSubstringSearch") && !mForceDisableFulltextSearch && mList->selectItemBySubstring(left_wstring, FALSE))
 	{
 		LLWString selected_item = utf8str_to_wstring(getSelectedItemLabel());
 		mTextEntry->setText(wstring_to_utf8str(left_wstring) + " (" + getSelectedItemLabel() + ")");
