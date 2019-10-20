@@ -221,6 +221,7 @@ BOOL FloaterAO::postBuild()
 	mOverrideSitsCheckBoxSmall = mSmallInterfacePanel->getChild<LLCheckBoxCtrl>("ao_sit_override_small");
 
 	mSetSelector->setCommitCallback(boost::bind(&FloaterAO::onSelectSet, this));
+	mSetSelector->setFocusLostCallback(boost::bind(&FloaterAO::onSelectSet, this));
 	mActivateSetButton->setCommitCallback(boost::bind(&FloaterAO::onClickActivate, this));
 	mAddButton->setCommitCallback(boost::bind(&FloaterAO::onClickAdd, this));
 	mRemoveButton->setCommitCallback(boost::bind(&FloaterAO::onClickRemove, this));
