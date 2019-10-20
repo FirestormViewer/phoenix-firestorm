@@ -569,7 +569,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, BOOL start)
 		S32 stateNum;
 
 		// loop through the list of states
-		while ((stateNum = cleanupStates[index]) != AOSet::AOSTATES_MAX);
+		while ((stateNum = cleanupStates[index]) != AOSet::AOSTATES_MAX)
 		{
 			// check if the next state is the one we are currently animating and skip that
 			AOSet::AOState* stateToCheck = mCurrentSet->getState(stateNum);
