@@ -227,7 +227,8 @@ BOOL AOEngine::foreignAnimations(const LLUUID& seat)
 	return FALSE;
 }
 
-const LLUUID& AOEngine::mapSwimming(const LLUUID& motion) const
+// map motion to underwater state, return nullptr if not applicable
+AOSet::AOState* AOEngine::mapSwimming(const LLUUID& motion) const
 {
 	S32 stateNum;
 
@@ -249,29 +250,91 @@ const LLUUID& AOEngine::mapSwimming(const LLUUID& motion) const
 	}
 	else
 	{
-		return LLUUID::null;
+		// motion not applicable for underwater mapping
+		return nullptr;
 	}
 
-	AOSet::AOState* state = mCurrentSet->getState(stateNum);
-	return mCurrentSet->getAnimationForState(state);
+	return mCurrentSet->getState(stateNum);
 }
 
+// switch between swimming and flying on transition in and out of Linden region water
 void AOEngine::checkBelowWater(BOOL yes)
 {
+	// there was no transition, do nothing
 	if (mUnderWater == yes)
 	{
 		return;
 	}
 
-	// only restart underwater/above water motion if the overridden motion is the one currently playing
-	if (mLastMotion != mLastOverriddenMotion)
+	// only applies to motions that actually change underwater and have animations inside
+	AOSet::AOState* mapped = mapSwimming(mLastMotion);
+	if (!mapped || mapped->mAnimations.empty())
 	{
+		// set underwater status but do nothing else
+		mUnderWater = yes;
 		return;
 	}
 
-	gAgent.sendAnimationRequest(override(mLastOverriddenMotion, FALSE), ANIM_REQUEST_STOP);
+	// find animation id to stop when transitioning
+	LLUUID id = override(mLastMotion, FALSE);
+	if (id.isNull())
+	{
+		// no animation in overrider for this state, use Linden Lab motion
+		id = mLastMotion;
+	}
+
+	// stop currently running animation
+	gAgent.sendAnimationRequest(id, ANIM_REQUEST_STOP);
+
+	if (!mUnderWater)
+	{
+		// remember which animation we stopped while going under water, to catch the stop
+		// request later in the overrider - this prevents the overrider from triggering itself
+		// after the region comes back with the stop request for Linden Lab motion ids
+		mTransitionId = id;
+	}
+
+	// set requested underwater status for overrider
 	mUnderWater = yes;
-	gAgent.sendAnimationRequest(override(mLastOverriddenMotion, TRUE), ANIM_REQUEST_START);
+
+	// find animation id to start when transitioning
+	id = override(mLastMotion, TRUE);
+	if (id.isNull())
+	{
+		// no animation in overrider for this state, use Linden Lab motion
+		id = mLastMotion;
+	}
+
+	// start new animation
+	gAgent.sendAnimationRequest(id, ANIM_REQUEST_START);
+}
+
+// find the correct animation state for the requested motion, mapping flying to
+// swimming where necessary
+AOSet::AOState* AOEngine::getStateForMotion(const LLUUID& motion) const
+{
+	// get default state for this motion
+	AOSet::AOState* defaultState = mCurrentSet->getStateByRemapID(motion);
+	if (!mUnderWater)
+	{
+		return defaultState;
+	}
+
+	// get state for underwater motion
+	AOSet::AOState* mapped = mapSwimming(motion);
+	if (!mapped)
+	{
+		// not applicable for underwater motion, so use default state
+		return defaultState;
+	}
+
+	// check if the underwater state has any animations to play
+	if (mapped->mAnimations.empty())
+	{
+		// no animations in underwater state, return default
+		return defaultState;
+	}
+	return mapped;
 }
 
 void AOEngine::enable_stands(BOOL yes)
@@ -443,7 +506,9 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, BOOL start)
 		motion = ANIM_AGENT_SIT_GROUND_CONSTRAINED;
 	}
 
-	AOSet::AOState* state = mCurrentSet->getStateByRemapID(motion);
+	// map the requested motion to an animation state, taking underwater
+	// swimming into account where applicable
+	AOSet::AOState* state = getStateForMotion(motion);
 	if (!state)
 	{
 		LL_DEBUGS("AOEngine") << "No current AO state for motion " << motion << " (" << gAnimLibrary.animationName(motion) << ")." << LL_ENDL;
@@ -469,6 +534,63 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, BOOL start)
 	}
 
 	mAnimationChangedSignal(LLUUID::null);
+
+	// clean up stray animations as an additional safety measure
+	// unless current motion is ANIM_AGENT_TYPE, which is a special
+	// case, as it plays at the same time as other motions
+	if (motion != ANIM_AGENT_TYPE)
+	{
+		const S32 cleanupStates[]=
+		{
+			AOSet::Standing,
+			AOSet::Walking,
+			AOSet::Running,
+			AOSet::Sitting,
+			AOSet::SittingOnGround,
+			AOSet::Crouching,
+			AOSet::CrouchWalking,
+			AOSet::Falling,
+			AOSet::FlyingDown,
+			AOSet::FlyingUp,
+			AOSet::Flying,
+			AOSet::FlyingSlow,
+			AOSet::Hovering,
+			AOSet::Jumping,
+			AOSet::TurningRight,
+			AOSet::TurningLeft,
+			AOSet::Floating,
+			AOSet::SwimmingForward,
+			AOSet::SwimmingUp,
+			AOSet::SwimmingDown,
+			AOSet::AOSTATES_MAX		// end marker, guaranteed to be different from any other entry
+		};
+
+		S32 index = 0;
+		S32 stateNum;
+
+		// loop through the list of states
+		while ((stateNum = cleanupStates[index]) != AOSet::AOSTATES_MAX);
+		{
+			// check if the next state is the one we are currently animating and skip that
+			AOSet::AOState* stateToCheck = mCurrentSet->getState(stateNum);
+			if (stateToCheck != state)
+			{
+				// check if there is an animation left over for that state
+				if (!stateToCheck->mCurrentAnimationID.isNull())
+				{
+					LL_WARNS() << "cleaning up animation in state " << stateToCheck->mName << LL_ENDL;
+
+					// stop  the leftover animation locally and in the region for everyone
+					gAgent.sendAnimationRequest(stateToCheck->mCurrentAnimationID, ANIM_REQUEST_STOP);
+					gAgentAvatarp->LLCharacter::stopMotion(stateToCheck->mCurrentAnimationID);
+
+					// mark the state as clean
+					stateToCheck->mCurrentAnimationID.setNull();
+				}
+			}
+			index++;
+		}
+	}
 
 	mCurrentSet->stopTimer();
 	if (start)
@@ -523,12 +645,6 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, BOOL start)
 			mCurrentSet->setMotion(motion);
 		}
 
-		mUnderWater = gAgentAvatarp->mBelowWater;
-		if (mUnderWater)
-		{
-			animation = mapSwimming(motion);
-		}
-
 		if (animation.isNull())
 		{
 			animation = mCurrentSet->getAnimationForState(state);
@@ -580,6 +696,20 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, BOOL start)
 	}
 	else
 	{
+		// check for previously remembered transition motion from/to underwater movement and don't
+		// allow the overrider to stop it, or it will cancel the transition to underwater motion
+		// immediately after starting it
+		if (motion == mTransitionId)
+		{
+			// clear transition motion id and return a null UUID to allow the stock Linden animation
+			// system to take over
+			mTransitionId.setNull();
+			return LLUUID::null;
+		}
+
+		// clear transition motion id here as well, to make sure there is no stray id left behind
+		mTransitionId.setNull();
+
 		animation = state->mCurrentAnimationID;
 		state->mCurrentAnimationID.setNull();
 
