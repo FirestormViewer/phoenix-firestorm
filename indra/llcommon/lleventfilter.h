@@ -32,7 +32,10 @@
 #include "llevents.h"
 #include "stdtypes.h"
 #include "lltimer.h"
+#include "lleventtimer.h"
 #include <boost/function.hpp>
+
+class LLDate;
 
 /**
  * Generic base class
@@ -209,6 +212,19 @@ class LL_COMMON_API LLEventTimeout: public LLEventTimeoutBase
 public:
     LLEventTimeout();
     LLEventTimeout(LLEventPump& source);
+
+    /// using LLEventTimeout as namespace for free functions
+    /// Post event to specified LLEventPump every period seconds. Delete
+    /// returned LLEventTimer* to cancel.
+    static LLEventTimer* post_every(F32 period, const std::string& pump, const LLSD& data);
+    /// Post event to specified LLEventPump at specified future time. Call
+    /// LLEventTimer::getInstance(returned pointer) to check whether it's still
+    /// pending; if so, delete the pointer to cancel.
+    static LLEventTimer* post_at(const LLDate& time, const std::string& pump, const LLSD& data);
+    /// Post event to specified LLEventPump after specified interval. Call
+    /// LLEventTimer::getInstance(returned pointer) to check whether it's still
+    /// pending; if so, delete the pointer to cancel.
+    static LLEventTimer* post_after(F32 interval, const std::string& pump, const LLSD& data);
 
 protected:
     virtual void setCountdown(F32 seconds);
