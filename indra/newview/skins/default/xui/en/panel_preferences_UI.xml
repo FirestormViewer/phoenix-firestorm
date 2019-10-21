@@ -436,9 +436,9 @@
          follows="left|top"
          height="16"
          layout="topleft"
-         left="5"
+         left="10"
          name="ShowGroupNoticesTopRightLabel"
-         top_pad="3"
+         top_pad="8"
          type="string"
          width="210">
            Group Notices and chiclets location:
@@ -450,6 +450,7 @@
          initial_value="1"
          layout="topleft"
          left_pad="5"
+         top_delta="-1"
          name="ShowGroupNoticesTopRight"
          tool_tip="Choose where group notifications and chiclet icons will appear on the screen."
          width="200">
@@ -478,7 +479,7 @@
          left_pad="2"
          name="GroupTopRightRequiresRestart"
          text_color="White_50"
-         top_pad="-16"
+         top_pad="-14"
          type="string"
          width="128">
            (requires restart)
