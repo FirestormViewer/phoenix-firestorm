@@ -151,7 +151,9 @@
 		// Once pumpMainLoop() reports that we're done, cancel frameTimer:
 		// stop the repetitive calls.
 		[frameTimer release];
-		[[LLNSApplication sharedApplication] terminate:self];
+		//<FS:TS> macOS compile fix
+		//[[LLNSApplication sharedApplication] terminate:self];
+		[[LLApplication sharedApplication] terminate:self];
 	}
 }
 
