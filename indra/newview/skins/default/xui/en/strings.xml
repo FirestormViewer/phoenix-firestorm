@@ -3124,6 +3124,7 @@ Your current position: [AVATAR_POS]
   <string name="Pie_av_render_fully">Fully</string>
 
   <string name="Nametag_Complexity_Label">Complexity: [COMPLEXITY]</string>
+  <string name="Nametag_Texture_Area_Label">Texture Area: [TEXTURE_AREA] m^2</string>
 
   <string name="font_unknown">Unknown Font</string>
   <string name="font_fonts.xml">Deja Vu</string>
