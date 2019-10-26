@@ -171,7 +171,7 @@ class AOEngine
 		void stopAllStandVariants();
 		void stopAllSitVariants();
 
-		BOOL foreignAnimations(const LLUUID& seat);
+		BOOL foreignAnimations();
 		AOSet::AOState* mapSwimming(const LLUUID& motion) const;
 		AOSet::AOState* getStateForMotion(const LLUUID& motion) const;
 
