@@ -85,7 +85,7 @@ void FloaterAO::updateSetParameters()
 	mOverrideSitsCheckBoxSmall->setValue(mSelectedSet->getSitOverride());
 	mSmartCheckBox->setValue(mSelectedSet->getSmart());
 	mDisableMouselookCheckBox->setValue(mSelectedSet->getMouselookDisable());
-	BOOL isDefault = (mSelectedSet == AOEngine::instance().getDefaultSet()) ? TRUE : FALSE;
+	BOOL isDefault = (mSelectedSet == AOEngine::instance().getDefaultSet());
 	mDefaultCheckBox->setValue(isDefault);
 	mDefaultCheckBox->setEnabled(!isDefault);
 	updateSmart();
@@ -282,7 +282,7 @@ void FloaterAO::enableSetControls(BOOL yes)
 	mSetSelectorSmall->setEnabled(yes);
 	mActivateSetButton->setEnabled(yes);
 	mRemoveButton->setEnabled(yes);
-	mDefaultCheckBox->setEnabled(yes);
+	mDefaultCheckBox->setEnabled(yes && (mSelectedSet != AOEngine::instance().getDefaultSet()));
 	mOverrideSitsCheckBox->setEnabled(yes);
 	mOverrideSitsCheckBoxSmall->setEnabled(yes);
 	mDisableMouselookCheckBox->setEnabled(yes);
