@@ -171,8 +171,9 @@ class AOEngine
 		void stopAllStandVariants();
 		void stopAllSitVariants();
 
-		BOOL foreignAnimations(const LLUUID& seat);
-		const LLUUID& mapSwimming(const LLUUID& motion) const;
+		BOOL foreignAnimations();
+		AOSet::AOState* mapSwimming(const LLUUID& motion) const;
+		AOSet::AOState* getStateForMotion(const LLUUID& motion) const;
 
 		void updateSortOrder(AOSet::AOState* state);
 		void saveSet(const AOSet* set);
@@ -204,6 +205,7 @@ class AOEngine
 		LLUUID mAOFolder;
 		LLUUID mLastMotion;
 		LLUUID mLastOverriddenMotion;
+		LLUUID mTransitionId;
 
 		std::vector<AOSet*> mSets;
 		std::vector<AOSet*> mOldSets;

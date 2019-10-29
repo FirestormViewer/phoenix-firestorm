@@ -829,6 +829,11 @@ BOOL LLFloaterPreference::postBuild()
 	onPieColorsOverrideChanged();
 	// </FS:Zi> Pie menu
 
+	// <FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
+	gSavedSettings.getControl("ShowGroupNoticesTopRight")->getSignal()->connect(boost::bind(&LLFloaterPreference::onShowGroupNoticesTopRightChanged, this));
+	onShowGroupNoticesTopRightChanged();
+	// </FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
+
 	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
 	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", getString("LoginToChange"));
 
@@ -891,6 +896,13 @@ void LLFloaterPreference::onPieColorsOverrideChanged()
 	getChild<LLSliderCtrl>("pie_menu_fade_out")->setEnabled(enable);
 }
 // </FS:Zi> Pie menu
+
+// <FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
+void LLFloaterPreference::onShowGroupNoticesTopRightChanged()
+{
+	getChild<LLRadioGroup>("ShowGroupNoticesTopRight")->setValue(gSavedSettings.getBOOL("ShowGroupNoticesTopRight"));
+}
+// </FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
 
 void LLFloaterPreference::updateDeleteTranscriptsButton()
 {

@@ -3702,14 +3702,25 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		{
 			std::string complexity_string;
 			LLLocale locale("");
-			LLResMgr::getInstance()->getIntegerString(complexity_string, complexity);
 
+			// always show complexity, even if the reason for a jelly baby is the texture area
+			// this is technically not 100% correct but the decision logic with all of the
+			// exceptions would be way too complex to justify the result - Zi
+			LLResMgr::getInstance()->getIntegerString(complexity_string, complexity);
 			LLStringUtil::format_map_t label_args;
 			label_args["COMPLEXITY"] = complexity_string;
 
+			addNameTagLine(format_string(complexity_label, label_args), complexity_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
+
+			// only show texture area if this is the reason for jelly baby rendering
 			static LLCachedControl<F32> max_attachment_area(gSavedSettings, "RenderAutoMuteSurfaceAreaLimit", 1000.0f);
-			bool surface_limit_exceeded = max_attachment_area > 0.f && mAttachmentSurfaceArea > max_attachment_area;
-			addNameTagLine(format_string(complexity_label, label_args) + (surface_limit_exceeded ? " \xE2\x96\xA0" : ""), complexity_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
+			if (max_attachment_area > 0.f && mAttachmentSurfaceArea > max_attachment_area)
+			{
+				LLResMgr::getInstance()->getIntegerString(complexity_string, mAttachmentSurfaceArea);
+				label_args["TEXTURE_AREA"] = complexity_string;
+
+				addNameTagLine(format_string(complexity_label, label_args), LLColor4::red, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
+			}
 		}
 		// </FS:Ansariel>
 
@@ -6458,6 +6469,11 @@ BOOL LLVOAvatar::startMotion(const LLUUID& id, F32 time_offset)
 		else
 		{
 			gAgent.sendAnimationRequest(remap_id, ANIM_REQUEST_START);
+
+			// since we did an override, there is no need to do anything else,
+			// specifically not the startMotion() part at the bottom of this function
+			// See FIRE-29020
+			return true;
 		}
 	}
 	else
@@ -6499,6 +6515,11 @@ BOOL LLVOAvatar::stopMotion(const LLUUID& id, BOOL stop_immediate)
 		else
 		{
 			gAgent.sendAnimationRequest(remap_id, ANIM_REQUEST_STOP);
+
+			// since we did an override, there is no need to do anything else,
+			// specifically not the stopMotion() part at the bottom of this function
+			// See FIRE-29020
+			return true;
 		}
 	}
 	else
