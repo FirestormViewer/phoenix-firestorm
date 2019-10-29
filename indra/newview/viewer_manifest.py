@@ -1846,13 +1846,12 @@ class LinuxManifest(ViewerManifest):
         print "DEBUG: icon_path '%s'" % icon_path
         with self.prefix(src=icon_path) :
             self.path("firestorm_256.png","firestorm_48.png")
-            with self.prefix(dst="res-sdl") :
-                self.path("firestorm_256.BMP","ll_icon.BMP")
+            #with self.prefix(dst="res-sdl") :
+            #    self.path("firestorm_256.bmp","ll_icon.BMP")
 
         # plugins
         with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'media_plugins'), dst="bin/llplugin"):
-            self.path("gstreamer010/libmedia_plugin_gstreamer010.so",
-                      "libmedia_plugin_gstreamer.so")
+            #self.path("gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
             self.path2basename("libvlc", "libmedia_plugin_libvlc.so")
             self.path("cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
 
@@ -1874,7 +1873,6 @@ class LinuxManifest(ViewerManifest):
         # CEF files 
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
             self.path( "libcef.so" )
-            self.path( "libllceflib.so" )
             
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
             self.path( "*.so" )
@@ -1885,7 +1883,6 @@ class LinuxManifest(ViewerManifest):
             self.path( "natives_blob.bin" )
             self.path( "snapshot_blob.bin" )
             self.path( "v8_context_snapshot.bin" )
-            self.path( "libffmpegsumo.so" )
 
         with self.prefix(src=os.path.join(pkgdir, 'resources'), dst="bin"):
             self.path( "cef.pak" )
@@ -1951,8 +1948,8 @@ class LinuxManifest(ViewerManifest):
             self.path("zh-TW.pak")
 
         # llcommon
-        if not self.path("../llcommon/libllcommon.so", "lib/libllcommon.so"):
-            print "Skipping llcommon.so (assuming llcommon was linked statically)"
+        #if not self.path("../llcommon/libllcommon.so", "lib/libllcommon.so"):
+        #    print "Skipping llcommon.so (assuming llcommon was linked statically)"
 
         self.path("featuretable_linux.txt")
 
@@ -1963,34 +1960,34 @@ class LinuxManifest(ViewerManifest):
           with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
             self.path("libapr-1.so*")
             self.path("libaprutil-1.so*")
-            self.path("libboost_context-mt.so*")
-            self.path("libboost_filesystem-mt.so*")
-            self.path("libboost_program_options-mt.so*")
-            self.path("libboost_regex-mt.so*")
-            self.path("libboost_signals-mt.so*")
-            self.path("libboost_system-mt.so*")
-            self.path("libboost_thread-mt.so*")
-            self.path("libboost_chrono-mt.so*") #<FS:TM> FS spcific
-            self.path("libboost_date_time-mt.so*") #<FS:TM> FS spcific
-            self.path("libboost_wave-mt.so*") #<FS:TM> FS spcific
-            self.path("libcollada14dom.so*")
-            self.path("libdb*.so*")
-            self.path("libcrypto.so*")
+            #self.path("libboost_context-mt.so*")
+            #self.path("libboost_filesystem-mt.so*")
+            #self.path("libboost_program_options-mt.so*")
+            #self.path("libboost_regex-mt.so*")
+            #self.path("libboost_signals-mt.so*")
+            #self.path("libboost_system-mt.so*")
+            #self.path("libboost_thread-mt.so*")
+            #self.path("libboost_chrono-mt.so*") #<FS:TM> FS spcific
+            #self.path("libboost_date_time-mt.so*") #<FS:TM> FS spcific
+            #self.path("libboost_wave-mt.so*") #<FS:TM> FS spcific
+            #self.path("libcollada14dom.so*")
+            #self.path("libdb*.so*")
+            #self.path("libcrypto.so*")
             self.path("libexpat.so*")
-            self.path("libssl.so*")
-            self.path("libGLOD.so")
-            self.path("libminizip.so")
+            #self.path("libssl.so*")
+            #self.path("libGLOD.so")
+            #self.fs_path("libminizip.so")
             self.path("libuuid.so*")
             self.path("libSDL-1.2.so*")
             self.path("libdirectfb*.so*")
             self.path("libfusion*.so*")
             self.path("libdirect*.so*")
-            self.path("libopenjpeg.so*")
+            self.fs_try_path("libopenjpeg.so*")
             self.path("libhunspell-1.3.so*")
             self.path("libalut.so*")
-            self.path("libpng15.so.15") #use provided libpng to workaround incompatible system versions on some distros
-            self.path("libpng15.so.15.13.0") #use provided libpng to workaround incompatible system versions on some distros
-            self.path("libpng15.so.15.1.0") #use provided libpng to workaround incompatible system versions on some distros
+            #self.path("libpng15.so.15") #use provided libpng to workaround incompatible system versions on some distros
+            #self.path("libpng15.so.15.13.0") #use provided libpng to workaround incompatible system versions on some distros
+            #self.path("libpng15.so.15.1.0") #use provided libpng to workaround incompatible system versions on some distros
             self.path("libopenal.so", "libopenal.so.1") # Install as versioned file in case it's missing from the 3p- and won't get copied below
             self.path("libopenal.so*")
             #self.path("libnotify.so.1.1.2", "libnotify.so.1") # LO - uncomment when testing libnotify(growl) on linux
@@ -2013,17 +2010,8 @@ class LinuxManifest(ViewerManifest):
             # previous call did, without having to explicitly state the
             # version number.
             self.path("libfontconfig.so.*.*")
-            try:
-                self.path("libtcmalloc.so*") #formerly called google perf tools
-                pass
-            except:
-                print "tcmalloc files not found, skipping"
-                pass
 
-            try:
-                self.path("libjemalloc.so*")
-            except:
-                pass
+            self.fs_try_path("libjemalloc.so*")
 
           # Vivox runtimes
           # Currentelly, the 32-bit ones will work with a 64-bit client.
@@ -2165,7 +2153,6 @@ class Linux_i686_Manifest(LinuxManifest):
                 pass
 
             if self.args['fmodversion'].lower() == 'fmodstudio':
-                self.path("libfmod-*.so")
                 self.path("libfmod.so")
                 self.path("libfmod.so*")
                 pass
@@ -2210,18 +2197,12 @@ class Linux_x86_64_Manifest(LinuxManifest):
                     pass
 
             if self.args['fmodversion'].lower() == 'fmodstudio':
-                self.path("libfmod-*.so")
                 self.path("libfmod.so")
                 self.path("libfmod.so*")
                 pass
 
         with self.prefix(dst="bin"):
             self.path2basename("../llplugin/slplugin", "SLPlugin")
-
-        # plugins
-        with self.prefix(dst="bin/llplugin"):
-            self.path2basename("../media_plugins/webkit", "libmedia_plugin_webkit.so")
-            self.path("../media_plugins/gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
 
         self.path("secondlife-i686.supp")
 
