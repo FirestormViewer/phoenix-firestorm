@@ -874,14 +874,14 @@
          increment="0.5"
          initial_value="1"
          layout="topleft"
-         label="Pick scale:"
+         label="Pick radius:"
          left="35"
          label_width="150"
          max_val="10"
          min_val="0.5"
          name="FSMinimapPickScale"
          show_text="true"
-         tool_tip="Controls the radius of the pick range on the minimap"
+         tool_tip="Controls the radius of the pick range on the minimap. The opacity and color of the pick range can be adjusted with the Pick radius color and Opacity settings."
          width="360"
          top_pad="5"/>
 
