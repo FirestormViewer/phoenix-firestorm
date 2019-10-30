@@ -1137,21 +1137,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 					getChildView("maskcutoff")->setEnabled(editable && mIsAlpha);
 					getChildView("label maskcutoff")->setEnabled(editable && mIsAlpha);
 
-					bool allAttachments = true;
-					for (LLObjectSelection::iterator iter = LLSelectMgr::getInstance()->getSelection()->begin();
-						iter != LLSelectMgr::getInstance()->getSelection()->end();iter++)
-					{
-						LLSelectNode* node = *iter;
-						LLViewerObject* object = node->getObject();
-						if (!object->isAttachment())
-						{
-							allAttachments = false;
-							break;
-						}
-					}
-
-					mTextureCtrl->setBakeTextureEnabled(allAttachments);
-					
+					mTextureCtrl->setBakeTextureEnabled(TRUE);
 				}
 				else if (id.isNull())
 				{
@@ -1176,21 +1162,8 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 					getChildView("label alphamode")->setEnabled(editable && mIsAlpha);
 					getChildView("maskcutoff")->setEnabled(editable && mIsAlpha);
 					getChildView("label maskcutoff")->setEnabled(editable && mIsAlpha);
-
-					bool allAttachments = true;
-					for (LLObjectSelection::iterator iter = LLSelectMgr::getInstance()->getSelection()->begin();
-						iter != LLSelectMgr::getInstance()->getSelection()->end();iter++)
-					{
-						LLSelectNode* node = *iter;
-						LLViewerObject* object = node->getObject();
-						if (!object->isAttachment())
-						{
-							allAttachments = false;
-							break;
-						}
-					}
-
-					mTextureCtrl->setBakeTextureEnabled(allAttachments);
+					
+					mTextureCtrl->setBakeTextureEnabled(TRUE);
 				}
 				
 			}
