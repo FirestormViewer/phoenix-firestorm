@@ -407,7 +407,7 @@ void allowDirectMarkedTextInput(bool allow, GLViewRef glView)
 
 NSWindowRef getMainAppWindow()
 {
-	LLNSWindow *winRef = [(LLAppDelegate*)[[LLNSApplication sharedApplication] delegate] window];
+	LLNSWindow *winRef = [(LLAppDelegate*)[[NSApplication sharedApplication] delegate] window];
 	
 	[winRef setAcceptsMouseMovedEvents:TRUE];
 	return winRef;
@@ -420,7 +420,7 @@ void makeFirstResponder(NSWindowRef window, GLViewRef view)
 
 void requestUserAttention()
 {
-	[[LLNSApplication sharedApplication] requestUserAttention:NSInformationalRequest];
+	[[NSApplication sharedApplication] requestUserAttention:NSInformationalRequest];
 }
 
 long showAlert(std::string text, std::string title, int type)
@@ -470,7 +470,7 @@ long showAlert(std::string text, std::string title, int type)
 /*
  GLViewRef getGLView()
  {
- return [(LLAppDelegate*)[[LLNSApplication sharedApplication] delegate] glview];
+ return [(LLAppDelegate*)[[NSApplication sharedApplication] delegate] glview];
  }
  */
 
