@@ -2280,6 +2280,7 @@ if (WINDOWS)
         --source=${CMAKE_CURRENT_SOURCE_DIR}
         --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/copy_touched.bat
         --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
+        --viewer_flavor=${ND_VIEWER_FLAVOR}
         --fmodversion=${FMODVERSION}
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2538,6 +2539,7 @@ endif (NOT ENABLE_MEDIA_PLUGINS)
       --grid=${GRID}
       --source=${CMAKE_CURRENT_SOURCE_DIR}
       --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
+      --viewer_flavor=${ND_VIEWER_FLAVOR}
       --fmodversion=${FMODVERSION}
     DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2621,6 +2623,7 @@ if (DARWIN)
       --grid=${GRID}
       --source=${CMAKE_CURRENT_SOURCE_DIR}
       --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
+      --viewer_flavor=${ND_VIEWER_FLAVOR}
       --fmodversion=${FMODVERSION}
     DEPENDS
       ${VIEWER_BINARY_NAME}
