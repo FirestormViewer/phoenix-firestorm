@@ -601,6 +601,12 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TooltipOutboxMixedStock">
 		Wszystkie rzeczy w folderze Magazynowym muszą mieć ten sam typ i zezwolenia
 	</string>
+	<string name="TooltipOutfitNotInInventory">
+		W "Strojach" możesz umieszczać tylko przedmioty lub stroje z własnej Szafy
+	</string>
+	<string name="TooltipCantCreateOutfit">
+		Jeden lub więcej przedmiotów nie może być użyty w "Strojach"
+	</string>
 	<string name="TooltipDragOntoOwnChild">
 		Nie możesz przenieść folderu do jego obiektu podrzędnego
 	</string>
@@ -6283,6 +6289,9 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="Nametag_Complexity_Label">
 		Złożoność: [COMPLEXITY]
+	</string>
+	<string name="Nametag_Texture_Area_Label">
+		Tekstury: [TEXTURE_AREA] m²
 	</string>
 	<string name="font_unknown">
 		Nieznana czcionka

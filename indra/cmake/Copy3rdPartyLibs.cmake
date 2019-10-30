@@ -17,17 +17,16 @@ if(WINDOWS)
 
     #*******************************
     # VIVOX - *NOTE: no debug version
-    set(vivox_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
-    set(vivox_files
-        SLVoice.exe
-        )
+    set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
+    set(slvoice_src_dir "${ARCH_PREBUILT_BIN_RELEASE}")    
+    set(slvoice_files SLVoice.exe )
     if (ADDRESS_SIZE EQUAL 64)
-        list(APPEND vivox_files
+        list(APPEND vivox_libs
             vivoxsdk_x64.dll
             ortp_x64.dll
             )
     else (ADDRESS_SIZE EQUAL 64)
-        list(APPEND vivox_files
+        list(APPEND vivox_libs
             vivoxsdk.dll
             ortp.dll
             )
@@ -174,11 +173,10 @@ elseif(DARWIN)
     set(SHARED_LIB_STAGING_DIR_RELWITHDEBINFO   "${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/Resources")
     set(SHARED_LIB_STAGING_DIR_RELEASE          "${SHARED_LIB_STAGING_DIR}/Release/Resources")
 
-    set(vivox_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
-    set(vivox_files
-        SLVoice
+    set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
+    set(slvoice_files SLVoice)
+    set(vivox_libs
         libortp.dylib
-        libvivoxplatform.dylib
         libvivoxsdk.dylib
        )
     set(debug_src_dir "${ARCH_PREBUILT_DIRS_DEBUG}")
@@ -218,15 +216,15 @@ elseif(LINUX)
     set(SHARED_LIB_STAGING_DIR_RELWITHDEBINFO   "${SHARED_LIB_STAGING_DIR}")
     set(SHARED_LIB_STAGING_DIR_RELEASE          "${SHARED_LIB_STAGING_DIR}")
 
-    set(vivox_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
-    set(vivox_files
+    set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
+    set(vivox_libs
         libsndfile.so.1
         libortp.so
         libvivoxoal.so.1
-        libvivoxplatform.so
         libvivoxsdk.so
-        SLVoice
-       )
+        )
+    set(slvoice_files SLVoice)
+
     # *TODO - update this to use LIBS_PREBUILT_DIR and LL_ARCH_DIR variables
     # or ARCH_PREBUILT_DIRS
     set(debug_src_dir "${ARCH_PREBUILT_DIRS_DEBUG}")
@@ -269,10 +267,6 @@ elseif(LINUX)
       set(release_files ${release_files} "libfmod.so")
     endif (FMODSTUDIO)
 
-    #if (FMODEX)
-    #  set(debug_files ${debug_files} "libfmodexL.so")
-    #  set(release_files ${release_files} "libfmodex.so")
-    #endif (FMODEX)
     if (FMODEX)
       if(ADDRESS_SIZE EQUAL 32)
         set(debug_files ${debug_files} "libfmodexL.so")
@@ -285,8 +279,8 @@ elseif(LINUX)
 
 else(WINDOWS)
     message(STATUS "WARNING: unrecognized platform for staging 3rd party libs, skipping...")
-    set(vivox_src_dir "${CMAKE_SOURCE_DIR}/newview/vivox-runtime/i686-linux")
-    set(vivox_files "")
+    set(vivox_lib_dir "${CMAKE_SOURCE_DIR}/newview/vivox-runtime/i686-linux")
+    set(vivox_libs "")
     # *TODO - update this to use LIBS_PREBUILT_DIR and LL_ARCH_DIR variables
     # or ARCH_PREBUILT_DIRS
     set(debug_src_dir "${CMAKE_SOURCE_DIR}/../libraries/i686-linux/lib/debug")
@@ -309,38 +303,35 @@ endif(WINDOWS)
 ################################################################
 
 copy_if_different(
-    ${vivox_src_dir}
+    ${vivox_lib_dir}
     "${SHARED_LIB_STAGING_DIR_DEBUG}"
     out_targets 
-    ${vivox_files}
+    ${vivox_libs}
     )
 set(third_party_targets ${third_party_targets} ${out_targets})
 
 copy_if_different(
-    ${vivox_src_dir}
+    ${slvoice_src_dir}
     "${SHARED_LIB_STAGING_DIR_RELEASE}"
     out_targets
-    ${vivox_files}
+    ${slvoice_files}
     )
+copy_if_different(
+    ${vivox_lib_dir}
+    "${SHARED_LIB_STAGING_DIR_RELEASE}"
+    out_targets
+    ${vivox_libs}
+    )
+
 set(third_party_targets ${third_party_targets} ${out_targets})
 
 copy_if_different(
-    ${vivox_src_dir}
+    ${vivox_lib_dir}
     "${SHARED_LIB_STAGING_DIR_RELWITHDEBINFO}"
     out_targets
-    ${vivox_files}
+    ${vivox_libs}
     )
 set(third_party_targets ${third_party_targets} ${out_targets})
-
-
-
-#copy_if_different(
-#    ${debug_src_dir}
-#    "${SHARED_LIB_STAGING_DIR_DEBUG}"
-#    out_targets
-#    ${debug_files}
-#    )
-#set(third_party_targets ${third_party_targets} ${out_targets})
 
 copy_if_different(
     ${release_src_dir}
