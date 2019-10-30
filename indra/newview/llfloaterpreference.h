@@ -164,6 +164,9 @@ protected:
 	// <FS:Ansariel> Correct enabled state of Animated Script Dialogs option
 	void updateAnimatedScriptDialogs();
 
+	// <FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
+	void onShowGroupNoticesTopRightChanged();
+
 public:
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.	
