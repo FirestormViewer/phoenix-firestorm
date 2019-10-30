@@ -129,7 +129,7 @@
 				<combo_box.item label="Weltkarte öffnen" name="1"/>
 				<combo_box.item label="Zur Position teleportieren" name="2"/>
 			</combo_box>
-			<slider label="Auswahlradius-Skalierung:" tool_tip="Steuert den Radius für den Auswahlbereich auf der Minikarte" name="FSMinimapPickScale"/>
+			<slider label="Selektionsradius-Größe:" tool_tip="Steuert den Radius für den Selektionsbereich auf der Minikarte. Die Farbe und Deckkraft können über die Selektionsradius-Farbe- und Deckkraft-Einstellungen konfiguriert werden." name="FSMinimapPickScale"/>
 			<text name="world_map_options_label">
 			   Weltkarte-Optionen:
 			</text>

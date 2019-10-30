@@ -143,10 +143,15 @@
 			</panel>
 		</panel>
 		<panel label="Mini-Karte" name="tab-minimap">
-			<slider name="FSMiniMapOpacity" label="Hintergrund-Deckkraft:" label_width="130" width="430"/>
-			<text name="netmap_pickradius_textbox" width="130">
-				Auswahl-Radius:
+			<slider name="FSMiniMapOpacity" label="Hintergrund-Deckkraft:" label_width="135" width="435"/>
+			<text name="netmap_pickradius_color_textbox" width="135">
+				Selektionsradius-Farbe:
 			</text>
+			<color_swatch name="MapPickRadiusColor" tool_tip="Erlaubt die Auswahl der Farbe des Selektionsradius auf der Minikarte. Die Größe des Selektionsradius kann über die Selektionsradius-Größe-Einstellung konfiguriert werden." />
+			<text name="netmap_pickradius_opacity_textbox" width="60">
+				Deckkraft:
+			</text>
+			<slider name="MapPickRadiusTransparency" width="163" tool_tip="Erlaubt die Auswahl der Deckkraft des Selektionsradius auf der Minikarte. Die Größe des Selektionsradius kann über die Selektionsradius-Größe-Einstellung konfiguriert werden." />
 			<text name="netmap_dots_textbox">
 				Punkte auf Minikarte:
 			</text>
