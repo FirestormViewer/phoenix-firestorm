@@ -6981,6 +6981,9 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="Nametag_Complexity_Label">
 		Komplexität: [COMPLEXITY]
 	</string>
+	<string name="Nametag_Texture_Area_Label">
+		Textur-Oberfläche: [TEXTURE_AREA] m²
+	</string>
 	<string name="font_unknown">
 		Unbekannte Schriftart
 	</string>

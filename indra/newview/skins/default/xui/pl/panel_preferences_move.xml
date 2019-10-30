@@ -105,7 +105,7 @@
 				<combo_box.item label="Otwórz mapę świata" name="1"/>
 				<combo_box.item label="Teleportuj do klikniętego punktu" name="2"/>
 			</combo_box>
-			<slider label="Rozm. okręgu zaznaczenia:" name="FSMinimapPickScale" tool_tip="Kontroluje rozmiar okręgu zaznaczenia pod kursorem na minimapie"/>
+			<slider label="Promień okręgu zaznacz.:" name="FSMinimapPickScale" tool_tip="Kontroluje promień okręgu zaznaczenia pod kursorem na minimapie. Przezroczystość i kolor pierścienia mogą być dostosowane przez odpowiadające mu ustawienia w sekcji z kolorami."/>
 			<text name="world_map_options_label">
 				Opcje mapy świata:
 			</text>
