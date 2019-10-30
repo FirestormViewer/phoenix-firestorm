@@ -207,6 +207,9 @@ public:
 		return instance_iter(getMap_().end());
 	}
 
+	// while iterating over instances, might want to request the key
+	virtual const KEY& getKey() const { return mInstanceKey; }
+
 	static S32 instanceCount() 
 	{ 
 		return getMap_().size(); 
@@ -235,7 +238,6 @@ protected:
 		remove_();
 	}
 	virtual void setKey(KEY key) { remove_(); add_(key); }
-	virtual const KEY& getKey() const { return mInstanceKey; }
 
 private:
 	LLInstanceTracker( const LLInstanceTracker& );
