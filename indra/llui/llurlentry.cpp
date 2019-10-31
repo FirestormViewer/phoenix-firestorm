@@ -929,7 +929,7 @@ std::string LLUrlEntryAgentUserName::getName(const LLAvatarName& avatar_name)
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 
 // Defined in rlvcommon.cpp - redirects to RlvStrings::getAnonym() since we can't really get to that class from here
-extern const std::string& rlvGetAnonym(const LLAvatarName& avName);
+extern std::string rlvGetAnonym(const LLAvatarName& avName);
 
 //
 // LLUrlEntryAgentRLVAnonymizedName Describes an RLV anonymized agent name Url, e.g.,

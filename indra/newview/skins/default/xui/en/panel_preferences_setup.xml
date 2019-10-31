@@ -43,7 +43,7 @@
 		 mouse_opaque="false"
 		 top_pad="15"
 		 width="500">
-			Maximum bandwidth ([http://wiki.phoenixviewer.com/fs_speedtest need a suggestion?]):
+			Maximum bandwidth ([http://wiki.firestormviewer.org/fs_speedtest need a suggestion?]):
 		</text>
 
 		<icon
@@ -411,7 +411,7 @@
 		 name="cache_size_label_l"
 		 top_pad="15"
 		 width="500">
-		   Cache size ([http://wiki.phoenixviewer.com/cache need a suggestion?]):
+		   Cache size ([http://wiki.firestormviewer.org/cache need a suggestion?]):
 		</text>
 		<slider
 		 can_edit_text="true"

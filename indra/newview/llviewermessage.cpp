@@ -6322,8 +6322,8 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			// save the home location image to disk
 			std::string snap_filename = gDirUtilp->getLindenUserDir();
 			snap_filename += gDirUtilp->getDirDelimiter();
-			snap_filename += SCREEN_HOME_FILENAME;
-			gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
+			snap_filename += LLStartUp::getScreenHomeFilename();
+			gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE, LLSnapshotModel::SNAPSHOT_TYPE_COLOR, LLSnapshotModel::SNAPSHOT_FORMAT_PNG);
 		}
 		
 		if (notificationID == "RegionRestartMinutes" ||
@@ -6384,14 +6384,14 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			// save the home location image to disk
 			std::string snap_filename = gDirUtilp->getLindenUserDir();
 			snap_filename += gDirUtilp->getDirDelimiter();
-			snap_filename += SCREEN_HOME_FILENAME;
-			if (gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE))
+			snap_filename += LLStartUp::getScreenHomeFilename();
+			if (gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE, LLSnapshotModel::SNAPSHOT_TYPE_COLOR, LLSnapshotModel::SNAPSHOT_FORMAT_PNG))
 			{
-				LL_INFOS() << SCREEN_HOME_FILENAME << " saved successfully." << LL_ENDL;
+				LL_INFOS() << LLStartUp::getScreenHomeFilename() << " saved successfully." << LL_ENDL;
 			}
 			else
 			{
-				LL_WARNS() << SCREEN_HOME_FILENAME << " could not be saved." << LL_ENDL;
+				LL_WARNS() << LLStartUp::getScreenHomeFilename() << " could not be saved." << LL_ENDL;
 			}
 		}
 // </FS:CR>
@@ -6441,8 +6441,8 @@ static void process_special_alert_messages(const std::string & message)
 		// save the home location image to disk
 		std::string snap_filename = gDirUtilp->getLindenUserDir();
 		snap_filename += gDirUtilp->getDirDelimiter();
-		snap_filename += SCREEN_HOME_FILENAME;
-		gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
+		snap_filename += LLStartUp::getScreenHomeFilename();
+		gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE, LLSnapshotModel::SNAPSHOT_TYPE_COLOR, LLSnapshotModel::SNAPSHOT_FORMAT_PNG);
 	}
 }
 
