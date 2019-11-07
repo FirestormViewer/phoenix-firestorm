@@ -1768,19 +1768,35 @@ void LLFavoritesOrderStorage::load()
 												<< LL_ENDL;
 				in_file.close();
 				// <FS:Ansariel> FIRE-10122 - User@grid stored_favorites.xml
-				//user_llsd = fav_llsd[gAgentUsername];
-				user_llsd = fav_llsd[gAgentUsername + " @ " + LLGridManager::getInstance()->getGridLabel()];
+				//if (fav_llsd.isMap() && fav_llsd.has(gAgentUsername))
+				//{
+				//	user_llsd = fav_llsd[gAgentUsername];
+				if (fav_llsd.isMap() && fav_llsd.has(gAgentUsername + " @ " + LLGridManager::getInstance()->getGridLabel()))
+				{
+					user_llsd = fav_llsd[gAgentUsername + " @ " + LLGridManager::getInstance()->getGridLabel()];
 				// </FS:Ansariel>
 
-				S32 index = 0;
-				for (LLSD::array_iterator iter = user_llsd.beginArray();
+					S32 index = 0;
+					bool needs_validation = gSavedPerAccountSettings.getBOOL("ShowFavoritesOnLogin");
+					for (LLSD::array_iterator iter = user_llsd.beginArray();
 						iter != user_llsd.endArray(); ++iter)
-				{
-					mSortIndexes.insert(std::make_pair(iter->get("id").asUUID(), index));
-					index++;
+					{
+						// Validation
+						LLUUID fv_id = iter->get("id").asUUID();
+						if (needs_validation
+							&& (fv_id.isNull()
+								|| iter->get("asset_id").asUUID().isNull()
+								|| iter->get("name").asString().empty()
+								|| iter->get("slurl").asString().empty()))
+						{
+							mRecreateFavoriteStorage = true;
+						}
+
+						mSortIndexes.insert(std::make_pair(fv_id, index));
+						index++;
+					}
 				}
 			}
-
 			else
 			{
 				LL_WARNS("FavoritesBar") << "unable to open favorites from '" << filename << "'" << LL_ENDL;
@@ -2035,6 +2051,8 @@ void LLFavoritesOrderStorage::rearrangeFavoriteLandmarks(const LLUUID& source_it
 
 BOOL LLFavoritesOrderStorage::saveFavoritesRecord(bool pref_changed)
 {
+	pref_changed |= mRecreateFavoriteStorage;
+	mRecreateFavoriteStorage = false;
 
 	LLUUID favorite_folder= gInventory.findCategoryUUIDForType(LLFolderType::FT_FAVORITE);
 	if (favorite_folder.isNull())
