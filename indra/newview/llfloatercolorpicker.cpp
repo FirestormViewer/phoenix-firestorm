@@ -73,6 +73,7 @@
 
 LLFloaterColorPicker::LLFloaterColorPicker (LLColorSwatchCtrl* swatch, BOOL show_apply_immediate )
 	: LLFloater(LLSD()),
+      LLDrawFrustum(swatch),
 	  mComponents			( 3 ),
 	  mMouseDownInLumRegion	( FALSE ),
 	  mMouseDownInHueRegion	( FALSE ),
@@ -103,11 +104,7 @@ LLFloaterColorPicker::LLFloaterColorPicker (LLColorSwatchCtrl* swatch, BOOL show
 	  mPaletteRegionHeight	( 40 ),
 	  mSwatch				( swatch ),
 	  mActive				( TRUE ),
-	  mCanApplyImmediately	( show_apply_immediate ),
-	  mContextConeOpacity	( 0.f ),
-      mContextConeInAlpha   ( 0.f ),
-      mContextConeOutAlpha   ( 0.f ),
-      mContextConeFadeTime   ( 0.f )
+	  mCanApplyImmediately	( show_apply_immediate )
 {
 	buildFromFile ( "floater_color_picker.xml");
 
@@ -119,10 +116,6 @@ LLFloaterColorPicker::LLFloaterColorPicker (LLColorSwatchCtrl* swatch, BOOL show
 		mApplyImmediateCheck->setEnabled(FALSE);
 		mApplyImmediateCheck->set(FALSE);
 	}
-
-    mContextConeInAlpha = gSavedSettings.getF32("ContextConeInAlpha");
-    mContextConeOutAlpha = gSavedSettings.getF32("ContextConeOutAlpha");
-    mContextConeFadeTime = gSavedSettings.getF32("ContextConeFadeTime");
 }
 
 LLFloaterColorPicker::~LLFloaterColorPicker()
@@ -498,82 +491,10 @@ BOOL LLFloaterColorPicker::isColorChanged()
 //
 void LLFloaterColorPicker::draw()
 {
-	LLRect swatch_rect;
-	mSwatch->localRectToOtherView(mSwatch->getLocalRect(), &swatch_rect, this);
 	// draw context cone connecting color picker with color swatch in parent floater
 	LLRect local_rect = getLocalRect();
-	if (hasFocus() && mSwatch->isInVisibleChain() && mContextConeOpacity > 0.001f)
-	{
-		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-		LLGLEnable(GL_CULL_FACE);
-		// <FS:Ansariel> Remove QUADS rendering mode
-		//gGL.begin(LLRender::QUADS);
-		//{
-		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
-		//	gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mTop);
-		//	gGL.vertex2i(swatch_rect.mRight, swatch_rect.mTop);
-		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
-		//	gGL.vertex2i(local_rect.mRight, local_rect.mTop);
-		//	gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
+	drawFrustum(local_rect, this, getDragHandle(), hasFocus());
 
-		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
-		//	gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
-		//	gGL.vertex2i(local_rect.mLeft, local_rect.mBottom);
-		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
-		//	gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mBottom);
-		//	gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mTop);
-
-		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
-		//	gGL.vertex2i(local_rect.mRight, local_rect.mBottom);
-		//	gGL.vertex2i(local_rect.mRight, local_rect.mTop);
-		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
-		//	gGL.vertex2i(swatch_rect.mRight, swatch_rect.mTop);
-		//	gGL.vertex2i(swatch_rect.mRight, swatch_rect.mBottom);
-
-		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
-		//	gGL.vertex2i(local_rect.mLeft, local_rect.mBottom);
-		//	gGL.vertex2i(local_rect.mRight, local_rect.mBottom);
-		//	gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
-		//	gGL.vertex2i(swatch_rect.mRight, swatch_rect.mBottom);
-		//	gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mBottom);
-		//}
-		//gGL.end();
-		gGL.begin(LLRender::TRIANGLE_STRIP);
-		{
-			gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mRight, swatch_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mRight, local_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mRight, swatch_rect.mBottom);
-			gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mRight, local_rect.mBottom);
-			gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mBottom);
-			gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mLeft, local_rect.mBottom);
-			gGL.color4f(0.f, 0.f, 0.f, mContextConeInAlpha * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, mContextConeOutAlpha * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
-		}
-		gGL.end();
-		// </FS:Ansariel>
-	}
-
-	if (gFocusMgr.childHasMouseCapture(getDragHandle()))
-	{
-		mContextConeOpacity = lerp(mContextConeOpacity, gSavedSettings.getF32("PickerContextOpacity"), 
-                                        LLSmoothInterpolation::getInterpolant(mContextConeFadeTime));
-	}
-	else
-	{
-		mContextConeOpacity = lerp(mContextConeOpacity, 0.f, LLSmoothInterpolation::getInterpolant(mContextConeFadeTime));
-	}
 
 	mPipetteBtn->setToggleState(LLToolMgr::getInstance()->getCurrentTool() == LLToolPipette::getInstance());
 	mApplyImmediateCheck->setEnabled(mActive && mCanApplyImmediately);

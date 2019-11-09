@@ -291,6 +291,7 @@ set(viewer_SOURCE_FILES
     lldonotdisturbnotificationstorage.cpp
     lldndbutton.cpp
     lldrawable.cpp
+    lldrawfrustum.cpp
     lldrawpool.cpp
     lldrawpoolalpha.cpp
     lldrawpoolavatar.cpp
@@ -491,6 +492,7 @@ set(viewer_SOURCE_FILES
     llinventoryobserver.cpp
     llinventorypanel.cpp
     lljoystickbutton.cpp
+    llkeyconflict.cpp
     lllandmarkactions.cpp
     lllandmarklist.cpp
     lllistbrowser.cpp
@@ -664,6 +666,7 @@ set(viewer_SOURCE_FILES
     llsecapi.cpp
     llsechandler_basic.cpp
     llselectmgr.cpp
+    llsetkeybinddialog.cpp
     llshareavatarhandler.cpp
     llsidepanelappearance.cpp
     llsidepanelinventory.cpp
@@ -768,7 +771,7 @@ set(viewer_SOURCE_FILES
     llviewerjointattachment.cpp
     llviewerjointmesh.cpp
     llviewerjoystick.cpp
-    llviewerkeyboard.cpp
+    llviewerinput.cpp
     llviewerlayer.cpp
     llviewermedia.cpp
     llviewermedia_streamingaudio.cpp
@@ -1051,6 +1054,7 @@ set(viewer_HEADER_FILES
     lldonotdisturbnotificationstorage.h
     lldndbutton.h
     lldrawable.h
+    lldrawfrustum.h
     lldrawpool.h
     lldrawpoolalpha.h
     lldrawpoolavatar.h
@@ -1252,6 +1256,7 @@ set(viewer_HEADER_FILES
     llinventoryobserver.h
     llinventorypanel.h
     lljoystickbutton.h
+    llkeyconflict.h
     lllandmarkactions.h
     lllandmarklist.h
     lllightconstants.h
@@ -1416,6 +1421,7 @@ set(viewer_HEADER_FILES
     llsecapi.h
     llsechandler_basic.h
     llselectmgr.h
+    llsetkeybinddialog.h
     llsidepanelappearance.h
     llsidepanelinventory.h
     llsidepanelinventorysubpanel.h
@@ -1522,7 +1528,7 @@ set(viewer_HEADER_FILES
     llviewerjointattachment.h
     llviewerjointmesh.h
     llviewerjoystick.h
-    llviewerkeyboard.h
+    llviewerinput.h
     llviewerlayer.h
     llviewermedia.h
     llviewermediafocus.h
@@ -2020,7 +2026,7 @@ set(viewer_APPSETTINGS_FILES
     app_settings/growl_notifications.xml
     app_settings/high_graphics.xml
     app_settings/ignorable_dialogs.xml
-    app_settings/keys.xml
+    app_settings/key_bindings.xml
     app_settings/keys_azerty.xml
     app_settings/keywords.ini
     app_settings/keywords_lsl_default.xml

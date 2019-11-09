@@ -42,7 +42,7 @@
 #include "lllineeditor.h"
 #include "llspinctrl.h"
 #include "llviewercontrol.h"
-#include "llviewerkeyboard.h"
+#include "llviewerinput.h"
 #include "llviewerstats.h"
 #include "llworld.h"
 #include "rlvactions.h"

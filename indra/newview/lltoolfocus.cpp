@@ -39,7 +39,7 @@
 #include "llagentcamera.h"
 #include "llbutton.h"
 #include "llviewercontrol.h"
-#include "llviewerkeyboard.h"//<FS:JL> Mouse movement by Singularity
+#include "llviewerinput.h"//<FS:JL> Mouse movement by Singularity
 #include "lldrawable.h"
 #include "lltooltip.h"
 #include "llhudmanager.h"

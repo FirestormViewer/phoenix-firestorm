@@ -110,7 +110,6 @@
 //#include "llfirstuse.h"
 #include "llfloaterhud.h"
 #include "llfloaterland.h"
-#include "llfloaterpreference.h"
 #include "llfloatertopobjects.h"
 #include "llfloaterworldmap.h"
 #include "llgesturemgr.h"
