@@ -13,7 +13,7 @@
    follows="top|left"
    layout="topleft"
    top="6"
-   left="10"
+   left="3"
    height="23"
    width="140"
    name="key_mode">
@@ -39,7 +39,7 @@
    follows="top|left"
    layout="topleft"
    top="6"
-   right="-10"
+   right="-1"
    height="23"
    width="140"
    label="Restore Defaults"

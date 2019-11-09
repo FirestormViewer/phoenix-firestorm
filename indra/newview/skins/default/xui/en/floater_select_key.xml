@@ -9,7 +9,7 @@
  height="116"
  layout="topleft"
  name="modal container"
- width="272">
+ width="280">
   <floater.string
    name="keyboard">
     Keyboard
@@ -20,7 +20,7 @@
   </floater.string>
   <floater.string
    name="basic_description">
-Press a key to set your trigger.
+Press a key or mouse button to set your trigger.
 Allowed input: [INPUT].
   </floater.string>
   <floater.string
@@ -31,15 +31,15 @@ Combination [KEYSTR] is reserved by menu.
      type="string"
      halign="center"
      length="1"
-     follows="left|top"
+     follows="left|top|right"
      height="30"
      layout="topleft"
-     left="10"
+     left="5"
      name="descritption"
      top="25"
      word_wrap="true"
-     width="212">
-Press a key to set your trigger.
+     right="-5">
+Press a key or mouse button to set your trigger.
 Allowed input: [INPUT].
     </text>
     <check_box

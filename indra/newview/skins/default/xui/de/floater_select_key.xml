@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="modal container" title="Taste festlegen">
-	<button label="Abbrechen" label_selected="Abbrechen" name="Cancel"/>
-	<text name="Save item as:">
-		Eine Taste drücken, um die Auslösetaste zum Sprechen festzulegen.
+<floater name="modal container" title="Taste festlegen" width="310">
+	<floater.string name="keyboard">
+		Tastatur
+	</floater.string>
+	<floater.string name="mouse">
+		Maustasten
+	</floater.string>
+	<floater.string name="basic_description">
+		Taste oder Maustaste drücken, um Auslöser zu setzen.
+Zulässige Eingabe: [INPUT].
+	</floater.string>
+	<floater.string name="reserved_by_menu">
+		Kombination [KEYSTR] ist vom Menü reserviert.
+	</floater.string>
+	<text name="descritption">
+		Taste oder Maustaste drücken, um Auslöser zu setzen.
+Zulässige Eingabe: [INPUT].
 	</text>
+	<check_box label="Für alle Modi festlegen" left="80" name="apply_all" tool_tip="Der Viewer verwendet verschiedene Tastenbelegungen, abhängig von Ihrer aktuellen Tätigkeit Inworld. Das Aktivieren dieser Option übernimmt Ihre Änderung für alle Modi."/>
+	<button label="Löschen" name="SetEmpty" width="92"/>
+	<button label="Standard" name="Default" width="92"/>
+	<button label="Abbrechen" name="Cancel" width="92"/>
 </floater>

@@ -12717,14 +12717,16 @@ The backup path could not be found.
    name="SettingsConfirmBackup"
    type="alertmodal">
 Are you sure you want to save a backup to this directory?
+
 [DIRECTORY]
+
 Any existing backups in that location will be overwritten!
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
      yestext="Save backup"/>
   </notification>
-  
+
   <notification
    icon="alertmodal.tga"
    name="SettingsRestoreNeedsLogout"
