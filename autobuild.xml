@@ -542,9 +542,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>40e8f6c5f56f411db75c19b95db29de9</string>
+              <string>d453d6200607972493e1797a30fc805f</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/44287/391455/bugsplat-1.0.7.531352-darwin64-531352.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45455/401027/bugsplat-1.0.7.532004-darwin64-532004.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -554,9 +554,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>33a52911164bc6b810b44cdf57be723e</string>
+              <string>372e1d677ee570f947183bae81ca0852</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/44289/391466/bugsplat-3.6.0.4.531352-windows-531352.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45457/401043/bugsplat-3.6.0.4.532004-windows-532004.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -566,16 +566,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8ed50aebd8df656be512fb68be63dc13</string>
+              <string>261d460a67e3e2f52bdad1391bb02ec3</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/44288/391459/bugsplat-.531352-windows64-531352.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45456/401036/bugsplat-.532004-windows64-532004.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>.531352</string>
+        <string>1.0.7.532004</string>
       </map>
       <key>colladadom</key>
       <map>
@@ -857,7 +857,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>1.500564</string>
+        <string>1.531288</string>
       </map>
       <key>dullahan</key>
       <map>
@@ -1149,6 +1149,18 @@
             <key>name</key>
             <string>darwin</string>
           </map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>74405aaaa226a9fa13c41d25f8e0df27</string>
+              <key>url</key>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/44202/391132/fmodex-4.44.64.531266-darwin64-531266.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
           <key>linux</key>
           <map>
             <key>archive</key>
@@ -1166,16 +1178,28 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5b1b5ce866afd2a74e445af1fffe6a8b</string>
+              <string>2a6d0cb25085cce2f7a4f2c982949eee</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodex-44461-windows-201601282252-r23.tar.bz2</string>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/43834/390171/fmodex-4.44.64.531266-windows-531266.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
           </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>bcee653711947af2c8db81d69504704c</string>
+              <key>url</key>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/43833/390164/fmodex-4.44.64.531266-windows64-531266.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
         </map>
         <key>version</key>
-        <string>4.44.61</string>
+        <string>4.44.64.531266</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -2252,9 +2276,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>aa2dcce6634256b3280813828e294b58</string>
+              <string>62b72bf45189b6c876947ac4e8209025</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/44301/391550/libndofdev-0.1.531359-darwin64-531359.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45899/405069/libndofdev-0.1.532324-darwin64-532324.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2264,9 +2288,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b9dc910aaba2207d04718b31a84dc10f</string>
+              <string>28df735378e7ba7154517ebc7bd53a69</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/44307/391585/libndofdev-0.1.531359-windows-531359.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45901/405083/libndofdev-0.1.532324-windows-532324.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2276,16 +2300,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fac91eace685540d467dc24016342cd4</string>
+              <string>f397f1eb92f5ba75df7b69041156c944</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/44305/391576/libndofdev-0.1.531359-windows64-531359.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45900/405076/libndofdev-0.1.532324-windows64-532324.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>0.1.531359</string>
+        <string>0.1.532324</string>
       </map>
       <key>libpng</key>
       <map>
@@ -2921,7 +2945,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.3.3-1.3.6.520171</string>
+        <string>1.3.3-1.3.6.531357</string>
       </map>
       <key>open-libndofdev</key>
       <map>
@@ -3336,9 +3360,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f824d586ab5de6edd14ef6828e9e4b66</string>
+              <string>d1c28eef1aa72d0aaa227e5122b43659</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/44719/395040/slvoice-4.10.0000.32327.5fc3fe7c.531581-darwin64-531581.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45922/405171/slvoice-4.10.0000.32327.5fc3fe7c.532334-darwin64-532334.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3372,9 +3396,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1941c17c81905f23b4928288bcf719fb</string>
+              <string>fcb26f570187eff2c724c3272581628f</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/44720/395047/slvoice-4.10.0000.32327.5fc3fe7c.531581-windows-531581.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45927/405216/slvoice-4.10.0000.32327.5fc3fe7c.532334-windows-532334.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3384,16 +3408,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>baa6cdc8e8762d5519996ed9faa0bf3f</string>
+              <string>cf6800e2221ff54d8af1de23b10f2797</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/44721/395056/slvoice-4.10.0000.32327.5fc3fe7c.531581-windows64-531581.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45926/405209/slvoice-4.10.0000.32327.5fc3fe7c.532334-windows64-532334.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>4.10.0000.32327.5fc3fe7c.531581</string>
+        <string>4.10.0000.32327.5fc3fe7c.532334</string>
       </map>
       <key>tut</key>
       <map>
@@ -3534,9 +3558,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c5ab9d9d7482e48cd76f4bf391900a8c</string>
+              <string>32fa3efa3529f91fd483c88bc6d64efd</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/43369/385585/viewer_manager-2.0.531000-darwin64-531000.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/44990/397778/viewer_manager-2.0.531762-darwin64-531762.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3570,9 +3594,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6b10d7407686d9e12e63576256581e3e</string>
+              <string>49de4f0490b3a3d7b078af0efc8d0ae8</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/43370/385592/viewer_manager-2.0.531000-windows-531000.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/44991/397785/viewer_manager-2.0.531762-windows-531762.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3583,7 +3607,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>source_type</key>
         <string>hg</string>
         <key>version</key>
-        <string>2.0.531000</string>
+        <string>2.0.531762</string>
       </map>
       <key>vlc-bin</key>
       <map>

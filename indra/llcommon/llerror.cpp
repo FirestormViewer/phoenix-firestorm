@@ -39,6 +39,8 @@
 #if !LL_WINDOWS
 # include <syslog.h>
 # include <unistd.h>
+#else
+# include <io.h>
 #endif // !LL_WINDOWS
 #include <vector>
 #include "string.h"
@@ -54,6 +56,47 @@
 #include "lltimer.h"
 
 #include "nd/ndlogthrottle.h"
+
+#if LL_WINDOWS
+#define fhclose  _close
+#define fhdup    _dup
+#define fhdup2   _dup2
+#define fhfdopen _fdopen
+#define fhfileno _fileno
+#else
+#define fhclose  ::close
+#define fhdup    ::dup
+#define fhdup2   ::dup2
+#define fhfdopen ::fdopen
+#define fhfileno ::fileno
+#endif
+
+namespace LLError
+{
+
+	class SettingsConfig;
+	typedef LLPointer<SettingsConfig> SettingsConfigPtr;
+
+	class Settings : public LLSingleton<Settings>
+	{
+		LLSINGLETON(Settings);
+	public:
+		SettingsConfigPtr getSettingsConfig();
+		~Settings();
+
+		void reset();
+		SettingsStoragePtr saveAndReset();
+		void restore(SettingsStoragePtr pSettingsStorage);
+
+		int getDupStderr() const;
+
+	private:
+		SettingsConfigPtr mSettingsConfig;
+		int mDupStderr;
+	};
+
+} // namespace LLError
+
 
 namespace {
 #if LL_WINDOWS
@@ -120,79 +163,88 @@ namespace {
 	class RecordToFile : public LLError::Recorder
 	{
 	public:
-		RecordToFile(const std::string& filename)
+		RecordToFile(const std::string& filename):
+			mName(filename),
+			mFile(LLFile::fopen(filename, "a")),
+			mSavedStderr(LLError::Settings::instance().getDupStderr())
 		{
 			// <FS:Ansariel> Don't screw up log file output
 			this->showMultiline(true);
 
-			mFile.open(filename.c_str(), std::ios_base::out | std::ios_base::app);
 			if (!mFile)
 			{
-				LL_INFOS() << "Error setting log file to " << filename << LL_ENDL;
+				LL_WARNS() << "Error setting log file to " << filename << LL_ENDL;
 			}
-            else
-            {
-                if (!LLError::getAlwaysFlush())
-                {
-                    mFile.sync_with_stdio(false);
-                }
-            }
+			else
+			{
+				// We use a number of classic-C libraries, some of which write
+				// log output to stderr. The trouble with that is that unless
+				// you launch the viewer from a console, stderr output is
+				// lost. Redirect STDERR_FILENO to write into this log file.
+				fhdup2(fhfileno(mFile), fhfileno(stderr));
+			}
 		}
-		
+
 		~RecordToFile()
 		{
+			// restore stderr to its original fileno so any subsequent output
+			// to stderr goes to original stream
+			fhdup2(mSavedStderr, fhfileno(stderr));
 			mFile.close();
 		}
-		
-        virtual bool enabled() override
-        {
+
+		virtual bool enabled() override
+		{
 #ifdef LL_RELEASE_FOR_DOWNLOAD
-            return 1;
+			return 1;
 #else
-            return LLError::getEnabledLogTypesMask() & 0x02;
+			return LLError::getEnabledLogTypesMask() & 0x02;
 #endif
-        }
-        
-		bool okay() { return mFile.good(); }
-		
+		}
+
+		bool okay() const { return bool(mFile); }
+
+		std::string getFilename() const { return mName; }
+
 		virtual void recordMessage(LLError::ELevel level,
 									const std::string& message) override
 		{
-            if (LLError::getAlwaysFlush())
-            {
-                mFile << message << std::endl;
-            }
-            else
-            {
-                mFile << message << "\n";
-            }
+			::fwrite(message.c_str(), sizeof(char), message.length(), mFile);
+			::fputc('\n', mFile);
+			if (LLError::getAlwaysFlush())
+			{
+				::fflush(mFile);
+			}
 		}
-	
+
 	private:
-		llofstream mFile;
+		const std::string mName;
+		LLUniqueFile mFile;
+		int mSavedStderr;
 	};
-	
-	
+
+
 	class RecordToStderr : public LLError::Recorder
 	{
 	public:
-		RecordToStderr(bool timestamp) : mUseANSI(ANSI_PROBE) 
+		RecordToStderr(bool timestamp) :
+			mUseANSI(checkANSI()),
+			// use duplicate stderr file handle so THIS output isn't affected
+			// by our internal redirection of all (other) stderr output
+			mStderr(fhfdopen(LLError::Settings::instance().getDupStderr(), "a"))
 		{
-            this->showMultiline(true);
+			this->showMultiline(true);
 		}
-		
-        virtual bool enabled() override
-        {
-            return LLError::getEnabledLogTypesMask() & 0x04;
-        }
+
+		virtual bool enabled() override
+		{
+			return LLError::getEnabledLogTypesMask() & 0x04;
+		}
         
 		virtual void recordMessage(LLError::ELevel level,
 					   const std::string& message) override
 		{
-			if (ANSI_PROBE == mUseANSI)
-				mUseANSI = (checkANSI() ? ANSI_YES : ANSI_NO);
-
-			if (ANSI_YES == mUseANSI)
+			if (mUseANSI)
 			{
 				// Default all message levels to bold so we can distinguish our own messages from those dumped by subprocesses and libraries.
 				colorANSI("1"); // bold
@@ -210,34 +262,30 @@ namespace {
 					break;
 				}
 			}
-			fprintf(stderr, "%s\n", message.c_str());
+			fprintf(mStderr, "%s\n", message.c_str());
 #if LL_WINDOWS 
-	fflush(stderr); //Now using a buffer. flush is required. 
+	fflush(mStderr); //Now using a buffer. flush is required. 
 #endif 
-			if (ANSI_YES == mUseANSI) colorANSI("0"); // reset
+			if (mUseANSI) colorANSI("0"); // reset
 		}
-	
+
 	private:
-		enum ANSIState 
-		{
-			ANSI_PROBE, 
-			ANSI_YES, 
-			ANSI_NO
-		}					mUseANSI;
+		bool mUseANSI;
+		LLFILE* mStderr;
 
 		void colorANSI(const std::string color)
 		{
 			// ANSI color code escape sequence
-			fprintf(stderr, "\033[%sm", color.c_str() );
+			fprintf(mStderr, "\033[%sm", color.c_str() );
 		};
 
-		bool checkANSI(void)
+		static bool checkANSI(void)
 		{
 #if LL_LINUX || LL_DARWIN
 			// Check whether it's okay to use ANSI; if stderr is
 			// a tty then we assume yes.  Can be turned off with
 			// the LL_NO_ANSI_COLOR env var.
-			return (0 != isatty(2)) &&
+			return (0 != isatty(fhfileno(stderr))) &&
 				(NULL == getenv("LL_NO_ANSI_COLOR"));
 #endif // LL_LINUX
 			return false;
@@ -492,32 +540,13 @@ namespace LLError
 		
 		LLError::FatalFunction              mCrashFunction;
 		LLError::TimeFunction               mTimeFunction;
-		
+
 		Recorders                           mRecorders;
-		RecorderPtr                         mFileRecorder;
-		RecorderPtr                         mFixedBufferRecorder;
-		std::string                         mFileRecorderFileName;
-		
-		int									mShouldLogCallCounter;
-		
+
+		int                                 mShouldLogCallCounter;
+
 	private:
 		SettingsConfig();
-	};
-
-	typedef LLPointer<SettingsConfig> SettingsConfigPtr;
-
-	class Settings : public LLSingleton<Settings>
-	{
-		LLSINGLETON(Settings);
-	public:
-		SettingsConfigPtr getSettingsConfig();
-
-		void reset();
-		SettingsStoragePtr saveAndReset();
-		void restore(SettingsStoragePtr pSettingsStorage);
-		
-	private:
-		SettingsConfigPtr mSettingsConfig;
 	};
 
 	SettingsConfig::SettingsConfig()
@@ -533,9 +562,6 @@ namespace LLError
 		mCrashFunction(NULL),
 		mTimeFunction(NULL),
 		mRecorders(),
-		mFileRecorder(),
-		mFixedBufferRecorder(),
-		mFileRecorderFileName(),
 		mShouldLogCallCounter(0)
 	{
 	}
@@ -546,8 +572,18 @@ namespace LLError
 	}
 
 	Settings::Settings():
-		mSettingsConfig(new SettingsConfig())
+		mSettingsConfig(new SettingsConfig()),
+		// duplicate stderr file handle right away
+		mDupStderr(fhdup(fhfileno(stderr)))
 	{
+	}
+
+	Settings::~Settings()
+	{
+		// restore original stderr
+		fhdup2(mDupStderr, fhfileno(stderr));
+		// and close the duplicate
+		fhclose(mDupStderr);
 	}
 
 	SettingsConfigPtr Settings::getSettingsConfig()
@@ -573,6 +609,11 @@ namespace LLError
 		Globals::getInstance()->invalidateCallSites();
 		SettingsConfigPtr newSettingsConfig(dynamic_cast<SettingsConfig *>(pSettingsStorage.get()));
 		mSettingsConfig = newSettingsConfig;
+	}
+
+	int Settings::getDupStderr() const
+	{
+		return mDupStderr;
 	}
 
 	bool is_available()
@@ -693,20 +734,19 @@ namespace
 	void commonInit(const std::string& user_dir, const std::string& app_dir, bool log_to_stderr = true)
 	{
 		LLError::Settings::getInstance()->reset();
-		
+
 		LLError::setDefaultLevel(LLError::LEVEL_INFO);
-        LLError::setAlwaysFlush(true);
-        LLError::setEnabledLogTypesMask(0xFFFFFFFF);
+		LLError::setAlwaysFlush(true);
+		LLError::setEnabledLogTypesMask(0xFFFFFFFF);
 		LLError::setFatalFunction(LLError::crashAndLoop);
 		LLError::setTimeFunction(LLError::utcTime);
 
 		// log_to_stderr is only false in the unit and integration tests to keep builds quieter
 		if (log_to_stderr && shouldLogToStderr())
 		{
-			LLError::RecorderPtr recordToStdErr(new RecordToStderr(stderrLogWantsTime()));
-			LLError::addRecorder(recordToStdErr);
+			LLError::logToStderr();
 		}
-		
+
 #if LL_WINDOWS
 		LLError::RecorderPtr recordToWinDebug(new RecordToWinDebug());
 		LLError::addRecorder(recordToWinDebug);
@@ -1004,49 +1044,110 @@ namespace LLError
 		s->mRecorders.erase(std::remove(s->mRecorders.begin(), s->mRecorders.end(), recorder),
 							s->mRecorders.end());
 	}
+
+    // Find an entry in SettingsConfig::mRecorders whose RecorderPtr points to
+    // a Recorder subclass of type RECORDER. Return, not a RecorderPtr (which
+    // points to the Recorder base class), but a shared_ptr<RECORDER> which
+    // specifically points to the concrete RECORDER subclass instance, along
+    // with a Recorders::iterator indicating the position of that entry in
+    // mRecorders. The shared_ptr might be empty (operator!() returns true) if
+    // there was no such RECORDER subclass instance in mRecorders.
+    template <typename RECORDER>
+    std::pair<boost::shared_ptr<RECORDER>, Recorders::iterator>
+    findRecorderPos()
+    {
+        SettingsConfigPtr s = Settings::instance().getSettingsConfig();
+        // Since we promise to return an iterator, use a classic iterator
+        // loop.
+        auto end{s->mRecorders.end()};
+        for (Recorders::iterator it{s->mRecorders.begin()}; it != end; ++it)
+        {
+            // *it is a RecorderPtr, a shared_ptr<Recorder>. Use a
+            // dynamic_pointer_cast to try to downcast to test if it's also a
+            // shared_ptr<RECORDER>.
+            auto ptr = boost::dynamic_pointer_cast<RECORDER>(*it);
+            if (ptr)
+            {
+                // found the entry we want
+                return { ptr, it };
+            }
+        }
+        // dropped out of the loop without finding any such entry -- instead
+        // of default-constructing Recorders::iterator (which might or might
+        // not be valid), return a value that is valid but not dereferenceable.
+        return { {}, end };
+    }
+
+    // Find an entry in SettingsConfig::mRecorders whose RecorderPtr points to
+    // a Recorder subclass of type RECORDER. Return, not a RecorderPtr (which
+    // points to the Recorder base class), but a shared_ptr<RECORDER> which
+    // specifically points to the concrete RECORDER subclass instance. The
+    // shared_ptr might be empty (operator!() returns true) if there was no
+    // such RECORDER subclass instance in mRecorders.
+    template <typename RECORDER>
+    boost::shared_ptr<RECORDER> findRecorder()
+    {
+        return findRecorderPos<RECORDER>().first;
+    }
+
+    // Remove an entry from SettingsConfig::mRecorders whose RecorderPtr
+    // points to a Recorder subclass of type RECORDER. Return true if there
+    // was one and we removed it, false if there wasn't one to start with.
+    template <typename RECORDER>
+    bool removeRecorder()
+    {
+        auto found = findRecorderPos<RECORDER>();
+        if (found.first)
+        {
+            SettingsConfigPtr s = Settings::instance().getSettingsConfig();
+            s->mRecorders.erase(found.second);
+        }
+        return bool(found.first);
+    }
 }
 
 namespace LLError
 {
 	void logToFile(const std::string& file_name)
 	{
-		SettingsConfigPtr s = Settings::getInstance()->getSettingsConfig();
+		// remove any previous Recorder filling this role
+		removeRecorder<RecordToFile>();
 
-		removeRecorder(s->mFileRecorder);
-		s->mFileRecorder.reset();
-		s->mFileRecorderFileName.clear();
-		
 		if (!file_name.empty())
 		{
-            RecorderPtr recordToFile(new RecordToFile(file_name));
-            if (boost::dynamic_pointer_cast<RecordToFile>(recordToFile)->okay())
-            {
-                s->mFileRecorderFileName = file_name;
-                s->mFileRecorder = recordToFile;
-                addRecorder(recordToFile);
-            }
+			boost::shared_ptr<RecordToFile> recordToFile(new RecordToFile(file_name));
+			if (recordToFile->okay())
+			{
+				addRecorder(recordToFile);
+			}
 		}
-	}
-	
-	void logToFixedBuffer(LLLineBuffer* fixedBuffer)
-	{
-		SettingsConfigPtr s = Settings::getInstance()->getSettingsConfig();
-
-		removeRecorder(s->mFixedBufferRecorder);
-		s->mFixedBufferRecorder.reset();
-		
-		if (fixedBuffer)
-		{
-            RecorderPtr recordToFixedBuffer(new RecordToFixedBuffer(fixedBuffer));
-            s->mFixedBufferRecorder = recordToFixedBuffer;
-            addRecorder(recordToFixedBuffer);
-        }
 	}
 
 	std::string logFileName()
 	{
-		SettingsConfigPtr s = Settings::getInstance()->getSettingsConfig();
-		return s->mFileRecorderFileName;
+		auto found = findRecorder<RecordToFile>();
+		return found? found->getFilename() : std::string();
+	}
+
+    void logToStderr()
+    {
+        if (! findRecorder<RecordToStderr>())
+        {
+            RecorderPtr recordToStdErr(new RecordToStderr(stderrLogWantsTime()));
+            addRecorder(recordToStdErr);
+        }
+    }
+
+	void logToFixedBuffer(LLLineBuffer* fixedBuffer)
+	{
+		// remove any previous Recorder filling this role
+		removeRecorder<RecordToFixedBuffer>();
+
+		if (fixedBuffer)
+		{
+			RecorderPtr recordToFixedBuffer(new RecordToFixedBuffer(fixedBuffer));
+			addRecorder(recordToFixedBuffer);
+		}
 	}
 }
 

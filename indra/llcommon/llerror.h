@@ -218,19 +218,6 @@ namespace LLError
 				const char** tags, 
 				size_t tag_count);
 
-#ifdef LL_LINUX
-		// <FS:ND> Temp hack to get the old linux havok stub to link
-		CallSite(LLError::ELevel,
-			 char const*,
-			 int,
-			 std::type_info const&,
-			 char const*,
-			 char const*,
-			 char const*,
-			 bool);
-		// </FS:ND>
-#endif
-
 		~CallSite();
 
 #ifdef LL_LIBRARY_INCLUDE

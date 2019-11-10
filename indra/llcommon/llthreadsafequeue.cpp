@@ -23,7 +23,7 @@
  * $/LicenseInfo$
  */
 
-//#include "linden_common.h"
-//#include "llthreadsafequeue.h"
+#include "linden_common.h"
+#include "llthreadsafequeue.h"
 
 

@@ -29,11 +29,12 @@
 #if ! defined(LL_LLCOROS_H)
 #define LL_LLCOROS_H
 
+#include "llexception.h"
 #include <boost/fiber/fss.hpp>
 #include <boost/fiber/future/promise.hpp>
 #include <boost/fiber/future/future.hpp>
 #include "llsingleton.h"
-#include <boost/ptr_container/ptr_map.hpp>
+#include "llinstancetracker.h"
 #include <boost/function.hpp>
 #include <string>
 
@@ -74,6 +75,7 @@
 class LL_COMMON_API LLCoros: public LLSingleton<LLCoros>
 {
     LLSINGLETON(LLCoros);
+    ~LLCoros();
 public:
     /// The viewer's use of the term "coroutine" became deeply embedded before
     /// the industry term "fiber" emerged to distinguish userland threads from
@@ -147,8 +149,8 @@ public:
      */
     void setStackSize(S32 stacksize);
 
-    /// for delayed initialization
-    void printActiveCoroutines();
+    /// diagnostic
+    void printActiveCoroutines(const std::string& when=std::string());
 
     /// get the current coro::id for those who really really care
     static coro::id get_self();
@@ -176,6 +178,7 @@ public:
         {
             set_consuming(consuming);
         }
+        OverrideConsuming(const OverrideConsuming&) = delete;
         ~OverrideConsuming()
         {
             set_consuming(mPrevConsuming);
@@ -184,6 +187,58 @@ public:
     private:
         bool mPrevConsuming;
     };
+
+    /// set string coroutine status for diagnostic purposes
+    static void setStatus(const std::string& status);
+    static std::string getStatus();
+
+    /// RAII control of status
+    class TempStatus
+    {
+    public:
+        TempStatus(const std::string& status):
+            mOldStatus(getStatus())
+        {
+            setStatus(status);
+        }
+        TempStatus(const TempStatus&) = delete;
+        ~TempStatus()
+        {
+            setStatus(mOldStatus);
+        }
+
+    private:
+        std::string mOldStatus;
+    };
+
+    /// thrown by checkStop()
+    struct Stop: public LLContinueError
+    {
+        Stop(const std::string& what): LLContinueError(what) {}
+    };
+
+    /// early stages
+    struct Stopping: public Stop
+    {
+        Stopping(const std::string& what): Stop(what) {}
+    };
+
+    /// cleaning up
+    struct Stopped: public Stop
+    {
+        Stopped(const std::string& what): Stop(what) {}
+    };
+
+    /// cleaned up -- not much survives!
+    struct Shutdown: public Stop
+    {
+        Shutdown(const std::string& what): Stop(what) {}
+    };
+
+    /// Call this intermittently if there's a chance your coroutine might
+    /// continue running into application shutdown. Throws Stop if LLCoros has
+    /// been cleaned up.
+    static void checkStop();
 
     /**
      * Aliases for promise and future. An older underlying future implementation
@@ -204,18 +259,17 @@ public:
 
 private:
     std::string generateDistinctName(const std::string& prefix) const;
-    void toplevel(const std::string& name, const callable_t& callable);
+    void toplevel(std::string name, callable_t callable);
     struct CoroData;
 #if LL_WINDOWS
     static void winlevel(const callable_t& callable);
 #endif
-    CoroData& get_CoroData(const std::string& caller);
-    const CoroData& get_CoroData(const std::string& caller) const;
+    static CoroData& get_CoroData(const std::string& caller);
 
     S32 mStackSize;
 
     // coroutine-local storage, as it were: one per coro we track
-    struct CoroData
+    struct CoroData: public LLInstanceTracker<CoroData, std::string>
     {
         CoroData(const std::string& name);
 
@@ -223,20 +277,15 @@ private:
         const std::string mName;
         // set_consuming() state
         bool mConsuming;
+        // setStatus() state
+        std::string mStatus;
         F64 mCreationTime; // since epoch
     };
-    typedef boost::ptr_map<std::string, CoroData> CoroMap;
-    CoroMap mCoros;
 
     // Identify the current coroutine's CoroData. This local_ptr isn't static
     // because it's a member of an LLSingleton, and we rely on it being
     // cleaned up in proper dependency order.
-    // As each coroutine terminates, use our custom cleanup function to remove
-    // the corresponding entry from mCoros.
-    local_ptr<CoroData> mCurrent{delete_CoroData};
-
-    // Cleanup function for each fiber's instance of mCurrent.
-    static void delete_CoroData(CoroData* cdptr);
+    local_ptr<CoroData> mCurrent;
 };
 
 namespace llcoro
