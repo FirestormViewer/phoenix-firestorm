@@ -527,12 +527,8 @@ class WindowsManifest(ViewerManifest):
 
             # These need to be installed as a SxS assembly, currently a 'private' assembly.
             # See http://msdn.microsoft.com/en-us/library/ms235291(VS.80).aspx
-            if self.args['configuration'].lower() == 'debug':
-                self.path("msvcr120d.dll")
-                self.path("msvcp120d.dll")
-            else:
-                self.path("msvcr120.dll")
-                self.path("msvcp120.dll")
+            self.path("msvcp140.dll")
+            self.path("vcruntime140.dll")
 
             # SLVoice executable
             with self.prefix(src=os.path.join(pkgdir, 'bin', 'release')):
@@ -606,8 +602,8 @@ class WindowsManifest(ViewerManifest):
             # MSVC DLLs needed for CEF and have to be in same directory as plugin
             with self.prefix(src=os.path.join(self.args['build'], os.pardir,
                                               'sharedlibs', 'Release')):
-                self.path("msvcp120.dll")
-                self.path("msvcr120.dll")
+                self.path("msvcp140.dll")
+                self.path("vcruntime140.dll")
 
             # CEF files common to all configurations
             with self.prefix(src=os.path.join(pkgdir, 'resources')):
@@ -1332,7 +1328,6 @@ class DarwinManifest(ViewerManifest):
         print "Converting temp disk image to final disk image"
         self.run_command(['hdiutil', 'convert', sparsename, '-format', 'UDZO',
                           '-imagekey', 'zlib-level=9', '-o', finalname])
-        self.run_command(['hdiutil', 'internet-enable', '-yes', finalname])
         # get rid of the temp file
         self.package_file = finalname
         self.remove(sparsename)
@@ -1553,6 +1548,11 @@ class Linux_x86_64_Manifest(LinuxManifest):
 ################################################################
 
 if __name__ == "__main__":
+    # Report our own command line so that, in case of trouble, a developer can
+    # manually rerun the same command.
+    print('%s \\\n%s' %
+          (sys.executable,
+           ' '.join((("'%s'" % arg) if ' ' in arg else arg) for arg in sys.argv)))
     extra_arguments = [
         dict(name='bugsplat', description="""BugSplat database to which to post crashes,
              if BugSplat crash reporting is desired""", default=''),
