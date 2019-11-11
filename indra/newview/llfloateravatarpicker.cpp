@@ -92,7 +92,6 @@ LLFloaterAvatarPicker* LLFloaterAvatarPicker::show(select_callback_t callback,
 	floater->mNearMeListComplete = FALSE;
 	floater->mCloseOnSelect = closeOnSelect;
 	floater->mExcludeAgentFromSearchResults = skip_agent;
-    floater->setFrustumOrigin(frustumOrigin);
 	
 	if (!closeOnSelect)
 	{
@@ -103,6 +102,10 @@ LLFloaterAvatarPicker* LLFloaterAvatarPicker::show(select_callback_t callback,
 		floater->getChild<LLButton>("cancel_btn")->setLabel(close_string);
 	}
 
+    if(frustumOrigin)
+    {
+        floater->mFrustumOrigin = frustumOrigin->getHandle();
+    }
 
 	return floater;
 }
@@ -113,9 +116,17 @@ LLFloaterAvatarPicker::LLFloaterAvatarPicker(const LLSD& key)
 	mNumResultsReturned(0),
 	mNearMeListComplete(FALSE),
 	mCloseOnSelect(FALSE),
+    mContextConeOpacity	(0.f),
+    mContextConeInAlpha(0.f),
+    mContextConeOutAlpha(0.f),
+    mContextConeFadeTime(0.f),
 	mFindUUIDAvatarNameCacheConnection() // <FS:Ansariel> Search by UUID
 {
 	mCommitCallbackRegistrar.add("Refresh.FriendList", boost::bind(&LLFloaterAvatarPicker::populateFriend, this));
+
+    mContextConeInAlpha = gSavedSettings.getF32("ContextConeInAlpha");
+    mContextConeOutAlpha = gSavedSettings.getF32("ContextConeOutAlpha");
+    mContextConeFadeTime = gSavedSettings.getF32("ContextConeFadeTime");
 }
 
 BOOL LLFloaterAvatarPicker::postBuild()
@@ -507,10 +518,15 @@ void LLFloaterAvatarPicker::populateFriend()
 	// </FS:Ansariel>
 }
 
+void LLFloaterAvatarPicker::drawFrustum()
+{
+    static LLCachedControl<F32> max_opacity(gSavedSettings, "PickerContextOpacity", 0.4f);
+    drawConeToOwner(mContextConeOpacity, max_opacity, mFrustumOrigin.get(), mContextConeFadeTime, mContextConeInAlpha, mContextConeOutAlpha);
+}
+
 void LLFloaterAvatarPicker::draw()
 {
-    LLRect local_rect = getLocalRect();
-    drawFrustum(local_rect, this, getDragHandle(), hasFocus());
+    drawFrustum();
 
 	// sometimes it is hard to determine when Select/Ok button should be disabled (see LLAvatarActions::shareWithAvatars).
 	// lets check this via mOkButtonValidateSignal callback periodically.

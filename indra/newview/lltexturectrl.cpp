@@ -112,6 +112,7 @@ LLFloaterTexturePicker::LLFloaterTexturePicker(
 	mImmediateFilterPermMask(immediate_filter_perm_mask),
 	mDnDFilterPermMask(dnd_filter_perm_mask),
 	mNonImmediateFilterPermMask(non_immediate_filter_perm_mask),
+	mContextConeOpacity(0.f),
 	mSelectedItemPinned( FALSE ),
 	mCanApply(true),
 	mCanPreview(true),
@@ -126,7 +127,6 @@ LLFloaterTexturePicker::LLFloaterTexturePicker(
 	buildFromFile("floater_texture_ctrl.xml");
 	mCanApplyImmediately = can_apply_immediately;
 	setCanMinimize(FALSE);
-	setFrustumOrigin(mOwner);
 
 	// <FS:Ansariel> Threaded filepickers
 	mLocalBitmapsAddedCallbackConnection = LLLocalBitmapMgr::setBitmapsAddedCallback(boost::bind(&LLFloaterTexturePicker::onLocalBitmapsAddedCallback, this));
@@ -494,9 +494,8 @@ BOOL LLFloaterTexturePicker::postBuild()
 // virtual
 void LLFloaterTexturePicker::draw()
 {
-	// draw cone of context pointing back to texture swatch	
-    LLRect local_rect = getLocalRect();
-    drawFrustum(local_rect, this, getDragHandle(), hasFocus());
+    static LLCachedControl<F32> max_opacity(gSavedSettings, "PickerContextOpacity", 0.4f);
+    drawConeToOwner(mContextConeOpacity, max_opacity, mOwner);
 
 	updateImageStats();
 
