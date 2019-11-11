@@ -36,12 +36,12 @@ public:
 	virtual ~lggBeamMapFloater();
 
 	BOOL postBuild(void);
-	BOOL handleMouseDown(S32 x,S32 y,MASK mask);
-	BOOL handleRightMouseDown(S32 x,S32 y,MASK mask);
+	BOOL handleMouseDown(S32 x, S32 y, MASK mask);
+	BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
 
 	void draw();
 
-	void setData(void* data);
+	void setData(FSPanelPrefs* data);
 
 private:
 	// UI Handlers
@@ -55,7 +55,7 @@ private:
 
 	void clearPoints();
 
-	LLSD getMyDataSerialized();
+	LLSD getDataSerialized();
 
 	std::vector<lggPoint>	mDots;
 	F32						mContextConeOpacity;

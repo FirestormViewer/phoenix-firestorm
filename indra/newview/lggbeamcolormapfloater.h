@@ -34,7 +34,7 @@ public:
 	BOOL handleMouseDown(S32 x, S32 y, MASK mask);
 	BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
 
-	void setData(void* data);
+	void setData(FSPanelPrefs* data);
 
 	void draw();
 
