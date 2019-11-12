@@ -1686,8 +1686,12 @@ if (DARWIN)
     PROPERTIES
     COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
     # BugsplatMac is a module, imported with @import. That language feature
-    # demands these switches.
-    COMPILE_FLAGS "-fmodules -fcxx-modules"
+    # demands these -f switches.
+    # Xcode 10.2 requires that Objective-C++ headers declare nullability of
+    # pointer variables. As of 2019-06-26, the BugsplatMac version we're using
+    # does not yet do so in its own header files. This -W flag prevents fatal
+    # warnings.
+    COMPILE_FLAGS "-fmodules -fcxx-modules -Wno-nullability-completeness"
     )
 
 # [FS] Growl libs
@@ -2284,6 +2288,7 @@ if (WINDOWS)
         --source=${CMAKE_CURRENT_SOURCE_DIR}
         --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/copy_touched.bat
         --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
+        --viewer_flavor=${ND_VIEWER_FLAVOR}
         --fmodversion=${FMODVERSION}
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2542,6 +2547,7 @@ endif (NOT ENABLE_MEDIA_PLUGINS)
       --grid=${GRID}
       --source=${CMAKE_CURRENT_SOURCE_DIR}
       --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
+      --viewer_flavor=${ND_VIEWER_FLAVOR}
       --fmodversion=${FMODVERSION}
     DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2625,6 +2631,7 @@ if (DARWIN)
       --grid=${GRID}
       --source=${CMAKE_CURRENT_SOURCE_DIR}
       --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
+      --viewer_flavor=${ND_VIEWER_FLAVOR}
       --fmodversion=${FMODVERSION}
     DEPENDS
       ${VIEWER_BINARY_NAME}

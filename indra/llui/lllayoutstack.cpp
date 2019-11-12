@@ -217,7 +217,7 @@ LLLayoutStack::Params::Params()
 	open_time_constant("open_time_constant", 0.02f),
 	close_time_constant("close_time_constant", 0.03f),
 	resize_bar_overlap("resize_bar_overlap", 1),
-	border_size("border_size", LLCachedControl<S32>(*LLUI::sSettingGroups["config"], "UIResizeBarHeight", 0)),
+	border_size("border_size", LLCachedControl<S32>(*LLUI::getInstance()->mSettingGroups["config"], "UIResizeBarHeight", 0)),
 	show_drag_handle("show_drag_handle", false),
 	drag_handle_first_indent("drag_handle_first_indent", 0),
 	drag_handle_second_indent("drag_handle_second_indent", 0),
@@ -251,7 +251,7 @@ LLLayoutStack::LLLayoutStack(const LLLayoutStack::Params& p)
 		std::string res = std::string("layout_size_") + getName();
 		LLStringUtil::replaceChar(res, ' ', '_');
 		mSizeControlName = res;
-		LLControlGroup* controlGroup = LLUI::sSettingGroups["account"];
+		LLControlGroup* controlGroup = LLUI::getInstance()->mSettingGroups["account"];
 		if (!controlGroup->controlExists(mSizeControlName))
 		{
 			LL_WARNS() << "declaring control " << mSizeControlName << LL_ENDL;
@@ -274,7 +274,7 @@ LLLayoutStack::~LLLayoutStack()
 	// <FS:Zi> Save new sizes for this layout stack's panels
 	if (mSaveSizes)
 	{
-		LLUI::sSettingGroups["account"]->setLLSD(mSizeControlName, mSavedSizes);
+		LLUI::getInstance()->mSettingGroups["account"]->setLLSD(mSizeControlName, mSavedSizes);
 	}
 	// </FS:Zi>
 
@@ -1082,7 +1082,7 @@ void LLLayoutStack::refreshFromSettings()
 		return;
 	}
 
-	LLSD dimensions = LLUI::sSettingGroups["account"]->getLLSD(mSizeControlName);
+	LLSD dimensions = LLUI::getInstance()->mSettingGroups["account"]->getLLSD(mSizeControlName);
 	if (dimensions.size() < mPanels.size())
 	{
 		return;

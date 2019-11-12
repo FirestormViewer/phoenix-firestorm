@@ -527,7 +527,7 @@ BOOL AnimationExplorer::handleHover(S32 x, S32 y, MASK mask)
 			mAnimationPreview->zoom(zoom_amt);
 		}
 		mAnimationPreview->requestUpdate();
-		LLUI::setMousePositionLocal(this, mLastMouseX, mLastMouseY);
+		LLUI::getInstance()->setMousePositionLocal(this, mLastMouseX, mLastMouseY);
 	}
 	else if (local_mask == MASK_ORBIT)
 	{

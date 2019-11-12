@@ -124,7 +124,7 @@ FSFloaterVoiceControls::FSFloaterVoiceControls(const LLSD& key)
 	LLTransientFloaterMgr::getInstance()->addControlView(this);
 
 	// update the agent's name if display name setting change
-	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&FSFloaterVoiceControls::updateAgentModeratorState, this));
+	LLAvatarNameCache::getInstance()->addUseDisplayNamesCallback(boost::bind(&FSFloaterVoiceControls::updateAgentModeratorState, this));
 
 	LLViewerDisplayName::addNameChangedCallback(boost::bind(&FSFloaterVoiceControls::updateAgentModeratorState, this));
 }
