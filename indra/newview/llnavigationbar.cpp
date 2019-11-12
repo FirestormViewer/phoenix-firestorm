@@ -306,7 +306,7 @@ void LLNavigationBar::setupPanel()
 
 	// mCmbLocation= getChild<LLLocationInputCtrl>("location_combo"); 
 
-	mView = LLUI::getRootView()->getChild<LLView>("navigation_bar");
+	mView = LLUI::getInstance()->getRootView()->getChild<LLView>("navigation_bar");
 
 	mBtnBack	= mView->getChild<LLPullButton>("back_btn");
 	mBtnForward	= mView->getChild<LLPullButton>("forward_btn");
@@ -361,7 +361,7 @@ void LLNavigationBar::setupPanel()
 			boost::bind(&LLNavigationBar::onTeleportHistoryChanged, this));
 
 	// <FS:Zi> Make navigation bar part of the UI
-	// LLHints::registerHintTarget("nav_bar", getHandle());
+	// LLHints::getUInstance()->registerHintTarget("nav_bar", getHandle());
 
 	//mNavigationPanel = getChild<LLLayoutPanel>("navigation_layout_panel");
 	//mFavoritePanel = getChild<LLLayoutPanel>("favorites_layout_panel");
@@ -369,7 +369,7 @@ void LLNavigationBar::setupPanel()
 	//mFavoritePanel->getResizeBar()->setResizeListener(boost::bind(&LLNavigationBar::onNavbarResized, this));
 
 	// return TRUE;
-	LLHints::registerHintTarget("nav_bar",mView->getHandle());
+	LLHints::getInstance()->registerHintTarget("nav_bar",mView->getHandle());
 	// </FS:Zi>
 }
 

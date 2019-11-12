@@ -61,7 +61,7 @@ bool LLAgentLanguage::update()
 
 	// <FS:Ansariel> FIRE-16709: Bypass FSEnabledLanguages for llGetAgentLanguage
 	//std::string language = LLUI::getLanguage();
-	std::string language = LLUI::getLanguage(true);
+	std::string language = LLUI::getInstance()->getUILanguage(true);
 	// </FS:Ansariel>
 		
 	body["language"] = language;

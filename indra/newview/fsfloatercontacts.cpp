@@ -161,7 +161,7 @@ BOOL FSFloaterContacts::postBuild()
 	gSavedSettings.getControl("FSFriendListColumnShowPermissions")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, std::string()));
 	onColumnDisplayModeChanged();
 
-	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&FSFloaterContacts::onDisplayNameChanged, this));
+	LLAvatarNameCache::getInstance()->addUseDisplayNamesCallback(boost::bind(&FSFloaterContacts::onDisplayNameChanged, this));
 
 	return TRUE;
 }
