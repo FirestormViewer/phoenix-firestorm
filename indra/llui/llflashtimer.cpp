@@ -41,22 +41,22 @@ LLFlashTimer::LLFlashTimer(callback_t cb, S32 count, F32 period)
 	// Due to Timer is implemented as derived class from EventTimer it is impossible to change period
 	// in runtime. So, both settings are made as required restart.
 	// <FS:CR>
-	//mFlashCount = 2 * ((count > 0) ? count : LLUI::sSettingGroups["config"]->getS32("FlashCount"));
-	static LLCachedControl<S32> flash_count(*LLUI::sSettingGroups["config"], "FlashCount");
+	//mFlashCount = 2 * ((count > 0) ? count : LLUI::getInstance()->mSettingGroups["config"]->getS32("FlashCount"));
+	static LLCachedControl<S32> flash_count(*LLUI::getInstance()->mSettingGroups["config"], "FlashCount");
 	mFlashCount = 2 * ((count > 0) ? count : flash_count);
 	// </FS:CR>
 	if (mPeriod <= 0)
 	{
-		//mPeriod = LLUI::sSettingGroups["config"]->getF32("FlashPeriod");
+		//mPeriod = LLUI::getInstance()->mSettingGroups["config"]->getF32("FlashPeriod");
 		// <FS:CR>
-		static LLCachedControl<F32> flash_period(*LLUI::sSettingGroups["config"], "FlashPeriod");
+		static LLCachedControl<F32> flash_period(*LLUI::getInstance()->mSettingGroups["config"], "FlashPeriod");
 		mPeriod = flash_period;
 		// </FS:CR>
 	}
 
 	// <FS:Ansariel> Configurable at runtime
-	LLUI::sSettingGroups["config"]->getControl("FlashCount")->getSignal()->connect(boost::bind(&LLFlashTimer::onUpdateFlashSettings, this));
-	LLUI::sSettingGroups["config"]->getControl("FlashPeriod")->getSignal()->connect(boost::bind(&LLFlashTimer::onUpdateFlashSettings, this));
+	LLUI::getInstance()->mSettingGroups["config"]->getControl("FlashCount")->getSignal()->connect(boost::bind(&LLFlashTimer::onUpdateFlashSettings, this));
+	LLUI::getInstance()->mSettingGroups["config"]->getControl("FlashPeriod")->getSignal()->connect(boost::bind(&LLFlashTimer::onUpdateFlashSettings, this));
 	// </FS:Ansariel>
 }
 
@@ -64,8 +64,8 @@ LLFlashTimer::LLFlashTimer(callback_t cb, S32 count, F32 period)
 void LLFlashTimer::onUpdateFlashSettings()
 {
 	stopFlashing();
-	mFlashCount = 2 * llmax(LLUI::sSettingGroups["config"]->getS32("FlashCount"), 0);
-	mPeriod = llmax(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"), 0.f);
+	mFlashCount = 2 * llmax(LLUI::getInstance()->mSettingGroups["config"]->getS32("FlashCount"), 0);
+	mPeriod = llmax(LLUI::getInstance()->mSettingGroups["config"]->getF32("FlashPeriod"), 0.f);
 }
 // </FS:Ansariel>
 

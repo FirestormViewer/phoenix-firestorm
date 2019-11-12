@@ -149,7 +149,7 @@ void FSKeywords::notify(const LLChat& chat)
 			static LLCachedControl<bool> PlayModeUISndFSKeywordSound(gSavedPerAccountSettings, "PlayModeUISndFSKeywordSound");
 			if (PlayModeUISndFSKeywordSound)
 			{
-				LLUI::sAudioCallback(LLUUID(gSavedPerAccountSettings.getString("UISndFSKeywordSound")));
+				LLUI::getInstance()->mAudioCallback(LLUUID(gSavedPerAccountSettings.getString("UISndFSKeywordSound")));
 			}
 
 			static LLCachedControl<bool> FSEnableGrowl(gSavedSettings, "FSEnableGrowl");
