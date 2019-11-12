@@ -110,45 +110,43 @@ class LLLocalBitmapTimer : public LLEventTimer
 
 };
 
-class LLLocalBitmapMgr
+class LLLocalBitmapMgr : public LLSingleton<LLLocalBitmapMgr>
 {
-	public:
-		LLLocalBitmapMgr();
-		~LLLocalBitmapMgr();
+	LLSINGLETON(LLLocalBitmapMgr);
+	~LLLocalBitmapMgr();
+public:
+	// <FS:Ansariel> Threaded filepickers
+	//bool         addUnit();
+	void         addUnit();
+	// </FS:Ansariel>
+	void         delUnit(LLUUID tracking_id);
+	bool 		checkTextureDimensions(std::string filename);
 
-	public:
-		static void			cleanupClass();
-		// <FS:Ansariel> Threaded filepickers
-		//static bool         addUnit();
-		static void         addUnit();
-		// </FS:Ansariel>
-		static void         delUnit(LLUUID tracking_id);
-		static bool 		checkTextureDimensions(std::string filename);
 
-		static LLUUID       getWorldID(LLUUID tracking_id);
-		static std::string  getFilename(LLUUID tracking_id);
+	LLUUID       getWorldID(LLUUID tracking_id);
+	std::string  getFilename(LLUUID tracking_id);
+
+	void         feedScrollList(LLScrollListCtrl* ctrl);
+	void         doUpdates();
+	void         setNeedsRebake();
+	void         doRebake();
+	
+	// <FS:Ansariel> Threaded filepickers
+	void         filePickerCallback(const std::vector<std::string>& filenames);
+	boost::signals2::connection setBitmapsAddedCallback(const boost::signals2::signal<void ()>::slot_type& cb)
+	{
+		return mBitmapsAddedSignal.connect(cb);
+	}
+	// </FS:Ansariel>
 		
-		static void         feedScrollList(LLScrollListCtrl* ctrl);
-		static void         doUpdates();
-		static void         setNeedsRebake();
-		static void         doRebake();
+private:
+	std::list<LLLocalBitmap*>    mBitmapList;
+	LLLocalBitmapTimer           mTimer;
+	bool                         mNeedsRebake;
+	typedef std::list<LLLocalBitmap*>::iterator local_list_iter;
 
-		// <FS:Ansariel> Threaded filepickers
-		static void         filePickerCallback(const std::vector<std::string>& filenames);
-		static boost::signals2::connection setBitmapsAddedCallback(const boost::signals2::signal<void ()>::slot_type& cb)
-		{
-			return sBitmapsAddedSignal.connect(cb);
-		}
-		// </FS:Ansariel>
-		
-	private:
-		static std::list<LLLocalBitmap*>    sBitmapList;
-		static LLLocalBitmapTimer           sTimer;
-		static bool                         sNeedsRebake;
-		typedef std::list<LLLocalBitmap*>::iterator local_list_iter;
-
-		// <FS:Ansariel> Threaded filepickers
-		static boost::signals2::signal<void ()> sBitmapsAddedSignal;
+	// <FS:Ansariel> Threaded filepickers
+	boost::signals2::signal<void ()> mBitmapsAddedSignal;
 };
 
 #endif

@@ -1261,7 +1261,7 @@
             seconds
         </text>
         <slider
-         control_name="StartupToastLifeTime"
+         control_name="StartUpToastLifeTime"
          decimal_digits="0"
          follows="left|top"
          height="16"
