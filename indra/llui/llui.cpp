@@ -75,19 +75,6 @@
 // Language for UI construction
 std::map<std::string, std::string> gTranslation;
 std::list<std::string> gUntranslated;
-/*static*/ LLUI::settings_map_t LLUI::sSettingGroups;
-/*static*/ LLUIAudioCallback LLUI::sAudioCallback = NULL;
-/*static*/ LLUIAudioCallback LLUI::sDeferredAudioCallback = NULL;
-/*static*/ LLWindow*		LLUI::sWindow = NULL;
-/*static*/ LLView*			LLUI::sRootView = NULL;
-/*static*/ BOOL                         LLUI::sDirty = FALSE;
-/*static*/ LLRect                       LLUI::sDirtyRect;
-/*static*/ LLHelp*			LLUI::sHelpImpl = NULL;
-/*static*/ std::vector<std::string> LLUI::sXUIPaths;
-/*static*/ LLFrameTimer		LLUI::sMouseIdleTimer;
-/*static*/ LLUI::add_popup_t	LLUI::sAddPopupFunc;
-/*static*/ LLUI::remove_popup_t	LLUI::sRemovePopupFunc;
-/*static*/ LLUI::clear_popups_t	LLUI::sClearPopupsFunc;
 
 // register filter editor here
 static LLDefaultChildRegistry::Register<LLFilterEditor> register_filter_editor("filter_editor");
@@ -111,8 +98,9 @@ LLUUID find_ui_sound(const char * namep, bool force_sound)
 	std::string name = ll_safe_string(namep);
 	LLUUID uuid = LLUUID(NULL);
 	// <FS:Ansariel> Per-account sounds
-	//if (!LLUI::sSettingGroups["config"]->controlExists(name))
-	if (!LLUI::sSettingGroups["config"]->controlExists(name) && !LLUI::sSettingGroups["account"]->controlExists(name))
+	LLUI *ui_inst = LLUI::getInstance();
+	//if (!ui_inst->mSettingGroups["config"]->controlExists(name))
+	if (!ui_inst->mSettingGroups["config"]->controlExists(name) && !ui_inst->mSettingGroups["account"]->controlExists(name))
 	// </FS:Ansariel>
 	{
 		LL_WARNS() << "tried to make UI sound for unknown sound name: " << name << LL_ENDL;	
@@ -120,18 +108,18 @@ LLUUID find_ui_sound(const char * namep, bool force_sound)
 	else
 	{
 		// <FS:Ansariel> Per-account sounds
-		//uuid = LLUUID(LLUI::sSettingGroups["config"]->getString(name));
-		std::string group_name = LLUI::sSettingGroups["config"]->controlExists(name) ? "config" : "account";
-		uuid = LLUUID(LLUI::sSettingGroups[group_name]->getString(name));
+		//uuid = LLUUID(ui_inst->mSettingGroups["config"]->getString(name));
+		std::string group_name = ui_inst->mSettingGroups["config"]->controlExists(name) ? "config" : "account";
+		uuid = LLUUID(ui_inst->mSettingGroups[group_name]->getString(name));
 		// </FS:Ansariel>
 		if (uuid.isNull())
 		{
 			// <FS:Ansariel> Per-account sounds
-			//if (LLUI::sSettingGroups["config"]->getString(name) == LLUUID::null.asString())
-			if (LLUI::sSettingGroups[group_name]->getString(name) == LLUUID::null.asString())
+			//if (ui_inst->mSettingGroups["config"]->getString(name) == LLUUID::null.asString())
+			if (ui_inst->mSettingGroups[group_name]->getString(name) == LLUUID::null.asString())
 			// </FS:Ansariel>
 			{
-				if (LLUI::sSettingGroups["config"]->getBOOL("UISndDebugSpamToggle"))
+				if (ui_inst->mSettingGroups["config"]->getBOOL("UISndDebugSpamToggle"))
 				{
 					LL_INFOS() << "UI sound name: " << name << " triggered but silent (null uuid)" << LL_ENDL;	
 				}				
@@ -141,17 +129,17 @@ LLUUID find_ui_sound(const char * namep, bool force_sound)
 				LL_WARNS() << "UI sound named: " << name << " does not translate to a valid uuid" << LL_ENDL;	
 			}
 		}
-		else if (LLUI::sAudioCallback != NULL)
+		else if (ui_inst->mAudioCallback != NULL)
 		{
 			// <FS:PP> Silencer for FIRE-7556: Configurable User Interface sounds
 			if (name != "UISndTrackerBeacon" && name != "UISndNewIncomingIMSession" && name != "UISndNewIncomingGroupIMSession" && name != "UISndNewIncomingConfIMSession") // There is no need to process these here, checks are already elsewhere
 			{
-				if (!force_sound && ( (name != "UISndSnapshot" && !LLUI::sSettingGroups[group_name]->getBOOL("PlayMode" + name)) || (name == "UISndSnapshot" && LLUI::sSettingGroups["config"]->getBOOL("PlayModeUISndSnapshot")) ) )
+				if (!force_sound && ( (name != "UISndSnapshot" && !ui_inst->mSettingGroups[group_name]->getBOOL("PlayMode" + name)) || (name == "UISndSnapshot" && ui_inst->mSettingGroups["config"]->getBOOL("PlayModeUISndSnapshot")) ) )
 					return LLUUID(NULL);
 			}
 			// </FS:PP>
 			
-			if (LLUI::sSettingGroups["config"]->getBOOL("UISndDebugSpamToggle"))
+			if (ui_inst->mSettingGroups["config"]->getBOOL("UISndDebugSpamToggle"))
 			{
 				LL_INFOS() << "UI sound name: " << name << LL_ENDL;	
 			}
@@ -167,7 +155,7 @@ void make_ui_sound(const char* namep, bool force_sound)
 	LLUUID soundUUID = find_ui_sound(namep, force_sound);
 	if(soundUUID.notNull())
 	{
-		LLUI::sAudioCallback(soundUUID);
+		LLUI::getInstance()->mAudioCallback(soundUUID);
 	}
 }
 
@@ -177,30 +165,31 @@ void make_ui_sound_deferred(const char* namep, bool force_sound)
 	LLUUID soundUUID = find_ui_sound(namep, force_sound);
 	if(soundUUID.notNull())
 	{
-		LLUI::sDeferredAudioCallback(soundUUID);
+		LLUI::getInstance()->mDeferredAudioCallback(soundUUID);
 	}
 }
 
-void LLUI::initClass(const settings_map_t& settings,
-					 LLImageProviderInterface* image_provider,
-					 LLUIAudioCallback audio_callback,
-					 LLUIAudioCallback deferred_audio_callback,
-					 const LLVector2* scale_factor,
-					 const std::string& language)
+LLUI::LLUI(const settings_map_t& settings,
+				 LLImageProviderInterface* image_provider,
+				 LLUIAudioCallback audio_callback,
+				 LLUIAudioCallback deferred_audio_callback)
+: mSettingGroups(settings),
+mAudioCallback(audio_callback),
+mDeferredAudioCallback(deferred_audio_callback),
+mWindow(NULL), // set later in startup
+mRootView(NULL),
+mDirty(FALSE),
+mHelpImpl(NULL)
 {
-	LLRender2D::initClass(image_provider,scale_factor);
-	sSettingGroups = settings;
+	LLRender2D::initParamSingleton(image_provider);
 
-	if ((get_ptr_in_map(sSettingGroups, std::string("config")) == NULL) ||
-		(get_ptr_in_map(sSettingGroups, std::string("floater")) == NULL) ||
-		(get_ptr_in_map(sSettingGroups, std::string("ignores")) == NULL))
+	if ((get_ptr_in_map(mSettingGroups, std::string("config")) == NULL) ||
+		(get_ptr_in_map(mSettingGroups, std::string("floater")) == NULL) ||
+		(get_ptr_in_map(mSettingGroups, std::string("ignores")) == NULL))
 	{
 		LL_ERRS() << "Failure to initialize configuration groups" << LL_ENDL;
 	}
 
-	sAudioCallback = audio_callback;
-	sDeferredAudioCallback = deferred_audio_callback;
-	sWindow = NULL; // set later in startup
 	LLFontGL::sShadowColor = LLUIColorTable::instance().getColor("ColorDropShadow");
 
 	LLUICtrl::CommitCallbackRegistry::Registrar& reg = LLUICtrl::CommitCallbackRegistry::defaultRegistrar();
@@ -234,33 +223,26 @@ void LLUI::initClass(const settings_map_t& settings,
 	LLCommandManager::load();
 }
 
-void LLUI::cleanupClass()
-{
-	SUBSYSTEM_CLEANUP(LLRender2D);
-}
-
 void LLUI::setPopupFuncs(const add_popup_t& add_popup, const remove_popup_t& remove_popup,  const clear_popups_t& clear_popups)
 {
-	sAddPopupFunc = add_popup;
-	sRemovePopupFunc = remove_popup;
-	sClearPopupsFunc = clear_popups;
+	mAddPopupFunc = add_popup;
+	mRemovePopupFunc = remove_popup;
+	mClearPopupsFunc = clear_popups;
 }
 
-//static
 void LLUI::dirtyRect(LLRect rect)
 {
-	if (!sDirty)
+	if (!mDirty)
 	{
-		sDirtyRect = rect;
-		sDirty = TRUE;
+		mDirtyRect = rect;
+		mDirty = TRUE;
 	}
 	else
 	{
-		sDirtyRect.unionWith(rect);
-	}		
+		mDirtyRect.unionWith(rect);
+	}
 }
- 
-//static 
+
 void LLUI::setMousePositionScreen(S32 x, S32 y)
 {
 #if defined(LL_DARWIN)
@@ -274,7 +256,6 @@ void LLUI::setMousePositionScreen(S32 x, S32 y)
 	LLView::getWindow()->setCursorPosition(LLCoordGL(screen_x, screen_y).convert());
 }
 
-//static 
 void LLUI::getMousePositionScreen(S32 *x, S32 *y)
 {
 	LLCoordWindow cursor_pos_window;
@@ -284,7 +265,6 @@ void LLUI::getMousePositionScreen(S32 *x, S32 *y)
 	*y = ll_round((F32)cursor_pos_gl.mY / getScaleFactor().mV[VY]);
 }
 
-//static 
 void LLUI::setMousePositionLocal(const LLView* viewp, S32 x, S32 y)
 {
 	S32 screen_x, screen_y;
@@ -293,7 +273,6 @@ void LLUI::setMousePositionLocal(const LLView* viewp, S32 x, S32 y)
 	setMousePositionScreen(screen_x, screen_y);
 }
 
-//static 
 void LLUI::getMousePositionLocal(const LLView* viewp, S32 *x, S32 *y)
 {
 	S32 screen_x, screen_y;
@@ -307,23 +286,22 @@ void LLUI::getMousePositionLocal(const LLView* viewp, S32 *x, S32 *y)
 // or on Windows if the SecondLife.exe executable is run directly, the 
 // language follows the OS language.  In all cases the user can override
 // the language manually in preferences. JC
-// static
 // <FS:Ansariel> FIRE-16709: Bypass FSEnabledLanguages for llGetAgentLanguage
-//std::string LLUI::getLanguage()
-std::string LLUI::getLanguage(bool ignore_enabled_languages /*= false*/)
+//std::string LLUI::getUILanguage()
+std::string LLUI::getUILanguage(bool ignore_enabled_languages /*= false*/)
 // </FS:Ansariel>
 {
 	std::string language = "en";
-	if (sSettingGroups["config"])
+	if (mSettingGroups["config"])
 	{
-		language = sSettingGroups["config"]->getString("Language");
+		language = mSettingGroups["config"]->getString("Language");
 		if (language.empty() || language == "default")
 		{
-			language = sSettingGroups["config"]->getString("InstallLanguage");
+			language = mSettingGroups["config"]->getString("InstallLanguage");
 		}
 		if (language.empty() || language == "default")
 		{
-			language = sSettingGroups["config"]->getString("SystemLanguage");
+			language = mSettingGroups["config"]->getString("SystemLanguage");
 		}
 		if (language.empty() || language == "default")
 		{
@@ -337,7 +315,7 @@ std::string LLUI::getLanguage(bool ignore_enabled_languages /*= false*/)
 		}
 
 		bool language_enabled = false;
-		LLSD enabled_languages = sSettingGroups["config"]->getLLSD("FSEnabledLanguages");
+		LLSD enabled_languages = mSettingGroups["config"]->getLLSD("FSEnabledLanguages");
 		for (LLSD::array_const_iterator it = enabled_languages.beginArray(); it != enabled_languages.endArray(); ++it)
 		{
 			if ((*it).asString() == language)
@@ -350,11 +328,18 @@ std::string LLUI::getLanguage(bool ignore_enabled_languages /*= false*/)
 		if (!language_enabled)
 		{
 			language = "en";
-			sSettingGroups["config"]->setString("Language", "default");
+			mSettingGroups["config"]->setString("Language", "default");
 		}
 		// </FS:Ansariel>
 	}
 	return language;
+}
+
+// static
+std::string LLUI::getLanguage()
+{
+    // Note: lldateutil_test redefines this function
+    return LLUI::getInstance()->getUILanguage();
 }
 
 struct SubDir : public LLInitParam::Block<SubDir>
@@ -416,37 +401,32 @@ std::string LLUI::locateSkin(const std::string& filename)
 	return "";
 }
 
-//static
 LLVector2 LLUI::getWindowSize()
 {
 	LLCoordWindow window_rect;
-	sWindow->getSize(&window_rect);
+	mWindow->getSize(&window_rect);
 
 	return LLVector2(window_rect.mX / getScaleFactor().mV[VX], window_rect.mY / getScaleFactor().mV[VY]);
 }
 
-//static
 void LLUI::screenPointToGL(S32 screen_x, S32 screen_y, S32 *gl_x, S32 *gl_y)
 {
 	*gl_x = ll_round((F32)screen_x * getScaleFactor().mV[VX]);
 	*gl_y = ll_round((F32)screen_y * getScaleFactor().mV[VY]);
 }
 
-//static
 void LLUI::glPointToScreen(S32 gl_x, S32 gl_y, S32 *screen_x, S32 *screen_y)
 {
 	*screen_x = ll_round((F32)gl_x / getScaleFactor().mV[VX]);
 	*screen_y = ll_round((F32)gl_y / getScaleFactor().mV[VY]);
 }
 
-//static
 void LLUI::screenRectToGL(const LLRect& screen, LLRect *gl)
 {
 	screenPointToGL(screen.mLeft, screen.mTop, &gl->mLeft, &gl->mTop);
 	screenPointToGL(screen.mRight, screen.mBottom, &gl->mRight, &gl->mBottom);
 }
 
-//static
 void LLUI::glRectToScreen(const LLRect& gl, LLRect *screen)
 {
 	glPointToScreen(gl.mLeft, gl.mTop, &screen->mLeft, &screen->mTop);
@@ -456,8 +436,8 @@ void LLUI::glRectToScreen(const LLRect& gl, LLRect *screen)
 
 LLControlGroup& LLUI::getControlControlGroup (const std::string& controlname)
 {
-	for (settings_map_t::iterator itor = sSettingGroups.begin();
-		 itor != sSettingGroups.end(); ++itor)
+	for (settings_map_t::iterator itor = mSettingGroups.begin();
+		 itor != mSettingGroups.end(); ++itor)
 	{
 		LLControlGroup* control_group = itor->second;
 		if(control_group != NULL)
@@ -467,43 +447,38 @@ LLControlGroup& LLUI::getControlControlGroup (const std::string& controlname)
 		}
 	}
 
-	return *sSettingGroups["config"]; // default group
+	return *mSettingGroups["config"]; // default group
 }
 
-//static 
 void LLUI::addPopup(LLView* viewp)
 {
-	if (sAddPopupFunc)
+	if (mAddPopupFunc)
 	{
-		sAddPopupFunc(viewp);
+		mAddPopupFunc(viewp);
 	}
 }
 
-//static 
 void LLUI::removePopup(LLView* viewp)
 {
-	if (sRemovePopupFunc)
+	if (mRemovePopupFunc)
 	{
-		sRemovePopupFunc(viewp);
+		mRemovePopupFunc(viewp);
 	}
 }
 
-//static
 void LLUI::clearPopups()
 {
-	if (sClearPopupsFunc)
+	if (mClearPopupsFunc)
 	{
-		sClearPopupsFunc();
+		mClearPopupsFunc();
 	}
 }
 
-//static
 void LLUI::reportBadKeystroke()
 {
 	make_ui_sound("UISndBadKeystroke");
 }
-	
-//static
+
 // spawn_x and spawn_y are top left corner of view in screen GL coordinates
 void LLUI::positionViewNearMouse(LLView* view, S32 spawn_x, S32 spawn_y)
 {
@@ -514,7 +489,7 @@ void LLUI::positionViewNearMouse(LLView* view, S32 spawn_x, S32 spawn_y)
 
 	S32 mouse_x;
 	S32 mouse_y;
-	LLUI::getMousePositionScreen(&mouse_x, &mouse_y);
+	getMousePositionScreen(&mouse_x, &mouse_y);
 
 	// If no spawn location provided, use mouse position
 	if (spawn_x == S32_MAX || spawn_y == S32_MAX)

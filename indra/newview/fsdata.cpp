@@ -69,7 +69,7 @@ FSData::FSData() :
 	mFSDataDone(false),
 	mAgentsDone(false)
 {
-	mHeaders.insert("User-Agent", LLViewerMedia::getCurrentUserAgent());
+	mHeaders.insert("User-Agent", LLViewerMedia::getInstance()->getCurrentUserAgent());
 	mHeaders.insert("viewer-version", LLVersionInfo::getChannelAndVersionFS());
 	
 	mBaseURL = gSavedSettings.getBOOL("FSdataQAtest") ? "http://phoenixviewer.com/app/fsdatatest" : "http://phoenixviewer.com/app/fsdata";

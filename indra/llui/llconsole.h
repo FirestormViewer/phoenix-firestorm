@@ -55,7 +55,7 @@ public:
 		Optional<bool>	session_support; // <FS:Ansariel> Session support
 
 		Params()
-		:	max_lines("max_lines", LLUI::sSettingGroups["config"]->getS32("ConsoleMaxLines")),
+		:	max_lines("max_lines", LLUI::getInstance()->mSettingGroups["config"]->getS32("ConsoleMaxLines")),
 			persist_time("persist_time", 0.f), // forever
 			font_size_index("font_size_index"),
 			parse_urls("parse_urls", false), // <FS:Ansariel> If lines should be parsed for URLs

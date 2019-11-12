@@ -867,8 +867,7 @@
      </text>
      <color_swatch
        can_apply_immediately="true"
-       color="0 0 0 0.5"
-       control_name="NameTagBackground"
+       color="NameTagBackground"
        follows="left|top"
        height="24"
        label_height="0"
