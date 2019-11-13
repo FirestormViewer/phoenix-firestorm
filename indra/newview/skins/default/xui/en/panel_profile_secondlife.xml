@@ -153,6 +153,7 @@
       <!--mouse_opaque="true"-->
       <menu_button
        name="copy_btn"
+       tool_tip="Copy options"
        height="16"
        right="-2"
        top="0"
@@ -657,6 +658,7 @@
     <check_box
      name="show_in_search_checkbox"
      label="Show in search"
+     tool_tip="Let people see you in search results"
      enabled="false"
      bottom="-30"
      left="55"

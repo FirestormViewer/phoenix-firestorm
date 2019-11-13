@@ -105,12 +105,14 @@ const U32 KICK_FLAGS_FREEZE		= 1 << 0;
 const U32 KICK_FLAGS_UNFREEZE	= 1 << 1;
 
 
-std::string getProfileURL(const std::string& agent_name)
+std::string getProfileURL(const std::string& agent_name, bool feed_only)
 {
 	// <FS:Ansariel> OpenSim support
-	//std::string url = "[WEB_PROFILE_URL][AGENT_NAME]";
+    //std::string url = "[WEB_PROFILE_URL][AGENT_NAME][FEED_ONLY]";
 	//LLSD subs;
 	//subs["WEB_PROFILE_URL"] = LLGridManager::getInstance()->getWebProfileURL();
+	//subs["AGENT_NAME"] = agent_name;
+    //subs["FEED_ONLY"] = feed_only ? "/?feed_only=true" : "";
 	std::string url;
 	LLSD subs;
 
@@ -132,7 +134,8 @@ std::string getProfileURL(const std::string& agent_name)
 	else
 #endif
 	{
-		url = "[WEB_PROFILE_URL][AGENT_NAME]";
+		url = "[WEB_PROFILE_URL][AGENT_NAME][FEED_ONLY]";
+		subs["FEED_ONLY"] = feed_only ? "/?feed_only=true" : "";
 		subs["WEB_PROFILE_URL"] = LLGridManager::getInstance()->getWebProfileURL();
 	}
 	// </FS:Ansariel>
