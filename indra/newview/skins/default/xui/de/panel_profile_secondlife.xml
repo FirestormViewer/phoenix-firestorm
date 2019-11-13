@@ -29,6 +29,7 @@
 	<button label="Name:" name="set_name" tool_tip="Anzeigenamen festlegen"/>
 	<panel name="name_holder">
 		<text_editor name="complete_name" value="(wird geladen...)"/>
+		<menu_button name="copy_btn" tool_tip="Kopier-Optionen"/>
 	</panel>
 	<text name="Key:" value="UUID:"/>
 	<text_editor name="user_key" value="(wird geladen...)"/>
@@ -69,5 +70,5 @@
 			<button label="Blockierung aufheben" name="unblock" tool_tip="Diesen Einwohner nicht mehr blockieren"/>
 		</layout_panel>
 	</layout_stack>
-	<check_box label="In Suche anzeigen" name="show_in_search_checkbox"/>
+	<check_box label="In Suche anzeigen" tool_tip="Erlaubt es anderen Einwohnern, Sie in Suchergebnissen zu finden" name="show_in_search_checkbox"/>
 </panel>

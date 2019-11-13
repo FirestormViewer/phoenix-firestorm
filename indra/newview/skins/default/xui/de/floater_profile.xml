@@ -11,6 +11,6 @@
 			<panel label="Notizen" name="panel_profile_notes"/>
 		</tab_container>
 		<button label="OK" name="ok_btn" tool_tip="Profiländerungen speichern und schließen"/>
-		<button label="Abbrechen" label_selected="Abbrechen" name="cancel_btn"/>
+		<button label="Abbrechen" tool_tip="Verwirft ungespeicherte Änderungen und schließt das Fenster" label_selected="Abbrechen" name="cancel_btn"/>
 	</panel>
 </floater>

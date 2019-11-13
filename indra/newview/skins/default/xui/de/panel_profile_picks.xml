@@ -4,8 +4,8 @@
 	<text name="Tell everyone about your favorite places in Second Life.">
 		Erzählen Sie von Ihren Lieblingsorten in [GRID].
 	</text>
-	<button label="Neu..." name="new_btn"/>
-	<button label="Löschen..." name="delete_btn"/>
+	<button label="Neu..." tool_tip="Erstellt eine neue Auswahl an der aktuellen Position" name="new_btn"/>
+	<button label="Löschen..." tool_tip="Löscht die aktuell ausgewählte Auswahl" name="delete_btn"/>
 	<text name="picks_panel_text">
 		Laden...
 	</text>
