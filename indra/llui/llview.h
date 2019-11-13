@@ -504,7 +504,7 @@ public:
 	// return query for iterating over focus roots in tab order
 	static const LLViewQuery & getFocusRootsQuery();
 
-	static LLWindow*	getWindow(void) { return LLUI::sWindow; }
+	static LLWindow*	getWindow(void) { return LLUI::getInstance()->mWindow; }
 
 	// Set up params after XML load before calling new(),
 	// usually to adjust layout.
@@ -683,12 +683,6 @@ public:
 	static S32 sLastLeftXML;
 	static S32 sLastBottomXML;
 	static BOOL sForceReshape;
-
-// <FS:ND> virtual to override deleting a child by it's parent.
-private:
-	virtual bool deletableByParent()
-	{ return true; }
-// </FS:ND>
 };
 
 namespace LLInitParam

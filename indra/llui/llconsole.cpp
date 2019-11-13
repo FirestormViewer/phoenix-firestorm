@@ -71,7 +71,7 @@ LLConsole::LLConsole(const LLConsole::Params& p)
 		setFontSize(p.font_size_index);
 	}
 	mFadeTime = mLinePersistTime - FADE_DURATION;
-	setMaxLines(LLUI::sSettingGroups["config"]->getS32("ConsoleMaxLines"));
+	setMaxLines(LLUI::getInstance()->mSettingGroups["config"]->getS32("ConsoleMaxLines"));
 	
 	// <FS:Ansariel> Configurable background for different console types
 	mBackgroundImage = LLUI::getUIImage(p.background_image);
@@ -219,7 +219,7 @@ void LLConsole::draw()
 	// <FS> Different draw options
 	//LLUIImagePtr imagep = LLUI::getUIImage("transparent");
 
-	//F32 console_opacity = llclamp(LLUI::sSettingGroups["config"]->getF32("ConsoleBackgroundOpacity"), 0.f, 1.f);
+	//F32 console_opacity = llclamp(LLUI::getInstance()->mSettingGroups["config"]->getF32("ConsoleBackgroundOpacity"), 0.f, 1.f);
 	//LLColor4 color = LLUIColorTable::instance().getColor("ConsoleBackground");
 	//color.mV[VALPHA] *= console_opacity;
 
@@ -277,13 +277,13 @@ void LLConsole::draw()
 	//}
 
 	paragraph_t::reverse_iterator paragraph_it;
-	static LLCachedControl<F32> consoleBackgroundOpacity(*LLUI::sSettingGroups["config"], "ConsoleBackgroundOpacity");
+	static LLCachedControl<F32> consoleBackgroundOpacity(*LLUI::getInstance()->mSettingGroups["config"], "ConsoleBackgroundOpacity");
 	static LLUIColor cbcolor = LLUIColorTable::instance().getColor("ConsoleBackground");
 	LLColor4 color = cbcolor.get();
 	color.mV[VALPHA] *= llclamp(consoleBackgroundOpacity(), 0.f, 1.f);
 
 	F32 line_height = mFont->getLineHeight();
-	static LLCachedControl<bool> classic_draw_mode(*LLUI::sSettingGroups["config"], "FSConsoleClassicDrawMode");
+	static LLCachedControl<bool> classic_draw_mode(*LLUI::getInstance()->mSettingGroups["config"], "FSConsoleClassicDrawMode");
 
 	if (classic_draw_mode)
 	{

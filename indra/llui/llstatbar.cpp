@@ -213,7 +213,7 @@ LLStatBar::LLStatBar(const Params& p)
 	// <FS:Ansariel> Save display state
 	if (!mSetting.empty())
 	{
-		S32 setting = LLUI::sSettingGroups["config"]->getS32(mSetting);
+		S32 setting = LLUI::getInstance()->mSettingGroups["config"]->getS32(mSetting);
 		switch (setting)
 		{
 			default:
@@ -247,17 +247,17 @@ LLStatBar::~LLStatBar()
 	{
 		if (mDisplayHistory)
 		{
-			LLUI::sSettingGroups["config"]->setS32(mSetting, 1);
+			LLUI::getInstance()->mSettingGroups["config"]->setS32(mSetting, 1);
 		}
 		else
 		{
 			if (mDisplayBar)
 			{
-				LLUI::sSettingGroups["config"]->setS32(mSetting, 2);
+				LLUI::getInstance()->mSettingGroups["config"]->setS32(mSetting, 2);
 			}
 			else
 			{
-				LLUI::sSettingGroups["config"]->setS32(mSetting, 0);
+				LLUI::getInstance()->mSettingGroups["config"]->setS32(mSetting, 0);
 			}
 		}
 	}

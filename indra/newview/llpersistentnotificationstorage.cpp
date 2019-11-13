@@ -41,6 +41,7 @@ LLPersistentNotificationStorage::LLPersistentNotificationStorage():
 	, mLoaded(false)
 {
 	mDuringBulkUpdate = false; // <FS:ND>
+    initialize();
 }
 
 LLPersistentNotificationStorage::~LLPersistentNotificationStorage()

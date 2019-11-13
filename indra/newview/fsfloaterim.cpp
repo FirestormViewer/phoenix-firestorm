@@ -1923,7 +1923,7 @@ BOOL FSFloaterIM::handleKeyHere( KEY key, MASK mask )
 			{
 				if ((wstring_utf8_length(mInputEditor->getWText()) + wchar_utf8_length('\n')) > mInputEditor->getMaxTextLength())
 				{
-					LLUI::reportBadKeystroke();
+					LLUI::getInstance()->reportBadKeystroke();
 				}
 				else
 				{
@@ -1934,7 +1934,7 @@ BOOL FSFloaterIM::handleKeyHere( KEY key, MASK mask )
 			{
 				if ((wstring_utf8_length(mInputEditor->getWText()) + wchar_utf8_length(llwchar(182))) > mInputEditor->getMaxTextLength())
 				{
-					LLUI::reportBadKeystroke();
+					LLUI::getInstance()->reportBadKeystroke();
 				}
 				else
 				{
