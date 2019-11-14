@@ -55,12 +55,10 @@
 
 #include "llviewernetwork.h"
 #include "llnotificationsutil.h"
-#ifdef OPENSIM
 #include "exoflickr.h"
 #include "exoflickrauth.h"
 #include "llnotificationsutil.h"
 #include "llviewernetwork.h"
-#endif
 
 static LLPanelInjector<LLFlickrPhotoPanel> t_panel_photo("llflickrphotopanel");
 static LLPanelInjector<LLFlickrAccountPanel> t_panel_account("llflickraccountpanel");
