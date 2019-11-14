@@ -20,7 +20,7 @@
 #include <boost/bind.hpp>
 
 // This class's function is described by the flow chart at
-// http://www.flickr.com/services/api/auth.oauth.html
+// https://www.flickr.com/services/api/auth.oauth.html
 class exoFlickrAuth
 {
 public:
