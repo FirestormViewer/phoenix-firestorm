@@ -556,6 +556,12 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 		LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
 		if (camera_floater)
 		camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+
+		// <FS:Ansariel> Phototools camera
+		camera_floater = LLFloaterCamera::findPhototoolsInstance();
+		if (camera_floater)
+		camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+		// </FS:Ansariel>
 	}
 	// <FS:Ansariel> Improved camera floater
 	else if ("reset_view" == name)
@@ -563,6 +569,13 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 		LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
 		if (camera_floater)
 			camera_floater->switchMode(CAMERA_CTRL_MODE_PAN);
+
+		// <FS:Ansariel> Phototools camera
+		camera_floater = LLFloaterCamera::findPhototoolsInstance();
+		if (camera_floater)
+			camera_floater->switchMode(CAMERA_CTRL_MODE_PAN);
+		// </FS:Ansariel>
+
 		gAgentCamera.changeCameraToDefault();
 		switchToPreset("rear_view");
 	}
@@ -572,6 +585,13 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 		LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
 		if (camera_floater)
 			camera_floater->switchMode(CAMERA_CTRL_MODE_PAN);
+
+		// <FS:Ansariel> Phototools camera
+		camera_floater = LLFloaterCamera::findPhototoolsInstance();
+		if (camera_floater)
+			camera_floater->switchMode(CAMERA_CTRL_MODE_PAN);
+		// </FS:Ansariel>
+
 		switchToPreset(name);
 	}
 
@@ -581,6 +601,15 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 		camera_floater->updateItemsSelection();
 		camera_floater->fromFreeToPresets();
 	}
+
+	// <FS:Ansariel> Phototools camera
+	camera_floater = LLFloaterCamera::findPhototoolsInstance();
+	if (camera_floater)
+	{
+		camera_floater->updateItemsSelection();
+		camera_floater->fromFreeToPresets();
+	}
+	// </FS:Ansariel>
 }
 
 /*static*/
