@@ -39,27 +39,8 @@
          mouse_opaque="false"
          visible="true"
          width="18"
-         left="10"
+         left="20"
          top="10"/>
-        <text
-         follows="top|left|right"
-         height="16"
-         layout="topleft"
-         left="38"
-         name="preset_camera_label"
-         top_delta="0"
-         width="75">
-         Preset in use:
-        </text>
-        <text
-         follows="top|left|right"
-         height="16"
-         layout="topleft"
-         left_pad="10"
-         name="preset_camera_text"
-         width="120">
-         (None)
-        </text>
         <slider
          can_edit_text="true"
          control_name="CameraAngle"
@@ -71,12 +52,11 @@
          layout="topleft"
          label_width="100"
          label="View angle"
-         left="38"
+         left_pad="20"
          max_val="2.97"
          min_val="0.17"
          name="camera_fov"
          show_text="true"
-         top_pad="5"
          width="275" />
         <slider
          can_edit_text="true"
@@ -132,99 +112,13 @@
          show_text="true"
          width="275"
          top_pad="5"/>
-
-        <text
-         follows="top|left|right"
-         height="16"
-         layout="topleft"
-         left="322"
-         name="camera_offset_label"
-         tool_tip="Initial camera offset from avatar in Rear View"
-         top="10"
-         width="100">
-          Camera offset:
-        </text>
-        <spinner
-         height="20"
-         label="X"
-         label_width="10"
-         follows="top|left"
-         left="322"
-         name="camera_x"
-         top_pad="5"
-         min_val="-1e+007"
-         max_val="1e+007"
-         width="67"/>
-        <spinner
-         height="20"
-         label="Y"
-         label_width="10"
-         follows="top|left"
-         name="camera_y"
-         left_pad="4"
-         min_val="-1e+007"
-         max_val="1e+007"
-         width="67"/>
-        <spinner
-         height="20"
-         label="Z"
-         label_width="10"
-         follows="top|left"
-         name="camera_z"
-         left_pad="4"
-         min_val="-1e+007"
-         max_val="1e+007"
-         width="67"/>
-        <text
-         follows="top|left|right"
-         height="16"
-         layout="topleft"
-         left="322"
-         name="camera_focus_offset_label"
-         tool_tip="Initial focus point offset relative to avatar for the camera preset Rear View (x-axis is forward)"
-         top_pad="18"
-         width="100">
-         Focus offset:
-        </text>
-        <spinner
-         height="20"
-         label="X"
-         label_width="10"
-         follows="top|left"
-         left="322"
-         name="focus_x"
-         top_pad="5"
-         min_val="-1e+007"
-         max_val="1e+007"
-         width="67"/>
-        <spinner
-         height="20"
-         label="Y"
-         label_width="10"
-         follows="top|left"
-         name="focus_y"
-         left_pad="4"
-         min_val="-1e+007"
-         max_val="1e+007"
-         width="67"/>
-        <spinner
-         height="20"
-         label="Z"
-         label_width="10"
-         follows="top|left"
-         name="focus_z"
-         left_pad="4"
-         min_val="-1e+007"
-         max_val="1e+007"
-         width="67"/>
-
         <check_box
          control_name="DisableCameraConstraints"
          height="16"
          initial_value="true"
          label="Disable camera constraints"
          layout="topleft"
-         left="35"
+         left_delta="0"
          name="DisableCameraConstraints"
          tool_tip="Set this to move your camera beyond its normal bounds and below land level. If you are not good at moving the camera, more of your shots may be at bad angles."
          top_pad="10"
@@ -242,10 +136,10 @@
          type="string"
          length="1"
          height="10"
-         left="55"
+         left="80"
          name="heading2"
          width="300"
-         top_pad="8">
+         top_pad="10">
          Automatically pose avatar during (select one or more):
         </text>
         <check_box
@@ -289,56 +183,7 @@
          name="FSAppearanceShowHints"
          tool_tip="Enable or disable the visual hints showing the avatar parts being modified."
          width="150" />
-        <text
-         follows="left|top"
-         type="string"
-         length="1"
-         height="10"
-         left="38"
-         name="presets_buttons_label"
-         width="50"
-         top_pad="10">
-          Presets:
-        </text>
-        <button
-         follows="top|left"
-         height="23"
-         label="Save"
-         layout="topleft"
-         left_pad="5"
-         name="PrefCameraSaveButton"
-         top_delta="-4"
-         width="115">
-         <button.commit_callback
-          function="Pref.PrefSave"
-          parameter="camera" />
-        </button>
-        <button
-         follows="top|left"
-         height="23"
-         label="Load"
-         layout="topleft"
-         left_pad="10"
-         name="PrefCameraLoadButton"
-         top_delta="0"
-         width="115">
-         <button.commit_callback
-          function="Pref.PrefLoad"
-          parameter="camera"/>
-        </button>
-        <button
-         follows="top|left"
-         height="23"
-         label="Delete"
-         layout="topleft"
-         left_pad="10"
-         name="PrefCameraDeleteButton"
-         top_delta="0"
-         width="115">
-         <button.commit_callback
-          function="Pref.PrefDelete"
-          parameter="camera"/>
-        </button>
+
         <check_box
          top_pad="10"
          follows="left|top"

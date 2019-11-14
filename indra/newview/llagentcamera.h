@@ -59,7 +59,7 @@ enum ECameraPreset
 	CAMERA_PRESET_GROUP_VIEW,
 
 	/** Current view when a preset is saved */
-	CAMERA_PRESET_CUSTOM0,
+	CAMERA_PRESET_CUSTOM,
 
 // [RLVa:KB] - Checked: RLVa-2.0.0
 	/* Used by RLVa */
@@ -117,9 +117,12 @@ private:
 	//--------------------------------------------------------------------
 public:
 	void switchCameraPreset(ECameraPreset preset);
-private:
 	/** Determines default camera offset depending on the current camera preset */
 	LLVector3 getCameraOffsetInitial();
+	/** Determines default focus offset depending on the current camera preset */
+	LLVector3d getFocusOffsetInitial();
+
+private:
 	/** Determines maximum camera distance from target for mouselook, opposite to LAND_MIN_ZOOM */
 	// <FS:Ansariel> FIRE-23470: Fix camera controls zoom glitch
 	//F32 getCameraMaxZoomDistance();
@@ -129,11 +132,11 @@ private:
 	/** Camera preset in Third Person Mode */
 	ECameraPreset mCameraPreset; 
 
-	/** Initial camera offsets */
-	std::map<ECameraPreset, LLPointer<LLControlVariable> > mCameraOffsetInitial;
+	/** Initial camera offset */
+	LLPointer<LLControlVariable> mCameraOffsetInitial;
 
-	/** Initial focus offsets */
-	std::map<ECameraPreset, LLPointer<LLControlVariable> > mFocusOffsetInitial;
+	/** Initial focus offset */
+	LLPointer<LLControlVariable> mFocusOffsetInitial;
 
 	//--------------------------------------------------------------------
 	// Position

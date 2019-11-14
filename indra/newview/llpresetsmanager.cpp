@@ -80,21 +80,35 @@ void LLPresetsManager::createMissingDefault(const std::string& subdirectory)
 	//{
 	//	return;
 	//}
+
+	if (PRESETS_CAMERA == subdirectory)
+	{
+		createCameraDefaultPresets();
+		return;
+	}
+
 	//std::string default_file = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR,
 	std::string default_file = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR,
-															  subdirectory, PRESETS_DEFAULT + ".xml");
+		subdirectory, PRESETS_DEFAULT + ".xml");
 	// </FS:Ansariel>
 	if (!gDirUtilp->fileExists(default_file))
 	{
 		LL_INFOS() << "No default preset found -- creating one at " << default_file << LL_ENDL;
 
 		// Write current settings as the default
-        savePreset(subdirectory, PRESETS_DEFAULT, true);
+		savePreset(subdirectory, PRESETS_DEFAULT, true);
 	}
-    else
-    {
-        LL_DEBUGS() << "default preset exists; no-op" << LL_ENDL;
-    }
+	else
+	{
+		LL_DEBUGS() << "default preset exists; no-op" << LL_ENDL;
+	}
+}
+
+void LLPresetsManager::createCameraDefaultPresets()
+{
+	createDefaultCameraPreset(PRESETS_REAR_VIEW);
+	createDefaultCameraPreset(PRESETS_FRONT_VIEW);
+	createDefaultCameraPreset(PRESETS_SIDE_VIEW);
 }
 
 void LLPresetsManager::startWatching(const std::string& subdirectory)
@@ -113,7 +127,7 @@ void LLPresetsManager::startWatching(const std::string& subdirectory)
 				if (cntrl_ptr.isNull())
 				{
 					LL_WARNS("Init") << "Unable to set signal on global setting '" << ctrl_name
-									<< "'" << LL_ENDL;
+						<< "'" << LL_ENDL;
 				}
 				else
 				{
@@ -140,28 +154,28 @@ std::string LLPresetsManager::getPresetsDir(const std::string& subdirectory)
 	if (!gDirUtilp->fileExists(dest_path))
 		LLFile::mkdir(dest_path);
 
-		if (PRESETS_CAMERA == subdirectory)
+	if (PRESETS_CAMERA == subdirectory)
+	{
+		std::string source_dir = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, PRESETS_CAMERA);
+		LLDirIterator dir_iter(source_dir, "*.xml");
+		bool found = true;
+		while (found)
 		{
-			std::string source_dir = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, PRESETS_CAMERA);
-			LLDirIterator dir_iter(source_dir, "*.xml");
-			bool found = true;
-			while (found)
-			{
-				std::string file;
-				found = dir_iter.next(file);
+			std::string file;
+			found = dir_iter.next(file);
 
-				if (found)
-				{
-					std::string source = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, PRESETS_CAMERA, file);
-					file = LLURI::escape(file);
-					// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
-					//std::string dest = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_CAMERA, file);
-					std::string dest = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR, PRESETS_CAMERA, file);
-					// </FS:Ansariel>
-					LLFile::copy(source, dest);
-				}
+			if (found)
+			{
+				std::string source = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, PRESETS_CAMERA, file);
+				file = LLURI::escape(file);
+				// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
+				//std::string dest = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_CAMERA, file);
+				std::string dest = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR, PRESETS_CAMERA, file);
+				// </FS:Ansariel>
+				LLFile::copy(source, dest);
 			}
 		}
+	}
 
 	return dest_path;
 }
@@ -183,8 +197,19 @@ void LLPresetsManager::loadPresetNamesFromDir(const std::string& dir, preset_nam
 		{
 			std::string path = gDirUtilp->add(dir, file);
 			std::string name = LLURI::unescape(gDirUtilp->getBaseFileName(path, /*strip_exten = */ true));
-            LL_DEBUGS() << "  Found preset '" << name << "'" << LL_ENDL;
+			LL_DEBUGS() << "  Found preset '" << name << "'" << LL_ENDL;
 
+			if (isTemplateCameraPreset(name))
+			{
+				continue;
+			}
+			if (default_option == DEFAULT_VIEWS_HIDE)
+			{
+				if (isDefaultCameraPreset(name))
+				{
+					continue;
+				}
+			}
 			if (PRESETS_DEFAULT != name)
 			{
 				mPresetNames.push_back(name);
@@ -213,6 +238,7 @@ void LLPresetsManager::loadPresetNamesFromDir(const std::string& dir, preset_nam
 }
 
 bool LLPresetsManager::mCameraDirty = false;
+bool LLPresetsManager::mIgnoreChangedSignal = false;
 
 void LLPresetsManager::setCameraDirty(bool dirty)
 {
@@ -228,11 +254,15 @@ void LLPresetsManager::settingChanged()
 {
 	setCameraDirty(true);
 
-	gSavedSettings.setString("PresetCameraActive", "");
+	static LLCachedControl<std::string> preset_camera_active(gSavedSettings, "PresetCameraActive", "");
+	std::string preset_name = preset_camera_active;
+	if (!preset_name.empty() && !mIgnoreChangedSignal)
+	{
+		gSavedSettings.setString("PresetCameraActive", "");
 
-// Hack call because this is a static routine
-	LLPresetsManager::getInstance()->triggerChangeCameraSignal();
-
+		// Hack call because this is a static routine
+		LLPresetsManager::getInstance()->triggerChangeCameraSignal();
+	}
 }
 
 void LLPresetsManager::getControlNames(std::vector<std::string>& names)
@@ -245,10 +275,10 @@ void LLPresetsManager::getControlNames(std::vector<std::string>& names)
 		("AppearanceCameraMovement")
 		// From llagentcamera.cpp
 		("CameraOffsetBuild")
-		("CameraOffsetRearView")
-		("FocusOffsetRearView")
 		//("CameraOffsetScale") // <FS:Ansariel> Duplicate
 		("TrackFocusObject")
+		("CameraOffsetRearView")
+		("FocusOffsetRearView")
 		// <FS:Ansariel> Additional settings
 		("ZoomTime")
 		("CameraPositionSmoothing")
@@ -262,6 +292,9 @@ void LLPresetsManager::getControlNames(std::vector<std::string>& names)
 
 bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string name, bool createDefault)
 {
+	bool IS_CAMERA = (PRESETS_CAMERA == subdirectory);
+	bool IS_GRAPHIC = (PRESETS_GRAPHIC == subdirectory);
+
 	if (LLTrans::getString(PRESETS_DEFAULT) == name)
 	{
 		name = PRESETS_DEFAULT;
@@ -272,10 +305,16 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
 		return false;
 	}
 
+	if (isTemplateCameraPreset(name))
+	{
+		LL_WARNS() << "Should not overwrite template presets" << LL_ENDL;
+		return false;
+	}
+
 	bool saved = false;
 	std::vector<std::string> name_list;
 
-	if(PRESETS_GRAPHIC == subdirectory)
+	if (IS_GRAPHIC)
 	{
 		// <FS:Ansariel> Graphic preset controls independent from XUI
 		//LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
@@ -297,7 +336,7 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
 		}
 		// </FS:Ansariel>
 	}
-	else if(PRESETS_CAMERA == subdirectory)
+	else if (IS_CAMERA)
 	{
 		// <FS:Ansariel> This wrong the wrong setting upstream and got removed, but it is done for graphic preset
 		gSavedSettings.setString("PresetCameraActive", name);
@@ -314,7 +353,7 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
 	LLSD paramsData(LLSD::emptyMap());
 
 	// Create a default graphics preset from hw recommended settings 
-	if (createDefault && name == PRESETS_DEFAULT && subdirectory == PRESETS_GRAPHIC)
+	if (IS_GRAPHIC && createDefault && name == PRESETS_DEFAULT)
 	{
 		paramsData = LLFeatureManager::getInstance()->getRecommendedSettingsMap();
 		if (gSavedSettings.getU32("RenderAvatarMaxComplexity") == 0)
@@ -347,9 +386,35 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
 	}
 	else
 	{
+		ECameraPreset new_camera_preset = (ECameraPreset)gSavedSettings.getU32("CameraPreset");
+		bool new_camera_offsets = false;
+		if (IS_CAMERA)
+		{
+			if (isDefaultCameraPreset(name))
+			{
+				if (PRESETS_REAR_VIEW == name)
+				{
+					new_camera_preset = CAMERA_PRESET_REAR_VIEW;
+				}
+				else if (PRESETS_SIDE_VIEW == name)
+				{
+					new_camera_preset = CAMERA_PRESET_GROUP_VIEW;
+				}
+				else if (PRESETS_FRONT_VIEW == name)
+				{
+					new_camera_preset = CAMERA_PRESET_FRONT_VIEW;
+				}
+			}
+			else 
+			{
+				new_camera_preset = CAMERA_PRESET_CUSTOM;
+			}
+			new_camera_offsets = (!isDefaultCameraPreset(name) || (ECameraPreset)gSavedSettings.getU32("CameraPreset") != new_camera_preset);
+		}
 		for (std::vector<std::string>::iterator it = name_list.begin(); it != name_list.end(); ++it)
 		{
 			std::string ctrl_name = *it;
+
 			LLControlVariable* ctrl = gSavedSettings.getControl(ctrl_name).get();
 			if (ctrl)
 			{
@@ -362,6 +427,10 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
 				paramsData[ctrl_name]["Type"] = type;
 				paramsData[ctrl_name]["Value"] = value;
 			}
+		}
+		if (IS_CAMERA)
+		{
+			gSavedSettings.setU32("CameraPreset", new_camera_preset);
 		}
 	}
 
@@ -381,14 +450,14 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
             
 			LL_DEBUGS() << "saved preset '" << name << "'; " << paramsData.size() << " parameters" << LL_ENDL;
 
-			if (subdirectory == PRESETS_GRAPHIC)
+			if (IS_GRAPHIC)
 			{
 				gSavedSettings.setString("PresetGraphicActive", name);
 				// signal interested parties
 				triggerChangeSignal();
 			}
 
-			if (subdirectory == PRESETS_CAMERA)
+			if (IS_CAMERA)
 			{
 				gSavedSettings.setString("PresetCameraActive", name);
 				setCameraDirty(false);
@@ -414,6 +483,7 @@ bool LLPresetsManager::setPresetNamesInComboBox(const std::string& subdirectory,
 	bool sts = true;
 
 	combo->clearRows();
+	combo->setEnabled(TRUE);
 
 	std::string presets_dir = getPresetsDir(subdirectory);
 
@@ -429,12 +499,13 @@ bool LLPresetsManager::setPresetNamesInComboBox(const std::string& subdirectory,
 			for (std::list<std::string>::const_iterator it = preset_names.begin(); it != preset_names.end(); ++it)
 			{
 				const std::string& name = *it;
-				combo->add(name, LLSD().with(0, name));
+				combo->add(name, name);
 			}
 		}
 		else
 		{
 			combo->setLabel(LLTrans::getString("preset_combo_label"));
+			combo->setEnabled(FALSE);
 			sts = false;
 		}
 	}
@@ -454,8 +525,10 @@ void LLPresetsManager::loadPreset(const std::string& subdirectory, std::string n
     LL_DEBUGS() << "attempting to load preset '"<<name<<"' from '"<<full_path<<"'" << LL_ENDL;
 
 	mIsLoadingPreset = true; // <FS:Ansariel> Graphic preset controls independent from XUI
+	mIgnoreChangedSignal = true;
 	if(gSavedSettings.loadFromFile(full_path, false, true) > 0)
 	{
+		mIgnoreChangedSignal = false;
 		if(PRESETS_GRAPHIC == subdirectory)
 		{
 			gSavedSettings.setString("PresetGraphicActive", name);
@@ -483,10 +556,11 @@ void LLPresetsManager::loadPreset(const std::string& subdirectory, std::string n
 			triggerChangeCameraSignal();
 		}
 	}
-    else
-    {
-        LL_WARNS("Presets") << "failed to load preset '"<<name<<"' from '"<<full_path<<"'" << LL_ENDL;
-    }
+	else
+	{
+		mIgnoreChangedSignal = false;
+		LL_WARNS("Presets") << "failed to load preset '"<<name<<"' from '"<<full_path<<"'" << LL_ENDL;
+	}
 	mIsLoadingPreset = false; // <FS:Ansariel> Graphic preset controls independent from XUI
 }
 
@@ -534,6 +608,48 @@ bool LLPresetsManager::deletePreset(const std::string& subdirectory, std::string
 	}
 
 	return sts;
+}
+
+bool LLPresetsManager::isDefaultCameraPreset(std::string preset_name)
+{
+	return (preset_name == PRESETS_REAR_VIEW || preset_name == PRESETS_SIDE_VIEW || preset_name == PRESETS_FRONT_VIEW);
+}
+
+bool LLPresetsManager::isTemplateCameraPreset(std::string preset_name)
+{
+	return (preset_name == PRESETS_REAR || preset_name == PRESETS_SIDE || preset_name == PRESETS_FRONT);
+}
+
+void LLPresetsManager::resetCameraPreset(std::string preset_name)
+{
+	if (isDefaultCameraPreset(preset_name))
+	{
+		createDefaultCameraPreset(preset_name, true);
+
+		if (gSavedSettings.getString("PresetCameraActive") == preset_name)
+		{
+			loadPreset(PRESETS_CAMERA, preset_name);
+		}
+	}
+}
+
+void LLPresetsManager::createDefaultCameraPreset(std::string preset_name, bool force_reset)
+{
+	// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
+	//std::string preset_file = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR,
+	std::string preset_file = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR,
+	// </FS:Ansariel>
+		PRESETS_CAMERA, LLURI::escape(preset_name) + ".xml");
+	if (!gDirUtilp->fileExists(preset_file) || force_reset)
+	{
+		std::string template_name = preset_name.substr(0, preset_name.size() - PRESETS_VIEW_SUFFIX.size());
+		// <FS:Ansariel> Template is in application's app_settings folder
+		//std::string default_template_file = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR,
+		std::string default_template_file = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,
+		// </FS:Ansariel>
+			PRESETS_CAMERA, template_name + ".xml");
+		LLFile::copy(default_template_file, preset_file);
+	}
 }
 
 boost::signals2::connection LLPresetsManager::setPresetListChangeCameraCallback(const preset_list_signal_t::slot_type& cb)

@@ -36,10 +36,10 @@ class LLJoystickCameraRotate;
 class LLJoystickCameraTrack;
 class LLFloaterReg;
 class LLPanelCameraZoom;
+class LLComboBox;
 
 enum ECameraControlMode
 {
-	CAMERA_CTRL_MODE_MODES,
 	CAMERA_CTRL_MODE_PAN,
 	CAMERA_CTRL_MODE_FREE_CAMERA,
 	CAMERA_CTRL_MODE_PRESETS
@@ -50,7 +50,6 @@ class LLFloaterCamera : public LLFloater
 	friend class LLFloaterReg;
 	
 public:
-
 	/* whether in free camera mode */
 	static bool inFreeCameraMode();
 	/* callback for camera items selection changing */
@@ -76,6 +75,11 @@ public:
 
 	virtual void onOpen(const LLSD& key);
 	virtual void onClose(bool app_quitting);
+
+	void onSavePreset();
+	void onCustomPresetSelected();
+
+	void populatePresetCombo();
 
 	LLJoystickCameraRotate* mRotate;
 	LLPanelCameraZoom*	mZoom;
@@ -114,9 +118,6 @@ private:
 	/* update camera modes items selection and camera preset items selection according to the currently selected preset */
 	void updateItemsSelection();
 
-	void onClickBtn(ECameraControlMode mode);
-	void assignButton2Mode(ECameraControlMode mode, const std::string& button_name);
-	
 	// fills flatlist with items from given panel
 	void fillFlatlistFromPanel (LLFlatListView* list, LLPanel* panel);
 
@@ -127,13 +128,11 @@ private:
 	static bool sFreeCamera;
 	static bool sAppearanceEditing;
 	BOOL mClosed;
-
-	void setModeTitle(const ECameraControlMode mode);
-
-	bool mUseFlatUI;	// <AW: Flat cam floater>
 	ECameraControlMode mPrevMode;
 	ECameraControlMode mCurrMode;
 	std::map<ECameraControlMode, LLButton*> mMode2Button;
+
+	LLComboBox* mPresetCombo;
 };
 
 /**

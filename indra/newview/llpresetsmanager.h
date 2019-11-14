@@ -36,11 +36,19 @@ static const std::string PRESETS_DEFAULT = "Default";
 static const std::string PRESETS_DIR = "presets";
 static const std::string PRESETS_GRAPHIC = "graphic";
 static const std::string PRESETS_CAMERA = "camera";
+static const std::string PRESETS_REAR = "Rear";
+static const std::string PRESETS_FRONT = "Front";
+static const std::string PRESETS_SIDE = "Side";
+static const std::string PRESETS_VIEW_SUFFIX = " View";
+static const std::string PRESETS_REAR_VIEW = PRESETS_REAR + PRESETS_VIEW_SUFFIX;
+static const std::string PRESETS_FRONT_VIEW = PRESETS_FRONT + PRESETS_VIEW_SUFFIX;
+static const std::string PRESETS_SIDE_VIEW = PRESETS_SIDE + PRESETS_VIEW_SUFFIX;
 
 enum EDefaultOptions
 {
 	DEFAULT_SHOW,
 	DEFAULT_TOP,
+	DEFAULT_VIEWS_HIDE,
 	DEFAULT_HIDE				// Do not display "Default" in a list
 };
 
@@ -67,6 +75,13 @@ public:
 	bool isCameraDirty();
 	static void setCameraDirty(bool dirty);
 
+	void createCameraDefaultPresets();
+
+	bool isTemplateCameraPreset(std::string preset_name);
+	bool isDefaultCameraPreset(std::string preset_name);
+	void resetCameraPreset(std::string preset_name);
+	void createDefaultCameraPreset(std::string preset_name, bool force_reset = false);
+
 	// Emitted when a preset gets loaded, deleted, or saved.
 	boost::signals2::connection setPresetListChangeCameraCallback(const preset_list_signal_t::slot_type& cb);
 	boost::signals2::connection setPresetListChangeCallback(const preset_list_signal_t::slot_type& cb);
@@ -92,6 +107,7 @@ public:
 	boost::signals2::connection	mCameraChangedSignal;
 
 	static bool	mCameraDirty;
+	static bool mIgnoreChangedSignal;
 
 	// <FS:Ansariel> Graphic preset controls independent from XUI
 	void initGraphicPresetControlNames();

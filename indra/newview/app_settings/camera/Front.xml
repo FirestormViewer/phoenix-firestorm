@@ -40,7 +40,7 @@
     <key>CameraOffsetRearView</key>
         <map>
         <key>Comment</key>
-            <string>Initial camera offset from avatar in Rear View</string>
+            <string>Initial camera offset from avatar in Front View</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>
@@ -77,7 +77,7 @@
     <key>FocusOffsetRearView</key>
         <map>
         <key>Comment</key>
-            <string>Initial focus point offset relative to avatar for the camera preset Rear View (x-axis is forward)</string>
+            <string>Initial focus point offset relative to avatar for the camera preset Front View (x-axis is forward)</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>

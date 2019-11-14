@@ -372,8 +372,8 @@
     <button
      follows="right|top"
      height="16"
-     image_unselected="Cam_Avatar_Off"
-     image_pressed="Cam_Avatar_Off"
+     image_unselected="Cam_FreeCam_Off"
+     image_pressed="Cam_FreeCam_Off"
      left_pad="5"
      top="2"
      name="presets_icon_camera"

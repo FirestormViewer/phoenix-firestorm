@@ -51,7 +51,6 @@ class LLSD;
 class LLTextBox;
 class LLComboBox;
 class LLLineEditor;
-class LLSpinCtrl;
 
 namespace ll
 {
@@ -272,9 +271,7 @@ public:
 	static void refreshSkin(void* data);
 	void selectPanel(const LLSD& name);
 	// <FS:Ansariel> Build fix
-	//void saveCameraPreset(std::string& preset);
 	//void saveGraphicsPreset(std::string& preset);
-	void saveCameraPreset(const std::string& preset);
 	void saveGraphicsPreset(const std::string& preset);
 	// </FS:Ansariel>
 
@@ -299,7 +296,6 @@ private:
 	std::string mDirectoryVisibility;
 	
 	LLAvatarData mAvatarProperties;
-	std::string mSavedCameraPreset;
 	std::string mSavedGraphicsPreset;
 	LOG_CLASS(LLFloaterPreference);
 
@@ -377,36 +373,6 @@ private:
 	LOG_CLASS(LLPanelPreference);
 };
 
-class LLPanelPreferenceView : public LLPanelPreference
-{
-public:
-	BOOL postBuild();
-	void draw();
-	void setPresetText();
-
-private:
-	void onPresetsListChangeCamera();
-	LOG_CLASS(LLPanelPreferenceView);
-
-	// <FS:Ansariel> Hook up camera and focus spin controls
-	LLSpinCtrl*			mSpinnerCameraX;
-	LLSpinCtrl*			mSpinnerCameraY;
-	LLSpinCtrl*			mSpinnerCameraZ;
-	LLSpinCtrl*			mSpinnerFocusX;
-	LLSpinCtrl*			mSpinnerFocusY;
-	LLSpinCtrl*			mSpinnerFocusZ;
-
-	void onChangeCameraX();
-	void onChangeCameraY();
-	void onChangeCameraZ();
-	void onChangeFocusX();
-	void onChangeFocusY();
-	void onChangeFocusZ();
-
-	void refreshCameraSettings();
-	// </FS:Ansariel>
-};
-
 class LLPanelPreferenceGraphics : public LLPanelPreference
 {
 public:
@@ -424,6 +390,7 @@ protected:
 	bool hasDirtyChilds();
 
 private:
+
 	void onPresetsListChange();
 	LOG_CLASS(LLPanelPreferenceGraphics);
 };

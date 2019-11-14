@@ -140,9 +140,9 @@ https://accounts.secondlife.com/change_email/
          help_topic="preferences_input_tab"
          name="input" />
         <panel
-         class="panel_preference_view"
+		 class="panel_preference"
          filename="panel_preferences_move.xml"
-         label="Move"
+         label="Move &amp; View"
          layout="topleft"
          help_topic="preferences_move_tab"
          name="move" />

@@ -216,21 +216,16 @@ void LLAgentCamera::init()
 	
 	mCameraPreset = (ECameraPreset) gSavedSettings.getU32("CameraPreset");
 
-	mCameraOffsetInitial[CAMERA_PRESET_REAR_VIEW] = gSavedSettings.getControl("CameraOffsetRearView");
-	mCameraOffsetInitial[CAMERA_PRESET_FRONT_VIEW] = gSavedSettings.getControl("CameraOffsetFrontView");
-	mCameraOffsetInitial[CAMERA_PRESET_GROUP_VIEW] = gSavedSettings.getControl("CameraOffsetGroupView");
-// [RLVa:KB] - Checked: RLVa-2.0.0
-	mCameraOffsetInitial[CAMERA_RLV_SETCAM_VIEW] = gSavedSettings.declareVec3("CameraOffsetRLVaView", LLVector3(mCameraOffsetInitial[CAMERA_PRESET_REAR_VIEW]->getDefault()), "Declared in code", LLControlVariable::PERSIST_NO);
-	mCameraOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->setHiddenFromSettingsEditor(true);
-// [/RLVa:KB]
-
-	mFocusOffsetInitial[CAMERA_PRESET_REAR_VIEW] = gSavedSettings.getControl("FocusOffsetRearView");
-	mFocusOffsetInitial[CAMERA_PRESET_FRONT_VIEW] = gSavedSettings.getControl("FocusOffsetFrontView");
-	mFocusOffsetInitial[CAMERA_PRESET_GROUP_VIEW] = gSavedSettings.getControl("FocusOffsetGroupView");
-// [RLVa:KB] - Checked: RLVa-2.0.0
-	mFocusOffsetInitial[CAMERA_RLV_SETCAM_VIEW] = gSavedSettings.declareVec3("FocusOffsetRLVaView", LLVector3(mFocusOffsetInitial[CAMERA_PRESET_REAR_VIEW]->getDefault()), "Declared in code", LLControlVariable::PERSIST_NO);
-	mFocusOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->setHiddenFromSettingsEditor(true);
-// [/RLVa:KB]
+	mCameraOffsetInitial = gSavedSettings.getControl("CameraOffsetRearView");
+	mFocusOffsetInitial = gSavedSettings.getControl("FocusOffsetRearView");
+//// [RLVa:KB] - Checked: RLVa-2.0.0
+//	mCameraOffsetInitial[CAMERA_RLV_SETCAM_VIEW] = gSavedSettings.declareVec3("CameraOffsetRLVaView", LLVector3(mCameraOffsetInitial[CAMERA_PRESET_REAR_VIEW]->getDefault()), "Declared in code", LLControlVariable::PERSIST_NO);
+//	mCameraOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->setHiddenFromSettingsEditor(true);
+//// [/RLVa:KB]
+//// [RLVa:KB] - Checked: RLVa-2.0.0
+//	mFocusOffsetInitial[CAMERA_RLV_SETCAM_VIEW] = gSavedSettings.declareVec3("FocusOffsetRLVaView", LLVector3(mFocusOffsetInitial[CAMERA_PRESET_REAR_VIEW]->getDefault()), "Declared in code", LLControlVariable::PERSIST_NO);
+//	mFocusOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->setHiddenFromSettingsEditor(true);
+//// [/RLVa:KB]
 
 	mCameraCollidePlane.clearVec();
 	mCurrentCameraDistance = getCameraOffsetInitial().magVec() * gSavedSettings.getF32("CameraOffsetScale");
@@ -1668,7 +1663,7 @@ LLVector3d LLAgentCamera::calcThirdPersonFocusOffset()
 		agent_rot *= ((LLViewerObject*)(gAgentAvatarp->getParent()))->getRenderRotation();
 	}
 
-	focus_offset = convert_from_llsd<LLVector3d>(mFocusOffsetInitial[mCameraPreset]->get(), TYPE_VEC3D, "");
+	focus_offset = convert_from_llsd<LLVector3d>(mFocusOffsetInitial->get(), TYPE_VEC3D, "");
 	return focus_offset * agent_rot;
 }
 
@@ -2091,7 +2086,12 @@ bool LLAgentCamera::clampCameraPosition(LLVector3d& posCamGlobal, const LLVector
 
 LLVector3 LLAgentCamera::getCameraOffsetInitial()
 {
-	return convert_from_llsd<LLVector3>(mCameraOffsetInitial[mCameraPreset]->get(), TYPE_VEC3, "");
+	return convert_from_llsd<LLVector3>(mCameraOffsetInitial->get(), TYPE_VEC3, "");
+}
+
+LLVector3d LLAgentCamera::getFocusOffsetInitial()
+{
+	return convert_from_llsd<LLVector3d>(mFocusOffsetInitial->get(), TYPE_VEC3D, "");
 }
 
 // <FS:Ansariel> FIRE-23470: Fix camera controls zoom glitch
@@ -2554,8 +2554,8 @@ void LLAgentCamera::switchCameraPreset(ECameraPreset preset)
 		// Reset our view when switching away
 		if (CAMERA_RLV_SETCAM_VIEW != preset)
 		{
-			mCameraOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->resetToDefault();
-			mFocusOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->resetToDefault();
+			//mCameraOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->resetToDefault();
+			//mFocusOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->resetToDefault();
 		}
 	}
 // [/RLVa:KB]

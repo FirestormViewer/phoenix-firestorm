@@ -28,6 +28,7 @@
 	<floater.string name="free_mode_title">
 		View Object
 	</floater.string>
+	<string name="inactive_combo_text">Use preset</string>
 	<tab_container
 	 follows="all"
 	 halign="center"
