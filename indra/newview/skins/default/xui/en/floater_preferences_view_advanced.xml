@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- height="128"
+ height="138"
  layout="topleft"
  name="floaterpreferencesviewadvanced"
  help_topic="floaterviewadvanced"
@@ -13,7 +13,7 @@
     height="16"
     layout="topleft"
     left="10"
-    top="10"
+    top="5"
     width="100">
       Camera offset:
   </text>
@@ -66,7 +66,7 @@
     height="16"
     layout="topleft"
     left="10"
-    top_pad="20"
+    top_pad="10"
     width="100">
       Focus offset:
   </text>
@@ -113,4 +113,31 @@
     <spinner.commit_callback
      function="CommitSettings" />
   </spinner>
+
+  <button
+   follows="top|left"
+   height="23"
+   label="Save as preset..."
+   layout="topleft"
+   left="10"
+   name="save_preset_btn"
+   top_pad="10"
+   width="125">
+   <button.commit_callback
+    function="CameraPresets.Save"/>
+  </button>
+
+  <button
+   follows="top|left"
+   height="23"
+   label="Close"
+   layout="topleft"
+   left_pad="10"
+   name="close_btn"
+   top_delta="0"
+   width="125">
+   <button.commit_callback
+    function="Floater.Hide"
+    parameter="prefs_view_advanced"/>
+  </button>
 </floater>

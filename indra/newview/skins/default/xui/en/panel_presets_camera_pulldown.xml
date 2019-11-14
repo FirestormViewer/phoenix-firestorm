@@ -58,7 +58,7 @@
   <button
     name="open_prefs_btn"
     label="Open Camera floater"
-    tool_tip = "Bring up Camera floater"
+    tool_tip="Bring up Camera floater"
     top_delta="3"
     left="15"
     height="22"

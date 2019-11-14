@@ -42,6 +42,7 @@ public:
 	void onCommitSettings();
 	void updateCameraControl(const LLVector3& vector);
 	void updateFocusControl(const LLVector3d& vector3d);
+	void onSavePreset(); // <FS:Ansariel> Improved camera floater
 
 private:
 	virtual ~LLFloaterPreferenceViewAdvanced();

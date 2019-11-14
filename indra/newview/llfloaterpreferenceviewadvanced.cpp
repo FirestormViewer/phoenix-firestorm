@@ -32,12 +32,14 @@
 #include "lluictrlfactory.h"
 #include "llspinctrl.h"
 #include "llviewercontrol.h"
+#include "llpresetsmanager.h"
 
 
 LLFloaterPreferenceViewAdvanced::LLFloaterPreferenceViewAdvanced(const LLSD& key) 
 :	LLFloater(key)
 {
 	mCommitCallbackRegistrar.add("CommitSettings",	boost::bind(&LLFloaterPreferenceViewAdvanced::onCommitSettings, this));
+	mCommitCallbackRegistrar.add("CameraPresets.Save", boost::bind(&LLFloaterPreferenceViewAdvanced::onSavePreset, this)); // <FS:Ansariel> Improved camera floater
 }
 
 LLFloaterPreferenceViewAdvanced::~LLFloaterPreferenceViewAdvanced()
@@ -80,3 +82,18 @@ void LLFloaterPreferenceViewAdvanced::onCommitSettings()
 	vector3d.mdV[VZ] = (F32)getChild<LLUICtrl>("focus_z")->getValue().asReal();
 	gSavedSettings.setVector3d("FocusOffsetRearView", vector3d);
 }
+
+// <FS:Ansariel> Improved camera floater
+void LLFloaterPreferenceViewAdvanced::onSavePreset()
+{
+	LLFloaterReg::hideInstance("delete_pref_preset", PRESETS_CAMERA);
+	LLFloaterReg::hideInstance("load_pref_preset", PRESETS_CAMERA);
+	
+	LLSD key;
+	key["subdirectory"] = PRESETS_CAMERA;
+	std::string current_preset = gSavedSettings.getString("PresetCameraActive");
+	bool is_custom_preset = current_preset != "" && !LLPresetsManager::getInstance()->isDefaultCameraPreset(current_preset);
+	key["index"] = is_custom_preset ? 1 : 0;
+	LLFloaterReg::showInstance("save_pref_preset", key);
+}
+// </FS:Ansariel>

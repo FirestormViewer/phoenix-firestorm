@@ -393,9 +393,11 @@ BOOL LLFloaterCamera::postBuild()
 	mTrack = getChild<LLJoystickCameraTrack>(PAN);
 	mPresetCombo = getChild<LLComboBox>("preset_combo");
 
-	getChild<LLTextBox>("precise_ctrs_label")->setShowCursorHand(false);
-	getChild<LLTextBox>("precise_ctrs_label")->setSoundFlags(LLView::MOUSE_UP);
-	getChild<LLTextBox>("precise_ctrs_label")->setClickedCallback(boost::bind(&LLFloaterReg::showInstance, "prefs_view_advanced", LLSD(), FALSE));
+	// <FS:Ansariel> Improved camera floater
+	//getChild<LLTextBox>("precise_ctrs_label")->setShowCursorHand(false);
+	//getChild<LLTextBox>("precise_ctrs_label")->setSoundFlags(LLView::MOUSE_UP);
+	//getChild<LLTextBox>("precise_ctrs_label")->setClickedCallback(boost::bind(&LLFloaterReg::showInstance, "prefs_view_advanced", LLSD(), FALSE));
+	// </FS:Ansariel>
 
 	mPresetCombo->setCommitCallback(boost::bind(&LLFloaterCamera::onCustomPresetSelected, this));
 	LLPresetsManager::getInstance()->setPresetListChangeCameraCallback(boost::bind(&LLFloaterCamera::populatePresetCombo, this));
@@ -555,6 +557,16 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 		if (camera_floater)
 		camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
 	}
+	// <FS:Ansariel> Improved camera floater
+	else if ("reset_view" == name)
+	{
+		LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
+		if (camera_floater)
+			camera_floater->switchMode(CAMERA_CTRL_MODE_PAN);
+		gAgentCamera.changeCameraToDefault();
+		switchToPreset("rear_view");
+	}
+	// </FS:Ansariel>
 	else
 	{
 		LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();

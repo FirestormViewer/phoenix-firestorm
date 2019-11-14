@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
+ header_height="0"
+ bg_opaque_image="Window_NoTitle_Foreground"
+ bg_alpha_image="Window_NoTitle_Foreground"
  positioning="specified"
  right="-460"
  bottom="-50"
  follows="left|bottom"
- legacy_header_height="18"
- can_minimize="true"
- can_close="true"
- height="135"
+ legacy_header_height="0"
+ can_minimize="false"
+ can_close="false"
+ height="85"
  layout="topleft"
  name="camera_floater"
  help_topic="camera_floater"
  save_visibility="true"
+ show_title="false"
  single_instance="true"
  title="Camera Controls"
  chrome="true"
@@ -36,10 +40,11 @@
     <string name="inactive_combo_text">Use preset</string>
     <panel
      border="false"
+     follows="top|left"
      height="123"
      layout="topleft"
      left="2"
-     top="0"
+     top_pad="-23"
      mouse_opaque="false"
      name="controls"
      width="190">
@@ -47,7 +52,7 @@
          <panel
             border="false"
             class="camera_zoom_panel"
-            height="123"
+            bottom="-1"
             layout="topleft"
             left="0"
             mouse_opaque="false"
@@ -123,32 +128,20 @@
          tool_tip="Move camera up and down, left and right"
          top="25"
          width="78"/>
-         <text
-          type="string"
-          length="1"
-          follows="left|top"
-          height="15"
-          layout="topleft"
-          left="41"
-          top_pad="9"
-          name="precise_ctrs_label"
-          width="200">
-            Use precise controls
-        </text>
         </panel>
     </panel>
     <panel
      follows="all"
-     height="102"
+     height="27"
      layout="topleft"
      left_pad="2"
      name="buttons_panel"
-     top="17"
-     width="212">
+     top_delta="18"
+     width="120">
     <panel_camera_item
       name="front_view"
       tool_tip="Front View"
-      width="25">
+      width="18">
       <panel_camera_item.mousedown_callback
         function="CameraPresets.ChangeView"
         parameter="front_view" />
@@ -160,8 +153,8 @@
     <panel_camera_item
       name="group_view"
       tool_tip="Side View"
-      width="25"
-      left_pad="4">
+      width="18"
+      left_pad="2">
       <panel_camera_item.mousedown_callback
         function="CameraPresets.ChangeView"
         parameter="group_view" />
@@ -173,8 +166,8 @@
     <panel_camera_item
       name="rear_view"
       tool_tip="Rear View"
-      width="25"
-      left_pad="4">
+      width="18"
+      left_pad="2">
       <panel_camera_item.mousedown_callback
         function="CameraPresets.ChangeView"
         tool_tip="Rear View"
@@ -187,8 +180,8 @@
     <panel_camera_item
         name="object_view"
         tool_tip="Object View"
-        width="25"
-        left_pad="4">
+        width="18"
+        left_pad="2">
         <panel_camera_item.mousedown_callback
           function="CameraPresets.ChangeView"
           parameter="object_view" />
@@ -200,8 +193,8 @@
       <panel_camera_item
         name="mouselook_view"
         tool_tip="Mouselook View"
-        width="25"
-        left_pad="4">
+        width="18"
+        left_pad="2">
         <panel_camera_item.mousedown_callback
           function="CameraPresets.ChangeView"
           parameter="mouselook_view" />
@@ -210,12 +203,26 @@
         <panel_camera_item.selected_picture
           image_name="MouseLook_View_On" />
       </panel_camera_item>
+      <panel_camera_item
+        name="reset_view"
+        tool_tip="Reset view"
+        width="18"
+        left_pad="2">
+          <panel_camera_item.mousedown_callback
+          function="CameraPresets.ChangeView"
+          parameter="reset_view" />
+          <panel_camera_item.picture
+          image_name="StopReload_Off" />
+          <panel_camera_item.selected_picture
+          image_name="StopReload_Over" />
+      </panel_camera_item>
+    </panel>
       <combo_box
         height="23"
-        left="0"
+        left_delta="-1"
         mouse_opaque="true"
         name="preset_combo"
-        top_pad="5"
+        top_pad="7"
         width="122">
         <combo_box.item
          label="Use preset"
@@ -238,6 +245,7 @@
         <button.commit_callback
           function="CameraPresets.ShowPresetsList"/>
       </button>
+      <!--
       <button
         follows="top|left"
         height="23"
@@ -250,5 +258,18 @@
         <button.commit_callback
           function="CameraPresets.Save"/>
       </button>
-  </panel>
+      -->
+      <button
+        follows="top|left"
+        height="23"
+        label="Camera Position..."
+        layout="topleft"
+        left_delta="-125"
+        name="camera_position_btn"
+        top_pad="9"
+        width="143">
+        <button.commit_callback
+          function="Floater.Show"
+          parameter="prefs_view_advanced"/>
+      </button>
 </floater>

@@ -6,7 +6,7 @@
  width="180">
   <panel_camera_item.icon_over
    follows="top|left"
-     height="25"
+     height="18"
      image_name="ListItem_Over"
      left="0"
      mouse_opaque="false"
@@ -15,10 +15,10 @@
      top="25"
      scale_image="true"
      visible="false"
-     width="25" />
+     width="18" />
   <panel_camera_item.icon_selected
    follows="top|left"
-     height="25"
+     height="18"
      image_name="ListItem_Select"
      layout="topleft"
      left="0"
@@ -27,10 +27,10 @@
      top="25"
      scale_image="true"
      visible="false"
-     width="25" />
+     width="18" />
   <panel_camera_item.picture
      follows="top|left"
-     height="25"
+     height="18"
      image_name="Icon_For_Sale"
      layout="topleft"
      left="0"
@@ -39,10 +39,10 @@
      tab_stop="false"
      top="25"
      top_pad="10"
-     width="25" />
+     width="18" />
   <panel_camera_item.selected_picture
      follows="top|left"
-     height="25"
+     height="18"
      image_name="Cam_Rotate_In"
      layout="topleft"
      left="0"
@@ -52,7 +52,7 @@
      top="25"
      top_pad="8"
      visible="false" 
-     width="25" />
+     width="18" />
   <panel_camera_item.text
    follows="top|left|right"
      font="SansSerifMedium"
