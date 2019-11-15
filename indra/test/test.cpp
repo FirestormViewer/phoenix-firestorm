@@ -37,7 +37,6 @@
 #include "linden_common.h"
 #include "llerrorcontrol.h"
 #include "lltut.h"
-#include "tests/wrapllerrs.h"             // RecorderProxy
 #include "stringize.h"
 #include "namedtempfile.h"
 #include "lltrace.h"
@@ -259,7 +258,7 @@ public:
 				break;
 			case tut::test_result::ex:
 				++mFailedTests;
-				out << "exception";
+				out << "exception: " << tr.exception_typeid;
 				break;
 			case tut::test_result::warn:
 				++mFailedTests;
@@ -270,7 +269,7 @@ public:
 				out << "abnormal termination";
 				break;
 			case tut::test_result::skip:
-				++mSkippedTests;			
+				++mSkippedTests;
 				out << "skipped known failure";
 				break;
 			default:

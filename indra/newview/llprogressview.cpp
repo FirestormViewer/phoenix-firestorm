@@ -140,7 +140,7 @@ BOOL LLProgressView::postBuild()
 	mMediaCtrl->setVisible( false );		// hidden initially
 	mMediaCtrl->addObserver( this );		// watch events
 	
-	LLViewerMedia::setOnlyAudibleMediaTextureID(mMediaCtrl->getTextureID());
+	LLViewerMedia::getInstance()->setOnlyAudibleMediaTextureID(mMediaCtrl->getTextureID());
 
 	mCancelBtn = getChild<LLButton>("cancel_btn");
 	mCancelBtn->setClickedCallback(  LLProgressView::onCancelButtonClicked, NULL );
@@ -232,7 +232,7 @@ void LLProgressView::setStartupComplete()
 
 	// NickyD: FIRE-3063; Enable Audio for all media sources again. They got disabled during postBuild(), but as we never reach LLProgressView::draw
 	// if the progress is disabled, we would never get media audio back.
-	LLViewerMedia::setOnlyAudibleMediaTextureID(LLUUID::null);
+	LLViewerMedia::getInstance()->setOnlyAudibleMediaTextureID(LLUUID::null);
 }
 
 void LLProgressView::setVisible(BOOL visible)
@@ -342,7 +342,7 @@ void LLProgressView::draw()
 		{
 			mFadeToWorldTimer.stop();
 
-			LLViewerMedia::setOnlyAudibleMediaTextureID(LLUUID::null);
+			LLViewerMedia::getInstance()->setOnlyAudibleMediaTextureID(LLUUID::null);
 
 			// Fade is complete, release focus
 			gFocusMgr.releaseFocusIfNeeded( this );

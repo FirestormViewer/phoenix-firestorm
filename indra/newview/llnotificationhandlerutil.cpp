@@ -232,7 +232,7 @@ void LLHandlerUtil::logGroupNoticeToIMGroup(
 	{
 		// Legacy support and fallback method
 		// if we can't retrieve sender id from group notice system message, try to lookup it from cache
-		sender_id = LLAvatarNameCache::findIdByName(sender_name);
+		sender_id = LLAvatarNameCache::getInstance()->findIdByName(sender_name);
 	}
 
 	// <FS:KC> Better group notices to IM log

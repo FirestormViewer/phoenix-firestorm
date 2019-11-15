@@ -1963,7 +1963,7 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 	else
 	{
 		// Check for video
-		LLViewerParcelMedia::update(parcel);
+		LLViewerParcelMedia::getInstance()->update(parcel);
 
 		// Then check for music
 		if (gAudiop)
@@ -2033,7 +2033,7 @@ void LLViewerParcelMgr::optionally_start_music(const std::string& music_url)
 		{
 			if (gSavedSettings.getBOOL("MediaEnableFilter"))
 			{
-				LLViewerParcelMedia::filterAudioUrl(music_url);
+				LLViewerParcelMedia::getInstance()->filterAudioUrl(music_url);
 			}
 			else
 			{
