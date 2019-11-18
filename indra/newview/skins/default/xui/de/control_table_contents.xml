@@ -5,7 +5,7 @@
 	<columns label="Alternative 1" name="lst_ctrl2" />
 	<columns label="Alternative 2" name="lst_ctrl3" />
 	<rows name="move_actions">
-		<columns label="Bewegungs-Aktionen" name="lst_action"/>
+		<columns label="Bewegungsaktionen" name="lst_action"/>
 	</rows>
 	<rows name="walk_to">
 		<columns name="lst_action" tool_tip="Gehe zur aktuellen Position, auf die der Mauszeiger zeigt" value="Gehe zu" />
