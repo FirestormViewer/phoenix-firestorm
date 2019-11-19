@@ -624,11 +624,11 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						parcel->setMediaType(media_type);
 						if (gSavedSettings.getBOOL("MediaEnableFilter"))
 						{
-							LLViewerParcelMedia::filterMediaUrl(parcel);
+							LLViewerParcelMedia::getInstance()->filterMediaUrl(parcel);
 						}
 						else
 						{
-							LLViewerParcelMedia::play(parcel);
+							LLViewerParcelMedia::getInstance()->play(parcel);
 						}
 						LLViewerParcelMediaAutoPlay::playStarted();
 						return false;
@@ -642,7 +642,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				{
 					if (gSavedSettings.getBOOL("MediaEnableFilter"))
 					{
-						LLViewerParcelMedia::filterAudioUrl(status);
+						LLViewerParcelMedia::getInstance()->filterAudioUrl(status);
 					}
 					else
 					{
@@ -1532,7 +1532,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					LLVector3 cameraPosition = gAgentCamera.getCameraPositionAgent();
 					std::string cameraPositionString = llformat("<%.3f, %.3f, %.3f>",
 						cameraPosition.mV[VX], cameraPosition.mV[VY], cameraPosition.mV[VZ]);
-					LLUI::sWindow->copyTextToClipboard(utf8str_to_wstring(cameraPositionString));
+					LLUI::getInstance()->getWindow()->copyTextToClipboard(utf8str_to_wstring(cameraPositionString));
 
 					LLStringUtil::format_map_t args;
 					args["[POS]"] = cameraPositionString;

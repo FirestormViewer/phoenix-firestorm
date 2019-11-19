@@ -48,8 +48,8 @@ BOOL FloaterMediaLists::postBuild()
 	childSetAction("add_blacklist", boost::bind(&FloaterMediaLists::onBlacklistAdd, this));
 	childSetAction("remove_blacklist", boost::bind(&FloaterMediaLists::onBlacklistRemove, this));
 	
-	for (LLSD::array_iterator p_itr = LLViewerParcelMedia::sMediaFilterList.beginArray();
-		 p_itr != LLViewerParcelMedia::sMediaFilterList.endArray();
+	for (LLSD::array_iterator p_itr = LLViewerParcelMedia::getInstance()->mMediaFilterList.beginArray();
+		 p_itr != LLViewerParcelMedia::getInstance()->mMediaFilterList.endArray();
 		 ++p_itr)
 	{
 		LLSD itr = (*p_itr);
@@ -88,17 +88,18 @@ void FloaterMediaLists::onWhitelistRemove()
 	{
 		std::string domain = mWhitelistSLC->getSelectedItemLabel();
 
-		for (S32 i = 0; i < (S32)LLViewerParcelMedia::sMediaFilterList.size(); ++i)
+		LLViewerParcelMedia* inst = LLViewerParcelMedia::getInstance();
+		for (S32 i = 0; i < (S32)inst->mMediaFilterList.size(); ++i)
 		{
-			if (LLViewerParcelMedia::sMediaFilterList[i]["domain"].asString() == domain)
+			if (inst->mMediaFilterList[i]["domain"].asString() == domain)
 			{
-				LLViewerParcelMedia::sMediaFilterList.erase(i);
-				LLViewerParcelMedia::saveDomainFilterList();
+				inst->mMediaFilterList.erase(i);
+				inst->saveDomainFilterList();
 				//HACK: should really see if the URL being deleted
 				//  is the same as the saved one
-				LLViewerParcelMedia::sMediaLastURL = "";
-				LLViewerParcelMedia::sAudioLastURL = "";
-				LLViewerParcelMedia::sMediaReFilter = true;
+				inst->mMediaLastURL = "";
+				inst->mAudioLastURL = "";
+				inst->mMediaReFilter = true;
 				break;
 			}
 		}
@@ -122,17 +123,18 @@ void FloaterMediaLists::onBlacklistRemove()
 	{
 		std::string domain = mBlacklistSLC->getSelectedItemLabel();
 
-		for (S32 i = 0; i < (S32)LLViewerParcelMedia::sMediaFilterList.size(); ++i)
+		LLViewerParcelMedia* inst = LLViewerParcelMedia::getInstance();
+		for (S32 i = 0; i < (S32)inst->mMediaFilterList.size(); ++i)
 		{
-			if (LLViewerParcelMedia::sMediaFilterList[i]["domain"].asString() == domain)
+			if (inst->mMediaFilterList[i]["domain"].asString() == domain)
 			{
-				LLViewerParcelMedia::sMediaFilterList.erase(i);
-				LLViewerParcelMedia::saveDomainFilterList();
+				inst->mMediaFilterList.erase(i);
+				inst->saveDomainFilterList();
 				//HACK: should really see if the URL being deleted
 				//  is the same as the saved one
-				LLViewerParcelMedia::sMediaLastURL = "";
-				LLViewerParcelMedia::sAudioLastURL = "";
-				LLViewerParcelMedia::sMediaReFilter = true;
+				inst->mMediaLastURL = "";
+				inst->mAudioLastURL = "";
+				inst->mMediaReFilter = true;
 				break;
 			}
 		}
@@ -147,7 +149,8 @@ bool FloaterMediaLists::handleAddDomainCallback(const LLSD& notification, const 
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if (option == 0)
 	{
-		const std::string domain = LLViewerParcelMedia::extractDomain(response["url"].asString());
+		LLViewerParcelMedia* inst = LLViewerParcelMedia::getInstance();
+		const std::string domain = inst->extractDomain(response["url"].asString());
 		if (domain.empty())
 		{
 			LL_INFOS("MediaFilter") << "No domain specified" << LL_ENDL;
@@ -158,8 +161,8 @@ bool FloaterMediaLists::handleAddDomainCallback(const LLSD& notification, const 
 		LLSD newmedia;
 		newmedia["domain"] = domain;
 		newmedia["action"] = (whitelist ? "allow" : "deny");
-		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
-		LLViewerParcelMedia::saveDomainFilterList();
+		inst->mMediaFilterList.append(newmedia);
+		inst->saveDomainFilterList();
 		
 		LLFloater* floater = LLFloaterReg::findInstance("media_lists");
 		if (floater)

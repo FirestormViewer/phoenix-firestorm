@@ -60,8 +60,6 @@
 #include "rlvactions.h"
 #include "rlvhandler.h"
 
-using namespace boost;
-
 static const F32 FS_RADAR_LIST_UPDATE_INTERVAL = 1.f;
 
 /**
@@ -103,7 +101,7 @@ FSRadar::FSRadar() :
 	mRadarListUpdater = new FSRadarListUpdater(boost::bind(&FSRadar::updateRadarList, this));
 
 	// Use the callback from LLAvatarNameCache here or we might update the names too early!
-	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&FSRadar::updateNames, this));
+	LLAvatarNameCache::getInstance()->addUseDisplayNamesCallback(boost::bind(&FSRadar::updateNames, this));
 	mShowUsernamesCallbackConnection = gSavedSettings.getControl("NameTagShowUsernames")->getSignal()->connect(boost::bind(&FSRadar::updateNames, this));
 
 	mNameFormatCallbackConnection = gSavedSettings.getControl("RadarNameFormat")->getSignal()->connect(boost::bind(&FSRadar::updateNames, this));
