@@ -338,21 +338,18 @@ LLSingletonBase::vec_t LLSingletonBase::dep_sort()
 
 void LLSingletonBase::cleanup_()
 {
-    logdebugs("calling ",
-              demangle(typeid(*this).name()).c_str(), "::cleanupSingleton()");
+    logdebugs("calling ", classname(this).c_str(), "::cleanupSingleton()");
     try
     {
         cleanupSingleton();
     }
     catch (const std::exception& e)
     {
-        logwarns("Exception in ", demangle(typeid(*this).name()).c_str(),
-                 "::cleanupSingleton(): ", e.what());
+        logwarns("Exception in ", classname(this).c_str(), "::cleanupSingleton(): ", e.what());
     }
     catch (...)
     {
-        logwarns("Unknown exception in ", classname(this).c_str(),
-                 "::cleanupSingleton()");
+        logwarns("Unknown exception in ", classname(this).c_str(), "::cleanupSingleton()");
     }
 }
 
