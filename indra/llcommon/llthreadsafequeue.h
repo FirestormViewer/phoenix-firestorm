@@ -36,8 +36,8 @@
 #pragma warning (disable:4265)
 #endif
 // 'std::_Pad' : class has virtual functions, but destructor is not virtual
-#include <mutex>
-#include <condition_variable>
+#include <mutex>                    // std::unique_lock
+#include <boost/fiber/condition_variable.hpp>
 
 #if LL_WINDOWS
 #pragma warning (pop)
@@ -114,9 +114,9 @@ private:
 	std::deque< ElementT > mStorage;
 	U32 mCapacity;
 
-	std::mutex mLock;
-	std::condition_variable mCapacityCond;
-	std::condition_variable mEmptyCond;
+	boost::fibers::mutex mLock;
+	boost::fibers::condition_variable mCapacityCond;
+	boost::fibers::condition_variable mEmptyCond;
 };
 
 // LLThreadSafeQueue
@@ -132,10 +132,9 @@ mCapacity(capacity)
 template<typename ElementT>
 void LLThreadSafeQueue<ElementT>::pushFront(ElementT const & element)
 {
+    std::unique_lock<decltype(mLock)> lock1(mLock);
     while (true)
     {
-        std::unique_lock<std::mutex> lock1(mLock);
-
         if (mStorage.size() < mCapacity)
         {
             mStorage.push_front(element);
@@ -152,7 +151,7 @@ void LLThreadSafeQueue<ElementT>::pushFront(ElementT const & element)
 template<typename ElementT>
 bool LLThreadSafeQueue<ElementT>::tryPushFront(ElementT const & element)
 {
-    std::unique_lock<std::mutex> lock1(mLock, std::defer_lock);
+    std::unique_lock<decltype(mLock)> lock1(mLock, std::defer_lock);
     if (!lock1.try_lock())
         return false;
 
@@ -168,10 +167,9 @@ bool LLThreadSafeQueue<ElementT>::tryPushFront(ElementT const & element)
 template<typename ElementT>
 ElementT LLThreadSafeQueue<ElementT>::popBack(void)
 {
+    std::unique_lock<decltype(mLock)> lock1(mLock);
     while (true)
     {
-        std::unique_lock<std::mutex> lock1(mLock);
-
         if (!mStorage.empty())
         {
             ElementT value = mStorage.back();
@@ -189,7 +187,7 @@ ElementT LLThreadSafeQueue<ElementT>::popBack(void)
 template<typename ElementT>
 bool LLThreadSafeQueue<ElementT>::tryPopBack(ElementT & element)
 {
-    std::unique_lock<std::mutex> lock1(mLock, std::defer_lock);
+    std::unique_lock<decltype(mLock)> lock1(mLock, std::defer_lock);
     if (!lock1.try_lock())
         return false;
 
@@ -206,7 +204,7 @@ bool LLThreadSafeQueue<ElementT>::tryPopBack(ElementT & element)
 template<typename ElementT>
 size_t LLThreadSafeQueue<ElementT>::size(void)
 {
-    std::lock_guard<std::mutex> lock(mLock);
+    std::lock_guard<decltype(mLock)> lock(mLock);
     return mStorage.size();
 }
 
