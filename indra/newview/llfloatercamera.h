@@ -42,7 +42,8 @@ enum ECameraControlMode
 {
 	CAMERA_CTRL_MODE_PAN,
 	CAMERA_CTRL_MODE_FREE_CAMERA,
-	CAMERA_CTRL_MODE_PRESETS
+	CAMERA_CTRL_MODE_PRESETS,
+	CAMERA_CTRL_MODE_MODES // <FS:Ansariel> Phototools support
 };
 
 class LLFloaterCamera : public LLFloater
@@ -122,6 +123,9 @@ private:
 	void fillFlatlistFromPanel (LLFlatListView* list, LLPanel* panel);
 
 	void handleAvatarEditingAppearance(bool editing);
+
+	// <FS:Ansariel> Phototools support
+	void switchViews(ECameraControlMode mode);
 
 	// set to true when free camera mode is selected in modes list
 	// remains true until preset camera mode is chosen, or pan button is clicked, or escape pressed

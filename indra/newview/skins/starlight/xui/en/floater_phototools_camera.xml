@@ -28,6 +28,7 @@
 	<floater.string name="free_mode_title">
 		View Object
 	</floater.string>
+	<string name="inactive_combo_text">Use preset</string>
 	<tab_container
 	 follows="all"
 	 halign="center"
@@ -73,13 +74,15 @@
 					 follows="all"
 					 height="102"
 					 layout="topleft"
-					 left="50"
+					 left="10"
 					 name="preset_views_list"
 					 top_pad="0"
-					 width="220"
+					 right="-1"
 					 visible="false">
 						<panel_camera_item
-						 name="front_view">
+						 name="front_view"
+						 height="20"
+						 top="10">
 							<panel_camera_item.mousedown_callback
 							 function="CameraPresets.ChangeView"
 							 parameter="front_view"/>
@@ -88,13 +91,15 @@
 							<panel_camera_item.selected_picture
 							 image_name="Cam_Preset_Front_On"/>
 							<panel_camera_item.text
-							 name="front_view_text">
+							 name="front_view_text"
+							 top="22">
 								Front View
 							</panel_camera_item.text>
 						</panel_camera_item>
 						<panel_camera_item
 						 name="group_view"
-						 top_pad="4">
+						 height="20"
+						 top_pad="6">
 							<panel_camera_item.mousedown_callback
 							 function="CameraPresets.ChangeView"
 							 parameter="group_view"/>
@@ -103,14 +108,16 @@
 							<panel_camera_item.selected_picture
 							 image_name="Cam_Preset_Side_On"/>
 							<panel_camera_item.text
-							 name="side_view_text">
+							 name="side_view_text"
+							 top="22">
 								Side View
 							</panel_camera_item.text>
 						</panel_camera_item>
 						<panel_camera_item
 						 name="rear_view"
 						 layout="topleft"
-						 top_pad="4">
+						 height="20"
+						 top_pad="6">
 							<panel_camera_item.mousedown_callback
 							 function="CameraPresets.ChangeView"
 							 parameter="rear_view"/>
@@ -119,10 +126,52 @@
 							<panel_camera_item.selected_picture
 							 image_name="Cam_Preset_Back_On"/>
 							<panel_camera_item.text
-							 name="rear_view_text">
+							 name="rear_view_text"
+							 top="22">
 								Rear View
 							</panel_camera_item.text>
 						</panel_camera_item>
+					<combo_box
+					 height="23"
+					 left="0"
+					 mouse_opaque="true"
+					 name="preset_combo"
+					 top_pad="1"
+					 width="122">
+					 <combo_box.item
+						label="Use preset"
+						name="Use preset"
+						value="default" />
+					</combo_box>
+					<button
+					 height="16"
+					 width="16"  
+					 layout="topleft"
+					 mouse_opaque="true"
+					 name="gear_btn"
+					 tool_tip="My Camera Presets"
+					 top_delta="3"
+					 left_pad="3" 
+					 image_selected="Icon_Gear"
+					 image_pressed="Icon_Gear"
+					 image_unselected="Icon_Gear"
+					 is_toggle="true">
+					 <button.commit_callback
+						function="CameraPresets.ShowPresetsList"/>
+					</button>
+					<button
+					 follows="top|left"
+					 height="23"
+					 label="Position..."
+					 layout="topleft"
+					 left_pad="5"
+					 name="camera_position_btn"
+					 top_delta="-3"
+					 width="103">
+					 <button.commit_callback
+						function="Floater.Show"
+						parameter="prefs_view_advanced"/>
+					</button>
 					</panel>
 					<panel
 					 follows="all"
