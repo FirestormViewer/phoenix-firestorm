@@ -3,5 +3,5 @@
 	<text name="Camera Presets">
 		Kameravoreinstellungen
 	</text>
-	<button label="Anzeige-Einstellungen öffnen" name="open_prefs_btn" tool_tip="Anzeige-Einstellungen anzeigen"/>
+	<button label="Kamera-Fenster öffnen" name="open_prefs_btn" tool_tip="Zeigt das Kamera-Fenster an"/>
 </panel>

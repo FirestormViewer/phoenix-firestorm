@@ -3470,6 +3470,11 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 	<notification name="DefaultPresetNotSaved">
 		Die Standard-Voreinstellung kann nicht überschrieben werden.
 	</notification>
+	<notification name="PresetAlreadyExists">
+		„[NAME]“ wird bereits verwendet. Sie können diese
+Voreinstellung überschreiben oder einen anderen Namen wählen
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="PresetNotDeleted">
 		Fehler beim Löschen der Voreinstellung [NAME].
 	</notification>
@@ -3478,7 +3483,7 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 	</notification>
 	<notification name="ObjectMediaFailure">
 		Serverfehler: Medienaktualisierung oder Fehler
-&apos;[ERROR]&apos;
+„[ERROR]“
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="TextChatIsMutedByModerator">

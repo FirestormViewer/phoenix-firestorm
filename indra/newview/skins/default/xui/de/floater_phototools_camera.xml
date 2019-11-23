@@ -45,6 +45,11 @@
 								Mouselook
 							</panel_camera_item.text>
 						</panel_camera_item>
+						<combo_box name="preset_combo">
+							<combo_box.item label="Voreinstellung verwenden" name="Use preset"/>
+						</combo_box>
+						<button name="gear_btn" tool_tip="Kamera-Voreinstellungen"/>
+						<button label="Position..." name="camera_position_btn"/>
 					</panel>
 					<panel name="zoom">
 						<joystick_rotate name="cam_rotate_stick" tool_tip="Kamera um Fokus kreisen"/>

@@ -3,19 +3,10 @@
 	<tab_container label="Move and View" name="tabs">
 		<!--View-->
 		<panel label="Ansicht" name="tab-view">
-			<text name="preset_camera_label" width="130">
-				Aktuelle Voreinstellung:
-			</text>
 			<slider label="Sichtwinkel" name="camera_fov"/>
 			<slider label="Abstand" name="camera_offset_scale"/>
 			<slider label="Übergangszeit" name="camera_transition_time"/>
 			<slider label="Glättung" name="camera_position_smoothing"/>
-			<text name="camera_offset_label" tool_tip="Initialer Kamera-Abstand vom Avatar in der Rückansicht">
-				Kamera-Abstand:
-			</text>
-			<text name="camera_focus_offset_label" tool_tip="Initialer Fokuspunkt-Abstand relativ zum Avatar  für die Kamera in der Rückansicht (X-Achse ist vorwärts)">
-				Fokus-Abstand:
-			</text>
 			<check_box label="Kamerabeschränkungen aufheben" name="DisableCameraConstraints" tool_tip="Erlaubt die Bewegungen der Kamera außerhalb der normalen Grenzen und der Erdoberfläche"/>
 			<check_box label="Mausrad nicht zum Zoomen verwenden" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2">
@@ -25,12 +16,6 @@
 			<check_box label="Aussehen" name="appearance_camera_movement" tool_tip="Automatische Kamerapositionierung im Bearbeitenmodus verwenden"/>
 			<check_box label="Zusätzliche Beleuchtung" name="EditAppearanceLighting" tool_tip="Aktiviert die zusätzliche Beleuchtung, wenn die Form des Avatars bearbeitet wird."/>
 			<check_box label="Visuelle Hilfen" name="FSAppearanceShowHints" tool_tip="Aktiviert die visuellen Hilfen, die die Teile des Avatars anzeigen, die modifiziert werden."/>
-			<text name="presets_buttons_label" width="100">
-				Voreinstellungen:
-			</text>
-			<button label="Speichern" name="PrefCameraSaveButton"/>
-			<button label="Laden" name="PrefCameraLoadButton"/>
-			<button label="Löschen" name="PrefCameraDeleteButton"/>
 			<check_box label="Klick auf Avatar hält Kameraposition" name="clickonavatarkeepscamera" tool_tip="Normalerweise wird die Kameraposition beim Anklicken des Avatars zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
 			<check_box label="Kameraposition nach Teleport zurücksetzen (innerhalb einer Region)" name="FSResetCameraOnTP" tool_tip="Normalerweise wird die Kameraposition beim Teleportieren zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
 			<check_box label="Kameraposition bei Avatarbewegung zurücksetzen" name="FSResetCameraOnMovement"/>

@@ -131,47 +131,47 @@
 								Rear View
 							</panel_camera_item.text>
 						</panel_camera_item>
-					<combo_box
-					 height="23"
-					 left="0"
-					 mouse_opaque="true"
-					 name="preset_combo"
-					 top_pad="1"
-					 width="122">
-					 <combo_box.item
-						label="Use preset"
-						name="Use preset"
-						value="default" />
-					</combo_box>
-					<button
-					 height="16"
-					 width="16"  
-					 layout="topleft"
-					 mouse_opaque="true"
-					 name="gear_btn"
-					 tool_tip="My Camera Presets"
-					 top_delta="3"
-					 left_pad="3" 
-					 image_selected="Icon_Gear"
-					 image_pressed="Icon_Gear"
-					 image_unselected="Icon_Gear"
-					 is_toggle="true">
-					 <button.commit_callback
-						function="CameraPresets.ShowPresetsList"/>
-					</button>
-					<button
-					 follows="top|left"
-					 height="23"
-					 label="Position..."
-					 layout="topleft"
-					 left_pad="5"
-					 name="camera_position_btn"
-					 top_delta="-3"
-					 width="103">
-					 <button.commit_callback
-						function="Floater.Show"
-						parameter="prefs_view_advanced"/>
-					</button>
+						<combo_box
+						 height="23"
+						 left="0"
+						 mouse_opaque="true"
+						 name="preset_combo"
+						 top_pad="1"
+						 width="122">
+						 <combo_box.item
+							label="Use preset"
+							name="Use preset"
+							value="default" />
+						</combo_box>
+						<button
+						 height="16"
+						 width="16"  
+						 layout="topleft"
+						 mouse_opaque="true"
+						 name="gear_btn"
+						 tool_tip="Camera Presets"
+						 top_delta="3"
+						 left_pad="3" 
+						 image_selected="Icon_Gear"
+						 image_pressed="Icon_Gear"
+						 image_unselected="Icon_Gear"
+						 is_toggle="true">
+						 <button.commit_callback
+							function="CameraPresets.ShowPresetsList"/>
+						</button>
+						<button
+						 follows="top|left"
+						 height="23"
+						 label="Position..."
+						 layout="topleft"
+						 left_pad="5"
+						 name="camera_position_btn"
+						 top_delta="-3"
+						 width="103">
+						 <button.commit_callback
+							function="Floater.Show"
+							parameter="prefs_view_advanced"/>
+						</button>
 					</panel>
 					<panel
 					 follows="all"
