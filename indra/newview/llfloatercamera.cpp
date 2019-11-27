@@ -573,12 +573,20 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 	{
 		LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
 		if (camera_floater)
-		camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+		{
+			camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			camera_floater->updateItemsSelection();
+			camera_floater->fromFreeToPresets();
+		}
 
 		// <FS:Ansariel> Phototools camera
 		camera_floater = LLFloaterCamera::findPhototoolsInstance();
 		if (camera_floater)
-		camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+		{
+			camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			camera_floater->updateItemsSelection();
+			camera_floater->fromFreeToPresets();
+		}
 		// </FS:Ansariel>
 	}
 	// <FS:Ansariel> Improved camera floater
@@ -612,6 +620,34 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 
 		switchToPreset(name);
 	}
+}
+
+/*static*/
+void LLFloaterCamera::switchToPreset(const std::string& name)
+{
+	sFreeCamera = false;
+	clear_camera_tool();
+	if (PRESETS_REAR_VIEW == name)
+	{
+		gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
+	}
+	else if (PRESETS_SIDE_VIEW == name)
+	{
+		gAgentCamera.switchCameraPreset(CAMERA_PRESET_GROUP_VIEW);
+	}
+	else if (PRESETS_FRONT_VIEW == name)
+	{
+		gAgentCamera.switchCameraPreset(CAMERA_PRESET_FRONT_VIEW);
+	}
+	else
+	{
+		gAgentCamera.switchCameraPreset(CAMERA_PRESET_CUSTOM);
+	}
+	
+	if (gSavedSettings.getString("PresetCameraActive") != name)
+	{
+		LLPresetsManager::getInstance()->loadPreset(PRESETS_CAMERA, name);
+	}
 
 	LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
 	if (camera_floater)
@@ -628,28 +664,6 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 		camera_floater->fromFreeToPresets();
 	}
 	// </FS:Ansariel>
-}
-
-/*static*/
-void LLFloaterCamera::switchToPreset(const std::string& name)
-{
-	sFreeCamera = false;
-	clear_camera_tool();
-	if ("rear_view" == name)
-	{
-		gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
-		LLPresetsManager::getInstance()->loadPreset(PRESETS_CAMERA, PRESETS_REAR_VIEW);
-	}
-	else if ("group_view" == name)
-	{
-		gAgentCamera.switchCameraPreset(CAMERA_PRESET_GROUP_VIEW);
-		LLPresetsManager::getInstance()->loadPreset(PRESETS_CAMERA, PRESETS_SIDE_VIEW);
-	}
-	else if ("front_view" == name)
-	{
-		gAgentCamera.switchCameraPreset(CAMERA_PRESET_FRONT_VIEW);
-		LLPresetsManager::getInstance()->loadPreset(PRESETS_CAMERA, PRESETS_FRONT_VIEW);
-	}
 }
 
 void LLFloaterCamera::fromFreeToPresets()
@@ -697,12 +711,9 @@ void LLFloaterCamera::onSavePreset()
 void LLFloaterCamera::onCustomPresetSelected()
 {
 	std::string selected_preset = mPresetCombo->getSelectedItemLabel();
-	if (gSavedSettings.getString("PresetCameraActive") != selected_preset && getString("inactive_combo_text") != selected_preset)
+	if (getString("inactive_combo_text") != selected_preset)
 	{
-		gAgentCamera.switchCameraPreset(CAMERA_PRESET_CUSTOM);
-		updateItemsSelection();
-		fromFreeToPresets();
-		LLPresetsManager::getInstance()->loadPreset(PRESETS_CAMERA, selected_preset);
+		switchToPreset(selected_preset);
 	}
 }
 

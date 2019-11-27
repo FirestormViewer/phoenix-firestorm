@@ -106,9 +106,14 @@ void LLPresetsManager::createMissingDefault(const std::string& subdirectory)
 
 void LLPresetsManager::createCameraDefaultPresets()
 {
-	createDefaultCameraPreset(PRESETS_REAR_VIEW);
-	createDefaultCameraPreset(PRESETS_FRONT_VIEW);
-	createDefaultCameraPreset(PRESETS_SIDE_VIEW);
+	bool is_default_created = createDefaultCameraPreset(PRESETS_REAR_VIEW);
+	is_default_created |= createDefaultCameraPreset(PRESETS_FRONT_VIEW);
+	is_default_created |= createDefaultCameraPreset(PRESETS_SIDE_VIEW);
+
+	if (is_default_created)
+	{
+		triggerChangeCameraSignal();
+	}
 }
 
 void LLPresetsManager::startWatching(const std::string& subdirectory)
@@ -153,29 +158,6 @@ std::string LLPresetsManager::getPresetsDir(const std::string& subdirectory)
 	// </FS:Ansariel>
 	if (!gDirUtilp->fileExists(dest_path))
 		LLFile::mkdir(dest_path);
-
-	if (PRESETS_CAMERA == subdirectory)
-	{
-		std::string source_dir = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, PRESETS_CAMERA);
-		LLDirIterator dir_iter(source_dir, "*.xml");
-		bool found = true;
-		while (found)
-		{
-			std::string file;
-			found = dir_iter.next(file);
-
-			if (found)
-			{
-				std::string source = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, PRESETS_CAMERA, file);
-				file = LLURI::escape(file);
-				// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
-				//std::string dest = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_CAMERA, file);
-				std::string dest = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR, PRESETS_CAMERA, file);
-				// </FS:Ansariel>
-				LLFile::copy(source, dest);
-			}
-		}
-	}
 
 	return dest_path;
 }
@@ -633,7 +615,7 @@ void LLPresetsManager::resetCameraPreset(std::string preset_name)
 	}
 }
 
-void LLPresetsManager::createDefaultCameraPreset(std::string preset_name, bool force_reset)
+bool LLPresetsManager::createDefaultCameraPreset(std::string preset_name, bool force_reset)
 {
 	// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
 	//std::string preset_file = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR,
@@ -643,13 +625,10 @@ void LLPresetsManager::createDefaultCameraPreset(std::string preset_name, bool f
 	if (!gDirUtilp->fileExists(preset_file) || force_reset)
 	{
 		std::string template_name = preset_name.substr(0, preset_name.size() - PRESETS_VIEW_SUFFIX.size());
-		// <FS:Ansariel> Template is in application's app_settings folder
-		//std::string default_template_file = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR,
-		std::string default_template_file = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,
-		// </FS:Ansariel>
-			PRESETS_CAMERA, template_name + ".xml");
-		LLFile::copy(default_template_file, preset_file);
+		std::string default_template_file = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, PRESETS_CAMERA, template_name + ".xml");
+		return LLFile::copy(default_template_file, preset_file);
 	}
+	return false;
 }
 
 boost::signals2::connection LLPresetsManager::setPresetListChangeCameraCallback(const preset_list_signal_t::slot_type& cb)
