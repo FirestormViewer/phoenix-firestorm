@@ -3696,6 +3696,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 		// <FS:Ansariel> Show ARW in nametag options (for Jelly Dolls)
 		static const std::string complexity_label = LLTrans::getString("Nametag_Complexity_Label");
+		static const std::string texture_area_label = LLTrans::getString("Nametag_Texture_Area_Label");
 		if (show_arw_tag &&
 		   ((isSelf() && show_own_arw_tag) ||
 		   (!isSelf() && (!show_too_complex_only_arw_tag || isTooComplex()))))
@@ -3719,7 +3720,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				LLResMgr::getInstance()->getIntegerString(complexity_string, mAttachmentSurfaceArea);
 				label_args["TEXTURE_AREA"] = complexity_string;
 
-				addNameTagLine(format_string(complexity_label, label_args), LLColor4::red, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
+				addNameTagLine(format_string(texture_area_label, label_args), LLColor4::red, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
 			}
 		}
 		// </FS:Ansariel>
@@ -5451,6 +5452,15 @@ U32 LLVOAvatar::renderSkinned()
 		BOOL first_pass = TRUE;
 		if (!LLDrawPoolAvatar::sSkipOpaque)
 		{
+			if (isUIAvatar() && mIsDummy)
+			{
+				LLViewerJoint* hair_mesh = getViewerJoint(MESH_ID_HAIR);
+				if (hair_mesh)
+				{
+					num_indices += hair_mesh->render(mAdjustedPixelArea, first_pass, mIsDummy);
+				}
+				first_pass = FALSE;
+			}
 			if (!isSelf() || gAgent.needsRenderHead() || LLPipeline::sShadowRender)
 			{
 				if (isTextureVisible(TEX_HEAD_BAKED) || isUIAvatar())
@@ -5458,7 +5468,7 @@ U32 LLVOAvatar::renderSkinned()
 					LLViewerJoint* head_mesh = getViewerJoint(MESH_ID_HEAD);
 					if (head_mesh)
 					{
-						num_indices += head_mesh->render(mAdjustedPixelArea, TRUE, mIsDummy);
+						num_indices += head_mesh->render(mAdjustedPixelArea, first_pass, mIsDummy);
 					}
 					first_pass = FALSE;
 				}
