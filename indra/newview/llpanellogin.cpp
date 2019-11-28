@@ -556,12 +556,12 @@ void LLPanelLogin::populateFields(LLPointer<LLCredential> credential, bool remem
     if (sInstance->mFirstLoginThisInstall)
     {
         // no list to populate
-        setFields(credential, remember_psswrd);
+        setFields(credential);
     }
     else
     {
         sInstance->getChild<LLUICtrl>("remember_name")->setValue(remember_user);
-        sInstance->populateUserList(credential, remember_psswrd);
+        sInstance->populateUserList(credential);
         remember_check->setEnabled(remember_user);
     }
 }
@@ -582,16 +582,13 @@ void LLPanelLogin::resetFields()
     }
     else
     {
-        LLUICtrl* remember_check = sInstance->getChild<LLUICtrl>("remember_check");
-        bool remember_psswrd = remember_check->getValue();
         LLPointer<LLCredential> cred = gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());
-        sInstance->populateUserList(cred, remember_psswrd);
+        sInstance->populateUserList(cred);
     }
 }
 
 // static
-void LLPanelLogin::setFields(LLPointer<LLCredential> credential,
-							 bool remember_psswrd)
+void LLPanelLogin::setFields(LLPointer<LLCredential> credential)
 {
 	if (!sInstance)
 	{
@@ -633,7 +630,7 @@ void LLPanelLogin::setFields(LLPointer<LLCredential> credential,
 	LL_INFOS("Credentials") << "Setting authenticator field " << authenticator["type"].asString() << LL_ENDL;
 	if(authenticator.isMap() && 
 	   authenticator.has("secret") && 
-	   (authenticator["secret"].asString().size() > 0) && remember_psswrd)
+	   (authenticator["secret"].asString().size() > 0))
 	{
 		
 		// This is a MD5 hex digest of a password.
@@ -754,7 +751,7 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
     }
     else
     {
-        remember_user = true;
+        remember_user = remember_psswrd; // on panel_login_first "remember_check" is named as 'remember me'
     }
 }
 
@@ -1032,19 +1029,19 @@ void LLPanelLogin::onClickConnect(void *)
 			LLSD allowed_credential_types;
 			LLGridManager::getInstance()->getLoginIdentifierTypes(allowed_credential_types);
 			
-				// check the typed in credential type against the credential types expected by the server.
-				for(LLSD::array_iterator i = allowed_credential_types.beginArray();
-					i != allowed_credential_types.endArray();
-					i++)
-				{
+			// check the typed in credential type against the credential types expected by the server.
+			for(LLSD::array_iterator i = allowed_credential_types.beginArray();
+				i != allowed_credential_types.endArray();
+				i++)
+			{
 				
-					if(i->asString() == identifier_type)
-					{
-						// yay correct credential type
-						sInstance->mCallback(0, sInstance->mCallbackData);
-						return;
-					}
+				if(i->asString() == identifier_type)
+				{
+					// yay correct credential type
+					sInstance->mCallback(0, sInstance->mCallbackData);
+					return;
 				}
+			}
 			
 			// Right now, maingrid is the only thing that is picky about
 			// credential format, as it doesn't yet allow account (single username)
@@ -1064,7 +1061,7 @@ void LLPanelLogin::onClickVersion(void*)
 //static
 void LLPanelLogin::onClickForgotPassword(void*)
 {
-	if (sInstance)
+	if (sInstance )
 	{
 		LLWeb::loadURLExternal(sInstance->getString( "forgot_password_url" ));
 	}
@@ -1098,8 +1095,7 @@ void LLPanelLogin::onUserListCommit(void*)
         {
             std::string user_key = username_combo->getSelectedValue();
             LLPointer<LLCredential> cred = gSecAPIHandler->loadFromCredentialMap("login_list", LLGridManager::getInstance()->getGrid(), user_key);
-            bool remember_psswrd = sInstance->getChild<LLUICtrl>("remember_check")->getValue();
-            setFields(cred, remember_psswrd);
+            setFields(cred);
             sInstance->mPasswordModified = false;
         }
         else
@@ -1158,10 +1154,9 @@ void LLPanelLogin::updateServer()
 			if(!sInstance->areCredentialFieldsDirty())
 			{
 				// populate dropbox and setFields
-				bool remember_psswrd = sInstance->getChild<LLUICtrl>("remember_check")->getValue();
 				// Note: following call is related to initializeLoginInfo()
 				LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());
-				sInstance->populateUserList(credential, remember_psswrd);
+				sInstance->populateUserList(credential);
 			}
 
 			// update the login panel links 
@@ -1200,7 +1195,7 @@ void LLPanelLogin::updateLoginButtons()
     }
 }
 
-void LLPanelLogin::populateUserList(LLPointer<LLCredential> credential, bool remember_psswrd)
+void LLPanelLogin::populateUserList(LLPointer<LLCredential> credential)
 {
     LLComboBox* user_combo = getChild<LLComboBox>("username_combo");
     user_combo->removeall();
@@ -1230,15 +1225,19 @@ void LLPanelLogin::populateUserList(LLPointer<LLCredential> credential, bool rem
         }
         else
         {
-            setFields(credential, remember_psswrd);
+            setFields(credential);
         }
     }
     else
     {
         if (credential.notNull())
         {
-            user_combo->add(LLPanelLogin::getUserName(credential), credential->userID(), ADD_BOTTOM, TRUE);
-            setFields(credential, remember_psswrd);
+            const LLSD &ident = credential->getIdentifier();
+            if (ident.isMap() && ident.has("type"))
+            {
+                user_combo->add(LLPanelLogin::getUserName(credential), credential->userID(), ADD_BOTTOM, TRUE);
+                setFields(credential);
+            }
         }
     }
 }
@@ -1288,6 +1287,7 @@ void LLPanelLogin::onSelectServer()
 		}			
 		break;
 	}
+
 	updateServer();
 }
 
@@ -1336,4 +1336,3 @@ std::string LLPanelLogin::getUserName(LLPointer<LLCredential> &cred)
     return "unknown";
 }
 #endif
-
