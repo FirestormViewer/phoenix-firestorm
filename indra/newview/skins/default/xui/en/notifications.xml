@@ -7313,14 +7313,7 @@ Please select at least one type of content to search (General, Moderate, or Adul
    icon="notify.tga"
    name="FlickrConnect"
    type="notifytip">
-    [MESSAGE]
-  </notification>
-
-  <notification
-   icon="notify.tga"
-   name="TwitterConnect"
-   type="notifytip">
-    [MESSAGE]
+   [MESSAGE]
   </notification>
 
   <notification

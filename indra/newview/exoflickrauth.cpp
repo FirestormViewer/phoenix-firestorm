@@ -125,9 +125,9 @@ void exoFlickrAuth::explanationCallback(const LLSD& notification, const LLSD& re
 		LLSD params;
 		params["oauth_callback"] = "oob";
 		LL_INFOS("Flickr") << "Initialising OAuth authorisation process." << LL_ENDL;
-		exoFlickr::signRequest(params, "GET", "http://www.flickr.com/services/oauth/request_token");
+		exoFlickr::signRequest(params, "GET", "https://www.flickr.com/services/oauth/request_token");
 
-		std::string url = LLURI::buildHTTP( "http://www.flickr.com/services/oauth/request_token", LLSD::emptyArray(), params ).asString();
+		std::string url = LLURI::buildHTTP( "https://www.flickr.com/services/oauth/request_token", LLSD::emptyArray(), params ).asString();
 
 		exoFlickrAuth::authorized_callback_t callback = boost::bind(&exoFlickrAuth::gotRequestToken, this, _1, _2);
 		FSCoreHttpUtil::callbackHttpGetRaw( url, boost::bind( exoFlickrAuthResponse, _1, callback ) );
@@ -160,7 +160,7 @@ void exoFlickrAuth::gotRequestToken(bool success, const LLSD& params)
 	// We spawn the browser using spawnWebBrowser instead of LLWeb to bypass the
 	// browser prompt. This would a) be redundant to our earlier notice, and b)
 	// is unclickable because we have also presented a modal dialog.
-	gViewerWindow->getWindow()->spawnWebBrowser("http://www.flickr.com/services/oauth/authorize?perms=write&oauth_token=" + token, true);
+	gViewerWindow->getWindow()->spawnWebBrowser("https://www.flickr.com/services/oauth/authorize?perms=write&oauth_token=" + token, true);
 	LLNotificationsUtil::add("ExodusFlickrVerificationPrompt", LLSD(), LLSD(), boost::bind(&exoFlickrAuth::gotVerifier, this, _1, _2));
 }
 
@@ -177,9 +177,9 @@ void exoFlickrAuth::gotVerifier(const LLSD& notification, const LLSD& response)
 	// Proceed with stage three.
 	LLSD params;
 	params["oauth_verifier"] = response["oauth_verifier"];
-	exoFlickr::signRequest(params, "GET", "http://www.flickr.com/services/oauth/access_token");
+	exoFlickr::signRequest(params, "GET", "https://www.flickr.com/services/oauth/access_token");
 
-	std::string url = LLURI::buildHTTP( "http://www.flickr.com/services/oauth/access_token", LLSD::emptyArray(), params ).asString();
+	std::string url = LLURI::buildHTTP( "https://www.flickr.com/services/oauth/access_token", LLSD::emptyArray(), params ).asString();
 
 	exoFlickrAuth::authorized_callback_t callback = boost::bind(&exoFlickrAuth::gotAccessToken, this, _1, _2);
 	FSCoreHttpUtil::callbackHttpGetRaw( url, boost::bind( exoFlickrAuthResponse, _1, callback ) );
