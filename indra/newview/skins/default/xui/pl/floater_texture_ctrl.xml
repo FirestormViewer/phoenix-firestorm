@@ -22,7 +22,7 @@
 	<button label="Pusta" label_selected="Pusta" name="Blank"/>
 	<button label="Przezrocz." label_selected="Przezrocz." tool_tip="Uwaga: Jeśli wybrano teksturę z częściową lub całkowitą przezroczystością, to światło nie będzie przez nią rzucane." name="Transparent"/>
 	<button label="Żadna" label_selected="Żadna" name="None"/>
-	<button top_delta="-15" name="Pipette"/>
+	<button name="Pipette"/>
 	<text name="preview_disabled" value="Podgląd wyłączony"/>
 	<filter_editor label="Filtruj tekstury" name="inventory search editor"/>
 	<check_box label="Pokaż foldery" name="show_folders_check"/>

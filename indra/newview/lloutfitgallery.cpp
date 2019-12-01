@@ -1058,6 +1058,7 @@ void LLOutfitGallery::updateSnapshotFolderObserver()
 void LLOutfitGallery::refreshOutfit(const LLUUID& category_id)
 {
     LLViewerInventoryCategory* category = gInventory.getCategory(category_id);
+    if (category)
     {
         bool photo_loaded = false;
         LLInventoryModel::cat_array_t sub_cat_array;
@@ -1376,6 +1377,7 @@ void LLOutfitGallery::onSelectPhoto(LLUUID selected_outfit_id)
                 texture_floaterp->setOnFloaterCommitCallback(boost::bind(&LLOutfitGallery::onTexturePickerCommit, this, _1, _2));
                 texture_floaterp->setOnUpdateImageStatsCallback(boost::bind(&LLOutfitGallery::onTexturePickerUpdateImageStats, this, _1));
                 texture_floaterp->setLocalTextureEnabled(FALSE);
+                texture_floaterp->setCanApply(false, true);
             }
 
             floaterp->openFloater();

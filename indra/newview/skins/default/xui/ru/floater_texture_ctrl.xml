@@ -14,7 +14,8 @@
 		<radio_item label="Локально" name="local" value="1"/>
 	</radio_group>
 	<text name="unknown">
-		Размер: [DIMENSIONS]
+		Размер:
+[DIMENSIONS]
 	</text>
 	<button label="По умолчанию" label_selected="По умолчанию" name="Default"/>
 	<button label="Очистить" label_selected="Очистить" name="Blank"/>

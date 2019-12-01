@@ -8,8 +8,8 @@
 		<radio_item label="Local" name="local"/>
 	</radio_group>
 	<text name="unknown">
-         Taille :
- [DIMENSIONS]
+		Taille:
+[DIMENSIONS]
 	</text>
 	<button label="Par défaut" label_selected="Par défaut" name="Default"/>
 	<button label="Vierge" label_selected="Vierge" name="Blank"/>
