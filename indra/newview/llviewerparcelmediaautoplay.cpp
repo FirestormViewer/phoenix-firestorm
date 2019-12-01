@@ -54,29 +54,10 @@ LLViewerParcelMediaAutoPlay::LLViewerParcelMediaAutoPlay() :
 {
 }
 
-static LLViewerParcelMediaAutoPlay *sAutoPlay = NULL;
-
-// static
-void LLViewerParcelMediaAutoPlay::initClass()
-{
-	if (!sAutoPlay)
-		sAutoPlay = new LLViewerParcelMediaAutoPlay;
-}
-
-// static
-void LLViewerParcelMediaAutoPlay::cleanupClass()
-{
-	if (sAutoPlay)
-		delete sAutoPlay;
-}
-
 // static
 void LLViewerParcelMediaAutoPlay::playStarted()
 {
-	if (sAutoPlay)
-	{
-		sAutoPlay->mPlayed = TRUE;
-	}
+    LLSingleton<LLViewerParcelMediaAutoPlay>::getInstance()->mPlayed = TRUE;
 }
 
 BOOL LLViewerParcelMediaAutoPlay::tick()
@@ -125,7 +106,7 @@ BOOL LLViewerParcelMediaAutoPlay::tick()
 		(mTimeInParcel > AUTOPLAY_TIME) &&		// and if we've been here for so many seconds
 		(!this_media_url.empty()) &&			// and if the parcel has media
 		(stricmp(this_media_type.c_str(), LLMIMETypes::getDefaultMimeType().c_str()) != 0) &&
-		(LLViewerParcelMedia::sMediaImpl.isNull()))	// and if the media is not already playing
+		(!LLViewerParcelMedia::getInstance()->hasParcelMedia()))	// and if the media is not already playing
 	{
 		if (this_media_texture_id.notNull())	// and if the media texture is good
 		{
@@ -155,11 +136,11 @@ BOOL LLViewerParcelMediaAutoPlay::tick()
 								// Play, default value for ParcelMediaAutoPlayEnable
 								if (gSavedSettings.getBOOL("MediaEnableFilter"))
 								{
-									LLViewerParcelMedia::filterMediaUrl(this_parcel);
+									LLViewerParcelMedia::getInstance()->filterMediaUrl(this_parcel);
 								}
 								else
 								{
-									LLViewerParcelMedia::play(this_parcel);
+									LLViewerParcelMedia::getInstance()->play(this_parcel);
 								}
 								break;
 							case 2:
@@ -195,7 +176,7 @@ void LLViewerParcelMediaAutoPlay::onStartMusicResponse(const LLUUID &region_id, 
         // make sure we are still there
         if (parcel->getLocalID() == parcel_id && gAgent.getRegion()->getRegionID() == region_id)
         {
-            LLViewerParcelMedia::play(parcel);
+            LLViewerParcelMedia::getInstance()->play(parcel);
         }
     }
 }

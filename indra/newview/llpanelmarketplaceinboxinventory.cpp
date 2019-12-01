@@ -87,7 +87,7 @@ LLFolderViewFolder * LLInboxInventoryPanel::createFolderViewFolder(LLInvFVBridge
 	// <FS:Ansariel> Inventory specials
 	params.for_inventory = true;
 
-	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::getInstance()->mSettingGroups["config"], "FSFolderViewItemHeight");
 	const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
 	params.item_height = fsFolderViewItemHeight;
 	params.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
@@ -114,7 +114,7 @@ LLFolderViewItem * LLInboxInventoryPanel::createFolderViewItem(LLInvFVBridge * b
 	// <FS:Ansariel> Inventory specials
 	params.for_inventory = true;
 
-	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::getInstance()->mSettingGroups["config"], "FSFolderViewItemHeight");
 	const LLFolderViewItem::Params& default_params = LLUICtrlFactory::getDefaultParams<LLFolderViewItem>();
 	params.item_height = fsFolderViewItemHeight;
 	params.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;

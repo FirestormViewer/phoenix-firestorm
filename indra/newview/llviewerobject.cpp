@@ -505,7 +505,7 @@ void LLViewerObject::markDead()
 
 		if (flagCameraSource())
 		{
-			LLFollowCamMgr::removeFollowCamParams(mID);
+			LLFollowCamMgr::getInstance()->removeFollowCamParams(mID);
 		}
 
 		sNumZombieObjects++;

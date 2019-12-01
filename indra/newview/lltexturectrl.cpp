@@ -129,7 +129,7 @@ LLFloaterTexturePicker::LLFloaterTexturePicker(
 	setCanMinimize(FALSE);
 
 	// <FS:Ansariel> Threaded filepickers
-	mLocalBitmapsAddedCallbackConnection = LLLocalBitmapMgr::setBitmapsAddedCallback(boost::bind(&LLFloaterTexturePicker::onLocalBitmapsAddedCallback, this));
+	mLocalBitmapsAddedCallbackConnection = LLLocalBitmapMgr::getInstance()->setBitmapsAddedCallback(boost::bind(&LLFloaterTexturePicker::onLocalBitmapsAddedCallback, this));
 }
 
 LLFloaterTexturePicker::~LLFloaterTexturePicker()
@@ -459,7 +459,7 @@ BOOL LLFloaterTexturePicker::postBuild()
 
 	mLocalScrollCtrl = getChild<LLScrollListCtrl>("l_name_list");
 	mLocalScrollCtrl->setCommitCallback(onLocalScrollCommit, this);
-	LLLocalBitmapMgr::feedScrollList(mLocalScrollCtrl);
+	LLLocalBitmapMgr::getInstance()->feedScrollList(mLocalScrollCtrl);
 
 	mNoCopyTextureSelected = FALSE;
 
@@ -769,7 +769,7 @@ void LLFloaterTexturePicker::onBtnSelect(void* userdata)
 		if (self->mLocalScrollCtrl->getVisible() && !self->mLocalScrollCtrl->getAllSelected().empty())
 		{
 			LLUUID temp_id = self->mLocalScrollCtrl->getFirstSelected()->getColumn(LOCAL_TRACKING_ID_COLUMN)->getValue().asUUID();
-			local_id = LLLocalBitmapMgr::getWorldID(temp_id);
+			local_id = LLLocalBitmapMgr::getInstance()->getWorldID(temp_id);
 		}
 	}
 	
@@ -950,19 +950,19 @@ void LLFloaterTexturePicker::onModeSelect(LLUICtrl* ctrl, void *userdata)
 void LLFloaterTexturePicker::onBtnAdd(void* userdata)
 {
 	// <FS:Ansariel> Threaded filepickers
-	//if (LLLocalBitmapMgr::addUnit() == true)
+	//if (LLLocalBitmapMgr::getInstance()->addUnit() == true)
 	//{
 	//	LLFloaterTexturePicker* self = (LLFloaterTexturePicker*) userdata;
-	//	LLLocalBitmapMgr::feedScrollList(self->mLocalScrollCtrl);
+	//	LLLocalBitmapMgr::getInstance()->feedScrollList(self->mLocalScrollCtrl);
 	//}
-	LLLocalBitmapMgr::addUnit();
+	LLLocalBitmapMgr::getInstance()->addUnit();
 	// </FS:Ansariel>
 }
 
 // <FS:Ansariel> Threaded filepickers
 void LLFloaterTexturePicker::onLocalBitmapsAddedCallback()
 {
-	LLLocalBitmapMgr::feedScrollList(mLocalScrollCtrl);
+	LLLocalBitmapMgr::getInstance()->feedScrollList(mLocalScrollCtrl);
 }
 // </FS:Ansariel>
 
@@ -981,13 +981,13 @@ void LLFloaterTexturePicker::onBtnRemove(void* userdata)
 			if (list_item)
 			{
 				LLUUID tracking_id = list_item->getColumn(LOCAL_TRACKING_ID_COLUMN)->getValue().asUUID();
-				LLLocalBitmapMgr::delUnit(tracking_id);
+				LLLocalBitmapMgr::getInstance()->delUnit(tracking_id);
 			}
 		}
 
 		self->getChild<LLButton>("l_rem_btn")->setEnabled(false);
 		self->getChild<LLButton>("l_upl_btn")->setEnabled(false);
-		LLLocalBitmapMgr::feedScrollList(self->mLocalScrollCtrl);
+		LLLocalBitmapMgr::getInstance()->feedScrollList(self->mLocalScrollCtrl);
 	}
 
 }
@@ -1007,7 +1007,7 @@ void LLFloaterTexturePicker::onBtnUpload(void* userdata)
 	   in the future, it might be a good idea to check the vector size and if more than one units is selected - opt for multi-image upload. */
 	
 	LLUUID tracking_id = (LLUUID)self->mLocalScrollCtrl->getSelectedItemLabel(LOCAL_TRACKING_ID_COLUMN);
-	std::string filename = LLLocalBitmapMgr::getFilename(tracking_id);
+	std::string filename = LLLocalBitmapMgr::getInstance()->getFilename(tracking_id);
 
 	if (!filename.empty())
 	{
@@ -1030,7 +1030,7 @@ void LLFloaterTexturePicker::onLocalScrollCommit(LLUICtrl* ctrl, void* userdata)
 	if (has_selection)
 	{
 		LLUUID tracking_id = (LLUUID)self->mLocalScrollCtrl->getSelectedItemLabel(LOCAL_TRACKING_ID_COLUMN); 
-		LLUUID inworld_id = LLLocalBitmapMgr::getWorldID(tracking_id);
+		LLUUID inworld_id = LLLocalBitmapMgr::getInstance()->getWorldID(tracking_id);
 		// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
 		//if (self->mSetImageAssetIDCallback)
 		//{

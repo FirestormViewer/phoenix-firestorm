@@ -386,7 +386,7 @@ LLScrollListCtrl::~LLScrollListCtrl()
 			}
 			sort_order.append(LLSD(sort_val));
 		}
-		LLControlVariable* sort_order_setting = LLUI::sSettingGroups["config"]->declareLLSD(mPersistedSortOrderControl, LLSD(), "Column sort order for control " + mPersistedSortOrderControl);
+		LLControlVariable* sort_order_setting = LLUI::getInstance()->mSettingGroups["config"]->declareLLSD(mPersistedSortOrderControl, LLSD(), "Column sort order for control " + mPersistedSortOrderControl);
 		sort_order_setting->setValue(sort_order);
 	}
 	// </FS:Ansariel>
@@ -3608,11 +3608,11 @@ void LLScrollListCtrl::loadPersistedSortOrder()
 	if (root_floater)
 	{
 		mPersistedSortOrderControl = root_floater->getName() + "_" + getName() + "_sortorder";
-		if (LLUI::sSettingGroups["config"]->controlExists(mPersistedSortOrderControl))
+		if (LLUI::getInstance()->mSettingGroups["config"]->controlExists(mPersistedSortOrderControl))
 		{
 			clearSortOrder();
 
-			LLSD sort_order = LLUI::sSettingGroups["config"]->getLLSD(mPersistedSortOrderControl);
+			LLSD sort_order = LLUI::getInstance()->mSettingGroups["config"]->getLLSD(mPersistedSortOrderControl);
 			for (LLSD::array_iterator it = sort_order.beginArray(); it != sort_order.endArray(); ++it)
 			{
 				S32 sort_val = (*it).asInteger();
