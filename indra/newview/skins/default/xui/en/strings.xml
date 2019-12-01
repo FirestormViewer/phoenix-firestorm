@@ -3151,4 +3151,5 @@ Your current position: [AVATAR_POS]
   <string name="Yes">Yes</string>
   <string name="No">No</string>
   <string name="FSUrlEntryWearLabel">Wear inventory folder</string>
+  <string name="TexturePickerOutfitHeader">Picture for Outfit</string>
 </strings>
