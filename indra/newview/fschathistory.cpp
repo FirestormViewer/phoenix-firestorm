@@ -1154,7 +1154,10 @@ LLView* FSChatHistory::getSeparator()
 LLView* FSChatHistory::getHeader(const LLChat& chat,const LLStyle::Params& style_params, const LLSD& args)
 {
 	FSChatHistoryHeader* header = FSChatHistoryHeader::createInstance(mMessageHeaderFilename);
-	header->setup(chat, style_params, args);
+	if (header)
+	{
+		header->setup(chat, style_params, args);
+	}
 	return header;
 }
 
@@ -1509,6 +1512,12 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			view = getSeparator();
 			p.top_pad = mTopSeparatorPad;
 			p.bottom_pad = mBottomSeparatorPad;
+			if (!view)
+			{
+				// Might be wiser to make this LL_ERRS, getSeparator() should work in case of correct instalation.
+				LL_WARNS() << "Failed to create separator from " << mMessageSeparatorFilename << ": can't append to history" << LL_ENDL;
+				return;
+			}
 		}
 		else
 		{
@@ -1519,6 +1528,11 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			else
 				p.top_pad = mTopHeaderPad;
 			p.bottom_pad = mBottomHeaderPad;
+			if (!view)
+			{
+				LL_WARNS() << "Failed to create header from " << mMessageHeaderFilename << ": can't append to history" << LL_ENDL;
+				return;
+			}
 		}
 		p.view = view;
 
