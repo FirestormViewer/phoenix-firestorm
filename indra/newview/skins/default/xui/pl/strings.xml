@@ -6315,4 +6315,7 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="FSUrlEntryWearLabel">
 		Załóż folder z Szafy
 	</string>
+	<string name="TexturePickerOutfitHeader">
+		Zdjęcie dla Stroju
+	</string>
 </strings>
