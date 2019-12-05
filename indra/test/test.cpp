@@ -611,6 +611,9 @@ int main(int argc, char **argv)
 				wait_at_exit = true;
 				break;
 			case 'd':
+				// this is what LLError::initForApplication() does internally
+				// when you pass log_to_stderr=true
+				LLError::logToStderr();
 				LLError::setDefaultLevel(LLError::LEVEL_DEBUG);
 				break;
 			case 'x':
@@ -628,8 +631,9 @@ int main(int argc, char **argv)
 	const char* LOGFAIL = getenv("LOGFAIL");
 	boost::shared_ptr<LLReplayLog> replayer;
 	// As described in stream_usage(), LOGFAIL overrides both --debug and
-	// LOGTEST.
-	if (LOGFAIL)
+	// LOGTEST. But allow user to set LOGFAIL empty to revert to LOGTEST
+	// and/or --debug.
+	if (LOGFAIL && *LOGFAIL)
 	{
 		LLError::ELevel level = LLError::decodeLevel(LOGFAIL);
 		replayer.reset(new LLReplayLogReal(level, gAPRPoolp));
