@@ -31,7 +31,7 @@
 #include <deque>
 #include <string>
 #include "mutex.h"
-#include <condition_variable>
+#include <boost/fiber/condition_variable.hpp>
 
 //
 // A general queue exception.
