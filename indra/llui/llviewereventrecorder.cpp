@@ -56,7 +56,7 @@ LLViewerEventRecorder::LLViewerEventRecorder() {
 
 
 bool LLViewerEventRecorder::displayViewerEventRecorderMenuItems() {
-  return LLUI::sSettingGroups["config"]->getBOOL("ShowEventRecorderMenuItems");
+  return LLUI::getInstance()->mSettingGroups["config"]->getBOOL("ShowEventRecorderMenuItems");
 }
 
 
@@ -112,7 +112,7 @@ void LLViewerEventRecorder::setMouseGlobalCoords(S32 x, S32 y) {
 void LLViewerEventRecorder::updateMouseEventInfo(S32 local_x, S32 local_y, S32 global_x, S32 global_y, std::string mName) {
   if (! logEvents) return; //<FS:ND/> Do nothing if off 
 
-  LLView * target_view = LLUI::resolvePath(LLUI::getRootView(), xui);
+  LLView * target_view = LLUI::getInstance()->resolvePath(LLUI::getInstance()->getRootView(), xui);
   if (! target_view) {
     LL_DEBUGS() << "LLViewerEventRecorder::updateMouseEventInfo - xui path on file at moment is NOT valid - so DO NOT record these local coords" << LL_ENDL;
     return;
@@ -231,7 +231,7 @@ void LLViewerEventRecorder::playbackRecording() {
   LLSD LeapCommand;
 
   // ivita sets this on startup, it also sends commands to the viewer to make start, stop, and playback menu items visible in viewer
-  LeapCommand =LLUI::sSettingGroups["config"]->getLLSD("LeapPlaybackEventsCommand");
+  LeapCommand =LLUI::getInstance()->mSettingGroups["config"]->getLLSD("LeapPlaybackEventsCommand");
   
   LL_DEBUGS() << "[VITA] launching playback - leap command is: " << LLSDXMLStreamer(LeapCommand) << LL_ENDL;
   LLLeap::create("", LeapCommand, false); // exception=false

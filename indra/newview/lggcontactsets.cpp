@@ -778,9 +778,10 @@ uuid_vec_t LGGContactSets::getListOfPseudonymAvs()
 
 void LGGContactSets::setPseudonym(const LLUUID& friend_id, const std::string& pseudonym)
 {
+	LLAvatarNameCache* inst = LLAvatarNameCache::getInstance();
 	mPseudonyms[friend_id] = pseudonym;
-	LLAvatarNameCache::erase(friend_id);
-	LLAvatarNameCache::fetch(friend_id);
+	inst->erase(friend_id);
+	inst->fetch(friend_id);
 	LLVOAvatar::invalidateNameTag(friend_id);
 
 	avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(friend_id);
@@ -812,8 +813,9 @@ void LGGContactSets::clearPseudonym(const LLUUID& friend_id, bool save_changes /
 	if (found != mPseudonyms.end())
 	{
 		mPseudonyms.erase(found);
-		LLAvatarNameCache::erase(friend_id);
-		LLAvatarNameCache::fetch(friend_id); // update
+		LLAvatarNameCache* inst = LLAvatarNameCache::getInstance();
+		inst->erase(friend_id);
+		inst->fetch(friend_id); // update
 		LLVOAvatar::invalidateNameTag(friend_id);
 		if (!LLAvatarTracker::instance().isBuddy(friend_id) && LGGContactSets::getInstance()->getFriendSets(friend_id).size() == 0)
 		{

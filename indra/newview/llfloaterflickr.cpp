@@ -55,20 +55,15 @@
 
 #include "llviewernetwork.h"
 #include "llnotificationsutil.h"
-#ifdef OPENSIM
 #include "exoflickr.h"
 #include "exoflickrauth.h"
 #include "llnotificationsutil.h"
 #include "llviewernetwork.h"
-#endif
 
 static LLPanelInjector<LLFlickrPhotoPanel> t_panel_photo("llflickrphotopanel");
 static LLPanelInjector<LLFlickrAccountPanel> t_panel_account("llflickraccountpanel");
 
-const std::string DEFAULT_PHOTO_QUERY_PARAMETERS = "?sourceid=slshare_photo&utm_source=flickr&utm_medium=photo&utm_campaign=slshare";
 // <FS:Ansariel> Don't assume we're always in Second Life
-//const std::string DEFAULT_TAG_TEXT = "secondlife ";
-//const std::string FLICKR_MACHINE_TAGS_NAMESPACE = "secondlife";
 const std::string DEFAULT_TAG_TEXT = "Firestorm ";
 static std::string FLICKR_MACHINE_TAGS_NAMESPACE = "secondlife";
 // </FS:Ansariel>
@@ -191,15 +186,10 @@ void LLFlickrPhotoPanel::draw()
     // Enable interaction only if no transaction with the service is on-going (prevent duplicated posts)
     bool no_ongoing_connection = !(LLFlickrConnect::instance().isTransactionOngoing());
 // <FS:Ansariel> Exodus' flickr upload
-#ifdef OPENSIM
-	if (!LLGridManager::getInstance()->isInSecondLife())
-	{
-		LLFlickrConnect::EConnectionState connection_state = LLFlickrConnect::instance().getConnectionState();
-		no_ongoing_connection &= (connection_state != LLFlickrConnect::FLICKR_CONNECTION_IN_PROGRESS &&
-									connection_state != LLFlickrConnect::FLICKR_CONNECTION_FAILED &&
-									connection_state != LLFlickrConnect::FLICKR_NOT_CONNECTED);
-	}
-#endif
+	LLFlickrConnect::EConnectionState connection_state = LLFlickrConnect::instance().getConnectionState();
+	no_ongoing_connection &= (connection_state != LLFlickrConnect::FLICKR_CONNECTION_IN_PROGRESS &&
+								connection_state != LLFlickrConnect::FLICKR_CONNECTION_FAILED &&
+								connection_state != LLFlickrConnect::FLICKR_NOT_CONNECTED);
 // </FS:Ansariel>
     mCancelButton->setEnabled(no_ongoing_connection);
     mTitleTextBox->setEnabled(no_ongoing_connection);
@@ -338,28 +328,7 @@ void LLFlickrPhotoPanel::onSend()
 	LLEventPumps::instance().obtain("FlickrConnectState").listen("LLFlickrPhotoPanel", boost::bind(&LLFlickrPhotoPanel::onFlickrConnectStateChange, this, _1));
 	
 // <FS:Ansariel> Exodus' flickr upload
-#ifdef OPENSIM
-	if (LLGridManager::getInstance()->isInSecondLife())
-	{
-#endif
-// </FS:Ansariel>
-	// Connect to Flickr if necessary and then post
-	if (LLFlickrConnect::instance().isConnected())
-	{
-		sendPhoto();
-	}
-	else
-	{
-		LLFlickrConnect::instance().checkConnectionToFlickr(true);
-	}
-// <FS:Ansariel> Exodus' flickr upload
-#ifdef OPENSIM
-	}
-	else
-	{
-		sendPhoto();
-	}
-#endif
+	sendPhoto();
 // </FS:Ansariel>
 }
 
@@ -396,15 +365,6 @@ void LLFlickrPhotoPanel::sendPhoto()
 		LLSLURL slurl;
 		LLAgentUI::buildSLURL(slurl);
 		std::string slurl_string = slurl.getSLURLString();
-
-		// Add query parameters so Google Analytics can track incoming clicks!
-		// <FS:Ansariel> Don't assume we're always in Second Life
-		//slurl_string += DEFAULT_PHOTO_QUERY_PARAMETERS;
-		if (LLGridManager::instance().isInSecondLife())
-		{
-			slurl_string += DEFAULT_PHOTO_QUERY_PARAMETERS;
-		}
-		// </FS:Ansariel>
 
 		std::string photo_link_text = "Visit this location";// at [] in Second Life";
 		std::string parcel_name = LLViewerParcelMgr::getInstance()->getAgentParcelName();
@@ -478,27 +438,13 @@ void LLFlickrPhotoPanel::sendPhoto()
 	LLSnapshotLivePreview* previewp = getPreviewView();
 	
 // <FS:Ansariel> Exodus' flickr upload
-#ifdef OPENSIM
-	if (LLGridManager::getInstance()->isInSecondLife())
-	{
-#endif
-// </FS:Ansariel>
-	// Post to Flickr
-	LLFlickrConnect::instance().uploadPhoto(previewp->getFormattedImage(), title, description, tags, content_rating);
-// <FS:Ansariel> Exodus' flickr upload
-#ifdef OPENSIM
-	}
-	else
-	{
-		LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_POSTING);
-		LLSD params;
-		params["title"] = title;
-		params["safety_level"] = content_rating;
-		params["tags"] = tags;
-		params["description"] = description;
-		exoFlickr::uploadPhoto(params, previewp->getFormattedImage().get(), boost::bind(&LLFlickrPhotoPanel::uploadCallback, this, _1, _2));
-	}
-#endif
+	LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_POSTING);
+	LLSD params;
+	params["title"] = title;
+	params["safety_level"] = content_rating;
+	params["tags"] = tags;
+	params["description"] = description;
+	exoFlickr::uploadPhoto(params, previewp->getFormattedImage().get(), boost::bind(&LLFlickrPhotoPanel::uploadCallback, this, _1, _2));
 // </FS:Ansariel>
 
 	updateControls();
@@ -656,14 +602,9 @@ LLUICtrl* LLFlickrPhotoPanel::getRefreshBtn()
 // <FS:Ansariel> Exodus' flickr upload
 void LLFlickrPhotoPanel::onOpen(const LLSD& key)
 {
-#ifdef OPENSIM
-	if (!LLGridManager::getInstance()->isInSecondLife())
-	{
-		// Reauthorise if necessary.
-		LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_CONNECTION_IN_PROGRESS);
-		new exoFlickrAuth(boost::bind(&LLFlickrPhotoPanel::flickrAuthResponse, this, _1, _2));
-	}
-#endif
+	// Reauthorise if necessary.
+	LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_CONNECTION_IN_PROGRESS);
+	new exoFlickrAuth(boost::bind(&LLFlickrPhotoPanel::flickrAuthResponse, this, _1, _2));
 }
 
 void LLFlickrPhotoPanel::uploadCallback(bool success, const LLSD& response)
@@ -938,12 +879,7 @@ BOOL LLFloaterFlickr::postBuild()
     mStatusLoadingIndicator = getChild<LLUICtrl>("connection_loading_indicator");
 
 // <FS:Ansariel> Exodus' flickr upload
-#ifdef OPENSIM
-	if (!LLGridManager::getInstance()->isInSecondLife())
-	{
-		getChild<LLTabContainer>("tabs")->removeTabPanel(getChild<LLPanel>("panel_flickr_account"));
-	}
-#endif
+	getChild<LLTabContainer>("tabs")->removeTabPanel(getChild<LLPanel>("panel_flickr_account"));
 // </FS:Ansariel>
 
 	return LLFloater::postBuild();
