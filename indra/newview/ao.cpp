@@ -181,6 +181,10 @@ void FloaterAO::updateList()
 		}
 	}
 	enableSetControls(TRUE);
+	if (mSetSelector->getSelectedItemLabel().empty())
+	{
+		onClickReload();
+	}
 }
 
 BOOL FloaterAO::postBuild()
