@@ -437,11 +437,13 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 					
 					//For testing/beta groups, we display the build version since it doesn't speed by and this might change often
 					if(chat_prefix_testing && FSData::getInstance()->isTestingGroup(mSessionID))
-						utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getBuildVersion() + skin_indicator + str_rlv_enabled + str_opensim_tag + ") "));
+						utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getInstance()->getBuildVersion() +
+														skin_indicator + str_rlv_enabled + str_opensim_tag + ") "));
 					
 					//For release support groups, only display the short version(Major.Minor.Patch) since chat can speed by. This makes it easier on Support's eyes.
 					else if(chat_prefix_support && FSData::getInstance()->isSupportGroup(mSessionID))
-						utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getShortVersion() + skin_indicator + str_rlv_enabled + str_opensim_tag + ") "));
+						utf8_text.insert(	insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getInstance()->getShortVersion() + skin_indicator +
+											str_rlv_enabled + str_opensim_tag + ") "));
 				}
 				
 				// <FS:Techwolf Lupindo> Allow user to send system info.

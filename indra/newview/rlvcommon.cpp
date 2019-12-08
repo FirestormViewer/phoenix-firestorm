@@ -427,7 +427,8 @@ std::string RlvStrings::getVersion(const LLUUID& idRlvObject, bool fLegacy)
 
 std::string RlvStrings::getVersionAbout()
 {
-	return llformat("RLV v%d.%d.%d / RLVa v%d.%d.%d.%d", RLV_VERSION_MAJOR, RLV_VERSION_MINOR, RLV_VERSION_PATCH, RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH, LLVersionInfo::getBuild());
+	return llformat("RLV v%d.%d.%d / RLVa v%d.%d.%d.%d",	RLV_VERSION_MAJOR, RLV_VERSION_MINOR, RLV_VERSION_PATCH, RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH,
+															LLVersionInfo::getInstance()->getBuild());
 }
 
 std::string RlvStrings::getVersionNum(const LLUUID& idRlvObject)

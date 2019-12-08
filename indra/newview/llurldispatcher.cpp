@@ -232,7 +232,7 @@ bool LLURLDispatcherImpl::dispatchRegion(const LLSLURL& slurl, const std::string
 	if ((grid != current_grid)
 		&& (!LLGridManager::getInstance()->isInOpenSim() || (!slurl.getHypergrid() && gatekeeper.empty())))
 	{
-		std::string dest = hyper.getSLURLString();
+		std::string dest = slurl.getSLURLString();
 		if (!dest.empty())
 		{
 			LLSD args;
@@ -251,7 +251,7 @@ bool LLURLDispatcherImpl::dispatchRegion(const LLSLURL& slurl, const std::string
 #endif //OPENSIM
 // </FS:AW optional opensim support>
 	// Request a region handle by name
-	LLWorldMapMessage::getInstance()->sendNamedRegionRequest(oSLURL.getRegion(), LLURLDispatcherImpl::regionNameCallback, hyper.getSLURLString(), LLUI::getInstance()->mSettingGroups["config"]->getBOOL("SLURLTeleportDirectly"));	// don't teleport
+	LLWorldMapMessage::getInstance()->sendNamedRegionRequest(oSLURL.getRegion(), LLURLDispatcherImpl::regionNameCallback, slurl.getSLURLString(), LLUI::getInstance()->mSettingGroups["config"]->getBOOL("SLURLTeleportDirectly"));	// don't teleport
 	return true;
 }
 

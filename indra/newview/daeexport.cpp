@@ -762,7 +762,7 @@ bool DAESaver::saveDAE(std::string filename)
 	
 	daeElement* contributor = asset->add("contributor");
 	contributor->add("author")->setCharData(author);
-	contributor->add("authoring_tool")->setCharData(LLVersionInfo::getChannelAndVersion());
+	contributor->add("authoring_tool")->setCharData(LLVersionInfo::getInstance()->getChannelAndVersion());
 
 	daeElement* images = root->add("library_images");
 	daeElement* geomLib = root->add("library_geometries");

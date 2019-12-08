@@ -39,8 +39,6 @@
 #if !LL_WINDOWS
 # include <syslog.h>
 # include <unistd.h>
-#else
-# include <io.h>
 #endif // !LL_WINDOWS
 #include <vector>
 #include "string.h"
@@ -55,48 +53,12 @@
 #include "llstl.h"
 #include "lltimer.h"
 
-#include "nd/ndlogthrottle.h"
-
-#if LL_WINDOWS
-#define fhclose  _close
-#define fhdup    _dup
-#define fhdup2   _dup2
-#define fhfdopen _fdopen
-#define fhfileno _fileno
-#else
-#define fhclose  ::close
-#define fhdup    ::dup
-#define fhdup2   ::dup2
-#define fhfdopen ::fdopen
-#define fhfileno ::fileno
-#endif
-
-namespace LLError
-{
-
-	class SettingsConfig;
-	typedef LLPointer<SettingsConfig> SettingsConfigPtr;
-
-	class Settings : public LLSingleton<Settings>
-	{
-		LLSINGLETON(Settings);
-	public:
-		SettingsConfigPtr getSettingsConfig();
-		~Settings();
-
-		void reset();
-		SettingsStoragePtr saveAndReset();
-		void restore(SettingsStoragePtr pSettingsStorage);
-
-		int getDupStderr() const;
-
-	private:
-		SettingsConfigPtr mSettingsConfig;
-		int mDupStderr;
-	};
-
-} // namespace LLError
-
+// On Mac, got:
+// #error "Boost.Stacktrace requires `_Unwind_Backtrace` function. Define
+// `_GNU_SOURCE` macro or `BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED` if
+// _Unwind_Backtrace is available without `_GNU_SOURCE`."
+#define BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED
+#include <boost/stacktrace.hpp>
 
 namespace {
 #if LL_WINDOWS
@@ -164,82 +126,73 @@ namespace {
 	{
 	public:
 		RecordToFile(const std::string& filename):
-			mName(filename),
-			mFile(LLFile::fopen(filename, "a")),
-			mSavedStderr(LLError::Settings::instance().getDupStderr())
+			mName(filename)
 		{
 			// <FS:Ansariel> Don't screw up log file output
 			this->showMultiline(true);
-
+			mFile.open(filename.c_str(), std::ios_base::out | std::ios_base::app);
 			if (!mFile)
 			{
-				LL_WARNS() << "Error setting log file to " << filename << LL_ENDL;
+				LL_INFOS() << "Error setting log file to " << filename << LL_ENDL;
 			}
 			else
 			{
-				// We use a number of classic-C libraries, some of which write
-				// log output to stderr. The trouble with that is that unless
-				// you launch the viewer from a console, stderr output is
-				// lost. Redirect STDERR_FILENO to write into this log file.
-				fhdup2(fhfileno(mFile), fhfileno(stderr));
+				if (!LLError::getAlwaysFlush())
+				{
+					mFile.sync_with_stdio(false);
+				}
 			}
 		}
 
 		~RecordToFile()
 		{
-			// restore stderr to its original fileno so any subsequent output
-			// to stderr goes to original stream
-			fhdup2(mSavedStderr, fhfileno(stderr));
 			mFile.close();
 		}
 
-		virtual bool enabled() override
-		{
+        virtual bool enabled() override
+        {
 #ifdef LL_RELEASE_FOR_DOWNLOAD
-			return 1;
+            return 1;
 #else
-			return LLError::getEnabledLogTypesMask() & 0x02;
+            return LLError::getEnabledLogTypesMask() & 0x02;
 #endif
-		}
+        }
+        
+        bool okay() const { return mFile.good(); }
 
-		bool okay() const { return bool(mFile); }
+        std::string getFilename() const { return mName; }
 
-		std::string getFilename() const { return mName; }
-
-		virtual void recordMessage(LLError::ELevel level,
-									const std::string& message) override
-		{
-			::fwrite(message.c_str(), sizeof(char), message.length(), mFile);
-			::fputc('\n', mFile);
-			if (LLError::getAlwaysFlush())
-			{
-				::fflush(mFile);
-			}
-		}
+        virtual void recordMessage(LLError::ELevel level,
+                                    const std::string& message) override
+        {
+            if (LLError::getAlwaysFlush())
+            {
+                mFile << message << std::endl;
+            }
+            else
+            {
+                mFile << message << "\n";
+            }
+        }
 
 	private:
 		const std::string mName;
-		LLUniqueFile mFile;
-		int mSavedStderr;
+		llofstream mFile;
 	};
-
-
+	
+	
 	class RecordToStderr : public LLError::Recorder
 	{
 	public:
-		RecordToStderr(bool timestamp) :
-			mUseANSI(checkANSI()),
-			// use duplicate stderr file handle so THIS output isn't affected
-			// by our internal redirection of all (other) stderr output
-			mStderr(fhfdopen(LLError::Settings::instance().getDupStderr(), "a"))
+		RecordToStderr(bool timestamp) : mUseANSI(checkANSI()) 
 		{
-			this->showMultiline(true);
+            this->showMultiline(true);
 		}
-
-		virtual bool enabled() override
-		{
-			return LLError::getEnabledLogTypesMask() & 0x04;
-		}
+		
+        virtual bool enabled() override
+        {
+            return LLError::getEnabledLogTypesMask() & 0x04;
+        }
         
 		virtual void recordMessage(LLError::ELevel level,
 					   const std::string& message) override
@@ -262,21 +215,17 @@ namespace {
 					break;
 				}
 			}
-			fprintf(mStderr, "%s\n", message.c_str());
-#if LL_WINDOWS 
-	fflush(mStderr); //Now using a buffer. flush is required. 
-#endif 
+			fprintf(stderr, "%s\n", message.c_str());
 			if (mUseANSI) colorANSI("0"); // reset
 		}
-
+	
 	private:
 		bool mUseANSI;
-		LLFILE* mStderr;
 
 		void colorANSI(const std::string color)
 		{
 			// ANSI color code escape sequence
-			fprintf(mStderr, "\033[%sm", color.c_str() );
+			fprintf(stderr, "\033[%sm", color.c_str() );
 		};
 
 		static bool checkANSI(void)
@@ -285,7 +234,7 @@ namespace {
 			// Check whether it's okay to use ANSI; if stderr is
 			// a tty then we assume yes.  Can be turned off with
 			// the LL_NO_ANSI_COLOR env var.
-			return (0 != isatty(fhfileno(stderr))) &&
+			return (0 != isatty(2)) &&
 				(NULL == getenv("LL_NO_ANSI_COLOR"));
 #endif // LL_LINUX
 			return false;
@@ -458,7 +407,7 @@ namespace
 				return false;
 			}
 
-			if (configuration.isUndefined() || !configuration.isMap() || configuration.emptyMap())
+			if (! configuration || !configuration.isMap())
 			{
 				LL_WARNS() << filename() << " missing, ill-formed, or simply undefined"
 							" content; not changing configuration"
@@ -549,6 +498,22 @@ namespace LLError
 		SettingsConfig();
 	};
 
+	typedef LLPointer<SettingsConfig> SettingsConfigPtr;
+
+	class Settings : public LLSingleton<Settings>
+	{
+		LLSINGLETON(Settings);
+	public:
+		SettingsConfigPtr getSettingsConfig();
+
+		void reset();
+		SettingsStoragePtr saveAndReset();
+		void restore(SettingsStoragePtr pSettingsStorage);
+		
+	private:
+		SettingsConfigPtr mSettingsConfig;
+	};
+
 	SettingsConfig::SettingsConfig()
 		: LLRefCount(),
 		mDefaultLevel(LLError::LEVEL_DEBUG),
@@ -572,18 +537,8 @@ namespace LLError
 	}
 
 	Settings::Settings():
-		mSettingsConfig(new SettingsConfig()),
-		// duplicate stderr file handle right away
-		mDupStderr(fhdup(fhfileno(stderr)))
+		mSettingsConfig(new SettingsConfig())
 	{
-	}
-
-	Settings::~Settings()
-	{
-		// restore original stderr
-		fhdup2(mDupStderr, fhfileno(stderr));
-		// and close the duplicate
-		fhclose(mDupStderr);
 	}
 
 	SettingsConfigPtr Settings::getSettingsConfig()
@@ -609,11 +564,6 @@ namespace LLError
 		Globals::getInstance()->invalidateCallSites();
 		SettingsConfigPtr newSettingsConfig(dynamic_cast<SettingsConfig *>(pSettingsStorage.get()));
 		mSettingsConfig = newSettingsConfig;
-	}
-
-	int Settings::getDupStderr() const
-	{
-		return mDupStderr;
 	}
 
 	bool is_available()
@@ -1457,13 +1407,6 @@ namespace LLError
 			delete out;
 		}
 
-
-		// <FS:ND> Log throttling
-		std::ostringstream prefix;
-		if( nd::logging::throttle( site.mFile, site.mLine, &prefix ) )
-			return;
-		// </FS:ND>
-
 		if (site.mPrintOnce)
 		{
             std::ostringstream message_stream;
@@ -1606,124 +1549,129 @@ namespace LLError
 	S32    LLCallStacks::sIndex  = 0 ;
 
 	//static
-   void LLCallStacks::allocateStackBuffer()
-   {
-	   if(sBuffer == NULL)
-	   {
-		   sBuffer = new char*[512] ;
-		   sBuffer[0] = new char[512 * 128] ;
-		   for(S32 i = 1 ; i < 512 ; i++)
-		   {
-			   sBuffer[i] = sBuffer[i-1] + 128 ;
-		   }
-		   sIndex = 0 ;
-	   }
-   }
+    void LLCallStacks::allocateStackBuffer()
+    {
+        if(sBuffer == NULL)
+        {
+            sBuffer = new char*[512] ;
+            sBuffer[0] = new char[512 * 128] ;
+            for(S32 i = 1 ; i < 512 ; i++)
+            {
+                sBuffer[i] = sBuffer[i-1] + 128 ;
+            }
+            sIndex = 0 ;
+        }
+    }
 
-   void LLCallStacks::freeStackBuffer()
-   {
-	   if(sBuffer != NULL)
-	   {
-		   delete [] sBuffer[0] ;
-		   delete [] sBuffer ;
-		   sBuffer = NULL ;
-	   }
-   }
+    void LLCallStacks::freeStackBuffer()
+    {
+        if(sBuffer != NULL)
+        {
+            delete [] sBuffer[0] ;
+            delete [] sBuffer ;
+            sBuffer = NULL ;
+        }
+    }
 
-   //static
-   void LLCallStacks::push(const char* function, const int line)
-   {
-       LLMutexTrylock lock(&gCallStacksLogMutex, 5);
-       if (!lock.isLocked())
-       {
-           return;
-       }
+    //static
+    void LLCallStacks::push(const char* function, const int line)
+    {
+        LLMutexTrylock lock(&gCallStacksLogMutex, 5);
+        if (!lock.isLocked())
+        {
+            return;
+        }
 
-	   if(sBuffer == NULL)
-	   {
-		   allocateStackBuffer();
-	   }
+        if(sBuffer == NULL)
+        {
+            allocateStackBuffer();
+        }
 
-	   if(sIndex > 511)
-	   {
-		   clear() ;
-	   }
+        if(sIndex > 511)
+        {
+            clear() ;
+        }
 
-	   strcpy(sBuffer[sIndex], function) ;
-	   sprintf(sBuffer[sIndex] + strlen(function), " line: %d ", line) ;
-	   sIndex++ ;
+        strcpy(sBuffer[sIndex], function) ;
+        sprintf(sBuffer[sIndex] + strlen(function), " line: %d ", line) ;
+        sIndex++ ;
 
-	   return ;
-   }
+        return ;
+    }
 
-	//static
-   std::ostringstream* LLCallStacks::insert(const char* function, const int line)
-   {
-       std::ostringstream* _out = LLError::Log::out();
-	   *_out << function << " line " << line << " " ;
+    //static
+    std::ostringstream* LLCallStacks::insert(const char* function, const int line)
+    {
+        std::ostringstream* _out = LLError::Log::out();
+        *_out << function << " line " << line << " " ;
              
-	   return _out ;
-   }
+        return _out ;
+    }
 
-   //static
-   void LLCallStacks::end(std::ostringstream* _out)
-   {
-       LLMutexTrylock lock(&gCallStacksLogMutex, 5);
-       if (!lock.isLocked())
-       {
-           return;
-       }
+    //static
+    void LLCallStacks::end(std::ostringstream* _out)
+    {
+        LLMutexTrylock lock(&gCallStacksLogMutex, 5);
+        if (!lock.isLocked())
+        {
+            return;
+        }
 
-	   if(sBuffer == NULL)
-	   {
-		   allocateStackBuffer();
-	   }
+        if(sBuffer == NULL)
+        {
+            allocateStackBuffer();
+        }
 
-	   if(sIndex > 511)
-	   {
-		   clear() ;
-	   }
+        if(sIndex > 511)
+        {
+            clear() ;
+        }
 
-	   LLError::Log::flush(_out, sBuffer[sIndex++]) ;	   
-   }
+        LLError::Log::flush(_out, sBuffer[sIndex++]) ;
+    }
 
-   //static
-   void LLCallStacks::print()
-   {
-       LLMutexTrylock lock(&gCallStacksLogMutex, 5);
-       if (!lock.isLocked())
-       {
-           return;
-       }
+    //static
+    void LLCallStacks::print()
+    {
+        LLMutexTrylock lock(&gCallStacksLogMutex, 5);
+        if (!lock.isLocked())
+        {
+            return;
+        }
 
-       if(sIndex > 0)
-       {
-           LL_INFOS() << " ************* PRINT OUT LL CALL STACKS ************* " << LL_ENDL;
-           while(sIndex > 0)
-           {                  
-			   sIndex-- ;
-               LL_INFOS() << sBuffer[sIndex] << LL_ENDL;
-           }
-           LL_INFOS() << " *************** END OF LL CALL STACKS *************** " << LL_ENDL;
-       }
+        if(sIndex > 0)
+        {
+            LL_INFOS() << " ************* PRINT OUT LL CALL STACKS ************* " << LL_ENDL;
+            while(sIndex > 0)
+            {                  
+                sIndex-- ;
+                LL_INFOS() << sBuffer[sIndex] << LL_ENDL;
+            }
+            LL_INFOS() << " *************** END OF LL CALL STACKS *************** " << LL_ENDL;
+        }
 
-	   if(sBuffer != NULL)
-	   {
-		   freeStackBuffer();
-	   }
-   }
+        if(sBuffer != NULL)
+        {
+            freeStackBuffer();
+        }
+    }
 
-   //static
-   void LLCallStacks::clear()
-   {
-       sIndex = 0 ;
-   }
+    //static
+    void LLCallStacks::clear()
+    {
+        sIndex = 0 ;
+    }
 
-   //static
-   void LLCallStacks::cleanup()
-   {
-	   freeStackBuffer();
-   }
+    //static
+    void LLCallStacks::cleanup()
+    {
+        freeStackBuffer();
+    }
+
+    std::ostream& operator<<(std::ostream& out, const LLStacktrace&)
+    {
+        return out << boost::stacktrace::stacktrace();
+    }
 }
 
 bool debugLoggingEnabled(const std::string& tag)

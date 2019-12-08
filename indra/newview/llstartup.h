@@ -144,6 +144,7 @@ public:
 
 	static LLViewerStats::PhaseMap& getPhases() { return *sPhases; }
 private:
+	friend class LLStartupListener;
 	static LLSLURL sStartSLURL;
 	static std::string sStartSLURLString;
 

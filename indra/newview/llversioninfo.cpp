@@ -26,9 +26,10 @@
  */
 
 #include "llviewerprecompiledheaders.h"
-#include <iostream>
-#include <sstream>
+#include "llevents.h"
+#include "lleventfilter.h"
 #include "llversioninfo.h"
+#include "stringize.h"
 #include <boost/regex.hpp>
 
 // <FS:TS> Use configured file instead of compile time definitions to avoid
@@ -47,47 +48,65 @@
 // Set the version numbers in indra/VIEWER_VERSION
 //
 
-//static
+LLVersionInfo::LLVersionInfo():
+	short_version(STRINGIZE(LL_VIEWER_VERSION_MAJOR << "."
+							<< LL_VIEWER_VERSION_MINOR << "."
+							<< LL_VIEWER_VERSION_PATCH)),
+	// LL_VIEWER_CHANNEL is a macro defined on the compiler command line. The
+	// macro expands to the string name of the channel, but without quotes. We
+	// need to turn it into a quoted string. LL_TO_STRING() does that.
+	mWorkingChannelName(LL_TO_STRING(LL_VIEWER_CHANNEL)),
+	build_configuration(LLBUILD_CONFIG), // set in indra/cmake/BuildVersion.cmake
+	// instantiate an LLEventMailDrop with canonical name to listen for news
+	// from SLVersionChecker
+	mPump{new LLEventMailDrop("relnotes")},
+	// immediately listen on mPump, store arriving URL into mReleaseNotes
+	mStore{new LLStoreListener<std::string>(*mPump, mReleaseNotes)}
+{
+}
+
+void LLVersionInfo::initSingleton()
+{
+	// We override initSingleton() not because we have dependencies on other
+	// LLSingletons, but because certain initializations call other member
+	// functions. We should refrain from calling methods until this object is
+	// fully constructed; such calls don't really belong in the constructor.
+
+	// cache the version string
+	version = STRINGIZE(getShortVersion() << "." << getBuild());
+}
+
+LLVersionInfo::~LLVersionInfo()
+{
+}
+
 S32 LLVersionInfo::getMajor()
 {
 	return LL_VIEWER_VERSION_MAJOR;
 }
 
-//static
 S32 LLVersionInfo::getMinor()
 {
 	return LL_VIEWER_VERSION_MINOR;
 }
 
-//static
 S32 LLVersionInfo::getPatch()
 {
 	return LL_VIEWER_VERSION_PATCH;
 }
 
-//static
 S32 LLVersionInfo::getBuild()
 {
 	return LL_VIEWER_VERSION_BUILD;
 }
 
-//static
-const std::string &LLVersionInfo::getVersion()
+std::string LLVersionInfo::getVersion()
 {
-	static std::string version("");
-	if (version.empty())
-	{
-		std::ostringstream stream;
-		stream << LLVersionInfo::getShortVersion() << "." << LLVersionInfo::getBuild();
-		// cache the version string
-		version = stream.str();
-	}
 	return version;
 }
 
 //<FS:CZ>
-//static
-const std::string &LLVersionInfo::getBuildVersion()
+std::string LLVersionInfo::getBuildVersion()
 {
 	static std::string build_version("");
 	if (build_version.empty())
@@ -100,58 +119,29 @@ const std::string &LLVersionInfo::getBuildVersion()
 	return build_version;
 }
 //</FS:CZ>
-
-//static
-const std::string &LLVersionInfo::getShortVersion()
+std::string LLVersionInfo::getShortVersion()
 {
-	static std::string short_version("");
-	if(short_version.empty())
-	{
-		// cache the version string
-		std::ostringstream stream;
-		stream << LL_VIEWER_VERSION_MAJOR << "."
-		       << LL_VIEWER_VERSION_MINOR << "."
-		       << LL_VIEWER_VERSION_PATCH;
-		short_version = stream.str();
-	}
 	return short_version;
 }
 
-namespace
-{
-	// LL_VIEWER_CHANNEL is a macro defined on the compiler command line. The
-	// macro expands to the string name of the channel, but without quotes. We
-	// need to turn it into a quoted string. LL_TO_STRING() does that.
-	/// Storage of the channel name the viewer is using.
-	//  The channel name is set by hardcoded constant, 
-	//  or by calling LLVersionInfo::resetChannel()
-	std::string sWorkingChannelName(LL_TO_STRING(LL_VIEWER_CHANNEL));
-
-	// Storage for the "version and channel" string.
-	// This will get reset too.
-	std::string sVersionChannel("");
 
 	//<FS:TS> Same as above, with version number in Firestorm FSDATA
 	// format. Unlike the above, the channel name will always be the
 	// hardcoded version.
 	std::string sVersionChannelFS("");
-}
-
-//static
-const std::string &LLVersionInfo::getChannelAndVersion()
+std::string LLVersionInfo::getChannelAndVersion()
 {
-	if (sVersionChannel.empty())
+	if (mVersionChannel.empty())
 	{
 		// cache the version string
-		sVersionChannel = LLVersionInfo::getChannel() + " " + LLVersionInfo::getVersion();
+		mVersionChannel = getChannel() + " " + getVersion();
 	}
 
-	return sVersionChannel;
+	return mVersionChannel;
 }
 
 //<FS:TS> Get version and channel in the format needed for FSDATA.
-//static
-const std::string &LLVersionInfo::getChannelAndVersionFS()
+std::string LLVersionInfo::getChannelAndVersionFS()
 {
 	if (sVersionChannelFS.empty())
 	{
@@ -169,25 +159,23 @@ const std::string &LLVersionInfo::getChannelAndVersionFS()
 }
 //</FS:TS>
 
-//static
-const std::string &LLVersionInfo::getChannel()
+std::string LLVersionInfo::getChannel()
 {
 	// <FS:Ansariel> Above macro hackery results in extra quotes - fix it if it happens
-	if (LLStringUtil::startsWith(sWorkingChannelName, "\"") && sWorkingChannelName.size() > 2)
+	if (LLStringUtil::startsWith(mWorkingChannelName, "\"") && mWorkingChannelName.size() > 2)
 	{
-		sWorkingChannelName = sWorkingChannelName.substr(1, sWorkingChannelName.size() - 2);
+		mWorkingChannelName = mWorkingChannelName.substr(1, mWorkingChannelName.size() - 2);
 	}
 	// </FS:Ansariel>
-	return sWorkingChannelName;
+	return mWorkingChannelName;
 }
 
 void LLVersionInfo::resetChannel(const std::string& channel)
 {
-	sWorkingChannelName = channel;
-	sVersionChannel.clear(); // Reset version and channel string til next use.
+	mWorkingChannelName = channel;
+	mVersionChannel.clear(); // Reset version and channel string til next use.
 }
 
-//static
 LLVersionInfo::ViewerMaturity LLVersionInfo::getViewerMaturity()
 {
     ViewerMaturity maturity;
@@ -255,16 +243,20 @@ const char* getBuildPlatformString()
 #endif
 }
 
-const std::string& LLVersionInfo::getBuildPlatform()
+std::string LLVersionInfo::getBuildPlatform()
 {
-	static std::string strPlatform = getBuildPlatformString();
+	std::string strPlatform = getBuildPlatformString();
 	return strPlatform;
 }
 // [/SL:KB]
 
     
-const std::string &LLVersionInfo::getBuildConfig()
+std::string LLVersionInfo::getBuildConfig()
 {
-    static const std::string build_configuration(LLBUILD_CONFIG); // set in indra/cmake/BuildVersion.cmake
     return build_configuration;
+}
+
+std::string LLVersionInfo::getReleaseNotes()
+{
+    return mReleaseNotes;
 }
