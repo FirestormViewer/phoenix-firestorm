@@ -4548,6 +4548,11 @@ void LLViewerObject::setPositionRegion(const LLVector3 &pos_region, BOOL damped)
 
 void LLViewerObject::setPositionAgent(const LLVector3 &pos_agent, BOOL damped)
 {
+	// <FS:ND> Crsh protection
+	if( !getRegion() )
+		return;
+	// </FS:ND>
+	
 	LLVector3 pos_region = getRegion()->getPosRegionFromAgent(pos_agent);
 	setPositionRegion(pos_region, damped);
 }
