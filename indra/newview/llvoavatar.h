@@ -347,7 +347,7 @@ public:
 	static BOOL		sDebugAvatarRotation;
 	static LLPartSysData sCloud;
 	//<FS:Beq> BOM bake limits
-	static int		sMaxBakes;
+	static S32		sMaxBakes;
 	//</FS:Beq>
 
 	//--------------------------------------------------------------------
