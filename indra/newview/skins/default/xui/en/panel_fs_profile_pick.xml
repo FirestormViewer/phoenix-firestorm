@@ -46,6 +46,7 @@
      h_pad="4"
      enabled="false"
      trusted_content="false"
+     always_show_icons="true"
      max_length="1023"
      word_wrap="true"
      allow_html="true" />

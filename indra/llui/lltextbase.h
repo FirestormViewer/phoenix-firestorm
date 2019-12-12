@@ -344,7 +344,8 @@ public:
 								parse_highlights,
 								clip,
 								clip_partial,
-								trusted_content;
+								trusted_content,
+								always_show_icons;
 								
 		Optional<S32>			v_pad,
 								h_pad;
@@ -753,6 +754,7 @@ protected:
 	bool						mPlainText;			// didn't use Image or Icon segments
 	bool						mAutoIndent;
 	S32							mMaxTextByteLength;	// Maximum length mText is allowed to be in bytes
+	bool						mAlwaysShowIcons;
 
 	// support widgets
 	LLHandle<LLContextMenu>		mPopupMenuHandle;
