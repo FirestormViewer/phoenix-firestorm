@@ -1,6 +1,40 @@
 <llsd>
     <map>
-        <key>grid.virtualife.cloud:8002</key>
+    <key>cc.opensimulator.org:8002</key>
+         <map>
+         <key>LastModified</key>
+             <date>2019-12-09T10:00:00.00Z</date>
+         <key>gatekeeper</key>
+             <string>cc.opensimulator.org:8002</string>
+         <key>gridname</key>
+             <string>OpenSim Community Conference</string>
+         <key>gridnick</key>
+             <string>opensimcc</string>
+         <key>helperuri</key>
+             <string>http://cc.opensimulator.org/helper/</string>
+         <key>login_identifier_types</key>
+             <array>
+                 <string>agent</string>
+                 <string>account</string>
+             </array>
+         <key>loginpage</key>
+             <string>http://cc.opensimulator.org:8005/wifi/welcome.html</string>
+         <key>loginuri</key>
+             <array>
+                 <string>http://cc.opensimulator.org:8002/</string>
+             </array>
+         <key>name</key>
+             <string>cc.opensimulator.org:8002</string>
+         <key>password</key>
+             <string>http://cc.opensimulator.org:8005/wifi/forgotpassword</string>
+         <key>platform</key>
+             <string>OpenSim</string>
+         <key>register</key>
+             <string>http://cc.opensimulator.org:8005/wifi/user/account</string>
+         <key>slurl_base</key>
+             <string>hop://cc.opensimulator.org:8002/</string>
+         </map>
+    <key>grid.virtualife.cloud:8002</key>
         <map>
         <key>LastModified</key>
             <date>2019-12-04T10:50:32.55Z</date>
@@ -34,7 +68,7 @@
         <key>slurl_base</key>
             <string>hop://grid.virtualife.cloud:8002/</string>
         </map>
-        <key>discoverygrid.net:8002</key>
+    <key>discoverygrid.net:8002</key>
         <map>
         <key>LastModified</key>
             <date>2019-12-04T10:46:23.59Z</date>
@@ -72,7 +106,7 @@
         <key>slurl_base</key>
             <string>hop://discoverygrid.net:8002/</string>
         </map>
-        <key>grid.alifevirtual.com:8002</key>
+    <key>grid.alifevirtual.com:8002</key>
         <map>
         <key>LastModified</key>
             <date>2019-12-04T10:42:24.54Z</date>
@@ -108,7 +142,7 @@
         <key>slurl_base</key>
             <string>hop://grid.alifevirtual.com:8002/</string>
         </map>
-        <key>login.main.mobiusgrid.us:8002</key>
+    <key>login.main.mobiusgrid.us:8002</key>
         <map>
         <key>LastModified</key>
             <date>2019-12-04T10:41:18.60Z</date>
