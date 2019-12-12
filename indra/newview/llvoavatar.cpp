@@ -624,7 +624,9 @@ F32 LLVOAvatar::sUnbakedTime = 0.f;
 F32 LLVOAvatar::sUnbakedUpdateTime = 0.f;
 F32 LLVOAvatar::sGreyTime = 0.f;
 F32 LLVOAvatar::sGreyUpdateTime = 0.f;
-
+	//<FS:Beq> BOM bake limits
+int	LLVOAvatar::sMaxBakes;
+	//</FS:Beq>
 //-----------------------------------------------------------------------------
 // Helper functions
 //-----------------------------------------------------------------------------
@@ -735,7 +737,10 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 
 	mImpostorDistance = 0;
 	mImpostorPixelArea = 0;
-
+	//<FS:Beq> BOM constrain number of bake requests when BOM not supported
+	// BAKED_LEFT_ARM is equal to the pre-BOM BAKED_NUM_INDICES
+	sMaxBakes = gAgent.getRegion()->bakesOnMeshEnabled()?BAKED_NUM_INDICES:BAKED_LEFT_ARM;
+	//</FS:Beq>
 	setNumTEs(TEX_NUM_INDICES);
 
 	mbCanSelect = TRUE;
@@ -9322,7 +9327,10 @@ void LLVOAvatar::releaseComponentTextures()
 		}
 	}
 
-	for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
+	//<FS:Beq> BOM constrain number of bake requests when BOM not supported
+	// for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
+	for (U8 baked_index = 0; baked_index < sMaxBakes; baked_index++)
+		//</FS:Beq>	
 	{
 		const LLAvatarAppearanceDictionary::BakedEntry * bakedDicEntry = LLAvatarAppearanceDictionary::getInstance()->getBakedTexture((EBakedTextureIndex)baked_index);
 		// skip if this is a skirt and av is not wearing one, or if we don't have a baked texture UUID
@@ -10055,7 +10063,11 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 
 LLViewerTexture* LLVOAvatar::getBakedTexture(const U8 te)
 {
-	if (te < 0 || te >= BAKED_NUM_INDICES)
+	//<FS:Beq> BOM constrain number of bake requests when BOM not supported
+	// prior to BOM BAKES beyond BAKED_HAIR were not supported.
+	// if (te < 0 || te >= BAKED_NUM_INDICES)
+	if (te < 0 || te >= sMaxBakes)
+	//</FS:Beq>
 	{
 		return NULL;
 	}
@@ -10756,6 +10768,11 @@ void LLVOAvatar::removeMissingBakedTextures()
 //virtual
 void LLVOAvatar::updateRegion(LLViewerRegion *regionp)
 {
+	//<FS:Beq> BOM constrain number of bake requests when BOM not supported,
+	// TEX_HEAD_TATTOO and BAKED_LEFT_ARM are the first new entries
+	// TODO(Beq): We might need to force some kind off rebake here?
+	sMaxBakes = gAgent.getRegion()->bakesOnMeshEnabled()?BAKED_NUM_INDICES:BAKED_LEFT_ARM;
+	//</FS:Beq>
 	LLViewerObject::updateRegion(regionp);
 }
 
@@ -11410,8 +11427,10 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		U32 cost = VISUAL_COMPLEXITY_UNKNOWN;
 		LLVOVolume::texture_cost_t textures;
 		hud_complexity_list_t hud_complexity_list;
-
-		for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
+		//<FS:Beq> BOM constrain number of bake requests when BOM not supported
+		// for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
+		for (U8 baked_index = 0; baked_index < sMaxBakes; baked_index++)
+		//</FS:Beq>
 		{
 		    const LLAvatarAppearanceDictionary::BakedEntry *baked_dict
 				= LLAvatarAppearanceDictionary::getInstance()->getBakedTexture((EBakedTextureIndex)baked_index);
