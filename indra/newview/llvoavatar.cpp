@@ -624,9 +624,9 @@ F32 LLVOAvatar::sUnbakedTime = 0.f;
 F32 LLVOAvatar::sUnbakedUpdateTime = 0.f;
 F32 LLVOAvatar::sGreyTime = 0.f;
 F32 LLVOAvatar::sGreyUpdateTime = 0.f;
-	//<FS:Beq> BOM bake limits
-int	LLVOAvatar::sMaxBakes;
-	//</FS:Beq>
+//<FS:Beq> BOM bake limits
+S32 LLVOAvatar::sMaxBakes;
+//</FS:Beq>
 //-----------------------------------------------------------------------------
 // Helper functions
 //-----------------------------------------------------------------------------
