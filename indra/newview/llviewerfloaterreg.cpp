@@ -68,8 +68,8 @@
 #include "llfloaterexperiences.h"
 #include "llfloaterexperiencepicker.h"
 #include "llfloaterevent.h"
-#include "llfloaterflickr.h"
 #include "llfloaterfonttest.h"
+#include "llfloaterforgetuser.h"
 #include "llfloatergesture.h"
 #include "llfloatergodtools.h"
 #include "llfloatergridstatus.h"
@@ -134,7 +134,6 @@
 #include "llfloatertos.h"
 #include "llfloatertoybox.h"
 #include "llfloatertranslationsettings.h"
-#include "llfloatertwitter.h"
 #include "llfloateruipreview.h"
 #include "llfloatervoiceeffect.h"
 #include "llfloaterwebcontent.h"
@@ -205,6 +204,7 @@
 #include "lggbeamcolormapfloater.h"
 #include "lggbeammapfloater.h"
 #include "llfloaterdisplayname.h"
+#include "llfloaterflickr.h"
 #include "llfloaterscriptrecover.h"
 #include "llfloatersearchreplace.h"
 #include "llpanelgroup.h"
@@ -288,6 +288,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("experience_search", "floater_experience_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterExperiencePicker>);
 
 	LLFloaterReg::add("font_test", "floater_font_test.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterFontTest>);
+	//LLFloaterReg::add("forget_username", "floater_forget_user.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterForgetUser>);
 
 	LLFloaterReg::add("gestures", "floater_gesture.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterGesture>);
 	LLFloaterReg::add("god_tools", "floater_god_tools.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterGodTools>);
@@ -431,11 +432,6 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("profile", "floater_profile.xml",(LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterProfile>);
 	LLFloaterReg::add("how_to", "floater_how_to.xml", (LLFloaterBuildFunc)&LLFloaterWebContent::create);
 
-	LLFloaterReg::add("flickr_web", "floater_fbc_web.xml", (LLFloaterBuildFunc)&LLFloaterWebContent::create);
-	LLFloaterReg::add("twitter_web", "floater_fbc_web.xml", (LLFloaterBuildFunc)&LLFloaterWebContent::create);
-	
-	LLFloaterReg::add("flickr", "floater_flickr.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterFlickr>);
-	LLFloaterReg::add("twitter", "floater_twitter.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterTwitter>);
 	LLFloaterReg::add("big_preview", "floater_big_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterBigPreview>);
 	
 	LLFloaterUIPreviewUtil::registerFloater();
@@ -460,6 +456,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("area_search", "floater_fs_area_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSAreaSearch>);
 	LLFloaterReg::add("export_collada", "floater_export_collada.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<ColladaExportFloater>);
 	LLFloaterReg::add("delete_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterDeleteQueue>);
+	LLFloaterReg::add("flickr", "floater_flickr.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterFlickr>);
 	LLFloaterReg::add("fs_floater_profile", "floater_fs_profile_view.xml", &LLFloaterReg::build<FSFloaterProfile>);
 	LLFloaterReg::add("fs_asset_blacklist", "floater_fs_asset_blacklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAssetBlacklist>);
 	LLFloaterReg::add("fs_avatar_render_settings", "floater_fs_avatar_render_settings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAvatarRenderSettings>);

@@ -40,7 +40,7 @@
 
 std::map<std::string, std::string> LLFloaterGridStatus::sItemsMap;
 // <FS:Ansariel> FIRE-21236 - Help Menu - Check Grid Status doesn't open using External Browser
-//const std::string DEFAULT_GRID_STATUS_URL = "http://secondlife-status.statuspage.io/"; 
+//const std::string DEFAULT_GRID_STATUS_URL = "http://status.secondlifegrid.net/"; 
 
 LLFloaterGridStatus::LLFloaterGridStatus(const Params& key) :
     LLFloaterWebContent(key),

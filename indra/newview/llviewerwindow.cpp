@@ -1013,6 +1013,12 @@ BOOL LLViewerWindow::handleAnyMouseClick(LLWindow *window,  LLCoordGL pos, MASK 
 			mLeftMouseDown = down;
 			buttonname = "Left Double Click";
 			break;
+		case LLMouseHandler::CLICK_BUTTON4:
+			buttonname = "Button 4";
+			break;
+		case LLMouseHandler::CLICK_BUTTON5:
+			buttonname = "Button 5";
+			break;
 		}
 		
 		LLView::sMouseHandlerMessage.clear();
@@ -1190,7 +1196,7 @@ BOOL LLViewerWindow::handleRightMouseUp(LLWindow *window,  LLCoordGL pos, MASK m
 BOOL LLViewerWindow::handleMiddleMouseDown(LLWindow *window,  LLCoordGL pos, MASK mask)
 {
 	BOOL down = TRUE;
-	LLVoiceClient::getInstance()->middleMouseState(true);
+	LLVoiceClient::getInstance()->updateMouseState(LLMouseHandler::CLICK_MIDDLE, true);
  	handleAnyMouseClick(window,pos,mask,LLMouseHandler::CLICK_MIDDLE,down);
   
   	// Always handled as far as the OS is concerned.
@@ -1342,15 +1348,45 @@ LLWindowCallbacks::DragNDropResult LLViewerWindow::handleDragNDrop( LLWindow *wi
 	
 	return result;
 }
-  
+
 BOOL LLViewerWindow::handleMiddleMouseUp(LLWindow *window,  LLCoordGL pos, MASK mask)
 {
 	BOOL down = FALSE;
-	LLVoiceClient::getInstance()->middleMouseState(false);
+	LLVoiceClient::getInstance()->updateMouseState(LLMouseHandler::CLICK_MIDDLE, false);
  	handleAnyMouseClick(window,pos,mask,LLMouseHandler::CLICK_MIDDLE,down);
   
   	// Always handled as far as the OS is concerned.
 	return TRUE;
+}
+
+BOOL LLViewerWindow::handleOtherMouse(LLWindow *window, LLCoordGL pos, MASK mask, S32 button, bool down)
+{
+    switch (button)
+    {
+    case 4:
+        LLVoiceClient::getInstance()->updateMouseState(LLMouseHandler::CLICK_BUTTON4, down);
+        handleAnyMouseClick(window, pos, mask, LLMouseHandler::CLICK_BUTTON4, down);
+        break;
+    case 5:
+        LLVoiceClient::getInstance()->updateMouseState(LLMouseHandler::CLICK_BUTTON5, down);
+        handleAnyMouseClick(window, pos, mask, LLMouseHandler::CLICK_BUTTON5, down);
+        break;
+    default:
+        break;
+    }
+
+    // Always handled as far as the OS is concerned.
+    return TRUE;
+}
+
+BOOL LLViewerWindow::handleOtherMouseDown(LLWindow *window, LLCoordGL pos, MASK mask, S32 button)
+{
+    return handleOtherMouse(window, pos, mask, button, TRUE);
+}
+
+BOOL LLViewerWindow::handleOtherMouseUp(LLWindow *window, LLCoordGL pos, MASK mask, S32 button)
+{
+    return handleOtherMouse(window, pos, mask, button, FALSE);
 }
 
 // WARNING: this is potentially called multiple times per frame
@@ -1624,6 +1660,11 @@ BOOL LLViewerWindow::handlePaint(LLWindow *window,  S32 x,  S32 y, S32 width,  S
 void LLViewerWindow::handleScrollWheel(LLWindow *window,  S32 clicks)
 {
 	handleScrollWheel( clicks );
+}
+
+void LLViewerWindow::handleScrollHWheel(LLWindow *window,  S32 clicks)
+{
+	handleScrollHWheel(clicks);
 }
 
 void LLViewerWindow::handleWindowBlock(LLWindow *window)
@@ -2101,6 +2142,11 @@ void LLViewerWindow::initBase()
 	LLPanel* panel_holder = main_view->getChild<LLPanel>("toolbar_view_holder");
 	// Load the toolbar view from file 
 	gToolBarView = LLUICtrlFactory::getInstance()->createFromFile<LLToolBarView>("panel_toolbar_view.xml", panel_holder, LLDefaultChildRegistry::instance());
+	if (!gToolBarView)
+	{
+		LL_ERRS() << "Failed to initialize viewer: Viewer couldn't process file panel_toolbar_view.xml, "
+				<< "if this problem happens again, please validate your installation." << LL_ENDL;
+	}
 	gToolBarView->setShape(panel_holder->getLocalRect());
 	// Hide the toolbars for the moment: we'll make them visible after logging in world (see LLViewerWindow::initWorldUI())
 	gToolBarView->setVisible(FALSE);
@@ -3256,7 +3302,8 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	// -- Also removed !gAgentCamera.cameraMouselook() because of FIRE-10906; Pressing letter keys SHOULD move focus to chat when this option is enabled, regardless of being in mouselook or not
 	// -- The need to press Enter key while being in mouselook mode every time to say a sentence is not too coherent with user's expectation, if he/she checked "starts local chat"
 	// -- Also check for KEY_DIVIDE as we remapped VK_OEM_2 to KEY_DIVIDE in LLKeyboardWin32 to fix starting gestures
-	//if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
+	//if ( LLStartUp::getStartupState() >= STATE_STARTED && 
+	//	gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
 	//	!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
 	//{
 	//	// Initialize nearby chat if it's missing
@@ -3407,6 +3454,49 @@ void LLViewerWindow::handleScrollWheel(S32 clicks)
 		gAgentCamera.handleScrollWheel(clicks);
 
 	return;
+}
+
+void LLViewerWindow::handleScrollHWheel(S32 clicks)
+{
+    LLUI::getInstance()->resetMouseIdleTimer();
+
+    LLMouseHandler* mouse_captor = gFocusMgr.getMouseCapture();
+    if (mouse_captor)
+    {
+        S32 local_x;
+        S32 local_y;
+        mouse_captor->screenPointToLocal(mCurrentMousePoint.mX, mCurrentMousePoint.mY, &local_x, &local_y);
+        mouse_captor->handleScrollHWheel(local_x, local_y, clicks);
+        if (LLView::sDebugMouseHandling)
+        {
+            LL_INFOS() << "Scroll Horizontal Wheel handled by captor " << mouse_captor->getName() << LL_ENDL;
+        }
+        return;
+    }
+
+    LLUICtrl* top_ctrl = gFocusMgr.getTopCtrl();
+    if (top_ctrl)
+    {
+        S32 local_x;
+        S32 local_y;
+        top_ctrl->screenPointToLocal(mCurrentMousePoint.mX, mCurrentMousePoint.mY, &local_x, &local_y);
+        if (top_ctrl->handleScrollHWheel(local_x, local_y, clicks)) return;
+    }
+
+    if (mRootView->handleScrollHWheel(mCurrentMousePoint.mX, mCurrentMousePoint.mY, clicks))
+    {
+        if (LLView::sDebugMouseHandling)
+        {
+            LL_INFOS() << "Scroll Horizontal Wheel" << LLView::sMouseHandlerMessage << LL_ENDL;
+        }
+        return;
+    }
+    else if (LLView::sDebugMouseHandling)
+    {
+        LL_INFOS() << "Scroll Horizontal Wheel not handled by view" << LL_ENDL;
+    }
+
+    return;
 }
 
 void LLViewerWindow::addPopup(LLView* popup)
@@ -3775,9 +3865,8 @@ void LLViewerWindow::updateUI()
 			LLRect screen_sticky_rect = mRootView->getLocalRect();
 			S32 local_x, local_y;
 
-			//if (gSavedSettings.getBOOL("DebugShowXUINames"))
-			static LLCachedControl<bool> debugShowXUINames(gSavedSettings, "DebugShowXUINames");
-			if (debugShowXUINames)
+			static LLCachedControl<bool> debug_show_xui_names(gSavedSettings, "DebugShowXUINames", 0);
+			if (debug_show_xui_names)
 			{
 				LLToolTip::Params params;
 
@@ -5796,7 +5885,8 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 		if ((image_width <= gGLManager.mGLMaxTextureSize && image_height <= gGLManager.mGLMaxTextureSize) && 
 			(image_width > window_width || image_height > window_height) && LLPipeline::sRenderDeferred && !show_ui)
 		{
-			if (scratch_space.allocate(image_width, image_height, GL_DEPTH_COMPONENT, true, true))
+			U32 color_fmt = type == LLSnapshotModel::SNAPSHOT_TYPE_DEPTH ? GL_DEPTH_COMPONENT : GL_RGBA;
+			if (scratch_space.allocate(image_width, image_height, color_fmt, true, true))
 			{
 				original_width = gPipeline.mDeferredScreen.getWidth();
 				original_height = gPipeline.mDeferredScreen.getHeight();
@@ -6770,6 +6860,14 @@ void LLViewerWindow::setUIVisibility(bool visible)
 	//LLNavigationBar::getInstance()->setVisible(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);
 	LLPanelTopInfoBar::getInstance()->setVisible(visible? gSavedSettings.getBOOL("ShowMiniLocationPanel") : FALSE);
 	mRootView->getChildView("status_bar_container")->setVisible(visible);
+
+	// <FS:Zi> hide utility bar if we are on a skin that uses it, e.g. Vintage
+	LLView* utilityBarStack = mRootView->findChildView("chat_bar_utility_bar_stack");
+	if (utilityBarStack)
+	{
+		utilityBarStack->setVisible(visible);
+	}
+	// </FS:Zi>
 }
 
 bool LLViewerWindow::getUIVisibility()

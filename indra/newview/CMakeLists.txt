@@ -219,6 +219,8 @@ set(viewer_SOURCE_FILES
     lggbeamscolors.cpp
     lggcontactsets.cpp
     lfsimfeaturehandler.cpp
+    llflickrconnect.cpp
+    llfloaterflickr.cpp
     llpanelopenregionsettings.cpp
     # <FS:Ansariel> [Legacy Bake]
     llagentwearablesfetch.cpp
@@ -320,7 +322,6 @@ set(viewer_SOURCE_FILES
     llfilteredwearablelist.cpp
     llfirstuse.cpp
     llflexibleobject.cpp
-    llflickrconnect.cpp
     llfloaterabout.cpp
     llfloaterbvhpreview.cpp
     llfloaterauction.cpp
@@ -357,8 +358,8 @@ set(viewer_SOURCE_FILES
     llfloaterexperiencepicker.cpp
     llfloaterexperienceprofile.cpp
     llfloaterexperiences.cpp
-    llfloaterflickr.cpp
     llfloaterfonttest.cpp
+    llfloaterforgetuser.cpp
     llfloatergesture.cpp
     llfloatergodtools.cpp
     llfloatergotoline.cpp
@@ -433,7 +434,6 @@ set(viewer_SOURCE_FILES
     llfloatertos.cpp
     llfloatertoybox.cpp
     llfloatertranslationsettings.cpp
-    llfloatertwitter.cpp
     llfloateruipreview.cpp
     llfloaterurlentry.cpp
     llfloatervoiceeffect.cpp
@@ -730,7 +730,6 @@ set(viewer_SOURCE_FILES
     lltransientdockablefloater.cpp
     lltransientfloatermgr.cpp
     lltranslate.cpp
-    lltwitterconnect.cpp
     lluiavatar.cpp
     lluilistener.cpp
     lluploaddialog.cpp
@@ -779,6 +778,7 @@ set(viewer_SOURCE_FILES
     llviewerobject.cpp
     llviewerobjectlist.cpp
     llvieweroctree.cpp
+    llviewerparcelaskplay.cpp
     llviewerparcelmedia.cpp
     llviewerparcelmediaautoplay.cpp
     llviewerparcelmgr.cpp
@@ -977,6 +977,8 @@ set(viewer_HEADER_FILES
     lggbeamscolors.h
     lggcontactsets.h
     lfsimfeaturehandler.h
+    llflickrconnect.h
+    llfloaterflickr.h
     # <FS:Ansariel> [Legacy Bake]
     llagentwearablesfetch.h
 
@@ -1078,7 +1080,6 @@ set(viewer_HEADER_FILES
     llfilteredwearablelist.h
     llfirstuse.h
     llflexibleobject.h
-    llflickrconnect.h
     llfloaterabout.h
     llfloaterbvhpreview.h
     llfloaterauction.h
@@ -1115,8 +1116,8 @@ set(viewer_HEADER_FILES
     llfloaterexperiencepicker.h
     llfloaterexperienceprofile.h
     llfloaterexperiences.h
-    llfloaterflickr.h
     llfloaterfonttest.h
+    llfloaterforgetuser.h
     llfloatergesture.h
     llfloatergodtools.h
     llfloatergotoline.h
@@ -1194,7 +1195,6 @@ set(viewer_HEADER_FILES
     llfloatertos.h
     llfloatertoybox.h
     llfloatertranslationsettings.h
-    llfloatertwitter.h
     llfloateruipreview.h
     llfloaterurlentry.h
     llfloatervoiceeffect.h
@@ -1481,7 +1481,6 @@ set(viewer_HEADER_FILES
     lltransientdockablefloater.h
     lltransientfloatermgr.h
     lltranslate.h
-    lltwitterconnect.h
     lluiconstants.h
     lluiavatar.h
     lluilistener.h
@@ -1531,6 +1530,7 @@ set(viewer_HEADER_FILES
     llviewerobject.h
     llviewerobjectlist.h
     llvieweroctree.h
+    llviewerparcelaskplay.h
     llviewerparcelmedia.h
     llviewerparcelmediaautoplay.h
     llviewerparcelmgr.h

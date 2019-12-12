@@ -330,11 +330,6 @@ private:
 	FilterOps				mBackupFilterOps; // for backup purposes when leaving 'search link' mode
 
 	std::string				mFilterSubString;
-	
-	// <FS:Zi> Multi-substring inventory search
-	std::vector<std::string::size_type>	mSubStringMatchOffsets;
-	std::vector<std::string>			mFilterSubStrings;
-	// </FS:Zi> Multi-substring inventory search
 
 	std::string				mFilterSubStringOrig;
 	std::string				mUsername;
@@ -354,6 +349,9 @@ private:
 	std::string 			mEmptyLookupMessage;
 
 	ESearchType 			mSearchType;
+
+	std::vector<std::string> mFilterTokens;
+	std::string				 mExactToken;
 };
 
 #endif

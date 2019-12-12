@@ -198,6 +198,7 @@ public:
 	void onClickSetKey();
 	void onClickClearKey(); // <FS:Ansariel> FIRE-3803: Clear voice toggle button
 	void setKey(KEY key);
+	void setMouse(LLMouseHandler::EClickType click);
 	void onClickSetMiddleMouse();
 	// void onClickSetSounds();	//<FS:KC> Handled centrally now
 	void onClickPreviewUISound(const LLSD& ui_sound_id); // <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
@@ -247,7 +248,6 @@ public:
 
 	void refreshUI();
 
-	void onCommitParcelMediaAutoPlayEnable();
 	void onCommitMediaEnabled();
 	void onCommitMusicEnabled();
 	void applyResolution();
@@ -260,6 +260,7 @@ public:
 	void onClickProxySettings();
 	void onClickTranslationSettings();
 	void onClickPermsDefault();
+	void onClickRememberedUsernames();
 	void onClickAutoReplace();
 	void onClickSpellChecker();
 	void onClickRenderExceptions();

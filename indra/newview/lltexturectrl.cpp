@@ -399,7 +399,9 @@ BOOL LLFloaterTexturePicker::postBuild()
 	{
 		std::string pick = getString("pick title");
 	
-		setTitle(pick + mLabel);
+		// <FS:Ansariel> Missing whitespace
+		//setTitle(pick + mLabel);
+		setTitle(pick + " " + mLabel);
 	}
 	mTentativeLabel = getChild<LLTextBox>("Multiple");
 

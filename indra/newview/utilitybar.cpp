@@ -29,6 +29,7 @@
 #include "llbutton.h"
 
 #include "llagent.h"
+#include "llstartup.h"
 #include "llstatusbar.h"
 #include "llviewercontrol.h"
 #include "llviewermedia.h"
@@ -109,6 +110,13 @@ void UtilityBar::onParcelMediaClicked()
 
 BOOL UtilityBar::tick()
 {
+	// Don't check media before being logged in properly so we won't try to
+	// initialize parcel media classes too early
+	if (LLStartUp::getStartupState() != STATE_STARTED)
+	{
+		return FALSE;
+	}
+
 	// NOTE: copied from llstatusbar.cpp
 	// This has to be resolved to callbacks or controls eventually -Zi
 	LLViewerMedia* inst = LLViewerMedia::getInstance();

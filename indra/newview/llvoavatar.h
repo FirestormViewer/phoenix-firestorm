@@ -346,6 +346,9 @@ public:
 	static BOOL		sJointDebug; // output total number of joints being touched for each avatar
 	static BOOL		sDebugAvatarRotation;
 	static LLPartSysData sCloud;
+	//<FS:Beq> BOM bake limits
+	static S32		sMaxBakes;
+	//</FS:Beq>
 
 	//--------------------------------------------------------------------
 	// Region state
@@ -364,7 +367,7 @@ public:
 	BOOL			isFullyTextured() const;
 	BOOL			hasGray() const; 
 	S32				getRezzedStatus() const; // 0 = cloud, 1 = gray, 2 = textured, 3 = textured and fully downloaded.
-	void			updateRezzedStatusTimers();
+	void			updateRezzedStatusTimers(S32 status);
 
 	S32				mLastRezzedStatus;
 

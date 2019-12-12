@@ -575,7 +575,7 @@ void FSPanelLogin::setFields(LLPointer<LLCredential> credential, bool from_start
 
 // static
 void FSPanelLogin::getFields(LLPointer<LLCredential>& credential,
-							 BOOL& remember)
+							 bool& remember)
 {
 	if (!sInstance)
 	{
@@ -945,7 +945,7 @@ void FSPanelLogin::onClickConnect(void *)
 		{
 			sCredentialSet = FALSE;
 			LLPointer<LLCredential> cred;
-			BOOL remember;
+			bool remember;
 			getFields(cred, remember);
 			std::string identifier_type;
 			cred->identifierType(identifier_type);

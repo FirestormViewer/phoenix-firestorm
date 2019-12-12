@@ -181,6 +181,7 @@ public:
 		Optional<std::string>	control;
 		Optional<bool>			invert_control;
 		Optional<bool>			session_only;
+		Optional<bool>			checkbox_only;
 
 		FormIgnore();
 	};
@@ -234,7 +235,8 @@ public:
 
 	typedef enum e_ignore_type
 	{ 
-		IGNORE_NO,
+		IGNORE_CHECKBOX_ONLY = -1, // ignore won't be handled, will set value/checkbox only
+		IGNORE_NO = 0,
 		IGNORE_WITH_DEFAULT_RESPONSE,
 		IGNORE_WITH_DEFAULT_RESPONSE_SESSION_ONLY,
 		IGNORE_WITH_LAST_RESPONSE, 

@@ -1069,7 +1069,7 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 			mDeferredLight.release();
 		}
 
-		F32 scale = RenderShadowResolutionScale;
+		F32 scale = llmax(0.f, RenderShadowResolutionScale);
 
 		if (shadow_detail > 0)
 		{ //allocate 4 sun shadow maps
@@ -8876,8 +8876,8 @@ void LLPipeline::renderDeferredLighting()
 					}
 
 					const LLViewerObject *vobj = drawablep->getVObj();
-					if(vobj && vobj->getAvatar()
-						&& (vobj->getAvatar()->isTooComplex() || vobj->getAvatar()->isInMuteList()))
+					if((vobj && vobj->getAvatar() && (vobj->getAvatar()->isTooComplex() || vobj->getAvatar()->isInMuteList()))
+						|| (vobj && dist_vec(vobj->getPosition(), LLViewerCamera::getInstance()->getOrigin()) > RenderFarClip))
 					{
 						continue;
 					}
@@ -11630,7 +11630,7 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 				 attachment_iter != attachment->mAttachedObjects.end();
 				 ++attachment_iter)
 			{
-				if (LLViewerObject* attached_object = (*attachment_iter))
+				if (LLViewerObject* attached_object = attachment_iter->get())
 				{
 					markVisible(attached_object->mDrawable->getSpatialBridge(), *viewer_camera);
 				}

@@ -42,7 +42,7 @@
 #include "llviewerfoldertype.h"
 #include "llradiogroup.h"
 #include "llstartup.h"
-
+#include <boost/regex.hpp>
 // linden library includes
 #include "llclipboard.h"
 #include "lltrans.h"
@@ -84,11 +84,6 @@ LLInventoryFilter::LLInventoryFilter(const Params& p)
 	mFirstSuccessGeneration(0),
 	mSearchType(SEARCHTYPE_NAME)
 {
-	// <FS:Zi> Begin Multi-substring inventory search
-	mSubStringMatchOffsets.clear();
-	mFilterSubStrings.clear();
-	// </FS:Zi> End Multi-substring inventory search
-
 	// copy mFilterOps into mDefaultFilterOps
 	markDefault();
 	mUsername = gAgentUsername;
@@ -106,79 +101,66 @@ bool LLInventoryFilter::check(const LLFolderViewModelItem* item)
 		return true;
 	}
 	
-	// <FS:Zi> Multi-substring inventory search
-	//std::string desc = listener->getSearchableCreatorName();
-	//switch(mSearchType)
-	//{
-	//	case SEARCHTYPE_CREATOR:
-	//		desc = listener->getSearchableCreatorName();
-	//		break;
-	//	case SEARCHTYPE_DESCRIPTION:
-	//		desc = listener->getSearchableDescription();
-	//		break;
-	//	case SEARCHTYPE_UUID:
-	//		desc = listener->getSearchableUUIDString();
-	//		break;
-	//	case SEARCHTYPE_NAME:
-	//	default:
-	//		desc = listener->getSearchableName();
-	//		break;
-	//}
-
-	//bool passed = (mFilterSubString.size() ? desc.find(mFilterSubString) != std::string::npos : true);
-	std::string::size_type string_offset = std::string::npos;
-	if (mFilterSubStrings.size())
+	std::string desc = listener->getSearchableCreatorName();
+	switch(mSearchType)
 	{
-		std::string searchLabel;
-		switch (mSearchType)
+		case SEARCHTYPE_CREATOR:
+			desc = listener->getSearchableCreatorName();
+			break;
+		case SEARCHTYPE_DESCRIPTION:
+			desc = listener->getSearchableDescription();
+			break;
+		case SEARCHTYPE_UUID:
+			desc = listener->getSearchableUUIDString();
+			break;
+		// <FS:Ansariel> Allow searching by all
+		case SEARCHTYPE_ALL:
+			desc = listener->getSearchableAll();
+			break;
+		// </FS:Ansariel>
+		case SEARCHTYPE_NAME:
+		default:
+			desc = listener->getSearchableName();
+			break;
+	}
+
+	bool passed = true;
+	// <FS:Ansariel> Allow searching by all
+	//if (!mExactToken.empty() && (mSearchType == SEARCHTYPE_NAME))
+	if (!mExactToken.empty() && ((mSearchType == SEARCHTYPE_NAME) || (mSearchType == SEARCHTYPE_ALL)))
+	// </FS:Ansariel>
+	{
+		passed = false;
+		typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+		boost::char_separator<char> sep(" ");
+		tokenizer tokens(desc, sep);
+
+		for (auto token_iter : tokens)
 		{
-			case SEARCHTYPE_NAME:
-				searchLabel = listener->getSearchableName();
-				break;
-			case SEARCHTYPE_DESCRIPTION:
-				searchLabel = listener->getSearchableDescription();
-				break;
-			case SEARCHTYPE_CREATOR:
-				searchLabel = listener->getSearchableCreatorName();
-				break;
-			case SEARCHTYPE_UUID:
-				searchLabel = listener->getSearchableUUIDString();
-				break;
-			case SEARCHTYPE_ALL:
-				searchLabel = listener->getSearchableAll();
-				break;
-			default:
-				LL_WARNS("LLInventoryFilter") << "Unknown search substring target: " << mSearchType << LL_ENDL;
-				searchLabel = listener->getSearchableName();
-				break;
-		}
-
-		U32 index = 0;
-		for (std::vector<std::string>::iterator it = mFilterSubStrings.begin();
-			it < mFilterSubStrings.end(); it++, index++)
-		{
-			std::string::size_type sub_string_offset = searchLabel.find(*it);
-
-			mSubStringMatchOffsets[index] = sub_string_offset;
-
-			if (sub_string_offset == std::string::npos)
+			if (token_iter == mExactToken)
 			{
-				string_offset = std::string::npos;
-				for (std::vector<std::string::size_type>::iterator it = mSubStringMatchOffsets.begin();
-					it < mSubStringMatchOffsets.end(); it++)
-				{
-					*it = std::string::npos;
-				}
+				passed = true;
 				break;
 			}
-			else if (string_offset == std::string::npos)
+		}	
+	}
+	// <FS:Ansariel> Allow searching by all
+	//else if ((mFilterTokens.size() > 0) && (mSearchType == SEARCHTYPE_NAME))
+	else if ((mFilterTokens.size() > 0) && ((mSearchType == SEARCHTYPE_NAME) || (mSearchType == SEARCHTYPE_ALL)))
+	// </FS:Ansariel>
+	{
+		for (auto token_iter : mFilterTokens)
+		{
+			if (desc.find(token_iter) == std::string::npos)
 			{
-				string_offset = sub_string_offset;
+				return false;
 			}
 		}
 	}
-	bool passed = (mFilterSubString.size() == 0 || string_offset != std::string::npos);
-	// </FS:Zi> Multi-substring inventory search
+	else
+	{
+		passed = (mFilterSubString.size() ? desc.find(mFilterSubString) != std::string::npos : true);
+	}
 
 	passed = passed && checkAgainstFilterType(listener);
 	passed = passed && checkAgainstPermissions(listener);
@@ -794,34 +776,41 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
 	mFilterSubStringOrig = string;
 	LLStringUtil::trimHead(filter_sub_string_new);
 	LLStringUtil::toUpper(filter_sub_string_new);
-	
-	// <FS:Zi> Multi-substring inventory search
-	//	Cut filter string into several substrings, separated by +
-	{
-		mFilterSubStrings.clear();
-		mSubStringMatchOffsets.clear();
-		std::string::size_type frm = 0;
-		std::string::size_type to;
-		do
-		{
-			to = filter_sub_string_new.find_first_of('+',frm);
-
-			std::string subSubString = (to == std::string::npos) ? filter_sub_string_new.substr(frm, to) : filter_sub_string_new.substr(frm, to-frm);
-		
-			if (subSubString.size())
-			{
-				mFilterSubStrings.push_back(subSubString);
-				mSubStringMatchOffsets.push_back(std::string::npos);
-			}
-
-			frm = to+1;
-		}
-		while (to != std::string::npos);
-	}
-	// </FS:Zi> Multi-substring inventory search
 
 	if (mFilterSubString != filter_sub_string_new)
 	{
+		
+		mFilterTokens.clear();
+		if (filter_sub_string_new.find_first_of("+") != std::string::npos)
+		{
+			typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+			boost::char_separator<char> sep("+");
+			tokenizer tokens(filter_sub_string_new, sep);
+
+			for (auto token_iter : tokens)
+			{
+				mFilterTokens.push_back(token_iter);
+			}
+		}
+
+		std::string old_token = mExactToken;
+		mExactToken.clear();
+		bool exact_token_changed = false;
+		if (mFilterTokens.empty() && filter_sub_string_new.size() > 2)
+		{
+			boost::regex mPattern = boost::regex("\"\\s*([^<]*)?\\s*\"",
+				boost::regex::perl | boost::regex::icase);
+			boost::match_results<std::string::const_iterator> matches;
+			mExactToken = (boost::regex_match(filter_sub_string_new, matches, mPattern) && matches[1].matched)
+				? matches[1]
+				: LLStringUtil::null;
+			if ((old_token.empty() && !mExactToken.empty()) 
+				|| (!old_token.empty() && mExactToken.empty()))
+			{
+				exact_token_changed = true;
+			}
+		}
+
 		// hitting BACKSPACE, for example
 		const BOOL less_restrictive = mFilterSubString.size() >= filter_sub_string_new.size()
 			&& !mFilterSubString.substr(0, filter_sub_string_new.size()).compare(filter_sub_string_new);
@@ -831,7 +820,11 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
 			&& !filter_sub_string_new.substr(0, mFilterSubString.size()).compare(mFilterSubString);
 
 		mFilterSubString = filter_sub_string_new;
-		if (less_restrictive)
+		if (exact_token_changed)
+		{
+			setModified(FILTER_RESTART);
+		}
+		else if (less_restrictive)
 		{
 			setModified(FILTER_LESS_RESTRICTIVE);
 		}
@@ -1595,25 +1588,3 @@ bool LLInventoryFilter::FilterOps::DateRange::validateBlock( bool   emit_errors 
 	}
 	return valid;
 }
-
-// <FS:Zi> Multi-substring inventory search
-
-//	For use by LLFolderViewItem for highlighting
-
-U32	LLInventoryFilter::getFilterSubStringCount() const 
-{
-	return mFilterSubStrings.size();
-}
-
-std::string::size_type LLInventoryFilter::getFilterSubStringPos(U32 index) const
-{
-	if (index >= mSubStringMatchOffsets.size()) return std::string::npos;
-	return mSubStringMatchOffsets[index];
-}
-
-std::string::size_type LLInventoryFilter::getFilterSubStringLen(U32 index) const
-{
-	if (index >= mFilterSubStrings.size()) return 0;
-	return mFilterSubStrings[index].size();
-}
-// </FS:Zi> Multi-substring inventory search

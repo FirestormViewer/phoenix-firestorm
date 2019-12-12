@@ -187,7 +187,7 @@ BOOL LLDataPackerBinaryBuffer::packString(const std::string& value, const char *
 
 	if (mWriteEnabled) 
 	{
-		htonmemcpy(mCurBufferp, value.c_str(), MVT_VARIABLE, length);  
+		htolememcpy(mCurBufferp, value.c_str(), MVT_VARIABLE, length);  
 	}
 	mCurBufferp += length;
 	return TRUE;
@@ -218,12 +218,12 @@ BOOL LLDataPackerBinaryBuffer::packBinaryData(const U8 *value, S32 size, const c
 
 	if (mWriteEnabled) 
 	{ 
-		htonmemcpy(mCurBufferp, &size, MVT_S32, 4);  
+		htolememcpy(mCurBufferp, &size, MVT_S32, 4);  
 	}
 	mCurBufferp += 4;
 	if (mWriteEnabled) 
 	{ 
-		htonmemcpy(mCurBufferp, value, MVT_VARIABLE, size);  
+		htolememcpy(mCurBufferp, value, MVT_VARIABLE, size);  
 	}
 	mCurBufferp += size;
 	return TRUE;
@@ -238,7 +238,7 @@ BOOL LLDataPackerBinaryBuffer::unpackBinaryData(U8 *value, S32 &size, const char
 		return FALSE;
 	}
 
-	htonmemcpy(&size, mCurBufferp, MVT_S32, 4);
+	htolememcpy(&size, mCurBufferp, MVT_S32, 4);
 	mCurBufferp += 4;
 
 	if (!verifyLength(size, name))
@@ -247,7 +247,7 @@ BOOL LLDataPackerBinaryBuffer::unpackBinaryData(U8 *value, S32 &size, const char
 		return FALSE;
 	}
 
-	htonmemcpy(value, mCurBufferp, MVT_VARIABLE, size);
+	htolememcpy(value, mCurBufferp, MVT_VARIABLE, size);
 	mCurBufferp += size;
 
 	return TRUE;
@@ -263,7 +263,7 @@ BOOL LLDataPackerBinaryBuffer::packBinaryDataFixed(const U8 *value, S32 size, co
 
 	if (mWriteEnabled) 
 	{ 
-		htonmemcpy(mCurBufferp, value, MVT_VARIABLE, size);  
+		htolememcpy(mCurBufferp, value, MVT_VARIABLE, size);  
 	}
 	mCurBufferp += size;
 	return TRUE;
@@ -276,7 +276,7 @@ BOOL LLDataPackerBinaryBuffer::unpackBinaryDataFixed(U8 *value, S32 size, const 
 	{
 		return FALSE;
 	}
-	htonmemcpy(value, mCurBufferp, MVT_VARIABLE, size);
+	htolememcpy(value, mCurBufferp, MVT_VARIABLE, size);
 	mCurBufferp += size;
 	return TRUE;
 }
@@ -320,7 +320,7 @@ BOOL LLDataPackerBinaryBuffer::packU16(const U16 value, const char *name)
 
 	if (mWriteEnabled) 
 	{ 
-		htonmemcpy(mCurBufferp, &value, MVT_U16, 2);  
+		htolememcpy(mCurBufferp, &value, MVT_U16, 2);  
 	}
 	mCurBufferp += 2;
 	return TRUE;
@@ -334,7 +334,7 @@ BOOL LLDataPackerBinaryBuffer::unpackU16(U16 &value, const char *name)
 		return FALSE;
 	}
 
-	htonmemcpy(&value, mCurBufferp, MVT_U16, 2);
+	htolememcpy(&value, mCurBufferp, MVT_U16, 2);
 	mCurBufferp += 2;
 	return TRUE;
 }
@@ -349,7 +349,7 @@ BOOL LLDataPackerBinaryBuffer::packU32(const U32 value, const char *name)
 
 	if (mWriteEnabled) 
 	{ 
-		htonmemcpy(mCurBufferp, &value, MVT_U32, 4);  
+		htolememcpy(mCurBufferp, &value, MVT_U32, 4);  
 	}
 	mCurBufferp += 4;
 	return TRUE;
@@ -363,7 +363,7 @@ BOOL LLDataPackerBinaryBuffer::unpackU32(U32 &value, const char *name)
 		return FALSE;
 	}
 
-	htonmemcpy(&value, mCurBufferp, MVT_U32, 4);
+	htolememcpy(&value, mCurBufferp, MVT_U32, 4);
 	mCurBufferp += 4;
 	return TRUE;
 }
@@ -378,7 +378,7 @@ BOOL LLDataPackerBinaryBuffer::packS32(const S32 value, const char *name)
 
 	if (mWriteEnabled) 
 	{ 
-		htonmemcpy(mCurBufferp, &value, MVT_S32, 4); 
+		htolememcpy(mCurBufferp, &value, MVT_S32, 4); 
 	}
 	mCurBufferp += 4;
 	return TRUE;
@@ -392,7 +392,7 @@ BOOL LLDataPackerBinaryBuffer::unpackS32(S32 &value, const char *name)
 		return FALSE;
 	}
 
-	htonmemcpy(&value, mCurBufferp, MVT_S32, 4);
+	htolememcpy(&value, mCurBufferp, MVT_S32, 4);
 	mCurBufferp += 4;
 	return TRUE;
 }
@@ -407,7 +407,7 @@ BOOL LLDataPackerBinaryBuffer::packF32(const F32 value, const char *name)
 
 	if (mWriteEnabled) 
 	{ 
-		htonmemcpy(mCurBufferp, &value, MVT_F32, 4); 
+		htolememcpy(mCurBufferp, &value, MVT_F32, 4); 
 	}
 	mCurBufferp += 4;
 	return TRUE;
@@ -421,7 +421,7 @@ BOOL LLDataPackerBinaryBuffer::unpackF32(F32 &value, const char *name)
 		return FALSE;
 	}
 
-	htonmemcpy(&value, mCurBufferp, MVT_F32, 4);
+	htolememcpy(&value, mCurBufferp, MVT_F32, 4);
 	mCurBufferp += 4;
 	return TRUE;
 }
@@ -436,7 +436,7 @@ BOOL LLDataPackerBinaryBuffer::packColor4(const LLColor4 &value, const char *nam
 
 	if (mWriteEnabled) 
 	{ 
-		htonmemcpy(mCurBufferp, value.mV, MVT_LLVector4, 16); 
+		htolememcpy(mCurBufferp, value.mV, MVT_LLVector4, 16); 
 	}
 	mCurBufferp += 16;
 	return TRUE;
@@ -450,7 +450,7 @@ BOOL LLDataPackerBinaryBuffer::unpackColor4(LLColor4 &value, const char *name)
 		return FALSE;
 	}
 
-	htonmemcpy(value.mV, mCurBufferp, MVT_LLVector4, 16);
+	htolememcpy(value.mV, mCurBufferp, MVT_LLVector4, 16);
 	mCurBufferp += 16;
 	return TRUE;
 }
@@ -465,7 +465,7 @@ BOOL LLDataPackerBinaryBuffer::packColor4U(const LLColor4U &value, const char *n
 
 	if (mWriteEnabled) 
 	{ 
-		htonmemcpy(mCurBufferp, value.mV, MVT_VARIABLE, 4);  
+		htolememcpy(mCurBufferp, value.mV, MVT_VARIABLE, 4);  
 	}
 	mCurBufferp += 4;
 	return TRUE;
@@ -479,7 +479,7 @@ BOOL LLDataPackerBinaryBuffer::unpackColor4U(LLColor4U &value, const char *name)
 		return FALSE;
 	}
 
-	htonmemcpy(value.mV, mCurBufferp, MVT_VARIABLE, 4);
+	htolememcpy(value.mV, mCurBufferp, MVT_VARIABLE, 4);
 	mCurBufferp += 4;
 	return TRUE;
 }
@@ -495,8 +495,8 @@ BOOL LLDataPackerBinaryBuffer::packVector2(const LLVector2 &value, const char *n
 
 	if (mWriteEnabled) 
 	{ 
-		htonmemcpy(mCurBufferp, &value.mV[0], MVT_F32, 4);  
-		htonmemcpy(mCurBufferp+4, &value.mV[1], MVT_F32, 4);  
+		htolememcpy(mCurBufferp, &value.mV[0], MVT_F32, 4);  
+		htolememcpy(mCurBufferp+4, &value.mV[1], MVT_F32, 4);  
 	}
 	mCurBufferp += 8;
 	return TRUE;
@@ -510,8 +510,8 @@ BOOL LLDataPackerBinaryBuffer::unpackVector2(LLVector2 &value, const char *name)
 		return FALSE;
 	}
 
-	htonmemcpy(&value.mV[0], mCurBufferp, MVT_F32, 4);
-	htonmemcpy(&value.mV[1], mCurBufferp+4, MVT_F32, 4);
+	htolememcpy(&value.mV[0], mCurBufferp, MVT_F32, 4);
+	htolememcpy(&value.mV[1], mCurBufferp+4, MVT_F32, 4);
 	mCurBufferp += 8;
 	return TRUE;
 }
@@ -526,7 +526,7 @@ BOOL LLDataPackerBinaryBuffer::packVector3(const LLVector3 &value, const char *n
 
 	if (mWriteEnabled) 
 	{ 
-		htonmemcpy(mCurBufferp, value.mV, MVT_LLVector3, 12);  
+		htolememcpy(mCurBufferp, value.mV, MVT_LLVector3, 12);  
 	}
 	mCurBufferp += 12;
 	return TRUE;
@@ -540,7 +540,7 @@ BOOL LLDataPackerBinaryBuffer::unpackVector3(LLVector3 &value, const char *name)
 		return FALSE;
 	}
 
-	htonmemcpy(value.mV, mCurBufferp, MVT_LLVector3, 12);
+	htolememcpy(value.mV, mCurBufferp, MVT_LLVector3, 12);
 	mCurBufferp += 12;
 	return TRUE;
 }
@@ -554,7 +554,7 @@ BOOL LLDataPackerBinaryBuffer::packVector4(const LLVector4 &value, const char *n
 
 	if (mWriteEnabled) 
 	{ 
-		htonmemcpy(mCurBufferp, value.mV, MVT_LLVector4, 16);  
+		htolememcpy(mCurBufferp, value.mV, MVT_LLVector4, 16);  
 	}
 	mCurBufferp += 16;
 	return TRUE;
@@ -568,7 +568,7 @@ BOOL LLDataPackerBinaryBuffer::unpackVector4(LLVector4 &value, const char *name)
 		return FALSE;
 	}
 
-	htonmemcpy(value.mV, mCurBufferp, MVT_LLVector4, 16);
+	htolememcpy(value.mV, mCurBufferp, MVT_LLVector4, 16);
 	mCurBufferp += 16;
 	return TRUE;
 }
@@ -582,7 +582,7 @@ BOOL LLDataPackerBinaryBuffer::packUUID(const LLUUID &value, const char *name)
 
 	if (mWriteEnabled) 
 	{ 
-		htonmemcpy(mCurBufferp, value.mData, MVT_LLUUID, 16);  
+		htolememcpy(mCurBufferp, value.mData, MVT_LLUUID, 16);  
 	}
 	mCurBufferp += 16;
 	return TRUE;
@@ -596,7 +596,7 @@ BOOL LLDataPackerBinaryBuffer::unpackUUID(LLUUID &value, const char *name)
 		return FALSE;
 	}
 
-	htonmemcpy(value.mData, mCurBufferp, MVT_LLUUID, 16);
+	htolememcpy(value.mData, mCurBufferp, MVT_LLUUID, 16);
 	mCurBufferp += 16;
 	return TRUE;
 }

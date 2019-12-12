@@ -2525,7 +2525,7 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	</string>
 	<string name="UnknownFileExtension">
 		Extension de fichier inconnue .%s
-.wav, .tga, .bmp, .jpg, .jpeg, ou .bvh acceptés
+.wav, .tga, .bmp, .jpg, .jpeg, ou .anim acceptés
 	</string>
 	<string name="MuteObject2">
 		Ignorer

@@ -2658,7 +2658,7 @@ Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia 
 	</string>
 	<string name="UnknownFileExtension">
 		Extensión de archivo desconocida [.%s]
-Se esperaba .wav, .tga, .bmp, .jpg, .jpeg, o .bvh
+Se esperaba .wav, .tga, .bmp, .jpg, .jpeg, o .anim
 	</string>
 	<string name="MuteObject2">
 		Bloquear
