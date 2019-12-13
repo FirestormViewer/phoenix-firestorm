@@ -2422,6 +2422,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="NoGroupDataFound">
 		Für Gruppe wurden keine Gruppendaten gefunden
 	</string>
+	<string name="AlreadyInGroup">
+		Sie sind bereits Mitglied dieser Gruppe.
+	</string>
 	<string name="IMParentEstate">
 		parent estate
 	</string>
@@ -2864,7 +2867,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	</string>
 	<string name="UnknownFileExtension">
 		Unbekanntes Dateiformat .%s
-Gültige Formate: .wav, .tga, .bmp, .jpg, .jpeg oder .bvh
+Gültige Formate: .wav, .tga, .bmp, .jpg, .jpeg oder .anim
 	</string>
 	<string name="MuteObject2">
 		Ignorieren
@@ -6987,5 +6990,8 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="FSUrlEntryWearLabel">
 		Inventar-Ordner anziehen
+	</string>
+	<string name="TexturePickerOutfitHeader">
+		Foto für Outfit
 	</string>
 </strings>

@@ -164,6 +164,13 @@ private:
 	bool mUseYCC;
 	kdu_dims mDims;
 	kdu_sample_allocator mAllocator;
+
+	// <FS:ND> KDU 8.0.1 compatibiliy
+#if KDU_MAJOR_VERSION >= 8
+	kdu_push_pull_params mPushPullParams;
+#endif
+	// </FS:ND>
+	
 	kdu_tile_comp mComps[4];
 	kdu_line_buf mLines[4];
 	kdu_pull_ifc mEngines[4];
@@ -1309,6 +1316,19 @@ LLKDUDecodeState::LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap,
 		}
 		bool use_shorts = (mComps[c].get_bit_depth(true) <= 16);
 		mLines[c].pre_create(&mAllocator,mDims.size.x,mReversible[c],use_shorts,0,0);
+
+		// <FS:ND> KDU 8.0.1 compatibiliy
+#if KDU_MAJOR_VERSION >= 8
+		if (res.which() == 0) // No DWT levels used
+		{
+			mEngines[c] = kdu_decoder(res.access_subband(LL_BAND),&mAllocator,mPushPullParams,use_shorts);
+		}
+		else
+		{
+			mEngines[c] = kdu_synthesis(res,&mAllocator,mPushPullParams,use_shorts);
+		}
+#else
+		// </FS:ND>
 		if (res.which() == 0) // No DWT levels used
 		{
 			mEngines[c] = kdu_decoder(res.access_subband(LL_BAND),&mAllocator,use_shorts);
@@ -1317,6 +1337,8 @@ LLKDUDecodeState::LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap,
 		{
 			mEngines[c] = kdu_synthesis(res,&mAllocator,use_shorts);
 		}
+#endif // <FS:ND/> KDU 8.0.1 compatibiliy
+				
 	}
 	mAllocator.finalize(*codestreamp); // Actually creates buffering resources
 	for (c = 0; c < mNumComponents; c++)

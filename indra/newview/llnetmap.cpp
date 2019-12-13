@@ -720,7 +720,7 @@ void LLNetMap::draw()
 			pos_map = globalPosToView(positions[i]);
 
 			// <FS:Ansariel> Check for unknown Z-offset => AVATAR_UNKNOWN_Z_OFFSET
-			//unknown_relative_z = positions[i].mdV[VZ] == COARSEUPDATE_MAX_Z &&
+			//unknown_relative_z = positions[i].mdV[VZ] >= COARSEUPDATE_MAX_Z &&
 			//		camera_position.mV[VZ] >= COARSEUPDATE_MAX_Z;
 			unknown_relative_z = false;
 			if (positions[i].mdV[VZ] == AVATAR_UNKNOWN_Z_OFFSET)

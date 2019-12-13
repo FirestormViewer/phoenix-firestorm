@@ -42,6 +42,7 @@
 // Viewer includes
 #include "llagent.h"
 #include "llagentaccess.h"
+#include "llviewerparcelaskplay.h"
 #include "llviewerwindow.h"
 #include "llviewercontrol.h"
 //#include "llfirstuse.h"
@@ -1919,6 +1920,7 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
                 // Only update stream if parcel changed (recreated) or music is playing (enabled)
                 if (!agent_parcel_update || gSavedSettings.getBOOL("MediaTentativeAutoPlay"))
                 {
+                    LLViewerParcelAskPlay::getInstance()->cancelNotification();
                     std::string music_url_raw = parcel->getMusicURL();
 
                     // Trim off whitespace from front and back
@@ -1930,7 +1932,8 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
                     {
                         if (music_url.substr(0, 7) == "http://")
                         {
-                            optionally_start_music(music_url);
+                            LLViewerRegion *region = LLWorld::getInstance()->getRegion(msg->getSender());
+                            optionally_start_music(music_url, parcel->mLocalID, region->getRegionID());
                         }
                         else
                         {
@@ -1951,30 +1954,66 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 			else
 			{
 				// Public land has no music
+				LLViewerParcelAskPlay::getInstance()->cancelNotification();
 				LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
 			}
 		}//if gAudiop
 	};
 }
 
-void LLViewerParcelMgr::optionally_start_music(const std::string& music_url)
+//static
+void LLViewerParcelMgr::onStartMusicResponse(const LLUUID &region_id, const S32 &parcel_id, const std::string &url, const bool &play)
 {
-	if (gSavedSettings.getBOOL("AudioStreamingMusic"))
+    if (play)
+    {
+        LL_INFOS("ParcelMgr") << "Starting parcel music " << url << LL_ENDL;
+        LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(url);
+    }
+}
+
+void LLViewerParcelMgr::optionally_start_music(const std::string &music_url, const S32 &local_id, const LLUUID &region_id)
+{
+	static LLCachedControl<bool> streaming_music(gSavedSettings, "AudioStreamingMusic", true);
+	if (streaming_music)
 	{
+		//static LLCachedControl<S32> autoplay_mode(gSavedSettings, "ParcelMediaAutoPlayEnable", 1); // <FS> Media/Stream separation
+		static LLCachedControl<bool> tentative_autoplay(gSavedSettings, "MediaTentativeAutoPlay", true);
 		// only play music when you enter a new parcel if the UI control for this
 		// was not *explicitly* stopped by the user. (part of SL-4878)
-		// <FS> Media/Stream separation
+        // <FS> Media/Stream separation
 		//LLPanelNearByMedia* nearby_media_panel = gStatusBar->getNearbyMediaPanel();
-		//if ((nearby_media_panel &&
-		//     nearby_media_panel->getParcelAudioAutoStart()) ||
-		//    // or they have expressed no opinion in the UI, but have autoplay on...
-		//    (!nearby_media_panel &&
-		//     gSavedSettings.getBOOL(LLViewerMedia::AUTO_PLAY_MEDIA_SETTING) &&
-		if (gStatusBar->getAudioStreamEnabled() ||
-		    // or they have expressed no opinion in the UI, but have autoplay on...
-			(gSavedSettings.getBOOL("FSParcelMusicAutoPlay") &&
-		// </FS>
-			 gSavedSettings.getBOOL("MediaTentativeAutoPlay")))
+
+        //// ask mode //todo constants
+        //if (autoplay_mode == 2)
+        //{
+        //    // stop previous stream
+        //    LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(LLStringUtil::null);
+
+        //    // if user set media to play - ask
+        //    if ((nearby_media_panel && nearby_media_panel->getParcelAudioAutoStart())
+        //        || (!nearby_media_panel && tentative_autoplay))
+        //    {
+        //        LLViewerParcelAskPlay::getInstance()->askToPlay(region_id,
+        //            local_id,
+        //            music_url,
+        //            onStartMusicResponse);
+        //    }
+        //    else
+        //    {
+        //        LLViewerParcelAskPlay::getInstance()->cancelNotification();
+        //    }
+        //}
+        // autoplay
+        //else if ((nearby_media_panel
+        //          && nearby_media_panel->getParcelAudioAutoStart())
+        //          // or they have expressed no opinion in the UI, but have autoplay on...
+        //         || (!nearby_media_panel
+        //             && autoplay_mode == 1
+        if (gStatusBar->getAudioStreamEnabled() ||
+            // or they have expressed no opinion in the UI, but have autoplay on...
+           (gSavedSettings.getBOOL("FSParcelMusicAutoPlay")
+        // </FS>
+                     && tentative_autoplay))
 		{
 			if (gSavedSettings.getBOOL("MediaEnableFilter"))
 			{
