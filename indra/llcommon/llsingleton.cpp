@@ -136,40 +136,6 @@ public:
         {
             if (! mList)
             {
-                LLTHROW(std::runtime_error("Trying to use LockedInitializing "
-                                           "after cleanup_initializing()"));
-            }
-            return *mList;
-        }
-        operator list_t&() const { return get(); }
-        void log(const char* verb, const char* name);
-        void cleanup_initializing()
-        {
-            mMasterList.cleanup_initializing_();
-            mList = nullptr;
-        }
-
-    private:
-        // Store pointer since cleanup_initializing() must clear it.
-        list_t* mList;
-    };
-
-public:
-    // Instantiate this to obtain a reference to the coroutine-specific
-    // initializing list and to hold the MasterList lock for the lifespan of
-    // this LockedInitializing instance.
-    struct LockedInitializing: public Lock
-    {
-    public:
-        LockedInitializing():
-            // only do the lookup once, cache the result
-            // note that the lock is already locked during this lookup
-            mList(&mMasterList.get_initializing_())
-        {}
-        list_t& get() const
-        {
-            if (! mList)
-            {
                 LLTHROW(LLException("Trying to use LockedInitializing "
                                     "after cleanup_initializing()"));
             }
@@ -439,23 +405,6 @@ LLSingletonBase::vec_t LLSingletonBase::dep_sort()
     // depend! -- so our caller will process it.
     ret.push_back(MasterList::getInstance());
     return ret;
-}
-
-void LLSingletonBase::cleanup_()
-{
-    logdebugs("calling ", classname(this).c_str(), "::cleanupSingleton()");
-    try
-    {
-        cleanupSingleton();
-    }
-    catch (const std::exception& e)
-    {
-        logwarns("Exception in ", classname(this).c_str(), "::cleanupSingleton(): ", e.what());
-    }
-    catch (...)
-    {
-        logwarns("Unknown exception in ", classname(this).c_str(), "::cleanupSingleton()");
-    }
 }
 
 void LLSingletonBase::cleanup_()
