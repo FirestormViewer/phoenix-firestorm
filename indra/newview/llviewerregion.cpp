@@ -3087,8 +3087,6 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("EstateChangeInfo");
 	capabilityNames.append("EventQueueGet");
     capabilityNames.append("ExtEnvironment");
-	capabilityNames.append("FlickrConnect");
-	capabilityNames.append("TwitterConnect");
 
 	// <FS:Ansariel> Force HTTP features on SL
 	if (use_http_inventory()) {

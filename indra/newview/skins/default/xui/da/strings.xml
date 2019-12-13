@@ -1945,7 +1945,7 @@ Prøv venligst om lidt igen.
 	</string>
 	<string name="UnknownFileExtension">
 		Ukendt fil efternavn [.%s]
-Forventet .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
+Forventet .wav, .tga, .bmp, .jpg, .jpeg, or .anim
 	</string>
 	<string name="MuteObject2">
 		Blokér

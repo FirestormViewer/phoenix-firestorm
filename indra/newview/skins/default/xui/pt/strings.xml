@@ -2525,7 +2525,7 @@ http://secondlife.com/support para ajuda ao resolver este problema.
 	</string>
 	<string name="UnknownFileExtension">
 		Extensão de arquivo desconhecida [.%s]
-Expected .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
+Expected .wav, .tga, .bmp, .jpg, .jpeg, or .anim
 	</string>
 	<string name="MuteObject2">
 		Bloquear

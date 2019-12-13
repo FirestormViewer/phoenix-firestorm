@@ -404,6 +404,7 @@ void LLPreviewNotecard::onLoadComplete(LLVFS *vfs,
 			previewEditor->onSpellCheckSettingsChange();
 
 			preview->setEnabled(modifiable);
+			preview->syncExternal();
 			preview->mAssetStatus = PREVIEW_ASSET_LOADED;
 		}
 		else
@@ -544,10 +545,6 @@ bool LLPreviewNotecard::saveIfNeeded(LLInventoryItem* copyitem, bool sync)
 		}
 
 		editor->makePristine();
-		if (sync)
-		{
-			syncExternal();
-		}
 		const LLInventoryItem* item = getItem();
 		// save it out to database
         if (item)
@@ -804,6 +801,7 @@ void LLPreviewNotecard::openInExternalEditor()
 
     // Start watching file changes.
     mLiveFile = new LLLiveLSLFile(filename, boost::bind(&LLPreviewNotecard::onExternalChange, this, _1));
+    mLiveFile->ignoreNextUpdate();
     mLiveFile->addToEventTimer();
 
     // Open it in external editor.

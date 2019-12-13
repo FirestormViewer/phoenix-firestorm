@@ -1075,7 +1075,7 @@ bool LLPipeline::allocateShadowBuffer(U32 resX, U32 resY)
 
 		const U32 occlusion_divisor = 3;
 
-		F32 scale = RenderShadowResolutionScale;
+		F32 scale = llmax(0.f, RenderShadowResolutionScale);
 		U32 sun_shadow_map_width  = BlurHappySize(resX, scale);
 		U32 sun_shadow_map_height = BlurHappySize(resY, scale);
 
@@ -8940,7 +8940,8 @@ void LLPipeline::renderDeferredLighting(LLRenderTarget* screen_target)
 					}
 
 					const LLViewerObject *vobj = drawablep->getVObj();
-                    if(vobj && vobj->getAvatar() && vobj->getAvatar()->isInMuteList())
+                    if(vobj && vobj->getAvatar() && vobj->getAvatar()->isInMuteList()
+						|| (vobj && dist_vec(vobj->getPosition(), LLViewerCamera::getInstance()->getOrigin()) > RenderFarClip))
 					{
 						continue;
 					}
@@ -11155,7 +11156,7 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 				 attachment_iter != attachment->mAttachedObjects.end();
 				 ++attachment_iter)
 			{
-				if (LLViewerObject* attached_object = (*attachment_iter))
+				if (LLViewerObject* attached_object = attachment_iter->get())
 				{
 					markVisible(attached_object->mDrawable->getSpatialBridge(), *viewer_camera);
 				}

@@ -7,7 +7,7 @@
  help_topic="avatar_texture_debug"
  save_rect="true"
  title="Avatar Textures"
- width="1024"
+ width="940"
  can_resize="false">
     <floater.string
      name="InvalidAvatar">
@@ -20,11 +20,11 @@
      follows="all"
      height="680"
      layout="topleft"
-     left="1"
+     left="5"
      top_pad="15"
      name="profile_scroll"
      reserve_scroll_corner="false"
-     right="-1">
+     width="930">
     <panel
      name="scroll_content_panel"
      follows="left|top"
@@ -35,13 +35,13 @@
      background_visible="false"
      left="0"
      height="1165"
-     width="1000">
+     width="1015">
     <text
      type="string"
      length="1"
      height="16"
      layout="topleft"
-     left="10"
+     left="15"
      name="label"
      top="20"
      width="90">
@@ -53,7 +53,7 @@ Textures
      length="1"
      height="16"
      layout="topleft"
-     left_pad="15"
+     left_pad="22"
      name="composite_label"
      top_delta="0"
      width="120">
@@ -93,7 +93,7 @@ Textures
      height="103"
      label="Hair"
      layout="topleft"
-     left_pad="10"
+     left_pad="21"
      name="hair_grain"
      top_delta="0"
      width="92" />
@@ -126,7 +126,7 @@ Textures
      height="103"
      label="Makeup"
      layout="topleft"
-     left_pad="10"
+     left_pad="21"
      name="head_bodypaint"
      top_delta="0"
      width="92" />
@@ -167,7 +167,7 @@ Textures
      height="103"
      label="Eye"
      layout="topleft"
-     left_pad="10"
+     left_pad="21"
      name="eyes_iris"
      top_delta="0"
      width="92" />
@@ -200,7 +200,7 @@ Textures
      height="103"
      label="Upper BodyPaint"
      layout="topleft"
-     left_pad="10"
+     left_pad="21"
      name="upper_bodypaint"
      top_delta="0"
      width="92" />
@@ -273,7 +273,7 @@ Textures
      height="103"
      label="Lower BodyPaint"
      layout="topleft"
-     left_pad="10"
+     left_pad="21"
      name="lower_bodypaint"
      top_delta="0"
      width="92" />
@@ -354,7 +354,7 @@ Textures
      height="103"
      label="Skirt"
      layout="topleft"
-     left_pad="10"
+     left_pad="21"
      name="skirt"
      top_delta="0"
      width="92" />
@@ -379,7 +379,7 @@ Textures
      height="103"
      label="Left Arm Tattoo"
      layout="topleft"
-     left_pad="10"
+     left_pad="21"
      name="leftarm_tattoo"
      top_delta="0"
      width="92" />
@@ -396,7 +396,7 @@ Textures
      height="103"
      label="Left Leg Tattoo"
      layout="topleft"
-     left_pad="10"
+     left_pad="21"
      name="leftleg_tattoo"
      top_delta="0"
      width="92" />
@@ -413,7 +413,7 @@ Textures
      height="103"
      label="AUX 1 Tattoo"
      layout="topleft"
-     left_pad="10"
+     left_pad="21"
      name="aux1_tattoo"
      top_delta="0"
      width="92" />
@@ -430,7 +430,7 @@ Textures
      height="103"
      label="AUX 2 Tattoo"
      layout="topleft"
-     left_pad="10"
+     left_pad="21"
      name="aux2_tattoo"
      top_delta="0"
      width="92" />
@@ -447,7 +447,7 @@ Textures
      height="103"
      label="AUX 3 Tattoo"
      layout="topleft"
-     left_pad="10"
+     left_pad="21"
      name="aux3_tattoo"
      top_delta="0"
      width="92" />

@@ -52,6 +52,29 @@
 #include "rlvcommon.h"
 // [/RLVa:KB]
 
+class PropertiesChangedCallback : public LLInventoryCallback
+{
+public:
+    PropertiesChangedCallback(LLHandle<LLPanel> sidepanel_handle, LLUUID &item_id, S32 id)
+        : mHandle(sidepanel_handle), mItemId(item_id), mId(id)
+    {}
+
+    void fire(const LLUUID &inv_item)
+    {
+        // inv_item can be null for some reason
+        LLSidepanelItemInfo* sidepanel = dynamic_cast<LLSidepanelItemInfo*>(mHandle.get());
+        if (sidepanel)
+        {
+            // sidepanel waits only for most recent update
+            sidepanel->onUpdateCallback(mItemId, mId);
+        }
+    }
+private:
+    LLHandle<LLPanel> mHandle;
+    LLUUID mItemId;
+    S32 mId;
+};
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLItemPropertiesObserver
 //
@@ -71,7 +94,7 @@ public:
 	}
 	virtual void changed(U32 mask);
 private:
-	LLSidepanelItemInfo* mFloater;
+	LLSidepanelItemInfo* mFloater; // Not a handle because LLSidepanelItemInfo is managing LLItemPropertiesObserver
 };
 
 void LLItemPropertiesObserver::changed(U32 mask)
@@ -118,7 +141,7 @@ public:
 									  S32 serial_num,
 									  void* user_data);
 private:
-	LLSidepanelItemInfo* mFloater;
+	LLSidepanelItemInfo* mFloater;  // Not a handle because LLSidepanelItemInfo is managing LLObjectInventoryObserver
 };
 
 /*virtual*/
@@ -141,6 +164,7 @@ LLSidepanelItemInfo::LLSidepanelItemInfo(const LLPanel::Params& p)
 	: LLSidepanelInventorySubpanel(p)
 	, mItemID(LLUUID::null)
 	, mObjectInventoryObserver(NULL)
+	, mUpdatePendingId(-1)
 {
 	mPropertiesObserver = new LLItemPropertiesObserver(this);
 }
@@ -171,19 +195,19 @@ BOOL LLSidepanelItemInfo::postBuild()
 	// owner permissions
 	// Permissions debug text
 	// group permissions
-	getChild<LLUICtrl>("CheckShareWithGroup")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitPermissions, this));
+	getChild<LLUICtrl>("CheckShareWithGroup")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitPermissions, this, _1));
 	// everyone permissions
-	getChild<LLUICtrl>("CheckEveryoneCopy")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitPermissions, this));
+	getChild<LLUICtrl>("CheckEveryoneCopy")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitPermissions, this, _1));
 	// next owner permissions
-	getChild<LLUICtrl>("CheckNextOwnerModify")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitPermissions, this));
-	getChild<LLUICtrl>("CheckNextOwnerCopy")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitPermissions, this));
-	getChild<LLUICtrl>("CheckNextOwnerTransfer")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitPermissions, this));
+	getChild<LLUICtrl>("CheckNextOwnerModify")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitPermissions, this, _1));
+	getChild<LLUICtrl>("CheckNextOwnerCopy")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitPermissions, this, _1));
+	getChild<LLUICtrl>("CheckNextOwnerTransfer")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitPermissions, this, _1));
 	// Mark for sale or not, and sale info
-	getChild<LLUICtrl>("CheckPurchase")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitSaleInfo, this));
+	getChild<LLUICtrl>("CheckPurchase")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitSaleInfo, this, _1));
 	// Change sale type, and sale info
-	getChild<LLUICtrl>("ComboBoxSaleType")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitSaleInfo, this));
+	getChild<LLUICtrl>("ComboBoxSaleType")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitSaleInfo, this, _1));
 	// "Price" label for edit
-	getChild<LLUICtrl>("Edit Cost")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitSaleInfo, this));
+	getChild<LLUICtrl>("Edit Cost")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitSaleInfo, this, _1));
 	refresh();
 	return TRUE;
 }
@@ -195,11 +219,16 @@ void LLSidepanelItemInfo::setObjectID(const LLUUID& object_id)
 	// Start monitoring changes in the object inventory to update
 	// selected inventory item properties in Item Profile panel. See STORM-148.
 	startObjectInventoryObserver();
+	mUpdatePendingId = -1;
 }
 
 void LLSidepanelItemInfo::setItemID(const LLUUID& item_id)
 {
-	mItemID = item_id;
+    if (mItemID != item_id)
+    {
+        mItemID = item_id;
+        mUpdatePendingId = -1;
+    }
 }
 
 const LLUUID& LLSidepanelItemInfo::getObjectID() const
@@ -210,6 +239,15 @@ const LLUUID& LLSidepanelItemInfo::getObjectID() const
 const LLUUID& LLSidepanelItemInfo::getItemID() const
 {
 	return mItemID;
+}
+
+void LLSidepanelItemInfo::onUpdateCallback(const LLUUID& item_id, S32 received_update_id)
+{
+    if (mItemID == item_id && mUpdatePendingId == received_update_id)
+    {
+        mUpdatePendingId = -1;
+        refresh();
+    }
 }
 
 void LLSidepanelItemInfo::reset()
@@ -245,24 +283,16 @@ void LLSidepanelItemInfo::refresh()
 			"LabelItemName",
 			"LabelItemDesc",
 			"LabelCreatorName",
-			"LabelOwnerName",
-			"CheckOwnerModify",
-			"CheckOwnerCopy",
-			"CheckOwnerTransfer",
-			"CheckShareWithGroup",
-			"CheckEveryoneCopy",
-			"CheckNextOwnerModify",
-			"CheckNextOwnerCopy",
-			"CheckNextOwnerTransfer",
-			"CheckPurchase",
-			"Edit Cost"
+			"LabelOwnerName"
 		};
 
 		for(size_t t=0; t<LL_ARRAY_SIZE(no_item_names); ++t)
 		{
 			getChildView(no_item_names[t])->setEnabled(false);
 		}
-		
+
+		setPropertiesFieldsEnabled(false);
+
 		const std::string hide_names[]={
 			"BaseMaskDebug",
 			"OwnerMaskDebug",
@@ -299,6 +329,11 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 
 	llassert(item);
 	if (!item) return;
+
+    if (mUpdatePendingId != -1)
+    {
+        return;
+    }
 
 	// do not enable the UI for incomplete items.
 	BOOL is_complete = item->isFinished();
@@ -770,6 +805,26 @@ void LLSidepanelItemInfo::stopObjectInventoryObserver()
 	mObjectInventoryObserver = NULL;
 }
 
+void LLSidepanelItemInfo::setPropertiesFieldsEnabled(bool enabled)
+{
+    const std::string fields[] = {
+        "CheckOwnerModify",
+        "CheckOwnerCopy",
+        "CheckOwnerTransfer",
+        "CheckShareWithGroup",
+        "CheckEveryoneCopy",
+        "CheckNextOwnerModify",
+        "CheckNextOwnerCopy",
+        "CheckNextOwnerTransfer",
+        "CheckPurchase",
+        "Edit Cost"
+    };
+    for (size_t t = 0; t<LL_ARRAY_SIZE(fields); ++t)
+    {
+        getChildView(fields[t])->setEnabled(false);
+    }
+}
+
 void LLSidepanelItemInfo::onClickCreator()
 {
 	LLViewerInventoryItem* item = findItem();
@@ -852,10 +907,18 @@ void LLSidepanelItemInfo::onCommitDescription()
 	}
 }
 
-// static
-void LLSidepanelItemInfo::onCommitPermissions()
+void LLSidepanelItemInfo::onCommitPermissions(LLUICtrl* ctrl)
 {
-	//LL_INFOS() << "LLSidepanelItemInfo::onCommitPermissions()" << LL_ENDL;
+    if (ctrl)
+    {
+        // will be enabled by response from server
+        ctrl->setEnabled(false);
+    }
+    updatePermissions();
+}
+
+void LLSidepanelItemInfo::updatePermissions()
+{
 	LLViewerInventoryItem* item = findItem();
 	if(!item) return;
 
@@ -943,16 +1006,14 @@ void LLSidepanelItemInfo::onCommitPermissions()
 }
 
 // static
-void LLSidepanelItemInfo::onCommitSaleInfo()
+void LLSidepanelItemInfo::onCommitSaleInfo(LLUICtrl* ctrl)
 {
+    if (ctrl)
+    {
+        // will be enabled by response from server
+        ctrl->setEnabled(false);
+    }
 	//LL_INFOS() << "LLSidepanelItemInfo::onCommitSaleInfo()" << LL_ENDL;
-	updateSaleInfo();
-}
-
-// static
-void LLSidepanelItemInfo::onCommitSaleType()
-{
-	//LL_INFOS() << "LLSidepanelItemInfo::onCommitSaleType()" << LL_ENDL;
 	updateSaleInfo();
 }
 
@@ -1036,7 +1097,12 @@ void LLSidepanelItemInfo::onCommitChanges(LLPointer<LLViewerInventoryItem> item)
     if (mObjectID.isNull())
     {
         // This is in the agent's inventory.
-        item->updateServer(FALSE);
+        // Mark update as pending and wait only for most recent one in case user requested for couple
+        // Once update arrives or any of ids change drop pending id.
+        mUpdatePendingId++;
+        LLPointer<LLInventoryCallback> callback = new PropertiesChangedCallback(getHandle(), mItemID, mUpdatePendingId);
+        update_inventory_item(item.get(), callback);
+        //item->updateServer(FALSE);
         gInventory.updateItem(item);
         gInventory.notifyObservers();
     }
@@ -1061,6 +1127,7 @@ void LLSidepanelItemInfo::onCommitChanges(LLPointer<LLViewerInventoryItem> item)
                 // prevents flashing in content tab and some duplicated request.
                 object->dirtyInventory();
             }
+            setPropertiesFieldsEnabled(false);
         }
     }
 }
@@ -1089,7 +1156,6 @@ void LLSidepanelItemInfo::save()
 {
 	onCommitName();
 	onCommitDescription();
-	onCommitPermissions();
-	onCommitSaleInfo();
-	onCommitSaleType();
+	updatePermissions();
+	updateSaleInfo();
 }

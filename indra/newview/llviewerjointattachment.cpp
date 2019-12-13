@@ -264,7 +264,7 @@ void LLViewerJointAttachment::removeObject(LLViewerObject *object)
 		 iter != mAttachedObjects.end();
 		 ++iter)
 	{
-		LLViewerObject *attached_object = (*iter);
+		LLViewerObject *attached_object = iter->get();
 		if (attached_object == object)
 		{
 			break;
@@ -366,7 +366,7 @@ void LLViewerJointAttachment::setAttachmentVisibility(BOOL visible)
 		 iter != mAttachedObjects.end();
 		 ++iter)
 	{
-		LLViewerObject *attached_obj = (*iter);
+		LLViewerObject *attached_obj = iter->get();
 		if (!attached_obj || attached_obj->mDrawable.isNull() || 
 			!(attached_obj->mDrawable->getSpatialBridge()))
 			continue;
@@ -405,7 +405,7 @@ S32 LLViewerJointAttachment::getNumAnimatedObjects() const
 		 iter != mAttachedObjects.end();
 		 ++iter)
 	{
-        const LLViewerObject *attached_object = *iter;
+        const LLViewerObject *attached_object = iter->get();
         if (attached_object->isAnimatedObject())
         {
             count++;
@@ -423,7 +423,7 @@ void LLViewerJointAttachment::clampObjectPosition()
 		 iter != mAttachedObjects.end();
 		 ++iter)
 	{
-		if (LLViewerObject *attached_object = (*iter))
+		if (LLViewerObject *attached_object = iter->get())
 		{
 			// *NOTE: object can drift when hitting maximum radius
 			LLVector3 attachmentPos = attached_object->getPosition();
@@ -445,7 +445,7 @@ void LLViewerJointAttachment::calcLOD()
 		 iter != mAttachedObjects.end();
 		 ++iter)
 	{
-		if (LLViewerObject *attached_object = (*iter))
+		if (LLViewerObject *attached_object = iter->get())
 		{
 			maxarea = llmax(maxarea,attached_object->getMaxScale() * attached_object->getMidScale());
 			LLViewerObject::const_child_list_t& child_list = attached_object->getChildren();
@@ -484,7 +484,7 @@ BOOL LLViewerJointAttachment::isObjectAttached(const LLViewerObject *viewer_obje
 		 iter != mAttachedObjects.end();
 		 ++iter)
 	{
-		const LLViewerObject* attached_object = (*iter);
+		const LLViewerObject* attached_object = iter->get();
 		if (attached_object == viewer_object)
 		{
 			return TRUE;
@@ -499,7 +499,7 @@ const LLViewerObject *LLViewerJointAttachment::getAttachedObject(const LLUUID &o
 		 iter != mAttachedObjects.end();
 		 ++iter)
 	{
-		const LLViewerObject* attached_object = (*iter);
+		const LLViewerObject* attached_object = iter->get();
 //		if (attached_object->getAttachmentItemID() == object_id)
 // [SL:KB] - Patch: Appearance-PhantomAttach | Checked: Catznip-5.0
 		if ( (attached_object->getAttachmentItemID() == object_id) && (!attached_object->isDead()) )
@@ -517,7 +517,7 @@ LLViewerObject *LLViewerJointAttachment::getAttachedObject(const LLUUID &object_
 		 iter != mAttachedObjects.end();
 		 ++iter)
 	{
-		LLViewerObject* attached_object = (*iter);
+		LLViewerObject* attached_object = iter->get();
 		if (attached_object->getAttachmentItemID() == object_id)
 		{
 			return attached_object;

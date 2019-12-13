@@ -2826,7 +2826,7 @@ support@secondlife.com.
 	</string>
 	<string name="UnknownFileExtension">
 		Неизвестное расширение файла .%s
-Используйте .wav, .tga, .bmp, .jpg, .jpeg, или .bvh
+Используйте .wav, .tga, .bmp, .jpg, .jpeg, или .anim
 	</string>
 	<string name="MuteObject2">
 		Заблокировать

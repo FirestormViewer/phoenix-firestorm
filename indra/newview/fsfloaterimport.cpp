@@ -1166,18 +1166,18 @@ void FSFloaterImport::setPrimPosition(U8 type, LLViewerObject* object, LLVector3
 
 	if (type & UPD_POSITION)
 	{
-		htonmemcpy(&data[offset], &(position.mV), MVT_LLVector3, 12); 
+		htolememcpy(&data[offset], &(position.mV), MVT_LLVector3, 12); 
 		offset += 12;
 	}
 	if (type & UPD_ROTATION)
 	{
 		LLVector3 vec = rotation.packToVector3();
-		htonmemcpy(&data[offset], &(vec.mV), MVT_LLQuaternion, 12); 
+		htolememcpy(&data[offset], &(vec.mV), MVT_LLQuaternion, 12); 
 		offset += 12;
 	}
 	if (type & UPD_SCALE)
 	{
-		htonmemcpy(&data[offset], &(scale.mV), MVT_LLVector3, 12); 
+		htolememcpy(&data[offset], &(scale.mV), MVT_LLVector3, 12); 
 		offset += 12;
 	}
 	gMessageSystem->addBinaryDataFast(_PREHASH_Data, data, offset);

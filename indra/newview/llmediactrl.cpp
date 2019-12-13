@@ -202,9 +202,26 @@ BOOL LLMediaCtrl::handleScrollWheel( S32 x, S32 y, S32 clicks )
 {
 	if (LLPanel::handleScrollWheel(x, y, clicks)) return TRUE;
 	if (mMediaSource && mMediaSource->hasMedia())
-		mMediaSource->getMediaPlugin()->scrollEvent(0, clicks, gKeyboard->currentMask(TRUE));
+	{
+		convertInputCoords(x, y);
+		mMediaSource->scrollWheel(x, y, 0, clicks, gKeyboard->currentMask(TRUE));
+	}
 
 	return TRUE;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+BOOL LLMediaCtrl::handleScrollHWheel(S32 x, S32 y, S32 clicks)
+{
+    if (LLPanel::handleScrollHWheel(x, y, clicks)) return TRUE;
+    if (mMediaSource && mMediaSource->hasMedia())
+    {
+        convertInputCoords(x, y);
+        mMediaSource->scrollWheel(x, y, clicks, 0, gKeyboard->currentMask(TRUE));
+    }
+
+    return TRUE;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -429,18 +446,18 @@ void LLMediaCtrl::onOpenWebInspector()
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-BOOL LLMediaCtrl::handleKeyHere(KEY key, MASK mask)
+BOOL LLMediaCtrl::handleKeyHere( KEY key, MASK mask )
 {
 	BOOL result = FALSE;
-
+	
 	if (mMediaSource)
 	{
 		result = mMediaSource->handleKeyHere(key, mask);
 	}
-
-	if (!result)
+	
+	if ( ! result )
 		result = LLPanel::handleKeyHere(key, mask);
-
+		
 	return result;
 }
 
@@ -602,8 +619,6 @@ void LLMediaCtrl::navigateTo( std::string url_in, std::string mime_type, bool cl
 		// LL_INFOS() << "Rejecting attempt to load restricted website :" << urlIn << LL_ENDL;
 		return;
 	}
-
-
 	
 	if (ensureMediaSourceExists())
 	{

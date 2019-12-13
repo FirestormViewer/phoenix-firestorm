@@ -1110,8 +1110,8 @@ void FSLSLBridge::setupBridgePrim(LLViewerObject* object)
 	gAgentAvatarp->clampAttachmentPositions();
 
 	U8 data[24];
-	htonmemcpy(&data[0], &(object->getPosition().mV), MVT_LLVector3, 12);
-	htonmemcpy(&data[12], &(object->getScale().mV), MVT_LLVector3, 12);
+	htolememcpy(&data[0], &(object->getPosition().mV), MVT_LLVector3, 12);
+	htolememcpy(&data[12], &(object->getScale().mV), MVT_LLVector3, 12);
 
 	gMessageSystem->newMessage("MultipleObjectUpdate");
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);

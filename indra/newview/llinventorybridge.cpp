@@ -2012,7 +2012,7 @@ void LLItemBridge::restoreToWorld()
 
 		msg->nextBlockFast(_PREHASH_InventoryData);
 		itemp->packMessage(msg);
-		msg->sendReliable(gAgent.getRegion()->getHost());
+		msg->sendReliable(gAgent.getRegionHost());
 		//remove local inventory copy, sim will deal with permissions and removing the item
 		//from the actual inventory if its a no-copy etc
 		if(!itemp->getPermissions().allowCopyBy(gAgent.getID()))
@@ -2535,7 +2535,7 @@ public:
 // Can be destroyed (or moved to trash)
 BOOL LLFolderBridge::isItemRemovable() const
 {
-	if (!get_is_category_removable(getInventoryModel(), mUUID) || isMarketplaceListingsFolder())
+	if (!get_is_category_removable(getInventoryModel(), mUUID))
 	{
 		return FALSE;
 	}
@@ -2550,6 +2550,11 @@ BOOL LLFolderBridge::isItemRemovable() const
 		{
 			return FALSE;
 		}
+	}
+
+	if (isMarketplaceListingsFolder() && (!LLMarketplaceData::instance().isSLMDataFetched() || LLMarketplaceData::instance().getActivationState(mUUID)))
+	{
+		return FALSE;
 	}
 
 	return TRUE;
@@ -5089,7 +5094,7 @@ bool move_task_inventory_callback(const LLSD& notification, const LLSD& response
 		{
 			LLInventoryObject::object_list_t inventory_objects;
 			object->getInventoryContents(inventory_objects);
-			int contents_count = inventory_objects.size()-1; //subtract one for containing folder
+			int contents_count = inventory_objects.size();
 			LLInventoryCopyAndWearObserver* inventoryObserver = new LLInventoryCopyAndWearObserver(cat_and_wear->mCatID, contents_count, cat_and_wear->mFolderResponded,
 																									cat_and_wear->mReplace);
 			
