@@ -639,8 +639,8 @@ static void settings_to_globals()
 	LLRender::sGLCoreProfile = gSavedSettings.getBOOL("RenderGLCoreProfile");
 	LLRender::sNsightDebugSupport = gSavedSettings.getBOOL("RenderNsightDebugSupport");
 	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
-	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
-	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO");
+	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO") && LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 0;
+	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO") && LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 0;
 	// </FS:Ansariel>
 	LLImageGL::sGlobalUseAnisotropic	= gSavedSettings.getBOOL("RenderAnisotropic");
 	LLImageGL::sCompressTextures		= gSavedSettings.getBOOL("RenderCompressTextures");

@@ -499,8 +499,8 @@ void LLPipeline::init()
 	sUseTriStrips = gSavedSettings.getBOOL("RenderUseTriStrips");
 	LLVertexBuffer::sUseStreamDraw = gSavedSettings.getBOOL("RenderUseStreamVBO");
 	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
-	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
-	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO");
+	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO") && LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 0;
+	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO") && LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 0;
 	// </FS:Ansariel>
 	LLVertexBuffer::sPreferStreamDraw = gSavedSettings.getBOOL("RenderPreferStreamDraw");
 	sRenderAttachedLights = gSavedSettings.getBOOL("RenderAttachedLights");
@@ -7577,8 +7577,8 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 	sUseTriStrips = gSavedSettings.getBOOL("RenderUseTriStrips");
 	LLVertexBuffer::sUseStreamDraw = gSavedSettings.getBOOL("RenderUseStreamVBO");
 	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
-	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
-	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO");
+	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO") && LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 0;
+	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO") && LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 0;
 	// </FS:Ansariel>
 	LLVertexBuffer::sPreferStreamDraw = gSavedSettings.getBOOL("RenderPreferStreamDraw");
 	LLVertexBuffer::sEnableVBOs = gSavedSettings.getBOOL("RenderVBOEnable");

@@ -39,6 +39,7 @@
 #include "llspinctrl.h"
 #include "llstring.h"
 #include "lltexteditor.h"
+#include "llviewershadermgr.h"
 #include "lluictrlfactory.h"
 #include "llviewercontrol.h"
 // [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a)
@@ -358,10 +359,15 @@ void LLFloaterSettingsDebug::updateControl()
 	mColorSwatch->setVisible(FALSE);
 	mValText->setVisible( FALSE);
 	mComment->setText(LLStringUtil::null);
+	mBooleanCombo->setEnabled(TRUE);
+	getChild<LLUICtrl>("TRUE")->setEnabled(TRUE);
+	getChild<LLUICtrl>("FALSE")->setEnabled(TRUE);
+	mDefaultButton->setEnabled(TRUE);
 	mCopyButton->setEnabled(FALSE);
 	mDefaultButton->setEnabled(FALSE);
 	mBooleanCombo->setVisible(FALSE);
 	mSanityButton->setVisible(FALSE);
+
 
 	if (mCurrentControlVariable)
 	{
@@ -458,6 +464,19 @@ void LLFloaterSettingsDebug::updateControl()
 				else
 				{
 					mBooleanCombo->setValue(LLSD(""));
+				}
+
+				bool bUseVAO = mCurrentControlVariable->getName() == "RenderUseVAO";
+				if (bUseVAO)
+				{
+					bool use_shaders = LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 0;
+					mBooleanCombo->setEnabled(use_shaders);
+					getChild<LLUICtrl>("TRUE")->setEnabled(use_shaders);
+					getChild<LLUICtrl>("FALSE")->setEnabled(use_shaders);
+					mDefaultButton->setEnabled(use_shaders);
+					if (!use_shaders) {
+						mBooleanCombo->setValue(LLSD(false));
+					}
 				}
 			}
 			break;
