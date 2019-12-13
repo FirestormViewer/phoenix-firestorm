@@ -32,6 +32,7 @@
 #include "lldependencies.h"
 #include "llexception.h"
 #include "llcoros.h"
+#include "llexception.h"
 #include <boost/foreach.hpp>
 #include <algorithm>
 #include <iostream>                 // std::cerr in dire emergency
@@ -117,7 +118,41 @@ private:
     // stack for every running coroutine. Therefore this stack must be based
     // on a coroutine-local pointer.
     // This local_ptr isn't static because it's a member of an LLSingleton.
-    LLCoros::local_ptr<LLSingletonBase::list_t> mInitializing;
+    LLCoros::local_ptr<list_t> mInitializing;
+
+public:
+    // Instantiate this to obtain a reference to the coroutine-specific
+    // initializing list and to hold the MasterList lock for the lifespan of
+    // this LockedInitializing instance.
+    struct LockedInitializing: public Lock
+    {
+    public:
+        LockedInitializing():
+            // only do the lookup once, cache the result
+            // note that the lock is already locked during this lookup
+            mList(&mMasterList.get_initializing_())
+        {}
+        list_t& get() const
+        {
+            if (! mList)
+            {
+                LLTHROW(std::runtime_error("Trying to use LockedInitializing "
+                                           "after cleanup_initializing()"));
+            }
+            return *mList;
+        }
+        operator list_t&() const { return get(); }
+        void log(const char* verb, const char* name);
+        void cleanup_initializing()
+        {
+            mMasterList.cleanup_initializing_();
+            mList = nullptr;
+        }
+
+    private:
+        // Store pointer since cleanup_initializing() must clear it.
+        list_t* mList;
+    };
 
 public:
     // Instantiate this to obtain a reference to the coroutine-specific
@@ -297,7 +332,7 @@ void LLSingletonBase::MasterList::LockedInitializing::log(const char* verb, cons
     }
 }
 
-void LLSingletonBase::capture_dependency(EInitState initState)
+void LLSingletonBase::capture_dependency()
 {
     MasterList::LockedInitializing locked_list;
     list_t& initializing(locked_list.get());
@@ -329,21 +364,8 @@ void LLSingletonBase::capture_dependency(EInitState initState)
                 LLSingletonBase* foundp(*found);
                 out << classname(foundp) << " -> ";
             }
-            // We promise to capture dependencies from both the constructor
-            // and the initSingleton() method, so an LLSingleton's instance
-            // pointer is on the initializing list during both. Now that we've
-            // detected circularity, though, we must distinguish the two. If
-            // the recursive call is from the constructor, we CAN'T honor it:
-            // otherwise we'd be returning a pointer to a partially-
-            // constructed object! But from initSingleton() is okay: that
-            // method exists specifically to support circularity.
             // Decide which log helper to call.
-            if (initState == CONSTRUCTING)
-            {
-                logerrs("LLSingleton circularity in Constructor: ", out.str().c_str(),
-                    classname(this).c_str(), "");
-            }
-            else if (it_next == initializing.end())
+            if (it_next == initializing.end())
             {
                 // Points to self after construction, but during initialization.
                 // Singletons can initialize other classes that depend onto them,
@@ -436,6 +458,19 @@ void LLSingletonBase::cleanup_()
     }
 }
 
+void LLSingletonBase::cleanup_()
+{
+    logdebugs("calling ", classname(this).c_str(), "::cleanupSingleton()");
+    try
+    {
+        cleanupSingleton();
+    }
+    catch (...)
+    {
+        LOG_UNHANDLED_EXCEPTION(classname(this) + "::cleanupSingleton()");
+    }
+}
+
 //static
 void LLSingletonBase::deleteAll()
 {
@@ -513,6 +548,12 @@ void logdebugs(const char* p1, const char* p2, const char* p3, const char* p4)
 void LLSingletonBase::logwarns(const char* p1, const char* p2, const char* p3, const char* p4)
 {
     log(LLError::LEVEL_WARN, p1, p2, p3, p4);
+}
+
+//static
+void LLSingletonBase::loginfos(const char* p1, const char* p2, const char* p3, const char* p4)
+{
+    log(LLError::LEVEL_INFO, p1, p2, p3, p4);
 }
 
 //static

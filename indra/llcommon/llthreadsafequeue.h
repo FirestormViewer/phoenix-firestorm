@@ -30,7 +30,7 @@
 #include "llexception.h"
 #include <deque>
 #include <string>
-#include "mutex.h"
+#include "mutex.h"                  // std::unique_lock
 #include <boost/fiber/condition_variable.hpp>
 
 //
