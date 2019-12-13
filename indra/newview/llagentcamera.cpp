@@ -217,7 +217,7 @@ void LLAgentCamera::init()
 
 	mCameraFocusOffsetTarget = LLVector4(gSavedSettings.getVector3("CameraOffsetBuild"));
 	
-	mCameraPreset = (ECameraPreset) gSavedSettings.getU32("CameraPreset");
+	mCameraPreset = (ECameraPreset) gSavedSettings.getU32("CameraPresetType");
 
 	mCameraOffsetInitial = gSavedSettings.getControl("CameraOffsetRearView");
 	mFocusOffsetInitial = gSavedSettings.getControl("FocusOffsetRearView");
@@ -2635,7 +2635,7 @@ void LLAgentCamera::switchCameraPreset(ECameraPreset preset)
 	resetPanDiff();
 	resetOrbitDiff();
 
-	gSavedSettings.setU32("CameraPreset", mCameraPreset);
+	gSavedSettings.setU32("CameraPresetType", mCameraPreset);
 }
 
 
