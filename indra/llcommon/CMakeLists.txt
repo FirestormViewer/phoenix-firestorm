@@ -189,6 +189,7 @@ set(llcommon_HEADER_FILES
     lllistenerwrapper.h
     llliveappconfig.h
     lllivefile.h
+    llmainthreadtask.h
     llmd5.h
     llmemory.h
     llmemorystream.h
@@ -247,6 +248,7 @@ set(llcommon_HEADER_FILES
     llwin32headers.h
     llwin32headerslean.h
     llworkerthread.h
+    lockstatic.h
     stdtypes.h
     stringize.h
     timer.h

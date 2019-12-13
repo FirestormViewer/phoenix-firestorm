@@ -30,18 +30,10 @@
 #include <list>
 #include <vector>
 #include <typeinfo>
-
-#if LL_WINDOWS
-#pragma warning (push)
-#pragma warning (disable:4265)
-#endif
-// warning C4265: 'std::_Pad' : class has virtual functions, but destructor is not virtual
-
-#include <mutex>
-
-#if LL_WINDOWS
-#pragma warning (pop)
-#endif
+#include "mutex.h"
+#include "lockstatic.h"
+#include "llthread.h"               // on_main_thread()
+#include "llmainthreadtask.h"
 
 class LLSingletonBase: private boost::noncopyable
 {
@@ -51,10 +43,9 @@ public:
 private:
     // All existing LLSingleton instances are tracked in this master list.
     typedef std::list<LLSingletonBase*> list_t;
-    static list_t& get_master();
-    // This, on the other hand, is a stack whose top indicates the LLSingleton
-    // currently being initialized.
-    static list_t& get_initializing();
+    // Size of stack whose top indicates the LLSingleton currently being
+    // initialized.
+    static list_t::size_type get_initializing_size();
     // Produce a vector<LLSingletonBase*> of master list, in dependency order.
     typedef std::vector<LLSingletonBase*> vec_t;
     static vec_t dep_sort();
@@ -68,8 +59,8 @@ protected:
     typedef enum e_init_state
     {
         UNINITIALIZED = 0,          // must be default-initialized state
+        QUEUED,                     // construction queued, not yet executing
         CONSTRUCTING,               // within DERIVED_TYPE constructor
-        CONSTRUCTED,                // finished DERIVED_TYPE constructor
         INITIALIZING,               // within DERIVED_TYPE::initSingleton()
         INITIALIZED,                // normal case
         DELETED                     // deleteSingleton() or deleteAll() called
@@ -115,19 +106,19 @@ protected:
     // Remove 'this' from the init stack in case of exception in the
     // LLSingleton subclass constructor.
     static void reset_initializing(list_t::size_type size);
-private:
-    // logging
-    static void log_initializing(const char* verb, const char* name);
 protected:
     // If a given call to B::getInstance() happens during either A::A() or
     // A::initSingleton(), record that A directly depends on B.
-    void capture_dependency(list_t& initializing, EInitState);
+    void capture_dependency();
 
     // delegate LL_ERRS() logging to llsingleton.cpp
     static void logerrs(const char* p1, const char* p2="",
                         const char* p3="", const char* p4="");
     // delegate LL_WARNS() logging to llsingleton.cpp
     static void logwarns(const char* p1, const char* p2="",
+                         const char* p3="", const char* p4="");
+    // delegate LL_INFOS() logging to llsingleton.cpp
+    static void loginfos(const char* p1, const char* p2="",
                          const char* p3="", const char* p4="");
     static std::string demangle(const char* mangled);
     template <typename T>
@@ -138,6 +129,9 @@ protected:
     // Default methods in case subclass doesn't declare them.
     virtual void initSingleton() {}
     virtual void cleanupSingleton() {}
+
+    // internal wrapper around calls to cleanupSingleton()
+    void cleanup_();
 
     // deleteSingleton() isn't -- and shouldn't be -- a virtual method. It's a
     // class static. However, given only Foo*, deleteAll() does need to be
@@ -203,9 +197,16 @@ struct LLSingleton_manage_master
     {
         LLSingletonBase::reset_initializing(size);
     }
-    // For any LLSingleton subclass except the MasterList, obtain the init
-    // stack from the MasterList singleton instance.
-    LLSingletonBase::list_t& get_initializing() { return LLSingletonBase::get_initializing(); }
+    // For any LLSingleton subclass except the MasterList, obtain the size of
+    // the init stack from the MasterList singleton instance.
+    LLSingletonBase::list_t::size_type get_initializing_size()
+    {
+        return LLSingletonBase::get_initializing_size();
+    }
+    void capture_dependency(LLSingletonBase* sb)
+    {
+        sb->capture_dependency();
+    }
 };
 
 // But for the specific case of LLSingletonBase::MasterList, don't.
@@ -218,20 +219,15 @@ struct LLSingleton_manage_master<LLSingletonBase::MasterList>
     void pop_initializing (LLSingletonBase*) {}
     // since we never pushed, no need to clean up
     void reset_initializing(LLSingletonBase::list_t::size_type size) {}
-    LLSingletonBase::list_t& get_initializing()
-    {
-        // The MasterList shouldn't depend on any other LLSingletons. We'd
-        // get into trouble if we tried to recursively engage that machinery.
-        static LLSingletonBase::list_t sDummyList;
-        return sDummyList;
-    }
+    LLSingletonBase::list_t::size_type get_initializing_size() { return 0; }
+    void capture_dependency(LLSingletonBase*) {}
 };
 
 // Now we can implement LLSingletonBase's template constructor.
 template <typename DERIVED_TYPE>
 LLSingletonBase::LLSingletonBase(tag<DERIVED_TYPE>):
     mCleaned(false),
-    mDeleteSingleton(NULL)
+    mDeleteSingleton(nullptr)
 {
     // This is the earliest possible point at which we can push this new
     // instance onto the init stack. LLSingleton::constructSingleton() can't
@@ -304,13 +300,26 @@ class LLParamSingleton;
  * remaining LLSingleton instances will be destroyed in dependency order. (Or
  * call MySubclass::deleteSingleton() to specifically destroy the canonical
  * MySubclass instance.)
- *
- * As currently written, LLSingleton is not thread-safe.
  */
 template <typename DERIVED_TYPE>
 class LLSingleton : public LLSingletonBase
 {
 private:
+    // LLSingleton<DERIVED_TYPE> must have a distinct instance of
+    // SingletonData for every distinct DERIVED_TYPE. It's tempting to
+    // consider hoisting SingletonData up into LLSingletonBase. Don't do it.
+    struct SingletonData
+    {
+        // Use a recursive_mutex in case of constructor circularity. With a
+        // non-recursive mutex, that would result in deadlock.
+        typedef std::recursive_mutex mutex_t;
+        mutex_t mMutex;             // LockStatic looks for mMutex
+
+        EInitState      mInitState{UNINITIALIZED};
+        DERIVED_TYPE*   mInstance{nullptr};
+    };
+    typedef llthread::LockStatic<SingletonData> LockStatic;
+
     // Allow LLParamSingleton subclass -- but NOT DERIVED_TYPE itself -- to
     // access our private members.
     friend class LLParamSingleton<DERIVED_TYPE>;
@@ -319,17 +328,17 @@ private:
     // purpose for its subclass LLParamSingleton is to support Singletons
     // requiring constructor arguments. constructSingleton() supports both use
     // cases.
+    // Accepting LockStatic& requires that the caller has already locked our
+    // static data before calling.
     template <typename... Args>
-    static void constructSingleton(Args&&... args)
+    static void constructSingleton(LockStatic& lk, Args&&... args)
     {
-        auto prev_size = LLSingleton_manage_master<DERIVED_TYPE>().get_initializing().size();
-        // getInstance() calls are from within constructor
-        sData.mInitState = CONSTRUCTING;
+        auto prev_size = LLSingleton_manage_master<DERIVED_TYPE>().get_initializing_size();
+        // Any getInstance() calls after this point are from within constructor
+        lk->mInitState = CONSTRUCTING;
         try
         {
-            sData.mInstance = new DERIVED_TYPE(std::forward<Args>(args)...);
-            // we have called constructor, have not yet called initSingleton()
-            sData.mInitState = CONSTRUCTED;
+            lk->mInstance = new DERIVED_TYPE(std::forward<Args>(args)...);
         }
         catch (const std::exception& err)
         {
@@ -343,62 +352,56 @@ private:
             // There isn't a separate EInitState value meaning "we attempted
             // to construct this LLSingleton subclass but could not," so use
             // DELETED. That seems slightly more appropriate than UNINITIALIZED.
-            sData.mInitState = DELETED;
+            lk->mInitState = DELETED;
             // propagate the exception
             throw;
         }
-    }
 
-    static void finishInitializing()
-    {
-        // getInstance() calls are from within initSingleton()
-        sData.mInitState = INITIALIZING;
+        // Any getInstance() calls after this point are from within initSingleton()
+        lk->mInitState = INITIALIZING;
         try
         {
             // initialize singleton after constructing it so that it can
             // reference other singletons which in turn depend on it, thus
             // breaking cyclic dependencies
-            sData.mInstance->initSingleton();
-            sData.mInitState = INITIALIZED;
+            lk->mInstance->initSingleton();
+            lk->mInitState = INITIALIZED;
 
             // pop this off stack of initializing singletons
-            pop_initializing();
+            pop_initializing(lk->mInstance);
         }
         catch (const std::exception& err)
         {
             // pop this off stack of initializing singletons here, too --
             // BEFORE logging, so log-machinery LLSingletons don't record a
             // dependency on DERIVED_TYPE!
-            pop_initializing();
+            pop_initializing(lk->mInstance);
             logwarns("Error in ", classname<DERIVED_TYPE>().c_str(),
                      "::initSingleton(): ", err.what());
-            // and get rid of the instance entirely
+            // Get rid of the instance entirely. This call depends on our
+            // recursive_mutex. We could have a deleteSingleton(LockStatic&)
+            // overload and pass lk, but we don't strictly need it.
             deleteSingleton();
             // propagate the exception
             throw;
         }
     }
 
-    static void pop_initializing()
+    static void pop_initializing(LLSingletonBase* sb)
     {
         // route through LLSingleton_manage_master so we Do The Right Thing
         // (namely, nothing) for MasterList
-        LLSingleton_manage_master<DERIVED_TYPE>().pop_initializing(sData.mInstance);
+        LLSingleton_manage_master<DERIVED_TYPE>().pop_initializing(sb);
     }
 
-    // Without this 'using' declaration, the static method we're declaring
-    // here would hide the base-class method we want it to call.
-    using LLSingletonBase::capture_dependency;
-    static void capture_dependency()
+    static void capture_dependency(LLSingletonBase* sb)
     {
         // By this point, if DERIVED_TYPE was pushed onto the initializing
         // stack, it has been popped off. So the top of that stack, if any, is
         // an LLSingleton that directly depends on DERIVED_TYPE. If
         // getInstance() was called by another LLSingleton, rather than from
         // vanilla application code, record the dependency.
-        sData.mInstance->capture_dependency(
-            LLSingleton_manage_master<DERIVED_TYPE>().get_initializing(),
-            sData.mInitState);
+        LLSingleton_manage_master<DERIVED_TYPE>().capture_dependency(sb);
     }
 
     // We know of no way to instruct the compiler that every subclass
@@ -410,20 +413,6 @@ private:
     // virtual method" for this method, then add LLSINGLETON(yourclass) in the
     // subclass body.
     virtual void you_must_use_LLSINGLETON_macro() = 0;
-
-    // The purpose of this struct is to engage the C++11 guarantee that static
-    // variables declared in function scope are initialized exactly once, even
-    // if multiple threads concurrently reach the same declaration.
-    // https://en.cppreference.com/w/cpp/language/storage_duration#Static_local_variables
-    // Since getInstance() declares a static instance of SingletonInitializer,
-    // only the first call to getInstance() calls constructSingleton().
-    struct SingletonInitializer
-    {
-        SingletonInitializer()
-        {
-            constructSingleton();
-        }
-    };
 
 protected:
     // Pass DERIVED_TYPE explicitly to LLSingletonBase's constructor because,
@@ -440,14 +429,6 @@ protected:
     }
 
 public:
-    virtual ~LLSingleton()
-    {
-        // remove this instance from the master list
-        LLSingleton_manage_master<DERIVED_TYPE>().remove(this);
-        sData.mInstance = NULL;
-        sData.mInitState = DELETED;
-    }
-
     /**
      * @brief Immediately delete the singleton.
      *
@@ -471,65 +452,157 @@ public:
      */
     static void deleteSingleton()
     {
-        delete sData.mInstance;
-        // SingletonData state handled by destructor, above
+        DERIVED_TYPE* lameduck;
+        {
+            LockStatic lk;
+            // Capture the instance and clear SingletonData. This sequence
+            // guards against the chance that the destructor throws, somebody
+            // catches it and there's a subsequent call to getInstance().
+            lameduck = lk->mInstance;
+            lk->mInstance = nullptr;
+            lk->mInitState = DELETED;
+            // At this point we can safely unlock SingletonData during the
+            // remaining cleanup. If another thread calls deleteSingleton() (or
+            // getInstance(), or whatever) it won't find our instance, now
+            // referenced only as 'lameduck'.
+        }
+        // of course, only cleanup and delete if there's something there
+        if (lameduck)
+        {
+            // remove this instance from the master list BEFORE attempting
+            // cleanup so possible destructor exception won't leave the master
+            // list confused
+            LLSingleton_manage_master<DERIVED_TYPE>().remove(lameduck);
+            lameduck->cleanup_();
+            delete lameduck;
+        }
     }
 
     static DERIVED_TYPE* getInstance()
     {
-        // call constructSingleton() only the first time we get here
-        static SingletonInitializer sInitializer;
+        // We know the viewer has LLSingleton dependency circularities. If you
+        // feel strongly motivated to eliminate them, cheers and good luck.
+        // (At that point we could consider a much simpler locking mechanism.)
 
-        switch (sData.mInitState)
-        {
-        case UNINITIALIZED:
-            // should never be uninitialized at this point
-            logerrs("Uninitialized singleton ",
-                    classname<DERIVED_TYPE>().c_str());
-            return NULL;
+        // If A and B depend on each other, and thread T1 requests A at the
+        // same moment thread T2 requests B, you could get a sequence like this:
+        // - T1 locks A
+        // - T2 locks B
+        // - T1, having constructed A, calls A::initSingleton(), which calls
+        //   B::getInstance() and blocks on B's lock
+        // - T2, having constructed B, calls B::initSingleton(), which calls
+        //   A::getInstance() and blocks on A's lock
+        // In other words, classic deadlock.
 
-        case CONSTRUCTING:
-            // here if DERIVED_TYPE's constructor (directly or indirectly)
-            // calls DERIVED_TYPE::getInstance()
-            logerrs("Tried to access singleton ",
-                    classname<DERIVED_TYPE>().c_str(),
-                    " from singleton constructor!");
-            return NULL;
+        // Avoid that by constructing and initializing every LLSingleton on
+        // the main thread. In that scenario:
+        // - T1 locks A
+        // - T2 locks B
+        // - T1 discovers A is UNINITIALIZED, so it queues a task for the main
+        //   thread, unlocks A and blocks on the std::future.
+        // - T2 discovers B is UNINITIALIZED, so it queues a task for the main
+        //   thread, unlocks B and blocks on the std::future.
+        // - The main thread executes T1's request for A. It locks A and
+        //   starts to construct it.
+        // - A::initSingleton() calls B::getInstance(). Fine: nobody's holding
+        //   B's lock.
+        // - The main thread locks B, constructs B, calls B::initSingleton(),
+        //   which calls A::getInstance(), which returns A.
+        // - B::getInstance() returns B to A::initSingleton(), unlocking B.
+        // - A::getInstance() returns A to the task wrapper, unlocking A.
+        // - The task wrapper passes A to T1 via the future. T1 resumes.
+        // - The main thread executes T2's request for B. Oh look, B already
+        //   exists. The task wrapper passes B to T2 via the future. T2
+        //   resumes.
+        // This still works even if one of T1 or T2 *is* the main thread.
+        // This still works even if thread T3 requests B at the same moment as
+        // T2. Finding B still UNINITIALIZED, T3 also queues a task for the
+        // main thread, unlocks B and blocks on a (distinct) std::future. By
+        // the time the main thread executes T3's request for B, B already
+        // exists, and is simply delivered via the future.
 
-        case CONSTRUCTED:
-            // first time through: set to CONSTRUCTED by
-            // constructSingleton(), called by sInitializer's constructor;
-            // still have to call initSingleton()
-            finishInitializing();
-            break;
+        { // nested scope for 'lk'
+            // In case racing threads call getInstance() at the same moment,
+            // serialize the calls.
+            LockStatic lk;
 
-        case INITIALIZING:
-            // here if DERIVED_TYPE::initSingleton() (directly or indirectly)
-            // calls DERIVED_TYPE::getInstance(): go ahead and allow it
-        case INITIALIZED:
-            // normal subsequent calls
-            break;
+            switch (lk->mInitState)
+            {
+            case CONSTRUCTING:
+                // here if DERIVED_TYPE's constructor (directly or indirectly)
+                // calls DERIVED_TYPE::getInstance()
+                logerrs("Tried to access singleton ",
+                        classname<DERIVED_TYPE>().c_str(),
+                        " from singleton constructor!");
+                return nullptr;
 
-        case DELETED:
-            // called after deleteSingleton()
-            logwarns("Trying to access deleted singleton ",
-                     classname<DERIVED_TYPE>().c_str(),
-                     " -- creating new instance");
-            // This recovery sequence is NOT thread-safe! We would need a
-            // recursive_mutex a la LLParamSingleton.
-            constructSingleton();
-            finishInitializing();
-            break;
-        }
+            case INITIALIZING:
+                // here if DERIVED_TYPE::initSingleton() (directly or indirectly)
+                // calls DERIVED_TYPE::getInstance(): go ahead and allow it
+            case INITIALIZED:
+                // normal subsequent calls
+                // record the dependency, if any: check if we got here from another
+                // LLSingleton's constructor or initSingleton() method
+                capture_dependency(lk->mInstance);
+                return lk->mInstance;
 
-        // record the dependency, if any: check if we got here from another
-        // LLSingleton's constructor or initSingleton() method
-        capture_dependency();
-        return sData.mInstance;
+            case DELETED:
+                // called after deleteSingleton()
+                logwarns("Trying to access deleted singleton ",
+                         classname<DERIVED_TYPE>().c_str(),
+                         " -- creating new instance");
+                // fall through
+            case UNINITIALIZED:
+            case QUEUED:
+                // QUEUED means some secondary thread has already requested an
+                // instance, but for present purposes that's semantically
+                // identical to UNINITIALIZED: either way, we must ourselves
+                // request an instance.
+                break;
+            }
+
+            // Here we need to construct a new instance.
+            if (on_main_thread())
+            {
+                // On the main thread, directly construct the instance while
+                // holding the lock.
+                constructSingleton(lk);
+                capture_dependency(lk->mInstance);
+                return lk->mInstance;
+            }
+
+            // Here we need to construct a new instance, but we're on a secondary
+            // thread.
+            lk->mInitState = QUEUED;
+        } // unlock 'lk'
+
+        // Per the comment block above, dispatch to the main thread.
+        loginfos(classname<DERIVED_TYPE>().c_str(),
+                 "::getInstance() dispatching to main thread");
+        auto instance = LLMainThreadTask::dispatch(
+            [](){
+                // VERY IMPORTANT to call getInstance() on the main thread,
+                // rather than going straight to constructSingleton()!
+                // During the time window before mInitState is INITIALIZED,
+                // multiple requests might be queued. It's essential that, as
+                // the main thread processes them, only the FIRST such request
+                // actually constructs the instance -- every subsequent one
+                // simply returns the existing instance.
+                loginfos(classname<DERIVED_TYPE>().c_str(),
+                         "::getInstance() on main thread");
+                return getInstance();
+            });
+        // record the dependency chain tracked on THIS thread, not the main
+        // thread (consider a getInstance() overload with a tag param that
+        // suppresses dep tracking when dispatched to the main thread)
+        capture_dependency(instance);
+        loginfos(classname<DERIVED_TYPE>().c_str(),
+                 "::getInstance() returning on requesting thread");
+        return instance;
     }
 
     // Reference version of getInstance()
-    // Preferred over getInstance() as it disallows checking for NULL
+    // Preferred over getInstance() as it disallows checking for nullptr
     static DERIVED_TYPE& instance()
     {
         return *getInstance();
@@ -539,7 +612,9 @@ public:
     // Use this to avoid accessing singletons before they can safely be constructed.
     static bool instanceExists()
     {
-        return sData.mInitState == INITIALIZED;
+        // defend any access to sData from racing threads
+        LockStatic lk;
+        return lk->mInitState == INITIALIZED;
     }
 
     // Has this singleton been deleted? This can be useful during shutdown
@@ -547,22 +622,11 @@ public:
     // cleaned up.
     static bool wasDeleted()
     {
-        return sData.mInitState == DELETED;
+        // defend any access to sData from racing threads
+        LockStatic lk;
+        return lk->mInitState == DELETED;
     }
-
-private:
-    struct SingletonData
-    {
-        // explicitly has a default constructor so that member variables are zero initialized in BSS
-        // and only changed by singleton logic, not constructor running during startup
-        EInitState      mInitState;
-        DERIVED_TYPE*   mInstance;
-    };
-    static SingletonData sData;
 };
-
-template<typename T>
-typename LLSingleton<T>::SingletonData LLSingleton<T>::sData;
 
 
 /**
@@ -588,47 +652,84 @@ class LLParamSingleton : public LLSingleton<DERIVED_TYPE>
 {
 private:
     typedef LLSingleton<DERIVED_TYPE> super;
-    // Use a recursive_mutex in case of constructor circularity. With a
-    // non-recursive mutex, that would result in deadlock rather than the
-    // logerrs() call in getInstance().
-    typedef std::recursive_mutex mutex_t;
+    using typename super::LockStatic;
+
+    // Passes arguments to DERIVED_TYPE's constructor and sets appropriate
+    // states, returning a pointer to the new instance.
+    template <typename... Args>
+    static DERIVED_TYPE* initParamSingleton_(Args&&... args)
+    {
+        // In case racing threads both call initParamSingleton() at the same
+        // time, serialize them. One should initialize; the other should see
+        // mInitState already set.
+        LockStatic lk;
+        // For organizational purposes this function shouldn't be called twice
+        if (lk->mInitState != super::UNINITIALIZED)
+        {
+            super::logerrs("Tried to initialize singleton ",
+                           super::template classname<DERIVED_TYPE>().c_str(),
+                           " twice!");
+            return nullptr;
+        }
+        else if (on_main_thread())
+        {
+            // on the main thread, simply construct instance while holding lock
+            super::constructSingleton(lk, std::forward<Args>(args)...);
+            return lk->mInstance;
+        }
+        else
+        {
+            // on secondary thread, dispatch to main thread --
+            // set state so we catch any other calls before the main thread
+            // picks up the task
+            lk->mInitState = super::QUEUED;
+            // very important to unlock here so main thread can actually process
+            lk.unlock();
+            super::loginfos(super::template classname<DERIVED_TYPE>().c_str(),
+                            "::initParamSingleton() dispatching to main thread");
+            // Normally it would be the height of folly to reference-bind
+            // 'args' into a lambda to be executed on some other thread! By
+            // the time that thread executed the lambda, the references would
+            // all be dangling, and Bad Things would result. But
+            // LLMainThreadTask::dispatch() promises to block until the passed
+            // task has completed. So in this case we know the references will
+            // remain valid until the lambda has run, so we dare to bind
+            // references.
+            auto instance = LLMainThreadTask::dispatch(
+                [&](){
+                    super::loginfos(super::template classname<DERIVED_TYPE>().c_str(),
+                                    "::initParamSingleton() on main thread");
+                    return initParamSingleton_(std::forward<Args>(args)...);
+                });
+            super::loginfos(super::template classname<DERIVED_TYPE>().c_str(),
+                            "::initParamSingleton() returning on requesting thread");
+            return instance;
+        }
+    }
 
 public:
     using super::deleteSingleton;
     using super::instanceExists;
     using super::wasDeleted;
 
-    // Passes arguments to DERIVED_TYPE's constructor and sets appropriate states
+    /// initParamSingleton() constructs the instance, returning a reference.
+    /// Pass whatever arguments are required to construct DERIVED_TYPE.
     template <typename... Args>
-    static void initParamSingleton(Args&&... args)
+    static DERIVED_TYPE& initParamSingleton(Args&&... args)
     {
-        // In case racing threads both call initParamSingleton() at the same
-        // time, serialize them. One should initialize; the other should see
-        // mInitState already set.
-        std::unique_lock<mutex_t> lk(getMutex());
-        // For organizational purposes this function shouldn't be called twice
-        if (super::sData.mInitState != super::UNINITIALIZED)
-        {
-            super::logerrs("Tried to initialize singleton ",
-                           super::template classname<DERIVED_TYPE>().c_str(),
-                           " twice!");
-        }
-        else
-        {
-            super::constructSingleton(std::forward<Args>(args)...);
-            super::finishInitializing();
-        }
+        return *initParamSingleton_(std::forward<Args>(args)...);
     }
 
     static DERIVED_TYPE* getInstance()
     {
         // In case racing threads call getInstance() at the same moment as
         // initParamSingleton(), serialize the calls.
-        std::unique_lock<mutex_t> lk(getMutex());
+        LockStatic lk;
 
-        switch (super::sData.mInitState)
+        switch (lk->mInitState)
         {
         case super::UNINITIALIZED:
+        case super::QUEUED:
             super::logerrs("Uninitialized param singleton ",
                            super::template classname<DERIVED_TYPE>().c_str());
             break;
@@ -639,25 +740,13 @@ public:
                            " from singleton constructor!");
             break;
 
-        case super::CONSTRUCTED:
-            // Should never happen!? The CONSTRUCTED state is specifically to
-            // navigate through LLSingleton::SingletonInitializer getting
-            // constructed (once) before LLSingleton::getInstance()'s switch
-            // on mInitState. But our initParamSingleton() method calls
-            // constructSingleton() and then calls finishInitializing(), which
-            // immediately sets INITIALIZING. Why are we here?
-            super::logerrs("Param singleton ",
-                           super::template classname<DERIVED_TYPE>().c_str(),
-                           "::initSingleton() not yet called");
-            break;
-
         case super::INITIALIZING:
             // As with LLSingleton, explicitly permit circular calls from
             // within initSingleton()
         case super::INITIALIZED:
             // for any valid call, capture dependencies
-            super::capture_dependency();
-            return super::sData.mInstance;
+            super::capture_dependency(lk->mInstance);
+            return lk->mInstance;
 
         case super::DELETED:
             super::logerrs("Trying to access deleted param singleton ",
@@ -676,30 +765,6 @@ public:
     static DERIVED_TYPE& instance()
     {
         return *getInstance();
-    }
-
-private:
-    // sMutex must be a function-local static rather than a static member. One
-    // of the essential features of LLSingleton and friends is that they must
-    // support getInstance() even when the containing module's static
-    // variables have not yet been runtime-initialized. A mutex requires
-    // construction. A static class member might not yet have been
-    // constructed.
-    //
-    // We could store a dumb mutex_t*, notice when it's NULL and allocate a
-    // heap mutex -- but that's vulnerable to race conditions. And we can't
-    // defend the dumb pointer with another mutex.
-    //
-    // We could store a std::atomic<mutex_t*> -- but a default-constructed
-    // std::atomic<T> does not contain a valid T, even a default-constructed
-    // T! Which means std::atomic, too, requires runtime initialization.
-    //
-    // But a function-local static is guaranteed to be initialized exactly
-    // once, the first time control reaches that declaration.
-    static mutex_t& getMutex()
-    {
-        static mutex_t sMutex;
-        return sMutex;
     }
 };
 
@@ -725,9 +790,9 @@ public:
     using super::instanceExists;
     using super::wasDeleted;
 
-    static void construct()
+    static DT* construct()
     {
-        super::initParamSingleton();
+        return super::initParamSingleton();
     }
 };
 
