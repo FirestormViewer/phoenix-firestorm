@@ -6860,6 +6860,14 @@ void LLViewerWindow::setUIVisibility(bool visible)
 	//LLNavigationBar::getInstance()->setVisible(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);
 	LLPanelTopInfoBar::getInstance()->setVisible(visible? gSavedSettings.getBOOL("ShowMiniLocationPanel") : FALSE);
 	mRootView->getChildView("status_bar_container")->setVisible(visible);
+
+	// <FS:Zi> hide utility bar if we are on a skin that uses it, e.g. Vintage
+	LLView* utilityBarStack = mRootView->findChildView("chat_bar_utility_bar_stack");
+	if (utilityBarStack)
+	{
+		utilityBarStack->setVisible(visible);
+	}
+	// </FS:Zi>
 }
 
 bool LLViewerWindow::getUIVisibility()

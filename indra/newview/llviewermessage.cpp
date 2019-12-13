@@ -2104,7 +2104,7 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 		}
 
 		// <FS:Ansariel> FIRE-3832: Silent accept/decline of inventory offers
-		if (mIM == IM_GROUP_NOTICE || IM_GROUP_NOTICE_REQUESTED)
+		if (mIM == IM_GROUP_NOTICE || mIM == IM_GROUP_NOTICE_REQUESTED)
 		{
 			opener = new LLOpenTaskGroupOffer;
 			sendReceiveResponse(true, mFolderID);
