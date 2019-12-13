@@ -2592,7 +2592,7 @@ Bu mesaj size gelmeye devam ederse lütfen http://support.secondlife.com adresin
 	</string>
 	<string name="UnknownFileExtension">
 		Bilinmeyen dosya uzantısı .%s
-.wav, .tga, .bmp, .jpg, .jpeg veya .bvh bekleniyordu
+.wav, .tga, .bmp, .jpg, .jpeg veya .anim bekleniyordu
 	</string>
 	<string name="MuteObject2">
 		Engelle
