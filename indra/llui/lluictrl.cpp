@@ -137,13 +137,29 @@ void LLUICtrl::initFromParams(const Params& p)
 		{
 			LLControlVariable* control = findControl(p.enabled_controls.enabled);
 			if (control)
+			{
 				setEnabledControlVariable(control);
+			}
+			else
+			{
+				LL_WARNS() << "Failed to assign 'enabled' control variable to " << getName()
+							<< ": control " << p.enabled_controls.enabled()
+							<< " does not exist." << LL_ENDL;
+			}
 		}
 		else if(p.enabled_controls.disabled.isChosen())
 		{
 			LLControlVariable* control = findControl(p.enabled_controls.disabled);
 			if (control)
+			{
 				setDisabledControlVariable(control);
+			}
+			else
+			{
+				LL_WARNS() << "Failed to assign 'disabled' control variable to " << getName() 
+							<< ": control " << p.enabled_controls.disabled()
+							<< " does not exist." << LL_ENDL;
+			}
 		}
 	}
 	// <FS:Zi> Decide if a control should be visible, according to ControlVisibility
@@ -155,7 +171,15 @@ void LLUICtrl::initFromParams(const Params& p)
 		{
 			LLControlVariable* control = findControl(p.controls_visibility.visible);
 			if (control)
+			{
 				setMakeVisibleControlVariable(control);
+			}
+			else
+			{
+				LL_WARNS() << "Failed to assign visibility control variable to " << getName()
+							<< ": control " << p.controls_visibility.visible()
+							<< " does not exist." << LL_ENDL;
+			}
 		}
 		// <FS:Zi> Decide if a control should be visible, according to ControlVisibility
 		// else if (p.controls_visibility.invisible.isChosen())
@@ -164,7 +188,15 @@ void LLUICtrl::initFromParams(const Params& p)
 		{
 			LLControlVariable* control = findControl(p.controls_visibility.invisible);
 			if (control)
+			{
 				setMakeInvisibleControlVariable(control);
+			}
+			else
+			{
+				LL_WARNS() << "Failed to assign invisibility control variable to " << getName()
+							<< ": control " << p.controls_visibility.invisible()
+							<< " does not exist." << LL_ENDL;
+			}
 		}
 	// <FS:Zi> Decide if a control should be visible, according to ControlVisibility
 	// }
@@ -505,6 +537,11 @@ void LLUICtrl::setControlName(const std::string& control_name, LLView *context)
 	if (!control_name.empty())
 	{
 		LLControlVariable* control = context->findControl(control_name);
+		if (!control)
+		{
+			LL_WARNS() << "Failed to assign control variable to " << getName()
+						<< ": control "<< control_name << " does not exist." << LL_ENDL;
+		}
 		setControlVariable(control);
 	}
 }

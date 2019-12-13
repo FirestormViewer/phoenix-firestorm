@@ -13,6 +13,14 @@
      name="middle_mouse">
      Middle Mouse
     </panel.string>
+    <panel.string
+     name="button4_mouse">
+     Mouse Button 4
+    </panel.string>
+    <panel.string
+     name="button5_mouse">
+     Mouse Button 5
+    </panel.string>
 
 <tab_container
  label="Firestorm Prefs"
@@ -481,18 +489,40 @@
      label="Media"
      name="Media Media Panel" >
 
-        <check_box
-         name="media_auto_play_btn"
-         control_name="ParcelMediaAutoPlayEnable"
-         enabled_control="AudioStreamingMedia"
-         layout="topleft"
-         height="16"
-         width="230"
-         tool_tip="Check this to automatically start media."
-         label="Allow media to auto-play"
-         top_pad="10"
-         left="25"/>
-        <check_box
+      <text
+          follows="left|top"
+          layout="topleft"
+          height="15"
+          left="28"
+          top_pad="10"
+          width="90"
+          name="media_autoplay_label">
+        Media auto-play
+      </text>
+      <combo_box
+          control_name="ParcelMediaAutoPlayEnable"
+          enabled_control="AudioStreamingMedia"
+          follows="left|top"
+          layout="topleft"
+          height="23"
+          left_pad="7"
+          top_delta="-4"
+          name="media_auto_play_combo"
+          width="100">
+        <item
+            label="Disabled"
+            name="autoplay_disabled"
+            value="0"/>
+        <item
+            label="Enabled"
+            name="autoplay_enabled"
+            value="1"/>
+        <!--<item
+            label="Ask"
+            name="autoplay_ask"
+            value="2"/>-->
+      </combo_box>
+      <check_box
          name="media_allowscript_btn"
          control_name="PermAllowScriptedMedia"
          follows="left|top"

@@ -95,6 +95,7 @@ public:
 private:
 	void checkEnableStart();
 	void onStartClicked();
+	void onStartClickedResponse(const LLSD& notification, const LLSD& response);
 	void decreaseOpenItemCount();
 	void updateFoundLinks();
 	void processBatch(LLInventoryModel::item_array_t items);

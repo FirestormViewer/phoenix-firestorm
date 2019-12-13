@@ -2559,7 +2559,7 @@ http://secondlife.com/support 求助解決問題。
 	</string>
 	<string name="UnknownFileExtension">
 		未知的副檔名 .%s
-應該是 .wav、.tga、.bmp、.jpg、.jpeg 或 .bvh
+應該是 .wav、.tga、.bmp、.jpg、.jpeg 或 .anim
 	</string>
 	<string name="MuteObject2">
 		封鎖

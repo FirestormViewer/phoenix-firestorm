@@ -29,8 +29,7 @@
 #include "llfloatersnapshot.h"
 
 #include "llfloaterreg.h"
-#include "llfloaterflickr.h"
-#include "llfloatertwitter.h"
+#include "llfloaterflickr.h" // <FS:Ansariel> Share to Flickr
 #include "llimagefiltersmanager.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
@@ -1426,10 +1425,11 @@ BOOL LLFloaterSnapshot::isWaitingState()
 
 BOOL LLFloaterSnapshotBase::ImplBase::updatePreviewList(bool initialized)
 {
+	// <FS:Ansariel> Share to Flickr
+	//if (!initialized)
 	LLFloaterFlickr* floater_flickr = LLFloaterReg::findTypedInstance<LLFloaterFlickr>("flickr");
-	LLFloaterTwitter* floater_twitter = LLFloaterReg::findTypedInstance<LLFloaterTwitter>("twitter");
-
-	if (!initialized && !floater_flickr && !floater_twitter)
+	if (!initialized && !floater_flickr)
+	// </FS:Ansariel>
 		return FALSE;
 
 	BOOL changed = FALSE;

@@ -348,7 +348,7 @@ void LLCoros::toplevel(coro::self& self, CoroData* data, const callable_t& calla
     try
     {
 // <FS:Ansariel> Disable for more meaningful callstacks
-//#if LL_WINDOWS
+//#if LL_WINDOWS && LL_RELEASE_FOR_DOWNLOAD
 //        winlevel(callable);
 //#else
 // </FS:Ansariel>

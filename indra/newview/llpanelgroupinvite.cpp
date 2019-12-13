@@ -614,6 +614,14 @@ void LLPanelGroupInvite::updateLists()
 		}
         else if (gdatap)
         {
+			// <FS:Beq> FIRE-22912 Group send fail on OpenSim
+			// Debug shows that GroupProperties data is frequently failing to be returned
+			// Note that this method has a time-based SPAM check for existing pending requests.
+            if (!gdatap->isGroupPropertiesDataComplete())
+            {
+                LLGroupMgr::getInstance()->sendGroupPropertiesRequest(mImplementation->mGroupID);
+            }
+			// </FS:Beq>
             // restart requests that were interrupted/dropped/failed to start
             if (!gdatap->isRoleDataPending() && !gdatap->isRoleDataComplete())
             {

@@ -31,8 +31,7 @@
 
 #include "llagent.h"
 #include "llfloaterreg.h"
-#include "llfloaterflickr.h"
-#include "llfloatertwitter.h"
+#include "llfloaterflickr.h" // <FS:Ansariel> Share to Flickr
 #include "llimagefiltersmanager.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
