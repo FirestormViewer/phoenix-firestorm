@@ -350,6 +350,9 @@ BOOL LLFloaterModelPreview::postBuild()
 	childDisable("upload_joints");
 	childDisable("lock_scale_if_joint_position");
 
+	childSetVisible("skin_too_many_joints", false);
+	childSetVisible("skin_unknown_joint", false);
+
 	initDecompControls();
 
 	LLView* preview_panel = getChild<LLView>("preview_panel");
@@ -608,6 +611,8 @@ void LLFloaterModelPreview::loadModel(S32 lod, const std::string& file_name, boo
 
 void LLFloaterModelPreview::onClickCalculateBtn()
 {
+	clearLogTab();
+
 	mModelPreview->rebuildUploadData();
 
 	bool upload_skinweights = childGetValue("upload_skin").asBoolean();
@@ -1408,6 +1413,34 @@ void LLFloaterModelPreview::onMouseCaptureLostModelPreview(LLMouseHandler* handl
 //-----------------------------------------------------------------------------
 // addStringToLog()
 //-----------------------------------------------------------------------------
+//static
+void LLFloaterModelPreview::addStringToLog(const std::string& message, const LLSD& args, bool flash, S32 lod)
+{
+    if (sInstance && sInstance->hasString(message))
+    {
+        std::string str;
+        switch (lod)
+        {
+        case LLModel::LOD_IMPOSTOR: str = "LOD0 "; break;
+        case LLModel::LOD_LOW:      str = "LOD1 "; break;
+        case LLModel::LOD_MEDIUM:   str = "LOD2 "; break;
+        case LLModel::LOD_PHYSICS:  str = "PHYS "; break;
+        case LLModel::LOD_HIGH:     str = "LOD3 ";   break;
+        default: break;
+        }
+        
+        LLStringUtil::format_map_t args_msg;
+        LLSD::map_const_iterator iter = args.beginMap();
+        LLSD::map_const_iterator end = args.endMap();
+        for (; iter != end; ++iter)
+        {
+            args_msg[iter->first] = iter->second.asString();
+        }
+        str += sInstance->getString(message, args_msg);
+        sInstance->addStringToLogTab(str, flash);
+    }
+}
+
 // static
 void LLFloaterModelPreview::addStringToLog(const std::string& str, bool flash)
 {
@@ -1472,7 +1505,7 @@ LLModelPreview::LLModelPreview(S32 width, S32 height, LLFloater* fmp)
 , mLodsQuery()
 , mLodsWithParsingError()
 , mPelvisZOffset( 0.0f )
-, mLegacyRigValid( false )
+, mLegacyRigFlags( U32_MAX )
 , mRigValidJointUpload( false )
 , mPhysicsSearchLOD( LLModel::LOD_PHYSICS )
 , mResetJoints( false )
@@ -2277,7 +2310,7 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
 	// Copy determinations about rig so UI will reflect them
 	//
 	setRigValidForJointPositionUpload(mModelLoader->isRigValidForJointPositionUpload());
-	setLegacyRigValid(mModelLoader->isLegacyRigValid());
+	setLegacyRigFlags(mModelLoader->getLegacyRigFlags());
 
 	mModelLoader->loadTextures() ;
 
@@ -2496,7 +2529,6 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
 	mLoading = false;
 	if (mFMP)
 	{
-		mFMP->getChild<LLCheckBoxCtrl>("confirm_checkbox")->set(FALSE);
 		if (!mBaseModel.empty())
 		{
 			const std::string& model_name = mBaseModel[0]->getName();
@@ -4049,9 +4081,18 @@ void LLModelPreview::loadedCallback(
 	LLModelPreview* pPreview = static_cast< LLModelPreview* >(opaque);
 	if (pPreview && !LLModelPreview::sIgnoreLoadedCallback)
 	{
-		LLFloaterModelPreview::addStringToLog(pPreview->mModelLoader->logOut(), true);
-		pPreview->mModelLoader->clearLog();
-		pPreview->loadModelCallback(lod); // removes mModelLoader in some cases
+        const LLSD out = pPreview->mModelLoader->logOut();
+        LLSD::array_const_iterator iter_out = out.beginArray();
+        LLSD::array_const_iterator end_out = out.endArray();
+        for (; iter_out != end_out; ++iter_out)
+        {
+            if (iter_out->has("Message"))
+            {
+                LLFloaterModelPreview::addStringToLog(iter_out->get("Message"), *iter_out, true, pPreview->mModelLoader->mLod);
+            }
+        }
+        pPreview->mModelLoader->clearLog();
+        pPreview->loadModelCallback(lod); // removes mModelLoader in some cases
 	}
 
 }
@@ -4243,13 +4284,25 @@ BOOL LLModelPreview::render()
 
 	if (has_skin_weights && lodsReady())
 	{ //model has skin weights, enable view options for skin weights and joint positions
-		if (fmp && isLegacyRigValid() )
-		{
-			fmp->enableViewOption("show_skin_weight");
-			fmp->setViewOptionEnabled("show_joint_positions", skin_weight);	
-			mFMP->childEnable("upload_skin");
-			mFMP->childSetValue("show_skin_weight", skin_weight);
-		}
+        U32 flags = getLegacyRigFlags();
+        if (fmp)
+        {
+            if (flags == LEGACY_RIG_OK)
+            {
+                fmp->enableViewOption("show_skin_weight");
+                fmp->setViewOptionEnabled("show_joint_positions", skin_weight);
+                mFMP->childEnable("upload_skin");
+                mFMP->childSetValue("show_skin_weight", skin_weight);
+            }
+            else if ((flags & LEGACY_RIG_FLAG_TOO_MANY_JOINTS) > 0)
+            {
+                mFMP->childSetVisible("skin_too_many_joints", true);
+            }
+            else if ((flags & LEGACY_RIG_FLAG_UNKNOWN_JOINT) > 0)
+            {
+                mFMP->childSetVisible("skin_unknown_joint", true);
+            }
+        }
 	}
 	else
 	{
@@ -4867,14 +4920,6 @@ void LLModelPreview::setPreviewLOD(S32 lod)
 		combo_box->setCurrentByIndex((NUM_LOD-1)-mPreviewLOD); // combo box list of lods is in reverse order
 		mFMP->childSetValue("lod_file_" + lod_name[mPreviewLOD], mLODFile[mPreviewLOD]);
 
-		// <FS:Ansariel> Doesn't exist as of 16-06-2017
-		//LLComboBox* combo_box2 = mFMP->getChild<LLComboBox>("preview_lod_combo2");
-		//combo_box2->setCurrentByIndex((NUM_LOD-1)-mPreviewLOD); // combo box list of lods is in reverse order
-		//
-		//LLComboBox* combo_box3 = mFMP->getChild<LLComboBox>("preview_lod_combo3");
-		//combo_box3->setCurrentByIndex((NUM_LOD-1)-mPreviewLOD); // combo box list of lods is in reverse order
-		// </FS:Ansariel>
-
 		LLColor4 highlight_color = LLUIColorTable::instance().getColor("MeshImportTableHighlightColor");
 		LLColor4 normal_color = LLUIColorTable::instance().getColor("MeshImportTableNormalColor");
 
@@ -4904,8 +4949,10 @@ void LLFloaterModelPreview::onReset(void* user_data)
 {
 	assert_main_thread();
 
+
 	LLFloaterModelPreview* fmp = (LLFloaterModelPreview*) user_data;
 	fmp->childDisable("reset_btn");
+	fmp->clearLogTab();
 	LLModelPreview* mp = fmp->mModelPreview;
 	std::string filename = mp->mLODFile[LLModel::LOD_HIGH]; 
 
@@ -4924,6 +4971,7 @@ void LLFloaterModelPreview::onUpload(void* user_data)
 	assert_main_thread();
 
 	LLFloaterModelPreview* mp = (LLFloaterModelPreview*) user_data;
+	mp->clearLogTab();
 
 	mp->mUploadBtn->setEnabled(false);
 
@@ -5123,6 +5171,13 @@ void LLFloaterModelPreview::resetUploadOptions()
 	}
 	getChild<LLComboBox>("physics_lod_combo")->setCurrentByIndex(0);
 	getChild<LLComboBox>("Cosine%")->setCurrentByIndex(0);
+}
+
+void LLFloaterModelPreview::clearLogTab()
+{
+    mUploadLogText->clear();
+    LLPanel* panel = mTabContainer->getPanelByName("logs_panel");
+    mTabContainer->setTabPanelFlashing(panel, false);
 }
 
 void LLFloaterModelPreview::onModelPhysicsFeeReceived(const LLSD& result, std::string upload_url)

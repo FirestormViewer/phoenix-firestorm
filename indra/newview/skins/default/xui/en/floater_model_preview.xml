@@ -43,6 +43,12 @@
   <string name="decomposing">Analyzing...</string>
   <string name="simplifying">Simplifying...</string>
   <string name="tbd">TBD</string>
+  
+  <!-- Warnings from model loader-->
+  <string name="TooManyJoint">Skinning disabled due to too many joints: [JOINTS], maximum: [MAX]</string>
+  <string name="UnrecognizedJoint">Rigged to unrecognized joint name [NAME]</string>
+  <string name="UnknownJoints">Skinning disabled due to [COUNT] unknown joints</string>
+  
 
   <panel
     follows="top|left"
@@ -1187,27 +1193,48 @@
              label="Include skin weight"
              name="upload_skin"
              top_pad="15"/>
+           <text
+             follows="top|left"
+             height="17"
+             left="40"
+             name="skin_too_many_joints"
+             text_color="Orange"
+             top_pad="-2"
+             width="300">
+             Too many skinned joints
+           </text>
+           <text
+             follows="top|left"
+             height="17"
+             left="40"
+             name="skin_unknown_joint"
+             text_color="Orange"
+             top_pad="-17"
+             width="300">
+             Model has an unknown joint(s)
+           </text>
            <check_box
              follows="top|left"
              height="15"
              label="Include joint positions"
              name="upload_joints"
-             top_pad="15"/>
+             left_delta="-20"
+             top_pad="1"/>
            <check_box
              follows="top|left"
              height="15"
              label="Lock scale if joint position defined"
              name="lock_scale_if_joint_position"
-             top_pad="15"/>
+             top_pad="16"/>
            <text
              follows="top|left"
              height="15"
              layout="topleft"
-             left="220"
+             left="20"
              name="pelvis_offset_label"
              text_color="White"
-             top="134"
-             width="250">
+             top_pad="16"
+             width="175">
              Z offset (raise or lower avatar):
            </text>
            <spinner
@@ -1216,7 +1243,8 @@
              min_val="-3.00"
              max_val="3.0"
              name="pelvis_offset"
-             top_pad="10"
+             top_delta="-3"
+             left_pad="5"
              value="0.0"
              width="80"/>
        <panel
@@ -1654,7 +1682,6 @@ Analysed:
   </panel>
   <panel
     follows="top|left|bottom|right"
-    can_resize="true"
     name="right_panel"
     top="0"
     left="640"
