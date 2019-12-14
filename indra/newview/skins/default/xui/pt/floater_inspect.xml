@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater min_width="450" name="inspect" title="EXAMINAR OBJETOS">
 	<floater.string name="timeStamp">
-		[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
+		[wkday,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [year,datetime,slt]
 	</floater.string>
 	<scroll_list name="object_list" tool_tip="Selecione um objeto nesta lista para destacá-lo in-world">
 		<scroll_list.columns label="Nome do Objeto" name="object_name"/>
