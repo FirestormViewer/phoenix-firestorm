@@ -1742,6 +1742,8 @@ bool idle_startup()
 				// Its either downloading or declined.
 				// If optional was skipped this case shouldn't 
 				// be reached.
+
+				LL_INFOS() << "Forcing a quit due to update." << LL_ENDL;
 				LLLoginInstance::getInstance()->disconnect();
 				LLAppViewer::instance()->forceQuit();
 			}
