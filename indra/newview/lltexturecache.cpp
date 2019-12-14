@@ -838,6 +838,7 @@ LLTextureCache::LLTextureCache(bool threaded)
 	  mFastCachePoolp(NULL),
 	  mFastCachePadBuffer(NULL)
 {
+    mHeaderAPRFilePoolp = new LLVolatileAPRPool(); // is_local = true, because this pool is for headers, headers are under own mutex
 }
 
 LLTextureCache::~LLTextureCache()
@@ -846,6 +847,7 @@ LLTextureCache::~LLTextureCache()
 	writeUpdatedEntries() ;
 	delete mFastCachep;
 	delete mFastCachePoolp;
+	delete mHeaderAPRFilePoolp;
 	ll_aligned_free_16(mFastCachePadBuffer);
 }
 
@@ -1015,10 +1017,11 @@ void LLTextureCache::purgeCache(ELLPath location, bool remove_dir)
 		if(LLFile::isdir(mTexturesDirName))
 		{
 			std::string file_name = gDirUtilp->getExpandedFilename(location, entries_filename);
-			LLAPRFile::remove(file_name, getLocalAPRFilePool());
+			// mHeaderAPRFilePoolp because we are under header mutex, and can be in main thread
+			LLAPRFile::remove(file_name, mHeaderAPRFilePoolp);
 
 			file_name = gDirUtilp->getExpandedFilename(location, cache_filename);
-			LLAPRFile::remove(file_name, getLocalAPRFilePool());
+			LLAPRFile::remove(file_name, mHeaderAPRFilePoolp);
 
 			purgeAllTextures(true);
 		}
@@ -1099,7 +1102,7 @@ LLAPRFile* LLTextureCache::openHeaderEntriesFile(bool readonly, S32 offset)
 {
 	llassert_always(mHeaderAPRFile == NULL);
 	apr_int32_t flags = readonly ? APR_READ|APR_BINARY : APR_READ|APR_WRITE|APR_BINARY;
-	mHeaderAPRFile = new LLAPRFile(mHeaderEntriesFileName, flags, getLocalAPRFilePool());
+	mHeaderAPRFile = new LLAPRFile(mHeaderEntriesFileName, flags, mHeaderAPRFilePoolp);
 	if(offset > 0)
 	{
 		mHeaderAPRFile->seek(APR_SET, offset);
@@ -1122,10 +1125,10 @@ void LLTextureCache::readEntriesHeader()
 {
 	// mHeaderEntriesInfo initializes to default values so safe not to read it
 	llassert_always(mHeaderAPRFile == NULL);
-	if (LLAPRFile::isExist(mHeaderEntriesFileName, getLocalAPRFilePool()))
+	if (LLAPRFile::isExist(mHeaderEntriesFileName, mHeaderAPRFilePoolp))
 	{
 		LLAPRFile::readEx(mHeaderEntriesFileName, (U8*)&mHeaderEntriesInfo, 0, sizeof(EntriesInfo),
-						  getLocalAPRFilePool());
+						  mHeaderAPRFilePoolp);
 	}
 	else //create an empty entries header.
 	{
@@ -1157,7 +1160,7 @@ void LLTextureCache::writeEntriesHeader()
 	if (!mReadOnly)
 	{
 		LLAPRFile::writeEx(mHeaderEntriesFileName, (U8*)&mHeaderEntriesInfo, 0, sizeof(EntriesInfo),
-						   getLocalAPRFilePool());
+						   mHeaderAPRFilePoolp);
 	}
 }
 
@@ -1864,7 +1867,8 @@ void LLTextureCache::purgeTextures(bool validate)
 			if (uuididx == validate_idx)
 			{
  				LL_DEBUGS("TextureCache") << "Validating: " << filename << "Size: " << entries[idx].mBodySize << LL_ENDL;
-				S32 bodysize = LLAPRFile::size(filename, getLocalAPRFilePool());
+				// mHeaderAPRFilePoolp because this is under header mutex in main thread
+				S32 bodysize = LLAPRFile::size(filename, mHeaderAPRFilePoolp);
 				if (bodysize != entries[idx].mBodySize)
 				{
 					LL_WARNS("TextureCache") << "TEXTURE CACHE BODY HAS BAD SIZE: " << bodysize << " != " << entries[idx].mBodySize
@@ -2273,7 +2277,7 @@ void LLTextureCache::openFastCache(bool first_time)
 			{
 				mFastCachePadBuffer = (U8*)ll_aligned_malloc_16(TEXTURE_FAST_CACHE_ENTRY_SIZE);
 			}
-			mFastCachePoolp = new LLVolatileAPRPool();
+			mFastCachePoolp = new LLVolatileAPRPool(); // is_local= true by default, so not thread safe by default
 			if (LLAPRFile::isExist(mFastCacheFileName, mFastCachePoolp))
 			{
 				mFastCachep = new LLAPRFile(mFastCacheFileName, APR_READ|APR_WRITE|APR_BINARY, mFastCachePoolp) ;				
@@ -2357,7 +2361,9 @@ void LLTextureCache::removeCachedTexture(const LLUUID& id)
 		mTexturesSizeMap.erase(id);
 	}
 	mHeaderIDMap.erase(id);
-	LLAPRFile::remove(getTextureFileName(id), getLocalAPRFilePool());		
+	// We are inside header's mutex so mHeaderAPRFilePoolp is safe to use,
+	// but getLocalAPRFilePool() is not safe, it might be in use by worker
+	LLAPRFile::remove(getTextureFileName(id), mHeaderAPRFilePoolp);
 }
 
 //called after mHeaderMutex is locked.
@@ -2369,7 +2375,10 @@ void LLTextureCache::removeEntry(S32 idx, Entry& entry, std::string& filename)
 	{
 		if (entry.mBodySize == 0)	// Always attempt to remove when mBodySize > 0.
 		{
-		  if (LLAPRFile::isExist(filename, getLocalAPRFilePool()))		// Sanity check. Shouldn't exist when body size is 0.
+		  // Sanity check. Shouldn't exist when body size is 0.
+		  // We are inside header's mutex so mHeaderAPRFilePoolp is safe to use,
+		  // but getLocalAPRFilePool() is not safe, it might be in use by worker
+		  if (LLAPRFile::isExist(filename, mHeaderAPRFilePoolp))
 		  {
 			  LL_WARNS("TextureCache") << "Entry has body size of zero but file " << filename << " exists. Deleting this file, too." << LL_ENDL;
 		  }
@@ -2389,7 +2398,7 @@ void LLTextureCache::removeEntry(S32 idx, Entry& entry, std::string& filename)
 
 	if (file_maybe_exists)
 	{
-		LLAPRFile::remove(filename, getLocalAPRFilePool());		
+		LLAPRFile::remove(filename, mHeaderAPRFilePoolp);		
 	}
 }
 

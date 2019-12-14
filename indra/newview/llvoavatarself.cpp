@@ -3184,7 +3184,10 @@ LLViewerTexLayerSet* LLVOAvatarSelf::getLayerSet(EBakedTextureIndex baked_index)
                case TEX_HEAD_BAKED:
                case TEX_HEAD_BODYPAINT:
                        return mHeadLayerSet; */
-       if (baked_index >= 0 && baked_index < BAKED_NUM_INDICES)
+	// <FS:Beq> BOM fallback support for OpenSim legacy
+    //    if (baked_index >= 0 && baked_index < BAKED_NUM_INDICES)
+       if (baked_index >= 0 && baked_index < LLVOAvatar::sMaxBakes)
+	//</FS:Beq>
        {
 		   return  getTexLayerSet(baked_index);
        }

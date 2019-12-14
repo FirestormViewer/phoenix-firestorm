@@ -7021,4 +7021,7 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="FSUrlEntryWearLabel">
 		Inventar-Ordner anziehen
 	</string>
+	<string name="TexturePickerOutfitHeader">
+		Foto für Outfit
+	</string>
 </strings>

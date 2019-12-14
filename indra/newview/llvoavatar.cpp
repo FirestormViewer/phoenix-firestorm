@@ -624,7 +624,9 @@ F32 LLVOAvatar::sUnbakedTime = 0.f;
 F32 LLVOAvatar::sUnbakedUpdateTime = 0.f;
 F32 LLVOAvatar::sGreyTime = 0.f;
 F32 LLVOAvatar::sGreyUpdateTime = 0.f;
-
+//<FS:Beq> BOM bake limits
+S32 LLVOAvatar::sMaxBakes;
+//</FS:Beq>
 //-----------------------------------------------------------------------------
 // Helper functions
 //-----------------------------------------------------------------------------
@@ -735,7 +737,10 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 
 	mImpostorDistance = 0;
 	mImpostorPixelArea = 0;
-
+	//<FS:Beq> BOM constrain number of bake requests when BOM not supported
+	// BAKED_LEFT_ARM is equal to the pre-BOM BAKED_NUM_INDICES
+	sMaxBakes = gAgent.getRegion()->bakesOnMeshEnabled()?BAKED_NUM_INDICES:BAKED_LEFT_ARM;
+	//</FS:Beq>
 	setNumTEs(TEX_NUM_INDICES);
 
 	mbCanSelect = TRUE;
@@ -1465,7 +1470,7 @@ void LLVOAvatar::calculateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
 				 ++attachment_iter)
 			{
                     // Don't we need to look at children of attached_object as well?
-				const LLViewerObject* attached_object = (*attachment_iter);
+                const LLViewerObject* attached_object = attachment_iter->get();
 				if (attached_object && !attached_object->isHUDAttachment())
 				{
                         const LLVOVolume *vol = dynamic_cast<const LLVOVolume*>(attached_object);
@@ -1895,7 +1900,7 @@ BOOL LLVOAvatar::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 					 attachment_iter != attachment->mAttachedObjects.end();
 					 ++attachment_iter)
 				{
-					LLViewerObject* attached_object = (*attachment_iter);
+					LLViewerObject* attached_object = attachment_iter->get();
 					
 					if (attached_object && !attached_object->isDead() && attachment->getValid())
 					{
@@ -1966,7 +1971,7 @@ LLViewerObject* LLVOAvatar::lineSegmentIntersectRiggedAttachments(const LLVector
 					attachment_iter != attachment->mAttachedObjects.end();
 					++attachment_iter)
 			{
-				LLViewerObject* attached_object = (*attachment_iter);
+				LLViewerObject* attached_object = attachment_iter->get();
 					
 				if (attached_object->lineSegmentIntersect(start, local_end, face, pick_transparent, pick_rigged, face_hit, &local_intersection, tex_coord, normal, tangent))
 				{
@@ -2854,7 +2859,7 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
 				 attachment_iter != attachment->mAttachedObjects.end();
 				 ++attachment_iter)
 			{
-				LLViewerObject* attached_object = (*attachment_iter);
+				LLViewerObject* attached_object = attachment_iter->get();
 				BOOL visibleAttachment = visible || (attached_object && 
 													 !(attached_object->mDrawable->getSpatialBridge() &&
 													   attached_object->mDrawable->getSpatialBridge()->getRadius() < 2.0f));
@@ -5217,7 +5222,7 @@ void LLVOAvatar::updateVisibility()
 					 attachment_iter != attachment->mAttachedObjects.end();
 					 ++attachment_iter)
 				{
-					if (LLViewerObject *attached_object = (*attachment_iter))
+					if (LLViewerObject *attached_object = attachment_iter->get())
 					{
 						if(attached_object->mDrawable->isVisible())
 						{
@@ -6770,7 +6775,7 @@ void LLVOAvatar::rebuildAttachmentOverrides()
             for (LLViewerJointAttachment::attachedobjs_vec_t::iterator at_it = attachment_pt->mAttachedObjects.begin();
 				 at_it != attachment_pt->mAttachedObjects.end(); ++at_it)
             {
-                LLViewerObject *vo = *at_it;
+                LLViewerObject *vo = at_it->get();
                 // Attached animated objects affect joints in their control
                 // avs, not the avs to which they are attached.
                 if (vo && !vo->isAnimatedObject())
@@ -6821,7 +6826,7 @@ void LLVOAvatar::updateAttachmentOverrides()
             for (LLViewerJointAttachment::attachedobjs_vec_t::iterator at_it = attachment_pt->mAttachedObjects.begin();
 				 at_it != attachment_pt->mAttachedObjects.end(); ++at_it)
             {
-                LLViewerObject *vo = *at_it;
+                LLViewerObject *vo = at_it->get();
                 // Attached animated objects affect joints in their control
                 // avs, not the avs to which they are attached.
                 if (vo && !vo->isAnimatedObject())
@@ -7956,28 +7961,32 @@ void LLVOAvatar::lazyAttach()
 	for (U32 i = 0; i < mPendingAttachment.size(); i++)
 	{
 		LLPointer<LLViewerObject> cur_attachment = mPendingAttachment[i];
-		if (cur_attachment->mDrawable)
+		// Object might have died while we were waiting for drawable
+		if (!cur_attachment->isDead())
 		{
-			if (isSelf())
+			if (cur_attachment->mDrawable)
 			{
-				const LLUUID& item_id = cur_attachment->getAttachmentItemID();
-				LLViewerInventoryItem *item = gInventory.getItem(item_id);
-				LL_DEBUGS("Avatar") << "ATT attaching object "
-									<< (item ? item->getName() : "UNKNOWN") << " id " << item_id << LL_ENDL;
+				if (isSelf())
+				{
+					const LLUUID& item_id = cur_attachment->getAttachmentItemID();
+					LLViewerInventoryItem *item = gInventory.getItem(item_id);
+					LL_DEBUGS("Avatar") << "ATT attaching object "
+						<< (item ? item->getName() : "UNKNOWN") << " id " << item_id << LL_ENDL;
+				}
+				if (!attachObject(cur_attachment))
+				{	// Drop it
+					LL_WARNS() << "attachObject() failed for "
+						<< cur_attachment->getID()
+						<< " item " << cur_attachment->getAttachmentItemID()
+						<< LL_ENDL;
+					// MAINT-3312 backout
+					//still_pending.push_back(cur_attachment);
+				}
 			}
-			if (!attachObject(cur_attachment))
-			{	// Drop it
-				LL_WARNS() << "attachObject() failed for " 
-					<< cur_attachment->getID()
-					<< " item " << cur_attachment->getAttachmentItemID()
-					<< LL_ENDL;
-				// MAINT-3312 backout
-				//still_pending.push_back(cur_attachment);
+			else
+			{
+				still_pending.push_back(cur_attachment);
 			}
-		}
-		else
-		{
-			still_pending.push_back(cur_attachment);
 		}
 	}
 
@@ -8001,7 +8010,7 @@ void LLVOAvatar::resetHUDAttachments()
 				 attachment_iter != attachment->mAttachedObjects.end();
 				 ++attachment_iter)
 			{
-				const LLViewerObject* attached_object = (*attachment_iter);
+				const LLViewerObject* attached_object = attachment_iter->get();
 				if (attached_object && attached_object->mDrawable.notNull())
 				{
 					gPipeline.markMoved(attached_object->mDrawable);
@@ -8398,7 +8407,7 @@ LLViewerObject *	LLVOAvatar::findAttachmentByID( const LLUUID & target_id ) cons
 			 attachment_iter != attachment->mAttachedObjects.end();
 			 ++attachment_iter)
 		{
-			LLViewerObject *attached_object = (*attachment_iter);
+			LLViewerObject *attached_object = attachment_iter->get();
 			if (attached_object &&
 				attached_object->getID() == target_id)
 			{
@@ -8858,7 +8867,7 @@ void LLVOAvatar::updateMeshVisibility()
 				attachment_iter != attachment->mAttachedObjects.end();
 				++attachment_iter)
 			{
-				LLViewerObject *objectp = (*attachment_iter);
+				LLViewerObject *objectp = attachment_iter->get();
 				if (objectp)
 				{
 					for (int face_index = 0; face_index < objectp->getNumTEs(); face_index++)
@@ -9181,7 +9190,7 @@ void LLVOAvatar::updateMeshTextures()
 			attachment_iter != attachment->mAttachedObjects.end();
 			++attachment_iter)
 		{
-			LLViewerObject* attached_object = (*attachment_iter);
+			LLViewerObject* attached_object = attachment_iter->get();
 			if (attached_object && !attached_object->isDead())
 			{
 				attached_object->refreshBakeTexture();
@@ -9318,7 +9327,10 @@ void LLVOAvatar::releaseComponentTextures()
 		}
 	}
 
-	for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
+	//<FS:Beq> BOM constrain number of bake requests when BOM not supported
+	// for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
+	for (U8 baked_index = 0; baked_index < sMaxBakes; baked_index++)
+		//</FS:Beq>	
 	{
 		const LLAvatarAppearanceDictionary::BakedEntry * bakedDicEntry = LLAvatarAppearanceDictionary::getInstance()->getBakedTexture((EBakedTextureIndex)baked_index);
 		// skip if this is a skirt and av is not wearing one, or if we don't have a baked texture UUID
@@ -9430,7 +9442,7 @@ LLBBox LLVOAvatar::getHUDBBox() const
 				 attachment_iter != attachment->mAttachedObjects.end();
 				 ++attachment_iter)
 			{
-				const LLViewerObject* attached_object = (*attachment_iter);
+				const LLViewerObject* attached_object = attachment_iter->get();
 				if (attached_object == NULL)
 				{
 					LL_WARNS() << "HUD attached object is NULL!" << LL_ENDL;
@@ -10051,7 +10063,11 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 
 LLViewerTexture* LLVOAvatar::getBakedTexture(const U8 te)
 {
-	if (te < 0 || te >= BAKED_NUM_INDICES)
+	//<FS:Beq> BOM constrain number of bake requests when BOM not supported
+	// prior to BOM BAKES beyond BAKED_HAIR were not supported.
+	// if (te < 0 || te >= BAKED_NUM_INDICES)
+	if (te < 0 || te >= sMaxBakes)
+	//</FS:Beq>
 	{
 		return NULL;
 	}
@@ -10752,6 +10768,11 @@ void LLVOAvatar::removeMissingBakedTextures()
 //virtual
 void LLVOAvatar::updateRegion(LLViewerRegion *regionp)
 {
+	//<FS:Beq> BOM constrain number of bake requests when BOM not supported,
+	// TEX_HEAD_TATTOO and BAKED_LEFT_ARM are the first new entries
+	// TODO(Beq): We might need to force some kind off rebake here?
+	sMaxBakes = gAgent.getRegion()->bakesOnMeshEnabled()?BAKED_NUM_INDICES:BAKED_LEFT_ARM;
+	//</FS:Beq>
 	LLViewerObject::updateRegion(regionp);
 }
 
@@ -10873,7 +10894,7 @@ void LLVOAvatar::getAssociatedVolumes(std::vector<LLVOVolume*>& volumes)
 		for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attach_iter = attachment->mAttachedObjects.begin();
 			 attach_iter != attach_end; ++attach_iter)
 		{
-			LLViewerObject* attached_object =  *attach_iter;
+			LLViewerObject* attached_object =  attach_iter->get();
             LLVOVolume *volume = dynamic_cast<LLVOVolume*>(attached_object);
             if (volume)
             {
@@ -11406,8 +11427,10 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		U32 cost = VISUAL_COMPLEXITY_UNKNOWN;
 		LLVOVolume::texture_cost_t textures;
 		hud_complexity_list_t hud_complexity_list;
-
-		for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
+		//<FS:Beq> BOM constrain number of bake requests when BOM not supported
+		// for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
+		for (U8 baked_index = 0; baked_index < sMaxBakes; baked_index++)
+		//</FS:Beq>
 		{
 		    const LLAvatarAppearanceDictionary::BakedEntry *baked_dict
 				= LLAvatarAppearanceDictionary::getInstance()->getBakedTexture((EBakedTextureIndex)baked_index);
@@ -11462,7 +11485,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 				 attachment_iter != attachment->mAttachedObjects.end();
 				 ++attachment_iter)
 			{
-				const LLViewerObject* attached_object = (*attachment_iter);
+                const LLViewerObject* attached_object = attachment_iter->get();
                 accountRenderComplexityForObject(attached_object, max_attachment_complexity,
                                                  // <FS:Ansariel> Show per-item complexity in COF
                                                  //textures, cost, hud_complexity_list);

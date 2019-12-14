@@ -34,8 +34,7 @@
 #include "lleconomy.h"
 #include "llfloaterperms.h"
 #include "llfloaterreg.h"
-#include "llfloaterflickr.h"
-#include "llfloatertwitter.h"
+#include "llfloaterflickr.h" // <FS:Ansariel> Share to Flickr
 #include "llimagefilter.h"
 #include "llimagefiltersmanager.h"
 #include "llimagebmp.h"
