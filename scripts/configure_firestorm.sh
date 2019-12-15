@@ -394,7 +394,14 @@ fi
 if [ \( $WANTS_VERSION -eq $TRUE \) -o \( $WANTS_CONFIG -eq $TRUE \) ] ; then
     echo "Versioning..."
     pushd ..
-    buildVer=`hg summary | head -1 | cut -d " "  -f 2 | cut -d : -f 1 | grep "[0-9]*"`
+	if [ -d .git ]
+	then
+		buildVer=${AUTOBUILD_BUILD_ID}
+	else
+		buildVer=`hg summary | head -1 | cut -d " "  -f 2 | cut -d : -f 1 | grep "[0-9]*"`
+		AUTOBUILD_BUILD_ID=${buildVer}
+	fi
+	
     majorVer=`cat indra/newview/VIEWER_VERSION.txt | cut -d "." -f 1`
     minorVer=`cat indra/newview/VIEWER_VERSION.txt | cut -d "." -f 2`
     patchVer=`cat indra/newview/VIEWER_VERSION.txt | cut -d "." -f 3`
