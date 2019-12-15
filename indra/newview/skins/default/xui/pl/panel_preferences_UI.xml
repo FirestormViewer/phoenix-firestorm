@@ -32,6 +32,9 @@
         <text name="UI Size:" width="120">
             Skalowanie interfejsu:
         </text>
+        <text name="HUD Size:" width="120">
+            Skalowanie HUD-ów:
+        </text>
         <text name="ScriptDialogsPerObjectLabel" width="185">
             Komunikatów skryptów na obiekt:
         </text>

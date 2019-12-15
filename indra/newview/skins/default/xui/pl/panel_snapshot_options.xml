@@ -10,9 +10,6 @@
 		<layout_panel name="lp_profile">
 			<button label="Wrzuć na mój Kanał" name="save_to_profile_btn" />
 		</layout_panel>
-		<layout_panel name="lp_twitter">
-			<button label="Wrzuć na Twitter" name="send_to_twitter_btn" />
-		</layout_panel>
 		<layout_panel name="lp_flickr">
 			<button label="Wrzuć na Flickr" name="send_to_flickr_btn" />
 		</layout_panel>
