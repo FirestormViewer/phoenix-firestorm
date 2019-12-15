@@ -40,6 +40,9 @@ Spróbuj jeszcze raz za kilka minut albo teleportuj się do mniej zatłoczonego 
 		<message name="expired_region_handoff">
 			Przepraszamy, ale nie udało się przeprowadzić zmiany regionu wystarczająco szybko. Spróbuj jeszcze raz za kilka minut.
 		</message>
+		<message name="preexisting_tport">
+			Przepraszamy, ale system nie mógł zainicjować teleportacji. Spróbuj jeszcze raz za kilka minut.
+		</message>
 		<message name="no_host">
 			Nie możemy znaleźć miejsca docelowego. To miejsce może być chwilowo nieosiągalne albo przestało istnieć.
 Spróbuj jeszcze raz za kilka minut.
