@@ -314,47 +314,6 @@ private:
     // access our private members.
     friend class LLParamSingleton<DERIVED_TYPE>;
 
-    // Scoped lock on the mutex associated with this LLSingleton<T>
-    class Locker
-    {
-    public:
-        Locker(): mLock(getMutex()) {}
-
-    private:
-        // Use a recursive_mutex in case of constructor circularity. With a
-        // non-recursive mutex, that would result in deadlock.
-        typedef std::recursive_mutex mutex_t;
-
-        // LLSingleton<T> must have a distinct instance of sMutex for every
-        // distinct T. It's tempting to consider hoisting Locker up into
-        // LLSingletonBase. Don't do it.
-        //
-        // sMutex must be a function-local static rather than a static member. One
-        // of the essential features of LLSingleton and friends is that they must
-        // support getInstance() even when the containing module's static
-        // variables have not yet been runtime-initialized. A mutex requires
-        // construction. A static class member might not yet have been
-        // constructed.
-        //
-        // We could store a dumb mutex_t*, notice when it's NULL and allocate a
-        // heap mutex -- but that's vulnerable to race conditions. And we can't
-        // defend the dumb pointer with another mutex.
-        //
-        // We could store a std::atomic<mutex_t*> -- but a default-constructed
-        // std::atomic<T> does not contain a valid T, even a default-constructed
-        // T! Which means std::atomic, too, requires runtime initialization.
-        //
-        // But a function-local static is guaranteed to be initialized exactly
-        // once, the first time control reaches that declaration.
-        static mutex_t& getMutex()
-        {
-            static mutex_t sMutex;
-            return sMutex;
-        }
-
-        std::unique_lock<mutex_t> mLock;
-    };
-
     // LLSingleton only supports a nullary constructor. However, the specific
     // purpose for its subclass LLParamSingleton is to support Singletons
     // requiring constructor arguments. constructSingleton() supports both use
