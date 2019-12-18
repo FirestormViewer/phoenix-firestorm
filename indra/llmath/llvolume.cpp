@@ -2424,9 +2424,9 @@ bool LLVolume::unpackVolumeFaces(std::istream& is, S32 size)
 			{ //face has no geometry, continue
 				face.resizeIndices(3);
 				face.resizeVertices(1);
-				memset(face.mPositions, 0, sizeof(LLVector4a));
-				memset(face.mNormals, 0, sizeof(LLVector4a));
-				memset(face.mTexCoords, 0, sizeof(LLVector2));
+				face.mPositions->clear();
+				face.mNormals->clear();
+				face.mTexCoords->setZero();
 				memset(face.mIndices, 0, sizeof(U16)*3);
 				continue;
 			}
@@ -2443,7 +2443,7 @@ bool LLVolume::unpackVolumeFaces(std::istream& is, S32 size)
 			
 			if (idx.empty() || face.mNumIndices < 3)
 			{ //why is there an empty index list?
-				LL_WARNS() <<"Empty face present!" << LL_ENDL;
+				LL_WARNS() << "Empty face present! Face index: " << i << " Total: " << face_count << LL_ENDL;
 				continue;
 			}
 
@@ -2514,7 +2514,11 @@ bool LLVolume::unpackVolumeFaces(std::istream& is, S32 size)
 				}
 				else
 				{
-					memset(norm_out, 0, sizeof(LLVector4a)*num_verts);
+					for (U32 j = 0; j < num_verts; ++j)
+					{
+						norm_out->clear();
+						norm_out++; // or just norm_out[j].clear();
+					}
 				}
 			}
 
@@ -2544,7 +2548,11 @@ bool LLVolume::unpackVolumeFaces(std::istream& is, S32 size)
 				}
 				else
 				{
-					memset(tc_out, 0, sizeof(LLVector2)*num_verts);
+					for (U32 j = 0; j < num_verts; j += 2)
+					{
+						tc_out->clear();
+						tc_out++;
+					}
 				}
 			}
 
@@ -5293,25 +5301,18 @@ bool LLVolumeFace::cacheOptimize()
 	// LLVCacheVertexData suddenly does point to unrelated vertices. It is an interesting fact that this is no problem for the
 	// windows version.
 	//
-	// To solve the issue with the pointer invalidation it would make sense to use a std::vector< U16 > for triangle indices, sort this
-	// using
+	// To solve the issue with the pointer invalidation it use a std::vector< U16 > for triangle indices, sort this using
 	// std::sort( v.begin(), v.end(), [&triangle_data](U16 rhs, U16 lhs ){ return triangle_data[rhs].mScore > triangle_data[lhs].mScore; }
 	// Then access all LLVCacheTriangleData> via triangle_data[ v[ idx ] ].
 	//
-	// This will help indeed with the destroyed triangles; but the result will still not be perfect and there are problems with alpha due to
-	// what looks like z order.
-	//
-	// It is peculiar that none of this happens when compiling with MSVC.
-	// Sadly for Linux it seems to be a decision between two evils
-	// - Disable cacheOptimize and have correct meshes but potentially a bit of less FPS.
-	// - Enable/fix cacheOptimize, potentially have a bit higher FPS but broken meshes.
-	//
-	// Having meshes correctly seems to be a bit of a lesser evil. Then do some wider testing on different systems to test for any other potential sideeffects.
+	// Unfortunately this is a bit of a messy interwoven change all of this method, alternative is to copy a Linux specific version. Which
+	// won't be that great either
+	// NB The change really should be safe for Winows too, in fact it is surprising Windows does not suffer fro the sae bug. Just cannot test
+	// the windows versions right now.
 	
-#ifndef LL_LINUX
 	LLVCacheLRU cache;
 	
-	if (mNumVertices < 3)
+	if (mNumVertices < 3 || mNumIndices < 3)
 	{ //nothing to do
 		return true;
 	}
@@ -5327,7 +5328,7 @@ bool LLVolumeFace::cacheOptimize()
 		triangle_data.resize(mNumIndices / 3);
 		vertex_data.resize(mNumVertices);
 	}
-	catch (std::bad_alloc)
+	catch (std::bad_alloc&)
 	{
 		LL_WARNS("LLVOLUME") << "Resize failed" << LL_ENDL;
 		return false;
@@ -5343,6 +5344,13 @@ bool LLVolumeFace::cacheOptimize()
 		triangle_data[tri_idx].mVertex[i%3] = &(vertex_data[idx]);
 	}
 
+// <FS:ND> FIRE-23370/BUG-8801/MAIN-5060
+#ifdef LL_LINUX
+	std::vector< U32 > v;
+	for (U32 j = 0; j < triangle_data.size(); ++j)
+		v.push_back( j );
+#endif
+	
 	/*F32 pre_acmr = 1.f;
 	//measure cache misses from before rebuild
 	{
@@ -5374,14 +5382,28 @@ bool LLVolumeFace::cacheOptimize()
 	}
 
 	//sort triangle data by score
+// <FS:ND> FIRE-23370/BUG-8801/MAIN-5060
+#ifndef LL_LINUX
 	std::sort(triangle_data.begin(), triangle_data.end());
-
+#else
+	std::sort( v.begin(), v.end(),
+			   [&triangle_data](U16 rhs, U16 lhs )
+			   { return triangle_data[rhs].mScore > triangle_data[lhs].mScore; }
+			   );
+#endif
+		
 	std::vector<U16> new_indices;
 
 	LLVCacheTriangleData* tri;
 
 	//prime pump by adding first triangle to cache;
+// <FS:ND> FIRE-23370/BUG-8801/MAIN-5060
+#ifndef LL_LINUX
 	tri = &(triangle_data[0]);
+#else
+	tri = &(triangle_data[v[0]]);
+#endif
+	
 	cache.addTriangle(tri);
 	new_indices.push_back(tri->mVertex[0]->mIdx);
 	new_indices.push_back(tri->mVertex[1]->mIdx);
@@ -5398,11 +5420,21 @@ bool LLVolumeFace::cacheOptimize()
 			breaks++;
 			for (U32 j = 0; j < triangle_data.size(); ++j)
 			{
+// <FS:ND> FIRE-23370/BUG-8801/MAIN-5060
+#ifndef LL_LINUX
 				if (triangle_data[j].mActive)
 				{
 					tri = &(triangle_data[j]);
 					break;
 				}
+#else
+				if (triangle_data[v[j]].mActive)
+				{
+					tri = &(triangle_data[v[j]]);
+					break;
+				}
+#endif
+
 			}
 		}	
 		
@@ -5481,7 +5513,7 @@ bool LLVolumeFace::cacheOptimize()
 	{
 		new_idx.resize(mNumVertices, -1);
 	}
-	catch (std::bad_alloc)
+	catch (std::bad_alloc&)
 	{
 		ll_aligned_free<64>(pos);
 		ll_aligned_free_16(wght);
@@ -5533,8 +5565,6 @@ bool LLVolumeFace::cacheOptimize()
 
 	//std::string result = llformat("ACMR pre/post: %.3f/%.3f  --  %d triangles %d breaks", pre_acmr, post_acmr, mNumIndices/3, breaks);
 	//LL_INFOS() << result << LL_ENDL;
-
-#endif // <FS:ND/>
 
 	return true;
 }
@@ -7001,11 +7031,16 @@ void CalculateTangentArray(U32 vertexCount, const LLVector4a *vertex, const LLVe
 {
     //LLVector4a *tan1 = new LLVector4a[vertexCount * 2];
 	LLVector4a* tan1 = (LLVector4a*) ll_aligned_malloc_16(vertexCount*2*sizeof(LLVector4a));
+	// new(tan1) LLVector4a;
 
     LLVector4a* tan2 = tan1 + vertexCount;
 
-	memset(tan1, 0, vertexCount*2*sizeof(LLVector4a));
-        
+    U32 count = vertexCount * 2;
+    for (U32 i = 0; i < count; i++)
+    {
+        tan1[i].clear();
+    }
+
     for (U32 a = 0; a < triangleCount; a++)
     {
         U32 i1 = *index_array++;

@@ -708,7 +708,7 @@ void LLLocationInputCtrl::onAgentParcelChange()
 
 void LLLocationInputCtrl::onMaturityButtonClicked()
 {
-	LLUI::sHelpImpl->showTopic(mMaturityHelpTopic);
+	LLUI::getInstance()->mHelpImpl->showTopic(mMaturityHelpTopic);
 }
 
 void LLLocationInputCtrl::onRegionBoundaryCrossed()
@@ -1174,9 +1174,7 @@ void LLLocationInputCtrl::changeLocationPresentation()
 
 	//change location presentation only if user does not select/paste anything and 
 	//human-readable region name is being displayed
-	std::string text = mTextEntry->getText();
-	LLStringUtil::trim(text);
-	if(!mTextEntry->hasSelection() && text == mHumanReadableLocation)
+	if(!mTextEntry->hasSelection() && mTextEntry->getText() == mHumanReadableLocation)
 	{
 		//needs unescaped one
 		LLSLURL slurl;

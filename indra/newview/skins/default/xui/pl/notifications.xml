@@ -81,6 +81,9 @@ Inicjalizacja Marketplace nieudana z powodu błędu sieci lub systemu. Spróbuj 
 
         &apos;[ERROR_CODE]&apos;
 	</notification>
+	<notification name="MyOutfitsPasteFailed">
+		Jeden lub więcej przedmiotów nie może być użyty w "Strojach"
+	</notification>
 	<notification name="MerchantPasteFailed">
 		Kopiowanie lub przenoszenie przedmiotów na Marketplace nie powiodło się:
 
@@ -608,9 +611,6 @@ Obiekt może znajdować się zbyt daleko albo został usunięty.
 Odwiedzić [_URL], aby uzyskać więcej informacji?
 		<usetemplate ignoretext="Sprzęt w moim komputerze nie jest wspierany" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
-	<notification name="RunLauncher">
-		Proszę nie uruchamiać przeglądarki bezpośrednio. Zamiast tego zaktualizuj wszystkie skróty, aby wskazywały na program rozruchowy.
-	</notification>
 	<notification name="OldGPUDriver">
 		Prawdopodobnie istnieje nowszy sterownik dla Twojej karty graficznej. Aktualizacja sterowników graficznych może znacznie zwiększyć wydajność.
 
@@ -920,6 +920,9 @@ Jeżeli nadal otrzymujesz tę wiadomość proponujemy odwiedzić stronę [SUPPOR
 	<notification name="expired_region_handoff">
 		Przepraszamy, ale nie udało się przeprowadzić zmiany regionu wystarczająco szybko. Spróbuj jeszcze raz za kilka minut.
 	</notification>
+	<notification name="preexisting_tport">
+		Przepraszamy, ale system nie mógł zainicjować teleportacji. Spróbuj jeszcze raz za kilka minut.
+	</notification>
 	<notification name="no_host">
 		Nie można znaleźć miejsca docelowego. To miejsce może być chwilowo nieosiągalne albo przestało istnieć. Spróbuj jeszcze raz za kilka minut.
 	</notification>
@@ -1191,6 +1194,12 @@ do
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification label="Zmień nazwę gestu" name="RenameGesture">
+		Nowa nazwa gestu:
+		<form name="form">
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
 	<notification name="RemoveFromFriends">
 		Czy chcesz usunąć &lt;nolink&gt;[NAME]&lt;/nolink&gt; z listy znajomych?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
@@ -1377,6 +1386,14 @@ Możesz sprawdzić swoje połączenie z Internetem i spróbować ponownie za kil
 		<form name="form">
 			<button name="Help" text="Pomoc"/>
 			<button name="Teleport" text="Teleportuj"/>
+		</form>
+	</notification>
+	<notification name="LoginPacketNeverReceivedNoTP">
+		Problemy z połączeniem. Problem może być spowodowany Twoim połączeniem z Internetem albo może istnieć po stronie [SECOND_LIFE_GRID].
+
+Możesz sprawdzić swoje połączenie z Internetem i spróbować ponownie za kilka minut lub połączyć się ze stroną pomocy technicznej [SUPPORT_SITE].
+		<form name="form">
+			<button name="Help" text="Pomoc"/>
 		</form>
 	</notification>
 	<notification name="WelcomeChooseSex">
@@ -2329,6 +2346,16 @@ Chcesz wyłączyć Tryb Zajętości przed zakończeniem tej transakcji?
 			<button ignore="Nigdy nie wyłączaj trybu Zajętości" name="No" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification label="Działka odtwarza media" name="ParcelPlayingMedia">
+		Ta ziemia ma media:
+[URL]
+Czy chcesz je odtworzyć?
+		<form name="form">
+			<ignore name="ignore" text="Zawsze wybieraj tę opcję dla tej ziemi."/>
+			<button ignore="Odtwarzaj media" name="Yes" text="Odtwarzaj"/>
+			<button ignore="Ignoruj media" name="No" text="Ignoruj"/>
+		</form>
+	</notification>
 	<notification name="ConfirmDeleteProtectedCategory">
 		Ten folder &apos;[FOLDERNAME]&apos; to folder systemowy. Usunięcie folderu systemowego spowoduje niestabilność. Czy na pewno chcesz go skasować?
 		<usetemplate ignoretext="Potwierdź zanim folder systemu zostanie skasowany" name="okcancelignore" notext="Anuluj" />
@@ -2372,6 +2399,12 @@ Chcesz wyłączyć Tryb Zajętości przed zakończeniem tej transakcji?
 	<notification name="ConfirmEmptyLostAndFound">
 		Na pewno chcesz permanentnie usunąć zawartość Twojego folderu Zagubione i odnalezione?
 		<usetemplate ignoretext="Potwierdź przed usunięciem zawartości foldera Zagubione i odnalezione" name="okcancelignore" notext="Nie" yestext="Tak"/>
+	</notification>
+	<notification name="ConfirmReplaceLink">
+		Zamierzasz zastąpić link do części ciała o typie '[TYPE]' elementem, który nie pasuje do tego typu.
+
+Na pewno chcesz kontynuować?
+		<usetemplate ignoretext="Potwierdź przed zamianą linku" name="okcancelignore" notext="Nie" yestext="Tak" />
 	</notification>
 	<notification name="CopySLURL">
 		Następujący link SLurl został skopiowany do schowka:
@@ -3468,7 +3501,7 @@ Porty, które muszą być otwarte dla połączeń głosowych, to:
 Proszę sprawdź swoją sieć i ustawienia firewall.
 Wyłącz wszelkie funkcjonalności SIP ALG (Application Layer Gateway) w swoim routerze.
 
-[https://wiki.phoenixviewer.com/fs_voice]
+[https://wiki.firestormviewer.org/fs_voice]
 		<usetemplate name="okignore" ignoretext="Ostrzegaj mnie, gdy przeglądarka nie może połączyć się z serwerem głosu" />
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
@@ -3477,7 +3510,7 @@ Wyłącz wszelkie funkcjonalności SIP ALG (Application Layer Gateway) w swoim r
 Komunikacja głosowa nie będzie dostępna.
 Proszę sprawdź swoją sieć i ustawienia firewall.
 
-[https://wiki.phoenixviewer.com/fs_voice]
+[https://wiki.firestormviewer.org/fs_voice]
 	</notification>
 	<notification name="AvatarRezLeftNotification">
 		( [EXISTENCE] sekund w Second Life)

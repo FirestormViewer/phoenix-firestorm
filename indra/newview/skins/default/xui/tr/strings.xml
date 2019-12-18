@@ -67,6 +67,9 @@ Grafik Kartı: [GRAPHICS_CARD]
 	<string name="AboutOGL">
 		OpenGL Sürümü [OPENGL_VERSION]
 	</string>
+	<string name="AboutOSXHiDPI">
+		HiDPI görüntü modu: [HIDPI]
+	</string>
 	<string name="AboutLibs">
 libcurl Sürümü: [LIBCURL_VERSION]
 J2C Kod Çözücü Sürümü: [J2C_VERSION]
@@ -1467,6 +1470,15 @@ http://secondlife.com/support adresini ziyaret edin.
 	<string name="MarketplaceURL_LearnMore">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
 	</string>
+	<string name="InventoryPlayAnimationTooltip">
+		Pencereyi Oyun seçenekleri ile birlikte açın.
+	</string>
+	<string name="InventoryPlayGestureTooltip">
+		Seçilen mimiği SL dünyasında uygulayın.
+	</string>
+	<string name="InventoryPlaySoundTooltip">
+		Pencereyi Oyun seçenekleri ile birlikte açın.
+	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		Pazaryerinde herkes öğe satabilir.
 	</string>
@@ -2580,7 +2592,7 @@ Bu mesaj size gelmeye devam ederse lütfen http://support.secondlife.com adresin
 	</string>
 	<string name="UnknownFileExtension">
 		Bilinmeyen dosya uzantısı .%s
-.wav, .tga, .bmp, .jpg, .jpeg veya .bvh bekleniyordu
+.wav, .tga, .bmp, .jpg, .jpeg veya .anim bekleniyordu
 	</string>
 	<string name="MuteObject2">
 		Engelle
@@ -5400,9 +5412,6 @@ Düzenleyici yolunu çift tırnakla çevrelemeyi deneyin.
 	<string name="Command_Destinations_Label">
 		Hedef Konum
 	</string>
-	<string name="Command_Facebook_Label">
-		Facebook
-	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
 	</string>
@@ -5495,9 +5504,6 @@ Düzenleyici yolunu çift tırnakla çevrelemeyi deneyin.
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		İlgilendiğiniz hedef konumlar
-	</string>
-	<string name="Command_Facebook_Tooltip">
-		Facebook&apos;ta Yayınla
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Flickr&apos;a yükle

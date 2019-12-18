@@ -867,8 +867,7 @@
      </text>
      <color_swatch
        can_apply_immediately="true"
-       color="0 0 0 0.5"
-       control_name="NameTagBackground"
+       color="NameTagBackground"
        follows="left|top"
        height="24"
        label_height="0"
@@ -1237,9 +1236,9 @@
        left="30"
        top_pad="16"
        height="15"
-       name="netmap_pickradius_textbox"
+       name="netmap_pickradius_color_textbox"
        width="115">
-       Pick radius:
+       Pick radius color:
      </text>
      <color_swatch
        color="MapPickRadiusColor"
@@ -1250,6 +1249,7 @@
        layout="topleft"
        left_pad="13"
        name="MapPickRadiusColor"
+       tool_tip="Controls the color of the pick range on the minimap. The size of the pick range can be adjusted with the Pick radius setting."
        top_delta="-5"
        width="44" >
        <color_swatch.init_callback
@@ -1259,6 +1259,18 @@
        function="Pref.applyUIColor"
        parameter="MapPickRadiusColor" />
      </color_swatch>
+     <text
+       type="string"
+       length="1"
+       follows="left|top"
+       layout="topleft"
+       left_pad="10"
+       height="15"
+       name="netmap_pickradius_opacity_textbox"
+       top_delta="5"
+       width="50">
+       Opacity:
+     </text>
      <slider
        can_edit_text="false"
        decimal_digits="2"
@@ -1271,8 +1283,8 @@
        min_val="0.00"
        name="MapPickRadiusTransparency"
        show_text="true"
-       top_delta="5"
-       width="233" />
+       tool_tip="Controls the opacity of the pick range on the minimap. The size of the pick range can be adjusted with the Pick radius setting."
+       width="173" />
      <text
        type="string"
        length="1"

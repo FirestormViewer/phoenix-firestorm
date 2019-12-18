@@ -62,6 +62,7 @@ LLFloaterConversationPreview::LLFloaterConversationPreview(const LLSD& session_i
 	mShowHistory(false),
 	mMessages(NULL),
 	mHistoryThreadsBusy(false),
+	mIsGroup(false),
 	mOpened(false)
 {
 }
@@ -93,6 +94,7 @@ BOOL LLFloaterConversationPreview::postBuild()
 	{
 		name = conv->getConversationName();
 		file = conv->getHistoryFileName();
+		mIsGroup = (LLIMModel::LLIMSession::GROUP_SESSION == conv->getConversationType());
 	}
 	else
 	{
@@ -101,6 +103,10 @@ BOOL LLFloaterConversationPreview::postBuild()
 	}
 	// <FS:Ansariel> Remember used log file name
 	mChatHistoryFileName = file;
+	if (mIsGroup)
+	{
+		mChatHistoryFileName += GROUP_CHAT_SUFFIX;
+	}
 	LLStringUtil::format_map_t args;
 	args["[NAME]"] = name;
 	std::string title = getString("Title", args);
@@ -130,7 +136,7 @@ void LLFloaterConversationPreview::setPages(std::list<LLSD>* messages, const std
 		getChild<LLTextBox>("page_num_label")->setValue(total_page_num);
 		mShowHistory = true;
 	}
-	LLLoadHistoryThread* loadThread = LLLogChat::getLoadHistoryThread(mSessionID);
+	LLLoadHistoryThread* loadThread = LLLogChat::getInstance()->getLoadHistoryThread(mSessionID);
 	if (loadThread)
 	{
 		loadThread->removeLoadEndSignal(boost::bind(&LLFloaterConversationPreview::setPages, this, _1, _2));
@@ -154,7 +160,7 @@ void LLFloaterConversationPreview::onOpen(const LLSD& key)
 		return;
 	}
 	mOpened = true;
-	if (!LLLogChat::historyThreadsFinished(mSessionID))
+	if (!LLLogChat::getInstance()->historyThreadsFinished(mSessionID))
 	{
 		LLNotificationsUtil::add("ChatHistoryIsBusyAlert");
 		mHistoryThreadsBusy = true;
@@ -164,6 +170,7 @@ void LLFloaterConversationPreview::onOpen(const LLSD& key)
 	LLSD load_params;
 	load_params["load_all_history"] = true;
 	load_params["cut_off_todays_date"] = false;
+	load_params["is_group"] = mIsGroup;
 
 	// The temporary message list with "Loading..." text
 	// Will be deleted upon loading completion in setPages() method
@@ -184,15 +191,16 @@ void LLFloaterConversationPreview::onOpen(const LLSD& key)
 	// LLDeleteHistoryThread is started in destructor
 	std::list<LLSD>* messages = new std::list<LLSD>();
 
-	LLLogChat::cleanupHistoryThreads();
+	LLLogChat *log_chat_inst = LLLogChat::getInstance();
+	log_chat_inst->cleanupHistoryThreads();
 	
 	LLLoadHistoryThread* loadThread = new LLLoadHistoryThread(mChatHistoryFileName, messages, load_params);
 	loadThread->setLoadEndSignal(boost::bind(&LLFloaterConversationPreview::setPages, this, _1, _2));
 	loadThread->start();
-	LLLogChat::addLoadHistoryThread(mSessionID, loadThread);
+	log_chat_inst->addLoadHistoryThread(mSessionID, loadThread);
 
 	LLDeleteHistoryThread* deleteThread = new LLDeleteHistoryThread(messages, loadThread);
-	LLLogChat::addDeleteHistoryThread(mSessionID, deleteThread);
+	log_chat_inst->addDeleteHistoryThread(mSessionID, deleteThread);
 
 	mShowHistory = true;
 }
@@ -202,7 +210,7 @@ void LLFloaterConversationPreview::onClose(bool app_quitting)
 	mOpened = false;
 	if (!mHistoryThreadsBusy)
 	{
-		LLDeleteHistoryThread* deleteThread = LLLogChat::getDeleteHistoryThread(mSessionID);
+		LLDeleteHistoryThread* deleteThread = LLLogChat::getInstance()->getDeleteHistoryThread(mSessionID);
 		if (deleteThread)
 		{
 			deleteThread->start();
@@ -240,7 +248,7 @@ void LLFloaterConversationPreview::showHistory()
 		else
  		{
 			std::string legacy_name = gCacheName->buildLegacyName(from);
-			from_id = LLAvatarNameCache::findIdByName(legacy_name);
+			from_id = LLAvatarNameCache::getInstance()->findIdByName(legacy_name);
  		}
 
 		LLChat chat;

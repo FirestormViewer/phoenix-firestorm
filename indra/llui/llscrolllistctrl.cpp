@@ -375,7 +375,7 @@ LLScrollListCtrl::~LLScrollListCtrl()
 			}
 			sort_order.append(LLSD(sort_val));
 		}
-		LLControlVariable* sort_order_setting = LLUI::sSettingGroups["config"]->declareLLSD(mPersistedSortOrderControl, LLSD(), "Column sort order for control " + mPersistedSortOrderControl);
+		LLControlVariable* sort_order_setting = LLUI::getInstance()->mSettingGroups["config"]->declareLLSD(mPersistedSortOrderControl, LLSD(), "Column sort order for control " + mPersistedSortOrderControl);
 		sort_order_setting->setValue(sort_order);
 	}
 	// </FS:Ansariel>
@@ -1788,6 +1788,20 @@ BOOL LLScrollListCtrl::handleScrollWheel(S32 x, S32 y, S32 clicks)
 	BOOL handled = FALSE;
 	// Pretend the mouse is over the scrollbar
 	handled = mScrollbar->handleScrollWheel( 0, 0, clicks );
+
+	if (mMouseWheelOpaque)
+	{
+		return TRUE;
+	}
+
+	return handled;
+}
+
+BOOL LLScrollListCtrl::handleScrollHWheel(S32 x, S32 y, S32 clicks)
+{
+	BOOL handled = FALSE;
+	// Pretend the mouse is over the scrollbar
+	handled = mScrollbar->handleScrollHWheel( 0, 0, clicks );
 
 	if (mMouseWheelOpaque)
 	{
@@ -3487,11 +3501,11 @@ void LLScrollListCtrl::loadPersistedSortOrder()
 	if (root_floater)
 	{
 		mPersistedSortOrderControl = root_floater->getName() + "_" + getName() + "_sortorder";
-		if (LLUI::sSettingGroups["config"]->controlExists(mPersistedSortOrderControl))
+		if (LLUI::getInstance()->mSettingGroups["config"]->controlExists(mPersistedSortOrderControl))
 		{
 			clearSortOrder();
 
-			LLSD sort_order = LLUI::sSettingGroups["config"]->getLLSD(mPersistedSortOrderControl);
+			LLSD sort_order = LLUI::getInstance()->mSettingGroups["config"]->getLLSD(mPersistedSortOrderControl);
 			for (LLSD::array_iterator it = sort_order.beginArray(); it != sort_order.endArray(); ++it)
 			{
 				S32 sort_val = (*it).asInteger();

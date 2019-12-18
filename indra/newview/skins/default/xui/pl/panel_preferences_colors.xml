@@ -141,9 +141,14 @@
 		</panel>
 		<panel label="Minimapa" name="tab-minimap">
 			<slider label="Przezroczystość tła:" name="FSMiniMapOpacity"/>
-			<text name="netmap_pickradius_textbox">
-				Okrąg zazn.:
+			<text name="netmap_pickradius_color_textbox">
+				Okrąg zaznaczenia:
 			</text>
+			<color_swatch name="MapPickRadiusColor" tool_tip="Kontroluje kolor promienia okręgu zaznaczenia na minimapie. Rozmiar pierścienia może być dostosowany przez odpowiadające mu ustawienia w sekcji z promieniem okręgu zaznaczenia." />
+			<text name="netmap_pickradius_opacity_textbox">
+				Przezr.:
+			</text>
+			<slider name="MapPickRadiusTransparency" tool_tip="Kontroluje stopień przezroczystości promienia okręgu zaznaczenia na minimapie. Rozmiar pierścienia może być dostosowany przez odpowiadające mu ustawienia w sekcji z promieniem okręgu zaznaczenia." />
 			<text name="netmap_dots_textbox">
 				Kropki minimapy:
 			</text>

@@ -71,6 +71,8 @@ const std::string LL_IM_FROM("from");
 const std::string LL_IM_FROM_ID("from_id");
 const std::string LL_TRANSCRIPT_FILE_EXTENSION("txt");
 
+const std::string GROUP_CHAT_SUFFIX(" (group)");
+
 const static char IM_SYMBOL_SEPARATOR(':');
 const static std::string IM_SEPARATOR(std::string() + IM_SYMBOL_SEPARATOR + " ");
 const static std::string NEW_LINE("\n");
@@ -280,11 +282,24 @@ LLLogChatTimeScanner::LLLogChatTimeScanner()
 	// </FS:Ansariel>
 }
 
-LLLogChat::save_history_signal_t * LLLogChat::sSaveHistorySignal = NULL;
+LLLogChat::LLLogChat()
+: mSaveHistorySignal(NULL) // only needed in preferences
+{
+    mHistoryThreadsMutex = new LLMutex();
+}
 
-std::map<LLUUID,LLLoadHistoryThread *> LLLogChat::sLoadHistoryThreads;
-std::map<LLUUID,LLDeleteHistoryThread *> LLLogChat::sDeleteHistoryThreads;
-LLMutex* LLLogChat::sHistoryThreadsMutex = NULL;
+LLLogChat::~LLLogChat()
+{
+    delete mHistoryThreadsMutex;
+    mHistoryThreadsMutex = NULL;
+
+    if (mSaveHistorySignal)
+    {
+        mSaveHistorySignal->disconnect_all_slots();
+        delete mSaveHistorySignal;
+        mSaveHistorySignal = NULL;
+    }
+}
 
 
 //static
@@ -425,14 +440,11 @@ void LLLogChat::saveHistory(const std::string& filename,
 
 	file.close();
 
-	if (NULL != sSaveHistorySignal)
-	{
-		(*sSaveHistorySignal)();
-	}
+	LLLogChat::getInstance()->triggerHistorySignal();
 }
 
 // static
-void LLLogChat::loadChatHistory(const std::string& file_name, std::list<LLSD>& messages, const LLSD& load_params)
+void LLLogChat::loadChatHistory(const std::string& file_name, std::list<LLSD>& messages, const LLSD& load_params, bool is_group)
 {
 	if (file_name.empty())
 	{
@@ -445,10 +457,25 @@ void LLLogChat::loadChatHistory(const std::string& file_name, std::list<LLSD>& m
 	LLFILE* fptr = LLFile::fopen(LLLogChat::makeLogFileName(file_name), "r");/*Flawfinder: ignore*/
 	if (!fptr)
 	{
-		fptr = LLFile::fopen(LLLogChat::oldLogFileName(file_name), "r");/*Flawfinder: ignore*/
+		if (is_group)
+		{
+			std::string old_name(file_name);
+			old_name.erase(old_name.size() - GROUP_CHAT_SUFFIX.size());
+			fptr = LLFile::fopen(LLLogChat::makeLogFileName(old_name), "r");
+			if (fptr)
+			{
+				fclose(fptr);
+				LLFile::copy(LLLogChat::makeLogFileName(old_name), LLLogChat::makeLogFileName(file_name));
+			}
+			fptr = LLFile::fopen(LLLogChat::makeLogFileName(file_name), "r");
+		}
 		if (!fptr)
 		{
-			return;						//No previous conversation with this name.
+			fptr = LLFile::fopen(LLLogChat::oldLogFileName(file_name), "r");/*Flawfinder: ignore*/
+			if (!fptr)
+			{
+				return;						//No previous conversation with this name.
+			}
 		}
 	}
 
@@ -503,13 +530,12 @@ void LLLogChat::loadChatHistory(const std::string& file_name, std::list<LLSD>& m
 	fclose(fptr);
 }
 
-// static
 bool LLLogChat::historyThreadsFinished(LLUUID session_id)
 {
 	LLMutexLock lock(historyThreadsMutex());
 	bool finished = true;
-	std::map<LLUUID,LLLoadHistoryThread *>::iterator it = sLoadHistoryThreads.find(session_id);
-	if (it != sLoadHistoryThreads.end())
+	std::map<LLUUID,LLLoadHistoryThread *>::iterator it = mLoadHistoryThreads.find(session_id);
+	if (it != mLoadHistoryThreads.end())
 	{
 		finished = it->second->isFinished();
 	}
@@ -517,95 +543,93 @@ bool LLLogChat::historyThreadsFinished(LLUUID session_id)
 	{
 		return false;
 	}
-	std::map<LLUUID,LLDeleteHistoryThread *>::iterator dit = sDeleteHistoryThreads.find(session_id);
-	if (dit != sDeleteHistoryThreads.end())
+	std::map<LLUUID,LLDeleteHistoryThread *>::iterator dit = mDeleteHistoryThreads.find(session_id);
+	if (dit != mDeleteHistoryThreads.end())
 	{
 		finished = finished && dit->second->isFinished();
 	}
 	return finished;
 }
 
-// static
 LLLoadHistoryThread* LLLogChat::getLoadHistoryThread(LLUUID session_id)
 {
 	LLMutexLock lock(historyThreadsMutex());
-	std::map<LLUUID,LLLoadHistoryThread *>::iterator it = sLoadHistoryThreads.find(session_id);
-	if (it != sLoadHistoryThreads.end())
+	std::map<LLUUID,LLLoadHistoryThread *>::iterator it = mLoadHistoryThreads.find(session_id);
+	if (it != mLoadHistoryThreads.end())
 	{
 		return it->second;
 	}
 	return NULL;
 }
 
-// static
 LLDeleteHistoryThread* LLLogChat::getDeleteHistoryThread(LLUUID session_id)
 {
 	LLMutexLock lock(historyThreadsMutex());
-	std::map<LLUUID,LLDeleteHistoryThread *>::iterator it = sDeleteHistoryThreads.find(session_id);
-	if (it != sDeleteHistoryThreads.end())
+	std::map<LLUUID,LLDeleteHistoryThread *>::iterator it = mDeleteHistoryThreads.find(session_id);
+	if (it != mDeleteHistoryThreads.end())
 	{
 		return it->second;
 	}
 	return NULL;
 }
 
-// static
 bool LLLogChat::addLoadHistoryThread(LLUUID& session_id, LLLoadHistoryThread* lthread)
 {
 	LLMutexLock lock(historyThreadsMutex());
-	std::map<LLUUID,LLLoadHistoryThread *>::const_iterator it = sLoadHistoryThreads.find(session_id);
-	if (it != sLoadHistoryThreads.end())
+	std::map<LLUUID,LLLoadHistoryThread *>::const_iterator it = mLoadHistoryThreads.find(session_id);
+	if (it != mLoadHistoryThreads.end())
 	{
 		return false;
 	}
-	sLoadHistoryThreads[session_id] = lthread;
+	mLoadHistoryThreads[session_id] = lthread;
 	return true;
 }
 
-// static
 bool LLLogChat::addDeleteHistoryThread(LLUUID& session_id, LLDeleteHistoryThread* dthread)
 {
 	LLMutexLock lock(historyThreadsMutex());
-	std::map<LLUUID,LLDeleteHistoryThread *>::const_iterator it = sDeleteHistoryThreads.find(session_id);
-	if (it != sDeleteHistoryThreads.end())
+	std::map<LLUUID,LLDeleteHistoryThread *>::const_iterator it = mDeleteHistoryThreads.find(session_id);
+	if (it != mDeleteHistoryThreads.end())
 	{
 		return false;
 	}
-	sDeleteHistoryThreads[session_id] = dthread;
+	mDeleteHistoryThreads[session_id] = dthread;
 	return true;
 }
 
-// static
 void LLLogChat::cleanupHistoryThreads()
 {
 	LLMutexLock lock(historyThreadsMutex());
 	std::vector<LLUUID> uuids;
-	std::map<LLUUID,LLLoadHistoryThread *>::iterator lit = sLoadHistoryThreads.begin();
-	for (; lit != sLoadHistoryThreads.end(); lit++)
+	std::map<LLUUID,LLLoadHistoryThread *>::iterator lit = mLoadHistoryThreads.begin();
+	for (; lit != mLoadHistoryThreads.end(); lit++)
 	{
-		if (lit->second->isFinished() && sDeleteHistoryThreads[lit->first]->isFinished())
+		if (lit->second->isFinished() && mDeleteHistoryThreads[lit->first]->isFinished())
 		{
 			delete lit->second;
-			delete sDeleteHistoryThreads[lit->first];
+			delete mDeleteHistoryThreads[lit->first];
 			uuids.push_back(lit->first);
 		}
 	}
 	std::vector<LLUUID>::iterator uuid_it = uuids.begin();
 	for ( ;uuid_it != uuids.end(); uuid_it++)
 	{
-		sLoadHistoryThreads.erase(*uuid_it);
-		sDeleteHistoryThreads.erase(*uuid_it);
+		mLoadHistoryThreads.erase(*uuid_it);
+		mDeleteHistoryThreads.erase(*uuid_it);
 	}
 }
 
-//static
 LLMutex* LLLogChat::historyThreadsMutex()
 {
-	if (sHistoryThreadsMutex == NULL)
-	{
-		sHistoryThreadsMutex = new LLMutex();
-	}
-	return sHistoryThreadsMutex;
+	return mHistoryThreadsMutex;
+}
+
+void LLLogChat::triggerHistorySignal()
+{
+    if (NULL != mSaveHistorySignal)
+    {
+        (*mSaveHistorySignal)();
+    }
 }
 
 // static
@@ -683,15 +707,14 @@ void LLLogChat::getListOfTranscriptBackupFiles(std::vector<std::string>& list_of
 	findTranscriptFiles(pattern, list_of_transcriptions);
 }
 
-//static
 boost::signals2::connection LLLogChat::setSaveHistorySignal(const save_history_signal_t::slot_type& cb)
 {
-	if (NULL == sSaveHistorySignal)
+	if (NULL == mSaveHistorySignal)
 	{
-		sSaveHistorySignal = new save_history_signal_t();
+		mSaveHistorySignal = new save_history_signal_t();
 	}
 
-	return sSaveHistorySignal->connect(cb);
+	return mSaveHistorySignal->connect(cb);
 }
 
 //static
@@ -1197,12 +1220,28 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 
 	if (!fptr)
 	{
-		fptr = LLFile::fopen(LLLogChat::oldLogFileName(file_name), "r");/*Flawfinder: ignore*/
+		bool is_group = load_params.has("is_group") ? load_params["is_group"].asBoolean() : false;
+		if (is_group)
+		{
+			std::string old_name(file_name);
+			old_name.erase(old_name.size() - GROUP_CHAT_SUFFIX.size());
+			fptr = LLFile::fopen(LLLogChat::makeLogFileName(old_name), "r");
+			if (fptr)
+			{
+				fclose(fptr);
+				LLFile::copy(LLLogChat::makeLogFileName(old_name), LLLogChat::makeLogFileName(file_name));
+			}
+			fptr = LLFile::fopen(LLLogChat::makeLogFileName(file_name), "r");
+		}
 		if (!fptr)
 		{
-			mNewLoad = false;
-			(*mLoadEndSignal)(messages, file_name);
-			return;						//No previous conversation with this name.
+			fptr = LLFile::fopen(LLLogChat::oldLogFileName(file_name), "r");/*Flawfinder: ignore*/
+			if (!fptr)
+			{
+				mNewLoad = false;
+				(*mLoadEndSignal)(messages, file_name);
+				return;						//No previous conversation with this name.
+			}
 		}
 	}
 

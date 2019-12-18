@@ -607,13 +607,15 @@ BOOL LLPanelStandStopFlying::postBuild()
 	mStandButton->setCommitCallback(boost::bind(&LLPanelStandStopFlying::onStandButtonClick, this));
 	mStandButton->setCommitCallback(boost::bind(&LLFloaterMove::enableInstance));
 	mStandButton->setVisible(FALSE);
-	LLHints::registerHintTarget("stand_btn", mStandButton->getHandle());
+	LLHints::getInstance()->registerHintTarget("stand_btn", mStandButton->getHandle());
 	
 	mStopFlyingButton = getChild<LLButton>("stop_fly_btn");
 	//mStopFlyingButton->setCommitCallback(boost::bind(&LLFloaterMove::setFlyingMode, FALSE));
 	mStopFlyingButton->setCommitCallback(boost::bind(&LLPanelStandStopFlying::onStopFlyingButtonClick, this));
 	mStopFlyingButton->setVisible(FALSE);
 
+	gViewerWindow->setOnWorldViewRectUpdated(boost::bind(&LLPanelStandStopFlying::updatePosition, this));
+	
 	mFlycamButton = getChild<LLButton>("flycam_btn");
 	mFlycamButton->setVisible(FALSE);
 
@@ -732,7 +734,7 @@ LLPanelStandStopFlying* LLPanelStandStopFlying::getStandStopFlyingPanel()
 	panel->buildFromFile("panel_stand_stop_flying.xml");
 
 	panel->setVisible(FALSE);
-	//LLUI::getRootView()->addChild(panel);
+	//LLUI::getInstance()->getRootView()->addChild(panel);
 
 	LL_INFOS() << "Build LLPanelStandStopFlying panel" << LL_ENDL;
 

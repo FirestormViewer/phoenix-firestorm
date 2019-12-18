@@ -164,6 +164,9 @@ protected:
 	// <FS:Ansariel> Correct enabled state of Animated Script Dialogs option
 	void updateAnimatedScriptDialogs();
 
+	// <FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
+	void onShowGroupNoticesTopRightChanged();
+
 public:
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.	
@@ -195,6 +198,7 @@ public:
 	void onClickSetKey();
 	void onClickClearKey(); // <FS:Ansariel> FIRE-3803: Clear voice toggle button
 	void setKey(KEY key);
+	void setMouse(LLMouseHandler::EClickType click);
 	void onClickSetMiddleMouse();
 	// void onClickSetSounds();	//<FS:KC> Handled centrally now
 	void onClickPreviewUISound(const LLSD& ui_sound_id); // <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
@@ -244,7 +248,6 @@ public:
 
 	void refreshUI();
 
-	void onCommitParcelMediaAutoPlayEnable();
 	void onCommitMediaEnabled();
 	void onCommitMusicEnabled();
 	void applyResolution();
@@ -257,6 +260,7 @@ public:
 	void onClickProxySettings();
 	void onClickTranslationSettings();
 	void onClickPermsDefault();
+	void onClickRememberedUsernames();
 	void onClickAutoReplace();
 	void onClickSpellChecker();
 	void onClickRenderExceptions();

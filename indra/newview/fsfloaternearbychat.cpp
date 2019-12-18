@@ -574,7 +574,7 @@ void FSFloaterNearbyChat::loadHistory()
 			}
 
 			std::string legacy_name = gCacheName->buildLegacyName(from);
-			from_id = LLAvatarNameCache::findIdByName(legacy_name);
+			from_id = LLAvatarNameCache::getInstance()->findIdByName(legacy_name);
 		}
 
 		LLChat chat;
@@ -690,7 +690,7 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 			{
 				if ((wstring_utf8_length(mInputEditor->getWText()) + wchar_utf8_length('\n')) > mInputEditor->getMaxTextLength())
 				{
-					LLUI::reportBadKeystroke();
+					LLUI::getInstance()->reportBadKeystroke();
 				}
 				else
 				{
@@ -701,7 +701,7 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 			{
 				if ((wstring_utf8_length(mInputEditor->getWText()) + wchar_utf8_length(llwchar(182))) > mInputEditor->getMaxTextLength())
 				{
-					LLUI::reportBadKeystroke();
+					LLUI::getInstance()->reportBadKeystroke();
 				}
 				else
 				{

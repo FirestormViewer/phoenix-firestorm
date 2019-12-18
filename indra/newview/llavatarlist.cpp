@@ -205,7 +205,7 @@ LLAvatarList::LLAvatarList(const Params& p)
 		mLITUpdateTimer->start();
 	}
 	
-	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&LLAvatarList::handleDisplayNamesOptionChanged, this));
+	LLAvatarNameCache::getInstance()->addUseDisplayNamesCallback(boost::bind(&LLAvatarList::handleDisplayNamesOptionChanged, this));
 
 	// <FS:Ansariel> FIRE-1089: List needs to update also if we change the username setting
 	gSavedSettings.getControl("NameTagShowUsernames")->getSignal()->connect(boost::bind(&LLAvatarList::handleDisplayNamesOptionChanged, this));

@@ -583,59 +583,37 @@ static void bilinear_scale(const U8 *src, U32 srcW, U32 srcH, U32 srcCh, U32 src
 // LLImage
 //---------------------------------------------------------------------------
 
-//static
-std::string LLImage::sLastErrorMessage;
-LLMutex* LLImage::sMutex = NULL;
-bool LLImage::sUseNewByteRange = false;
-S32  LLImage::sMinimalReverseByteRangePercent = 75;
-
-// <FS:ND> Report amount of failed buffer allocations
-
-U32 LLImageBase::mAllocationErrors;
-
-void LLImageBase::addAllocationError()
+LLImage::LLImage(bool use_new_byte_range, S32 minimal_reverse_byte_range_percent)
 {
-	++mAllocationErrors;
+    mMutex = new LLMutex();
+    mUseNewByteRange = use_new_byte_range;
+    mMinimalReverseByteRangePercent = minimal_reverse_byte_range_percent;
 }
 
-U32 LLImageBase::getAllocationErrors()
+LLImage::~LLImage()
 {
-	return mAllocationErrors;
-}
-//</FS:ND>
-
-//static
-void LLImage::initClass(bool use_new_byte_range, S32 minimal_reverse_byte_range_percent)
-{
-	sUseNewByteRange = use_new_byte_range;
-    sMinimalReverseByteRangePercent = minimal_reverse_byte_range_percent;
-	sMutex = new LLMutex();
+    delete mMutex;
+    mMutex = NULL;
 }
 
-//static
-void LLImage::cleanupClass()
-{
-	delete sMutex;
-	sMutex = NULL;
-}
-
-//static
-const std::string& LLImage::getLastError()
+const std::string& LLImage::getLastErrorMessage()
 {
 	static const std::string noerr("No Error");
-	return sLastErrorMessage.empty() ? noerr : sLastErrorMessage;
+	return mLastErrorMessage.empty() ? noerr : mLastErrorMessage;
 }
 
-//static
-void LLImage::setLastError(const std::string& message)
+void LLImage::setLastErrorMessage(const std::string& message)
 {
-	LLMutexLock m(sMutex);
-	sLastErrorMessage = message;
+	LLMutexLock m(mMutex);
+	mLastErrorMessage = message;
 }
 
 //---------------------------------------------------------------------------
 // LLImageBase
 //---------------------------------------------------------------------------
+
+// <FS:ND> Report amount of failed buffer allocations
+U32 LLImageBase::sAllocationErrors;
 
 LLImageBase::LLImageBase()
 :	LLTrace::MemTrackable<LLImageBase>("LLImage"),
@@ -815,6 +793,20 @@ U8* LLImageBase::allocateDataSize(S32 width, S32 height, S32 ncomponents, S32 si
 	setSize(width, height, ncomponents);
 	return allocateData(size); // virtual
 }
+
+// <FS:ND> Report amount of failed buffer allocations
+// static
+void LLImageBase::addAllocationError()
+{
+	++sAllocationErrors;
+}
+
+// static
+U32 LLImageBase::getAllocationErrors()
+{
+	return sAllocationErrors;
+}
+//</FS:ND>
 
 //---------------------------------------------------------------------------
 // LLImageRaw
@@ -2203,19 +2195,27 @@ bool LLImageFormatted::load(const std::string &filename, int load_size)
 	}
 	bool res;
 	U8 *data = allocateData(load_size);
-	apr_size_t bytes_read = load_size;
-	apr_status_t s = apr_file_read(apr_file, data, &bytes_read); // modifies bytes_read
-	if (s != APR_SUCCESS || (S32) bytes_read != load_size)
+	if (data)
 	{
-		deleteData();
-		setLastError("Unable to read file",filename);
-		res = false;
+		apr_size_t bytes_read = load_size;
+		apr_status_t s = apr_file_read(apr_file, data, &bytes_read); // modifies bytes_read
+		if (s != APR_SUCCESS || (S32) bytes_read != load_size)
+		{
+			deleteData();
+			setLastError("Unable to read file",filename);
+			res = false;
+		}
+		else
+		{
+			res = updateData();
+		}
 	}
 	else
 	{
-		res = updateData();
+		setLastError("Allocation failure", filename);
+		res = false;
 	}
-	
+
 	return res;
 }
 

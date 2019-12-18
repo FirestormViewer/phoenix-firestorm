@@ -33,8 +33,11 @@
 
 	<!--2D Overlay-->
 	<panel label="2D-Overlay" name="ui-2d-overlay">
-		<text name="UI Size:" width="80">
+		<text name="UI Size:" width="95">
 			UI-Skalierung:
+		</text>
+		<text name="HUD Size:" width="95">
+			HUD-Skalierung:
 		</text>
 		<text name="ScriptDialogsPerObjectLabel">
 			Skriptdialoge pro Objekt:
@@ -63,7 +66,13 @@
 		<check_box label="Pie-Menü aktivieren" name="UsePieMenu" tool_tip="Aktiviert das klassische V1-Kontextmenü in Kuchenform anstelle des standardmäßigen Kontextmenüs."/>
 		<check_box label="Text-Animation aktivieren" name="PieMenuPopupFontEffect" tool_tip="Aktiviert die Animation der Texte innerhalb des klassischen V1-Kontextmenü in Kuchenform, wenn sich dieses öffnet."/>
 		<check_box label="Außenring-Schatten aktivieren" name="PieMenuOuterRingShade" tool_tip="Aktiviert einen zusätzlichen Schatten um den äußeren Ring des klassischen V1-Kontextmenü in Kuchenform, der bei der Visualisierung von Untermenüs unterstützt."/>
-		<check_box label="Gruppenmitteilungen und Chiclets oben rechts" name="ShowGroupNoticesTopRight" tool_tip="Aktivieren, um Gruppenmitteilungen in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
+		<text name="ShowGroupNoticesTopRightLabel">
+			Position Gruppenmitt. und Chiclets:
+		</text>
+		<radio_group name="ShowGroupNoticesTopRight" tool_tip="Legt fest, wo Gruppenmitteilungen und Chiclet-Icons auf dem Bildschirm angezeigt werden.">
+			<radio_item label="Rechts unten" name="radio" />
+			<radio_item label="Rechts oben" name="radio1" />
+		</radio_group>
 		<text name="GroupTopRightRequiresRestart" left_delta="280">
 			(Erfordert Neustart)
 		</text>

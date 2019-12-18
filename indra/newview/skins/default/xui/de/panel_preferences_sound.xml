@@ -3,6 +3,12 @@
 <panel.string name="middle_mouse">
 	Mittlere Maustaste
 </panel.string>
+<panel.string name="button4_mouse">
+	Maustaste 4
+</panel.string>
+<panel.string name="button5_mouse">
+	Maustaste 5
+</panel.string>
 <tab_container label="Firestorm Prefs" name="tabs">
     <!-- Sounds -->
     <panel label="Klänge" name="Media Sounds Panel">
@@ -49,7 +55,14 @@
 	
 	<!-- Media -->
 	<panel label="Medien" name="Media Media Panel">
-		<check_box label="Automatische Medien-Wiedergabe zulassen" name="media_auto_play_btn" tool_tip="Hier aktivieren, um Medien automatisch wiederzugeben."/>
+		<text width="190" name="media_autoplay_label">
+			Automatische Medien-Wiedergabe
+		</text>
+		<combo_box name="media_auto_play_combo" width="100">
+			<item label="Deaktiviert" name="autoplay_disabled"/>
+			<item label="Aktiviert" name="autoplay_enabled"/>
+			<!--<item label="Nachfragen" name="autoplay_ask"/>-->
+		</combo_box>
 		<check_box name="media_allowscript_btn" tool_tip="Erlaubt bzw. verbietet Scripten die Kontrolle über die Medienwiedergabe" label="Skripte erlauben Medien abzuspielen" />
 		<check_box label="Medien, die an andere Avatare angehängt sind, wiedergeben." name="media_show_on_others_btn" tool_tip="Diese Option deaktivieren, um Medien für andere Avataren, die sich in der Nähe befinden, auszublenden."/>
 		<check_box name="media_filter" tool_tip="Aktiviert den Medienfilter, der abhängig der Medien-URL die Wiedergabe erlaubt oder verbietet." label="Medienfilter aktivieren (erhöhte Sicherheit)"/>

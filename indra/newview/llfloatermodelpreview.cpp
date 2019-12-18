@@ -489,7 +489,7 @@ void LLFloaterModelPreview::initModelPreview()
 	mModelPreview = new LLModelPreview(tex_width, tex_height, this);
 	mModelPreview->setPreviewTarget(16.f);
 	mModelPreview->setDetailsCallback(boost::bind(&LLFloaterModelPreview::setDetails, this, _1, _2, _3, _4, _5));
-	mModelPreview->setModelUpdatedCallback(boost::bind(&LLFloaterModelPreview::toggleCalculateButton, this, _1));
+	mModelPreview->setModelUpdatedCallback(boost::bind(&LLFloaterModelPreview::modelUpdated, this, _1));
 }
 
 void LLFloaterModelPreview::onUploadOptionChecked(LLUICtrl* ctrl)
@@ -599,7 +599,8 @@ void LLFloaterModelPreview::onClickCalculateBtn()
 		mModelPreview->getPreviewAvatar()->showAttachmentOverrides();
     }
 
-	mUploadModelUrl.clear();
+    mUploadModelUrl.clear();
+    mModelPhysicsFee.clear();
 
 	gMeshRepo.uploadModel(mModelPreview->mUploadData, mModelPreview->mPreviewScale,
                           childGetValue("upload_textures").asBoolean(), 
@@ -976,7 +977,7 @@ BOOL LLFloaterModelPreview::handleHover	(S32 x, S32 y, MASK mask)
 
 		mModelPreview->refresh();
 
-		LLUI::setMousePositionLocal(this, mLastMouseX, mLastMouseY);
+		LLUI::getInstance()->setMousePositionLocal(this, mLastMouseX, mLastMouseY);
 	}
 
 	if (!mPreviewRect.pointInRect(x, y) || !mModelPreview)
@@ -3383,6 +3384,15 @@ void LLModelPreview::updateStatusMessages()
 		mFMP->childEnable("ok_btn");
 		mFMP->childEnable("calculate_btn");
 	}
+
+    if (mModelNoErrors && mLodsWithParsingError.empty())
+    {
+        mFMP->childEnable("calculate_btn");
+    }
+    else
+    {
+        mFMP->childDisable("calculate_btn");
+    }
 	
 	//add up physics triangles etc
 	S32 phys_tris = 0;
@@ -4906,6 +4916,12 @@ void LLFloaterModelPreview::setStatusMessage(const std::string& msg)
 	mStatusMessage = msg;
 }
 
+void LLFloaterModelPreview::modelUpdated(bool calculate_visible)
+{
+    mModelPhysicsFee.clear();
+    toggleCalculateButton(calculate_visible);
+}
+
 void LLFloaterModelPreview::toggleCalculateButton(bool visible)
 {
 	mCalculateBtn->setVisible(visible);
@@ -4931,7 +4947,10 @@ void LLFloaterModelPreview::toggleCalculateButton(bool visible)
 		childSetTextArg("download_weight", "[ST]", tbd);
 		childSetTextArg("server_weight", "[SIM]", tbd);
 		childSetTextArg("physics_weight", "[PH]", tbd);
-		childSetTextArg("upload_fee", "[FEE]", tbd);
+		if (!mModelPhysicsFee.isMap() || mModelPhysicsFee.emptyMap())
+		{
+			childSetTextArg("upload_fee", "[FEE]", tbd);
+		}
 		std::string dashes = hasString("--") ? getString("--") : "--";
 		childSetTextArg("price_breakdown", "[STREAMING]", dashes);
 		childSetTextArg("price_breakdown", "[PHYSICS]", dashes);
@@ -5036,10 +5055,21 @@ void LLFloaterModelPreview::handleModelPhysicsFeeReceived()
 	mUploadBtn->setEnabled(isModelUploadAllowed());
 }
 
-void LLFloaterModelPreview::setModelPhysicsFeeErrorStatus(S32 status, const std::string& reason)
+void LLFloaterModelPreview::setModelPhysicsFeeErrorStatus(S32 status, const std::string& reason, const LLSD& result)
 {
 	LL_WARNS() << "LLFloaterModelPreview::setModelPhysicsFeeErrorStatus(" << status << " : " << reason << ")" << LL_ENDL;
 	doOnIdleOneTime(boost::bind(&LLFloaterModelPreview::toggleCalculateButton, this, true));
+
+    if (result.has("upload_price"))
+    {
+        mModelPhysicsFee = result;
+        childSetTextArg("upload_fee", "[FEE]", llformat("%d", result["upload_price"].asInteger()));
+        childSetVisible("upload_fee", true);
+    }
+    else
+    {
+        mModelPhysicsFee.clear();
+    }
 }
 
 /*virtual*/ 

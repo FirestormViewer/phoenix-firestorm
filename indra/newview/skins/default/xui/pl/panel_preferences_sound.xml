@@ -3,6 +3,12 @@
 	<panel.string name="middle_mouse">
 		Środkowy przycisk myszy
 	</panel.string>
+	<panel.string name="button4_mouse">
+		Przycisk myszy 4
+	</panel.string>
+	<panel.string name="button5_mouse">
+		Przycisk myszy 5
+	</panel.string>
 	<tab_container label="Ust. Firestorma" name="tabs">
 		<panel label="Dźwięki" name="Media Sounds Panel">
 			<slider label="Głośność ogólna" name="System Volume"/>
@@ -44,7 +50,14 @@
 			</panel>
 		</panel>
 		<panel name="Media Media Panel">
-			<check_box label="Automatycznie odtwarzaj media" name="media_auto_play_btn" tool_tip="Zaznacz tę funkcję, aby automatycznie uruchamiać media."/>
+			<text name="media_autoplay_label" width="150">
+				Autoodtwarzanie mediów
+			</text>
+			<combo_box name="media_auto_play_combo">
+				<item label="Wyłącz" name="autoplay_disabled" />
+				<item label="Włącz" name="autoplay_enabled" />
+				<!-- <item label="Pytaj" name="autoplay_ask" /> -->
+			</combo_box>
 			<check_box name="media_allowscript_btn" tool_tip="To ustawienie pozwala lub zabrania oskryptowanym primom kontrolować Twoje media" label="Pozwalaj skryptom w świecie odtwarzać media"/>
 			<check_box label="Uruchamiaj media dołączone do innych awatarów" name="media_show_on_others_btn" tool_tip="Odznacz tę funkcję by ukryć media załączone do awatarów w pobliżu"/>
 			<check_box name="media_filter" tool_tip="Zaznacz tą opcję, aby móc wybierać, czy odtwarzać media z konkretnego hosta, czy nie" label="Włącz filtr mediów (zwiększone bezpieczeństwo)"/>

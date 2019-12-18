@@ -84,7 +84,7 @@ LLScrollbar::LLScrollbar(const Params & p)
 		mThumbImageH(p.thumb_image_horizontal),
 		mTrackImageV(p.track_image_vertical),
 		mTrackImageH(p.track_image_horizontal),
-		mThickness(p.thickness.isProvided() ? p.thickness : LLUI::sSettingGroups["config"]->getS32("UIScrollbarSize")),
+		mThickness(p.thickness.isProvided() ? p.thickness : LLUI::getInstance()->mSettingGroups["config"]->getS32("UIScrollbarSize")),
 		mBGVisible(p.bg_visible),
 		mBGColor(p.bg_color)
 {
@@ -408,6 +408,16 @@ BOOL LLScrollbar::handleScrollWheel(S32 x, S32 y, S32 clicks)
 	return handled;
 }
 
+BOOL LLScrollbar::handleScrollHWheel(S32 x, S32 y, S32 clicks)
+{
+	BOOL handled = FALSE;
+	if (LLScrollbar::HORIZONTAL == mOrientation)
+	{
+		handled = changeLine(clicks * mStepSize, TRUE);
+	}
+	return handled;
+}
+
 BOOL LLScrollbar::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 									EDragAndDropType cargo_type, void *cargo_data, EAcceptance *accept, std::string &tooltip_msg)
 {
@@ -488,7 +498,7 @@ void LLScrollbar::draw()
 
 	S32 local_mouse_x;
 	S32 local_mouse_y;
-	LLUI::getMousePositionLocal(this, &local_mouse_x, &local_mouse_y);
+	LLUI::getInstance()->getMousePositionLocal(this, &local_mouse_x, &local_mouse_y);
 	BOOL other_captor = gFocusMgr.getMouseCapture() && gFocusMgr.getMouseCapture() != this;
 	BOOL hovered = getEnabled() && !other_captor && (hasMouseCapture() || mThumbRect.pointInRect(local_mouse_x, local_mouse_y));
 	if (hovered)
@@ -645,5 +655,5 @@ void LLScrollbar::onLineDownBtnPressed( const LLSD& data )
 
 void LLScrollbar::setThickness(S32 thickness)
 {
-	mThickness = thickness < 0 ? LLUI::sSettingGroups["config"]->getS32("UIScrollbarSize") : thickness;
+	mThickness = thickness < 0 ? LLUI::getInstance()->mSettingGroups["config"]->getS32("UIScrollbarSize") : thickness;
 }

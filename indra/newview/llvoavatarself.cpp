@@ -1713,7 +1713,7 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 		// the simulator should automatically handle permission revocation
 		
 		stopMotionFromSource(attachment_id);
-		LLFollowCamMgr::setCameraActive(viewer_object->getID(), FALSE);
+		LLFollowCamMgr::getInstance()->setCameraActive(viewer_object->getID(), FALSE);
 		
 		LLViewerObject::const_child_list_t& child_list = viewer_object->getChildren();
 		for (LLViewerObject::child_list_t::const_iterator iter = child_list.begin();
@@ -1725,7 +1725,7 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 			// permissions revocation
 			
 			stopMotionFromSource(child_objectp->getID());
-			LLFollowCamMgr::setCameraActive(child_objectp->getID(), FALSE);
+			LLFollowCamMgr::getInstance()->setCameraActive(child_objectp->getID(), FALSE);
 		}
 		
 		// Make sure the inventory is in sync with the avatar.
@@ -1764,7 +1764,7 @@ BOOL LLVOAvatarSelf::detachAttachmentIntoInventory(const LLUUID &item_id)
 		gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
 		gMessageSystem->addUUIDFast(_PREHASH_ItemID, item_id);
-		gMessageSystem->sendReliable(gAgent.getRegion()->getHost());
+		gMessageSystem->sendReliable(gAgent.getRegionHost());
 		
 		// This object might have been selected, so let the selection manager know it's gone now
 		LLViewerObject *found_obj = gObjectList.findObject(item_id);
@@ -3184,7 +3184,10 @@ LLViewerTexLayerSet* LLVOAvatarSelf::getLayerSet(EBakedTextureIndex baked_index)
                case TEX_HEAD_BAKED:
                case TEX_HEAD_BODYPAINT:
                        return mHeadLayerSet; */
-       if (baked_index >= 0 && baked_index < BAKED_NUM_INDICES)
+	// <FS:Beq> BOM fallback support for OpenSim legacy
+    //    if (baked_index >= 0 && baked_index < BAKED_NUM_INDICES)
+       if (baked_index >= 0 && baked_index < LLVOAvatar::sMaxBakes)
+	//</FS:Beq>
        {
 		   return  getTexLayerSet(baked_index);
        }

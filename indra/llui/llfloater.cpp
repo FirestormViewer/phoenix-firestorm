@@ -230,14 +230,14 @@ void LLFloater::initClass()
 		sButtonToolTips[i] = LLTrans::getString( sButtonToolTipsIndex[i] );
 	}
 
-	LLControlVariable* ctrl = LLUI::sSettingGroups["config"]->getControl("ActiveFloaterTransparency").get();
+    LLControlVariable* ctrl = LLUI::getInstance()->mSettingGroups["config"]->getControl("ActiveFloaterTransparency").get();
 	if (ctrl)
 	{
 		ctrl->getSignal()->connect(boost::bind(&LLFloater::updateActiveFloaterTransparency));
 		updateActiveFloaterTransparency();
 	}
 
-	ctrl = LLUI::sSettingGroups["config"]->getControl("InactiveFloaterTransparency").get();
+    ctrl = LLUI::getInstance()->mSettingGroups["config"]->getControl("InactiveFloaterTransparency").get();
 	if (ctrl)
 	{
 		ctrl->getSignal()->connect(boost::bind(&LLFloater::updateInactiveFloaterTransparency));
@@ -304,7 +304,7 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	// if no padding is set, use default from settings.xml
 	if (mLabelVPadding == -1)
 	{
-		mLabelVPadding = LLUI::sSettingGroups["config"]->getS32("UIFloaterTitleVPad");
+		mLabelVPadding = LLUI::getInstance()->mSettingGroups["config"]->getS32("UIFloaterTitleVPad");
 	}
 	// </FS:Zi>
 
@@ -408,13 +408,13 @@ void LLFloater::layoutDragHandle()
 // static
 void LLFloater::updateActiveFloaterTransparency()
 {
-	sActiveControlTransparency = LLUI::sSettingGroups["config"]->getF32("ActiveFloaterTransparency");
+    sActiveControlTransparency = LLUI::getInstance()->mSettingGroups["config"]->getF32("ActiveFloaterTransparency");
 }
 
 // static
 void LLFloater::updateInactiveFloaterTransparency()
 {
-	sInactiveControlTransparency = LLUI::sSettingGroups["config"]->getF32("InactiveFloaterTransparency");
+    sInactiveControlTransparency = LLUI::getInstance()->mSettingGroups["config"]->getF32("InactiveFloaterTransparency");
 }
 
 void LLFloater::addResizeCtrls()
@@ -625,7 +625,7 @@ std::string LLFloater::getControlName(const std::string& name, const LLSD& key)
 LLControlGroup*	LLFloater::getControlGroup()
 {
 	// Floater size, position, visibility, etc are saved in per-account settings.
-	return LLUI::sSettingGroups["account"];
+	return LLUI::getInstance()->mSettingGroups["account"];
 }
 
 void LLFloater::setVisible( BOOL visible )
@@ -638,7 +638,7 @@ void LLFloater::setVisible( BOOL visible )
 
 	if( !visible )
 	{
-		LLUI::removePopup(this);
+		LLUI::getInstance()->removePopup(this);
 
 		if( gFocusMgr.childHasMouseCapture( this ) )
 		{
@@ -884,7 +884,7 @@ void LLFloater::reshape(S32 width, S32 height, BOOL called_from_parent)
 
 void LLFloater::releaseFocus()
 {
-	LLUI::removePopup(this);
+	LLUI::getInstance()->removePopup(this);
 
 	setFocus(FALSE);
 
@@ -1862,13 +1862,13 @@ void LLFloater::onClickDock(LLFloater* self)
 // static
 void LLFloater::onClickHelp( LLFloater* self )
 {
-	if (self && LLUI::sHelpImpl)
+	if (self && LLUI::getInstance()->mHelpImpl)
 	{
 		// find the current help context for this floater
 		std::string help_topic;
 		if (self->findHelpTopic(help_topic))
 		{
-			LLUI::sHelpImpl->showTopic(help_topic);
+			LLUI::getInstance()->mHelpImpl->showTopic(help_topic);
 		}
 	}
 }
@@ -2785,8 +2785,8 @@ void LLFloaterView::getMinimizePosition(S32 *left, S32 *bottom)
 		// <FS:AO> offset minimized windows to not obscure title bars. Yes, this is a quick and dirty hack.
 		int offset = 0;
 		//LLFavoritesBarCtrl* fb = getChild<LLFavoritesBarCtrl>("favorite");
-		bool fbVisible = LLUI::sSettingGroups["config"]->getBOOL("ShowNavbarFavoritesPanel");
-		bool nbVisible = LLUI::sSettingGroups["config"]->getBOOL("ShowNavbarNavigationPanel");
+		bool fbVisible = LLUI::getInstance()->mSettingGroups["config"]->getBOOL("ShowNavbarFavoritesPanel");
+		bool nbVisible = LLUI::getInstance()->mSettingGroups["config"]->getBOOL("ShowNavbarNavigationPanel");
 		// TODO: Make this introspect controls to get the dynamic size.
 		if (fbVisible)
 			offset += 20;
@@ -3193,7 +3193,7 @@ void LLFloaterView::syncFloaterTabOrder()
 	if (modal_dialog)
 	{
 		// If we have a visible modal dialog, make sure that it has focus
-		LLUI::addPopup(modal_dialog);
+		LLUI::getInstance()->addPopup(modal_dialog);
 		
 		if( !gFocusMgr.childHasKeyboardFocus( modal_dialog ) )
 		{

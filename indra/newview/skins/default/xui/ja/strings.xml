@@ -28,6 +28,9 @@
 	<string name="StartupRequireDriverUpdate">
 		グラフィックを初期化できませんでした。グラフィックドライバを更新してください。
 	</string>
+	<string name="AboutOSXHiDPI">
+		HiDPI 表示モード: [HIDPI]
+	</string>
 	<string name="AboutTime">
 		[month, datetime, slt] [day, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt]
 	</string>
@@ -1442,6 +1445,15 @@ http://www.firestormviewer.org/support
 	<string name="MarketplaceURL_LearnMore">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
 	</string>
+	<string name="InventoryPlayAnimationTooltip">
+		[再生] オプションでウィンドウを開ける。
+	</string>
+	<string name="InventoryPlayGestureTooltip">
+		インワールドで選択済みのジェスチャーを実行する。
+	</string>
+	<string name="InventoryPlaySoundTooltip">
+		[再生] オプションでウィンドウを開ける。
+	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		マーケットプレイスでは誰でもアイテムを売ることができます。
 	</string>
@@ -2579,7 +2591,7 @@ http://www.firestormviewer.org/support
 	</string>
 	<string name="UnknownFileExtension">
 		不明の拡張子： %s
-使用可能な拡張子： .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
+使用可能な拡張子： .wav, .tga, .bmp, .jpg, .jpeg, or .anim
 	</string>
 	<string name="MuteObject2">
 		ブロック
@@ -5402,9 +5414,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Destinations_Label">
 		行き先
 	</string>
-	<string name="Command_Facebook_Label">
-		Facebook
-	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
 	</string>
@@ -5538,9 +5547,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		行ってみたい場所
-	</string>
-	<string name="Command_Facebook_Tooltip">
-		Facebook へ投稿
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Flickr にアップロード

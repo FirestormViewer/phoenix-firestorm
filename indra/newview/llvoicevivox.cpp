@@ -924,6 +924,20 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
             params.args.add("-lf");
             params.args.add(log_folder);
 
+            // set log file basename and .log
+            params.args.add("-lp");
+            params.args.add("SLVoice");
+            params.args.add("-ls");
+            params.args.add(".log");
+
+            // rotate any existing log
+            std::string new_log = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "SLVoice.log");
+            std::string old_log = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "SLVoice.old");
+            if (gDirUtilp->fileExists(new_log))
+            {
+                LLFile::rename(new_log, old_log);
+            }
+            
             std::string shutdown_timeout = gSavedSettings.getString("VivoxShutdownTimeout");
             if (!shutdown_timeout.empty())
             {
@@ -5303,6 +5317,7 @@ void LLVivoxVoiceClient::setVoiceEnabled(bool enabled)
 		{
 			// Turning voice off looses your current channel -- this makes sure the UI isn't out of sync when you re-enable it.
 			LLVoiceChannel::getCurrentVoiceChannel()->deactivate();
+			gAgent.setVoiceConnected(false);
 			status = LLVoiceClientStatusObserver::STATUS_VOICE_DISABLED;
 		}
 

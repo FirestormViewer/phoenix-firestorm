@@ -179,7 +179,7 @@ void LLUrlEntryBase::callObservers(const std::string &id,
 bool LLUrlEntryBase::isLinkDisabled() const
 {
 	// this allows us to have a global setting to turn off text hyperlink highlighting/action
-	bool globally_disabled = LLUI::sSettingGroups["config"]->getBOOL("DisableTextHyperlinkActions");
+	bool globally_disabled = LLUI::getInstance()->mSettingGroups["config"]->getBOOL("DisableTextHyperlinkActions");
 
 	return globally_disabled;
 }
@@ -520,7 +520,7 @@ std::string LLUrlEntrySLURL::getLocation(const std::string &url) const
 }
 
 //
-// LLUrlEntrySeconlifeURL Describes *secondlife.com/ and *lindenlab.com/ urls to substitute icon 'hand.png' before link
+// LLUrlEntrySeconlifeURL Describes *secondlife.com/ *lindenlab.com/ and *tilia-inc.com/ urls to substitute icon 'hand.png' before link
 //
 LLUrlEntrySecondlifeURL::LLUrlEntrySecondlifeURL()
 {                              
@@ -564,7 +564,7 @@ std::string LLUrlEntrySecondlifeURL::getTooltip(const std::string &url) const
 }
 
 //
-// LLUrlEntrySimpleSecondlifeURL Describes *secondlife.com and *lindenlab.com urls to substitute icon 'hand.png' before link
+// LLUrlEntrySimpleSecondlifeURL Describes *secondlife.com *lindenlab.com and *tilia-inc.com urls to substitute icon 'hand.png' before link
 //
 LLUrlEntrySimpleSecondlifeURL::LLUrlEntrySimpleSecondlifeURL()
 {
@@ -929,7 +929,7 @@ std::string LLUrlEntryAgentUserName::getName(const LLAvatarName& avatar_name)
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 
 // Defined in rlvcommon.cpp - redirects to RlvStrings::getAnonym() since we can't really get to that class from here
-extern const std::string& rlvGetAnonym(const LLAvatarName& avName);
+extern std::string rlvGetAnonym(const LLAvatarName& avName);
 
 //
 // LLUrlEntryAgentRLVAnonymizedName Describes an RLV anonymized agent name Url, e.g.,

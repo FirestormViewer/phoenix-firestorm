@@ -31,14 +31,15 @@
 #include "lluuid.h"
 
 // timer to automatically play media
-class LLViewerParcelMediaAutoPlay : LLEventTimer
+class LLViewerParcelMediaAutoPlay : LLEventTimer, public LLSingleton<LLViewerParcelMediaAutoPlay>
 {
- public:
-	LLViewerParcelMediaAutoPlay();
+	LLSINGLETON(LLViewerParcelMediaAutoPlay);
+public:
 	virtual BOOL tick();
-	static void initClass();
-	static void cleanupClass();
 	static void playStarted();
+
+ private:
+	static void onStartMusicResponse(const LLUUID &region_id, const S32 &parcel_id, const std::string &url, const bool &play);
 
  private:
 	S32 mLastParcelID;

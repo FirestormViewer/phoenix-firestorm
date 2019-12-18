@@ -24,17 +24,20 @@
  * $/LicenseInfo$
  */
 
+
 #include "llviewerprecompiledheaders.h"
+
 #include "llviewerparcelmediaautoplay.h"
-#include "llviewerparcelmedia.h"
+
+#include "llparcel.h"
 #include "llviewercontrol.h"
 #include "llviewermedia.h"
-#include "llviewerregion.h"
-#include "llparcel.h"
+#include "llviewerparcelaskplay.h"
+#include "llviewerparcelmedia.h"
 #include "llviewerparcelmgr.h"
-#include "lluuid.h"
-#include "message.h"
+#include "llviewerregion.h"
 #include "llviewertexturelist.h"         // for texture stats
+#include "message.h"
 #include "llagent.h"
 #include "llmimetypes.h"
 
@@ -51,29 +54,10 @@ LLViewerParcelMediaAutoPlay::LLViewerParcelMediaAutoPlay() :
 {
 }
 
-static LLViewerParcelMediaAutoPlay *sAutoPlay = NULL;
-
-// static
-void LLViewerParcelMediaAutoPlay::initClass()
-{
-	if (!sAutoPlay)
-		sAutoPlay = new LLViewerParcelMediaAutoPlay;
-}
-
-// static
-void LLViewerParcelMediaAutoPlay::cleanupClass()
-{
-	if (sAutoPlay)
-		delete sAutoPlay;
-}
-
 // static
 void LLViewerParcelMediaAutoPlay::playStarted()
 {
-	if (sAutoPlay)
-	{
-		sAutoPlay->mPlayed = TRUE;
-	}
+    LLSingleton<LLViewerParcelMediaAutoPlay>::getInstance()->mPlayed = TRUE;
 }
 
 BOOL LLViewerParcelMediaAutoPlay::tick()
@@ -122,7 +106,7 @@ BOOL LLViewerParcelMediaAutoPlay::tick()
 		(mTimeInParcel > AUTOPLAY_TIME) &&		// and if we've been here for so many seconds
 		(!this_media_url.empty()) &&			// and if the parcel has media
 		(stricmp(this_media_type.c_str(), LLMIMETypes::getDefaultMimeType().c_str()) != 0) &&
-		(LLViewerParcelMedia::sMediaImpl.isNull()))	// and if the media is not already playing
+		(!LLViewerParcelMedia::getInstance()->hasParcelMedia()))	// and if the media is not already playing
 	{
 		if (this_media_texture_id.notNull())	// and if the media texture is good
 		{
@@ -141,18 +125,35 @@ BOOL LLViewerParcelMediaAutoPlay::tick()
 				{
 					if (this_parcel)
 					{
-						if (gSavedSettings.getBOOL("ParcelMediaAutoPlayEnable"))
+						static LLCachedControl<S32> autoplay_mode(gSavedSettings, "ParcelMediaAutoPlayEnable");
+
+						switch (autoplay_mode())
 						{
-							// and last but not least, only play when autoplay is enabled
-							if (gSavedSettings.getBOOL("MediaEnableFilter"))
+							case 0:
+								// Disabled
+								break;
+							case 1:
+								// Play, default value for ParcelMediaAutoPlayEnable
+								if (gSavedSettings.getBOOL("MediaEnableFilter"))
+								{
+									LLViewerParcelMedia::getInstance()->filterMediaUrl(this_parcel);
+								}
+								else
+								{
+									LLViewerParcelMedia::getInstance()->play(this_parcel);
+								}
+								break;
+							case 2:
+							default:
 							{
-								LLViewerParcelMedia::filterMediaUrl(this_parcel);
-							}
-							else  
-							{
-								LLViewerParcelMedia::play(this_parcel);
-							}
-						}
+								// Ask
+								LLViewerParcelAskPlay::getInstance()->askToPlay(this_region->getRegionID(),
+																				this_parcel->getLocalID(),
+																				this_parcel->getMediaURL(),
+																				onStartMusicResponse);
+								break;
+  							}
+  						}
 					}
 
 					mPlayed = TRUE;
@@ -165,5 +166,18 @@ BOOL LLViewerParcelMediaAutoPlay::tick()
 	return FALSE; // continue ticking forever please.
 }
 
+//static
+void LLViewerParcelMediaAutoPlay::onStartMusicResponse(const LLUUID &region_id, const S32 &parcel_id, const std::string &url, const bool &play)
+{
+    if (play)
+    {
+        LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 
+        // make sure we are still there
+        if (parcel->getLocalID() == parcel_id && gAgent.getRegion()->getRegionID() == region_id)
+        {
+            LLViewerParcelMedia::getInstance()->play(parcel);
+        }
+    }
+}
 

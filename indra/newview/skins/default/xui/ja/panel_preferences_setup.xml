@@ -8,7 +8,7 @@
 	<tab_container name="max_bandwidth_layout" label="セットアップ">
 		<panel label="接続" name="tab-conn">
 			<text name="Maximum bandwidth">
-				最大帯域幅 ([http://wiki.phoenixviewer.com/fs_speedtest 適正な値を設定するには？]):
+				最大帯域幅 ([http://wiki.firestormviewer.org/fs_speedtest 適正な値を設定するには？]):
 			</text>
 			<icon name="NetworkLowGraphicsDivet" />
 			<icon name="NetworkMidGraphicsDivet" />
@@ -64,7 +64,7 @@
 		
 		<panel label="ディレクトリ" name="tab-dir">
 			<text name="cache_size_label_l">
-				キャッシュサイズ ([http://wiki.phoenixviewer.com/cache 推奨設定を確認しますか？]):
+				キャッシュサイズ ([http://wiki.firestormviewer.org/cache 推奨設定を確認しますか？]):
 			</text>
 			<text name="text_box5">
 				MB

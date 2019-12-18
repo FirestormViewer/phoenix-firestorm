@@ -190,7 +190,7 @@ void PieMenu::show(S32 x, S32 y, LLView* spawning_view)
 	}
 
 	// move the mouse pointer into the center of the menu
-	LLUI::setMousePositionLocal(getParent(), x, y);
+	LLUI::getInstance()->setMousePositionLocal(getParent(), x, y);
 
 	// set our drawing origin to the center of the menu
 	setOrigin(x - PIE_OUTER_SIZE, y - PIE_OUTER_SIZE);

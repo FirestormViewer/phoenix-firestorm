@@ -139,6 +139,10 @@ Marktplatzinitialisierung aufgrund eines System- oder Netzwerkfehlers fehlgeschl
         „[ERROR_CODE]“
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="MyOutfitsPasteFailed">
+		Ein oder mehrere Objekte können nicht innerhalb von „Outfits“ verwendet werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="MerchantPasteFailed">
 		Kopieren oder Verschieben von Marktplatz-Auflistungen fehlgeschlagen mit Fehler:
         
@@ -1007,6 +1011,9 @@ Ihre Teleport-Anfrage kann nicht sofort bearbeitet werden. Versuchen Sie es in e
 	<notification name="expired_region_handoff">
 		Das System konnte Ihre Anfrage zum Regionswechsel nicht rechtzeitig bearbeiten. Versuchen Sie es in einigen Minuten erneut.
 	</notification>
+	<notification name="preexisting_tport">
+		Das System konnte Ihre Teleport-Anfrage nicht ausführen. Versuchen Sie es in einigen Minuten erneut.
+	</notification>
 	<notification name="no_host">
 		Teleport-Ziel wurde nicht gefunden. Das Ziel ist entweder im Moment nicht verfügbar oder existiert nicht mehr. Versuchen Sie es in einigen Minuten erneut.
 	</notification>
@@ -1278,6 +1285,13 @@ nach
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
+	<notification label="Geste umbenennen" name="RenameGesture">
+		Neuer Gesten-Name:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 	<notification name="RemoveFromFriends">
 		Möchten Sie &lt;nolink&gt;[NAME]&lt;/nolink&gt; aus Ihrer Freundesliste entfernen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
@@ -1474,6 +1488,18 @@ Falls Sie [CURRENT_GRID] zum ersten Mal verwenden, müssen Sie zuerst ein Konto 
 			<button name="Teleport" text="Teleportieren"/>
 		</form>
 	</notification>
+	<notification name="LoginPacketNeverReceivedNoTP">
+		Es gibt Probleme mit der Verbindung. Möglicherweise besteht ein Problem mit Ihrer Internetverbindung oder dem [SECOND_LIFE_GRID].
+
+Überprüfen Sie Ihre Internetverbindung und versuchen Sie es dann erneut, oder klicken Sie auf Hilfe, um zu [SUPPORT_SITE] zu gelangen.
+		<url name="url">
+			http://de.secondlife.com/support/
+		</url>
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Help" text="Hilfe"/>
+		</form>
+	</notification>
 	<notification name="WelcomeChooseSex">
 		Ihr Avatar erscheint jeden Moment.
 
@@ -1619,7 +1645,7 @@ Ersetzen Sie die Textur [TEXTURE_NUM] mit einer Bilddatei von maximal 1024x1024 
 		[AGENT] wurden zur [LIST_TYPE]-Liste von [ESTATE] hinzugefügt.
 	</notification>
 	<notification name="AgentWasRemovedFromList">
-		[AGENT] wurden von der [LIST_TYPE]-Liste von [ESTATE] entfernt.
+		[AGENT] wurde von der [LIST_TYPE]-Liste von [ESTATE] entfernt.
 	</notification>
 	<notification name="AgentsWereRemovedFromList">
 		[AGENT] wurden von der [LIST_TYPE]-Liste von [ESTATE] entfernt.
@@ -3608,7 +3634,7 @@ Bitte prüfen Sie Ihre Netzwerk- und Firewall-Konfiguration.
 Deaktivieren Sie alle SIP ALG-Funktionen in Ihrem Router. 
 
 Voice-Kommunikation ist leider nicht verfügbar.
-[https://wiki.phoenixviewer.com/fs_voice]
+[https://wiki.firestormviewer.org/fs_voice]
 		<usetemplate name="okignore" yestext="OK" ignoretext="Warnen, wenn keine Verbindung zum Voice-Server hergestellt werden kann."/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
@@ -3616,7 +3642,7 @@ Voice-Kommunikation ist leider nicht verfügbar.
 
 Voice-Kommunikation ist leider nicht verfügbar.
 Bitte überprüfen Sie Ihr Netzwerk- und Firewall-Setup.
-[https://wiki.phoenixviewer.com/fs_voice]
+[https://wiki.firestormviewer.org/fs_voice]
 		<usetemplate name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="AvatarRezLeftNotification">

@@ -369,24 +369,6 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="SocialFlickrErrorDisconnecting">
 		Problem z rozłączaniem z Flickr
 	</string>
-	<string name="SocialTwitterConnecting">
-		Łączenie z Twitterem...
-	</string>
-	<string name="SocialTwitterPosting">
-		Wysyłanie...
-	</string>
-	<string name="SocialTwitterDisconnecting">
-		Rozłączanie z Twitterem...
-	</string>
-	<string name="SocialTwitterErrorConnecting">
-		Problem z łączeniem z Twitterem
-	</string>
-	<string name="SocialTwitterErrorPosting">
-		Problem z wysyłaniem na Twittera
-	</string>
-	<string name="SocialTwitterErrorDisconnecting">
-		Problem z rozłączaniem z Twittera
-	</string>
 	<string name="BlackAndWhite">
 		Czerń i biel
 	</string>
@@ -600,6 +582,12 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="TooltipOutboxMixedStock">
 		Wszystkie rzeczy w folderze Magazynowym muszą mieć ten sam typ i zezwolenia
+	</string>
+	<string name="TooltipOutfitNotInInventory">
+		W "Strojach" możesz umieszczać tylko przedmioty lub stroje z własnej Szafy
+	</string>
+	<string name="TooltipCantCreateOutfit">
+		Jeden lub więcej przedmiotów nie może być użyty w "Strojach"
 	</string>
 	<string name="TooltipDragOntoOwnChild">
 		Nie możesz przenieść folderu do jego obiektu podrzędnego
@@ -2292,6 +2280,9 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="NoGroupDataFound">
 		Brak informacji na temat grupy
 	</string>
+	<string name="AlreadyInGroup">
+		Jesteś już w tej grupie
+	</string>
 	<string name="IMParentEstate">
 		majątek rodziców
 	</string>
@@ -2726,7 +2717,7 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	</string>
 	<string name="UnknownFileExtension">
 		Nieznane rozszerzenie pliku [.%s]
-Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .bvh
+Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .anim
 	</string>
 	<string name="MuteObject2">
 		Zablokuj
@@ -4579,9 +4570,6 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	<string name="flickr_post_success">
 		Wysłałeś/aś post na Flickr.
 	</string>
-	<string name="twitter_post_success">
-		Wysłałeś/aś post na Twittera.
-	</string>
 	<string name="no_session_message">
 		(Sesja IM wygasła)
 	</string>
@@ -5119,9 +5107,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Move_Label">
 		Ruch
 	</string>
-	<string name="Command_Outbox_Label">
-		Skrzynka nadawcza kupca
-	</string>
 	<string name="Command_People_Label">
 		Ludzie
 	</string>
@@ -5301,9 +5286,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Move_Tooltip">
 		Poruszanie Twoim awatarem
-	</string>
-	<string name="Command_Outbox_Tooltip">
-		Przenieś przedmioty na Marketplace, aby je sprzedać
 	</string>
 	<string name="Command_People_Tooltip">
 		Znajomi, grupy i ludzie w pobliżu (CTRL+SHIFT+A)
@@ -6281,6 +6263,9 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="Nametag_Complexity_Label">
 		Złożoność: [COMPLEXITY]
 	</string>
+	<string name="Nametag_Texture_Area_Label">
+		Tekstury: [TEXTURE_AREA] m²
+	</string>
 	<string name="font_unknown">
 		Nieznana czcionka
 	</string>
@@ -6305,5 +6290,8 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="FSUrlEntryWearLabel">
 		Załóż folder z Szafy
+	</string>
+	<string name="TexturePickerOutfitHeader">
+		Zdjęcie dla Stroju
 	</string>
 </strings>

@@ -68,7 +68,8 @@ LLNotificationForm::FormIgnore::FormIgnore()
 	control("control"),
 	invert_control("invert_control", false),
 	save_option("save_option", false),
-	session_only("session_only", false)
+	session_only("session_only", false),
+	checkbox_only("checkbox_only", false)
 {}
 
 LLNotificationForm::FormButton::FormButton()
@@ -131,7 +132,7 @@ bool handleIgnoredNotification(const LLSD& payload)
 			response = pNotif->getResponseTemplate(LLNotification::WITH_DEFAULT_BUTTON);
 			break;
 		case LLNotificationForm::IGNORE_WITH_LAST_RESPONSE:
-			response = LLUI::sSettingGroups["ignores"]->getLLSD("Default" + pNotif->getName());
+			response = LLUI::getInstance()->mSettingGroups["ignores"]->getLLSD("Default" + pNotif->getName());
 			break;
 		case LLNotificationForm::IGNORE_SHOW_AGAIN:
 			break;
@@ -194,11 +195,17 @@ LLNotificationForm::LLNotificationForm(const std::string& name, const LLNotifica
 :	mIgnore(IGNORE_NO),
 	mInvertSetting(false) // ignore settings by default mean true=show, false=ignore
 {
-	if (p.ignore.isProvided() && LLUI::sSettingGroups["ignores"] && LLUI::sSettingGroups["config"])
+	LLUI *ui_inst = LLUI::getInstance();
+	if (p.ignore.isProvided() && ui_inst->mSettingGroups["ignores"] && ui_inst->mSettingGroups["config"])
 	{
+		// For all cases but IGNORE_CHECKBOX_ONLY this is name for use in preferences
 		mIgnoreMsg = p.ignore.text;
 
-		if (!p.ignore.save_option)
+		if (p.ignore.checkbox_only)
+		{
+			mIgnore = IGNORE_CHECKBOX_ONLY;
+		}
+		else if (!p.ignore.save_option)
 		{
 			mIgnore = p.ignore.session_only ? IGNORE_WITH_DEFAULT_RESPONSE_SESSION_ONLY : IGNORE_WITH_DEFAULT_RESPONSE;
 		}
@@ -206,19 +213,19 @@ LLNotificationForm::LLNotificationForm(const std::string& name, const LLNotifica
 		{
 			// remember last option chosen by user and automatically respond with that in the future
 			mIgnore = IGNORE_WITH_LAST_RESPONSE;
-			LLUI::sSettingGroups["ignores"]->declareLLSD(std::string("Default") + name, "", std::string("Default response for notification " + name));
+			ui_inst->mSettingGroups["ignores"]->declareLLSD(std::string("Default") + name, "", std::string("Default response for notification " + name));
 		}
 
 		BOOL show_notification = TRUE;
 		if (p.ignore.control.isProvided())
 		{
-			mIgnoreSetting = LLUI::sSettingGroups["config"]->getControl(p.ignore.control);
+			mIgnoreSetting = ui_inst->mSettingGroups["config"]->getControl(p.ignore.control);
 			mInvertSetting = p.ignore.invert_control;
 		}
-		else
+		else if (mIgnore > IGNORE_NO)
 		{
-			LLUI::sSettingGroups["ignores"]->declareBOOL(name, show_notification, "Show notification with this name", LLControlVariable::PERSIST_NONDFT);
-			mIgnoreSetting = LLUI::sSettingGroups["ignores"]->getControl(name);
+			ui_inst->mSettingGroups["ignores"]->declareBOOL(name, show_notification, "Show notification with this name", LLControlVariable::PERSIST_NONDFT);
+			mIgnoreSetting = ui_inst->mSettingGroups["ignores"]->getControl(name);
 		}
 	}
 
@@ -389,13 +396,12 @@ LLControlVariablePtr LLNotificationForm::getIgnoreSetting()
 bool LLNotificationForm::getIgnored()
 {
 	bool show = true;
-	if (mIgnore != LLNotificationForm::IGNORE_NO
+	if (mIgnore > LLNotificationForm::IGNORE_NO
 		&& mIgnoreSetting) 
 	{
 		show = mIgnoreSetting->getValue().asBoolean();
 		if (mInvertSetting) show = !show;
 	}
-
 	return !show;
 }
 
@@ -432,8 +438,8 @@ LLNotificationTemplate::LLNotificationTemplate(const LLNotificationTemplate::Par
 	mFadeToast(p.fade_toast),
     mSoundName("")
 {
-	if (p.sound.isProvided() && LLUI::sSettingGroups["config"]
-		&& LLUI::sSettingGroups["config"]->controlExists(p.sound))
+	if (p.sound.isProvided() && LLUI::getInstance()->mSettingGroups["config"]
+		&& LLUI::getInstance()->mSettingGroups["config"]->controlExists(p.sound))
 	{
 		mSoundName = p.sound;
 	}
@@ -696,12 +702,12 @@ void LLNotification::respond(const LLSD& response)
 		mTemporaryResponder = false;
 	}
 
-	if (mForm->getIgnoreType() != LLNotificationForm::IGNORE_NO)
+	if (mForm->getIgnoreType() > LLNotificationForm::IGNORE_NO)
 	{
 		mForm->setIgnored(mIgnored);
 		if (mIgnored && mForm->getIgnoreType() == LLNotificationForm::IGNORE_WITH_LAST_RESPONSE)
 		{
-			LLUI::sSettingGroups["ignores"]->setLLSD("Default" + getName(), response);
+			LLUI::getInstance()->mSettingGroups["ignores"]->setLLSD("Default" + getName(), response);
 		}
 	}
 

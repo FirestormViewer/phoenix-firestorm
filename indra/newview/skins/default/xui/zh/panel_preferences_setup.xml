@@ -3,7 +3,7 @@
 	<tab_container name="max_bandwidth_layout">
 		<panel label="網路" name="tab-conn">
 			<text name="Maximum bandwidth">
-				最大頻寬 ([http://wiki.phoenixviewer.com/fs_speedtest 你需要一个建议?]):
+				最大頻寬 ([http://wiki.firestormviewer.org/fs_speedtest 你需要一个建议?]):
 			</text>
 			<check_box label="自訂埠" name="connection_port_enabled"/>
 			<spinner label="埠號:" name="connection_port"/>

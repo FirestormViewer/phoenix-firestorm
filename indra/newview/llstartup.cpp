@@ -118,7 +118,7 @@
 #include "llhudeffecttrail.h"
 #include "llhudmanager.h"
 #include "llbufferstream.h" // <FS:PP> For SL Grid Status
-#include "llimagebmp.h"
+#include "llimage.h"
 #include "llinventorybridge.h"
 #include "llinventorymodel.h"
 #include "llinventorymodelbackgroundfetch.h"
@@ -166,10 +166,12 @@
 #include "llviewermessage.h"
 #include "llviewernetwork.h"
 #include "llviewerobjectlist.h"
+#include "llviewerparcelaskplay.h"
 #include "llviewerparcelmedia.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "llviewerstats.h"
+#include "llviewerstatsrecorder.h"
 #include "llviewerthrottle.h"
 #include "llviewerwindow.h"
 #include "llvoavatar.h"
@@ -255,8 +257,8 @@
 bool gAgentMovementCompleted = false;
 S32  gMaxAgentGroups;
 
-std::string SCREEN_HOME_FILENAME = "screen_home.bmp";
-std::string SCREEN_LAST_FILENAME = "screen_last.bmp";
+const std::string SCREEN_HOME_FILENAME = "screen_home%s.png";
+const std::string SCREEN_LAST_FILENAME = "screen_last%s.png";
 
 LLPointer<LLViewerTexture> gStartTexture;
 
@@ -283,7 +285,8 @@ std::string LLStartUp::sStartSLURLString;
 
 static LLPointer<LLCredential> gUserCredential;
 static std::string gDisplayName;
-static BOOL gRememberPassword = TRUE;     
+static bool gRememberPassword = true;
+static bool gRememberUser = true;
 
 static U64 gFirstSimHandle = 0;
 static LLHost gFirstSim;
@@ -605,6 +608,7 @@ bool idle_startup()
 	// to work.
 	gIdleCallbacks.callFunctions();
 	gViewerWindow->updateUI();
+
 	LLMortician::updateClass();
 
 	const std::string delims (" ");
@@ -1071,15 +1075,17 @@ bool idle_startup()
 			// <FS:Ansariel> Option to not save password if using login cmdline switch;
 			//               gLoginHandler.initializeLoginInfo() sets AutoLogin to TRUE,
 			//               so we end up here!
-			//gRememberPassword = TRUE;
+			//gRememberPassword = true;
+			//gRememberUser = true;
 			//gSavedSettings.setBOOL("RememberPassword", TRUE);                                                      
+			//gRememberUser = gSavedSettings.getBOOL("RememberUser");
 			if (gSavedSettings.getBOOL("FSLoginDontSavePassword"))
 			{
-				gRememberPassword = FALSE;
+				gRememberPassword = false;
 			}
 			else
 			{
-				gRememberPassword = TRUE;
+				gRememberPassword = true;
 				gSavedSettings.setBOOL("RememberPassword", TRUE);
 			}
 			// </FS:Ansariel>
@@ -1091,12 +1097,14 @@ bool idle_startup()
 		//{
 		//	// Console provided login&password
 		//	gRememberPassword = gSavedSettings.getBOOL("RememberPassword");
+		//	gRememberUser = gSavedSettings.getBOOL("RememberUser");
 		//	show_connect_box = false;
 		//}
 		// </FS:Ansariel>
 		else 
 		{
 			gRememberPassword = gSavedSettings.getBOOL("RememberPassword");
+			gRememberUser = gSavedSettings.getBOOL("RememberUser");
 			show_connect_box = TRUE;
 		}
 
@@ -1208,10 +1216,7 @@ bool idle_startup()
 			login_show();
 			// connect dialog is already shown, so fill in the names
 			// <FS:CR>
-			//if (gUserCredential.notNull() && !LLPanelLogin::isCredentialSet())
-			//{
-			//	LLPanelLogin::setFields( gUserCredential, gRememberPassword);
-			//}
+			//LLPanelLogin::populateFields( gUserCredential, gRememberUser, gRememberPassword);
 			if (gUserCredential.notNull() && !FSPanelLogin::isCredentialSet())
 			{
 				FSPanelLogin::setFields(gUserCredential, true);
@@ -1346,7 +1351,7 @@ bool idle_startup()
 			// TODO if not use viewer auth
 			// Load all the name information out of the login view
 			// <FS:Ansariel> [FS Login Panel]
-			//LLPanelLogin::getFields(gUserCredential, gRememberPassword); 
+			//LLPanelLogin::getFields(gUserCredential, gRememberUser, gRememberPassword);
 			FSPanelLogin::getFields(gUserCredential, gRememberPassword); 
 			// </FS:Ansariel> [FS Login Panel]
 			// end TODO
@@ -1360,14 +1365,24 @@ bool idle_startup()
 		// STATE_LOGIN_SHOW state if we've gone backwards
 		mLoginStatePastUI = true;
 
-		// save the credentials                                                                                        
-		std::string userid = "unknown";                                                                                
-		if(gUserCredential.notNull())                                                                                  
-		{  
-			userid = gUserCredential->userID();                                                                    
-		}
+		// save the credentials
+		std::string userid = "unknown";
+        if (gUserCredential.notNull())
+        {
+            userid = gUserCredential->userID();
+            // <FS:Ansariel> [FS Login Panel]
+            //if (gRememberUser)
+            //{
+            //    gSecAPIHandler->addToCredentialMap("login_list", gUserCredential, gRememberPassword);
+            //    // Legacy viewers use this method to store user credentials, newer viewers
+            //    // reuse it to be compatible and to remember last session
+            //    gSecAPIHandler->saveCredential(gUserCredential, gRememberPassword);
+            //}
+            // </FS:Ansariel> [FS Login Panel]
+        }
 		// <FS:Ansariel> Option to not save password if using login cmdline switch
 		//gSavedSettings.setBOOL("RememberPassword", gRememberPassword);                                                 
+		//gSavedSettings.setBOOL("RememberUser", gRememberUser);
 		if (!gSavedSettings.getBOOL("FSLoginDontSavePassword"))
 		{
 			gSavedSettings.setBOOL("RememberPassword", gRememberPassword);
@@ -1410,8 +1425,13 @@ bool idle_startup()
 		LLFile::mkdir(gDirUtilp->getLindenUserDir());
 
 		// As soon as directories are ready initialize notification storages
-		LLPersistentNotificationStorage::getInstance()->initialize();
-		LLDoNotDisturbNotificationStorage::getInstance()->initialize();
+		if (!LLPersistentNotificationStorage::instanceExists())
+		{
+			// check existance since this part of code can be reached
+			// twice due to login failures
+			LLPersistentNotificationStorage::initParamSingleton();
+			LLDoNotDisturbNotificationStorage::initParamSingleton();
+		}
 
 		// Set PerAccountSettingsFile to the default value.
 		gSavedSettings.setString("PerAccountSettingsFile",
@@ -1889,14 +1909,13 @@ bool idle_startup()
 		//
 		// Initialize classes w/graphics stuff.
 		//
+		LLViewerStatsRecorder::instance(); // Since textures work in threads
 		gTextureList.doPrefetchImages();		
 		display_startup();
 
 		LLSurface::initClasses();
 		display_startup();
 
-
-		LLFace::initClass();
 		display_startup();
 
 		LLDrawable::initClass();
@@ -1961,9 +1980,13 @@ bool idle_startup()
 		LLStartUp::initExperiences();
 
 		display_startup();
+
+		// If logging should be enebled, turns it on and loads history from disk
+		// Note: does not happen on init of singleton because preferences can use
+		// this instance without logging in
+		LLConversationLog::getInstance()->initLoggingState();
+
 		LLStartUp::setStartupState( STATE_MULTIMEDIA_INIT );
-		
-		LLConversationLog::getInstance();
 
 		return FALSE;
 	}
@@ -2084,6 +2107,11 @@ bool idle_startup()
 		//LLFloaterIMContainer::getInstance();
 		FSFloaterIMContainer* floater_imcontainer = FSFloaterIMContainer::getInstance();
 		floater_imcontainer->initTabs();
+
+		if (gSavedSettings.getS32("ParcelMediaAutoPlayEnable") == 2)
+		{
+			LLViewerParcelAskPlay::getInstance()->loadSettings();
+		}
 
 		// <FS:ND> FIRE-3066: Force creation or FSFLoaterContacts here, this way it will register with LLAvatarTracker early enough.
 		// Otherwise it is only create if isChatMultriTab() == true and LLIMFloaterContainer::getInstance is called
@@ -2339,7 +2367,14 @@ bool idle_startup()
 		if (!gAgentMovementCompleted && timeout.getElapsedTimeF32() > STATE_AGENT_WAIT_TIMEOUT)
 		{
 			LL_WARNS("AppInit") << "Backing up to login screen!" << LL_ENDL;
-			LLNotificationsUtil::add("LoginPacketNeverReceived", LLSD(), LLSD(), login_alert_status);
+			if (gRememberPassword)
+			{
+				LLNotificationsUtil::add("LoginPacketNeverReceived", LLSD(), LLSD(), login_alert_status);
+			}
+			else
+			{
+				LLNotificationsUtil::add("LoginPacketNeverReceivedNoTP", LLSD(), LLSD(), login_alert_status);
+			}
 			reset_login();
 		}
 		return FALSE;
@@ -3242,7 +3277,14 @@ void use_circuit_callback(void**, S32 result)
 		{
 			// Make sure user knows something bad happened. JC
 			LL_WARNS("AppInit") << "Backing up to login screen!" << LL_ENDL;
-			LLNotificationsUtil::add("LoginPacketNeverReceived", LLSD(), LLSD(), login_alert_status);
+			if (gRememberPassword)
+			{
+				LLNotificationsUtil::add("LoginPacketNeverReceived", LLSD(), LLSD(), login_alert_status);
+			}
+			else
+			{
+				LLNotificationsUtil::add("LoginPacketNeverReceivedNoTP", LLSD(), LLSD(), login_alert_status);
+			}
 			reset_login();
 		}
 		else
@@ -3480,6 +3522,37 @@ bool callback_choose_gender(const LLSD& notification, const LLSD& response)
 	return false;
 }
 
+std::string get_screen_filename(const std::string& pattern)
+{
+    // <FS:Ansariel> OpenSim support
+    //if (LLGridManager::getInstance()->isInProductionGrid())
+    if (LLGridManager::getInstance()->isInSLMain())
+    // </FS:Ansariel>
+    {
+        return llformat(pattern.c_str(), "");
+    }
+    else
+    {
+        const std::string& grid_id_str = LLGridManager::getInstance()->getGridId();
+        const std::string& grid_id_lower = utf8str_tolower(grid_id_str);
+        std::string grid = "." + grid_id_lower;
+        return llformat(pattern.c_str(), grid.c_str());
+    }
+}
+
+//static
+std::string LLStartUp::getScreenLastFilename()
+{
+    return get_screen_filename(SCREEN_LAST_FILENAME);
+}
+
+//static
+std::string LLStartUp::getScreenHomeFilename()
+{
+    return get_screen_filename(SCREEN_HOME_FILENAME);
+}
+
+//static
 void LLStartUp::loadInitialOutfit( const std::string& outfit_folder_name,
 								   const std::string& gender_name )
 {
@@ -3578,19 +3651,35 @@ void init_start_screen(S32 location_id)
 
 	LL_DEBUGS("AppInit") << "Loading startup bitmap..." << LL_ENDL;
 
+	U8 image_codec = IMG_CODEC_PNG;
 	std::string temp_str = gDirUtilp->getLindenUserDir() + gDirUtilp->getDirDelimiter();
 
 	if ((S32)START_LOCATION_ID_LAST == location_id)
 	{
-		temp_str += SCREEN_LAST_FILENAME;
+		temp_str += LLStartUp::getScreenLastFilename();
 	}
 	else
 	{
-		temp_str += SCREEN_HOME_FILENAME;
+		std::string path = temp_str + LLStartUp::getScreenHomeFilename();
+		
+		// <FS:Ansariel> OpenSim support
+		//if (!gDirUtilp->fileExists(path) && LLGridManager::getInstance()->isInProductionGrid())
+		if (!gDirUtilp->fileExists(path) && LLGridManager::getInstance()->isInSLMain())
+		// </FS:Ansariel>
+		{
+			// Fallback to old file, can be removed later
+			// Home image only sets when user changes home, so it will take time for users to switch to pngs
+			temp_str += "screen_home.bmp";
+			image_codec = IMG_CODEC_BMP;
+		}
+		else
+		{
+			temp_str = path;
+		}
 	}
 
-	LLPointer<LLImageBMP> start_image_bmp = new LLImageBMP;
-	
+	LLPointer<LLImageFormatted> start_image_frmted = LLImageFormatted::createFromType(image_codec);
+
 	// Turn off start screen to get around the occasional readback 
 	// driver bug
 	if(!gSavedSettings.getBOOL("UseStartScreen"))
@@ -3598,18 +3687,18 @@ void init_start_screen(S32 location_id)
 		LL_INFOS("AppInit")  << "Bitmap load disabled" << LL_ENDL;
 		return;
 	}
-	else if(!start_image_bmp->load(temp_str) )
+	else if(!start_image_frmted->load(temp_str) )
 	{
 		LL_WARNS("AppInit") << "Bitmap load failed" << LL_ENDL;
 		gStartTexture = NULL;
 	}
 	else
 	{
-		gStartImageWidth = start_image_bmp->getWidth();
-		gStartImageHeight = start_image_bmp->getHeight();
+		gStartImageWidth = start_image_frmted->getWidth();
+		gStartImageHeight = start_image_frmted->getHeight();
 
 		LLPointer<LLImageRaw> raw = new LLImageRaw;
-		if (!start_image_bmp->decode(raw, 0.0f))
+		if (!start_image_frmted->decode(raw, 0.0f))
 		{
 			LL_WARNS("AppInit") << "Bitmap decode failed" << LL_ENDL;
 			gStartTexture = NULL;
@@ -3736,9 +3825,6 @@ void LLStartUp::multimediaInit()
 	set_startup_status(0.42f, msg.c_str(), gAgent.mMOTD.c_str());
 	display_startup();
 
-	// LLViewerMedia::initClass();
-	LLViewerParcelMedia::initClass();
-
 	// Also initialise the stream titles.
 	new StreamTitleDisplay();
 }
@@ -3768,9 +3854,10 @@ void LLStartUp::initNameCache()
 
 	// Start cache in not-running state until we figure out if we have
 	// capabilities for display name lookup
-	LLAvatarNameCache::initClass(false,gSavedSettings.getBOOL("UsePeopleAPI"));
-	LLAvatarNameCache::setUseDisplayNames(gSavedSettings.getBOOL("UseDisplayNames"));
-	LLAvatarNameCache::setUseUsernames(gSavedSettings.getBOOL("NameTagShowUsernames"));
+	LLAvatarNameCache* cache_inst = LLAvatarNameCache::getInstance();
+	cache_inst->setUsePeopleAPI(gSavedSettings.getBOOL("UsePeopleAPI"));
+	cache_inst->setUseDisplayNames(gSavedSettings.getBOOL("UseDisplayNames"));
+	cache_inst->setUseUsernames(gSavedSettings.getBOOL("NameTagShowUsernames"));
 
 	// <FS:CR> Legacy name/Username format
 	LLAvatarName::setUseLegacyFormat(gSavedSettings.getBOOL("FSNameTagShowLegacyUsernames"));
@@ -3790,8 +3877,6 @@ void LLStartUp::initExperiences()
 
 void LLStartUp::cleanupNameCache()
 {
-	SUBSYSTEM_CLEANUP(LLAvatarNameCache);
-
 	delete gCacheName;
 	gCacheName = NULL;
 }
@@ -4563,7 +4648,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	if(!openid_url.empty())
 	{
 		std::string openid_token = response["openid_token"];
-		LLViewerMedia::openIDSetup(openid_url, openid_token);
+		LLViewerMedia::getInstance()->openIDSetup(openid_url, openid_token);
 	}
 	// <FS:AW> opensim max groups support
 	//gMaxAgentGroups = DEFAULT_MAX_AGENT_GROUPS;

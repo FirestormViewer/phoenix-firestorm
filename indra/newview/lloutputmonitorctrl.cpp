@@ -277,15 +277,15 @@ void LLOutputMonitorCtrl::draw()
 BOOL LLOutputMonitorCtrl::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	// <FS:Ansariel> Show voice volume instead of an empty floater
-	//if (mSpeakerId != gAgentID && !mShowParticipantsSpeaking)
+	//if (mSpeakerId != gAgentID)
 	if (mSpeakerId.notNull() && mSpeakerId != gAgentID && !mShowParticipantsSpeaking)
 	// </FS:Ansariel>
 	{
 		LLFloaterReg::showInstance("floater_voice_volume", LLSD().with("avatar_id", mSpeakerId));
 	}
 	// <FS:Ansariel> Show voice volume instead of an empty floater
-	//else if(mShowParticipantsSpeaking)
-	else if(mShowParticipantsSpeaking || mSpeakerId.isNull())
+	//else if (mShowParticipantsSpeaking)
+	else if (mShowParticipantsSpeaking || mSpeakerId.isNull())
 	// </FS:Ansariel>
 	{
 		LLFloaterReg::showInstance("chat_voice", LLSD());

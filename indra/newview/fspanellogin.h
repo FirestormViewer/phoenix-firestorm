@@ -56,7 +56,7 @@ public:
 
 	static void setFields(LLPointer<LLCredential> credential, bool from_startup = false);
 
-	static void getFields(LLPointer<LLCredential>& credential, BOOL& remember);
+	static void getFields(LLPointer<LLCredential>& credential, bool& remember);
 
 	static BOOL isCredentialSet() { return sCredentialSet; }
 

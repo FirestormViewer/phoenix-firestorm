@@ -171,7 +171,10 @@ void LLControlAvatar::matchVolumeTransform()
             if (attached_av)
             {
                 LLViewerJointAttachment *attach = attached_av->getTargetAttachmentPoint(mRootVolp);
-                setPositionAgent(mRootVolp->getRenderPosition());
+                if (getRegion() && !isDead())
+                {
+                    setPositionAgent(mRootVolp->getRenderPosition());
+                }
 				attach->updateWorldPRSParent();
                 LLVector3 joint_pos = attach->getWorldPosition();
                 LLQuaternion joint_rot = attach->getWorldRotation();
@@ -227,7 +230,10 @@ void LLControlAvatar::matchVolumeTransform()
 #endif
 			setRotation(bind_rot*obj_rot);
             mRoot->setWorldRotation(bind_rot*obj_rot);
-			setPositionAgent(vol_pos);
+            if (getRegion() && !isDead())
+            {
+                setPositionAgent(vol_pos);
+            }
 			mRoot->setPosition(vol_pos + mPositionConstraintFixup);
 
             F32 global_scale = gSavedSettings.getF32("AnimatedObjectsGlobalScale");
@@ -327,10 +333,13 @@ LLControlAvatar *LLControlAvatar::createControlAvatar(LLVOVolume *obj)
 {
 	LLControlAvatar *cav = (LLControlAvatar*)gObjectList.createObjectViewer(LL_PCODE_LEGACY_AVATAR, gAgent.getRegion(), CO_FLAG_CONTROL_AVATAR);
 
-    cav->mRootVolp = obj;
+    if (cav)
+    {
+        cav->mRootVolp = obj;
 
-    // Sync up position/rotation with object
-    cav->matchVolumeTransform();
+        // Sync up position/rotation with object
+        cav->matchVolumeTransform();
+    }
 
     return cav;
 }

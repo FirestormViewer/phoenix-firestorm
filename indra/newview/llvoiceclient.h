@@ -330,9 +330,9 @@ typedef enum e_voice_power_level
 } EVoicePowerLevel;
 // </FS:Ansariel> Centralized voice power level
 
-class LLVoiceClient: public LLSingleton<LLVoiceClient>
+class LLVoiceClient: public LLParamSingleton<LLVoiceClient>
 {
-	LLSINGLETON(LLVoiceClient);
+	LLSINGLETON(LLVoiceClient, LLPumpIO *pump);
 	LOG_CLASS(LLVoiceClient);
 	~LLVoiceClient();
 
@@ -340,7 +340,6 @@ public:
 	typedef boost::signals2::signal<void(void)> micro_changed_signal_t;
 	micro_changed_signal_t mMicroChangedSignal;
 
-	void init(LLPumpIO *pump);	// Call this once at application startup (creates connector)
 	void terminate();	// Call this to clean up during shutdown
 	
 	const LLVoiceVersionInfo getVersion();
@@ -447,8 +446,8 @@ public:
 	// PTT key triggering
 	void keyDown(KEY key, MASK mask);
 	void keyUp(KEY key, MASK mask);
-	void middleMouseState(bool down);
-	
+	void updateMouseState(S32 click, bool down);
+
 	boost::signals2::connection MicroChangedCallback(const micro_changed_signal_t::slot_type& cb ) { return mMicroChangedSignal.connect(cb); }
 
 	// <FS:Ansariel> Add callback for user volume change
@@ -507,6 +506,8 @@ public:
 	// Returns NULL if voice effects are not supported, or not enabled.
 	LLVoiceEffectInterface* getVoiceEffectInterface() const;
 	//@}
+private:
+	void init(LLPumpIO *pump);
 
 protected:
 	LLVoiceModuleInterface* mVoiceModule;
@@ -520,7 +521,7 @@ protected:
 	bool		mPTT;
 	
 	bool		mUsePTT;
-	bool		mPTTIsMiddleMouse;
+	S32			mPTTMouseButton;
 	KEY			mPTTKey;
 	bool		mPTTIsToggle;
 	bool		mUserPTTState;

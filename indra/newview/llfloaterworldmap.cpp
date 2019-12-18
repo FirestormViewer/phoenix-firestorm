@@ -129,7 +129,7 @@ public:
 	bool handle(const LLSD& params, const LLSD& query_map,
 				LLMediaCtrl* web)
 	{
-		if (!LLUI::sSettingGroups["config"]->getBOOL("EnableWorldMap"))
+		if (!LLUI::getInstance()->mSettingGroups["config"]->getBOOL("EnableWorldMap"))
 		{
 			LLNotificationsUtil::add("NoWorldMap", LLSD(), LLSD(), std::string("SwitchToStandardSkinAndQuit"));
 			return true;
@@ -167,7 +167,7 @@ public:
 	
 	bool handle(const LLSD& params, const LLSD& query_map, LLMediaCtrl* web)
 	{
-		if (!LLUI::sSettingGroups["config"]->getBOOL("EnableWorldMap"))
+		if (!LLUI::getInstance()->mSettingGroups["config"]->getBOOL("EnableWorldMap"))
 		{
 			LLNotificationsUtil::add("NoWorldMap", LLSD(), LLSD(), std::string("SwitchToStandardSkinAndQuit"));
 			return true;
@@ -1858,8 +1858,8 @@ void LLFloaterWorldMap::updateSims(bool found_null_sim)
 	LLScrollListCtrl *list = getChild<LLScrollListCtrl>("search_results");
 	list->operateOnAll(LLCtrlListInterface::OP_DELETE);
 	
-	S32 name_length = mCompletingRegionName.length();
-	
+	// S32 name_length = mCompletingRegionName.length(); // <FS:Beq/> FIRE-23591 support map search partial matches (Patch by Kevin Cozens)
+
 	LLSD match;
 
 	S32 num_results = 0;
@@ -1872,8 +1872,10 @@ void LLFloaterWorldMap::updateSims(bool found_null_sim)
 		LLSimInfo* info = it->second;
 		std::string sim_name_lower = info->getName();
 		LLStringUtil::toLower(sim_name_lower);
-		
-		if (sim_name_lower.substr(0, name_length) == mCompletingRegionName)
+		// <FS:Beq> FIRE-23591 support map search partial matches (Patch by Kevin Cozens)
+		// if (sim_name_lower.substr(0, name_length) == mCompletingRegionName)
+		if (sim_name_lower.find(mCompletingRegionName) != std::string::npos)
+		// <FS:Beq>
 		{
 			if (sim_name_lower == mCompletingRegionName)
 			{

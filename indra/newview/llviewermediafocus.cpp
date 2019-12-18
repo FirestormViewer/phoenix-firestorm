@@ -339,12 +339,12 @@ BOOL LLViewerMediaFocus::handleKey(KEY key, MASK mask, BOOL called_from_parent)
 			clearFocus();
 		}
 		
-		if ( KEY_F1 == key && LLUI::sHelpImpl && mMediaControls.get())
+		if ( KEY_F1 == key && LLUI::getInstance()->mHelpImpl && mMediaControls.get())
 		{
 			std::string help_topic;
 			if (mMediaControls.get()->findHelpTopic(help_topic))
 			{
-				LLUI::sHelpImpl->showTopic(help_topic);
+				LLUI::getInstance()->mHelpImpl->showTopic(help_topic);
 			}
 		}
 	}
@@ -377,12 +377,7 @@ BOOL LLViewerMediaFocus::handleScrollWheel(S32 x, S32 y, S32 clicks)
 	LLViewerMediaImpl* media_impl = getFocusedMediaImpl();
 	if(media_impl && media_impl->hasMedia())
 	{
-        // the scrollEvent() API's x and y are not the same as handleScrollWheel's x and y.
-        // The latter is the position of the mouse at the time of the event
-        // The former is the 'scroll amount' in x and y, respectively.
-        // All we have for 'scroll amount' here is 'clicks'.
-		// We're also not passed the keyboard modifier mask, but we can get that from gKeyboard.
-		media_impl->getMediaPlugin()->scrollEvent(0, clicks, gKeyboard->currentMask(TRUE));
+		media_impl->scrollWheel(x, y, 0, clicks, gKeyboard->currentMask(TRUE));
 		retval = TRUE;
 	}
 	return retval;
@@ -537,7 +532,7 @@ bool LLViewerMediaFocus::isHoveringOverFace(LLPointer<LLViewerObject> objectp, S
 
 LLViewerMediaImpl* LLViewerMediaFocus::getFocusedMediaImpl()
 {
-	return LLViewerMedia::getMediaImplFromTextureID(mFocusedImplID);
+	return LLViewerMedia::getInstance()->getMediaImplFromTextureID(mFocusedImplID);
 }
 
 LLViewerObject* LLViewerMediaFocus::getFocusedObject()
@@ -547,7 +542,7 @@ LLViewerObject* LLViewerMediaFocus::getFocusedObject()
 
 LLViewerMediaImpl* LLViewerMediaFocus::getHoverMediaImpl()
 {
-	return LLViewerMedia::getMediaImplFromTextureID(mHoverImplID);
+	return LLViewerMedia::getInstance()->getMediaImplFromTextureID(mHoverImplID);
 }
 
 LLViewerObject* LLViewerMediaFocus::getHoverObject()
@@ -557,7 +552,7 @@ LLViewerObject* LLViewerMediaFocus::getHoverObject()
 
 void LLViewerMediaFocus::focusZoomOnMedia(LLUUID media_id)
 {
-	LLViewerMediaImpl* impl = LLViewerMedia::getMediaImplFromTextureID(media_id);
+	LLViewerMediaImpl* impl = LLViewerMedia::getInstance()->getMediaImplFromTextureID(media_id);
 	
 	if(impl)
 	{	

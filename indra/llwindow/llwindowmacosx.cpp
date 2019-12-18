@@ -77,7 +77,7 @@ BOOL check_for_card(const char* RENDERER, const char* bad_card)
 			"\n"
 			"If you own a supported card and continue to receive this message, try \n"
 			"updating to the latest video card drivers. Otherwise contact the\n"
-			"Phoenix Viewer Support group in world, or visit www.phoenixviewer.com\n"
+			"Phoenix Viewer Support group in world, or visit www.firestormviewer.org\n"
 			"for support.\n"
 			"\n"
 			"You can try to run Firestorm, but it will probably crash or run\n"
@@ -365,9 +365,13 @@ void callMouseDragged(float *pos, MASK mask)
     gWindowImplementation->getCallbacks()->handleMouseDragged(gWindowImplementation, outCoords, gKeyboard->currentMask(TRUE));
 }
 
-void callScrollMoved(float delta)
+void callScrollMoved(float deltaX, float deltaY)
 {
-	gWindowImplementation->getCallbacks()->handleScrollWheel(gWindowImplementation, delta);
+	if ( gWindowImplementation && gWindowImplementation->getCallbacks() )
+	{
+		gWindowImplementation->getCallbacks()->handleScrollHWheel(gWindowImplementation, deltaX);
+		gWindowImplementation->getCallbacks()->handleScrollWheel(gWindowImplementation, deltaY);
+	}
 }
 
 void callMouseExit()
@@ -426,7 +430,7 @@ void callDeltaUpdate(float *delta, MASK mask)
 	gWindowImplementation->updateMouseDeltas(delta);
 }
 
-void callMiddleMouseDown(float *pos, MASK mask)
+void callOtherMouseDown(float *pos, MASK mask, int button)
 {
 	LLCoordGL		outCoords;
 	outCoords.mX = ll_round(pos[0]);
@@ -435,10 +439,18 @@ void callMiddleMouseDown(float *pos, MASK mask)
 	gWindowImplementation->getMouseDeltas(deltas);
 	outCoords.mX += deltas[0];
 	outCoords.mY += deltas[1];
-	gWindowImplementation->getCallbacks()->handleMiddleMouseDown(gWindowImplementation, outCoords, mask);
+
+    if (button == 2)
+    {
+        gWindowImplementation->getCallbacks()->handleMiddleMouseDown(gWindowImplementation, outCoords, mask);
+    }
+    else
+    {
+        gWindowImplementation->getCallbacks()->handleOtherMouseDown(gWindowImplementation, outCoords, mask, button + 1);
+    }
 }
 
-void callMiddleMouseUp(float *pos, MASK mask)
+void callOtherMouseUp(float *pos, MASK mask, int button)
 {
 	LLCoordGL outCoords;
 	outCoords.mX = ll_round(pos[0]);
@@ -446,8 +458,15 @@ void callMiddleMouseUp(float *pos, MASK mask)
 	float deltas[2];
 	gWindowImplementation->getMouseDeltas(deltas);
 	outCoords.mX += deltas[0];
-	outCoords.mY += deltas[1];
-	gWindowImplementation->getCallbacks()->handleMiddleMouseUp(gWindowImplementation, outCoords, mask);
+    outCoords.mY += deltas[1];
+    if (button == 2)
+    {
+        gWindowImplementation->getCallbacks()->handleMiddleMouseUp(gWindowImplementation, outCoords, mask);
+    }
+    else
+    {
+        gWindowImplementation->getCallbacks()->handleOtherMouseUp(gWindowImplementation, outCoords, mask, button + 1);
+    }
 }
 
 void callModifier(MASK mask)

@@ -46,26 +46,12 @@ class LLLineEditor;
  */
 
 class LLToastAlertPanel
-	: public LLToastPanel
+	: public LLCheckBoxToastPanel
 {
 	LOG_CLASS(LLToastAlertPanel);
 public:
 	typedef bool (*display_callback_t)(S32 modal);
 
-	class URLLoader
-	{
-	public:
-		virtual void load(const std::string& url, bool force_open_externally = 0) = 0;
-		virtual ~URLLoader()
-		{
-		}
-	};
-
-	static void setURLLoader(URLLoader* loader)
-	{
-		sURLLoader = loader;
-	}
-	
 public:
 	// User's responsibility to call show() after creating these.
 	LLToastAlertPanel( LLNotificationPtr notep, bool is_modal );
@@ -75,13 +61,11 @@ public:
 	virtual void	draw();
 	virtual void	setVisible( BOOL visible );
 
-	bool 			setCheckBox( const std::string&, const std::string& );	
 	void			setCaution(BOOL val = TRUE) { mCaution = val; }
 	// If mUnique==TRUE only one copy of this message should exist
 	void			setUnique(BOOL val = TRUE) { mUnique = val; }
 	void			setEditTextArgs(const LLSD& edit_args);
 	
-	void onClickIgnore(LLUICtrl* ctrl);
 	void onButtonPressed(const LLSD& data, S32 button);
 	
 private:
@@ -94,7 +78,6 @@ private:
 	BOOL hasTitleBar() const;
 
 private:
-	static URLLoader* sURLLoader;
 	static LLControlGroup* sSettings;
 
 	struct ButtonData
@@ -106,7 +89,6 @@ private:
 	std::vector<ButtonData> mButtonData;
 
 	S32				mDefaultOption;
-	LLCheckBoxCtrl* mCheck;
 	BOOL			mCaution;
 	BOOL			mUnique;
 	LLUIString		mLabel;
