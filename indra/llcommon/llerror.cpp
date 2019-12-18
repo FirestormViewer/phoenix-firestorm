@@ -1679,6 +1679,11 @@ namespace LLError
     {
         freeStackBuffer();
     }
+
+    std::ostream& operator<<(std::ostream& out, const LLStacktrace&)
+    {
+        return out << boost::stacktrace::stacktrace();
+    }
 }
 
 bool debugLoggingEnabled(const std::string& tag)
