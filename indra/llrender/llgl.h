@@ -88,6 +88,7 @@ public:
 	// Extensions used by everyone
 	BOOL mHasMultitexture;
 	BOOL mHasATIMemInfo;
+	BOOL mHasAMDAssociations;
 	BOOL mHasNVXMemInfo;
 	S32	 mNumTextureUnits;
 	BOOL mHasMipMapGeneration;

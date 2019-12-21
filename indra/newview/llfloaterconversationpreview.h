@@ -78,6 +78,7 @@ private:
 	bool			mShowHistory;
 	bool			mHistoryThreadsBusy;
 	bool			mOpened;
+	bool			mIsGroup;
 };
 
 #endif /* LLFLOATERCONVERSATIONPREVIEW_H_ */

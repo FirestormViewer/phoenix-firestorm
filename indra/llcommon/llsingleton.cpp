@@ -31,6 +31,7 @@
 #include "llerrorcontrol.h"         // LLError::is_available()
 #include "lldependencies.h"
 #include "llcoros.h"
+#include "llexception.h"
 #include <boost/foreach.hpp>
 #include <algorithm>
 #include <iostream>                 // std::cerr in dire emergency
@@ -56,17 +57,59 @@ bool oktolog();
 class LLSingletonBase::MasterList:
     public LLSingleton<LLSingletonBase::MasterList>
 {
+private:
     LLSINGLETON_EMPTY_CTOR(MasterList);
 
-public:
-    // No need to make this private with accessors; nobody outside this source
-    // file can see it.
+    // Independently of the LLSingleton locks governing construction,
+    // destruction and other state changes of the MasterList instance itself,
+    // we must also defend each of the data structures owned by the
+    // MasterList.
+    // This must be a recursive_mutex because, while the lock is held for
+    // manipulating some data in the master list, we must also check whether
+    // it's safe to log -- which involves querying a different LLSingleton --
+    // which requires accessing the master list.
+    typedef std::recursive_mutex mutex_t;
+    typedef std::unique_lock<mutex_t> lock_t;
 
+    mutex_t mMutex;
+
+public:
+    // Instantiate this to both obtain a reference to MasterList::instance()
+    // and lock its mutex for the lifespan of this Lock instance.
+    class Lock
+    {
+    public:
+        Lock():
+            mMasterList(MasterList::instance()),
+            mLock(mMasterList.mMutex)
+        {}
+        Lock(const Lock&) = delete;
+        Lock& operator=(const Lock&) = delete;
+        MasterList& get() const { return mMasterList; }
+        operator MasterList&() const { return get(); }
+
+    protected:
+        MasterList& mMasterList;
+        MasterList::lock_t mLock;
+    };
+
+private:
     // This is the master list of all instantiated LLSingletons (save the
     // MasterList itself) in arbitrary order. You MUST call dep_sort() before
     // traversing this list.
-    LLSingletonBase::list_t mMaster;
+    list_t mMaster;
 
+public:
+    // Instantiate this to obtain a reference to MasterList::mMaster and to
+    // hold the MasterList lock for the lifespan of this LockedMaster
+    // instance.
+    struct LockedMaster: public Lock
+    {
+        list_t& get() const { return mMasterList.mMaster; }
+        operator list_t&() const { return get(); }
+    };
+
+private:
     // We need to maintain a stack of LLSingletons currently being
     // initialized, either in the constructor or in initSingleton(). However,
     // managing that as a stack depends on having a DISTINCT 'initializing'
@@ -76,7 +119,41 @@ public:
     // This local_ptr isn't static because it's a member of an LLSingleton.
     LLCoros::local_ptr<LLSingletonBase::list_t> mInitializing;
 
-    // non-static method, cf. LLSingletonBase::get_initializing()
+public:
+    // Instantiate this to obtain a reference to the coroutine-specific
+    // initializing list and to hold the MasterList lock for the lifespan of
+    // this LockedInitializing instance.
+    struct LockedInitializing: public Lock
+    {
+    public:
+        LockedInitializing():
+            // only do the lookup once, cache the result
+            // note that the lock is already locked during this lookup
+            mList(&mMasterList.get_initializing_())
+        {}
+        list_t& get() const
+        {
+            if (! mList)
+            {
+                LLTHROW(LLException("Trying to use LockedInitializing "
+                                    "after cleanup_initializing()"));
+            }
+            return *mList;
+        }
+        operator list_t&() const { return get(); }
+        void log(const char* verb, const char* name);
+        void cleanup_initializing()
+        {
+            mMasterList.cleanup_initializing_();
+            mList = nullptr;
+        }
+
+    private:
+        // Store pointer since cleanup_initializing() must clear it.
+        list_t* mList;
+    };
+
+private:
     list_t& get_initializing_()
     {
         LLSingletonBase::list_t* current = mInitializing.get();
@@ -99,16 +176,12 @@ public:
     }
 };
 
-//static
-LLSingletonBase::list_t& LLSingletonBase::get_master()
-{
-    return LLSingletonBase::MasterList::instance().mMaster;
-}
-
 void LLSingletonBase::add_master()
 {
     // As each new LLSingleton is constructed, add to the master list.
-    get_master().push_back(this);
+    // This temporary LockedMaster should suffice to hold the MasterList lock
+    // during the push_back() call.
+    MasterList::LockedMaster().get().push_back(this);
 }
 
 void LLSingletonBase::remove_master()
@@ -120,27 +193,32 @@ void LLSingletonBase::remove_master()
     // master list, and remove this item IF FOUND. We have few enough
     // LLSingletons, and they are so rarely destroyed (once per run), that the
     // cost of a linear search should not be an issue.
-    get_master().remove(this);
+    // This temporary LockedMaster should suffice to hold the MasterList lock
+    // during the remove() call.
+    MasterList::LockedMaster().get().remove(this);
 }
 
 //static
-LLSingletonBase::list_t& LLSingletonBase::get_initializing()
+LLSingletonBase::list_t::size_type LLSingletonBase::get_initializing_size()
 {
-    return LLSingletonBase::MasterList::instance().get_initializing_();
+    return MasterList::LockedInitializing().get().size();
 }
 
 LLSingletonBase::~LLSingletonBase() {}
 
 void LLSingletonBase::push_initializing(const char* name)
 {
+    MasterList::LockedInitializing locked_list;
     // log BEFORE pushing so logging singletons don't cry circularity
-    log_initializing("Pushing", name);
-    get_initializing().push_back(this);
+    locked_list.log("Pushing", name);
+    locked_list.get().push_back(this);
 }
 
 void LLSingletonBase::pop_initializing()
 {
-    list_t& list(get_initializing());
+    // Lock the MasterList for the duration of this call
+    MasterList::LockedInitializing locked_list;
+    list_t& list(locked_list.get());
 
     if (list.empty())
     {
@@ -160,7 +238,7 @@ void LLSingletonBase::pop_initializing()
     // entirely.
     if (list.empty())
     {
-        MasterList::instance().cleanup_initializing_();
+        locked_list.cleanup_initializing();
     }
 
     // Now validate the newly-popped LLSingleton.
@@ -172,7 +250,7 @@ void LLSingletonBase::pop_initializing()
     }
 
     // log AFTER popping so logging singletons don't cry circularity
-    log_initializing("Popping", typeid(*back).name());
+    locked_list.log("Popping", typeid(*back).name());
 }
 
 void LLSingletonBase::reset_initializing(list_t::size_type size)
@@ -186,7 +264,8 @@ void LLSingletonBase::reset_initializing(list_t::size_type size)
     // push_initializing() call in LLSingletonBase's constructor. So only
     // remove the stack top if in fact we've pushed something more than the
     // previous size.
-    list_t& list(get_initializing());
+    MasterList::LockedInitializing locked_list;
+    list_t& list(locked_list.get());
 
     while (list.size() > size)
     {
@@ -196,29 +275,32 @@ void LLSingletonBase::reset_initializing(list_t::size_type size)
     // as in pop_initializing()
     if (list.empty())
     {
-        MasterList::instance().cleanup_initializing_();
+        locked_list.cleanup_initializing();
     }
 }
 
-//static
-void LLSingletonBase::log_initializing(const char* verb, const char* name)
+void LLSingletonBase::MasterList::LockedInitializing::log(const char* verb, const char* name)
 {
     if (oktolog())
     {
         LL_DEBUGS("LLSingleton") << verb << ' ' << demangle(name) << ';';
-        list_t& list(get_initializing());
-        for (list_t::const_reverse_iterator ri(list.rbegin()), rend(list.rend());
-             ri != rend; ++ri)
+        if (mList)
         {
-            LLSingletonBase* sb(*ri);
-            LL_CONT << ' ' << classname(sb);
+            for (list_t::const_reverse_iterator ri(mList->rbegin()), rend(mList->rend());
+                 ri != rend; ++ri)
+            {
+                LLSingletonBase* sb(*ri);
+                LL_CONT << ' ' << classname(sb);
+            }
         }
         LL_ENDL;
     }
 }
 
-void LLSingletonBase::capture_dependency(list_t& initializing, EInitState initState)
+void LLSingletonBase::capture_dependency(EInitState initState)
 {
+    MasterList::LockedInitializing locked_list;
+    list_t& initializing(locked_list.get());
     // Did this getInstance() call come from another LLSingleton, or from
     // vanilla application code? Note that although this is a nontrivial
     // method, the vast majority of its calls arrive here with initializing
@@ -307,8 +389,9 @@ LLSingletonBase::vec_t LLSingletonBase::dep_sort()
     // should happen basically once: for deleteAll().
     typedef LLDependencies<LLSingletonBase*> SingletonDeps;
     SingletonDeps sdeps;
-    list_t& master(get_master());
-    BOOST_FOREACH(LLSingletonBase* sp, master)
+    // Lock while traversing the master list 
+    MasterList::LockedMaster master;
+    BOOST_FOREACH(LLSingletonBase* sp, master.get())
     {
         // Build the SingletonDeps structure by adding, for each
         // LLSingletonBase* sp in the master list, sp itself. It has no
@@ -320,7 +403,7 @@ LLSingletonBase::vec_t LLSingletonBase::dep_sort()
                   SingletonDeps::KeyList(sp->mDepends.begin(), sp->mDepends.end()));
     }
     vec_t ret;
-    ret.reserve(master.size());
+    ret.reserve(master.get().size());
     // We should be able to effect this with a transform_iterator that
     // extracts just the first (key) element from each sorted_iterator, then
     // uses vec_t's range constructor... but frankly this is more

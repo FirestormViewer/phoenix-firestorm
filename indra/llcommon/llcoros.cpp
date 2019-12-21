@@ -295,7 +295,7 @@ void LLCoros::toplevel(std::string name, callable_t callable)
     try
     {
 // <FS:Ansariel> Disable for more meaningful callstacks
-//#if LL_WINDOWS
+//#if LL_WINDOWS && LL_RELEASE_FOR_DOWNLOAD
 //        winlevel(callable);
 //#else
         callable();

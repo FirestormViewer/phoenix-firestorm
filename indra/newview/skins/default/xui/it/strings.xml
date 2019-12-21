@@ -2774,7 +2774,7 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 	</string>
 	<string name="UnknownFileExtension">
 		Estensione del file sconosciuta [.%s]
-Tipi conosciuti .WAV .TGA .BMP .JPG .JPEG .BVH
+Tipi conosciuti .WAV .TGA .BMP .JPG .JPEG .ANIM
 	</string>
 	<string name="MuteObject2">
 		Blocca

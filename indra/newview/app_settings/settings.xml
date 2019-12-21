@@ -7075,7 +7075,7 @@
     <key>InventoryOutboxDisplayBoth</key>
     <map>
         <key>Comment</key>
-        <string>Show the legacy Merchant Outbox UI as well as the Marketplace Listings UI</string>
+        <string>(Deprecated) Show the legacy Merchant Outbox UI as well as the Marketplace Listings UI</string>
         <key>Persist</key>
         <integer>1</integer>
         <key>Type</key>
@@ -7551,7 +7551,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>https://secondlife-status.statuspage.io/history.atom</string>
+      <string>https://status.secondlifegrid.net/history.atom</string>
     </map>
     <key>GridStatusUpdateDelay</key>
     <map>
@@ -10199,11 +10199,11 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ParcelMediaAutoPlayEnable</key>
     <map>
       <key>Comment</key>
-      <string>Auto play parcel media when available</string>
+      <string>Auto play parcel media when available. 0 - Do not autoplay; 1- Autoplay; (2 - Ask; not supported)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>Boolean</string>
+      <string>S32</string>
       <key>Value</key>
       <integer>0</integer>
     </map>
@@ -11159,6 +11159,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>RememberUser</key>
+    <map>
+      <key>Comment</key>
+      <string>Keep user name for next login</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>RememberPassword</key>
     <map>
       <key>Comment</key>
@@ -12099,7 +12110,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderShadowResolutionScale</key>
   <map>
     <key>Comment</key>
-    <string>Scale of shadow map resolution vs. screen resolution</string>
+    <string>Scale of shadow map resolution vs. screen resolution (only positivie values are allowed)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -14174,6 +14185,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>BasicUITooltips</key>
+    <map>
+      <key>Comment</key>
+      <string>Show tooltips for various 2D UI elements like buttons or checkboxes, won't supress tooltips like drag'n'drop, inworld, links or media</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>ShowHoverTips</key>
     <map>
       <key>Comment</key>
@@ -16188,6 +16210,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <real>3</real>
+    </map>
+    <key>HUDScaleFactor</key>
+    <map>
+    <key>Comment</key>
+      <string>Scale of HUD attachments</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1.0</real>
+    </map>
+    <key>HUDScaleFactor</key>
+    <map>
+    <key>Comment</key>
+      <string>Scale of HUD attachments</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1.0</real>
     </map>
     <key>UIScaleFactor</key>
     <map>
@@ -25190,6 +25234,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string>00000000-0000-0000-0000-000000000000</string>
+    </map>
+    <key>FSDismissGroupNoticeAttachmentsToTrash</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, dismissing group notices with attachments will move attachment to trash folder</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
   </map>
 </llsd>

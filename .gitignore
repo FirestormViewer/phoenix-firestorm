@@ -1,5 +1,3 @@
-syntax: glob
-
 # WinMerge temp files
 *.bak
 # Compiled python bytecode
@@ -73,28 +71,20 @@ debian/secondlife-appearance-utility*
 debian/files
 build-stamp
 configure-stamp
-^indra/lib/python/mulib.*
-^web/locale.*
-^web/secondlife.com.*
-^web/config.*
-^indra/web/dataservice/locale.*
-^indra/web/dataservice/lib/shared/vault.*
-^indra/web/dataservice/vendor.*
-glob:indra/newview/dbghelp.dll
-glob:*Thumbs.db
-glob:*.cpp.orig
-glob:*.cpp.bak
-glob:*.h.bak
-glob:*.h.orig
-glob:indra/newview/typed_locations.txt
-glob:indra/newview/teleport_history.txt
-glob:indra/newview/search_history.txt
-glob:indra/newview/filters.xml
-glob:indra/newview/avatar_icons_cache.txt
-glob:indra/newview/avatar_lad.log
-glob:*.diff
+indra/newview/dbghelp.dll
+*Thumbs.db
+*.cpp.orig
+*.cpp.bak
+*.h.bak
+*.h.orig
+indra/newview/typed_locations.txt
+indra/newview/teleport_history.txt
+indra/newview/search_history.txt
+indra/newview/filters.xml
+indra/newview/avatar_icons_cache.txt
+indra/newview/avatar_lad.log
+*.diff
 indra/newview/pilot.txt
 indra/newview/pilot.xml
 #*.rej
-^indra/build
 .*\.wixobj

@@ -2000,7 +2000,7 @@ void LLItemBridge::restoreToWorld()
 
 		msg->nextBlockFast(_PREHASH_InventoryData);
 		itemp->packMessage(msg);
-		msg->sendReliable(gAgent.getRegion()->getHost());
+		msg->sendReliable(gAgent.getRegionHost());
 		//remove local inventory copy, sim will deal with permissions and removing the item
 		//from the actual inventory if its a no-copy etc
 		if(!itemp->getPermissions().allowCopyBy(gAgent.getID()))
@@ -2523,7 +2523,7 @@ public:
 // Can be destroyed (or moved to trash)
 BOOL LLFolderBridge::isItemRemovable() const
 {
-	if (!get_is_category_removable(getInventoryModel(), mUUID) || isMarketplaceListingsFolder())
+	if (!get_is_category_removable(getInventoryModel(), mUUID))
 	{
 		return FALSE;
 	}
@@ -2538,6 +2538,11 @@ BOOL LLFolderBridge::isItemRemovable() const
 		{
 			return FALSE;
 		}
+	}
+
+	if (isMarketplaceListingsFolder() && (!LLMarketplaceData::instance().isSLMDataFetched() || LLMarketplaceData::instance().getActivationState(mUUID)))
+	{
+		return FALSE;
 	}
 
 	return TRUE;
@@ -3978,7 +3983,7 @@ void LLFolderBridge::perform_pasteFromClipboard()
 
 		const BOOL move_is_into_current_outfit = (mUUID == current_outfit_id);
 		const BOOL move_is_into_my_outfits = (mUUID == my_outifts_id) || model->isObjectDescendentOf(mUUID, my_outifts_id);
-		const BOOL move_is_into_outfit = move_is_into_my_outfits || (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_OUTFIT);
+		const BOOL move_is_into_outfit = /*move_is_into_my_outfits ||*/ (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_OUTFIT); // <FS:Ansariel> Unable to copy&paste into outfits anymore
         const BOOL move_is_into_marketplacelistings = model->isObjectDescendentOf(mUUID, marketplacelistings_id);
 		const BOOL move_is_into_favorites = (mUUID == favorites_id);
 		const BOOL move_is_into_lost_and_found = model->isObjectDescendentOf(mUUID, lost_and_found_id);
@@ -4064,13 +4069,19 @@ void LLFolderBridge::perform_pasteFromClipboard()
 						return;
 					}
 				}
-				if (move_is_into_outfit)
+				// <FS:Ansariel> Unable to copy&paste into outfits anymore
+				//if (move_is_into_outfit)
+				if (move_is_into_my_outfits)
+				// </FS:Ansariel>
 				{
-					if (!move_is_into_my_outfits && item && can_move_to_outfit(item, move_is_into_current_outfit))
+					// <FS:Ansariel> Unable to copy&paste into outfits anymore
+					//if (!move_is_into_my_outfits && item && can_move_to_outfit(item, move_is_into_current_outfit))
+					if (move_is_into_outfit && item && can_move_to_outfit(item, move_is_into_current_outfit))
+					// </FS:Ansariel>
 					{
 						dropToOutfit(item, move_is_into_current_outfit);
 					}
-					else if (move_is_into_my_outfits && LLAssetType::AT_CATEGORY == obj->getType())
+					else if (/*move_is_into_my_outfits &&*/ LLAssetType::AT_CATEGORY == obj->getType()) // <FS:Ansariel> Unable to copy&paste into outfits anymore
 					{
 						LLInventoryCategory* cat = model->getCategory(item_id);
 						U32 max_items_to_wear = gSavedSettings.getU32("WearFolderLimit");
@@ -5067,7 +5078,7 @@ bool move_task_inventory_callback(const LLSD& notification, const LLSD& response
 		{
 			LLInventoryObject::object_list_t inventory_objects;
 			object->getInventoryContents(inventory_objects);
-			int contents_count = inventory_objects.size()-1; //subtract one for containing folder
+			int contents_count = inventory_objects.size();
 			LLInventoryCopyAndWearObserver* inventoryObserver = new LLInventoryCopyAndWearObserver(cat_and_wear->mCatID, contents_count, cat_and_wear->mFolderResponded,
 																									cat_and_wear->mReplace);
 			

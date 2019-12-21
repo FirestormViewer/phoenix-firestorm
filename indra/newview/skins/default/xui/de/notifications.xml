@@ -1011,6 +1011,9 @@ Ihre Teleport-Anfrage kann nicht sofort bearbeitet werden. Versuchen Sie es in e
 	<notification name="expired_region_handoff">
 		Das System konnte Ihre Anfrage zum Regionswechsel nicht rechtzeitig bearbeiten. Versuchen Sie es in einigen Minuten erneut.
 	</notification>
+	<notification name="preexisting_tport">
+		Das System konnte Ihre Teleport-Anfrage nicht ausführen. Versuchen Sie es in einigen Minuten erneut.
+	</notification>
 	<notification name="no_host">
 		Teleport-Ziel wurde nicht gefunden. Das Ziel ist entweder im Moment nicht verfügbar oder existiert nicht mehr. Versuchen Sie es in einigen Minuten erneut.
 	</notification>
@@ -1282,6 +1285,13 @@ nach
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
+	<notification label="Geste umbenennen" name="RenameGesture">
+		Neuer Gesten-Name:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 	<notification name="RemoveFromFriends">
 		Möchten Sie &lt;nolink&gt;[NAME]&lt;/nolink&gt; aus Ihrer Freundesliste entfernen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
@@ -1476,6 +1486,18 @@ Falls Sie [CURRENT_GRID] zum ersten Mal verwenden, müssen Sie zuerst ein Konto 
 			<button name="OK" text="OK"/>
 			<button name="Help" text="Hilfe"/>
 			<button name="Teleport" text="Teleportieren"/>
+		</form>
+	</notification>
+	<notification name="LoginPacketNeverReceivedNoTP">
+		Es gibt Probleme mit der Verbindung. Möglicherweise besteht ein Problem mit Ihrer Internetverbindung oder dem [SECOND_LIFE_GRID].
+
+Überprüfen Sie Ihre Internetverbindung und versuchen Sie es dann erneut, oder klicken Sie auf Hilfe, um zu [SUPPORT_SITE] zu gelangen.
+		<url name="url">
+			http://de.secondlife.com/support/
+		</url>
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Help" text="Hilfe"/>
 		</form>
 	</notification>
 	<notification name="WelcomeChooseSex">
