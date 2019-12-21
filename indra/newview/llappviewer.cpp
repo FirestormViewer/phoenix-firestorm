@@ -280,7 +280,7 @@
 #include "nd/ndlogthrottle.h"
 
 #include "fsradar.h"
-
+#include "fsassetblacklist.h"
 
 #if (LL_LINUX || LL_SOLARIS) && LL_GTK
 #include "glib.h"
@@ -1095,6 +1095,15 @@ bool LLAppViewer::init()
 	/////////////////////////////////////////////////
 
 	LLToolMgr::getInstance(); // Initialize tool manager if not already instantiated
+
+	// <FS:ND/> Contruct singleton early.
+	// Otherwise it will get constructed inside the texture decode thread and this will lead to deadlocks:
+	// - Let "Thread I" be the image decode threat that causes the creation of FSAssetBlack. 
+	// - Thread I holds a lock to a mutex the mainthread is sleeping on.
+	// - Thread I will defer the singleton creation to the mainthread, which will cause Thread I to sleep on a mutex till the mainthread is done creating the object.
+	// - The mainthread can never wake up and create the object due do it sleeping on something Tread I must release.
+	// - Thread I can never wake up and release the mutex as the mainthread can never wake up and wake thread I again.
+	FSAssetBlacklist::getInstance();
 
 	LLViewerFloaterReg::registerFloaters();
 
