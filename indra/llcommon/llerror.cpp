@@ -307,28 +307,35 @@ namespace LLError
 	{
 #ifdef __GNUC__
 		// GCC: type_info::name() returns a mangled class name,st demangle
-        // passing nullptr, 0 forces allocation of a unique buffer we can free
-        // fixing MAINT-8724 on OSX 10.14
+		// passing nullptr, 0 forces allocation of a unique buffer we can free
+		// fixing MAINT-8724 on OSX 10.14
 		int status = -1;
 		char* name = abi::__cxa_demangle(mangled, nullptr, 0, &status);
-        std::string result(name ? name : mangled);
-        free(name);
-        return result;
+		std::string result(name ? name : mangled);
+		free(name);
+		return result;
+
 #elif LL_WINDOWS
-		// DevStudio: type_info::name() includes the text "class " at the start
-
-		static const std::string class_prefix = "class ";
+		// Visual Studio: type_info::name() includes the text "class " at the start
 		std::string name = mangled;
-		if (0 != name.compare(0, class_prefix.length(), class_prefix))
+		for (const auto& prefix : std::vector<std::string>{ "class ", "struct " })
 		{
-			LL_DEBUGS() << "Did not see '" << class_prefix << "' prefix on '"
-					   << name << "'" << LL_ENDL;
-			return name;
+			if (0 == name.compare(0, prefix.length(), prefix))
+			{
+				return name.substr(prefix.length());
+			}
 		}
+		// huh, that's odd, we should see one or the other prefix -- but don't
+		// try to log unless logging is already initialized
+		if (is_available())
+		{
+			// in Python, " or ".join(vector) -- but in C++, a PITB
+			LL_DEBUGS() << "Did not see 'class' or 'struct' prefix on '"
+				<< name << "'" << LL_ENDL;
+		}
+		return name;
 
-		return name.substr(class_prefix.length());
-
-#else
+#else  // neither GCC nor Visual Studio
 		return mangled;
 #endif
 	}
@@ -1213,8 +1220,25 @@ namespace
 }
 
 namespace {
-	LLMutex gLogMutex;
-	LLMutex gCallStacksLogMutex;
+	// We need a couple different mutexes, but we want to use the same mechanism
+	// for both. Make getMutex() a template function with different instances
+	// for different MutexDiscriminator values.
+	enum MutexDiscriminator
+	{
+		LOG_MUTEX,
+		STACKS_MUTEX
+	};
+	// Some logging calls happen very early in processing -- so early that our
+	// module-static variables aren't yet initialized. getMutex() wraps a
+	// function-static LLMutex so that early calls can still have a valid
+	// LLMutex instance.
+	template <MutexDiscriminator MTX>
+	LLMutex* getMutex()
+	{
+		// guaranteed to be initialized the first time control reaches here
+		static LLMutex sMutex;
+		return &sMutex;
+	}
 
 	bool checkLevelMap(const LevelMap& map, const std::string& key,
 						LLError::ELevel& level)
@@ -1267,7 +1291,7 @@ namespace LLError
 
 	bool Log::shouldLog(CallSite& site)
 	{
-		LLMutexTrylock lock(&gLogMutex, 5);
+		LLMutexTrylock lock(getMutex<LOG_MUTEX>(), 5);
 		if (!lock.isLocked())
 		{
 			return false;
@@ -1318,7 +1342,7 @@ namespace LLError
 
 	std::ostringstream* Log::out()
 	{
-		LLMutexTrylock lock(&gLogMutex,5);
+		LLMutexTrylock lock(getMutex<LOG_MUTEX>(),5);
 		// If we hit a logging request very late during shutdown processing,
 		// when either of the relevant LLSingletons has already been deleted,
 		// DO NOT resurrect them.
@@ -1338,7 +1362,7 @@ namespace LLError
 
 	void Log::flush(std::ostringstream* out, char* message)
 	{
-		LLMutexTrylock lock(&gLogMutex,5);
+		LLMutexTrylock lock(getMutex<LOG_MUTEX>(),5);
 		if (!lock.isLocked())
 		{
 			return;
@@ -1378,7 +1402,7 @@ namespace LLError
 
 	void Log::flush(std::ostringstream* out, const CallSite& site)
 	{
-		LLMutexTrylock lock(&gLogMutex,5);
+		LLMutexTrylock lock(getMutex<LOG_MUTEX>(),5);
 		if (!lock.isLocked())
 		{
 			return;
@@ -1549,34 +1573,34 @@ namespace LLError
 	S32    LLCallStacks::sIndex  = 0 ;
 
 	//static
-    void LLCallStacks::allocateStackBuffer()
-    {
-        if(sBuffer == NULL)
-        {
-            sBuffer = new char*[512] ;
-            sBuffer[0] = new char[512 * 128] ;
-            for(S32 i = 1 ; i < 512 ; i++)
-            {
-                sBuffer[i] = sBuffer[i-1] + 128 ;
-            }
-            sIndex = 0 ;
-        }
-    }
+   void LLCallStacks::allocateStackBuffer()
+   {
+	   if(sBuffer == NULL)
+	   {
+		   sBuffer = new char*[512] ;
+		   sBuffer[0] = new char[512 * 128] ;
+		   for(S32 i = 1 ; i < 512 ; i++)
+		   {
+			   sBuffer[i] = sBuffer[i-1] + 128 ;
+		   }
+		   sIndex = 0 ;
+	   }
+   }
 
-    void LLCallStacks::freeStackBuffer()
-    {
-        if(sBuffer != NULL)
-        {
-            delete [] sBuffer[0] ;
-            delete [] sBuffer ;
-            sBuffer = NULL ;
-        }
-    }
+   void LLCallStacks::freeStackBuffer()
+   {
+	   if(sBuffer != NULL)
+	   {
+		   delete [] sBuffer[0] ;
+		   delete [] sBuffer ;
+		   sBuffer = NULL ;
+	   }
+   }
 
-    //static
-    void LLCallStacks::push(const char* function, const int line)
-    {
-        LLMutexTrylock lock(&gCallStacksLogMutex, 5);
+   //static
+   void LLCallStacks::push(const char* function, const int line)
+   {
+        LLMutexTrylock lock(getMutex<STACKS_MUTEX>(), 5);
         if (!lock.isLocked())
         {
             return;
@@ -1611,7 +1635,7 @@ namespace LLError
     //static
     void LLCallStacks::end(std::ostringstream* _out)
     {
-        LLMutexTrylock lock(&gCallStacksLogMutex, 5);
+        LLMutexTrylock lock(getMutex<STACKS_MUTEX>(), 5);
         if (!lock.isLocked())
         {
             return;
@@ -1633,7 +1657,7 @@ namespace LLError
     //static
     void LLCallStacks::print()
     {
-        LLMutexTrylock lock(&gCallStacksLogMutex, 5);
+        LLMutexTrylock lock(getMutex<STACKS_MUTEX>(), 5);
         if (!lock.isLocked())
         {
             return;
@@ -1676,7 +1700,7 @@ namespace LLError
 
 bool debugLoggingEnabled(const std::string& tag)
 {
-    LLMutexTrylock lock(&gLogMutex, 5);
+    LLMutexTrylock lock(getMutex<LOG_MUTEX>(), 5);
     if (!lock.isLocked())
     {
         return false;

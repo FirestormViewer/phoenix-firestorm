@@ -47,7 +47,8 @@ class LLWearableType : public LLParamSingleton<LLWearableType>
 	LLSINGLETON(LLWearableType, LLTranslationBridge* trans);
 	~LLWearableType();
 	friend struct WearableEntry;
-public: 
+	void initSingleton(); 
+public:
 	enum EType
 	{
 		WT_SHAPE	  = 0,

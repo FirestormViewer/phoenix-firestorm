@@ -187,6 +187,7 @@ set(llcommon_HEADER_FILES
     llleaplistener.h
     llliveappconfig.h
     lllivefile.h
+    llmainthreadtask.h
     llmd5.h
     llmemory.h
     llmemorystream.h
@@ -246,6 +247,7 @@ set(llcommon_HEADER_FILES
     llwin32headers.h
     llwin32headerslean.h
     llworkerthread.h
+    lockstatic.h
     stdtypes.h
     stringize.h
     timer.h
@@ -374,6 +376,7 @@ if (LL_TESTS)
   LL_ADD_INTEGRATION_TEST(llheteromap "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llinstancetracker "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llleap "" "${test_libs}")
+  LL_ADD_INTEGRATION_TEST(llmainthreadtask "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llpounceable "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llprocess "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llprocessor "" "${test_libs}")

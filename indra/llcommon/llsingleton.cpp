@@ -30,6 +30,7 @@
 #include "llerror.h"
 #include "llerrorcontrol.h"         // LLError::is_available()
 #include "lldependencies.h"
+#include "llexception.h"
 #include "llcoros.h"
 #include "llexception.h"
 #include <boost/foreach.hpp>
@@ -41,8 +42,6 @@
 namespace {
 void log(LLError::ELevel level,
          const char* p1, const char* p2, const char* p3, const char* p4);
-
-void logdebugs(const char* p1="", const char* p2="", const char* p3="", const char* p4="");
 
 bool oktolog();
 } // anonymous namespace
@@ -117,7 +116,7 @@ private:
     // stack for every running coroutine. Therefore this stack must be based
     // on a coroutine-local pointer.
     // This local_ptr isn't static because it's a member of an LLSingleton.
-    LLCoros::local_ptr<LLSingletonBase::list_t> mInitializing;
+    LLCoros::local_ptr<list_t> mInitializing;
 
 public:
     // Instantiate this to obtain a reference to the coroutine-specific
@@ -297,7 +296,7 @@ void LLSingletonBase::MasterList::LockedInitializing::log(const char* verb, cons
     }
 }
 
-void LLSingletonBase::capture_dependency(EInitState initState)
+void LLSingletonBase::capture_dependency()
 {
     MasterList::LockedInitializing locked_list;
     list_t& initializing(locked_list.get());
@@ -329,21 +328,8 @@ void LLSingletonBase::capture_dependency(EInitState initState)
                 LLSingletonBase* foundp(*found);
                 out << classname(foundp) << " -> ";
             }
-            // We promise to capture dependencies from both the constructor
-            // and the initSingleton() method, so an LLSingleton's instance
-            // pointer is on the initializing list during both. Now that we've
-            // detected circularity, though, we must distinguish the two. If
-            // the recursive call is from the constructor, we CAN'T honor it:
-            // otherwise we'd be returning a pointer to a partially-
-            // constructed object! But from initSingleton() is okay: that
-            // method exists specifically to support circularity.
             // Decide which log helper to call.
-            if (initState == CONSTRUCTING)
-            {
-                logerrs("LLSingleton circularity in Constructor: ", out.str().c_str(),
-                    classname(this).c_str(), "");
-            }
-            else if (it_next == initializing.end())
+            if (it_next == initializing.end())
             {
                 // Points to self after construction, but during initialization.
                 // Singletons can initialize other classes that depend onto them,
@@ -391,7 +377,7 @@ LLSingletonBase::vec_t LLSingletonBase::dep_sort()
     SingletonDeps sdeps;
     // Lock while traversing the master list 
     MasterList::LockedMaster master;
-    BOOST_FOREACH(LLSingletonBase* sp, master.get())
+    for (LLSingletonBase* sp : master.get())
     {
         // Build the SingletonDeps structure by adding, for each
         // LLSingletonBase* sp in the master list, sp itself. It has no
@@ -408,14 +394,14 @@ LLSingletonBase::vec_t LLSingletonBase::dep_sort()
     // extracts just the first (key) element from each sorted_iterator, then
     // uses vec_t's range constructor... but frankly this is more
     // straightforward, as long as we remember the above reserve() call!
-    BOOST_FOREACH(SingletonDeps::sorted_iterator::value_type pair, sdeps.sort())
+    for (const SingletonDeps::sorted_iterator::value_type& pair : sdeps.sort())
     {
         ret.push_back(pair.first);
     }
     // The master list is not itself pushed onto the master list. Add it as
     // the very last entry -- it is the LLSingleton on which ALL others
     // depend! -- so our caller will process it.
-    ret.push_back(MasterList::getInstance());
+    ret.push_back(&master.Lock::get());
     return ret;
 }
 
@@ -426,13 +412,9 @@ void LLSingletonBase::cleanup_()
     {
         cleanupSingleton();
     }
-    catch (const std::exception& e)
-    {
-        logwarns("Exception in ", classname(this).c_str(), "::cleanupSingleton(): ", e.what());
-    }
     catch (...)
     {
-        logwarns("Unknown exception in ", classname(this).c_str(), "::cleanupSingleton()");
+        LOG_UNHANDLED_EXCEPTION(classname(this) + "::cleanupSingleton()");
     }
 }
 
@@ -503,16 +485,24 @@ void log(LLError::ELevel level,
     }
 }
 
-void logdebugs(const char* p1, const char* p2, const char* p3, const char* p4)
-{
-    log(LLError::LEVEL_DEBUG, p1, p2, p3, p4);
-}
 } // anonymous namespace        
 
 //static
 void LLSingletonBase::logwarns(const char* p1, const char* p2, const char* p3, const char* p4)
 {
     log(LLError::LEVEL_WARN, p1, p2, p3, p4);
+}
+
+//static
+void LLSingletonBase::loginfos(const char* p1, const char* p2, const char* p3, const char* p4)
+{
+    log(LLError::LEVEL_INFO, p1, p2, p3, p4);
+}
+
+//static
+void LLSingletonBase::logdebugs(const char* p1, const char* p2, const char* p3, const char* p4)
+{
+    log(LLError::LEVEL_DEBUG, p1, p2, p3, p4);
 }
 
 //static

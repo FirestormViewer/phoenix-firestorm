@@ -34,6 +34,7 @@
 #include "llcoros.h"
 // STL headers
 // std headers
+#include <atomic>
 // external library headers
 #include <boost/bind.hpp>
 #include <boost/fiber/fiber.hpp>
@@ -73,10 +74,9 @@ LLCoros::CoroData& LLCoros::get_CoroData(const std::string& caller)
     // canonical values.
     if (! current)
     {
-        // It's tempting to provide a distinct name for each thread's "main
-        // coroutine." But as getName() has always returned the empty string
-        // to mean "not in a coroutine," empty string should suffice here.
-        static thread_local CoroData sMain("");
+        static std::atomic<int> which_thread(0);
+        // Use alternate CoroData constructor.
+        static thread_local CoroData sMain(which_thread++);
         // We need not reset() the local_ptr to this instance; we'll simply
         // find it again every time we discover that current is null.
         current = &sMain;
@@ -197,6 +197,13 @@ std::string LLCoros::getName()
     return get_CoroData("getName()").mName;
 }
 
+//static
+std::string LLCoros::logname()
+{
+    LLCoros::CoroData& data(get_CoroData("logname()"));
+    return data.mName.empty()? data.getKey() : data.mName;
+}
+
 void LLCoros::setStackSize(S32 stacksize)
 {
     LL_DEBUGS("LLCoros") << "Setting coroutine stack size to " << stacksize << LL_ENDL;
@@ -211,12 +218,11 @@ void LLCoros::printActiveCoroutines(const std::string& when)
     {
         LL_INFOS("LLCoros") << "-------------- List of active coroutines ------------";
         F64 time = LLTimer::getTotalSeconds();
-        for (auto it(CoroData::beginInstances()), end(CoroData::endInstances());
-             it != end; ++it)
+        for (auto& cd : CoroData::instance_snapshot())
         {
-            F64 life_time = time - it->mCreationTime;
+            F64 life_time = time - cd.mCreationTime;
             LL_CONT << LL_NEWLINE
-                    << it->mName << ' ' << it->mStatus << " life: " << life_time;
+                    << cd.getKey() << ' ' << cd.mStatus << " life: " << life_time;
         }
         LL_CONT << LL_ENDL;
         LL_INFOS("LLCoros") << "-----------------------------------------------------" << LL_ENDL;
@@ -351,6 +357,19 @@ LLCoros::CoroData::CoroData(const std::string& name):
     LLInstanceTracker<CoroData, std::string>(name),
     mName(name),
     // don't consume events unless specifically directed
+    mConsuming(false),
+    mCreationTime(LLTimer::getTotalSeconds())
+{
+}
+
+LLCoros::CoroData::CoroData(int n):
+    // This constructor is used for the thread_local instance belonging to the
+    // default coroutine on each thread. We must give each one a different
+    // LLInstanceTracker key because LLInstanceTracker's map spans all
+    // threads, but we want the default coroutine on each thread to have the
+    // empty string as its visible name because some consumers test for that.
+    LLInstanceTracker<CoroData, std::string>("main" + stringize(n)),
+    mName(),
     mConsuming(false),
     mCreationTime(LLTimer::getTotalSeconds())
 {
