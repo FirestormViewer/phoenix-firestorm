@@ -86,3 +86,5 @@ indra/newview/pilot.txt
 indra/newview/pilot.xml
 #*.rej
 .*\.wixobj
+my_autobuild.xml
+.vscode
