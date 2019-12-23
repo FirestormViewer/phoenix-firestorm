@@ -806,7 +806,7 @@ BOOL LLFloaterModelPreview::handleHover	(S32 x, S32 y, MASK mask)
 
 		mModelPreview->refresh();
 
-		LLUI::setMousePositionLocal(this, mLastMouseX, mLastMouseY);
+		LLUI::getInstance()->setMousePositionLocal(this, mLastMouseX, mLastMouseY);
 	}
 
 	if (!mPreviewRect.pointInRect(x, y) || !mModelPreview)
@@ -3014,6 +3014,15 @@ void LLModelPreview::updateStatusMessages()
 	{
 		mFMP->childDisable("ok_btn");
 	}
+
+    if (mModelNoErrors && mLodsWithParsingError.empty())
+    {
+        mFMP->childEnable("calculate_btn");
+    }
+    else
+    {
+        mFMP->childDisable("calculate_btn");
+    }
 	
 	//add up physics triangles etc
 	S32 phys_tris = 0;
