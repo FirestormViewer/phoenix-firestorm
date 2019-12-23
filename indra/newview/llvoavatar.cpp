@@ -10772,11 +10772,16 @@ void LLVOAvatar::updateRegion(LLViewerRegion *regionp)
 	// TEX_HEAD_TATTOO and BAKED_LEFT_ARM are the first new entries
 	
 	sMaxBakes = gAgent.getRegion()->bakesOnMeshEnabled()?BAKED_NUM_INDICES:BAKED_LEFT_ARM;
+
 	if(!gSavedSettings.getBOOL("CurrentlyUsingBakesOnMesh") != getRegion()->bakesOnMeshEnabled())
 	{
-		// force a rebake when the last grid we were on (including previous login) had different BOM support
-		// This replicates forceAppearanceUpdate rather than pulling in the whole of llavatarself.
-		doAfterInterval(boost::bind(&LLVOAvatarSelf::forceBakeAllTextures,	gAgentAvatarp.get(), true), 5.0);
+			// force a rebake when the last grid we were on (including previous login) had different BOM support
+			// This replicates forceAppearanceUpdate rather than pulling in the whole of llavatarself.
+		if(!LLGridManager::instance().isInSecondLife())
+		{
+			doAfterInterval(boost::bind(&LLVOAvatarSelf::forceBakeAllTextures,	gAgentAvatarp.get(), true), 5.0);
+		}
+		// update the setting even if we are in SL so that switch SL to OS and back 
 		gSavedSettings.setBOOL("CurrentlyUsingBakesOnMesh", getRegion()->bakesOnMeshEnabled());
 	}
 	//</FS:Beq>
