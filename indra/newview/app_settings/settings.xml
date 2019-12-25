@@ -3784,7 +3784,7 @@
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>Bool</string>
+      <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
       <key>Backup</key>
