@@ -1780,6 +1780,9 @@ if (LINUX)
     endif( ND_CTAGS )
     # </FS:ND>
 
+    # <FS:ND> Get rid of memory limit exceeded for -fvar-tracking-assignments.
+    SET_SOURCE_FILES_PROPERTIES(llviewermenu.cpp PROPERTIES COMPILE_FLAGS -fno-var-tracking-assignments)
+    # </FS:ND>
 endif (LINUX)
 
 if (WINDOWS)
