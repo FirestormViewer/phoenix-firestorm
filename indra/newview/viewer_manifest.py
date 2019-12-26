@@ -2059,10 +2059,16 @@ class LinuxManifest(ViewerManifest):
         installer_name = "_".join(installer_name_components)
         #installer_name = self.installer_base_name()
 
-        self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
-        self.strip_binaries()
-        self.fs_save_linux_symbols() # <FS:ND/> Package symbols, add debug link
-        self.fs_setuid_chromesandbox() # <FS:ND/> Chown chrome-sandbox to root:root and set the setuid bit
+        createTar = True
+        if os.environ.get( "FS_CREATE_NO_TAR" ): 
+            createTar = False
+
+            
+        if createTar:
+            self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
+            self.strip_binaries()
+            self.fs_save_linux_symbols() # <FS:ND/> Package symbols, add debug link
+            self.fs_setuid_chromesandbox() # <FS:ND/> Chown chrome-sandbox to root:root and set the setuid bit
 
         # Fix access permissions
         self.run_command(['find', self.get_dst_prefix(),
@@ -2079,24 +2085,25 @@ class LinuxManifest(ViewerManifest):
 
         self.package_file = installer_name + '.tar.xz'
 
-        # temporarily move directory tree so that it has the right
-        # name in the tarfile
-        realname = self.get_dst_prefix()
-        tempname = self.build_path_of(installer_name)
-        self.run_command(["mv", realname, tempname])
-        try:
-            # only create tarball if it's a release build.
-            if self.args['buildtype'].lower() == 'release':
-                # --numeric-owner hides the username of the builder for
-                # security etc.
-                self.run_command(['tar', '-C', self.get_build_prefix(),
-                                  '--numeric-owner', self.fs_linux_tar_excludes(), '-caf',
-                                 tempname + '.tar.xz', installer_name])
-            else:
-                print "Skipping %s.tar.xz for non-Release build (%s)" % \
-                      (installer_name, self.args['buildtype'])
-        finally:
-            self.run_command(["mv", tempname, realname])
+        if createTar:
+            # temporarily move directory tree so that it has the right
+            # name in the tarfile
+            realname = self.get_dst_prefix()
+            tempname = self.build_path_of(installer_name)
+            self.run_command(["mv", realname, tempname])
+            try:
+                # only create tarball if it's a release build.
+                if self.args['buildtype'].lower() == 'release':
+                    # --numeric-owner hides the username of the builder for
+                    # security etc.
+                    self.run_command(['tar', '-C', self.get_build_prefix(),
+                                      '--numeric-owner', self.fs_linux_tar_excludes(), '-caf',
+                                      tempname + '.tar.xz', installer_name])
+                else:
+                    print "Skipping %s.tar.xz for non-Release build (%s)" % \
+                        (installer_name, self.args['buildtype'])
+            finally:
+                self.run_command(["mv", tempname, realname])
 
     def strip_binaries(self):
         if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
