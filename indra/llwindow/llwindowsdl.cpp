@@ -203,6 +203,7 @@ LLWindowSDL::LLWindowSDL(LLWindowCallbacks* callbacks,
 
 	// Ignore use_gl for now, only used for drones on PC
 	mWindow = NULL;
+	mContext = {};
 	mNeedsResize = FALSE;
 	mOverrideAspectRatio = 0.f;
 	mGrabbyKeyFlags = 0;
@@ -598,15 +599,20 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 		bmpsurface = NULL;
 	}
 
-	SDL_GLContext glContext = SDL_GL_CreateContext( mWindow );
-
-	if( glContext == 0 )
+	char const *pEnv = getenv("FS_NO_SDL_CREATE_CONTEXT" );
+	if( pEnv == nullptr || std::string( pEnv ) == "1" )
 	{
-		LL_WARNS() << "Cannot create GL context " << SDL_GetError() << LL_ENDL;
-		return FALSE;
+		mContext = SDL_GL_CreateContext( mWindow );
+
+		if( mContext == 0 )
+		{
+			LL_WARNS() << "Cannot create GL context " << SDL_GetError() << LL_ENDL;
+			raise(SIGTRAP);
+			return FALSE;
+		}
+		// SDL_GL_SetSwapInterval(1);
 	}
 
-	
 	// Detect video memory size.
 # if LL_X11
 	gGLManager.mVRAM = x11_detect_VRAM_kb() / 1024;

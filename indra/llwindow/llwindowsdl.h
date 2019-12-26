@@ -190,8 +190,12 @@ protected:
 	//
 	U32             mGrabbyKeyFlags;
 	int			mReallyCapturedCount;
+
 	SDL_Window* mWindow;
 	SDL_Surface* mSurface;
+	SDL_GLContext mContext;
+	SDL_Cursor*	mSDLCursors[UI_CURSOR_COUNT];
+
 	std::string mWindowTitle;
 	double		mOriginalAspectRatio;
 	BOOL		mNeedsResize;		// Constructor figured out the window is too big, it needs a resize.
@@ -202,7 +206,6 @@ protected:
 
 	int		mSDLFlags;
 
-	SDL_Cursor*	mSDLCursors[UI_CURSOR_COUNT];
 	int             mHaveInputFocus; /* 0=no, 1=yes, else unknown */
 	int             mIsMinimized; /* 0=no, 1=yes, else unknown */
 
