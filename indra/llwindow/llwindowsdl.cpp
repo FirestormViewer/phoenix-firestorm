@@ -546,8 +546,20 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 	mWindow = SDL_CreateWindow( mWindowTitle.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, mSDLFlags );
 
 	if( mWindow )
+	{
+		mContext = SDL_GL_CreateContext( mWindow );
+
+		if( mContext == 0 )
+		{
+			LL_WARNS() << "Cannot create GL context " << SDL_GetError() << LL_ENDL;
+			setupFailure("GL Context creation error creation error", "Error", OSMB_OK);
+			return FALSE;
+		}
+		// SDL_GL_SetSwapInterval(1);
 		mSurface = SDL_GetWindowSurface( mWindow );
-	
+	}
+
+
 	if( mFullscreen )
 	{
 		if (mSurface)
@@ -597,20 +609,6 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 		SDL_SetWindowIcon(mWindow, bmpsurface);
 		SDL_FreeSurface(bmpsurface);
 		bmpsurface = NULL;
-	}
-
-	char const *pEnv = getenv("FS_NO_SDL_CREATE_CONTEXT" );
-	if( pEnv == nullptr || std::string( pEnv ) == "1" )
-	{
-		mContext = SDL_GL_CreateContext( mWindow );
-
-		if( mContext == 0 )
-		{
-			LL_WARNS() << "Cannot create GL context " << SDL_GetError() << LL_ENDL;
-			raise(SIGTRAP);
-			return FALSE;
-		}
-		// SDL_GL_SetSwapInterval(1);
 	}
 
 	// Detect video memory size.
