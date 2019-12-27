@@ -175,7 +175,7 @@ void LLFilePickerThread::run()
 //static
 void LLFilePickerThread::initClass()
 {
-	sMutex = new LLMutex(NULL);
+	sMutex = new LLMutex();
 }
 
 //static
@@ -203,38 +203,55 @@ void LLFilePickerThread::clearDead()
 	}
 }
 
-LLFilePickerReplyThread::LLFilePickerReplyThread(const file_picked_signal_t::slot_type& cb, LLFilePicker::ELoadFilter filter, bool get_multiple)
+LLFilePickerReplyThread::LLFilePickerReplyThread(const file_picked_signal_t::slot_type& cb, LLFilePicker::ELoadFilter filter, bool get_multiple, const file_picked_signal_t::slot_type& failure_cb)
 	: LLFilePickerThread(filter, get_multiple),
 	mLoadFilter(filter),
 	mSaveFilter(LLFilePicker::FFSAVE_ALL),
-	mFilePickedSignal(NULL)
+	mFilePickedSignal(NULL),
+	mFailureSignal(NULL)
 {
 	mFilePickedSignal = new file_picked_signal_t();
 	mFilePickedSignal->connect(cb);
+
+	mFailureSignal = new file_picked_signal_t();
+	mFailureSignal->connect(failure_cb);
 }
 
-LLFilePickerReplyThread::LLFilePickerReplyThread(const file_picked_signal_t::slot_type& cb, LLFilePicker::ESaveFilter filter, const std::string &proposed_name)
+LLFilePickerReplyThread::LLFilePickerReplyThread(const file_picked_signal_t::slot_type& cb, LLFilePicker::ESaveFilter filter, const std::string &proposed_name, const file_picked_signal_t::slot_type& failure_cb)
 	: LLFilePickerThread(filter, proposed_name),
 	mLoadFilter(LLFilePicker::FFLOAD_ALL),
 	mSaveFilter(filter),
-	mFilePickedSignal(NULL)
+	mFilePickedSignal(NULL),
+	mFailureSignal(NULL)
 {
 	mFilePickedSignal = new file_picked_signal_t();
 	mFilePickedSignal->connect(cb);
+
+	mFailureSignal = new file_picked_signal_t();
+	mFailureSignal->connect(failure_cb);
 }
 
 LLFilePickerReplyThread::~LLFilePickerReplyThread()
 {
 	delete mFilePickedSignal;
+	delete mFailureSignal;
 }
 
 void LLFilePickerReplyThread::notify(const std::vector<std::string>& filenames)
 {
-	if (filenames.empty()) return;
-
-	if (mFilePickedSignal)
+	if (filenames.empty())
 	{
-		(*mFilePickedSignal)(filenames, mLoadFilter, mSaveFilter);
+		if (mFailureSignal)
+		{
+			(*mFailureSignal)(filenames, mLoadFilter, mSaveFilter);
+		}
+	}
+	else
+	{
+		if (mFilePickedSignal)
+		{
+			(*mFilePickedSignal)(filenames, mLoadFilter, mSaveFilter);
+		}
 	}
 }
 
@@ -592,7 +609,6 @@ class LLFileTakeSnapshotToDisk : public view_listener_t
 									   gSavedSettings.getBOOL("RenderUIInSnapshot"),
 									   FALSE))
 		{
-			gViewerWindow->playSnapshotAnimAndSound();
 			LLPointer<LLImageFormatted> formatted;
             LLSnapshotModel::ESnapshotFormat fmt = (LLSnapshotModel::ESnapshotFormat) gSavedSettings.getS32("SnapshotFormat");
 			switch (fmt)
@@ -673,7 +689,8 @@ LLUUID upload_new_resource(
 	const std::string& display_name,
 	LLAssetStorage::LLStoreAssetCallback callback,
 	S32 expected_upload_cost,
-	void *userdata)
+	void *userdata,
+	bool show_inventory)
 {	
 
     LLResourceUploadInfo::ptr_t uploadInfo(new LLNewFileResourceUploadInfo(
@@ -681,7 +698,7 @@ LLUUID upload_new_resource(
         name, desc, compression_info,
         destination_folder_type, inv_type,
         next_owner_perms, group_perms, everyone_perms,
-        expected_upload_cost));
+        expected_upload_cost, show_inventory));
     upload_new_resource(uploadInfo, callback, userdata);
 
     return LLUUID::null;

@@ -49,6 +49,8 @@ public:
 	virtual BOOL handleRightMouseUp(LLWindow *window,  LLCoordGL pos, MASK mask);
 	virtual BOOL handleMiddleMouseDown(LLWindow *window,  LLCoordGL pos, MASK mask);
 	virtual BOOL handleMiddleMouseUp(LLWindow *window,  LLCoordGL pos, MASK mask);
+	virtual BOOL handleOtherMouseDown(LLWindow *window,  LLCoordGL pos, MASK mask, S32 button);
+	virtual BOOL handleOtherMouseUp(LLWindow *window,  LLCoordGL pos, MASK mask, S32 button);
 	virtual BOOL handleActivate(LLWindow *window, BOOL activated);
 	virtual BOOL handleActivateApp(LLWindow *window, BOOL activating);
 	virtual void handleMouseMove(LLWindow *window,  LLCoordGL pos, MASK mask);
@@ -66,6 +68,7 @@ public:
 	virtual BOOL handleTimerEvent(LLWindow *window);
 	virtual BOOL handleDeviceChange(LLWindow *window);
 	virtual BOOL handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height);
+	virtual BOOL handleWindowDidChangeScreen(LLWindow *window);
 
 	enum DragNDropAction {
 		DNDA_START_TRACKING = 0,// Start tracking an incoming drag

@@ -527,7 +527,7 @@ BOOL LLFloaterBvhPreview::handleHover(S32 x, S32 y, MASK mask)
 
 		mAnimPreview->requestUpdate();
 
-		LLUI::setMousePositionLocal(this, mLastMouseX, mLastMouseY);
+		LLUI::getInstance()->setMousePositionLocal(this, mLastMouseX, mLastMouseY);
 	}
 
 	if (!mPreviewRect.pointInRect(x, y) || !mAnimPreview)
@@ -1042,14 +1042,8 @@ LLPreviewAnimation::LLPreviewAnimation(S32 width, S32 height) : LLViewerDynamicT
 	mCameraPitch = 0.f;
 	mCameraZoom = 1.f;
 
-	mDummyAvatar = (LLVOAvatar*)gObjectList.createObjectViewer(LL_PCODE_LEGACY_AVATAR, gAgent.getRegion());
-	mDummyAvatar->createDrawable(&gPipeline);
-	mDummyAvatar->mIsDummy = TRUE;
+	mDummyAvatar = (LLVOAvatar*)gObjectList.createObjectViewer(LL_PCODE_LEGACY_AVATAR, gAgent.getRegion(), LLViewerObject::CO_FLAG_UI_AVATAR);
 	mDummyAvatar->mSpecialRenderMode = 1;
-	mDummyAvatar->setPositionAgent(LLVector3::zero);
-	mDummyAvatar->slamPosition();
-	mDummyAvatar->updateJointLODs();
-	mDummyAvatar->updateGeometry(mDummyAvatar->mDrawable);
 	mDummyAvatar->startMotion(ANIM_AGENT_STAND, BASE_ANIM_TIME_OFFSET);
 	mDummyAvatar->hideSkirt();
 

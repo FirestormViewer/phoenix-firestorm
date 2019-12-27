@@ -2141,6 +2141,7 @@ void LLGroupMgr::sendCapGroupMembersRequest(const LLUUID& group_id)
     static U32 lastGroupMemberRequestFrame = 0;
 
 	// Have we requested the information already this frame?
+    // Todo: make this per group, we can invite to one group and simultaneously be checking another one
     if ((lastGroupMemberRequestFrame == gFrameCount) || (mMemberRequestInFlight))
 		return;
 	
@@ -2169,6 +2170,9 @@ void LLGroupMgr::sendCapGroupMembersRequest(const LLUUID& group_id)
 		sendGroupMembersRequest(group_id);
 		return;
 	}
+
+    LLGroupMgrGroupData* group_datap = createGroupData(group_id); //make sure group exists
+    group_datap->mMemberRequestID.generate(); // mark as pending
 
     lastGroupMemberRequestFrame = gFrameCount;
 

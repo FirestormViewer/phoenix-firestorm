@@ -31,6 +31,7 @@
 #include "llui.h"
 #include "llprocess.h"
 #include "llsdutil.h"
+#include "llstring.h"
 #include <boost/foreach.hpp>
 
 // static
@@ -183,17 +184,17 @@ std::string LLExternalEditor::findCommand(
 		cmd = override;
 		LL_INFOS() << "Using override" << LL_ENDL;
 	}
-	else if (!LLUI::sSettingGroups["config"]->getString(sSetting).empty())
+	else if (!LLUI::getInstance()->mSettingGroups["config"]->getString(sSetting).empty())
 	{
-		cmd = LLUI::sSettingGroups["config"]->getString(sSetting);
+		cmd = LLUI::getInstance()->mSettingGroups["config"]->getString(sSetting);
 		LL_INFOS() << "Using setting" << LL_ENDL;
 	}
-	else					// otherwise use the path specified by the environment variable
+	else                    // otherwise use the path specified by the environment variable
 	{
-		char* env_var_val = getenv(env_var.c_str());
+		auto env_var_val(LLStringUtil::getoptenv(env_var));
 		if (env_var_val)
 		{
-			cmd = env_var_val;
+			cmd = *env_var_val;
 			LL_INFOS() << "Using env var " << env_var << LL_ENDL;
 		}
 	}

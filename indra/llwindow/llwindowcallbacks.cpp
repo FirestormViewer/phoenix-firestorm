@@ -98,6 +98,16 @@ BOOL LLWindowCallbacks::handleMiddleMouseUp(LLWindow *window, const LLCoordGL po
 	return FALSE;
 }
 
+BOOL LLWindowCallbacks::handleOtherMouseDown(LLWindow *window, const LLCoordGL pos, MASK mask, S32 button)
+{
+    return FALSE;
+}
+
+BOOL LLWindowCallbacks::handleOtherMouseUp(LLWindow *window, const LLCoordGL pos, MASK mask, S32 button)
+{
+    return FALSE;
+}
+
 BOOL LLWindowCallbacks::handleActivate(LLWindow *window, BOOL activated)
 {
 	return FALSE;
@@ -176,6 +186,11 @@ BOOL LLWindowCallbacks::handleDeviceChange(LLWindow *window)
 }
 
 BOOL LLWindowCallbacks::handleDPIChanged(LLWindow *window, F32 ui_scale_factor, S32 window_width, S32 window_height)
+{
+	return FALSE;
+}
+
+BOOL LLWindowCallbacks::handleWindowDidChangeScreen(LLWindow *window)
 {
 	return FALSE;
 }

@@ -34,9 +34,6 @@
 #include "lleconomy.h"
 #include "llfloaterperms.h"
 #include "llfloaterreg.h"
-#include "llfloaterfacebook.h"
-#include "llfloaterflickr.h"
-#include "llfloatertwitter.h"
 #include "llimagefilter.h"
 #include "llimagefiltersmanager.h"
 #include "llimagebmp.h"
@@ -70,6 +67,7 @@ S32 BORDER_WIDTH = 6;
 const S32 MAX_TEXTURE_SIZE = 512 ; //max upload texture size 512 * 512
 
 std::set<LLSnapshotLivePreview*> LLSnapshotLivePreview::sList;
+LLPointer<LLImageFormatted> LLSnapshotLivePreview::sSaveLocalImage = NULL;
 
 LLSnapshotLivePreview::LLSnapshotLivePreview (const LLSnapshotLivePreview::Params& p) 
 	:	LLView(p),
@@ -131,6 +129,7 @@ LLSnapshotLivePreview::~LLSnapshotLivePreview()
 
 	// 	gIdleCallbacks.deleteFunction( &LLSnapshotLivePreview::onIdle, (void*)this );
 	sList.erase(this);
+	sSaveLocalImage = NULL;
 }
 
 void LLSnapshotLivePreview::setMaxImageSize(S32 size) 
@@ -570,7 +569,7 @@ void LLSnapshotLivePreview::generateThumbnailImage(BOOL force_update)
     
     if (mThumbnailSubsampled)
     {
-        // The thumbnail is be a subsampled version of the preview (used in SL Share previews, i.e. Flickr, Twitter, Facebook)
+        // The thumbnail is be a subsampled version of the preview (used in SL Share previews, i.e. Flickr, Twitter)
 		raw->resize( mPreviewImage->getWidth(),
                      mPreviewImage->getHeight(),
                      mPreviewImage->getComponents());
@@ -636,7 +635,7 @@ LLViewerTexture* LLSnapshotLivePreview::getBigThumbnailImage()
     
 	if (raw)
 	{
-        // The big thumbnail is a new filtered version of the preview (used in SL Share previews, i.e. Flickr, Twitter, Facebook)
+        // The big thumbnail is a new filtered version of the preview (used in SL Share previews, i.e. Flickr, Twitter)
         mBigThumbnailWidth = mPreviewImage->getWidth();
         mBigThumbnailHeight = mPreviewImage->getHeight();
         raw->resize( mBigThumbnailWidth,
@@ -1048,7 +1047,7 @@ void LLSnapshotLivePreview::saveTexture(BOOL outfit_snapshot, std::string name)
             tid, LLAssetType::AT_TEXTURE, res_name, res_desc, 0,
             folder_type, inv_type,
             PERM_ALL, LLFloaterPerms::getGroupPerms("Uploads"), LLFloaterPerms::getEveryonePerms("Uploads"),
-            expected_upload_cost));
+            expected_upload_cost, !outfit_snapshot));
 
         upload_new_resource(assetUploadInfo);
 
@@ -1065,53 +1064,19 @@ void LLSnapshotLivePreview::saveTexture(BOOL outfit_snapshot, std::string name)
 	mDataSize = 0;
 }
 
-BOOL LLSnapshotLivePreview::saveLocal()
+void LLSnapshotLivePreview::saveLocal(const snapshot_saved_signal_t::slot_type& success_cb, const snapshot_saved_signal_t::slot_type& failure_cb)
 {
     // Update mFormattedImage if necessary
     getFormattedImage();
     
     // Save the formatted image
-	BOOL success = saveLocal(mFormattedImage);
-
-	if(success)
-	{
-		gViewerWindow->playSnapshotAnimAndSound();
-	}
-	return success;
+	saveLocal(mFormattedImage, success_cb, failure_cb);
 }
 
 //Check if failed due to insufficient memory
-BOOL LLSnapshotLivePreview::saveLocal(LLPointer<LLImageFormatted> mFormattedImage)
+void LLSnapshotLivePreview::saveLocal(LLPointer<LLImageFormatted> image, const snapshot_saved_signal_t::slot_type& success_cb, const snapshot_saved_signal_t::slot_type& failure_cb)
 {
-	BOOL insufficient_memory;
-	BOOL success = gViewerWindow->saveImageNumbered(mFormattedImage, FALSE, insufficient_memory);
+	sSaveLocalImage = image;
 
-	if (insufficient_memory)
-	{
-		std::string lastSnapshotDir = LLViewerWindow::getLastSnapshotDir();
-
-#ifdef LL_WINDOWS
-		boost::filesystem::path b_path(utf8str_to_utf16str(lastSnapshotDir));
-#else
-		boost::filesystem::path b_path(lastSnapshotDir);
-#endif
-		boost::filesystem::space_info b_space = boost::filesystem::space(b_path);
-		if (b_space.free < mFormattedImage->getDataSize())
-		{
-			LLSD args;
-			args["PATH"] = lastSnapshotDir;
-
-			std::string needM_bytes_string;
-			LLResMgr::getInstance()->getIntegerString(needM_bytes_string, (mFormattedImage->getDataSize()) >> 10);
-			args["NEED_MEMORY"] = needM_bytes_string;
-
-			std::string freeM_bytes_string;
-			LLResMgr::getInstance()->getIntegerString(freeM_bytes_string, (b_space.free) >> 10);
-			args["FREE_MEMORY"] = freeM_bytes_string;
-
-			LLNotificationsUtil::add("SnapshotToComputerFailed", args);
-			return false;
-		}
-	}
-	return success;
+	gViewerWindow->saveImageNumbered(sSaveLocalImage, FALSE, success_cb, failure_cb);
 }

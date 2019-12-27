@@ -24,6 +24,7 @@
  * $/LicenseInfo$
  */
 
+
 #include "llviewerprecompiledheaders.h"
 
 #include "llagent.h" 
@@ -773,7 +774,7 @@ BOOL LLAgent::getFlying() const
 //-----------------------------------------------------------------------------
 // setFlying()
 //-----------------------------------------------------------------------------
-void LLAgent::setFlying(BOOL fly)
+void LLAgent::setFlying(BOOL fly, BOOL fail_sound)
 {
 	if (isAgentAvatarValid())
 	{
@@ -809,7 +810,10 @@ void LLAgent::setFlying(BOOL fly)
 			// parcel doesn't let you start fly
 			// gods can always fly
 			// and it's OK if you're already flying
-			make_ui_sound("UISndBadKeystroke");
+			if (fail_sound)
+			{
+				make_ui_sound("UISndBadKeystroke");
+			}
 			return;
 		}
 		if( !was_flying )
@@ -926,6 +930,16 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
 			{
 				gSky.mVOGroundp->setRegion(regionp);
 			}
+
+            if (regionp->capabilitiesReceived())
+            {
+                regionp->requestSimulatorFeatures();
+            }
+            else
+            {
+                regionp->setCapabilitiesReceivedCallback(boost::bind(&LLViewerRegion::requestSimulatorFeatures, regionp));
+            }
+
 		}
 		else
 		{
@@ -3791,6 +3805,23 @@ BOOL LLAgent::getHomePosGlobal( LLVector3d* pos_global )
 	return TRUE;
 }
 
+bool LLAgent::isInHomeRegion()
+{
+	if(!mHaveHomePosition)
+	{
+		return false;
+	}
+	if (!getRegion())
+	{
+		return false;
+	}
+	if (getRegion()->getHandle() != mHomeRegionHandle)
+	{
+		return false;
+	}
+	return true;
+}
+
 void LLAgent::clearVisualParams(void *data)
 {
 	if (isAgentAvatarValid())
@@ -4313,6 +4344,7 @@ void LLAgent::setTeleportState(ETeleportState state)
             " for previously failed teleport.  Ignore!" << LL_ENDL;
         return;
     }
+    LL_DEBUGS("Teleport") << "Setting teleport state to " << state << " Previous state: " << mTeleportState << LL_ENDL;
 	mTeleportState = state;
 	if (mTeleportState > TELEPORT_NONE && gSavedSettings.getBOOL("FreezeTime"))
 	{

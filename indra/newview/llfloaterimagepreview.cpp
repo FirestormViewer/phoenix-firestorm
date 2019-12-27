@@ -503,7 +503,7 @@ BOOL LLFloaterImagePreview::handleHover(S32 x, S32 y, MASK mask)
 			mSculptedPreview->refresh();
 		}
 
-		LLUI::setMousePositionLocal(this, mLastMouseX, mLastMouseY);
+		LLUI::getInstance()->setMousePositionLocal(this, mLastMouseX, mLastMouseY);
 	}
 
 	if (!mPreviewRect.pointInRect(x, y) || !mAvatarPreview || !mSculptedPreview)
@@ -566,15 +566,8 @@ LLImagePreviewAvatar::LLImagePreviewAvatar(S32 width, S32 height) : LLViewerDyna
 	mCameraPitch = 0.f;
 	mCameraZoom = 1.f;
 
-	mDummyAvatar = (LLVOAvatar*)gObjectList.createObjectViewer(LL_PCODE_LEGACY_AVATAR, gAgent.getRegion());
-	mDummyAvatar->createDrawable(&gPipeline);
-	mDummyAvatar->mIsDummy = TRUE;
+	mDummyAvatar = (LLVOAvatar*)gObjectList.createObjectViewer(LL_PCODE_LEGACY_AVATAR, gAgent.getRegion(), LLViewerObject::CO_FLAG_UI_AVATAR);
 	mDummyAvatar->mSpecialRenderMode = 2;
-	mDummyAvatar->setPositionAgent(LLVector3::zero);
-	mDummyAvatar->slamPosition();
-	mDummyAvatar->updateJointLODs();
-	mDummyAvatar->updateGeometry(mDummyAvatar->mDrawable);
-	// gPipeline.markVisible(mDummyAvatar->mDrawable, *LLViewerCamera::getInstance());
 
 	mTextureName = 0;
 }

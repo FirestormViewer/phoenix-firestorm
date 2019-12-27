@@ -66,6 +66,11 @@ enum InventoryOfferResponse
 BOOL can_afford_transaction(S32 cost);
 void give_money(const LLUUID& uuid, LLViewerRegion* region, S32 amount, BOOL is_group = FALSE,
 				S32 trx_type = TRANS_GIFT, const std::string& desc = LLStringUtil::null);
+void send_join_group_response(LLUUID group_id,
+							  LLUUID transaction_id,
+							  bool accept_invite,
+							  S32 fee,
+							  bool use_offline_cap);
 
 void process_logout_reply(LLMessageSystem* msg, void**);
 void process_layer_data(LLMessageSystem *mesgsys, void **user_data);
@@ -95,6 +100,7 @@ void process_health_message(LLMessageSystem *mesgsys, void **user_data);
 void process_sim_stats(LLMessageSystem *mesgsys, void **user_data);
 void process_shooter_agent_hit(LLMessageSystem* msg, void** user_data);
 void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data);
+void process_object_animation(LLMessageSystem *mesgsys, void **user_data);
 void process_avatar_appearance(LLMessageSystem *mesgsys, void **user_data);
 void process_camera_constraint(LLMessageSystem *mesgsys, void **user_data);
 void process_avatar_sit_response(LLMessageSystem *mesgsys, void **user_data);
@@ -248,7 +254,7 @@ public:
 	/*virtual*/ void fromLLSD(const LLSD& params);
 	/*virtual*/ void handleRespond(const LLSD& notification, const LLSD& response);
 
-	void send_auto_receive_response(void);
+	void send_auto_receive_response() { sendReceiveResponse(true, mFolderID); }
 
 	// TODO - replace all references with handleRespond()
 	bool inventory_offer_callback(const LLSD& notification, const LLSD& response);
@@ -257,6 +263,8 @@ public:
 private:
 
 	void initRespondFunctionMap();
+	std::string getSanitizedDescription();
+	void sendReceiveResponse(bool accept, const LLUUID &destination_folder_id);
 
 	typedef boost::function<bool (const LLSD&, const LLSD&)> respond_function_t;
 	typedef std::map<std::string, respond_function_t> respond_function_map_t;

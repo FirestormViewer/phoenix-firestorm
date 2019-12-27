@@ -12,6 +12,10 @@
     name="forgot_password_url">
     http://secondlife.com/account/request.php
   </panel.string>
+  <panel.string
+    name="sign_up_url">
+    https://join.secondlife.com/
+  </panel.string>
   <layout_stack
     follows="left|right|top|bottom"
     width="1024"
@@ -107,7 +111,6 @@
             combo_editor.font="SansSerifLarge"
             max_chars="128"
             top="0"
-            commit_on_focus_lost="false"
             combo_editor.prevalidate_callback="ascii"
             tool_tip="The username you chose when you registered, like bobsmith12 or Steller Sunshine"
             name="username_combo"
@@ -137,7 +140,7 @@
             follows="left|top"
             image_unselected="PushButton_Login"
             image_pressed="PushButton_Login_Pressed"
-            image_hover="PushButton_Login_Over"
+            image_hover_unselected="PushButton_Login_Over"
             label="Log In"
             label_color="White"
             font="SansSerifLarge"
@@ -167,6 +170,17 @@
             top="34"
             width="200">
             Forgotten password
+          </text>
+          <text
+            follows="left|top"
+            font="SansSerifLarge"
+            text_color="EmphasisColor"
+            height="16"
+            name="sign_up_text"
+            left="432"
+            top="34"
+            width="200">
+            Sign up
           </text>
         </layout_panel>
         <layout_panel

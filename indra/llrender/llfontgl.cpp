@@ -40,9 +40,16 @@
 #include "v4color.h"
 #include "lltexture.h"
 #include "lldir.h"
+#include "llstring.h"
 
 // Third party library includes
 #include <boost/tokenizer.hpp>
+
+#if LL_WINDOWS
+#include <Shlobj.h>
+#include <Knownfolders.h>
+#include <Objbase.h>
+#endif // LL_WINDOWS
 
 const S32 BOLD_OFFSET = 1;
 
@@ -82,14 +89,24 @@ void LLFontGL::destroyGL()
 	mFontFreetype->destroyGL();
 }
 
-BOOL LLFontGL::loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 components, BOOL is_fallback)
+BOOL LLFontGL::loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 components, BOOL is_fallback, S32 face_n)
 {
 	if(mFontFreetype == reinterpret_cast<LLFontFreetype*>(NULL))
 	{
 		mFontFreetype = new LLFontFreetype;
 	}
 
-	return mFontFreetype->loadFace(filename, point_size, vert_dpi, horz_dpi, components, is_fallback);
+	return mFontFreetype->loadFace(filename, point_size, vert_dpi, horz_dpi, components, is_fallback, face_n);
+}
+
+S32 LLFontGL::getNumFaces(const std::string& filename)
+{
+	if (mFontFreetype == reinterpret_cast<LLFontFreetype*>(NULL))
+	{
+		mFontFreetype = new LLFontFreetype;
+	}
+
+	return mFontFreetype->getNumFaces(filename);
 }
 
 static LLTrace::BlockTimerStatHandle FTM_RENDER_FONTS("Fonts");
@@ -853,10 +870,6 @@ void LLFontGL::destroyAllGL()
 U8 LLFontGL::getStyleFromString(const std::string &style)
 {
 	S32 ret = 0;
-	if (style.find("NORMAL") != style.npos)
-	{
-		ret |= NORMAL;
-	}
 	if (style.find("BOLD") != style.npos)
 	{
 		ret |= BOLD;
@@ -876,7 +889,7 @@ U8 LLFontGL::getStyleFromString(const std::string &style)
 std::string LLFontGL::getStringFromStyle(U8 style)
 {
 	std::string style_string;
-	if (style & NORMAL)
+	if (style == NORMAL)
 	{
 		style_string += "|NORMAL";
 	}
@@ -1063,33 +1076,33 @@ LLFontGL* LLFontGL::getFontDefault()
 // static 
 std::string LLFontGL::getFontPathSystem()
 {
-	std::string system_path;
+#if LL_DARWIN
+    // HACK for Mac OS X
+    return "/System/Library/Fonts/";
 
-	// Try to figure out where the system's font files are stored.
-	char *system_root = NULL;
-#if LL_WINDOWS
-	system_root = getenv("SystemRoot");	/* Flawfinder: ignore */
-	if (!system_root)
-	{
-		LL_WARNS() << "SystemRoot not found, attempting to load fonts from default path." << LL_ENDL;
-	}
+#elif LL_WINDOWS
+    auto system_root = LLStringUtil::getenv("SystemRoot");
+    if (! system_root.empty())
+    {
+        std::string fontpath(gDirUtilp->add(system_root, "fonts") + gDirUtilp->getDirDelimiter());
+        LL_INFOS() << "from SystemRoot: " << fontpath << LL_ENDL;
+        return fontpath;
+    }
+
+    wchar_t *pwstr = NULL;
+    HRESULT okay = SHGetKnownFolderPath(FOLDERID_Fonts, 0, NULL, &pwstr);
+    if (SUCCEEDED(okay) && pwstr)
+    {
+        std::string fontpath(ll_convert_wide_to_string(pwstr));
+        // SHGetKnownFolderPath() contract requires us to free pwstr
+        CoTaskMemFree(pwstr);
+        LL_INFOS() << "from SHGetKnownFolderPath(): " << fontpath << LL_ENDL;
+        return fontpath;
+    }
 #endif
 
-	if (system_root)
-	{
-		system_path = llformat("%s/fonts/", system_root);
-	}
-	else
-	{
-#if LL_WINDOWS
-		// HACK for windows 98/Me
-		system_path = "/WINDOWS/FONTS/";
-#elif LL_DARWIN
-		// HACK for Mac OS X
-		system_path = "/System/Library/Fonts/";
-#endif
-	}
-	return system_path;
+    LL_WARNS() << "Could not determine system fonts path" << LL_ENDL;
+    return {};
 }
 
 

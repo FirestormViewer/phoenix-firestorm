@@ -267,7 +267,7 @@ LLToolDragAndDrop::LLDragAndDropDictionary::LLDragAndDropDictionary()
 	addEntry(DAD_CLOTHING, 		new DragAndDropEntry(&LLToolDragAndDrop::dad3dNULL, &LLToolDragAndDrop::dad3dWearItem, 				&LLToolDragAndDrop::dad3dGiveInventory, 		&LLToolDragAndDrop::dad3dUpdateInventory, 			&LLToolDragAndDrop::dad3dNULL));
 	addEntry(DAD_OBJECT, 		new DragAndDropEntry(&LLToolDragAndDrop::dad3dNULL, &LLToolDragAndDrop::dad3dRezAttachmentFromInv,	&LLToolDragAndDrop::dad3dGiveInventoryObject,	&LLToolDragAndDrop::dad3dRezObjectOnObject, 		&LLToolDragAndDrop::dad3dRezObjectOnLand));
 	addEntry(DAD_NOTECARD, 		new DragAndDropEntry(&LLToolDragAndDrop::dad3dNULL, &LLToolDragAndDrop::dad3dNULL, 					&LLToolDragAndDrop::dad3dGiveInventory, 		&LLToolDragAndDrop::dad3dUpdateInventory, 			&LLToolDragAndDrop::dad3dNULL));
-	addEntry(DAD_CATEGORY, 		new DragAndDropEntry(&LLToolDragAndDrop::dad3dNULL, &LLToolDragAndDrop::dad3dWearCategory,			&LLToolDragAndDrop::dad3dGiveInventoryCategory,	&LLToolDragAndDrop::dad3dUpdateInventoryCategory,	&LLToolDragAndDrop::dad3dNULL));
+	addEntry(DAD_CATEGORY,		new DragAndDropEntry(&LLToolDragAndDrop::dad3dNULL, &LLToolDragAndDrop::dad3dWearCategory,			&LLToolDragAndDrop::dad3dGiveInventoryCategory,	&LLToolDragAndDrop::dad3dRezCategoryOnObject,		&LLToolDragAndDrop::dad3dNULL));
 	addEntry(DAD_ROOT_CATEGORY, new DragAndDropEntry(&LLToolDragAndDrop::dad3dNULL,	&LLToolDragAndDrop::dad3dNULL,					&LLToolDragAndDrop::dad3dNULL,					&LLToolDragAndDrop::dad3dNULL,						&LLToolDragAndDrop::dad3dNULL));
 	addEntry(DAD_BODYPART, 		new DragAndDropEntry(&LLToolDragAndDrop::dad3dNULL,	&LLToolDragAndDrop::dad3dWearItem,				&LLToolDragAndDrop::dad3dGiveInventory,			&LLToolDragAndDrop::dad3dUpdateInventory,			&LLToolDragAndDrop::dad3dNULL));
 	addEntry(DAD_ANIMATION, 	new DragAndDropEntry(&LLToolDragAndDrop::dad3dNULL,	&LLToolDragAndDrop::dad3dNULL,					&LLToolDragAndDrop::dad3dGiveInventory,			&LLToolDragAndDrop::dad3dUpdateInventory,			&LLToolDragAndDrop::dad3dNULL));
@@ -789,7 +789,7 @@ void LLToolDragAndDrop::dragOrDrop3D( S32 x, S32 y, MASK mask, BOOL drop, EAccep
 	mDrop = drop;
 	if (mDrop)
 	{
-		// don't allow drag and drop onto transparent objects
+		// don't allow drag and drop onto rigged or transparent objects
 		pick(gViewerWindow->pickImmediate(x, y, FALSE, FALSE));
 	}
 	else
@@ -2410,6 +2410,21 @@ EAcceptance LLToolDragAndDrop::dad3dUpdateInventoryCategory(
 	}
 	return rv;
 }
+
+
+EAcceptance LLToolDragAndDrop::dad3dRezCategoryOnObject(
+	LLViewerObject* obj, S32 face, MASK mask, BOOL drop)
+{
+	if ((mask & MASK_CONTROL))
+	{
+		return dad3dUpdateInventoryCategory(obj, face, mask, drop);
+	}
+	else
+	{
+		return ACCEPT_NO;
+	}
+}
+
 
 BOOL LLToolDragAndDrop::dadUpdateInventoryCategory(LLViewerObject* obj,
 												   BOOL drop)

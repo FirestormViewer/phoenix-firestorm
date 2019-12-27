@@ -65,16 +65,19 @@ Grafik Kartı: [GRAPHICS_CARD]
 		OpenGL Sürümü: [OPENGL_VERSION]
 	</string>
 	<string name="AboutSettings">
-		Pencere büyüklüğü: [WINDOW_WIDTH]x[WINDOW_HEIGHT]
-Font Büyüklüğü Ayarı: [FONT_SIZE_ADJUSTMENT] pt
-Kullanıcı Arayüzü Ölçekleme: [UI_SCALE]
-Çizme mesafesi: [DRAW_DISTANCE] m
-Bant genişliği: [NET_BANDWITH] kbit/sn
-Ayrıntı seviyesi faktörü: [LOD_FACTOR]
-İşleme kalitesi: [RENDER_QUALITY] / 7
+		Pencere boyutu: [WINDOW_WIDTH]x[WINDOW_HEIGHT]
+Yazı Tipi Boyutu Ayarı: [FONT_SIZE_ADJUSTMENT]pt
+UI Ölçeklendirme: [UI_SCALE]
+Çizim mesafesi: [DRAW_DISTANCE]m
+Bant genişliği: [NET_BANDWITH]kbit/s
+LOD faktörü: [LOD_FACTOR]
+İşleme kalitesi: [RENDER_QUALITY]
 Gelişmiş Aydınlatma Modeli: [GPU_SHADERS]
 Doku belleği: [TEXTURE_MEMORY]MB
-VFS (önbellek) oluşturma zamanı: [VFS_TIME]
+VFS (önbellek) oluşturma saati: [VFS_TIME]
+	</string>
+	<string name="AboutOSXHiDPI">
+		HiDPI görüntü modu: [HIDPI]
 	</string>
 	<string name="AboutLibs">
 		J2C Kod Çözücü Sürümü: [J2C_VERSION] 
@@ -1475,6 +1478,15 @@ http://secondlife.com/support adresini ziyaret edin.
 	<string name="MarketplaceURL_LearnMore">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
 	</string>
+	<string name="InventoryPlayAnimationTooltip">
+		Pencereyi Oyun seçenekleri ile birlikte açın.
+	</string>
+	<string name="InventoryPlayGestureTooltip">
+		Seçilen mimiği SL dünyasında uygulayın.
+	</string>
+	<string name="InventoryPlaySoundTooltip">
+		Pencereyi Oyun seçenekleri ile birlikte açın.
+	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		Pazaryerinde herkes öğe satabilir.
 	</string>
@@ -2226,6 +2238,18 @@ Bu mesaj size gelmeye devam ederse lütfen http://support.secondlife.com adresin
 	<string name="RegionInfoListTypeBannedAgents">
 		Her zaman engellenen
 	</string>
+	<string name="RegionInfoAllEstates">
+		tüm gayrimenkuller
+	</string>
+	<string name="RegionInfoManagedEstates">
+		yönetilen gayrimenkuller
+	</string>
+	<string name="RegionInfoThisEstate">
+		bu gayrimenkul
+	</string>
+	<string name="AndNMore">
+		ve [EXTRA_COUNT] tane daha
+	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		Parsel Komut Dosyası Belleği
 	</string>
@@ -2269,7 +2293,7 @@ Bu mesaj size gelmeye devam ederse lütfen http://support.secondlife.com adresin
 		Göğüs
 	</string>
 	<string name="ATTACH_HEAD">
-		Baş
+		Kafatası
 	</string>
 	<string name="ATTACH_LSHOULDER">
 		Sol Omuz
@@ -2290,7 +2314,7 @@ Bu mesaj size gelmeye devam ederse lütfen http://support.secondlife.com adresin
 		Sağ Ayak
 	</string>
 	<string name="ATTACH_BACK">
-		Geri
+		Omurga
 	</string>
 	<string name="ATTACH_PELVIS">
 		Leğen Kemiği
@@ -2320,13 +2344,13 @@ Bu mesaj size gelmeye devam ederse lütfen http://support.secondlife.com adresin
 		Sol Üst Kol
 	</string>
 	<string name="ATTACH_RLARM">
-		Sağ Alt Kol
+		Sağ Ön Kol
 	</string>
 	<string name="ATTACH_LUARM">
 		Sol Üst Kol
 	</string>
 	<string name="ATTACH_LLARM">
-		Sol Alt Kol
+		Sol Ön Kol
 	</string>
 	<string name="ATTACH_RHIP">
 		Sağ Kalça
@@ -2347,7 +2371,7 @@ Bu mesaj size gelmeye devam ederse lütfen http://support.secondlife.com adresin
 		Sol Alt Bacak
 	</string>
 	<string name="ATTACH_BELLY">
-		Göbek
+		Karın
 	</string>
 	<string name="ATTACH_LEFT_PEC">
 		Sol Göğüs
@@ -5394,9 +5418,6 @@ Düzenleyici yolunu çift tırnakla çevrelemeyi deneyin.
 	<string name="Command_Destinations_Label">
 		Hedef Konum
 	</string>
-	<string name="Command_Facebook_Label">
-		Facebook
-	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
 	</string>
@@ -5489,9 +5510,6 @@ Düzenleyici yolunu çift tırnakla çevrelemeyi deneyin.
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		İlgilendiğiniz hedef konumlar
-	</string>
-	<string name="Command_Facebook_Tooltip">
-		Facebook&apos;ta Yayınla
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Flickr&apos;a yükle
@@ -5747,5 +5765,26 @@ Düzenleyici yolunu çift tırnakla çevrelemeyi deneyin.
 	</string>
 	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
 		Fiziksel şekil doğru sürüme sahip değil. Fiziksel model için doğru sürümü ayarlayın.
+	</string>
+	<string name="couldnt_resolve_host">
+		DNS sunucusu ana bilgisayar adını çözümleyemedi ([HOSTNAME]). 
+Lütfen www.secondlife.com web sitesine bağlanabildiğinizi doğrulayın. 
+Bağlanabiliyor, ancak bu hatayı almaya devam ediyorsanız, lütfen 
+destek bölümüne gidin ve bu sorunu bildirin.
+	</string>
+	<string name="ssl_peer_certificate">
+		Oturum açma sunucusu SSL aracılığıyla kendini doğrulayamadı. 
+Bu hatayı almaya devam ederseniz, lütfen 
+SecondLife.com web sitesinin Destek 
+bölümüne gidin ve sorunu bildirin.
+	</string>
+	<string name="ssl_connect_error">
+		Çoğunlukla, bu durum, bilgisayarınızın saatinin yanlış ayarlandığı anlamına gelir. 
+Lütfen Denetim Masası&apos;na gidin ve tarih ve saat ayarlarının doğru yapıldığından emin olun. 
+Ayrıca, ağınızın ve güvenlik duvarınızın doğru şekilde ayarlanıp ayarlanmadığını kontrol edin. 
+Bu hatayı almaya devam ederseniz, lütfen SecondLife.com web sitesinin Destek bölümüne 
+gidin ve sorunu bildirin. 
+
+[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 Bilgi Bankası]
 	</string>
 </strings>

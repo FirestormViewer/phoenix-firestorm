@@ -34,11 +34,9 @@
  *
  */
 
-
 #include "linden_common.h"
 #include "llerrorcontrol.h"
 #include "lltut.h"
-#include "tests/wrapllerrs.h"             // RecorderProxy
 #include "stringize.h"
 #include "namedtempfile.h"
 #include "lltrace.h"
@@ -255,7 +253,7 @@ public:
 				break;
 			case tut::test_result::ex:
 				++mFailedTests;
-				out << "exception";
+				out << "exception: " << tr.exception_typeid;
 				break;
 			case tut::test_result::warn:
 				++mFailedTests;
@@ -266,7 +264,7 @@ public:
 				out << "abnormal termination";
 				break;
 			case tut::test_result::skip:
-				++mSkippedTests;			
+				++mSkippedTests;
 				out << "skipped known failure";
 				break;
 			default:
@@ -535,7 +533,6 @@ int main(int argc, char **argv)
 		LLError::setDefaultLevel(LLError::LEVEL_DEBUG);
 	}	
 	LLError::setFatalFunction(wouldHaveCrashed);
-	LLError::setPrintLocation(true);
 	std::string test_app_name(argv[0]);
 	std::string test_log = test_app_name + ".log";
 	LLFile::remove(test_log);
@@ -685,5 +682,4 @@ int main(int argc, char **argv)
 	return retval;
 
 	//delete mycallback;
-
 }

@@ -71,10 +71,13 @@
 描繪距離：[DRAW_DISTANCE]公尺
 頻寬：[NET_BANDWITH]千位元/秒
 細節層次率：[LOD_FACTOR]
-呈像品質：[RENDER_QUALITY] / 7
+呈像品質：[RENDER_QUALITY]
 進階照明模型：[GPU_SHADERS]
 材質記憶體：[TEXTURE_MEMORY]MB
 VFS（快取）建立時間：[VFS_TIME]
+	</string>
+	<string name="AboutOSXHiDPI">
+		HiDPI顯示模式：[HIDPI]
 	</string>
 	<string name="AboutLibs">
 		J2C 解碼器版本： [J2C_VERSION]
@@ -1471,6 +1474,15 @@ http://secondlife.com/support 求助解決問題。
 	<string name="MarketplaceURL_LearnMore">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
 	</string>
+	<string name="InventoryPlayAnimationTooltip">
+		開啟「Play選項」視窗。
+	</string>
+	<string name="InventoryPlayGestureTooltip">
+		在虛擬世界裡執行所選姿勢。
+	</string>
+	<string name="InventoryPlaySoundTooltip">
+		開啟「Play選項」視窗。
+	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		任何人都可在第二人生購物市集出售物品。
 	</string>
@@ -2222,6 +2234,18 @@ http://secondlife.com/support 求助解決問題。
 	<string name="RegionInfoListTypeBannedAgents">
 		永遠封鎖
 	</string>
+	<string name="RegionInfoAllEstates">
+		全部領地
+	</string>
+	<string name="RegionInfoManagedEstates">
+		受管領地
+	</string>
+	<string name="RegionInfoThisEstate">
+		這個領地
+	</string>
+	<string name="AndNMore">
+		及其他[EXTRA_COUNT]個
+	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		地段腳本記憶體
 	</string>
@@ -2265,7 +2289,7 @@ http://secondlife.com/support 求助解決問題。
 		胸部
 	</string>
 	<string name="ATTACH_HEAD">
-		頭部
+		頭顱
 	</string>
 	<string name="ATTACH_LSHOULDER">
 		左肩
@@ -2286,7 +2310,7 @@ http://secondlife.com/support 求助解決問題。
 		右腳
 	</string>
 	<string name="ATTACH_BACK">
-		背部
+		脊椎
 	</string>
 	<string name="ATTACH_PELVIS">
 		骨盆
@@ -5392,9 +5416,6 @@ http://secondlife.com/support 求助解決問題。
 	<string name="Command_Destinations_Label">
 		目的地
 	</string>
-	<string name="Command_Facebook_Label">
-		臉書
-	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
 	</string>
@@ -5487,9 +5508,6 @@ http://secondlife.com/support 求助解決問題。
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		你可能感興趣的目的地
-	</string>
-	<string name="Command_Facebook_Tooltip">
-		發佈到臉書
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		上傳到 Flickr
@@ -5745,5 +5763,26 @@ http://secondlife.com/support 求助解決問題。
 	</string>
 	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
 		物理形狀的版本不正確。 請設成正確的物理模型版本。
+	</string>
+	<string name="couldnt_resolve_host">
+		DNS無法解決主機名稱（[HOSTNAME]）。
+請確認你能夠連通 www.secondlife.com
+網站。  如能連通，但繼續看到這個錯誤，
+請到「支援」部分通報問題。
+	</string>
+	<string name="ssl_peer_certificate">
+		登入伺服器無法透過SSL自我確認。
+如果你繼續看到這個錯誤，請前往
+SecondLife.com網站的「支援」部分
+提報問題。
+	</string>
+	<string name="ssl_connect_error">
+		這通常意味你電腦的時鐘設定不正確。
+請到控制台確定時間和日期設定正確。
+並檢查確定你的網路和防火牆設定正確。
+如果你繼續看到這個錯誤，請前往SecondLife.com
+網站的「支援」部分提報問題。
+
+[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 知識庫]
 	</string>
 </strings>

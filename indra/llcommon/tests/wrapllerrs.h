@@ -37,6 +37,7 @@
 #include "llerrorcontrol.h"
 #include "llexception.h"
 #include "stringize.h"
+#include "../test/catch_and_store_what_in.h"
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
@@ -81,6 +82,31 @@ struct WrapLLErrs
         LLTHROW(FatalException(message));
     }
 
+    /// Convenience wrapper for catch_what<FatalException>()
+    //
+    // The implementation makes it clear that this function need not be a
+    // member; it could easily be a free function. It is a member because it
+    // makes no sense to attempt to catch FatalException unless there is a
+    // WrapLLErrs instance in scope. Without a live WrapLLErrs instance, any
+    // LL_ERRS() reached by code within 'func' would terminate the test
+    // program instead of throwing FatalException.
+    //
+    // We were tempted to introduce a free function, likewise accepting
+    // arbitrary 'func', that would instantiate WrapLLErrs and then call
+    // catch_llerrs() on that instance. We decided against it, for this
+    // reason: on extending a test function containing a single call to that
+    // free function, a maintainer would most likely make additional calls to
+    // that free function, instead of switching to an explicit WrapLLErrs
+    // declaration with several calls to its catch_llerrs() member function.
+    // Even a construct such as WrapLLErrs().catch_llerrs(...) would make the
+    // object declaration more visible; it's not unreasonable to expect a
+    // maintainer to extend that by naming and reusing the WrapLLErrs instance.
+    template <typename FUNC>
+    std::string catch_llerrs(FUNC func)
+    {
+        return catch_what<FatalException>(func);
+    }
+
     std::string error;
     LLError::SettingsStoragePtr mPriorErrorSettings;
     LLError::FatalFunction mPriorFatal;
@@ -109,6 +135,12 @@ public:
         mMessages.push_back(message);
     }
 
+    friend inline
+    std::ostream& operator<<(std::ostream& out, const CaptureLogRecorder& log)
+    {
+        return log.streamto(out);
+    }
+
     /// Don't assume the message we want is necessarily the LAST log message
     /// emitted by the underlying code; search backwards through all messages
     /// for the sought string.
@@ -126,7 +158,7 @@ public:
 
         throw tut::failure(STRINGIZE("failed to find '" << search
                                      << "' in captured log messages:\n"
-                                     << boost::ref(*this)));
+                                     << *this));
     }
 
     std::ostream& streamto(std::ostream& out) const
@@ -199,11 +231,5 @@ private:
     LLError::SettingsStoragePtr mOldSettings;
 	LLError::RecorderPtr mRecorder;
 };
-
-inline
-std::ostream& operator<<(std::ostream& out, const CaptureLogRecorder& log)
-{
-    return log.streamto(out);
-}
 
 #endif /* ! defined(LL_WRAPLLERRS_H) */

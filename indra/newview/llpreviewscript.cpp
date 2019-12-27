@@ -41,7 +41,6 @@
 #include "llinventorymodel.h"
 #include "llkeyboard.h"
 #include "lllineeditor.h"
-#include "lllivefile.h"
 #include "llhelp.h"
 #include "llnotificationsutil.h"
 #include "llresmgr.h"
@@ -124,22 +123,6 @@ static bool have_script_upload_cap(LLUUID& object_id)
 /// ---------------------------------------------------------------------------
 /// LLLiveLSLFile
 /// ---------------------------------------------------------------------------
-class LLLiveLSLFile : public LLLiveFile
-{
-public:
-	typedef boost::function<bool (const std::string& filename)> change_callback_t;
-
-	LLLiveLSLFile(std::string file_path, change_callback_t change_cb);
-	~LLLiveLSLFile();
-
-	void ignoreNextUpdate() { mIgnoreNextUpdate = true; }
-
-protected:
-	/*virtual*/ bool loadFile();
-
-	change_callback_t	mOnChangeCallback;
-	bool				mIgnoreNextUpdate;
-};
 
 LLLiveLSLFile::LLLiveLSLFile(std::string file_path, change_callback_t change_cb)
 :	mOnChangeCallback(change_cb)
@@ -906,7 +889,7 @@ bool LLScriptEdCore::handleSaveChangesDialog(const LLSD& notification, const LLS
 
 void LLScriptEdCore::onBtnHelp()
 {
-	LLUI::sHelpImpl->showTopic(HELP_LSL_PORTAL_TOPIC);
+	LLUI::getInstance()->mHelpImpl->showTopic(HELP_LSL_PORTAL_TOPIC);
 }
 
 void LLScriptEdCore::onBtnDynamicHelp()
@@ -1073,7 +1056,7 @@ void LLScriptEdCore::openInExternalEditor()
 		{
 			if (status == LLExternalEditor::EC_NOT_SPECIFIED) // Use custom message for this error.
 			{
-				msg = getString("external_editor_not_set");
+				msg = LLTrans::getString("ExternalEditorNotSet");
 			}
 			else
 			{
@@ -1745,14 +1728,22 @@ void LLPreviewLSL::onLoadComplete( LLVFS *vfs, const LLUUID& asset_uuid, LLAsset
 			buffer[file_length] = 0;
 			preview->mScriptEd->setScriptText(LLStringExplicit(&buffer[0]), TRUE);
 			preview->mScriptEd->mEditor->makePristine();
+
+			std::string script_name = DEFAULT_SCRIPT_NAME;
 			LLInventoryItem* item = gInventory.getItem(*item_uuid);
 			BOOL is_modifiable = FALSE;
-			if(item
-			   && gAgent.allowOperation(PERM_MODIFY, item->getPermissions(),
-				   					GP_OBJECT_MANIPULATE))
+			if (item)
 			{
-				is_modifiable = TRUE;		
+				if (!item->getName().empty())
+				{
+					script_name = item->getName();
+				}
+				if (gAgent.allowOperation(PERM_MODIFY, item->getPermissions(), GP_OBJECT_MANIPULATE))
+				{
+					is_modifiable = TRUE;
+				}
 			}
+			preview->mScriptEd->setScriptName(script_name);
 			preview->mScriptEd->setEnableEditing(is_modifiable);
 			preview->mAssetStatus = PREVIEW_ASSET_LOADED;
 		}

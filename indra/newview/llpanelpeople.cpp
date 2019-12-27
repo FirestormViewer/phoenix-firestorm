@@ -54,7 +54,6 @@
 #include "llcallingcard.h"			// for LLAvatarTracker
 #include "llcallbacklist.h"
 #include "llerror.h"
-#include "llfacebookconnect.h"
 #include "llfloateravatarpicker.h"
 #include "llfriendcard.h"
 #include "llgroupactions.h"
@@ -67,6 +66,7 @@
 #include "llrecentpeople.h"
 #include "llviewercontrol.h"		// for gSavedSettings
 #include "llviewermenu.h"			// for gMenuHolder
+#include "llviewerregion.h"
 #include "llvoiceclient.h"
 #include "llworld.h"
 #include "llspeakers.h"
@@ -217,10 +217,39 @@ protected:
 	}
 };
 
+class LLAvatarItemRecentArrivalComparator : public  LLAvatarItemNameComparator
+{
+public:
+	LLAvatarItemRecentArrivalComparator() {};
+	virtual ~LLAvatarItemRecentArrivalComparator() {};
+
+protected:
+	virtual bool doCompare(const LLAvatarListItem* item1, const LLAvatarListItem* item2) const
+	{
+
+		F32 arr_time1 = LLRecentPeople::instance().getArrivalTimeByID(item1->getAvatarId());
+		F32 arr_time2 = LLRecentPeople::instance().getArrivalTimeByID(item2->getAvatarId());
+
+		if (arr_time1 == arr_time2)
+		{
+			std::string name1 = item1->getAvatarName();
+			std::string name2 = item2->getAvatarName();
+
+			LLStringUtil::toUpper(name1);
+			LLStringUtil::toUpper(name2);
+
+			return name1 < name2;
+		}
+
+		return arr_time1 > arr_time2;
+	}
+};
+
 static const LLAvatarItemRecentComparator RECENT_COMPARATOR;
 static const LLAvatarItemStatusComparator STATUS_COMPARATOR;
 static LLAvatarItemDistanceComparator DISTANCE_COMPARATOR;
 static const LLAvatarItemRecentSpeakerComparator RECENT_SPEAKER_COMPARATOR;
+static LLAvatarItemRecentArrivalComparator RECENT_ARRIVAL_COMPARATOR;
 
 static LLPanelInjector<LLPanelPeople> t_people("panel_people");
 
@@ -511,7 +540,6 @@ public:
 
 LLPanelPeople::LLPanelPeople()
 	:	LLPanel(),
-		mTryToConnectToFacebook(true),
 		mTabContainer(NULL),
 		mOnlineFriendList(NULL),
 		mAllFriendList(NULL),
@@ -543,6 +571,8 @@ LLPanelPeople::LLPanelPeople()
 	mEnableCallbackRegistrar.add("People.Nearby.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onNearbyViewSortMenuItemCheck,	this, _2));
 
 	mEnableCallbackRegistrar.add("People.Group.Plus.Validate",	boost::bind(&LLPanelPeople::onGroupPlusButtonValidate,	this));
+
+	doPeriodically(boost::bind(&LLPanelPeople::updateNearbyArrivalTime, this), 2.0);
 }
 
 LLPanelPeople::~LLPanelPeople()
@@ -586,12 +616,23 @@ void LLPanelPeople::removePicker()
 
 BOOL LLPanelPeople::postBuild()
 {
+	S32 max_premium = PREMIUM_MAX_AGENT_GROUPS; 
+	if (gAgent.getRegion())
+	{
+		LLSD features;
+		gAgent.getRegion()->getSimulatorFeatures(features);
+		if (features.has("MaxAgentGroupsPremium"))
+		{
+			max_premium = features["MaxAgentGroupsPremium"].asInteger();
+		}
+	}
+
 	getChild<LLFilterEditor>("nearby_filter_input")->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
 	getChild<LLFilterEditor>("friends_filter_input")->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
 	getChild<LLFilterEditor>("groups_filter_input")->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
 	getChild<LLFilterEditor>("recent_filter_input")->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
 
-	if(gMaxAgentGroups <= BASE_MAX_AGENT_GROUPS)
+	if(gMaxAgentGroups < max_premium)
 	{
 	    getChild<LLTextBox>("groupcount")->setText(getString("GroupCountWithInfo"));
 	    getChild<LLTextBox>("groupcount")->setURLClickedCallback(boost::bind(&LLPanelPeople::onGroupLimitInfo, this));
@@ -606,11 +647,9 @@ BOOL LLPanelPeople::postBuild()
 	// updater is active only if panel is visible to user.
 	friends_tab->setVisibleCallback(boost::bind(&Updater::setActive, mFriendListUpdater, _2));
     friends_tab->setVisibleCallback(boost::bind(&LLPanelPeople::removePicker, this));
-	friends_tab->setVisibleCallback(boost::bind(&LLPanelPeople::updateFacebookList, this, _2));
 
 	mOnlineFriendList = friends_tab->getChild<LLAvatarList>("avatars_online");
 	mAllFriendList = friends_tab->getChild<LLAvatarList>("avatars_all");
-	mSuggestedFriends = friends_tab->getChild<LLAvatarList>("suggested_friends");
 	mOnlineFriendList->setNoItemsCommentText(getString("no_friends_online"));
 	mOnlineFriendList->setShowIcons("FriendsListShowIcons");
 	mOnlineFriendList->showPermissions("FriendsListShowPermissions");
@@ -649,7 +688,6 @@ BOOL LLPanelPeople::postBuild()
 	mRecentList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
 	mAllFriendList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
 	mOnlineFriendList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
-	mSuggestedFriends->setContextMenu(&LLPanelPeopleMenus::gSuggestedFriendsContextMenu);
 
 	setSortOrder(mRecentList,		(ESortOrder)gSavedSettings.getU32("RecentPeopleSortOrder"),	false);
 	setSortOrder(mAllFriendList,	(ESortOrder)gSavedSettings.getU32("FriendsSortOrder"),		false);
@@ -728,7 +766,7 @@ void LLPanelPeople::updateFriendListHelpText()
 
 	// Seems sometimes all_friends can be empty because of issue with Inventory loading (clear cache, slow connection...)
 	// So, lets check all lists to avoid overlapping the text with online list. See EXT-6448.
-	bool any_friend_exists = mAllFriendList->filterHasMatches() || mOnlineFriendList->filterHasMatches() || mSuggestedFriends->filterHasMatches();
+	bool any_friend_exists = mAllFriendList->filterHasMatches() || mOnlineFriendList->filterHasMatches();
 	no_friends_text->setVisible(!any_friend_exists);
 	if (no_friends_text->getVisible())
 	{
@@ -795,38 +833,7 @@ void LLPanelPeople::updateFriendList()
 	mAllFriendList->setDirty(true, !mAllFriendList->filterHasMatches());
 	//update trash and other buttons according to a selected item
 	updateButtons();
-	updateSuggestedFriendList();
 	showFriendsAccordionsIfNeeded();
-}
-
-bool LLPanelPeople::updateSuggestedFriendList()
-{
-	const LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
-	uuid_vec_t& suggested_friends = mSuggestedFriends->getIDs();
-	suggested_friends.clear();
-
-	//Add suggested friends
-	LLSD friends = LLFacebookConnect::instance().getContent();
-	for (LLSD::array_const_iterator i = friends.beginArray(); i != friends.endArray(); ++i)
-	{
-		LLUUID agent_id = (*i).asUUID();
-		bool second_life_buddy = agent_id.notNull() ? av_tracker.isBuddy(agent_id) : false;
-
-		if(!second_life_buddy)
-		{
-			//FB+SL but not SL friend
-			if (agent_id.notNull())
-			{
-				suggested_friends.push_back(agent_id);
-			}
-		}
-	}
-
-	//Force a refresh when there aren't any filter matches (prevent displaying content that shouldn't display)
-	mSuggestedFriends->setDirty(true, !mSuggestedFriends->filterHasMatches());
-	showFriendsAccordionsIfNeeded();
-
-	return false;
 }
 
 void LLPanelPeople::updateNearbyList()
@@ -861,51 +868,6 @@ void LLPanelPeople::updateRecentList()
 
 	LLRecentPeople::instance().get(mRecentList->getIDs());
 	mRecentList->setDirty();
-}
-
-bool LLPanelPeople::onConnectedToFacebook(const LLSD& data)
-{
-	LLSD::Integer connection_state = data.get("enum").asInteger();
-
-	if (connection_state == LLFacebookConnect::FB_CONNECTED)
-	{
-		LLFacebookConnect::instance().loadFacebookFriends();
-	}
-	else if(connection_state == LLFacebookConnect::FB_NOT_CONNECTED)
-	{
-		updateSuggestedFriendList();
-	};
-
-	return false;
-}
-
-void LLPanelPeople::updateFacebookList(bool visible)
-{
-	if (visible)
-	{
-		LLEventPumps::instance().obtain("FacebookConnectContent").stopListening("LLPanelPeople"); // just in case it is already listening
-		LLEventPumps::instance().obtain("FacebookConnectContent").listen("LLPanelPeople", boost::bind(&LLPanelPeople::updateSuggestedFriendList, this));
-
-		LLEventPumps::instance().obtain("FacebookConnectState").stopListening("LLPanelPeople"); // just in case it is already listening
-		LLEventPumps::instance().obtain("FacebookConnectState").listen("LLPanelPeople", boost::bind(&LLPanelPeople::onConnectedToFacebook, this, _1));
-
-		if (LLFacebookConnect::instance().isConnected())
-		{
-			LLFacebookConnect::instance().loadFacebookFriends();
-		}
-		else if(mTryToConnectToFacebook)
-		{
-			LLFacebookConnect::instance().checkConnectionToFacebook();
-			mTryToConnectToFacebook = false;
-		}
-    
-		updateSuggestedFriendList();
-	}
-	else
-	{
-		LLEventPumps::instance().obtain("FacebookConnectState").stopListening("LLPanelPeople");
-		LLEventPumps::instance().obtain("FacebookConnectContent").stopListening("LLPanelPeople");
-	}
 }
 
 void LLPanelPeople::updateButtons()
@@ -1084,6 +1046,10 @@ void LLPanelPeople::setSortOrder(LLAvatarList* list, ESortOrder order, bool save
 		list->setComparator(&DISTANCE_COMPARATOR);
 		list->sort();
 		break;
+	case E_SORT_BY_RECENT_ARRIVAL:
+		list->setComparator(&RECENT_ARRIVAL_COMPARATOR);
+		list->sort();
+		break;
 	default:
 		LL_WARNS() << "Unrecognized people sort order for " << list->getName() << LL_ENDL;
 		return;
@@ -1139,11 +1105,9 @@ void LLPanelPeople::onFilterEdit(const std::string& search_string)
 
 		mOnlineFriendList->setNameFilter(filter);
 		mAllFriendList->setNameFilter(filter);
-		mSuggestedFriends->setNameFilter(filter);
 
         setAccordionCollapsedByUser("tab_online", false);
         setAccordionCollapsedByUser("tab_all", false);
-		setAccordionCollapsedByUser("tab_suggested_friends", false);
         showFriendsAccordionsIfNeeded();
 
 		// restore accordion tabs state _after_ all manipulations
@@ -1165,8 +1129,25 @@ void LLPanelPeople::onFilterEdit(const std::string& search_string)
 void LLPanelPeople::onGroupLimitInfo()
 {
 	LLSD args;
-	args["MAX_BASIC"] = BASE_MAX_AGENT_GROUPS;
-	args["MAX_PREMIUM"] = PREMIUM_MAX_AGENT_GROUPS;
+
+	S32 max_basic = BASE_MAX_AGENT_GROUPS;
+	S32 max_premium = PREMIUM_MAX_AGENT_GROUPS;
+	if (gAgent.getRegion())
+	{
+		LLSD features;
+		gAgent.getRegion()->getSimulatorFeatures(features);
+		if (features.has("MaxAgentGroupsBasic"))
+		{
+			max_basic = features["MaxAgentGroupsBasic"].asInteger();
+		}
+		if (features.has("MaxAgentGroupsPremium"))
+		{
+			max_premium = features["MaxAgentGroupsPremium"].asInteger();
+		}
+	}
+	args["MAX_BASIC"] = max_basic; 
+	args["MAX_PREMIUM"] = max_premium; 
+
 	LLNotificationsUtil::add("GroupLimitInfo", args);
 }
 
@@ -1437,6 +1418,10 @@ void LLPanelPeople::onNearbyViewSortMenuItemClicked(const LLSD& userdata)
 	{
 		setSortOrder(mNearbyList, E_SORT_BY_DISTANCE);
 	}
+	else if (chosen_item == "sort_arrival")
+	{
+		setSortOrder(mNearbyList, E_SORT_BY_RECENT_ARRIVAL);
+	}
 	else if (chosen_item == "view_usernames")
 	{
 	    bool hide_usernames = !gSavedSettings.getBOOL("NearbyListHideUsernames");
@@ -1458,6 +1443,8 @@ bool LLPanelPeople::onNearbyViewSortMenuItemCheck(const LLSD& userdata)
 		return sort_order == E_SORT_BY_NAME;
 	if (item == "sort_distance")
 		return sort_order == E_SORT_BY_DISTANCE;
+	if (item == "sort_arrival")
+		return sort_order == E_SORT_BY_RECENT_ARRIVAL;
 
 	return false;
 }
@@ -1581,7 +1568,6 @@ void LLPanelPeople::showFriendsAccordionsIfNeeded()
 		// Expand and show accordions if needed, else - hide them
 		showAccordion("tab_online", mOnlineFriendList->filterHasMatches());
 		showAccordion("tab_all", mAllFriendList->filterHasMatches());
-		showAccordion("tab_suggested_friends", mSuggestedFriends->filterHasMatches());
 
 		// Rearrange accordions
 		LLAccordionCtrl* accordion = getChild<LLAccordionCtrl>("friends_accordion");
@@ -1643,6 +1629,16 @@ bool LLPanelPeople::isAccordionCollapsedByUser(LLUICtrl* acc_tab)
 bool LLPanelPeople::isAccordionCollapsedByUser(const std::string& name)
 {
 	return isAccordionCollapsedByUser(getChild<LLUICtrl>(name));
+}
+
+bool LLPanelPeople::updateNearbyArrivalTime()
+{
+	std::vector<LLVector3d> positions;
+	std::vector<LLUUID> uuids;
+	static LLCachedControl<F32> range(gSavedSettings, "NearMeRange");
+	LLWorld::getInstance()->getAvatars(&uuids, &positions, gAgent.getPositionGlobal(), range);
+	LLRecentPeople::instance().updateAvatarsArrivalTime(uuids);
+	return LLApp::isExiting();
 }
 
 

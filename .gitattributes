@@ -1,0 +1,29 @@
+*          text=auto
+
+# Sources
+*.cpp      text diff=cpp
+*.h        text diff=cpp
+*.py       text diff=python
+
+# Documents
+*.txt      text
+*.xml      text
+
+# Graphics
+*.png      binary diff=exif
+*.jpg      binary diff=exif
+*.jpeg     binary diff=exif
+*.gif      binary diff=exif
+*.tif      binary
+*.tiff     binary
+*.ico      binary
+*.svg      text
+*.eps      binary
+
+# Scripts
+*.sh       text eol=lf
+*.bat      text eol=crlf
+
+# Exclude files from exporting
+.gitattributes export-ignore
+.gitignore     export-ignore

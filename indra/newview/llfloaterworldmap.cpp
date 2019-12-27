@@ -126,7 +126,7 @@ public:
 	bool handle(const LLSD& params, const LLSD& query_map,
 				LLMediaCtrl* web)
 	{
-		if (!LLUI::sSettingGroups["config"]->getBOOL("EnableWorldMap"))
+		if (!LLUI::getInstance()->mSettingGroups["config"]->getBOOL("EnableWorldMap"))
 		{
 			LLNotificationsUtil::add("NoWorldMap", LLSD(), LLSD(), std::string("SwitchToStandardSkinAndQuit"));
 			return true;
@@ -164,7 +164,7 @@ public:
 	
 	bool handle(const LLSD& params, const LLSD& query_map, LLMediaCtrl* web)
 	{
-		if (!LLUI::sSettingGroups["config"]->getBOOL("EnableWorldMap"))
+		if (!LLUI::getInstance()->mSettingGroups["config"]->getBOOL("EnableWorldMap"))
 		{
 			LLNotificationsUtil::add("NoWorldMap", LLSD(), LLSD(), std::string("SwitchToStandardSkinAndQuit"));
 			return true;
@@ -304,8 +304,8 @@ BOOL LLFloaterWorldMap::postBuild()
 	landmark_combo->setTextChangedCallback( boost::bind(&LLFloaterWorldMap::onComboTextEntry, this) );
 	mListLandmarkCombo = dynamic_cast<LLCtrlListInterface *>(landmark_combo);
 	
-	mCurZoomVal = log(LLWorldMapView::sMapScale)/log(2.f);
-	getChild<LLUICtrl>("zoom slider")->setValue(LLWorldMapView::sMapScale);
+	mCurZoomVal = log(LLWorldMapView::sMapScale/256.f)/log(2.f);
+	getChild<LLUICtrl>("zoom slider")->setValue(mCurZoomVal);
 	
 	setDefaultBtn(NULL);
 	

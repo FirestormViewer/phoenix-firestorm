@@ -324,9 +324,7 @@ public:
     // Copy content of all folders of type "type" into folder "id" and delete/purge the empty folders
     // Note : This method has been designed for FT_OUTBOX (aka Merchant Outbox) but can be used for other categories
     void consolidateForType(const LLUUID& id, LLFolderType::EType type);
-
-    bool isCategoryHidden(const LLUUID& id) const;
-
+    
 private:
 	mutable LLPointer<LLViewerInventoryItem> mLastItem; // cache recent lookups	
 
@@ -623,6 +621,7 @@ protected:
 	static bool loadFromFile(const std::string& filename,
 							 cat_array_t& categories,
 							 item_array_t& items,
+							 changed_items_t& cats_to_update,
 							 bool& is_cache_obsolete); 
 	static bool saveToFile(const std::string& filename,
 						   const cat_array_t& categories,

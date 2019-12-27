@@ -25,8 +25,6 @@
 #include <boost/function.hpp>
 #include <boost/algorithm/string/find_iterator.hpp>
 #include <boost/algorithm/string/finder.hpp>
-//#include <boost/lambda/lambda.hpp>
-//#include <boost/lambda/bind.hpp>
 // other Linden headers
 #include "../test/lltut.h"
 #include "../test/namedtempfile.h"
@@ -34,7 +32,8 @@
 #include "stringize.h"
 #include "llsdutil.h"
 #include "llevents.h"
-#include "wrapllerrs.h"
+#include "llstring.h"
+#include "wrapllerrs.h"             // CaptureLog
 
 #if defined(LL_WINDOWS)
 #define sleep(secs) _sleep((secs) * 1000)
@@ -44,8 +43,7 @@
 #include <sys/wait.h>
 #endif
 
-//namespace lambda = boost::lambda;
- std::string apr_strerror_helper(apr_status_t rv)
+std::string apr_strerror_helper(apr_status_t rv)
 {
     char errbuf[256];
     apr_strerror(rv, errbuf, sizeof(errbuf));
@@ -142,8 +140,8 @@ struct PythonProcessLauncher
         mDesc(desc),
         mScript("py", script)
     {
-        const char* PYTHON(getenv("PYTHON"));
-        tut::ensure("Set $PYTHON to the Python interpreter", PYTHON);
+        auto PYTHON(LLStringUtil::getenv("PYTHON"));
+        tut::ensure("Set $PYTHON to the Python interpreter", !PYTHON.empty());
 
         mParams.desc = desc + " script";
         mParams.executable = PYTHON;
@@ -959,12 +957,9 @@ namespace tut
 #define CATCH_IN(THREW, EXCEPTION, CODE)                                \
     do                                                                  \
     {                                                                   \
-        (THREW).clear();                                                \
-        try                                                             \
-        {                                                               \
-            CODE;                                                       \
-        }                                                               \
-        CATCH_AND_STORE_WHAT_IN(THREW, EXCEPTION)                       \
+        (THREW) = catch_what<EXCEPTION>([&](){                          \
+                CODE;                                                   \
+            });                                                         \
         ensure("failed to throw " #EXCEPTION ": " #CODE, ! (THREW).empty()); \
     } while (0)
 

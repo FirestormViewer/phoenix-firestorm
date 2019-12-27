@@ -101,7 +101,7 @@ void ll_debug_socket(const char* msg, apr_socket_t* apr_sock)
 ///
 
 // static
-LLSocket::ptr_t LLSocket::create(apr_pool_t* pool, EType type, U16 port)
+LLSocket::ptr_t LLSocket::create(apr_pool_t* pool, EType type, U16 port, const char *hostname)
 {
 	LLSocket::ptr_t rv;
 	apr_socket_t* socket = NULL;
@@ -150,7 +150,7 @@ LLSocket::ptr_t LLSocket::create(apr_pool_t* pool, EType type, U16 port)
 		apr_sockaddr_t* sa = NULL;
 		status = apr_sockaddr_info_get(
 			&sa,
-			APR_ANYADDR,
+			hostname,
 			APR_UNSPEC,
 			port,
 			0,
@@ -265,7 +265,7 @@ LLSocket::~LLSocket()
 void LLSocket::setBlocking(S32 timeout)
 {
 	// set up the socket options
-	ll_apr_warn_status(apr_socket_timeout_set(mSocket, timeout));
+	ll_apr_warn_status(apr_socket_timeout_set(mSocket, timeout)); // Sets both receive and send timeout SO_RCVTIMEO, SO_SNDTIMEO
 	ll_apr_warn_status(apr_socket_opt_set(mSocket, APR_SO_NONBLOCK, 0));
 	ll_apr_warn_status(apr_socket_opt_set(mSocket, APR_SO_SNDBUF, LL_SEND_BUFFER_SIZE));
 	ll_apr_warn_status(apr_socket_opt_set(mSocket, APR_SO_RCVBUF, LL_RECV_BUFFER_SIZE));

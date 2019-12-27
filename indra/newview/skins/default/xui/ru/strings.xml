@@ -71,10 +71,13 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 Дальность отрисовки: [DRAW_DISTANCE] м
 Ширина канала: [NET_BANDWITH] кбит/с
 Коэффициент детализации: [LOD_FACTOR]
-Качество визуализации: [RENDER_QUALITY] / 7
+Качество визуализации: [RENDER_QUALITY]
 Расширенная модель освещения: [GPU_SHADERS]
 Память текстур: [TEXTURE_MEMORY] МБ
 Время создания VFS (кэш): [VFS_TIME]
+	</string>
+	<string name="AboutOSXHiDPI">
+		Режим отображения HiDPI: [HIDPI]
 	</string>
 	<string name="AboutLibs">
 		Версия декодера J2C: [J2C_VERSION] 
@@ -1475,6 +1478,15 @@ support@secondlife.com.
 	<string name="MarketplaceURL_LearnMore">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
 	</string>
+	<string name="InventoryPlayAnimationTooltip">
+		Откройте окно с настройками игры.
+	</string>
+	<string name="InventoryPlayGestureTooltip">
+		Выполните выбранный жест в игровом мире.
+	</string>
+	<string name="InventoryPlaySoundTooltip">
+		Откройте окно с настройками игры.
+	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		Продавать вещи в торговом центре может кто угодно.
 	</string>
@@ -2226,6 +2238,18 @@ support@secondlife.com.
 	<string name="RegionInfoListTypeBannedAgents">
 		Всегда заблокированы
 	</string>
+	<string name="RegionInfoAllEstates">
+		все землевладения
+	</string>
+	<string name="RegionInfoManagedEstates">
+		управляемые землевладения
+	</string>
+	<string name="RegionInfoThisEstate">
+		это землевладение
+	</string>
+	<string name="AndNMore">
+		и \[EXTRA_COUNT] более
+	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		Память под скрипты на участке
 	</string>
@@ -2269,7 +2293,7 @@ support@secondlife.com.
 		Грудь
 	</string>
 	<string name="ATTACH_HEAD">
-		Голова
+		Череп
 	</string>
 	<string name="ATTACH_LSHOULDER">
 		Левое плечо
@@ -2290,7 +2314,7 @@ support@secondlife.com.
 		Правая ступня
 	</string>
 	<string name="ATTACH_BACK">
-		Спина
+		Позвоночник
 	</string>
 	<string name="ATTACH_PELVIS">
 		Таз
@@ -5393,9 +5417,6 @@ support@secondlife.com.
 	<string name="Command_Destinations_Label">
 		Пункты
 	</string>
-	<string name="Command_Facebook_Label">
-		Facebook
-	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
 	</string>
@@ -5488,9 +5509,6 @@ support@secondlife.com.
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		Интересные места
-	</string>
-	<string name="Command_Facebook_Tooltip">
-		Опубликовать в Facebook
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Загрузить на Flickr
@@ -5746,5 +5764,26 @@ support@secondlife.com.
 	</string>
 	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
 		У физической формы нет правильной версии. Задайте правильную версию для физической модели.
+	</string>
+	<string name="couldnt_resolve_host">
+		DNS не удалось разрешить имя узла([HOSTNAME]). 
+Проверьте возможность подключения к веб-сайту www.secondlife.com. 
+Если вы продолжаете получать эту ошибку, перейдите в раздел 
+поддержки и сообщите о проблеме.
+	</string>
+	<string name="ssl_peer_certificate">
+		Серверу входа в систему не удалось пройти аутентификацию с помощью 
+протокола SSL. Если вы продолжаете получать эту ошибку, 
+перейдите в раздел поддержки на веб-сайте SecondLife.com 
+и сообщите о проблеме.
+	</string>
+	<string name="ssl_connect_error">
+		Часто это означает, что часы компьютера установлены неправильно. 
+Перейдите, пожалуйста, на Панели управления и убедитесь в правильной 
+установке времени и даты. Также проверьте правильность настройки сети 
+и брандмауэра. Если вы продолжаете получать эту ошибку, перейдите в 
+раздел поддержки на веб-сайте SecondLife.com и сообщите о проблеме. 
+
+[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 База знаний]
 	</string>
 </strings>

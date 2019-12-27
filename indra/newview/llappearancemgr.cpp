@@ -154,7 +154,7 @@ public:
 	{
 		// support secondlife:///app/appearance/show, but for now we just
 		// make all secondlife:///app/appearance SLapps behave this way
-		if (!LLUI::sSettingGroups["config"]->getBOOL("EnableAppearance"))
+		if (!LLUI::getInstance()->mSettingGroups["config"]->getBOOL("EnableAppearance"))
 		{
 			LLNotificationsUtil::add("NoAppearance", LLSD(), LLSD(), std::string("SwitchToStandardSkinAndQuit"));
 			return true;
@@ -891,7 +891,10 @@ void LLWearableHoldingPattern::onAllComplete()
 //			 ++it)
 //		{
 //			LLViewerObject *objectp = *it;
-//			gAgentAvatarp->addAttachmentOverridesForObject(objectp);
+//            if (!objectp->isAnimatedObject())
+//            {
+//                gAgentAvatarp->addAttachmentOverridesForObject(objectp);
+//            }
 //		}
 //		
 //		// Add new attachments to match those requested.
@@ -1932,7 +1935,6 @@ bool LLAppearanceMgr::getCanRemoveOutfit(const LLUUID& outfit_cat_id)
 	LLFindNonRemovableObjects filter_non_removable;
 	LLInventoryModel::cat_array_t cats;
 	LLInventoryModel::item_array_t items;
-	LLInventoryModel::item_array_t::const_iterator it;
 	gInventory.collectDescendentsIf(outfit_cat_id, cats, items, false, filter_non_removable);
 	if (!cats.empty() || !items.empty())
 	{
@@ -2710,7 +2712,10 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 		for (LLAgentWearables::llvo_vec_t::iterator it = objects_to_retain.begin(); it != objects_to_retain.end(); ++it)
 		{
 			LLViewerObject *objectp = *it;
-			gAgentAvatarp->addAttachmentOverridesForObject(objectp);
+			if (!objectp->isAnimatedObject())
+			{
+				gAgentAvatarp->addAttachmentOverridesForObject(objectp);
+			}
 		}
 
 		// Add new attachments to match those requested.
@@ -3246,7 +3251,7 @@ void LLAppearanceMgr::removeAllAttachmentsFromAvatar()
 			 attachment_iter != attachment->mAttachedObjects.end();
 			 ++attachment_iter)
 		{
-			LLViewerObject *attached_object = (*attachment_iter);
+			LLViewerObject *attached_object = attachment_iter->get();
 			if (attached_object)
 			{
 				objects_to_remove.push_back(attached_object);

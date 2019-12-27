@@ -65,16 +65,19 @@ OS バージョン：[OS_VERSION]
 		OpenGL バージョン：[OPENGL_VERSION]
 	</string>
 	<string name="AboutSettings">
-		ウィンドウサイズ： [WINDOW_WIDTH]x[WINDOW_HEIGHT]
-フォントサイズの調整： [FONT_SIZE_ADJUSTMENT]pt
-UI スケーリング： [UI_SCALE]
-描画距離：[DRAW_DISTANCE]m
-帯域幅：[NET_BANDWITH]kbit/s
-LOD 係数： [LOD_FACTOR]
-表示品質： [RENDER_QUALITY] / 7
-高度なライティングモデル： [GPU_SHADERS]
-テクスチャメモリ： [TEXTURE_MEMORY]MB
-VFS（キャッシュ）作成時間： [VFS_TIME]
+		ウィンドウサイズ: [WINDOW_WIDTH]x[WINDOW_HEIGHT]
+フォントサイズ調整: [FONT_SIZE_ADJUSTMENT]pt
+UI スケーリング: [UI_SCALE]
+描画距離: [DRAW_DISTANCE]m
+帯域幅: [NET_BANDWITH]kbit/s
+LOD 係数: [LOD_FACTOR]
+描画の質: [RENDER_QUALITY]
+高度なライティングモデル: [GPU_SHADERS]
+テクスチャメモリ: [TEXTURE_MEMORY]MB
+VFS（キャッシュ）作成時間: [VFS_TIME]
+	</string>
+	<string name="AboutOSXHiDPI">
+		HiDPI 表示モード: [HIDPI]
 	</string>
 	<string name="AboutLibs">
 		J2C デコーダバージョン： [J2C_VERSION] 
@@ -648,7 +651,7 @@ support@secondlife.com にお問い合わせください。
 		リリースノート
 	</string>
 	<string name="RELEASE_NOTES_BASE_URL">
-		http://wiki.secondlife.com/wiki/Release_Notes/
+		https://releasenotes.secondlife.com/viewer/
 	</string>
 	<string name="LoadingData">
 		ローディング...
@@ -1477,6 +1480,15 @@ support@secondlife.com にお問い合わせください。
 	<string name="MarketplaceURL_LearnMore">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
 	</string>
+	<string name="InventoryPlayAnimationTooltip">
+		[再生] オプションでウィンドウを開ける。
+	</string>
+	<string name="InventoryPlayGestureTooltip">
+		インワールドで選択済みのジェスチャーを実行する。
+	</string>
+	<string name="InventoryPlaySoundTooltip">
+		[再生] オプションでウィンドウを開ける。
+	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		マーケットプレイスでは誰でもアイテムを売ることができます。
 	</string>
@@ -2227,6 +2239,18 @@ support@secondlife.com にお問い合わせください。
 	<string name="RegionInfoListTypeBannedAgents">
 		常に禁止
 	</string>
+	<string name="RegionInfoAllEstates">
+		すべての不動産
+	</string>
+	<string name="RegionInfoManagedEstates">
+		管理されている不動産
+	</string>
+	<string name="RegionInfoThisEstate">
+		この不動産
+	</string>
+	<string name="AndNMore">
+		および [EXTRA_COUNT] つの不動産
+	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		区画スクリプトメモリ
 	</string>
@@ -2270,7 +2294,7 @@ support@secondlife.com にお問い合わせください。
 		胸部
 	</string>
 	<string name="ATTACH_HEAD">
-		頭
+		頭蓋
 	</string>
 	<string name="ATTACH_LSHOULDER">
 		左肩
@@ -2291,7 +2315,7 @@ support@secondlife.com にお問い合わせください。
 		右足
 	</string>
 	<string name="ATTACH_BACK">
-		背中
+		背骨
 	</string>
 	<string name="ATTACH_PELVIS">
 		骨盤
@@ -2321,13 +2345,13 @@ support@secondlife.com にお問い合わせください。
 		右腕（上）
 	</string>
 	<string name="ATTACH_RLARM">
-		右腕（下）
+		右前腕
 	</string>
 	<string name="ATTACH_LUARM">
 		左腕（上）
 	</string>
 	<string name="ATTACH_LLARM">
-		左腕（下）
+		左前腕
 	</string>
 	<string name="ATTACH_RHIP">
 		右腰
@@ -2348,7 +2372,7 @@ support@secondlife.com にお問い合わせください。
 		左脚（下）
 	</string>
 	<string name="ATTACH_BELLY">
-		お腹
+		腹
 	</string>
 	<string name="ATTACH_LEFT_PEC">
 		左胸筋
@@ -5385,9 +5409,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Destinations_Label">
 		行き先
 	</string>
-	<string name="Command_Facebook_Label">
-		Facebook
-	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
 	</string>
@@ -5480,9 +5501,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		行ってみたい場所
-	</string>
-	<string name="Command_Facebook_Tooltip">
-		Facebook へ投稿
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Flickr にアップロード
@@ -5738,5 +5756,26 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
 		物理形状のバージョンが正しくありません。物理モデルに正しいバージョンを設定してください。
+	</string>
+	<string name="couldnt_resolve_host">
+		DNS がホスト名 ([HOSTNAME]) を解決できませんでした。
+www.secondlife.com のウェブサイトに接続できるかご確認ください。
+接続できても、このエラーが継続的に起こる場合は、
+サポートセクションから問題を報告してください。
+	</string>
+	<string name="ssl_peer_certificate">
+		ログインサーバーが SSL 経由で確認できませんでした。
+このエラーが継続的に起こる場合は、
+Secondlife.com のサポートセクションから
+問題を報告してください。
+	</string>
+	<string name="ssl_connect_error">
+		この問題の多くは、お使いのコンピュータの時計が正しく設定されていないために起こります。
+コントロールパネルから時刻と日付が正しく設定されているかご確認ください。
+お使いのネットワークとファイアウォールも正しく設定されているかお確かめください。
+このエラーが継続的に起こる場合は、Secondlife.com のサポートセクションから
+問題を報告してください。
+
+[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 ナレッジベース]
 	</string>
 </strings>

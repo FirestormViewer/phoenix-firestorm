@@ -241,6 +241,7 @@ void MediaPluginCEF::onRequestExitCallback()
 	LLPluginMessage message("base", "goodbye");
 	sendMessage(message);
 
+	// Will trigger delete on next staticReceiveMessage()
 	mDeleteMe = true;
 }
 
@@ -437,8 +438,12 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			}
 			else if (message_name == "cleanup")
 			{
-				mVolumeCatcher.setVolume(0);
+				mVolumeCatcher.setVolume(0); // Hack: masks CEF exit issues
 				mCEFLib->requestExit();
+			}
+			else if (message_name == "force_exit")
+			{
+				mDeleteMe = true;
 			}
 			else if (message_name == "shm_added")
 			{
@@ -498,7 +503,7 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 
 				dullahan::dullahan_settings settings;
 				settings.accept_language_list = mHostLanguage;
-				settings.background_color = 0xff282828;
+				settings.background_color = 0xffffffff;
 				settings.cache_enabled = true;
 				settings.cache_path = mCachePath;
 				settings.cookie_store_path = mCookiePath;
@@ -519,6 +524,7 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				settings.webgl_enabled = true;
 				settings.log_file = mCefLogFile;
 				settings.log_verbose = mCefLogVerbose;
+				settings.autoplay_without_gesture = true;
 
 				std::vector<std::string> custom_schemes(1, "secondlife");
 				mCEFLib->setCustomSchemes(custom_schemes);
@@ -530,7 +536,12 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				}
 
 				// now we can set page zoom factor
-				mCEFLib->setPageZoom(message_in.getValueReal("factor"));
+				F32 factor = (F32)message_in.getValueReal("factor");
+#if LL_DARWIN
+				//temporary fix for SL-10473: issue with displaying checkboxes on Mojave
+				factor*=1.001;
+#endif
+				mCEFLib->setPageZoom(factor);
 
 				// Plugin gets to decide the texture parameters to use.
 				mDepth = 4;
@@ -735,6 +746,10 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			if (message_name == "set_page_zoom_factor")
 			{
 				F32 factor = (F32)message_in.getValueReal("factor");
+#if LL_DARWIN
+				//temporary fix for SL-10473: issue with displaying checkboxes on Mojave
+				factor*=1.001;
+#endif
 				mCEFLib->setPageZoom(factor);
 			}
 			if (message_name == "browse_stop")
@@ -812,7 +827,8 @@ void MediaPluginCEF::keyEvent(dullahan::EKeyEvent key_event, LLSD native_key_dat
 	// adding new code below in unicodeInput means we don't send ascii chars
 	// here too or we get double key presses on a mac.
 	bool esc_key = (event_umodchars == 27);
-	if (esc_key || ((unsigned char)event_chars < 0x10 || (unsigned char)event_chars >= 0x7f ))
+	bool tab_key_up = (event_umodchars == 9) && (key_event == dullahan::EKeyEvent::KE_KEY_UP);
+	if ((esc_key || ((unsigned char)event_chars < 0x10 || (unsigned char)event_chars >= 0x7f )) && !tab_key_up)
 	{
 		mCEFLib->nativeKeyboardEventOSX(key_event, event_modifiers, 
 										event_keycode, event_chars, 

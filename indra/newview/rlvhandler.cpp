@@ -2363,12 +2363,12 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNAMES>::onCommandToggle(ERlvBehaviou
 	// Force the use of the "display name" cache so we can filter both display and legacy names (or return back to the user's preference)
 	if (fHasBhvr)
 	{
-		LLAvatarNameCache::setForceDisplayNames(true);
+		LLAvatarNameCache::instance().setForceDisplayNames(true);
 	}
 	else
 	{
-		LLAvatarNameCache::setForceDisplayNames(false);
-		LLAvatarNameCache::setUseDisplayNames(gSavedSettings.getBOOL("UseDisplayNames"));
+		LLAvatarNameCache::instance().setForceDisplayNames(false);
+		LLAvatarNameCache::instance().setUseDisplayNames(gSavedSettings.getBOOL("UseDisplayNames"));
 	}
 
 	// Refresh all name tags and HUD text

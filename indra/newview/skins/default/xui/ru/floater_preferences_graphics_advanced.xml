@@ -31,8 +31,8 @@
 	<text name="AvatarPhysicsDetailText">
 		Низкая
 	</text>
-	<text name="ShadersText">
-		Аппаратура
+	<text name="HardwareText">
+		Аппаратное оборудование
 	</text>
 	<slider label="Память для текстур (МБ):" name="GraphicsCardTextureMemory" tool_tip="Объем памяти, отводимый для текстур. По умолчанию – объем памяти видеокарты. Уменьшение поможет увеличить производительность, но текстуры могут стать размытыми."/>
 	<slider label="Дистанция тумана:" name="fog"/>
@@ -43,6 +43,7 @@
 	<check_box label="Анизотропная фильтрация (медленнее, если включено)" name="ani"/>
 	<check_box initial_value="true" label="Включить объекты вершинных буферов OpenGL" name="vbo" tool_tip="Включение этого параметра на современном оборудовании даст увеличение производительности.  Однако на старом оборудовании это может привести к сбою приложения."/>
 	<check_box initial_value="true" label="Разрешить сжатие текстур (требует перезагрузки)" name="texture compression" tool_tip="Сжатие текстур в видеопамяти, что позволяет загружать текстуры большего размера за счет некоторого падения качества цвета."/>
+	<check_box initial_value="true" label="Активировать поддержку отображения HiDPI (требуется перезапуск)" name="use HiDPI" tool_tip="Активировать OpenGL для рисования с высоким разрешением."/>
 	<text name="antialiasing label">
 		Сглаживание:
 	</text>
@@ -55,6 +56,9 @@
 	</combo_box>
 	<text name="antialiasing restart">
 		(требуется перезапуск)
+	</text>
+	<text name="MeshText">
+		Сетка
 	</text>
 	<slider label="Детализация меша:" name="TerrainMeshDetail"/>
 	<text name="TerrainMeshDetailText">
@@ -71,6 +75,9 @@
 	<slider label="Гибкие примитивы:" name="FlexibleMeshDetail"/>
 	<text name="FlexibleMeshDetailText">
 		Низкая
+	</text>
+	<text name="ShadersText">
+		Шейдеры
 	</text>
 	<check_box initial_value="true" label="Прозрачность воды" name="TransparentWater"/>
 	<check_box initial_value="true" label="Рельефность и сияние" name="BumpShiny"/>
@@ -111,5 +118,6 @@
 	<button label="Вернуть рекомендуемые настройки" name="Defaults"/>
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Отмена" label_selected="Отмена" name="Cancel"/>
-	<check_box label="RenderAvatarMaxComplexity" name="RenderAvatarMaxNonImpostors"/>
+	<check_box label="RenderAvatarMaxComplexity (Отрисовка аватара макс. сложности)" name="RenderAvatarMaxComplexity"/>
+	<check_box label="RenderAvatarMaxNonImpostors (Отрисовка макс. кол-ва 3-D аватаров)" name="RenderAvatarMaxNonImpostors"/>
 </floater>

@@ -251,6 +251,8 @@ void LLVOAvatarSelf::initInstance()
 	//doPeriodically(output_self_av_texture_diagnostics, 30.0);
 	doPeriodically(update_avatar_rez_metrics, 5.0);
 	doPeriodically(boost::bind(&LLVOAvatarSelf::checkStuckAppearance, this), 30.0);
+
+    mInitFlags |= 1<<2;
 }
 
 void LLVOAvatarSelf::setHoverIfRegionEnabled()
@@ -1305,7 +1307,7 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 		// the simulator should automatically handle permission revocation
 		
 		stopMotionFromSource(attachment_id);
-		LLFollowCamMgr::setCameraActive(viewer_object->getID(), FALSE);
+		LLFollowCamMgr::getInstance()->setCameraActive(viewer_object->getID(), FALSE);
 		
 		LLViewerObject::const_child_list_t& child_list = viewer_object->getChildren();
 		for (LLViewerObject::child_list_t::const_iterator iter = child_list.begin();
@@ -1317,7 +1319,7 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 			// permissions revocation
 			
 			stopMotionFromSource(child_objectp->getID());
-			LLFollowCamMgr::setCameraActive(child_objectp->getID(), FALSE);
+			LLFollowCamMgr::getInstance()->setCameraActive(child_objectp->getID(), FALSE);
 		}
 		
 		// Make sure the inventory is in sync with the avatar.
@@ -2806,6 +2808,12 @@ void LLVOAvatarSelf::onCustomizeEnd(bool disable_camera_switch)
 	}
 }
 
+// virtual
+bool LLVOAvatarSelf::shouldRenderRigged() const
+{
+    return gAgent.needsRenderAvatar(); 
+}
+
 // HACK: this will null out the avatar's local texture IDs before the TE message is sent
 //       to ensure local texture IDs are not sent to other clients in the area.
 //       this is a short-term solution. The long term solution will be to not set the texture
@@ -2900,7 +2908,7 @@ BOOL LLVOAvatarSelf::needsRenderBeam()
 		// don't render selection beam on hud objects
 		is_touching_or_grabbing = FALSE;
 	}
-	return is_touching_or_grabbing || (mState & AGENT_STATE_EDITING && LLSelectMgr::getInstance()->shouldShowSelection());
+	return is_touching_or_grabbing || (getAttachmentState() & AGENT_STATE_EDITING && LLSelectMgr::getInstance()->shouldShowSelection());
 }
 
 // static

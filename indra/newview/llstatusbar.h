@@ -45,7 +45,15 @@ class LLPanelPresetsPulldown;
 class LLPanelVolumePulldown;
 class LLPanelNearByMedia;
 class LLIconCtrl;
+class LLSearchEditor;
 
+namespace ll
+{
+	namespace statusbar
+	{
+		struct SearchData;
+	}
+}
 class LLStatusBar
 :	public LLPanel
 {
@@ -98,6 +106,16 @@ private:
 
 	static void onClickMediaToggle(void* data);
 	static void onClickBalance(void* data);
+
+	LLSearchEditor *mFilterEdit;
+	LLPanel *mSearchPanel;
+	void onUpdateFilterTerm();
+
+	std::unique_ptr< ll::statusbar::SearchData > mSearchData;
+	void collectSearchableItems();
+	void updateMenuSearchVisibility( const LLSD& data );
+	void updateMenuSearchPosition(); // depends onto balance position
+	void updateBalancePanelPosition();
 
 private:
 	LLTextBox	*mTextTime;

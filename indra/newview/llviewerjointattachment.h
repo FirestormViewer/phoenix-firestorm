@@ -77,6 +77,7 @@ public:
 	S32 getGroup() const { return mGroup; }
 	S32 getPieSlice() const { return mPieSlice; }
 	S32	getNumObjects() const { return mAttachedObjects.size(); }
+	S32	getNumAnimatedObjects() const;
 
 	void clampObjectPosition();
 
@@ -94,7 +95,7 @@ public:
 	LLViewerObject *getAttachedObject(const LLUUID &object_id);
 
 	// list of attachments for this joint
-	typedef std::vector<LLViewerObject *> attachedobjs_vec_t;
+	typedef std::vector<LLPointer<LLViewerObject> > attachedobjs_vec_t;
 	attachedobjs_vec_t mAttachedObjects;
 
 protected:

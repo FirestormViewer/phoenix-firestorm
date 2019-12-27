@@ -31,7 +31,7 @@
 	<text name="AvatarPhysicsDetailText">
 		Basso
 	</text>
-	<text name="ShadersText">
+	<text name="HardwareText">
 		Hardware
 	</text>
 	<slider label="Memoria texture (MB):" name="GraphicsCardTextureMemory" tool_tip="Spazio di memoria da assegnare alle texture. Utilizza la memoria della scheda video come impostazione predefinita. La riduzione di questa impostazione potrebbe migliorare il rendimento ma potrebbe anche rendere le texture poco definite."/>
@@ -43,6 +43,7 @@
 	<check_box label="Filtro anisotropico (rallenta quando è attivato)" name="ani"/>
 	<check_box initial_value="true" label="Attiva oggetti buffer vertici OpenGL" name="vbo" tool_tip="Se si attiva questa impostazione su hardware più recente si migliorano le prestazioni. Con la funzione attiva, l&apos;hardware meno recente potrebbe implementare VBO in maniera errata, causando interruzioni."/>
 	<check_box initial_value="true" label="Attiva compressione texture (richiede riavvio)" name="texture compression" tool_tip="Comprime le texture nella memoria video, consentendo il caricamento di texture a risoluzione maggiore al prezzo di una perdita di qualità del colore."/>
+	<check_box initial_value="true" label="Abilita assistenza per display HiDPI (riavvio necessario)" name="use HiDPI" tool_tip="Abilita OpenGL per disegni ad alta risoluzione."/>
 	<text name="antialiasing label">
 		Antialiasing:
 	</text>
@@ -55,6 +56,9 @@
 	</combo_box>
 	<text name="antialiasing restart">
 		(richiede il riavvio)
+	</text>
+	<text name="MeshText">
+		Mesh
 	</text>
 	<slider label="Dettagli mesh terreno:" name="TerrainMeshDetail"/>
 	<text name="TerrainMeshDetailText">
@@ -71,6 +75,9 @@
 	<slider label="Prim flessibili:" name="FlexibleMeshDetail"/>
 	<text name="FlexibleMeshDetailText">
 		Basso
+	</text>
+	<text name="ShadersText">
+		Shader
 	</text>
 	<check_box initial_value="true" label="Acqua trasparente" name="TransparentWater"/>
 	<check_box initial_value="true" label="Mappatura urti e brillantezza" name="BumpShiny"/>
@@ -111,5 +118,6 @@
 	<button label="Ripristina impostazioni consigliate" name="Defaults"/>
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Annulla" label_selected="Annulla" name="Cancel"/>
-	<check_box label="RenderAvatarMaxComplexity" name="RenderAvatarMaxNonImpostors"/>
+	<check_box label="RenderAvatarMaxComplexity" name="RenderAvatarMaxComplexity"/>
+	<check_box label="RenderAvatarMaxNonImpostors" name="RenderAvatarMaxNonImpostors"/>
 </floater>

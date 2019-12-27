@@ -28,11 +28,7 @@
 
 #include "llfloatersnapshot.h"
 
-#include "llfacebookconnect.h"
 #include "llfloaterreg.h"
-#include "llfloaterfacebook.h"
-#include "llfloaterflickr.h"
-#include "llfloatertwitter.h"
 #include "llimagefiltersmanager.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
@@ -784,6 +780,7 @@ void LLFloaterSnapshot::Impl::onCommitLayerTypes(LLUICtrl* ctrl, void*data)
 			previewp->setSnapshotBufferType((LLSnapshotModel::ESnapshotLayerType)combobox->getCurrentIndex());
 		}
 		view->impl->checkAutoSnapshot(previewp, TRUE);
+		previewp->updateSnapshot(TRUE, TRUE);
 	}
 }
 
@@ -1241,11 +1238,7 @@ BOOL LLFloaterSnapshot::isWaitingState()
 
 BOOL LLFloaterSnapshotBase::ImplBase::updatePreviewList(bool initialized)
 {
-	LLFloaterFacebook* floater_facebook = LLFloaterReg::findTypedInstance<LLFloaterFacebook>("facebook");
-	LLFloaterFlickr* floater_flickr = LLFloaterReg::findTypedInstance<LLFloaterFlickr>("flickr");
-	LLFloaterTwitter* floater_twitter = LLFloaterReg::findTypedInstance<LLFloaterTwitter>("twitter");
-
-	if (!initialized && !floater_facebook && !floater_flickr && !floater_twitter)
+	if (!initialized)
 		return FALSE;
 
 	BOOL changed = FALSE;
@@ -1309,17 +1302,15 @@ void LLFloaterSnapshot::saveTexture()
 	previewp->saveTexture();
 }
 
-BOOL LLFloaterSnapshot::saveLocal()
+void LLFloaterSnapshot::saveLocal(const snapshot_saved_signal_t::slot_type& success_cb, const snapshot_saved_signal_t::slot_type& failure_cb)
 {
 	LL_DEBUGS() << "saveLocal" << LL_ENDL;
 	LLSnapshotLivePreview* previewp = getPreviewView();
-	if (!previewp)
+	llassert(previewp != NULL);
+	if (previewp)
 	{
-		llassert(previewp != NULL);
-		return FALSE;
+		previewp->saveLocal(success_cb, failure_cb);
 	}
-
-	return previewp->saveLocal();
 }
 
 void LLFloaterSnapshotBase::postSave()

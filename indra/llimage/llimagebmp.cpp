@@ -181,7 +181,7 @@ bool LLImageBMP::updateData()
 		}
 	}
 	else
-	if( 12 <= header.mSize && 64 <= header.mSize )
+	if( 12 <= header.mSize && header.mSize <= 64 )
 	{
 		setLastError("OS/2 2.x BMP files are not supported");
 		return false;
@@ -318,7 +318,7 @@ bool LLImageBMP::updateData()
 
 	if( 0 != mColorPaletteColors )
 	{
-		mColorPalette = new U8[color_palette_size];
+		mColorPalette = new(std::nothrow) U8[color_palette_size];
 		if (!mColorPalette)
 		{
 			LL_ERRS() << "Out of memory in LLImageBMP::updateData()" << LL_ENDL;
@@ -344,7 +344,11 @@ bool LLImageBMP::decode(LLImageRaw* raw_image, F32 decode_time)
 		return false;
 	}
 	
-	raw_image->resize(getWidth(), getHeight(), 3);
+	if (!raw_image->resize(getWidth(), getHeight(), 3))
+	{
+		setLastError("llimagebmp failed to resize image!");
+		return false;
+	}
 
 	U8* src = mdata + mBitmapOffset;
 	U8* dst = raw_image->getData();

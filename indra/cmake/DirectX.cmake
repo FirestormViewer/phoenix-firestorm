@@ -1,5 +1,4 @@
 # -*- cmake -*-
-include(FindWindowsSDK)
 
 if (WINDOWS)
   include(FindWindowsSDK)

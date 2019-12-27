@@ -115,9 +115,64 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
     mMouseOutsideSlop = FALSE;
 	mMouseDownX = x;
 	mMouseDownY = y;
+	LLTimer pick_timer;
+	BOOL pick_rigged = false; //gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
+	LLPickInfo transparent_pick = gViewerWindow->pickImmediate(x, y, TRUE /*includes transparent*/, pick_rigged);
+	LLPickInfo visible_pick = gViewerWindow->pickImmediate(x, y, FALSE, pick_rigged);
+	LLViewerObject *transp_object = transparent_pick.getObject();
+	LLViewerObject *visible_object = visible_pick.getObject();
 
-	//left mouse down always picks transparent (but see handleMouseUp)
-	mPick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE);
+	// Current set of priorities
+	// 1. Transparent attachment pick
+	// 2. Transparent actionable pick
+	// 3. Visible attachment pick (e.x we click on attachment under invisible floor)
+	// 4. Visible actionable pick
+	// 5. Transparent pick (e.x. movement on transparent object/floor, our default pick)
+	// left mouse down always picks transparent (but see handleMouseUp).
+	// Also see LLToolPie::handleHover() - priorities are a bit different there.
+	// Todo: we need a more consistent set of rules to work with
+	if (transp_object == visible_object || !visible_object)
+	{
+		// Note: if transparent object is null, then visible object is also null
+		// since transparent pick includes non-tranpsarent one.
+		// !transparent_object check will be covered by transparent_object == visible_object.
+		mPick = transparent_pick;
+	}
+	else
+	{
+		// Select between two non-null picks
+		LLViewerObject *transp_parent = transp_object->getRootEdit();
+		LLViewerObject *visible_parent = visible_object->getRootEdit();
+		if (transp_object->isAttachment())
+		{
+			// 1. Transparent attachment
+			mPick = transparent_pick;
+		}
+		else if (transp_object->getClickAction() != CLICK_ACTION_DISABLED
+				 && (useClickAction(mask, transp_object, transp_parent) || transp_object->flagHandleTouch() || (transp_parent && transp_parent->flagHandleTouch())))
+		{
+			// 2. Transparent actionable pick
+			mPick = transparent_pick;
+		}
+		else if (visible_object->isAttachment())
+		{
+			// 3. Visible attachment pick
+			mPick = visible_pick;
+		}
+		else if (visible_object->getClickAction() != CLICK_ACTION_DISABLED
+				 && (useClickAction(mask, visible_object, visible_parent) || visible_object->flagHandleTouch() || (visible_parent && visible_parent->flagHandleTouch())))
+		{
+			// 4. Visible actionable pick
+			mPick = visible_pick;
+		}
+		else
+		{
+			// 5. Default: transparent
+			mPick = transparent_pick;
+		}
+	}
+	LL_INFOS() << "pick_rigged is " << (S32) pick_rigged << " pick time elapsed " << pick_timer.getElapsedTimeF32() << LL_ENDL;
+
 	mPick.mKeyMask = mask;
 
 	mMouseButtonDown = true;
@@ -132,7 +187,10 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 BOOL LLToolPie::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	// don't pick transparent so users can't "pay" transparent objects
-	mPick = gViewerWindow->pickImmediate(x, y, /*BOOL pick_transparent*/ FALSE, /*BOOL pick_rigged*/ TRUE, /*BOOL pick_particle*/ TRUE);
+	mPick = gViewerWindow->pickImmediate(x, y,
+                                         /*BOOL pick_transparent*/ FALSE,
+                                         /*BOOL pick_rigged*/ TRUE,
+                                         /*BOOL pick_particle*/ TRUE);
 	mPick.mKeyMask = mask;
 
 	// claim not handled so UI focus stays same
@@ -312,6 +370,8 @@ BOOL LLToolPie::handleLeftClickPick()
 				}
 			}
 			return TRUE;			
+		case CLICK_ACTION_DISABLED:
+			return TRUE;
 		default:
 			// nothing
 			break;
@@ -487,6 +547,8 @@ ECursorType LLToolPie::cursorFromObject(LLViewerObject* object)
 	case CLICK_ACTION_OPEN_MEDIA: 
 		cursor = cursor_from_parcel_media(click_action);
 		break;
+	case CLICK_ACTION_DISABLED: 
+		break;
 	default:
 		break;
 	}
@@ -552,6 +614,8 @@ void LLToolPie::selectionPropertiesReceived()
 			case CLICK_ACTION_OPEN:
 				LLFloaterReg::showInstance("openobject");
 				break;
+			case CLICK_ACTION_DISABLED:
+				break;
 			default:
 				break;
 			}
@@ -562,7 +626,8 @@ void LLToolPie::selectionPropertiesReceived()
 
 BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 {
-	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE, FALSE);
+    BOOL pick_rigged = false; //gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
+	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE, pick_rigged);
 	LLViewerObject *parent = NULL;
 	LLViewerObject *object = mHoverPick.getObject();
 // [RLVa:KB] - Checked: RLVa-1.1.0
@@ -616,7 +681,7 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 	else
 	{
 		// perform a separate pick that detects transparent objects since they respond to 1-click actions
-		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE);
+		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE, pick_rigged);
 
 		LLViewerObject* click_action_object = click_action_pick.getObject();
 
@@ -641,8 +706,8 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 			gViewerWindow->setCursor(UI_CURSOR_TOOLGRAB);
 			LL_DEBUGS("UserInput") << "hover handled by LLToolPie (inactive)" << LL_ENDL;
 		}
-		else if ( (object && object->flagHandleTouch()) 
-				  || (parent && parent->flagHandleTouch()))
+		else if ((!object || !object->isAttachment() || object->getClickAction() != CLICK_ACTION_DISABLED)
+				 && ((object && object->flagHandleTouch()) || (parent && parent->flagHandleTouch())))
 		{
 			show_highlight = true;
 			gViewerWindow->setCursor(UI_CURSOR_HAND);
@@ -708,6 +773,7 @@ BOOL LLToolPie::handleMouseUp(S32 x, S32 y, MASK mask)
         LLPickInfo savedPick = mPick;
         mPick = gViewerWindow->pickImmediate(savedPick.mMousePt.mX, savedPick.mMousePt.mY,
                                              FALSE /* ignore transparent */,
+                                             FALSE /* ignore rigged */,
                                              FALSE /* ignore particles */);
 
 //        if (!mPick.mPosGlobal.isExactlyZero()			// valid coordinates for pick
@@ -811,6 +877,7 @@ BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
         LLPickInfo savedPick = mPick;
         mPick = gViewerWindow->pickImmediate(savedPick.mMousePt.mX, savedPick.mMousePt.mY,
                                              FALSE /* ignore transparent */,
+                                             FALSE /* ignore rigged */,
                                              FALSE /* ignore particles */);
 
         if(mPick.mPickType == LLPickInfo::PICK_OBJECT)
@@ -871,49 +938,19 @@ BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
 
 static bool needs_tooltip(LLSelectNode* nodep)
 {
-	if (!nodep) 
+	if (!nodep || !nodep->mValid) 
 		return false;
-
-	LLViewerObject* object = nodep->getObject();
-	LLViewerObject *parent = (LLViewerObject *)object->getParent();
-	if (object->flagHandleTouch()
-		|| (parent && parent->flagHandleTouch())
-		|| object->flagTakesMoney()
-		|| (parent && parent->flagTakesMoney())
-		|| object->flagAllowInventoryAdd()
-		)
-	{
-		return true;
-	}
-
-	U8 click_action = final_click_action(object);
-	if (click_action != 0)
-	{
-		return true;
-	}
-
-	if (nodep->mValid)
-	{
-		bool anyone_copy = anyone_copy_selection(nodep);
-		bool for_sale = for_sale_selection(nodep);
-		if (anyone_copy || for_sale)
-		{
-			return true;
-		}
-	}
-	return false;
+	return true;
 }
 
 
 BOOL LLToolPie::handleTooltipLand(std::string line, std::string tooltip_msg)
 {
-	LLViewerParcelMgr::getInstance()->setHoverParcel( mHoverPick.mPosGlobal );
-	// 
-	//  Do not show hover for land unless prefs are set to allow it.
-	// 
-	
+	//  Do not show hover for land unless prefs are set to allow it. 
 	if (!gSavedSettings.getBOOL("ShowLandHoverTip")) return TRUE; 
-	
+
+	LLViewerParcelMgr::getInstance()->setHoverParcel( mHoverPick.mPosGlobal );
+
 	// Didn't hit an object, but since we have a land point we
 	// must be hovering over land.
 	
@@ -1199,7 +1236,7 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				const LLMediaEntry* mep = has_media ? tep->getMediaData() : NULL;
 				if (mep)
 				{
-					viewer_media_t media_impl = LLViewerMedia::getMediaImplFromTextureID(mep->getMediaID());
+					viewer_media_t media_impl = LLViewerMedia::getInstance()->getMediaImplFromTextureID(mep->getMediaID());
 					LLPluginClassMedia* media_plugin = NULL;
 					
 					if (media_impl.notNull() && (media_impl->hasMedia()))
@@ -1280,7 +1317,7 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 
 BOOL LLToolPie::handleToolTip(S32 local_x, S32 local_y, MASK mask)
 {
-	if (!LLUI::sSettingGroups["config"]->getBOOL("ShowHoverTips")) return TRUE;
+	if (!LLUI::getInstance()->mSettingGroups["config"]->getBOOL("ShowHoverTips")) return TRUE;
 	if (!mHoverPick.isValid()) return TRUE;
 
 	LLViewerObject* hover_object = mHoverPick.getObject();
@@ -1393,7 +1430,7 @@ void LLToolPie::playCurrentMedia(const LLPickInfo& info)
 
 	LLPluginClassMedia* media_plugin = NULL;
 	
-	viewer_media_t media_impl = LLViewerMedia::getMediaImplFromTextureID(mep->getMediaID());
+	viewer_media_t media_impl = LLViewerMedia::getInstance()->getMediaImplFromTextureID(mep->getMediaID());
 		
 	if(media_impl.notNull() && media_impl->hasMedia())
 	{
@@ -1445,7 +1482,7 @@ void LLToolPie::VisitHomePage(const LLPickInfo& info)
 	
 	LLPluginClassMedia* media_plugin = NULL;
 	
-	viewer_media_t media_impl = LLViewerMedia::getMediaImplFromTextureID(mep->getMediaID());
+	viewer_media_t media_impl = LLViewerMedia::getInstance()->getMediaImplFromTextureID(mep->getMediaID());
 	
 	if(media_impl.notNull() && media_impl->hasMedia())
 	{
@@ -1545,19 +1582,19 @@ static void handle_click_action_play()
 	LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 	if (!parcel) return;
 
-	LLViewerMediaImpl::EMediaStatus status = LLViewerParcelMedia::getStatus();
+	LLViewerMediaImpl::EMediaStatus status = LLViewerParcelMedia::getInstance()->getStatus();
 	switch(status)
 	{
 		case LLViewerMediaImpl::MEDIA_PLAYING:
-			LLViewerParcelMedia::pause();
+			LLViewerParcelMedia::getInstance()->pause();
 			break;
 
 		case LLViewerMediaImpl::MEDIA_PAUSED:
-			LLViewerParcelMedia::start();
+			LLViewerParcelMedia::getInstance()->start();
 			break;
 
 		default:
-			LLViewerParcelMedia::play(parcel);
+			LLViewerParcelMedia::getInstance()->play(parcel);
 			break;
 	}
 }
@@ -1588,7 +1625,7 @@ bool LLToolPie::handleMediaClick(const LLPickInfo& pick)
     if (!mep)
         return false;
 
-    viewer_media_t media_impl = LLViewerMedia::getMediaImplFromTextureID(mep->getMediaID());
+    viewer_media_t media_impl = LLViewerMedia::getInstance()->getMediaImplFromTextureID(mep->getMediaID());
 
     if (gSavedSettings.getBOOL("MediaOnAPrimUI"))
     {
@@ -1642,7 +1679,7 @@ bool LLToolPie::handleMediaDblClick(const LLPickInfo& pick)
     if (!mep)
         return false;
 
-    viewer_media_t media_impl = LLViewerMedia::getMediaImplFromTextureID(mep->getMediaID());
+    viewer_media_t media_impl = LLViewerMedia::getInstance()->getMediaImplFromTextureID(mep->getMediaID());
 
     if (gSavedSettings.getBOOL("MediaOnAPrimUI"))
     {
@@ -1697,7 +1734,7 @@ bool LLToolPie::handleMediaHover(const LLPickInfo& pick)
 	if (mep
 		&& gSavedSettings.getBOOL("MediaOnAPrimUI"))
 	{		
-		viewer_media_t media_impl = LLViewerMedia::getMediaImplFromTextureID(mep->getMediaID());
+		viewer_media_t media_impl = LLViewerMedia::getInstance()->getMediaImplFromTextureID(mep->getMediaID());
 		
 		if(media_impl.notNull())
 		{
@@ -1735,7 +1772,7 @@ bool LLToolPie::handleMediaMouseUp()
 	if(mMediaMouseCaptureID.notNull())
 	{
 		// Face media needs to know the mouse went up.
-		viewer_media_t media_impl = LLViewerMedia::getMediaImplFromTextureID(mMediaMouseCaptureID);
+		viewer_media_t media_impl = LLViewerMedia::getInstance()->getMediaImplFromTextureID(mMediaMouseCaptureID);
 		if(media_impl)
 		{
 			// This will send a mouseUp event to the plugin using the last known mouse coordinate (from a mouseDown or mouseMove), which is what we want.
@@ -1764,7 +1801,7 @@ static void handle_click_action_open_media(LLPointer<LLViewerObject> objectp)
 	if( face < 0 || face >= objectp->getNumTEs() ) return;
 		
 	// is media playing on this face?
-	if (LLViewerMedia::getMediaImplFromTextureID(objectp->getTE(face)->getID()) != NULL)
+	if (LLViewerMedia::getInstance()->getMediaImplFromTextureID(objectp->getTE(face)->getID()) != NULL)
 	{
 		handle_click_action_play();
 		return;
@@ -1794,7 +1831,7 @@ static ECursorType cursor_from_parcel_media(U8 click_action)
 
 	open_cursor = UI_CURSOR_TOOLMEDIAOPEN;
 
-	LLViewerMediaImpl::EMediaStatus status = LLViewerParcelMedia::getStatus();
+	LLViewerMediaImpl::EMediaStatus status = LLViewerParcelMedia::getInstance()->getStatus();
 	switch(status)
 	{
 		case LLViewerMediaImpl::MEDIA_PLAYING:
@@ -1849,8 +1886,7 @@ BOOL LLToolPie::handleRightClickPick()
 		gMenuHolder->setObjectSelection(LLSelectMgr::getInstance()->getSelection());
 
 		bool is_other_attachment = (object->isAttachment() && !object->isHUDAttachment() && !object->permYouOwner());
-		if (object->isAvatar() 
-			|| is_other_attachment)
+		if (object->isAvatar() || is_other_attachment)
 		{
 			// Find the attachment's avatar
 			while( object && object->isAttachment())

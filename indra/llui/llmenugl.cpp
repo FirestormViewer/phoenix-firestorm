@@ -504,6 +504,10 @@ void LLMenuItemGL::draw( void )
 		color = mDisabledColor.get();
 	}
 
+	// Highlight if needed
+	if( ll::ui::SearchableControl::getHighlighted() )
+		color = ll::ui::SearchableControl::getHighlightColor();
+
 	// Draw the text on top.
 	if (mBriefItem)
 	{
@@ -3259,7 +3263,7 @@ void LLMenuGL::showPopup(LLView* spawning_view, LLMenuGL* menu, S32 x, S32 y)
 	menu->needsArrange();
 	menu->arrangeAndClear();
 
-	LLUI::getMousePositionLocal(menu->getParent(), &mouse_x, &mouse_y);
+	LLUI::getInstance()->getMousePositionLocal(menu->getParent(), &mouse_x, &mouse_y);
 	LLMenuHolderGL::sContextMenuSpawnPos.set(mouse_x,mouse_y);
 
 	const LLRect menu_region_rect = LLMenuGL::sMenuContainer->getRect();

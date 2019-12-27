@@ -31,6 +31,9 @@
 #include <map>
 #include <vector>
 
+//fir CGSize
+#include <CoreGraphics/CGGeometry.h>
+
 typedef std::vector<std::pair<int, bool> > segment_t;
 
 typedef std::vector<int> segment_lengths;
@@ -101,11 +104,15 @@ void setResizeMode(bool oldresize, void* glview);
 NSWindowRef createNSWindow(int x, int y, int width, int height);
 
 #include <OpenGL/OpenGL.h>
+
 GLViewRef createOpenGLView(NSWindowRef window, unsigned int samples, bool vsync);
 void glSwapBuffers(void* context);
 CGLContextObj getCGLContextObj(GLViewRef view);
 unsigned long getVramSize(GLViewRef view);
-void getContentViewBounds(NSWindowRef window, float* bounds);
+float getDeviceUnitSize(GLViewRef view);
+CGPoint getContentViewBoundsPosition(NSWindowRef window);
+CGSize getContentViewBoundsSize(NSWindowRef window);
+CGSize getDeviceContentViewSize(NSWindowRef window, GLViewRef view);
 void getWindowSize(NSWindowRef window, float* size);
 void setWindowSize(NSWindowRef window, int width, int height);
 void getCursorPos(NSWindowRef window, float* pos);
@@ -141,9 +148,10 @@ void callWindowFocus();
 void callWindowUnfocus();
 void callWindowHide();
 void callWindowUnhide();
+void callWindowDidChangeScreen();
 void callDeltaUpdate(float *delta, unsigned int mask);
-void callMiddleMouseDown(float *pos, unsigned int mask);
-void callMiddleMouseUp(float *pos, unsigned int mask);
+void callOtherMouseDown(float *pos, unsigned int mask, int button);
+void callOtherMouseUp(float *pos, unsigned int mask, int button);
 void callFocus();
 void callFocusLost();
 void callModifier(unsigned int mask);
