@@ -7,7 +7,7 @@
 .*.swp
 #OSX image cache file
 *.DS_Store
-#*.orig
+*.orig
 LICENSES
 scripts/install.cache.*
 indra/newview/res/viewerRes.rc
