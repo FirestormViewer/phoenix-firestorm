@@ -4196,7 +4196,11 @@ void LLAppViewer::writeSystemInfo()
 
 	// Dump some debugging info
 	LL_INFOS("SystemInfo") << "Application: " << LLTrans::getString("APP_NAME") << LL_ENDL;
-	LL_INFOS("SystemInfo") << "Version: " << LLVersionInfo::getChannelAndVersion() << LL_ENDL;
+
+	// <FS:ND> Print into about git sha hash this build is based on.
+	// LL_INFOS("SystemInfo") << "Version: " << LLVersionInfo::getChannelAndVersion() << LL_ENDL;
+	LL_INFOS("SystemInfo") << "Version: " << LLVersionInfo::getChannelAndVersion() << " [" << LLVersionInfo::getGitHash() << "]" << LL_ENDL;
+	// </FS:ND>
 
 	// Dump the local time and time zone
 	time_t now;
