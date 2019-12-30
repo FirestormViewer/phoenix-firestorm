@@ -1,1 +1,28 @@
-*.sh -text
+* text eol=lf
+
+# Images
+*.bmp binary
+*.BMP binary
+*.gif binary
+*.icns binary
+*.ico binary
+*.j2c binary
+*.j2k binary
+*.jpg binary
+*.png binary
+*.tga binary
+*.tif binary
+
+# Viewer resources
+*.db2 binary
+*.llm binary
+
+# Executables
+*.dll binary
+*.exe binary
+
+# VSTool
+indra/tools/vstool/* -text
+
+# Windows Manifest files
+*.manifest text eol=crlf
