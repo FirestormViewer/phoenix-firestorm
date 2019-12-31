@@ -1,5 +1,8 @@
 * text eol=lf
 
+# VSTool
+indra/tools/vstool/* -text
+
 # Images
 *.bmp binary
 *.BMP binary
@@ -20,9 +23,6 @@
 # Executables
 *.dll binary
 *.exe binary
-
-# VSTool
-indra/tools/vstool/* -text
 
 # Windows Manifest files
 *.manifest text eol=crlf
