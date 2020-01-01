@@ -530,9 +530,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c3b5e8c57bd1c92bc9e0956586908b99</string>
+              <string>d453d6200607972493e1797a30fc805f</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/26330/207568/bugsplat-1.0.7.520791-darwin64-520791.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45455/401027/bugsplat-1.0.7.532004-darwin64-532004.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -542,9 +542,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>766dfde65a5b42ea5691d41df79c43e0</string>
+              <string>372e1d677ee570f947183bae81ca0852</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/26332/207582/bugsplat-3.6.0.4.520791-windows-520791.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45457/401043/bugsplat-3.6.0.4.532004-windows-532004.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -554,9 +554,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>afd01285e22f27d473fac6f88fac9a3b</string>
+              <string>261d460a67e3e2f52bdad1391bb02ec3</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/26331/207576/bugsplat-3.6.0.4.520791-windows64-520791.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45456/401036/bugsplat-.532004-windows64-532004.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
