@@ -4959,6 +4959,13 @@ void LLPanelPreferenceCrashReports::refresh()
 	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setEnabled(fEnable);
 	getChild<LLUICtrl>("checkSendSettings")->setEnabled(fEnable);
 	getChild<LLUICtrl>("checkSendName")->setEnabled(fEnable);
+
+// <FS:ND> Disable options not available when compiling with Bugsplat and set those to default values.
+#ifdef LL_BUGSPLAT
+	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setEnabled(false);
+	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setValue(false);
+#endif
+// </FS:ND>
 }
 
 void LLPanelPreferenceCrashReports::apply()
