@@ -4955,7 +4955,6 @@ void LLPanelPreferenceCrashReports::refresh()
 	pSendCrashReports->setEnabled(TRUE);
 
 	bool fEnable = pSendCrashReports->get();
-	getChild<LLUICtrl>("comboSaveMiniDumpType")->setEnabled(fEnable);
 	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setEnabled(fEnable);
 	getChild<LLUICtrl>("checkSendSettings")->setEnabled(fEnable);
 	getChild<LLUICtrl>("checkSendName")->setEnabled(fEnable);

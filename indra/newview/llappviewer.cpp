@@ -850,16 +850,7 @@ void fast_exit(int rc)
 
 bool LLAppViewer::init()
 {
-	// <FS:ND> Breakpad merge, setup minidump type from Catznip.
-
-	// setupErrorHandling(mSecondInstance);
-	EMiniDumpType minidump_type = MINIDUMP_NORMAL;
-	if (gSavedSettings.controlExists("SaveMiniDumpType"))
-		minidump_type = (LLApp::EMiniDumpType)gSavedSettings.getU32("SaveMiniDumpType"); 
-
-	setupErrorHandling( mSecondInstance, minidump_type );
-
-	// </FS:ND>
+	setupErrorHandling(mSecondInstance);
 
 	nd::octree::debug::setOctreeLogFilename( gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "octree.log" ) ); // <FS:ND/> Filename to log octree options to.
 	nd::etw::init(); // <FS:ND/> Init event tracing.
