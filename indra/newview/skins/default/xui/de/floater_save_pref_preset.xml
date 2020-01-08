@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="save_pref_preset" title="Voreinstellung speichern">
+<floater name="save_pref_preset" title="Grafikvoreinstellung speichern">
 	<string name="title_graphic">
 		Grafikvoreinstellung speichern
 	</string>
 	<string name="title_camera">
 		Kameravoreinstellung speichern
 	</string>
-	<string name="btn_label_save">
-		Speichern
-	</string>
-	<string name="btn_label_replace">
-		Ersetzen
-	</string>
-	<radio_group name="radio_save_preset">
-		<radio_item label="Als neue Voreinstellung speichern" name="new_preset"/>
-		<radio_item label="Voreinstellung ersetzen" name="replace_preset"/>
-	</radio_group> 
-	<button label="Speichern" name="save"/>
+	<text name="Preset">
+		Geben Sie einen Namen für die Voreinstellung ein oder wählen Sie eine vorhandene Voreinstellung aus.
+	</text>
+	<combo_box name="preset_combo" top_delta="45"/>
+	<button label="Speichern" name="save" top_delta="35"/>
 	<button label="Abbrechen" name="cancel"/>
 </floater>
