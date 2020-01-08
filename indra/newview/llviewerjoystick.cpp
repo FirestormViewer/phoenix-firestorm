@@ -114,7 +114,13 @@ NDOF_HotPlugResult LLViewerJoystick::HotPlugAddCallback(NDOF_Device *dev)
 	if (joystick->mDriverState == JDS_UNINITIALIZED)
 	{
         LL_INFOS() << "HotPlugAddCallback: will use device:" << LL_ENDL;
+
+		// <FS:ND> Disable for Linux till vs017 gets merged in to no having to support multiple version of libndofdev
+#ifndef LL_LINUX
 		ndof_dump(dev);
+#endif
+		// </FS:ND>
+		
 		joystick->mNdofDev = dev;
         joystick->mDriverState = JDS_INITIALIZED;
         res = NDOF_KEEP_HOTPLUGGED;
@@ -133,7 +139,13 @@ void LLViewerJoystick::HotPlugRemovalCallback(NDOF_Device *dev)
 	{
         LL_INFOS() << "HotPlugRemovalCallback: joystick->mNdofDev=" 
 				<< joystick->mNdofDev << "; removed device:" << LL_ENDL;
+
+		// <FS:ND> Disable for Linux till vs017 gets merged in to no having to support multiple version of libndofdev
+#ifndef LL_LINUX
 		ndof_dump(dev);
+#endif
+		// </FS:ND>
+
 		joystick->mDriverState = JDS_UNINITIALIZED;
 	}
 	joystick->updateEnabled(true);

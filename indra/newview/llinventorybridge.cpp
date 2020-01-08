@@ -3995,7 +3995,7 @@ void LLFolderBridge::perform_pasteFromClipboard()
 
 		const BOOL move_is_into_current_outfit = (mUUID == current_outfit_id);
 		const BOOL move_is_into_my_outfits = (mUUID == my_outifts_id) || model->isObjectDescendentOf(mUUID, my_outifts_id);
-		const BOOL move_is_into_outfit = move_is_into_my_outfits || (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_OUTFIT);
+		const BOOL move_is_into_outfit = /*move_is_into_my_outfits ||*/ (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_OUTFIT); // <FS:Ansariel> Unable to copy&paste into outfits anymore
         const BOOL move_is_into_marketplacelistings = model->isObjectDescendentOf(mUUID, marketplacelistings_id);
 		const BOOL move_is_into_favorites = (mUUID == favorites_id);
 		const BOOL move_is_into_lost_and_found = model->isObjectDescendentOf(mUUID, lost_and_found_id);
@@ -4081,13 +4081,19 @@ void LLFolderBridge::perform_pasteFromClipboard()
 						return;
 					}
 				}
-				if (move_is_into_outfit)
+				// <FS:Ansariel> Unable to copy&paste into outfits anymore
+				//if (move_is_into_outfit)
+				if (move_is_into_my_outfits)
+				// </FS:Ansariel>
 				{
-					if (!move_is_into_my_outfits && item && can_move_to_outfit(item, move_is_into_current_outfit))
+					// <FS:Ansariel> Unable to copy&paste into outfits anymore
+					//if (!move_is_into_my_outfits && item && can_move_to_outfit(item, move_is_into_current_outfit))
+					if (move_is_into_outfit && item && can_move_to_outfit(item, move_is_into_current_outfit))
+					// </FS:Ansariel>
 					{
 						dropToOutfit(item, move_is_into_current_outfit);
 					}
-					else if (move_is_into_my_outfits && LLAssetType::AT_CATEGORY == obj->getType())
+					else if (/*move_is_into_my_outfits &&*/ LLAssetType::AT_CATEGORY == obj->getType()) // <FS:Ansariel> Unable to copy&paste into outfits anymore
 					{
 						LLInventoryCategory* cat = model->getCategory(item_id);
 						U32 max_items_to_wear = gSavedSettings.getU32("WearFolderLimit");

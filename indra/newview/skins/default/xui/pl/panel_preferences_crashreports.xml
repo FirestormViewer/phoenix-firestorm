@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Raportowanie błędów" name="crash_reports">
     <check_box label="Wysyłaj raporty o błędach na firestormviewer.org" name="checkSendCrashReports" />
-    <text label="Logi:" name="textSaveMiniDumpType">
-        Typ zrzutu:
-    </text>
-    <combo_box name="comboSaveMiniDumpType">
-        <combo_box.item name="Minimal" label="Minimalny" />
-        <combo_box.item name="Default" label="Domyślny" />
-        <combo_box.item name="Extended" label="Rozszerzony" />
-    </combo_box>
     <check_box label="Zawsze pytaj przed wysłaniem" name="checkSendCrashReportsAlwaysAsk" />
     <check_box label="Dołącz dane konfiguracyjne Firestorma - plik settings.xml" name="checkSendSettings" />
     <text name="textSendSettings">

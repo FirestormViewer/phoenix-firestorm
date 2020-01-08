@@ -849,16 +849,7 @@ void fast_exit(int rc)
 
 bool LLAppViewer::init()
 {
-	// <FS:ND> Breakpad merge, setup minidump type from Catznip.
-
-	// setupErrorHandling(mSecondInstance);
-	EMiniDumpType minidump_type = MINIDUMP_NORMAL;
-	if (gSavedSettings.controlExists("SaveMiniDumpType"))
-		minidump_type = (LLApp::EMiniDumpType)gSavedSettings.getU32("SaveMiniDumpType"); 
-
-	setupErrorHandling( mSecondInstance, minidump_type );
-
-	// </FS:ND>
+	setupErrorHandling(mSecondInstance);
 
 	nd::octree::debug::setOctreeLogFilename( gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "octree.log" ) ); // <FS:ND/> Filename to log octree options to.
 	nd::etw::init(); // <FS:ND/> Init event tracing.
@@ -4203,7 +4194,11 @@ void LLAppViewer::writeSystemInfo()
 
 	// Dump some debugging info
 	LL_INFOS("SystemInfo") << "Application: " << LLTrans::getString("APP_NAME") << LL_ENDL;
-	LL_INFOS("SystemInfo") << "Version: " << LLVersionInfo::getChannelAndVersion() << LL_ENDL;
+
+	// <FS:ND> Print into about git sha hash this build is based on.
+	// LL_INFOS("SystemInfo") << "Version: " << LLVersionInfo::getChannelAndVersion() << LL_ENDL;
+	LL_INFOS("SystemInfo") << "Version: " << LLVersionInfo::getChannelAndVersion() << " [" << LLVersionInfo::getGitHash() << "]" << LL_ENDL;
+	// </FS:ND>
 
 	// Dump the local time and time zone
 	time_t now;

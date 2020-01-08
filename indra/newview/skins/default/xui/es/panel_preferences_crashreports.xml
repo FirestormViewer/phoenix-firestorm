@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Reporte de fallos" name="crash_reports">
 	<check_box label="Enviar reportes de fallos a firestormviewer.org" name="checkSendCrashReports"/>
-	<text label="Registros:" name="textSaveMiniDumpType">
-		Tipo de volcado:
-	</text>
-	<combo_box name="comboSaveMiniDumpType">
-		<combo_box.item name="Minimal" label="Mínimo" value="0"/>
-		<combo_box.item name="Default" label="Por defecto" value="1"/>
-		<combo_box.item name="Extended" label="Extendido" value="2"/>
-	</combo_box>
 	<check_box label="Preguntar siempre antes de enviar" name="checkSendCrashReportsAlwaysAsk"/>
 	<check_box label="Incluir settings.xml" name="checkSendSettings"/>
 	<text name="textSendSettings">
