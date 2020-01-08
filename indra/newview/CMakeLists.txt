@@ -412,6 +412,7 @@ set(viewer_SOURCE_FILES
     llfloaterregioninfo.cpp
     llfloaterreporter.cpp
     llfloaterregionrestarting.cpp
+    llfloatersavecamerapreset.cpp
     llfloatersaveprefpreset.cpp
     llfloatersceneloadstats.cpp
     llfloaterscriptdebug.cpp
@@ -1176,6 +1177,7 @@ set(viewer_HEADER_FILES
     llfloaterregioninfo.h
     llfloaterreporter.h
     llfloaterregionrestarting.h
+    llfloatersavecamerapreset.h
     llfloatersaveprefpreset.h
     llfloatersceneloadstats.h
     llfloaterscriptdebug.h
