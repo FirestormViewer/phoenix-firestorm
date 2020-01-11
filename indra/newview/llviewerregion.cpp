@@ -46,6 +46,7 @@
 #include "llagentcamera.h"
 #include "llappviewer.h"
 #include "llavatarrenderinfoaccountant.h"
+#include "llavatarappearancedefines.h"
 #include "llcallingcard.h"
 #include "llcommandhandler.h"
 #include "lldir.h"
@@ -580,6 +581,14 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	mPaused(FALSE),
 	mRegionCacheHitCount(0),
 	mRegionCacheMissCount(0),
+// <FS:Beq> BOM tests for OS
+	mMaxBakes(LLGridManager::getInstance()->isInSecondLife()?
+		LLAvatarAppearanceDefines::EBakedTextureIndex::BAKED_NUM_INDICES:
+		LLAvatarAppearanceDefines::EBakedTextureIndex::BAKED_LEFT_ARM),
+	mMaxTEs(LLGridManager::getInstance()->isInSecondLife()?
+		LLAvatarAppearanceDefines::ETextureIndex::TEX_NUM_INDICES:
+		LLAvatarAppearanceDefines::ETextureIndex::TEX_HEAD_UNIVERSAL_TATTOO),
+// </FS:Beq>
 	// <FS:CR> Aurora Sim
 	mWidth(region_width_meters),
 	mWidthScaleFactor(region_width_meters / REGION_WIDTH_METERS) // <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
@@ -2411,6 +2420,23 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
 	}
 #endif // OPENSIM
 // </FS:CR>
+// <FS:Beq> limit num bakes by region support
+#ifdef OPENSIM
+	if (mSimulatorFeatures.has("BakesOnMeshEnabled") && (mSimulatorFeatures["BakesOnMeshEnabled"].asBoolean()==true))
+	{
+		mMaxBakes = LLAvatarAppearanceDefines::EBakedTextureIndex::BAKED_NUM_INDICES;
+		mMaxTEs   = LLAvatarAppearanceDefines::ETextureIndex::TEX_NUM_INDICES;
+	}
+	else
+	{
+		mMaxBakes = LLAvatarAppearanceDefines::EBakedTextureIndex::BAKED_LEFT_ARM;
+		mMaxTEs   = LLAvatarAppearanceDefines::ETextureIndex::TEX_HEAD_UNIVERSAL_TATTOO;
+	}
+#else
+	mMaxBakes = LLAvatarAppearanceDefines::EBakedTextureIndex::BAKED_NUM_INDICES;
+	mMaxTEs   = LLAvatarAppearanceDefines::ETextureIndex::TEX_NUM_INDICES;
+#endif // OPENSIM
+// </FS:Beq>
 }
 
 //this is called when the parent is not cacheable.
