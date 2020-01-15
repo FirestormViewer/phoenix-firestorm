@@ -1761,7 +1761,7 @@ class DarwinManifest(ViewerManifest):
                             sign_attempts-=1;
                             self.run_command(
                                 # Note: See blurb above about names of keychains
-                               ['codesign', '--verbose', '--deep', '--force',
+                               ['codesign', '--verbose', '--deep', '--force', '--option=runtime',
                                 '--keychain', viewer_keychain, '--sign', identity,
                                 app_in_dmg])
                             signed=True # if no exception was raised, the codesign worked
