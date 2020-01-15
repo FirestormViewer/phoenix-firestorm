@@ -19,6 +19,7 @@ indra/tools/vstool/* -text
 # Viewer resources
 *.db2 binary
 *.llm binary
+*.ttf binary
 
 # Executables
 *.dll binary
