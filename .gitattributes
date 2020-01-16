@@ -20,10 +20,15 @@ indra/tools/vstool/* -text
 *.db2 binary
 *.llm binary
 *.ttf binary
+*.nib binary
 
 # Executables
 *.dll binary
 *.exe binary
+
+# Normalization disabled
+VivoxAUP.txt -text
+FILES_ARE_UNICODE_UTF-16LE.txt -text
 
 # Windows Manifest files
 *.manifest text eol=crlf
