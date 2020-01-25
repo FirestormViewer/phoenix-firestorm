@@ -580,23 +580,40 @@ void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, L
 	while( paragraph_offset < (S32)mParagraphText.length() &&
 		   mParagraphText[paragraph_offset] != 0)
 	{
-		S32 skip_chars; // skip '\n'
+		// <FS> FIRE-8257: Sometimes text is cut off on left side of console
+		//S32 skip_chars; // skip '\n'
 		// Figure out if a word-wrapped line fits here.
 		LLWString::size_type line_end = mParagraphText.find_first_of(llwchar('\n'), paragraph_offset);
-		if (line_end != LLWString::npos)
-		{
-			skip_chars = 1; // skip '\n'
-		}
-		else
+		// <FS> FIRE-8257: Sometimes text is cut off on left side of console
+		//if (line_end != LLWString::npos)
+		//{
+		//	skip_chars = 1; // skip '\n'
+		//}
+		//else
+		//{
+		//	line_end = mParagraphText.size();
+		//	skip_chars = 0;
+		//}
+
+		//U32 drawable = font->maxDrawableChars(mParagraphText.c_str()+paragraph_offset, screen_width, line_end - paragraph_offset, LLFontGL::WORD_BOUNDARY_IF_POSSIBLE);
+		if (line_end == LLWString::npos)
 		{
 			line_end = mParagraphText.size();
-			skip_chars = 0;
 		}
 
-		U32 drawable = font->maxDrawableChars(mParagraphText.c_str()+paragraph_offset, screen_width, line_end - paragraph_offset, LLFontGL::WORD_BOUNDARY_IF_POSSIBLE);
+		S32 skip_chars = 0; // skip '\n'
+		U32 line_length = line_end - paragraph_offset;
+		U32 drawable = font->maxDrawableChars(mParagraphText.c_str()+paragraph_offset, screen_width, line_length, LLFontGL::WORD_BOUNDARY_IF_POSSIBLE);
+		// </FS>
 
 		if (drawable != 0)
 		{
+			// <FS> FIRE-8257: Sometimes text is cut off on left side of console
+			if (drawable >= line_length)
+			{
+				skip_chars = 1;
+			}
+			// </FS>
 			F32 x_position = 0;						//Screen X position of text.
 			
 			mMaxWidth = llmax( mMaxWidth, (F32)font->getWidth( mParagraphText.substr( paragraph_offset, drawable ).c_str() ) );
