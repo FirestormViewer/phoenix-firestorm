@@ -611,15 +611,19 @@ void LLPanelLogin::setFields(LLPointer<LLCredential> credential)
 		    login_id += " ";
 		    login_id += lastname;
 	    }
-		sInstance->getChild<LLComboBox>("username_combo")->setLabel(login_id);	
+		sInstance->getChild<LLComboBox>("username_combo")->setLabel(login_id);
+		sInstance->mUsernameLength = login_id.length();
 	}
 	else if(identifier.has("type") && (std::string)identifier["type"] == "account")
 	{
-		sInstance->getChild<LLComboBox>("username_combo")->setLabel((std::string)identifier["account_name"]);		
+		std::string login_id = identifier["account_name"].asString();
+		sInstance->getChild<LLComboBox>("username_combo")->setLabel(login_id);
+		sInstance->mUsernameLength = login_id.length();
 	}
 	else
 	{
-		sInstance->getChild<LLComboBox>("username_combo")->setLabel(std::string());	
+		sInstance->getChild<LLComboBox>("username_combo")->setLabel(std::string());
+		sInstance->mUsernameLength = 0;
 	}
 
 	sInstance->addFavoritesToStartLocation();
@@ -643,7 +647,8 @@ void LLPanelLogin::setFields(LLPointer<LLCredential> credential)
 	}
 	else
 	{
-		sInstance->getChild<LLUICtrl>("password_edit")->setValue(std::string());		
+		sInstance->getChild<LLUICtrl>("password_edit")->setValue(std::string());
+		sInstance->mPasswordLength = 0;
 	}
 }
 
@@ -661,7 +666,7 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
 	LLSD identifier = LLSD::emptyMap();
 	LLSD authenticator = LLSD::emptyMap();
 
-	std::string username = sInstance->getChild<LLComboBox>("username_combo")->getValue().asString();
+	std::string username = sInstance->getChild<LLComboBox>("username_combo")->getSimple();
 	std::string password = sInstance->getChild<LLUICtrl>("password_edit")->getValue().asString();
 	LLStringUtil::trim(username);
 
@@ -1229,6 +1234,8 @@ void LLPanelLogin::populateUserList(LLPointer<LLCredential> credential)
     LLComboBox* user_combo = getChild<LLComboBox>("username_combo");
     user_combo->removeall();
     user_combo->clear();
+    mUsernameLength = 0;
+    mPasswordLength = 0;
 
     if (gSecAPIHandler->hasCredentialMap("login_list", LLGridManager::getInstance()->getGrid()))
     {
@@ -1252,6 +1259,7 @@ void LLPanelLogin::populateUserList(LLPointer<LLCredential> credential)
             // selection failed, just deselect whatever might be selected
             user_combo->setValue(std::string());
             getChild<LLUICtrl>("password_edit")->setValue(std::string());
+            updateLoginButtons();
         }
         else
         {
@@ -1268,6 +1276,14 @@ void LLPanelLogin::populateUserList(LLPointer<LLCredential> credential)
                 user_combo->add(LLPanelLogin::getUserName(credential), credential->userID(), ADD_BOTTOM, TRUE);
                 setFields(credential);
             }
+            else
+            {
+                updateLoginButtons();
+            }
+        }
+        else
+        {
+            updateLoginButtons();
         }
     }
 }
