@@ -38,6 +38,7 @@
 #include "llpresetsmanager.h"
 #include "llradiogroup.h"
 #include "lltrans.h"
+#include "llviewercontrol.h"
 
 LLFloaterSaveCameraPreset::LLFloaterSaveCameraPreset(const LLSD &key)
 	: LLModalDialog(key)
