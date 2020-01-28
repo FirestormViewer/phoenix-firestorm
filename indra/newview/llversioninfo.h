@@ -98,6 +98,10 @@ public:
         RELEASE_VIEWER
     } ViewerMaturity;
     static ViewerMaturity getViewerMaturity();
+
+    //<FS:ND> return hash of HEAD
+    static std::string getGitHash();
+    // </FS:ND>
 };
 
 #endif

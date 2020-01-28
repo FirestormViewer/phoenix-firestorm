@@ -570,6 +570,7 @@ things in this group. There&apos;s a broad variety of Abilities.
          follows="left|top|right"
          right="-1"
          name="role_assigned_members"
+         multi_select="true"
          top_pad="0"
          width="300" />
         <check_box
@@ -689,6 +690,7 @@ things in this group. There&apos;s a broad variety of Abilities.
          left="5"
          right="-1"
          name="action_members"
+         multi_select="true"
          top_pad="0"
          width="300" />
     </panel>

@@ -168,6 +168,7 @@ Hover your mouse over the options for more help.
      draw_heading="true"
      heading_height="23"
      name="visible_members"
+     multi_select="true"
      short_names="false"
      follows="all"
      layout="topleft">
