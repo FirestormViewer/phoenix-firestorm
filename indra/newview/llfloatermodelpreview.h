@@ -30,6 +30,7 @@
 #include "llfloaternamedesc.h"
 
 #include "lldynamictexture.h"
+#include "lljointoverridedata.h"
 #include "llquaternion.h"
 #include "llmeshrepository.h"
 #include "llmodel.h"
@@ -213,7 +214,8 @@ protected:
 	LLSD mModelPhysicsFee;
 
 private:
-	void onClickCalculateBtn();
+    void onClickCalculateBtn();
+    void onJointListSelection();
 
 	void onLoDSourceCommit(S32 lod);
 
@@ -227,6 +229,8 @@ private:
 
 	void resetUploadOptions();
 	void clearLogTab();
+	void populateOverridesTab();
+	void disableOverridesTab();
 
 	void createSmoothComboBox(LLComboBox* combo_box, float min, float max);
 
@@ -234,6 +238,8 @@ private:
 	LLButton* mCalculateBtn;
 	LLViewerTextEditor* mUploadLogText;
 	LLTabContainer* mTabContainer;
+
+	joint_override_data_map_t mJointOverrides;
 };
 
 class LLMeshFilePicker : public LLFilePickerThread
