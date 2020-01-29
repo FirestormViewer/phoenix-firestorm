@@ -55,6 +55,7 @@
 
 // Firestorm includes
 #include "exogroupmutelist.h"
+#include "fsnamelistavatarmenu.h"
 #include "llclipboard.h"
 #include "lleconomy.h" // <FS:AW FIRE-7091 group creation cost inaccurate on opensim>
 #include "llurlaction.h"
@@ -135,7 +136,9 @@ BOOL LLPanelGroupGeneral::postBuild()
 	if (mListVisibleMembers)
 	{
 		mListVisibleMembers->setDoubleClickCallback(openProfile, this);
-		mListVisibleMembers->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+		// <FS:Ansariel> Special Firestorm menu also allowing multi-select action
+		//mListVisibleMembers->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+		mListVisibleMembers->setContextMenu(&gFSNameListAvatarMenu);
 		
 		mListVisibleMembers->setSortCallback(boost::bind(&LLPanelGroupGeneral::sortMembersList,this,_1,_2,_3));
 	}

@@ -530,9 +530,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c3b5e8c57bd1c92bc9e0956586908b99</string>
+              <string>d453d6200607972493e1797a30fc805f</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/26330/207568/bugsplat-1.0.7.520791-darwin64-520791.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45455/401027/bugsplat-1.0.7.532004-darwin64-532004.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -542,9 +542,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>766dfde65a5b42ea5691d41df79c43e0</string>
+              <string>372e1d677ee570f947183bae81ca0852</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/26332/207582/bugsplat-3.6.0.4.520791-windows-520791.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45457/401043/bugsplat-3.6.0.4.532004-windows-532004.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -554,9 +554,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>afd01285e22f27d473fac6f88fac9a3b</string>
+              <string>261d460a67e3e2f52bdad1391bb02ec3</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/26331/207576/bugsplat-3.6.0.4.520791-windows64-520791.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/45456/401036/bugsplat-.532004-windows64-532004.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -1072,11 +1072,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4bf66af7313c2a859bde553a563698e3</string>
+              <string>7e114818d7e6688c956eca1bee149e99</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.00.05-linux64-192862026.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.00.07-linux64-200271635.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1086,11 +1086,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c668bd6961489c9bd6f07f1203a9d6eb</string>
+              <string>3067612af8484188a50069bf9ecca987</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.05-windows-192861134.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.07-windows-200240843.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1100,11 +1100,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2cf52c44f8943f69b91c950ae7ea356a</string>
+              <string>a26e1b97c3fd2a8a7631ca84da8ab95d</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.05-windows64-192861136.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.07-windows64-200240848.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -3825,9 +3825,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
     <key>package_description</key>
     <map>
       <key>canonical_repo</key>
-      <string>https://bitbucket.org/lindenlab/viewer-release</string>
+      <string>https://bitbucket.org/lindenlab/viewer</string>
       <key>copyright</key>
-      <string>Copyright (c) 2019, The Phoenix Firestorm Project, Inc.</string>
+      <string>Copyright (c) 2020, The Phoenix Firestorm Project, Inc.</string>
       <key>description</key>
       <string>Firestorm Viewer</string>
       <key>license</key>
