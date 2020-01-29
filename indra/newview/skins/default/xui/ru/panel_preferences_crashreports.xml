@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Сообщения об ошибках" name="crash_reports">
     <check_box label="Отправить отчет об ошибке на firestormviewer.org" name="checkSendCrashReports" />
-    <text label="Журналы:" name="textSaveMiniDumpType">
-        Тип минидампа:
-    </text>
-    <combo_box name="comboSaveMiniDumpType">
-        <combo_box.item name="Minimal" label="Минимальный" />
-        <combo_box.item name="Default" label="По умолчанию" />
-        <combo_box.item name="Extended" label="Расширенный" />
-    </combo_box>
     <check_box label="Всегда спрашивать перед отправкой" name="checkSendCrashReportsAlwaysAsk" />
     <check_box label="Включая settings.xml" name="checkSendSettings" />
     <text name="textSendSettings">

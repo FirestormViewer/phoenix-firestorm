@@ -38,6 +38,7 @@
 #include "llagentui.h"
 #include "llappearancemgr.h"
 #include "llanimationstates.h"
+#include "llavatarappearancedefines.h"
 #include "llcallingcard.h"
 #include "llchannelmanager.h"
 #include "llchicletbar.h"
@@ -5551,10 +5552,7 @@ LLAgentQueryManager::LLAgentQueryManager() :
 	mNumPendingQueries(0),
 	mUpdateSerialNum(0)
 {
-	//<FS:Beq> BOM fallback legacy opensim
-	// for (U32 i = 0; i < BAKED_NUM_INDICES; i++)
-	for (U32 i = 0; i < LLVOAvatar::sMaxBakes; i++)
-	// </FS:Beq>
+	for (U32 i = 0; i < BAKED_NUM_INDICES; i++)
 	{
 		mActiveCacheQueries[i] = 0;
 	}
@@ -5963,7 +5961,7 @@ void LLAgent::sendAgentSetAppearance()
 	BOOL textures_current = gAgentAvatarp->areTexturesCurrent();
 	//<FS:Beq> BOM fallback legacy opensim
 	// for(U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++ )
-	for(U8 baked_index = 0; baked_index < LLVOAvatar::sMaxBakes; baked_index++ )
+	for(U8 baked_index = 0; baked_index < gAgentAvatarp->getNumBakes(); baked_index++ )
 	//</FS:Beq>
 	{
 		const ETextureIndex texture_index = LLAvatarAppearanceDictionary::bakedToLocalTextureIndex((EBakedTextureIndex)baked_index);
@@ -5999,7 +5997,7 @@ void LLAgent::sendAgentSetAppearance()
 		LL_DEBUGS("Avatar") << gAgentAvatarp->avString() << "TAT: Sending cached texture data" << LL_ENDL;
 		//<FS:Beq> BOM fallback for legacy opensim
 		// for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
-		for (U8 baked_index = 0; baked_index < LLVOAvatar::sMaxBakes; baked_index++)
+		for (U8 baked_index = 0; baked_index < gAgentAvatarp->getNumBakes(); baked_index++)
 		//</FS:Beq>
 		{
 			BOOL generate_valid_hash = TRUE;
@@ -6008,6 +6006,13 @@ void LLAgent::sendAgentSetAppearance()
 				generate_valid_hash = FALSE;
 				LL_DEBUGS("Avatar") << gAgentAvatarp->avString() << "Not caching baked texture upload for " << (U32)baked_index << " due to being uploaded at low resolution." << LL_ENDL;
 			}
+			// <FS:Beq> Exclude BAKED_SKIRT from being sent if no skirt is worn (should only reach here if it were already baked)
+			if (baked_index == BAKED_SKIRT && !gAgentAvatarp->isWearingWearableType(LLWearableType::WT_SKIRT))
+			{
+				LL_DEBUGS("Avatar") << "Not caching baked texture for unworn skirt." << LL_ENDL;
+				generate_valid_hash = FALSE;
+			}
+			// </FS:Beq>
 
 			const LLUUID hash = gAgentWearables.computeBakedTextureHash((EBakedTextureIndex) baked_index, generate_valid_hash);
 			if (hash.notNull())
@@ -6019,6 +6024,7 @@ void LLAgent::sendAgentSetAppearance()
 			}
 		}
 		msg->nextBlockFast(_PREHASH_ObjectData);
+		// gAgentAvatarp->dumpAvatarTEs("sendAppearance"); // <FS:Beq> useful when debugging appeanrce updates
 		gAgentAvatarp->sendAppearanceMessage( gMessageSystem );
 	}
 	else

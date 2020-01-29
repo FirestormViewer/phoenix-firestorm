@@ -63,13 +63,16 @@ void FSKeywords::updateKeywords()
 	mWordList.clear();
 	while (begin != end)
 	{
+		std::string token(*begin++);
+		LLStringUtil::trim(token);
+
 		if (match_whole_words)
 		{
-			mWordList.push_back(boost::regex_replace(std::string(*begin++), boost::regex("[.^$|()\\[\\]{}*+?\\\\]"), "\\\\&", boost::match_default|boost::format_sed));
+			mWordList.push_back(boost::regex_replace(token, boost::regex("[.^$|()\\[\\]{}*+?\\\\]"), "\\\\&", boost::match_default|boost::format_sed));
 		}
 		else
 		{
-			mWordList.push_back(*begin++);
+			mWordList.push_back(token);
 		}
 	}
 }

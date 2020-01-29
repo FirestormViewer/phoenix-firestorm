@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Rapports d'erreurs" name="crash_reports">
 	<check_box label="Envoyer les rapports d'erreurs à firestormviewer.org" name="checkSendCrashReports"/>
-	<text label="Journaux :" name="textSaveMiniDumpType">
-         Type de rapport :
-	</text>
-	<combo_box name="comboSaveMiniDumpType">
-		<combo_box.item name="Minimal" label="Minimal"/>
-		<combo_box.item name="Default" label="Par défaut"/>
-		<combo_box.item name="Extended" label="Détaillé"/>
-	</combo_box>
 	<check_box label="Toujours demander avant l'envoi" name="checkSendCrashReportsAlwaysAsk"/>
 	<check_box label="Inclure le fichier settings.xml" name="checkSendSettings"/>
 	<text name="textSendSettings">(contient le nom d'utilisateur Second Life)</text>

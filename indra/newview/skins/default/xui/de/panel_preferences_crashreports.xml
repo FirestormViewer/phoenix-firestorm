@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Absturzmeldungen" name="crash_reports">
 	<check_box label="Absturzmeldungen an firestormviewer.org senden" name="checkSendCrashReports"/>
-	<text name="textSaveMiniDumpType" width="120">
-		Typ Speicherabbild:
-	</text>
-	<combo_box name="comboSaveMiniDumpType">
-		<combo_box.item name="Minimal" label="Minimal"/>
-		<combo_box.item name="Default" label="Standard"/>
-		<combo_box.item name="Extended" label="Erweitert"/>
-	</combo_box>
 	<check_box label="Vor dem Senden immer fragen" name="checkSendCrashReportsAlwaysAsk"/>
 	<check_box label="Firestorm-Konfigurationsdatei settings.xml einschließen" name="checkSendSettings"/>
 	<text name="textSendSettings">

@@ -2431,7 +2431,10 @@ std::string LLOfferInfo::getSanitizedDescription()
 
 	std::size_t start = mDesc.find_first_of("'");
 	std::size_t end = mDesc.find_last_of("'");
-	if ((start != std::string::npos) && (end != std::string::npos))
+	// <FS:Ansariel> FIRE-29194: <nolink> tags showing in offline inventory offer log
+	//if ((start != std::string::npos) && (end != std::string::npos))
+	if ((start != std::string::npos) && (end != std::string::npos) && start != end)
+	// </FS:Ansariel>
 	{
 		description.insert(start, "<nolink>");
 		description.insert(end + 8, "</nolink>");

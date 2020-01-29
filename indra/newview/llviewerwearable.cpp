@@ -51,7 +51,7 @@ public:
 	{
 		//<FS:Beq> OpenSim BOM fallback
 		// U32 num_bakes = (U32) LLAvatarAppearanceDefines::BAKED_NUM_INDICES;
-		U32 num_bakes = (U32) LLVOAvatar::sMaxBakes;
+		U32 num_bakes = (U32) gAgentAvatarp->getNumBakes();
 		//</FS:Beq>
 		for( U32 index = 0; index < num_bakes; ++index )
 		{
@@ -64,7 +64,7 @@ public:
 	{
 		//<FS:Beq> OpenSim BOM fallback
 		// U32 num_bakes = (U32) LLAvatarAppearanceDefines::BAKED_NUM_INDICES;
-		U32 num_bakes = (U32) LLVOAvatar::sMaxBakes;
+		U32 num_bakes = (U32) gAgentAvatarp->getNumBakes();
 		//</FS:Beq>
 		for( U32 index = 0; index < num_bakes; ++index )
 		{

@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Crash Reports" name="crash_reports">
     <check_box label="クラッシュレポートを firestormviewer.org に送る" name="checkSendCrashReports" />
-
-    <text label="Logs:" name="textSaveMiniDumpType" >
-        ミニダンプのタイプ：
-    </text>
-    <combo_box name="comboSaveMiniDumpType" >
-        <combo_box.item name="Minimal" label="最小"/>
-        <combo_box.item name="Default" label="デフォルト"/>
-        <combo_box.item name="Extended" label="拡張"/>
-    </combo_box>
-
     <check_box label="送信前に必ず確認する" name="checkSendCrashReportsAlwaysAsk" />
 
     <check_box label="settings.xml ファイルを含める" name="checkSendSettings" />
