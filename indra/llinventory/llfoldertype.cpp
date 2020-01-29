@@ -92,7 +92,7 @@ LLFolderDictionary::LLFolderDictionary()
 	addEntry(LLFolderType::FT_MESH, 				new FolderEntry("mesh",	TRUE));
 
 	addEntry(LLFolderType::FT_INBOX, 				new FolderEntry("inbox",	TRUE));
-	addEntry(LLFolderType::FT_OUTBOX, 				new FolderEntry("outbox",	TRUE));
+	addEntry(LLFolderType::FT_OUTBOX, 				new FolderEntry("outbox",	FALSE)); // <FS:Ansariel> Make obsolete Merchant Outbox folder deletable
 	
 	addEntry(LLFolderType::FT_BASIC_ROOT,			new FolderEntry("basic_rt", TRUE));
 
