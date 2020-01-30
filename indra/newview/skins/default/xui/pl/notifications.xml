@@ -1379,6 +1379,13 @@ Jeżeli używasz [CURRENT_GRID] po raz pierwszy to musisz stworzyć konto żeby 
 Czy chcesz przejść na stronę [http://join.secondlife.com secondlife.com] żeby stworzyć nowe konto?
 		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Stwórz konto..."/>
 	</notification>
+	<notification name="LoginCantRemoveUsername">
+		Zapamiętany użytkownik może zostać zapomniany w Awatar &gt; Ustawienia &gt; Zaawansowane &gt; Zapamiętani użytkownicy.
+	</notification>
+	<notification name="LoginCantRemoveCurUsername">
+		Zapomnienie zalogowanego użytkownika wymaga jego wylogowania.
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Potwierdź i wyloguj się" />
+	</notification>
 	<notification name="LoginPacketNeverReceived">
 		Problemy z połączeniem. Problem może być spowodowany Twoim połączeniem z Internetem albo może istnieć po stronie [SECOND_LIFE_GRID].
 
@@ -1395,6 +1402,10 @@ Możesz sprawdzić swoje połączenie z Internetem i spróbować ponownie za kil
 		<form name="form">
 			<button name="Help" text="Pomoc"/>
 		</form>
+	</notification>
+	<notification name="LoginRemoveMultiGridUserData">
+		Usuwane Dane Lokalne są współużytkowane przez wiele siatek, czy na pewno chcesz je usunąć?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Potwierdź" />
 	</notification>
 	<notification name="WelcomeChooseSex">
 		Twoja postać pojawi się za moment.
@@ -2347,13 +2358,13 @@ Chcesz wyłączyć Tryb Zajętości przed zakończeniem tej transakcji?
 		</form>
 	</notification>
 	<notification label="Działka odtwarza media" name="ParcelPlayingMedia">
-		Ta ziemia ma media:
+		Ta lokalizacja odtwarza media:
 [URL]
 Czy chcesz je odtworzyć?
 		<form name="form">
 			<ignore name="ignore" text="Zawsze wybieraj tę opcję dla tej ziemi."/>
 			<button ignore="Odtwarzaj media" name="Yes" text="Odtwarzaj"/>
-			<button ignore="Ignoruj media" name="No" text="Ignoruj"/>
+			<button ignore="Ignoruj media" name="No" text="Nie odtwarzaj"/>
 		</form>
 	</notification>
 	<notification name="ConfirmDeleteProtectedCategory">
