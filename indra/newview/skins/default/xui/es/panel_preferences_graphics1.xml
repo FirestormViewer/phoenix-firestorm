@@ -33,7 +33,6 @@
 			<check_box label="Agua transparente" name="TransparentWater"/>
 			<check_box label="Mapeado topológico y brillos" name="BumpShiny"/>
 			<check_box label="Focos locales de luz" name="LocalLights"/>
-			<check_box label="Efectos básicos" name="BasicShaders" tool_tip="Desactivar esta opción puede evitar que algunas tarjetas gráficas fallen"/>
 			<check_box label="Efectos atmosféricos" name="WindLightUseAtmosShaders"/>
 			<check_box label="Modelo avanz. de iluminación" tool_tip="Activa el dibujo avanzado de la luz" name="UseLightShaders"/>
 			<check_box label="Oclusión de ambiente" name="UseSSAO"/>

@@ -72,26 +72,14 @@
 			 border_visible="true"
 			 background_visible="true">
 				<check_box
-				 control_name="VertexShaderEnable"
-				 height="16"
-				 label="Basic Shaders - Leave ON! (see tool tip!)"
-				 layout="topleft"
-				 left="5"
-				 name="BasicShaders"
-				 tool_tip="This should ALWAYS be on as it is required for DoF, Shadows and Lights, Ambient Occlusion, Water Reflections and more."
-				 top_pad="8"
-				 width="240">
-				</check_box>
-				<check_box
 				 control_name="WindLightUseAtmosShaders"
-				 enabled_control="VertexShaderEnable"
 				 height="16"
 				 initial_value="true"
 				 label="Enable Atmospheric Shaders (Windlight)"
 				 layout="topleft"
 				 left="5"
 				 name="WindLightUseAtmosShaders"
-				 top_pad="2"
+				 top_pad="8"
 				 tool_tip="This will enable full WindLight functionality (atmospheric shaders). If you cannot enable this feature, ensure that Basic Shaders are enabled below."
 				 width="240">
 				</check_box>
@@ -608,7 +596,6 @@
 				</text>
 				<combo_box
 				 control_name="RenderWaterRefResolution"
-				 enabled_control="VertexShaderEnable"
 				 height="22"
 				 layout="topleft"
 				 left_pad="65"
@@ -701,7 +688,6 @@
 			 background_visible="true">
 				<check_box
 				 control_name="RenderDeferred"
-				 enabled_control="VertexShaderEnable"
 				 height="16"
 				 initial_value="true"
 				 label="Enable Advanced Lighting Model"
@@ -1937,7 +1923,6 @@
 				<!--
 				<check_box
 				 control_name="RenderGlow"
-				 enabled_control="VertexShaderEnable"
 				 height="16"
 				 label="Enable Glow Effect (please read the tool tip)"
 				 layout="topleft"

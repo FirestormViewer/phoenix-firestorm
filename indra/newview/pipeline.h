@@ -910,7 +910,6 @@ public:
 
 	//cached settings
 	static bool WindLightUseAtmosShaders;
-	static bool VertexShaderEnable;
 	static bool RenderAvatarVP;
 	static bool RenderDeferred;
 	static F32 RenderDeferredSunWash;

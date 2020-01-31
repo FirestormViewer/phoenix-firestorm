@@ -137,8 +137,8 @@ protected:
 	// callback for defaults
 	void setHardwareDefaults();
 	void setRecommended();
-	// callback for when client turns on shaders
-	void onVertexShaderEnable();
+	// callback for when client modifies a render option
+    void onRenderOptionEnable();
 	// callback for when client turns on impostors
 	void onAvatarImpostorsEnable();
 	// <FS:AO> callback for local lights toggle
@@ -416,8 +416,8 @@ class LLFloaterPreferenceGraphicsAdvanced : public LLFloater
 	static void setIndirectMaxNonImpostors();
 	static void setIndirectMaxArc();
 	void refresh();
-	// callback for when client turns on shaders
-	void onVertexShaderEnable();
+	// callback for when client modifies a render option
+	void onRenderOptionEnable();
     void onAdvancedAtmosphericsEnable();
 	LOG_CLASS(LLFloaterPreferenceGraphicsAdvanced);
 };

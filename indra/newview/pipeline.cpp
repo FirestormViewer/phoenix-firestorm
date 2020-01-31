@@ -140,7 +140,6 @@ bool gShiftFrame = false;
 
 //cached settings
 bool LLPipeline::RenderAvatarVP;
-bool LLPipeline::VertexShaderEnable;
 bool LLPipeline::WindLightUseAtmosShaders;
 bool LLPipeline::RenderDeferred;
 F32 LLPipeline::RenderDeferredSunWash;
@@ -571,7 +570,6 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("RenderAvatarMaxNonImpostors");
 	connectRefreshCachedSettingsSafe("RenderDelayVBUpdate");
 	connectRefreshCachedSettingsSafe("UseOcclusion");
-	connectRefreshCachedSettingsSafe("VertexShaderEnable");
 	connectRefreshCachedSettingsSafe("RenderAvatarVP");
 	connectRefreshCachedSettingsSafe("WindLightUseAtmosShaders");
 	connectRefreshCachedSettingsSafe("RenderDeferred");
@@ -836,8 +834,8 @@ void LLPipeline::resizeScreenTexture()
             releaseShadowTargets();
 		    allocateScreenBuffer(resX,resY);
             gResizeScreenTexture = FALSE;
-		}
-	}
+				}
+			}
 }
 
 void LLPipeline::allocatePhysicsBuffer()
@@ -1075,7 +1073,7 @@ bool LLPipeline::allocateShadowBuffer(U32 resX, U32 resY)
 
 		const U32 occlusion_divisor = 3;
 
-		F32 scale = llmax(0.f, RenderShadowResolutionScale);
+		F32 scale = llmax(0.f,RenderShadowResolutionScale);
 		U32 sun_shadow_map_width  = BlurHappySize(resX, scale);
 		U32 sun_shadow_map_height = BlurHappySize(resY, scale);
 
@@ -1146,7 +1144,6 @@ void LLPipeline::updateRenderDeferred()
 					 LLRenderTarget::sUseFBO &&
 					 LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&	 
 					 LLPipeline::sRenderBump &&
-					 VertexShaderEnable && 
 					 RenderAvatarVP &&
 					 WindLightUseAtmosShaders)) &&
 					!gUseWireframe;
@@ -1180,7 +1177,6 @@ void LLPipeline::refreshCachedSettings()
 			&& gSavedSettings.getBOOL("UseOcclusion") 
 			&& gGLManager.mHasOcclusionQuery) ? 2 : 0;
 	
-	VertexShaderEnable = gSavedSettings.getBOOL("VertexShaderEnable");
 	RenderAvatarVP = gSavedSettings.getBOOL("RenderAvatarVP");
 	WindLightUseAtmosShaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
 	RenderDeferred = gSavedSettings.getBOOL("RenderDeferred");
@@ -1327,7 +1323,7 @@ void LLPipeline::releaseScreenBuffers()
 	mOcclusionDepth.release();
 }
 		
-
+		
 void LLPipeline::releaseShadowTarget(U32 index)
 {
     mShadow[index].release();
@@ -1512,12 +1508,9 @@ void LLPipeline::restoreGL()
 
 bool LLPipeline::canUseVertexShaders()
 {
-	static const std::string vertex_shader_enable_feature_string = "VertexShaderEnable";
-
 	if (sDisableShaders ||
 		!gGLManager.mHasVertexShader ||
 		!gGLManager.mHasFragmentShader ||
-		!LLFeatureManager::getInstance()->isFeatureAvailable(vertex_shader_enable_feature_string) ||
 		(assertInitialized() && mVertexShadersLoaded != 1) )
 	{
 		return false;
