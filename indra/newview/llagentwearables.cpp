@@ -2139,7 +2139,7 @@ void LLAgentWearables::queryWearableCache()
 	S32 num_queries = 0;
 	// <FS:Beq> BOM fallback for legacy opensim 
 	// for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
-	for (U8 baked_index = 0; baked_index < LLVOAvatar::sMaxBakes; baked_index++)
+	for (U8 baked_index = 0; baked_index < gAgentAvatarp->getNumBakes(); baked_index++)
 	// </FS:Beq>
 	{
 		LLUUID hash_id = computeBakedTextureHash((EBakedTextureIndex) baked_index);
