@@ -127,7 +127,6 @@ private:
 	LLComboBox*			mDayCyclePresetsCombo;
 
 	// Phototools additions
-	LLCheckBoxCtrl*		mCtrlShaderEnable;
 	LLCheckBoxCtrl*		mCtrlWindLight;
 	LLCheckBoxCtrl*		mCtrlDeferred;
 	LLCheckBoxCtrl*		mCtrlUseSSAO;

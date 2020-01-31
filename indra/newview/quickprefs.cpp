@@ -201,7 +201,7 @@ void FloaterQuickPrefs::initCallbacks()
 	// Phototools additions
 	if (getIsPhototools())
 	{
-		gSavedSettings.getControl("VertexShaderEnable")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
+		gSavedSettings.getControl("RenderObjectBump")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderDeferred")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderAvatarVP")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
@@ -514,7 +514,6 @@ BOOL FloaterQuickPrefs::postBuild()
 	// Phototools additions
 	if (getIsPhototools())
 	{
-		mCtrlShaderEnable = getChild<LLCheckBoxCtrl>("BasicShaders");
 		mCtrlWindLight = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
 		mCtrlDeferred = getChild<LLCheckBoxCtrl>("RenderDeferred");
 		mCtrlUseSSAO = getChild<LLCheckBoxCtrl>("UseSSAO");
@@ -954,29 +953,23 @@ void FloaterQuickPrefs::setSelectedDayCycle(const std::string& preset_name)
 // Phototools additions
 void FloaterQuickPrefs::refreshSettings()
 {
-	BOOL reflections = gSavedSettings.getBOOL("VertexShaderEnable") && gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps;
+	BOOL reflections = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps;
 	mCtrlReflectionDetail->setEnabled(reflections);
 
-	bool fCtrlShaderEnable = LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable");
-	mCtrlShaderEnable->setEnabled(fCtrlShaderEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("VertexShaderEnable"))) );
-	BOOL shaders = mCtrlShaderEnable->get();
-
-	bool fCtrlWindLightEnable = fCtrlShaderEnable && shaders;
-	mCtrlWindLight->setEnabled(fCtrlWindLightEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders"))) );
+	mCtrlWindLight->setEnabled((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")) );
 
 	LLTextBox* sky_label = getChild<LLTextBox>("T_Sky_Detail");
 	LLSlider* sky_slider = getChild<LLSlider>("SB_Sky_Detail");
 	LLSpinCtrl* sky_spinner = getChild<LLSpinCtrl>("S_Sky_Detail");
 	LLButton* sky_default_button = getChild<LLButton>("Reset_Sky_Detail");
 
-	BOOL sky_enabled = mCtrlWindLight->get() && shaders;
-	sky_label->setEnabled(sky_enabled);
-	sky_slider->setEnabled(sky_enabled);
-	sky_spinner->setEnabled(sky_enabled);
-	sky_default_button->setEnabled(sky_enabled);
+	sky_label->setEnabled(TRUE);
+	sky_slider->setEnabled(TRUE);
+	sky_spinner->setEnabled(TRUE);
+	sky_default_button->setEnabled(TRUE);
 
-	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") && 
-						shaders && 
+	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
+						gSavedSettings.getBOOL("RenderObjectBump") &&
 						gGLManager.mHasFramebufferObject &&
 						gSavedSettings.getBOOL("RenderAvatarVP") &&
 						(mCtrlWindLight->get()) ? TRUE : FALSE;
@@ -993,39 +986,6 @@ void FloaterQuickPrefs::refreshSettings()
 	mCtrlShadowDetail->setEnabled(enabled);
 
 	mCtrlAvatarShadowDetail->setEnabled(enabled && mCtrlShadowDetail->getValue().asInteger() > 0);
-
-	// if vertex shaders off, disable all shader related products
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"))
-	{
-		mCtrlShaderEnable->setEnabled(FALSE);
-		mCtrlShaderEnable->setValue(FALSE);
-
-		mCtrlWindLight->setEnabled(FALSE);
-		mCtrlWindLight->setValue(FALSE);
-
-		sky_label->setEnabled(FALSE);
-		sky_slider->setEnabled(FALSE);
-		sky_spinner->setEnabled(FALSE);
-		sky_default_button->setEnabled(FALSE);
-
-		mCtrlReflectionDetail->setEnabled(FALSE);
-		mCtrlReflectionDetail->setValue(0);
-
-		mCtrlShadowDetail->setEnabled(FALSE);
-		mCtrlShadowDetail->setValue(0);
-
-		mCtrlAvatarShadowDetail->setEnabled(FALSE);
-		mCtrlAvatarShadowDetail->setValue(0);
-		
-		mCtrlUseSSAO->setEnabled(FALSE);
-		mCtrlUseSSAO->setValue(FALSE);
-
-		mCtrlUseDoF->setEnabled(FALSE);
-		mCtrlUseDoF->setValue(FALSE);
-
-		mCtrlDeferred->setEnabled(FALSE);
-		mCtrlDeferred->setValue(FALSE);
-	}
 
 	// disabled windlight
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))

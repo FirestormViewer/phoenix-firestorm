@@ -13,7 +13,6 @@
 			</panel>
 
 			<panel name="P_WL_Settings">
-				<check_box label="基本シェーダー - 必ず ON! (ヒント参照！)" name="BasicShaders" tool_tip="この項目には「常に」チェックが入っている必要があります。何故なら、被写界深度（DOF）、光と影、アンビエントオクルージョン、水の反射その他多くの設定に必須となっているからです。" />
 				<check_box label="環境（大気）シェーダー（WindLight）を有効にする" name="WindLightUseAtmosShaders" tool_tip="ここにチェックを入れるとWindLightの機能（環境シェーダー）をフルに利用できます。もしこの機能を有効にできない時は、「基本シェーダー」が有効になっているか確認して下さい。" />
 			</panel>
 

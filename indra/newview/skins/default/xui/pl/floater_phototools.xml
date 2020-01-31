@@ -8,7 +8,6 @@
 				</text>
 			</panel>
 			<panel name="P_WL_Settings">
-				<check_box label="Podstawowe shadery - włącz! (chmurka)" name="BasicShaders" tool_tip="Ta opcja powinna być ZAWSZE włączona. Jeśli zmienisz ustawienia rozdzielczości znajdujące się powyżej musisz wyłączyć i włączyć tą opcję, aby zmiany odniosły skutek."/>
 				<check_box label="Włącz shadery atmosfery (Windlight)" name="WindLightUseAtmosShaders" tool_tip="Ta opcja włącza pełną funkcjonalność systemu Windlight (shadery atmosfery). Jeśli nie można włączyć tej funkcji to należy upewnić się, że są zaznaczone 'podstawowe shadery' powyżej."/>
 			</panel>
 			<panel name="P_WL_Sky_Water">

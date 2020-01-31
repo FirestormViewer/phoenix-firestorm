@@ -29,7 +29,6 @@ rápido
 		<check_box label="Água transparente" name="TransparentWater"/>
 		<check_box label="Bump de Mapeamento e Brilho" name="BumpShiny"/>
 		<check_box label="Luzes locais" name="LocalLights"/>
-		<check_box label="Sombreadores básicos" name="BasicShaders" tool_tip="Desabilitar esta opção poderá impedir que alguns drivers de placa de vídeo a travem."/>
 		<check_box label="Sombreadores Atmosféricos" name="WindLightUseAtmosShaders"/>
 		<check_box label="Modelo avançado de luzes" name="UseLightShaders"/>
 		<check_box label="Oclusão ambiental" name="UseSSAO"/>
