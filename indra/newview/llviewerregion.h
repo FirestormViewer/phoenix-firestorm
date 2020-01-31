@@ -244,6 +244,8 @@ public:
 	F32	getWidth() const						{ return mWidth; }
 	F32 getWidthScaleFactor() const				{ return mWidthScaleFactor; } // <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
 
+	S32 getRegionMaxBakes() const						{ return mMaxBakes; } // <FS:Beq/> FS BOM for OS max bakes restriction
+	S32 getRegionMaxTEs() const							{ return mMaxTEs; } // <FS:Beq/> FS BOM for OS max TEs restriction
 	void idleUpdate(F32 max_update_time);
 	void lightIdleUpdate();
 	bool addVisibleGroup(LLViewerOctreeGroup* group);
@@ -505,7 +507,8 @@ private:
 	F32			mTimeDilation;	// time dilation of physics simulation on simulator
 	S32         mLastUpdate; //last time called idleUpdate()
 	F32			mWidthScaleFactor; // <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
-
+	S32			mMaxBakes; // <FS:Beq/> store max bakes on the region
+	S32			mMaxTEs; // <FS:Beq/> store max bakes on the region
 	// simulator name
 	std::string mName;
 	std::string mZoning;

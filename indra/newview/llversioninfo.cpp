@@ -268,3 +268,9 @@ const std::string &LLVersionInfo::getBuildConfig()
     static const std::string build_configuration(LLBUILD_CONFIG); // set in indra/cmake/BuildVersion.cmake
     return build_configuration;
 }
+
+//<FS:ND> return hash of HEAD
+std::string LLVersionInfo::getGitHash()
+{
+	return LL_VIEWER_VERSION_GITHASH;
+}
