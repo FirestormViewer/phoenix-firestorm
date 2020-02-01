@@ -38,6 +38,7 @@
 
 #if LL_SDL
 #include "llwindowsdl.h" // for some X/GTK utils to help with filepickers
+#include <gdk/gdkx.h>
 #endif // LL_SDL
 
 #if LL_LINUX || LL_SOLARIS
@@ -1186,9 +1187,8 @@ GtkWindow* LLFilePicker::buildFilePicker(bool is_save, bool is_folder, std::stri
 		if (None != XWindowID)
 		{
 			gtk_widget_realize(GTK_WIDGET(win)); // so we can get its gdkwin
-			GdkWindow *gdkwin = gdk_window_foreign_new(XWindowID);
-			gdk_window_set_transient_for(GTK_WIDGET(win)->window,
-						     gdkwin);
+			GdkWindow *gdkwin = gdk_x11_window_foreign_new_for_display (gdk_display_get_default(),XWindowID);
+			gdk_window_set_transient_for(gtk_widget_get_window(GTK_WIDGET(win)), gdkwin);
 		}
 		else
 		{
