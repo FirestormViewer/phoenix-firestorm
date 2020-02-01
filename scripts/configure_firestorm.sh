@@ -405,8 +405,10 @@ if [ \( $WANTS_VERSION -eq $TRUE \) -o \( $WANTS_CONFIG -eq $TRUE \) ] ; then
     majorVer=`cat indra/newview/VIEWER_VERSION.txt | cut -d "." -f 1`
     minorVer=`cat indra/newview/VIEWER_VERSION.txt | cut -d "." -f 2`
     patchVer=`cat indra/newview/VIEWER_VERSION.txt | cut -d "." -f 3`
+    gitHash=`git describe --always`
     echo "Channel : ${CHANNEL}"
-    echo "Version : ${majorVer}.${minorVer}.${patchVer}.${buildVer}"
+    echo "Version : ${majorVer}.${minorVer}.${patchVer}.${buildVer} [${gitHash}]"
+    GITHASH=-DVIEWER_VERSION_GITHASH=\"${gitHash}\"
     popd
 fi
 
@@ -505,7 +507,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         UNATTENDED="-DUNATTENDED=ON"
     fi
 
-    cmake -G "$TARGET" ../indra $CHANNEL $FMODSTUDIO $FMODEX $KDU $OPENSIM $SINGLEGRID $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TESTBUILD $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
+    cmake -G "$TARGET" ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $FMODEX $KDU $OPENSIM $SINGLEGRID $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TESTBUILD $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
     if [ $PLATFORM == "windows" ] ; then

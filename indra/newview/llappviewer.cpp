@@ -751,7 +751,8 @@ LLAppViewer::LLAppViewer()
 	mReportedCrash(false),
 	mNumSessions(0),
 	mPurgeCache(false),
-	mPurgeOnExit(false),
+	mPurgeCacheOnExit(false),
+	mPurgeUserDataOnExit(false),
 	mSecondInstance(false),
 	mSavedFinalSnapshot(false),
 	mSavePerAccountSettings(false),		// don't save settings on logout unless login succeeded.
@@ -858,16 +859,7 @@ void fast_exit(int rc)
 
 bool LLAppViewer::init()
 {
-	// <FS:ND> Breakpad merge, setup minidump type from Catznip.
-
-	// setupErrorHandling(mSecondInstance);
-	EMiniDumpType minidump_type = MINIDUMP_NORMAL;
-	if (gSavedSettings.controlExists("SaveMiniDumpType"))
-		minidump_type = (LLApp::EMiniDumpType)gSavedSettings.getU32("SaveMiniDumpType"); 
-
-	setupErrorHandling( mSecondInstance, minidump_type );
-
-	// </FS:ND>
+	setupErrorHandling(mSecondInstance);
 
 	nd::octree::debug::setOctreeLogFilename( gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "octree.log" ) ); // <FS:ND/> Filename to log octree options to.
 	nd::etw::init(); // <FS:ND/> Init event tracing.
@@ -2341,7 +2333,7 @@ bool LLAppViewer::cleanup()
 		LLConversationLog::instance().cache();
 	}
 
-	if (mPurgeOnExit)
+	if (mPurgeCacheOnExit)
 	{
 		LL_INFOS() << "Purging all cache files on exit" << LL_ENDL;
 		gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,""), "*.*");
@@ -2383,6 +2375,14 @@ bool LLAppViewer::cleanup()
 			break;
 		}
 	}
+
+    if (mPurgeUserDataOnExit)
+    {
+        // Ideally we should not save anything from this session since it is going to be purged now,
+        // but this is a very 'rare' case (user deleting himself), not worth overcomplicating 'save&cleanup' code
+        std::string user_path = gDirUtilp->getOSUserAppDir() + gDirUtilp->getDirDelimiter() + LLStartUp::getUserId();
+        gDirUtilp->deleteDirAndContents(user_path);
+    }
 
 	// Delete workers first
 	// shotdown all worker threads before deleting them in case of co-dependencies
@@ -4204,7 +4204,11 @@ void LLAppViewer::writeSystemInfo()
 
 	// Dump some debugging info
 	LL_INFOS("SystemInfo") << "Application: " << LLTrans::getString("APP_NAME") << LL_ENDL;
-	LL_INFOS("SystemInfo") << "Version: " << LLVersionInfo::getChannelAndVersion() << LL_ENDL;
+
+	// <FS:ND> Print into about git sha hash this build is based on.
+	// LL_INFOS("SystemInfo") << "Version: " << LLVersionInfo::getChannelAndVersion() << LL_ENDL;
+	LL_INFOS("SystemInfo") << "Version: " << LLVersionInfo::getChannelAndVersion() << " [" << LLVersionInfo::getGitHash() << "]" << LL_ENDL;
+	// </FS:ND>
 
 	// Dump the local time and time zone
 	time_t now;
@@ -5320,7 +5324,7 @@ void LLAppViewer::badNetworkHandler()
 	// Flush all of our caches on exit in the case of disconnect due to
 	// invalid packets.
 
-	mPurgeOnExit = TRUE;
+	mPurgeCacheOnExit = TRUE;
 
 	std::ostringstream message;
 	message <<

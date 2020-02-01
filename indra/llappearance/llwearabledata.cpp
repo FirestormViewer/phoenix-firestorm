@@ -257,6 +257,7 @@ BOOL LLWearableData::canAddWearable(const LLWearableType::EType type) const
 	LLAssetType::EType a_type = LLWearableType::getAssetType(type);
 	if (a_type==LLAssetType::AT_CLOTHING)
 	{
+		if (type == LLWearableType::WT_PHYSICS) return (getWearableCount(type) < 1); // <FS:Ansariel> Don't add physics layer
 		return (getClothingLayerCount() < MAX_CLOTHING_LAYERS);
 	}
 	else if (a_type==LLAssetType::AT_BODYPART)
