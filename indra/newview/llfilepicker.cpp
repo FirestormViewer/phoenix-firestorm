@@ -1136,17 +1136,14 @@ GtkWindow* LLFilePicker::buildFilePicker(bool is_save, bool is_folder, std::stri
 			 GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER :
 			 GTK_FILE_CHOOSER_ACTION_OPEN);
 
+		gchar const *acceptText = is_folder ? "_Apply" :(is_save ? "_Save" : "_Open");
 		win = gtk_file_chooser_dialog_new(NULL, NULL,
-						  pickertype,
-						  GTK_STOCK_CANCEL,
-						   GTK_RESPONSE_CANCEL,
-						  is_folder ?
-						  GTK_STOCK_APPLY :
-						  (is_save ? 
-						   GTK_STOCK_SAVE :
-						   GTK_STOCK_OPEN),
-						   GTK_RESPONSE_ACCEPT,
-						  (gchar *)NULL);
+										  pickertype,
+										  "_Cancel",
+										  GTK_RESPONSE_CANCEL,
+										  acceptText,
+										  GTK_RESPONSE_ACCEPT,
+										  (gchar *)NULL);
 		mCurContextName = context;
 
 		// get the default path for this usage context if it's been
