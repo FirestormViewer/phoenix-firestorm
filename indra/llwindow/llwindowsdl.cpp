@@ -1831,13 +1831,14 @@ void LLWindowSDL::gatherInput()
 
             case SDL_WINDOWEVENT:  // *FIX: handle this?
             {
-				if( event.window.event == SDL_WINDOWEVENT_RESIZED ||
-					event.window.event == SDL_WINDOWEVENT_RESIZED )
+				if( event.window.event == SDL_WINDOWEVENT_RESIZED
+					/* || event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED*/ ) // <FS:ND> SDL_WINDOWEVENT_SIZE_CHANGED is followed by SDL_WINDOWEVENT_RESIZED, so handling one shall be enough
 				{
 					LL_INFOS() << "Handling a resize event: " << event.window.data1 << "x" << event.window.data2 << LL_ENDL;
 				
 					S32 width = llmax(event.window.data1, (S32)mMinWindowWidth);
 					S32 height = llmax(event.window.data2, (S32)mMinWindowHeight);
+					mSurface = SDL_GetWindowSurface( mWindow );
 				
 					// *FIX: I'm not sure this is necessary!
 					// <FS:ND> I think is is not
