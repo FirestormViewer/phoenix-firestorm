@@ -5,23 +5,29 @@ include(FreeType)
 if (USESYSTEMLIBS)
   include(FindPkgConfig)
     
+  if( NOT GTK_VERSION )
+    set( GTK_VERSION 2.0 )
+  endif()
   if (LINUX)
     set(PKGCONFIG_PACKAGES
         atk
         cairo
-        gdk-2.0
+        gdk-${GTK_VERSION}
         gdk-pixbuf-2.0
         glib-2.0
         gmodule-2.0
-        gtk+-2.0
+        gtk+-${GTK_VERSION}
         gthread-2.0
         libpng
         pango
         pangoft2
-        #pangox
-        pangoxft
         sdl2
         )
+	if( GTK_VERSION LESS "3.0" )
+	  LIST( APPEND PKGCONFIG_PACKAGES pangoxft )
+	else()
+	  add_definitions( -DGTK_DISABLE_DEPRECATED)
+	endif()
   endif (LINUX)
 
   foreach(pkg ${PKGCONFIG_PACKAGES})
