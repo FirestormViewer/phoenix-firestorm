@@ -2302,14 +2302,7 @@ S32 OSMessageBoxSDL(const std::string& text, const std::string& caption, U32 typ
 	return rtn;
 }
 
-static void color_changed_callback(GtkWidget *widget,
-				   gpointer user_data)
-{
-	GtkColorSelection *colorsel = GTK_COLOR_SELECTION(widget);
-	GdkColor *colorp = (GdkColor*)user_data;
 	
-	gtk_color_selection_get_current_color(colorsel, colorp);
-}
 
 
 /*
@@ -2346,76 +2339,7 @@ LLSD LLWindowSDL::getNativeKeyData()
 
 BOOL LLWindowSDL::dialogColorPicker( F32 *r, F32 *g, F32 *b)
 {
-	BOOL rtn = FALSE;
-
-	beforeDialog();
-
-	if (ll_try_gtk_init())
-	{
-		GtkWidget *win = NULL;
-
-		win = gtk_color_selection_dialog_new(NULL);
-
-# if LL_X11
-		// Get GTK to tell the window manager to associate this
-		// dialog with our non-GTK SDL window, which should try
-		// to keep it on top etc.
-		if (mSDL_XWindowID != None)
-		{
-			gtk_widget_realize(GTK_WIDGET(win)); // so we can get its gdkwin
-			GdkWindow *gdkwin = gdk_x11_window_foreign_new_for_display (gdk_display_get_default(), gWindowImplementation->mSDL_XWindowID);
-			gdk_window_set_transient_for(gtk_widget_get_window(GTK_WIDGET(win)), gdkwin);
-		}
-# endif //LL_X11
-
-		GtkColorSelection *colorsel = GTK_COLOR_SELECTION ( gtk_color_selection_dialog_get_color_selection( GTK_COLOR_SELECTION_DIALOG(win) ) );
-
-		GdkColor color, orig_color;
-		orig_color.pixel = 0;
-		orig_color.red = guint16(65535 * *r);
-		orig_color.green= guint16(65535 * *g);
-		orig_color.blue = guint16(65535 * *b);
-		color = orig_color;
-
-		gtk_color_selection_set_previous_color (colorsel, &color);
-		gtk_color_selection_set_current_color (colorsel, &color);
-		gtk_color_selection_set_has_palette (colorsel, TRUE);
-		gtk_color_selection_set_has_opacity_control(colorsel, FALSE);
-
-		gint response = GTK_RESPONSE_NONE;
-		g_signal_connect (win,
-				  "response", 
-				  G_CALLBACK (response_callback),
-				  &response);
-
-		g_signal_connect (G_OBJECT (colorsel), "color_changed",
-				  G_CALLBACK (color_changed_callback),
-				  &color);
-
-		gtk_window_set_modal(GTK_WINDOW(win), TRUE);
-		gtk_widget_show_all(win);
-		// hide the help button - we don't service it.
-		GtkWidget* help_button;
-		g_object_get(win, "help-button", &help_button, NULL);
-		gtk_widget_hide( help_button );
-		//		gtk_widget_hide(GTK_COLOR_SELECTION_DIALOG(win)->help_button);
-		gtk_main();
-
-		if (response == GTK_RESPONSE_OK &&
-		    (orig_color.red != color.red
-		     || orig_color.green != color.green
-		     || orig_color.blue != color.blue) )
-		{
-			*r = color.red / 65535.0f;
-			*g = color.green / 65535.0f;
-			*b = color.blue / 65535.0f;
-			rtn = TRUE;
-		}
-	}
-
-	afterDialog();
-
-	return rtn;
+	return FALSE;
 }
 #else
 S32 OSMessageBoxSDL(const std::string& text, const std::string& caption, U32 type)
