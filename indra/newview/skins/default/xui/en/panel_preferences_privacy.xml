@@ -586,7 +586,7 @@
          name="autorespond_nf_response_label"
          top_pad="5"
          width="450">
-           Automatic response to non-friends when in AUTOREPONSE TO NON-FRIENDS mode:
+           Automatic response to non-friends when in AUTORESPONSE TO NON-FRIENDS mode:
         </text>
         <text_editor
          control_name="FSAutorespondNonFriendsResponse"
