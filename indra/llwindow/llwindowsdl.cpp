@@ -902,24 +902,37 @@ BOOL LLWindowSDL::setPosition(const LLCoordScreen position)
 	return TRUE;
 }
 
+template< typename T > bool setSizeImpl( const T& newSize, SDL_Window *pWin )
+{
+	if( !pWin )
+		return false;
+
+	auto nFlags = SDL_GetWindowFlags( pWin );
+
+	if( nFlags & SDL_WINDOW_MAXIMIZED )
+		SDL_RestoreWindow( pWin );
+
+
+	SDL_SetWindowSize( pWin, newSize.mX, newSize.mY );
+	SDL_Event event;
+	event.type = SDL_WINDOWEVENT;
+	event.window.event = SDL_WINDOWEVENT_RESIZED;
+	event.window.windowID = SDL_GetWindowID( pWin );
+	event.window.data1 = newSize.mX;
+	event.window.data2 = newSize.mY;
+	SDL_PushEvent( &event );
+
+	return true;
+}
+
 BOOL LLWindowSDL::setSizeImpl(const LLCoordScreen size)
 {
-	if(mWindow)
-	{
-		return TRUE;
-	}
-		
-	return FALSE;
+	return ::setSizeImpl( size, mWindow );
 }
 
 BOOL LLWindowSDL::setSizeImpl(const LLCoordWindow size)
 {
-	if(mWindow)
-	{
-		return TRUE;
-	}
-
-	return FALSE;
+	return ::setSizeImpl( size, mWindow );
 }
 
 
