@@ -298,7 +298,7 @@
 			<menu_item_call label="サウンド（[COST]）..." name="Upload Sound"/>
 			<menu_item_call label="アニメーション（[COST]）..." name="Upload Animation"/>
 			<menu_item_call label="メッシュモデル" name="Upload Model"/>
-			<menu_item_call label="一括 （ファイルにつき[COST]）..." name="Bulk Upload"/>
+			<menu_item_call label="一括..." name="Bulk Upload"/>
 			<menu_item_call label="リンクセットをインポート" name="import linkset" />
 		</menu>
 		<menu_item_call label="元に戻す" name="Undo"/>

@@ -5,7 +5,7 @@
 		<menu_item_call label="Звук ([COST])..." name="Upload Sound"/>
 		<menu_item_call label="Анимацию ([COST])..." name="Upload Animation"/>
 		<menu_item_call label="Меш модель..." name="Upload Model"/>
-		<menu_item_call label="Несколько файлов ([COST] за файл)..." name="Bulk Upload"/>
+		<menu_item_call label="Несколько файлов..." name="Bulk Upload"/>
 		<menu_item_call label="Импортировать набор связей..." name="import linkset"/>
 	</menu>
 	<menu_item_call label="Новая папка" name="New Folder"/>

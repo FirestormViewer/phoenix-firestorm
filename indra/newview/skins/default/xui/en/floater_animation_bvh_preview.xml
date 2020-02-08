@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  can_minimize="false"
- height="455"
+ height="490"
  left="30"
  layout="topleft"
  name="Animation Preview"
@@ -604,7 +604,7 @@ Maximum animation length is [MAX_LENGTH] seconds.
 We recommend BVH files exported from Poser 4.
     </text>
   <button
-    bottom="-32"
+    bottom="-77"
    follows="bottom|left"
    height="23"
    label="Reload file"
@@ -613,7 +613,7 @@ We recommend BVH files exported from Poser 4.
    name="reload_btn"
    width="128" />
   <button
-    bottom="-5"
+    bottom="-50"
    follows="bottom|left"
    height="23"
    label="Upload (L$[AMOUNT])"
@@ -622,7 +622,7 @@ We recommend BVH files exported from Poser 4.
    name="ok_btn"
    width="128" />
     <button
-    	bottom="-5"
+    	bottom="-50"
      follows="bottom|left"
      height="23"
      label="Cancel"
@@ -630,4 +630,17 @@ We recommend BVH files exported from Poser 4.
      name="cancel_btn"
      left="142"
      width="128" />
+    <text
+     type="string"
+     length="1"
+     follows="left|bottom"
+     height="35"
+     layout="topleft"
+     left="10"
+     mouse_opaque="false"
+     skip_link_underline="true"
+     name="info_text"
+     word_wrap="true"
+     bottom="-5"
+     width="270"/>
 </floater>

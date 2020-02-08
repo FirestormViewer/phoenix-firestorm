@@ -30,6 +30,7 @@
 
 #include "llavatarnamecache.h"
 #include "llagent.h"
+#include "llagentbenefits.h"
 #include "llsdparam.h"
 #include "lluictrlfactory.h"
 #include "roles_constants.h"
@@ -380,6 +381,11 @@ void LLPanelGroupGeneral::draw()
 
 bool LLPanelGroupGeneral::apply(std::string& mesg)
 {
+	if (mGroupID.isNull())
+	{
+		return false;
+	}
+
 	if (!mGroupID.isNull() && mAllowEdit && mComboActiveTitle && mComboActiveTitle->isDirty())
 	{
 		LLGroupMgr::getInstance()->sendGroupTitleUpdate(mGroupID,mComboActiveTitle->getCurrentID());
@@ -389,7 +395,7 @@ bool LLPanelGroupGeneral::apply(std::string& mesg)
 
 	BOOL has_power_in_group = gAgent.hasPowerInGroup(mGroupID,GP_GROUP_CHANGE_IDENTITY);
 
-	if (has_power_in_group || mGroupID.isNull())
+	if (has_power_in_group)
 	{
 		LL_INFOS() << "LLPanelGroupGeneral::apply" << LL_ENDL;
 
@@ -399,31 +405,6 @@ bool LLPanelGroupGeneral::apply(std::string& mesg)
 		{
 			LLNotificationsUtil::add("SetGroupMature", LLSD(), LLSD(), 
 											boost::bind(&LLPanelGroupGeneral::confirmMatureApply, this, _1, _2));
-			return false;
-		}
-
-		if (mGroupID.isNull())
-		{
-			// Validate the group name length.
-			S32 group_name_len = mGroupNameEditor->getText().size();
-			if ( group_name_len < DB_GROUP_NAME_MIN_LEN 
-				|| group_name_len > DB_GROUP_NAME_STR_LEN)
-			{
-				std::ostringstream temp_error;
-				temp_error << "A group name must be between " << DB_GROUP_NAME_MIN_LEN
-					<< " and " << DB_GROUP_NAME_STR_LEN << " characters.";
-				mesg = temp_error.str();
-				return false;
-			}
-
-			// <FS:AW> FIRE-7091 group creation cost inaccurate on opensim>
-			//LLNotificationsUtil::add("CreateGroupCost",  LLSD(), LLSD(), boost::bind(&LLPanelGroupGeneral::createGroupCallback, this, _1, _2));
-			LLSD args;
-			S32 cost =  LLGlobalEconomy::getInstance()->getPriceGroupCreate();
-			args["[COST]"] = llformat("%d", cost);
-			LLNotificationsUtil::add("CreateGroupCost",  args, LLSD(), boost::bind(&LLPanelGroupGeneral::createGroupCallback, this, _1, _2));
-			// </FS:AW> FIRE-7091 group creation cost inaccurate on opensim>
-
 			return false;
 		}
 
@@ -545,37 +526,6 @@ bool LLPanelGroupGeneral::confirmMatureApply(const LLSD& notification, const LLS
 	}
 
 	return ret;
-}
-
-// static
-bool LLPanelGroupGeneral::createGroupCallback(const LLSD& notification, const LLSD& response)
-{
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	switch(option)
-	{
-	case 0:
-		{
-			// Yay!  We are making a new group!
-			U32 enrollment_fee = (mCtrlEnrollmentFee->get() ? 
-									(U32) mSpinEnrollmentFee->get() : 0);
-			LLUUID insignia_id = mInsignia->getImageItemID().isNull() ? LLUUID::null : mInsignia->getImageAssetID();
-
-			LLGroupMgr::getInstance()->sendCreateGroupRequest(mGroupNameEditor->getText(),
-												mEditCharter->getText(),
-												mCtrlShowInGroupList->get(),
-												insignia_id,
-												enrollment_fee,
-												mCtrlOpenEnrollment->get(),
-												false,
-												mComboMature->getCurrentIndex() == MATURE_CONTENT);
-
-		}
-		break;
-	case 1:
-	default:
-		break;
-	}
-	return false;
 }
 
 // virtual

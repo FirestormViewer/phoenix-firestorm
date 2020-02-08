@@ -90,7 +90,7 @@ typedef enum {
 
 // exported symbols
 extern bool gAgentMovementCompleted;
-extern S32  gMaxAgentGroups;
+extern S32  gMaxAgentGroups; // <FS:Ansariel> OpenSim legacy economy support
 extern LLPointer<LLViewerTexture> gStartTexture;
 
 class LLStartUp

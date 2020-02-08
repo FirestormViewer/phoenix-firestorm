@@ -23,7 +23,7 @@ include_directories(SYSTEM
 
 set(llinventory_SOURCE_FILES
     llcategory.cpp
-    lleconomy.cpp
+    lleconomy.cpp #<FS:Ansariel> OpenSim legacy economy
     llfoldertype.cpp
     llinventory.cpp
     llinventorydefines.cpp
@@ -41,7 +41,7 @@ set(llinventory_HEADER_FILES
     CMakeLists.txt
 
     llcategory.h
-    lleconomy.h
+    lleconomy.h #<FS:Ansariel> OpenSim legacy economy
     llfoldertype.h
     llinventory.h
     llinventorydefines.h
