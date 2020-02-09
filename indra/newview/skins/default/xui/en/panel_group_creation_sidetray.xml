@@ -16,31 +16,50 @@ background_visible="true"
   </panel.string>
   <panel
     name="group_info_top"
-    follows="top|left"
+    follows="top|left|right"
     top="0"
     left="0"
     height="29"
     width="313"
     layout="topleft">
     <line_editor
-     follows="left|top"
+     follows="left|right|top"
      font="SansSerif"
      label="Type your new group name here"
      layout="topleft"
      max_length_bytes="35"
      name="group_name_editor"
-     left="12"
+     left="8"
      top="5"
-     width="270"
+     right="-5"
      height="20"
      visible="true" />
   </panel>
+
+    <scroll_container
+     follows="all"
+     layout="topleft"
+     name="content_scroll_container"
+     reserve_scroll_corner="false"
+     left="0"
+     top="30"
+     bottom="-1"
+     right="-1">
+        <panel
+         name="content_panel"
+         follows="top|left"
+         layout="topleft"
+         top="5"
+         left="5"
+         right="-5"
+         bottom="-1">
+
   <layout_stack
     name="layout"
     orientation="vertical"
      follows="all"
     left="8"
-    top_pad="0"
+    top="0"
     height="538"
     width="300"
     border_size="0">
@@ -168,7 +187,7 @@ background_visible="true"
       auto_resize="false"
       user_resize="false"
       height="200"
-      width="313">
+      right="0">
       <text
         font="SansSerifSmall"
         follows="top|left|right"
@@ -311,4 +330,7 @@ background_visible="true"
       </text>
     </layout_panel>
   </layout_stack>
+
+        </panel>
+    </scroll_container>
 </panel>
