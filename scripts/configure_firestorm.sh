@@ -35,6 +35,7 @@ WANTS_VERSION=$FALSE
 WANTS_KDU=$FALSE
 WANTS_FMODSTUDIO=$FALSE
 WANTS_FMODEX=$FALSE
+WANTS_OPENAL=$FALSE
 WANTS_OPENSIM=$TRUE
 WANTS_SINGLEGRID=$FALSE
 WANTS_AVX=$FALSE
@@ -72,6 +73,7 @@ showUsage()
     echo "  --no-package             : Build without installer (Overrides --package)"
     echo "  --fmodstudio             : Build with FMOD Studio"
     echo "  --fmodex                 : Build with FMOD Ex"
+    echo "  --openal                 : Build with OpenAL"
     echo "  --opensim                : Build with OpenSim support (Disables Havok features)"
     echo "  --no-opensim             : Build without OpenSim support (Overrides --opensim)"
     echo "  --singlegrid <login_uri> : Build for single grid usage (Requires --opensim)"
@@ -91,7 +93,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package no-package fmodstudio fmodex ninja jobs: platform: kdu opensim no-opensim singlegrid: avx avx2 crashreporting testbuild: help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodstudio fmodex openal ninja jobs: platform: kdu opensim no-opensim singlegrid: avx avx2 crashreporting testbuild: help chan: btype:" "$@" ; do
 
           #ensure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -111,6 +113,7 @@ getArgs()
           kdu)            WANTS_KDU=$TRUE;;
           fmodstudio)     WANTS_FMODSTUDIO=$TRUE;;
           fmodex)         WANTS_FMODEX=$TRUE;;
+          openal)         WANTS_OPENAL=$TRUE;;
           opensim)        WANTS_OPENSIM=$TRUE;;
           no-opensim)     WANTS_OPENSIM=$FALSE;;
           singlegrid)     WANTS_SINGLEGRID=$TRUE
@@ -294,10 +297,11 @@ if [ ! -d `dirname "$LOG"` ] ; then
 fi
 
 echo -e "configure_firestorm.sh" > $LOG
-echo -e "       PLATFORM: '$PLATFORM'"                                         | tee -a $LOG
+echo -e "       PLATFORM: $PLATFORM"                                           | tee -a $LOG
 echo -e "            KDU: `b2a $WANTS_KDU`"                                    | tee -a $LOG
 echo -e "     FMODSTUDIO: `b2a $WANTS_FMODSTUDIO`"                             | tee -a $LOG
 echo -e "         FMODEX: `b2a $WANTS_FMODEX`"                                 | tee -a $LOG
+echo -e "         OPENAL: `b2a $WANTS_OPENAL`"                                 | tee -a $LOG
 echo -e "        OPENSIM: `b2a $WANTS_OPENSIM`"                                | tee -a $LOG
 if [ $WANTS_SINGLEGRID -eq $TRUE ] ; then
     echo -e "     SINGLEGRID: `b2a $WANTS_SINGLEGRID` ($SINGLEGRID_URI)"       | tee -a $LOG
@@ -430,6 +434,11 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     else
         FMODEX="-DFMODEX:BOOL=OFF"
     fi
+    if [ $WANTS_OPENAL -eq $TRUE ] ; then
+        OPENAL="-DOPENAL:BOOL=ON"
+    else
+        OPENAL="-DOPENAL:BOOL=OFF"
+    fi
     if [ $WANTS_OPENSIM -eq $TRUE ] ; then
         OPENSIM="-DOPENSIM:BOOL=ON"
     else
@@ -507,7 +516,8 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         UNATTENDED="-DUNATTENDED=ON"
     fi
 
-    cmake -G "$TARGET" ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $FMODEX $KDU $OPENSIM $SINGLEGRID $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TESTBUILD $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
+    cmake -G "$TARGET" ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $FMODEX $OPENAL $KDU $OPENSIM $SINGLEGRID $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TESTBUILD $PACKAGE \
+          $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
     if [ $PLATFORM == "windows" ] ; then

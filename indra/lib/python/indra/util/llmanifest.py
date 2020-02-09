@@ -162,6 +162,8 @@ BASE_ARGUMENTS=[
          description='Type of viewer build. Can be oss or hvk.', default="oss"),
     dict(name='fmodversion',
          description='Version of FMOD used. Can be fmodstudio or fmodex.', default=None),
+    dict(name='openal',
+         description='If OpenAL is used.', default=None)
     ]
 
 def usage(arguments, srctree=""):
