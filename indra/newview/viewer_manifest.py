@@ -589,6 +589,11 @@ class WindowsManifest(ViewerManifest):
                 else:
                     self.path("fmodex.dll")
 
+            # Get openal dll
+            if self.args.get('openal'):
+                self.path("OpenAL32.dll")
+                self.path("alut.dll")
+
             # For textures
             self.path("openjpeg.dll")
 
