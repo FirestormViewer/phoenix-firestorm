@@ -1974,6 +1974,10 @@ if (WINDOWS)
         LIST(APPEND viewer_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../tools/manifests/legacy.manifest)
     endif (ADDRESS_SIZE EQUAL 64)
     # </FS:Ansariel>
+
+    if (OPENAL)
+      LIST(APPEND viewer_LIBRARIES ${OPENAL_LIBRARIES})
+    endif (OPENAL)
 endif (WINDOWS)
 
 # Add the xui files. This is handy for searching for xui elements
@@ -2163,10 +2167,6 @@ elseif (FMODEX)
     set(FMODVERSION "fmodex")
 endif (FMODSTUDIO)
 
-if (OPENAL)
-    set(USE_OPENAL "true")
-endif (OPENAL)
-
 if (WINDOWS)
     set_target_properties(${VIEWER_BINARY_NAME}
         PROPERTIES
@@ -2275,10 +2275,8 @@ if (WINDOWS)
 
     if (OPENAL)
         list(APPEND COPY_INPUT_DEPENDENCIES
-            ${SHARED_LIB_STAGING_DIR}/Release/OpenAL32.dll
-            ${SHARED_LIB_STAGING_DIR}/Release/alut.dll
-            ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/OpenAL32.dll
-            ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/alut.dll
+            ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/OpenAL32.dll
+            ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/alut.dll
         )
     endif (OPENAL)
 
@@ -2302,7 +2300,7 @@ if (WINDOWS)
         --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
         --viewer_flavor=${ND_VIEWER_FLAVOR}
         --fmodversion=${FMODVERSION}
-        --openal=${USE_OPENAL}
+        --openal=${OPENAL}
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
         stage_third_party_libs
@@ -2366,7 +2364,7 @@ if (WINDOWS)
           --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
           --viewer_flavor=${ND_VIEWER_FLAVOR}
           --fmodversion=${FMODVERSION}
-          --openal=${USE_OPENAL}
+          --openal=${OPENAL}
         DEPENDS
             ${VIEWER_BINARY_NAME}
             ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2539,7 +2537,7 @@ endif (NOT ENABLE_MEDIA_PLUGINS)
         --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
         --viewer_flavor=${ND_VIEWER_FLAVOR}
         --fmodversion=${FMODVERSION}
-        --openal=${USE_OPENAL}
+        --openal=${OPENAL}
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
         ${COPY_INPUT_DEPENDENCIES}
@@ -2565,7 +2563,7 @@ endif (NOT ENABLE_MEDIA_PLUGINS)
       --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
       --viewer_flavor=${ND_VIEWER_FLAVOR}
       --fmodversion=${FMODVERSION}
-      --openal=${USE_OPENAL}
+      --openal=${OPENAL}
     DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
       ${COPY_INPUT_DEPENDENCIES}
@@ -2650,7 +2648,7 @@ if (DARWIN)
       --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
       --viewer_flavor=${ND_VIEWER_FLAVOR}
       --fmodversion=${FMODVERSION}
-      --openal=${USE_OPENAL}
+      --openal=${OPENAL}
     DEPENDS
       ${VIEWER_BINARY_NAME}
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2687,7 +2685,7 @@ if (DARWIN)
           --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
           --viewer_flavor=${ND_VIEWER_FLAVOR}
           --fmodversion=${FMODVERSION}
-          --openal=${USE_OPENAL}
+          --openal=${OPENAL}
           ${SIGNING_SETTING}
         DEPENDS
           ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
