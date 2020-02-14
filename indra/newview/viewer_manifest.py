@@ -590,7 +590,7 @@ class WindowsManifest(ViewerManifest):
                     self.path("fmodex.dll")
 
             # Get openal dll
-            if self.args.get('openal').lower() == 'true':
+            if self.args.get('openal') == 'ON':
                 self.path("OpenAL32.dll")
                 self.path("alut.dll")
 
@@ -2257,6 +2257,7 @@ if __name__ == "__main__":
     extra_arguments = [
         dict(name='bugsplat', description="""BugSplat database to which to post crashes,
              if BugSplat crash reporting is desired""", default=''),
+        dict(name='openal', description="""Indication openal libraries are needed""", default='OFF')
         ]
     try:
         main(extra=extra_arguments)
