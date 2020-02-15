@@ -506,6 +506,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     if [ $PLATFORM == "darwin" ] ; then
         TARGET="Xcode"
     elif [ \( $PLATFORM == "linux" \) ] ; then
+        OPENAL="-DOPENAL:BOOL=ON"
         if [ $WANTS_NINJA -eq $TRUE ] ; then
             TARGET="Ninja"
         else
