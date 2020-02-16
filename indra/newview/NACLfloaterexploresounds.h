@@ -29,7 +29,7 @@ private:
 	void handlePlayLocally();
 	void handleLookAt();
 	void handleStop();
-    void handleStopLocally();
+	void handleStopLocally();
 	void handleSelection();
 	void blacklistSound();
 
@@ -42,8 +42,7 @@ private:
 
 	std::list<LLSoundHistoryItem> mLastHistory;
 
-    typedef std::list<LLUUID*> uuid_list_t;
-    uuid_list_t mLocalPlayingAudioSourceIDs;
+	uuid_vec_t mLocalPlayingAudioSourceIDs;
 
 	typedef std::map<LLUUID, boost::signals2::connection> blacklist_avatar_name_cache_connection_map_t;
 	blacklist_avatar_name_cache_connection_map_t mBlacklistAvatarNameCacheConnections;
