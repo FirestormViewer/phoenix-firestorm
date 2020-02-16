@@ -63,6 +63,14 @@ NACLFloaterExploreSounds::~NACLFloaterExploreSounds()
 		}
 	}
 	mBlacklistAvatarNameCacheConnections.clear();
+
+    uuid_list_t::iterator audio_source_id_iter = mLocalPlayingAudioSourceIDs.begin();
+    uuid_list_t::iterator audio_source_id_end = mLocalPlayingAudioSourceIDs.end();
+    for (; audio_source_id_iter != audio_source_id_end; ++audio_source_id_iter)
+    {
+        delete *audio_source_id_iter;
+    }
+    mLocalPlayingAudioSourceIDs.clear();
 }
 
 BOOL NACLFloaterExploreSounds::postBuild()
@@ -71,6 +79,7 @@ BOOL NACLFloaterExploreSounds::postBuild()
 	getChild<LLButton>("look_at_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleLookAt, this));
 	getChild<LLButton>("stop_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleStop, this));
 	getChild<LLButton>("bl_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this));
+    getChild<LLButton>("stop_locally_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleStopLocally, this));
 
 	mHistoryScroller = getChild<LLScrollListCtrl>("sound_list");
 	mHistoryScroller->setCommitCallback(boost::bind(&NACLFloaterExploreSounds::handleSelection, this));
@@ -296,6 +305,32 @@ BOOL NACLFloaterExploreSounds::tick()
 	mHistoryScroller->selectMultiple(selected_ids);
 	mHistoryScroller->setScrollPos(scroll_pos);
 
+    // Clean up stopped local audio source IDs
+    typedef std::vector<LLUUID*> uuid_vector_t;
+    uuid_vector_t stopped_audio_src_ids;
+    uuid_list_t::iterator audio_src_id_iter = mLocalPlayingAudioSourceIDs.begin();
+    uuid_list_t::iterator audio_src_id_end = mLocalPlayingAudioSourceIDs.end();
+    for (; audio_src_id_iter != audio_src_id_end; ++audio_src_id_iter)
+    {
+        LLUUID* audio_src_id = *audio_src_id_iter;
+        LLAudioSource* audio_source = gAudiop->findAudioSource(*audio_src_id);
+        if (!audio_source || audio_source->isDone())
+        {
+            stopped_audio_src_ids.push_back(audio_src_id);
+        }
+    }
+
+    uuid_vector_t::iterator stopped_audio_src_ids_iter = stopped_audio_src_ids.begin();
+    uuid_vector_t::iterator stopped_audio_src_ids_end = stopped_audio_src_ids.end();
+    for (; stopped_audio_src_ids_iter != stopped_audio_src_ids_end; ++stopped_audio_src_ids_iter)
+    {
+        LLUUID* audio_src_id = *stopped_audio_src_ids_iter;
+        mLocalPlayingAudioSourceIDs.remove(audio_src_id);
+        delete audio_src_id;
+    }
+
+    childSetEnabled("stop_locally_btn", mLocalPlayingAudioSourceIDs.size() > 0);
+
 	return FALSE;
 }
 
@@ -313,9 +348,14 @@ void NACLFloaterExploreSounds::handlePlayLocally()
 		if(std::find(asset_list.begin(), asset_list.end(), item.mAssetID) == asset_list.end())
 		{
 			asset_list.push_back(item.mAssetID);
-			gAudiop->triggerSound(item.mAssetID, gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
+            LLUUID* audio_source_id = new LLUUID();
+            audio_source_id->generate();
+			gAudiop->triggerSound(item.mAssetID, gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI, LLVector3d::zero, LLUUID::null, *audio_source_id);
+            mLocalPlayingAudioSourceIDs.push_back(audio_source_id);
 		}
 	}
+
+    childSetEnabled("stop_locally_btn", mLocalPlayingAudioSourceIDs.size() > 0);
 }
 
 void NACLFloaterExploreSounds::handleLookAt()
@@ -382,6 +422,25 @@ void NACLFloaterExploreSounds::handleStop()
 			}
 		}
 	}
+}
+
+void NACLFloaterExploreSounds::handleStopLocally()
+{
+    uuid_list_t::iterator audio_source_id_iter = mLocalPlayingAudioSourceIDs.begin();
+    uuid_list_t::iterator audio_source_id_end = mLocalPlayingAudioSourceIDs.end();
+    for (; audio_source_id_iter != audio_source_id_end; ++audio_source_id_iter)
+    {
+        LLUUID* audio_source_id = *audio_source_id_iter;
+        LLAudioSource* audio_source = gAudiop->findAudioSource(*audio_source_id);
+        if (audio_source && !audio_source->isDone())
+        {
+            audio_source->play(LLUUID::null);
+        }
+
+        delete audio_source_id;
+    }
+
+    mLocalPlayingAudioSourceIDs.clear();
 }
 
 //add sound to blacklist
