@@ -1640,37 +1640,19 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 	if (action == "select_all")
 	{
 		std::vector<LLScrollListItem*> result_items = mResultList->getAllData();
-		std::vector<LLScrollListItem*>::iterator iter = result_items.begin();
-		std::vector<LLScrollListItem*>::iterator end = result_items.end();
-		for (; iter != end; ++iter)
-		{
-			(*iter)->setSelected(TRUE);
-		}
+		std::for_each(result_items.begin(), result_items.end(), [](LLScrollListItem* item) { item->setSelected(TRUE); });
 		return true;
 	}
 	if (action == "clear_selection")
 	{
 		std::vector<LLScrollListItem*> selected_items = mResultList->getAllSelected();
-		std::vector<LLScrollListItem*>::iterator iter = selected_items.begin();
-		std::vector<LLScrollListItem*>::iterator end = selected_items.end();
-		for (; iter != end; ++iter)
-		{
-			(*iter)->setSelected(FALSE);
-		}
+		std::for_each(selected_items.begin(), selected_items.end(), [](LLScrollListItem* item) { item->setSelected(FALSE); });
 		return true;
 	}
 	if (action == "filter_my_objects")
 	{
-		LLAvatarName avatar_name;
-		if (LLAvatarNameCache::get(gAgent.getID(), &avatar_name))
-		{
-			mFSAreaSearch->setFindOwnerText(avatar_name.getLegacyName());
-			mFSAreaSearch->onButtonClickedSearch();
-		}
-		else
-		{
-			LL_DEBUGS() << "Avatar name could not be retrieved from cache." << LL_ENDL;
-		}
+		mFSAreaSearch->setFindOwnerText(gAgentUsername);
+		mFSAreaSearch->onButtonClickedSearch();
 		return true;
 	}
 
