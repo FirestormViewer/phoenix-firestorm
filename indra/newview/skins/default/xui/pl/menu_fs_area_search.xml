@@ -11,4 +11,7 @@
 	<menu_item_call label="Usuń" name="delete_object" />
 	<menu_item_call label="Na czarną listę" name="blacklist_object" />
 	<menu_item_call label="Kup obiekt" name="object_buy" />
+	<menu_item_call label="Pokaż moje obiekty" name="filter_my_objects" />
+	<menu_item_call label="Zaznacz wszystko" name="select_all" />
+	<menu_item_call label="Wyczyść zaznaczenie" name="clear_selection" />
 </context_menu>
