@@ -126,6 +126,7 @@ public:
 	void onButtonClickedSearch();
 	void onCommitCheckboxRegex();
 	bool isSearchableObject (LLViewerObject* objectp, LLViewerRegion* our_region);
+	void setFindOwnerText(std::string value);
 	
 	std::map<LLUUID, FSObjectProperties> mObjectDetails;
 
