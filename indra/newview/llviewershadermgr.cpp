@@ -695,16 +695,6 @@ void LLViewerShaderMgr::setShaders()
                 setShaders();
                 return;
             }
-
-            // <FS:Ansariel> Commented out since setting has been removed
-            //if (gSavedSettings.getBOOL("VertexShaderEnable"))
-            //{ //disable shaders outright and try again
-            //    gSavedSettings.setBOOL("VertexShaderEnable", FALSE);
-            //    LL_WARNS() << "Falling back to no vertex shaders." << LL_ENDL;
-            //    reentrance = false;
-            //    setShaders();
-            //    return;
-            //}
         }       
 
         llassert(loaded);
