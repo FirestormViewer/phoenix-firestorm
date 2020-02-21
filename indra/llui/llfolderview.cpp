@@ -1342,7 +1342,47 @@ BOOL LLFolderView::handleKeyHere( KEY key, MASK mask )
 			handled = TRUE;
 		}
 		break;
+
+	// <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
+	case KEY_CONTEXT_MENU:
+		S32 count = mSelectedItems.size();
+		LLMenuGL* menu = (LLMenuGL*)mPopupMenuHandle.get();
+		if (( count > 0 && (hasVisibleChildren()) ) // show menu only if selected items are visible
+			&& menu )
+		{
+			if (mCallbackRegistrar)
+			{
+				mCallbackRegistrar->pushScope();
+			}
+
+			updateMenuOptions(menu);
+			menu->updateParent(LLMenuGL::sMenuContainer);
+
+			LLView* spawning_view = getParentByType<LLFolderViewScrollContainer>();
+			if (!spawning_view)
+			{
+				spawning_view = this;
+			}
+
+			LLMenuGL::showPopup(spawning_view, menu, spawning_view->getRect().getCenterX(), spawning_view->getRect().getCenterY());
+
+			if (mCallbackRegistrar)
+			{
+				mCallbackRegistrar->popScope();
+			}
+		}
+		else
+		{
+			if (menu && menu->getVisible())
+			{
+				menu->setVisible(FALSE);
+			}
+			setSelection(NULL, FALSE, TRUE);
+		}
+		handled = TRUE;
+		break;
 	}
+	// </FS:Ansariel>
 
 	return handled;
 }

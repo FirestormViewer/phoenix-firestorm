@@ -82,9 +82,7 @@
 
 
 // <FS:Ansariel> [Legacy Bake]
-#ifdef OPENSIM
 #include "llviewernetwork.h"
-#endif
 // </FS:Ansariel> [Legacy Bake]
 
 #if LL_MSVC

@@ -1274,8 +1274,9 @@ void LLSecAPIBasicHandler::init()
 															"bin_conf.dat");
 		mLegacyPasswordPath = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "password.dat");
 	
-		mProtectedDataFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,
-															"bin_conf.dat");	
+		// <FS:Testy> Duplicate line
+		//mProtectedDataFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,
+		//													"bin_conf.dat");
 		std::string store_file = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,
 														"CA.pem");
 		
