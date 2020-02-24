@@ -991,27 +991,13 @@ void LLPanelProfileWeb::onOpen(const LLSD& key)
     resetData();
 
     mAvatarNameCacheConnection = LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLPanelProfileWeb::onAvatarNameCache, this, _1, _2));
-
-    if (mWebBrowser->getMediaPlugin())
-    {
-        mWebBrowser->getMediaPlugin()->setOverrideClickTarget("_navigate");
-    }
 }
 
 BOOL LLPanelProfileWeb::postBuild()
 {
-    mUrlEdit = getChild<LLLineEditor>("url_edit");
-    mLoadButton = getChild<LLUICtrl>("load");
-    mWebProfileButton = getChild<LLButton>("web_profile_popout_btn");
-
-    mLoadButton->setCommitCallback(boost::bind(&LLPanelProfileWeb::onCommitLoad, this, _1));
-    mWebProfileButton->setCommitCallback(boost::bind(&LLPanelProfileWeb::onCommitWebProfile, this));
-
     mWebBrowser = getChild<LLMediaCtrl>("profile_html");
     mWebBrowser->addObserver(this);
     mWebBrowser->setHomePageUrl("about:blank");
-
-    mUrlEdit->setEnabled(FALSE);
 
     return TRUE;
 }
@@ -1023,9 +1009,6 @@ void LLPanelProfileWeb::processProperties(void* data, EAvatarProcessorType type)
         const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
         if (avatar_data && getAvatarId() == avatar_data->avatar_id)
         {
-            mURLHome = avatar_data->profile_url;
-            mUrlEdit->setValue(mURLHome);
-            mLoadButton->setEnabled(mURLHome.length() > 0);
             updateButtons();
         }
     }
@@ -1033,14 +1016,12 @@ void LLPanelProfileWeb::processProperties(void* data, EAvatarProcessorType type)
 
 void LLPanelProfileWeb::resetData()
 {
-    mURLHome = LLStringUtil::null;
-    mUrlEdit->setValue(mURLHome);
     mWebBrowser->navigateHome();
 }
 
 void LLPanelProfileWeb::apply(LLAvatarData* data)
 {
-    data->profile_url = mUrlEdit->getValue().asString();
+
 }
 
 void LLPanelProfileWeb::updateData()
@@ -1104,24 +1085,12 @@ void LLPanelProfileWeb::onCommitLoad(LLUICtrl* ctrl)
     }
 }
 
-void LLPanelProfileWeb::onCommitWebProfile()
-{
-    // open the web profile floater
-    LLAvatarActions::showProfileWeb(getAvatarId());
-}
-
 void LLPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event)
 {
     switch(event)
     {
         case MEDIA_EVENT_STATUS_TEXT_CHANGED:
             childSetValue("status_text", LLSD( self->getStatusText() ) );
-        break;
-
-        case MEDIA_EVENT_LOCATION_CHANGED:
-            // don't set this or user will set there url to profile url
-            // when clicking ok on there own profile.
-            // childSetText("url_edit", self->getLocation() );
         break;
 
         case MEDIA_EVENT_NAVIGATE_BEGIN:
@@ -1142,7 +1111,6 @@ void LLPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
             LLStringUtil::format_map_t args;
             args["[TIME]"] = llformat("%.2f", mPerformanceTimer.getElapsedTimeF32());
             childSetValue("status_text", LLSD( getString("LoadTime", args)) );
-            resetLoading();
         }
         break;
 
@@ -1155,11 +1123,6 @@ void LLPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
 void LLPanelProfileWeb::updateButtons()
 {
     LLPanelProfileTab::updateButtons();
-
-    if (getSelfProfile() && !getEmbedded())
-    {
-        mUrlEdit->setEnabled(TRUE);
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////

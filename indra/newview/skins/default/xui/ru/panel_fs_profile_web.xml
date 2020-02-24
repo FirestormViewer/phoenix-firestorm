@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_profile_web" label="Web">
 	<panel.string name="LoadTime" value="Загружено за: [TIME] секунд"/>
-    <flyout_button name="load" width="100" label="Открыть" tool_tip="Загрузите страницу профиля в веб-браузере.">
-        <flyout_button.item label="Открыть встроенным браузером" name="open_item" />
-        <flyout_button.item label="Открыть внешним браузером" name="home_item" />
-    </flyout_button>
-        <flyout_button name="web_profile" width="100" label="Профиль">
-        <flyout_button.item label="Окно" name="builtin_item" />
-        <flyout_button.item label="Открыть дополнительный браузер" name="open_item" />
-    </flyout_button>
 </panel>

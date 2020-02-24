@@ -297,15 +297,11 @@ public:
 
 protected:
 	void onCommitLoad(LLUICtrl* ctrl);
-	void onCommitWebProfile(LLUICtrl* ctrl);
 
 private:
 	std::string			mURLHome;
 	std::string			mURLWebProfile;
 	LLMediaCtrl*		mWebBrowser;
-	LLUICtrl*			mWebProfileButton;
-	LLUICtrl*			mLoadButton;
-	LLLineEditor*		mUrlEdit;
 
 	LLFrameTimer		mPerformanceTimer;
 	bool				mFirstNavigate;

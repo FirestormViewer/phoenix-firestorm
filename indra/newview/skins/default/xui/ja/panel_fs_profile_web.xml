@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_profile_web" label="ウェブ">
-
     <panel.string name="LoadTime" value="読み込み時間: [TIME] 秒"/>
-    <line_editor name="url_edit" />
-    <flyout_button name="load" label="ロード" tool_tip="このプロフィール・ページを内蔵ブラウザーでロードします。" />
-    <loading_indicator name="progress_indicator" />
-    <flyout_button name="web_profile" label="プロフィール" />
-    <web_browser name="profile_html" />
-    <text name="status_text" />
-	
 </panel>
 

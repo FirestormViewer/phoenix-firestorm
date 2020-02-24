@@ -809,20 +809,9 @@ void FSPanelProfileWeb::onOpen(const LLSD& key)
 
 BOOL FSPanelProfileWeb::postBuild()
 {
-	mWebProfileButton = getChild<LLUICtrl>("web_profile");
-	mLoadButton = getChild<LLUICtrl>("load");
-	mUrlEdit = getChild<LLLineEditor>("url_edit");
-
-	mLoadButton->setCommitCallback(boost::bind(&FSPanelProfileWeb::onCommitLoad, this, _1));
-
-	mWebProfileButton->setCommitCallback(boost::bind(&FSPanelProfileWeb::onCommitWebProfile, this, _1));
-	mWebProfileButton->setVisible(LLGridManager::getInstance()->isInSecondLife());
-
 	mWebBrowser = getChild<LLMediaCtrl>("profile_html");
 	mWebBrowser->addObserver(this);
 	mWebBrowser->setHomePageUrl("about:blank");
-
-	mUrlEdit->setEnabled(FALSE);
 
 	return TRUE;
 }
@@ -834,9 +823,6 @@ void FSPanelProfileWeb::processProperties(void* data, EAvatarProcessorType type)
 		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
 		if (avatar_data && getAvatarId() == avatar_data->avatar_id)
 		{
-			mURLHome = avatar_data->profile_url;
-			mUrlEdit->setValue(mURLHome);
-			mLoadButton->setEnabled(mURLHome.length() > 0);
 			enableControls();
 		}
 	}
@@ -844,14 +830,11 @@ void FSPanelProfileWeb::processProperties(void* data, EAvatarProcessorType type)
 
 void FSPanelProfileWeb::resetData()
 {
-	mURLHome = LLStringUtil::null;
-	mUrlEdit->setValue(mURLHome);
 	mWebBrowser->navigateHome();
 }
 
 void FSPanelProfileWeb::apply(LLAvatarData* data)
 {
-	data->profile_url = mUrlEdit->getValue().asString();
 }
 
 void FSPanelProfileWeb::updateData()
@@ -882,13 +865,12 @@ void FSPanelProfileWeb::onAvatarNameCache(const LLUUID& agent_id, const LLAvatar
 		LLStringUtil::replaceChar(username, ' ', '.');
 	}
 
-	mURLWebProfile = getProfileURL(username);
+	mURLWebProfile = getProfileURL(username, true);
 	if (mURLWebProfile.empty())
 	{
 		return;
 	}
-	mWebProfileButton->setEnabled(TRUE);
-	
+
 	if (getIsLoading()) //if the tab was opened before name was resolved, load the panel now
 	{
 		updateData();
@@ -919,42 +901,12 @@ void FSPanelProfileWeb::onCommitLoad(LLUICtrl* ctrl)
 	}
 }
 
-void FSPanelProfileWeb::onCommitWebProfile(LLUICtrl* ctrl)
-{
-	if (!mURLWebProfile.empty())
-	{
-		LLSD::String valstr = ctrl->getValue().asString();
-		if (valstr.empty())
-		{
-			mWebBrowser->setVisible(TRUE);
-			mPerformanceTimer.start();
-			mWebBrowser->navigateTo( mURLWebProfile, HTTP_CONTENT_TEXT_HTML );
-		}
-		else if (valstr == "popout")
-		{
-			// open the web profile floater
-			LLAvatarActions::showProfileWeb(getAvatarId());
-		}
-		else if (valstr == "external")
-		{
-			// open in external browser
-			LLWeb::loadURLExternal(mURLWebProfile);
-		}
-	}
-}
-
 void FSPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event)
 {
 	switch(event)
 	{
 		case MEDIA_EVENT_STATUS_TEXT_CHANGED:
 			childSetValue("status_text", LLSD( self->getStatusText() ) );
-		break;
-
-		case MEDIA_EVENT_LOCATION_CHANGED:
-			// don't set this or user will set there url to profile url
-			// when clicking ok on there own profile.
-			// childSetText("url_edit", self->getLocation() );
 		break;
 
 		case MEDIA_EVENT_NAVIGATE_BEGIN:
@@ -987,11 +939,6 @@ void FSPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
 void FSPanelProfileWeb::enableControls()
 {
 	FSPanelProfileTab::enableControls();
-
-	if (getSelfProfile() && !getEmbedded())
-	{
-		mUrlEdit->setEnabled(TRUE);
-	}
 }
 
 //////////////////////////////////////////////////////////////////////////

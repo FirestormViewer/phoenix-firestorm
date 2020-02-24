@@ -137,7 +137,6 @@
 #include "llfloateruipreview.h"
 #include "llfloatervoiceeffect.h"
 #include "llfloaterwebcontent.h"
-#include "llfloaterwebprofile.h"
 #include "llfloatervoicevolume.h"
 #include "llfloaterwhitelistentry.h"
 #include "llfloaterwindowsize.h"
@@ -427,8 +426,6 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("outfit_snapshot", "floater_outfit_snapshot.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterOutfitSnapshot>);
 	// <FS:CR> Search floater is deferred to login now so we can tell what grid we're in.
     //LLFloaterReg::add("search", "floater_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSearch>);
-	LLFloaterReg::add("my_profile_web", "floater_my_web_profile.xml", (LLFloaterBuildFunc)&LLFloaterWebProfile::create);
-	LLFloaterReg::add("profile_web", "floater_web_profile.xml", (LLFloaterBuildFunc)&LLFloaterWebProfile::create);
     LLFloaterReg::add("profile", "floater_profile.xml",(LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterProfile>);
 	LLFloaterReg::add("how_to", "floater_how_to.xml", (LLFloaterBuildFunc)&LLFloaterWebContent::create);
 
