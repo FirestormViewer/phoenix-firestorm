@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- height="138"
+ height="190"
  layout="topleft"
  name="floaterpreferencesviewadvanced"
  help_topic="floaterviewadvanced"
@@ -10,12 +10,12 @@
 
   <text
     follows="top|left|right"
+    name="camera_offset_lbl"
     height="16"
     layout="topleft"
     left="10"
     top="5"
-    width="100"
-    name="camera_offset_label">
+    width="100">
       Camera offset:
   </text>
 
@@ -64,12 +64,12 @@
 
   <text
     follows="top|left|right"
+    name="focus_offset_lbl"
     height="16"
     layout="topleft"
     left="10"
     top_pad="10"
-    width="100"
-    name="focus_offset_label">
+    width="100">
       Focus offset:
   </text>
 
@@ -115,6 +115,44 @@
     <spinner.commit_callback
      function="CommitSettings" />
   </spinner>
+
+   <text
+    follows="top|left|right"
+    name="offset_scale_lbl"
+    height="16"
+    layout="topleft"
+    left="10"
+    top_pad="15"
+    width="260">
+      Camera offset scale:
+  </text>
+
+  <slider
+   control_name="CameraOffsetScale"
+   follows="top|left|right"
+   height="16"
+   top_pad="5"
+   increment="0.1"
+   min_val="-3"
+   max_val="5"
+   show_text="false"
+   layout="topleft"
+   left="3"
+   name="offset_scale_sld"
+   width="196" />
+  <spinner
+   control_name="CameraOffsetScale"
+   height="20"
+   follows="top|left|right"
+   left_pad="5"
+   name="offset_scale_ctrl"
+   min_val="-3"
+   max_val="5"
+   width="58">
+    <spinner.commit_callback
+     function="CommitSettings" />
+  </spinner>
+
 
   <button
    follows="top|left"

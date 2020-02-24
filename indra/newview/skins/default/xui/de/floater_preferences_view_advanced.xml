@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floaterpreferencesviewadvanced">
-	<text name="camera_offset_label">
+<floater name="floaterpreferencesviewadvanced" title="Kamera-Position">
+	<text name="camera_offset_lbl">
 		Kamera-Offset:
 	</text>
-	<text name="focus_offset_label">
+	<text name="focus_offset_lbl">
 		Fokus-Offset:
+	</text>
+	<text name="offset_scale_lbl">
+		Kamera-Offset-Skalierung:
 	</text>
 	<button label="Speichern als Voreinstellung..." name="save_preset_btn" width="180"/>
 	<button label="Schließen" name="close_btn" width="70"/>
