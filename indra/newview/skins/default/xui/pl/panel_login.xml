@@ -12,8 +12,8 @@
 			<text name="sign_up_text">
 				Dołącz
 			</text>
-			<check_box label="Pamiętaj mnie" name="remember_name" tooltip="Już zapamiętanego użytkownika można zapomnieć w preferencjach." />
-			<check_box label="Pamiętaj hasło" name="remember_check" />
+			<check_box label="Pamiętaj mnie" name="remember_name" tool_tip="Już zapamiętanego użytkownika można zapomnieć w Awatar &gt; Ustawienia &gt; Zaawansowane &gt; Zapamiętani użytkownicy." />
+			<check_box label="Pamiętaj hasło" name="remember_password" />
 			<combo_box label="Wybierz siatkę" name="server_combo" />
 			<text name="forgot_password_text">
 				Pomoc z hasłem

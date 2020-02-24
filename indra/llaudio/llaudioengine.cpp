@@ -832,7 +832,9 @@ F64 LLAudioEngine::mapWindVecToPan(LLVector3 wind_vec)
 
 
 void LLAudioEngine::triggerSound(const LLUUID &audio_uuid, const LLUUID& owner_id, const F32 gain,
-								 const S32 type, const LLVector3d &pos_global, const LLUUID& source_object)
+								 // / <FS:Testy> Optional parameter for setting the audio source UUID
+								 // const S32 type, const LLVector3d &pos_global, const LLUUID& source_object)
+								 const S32 type, const LLVector3d &pos_global, const LLUUID& source_object, const LLUUID& audio_source_id)
 {
 	// Create a new source (since this can't be associated with an existing source.
 	//LL_INFOS() << "Localized: " << audio_uuid << LL_ENDL;
@@ -843,8 +845,14 @@ void LLAudioEngine::triggerSound(const LLUUID &audio_uuid, const LLUUID& owner_i
 		return;
 	}
 
-	LLUUID source_id;
-	source_id.generate();
+	// <FS:Testy> Only generate the id if one wasn't passed to the method
+	//LLUUID source_id;
+	//source_id.generate();
+	LLUUID source_id = audio_source_id;
+	if (source_id.isNull())
+	{
+		source_id.generate();
+	}
 
 	LLAudioSource *asp = new LLAudioSource(source_id, owner_id, gain, type, source_object, true);
 	addAudioSource(asp);
