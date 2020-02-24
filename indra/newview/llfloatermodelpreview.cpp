@@ -343,6 +343,7 @@ BOOL LLFloaterModelPreview::postBuild()
 	getChild<LLCheckBoxCtrl>("show_physics")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_textures")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_skin_weight")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onShowSkinWeightChecked, this, _1));
+	getChild<LLCheckBoxCtrl>("show_joint_overrides")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_joint_positions")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_uv_guide")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1)); // <FS:Beq> - Add UV guide overlay to pmesh preview
 
@@ -627,12 +628,9 @@ void LLFloaterModelPreview::onClickCalculateBtn()
 
     if (upload_joint_positions)
     {
-        // Todo: this probably should be enabled when checkbox enables, not on calculate
-        populateOverridesTab();
-    }
-    else
-    {
-        disableOverridesTab();
+        // Diagnostic message showing list of joints for which joint offsets are defined.
+        // FIXME - given time, would be much better to put this in the UI, in updateStatusMessages().
+		mModelPreview->getPreviewAvatar()->showAttachmentOverrides();
     }
 
     mUploadModelUrl.clear();
@@ -648,9 +646,9 @@ void LLFloaterModelPreview::onClickCalculateBtn()
 	mUploadBtn->setEnabled(false);
 }
 
-void populate_list_with_vectors(LLScrollListCtrl *list, const std::set<LLVector3> &vector_set, const LLVector3 &active)
+void populate_list_with_map(LLScrollListCtrl *list, const std::map<std::string, LLVector3> &vector_map)
 {
-    if (vector_set.empty())
+    if (vector_map.empty())
     {
         return;
     }
@@ -660,35 +658,28 @@ void populate_list_with_vectors(LLScrollListCtrl *list, const std::set<LLVector3
     // Start out right justifying numeric displays
     cell_params.font_halign = LLFontGL::HCENTER;
 
-    std::set<LLVector3>::const_iterator iter = vector_set.begin();
-    std::set<LLVector3>::const_iterator end = vector_set.end();
+    std::map<std::string, LLVector3>::const_iterator iter = vector_map.begin();
+    std::map<std::string, LLVector3>::const_iterator end = vector_map.end();
     while (iter != end)
     {
         LLScrollListItem::Params item_params;
         item_params.value = LLSD::Integer(count);
 
-        cell_params.column = "override";
-        if (*iter != active)
-        {
-            cell_params.value = "";
-        }
-        else
-        {
-            cell_params.value = "active"; //todo: localize
-        }
+        cell_params.column = "model_name";
+        cell_params.value = iter->first;
 
         item_params.columns.add(cell_params);
 
         cell_params.column = "axis_x";
-        cell_params.value = iter->mV[VX];
+        cell_params.value = iter->second.mV[VX];
         item_params.columns.add(cell_params);
 
         cell_params.column = "axis_y";
-        cell_params.value = iter->mV[VY];
+        cell_params.value = iter->second.mV[VY];
         item_params.columns.add(cell_params);
 
         cell_params.column = "axis_z";
-        cell_params.value = iter->mV[VZ];
+        cell_params.value = iter->second.mV[VZ];
 
         item_params.columns.add(cell_params);
 
@@ -700,12 +691,12 @@ void populate_list_with_vectors(LLScrollListCtrl *list, const std::set<LLVector3
 
 void LLFloaterModelPreview::onJointListSelection()
 {
+    S32 display_lod = mModelPreview->mPreviewLOD;
     LLPanel *panel = mTabContainer->getPanelByName("overrides_panel");
     LLScrollListCtrl *joints_list = panel->getChild<LLScrollListCtrl>("joints_list");
     LLScrollListCtrl *joints_pos = panel->getChild<LLScrollListCtrl>("pos_overrides_list");
     LLScrollListCtrl *joints_scale = panel->getChild<LLScrollListCtrl>("scale_overrides_list");
     LLTextBox *joint_pos_descr = panel->getChild<LLTextBox>("pos_overrides_descr");
-    LLTextBox *joint_scale_descr = panel->getChild<LLTextBox>("scale_overrides_descr");
 
     joints_pos->deleteAllItems();
     joints_scale->deleteAllItems();
@@ -714,19 +705,16 @@ void LLFloaterModelPreview::onJointListSelection()
     if (selected)
     {
         std::string label = selected->getValue().asString();
-        LLJointOverrideData *data = &mJointOverrides[label];
-        populate_list_with_vectors(joints_pos, data->mPosOverrides, data->mActivePosOverride);
-        populate_list_with_vectors(joints_scale, data->mScaleOverrides, data->mActiveScaleOverride);
+        LLJointOverrideData &data = mJointOverrides[display_lod][label];
+        populate_list_with_map(joints_pos, data.mPosOverrides);
 
         joint_pos_descr->setTextArg("[JOINT]", label);
-        joint_scale_descr->setTextArg("[JOINT]", label);
     }
     else
     {
         // temporary value (shouldn't happen)
         std::string label = "mPelvis";
         joint_pos_descr->setTextArg("[JOINT]", label);
-        joint_scale_descr->setTextArg("[JOINT]", label);
     }
 
 }
@@ -1549,6 +1537,121 @@ void LLFloaterModelPreview::addStringToLog(const std::ostringstream& strm, bool 
     {
         sInstance->addStringToLogTab(strm.str(), flash);
     }
+}
+
+void LLFloaterModelPreview::clearOverridesTab()
+{
+    LLPanel *panel = mTabContainer->getPanelByName("overrides_panel");
+    LLScrollListCtrl *joints_list = panel->getChild<LLScrollListCtrl>("joints_list");
+    joints_list->deleteAllItems();
+
+    for (U32 i = 0; i < LLModel::NUM_LODS; ++i)
+    {
+        mJointOverrides[i].clear();
+    }
+}
+
+void LLFloaterModelPreview::resetOverridesTab()
+{
+    clearOverridesTab();
+
+    for (U32 i = 0; i < LLModel::NUM_LODS; ++i)
+    {
+        mJointOverrides[i].clear();
+    }
+}
+
+void LLFloaterModelPreview::showOverridesTab()
+{
+    S32 display_lod = mModelPreview->mPreviewLOD;
+    if (mModelPreview->mModel[display_lod].empty())
+    {
+        return;
+    }
+
+    // Joints will be listed as long as they are listed in mAlternateBindMatrix
+    // even if they are for some reason identical to defaults.
+    // Todo: Are overrides always identical for all lods? They normally are, but there might be situations where they aren't.
+    if (mJointOverrides[display_lod].empty())
+    {
+        // populate map
+        for (LLModelLoader::scene::iterator iter = mModelPreview->mScene[display_lod].begin(); iter != mModelPreview->mScene[display_lod].end(); ++iter)
+        {
+            for (LLModelLoader::model_instance_list::iterator model_iter = iter->second.begin(); model_iter != iter->second.end(); ++model_iter)
+            {
+                LLModelInstance& instance = *model_iter;
+                LLModel* model = instance.mModel;
+                const LLMeshSkinInfo *skin = &model->mSkinInfo;
+                if (skin->mAlternateBindMatrix.size() > 0)
+                {
+                    U32 count = LLSkinningUtil::getMeshJointCount(skin);
+                    for (U32 j = 0; j < count; ++j)
+                    {
+                        const LLVector3& jointPos = skin->mAlternateBindMatrix[j].getTranslation();
+                        //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+                        //LLJointOverrideData &data = mJointOverrides[display_lod][skin->mJointNames[j]];
+                        LLJointOverrideData &data = mJointOverrides[display_lod][skin->mJointNames[j].mName];
+                        if (data.mPosOverrides.size() > 0
+                            && (data.mPosOverrides.begin()->second - jointPos).lengthSquared() > (LL_JOINT_TRESHOLD_POS_OFFSET * LL_JOINT_TRESHOLD_POS_OFFSET))
+                        {
+                            // File contains multiple meshes with conflicting joint offsets
+                            // preview may be incorrect, upload result might wary (depends onto
+                            // mesh_id that hasn't been generated yet).
+                            data.mHasConflicts = true;
+                        }
+                        data.mPosOverrides[model->getName()] = jointPos;
+
+                    }
+                }
+            }
+        }
+    }
+
+    LLPanel *panel = mTabContainer->getPanelByName("overrides_panel");
+    S32 index = mTabContainer->getIndexForPanel(panel);
+    mTabContainer->enableTabButton(index, true);
+    LLScrollListCtrl *joints_list = panel->getChild<LLScrollListCtrl>("joints_list");
+
+    if (joints_list->isEmpty())
+    {
+        // Populate table
+        S32 conflicts = 0;
+        joint_override_data_map_t::iterator joint_iter = mJointOverrides[display_lod].begin();
+        joint_override_data_map_t::iterator joint_end = mJointOverrides[display_lod].end();
+        while (joint_iter != joint_end)
+        {
+            const std::string& listName = joint_iter->first;
+
+            LLScrollListItem::Params item_params;
+            item_params.value(listName);
+
+            LLScrollListCell::Params cell_params;
+            cell_params.font = LLFontGL::getFontSansSerif();
+            cell_params.value = listName;
+            if (joint_iter->second.mHasConflicts)
+            {
+                cell_params.color = LLColor4::orange;
+                conflicts++;
+            }
+
+            item_params.columns.add(cell_params);
+
+            joints_list->addRow(item_params, ADD_BOTTOM);
+            joint_iter++;
+        }
+        joints_list->selectFirstItem();
+
+        LLTextBox *joint_pos_descr = panel->getChild<LLTextBox>("conflicts_description");
+        joint_pos_descr->setTextArg("[CONFLICTS]", llformat("%d", conflicts));
+        joint_pos_descr->setTextArg("[JOINTS_COUNT]", llformat("%d", mJointOverrides[display_lod].size()));
+    }
+}
+
+void LLFloaterModelPreview::hideOverridesTab()
+{
+    LLPanel *panel = mTabContainer->getPanelByName("overrides_panel");
+    S32 index = mTabContainer->getIndexForPanel(panel);
+    mTabContainer->enableTabButton(index, false);
 }
 
 //-----------------------------------------------------------------------------
@@ -2412,7 +2515,7 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
 		mBaseScene.clear();
 
 		bool skin_weights = false;
-		bool joint_positions = false;
+		bool joint_overrides = false;
 		bool lock_scale_if_joint_position = false;
 
 		for (S32 lod = 0; lod < LLModel::NUM_LODS; ++lod)
@@ -2459,7 +2562,7 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
 
 							if (!list_iter->mModel->mSkinInfo.mAlternateBindMatrix.empty())
 							{
-								joint_positions = true;
+								joint_overrides = true;
 							}
 							if (list_iter->mModel->mSkinInfo.mLockScaleIfJointPosition)
 							{
@@ -2482,12 +2585,19 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
 				fmp->childSetValue("upload_skin", true);
 			}
 
-			if (joint_positions)
-			{ 
+			if (joint_overrides)
+			{
+				fmp->enableViewOption("show_joint_overrides");
+				mViewOption["show_joint_overrides"] = true;
 				fmp->enableViewOption("show_joint_positions");
 				mViewOption["show_joint_positions"] = true;
 				fmp->childSetValue("upload_joints", true);
 			}
+            else
+            {
+                fmp->resetOverridesTab();
+                fmp->hideOverridesTab();
+            }
 
 			if (lock_scale_if_joint_position)
 			{
@@ -4173,6 +4283,7 @@ void LLModelPreview::loadedCallback(
 	LLModelPreview* pPreview = static_cast< LLModelPreview* >(opaque);
 	if (pPreview && !LLModelPreview::sIgnoreLoadedCallback)
 	{
+        // Load loader's warnings into floater's log tab
         const LLSD out = pPreview->mModelLoader->logOut();
         LLSD::array_const_iterator iter_out = out.beginArray();
         LLSD::array_const_iterator end_out = out.endArray();
@@ -4280,6 +4391,8 @@ void LLModelPreview::addEmptyFace( LLModel* pTarget )
 //-----------------------------------------------------------------------------
 // render()
 //-----------------------------------------------------------------------------
+// Todo: we shouldn't be setting all those UI elements on render.
+// Note: Render happens each frame with skinned avatars
 BOOL LLModelPreview::render()
 {
 	assert_main_thread();
@@ -4290,6 +4403,7 @@ BOOL LLModelPreview::render()
 	bool use_shaders = LLGLSLShader::sNoFixedFunction;
 
 	bool edges = mViewOption["show_edges"];
+	bool joint_overrides = mViewOption["show_joint_overrides"];
 	bool joint_positions = mViewOption["show_joint_positions"];
 	bool skin_weight = mViewOption["show_skin_weight"];
 	bool textures = mViewOption["show_textures"];
@@ -4382,6 +4496,7 @@ BOOL LLModelPreview::render()
             if (flags == LEGACY_RIG_OK)
             {
                 fmp->enableViewOption("show_skin_weight");
+                fmp->setViewOptionEnabled("show_joint_overrides", skin_weight);
                 fmp->setViewOptionEnabled("show_joint_positions", skin_weight);
                 mFMP->childEnable("upload_skin");
                 mFMP->childSetValue("show_skin_weight", skin_weight);
@@ -4403,6 +4518,7 @@ BOOL LLModelPreview::render()
 		{
 			mViewOption["show_skin_weight"] = false;
 			fmp->disableViewOption("show_skin_weight");
+			fmp->disableViewOption("show_joint_overrides");
 			fmp->disableViewOption("show_joint_positions");
 
 			skin_weight = false;
@@ -4426,11 +4542,19 @@ BOOL LLModelPreview::render()
     if (upload_skin && upload_joints)
     {
         mFMP->childEnable("lock_scale_if_joint_position");
+        if (fmp)
+        {
+            fmp->showOverridesTab();
+        }
     }
     else
     {
         mFMP->childDisable("lock_scale_if_joint_position");
         mFMP->childSetValue("lock_scale_if_joint_position", false);
+        if (fmp)
+        {
+            fmp->hideOverridesTab();
+        }
     }
     
 	//Only enable joint offsets if it passed the earlier critiquing
@@ -4824,6 +4948,11 @@ BOOL LLModelPreview::render()
 		else
 		{
 			target_pos = getPreviewAvatar()->getPositionAgent();
+            getPreviewAvatar()->clearAttachmentOverrides(); // removes pelvis fixup
+            LLUUID fake_mesh_id;
+            fake_mesh_id.generate();
+            getPreviewAvatar()->addPelvisFixup(mPelvisZOffset, fake_mesh_id);
+			bool pelvis_recalc = false;
 
 			LLViewerCamera::getInstance()->setOriginAndLookAt(
 															  target_pos + ((LLVector3(camera_distance, 0.f, 0.f) + offset) * av_rot),		// camera
@@ -4839,6 +4968,51 @@ BOOL LLModelPreview::render()
 
 					if (!model->mSkinWeights.empty())
 					{
+                        const LLMeshSkinInfo *skin = &model->mSkinInfo;
+                        LLSkinningUtil::initJointNums(&model->mSkinInfo, getPreviewAvatar());// inits skin->mJointNums if nessesary
+                        U32 count = LLSkinningUtil::getMeshJointCount(skin);
+
+                        if (joint_overrides && skin->mAlternateBindMatrix.size() > 0)
+                        {
+                            // mesh_id is used to determine which mesh gets to
+                            // set the joint offset, in the event of a conflict. Since
+                            // we don't know the mesh id yet, we can't guarantee that
+                            // joint offsets will be applied with the same priority as
+                            // in the uploaded model. If the file contains multiple
+                            // meshes with conflicting joint offsets, preview may be
+                            // incorrect.
+                            LLUUID fake_mesh_id;
+                            fake_mesh_id.generate();
+                            for (U32 j = 0; j < count; ++j)
+                            {
+                                LLJoint *joint = getPreviewAvatar()->getJoint(skin->mJointNums[j]);
+                                if (joint)
+                                {
+                                    const LLVector3& jointPos = skin->mAlternateBindMatrix[j].getTranslation();
+                                    if (joint->aboveJointPosThreshold(jointPos))
+                                    {
+                                        bool override_changed;
+                                        joint->addAttachmentPosOverride(jointPos, fake_mesh_id, "model", override_changed);
+
+                                        if (override_changed)
+                                        {
+                                            //If joint is a pelvis then handle old/new pelvis to foot values
+                                            if (joint->getName() == "mPelvis")// or skin->mJointNames[j]
+                                            {
+                                                pelvis_recalc = true;
+                                            }
+                                        }
+                                        if (skin->mLockScaleIfJointPosition)
+                                        {
+                                            // Note that unlike positions, there's no threshold check here,
+                                            // just a lock at the default value.
+                                            joint->addAttachmentScaleOverride(joint->getDefaultScale(), fake_mesh_id, "model");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
 						for (U32 i = 0, e = mVertexBuffer[mPreviewLOD][model].size(); i < e; ++i)
 						{
 							LLVertexBuffer* buffer = mVertexBuffer[mPreviewLOD][model][i];
@@ -4856,16 +5030,14 @@ BOOL LLModelPreview::render()
 							//quick 'n dirty software vertex skinning
 
 							//build matrix palette
-							//<FS:Beq> use Mat4a part of the caching changes, no point in using the cache itself in the preview though.
-							//LLMatrix4 mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
 							LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
-							const LLMeshSkinInfo *skin = &model->mSkinInfo;
-							U32 count = LLSkinningUtil::getMeshJointCount(skin);
+							//<FS:Beq> use Mat4a part of the caching changes, no point in using the cache itself in the preview though.
 							//LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, count,
 							//											skin, getPreviewAvatar());
                             LLSkinningUtil::initSkinningMatrixPalette(mat, count,
                                                                       skin, getPreviewAvatar());
 							//</FS:Beq>
+
                             LLMatrix4a bind_shape_matrix;
                             bind_shape_matrix.loadu(skin->mBindShapeMatrix);
                             U32 max_joints = LLSkinningUtil::getMaxJointCount();
@@ -4950,6 +5122,11 @@ BOOL LLModelPreview::render()
 				}
 			}
 
+            if (pelvis_recalc)
+            {
+                // size/scale recalculation
+                getPreviewAvatar()->postPelvisSetRecalc();
+            }
 		}
 	}
 
@@ -5024,6 +5201,13 @@ void LLModelPreview::setPreviewLOD(S32 lod)
 			mFMP->childSetColor(lod_triangles_name[i], color);
 			mFMP->childSetColor(lod_vertices_name[i], color);
 		}
+
+        LLFloaterModelPreview* fmp = (LLFloaterModelPreview*)mFMP;
+        if (fmp)
+        {
+            // make preview repopulate tab
+            fmp->clearOverridesTab();
+        }
 	}
 	refresh();
 	updateStatusMessages();
@@ -5045,6 +5229,7 @@ void LLFloaterModelPreview::onReset(void* user_data)
 	LLFloaterModelPreview* fmp = (LLFloaterModelPreview*) user_data;
 	fmp->childDisable("reset_btn");
 	fmp->clearLogTab();
+	fmp->resetOverridesTab();
 	LLModelPreview* mp = fmp->mModelPreview;
 	std::string filename = mp->mLODFile[LLModel::LOD_HIGH]; 
 
@@ -5164,6 +5349,11 @@ void LLFloaterModelPreview::setStatusMessage(const std::string& msg)
 	mStatusMessage = msg;
 }
 
+void LLFloaterModelPreview::toggleCalculateButton()
+{
+	toggleCalculateButton(true);
+}
+
 void LLFloaterModelPreview::modelUpdated(bool calculate_visible)
 {
     mModelPhysicsFee.clear();
@@ -5270,43 +5460,6 @@ void LLFloaterModelPreview::clearLogTab()
     mUploadLogText->clear();
     LLPanel* panel = mTabContainer->getPanelByName("logs_panel");
     mTabContainer->setTabPanelFlashing(panel, false);
-}
-
-void LLFloaterModelPreview::populateOverridesTab()
-{
-    mJointOverrides.clear();
-    attach_override_data_map_t attach_not_in_use;
-    mModelPreview->getPreviewAvatar()->getAttachmentOverrides(mJointOverrides, attach_not_in_use);
-
-    if (mJointOverrides.empty())
-    {
-        disableOverridesTab();
-        return;
-    }
-
-    LLPanel *panel = mTabContainer->getPanelByName("overrides_panel");
-    S32 index = mTabContainer->getIndexForPanel(panel);
-    mTabContainer->enableTabButton(index, true);
-
-    LLScrollListCtrl *joints_list = panel->getChild<LLScrollListCtrl>("joints_list");
-    joints_list->deleteAllItems();
-    
-    joint_override_data_map_t::iterator joint_iter = mJointOverrides.begin();
-    joint_override_data_map_t::iterator joint_end = mJointOverrides.end();
-    while (joint_iter != joint_end)
-    {
-        const std::string& listName = joint_iter->first;
-        joints_list->addSimpleElement(listName);
-        joint_iter++;
-    }
-    joints_list->selectFirstItem();
-}
-
-void LLFloaterModelPreview::disableOverridesTab()
-{
-    LLPanel *panel = mTabContainer->getPanelByName("overrides_panel");
-    S32 index = mTabContainer->getIndexForPanel(panel);
-    mTabContainer->enableTabButton(index, false);
 }
 
 void LLFloaterModelPreview::onModelPhysicsFeeReceived(const LLSD& result, std::string upload_url)

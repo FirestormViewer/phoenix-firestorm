@@ -30,7 +30,6 @@
 #include "llfloaternamedesc.h"
 
 #include "lldynamictexture.h"
-#include "lljointoverridedata.h"
 #include "llquaternion.h"
 #include "llmeshrepository.h"
 #include "llmodel.h"
@@ -61,6 +60,16 @@ class LLMenuButton;
 class LLTabContainer;
 class LLToggleableMenu;
 class LLViewerTextEditor;
+
+
+class LLJointOverrideData
+{
+public:
+    LLJointOverrideData() : mHasConflicts(false) {};
+    std::map<std::string, LLVector3> mPosOverrides;
+    bool mHasConflicts;
+};
+typedef std::map<std::string, LLJointOverrideData> joint_override_data_map_t;
 
 class LLFloaterModelPreview : public LLFloaterModelUploadBase
 {
@@ -95,10 +104,14 @@ public:
 	/*virtual*/ void onClose(bool app_quitting);
 
 	static void onMouseCaptureLostModelPreview(LLMouseHandler*);
-    static void setUploadAmount(S32 amount) { sUploadAmount = amount; }
-    static void addStringToLog(const std::string& message, const LLSD& args, bool flash, S32 lod = -1);
+	static void setUploadAmount(S32 amount) { sUploadAmount = amount; }
+	static void addStringToLog(const std::string& message, const LLSD& args, bool flash, S32 lod = -1);
 	static void addStringToLog(const std::string& str, bool flash);
 	static void addStringToLog(const std::ostringstream& strm, bool flash);
+	void clearOverridesTab(); // clears table
+	void resetOverridesTab(); // clears table and cleans all data
+	void showOverridesTab(); // populates table and data as nessesary
+	void hideOverridesTab();
 
 	void setDetails(F32 x, F32 y, F32 z, F32 streaming_cost, F32 physics_cost);
 	void setPreviewLOD(S32 lod);
@@ -222,6 +235,7 @@ private:
 	void modelUpdated(bool calculate_visible);
 
 	// Toggles between "Calculate weights & fee" and "Upload" buttons.
+    void toggleCalculateButton();
 	void toggleCalculateButton(bool visible);
 
 	// resets display options of model preview to their defaults.
@@ -229,8 +243,6 @@ private:
 
 	void resetUploadOptions();
 	void clearLogTab();
-	void populateOverridesTab();
-	void disableOverridesTab();
 
 	void createSmoothComboBox(LLComboBox* combo_box, float min, float max);
 
@@ -239,7 +251,7 @@ private:
 	LLViewerTextEditor* mUploadLogText;
 	LLTabContainer* mTabContainer;
 
-	joint_override_data_map_t mJointOverrides;
+	joint_override_data_map_t mJointOverrides[LLModel::NUM_LODS];
 };
 
 class LLMeshFilePicker : public LLFilePickerThread
