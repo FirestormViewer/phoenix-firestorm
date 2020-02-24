@@ -106,7 +106,9 @@ void LLErrorThread::run()
 	// This thread sits and waits for the sole purpose
 	// of waiting for the signal/exception handlers to flag the
 	// application state as APP_STATUS_ERROR.
-	LL_INFOS() << "thread_error - Waiting for an error" << LL_ENDL;
+
+	// <FS:ND/> Do not log as this can lead to deadlocks during startup. 
+	// LL_INFOS() << "thread_error - Waiting for an error" << LL_ENDL;
 
 	S32 counter = 0;
 	while (! (LLApp::isError() || LLApp::isStopped()))
