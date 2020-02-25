@@ -82,14 +82,11 @@
 #include "llcorehttputil.h"
 #include "llcallstack.h"
 
-// <FS:CR> Opensim
-#include "llviewerparcelmgr.h"	//Aurora Sim
-#ifdef OPENSIM
-#include "llviewernetwork.h"
-#endif
-// </FS:CR>
-#include "llviewermenu.h"
+// Firestorm includes
 #include "lfsimfeaturehandler.h"
+#include "llviewermenu.h"
+#include "llviewernetwork.h"
+#include "llviewerparcelmgr.h"	//Aurora Sim
 
 #ifdef LL_WINDOWS
 	#pragma warning(disable:4355)
