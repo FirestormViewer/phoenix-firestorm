@@ -1323,6 +1323,11 @@ void FSAreaSearch::onCommitCheckboxRegex()
 	}
 }
 
+void FSAreaSearch::setFindOwnerText(std::string value)
+{
+	mPanelFind->mOwnerLineEditor->setText(value);
+}
+
 
 //---------------------------------------------------------------------------
 // List panel
@@ -1631,6 +1636,25 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 {
 	std::string action = userdata.asString();
 	LL_DEBUGS("FSAreaSearch") << "Right click menu " << action << " was selected." << LL_ENDL;
+
+	if (action == "select_all")
+	{
+		std::vector<LLScrollListItem*> result_items = mResultList->getAllData();
+		std::for_each(result_items.begin(), result_items.end(), [](LLScrollListItem* item) { item->setSelected(TRUE); });
+		return true;
+	}
+	if (action == "clear_selection")
+	{
+		std::vector<LLScrollListItem*> selected_items = mResultList->getAllSelected();
+		std::for_each(selected_items.begin(), selected_items.end(), [](LLScrollListItem* item) { item->setSelected(FALSE); });
+		return true;
+	}
+	if (action == "filter_my_objects")
+	{
+		mFSAreaSearch->setFindOwnerText(gAgentUsername);
+		mFSAreaSearch->onButtonClickedSearch();
+		return true;
+	}
 
 	// NOTE that each action command MUST begin with a different letter.
 	char c = action.at(0);
