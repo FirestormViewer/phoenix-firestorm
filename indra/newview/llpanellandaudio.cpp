@@ -322,7 +322,7 @@ void LLPanelLandAudio::onBtnStreamDelete()
 		std::string current_url = (*it).asString();
 		// <FS:Testy> FIRE-29157 - Stream can't be deleted if onCommitAny() prepended "http://" to the URL since it doesn't match in the list.
 		//if (current_url != music_url)
-		if (current_url != music_url && !music_url_no_http.empty() && current_url != music_url_no_http)
+		if (current_url != music_url && !(current_url.find("://") == std::string::npos && current_url == music_url_no_http))
 		{
 			streamlist_new["audio"].append(current_url);
 		}
