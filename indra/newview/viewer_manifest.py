@@ -248,6 +248,11 @@ class ViewerManifest(LLManifest,FSViewerManifest):
 
     def channel_type(self): # returns 'release', 'beta', 'project', or 'test'
         channel_qualifier=self.channel_variant().lower()
+        #<FS:TS> Somehow, we started leaving the - separating the variant from the app name
+        # on the beginning of the channel qualifier. This screws up later processing that
+        # depends on the channel type. If it's there, we chop it off.
+        if channel_qualifier[0] == '-':
+            channel_qualifier = channel_qualifier[1:]
         if channel_qualifier.startswith('release'):
             channel_type='release'
         elif channel_qualifier.startswith('beta'):
