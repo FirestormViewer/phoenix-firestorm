@@ -76,7 +76,7 @@ background_visible="true"
         height="206"
         width="313">
       <panel
-         name="group_info_top"
+         name="group_info_top2"
          follows="top|left|right"
          top="0"
          left="0"
@@ -237,7 +237,7 @@ background_visible="true"
     <layout_panel
       background_visible="false"
       background_opaque="true"
-      name="create_actions"
+      name="create_actions0"
       follows="all"
       layout="topleft"
       auto_resize="true"
@@ -268,7 +268,7 @@ background_visible="true"
         <layout_panel
           follows="bottom|left|right"
           layout="bottomleft"
-          name="layout_crt"
+          name="layout_crt0"
           auto_resize="true"
           height="23"
           width="91">
@@ -297,7 +297,6 @@ background_visible="true"
             name="back"
             label="Cancel"
             layout="topleft"
-            tool_tip="Return to list of groups"
             left_pad="13"
             height="23"
             top="0"
@@ -306,7 +305,7 @@ background_visible="true"
         <layout_panel
           follows="bottom|left|right"
           layout="bottomleft"
-          name="layout_crt"
+          name="layout_crt1"
           auto_resize="true"
           height="23"
           width="91">
@@ -326,7 +325,7 @@ background_visible="true"
         top_pad="8"
         word_wrap="true"
         halign="center">
-        Note: After 7 days, a group with no members (other than the creator) is deleted
+        Note: After 7 days, a group with no members (other than the creator) is deleted!
       </text>
     </layout_panel>
   </layout_stack>
