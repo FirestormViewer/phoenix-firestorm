@@ -214,9 +214,9 @@
 			<menu_item_call label="Imposta permessi predefiniti..." name="Set default permissions"/>
 		</menu>
 		<menu label="Carica" name="Upload">
-			<menu_item_call label="Immagine ([COST])..." name="Upload Image"/>
-			<menu_item_call label="Suono ([COST])..." name="Upload Sound"/>
-			<menu_item_call label="Animazione ([COST])..." name="Upload Animation"/>
+			<menu_item_call label="Immagine (L$[COST])..." name="Upload Image"/>
+			<menu_item_call label="Suono (L$[COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animazione (L$[COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modello..." name="Upload Model"/>
 			<menu_item_call label="In blocco..." name="Bulk Upload"/>
 			<menu_item_call label="Importa linkset..." name="import linkset"/>

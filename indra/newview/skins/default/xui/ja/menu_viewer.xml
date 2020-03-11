@@ -53,17 +53,6 @@
 		
 		<menu_item_call label="環境設定" name="Preferences"/>
 		<menu_item_call label="ツールバーボタン" name="Toolbar Buttons" />
-		<!--
-		<menu label="アップロード" name="Upload">
-			<menu_item_call label="画像（[COST]）..." name="Upload Image"/>
-			<menu_item_call label="サウンド（[COST]）..." name="Upload Sound"/>
-			<menu_item_call label="アニメーション（[COST]）..." name="Upload Animation"/>
-			<menu_item_call label="メッシュモデル" name="Upload Model"/>
-			<menu_item_call label="一括アップロード..." name="Bulk Upload"/>
-			<menu_item_call label="権限の初期設定..." name="perm prefs"/>
-			<menu_item_call label="リンクセットをインポート" name="import linkset" />
-		</menu>
-		-->
 		<menu_item_check label="HUD を表示" name="Show HUD Attachments"/>
 		<menu_item_check label="インターフェイスを表示" name="Show User Interface" />都
 		<menu_item_call label="管理者権限のリクエスト" name="Request Admin Options"/>
@@ -105,42 +94,6 @@
 			<menu_item_call label="プレミアム特典..." name="PremiumPerk" />
         </menu>
 		<menu_item_check name="Conversation Log..." label="会話ログ..." />
-        <!--
-        <menu_item_separator/>
-        <menu_item_check
-         label="Friends"
-         name="My Friends"
-         shortcut="control|shift|F">
-            <menu_item_check.on_check
-             function="SideTray.CheckPanelPeopleTab"
-             parameter="friends_panel" />
-            <menu_item_check.on_click
-             function="SideTray.PanelPeopleTab"
-             parameter="friends_panel" />
-            </menu_item_check>
-        <menu_item_check
-         label="Groups"
-         name="My Groups"
-         shortcut="control|shift|G">
-         	<menu_item_check.on_check
-             function="SideTray.CheckPanelPeopleTab"
-             parameter="groups_panel" />
-            <menu_item_check.on_click
-             function="SideTray.PanelPeopleTab"
-             parameter="groups_panel" />
-        </menu_item_check>
-        <menu_item_check
-         label="Nearby people"
-         name="Active Speakers"
-         shortcut="control|shift|A">
-        	 <menu_item_check.on_check
-             function="SideTray.CheckPanelPeopleTab"
-             parameter="nearby_panel" />
-            <menu_item_check.on_click
-              function="SideTray.PanelPeopleTab"
-              parameter="nearby_panel" />
-        </menu_item_check>
-        -->
 		<menu_item_check label="近くのボイス" name="Nearby Voice"/>
 		<menu_item_call label="ブロックリスト" name="Block List"/>
 	</menu>
@@ -294,9 +247,9 @@
 			<menu_item_call label="権限の初期設定..." name="Set default permissions" />
 		</menu>
 		<menu label="アップロード" name="Upload">
-			<menu_item_call label="画像（[COST]）..." name="Upload Image"/>
-			<menu_item_call label="サウンド（[COST]）..." name="Upload Sound"/>
-			<menu_item_call label="アニメーション（[COST]）..." name="Upload Animation"/>
+			<menu_item_call label="画像（L$[COST]）..." name="Upload Image"/>
+			<menu_item_call label="サウンド（L$[COST]）..." name="Upload Sound"/>
+			<menu_item_call label="アニメーション（L$[COST]）..." name="Upload Animation"/>
 			<menu_item_call label="メッシュモデル" name="Upload Model"/>
 			<menu_item_call label="一括..." name="Bulk Upload"/>
 			<menu_item_call label="リンクセットをインポート" name="import linkset" />
