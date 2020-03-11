@@ -452,6 +452,11 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
 					AISUpdate::parseUUIDArray(result, "_created_categories", ids);
 				}
 				break;
+			case UPDATECATEGORY:
+				{
+					AISUpdate::parseUUIDArray(result, "_updated_categories", ids);
+				}
+				break;
 			default:
 				break;
 		}

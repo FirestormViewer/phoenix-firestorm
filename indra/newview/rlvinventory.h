@@ -131,8 +131,8 @@ protected:
 	virtual ~RlvGiveToRLVOffer() {}
 protected:
 	bool         createDestinationFolder(const std::string& strPath);
-	virtual void onDestinationCreated(const LLUUID& idFolder, const std::string& strName) = 0;
-	void         moveAndRename(const LLUUID& idFolder, const LLUUID& idDestination, const std::string& strName);
+	virtual void onDestinationCreated(const LLUUID& idDestFolder, const std::string& strName) = 0;
+	static void  moveAndRename(const LLUUID& idFolder, const LLUUID& idDestination, const std::string& strName, LLPointer<LLInventoryCallback> cb);
 private:
 	static void  onCategoryCreateCallback(LLUUID idFolder, RlvGiveToRLVOffer* pInstance);
 
@@ -147,11 +147,12 @@ class RlvGiveToRLVTaskOffer : public LLInventoryObserver, RlvGiveToRLVOffer
 {
 public:
 	RlvGiveToRLVTaskOffer(const LLUUID& idTransaction) : RlvGiveToRLVOffer(), m_idTransaction(idTransaction) {}
-	/*virtual*/ void changed(U32 mask);
+	void changed(U32 mask) override;
 protected:
-	/*virtual*/ void done();
-	            void doneIdle();
-	/*virtual*/ void onDestinationCreated(const LLUUID& idFolder, const std::string& strName);
+	void done();
+	void doneIdle();
+	void onDestinationCreated(const LLUUID& idDestFolder, const std::string& strName) override;
+	void onOfferCompleted(const LLUUID& idOfferedFolder);
 
 protected:
 	typedef std::vector<LLUUID> folder_ref_t;
