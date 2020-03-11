@@ -23,4 +23,7 @@
 			<button label="Per E-Mail senden" name="save_to_email_btn"/>
 		</layout_panel>
 	</layout_stack>
+	<text name="fee_hint_lbl">
+		Die Gebühr richtet sich nach der Mitgliedsstufe. Höhere Stufen berechnen niedrigere Gebühren.
+	</text>
 </panel>
