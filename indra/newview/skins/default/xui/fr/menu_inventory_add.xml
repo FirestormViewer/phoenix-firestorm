@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="menu_inventory_add">
 	<menu label="Uploader" name="upload">
-		<menu_item_call label="Image ([COST])..." name="Upload Image"/>
-		<menu_item_call label="Son ([COST])..." name="Upload Sound"/>
-		<menu_item_call label="Animation ([COST])..." name="Upload Animation"/>
+		<menu_item_call label="Image (L$[COST])..." name="Upload Image"/>
+		<menu_item_call label="Son (L$[COST])..." name="Upload Sound"/>
+		<menu_item_call label="Animation (L$[COST])..." name="Upload Animation"/>
 		<menu_item_call label="Mesh..." name="Upload Model"/>
 		<menu_item_call label="En Bloc..." name="Bulk Upload"/>
 		<menu_item_call label="Importer un ensemble lié..." name="import linkset"/>
