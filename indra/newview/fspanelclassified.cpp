@@ -591,8 +591,6 @@ BOOL FSPanelClassifiedEdit::postBuild()
 	FSPanelClassifiedInfo::postBuild();
 
 	LLTextureCtrl* snapshot = getChild<LLTextureCtrl>("classified_snapshot");
-	snapshot->setOnSelectCallback(boost::bind(&FSPanelClassifiedEdit::onChange, this));
-
 	LLUICtrl* edit_icon = getChild<LLUICtrl>("edit_icon");
 	snapshot->setMouseEnterCallback(boost::bind(&FSPanelClassifiedEdit::onTexturePickerMouseEnter, this, edit_icon));
 	snapshot->setMouseLeaveCallback(boost::bind(&FSPanelClassifiedEdit::onTexturePickerMouseLeave, this, edit_icon));
@@ -1110,6 +1108,7 @@ void FSPanelClassifiedEdit::onTexturePickerMouseLeave(LLUICtrl* ctrl)
 void FSPanelClassifiedEdit::onTextureSelected()
 {
 	setSnapshotId(mSnapshotCtrl->getValue().asUUID());
+	onChange();
 }
 
 //////////////////////////////////////////////////////////////////////////

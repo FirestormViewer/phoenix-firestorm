@@ -839,7 +839,12 @@ void LLViewerAssetUpload::AssetInventoryUploadCoproc(LLCoreHttpUtil::HttpCorouti
                 sidepanel_inventory->showInventoryPanel();
             }
             // </FS:Ansariel>
-            LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, serverInventoryItem, TRUE, TAKE_FOCUS_NO, (panel == NULL));
+
+            // <FS:Testy> FIRE-22943: Don't switch away from the "Recent Items" tab.
+            //LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, serverInventoryItem, TRUE, TAKE_FOCUS_NO, (panel == NULL));
+            BOOL show_main_panel = (!panel || panel->getName() != "Recent Items");
+            LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, serverInventoryItem, show_main_panel, TAKE_FOCUS_NO, (panel == NULL));
+            // </FS:Testy>
 
             // restore keyboard focus
             gFocusMgr.setKeyboardFocus(focus);
