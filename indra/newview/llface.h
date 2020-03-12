@@ -221,6 +221,9 @@ public:
 	void        setHasMedia(bool has_media)  { mHasMedia = has_media ;}
 	BOOL        hasMedia() const ;
 
+    void        setMediaAllowed(bool is_media_allowed)  { mIsMediaAllowed = is_media_allowed; }
+    BOOL        isMediaAllowed() const { return mIsMediaAllowed; }
+
 	BOOL		switchTexture() ;
 
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
@@ -300,6 +303,7 @@ private:
 	F32         mImportanceToCamera ; 
 	F32         mBoundingSphereRadius ;
 	bool        mHasMedia ;
+	bool        mIsMediaAllowed;
 
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
 	mutable bool                       mShowDiffTexture;

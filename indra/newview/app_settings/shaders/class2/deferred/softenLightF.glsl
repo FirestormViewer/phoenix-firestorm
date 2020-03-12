@@ -86,7 +86,7 @@ void main()
     vec2 scol_ambocc = texture2DRect(lightMap, vary_fragcoord.xy).rg;
 
     float da = clamp(dot(normalize(norm.xyz), light_dir.xyz), 0.0, 1.0);
-
+    da = pow(da, 1.0/1.3);
     vec4 diffuse_srgb   = texture2DRect(diffuseRect, tc);
     vec4 diffuse_linear = vec4(srgb_to_linear(diffuse_srgb.rgb), diffuse_srgb.a);
 
@@ -106,8 +106,8 @@ void main()
         vec3 atten;
     
         calcAtmosphericVars(pos.xyz, light_dir, ambocc, sunlit, amblit, additive, atten, true);
-
-        float ambient = da;
+        
+        float ambient = min(abs(dot(norm.xyz, sun_dir.xyz)), 1.0);
         ambient *= 0.5;
         ambient *= ambient;
         ambient = (1.0 - ambient);
@@ -162,16 +162,14 @@ vec3 post_diffuse = color.rgb;
        
  vec3 post_spec = color.rgb;
  
-#ifndef WATER_FOG
         color.rgb = mix(color.rgb, diffuse_srgb.rgb, diffuse_srgb.a);
-#endif
 
         if (envIntensity > 0.0)
         { //add environmentmap
             vec3 env_vec = env_mat * refnormpersp;
             vec3 reflected_color = textureCube(environmentMap, env_vec).rgb;
 #if !defined(SUNLIGHT_KILL)
-            color = mix(color.rgb, reflected_color, envIntensity); 
+            color = mix(color.rgb, reflected_color, envIntensity*0.75); // MAGIC NUMBER SL-12574; ALM: On, Quality >= High
 #endif
         }
         
@@ -206,9 +204,6 @@ vec3 post_atmo = color.rgb;
 //color.rgb = post_env;
 //color.rgb = post_atmo;
 
-// convert to linear as fullscreen lights need to sum in linear colorspace
-// and will be gamma (re)corrected downstream...
-        color.rgb = srgb_to_linear(color.rgb);
     }
 
 // linear debuggables
@@ -217,6 +212,8 @@ vec3 post_atmo = color.rgb;
 //color.rgb = vec3(scol);
 //color.rgb = diffuse_linear.rgb;
 
-    frag_color.rgb = color.rgb;
+        //output linear RGB as lights are summed up in linear space and then gamma corrected prior to the 
+        //post deferred passes
+    frag_color.rgb = srgb_to_linear(color.rgb);
     frag_color.a = bloom;
 }

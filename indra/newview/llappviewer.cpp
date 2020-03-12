@@ -2618,14 +2618,9 @@ void errorCallback(const std::string &error_string)
 	// static info file.
 	LLAppViewer::instance()->writeDebugInfo();
 
-//	LLError::crashAndLoop(error_string);
-// [SL:KB] - Patch: Viewer-Build | Checked: 2010-12-04 (Catznip-2.4)
-#if !LL_RELEASE_FOR_DOWNLOAD && LL_WINDOWS
-	DebugBreak();
-#else
+#ifndef SHADER_CRASH_NONFATAL
 	LLError::crashAndLoop(error_string);
-#endif // LL_RELEASE_WITH_DEBUG_INFO && LL_WINDOWS
-// [/SL:KB]
+#endif
 }
 
 void LLAppViewer::initLoggingAndGetLastDuration()
