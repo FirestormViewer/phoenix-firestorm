@@ -169,7 +169,10 @@ void LLPanelLandAudio::refresh()
 		std::string current_url = parcel->getMusicURL();
 		mMusicURLEdit->clearRows();
 		LLSD streamlist = gSavedSettings.getLLSD("FSStreamList");
-		LLSD streams = streamlist["audio"];
+		// <FS:Testy> FIRE-29157 - Remove invalid URLs that were rejected by the server
+		//LLSD streams = streamlist["audio"];
+		LLSD& streams = streamlist["audio"];
+		// </FS:Testy>
 
 		for(LLSD::array_iterator s_itr = streams.beginArray(); s_itr != streams.endArray(); ++s_itr)
 		{
@@ -185,6 +188,23 @@ void LLPanelLandAudio::refresh()
 		mBtnStreamCopyToClipboard->setEnabled(TRUE);
 // </FS:CR>
 		mMusicURLEdit->setEnabled( can_change_media );
+
+		// <FS:Testy> FIRE-29157 - Remove invalid URLs that were rejected by the server
+		if (current_url != mLastSetURL)
+		{
+			mMusicURLEdit->remove(mLastSetURL);
+			LLSD::Integer index = 0;
+			for (LLSD::array_iterator iter = streams.beginArray(), end = streams.endArray(); iter != end; ++iter, ++index)
+			{
+				if ((*iter).asString() == mLastSetURL)
+				{
+					streams.erase(index);
+					break;
+				}
+			}
+			gSavedSettings.setLLSD("FSStreamList", streamlist);
+		}
+		// </FS:Testy>
 
 		BOOL can_change_av_sounds = LLViewerParcelMgr::isParcelModifiableByAgent(parcel, GP_LAND_OPTIONS) && parcel->getHaveNewParcelLimitData();
 		mCheckAVSoundAny->set(parcel->getAllowAnyAVSounds());
@@ -231,6 +251,10 @@ void LLPanelLandAudio::onCommitAny(LLUICtrl*, void *userdata)
 		music_url.insert(0, "http://");
 	}
 	// </FS>
+
+	// <FS:Testy> FIRE-29157 - Remove invalid URLs that were rejected by the server
+	self->mLastSetURL = music_url;
+	// </FS:Testy>
 
 	// Push data into current parcel
 	parcel->setParcelFlag(PF_ALLOW_VOICE_CHAT, voice_enabled);
@@ -281,6 +305,13 @@ void LLPanelLandAudio::onBtnStreamDelete()
 {
 	std::string music_url = mMusicURLEdit->getSimple();
 	LLStringUtil::trim(music_url);
+	// <FS:Testy> FIRE-29157 - Stream can't be deleted if onCommitAny() prepended "http://" to the URL since it doesn't match in the list.
+	std::string music_url_no_http;
+	if (music_url.find("http://") == 0)
+	{
+		music_url_no_http = music_url.substr(7, music_url.size() - 7);
+	}
+	// </FS:Testy>
 	
 	LLSD streamlist = gSavedSettings.getLLSD("FSStreamList");
 	LLSD streamlist_new;
@@ -289,10 +320,13 @@ void LLPanelLandAudio::onBtnStreamDelete()
 	for (LLSD::array_const_iterator it = streamlist["audio"].beginArray(); it != streamlist["audio"].endArray(); ++it)
 	{
 		std::string current_url = (*it).asString();
-		if (current_url != music_url)
+		// <FS:Testy> FIRE-29157 - Stream can't be deleted if onCommitAny() prepended "http://" to the URL since it doesn't match in the list.
+		//if (current_url != music_url)
+		if (current_url != music_url && !(current_url.find("://") == std::string::npos && current_url == music_url_no_http))
 		{
 			streamlist_new["audio"].append(current_url);
 		}
+		// </FS:Testy>
 	}
 
 	gSavedSettings.setLLSD("FSStreamList", streamlist_new);

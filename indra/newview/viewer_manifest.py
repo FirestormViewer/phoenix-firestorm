@@ -248,6 +248,11 @@ class ViewerManifest(LLManifest,FSViewerManifest):
 
     def channel_type(self): # returns 'release', 'beta', 'project', or 'test'
         channel_qualifier=self.channel_variant().lower()
+        #<FS:TS> Somehow, we started leaving the - separating the variant from the app name
+        # on the beginning of the channel qualifier. This screws up later processing that
+        # depends on the channel type. If it's there, we chop it off.
+        if channel_qualifier[0] == '-':
+            channel_qualifier = channel_qualifier[1:]
         if channel_qualifier.startswith('release'):
             channel_type='release'
         elif channel_qualifier.startswith('beta'):
@@ -1761,11 +1766,45 @@ class DarwinManifest(ViewerManifest):
                     signed=False
                     sign_attempts=3
                     sign_retry_wait=15
+                    #<FS:TS> The order of these is critical. When two things need signing and one is contained within the
+                    # other, they must be signed from the innermost out.
+                    things_to_sign = ['Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework',
+                                        'Resources/SLPlugin.app/Contents/Frameworks/DullahanHelper.app',
+                                        'Resources/SLPlugin.app',
+                                        'Resources/SLVoice',
+                                        'Resources/mac-crash-logger.app']
+                    #<FS:TS> Even though we're signing the old version of SLVoice used with Vivox for OpenSim,
+                    # its presence will prevent the application bundle from being notarized because that version
+                    # was compiled against a version of the macOS SDK older than 10.9. 
+                    if self.fs_is_opensim():
+                        things_to_sign.append('Resources/voice_os/SLVoice')
                     while (not signed) and (sign_attempts > 0):
                         try:
-                            sign_attempts-=1;
-                            self.run_command(
+                            sign_attempts-=1
+                            #<FS:TS> This is ugly as hell, but it's the only way to make sure that every dylib in the
+                            # entire package gets signed, as required for notarization. Apparently the --deep option
+                            # isn't sufficient any more. Don't ask me why.
+                            contents_dir = os.path.join(app_in_dmg, 'Contents')
+                            try:
+                                all_dylibs = subprocess.check_output(['find', contents_dir, '-name', '*.dylib', '-print'])
+                            except subprocess.CalledProcessError as err:
+                                sys.exit("failed to get list of dylib files")
+                            for dylib in all_dylibs.split('\n'):
+                                if dylib: # ignore any empty lines
+                                    self.run_command(
+                                       ['codesign', '--verbose', '--deep', '--force', '--option=runtime',
+                                        '--keychain', viewer_keychain, '--sign', identity,
+                                        dylib])
+                            for item in things_to_sign:
                                 # Note: See blurb above about names of keychains
+                                sign_path = os.path.join(contents_dir, item)
+                                print "Signing %s" % sign_path
+                                self.run_command(
+                                   ['codesign', '--verbose', '--deep', '--force', '--option=runtime',
+                                    '--keychain', viewer_keychain, '--sign', identity,
+                                    sign_path])
+                            print "Signing main app bundle %s" % app_in_dmg
+                            self.run_command(
                                ['codesign', '--verbose', '--deep', '--force', '--option=runtime',
                                 '--keychain', viewer_keychain, '--sign', identity,
                                 app_in_dmg])
