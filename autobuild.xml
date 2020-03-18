@@ -197,46 +197,6 @@
           </map>
         </map>
       </map>
-      <key>slvoice_os</key>
-      <map>
-        <key>copyright</key>
-        <string>2010 Vivox, including audio coding using Polycom¨ Siren14TM (ITU-T Rec. G.722.1 Annex C)</string>
-        <key>description</key>
-        <string>Vivox SDK components compatible with OpenSim</string>
-        <key>license</key>
-        <string>Mixed</string>
-        <key>license_file</key>
-        <string>LICENSES/slvoice_os.txt</string>
-        <key>name</key>
-        <string>slvoice_os</string>
-        <key>platforms</key>
-        <map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>8d0a31f4653202cbd5ea1711be47e669</string>
-              <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/slvoice_os-4.6.0017.22050.302004-windows-302004.tar.bz2</uri>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-          <key>darwin64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>d5673fc7ad1ec9595a9b97537681e060</string>
-              <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/slvoice_os-4.6.0017.22050.302004-darwin-302004.tar.bz2</uri>
-            </map>
-            <key>name</key>
-            <string>darwin64</string>
-          </map>
-        </map>
-      </map>
       <key>discord-rpc</key>
       <map>
         <key>copyright</key>
