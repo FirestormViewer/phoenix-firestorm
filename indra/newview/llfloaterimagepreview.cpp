@@ -119,8 +119,20 @@ BOOL LLFloaterImagePreview::postBuild()
 		mSculptedPreview = new LLImagePreviewSculpted(256, 256);
 		mSculptedPreview->setPreviewTarget(mRawImagep, 2.0f);
 
+		// <FS:Beq> BUG-228331 - lossless_check is misleading don't show it if it won't be used.
+		// if (mRawImagep->getWidth() * mRawImagep->getHeight () <= LL_IMAGE_REZ_LOSSLESS_CUTOFF * LL_IMAGE_REZ_LOSSLESS_CUTOFF)
+		// 	getChildView("lossless_check")->setEnabled(TRUE);
 		if (mRawImagep->getWidth() * mRawImagep->getHeight () <= LL_IMAGE_REZ_LOSSLESS_CUTOFF * LL_IMAGE_REZ_LOSSLESS_CUTOFF)
+		{
 			getChildView("lossless_check")->setEnabled(TRUE);
+			getChildView("lossless_check")->setVisible(TRUE);
+		}
+		else
+		{
+			getChildView("lossless_check")->setEnabled(FALSE);
+			getChildView("lossless_check")->setVisible(FALSE);
+		}
+		//</FS:Beq>
 		
 		// <FS:CR> Temporary texture uploads
 		BOOL enable_temp_uploads = (LLAgentBenefitsMgr::current().getTextureUploadCost() != 0
