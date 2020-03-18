@@ -1478,7 +1478,7 @@ class DarwinManifest(ViewerManifest):
                     helperappfile = 'DullahanHelper.app'
                     self.path2basename(relpkgdir, helperappfile)
 
-                    pluginframeworkpath = self.dst_path_of('Chromium Embedded Framework.framework');
+                    pluginframeworkpath = self.dst_path_of('Chromium Embedded Framework.framework')
                     # Putting a Frameworks directory under Contents/MacOS
                     # isn't canonical, but the path baked into Dullahan
                     # Helper.app/Contents/MacOS/DullahanHelper is:
@@ -1748,11 +1748,6 @@ class DarwinManifest(ViewerManifest):
                                         'Resources/SLPlugin.app',
                                         'Resources/SLVoice',
                                         'Resources/mac-crash-logger.app']
-                    #<FS:TS> Even though we're signing the old version of SLVoice used with Vivox for OpenSim,
-                    # its presence will prevent the application bundle from being notarized because that version
-                    # was compiled against a version of the macOS SDK older than 10.9. 
-                    if self.fs_is_opensim():
-                        things_to_sign.append('Resources/voice_os/SLVoice')
                     while (not signed) and (sign_attempts > 0):
                         try:
                             sign_attempts-=1
