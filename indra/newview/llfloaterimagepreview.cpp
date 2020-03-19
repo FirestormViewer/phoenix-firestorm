@@ -53,7 +53,6 @@
 #include "llviewershadermgr.h"
 #include "llviewertexturelist.h"
 #include "llviewercontrol.h"
-#include "lleconomy.h"
 #include "llstring.h"
 
 #include "llendianswizzle.h"
@@ -63,12 +62,13 @@
 #include "llimagedimensionsinfo.h"
 #include "llviewerregion.h" // <FS:CR> getCentralBakeVersion()
 #include "llcheckboxctrl.h"
+#include "llagentbenefits.h"
 
 const S32 PREVIEW_BORDER_WIDTH = 2;
 const S32 PREVIEW_RESIZE_HANDLE_SIZE = S32(RESIZE_HANDLE_WIDTH * OO_SQRT2) + PREVIEW_BORDER_WIDTH;
 const S32 PREVIEW_HPAD = PREVIEW_RESIZE_HANDLE_SIZE;
-const S32 PREVIEW_VPAD = -24;	// yuk, hard coded
-const S32 PREF_BUTTON_HEIGHT = 16 + 7 + 16;
+const S32 PREVIEW_VPAD = -24 + 35;	// yuk, hard coded
+const S32 PREF_BUTTON_HEIGHT = 16 + 7 + 16 + 35;
 const S32 PREVIEW_TEXTURE_HEIGHT = 320;
 
 //-----------------------------------------------------------------------------
@@ -119,18 +119,30 @@ BOOL LLFloaterImagePreview::postBuild()
 		mSculptedPreview = new LLImagePreviewSculpted(256, 256);
 		mSculptedPreview->setPreviewTarget(mRawImagep, 2.0f);
 
+		// <FS:Beq> BUG-228331 - lossless_check is misleading don't show it if it won't be used.
+		// if (mRawImagep->getWidth() * mRawImagep->getHeight () <= LL_IMAGE_REZ_LOSSLESS_CUTOFF * LL_IMAGE_REZ_LOSSLESS_CUTOFF)
+		// 	getChildView("lossless_check")->setEnabled(TRUE);
 		if (mRawImagep->getWidth() * mRawImagep->getHeight () <= LL_IMAGE_REZ_LOSSLESS_CUTOFF * LL_IMAGE_REZ_LOSSLESS_CUTOFF)
+		{
 			getChildView("lossless_check")->setEnabled(TRUE);
+			getChildView("lossless_check")->setVisible(TRUE);
+		}
+		else
+		{
+			getChildView("lossless_check")->setEnabled(FALSE);
+			getChildView("lossless_check")->setVisible(FALSE);
+		}
+		//</FS:Beq>
 		
-// <FS:CR> Temporary texture uploads
-		BOOL enable_temp_uploads = (LLGlobalEconomy::getInstance()->getPriceUpload() != 0
+		// <FS:CR> Temporary texture uploads
+		BOOL enable_temp_uploads = (LLAgentBenefitsMgr::current().getTextureUploadCost() != 0
 									&& gAgent.getRegion()->getCentralBakeVersion() == 0);
 		if (!enable_temp_uploads)
 		{
 			gSavedSettings.setBOOL("TemporaryUpload", FALSE);
 		}
 		getChild<LLCheckBoxCtrl>("temp_check")->setVisible(enable_temp_uploads);
-// </FS:CR>
+		// </FS:CR>
 	}
 	else
 	{
