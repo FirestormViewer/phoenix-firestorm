@@ -1805,10 +1805,7 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 	F32			camera_land_height;
 	LLVector3d	frame_center_global = !isAgentAvatarValid() ? 
 		gAgent.getPositionGlobal() :
-		// <FS:Ansariel> FIRE-15772: Adjusting Hover Height changes camera view when camera view is at default
-		//gAgent.getPosGlobalFromAgent(gAgentAvatarp->mRoot->getWorldPosition());
-		gAgent.getPosGlobalFromAgent(gAgentAvatarp->mRoot->getWorldPosition() - gAgentAvatarp->getHoverOffset() );
-		// </FS:Ansariel>
+		gAgent.getPosGlobalFromAgent(getAvatarRootPosition());
 	
 	BOOL		isConstrained = FALSE;
 	LLVector3d	head_offset;
@@ -2150,7 +2147,7 @@ bool LLAgentCamera::clampCameraPosition(LLVector3d& posCamGlobal, const LLVector
 
 LLVector3 LLAgentCamera::getCurrentCameraOffset()
 {
-	LLVector3 camera_offset = (LLViewerCamera::getInstance()->getOrigin() - gAgentAvatarp->mRoot->getWorldPosition() - mThirdPersonHeadOffset) * ~gAgent.getFrameAgent().getQuaternion();
+	LLVector3 camera_offset = (LLViewerCamera::getInstance()->getOrigin() - getAvatarRootPosition() - mThirdPersonHeadOffset) * ~gAgent.getFrameAgent().getQuaternion();
 	return  camera_offset / mCameraZoomFraction / gSavedSettings.getF32("CameraOffsetScale");
 }
 
@@ -2187,6 +2184,12 @@ F32 LLAgentCamera::getCameraMaxZoomDistance(bool allow_disabled_constraints /* =
                  LLWorld::getInstance()->getRegionWidthInMeters() - CAMERA_FUDGE_FROM_OBJECT);
 }
 
+LLVector3 LLAgentCamera::getAvatarRootPosition()
+{
+    static LLCachedControl<bool> use_hover_height(gSavedSettings, "HoverHeightAffectsCamera");
+    return use_hover_height ? gAgentAvatarp->mRoot->getWorldPosition() : gAgentAvatarp->mRoot->getWorldPosition() - gAgentAvatarp->getHoverOffset();
+
+}
 //-----------------------------------------------------------------------------
 // handleScrollWheel()
 //-----------------------------------------------------------------------------
