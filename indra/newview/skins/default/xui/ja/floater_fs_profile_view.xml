@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <floater name="avatarinfo" title="Profile">
- <!-- FS:Ansariel: Help topic set above is a dummy only - real topics are set for the panels down below! -->
 <panel name="panel_profile_view">
-
     <tab_container name="panel_profile_tabs">
         <panel label="セカンドライフ" name="panel_profile_secondlife" />
         <panel label="ウェブ" name="panel_profile_web" />
@@ -12,9 +10,7 @@
         <panel label="リアルライフ" name="panel_profile_firstlife" />
         <panel label="メモ" name="panel_profile_notes" />
     </tab_container>
-
     <button name="ok_btn" label="OK" tool_tip="プロフィールの変更を保存してウィンドウを閉じます。" />
     <button name="cancel_btn" label="取り消し" label_selected="取り消し" />
-
 </panel>
 </floater>
