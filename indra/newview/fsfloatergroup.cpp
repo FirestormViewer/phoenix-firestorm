@@ -31,10 +31,12 @@
 
 #include "llfloaterreg.h"
 #include "llpanelgroup.h"
+#include "llpanelgroupcreate.h"
 
 FSFloaterGroup::FSFloaterGroup(const LLSD& seed)
 	: LLFloater(seed),
-	mGroupPanel(NULL),
+	mGroupPanel(nullptr),
+	mGroupCreatePanel(nullptr),
 	mIsCreateGroup(false)
 {
 }
@@ -46,7 +48,8 @@ FSFloaterGroup::~FSFloaterGroup()
 BOOL FSFloaterGroup::postBuild()
 {
 	mGroupPanel = findChild<LLPanelGroup>("panel_group_info_sidetray");
-	if (!mGroupPanel)
+	mGroupCreatePanel = findChild<LLPanelGroupCreate>("panel_group_creation_sidetray");
+	if (!mGroupPanel || !mGroupCreatePanel)
 	{
 		return FALSE;
 	}
@@ -59,15 +62,18 @@ void FSFloaterGroup::onOpen(const LLSD& key)
 	// openFloater() sets the key again - we only want the group id as key, so set it again!
 	setKey(LLSD().with("group_id", key.get("group_id").asUUID()));
 	mIsCreateGroup = (key.has("action") && key.get("action").asString() == "create");
-	mGroupPanel->onOpen(key);
 
 	if (mIsCreateGroup)
 	{
-		mGroupPanel->getChildView("header_container")->setVisible(TRUE);
-		mGroupPanel->getChildView("back")->setVisible(FALSE);
+		mGroupCreatePanel->onOpen(key);
+		mGroupCreatePanel->setVisible(TRUE);
+		mGroupPanel->setVisible(FALSE);
 	}
 	else
 	{
+		mGroupPanel->onOpen(key);
+		mGroupPanel->setVisible(TRUE);
+		mGroupCreatePanel->setVisible(FALSE);
 		mGroupPanel->getChildView("header_container")->setVisible(FALSE);
 	}
 }

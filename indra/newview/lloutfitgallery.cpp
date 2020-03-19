@@ -36,7 +36,7 @@
 
 #include "llaccordionctrltab.h"
 #include "llappearancemgr.h"
-#include "lleconomy.h"
+#include "llagentbenefits.h"
 #include "llerror.h"
 #include "llfilepicker.h"
 #include "llfloaterperms.h"
@@ -838,16 +838,7 @@ LLContextMenu* LLOutfitGalleryContextMenu::createMenu()
     enable_registrar.add("Outfit.OnEnable", boost::bind(&LLOutfitGalleryContextMenu::onEnable, this, _2));
     enable_registrar.add("Outfit.OnVisible", boost::bind(&LLOutfitGalleryContextMenu::onVisible, this, _2));
     
-    // </FS:Ansariel> Show correct upload fee in context menu
-    //return createFromFile("menu_gallery_outfit_tab.xml");
-    LLContextMenu* menu = createFromFile("menu_gallery_outfit_tab.xml");
-    LLMenuItemCallGL* upload_item = menu->findChild<LLMenuItemCallGL>("upload_photo");
-    if (upload_item)
-    {
-        upload_item->setLabelArg("[UPLOAD_COST]", llformat("%d", LLGlobalEconomy::getInstance()->getPriceUpload()));
-    }
-    return menu;
-    // </FS:Ansariel>
+    return createFromFile("menu_gallery_outfit_tab.xml");
 }
 
 void LLOutfitGalleryContextMenu::onUploadPhoto(const LLUUID& outfit_cat_id)
@@ -922,6 +913,7 @@ bool LLOutfitGalleryContextMenu::onEnable(LLSD::String param)
 
 bool LLOutfitGalleryContextMenu::onVisible(LLSD::String param)
 {
+	mMenuHandle.get()->getChild<LLUICtrl>("upload_photo")->setLabelArg("[UPLOAD_COST]", std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost()));
     if ("remove_photo" == param)
     {
         LLOutfitGallery* gallery = dynamic_cast<LLOutfitGallery*>(mOutfitList);
@@ -1217,7 +1209,7 @@ void LLOutfitGallery::uploadOutfitImage(const std::vector<std::string>& filename
             return;
         }
 
-        S32 expected_upload_cost = LLGlobalEconomy::getInstance()->getPriceUpload(); // kinda hack - assumes that unsubclassed LLFloaterNameDesc is only used for uploading chargeable assets, which it is right now (it's only used unsubclassed for the sound upload dialog, and THAT should be a subclass).
+        S32 expected_upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost();
         void *nruserdata = NULL;
         nruserdata = (void *)&outfit_id;
 

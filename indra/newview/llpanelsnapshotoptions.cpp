@@ -26,7 +26,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "lleconomy.h"
 #include "llpanel.h"
 #include "llsidetraypanelcontainer.h"
 
@@ -34,12 +33,14 @@
 #include "llfloaterreg.h"
 #include "llfloaterflickr.h" // <FS:Ansariel> Share to Flickr
 
+#include "llagentbenefits.h"
+
+
 /**
  * Provides several ways to save a snapshot.
  */
 class LLPanelSnapshotOptions
 :	public LLPanel
-,	public LLEconomyObserver
 {
 	LOG_CLASS(LLPanelSnapshotOptions);
 
@@ -48,7 +49,6 @@ public:
 	~LLPanelSnapshotOptions();
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
-	/*virtual*/ void onEconomyDataChange() { updateUploadCost(); }
 
 private:
 	void updateUploadCost();
@@ -71,13 +71,10 @@ LLPanelSnapshotOptions::LLPanelSnapshotOptions()
 	mCommitCallbackRegistrar.add("Snapshot.SaveToInventory",	boost::bind(&LLPanelSnapshotOptions::onSaveToInventory,	this));
 	mCommitCallbackRegistrar.add("Snapshot.SaveToComputer",		boost::bind(&LLPanelSnapshotOptions::onSaveToComputer,	this));
 	mCommitCallbackRegistrar.add("Snapshot.SendToFlickr",		boost::bind(&LLPanelSnapshotOptions::onSendToFlickr, this)); // <FS:Ansariel> Share to Flickr
-
-	LLGlobalEconomy::getInstance()->addObserver(this);
 }
 
 LLPanelSnapshotOptions::~LLPanelSnapshotOptions()
 {
-	LLGlobalEconomy::getInstance()->removeObserver(this);
 }
 
 // virtual
@@ -95,7 +92,7 @@ void LLPanelSnapshotOptions::onOpen(const LLSD& key)
 
 void LLPanelSnapshotOptions::updateUploadCost()
 {
-	S32 upload_cost = LLGlobalEconomy::getInstance()->getPriceUpload();
+	S32 upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost();
 	getChild<LLUICtrl>("save_to_inventory_btn")->setLabelArg("[AMOUNT]", llformat("%d", upload_cost));
 }
 
