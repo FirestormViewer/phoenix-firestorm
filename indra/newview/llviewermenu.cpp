@@ -46,6 +46,7 @@
 // newview includes
 #include "llagent.h"
 #include "llagentaccess.h"
+#include "llagentbenefits.h"
 #include "llagentcamera.h"
 #include "llagentui.h"
 #include "llagentwearables.h"
@@ -131,13 +132,13 @@
 #include "lluilistener.h"
 #include "llappearancemgr.h"
 #include "lltrans.h"
-#include "lleconomy.h"
 #include "lltoolgrab.h"
 #include "llwindow.h"
 #include "llpathfindingmanager.h"
 #include "llstartup.h"
 #include "boost/unordered_map.hpp"
 #include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
 #include "llcleanup.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "fsavatarrenderpersistence.h"
@@ -630,28 +631,35 @@ void init_menus()
     gViewerWindow->setMenuBackgroundColor(false, 
         !LLGridManager::getInstance()->isInSLBeta());
 // <FS:AW opensim currency support>
-//	// Assume L$10 for now, the server will tell us the real cost at login
-//	// *TODO:Also fix cost in llfolderview.cpp for Inventory menus
-//	const std::string upload_cost("10");
-	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
-	S32 cost = LLGlobalEconomy::getInstance()->getPriceUpload();
-	std::string upload_cost;
+	// *TODO:Also fix cost in llfolderview.cpp for Inventory menus
+	//const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
+	//const std::string sound_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getSoundUploadCost());
+	//const std::string animation_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getAnimationUploadCost());
+	S32 texture_upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost();
+	S32 sound_upload_cost = LLAgentBenefitsMgr::current().getSoundUploadCost();
+	S32 animation_upload_cost = LLAgentBenefitsMgr::current().getAnimationUploadCost();
+	std::string texture_upload_cost_str;
+	std::string sound_upload_cost_str;
+	std::string animation_upload_cost_str;
 #ifdef OPENSIM
 	if (LLGridManager::getInstance()->isInOpenSim())
 	{
-		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
+		texture_upload_cost_str = texture_upload_cost > 0 ? llformat("%s%d", "L$", texture_upload_cost) : LLTrans::getString("free");
+		sound_upload_cost_str = sound_upload_cost > 0 ? llformat("%s%d", "L$", sound_upload_cost) : LLTrans::getString("free");
+		animation_upload_cost_str = animation_upload_cost > 0 ? llformat("%s%d", "L$", animation_upload_cost) : LLTrans::getString("free");
 	}
 	else
 #endif
 	{
-		upload_cost = "L$" + (cost > 0 ? llformat("%d", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost")));
+		texture_upload_cost_str = "L$" + llformat("%d", texture_upload_cost);
+		sound_upload_cost_str = "L$" + llformat("%d", sound_upload_cost);
+		animation_upload_cost_str = "L$" + llformat("%d", animation_upload_cost);
 	}
 // </FS:AW opensim currency support>
-	gMenuHolder->childSetLabelArg("Upload Image", "[COST]", upload_cost);
-	gMenuHolder->childSetLabelArg("Upload Sound", "[COST]", upload_cost);
-	gMenuHolder->childSetLabelArg("Upload Animation", "[COST]", upload_cost);
-	gMenuHolder->childSetLabelArg("Bulk Upload", "[COST]", upload_cost);
-	
+	gMenuHolder->childSetLabelArg("Upload Image", "[COST]", texture_upload_cost_str);
+	gMenuHolder->childSetLabelArg("Upload Sound", "[COST]", sound_upload_cost_str);
+	gMenuHolder->childSetLabelArg("Upload Animation", "[COST]", animation_upload_cost_str);
+
 	gAutorespondMenu = gMenuBarView->getChild<LLMenuItemCallGL>("Set Autorespond", TRUE);
 	gAutorespondNonFriendsMenu = gMenuBarView->getChild<LLMenuItemCallGL>("Set Autorespond to non-friends", TRUE);
 	gAttachSubMenu = gMenuBarView->findChildMenuByName("Attach Object", TRUE);
@@ -10914,22 +10922,31 @@ class LLUploadCostCalculator : public view_listener_t
 
 	bool handleEvent(const LLSD& userdata)
 	{
-		std::string menu_name = userdata.asString();
-		// AW:this fights the update in llviewermessage
-		calculateCost();// <FS:AW opensim currency support>
+		std::vector<std::string> fields;
+		std::string str = userdata.asString(); 
+		boost::split(fields, str, boost::is_any_of(","));
+		if (fields.size()<1)
+		{
+			return false;
+		}
+		std::string menu_name = fields[0];
+		std::string asset_type_str = "texture";
+		if (fields.size()>1)
+		{
+			asset_type_str = fields[1];
+		}
+		LL_DEBUGS("Benefits") << "userdata " << userdata << " menu_name " << menu_name << " asset_type_str " << asset_type_str << LL_ENDL;
+		calculateCost(asset_type_str);
 		gMenuHolder->childSetLabelArg(menu_name, "[COST]", mCostStr);
 
 		return true;
 	}
 
-	void calculateCost();
+	void calculateCost(const std::string& asset_type_str);
 
 public:
 	LLUploadCostCalculator()
 	{
-// <FS:AW opensim currency support> we don't know the costs yet
-//		calculateCost();
-// </FS:AW opensim currency support>
 	}
 };
 
@@ -10955,20 +10972,26 @@ class LLToggleUIHints : public view_listener_t
 	}
 };
 
-void LLUploadCostCalculator::calculateCost()
+void LLUploadCostCalculator::calculateCost(const std::string& asset_type_str)
 {
-	S32 upload_cost = LLGlobalEconomy::getInstance()->getPriceUpload();
- 
- 	// getPriceUpload() returns -1 if no data available yet.
-// <FS:AW opensim currency support>
-// 	if(upload_cost >= 0)
-// 	{
-// 		mCostStr = llformat("%d", upload_cost);
-// 	}
-// 	else
-// 	{
-// 		mCostStr = llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
-// 	}
+	S32 upload_cost = -1;
+
+	if (asset_type_str == "texture")
+	{
+		upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost();
+	}
+	else if (asset_type_str == "animation")
+	{
+		upload_cost = LLAgentBenefitsMgr::current().getAnimationUploadCost();
+	}
+	else if (asset_type_str == "sound")
+	{
+		upload_cost = LLAgentBenefitsMgr::current().getSoundUploadCost();
+	}
+	if (upload_cost < 0)
+	{
+		LL_WARNS() << "Unable to find upload cost for asset_type_str " << asset_type_str << LL_ENDL;
+	}
 #ifdef OPENSIM // <FS:AW optional opensim support>
 	if (LLGridManager::getInstance()->isInOpenSim())
 	{
@@ -10976,10 +10999,7 @@ void LLUploadCostCalculator::calculateCost()
 	}
 	else
 #endif // OPENSIM // <FS:AW optional opensim support>
-	{
-		mCostStr = "L$" + (upload_cost > 0 ? llformat("%d", upload_cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost")));
-	}
-// </FS:AW opensim currency support>
+	mCostStr = std::to_string(upload_cost);
 }
 
 void show_navbar_context_menu(LLView* ctrl, S32 x, S32 y)

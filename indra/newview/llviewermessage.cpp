@@ -32,7 +32,6 @@
 #include "llaudioengine.h" 
 #include "llavataractions.h"
 #include "llavatarnamecache.h"		// IDEVO HACK
-#include "lleconomy.h"
 #include "lleventtimer.h"
 #include "llfloaterreg.h"
 #include "llfolderview.h"
@@ -51,6 +50,7 @@
 #include "mean_collision_data.h"
 
 #include "llagent.h"
+#include "llagentbenefits.h"
 #include "llagentcamera.h"
 #include "llcallingcard.h"
 #include "llbuycurrencyhtml.h"
@@ -148,6 +148,7 @@
 #include "fslslbridge.h"
 #include "fsmoneytracker.h"
 #include "llattachmentsmgr.h"
+#include "lleconomy.h"
 #include "llfloaterbump.h"
 #include "llfloaterreg.h"
 #include "llfriendcard.h"
@@ -1003,7 +1004,7 @@ bool join_group_response(const LLSD& notification, const LLSD& response)
 	if(option == 0 && !group_id.isNull())
 	{
 		// check for promotion or demotion.
-		S32 max_groups = gMaxAgentGroups;
+		S32 max_groups = LLAgentBenefitsMgr::current().getGroupMembershipLimit();
 		if(gAgent.isInGroup(group_id)) ++max_groups;
 
 		// [CR] FIRE-12229
@@ -6895,33 +6896,32 @@ void process_frozen_message(LLMessageSystem *msgsystem, void **user_data)
 // do some extra stuff once we get our economy data
 void process_economy_data(LLMessageSystem *msg, void** /*user_data*/)
 {
-	LLGlobalEconomy::processEconomyData(msg, LLGlobalEconomy::getInstance());
-	S32 upload_cost = LLGlobalEconomy::getInstance()->getPriceUpload();
-// <FS:AW opensim currency support> 
-// AW: from this point anything is bogus because it's all replaced by the LLUploadCostCalculator in llviewermenu
-//	LL_INFOS_ONCE("Messaging") << "EconomyData message arrived; upload cost is L$" << upload_cost << LL_ENDL;
-// 	gMenuHolder->getChild<LLUICtrl>("Upload Image")->setLabelArg("[COST]", llformat("%d", upload_cost));
-// 	gMenuHolder->getChild<LLUICtrl>("Upload Sound")->setLabelArg("[COST]", llformat("%d", upload_cost));
-// 	gMenuHolder->getChild<LLUICtrl>("Upload Animation")->setLabelArg("[COST]", llformat("%d", upload_cost));
-// 	gMenuHolder->getChild<LLUICtrl>("Bulk Upload")->setLabelArg("[COST]", llformat("%d", upload_cost));
-	std::string cost_str;
+	// <FS:AW opensim currency support> 
+	//LL_DEBUGS("Benefits") << "Received economy data, not currently used" << LL_ENDL;
 #ifdef OPENSIM
 	if (LLGridManager::getInstance()->isInOpenSim())
 	{
-		cost_str = upload_cost > 0 ? llformat("%s%d", "L$", upload_cost) : LLTrans::getString("free");
+		LLGlobalEconomy::processEconomyData(msg, LLGlobalEconomy::getInstance());
+
+		S32 texture_upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost();
+		S32 sound_upload_cost = LLAgentBenefitsMgr::current().getSoundUploadCost();
+		S32 animation_upload_cost = LLAgentBenefitsMgr::current().getAnimationUploadCost();
+		std::string texture_upload_cost_str;
+		std::string sound_upload_cost_str;
+		std::string animation_upload_cost_str;
+
+		texture_upload_cost_str = texture_upload_cost > 0 ? llformat("%s%d", "L$", texture_upload_cost) : LLTrans::getString("free");
+		sound_upload_cost_str = sound_upload_cost > 0 ? llformat("%s%d", "L$", sound_upload_cost) : LLTrans::getString("free");
+		animation_upload_cost_str = animation_upload_cost > 0 ? llformat("%s%d", "L$", animation_upload_cost) : LLTrans::getString("free");
+		gMenuHolder->getChild<LLUICtrl>("Upload Image")->setLabelArg("[COST]",  texture_upload_cost_str);
+		gMenuHolder->getChild<LLUICtrl>("Upload Sound")->setLabelArg("[COST]",  sound_upload_cost_str);
+		gMenuHolder->getChild<LLUICtrl>("Upload Animation")->setLabelArg("[COST]", animation_upload_cost_str);
 	}
 	else
 #endif
 	{
-		cost_str = "L$" + (upload_cost > 0 ? llformat("%d", upload_cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost")));
+		LL_DEBUGS("Benefits") << "Received economy data, not currently used" << LL_ENDL;
 	}
-
-	LL_INFOS_ONCE("Messaging") << Tea::wrapCurrency("EconomyData message arrived; upload cost is L$") << cost_str << LL_ENDL;
-
-	gMenuHolder->getChild<LLUICtrl>("Upload Image")->setLabelArg("[COST]",  cost_str);
-	gMenuHolder->getChild<LLUICtrl>("Upload Sound")->setLabelArg("[COST]",  cost_str);
-	gMenuHolder->getChild<LLUICtrl>("Upload Animation")->setLabelArg("[COST]", cost_str);
-	gMenuHolder->getChild<LLUICtrl>("Bulk Upload")->setLabelArg("[COST]", cost_str);
 // <FS:AW opensim currency support>
 
 	// update L$ substitution for "Buy and Sell L$", it was set before we knew the currency

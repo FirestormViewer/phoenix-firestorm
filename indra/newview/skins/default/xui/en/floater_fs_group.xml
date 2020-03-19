@@ -30,4 +30,14 @@
      name="panel_group_info_sidetray"
      filename="panel_group_info_sidetray.xml"
     />
+    <panel
+     background_visible="false"
+     top="5"
+     height="560"
+     right="-3"
+     left="0"
+     class="panel_group_creation_sidetray"
+     name="panel_group_creation_sidetray"
+     filename="panel_group_creation_sidetray.xml"
+    />
 </floater>

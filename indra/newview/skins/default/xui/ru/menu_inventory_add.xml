@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="menu_inventory_add">
 	<menu label="Загрузить" name="upload">
-		<menu_item_call label="Текстуру ([COST])..." name="Upload Image"/>
-		<menu_item_call label="Звук ([COST])..." name="Upload Sound"/>
-		<menu_item_call label="Анимацию ([COST])..." name="Upload Animation"/>
+		<menu_item_call label="Текстуру (L$[COST])..." name="Upload Image"/>
+		<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
+		<menu_item_call label="Анимацию (L$[COST])..." name="Upload Animation"/>
 		<menu_item_call label="Меш модель..." name="Upload Model"/>
-		<menu_item_call label="Несколько файлов ([COST] за файл)..." name="Bulk Upload"/>
+		<menu_item_call label="Несколько файлов..." name="Bulk Upload"/>
 		<menu_item_call label="Импортировать набор связей..." name="import linkset"/>
 	</menu>
 	<menu_item_call label="Новая папка" name="New Folder"/>
