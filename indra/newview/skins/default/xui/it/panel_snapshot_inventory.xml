@@ -14,7 +14,7 @@
 	<check_box label="Mantieni proporzioni" name="inventory_keep_aspect_check"/>
 	<check_box label="Temporaneo" name="inventory_temp_upload" />
 	<text name="hint_lbl">
-		Salvare in inventario costa L$[UPLOAD_COST]. Per salvare come texture, selezionare un formato quadrato.
+		Per salvare come texture, selezionare un formato quadrato.
 	</text>
 	<button label="&#x25B6; Seleziona" name="cancel_btn"/>
 	<button label="Salva" name="save_btn"/>

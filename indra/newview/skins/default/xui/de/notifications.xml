@@ -270,6 +270,10 @@ Möchten Sie den ausgewählten Einwohnern Änderungsrechte gewähren?
 		Möchten Sie den ausgewählten Einwohnern die Änderungsrechte entziehen?
 		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
 	</notification>
+	<notification name="GroupNameLengthWarning">
+		Ein Gruppenname muss zwischen [MIN_LEN] und [MAX_LEN] Zeichen lang sein.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="UnableToCreateGroup">
 		Gruppe konnte nicht erstellt werden.
 [MESSAGE]
@@ -510,6 +514,9 @@ Um Medien nur auf einer Fläche einzufügen, wählen Sie „Oberfläche auswähl
 	</notification>
 	<notification name="ErrorPhotoCannotAfford">
 		Es kostet L$[COST], um ein Foto in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
+	</notification>
+	<notification name="ErrorCannotAffordUpload">
+		Es kostet L$[COST], um diesen Gegenstand hochzuladen.
 	</notification>
 	<notification name="ErrorTextureCannotAfford">
 		Es kostet L$[COST], um eine Textur in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
@@ -1827,11 +1834,14 @@ Eingehende Gruppeneinladungen werden jetzt automatisch abgewiesen. Sie erhalten 
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GroupLimitInfo">
-		Die Gruppenbegrenzung für Basiskonten ist [MAX_BASIC]; für 
-[https://secondlife.com/premium/ Premium-]Konten ist sie [MAX_PREMIUM].
-Wenn Sie ein Downgrade Ihres Kontos durchgeführt haben, müssen Sie das Gruppenlimit unter [MAX_BASIC] bringen, bevor sich weitere Personen registrieren können.
-
-[https://secondlife.com/my/account/membership.php Noch heute upgraden!]
+		Einwohner mit einer Basis-Mitgliedschaft können bis zu [MAX_BASIC] Gruppen beitreten.
+Eine Premium-Mitgliedschaft erlaubt bis zu [MAX_PREMIUM]. [https://secondlife.com/my/account/membership.php Mehr erfahren oder upgraden]
+		<usetemplate name="okbutton" yestext="Schließen"/>
+	</notification>
+	<notification name="GroupLimitInfoPlus">
+		Einwohner mit einer Basis-Mitgliedschaft können bis zu [MAX_BASIC] Gruppen beitreten.
+Eine Premium-Mitgliedschaft erlaubt bis zu [MAX_PREMIUM]. [https://secondlife.com/my/account/membership.php Mehr erfahren oder upgraden]
+Eine Premium-Plus-Mitgliedschaft erlaubt bis zu [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/membership.php Mehr erfahren oder upgraden]
 		<usetemplate name="okbutton" yestext="Schließen"/>
 	</notification>
 	<notification name="KickUser">
@@ -3509,6 +3519,22 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 	</notification>
 	<notification name="VoiceIsMutedByModerator">
 		Sie wurden vom Moderator stummgeschaltet.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="FailedToGetBenefits">
+		Leider konnten die Vorteilsinformationen für diese Sitzung nicht abgerufen werden. Dieses sollte normalerweise nicht passieren. Bitte kontaktieren Sie den Support. Diese Sitzung wird nicht normal funktionieren und wir empfehlen einen Neustart.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="BulkUploadCostConfirmation">
+		Das Hochladen von [COUNT] Gegenständen wird insgesamt [COST] L$ kosten. Möchten Sie mit dem Hochladen fortfahren?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Hochladen"/>
+	</notification>
+	<notification name="BulkUploadNoCompatibleFiles">
+		Die ausgewählten Dateien können nicht per Mehrfach-Upload hochgeladen werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="BulkUploadIncompatibleFiles">
+		Einige der ausgewählten Dateien können nicht per Mehrfach-Upload hochgeladen werden.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="UploadCostConfirmation">

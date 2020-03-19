@@ -4,7 +4,7 @@
 		收納區
 	</text>
 	<text name="hint_lbl">
-		將圖像儲存到收納區的費用為 L$[UPLOAD_COST]。 若要將圖像存為材質，請選擇一個正方格式。
+		若要將圖像存為材質，請選擇一個正方格式。
 	</text>
 	<combo_box label="解析度" name="texture_size_combo">
 		<combo_box.item label="目前視窗(512x512)" name="CurrentWindow"/>
