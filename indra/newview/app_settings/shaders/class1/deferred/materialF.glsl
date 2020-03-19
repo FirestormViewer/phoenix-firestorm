@@ -230,7 +230,10 @@ void main()
     vec4 diffuse_linear = vec4(srgb_to_linear(diffuse_srgb.rgb), diffuse_srgb.a);
 
 #if (DIFFUSE_ALPHA_MODE == DIFFUSE_ALPHA_MODE_MASK)
-    if (diffuse_linear.a < minimum_alpha)
+
+    // Comparing floats cast from 8-bit values, produces acne right at the 8-bit transition points
+    float bias = 0.001953125; // 1/512, or half an 8-bit quantization
+    if (diffuse_linear.a < minimum_alpha-bias)
     {
         discard;
     }
@@ -336,7 +339,10 @@ void main()
     if (emissive_brightness >= 1.0)	// fullbright, skip lighting calculations
     {
         color = fullbrightAtmosTransportFrag(diffuse_srgb.rgb, additive, atten);
-        color = fullbrightScaleSoftClip(color);
+        // This call breaks the Mac GLSL compiler/linker for unknown reasons (17Mar2020)
+        // The call is either a no-op or a pure (pow) gamma adjustment, depending on GPU level
+        // TODO: determine if we want to re-apply the gamma adjustment, and if so understand & fix Mac breakage
+        //color = fullbrightScaleSoftClip(color);
 
         al = diffuse_srgb.a;
     }
