@@ -207,11 +207,11 @@
 			<menu_item_call label="Установить разрешения по умолчанию..." name="Set default permissions"/>
 		</menu>
 		<menu label="Загрузить" name="Upload">
-			<menu_item_call label="Изображение ([COST])..." name="Upload Image"/>
-			<menu_item_call label="Звук ([COST])..." name="Upload Sound"/>
-			<menu_item_call label="Анимацию ([COST])..." name="Upload Animation"/>
+			<menu_item_call label="Изображение (L$[COST])..." name="Upload Image"/>
+			<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
+			<menu_item_call label="Анимацию (L$[COST])..." name="Upload Animation"/>
 			<menu_item_call label="Меш модель..." name="Upload Model"/>
-			<menu_item_call label="Несколько ([COST] за файл)..." name="Bulk Upload"/>
+			<menu_item_call label="Несколько..." name="Bulk Upload"/>
 			<menu_item_call label="Импортировать группу каналов..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Отменить" name="Undo"/>

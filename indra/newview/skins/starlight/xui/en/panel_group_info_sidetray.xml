@@ -325,27 +325,6 @@ background_visible="true"
 				     top="0"
 				     width="82" />
 				</layout_panel>
-				
-				<layout_panel
-				follows="bottom|left|right"
-				height="23"
-				layout="bottomleft"
-				left_pad="3"
-				name="btn_create_lp" 
-			    auto_resize="true"
-				width="125">
-					<button
-    				 follows="bottom|left|right"
-	                 height="23"
-	                 layout="topleft"
-	                 left="1"
-	                 top="0"
-	                 label="Create Group"
-     				 name="btn_create"
-               		 visible="true"
-                 	 tool_tip="Create a new Group"
-                 	 width="124" />	
-				</layout_panel>
 		</layout_stack>
    <!--<button
      left_pad="3"

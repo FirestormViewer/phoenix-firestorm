@@ -30,13 +30,13 @@
 
 #include "fscommon.h"
 #include "llagent.h"
+#include "llagentbenefits.h"
 #include "llappviewer.h"
 #include "llbuycurrencyhtml.h"
 #include "llcallbacklist.h"
 #include "llcheckboxctrl.h"
 #include "lldatapacker.h"
 #include "lldir.h"
-#include "lleconomy.h"
 #include "llfloaterperms.h"
 #include "llinventorydefines.h"
 #include "llinventoryfunctions.h"
@@ -126,7 +126,7 @@ FSFloaterImport::~FSFloaterImport()
 
 BOOL FSFloaterImport::postBuild()
 {
-	if (LLGlobalEconomy::getInstance()->getPriceUpload() == 0 
+	if (LLAgentBenefitsMgr::current().getTextureUploadCost() == 0 
 		|| gAgent.getRegion()->getCentralBakeVersion() > 0)
 	{
 		getChild<LLCheckBoxCtrl>("temp_asset")->setVisible(FALSE);   
@@ -520,7 +520,7 @@ void FSFloaterImport::onClickBtnImport()
 		
 		if (!getChild<LLCheckBoxCtrl>("temp_asset")->get())
 		{
-			U32 expected_upload_cost = mTexturesTotal * (U32)LLGlobalEconomy::getInstance()->getPriceUpload();
+			U32 expected_upload_cost = mTexturesTotal * (U32)LLAgentBenefitsMgr::current().getTextureUploadCost();
 			if(!(can_afford_transaction(expected_upload_cost)))
 			{
 				LLStringUtil::format_map_t args;
@@ -590,7 +590,7 @@ void FSFloaterImport::onClickCheckBoxUploadAsset()
 	{
 		getChild<LLCheckBoxCtrl>("temp_asset")->setEnabled(TRUE);
 		LLUIString stats = getString("upload_cost");
-		stats.setArg("[COST]", llformat("%u", (mTexturesTotal + mSoundsTotal + mAnimsTotal) * (U32)LLGlobalEconomy::getInstance()->getPriceUpload()));
+		stats.setArg("[COST]", llformat("%u", (mTexturesTotal * LLAgentBenefitsMgr::current().getTextureUploadCost() + mSoundsTotal * LLAgentBenefitsMgr::current().getSoundUploadCost() + mAnimsTotal * LLAgentBenefitsMgr::current().getAnimationUploadCost())));
 		getChild<LLTextBox>("file_status_text")->setText(stats.getString());
 	}
 	else
@@ -613,7 +613,7 @@ void FSFloaterImport::onClickCheckBoxTempAsset()
 	else
 	{
 		LLUIString stats = getString("upload_cost");
-		stats.setArg("[COST]", llformat("%u", (mTexturesTotal + mSoundsTotal + mAnimsTotal) * (U32)LLGlobalEconomy::getInstance()->getPriceUpload()));
+		stats.setArg("[COST]", llformat("%u", (mTexturesTotal * LLAgentBenefitsMgr::current().getTextureUploadCost() + mSoundsTotal * LLAgentBenefitsMgr::current().getSoundUploadCost() + mAnimsTotal * LLAgentBenefitsMgr::current().getAnimationUploadCost())));
 		getChild<LLTextBox>("file_status_text")->setText(stats.getString());
 	}
 }
@@ -1468,7 +1468,21 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 	data->mAssetInfo.mCreatorID = gAgentID;
 	data->mInventoryType = inventory_type;
 	data->mNextOwnerPerm = LLFloaterPerms::getNextOwnerPerms(perms_prefix);
-	data->mExpectedUploadCost = LLGlobalEconomy::getInstance()->getPriceUpload();
+	switch (asset_type)
+	{
+		case LLAssetType::AT_TEXTURE:
+			data->mExpectedUploadCost = LLAgentBenefitsMgr::current().getTextureUploadCost();
+			break;
+		case LLAssetType::AT_ANIMATION:
+			data->mExpectedUploadCost = LLAgentBenefitsMgr::current().getAnimationUploadCost();
+			break;
+		case LLAssetType::AT_SOUND:
+			data->mExpectedUploadCost = LLAgentBenefitsMgr::current().getSoundUploadCost();
+			break;
+		default:
+			data->mExpectedUploadCost = 0;
+			break;
+	}
 	FSResourceData* fs_data = new FSResourceData;
 	fs_data->uuid = asset_id;
 	fs_data->mFloater = this;
@@ -1960,7 +1974,23 @@ void uploadCoroutine( LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &a_httpAdapter
 		{
 			LLAssetType::EType asset_type = LLAssetType::lookup( aBody[ "asset_type" ].asString() );
 			LLInventoryType::EType inventory_type = LLInventoryType::lookup( aBody[ "inventory_type" ].asString() );
-			S32 upload_price = LLGlobalEconomy::getInstance()->getPriceUpload();
+
+			S32 upload_price;
+			switch (asset_type)
+			{
+				case LLAssetType::AT_TEXTURE:
+					upload_price = LLAgentBenefitsMgr::current().getTextureUploadCost();
+					break;
+				case LLAssetType::AT_ANIMATION:
+					upload_price = LLAgentBenefitsMgr::current().getAnimationUploadCost();
+					break;
+				case LLAssetType::AT_SOUND:
+					upload_price = LLAgentBenefitsMgr::current().getSoundUploadCost();
+					break;
+				default:
+					upload_price = 0;
+					break;
+			}
 
 			const std::string inventory_type_string = aBody[ "asset_type" ].asString();
 			const LLUUID& item_folder_id = aBody[ "folder_id" ].asUUID();

@@ -32,6 +32,7 @@
 #include "pipeline.h"
 
 #include "llagentaccess.h"
+#include "llagentbenefits.h"
 #include "llagentcamera.h"
 #include "llagentlistener.h"
 #include "llagentwearables.h"
@@ -3577,10 +3578,17 @@ BOOL LLAgent::setUserGroupFlags(const LLUUID& group_id, BOOL accept_notices, BOO
 
 BOOL LLAgent::canJoinGroups() const
 {
-	// [CR] FIRE-12229
-	//return (S32)mGroups.size() < gMaxAgentGroups;
-	return ((!gMaxAgentGroups) || ((S32)mGroups.size() < gMaxAgentGroups));
-	// [/CR]
+	// <FS:CR> FIRE-12229
+	//return (S32)mGroups.size() < LLAgentBenefitsMgr::current().getGroupMembershipLimit();
+	if (LLGridManager::instance().isInSecondLife())
+	{
+		return (S32)mGroups.size() < LLAgentBenefitsMgr::current().getGroupMembershipLimit();
+	}
+	else
+	{
+		return ((!gMaxAgentGroups) || ((S32)mGroups.size() < gMaxAgentGroups));
+	}
+	// </FS:CR>
 }
 
 LLQuaternion LLAgent::getHeadRotation()

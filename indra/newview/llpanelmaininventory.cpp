@@ -28,12 +28,12 @@
 #include "llpanelmaininventory.h"
 
 #include "llagent.h"
+#include "llagentbenefits.h"
 #include "llagentcamera.h"
 #include "llavataractions.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
 #include "lldndbutton.h"
-#include "lleconomy.h"
 #include "llfilepicker.h"
 #include "llinventorybridge.h"
 #include "llinventoryfunctions.h"
@@ -328,19 +328,28 @@ BOOL LLPanelMainInventory::postBuild()
 
 	initListCommandsHandlers();
 // <FS:AW opensim currency support>
-//	// *TODO:Get the cost info from the server
-//	const std::string upload_cost("10");
-	S32 cost = LLGlobalEconomy::getInstance()->getPriceUpload();
-	std::string upload_cost;
+	//const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
+	//const std::string sound_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getSoundUploadCost());
+	//const std::string animation_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getAnimationUploadCost());
+	S32 texture_upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost();
+	S32 sound_upload_cost = LLAgentBenefitsMgr::current().getSoundUploadCost();
+	S32 animation_upload_cost = LLAgentBenefitsMgr::current().getAnimationUploadCost();
+	std::string texture_upload_cost_str;
+	std::string sound_upload_cost_str;
+	std::string animation_upload_cost_str;
 #ifdef OPENSIM
 	if (LLGridManager::getInstance()->isInOpenSim())
 	{
-		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
+		texture_upload_cost_str = texture_upload_cost > 0 ? llformat("%s%d", "L$", texture_upload_cost) : LLTrans::getString("free");
+		sound_upload_cost_str = sound_upload_cost > 0 ? llformat("%s%d", "L$", sound_upload_cost) : LLTrans::getString("free");
+		animation_upload_cost_str = animation_upload_cost > 0 ? llformat("%s%d", "L$", animation_upload_cost) : LLTrans::getString("free");
 	}
 	else
 #endif
 	{
-		upload_cost = "L$" + (cost > 0 ? llformat("%d", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost")));
+		texture_upload_cost_str = "L$" + llformat("%d", texture_upload_cost);
+		sound_upload_cost_str = "L$" + llformat("%d", sound_upload_cost);
+		animation_upload_cost_str = "L$" + llformat("%d", animation_upload_cost);
 	}
 // </FS:AW opensim currency support>
 
@@ -348,10 +357,9 @@ BOOL LLPanelMainInventory::postBuild()
 	LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
 	if (menu)
 	{
-		menu->getChild<LLMenuItemGL>("Upload Image")->setLabelArg("[COST]", upload_cost);
-		menu->getChild<LLMenuItemGL>("Upload Sound")->setLabelArg("[COST]", upload_cost);
-		menu->getChild<LLMenuItemGL>("Upload Animation")->setLabelArg("[COST]", upload_cost);
-		menu->getChild<LLMenuItemGL>("Bulk Upload")->setLabelArg("[COST]", upload_cost);
+		menu->getChild<LLMenuItemGL>("Upload Image")->setLabelArg("[COST]", texture_upload_cost_str);
+		menu->getChild<LLMenuItemGL>("Upload Sound")->setLabelArg("[COST]", sound_upload_cost_str);
+		menu->getChild<LLMenuItemGL>("Upload Animation")->setLabelArg("[COST]", animation_upload_cost_str);
 	}
 
 	// Trigger callback for focus received so we can deselect items in inbox/outbox
@@ -2064,47 +2072,37 @@ bool LLPanelMainInventory::handleDragAndDropToTrash(BOOL drop, EDragAndDropType 
 
 void LLPanelMainInventory::setUploadCostIfNeeded()
 {
-	// *NOTE dzaporozhan
-	// Upload cost is set in process_economy_data() (llviewermessage.cpp). But since we
-	// have two instances of Inventory panel at the moment(and two instances of context menu),
-	// call to gMenuHolder->childSetLabelArg() sets upload cost only for one of the instances.
-
 	LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
 	if(mNeedUploadCost && menu)
 	{
-		LLMenuItemBranchGL* upload_menu = menu->findChild<LLMenuItemBranchGL>("upload");
-		if(upload_menu)
-		{
-			S32 upload_cost = LLGlobalEconomy::getInstance()->getPriceUpload();
-			std::string cost_str;
-
-			// getPriceUpload() returns -1 if no data available yet.
 // <FS:AW opensim currency support>
-//			if(upload_cost >= 0)
-//			{
-//				mNeedUploadCost = false;
-//				cost_str = llformat("%d", upload_cost);
-//			}
-//			else
-//			{
-//				cost_str = llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
-//			}
+		//const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
+		//const std::string sound_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getSoundUploadCost());
+		//const std::string animation_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getAnimationUploadCost());
+		S32 texture_upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost();
+		S32 sound_upload_cost = LLAgentBenefitsMgr::current().getSoundUploadCost();
+		S32 animation_upload_cost = LLAgentBenefitsMgr::current().getAnimationUploadCost();
+		std::string texture_upload_cost_str;
+		std::string sound_upload_cost_str;
+		std::string animation_upload_cost_str;
 #ifdef OPENSIM
-			if (LLGridManager::getInstance()->isInOpenSim())
-			{
-				cost_str = upload_cost > 0 ? llformat("%s%d", "L$", upload_cost) : LLTrans::getString("free");
-			}
-			else
-#endif
-			{
-				cost_str = "L$" + (upload_cost > 0 ? llformat("%d", upload_cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost")));
-			}
-// </FS:AW opensim currency support>
-			upload_menu->getChild<LLView>("Upload Image")->setLabelArg("[COST]", cost_str);
-			upload_menu->getChild<LLView>("Upload Sound")->setLabelArg("[COST]", cost_str);
-			upload_menu->getChild<LLView>("Upload Animation")->setLabelArg("[COST]", cost_str);
-			upload_menu->getChild<LLView>("Bulk Upload")->setLabelArg("[COST]", cost_str);
+		if (LLGridManager::getInstance()->isInOpenSim())
+		{
+			texture_upload_cost_str = texture_upload_cost > 0 ? llformat("%s%d", "L$", texture_upload_cost) : LLTrans::getString("free");
+			sound_upload_cost_str = sound_upload_cost > 0 ? llformat("%s%d", "L$", sound_upload_cost) : LLTrans::getString("free");
+			animation_upload_cost_str = animation_upload_cost > 0 ? llformat("%s%d", "L$", animation_upload_cost) : LLTrans::getString("free");
 		}
+		else
+#endif
+		{
+			texture_upload_cost_str = "L$" + llformat("%d", texture_upload_cost);
+			sound_upload_cost_str = "L$" + llformat("%d", sound_upload_cost);
+			animation_upload_cost_str = "L$" + llformat("%d", animation_upload_cost);
+		}
+// </FS:AW opensim currency support>
+		menu->getChild<LLView>("Upload Image")->setLabelArg("[COST]", texture_upload_cost_str);
+		menu->getChild<LLView>("Upload Sound")->setLabelArg("[COST]", sound_upload_cost_str);
+		menu->getChild<LLView>("Upload Animation")->setLabelArg("[COST]", animation_upload_cost_str);
 	}
 }
 

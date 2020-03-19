@@ -40,9 +40,9 @@
 		<menu_item_call label="Historial de transacciones" name="money_tracker"/>
 		<menu_item_call label="Pose..." name="pose_stand"/>
 		<menu label="Subir" name="Upload">
-			<menu_item_call label="Imagen ([COST])..." name="Upload Image"/>
-			<menu_item_call label="Sonido ([COST])..." name="Upload Sound"/>
-			<menu_item_call label="Animación ([COST])..." name="Upload Animation"/>
+			<menu_item_call label="Imagen ([COST] L$)..." name="Upload Image"/>
+			<menu_item_call label="Sonido ([COST] L$)..." name="Upload Sound"/>
+			<menu_item_call label="Animación ([COST] L$)..." name="Upload Animation"/>
 			<menu_item_call label="Modelo mesh..." name="Upload Model"/>
 			<menu_item_call label="Masivo (múltiples archivos)..." name="Bulk Upload"/>
 			<menu_item_call label="Configurar permisos por defecto..." name="perm prefs"/>
