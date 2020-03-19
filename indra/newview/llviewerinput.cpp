@@ -49,6 +49,7 @@
 #include "llvoavatarself.h"
 #include "llfloatercamera.h"
 #include "llinitparam.h"
+#include "llselectmgr.h"
 #include "llfloaterwebcontent.h"
 #include "fsfloatersearch.h"
 #include "llvoiceclient.h"
