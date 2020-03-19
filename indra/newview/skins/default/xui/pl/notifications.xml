@@ -202,6 +202,9 @@ Czy chcesz dać prawa modyfikacji wybranym osobom?
 		Czy chcesz odebrać prawa modyfikacji wybranym Rezydentom?
 		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>
 	</notification>
+	<notification name="GroupNameLengthWarning">
+		Nazwa grupy musi zawierać od [MIN_LEN] do [MAX_LEN] znaków.
+	</notification>
 	<notification name="UnableToCreateGroup">
 		Założenie grupy nie jest możliwe.
 [MESSAGE]
@@ -429,6 +432,9 @@ W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z narzędzia 
 	</notification>
 	<notification name="ErrorPhotoCannotAfford">
 		Potrzebujesz [COST]L$ aby zapisać zdjęcie do swojej Szafy. Możesz zamiast tego kupić L$ lub zapisać zdjęcie na swoim komputerze.
+	</notification>
+	<notification name="ErrorCannotAffordUpload">
+		Potrzebujesz [COST]L$ aby załadować ten element.
 	</notification>
 	<notification name="ErrorTextureCannotAfford">
 		Potrzebujesz [COST]L$ aby zapisać teksturę do swojej Szafy. Możesz zamiast tego kupić L$ lub zapisać teksturę na swoim komputerze.
@@ -1716,6 +1722,17 @@ Wszystkie nadchodzące zaproszenia do grup będą automatycznie odrzucane. Nie b
 		Należysz już do maksymalnej ilości grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
 [NAME] oferuje Ci członkostwo w grupie.
 		<usetemplate name="okcancelbuttons" notext="Odmów" yestext="Przyjmij"/>
+	</notification>
+	<notification name="GroupLimitInfo">
+		Rezydenci z członkostwem podstawowym mogą dołączyć do [MAX_BASIC] grup.
+Członkostwo premium pozwala na [MAX_PREMIUM]. [https://secondlife.com/my/account/membership.php? Dowiedz się więcej]
+		<usetemplate name="okbutton" yestext="Zamknij" />
+	</notification>
+	<notification name="GroupLimitInfoPlus">
+		Rezydenci z członkostwem podstawowym mogą dołączyć do [MAX_BASIC] grup.
+Członkostwo premium pozwala na [MAX_PREMIUM]. Członkostwo
+Premium Plus pozwala na [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/membership.php? Dowiedz się więcej]
+		<usetemplate name="okbutton" yestext="Zamknij" />
 	</notification>
 	<notification name="JoinedTooManyGroups">
 		Należysz już do maksymalnej ilości grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
@@ -3392,6 +3409,19 @@ Zostaną zablokowane na kilka sekund dla bezpieczeństwa.
 	</notification>
 	<notification name="VoiceIsMutedByModerator">
 		Twoja rozmowa głosowa została wyciszona przez moderatora.
+	</notification>
+	<notification name="FailedToGetBenefits">
+		Niestety nie udało nam się uzyskać informacji o korzyściach dla tej sesji. Nie powinno się to zdarzyć w normalnym środowisku produkcyjnym. Skontaktuj się z pomocą techniczną. Ta sesja nie będzie działać normalnie i zalecamy restart.
+	</notification>
+	<notification name="BulkUploadCostConfirmation">
+		Spowoduje to załadowanie [COUNT] elementów o łącznym koszcie [COST]L$. Czy chcesz kontynuować przesyłanie?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Załaduj"/>
+	</notification>
+	<notification name="BulkUploadNoCompatibleFiles">
+		Wybranych plików nie można załadować zbiorczo.
+	</notification>
+	<notification name="BulkUploadIncompatibleFiles">
+		Niektórych z wybranych plików nie można załadować zbiorczo.
 	</notification>
 	<notification name="UploadCostConfirmation">
 		Załadowanie tego na serwer będzie kosztować [PRICE]L$, chcesz kontynuować?
