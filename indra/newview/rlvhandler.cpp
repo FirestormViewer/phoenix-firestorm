@@ -37,7 +37,7 @@
 #include "llavataractions.h"            // @stopim IM query
 #include "llavatarnamecache.h"			// @shownames
 #include "llavatarlist.h"				// @shownames
-#include "llenvmanager.h"				// @setenv
+//#include "llenvmanager.h"				// @setenv
 #include "llfloatersidepanelcontainer.h"// @shownames
 #include "llnotifications.h"			// @list IM query
 #include "llnotificationsutil.h"
@@ -2233,34 +2233,34 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour
 }
 
 // Handles: @setenv=n|y toggles
-template<> template<>
-void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
-{
-	const std::string strEnvFloaters[] = { "env_post_process", "env_settings", "env_delete_preset", "env_edit_sky", "env_edit_water", "env_edit_day_cycle" };
-	for (int idxFloater = 0, cntFloater = sizeof(strEnvFloaters) / sizeof(std::string); idxFloater < cntFloater; idxFloater++)
-	{
-		if (fHasBhvr)
-		{
-			// Hide the floater if it's currently visible
-			LLFloaterReg::const_instance_list_t envFloaters = LLFloaterReg::getFloaterList(strEnvFloaters[idxFloater]);
-			for (LLFloater* pFloater : envFloaters)
-				pFloater->closeFloater();
-			RlvUIEnabler::instance().addGenericFloaterFilter(strEnvFloaters[idxFloater]);
-		}
-		else
-		{
-			RlvUIEnabler::instance().removeGenericFloaterFilter(strEnvFloaters[idxFloater]);
-		}
-	}
-
-	// Don't allow toggling "Basic Shaders" and/or "Atmopsheric Shaders" through the debug settings under @setenv=n
-	gSavedSettings.getControl("VertexShaderEnable")->setHiddenFromSettingsEditor(fHasBhvr);
-	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(fHasBhvr);
-
-	// Restore the user's WindLight preferences when releasing
-	if (!fHasBhvr)
-		LLEnvManagerNew::instance().usePrefs();
-}
+//template<> template<>
+//void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+//{
+//	const std::string strEnvFloaters[] = { "env_post_process", "env_settings", "env_delete_preset", "env_edit_sky", "env_edit_water", "env_edit_day_cycle" };
+//	for (int idxFloater = 0, cntFloater = sizeof(strEnvFloaters) / sizeof(std::string); idxFloater < cntFloater; idxFloater++)
+//	{
+//		if (fHasBhvr)
+//		{
+//			// Hide the floater if it's currently visible
+//			LLFloaterReg::const_instance_list_t envFloaters = LLFloaterReg::getFloaterList(strEnvFloaters[idxFloater]);
+//			for (LLFloater* pFloater : envFloaters)
+//				pFloater->closeFloater();
+//			RlvUIEnabler::instance().addGenericFloaterFilter(strEnvFloaters[idxFloater]);
+//		}
+//		else
+//		{
+//			RlvUIEnabler::instance().removeGenericFloaterFilter(strEnvFloaters[idxFloater]);
+//		}
+//	}
+//
+//	// Don't allow toggling "Basic Shaders" and/or "Atmopsheric Shaders" through the debug settings under @setenv=n
+//	gSavedSettings.getControl("VertexShaderEnable")->setHiddenFromSettingsEditor(fHasBhvr);
+//	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(fHasBhvr);
+//
+//	// Restore the user's WindLight preferences when releasing
+//	if (!fHasBhvr)
+//		LLEnvManagerNew::instance().usePrefs();
+//}
 
 // Handles: @showhovertext:<uuid>=n|y
 template<> template<>

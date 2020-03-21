@@ -1395,12 +1395,12 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
     LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
     LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
     LLTextBox* sky_text = getChild<LLTextBox>("SkyMeshDetailText");
-//    ctrl_wind_light->setEnabled(TRUE);
+    ctrl_wind_light->setEnabled(TRUE);
 // [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a) | Modified: RLVa-0.2.0a
-	// "Atmospheric Shaders" can't be disabled - but can be enabled - under @setenv=n
-	bool fCtrlWindLightEnable = fCtrlShaderEnable && shaders;
-	ctrl_wind_light->setEnabled(
-		fCtrlWindLightEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders"))) );
+//	// "Atmospheric Shaders" can't be disabled - but can be enabled - under @setenv=n
+//	bool fCtrlWindLightEnable = fCtrlShaderEnable && shaders;
+//	ctrl_wind_light->setEnabled(
+//		fCtrlWindLightEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders"))) );
 // [/RLVa:KB]
     sky->setEnabled(TRUE);
     sky_text->setEnabled(TRUE);
