@@ -104,6 +104,7 @@ public:
 	void			setDiffuseMap(LLViewerTexture* tex);
 	void			setNormalMap(LLViewerTexture* tex);
 	void			setSpecularMap(LLViewerTexture* tex);
+    void			setAlternateDiffuseMap(LLViewerTexture* tex);
 	void            switchTexture(U32 ch, LLViewerTexture* new_texture);
 	void            dirtyTexture();
 	LLXformMatrix*	getXform()			const	{ return mXform; }
@@ -217,6 +218,9 @@ public:
 	void        setHasMedia(bool has_media)  { mHasMedia = has_media ;}
 	BOOL        hasMedia() const ;
 
+    void        setMediaAllowed(bool is_media_allowed)  { mIsMediaAllowed = is_media_allowed; }
+    BOOL        isMediaAllowed() const { return mIsMediaAllowed; }
+
 	BOOL		switchTexture() ;
 
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
@@ -297,6 +301,7 @@ private:
 	F32         mImportanceToCamera ; 
 	F32         mBoundingSphereRadius ;
 	bool        mHasMedia ;
+	bool        mIsMediaAllowed;
 
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
 	mutable bool                       mShowDiffTexture;

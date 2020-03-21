@@ -84,7 +84,10 @@ public:
 	LLImageGL(BOOL usemipmaps = TRUE);
 	LLImageGL(U32 width, U32 height, U8 components, BOOL usemipmaps = TRUE);
 	LLImageGL(const LLImageRaw* imageraw, BOOL usemipmaps = TRUE);
-	
+
+    // For wrapping textures created via GL elsewhere with our API only. Use with caution.
+    LLImageGL(LLGLuint mTexName, U32 components, LLGLenum target, LLGLint  formatInternal, LLGLenum formatPrimary, LLGLenum formatType, LLTexUnit::eTextureAddressMode addressMode);
+
 protected:
 	virtual ~LLImageGL();
 
@@ -237,6 +240,8 @@ protected:
 	LLGLenum mFormatType;
 	BOOL	 mFormatSwapBytes;// if true, use glPixelStorei(GL_UNPACK_SWAP_BYTES, 1)
 	
+    BOOL mExternalTexture;
+
 	// STATICS
 public:	
 	static std::set<LLImageGL*> sImageList;
@@ -282,6 +287,8 @@ public:
 	void setCategory(S32 category) {mCategory = category;}
 	S32  getCategory()const {return mCategory;}
 	
+    void setTexName(GLuint texName) { mTexName = texName; }
+
 	//for debug use: show texture size distribution 
 	//----------------------------------------
 	static S32 sCurTexSizeBar ;
