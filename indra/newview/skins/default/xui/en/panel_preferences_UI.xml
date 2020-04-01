@@ -808,7 +808,7 @@
 		 top_pad="2"
 		 follows="left|top"
 		 height="16"
-		 label="'Friends' and 'Groups' in 'Comm' menu opens the V5 based windows"
+		 label="'Friends' and 'Groups' in 'Comm' menu opens the [SHORT_VIEWER_GENERATION] based windows"
 		 name="FSUseV2Friends"
 		 width="270"
 		 control_name="FSUseV2Friends"

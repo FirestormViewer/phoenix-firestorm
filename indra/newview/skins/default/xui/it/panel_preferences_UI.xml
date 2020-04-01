@@ -99,7 +99,7 @@
 		<check_box label="Apri direttamente il profilo di un avatar cliccando sul nome" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Firestorm apre direttamente il profilo di un avatar quando si clicca su un link con il suo nome"/>
 		<check_box name="FSUseWebProfiles" label="Usa profili web" tool_tip="Se NON spuntata verranno visualizzati i profili come quelli del viewer 1.x"/>
 		<check_box label="Disabilita apertura automatica delle liste blocco" name="FSDisableBlockListAutoOpen" tool_tip="Disabilita l&apos;apertura automatica della lista dei bloccati quando si stanno bloccando avatar o oggetti."/>
-		<check_box label="&apos;Amici&apos; e &apos;Gruppi&apos; nel menu &apos;Comunica&apos; apre le finestre V5" name="FSUseV2Friends" tool_tip="Amici e gruppi si vedono tramite il pannello Persone - altrimenti verranno aperti nel pannello Contatti."/>
+		<check_box label="&apos;Amici&apos; e &apos;Gruppi&apos; nel menu &apos;Comunica&apos; apre le finestre [SHORT_VIEWER_GENERATION]" name="FSUseV2Friends" tool_tip="Amici e gruppi si vedono tramite il pannello Persone - altrimenti verranno aperti nel pannello Contatti."/>
 		<check_box label="Usa proprietà oggetto vecchio stile" name="FSUseLegacyObjectProperties" tool_tip="Aprendo le proprietà degli oggetti, viene usata la finestra vecchio stile."/>
 		<text name="standalone_textbox">
 			Usa finestre singole per:
