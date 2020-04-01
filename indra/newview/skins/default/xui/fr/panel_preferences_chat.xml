@@ -40,7 +40,7 @@
 			</radio_group>
 			<check_box name="IMShowNamesForP2PConv" label="Afficher les noms dans les conversations privées"/>
 			<check_box label="Utiliser le style V1 des entêtes de chat" name="plain_text_chat_history"/>
-			<check_box label="Lorsque le style V3 des conversations est utilisé, afficher une icône devant le nom des gens" name="ShowChatMiniIcons"/>
+			<check_box label="Lorsque le style [SHORT_VIEWER_GENERATION] des conversations est utilisé, afficher une icône devant le nom des gens" name="ShowChatMiniIcons"/>
 			<check_box label="Afficher la fin de la dernière conversation" name="LogShowHistory"/>
 			<check_box name="FSTypingChevronPrefix" label="Chevron (&gt;) additionnel comme indicateur de saisie dans les conversations privées"/>
 			<text name="show_unread_messages_label" width="225">Notification de nouveau message pour :</text>

@@ -51,7 +51,7 @@
 			</radio_group>
 			<check_box name="IMShowNamesForP2PConv" label="Pokazuj imiona w bezpośrednich wiadomościach IM" />
 			<check_box label="Używaj nagłówków czatów stylu V1" name="plain_text_chat_history" />
-			<check_box label="Podczas używania nagłówków w stylu V3 pokazuj małe ikony" name="ShowChatMiniIcons" />
+			<check_box label="Podczas używania nagłówków w stylu [SHORT_VIEWER_GENERATION] pokazuj małe ikony" name="ShowChatMiniIcons" />
 			<check_box label="Pokazuj zakończenia ostatnich rozmów" name="LogShowHistory"/>
 			<check_box name="FSTypingChevronPrefix" label="Dodawaj znak (&gt;) w tytułach okien wiadomości IM przed imionami osób, które piszą"/>
 			<text name="show_unread_messages_label">

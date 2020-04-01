@@ -389,7 +389,7 @@
              control_name="ShowChatMiniIcons"
              height="16"
              initial_value="false"
-             label="When using V3 style chat headers, show mini icons"
+             label="When using [SHORT_VIEWER_GENERATION] style chat headers, show mini icons"
              layout="topleft"
              name="ShowChatMiniIcons"
              top_pad="1"
