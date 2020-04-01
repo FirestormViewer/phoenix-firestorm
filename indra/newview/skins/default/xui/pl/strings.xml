@@ -1699,6 +1699,9 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="MarketplaceUpdating">
 		aktualizacja...
 	</string>
+	<string name="UploadFeeInfo">
+		Opłata zależy od Twojego poziomu członkostwa. Wyższe poziomy to niższe opłaty. [https://secondlife.com/my/account/membership.php? Więcej]
+	</string>
 	<string name="Open landmarks">
 		Otwórz landmarki
 	</string>
@@ -5002,6 +5005,12 @@ Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia 
 	</string>
 	<string name="Chat">
 		Czat
+	</string>
+	<string name="BaseMembership">
+		Podstawowe
+	</string>
+	<string name="InternalMembership">
+		Wewnętrzne
 	</string>
 	<string name="DeleteItems">
 		Usunąć zaznaczone obiekty?
