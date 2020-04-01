@@ -1779,7 +1779,7 @@
 		 height="20"
 		 control_name="FSKeywordInChat"
 		 name="FSKeywordInChat"
-		 label="Look for Keywords In Local Chat"/>
+		 label="Look for Keywords In Nearby Chat"/>
 		<check_box
 		 enabled="false"
 		 enabled_control="FSKeywordOn"
