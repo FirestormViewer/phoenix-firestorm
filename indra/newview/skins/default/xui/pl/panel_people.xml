@@ -17,7 +17,7 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 	<string name="no_groups_msg" value="Chcesz dołączyć do jakiejś grupy? Spróbuj użyć [secondlife:///app/search/groups Wyszukiwarki]." />
 	<string name="MiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie otwiera mapę, przeciąganie z Shiftem przesuwa)" />
 	<string name="AltMiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie teleportuje, przeciąganie z Shiftem przesuwa)" />
-	<string name="GroupCountWithInfo" value="Należysz do [COUNT] grup i możesz jeszcze dołączyć do [REMAINING]. [secondlife:/// Więcej?]" />
+	<string name="GroupCountWithInfo" value="Należysz do [COUNT] grup i możesz jeszcze dołączyć do [REMAINING]. [secondlife:/// Podnieś swój limit!]" />
 	<panel.string name="empty_list">
 		Ten zestaw kontaktów jest pusty.
 	</panel.string>
