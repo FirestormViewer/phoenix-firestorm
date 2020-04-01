@@ -4,8 +4,8 @@
  can_drag_on_left="false"
  can_minimize="true"
  can_resize="true"
- height="575"
- min_height="600"
+ height="590"
+ min_height="590"
  width="960"
  min_width="960"
  name="Model Preview"
@@ -43,11 +43,11 @@
   <string name="simplifying">Simplifying...</string>
   <string name="tbd">TBD</string>
   
-  <!-- Warnings from model loader-->
+  <!-- Warnings and info from model loader-->
   <string name="TooManyJoint">Skinning disabled due to too many joints: [JOINTS], maximum: [MAX]</string>
   <string name="UnrecognizedJoint">Rigged to unrecognized joint name [NAME]</string>
   <string name="UnknownJoints">Skinning disabled due to [COUNT] unknown joints</string>
-  
+  <string name="ModelLoaded">Model [MODEL_NAME] loaded</string>
 
   <panel
     follows="top|left"
@@ -56,7 +56,7 @@
     left="3"
     name="left_panel"
     top_pad="0"
-    width="630">
+    width="635">
     <panel
       follows="all"
       height="50"
@@ -68,7 +68,7 @@
           follows="top|left"
           layout="topleft"
           height="15"
-          left="15"
+          left="2"
           name="name_label"
           text_color="White"
           top="0"
@@ -87,9 +87,9 @@
     </panel>
     <tab_container
       follows="top|left"
-      top_pad="15"
+      top_pad="0"
       left="0"
-      height="300"
+      height="330"
       width="635"
       name="import_tab"
       tab_position="top"
@@ -104,7 +104,7 @@
             <view_border
              bevel_style="none"
              follows="top|left"
-             height="275"
+             height="306"
              layout="topleft"
              left="3"
              name="lod_tab_border"
@@ -742,7 +742,7 @@
             <view_border
               bevel_style="none"
               follows="top|left"
-              height="275"
+              height="306"
               layout="topleft"
               left="3"
               name="physics_tab_border"
@@ -1117,7 +1117,7 @@
          <view_border
           bevel_style="none"  
           follows="top|left"
-          height="275"
+          height="306"
           layout="topleft"
           left="3"
           name="border"
@@ -1168,131 +1168,96 @@
              label="Include textures"
              left="20"
              top_pad="20"/>
-           <view_border
-             bevel_style="none"
-             follows="top|left"
-             height="0"
-             layout="topleft"
-             name="border"
-             top_pad="20"
-             width="579"/>
-           <text
-             follows="top|left"
-             height="15"
-             left="20"
-             name="include_label"
-             text_color="White"
-             top_pad="20"
-             width="150">
-             For avatar models only:
-           </text>
-           <check_box
-             follows="top|left"
-             height="15"
-             label="Include skin weight"
-             name="upload_skin"
-             top_pad="15"/>
-           <text
-             follows="top|left"
-             height="17"
-             left="40"
-             name="skin_too_many_joints"
-             text_color="Orange"
-             top_pad="-2"
-             width="300">
-             Too many skinned joints
-           </text>
-           <text
-             follows="top|left"
-             height="17"
-             left="40"
-             name="skin_unknown_joint"
-             text_color="Orange"
-             top_pad="-17"
-             width="300">
-             Model has an unknown joint(s)
-           </text>
-           <check_box
-             follows="top|left"
-             height="15"
-             label="Include joint positions"
-             name="upload_joints"
-             left_delta="-20"
-             top_pad="1"/>
-           <check_box
-             follows="top|left"
-             height="15"
-             label="Lock scale if joint position defined"
-             name="lock_scale_if_joint_position"
-             top_pad="16"/>
-           <text
-             follows="top|left"
-             height="15"
-             layout="topleft"
-             left="20"
-             name="pelvis_offset_label"
-             text_color="White"
-             top_pad="16"
-             width="175">
-             Z offset (raise or lower avatar):
-           </text>
-           <spinner
-             follows="top|left"
-             height="20"
-             min_val="-3.00"
-             max_val="3.0"
-             name="pelvis_offset"
-             top_delta="-3"
-             left_pad="5"
-             value="0.0"
-             width="80"/>
-       <panel
-         follows="top|left"
-         layout="topleft"
-        border="true"
-        left="400"
-         height="165"
-         top="100"
-         width="200"
-         name="avatar_model_hint_panel"
-         >
-         <text 
-           left="5"
-           width="190"
-           height="165"
-           name="avatar_model_hint_text" 
-           wrap="true" 
-           word_wrap="true"
-           type="string">
-           Tip:
-Too many items use the default (right hand) unnecessarily.
-
-Please consider using an attachment point close to the item's position on the body.
-         </text>
-       </panel>
      </panel>
       <panel
        label="Overrides"
        layout="topleft"
-       name="overrides_panel"
-       title="Overrides">
+       name="avatar_panel"
+       title="Avatar">
         <view_border
          bevel_style="none"
          follows="top|left"
-         height="275"
+         height="306"
          layout="topleft"
          left="3"
-         name="log_tab_border"
+         name="avatar_tab_border"
          top_pad="0"
          width="619" />
+        <check_box
+          follows="top|left"
+          height="15"
+          label="Include skin weight"
+          label_text.text_color="White"
+          name="upload_skin"
+          top="8"
+          left="10"/>
+        <check_box
+          follows="top|left"
+          height="15"
+          label="Include joint positions"
+          label_text.text_color="White"
+          name="upload_joints"
+          left_delta="0"
+          top_pad="7"/>
+        <check_box
+          follows="top|left"
+          height="15"
+          label="Lock scale if joint position defined"
+          label_text.text_color="White"
+          label_text.wrap="true"
+          label_text.width="180"
+          name="lock_scale_if_joint_position"
+          top_pad="7"/>
+        <text
+          follows="top|left"
+          height="15"
+          layout="topleft"
+          left="225"
+          name="pelvis_offset_label"
+          text_color="White"
+          top="8"
+          width="200">
+          Z offset (raise or lower avatar):
+        </text>
+        <spinner
+          follows="top|left"
+          height="20"
+          min_val="-3.00"
+          max_val="3.0"
+          name="pelvis_offset"
+          top_pad="10"
+          value="0.0"
+          width="80"/>
+        <text
+          follows="top|left"
+          height="17"
+          left="425"
+          name="skin_too_many_joints"
+          text_color="Orange"
+          top="7"
+          width="195"
+          word_wrap="true">
+          Too many skinned joints
+        </text>
+        <text
+          follows="top|left"
+          height="32"
+          left="425"
+          name="skin_unknown_joint"
+          text_color="Orange"
+          top="8"
+          width="195"
+          word_wrap="true">
+          Model has an unknown joint(s)
+        </text>
         <text
           layout="topleft"
           follows="top|left"
           height="15"
-          left="6"
+          left="10"
           name="joints_descr"
-          top="4"
-          width="300">
+          top="73"
+          width="150">
           Joints:
         </text>
         <scroll_list
@@ -1304,27 +1269,27 @@ Please consider using an attachment point close to the item's position on the bo
          draw_stripes="false"
          commit_on_selection_change="true"
          heading_height="23"
-         height="238"
-         left="6"
+         height="199"
+         left_delta="0"
          top_pad="0"
-         width="200"/>
+         width="205"/>
         <text
           layout="topleft"
           follows="top|left"
           height="15"
-          left="6"
+          left_delta="0"
           name="conflicts_description"
           top_pad="2"
-          width="200">
+          width="205">
           [CONFLICTS] conflicts in [JOINTS_COUNT] joints
         </text>
         <text
           layout="topleft"
           follows="top|left"
           height="15"
-          left_pad="5"
+          left_pad="10"
           name="pos_overrides_descr"
-          top="4"
+          top="73"
           width="300">
           Position overrides for joint '[JOINT]':
         </text>
@@ -1339,24 +1304,48 @@ Please consider using an attachment point close to the item's position on the bo
          height="100"
          left_delta="0"
          top_pad="0"
-         width="330">
+         width="385">
           <scroll_list.columns
            label="Model"
            name="model_name"
-           relative_width="0.40"  />
+           relative_width="0.49" />
           <scroll_list.columns
            label="X"
            name="axis_x"
-           relative_width="0.20"  />
+           relative_width="0.17" />
           <scroll_list.columns
            label="Y"
            name="axis_y"
-           relative_width="0.20"  />
+           relative_width="0.17" />
           <scroll_list.columns
            label="Z"
            name="axis_z"
-           relative_width="0.20"  />
+           relative_width="0.17" />
         </scroll_list>
+       <panel
+         follows="top|left"
+         layout="topleft"
+         border="true"
+         left="410"
+         height="110"
+         top_pad="5"
+         width="200"
+         name="avatar_model_hint_panel"
+         >
+         <text 
+           left="5"
+           width="190"
+           height="110"
+           name="avatar_model_hint_text" 
+           wrap="true" 
+           word_wrap="true"
+           type="string">
+           Tip:
+Too many items use the default (right hand) unnecessarily.
+
+Please consider using an attachment point close to the item's position on the body.
+         </text>
+       </panel>
       </panel>
       <panel
        label="Log"
@@ -1365,7 +1354,7 @@ Please consider using an attachment point close to the item's position on the bo
         <view_border
          bevel_style="none"
          follows="top|left"
-         height="275"
+         height="306"
          layout="topleft"
          left="3"
          name="log_tab_border"
@@ -1395,7 +1384,7 @@ Please consider using an attachment point close to the item's position on the bo
     <panel
      follows="top|left|bottom"
      layout="topleft"
-     height="197"
+     height="195"
      left="4"
      border="true"
      name="weights_and_warning_panel"
@@ -1629,113 +1618,6 @@ Analysed:
 [PHU]
         </text>-->
       </panel>
-      <panel
-        follows="top|left"
-        layout="topleft"
-        left_pad="90"
-        height="100"
-        border="true"
-        name="preview_controls_panel"
-        width="260">
-        <panel
-          name="preview_controls_inner_panel"
-          height="18" >
-          <text
-            height="18"
-            layout="topleft"
-            name="preview_controls_title"
-            left="3"
-            width="150">
-            Preview controls
-          </text>
-          <combo_box
-              can_resize="false"
-              follows="top|left"
-            left="-85"
-            top_delta="-2"
-              height="18"
-              layout="topleft"
-              name="preview_lod_combo"
-              width="80"
-              tool_tip="LOD to view in preview render">
-              <combo_item name="high">   High   </combo_item>
-              <combo_item name="medium"> Medium </combo_item>
-              <combo_item name="low">    Low    </combo_item>
-              <combo_item name="lowest"> Lowest </combo_item>
-            </combo_box>
-        </panel>
-        <view_border
-          bevel_style="none"
-          follows="top|left"
-          height="0"
-          layout="topleft"
-          left="3"
-          name="preview_controls_border"
-          top_pad="5"
-          halign="center"
-          width="250"/>
-          <check_box
-            follows="top|left"
-            label="Edges"
-            layout="topleft"
-            name="show_edges"
-            width="70"
-            left="0"
-            top_pad="10"/>
-          <check_box
-            follows="top|left"
-            label="Textures"
-            layout="topleft"
-            name="show_textures"
-            left_pad="0"/>
-          <check_box
-            follows="top|left"
-            label="UV guide"
-            layout="topleft"
-            name="show_uv_guide"
-            left_pad="0"/>
-          <check_box
-            follows="top|left"
-            top_pad="10"
-            left="0"
-            width="70"
-            label="Physics"
-            name="show_physics"/>
-          <text
-            layout="topleft"
-            follows="top|left"
-            left_pad="2"
-            height="16"
-            width="80"
-            name="exploder_label">
-                Explode hulls
-          </text>
-          <slider
-            name="physics_explode"
-            show_text="false"
-            top_delta="1"
-            follows="top|left"
-            valign="center"
-            left_pad="2"
-            min_val="0.0"
-            max_val="3.0"
-            width="100"/>
-          <check_box
-            follows="top|left"
-            top_pad="15"
-            label="Weights"
-            layout="topleft"
-            width="70"
-            name="show_skin_weight"
-            left="0"/>
-          <check_box
-            follows="top|left"
-            label="Joints"
-            height="0"
-            layout="topleft"
-            name="show_joint_positions"
-            left_pad="0"/>
-      </panel>
       <!-- ========== NOTE MESSAGE ========== -->
       <text
          font="SansSerif"
@@ -1744,7 +1626,7 @@ Analysed:
          name="warning_title"
          top_pad="5"
          text_color="DrYellow"
-         visible="false"
+         visible="true"
          width="40">
          NOTE:
        </text>
@@ -1757,11 +1639,16 @@ Analysed:
          parse_urls="true"
          top_delta="0"
          wrap="true"
-         width="462"
-         visible="false">
+         width="530"
+         visible="true">
          You dont have rights to upload mesh models. [[VURL] Find out how] to get certified.
        </text>
-       <text text_color="Yellow" layout="topleft" top_pad="-1" left="6" name="status">
+       <text
+         text_color="Yellow"
+         layout="topleft"
+         top_pad="-2"
+         left="6"
+         name="status">
 [STATUS]
        </text>
     </panel>
@@ -1813,10 +1700,10 @@ Analysed:
       layout="topleft"
       text_color="White"
       top="5"
-      left_pad="20"
+      left_pad="10"
       name="label_display"
-      width="50">
-      Display...
+      width="100">
+      Display:
     </text>
     <check_box
       follows="top|left"
@@ -1856,7 +1743,7 @@ Analysed:
       label="Joint position overrides"
       label_text.text_color="White"
       word_wrap="down"
-      width="130"
+      width="150"
       layout="topleft"
       name="show_joint_overrides"
       top_pad="8">
@@ -1867,7 +1754,7 @@ Analysed:
       label_text.text_color="White"
       layout="topleft"
       name="show_joint_positions"
-      top_pad="17">
+      top_pad="8">
     </check_box>
     <text
       follows="top|left"

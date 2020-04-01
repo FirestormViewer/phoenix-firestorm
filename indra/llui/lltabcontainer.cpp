@@ -269,6 +269,7 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 	mOpenTabsOnDragAndDrop(p.open_tabs_on_drag_and_drop),
 	mTabIconCtrlPad(p.tab_icon_ctrl_pad),
 	mUseTabEllipses(p.use_ellipses),
+	mEnableTabsFlashing(p.enable_tabs_flashing),
 	mDropShadowedText(p.label_shadow)			// support for drop shadowed tab labels -Zi
 {
 	// AO: Treat the IM tab container specially 
@@ -1804,6 +1805,16 @@ void LLTabContainer::setTabPanelFlashing(LLPanel* child, BOOL state )
 	{
 		tuple->mButton->setFlashing( state );
 	}
+}
+
+void LLTabContainer::setTabPanelFlashing(LLPanel* child, BOOL state, LLUIColor color)
+{
+    LLTabTuple* tuple = getTabByPanel(child);
+    if (tuple)
+    {
+        tuple->mButton->setFlashColor(color);
+        tuple->mButton->setFlashing(state);
+    }
 }
 
 void LLTabContainer::setTabImage(LLPanel* child, std::string image_name, const LLColor4& color)

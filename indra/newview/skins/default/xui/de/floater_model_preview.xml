@@ -303,18 +303,25 @@
 					[X] X [Y] X [Z]
 				</text>
 				<check_box label="Texturen einschließen" name="upload_textures"/>
+				</panel>
+			<panel label="Übersteuerung" title="Avatar" name="avatar_panel">
+				<text name="scale_label">
+					Skalierung (1=keine):
+				</text>
+				<spinner name="import_scale" value="1.0"/>
+				<text name="dimensions_label">
+					Dimensionen:
+				</text>
+				<text name="import_dimensions">
+					[X] X [Y] X [Z]
+				</text>
+				<check_box label="Texturen einschließen" name="upload_textures"/>
 				<text name="include_label">
 					Nur für Avatarmodelle:
 				</text>
-				<check_box label="Skingewicht einschließen" name="upload_skin"/>
-				<text name="skin_too_many_joints" text_color="Orange">
-					Zu viele skingewichtete Gelenke
-				</text>
-				<text name="skin_unknown_joint">
-					Modell hat unbekannte Gelenke
-				</text>
-				<check_box label="Gelenkpositionen einschließen" name="upload_joints"/>
-				<check_box label="Skala sperren, wenn Gelenkposition definiert ist" name="lock_scale_if_joint_position"/>
+				<check_box label="Skingewicht einschließen" name="upload_skin" top_pad="0"/>
+				<check_box label="Gelenkpositionen einschließen" name="upload_joints" top_pad="2"/>
+				<check_box label="Skala sperren, wenn Gelenkposition definiert ist" name="lock_scale_if_joint_position" top_pad="15"/>
 				<check_box label="An Avatarform anpassen" name="deform"/>
 				<radio_group name="deform_base">
 					<radio_item label="Mann" name="0"/>
@@ -325,8 +332,29 @@
 					Z-Offset (Av. anheben / senken):
 				</text>
 				<spinner name="pelvis_offset" value="0.0"/>
-				<panel name="avatar_model_hint_panel">
-					<text name="avatar_model_hint_text">
+				<text name="skin_too_many_joints" text_color="Orange">
+					Zu viele skingewichtete Gelenke
+				</text>
+				<text name="skin_unknown_joint">
+					Modell hat unbekannte Gelenke
+				</text>
+				<text name="joints_descr">
+					Gelenke:
+				</text>
+				<text name="conflicts_description">
+					[CONFLICTS] Konflikte in [JOINTS_COUNT] Gelenk(e)
+				</text>
+				<text name="pos_overrides_descr">
+					Position übersteuert für Gelenk '[JOINT]':
+				</text>
+				<scroll_list name="pos_overrides_list">
+					<scroll_list.columns label="Modell" name="model_name"/>
+					<scroll_list.columns label="X" name="axis_x"/>
+					<scroll_list.columns label="Y" name="axis_y"/>
+					<scroll_list.columns label="Z" name="axis_z"/>
+				</scroll_list>
+				<panel name="avatar_model_hint_panel" left="380" width="230">
+					<text name="avatar_model_hint_text" width="220">
 						Hinweis:
 Zu viele Objekte nutzen unnötigerweise den Standard-Anhängepunkt (Rechte Hand).
 
@@ -387,56 +415,42 @@ Mesh:
 Analysiert:
 				</text>
 			</panel>
-			<panel name="preview_controls_panel">
-				<panel name="preview_controls_inner_panel">
-					<text name="preview_controls_title">
-						Vorschau-Einstellungen:
-					</text>
-					<combo_box name="preview_lod_combo" tool_tip="Detailstufe zur Anzeige in Vorschaudarstellung">
-						<combo_item name="high">
-							Hoch
-						</combo_item>
-						<combo_item name="medium">
-							Mittel
-						</combo_item>
-						<combo_item name="low">
-							Niedrig
-						</combo_item>
-						<combo_item name="lowest">
-							Niedrigste
-						</combo_item>
-					</combo_box>
-				</panel>
-				<text name="label_display">
-					Anzeige...
-				</text>
-				<check_box label="Kanten" name="show_edges"/>
-				<check_box label="Texturen" name="show_textures"/>
-				<check_box label="UV-Hilfe" name="show_uv_guide"/>
-				<check_box label="Physik" name="show_physics"/>
-				<check_box label="Skingew." name="show_skin_weight"/>
-				<check_box label="Gelenke" name="show_joint_positions"/>
-				<text name="exploder_label" width="105">
-					Vorschaudehnung:
-				</text>
-				<slider name="physics_explode" width="80"/>
-			</panel>
 			<text name="warning_title" width="60">
 				HINWEIS:
 			</text>
 			<text name="warning_message">
-				Sie haben keine Berechtigung zum Hochladen von Netzmodellen. [[VURL] Weitere Infos], wie Sie sich zertifizieren lassen können.
+				Sie haben keine Berechtigung zum Hochladen von Netzmodellen. [[VURL] Infos] zur Zertifizierung.
 			</text>
 			<text name="status">
 				[STATUS]
 			</text>
 		</panel>
 	</panel>
+	<text name="lod_label">
+		Vorschau:
+	</text>
 	<panel name="right_panel">
-		<text name="lod_label">
-			Vorschau:
+		<combo_box name="preview_lod_combo" tool_tip="Dargestelltes LOD in der Vorschau">
+			<combo_item name="high">Hoch</combo_item>
+			<combo_item name="medium">Mittel</combo_item>
+			<combo_item name="low">Niedrig</combo_item>
+			<combo_item name="lowest">Niedrigstes </combo_item>
+		</combo_box>
+		<text name="physics_explode_label" width="105">
+			Vorschaudehnung:
 		</text>
-	</panel>
-	<panel name="lower_right_panel">
+		<text name="label_display">
+			Anzeigen:
+		</text>
+		<check_box label="Kanten" name="show_edges"/>
+		<check_box label="Texturen" name="show_textures"/>
+		<check_box label="UV-Hilfe" name="show_uv_guide"/>
+		<check_box label="Physik" name="show_physics"/>
+		<check_box label="Skingewichte" name="show_skin_weight"/>
+		<check_box label="Gelenkpos.-Übersteuer." name="show_joint_overrides"/>
+		<check_box label="Gelenke" name="show_joint_positions"/>
+		<text name="exploder_label" width="105">
+			Vorschaudehnung:
+		</text>
 	</panel>
 </floater>

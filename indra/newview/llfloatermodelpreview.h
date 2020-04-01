@@ -108,10 +108,8 @@ public:
 	static void addStringToLog(const std::string& message, const LLSD& args, bool flash, S32 lod = -1);
 	static void addStringToLog(const std::string& str, bool flash);
 	static void addStringToLog(const std::ostringstream& strm, bool flash);
-	void clearOverridesTab(); // clears table
-	void resetOverridesTab(); // clears table and cleans all data
-	void showOverridesTab(); // populates table and data as nessesary
-	void hideOverridesTab();
+	void clearAvatarTab(); // clears table
+	void updateAvatarTab(); // populates table and data as nessesary
 
 	void setDetails(F32 x, F32 y, F32 z, F32 streaming_cost, F32 physics_cost);
 	void setPreviewLOD(S32 lod);
@@ -250,6 +248,9 @@ private:
 	LLButton* mCalculateBtn;
 	LLViewerTextEditor* mUploadLogText;
 	LLTabContainer* mTabContainer;
+
+	S32			mAvatarTabIndex; // just to avoid any issues in case of xml changes
+	std::string	mSelectedJointName;
 
 	joint_override_data_map_t mJointOverrides[LLModel::NUM_LODS];
 };

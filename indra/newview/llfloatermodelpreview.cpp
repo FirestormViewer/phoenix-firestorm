@@ -272,7 +272,8 @@ LLFloaterModelUploadBase(key),
 mUploadBtn(NULL),
 mCalculateBtn(NULL),
 mUploadLogText(NULL),
-mTabContainer(NULL)
+mTabContainer(NULL),
+mAvatarTabIndex(0)
 {
 	sInstance = this;
 	mLastMouseX = 0;
@@ -352,6 +353,10 @@ BOOL LLFloaterModelPreview::postBuild()
 
 	childSetVisible("skin_too_many_joints", false);
 	childSetVisible("skin_unknown_joint", false);
+
+    childSetVisible("warning_title", false);
+    childSetVisible("warning_message", false);
+    childSetVisible("status", false);
 
 	initDecompControls();
 
@@ -445,16 +450,9 @@ BOOL LLFloaterModelPreview::postBuild()
 	mUploadLogText = getChild<LLViewerTextEditor>("log_text");
 	mTabContainer = getChild<LLTabContainer>("import_tab");
 
-    // Disable Overrides tab untill it has something to show and set callbacks
-    LLPanel *panel = mTabContainer->getPanelByName("overrides_panel");
-    S32 index = mTabContainer->getIndexForPanel(panel);
-    mTabContainer->enableTabButton(index, false);
+    LLPanel *panel = mTabContainer->getPanelByName("avatar_panel");
+    mAvatarTabIndex = mTabContainer->getIndexForPanel(panel);
     panel->getChild<LLScrollListCtrl>("joints_list")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onJointListSelection, this));
-
-	// Disable Logs tab untill it has something to show
-	panel = mTabContainer->getPanelByName("logs_panel");
-	index = mTabContainer->getIndexForPanel(panel);
-	mTabContainer->enableTabButton(index, false);
 
 	if (LLConvexDecomposition::getInstance() != NULL)
 	{
@@ -691,7 +689,7 @@ void populate_list_with_map(LLScrollListCtrl *list, const std::map<std::string, 
 void LLFloaterModelPreview::onJointListSelection()
 {
     S32 display_lod = mModelPreview->mPreviewLOD;
-    LLPanel *panel = mTabContainer->getPanelByName("overrides_panel");
+    LLPanel *panel = mTabContainer->getPanelByName("avatar_panel");
     LLScrollListCtrl *joints_list = panel->getChild<LLScrollListCtrl>("joints_list");
     LLScrollListCtrl *joints_pos = panel->getChild<LLScrollListCtrl>("pos_overrides_list");
     LLScrollListCtrl *joints_scale = panel->getChild<LLScrollListCtrl>("scale_overrides_list");
@@ -708,14 +706,17 @@ void LLFloaterModelPreview::onJointListSelection()
         populate_list_with_map(joints_pos, data.mPosOverrides);
 
         joint_pos_descr->setTextArg("[JOINT]", label);
+        mSelectedJointName = label;
     }
     else
     {
         // temporary value (shouldn't happen)
         std::string label = "mPelvis";
         joint_pos_descr->setTextArg("[JOINT]", label);
+        mSelectedJointName.clear();
     }
 
+    // Note: We can make a version of renderBones() to highlight selected joint
 }
 
 void LLFloaterModelPreview::onDescriptionKeystroke(LLUICtrl* ctrl)
@@ -1538,33 +1539,34 @@ void LLFloaterModelPreview::addStringToLog(const std::ostringstream& strm, bool 
     }
 }
 
-void LLFloaterModelPreview::clearOverridesTab()
+void LLFloaterModelPreview::clearAvatarTab()
 {
-    LLPanel *panel = mTabContainer->getPanelByName("overrides_panel");
+    LLPanel *panel = mTabContainer->getPanelByName("avatar_panel");
     LLScrollListCtrl *joints_list = panel->getChild<LLScrollListCtrl>("joints_list");
     joints_list->deleteAllItems();
+    LLScrollListCtrl *joints_pos = panel->getChild<LLScrollListCtrl>("pos_overrides_list");
+    joints_pos->deleteAllItems();    mSelectedJointName.clear();
 
     for (U32 i = 0; i < LLModel::NUM_LODS; ++i)
     {
         mJointOverrides[i].clear();
     }
+
+    LLTextBox *joint_total_descr = panel->getChild<LLTextBox>("conflicts_description");
+    joint_total_descr->setTextArg("[CONFLICTS]", llformat("%d", 0));
+    joint_total_descr->setTextArg("[JOINTS_COUNT]", llformat("%d", 0));
+
+
+    LLTextBox *joint_pos_descr = panel->getChild<LLTextBox>("pos_overrides_descr");
+    joint_pos_descr->setTextArg("[JOINT]", std::string("mPelvis")); // Might be better to hide it
 }
 
-void LLFloaterModelPreview::resetOverridesTab()
-{
-    clearOverridesTab();
-
-    for (U32 i = 0; i < LLModel::NUM_LODS; ++i)
-    {
-        mJointOverrides[i].clear();
-    }
-}
-
-void LLFloaterModelPreview::showOverridesTab()
+void LLFloaterModelPreview::updateAvatarTab()
 {
     S32 display_lod = mModelPreview->mPreviewLOD;
     if (mModelPreview->mModel[display_lod].empty())
     {
+        mSelectedJointName.clear();
         return;
     }
 
@@ -1606,14 +1608,16 @@ void LLFloaterModelPreview::showOverridesTab()
         }
     }
 
-    LLPanel *panel = mTabContainer->getPanelByName("overrides_panel");
-    S32 index = mTabContainer->getIndexForPanel(panel);
-    mTabContainer->enableTabButton(index, true);
+    LLPanel *panel = mTabContainer->getPanelByName("avatar_panel");
     LLScrollListCtrl *joints_list = panel->getChild<LLScrollListCtrl>("joints_list");
 
     if (joints_list->isEmpty())
     {
         // Populate table
+
+        std::map<std::string, std::string> joint_alias_map;
+        mModelPreview->getJointAliases(joint_alias_map);
+
         S32 conflicts = 0;
         joint_override_data_map_t::iterator joint_iter = mJointOverrides[display_lod].begin();
         joint_override_data_map_t::iterator joint_end = mJointOverrides[display_lod].end();
@@ -1627,8 +1631,14 @@ void LLFloaterModelPreview::showOverridesTab()
             LLScrollListCell::Params cell_params;
             cell_params.font = LLFontGL::getFontSansSerif();
             cell_params.value = listName;
+            if (joint_alias_map.find(listName) == joint_alias_map.end())
+            {
+                // Missing names
+                cell_params.color = LLColor4::red;
+            }
             if (joint_iter->second.mHasConflicts)
             {
+                // Conflicts
                 cell_params.color = LLColor4::orange;
                 conflicts++;
             }
@@ -1639,18 +1649,16 @@ void LLFloaterModelPreview::showOverridesTab()
             joint_iter++;
         }
         joints_list->selectFirstItem();
+        LLScrollListItem *selected = joints_list->getFirstSelected();
+        if (selected)
+        {
+            mSelectedJointName = selected->getValue().asString();
+        }
 
-        LLTextBox *joint_pos_descr = panel->getChild<LLTextBox>("conflicts_description");
-        joint_pos_descr->setTextArg("[CONFLICTS]", llformat("%d", conflicts));
-        joint_pos_descr->setTextArg("[JOINTS_COUNT]", llformat("%d", mJointOverrides[display_lod].size()));
+        LLTextBox *joint_conf_descr = panel->getChild<LLTextBox>("conflicts_description");
+        joint_conf_descr->setTextArg("[CONFLICTS]", llformat("%d", conflicts));
+        joint_conf_descr->setTextArg("[JOINTS_COUNT]", llformat("%d", mJointOverrides[display_lod].size()));
     }
-}
-
-void LLFloaterModelPreview::hideOverridesTab()
-{
-    LLPanel *panel = mTabContainer->getPanelByName("overrides_panel");
-    S32 index = mTabContainer->getIndexForPanel(panel);
-    mTabContainer->enableTabButton(index, false);
 }
 
 //-----------------------------------------------------------------------------
@@ -1672,8 +1680,6 @@ void LLFloaterModelPreview::addStringToLogTab(const std::string& str, bool flash
     }
 
     LLPanel* panel = mTabContainer->getPanelByName("logs_panel");
-    S32 index = mTabContainer->getIndexForPanel(panel);
-    mTabContainer->enableTabButton(index, true);
 
     // Make sure we have space for new string
     S32 editor_text_len = mUploadLogText->getLength();
@@ -1686,7 +1692,10 @@ void LLFloaterModelPreview::addStringToLogTab(const std::string& str, bool flash
 
     if (flash && mTabContainer->getCurrentPanel() != panel)
     {
-        mTabContainer->setTabPanelFlashing(panel, true);
+        // This will makes colors pale due to "glow_type = LLRender::BT_ALPHA"
+        // So instead of using "MenuItemFlashBgColor" added stronger color
+        static LLUIColor sFlashBgColor(LLColor4U(255, 99, 0));
+        mTabContainer->setTabPanelFlashing(panel, true, sFlashBgColor);
     }
 }
 
@@ -2594,8 +2603,7 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
 			}
             else
             {
-                fmp->resetOverridesTab();
-                fmp->hideOverridesTab();
+                fmp->clearAvatarTab();
             }
 
 			if (lock_scale_if_joint_position)
@@ -2738,6 +2746,10 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
 			{
 				description_form->setText(model_name);
 			}
+            // Add info to log that loading is complete (purpose: separator between loading and other logs)
+            LLSD args;
+            args["MODEL_NAME"] = model_name; // Teoretically shouldn't be empty, but might be better idea to add filename here
+            LLFloaterModelPreview::addStringToLog("ModelLoaded", args, false, loaded_lod);
 		}
 	}
 	refresh();
@@ -4543,7 +4555,7 @@ BOOL LLModelPreview::render()
         mFMP->childEnable("lock_scale_if_joint_position");
         if (fmp)
         {
-            fmp->showOverridesTab();
+            fmp->updateAvatarTab();
         }
     }
     else
@@ -4552,7 +4564,7 @@ BOOL LLModelPreview::render()
         mFMP->childSetValue("lock_scale_if_joint_position", false);
         if (fmp)
         {
-            fmp->hideOverridesTab();
+            fmp->clearAvatarTab();
         }
     }
     
@@ -5114,7 +5126,14 @@ BOOL LLModelPreview::render()
 					gDebugProgram.bind();
 				}
 				getPreviewAvatar()->renderCollisionVolumes();
-				getPreviewAvatar()->renderBones();
+                if (fmp->mTabContainer->getCurrentPanelIndex() == fmp->mAvatarTabIndex)
+                {
+                    getPreviewAvatar()->renderBones(fmp->mSelectedJointName);
+                }
+                else
+                {
+                    getPreviewAvatar()->renderBones();
+                }
 				if (shader)
 				{
 					shader->bind();
@@ -5205,7 +5224,7 @@ void LLModelPreview::setPreviewLOD(S32 lod)
         if (fmp)
         {
             // make preview repopulate tab
-            fmp->clearOverridesTab();
+            fmp->clearAvatarTab();
         }
 	}
 	refresh();
@@ -5228,7 +5247,7 @@ void LLFloaterModelPreview::onReset(void* user_data)
 	LLFloaterModelPreview* fmp = (LLFloaterModelPreview*) user_data;
 	fmp->childDisable("reset_btn");
 	fmp->clearLogTab();
-	fmp->resetOverridesTab();
+	fmp->clearAvatarTab();
 	LLModelPreview* mp = fmp->mModelPreview;
 	std::string filename = mp->mLODFile[LLModel::LOD_HIGH]; 
 
