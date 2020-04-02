@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Opensim" name="opensim_panel">
 	<tab_container label="Opensim" name="tabs">
-		<panel label="Zarządzaj siatkami" name="grid_management_panel">
+		<panel label="Zarządzaj światami" name="grid_management_panel">
 			<text name="add_grid_text">
-				Dodaj siatkę
+				Dodaj świat
 			</text>
 			<line_editor name="add_grid" label="Wpisz URI logowania" />
 			<button label="Czyść" label_selected="Czyść" name="clear_grid" />
 			<button label="Dodaj" name="apply_new_grid" />
 			<text name="add_grid_text">
-				Zarządzaj siatkami
+				Zarządzaj światami
 			</text>
 			<scroll_list name="grid_list">
 				<scroll_list.columns label="Nazwa" name="grid_label" />
@@ -19,10 +19,10 @@
 			<button label="Usuń" name="remove_grid" />
 			<panel name="advanced_grid_panel">
 				<text name="grid_name_text">
-					Nazwa siatki:
+					Nazwa świata:
 				</text>
 				<text name="grid_uri_text">
-					URI siatki:
+					URI świata:
 				</text>
 				<text name="login_page_text">
 					Strona logowania:

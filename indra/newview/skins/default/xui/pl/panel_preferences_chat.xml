@@ -19,14 +19,14 @@
 			<check_box name="FSMarkObjects" label="Oznaczaj obiekty frazą (bez nazwy) gdy wysyłają coś na czat, by zapobiec oszustwom"/>
 			<check_box name="FSllOwnerSayToScriptDebugWindow_checkbox" label="Kieruj llOwnerSay do okna debugowania skryptów" />
 			<check_box label="Pokaż czat w chmurkach ponad awatarami" name="bubble_text_chat"/>
-			<check_box label="Nie pokazuj czatu w konsoli Czatu Lokalnego i tostach" name="FSBubblesHideConsoleAndToasts" />
+			<check_box label="Nie pokazuj czatu w konsoli czatu w pobliżu i tostach" name="FSBubblesHideConsoleAndToasts" />
 			<check_box label="Pokaż wskaźnik pisania w chmurkach ponad awatarami" name="bubble_text_typing"/>
 			<check_box label="Pokaż wskaźnik pisania w tagach imion ponad awatarami" name="FSShowTypingStateInNameTag" />
 			<check_box label="Pokazuj sekundy w logach [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
 			<text name="show_timestamps_label" width="150">
 				Pokazuj znaczniki czasu w:
 			</text>
-			<check_box label="Czat Lokalny" name="show_timestamps_nearby_chat" width="95"/>
+			<check_box label="Czat w pobliżu" name="show_timestamps_nearby_chat" width="100"/>
 			<check_box label="Wiadomości IM" name="show_timestamps_im" width="105"/>
 			<check_box label="Logi czatów i IM" name="show_timestamps_transcripts"/>
 			<check_box name="FSConsoleClassicDrawMode" label="Używaj klasycznej konsoli" tool_tip="Ta opcja renderuje tło konsoli jako jeden duży blok pod wszystkimi liniami tekstu, o szerokości takiej jak najdłuższa z nich."/>
@@ -57,7 +57,7 @@
 			<text name="show_unread_messages_label">
 				Informuj o nowych wiadomościach:
 			</text>
-			<check_box name="FSNotifyUnreadChatMessages" label="Czat Lokalny" tool_tip="Pokazuje powiadomienie o nieprzeczytanych jeszcze wiadomościach (wraz z ich liczbą) w oknie Czatu Lokalnego, jeśli nowe się pojawią, a widok historii jest przewinięty do góry." />
+			<check_box name="FSNotifyUnreadChatMessages" label="Czat w pobliżu" tool_tip="Pokazuje powiadomienie o nieprzeczytanych jeszcze wiadomościach (wraz z ich liczbą) w oknie czatu w pobliżu, jeśli nowe się pojawią, a widok historii jest przewinięty do góry." />
 			<check_box name="FSNotifyUnreadIMMessages" label="Wiadomości IM / grupowe" tool_tip="Pokazuje powiadomienie o nieprzeczytanych jeszcze wiadomościach (wraz z ich liczbą) w oknie czatu IM / grupowego, jeśli nowe się pojawią, a widok historii jest przewinięty do góry." />
 			<text name="show_ims_in_label">
 				Pokaż wiad. IM w:
@@ -118,7 +118,7 @@
 			<check_box name="FSMuteAllGroups" label="Wyłącz WSZYSTKIE czaty grupowe"/>
 			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Gdy opcja 'otrzymuj ogłoszenia grupy' jest wyłączona - wyłączaj także czat grupy"/>
 			<check_box name="FSIgnoreAdHocSessions" label="Automatycznie ignoruj i opuszczaj wszystkie czaty konferencji (ad-hoc)"/>
-			<check_box name="FSReportIgnoredAdHocSession" label="Zgłaszaj ignorowanie czatu konferencji w czacie lokalnym"/>
+			<check_box name="FSReportIgnoredAdHocSession" label="Zgłaszaj ignorowanie czatu konferencji w czacie w pobliżu"/>
 			<check_box name="FSDontIgnoreAdHocFromFriends" label="Nie ignoruj zaproszeń do czatów konferencji od moich znajomych"/>
 			<text width="290" name="group_snooze_time_label" tool_tip="Ilość czasu, przez jaką czat grupowy będzie zablokowany po naciśnięciu przycisku tymczasowego jego wyciszenia. Ustawienie tej wartości na 0 zwyczajnie zamknie czat grupy do czasu, gdy następna wiadomość się w nim nie pojawi.">
 				Długość tymczasowego wyciszenia czatu grupowego:
@@ -135,14 +135,14 @@
 			<button label="Tłumaczenie..." name="translation_settings_btn"/>
 			<check_box label="Używaj animacji podczas pisania" name="play_typing_animation"/>
 			<check_box label="Odtwarzaj ją również podczas używania emocji (/me)" name="play_typing_animation_emote" />
-			<check_box label="Dźwięk pisania, gdy inne osoby piszą w czacie lokalnym" name="play_typing_sound"/>
+			<check_box label="Dźwięk pisania, gdy inne osoby piszą w czacie w pobliżu" name="play_typing_sound"/>
 			<check_box label="Powiadomienia o pisaniu do innych awatarów podczas sesji IM" name="FSSendTypingState"/>
-			<check_box label="Włącz autouzupełnianie gestów w pasku czatu lokalnego" name="FSChatbarGestureAutoCompleteEnable"/>
-			<check_box label="Włącz automatyczne odgadywanie imion w pasku czatu lokalnego" name="FSChatbarNamePrediction"/>
+			<check_box label="Włącz autouzupełnianie gestów w pasku czatu w pobliżu" name="FSChatbarGestureAutoCompleteEnable"/>
+			<check_box label="Włącz automatyczne odgadywanie imion w pasku czatu w pobliżu" name="FSChatbarNamePrediction"/>
 			<check_box name="AllowMUpose" label="&quot;:&quot; synonimem dla &quot;/me&quot;"/>
 			<check_box name="AutoCloseOOC" label="Domykaj ((nawiasy)) dla czatu OOC"/>
 			<check_box name="FSShowIMSendButton" label="Pokaż przycisk wysyłania wiadomości w pasku czatu dla sesji IM"/>
-			<check_box name="FSNearbyChatbar" label="Dodaj pasek czatu do okna Czatu Lokalnego"/>
+			<check_box name="FSNearbyChatbar" label="Dodaj pasek czatu do okna czatu w pobliżu"/>
 			<check_box name="FSShowChatChannel" label="Oferuj ręczny wybór kanału w pasku czatu"/>
 			<check_box name="FSShowChatType" label="Pokaż typ czatu i przycisk wysyłania"/>
 			<check_box label="Autoukrywanie głównego paska czatu" name="AutohideChatBar" tool_tip="Ukryj pasek czatu na dolnej listwie przycisków i pokazuj go jako nakładkę tylko wtedy, gdy to potrzebne."/>
@@ -151,9 +151,9 @@
 			<text name="textUseKeyboardShortcuts">
 				Używaj skrótów klawiszowych:
 			</text>
-			<check_box name="FSUseCtrlShout" label="Ctrl+Enter (krzyk)" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Ctrl+Enter, aby krzyczeć poprzez czat lokalny." />
-			<check_box name="FSUseShiftWhisper" label="Shift+Enter (szept)" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Shift+Enter, aby szeptać poprzez czat lokalny" />
-			<check_box name="FSUseAltOOC" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Alt+Enter, aby wysyłać wiadomości ((OOC)) poprzez czat lokalny." />
+			<check_box name="FSUseCtrlShout" label="Ctrl+Enter (krzyk)" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Ctrl+Enter, aby krzyczeć poprzez czat w pobliżu." />
+			<check_box name="FSUseShiftWhisper" label="Shift+Enter (szept)" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Shift+Enter, aby szeptać poprzez czat w pobliżu" />
+			<check_box name="FSUseAltOOC" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Alt+Enter, aby wysyłać wiadomości ((OOC)) poprzez czat w pobliżu." />
 		</panel>
 		<panel label="Komunikaty" name="ChatNotices">
 			<text name="disable_toast_label">
@@ -170,8 +170,8 @@
 			<spinner tool_tip="-1 dla pełnej nazwy grupy, 0 aby wyłączyć" name="FSShowGroupNameLength"/>
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Otwórz okno Rozmów, gdy pojawia się wiadomość offline"/>
 			<check_box label="Ślij IM-y na mój e-mail, gdy jestem offline ([EMAIL])" name="send_im_to_email"/>
-			<check_box name="FSShowIMInChatHistory" label="Pokazuj IMy i czaty grup w oknie czatu lokalnego"/>
-			<check_box name="FSLogIMInChatHistory" label="Zapisuj IMy i czaty grup w czacie lokalnym"/>
+			<check_box name="FSShowIMInChatHistory" label="Pokazuj IMy i czaty grup w oknie czatu w pobliżu"/>
+			<check_box name="FSLogIMInChatHistory" label="Zapisuj IMy i czaty grup w czacie w pobliżu"/>
 			<text name="FSIMChatHistoryFade_label" width="315">
 				Wyszarzanie tekstu wiadomości IM w tle okna logów czatu
 			</text>
@@ -179,9 +179,9 @@
 			<check_box name="FSShowMessageCountInWindowTitle" label="Pokaż ilość nieprzeczytanych IM na belce tytułu okna Firestorma"/>
 			<check_box name="FSAnnounceIncomingIM" label="Powiadamiaj o nowej IM, gdy tylko nadawca zacznie pisać"/>
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Mrugaj kartami IM, gdy znajomi się logują/wylogowywują"/>
-			<check_box name="FSNotifyNearbyChatFlash" label="Mrugaj przyciskiem 'czat' na dolnym pasku, gdy nadchodzi wiadomość czatu lokalnego" tool_tip="Mruga przyciskiem 'czat' na dolnym pasku, gdy nadchodzi nowa wiadomość czatu lokalnego. Okno czatu lokalnego musi być zadokowane w oknie rozmów, a okno rozmów musi być zamknięte, aby przycisk mrugał."/>
+			<check_box name="FSNotifyNearbyChatFlash" label="Mrugaj przyciskiem 'czat' na dolnym pasku, gdy nadchodzi wiadomość czatu w pobliżu" tool_tip="Mruga przyciskiem 'czat' na dolnym pasku, gdy nadchodzi nowa wiadomość czatu w pobliżu. Okno czatu w pobliżu musi być zadokowane w oknie rozmów, a okno rozmów musi być zamknięte, aby przycisk mrugał."/>
 			<check_box name="FSNotifyIMFlash" label="Mrugaj przyciskiem 'czat' na dolnym pasku, gdy nadchodzi wiadomość IM" tool_tip="Mruga przyciskiem 'czat' na dolnym pasku, gdy nadchodzi nowa wiadomość IM (dotyczy też wiadomości grupowych). Okno wiadomości IM musi być zadokowane w oknie rozmów, a okno rozmów musi być zamknięte, aby przycisk mrugał. Ta opcja jest dostępna tylko w wypadku, gdy wiadomości IM są pokazywane w kartach, a nie w osobnych oknach (zobacz zakładkę &quot;Ogólne&quot;)."/>
-			<check_box name="FSReportMutedGroupChat" label="Zgłaszaj wyciszenie czatu grupowego w czacie lokalnym"/>
+			<check_box name="FSReportMutedGroupChat" label="Zgłaszaj wyciszenie czatu grupowego w czacie w pobliżu"/>
 			<check_box name="FSGroupNoticesToIMLog" label="Pokazuj ogłoszenia grup także w czatach grupowych, a nie tylko w tostach"/>
 			<check_box name="FSBetterGroupNoticesToIMLog" label="Pokazuj również ich tematy i autorów"/>
 		</panel>
@@ -230,7 +230,7 @@
 		</panel>
 		<panel label="Detektor słów" name="ChatKeywordAlerts">
 			<check_box name="FSKeywordOn" label="Włącz detektor słów"/>
-			<check_box name="FSKeywordInChat" label="Szukaj słów w Czacie Lokalnym"/>
+			<check_box name="FSKeywordInChat" label="Szukaj słów w czacie w pobliżu"/>
 			<check_box name="FSKeywordInIM" label="Szukaj słów w IM i czatach grupowych"/>
 			<check_box name="FSKeywordSpeakersName" label="Szukaj słów w imionach mówiących osób lub nazwach obiektów"/>
 			<check_box name="FSKeywordCaseSensitive" label="Bierz pod uwagę wielkość liter w szukanych słowach"/>

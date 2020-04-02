@@ -172,15 +172,15 @@
         <text name="TipToastLifetimeText">
             sekund
         </text>
-        <slider label="Ukryj tost czatu po:" tool_tip="Liczba sekund, po jakich tost czatu lokalnego jest usuwany z ekranu" name="NearbyToastLifetime" />
+        <slider label="Ukryj tost czatu po:" tool_tip="Liczba sekund, po jakich tost czatu w pobliżu jest usuwany z ekranu" name="NearbyToastLifetime" />
         <text name="NearbyToastLifetimeText">
             sekund
         </text>
-        <slider label="Przesunięcie Z dla tostów czatu:" tool_tip="Kontroluje przesunięcie w osi Z dla tostów czatu lokalnego." name="FSNearbyChatToastsOffset" />
+        <slider label="Przesunięcie Z dla tostów czatu:" tool_tip="Kontroluje przesunięcie w osi Z dla tostów czatu w pobliżu." name="FSNearbyChatToastsOffset" />
         <text name="FSNearbyChatToastsOffsetText">
             pikseli
         </text>
-        <slider label="Czas ukrywania tosta czatu:" tool_tip="Liczba sekund potrzebna na całkowite wygaszenie tosta czatu lokalnego" name="NearbyToastFadingTime" />
+        <slider label="Czas ukrywania tosta czatu:" tool_tip="Liczba sekund potrzebna na całkowite wygaszenie tosta czatu w pobliżu" name="NearbyToastFadingTime" />
         <text name="NearbyToastFadingTimeText">
             sekund
         </text>
@@ -200,7 +200,7 @@
         <text name="OverflowToastHeightText">
             pikseli
         </text>
-        <slider label="Szerokość tosta czatu:" tool_tip="Szerokość tosta czatu lokalnego ustalana procentowo do szerokości ekranu" name="NearbyToastWidth" />
+        <slider label="Szerokość tosta czatu:" tool_tip="Szerokość tosta czatu w pobliżu ustalana procentowo do szerokości ekranu" name="NearbyToastWidth" />
         <check_box label="Pokazuj tosty ponad innymi oknami" name="FSShowToastsInFront" />
         <check_box label="Nowy sposób powiadamiania o restarcie regionu" name="FSUseNewRegionRestartNotification" />
         <check_box label="Nie trzęś moim ekranem, gdy pojawia się informacja o restarcie regionu" name="FSNoScreenShakeOnRegionRestart" />
