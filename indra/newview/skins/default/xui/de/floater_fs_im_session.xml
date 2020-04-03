@@ -45,6 +45,9 @@
 		<layout_panel name="lp_options_btn">
 			<button name="chat_options_btn" tool_tip="Chat-Optionen"/>
 		</layout_panel>
+		<layout_panel name="lp_chat_search_btn">
+			<button name="chat_search_btn" tool_tip="Chat durchsuchen"/>
+		</layout_panel>
 		<layout_panel name="support_panel">
 			<check_box label="Version senden" name="FSSupportGroupChatPrefix_toggle" tool_tip="Fügt die aktuelle Viewer-Version, Viewer-Skin, das Betriebssystem und den RLVa-Status am Anfang jeder Nachricht hinzu, die an diese Gruppe gesendet werden, um die Support-Mitarbeiter dabei zu unterstützen, ein mögliches Problem besser zu diagnostizieren und die Genauigkeit der Antworten auf Ihre Fragen zu verbessern."/>
 		</layout_panel>
