@@ -125,7 +125,27 @@
        tool_tip="Chat Options"
        name="chat_options_btn"/>
     </layout_panel>
-    
+    <layout_panel
+      name="lp_chat_search_btn"
+      auto_resize="false"
+      user_resize="false"
+      top="0"
+      layout="topleft"
+      height="26"
+      width="26"
+      follows="left|top">
+      <button
+       name="chat_search_btn"
+       follows="left|top"
+       top="2"
+       width="24"
+       height="24"
+       image_overlay="Script_Search"
+       image_pressed="PushButton_Press"
+       image_pressed_selected="PushButton_Selected_Press"
+       image_selected="PushButton_Selected_Press"
+       tool_tip="Search nearby chat"/>
+    </layout_panel>
   </layout_stack>
   <layout_stack
     tab_group="1"
