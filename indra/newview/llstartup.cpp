@@ -43,10 +43,6 @@
 # include "llaudioengine_fmodstudio.h"
 #endif
 
-#ifdef LL_FMODEX
-# include "llaudioengine_fmodex.h"
-#endif
-
 #ifdef LL_OPENAL
 #include "llaudioengine_openal.h"
 #endif
@@ -993,15 +989,6 @@ bool idle_startup()
 #endif // !LL_WINDOWS
 			{
 				gAudiop = (LLAudioEngine *) new LLAudioEngine_FMODSTUDIO(gSavedSettings.getBOOL("FMODProfilerEnable"), gSavedSettings.getU32("FMODResampleMethod"));
-			}
-#endif
-
-#ifdef LL_FMODEX
-#if !LL_WINDOWS
-			if (NULL == getenv("LL_BAD_FMODEX_DRIVER"))
-#endif // !LL_WINDOWS
-			{
-				gAudiop = (LLAudioEngine *) new LLAudioEngine_FMODEX(gSavedSettings.getBOOL("FMODProfilerEnable"));
 			}
 #endif
 
