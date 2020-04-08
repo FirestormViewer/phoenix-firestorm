@@ -2254,19 +2254,11 @@ if (WINDOWS)
     endif (ADDRESS_SIZE EQUAL 64)
 
     if (FMODSTUDIO)
-      if (ADDRESS_SIZE EQUAL 64)
-        list(APPEND COPY_INPUT_DEPENDENCIES
-           ${SHARED_LIB_STAGING_DIR}/Release/fmod64.dll
-           ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod64.dll
-           ${SHARED_LIB_STAGING_DIR}/Debug/fmodL64.dll
-          )
-      else (ADDRESS_SIZE EQUAL 64)
-        list(APPEND COPY_INPUT_DEPENDENCIES
-           ${SHARED_LIB_STAGING_DIR}/Release/fmod.dll
-           ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod.dll
-           ${SHARED_LIB_STAGING_DIR}/Debug/fmodL.dll
-          )
-      endif (ADDRESS_SIZE EQUAL 64)
+      list(APPEND COPY_INPUT_DEPENDENCIES
+         ${SHARED_LIB_STAGING_DIR}/Release/fmod.dll
+         ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod.dll
+         ${SHARED_LIB_STAGING_DIR}/Debug/fmodL.dll
+        )
     endif (FMODSTUDIO)
 
     if (FMODEX)
