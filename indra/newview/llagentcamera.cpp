@@ -1880,7 +1880,7 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 				at_axis.normalize();
 				gAgent.resetAxes(at_axis * ~parent_rot);
 
-				local_camera_offset = local_camera_offset * gAgent.getFrameAgent().getQuaternion() * parent_rot;
+				local_camera_offset = local_camera_offset * parent_rot;
 			}
 			else
 			{
@@ -2147,13 +2147,19 @@ bool LLAgentCamera::clampCameraPosition(LLVector3d& posCamGlobal, const LLVector
 
 LLVector3 LLAgentCamera::getCurrentCameraOffset()
 {
-	LLVector3 camera_offset = (LLViewerCamera::getInstance()->getOrigin() - getAvatarRootPosition() - mThirdPersonHeadOffset) * ~gAgent.getFrameAgent().getQuaternion();
+	LLVector3 camera_offset = (LLViewerCamera::getInstance()->getOrigin() - getAvatarRootPosition() - mThirdPersonHeadOffset) * ~getCurrentAvatarRotation();
 	return  camera_offset / mCameraZoomFraction / gSavedSettings.getF32("CameraOffsetScale");
 }
 
 LLVector3d LLAgentCamera::getCurrentFocusOffset()
 {
-	return (mFocusTargetGlobal - gAgent.getPositionGlobal()) * ~gAgent.getFrameAgent().getQuaternion();
+	return (mFocusTargetGlobal - gAgent.getPositionGlobal()) * ~getCurrentAvatarRotation();
+}
+
+LLQuaternion LLAgentCamera::getCurrentAvatarRotation()
+{
+	LLViewerObject* sit_object = (LLViewerObject*)gAgentAvatarp->getParent();
+	return sit_object ? sit_object->getRenderRotation() : gAgent.getFrameAgent().getQuaternion();
 }
 
 bool LLAgentCamera::isJoystickCameraUsed()
@@ -2517,15 +2523,7 @@ void LLAgentCamera::changeCameraToThirdPerson(BOOL animate)
 	}
 
 	// Remove any pitch from the avatar
-	if (isAgentAvatarValid() && gAgentAvatarp->getParent())
-	{
-		LLQuaternion obj_rot = ((LLViewerObject*)gAgentAvatarp->getParent())->getRenderRotation();
-		at_axis = LLViewerCamera::getInstance()->getAtAxis();
-		at_axis.mV[VZ] = 0.f;
-		at_axis.normalize();
-		gAgent.resetAxes(at_axis * ~obj_rot);
-	}
-	else
+	if (!isAgentAvatarValid() || !gAgentAvatarp->getParent())
 	{
 		at_axis = gAgent.getFrameAgent().getAtAxis();
 		at_axis.mV[VZ] = 0.f;
@@ -2924,15 +2922,7 @@ void LLAgentCamera::setFocusOnAvatar(BOOL focus_on_avatar, BOOL animate)
 		if (mCameraMode == CAMERA_MODE_THIRD_PERSON)
 		{
 			LLVector3 at_axis;
-			if (isAgentAvatarValid() && gAgentAvatarp->getParent())
-			{
-				LLQuaternion obj_rot = ((LLViewerObject*)gAgentAvatarp->getParent())->getRenderRotation();
-				at_axis = LLViewerCamera::getInstance()->getAtAxis();
-				at_axis.mV[VZ] = 0.f;
-				at_axis.normalize();
-				gAgent.resetAxes(at_axis * ~obj_rot);
-			}
-			else
+			if (!isAgentAvatarValid() || !gAgentAvatarp->getParent())
 			{
 				at_axis = LLViewerCamera::getInstance()->getAtAxis();
 				at_axis.mV[VZ] = 0.f;
