@@ -3,9 +3,9 @@
  * @brief Description of LISTENER class abstracting the audio support
  * as an FMOD Studio implementation (windows and Linux)
  *
- * $LicenseInfo:firstyear=2002&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2020&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2020, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -39,24 +39,25 @@ namespace FMOD
 //Interfaces
 class LLListener_FMODSTUDIO : public LLListener
 {
- public:  
-	LLListener_FMODSTUDIO(FMOD::System *system);
-	virtual ~LLListener_FMODSTUDIO();
+public:
+    LLListener_FMODSTUDIO(FMOD::System *system);
+    virtual ~LLListener_FMODSTUDIO();
+    virtual void init();
 
-	virtual void translate(LLVector3 offset);
-	virtual void setPosition(LLVector3 pos);
-	virtual void setVelocity(LLVector3 vel);
-	virtual void orient(LLVector3 up, LLVector3 at);
-	virtual void commitDeferredChanges();
+    virtual void translate(LLVector3 offset);
+    virtual void setPosition(LLVector3 pos);
+    virtual void setVelocity(LLVector3 vel);
+    virtual void orient(LLVector3 up, LLVector3 at);
+    virtual void commitDeferredChanges();
 
-	virtual void setDopplerFactor(F32 factor);
-	virtual F32 getDopplerFactor();
-	virtual void setRolloffFactor(F32 factor);
-	virtual F32 getRolloffFactor();
- protected:
-	 FMOD::System *mSystem;
-	 F32 mDopplerFactor;
-	 F32 mRolloffFactor;
+    virtual void setDopplerFactor(F32 factor);
+    virtual F32 getDopplerFactor();
+    virtual void setRolloffFactor(F32 factor);
+    virtual F32 getRolloffFactor();
+protected:
+    FMOD::System *mSystem;
+    F32 mDopplerFactor;
+    F32 mRolloffFactor;
 };
 
 #endif

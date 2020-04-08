@@ -1,11 +1,11 @@
 /** 
  * @file audioengine_fmodstudio.h
  * @brief Definition of LLAudioEngine class abstracting the audio 
- * support as a FMOD Studio implementation
+ * support as a FMODSTUDIO implementation
  *
- * $LicenseInfo:firstyear=2002&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2020&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2014, Linden Research, Inc.
+ * Copyright (C) 2020, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -103,8 +103,8 @@ public:
 class LLAudioChannelFMODSTUDIO : public LLAudioChannel
 {
 public:
-	LLAudioChannelFMODSTUDIO(FMOD::System *audioengine);
-	virtual ~LLAudioChannelFMODSTUDIO();
+    LLAudioChannelFMODSTUDIO(FMOD::System *audioengine);
+    virtual ~LLAudioChannelFMODSTUDIO();
 
 protected:
 	/*virtual*/ void play();
@@ -128,8 +128,8 @@ protected:
 class LLAudioBufferFMODSTUDIO : public LLAudioBuffer
 {
 public:
-	LLAudioBufferFMODSTUDIO(FMOD::System *audioengine);
-	virtual ~LLAudioBufferFMODSTUDIO();
+    LLAudioBufferFMODSTUDIO(FMOD::System *audioengine);
+    virtual ~LLAudioBufferFMODSTUDIO();
 
 	/*virtual*/ bool loadWAV(const std::string& filename);
 	/*virtual*/ U32 getLength();
