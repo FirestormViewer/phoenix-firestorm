@@ -16,6 +16,9 @@
 		<layout_panel name="lp_options_btn">
 			<button name="chat_options_btn" tool_tip="Chat-Optionen"/>
 		</layout_panel>
+		<layout_panel name="lp_chat_search_btn">
+			<button name="chat_search_btn" tool_tip="Chat in der Nähe durchsuchen"/>
+		</layout_panel>
 	</layout_stack>
 	<layout_stack name="ls_chat">
 		<layout_panel name="panel_im_control_lp">

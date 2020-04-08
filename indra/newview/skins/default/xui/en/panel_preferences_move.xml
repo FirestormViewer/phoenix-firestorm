@@ -483,7 +483,7 @@
          control_name="LetterKeysAffectsMovementNotFocusChatBar"
          follows="left|top"
          height="20"
-         label="Pressing letter keys affects movement (i.e. WASD) instead of starting local chat"
+         label="Pressing letter keys affects movement (i.e. WASD) instead of starting nearby chat"
          layout="topleft"
          left_delta="0"
          name="LetterKeysAffectsMovementNotFocusChatBar"

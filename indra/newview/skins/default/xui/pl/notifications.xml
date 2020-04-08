@@ -202,6 +202,9 @@ Czy chcesz dać prawa modyfikacji wybranym osobom?
 		Czy chcesz odebrać prawa modyfikacji wybranym Rezydentom?
 		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>
 	</notification>
+	<notification name="GroupNameLengthWarning">
+		Nazwa grupy musi zawierać od [MIN_LEN] do [MAX_LEN] znaków.
+	</notification>
 	<notification name="UnableToCreateGroup">
 		Założenie grupy nie jest możliwe.
 [MESSAGE]
@@ -430,6 +433,9 @@ W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z narzędzia 
 	<notification name="ErrorPhotoCannotAfford">
 		Potrzebujesz [COST]L$ aby zapisać zdjęcie do swojej Szafy. Możesz zamiast tego kupić L$ lub zapisać zdjęcie na swoim komputerze.
 	</notification>
+	<notification name="ErrorCannotAffordUpload">
+		Potrzebujesz [COST]L$ aby załadować ten element.
+	</notification>
 	<notification name="ErrorTextureCannotAfford">
 		Potrzebujesz [COST]L$ aby zapisać teksturę do swojej Szafy. Możesz zamiast tego kupić L$ lub zapisać teksturę na swoim komputerze.
 	</notification>
@@ -469,10 +475,10 @@ Potrzebujesz konta aby się zalogować do [CURRENT_GRID]. Czy chcesz utworzyć j
 		Należy wprowadzić nazwę użytkownika lub imię oraz nazwisko Twojego awatara w pole nazwy użytkownika, a następnie ponownie się zalogować.
 	</notification>
 	<notification name="InvalidGrid">
-		'[GRID]' nie jest prawidłowym identyfikatorem siatki.
+		'[GRID]' nie jest prawidłowym identyfikatorem świata.
 	</notification>
 	<notification name="InvalidLocationSLURL">
-		Twój punkt startowy nie znajduje się na prawidłowej siatce.
+		Twój punkt startowy nie znajduje się w prawidłowym świecie.
 	</notification>
 	<notification name="DeleteClassified">
 		Usunąć reklamę &apos;[NAME]&apos;?
@@ -1404,7 +1410,7 @@ Możesz sprawdzić swoje połączenie z Internetem i spróbować ponownie za kil
 		</form>
 	</notification>
 	<notification name="LoginRemoveMultiGridUserData">
-		Usuwane Dane Lokalne są współużytkowane przez wiele siatek, czy na pewno chcesz je usunąć?
+		Usuwane Dane Lokalne są współużytkowane przez wiele światów, czy na pewno chcesz je usunąć?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Potwierdź" />
 	</notification>
 	<notification name="WelcomeChooseSex">
@@ -1416,7 +1422,7 @@ Wybierz awatara właściwej płci. Ten wybór będzie można później zmienić.
 		<usetemplate name="okcancelbuttons" notext="Kobieta" yestext="Mężczyzna"/>
 	</notification>
 	<notification name="CantTeleportToGrid">
-		Nie można teleportować do [SLURL], ponieważ jest na innej siatce ([GRID]) niż obecna siatka ([CURRENT_GRID]). Proszę zamknąć przeglądarkę i spróbować ponownie.
+		Nie można teleportować do [SLURL], ponieważ jest w innym świecie ([GRID]) niż obecny ([CURRENT_GRID]). Proszę zamknąć przeglądarkę i spróbować ponownie.
 	</notification>
 	<notification name="GeneralCertificateError">
 		Połączenie z serwerem nie mogło zostać nawiązane.
@@ -1654,7 +1660,7 @@ Chcesz ją opuścić?
 		Nie możesz opuścić tej grupy.
 	</notification>
 	<notification name="ConfirmKick">
-		Na pewno chcesz wyrzucić wszystkich Rezydentów z siatki?
+		Na pewno chcesz wyrzucić wszystkich Rezydentów ze świata?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Wyrzuć Rezydentów"/>
 	</notification>
 	<notification name="MuteLinden">
@@ -1716,6 +1722,17 @@ Wszystkie nadchodzące zaproszenia do grup będą automatycznie odrzucane. Nie b
 		Należysz już do maksymalnej ilości grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
 [NAME] oferuje Ci członkostwo w grupie.
 		<usetemplate name="okcancelbuttons" notext="Odmów" yestext="Przyjmij"/>
+	</notification>
+	<notification name="GroupLimitInfo">
+		Rezydenci z członkostwem podstawowym mogą dołączyć do [MAX_BASIC] grup.
+Członkostwo premium pozwala na [MAX_PREMIUM]. [https://secondlife.com/my/account/membership.php? Dowiedz się więcej]
+		<usetemplate name="okbutton" yestext="Zamknij" />
+	</notification>
+	<notification name="GroupLimitInfoPlus">
+		Rezydenci z członkostwem podstawowym mogą dołączyć do [MAX_BASIC] grup.
+Członkostwo premium pozwala na [MAX_PREMIUM]. Członkostwo
+Premium Plus pozwala na [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/membership.php? Dowiedz się więcej]
+		<usetemplate name="okbutton" yestext="Zamknij" />
 	</notification>
 	<notification name="JoinedTooManyGroups">
 		Należysz już do maksymalnej ilości grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
@@ -3289,19 +3306,19 @@ Wybierz Zablokuj żeby wyciszyć tą osobę.
 		Przepraszamy. Limit rozmów został przekroczony w tym obszarze. Spróbuj w innym miejscu.
 	</notification>
 	<notification name="VoiceChannelDisconnected">
-		[VOICE_CHANNEL_NAME] odłączył się. Przełączanie do rozmowy w czacie lokalnym.
+		[VOICE_CHANNEL_NAME] odłączył się. Przełączanie do rozmowy w czacie w pobliżu.
 	</notification>
 	<notification name="VoiceChannelDisconnectedP2P">
-		[VOICE_CHANNEL_NAME] skończył rozmowę. Przełączanie do rozmowy w czacie lokalnym.
+		[VOICE_CHANNEL_NAME] skończył rozmowę. Przełączanie do rozmowy w czacie w pobliżu.
 	</notification>
 	<notification name="P2PCallDeclined">
-		[VOICE_CHANNEL_NAME] odmówił połączenia. Przełączanie do rozmowy w czacie lokalnym.
+		[VOICE_CHANNEL_NAME] odmówił połączenia. Przełączanie do rozmowy w czacie w pobliżu.
 	</notification>
 	<notification name="P2PCallNoAnswer">
-		[VOICE_CHANNEL_NAME] nie odpowiada. Przełączanie do rozmowy w czacie lokalnym.
+		[VOICE_CHANNEL_NAME] nie odpowiada. Przełączanie do rozmowy w czacie w pobliżu.
 	</notification>
 	<notification name="VoiceChannelJoinFailed">
-		Brak połączenia z [VOICE_CHANNEL_NAME], spróbuj później. Przełączanie do rozmowy w czacie lokalnym.
+		Brak połączenia z [VOICE_CHANNEL_NAME], spróbuj później. Przełączanie do rozmowy w czacie w pobliżu.
 	</notification>
 	<notification name="VoiceEffectsExpired">
 		Subskrypcja jednego lub więcej Przekształceń Głosu wygasła.
@@ -3392,6 +3409,19 @@ Zostaną zablokowane na kilka sekund dla bezpieczeństwa.
 	</notification>
 	<notification name="VoiceIsMutedByModerator">
 		Twoja rozmowa głosowa została wyciszona przez moderatora.
+	</notification>
+	<notification name="FailedToGetBenefits">
+		Niestety nie udało nam się uzyskać informacji o korzyściach dla tej sesji. Nie powinno się to zdarzyć w normalnym środowisku produkcyjnym. Skontaktuj się z pomocą techniczną. Ta sesja nie będzie działać normalnie i zalecamy restart.
+	</notification>
+	<notification name="BulkUploadCostConfirmation">
+		Spowoduje to załadowanie [COUNT] elementów o łącznym koszcie [COST]L$. Czy chcesz kontynuować przesyłanie?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Załaduj"/>
+	</notification>
+	<notification name="BulkUploadNoCompatibleFiles">
+		Wybranych plików nie można załadować zbiorczo.
+	</notification>
+	<notification name="BulkUploadIncompatibleFiles">
+		Niektórych z wybranych plików nie można załadować zbiorczo.
 	</notification>
 	<notification name="UploadCostConfirmation">
 		Załadowanie tego na serwer będzie kosztować [PRICE]L$, chcesz kontynuować?
@@ -3784,12 +3814,12 @@ W innym przypadku możesz poszukać na mapie miejsc oznaczonych jako &quot;Infoh
 		<usetemplate name="okcancelignore" ignoretext="Potwierdzenie ustawiania debugowanego URL szukania" notext="Anuluj" />
 	</notification>
 	<notification name="ConfirmRemoveGrid">
-		Na pewno chcesz usunąć [REMOVE_GRID] z listy siatek?
-		<usetemplate ignoretext="Potwierdzenie usuwania siatki z listy siatek" name="okcancelignore" notext="Anuluj" />
+		Na pewno chcesz usunąć [REMOVE_GRID] z listy światów?
+		<usetemplate ignoretext="Potwierdzenie usuwania świata z listy światów" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="CanNotRemoveConnectedGrid">
-		Nie możesz usunąć siatki [REMOVE_GRID], gdy jesteś z nią połączony/a.
-		<usetemplate ignoretext="Ostrzeżenie przed usuwaniem siatki z aktywnym połączeniem" name="okcancelignore" notext="Anuluj" />
+		Nie możesz usunąć świata [REMOVE_GRID], gdy jesteś z nim połączony/a.
+		<usetemplate ignoretext="Ostrzeżenie przed usuwaniem świata z aktywnym połączeniem" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="FSWL" label="Aplikowanie ustawień Windlight">
 		&apos;[PARCEL_NAME]&apos;, własność [OWNER_NAME], chce zmienić ustawienia otoczenia systemu Windlight.
@@ -3904,7 +3934,7 @@ Na pewno chcesz zresetować wszystkie ustawienia?
 		Ustawienia zostaną zresetowane po zrestartowaniu [APP_NAME].
 	</notification>
 	<notification name="CantAddGrid">
-		Nie można dodać [GRID] do listy siatek.
+		Nie można dodać [GRID] do listy światów.
 [REASON] skontaktuj się ze wsparciem [GRID].
 	</notification>
 	<notification name="ParticleScriptFindFolderFailed">
