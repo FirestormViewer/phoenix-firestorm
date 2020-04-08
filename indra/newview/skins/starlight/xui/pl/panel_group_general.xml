@@ -22,7 +22,7 @@ By otrzymać dodatkowe wskazówki przytrzymuj kursor ponad opcjami.
 		<button label="DOŁĄCZ!" name="btn_join"/>
 	</panel>
 	<text_editor name="charter">
-		Status grupy
+		Statut grupy
 	</text_editor>
 	<name_list name="visible_members">
 		<name_list.columns label="Imię" name="name"/>

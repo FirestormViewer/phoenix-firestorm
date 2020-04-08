@@ -24,7 +24,7 @@ By otrzymać dodatkowe wskazówki przytrzymuj kursor ponad opcjami.
 		<button name="copy_name" label="Kopiuj nazwę"/>
 		<texture_picker name="insignia" tool_tip="Kliknij by wybrać obraz"/>
 		<text_editor name="charter">
-			Status grupy
+			Statut grupy
 		</text_editor>
 		<text name="join_cost_text">
 			Wstęp wolny

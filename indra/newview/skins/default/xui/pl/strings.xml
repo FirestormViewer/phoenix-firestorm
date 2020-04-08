@@ -167,22 +167,22 @@ Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 		Pobieranie ubrania...
 	</string>
 	<string name="InvalidCertificate">
-		Serwer zwrócił nieważny lub zniekształcony certyfikat. Proszę skontaktuj się z administratorem siatki.
+		Serwer zwrócił nieważny lub zniekształcony certyfikat. Proszę skontaktuj się z administratorem świata.
 	</string>
 	<string name="CertInvalidHostname">
-		Nazwa hosta jest nieważna, proszę sprawdź SLURL lub nazwę hosta siatki.
+		Nazwa hosta jest nieważna, proszę sprawdź SLURL lub nazwę hosta świata.
 	</string>
 	<string name="CertExpired">
-		Termin ważności certyfikatu zwróconego przez siatkę minął. Proszę sprawdzić swój zegar systemowy lub skontaktować się z administratorem siatki.
+		Termin ważności certyfikatu zwróconego przez świat minął. Proszę sprawdzić swój zegar systemowy lub skontaktować się z administratorem świata.
 	</string>
 	<string name="CertKeyUsage">
-		Certyfikat zwrócony przez serwer nie może być użyty dla SSL. Proszę skontaktuj się z administratorem siatki.
+		Certyfikat zwrócony przez serwer nie może być użyty dla SSL. Proszę skontaktuj się z administratorem świata.
 	</string>
 	<string name="CertBasicConstraints">
-		Zbyt wiele certyfikatów w łańcuchu certyfikatów serwera. Proszę skontaktować się z administratorem siatki.
+		Zbyt wiele certyfikatów w łańcuchu certyfikatów serwera. Proszę skontaktować się z administratorem świata.
 	</string>
 	<string name="CertInvalidSignature">
-		Podpis certyfikatu zwrócony przez siatkę nie mógł zostać zweryfikowany. Proszę skontaktować się z administratorem siatki.
+		Podpis certyfikatu zwrócony przez świat nie mógł zostać zweryfikowany. Proszę skontaktować się z administratorem świata.
 	</string>
 	<string name="LoginFailedNoNetwork">
 		Błąd sieci: Brak połączenia z siecią, sprawdź status swojego połączenia internetowego.
@@ -194,10 +194,10 @@ Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 		Wyłącz
 	</string>
 	<string name="AgniGridLabel">
-		Second Life: siatka główna (Agni)
+		Second Life: świat główny (Agni)
 	</string>
 	<string name="AditiGridLabel">
-		Second Life Beta: siatka testowa (Aditi)
+		Second Life Beta: świat testowy (Aditi)
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Przeglądarka używana przez Ciebie nie ma już dostępu do Second Life. Proszę przejść na poniższą stronę i pobrać nową:
@@ -1135,10 +1135,10 @@ http://www.firestormviewer.org/support aby uzyskać pomoc.
 		(bez nazwy)
 	</string>
 	<string name="NearbyChatTitle">
-		Czat lokalny
+		Czat w pobliżu
 	</string>
 	<string name="NearbyChatLabel">
-		(Czat lokalny)
+		(Czat w pobliżu)
 	</string>
 	<string name="whisper">
 		szepcze:
@@ -5276,7 +5276,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Gesty Twojego awatara (CTRL+G)
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
-		Pokaż obecny status świata (siatki)
+		Pokaż obecny status świata
 	</string>
 	<string name="Command_HowTo_Tooltip">
 		Jak wykonywać zwyczajne rzeczy
@@ -5654,7 +5654,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Zakres: Ziemia
 	</string>
 	<string name="Grid-Scope">
-		Zakres: Cała siatka
+		Zakres: Cały świat
 	</string>
 	<string name="Allowed_Experiences_Tab">
 		Zezwalam
