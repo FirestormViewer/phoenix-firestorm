@@ -136,12 +136,12 @@ FMOD_RESULT F_CALLBACK systemCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBACK_
 }
 
 LLAudioEngine_FMODSTUDIO::LLAudioEngine_FMODSTUDIO(bool enable_profiler, U32 resample_method)
-    : mInited(false),
-    mWindGen(nullptr),
-    mWindDSPDesc(nullptr),
-    mWindDSP(nullptr),
-    mSystem(nullptr),
+:   mInited(false),
+    mWindGen(NULL),
+    mWindDSP(NULL),
+    mSystem(NULL),
     mEnableProfiler(enable_profiler),
+    mWindDSPDesc(NULL),
     mResampleMethod(resample_method),
     mSelectedDeviceUUID()
 {
@@ -149,7 +149,8 @@ LLAudioEngine_FMODSTUDIO::LLAudioEngine_FMODSTUDIO(bool enable_profiler, U32 res
 
 LLAudioEngine_FMODSTUDIO::~LLAudioEngine_FMODSTUDIO()
 {
-    delete mWindDSPDesc;
+    // mWindDSPDesc, mWindGen and mWindDSP get cleaned up on cleanupWind in LLAudioEngine::shutdown()
+    // mSystem gets cleaned up at shutdown()
 }
 
 bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata)
@@ -558,13 +559,12 @@ void LLAudioEngine_FMODSTUDIO::setInternalGain(F32 gain)
 
     gain = llclamp(gain, 0.0f, 1.0f);
 
-    FMOD::ChannelGroup *master_group;
-    if (Check_FMOD_Error(mSystem->getMasterChannelGroup(&master_group), "FMOD::System::getMasterChannelGroup"))
+    FMOD::ChannelGroup* master_group = NULL;
+    if (!Check_FMOD_Error(mSystem->getMasterChannelGroup(&master_group), "FMOD::System::getMasterChannelGroup")
+        && master_group)
     {
-        return;
+        master_group->setVolume(gain);
     }
-
-    master_group->setVolume(gain);
 
     LLStreamingAudioInterface *saimpl = getStreamingAudioImpl();
     if (saimpl)
@@ -822,7 +822,7 @@ bool LLAudioBufferFMODSTUDIO::loadWAV(const std::string& filename)
     memset(&exinfo, 0, sizeof(exinfo));
     exinfo.cbsize = sizeof(exinfo);
     exinfo.suggestedsoundtype = FMOD_SOUND_TYPE_WAV;	//Hint to speed up loading.
-    // Load up the wav file into an fmod sample
+    // Load up the wav file into an fmod sample (since 1.05 fmod studio expects everything in UTF-8)
     FMOD_RESULT result = getSystem()->createSound(filename.c_str(), base_mode, &exinfo, &mSoundp);
 
     if (result != FMOD_OK)
@@ -882,13 +882,15 @@ FMOD_RESULT F_CALLBACK windCallback(FMOD_DSP_STATE *dsp_state, float *inbuffer, 
     // outbuffer = the buffer passed from the previous DSP unit.
     // length = length in samples at this mix time.
 
-    LLWindGen<LLAudioEngine_FMODSTUDIO::MIXBUFFERFORMAT> *windgen;
+    LLWindGen<LLAudioEngine_FMODSTUDIO::MIXBUFFERFORMAT> *windgen = NULL;
     FMOD::DSP *thisdsp = (FMOD::DSP *)dsp_state->instance;
 
     thisdsp->getUserData((void **)&windgen);
-    
+
     if (windgen)
+    {
         windgen->windGenerate((LLAudioEngine_FMODSTUDIO::MIXBUFFERFORMAT *)outbuffer, length);
+    }
 
     return FMOD_OK;
 }
