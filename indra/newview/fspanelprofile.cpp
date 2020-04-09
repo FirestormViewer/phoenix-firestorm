@@ -52,6 +52,7 @@
 #include "fsdroptarget.h"
 #include "fspanelprofileclassifieds.h"
 #include "llagent.h" //gAgent
+#include "llagentbenefits.h"
 #include "llagentpicksinfo.h"
 #include "llavataractions.h"
 #include "llavatarpropertiesprocessor.h"
@@ -1766,7 +1767,7 @@ void FSPanelProfilePicks::updateRlvRestrictions(ERlvBehaviour behavior, ERlvPara
 bool FSPanelProfilePicks::canAddNewPick()
 {
 	return (!LLAgentPicksInfo::getInstance()->isPickLimitReached() &&
-		mTabContainer->getTabCount() < LLAgentPicksInfo::getInstance()->getMaxNumberOfPicks() &&
+		mTabContainer->getTabCount() < LLAgentBenefitsMgr::current().getPicksLimit() &&
 		!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
 }
 

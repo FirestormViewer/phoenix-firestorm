@@ -51,7 +51,7 @@
 			</radio_group>
 			<check_box name="IMShowNamesForP2PConv" label="Mostra nomi negli IM"/>
 			<check_box label="Usa intestazioni chat V1" name="plain_text_chat_history"/>
-			<check_box label="Con intestazioni chat V3, mostra mini icone" name="ShowChatMiniIcons"/>
+			<check_box label="Con intestazioni chat [SHORT_VIEWER_GENERATION], mostra mini icone" name="ShowChatMiniIcons"/>
 			<check_box label="Mostra fine conversazione precedente" name="LogShowHistory"/>
 			<check_box name="FSTypingChevronPrefix" label="Aggiungi altro &gt; alle sessioni IM"/>
 			<text name="show_unread_messages_label">

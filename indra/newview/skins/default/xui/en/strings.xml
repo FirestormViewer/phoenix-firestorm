@@ -14,6 +14,7 @@
 	<string name="DOWNLOAD_URL">https://www.firestormviewer.org/downloads</string>
 	<string name="CURRENT_GRID"/> <!-- Will be set in fsgridhandler.cpp / llviewernetwork.cpp -->
 	<string name="VIEWER_GENERATION">Viewer [VERSION]</string>
+	<string name="SHORT_VIEWER_GENERATION">V[VERSION]</string>
 	<string name="APP_NAME_ABBR">FS</string>
 
 	<!-- starting up -->

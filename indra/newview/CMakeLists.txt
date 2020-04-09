@@ -2124,7 +2124,7 @@ endif (FMODEX)
 
 # <FS:Ansariel> Output device selection
 # set_source_files_properties(llstartup.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
-set_source_files_properties(llstartup.cpp llfloaterpreference.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
+set_source_files_properties(llstartup.cpp llfloaterpreference.cpp llfloaterabout.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
 # </FS:Ansariel>
 
 list(APPEND viewer_SOURCE_FILES ${viewer_HEADER_FILES})
@@ -2252,19 +2252,11 @@ if (WINDOWS)
     endif (ADDRESS_SIZE EQUAL 64)
 
     if (FMODSTUDIO)
-      if (ADDRESS_SIZE EQUAL 64)
-        list(APPEND COPY_INPUT_DEPENDENCIES
-           ${SHARED_LIB_STAGING_DIR}/Release/fmod64.dll
-           ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod64.dll
-           ${SHARED_LIB_STAGING_DIR}/Debug/fmodL64.dll
-          )
-      else (ADDRESS_SIZE EQUAL 64)
-        list(APPEND COPY_INPUT_DEPENDENCIES
-           ${SHARED_LIB_STAGING_DIR}/Release/fmod.dll
-           ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod.dll
-           ${SHARED_LIB_STAGING_DIR}/Debug/fmodL.dll
-          )
-      endif (ADDRESS_SIZE EQUAL 64)
+      list(APPEND COPY_INPUT_DEPENDENCIES
+         ${SHARED_LIB_STAGING_DIR}/Release/fmod.dll
+         ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod.dll
+         ${SHARED_LIB_STAGING_DIR}/Debug/fmodL.dll
+        )
     endif (FMODSTUDIO)
 
     if (FMODEX)

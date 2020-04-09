@@ -227,17 +227,40 @@ Adam Frisby, Alexandrea Fride, DarkAgent Baphomet, David Rowe, Digital Scribe, H
       label="Licenses"
       help_topic="about_licenses_tab"
       name="licenses_panel">
+
+  <layout_stack
+    border_size="0"
+    animate="false"
+    follows="all"
+    clip="true"
+    bottom="-1"
+    right="-4"
+    layout="topleft"
+    orientation="vertical"
+    name="license_layout_stack"
+    top="10"
+    left="0">
+    <layout_panel
+      auto_resize="true"
+      user_resize="false"
+      name="licenses_panel"
+      top="0"
+      layout="topleft"
+      height="400"
+      right="-4"
+      follows="all">
+
       <text_editor
        enabled="false"
-       follows="left|top"
-       height="532"
+       follows="all"
+       bottom="-10"
        bg_readonly_color="Transparent"
-       left="4"
+       left="0"
        text_color="LtGray"
        max_length="65536"
        name="licenses_editor"
-       top="16"
-       width="474"
+       top="0"
+       right="-1"
        word_wrap="true">
 3Dconnexion SDK Copyright (C) 1992-2009 3Dconnexion
 APR Copyright (C) 2011 The Apache Software Foundation
@@ -270,6 +293,70 @@ All rights reserved.  See licenses.txt for details.
 
 Voice chat Audio coding: Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
       </text_editor>
+    </layout_panel>
+    <layout_panel
+      visible="false"
+      auto_resize="true"
+      user_resize="false"
+      name="logos_panel"
+      top="0"
+      layout="topleft"
+      height="50"
+      left_pad="0"
+      right="-1"
+      follows="all">
+      <layout_stack
+       border_size="0"
+       animate="false"
+       follows="all"
+       clip="true"
+       bottom="-1"
+       right="-1"
+       layout="topleft"
+       orientation="horizontal"
+       name="logos_layout_stack"
+       top="0"
+       left="0">
+      <layout_panel
+       auto_resize="true"
+       user_resize="false"
+       name="left_center_helper_panel"
+       top="0"
+       layout="topleft"
+       height="100"
+       width="200"
+       follows="all"/>
+      <layout_panel
+       auto_resize="false"
+       user_resize="false"
+       name="fmod_logo_panel"
+       top="0"
+       layout="topleft"
+       height="100"
+       width="182"
+       follows="all">
+      <icon
+        visible="true"
+        follows="left|right|top"
+        image_name="FMOD_Logo"
+        left="0"
+        name="fmod_logo"
+        top="1"
+        height="48"
+        width="182"/>
+      </layout_panel>
+      <layout_panel
+       auto_resize="true"
+       user_resize="false"
+       name="right_center_helper_panel"
+       top="0"
+       layout="topleft"
+       height="100"
+       width="200"
+       follows="all"/>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
       </panel>
     </tab_container>
 </floater>

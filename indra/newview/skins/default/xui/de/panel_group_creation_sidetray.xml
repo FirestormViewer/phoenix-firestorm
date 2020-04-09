@@ -4,6 +4,9 @@
 		(Ihre Mitgliedschaft)
 	</panel.string>
 	<panel name="group_info_top">
+		<text name="group_name_label" width="82">
+			Gruppenname:
+		</text>
 		<line_editor label="Hier den neuen Gruppennamen eingeben" name="group_name_editor"/>
 	</panel>
 	<scroll_container name="content_scroll_container">
