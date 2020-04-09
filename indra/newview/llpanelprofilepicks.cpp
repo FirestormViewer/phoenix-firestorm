@@ -29,6 +29,7 @@
 #include "llpanelprofilepicks.h"
 
 #include "llagent.h"
+#include "llagentbenefits.h"
 #include "llagentpicksinfo.h"
 #include "llavataractions.h"
 #include "llavatarpropertiesprocessor.h"
@@ -374,8 +375,8 @@ bool LLPanelProfilePicks::canAddNewPick()
 {
     return (!LLAgentPicksInfo::getInstance()->isPickLimitReached() &&
         // <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
-        //mTabContainer->getTabCount() < LLAgentPicksInfo::getInstance()->getMaxNumberOfPicks());
-        mTabContainer->getTabCount() < LLAgentPicksInfo::getInstance()->getMaxNumberOfPicks() &&
+        //mTabContainer->getTabCount() < LLAgentBenefitsMgr::current().getPicksLimit());
+        mTabContainer->getTabCount() < LLAgentBenefitsMgr::current().getPicksLimit() &&
         !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
         // </FS:Ansariel>
 }
