@@ -679,7 +679,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="60"
+			 height="65"
 			 border_visible="true"
 			 background_visible="true">
 				<check_box
@@ -691,7 +691,7 @@
 				 layout="topleft"
 				 left="5"
 				 name="RenderDeferred"
-				 top_pad="5"
+				 top_pad="8"
 				 tool_tip="This will enable shadows from the Sun and Moon and in-world light sources. It will also allow you to turn on Depth of Field and other graphic features. Basically you need to turn this on to see most of the 'eye candy' in-world. If you cannot enable this feature or see its effect, first ensure both Atmospheric Shaders and Basic Shaders are enabled in tab 'WL'."
 				 width="240">
 				</check_box>
@@ -730,7 +730,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="65"
+			 height="40"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -738,7 +738,7 @@
 				 follows="left|top"
 				 height="16"
 				 left="5" 
-				 top_pad="4"
+				 top_pad="8"
 				 width="50"
 				 word_wrap="true"
 				 layout="topleft"
@@ -767,44 +767,6 @@
 					 label="Sun/Moon + Projectors"
 					 name="2"
 					 value="2"/>
-				</combo_box>
-				<text
-				 type="string"
-				 length="1"
-				 top_pad="7"
-				 follows="top|left"
-				 height="16"
-				 width="50"
-				 word_wrap="true"
-				 layout="topleft"
-				 left="5"
-				 name="avatar_shadows_label">
-					Avatar Shadows:
-				</text>
-				<combo_box
-				 control_name="FSSimpleAvatarShadows"
-				 height="20"
-				 layout="topleft"
-				 left_pad="10"
-				 top_delta="3"
-				 name="AvatarShadowDetail"
-				 width="200">
-					<combo_box.item
-					 label="None"
-					 name="0"
-					 value="0"/>
-					<combo_box.item
-					 label="Simplified"
-					 name="1"
-					 value="1"/>
-					<combo_box.item
-					 label="Optimized"
-					 name="2"
-					 value="2"/>
-					<combo_box.item
-					 label="Complex"
-					 name="3"
-					 value="3"/>
 				</combo_box>
 			</panel>
 
@@ -1159,7 +1121,7 @@
 			 top_pad="5"
 			 left="0"
 			 width="285"
-			 height="20"
+			 height="22"
 			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
@@ -1183,7 +1145,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="30"
+			 height="35"
 			 border_visible="true"
 			 background_visible="true">
 				<check_box
@@ -1195,7 +1157,7 @@
 				 left="5"
 				 name="UseSSAO"
 				 tool_tip="Ambient Occlusion adds shading to all objects. It is most effective when the Effect and AO Soften settings below are used. It can add a high level of realism to the image. This is especially true when images are made at resolutions of 2048 pixels or above."
-				 top_pad="10"
+				 top_pad="12"
 				 width="230">
 				</check_box>
 			</panel>
