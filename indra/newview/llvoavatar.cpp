@@ -8789,10 +8789,7 @@ bool LLVOAvatar::isTooComplex() const
 	bool render_friend =  (LLAvatarTracker::instance().isBuddy(getID()) && alwaysRenderFriends);
 	// </FS:Ansariel>
 
-	// <FS:Ansariel> FIRE-29012: Standalone animesh avatars get affected by complexity limit
-	//if (isSelf() || render_friend || mVisuallyMuteSetting == AV_ALWAYS_RENDER)
-	if (isSelf() || render_friend || mVisuallyMuteSetting == AV_ALWAYS_RENDER || (isControlAvatar() && ((LLControlAvatar*)this)->mRootVolp != NULL && !((LLControlAvatar*)this)->mRootVolp->isAttachment()))
-	// </FS:Ansariel>
+	if (isSelf() || render_friend || mVisuallyMuteSetting == AV_ALWAYS_RENDER)
 	{
 		too_complex = false;
 	}
