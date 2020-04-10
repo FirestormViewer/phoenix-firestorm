@@ -58,7 +58,7 @@ void LLListener_FMODSTUDIO::translate(LLVector3 offset)
 {
     LLListener::translate(offset);
 
-    mSystem->set3DListenerAttributes(0, (FMOD_VECTOR*)mPosition.mV, NULL, NULL, NULL);
+    mSystem->set3DListenerAttributes(0, (FMOD_VECTOR*)mPosition.mV, NULL, (FMOD_VECTOR*)mListenAt.mV, (FMOD_VECTOR*)mListenUp.mV);
 }
 
 //-----------------------------------------------------------------------
@@ -66,7 +66,7 @@ void LLListener_FMODSTUDIO::setPosition(LLVector3 pos)
 {
     LLListener::setPosition(pos);
 
-    mSystem->set3DListenerAttributes(0, (FMOD_VECTOR*)mPosition.mV, NULL, NULL, NULL);
+    mSystem->set3DListenerAttributes(0, (FMOD_VECTOR*)mPosition.mV, NULL, (FMOD_VECTOR*)mListenAt.mV, (FMOD_VECTOR*)mListenUp.mV);
 }
 
 //-----------------------------------------------------------------------
@@ -74,7 +74,7 @@ void LLListener_FMODSTUDIO::setVelocity(LLVector3 vel)
 {
     LLListener::setVelocity(vel);
 
-    mSystem->set3DListenerAttributes(0, NULL, (FMOD_VECTOR*)mVelocity.mV, NULL, NULL);
+    mSystem->set3DListenerAttributes(0, NULL, (FMOD_VECTOR*)mVelocity.mV, (FMOD_VECTOR*)mListenAt.mV, (FMOD_VECTOR*)mListenUp.mV);
 }
 
 //-----------------------------------------------------------------------

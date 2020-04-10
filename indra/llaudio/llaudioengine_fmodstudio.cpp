@@ -40,10 +40,9 @@
 #include "fmodstudio/fmod.hpp"
 #include "fmodstudio/fmod_errors.h"
 #include "lldir.h"
+#include "llapr.h"
 
 #include "sound_ids.h"
-
-#include "indra_constants.h"
 
 const U32 EXTRA_SOUND_CHANNELS = 10;
 
@@ -153,7 +152,7 @@ LLAudioEngine_FMODSTUDIO::~LLAudioEngine_FMODSTUDIO()
     // mSystem gets cleaned up at shutdown()
 }
 
-bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata)
+bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata, const std::string &app_title)
 {
     U32 version;
     FMOD_RESULT result;
@@ -165,7 +164,7 @@ bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata)
         return false;
 
     //will call LLAudioEngine_FMODSTUDIO::allocateListener, which needs a valid mSystem pointer.
-    LLAudioEngine::init(num_channels, userdata);
+    LLAudioEngine::init(num_channels, userdata, app_title);
 
     result = mSystem->getVersion(&version);
     Check_FMOD_Error(result, "FMOD::System::getVersion");
@@ -175,6 +174,8 @@ bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata)
         LL_WARNS("AppInit") << "FMOD Studio version mismatch, actual: " << version
             << " expected:" << FMOD_VERSION << LL_ENDL;
     }
+
+    // In case we need to force sampling on stereo, use setSoftwareFormat here
 
     // In this case, all sounds, PLUS wind and stream will be software.
     result = mSystem->setSoftwareChannels(num_channels + EXTRA_SOUND_CHANNELS);
@@ -202,6 +203,8 @@ bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata)
     result = mSystem->setAdvancedSettings(&settings);
     Check_FMOD_Error(result, "FMOD::System::setAdvancedSettings");
 
+    // FMOD_INIT_THREAD_UNSAFE Disables thread safety for API calls.
+    // Only use this if FMOD is being called from a single thread, and if Studio API is not being used.
     U32 fmod_flags = FMOD_INIT_NORMAL | FMOD_INIT_3D_RIGHTHANDED | FMOD_INIT_THREAD_UNSAFE;
     if (mEnableProfiler)
     {
@@ -218,7 +221,7 @@ bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata)
         {
             LL_DEBUGS("AppInit") << "Trying PulseAudio audio output..." << LL_ENDL;
             if ((result = mSystem->setOutput(FMOD_OUTPUTTYPE_PULSEAUDIO)) == FMOD_OK &&
-                (result = mSystem->init(num_channels + EXTRA_SOUND_CHANNELS, fmod_flags, const_cast<char*>(APP_NAME.c_str()))) == FMOD_OK)
+                (result = mSystem->init(num_channels + EXTRA_SOUND_CHANNELS, fmod_flags, const_cast<char*>(app_title.c_str()))) == FMOD_OK)
             {
                 LL_DEBUGS("AppInit") << "PulseAudio output initialized OKAY" << LL_ENDL;
                 audio_ok = true;
@@ -454,7 +457,6 @@ bool LLAudioEngine_FMODSTUDIO::initWind()
         memset(mWindDSPDesc, 0, sizeof(*mWindDSPDesc));	//Set everything to zero
         strncpy(mWindDSPDesc->name, "Wind Unit", sizeof(mWindDSPDesc->name));
         mWindDSPDesc->pluginsdkversion = FMOD_PLUGIN_SDK_VERSION;
-        mWindDSPDesc->numoutputbuffers = 1;
         mWindDSPDesc->read = &windCallback; // Assign callback - may be called from arbitrary threads
         if (Check_FMOD_Error(mSystem->createDSP(mWindDSPDesc, &mWindDSP), "FMOD::createDSP"))
             return false;
@@ -591,37 +593,46 @@ LLAudioChannelFMODSTUDIO::~LLAudioChannelFMODSTUDIO()
 
 bool LLAudioChannelFMODSTUDIO::updateBuffer()
 {
-    if (mCurrentSourcep)
+    if (!mCurrentSourcep)
     {
-        if (LLAudioChannel::updateBuffer())
+        // This channel isn't associated with any source, nothing
+        // to be updated
+        return false;
+    }
+
+    if (LLAudioChannel::updateBuffer())
+    {
+        // Base class update returned true, which means that we need to actually
+        // set up the channel for a different buffer.
+
+        LLAudioBufferFMODSTUDIO *bufferp = (LLAudioBufferFMODSTUDIO *)mCurrentSourcep->getCurrentBuffer();
+
+        // Grab the FMOD sample associated with the buffer
+        FMOD::Sound *soundp = bufferp->getSound();
+        if (!soundp)
         {
-            // Base class update returned true, which means that we need to actually
-            // set up the channel for a different buffer.
-
-            LLAudioBufferFMODSTUDIO *bufferp = (LLAudioBufferFMODSTUDIO *) mCurrentSourcep->getCurrentBuffer();
-
-            // Grab the FMOD sample associated with the buffer
-            FMOD::Sound *soundp = bufferp->getSound();
-            if (!soundp)
-            {
-                // This is bad, there should ALWAYS be a sound associated with a legit
-                // buffer.
-                LL_ERRS() << "No FMOD sound!" << LL_ENDL;
-                return false;
-            }
-
-
-            // Actually play the sound.  Start it off paused so we can do all the necessary
-            // setup.
-            if (!mChannelp)
-            {
-                FMOD_RESULT result = getSystem()->playSound(soundp, nullptr, true, &mChannelp);
-                Check_FMOD_Error(result, "FMOD::System::playSound");
-            }
-
-            //LL_INFOS() << "Setting up channel " << std::hex << mChannelID << std::dec << LL_ENDL;
+            // This is bad, there should ALWAYS be a sound associated with a legit
+            // buffer.
+            LL_ERRS() << "No FMOD sound!" << LL_ENDL;
+            return false;
         }
 
+
+        // Actually play the sound.  Start it off paused so we can do all the necessary
+        // setup.
+        if (!mChannelp)
+        {
+            FMOD_RESULT result = getSystem()->playSound(soundp, NULL /*free channel?*/, true, &mChannelp);
+            Check_FMOD_Error(result, "FMOD::System::playSound");
+        }
+
+        // Setting up channel mChannelID
+    }
+
+    // If we have a source for the channel, we need to update its gain.
+    if (mCurrentSourcep)
+    {
+        // SJB: warnings can spam and hurt framerate, disabling
         //FMOD_RESULT result;
 
         mChannelp->setVolume(getSecondaryGain() * mCurrentSourcep->getGain());
@@ -630,16 +641,11 @@ bool LLAudioChannelFMODSTUDIO::updateBuffer()
         mChannelp->setMode(mCurrentSourcep->isLoop() ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF);
         /*if(Check_FMOD_Error(result, "FMOD::Channel::setMode"))
         {
-            S32 index;
-            mChannelp->getIndex(&index);
-            LL_WARNS() << "Channel " << index << "Source ID: " << mCurrentSourcep->getID()
-                    << " at " << mCurrentSourcep->getPositionGlobal() << LL_ENDL;
+        S32 index;
+        mChannelp->getIndex(&index);
+        LL_WARNS() << "Channel " << index << "Source ID: " << mCurrentSourcep->getID()
+        << " at " << mCurrentSourcep->getPositionGlobal() << LL_ENDL;
         }*/
-    }
-    else
-    {
-        LL_DEBUGS() << "No source buffer!" << LL_ENDL;
-        return false;
     }
 
     return true;
@@ -804,7 +810,7 @@ bool LLAudioBufferFMODSTUDIO::loadWAV(const std::string& filename)
         return false;
     }
 
-    if (!gDirUtilp->fileExists(filename))
+    if (!LLAPRFile::isExist(filename, NULL, LL_APR_RPB))
     {
         // File not found, abort.
         return false;
