@@ -91,7 +91,7 @@
 			<radio_group name="show_stream_metadata">
 				<radio_item label="Wyłącz" width="75" name="radio_off" />
 				<radio_item label="Tosty" name="radio_toasts" />
-				<radio_item label="Czat lokalny" name="radio_chat" />
+				<radio_item label="Czat w pobliżu" name="radio_chat" />
 			</radio_group>
 			<check_box name="StreamMetadataAnnounceToChat" width="210" label="Wysyłaj tytuł strumienia na kanał:"/>
 		</panel>
@@ -371,7 +371,7 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Def_UISndPieMenuSliceHighlight7" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndPieMenuSliceHighlight7"/>
 
-			<text tool_tip="UUID dźwięku odgrywany, gdy rozpoczyna się wpisywanie wiadomości czatu. To ustawienie jest wspólne z Czat &gt; Ogólne &gt; 'Dźwięk pisania, gdy inne osoby piszą w czacie lokalnym'." name="textFSTyping">
+			<text tool_tip="UUID dźwięku odgrywany, gdy rozpoczyna się wpisywanie wiadomości czatu. To ustawienie jest wspólne z Czat &gt; Ogólne &gt; 'Dźwięk pisania, gdy inne osoby piszą w czacie w pobliżu'." name="textFSTyping">
 				Pisanie wiadomości:
 			</text>
 			<button name="Prev_UISndTyping" tool_tip="Podgląd dźwięku."/>

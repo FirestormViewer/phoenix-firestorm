@@ -763,7 +763,7 @@
 			 top_pad="0"
 			 left="4"
 			 width="275"
-			 height="65"
+			 height="40"
 			 border_visible="true"
 			 bevel_style="none"
 			 bg_alpha_color="DkGray_66"
@@ -802,44 +802,6 @@
 					 label="Sun/Moon + Projectors"
 					 name="2"
 					 value="2"/>
-				</combo_box>
-				<text
-				 type="string"
-				 length="1"
-				 top_pad="7"
-				 follows="top|left"
-				 height="16"
-				 width="50"
-				 word_wrap="true"
-				 layout="topleft"
-				 left="5"
-				 name="avatar_shadows_label">
-					Avatar Shadows:
-				</text>
-				<combo_box
-				 control_name="FSSimpleAvatarShadows"
-				 height="20"
-				 layout="topleft"
-				 left_pad="10"
-				 top_delta="3"
-				 name="AvatarShadowDetail"
-				 width="200">
-					<combo_box.item
-					 label="None"
-					 name="0"
-					 value="0"/>
-					<combo_box.item
-					 label="Simplified"
-					 name="1"
-					 value="1"/>
-					<combo_box.item
-					 label="Optimized"
-					 name="2"
-					 value="2"/>
-					<combo_box.item
-					 label="Complex"
-					 name="3"
-					 value="3"/>
 				</combo_box>
 			</panel>
 

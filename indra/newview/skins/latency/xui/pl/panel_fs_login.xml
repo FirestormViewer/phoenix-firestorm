@@ -28,7 +28,7 @@
 		</layout_panel>
 		<layout_panel name="grid_panel">
 			<text name="grid_login_text">
-				Loguj na siatkę:
+				Loguj do świata:
 			</text>
 		</layout_panel>
 		<layout_panel name="links_login_panel">

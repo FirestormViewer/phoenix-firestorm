@@ -170,6 +170,21 @@ name="Edit Outfit">
             <menu_item_call.on_visible
              function="Advanced.EnableAppearanceToXML"/>
     </menu_item_call>
+   <menu_item_call
+       label="Object Profile"
+       name="Object Inspect">
+         <menu_item_call.on_click
+          function="Object.Inspect" />
+         <menu_item_call.on_enable
+          function="Object.EnableInspect" />
+   </menu_item_call>
+   <menu_item_call
+         label="Inspect"
+         name="Object_Inspect_Floater">
+        <menu_item_call.on_click
+         function="Floater.Show"
+         parameter="inspect" />
+      </menu_item_call>
   <menu_item_call 
       enabled="true"
       label="Script Info"

@@ -21,9 +21,9 @@
 			Powiadomienia online:
 		</text>
 		<check_box label="Powiadamiaj online dla WSZYSTKICH znajomych w tostach" name="ChatOnlineNotification" />
-		<check_box label="Powiadamiaj online dla WSZYSTKICH znajomych w czacie lokalnym" name="OnlineOfflinetoNearbyChat" />
+		<check_box label="Powiadamiaj online dla WSZYSTKICH znajomych w czacie w pobliżu" name="OnlineOfflinetoNearbyChat" />
 		<check_box label="Powiadamiaj online dla danych zestawów w tostach" name="FSContactSetsNotificationToast" />
-		<check_box label="Powiadamiaj online dla danych zestawów w czacie lokalnym" name="FSContactSetsNotificationNearbyChat" />
+		<check_box label="Powiadamiaj online dla danych zestawów w czacie w pobliżu" name="FSContactSetsNotificationNearbyChat" />
 		<text name="label_colors">
 			Własne kolory:
 		</text>

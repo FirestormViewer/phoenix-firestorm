@@ -4,6 +4,9 @@
 		(twoje członkostwo)
 	</panel.string>
 	<panel name="group_info_top">
+		<text name="group_name_label" width="80">
+			Nazwa grupy:
+		</text>
 		<line_editor label="Wpisz tutaj nazwę nowej grupy" name="group_name_editor" />
 	</panel>
 	<scroll_container name="content_scroll_container">
@@ -13,7 +16,7 @@
 					<panel name="group_info_top2">
 						<texture_picker name="insignia" tool_tip="Kliknij by wybrać obraz" />
 						<text_editor name="charter">
-							Status grupy
+							Statut grupy
 						</text_editor>
 					</panel>
 					<panel name="preferences_container">

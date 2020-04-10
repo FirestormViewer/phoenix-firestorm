@@ -29,7 +29,7 @@
 							<column name="restore_global_files_label">Pomijalne dialogi</column>
 						</row>
 						<row name="restore_global_row_grids">
-							<column name="restore_global_files_label">Siatki (gridy) użytkownika</column>
+							<column name="restore_global_files_label">Światy (gridy) użytkownika</column>
 						</row>
 						<row name="restore_global_row_autoreplace">
 							<column name="restore_global_files_label">Autokorekta</column>

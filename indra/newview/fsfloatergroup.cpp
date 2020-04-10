@@ -68,6 +68,7 @@ void FSFloaterGroup::onOpen(const LLSD& key)
 		mGroupCreatePanel->onOpen(key);
 		mGroupCreatePanel->setVisible(TRUE);
 		mGroupPanel->setVisible(FALSE);
+		setTitle(getString("title_create_group"));
 	}
 	else
 	{

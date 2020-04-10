@@ -1,6 +1,6 @@
 # -*- cmake -*-
 
-# FMOD can be set when launching the make using the argument -DFMODSTUDIO:BOOL=ON
+# FMOD Studio can be set when launching the make using the argument -DFMODSTUDIO:BOOL=ON
 # When building using proprietary binaries though (i.e. having access to LL private servers),
 # we always build with FMODSTUDIO.
 # Open source devs should use the -DFMODSTUDIO:BOOL=ON then if they want to build with FMOD, whether
@@ -27,15 +27,16 @@ if (FMODSTUDIO)
       include(Prebuilt)
       use_prebuilt_binary(fmodstudio)
       if (WINDOWS)
-        set(FMODSTUDIO_LIBRARY 
+        set(FMODSTUDIO_LIBRARY
             debug fmodL_vc
             optimized fmod_vc)
       elseif (DARWIN)
-        set(FMODSTUDIO_LIBRARY 
+        #despite files being called libfmod.dylib, we are searching for fmod
+        set(FMODSTUDIO_LIBRARY
             debug fmodL
             optimized fmod)
       elseif (LINUX)
-        set(FMODSTUDIO_LIBRARY 
+        set(FMODSTUDIO_LIBRARY
             debug fmodL
             optimized fmod)
       endif (WINDOWS)

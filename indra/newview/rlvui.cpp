@@ -138,7 +138,7 @@ void RlvUIEnabler::onToggleShowLoc()
 		LLTeleportHistoryStorage* pTpHistoryStg = LLTeleportHistoryStorage::getInstance();
 		RLV_ASSERT( (pTpHistory) && (pTpHistoryStg) && (pTpHistory->getItems().size() > 0) && (pTpHistory->getCurrentItemIndex() >= 0) );
 		if ( (pTpHistory) && (pTpHistory->getItems().size() > 0) && (pTpHistory->getCurrentItemIndex() >= 0) &&
-			 (pTpHistoryStg) && (pTpHistory->getItems().size() > 0) )
+			 (pTpHistoryStg) && (pTpHistoryStg->getItems().size() > 0) )
 		{
 			const LLTeleportHistoryItem& tpItem = pTpHistory->getItems().back();
 			const LLTeleportHistoryPersistentItem& tpItemStg = pTpHistoryStg->getItems().back();

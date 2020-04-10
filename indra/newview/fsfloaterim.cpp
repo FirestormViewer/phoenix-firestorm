@@ -53,6 +53,7 @@
 #include "llfloaterabout.h"		// for sysinfo button -Zi
 #include "llfloateravatarpicker.h"
 #include "llfloaterreg.h"
+#include "llfloatersearchreplace.h"
 #include "llgroupactions.h"
 #include "llinventoryfunctions.h"
 #include "llinventorymodel.h"
@@ -464,6 +465,11 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 	}
 
 	setTyping(false);
+}
+
+void FSFloaterIM::onChatSearchButtonClicked()
+{
+	LLFloaterSearchReplace::show(mChatHistory);
 }
 
 void FSFloaterIM::sendMsg(const std::string& msg)
@@ -914,6 +920,8 @@ BOOL FSFloaterIM::postBuild()
 	mInputEditor->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 
 	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
+
+	getChild<LLButton>("chat_search_btn")->setCommitCallback(boost::bind(&FSFloaterIM::onChatSearchButtonClicked, this));
 
 	bool isFSSupportGroup = FSData::getInstance()->isFirestormGroup(mSessionID);
 	bool isFSTestingGroup = FSData::getInstance()->isTestingGroup(mSessionID);
