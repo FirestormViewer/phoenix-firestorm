@@ -95,8 +95,16 @@
                     function="Object.EnableExport" />
             </pie_slice>
         </pie_menu>
-        <pie_separator name="inspect_placeholder" />
         <pie_separator/>
+        <pie_slice
+            label="Inspect"
+            name="Avatar Inspect">
+            <pie_slice.on_click
+                function="Floater.Show"
+                parameter="inspect" />
+            <pie_slice.on_enable
+                function="Object.EnableInspect" />
+        </pie_slice>
             <pie_slice
                 label="Textures"
                 name="Debug...">
