@@ -564,6 +564,12 @@ class WindowsManifest(ViewerManifest):
             #        self.path("*.gif")
 
             # </FS:Ansariel> Remove VMP
+
+        # Copy 3p icons
+        with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
+            if self.args['fmodstudio'] == 'ON':
+                self.path("fmod.png")
+
         # Plugin host application
         self.path2basename(os.path.join(os.pardir,
                                         'llplugin', 'slplugin', self.args['configuration']),
@@ -1324,6 +1330,11 @@ class DarwinManifest(ViewerManifest):
                 with self.prefix(src=pkgdir,dst=""):
                     self.path("ca-bundle.crt")
 
+                # Copy 3p icons
+                with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
+                    if self.args['fmodstudio'] == 'ON':
+                        self.path("fmod.png")
+
                 icon_path = self.icon_path()
                 with self.prefix(src=icon_path) :
                     self.path("firestorm_icon.icns")
@@ -2082,6 +2093,11 @@ class Linux_i686_Manifest(LinuxManifest):
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
         relpkgdir = os.path.join(pkgdir, "lib", "release")
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
+
+        # Copy 3p icons
+        with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
+            if self.args['fmodstudio'] == 'ON':
+                self.path("fmod.png")
 
         with self.prefix(src=relpkgdir, dst="lib"):
             self.path("libapr-1.so")

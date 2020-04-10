@@ -985,11 +985,11 @@ bool idle_startup()
 
 #ifdef LL_FMODSTUDIO
 #if !LL_WINDOWS
-			if (NULL == getenv("LL_BAD_FMODSTUDIO_DRIVER"))
+            if (NULL == getenv("LL_BAD_FMODSTUDIO_DRIVER"))
 #endif // !LL_WINDOWS
-			{
-				gAudiop = (LLAudioEngine *) new LLAudioEngine_FMODSTUDIO(gSavedSettings.getBOOL("FMODProfilerEnable"), gSavedSettings.getU32("FMODResampleMethod"));
-			}
+            {
+                gAudiop = (LLAudioEngine *) new LLAudioEngine_FMODSTUDIO(gSavedSettings.getBOOL("FMODProfilerEnable"), gSavedSettings.getU32("FMODResampleMethod"));
+            }
 #endif
 
 #ifdef LL_OPENAL
@@ -1155,6 +1155,7 @@ bool idle_startup()
 		display_startup();
 		// LLViewerMedia::initBrowser();
 		LLStartUp::setStartupState( STATE_LOGIN_SHOW );
+		gViewerWindow->setShowLogos(TRUE);
 		return FALSE;
 	}
 

@@ -1002,11 +1002,11 @@
       <key>fmodstudio</key>
       <map>
         <key>copyright</key>
-        <string>FMOD Studio, copyright (c) Firelight Technologies Pty, Ltd., 2012-2017.</string>
+        <string>FMOD Studio by Firelight Technologies Pty Ltd.</string>
         <key>description</key>
-        <string>FMOD Studio audio system library</string>
+        <string>FMOD Studio API</string>
         <key>license</key>
-        <string>fmodstudio</string>
+        <string>fmod</string>
         <key>license_file</key>
         <string>LICENSES/fmodstudio.txt</string>
         <key>name</key>

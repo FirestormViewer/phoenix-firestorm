@@ -6394,6 +6394,10 @@ void LLViewerWindow::setProgressCancelButtonVisible( BOOL b, const std::string& 
 	}
 }
 
+void LLViewerWindow::setShowLogos(const BOOL show_3p_logos)
+{
+    mProgressView->setShowLogos(show_3p_logos);
+}
 
 LLProgressView *LLViewerWindow::getProgressView() const
 {

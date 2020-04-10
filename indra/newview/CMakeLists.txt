@@ -2111,6 +2111,8 @@ endif (OPENAL)
 
 if (FMODSTUDIO)
   set(LLSTARTUP_COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS} -DLL_FMODSTUDIO")
+  # texture list needs to load fmod icon
+  set_source_files_properties(llviewertexturelist.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
   set(FMODWRAPPER_LIBRARY ${FMODSTUDIO_LIBRARY})
 endif (FMODSTUDIO)
 
@@ -2239,10 +2241,10 @@ if (WINDOWS)
 
     if (FMODSTUDIO)
       list(APPEND COPY_INPUT_DEPENDENCIES
-         ${SHARED_LIB_STAGING_DIR}/Release/fmod.dll
-         ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod.dll
-         ${SHARED_LIB_STAGING_DIR}/Debug/fmodL.dll
-        )
+           ${SHARED_LIB_STAGING_DIR}/Release/fmod.dll
+           ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod.dll
+           ${SHARED_LIB_STAGING_DIR}/Debug/fmodL.dll
+          )
     endif (FMODSTUDIO)
 
     if (OPENAL)

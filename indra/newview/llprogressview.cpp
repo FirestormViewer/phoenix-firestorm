@@ -42,6 +42,7 @@
 #include "llbutton.h"
 #include "llcallbacklist.h"
 #include "llfocusmgr.h"
+#include "lliconctrl.h"
 #include "llnotifications.h"
 #include "llprogressbar.h"
 #include "llstartup.h"
@@ -245,6 +246,7 @@ void LLProgressView::setVisible(BOOL visible)
 	if (getVisible() && !visible)
 	{
 		LLPanel::setVisible(FALSE);
+		setShowLogos(FALSE);
 	}
 	// showing progress view
 	else if (visible && (!getVisible() || mFadeToWorldTimer.getStarted()))
@@ -386,6 +388,18 @@ void LLProgressView::setMessage(const std::string& msg)
 {
 	mMessage = msg;
 	mMessageText->setValue(mMessage);
+}
+
+void LLProgressView::setShowLogos(const BOOL logos_visible)
+{
+    LLIconCtrl* logo = getChild<LLIconCtrl>("fmod_logo");
+    if (logos_visible)
+    {
+        logo->setValue(IMG_LOGO_FMOD);
+    }
+    logo->setVisible(logos_visible);
+    getChild<LLUICtrl>("fmod_text")->setVisible(logos_visible);
+    getChild<LLUICtrl>("message_text")->setVisible(!logos_visible);
 }
 
 void LLProgressView::setCancelButtonVisible(BOOL b, const std::string& label)
