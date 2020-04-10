@@ -565,10 +565,12 @@ class WindowsManifest(ViewerManifest):
 
             # </FS:Ansariel> Remove VMP
 
-        # Copy 3p icons
-        with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
-            if self.args['fmodstudio'] == 'ON':
-                self.path("fmod.png")
+        # <FS:Ansariel> [Progress Logos] Show logos on "About" floater instead
+        # # Copy 3p icons
+        # with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
+            # if self.args['fmodstudio'] == 'ON':
+                # self.path("fmod.png")
+        # </FS:Ansariel>
 
         # Plugin host application
         self.path2basename(os.path.join(os.pardir,
@@ -1330,10 +1332,12 @@ class DarwinManifest(ViewerManifest):
                 with self.prefix(src=pkgdir,dst=""):
                     self.path("ca-bundle.crt")
 
-                # Copy 3p icons
-                with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
-                    if self.args['fmodstudio'] == 'ON':
-                        self.path("fmod.png")
+                # <FS:Ansariel> [Progress Logos] Show logos on "About" floater instead
+                # # Copy 3p icons
+                # with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
+                    # if self.args['fmodstudio'] == 'ON':
+                        # self.path("fmod.png")
+                # </FS:Ansariel>
 
                 icon_path = self.icon_path()
                 with self.prefix(src=icon_path) :
@@ -2094,10 +2098,12 @@ class Linux_i686_Manifest(LinuxManifest):
         relpkgdir = os.path.join(pkgdir, "lib", "release")
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
-        # Copy 3p icons
-        with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
-            if self.args['fmodstudio'] == 'ON':
-                self.path("fmod.png")
+        # <FS:Ansariel> [Progress Logos] Show logos on "About" floater instead
+        # # Copy 3p icons
+        # with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
+            # if self.args['fmodstudio'] == 'ON':
+                # self.path("fmod.png")
+        # </FS:Ansariel>
 
         with self.prefix(src=relpkgdir, dst="lib"):
             self.path("libapr-1.so")

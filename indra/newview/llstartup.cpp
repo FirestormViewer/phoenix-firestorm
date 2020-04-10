@@ -1155,7 +1155,9 @@ bool idle_startup()
 		display_startup();
 		// LLViewerMedia::initBrowser();
 		LLStartUp::setStartupState( STATE_LOGIN_SHOW );
-		gViewerWindow->setShowLogos(TRUE);
+		// <FS:Ansariel> [Progress Logos] Show logos on "About" floater instead
+		//gViewerWindow->setShowLogos(TRUE);
+		// </FS:Ansariel>
 		return FALSE;
 	}
 
