@@ -99,15 +99,6 @@
 					<combo_box.item label="Słońce/Księżyc" name="1"/>
 					<combo_box.item label="Słońce/Księżyc + inne źródła" name="2"/>
 				</combo_box>
-				<text name="avatar_shadows_label">
-					Cienie postaci:
-				</text>
-				<combo_box name="AvatarShadowDetail">
-					<combo_box.item label="Brak" name="0"/>
-					<combo_box.item label="Uproszczone" name="1"/>
-					<combo_box.item label="Zoptymalizowane" name="2"/>
-					<combo_box.item label="Złożone" name="3"/>
-				</combo_box>
 			</panel>
 			<panel name="P_Shadow_Res">
 				<text name="T_Shadow_Res" tool_tip="Rozdzielczość cieni: To jest BARDZO ważne ustawienie, określa jakość cieni... i BARDZO obciąża komputer. Dobrym pomysłem jest ustawienie tego suwaka tak NISKO jak to tylko możliwe, kiedy nie robi się zdjęć. Kiedy jednak robisz zdjęcie ustaw wartość na 1.0, kiedy się przygotowujesz. Gdy wszystko będzie już na miejscu powolutku zwiększaj wartość w prawo - musisz być bardzo ostrożny/a i ciągle kontrolować ilość klatek na sekundę. Pomóc może włączenie podglądu statystyk (w karcie 'Pomoce', w 'Pomoce interfejsu'), gdy bawisz się tą opcją pierwsze kilka razy, przez co będzie możliwe określenie poziomu detali, który udźwignie Twój komputer. UWAGA: Ustawianie wartości zbyt wysoko lub zbyt szybko spowoduje zawieszenie się / awarię przeglądarki.">

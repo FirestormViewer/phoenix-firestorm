@@ -99,15 +99,6 @@
 					<combo_box.item label="Sole/Luna" name="1"/>
 					<combo_box.item label="Sole/Luna + altre fonti" name="2"/>
 				</combo_box>
-				<text name="avatar_shadows_label">
-					Ombre avatar
-				</text>
-				<combo_box name="AvatarShadowDetail">
-					<combo_box.item label="Nessuna" name="0"/>
-					<combo_box.item label="Semplificata" name="1"/>
-					<combo_box.item label="Ottimizzata" name="2"/>
-					<combo_box.item label="Complessa" name="3"/>
-				</combo_box>
 			</panel>
 			<panel name="P_Shadow_Res">
 				<text name="T_Shadow_Res" tool_tip="Risoluzione ombre: una impostazione molto importante. Determina la qualità delle ombre. Anche molto pesante per il computer. Può essere una buona idea lasciare questo valore più basso possibile quando non si scattano foto. Al momento di scattare, impostare a 1.0 durante la preparazione, quindi alzare lentamente il valore. Attenzione al framerate mentre si alza questo valore. Può essere utile aprire la barra delle statistiche (linguetta &apos;Aiuti&apos;) le prime volte, in modo da familiarizzare con i livelli di ombra che funzionano meglio sul proprio sistema. NOTA: alzando troppo, o troppo velocemente si possono provocare crash">

@@ -4,7 +4,7 @@
 	<menu_item_check label="Pokaż pasek wyszukiwarki" name="ShowSearchTopBar"/>
 	<menu_item_check label="Pokaż pasek ulubionych" name="ShowNavbarFavoritesPanel"/>
 	<menu_item_check label="Pokaż lokalizację" name="ShowMenuBarLocation"/>
-	<menu_item_check label="Pokaż kanał symulatora" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Pokaż wersję symulatora" name="FSStatusbarShowSimulatorVersion"/>
 	<menu_item_check label="Pokaż wyszukiwarkę pozycji w menu" name="FSMenuSearch"/>
 	<menu_item_check label="Pokaż stan konta" name="FSShowCurrencyBalanceInStatusbar"/>
 	<menu_item_check label="Pokaż kontrolki mediów" name="FSEnableVolumeControls"/>

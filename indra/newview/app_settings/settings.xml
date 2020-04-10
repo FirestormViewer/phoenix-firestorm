@@ -21404,17 +21404,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>Grey</string>
     </map>
-    <key>FSReleaseCandidateChannelId</key>
-    <map>
-      <key>Comment</key>
-      <string>Defines the string that identifies a simulator release candidate channel in the simulator version string.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>RC</string>
-    </map>
     <key>FSStatusbarShowSimulatorVersion</key>
     <map>
       <key>Comment</key>
