@@ -120,6 +120,8 @@ public:
 	
 	static void clearAllOpenHistories();	// <FS:CR> FIRE-11734
 
+	void onChatSearchButtonClicked();
+
 	BOOL handleDragAndDrop(S32 x, S32 y, MASK mask,
 							   BOOL drop, EDragAndDropType cargo_type,
 							   void *cargo_data, EAcceptance *accept,

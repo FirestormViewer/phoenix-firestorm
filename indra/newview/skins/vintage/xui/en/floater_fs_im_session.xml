@@ -407,6 +407,28 @@
        tool_tip="Chat Options"
        name="chat_options_btn"/>
     </layout_panel>
+    <layout_panel
+      name="lp_chat_search_btn"
+      auto_resize="false"
+      user_resize="false"
+      top="0"
+      layout="topleft"
+      height="26"
+      width="26"
+      follows="left|top">
+      <button
+       name="chat_search_btn"
+       follows="left|top"
+       height="20"
+       width="24"
+       left_delta="2"
+       image_pressed="Info_Press"
+       image_pressed_selected="PushButton_Selected_Press"
+       image_selected="PushButton_Selected_Press"
+       top="0"
+       tool_tip="Search chat"
+       image_overlay="Script_Search"/>
+    </layout_panel>
 
   <!-- Checkbox for FS prefix on support groups -->
     <layout_panel

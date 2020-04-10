@@ -105,26 +105,29 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 		pos_y -= pos_y % 2;
 	}
 
-	// <FS:Ansariel> FIRE-1874: Show server channel in statusbar
+	// <FS:Ansariel> FIRE-1874: Show server version in statusbar
 	static LLCachedControl<bool> fsStatusbarShowSimulatorVersion(gSavedSettings, "FSStatusbarShowSimulatorVersion");
-	static LLCachedControl<std::string> fsReleaseCandidateChannelId(gSavedSettings, "FSReleaseCandidateChannelId");
-	std::string simulator_channel;
+	std::string simulator_version;
 
 	if (fsStatusbarShowSimulatorVersion)
 	{
 		std::istringstream simulator_name(gLastVersionChannel);
-		std::string rc_part;
+		std::string version_part;
 
-		// RC identifier should be at 3rd position, RC name is at 4th
-		if ((simulator_name >> rc_part) &&
-			(simulator_name >> rc_part) &&
-			((simulator_name >> rc_part) && rc_part  == std::string(fsReleaseCandidateChannelId)) &&
-			(simulator_name >> rc_part))
+		// Format is "Second Life Server 2020-03-20T18:40:52.538914"
+		if ((simulator_name >> version_part) &&
+			(simulator_name >> version_part) &&
+			(simulator_name >> version_part) &&
+			(simulator_name >> version_part))
 		{
-			simulator_channel = rc_part;
+			size_t version_start = version_part.rfind('.');
+			if (version_start != std::string::npos && version_start != version_part.length() - 1)
+			{
+				simulator_version = version_part.substr(version_start + 1);
+			}
 		}
 	}
-	// </FS:Ansariel> FIRE-1874: Show server channel in statusbar
+	// </FS:Ansariel> FIRE-1874: Show server version in statusbar
 
 	// create a default name and description for the landmark
 	std::string parcel_name = LLViewerParcelMgr::getInstance()->getAgentParcelName();
@@ -179,11 +182,11 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 			break;
 		// <FS:Ansariel> V1 format statusbar
 		case LOCATION_FORMAT_V1:
-			if (fsStatusbarShowSimulatorVersion && !simulator_channel.empty())
+			if (fsStatusbarShowSimulatorVersion && !simulator_version.empty())
 			{
 				buffer = llformat("%s - %s - (%d, %d, %d)%s%s",
 					region_name.c_str(),
-					simulator_channel.c_str(),
+					simulator_version.c_str(),
 					pos_x, pos_y, pos_z,
 					sim_access_string.empty() ? "" : " - ",
 					sim_access_string.c_str());
@@ -198,11 +201,11 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 			}
 			break;
 		case LOCATION_FORMAT_V1_NO_COORDS:
-			if (fsStatusbarShowSimulatorVersion && !simulator_channel.empty())
+			if (fsStatusbarShowSimulatorVersion && !simulator_version.empty())
 			{
 				buffer = llformat("%s - %s%s%s",
 					region_name.c_str(),
-					simulator_channel.c_str(),
+					simulator_version.c_str(),
 					sim_access_string.empty() ? "" : " - ",
 					sim_access_string.c_str());
 			}
@@ -256,11 +259,11 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 			break;
 		// <FS:Ansariel> V1 format statusbar
 		case LOCATION_FORMAT_V1:
-			if (fsStatusbarShowSimulatorVersion && !simulator_channel.empty())
+			if (fsStatusbarShowSimulatorVersion && !simulator_version.empty())
 			{
 				buffer = llformat("%s - %s - (%d, %d, %d)%s%s - %s",
 					region_name.c_str(),
-					simulator_channel.c_str(),
+					simulator_version.c_str(),
 					pos_x, pos_y, pos_z,
 					sim_access_string.empty() ? "" : " - ",
 					sim_access_string.c_str(),
@@ -277,11 +280,11 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 			}
 			break;
 		case LOCATION_FORMAT_V1_NO_COORDS:
-			if (fsStatusbarShowSimulatorVersion && !simulator_channel.empty())
+			if (fsStatusbarShowSimulatorVersion && !simulator_version.empty())
 			{
 				buffer = llformat("%s - %s%s%s - %s",
 					region_name.c_str(),
-					simulator_channel.c_str(),
+					simulator_version.c_str(),
 					sim_access_string.empty() ? "" : " - ",
 					sim_access_string.c_str(),
 					parcel_name.c_str());

@@ -28,6 +28,7 @@
 
 // <FS:Ansariel> OpenSim legacy economy
 #include "llagent.h"
+#include "llagentpicksinfo.h"
 #include "lleconomy.h"
 #include "llstartup.h"
 #include "llviewercontrol.h"
@@ -198,7 +199,7 @@ S32 LLAgentBenefits::getPicksLimit() const
 {
 	// <FS:Ansariel> OpenSim legacy economy
 	//return m_picks_limit;
-	return LLGridManager::instance().isInSecondLife() ? m_picks_limit : 10;
+	return LLGridManager::instance().isInSecondLife() ? m_picks_limit : LLAgentPicksInfo::instance().getMaxNumberOfPicks();
 	// </FS:Ansariel>
 }
 

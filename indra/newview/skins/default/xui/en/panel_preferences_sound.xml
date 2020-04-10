@@ -2875,7 +2875,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when starting to type a chat message. This setting is shared with Chat &gt; General &gt; 'Hear typing sound when people type in local chat'."
+         tool_tip="Sound UUID played, when starting to type a chat message. This setting is shared with Chat &gt; General &gt; 'Hear typing sound when people type in nearby chat'."
          name="textFSTyping">
             Typing a message:
         </text>

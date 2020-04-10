@@ -5,7 +5,7 @@
 	<menu_item_check label="Favoritenleiste anzeigen" name="ShowNavbarFavoritesPanel"/>
 	<menu_item_check label="Mini-Standortleiste anzeigen" name="ShowMiniLocationPanel"/>
 	<menu_item_check label="Position anzeigen" name="ShowMenuBarLocation"/>
-	<menu_item_check label="Simulator-Kanal anzeigen" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Simulator-Version anzeigen" name="FSStatusbarShowSimulatorVersion"/>
 	<menu_item_check label="Menüsuche anzeigen" name="FSMenuSearch"/>
 	<menu_item_check label="Kontostand anzeigen" name="FSShowCurrencyBalanceInStatusbar"/>
 	<menu_item_check label="Mediensteuerung anzeigen" name="FSEnableVolumeControls"/>

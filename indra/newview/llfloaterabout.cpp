@@ -143,6 +143,10 @@ BOOL LLFloaterAbout::postBuild()
 	//	boost::bind(&LLFloaterAbout::onClickUpdateCheck, this));
 	// </FS:Ansariel>
 
+#if LL_FMODSTUDIO || LL_FMODEX
+	childSetVisible("logos_panel", true);
+#endif
+
 	static const LLUIColor about_color = LLUIColorTable::instance().getColor("TextFgReadOnlyColor");
 
 	if (gAgent.getRegion())

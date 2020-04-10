@@ -3,7 +3,7 @@
 <tab_container name="tabs">
 	<panel label="Świat" name="tab-world">
 		<check_box label="Powiadom mnie gdy wydaję lub dostaję L$" name="notify_money_change_checkbox"/>
-		<check_box name="FSPaymentInfoInChat" label="Zgłaszaj transakcje L$ w Czacie Lokalnym - nie w Tostach"/>
+		<check_box name="FSPaymentInfoInChat" label="Zgłaszaj transakcje L$ w czacie w pobliżu - nie w tostach"/>
 		<check_box label="Powiadom, jeśli wersja symulatora ulegnie zmianie podczas zmiany regionu" name="FSShowServerVersionChangeNotice" tool_tip="Wyświetla powiadomienie, jeśli wersja symulatora ulegnie zmianie podczas teleportowania się lub przekraczania granicy regionu."/>
 		<check_box label="Pobieraj najnowszego newsa z status.secondlifegrid.net przy logowaniu" name="AutoQueryGridStatus"/>
 		<check_box label="Włącz powiadomienia Growl" name="notify_growl_checkbox"/>
@@ -19,12 +19,12 @@
 			Powiadom, gdy znajomi się logują/wylogowywują:
 		</text>
 		<check_box label="W tostach" name="friends_online_notify_checkbox"/>
-		<check_box name="OnlineOfflinetoNearbyChat" label="W czacie lokalnym i konsoli"/>
-		<check_box label="Tylko w czacie lokalnym" name="OnlineOfflinetoNearbyChatHistory"/>
+		<check_box name="OnlineOfflinetoNearbyChat" label="W czacie w pobliżu i konsoli"/>
+		<check_box label="Tylko w czacie w pobliżu" name="OnlineOfflinetoNearbyChatHistory"/>
 	</panel>
 	<panel label="Obiekty i skrypty" name="tab-objects">
 		<check_box label="Mrugaj ikoną aplikacji, gdy otwiera się okno dialogowe skryptu, a [APP_NAME] jest w tle" name="FSFlashOnScriptDialog"/>
-		<check_box label="Powiadomienia o kolizjach w czacie lokalnym" name="FSCollisionMessagesInChat"/>
+		<check_box label="Powiadomienia o kolizjach w czacie w pobliżu" name="FSCollisionMessagesInChat"/>
 		<check_box label="Gdy wystąpi błąd skryptu to powiadom w:" name="show_script_errors"/>
 		<radio_group name="show_script_errors_location">
 			<radio_item label="Czacie" name="script_0"/>

@@ -127,16 +127,7 @@
 					<combo_box.item label="太陽/月" name="1" />
 					<combo_box.item label="太陽/月とプロジェクタ" name="2" />
 				</combo_box>
-				<text name="avatar_shadows_label">
-					アバターの影
-				</text>
-				<combo_box name="AvatarShadowDetail">
-					<combo_box.item label="なし" name="0" />
-					<combo_box.item label="簡略化" name="1" />
-					<combo_box.item label="最適化" name="2" />
-					<combo_box.item label="複雑化" name="3" />
-				</combo_box>
-			</panel>		
+			</panel>
 
 			<panel name="P_Shadow_Res">
 				<text name="T_Shadow_Res" tool_tip="影の解像度：これは非常に重要な設定です。ここで影の品質が決定されます。同時にこれはコンピュータにとって非常に重い設定でもあります。従って、撮影をしな時にはここの値を極力低くしておくのがよいと思います。撮影に当たっては、準備段階ではこの値を1.0に設定します。撮影準備が整ったら、スライダーバーをゆっくりと右の方に動かしてみて下さい。設定を上げて行く時は、フレームレートに注意していて下さい。この作業を行う時、最初の何回かは「統計バー」を表示しておくとよいでしょう。（「支援ツール」タブにあります。）どの位の設定にすればお使いのシステムで最も効果的な影が作れるか確認できると思います。※注意！　設定値を大きくし過ぎたり早く動かし過ぎたりするとビューワがクラッシュすることがあります。">
