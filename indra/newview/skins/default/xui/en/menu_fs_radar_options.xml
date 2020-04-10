@@ -197,7 +197,7 @@
 		</menu_item_check>
 	</context_menu>
 	<menu_item_check
-	 label="Local chat distance ring in Minimap"
+	 label="Nearby chat distance ring in Minimap"
 	 name="MiniMapChatRing">
 		<menu_item_check.on_check
 		 control="MiniMapChatRing"/>

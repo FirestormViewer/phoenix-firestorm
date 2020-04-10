@@ -28,6 +28,7 @@
 #include "llagentpicksinfo.h"
 
 #include "llagent.h"
+#include "llagentbenefits.h"
 #include "llavatarpropertiesprocessor.h"
 
 const S32 MAX_AVATAR_PICKS = 10;
@@ -112,7 +113,9 @@ void LLAgentPicksInfo::requestNumberOfPicks()
 
 bool LLAgentPicksInfo::isPickLimitReached()
 {
-	return getNumberOfPicks() >= getMaxNumberOfPicks();
+	// <FS:Ansariel> Picks premium perks integration
+	//return getNumberOfPicks() >= getMaxNumberOfPicks();
+	return getNumberOfPicks() >= LLAgentBenefitsMgr::current().getPicksLimit();
 }
 
 void LLAgentPicksInfo::onServerRespond(LLAvatarPicks* picks)

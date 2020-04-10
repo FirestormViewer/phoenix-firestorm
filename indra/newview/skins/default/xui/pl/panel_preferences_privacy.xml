@@ -25,7 +25,7 @@
 			<check_box label="Wyłącz mikrofon po zakończeniu rozmowy głosowej" name="auto_disengage_mic_check"/>
 			<check_box label="Pozwól oskryptowanym obiektom znać moje obecne ustawienie języka" name="LanguageIsPublic"/>
 			<check_box label="Automatycznie akceptuj nowe przedmioty" name="Auto_Accept_New_Inventory"/>
-			<check_box label="Pokaż w czacie lokalnym przedmioty zaakceptowane automatycznie" name="FSLogAutoAcceptInventoryToChat" />
+			<check_box label="Pokaż w czacie w pobliżu przedmioty zaakceptowane automatycznie" name="FSLogAutoAcceptInventoryToChat" />
 			<check_box label="Klasyczne powiadomienia akceptacji/odrzucenia przedmiotu" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Gdy włączysz tą opcję, to Przeglądarka będzie wysyłać powiadomienia o akceptacji/odrzuceniu przedmiotu tylko po naciśnięciu odpowiedniego przycisku. Gdy wyłączysz tą opcję, to powiadomienie będzie wysłane automatycznie zaraz po tym, gdy przedmiot zostanie zaakceptowany. Ta opcja nie ma żadnej mocy, gdy przedmioty są akceptowane automatycznie."/>
 			<check_box label="Automatycznie pokazuj akceptowane przedmioty" name="Show_In_Inventory"/>
 			<check_box label="Automatycznie pokazuj noty, tekstury i landmarki po zaakceptowaniu" name="Show_New_Inventory"/>
@@ -45,7 +45,7 @@
 			</combo_box>
 			<button label="Wyczyść dziennik" name="clear_log"/>
 			<button label="Usuń logi rozmów" name="delete_transcripts"/>
-			<check_box name="LogNearbyChat" label="Zapisuj log czatu lokalnego" tool_tip="Zapisuj wiadomości czatu lokalnego na twardym dysku swojego komputera"/>
+			<check_box name="LogNearbyChat" label="Zapisuj log czatu w pobliżu" tool_tip="Zapisuj wiadomości czatu w pobliżu na twardym dysku swojego komputera"/>
 			<check_box label="Używaj starego formatu nazw plików dla logów rozmów" name="UseLegacyIMLogNames" tool_tip="Włączenie tej opcji spowoduje używanie starego formatu nazw plików dla logów rozmów (Nazwa Użytkownika) zamiast nowego (nazwa_użytkownika)."/>
 			<check_box label="Dodawaj datę do nazw plików logów rozmów" name="LogFileNamewithDate" tool_tip="Dodawaj znaczniki czasu do logów czatów oraz IM w formacie czat-RRRR-MM-DD oraz 'Nazwa pliku IM'-RRRR-MM."/>
 			<check_box label="Używaj wbudowanej przeglądarki logów" name="FSUseBuiltInHistory" tool_tip="Używaj wbudowanej przeglądarki logów do przeglądania logów czatów. Gdy wyłączysz tą opcję, to logi będą się otwierać w domyślnym edytorze tekstowym Twojego systemu operacyjnego."/>

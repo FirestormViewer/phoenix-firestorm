@@ -674,3 +674,14 @@ void LLControlAvatar::onRegionChanged()
 		cav->mRegionChanged = true;
 	}
 }
+
+// <FS:Ansariel> FIRE-29012: Standalone animesh avatars get affected by complexity limit
+bool LLControlAvatar::isTooComplex() const
+{
+	if (mRootVolp && !mRootVolp->isAttachment())
+	{
+		return false;
+	}
+	return LLVOAvatar::isTooComplex();
+}
+// </FS:Ansariel>

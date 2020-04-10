@@ -2,7 +2,7 @@
 <panel
 background_visible="true"
  follows="all"
- height="570"
+ height="550"
  label="Group Creation"
  layout="topleft"
  min_height="350"
@@ -22,6 +22,17 @@ background_visible="true"
     height="29"
     width="313"
     layout="topleft">
+    <text
+     name="group_name_label"
+     left="8"
+     top="5"
+     width="68"
+     height="10"
+     type="string"
+     follows="top|left"
+     layout="topleft">
+    Group Name:
+    </text>
     <line_editor
      follows="left|right|top"
      font="SansSerif"
@@ -29,8 +40,8 @@ background_visible="true"
      layout="topleft"
      max_length_bytes="35"
      name="group_name_editor"
-     left="8"
-     top="5"
+     left_pad="8"
+     top="0"
      right="-5"
      height="20"
      visible="true" />
@@ -47,11 +58,10 @@ background_visible="true"
      right="-1">
         <panel
          name="content_panel"
-         follows="top|left"
+         follows="top|left|right"
          layout="topleft"
          top="5"
          left="5"
-         right="-5"
          bottom="-1">
 
   <layout_stack
@@ -60,8 +70,7 @@ background_visible="true"
      follows="all"
     left="8"
     top="0"
-    height="538"
-    width="300"
+    bottom="-8"
     border_size="0">
     <layout_panel
         bg_alpha_color="DkGray2"
@@ -73,15 +82,13 @@ background_visible="true"
         layout="topleft"
         auto_resize="false"
         user_resize="false"
-        height="206"
-        width="313">
+        height="206">
       <panel
          name="group_info_top2"
          follows="top|left|right"
          top="0"
          left="0"
          height="99"
-         width="312"
          layout="topleft">
         <texture_picker
          default_image_name="Generic_Group_Large"
@@ -119,7 +126,6 @@ background_visible="true"
             border="false"
             bg_alpha_color="FloaterUnfocusBorderColor"
             height="100"
-            width="313"
             left="0"
             name="preferences_container"
             top_pad="5">
@@ -139,8 +145,7 @@ background_visible="true"
          tool_tip="Sets whether to require an enrollment fee to join the group"
          top_pad="5"
          left_delta="0"
-         height="16"
-         width="300" />
+         height="16" />
         <spinner
          decimal_digits="0"
          follows="left|top"
@@ -186,7 +191,7 @@ background_visible="true"
       layout="topleft"
       auto_resize="false"
       user_resize="false"
-      height="200"
+      height="150"
       right="0">
       <text
         font="SansSerifSmall"

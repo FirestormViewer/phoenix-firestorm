@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="nearby_chat" title="Czat lokalny">
+<floater name="nearby_chat" title="Czat w pobliżu">
 	<floater.string name="chatbox_label">
-		Na czat lokalny
+		Na czat w pobliżu
 	</floater.string>
 	<layout_stack name="ls_control_panel">
 		<layout_panel name="lp_translate_btn">
 			<button tool_tip="Użyj zdefiniowanej wcześniej usługi tłumaczącej" name="translate_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_chat_history_btn">
-			<button tool_tip="Pokaż logi czatu lokalnego." name="chat_history_btn"/>
+			<button tool_tip="Pokaż logi czatu w pobliżu" name="chat_history_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_chat_history_muted_btn">
-			<button tool_tip="Pokazuj wyciszone wiadomości w oknie logu czatu lokalnego." name="chat_history_muted_btn"/>
+			<button tool_tip="Pokazuj wyciszone wiadomości w oknie logu czatu w pobliżu" name="chat_history_muted_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_options_btn">
 			<menu_button tool_tip="Opcje czatu" name="chat_options_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_search_btn">
+			<button name="chat_search_btn" tool_tip="Przeszukaj czat w pobliżu" />
 		</layout_panel>
 	</layout_stack>
 	<layout_stack name="ls_chat">
