@@ -9436,7 +9436,7 @@ static bool is_editable_selected()
 		}
 		else
 		{
-			if (!RlvActions::canEdit(hSelection->getFirstRootNode()->getObject()))
+			if (!RlvActions::canEdit(hSelection->getFirstEditableObject()))
 			{
 				return false;
 			}
