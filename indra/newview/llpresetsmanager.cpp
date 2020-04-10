@@ -341,8 +341,6 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
 	}
 	else if (IS_CAMERA)
 	{
-		// <FS:Ansariel> This wrong the wrong setting upstream and got removed, but it is done for graphic preset
-		gSavedSettings.setString("PresetCameraActive", name);
 		name_list.clear();
 		getControlNames(name_list);
 		name_list.push_back("PresetCameraActive");
