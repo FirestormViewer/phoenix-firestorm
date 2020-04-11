@@ -25083,6 +25083,39 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSRegionCrossingPositionErrorLimit</key>
+    <map>
+      <key>Comment</key>
+      <string>Region crossing position error limit in meters</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.25</real>
+    </map>
+    <key>FSRegionCrossingAngleErrorLimit</key>
+    <map>
+      <key>Comment</key>
+      <string>Region crossing angle error limit in degrees</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>20.0</real>
+    </map>
+    <key>FSRegionCrossingSmoothingTime</key>
+    <map>
+      <key>Comment</key>
+      <string>Region crossing smoothing filter time in seconds</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>10.0</real>
+    </map>
     <key>FSStatisticsNoFocus</key>
     <map>
       <key>Comment</key>
