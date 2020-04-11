@@ -337,6 +337,14 @@ BOOL LLInvFVBridge::isItemRemovable() const
 // Can be moved to another folder
 BOOL LLInvFVBridge::isItemMovable() const
 {
+	// <FS:Ansariel> FIRE-28977: Protect special and protected folders from being DaD'ed
+	if (isProtectedFolder())
+	{
+		// Child of a protected folder -> not movable
+		return FALSE;
+	}
+	// </FS:Ansariel
+
 	return TRUE;
 }
 
@@ -2384,6 +2392,14 @@ BOOL LLFolderBridge::isItemMovable() const
 		// If it's a protected type folder, we can't move it
 		if (LLFolderType::lookupIsProtectedType(((LLInventoryCategory*)obj)->getPreferredType()))
 			return FALSE;
+
+		// <FS:Ansariel> FIRE-28977: Protect special and protected folders from being DaD'ed
+		if (obj->getName() == ROOT_FIRESTORM_FOLDER || obj->getName() == RLV_ROOT_FOLDER || isProtectedFolder())
+		{
+			return FALSE;
+		}
+		// </FS:Ansariel>
+
 		return TRUE;
 	}
 	return FALSE;
