@@ -1090,16 +1090,35 @@ bool LLLandmarksPanel::isActionEnabled(const LLSD& userdata) const
 
 		return true;
 	}
-	else if("category" == command_name)
+	else if ("category" == command_name)
 	{
-		// we can add folder only in Landmarks Accordion
-		if (mCurrentSelectedList == mLandmarksInventoryPanel)
+		// <FS:Ansariel> FIRE-29367: Available actions in "Add" button menu in places window are incorrect
+		//// we can add folder only in Landmarks Accordion
+		//if (mCurrentSelectedList == mLandmarksInventoryPanel)
+		//{
+		//	// ... but except Received folder
+		//	return !isReceivedFolderSelected();
+		//}
+		////"Add a folder" is enabled by default (case when My Landmarks is empty)
+		//else return true;
+		std::string current_tabname;
+		LLView* accordion_view = findChildView("landmarks_accordion");
+		LLAccordionCtrl* accordion = dynamic_cast<LLAccordionCtrl*>(accordion_view);
+		if (accordion)
 		{
-			// ... but except Received folder
-			return !isReceivedFolderSelected();
+			current_tabname = accordion->getSelectedTab()->getName();
 		}
-		//"Add a folder" is enabled by default (case when My Landmarks is empty)
-		else return true;
+		else
+		{
+			LLTabContainer* tabcontainer = dynamic_cast<LLTabContainer*>(accordion_view);
+			if (tabcontainer)
+			{
+				current_tabname = tabcontainer->getCurrentPanel()->getName();
+			}
+		}
+
+		return current_tabname == "tab_landmarks";
+		// </FS:Ansariel>
 	}
 	else if("create_pick" == command_name)
 	{
@@ -1116,7 +1135,23 @@ bool LLLandmarksPanel::isActionEnabled(const LLSD& userdata) const
 // [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
 	else if("add_landmark" == command_name)
 	{
-		return !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC);
+		std::string current_tabname;
+		LLView* accordion_view = findChildView("landmarks_accordion");
+		LLAccordionCtrl* accordion = dynamic_cast<LLAccordionCtrl*>(accordion_view);
+		if (accordion)
+		{
+			current_tabname = accordion->getSelectedTab()->getName();
+		}
+		else
+		{
+			LLTabContainer* tabcontainer = dynamic_cast<LLTabContainer*>(accordion_view);
+			if (tabcontainer)
+			{
+				current_tabname = tabcontainer->getCurrentPanel()->getName();
+			}
+		}
+
+		return !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) && current_tabname != "tab_library";
 	}
 // [/RLVa:KB]
 	else
