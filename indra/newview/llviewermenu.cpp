@@ -9419,17 +9419,30 @@ class LLSomethingSelectedNoHUD : public view_listener_t
 static bool is_editable_selected()
 {
 // [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
-	// RELEASE-RLVa: [SL-2.2.0] Check that this still isn't called by anything but script actions in the Build menu
-	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_REMOVE)) )
+	// Changed for Firestorm because of script reset function in object menus (see FIRE-8213)
+	if (rlv_handler_t::isEnabled())
 	{
 		LLObjectSelectionHandle hSelection = LLSelectMgr::getInstance()->getSelection();
 
 		// NOTE: this is called for 5 different menu items so we'll trade accuracy for efficiency and only
 		//       examine root nodes (LLToolsSelectedScriptAction::handleEvent() will catch what we miss)
-		RlvSelectHasLockedAttach f;
-		if ( (hSelection->isAttachment()) && (hSelection->getFirstRootNode(&f)) )
+		if (hSelection->isAttachment())
 		{
-			return false;
+			RlvSelectHasLockedAttach f;
+			if (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_REMOVE) && hSelection->getFirstRootNode(&f))
+			{
+				return false;
+			}
+		}
+		else
+		{
+			// RlvSelectIsEditable will sort out all editable objects
+			// => if result = NULL, we can't edit all selected objects
+			RlvSelectIsEditable f;
+			if (hSelection->getFirstRootNode(&f) != NULL)
+			{
+				return false;
+			}
 		}
 	}
 // [/RLVa:KB]

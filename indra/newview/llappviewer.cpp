@@ -485,6 +485,7 @@ void init_default_trans_args()
 	default_trans_args.insert("create_account_url");
 	default_trans_args.insert("DOWNLOAD_URL"); //<FS:CR> Viewer download url
 	default_trans_args.insert("VIEWER_GENERATION"); // <FS:Ansariel> Viewer generation (major version number)
+	default_trans_args.insert("SHORT_VIEWER_GENERATION"); // <FS:Ansariel> Viewer generation (major version number)
 	default_trans_args.insert("APP_NAME_ABBR"); // <FS:Ansariel> Appreviated application title
 }
 
@@ -3485,6 +3486,7 @@ void LLAppViewer::initStrings()
 	LLStringUtil:: format_map_t gen_args;
 	gen_args["[VERSION]"] = llformat("%d", LLVersionInfo::getMajor());
 	LLTrans::setDefaultArg("[VIEWER_GENERATION]", LLTrans::getString("VIEWER_GENERATION", gen_args));
+	LLTrans::setDefaultArg("[SHORT_VIEWER_GENERATION]", LLTrans::getString("SHORT_VIEWER_GENERATION", gen_args));
 	// </FS:Ansariel>
 }
 

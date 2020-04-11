@@ -76,6 +76,9 @@ public:
     virtual bool shouldRenderRigged() const;
 
 	virtual BOOL isImpostor(); 
+
+    bool isTooComplex() const; // <FS:Ansariel> FIRE-29012: Standalone animesh avatars get affected by complexity limit
+
     
     bool mPlaying;
 

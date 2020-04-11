@@ -13,7 +13,7 @@ Tylko przygody o zasięgu ziemi mogą zostać dozwolone.
 Dozwolone przygody mogą być uruchamiane w tym Majątku.
 	</panel.string>
 	<panel.string name="blocked_estate_text">
-Tylko przygody o zasięgu siatki mogą zostać blokowane.
+Tylko przygody o zasięgu świata mogą zostać blokowane.
 
 Zablokowane przygody nie mogą być uruchamiane w tym Majątku.
 	</panel.string>

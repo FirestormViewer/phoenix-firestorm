@@ -3,5 +3,5 @@
 	<menu_item_check label="Sortuj według imion" name="sort_by_name" />
 	<menu_item_check label="Sortuj według daty" name="sort_by_date" />
 	<menu_item_check label="Umieść znajomych na górze" name="sort_by_friends" />
-	<menu_item_call label="Pokaż logi czatu lokalnego..." name="view_nearby_chat_history" />
+	<menu_item_call label="Pokaż logi czatu w pobliżu..." name="view_nearby_chat_history" />
 </toggleable_menu>

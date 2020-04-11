@@ -42,6 +42,9 @@
 		<layout_panel name="lp_options_btn">
 			<menu_button tool_tip="Opcje czatu" name="chat_options_btn"/>
 		</layout_panel>
+		<layout_panel name="lp_chat_search_btn">
+			<button name="chat_search_btn" tool_tip="Przeszukaj czat" />
+		</layout_panel>
 		<layout_panel name="support_panel">
 			<check_box label="Dodawaj wersję" name="FSSupportGroupChatPrefix_toggle" tool_tip="Dodaje aktualną wersję przeglądarki, informację o skórce, system operacyjny i status RLVa przed wiadomościami wysyłanymi przez Ciebie w tej grupie, co będzie pomagać członkom załogi wsparcia w prawidłowym diagnozowaniu Twoich problemów i poprawi dokładność odpowiedzi na Twoje pytania"/>
 		</layout_panel>
