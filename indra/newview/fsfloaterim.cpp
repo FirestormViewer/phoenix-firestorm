@@ -433,16 +433,29 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 						str_rlv_enabled = "*";
 					
 					
+					// Text mode check
+					std::string str_viewer_mode = "";
+					
+					// Unfortunately, we have to cheat a little here. Ideally we'd have
+					// a method defined to check if the viewer is running in Text Mode.
+					// For now, we will use the same method as used in llappviewer.cpp(LLAppViewer::getViewerInfo())
+					static LLCachedControl<std::string> FSViewerMode(gSavedSettings, "SessionSettingsFile");
+					std::string viewer_mode(FSViewerMode);
+					LLStringUtil::toLower(viewer_mode);
+					if(viewer_mode == "settings_text.xml")
+						str_viewer_mode = "T";
+					
+					
 					//Build it up
 					size_t insert_pos = is_irc_me_prefix(utf8_text) ? 4 : 0;
 					
 					//For testing/beta groups, we display the build version since it doesn't speed by and this might change often
 					if(chat_prefix_testing && FSData::getInstance()->isTestingGroup(mSessionID))
-						utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getBuildVersion() + skin_indicator + str_rlv_enabled + str_opensim_tag + ") "));
+						utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getBuildVersion() + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
 					
 					//For release support groups, only display the short version(Major.Minor.Patch) since chat can speed by. This makes it easier on Support's eyes.
 					else if(chat_prefix_support && FSData::getInstance()->isSupportGroup(mSessionID))
-						utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getShortVersion() + skin_indicator + str_rlv_enabled + str_opensim_tag + ") "));
+						utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + " " + LLVersionInfo::getShortVersion() + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
 				}
 				
 				// <FS:Techwolf Lupindo> Allow user to send system info.
