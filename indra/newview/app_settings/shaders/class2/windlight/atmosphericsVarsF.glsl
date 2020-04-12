@@ -1,5 +1,5 @@
 /** 
- * @file atmosphericVars.glsl
+ * @file class2\wl\atmosphericVars.glsl
  *
  * $LicenseInfo:firstyear=2007&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -32,14 +32,17 @@ vec3 getSunlitColor()
 {
 	return vec3(0,0,0);
 }
+
 vec3 getAmblitColor()
 {
 	return vec3(0,0,0);
 }
+
 vec3 getAdditiveColor()
 {
 	return vary_AdditiveColor;
 }
+
 vec3 getAtmosAttenuation()
 {
 	return vec3(vary_AtmosAttenuation);
