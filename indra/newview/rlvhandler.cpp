@@ -145,14 +145,58 @@ RlvHandler::RlvHandler() : m_fCanCancelTp(true), m_posSitSource(), m_pGCTimer(NU
 
 RlvHandler::~RlvHandler()
 {
+	cleanup();
+}
+
+void RlvHandler::cleanup()
+{
+	// Nothing to clean if we're not enabled (or already cleaned up)
+	if (!m_fEnabled)
+		return;
+
+	//
+	// Clean up any restrictions that are still active
+	//
+	RLV_ASSERT(LLApp::isQuitting());	// Several commands toggle debug settings but won't if they know the viewer is quitting
+
+	// Assume we have no way to predict how m_Objects will change so make a copy ahead of time
+	uuid_vec_t idRlvObjects;
+	idRlvObjects.reserve(m_Objects.size());
+	std::transform(m_Objects.begin(), m_Objects.end(), std::back_inserter(idRlvObjects), [](const rlv_object_map_t::value_type& kvPair) {return kvPair.first; });
+	for (const LLUUID & idRlvObj : idRlvObjects)
+	{
+		processCommand(idRlvObj, "clear", true);
+	}
+
+	// Sanity check
+	RLV_ASSERT(m_Objects.empty());
+	RLV_ASSERT(m_Exceptions.empty());
+	RLV_ASSERT(std::all_of(m_Behaviours, m_Behaviours + RLV_BHVR_COUNT, [](S16 cnt) { return !cnt; }));
+	RLV_ASSERT(m_CurCommandStack.empty());
+	RLV_ASSERT(m_CurObjectStack.empty());
+	RLV_ASSERT(m_pOverlayImage.isNull());
+
+	//
+	// Clean up what's left
+	//
 	gAgent.removeListener(this);
+	m_Retained.clear();
+	//delete m_pGCTimer;	// <- deletes itself
+
 	if (m_PendingGroupChange.first.notNull())
 	{
-		LLGroupMgr::instance().removeObserver(m_PendingGroupChange.first, this);
+		if (LLGroupMgr::instanceExists())
+			LLGroupMgr::instance().removeObserver(m_PendingGroupChange.first, this);
 		m_PendingGroupChange = std::make_pair(LLUUID::null, LLStringUtil::null);
 	}
 
-	//delete m_pGCTimer;	// <- deletes itself
+	for (RlvExtCommandHandler* pCmdHandler : m_CommandHandlers)
+	{
+		delete pCmdHandler;
+	}
+	m_CommandHandlers.clear();
+
+	m_fEnabled = false;
 }
 
 // ============================================================================
@@ -1030,6 +1074,12 @@ bool RlvHandler::onGC()
 	}
 
 	return (0 != m_Objects.size());	// GC will kill itself if it has nothing to do
+}
+
+// static
+void RlvHandler::cleanupClass()
+{
+	gRlvHandler.cleanup();
 }
 
 // Checked: 2009-11-26 (RLVa-1.1.0f) | Added: RLVa-1.1.0f

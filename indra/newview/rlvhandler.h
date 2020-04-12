@@ -173,6 +173,7 @@ protected:
 
 	// Externally invoked event handlers
 public:
+	void cleanup();
 	void onActiveGroupChanged();
 	void onAttach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
 	void onDetach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
@@ -183,6 +184,7 @@ public:
 	void onSitOrStand(bool fSitting);
 	void onTeleportFailed();
 	void onTeleportFinished(const LLVector3d& posArrival);
+	static void cleanupClass();
 	static void onIdleStartup(void* pParam);
 protected:
 	void getAttachmentResourcesCoro(const std::string& strUrl);
