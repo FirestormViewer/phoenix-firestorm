@@ -6309,7 +6309,18 @@ void LLViewerWindow::revealIntroPanel()
 	}
 }
 
-void LLViewerWindow::setShowProgress(const BOOL show,BOOL fullscreen)
+void LLViewerWindow::initTextures(S32 location_id)
+{
+    if (mProgressView)
+    {
+        // <FS:Ansariel> OpenSim support
+        //mProgressView->initTextures(location_id, LLGridManager::getInstance()->isInProductionGrid());
+        mProgressView->initTextures(location_id, LLGridManager::getInstance()->isInSLMain());
+        // </FS:Ansariel>
+    }
+}
+
+void LLViewerWindow::setShowProgress(const BOOL show, BOOL fullscreen)
 {
 	if(show)
 	{
@@ -6392,11 +6403,6 @@ void LLViewerWindow::setProgressCancelButtonVisible( BOOL b, const std::string& 
 	{
 		mProgressViewMini->setCancelButtonVisible( b, label );
 	}
-}
-
-void LLViewerWindow::setShowLogos(const BOOL show_3p_logos)
-{
-    mProgressView->setShowLogos(show_3p_logos);
 }
 
 LLProgressView *LLViewerWindow::getProgressView() const

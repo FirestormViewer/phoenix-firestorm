@@ -570,6 +570,8 @@ class WindowsManifest(ViewerManifest):
         # with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
             # if self.args['fmodstudio'] == 'ON':
                 # self.path("fmod.png")
+            # self.path("havok_logo.png")
+            # self.path("vivox_logo.png")
         # </FS:Ansariel>
 
         # Plugin host application
@@ -1337,6 +1339,8 @@ class DarwinManifest(ViewerManifest):
                 # with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
                     # if self.args['fmodstudio'] == 'ON':
                         # self.path("fmod.png")
+                    # self.path("havok_logo.png")
+                    # self.path("vivox_logo.png")
                 # </FS:Ansariel>
 
                 icon_path = self.icon_path()
@@ -2103,6 +2107,8 @@ class Linux_i686_Manifest(LinuxManifest):
         # with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
             # if self.args['fmodstudio'] == 'ON':
                 # self.path("fmod.png")
+            # self.path("havok_logo.png")
+            # self.path("vivox_logo.png")
         # </FS:Ansariel>
 
         with self.prefix(src=relpkgdir, dst="lib"):
