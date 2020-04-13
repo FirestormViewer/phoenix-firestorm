@@ -507,6 +507,10 @@ void LLLogChat::loadChatHistory(const std::string& file_name, std::list<LLSD>& m
 		std::string line(buffer);
 
 		// <FS:Ansariel> FIRE-28990: Unable to open chat transcript if file is UTF-8-BOM encoded
+		//               Technically it doesn't make sense to do it each iteration and ideally we
+		//               would do it once before the loop starts, but seeking backwards to the start of
+		//               the file causes the viewer's process being locked up for several seconds
+		//               during login, we just do it here to skip seeking backwards.
 		if (line.length() > 3 && line[0] == char(239) && line[1] == char(187) && line[2] == char(191))
 		{
 			line = line.substr(3);
@@ -1294,6 +1298,11 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 		std::string line(buffer);
 
 		// <FS:Ansariel> FIRE-28990: Unable to open chat transcript if file is UTF-8-BOM encoded
+		//               Technically it doesn't make sense to do it each iteration and ideally we
+		//               would do it once before the loop starts, but since this code was duplicated
+		//               from further above and in the other case seeking backwards to the start of
+		//               the file causes the viewer's process being locked up for several seconds
+		//               during login, we just do it here the same way we do above.
 		if (line.length() > 3 && line[0] == char(239) && line[1] == char(187) && line[2] == char(191))
 		{
 			line = line.substr(3);

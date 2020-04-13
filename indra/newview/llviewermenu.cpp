@@ -9436,7 +9436,10 @@ static bool is_editable_selected()
 		}
 		else
 		{
-			if (!RlvActions::canEdit(hSelection->getFirstRootNode()->getObject()))
+			// RlvSelectIsEditable will sort out all editable objects
+			// => if result = NULL, we can't edit all selected objects
+			RlvSelectIsEditable f;
+			if (hSelection->getFirstRootNode(&f) != NULL)
 			{
 				return false;
 			}

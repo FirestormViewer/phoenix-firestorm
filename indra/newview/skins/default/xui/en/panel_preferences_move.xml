@@ -574,9 +574,9 @@
          height="10"
          layout="topleft"
          name="Region_Crossing_Movement_Label"
-         width="175"
+         width="210"
          top_pad="10">
-            Movement at region crossing:
+            Region crossing movement prediction:
         </text>
         <radio_group
          control_name="FSExperimentalRegionCrossingMovementFix"
@@ -587,7 +587,7 @@
          top_delta="0"
          name="Region_Crossing_Movement">
             <radio_item
-             label="Predict"
+             label="Unlimited"
              name="move_predict"
              top_delta="20"
              layout="topleft"
@@ -596,7 +596,7 @@
              value="0"
              width="75" />
             <radio_item
-             label="Stop"
+             label="Stop when error gets too large"
              left_pad="0"
              layout="topleft"
              top_delta="0"

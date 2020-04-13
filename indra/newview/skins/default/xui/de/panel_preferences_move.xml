@@ -59,12 +59,12 @@
 			<check_box label="Warten auf Vor-Sprung- und Lande-Animationen deaktivieren" name="FSIgnoreFinishAnimation"/>
 			<check_box label="Avataren des Rückwärtsgehen in der lokalen Ansicht erlauben (SL-Standard)" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Falls aktiviert, gehen Avatare auf dem eigenen Bildschirm beim Rückwärtsgehen rückwärts, anstatt sich umzudrehen und anschließend vorwärts zu gehen. Diese Option hat nur lokalen Effekt und hat keinen Einfluss auf was andere sehen. Dies ist die Standardeinstellung im Second Life Viewer und kann u.U. durch den AO des Avatars übersteuert werden."/>
 			<check_box label="Avatar zum ausgewählten Objekt drehen" name="FSTurnAvatarToSelectedObject" tool_tip="Dreht den Avatar mit dem Gesicht zum aktuell ausgewählten Objekt."/>
-			<text name="Region_Crossing_Movement_Label" width="190">
-				Bewegung beim Regionswechsel:
+			<text name="Region_Crossing_Movement_Label" width="245">
+				Bewegungsvorhersage beim Regionswechsel:
 			</text>
 			<radio_group name="Region_Crossing_Movement">
-				<radio_item label="Vorhersage" name="move_predict" width="85" />
-				<radio_item label="Stop" name="move_stop" width="85" />
+				<radio_item label="Unbegrenzt" name="move_predict" width="85" />
+				<radio_item label="Stoppen, wenn Fehler zu groß" name="move_stop" width="85" />
 			</radio_group>
 			<text name="movelock_lbl">
 				Falls Movelock in der LSL-Brücke aktiviert ist...
