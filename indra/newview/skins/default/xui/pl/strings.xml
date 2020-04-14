@@ -725,6 +725,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="LoadingData">
 		Wczytywanie...
 	</string>
+	<string name="LockedFolder">
+		zablokowany
+	</string>
 	<string name="ProtectedFolder">
 		chroniony
 	</string>

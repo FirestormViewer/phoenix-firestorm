@@ -219,6 +219,7 @@
 			<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload"/>
 			<menu_item_call label="Importuj zbiór części..." name="import linkset"/>
 		</menu>
+		<menu_item_check label="Foldery chronione" name="Protected Folders" />
 		<menu_item_call label="Cofnij" name="Undo"/>
 		<menu_item_call label="Ponów" name="Redo"/>
 	</menu>
