@@ -570,6 +570,22 @@
          parameter="rename" />
     </menu_item_call>
     <menu_item_call
+     label="Protect"
+     layout="topleft"
+     name="ProtectFolder">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="protect_folder" />
+    </menu_item_call>
+    <menu_item_call
+     label="Unprotect"
+     layout="topleft"
+     name="UnprotectFolder">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="unprotect_folder" />
+    </menu_item_call>
+    <menu_item_call
      label="Copy Asset UUID"
      layout="topleft"
      name="Copy Asset UUID">

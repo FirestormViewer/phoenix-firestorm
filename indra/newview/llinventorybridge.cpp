@@ -337,8 +337,8 @@ BOOL LLInvFVBridge::isItemRemovable() const
 // Can be moved to another folder
 BOOL LLInvFVBridge::isItemMovable() const
 {
-	// <FS:Ansariel> FIRE-28977: Protect special and protected folders from being DaD'ed
-	if (isProtectedFolder())
+	// <FS:Ansariel> FIRE-28977: Lock special and locked folders from being DaD'ed
+	if (isLockedFolder())
 	{
 		// Child of a protected folder -> not movable
 		return FALSE;
@@ -868,9 +868,9 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 			if (!isInboxFolder())
 			{
 				items.push_back(std::string("Rename"));
-				// <FS> Protected folder
+				// <FS> Locked folder
 				//if (!isItemRenameable() || ((flags & FIRST_SELECTED_ITEM) == 0))
-				if (!isItemRenameable() || ((flags & FIRST_SELECTED_ITEM) == 0) || isProtectedFolder())
+				if (!isItemRenameable() || ((flags & FIRST_SELECTED_ITEM) == 0) || isLockedFolder())
 				// </FS>
 				{
 					disabled_items.push_back(std::string("Rename"));
@@ -928,7 +928,7 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 	//if (!isCOFFolder() && !isInboxFolder()
 	if (!isCOFFolder()
 		// <FS:TT> Client LSL Bridge (also for #AO)
-		&& !isProtectedFolder())
+		&& !isLockedFolder())
 		// </FS:TT>
 	{
 		items.push_back(std::string("Paste"));
@@ -940,7 +940,7 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 
 	if (gSavedSettings.getBOOL("InventoryLinking")
 		// <FS:TT> Client LSL Bridge (also for #AO)
-		&& !isProtectedFolder()
+		&& !isLockedFolder()
 		// </FS:TT>
 		)
 	{
@@ -1231,7 +1231,7 @@ void LLInvFVBridge::addMoveToDefaultFolderMenuOption(menuentry_vec_t& items)
 {
 	const LLInventoryObject* obj = getInventoryObject();
 
-	if (isAgentInventory() && !isProtectedFolder(true) && obj &&
+	if (isAgentInventory() && !isLockedFolder(true) && obj &&
 		obj->getActualType() != LLAssetType::AT_CATEGORY &&
 		obj->getActualType() != LLAssetType::AT_LINK_FOLDER &&
 		obj->getActualType() != LLAssetType::AT_LINK &&
@@ -1362,7 +1362,7 @@ BOOL LLInvFVBridge::isCOFFolder() const
 }
 
 // <FS:TT> Client LSL Bridge (also for #AO)
-BOOL LLInvFVBridge::isProtectedFolder(bool ignore_setting /*= false*/) const
+BOOL LLInvFVBridge::isLockedFolder(bool ignore_setting /*= false*/) const
 {
 	const LLInventoryModel* model = getInventoryModel();
 	if (!model)
@@ -1372,21 +1372,21 @@ BOOL LLInvFVBridge::isProtectedFolder(bool ignore_setting /*= false*/) const
 
 	if ((mUUID == FSLSLBridge::instance().getBridgeFolder()
 		|| model->isObjectDescendentOf(mUUID, FSLSLBridge::instance().getBridgeFolder()))
-		&& (gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder") || ignore_setting))
+		&& (gSavedPerAccountSettings.getBOOL("LockBridgeFolder") || ignore_setting))
 	{
 		return TRUE;
 	}
 
 	if ((mUUID == AOEngine::instance().getAOFolder()
 		|| model->isObjectDescendentOf(mUUID, AOEngine::instance().getAOFolder()))
-		&& (gSavedPerAccountSettings.getBOOL("ProtectAOFolders") || ignore_setting))
+		&& (gSavedPerAccountSettings.getBOOL("LockAOFolders") || ignore_setting))
 	{
 		return TRUE;
 	}
 
 	if ((mUUID == FSFloaterWearableFavorites::getFavoritesFolder()
 		|| model->isObjectDescendentOf(mUUID, FSFloaterWearableFavorites::getFavoritesFolder()))
-		&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders"))
+		&& gSavedPerAccountSettings.getBOOL("LockWearableFavoritesFolders"))
 	{
 		return TRUE;
 	}
@@ -2393,8 +2393,15 @@ BOOL LLFolderBridge::isItemMovable() const
 		if (LLFolderType::lookupIsProtectedType(((LLInventoryCategory*)obj)->getPreferredType()))
 			return FALSE;
 
-		// <FS:Ansariel> FIRE-28977: Protect special and protected folders from being DaD'ed
-		if (obj->getName() == ROOT_FIRESTORM_FOLDER || obj->getName() == RLV_ROOT_FOLDER || isProtectedFolder())
+		// <FS:Ansariel> FIRE-28977: Lock special and locked folders from being DaD'ed
+		if (obj->getName() == ROOT_FIRESTORM_FOLDER || obj->getName() == RLV_ROOT_FOLDER || isLockedFolder())
+		{
+			return FALSE;
+		}
+		// </FS:Ansariel>
+
+		// <FS:Ansariel> FIRE-29342: Protect folder option
+		if (isProtected())
 		{
 			return FALSE;
 		}
@@ -2543,6 +2550,13 @@ BOOL LLFolderBridge::isItemRemovable() const
 	{
 		return FALSE;
 	}
+
+	// <FS:Ansariel> FIRE-29342: Protected folder option
+	if (isProtected())
+	{
+		return FALSE;
+	}
+	// </FS:Ansariel>
 
 	LLInventoryPanel* panel = mInventoryPanel.get();
 	LLFolderViewFolder* folderp = dynamic_cast<LLFolderViewFolder*>(panel ?   panel->getItemByID(mUUID) : NULL);
@@ -2718,7 +2732,7 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 	if (!isAgentAvatarValid()) return FALSE;
 	if (!isAgentInventory()) return FALSE; // cannot drag categories into library
 	// <FS:TT> Client LSL Bridge (also for #AO)
-	if (isProtectedFolder()) return FALSE;
+	if (isLockedFolder()) return FALSE;
 	// </FS:TT>
 
 	LLInventoryPanel* destination_panel = mInventoryPanel.get();
@@ -3689,6 +3703,27 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
         const LLUUID &marketplacelistings_id = model->findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS, false);
         move_folder_to_marketplacelistings(cat, marketplacelistings_id, ("move_to_marketplace_listings" != action), (("copy_or_move_to_marketplace_listings" == action)));
     }
+	// <FS:Ansariel> FIRE-29342: Protect folder option
+	else if ("protect_folder" == action)
+	{
+		LLSD protected_folders = gSavedPerAccountSettings.getLLSD("FSProtectedFolders");
+		protected_folders.append(mUUID);
+		gSavedPerAccountSettings.setLLSD("FSProtectedFolders", protected_folders);
+	}
+	else if ("unprotect_folder" == action)
+	{
+		LLSD protected_folders = gSavedPerAccountSettings.getLLSD("FSProtectedFolders");
+		LLSD new_protected_folders;
+		for (LLSD::array_const_iterator it = protected_folders.beginArray(); it != protected_folders.endArray(); ++it)
+		{
+			if ((*it).asUUID() != mUUID)
+			{
+				new_protected_folders.append(*it);
+			}
+		}
+		gSavedPerAccountSettings.setLLSD("FSProtectedFolders", new_protected_folders);
+	}
+	// </FS:Ansariel>
 }
 
 void LLFolderBridge::gatherMessage(std::string& message, S32 depth, LLError::ELevel log_level)
@@ -4432,7 +4467,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 	}
 	else if(isAgentInventory()
 			// <FS:ND> moved from buildContextMenu after merge
-			&& !isProtectedFolder()
+			&& !isLockedFolder()
 			// </FS:ND>
 			) // do not allow creating in library
 	{
@@ -4567,7 +4602,26 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 		}
 	}
 
-	
+	// <FS:Ansariel> FIRE-29342: Protect folder option
+	if (isAgentInventory())
+	{
+		LLInventoryObject* obj = getInventoryObject();
+		if (obj)
+		{
+			if (!LLFolderType::lookupIsProtectedType(((LLInventoryCategory*)obj)->getPreferredType()))
+			{
+				if (isProtected())
+				{
+					items.push_back((std::string("UnprotectFolder")));
+				}
+				else
+				{
+					items.push_back((std::string("ProtectFolder")));
+				}
+			}
+		}
+	}
+	// </FS:Ansariel>
 
 	// Add menu items that are dependent on the contents of the folder.
 	LLViewerInventoryCategory* category = (LLViewerInventoryCategory *) model->getCategory(mUUID);
@@ -4965,6 +5019,19 @@ void LLFolderBridge::modifyOutfit(BOOL append)
 	}
 }
 
+// <FS:Ansariel> FIRE-29342: Protect folder option
+bool LLFolderBridge::isProtected() const
+{
+	LLInventoryModel* model = getInventoryModel();
+	if (model)
+	{
+		const uuid_set_t& categories = model->getProtectedCategories();
+		return categories.find(mUUID) != categories.end();
+	}
+
+	return false;
+}
+// </FS:Ansariel>
 
 // +=================================================+
 // |        LLMarketplaceFolderBridge                |
@@ -5354,7 +5421,7 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 	if (!isAgentInventory()) return FALSE; // cannot drag into library
 	if (!isAgentAvatarValid()) return FALSE;
 	// <FS:TT> Client LSL Bridge (also for #AO)
-	if (isProtectedFolder()) return FALSE;
+	if (isLockedFolder()) return FALSE;
 	// </FS:TT>
 
 	LLInventoryPanel* destination_panel = mInventoryPanel.get();
@@ -5859,16 +5926,16 @@ bool check_item(const LLUUID& item_id,
 #endif // 0
 // <FS:CR> Unused 2013.10.12
 
-// <FS:Ansariel> Special for protected folders
-bool LLFolderBridge::isProtected() const
+// <FS:Ansariel> Special for locked folders
+bool LLFolderBridge::isLocked() const
 {
-	static LLCachedControl<bool> protectAOFolders(gSavedPerAccountSettings, "ProtectAOFolders");
-	static LLCachedControl<bool> protectBridgeFolder(gSavedPerAccountSettings, "ProtectBridgeFolder");
-	static LLCachedControl<bool> WearableFavoritesprotectBridgeFolder(gSavedPerAccountSettings, "ProtectWearableFavoritesFolders");
+	static LLCachedControl<bool> LockAOFolders(gSavedPerAccountSettings, "LockAOFolders");
+	static LLCachedControl<bool> LockBridgeFolder(gSavedPerAccountSettings, "LockBridgeFolder");
+	static LLCachedControl<bool> LockWearableFavoritesFolders(gSavedPerAccountSettings, "LockWearableFavoritesFolders");
 
-	return ((mUUID == AOEngine::instance().getAOFolder() && protectAOFolders) ||
-		(mUUID == FSLSLBridge::instance().getBridgeFolder() && protectBridgeFolder) ||
-		(mUUID == FSFloaterWearableFavorites::getFavoritesFolder() && WearableFavoritesprotectBridgeFolder));
+	return ((mUUID == AOEngine::instance().getAOFolder() && LockAOFolders) ||
+		(mUUID == FSLSLBridge::instance().getBridgeFolder() && LockBridgeFolder) ||
+		(mUUID == FSFloaterWearableFavorites::getFavoritesFolder() && LockWearableFavoritesFolders));
 }
 // </FS:Ansariel>
 

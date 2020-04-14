@@ -798,6 +798,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="LoadingData">
 		Wird geladen...
 	</string>
+	<string name="LockedFolder">
+		gesperrt
+	</string>
 	<string name="ProtectedFolder">
 		geschützt
 	</string>

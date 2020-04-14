@@ -744,7 +744,7 @@
         <key>Value</key>
             <integer>0</integer>
         </map>
-    <key>ProtectAOFolders</key>
+    <key>LockAOFolders</key>
         <map>
         <key>Comment</key>
             <string>Keep the AO folders in Inventory safe from manual changes.</string>
@@ -769,7 +769,7 @@
                 <integer>0</integer>
             </array>
         </map>
-    <key>ProtectBridgeFolder</key>
+    <key>LockBridgeFolder</key>
         <map>
         <key>Comment</key>
             <string>Keep the Bridge folder in Inventory safe from manual changes.</string>
@@ -778,7 +778,7 @@
         <key>Value</key>
             <integer>1</integer>
         </map>
-    <key>ProtectWearableFavoritesFolders</key>
+    <key>LockWearableFavoritesFolders</key>
       <map>
         <key>Comment</key>
             <string>Keep the Wearable Favorites folder in Inventory safe from manual changes.</string>
@@ -1278,6 +1278,17 @@
             <string>Boolean</string>
         <key>Value</key>
             <integer>0</integer>
+        </map>
+     <key>FSProtectedFolders</key>
+        <map>
+        <key>Comment</key>
+            <string>A list of folder UUIDs that are protected from moving and deleting.</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>LLSD</string>
+        <key>Value</key>
+            <array/>
         </map>
     </map>
 </llsd>
