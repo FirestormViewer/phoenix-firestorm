@@ -63,7 +63,16 @@
            function="Floater.Toggle"
            parameter="inventory" />
         </menu_item_check>
-
+        <menu_item_check
+         label="Protected Folders"
+         name="Protected Folders">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="fs_protectedfolders" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="fs_protectedfolders" />
+        </menu_item_check>
         <menu_item_check
             label="Favorite Wearables"
             name="WearableFavorites">
@@ -1906,17 +1915,6 @@
                  parameter="" />
             </menu_item_call>
         </menu>
-        <menu_item_separator/>
-        <menu_item_check
-         label="Protected Folders"
-         name="Protected Folders">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="fs_protectedfolders" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="fs_protectedfolders" />
-            </menu_item_check>
         <menu_item_separator/>
         <menu_item_call
          enabled="false"

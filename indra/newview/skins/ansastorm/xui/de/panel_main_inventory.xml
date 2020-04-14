@@ -15,6 +15,7 @@
 			<menu_item_call name="inventory_share" label="Teilen"/>
 			<menu_item_call name="replace_links" label="Links ersetzen"/>
 			<menu_item_call name="inventory_new_window" label="Neues Inventar-Fenster"/>
+			<menu_item_check name="Protected Folders" label="Geschützte Ordner"/>
 			<menu_item_check name="add_inv_toggle" label="Objekte hinzufügen per Doppelklick"/>
 			<menu_item_check name="add_invclothing_toggle" label="Kleidung hinzufügen per Doppelklick"/>
 			<menu_item_call name="inventory_show_filters" label="Filter anzeigen"/>

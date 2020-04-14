@@ -6,6 +6,7 @@
 		<menu_item_call label="Kup L$" name="Buy and Sell L$"/>
 		<menu_item_check label="Moja szafa" name="Inventory"/>
 		<menu_item_check label="Moja szafa" name="ShowSidetrayInventory"/>
+		<menu_item_check label="Foldery chronione" name="Protected Folders" />
 		<menu_item_check label="Ulubione rzeczy" name="WearableFavorites"/>
 		<menu_item_call label="Miejsca" name="Picks"/>
 		<menu_item_call label="Przygody" name="Experiences"/>
@@ -219,7 +220,6 @@
 			<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload"/>
 			<menu_item_call label="Importuj zbiór części..." name="import linkset"/>
 		</menu>
-		<menu_item_check label="Foldery chronione" name="Protected Folders" />
 		<menu_item_call label="Cofnij" name="Undo"/>
 		<menu_item_call label="Ponów" name="Redo"/>
 	</menu>

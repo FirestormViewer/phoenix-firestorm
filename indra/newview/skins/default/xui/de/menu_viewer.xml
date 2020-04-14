@@ -8,6 +8,7 @@
 		<menu_item_call label="L$ kaufen" name="Buy and Sell L$"/>
 		<menu_item_check label="Inventar" name="Inventory"/>
 		<menu_item_check label="Inventar" name="ShowSidetrayInventory"/>
+		<menu_item_check label="Geschützte Ordner" name="Protected Folders"/>
 		<menu_item_check label="Kleidungsfavoriten" name="WearableFavorites"/>
 		<menu_item_call label="Auswahlen" name="Picks"/>
 		<menu_item_call label="Erlebnisse" name="Experiences"/>
@@ -224,7 +225,6 @@
 			<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
 			<menu_item_call label="Linkset importieren..." name="import linkset"/>
 		</menu>
-		<menu_item_check label="Geschützte Ordner" name="Protected Folders">
 		<menu_item_call label="Rückgängig" name="Undo"/>
 		<menu_item_call label="Wiederholen" name="Redo"/>
         <menu_item_call label="Lokaler Bitmap-Browser" name="Local Bitmap Browser"/>
