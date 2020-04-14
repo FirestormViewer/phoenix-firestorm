@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ positioning="cascading"
+ can_close="true"
+ can_resize="true"
+ height="350"
+ help_topic="fs_protected_folders"
+ min_height="150"
+ min_width="175"
+ layout="topleft"
+ name="floater_fs_protected_folders"
+ save_rect="true"
+ save_visibility="true"
+ single_instance="true"
+ reuse_instance="true"
+ title="Protected Folders"
+ width="310">
+	<floater.string name="UnknownFolder">
+		(Unknown Folder)
+	</floater.string>
+	<panel
+	 follows="left|top|right"
+	 height="27"
+	 layout="topleft"
+	 left="2"
+	 name="buttons_panel"
+	 right="-1"
+	 top="2">
+		<filter_editor
+		 follows="left|top|right"
+		 height="23"
+		 layout="topleft"
+		 left="3"
+		 label="Filter Protected Folders"
+		 max_length_chars="300"
+		 name="filter_input"
+		 top="1"
+		 right="-35" />
+		<button
+		 follows="right"
+		 height="25"
+		 image_hover_unselected="Toolbar_Middle_Over"
+		 image_overlay="TrashItem_Off"
+		 image_selected="Toolbar_Middle_Selected"
+		 image_unselected="Toolbar_Middle_Off"
+		 left_pad="2"
+		 layout="topleft"
+		 name="remove_btn"
+		 tool_tip="Remove folder from protected folder list"
+		 top_delta="0"
+		 width="31"/>
+	</panel>
+
+	<panel
+	 layout="topleft"
+	 follows="all"
+	 name="panel_fs_protected_folders"
+	 top="32"
+	 left="2"
+	 bottom="-2"
+	 right="-1">
+		<scroll_list
+		 draw_heading="true"
+		 follows="all"
+		 layout="topleft"
+		 top="0"
+		 left="0"
+		 bottom="-1"
+		 right="-1"
+		 sort_column="0"
+		 sort_ascending="true"
+		 name="folder_list"
+		 draw_stripes="true"
+		 multi_select="true">
+			<scroll_list.columns
+			 label="Name"
+			 name="name"
+			 dynamic_width="true"/>
+		</scroll_list>
+	</panel>
+</floater>
