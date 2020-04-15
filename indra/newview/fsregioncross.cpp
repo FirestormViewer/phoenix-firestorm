@@ -29,7 +29,7 @@
 #include "llviewercontrol.h"
 #include "llmath.h"                                             // normal build
 #include "llviewerobject.h"
-#include "llframetimer.h"                     
+#include "llframetimer.h"
 #include "fsregioncross.h"
 //
 //  Improved region crossing time limit prediction.
@@ -104,7 +104,7 @@ static inline F32 dividesafe(F32 num, F32 denom)
 {    return((denom > FP_MAG_THRESHOLD                           // avoid divide by zero
          || denom < -FP_MAG_THRESHOLD)        
         ? (num / denom)
-        : std::numeric_limits<F32>::infinity());                // return infinity if zero divide
+        : F32_MAX);                // return infinity if zero divide
 }
 //
 //  getextraptimelimit -- don't extrapolate further ahead than this during a region crossing.
@@ -121,11 +121,8 @@ F32 RegionCrossExtrapolateImpl::getextraptimelimit() const
     LLQuaternion rot = mOwner.getRotationRegion();              // transform in global coords
     const LLQuaternion& inverserot = rot.conjugate();           // transform global to local
     //  Calculate safe extrapolation time limit.
-    F32 extrapTimeLimit = std::min(
-        dividesafe(fsRegionCrossingPositionErrorLimit,
-            ((mOwner.getVelocity()*inverserot - mFilteredVel.get()).length())),
-        dividesafe(fsRegionCrossingAngleErrorLimit,
-            ((mOwner.getAngularVelocity()*inverserot - mFilteredAngVel.get()).length())));
+    F32 extrapTimeLimit = llmin(dividesafe(fsRegionCrossingPositionErrorLimit, ((mOwner.getVelocity()*inverserot - mFilteredVel.get()).length())),
+        dividesafe(fsRegionCrossingAngleErrorLimit, ((mOwner.getAngularVelocity()*inverserot - mFilteredAngVel.get()).length())));
     LL_INFOS() << "Region cross extrapolation safe limit " << extrapTimeLimit << " secs." << LL_ENDL;
     return(extrapTimeLimit);                                                   // do not extrapolate more than this
 }  
