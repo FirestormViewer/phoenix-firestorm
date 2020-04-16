@@ -32,9 +32,8 @@
 //  Improved region crossing support.
 //
 
-class LLViewerObject;                                               // forward declaration
+class LLViewerObject;
 
-//
 //  LowPassFilter -- a simple Kalman low-pass filter.
 //
 //  Supports nonuniform time deltas between samples, since object update times are not consistent.
@@ -43,26 +42,27 @@ class LowPassFilter
 {
 private:
     LLVector3 mFiltered;                                            // filtered value
-    BOOL mInitialized;                                              // true if initialized
+    bool mInitialized;
+
 public:
-    LowPassFilter() :                                               // constructor
+    LowPassFilter() :
     mInitialized(false),
-    mFiltered(0.0,0.0,0.0)
-    {}
+    mFiltered()
+    { }
+
     void update(const LLVector3& val, F32 dt);                      // add new value into filter
-    
+
     const LLVector3& get() const                                    // get filtered output
     {
-        return(mFiltered);                                          // already stored
+        return mFiltered;                                           // already stored
     }
-    
-    void clear() 
+
+    void clear()
     {
-        mInitialized = false;                                       // not initialized yet
+        mInitialized = false;
     }
 };
 
-//
 //  RegionCrossExtrapolateImpl -- the extrapolation limit calculator.
 //
 //  One of these is created when an object is sat upon. If the
@@ -79,16 +79,15 @@ private:
     F64 mPreviousUpdateTime;                                        // previous update time
     LowPassFilter mFilteredVel;                                     // filtered velocity
     LowPassFilter mFilteredAngVel;                                  // filtered angular velocity
-    BOOL mMoved;                                                    // seen to move at least once
+    bool mMoved;                                                    // seen to move at least once
 
 public:
-    RegionCrossExtrapolateImpl(const LLViewerObject& vo);           // constructor
+    RegionCrossExtrapolateImpl(const LLViewerObject& vo);
     void update();                                                  // update on object update message  
     F32 getextraptimelimit() const;                                 // don't extrapolate more than this
-    BOOL hasmoved() const { return(mMoved); }                       // true if has been seen to move with sitter
+    bool hasmoved() const { return (mMoved); }                      // true if has been seen to move with sitter
 };
 
-//
 //  RegionCrossExtrapolate -- calculate safe limit on how long to extrapolate after a region crossing
 //
 //  Member object of llViewerObject. For vehicles, a RegionCrossExtrapolateImpl is allocated to do the real work.
@@ -96,38 +95,57 @@ public:
 //  Call "changedlink" for any object update which changes parenting.
 //  Get the extrapolation limit time with getextraptimelimit.
 //
-class LLViewerObject;                                               // forward
-class RegionCrossExtrapolate {
+class RegionCrossExtrapolate
+{
 private:
-    std::unique_ptr<RegionCrossExtrapolateImpl> mImpl;              // pointer to region cross extrapolator, if present
-    
+    std::unique_ptr<RegionCrossExtrapolateImpl> mImpl;
+
 protected:
-    BOOL ifsaton(const LLViewerObject& vo);                         // true if root object and being sat on
-    
+    bool ifsaton(const LLViewerObject& vo);                         // true if root object and being sat on
+
 public:
     void update(const LLViewerObject& vo)                           // new object update message received
-    {   if (mImpl.get()) { mImpl->update(); }                       // update extrapolator if present
+    {
+        if (mImpl.get())
+        {
+            mImpl->update();                                        // update extrapolator if present
+        }
     }
-    
+
     void changedlink(const LLViewerObject& vo)                      // parent or child changed, check if extrapolation object needed
     {
         if (ifsaton(vo))                                            // if this object is now the root of a linkset with an avatar
-        {   if (!mImpl.get())                                       // if no extrapolation implementor
-            {   mImpl.reset(new RegionCrossExtrapolateImpl(vo)); }  // add an extrapolator       
-        } else {                                                    // not a vehicle
+        {
+            if (!mImpl.get())                                       // if no extrapolation implementor
+            {
+                mImpl.reset(new RegionCrossExtrapolateImpl(vo));    // add an extrapolator
+            }
+        }
+        else                                                        // not a vehicle
+        {
             if (mImpl.get())
-            {   mImpl.reset(); }                                    // no longer needed                           
+            {
+                mImpl.reset();                                      // no longer needed
+            }
         }
     }
-    
-    BOOL ismovingssaton(const LLViewerObject &vo)
-    {   if (!mImpl.get()) { return(false); }                        // not sat on
-        return(mImpl->hasmoved());                                  // sat on, check for moving
+
+    bool ismovingssaton(const LLViewerObject &vo)
+    {
+        if (!mImpl.get())
+        {
+            return (false);                                         // not sat on
+        }
+        return mImpl->hasmoved();                                   // sat on, check for moving
     }
-    
+
     F32 getextraptimelimit() const                                  // get extrapolation time limit
-    {   if (mImpl.get()) { return(mImpl->getextraptimelimit()); }   // get extrapolation time limit if vehicle
-        return(std::numeric_limits<F32>::infinity());               // no limit if not a vehicle
+    {
+        if (mImpl.get())
+        {
+            return mImpl->getextraptimelimit();                     // get extrapolation time limit if vehicle
+        }
+        return std::numeric_limits<F32>::infinity();                // no limit if not a vehicle
     }
 };
 
