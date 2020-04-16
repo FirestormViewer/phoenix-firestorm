@@ -104,7 +104,7 @@ static inline F32 dividesafe(F32 num, F32 denom)
 {    return((denom > FP_MAG_THRESHOLD                           // avoid divide by zero
          || denom < -FP_MAG_THRESHOLD)        
         ? (num / denom)
-        : F32_MAX);                // return infinity if zero divide
+        : std::numeric_limits<F32>::infinity());                // return infinity if zero divide
 }
 //
 //  getextraptimelimit -- don't extrapolate further ahead than this during a region crossing.

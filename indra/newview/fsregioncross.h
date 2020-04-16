@@ -127,7 +127,7 @@ public:
     
     F32 getextraptimelimit() const                                  // get extrapolation time limit
     {   if (mImpl.get()) { return(mImpl->getextraptimelimit()); }   // get extrapolation time limit if vehicle
-        return(F32_MAX);               // no limit if not a vehicle
+        return(std::numeric_limits<F32>::infinity());               // no limit if not a vehicle
     }
 };
 
