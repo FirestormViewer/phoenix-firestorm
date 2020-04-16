@@ -388,20 +388,6 @@ void LLAppCoreHttp::refreshSettings(bool initial)
 	// Global pipelining setting
 	bool pipeline_changed(false);
 	static const std::string http_pipelining("HttpPipelining");
-// <FS:Ansariel> FIRE-17287: Force HttpPipelining off on OpenSim
-#ifdef OPENSIM
-	if (LLGridManager::instance().isInOpenSim())
-	{
-		if (mPipelined)
-		{
-			mPipelined = false;
-			pipeline_changed = true;
-		}
-		LL_INFOS() << "HTTP Pipelining is not supported on OpenSim - setting to disabled." << LL_ENDL;
-	}
-	else
-#endif
-// </FS:Ansariel>
 	if (gSavedSettings.controlExists(http_pipelining))
 	{
 		// Default to true (in ctor) if absent.
