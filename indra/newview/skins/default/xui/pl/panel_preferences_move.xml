@@ -2,7 +2,7 @@
 <panel label="Ruch" name="move_panel">
 	<tab_container label="Ruch i widok" name="tabs">
 		<panel label="Widok" name="tab-view">
-			<slider label="Kąt widzenia" name="camera_fov"/>
+			<slider label="Kąt widzenia" name="camera_fov" tool_tip="W prawdziwym świecie to jest funkcja powiększania (zoom) - zmieni pole widzenia w oknie przeglądarki. Działa tak samo, jak naciskanie Ctrl+0 lub Ctrl+8. UWAGA: Ta opcja nie będzie działać, gdy będzie włączona 'wolna kamera' (3D SpaceNavigator)."/>
 			<slider label="Dystans" name="camera_offset_scale"/>
 			<slider label="Czas przejścia" name="camera_transition_time"/>
 			<slider label="Wygładzanie" name="camera_position_smoothing"/>
