@@ -3,7 +3,7 @@
 	<tab_container label="Move and View" name="tabs">
 		<!--View-->
 		<panel label="Ansicht" name="tab-view">
-			<slider label="Sichtwinkel" name="camera_fov"/>
+			<slider label="Sichtwinkel" name="camera_fov" tool_tip="In der echten Welt handelt es sich hierbei um ein Zoom-Feature. Es ändert den Sichtwinkel innerhalb des Viewer-Fensters. Er hat dieselbe Funktion wie das Drücken von Strg-0 oder Strg-8. HINWEIS: Diese Funktion funktioniert nicht, wenn Flycam aktiviert ist (3D SpaceNavigator)."/>
 			<slider label="Abstand" name="camera_offset_scale"/>
 			<slider label="Übergangszeit" name="camera_transition_time"/>
 			<slider label="Glättung" name="camera_position_smoothing"/>
