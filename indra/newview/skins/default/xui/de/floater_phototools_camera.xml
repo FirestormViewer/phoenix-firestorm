@@ -12,6 +12,9 @@
 	<floater.string name="free_mode_title">
 		Objekt ansehen
 	</floater.string>
+	<string name="inactive_combo_text">
+		Voreinstellung...
+	</string>
 
 	<tab_container name="tabs">
 		<panel name="P_Cam_Controls_1" label="Steuerung 1">

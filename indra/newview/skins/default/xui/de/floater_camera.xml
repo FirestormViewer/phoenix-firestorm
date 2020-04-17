@@ -12,7 +12,10 @@
 	<floater.string name="free_mode_title">
 		Objekt ansehen
 	</floater.string>
-	
+	<string name="inactive_combo_text">
+		Voreinstellung...
+	</string>
+
 	<panel name="controls">
 		<panel name="zoom">
 			<joystick_rotate name="cam_rotate_stick" tool_tip="Kamera um Fokus kreisen"/>
