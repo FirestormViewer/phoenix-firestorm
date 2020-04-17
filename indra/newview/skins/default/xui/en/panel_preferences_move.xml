@@ -56,6 +56,7 @@
          max_val="2.97"
          min_val="0.17"
          name="camera_fov"
+         tool_tip="In real world terms this is a Zoom feature. This will change the field of view in your viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpaceNavigator)."
          show_text="true"
          width="275" />
         <slider

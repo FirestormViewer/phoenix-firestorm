@@ -363,7 +363,7 @@
 				 layout="topleft"
 				 left="10"
 				 top_pad="12"
-				 tool_tip="In real world terms this is a Zoom feature. This will change the field of view in you viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpacenNavigator)."
+				 tool_tip="In real world terms this is a Zoom feature. This will change the field of view in your viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpacenNavigator)."
 				 width="100">
 					View angle
 				</text>
