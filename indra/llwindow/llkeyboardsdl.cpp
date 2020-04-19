@@ -281,7 +281,7 @@ MASK LLKeyboardSDL::currentMask(BOOL for_mouse_event)
 	// For keyboard events, consider Meta keys equivalent to Control
 	if (!for_mouse_event)
 	{
-		if (mask & KMOD_ALT) result |= MASK_CONTROL;
+		if (mask & KMOD_GUI) result |= MASK_CONTROL;
 	}
 
 	return result;

@@ -1498,7 +1498,8 @@ BOOL LLWindowSDL::SDLReallyCaptureInput(BOOL capture)
 					newGrab = true;
 				else
 					newGrab = false;
-			} else if (wantGrab == false)
+			}
+			else
 			{
 				newGrab = false;
 				
@@ -1507,13 +1508,12 @@ BOOL LLWindowSDL::SDLReallyCaptureInput(BOOL capture)
 				// Make sure the ungrab happens RIGHT NOW.
 				XSync(mSDL_Display, False);
 				maybe_unlock_display();
-			} else // not actually running on X11, for some reason
-				newGrab = wantGrab;
+			}
 		}
 	}
 #endif // LL_X11
 	// return boolean success for whether we ended up in the desired state
-	return (capture && newGrab) || (!capture && !newGrab);
+	return capture == newGrab;
 }
 
 U32 LLWindowSDL::SDLCheckGrabbyKeys(U32 keysym, BOOL gain)
@@ -1707,7 +1707,7 @@ void LLWindowSDL::gatherInput()
         {
 			case SDL_MOUSEWHEEL:
 				if( event.wheel.y != 0 )
-					mCallbacks->handleScrollWheel(this, event.wheel.y);
+					mCallbacks->handleScrollWheel(this, -event.wheel.y);
 				break;
 				
             case SDL_MOUSEMOTION:
