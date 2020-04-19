@@ -49,7 +49,7 @@
 			</radio_group>
 			<check_box name="IMShowNamesForP2PConv" label="Показывать имена в открытых ЛС" />
 			<check_box label="Использовать стиль V1 для заголовков чата" name="plain_text_chat_history" />
-			<check_box label="При использовании заголовков в V3 стиле, показывать мини аватарки" name="ShowChatMiniIcons" />
+			<check_box label="При использовании заголовков в [SHORT_VIEWER_GENERATION] стиле, показывать мини аватарки" name="ShowChatMiniIcons" />
 			<check_box label="Показывать конец предыдущей беседы" name="LogShowHistory"/>
 			<check_box name="FSTypingChevronPrefix" label="Добавить (&gt;) как индикатор набора текста в ЛС"/>
 			<text name="show_unread_messages_label">

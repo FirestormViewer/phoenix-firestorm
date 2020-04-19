@@ -15,6 +15,16 @@
          function="Inventory.GearDefault.Custom.Action"
          parameter="new_window" />
     </menu_item_call>
+    <menu_item_check
+     label="Protected Folders"
+     name="Protected Folders">
+        <menu_item_check.on_check
+         function="Floater.Visible"
+         parameter="fs_protectedfolders" />
+        <menu_item_check.on_click
+         function="Floater.Toggle"
+         parameter="fs_protectedfolders" />
+    </menu_item_check>
     <menu_item_separator
      layout="topleft" />
     <menu_item_check

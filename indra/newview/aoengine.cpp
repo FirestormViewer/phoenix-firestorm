@@ -963,11 +963,11 @@ LLUUID AOEngine::addSet(const std::string& name, BOOL reload)
 		return LLUUID::null;
 	}
 
-	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("ProtectAOFolders");
-	gSavedPerAccountSettings.setBOOL("ProtectAOFolders", FALSE);
+	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
+	gSavedPerAccountSettings.setBOOL("LockAOFolders", FALSE);
 	LL_DEBUGS("AOEngine") << "adding set folder " << name << LL_ENDL;
 	LLUUID newUUID = gInventory.createNewCategory(mAOFolder, LLFolderType::FT_NONE, name);
-	gSavedPerAccountSettings.setBOOL("ProtectAOFolders", wasProtected);
+	gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
 
 	if (reload)
 	{
@@ -1030,10 +1030,10 @@ BOOL AOEngine::addAnimation(const AOSet* set, AOSet::AOState* state, const LLInv
 	anim.mSortOrder = state->mAnimations.size() + 1;
 	state->mAnimations.push_back(anim);
 
-	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("ProtectAOFolders");
-	gSavedPerAccountSettings.setBOOL("ProtectAOFolders", FALSE);
+	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
+	gSavedPerAccountSettings.setBOOL("LockAOFolders", FALSE);
 	createAnimationLink(set, state, item);
-	gSavedPerAccountSettings.setBOOL("ProtectAOFolders", wasProtected);
+	gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
 
 	if (reload)
 	{
@@ -1060,8 +1060,8 @@ BOOL AOEngine::findForeignItems(const LLUUID& uuid) const
 	}
 
 	// count backwards in case we have to remove items
-	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("ProtectAOFolders");
-	gSavedPerAccountSettings.setBOOL("ProtectAOFolders", FALSE);
+	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
+	gSavedPerAccountSettings.setBOOL("LockAOFolders", FALSE);
 	for (S32 index = items->size() - 1; index >= 0; --index)
 	{
 		BOOL move = FALSE;
@@ -1093,7 +1093,7 @@ BOOL AOEngine::findForeignItems(const LLUUID& uuid) const
 			LL_DEBUGS("AOEngine") << item->getName() << " moved to lost and found!" << LL_ENDL;
 		}
 	}
-	gSavedPerAccountSettings.setBOOL("ProtectAOFolders", wasProtected);
+	gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
 
 	return moved;
 }
@@ -1102,8 +1102,8 @@ BOOL AOEngine::findForeignItems(const LLUUID& uuid) const
 void AOEngine::purgeFolder(const LLUUID& uuid) const
 {
 	// unprotect it
-	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("ProtectAOFolders");
-	gSavedPerAccountSettings.setBOOL("ProtectAOFolders", FALSE);
+	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
+	gSavedPerAccountSettings.setBOOL("LockAOFolders", FALSE);
 
 	// move everything that's not an animation link to "lost and found"
 	if (findForeignItems(uuid))
@@ -1123,7 +1123,7 @@ void AOEngine::purgeFolder(const LLUUID& uuid) const
 	gInventory.notifyObservers();
 
 	// protect it
-	gSavedPerAccountSettings.setBOOL("ProtectAOFolders", wasProtected);
+	gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
 }
 
 BOOL AOEngine::removeSet(AOSet* set)
@@ -1601,10 +1601,10 @@ void AOEngine::saveSet(const AOSet* set)
 	gInventory.addChangedMask(LLInventoryObserver::LABEL, cat->getUUID());
 	gInventory.notifyObservers();
 */
-	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("ProtectAOFolders");
-	gSavedPerAccountSettings.setBOOL("ProtectAOFolders", FALSE);
+	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
+	gSavedPerAccountSettings.setBOOL("LockAOFolders", FALSE);
 	rename_category(&gInventory, set->getInventoryUUID(), setParams);
-	gSavedPerAccountSettings.setBOOL("ProtectAOFolders", wasProtected);
+	gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
 
 	LL_INFOS("AOEngine") << "sending update signal" << LL_ENDL;
 	mUpdatedSignal();
@@ -1641,10 +1641,10 @@ void AOEngine::saveState(const AOSet::AOState* state)
 		stateParams += ":RN";
 	}
 
-	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("ProtectAOFolders");
-	gSavedPerAccountSettings.setBOOL("ProtectAOFolders", FALSE);
+	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
+	gSavedPerAccountSettings.setBOOL("LockAOFolders", FALSE);
 	rename_category(&gInventory, state->mInventoryUUID, stateParams);
-	gSavedPerAccountSettings.setBOOL("ProtectAOFolders", wasProtected);
+	gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
 }
 
 void AOEngine::saveSettings()

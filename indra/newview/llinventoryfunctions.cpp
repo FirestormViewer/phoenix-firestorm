@@ -643,21 +643,21 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 		return FALSE;
 	}
 
-	// <FS> Protected Folders
+	// <FS> Locked Folders
 	if (
 		(model->isObjectDescendentOf(id, AOEngine::instance().getAOFolder())
-			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+			&& gSavedPerAccountSettings.getBOOL("LockAOFolders"))
 		||
 		(model->isObjectDescendentOf(id, FSLSLBridge::instance().getBridgeFolder())
-			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+			&& gSavedPerAccountSettings.getBOOL("LockBridgeFolder"))
 		||
 		(model->isObjectDescendentOf(id, FSFloaterWearableFavorites::getFavoritesFolder())
-			&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders"))
+			&& gSavedPerAccountSettings.getBOOL("LockWearableFavoritesFolders"))
 		)
 	{
 		return FALSE;
 	}
-	// </FS> Protected Folders
+	// </FS> Locked Folders
 
 	// Disable delete from COF folder; have users explicitly choose "detach/take off",
 	// unless the item is not worn but in the COF (i.e. is bugged).
@@ -713,21 +713,21 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 	}
 // [/RLVa:KB]
 
-	// <FS> Protected Folders
+	// <FS> Locked Folders
 	if (
 		((id == AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id, AOEngine::instance().getAOFolder()))
-			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+			&& gSavedPerAccountSettings.getBOOL("LockAOFolders"))
 		||
 		((id == FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id, FSLSLBridge::instance().getBridgeFolder()))
-			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+			&& gSavedPerAccountSettings.getBOOL("LockBridgeFolder"))
 		||
 		((id == FSFloaterWearableFavorites::getFavoritesFolder() || model->isObjectDescendentOf(id, FSFloaterWearableFavorites::getFavoritesFolder()))
-			&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders"))
+			&& gSavedPerAccountSettings.getBOOL("LockWearableFavoritesFolders"))
 		)
 	{
 		return FALSE;
 	}
-	// </FS> Protected Folders
+	// </FS> Locked Folders
 
 	if (!isAgentAvatarValid()) return FALSE;
 
@@ -771,21 +771,21 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 	}
 // [/RLVa:KB]
 
-	// <FS> Protected Folders
+	// <FS> Locked Folders
 	if (
 		((id == AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id, AOEngine::instance().getAOFolder()))
-			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+			&& gSavedPerAccountSettings.getBOOL("LockAOFolders"))
 		||
 		((id == FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id, FSLSLBridge::instance().getBridgeFolder()))
-			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+			&& gSavedPerAccountSettings.getBOOL("LockBridgeFolder"))
 		||
 		((id == FSFloaterWearableFavorites::getFavoritesFolder() || model->isObjectDescendentOf(id, FSFloaterWearableFavorites::getFavoritesFolder()))
-			&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders"))
+			&& gSavedPerAccountSettings.getBOOL("LockWearableFavoritesFolders"))
 		)
 	{
 		return FALSE;
 	}
-	// </FS> Protected Folders
+	// </FS> Locked Folders
 
 	LLViewerInventoryCategory* cat = model->getCategory(id);
 
@@ -2611,8 +2611,8 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 				model->collectDescendents(obj->getUUID(), cats, items, FALSE);
 				LLUUID trash_id = model->findCategoryUUIDForType(LLFolderType::FT_TRASH);
 
-				BOOL old_setting = gSavedPerAccountSettings.getBOOL("ProtectAOFolders");
-				gSavedPerAccountSettings.setBOOL("ProtectAOFolders", FALSE);
+				BOOL old_setting = gSavedPerAccountSettings.getBOOL("LockAOFolders");
+				gSavedPerAccountSettings.setBOOL("LockAOFolders", FALSE);
 				for (LLInventoryModel::item_array_t::iterator it = items.begin(); it != items.end(); ++it)
 				{
 					if ((*it)->getIsLinkType() && LLAssetType::lookupIsLinkType((*it)->getType()))
@@ -2620,7 +2620,7 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 						model->removeItem((*it)->getUUID());
 					}
 				}
-				gSavedPerAccountSettings.setBOOL("ProtectAOFolders", old_setting);
+				gSavedPerAccountSettings.setBOOL("LockAOFolders", old_setting);
 			}
 		}
 		return;

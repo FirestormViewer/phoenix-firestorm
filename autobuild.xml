@@ -225,46 +225,6 @@
           </map>
         </map>
       </map>
-      <key>slvoice_os</key>
-      <map>
-        <key>copyright</key>
-        <string>2010 Vivox, including audio coding using Polycom¨ Siren14TM (ITU-T Rec. G.722.1 Annex C)</string>
-        <key>description</key>
-        <string>Vivox SDK components compatible with OpenSim</string>
-        <key>license</key>
-        <string>Mixed</string>
-        <key>license_file</key>
-        <string>LICENSES/slvoice_os.txt</string>
-        <key>name</key>
-        <string>slvoice_os</string>
-        <key>platforms</key>
-        <map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>8d0a31f4653202cbd5ea1711be47e669</string>
-              <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/slvoice_os-4.6.0017.22050.302004-windows-302004.tar.bz2</uri>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-          <key>darwin64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>d5673fc7ad1ec9595a9b97537681e060</string>
-              <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/slvoice_os-4.6.0017.22050.302004-darwin-302004.tar.bz2</uri>
-            </map>
-            <key>name</key>
-            <string>darwin64</string>
-          </map>
-        </map>
-      </map>
       <key>discord-rpc</key>
       <map>
         <key>copyright</key>
@@ -1086,11 +1046,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d62d82f427dfe77e417b50f503b295b6</string>
+              <string>b5b6897fb6f5413f3396b0666a6422ab</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.00.07-darwin-200602210.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.00.08-darwin-201031332.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1100,11 +1060,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7e114818d7e6688c956eca1bee149e99</string>
+              <string>aed9fbd15995e71f9b600eb2ed2b73b1</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.00.07-linux64-200271635.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.00.08-linux64-201031328.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1114,11 +1074,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3067612af8484188a50069bf9ecca987</string>
+              <string>670b2dc83403cc9024bc68728d851a4d</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.07-windows-200240843.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.08-windows-200921513.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1128,18 +1088,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a26e1b97c3fd2a8a7631ca84da8ab95d</string>
+              <string>b97c88e262d37dd1514c0e580a8cc775</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.07-windows64-200240848.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.08-windows64-200921514.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.00.05</string>
+        <string>2.00.08</string>
       </map>
       <key>fmodex</key>
       <map>

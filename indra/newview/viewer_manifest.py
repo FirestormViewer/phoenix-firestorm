@@ -786,18 +786,6 @@ class WindowsManifest(ViewerManifest):
                 self.path("msvcp120.dll")
                 self.path("msvcr120.dll")
 
-        # <FS:Ansariel> FIRE-22709: Local voice not working in OpenSim
-        if self.fs_is_opensim():
-            with self.prefix(src=os.path.join(relpkgdir, 'voice_os'), dst="voice_os"):
-                self.path("libsndfile-1.dll")
-                self.path("ortp.dll")
-                self.path("SLVoice.exe")
-                self.path("vivoxoal.dll")
-                self.path("vivoxsdk.dll")
-            with self.prefix(src=pkgdir, dst="voice_os"):
-                self.path("ca-bundle.crt")
-        # </FS:Ansariel>
-
         if not self.is_packaging_viewer():
             self.package_file = "copied_deps"    
 
@@ -1426,19 +1414,6 @@ class DarwinManifest(ViewerManifest):
                                 ):
                     self.path2basename(relpkgdir, libfile)
 
-                # <FS:Ansariel/TS> FIRE-22709: Local voice not working in OpenSim
-                if self.fs_is_opensim():
-                    with self.prefix(src=os.path.join(relpkgdir, 'voice_os'), dst="voice_os"):
-                        self.path('libortp.dylib')
-                        self.path('libsndfile.dylib')
-                        self.path('libvivoxoal.dylib')
-                        self.path('libvivoxsdk.dylib')
-                        self.path('libvivoxplatform.dylib')
-                        self.path('SLVoice')
-                    with self.prefix(src=pkgdir, dst="voice_os"):
-                        self.path("ca-bundle.crt")
-                # </FS:Ansariel/TS>
-
                 # dylibs that vary based on configuration
                 if self.args['fmodversion'].lower() == 'fmodstudio':
                     if self.args['configuration'].lower() == 'debug':
@@ -1503,7 +1478,7 @@ class DarwinManifest(ViewerManifest):
                     helperappfile = 'DullahanHelper.app'
                     self.path2basename(relpkgdir, helperappfile)
 
-                    pluginframeworkpath = self.dst_path_of('Chromium Embedded Framework.framework');
+                    pluginframeworkpath = self.dst_path_of('Chromium Embedded Framework.framework')
                     # Putting a Frameworks directory under Contents/MacOS
                     # isn't canonical, but the path baked into Dullahan
                     # Helper.app/Contents/MacOS/DullahanHelper is:
@@ -1773,11 +1748,6 @@ class DarwinManifest(ViewerManifest):
                                         'Resources/SLPlugin.app',
                                         'Resources/SLVoice',
                                         'Resources/mac-crash-logger.app']
-                    #<FS:TS> Even though we're signing the old version of SLVoice used with Vivox for OpenSim,
-                    # its presence will prevent the application bundle from being notarized because that version
-                    # was compiled against a version of the macOS SDK older than 10.9. 
-                    if self.fs_is_opensim():
-                        things_to_sign.append('Resources/voice_os/SLVoice')
                     while (not signed) and (sign_attempts > 0):
                         try:
                             sign_attempts-=1

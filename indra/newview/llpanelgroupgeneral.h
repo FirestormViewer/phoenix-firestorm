@@ -53,7 +53,6 @@ public:
 	virtual bool needsApply(std::string& mesg);
 	virtual bool apply(std::string& mesg);
 	virtual void cancel();
-	bool createGroupCallback(const LLSD& notification, const LLSD& response);
 	
 	virtual void update(LLGroupChange gc);
 	

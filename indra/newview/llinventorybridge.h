@@ -182,7 +182,7 @@ protected:
 	BOOL isLostInventory() const;
 // [/SL:KB]
 // <FS:TT> Client LSL Bridge
-	BOOL isProtectedFolder(bool ignore_setting = false) const;
+	BOOL isLockedFolder(bool ignore_setting = false) const;
 // </FS:TT>
 
 	virtual BOOL isItemPermissive() const;
@@ -350,7 +350,10 @@ public:
 
 	bool isLoading() { return mIsLoading; }
 
-	// <FS:Ansariel> Special for protected folders
+	// <FS:Ansariel> Special for locked folders
+	virtual bool isLocked() const;
+
+	// <FS:Ansariel> FIRE-29342: Protect folder option
 	virtual bool isProtected() const;
 
 protected:

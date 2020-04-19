@@ -56,6 +56,7 @@
          max_val="2.97"
          min_val="0.17"
          name="camera_fov"
+         tool_tip="In real world terms this is a Zoom feature. This will change the field of view in your viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpaceNavigator)."
          show_text="true"
          width="275" />
         <slider
@@ -493,7 +494,7 @@
          control_name="LetterKeysAffectsMovementNotFocusChatBar"
          follows="left|top"
          height="20"
-         label="Pressing letter keys affects movement (i.e. WASD) instead of starting local chat"
+         label="Pressing letter keys affects movement (i.e. WASD) instead of starting nearby chat"
          layout="topleft"
          left_delta="0"
          name="LetterKeysAffectsMovementNotFocusChatBar"
@@ -574,9 +575,9 @@
          height="10"
          layout="topleft"
          name="Region_Crossing_Movement_Label"
-         width="175"
+         width="210"
          top_pad="10">
-            Movement at region crossing:
+            Region crossing movement prediction:
         </text>
         <radio_group
          control_name="FSExperimentalRegionCrossingMovementFix"
@@ -587,7 +588,7 @@
          top_delta="0"
          name="Region_Crossing_Movement">
             <radio_item
-             label="Predict"
+             label="Unlimited"
              name="move_predict"
              top_delta="20"
              layout="topleft"
@@ -596,7 +597,7 @@
              value="0"
              width="75" />
             <radio_item
-             label="Stop"
+             label="Stop when error gets too large"
              left_pad="0"
              layout="topleft"
              top_delta="0"

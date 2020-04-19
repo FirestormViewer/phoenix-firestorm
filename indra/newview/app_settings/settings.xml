@@ -21404,17 +21404,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>Grey</string>
     </map>
-    <key>FSReleaseCandidateChannelId</key>
-    <map>
-      <key>Comment</key>
-      <string>Defines the string that identifies a simulator release candidate channel in the simulator version string.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>RC</string>
-    </map>
     <key>FSStatusbarShowSimulatorVersion</key>
     <map>
       <key>Comment</key>
@@ -25086,13 +25075,46 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSExperimentalRegionCrossingMovementFix</key>
     <map>
       <key>Comment</key>
-      <string>Enables the experimental fix for region crossing movements being bogus due to false predictions by the viewer (0 = Disabled, 1 = Enabled)</string>
+      <string>Enables the experimental fix for region crossing movements being bogus due to false predictions by the viewer (0 = Disabled (Unlimited prediction), 1 = Enabled (Predict until error gets too large))</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>FSRegionCrossingPositionErrorLimit</key>
+    <map>
+      <key>Comment</key>
+      <string>Region crossing position error limit in meters</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.25</real>
+    </map>
+    <key>FSRegionCrossingAngleErrorLimit</key>
+    <map>
+      <key>Comment</key>
+      <string>Region crossing angle error limit in degrees</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>20.0</real>
+    </map>
+    <key>FSRegionCrossingSmoothingTime</key>
+    <map>
+      <key>Comment</key>
+      <string>Region crossing smoothing filter time in seconds</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>10.0</real>
     </map>
     <key>FSStatisticsNoFocus</key>
     <map>

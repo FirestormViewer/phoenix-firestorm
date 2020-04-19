@@ -14,7 +14,7 @@
 	<spinner label="" name="inventory_snapshot_height"/>
 	<check_box label="Seitenverhältnis beibehalten" name="inventory_keep_aspect_check"/>
 	<text name="hint_lbl">
-		Das Speichern eines Bilds in Ihrem Inventar kostet [UPLOAD_COST] L$. Um das Bild als Textur zu speichern, wählen Sie eines der quadratischen Formate aus.
+		Um das Bild als Textur zu speichern, wählen Sie eines der quadratischen Formate aus.
 	</text>
 	<button label="&#x25B6; Auswahl" name="cancel_btn"/>
 	<button label="Speichern" name="save_btn"/>

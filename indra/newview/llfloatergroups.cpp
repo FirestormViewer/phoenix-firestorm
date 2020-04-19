@@ -38,6 +38,7 @@
 #include "roles_constants.h"
 
 #include "llagent.h"
+#include "llagentbenefits.h"
 #include "llbutton.h"
 #include "llgroupactions.h"
 #include "llscrolllistctrl.h"
@@ -175,7 +176,7 @@ void LLPanelGroups::reset()
 	}
 	// [CR] FIRE-12229
 	//getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d",gAgent.mGroups.size()));
-	//getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d",gMaxAgentGroups));
+	//getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d",LLAgentBenefitsMgr::current().getGroupMembershipLimit()));
 	getChild<LLUICtrl>("groupcount")->setValue(FSCommon::populateGroupCount());
 	// [/CR]
 
@@ -189,7 +190,7 @@ BOOL LLPanelGroups::postBuild()
 
 	// [CR] FIRE-12229
 	//getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d",gAgent.mGroups.size()));
-	//getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d",gMaxAgentGroups));
+	//getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d",LLAgentBenefitsMgr::current().getGroupMembershipLimit()));
 	getChild<LLUICtrl>("groupcount")->setValue(FSCommon::populateGroupCount());
 	// [/CR]
 

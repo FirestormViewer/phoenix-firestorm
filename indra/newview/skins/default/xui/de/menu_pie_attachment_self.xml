@@ -14,7 +14,7 @@
 			<pie_slice label="Backup" name="Backup"/>
 			<pie_slice label="Collada" name="Collada"/>
 		</pie_menu>
-		<pie_separator name="inspect_placeholder" />
+		<pie_slice label="Untersuchen" name="Avatar Inspect"/>
 		<pie_slice label="Texturen" name="Debug..."/>
 	</pie_menu>
 	<pie_slice label="Hinsetzen" name="Sit Down Here"/>

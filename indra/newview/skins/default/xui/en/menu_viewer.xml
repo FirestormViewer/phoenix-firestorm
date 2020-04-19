@@ -63,7 +63,16 @@
            function="Floater.Toggle"
            parameter="inventory" />
         </menu_item_check>
-
+        <menu_item_check
+         label="Protected Folders"
+         name="Protected Folders">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="fs_protectedfolders" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="fs_protectedfolders" />
+        </menu_item_check>
         <menu_item_check
             label="Favorite Wearables"
             name="WearableFavorites">
@@ -1832,7 +1841,7 @@
          name="Upload"
          tear_off="true">
             <menu_item_call
-             label="Image ([COST])..."
+             label="Image (L$[COST])..."
              layout="topleft"
              name="Upload Image"
              shortcut="control|U">
@@ -1843,10 +1852,10 @@
                  function="File.EnableUpload" />
                 <menu_item_call.on_visible
                  function="Upload.CalculateCosts"
-                 parameter="Upload Image" />
+                 parameter="Upload Image,texture" />
             </menu_item_call>
             <menu_item_call
-             label="Sound ([COST])..."
+             label="Sound (L$[COST])..."
              layout="topleft"
              name="Upload Sound">
                 <menu_item_call.on_click
@@ -1856,10 +1865,10 @@
                  function="File.EnableUpload" />
                 <menu_item_call.on_visible
                  function="Upload.CalculateCosts"
-                 parameter="Upload Sound" />
+                 parameter="Upload Sound,sound" />
             </menu_item_call>
             <menu_item_call
-             label="Animation ([COST])..."
+             label="Animation (L$[COST])..."
              layout="topleft"
              name="Upload Animation">
                 <menu_item_call.on_click
@@ -1869,7 +1878,7 @@
                  function="File.EnableUpload" />
                 <menu_item_call.on_visible
                  function="Upload.CalculateCosts"
-                 parameter="Upload Animation" />
+                 parameter="Upload Animation,animation" />
             </menu_item_call>
             <menu_item_call
              label="Mesh Model..."
@@ -1884,9 +1893,12 @@
             function="File.VisibleUploadModel"/>
             </menu_item_call>
 	   <menu_item_call
-             label="Bulk ([COST] per file)..."
+             label="Bulk..."
              layout="topleft"
              name="Bulk Upload">
+                <menu_item_call.on_visible
+                 function="Upload.CalculateCosts"
+                 parameter="Bulk Upload,texture" />
                 <menu_item_call.on_click
                  function="File.UploadBulk"
                  parameter="" />
