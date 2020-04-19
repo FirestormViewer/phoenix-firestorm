@@ -2777,8 +2777,8 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
           "${VIEWER_SYMBOL_FILE_CYGWIN}"
           "-C"
           "${PARENT_DIRECTORY_CYGWIN}"
-          "secondlife-bin.pdb"
-        DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/secondlife-bin.pdb"
+          "firestorm-bin.pdb"
+        DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-bin.pdb"
         COMMENT "Packing viewer PDB into ${VIEWER_SYMBOL_FILE_CYGWIN}"
         )
       add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}" ${VIEWER_BINARY_NAME})
