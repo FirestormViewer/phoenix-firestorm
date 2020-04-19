@@ -686,6 +686,13 @@ bool RlvCommand::parseCommand(const std::string& strCommand, std::string& strBeh
 //
 
 template<>
+bool RlvCommandOptionHelper::parseOption<std::string>(const std::string& strOption, std::string& valueOption)
+{
+	valueOption = strOption;
+	return true;
+}
+
+template<>
 bool RlvCommandOptionHelper::parseOption<LLUUID>(const std::string& strOption, LLUUID& idOption)
 {
 	return idOption.set(strOption, false);
@@ -767,6 +774,17 @@ bool RlvCommandOptionHelper::parseOption<LLViewerInventoryCategory*>(const std::
 }
 
 template<>
+bool RlvCommandOptionHelper::parseOption<LLVector2>(const std::string& strOption, LLVector2& vecOption)
+{
+	if (!strOption.empty())
+	{
+		S32 cntToken = sscanf(strOption.c_str(), "%f/%f", vecOption.mV + 0, vecOption.mV + 1);
+		return (2 == cntToken);
+	}
+	return false;
+}
+
+template<>
 bool RlvCommandOptionHelper::parseOption<LLVector3>(const std::string& strOption, LLVector3& vecOption)
  {
 	if (!strOption.empty())
@@ -783,6 +801,17 @@ bool RlvCommandOptionHelper::parseOption<LLVector3d>(const std::string& strOptio
 	if (!strOption.empty())
 	{
 		S32 cntToken = sscanf(strOption.c_str(), "%lf/%lf/%lf", vecOption.mdV + 0, vecOption.mdV + 1, vecOption.mdV + 2);
+		return (3 == cntToken);
+	}
+	return false;
+}
+
+template<>
+bool RlvCommandOptionHelper::parseOption<LLColor3>(const std::string& strOption, LLColor3& clrOption)
+{
+	if (!strOption.empty())
+	{
+		S32 cntToken = sscanf(strOption.c_str(), "%f/%f/%f", clrOption.mV + 0, clrOption.mV + 1, clrOption.mV + 2);
 		return (3 == cntToken);
 	}
 	return false;

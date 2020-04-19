@@ -40,7 +40,7 @@ namespace
     const LLUUID IMG_HALO("12149143-f599-91a7-77ac-b52a3c0f59cd");
 }
 
-namespace {
+//namespace {
     LLQuaternion convert_azimuth_and_altitude_to_quat(F32 azimuth, F32 altitude)
     {
         F32 sinTheta = sin(azimuth);
@@ -64,7 +64,7 @@ namespace {
 
         return quat;
     }
-}
+//}
 
 static LLTrace::BlockTimerStatHandle FTM_BLEND_SKYVALUES("Blending Sky Environment");
 static LLTrace::BlockTimerStatHandle FTM_RECALCULATE_SKYVALUES("Recalculate Sky");

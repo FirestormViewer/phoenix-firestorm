@@ -56,6 +56,7 @@
 
 // RLVa includes
 #include "rlvactions.h"
+#include "rlvenvironment.h"
 #include "rlvfloaters.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
@@ -1433,6 +1434,7 @@ bool RlvHandler::setEnabled(bool fEnable)
 		RlvSettings::initClass();
 		RlvStrings::initClass();
 
+		RlvHandler::instance().addCommandHandler(new RlvEnvironment());
 		RlvHandler::instance().addCommandHandler(new RlvExtGetSet());
 
 		// Make sure we get notified when login is successful
