@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- height="262"
+ height="282"
  width="500"
  help_topic="collada_export"
  layout="topleft"
@@ -20,7 +20,7 @@
 	follows="all"
 	layout="topleft"
 	width="500"
-	height="242"
+	height="262"
 	left="0"
 	orientation="horizontal"
 	top="18"
@@ -31,7 +31,7 @@
 	 left="0"
 	 min_width="5"
 	 width="250"
-	 height="242"
+	 height="262"
 	 name="control_panel">
 	<text
 	 follows="left|top"
@@ -76,7 +76,7 @@
 	 layout="topleft"
 	 left="4"
 	 name="OptionsText"
-	 top_pad="46"
+	 top_pad="42"
 	 width="235">
 		Options:
 	</text>
@@ -118,6 +118,15 @@
 	 label="Apply texture params"
 	 layout="topleft"
 	 name="texture_params_check"
+	 top_pad="2"
+	 width="235" />
+	<check_box
+	 control_name="DAEExportSingleUVMap"
+	 follows="left|bottom"
+	 height="16"
+	 label="Single UV Map"
+	 layout="topleft"
+	 name="single_uv_map_check"
 	 top_pad="2"
 	 width="235" />
 	<text
@@ -162,7 +171,7 @@
 	 left="0"
 	 min_width="5"
 	 width="250"
-	 height="242"
+	 height="262"
 	 name="tex_layout_panel">
 	  <scroll_container
 	   opaque="false"
