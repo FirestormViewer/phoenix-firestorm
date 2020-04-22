@@ -28,7 +28,7 @@
 	<check_box label="Pokaż foldery" name="show_folders_check"/>
 	<button label="Dodaj" label_selected="Dodaj" name="l_add_btn"/>
 	<button label="Usuń" label_selected="Usuń" name="l_rem_btn"/>
-	<button label="Załaduj" label_selected="Załaduj" name="l_upl_btn"/>
+	<button label="Prześlij" label_selected="Prześlij" name="l_upl_btn"/>
 	<scroll_list name="l_name_list">
 		<column name="unit_name" label="Nazwa"/>
 	</scroll_list>

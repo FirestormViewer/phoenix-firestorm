@@ -27,6 +27,7 @@
 			<check_box label="Konsoliduj tekstury" name="consolidate_check" />
 			<check_box label="Pomiń przezroczystość" name="skip_transparent_check" />
 			<check_box label="Stosuj parametry tekstur" name="texture_params_check" />
+			<check_box label="Pojedyncza mapa UV" name="single_uv_map_check" />
 			<text name="TextureFormatText">
 				Format tekstur:
 			</text>

@@ -22,7 +22,7 @@
 		<text name="label_7" tool_tip="Domyślne uprawnienia dla nowych obiektów">
 			Obiekty
 		</text>
-		<text name="label_8" tool_tip="Domyślne uprawnienia dla nowych przedmiotów ładowanych z dysku">
+		<text name="label_8" tool_tip="Domyślne uprawnienia dla nowych przedmiotów przesyłanych z dysku">
 			Z dysku
 		</text>
 		<text name="label_9" tool_tip="Domyślne uprawnienia dla nowych skryptów">

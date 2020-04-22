@@ -3,7 +3,7 @@
 	<menu_item_call label="Załóż - Zastąp obecny strój" name="wear_replace" />
 	<menu_item_call label="Załóż - Dodaj do obecnego stroju" name="wear_add" />
 	<menu_item_call label="Zdejmij - Usuń z obecnego stroju" name="take_off" />
-	<menu_item_call label="Załaduj zdjęcie ([UPLOAD_COST] L$)" name="upload_photo" />
+	<menu_item_call label="Prześlij zdjęcie ([UPLOAD_COST] L$)" name="upload_photo" />
 	<menu_item_call label="Wybierz zdjęcie" name="select_photo" />
 	<menu_item_call label="Zrób zdjęcie" name="take_snapshot" />
 	<menu_item_call label="Usuń zdjęcie" name="remove_photo" />
