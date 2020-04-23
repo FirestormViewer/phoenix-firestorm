@@ -55,7 +55,6 @@
 		<string>RenderWaterRefResolution</string>
 		<string>TextureDiscardLevel</string>
 		<string>TextureMemory</string>
-		<string>VertexShaderEnable</string>
 		<string>WindLightUseAtmosShaders</string>
 		<string>WLSkyDetail</string>
 	</array>

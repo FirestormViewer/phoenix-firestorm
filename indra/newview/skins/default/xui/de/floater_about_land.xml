@@ -506,5 +506,6 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			</panel>
 		</panel>
 		<panel label="Erlebnis" name="land_experiences_panel"/>
+		<panel label="Umgebung" name="land_environment_panel"/>
 	</tab_container>
 </floater>

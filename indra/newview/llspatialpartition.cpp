@@ -55,8 +55,6 @@
 #include "llviewershadermgr.h"
 #include "llcontrolavatar.h"
 
-//#pragma optimize("", off)
-
 #include "llvotree.h"
 
 static LLTrace::BlockTimerStatHandle FTM_FRUSTUM_CULL("Frustum Culling");
@@ -1102,6 +1100,11 @@ public:
 
 	virtual bool earlyFail(LLViewerOctreeGroup* base_group)
 	{
+        if (LLPipeline::sReflectionRender)
+        {
+            return false;
+        }
+
 		LLSpatialGroup* group = (LLSpatialGroup*)base_group;
 		group->checkOcclusion();
 

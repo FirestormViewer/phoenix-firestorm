@@ -12,6 +12,7 @@
 	<radio_group name="mode_selection">
 		<radio_item label="Inventar" name="inventory"/>
 		<radio_item label="Lokal" name="local"/>
+		<radio_item label="Backen" name="bake"/>
 	</radio_group>
 	<text name="unknown">
 		Größe:
@@ -22,7 +23,6 @@
 	<button label="Leer" label_selected="Leer" name="Blank"/>
 	<button label="Transparent" label_selected="Transparent" name="Transparent" tool_tip="Hinweis: Falls eine transparente Textur oder eine andere Textur mit teilweiser Transparenz gewählt wird, wird kein Licht projiziert."/>
 	<button label="" label_selected="" name="Pipette"/>
-	<check_box label="Live-Vorschau" name="apply_immediate_check"/>
 	<text name="preview_disabled">
 		Vorschau deaktiviert
 	</text>
@@ -35,8 +35,24 @@
 		<column name="unit_name" label="Name"/>
 		<column name="unit_id_HIDDEN" label="ID"/>
 	</scroll_list>
+	<combo_box name="l_bake_use_texture_combo_box" tool_tip="Back-Textur auswählen">
+		<combo_box.item label="Keine" name="None"/>
+		<combo_box.item label="BAKED_HEAD" name="BAKED_HEAD"/>
+		<combo_box.item label="BAKED_UPPER" name="BAKED_UPPER"/>
+		<combo_box.item label="BAKED_LOWER" name="BAKED_LOWER"/>
+		<combo_box.item label="BAKED_EYES" name="BAKED_EYES"/>
+		<combo_box.item label="BAKED_SKIRT" name="BAKED_SKIRT"/>
+		<combo_box.item label="BAKED_HAIR" name="BAKED_HAIR"/>
+		<combo_box.item label="BAKED_LEFTARM" name="BAKED_LEFTARM"/>
+		<combo_box.item label="BAKED_LEFTLEG" name="BAKED_LEFTLEG"/>
+		<combo_box.item label="BAKED_AUX1" name="BAKED_AUX1"/>
+		<combo_box.item label="BAKED_AUX2" name="BAKED_AUX2"/>
+		<combo_box.item label="BAKED_AUX3" name="BAKED_AUX3"/>
+	</combo_box>
+	<check_box label="Basis-Mesh-Region verbergen" name="hide_base_mesh_region"/>
 	<line_editor name="TextureKey" tool_tip="Textur-UUID"/>
 	<button name="TextureKeyApply" label="UUID anwenden" tool_tip="Textur mit dieser UUID anwenden"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="Cancel"/>
 	<button label="OK" label_selected="OK" name="Select" left="135"/>
+	<check_box label="Live-Vorschau" name="apply_immediate_check"/>
 </floater>

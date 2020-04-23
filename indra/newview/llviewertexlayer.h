@@ -99,7 +99,10 @@ private:
 	// Tex Layer Render
 	//--------------------------------------------------------------------
 	virtual void			preRenderTexLayerSet();
-	virtual void			midRenderTexLayerSet(BOOL success);
+	// <FS:Ansariel> [Legacy Bake]
+	//virtual void			midRenderTexLayerSet(BOOL success);
+	virtual void			midRenderTexLayerSet(BOOL success, LLRenderTarget* bound_target);
+	// </FS:Ansariel> [Legacy Bake]
 	virtual void			postRenderTexLayerSet(BOOL success);
 	virtual S32				getCompositeOriginX() const { return getOriginX(); }
 	virtual S32				getCompositeOriginY() const { return getOriginY(); }
@@ -115,7 +118,7 @@ protected:
 	// Pass these along for tex layer rendering.
 	virtual void			preRender(BOOL clear_depth) { preRenderTexLayerSet(); }
 	virtual void			postRender(BOOL success) { postRenderTexLayerSet(success); }
-	virtual BOOL			render() { return renderTexLayerSet(); }
+	virtual BOOL			render() { return renderTexLayerSet(mBoundTarget); }
 
 // <FS:Ansariel> [Legacy Bake]
 	//--------------------------------------------------------------------
@@ -132,7 +135,7 @@ public:
 													S32 result, LLExtStat ext_status);
 protected:
 	BOOL					isReadyToUpload() const;
-	void					doUpload(); 					// Does a read back and upload.
+	void					doUpload(LLRenderTarget* bound_target); 					// Does a read back and upload.
 	void					conditionalRestartUploadTimer();
 private:
 	BOOL					mNeedsUpload; 					// Whether we need to send our baked textures to the server

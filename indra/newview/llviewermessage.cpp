@@ -144,7 +144,6 @@
 #include "fsfloaterplacedetails.h"
 #include "fsradar.h"
 #include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
-#include "fslightshare.h" // <FS:CR> FIRE-5118 - Lightshare support
 #include "fslslbridge.h"
 #include "fsmoneytracker.h"
 #include "llattachmentsmgr.h"
@@ -3706,9 +3705,6 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 		LLWorldMap::getInstance()->cancelTracking();
 	}
 
-	// <FS:CR> FIRE-5118 - Lightshare support
-	FSLightshare::getInstance()->processLightshareReset();
-	// </FS:CR>
 /*
 	// send camera update to new region
 	gAgentCamera.updateCamera();
@@ -4686,6 +4682,7 @@ void process_object_properties_family(LLMessageSystem *msg, void**user_data)
 void process_time_synch(LLMessageSystem *mesgsys, void **user_data)
 {
 	LLVector3 sun_direction;
+    LLVector3 moon_direction;
 	LLVector3 sun_ang_velocity;
 	F32 phase;
 	U64	space_time_usec;
@@ -4705,14 +4702,26 @@ void process_time_synch(LLMessageSystem *mesgsys, void **user_data)
 
 	LLWorld::getInstance()->setSpaceTimeUSec(space_time_usec);
 
-	LL_DEBUGS("WindlightSync") << "Sun phase: " << phase << " rad = " << fmodf(phase / F_TWO_PI + 0.25, 1.f) * 24.f << " h" << LL_ENDL;
+	LL_DEBUGS("ENVIRONMENT") << "Sun phase: " << phase << " rad = " << fmodf(phase / F_TWO_PI + 0.25, 1.f) * 24.f << " h" << LL_ENDL;
 
-	gSky.setSunPhase(phase);
-	gSky.setSunTargetDirection(sun_direction, sun_ang_velocity);
-	if ( !(gSavedSettings.getBOOL("SkyOverrideSimSunPosition") || gSky.getOverrideSun()) )
-	{
-		gSky.setSunDirection(sun_direction, sun_ang_velocity);
-	}
+    F32 region_phase = LLEnvironment::instance().getRegionProgress();
+    if (region_phase >= 0.0)
+    {
+        F32 adjusted_phase = fmodf(phase / F_TWO_PI + 0.25, 1.f);
+        F32 delta_phase = adjusted_phase - region_phase;
+
+        LL_DEBUGS("ENVIRONMENT") << "adjusted phase = " << adjusted_phase << " local phase = " << region_phase << " delta = " << delta_phase << LL_ENDL;
+
+        if (!LLEnvironment::instance().isExtendedEnvironmentEnabled() && (fabs(delta_phase) > 0.125))
+        {
+            LL_INFOS("ENVIRONMENT") << "Adjusting environment to match region. adjustment=" << delta_phase << LL_ENDL;
+            LLEnvironment::instance().adjustRegionOffset(delta_phase);
+        }
+    }
+
+	/* We decode these parts of the message but ignore them
+        as the real values are provided elsewhere. */
+    (void)sun_direction, (void)moon_direction, (void)phase;
 }
 
 void process_sound_trigger(LLMessageSystem *msg, void **)
@@ -7295,6 +7304,7 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 			}
 		}
 	
+
 		args["QUESTIONS"] = script_question;
 
 		if (known_questions != questions)
