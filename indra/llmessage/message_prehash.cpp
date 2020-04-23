@@ -1376,7 +1376,9 @@ char const* const _PREHASH_RegionDenyAgeUnverified = LLMessageStringTable::getIn
 char const* const _PREHASH_AgeVerificationBlock = LLMessageStringTable::getInstance()->getString("AgeVerificationBlock");
 char const* const _PREHASH_RegionAllowAccessBlock = LLMessageStringTable::getInstance()->getString("RegionAllowAccessBlock");
 char const* const _PREHASH_RegionAllowAccessOverride = LLMessageStringTable::getInstance()->getString("RegionAllowAccessOverride");
-
+char const* const _PREHASH_ParcelEnvironmentBlock = LLMessageStringTable::getInstance()->getString("ParcelEnvironmentBlock");
+char const* const _PREHASH_ParcelEnvironmentVersion = LLMessageStringTable::getInstance()->getString("ParcelEnvironmentVersion");
+char const* const _PREHASH_RegionAllowEnvironmentOverride = LLMessageStringTable::getInstance()->getString("RegionAllowEnvironmentOverride");
 char const* const _PREHASH_UCoord = LLMessageStringTable::getInstance()->getString("UCoord");
 char const* const _PREHASH_VCoord = LLMessageStringTable::getInstance()->getString("VCoord");
 char const* const _PREHASH_FaceIndex = LLMessageStringTable::getInstance()->getString("FaceIndex");
@@ -1392,6 +1394,7 @@ char const* const _PREHASH_AppearanceHover = LLMessageStringTable::getInstance()
 char const* const _PREHASH_HoverHeight = LLMessageStringTable::getInstance()->getString("HoverHeight");
 char const* const _PREHASH_Experience = LLMessageStringTable::getInstance()->getString("Experience");
 char const* const _PREHASH_ExperienceID = LLMessageStringTable::getInstance()->getString("ExperienceID");
+char const* const _PREHASH_LargeGenericMessage = LLMessageStringTable::getInstance()->getString("LargeGenericMessage");
 
 // <FS:CR> Aurora Sim
 char const* const _PREHASH_RegionSizeX = LLMessageStringTable::getInstance()->getString("RegionSizeX");

@@ -4117,18 +4117,6 @@ UDP: 3478, 3479, 5060, 5062, 6250, 12000-32000
 	</notification>
 	<!-- </FS:AW  grid management-->
 
-	<notification label="Windlight 設定を適用" name="FSWL">
-		[OWNER_NAME] が所有する &apos;[PARCEL_NAME]&apos; があなたの Windlight 環境設定を変更しようとしています。
-		<form name="form">
-			<button name="Allow" text="許可"/>
-			<button name="Ignore" text="無視"/>
-		</form>
-	</notification>
-	<notification label="Windlight 設定をリセット" name="FSWLClear">
-		&apos;[PARCEL_NAME]&apos; での Windlight 設定を地域のデフォルトにリセットしますか？
-		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="はい"/>
-	</notification>
-
 	<!-- ## Zi: Animation Overrider -->
 	<notification name="NewAOSet">
 新しい AO セットに名前を付けて下さい。

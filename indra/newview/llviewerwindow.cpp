@@ -386,6 +386,8 @@ public:
 		static const std::string beacon_scripted_touch = LLTrans::getString("BeaconScriptedTouch");
 		static const std::string beacon_sound = LLTrans::getString("BeaconSound");
 		static const std::string beacon_media = LLTrans::getString("BeaconMedia");
+		static const std::string beacon_sun = LLTrans::getString("BeaconSun");
+		static const std::string beacon_moon = LLTrans::getString("BeaconMoon");
 		static const std::string particle_hiding = LLTrans::getString("ParticleHiding");
 
 		// Draw the statistics in a light gray
@@ -635,7 +637,7 @@ public:
 			addText(xpos, ypos, llformat("%d Unique Textures", LLImageGL::sUniqueCount));
 			ypos += y_inc;
 
-			addText(xpos, ypos, llformat("%d Render Calls", last_frame_recording.getSampleCount(LLPipeline::sStatBatchSize)));
+			addText(xpos, ypos, llformat("%d Render Calls", (U32)last_frame_recording.getSampleCount(LLPipeline::sStatBatchSize)));
             ypos += y_inc;
 
 			addText(xpos, ypos, llformat("%d/%d Objects Active", gObjectList.getNumActiveObjects(), gObjectList.getNumObjects()));
@@ -858,6 +860,20 @@ public:
 				addText(xpos, ypos, beacon_physical);
 				ypos += y_inc;
 			}
+		}
+
+		static LLUICachedControl<bool> show_sun_beacon("sunbeacon", false);
+		static LLUICachedControl<bool> show_moon_beacon("moonbeacon", false);
+
+		if (show_sun_beacon)
+		{
+			addText(xpos, ypos, beacon_sun);
+			ypos += y_inc;
+		}
+		if (show_moon_beacon)
+		{
+			addText(xpos, ypos, beacon_moon);
+			ypos += y_inc;
 		}
 
 		if(log_texture_traffic)
@@ -1838,7 +1854,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	U32 fsaa_samples)
 	*/
 	// create window
-	mWindow = LLWindowManager::createWindow(this,
+    mWindow = LLWindowManager::createWindow(this,
 		p.title, p.name, p.x, p.y, p.width, p.height, 0,
 		p.fullscreen, 
 		gHeadlessClient,
@@ -1936,11 +1952,6 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	{
 		LLFeatureManager::getInstance()->applyRecommendedSettings();
 		gSavedSettings.setBOOL("ProbeHardwareOnStartup", FALSE);
-	}
-
-	if (!gGLManager.mHasDepthClamp)
-	{
-		LL_INFOS("RenderInit") << "Missing feature GL_ARB_depth_clamp. Void water might disappear in rare cases." << LL_ENDL;
 	}
 	
 	// If we crashed while initializng GL stuff last time, disable certain features
@@ -4971,7 +4982,7 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 						F32 scale = vovolume->getLightRadius();
 						gGL.scalef(scale, scale, scale);
 
-						LLColor4 color(vovolume->getLightColor(), .5f);
+						LLColor4 color(vovolume->getLightSRGBColor(), .5f);
 						gGL.color4fv(color.mV);
 					
 						//F32 pixel_area = 100000.f;
@@ -5827,7 +5838,7 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 
 	// PRE SNAPSHOT
 	gDisplaySwapBuffers = FALSE;
-	
+	    
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	setCursor(UI_CURSOR_WAIT);
 
@@ -6002,7 +6013,6 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 				{
 					// Required for showing the GUI in snapshots and performing bloom composite overlay
 					// Call even if show_ui is FALSE
-					LL_RECORD_BLOCK_TIME(FTM_RENDER_UI);
 					render_ui(scale_factor, subfield);
 					swap();
 				}

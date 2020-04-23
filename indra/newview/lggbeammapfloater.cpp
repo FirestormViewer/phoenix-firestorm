@@ -23,55 +23,40 @@
 #include "llviewercontrol.h"
 #include "llviewermenufile.h"
 
-const F32 CONTEXT_CONE_IN_ALPHA = 0.0f;
-const F32 CONTEXT_CONE_OUT_ALPHA = 1.f;
-const F32 CONTEXT_FADE_TIME = 0.08f;
-
-
-void lggBeamMapFloater::clearPoints()
+lggBeamMapFloater::lggBeamMapFloater(const LLSD& seed) : LLFloater(seed),
+	mContextConeOpacity(0.f),
+	mContextConeInAlpha(0.f),
+	mContextConeOutAlpha(0.f),
+	mContextConeFadeTime(0.f)
 {
-	mDots.clear();
+	mContextConeInAlpha = gSavedSettings.getF32("ContextConeInAlpha");
+	mContextConeOutAlpha = gSavedSettings.getF32("ContextConeOutAlpha");
+	mContextConeFadeTime = gSavedSettings.getF32("ContextConeFadeTime");
+}
+
+lggBeamMapFloater::~lggBeamMapFloater()
+{
+}
+
+BOOL lggBeamMapFloater::postBuild()
+{
+	getChild<LLUICtrl>("beamshape_save")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickSave, this));
+	getChild<LLUICtrl>("beamshape_clear")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickClear, this));
+	getChild<LLUICtrl>("beamshape_load")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickLoad, this));
+	getChild<LLUICtrl>("cancel")->setCommitCallback(boost::bind(&lggBeamMapFloater::closeFloater, this, false));
+
+	getChild<LLColorSwatchCtrl>("back_color_swatch")->setCommitCallback(boost::bind(&lggBeamMapFloater::onBackgroundChange, this));
+	getChild<LLColorSwatchCtrl>("beam_color_swatch")->setColor(LLColor4::red);
+
+	mBeamshapePanel = getChild<LLPanel>("beamshape_draw");
+
+	return TRUE;
 }
 
 void lggBeamMapFloater::draw()
 {
-	LLRect swatch_rect;
-	LLButton* createButton = mFSPanel->getChild<LLButton>("custom_beam_btn");
-
-	createButton->localRectToOtherView(createButton->getLocalRect(), &swatch_rect, this);
-	LLRect local_rect = getLocalRect();
-	if (gFocusMgr.childHasKeyboardFocus(this) && createButton->isInVisibleChain() && mContextConeOpacity > 0.001f)
-	{
-		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-		LLGLEnable(GL_CULL_FACE);
-		gGL.begin(LLRender::TRIANGLE_STRIP);
-		{
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mRight, swatch_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mRight, local_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mRight, swatch_rect.mBottom);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mRight, local_rect.mBottom);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mBottom);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mLeft, local_rect.mBottom);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_IN_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(swatch_rect.mLeft, swatch_rect.mTop);
-			gGL.color4f(0.f, 0.f, 0.f, CONTEXT_CONE_OUT_ALPHA * mContextConeOpacity);
-			gGL.vertex2i(local_rect.mLeft, local_rect.mTop);
-		}
-		gGL.end();
-	}
-
-	static LLCachedControl<F32> opacity(gSavedSettings, "PickerContextOpacity");
-	mContextConeOpacity = lerp(mContextConeOpacity, opacity(), LLCriticalDamp::getInterpolant(CONTEXT_FADE_TIME));
+	static LLCachedControl<F32> max_opacity(gSavedSettings, "PickerContextOpacity", 0.4f);
+	drawConeToOwner(mContextConeOpacity, max_opacity, mFSPanel->getChild<LLButton>("custom_beam_btn"), mContextConeFadeTime, mContextConeInAlpha, mContextConeOutAlpha);
 
 	LLFloater::draw();
 	LLRect rec = mBeamshapePanel->getRect();
@@ -104,31 +89,6 @@ void lggBeamMapFloater::draw()
 	gGL.popMatrix();
 }
 
-lggBeamMapFloater::~lggBeamMapFloater()
-{
-}
-
-lggBeamMapFloater::lggBeamMapFloater(const LLSD& seed) : LLFloater(seed),
-	mContextConeOpacity(0.0f)
-{
-}
-
-BOOL lggBeamMapFloater::postBuild()
-{
-	setCanMinimize(FALSE);
-
-	getChild<LLUICtrl>("beamshape_save")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickSave, this));
-	getChild<LLUICtrl>("beamshape_clear")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickClear, this));
-	getChild<LLUICtrl>("beamshape_load")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickLoad, this));
-
-	getChild<LLColorSwatchCtrl>("back_color_swatch")->setCommitCallback(boost::bind(&lggBeamMapFloater::onBackgroundChange, this));
-	getChild<LLColorSwatchCtrl>("beam_color_swatch")->setColor(LLColor4::red);
-
-	mBeamshapePanel = getChild<LLPanel>("beamshape_draw");
-
-	return TRUE;
-}
-
 BOOL lggBeamMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	if (y > 39 && x > 16 && x < 394 && y < 317)
@@ -141,15 +101,6 @@ BOOL lggBeamMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 	}
 
 	return LLFloater::handleMouseDown(x, y, mask);
-}
-
-void lggBeamMapFloater::setData(void* data)
-{
-	mFSPanel = (FSPanelPrefs*)data;
-	if (mFSPanel)
-	{
-		gFloaterView->getParentFloater(mFSPanel)->addDependentFloater(this);
-	}
 }
 
 BOOL lggBeamMapFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
@@ -174,7 +125,7 @@ void lggBeamMapFloater::onBackgroundChange()
 	mBeamshapePanel->setBackgroundColor(getChild<LLColorSwatchCtrl>("back_color_swatch")->get());
 }
 
-LLSD lggBeamMapFloater::getMyDataSerialized()
+LLSD lggBeamMapFloater::getDataSerialized()
 {
 	LLSD out;
 	LLRect r  = mBeamshapePanel->getRect();
@@ -205,7 +156,7 @@ void lggBeamMapFloater::onSaveCallback(const std::vector<std::string>& filenames
 
 	LLSD export_data;
 	export_data["scale"] = 8.0f / (mBeamshapePanel->getRect().getWidth());
-	export_data["data"] = getMyDataSerialized();
+	export_data["data"] = getDataSerialized();
 
 	llofstream export_file;
 	export_file.open(filename.c_str());
@@ -253,4 +204,18 @@ void lggBeamMapFloater::onLoadCallback(const std::vector<std::string>& filenames
 
 		mDots.push_back(p);
 	}
+}
+
+void lggBeamMapFloater::setData(FSPanelPrefs* data)
+{
+	mFSPanel = data;
+	if (mFSPanel)
+	{
+		gFloaterView->getParentFloater(mFSPanel)->addDependentFloater(this);
+	}
+}
+
+void lggBeamMapFloater::clearPoints()
+{
+	mDots.clear();
 }

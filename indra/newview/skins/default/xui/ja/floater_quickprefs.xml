@@ -29,7 +29,6 @@
 				無制限
 			</text>
 			<!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
-			<check_box label="地域の設定を使用" name="UseRegionWindlight" />
 			<text name="WL Sky" tool_tip="WindLightの空の事前設定です。">
 				WLの空:
 			</text>

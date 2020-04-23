@@ -136,6 +136,7 @@ public:
 	inline BOOL isPrelude()					const;
 	inline BOOL getAllowTerraform() 		const;
 	inline BOOL getRestrictPushObject()		const;
+    inline BOOL getAllowEnvironmentOverride()   const;
 	inline BOOL getReleaseNotesRequested()		const;
 
 //	bool isAlive(); // can become false if circuit disconnects
@@ -304,16 +305,16 @@ public:
 	LLVLComposition *getComposition() const;
 	F32 getCompositionXY(const S32 x, const S32 y) const;
 
-	//	BOOL isOwnedSelf(const LLVector3& pos);
-	//
-	//	// Owned by a group you belong to?  (officer OR member)
-	//	BOOL isOwnedGroup(const LLVector3& pos);
-	// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-02 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+//	BOOL isOwnedSelf(const LLVector3& pos);
+//
+//	// Owned by a group you belong to?  (officer OR member)
+//	BOOL isOwnedGroup(const LLVector3& pos);
+// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-02 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
 	BOOL isOwnedSelf(const LLVector3& pos) const;
 
 	// Owned by a group you belong to?  (officer OR member)
 	BOOL isOwnedGroup(const LLVector3& pos) const;
-	// [/SL:KB]
+// [/SL:KB]
 
 	// deal with map object updates in the world.
 	void updateCoarseLocations(LLMessageSystem* msg);
@@ -680,6 +681,11 @@ inline BOOL LLViewerRegion::getAllowTerraform() const
 inline BOOL LLViewerRegion::getRestrictPushObject() const
 {
 	return ((mRegionFlags & REGION_FLAGS_RESTRICT_PUSHOBJECT) != 0);
+}
+
+inline BOOL LLViewerRegion::getAllowEnvironmentOverride() const
+{
+    return ((mRegionFlags & REGION_FLAGS_ALLOW_ENVIRONMENT_OVERRIDE) != 0);
 }
 
 inline BOOL LLViewerRegion::getReleaseNotesRequested() const

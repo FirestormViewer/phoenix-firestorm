@@ -5,7 +5,7 @@
     can_resize="false"
     can_dock="true"
     can_close="true"
-    height="201"
+    height="328"
     width="260"
     layout="topleft"
     name="quickprefs"
@@ -20,7 +20,7 @@
     left="0"
     top="16"
     width="260"
-    height="185"
+    height="313"
     follows="all"
     layout="topleft">
     <layout_stack
@@ -59,7 +59,7 @@
       left="0"
       top_pad="0"
       width="260"
-      height="175"
+      height="302"
       orientation="vertical">
 
      <layout_panel
@@ -67,7 +67,7 @@
       follows="all"
       name="wl_options_panel"
       invisibility_control="QuickPrefsEditMode"
-      height="175">
+      height="302">
         <text
             type="string"
             length="1"
@@ -171,16 +171,6 @@
             No Limit
         </text>
  <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
-        <check_box
-            control_name="UseEnvironmentFromRegion"
-            follows="left|top"
-            height="20"
-            label="Use Region Windlight"
-            layout="topleft"
-            left="2"
-            name="UseRegionWindlight"
-            top_pad="0"
-            width="200" />
         <text
             type="string"
             length="1"
@@ -319,60 +309,81 @@
             label_selected=""
             image_overlay="Arrow_Right_Off"
             scale_image="true" />
-        <icon
-            height="15"
-            image_name="icon_day_cycle_12am.tga"
-            layout="topleft"
-            left="10"
-            top_pad="5"
-            name="SkyDayCycle"
-            use_draw_context_alpha="false"
-            width="200"
-            tool_tip="Change the time of the day"/>
-        <multi_slider
-            can_edit_text="true"
-            control_name="WLSunPos"
-            decimal_digits="0"
-            follows="top"
-            height="10"
-            increment="0.0833333"
-            initial_value="0"
-            layout="topleft"
-            left="10"
-            max_sliders="1"
-            max_val="24"
-            name="WLSunPos"
-            show_text="false"
-            top_pad="-1"
-            width="200" />
-        <button
-            enabled="true"
-            name="ResetToRegionDefault"
-            follows="left|top"
-            height="20"
-            width="20"
-            bottom_delta="-3"
-            left_pad="5"
-            label=""
-            label_selected=""
-            image_overlay="StopReload_Off"
-            scale_image="true"
-            tool_tip="Reset the WindLight options to region default" />
-
-        <!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->
-        <button
-            layout="topleft"
-            follows="right|top"
-            name="button_edit"
-            tool_tip="Click here to configure your Quick Preferences controls"
-            label=""
-            toggle="true"
-            control_name="QuickPrefsEditMode"
-            image_overlay="Edit_Wrench"
-            left_delta="21"
-            width="20"
-            bottom_delta="0"
-            height="20" />
+                <text
+                 top_pad="7"
+                 left="10"
+                 height="10"
+                 width="90"
+                 follows="left|top"
+                 layout="topleft"
+                >
+                    Sun Position:
+                </text>
+                <sun_moon_trackball
+                 name="sun_rotation"
+                 top_pad="5"
+                 left_delta="0"
+                 height="150"
+                 width="150"
+                 follows="left|top"
+                 thumb_mode="sun"
+                />
+                <button
+                 name="ResetToRegionDefault"
+                 label=""
+                 tool_tip="Reset the WindLight options to region default"
+                 enabled="true"
+                 top_delta="-20"
+                 left="236"
+                 height="20"
+                 width="20"
+                 follows="left|top"
+                 image_overlay="StopReload_Off"
+                 label_selected=""
+                 scale_image="true"
+                />
+                <text
+                 top_delta="5"
+                 left="170"
+                 height="10"
+                 width="90"
+                 follows="left|top"
+                 layout="topleft"
+                >
+                    WL Time:
+                </text>
+                <multi_slider
+                 name="time_offset"
+                 top_delta="15"
+                 left_delta="15"
+                 height="150"
+                 width="15"
+                 follows="left|top"
+                 layout="topleft"
+                 can_edit_text="true"
+                 decimal_digits="0"
+                 increment="120"
+                 initial_value="0"
+                 max_sliders="1"
+                 max_val="86400"
+                 orientation="vertical"
+                 show_text="false"
+                />
+                <!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->
+                <button
+                 name="button_edit"
+                 label=""
+                 tool_tip="Click here to configure your Quick Preferences controls"
+                 top_delta="130"
+                 left="236"
+                 height="20"
+                 width="20"
+                 follows="right|top"
+                 layout="topleft"
+                 control_name="QuickPrefsEditMode"
+                 image_overlay="Edit_Wrench"
+                 toggle="true"
+                />
         <!-- </FS:Zi> -->
 
     </layout_panel>
