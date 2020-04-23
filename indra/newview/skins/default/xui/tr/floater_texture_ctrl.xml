@@ -14,7 +14,8 @@
 		<radio_item label="Yerel" name="local" value="1"/>
 	</radio_group>
 	<text name="unknown">
-		Büyüklük: [DIMENSIONS]
+		Büyüklük:
+[DIMENSIONS]
 	</text>
 	<button label="Varsayılan" label_selected="Varsayılan" name="Default"/>
 	<button label="Boş" label_selected="Boş" name="Blank"/>

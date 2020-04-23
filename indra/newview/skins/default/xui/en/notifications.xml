@@ -7685,12 +7685,14 @@ You can only claim public land that is in the same region as you.
   </notification>
 
   <notification
-   icon="notify.tga"
+   icon="alertmodal.tga"
    name="RegionTPAccessBlocked"
-   persist="false"
-   type="notify">
+   type="alertmodal">
    <tag>fail</tag>
     The region you're trying to visit contains content exceeding your current preferences.  You can change your preferences using Avatar &gt; Preferences &gt; General.
+   <usetemplate
+      name="okbutton"
+      yestext="OK"/>
   </notification>
 
   <notification
@@ -12609,6 +12611,19 @@ Changes won't take effect until after you restart [APP_NAME].
      notext="Cancel"
      yestext="OK"/>
   </notification>
+  
+  <notification
+   icon="alertmodal.tga"
+   name="PreferenceControlsDefaults"
+   type="alertmodal">
+    Do you want to restore default values for controls?
+    <tag>confirm</tag>
+    <usetemplate
+       canceltext="Cancel"
+       name="yesnocancelbuttons"
+       notext="Current mode"
+       yestext="All modes"/>
+  </notification>
     
   <notification
    icon="alertmodal.tga"
@@ -12800,14 +12815,16 @@ The backup path could not be found.
    name="SettingsConfirmBackup"
    type="alertmodal">
 Are you sure you want to save a backup to this directory?
+
 [DIRECTORY]
+
 Any existing backups in that location will be overwritten!
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
      yestext="Save backup"/>
   </notification>
-  
+
   <notification
    icon="alertmodal.tga"
    name="SettingsRestoreNeedsLogout"

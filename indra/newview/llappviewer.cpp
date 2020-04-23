@@ -163,7 +163,7 @@
 #include "llapr.h"
 #include <boost/lexical_cast.hpp>
 
-#include "llviewerkeyboard.h"
+#include "llviewerinput.h"
 #include "lllfsthread.h"
 #include "llworkerthread.h"
 #include "lltexturecache.h"
@@ -1176,28 +1176,15 @@ bool LLAppViewer::init()
 	gGLManager.getGLInfo(gDebugInfo);
 	gGLManager.printGLInfoString();
 
-	// Load Default bindings
-	// <FS:Ansariel> Optional AZERTY keyboard layout
-	//std::string key_bindings_file = gDirUtilp->findFile("keys.xml",
-	std::string keyBindingFileName("keys.xml");
-	if (gSavedSettings.getBOOL("FSUseAzertyKeyboardLayout"))
+	// Load User's bindings
+	std::string key_bindings_file = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "key_bindings.xml");
+	if (!gDirUtilp->fileExists(key_bindings_file) || !gViewerInput.loadBindingsXML(key_bindings_file))
 	{
-		keyBindingFileName = "keys_azerty.xml";
-	}
-	std::string key_bindings_file = gDirUtilp->findFile(keyBindingFileName,
-	// </FS:Ansariel>
-														gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, ""),
-														gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
-
-
-	if (!gViewerKeyboard.loadBindingsXML(key_bindings_file))
-	{
-		std::string key_bindings_file = gDirUtilp->findFile("keys.ini",
-															gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, ""),
-															gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
-		if (!gViewerKeyboard.loadBindings(key_bindings_file))
+		// Failed to load custom bindings, try default ones
+		key_bindings_file = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "key_bindings.xml");
+		if (!gViewerInput.loadBindingsXML(key_bindings_file))
 		{
-			LL_ERRS("InitInfo") << "Unable to open keys.ini" << LL_ENDL;
+			LL_ERRS("InitInfo") << "Unable to open default key bindings from " << key_bindings_file << LL_ENDL;
 		}
 	}
 
@@ -1692,6 +1679,7 @@ bool LLAppViewer::doFrame()
 			{
 				joystick->scanJoystick();
 				gKeyboard->scanKeyboard();
+                gViewerInput.scanMouse();
 				// <FS:Ansariel> Chalice Yao's crouch toggle
 				static LLCachedControl<bool> fsCrouchToggle(gSavedPerAccountSettings, "FSCrouchToggle");
 				static LLCachedControl<bool> fsCrouchToggleStatus(gSavedPerAccountSettings, "FSCrouchToggleStatus");
@@ -4760,6 +4748,7 @@ static LLNotificationFunctorRegistration finish_quit_reg("ConfirmQuit", finish_q
 
 void LLAppViewer::userQuit()
 {
+	LL_INFOS() << "User requested quit" << LL_ENDL;
 	if (gDisconnected
 		|| !gViewerWindow
 		|| !gViewerWindow->getProgressView()
@@ -5358,6 +5347,7 @@ void LLAppViewer::saveFinalSnapshot()
 									gViewerWindow->getWindowWidthRaw(),
 									gViewerWindow->getWindowHeightRaw(),
 									FALSE,
+									gSavedSettings.getBOOL("RenderHUDInSnapshot"),
 									TRUE,
 									LLSnapshotModel::SNAPSHOT_TYPE_COLOR,
 									LLSnapshotModel::SNAPSHOT_FORMAT_PNG);

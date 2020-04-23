@@ -72,7 +72,7 @@
 				区画が選択されていません。
 			</panel.string>
 			<panel.string name="time_stamp_template">
-				[year,datetime,local] [mth,datetime,local] [day,datetime,local] [wkday,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+				[year,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [wkday,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
 			</panel.string>
 			<text name="Name:">
 				名前：

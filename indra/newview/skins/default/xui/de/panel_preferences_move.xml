@@ -52,7 +52,6 @@
 		<panel label="Bewegung" name="tab-movement">
 			<check_box label="Mit Pfeiltasten bewegen" name="arrow_keys_move_avatar_check"/>
 			<check_box label="Buchstabeneingabe beeinflusst Bewegung (z.B. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
-			<check_box label="AZERTY-Tastaturlayout verwenden" name="FSUseAzertyKeyboardLayout"/>
 			<check_box label="Drücken-drücken-halten, um zu rennen" name="tap_tap_hold_to_run"/>
 			<check_box label="Fliegen/Landen beim Drücken von auf (springen) / ab (kriechen)" name="automatic_fly" />
 			<check_box label="Kriech-Umschaltmodus aktivieren" name="crouch_toggle_mode"/>
@@ -71,21 +70,6 @@
 			</text>
 			<check_box label="Movelock nach Teleport erneut aktivieren, falls zuvor aktiv" name="RelockMoveLockAfterRegionChange"/>
 			<check_box label="Nachdem eine Bewegung gestoppt oder gestartet ist, Position sperren oder entsperren" name="RelockMoveLockAfterMovement"/>
-			<text name="single_click_action_lbl">
-				Einfacher Klick auf Land:
-			</text>
-			<combo_box name="single_click_action_combo">
-				<combo_box.item label="Keine Aktion" name="0"/>
-				<combo_box.item label="Zur Position gehen" name="1"/>
-			</combo_box>
-			<text name="double_click_action_lbl">
-				Doppelklick auf Land:
-			</text>
-			<combo_box name="double_click_action_combo">
-				<combo_box.item label="Keine Aktion" name="0"/>
-				<combo_box.item label="Zur Position gehen" name="1"/>
-				<combo_box.item label="Zur Position teleportieren" name="2"/>
-			</combo_box>
 			<button label="Joystick-Konfiguration" name="joystick_setup_button"/>
 		</panel>
 

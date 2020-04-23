@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<columns label="Aktion" name="lst_action" />
+	<columns label="Primäre Taste" name="lst_ctrl1" />
+	<columns label="Alternative 1" name="lst_ctrl2" />
+	<columns label="Alternative 2" name="lst_ctrl3" />
+	<rows name="move_actions">
+		<columns label="Bewegungsaktionen" name="lst_action"/>
+	</rows>
+	<rows name="walk_to">
+		<columns name="lst_action" tool_tip="Gehe zur aktuellen Position, auf die der Mauszeiger zeigt" value="Gehe zu" />
+	</rows>
+	<rows name="teleport_to">
+		<columns name="lst_action" tool_tip="Teleportiert zur aktuellen Position, auf die der Mauszeigt zeigt. Allerdings erlauben nicht alle Ziele einen direkten teleport, so dass Sie in deren Nähe teleportiert werden." value="Teleportieren zu" />
+	</rows>
+	<rows name="push_forward">
+		<columns name="lst_action" value="Vorwärts gehen" />
+	</rows>
+	<rows name="push_backward">
+		<columns name="lst_action" value="Rückwärts gehen" />
+	</rows>
+	<rows name="turn_left">
+		<columns name="lst_action" value="Links" />
+	</rows>
+	<rows name="turn_right">
+		<columns name="lst_action" value="Rechts" />
+	</rows>
+	<rows name="slide_left">
+		<columns name="lst_action" value="Seitlich links" />
+	</rows>
+	<rows name="slide_right">
+		<columns name="lst_action" value="Seitlich rechts" />
+	</rows>
+	<rows name="jump">
+		<columns name="lst_action" value="Springen/Auf" />
+	</rows>
+	<rows name="push_down">
+		<columns name="lst_action" value="Ab" />
+	</rows>
+	<rows name="run_forward">
+		<columns name="lst_action" value="Vorwärts rennen" />
+	</rows>
+	<rows name="run_backward">
+		<columns name="lst_action" value="Rückwärts rennen" />
+	</rows>
+	<rows name="run_left">
+		<columns name="lst_action" value="Links rennen" />
+	</rows>
+	<rows name="run_right">
+		<columns name="lst_action" value="Rechts rennen" />
+	</rows>
+	<rows name="toggle_run">
+		<columns name="lst_action" value="Rennen umschalten" />
+	</rows>
+	<rows name="toggle_fly">
+		<columns name="lst_action" value="Fliegen starten/stoppen" />
+	</rows>
+	<rows name="toggle_sit">
+		<columns name="lst_action" value="Sitzen/Aufstehen" />
+	</rows>
+	<rows name="stop_moving">
+		<columns name="lst_action" value="Bewegung stoppen" />
+	</rows>
+	<rows name="camera_actions">
+		<columns label="Kamera" name="lst_action"/>
+	</rows>
+	<rows name="look_up">
+		<columns name="lst_action" value="Hochschauen" />
+	</rows>
+	<rows name="look_down">
+		<columns name="lst_action" value="Runterschauen" />
+	</rows>
+	<rows name="move_forward">
+		<columns name="lst_action" value="Kamera vorwärts" />
+	</rows>
+	<rows name="move_backward">
+		<columns name="lst_action" value="Kamera rückwärts" />
+	</rows>
+	<rows name="move_forward_fast">
+		<columns name="lst_action" value="Kamera schnell vorwärts" />
+	</rows>
+	<rows name="move_backward_fast">
+		<columns name="lst_action" value="Kamera schnell rückwärts" />
+	</rows>
+	<rows name="move_forward_sitting">
+		<columns name="lst_action" value="Kamera vorwärts sitzend" />
+	</rows>
+	<rows name="move_backward_sitting">
+		<columns name="lst_action" value="Kamera rückwärts sitzend" />
+	</rows>
+	<rows name="spin_over">
+		<columns name="lst_action" value="Kamera hochdrehen" />
+	</rows>
+	<rows name="spin_under">
+		<columns name="lst_action" value="Kamera runterdrehen" />
+	</rows>
+	<rows name="spin_over_sitting">
+		<columns name="lst_action" value="Kamera hochdrehen sitzend" />
+	</rows>
+	<rows name="spin_under_sitting">
+		<columns name="lst_action" value="Kamera runterdrehen sitzend" />
+	</rows>
+	<rows name="pan_up">
+		<columns name="lst_action" value="Kamera hochschwenken" />
+	</rows>
+	<rows name="pan_down">
+		<columns name="lst_action" value="Kamera runterschwenken" />
+	</rows>
+	<rows name="pan_left">
+		<columns name="lst_action" value="Kamera linksschwenken" />
+	</rows>
+	<rows name="pan_right">
+		<columns name="lst_action" value="Kamera rechtsschwenken" />
+	</rows>
+	<rows name="pan_in">
+		<columns name="lst_action" value="Kamera hineinschwenken" />
+	</rows>
+	<rows name="pan_out">
+		<columns name="lst_action" value="Kamera herausschwenken" />
+	</rows>
+	<rows name="spin_around_ccw">
+		<columns name="lst_action" tool_tip="Kamera gegen den Uhrzeigersinn drehen" value="Drehen (gg. Uhrzeigersinn)" />
+	</rows>
+	<rows name="spin_around_cw">
+		<columns name="lst_action" tool_tip="Kamera im Uhrzeigersinn drehen" value="Drehen (Uhrzeigersinn)" />
+	</rows>
+	<rows name="spin_around_ccw_sitting">
+		<columns name="lst_action" tool_tip="Kamera im Sitzen gegen den Uhrzeigersinn drehen" value="gg. Uhrzeigersinn sitzend" />
+	</rows>
+	<rows name="spin_around_cw_sitting">
+		<columns name="lst_action" tool_tip="Kamera im Sitzen im Uhrzeigersinn drehen" value="im Uhrzeigersinn sitzend" />
+	</rows>
+	<rows name="editing_actions">
+		<columns label="Bearbeiten" name="lst_action"/>
+	</rows>
+	<rows name="edit_avatar_spin_ccw">
+		<columns name="lst_action" tool_tip="Dreht die Kamera um den Avatar gegen den Uhrzeigersinn" value="Drehen (gg. Uhrzeigersinn)" />
+	</rows>
+	<rows name="edit_avatar_spin_cw">
+		<columns name="lst_action" tool_tip="Dreht die Kamera um den Avatar im Uhrzeigersinn" value="Drehen (Uhrzeigersinn)" />
+	</rows>
+	<rows name="edit_avatar_spin_over">
+		<columns name="lst_action" tool_tip="Dreht die Kamera über den Avatar" value="Kamera hochdrehen" />
+	</rows>
+	<rows name="edit_avatar_spin_under">
+		<columns name="lst_action" tool_tip="Dreht die Kamera unter den Avatar" value="Kamera runterdrehen" />
+	</rows>
+	<rows name="edit_avatar_move_forward">
+		<columns name="lst_action" value="Kamera vorwärts" />
+	</rows>
+	<rows name="edit_avatar_move_backward">
+		<columns name="lst_action" value="Kamera rückwärts" />
+	</rows>
+	<rows name="media_actions">
+		<columns label="Sound und Medien" name="lst_action"/>
+	</rows>
+	<rows name="toggle_pause_media">
+		<columns name="lst_action" value="Medien starten/stoppen" />
+	</rows>
+	<rows name="toggle_enable_media">
+		<columns name="lst_action" value="Alle Medien starten/stoppen" />
+	</rows>
+	<rows name="voice_follow_key">
+		<columns name="lst_action" value="Voice-Chat" />
+	</rows>
+	<rows name="toggle_voice">
+		<columns name="lst_action" value="Voice-Chat umschalten" />
+	</rows>
+	<rows name="start_chat">
+		<columns name="lst_action" value="Chat beginnen" />
+	</rows>
+	<rows name="start_gesture">
+		<columns name="lst_action" value="Geste beginnen" />
+	</rows>
+</contents>

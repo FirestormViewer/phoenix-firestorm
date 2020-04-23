@@ -37,6 +37,8 @@
 #include "llavatarpropertiesprocessor.h"
 #include "llconversationlog.h"
 #include "llsearcheditor.h"
+#include "llsetkeybinddialog.h"
+#include "llkeyconflict.h"
 
 #include "llaudioengine.h" // <FS:Ansariel> Output device selection
 
@@ -45,7 +47,9 @@ class LLPanelPreference;
 class LLPanelLCD;
 class LLPanelDebug;
 class LLMessageSystem;
+class LLComboBox;
 class LLScrollListCtrl;
+class LLScrollListCell;
 class LLSliderCtrl;
 class LLSD;
 class LLTextBox;
@@ -144,12 +148,6 @@ protected:
 	// <FS:AO> callback for local lights toggle
 	void onLocalLightsEnable();
 
-	// callback for commit in the "Single click on land" and "Double click on land" comboboxes.
-	void onClickActionChange();
-	// updates click/double-click action settings depending on controls values
-	void updateClickActionSettings();
-	// updates click/double-click action controls depending on values from settings.xml
-	void updateClickActionControls();
 	// <FS:PP> updates UI Sounds controls depending on values from settings.xml
 	void updateUISoundsControls();
 
@@ -166,7 +164,6 @@ protected:
 
 	// <FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
 	void onShowGroupNoticesTopRightChanged();
-
 public:
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.	
@@ -195,11 +192,7 @@ public:
 	void onClickBrowseSettingsDir();
 	void onClickSkin(LLUICtrl* ctrl,const LLSD& userdata);
 	void onSelectSkin();
-	void onClickSetKey();
 	void onClickClearKey(); // <FS:Ansariel> FIRE-3803: Clear voice toggle button
-	void setKey(KEY key);
-	void setMouse(LLMouseHandler::EClickType click);
-	void onClickSetMiddleMouse();
 	// void onClickSetSounds();	//<FS:KC> Handled centrally now
 	void onClickPreviewUISound(const LLSD& ui_sound_id); // <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 	void setPreprocInclude();
@@ -286,7 +279,6 @@ private:
 
 	static std::string sSkin;
 	notifications_map mNotificationOptions;
-	bool mClickActionDirty; ///< Set to true when the click/double-click options get changed by user.
 	bool mGotPersonalInfo;
 	bool mOriginalIMViaEmail;
 	bool mLanguageChanged;
@@ -394,6 +386,44 @@ private:
 
 	void onPresetsListChange();
 	LOG_CLASS(LLPanelPreferenceGraphics);
+};
+
+class LLPanelPreferenceControls : public LLPanelPreference, public LLKeyBindResponderInterface
+{
+	LOG_CLASS(LLPanelPreferenceControls);
+public:
+	LLPanelPreferenceControls();
+	virtual ~LLPanelPreferenceControls();
+
+	BOOL postBuild();
+
+	void apply();
+	void cancel();
+	void saveSettings();
+	void resetDirtyChilds();
+
+	void onListCommit();
+	void onModeCommit();
+	void onRestoreDefaultsBtn();
+	void onRestoreDefaultsResponse(const LLSD& notification, const LLSD& response);
+	/*virtual*/ bool onSetKeyBind(EMouseClickType click, KEY key, MASK mask, bool all_modes);
+    /*virtual*/ void onDefaultKeyBind(bool all_modes);
+	/*virtual*/ void onCancelKeyBind();
+
+private:
+	// reloads settings, discards current changes, updates table
+	void regenerateControls();
+
+	void populateControlTable();
+	void addSeparator();
+	void updateTable();
+
+	LLScrollListCtrl* pControlsTable;
+	LLComboBox *pKeyModeBox;
+	LLKeyConflictHandler mConflictHandler[LLKeyConflictHandler::MODE_COUNT];
+	std::string mEditingControl;
+	S32 mEditingColumn;
+	S32 mEditingMode;
 };
 
 class LLFloaterPreferenceGraphicsAdvanced : public LLFloater

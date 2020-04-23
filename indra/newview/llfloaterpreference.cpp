@@ -81,8 +81,9 @@
 #include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llviewercamera.h"
-#include "llviewerwindow.h"
+#include "llviewereventrecorder.h"
 #include "llviewermessage.h"
+#include "llviewerwindow.h"
 #include "llviewershadermgr.h"
 #include "llviewerthrottle.h"
 #include "llvoavatarself.h"
@@ -209,87 +210,6 @@ struct LabelTable : public LLInitParam::Block<LabelTable>
         : labels("label")
     {}
 };
-
-class LLVoiceSetKeyDialog : public LLModalDialog
-{
-public:
-	LLVoiceSetKeyDialog(const LLSD& key);
-	~LLVoiceSetKeyDialog();
-	
-	/*virtual*/ BOOL postBuild();
-	
-	void setParent(LLFloaterPreference* parent) { mParent = parent; }
-	
-	BOOL handleKeyHere(KEY key, MASK mask);
-	BOOL handleAnyMouseClick(S32 x, S32 y, MASK mask, LLMouseHandler::EClickType clicktype, BOOL down);
-	static void onCancel(void* user_data);
-		
-private:
-	LLFloaterPreference* mParent;
-};
-
-LLVoiceSetKeyDialog::LLVoiceSetKeyDialog(const LLSD& key)
-  : LLModalDialog(key),
-	mParent(NULL)
-{
-}
-
-//virtual
-BOOL LLVoiceSetKeyDialog::postBuild()
-{
-	childSetAction("Cancel", onCancel, this);
-	getChild<LLUICtrl>("Cancel")->setFocus(TRUE);
-	
-	gFocusMgr.setKeystrokesOnly(TRUE);
-	
-	return TRUE;
-}
-
-LLVoiceSetKeyDialog::~LLVoiceSetKeyDialog()
-{
-}
-
-BOOL LLVoiceSetKeyDialog::handleKeyHere(KEY key, MASK mask)
-{
-	BOOL result = TRUE;
-	
-	if (key == 'Q' && mask == MASK_CONTROL)
-	{
-		result = FALSE;
-	}
-	else if (mParent)
-	{
-		mParent->setKey(key);
-	}
-	closeFloater();
-	return result;
-}
-
-BOOL LLVoiceSetKeyDialog::handleAnyMouseClick(S32 x, S32 y, MASK mask, LLMouseHandler::EClickType clicktype, BOOL down)
-{
-    BOOL result = FALSE;
-    if (down
-        && (clicktype == LLMouseHandler::CLICK_MIDDLE || clicktype == LLMouseHandler::CLICK_BUTTON4 || clicktype == LLMouseHandler::CLICK_BUTTON5)
-        && mask == 0)
-    {
-        mParent->setMouse(clicktype);
-        result = TRUE;
-        closeFloater();
-    }
-    else
-    {
-        result = LLMouseHandler::handleAnyMouseClick(x, y, mask, clicktype, down);
-    }
-
-    return result;
-}
-
-//static
-void LLVoiceSetKeyDialog::onCancel(void* user_data)
-{
-	LLVoiceSetKeyDialog* self = (LLVoiceSetKeyDialog*)user_data;
-	self->closeFloater();
-}
 
 
 // global functions 
@@ -472,37 +392,6 @@ bool callback_pick_debug_search(const LLSD& notification, const LLSD& response)
 }
 // </FS:AW  opensim search support>
 
-/*bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater)
-{
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	if (0 == option && floater )
-	{
-		if ( floater )
-		{
-			floater->setAllIgnored();
-		//	LLFirstUse::disableFirstUse();
-			floater->buildPopupLists();
-		}
-	}
-	return false;
-}
-
-bool callback_reset_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater)
-{
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	if ( 0 == option && floater )
-	{
-		if ( floater )
-		{
-			floater->resetAllIgnored();
-			//LLFirstUse::resetFirstUse();
-			floater->buildPopupLists();
-		}
-	}
-	return false;
-}
-*/
-
 void fractionFromDecimal(F32 decimal_val, S32& numerator, S32& denominator)
 {
 	numerator = 0;
@@ -527,8 +416,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mGotPersonalInfo(false),
 	mOriginalIMViaEmail(false),
 	mLanguageChanged(false),
-	mAvatarDataInitialized(false),
-	mClickActionDirty(false)
+	mAvatarDataInitialized(false)
 {
 	LLConversationLog::instance().addObserver(this);
 
@@ -537,7 +425,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	static bool registered_dialog = false;
 	if (!registered_dialog)
 	{
-		LLFloaterReg::add("voice_set_key", "floater_select_key.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLVoiceSetKeyDialog>);
+		LLFloaterReg::add("keybind_dialog", "floater_select_key.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLSetKeyBindDialog>);
 		registered_dialog = true;
 	}
 	
@@ -556,9 +444,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.ResetCache",				boost::bind(&LLFloaterPreference::onClickResetCache, this));
 //	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
 //	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
-	mCommitCallbackRegistrar.add("Pref.VoiceSetKey",			boost::bind(&LLFloaterPreference::onClickSetKey, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetClearKey",		boost::bind(&LLFloaterPreference::onClickClearKey, this)); // <FS:Ansariel> FIRE-3803: Clear voice toggle button
-	mCommitCallbackRegistrar.add("Pref.VoiceSetMiddleMouse",	boost::bind(&LLFloaterPreference::onClickSetMiddleMouse, this));
 	//<FS:KC> Handled centrally now
 //	mCommitCallbackRegistrar.add("Pref.SetSounds",				boost::bind(&LLFloaterPreference::onClickSetSounds, this));
 	mCommitCallbackRegistrar.add("Pref.ClickEnablePopup",		boost::bind(&LLFloaterPreference::onClickEnablePopup, this));
@@ -590,8 +476,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	// </FS:Ansariel>
 
 	sSkin = gSavedSettings.getString("SkinCurrent");
-
-	mCommitCallbackRegistrar.add("Pref.ClickActionChange",		boost::bind(&LLFloaterPreference::onClickActionChange, this));
 
 	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
 	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
@@ -1080,12 +964,6 @@ void LLFloaterPreference::apply()
 
 	saveAvatarProperties();
 
-	if (mClickActionDirty)
-	{
-		updateClickActionSettings();
-		mClickActionDirty = false;
-	}
-
 	// <FS:Ansariel> Fix resetting graphics preset on cancel; Save preset here because cancel() gets called in either way!
 	saveGraphicsPreset(gSavedSettings.getString("PresetGraphicActive"));
 }
@@ -1119,12 +997,6 @@ void LLFloaterPreference::cancel()
 	
 	// reverts any changes to current skin
 	//gSavedSettings.setString("SkinCurrent", sSkin);
-
-	if (mClickActionDirty)
-	{
-		updateClickActionControls();
-		mClickActionDirty = false;
-	}
 
 	LLFloaterPreferenceProxy * advanced_proxy_settings = LLFloaterReg::findTypedInstance<LLFloaterPreferenceProxy>("prefs_proxy");
 	if (advanced_proxy_settings)
@@ -1233,9 +1105,6 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	onChangeTextureFolder();
 	onChangeSoundFolder();
 	onChangeAnimationFolder();
-
-	// Load (double-)click to walk/teleport settings.
-	updateClickActionControls();
 	
 	// <FS:PP> Load UI Sounds tabs settings.
 	updateUISoundsControls();
@@ -2075,12 +1944,12 @@ void LLFloaterPreference::buildPopupLists()
 						if (it->second.asBoolean())
 						{
 							row["columns"][1]["value"] = formp->getElement(it->first)["ignore"].asString();
+							row["columns"][1]["font"] = "SANSSERIF_SMALL";
+							row["columns"][1]["width"] = 360;
 							break;
 						}
 					}
 				}
-				row["columns"][1]["font"] = "SANSSERIF_SMALL";
-				row["columns"][1]["width"] = 360;
 			}
 #endif
 			item = disabled_popups.addElement(row);
@@ -2852,75 +2721,12 @@ void LLFloaterPreference::onChangeQuality(const LLSD& data)
 	refresh();
 }
 
-void LLFloaterPreference::onClickSetKey()
-{
-	LLVoiceSetKeyDialog* dialog = LLFloaterReg::showTypedInstance<LLVoiceSetKeyDialog>("voice_set_key", LLSD(), TRUE);
-	if (dialog)
-	{
-		dialog->setParent(this);
-	}
-}
-
 // <FS:Ansariel> FIRE-3803: Clear voice toggle button
 void LLFloaterPreference::onClickClearKey()
 {
 	gSavedSettings.setString("PushToTalkButton", "");
 }
 // </FS:Ansariel>
-
-void LLFloaterPreference::setKey(KEY key)
-{
-	getChild<LLUICtrl>("modifier_combo")->setValue(LLKeyboard::stringFromKey(key));
-	// update the control right away since we no longer wait for apply
-	getChild<LLUICtrl>("modifier_combo")->onCommit();
-}
-
-void LLFloaterPreference::setMouse(LLMouseHandler::EClickType click)
-{
-    std::string bt_name;
-    std::string ctrl_value;
-    switch (click)
-    {
-        case LLMouseHandler::CLICK_MIDDLE:
-            bt_name = "middle_mouse";
-            ctrl_value = MIDDLE_MOUSE_CV;
-            break;
-        case LLMouseHandler::CLICK_BUTTON4:
-            bt_name = "button4_mouse";
-            ctrl_value = MOUSE_BUTTON_4_CV;
-            break;
-        case LLMouseHandler::CLICK_BUTTON5:
-            bt_name = "button5_mouse";
-            ctrl_value = MOUSE_BUTTON_5_CV;
-            break;
-        default:
-            break;
-    }
-
-    if (!ctrl_value.empty())
-    {
-        LLUICtrl* p2t_line_editor = getChild<LLUICtrl>("modifier_combo");
-        // We are using text control names for readability and compatibility with voice
-        p2t_line_editor->setControlValue(ctrl_value);
-        LLPanel* advanced_preferences = dynamic_cast<LLPanel*>(p2t_line_editor->getParent());
-        if (advanced_preferences)
-        {
-            p2t_line_editor->setValue(advanced_preferences->getString(bt_name));
-        }
-    }
-}
-
-void LLFloaterPreference::onClickSetMiddleMouse()
-{
-	LLUICtrl* p2t_line_editor = getChild<LLUICtrl>("modifier_combo");
-
-	// update the control right away since we no longer wait for apply
-	p2t_line_editor->setControlValue(MIDDLE_MOUSE_CV);
-
-	//push2talk button "middle mouse" control value is in English, need to localize it for presentation
-	LLPanel* audioPanel=getChild<LLPanel>("audio");
-	p2t_line_editor->setValue(audioPanel->getString("middle_mouse"));
-}
 
 //<FS:KC> Handled centrally now
 /*
@@ -2940,18 +2746,6 @@ void LLFloaterPreference::onClickPreviewUISound(const LLSD& ui_sound_id)
 	make_ui_sound(uisndid.c_str(), true);
 }
 // </FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
-
-/*
-void LLFloaterPreference::onClickSkipDialogs()
-{
-	LLNotificationsUtil::add("SkipShowNextTimeDialogs", LLSD(), LLSD(), boost::bind(&callback_skip_dialogs, _1, _2, this));
-}
-
-void LLFloaterPreference::onClickResetDialogs()
-{
-	LLNotificationsUtil::add("ResetShowNextTimeDialogs", LLSD(), LLSD(), boost::bind(&callback_reset_dialogs, _1, _2, this));
-}
- */
 
 void LLFloaterPreference::onClickEnablePopup()
 {	
@@ -3557,11 +3351,6 @@ void LLFloaterPreference::onClickAdvanced()
 	}
 }
 
-void LLFloaterPreference::onClickActionChange()
-{
-	mClickActionDirty = true;
-}
-
 void LLFloaterPreference::onClickPermsDefault()
 {
 	LLFloaterReg::showInstance("perms_default");
@@ -3597,26 +3386,6 @@ void LLFloaterPreference::onLogChatHistorySaved()
 	{
 		delete_transcripts_buttonp->setEnabled(true);
 	}
-}
-
-void LLFloaterPreference::updateClickActionSettings()
-{
-	const int single_clk_action = getChild<LLComboBox>("single_click_action_combo")->getValue().asInteger();
-	const int double_clk_action = getChild<LLComboBox>("double_click_action_combo")->getValue().asInteger();
-
-	gSavedSettings.setBOOL("ClickToWalk",			single_clk_action == 1);
-	gSavedSettings.setBOOL("DoubleClickAutoPilot",	double_clk_action == 1);
-	gSavedSettings.setBOOL("DoubleClickTeleport",	double_clk_action == 2);
-}
-
-void LLFloaterPreference::updateClickActionControls()
-{
-	const bool click_to_walk = gSavedSettings.getBOOL("ClickToWalk");
-	const bool dbl_click_to_walk = gSavedSettings.getBOOL("DoubleClickAutoPilot");
-	const bool dbl_click_to_teleport = gSavedSettings.getBOOL("DoubleClickTeleport");
-
-	getChild<LLComboBox>("single_click_action_combo")->setValue((int)click_to_walk);
-	getChild<LLComboBox>("double_click_action_combo")->setValue(dbl_click_to_teleport ? 2 : (int)dbl_click_to_walk);
 }
 
 // <FS:PP> Load UI Sounds tabs settings
@@ -3907,24 +3676,6 @@ BOOL LLPanelPreference::postBuild()
 		getChild<LLTextBox>("mute_chb_label")->setClickedCallback(boost::bind(&toggleMuteWhenMinimized));
 	}
 
-	//////////////////////PanelAdvanced ///////////////////
-	if (hasChild("modifier_combo", TRUE))
-	{
-		//localizing if push2talk button is set to middle mouse
-		std::string modifier_value = getChild<LLUICtrl>("modifier_combo")->getValue().asString();
-		if (MIDDLE_MOUSE_CV == modifier_value)
-		{
-			getChild<LLUICtrl>("modifier_combo")->setValue(getString("middle_mouse"));
-		}
-		else if (MOUSE_BUTTON_4_CV == modifier_value)
-		{
-			getChild<LLUICtrl>("modifier_combo")->setValue(getString("button4_mouse"));
-		}
-		else if (MOUSE_BUTTON_5_CV == modifier_value)
-		{
-			getChild<LLUICtrl>("modifier_combo")->setValue(getString("button5_mouse"));
-		}
-	}
 	// Panel Setup (Network) -WoLf
 	if (hasChild("connection_port_enabled"))
 	{
@@ -4444,7 +4195,7 @@ void LLPanelPreferenceGraphics::setPresetText()
 	// </FS:Ansariel>
 
 	// <FS:Ansariel> Graphic preset controls independent from XUI
-	//if (hasDirtyChilds() && !preset_graphic_active.empty())
+    //if (hasDirtyChilds() && !preset_graphic_active.empty())
 	//{
 	//	gSavedSettings.setString("PresetGraphicActive", "");
 	//	preset_graphic_active.clear();
@@ -4568,6 +4319,373 @@ void LLPanelPreferenceGraphics::setHardwareDefaults()
 	resetDirtyChilds();
 	// <FS:Ansariel> Improved graphics preferences
 	LLPanelPreference::setHardwareDefaults();
+}
+
+//------------------------LLPanelPreferenceControls--------------------------------
+static LLPanelInjector<LLPanelPreferenceControls> t_pref_contrls("panel_preference_controls");
+
+LLPanelPreferenceControls::LLPanelPreferenceControls()
+    :LLPanelPreference(),
+    mEditingColumn(-1),
+    mEditingMode(0)
+{
+    // MODE_COUNT - 1 because there are currently no settings assigned to 'saved settings'.
+    for (U32 i = 0; i < LLKeyConflictHandler::MODE_COUNT - 1; ++i)
+    {
+        mConflictHandler[i].setLoadMode((LLKeyConflictHandler::ESourceMode)i);
+    }
+}
+
+LLPanelPreferenceControls::~LLPanelPreferenceControls()
+{
+}
+
+BOOL LLPanelPreferenceControls::postBuild()
+{
+    // populate list of controls
+    pControlsTable = getChild<LLScrollListCtrl>("controls_list");
+    pKeyModeBox = getChild<LLComboBox>("key_mode");
+
+    pControlsTable->setCommitCallback(boost::bind(&LLPanelPreferenceControls::onListCommit, this));
+    pKeyModeBox->setCommitCallback(boost::bind(&LLPanelPreferenceControls::onModeCommit, this));
+    getChild<LLButton>("restore_defaults")->setCommitCallback(boost::bind(&LLPanelPreferenceControls::onRestoreDefaultsBtn, this));
+
+    return TRUE;
+}
+
+void LLPanelPreferenceControls::regenerateControls()
+{
+    mEditingMode = pKeyModeBox->getValue().asInteger();
+    mConflictHandler[mEditingMode].loadFromSettings((LLKeyConflictHandler::ESourceMode)mEditingMode);
+    populateControlTable();
+}
+
+void LLPanelPreferenceControls::populateControlTable()
+{
+    pControlsTable->clearRows();
+    pControlsTable->clearColumns();
+
+    std::string filename;
+    switch ((LLKeyConflictHandler::ESourceMode)mEditingMode)
+    {
+    case LLKeyConflictHandler::MODE_THIRD_PERSON:
+    case LLKeyConflictHandler::MODE_FIRST_PERSON:
+    case LLKeyConflictHandler::MODE_EDIT_AVATAR:
+    case LLKeyConflictHandler::MODE_SITTING:
+        filename = "control_table_contents.xml";
+        break;
+    default:
+        // 'saved settings' mode doesn't have UI or actual settings yet
+        LL_INFOS() << "Unimplemented mode" << LL_ENDL;
+        return;
+    }
+
+    LLXMLNodePtr xmlNode;
+    LLScrollListCtrl::Contents contents;
+    if (!LLUICtrlFactory::getLayeredXMLNode(filename, xmlNode))
+    {
+    LL_WARNS() << "Failed to load " << filename << LL_ENDL;
+    return;
+    }
+    LLXUIParser parser;
+    parser.readXUI(xmlNode, contents, filename);
+
+    if (!contents.validateBlock())
+    {
+        return;
+    }
+
+    for (LLInitParam::ParamIterator<LLScrollListColumn::Params>::const_iterator col_it = contents.columns.begin();
+        col_it != contents.columns.end();
+        ++col_it)
+    {
+        pControlsTable->addColumn(*col_it);
+    }
+
+    LLScrollListCell::Params cell_params;
+    // init basic cell params
+    cell_params.font = LLFontGL::getFontSansSerif();
+    cell_params.font_halign = LLFontGL::LEFT;
+    cell_params.column = "";
+    cell_params.value = "";
+
+
+    for (LLInitParam::ParamIterator<LLScrollListItem::Params>::const_iterator row_it = contents.rows.begin();
+        row_it != contents.rows.end();
+        ++row_it)
+    {
+        std::string control = row_it->value.getValue().asString();
+        if (!control.empty() && control != "menu_separator")
+        {
+            // At the moment 4 collumns are hardcoded
+            LLScrollListItem::Params item_params(*row_it);
+            bool enabled = mConflictHandler[mEditingMode].canAssignControl(control);
+            item_params.enabled.setValue(enabled);
+            cell_params.column = "lst_ctrl1";
+            cell_params.value = mConflictHandler[mEditingMode].getControlString(control, 0);
+            item_params.columns.add(cell_params);
+            cell_params.column = "lst_ctrl2";
+            cell_params.value = mConflictHandler[mEditingMode].getControlString(control, 1);
+            item_params.columns.add(cell_params);
+            cell_params.column = "lst_ctrl3";
+            cell_params.value = mConflictHandler[mEditingMode].getControlString(control, 2);
+            item_params.columns.add(cell_params);
+            pControlsTable->addRow(item_params, EAddPosition::ADD_BOTTOM);
+        }
+        else
+        {
+            pControlsTable->addRow(*row_it, EAddPosition::ADD_BOTTOM);
+        }
+    }
+}
+
+// Just a workaround to not care about first separator before headers (we can start from random header)
+void LLPanelPreferenceControls::addSeparator()
+{
+    if (pControlsTable->getItemCount() > 0)
+    {
+        pControlsTable->addSeparator(EAddPosition::ADD_BOTTOM);
+    }
+}
+
+void LLPanelPreferenceControls::updateTable()
+{
+    mEditingControl.clear();
+    std::vector<LLScrollListItem*> list = pControlsTable->getAllData();
+    for (S32 i = 0; i < list.size(); ++i)
+    {
+        std::string control = list[i]->getValue();
+        if (!control.empty())
+        {
+            LLScrollListCell* cell = list[i]->getColumn(1);
+            cell->setValue(mConflictHandler[mEditingMode].getControlString(control, 0));
+            cell = list[i]->getColumn(2);
+            cell->setValue(mConflictHandler[mEditingMode].getControlString(control, 1));
+            cell = list[i]->getColumn(3);
+            cell->setValue(mConflictHandler[mEditingMode].getControlString(control, 2));
+        }
+    }
+    pControlsTable->deselectAllItems();
+}
+
+void LLPanelPreferenceControls::apply()
+{
+    for (U32 i = 0; i < LLKeyConflictHandler::MODE_COUNT - 1; ++i)
+    {
+        if (mConflictHandler[i].hasUnsavedChanges())
+        {
+            mConflictHandler[i].saveToSettings();
+        }
+    }
+}
+
+void LLPanelPreferenceControls::cancel()
+{
+    for (U32 i = 0; i < LLKeyConflictHandler::MODE_COUNT - 1; ++i)
+    {
+        if (mConflictHandler[i].hasUnsavedChanges())
+        {
+            mConflictHandler[i].clear();
+        }
+    }
+    pControlsTable->clear();
+}
+
+void LLPanelPreferenceControls::saveSettings()
+{
+    for (U32 i = 0; i < LLKeyConflictHandler::MODE_COUNT - 1; ++i)
+    {
+        if (mConflictHandler[i].hasUnsavedChanges())
+        {
+            mConflictHandler[i].saveToSettings();
+            mConflictHandler[i].clear();
+        }
+    }
+
+    S32 mode = pKeyModeBox->getValue().asInteger();
+    if (mConflictHandler[mode].empty())
+    {
+        regenerateControls();
+    }
+}
+
+void LLPanelPreferenceControls::resetDirtyChilds()
+{
+    regenerateControls();
+}
+
+void LLPanelPreferenceControls::onListCommit()
+{
+    LLScrollListItem* item = pControlsTable->getFirstSelected();
+    if (item == NULL)
+    {
+        return;
+    }
+
+    std::string control = item->getValue();
+
+    if (control.empty())
+    {
+        pControlsTable->deselectAllItems();
+        return;
+    }
+
+    if (!mConflictHandler[mEditingMode].canAssignControl(control))
+    {
+        pControlsTable->deselectAllItems();
+        return;
+    }
+
+    S32 cell_ind = item->getSelectedCell();
+    if (cell_ind <= 0)
+    {
+        pControlsTable->deselectAllItems();
+        return;
+    }
+
+    // List does not tell us what cell was clicked, so we have to figure it out manually, but
+    // fresh mouse coordinates are not yet accessible during onCommit() and there are other issues,
+    // so we cheat: remember item user clicked at, trigger 'key dialog' on hover that comes next,
+    // use coordinates from hover to calculate cell
+
+    LLScrollListCell* cell = item->getColumn(cell_ind);
+    if (cell)
+    {
+        LLSetKeyBindDialog* dialog = LLFloaterReg::getTypedInstance<LLSetKeyBindDialog>("keybind_dialog", LLSD());
+        if (dialog)
+        {
+            mEditingControl = control;
+            mEditingColumn = cell_ind;
+            dialog->setParent(this, pControlsTable, DEFAULT_KEY_FILTER);
+
+            LLFloater* root_floater = gFloaterView->getParentFloater(this);
+            if (root_floater)
+                root_floater->addDependentFloater(dialog);
+            dialog->openFloater();
+            dialog->setFocus(TRUE);
+        }
+    }
+    else
+    {
+        pControlsTable->deselectAllItems();
+    }
+}
+
+void LLPanelPreferenceControls::onModeCommit()
+{
+    mEditingMode = pKeyModeBox->getValue().asInteger();
+    if (mConflictHandler[mEditingMode].empty())
+    {
+        // opening for first time
+        mConflictHandler[mEditingMode].loadFromSettings((LLKeyConflictHandler::ESourceMode)mEditingMode);
+    }
+    populateControlTable();
+}
+
+void LLPanelPreferenceControls::onRestoreDefaultsBtn()
+{
+    LLNotificationsUtil::add("PreferenceControlsDefaults", LLSD(), LLSD(), boost::bind(&LLPanelPreferenceControls::onRestoreDefaultsResponse, this, _1, _2));
+}
+
+void LLPanelPreferenceControls::onRestoreDefaultsResponse(const LLSD& notification, const LLSD& response)
+{
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    switch(option)
+    {
+    case 0: // All
+        for (U32 i = 0; i < LLKeyConflictHandler::MODE_COUNT - 1; ++i)
+        {
+            mConflictHandler[i].resetToDefaults();
+            // Apply changes to viewer as 'temporary'
+            mConflictHandler[i].saveToSettings(true);
+        }
+
+        updateTable();
+        break;
+    case 1: // Current
+        mConflictHandler[mEditingMode].resetToDefaults();
+        // Apply changes to viewer as 'temporary'
+        mConflictHandler[mEditingMode].saveToSettings(true);
+
+        updateTable();
+        break;
+    case 2: // Cancel
+    default:
+        //exit;
+        break;
+    }
+}
+
+// todo: copy onSetKeyBind to interface and inherit from interface
+bool LLPanelPreferenceControls::onSetKeyBind(EMouseClickType click, KEY key, MASK mask, bool all_modes)
+{
+    if (!mConflictHandler[mEditingMode].canAssignControl(mEditingControl))
+    {
+        return true;
+    }
+
+    if ( mEditingColumn > 0)
+    {
+        if (all_modes)
+        {
+            for (U32 i = 0; i < LLKeyConflictHandler::MODE_COUNT - 1; ++i)
+            {
+                if (mConflictHandler[i].empty())
+                {
+                    mConflictHandler[i].loadFromSettings((LLKeyConflictHandler::ESourceMode)i);
+                }
+                mConflictHandler[i].registerControl(mEditingControl, mEditingColumn - 1, click, key, mask, true);
+                // Apply changes to viewer as 'temporary'
+                mConflictHandler[i].saveToSettings(true);
+            }
+        }
+        else
+        {
+            mConflictHandler[mEditingMode].registerControl(mEditingControl, mEditingColumn - 1, click, key, mask, true);
+            // Apply changes to viewer as 'temporary'
+            mConflictHandler[mEditingMode].saveToSettings(true);
+        }
+    }
+
+    updateTable();
+    return true;
+}
+
+void LLPanelPreferenceControls::onDefaultKeyBind(bool all_modes)
+{
+    if (!mConflictHandler[mEditingMode].canAssignControl(mEditingControl))
+    {
+        return;
+    }
+    
+    if (mEditingColumn > 0)
+    {
+        if (all_modes)
+        {
+            for (U32 i = 0; i < LLKeyConflictHandler::MODE_COUNT - 1; ++i)
+            {
+                if (mConflictHandler[i].empty())
+                {
+                    mConflictHandler[i].loadFromSettings((LLKeyConflictHandler::ESourceMode)i);
+                }
+                mConflictHandler[i].resetToDefault(mEditingControl, mEditingColumn - 1);
+                // Apply changes to viewer as 'temporary'
+                mConflictHandler[i].saveToSettings(true);
+            }
+        }
+        else
+        {
+            mConflictHandler[mEditingMode].resetToDefault(mEditingControl, mEditingColumn - 1);
+            // Apply changes to viewer as 'temporary'
+            mConflictHandler[mEditingMode].saveToSettings(true);
+        }
+    }
+    updateTable();
+}
+
+void LLPanelPreferenceControls::onCancelKeyBind()
+{
+    pControlsTable->deselectAllItems();
 }
 
 LLFloaterPreferenceGraphicsAdvanced::LLFloaterPreferenceGraphicsAdvanced(const LLSD& key)

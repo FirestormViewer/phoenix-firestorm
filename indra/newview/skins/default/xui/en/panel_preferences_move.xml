@@ -501,16 +501,6 @@
          width="180"
          top_pad="0"/>
         <check_box
-         control_name="FSUseAzertyKeyboardLayout"
-         follows="left|top"
-         height="20"
-         label="Use AZERTY keyboard layout"
-         layout="topleft"
-         left_delta="0"
-         name="FSUseAzertyKeyboardLayout"
-         width="400"
-         top_pad="0"/>
-        <check_box
          control_name="AllowTapTapHoldRun"
          follows="left|top"
          height="20"
@@ -641,70 +631,6 @@
          width="237"
          top_pad="0"/>
 
-        <text
-         follows="left|top"
-         type="string"
-         length="1"
-         height="10"
-         layout="topleft"
-         left="10"
-         name="single_click_action_lbl"
-         width="150"
-         top_pad="20">
-         Single click on land:
-        </text>
-        <combo_box
-         height="23"
-         layout="topleft"
-         left_pad="10"
-         top_delta="-6"
-         name="single_click_action_combo"
-         width="200">
-            <combo_box.item
-             label="No action"
-             name="0"
-             value="0"/>
-            <combo_box.item
-             label="Move to clicked point"
-             name="1"
-             value="1"/>
-            <combo_box.commit_callback
-             function="Pref.ClickActionChange"/>
-        </combo_box>
-        <text
-         follows="left|top"
-         type="string"
-         length="1"
-         height="10"
-         layout="topleft"
-         left="10"
-         name="double_click_action_lbl"
-         width="150"
-         top_pad="10">
-         Double click on land:
-        </text>
-        <combo_box
-         height="23"
-         layout="topleft"
-         left_pad="10"
-         top_delta="-6"
-         name="double_click_action_combo"
-         width="200">
-            <combo_box.item
-             label="No action"
-             name="0"
-             value="0"/>
-            <combo_box.item
-             label="Move to clicked point"
-             name="1"
-             value="1"/>
-            <combo_box.item
-             label="Teleport to clicked point"
-             name="2"
-             value="2"/>
-            <combo_box.commit_callback
-             function="Pref.ClickActionChange"/>
-        </combo_box>
         <button
          follows="top|left"
          height="23"

@@ -39,7 +39,6 @@
 		<panel label="Mouvement" name="tab-movement">
 			<check_box label="Les flèches directionnelles déplacent toujours mon avatar" name="arrow_keys_move_avatar_check"/>
 			<check_box label="Appuyer sur les touches alphabétiques de déplacement (WASD) déplace mon avatar" name="LetterKeysAffectsMovementNotFocusChatBar"/>
-			<check_box label="Utiliser les touches de déplacement pour clavier AZERTY" name="FSUseAzertyKeyboardLayout"/>
 			<check_box label="Double-pression sur une touche directionnelle pour courir" name="tap_tap_hold_to_run"/>
 			<check_box label="Décoller / Atterrir en maintenant les touches Saut / Accroupi" name="automatic_fly"/>
 			<check_box label="Rester accroupi jusqu'à ce que je me relève" name="crouch_toggle_mode"/>
