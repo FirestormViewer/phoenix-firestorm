@@ -44,6 +44,7 @@
 #include "llfirstuse.h"
 #include "llhints.h"
 #include "lltabcontainer.h"
+#include "llvoavatarself.h"
 
 static LLDefaultChildRegistry::Register<LLPanelCameraItem> r("panel_camera_item");
 
@@ -648,7 +649,21 @@ void LLFloaterCamera::switchToPreset(const std::string& name)
 	{
 		LLPresetsManager::getInstance()->loadPreset(PRESETS_CAMERA, name);
 	}
-	gAgentCamera.setCameraZoomFraction(gSavedSettings.getF32("CameraZoomFraction"));
+
+	if (isAgentAvatarValid() && gAgentAvatarp->getParent())
+	{
+		LLQuaternion sit_rot = gSavedSettings.getQuaternion("AvatarSitRotation");
+		if (sit_rot != LLQuaternion())
+		{
+			gAgent.rotate(~gAgent.getFrameAgent().getQuaternion());
+			gAgent.rotate(sit_rot);
+		}
+		else
+		{
+			gAgentCamera.rotateToInitSitRot();
+		}
+	}
+	gAgentCamera.resetCameraZoomFraction();
 
 	LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
 	if (camera_floater)

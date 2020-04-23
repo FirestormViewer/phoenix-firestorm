@@ -614,6 +614,7 @@ set(viewer_SOURCE_FILES
     llpaneltiptoast.cpp
     llpanelvoiceeffect.cpp
     llpaneltopinfobar.cpp
+    llpanelpulldown.cpp
     llpanelvoicedevicesettings.cpp
     llpanelvolume.cpp
     llpanelvolumepulldown.cpp
@@ -1367,6 +1368,7 @@ set(viewer_HEADER_FILES
     llpanelsnapshot.h
     llpanelteleporthistory.h
     llpaneltiptoast.h
+    llpanelpulldown.h
     llpanelvoicedevicesettings.h
     llpanelvoiceeffect.h
     llpaneltopinfobar.h

@@ -1879,8 +1879,8 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 				at_axis.mV[VZ] = 0.f;
 				at_axis.normalize();
 				gAgent.resetAxes(at_axis * ~parent_rot);
-
-				local_camera_offset = local_camera_offset * parent_rot;
+				
+				local_camera_offset = local_camera_offset * gAgent.getFrameAgent().getQuaternion() * parent_rot;
 			}
 			else
 			{
@@ -2147,8 +2147,7 @@ bool LLAgentCamera::clampCameraPosition(LLVector3d& posCamGlobal, const LLVector
 
 LLVector3 LLAgentCamera::getCurrentCameraOffset()
 {
-	LLVector3 camera_offset = (LLViewerCamera::getInstance()->getOrigin() - getAvatarRootPosition() - mThirdPersonHeadOffset) * ~getCurrentAvatarRotation();
-	return  camera_offset / mCameraZoomFraction / gSavedSettings.getF32("CameraOffsetScale");
+	return (LLViewerCamera::getInstance()->getOrigin() - getAvatarRootPosition() - mThirdPersonHeadOffset) * ~getCurrentAvatarRotation();
 }
 
 LLVector3d LLAgentCamera::getCurrentFocusOffset()
@@ -2159,7 +2158,10 @@ LLVector3d LLAgentCamera::getCurrentFocusOffset()
 LLQuaternion LLAgentCamera::getCurrentAvatarRotation()
 {
 	LLViewerObject* sit_object = (LLViewerObject*)gAgentAvatarp->getParent();
-	return sit_object ? sit_object->getRenderRotation() : gAgent.getFrameAgent().getQuaternion();
+	
+	LLQuaternion av_rot = gAgent.getFrameAgent().getQuaternion();
+	LLQuaternion obj_rot = sit_object ? sit_object->getRenderRotation() : LLQuaternion::DEFAULT;
+	return av_rot * obj_rot;
 }
 
 bool LLAgentCamera::isJoystickCameraUsed()
@@ -2898,7 +2900,7 @@ void LLAgentCamera::setSitCamera(const LLUUID &object_id, const LLVector3 &camer
 //-----------------------------------------------------------------------------
 // setFocusOnAvatar()
 //-----------------------------------------------------------------------------
-void LLAgentCamera::setFocusOnAvatar(BOOL focus_on_avatar, BOOL animate)
+void LLAgentCamera::setFocusOnAvatar(BOOL focus_on_avatar, BOOL animate, BOOL reset_axes)
 {
 	if (focus_on_avatar != mFocusOnAvatar)
 	{
@@ -2915,7 +2917,7 @@ void LLAgentCamera::setFocusOnAvatar(BOOL focus_on_avatar, BOOL animate)
 	//RN: when focused on the avatar, we're not "looking" at it
 	// looking implies intent while focusing on avatar means
 	// you're just walking around with a camera on you...eesh.
-	if (!mFocusOnAvatar && focus_on_avatar)
+	if (!mFocusOnAvatar && focus_on_avatar && reset_axes)
 	{
 		setFocusGlobal(LLVector3d::zero);
 		mCameraFOVZoomFactor = 0.f;
@@ -3097,6 +3099,17 @@ BOOL LLAgentCamera::setPointAt(EPointAtType target_type, LLViewerObject *object,
 		mPointAt->setSourceObject(gAgentAvatarp);
 	}
 	return mPointAt->setPointAt(target_type, object, position);
+}
+
+void LLAgentCamera::rotateToInitSitRot()
+{
+	gAgent.rotate(~gAgent.getFrameAgent().getQuaternion());
+	gAgent.rotate(mInitSitRot);
+}
+
+void LLAgentCamera::resetCameraZoomFraction()
+{ 
+	mCameraZoomFraction = INITIAL_ZOOM_FRACTION; 
 }
 
 ELookAtType LLAgentCamera::getLookAtType()

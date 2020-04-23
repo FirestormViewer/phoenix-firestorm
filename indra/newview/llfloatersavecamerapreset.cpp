@@ -28,6 +28,7 @@
 
 #include "llfloatersavecamerapreset.h"
 
+#include "llagent.h"
 #include "llagentcamera.h"
 #include "llbutton.h"
 #include "llcombobox.h"
@@ -38,6 +39,7 @@
 #include "llpresetsmanager.h"
 #include "llradiogroup.h"
 #include "lltrans.h"
+#include "llvoavatarself.h"
 #include "llviewercontrol.h"
 
 LLFloaterSaveCameraPreset::LLFloaterSaveCameraPreset(const LLSD &key)
@@ -103,10 +105,22 @@ void LLFloaterSaveCameraPreset::onBtnSave()
 	}
 	else 
 	{
+		if (isAgentAvatarValid() && gAgentAvatarp->getParent())
+		{
+			gSavedSettings.setQuaternion("AvatarSitRotation", gAgent.getFrameAgent().getQuaternion());
+		}
 		if (gAgentCamera.isJoystickCameraUsed())
 		{
 			gSavedSettings.setVector3("CameraOffsetRearView", gAgentCamera.getCurrentCameraOffset());
 			gSavedSettings.setVector3d("FocusOffsetRearView", gAgentCamera.getCurrentFocusOffset());
+			gAgentCamera.resetCameraZoomFraction();
+			gAgentCamera.setFocusOnAvatar(TRUE, TRUE, FALSE);
+		}
+		else
+		{
+			LLVector3 camera_offset = gSavedSettings.getVector3("CameraOffsetRearView") * gAgentCamera.getCurrentCameraZoomFraction();
+			gSavedSettings.setVector3("CameraOffsetRearView", camera_offset);
+			gAgentCamera.resetCameraZoomFraction();
 		}
 		if (is_saving_new)
 		{

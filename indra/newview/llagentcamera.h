@@ -126,6 +126,8 @@ public:
 	LLVector3d getCurrentFocusOffset();
 	LLQuaternion getCurrentAvatarRotation();
 	bool isJoystickCameraUsed();
+	void setInitSitRot(LLQuaternion sit_rot) { mInitSitRot = sit_rot; };
+	void rotateToInitSitRot();
 
 private:
 	/** Determines maximum camera distance from target for mouselook, opposite to LAND_MIN_ZOOM */
@@ -142,6 +144,8 @@ private:
 
 	/** Initial focus offset */
 	LLPointer<LLControlVariable> mFocusOffsetInitial;
+
+	LLQuaternion mInitSitRot;
 
 	//--------------------------------------------------------------------
 	// Position
@@ -225,7 +229,7 @@ public:
 	void			validateFocusObject();
 	void			setFocusGlobal(const LLPickInfo& pick);
 	void			setFocusGlobal(const LLVector3d &focus, const LLUUID &object_id = LLUUID::null);
-	void			setFocusOnAvatar(BOOL focus, BOOL animate);
+	void			setFocusOnAvatar(BOOL focus, BOOL animate, BOOL reset_axes = TRUE);
 	void			setCameraPosAndFocusGlobal(const LLVector3d& pos, const LLVector3d& focus, const LLUUID &object_id);
 	void			clearFocusObject();
 	void			setFocusObject(LLViewerObject* object);
@@ -291,6 +295,9 @@ public:
 	void			setCameraZoomFraction(F32 fraction);					// Set camera zoom as fraction of minimum and maximum zoom
 	F32				calcCameraFOVZoomFactor();
 	F32				getAgentHUDTargetZoom();
+
+	void			resetCameraZoomFraction();
+	F32				getCurrentCameraZoomFraction() { return mCameraZoomFraction; }
 
 	//--------------------------------------------------------------------
 	// Pan

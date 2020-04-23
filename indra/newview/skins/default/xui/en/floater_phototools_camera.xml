@@ -138,6 +138,8 @@
 						 name="preset_combo"
 						 top_pad="1"
 						 width="122">
+						 <combo_list
+							mouse_wheel_opaque="true"/>
 						 <combo_box.item
 							label="Use preset"
 							name="Use preset"
