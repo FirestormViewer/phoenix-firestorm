@@ -465,19 +465,6 @@ void LLFloaterSettingsDebug::updateControl()
 				{
 					mBooleanCombo->setValue(LLSD(""));
 				}
-
-				bool bUseVAO = mCurrentControlVariable->getName() == "RenderUseVAO";
-				if (bUseVAO)
-				{
-					bool use_shaders = LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 0;
-					mBooleanCombo->setEnabled(use_shaders);
-					getChild<LLUICtrl>("TRUE")->setEnabled(use_shaders);
-					getChild<LLUICtrl>("FALSE")->setEnabled(use_shaders);
-					mDefaultButton->setEnabled(use_shaders);
-					if (!use_shaders) {
-						mBooleanCombo->setValue(LLSD(false));
-					}
-				}
 			}
 			break;
 		  case TYPE_STRING:
