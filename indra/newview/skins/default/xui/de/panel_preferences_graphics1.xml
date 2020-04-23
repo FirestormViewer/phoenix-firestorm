@@ -33,7 +33,6 @@
 		<check_box label="Transparentes Wasser" name="TransparentWater"/>
 		<check_box label="Bumpmapping und Glanz" name="BumpShiny"/>
 		<check_box label="Lokale Lichtquellen" name="LocalLights"/>
-		<check_box label="Einfache Shader" name="BasicShaders" tool_tip="Deaktivieren Sie diese Option, wenn der Grafikkartentreiber Abstürze verursacht"/>
 		<check_box label="Atmosphären-Shader" name="WindLightUseAtmosShaders"/>
 		<check_box label="Erw. Beleuchtungsmodell" name="UseLightShaders" tool_tip="Aktiviert erweitertes Rendering von Lichtquellen."/>
 		<check_box label="Ambient Occlusion" name="UseSSAO"/>

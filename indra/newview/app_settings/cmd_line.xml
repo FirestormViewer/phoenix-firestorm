@@ -439,6 +439,14 @@
       <!-- Special case. Mapped to settings procedurally. -->
     </map>
 
+    <key>skipupdatecheck</key>
+    <map>
+      <key>desc</key>
+      <string>Skips update check at startup.</string>
+      <key>map-to</key>
+      <string>CmdLineSkipUpdater</string>
+    </map>
+
     <!-- FS:Ansariel - Option to not auto-save passwords when using login option >
     <key>logindontsavepassword</key>
     <map>

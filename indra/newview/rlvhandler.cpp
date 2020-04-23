@@ -37,7 +37,8 @@
 #include "llavataractions.h"            // @stopim IM query
 #include "llavatarnamecache.h"			// @shownames
 #include "llavatarlist.h"				// @shownames
-#include "llenvmanager.h"				// @setenv
+// [EEPMERGE]
+//#include "llenvmanager.h"				// @setenv
 #include "llfloatersidepanelcontainer.h"// @shownames
 #include "llnotifications.h"			// @list IM query
 #include "llnotificationsutil.h"
@@ -2273,12 +2274,12 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour e
 	}
 
 	// Don't allow toggling "Basic Shaders" and/or "Atmopsheric Shaders" through the debug settings under @setenv=n
-	gSavedSettings.getControl("VertexShaderEnable")->setHiddenFromSettingsEditor(fHasBhvr);
 	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(fHasBhvr);
 
 	// Restore the user's WindLight preferences when releasing
-	if (!fHasBhvr)
-		LLEnvManagerNew::instance().usePrefs();
+	// [EEPMERGE] Use LLEnvironment::loadPreferences()???
+	//if (!fHasBhvr)
+	//	LLEnvManagerNew::instance().usePrefs();
 }
 
 // Handles: @showhovertext:<uuid>=n|y

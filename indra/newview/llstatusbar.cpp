@@ -89,8 +89,6 @@
 #include <iomanip>
 
 // Firestorm includes
-#include "fslightshare.h"
-#include "kcwlinterface.h"
 #include "llagentui.h"
 #include "llaudioengine.h"
 #include "llclipboard.h"
@@ -452,14 +450,6 @@ BOOL LLStatusBar::postBuild()
 
 	mBuyParcelBtn = getChild<LLButton>("buy_land_btn");
 	mBuyParcelBtn->setClickedCallback(boost::bind(&LLStatusBar::onBuyLandClicked, this));
-
-	mPWLBtn = getChild<LLButton>("status_wl_btn");
-	mPWLBtn->setClickedCallback(boost::bind(&LLStatusBar::onParcelWLClicked, this));
-	
-	// <FS:CR> FIRE-5118 - Lightshare support
-	mLightshareBtn = getChild<LLButton>("status_lightshare_btn");
-	mLightshareBtn->setClickedCallback(boost::bind(&LLStatusBar::onLightshareClicked, this));
-	// </FS:CR>
 
 	mBalancePanel = getChild<LLPanel>("balance_bg");
 	mTimeMediaPanel = getChild<LLPanel>("time_and_media_bg");
@@ -1340,8 +1330,6 @@ void LLStatusBar::updateParcelIcons()
 		bool allow_damage	= vpm->allowAgentDamage(agent_region, current_parcel);
 		BOOL see_avatars	= current_parcel->getSeeAVs();
 		bool is_for_sale	= (!current_parcel->isPublic() && vpm->canAgentBuyParcel(current_parcel, false));
-		bool has_pwl		= KCWindlightInterface::instance().getWLset();
-		bool has_lightshare	= FSLightshare::getInstance()->getState();
 		bool pathfinding_dynamic_enabled = agent_region->dynamicPathfindingEnabled();
 
 		bool pathfinding_navmesh_dirty = LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded();
@@ -1373,10 +1361,6 @@ void LLStatusBar::updateParcelIcons()
 		mParcelIcon[PATHFINDING_DISABLED_ICON]->setVisible(!pathfinding_navmesh_dirty && !pathfinding_dynamic_enabled && !is_opensim);
 		mDamageText->setVisible(allow_damage);
 		mBuyParcelBtn->setVisible(is_for_sale);
-		mPWLBtn->setVisible(has_pwl);
-		mPWLBtn->setEnabled(has_pwl);
-		mLightshareBtn->setVisible(has_lightshare);
-		mLightshareBtn->setEnabled(has_lightshare);
 		mScriptOut->setVisible(LLHUDIcon::scriptIconsNearby());
 	}
 	else
@@ -1387,9 +1371,7 @@ void LLStatusBar::updateParcelIcons()
 		}
 		mDamageText->setVisible(false);
 		mBuyParcelBtn->setVisible(false);
-		mPWLBtn->setVisible(false);
-		mLightshareBtn->setVisible(false);
-		mScriptOut->setVisible(FALSE);
+		mScriptOut->setVisible(false);
 	}
 
 	layoutParcelIcons();
@@ -1426,8 +1408,6 @@ void LLStatusBar::layoutParcelIcons()
 		left = layoutWidget(mParcelIcon[i], left);
 	}
 	left = layoutWidget(mBuyParcelBtn, left);
-	left = layoutWidget(mPWLBtn, left);
-	left = layoutWidget(mLightshareBtn, left);
 
 	LLRect infoTextRect = mParcelInfoText->getRect();
 	infoTextRect.mLeft = left;
@@ -1544,16 +1524,6 @@ void LLStatusBar::onInfoButtonClicked()
 		return;
 	}
 	LLFloaterReg::showInstance("about_land");
-}
-
-void LLStatusBar::onParcelWLClicked()
-{
-	KCWindlightInterface::instance().onClickWLStatusButton();
-}
-
-void LLStatusBar::onLightshareClicked()
-{
-	FSLightshare::getInstance()->processLightshareReset();
 }
 
 void LLStatusBar::onBuyLandClicked()

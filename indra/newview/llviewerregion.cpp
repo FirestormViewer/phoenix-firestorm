@@ -81,6 +81,7 @@
 #include "lleventcoro.h"
 #include "llcorehttputil.h"
 #include "llcallstack.h"
+#include "llsettingsdaycycle.h"
 
 // Firestorm includes
 #include "lfsimfeaturehandler.h"
@@ -3109,6 +3110,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 // </FS:CR> Aurora Sim
 	capabilityNames.append("EstateChangeInfo");
 	capabilityNames.append("EventQueueGet");
+    capabilityNames.append("ExtEnvironment");
 
 	// <FS:Ansariel> Force HTTP features on SL
 	if (use_http_inventory()) {
@@ -3134,6 +3136,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("IsExperienceAdmin");
 	capabilityNames.append("IsExperienceContributor");
 	capabilityNames.append("RegionExperiences");
+    capabilityNames.append("ExperienceQuery");
 	// <FS:Ansariel> [UDP Assets]
 	capabilityNames.append("GetMesh");
 	capabilityNames.append("GetMesh2");
@@ -3189,6 +3192,8 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("UpdateNotecardTaskInventory");
 	capabilityNames.append("UpdateScriptAgent");
 	capabilityNames.append("UpdateScriptTask");
+    capabilityNames.append("UpdateSettingsAgentInventory");
+    capabilityNames.append("UpdateSettingsTaskInventory");
 	capabilityNames.append("UploadBakedTexture");
     capabilityNames.append("UserInfo");
 	capabilityNames.append("ViewerAsset"); 

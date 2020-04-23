@@ -31,6 +31,7 @@
 #include <vector>
 #include "stdtypes.h"
 #include "llpreprocessor.h"
+#include <boost/functional/hash.hpp>
 
 class LLMutex;
 
@@ -163,6 +164,30 @@ public:
 	static const LLTransactionID tnull;
 	LLAssetID makeAssetID(const LLUUID& session) const;
 };
+
+// Generate a hash of an LLUUID object using the boost hash templates. 
+
+// <FS:ND> GCC 4.9 does not like the specialization in form of boost::hash but rather wants a namespace
+// template <>
+// struct boost::hash<LLUUID>
+namespace boost { template <> struct hash<LLUUID>
+// </FS:ND>
+{
+    typedef LLUUID argument_type;
+    typedef std::size_t result_type;
+    result_type operator()(argument_type const& s) const
+    {
+        result_type seed(0);
+
+        for (S32 i = 0; i < UUID_BYTES; ++i)
+        {
+            boost::hash_combine(seed, s.mData[i]);
+        }
+
+        return seed;
+    }
+};
+} // <FS:ND/> close namespace
 
 // <FS:Ansariel> UUID hash calculation
 struct FSUUIDHash

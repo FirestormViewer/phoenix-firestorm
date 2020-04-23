@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="beacons" title="Balises">
+<floater name="beacons" title="BALISES">
 	<panel name="beacons_panel">
-		<text name="label_show">Montrer :</text>
-		<check_box label="Boîtes de contour pour l'éclairage dans la scène" name="lights_bounding_boxes"/>
+		<text name="label_show">
+			Afficher :
+		</text>
 		<check_box label="Balises" name="beacons"/>
-		<check_box label="Eclairage élevé" name="highlights"/>
-		<check_box label="Balise de texte d'information dans la fenêtre d'affichage" name="FSRenderBeaconText"/>
-		<text tool_tip="Largeur de Balise" name="beacon_width_label">Largeur :</text>
-		<text name="label_objects">Pour ces objets :</text>
+		<check_box label="Surbrillances" name="highlights"/>
+		<text name="beacon_width_label" tool_tip="Largeur de la balise">
+			Largeur :
+		</text>
+		<text name="label_objects">
+			Pour ces objets :
+		</text>
 		<check_box label="Physique" name="physical"/>
 		<check_box label="Scripté" name="scripted"/>
-		<check_box label="Toucher seulement" name="touch_only"/>
-		<check_box label="Sources du son" name="sounds"/>
+		<check_box label="Toucher uniquement" name="touch_only"/>
+		<check_box label="Sources sonores" name="sounds"/>
 		<check_box label="Sources des particules" name="particles"/>
-		<check_box label="Sources du Media" name="moapbeacon"/>
+		<check_box label="Sources des médias" name="moapbeacon"/>
+		<check_box label="Soleil" name="sun"/>
+		<check_box label="Lune" name="moon"/>
 	</panel>
 </floater>

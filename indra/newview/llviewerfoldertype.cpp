@@ -160,7 +160,8 @@ LLViewerFolderDictionary::LLViewerFolderDictionary()
 	addEntry(LLFolderType::FT_OUTFIT, 				new ViewerFolderEntry("New Outfit",				"Inv_LookFolderOpen",	"Inv_LookFolderClosed",	TRUE,      true));
 	addEntry(LLFolderType::FT_MY_OUTFITS, 			new ViewerFolderEntry("My Outfits",				"Inv_LookFolderOpen",	"Inv_LookFolderClosed",	TRUE,      true));
 	addEntry(LLFolderType::FT_MESH, 				new ViewerFolderEntry("Meshes",					"Inv_MeshesOpen",		"Inv_MeshesClosed",		FALSE,     true));
-	
+	addEntry(LLFolderType::FT_SETTINGS, 		    new ViewerFolderEntry("Settings",			    "Inv_SettingsOpen",		"Inv_SettingsClosed",	FALSE,     true));
+
 	bool boxes_invisible = !gSavedSettings.getBOOL("InventoryOutboxMakeVisible");
 	addEntry(LLFolderType::FT_INBOX, 				new ViewerFolderEntry("Received Items",			"Inv_InboxOpen",		"Inv_InboxClosed",		FALSE,     true));
 	addEntry(LLFolderType::FT_OUTBOX, 				new ViewerFolderEntry("Merchant Outbox",		"Inv_OutboxOpen",		"Inv_OutboxClosed",		FALSE,     true));

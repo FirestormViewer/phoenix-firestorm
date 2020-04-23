@@ -318,7 +318,7 @@ public:
 	static void onDerenderAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, bool permanent);
 	// </FS:Ansariel> Derender
 
-	static std::set<LLUUID> getInventorySelectedUUIDs();
+	static std::set<LLUUID> getInventorySelectedUUIDs(LLInventoryPanel* active_panel = NULL);
 
 protected:
 	static bool callbackEstateKick(const LLSD& notification, const LLSD& response);

@@ -72,39 +72,17 @@
 			 border_visible="true"
 			 background_visible="true">
 				<check_box
-				 control_name="VertexShaderEnable"
-				 height="16"
-				 label="Basic Shaders - Leave ON! (see tool tip!)"
-				 layout="topleft"
-				 left="5"
-				 name="BasicShaders"
-				 tool_tip="This should ALWAYS be on as it is required for DoF, Shadows and Lights, Ambient Occlusion, Water Reflections and more."
-				 top_pad="8"
-				 width="240">
-				</check_box>
-				<check_box
 				 control_name="WindLightUseAtmosShaders"
-				 enabled_control="VertexShaderEnable"
 				 height="16"
 				 initial_value="true"
 				 label="Enable Atmospheric Shaders (Windlight)"
 				 layout="topleft"
 				 left="5"
 				 name="WindLightUseAtmosShaders"
-				 top_pad="2"
+				 top_pad="8"
 				 tool_tip="This will enable full WindLight functionality (atmospheric shaders). If you cannot enable this feature, ensure that Basic Shaders are enabled below."
 				 width="240">
 				</check_box>
-				<check_box
-				 control_name="UseEnvironmentFromRegion"
-				 follows="left|top"
-				 height="16"
-				 label="Use Region Windlight"
-				 layout="topleft"
-				 left="5"
-				 name="UseRegionWindlight"
-				 top_pad="2"
-				 width="240"/>
 			</panel>
 
 			<panel
@@ -258,52 +236,78 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="60"
+			 height="200"
 			 border_visible="true"
 			 background_visible="true">
-				<icon
-				 height="32"
-				 image_name="icon_day_cycle_12am.tga"
-				 layout="topleft"
+				<text
+				 top="10"
 				 left="6"
-				 top_pad="10"
-				 name="SkyDayCycle"
-				 use_draw_context_alpha="false"
-				 width="240"
-				 tool_tip="Change the time of the day. NOTE: THIS WILL USUALLY RESET THE WINDLIGHT PRESET TO DEFAULT! To change to position of the sun for a specific preset, select 'New Sky Preset' or 'Edit Sky Preset' from the menu below."/>
-				<multi_slider
-				 can_edit_text="false"
-				 control_name="WLSunPos"
-				 decimal_digits="0"
 				 height="10"
-				 increment="0.0833333"
-				 layout="topleft"
-				 left="6"
-				 max_sliders="1"
-				 max_val="24"
-				 name="WLSunPos"
-				 show_text="false"
-				 top_pad="3"
-				 tool_tip="This may not function correctly. Use 'New Sky Present' or 'Edit Sky Preset' if you encounter difficulty."
-				 width="240"/>
-				<button
-				 enabled="true"
-				 name="ResetToRegionDefault"
+				 width="90"
 				 follows="left|top"
-				 height="47"
+				 layout="topleft"
+				>
+					Sun Position:
+				</text>
+				<sun_moon_trackball
+				 name="sun_rotation"
+				 top_pad="5"
+				 left_delta="0"
+				 height="150"
+				 width="150"
+				 follows="left|top"
+				 thumb_mode="sun"
+				/>
+				<button
+				 name="ResetToRegionDefault"
+				 label=""
+				 tool_tip="Reset the WindLight options to region default"
+				 enabled="true"
+				 top="10"
+				 left="236"
+				 height="20"
 				 width="20"
-				 top_delta="-35"
-				 left_pad="5"
+				 follows="left|top"
 				 image_overlay="StopReload_Off"
+				 label_selected=""
 				 scale_image="true"
-				 tool_tip="Reset the WindLight options to region default."/>
+				/>
+				<text
+				 top="10"
+				 left="170"
+				 height="10"
+				 width="90"
+				 follows="left|top"
+				 layout="topleft"
+				>
+					WL Time:
+				</text>
+				<multi_slider
+				 name="time_offset"
+				 top_delta="15"
+				 left_delta="15"
+				 height="150"
+				 width="15"
+				 follows="left|top"
+				 layout="topleft"
+				 can_edit_text="true"
+				 decimal_digits="0"
+				 increment="120"
+				 initial_value="0"
+				 max_sliders="1"
+				 max_val="86400"
+				 orientation="vertical"
+				 show_text="false"
+				/>
 			</panel>
 
+			<!-- KC: These next two panels need to be refactored, hiding for now -->
 			<panel
+			 visible="false"
 			 name="P_Q_Windlights"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_delta="65"
 			 left="4"
 			 width="135"
 			 height="135"
@@ -397,6 +401,7 @@
 			</panel>
 			
 			<panel
+			 visible="false"
 			 name="P_WL_Presets"
 			 follows="top|left"
 			 layout="topleft"
@@ -591,7 +596,6 @@
 				</text>
 				<combo_box
 				 control_name="RenderWaterRefResolution"
-				 enabled_control="VertexShaderEnable"
 				 height="22"
 				 layout="topleft"
 				 left_pad="65"
@@ -684,7 +688,6 @@
 			 background_visible="true">
 				<check_box
 				 control_name="RenderDeferred"
-				 enabled_control="VertexShaderEnable"
 				 height="16"
 				 initial_value="true"
 				 label="Enable Advanced Lighting Model"
@@ -1882,7 +1885,6 @@
 				<!--
 				<check_box
 				 control_name="RenderGlow"
-				 enabled_control="VertexShaderEnable"
 				 height="16"
 				 label="Enable Glow Effect (please read the tool tip)"
 				 layout="topleft"

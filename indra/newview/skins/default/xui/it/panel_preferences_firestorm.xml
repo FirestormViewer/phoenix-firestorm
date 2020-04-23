@@ -108,26 +108,6 @@
             <check_box label="Permetti al protocollo OpenCollar di abilitare/disabilitare l&apos;AO interno" name="BridgeIntegrationOC"/>
             <check_box label="Permetti al protocollo LockMeister di abilitare/disabilitare l&apos;AO interno" name="BridgeIntegrationLM"/>
         </panel>
-        <panel label="Ambiente" name="WindlightTab">
-            <check_box label="Cambia automaticamente le impostazioni ambiente della sim/lotto" name="UseEnvironmentFromRegionAlways" />
-            <check_box label="Cambia gradualmente le impostazioni del cielo" name="FSInterpolateSky" tool_tip="Questa opzione cambierà le impostazioni dell&apos;ambiente gradualmente, questo provocherà rallentamenti poichè richiede un&apos;utilizzo di FPS. Disabilitarla per cambiare instantaneamente le impostazioni dell&apos;ambiente" />
-            <check_box label="Cambia gradualmente le impostazioni dell&apos;acqua" name="FSInterpolateWater" tool_tip="Questa opzione cambierà le impostazioni dell&apos;ambiente gradualmente, questo provocherà rallentamenti poichè richiede un&apos;utilizzo di FPS. Disabilitarla per cambiare instantaneamente le impostazioni dell&apos;ambiente" />
-            <text name="FSWLshare_txt">
-                Condivisione parametri ambiente Firestorm
-            </text>
-            <check_box label="Abilita ambiente Firestorm" name="FSWLParcelEnabled" />
-            <check_box label="Applica automaticamente le impostazioni ambiente dai terreni di amici" name="FSWLWhitelistFriends" />
-            <check_box label="Applica automaticamente le impostazioni ambiente dai terreni dei miei gruppi" name="FSWLWhitelistGroups" />
-            <check_box label="Applica automaticamente le impostazioni ambiente da qualunque terreno" name="FSWLWhitelistAll" />
-            <text name="wl_crossfade_label">
-                Durata transizione (secondi):
-            </text>
-            <spinner name="FSWindlightInterpolateTime" tool_tip="Durata della transizione da un&apos;impostazione ad un&apos;altra. [Predefinito: 3]"/>
-            <text name="could_texture_text">
-                Texture nuvole (riavvio consigliato):
-            </text>
-            <combo_box name="cloud_combo" tool_tip="Scegliere la texture desiderata per le nuvole."/>
-        </panel>
         <panel label="Costr. 1" name="BuildTab">
             <text name="text_box_objprams" width="250">
                 Misure alla creazione

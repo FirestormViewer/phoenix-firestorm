@@ -502,9 +502,26 @@ U32 LLRenderTarget::getNumTextures() const
 }
 
 
-void LLRenderTarget::bindTexture(U32 index, S32 channel)
+void LLRenderTarget::bindTexture(U32 index, S32 channel, LLTexUnit::eTextureFilterOptions filter_options)
 {
 	gGL.getTexUnit(channel)->bindManual(mUsage, getTexture(index));
+
+    bool isSRGB = false;
+    llassert(mInternalFormat.size() > index);
+    switch (mInternalFormat[index])
+    {
+        case GL_SRGB_ALPHA:
+        case GL_SRGB:
+        case GL_SRGB8_ALPHA8:
+            isSRGB = true;
+        break;
+
+        default:
+        break;
+    }
+
+    gGL.getTexUnit(channel)->setTextureFilteringOption(filter_options);
+    gGL.getTexUnit(channel)->setTextureColorSpace(isSRGB ? LLTexUnit::TCS_SRGB : LLTexUnit::TCS_LINEAR);
 }
 
 void LLRenderTarget::flush(bool fetch_depth)
@@ -638,134 +655,3 @@ void LLRenderTarget::getViewport(S32* viewport)
 	viewport[2] = mResX;
 	viewport[3] = mResY;
 }
-
-// <FS:ND> Determine version of intel driver. We know anything >= 24 is problematic with glReadPixels
-#if LL_WINDOWS && ADDRESS_SIZE == 64
-U32 getIntelDriverVersionMajor()
-{
-	if (!gGLManager.mIsIntel)
-		return 0;
-
-	std::string strVersion = gGLManager.mDriverVersionVendorString;
-	auto i = strVersion.find("Build ");
-	if (i != std::string::npos)
-	{
-		i += sizeof("Build");
-		while (isspace(strVersion[i]) && strVersion[i])
-			++i;
-		auto start = i;
-		while (strVersion[i] != '.' && strVersion[i])
-			i++;
-
-		if( strVersion[i] )
-		{
-			std::string strMajor(strVersion.begin() + start, strVersion.begin() + i);
-			U32 version = 0;
-			if (LLStringUtil::convertToU32(strMajor, version))
-				return version;
-		}
-	}
-
-	return 0;
-}
-#endif
-//</FD>ND>
-// <FS:ND> Copy the contents of this FBO into memory 
-void LLRenderTarget::copyContents(S32 x, S32 y, S32 w, S32 h, U32 format, U32 type, U8 *buffer)
-{
-#if LL_WINDOWS && ADDRESS_SIZE == 64
-	// <FS:ND> If not Intel or driver < 24.*, be done with it
-	if (!gGLManager.mIsIntel || getIntelDriverVersionMajor() < 24)
-	{
-		glReadPixels(x, y, w, h, (GLenum)format, (GLenum)type, buffer);
-		return;
-	}
-
-	std::vector< GLenum > vErrors;
-	
-	// BUG-225655/FIRE-24049 some drivers (Intel 64 bit >= 24.* are behaving buggy when glReadPixels is called
-	if (mFBO)
-	{
-		// When a FBO is bound unbind/rebind it.
-		vErrors.push_back(glGetError());
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		vErrors.push_back(glGetError());
-		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
-		vErrors.push_back(glGetError());
-
-		glReadPixels(x, y, w, h, (GLenum)format, (GLenum)type, buffer);
-		vErrors.push_back(glGetError());
-	}
-	else
-	{
-		llassert_always(type == GL_UNSIGNED_BYTE);
-		llassert_always(format == GL_RGBA || format == GL_ALPHA);
-
-		if (mUsage != LLTexUnit::TT_TEXTURE && mUsage != LLTexUnit::TT_RECT_TEXTURE )
-		{
-			LL_WARNS() << "Expected type TT_TEXTURE or TT_RECT_TEXTURE got 0x" << std::setw(8) << std::setfill('0') << std::hex << LLTexUnit::getInternalType(mUsage) <<
-						 " internal type 0x" << std::setw(8) << std::setfill('0') << std::hex << mUsage << LL_ENDL;
-		}
-
-		// When using no FBO and avoid glReadPixels altogether, instead bind the texture and call glGetTexImage
-		vErrors.push_back(glGetError());
-		flush();
-		vErrors.push_back(glGetError());
-		gGL.getTexUnit(0)->bind(this);
-		vErrors.push_back(glGetError());
-
-		std::string sBuffer(mResX*mResY * 4, 0);
-
-		// Would be nice if GL_ALPHA would be allowed for glGetTexImage
-		glGetTexImage(LLTexUnit::getInternalType(mUsage), 0, GL_RGBA, GL_UNSIGNED_BYTE, &sBuffer[0]);
-		vErrors.push_back(glGetError());
-
-		// Now copy out the data.
-		// n.b. in case of:
-		//	format == GL_RGBA && x == 0 ** y == 0 and w == mResX && h == mResY
-		// would could safe all this and glGetTexImage right into buffer
-		U8 const *pBuffer = reinterpret_cast<U8 const*>(sBuffer.c_str());
-		pBuffer += (y * mResX * 4); // Adjust to skip to requested y coord
-		pBuffer += x * 4; // Skip to requested x coord
-
-		if (format == GL_RGBA)
-		{
-			for (S32 i = y; i < h; ++i)
-			{
-				std::memcpy(buffer, pBuffer, w * 4);
-				pBuffer += mResX * 4; // Skip one full row, row is already x adjusted
-				buffer += w * 4;
-			}
-		}
-		else if (format == GL_ALPHA)
-		{
-			for (S32 i = y; i < h; ++i)
-			{
-				for (S32 j = 0; j < w; ++j)
-				{
-					*buffer = pBuffer[3];
-					++buffer;
-					pBuffer += 4;
-				}
-				pBuffer += (mResX - w) * 4; // Skip to end of row
-				pBuffer += x * 4; // Skip to requested x coordinate again
-			}
-		}
-		gGL.getTexUnit(0)->disable();
-		vErrors.push_back(glGetError());
-	}
-
-	std::stringstream strm;
-	for (GLenum err : vErrors )
-		strm << "0x" << std::hex << (U32)err << " ";
-
-	if (vErrors.end() != std::find_if(vErrors.begin(), vErrors.end(), [](GLenum err){return err != GL_NO_ERROR; }))
-	{
-		LL_WARNS() << "GL error occured: " << strm.str() << LL_ENDL;
-	}
-#else
-	// <FS:ND> Every other OS just gets glReadPixels
-	glReadPixels(x, y, w, h, (GLenum)format, (GLenum)type, buffer);
-#endif
-}
-// </FS:ND>
