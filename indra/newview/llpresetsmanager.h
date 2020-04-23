@@ -36,11 +36,19 @@ static const std::string PRESETS_DEFAULT = "Default";
 static const std::string PRESETS_DIR = "presets";
 static const std::string PRESETS_GRAPHIC = "graphic";
 static const std::string PRESETS_CAMERA = "camera";
+static const std::string PRESETS_REAR = "Rear";
+static const std::string PRESETS_FRONT = "Front";
+static const std::string PRESETS_SIDE = "Side";
+static const std::string PRESETS_VIEW_SUFFIX = " View";
+static const std::string PRESETS_REAR_VIEW = PRESETS_REAR + PRESETS_VIEW_SUFFIX;
+static const std::string PRESETS_FRONT_VIEW = PRESETS_FRONT + PRESETS_VIEW_SUFFIX;
+static const std::string PRESETS_SIDE_VIEW = PRESETS_SIDE + PRESETS_VIEW_SUFFIX;
 
 enum EDefaultOptions
 {
 	DEFAULT_SHOW,
 	DEFAULT_TOP,
+	DEFAULT_BOTTOM,
 	DEFAULT_HIDE				// Do not display "Default" in a list
 };
 
@@ -54,22 +62,35 @@ public:
 	typedef std::list<std::string> preset_name_list_t;
 	typedef boost::signals2::signal<void()> preset_list_signal_t;
 
-	void createMissingDefault();
+	void createMissingDefault(const std::string& subdirectory);
+	void startWatching(const std::string& subdirectory);
+	void triggerChangeCameraSignal();
 	void triggerChangeSignal();
 	static std::string getPresetsDir(const std::string& subdirectory);
-	void setPresetNamesInComboBox(const std::string& subdirectory, LLComboBox* combo, EDefaultOptions default_option);
-	void loadPresetNamesFromDir(const std::string& dir, preset_name_list_t& presets, EDefaultOptions default_option);
+	bool setPresetNamesInComboBox(const std::string& subdirectory, LLComboBox* combo, EDefaultOptions default_option);
+	void loadPresetNamesFromDir(const std::string& subdirectory, preset_name_list_t& presets, EDefaultOptions default_option);
 	bool savePreset(const std::string& subdirectory, std::string name, bool createDefault = false);
 	void loadPreset(const std::string& subdirectory, std::string name);
 	bool deletePreset(const std::string& subdirectory, std::string name);
+	bool isCameraDirty();
+	static void setCameraDirty(bool dirty);
+
+	void createCameraDefaultPresets();
+
+	bool isTemplateCameraPreset(std::string preset_name);
+	bool isDefaultCameraPreset(std::string preset_name);
+	void resetCameraPreset(std::string preset_name);
+	bool createDefaultCameraPreset(std::string preset_name, bool force_reset = false);
 
 	// Emitted when a preset gets loaded, deleted, or saved.
+	boost::signals2::connection setPresetListChangeCameraCallback(const preset_list_signal_t::slot_type& cb);
 	boost::signals2::connection setPresetListChangeCallback(const preset_list_signal_t::slot_type& cb);
 
 	// Emitted when a preset gets loaded or saved.
 
 	preset_name_list_t mPresetNames;
 
+	preset_list_signal_t mPresetListChangeCameraSignal;
 	preset_list_signal_t mPresetListChangeSignal;
 
 	// <FS:Ansariel> Graphic preset controls independent from XUI
@@ -78,13 +99,20 @@ public:
 	// </FS:Ansariel>
 
   private:
-    LOG_CLASS(LLPresetsManager);
+	LOG_CLASS(LLPresetsManager);
+
+	void getControlNames(std::vector<std::string>& names);
+	static void settingChanged();
+
+	boost::signals2::connection	mCameraChangedSignal;
+
+	static bool	mCameraDirty;
+	static bool mIgnoreChangedSignal;
 
 	// <FS:Ansariel> Graphic preset controls independent from XUI
 	void initGraphicPresetControlNames();
 	void initGraphicPresetControls();
 	void handleGraphicPresetControlChanged(LLControlVariablePtr control, const LLSD& new_value, const LLSD& old_value);
-
 	bool mIsLoadingPreset;
 	bool mIsDrawDistanceSteppingActive;
 	std::vector<std::string> mGraphicPresetControls;

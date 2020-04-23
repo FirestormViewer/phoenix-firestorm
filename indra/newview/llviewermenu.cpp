@@ -5238,13 +5238,12 @@ void handle_reset_view()
 		// switching to outfit selector should automagically save any currently edited wearable
 		LLFloaterSidePanelContainer::showPanel("appearance", LLSD().with("type", "my_outfits"));
 	}
-
+	
 	// <FS:Zi> Added optional V1 behavior so the avatar turns into camera direction after hitting ESC
 	if(gSavedSettings.getBOOL("ResetViewTurnsAvatar"))
 		gAgentCamera.resetView();
 	// </FS:Zi>
 
-	gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
 	reset_view_final( TRUE );
 	LLFloaterCamera::resetCameraMode();
 }

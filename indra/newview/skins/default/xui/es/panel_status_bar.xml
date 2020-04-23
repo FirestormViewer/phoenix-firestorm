@@ -24,11 +24,11 @@
 		<button name="status_lightshare_btn" tool_tip="Configuración Lightshare"/>
 		<text name="parcel_info_text" tool_tip="Nombre de la parcela en la que te encuentras. Haz clic para obtener información sobre la misma." value="(cargando...)"/>
 	</panel>
-	<panel name="balance_bg" left="-308">
+	<panel name="balance_bg" left="-331">
 		<text name="balance" tool_tip="Haz clic para actualizar tu saldo en L$" value="?? L$"/>
 		<button name="buyL" label="COMPRAR L$" halign="left" tool_tip="Pulsa para comprar más L$" left_pad="-15"/>
 	</panel>
-	<panel name="time_and_media_bg" width="206">
+	<panel name="time_and_media_bg" width="229">
 		<text name="TimeText" tool_tip="Hora actual (costa del Pacífico de EEUU)" width="78">
 			24:00:00 PST
 		</text>

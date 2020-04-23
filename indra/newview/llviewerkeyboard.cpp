@@ -383,6 +383,7 @@ void camera_spin_around_ccw_sitting( EKeystate s )
 	else
 	{
 		//change camera but do not send keystrokes
+		gAgentCamera.unlockView();
 		gAgentCamera.setOrbitLeftKey( get_orbit_rate() );
 	}
 }
@@ -399,6 +400,7 @@ void camera_spin_around_cw_sitting( EKeystate s )
 	else
 	{
 		//change camera but do not send keystrokes
+		gAgentCamera.unlockView();
 		gAgentCamera.setOrbitRightKey( get_orbit_rate() );
 	}
 }

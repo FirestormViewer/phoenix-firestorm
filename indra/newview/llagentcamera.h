@@ -58,6 +58,9 @@ enum ECameraPreset
 	/** "Above and to the left, over the shoulder, pulled back a little on the zoom" */
 	CAMERA_PRESET_GROUP_VIEW,
 
+	/** Current view when a preset is saved */
+	CAMERA_PRESET_CUSTOM,
+
 // [RLVa:KB] - Checked: RLVa-2.0.0
 	/* Used by RLVa */
 	CAMERA_RLV_SETCAM_VIEW
@@ -114,9 +117,17 @@ private:
 	//--------------------------------------------------------------------
 public:
 	void switchCameraPreset(ECameraPreset preset);
-private:
 	/** Determines default camera offset depending on the current camera preset */
 	LLVector3 getCameraOffsetInitial();
+	/** Determines default focus offset depending on the current camera preset */
+	LLVector3d getFocusOffsetInitial();
+
+	LLVector3 getCurrentCameraOffset();
+	LLVector3d getCurrentFocusOffset();
+	LLQuaternion getCurrentAvatarRotation();
+	bool isJoystickCameraUsed();
+
+private:
 	/** Determines maximum camera distance from target for mouselook, opposite to LAND_MIN_ZOOM */
 	// <FS:Ansariel> FIRE-23470: Fix camera controls zoom glitch
 	//F32 getCameraMaxZoomDistance();
@@ -126,11 +137,11 @@ private:
 	/** Camera preset in Third Person Mode */
 	ECameraPreset mCameraPreset; 
 
-	/** Initial camera offsets */
-	std::map<ECameraPreset, LLPointer<LLControlVariable> > mCameraOffsetInitial;
+	/** Initial camera offset */
+	LLPointer<LLControlVariable> mCameraOffsetInitial;
 
-	/** Initial focus offsets */
-	std::map<ECameraPreset, LLPointer<LLControlVariable> > mFocusOffsetInitial;
+	/** Initial focus offset */
+	LLPointer<LLControlVariable> mFocusOffsetInitial;
 
 	//--------------------------------------------------------------------
 	// Position
@@ -145,6 +156,8 @@ public:
 	F32				getCurrentCameraBuildOffset() 	{ return (F32)mCameraFocusOffset.length(); }
 	void			clearCameraLag() { mCameraLag.clearVec(); }
 private:
+	LLVector3		getAvatarRootPosition();
+
 	F32				mCurrentCameraDistance;	 		// Current camera offset from avatar
 	F32				mTargetCameraDistance;			// Target camera offset from avatar
 	F32				mCameraFOVZoomFactor;			// Amount of fov zoom applied to camera when zeroing in on an object
@@ -266,15 +279,16 @@ public:
 	void			cameraOrbitAround(const F32 radians);	// Rotate camera CCW radians about build focus point
 	void			cameraOrbitOver(const F32 radians);		// Rotate camera forward radians over build focus point
 	void			cameraOrbitIn(const F32 meters);		// Move camera in toward build focus point
-
+	void			resetCameraOrbit();
+	void			resetOrbitDiff();
 	//--------------------------------------------------------------------
 	// Zoom
 	//--------------------------------------------------------------------
 public:
-	void			handleScrollWheel(S32 clicks); 			// Mousewheel driven zoom
-	void			cameraZoomIn(const F32 factor);			// Zoom in by fraction of current distance
-	F32				getCameraZoomFraction();				// Get camera zoom as fraction of minimum and maximum zoom
-	void			setCameraZoomFraction(F32 fraction);	// Set camera zoom as fraction of minimum and maximum zoom
+	void			handleScrollWheel(S32 clicks); 							// Mousewheel driven zoom
+	void			cameraZoomIn(const F32 factor);							// Zoom in by fraction of current distance
+	F32				getCameraZoomFraction(bool get_third_person = false);	// Get camera zoom as fraction of minimum and maximum zoom
+	void			setCameraZoomFraction(F32 fraction);					// Set camera zoom as fraction of minimum and maximum zoom
 	F32				calcCameraFOVZoomFactor();
 	F32				getAgentHUDTargetZoom();
 
@@ -284,8 +298,9 @@ public:
 public:
 	void			cameraPanIn(const F32 meters);
 	void			cameraPanLeft(const F32 meters);
-	void			cameraPanUp(const F32 meters);
-	
+	void			cameraPanUp(const F32 meters);	
+	void			resetCameraPan();
+	void			resetPanDiff();
 	//--------------------------------------------------------------------
 	// View
 	//--------------------------------------------------------------------
@@ -387,6 +402,9 @@ private:
 	F32				mOrbitInKey;
 	F32				mOrbitOutKey;
 
+	F32				mOrbitAroundRadians;
+	F32				mOrbitOverAngle;
+
 	//--------------------------------------------------------------------
 	// Pan
 	//--------------------------------------------------------------------
@@ -413,6 +431,8 @@ private:
 	F32				mPanRightKey;					
 	F32				mPanInKey;
 	F32				mPanOutKey;
+
+	LLVector3d		mPanFocusDiff;
 
 /**                    Keys
  **                                                                            **
