@@ -225,16 +225,6 @@ private:
 	// </FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
 
 	/**
-	 * Handles clicks on the parcel wl info button.
-	 */
-	void onParcelWLClicked();
-
-	/** <FS:CR> FIRE-5118 - Lightshare support
-	 * Handles clicks on the lightshare icon.
-	 */
-	void onLightshareClicked();
-	
-	/**
 	 * Called when agent changes the parcel.
 	 */
 	void onAgentParcelChange();
@@ -369,10 +359,6 @@ private:
 	LLTextBox* 				mDamageText;
 	LLIconCtrl*				mParcelIcon[ICON_COUNT];
 	LLParcelChangeObserver*	mParcelChangedObserver;
-	LLButton* 				mPWLBtn;
-	// <FS:CR> FIRE-5118 - Lightshare support
-	LLButton*				mLightshareBtn;
-	// </FS:CR>
 	LLPanel*				mBalancePanel;
 	LLButton*				mBuyParcelBtn;
 	LLPanel*				mTimeMediaPanel;

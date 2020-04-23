@@ -3821,17 +3821,6 @@ W innym przypadku możesz poszukać na mapie miejsc oznaczonych jako &quot;Infoh
 		Nie możesz usunąć świata [REMOVE_GRID], gdy jesteś z nim połączony/a.
 		<usetemplate ignoretext="Ostrzeżenie przed usuwaniem świata z aktywnym połączeniem" name="okcancelignore" notext="Anuluj" />
 	</notification>
-	<notification name="FSWL" label="Aplikowanie ustawień Windlight">
-		&apos;[PARCEL_NAME]&apos;, własność [OWNER_NAME], chce zmienić ustawienia otoczenia systemu Windlight.
-		<form name="form">
-			<button name="Allow" text="Zezwól"/>
-			<button name="Ignore" text="Ignoruj"/>
-		</form>
-	</notification>
-	<notification name="FSWLClear" label="Reset ustawień Windlight">
-		Zresetować ustawienia WL dla &apos;[PARCEL_NAME]&apos; do domyślnych regionu?
-		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Tak"/>
-	</notification>
 	<notification name="NewAOSet">
 		Wpisz nazwę nowego zestawu AO:
 (Nazwa może zawierać każdy znak ASCII, za wyjątkiem ":" oraz "|")
