@@ -176,7 +176,7 @@ typedef enum
 
 	virtual U32 getVertexDataMask() { return VERTEX_DATA_MASK; }
 
-	virtual S32 getVertexShaderLevel() const;
+	virtual S32 getShaderLevel() const;
 
 	LLDrawPoolAvatar();
 
@@ -265,7 +265,7 @@ typedef enum
 									  LLFace* facep, 
 									  const LLMeshSkinInfo* skin, 
 									  LLVolume* volume,
-									  const LLVolumeFace& vol_face);
+									  LLVolumeFace& vol_face);
 	void updateRiggedVertexBuffers(LLVOAvatar* avatar);
 
 	void renderRigged(LLVOAvatar* avatar, U32 type, bool glow = false);

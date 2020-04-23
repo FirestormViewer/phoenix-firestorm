@@ -43,7 +43,6 @@
 		<check_box label="透明な水" name="TransparentWater"/>
 		<check_box label="バンプマッピングと光沢" name="BumpShiny"/>
 		<check_box label="近くの光" name="LocalLights"/>
-		<check_box label="基本シェーダー" name="BasicShaders" tool_tip="このオプションを無効にすると、グラフィックカードのドライバの種類によっては、クラッシュするのを防ぎます。"/>
 		<check_box label="環境（大気）シェーダー" name="WindLightUseAtmosShaders"/>
 		<check_box label="高度な照明モデル" name="UseLightShaders"/>
 		<check_box label="アンビエントオクルージョン" name="UseSSAO"/>

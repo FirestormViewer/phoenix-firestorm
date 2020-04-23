@@ -645,6 +645,15 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="BUTTON_HELP">
 		Ver la Ayuda
 	</string>
+	<string name="TooltipNotecardNotAllowedTypeDrop">
+		Los objetos de este tipo no se pueden adjuntar 
+a las notas de esta región.
+	</string>
+	<string name="TooltipNotecardOwnerRestrictedDrop">
+		Sólo los objetos con permisos 
+«próximo propietario» sin restricciones 
+pueden adjuntarse a las notas.
+	</string>
 	<string name="Searching">
 		Buscando...
 	</string>
@@ -715,6 +724,18 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="AssetErrorUnknownStatus">
 		Estado desconocido
+	</string>
+	<string name="SettingValidationError">
+		Error en la validación para importar los parámetros [NAME]
+	</string>
+	<string name="SettingImportFileError">
+		No se pudo abrir el archivo [FILE]
+	</string>
+	<string name="SettingParseFileError">
+		No se pudo abrir el archivo [FILE]
+	</string>
+	<string name="SettingTranslateError">
+		No se pudo traducir el Viento de luz legado [NAME]
 	</string>
 	<string name="texture">
 		la textura
@@ -790,6 +811,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="symbolic folder link">
 		enlace de la carpeta
+	</string>
+	<string name="settings blob">
+		opciones
 	</string>
 	<string name="mesh">
 		el modelo mesh
@@ -1136,6 +1160,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="ForceSitAvatar">
 		Forzar que el avatar se siente
 	</string>
+	<string name="ChangeEnvSettings">
+		Cambiar tu configuración del entorno
+	</string>
 	<string name="AgentNameSubst">
 		(Tú)
 	</string>
@@ -1305,6 +1332,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="tattoo">
 		Tatuaje
 	</string>
+	<string name="universal">
+		Universal
+	</string>
 	<string name="physics">
 		Física
 	</string>
@@ -1346,6 +1376,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="tattoo_not_worn">
 		Tatuaje no puesto
+	</string>
+	<string name="universal_not_worn">
+		Universal no puesto
 	</string>
 	<string name="physics_not_worn">
 		Física no puesta
@@ -1397,6 +1430,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="create_new_tattoo">
 		Crear un tatuaje nuevo
+	</string>
+	<string name="create_new_universal">
+		Crear unos guantes nuevos
 	</string>
 	<string name="create_new_physics">
 		Crear nueva física
@@ -2546,6 +2582,27 @@ Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia 
 	</string>
 	<string name="RegionSettings">
 		Configuración de la región
+	</string>
+	<string name="NoEnvironmentSettings">
+		Esta región no es compatible con las opciones de entorno.
+	</string>
+	<string name="EnvironmentSun">
+		Sol
+	</string>
+	<string name="EnvironmentMoon">
+		Luna
+	</string>
+	<string name="EnvironmentBloom">
+		Florecimiento
+	</string>
+	<string name="EnvironmentCloudNoise">
+		Ruido de nubes
+	</string>
+	<string name="EnvironmentNormalMap">
+		Vista Normal
+	</string>
+	<string name="EnvironmentTransparent">
+		Transparente
 	</string>
 	<string name="ClassifiedClicksTxt">
 		Clics: [TELEPORT] teleportes, [MAP] mapa, [PROFILE] perfil
@@ -4794,6 +4851,9 @@ Denuncia de infracción
 	<string name="New Tattoo">
 		Tatuaje nuevo
 	</string>
+	<string name="New Universal">
+		Nuevo Universal
+	</string>
 	<string name="New Physics">
 		Nueva física
 	</string>
@@ -4919,6 +4979,15 @@ Denuncia de infracción
 	</string>
 	<string name="Female - Wow">
 		Mujer - Admiración
+	</string>
+	<string name="New Daycycle">
+		Nuevo Ciclo del día
+	</string>
+	<string name="New Water">
+		Nueva Agua
+	</string>
+	<string name="New Sky">
+		Nuevo Cielo
 	</string>
 	<string name="/bow">
 		/reverencia
@@ -5463,6 +5532,12 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="BeaconMedia">
 		Viendo balizas de medios (blancas)
 	</string>
+	<string name="BeaconSun">
+		Visualización de la baliza de dirección del sol (naranja)
+	</string>
+	<string name="BeaconMoon">
+		Visualización de la baliza de dirección de la luna (violeta)
+	</string>
 	<string name="ParticleHiding">
 		Ocultando las partículas
 	</string>
@@ -5489,6 +5564,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="Command_Destinations_Label">
 		Destinos
+	</string>
+	<string name="Command_Environments_Label">
+		Mis entornos
 	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
@@ -5654,6 +5732,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		Destinos de interés
+	</string>
+	<string name="Command_Environments_Tooltip">
+		Mis entornos
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Subir a Flickr
@@ -5968,6 +6049,12 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="ExperiencePermission12">
 		aceptar automáticamente permisos de experiencias
 	</string>
+	<string name="ExperiencePermission16">
+		forzar que el avatar se siente
+	</string>
+	<string name="ExperiencePermission17">
+		cambiar tu configuración del entorno
+	</string>
 	<string name="ExperiencePermissionShortUnknown">
 		ha realizado una operación desconocida: [Permission]
 	</string>
@@ -5991,6 +6078,12 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="ExperiencePermissionShort12">
 		Otorgar permisos
+	</string>
+	<string name="ExperiencePermissionShort16">
+		Sentarte
+	</string>
+	<string name="ExperiencePermissionShort17">
+		Entorno
 	</string>
 	<string name="LoadCameraPositionNoneSaved">Todavía no ha sido guardada ninguna vista de cámara.</string>
 	<string name="LoadCameraPositionOutsideDrawDistance">No se puede restaurar la vista de cámara porque su posición está más allá de tu distancia de dibujo.</string>

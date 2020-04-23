@@ -867,6 +867,8 @@ with the same filename but different name
   <texture name="Inv_InboxClosed"		file_name="icons/Inv_SysClosed.png" />
   <texture name="Inv_OutboxOpen"		file_name="icons/Inv_SysOpen.png" />
   <texture name="Inv_OutboxClosed"		file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_SettingsOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_SettingsClosed"	file_name="icons/Inv_SysClosed.png" />
   <texture name="Parcel_Windlight" file_name="icons/Parcel_WindLight.png" preload="false" />
   <texture name="TabIcon_Translate_Off" file_name="taskpanel/translate_icon_24x24.png" preload="false" />
   <texture name="ao_toggle_18" file_name="toolbar_icons/animation_override.png" preload="false" />

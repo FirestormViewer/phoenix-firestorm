@@ -505,5 +505,6 @@ los medios:
 			</panel>
 		</panel>
 		<panel label="Experiencas" name="land_experiences_panel"/>
+		<panel label="Entorno" name="land_environment_panel"/>
 	</tab_container>
 </floater>

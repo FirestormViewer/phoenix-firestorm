@@ -3768,17 +3768,6 @@ In alternativa, puoi guardare sulla mappa e trovare luoghi segnalati come &quot;
 		Impossibile rimuovere la grid [REMOVE_GRID] mentre si è connessi ad essa.
 		<usetemplate ignoretext="La grid a cui si è connessi non può essere cancellata." name="okcancelignore" notext="Annulla" />
 	</notification>
-	<notification label="Applica impostazioni ambiente" name="FSWL">
-		&apos;[PARCEL_NAME]&apos;, di proprietà di [OWNER_NAME], vuole modificare le impostazioni visuali dell&apos;ambiente.
-		<form name="form">
-			<button name="Allow" text="Permetti"/>
-			<button name="Ignore" text="Ignora"/>
-		</form>
-	</notification>
-	<notification label="Ripristina impostazioni ambiente" name="FSWLClear">
-		Ripristinare le impostazioni d&apos;ambiente di [PARCEL_NAME] al predefinito della regione?
-		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Yes"/>
-	</notification>
 	<notification name="NewAOSet">
 		Specificare un nome per il nuovo set AO:
 (qualsiasi carattere ASCII eccetto : e | )

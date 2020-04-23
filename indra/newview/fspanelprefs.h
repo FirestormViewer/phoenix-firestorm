@@ -50,8 +50,6 @@ private:
 	void onBeamColorDelete();
 	void onBeamDelete();
 
-	void populateCloudCombo();
-	
 	void onCommitTexture(const LLSD& data);
 	void onCommitCopy();
 	void onCommitTrans();

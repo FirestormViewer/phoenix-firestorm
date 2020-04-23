@@ -897,6 +897,9 @@ http://www.firestormviewer.org/support per avere aiuto nella soluzione.
 	<string name="mesh">
 		modello
 	</string>
+    <string name="settings">
+        impostazioni
+    </string>
 	<string name="AvatarEditingAppearance">
 		(Modifica aspetto)
 	</string>

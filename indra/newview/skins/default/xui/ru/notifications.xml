@@ -3861,17 +3861,6 @@ URL: [MEDIAURL]
 		Невозможно удалить [REMOVE_GRID] пока вы подключены к ней.
 		<usetemplate ignoretext="Невозможно удалить сетку, когда к ней подключен" name="okcancelignore" notext="Отмена" yestext="OK"/>
 	</notification>
-	<notification label="Применить настройки окружиющей среды" name="FSWL">
-		&apos;[PARCEL_NAME]&apos;, владельца [OWNER_NAME], хотел бы изменить настройки окружиющей среды.
-		<form name="form">
-			<button name="Allow" text="Разрешить"/>
-			<button name="Ignore" text="Игнор"/>
-		</form>
-	</notification>
-	<notification label="Сброс настроек окружиющей среды" name="FSWLClear">
-		Сбросить настройки окружающей среды в &apos;[PARCEL_NAME]&apos; к настройкам по умолчанию?
-		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>
-	</notification>
 	<notification name="NewAOSet">
 		Укажите имя для нового набора АО:
 (Имя может содержать любые ASCII символ, за исключением ":" или "|")
