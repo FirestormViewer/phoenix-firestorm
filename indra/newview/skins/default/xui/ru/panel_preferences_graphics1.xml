@@ -30,7 +30,6 @@
 			<check_box label="Прозрачная вода" name="TransparentWater"/>
 			<check_box label="Выпуклости и блеск" name="BumpShiny"/>
 			<check_box label="Локальный свет" name="LocalLights"/>
-			<check_box label="Основные шейдеры" name="BasicShaders" tool_tip="Отключение этой опции может предотвратить некоторые драйверы видеокарты от сбоев"/>
 			<check_box label="Атмосферные шейдеры" name="WindLightUseAtmosShaders"/>
 			<check_box label="Расшир. модель освещения" tool_tip="Включить расширенную прорисовку освещения. ('deferred rendering')." name="UseLightShaders"/>
 			<check_box label="Окклюзия окружения" name="UseSSAO"/>

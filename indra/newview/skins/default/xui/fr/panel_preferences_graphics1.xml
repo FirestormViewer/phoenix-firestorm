@@ -14,7 +14,6 @@
 			<check_box label="Transparence de l'eau" name="TransparentWater"/>
 			<check_box label="Relief &amp; Brillance" name="BumpShiny"/>
 			<check_box label="Éclairage local" name="LocalLights"/>
-			<check_box label="Shaders basiques" name="BasicShaders" tool_tip="Désactiver cette option peut empêcher certains pilotes de cartes graphiques de planter"/>
 			<check_box label="Shaders atmosphériques" name="WindLightUseAtmosShaders"/>
 			<check_box label="Éclairage avancé" tool_tip="Permet un rendu de lumière avancé" name="UseLightShaders"/>
 			<check_box label="Occlusion ambiante" name="UseSSAO"/>

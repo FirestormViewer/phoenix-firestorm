@@ -8,9 +8,7 @@
 				</text>
 			</panel>
 			<panel name="P_WL_Settings">
-				<check_box label="Effetti base - lasciare ON (vedi suggerimento)" name="BasicShaders" tool_tip="Dovrebbe sempre rimanere attivo, è richiesto per la profondità di campo, luci e ombre, riflessi acqua e altro"/>
 				<check_box label="Abilita resa ambiente" name="WindLightUseAtmosShaders" tool_tip="Abilita tutte le funzioni ambiente. Se non si può attivare, lasciare almeno gli effetti base qui sopra"/>
-				<check_box label="Usa ambiente regione" name="UseRegionWindlight"/>
 			</panel>
 			<panel name="P_WL_Sky_Water">
 				<text name="WL Sky" tool_tip="Impostazioni per il cielo">

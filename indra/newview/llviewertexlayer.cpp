@@ -185,7 +185,10 @@ void LLViewerTexLayerSetBuffer::postRenderTexLayerSet(BOOL success)
 }
 
 // virtual
-void LLViewerTexLayerSetBuffer::midRenderTexLayerSet(BOOL success)
+// <FS:Ansariel> [Legacy Bake]
+//void LLViewerTexLayerSetBuffer::midRenderTexLayerSet(BOOL success)
+void LLViewerTexLayerSetBuffer::midRenderTexLayerSet(BOOL success, LLRenderTarget* bound_target)
+// </FS:Ansariel> [Legacy Bake]
 {
 	// <FS:Ansariel> [Legacy Bake]
 	// do we need to upload, and do we have sufficient data to create an uploadable composite?
@@ -209,12 +212,12 @@ void LLViewerTexLayerSetBuffer::midRenderTexLayerSet(BOOL success)
 			{
 				//<FS:Beq> OpenSim BOM fallback
 				// layer_set->getAvatar()->debugBakedTextureUpload(layer_set->getBakedTexIndex(), FALSE); // FALSE for start of upload, TRUE for finish.
-				//	doUpload();
+				//doUpload(bound_target);
 				auto bakedTexIdx = layer_set->getBakedTexIndex();
 				if(bakedTexIdx <= layer_set->getAvatar()->getNumBakes())
 				{
 					layer_set->getAvatar()->debugBakedTextureUpload(bakedTexIdx, FALSE); // FALSE for start of upload, TRUE for finish.
-					doUpload();
+					doUpload(bound_target);
 				}
 				else
 				{
@@ -551,7 +554,7 @@ class FSTexlayerUpload: public LLBufferedAssetUploadInfo
 	LLBakedUploadData *mBakdedUploadData;
 public:
 	FSTexlayerUpload( LLUUID aAssetId, LLBakedUploadData *aBakdedUploadData, std::string aTexture )
-		: LLBufferedAssetUploadInfo( LLUUID::null, LLAssetType::AT_TEXTURE, aTexture, NULL )
+		: LLBufferedAssetUploadInfo( LLUUID::null, LLAssetType::AT_TEXTURE, aTexture, nullptr )
 		, mBakdedUploadData( aBakdedUploadData )
 	{
 		setAssetId( aAssetId );
@@ -609,7 +612,7 @@ public:
 
 // Create the baked texture, send it out to the server, then wait for it to come
 // back so we can switch to using it.
-void LLViewerTexLayerSetBuffer::doUpload()
+void LLViewerTexLayerSetBuffer::doUpload(LLRenderTarget* bound_target)
 {
 	LLViewerTexLayerSet* layer_set = getViewerTexLayerSet();
 	LL_DEBUGS("Avatar") << "Uploading baked " << layer_set->getBodyRegionName() << LL_ENDL;
@@ -630,7 +633,7 @@ void LLViewerTexLayerSetBuffer::doUpload()
 	U8* baked_mask_data = baked_mask_image->getData(); 
 	layer_set->gatherMorphMaskAlpha(baked_mask_data,
 									mOrigin.mX, mOrigin.mY,
-									mFullWidth, mFullHeight);
+									mFullWidth, mFullHeight, bound_target);
 
 
 	// Create the baked image from our color and mask information
