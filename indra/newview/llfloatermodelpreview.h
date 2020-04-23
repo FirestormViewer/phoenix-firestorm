@@ -57,7 +57,19 @@ class domController;
 class domSkin;
 class domMesh;
 class LLMenuButton;
+class LLTabContainer;
 class LLToggleableMenu;
+class LLViewerTextEditor;
+
+
+class LLJointOverrideData
+{
+public:
+    LLJointOverrideData() : mHasConflicts(false) {};
+    std::map<std::string, LLVector3> mPosOverrides;
+    bool mHasConflicts;
+};
+typedef std::map<std::string, LLJointOverrideData> joint_override_data_map_t;
 
 class LLFloaterModelPreview : public LLFloaterModelUploadBase
 {
@@ -93,6 +105,11 @@ public:
 
 	static void onMouseCaptureLostModelPreview(LLMouseHandler*);
 	static void setUploadAmount(S32 amount) { sUploadAmount = amount; }
+	static void addStringToLog(const std::string& message, const LLSD& args, bool flash, S32 lod = -1);
+	static void addStringToLog(const std::string& str, bool flash);
+	static void addStringToLog(const std::ostringstream& strm, bool flash);
+	void clearAvatarTab(); // clears table
+	void updateAvatarTab(); // populates table and data as nessesary
 
 	void setDetails(F32 x, F32 y, F32 z, F32 streaming_cost, F32 physics_cost);
 	void setPreviewLOD(S32 lod);
@@ -115,6 +132,7 @@ public:
 	void setViewOptionEnabled(const std::string& option, bool enabled);
 	void enableViewOption(const std::string& option);
 	void disableViewOption(const std::string& option);
+	void onShowSkinWeightChecked(LLUICtrl* ctrl);
 
 	bool isModelLoading();
 
@@ -177,7 +195,8 @@ protected:
     // FIXME - this function and mStatusMessage have no visible effect, and the
     // actual status messages are managed by directly manipulation of
     // the UI element.
-	void setStatusMessage(const std::string& msg);
+    void setStatusMessage(const std::string& msg);
+    void addStringToLogTab(const std::string& str, bool flash);
 
 	LLModelPreview*	mModelPreview;
 	
@@ -206,24 +225,34 @@ protected:
 	LLSD mModelPhysicsFee;
 
 private:
-	void onClickCalculateBtn();
+    void onClickCalculateBtn();
+    void onJointListSelection();
 
 	void onLoDSourceCommit(S32 lod);
 
 	void modelUpdated(bool calculate_visible);
 
 	// Toggles between "Calculate weights & fee" and "Upload" buttons.
+    void toggleCalculateButton();
 	void toggleCalculateButton(bool visible);
 
 	// resets display options of model preview to their defaults.
 	void resetDisplayOptions();
 
 	void resetUploadOptions();
+	void clearLogTab();
 
 	void createSmoothComboBox(LLComboBox* combo_box, float min, float max);
 
 	LLButton* mUploadBtn;
 	LLButton* mCalculateBtn;
+	LLViewerTextEditor* mUploadLogText;
+	LLTabContainer* mTabContainer;
+
+	S32			mAvatarTabIndex; // just to avoid any issues in case of xml changes
+	std::string	mSelectedJointName;
+
+	joint_override_data_map_t mJointOverrides[LLModel::NUM_LODS];
 };
 
 class LLMeshFilePicker : public LLFilePickerThread
@@ -302,8 +331,9 @@ public:
 	void setRigValidForJointPositionUpload( bool rigValid ) { mRigValidJointUpload = rigValid; }
 
 	//Accessors for the legacy rigs
-	const bool isLegacyRigValid( void ) const { return mLegacyRigValid; }
-	void setLegacyRigValid( bool rigValid ) { mLegacyRigValid = rigValid; }		
+	const bool isLegacyRigValid( void ) const { return mLegacyRigFlags == 0; }
+	U32 getLegacyRigFlags() const { return mLegacyRigFlags; }
+	void setLegacyRigFlags( U32 rigFlags ) { mLegacyRigFlags = rigFlags; }
 
 	static void	textureLoadedCallback( BOOL success, LLViewerFetchedTexture *src_vi, LLImageRaw* src, LLImageRaw* src_aux, S32 discard_level, BOOL final, void* userdata );
     static bool lodQueryCallback();
@@ -418,7 +448,7 @@ private:
 	float		mPelvisZOffset;
 	
 	bool		mRigValidJointUpload;
-	bool		mLegacyRigValid;
+	U32			mLegacyRigFlags;
 
 	bool		mLastJointUpdate;
 

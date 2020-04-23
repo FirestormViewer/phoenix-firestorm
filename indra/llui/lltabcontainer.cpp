@@ -39,7 +39,6 @@
 #include "llfloater.h"
 #include "lltrans.h"
 
-
 //----------------------------------------------------------------------------
 
 // Implementation Notes:
@@ -224,6 +223,7 @@ LLTabContainer::Params::Params()
 	last_tab("last_tab"),
 	use_custom_icon_ctrl("use_custom_icon_ctrl", false),
 	open_tabs_on_drag_and_drop("open_tabs_on_drag_and_drop", false),
+	enable_tabs_flashing("enable_tabs_flashing", false),
 	tab_icon_ctrl_pad("tab_icon_ctrl_pad", 0),
 	use_ellipses("use_ellipses"),
 	label_shadow("label_shadow",false),		// no drop shadowed labels by default -Zi
@@ -269,6 +269,7 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 	mOpenTabsOnDragAndDrop(p.open_tabs_on_drag_and_drop),
 	mTabIconCtrlPad(p.tab_icon_ctrl_pad),
 	mUseTabEllipses(p.use_ellipses),
+	mEnableTabsFlashing(p.enable_tabs_flashing),
 	mDropShadowedText(p.label_shadow)			// support for drop shadowed tab labels -Zi
 {
 	// AO: Treat the IM tab container specially 
@@ -1248,6 +1249,9 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
 		    p.pad_right(2);
 		}
 
+		// inits flash timer
+		p.button_flash_enable = mEnableTabsFlashing;
+
 		// <FS:Ansariel> Enable tab flashing
 		p.button_flash_enable(LLUI::getInstance()->mSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
 		p.button_flash_count(LLUI::getInstance()->mSettingGroups["config"]->getS32("FlashCount"));
@@ -1801,6 +1805,16 @@ void LLTabContainer::setTabPanelFlashing(LLPanel* child, BOOL state )
 	{
 		tuple->mButton->setFlashing( state );
 	}
+}
+
+void LLTabContainer::setTabPanelFlashing(LLPanel* child, BOOL state, LLUIColor color)
+{
+    LLTabTuple* tuple = getTabByPanel(child);
+    if (tuple)
+    {
+        tuple->mButton->setFlashColor(color);
+        tuple->mButton->setFlashing(state);
+    }
 }
 
 void LLTabContainer::setTabImage(LLPanel* child, std::string image_name, const LLColor4& color)

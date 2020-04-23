@@ -204,7 +204,7 @@ Rozważ użycie innego punktu doczepienia, bliżej do pozycji obiektu na ciele.
        <text name="server_weight">
          Serwer: [SIM]
        </text>
-       <panel name="physics_costs_panel">
+       <panel name="price_breakdown_panel">
            <text name="price_breakdown_title">
                 Podział kosztów
            </text>
@@ -223,7 +223,7 @@ Wysokie:
 Niskie:
 Najniższe:
        </text>
-       <panel name="physics_breakdown_panel">
+       <panel name="physics_costs_panel">
            <text name="physics_breakdown_title">
                 Koszty fizyki
            </text>
