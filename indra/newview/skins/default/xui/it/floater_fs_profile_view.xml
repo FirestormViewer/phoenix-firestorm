@@ -3,6 +3,7 @@
 <panel name="panel_profile_view">
     <tab_container name="panel_profile_tabs">
         <panel label="Interessi" name="panel_profile_interests" />
+        <panel label="Feed" name="panel_profile_web"/>
         <panel label="Preferiti" name="panel_profile_picks" />
         <panel label="Inserzioni" name="panel_profile_classified" />
         <panel label="Note" name="panel_profile_notes" />

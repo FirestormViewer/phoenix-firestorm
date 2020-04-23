@@ -295,6 +295,24 @@ support@secondlife.com にお問い合わせください。
 	<string name="TestingDisconnect">
 		ビューワの接続を切るテスト中
 	</string>
+	<string name="SocialFacebookConnecting">
+		Facebook に接続中...
+	</string>
+	<string name="SocialFacebookPosting">
+		投稿中...
+	</string>
+	<string name="SocialFacebookDisconnecting">
+		Facebook から切断中...
+	</string>
+	<string name="SocialFacebookErrorConnecting">
+		Facebook への接続時のエラー
+	</string>
+	<string name="SocialFacebookErrorPosting">
+		Facebook への投稿時のエラー
+	</string>
+	<string name="SocialFacebookErrorDisconnecting">
+		Facebook からの切断時のエラー
+	</string>
 	<string name="SocialFlickrConnecting">
 		Flickr に接続中...
 	</string>
@@ -2493,8 +2511,20 @@ http://www.firestormviewer.org/support
 	<string name="NoPicksClassifiedsText">
 		ピックやクラシファイド広告を作成していません。 作成するには、下にある「プラス」ボタンをクリックします。
 	</string>
+	<string name="NoPicksText">
+		ピックを作成していません。[新規] ボタンをクリックしてピックを作成する。
+	</string>
+	<string name="NoClassifiedsText">
+		クラシファイド広告を作成していません。[新規] ボタンをクリックしてクラシファイド広告を作成する。
+	</string>
 	<string name="NoAvatarPicksClassifiedsText">
 		ピック、またはクラシファイド広告がありません
+	</string>
+	<string name="NoAvatarPicksText">
+		ピックがありません
+	</string>
+	<string name="NoAvatarClassifiedsText">
+		クラシファイド広告がありません
 	</string>
 	<string name="PicksClassifiedsLoadingText">
 		ローディング...

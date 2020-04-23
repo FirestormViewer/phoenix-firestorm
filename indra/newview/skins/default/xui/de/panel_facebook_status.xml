@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_facebook_status">
-	<string name="facebook_connected" value="Angemeldet bei Facebook als:" />
-	<string name="facebook_disconnected" value="Nicht bei Facebook angemeldet." />
+	<string name="facebook_connected" value="Sie sind mit Facebook verbunden als:"/>
+	<string name="facebook_disconnected" value="Nicht mit Facebook verbunden"/>
 	<text name="account_caption_label">
-		Nicht bei Facebook angemeldet.
+		Nicht mit Facebook verbunden.
 	</text>
 	<panel name="panel_buttons">
 		<button label="Verbinden..." name="connect_btn" />
@@ -13,7 +13,7 @@
 		</text>
 	</panel>
 	<text name="status_caption_label">
-		Was haben Sie gerade im Sinn?
+		Was machen Sie gerade?
 	</text>
 	<button label="Posten" name="post_status_btn" />
 	<button label="Abbrechen" name="cancel_status_btn" />

@@ -6,11 +6,6 @@
     <string name="status_offline">
 		オフライン
     </string>
-    <string name="CaptionTextAcctInfo">
-		[ACCTTYPE]
-		[PAYMENTINFO]
-		[FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]
-    </string>
     <!-- [AGEVERIFICATION] moved out of the above, since it's not set anyway. See
     LLPanelAvatarProfile::fillAccountStatus() ...TS -->
     <string name="payment_update_link_url">
@@ -22,10 +17,6 @@
     <string name="my_account_link_url" value="http://secondlife.com/account" />
     <string name="no_partner_text" value="なし" />
     <string name="no_group_text" value="なし" />
-    <string name="RegisterDateFormat">
-		[REG_DATE]
-		([AGE])
-    </string>
     <string name="name_text_args">
 		[NAME]
     </string>

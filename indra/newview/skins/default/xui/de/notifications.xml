@@ -5312,10 +5312,6 @@ Welche Bezeichnung soll für die Region
 		Bitte geben Sie einen gültigen Wert für die Zeitspanne ein!
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="PickLimitReached">
-		Neue Auswahl kann nicht erstellt werden, da bereits die maximale Anzahl an Auswahlen erstellt wurde.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
 	<notification name="GlobalOnlineStatusToggle">
 		Abhängig von der Serverauslastung kann es einen Moment dauern, bis das Umschalten der Sichtbarkeit des Online-Status effektiv wird.
 		<usetemplate ignoretext="Weise mich darauf hin, dass das Umschalten der Sichtbarkeit des Online-Status etwas dauern kann." name="okignore" yestext="OK"/>

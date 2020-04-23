@@ -351,6 +351,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          font="SansSerifSmall"
          enabled="false"
          trusted_content="false"
+         always_show_icons="true"
          max_length="510"
          h_pad="2"
          word_wrap="true"

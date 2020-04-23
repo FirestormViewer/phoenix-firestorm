@@ -56,15 +56,12 @@ enum EAvatarProcessorType
 	APT_PICKS,
 	APT_PICK_INFO,
 	APT_TEXTURES,
-//<FS:KC legacy profiles>
     APT_INTERESTS_INFO,
-//</FS:KC legacy profiles>
 	APT_CLASSIFIEDS,
 	APT_CLASSIFIED_INFO
 };
 
-//<FS:KC legacy profiles>
-struct FSInterestsData
+struct LLInterestsData
 {
     LLUUID      agent_id;
     LLUUID      avatar_id; //target id
@@ -74,7 +71,6 @@ struct FSInterestsData
     std::string skills_text;
     std::string languages_text;
 };
-//</FS:KC legacy profiles>
 
 struct LLAvatarData
 {
@@ -239,9 +235,7 @@ public:
 
 	void sendClassifiedDelete(const LLUUID& classified_id);
 
-//<FS:KC legacy profiles>
-	void sendInterestsInfoUpdate(const FSInterestsData* interests_data);
-//</FS:KC legacy profiles>
+    void sendInterestsInfoUpdate(const LLInterestsData* interests_data);
 
 	// Returns translated, human readable string for account type, such
 	// as "Resident" or "Linden Employee".  Used for profiles, inspectors.

@@ -5321,14 +5321,6 @@ Flickrの認証に失敗しました。もう一度試してみて下さい。�
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	
-	<notification name="PickLimitReached" label="">
-		<unique/>
-		<tag>fail</tag>
-		<tag>confirm</tag>
-    既にピック数の上限に達しているため、新しいピックを追加することはできません。
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	
 	<notification name="GlobalOnlineStatusToggle">
 サーバ負荷のため、多数のオンラインステータス切替が有効になるまでにはしばらく時間がかかります。このままお待ち下さい。
 		<usetemplate ignoretext="オンラインステータスの切り替えに時間がかかる時は通知する" name="okignore" yestext="OK"/>

@@ -43,7 +43,7 @@
         <panel
          class="panel_fs_profile_web"
          filename="panel_fs_profile_web.xml"
-         label="Web"
+         label="Feed"
          layout="topleft"
          help_topic="profile_web_tab"
          name="panel_profile_web" />

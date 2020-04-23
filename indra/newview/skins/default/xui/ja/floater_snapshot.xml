@@ -7,7 +7,7 @@
 		メールの送信
 	</string>
 	<string name="facebook_progress_str">
-		Facebookに投稿
+		Facebook へ投稿中
 	</string>
 	<string name="profile_progress_str">
 		投稿
@@ -25,7 +25,7 @@
 	</string>
 	<string name="facebook_succeeded_str">
 		画像がアップロードされました
- 	</string>
+	</string>
 	<string name="profile_succeeded_str">
 		画像がアップロードされました
 	</string>
@@ -42,6 +42,9 @@
 	</string>
 	<string name="local_succeeded_str">
 		コンピュータに保存されました
+	</string>
+	<string name="facebook_failed_str">
+		Facebook のタイムラインに画像をアップロードできませんでした。
 	</string>
 	<string name="facebook_failed_str">
  		Facebook のタイムラインに画像をアップロードできませんでした。

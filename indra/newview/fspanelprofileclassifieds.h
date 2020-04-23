@@ -59,6 +59,8 @@ public:
 
 	/*virtual*/ void onOpen(const LLSD& key);
 
+	void selectClassified(const LLUUID& classified_id, bool edit);
+
 	/*virtual*/ void onClosePanel();
 
 	void processProperties(void* data, EAvatarProcessorType type);
@@ -130,6 +132,9 @@ private:
 
 	//true if classifieds list is empty after processing classifieds
 	bool mNoClassifieds;
+
+	LLUUID	mClassifiedToSelectOnLoad;
+	bool	mClassifiedEditOnLoad;
 };
 
 class FSClassifiedItem : public LLPanel, public LLAvatarPropertiesObserver

@@ -297,15 +297,11 @@ public:
 
 protected:
 	void onCommitLoad(LLUICtrl* ctrl);
-	void onCommitWebProfile(LLUICtrl* ctrl);
 
 private:
 	std::string			mURLHome;
 	std::string			mURLWebProfile;
 	LLMediaCtrl*		mWebBrowser;
-	LLUICtrl*			mWebProfileButton;
-	LLUICtrl*			mLoadButton;
-	LLLineEditor*		mUrlEdit;
 
 	LLFrameTimer		mPerformanceTimer;
 	bool				mFirstNavigate;
@@ -503,6 +499,8 @@ public:
 
 	/*virtual*/ void onOpen(const LLSD& key);
 
+	void selectPick(const LLUUID& pick_id);
+
 	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
 	
 	void resetData();
@@ -532,6 +530,8 @@ private:
 	LLUICtrl*		mNoItemsLabel;
 	LLButton*		mNewButton;
 	LLButton*		mDeleteButton;
+
+	LLUUID			mPickToSelectOnLoad;
 };
 
 
@@ -645,6 +645,11 @@ public:
 	 * Saves changes.
 	 */
 	void apply();
+
+	void showPick(const LLUUID& pick_id = LLUUID::null);
+	bool isPickTabSelected();
+
+	void showClassified(const LLUUID& classified_id = LLUUID::null, bool edit = false);
 
 private:
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);

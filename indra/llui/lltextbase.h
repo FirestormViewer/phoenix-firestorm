@@ -345,7 +345,8 @@ public:
 								parse_highlights,
 								clip,
 								clip_partial,
-								trusted_content;
+								trusted_content,
+								always_show_icons;
 								
 		Optional<S32>			v_pad,
 								h_pad;
@@ -396,9 +397,7 @@ public:
 	virtual void	onFocusReceived();
 	virtual void	onFocusLost();
 
-//<FS:KC - expose ParseHTML setting>
-                void        setParseHTML(bool parse_html) { mParseHTML = parse_html; }
-//</FS:KC - expose ParseHTML setting>
+    void        setParseHTML(bool parse_html) { mParseHTML = parse_html; }
 
 	// LLSpellCheckMenuHandler overrides
 	/*virtual*/ bool		getSpellCheck() const;
@@ -761,6 +760,7 @@ protected:
 	bool						mPlainText;			// didn't use Image or Icon segments
 	bool						mAutoIndent;
 	S32							mMaxTextByteLength;	// Maximum length mText is allowed to be in bytes
+	bool						mAlwaysShowIcons;
 
 	bool						mSkipLinkUnderline;
 

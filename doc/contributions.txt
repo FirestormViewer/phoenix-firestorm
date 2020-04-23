@@ -224,6 +224,7 @@ Ansariel Hiller
 	MAINT-8723
 	SL-10385
 	SL-10891
+	SL-10675
 Aralara Rajal
 Arare Chantilly
 	CHUIBUG-191
@@ -791,6 +792,7 @@ Jonathan Yap
 Kadah Coba
 	STORM-1060
     STORM-1843
+    SL-10675
 Jondan Lundquist
 Joosten Briebers
     MAINT-7074

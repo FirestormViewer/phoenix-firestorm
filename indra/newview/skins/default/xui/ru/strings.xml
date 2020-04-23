@@ -368,7 +368,7 @@ support@secondlife.com.
 		Тестирование отключения клиента
 	</string>
 	<string name="SocialFacebookConnecting">
-		Соединение с Facebook...
+		Подключение к Facebook...
 	</string>
 	<string name="SocialFacebookPosting">
 		Публикация...
@@ -377,13 +377,13 @@ support@secondlife.com.
 		Отключение от Facebook...
 	</string>
 	<string name="SocialFacebookErrorConnecting">
-		Невозможно соедениться с Facebook
+		Проблема с подключением к Facebook
 	</string>
 	<string name="SocialFacebookErrorPosting">
-		Невозможно опубликовать в Facebook
+		Проблемы при публикации в Facebook
 	</string>
 	<string name="SocialFacebookErrorDisconnecting">
-		Невозможно отключиться от Facebook
+		Проблема с отключением от Facebook
 	</string>
 	<string name="SocialFlickrConnecting">
 		Соединение с Flickr...
@@ -2710,8 +2710,20 @@ support@secondlife.com.
 	<string name="NoPicksClassifiedsText">
 		Вы еще не создали подборку или объявление. Нажмите на кнопку 'Плюс', которая находится ниже, чтобы создать подборку или объявление.
 	</string>
+	<string name="NoPicksText">
+		Вы не сделали никакой подборки. Нажмите кнопку Создать, чтобы сделать подборку.
+	</string>
+	<string name="NoClassifiedsText">
+		Вы не сделали никакой рекламы. Нажмите кнопку Создать, чтобы сделать рекламу.
+	</string>
 	<string name="NoAvatarPicksClassifiedsText">
 		У пользователя нет подборок или объявлений
+	</string>
+	<string name="NoAvatarPicksText">
+		У пользователя нет подборки
+	</string>
+	<string name="NoAvatarClassifiedsText">
+		У пользователя нет объявлений
 	</string>
 	<string name="PicksClassifiedsLoadingText">
 		Загрузка...
@@ -4728,7 +4740,7 @@ support@secondlife.com.
 		Перетащите элементы из инвентаря сюда
 	</string>
 	<string name="facebook_post_success">
-		Вы опубликовали в Facebook.
+		Вы опубликовали сообщение в Facebook.
 	</string>
 	<string name="flickr_post_success">
 		Вы опубликовали в Flickr.

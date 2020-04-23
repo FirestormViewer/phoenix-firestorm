@@ -34,7 +34,6 @@
 #include "llviewerinventory.h"
 
 static LLDefaultChildRegistry::Register<FSCopyTransInventoryDropTarget> r1("fs_copytrans_inventory_drop_target");
-static LLDefaultChildRegistry::Register<FSDropTarget> r2("profile_drop_target");
 static LLDefaultChildRegistry::Register<FSEmbeddedItemDropTarget> r3("fs_embedded_item_drop_target");
 
 
@@ -68,29 +67,6 @@ BOOL FSCopyTransInventoryDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, 
 	}
 
 	return TRUE;
-}
-
-
-FSDropTarget::FSDropTarget(const FSDropTarget::Params& p)
-	: LLView(p),
-	mAgentID(p.agent_id)
-{}
-
-BOOL FSDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
-									 EDragAndDropType cargo_type,
-									 void* cargo_data,
-									 EAcceptance* accept,
-									 std::string& tooltip_msg)
-{
-	if (getParent())
-	{
-		LLToolDragAndDrop::handleGiveDragAndDrop(mAgentID, LLUUID::null, drop,
-												 cargo_type, cargo_data, accept);
-
-		return TRUE;
-	}
-
-	return FALSE;
 }
 
 BOOL FSEmbeddedItemDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,

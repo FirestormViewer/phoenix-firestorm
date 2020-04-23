@@ -68,6 +68,8 @@ static LLPanelInjector<FSPanelClassifieds> t_panel_fs_classifieds("panel_fs_prof
 //-----------------------------------------------------------------------------
 FSPanelClassifieds::FSPanelClassifieds()
 :	FSPanelProfileTab(),
+	mClassifiedToSelectOnLoad(LLUUID::null),
+	mClassifiedEditOnLoad(false),
 	mPopupMenu(NULL),
 	mClassifiedsList(NULL),
 	mPanelClassifiedInfo(NULL),
@@ -110,11 +112,14 @@ void FSPanelClassifieds::processProperties(void* data, EAvatarProcessorType type
 {
 	if (APT_CLASSIFIEDS == type)
 	{
+		LLUUID edit_id;
+
 		LLAvatarClassifieds* c_info = static_cast<LLAvatarClassifieds*>(data);
 		if (c_info && getAvatarId() == c_info->target_id)
 		{
 			// do not clear classified list in case we will receive two or more data packets.
 			// list has been cleared in updateData(). (fix for EXT-6436)
+			LLUUID selected_id = mClassifiedToSelectOnLoad;
 
 			LLAvatarClassifieds::classifieds_list_t::const_iterator it = c_info->classifieds_list.begin();
 			for (; c_info->classifieds_list.end() != it; ++it)
@@ -132,11 +137,22 @@ void FSPanelClassifieds::processProperties(void* data, EAvatarProcessorType type
 				if (!findClassifiedById(c_data.classified_id))
 				{
 					mClassifiedsList->addItem(c_item, pick_value);
+					mClassifiedsList->selectItem(c_item, selected_id == c_data.classified_id);
 				}
 
 				c_item->setDoubleClickCallback(boost::bind(&FSPanelClassifieds::onDoubleClickClassifiedItem, this, _1));
 				c_item->setRightMouseUpCallback(boost::bind(&FSPanelClassifieds::onRightMouseUpItem, this, _1, _2, _3, _4));
 				c_item->setMouseUpCallback(boost::bind(&FSPanelClassifieds::updateButtons, this));
+
+				if (selected_id == c_data.classified_id)
+				{
+					mClassifiedToSelectOnLoad = LLUUID::null;
+					if (mClassifiedEditOnLoad)
+					{
+						edit_id = mClassifiedToSelectOnLoad;
+					}
+					mClassifiedEditOnLoad = false;
+				}
 			}
 
 			resetDirty();
@@ -160,6 +176,11 @@ void FSPanelClassifieds::processProperties(void* data, EAvatarProcessorType type
 		}
 
 		enableControls();
+
+		if (edit_id.notNull())
+		{
+			editClassified(edit_id);
+		}
 	}
 }
 
@@ -250,6 +271,37 @@ void FSPanelClassifieds::onOpen(const LLSD& key)
 	gGenericDispatcher.addHandler("classifiedclickthrough", &sClassifiedClickThrough);
 	updateData();
 	updateButtons();
+}
+
+void FSPanelClassifieds::selectClassified(const LLUUID& classified_id, bool edit)
+{
+	if (getIsLoaded())
+	{
+		std::vector<LLPanel*> panels;
+		mClassifiedsList->getItems(panels);
+
+		for (auto panel : panels)
+		{
+			FSClassifiedItem* classified_panel = dynamic_cast<FSClassifiedItem*>(panel);
+			if (classified_panel)
+			{
+				if (classified_panel->getClassifiedId() == classified_id)
+				{
+					mClassifiedsList->selectItem(classified_panel);
+					if (edit)
+					{
+						editClassified(classified_id);
+					}
+					break;
+				}
+			}
+		}
+	}
+	else
+	{
+		mClassifiedToSelectOnLoad = classified_id;
+		mClassifiedEditOnLoad = edit;
+	}
 }
 
 void FSPanelClassifieds::onClosePanel()

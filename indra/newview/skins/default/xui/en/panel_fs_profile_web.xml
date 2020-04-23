@@ -9,68 +9,8 @@
  name="panel_profile_web"
  label="Web">
     <panel.string name="LoadTime" value="Load Time: [TIME] seconds"/>
-    <line_editor
-     top_pad="5"
-     left="10"
-     height="16"
-     width="400"
-     layout="topleft"
-     follows="left|top"
-     name="url_edit"
-     max_length_bytes="254" />
-
-    <flyout_button
-     top_pad="5"
-     left="10"
-     height="18"
-     width="80"
-     layout="topleft"
-     follows="left|top"
-     name="load"
-     label="Load"
-     enabled="false"
-     tool_tip="Load this profile page with embedded web browser." >
-        <flyout_button.item
-         label="Open in-viewer browser"
-         value="popout"
-         name="open_item" />
-        <flyout_button.item
-         label="Open external browser"
-         value="external"
-         name="home_item" />
-    </flyout_button>
-
-    <loading_indicator
-     left_pad="100"
-     height="23"
-     width="23"
-     layout="topleft"
-     follows="top|left"
-     name="progress_indicator"
-     visible="false" />
-
-    <flyout_button
-     top_delta="5"
-     right="-10"
-     height="18"
-     width="80"
-     layout="topleft"
-     follows="right|top"
-     name="web_profile"
-     label="Profile"
-     enabled="false" >
-        <flyout_button.item
-         label="Popout"
-         value="popout"
-         name="builtin_item" />
-        <flyout_button.item
-         label="Open external browser"
-         value="external"
-         name="open_item" />
-    </flyout_button>
-
     <web_browser
-     top="48"
+     top="10"
      bottom="-18"
      left="10"
      right="-10"
@@ -78,7 +18,6 @@
      follows="all"
      name="profile_html"
      start_url="" />
-
     <text
      bottom="-4"
      left="110"

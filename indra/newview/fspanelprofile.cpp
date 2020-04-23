@@ -311,7 +311,7 @@ void FSPanelProfileSecondLife::onOpen(const LLSD& key)
 
 	mDescriptionEdit->setParseHTML(!own_profile && !getEmbedded());
 
-	FSDropTarget* drop_target = getChild<FSDropTarget>("drop_target");
+	LLProfileDropTarget* drop_target = getChild<LLProfileDropTarget>("drop_target");
 	drop_target->setVisible(!own_profile);
 	drop_target->setEnabled(!own_profile);
 
@@ -810,20 +810,9 @@ void FSPanelProfileWeb::onOpen(const LLSD& key)
 
 BOOL FSPanelProfileWeb::postBuild()
 {
-	mWebProfileButton = getChild<LLUICtrl>("web_profile");
-	mLoadButton = getChild<LLUICtrl>("load");
-	mUrlEdit = getChild<LLLineEditor>("url_edit");
-
-	mLoadButton->setCommitCallback(boost::bind(&FSPanelProfileWeb::onCommitLoad, this, _1));
-
-	mWebProfileButton->setCommitCallback(boost::bind(&FSPanelProfileWeb::onCommitWebProfile, this, _1));
-	mWebProfileButton->setVisible(LLGridManager::getInstance()->isInSecondLife());
-
 	mWebBrowser = getChild<LLMediaCtrl>("profile_html");
 	mWebBrowser->addObserver(this);
 	mWebBrowser->setHomePageUrl("about:blank");
-
-	mUrlEdit->setEnabled(FALSE);
 
 	return TRUE;
 }
@@ -835,9 +824,6 @@ void FSPanelProfileWeb::processProperties(void* data, EAvatarProcessorType type)
 		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
 		if (avatar_data && getAvatarId() == avatar_data->avatar_id)
 		{
-			mURLHome = avatar_data->profile_url;
-			mUrlEdit->setValue(mURLHome);
-			mLoadButton->setEnabled(mURLHome.length() > 0);
 			enableControls();
 		}
 	}
@@ -845,14 +831,11 @@ void FSPanelProfileWeb::processProperties(void* data, EAvatarProcessorType type)
 
 void FSPanelProfileWeb::resetData()
 {
-	mURLHome = LLStringUtil::null;
-	mUrlEdit->setValue(mURLHome);
 	mWebBrowser->navigateHome();
 }
 
 void FSPanelProfileWeb::apply(LLAvatarData* data)
 {
-	data->profile_url = mUrlEdit->getValue().asString();
 }
 
 void FSPanelProfileWeb::updateData()
@@ -883,13 +866,12 @@ void FSPanelProfileWeb::onAvatarNameCache(const LLUUID& agent_id, const LLAvatar
 		LLStringUtil::replaceChar(username, ' ', '.');
 	}
 
-	mURLWebProfile = getProfileURL(username);
+	mURLWebProfile = getProfileURL(username, true);
 	if (mURLWebProfile.empty())
 	{
 		return;
 	}
-	mWebProfileButton->setEnabled(TRUE);
-	
+
 	if (getIsLoading()) //if the tab was opened before name was resolved, load the panel now
 	{
 		updateData();
@@ -920,42 +902,12 @@ void FSPanelProfileWeb::onCommitLoad(LLUICtrl* ctrl)
 	}
 }
 
-void FSPanelProfileWeb::onCommitWebProfile(LLUICtrl* ctrl)
-{
-	if (!mURLWebProfile.empty())
-	{
-		LLSD::String valstr = ctrl->getValue().asString();
-		if (valstr.empty())
-		{
-			mWebBrowser->setVisible(TRUE);
-			mPerformanceTimer.start();
-			mWebBrowser->navigateTo( mURLWebProfile, HTTP_CONTENT_TEXT_HTML );
-		}
-		else if (valstr == "popout")
-		{
-			// open the web profile floater
-			LLAvatarActions::showProfileWeb(getAvatarId());
-		}
-		else if (valstr == "external")
-		{
-			// open in external browser
-			LLWeb::loadURLExternal(mURLWebProfile);
-		}
-	}
-}
-
 void FSPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event)
 {
 	switch(event)
 	{
 		case MEDIA_EVENT_STATUS_TEXT_CHANGED:
 			childSetValue("status_text", LLSD( self->getStatusText() ) );
-		break;
-
-		case MEDIA_EVENT_LOCATION_CHANGED:
-			// don't set this or user will set there url to profile url
-			// when clicking ok on there own profile.
-			// childSetText("url_edit", self->getLocation() );
 		break;
 
 		case MEDIA_EVENT_NAVIGATE_BEGIN:
@@ -988,11 +940,6 @@ void FSPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
 void FSPanelProfileWeb::enableControls()
 {
 	FSPanelProfileTab::enableControls();
-
-	if (getSelfProfile() && !getEmbedded())
-	{
-		mUrlEdit->setEnabled(TRUE);
-	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1050,7 +997,7 @@ void FSPanelProfileInterests::processProperties(void* data, EAvatarProcessorType
 {
 	if (APT_INTERESTS_INFO == type)
 	{
-		const FSInterestsData* interests_data = static_cast<const FSInterestsData*>(data);
+		const LLInterestsData* interests_data = static_cast<const LLInterestsData*>(data);
 		if (interests_data && getAvatarId() == interests_data->avatar_id)
 		{
 			for (S32 i = 0; i < WANT_CHECKS; ++i)
@@ -1107,7 +1054,7 @@ void FSPanelProfileInterests::apply()
 {
 	if (getIsLoaded() && getSelfProfile())
 	{
-		FSInterestsData interests_data = FSInterestsData();
+		LLInterestsData interests_data = LLInterestsData();
 
 		interests_data.want_to_mask = 0;
 		for (S32 i = 0; i < WANT_CHECKS; ++i)
@@ -1576,6 +1523,7 @@ void FSPanelPick::updateTabLabel(const std::string& title)
 
 FSPanelProfilePicks::FSPanelProfilePicks()
  : FSPanelProfileTab(),
+	mPickToSelectOnLoad(LLUUID::null),
 	mRlvBehaviorCallbackConnection()
 {
 }
@@ -1601,6 +1549,29 @@ void FSPanelProfilePicks::onOpen(const LLSD& key)
 
 		mDeleteButton->setVisible(TRUE);
 		mDeleteButton->setEnabled(FALSE);
+	}
+}
+
+void FSPanelProfilePicks::selectPick(const LLUUID& pick_id)
+{
+	if (getIsLoaded())
+	{
+		for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
+		{
+			FSPanelPick* pick_panel = dynamic_cast<FSPanelPick*>(mTabContainer->getPanelByIndex(tab_idx));
+			if (pick_panel)
+			{
+				if (pick_panel->getPickId() == pick_id)
+				{
+					mTabContainer->selectTabPanel(pick_panel);
+					break;
+				}
+			}
+		}
+	}
+	else
+	{
+		mPickToSelectOnLoad = pick_id;
 	}
 }
 
@@ -1686,14 +1657,16 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
 		LLAvatarPicks* avatar_picks = static_cast<LLAvatarPicks*>(data);
 		if (avatar_picks && getAvatarId() == avatar_picks->target_id)
 		{
-
-			LLUUID selected_id = LLUUID::null;
-			if (mTabContainer->getTabCount() > 0)
+			LLUUID selected_id = mPickToSelectOnLoad;
+			if (mPickToSelectOnLoad.isNull())
 			{
-				FSPanelPick* active_pick_panel = dynamic_cast<FSPanelPick*>(mTabContainer->getCurrentPanel());
-				if (active_pick_panel)
+				if (mTabContainer->getTabCount() > 0)
 				{
-					selected_id = active_pick_panel->getPickId();
+					FSPanelPick* active_pick_panel = dynamic_cast<FSPanelPick*>(mTabContainer->getCurrentPanel());
+					if (active_pick_panel)
+					{
+						selected_id = active_pick_panel->getPickId();
+					}
 				}
 			}
 
@@ -1716,6 +1689,11 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
 					panel(pick_panel).
 					select_tab(selected_id == pick_id).
 					label(pick_name));
+
+				if (selected_id == pick_id)
+				{
+					mPickToSelectOnLoad = LLUUID::null;
+				}
 			}
 
 			mNewButton->setEnabled(canAddNewPick());
@@ -2118,11 +2096,7 @@ BOOL FSPanelProfile::postBuild()
 
 void FSPanelProfile::processProperties(void* data, EAvatarProcessorType type)
 {
-	mTabContainer = getChild<LLTabContainer>("panel_profile_tabs");
-	if (mTabContainer)
-	{
-		mTabContainer->setCommitCallback(boost::bind(&FSPanelProfile::onTabChange, this));
-	}
+	mTabContainer->setCommitCallback(boost::bind(&FSPanelProfile::onTabChange, this));
 	
 	// Load data on currently opened tab as well
 	onTabChange();
@@ -2147,6 +2121,7 @@ void FSPanelProfile::onOpen(const LLSD& key)
 	
 	FSPanelProfileTab::onOpen(key);
 	
+	mTabContainer		= getChild<LLTabContainer>("panel_profile_tabs");
 	mPanelSecondlife	= findChild<FSPanelProfileSecondLife>(PANEL_SECONDLIFE);
 	mPanelWeb			= findChild<FSPanelProfileWeb>(PANEL_WEB);
 	mPanelInterests		= findChild<FSPanelProfileInterests>(PANEL_INTERESTS);
@@ -2220,3 +2195,27 @@ void FSPanelProfile::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarNam
 	mPanelSecondlife->onAvatarNameCache(agent_id, av_name);
 	mPanelWeb->onAvatarNameCache(agent_id, av_name);
 }
+
+void FSPanelProfile::showPick(const LLUUID& pick_id)
+{
+	if (pick_id.notNull())
+	{
+		mPanelPicks->selectPick(pick_id);
+	}
+	mTabContainer->selectTabPanel(mPanelPicks);
+}
+
+bool FSPanelProfile::isPickTabSelected()
+{
+	return (mTabContainer->getCurrentPanel() == mPanelPicks);
+}
+
+void FSPanelProfile::showClassified(const LLUUID& classified_id, bool edit)
+{
+	if (classified_id.notNull())
+	{
+		mPanelClassifieds->selectClassified(classified_id, edit);
+	}
+	mTabContainer->selectTabPanel(mPanelClassifieds);
+}
+

@@ -352,22 +352,22 @@ Provare ad accedere nuovamente tra un minuto.
 		Verifica scollegamento viewer
 	</string>
 	<string name="SocialFacebookConnecting">
-		Connessione a Facebook...
+		Connessione a Facebook in corso...
 	</string>
 	<string name="SocialFacebookPosting">
-		Pubblico...
+		Caricamento post...
 	</string>
 	<string name="SocialFacebookDisconnecting">
-		Disconnessione da Facebook...
+		Disconnessione da Facebook in corso...
 	</string>
 	<string name="SocialFacebookErrorConnecting">
-		Problema nel collegamento a Facebook
+		Problemi con la connessione a Facebook
 	</string>
 	<string name="SocialFacebookErrorPosting">
-		Problema nella pubblicazione su Facebook
+		Problemi con la connessione a Facebook
 	</string>
 	<string name="SocialFacebookErrorDisconnecting">
-		Problema nella chiusura collegamento a Facebook
+		Problemi con la disconnessione da Facebook
 	</string>
 	<string name="SocialFlickrConnecting">
 		Collegamento a Flickr...
@@ -2670,8 +2670,20 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 	<string name="NoPicksClassifiedsText">
 		Non hai creato luoghi preferiti né inserzioni. Clicca il pulsante + qui sotto per creare un luogo preferito o un&apos;inserzione.
 	</string>
+	<string name="NoPicksText">
+		Non hai creato Luoghi preferiti. Fai clic sul pulsante Nuovo per creare un Luogo preferito.
+	</string>
+	<string name="NoClassifiedsText">
+		Non hai creato Annunci. Fai clic sul pulsante Nuovo per creare un Annuncio.
+	</string>
 	<string name="NoAvatarPicksClassifiedsText">
 		L&apos;utente non ha luoghi preferiti né inserzioni
+	</string>
+	<string name="NoAvatarPicksText">
+		L&apos;utente non ha luoghi preferiti
+	</string>
+	<string name="NoAvatarClassifiedsText">
+		L&apos;utente non ha annunci
 	</string>
 	<string name="PicksClassifiedsLoadingText">
 		Caricamento in corso...

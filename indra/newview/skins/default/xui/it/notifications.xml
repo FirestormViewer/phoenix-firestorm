@@ -2691,6 +2691,9 @@ Prova a selezionare una parte di terreno più piccola.
 	<notification name="NoContentToSearch">
 		Seleziona almeno un tipo di contenuto per la ricerca (Generale, Moderato o Adulti).
 	</notification>
+	<notification name="FacebookConnect">
+		[MESSAGE]
+	</notification>
 	<notification name="EventNotification">
 		Notifica eventi:
 
@@ -4875,9 +4878,6 @@ per la regione &quot;[REGION]&quot;
 	</notification>
 	<notification name="SnoozeDurationInvalidInput">
 		Inserire un numero valido per la durata del blocco temporaneo chat.
-	</notification>
-	<notification name="PickLimitReached">
-		E' stato raggiunto il numero massimo di preferiti. Non se ne possono aggiungere altri.
 	</notification>
 	<notification name="GlobalOnlineStatusToggle">
 		A causa del carico sul server, la modifica collettiva dello stato di visibilità può impiegare tempo per diventare efficace. Ci vuole pazienza.

@@ -88,8 +88,7 @@
        label="Picks"
        name="Picks">
         <menu_item_call.on_click
-         function="Floater.Show"
-         parameter="picks" />
+         function="ShowAgentProfilePicks" />
         </menu_item_call>
 
       <menu_item_call

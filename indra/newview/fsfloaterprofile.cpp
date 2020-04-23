@@ -51,8 +51,7 @@ FSFloaterProfile::~FSFloaterProfile()
 
 void FSFloaterProfile::onOpen(const LLSD& key)
 {
-	FSPanelProfile* panel_profile = findChild<FSPanelProfile>(PANEL_PROFILE_VIEW);
-	panel_profile->onOpen(mAvatarId);
+	mPanelProfile->onOpen(mAvatarId);
 
 	if (mAvatarId == gAgentID)
 	{
@@ -66,10 +65,27 @@ void FSFloaterProfile::onOpen(const LLSD& key)
 
 BOOL FSFloaterProfile::postBuild()
 {
+	mPanelProfile = findChild<FSPanelProfile>(PANEL_PROFILE_VIEW);
+
 	childSetAction("ok_btn", boost::bind(&FSFloaterProfile::onOKBtn, this));
 	childSetAction("cancel_btn", boost::bind(&FSFloaterProfile::onCancelBtn, this));
 
 	return TRUE;
+}
+
+void FSFloaterProfile::showPick(const LLUUID& pick_id)
+{
+	mPanelProfile->showPick(pick_id);
+}
+
+bool FSFloaterProfile::isPickTabSelected()
+{
+	return mPanelProfile->isPickTabSelected();
+}
+
+void FSFloaterProfile::showClassified(const LLUUID& classified_id, bool edit)
+{
+	mPanelProfile->showClassified(classified_id, edit);
 }
 
 void FSFloaterProfile::onOKBtn()

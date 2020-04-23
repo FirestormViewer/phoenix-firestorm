@@ -790,15 +790,6 @@
 		 top_pad="2"
 		 follows="left|top"
 		 height="16"
-		 label="Use web profiles by default"
-		 name="FSUseWebProfiles"
-		 width="270"
-		 control_name="FSUseWebProfiles"
-		 tool_tip="Shows profiles as a web page instead of a v1-style panel."/>
-		<check_box
-		 top_pad="2"
-		 follows="left|top"
-		 height="16"
 		 label="Disable automatic opening of block list"
 		 name="FSDisableBlockListAutoOpen"
 		 width="270"

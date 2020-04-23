@@ -53,7 +53,7 @@
 #include "llscrollcontainer.h"
 #include "llstatusbar.h"
 #include "llviewertexture.h"
-#include "llpanelclassified.h"
+#include "llpanelprofileclassifieds.h"
 
 #ifdef OPENSIM
 #include "llviewernetwork.h"
@@ -198,7 +198,7 @@ void FSPanelClassifiedInfo::onOpen(const LLSD& key)
 		LL_INFOS("FSPanelClassifiedInfo") << "Classified stat request via capability" << LL_ENDL;
 		LLSD body;
 		body["classified_id"] = getClassifiedId();
-		LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body, boost::bind(&LLPanelClassifiedInfo::handleSearchStatResponse, getClassifiedId(), _1));
+		LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body, boost::bind(&LLPanelProfileClassified::handleSearchStatResponse, getClassifiedId(), _1));
 	}
 
 	// Update classified click stats.

@@ -1,68 +1,71 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Side tray panel -->
 <panel label="Résidents" name="people_panel">
-	<string name="no_recent_people">Aucun contact récent. Essayez [secondlife:///app/search/people la recherche] ou [secondlife:///app/worldmap La carte du monde] pour trouver des gens avec qui passer du temps !</string>
-	<string name="no_filtered_recent_people">Vous n'avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/people/[SEARCH_TERM] La recherche].</string>
-	<string name="no_one_near">Personne à proximité. Essayez [secondlife:///app/search/people la recherche] ou [secondlife:///app/worldmap La carte du monde] pour trouver des gens avec qui passer du temps !</string>
-	<string name="no_one_filtered_near">Vous n'avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/people/[SEARCH_TERM] La recherche].</string>
-	<string name="no_friends_online">Aucun ami connecté</string>
-	<string name="no_friends">Pas encore d'amis :(</string>
+	<string name="no_recent_people" value="Personne de récent. Pour rechercher des résidents avec qui passer du temps, voir [secondlife:///app/search/people Rechercher] ou [secondlife:///app/worldmap Carte du monde]."/>
+	<string name="no_filtered_recent_people" value="Vous n&apos;avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/people/[SEARCH_TERM] Rechercher]."/>
+	<string name="no_one_near" value="Personne près de vous. Pour rechercher des résidents avec qui passer du temps, voir [secondlife:///app/search/people Rechercher] ou [secondlife:///app/worldmap Carte du monde]."/>
+	<string name="no_one_filtered_near" value="Vous n&apos;avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/people/[SEARCH_TERM] Rechercher]."/>
+	<string name="no_friends_online" value="Pas d&apos;amis connectés"/>
+	<string name="no_friends" value="Pas d&apos;amis"/>
 	<string name="no_friends_msg">
-         Trouvez des amis en utilisant [secondlife:///app/search/people La recherche] ou faites un clic droit sur le résident pour l'ajouter comme ami.
- Vous recherchez des personnes avec qui passer du temps ? Essayez [secondlife:///app/worldmap La carte du monde].
+		Pour rechercher des amis, utilisez [secondlife:///app/search/people Rechercher] ou cliquez-droit sur le résident à ajouter comme ami.
+Pour rechercher des résidents avec qui passer du temps, utilisez [secondlife:///app/worldmap Carte du monde].
 	</string>
-	<string name="no_filtered_friends_msg">Vous n'avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/people/[SEARCH_TERM] La recherche].</string>
-	<string name="no_filtered_groups_msg">Vous n'avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/groups/[SEARCH_TERM] La recherche].</string>
-	<string name="no_groups_msg">Si vous cherchez à rejoindre des groupes, essayez [secondlife:///app/search/groups La recherche].</string>
-	<string name="MiniMapToolTipMsg">[REGION] (Double-clic pour ouvrir la carte, maintenez shift et faites glisser pour voir aux alentours)</string>
-	<string name="AltMiniMapToolTipMsg">[REGION] (Double-clic pour ouvrir la carte, maintenez shift et faites glisser pour voir aux alentours)</string>
-	<string name="GroupCountWithInfo">Vous appartenez à [COUNT] groupes, et pouvez encore en rejoindre [REMAINING]. [secondlife:/// Besoin de plus ?]</string>
-	<panel.string name="empty_list">Ce cercle est vide.</panel.string>
-	<panel.string name="no_sets">Pas de cercles</panel.string>
-	<panel.string name="all_sets">Tous les cercles</panel.string>
-	<panel.string name="pseudonyms">Surnoms</panel.string>
-	<panel.string name="AllFriendsTitle">Tous ([ALL])</panel.string>
-	<panel.string name="OnlineFriendsTitle">En ligne ([ONLINE])</panel.string>
+	<string name="no_filtered_friends_msg">
+		Vous n&apos;avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/people/[SEARCH_TERM] Rechercher].
+	</string>
+	<string name="no_filtered_groups_msg" value="Vous n&apos;avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/groups/[SEARCH_TERM] Rechercher]."/>
+	<string name="no_groups_msg" value="Vous souhaitez trouver des groupes à rejoindre ? Utilisez [secondlife:///app/search/groups Rechercher]."/>
+	<string name="MiniMapToolTipMsg" value="[REGION](Carte : double-clic ; Panoramique : Maj + faire glisser)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION](Téléportation : double-clic ; Panoramique : Maj + faire glisser)"/>
+	<string name="GroupCountWithInfo" value="Vous appartenez à [COUNT] groupes, et pouvez en rejoindre [REMAINING] autres.  [secondlife:/// Vous en voulez plus ?]"/>
 	<tab_container name="tabs">
-		<panel label="À proximité" name="nearby_panel"/>
-		<panel label="Amis" name="friends_panel">
+		<panel label="PRÈS DE VOUS" name="nearby_panel">
+			<panel label="bottom_panel" name="nearby_buttons_panel">
+				<filter_editor label="Filtrer les personnes" name="nearby_filter_input"/>
+				<button name="gear_btn" tool_tip="Actions sur la personne sélectionnée"/>
+				<menu_button name="nearby_view_btn" tool_tip="Options d&apos;affichage/de tri"/>
+				<button name="add_friend_btn" tool_tip="Proposer à ce résident de devenir votre ami"/>
+				<dnd_button name="nearby_del_btn" tool_tip="Supprimer la personne sélectionnée des amis"/>
+			</panel>
+		</panel>
+		<panel label="AMIS" name="friends_panel">
 			<panel label="bottom_panel" name="friends_buttons_panel">
 				<filter_editor label="Filtrer les personnes" name="friends_filter_input"/>
 				<button name="gear_btn" tool_tip="Actions sur la personne sélectionnée"/>
-				<menu_button name="friends_view_btn" tool_tip="Options d'affichage/de tri"/>
-				<button name="friends_add_btn" tool_tip="Devenir amis"/>
-				<button name="GlobalOnlineStatusToggle" tool_tip="Activer/Désactiver la visibilité de ma présence"/>
-				<dnd_button name="friends_del_btn" tool_tip="Supprimer cet ami"/>
+				<menu_button name="friends_view_btn" tool_tip="Options d&apos;affichage/de tri"/>
+				<button name="friends_add_btn" tool_tip="Proposer à ce résident de devenir votre ami"/>
+				<dnd_button name="friends_del_btn" tool_tip="Supprimer la personne sélectionnée des amis"/>
 			</panel>
-			<tab_container name="friends_accordion">
-				<panel name="tab_online" title="En ligne"/>
-				<panel name="tab_all" title="Tous"/>
-				<panel name="tab_suggested_friends" title="Amis possibles"/>
-			</tab_container>
+			<accordion name="friends_accordion">
+				<accordion_tab name="tab_online" title="En ligne"/>
+				<accordion_tab name="tab_all" title="Tout"/>
+				<accordion_tab name="tab_suggested_friends" title="Personnes avec lesquelles vous aimeriez peut-être devenir ami(e)"/>
+			</accordion>
 		</panel>
-		<panel label="Groupes" name="groups_panel">
+		<panel label="GROUPES" name="groups_panel">
 			<panel label="bottom_panel" name="groups_buttons_panel">
 				<filter_editor label="Filtrer les groupes" name="groups_filter_input"/>
 				<menu_button name="groups_gear_btn" tool_tip="Actions sur le groupe sélectionné"/>
-				<menu_button name="groups_view_btn" tool_tip="Options d'affichage/de tri"/>
-				<menu_button name="plus_btn" tool_tip="Rejoindre/Créer un nouveau groupe"/>
+				<menu_button name="groups_view_btn" tool_tip="Options d&apos;affichage/de tri"/>
+				<menu_button name="plus_btn" tool_tip="Rejoindre/créer un nouveau groupe"/>
 				<dnd_button name="minus_btn" tool_tip="Quitter le groupe sélectionné"/>
 			</panel>
-			<text name="groupcount">Vous appartenez à [COUNT] groupes et pouvez en rejoindre [REMAINING] autres.</text>
+			<text name="groupcount">
+				Vous appartenez à [COUNT] groupes, et pouvez en rejoindre [REMAINING] autres.
+			</text>
 		</panel>
-		<panel label="Récents" name="recent_panel">
+		<panel label="RÉCENT" name="recent_panel">
 			<panel label="bottom_panel" name="recent_buttons_panel">
 				<filter_editor label="Filtrer les personnes" name="recent_filter_input"/>
 				<button name="gear_btn" tool_tip="Actions sur la personne sélectionnée"/>
-				<menu_button name="recent_view_btn" tool_tip="Options d'affichage/de tri"/>
-				<button name="add_friend_btn" tool_tip="Devenir amis"/>
-				<dnd_button name="recent_del_btn" tool_tip="Supprimer cet ami"/>
+				<menu_button name="recent_view_btn" tool_tip="Options d&apos;affichage/de tri"/>
+				<button name="add_friend_btn" tool_tip="Proposer à ce résident de devenir votre ami"/>
+				<dnd_button name="recent_del_btn" tool_tip="Supprimer la personne sélectionnée des amis"/>
 			</panel>
 		</panel>
-		<panel label="Ignorés" name="blocked_panel">
-			<panel name="panel_block_list_sidetray" label="Résidents &amp; Objets ignorés"/>
-		</panel>
-		<panel label="Cercles" name="contact_sets_panel">
-			<panel name="panel_people_contacts_sidetray" label="Cercles"/>
+		<panel label="BLOQUÉ" name="blocked_panel">
+			<panel label="Résidents et objets ignorés" name="panel_block_list_sidetray"/>
 		</panel>
 	</tab_container>
 </panel>

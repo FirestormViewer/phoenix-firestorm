@@ -343,7 +343,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Probando la desconexión del visor
 	</string>
 	<string name="SocialFacebookConnecting">
-		Conectando a Facebook...
+		Conectando con Facebook...
 	</string>
 	<string name="SocialFacebookPosting">
 		Publicando...
@@ -352,13 +352,13 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Desconectando de Facebook...
 	</string>
 	<string name="SocialFacebookErrorConnecting">
-		Problema conectando con Facebook
+		Problema al conectar con Facebook
 	</string>
 	<string name="SocialFacebookErrorPosting">
-		Problema publicando en Facebook
+		Problema al publicar en Facebook
 	</string>
 	<string name="SocialFacebookErrorDisconnecting">
-		Problema desconectando de Facebook
+		Problema al desconectar de Facebook
 	</string>
 	<string name="SocialFlickrConnecting">
 		Conectándose a Flickr...
@@ -2556,8 +2556,20 @@ Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia 
 	<string name="NoPicksClassifiedsText">
 		No has creado destacados ni clasificados. Pulsa el botón Más para crear uno.
 	</string>
+	<string name="NoPicksText">
+		No has creado destacados. Haz clic en el botón Más para crear uno.
+	</string>
+	<string name="NoClassifiedsText">
+		No has creado clasificados. Haz clic en el botón Nuevo para crear un anuncio clasificado.
+	</string>
 	<string name="NoAvatarPicksClassifiedsText">
 		El usuario no tiene clasificados ni destacados
+	</string>
+	<string name="NoAvatarPicksText">
+		El usuario no tiene destacados
+	</string>
+	<string name="NoAvatarClassifiedsText">
+		El usuario no tiene clasificados
 	</string>
 	<string name="PicksClassifiedsLoadingText">
 		Cargando...

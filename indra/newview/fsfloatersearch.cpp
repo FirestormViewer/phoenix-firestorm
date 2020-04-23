@@ -32,7 +32,6 @@
 #include "fsavatarsearchmenu.h"
 #include "fsdispatchclassifiedclickthrough.h"
 #include "fspanelclassified.h"
-#include "fspanelprofile.h"
 #include "fsscrolllistctrl.h"
 #include "lfsimfeaturehandler.h"
 #include "llagent.h"
@@ -53,7 +52,8 @@
 #include "llloadingindicator.h"
 #include "lllogininstance.h"
 #include "llnotificationsutil.h"
-#include "llpanelclassified.h"
+#include "llpanelprofile.h"
+#include "llpanelprofileclassifieds.h"
 #include "llparcel.h"
 #include "llproductinforequest.h"
 #include "llqueryflags.h"
@@ -172,7 +172,7 @@ public:
 					LL_INFOS("Search") << "Classified stat request via capability" << LL_ENDL;
 					LLSD body;
 					body["classified_id"] = c_info->classified_id;
-					LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body, boost::bind(&LLPanelClassifiedInfo::handleSearchStatResponse, c_info->classified_id, _1));
+					LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body, boost::bind(&LLPanelProfileClassified::handleSearchStatResponse, c_info->classified_id, _1));
 				}
 			}
 		}
@@ -297,7 +297,7 @@ BOOL FSFloaterSearch::postBuild()
 	mPanelWeb			= findChild<FSPanelSearchWeb>("panel_ls_web");
 
 	// <KC> If skin has legacy full profile view, use it
-	mPanelProfile = mPanelPeople->findChild<FSPanelProfile>("panel_profile_view");
+	mPanelProfile = mPanelPeople->findChild<LLPanelProfile>("panel_profile_view");
 	if (mPanelProfile)
 	{
 		mPanelProfile->setVisible(false);
@@ -384,7 +384,7 @@ void FSFloaterSearch::onSelectedItem(const LLUUID& selected_item, ESearchCategor
 					if (mPanelProfile)
 					{
 						mPanelProfile->setVisible(true);
-						mPanelProfile->onOpen(selected_item);
+						mPanelProfile->onOpen(LLSD().with("id", selected_item));
 					}
 					else
 					{

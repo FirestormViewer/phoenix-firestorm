@@ -70,37 +70,6 @@ private:
 };
 
 
-class FSDropTarget : public LLView
-{
-public:
-	struct Params : public LLInitParam::Block<Params, LLView::Params>
-	{
-		Optional<LLUUID> agent_id;
-		Params()
-			: agent_id("agent_id")
-		{
-			changeDefault(mouse_opaque, false);
-			changeDefault(follows.flags, FOLLOWS_ALL);
-		}
-	};
-
-	FSDropTarget(const Params&);
-	~FSDropTarget() {}
-
-	// LLView functionality
-	virtual BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
-								   EDragAndDropType cargo_type,
-								   void* cargo_data,
-								   EAcceptance* accept,
-								   std::string& tooltip_msg);
-
-	void setAgentID(const LLUUID &agent_id) { mAgentID = agent_id; }
-
-protected:
-	LLUUID mAgentID;
-};
-
-
 class FSEmbeddedItemDropTarget : public LLTextBox
 {
 public:
