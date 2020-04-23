@@ -230,7 +230,7 @@ void LLProgressView::setStartupComplete()
 		mFadeToWorldTimer.start();
 	}
 
-	// NickyD: FIRE-3063; Enable Audio for all media sources again. They got disabled during postBuild(), but as we never reach LLProgressView::draw
+	// <FS:NickyD> FIRE-3063; Enable Audio for all media sources again. They got disabled during postBuild(), but as we never reach LLProgressView::draw
 	// if the progress is disabled, we would never get media audio back.
 	LLViewerMedia::getInstance()->setOnlyAudibleMediaTextureID(LLUUID::null);
 }
@@ -255,7 +255,7 @@ void LLProgressView::setVisible(BOOL visible)
 	} 
 }
 
-// ## Zi: Fade teleport screens
+// <FS:Zi> Fade teleport screens
 void LLProgressView::fade(BOOL in)
 {
 	if(in)
@@ -271,7 +271,7 @@ void LLProgressView::fade(BOOL in)
 		// set visibility will be done in the draw() method after fade
 	}
 }
-// ## Zi: Fade teleport screens
+// </FS:Zi> Fade teleport screens
 
 void LLProgressView::drawStartTexture(F32 alpha)
 {
@@ -489,6 +489,7 @@ void LLProgressView::initLogos()
     texture_start_x += icon_width + default_pad;
 #endif
 
+#ifdef HAVOK_TPV // <FS:Ansariel> Don't show on non-Havok builds
     icon_width = 100;
     loadLogo(temp_str + "havok_logo.png",
         image_codec,
@@ -497,6 +498,7 @@ void LLProgressView::initLogos()
         default_clip);
 
     texture_start_x += icon_width + default_pad;
+#endif // <FS:Ansariel> Don't show on non-Havok builds
 
     icon_width = 87;
     loadLogo(temp_str + "vivox_logo.png",
@@ -587,8 +589,12 @@ void LLProgressView::initTextures(S32 location_id, bool is_in_production)
     initLogos();
 
     childSetVisible("panel_icons", mLogosList.empty() ? FALSE : TRUE);
-    childSetVisible("panel_login", TRUE);
-    childSetVisible("panel_teleport", FALSE);
+    // <FS:Ansariel> Show normal login progress
+    //childSetVisible("panel_login", TRUE);
+    //childSetVisible("panel_teleport", FALSE);
+    childSetVisible("panel_login", FALSE);
+    childSetVisible("panel_teleport", TRUE);
+    // </FS:Ansariel>
 }
 
 void LLProgressView::releaseTextures()
@@ -596,9 +602,11 @@ void LLProgressView::releaseTextures()
     gStartTexture = NULL;
     mLogosList.clear();
 
-    childSetVisible("panel_login", FALSE);
-    childSetVisible("panel_teleport", TRUE);
+    // <FS:Ansariel> Show normal login progress
+    //childSetVisible("panel_login", FALSE);
+    //childSetVisible("panel_teleport", TRUE);
     childSetVisible("panel_icons", FALSE);
+    // </FS:Ansariel>
 }
 
 void LLProgressView::setCancelButtonVisible(BOOL b, const std::string& label)
