@@ -106,6 +106,21 @@
                      top="145"
                      right="-90"
                      word_wrap="true"/>
+                    <!--Logos are tied to following label from code-->
+                    <text
+                     follows="left|right|top"
+                     layout="topleft"
+                     font_shadow="none"
+                     halign="left"
+                     height="16"
+                     width="100"
+                     left="48"
+                     top="200"
+                     line_spacing.pixels="2"
+                     name="logos_lbl"
+                     text_color="LoginProgressBoxTextColor">
+                      Second Life uses
+                    </text>
                 </layout_panel>
                 <layout_panel
                  height="200"

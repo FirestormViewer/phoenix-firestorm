@@ -143,7 +143,7 @@ BOOL LLFloaterAbout::postBuild()
 	//	boost::bind(&LLFloaterAbout::onClickUpdateCheck, this));
 	// </FS:Ansariel>
 
-#if LL_FMODSTUDIO || LL_FMODEX
+#if LL_FMODSTUDIO
 	childSetVisible("logos_panel", true);
 #endif
 

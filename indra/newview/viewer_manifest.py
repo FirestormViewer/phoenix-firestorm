@@ -564,6 +564,16 @@ class WindowsManifest(ViewerManifest):
             #        self.path("*.gif")
 
             # </FS:Ansariel> Remove VMP
+
+        # <FS:Ansariel> [Progress Logos] Show logos on "About" floater instead
+        # # Copy 3p icons
+        # with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
+            # if self.args['fmodstudio'] == 'ON':
+                # self.path("fmod.png")
+            # self.path("havok_logo.png")
+            # self.path("vivox_logo.png")
+        # </FS:Ansariel>
+
         # Plugin host application
         self.path2basename(os.path.join(os.pardir,
                                         'llplugin', 'slplugin', self.args['configuration']),
@@ -580,21 +590,14 @@ class WindowsManifest(ViewerManifest):
                 print err.message
                 print "Skipping GLOD library (assumming linked statically)"
 
-            # Get fmodstudio dll
-            if self.args['fmodversion'].lower() == 'fmodstudio':
-                if self.args['configuration'].lower() == 'debug':
+            # Get fmodstudio dll if needed
+            if self.args['fmodstudio'] == 'ON':
+                if(self.args['configuration'].lower() == 'debug'):
                     self.path("fmodL.dll")
                 else:
                     self.path("fmod.dll")
 
-            # Get fmodex dll
-            if self.args['fmodversion'].lower() == 'fmodex':
-                if(self.address_size == 64):
-                    self.path("fmodex64.dll")
-                else:
-                    self.path("fmodex.dll")
-
-            # Get openal dll
+            # Get openal dll if needed
             if self.args.get('openal') == 'ON':
                 self.path("OpenAL32.dll")
                 self.path("alut.dll")
@@ -1166,17 +1169,18 @@ class DarwinManifest(ViewerManifest):
                                 # ):
                     # self.path2basename(relpkgdir, libfile)
 
-                # # dylibs that vary based on configuration
-                # if self.args['configuration'].lower() == 'debug':
-                    # for libfile in (
-                                # "libfmodexL.dylib",
-                                # ):
-                        # dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
-                # else:
-                    # for libfile in (
-                                # "libfmodex.dylib",
-                                # ):
-                        # dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+                # # Fmod studio dylibs (vary based on configuration)
+                # if self.args['fmodstudio'] == 'ON':
+                    # if self.args['configuration'].lower() == 'debug':
+                        # for libfile in (
+                                    # "libfmodL.dylib",
+                                    # ):
+                            # dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
+                    # else:
+                        # for libfile in (
+                                    # "libfmod.dylib",
+                                    # ):
+                            # dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
                 # # our apps
                 # executable_path = {}
@@ -1330,6 +1334,15 @@ class DarwinManifest(ViewerManifest):
                 with self.prefix(src=pkgdir,dst=""):
                     self.path("ca-bundle.crt")
 
+                # <FS:Ansariel> [Progress Logos] Show logos on "About" floater instead
+                # # Copy 3p icons
+                # with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
+                    # if self.args['fmodstudio'] == 'ON':
+                        # self.path("fmod.png")
+                    # self.path("havok_logo.png")
+                    # self.path("vivox_logo.png")
+                # </FS:Ansariel>
+
                 icon_path = self.icon_path()
                 with self.prefix(src=icon_path) :
                     self.path("firestorm_icon.icns")
@@ -1414,8 +1427,8 @@ class DarwinManifest(ViewerManifest):
                                 ):
                     self.path2basename(relpkgdir, libfile)
 
-                # dylibs that vary based on configuration
-                if self.args['fmodversion'].lower() == 'fmodstudio':
+                # Fmod studio dylibs (vary based on configuration)
+                if self.args['fmodstudio'] == 'ON':
                     if self.args['configuration'].lower() == 'debug':
                         for libfile in (
                                     "libfmodL.dylib",
@@ -1425,19 +1438,6 @@ class DarwinManifest(ViewerManifest):
                         for libfile in (
                                     "libfmod.dylib",
                                     ):
-                            dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
-
-                # dylibs that vary based on configuration
-                if self.args['fmodversion'].lower() == 'fmodex':
-                    if self.args['configuration'].lower() == 'debug':
-                        for libfile in (
-                                   "libfmodexL.dylib",
-                                   ):
-                            dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
-                    else:
-                        for libfile in (
-                                   "libfmodex.dylib",
-                                   ):
                             dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
                 # our apps
@@ -2102,6 +2102,15 @@ class Linux_i686_Manifest(LinuxManifest):
         relpkgdir = os.path.join(pkgdir, "lib", "release")
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
+        # <FS:Ansariel> [Progress Logos] Show logos on "About" floater instead
+        # # Copy 3p icons
+        # with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
+            # if self.args['fmodstudio'] == 'ON':
+                # self.path("fmod.png")
+            # self.path("havok_logo.png")
+            # self.path("vivox_logo.png")
+        # </FS:Ansariel>
+
         with self.prefix(src=relpkgdir, dst="lib"):
             self.path("libapr-1.so")
             self.path("libapr-1.so.0")
@@ -2158,16 +2167,14 @@ class Linux_i686_Manifest(LinuxManifest):
                 print "tcmalloc files not found, skipping"
                 pass
 
-            if self.args['fmodversion'].lower() == 'fmodex':
-                self.path("libfmodex-*.so")
-                self.path("libfmodex.so")
-                self.path("libfmodex.so*")
-                pass
-
-            if self.args['fmodversion'].lower() == 'fmodstudio':
-                self.path("libfmod.so")
-                self.path("libfmod.so*")
-                pass
+            if self.args['fmodstudio'] == 'ON':
+                try:
+                    self.path("libfmod.so")
+                    self.path("libfmod.so*")
+                    pass
+                except:
+                    print "Skipping libfmod.so - not found"
+                    pass
 
 
         # Vivox runtimes
@@ -2202,16 +2209,15 @@ class Linux_x86_64_Manifest(LinuxManifest):
             # <FS:TS> No, we don't need to dink with this. A usable library
             # is now in the slvoice package, and we need to just use it as is.
             # self.path("libopenal32.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
-            if self.args['fmodversion'].lower() == 'fmodex':
-                    self.path("libfmodex64-*.so")
-                    self.path("libfmodex64.so")
-                    self.path("libfmodex64.so*")
-                    pass
 
-            if self.args['fmodversion'].lower() == 'fmodstudio':
-                self.path("libfmod.so")
-                self.path("libfmod.so*")
-                pass
+            if self.args['fmodstudio'] == 'ON':
+                try:
+                    self.path("libfmod.so")
+                    self.path("libfmod.so*")
+                    pass
+                except:
+                    print "Skipping libfmod.so - not found"
+                    pass
 
         with self.prefix(dst="bin"):
             self.path2basename("../llplugin/slplugin", "SLPlugin")
@@ -2266,6 +2272,7 @@ if __name__ == "__main__":
     extra_arguments = [
         dict(name='bugsplat', description="""BugSplat database to which to post crashes,
              if BugSplat crash reporting is desired""", default=''),
+        dict(name='fmodstudio', description="""Indication if fmod studio libraries are needed""", default='OFF'),
         dict(name='openal', description="""Indication openal libraries are needed""", default='OFF')
         ]
     try:

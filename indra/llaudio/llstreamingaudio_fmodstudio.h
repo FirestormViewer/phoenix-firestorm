@@ -2,9 +2,9 @@
  * @file streamingaudio_fmodstudio.h
  * @brief Definition of LLStreamingAudio_FMODSTUDIO implementation
  *
- * $LicenseInfo:firstyear=2002&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2020&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2020, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -45,41 +45,41 @@ namespace FMOD
 //Interfaces
 class LLStreamingAudio_FMODSTUDIO : public LLStreamingAudioInterface
 {
- public:
-	LLStreamingAudio_FMODSTUDIO(FMOD::System *system);
-	/*virtual*/ ~LLStreamingAudio_FMODSTUDIO();
+public:
+    LLStreamingAudio_FMODSTUDIO(FMOD::System *system);
+    /*virtual*/ ~LLStreamingAudio_FMODSTUDIO();
 
-	/*virtual*/ void start(const std::string& url);
-	/*virtual*/ void stop();
-	/*virtual*/ void pause(S32 pause);
-	/*virtual*/ void update();
-	/*virtual*/ S32 isPlaying();
-	/*virtual*/ void setGain(F32 vol);
-	/*virtual*/ F32 getGain();
-	/*virtual*/ std::string getURL();
+    /*virtual*/ void start(const std::string& url);
+    /*virtual*/ void stop();
+    /*virtual*/ void pause(S32 pause);
+    /*virtual*/ void update();
+    /*virtual*/ S32 isPlaying();
+    /*virtual*/ void setGain(F32 vol);
+    /*virtual*/ F32 getGain();
+    /*virtual*/ std::string getURL();
 
-	/*virtual*/ bool supportsAdjustableBufferSizes(){return true;}
-	/*virtual*/ void setBufferSizes(U32 streambuffertime, U32 decodebuffertime);
-	//Streamtitle display DKO
-	virtual bool getNewMetadata(LLSD& metadata);
-	// DKO
+    /*virtual*/ bool supportsAdjustableBufferSizes(){return true;}
+    /*virtual*/ void setBufferSizes(U32 streambuffertime, U32 decodebuffertime);
+    //Streamtitle display DKO
+    virtual bool getNewMetadata(LLSD& metadata);
+    // DKO
 private:
-	bool releaseDeadStreams();
+    bool releaseDeadStreams();
 
-	FMOD::System *mSystem;
+    FMOD::System *mSystem;
 
-	LLAudioStreamManagerFMODSTUDIO *mCurrentInternetStreamp;
-	FMOD::ChannelGroup* mStreamGroup;
-	FMOD::Channel *mFMODInternetStreamChannelp;
-	std::list<LLAudioStreamManagerFMODSTUDIO *> mDeadStreams;
+    LLAudioStreamManagerFMODSTUDIO *mCurrentInternetStreamp;
+    FMOD::ChannelGroup* mStreamGroup;
+    FMOD::Channel *mFMODInternetStreamChannelp;
+    std::list<LLAudioStreamManagerFMODSTUDIO *> mDeadStreams;
 
-	std::string mURL;
-	std::string mPendingURL;
-	F32 mGain;
-	// <DKO> Streamtitle display
-	bool mNewMetadata;
-	LLSD mMetadata;
-	// </DKO> Streamtitle display
+    std::string mURL;
+    std::string mPendingURL;
+    F32 mGain;
+    // <DKO> Streamtitle display
+    bool mNewMetadata;
+    LLSD mMetadata;
+    // </DKO> Streamtitle display
 };
 
 
