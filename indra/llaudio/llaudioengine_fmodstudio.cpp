@@ -59,11 +59,11 @@ static inline bool Check_FMOD_Error(FMOD_RESULT result, const char *string)
 
     if (result != FMOD_ERR_INVALID_HANDLE)
     {
-        LL_WARNS() << string << " Error: " << FMOD_ErrorString(result) << LL_ENDL;
+        LL_WARNS("FMOD") << string << " Error: " << FMOD_ErrorString(result) << LL_ENDL;
     }
     else
     {
-        LL_DEBUGS() << string << " Error: " << FMOD_ErrorString(result) << LL_ENDL;
+        LL_DEBUGS("FMOD") << string << " Error: " << FMOD_ErrorString(result) << LL_ENDL;
     }
 
     return true;
@@ -84,7 +84,7 @@ void set_device(FMOD::System* system, const LLUUID& device_uuid)
     {
         if (device_uuid.isNull())
         {
-            LL_INFOS() << "Setting driver \"Default\"" << LL_ENDL;
+            LL_INFOS("FMOD") << "Setting driver \"Default\"" << LL_ENDL;
             Check_FMOD_Error(system->setDriver(0), "FMOD::System::setDriver");
         }
         else
@@ -100,14 +100,14 @@ void set_device(FMOD::System* system, const LLUUID& device_uuid)
 
                     if (driver_guid == device_uuid)
                     {
-                        LL_INFOS() << "Setting driver " << i << ": " << driver_guid << LL_ENDL;
+                        LL_INFOS("FMOD") << "Setting driver " << i << ": " << driver_guid << LL_ENDL;
                         Check_FMOD_Error(system->setDriver(i), "FMOD::System::setDriver");
                         return;
                     }
                 }
             }
 
-            LL_INFOS() << "Device not available (anymore) - falling back to default" << LL_ENDL;
+            LL_INFOS("FMOD") << "Device not available (anymore) - falling back to default" << LL_ENDL;
             Check_FMOD_Error(system->setDriver(0), "FMOD::System::setDriver");
         }
     }
@@ -121,7 +121,7 @@ FMOD_RESULT F_CALLBACK systemCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBACK_
     switch (type)
     {
         case FMOD_SYSTEM_CALLBACK_DEVICELISTCHANGED:
-            LL_DEBUGS() << "FMOD system callback FMOD_SYSTEM_CALLBACK_DEVICELISTCHANGED" << LL_ENDL;
+            LL_DEBUGS("FMOD") << "FMOD system callback FMOD_SYSTEM_CALLBACK_DEVICELISTCHANGED" << LL_ENDL;
             if (sys && audio_engine)
             {
                 set_device(sys, audio_engine->getSelectedDeviceUUID());
@@ -174,8 +174,6 @@ bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata, cons
         LL_WARNS("AppInit") << "FMOD Studio version mismatch, actual: " << version
             << " expected:" << FMOD_VERSION << LL_ENDL;
     }
-
-    // In case we need to force sampling on stereo, use setSoftwareFormat here
 
     // In this case, all sounds, PLUS wind and stream will be software.
     result = mSystem->setSoftwareChannels(num_channels + EXTRA_SOUND_CHANNELS);
@@ -298,6 +296,15 @@ bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata, cons
         */
         result = mSystem->init(num_channels + EXTRA_SOUND_CHANNELS, fmod_flags, 0);
     }
+    if (Check_FMOD_Error(result, "Error initializing FMOD Studio with default settins, retrying with other format"))
+    {
+        result = mSystem->setSoftwareFormat(44100, FMOD_SPEAKERMODE_STEREO, 0/*- ignore*/);
+        if (Check_FMOD_Error(result, "Error setting sotware format. Can't init."))
+        {
+            return false;
+        }
+        result = mSystem->init(num_channels + 2, fmod_flags, 0);
+    }
     if (Check_FMOD_Error(result, "Error initializing FMOD Studio"))
     {
         return false;
@@ -407,7 +414,7 @@ void LLAudioEngine_FMODSTUDIO::allocateListener(void)
     }
     catch (const std::bad_alloc& e)
     {
-        LL_WARNS() << "Listener allocation failed due to: " << e.what() << LL_ENDL;
+        LL_WARNS("FMOD") << "Listener allocation failed due to: " << e.what() << LL_ENDL;
     }
 }
 
@@ -416,16 +423,16 @@ void LLAudioEngine_FMODSTUDIO::shutdown()
 {
     stopInternetStream();
 
-    LL_INFOS() << "About to LLAudioEngine::shutdown()" << LL_ENDL;
+    LL_INFOS("FMOD") << "About to LLAudioEngine::shutdown()" << LL_ENDL;
     LLAudioEngine::shutdown();
 
-    LL_INFOS() << "LLAudioEngine_FMODSTUDIO::shutdown() closing FMOD Studio" << LL_ENDL;
+    LL_INFOS("FMOD") << "LLAudioEngine_FMODSTUDIO::shutdown() closing FMOD Studio" << LL_ENDL;
     if (mSystem)
     {
         Check_FMOD_Error(mSystem->close(), "FMOD::System::close");
         Check_FMOD_Error(mSystem->release(), "FMOD::System::release");
     }
-    LL_INFOS() << "LLAudioEngine_FMODSTUDIO::shutdown() done closing FMOD Studio" << LL_ENDL;
+    LL_INFOS("FMOD") << "LLAudioEngine_FMODSTUDIO::shutdown() done closing FMOD Studio" << LL_ENDL;
 
     delete mListenerp;
     mListenerp = NULL;

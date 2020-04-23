@@ -565,15 +565,6 @@ class WindowsManifest(ViewerManifest):
 
             # </FS:Ansariel> Remove VMP
 
-        # <FS:Ansariel> [Progress Logos] Show logos on "About" floater instead
-        # # Copy 3p icons
-        # with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
-            # if self.args['fmodstudio'] == 'ON':
-                # self.path("fmod.png")
-            # self.path("havok_logo.png")
-            # self.path("vivox_logo.png")
-        # </FS:Ansariel>
-
         # Plugin host application
         self.path2basename(os.path.join(os.pardir,
                                         'llplugin', 'slplugin', self.args['configuration']),
@@ -1334,15 +1325,6 @@ class DarwinManifest(ViewerManifest):
                 with self.prefix(src=pkgdir,dst=""):
                     self.path("ca-bundle.crt")
 
-                # <FS:Ansariel> [Progress Logos] Show logos on "About" floater instead
-                # # Copy 3p icons
-                # with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
-                    # if self.args['fmodstudio'] == 'ON':
-                        # self.path("fmod.png")
-                    # self.path("havok_logo.png")
-                    # self.path("vivox_logo.png")
-                # </FS:Ansariel>
-
                 icon_path = self.icon_path()
                 with self.prefix(src=icon_path) :
                     self.path("firestorm_icon.icns")
@@ -2101,15 +2083,6 @@ class Linux_i686_Manifest(LinuxManifest):
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
         relpkgdir = os.path.join(pkgdir, "lib", "release")
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
-
-        # <FS:Ansariel> [Progress Logos] Show logos on "About" floater instead
-        # # Copy 3p icons
-        # with self.prefix(src=os.path.join(pkgdir, "icons"), dst="3p_icons"):
-            # if self.args['fmodstudio'] == 'ON':
-                # self.path("fmod.png")
-            # self.path("havok_logo.png")
-            # self.path("vivox_logo.png")
-        # </FS:Ansariel>
 
         with self.prefix(src=relpkgdir, dst="lib"):
             self.path("libapr-1.so")
