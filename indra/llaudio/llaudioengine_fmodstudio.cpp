@@ -283,19 +283,6 @@ bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata, cons
 
     // initialize the FMOD engine
     result = mSystem->init(num_channels + EXTRA_SOUND_CHANNELS, fmod_flags, 0);
-    if (result == FMOD_ERR_OUTPUT_CREATEBUFFER)
-    {
-        /*
-        Ok, the speaker mode selected isn't supported by this soundcard. Switch it
-        back to stereo...
-        */
-        result = mSystem->setSoftwareFormat(44100, FMOD_SPEAKERMODE_STEREO, 0);
-        Check_FMOD_Error(result,"Error falling back to stereo mode");
-        /*
-        ... and re-init.
-        */
-        result = mSystem->init(num_channels + EXTRA_SOUND_CHANNELS, fmod_flags, 0);
-    }
     if (Check_FMOD_Error(result, "Error initializing FMOD Studio with default settins, retrying with other format"))
     {
         result = mSystem->setSoftwareFormat(44100, FMOD_SPEAKERMODE_STEREO, 0/*- ignore*/);
@@ -303,7 +290,7 @@ bool LLAudioEngine_FMODSTUDIO::init(const S32 num_channels, void* userdata, cons
         {
             return false;
         }
-        result = mSystem->init(num_channels + 2, fmod_flags, 0);
+        result = mSystem->init(num_channels + EXTRA_SOUND_CHANNELS, fmod_flags, 0);
     }
     if (Check_FMOD_Error(result, "Error initializing FMOD Studio"))
     {
