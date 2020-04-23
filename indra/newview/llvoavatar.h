@@ -269,7 +269,7 @@ public:
 	virtual void	updateDebugText();
 	virtual BOOL 	updateCharacter(LLAgent &agent);
     void			updateFootstepSounds();
-    void			computeUpdatePeriod();
+    BOOL			computeUpdatePeriodAndVisibility();
     void			updateOrientation(LLAgent &agent, F32 speed, F32 delta_time);
     void			updateTimeStep();
     void			updateRootPositionAndRotation(LLAgent &agent, F32 speed, bool was_sit_ground_constrained);
@@ -297,6 +297,7 @@ public:
 	void			addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font, bool is_name = false);
 	// </FS:Ansariel>
 	void 			idleUpdateRenderComplexity();
+	void 			idleUpdateDebugInfo();
     void 			accountRenderComplexityForObject(const LLViewerObject *attached_object,
                                                      const F32 max_attachment_complexity,
                                                      LLVOVolume::texture_cost_t& textures,

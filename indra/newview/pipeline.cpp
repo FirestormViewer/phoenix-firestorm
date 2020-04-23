@@ -1,4 +1,4 @@
-/** 
+﻿/** 
  * @file pipeline.cpp
  * @brief Rendering pipeline.
  *
@@ -499,8 +499,8 @@ void LLPipeline::init()
 	sUseTriStrips = gSavedSettings.getBOOL("RenderUseTriStrips");
 	LLVertexBuffer::sUseStreamDraw = gSavedSettings.getBOOL("RenderUseStreamVBO");
 	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
-	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
-	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO");
+	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO") && LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 0;
+	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO") && LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 0;
 	// </FS:Ansariel>
 	LLVertexBuffer::sPreferStreamDraw = gSavedSettings.getBOOL("RenderPreferStreamDraw");
 	sRenderAttachedLights = gSavedSettings.getBOOL("RenderAttachedLights");
@@ -1733,6 +1733,7 @@ LLDrawPool *LLPipeline::findPool(const U32 type, LLViewerTexture *tex0)
 		break;
 
 	case LLDrawPool::POOL_AVATAR:
+	case LLDrawPool::POOL_CONTROL_AV:
 		break; // Do nothing
 
 	case LLDrawPool::POOL_SKY:
@@ -2122,7 +2123,7 @@ void LLPipeline::updateMovedList(LLDrawable::drawable_vector_t& moved_list)
 		drawablep->clearState(LLDrawable::EARLY_MOVE | LLDrawable::MOVE_UNDAMPED);
 		if (done)
 		{
-			if (drawablep->isRoot())
+			if (drawablep->isRoot() && !drawablep->isState(LLDrawable::ACTIVE))
 			{
 				drawablep->makeStatic();
 			}
@@ -2514,7 +2515,7 @@ bool LLPipeline::getVisibleExtents(LLCamera& camera, LLVector3& min, LLVector3& 
 
 static LLTrace::BlockTimerStatHandle FTM_CULL("Object Culling");
 
-void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_clip, LLPlane* planep)
+void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_clip, LLPlane* planep, bool hud_attachments)
 {
 	static LLCachedControl<bool> use_occlusion(gSavedSettings,"UseOcclusion");
 	static bool can_use_occlusion = LLGLSLShader::sNoFixedFunction
@@ -2632,9 +2633,9 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
 			LLSpatialPartition* part = region->getSpatialPartition(i);
 			if (part)
 			{
-				if (hasRenderType(part->mDrawableType))
+				if (!hud_attachments ? LLViewerRegion::PARTITION_BRIDGE == i || hasRenderType(part->mDrawableType) : hasRenderType(part->mDrawableType))
 				{
-					part->cull(camera);
+				    part->cull(camera);
 				}
 			}
 		}
@@ -3533,6 +3534,7 @@ static LLTrace::BlockTimerStatHandle FTM_RESET_DRAWORDER("Reset Draw Order");
 void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
 {
 	if (hasAnyRenderType(LLPipeline::RENDER_TYPE_AVATAR,
+					  LLPipeline::RENDER_TYPE_CONTROL_AV,
 					  LLPipeline::RENDER_TYPE_GROUND,
 					  LLPipeline::RENDER_TYPE_TERRAIN,
 					  LLPipeline::RENDER_TYPE_TREE,
@@ -5940,6 +5942,7 @@ void LLPipeline::addToQuickLookup( LLDrawPool* new_poolp )
 		break;
 
 	case LLDrawPool::POOL_AVATAR:
+	case LLDrawPool::POOL_CONTROL_AV:
 		break; // Do nothing
 
 	case LLDrawPool::POOL_SKY:
@@ -6088,6 +6091,7 @@ void LLPipeline::removeFromQuickLookup( LLDrawPool* poolp )
 		break;
 
 	case LLDrawPool::POOL_AVATAR:
+	case LLDrawPool::POOL_CONTROL_AV:
 		break; // Do nothing
 
 	case LLDrawPool::POOL_SKY:
@@ -7283,7 +7287,8 @@ LLViewerObject* LLPipeline::lineSegmentIntersectInWorld(const LLVector4a& start,
 		for (U32 j = 0; j < LLViewerRegion::NUM_PARTITIONS; j++)
 		{
 			if ((j == LLViewerRegion::PARTITION_VOLUME) || 
-				(j == LLViewerRegion::PARTITION_BRIDGE) || 
+				(j == LLViewerRegion::PARTITION_BRIDGE) ||
+				(j == LLViewerRegion::PARTITION_CONTROL_AV) ||
 				(j == LLViewerRegion::PARTITION_TERRAIN) ||
 				(j == LLViewerRegion::PARTITION_TREE) ||
 				(j == LLViewerRegion::PARTITION_GRASS))  // only check these partitions for now
@@ -7345,7 +7350,7 @@ LLViewerObject* LLPipeline::lineSegmentIntersectInWorld(const LLVector4a& start,
 		{
 			LLViewerRegion* region = *iter;
 
-			LLSpatialPartition* part = region->getSpatialPartition(LLViewerRegion::PARTITION_BRIDGE);
+			LLSpatialPartition* part = region->getSpatialPartition(LLViewerRegion::PARTITION_AVATAR);
 			if (part && hasRenderType(part->mDrawableType))
 			{
 				LLDrawable* hit = part->lineSegmentIntersect(start, local_end, pick_transparent, pick_rigged, face_hit, &position, tex_coord, normal, tangent);
@@ -7572,8 +7577,8 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 	sUseTriStrips = gSavedSettings.getBOOL("RenderUseTriStrips");
 	LLVertexBuffer::sUseStreamDraw = gSavedSettings.getBOOL("RenderUseStreamVBO");
 	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
-	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
-	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO");
+	//LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO") && LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 0;
+	LLVertexBuffer::sUseVAO = LLRender::sGLCoreProfile ? TRUE : gSavedSettings.getBOOL("RenderUseVAO") && LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 0;
 	// </FS:Ansariel>
 	LLVertexBuffer::sPreferStreamDraw = gSavedSettings.getBOOL("RenderPreferStreamDraw");
 	LLVertexBuffer::sEnableVBOs = gSavedSettings.getBOOL("RenderVBOEnable");
