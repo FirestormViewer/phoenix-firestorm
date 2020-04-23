@@ -21,6 +21,7 @@
 	<icon name="icon_script" tool_tip="Script"/>
 	<icon name="icon_sound" tool_tip="Suoni"/>
 	<icon name="icon_texture" tool_tip="Texture"/>
+	<icon name="icon_setting" tool_tip="Impostazioni ambiente"/>
 	<button label="√ Tutti" name="check_all"/>
 	<button label="Cancella" label_selected="Nessuno" name="check_none"/>
 	<text name="newperms">

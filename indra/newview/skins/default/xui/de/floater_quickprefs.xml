@@ -4,7 +4,6 @@
 		<layout_stack name="options_stack" width="280"/>
 		<layout_stack name="wl_options_stack" width="280">
 			<layout_panel name="wl_options_panel">
-				<check_box label="Regions-Windlight-Vorstellungen verwenden" name="UseRegionWindlight"/>
 				<text name="HoverHeightLabel" width="105" tool_tip="Legt die Schwebehöhe des eigenen Avatars fest.">
 					Schwebehöhe:
 				</text>

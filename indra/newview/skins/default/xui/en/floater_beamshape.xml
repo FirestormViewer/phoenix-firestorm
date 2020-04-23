@@ -90,4 +90,16 @@ remove a ray. Press the Save button when done.
 	 name="beamshape_clear"
 	 scale_image="true"
 	 width="85" />
+	<button
+	 bottom_delta="0"
+	 enabled="true"
+	 follows="left|top"
+	 halign="center"
+	 height="22"
+	 label="Cancel"
+	 left_delta="100"
+	 mouse_opaque="true"
+	 name="cancel"
+	 scale_image="true"
+	 width="85" />
 </floater> 

@@ -35,19 +35,21 @@
 #include "fscommon.h"
 #include "llagent.h"
 #include "llappviewer.h"
+#include "llcallbacklist.h"
 #include "llcheckboxctrl.h"
 #include "llcolorswatch.h"
 #include "llcombobox.h"
 #include "llcubemap.h"
-#include "lldaycyclemanager.h"
-#include "llenvmanager.h"
+#include "llenvironment.h"
 #include "llf32uictrl.h"
 #include "llfeaturemanager.h"
 #include "llfloaterpreference.h" // for LLAvatarComplexityControls
 #include "llfloaterreg.h"
+#include "llinventoryfunctions.h"
 #include "lllayoutstack.h"
 #include "llmultisliderctrl.h"
 #include "llnotificationsutil.h"
+#include "llsettingsvo.h"
 #include "llsliderctrl.h"
 #include "llspinctrl.h"
 #include "lltoolbarview.h"
@@ -55,28 +57,36 @@
 #include "llviewerregion.h"
 #include "llvoavatar.h"
 #include "llvoavatarself.h"
-#include "llwaterparammanager.h"
-#include "llwlparamset.h"
-#include "llwlparammanager.h"
+#include "llvirtualtrackball.h"
 #include "rlvhandler.h"
 #include <boost/foreach.hpp>
 
 
-static F32 sun_pos_to_time24(F32 sun_pos)
+std::string unescape_name(const std::string& name);
+class FSSettingsCollector : public LLInventoryCollectFunctor
 {
-	return fmodf(sun_pos * 24.0f + 6.f, 24.0f);
-}
+public:
+	FSSettingsCollector() { LL_INFOS() << "EEP: Inventory read: " << (gInventory.isInventoryUsable() ? "yes" : "no") << LL_ENDL;}
+	virtual ~FSSettingsCollector() {}
 
-static F32 time24_to_sun_pos(F32 time)
-{
-	F32 ret = time - 6.f;
-	if (ret < 0.f)
+	bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
 	{
-		ret += 24.f;
+		if (item && item->getType() == LLAssetType::AT_SETTINGS &&
+			mSeen.find(item->getAssetUUID()) == mSeen.end())
+		{
+			LL_INFOS() << "EEP: Found " << item->getName() << LL_ENDL;
+			mSeen.insert(item->getAssetUUID());
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
-	return (ret / 24.f);
-}
+protected:
+	std::set<LLUUID> mSeen;
+};
 
 
 FloaterQuickPrefs::QuickPrefsXML::QuickPrefsXML()
@@ -130,6 +140,9 @@ FloaterQuickPrefs::~FloaterQuickPrefs()
 
 void FloaterQuickPrefs::onOpen(const LLSD& key)
 {
+	loadPresets();
+	setSelectedEnvironment();
+
 	// Make sure IndirectMaxNonImpostors gets set properly
 	LLAvatarComplexityControls::setIndirectMaxNonImpostors();
 
@@ -172,7 +185,6 @@ void FloaterQuickPrefs::onOpen(const LLSD& key)
 
 void FloaterQuickPrefs::initCallbacks()
 {
-	getChild<LLUICtrl>("UseRegionWindlight")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeUseRegionWindlight, this));
 	getChild<LLUICtrl>("WaterPresetsCombo")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeWaterPreset, this));
 	getChild<LLUICtrl>("WLPresetsCombo")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeSkyPreset, this));
 	getChild<LLUICtrl>("DCPresetsCombo")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeDayCyclePreset, this));
@@ -183,12 +195,13 @@ void FloaterQuickPrefs::initCallbacks()
 	getChild<LLUICtrl>("DCPrevPreset")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickDayCyclePrev, this));
 	getChild<LLUICtrl>("DCNextPreset")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickDayCycleNext, this));
 	getChild<LLUICtrl>("ResetToRegionDefault")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickResetToRegionDefault, this));
-	getChild<LLUICtrl>("WLSunPos")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onSunMoved, this));
+	getChild<LLMultiSliderCtrl>("time_offset")->setSliderMouseUpCallback(boost::bind(&FloaterQuickPrefs::onDayOffset, this));
+	getChild<LLUICtrl>("sun_rotation")->setCommitCallback([this](LLUICtrl *, const LLSD &) { onSunMoved(); });
 
 	// Phototools additions
 	if (getIsPhototools())
 	{
-		gSavedSettings.getControl("VertexShaderEnable")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
+		gSavedSettings.getControl("RenderObjectBump")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderDeferred")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderAvatarVP")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
@@ -256,123 +269,244 @@ void FloaterQuickPrefs::initCallbacks()
 	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FloaterQuickPrefs::updateRlvRestrictions, this, _1, _2));
 	gSavedSettings.getControl("IndirectMaxNonImpostors")->getCommitSignal()->connect(boost::bind(&FloaterQuickPrefs::updateMaxNonImpostors, this, _2));
 
-	LLWLParamManager::instance().setPresetListChangeCallback(boost::bind(&FloaterQuickPrefs::reloadPresetsAndSelect, QP_PARAM_SKY));
-	LLWaterParamManager::instance().setPresetListChangeCallback(boost::bind(&FloaterQuickPrefs::reloadPresetsAndSelect, QP_PARAM_WATER));
-	LLDayCycleManager::instance().setModifyCallback(boost::bind(&FloaterQuickPrefs::reloadPresetsAndSelect, QP_PARAM_DAYCYCLE));
+	LLEnvironment::instance().setEnvironmentChanged([this](LLEnvironment::EnvSelection_t, S32){ setSelectedEnvironment(); });
 }
 
-void FloaterQuickPrefs::loadDayCyclePresets()
+void FloaterQuickPrefs::loadDayCyclePresets(const std::multimap<std::string, LLUUID>& daycycle_map)
 {
-	LLDayCycleManager::preset_name_list_t user_presets, sys_presets;
-	LLDayCycleManager::instance().getPresetNames(user_presets, sys_presets);
-
 	mDayCyclePresetsCombo->operateOnAll(LLComboBox::OP_DELETE);
 	mDayCyclePresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT));
 	mDayCyclePresetsCombo->add(LLTrans::getString("QP_WL_None"), LLSD(PRESET_NAME_NONE));
 	mDayCyclePresetsCombo->addSeparator();
 
-	// Add user presets.
-	for (LLDayCycleManager::preset_name_list_t::const_iterator it = user_presets.begin(); it != user_presets.end(); ++it)
+	// Add setting presets.
+	for (std::multimap<std::string, LLUUID>::const_iterator it = daycycle_map.begin(); it != daycycle_map.end(); ++it)
 	{
-		std::string preset_name = *it;
+		const std::string& preset_name = (*it).first;
+		const LLUUID& asset_id = (*it).second;
+
 		if (!preset_name.empty())
 		{
-			mDayCyclePresetsCombo->add(preset_name, LLSD(preset_name));
-		}
-	}
-
-	if (!user_presets.empty() && !sys_presets.empty())
-	{
-		mDayCyclePresetsCombo->addSeparator();
-	}
-
-	// Add system presets.
-	for (LLDayCycleManager::preset_name_list_t::const_iterator it = sys_presets.begin(); it != sys_presets.end(); ++it)
-	{
-		std::string preset_name = *it;
-		if (!preset_name.empty())
-		{
-			mDayCyclePresetsCombo->add(preset_name, LLSD(preset_name));
+			mDayCyclePresetsCombo->add(preset_name, LLSD(asset_id));
 		}
 	}
 }
 
-void FloaterQuickPrefs::loadSkyPresets()
-{
-	LLWLParamManager::preset_name_list_t user_presets, sys_presets, region_presets;
-	LLWLParamManager::instance().getPresetNames(region_presets, user_presets, sys_presets);
 
+void FloaterQuickPrefs::loadSkyPresets(const std::multimap<std::string, LLUUID>& sky_map)
+{
 	mWLPresetsCombo->operateOnAll(LLComboBox::OP_DELETE);
 	mWLPresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT));
-	mWLPresetsCombo->add(LLTrans::getString("QP_WL_Day_Cycle_Based"), LLSD(PRESET_NAME_SKY_DAY_CYCLE));
+	mWLPresetsCombo->add(LLTrans::getString("QP_WL_Day_Cycle_Based"), LLSD(PRESET_NAME_DAY_CYCLE));
 	mWLPresetsCombo->addSeparator();
 
-	// Add user presets.
-	for (LLWLParamManager::preset_name_list_t::const_iterator it = user_presets.begin(); it != user_presets.end(); ++it)
+	// Add setting presets.
+	for (std::multimap<std::string, LLUUID>::const_iterator it = sky_map.begin(); it != sky_map.end(); ++it)
 	{
-		std::string preset_name = *it;
+		const std::string& preset_name = (*it).first;
+		const LLUUID& asset_id = (*it).second;
+
 		if (!preset_name.empty())
 		{
-			mWLPresetsCombo->add(preset_name, LLSD(preset_name));
-		}
-	}
-
-	if (!user_presets.empty() && !sys_presets.empty())
-	{
-		mWLPresetsCombo->addSeparator();
-	}
-
-	// Add system presets.
-	for (LLWLParamManager::preset_name_list_t::const_iterator it = sys_presets.begin(); it != sys_presets.end(); ++it)
-	{
-		std::string preset_name = *it;
-		if (!preset_name.empty())
-		{
-			mWLPresetsCombo->add(preset_name, LLSD(preset_name));
+			mWLPresetsCombo->add(preset_name, LLSD(asset_id));
 		}
 	}
 }
 
-void FloaterQuickPrefs::loadWaterPresets()
+void FloaterQuickPrefs::loadWaterPresets(const std::multimap<std::string, LLUUID>& water_map)
 {
-	std::list<std::string> user_presets, system_presets;
-	LLWaterParamManager::instance().getPresetNames(user_presets, system_presets);
-
 	mWaterPresetsCombo->operateOnAll(LLComboBox::OP_DELETE);
 	mWaterPresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT));
+	mWaterPresetsCombo->add(LLTrans::getString("QP_WL_Day_Cycle_Based"), LLSD(PRESET_NAME_DAY_CYCLE));
 	mWaterPresetsCombo->addSeparator();
 
-	// Add user presets first.
-	for (std::list<std::string>::const_iterator mIt = user_presets.begin(); mIt != user_presets.end(); ++mIt)
+	// Add setting presets.
+	for (std::multimap<std::string, LLUUID>::const_iterator it = water_map.begin(); it != water_map.end(); ++it)
 	{
-		std::string preset_name = *mIt;
+		const std::string& preset_name = (*it).first;
+		const LLUUID& asset_id = (*it).second;
+
 		if (!preset_name.empty())
 		{
-			mWaterPresetsCombo->add(preset_name, LLSD(preset_name));
-		}
-	}
-
-	if (!user_presets.empty() && !system_presets.empty())
-	{
-		mWaterPresetsCombo->addSeparator();
-	}
-
-	// Add system presets.
-	for (std::list<std::string>::const_iterator mIt = system_presets.begin(); mIt != system_presets.end(); ++mIt)
-	{
-		std::string preset_name = *mIt;
-		if (!preset_name.empty())
-		{
-			mWaterPresetsCombo->add(preset_name, LLSD(preset_name));
+			mWaterPresetsCombo->add(preset_name, LLSD(asset_id));
 		}
 	}
 }
 
 void FloaterQuickPrefs::loadPresets()
 {
-	loadWaterPresets();
-	loadSkyPresets();
-	loadDayCyclePresets();
+	LLInventoryModel::cat_array_t cats;
+	LLInventoryModel::item_array_t items;
+	FSSettingsCollector collector;
+	gInventory.collectDescendentsIf(gInventory.getRootFolderID(),
+									cats,
+									items,
+									LLInventoryModel::EXCLUDE_TRASH,
+									collector);
+
+	std::multimap<std::string, LLUUID> sky_map;
+	std::multimap<std::string, LLUUID> water_map;
+	std::multimap<std::string, LLUUID> daycycle_map;
+
+	for (LLInventoryModel::item_array_t::const_iterator it = items.begin(); it != items.end(); ++it)
+	{
+		LLInventoryItem* item = *it;
+
+		LLSettingsType::type_e type = LLSettingsType::fromInventoryFlags(item->getFlags());
+		switch (type)
+		{
+			case LLSettingsType::ST_SKY:
+				sky_map.insert(std::make_pair(item->getName(), item->getAssetUUID()));
+				break;
+			case LLSettingsType::ST_WATER:
+				water_map.insert(std::make_pair(item->getName(), item->getAssetUUID()));
+				break;
+			case LLSettingsType::ST_DAYCYCLE:
+				daycycle_map.insert(std::make_pair(item->getName(), item->getAssetUUID()));
+				break;
+			default:
+				LL_WARNS() << "Found invalid setting: " << item->getName() << LL_ENDL;
+				break;
+		}
+	}
+
+	loadWaterPresets(water_map);
+	loadSkyPresets(sky_map);
+	loadDayCyclePresets(daycycle_map);
+}
+
+void FloaterQuickPrefs::setSelectedEnvironment()
+{
+	LL_INFOS() << "EEP: setSelectedEnvironment: " << LLEnvironment::instance().getSelectedEnvironment() << LL_ENDL;
+
+	switch (LLEnvironment::instance().getSelectedEnvironment())
+	{
+		case LLEnvironment::ENV_REGION:
+		case LLEnvironment::ENV_PARCEL:
+		{
+			LL_INFOS() << "EEP: ENV_REGION / ENV_PARCEL" << LL_ENDL;
+
+			mWLPresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
+			mWaterPresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
+			mDayCyclePresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
+			break;
+		}
+
+		case LLEnvironment::ENV_LOCAL:
+		{
+			//LLSettingsDay::ptr_t day = LLEnvironment::instance().getCurrentDay();
+			LLSettingsDay::ptr_t day = LLEnvironment::instance().getEnvironmentDay(LLEnvironment::ENV_LOCAL);
+			if (day)
+			{
+				LL_INFOS() << "EEP: day name = " << day->getName() << LL_ENDL;
+
+				LLUUID asset_id = day->getAssetId();
+				if (asset_id.notNull())
+				{
+					mDayCyclePresetsCombo->selectByValue(LLSD(asset_id));
+
+					// Water is part of a day cycle
+					mWLPresetsCombo->selectByValue(LLSD(PRESET_NAME_DAY_CYCLE));
+					mWaterPresetsCombo->selectByValue(LLSD(PRESET_NAME_DAY_CYCLE));
+				}
+				else
+				{
+					//mDayCyclePresetsCombo->selectByValue(LLSD(day->getName()));
+					std::string preset_name = day->getName();
+					if (preset_name == "_default_")
+					{
+						preset_name = "Default";
+					}
+					mDayCyclePresetsCombo->selectByValue(preset_name);
+
+					mWLPresetsCombo->selectByValue(LLSD(PRESET_NAME_DAY_CYCLE));
+
+					// Legacy daycycle has no water. Need to find out what is currently selected
+					// as water preset. Seems it will always be default fixed water ("_default_").
+					LLSettingsWater::ptr_t water = LLEnvironment::instance().getEnvironmentFixedWater(LLEnvironment::ENV_LOCAL);
+					if (water)
+					{
+						LL_INFOS() << "EEP: water name = " << water->getName() << LL_ENDL;
+
+						LLUUID asset_id = water->getAssetId();
+						if (asset_id.notNull())
+						{
+							mWaterPresetsCombo->selectByValue(LLSD(asset_id));
+						}
+						else
+						{
+							//mWaterPresetsCombo->selectByValue(LLSD(water->getName()));
+							std::string preset_name = water->getName();
+							if (preset_name == "_default_")
+							{
+								preset_name = "Default";
+							}
+							mWaterPresetsCombo->selectByValue(preset_name);
+						}
+					}
+				}
+			}
+			else
+			{
+				mDayCyclePresetsCombo->selectByValue(LLSD(PRESET_NAME_NONE));
+
+				//LLSettingsSky::ptr_t sky = LLEnvironment::instance().getCurrentSky();
+				LLSettingsSky::ptr_t sky = LLEnvironment::instance().getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL);
+				if (sky)
+				{
+					LL_INFOS() << "EEP: sky name = " << sky->getName() << LL_ENDL;
+
+					LLUUID asset_id = sky->getAssetId();
+					if (asset_id.notNull())
+					{
+						mWLPresetsCombo->selectByValue(LLSD(asset_id));
+					}
+					else
+					{
+						//mWLPresetsCombo->selectByValue(LLSD(sky->getName()));
+						std::string preset_name = sky->getName();
+						if (preset_name == "_default_")
+						{
+							preset_name = "Default";
+						}
+						mWLPresetsCombo->selectByValue(preset_name);
+					}
+				}
+
+				// LLEnvironment::instance().getCurrentWater() will return correct preset only after
+				// calling updateEnvironment(), which is too late.
+				//LLSettingsWater::ptr_t water = LLEnvironment::instance().getCurrentWater();
+				LLSettingsWater::ptr_t water = LLEnvironment::instance().getEnvironmentFixedWater(LLEnvironment::ENV_LOCAL);
+				if (water)
+				{
+					LL_INFOS() << "EEP: water name = " << water->getName() << LL_ENDL;
+
+					LLUUID asset_id = water->getAssetId();
+					if (asset_id.notNull())
+					{
+						mWaterPresetsCombo->selectByValue(LLSD(asset_id));
+					}
+					else
+					{
+						// What if preset name is empty???
+						//mWaterPresetsCombo->selectByValue(LLSD(water->getName()));
+						std::string preset_name = water->getName();
+						if (preset_name == "_default_")
+						{
+							preset_name = "Default";
+						}
+						mWaterPresetsCombo->selectByValue(preset_name);
+					}
+				}
+
+			}
+			break;
+		}
+		default:
+			break;
+	}
+
+	updateDayOffset();
 }
 
 BOOL FloaterQuickPrefs::postBuild()
@@ -380,7 +514,6 @@ BOOL FloaterQuickPrefs::postBuild()
 	// Phototools additions
 	if (getIsPhototools())
 	{
-		mCtrlShaderEnable = getChild<LLCheckBoxCtrl>("BasicShaders");
 		mCtrlWindLight = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
 		mCtrlDeferred = getChild<LLCheckBoxCtrl>("RenderDeferred");
 		mCtrlUseSSAO = getChild<LLCheckBoxCtrl>("UseSSAO");
@@ -425,9 +558,9 @@ BOOL FloaterQuickPrefs::postBuild()
 	mWaterPresetsCombo = getChild<LLComboBox>("WaterPresetsCombo");
 	mWLPresetsCombo = getChild<LLComboBox>("WLPresetsCombo");
 	mDayCyclePresetsCombo = getChild<LLComboBox>("DCPresetsCombo");
-	mWLSunPos = getChild<LLMultiSliderCtrl>("WLSunPos");
-	mUseRegionWindlight = getChild<LLCheckBoxCtrl>("UseRegionWindlight");
-	mWLSunPos->addSlider(12.f);
+	mWLSunRot = getChild<LLVirtualTrackball>("sun_rotation");
+	mWLDayOffset = getChild<LLMultiSliderCtrl>("time_offset");
+	mWLDayOffset->addSlider(0);
 
 	initCallbacks();
 	loadPresets();
@@ -593,23 +726,22 @@ void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_pa
 }
 
 
-bool FloaterQuickPrefs::isValidPresetName(const std::string& preset_name)
+bool FloaterQuickPrefs::isValidPreset(const LLSD& preset)
 {
-	return (!preset_name.empty() &&
-		preset_name != PRESET_NAME_REGION_DEFAULT &&
-		preset_name != PRESET_NAME_SKY_DAY_CYCLE &&
-		preset_name != PRESET_NAME_NONE);
+	return (!preset.asString().empty() &&
+		!preset.asUUID().isNull() &&
+		preset.asString() != PRESET_NAME_REGION_DEFAULT &&
+		preset.asString() != PRESET_NAME_DAY_CYCLE &&
+		preset.asString() != PRESET_NAME_NONE);
 }
 
-std::string FloaterQuickPrefs::stepComboBox(LLComboBox* ctrl, bool forward)
+void FloaterQuickPrefs::stepComboBox(LLComboBox* ctrl, bool forward)
 {
 	S32 increment = (forward ? 1 : -1);
 	S32 lastitem = ctrl->getItemCount() - 1;
 	S32 curid = ctrl->getCurrentIndex();
-	std::string preset_name;
-	std::string start_preset_name;
+	S32 startid = curid;
 
-	start_preset_name = ctrl->getSelectedValue().asString();
 	do
 	{
 		curid += increment;
@@ -622,227 +754,182 @@ std::string FloaterQuickPrefs::stepComboBox(LLComboBox* ctrl, bool forward)
 			curid = 0;
 		}
 		ctrl->setCurrentByIndex(curid);
-		preset_name = ctrl->getSelectedValue().asString();
 	}
-	while (!isValidPresetName(preset_name) && preset_name != start_preset_name);
-
-	return preset_name;
+	while (!isValidPreset(ctrl->getSelectedValue()) && curid != startid);
 }
 
-void FloaterQuickPrefs::selectSkyPreset(const std::string& preset_name)
+void FloaterQuickPrefs::selectSkyPreset(const LLSD& preset)
 {
-	if (isValidPresetName(preset_name))
-	{	
-		deactivateAnimator();
-		LLEnvManagerNew::instance().setUseSkyPreset(preset_name, (bool)gSavedSettings.getBOOL("FSInterpolateSky"));
-	}
+	LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+	LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+	LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST, true);
 }
 
-void FloaterQuickPrefs::selectWaterPreset(const std::string& preset_name)
+void FloaterQuickPrefs::selectWaterPreset(const LLSD& preset)
 {
-	if (isValidPresetName(preset_name))
-	{
-		deactivateAnimator();
-		LLEnvManagerNew::instance().setUseWaterPreset(preset_name, (bool)gSavedSettings.getBOOL("FSInterpolateWater"));
-	}
+	LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+	LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+	LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST, true);
 }
 
-void FloaterQuickPrefs::selectDayCyclePreset(const std::string& preset_name)
+void FloaterQuickPrefs::selectDayCyclePreset(const LLSD& preset)
 {
-	if (isValidPresetName(preset_name))
-	{
-		deactivateAnimator();
-		LLEnvManagerNew::instance().setUseDayCycle(preset_name, (bool)gSavedSettings.getBOOL("FSInterpolateSky"));
-	}
-}
-
-void FloaterQuickPrefs::onChangeUseRegionWindlight()
-{
-	LLEnvManagerNew &envmgr = LLEnvManagerNew::instance();
-	// reset all environmental settings to track the region defaults, make this reset 'sticky' like the other sun settings.
-	bool use_fixed_sky = !mUseRegionWindlight->get();
-	bool use_region_settings = !use_fixed_sky;
-	envmgr.setUserPrefs(envmgr.getWaterPresetName(),
-				envmgr.getSkyPresetName(),
-				envmgr.getDayCycleName(),
-				use_fixed_sky, use_region_settings,
-				(gSavedSettings.getBOOL("FSInterpolateSky") || gSavedSettings.getBOOL("FSInterpolateWater")));
+	LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+	LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+	LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST, true);
 }
 
 void FloaterQuickPrefs::onChangeWaterPreset()
 {
-	std::string preset_name = mWaterPresetsCombo->getSelectedValue().asString();
-	if (!isValidPresetName(preset_name))
+	if (!isValidPreset(mWaterPresetsCombo->getSelectedValue()))
 	{
-		preset_name = stepComboBox(mWaterPresetsCombo, true);
+		stepComboBox(mWaterPresetsCombo, true);
 	}
-	selectWaterPreset(preset_name);
+
+	if (isValidPreset(mWaterPresetsCombo->getSelectedValue()))
+	{
+		selectWaterPreset(mWaterPresetsCombo->getSelectedValue());
+	}
+	else
+	{
+		LLNotificationsUtil::add("NoValidEnvSettingFound");
+	}
 }
 
 void FloaterQuickPrefs::onChangeSkyPreset()
 {
-	std::string preset_name = mWLPresetsCombo->getSelectedValue().asString();
-	if (!isValidPresetName(preset_name))
+	if (!isValidPreset(mWLPresetsCombo->getSelectedValue()))
 	{
-		preset_name = stepComboBox(mWLPresetsCombo, true);
+		stepComboBox(mWLPresetsCombo, true);
 	}
-	selectSkyPreset(preset_name);
+
+	if (isValidPreset(mWLPresetsCombo->getSelectedValue()))
+	{
+		selectSkyPreset(mWLPresetsCombo->getSelectedValue());
+	}
+	else
+	{
+		LLNotificationsUtil::add("NoValidEnvSettingFound");
+	}
 }
 
 void FloaterQuickPrefs::onChangeDayCyclePreset()
 {
-	std::string preset_name = mDayCyclePresetsCombo->getSelectedValue().asString();
-	if (!isValidPresetName(preset_name))
+	if (!isValidPreset(mDayCyclePresetsCombo->getSelectedValue()))
 	{
-		preset_name = stepComboBox(mDayCyclePresetsCombo, true);
+		stepComboBox(mDayCyclePresetsCombo, true);
 	}
-	selectDayCyclePreset(preset_name);
-}
 
-void FloaterQuickPrefs::deactivateAnimator()
-{
-	LLWLParamManager::instance().mAnimator.deactivate();
+	if (isValidPreset(mDayCyclePresetsCombo->getSelectedValue()))
+	{
+		selectDayCyclePreset(mDayCyclePresetsCombo->getSelectedValue());
+	}
+	else
+	{
+		LLNotificationsUtil::add("NoValidEnvSettingFound");
+	}
 }
 
 void FloaterQuickPrefs::onClickWaterPrev()
 {
-	std::string preset_name = stepComboBox(mWaterPresetsCombo, false);
-	selectWaterPreset(preset_name);
+	stepComboBox(mWaterPresetsCombo, false);
+	selectWaterPreset(mWaterPresetsCombo->getSelectedValue());
 }
 
 void FloaterQuickPrefs::onClickWaterNext()
 {
-	std::string preset_name = stepComboBox(mWaterPresetsCombo, true);
-	selectWaterPreset(preset_name);
+	stepComboBox(mWaterPresetsCombo, true);
+	selectWaterPreset(mWaterPresetsCombo->getSelectedValue());
 }
 
 void FloaterQuickPrefs::onClickSkyPrev()
 {
-	std::string preset_name = stepComboBox(mWLPresetsCombo, false);
-	selectSkyPreset(preset_name);
+	stepComboBox(mWLPresetsCombo, false);
+	selectSkyPreset(mWLPresetsCombo->getSelectedValue());
 }
 
 void FloaterQuickPrefs::onClickSkyNext()
 {
-	std::string preset_name = stepComboBox(mWLPresetsCombo, true);
-	selectSkyPreset(preset_name);
+	stepComboBox(mWLPresetsCombo, true);
+	selectSkyPreset(mWLPresetsCombo->getSelectedValue());
 }
 
 void FloaterQuickPrefs::onClickDayCyclePrev()
 {
-	std::string preset_name = stepComboBox(mDayCyclePresetsCombo, false);
-	selectDayCyclePreset(preset_name);
+	stepComboBox(mDayCyclePresetsCombo, false);
+	selectDayCyclePreset(mDayCyclePresetsCombo->getSelectedValue());
 }
 
 void FloaterQuickPrefs::onClickDayCycleNext()
 {
-	std::string preset_name = stepComboBox(mDayCyclePresetsCombo, true);
-	selectDayCyclePreset(preset_name);
+	stepComboBox(mDayCyclePresetsCombo, true);
+	selectDayCyclePreset(mDayCyclePresetsCombo->getSelectedValue());
 }
-
 
 void FloaterQuickPrefs::draw()
 {
-	F32 val;
+	updateSun();
+	LLTransientDockableFloater::draw();
+}
 
-	if (LLEnvManagerNew::instance().getUseRegionSettings() ||
-		LLEnvManagerNew::instance().getUseDayCycle())
+void FloaterQuickPrefs::updateDayOffset()
+{
+	// KC: Limit day cycle offset max to day length if less than a full real day
+	LLSettingsDay::Seconds day_length = LLEnvironment::instance().getDayLength();
+	if (day_length > LLSettingsDay::MINIMUM_DAYOFFSET)
 	{
-		val = (F32)(LLWLParamManager::instance().mAnimator.getDayTime() * 24.f);
+		if (day_length < LLSettingsDay::MAXIMUM_DAYOFFSET)
+		{
+			mWLDayOffset->setMaxValue(day_length);
+		}
+		else
+		{
+			mWLDayOffset->setMaxValue(LLSettingsDay::MAXIMUM_DAYOFFSET);
+		}
+		mWLDayOffset->setCurSliderValue(LLEnvironment::instance().getDayOffsetOverride());
 	}
 	else
 	{
-		val = sun_pos_to_time24(LLWLParamManager::instance().mCurParams.getSunAngle() / F_TWO_PI);
+		mWLDayOffset->setCurSliderValue(0);
 	}
+}
 
-	mWLSunPos->setCurSliderValue(val);
+const F32 SUN_ROTATION_PRECISION = 0.1f;
 
-	LLTransientDockableFloater::draw();
+void FloaterQuickPrefs::updateSun()
+{
+	LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+	mWLSunRot->setRotation(psky->getSunRotation());
+}
+
+void FloaterQuickPrefs::onDayOffset()
+{
+	//KC: Forces the environment time by an additional offset
+	if (LLEnvironment::instance().getDayOffset() > LLSettingsDay::INVALID_DAYOFFSET)
+	{
+		LLSettingsDay::Seconds day_offset(mWLDayOffset->getCurSliderValue());
+		LLEnvironment::instance().setDayOffsetOverride(day_offset);
+		LLEnvironment::instance().updateEnvironment();
+	}
 }
 
 void FloaterQuickPrefs::onSunMoved()
 {
-	if (LLEnvManagerNew::instance().getUseRegionSettings() ||
-		LLEnvManagerNew::instance().getUseDayCycle())
-	{
-		F32 val = mWLSunPos->getCurSliderValue() / 24.0f;
-
-		LLWLParamManager& mgr = LLWLParamManager::instance();
-		mgr.mAnimator.setDayTime((F64)val);
-		mgr.mAnimator.deactivate();
-		mgr.mAnimator.update(mgr.mCurParams);
-	}
-	else
-	{
-		deactivateAnimator();
-		F32 val = time24_to_sun_pos(mWLSunPos->getCurSliderValue()) * F_TWO_PI;
-		LLWLParamManager::instance().mCurParams.setSunAngle(val);
-	}
+	LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+	psky->setSunRotation(mWLSunRot->getRotation());
+	psky->updateSettings();
 }
 
 void FloaterQuickPrefs::onClickResetToRegionDefault()
 {
-	deactivateAnimator();
-	LLWLParamManager::instance().mAnimator.stopInterpolation();
-	LLEnvManagerNew::instance().useRegionSettings();
-}
+	mWLPresetsCombo->setValue(LLSD(PRESET_NAME_REGION_DEFAULT));
+	mWaterPresetsCombo->setValue(LLSD(PRESET_NAME_REGION_DEFAULT));
 
-// This method is invoked by LLEnvManagerNew when a particular preset is applied
-// static
-void FloaterQuickPrefs::updateParam(EQuickPrefUpdateParam param, const std::string& preset_name)
-{
-	FloaterQuickPrefs* qp_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>("quickprefs");
-	FloaterQuickPrefs* pt_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>(PHOTOTOOLS_FLOATER);
-
-	switch (param)
-	{
-		case QP_PARAM_SKY:
-			qp_floater->setSelectedSky(preset_name);
-			pt_floater->setSelectedSky(preset_name);
-			break;
-		case QP_PARAM_WATER:
-			qp_floater->setSelectedWater(preset_name);
-			pt_floater->setSelectedWater(preset_name);
-			break;
-		case QP_PARAM_DAYCYCLE:
-			qp_floater->setSelectedDayCycle(preset_name);
-			pt_floater->setSelectedDayCycle(preset_name);
-			break;
-		default:
-			break;
-	}
-}
-
-// static
-void FloaterQuickPrefs::reloadPresetsAndSelect(EQuickPrefUpdateParam param)
-{
-	FloaterQuickPrefs* qp_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>("quickprefs");
-	FloaterQuickPrefs* pt_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>(PHOTOTOOLS_FLOATER);
-
-	std::string preset_name;
-
-	switch (param)
-	{
-		case QP_PARAM_SKY:
-			qp_floater->loadSkyPresets();
-			pt_floater->loadSkyPresets();
-			preset_name = LLEnvManagerNew::instance().getSkyPresetName();
-			break;
-		case QP_PARAM_WATER:
-			qp_floater->loadWaterPresets();
-			pt_floater->loadWaterPresets();
-			preset_name = LLEnvManagerNew::instance().getWaterPresetName();
-			break;
-		case QP_PARAM_DAYCYCLE:
-			qp_floater->loadDayCyclePresets();
-			pt_floater->loadDayCyclePresets();
-			preset_name = LLEnvManagerNew::instance().getDayCycleName();
-			break;
-		default:
-			break;
-	}
-
-	updateParam(param, preset_name);
+	LLEnvironment::instance().setDayOffsetOverride(LLSettingsDay::MINIMUM_DAYOFFSET);
+	mWLDayOffset->setCurSliderValue(0);
+	LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_LOCAL);
+	LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+	LLEnvironment::instance().updateEnvironment();
 }
 
 void FloaterQuickPrefs::setSelectedSky(const std::string& preset_name)
@@ -859,39 +946,30 @@ void FloaterQuickPrefs::setSelectedWater(const std::string& preset_name)
 void FloaterQuickPrefs::setSelectedDayCycle(const std::string& preset_name)
 {
 	mDayCyclePresetsCombo->setValue(LLSD(preset_name));
-	mWLPresetsCombo->setValue(LLSD(PRESET_NAME_SKY_DAY_CYCLE));
+	mWLPresetsCombo->setValue(LLSD(PRESET_NAME_DAY_CYCLE));
+	mWaterPresetsCombo->setValue(LLSD(PRESET_NAME_DAY_CYCLE));
 }
 
 // Phototools additions
 void FloaterQuickPrefs::refreshSettings()
 {
-	BOOL reflections = gSavedSettings.getBOOL("VertexShaderEnable") 
-		&& gGLManager.mHasCubeMap
-		&& LLCubeMap::sUseCubeMaps;
+	BOOL reflections = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps;
 	mCtrlReflectionDetail->setEnabled(reflections);
 
-	bool fCtrlShaderEnable = LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable");
-	mCtrlShaderEnable->setEnabled(
-		fCtrlShaderEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("VertexShaderEnable"))) );
-	BOOL shaders = mCtrlShaderEnable->get();
-
-	bool fCtrlWindLightEnable = fCtrlShaderEnable && shaders;
-	mCtrlWindLight->setEnabled(
-		fCtrlWindLightEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders"))) );
+	mCtrlWindLight->setEnabled((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")) );
 
 	LLTextBox* sky_label = getChild<LLTextBox>("T_Sky_Detail");
 	LLSlider* sky_slider = getChild<LLSlider>("SB_Sky_Detail");
 	LLSpinCtrl* sky_spinner = getChild<LLSpinCtrl>("S_Sky_Detail");
 	LLButton* sky_default_button = getChild<LLButton>("Reset_Sky_Detail");
 
-	BOOL sky_enabled = mCtrlWindLight->get() && shaders;
-	sky_label->setEnabled(sky_enabled);
-	sky_slider->setEnabled(sky_enabled);
-	sky_spinner->setEnabled(sky_enabled);
-	sky_default_button->setEnabled(sky_enabled);
+	sky_label->setEnabled(TRUE);
+	sky_slider->setEnabled(TRUE);
+	sky_spinner->setEnabled(TRUE);
+	sky_default_button->setEnabled(TRUE);
 
-	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") && 
-						shaders && 
+	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
+						gSavedSettings.getBOOL("RenderObjectBump") &&
 						gGLManager.mHasFramebufferObject &&
 						gSavedSettings.getBOOL("RenderAvatarVP") &&
 						(mCtrlWindLight->get()) ? TRUE : FALSE;
@@ -899,7 +977,7 @@ void FloaterQuickPrefs::refreshSettings()
 	mCtrlDeferred->setEnabled(enabled);
 
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO") && (mCtrlDeferred->get() ? TRUE : FALSE);
-		
+
 	mCtrlUseSSAO->setEnabled(enabled);
 	mCtrlUseDoF->setEnabled(enabled);
 
@@ -909,39 +987,6 @@ void FloaterQuickPrefs::refreshSettings()
 
 	mCtrlAvatarShadowDetail->setEnabled(enabled && mCtrlShadowDetail->getValue().asInteger() > 0);
 
-	// if vertex shaders off, disable all shader related products
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"))
-	{
-		mCtrlShaderEnable->setEnabled(FALSE);
-		mCtrlShaderEnable->setValue(FALSE);
-		
-		mCtrlWindLight->setEnabled(FALSE);
-		mCtrlWindLight->setValue(FALSE);
-
-		sky_label->setEnabled(FALSE);
-		sky_slider->setEnabled(FALSE);
-		sky_spinner->setEnabled(FALSE);
-		sky_default_button->setEnabled(FALSE);
-		
-		mCtrlReflectionDetail->setEnabled(FALSE);
-		mCtrlReflectionDetail->setValue(0);
-
-		mCtrlShadowDetail->setEnabled(FALSE);
-		mCtrlShadowDetail->setValue(0);
-
-		mCtrlAvatarShadowDetail->setEnabled(FALSE);
-		mCtrlAvatarShadowDetail->setValue(0);
-		
-		mCtrlUseSSAO->setEnabled(FALSE);
-		mCtrlUseSSAO->setValue(FALSE);
-
-		mCtrlUseDoF->setEnabled(FALSE);
-		mCtrlUseDoF->setValue(FALSE);
-
-		mCtrlDeferred->setEnabled(FALSE);
-		mCtrlDeferred->setValue(FALSE);
-	}
-	
 	// disabled windlight
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
 	{
@@ -989,14 +1034,14 @@ void FloaterQuickPrefs::refreshSettings()
 		mCtrlDeferred->setEnabled(FALSE);
 		mCtrlDeferred->setValue(FALSE);
 	}
-	
+
 	// disabled deferred SSAO
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO"))
 	{
 		mCtrlUseSSAO->setEnabled(FALSE);
 		mCtrlUseSSAO->setValue(FALSE);
 	}
-	
+
 	// disabled deferred shadows
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail"))
 	{
@@ -1034,7 +1079,7 @@ void FloaterQuickPrefs::refreshSettings()
 		mCtrlDeferred->setEnabled(FALSE);
 		mCtrlDeferred->setValue(FALSE);
 	}
-	
+
 	// <FS:CR> FIRE-9630 - Vignette UI controls
 	if (getIsPhototools())
 	{
@@ -1087,12 +1132,12 @@ void FloaterQuickPrefs::enableWindlightButtons(BOOL enable)
 	childSetEnabled("WWPrevPreset", enable);
 	childSetEnabled("WWNextPreset", enable);
 	childSetEnabled("ResetToRegionDefault", enable);
-	childSetEnabled("UseRegionWindlight", enable);
 	childSetEnabled("DCPresetsCombo", enable);
 	childSetEnabled("DCPrevPreset", enable);
 	childSetEnabled("DCNextPreset", enable);
 	//<FS:TS> FIRE-13448: Quickprefs daycycle slider allows evading @setenv=n
-	childSetEnabled("WLSunPos", enable);
+	childSetEnabled("time_offset", enable);
+	childSetEnabled("sun_rotation", enable);
 	//</FS:TS> FIRE-13448
 
 	if (getIsPhototools())

@@ -64,7 +64,6 @@
 		</panel>
 
 		<panel label="その他" name="opensim_misc_panel">
-			<check_box label="Lightshare の設定を有効にする" name="Lightshare" />
 			<check_box label="デバッグ検索" name="DebugSearch" />
 			<text name="search_url_debug_text">
 				現在の検索URLを上書きする（空欄の場合上書きされない）：

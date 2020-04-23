@@ -271,6 +271,7 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 	BOOL is_complete = i->isFinished();
 	const BOOL cannot_restrict_permissions = LLInventoryType::cannotRestrictPermissions(i->getInventoryType());
 	const BOOL is_calling_card = (i->getInventoryType() == LLInventoryType::IT_CALLINGCARD);
+	const BOOL is_settings = (item->getInventoryType() == LLInventoryType::IT_SETTINGS);
 	const LLPermissions& perm = item->getPermissions();
 	const BOOL can_agent_manipulate = gAgent.allowOperation(PERM_OWNER, perm, 
 															GP_OBJECT_MANIPULATE);
@@ -566,7 +567,7 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 
 		getChildView("NextOwnerLabel")->setEnabled(TRUE);
 		getChildView("CheckNextOwnerModify")->setEnabled((base_mask & PERM_MODIFY) && !cannot_restrict_permissions);
-		getChildView("CheckNextOwnerCopy")->setEnabled((base_mask & PERM_COPY) && !cannot_restrict_permissions);
+		getChildView("CheckNextOwnerCopy")->setEnabled((base_mask & PERM_COPY) && !cannot_restrict_permissions && !is_settings);
 		getChildView("CheckNextOwnerTransfer")->setEnabled((next_owner_mask & PERM_COPY) && !cannot_restrict_permissions);
 
 		combo_sale_type->setEnabled(is_complete && is_for_sale);
@@ -583,6 +584,27 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 
 		combo_sale_type->setEnabled(FALSE);
 		edit_cost->setEnabled(FALSE);
+	}
+
+	// Hide any properties that are not relevant to settings
+	if (is_settings)
+	{
+		getChild<LLUICtrl>("GroupLabel")->setEnabled(false);
+		getChild<LLUICtrl>("GroupLabel")->setVisible(false);
+		getChild<LLUICtrl>("CheckShareWithGroup")->setEnabled(false);
+		getChild<LLUICtrl>("CheckShareWithGroup")->setVisible(false);
+		getChild<LLUICtrl>("AnyoneLabel")->setEnabled(false);
+		getChild<LLUICtrl>("AnyoneLabel")->setVisible(false);
+		getChild<LLUICtrl>("CheckEveryoneCopy")->setEnabled(false);
+		getChild<LLUICtrl>("CheckEveryoneCopy")->setVisible(false);
+		getChild<LLUICtrl>("CheckPurchase")->setEnabled(false);
+		getChild<LLUICtrl>("CheckPurchase")->setVisible(false);
+		getChild<LLUICtrl>("ComboBoxSaleType")->setEnabled(false);
+		getChild<LLUICtrl>("ComboBoxSaleType")->setVisible(false);
+		getChild<LLUICtrl>("Edit Cost")->setEnabled(false);
+		getChild<LLUICtrl>("Edit Cost")->setVisible(false);
+		getChild<LLUICtrl>("CurrencySymbol")->setEnabled(false);
+		getChild<LLUICtrl>("CurrencySymbol")->setVisible(false);
 	}
 
 	// Set values.

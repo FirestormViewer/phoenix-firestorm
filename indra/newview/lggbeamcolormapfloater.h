@@ -34,7 +34,7 @@ public:
 	BOOL handleMouseDown(S32 x, S32 y, MASK mask);
 	BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
 
-	void setData(void* data);
+	void setData(FSPanelPrefs* data);
 
 	void draw();
 
@@ -43,7 +43,6 @@ protected:
 	void onClickSlider();
 	void onClickSave();
 	void onClickLoad();
-	void onClickCancel();
 
 	void onSaveCallback(const std::vector<std::string>& filenames);
 	void onLoadCallback(const std::vector<std::string>& filenames);
@@ -53,6 +52,9 @@ protected:
 	LLSD getDataSerialized();
 
 	F32					mContextConeOpacity;
+	F32					mContextConeInAlpha;
+	F32					mContextConeOutAlpha;
+	F32					mContextConeFadeTime;
 	FSPanelPrefs*		mFSPanel;
 	lggBeamsColors		mData;
 	LLSliderCtrl*		mColorSlider;

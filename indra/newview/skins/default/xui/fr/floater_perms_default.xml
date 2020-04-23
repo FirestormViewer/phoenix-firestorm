@@ -1,18 +1,46 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="perms default" title="Permissions par défaut des objets créés">
+<floater name="perms default" title="PERMISSIONS DE CRÉATION PAR DÉFAUT">
 	<panel label="Permissions par défaut" name="default permissions">
-		<text name="label_1" left="10">Prochain propriétaire :</text>
-		<text name="label_2" left_pad="0">Copier</text>
-		<text name="label_3">Modifier</text>
-		<text name="label_4">Transférer</text>
-		<text name="label_5">Partager avec le groupe</text>
-		<text name="label_6">Autoriser n'importe qui à copier</text>
-		<text name="label_7" tool_tip="Définir les permissions par défaut pour les objets créés">Objets</text>
-		<text name="label_8" tool_tip="Définir les permissions par défaut pour les objets uploadés">Uploads</text>
-		<text name="label_9" tool_tip="Définir les permissions par défaut pour les scripts créés">Scripts</text>
-		<text name="label_10" tool_tip="Définir les permissions par défaut pour les notes créées">Notes</text>
-		<text name="label_11" tool_tip="Définir les permissions par défaut pour les gestes créés">Gestes</text>
-		<text name="label_12" tool_tip="Définir les permissions par défaut pour les vêtements et les éléments du corps créés">Vêtements</text>
+		<text name="label_1">
+			Prochain propr. :
+		</text>
+		<text name="label_2">
+			Copier
+		</text>
+		<text name="label_3">
+			Modifier
+		</text>
+		<text name="label_4">
+			Transférer
+		</text>
+		<text name="label_5">
+			Partager avec le groupe
+		</text>
+		<text name="label_6">
+			Autoriser tout le monde à copier
+		</text>
+		<text name="label_7" tool_tip="Définir les droits par défaut pour la création d’objets">
+			Objets
+		</text>
+		<text name="label_8" tool_tip="Définir les droits par défaut pour les articles chargés">
+			Chargements
+		</text>
+		<text name="label_9" tool_tip="Définir les droits par défaut pour la création de scripts">
+			Scripts
+		</text>
+		<text name="label_10" tool_tip="Définir les droits par défaut pour la création de notes">
+			Notes
+		</text>
+		<text name="label_11" tool_tip="Définir les droits par défaut pour la création de gestes">
+			Gestes
+		</text>
+		<text name="label_12" tool_tip="Définir les droits par défaut pour la création d’habits ou de parties de corps">
+			Articles à porter
+		</text>
+		<text name="label_13" tool_tip="Définir les autorisations par défaut pour la création des paramètres environnementaux">
+			Paramètres
+		</text>
+		<check_box name="env_settings_c" value="true"/>
 	</panel>
 	<button label="OK" label_selected="OK" name="ok"/>
 	<button label="Annuler" label_selected="Annuler" name="cancel"/>

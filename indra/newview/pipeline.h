@@ -61,14 +61,7 @@ bool compute_min_max(LLMatrix4& box, LLVector2& min, LLVector2& max); // Shouldn
 bool LLRayAABB(const LLVector3 &center, const LLVector3 &size, const LLVector3& origin, const LLVector3& dir, LLVector3 &coord, F32 epsilon = 0);
 bool setup_hud_matrices(); // use whole screen to render hud
 bool setup_hud_matrices(const LLRect& screen_region); // specify portion of screen (in pixels) to render hud attachments from (for picking)
-glh::matrix4f glh_copy_matrix(F32* src);
-glh::matrix4f glh_get_current_modelview();
-void glh_set_current_modelview(const glh::matrix4f& mat);
-glh::matrix4f glh_get_current_projection();
-void glh_set_current_projection(glh::matrix4f& mat);
-glh::matrix4f gl_ortho(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat znear, GLfloat zfar);
-glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar);
-glh::matrix4f gl_lookat(LLVector3 eye, LLVector3 center, LLVector3 up);
+
 
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_GEOMETRY;
 extern LLTrace::BlockTimerStatHandle FTM_RENDER_GRASS;
@@ -91,6 +84,11 @@ extern LLTrace::BlockTimerStatHandle FTM_STATESORT;
 extern LLTrace::BlockTimerStatHandle FTM_PIPELINE;
 extern LLTrace::BlockTimerStatHandle FTM_CLIENT_COPY;
 
+extern LLTrace::BlockTimerStatHandle FTM_RENDER_UI_HUD;
+extern LLTrace::BlockTimerStatHandle FTM_RENDER_UI_3D;
+extern LLTrace::BlockTimerStatHandle FTM_RENDER_UI_2D;
+extern LLTrace::BlockTimerStatHandle FTM_RENDER_UI_DEBUG_TEXT;
+extern LLTrace::BlockTimerStatHandle FTM_RENDER_UI_SCENE_MON;
 
 class LLPipeline
 {
@@ -102,10 +100,17 @@ public:
 	void restoreGL();
 	void resetVertexBuffers();
 	void doResetVertexBuffers(bool forced = false);
+    void requestResizeScreenTexture(); // set flag only, no work, safer for callbacks...
+    void requestResizeShadowTexture(); // set flag only, no work, safer for callbacks...
+
 	void resizeScreenTexture();
+    void resizeShadowTexture();
+
 	void releaseGLBuffers();
 	void releaseLUTBuffers();
 	void releaseScreenBuffers();
+    void releaseShadowBuffers();
+
 	void createGLBuffers();
 	void createLUTBuffers();
 
@@ -127,6 +132,7 @@ public:
 	//attempt to allocate screen buffers at resX, resY
 	//returns true if allocation successful, false otherwise
 	bool allocateScreenBuffer(U32 resX, U32 resY, U32 samples);
+    bool allocateShadowBuffer(U32 resX, U32 resY);
 
 	void allocatePhysicsBuffer();
 	
@@ -213,6 +219,8 @@ public:
 	U32         addObject(LLViewerObject *obj);
 
 	void		enableShadows(const bool enable_shadows);
+    void        releaseShadowTargets();
+    void        releaseShadowTarget(U32 index);
 
 // 	void		setLocalLighting(const bool local_lighting);
 // 	bool		isLocalLightingEnabled() const;
@@ -261,6 +269,7 @@ public:
 
 	void renderObjects(U32 type, U32 mask, bool texture = true, bool batch_texture = false);
 	void renderMaskedObjects(U32 type, U32 mask, bool texture = true, bool batch_texture = false);
+    void renderFullbrightMaskedObjects(U32 type, U32 mask, bool texture = true, bool batch_texture = false);
 
 	void renderGroups(LLRenderPass* pass, U32 type, U32 mask, bool texture);
 
@@ -278,15 +287,17 @@ public:
 	void renderGeomDeferred(LLCamera& camera);
 	void renderGeomPostDeferred(LLCamera& camera, bool do_occlusion=true);
 	void renderGeomShadow(LLCamera& camera);
-	void bindDeferredShader(LLGLSLShader& shader, U32 light_index = 0, U32 noise_map = 0xFFFFFFFF);
+	void bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_target = nullptr);
 	void setupSpotLight(LLGLSLShader& shader, LLDrawable* drawablep);
 
 	void unbindDeferredShader(LLGLSLShader& shader);
-	void renderDeferredLighting();
-	void renderDeferredLightingToRT(LLRenderTarget* target);
-	
+	void renderDeferredLighting(LLRenderTarget* light_target);
+	void postDeferredGammaCorrect(LLRenderTarget* screen_target);
+
 	void generateWaterReflection(LLCamera& camera);
 	void generateSunShadow(LLCamera& camera);
+    LLRenderTarget* getShadowTarget(U32 i);
+
 	void generateHighlight(LLCamera& camera);
 	void renderHighlight(const LLViewerObject* obj, F32 fade);
 	void setHighlightObject(LLDrawable* obj) { mHighlightObject = obj; }
@@ -313,7 +324,7 @@ public:
 	void enableLightsAvatar();
 	void enableLightsPreview();
 	void enableLightsAvatarEdit(const LLColor4& color);
-	void enableLightsFullbright(const LLColor4& color);
+	void enableLightsFullbright();
 	void disableLights();
 
 	void shiftObjects(const LLVector3 &offset);
@@ -587,6 +598,7 @@ public:
 	static bool				sDynamicLOD;
 	static bool				sPickAvatar;
 	static bool				sReflectionRender;
+    static bool				sDistortionRender;
 	static bool				sImpostorRender;
 	static bool				sImpostorRenderAlphaDepthPass;
 	static bool				sUnderWaterRender;
@@ -600,6 +612,7 @@ public:
 	static S32				sVisibleLightCount;
 	static F32				sMinRenderSize;
 	static bool				sRenderingHUDs;
+    static F32              sDistortionWaterClipPlaneMargin;
 	static F32        		sVolumeSAFrame;
 
 	static bool				sRenderParticles; // <FS:LO> flag to hold correct, user selected, status of particles
@@ -624,6 +637,10 @@ public:
 	LLRenderTarget			mHighlight;
 	LLRenderTarget			mPhysicsDisplay;
 
+    LLCullResult            mSky;
+    LLCullResult            mReflectedObjects;
+    LLCullResult            mRefractedObjects;
+
 	//utility buffer for rendering post effects, gets abused by renderDeferredLighting
 	LLPointer<LLVertexBuffer> mDeferredVB;
 
@@ -636,50 +653,56 @@ public:
 	//sun shadow map
 	LLRenderTarget			mShadow[6];
 	LLRenderTarget			mShadowOcclusion[6];
-	std::vector<LLVector3>	mShadowFrustPoints[4];
-	LLVector4				mShadowError;
-	LLVector4				mShadowFOV;
-	LLVector3				mShadowFrustOrigin[4];
-	LLCamera				mShadowCamera[8];
-	LLVector3				mShadowExtents[4][2];
+
+	std::vector<LLVector3>  mShadowFrustPoints[4];
+	LLVector4			    mShadowError;
+	LLVector4			    mShadowFOV;
+	LLVector3			    mShadowFrustOrigin[4];
+	LLCamera			    mShadowCamera[8];
+	LLVector3			    mShadowExtents[4][2];
 	glh::matrix4f			mSunShadowMatrix[6];
 	glh::matrix4f			mShadowModelview[6];
 	glh::matrix4f			mShadowProjection[6];
-	glh::matrix4f			mGIMatrix;
-	glh::matrix4f			mGIMatrixProj;
-	glh::matrix4f			mGIModelview;
-	glh::matrix4f			mGIProjection;
-	glh::matrix4f			mGINormalMatrix;
-	glh::matrix4f			mGIInvProj;
-	LLVector2				mGIRange;
-	F32						mGILightRadius;
-	
-	LLPointer<LLDrawable>				mShadowSpotLight[2];
-	F32									mSpotLightFade[2];
-	LLPointer<LLDrawable>				mTargetShadowSpotLight[2];
+    glh::matrix4f           mReflectionModelView;
+
+	LLPointer<LLDrawable>	mShadowSpotLight[2];
+	F32						mSpotLightFade[2];
+	LLPointer<LLDrawable>	mTargetShadowSpotLight[2];
 
 	LLVector4				mSunClipPlanes;
 	LLVector4				mSunOrthoClipPlanes;
-
 	LLVector2				mScreenScale;
 
 	//water reflection texture
 	LLRenderTarget				mWaterRef;
-
+    LLRenderTarget				mWaterDeferredScreen;
+    LLRenderTarget				mWaterDeferredDepth;
+    LLRenderTarget				mWaterOcclusionDepth;
+    LLRenderTarget			    mWaterDeferredLight;
 	//water distortion texture (refraction)
 	LLRenderTarget				mWaterDis;
 
+    LLRenderTarget				mBake;
+
 	//texture for making the glow
 	LLRenderTarget				mGlow[3];
+
+    // texture for SH indirect sky contribution
+	LLRenderTarget				mSkySH;
 
 	//noise map
 	U32					mNoiseMap;
 	U32					mTrueNoiseMap;
 	U32					mLightFunc;
 
-	LLColor4				mSunDiffuse;
-	LLVector3				mSunDir;
-	LLVector3				mTransformedSunDir;
+	LLColor4			mSunDiffuse;
+    LLColor4			mMoonDiffuse;
+	LLVector4			mSunDir;
+    LLVector4			mMoonDir;
+    bool                mNeedsShadowTargetClear;
+
+	LLVector4			mTransformedSunDir;
+    LLVector4			mTransformedMoonDir;
 
 	bool					mInitialized;
 	bool					mVertexShadersEnabled;
@@ -887,7 +910,6 @@ public:
 
 	//cached settings
 	static bool WindLightUseAtmosShaders;
-	static bool VertexShaderEnable;
 	static bool RenderAvatarVP;
 	static bool RenderDeferred;
 	static F32 RenderDeferredSunWash;
@@ -949,6 +971,7 @@ public:
 	static F32 RenderShadowBias;
 	static F32 RenderSpotShadowOffset;
 	static F32 RenderSpotShadowBias;
+    static LLDrawable* RenderSpotLight;
 	static F32 RenderEdgeDepthCutoff;
 	static F32 RenderEdgeNormCutoff;
 	static LLVector3 RenderShadowGaussian;
@@ -967,16 +990,6 @@ public:
 	static F32 CameraMaxCoF;
 	static F32 CameraDoFResScale;
 	static F32 RenderAutoHideSurfaceAreaLimit;
-
-
- 	// <FS:ND>FIRE-9943; resizeScreenTexture will try to disable deferred mode in low memory situations.
-	// Depending on the state of the pipeline. this can trigger illegal deletion of drawables.
-	// To work around that, resizeScreenTexture will just set a flag, which then later does trigger the change
-	// in shaders.
-	static bool TriggeredDisabledDeferred;
-
-	void disableDeferredOnLowMemory();
-	// </FS:ND>
 };
 
 void render_bbox(const LLVector3 &min, const LLVector3 &max);
