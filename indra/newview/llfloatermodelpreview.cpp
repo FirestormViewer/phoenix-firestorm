@@ -1423,11 +1423,14 @@ void LLFloaterModelPreview::updateAvatarTab(bool highlight_overrides)
                     for (U32 j = 0; j < joint_count; ++j)
                     {
                         const LLVector3& joint_pos = skin->mAlternateBindMatrix[j].getTranslation();
-                        //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+                        // <FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
                         //LLJointOverrideData &data = mJointOverrides[display_lod][skin->mJointNames[j]];
+
+                        //LLJoint* pJoint = LLModelPreview::lookupJointByName(skin->mJointNames[j], mModelPreview);
                         LLJointOverrideData &data = mJointOverrides[display_lod][skin->mJointNames[j].mName];
 
-                        LLJoint* pJoint = LLModelPreview::lookupJointByName(skin->mJointNames[j], mModelPreview);
+                        LLJoint* pJoint = LLModelPreview::lookupJointByName(skin->mJointNames[j].mName, mModelPreview);
+                        // <FS:ND>
                         if (pJoint)
                         {
                             // see how voavatar uses aboveJointPosThreshold
@@ -1456,7 +1459,9 @@ void LLFloaterModelPreview::updateAvatarTab(bool highlight_overrides)
                 {
                     for (U32 j = 0; j < joint_count; ++j)
                     {
-                        LLJointOverrideData &data = mJointOverrides[display_lod][skin->mJointNames[j]];
+                        // <FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+                        //LLJointOverrideData &data = mJointOverrides[display_lod][skin->mJointNames[j]];
+                        LLJointOverrideData &data = mJointOverrides[display_lod][skin->mJointNames[j].mName];
                         data.mModelsNoOverrides.insert(model->getName());
                     }
                 }
