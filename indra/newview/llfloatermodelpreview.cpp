@@ -166,6 +166,7 @@ BOOL LLFloaterModelPreview::postBuild()
 		getChild<LLSpinCtrl>("lod_triangle_limit_" + lod_name[lod])->setCommitCallback(boost::bind(&LLFloaterModelPreview::onLODParamCommit, this, lod, true));
 	}
 
+	// Upload/avatar options, they need to refresh errors/notifications
 	childSetCommitCallback("upload_skin", boost::bind(&LLFloaterModelPreview::onUploadOptionChecked, this, _1), NULL);
 	childSetCommitCallback("upload_joints", boost::bind(&LLFloaterModelPreview::onUploadOptionChecked, this, _1), NULL);
 	childSetCommitCallback("lock_scale_if_joint_position", boost::bind(&LLFloaterModelPreview::onUploadOptionChecked, this, _1), NULL);
@@ -179,10 +180,6 @@ BOOL LLFloaterModelPreview::postBuild()
 	childSetAction("reset_btn", onReset, this);
 
 	childSetCommitCallback("preview_lod_combo", onPreviewLODCommit, this);
-
-	childSetCommitCallback("upload_skin", onUploadSkinCommit, this);
-	childSetCommitCallback("upload_joints", onUploadJointsCommit, this);
-	childSetCommitCallback("lock_scale_if_joint_position", onUploadJointsCommit, this);
 
 	childSetCommitCallback("import_scale", onImportScaleCommit, this);
 	childSetCommitCallback("pelvis_offset", onPelvisOffsetCommit, this);
@@ -366,8 +363,15 @@ void LLFloaterModelPreview::onUploadOptionChecked(LLUICtrl* ctrl)
 	if (mModelPreview)
 	{
 		auto name = ctrl->getName();
-		mModelPreview->mViewOption[name] = !mModelPreview->mViewOption[name];
-	}
+        // update the option and notifications
+        // (this is a bit convoluted, because of the current structure of mModelPreview)
+        mModelPreview->mViewOption[name] = !mModelPreview->mViewOption[name];
+        mModelPreview->refresh(); // a 'dirty' flag for render
+        mModelPreview->resetPreviewTarget(); 
+        mModelPreview->clearBuffers();
+        mModelPreview->mDirty = true;
+    }
+    // set the button visible, it will be refreshed later
 	toggleCalculateButton(true);
 }
 
@@ -465,7 +469,7 @@ void LLFloaterModelPreview::loadModel(S32 lod, const std::string& file_name, boo
 void LLFloaterModelPreview::onClickCalculateBtn()
 {
 	clearLogTab();
-
+	addStringToLog("Calculating model data.", false);
 	mModelPreview->rebuildUploadData();
 
 	bool upload_skinweights = childGetValue("upload_skin").asBoolean();
@@ -485,46 +489,95 @@ void LLFloaterModelPreview::onClickCalculateBtn()
 	mUploadBtn->setEnabled(false);
 }
 
-void populate_list_with_map(LLScrollListCtrl *list, const std::map<std::string, LLVector3> &vector_map)
+// Modified cell_params, make sure to clear values if you have to reuse cell_params outside of this function
+void add_row_to_list(LLScrollListCtrl *listp,
+                     LLScrollListCell::Params &cell_params,
+                     const LLSD &item_value,
+                     const std::string &name,
+                     const LLSD &vx,
+                     const LLSD &vy,
+                     const LLSD &vz)
 {
-    if (vector_map.empty())
+    LLScrollListItem::Params item_params;
+    item_params.value = item_value;
+
+    cell_params.column = "model_name";
+    cell_params.value = name;
+
+    item_params.columns.add(cell_params);
+
+    cell_params.column = "axis_x";
+    cell_params.value = vx;
+    item_params.columns.add(cell_params);
+
+    cell_params.column = "axis_y";
+    cell_params.value = vy;
+    item_params.columns.add(cell_params);
+
+    cell_params.column = "axis_z";
+    cell_params.value = vz;
+
+    item_params.columns.add(cell_params);
+
+    listp->addRow(item_params);
+}
+
+void populate_list_with_overrides(LLScrollListCtrl *listp, const LLJointOverrideData &data, bool include_overrides)
+{
+    if (data.mModelsNoOverrides.empty() && data.mPosOverrides.empty())
     {
         return;
     }
+
+    static const std::string no_override_placeholder = "-";
+
     S32 count = 0;
     LLScrollListCell::Params cell_params;
     cell_params.font = LLFontGL::getFontSansSerif();
     // Start out right justifying numeric displays
     cell_params.font_halign = LLFontGL::HCENTER;
 
-    std::map<std::string, LLVector3>::const_iterator iter = vector_map.begin();
-    std::map<std::string, LLVector3>::const_iterator end = vector_map.end();
-    while (iter != end)
+    std::map<std::string, LLVector3>::const_iterator map_iter = data.mPosOverrides.begin();
+    std::map<std::string, LLVector3>::const_iterator map_end = data.mPosOverrides.end();
+    while (map_iter != map_end)
     {
-        LLScrollListItem::Params item_params;
-        item_params.value = LLSD::Integer(count);
-
-        cell_params.column = "model_name";
-        cell_params.value = iter->first;
-
-        item_params.columns.add(cell_params);
-
-        cell_params.column = "axis_x";
-        cell_params.value = iter->second.mV[VX];
-        item_params.columns.add(cell_params);
-
-        cell_params.column = "axis_y";
-        cell_params.value = iter->second.mV[VY];
-        item_params.columns.add(cell_params);
-
-        cell_params.column = "axis_z";
-        cell_params.value = iter->second.mV[VZ];
-
-        item_params.columns.add(cell_params);
-
-        list->addRow(item_params);
+        if (include_overrides)
+        {
+            add_row_to_list(listp,
+                cell_params,
+                LLSD::Integer(count),
+                map_iter->first,
+                LLSD::Real(map_iter->second.mV[VX]),
+                LLSD::Real(map_iter->second.mV[VY]),
+                LLSD::Real(map_iter->second.mV[VZ]));
+        }
+        else
+        {
+            add_row_to_list(listp,
+                cell_params,
+                LLSD::Integer(count),
+                map_iter->first,
+                no_override_placeholder,
+                no_override_placeholder,
+                no_override_placeholder);
+        }
         count++;
-        iter++;
+        map_iter++;
+    }
+
+    std::set<std::string>::const_iterator set_iter = data.mModelsNoOverrides.begin();
+    std::set<std::string>::const_iterator set_end = data.mModelsNoOverrides.end();
+    while (set_iter != set_end)
+    {
+        add_row_to_list(listp,
+                        cell_params,
+                        LLSD::Integer(count),
+                        *set_iter,
+                        no_override_placeholder,
+                        no_override_placeholder,
+                        no_override_placeholder);
+        count++;
+        set_iter++;
     }
 }
 
@@ -545,7 +598,8 @@ void LLFloaterModelPreview::onJointListSelection()
     {
         std::string label = selected->getValue().asString();
         LLJointOverrideData &data = mJointOverrides[display_lod][label];
-        populate_list_with_map(joints_pos, data.mPosOverrides);
+        bool upload_joint_positions = childGetValue("upload_joints").asBoolean();
+        populate_list_with_overrides(joints_pos, data, upload_joint_positions);
 
         joint_pos_descr->setTextArg("[JOINT]", label);
         mSelectedJointName = label;
@@ -602,33 +656,6 @@ void LLFloaterModelPreview::onPelvisOffsetCommit( LLUICtrl*, void* userdata )
 	fp->toggleCalculateButton(true);
 
 	fp->mModelPreview->refresh();
-}
-
-//static
-void LLFloaterModelPreview::onUploadJointsCommit(LLUICtrl*,void* userdata)
-{
-	LLFloaterModelPreview *fp =(LLFloaterModelPreview *)userdata;
-
-	if (!fp->mModelPreview)
-	{
-		return;
-	}
-
-	fp->mModelPreview->refresh();
-}
-
-//static
-void LLFloaterModelPreview::onUploadSkinCommit(LLUICtrl*,void* userdata)
-{
-	LLFloaterModelPreview *fp =(LLFloaterModelPreview *)userdata;
-
-	if (!fp->mModelPreview)
-	{
-		return;
-	}
-	fp->mModelPreview->refresh();
-	fp->mModelPreview->resetPreviewTarget();
-	fp->mModelPreview->clearBuffers();
 }
 
 //static
@@ -1356,7 +1383,7 @@ void LLFloaterModelPreview::clearAvatarTab()
     joint_pos_descr->setTextArg("[JOINT]", std::string("mPelvis")); // Might be better to hide it
 }
 
-void LLFloaterModelPreview::updateAvatarTab()
+void LLFloaterModelPreview::updateAvatarTab(bool highlight_overrides)
 {
     S32 display_lod = mModelPreview->mPreviewLOD;
     if (mModelPreview->mModel[display_lod].empty())
@@ -1378,25 +1405,59 @@ void LLFloaterModelPreview::updateAvatarTab()
                 LLModelInstance& instance = *model_iter;
                 LLModel* model = instance.mModel;
                 const LLMeshSkinInfo *skin = &model->mSkinInfo;
-                if (skin->mAlternateBindMatrix.size() > 0)
+                U32 joint_count = LLSkinningUtil::getMeshJointCount(skin);
+                U32 bind_count = highlight_overrides ? skin->mAlternateBindMatrix.size() : 0; // simply do not include overrides if data is not needed
+                if (bind_count > 0 && bind_count != joint_count)
                 {
-                    U32 count = LLSkinningUtil::getMeshJointCount(skin);
-                    for (U32 j = 0; j < count; ++j)
+                    std::ostringstream out;
+                    out << "Invalid joint overrides for model " << model->getName();
+                    out << ". Amount of joints " << joint_count;
+                    out << ", is different from amount of overrides " << bind_count;
+                    LL_INFOS() << out.str() << LL_ENDL;
+                    addStringToLog(out.str(), true);
+                    // Disable overrides for this model
+                    bind_count = 0;
+                }
+                if (bind_count > 0)
+                {
+                    for (U32 j = 0; j < joint_count; ++j)
                     {
-                        const LLVector3& jointPos = skin->mAlternateBindMatrix[j].getTranslation();
+                        const LLVector3& joint_pos = skin->mAlternateBindMatrix[j].getTranslation();
                         //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
                         //LLJointOverrideData &data = mJointOverrides[display_lod][skin->mJointNames[j]];
                         LLJointOverrideData &data = mJointOverrides[display_lod][skin->mJointNames[j].mName];
-                        if (data.mPosOverrides.size() > 0
-                            && (data.mPosOverrides.begin()->second - jointPos).lengthSquared() > (LL_JOINT_TRESHOLD_POS_OFFSET * LL_JOINT_TRESHOLD_POS_OFFSET))
-                        {
-                            // File contains multiple meshes with conflicting joint offsets
-                            // preview may be incorrect, upload result might wary (depends onto
-                            // mesh_id that hasn't been generated yet).
-                            data.mHasConflicts = true;
-                        }
-                        data.mPosOverrides[model->getName()] = jointPos;
 
+                        LLJoint* pJoint = LLModelPreview::lookupJointByName(skin->mJointNames[j], mModelPreview);
+                        if (pJoint)
+                        {
+                            // see how voavatar uses aboveJointPosThreshold
+                            if (pJoint->aboveJointPosThreshold(joint_pos))
+                            {
+                                // valid override
+                                if (data.mPosOverrides.size() > 0
+                                    && (data.mPosOverrides.begin()->second - joint_pos).lengthSquared() > (LL_JOINT_TRESHOLD_POS_OFFSET * LL_JOINT_TRESHOLD_POS_OFFSET))
+                                {
+                                    // File contains multiple meshes with conflicting joint offsets
+                                    // preview may be incorrect, upload result might wary (depends onto
+                                    // mesh_id that hasn't been generated yet).
+                                    data.mHasConflicts = true;
+                                }
+                                data.mPosOverrides[model->getName()] = joint_pos;
+                            }
+                            else
+                            {
+                                // default value, it won't be accounted for by avatar
+                                data.mModelsNoOverrides.insert(model->getName());
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (U32 j = 0; j < joint_count; ++j)
+                    {
+                        LLJointOverrideData &data = mJointOverrides[display_lod][skin->mJointNames[j]];
+                        data.mModelsNoOverrides.insert(model->getName());
                     }
                 }
             }
@@ -1436,6 +1497,10 @@ void LLFloaterModelPreview::updateAvatarTab()
                 // Conflicts
                 cell_params.color = LLColor4::orange;
                 conflicts++;
+            }
+            if (highlight_overrides && joint_iter->second.mPosOverrides.size() > 0)
+            {
+                cell_params.font.style = "BOLD";
             }
 
             item_params.columns.add(cell_params);
@@ -1504,10 +1569,7 @@ void LLFloaterModelPreview::addStringToLogTab(const std::string& str, bool flash
         LLPanel* panel = mTabContainer->getPanelByName("logs_panel");
         if (mTabContainer->getCurrentPanel() != panel)
         {
-            // This will makes colors pale due to "glow_type = LLRender::BT_ALPHA"
-            // So instead of using "MenuItemFlashBgColor" added stronger color
-            static LLUIColor sFlashBgColor(LLColor4U(255, 99, 0));
-            mTabContainer->setTabPanelFlashing(panel, true, sFlashBgColor);
+            mTabContainer->setTabPanelFlashing(panel, true);
         }
     }
 }

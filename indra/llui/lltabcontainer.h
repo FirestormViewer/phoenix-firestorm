@@ -128,6 +128,7 @@ public:
 		 * Enable tab flashing
 		 */
 		Optional<bool>						enable_tabs_flashing;
+		Optional<LLUIColor>					tabs_flashing_color;
 		
 		/**
 		 *  Paddings for LLIconCtrl in case of LLCustomButtonIconCtrl usage(use_custom_icon_ctrl = true)
@@ -220,7 +221,6 @@ public:
 
 	BOOL        getTabPanelFlashing(LLPanel* child);
 	void		setTabPanelFlashing(LLPanel* child, BOOL state);
-	void		setTabPanelFlashing(LLPanel* child, BOOL state, LLUIColor color);
 	void 		setTabImage(LLPanel* child, std::string img_name, const LLColor4& color = LLColor4::white);
 	void 		setTabImage(LLPanel* child, const LLUUID& img_id, const LLColor4& color = LLColor4::white);
 	void		setTabImage(LLPanel* child, LLIconCtrl* icon);
@@ -350,6 +350,7 @@ private:
 	bool							mCustomIconCtrlUsed;
 	bool							mOpenTabsOnDragAndDrop;
 	bool							mEnableTabsFlashing;
+	LLUIColor						mTabsFlashingColor;
 	S32								mTabIconCtrlPad;
 	bool							mUseTabEllipses;
 };

@@ -370,6 +370,7 @@ void LLModelPreview::rebuildUploadData()
     F32 max_scale = 0.f;
 
     BOOL legacyMatching = gSavedSettings.getBOOL("ImporterLegacyMatching");
+    U32 load_state = 0;
 
     for (LLModelLoader::scene::iterator iter = mBaseScene.begin(); iter != mBaseScene.end(); ++iter)
     { //for each transform in scene
@@ -577,7 +578,8 @@ void LLModelPreview::rebuildUploadData()
             LLModel* high_lod_model = instance.mLOD[LLModel::LOD_HIGH];
             if (!high_lod_model)
             {
-                setLoadState(LLModelLoader::ERROR_MATERIALS);
+                LLFloaterModelPreview::addStringToLog("Model " + instance.mLabel + " has no High Lod (LOD3).", true);
+                load_state = LLModelLoader::ERROR_MATERIALS;
                 mFMP->childDisable("calculate_btn");
             }
             else
@@ -589,7 +591,8 @@ void LLModelPreview::rebuildUploadData()
                     llassert(instance.mLOD[i]);
                     if (instance.mLOD[i] && !instance.mLOD[i]->matchMaterialOrder(high_lod_model, refFaceCnt, modelFaceCnt))
                     {
-                        setLoadState(LLModelLoader::ERROR_MATERIALS);
+                        LLFloaterModelPreview::addStringToLog("Model " + instance.mLabel + " has mismatching materials between lods." , true);
+                        load_state = LLModelLoader::ERROR_MATERIALS;
                         mFMP->childDisable("calculate_btn");
                     }
                 }
@@ -601,6 +604,8 @@ void LLModelPreview::rebuildUploadData()
                     LLQuaternion identity;
                     if (!bind_rot.isEqualEps(identity, 0.01f))
                     {
+                        // Bind shape matrix is not in standard X-forward orientation.
+                        // Might be good idea to only show this once. It can be spammy.
                         std::ostringstream out;
                         out << "non-identity bind shape rot. mat is ";
                         out << high_lod_model->mSkinInfo.mBindShapeMatrix;
@@ -608,8 +613,8 @@ void LLModelPreview::rebuildUploadData()
                         out << bind_rot;
                         LL_WARNS() << out.str() << LL_ENDL;
 
-                        LLFloaterModelPreview::addStringToLog(out, false);
-                        setLoadState(LLModelLoader::WARNING_BIND_SHAPE_ORIENTATION);
+                        LLFloaterModelPreview::addStringToLog(out, getLoadState() != LLModelLoader::WARNING_BIND_SHAPE_ORIENTATION);
+                        load_state = LLModelLoader::WARNING_BIND_SHAPE_ORIENTATION;
                     }
                 }
             }
@@ -641,12 +646,27 @@ void LLModelPreview::rebuildUploadData()
                     std::ostringstream out;
                     out << "Model " << mModel[lod][model_ind]->mLabel << " was not used - mismatching lod models.";
                     LL_INFOS() << out.str() << LL_ENDL;
-                    LLFloaterModelPreview::addStringToLog(out, false);
+                    LLFloaterModelPreview::addStringToLog(out, true);
                 }
-                setLoadState(LLModelLoader::ERROR_MATERIALS);
+                load_state = LLModelLoader::ERROR_MATERIALS;
                 mFMP->childDisable("calculate_btn");
             }
         }
+    }
+
+    // Update state for notifications
+    if (load_state > 0)
+    {
+        // encountered issues
+        setLoadState(load_state);
+    }
+    else if (getLoadState() == LLModelLoader::ERROR_MATERIALS
+             || getLoadState() == LLModelLoader::WARNING_BIND_SHAPE_ORIENTATION)
+    {
+        // This is only valid for these two error types because they are 
+        // only used inside rebuildUploadData() and updateStatusMessages()
+        // updateStatusMessages() is called after rebuildUploadData()
+        setLoadState(LLModelLoader::DONE);
     }
 
     // <FS:AW> OpenSim limits
@@ -2828,7 +2848,7 @@ U32 LLModelPreview::loadTextures(LLImportMaterial& material, void* opaque)
         material.mOpaqueData = new LLPointer< LLViewerFetchedTexture >;
         LLPointer< LLViewerFetchedTexture >& tex = (*reinterpret_cast< LLPointer< LLViewerFetchedTexture > * >(material.mOpaqueData));
 
-        tex = LLViewerTextureManager::getFetchedTextureFromUrl("file://" + material.mDiffuseMapFilename, FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_PREVIEW);
+        tex = LLViewerTextureManager::getFetchedTextureFromUrl("file://" + LLURI::unescape(material.mDiffuseMapFilename), FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_PREVIEW);
         tex->setLoadedCallback(LLModelPreview::textureLoadedCallback, 0, TRUE, FALSE, opaque, NULL, FALSE);
         tex->forceToSaveRawImage(0, F32_MAX);
         material.setDiffuseMap(tex->getID()); // record tex ID
@@ -2952,6 +2972,10 @@ BOOL LLModelPreview::render()
     if (upload_joints != mLastJointUpdate)
     {
         mLastJointUpdate = upload_joints;
+        if (fmp)
+        {
+            fmp->clearAvatarTab();
+        }
     }
 
     for (LLModelLoader::scene::iterator iter = mScene[mPreviewLOD].begin(); iter != mScene[mPreviewLOD].end(); ++iter)
@@ -3019,22 +3043,27 @@ BOOL LLModelPreview::render()
         upload_joints = false;
     }
 
+    if (fmp)
+    {
+        if (upload_skin)
+        {
+            // will populate list of joints
+            fmp->updateAvatarTab(upload_joints);
+        }
+        else
+        {
+            fmp->clearAvatarTab();
+        }
+    }
+
     if (upload_skin && upload_joints)
     {
         mFMP->childEnable("lock_scale_if_joint_position");
-        if (fmp)
-        {
-            fmp->updateAvatarTab();
-        }
     }
     else
     {
         mFMP->childDisable("lock_scale_if_joint_position");
         mFMP->childSetValue("lock_scale_if_joint_position", false);
-        if (fmp)
-        {
-            fmp->clearAvatarTab();
-        }
     }
 
     //Only enable joint offsets if it passed the earlier critiquing
@@ -3450,9 +3479,12 @@ BOOL LLModelPreview::render()
                     {
                         const LLMeshSkinInfo *skin = &model->mSkinInfo;
                         LLSkinningUtil::initJointNums(&model->mSkinInfo, getPreviewAvatar());// inits skin->mJointNums if nessesary
-                        U32 count = LLSkinningUtil::getMeshJointCount(skin);
+                        U32 joint_count = LLSkinningUtil::getMeshJointCount(skin);
+                        U32 bind_count = skin->mAlternateBindMatrix.size();
 
-                        if (joint_overrides && skin->mAlternateBindMatrix.size() > 0)
+                        if (joint_overrides
+                            && bind_count > 0
+                            && joint_count == bind_count)
                         {
                             // mesh_id is used to determine which mesh gets to
                             // set the joint offset, in the event of a conflict. Since
@@ -3463,7 +3495,7 @@ BOOL LLModelPreview::render()
                             // incorrect.
                             LLUUID fake_mesh_id;
                             fake_mesh_id.generate();
-                            for (U32 j = 0; j < count; ++j)
+                            for (U32 j = 0; j < joint_count; ++j)
                             {
                                 LLJoint *joint = getPreviewAvatar()->getJoint(skin->mJointNums[j]);
                                 if (joint)
@@ -3513,9 +3545,9 @@ BOOL LLModelPreview::render()
 
                             LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
                             //<FS:Beq> use Mat4a part of the caching changes, no point in using the cache itself in the preview though.
-                            //LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, count,
+                            //LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, joint_count,
                             //    skin, getPreviewAvatar());
-                            LLSkinningUtil::initSkinningMatrixPalette(mat, count,
+                            LLSkinningUtil::initSkinningMatrixPalette(mat, joint_count,
                                 skin, getPreviewAvatar());
                             //</FS:Beq>
 
