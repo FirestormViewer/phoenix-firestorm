@@ -37,7 +37,6 @@
 #include "llavataractions.h"            // @stopim IM query
 #include "llavatarnamecache.h"			// @shownames
 #include "llavatarlist.h"				// @shownames
-//#include "llenvmanager.h"				// @setenv
 #include "llfloatersidepanelcontainer.h"// @shownames
 #include "llnotifications.h"			// @list IM query
 #include "llnotificationsutil.h"
@@ -2235,34 +2234,47 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour
 }
 
 // Handles: @setenv=n|y toggles
-//template<> template<>
-//void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
-//{
-//	const std::string strEnvFloaters[] = { "env_post_process", "env_settings", "env_delete_preset", "env_edit_sky", "env_edit_water", "env_edit_day_cycle" };
-//	for (int idxFloater = 0, cntFloater = sizeof(strEnvFloaters) / sizeof(std::string); idxFloater < cntFloater; idxFloater++)
-//	{
-//		if (fHasBhvr)
-//		{
-//			// Hide the floater if it's currently visible
-//			LLFloaterReg::const_instance_list_t envFloaters = LLFloaterReg::getFloaterList(strEnvFloaters[idxFloater]);
-//			for (LLFloater* pFloater : envFloaters)
-//				pFloater->closeFloater();
-//			RlvUIEnabler::instance().addGenericFloaterFilter(strEnvFloaters[idxFloater]);
-//		}
-//		else
-//		{
-//			RlvUIEnabler::instance().removeGenericFloaterFilter(strEnvFloaters[idxFloater]);
-//		}
-//	}
-//
-//	// Don't allow toggling "Basic Shaders" and/or "Atmopsheric Shaders" through the debug settings under @setenv=n
-//	gSavedSettings.getControl("VertexShaderEnable")->setHiddenFromSettingsEditor(fHasBhvr);
-//	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(fHasBhvr);
-//
-//	// Restore the user's WindLight preferences when releasing
-//	if (!fHasBhvr)
-//		LLEnvManagerNew::instance().usePrefs();
-//}
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	const std::string strEnvFloaters[] = { "env_adjust_snapshot", "env_edit_extdaycycle", "env_fixed_environmentent_sky", "env_fixed_environmentent_water", "my_environments" };
+	for (int idxFloater = 0, cntFloater = sizeof(strEnvFloaters) / sizeof(std::string); idxFloater < cntFloater; idxFloater++)
+	{
+		if (fHasBhvr)
+		{
+			// Hide the floater if it's currently visible
+			LLFloaterReg::const_instance_list_t envFloaters = LLFloaterReg::getFloaterList(strEnvFloaters[idxFloater]);
+			for (LLFloater* pFloater : envFloaters)
+				pFloater->closeFloater();
+			RlvUIEnabler::instance().addGenericFloaterFilter(strEnvFloaters[idxFloater]);
+		}
+		else
+		{
+			RlvUIEnabler::instance().removeGenericFloaterFilter(strEnvFloaters[idxFloater]);
+		}
+	}
+
+	// Don't allow toggling "Atmopsheric Shaders" through the debug settings under @setenv=n
+	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(fHasBhvr);
+
+	if (fHasBhvr)
+	{
+		// Usurp the 'edit' environment for RLVa locking so TPV tools like quick prefs and phototools are automatically locked out as well
+		// (these needed per-feature awareness of RLV in the previous implementation which often wasn't implemented)
+		LLEnvironment* pEnv = LLEnvironment::getInstance();
+		LLSettingsSky::ptr_t pRlvSky = pEnv->getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL, true)->buildClone();
+		pEnv->setEnvironment(LLEnvironment::ENV_EDIT, pRlvSky);
+		pEnv->setSelectedEnvironment(LLEnvironment::ENV_EDIT, LLEnvironment::TRANSITION_INSTANT);
+		pEnv->updateEnvironment(LLEnvironment::TRANSITION_INSTANT);
+	}
+	else
+	{
+		// Restore the user's WindLight preferences when releasing
+		LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_EDIT);
+		LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+		LLEnvironment::instance().updateEnvironment();
+	}
+}
 
 // Handles: @showhovertext:<uuid>=n|y
 template<> template<>

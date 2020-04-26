@@ -20,6 +20,7 @@
 #include "llsettingsvo.h"
 #include <boost/algorithm/string.hpp>
 
+#include "rlvactions.h"
 #include "rlvenvironment.h"
 #include "rlvhelper.h"
 
@@ -413,9 +414,16 @@ RlvEnvironment::RlvEnvironment()
 												if ((nValue >= 0.f) && (nValue <= 1.0f))
 												{
 													LLSettingsDay::ptr_t pDay;
-													LLEnvironment::EnvSelection_t envs[] = { LLEnvironment::ENV_LOCAL, LLEnvironment::ENV_PUSH, LLEnvironment::ENV_PARCEL, LLEnvironment::ENV_REGION };
-													for (size_t idxEnv = 0, cntEnv = sizeof(envs) / sizeof(LLEnvironment::EnvSelection_t); idxEnv < cntEnv && !pDay; idxEnv++)
-														pDay = LLEnvironment::instance().getEnvironmentDay(envs[idxEnv]);
+													if (LLEnvironment::ENV_EDIT != env)
+													{
+														LLEnvironment::EnvSelection_t envs[] = { LLEnvironment::ENV_LOCAL, LLEnvironment::ENV_PUSH, LLEnvironment::ENV_PARCEL, LLEnvironment::ENV_REGION };
+														for (size_t idxEnv = 0, cntEnv = sizeof(envs) / sizeof(LLEnvironment::EnvSelection_t); idxEnv < cntEnv && !pDay; idxEnv++)
+															pDay = LLEnvironment::instance().getEnvironmentDay(envs[idxEnv]);
+													}
+													else
+													{
+														pDay = LLEnvironment::instance().getEnvironmentDay(LLEnvironment::ENV_EDIT);
+													}
 
 													if (pDay)
 													{
@@ -445,7 +453,7 @@ RlvEnvironment::RlvEnvironment()
 											{
 												// I forgot how much I hate this command... it literally makes no sense since time of day only has any meaning in an
 												// actively animating day cycle (but in that case we have to return -1).
-												if (!LLEnvironment::instance().getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL)) {
+												if (!LLEnvironment::instance().getEnvironmentFixedSky(env)) {
 													return std::to_string(-1.f);
 												}
 
@@ -456,6 +464,12 @@ RlvEnvironment::RlvEnvironment()
 
 RlvEnvironment::~RlvEnvironment()
 {
+}
+
+// static
+LLEnvironment::EnvSelection_t RlvEnvironment::getTargetEnvironment()
+{
+	return RlvActions::canChangeEnvironment() ? LLEnvironment::ENV_LOCAL : LLEnvironment::ENV_EDIT;
 }
 
 // static
@@ -611,7 +625,7 @@ void RlvEnvironment::registerGetEnvFn(const std::string& strFnName, const std::f
 	RLV_ASSERT(m_GetFnLookup.end() == m_GetFnLookup.find(strFnName));
 	m_GetFnLookup.insert(std::make_pair(strFnName, [this, getFn](const std::string& strRlvParam)
 		{
-			if (RlvUtil::sendChatReply(strRlvParam, getFn(LLEnvironment::ENV_LOCAL)))
+			if (RlvUtil::sendChatReply(strRlvParam, getFn(getTargetEnvironment())))
 				return RLV_RET_SUCCESS;
 			return RLV_RET_FAILED_PARAM;
 		}));
@@ -626,7 +640,7 @@ void RlvEnvironment::registerSetEnvFn(const std::string& strFnName, const std::f
 			T optionValue;
 			if (!RlvCommandOptionHelper::parseOption<T>(strRlvOption, optionValue))
 				return RLV_RET_FAILED_PARAM;
-			return setFn(LLEnvironment::ENV_LOCAL, optionValue);
+			return setFn(getTargetEnvironment(), optionValue);
 		}));
 }
 

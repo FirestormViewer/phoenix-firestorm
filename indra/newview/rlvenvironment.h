@@ -33,6 +33,7 @@ public:
 	bool onReplyCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet) override;
 	bool onForceCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet) override;
 protected:
+	static LLEnvironment::EnvSelection_t getTargetEnvironment();
 	typedef std::map<std::string, std::function<ERlvCmdRet(const std::string&)>> handler_map_t;
 	typedef std::map<std::string, std::function<ERlvCmdRet(const std::string&, U32)>> legacy_handler_map_t;
 	static bool onHandleCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet, const std::string& strCmdPrefix, const handler_map_t& fnLookup, const legacy_handler_map_t& legacyFnLookup);

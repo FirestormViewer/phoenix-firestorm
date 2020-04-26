@@ -352,6 +352,15 @@ bool RlvActions::isLocalTp(const LLVector3d& posGlobal)
 }
 
 // ============================================================================
+// WindLight
+//
+
+bool RlvActions::canChangeEnvironment()
+{
+	return !gRlvHandler.hasBehaviour(RLV_BHVR_SETENV);
+}
+
+// ============================================================================
 // World interaction
 //
 
