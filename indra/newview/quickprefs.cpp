@@ -336,13 +336,19 @@ void FloaterQuickPrefs::loadWaterPresets(const std::multimap<std::string, LLUUID
 void FloaterQuickPrefs::loadPresets()
 {
 	LLInventoryModel::cat_array_t cats;
-	LLInventoryModel::item_array_t items;
+	LLInventoryModel::item_array_t items, libitems;
 	FSSettingsCollector collector;
 	gInventory.collectDescendentsIf(gInventory.getRootFolderID(),
 									cats,
 									items,
 									LLInventoryModel::EXCLUDE_TRASH,
 									collector);
+	gInventory.collectDescendentsIf(gInventory.getLibraryRootFolderID(),
+									cats,
+									libitems,
+									LLInventoryModel::EXCLUDE_TRASH,
+									collector);
+	items.insert(items.end(), libitems.begin(), libitems.end());
 
 	std::multimap<std::string, LLUUID> sky_map;
 	std::multimap<std::string, LLUUID> water_map;
