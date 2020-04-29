@@ -161,7 +161,7 @@ BASE_ARGUMENTS=[
     dict(name='viewer_flavor',
          description='Type of viewer build. Can be oss or hvk.', default="oss"),
     dict(name='fmodversion',
-         description='Version of FMOD used. Can be fmodstudio or fmodex.', default=None),
+         description='Version of FMOD used. Can be fmodstudio or fmodex.', default=None)
     ]
 
 def usage(arguments, srctree=""):

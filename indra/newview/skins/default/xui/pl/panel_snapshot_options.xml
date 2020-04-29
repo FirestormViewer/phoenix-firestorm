@@ -17,4 +17,7 @@
 			<button label="Wyślij przez e-mail" name="save_to_email_btn" />
 		</layout_panel>
 	</layout_stack>
+	<text name="fee_hint_lbl">
+		Opłata zależy od Twojego poziomu członkostwa. Wyższe poziomy to niższe opłaty.
+	</text>
 </panel>

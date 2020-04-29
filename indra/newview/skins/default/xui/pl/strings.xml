@@ -167,22 +167,22 @@ Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 		Pobieranie ubrania...
 	</string>
 	<string name="InvalidCertificate">
-		Serwer zwrócił nieważny lub zniekształcony certyfikat. Proszę skontaktuj się z administratorem siatki.
+		Serwer zwrócił nieważny lub zniekształcony certyfikat. Proszę skontaktuj się z administratorem świata.
 	</string>
 	<string name="CertInvalidHostname">
-		Nazwa hosta jest nieważna, proszę sprawdź SLURL lub nazwę hosta siatki.
+		Nazwa hosta jest nieważna, proszę sprawdź SLURL lub nazwę hosta świata.
 	</string>
 	<string name="CertExpired">
-		Termin ważności certyfikatu zwróconego przez siatkę minął. Proszę sprawdzić swój zegar systemowy lub skontaktować się z administratorem siatki.
+		Termin ważności certyfikatu zwróconego przez świat minął. Proszę sprawdzić swój zegar systemowy lub skontaktować się z administratorem świata.
 	</string>
 	<string name="CertKeyUsage">
-		Certyfikat zwrócony przez serwer nie może być użyty dla SSL. Proszę skontaktuj się z administratorem siatki.
+		Certyfikat zwrócony przez serwer nie może być użyty dla SSL. Proszę skontaktuj się z administratorem świata.
 	</string>
 	<string name="CertBasicConstraints">
-		Zbyt wiele certyfikatów w łańcuchu certyfikatów serwera. Proszę skontaktować się z administratorem siatki.
+		Zbyt wiele certyfikatów w łańcuchu certyfikatów serwera. Proszę skontaktować się z administratorem świata.
 	</string>
 	<string name="CertInvalidSignature">
-		Podpis certyfikatu zwrócony przez siatkę nie mógł zostać zweryfikowany. Proszę skontaktować się z administratorem siatki.
+		Podpis certyfikatu zwrócony przez świat nie mógł zostać zweryfikowany. Proszę skontaktować się z administratorem świata.
 	</string>
 	<string name="LoginFailedNoNetwork">
 		Błąd sieci: Brak połączenia z siecią, sprawdź status swojego połączenia internetowego.
@@ -194,10 +194,10 @@ Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 		Wyłącz
 	</string>
 	<string name="AgniGridLabel">
-		Second Life: siatka główna (Agni)
+		Second Life: świat główny (Agni)
 	</string>
 	<string name="AditiGridLabel">
-		Second Life Beta: siatka testowa (Aditi)
+		Second Life Beta: świat testowy (Aditi)
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Przeglądarka używana przez Ciebie nie ma już dostępu do Second Life. Proszę przejść na poniższą stronę i pobrać nową:
@@ -725,6 +725,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="LoadingData">
 		Wczytywanie...
 	</string>
+	<string name="LockedFolder">
+		zablokowany
+	</string>
 	<string name="ProtectedFolder">
 		chroniony
 	</string>
@@ -786,7 +789,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Usługa niedostępna lub osiągnięto limit czasu.
 	</string>
 	<string name="AssetUploadRequestInvalid">
-		Błąd podczas ładowania. Odwiedź
+		Błąd podczas przesyłania. Odwiedź
 http://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
 	<string name="texture">
@@ -1132,10 +1135,10 @@ http://www.firestormviewer.org/support aby uzyskać pomoc.
 		(bez nazwy)
 	</string>
 	<string name="NearbyChatTitle">
-		Czat lokalny
+		Czat w pobliżu
 	</string>
 	<string name="NearbyChatLabel">
-		(Czat lokalny)
+		(Czat w pobliżu)
 	</string>
 	<string name="whisper">
 		szepcze:
@@ -1696,6 +1699,9 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="MarketplaceUpdating">
 		aktualizacja...
 	</string>
+	<string name="UploadFeeInfo">
+		Opłata zależy od Twojego poziomu członkostwa. Wyższe poziomy to niższe opłaty. [https://secondlife.com/my/account/membership.php? Więcej]
+	</string>
 	<string name="Open landmarks">
 		Otwórz landmarki
 	</string>
@@ -2240,7 +2246,7 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 		Zapisywanie zakończone.
 	</string>
 	<string name="UploadFailed">
-		Ładowanie nieudane: [REASON]
+		Przesyłanie nieudane: [REASON]
 	</string>
 	<string name="ObjectOutOfRange">
 		Skrypt (obiekt poza zasięgiem)
@@ -2710,7 +2716,7 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 		Anuluj
 	</string>
 	<string name="UploadingCosts">
-		Załadowanie [NAME] kosztuje [AMOUNT]L$
+		Przesyłanie [NAME] kosztuje [AMOUNT]L$
 	</string>
 	<string name="BuyingCosts">
 		Cena zakupu tego wynosi [AMOUNT]L$
@@ -4705,7 +4711,7 @@ Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pom
 		aby dołączyć do grupy
 	</string>
 	<string name="to upload">
-		aby załadować
+		aby przesłać
 	</string>
 	<string name="to publish a classified ad">
 		publikacja reklamy
@@ -4714,7 +4720,7 @@ Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pom
 		Dajesz [AMOUNT]L$
 	</string>
 	<string name="uploading_costs">
-		Ładowanie kosztuje [AMOUNT]L$
+		Przesyłanie kosztuje [AMOUNT]L$
 	</string>
 	<string name="this_costs">
 		To kosztuje [AMOUNT]L$
@@ -4738,7 +4744,7 @@ Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pom
 		Obecnie w SL
 	</string>
 	<string name="uploading_abuse_report">
-		Ładowanie...
+		Przesyłanie...
 
 Raport o Nadużyciu
 	</string>
@@ -4999,6 +5005,12 @@ Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia 
 	</string>
 	<string name="Chat">
 		Czat
+	</string>
+	<string name="BaseMembership">
+		Podstawowe
+	</string>
+	<string name="InternalMembership">
+		Wewnętrzne
 	</string>
 	<string name="DeleteItems">
 		Usunąć zaznaczone obiekty?
@@ -5264,7 +5276,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Gesty Twojego awatara (CTRL+G)
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
-		Pokaż obecny status świata (siatki)
+		Pokaż obecny status świata
 	</string>
 	<string name="Command_HowTo_Tooltip">
 		Jak wykonywać zwyczajne rzeczy
@@ -5642,7 +5654,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Zakres: Ziemia
 	</string>
 	<string name="Grid-Scope">
-		Zakres: Cała siatka
+		Zakres: Cały świat
 	</string>
 	<string name="Allowed_Experiences_Tab">
 		Zezwalam
@@ -6279,7 +6291,7 @@ Twoja aktualna pozycja: [AVATAR_POS]
 		Tekstowy
 	</string>
 	<string name="Asset_Uploading">
-		Ładowanie na serwer...
+		Przesyłanie na serwer...
 [ASSET_NAME]
 	</string>
 	<string name="Yes">

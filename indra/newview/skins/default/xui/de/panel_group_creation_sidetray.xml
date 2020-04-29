@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Gruppe erstellen" name="GroupCreation">
+	<panel.string name="current_membership">
+		(Ihre Mitgliedschaft)
+	</panel.string>
+	<panel name="group_info_top">
+		<text name="group_name_label" width="82">
+			Gruppenname:
+		</text>
+		<line_editor label="Hier den neuen Gruppennamen eingeben" name="group_name_editor"/>
+	</panel>
+	<scroll_container name="content_scroll_container">
+		<panel name="content_panel">
+			<layout_stack name="layout">
+				<layout_panel name="group_info">
+					<panel name="group_info_top2">
+						<texture_picker name="insignia" tool_tip="Klicken, um Bild auszuwählen"/>
+						<text_editor name="charter">
+							Gruppen-Charta
+						</text_editor>
+					</panel>
+					<panel name="preferences_container">
+						<check_box label="Jeder kann beitreten" name="open_enrollement" tool_tip="Festlegen, ob der Gruppenbeitritt ohne Einladung zulässig ist."/>
+						<check_box label="Kosten für Beitritt" name="check_enrollment_fee" tool_tip="Festlegen, ob Neumitglieder eine Beitrittsgebühr zahlen müssen"/>
+						<spinner label="L$" name="spin_enrollment_fee" tool_tip="Wenn Beitrittsgebühr aktiviert ist, müssen neue Mitglieder diesen Betrag zahlen."/>
+						<combo_box name="group_mature_check" tool_tip="Inhaltseinstufungen kennzeichnen die in einer Gruppe zulässigen Inhalte und Verhaltensweisen">
+							<combo_item name="select_mature">
+								- Inhaltseinstufung auswählen -
+							</combo_item>
+							<combo_box.item label="Moderater Inhalt" name="mature"/>
+							<combo_box.item label="Genereller Inhalt" name="pg"/>
+						</combo_box>
+					</panel>
+				</layout_panel>
+				<layout_panel name="create_info">
+					<text name="fee_information">
+						Die Gebühr zum Erstellen einer Gruppe hängig von Ihrer Mitgliedschaftsstufe ab. [https://secondlife.com/my/account/membership.php Weitere Informationen]
+					</text>
+					<scroll_list name="membership_list">
+						<scroll_list.rows name="basic" value="Basis (Platzhalter)"/>
+						<scroll_list.rows name="premium" value="Premium (Platzhalter)" />
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="create_actions">
+					<layout_stack name="button_row_ls">
+						<layout_panel name="layout_crt">
+							<button label="Gruppe erstellen ([COST] L$)" name="btn_create" tool_tip="Neue Gruppe erstellen"/>
+							<button name="back" label="Abbrechen"/>
+						</layout_panel>
+					</layout_stack>
+					<text name="info_deletion">
+						Hinweis: Nach 7 Tagen wird eine Gruppe ohne Mitglieder (ausgenommen des Erstellers) gelöscht!
+					</text>
+				</layout_panel>
+			</layout_stack>
+		</panel>
+	</scroll_container>
+</panel>

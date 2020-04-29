@@ -248,6 +248,11 @@ class ViewerManifest(LLManifest,FSViewerManifest):
 
     def channel_type(self): # returns 'release', 'beta', 'project', or 'test'
         channel_qualifier=self.channel_variant().lower()
+        #<FS:TS> Somehow, we started leaving the - separating the variant from the app name
+        # on the beginning of the channel qualifier. This screws up later processing that
+        # depends on the channel type. If it's there, we chop it off.
+        if channel_qualifier[0] == '-':
+            channel_qualifier = channel_qualifier[1:]
         if channel_qualifier.startswith('release'):
             channel_type='release'
         elif channel_qualifier.startswith('beta'):
@@ -589,6 +594,11 @@ class WindowsManifest(ViewerManifest):
                 else:
                     self.path("fmodex.dll")
 
+            # Get openal dll
+            if self.args.get('openal') == 'ON':
+                self.path("OpenAL32.dll")
+                self.path("alut.dll")
+
             # For textures
             self.path("openjpeg.dll")
 
@@ -771,18 +781,6 @@ class WindowsManifest(ViewerManifest):
             with self.prefix(src=os.path.join(self.args['build'], os.pardir, os.pardir, 'indra', 'newview', 'installers', 'windows_x64')):
                 self.path("msvcp120.dll")
                 self.path("msvcr120.dll")
-
-        # <FS:Ansariel> FIRE-22709: Local voice not working in OpenSim
-        if self.fs_is_opensim():
-            with self.prefix(src=os.path.join(relpkgdir, 'voice_os'), dst="voice_os"):
-                self.path("libsndfile-1.dll")
-                self.path("ortp.dll")
-                self.path("SLVoice.exe")
-                self.path("vivoxoal.dll")
-                self.path("vivoxsdk.dll")
-            with self.prefix(src=pkgdir, dst="voice_os"):
-                self.path("ca-bundle.crt")
-        # </FS:Ansariel>
 
         if not self.is_packaging_viewer():
             self.package_file = "copied_deps"    
@@ -1412,19 +1410,6 @@ class DarwinManifest(ViewerManifest):
                                 ):
                     self.path2basename(relpkgdir, libfile)
 
-                # <FS:Ansariel/TS> FIRE-22709: Local voice not working in OpenSim
-                if self.fs_is_opensim():
-                    with self.prefix(src=os.path.join(relpkgdir, 'voice_os'), dst="voice_os"):
-                        self.path('libortp.dylib')
-                        self.path('libsndfile.dylib')
-                        self.path('libvivoxoal.dylib')
-                        self.path('libvivoxsdk.dylib')
-                        self.path('libvivoxplatform.dylib')
-                        self.path('SLVoice')
-                    with self.prefix(src=pkgdir, dst="voice_os"):
-                        self.path("ca-bundle.crt")
-                # </FS:Ansariel/TS>
-
                 # dylibs that vary based on configuration
                 if self.args['fmodversion'].lower() == 'fmodstudio':
                     if self.args['configuration'].lower() == 'debug':
@@ -1489,7 +1474,7 @@ class DarwinManifest(ViewerManifest):
                     helperappfile = 'DullahanHelper.app'
                     self.path2basename(relpkgdir, helperappfile)
 
-                    pluginframeworkpath = self.dst_path_of('Chromium Embedded Framework.framework');
+                    pluginframeworkpath = self.dst_path_of('Chromium Embedded Framework.framework')
                     # Putting a Frameworks directory under Contents/MacOS
                     # isn't canonical, but the path baked into Dullahan
                     # Helper.app/Contents/MacOS/DullahanHelper is:
@@ -1732,12 +1717,41 @@ class DarwinManifest(ViewerManifest):
                     signed=False
                     sign_attempts=3
                     sign_retry_wait=15
+                    #<FS:TS> The order of these is critical. When two things need signing and one is contained within the
+                    # other, they must be signed from the innermost out.
+                    things_to_sign = ['Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework',
+                                        'Resources/SLPlugin.app/Contents/Frameworks/DullahanHelper.app',
+                                        'Resources/SLPlugin.app',
+                                        'Resources/SLVoice',
+                                        'Resources/mac-crash-logger.app']
                     while (not signed) and (sign_attempts > 0):
                         try:
-                            sign_attempts-=1;
-                            self.run_command(
+                            sign_attempts-=1
+                            #<FS:TS> This is ugly as hell, but it's the only way to make sure that every dylib in the
+                            # entire package gets signed, as required for notarization. Apparently the --deep option
+                            # isn't sufficient any more. Don't ask me why.
+                            contents_dir = os.path.join(app_in_dmg, 'Contents')
+                            try:
+                                all_dylibs = subprocess.check_output(['find', contents_dir, '-name', '*.dylib', '-print'])
+                            except subprocess.CalledProcessError as err:
+                                sys.exit("failed to get list of dylib files")
+                            for dylib in all_dylibs.split('\n'):
+                                if dylib: # ignore any empty lines
+                                    self.run_command(
+                                       ['codesign', '--verbose', '--deep', '--force', '--option=runtime',
+                                        '--keychain', viewer_keychain, '--sign', identity,
+                                        dylib])
+                            for item in things_to_sign:
                                 # Note: See blurb above about names of keychains
-                               ['codesign', '--verbose', '--deep', '--force',
+                                sign_path = os.path.join(contents_dir, item)
+                                print "Signing %s" % sign_path
+                                self.run_command(
+                                   ['codesign', '--verbose', '--deep', '--force', '--option=runtime',
+                                    '--keychain', viewer_keychain, '--sign', identity,
+                                    sign_path])
+                            print "Signing main app bundle %s" % app_in_dmg
+                            self.run_command(
+                               ['codesign', '--verbose', '--deep', '--force', '--option=runtime',
                                 '--keychain', viewer_keychain, '--sign', identity,
                                 app_in_dmg])
                             signed=True # if no exception was raised, the codesign worked
@@ -2233,6 +2247,7 @@ if __name__ == "__main__":
     extra_arguments = [
         dict(name='bugsplat', description="""BugSplat database to which to post crashes,
              if BugSplat crash reporting is desired""", default=''),
+        dict(name='openal', description="""Indication openal libraries are needed""", default='OFF')
         ]
     try:
         main(extra=extra_arguments)

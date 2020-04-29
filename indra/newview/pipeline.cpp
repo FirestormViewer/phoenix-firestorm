@@ -8875,15 +8875,24 @@ void LLPipeline::renderDeferredLighting()
 						}
 					}
 
-					const LLViewerObject *vobj = drawablep->getVObj();
-					if((vobj && vobj->getAvatar() && (vobj->getAvatar()->isTooComplex() || vobj->getAvatar()->isInMuteList()))
-						|| (vobj && dist_vec(vobj->getPosition(), LLViewerCamera::getInstance()->getOrigin()) > RenderFarClip))
-					{
-						continue;
-					}
+                    const LLViewerObject *vobj = drawablep->getVObj();
+                    if (vobj)
+                    {
+                        LLVOAvatar *av = vobj->getAvatar();
+                        if (av && (av->isTooComplex() || av->isInMuteList()))
+                        {
+                            continue;
+                        }
+                    }
+
+                    const LLVector3 position = drawablep->getPositionAgent();
+                    if (dist_vec(position, LLViewerCamera::getInstance()->getOrigin()) > RenderFarClip + volume->getLightRadius())
+                    {
+                        continue;
+                    }
 
 					LLVector4a center;
-					center.load3(drawablep->getPositionAgent().mV);
+					center.load3(position.mV);
 					const F32* c = center.getF32ptr();
 					F32 s = volume->getLightRadius()*1.5f;
 

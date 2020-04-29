@@ -14,7 +14,7 @@
 		Opis:
 	</text>
 	<text name="uploader_label">
-		Załadował/a:
+		Przesłał/a:
 	</text>
  	<button label="Profil" name="openprofile"/>
 	<text name="upload_time_label">

@@ -334,6 +334,7 @@ public:
 								border_visible,
 								track_end,
 								read_only,
+								skip_link_underline,
 								spellcheck,
 								allow_scroll,
 								plain_text,
@@ -474,6 +475,8 @@ public:
 
 	S32						getVPad() { return mVPad; }
 	S32						getHPad() { return mHPad; }
+	F32						getLineSpacingMult() { return mLineSpacingMult; }
+	S32						getLineSpacingPixels() { return mLineSpacingPixels; } // only for multiline
 
 	S32						getDocIndexFromLocalCoord( S32 local_x, S32 local_y, BOOL round, bool hit_past_end_of_line = true) const;
 	LLRect					getLocalRectFromDocIndex(S32 pos) const;
@@ -481,6 +484,9 @@ public:
 
 	void					setReadOnly(bool read_only) { mReadOnly = read_only; }
 	bool					getReadOnly() { return mReadOnly; }
+
+	void					setSkipLinkUnderline(bool skip_link_underline) { mSkipLinkUnderline = skip_link_underline; }
+	bool					getSkipLinkUnderline() { return mSkipLinkUnderline;  }
 
 	void					setPlainText(bool value) { mPlainText = value;}
 	bool					getPlainText() const { return mPlainText; }
@@ -755,6 +761,8 @@ protected:
 	bool						mPlainText;			// didn't use Image or Icon segments
 	bool						mAutoIndent;
 	S32							mMaxTextByteLength;	// Maximum length mText is allowed to be in bytes
+
+	bool						mSkipLinkUnderline;
 
 	// support widgets
 	LLHandle<LLContextMenu>		mPopupMenuHandle;

@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Segnalazione crash" name="crash_reports">
     <check_box label="Invia segnalazione del crash a firestormviewer.org" name="checkSendCrashReports" />
-    <text label="Log:" name="textSaveMiniDumpType">
-        Tipo minidump:
-    </text>
-    <combo_box name="comboSaveMiniDumpType">
-        <combo_box.item name="Minimal" label="Minimo" />
-        <combo_box.item name="Default" label="Normale" />
-        <combo_box.item name="Extended" label="Esteso" />
-    </combo_box>
     <check_box label="Chiedi sempre prima di inviare" name="checkSendCrashReportsAlwaysAsk" />
     <check_box label="Include il file settings.xml" name="checkSendSettings" />
     <text name="textSendSettings">

@@ -392,10 +392,7 @@ void EnableCrashingOnCrashes()
 }
 #endif
 
-//void LLApp::setupErrorHandling(bool second_instance)
-// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-12 (Catznip-2.6.0a) | Added: Catznip-2.4.0a
-void LLApp::setupErrorHandling(bool second_instance, EMiniDumpType minidump_type)
-// [/SL:KB]
+void LLApp::setupErrorHandling(bool second_instance)
 {
 	// Error handling is done by starting up an error handling thread, which just sleeps and
 	// occasionally checks to see if the app is in an error state, and sees if it needs to be run.
@@ -434,23 +431,7 @@ void LLApp::setupErrorHandling(bool second_instance, EMiniDumpType minidump_type
 			for (; retries > 0; --retries)
 			{
 				if (mExceptionHandler != 0) delete mExceptionHandler;
-			// <FS:ND> Reapply patch from Catznip to allow different types of minidumps
-			U32 maskMiniDumpType = MiniDumpNormal | MiniDumpFilterModulePaths;
-			switch (minidump_type)
-			{
-				case MINIDUMP_MINIMAL:
-					maskMiniDumpType |= MiniDumpFilterMemory;
-				break;
-				case MINIDUMP_EXTENDED:
-					maskMiniDumpType |= MiniDumpWithDataSegs | MiniDumpWithIndirectlyReferencedMemory;
-					break;
-				case MINIDUMP_NORMAL:
-				default:
-					break;
-			}
-			// </FS:ND>
-
-
+				U32 maskMiniDumpType = MiniDumpNormal | MiniDumpFilterModulePaths;
 				mExceptionHandler = new google_breakpad::ExceptionHandler(
 															wdump_path,		
 															NULL,		//No filter

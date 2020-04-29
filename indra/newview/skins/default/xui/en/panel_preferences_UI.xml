@@ -689,13 +689,13 @@
 		 top_pad="4"
 		 follows="left|top"
 		 height="16"
-		 label="Show simulator channel in top menu"
+		 label="Show simulator version in top menu"
 		 left="20"
 		 name="FSStatusbarShowSimulatorVersion"
 		 enabled_control="ShowMenuBarLocation"
 		 width="270"
 		 control_name="FSStatusbarShowSimulatorVersion"
-		 tool_tip="Shows the current simulator channel (RC Magnum, RC Le Tigre, RC BlueSteel etc.) in the V1-like status bar."/>
+		 tool_tip="Shows the current simulator version in the V1-like status bar."/>
 		<check_box
 		 top_pad="4"
 		 follows="left|top"
@@ -808,7 +808,7 @@
 		 top_pad="2"
 		 follows="left|top"
 		 height="16"
-		 label="'Friends' and 'Groups' in 'Comm' menu opens the V5 based windows"
+		 label="'Friends' and 'Groups' in 'Comm' menu opens the [SHORT_VIEWER_GENERATION] based windows"
 		 name="FSUseV2Friends"
 		 width="270"
 		 control_name="FSUseV2Friends"

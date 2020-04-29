@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="Model Preview" title="Ładowanie modelu">
-  <string name="no_havok">ładowanie meszy z fizyką</string>
+<floater name="Model Preview" title="Przesyłanie modelu">
+  <string name="no_havok">przesyłanie meszy z fizyką</string>
   <string name="status_parse_error">Błąd: Problem z parsowaniem Dae, zobacz log.</string>
   <string name="status_bind_shape_orientation">Uwaga: Macierz powiązań kształtu nie jest w standardowej orientacji X-forward.</string>
   <string name="status_material_mismatch">Błąd: Materiał nie jest podzbiorem modelu referencyjnego.</string>
@@ -151,7 +151,7 @@
                     </text>
                 </panel>
         </panel>
-     <panel label="Opcje ładowania" name="modifiers_panel">
+     <panel label="Opcje przesyłania" name="modifiers_panel">
            <text name="scale_label">
              Skala (1=bez skali):
            </text>
@@ -187,7 +187,7 @@ Rozważ użycie innego punktu doczepienia, bliżej do pozycji obiektu na ciele.
     <panel name="weights_and_warning_panel">
        <button label="Przelicz wagi i opłatę" name="calculate_btn" tool_tip="Przelicz wagi i opłatę"/>
        <button label="Anuluj" name="cancel_btn"/>
-       <button label="Załaduj" name="ok_btn" tool_tip="Załaduj na serwer"/>
+       <button label="Prześlij" name="ok_btn" tool_tip="Prześlij na serwer"/>
        <button label="Wyczyść i zresetuj" name="reset_btn"/>
        <text name="upload_fee">
          Opłata: [FEE]L$
@@ -259,7 +259,7 @@ Analiza:
          UWAGA:
        </text>
        <text name="warning_message">
-         Nie masz uprawnień do ładowania modeli meszowych. [[VURL] Zobacz jak] uzyskać certyfikat.
+         Nie masz uprawnień do przesyłania modeli meszowych. [[VURL] Zobacz jak] uzyskać certyfikat.
        </text>
     </panel>
 </panel>

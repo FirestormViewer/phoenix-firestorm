@@ -125,10 +125,6 @@ std::string LLVersionInfo::getShortVersion()
 }
 
 
-	//<FS:TS> Same as above, with version number in Firestorm FSDATA
-	// format. Unlike the above, the channel name will always be the
-	// hardcoded version.
-	std::string sVersionChannelFS("");
 std::string LLVersionInfo::getChannelAndVersion()
 {
 	if (mVersionChannel.empty())
@@ -143,6 +139,7 @@ std::string LLVersionInfo::getChannelAndVersion()
 //<FS:TS> Get version and channel in the format needed for FSDATA.
 std::string LLVersionInfo::getChannelAndVersionFS()
 {
+	static std::string sVersionChannelFS;
 	if (sVersionChannelFS.empty())
 	{
 		// cache the version string
@@ -215,6 +212,11 @@ LLVersionInfo::ViewerMaturity LLVersionInfo::getViewerMaturity()
     return maturity;
 }
 
+std::string LLVersionInfo::getReleaseNotes()
+{
+	return mReleaseNotes;
+}
+
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-05-08 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
 const char* getBuildPlatformString()
 {
@@ -256,7 +258,8 @@ std::string LLVersionInfo::getBuildConfig()
     return build_configuration;
 }
 
-std::string LLVersionInfo::getReleaseNotes()
+//<FS:ND> return hash of HEAD
+std::string LLVersionInfo::getGitHash()
 {
-    return mReleaseNotes;
+	return LL_VIEWER_VERSION_GITHASH;
 }

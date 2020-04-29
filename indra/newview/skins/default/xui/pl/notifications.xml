@@ -165,7 +165,7 @@ Inicjalizacja Marketplace nieudana z powodu błędu sieci lub systemu. Spróbuj 
 		Problem w zapisywaniu danych animacji. Spróbuj ponownie za kilka minut.
 	</notification>
 	<notification name="UploadAuctionSnapshotFail">
-		W trakcie ładowania obrazu aukcji pojawił się problem z następującego powodu: [REASON].
+		W trakcie przesyłania obrazu aukcji pojawił się problem z następującego powodu: [REASON].
 	</notification>
 	<notification name="UnableToViewContentsMoreThanOne">
 		Nie można przeglądać zawartości więcej niż jednego obiektu naraz.
@@ -201,6 +201,9 @@ Czy chcesz dać prawa modyfikacji wybranym osobom?
 	<notification name="RevokeModifyRightsMultiple">
 		Czy chcesz odebrać prawa modyfikacji wybranym Rezydentom?
 		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>
+	</notification>
+	<notification name="GroupNameLengthWarning">
+		Nazwa grupy musi zawierać od [MIN_LEN] do [MAX_LEN] znaków.
 	</notification>
 	<notification name="UnableToCreateGroup">
 		Założenie grupy nie jest możliwe.
@@ -430,14 +433,17 @@ W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z narzędzia 
 	<notification name="ErrorPhotoCannotAfford">
 		Potrzebujesz [COST]L$ aby zapisać zdjęcie do swojej Szafy. Możesz zamiast tego kupić L$ lub zapisać zdjęcie na swoim komputerze.
 	</notification>
+	<notification name="ErrorCannotAffordUpload">
+		Potrzebujesz [COST]L$ aby przesłać ten element.
+	</notification>
 	<notification name="ErrorTextureCannotAfford">
 		Potrzebujesz [COST]L$ aby zapisać teksturę do swojej Szafy. Możesz zamiast tego kupić L$ lub zapisać teksturę na swoim komputerze.
 	</notification>
 	<notification name="ErrorUploadingPostcard">
-		W trakcie ładowania zdjęcia pojawił się problem z następującego powodu: [REASON]
+		W trakcie przesyłania zdjęcia pojawił się problem z następującego powodu: [REASON]
 	</notification>
 	<notification name="ErrorUploadingReportScreenshot">
-		W trakcie ładowania zdjęcia ekranu do raportu pojawił się problem z następującego powodu: [REASON]
+		W trakcie przesyłania zdjęcia ekranu do raportu pojawił się problem z następującego powodu: [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
 		Musisz zaakceptować Regulamin (Terms and Conditions), Politykę Prywatności (Privacy Policy) i Warunki korzystania z Usług (Terms of Service) by kontynuować logowanie się do [CURRENT_GRID].
@@ -469,10 +475,10 @@ Potrzebujesz konta aby się zalogować do [CURRENT_GRID]. Czy chcesz utworzyć j
 		Należy wprowadzić nazwę użytkownika lub imię oraz nazwisko Twojego awatara w pole nazwy użytkownika, a następnie ponownie się zalogować.
 	</notification>
 	<notification name="InvalidGrid">
-		'[GRID]' nie jest prawidłowym identyfikatorem siatki.
+		'[GRID]' nie jest prawidłowym identyfikatorem świata.
 	</notification>
 	<notification name="InvalidLocationSLURL">
-		Twój punkt startowy nie znajduje się na prawidłowej siatce.
+		Twój punkt startowy nie znajduje się w prawidłowym świecie.
 	</notification>
 	<notification name="DeleteClassified">
 		Usunąć reklamę &apos;[NAME]&apos;?
@@ -757,7 +763,7 @@ Upewnij się, że nazwa pliku ma poprawne rozszerzenie.
 Oczekiwane: [VALIDS]
 	</notification>
 	<notification name="CannotUploadSoundFile">
-		Nie można otworzyć załadowanego pliku dźwiękowego:
+		Nie można otworzyć przesłanego pliku dźwiękowego:
 [FILE]
 	</notification>
 	<notification name="SoundFileNotRIFF">
@@ -820,10 +826,10 @@ To może się zdarzyć, kiedy zmieniasz ustawienia sieci. Zrestartowanie Przegl�
 		Nie można utworzyć pliku wyjściowego: [FILE]
 	</notification>
 	<notification name="DoNotSupportBulkAnimationUpload">
-		[APP_NAME] obecnie nie wspomaga ładowania grupowego plików animacji w formacie BVH.
+		[APP_NAME] obecnie nie wspomaga przesyłania grupowego plików animacji w formacie BVH.
 	</notification>
 	<notification name="CannotUploadReason">
-		Ładowanie pliku [FILE] nie powiodło się z powodu: [REASON]
+		Przesyłanie pliku [FILE] nie powiodło się z powodu: [REASON]
 Spróbuj jeszcze raz później.
 	</notification>
 	<notification name="LandmarkCreated">
@@ -1379,6 +1385,13 @@ Jeżeli używasz [CURRENT_GRID] po raz pierwszy to musisz stworzyć konto żeby 
 Czy chcesz przejść na stronę [http://join.secondlife.com secondlife.com] żeby stworzyć nowe konto?
 		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Stwórz konto..."/>
 	</notification>
+	<notification name="LoginCantRemoveUsername">
+		Zapamiętany użytkownik może zostać zapomniany w Awatar &gt; Ustawienia &gt; Zaawansowane &gt; Zapamiętani użytkownicy.
+	</notification>
+	<notification name="LoginCantRemoveCurUsername">
+		Zapomnienie zalogowanego użytkownika wymaga jego wylogowania.
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Potwierdź i wyloguj się" />
+	</notification>
 	<notification name="LoginPacketNeverReceived">
 		Problemy z połączeniem. Problem może być spowodowany Twoim połączeniem z Internetem albo może istnieć po stronie [SECOND_LIFE_GRID].
 
@@ -1396,6 +1409,10 @@ Możesz sprawdzić swoje połączenie z Internetem i spróbować ponownie za kil
 			<button name="Help" text="Pomoc"/>
 		</form>
 	</notification>
+	<notification name="LoginRemoveMultiGridUserData">
+		Usuwane Dane Lokalne są współużytkowane przez wiele światów, czy na pewno chcesz je usunąć?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Potwierdź" />
+	</notification>
 	<notification name="WelcomeChooseSex">
 		Twoja postać pojawi się za moment.
 
@@ -1405,7 +1422,7 @@ Wybierz awatara właściwej płci. Ten wybór będzie można później zmienić.
 		<usetemplate name="okcancelbuttons" notext="Kobieta" yestext="Mężczyzna"/>
 	</notification>
 	<notification name="CantTeleportToGrid">
-		Nie można teleportować do [SLURL], ponieważ jest na innej siatce ([GRID]) niż obecna siatka ([CURRENT_GRID]). Proszę zamknąć przeglądarkę i spróbować ponownie.
+		Nie można teleportować do [SLURL], ponieważ jest w innym świecie ([GRID]) niż obecny ([CURRENT_GRID]). Proszę zamknąć przeglądarkę i spróbować ponownie.
 	</notification>
 	<notification name="GeneralCertificateError">
 		Połączenie z serwerem nie mogło zostać nawiązane.
@@ -1486,7 +1503,7 @@ Tekstura terenu [TEXTURE_NUM] jest za duża - [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y].
 Zamień teksturę [TEXTURE_NUM] na 24-bitową teksturę o wymiarze 1024x1024 lub mniejszą i ponownie kliknij na &quot;Zastosuj&quot;.
 	</notification>
 	<notification name="RawUploadStarted">
-		Ładowanie rozpoczęte. Może potrwać do dwóch minut zależnie od prędkości Twojego połączenia.
+		Przesyłanie rozpoczęte. Może potrwać do dwóch minut zależnie od prędkości Twojego połączenia.
 	</notification>
 	<notification name="ConfirmBakeTerrain">
 		Na pewno chcesz zapisać obecne ukształtowanie terenu jako punkt odniesienia dla górnego i dolnego limitu terenu oraz jako domyślną wartość dla opcji &apos;Odtwórz&apos;?
@@ -1643,7 +1660,7 @@ Chcesz ją opuścić?
 		Nie możesz opuścić tej grupy.
 	</notification>
 	<notification name="ConfirmKick">
-		Na pewno chcesz wyrzucić wszystkich Rezydentów z siatki?
+		Na pewno chcesz wyrzucić wszystkich Rezydentów ze świata?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Wyrzuć Rezydentów"/>
 	</notification>
 	<notification name="MuteLinden">
@@ -1705,6 +1722,17 @@ Wszystkie nadchodzące zaproszenia do grup będą automatycznie odrzucane. Nie b
 		Należysz już do maksymalnej ilości grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
 [NAME] oferuje Ci członkostwo w grupie.
 		<usetemplate name="okcancelbuttons" notext="Odmów" yestext="Przyjmij"/>
+	</notification>
+	<notification name="GroupLimitInfo">
+		Rezydenci z członkostwem podstawowym mogą dołączyć do [MAX_BASIC] grup.
+Członkostwo premium pozwala na [MAX_PREMIUM]. [https://secondlife.com/my/account/membership.php? Dowiedz się więcej]
+		<usetemplate name="okbutton" yestext="Zamknij" />
+	</notification>
+	<notification name="GroupLimitInfoPlus">
+		Rezydenci z członkostwem podstawowym mogą dołączyć do [MAX_BASIC] grup.
+Członkostwo premium pozwala na [MAX_PREMIUM]. Członkostwo
+Premium Plus pozwala na [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/membership.php? Dowiedz się więcej]
+		<usetemplate name="okbutton" yestext="Zamknij" />
 	</notification>
 	<notification name="JoinedTooManyGroups">
 		Należysz już do maksymalnej ilości grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
@@ -2347,13 +2375,13 @@ Chcesz wyłączyć Tryb Zajętości przed zakończeniem tej transakcji?
 		</form>
 	</notification>
 	<notification label="Działka odtwarza media" name="ParcelPlayingMedia">
-		Ta ziemia ma media:
+		Ta lokalizacja odtwarza media:
 [URL]
 Czy chcesz je odtworzyć?
 		<form name="form">
 			<ignore name="ignore" text="Zawsze wybieraj tę opcję dla tej ziemi."/>
 			<button ignore="Odtwarzaj media" name="Yes" text="Odtwarzaj"/>
-			<button ignore="Ignoruj media" name="No" text="Ignoruj"/>
+			<button ignore="Ignoruj media" name="No" text="Nie odtwarzaj"/>
 		</form>
 	</notification>
 	<notification name="ConfirmDeleteProtectedCategory">
@@ -2574,17 +2602,17 @@ Temat: [SUBJECT], Treść: [MESSAGE]
 		Nie możesz dodać siebie do listy wyjątków renderowania.
 	</notification>
 	<notification name="UploadingAuctionSnapshot">
-		Ładowanie obrazów z Internetu...
+		Przesyłanie obrazów...
 (Zajmuje około 5 minut.)
 	</notification>
 	<notification name="UploadPayment">
-		Ładowanie kosztowało [AMOUNT]L$.
+		Przesyłanie kosztowało [AMOUNT]L$.
 	</notification>
 	<notification name="UploadWebSnapshotDone">
-		Ładowanie obrazu z Internetu zakończone pomyślnie.
+		Przesyłanie obrazu do sieci zakończone pomyślnie.
 	</notification>
 	<notification name="UploadSnapshotDone">
-		Ładowanie zdjęcia zakończone pomyślnie.
+		Przesyłanie zdjęcia zakończone pomyślnie.
 	</notification>
 	<notification name="TerrainDownloaded">
 		Plik terrain.raw ściągnięty.
@@ -3278,19 +3306,19 @@ Wybierz Zablokuj żeby wyciszyć tą osobę.
 		Przepraszamy. Limit rozmów został przekroczony w tym obszarze. Spróbuj w innym miejscu.
 	</notification>
 	<notification name="VoiceChannelDisconnected">
-		[VOICE_CHANNEL_NAME] odłączył się. Przełączanie do rozmowy w czacie lokalnym.
+		[VOICE_CHANNEL_NAME] odłączył się. Przełączanie do rozmowy w czacie w pobliżu.
 	</notification>
 	<notification name="VoiceChannelDisconnectedP2P">
-		[VOICE_CHANNEL_NAME] skończył rozmowę. Przełączanie do rozmowy w czacie lokalnym.
+		[VOICE_CHANNEL_NAME] skończył rozmowę. Przełączanie do rozmowy w czacie w pobliżu.
 	</notification>
 	<notification name="P2PCallDeclined">
-		[VOICE_CHANNEL_NAME] odmówił połączenia. Przełączanie do rozmowy w czacie lokalnym.
+		[VOICE_CHANNEL_NAME] odmówił połączenia. Przełączanie do rozmowy w czacie w pobliżu.
 	</notification>
 	<notification name="P2PCallNoAnswer">
-		[VOICE_CHANNEL_NAME] nie odpowiada. Przełączanie do rozmowy w czacie lokalnym.
+		[VOICE_CHANNEL_NAME] nie odpowiada. Przełączanie do rozmowy w czacie w pobliżu.
 	</notification>
 	<notification name="VoiceChannelJoinFailed">
-		Brak połączenia z [VOICE_CHANNEL_NAME], spróbuj później. Przełączanie do rozmowy w czacie lokalnym.
+		Brak połączenia z [VOICE_CHANNEL_NAME], spróbuj później. Przełączanie do rozmowy w czacie w pobliżu.
 	</notification>
 	<notification name="VoiceEffectsExpired">
 		Subskrypcja jednego lub więcej Przekształceń Głosu wygasła.
@@ -3382,9 +3410,22 @@ Zostaną zablokowane na kilka sekund dla bezpieczeństwa.
 	<notification name="VoiceIsMutedByModerator">
 		Twoja rozmowa głosowa została wyciszona przez moderatora.
 	</notification>
+	<notification name="FailedToGetBenefits">
+		Niestety nie udało nam się uzyskać informacji o korzyściach dla tej sesji. Nie powinno się to zdarzyć w normalnym środowisku produkcyjnym. Skontaktuj się z pomocą techniczną. Ta sesja nie będzie działać normalnie i zalecamy restart.
+	</notification>
+	<notification name="BulkUploadCostConfirmation">
+		Spowoduje to przesłanie [COUNT] elementów o łącznym koszcie [COST]L$. Czy chcesz kontynuować przesyłanie?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Prześlij"/>
+	</notification>
+	<notification name="BulkUploadNoCompatibleFiles">
+		Wybranych plików nie można przesłać zbiorczo.
+	</notification>
+	<notification name="BulkUploadIncompatibleFiles">
+		Niektórych z wybranych plików nie można przesłać zbiorczo.
+	</notification>
 	<notification name="UploadCostConfirmation">
-		Załadowanie tego na serwer będzie kosztować [PRICE]L$, chcesz kontynuować?
-		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Załaduj"/>
+		Przesłanie tego na serwer będzie kosztować [PRICE]L$, chcesz kontynuować?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Prześlij"/>
 	</notification>
 	<notification name="ConfirmClearTeleportHistory">
 		Czy na pewno chcesz usunąć historię teleportacji?
@@ -3398,15 +3439,15 @@ Przycisk zostanie wyświetlony w przypadku dostatecznej ilości przestrzeni.
 		Zaznacz Rezydentów, z którymi chcesz się podzielić.
 	</notification>
 	<notification name="MeshUploadErrorDetails">
-		Nie można załadować [LABEL]: [MESSAGE]
+		Nie można przesłać [LABEL]: [MESSAGE]
 [DETAILS] Zobacz Firestorm.log, aby dowiedzieć się więcej.
 	</notification>
 	<notification name="MeshUploadError">
-		Nie można załadować [LABEL]: [MESSAGE]
+		Nie można przesłać [LABEL]: [MESSAGE]
 Zobacz Firestorm.log, aby dowiedzieć się więcej.
 	</notification>
 	<notification name="MeshUploadPermError">
-		Wystąpił błąd podczas pobierania uprawnień ładowania meszy.
+		Wystąpił błąd podczas pobierania uprawnień przesyłania meszy.
 	</notification>
 	<notification name="RegionCapabilityRequestError">
 		Nie udało się uzyskać zdolności regionu: &apos;[CAPABILITY]&apos;.
@@ -3518,14 +3559,14 @@ Awatar &apos;[NAME]&apos; pozostał w pełni załadowany.
 	</notification>
 	<notification name="AvatarRezSelfBakedTextureUploadNotification">
 		( [EXISTENCE] sekund w Second Life )
-Wstępnie przetworzone tekstury [RESOLUTION] dla &apos;[BODYREGION]&apos; zostały załadowane po [TIME] sekundach.
+Wstępnie przetworzone tekstury [RESOLUTION] dla &apos;[BODYREGION]&apos; zostały przesłane po [TIME] sekundach.
 	</notification>
 	<notification name="AvatarRezSelfBakedTextureUpdateNotification">
 		( [EXISTENCE] sekund w Second Life )
 Wstępnie przetworzone tekstury [RESOLUTION] zostały lokalnie zaktualizowane dla &apos;[BODYREGION]&apos; po [TIME] sekundach.
 	</notification>
 	<notification name="CannotUploadTexture">
-		Nie można załadować tekstury.
+		Nie można przesłać tekstury.
 [REASON]
 	</notification>
 	<notification name="LivePreviewUnavailable">
@@ -3773,12 +3814,12 @@ W innym przypadku możesz poszukać na mapie miejsc oznaczonych jako &quot;Infoh
 		<usetemplate name="okcancelignore" ignoretext="Potwierdzenie ustawiania debugowanego URL szukania" notext="Anuluj" />
 	</notification>
 	<notification name="ConfirmRemoveGrid">
-		Na pewno chcesz usunąć [REMOVE_GRID] z listy siatek?
-		<usetemplate ignoretext="Potwierdzenie usuwania siatki z listy siatek" name="okcancelignore" notext="Anuluj" />
+		Na pewno chcesz usunąć [REMOVE_GRID] z listy światów?
+		<usetemplate ignoretext="Potwierdzenie usuwania świata z listy światów" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="CanNotRemoveConnectedGrid">
-		Nie możesz usunąć siatki [REMOVE_GRID], gdy jesteś z nią połączony/a.
-		<usetemplate ignoretext="Ostrzeżenie przed usuwaniem siatki z aktywnym połączeniem" name="okcancelignore" notext="Anuluj" />
+		Nie możesz usunąć świata [REMOVE_GRID], gdy jesteś z nim połączony/a.
+		<usetemplate ignoretext="Ostrzeżenie przed usuwaniem świata z aktywnym połączeniem" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="FSWL" label="Aplikowanie ustawień Windlight">
 		&apos;[PARCEL_NAME]&apos;, własność [OWNER_NAME], chce zmienić ustawienia otoczenia systemu Windlight.
@@ -3893,7 +3934,7 @@ Na pewno chcesz zresetować wszystkie ustawienia?
 		Ustawienia zostaną zresetowane po zrestartowaniu [APP_NAME].
 	</notification>
 	<notification name="CantAddGrid">
-		Nie można dodać [GRID] do listy siatek.
+		Nie można dodać [GRID] do listy światów.
 [REASON] skontaktuj się ze wsparciem [GRID].
 	</notification>
 	<notification name="ParticleScriptFindFolderFailed">
@@ -3906,7 +3947,7 @@ Na pewno chcesz zresetować wszystkie ustawienia?
 		Nie można znaleźć nowo utworzonego skryptu dla tego systemu cząsteczkowego.
 	</notification>
 	<notification name="ParticleScriptCreateTempFileFailed">
-		Nie można utworzyć tymczasowego pliku skryptu do załadowania.
+		Nie można utworzyć tymczasowego pliku skryptu do przesłania.
 	</notification>
 	<notification name="ParticleScriptInjected">
 		Skrypt cząsteczkowy został wstawiony w obiekt poprawnie.
@@ -4460,7 +4501,7 @@ Spróbuj ponownie za minutę.
 		Sprecyzuj proszę swoje parametry usuwania.
 	</notification>
 	<notification name="UnableToUploadAsset">
-		Nie można załadować zasobu danych (assetu).
+		Nie można przesłać zasobu danych (assetu).
 	</notification>
 	<notification name="CantTeleportCouldNotFindUser">
 		Nie można znaleźć użytkownika, aby teleportować do domu
@@ -4472,7 +4513,7 @@ Spróbuj ponownie za minutę.
 		żądanie ogólne nie powiodło się
 	</notification>
 	<notification name="CantUploadPostcard">
-		Nie można załadować pocztówki. Spróbuj ponownie później.
+		Nie można przesłać pocztówki. Spróbuj ponownie później.
 	</notification>
 	<notification name="CantFetchInventoryForGroupNotice">
 		Nie można pobrać szczegółów dołączonego przedmiotu dla ogłoszenia grupy.
@@ -4487,7 +4528,7 @@ Spróbuj ponownie za minutę.
 		Nie można zanalizować przedmiotu z ogłoszenia.
 	</notification>
 	<notification name="TerrainUploadFailed">
-		Ładowanie podłoża na serwer nie powiodło się.
+		Przesyłanie podłoża na serwer nie powiodło się.
 	</notification>
 	<notification name="TerrainFileWritten">
 		Plik podłoża zapisany.
@@ -4868,9 +4909,9 @@ Nie można tego cofnąć.
 		</form>
 	</notification>
 	<notification name="ExodusFlickrVerificationExplanation">
-		Aby móc ładować zdjęcia na Flickr musisz autoryzować dostęp do konta dla [APP_NAME]. Jeśli kontynuujesz, to Twoja przeglądarka internetowa otworzy stronę Flickr, gdzie zostaniesz poproszony/a, aby autoryzować [APP_NAME]. Dostaniesz kod, który będzie trzeba wkleić w odpowiednie pole [APP_NAME].
+		Aby móc przesyłać zdjęcia na Flickr musisz autoryzować dostęp do konta dla [APP_NAME]. Jeśli kontynuujesz, to Twoja przeglądarka internetowa otworzy stronę Flickr, gdzie zostaniesz poproszony/a, aby autoryzować [APP_NAME]. Dostaniesz kod, który będzie trzeba wkleić w odpowiednie pole [APP_NAME].
 
-Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
+Czy chcesz autoryzować [APP_NAME] do przesyłania zdjęć na Flickr?
 		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>
 	</notification>
 	<notification name="ExodusFlickrVerificationPrompt">

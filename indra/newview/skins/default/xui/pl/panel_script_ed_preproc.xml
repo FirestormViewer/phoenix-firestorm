@@ -44,7 +44,7 @@
 		<layout_panel name="script_editor_buttons_panel">
 			<button tool_tip="Zapisz skrypt" name="save_btn"/>
 			<button tool_tip="Zewnętrzny edytor skryptów" name="Edit_btn"/>
-			<button tool_tip="Załaduj skrypt z twardego dysku komputera" name="load_disk_btn"/>
+			<button tool_tip="Prześlij skrypt z twardego dysku komputera" name="load_disk_btn"/>
 			<button tool_tip="Zapisz skrypt na dysk twardy komputera" name="save_disk_btn"/>
 			<button tool_tip="Wytnij" name="cut_btn"/>
 			<button tool_tip="Kopiuj" name="copy_btn"/>

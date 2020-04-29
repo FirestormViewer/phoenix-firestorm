@@ -15,6 +15,7 @@
 			<menu_item_call name="inventory_share" label="Udostępnij" />
 			<menu_item_call name="replace_links" label="Zastąp linki" />
 			<menu_item_call name="inventory_new_window" label="Nowe okno" />
+			<menu_item_check name="Protected Folders" label="Foldery chronione" />
 			<menu_item_check name="add_inv_toggle" label="Dodawaj obiekty po dwukliku" />
 			<menu_item_check name="add_invclothing_toggle" label="Dodawaj ubrania po dwukliku" />
 			<menu_item_call name="inventory_show_filters" label="Pokaż filtry" />

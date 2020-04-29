@@ -39,6 +39,7 @@
 
 #include "aoengine.h"			// ## Zi: Animation Overrider
 #include "llagent.h" //  Get state values from here
+#include "llagentbenefits.h"
 #include "llagentcamera.h"
 #include "llagentwearables.h"
 #include "llanimationstates.h"
@@ -624,9 +625,6 @@ F32 LLVOAvatar::sUnbakedTime = 0.f;
 F32 LLVOAvatar::sUnbakedUpdateTime = 0.f;
 F32 LLVOAvatar::sGreyTime = 0.f;
 F32 LLVOAvatar::sGreyUpdateTime = 0.f;
-//<FS:Beq> BOM bake limits
-S32 LLVOAvatar::sMaxBakes;
-//</FS:Beq>
 //-----------------------------------------------------------------------------
 // Helper functions
 //-----------------------------------------------------------------------------
@@ -737,12 +735,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 
 	mImpostorDistance = 0;
 	mImpostorPixelArea = 0;
-	//<FS:Beq> BOM constrain number of bake requests when BOM not supported
-	// BAKED_LEFT_ARM is equal to the pre-BOM BAKED_NUM_INDICES
-	sMaxBakes = gAgent.getRegion()->bakesOnMeshEnabled()?BAKED_NUM_INDICES:BAKED_LEFT_ARM;
-	//</FS:Beq>
 	setNumTEs(TEX_NUM_INDICES);
-
 	mbCanSelect = TRUE;
 
 	mSignaledAnimations.clear();
@@ -783,6 +776,47 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mVisuallyMuteSetting = FSAvatarRenderPersistence::instance().getAvatarRenderSettings(id);
 }
 
+//<FS:Beq> BOM constrain number of bake requests when BOM not supported
+S32 LLVOAvatar::getNumBakes() const 
+{
+#ifdef OPENSIM
+	// BAKED_LEFT_ARM is equal to the pre-BOM BAKED_NUM_INDICES
+	if(getRegion())
+	{
+		// LL_INFOS("BOMOS") 
+		// 				<< getFullname()
+		// 				<< "Using avatar region settings [" << getRegion()->getName() << "]"
+		// 				<< " bakesOnMesh = " << static_cast<const char *>(getRegion()->bakesOnMeshEnabled()?"True":"False")
+		// 				<< LL_ENDL;
+		return getRegion()->getRegionMaxBakes();
+	}
+	// LL_INFOS("BOMOS") 
+	// 				<< " Using fallback settings"
+	// 				<< " bakesOnMesh = " << static_cast<const char *>(LLGridManager::instance().isInSecondLife()?"True":"False")
+	// 				<< LL_ENDL;
+	// fallback, in SL assume BOM, elsewhere assume not.
+	return LLGridManager::instance().isInSecondLife()?BAKED_NUM_INDICES:BAKED_LEFT_ARM;
+#else
+	return BAKED_NUM_INDICES;
+#endif
+}
+
+// U8 LLVOAvatar::getNumTEs() const
+// {
+// #ifdef OPENSIM
+// 	// TEX_HEAD_UNIVERSAL_TATTOO is equal to the pre-BOM TEX_NUM_INDICES
+// 	if(!mTEImages){return 0;}
+// 	if(getRegion())
+// 	{
+// 		return getRegion()->getRegionMaxTEs();
+// 	}
+// 	// fallback, in SL assume BOM, elsewhere assume not.
+// 	return LLGridManager::instance().isInSecondLife()?TEX_NUM_INDICES:TEX_HEAD_UNIVERSAL_TATTOO;
+// #else
+// 	return TEX_NUM_INDICES;
+// #endif
+// }
+//</FS:Beq>
 std::string LLVOAvatar::avString() const
 {
     if (isControlAvatar())
@@ -870,8 +904,9 @@ BOOL LLVOAvatar::isFullyBaked()
 {
 	if (mIsDummy) return TRUE;
 	if (getNumTEs() == 0) return FALSE;
-
-	for (U32 i = 0; i < mBakedTextureDatas.size(); i++)
+	// <FS:Beq> OS BOM limit the tests to avoid "invalid face error"
+	// for (U32 i = 0; i < mBakedTextureDatas.size(); i++)
+	for (U32 i = 0; i < getNumBakes(); i++)
 	{
 		if (!isTextureDefined(mBakedTextureDatas[i].mTextureIndex)
 			&& ((i != BAKED_SKIRT) || isWearingWearableType(LLWearableType::WT_SKIRT))
@@ -927,9 +962,8 @@ BOOL LLVOAvatar::hasGray() const
 S32 LLVOAvatar::getRezzedStatus() const
 {
 	if (getIsCloud()) return 0;
-	bool textured = isFullyTextured();
-	if (textured && allBakedTexturesCompletelyDownloaded()) return 3;
-	if (textured) return 2;
+	if (isFullyTextured() && allBakedTexturesCompletelyDownloaded()) return 3;
+	if (isFullyTextured()) return 2;
 	llassert(hasGray());
 	return 1; // gray
 }
@@ -7875,20 +7909,7 @@ U32 LLVOAvatar::getNumAttachments() const
 //-----------------------------------------------------------------------------
 S32 LLVOAvatar::getMaxAttachments() const
 {
-	const S32 MAX_AGENT_ATTACHMENTS = 38;
-
-	S32 max_attach = MAX_AGENT_ATTACHMENTS;
-	
-	if (gAgent.getRegion())
-	{
-		LLSD features;
-		gAgent.getRegion()->getSimulatorFeatures(features);
-		if (features.has("MaxAgentAttachments"))
-		{
-			max_attach = features["MaxAgentAttachments"].asInteger();
-		}
-	}
-	return max_attach;
+	return LLAgentBenefitsMgr::current().getAttachmentLimit();
 }
 
 //-----------------------------------------------------------------------------
@@ -7922,24 +7943,7 @@ U32 LLVOAvatar::getNumAnimatedObjectAttachments() const
 //-----------------------------------------------------------------------------
 S32 LLVOAvatar::getMaxAnimatedObjectAttachments() const
 {
-    S32 max_attach = 0;
-    if (gSavedSettings.getBOOL("AnimatedObjectsIgnoreLimits"))
-    {
-        max_attach = getMaxAttachments(); 
-    }
-    else
-    {
-        if (gAgent.getRegion())
-        {
-            LLSD features;
-            gAgent.getRegion()->getSimulatorFeatures(features);
-            if (features.has("AnimatedObjects"))
-            {
-                max_attach = features["AnimatedObjects"]["MaxAgentAnimatedObjectAttachments"].asInteger();
-            }
-        }
-    }
-    return max_attach;
+	return LLAgentBenefitsMgr::current().getAnimatedObjectLimit();
 }
 
 //-----------------------------------------------------------------------------
@@ -8517,13 +8521,14 @@ bool LLVOAvatar::getIsCloud() const
 			);
 }
 
-void LLVOAvatar::updateRezzedStatusTimers(S32 rez_status)
+void LLVOAvatar::updateRezzedStatusTimers()
 {
 	// State machine for rezzed status. Statuses are -1 on startup, 0
 	// = cloud, 1 = gray, 2 = downloading, 3 = full.
 	// Purpose is to collect time data for each it takes avatar to reach
 	// various loading landmarks: gray, textured (partial), textured fully.
 
+	S32 rez_status = getRezzedStatus();
 	if (rez_status != mLastRezzedStatus)
 	{
 		LL_DEBUGS("Avatar") << avString() << "rez state change: " << mLastRezzedStatus << " -> " << rez_status << LL_ENDL;
@@ -8695,13 +8700,8 @@ void LLVOAvatar::logMetricsTimerRecord(const std::string& phase_name, F32 elapse
 // returns true if the value has changed.
 BOOL LLVOAvatar::updateIsFullyLoaded()
 {
-	S32 rez_status = getRezzedStatus();
-	bool loading = getIsCloud();
-	if (mFirstFullyVisible && !mIsControlAvatar && rez_status < 3)
-	{
-		loading = ((rez_status < 2) || !isFullyBaked());
-	}
-	updateRezzedStatusTimers(rez_status);
+	const bool loading = getIsCloud();
+	updateRezzedStatusTimers();
 	updateRuthTimer(loading);
 	return processFullyLoadedChange(loading);
 }
@@ -8737,22 +8737,13 @@ void LLVOAvatar::updateRuthTimer(bool loading)
 
 BOOL LLVOAvatar::processFullyLoadedChange(bool loading)
 {
-	// We wait a little bit before giving the 'all clear', to let things to
-	// settle down (models to snap into place, textures to get first packets)
-	const F32 LOADED_DELAY = 1.f;
-	const F32 FIRST_USE_DELAY = 3.f;
-
+	// we wait a little bit before giving the all clear,
+	// to let textures settle down
+	const F32 PAUSE = 1.f;
 	if (loading)
 		mFullyLoadedTimer.reset();
-
-	if (mFirstFullyVisible)
-	{
-		mFullyLoaded = (mFullyLoadedTimer.getElapsedTimeF32() > FIRST_USE_DELAY);
-	}
-	else
-	{
-		mFullyLoaded = (mFullyLoadedTimer.getElapsedTimeF32() > LOADED_DELAY);
-	}
+	
+	mFullyLoaded = (mFullyLoadedTimer.getElapsedTimeF32() > PAUSE);
 
 	if (!mPreviousFullyLoaded && !loading && mFullyLoaded)
 	{
@@ -9000,7 +8991,9 @@ void LLVOAvatar::updateMeshTextures()
 
 	mBakedTextureDebugText += llformat("%06d\n",update_counter++);
 	mBakedTextureDebugText += "indx layerset linvld ltda ilb ulkg ltid\n";
-	for (U32 i=0; i < mBakedTextureDatas.size(); i++)
+	// <FS:Beq> BOM OS
+	// for (U32 i=0; i < mBakedTextureDatas.size(); i++)
+	for (U32 i=0; i < getNumBakes(); i++)
 	{
 		is_layer_baked[i] = isTextureDefined(mBakedTextureDatas[i].mTextureIndex);
 		LLViewerTexLayerSet* layerset = NULL;
@@ -9048,8 +9041,10 @@ void LLVOAvatar::updateMeshTextures()
 										   use_lkg_baked_layer[i],
 										   last_id_string.c_str());
 	}
-
-	for (U32 i=0; i < mBakedTextureDatas.size(); i++)
+	// <FS:Beq> BOM OS
+	// for (U32 i=0; i < mBakedTextureDatas.size(); i++)
+	for (U32 i=0; i < getNumBakes(); i++)
+	// </FS:Beq>
 	{
 		debugColorizeSubMeshes(i, LLColor4::white);
 
@@ -9329,7 +9324,7 @@ void LLVOAvatar::releaseComponentTextures()
 
 	//<FS:Beq> BOM constrain number of bake requests when BOM not supported
 	// for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
-	for (U8 baked_index = 0; baked_index < sMaxBakes; baked_index++)
+	for (U8 baked_index = 0; baked_index < getNumBakes(); baked_index++)
 		//</FS:Beq>	
 	{
 		const LLAvatarAppearanceDictionary::BakedEntry * bakedDicEntry = LLAvatarAppearanceDictionary::getInstance()->getBakedTexture((EBakedTextureIndex)baked_index);
@@ -9912,7 +9907,12 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 	// prevent the overwriting of valid baked textures with invalid baked textures
 	for (U8 baked_index = 0; baked_index < mBakedTextureDatas.size(); baked_index++)
 	{
-		if (!isTextureDefined(mBakedTextureDatas[baked_index].mTextureIndex) 
+		// <FS:Beq> refactor a little to help debug
+		// if (!isTextureDefined(mBakedTextureDatas[baked_index].mTextureIndex) 
+		auto isDefined = isTextureDefined(mBakedTextureDatas[baked_index].mTextureIndex);
+		LL_DEBUGS("Avatar") << avString() << "sb " << (S32) isUsingServerBakes() << " baked_index " << (S32) baked_index << " textureDefined= " << isDefined << LL_ENDL;
+		if (!isDefined 
+		// </FS:Beq>
 			&& mBakedTextureDatas[baked_index].mLastTextureID != IMG_DEFAULT
 			&& baked_index != BAKED_SKIRT && baked_index != BAKED_LEFT_ARM && baked_index != BAKED_LEFT_LEG && baked_index != BAKED_AUX1 && baked_index != BAKED_AUX2 && baked_index != BAKED_AUX3)
 		{
@@ -9937,8 +9937,8 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 	BOOL is_first_appearance_message = !mFirstAppearanceMessageReceived;
 	mFirstAppearanceMessageReceived = TRUE;
 
-	//LL_DEBUGS("Avatar") << avString() << "processAvatarAppearance start " << mID
-    //                    << " first? " << is_first_appearance_message << " self? " << isSelf() << LL_ENDL;
+	// LL_DEBUGS("Avatar") << avString() << "processAvatarAppearance start " << mID
+    //                     << " first? " << is_first_appearance_message << " self? " << isSelf() << LL_ENDL;
 
 	if (is_first_appearance_message )
 	{
@@ -10066,7 +10066,7 @@ LLViewerTexture* LLVOAvatar::getBakedTexture(const U8 te)
 	//<FS:Beq> BOM constrain number of bake requests when BOM not supported
 	// prior to BOM BAKES beyond BAKED_HAIR were not supported.
 	// if (te < 0 || te >= BAKED_NUM_INDICES)
-	if (te < 0 || te >= sMaxBakes)
+	if (te < 0 || te >= getNumBakes())
 	//</FS:Beq>
 	{
 		return NULL;
@@ -10768,11 +10768,6 @@ void LLVOAvatar::removeMissingBakedTextures()
 //virtual
 void LLVOAvatar::updateRegion(LLViewerRegion *regionp)
 {
-	//<FS:Beq> BOM constrain number of bake requests when BOM not supported,
-	// TEX_HEAD_TATTOO and BAKED_LEFT_ARM are the first new entries
-	// TODO(Beq): We might need to force some kind off rebake here?
-	sMaxBakes = gAgent.getRegion()->bakesOnMeshEnabled()?BAKED_NUM_INDICES:BAKED_LEFT_ARM;
-	//</FS:Beq>
 	LLViewerObject::updateRegion(regionp);
 }
 
@@ -11415,7 +11410,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 	// <FS:Ansariel> Disable useless diagnostics
 	//static std::set<LLUUID> all_textures;
 
-	if (mVisualComplexityStale)
+    if (mVisualComplexityStale)
 	{
 		
 		// <FS:Ansariel> Show per-item complexity in COF
@@ -11429,7 +11424,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		hud_complexity_list_t hud_complexity_list;
 		//<FS:Beq> BOM constrain number of bake requests when BOM not supported
 		// for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
-		for (U8 baked_index = 0; baked_index < sMaxBakes; baked_index++)
+		for (U8 baked_index = 0; baked_index < getNumBakes(); baked_index++)
 		//</FS:Beq>
 		{
 		    const LLAvatarAppearanceDictionary::BakedEntry *baked_dict

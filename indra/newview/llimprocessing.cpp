@@ -1369,9 +1369,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                     {
                         LL_WARNS("Messaging") << "Malformed inventory offer from object" << LL_ENDL;
                         delete info;
-                        // <FS:Ansariel> Don't flash task icon
-                        //break;
-                        return; 
+                        break;
                     }
                     info->mType = (LLAssetType::EType) binary_bucket[0];
                     info->mObjectID = LLUUID::null;
@@ -2230,6 +2228,12 @@ void LLIMProcessing::requestOfflineMessagesCoro(std::string url)
     if (messages.emptyArray())
     {
         // Nothing to process
+        return;
+    }
+
+    if (gAgent.getRegion() == NULL)
+    {
+        LL_WARNS("Messaging") << "Region null while attempting to load messages." << LL_ENDL;
         return;
     }
 

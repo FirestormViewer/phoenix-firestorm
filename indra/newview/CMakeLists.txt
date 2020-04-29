@@ -173,6 +173,7 @@ set(viewer_SOURCE_FILES
     fsfloaterplacedetails.cpp
     fsfloaterposestand.cpp
     fsfloaterprofile.cpp
+    fsfloaterprotectedfolders.cpp
     fsfloaterradar.cpp
     fsfloatersearch.cpp
     fsfloaterstatistics.cpp
@@ -208,6 +209,7 @@ set(viewer_SOURCE_FILES
     fsradarentry.cpp
     fsradarlistctrl.cpp
     fsradarmenu.cpp
+    fsregioncross.cpp
     fsscriptlibrary.cpp
     fsscrolllistctrl.cpp
     fsslurlcommand.cpp
@@ -229,6 +231,7 @@ set(viewer_SOURCE_FILES
     llaisapi.cpp
     llagent.cpp
     llagentaccess.cpp
+    llagentbenefits.cpp
     llagentcamera.cpp
     llagentdata.cpp
     llagentlanguage.cpp
@@ -555,6 +558,7 @@ set(viewer_SOURCE_FILES
     llpanelface.cpp
     llpanelgenerictip.cpp
     llpanelgroup.cpp
+    llpanelgroupcreate.cpp
     llpanelgroupbulk.cpp
     llpanelgroupbulkban.cpp
     llpanelgroupexperiences.cpp
@@ -928,6 +932,7 @@ set(viewer_HEADER_FILES
     fsfloaterplacedetails.h
     fsfloaterposestand.h
     fsfloaterprofile.h
+    fsfloaterprotectedfolders.h
     fsfloaterradar.h
     fsfloatersearch.h
     fsfloaterstatistics.h
@@ -964,6 +969,7 @@ set(viewer_HEADER_FILES
     fsradarentry.h
     fsradarlistctrl.h
     fsradarmenu.h
+    fsregioncross.h
     fsscriptlibrary.h
     fsscrolllistctrl.h
     fsslurl.h
@@ -986,6 +992,7 @@ set(viewer_HEADER_FILES
     llaisapi.h
     llagent.h
     llagentaccess.h
+    llagentbenefits.h
     llagentcamera.h
     llagentdata.h
     llagentlanguage.h
@@ -1306,6 +1313,7 @@ set(viewer_HEADER_FILES
     llpanelface.h
     llpanelgenerictip.h
     llpanelgroup.h
+    llpanelgroupcreate.h
     llpanelgroupbulk.h
     llpanelgroupbulkimpl.h
     llpanelgroupbulkban.h
@@ -1780,6 +1788,9 @@ if (LINUX)
     endif( ND_CTAGS )
     # </FS:ND>
 
+    # <FS:ND> Get rid of memory limit exceeded for -fvar-tracking-assignments.
+    SET_SOURCE_FILES_PROPERTIES(llviewermenu.cpp PROPERTIES COMPILE_FLAGS -fno-var-tracking-assignments)
+    # </FS:ND>
 endif (LINUX)
 
 if (WINDOWS)
@@ -1971,6 +1982,10 @@ if (WINDOWS)
         LIST(APPEND viewer_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../tools/manifests/legacy.manifest)
     endif (ADDRESS_SIZE EQUAL 64)
     # </FS:Ansariel>
+
+    if (OPENAL)
+      LIST(APPEND viewer_LIBRARIES ${OPENAL_LIBRARIES})
+    endif (OPENAL)
 endif (WINDOWS)
 
 # Add the xui files. This is handy for searching for xui elements
@@ -2115,7 +2130,7 @@ endif (FMODEX)
 
 # <FS:Ansariel> Output device selection
 # set_source_files_properties(llstartup.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
-set_source_files_properties(llstartup.cpp llfloaterpreference.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
+set_source_files_properties(llstartup.cpp llfloaterpreference.cpp llfloaterabout.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
 # </FS:Ansariel>
 
 list(APPEND viewer_SOURCE_FILES ${viewer_HEADER_FILES})
@@ -2242,19 +2257,11 @@ if (WINDOWS)
     endif (ADDRESS_SIZE EQUAL 64)
 
     if (FMODSTUDIO)
-      if (ADDRESS_SIZE EQUAL 64)
-        list(APPEND COPY_INPUT_DEPENDENCIES
-           ${SHARED_LIB_STAGING_DIR}/Release/fmod64.dll
-           ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod64.dll
-           ${SHARED_LIB_STAGING_DIR}/Debug/fmodL64.dll
-          )
-      else (ADDRESS_SIZE EQUAL 64)
-        list(APPEND COPY_INPUT_DEPENDENCIES
-           ${SHARED_LIB_STAGING_DIR}/Release/fmod.dll
-           ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod.dll
-           ${SHARED_LIB_STAGING_DIR}/Debug/fmodL.dll
-          )
-      endif (ADDRESS_SIZE EQUAL 64)
+      list(APPEND COPY_INPUT_DEPENDENCIES
+         ${SHARED_LIB_STAGING_DIR}/Release/fmod.dll
+         ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod.dll
+         ${SHARED_LIB_STAGING_DIR}/Debug/fmodL.dll
+        )
     endif (FMODSTUDIO)
 
     if (FMODEX)
@@ -2264,6 +2271,13 @@ if (WINDOWS)
            ${SHARED_LIB_STAGING_DIR}/Debug/fmodexL.dll
           )
     endif (FMODEX)
+
+    if (OPENAL)
+        list(APPEND COPY_INPUT_DEPENDENCIES
+            ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/OpenAL32.dll
+            ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/alut.dll
+        )
+    endif (OPENAL)
 
     add_custom_command(
       OUTPUT  ${CMAKE_CFG_INTDIR}/copy_touched.bat
@@ -2285,6 +2299,7 @@ if (WINDOWS)
         --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
         --viewer_flavor=${ND_VIEWER_FLAVOR}
         --fmodversion=${FMODVERSION}
+        --openal=${OPENAL}
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
         stage_third_party_libs
@@ -2348,6 +2363,7 @@ if (WINDOWS)
           --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
           --viewer_flavor=${ND_VIEWER_FLAVOR}
           --fmodversion=${FMODVERSION}
+          --openal=${OPENAL}
         DEPENDS
             ${VIEWER_BINARY_NAME}
             ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2440,6 +2456,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${DBUSGLIB_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${FMODWRAPPER_LIBRARY} # must come after LLAudio
+    ${OPENAL_LIBRARIES}
     ${GLOD_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${JSONCPP_LIBRARIES}
@@ -2523,6 +2540,7 @@ endif (NOT ENABLE_MEDIA_PLUGINS)
         --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
         --viewer_flavor=${ND_VIEWER_FLAVOR}
         --fmodversion=${FMODVERSION}
+        --openal=${OPENAL}
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
         ${COPY_INPUT_DEPENDENCIES}
@@ -2548,6 +2566,7 @@ endif (NOT ENABLE_MEDIA_PLUGINS)
       --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
       --viewer_flavor=${ND_VIEWER_FLAVOR}
       --fmodversion=${FMODVERSION}
+      --openal=${OPENAL}
     DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
       ${COPY_INPUT_DEPENDENCIES}
@@ -2578,7 +2597,7 @@ if (DARWIN)
   set(MACOSX_BUNDLE_BUNDLE_NAME "Firestorm")
   set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}")
   set(MACOSX_BUNDLE_BUNDLE_VERSION "${VIEWER_SHORT_VERSION}${VIEWER_MACOSX_PHASE}${VIEWER_REVISION}")
-  set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2019 The Phoenix Firestorm Project, Inc.")
+  set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2020 The Phoenix Firestorm Project, Inc.")
   set(MACOSX_BUNDLE_NSMAIN_NIB_FILE "Firestorm.nib")
   set(MACOSX_BUNDLE_NSPRINCIPAL_CLASS "LLApplication")
 
@@ -2632,6 +2651,7 @@ if (DARWIN)
       --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
       --viewer_flavor=${ND_VIEWER_FLAVOR}
       --fmodversion=${FMODVERSION}
+      --openal=${OPENAL}
     DEPENDS
       ${VIEWER_BINARY_NAME}
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2668,6 +2688,7 @@ if (DARWIN)
           --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
           --viewer_flavor=${ND_VIEWER_FLAVOR}
           --fmodversion=${FMODVERSION}
+          --openal=${OPENAL}
           ${SIGNING_SETTING}
         DEPENDS
           ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2759,8 +2780,8 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
           "${VIEWER_SYMBOL_FILE_CYGWIN}"
           "-C"
           "${PARENT_DIRECTORY_CYGWIN}"
-          "secondlife-bin.pdb"
-        DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/secondlife-bin.pdb"
+          "firestorm-bin.pdb"
+        DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-bin.pdb"
         COMMENT "Packing viewer PDB into ${VIEWER_SYMBOL_FILE_CYGWIN}"
         )
       add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}" ${VIEWER_BINARY_NAME})

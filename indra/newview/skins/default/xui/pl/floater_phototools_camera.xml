@@ -65,7 +65,7 @@
 				</text>
 			</panel>
 			<panel name="P_Zoom">
-				<text name="T_Zoom" tool_tip="W prawdziwym świecie to jest funkcja powiększania (zoom) - zmieni pole widzenia w oknie przeglądarki. Działa tak samo, jak naciskanie Ctrl+0 lub Ctrl+8. UWAGA: Ta opcja nie będzie działać, gdy będzie włączona 'wolna kamera' (3D SpacenNavigator).">
+				<text name="T_Zoom" tool_tip="W prawdziwym świecie to jest funkcja powiększania (zoom) - zmieni pole widzenia w oknie przeglądarki. Działa tak samo, jak naciskanie Ctrl+0 lub Ctrl+8. UWAGA: Ta opcja nie będzie działać, gdy będzie włączona 'wolna kamera' (3D SpaceNavigator).">
 					Kąt widzenia
 				</text>
 				<button name="Reset_Camera_Angle" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>

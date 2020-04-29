@@ -346,9 +346,6 @@ public:
 	static BOOL		sJointDebug; // output total number of joints being touched for each avatar
 	static BOOL		sDebugAvatarRotation;
 	static LLPartSysData sCloud;
-	//<FS:Beq> BOM bake limits
-	static S32		sMaxBakes;
-	//</FS:Beq>
 
 	//--------------------------------------------------------------------
 	// Region state
@@ -361,13 +358,15 @@ public:
 	//--------------------------------------------------------------------
 public:
 	BOOL			isFullyLoaded() const;
-	bool 			isTooComplex() const;
+	virtual bool	isTooComplex() const; // <FS:Ansariel> FIRE-29012: Standalone animesh avatars get affected by complexity limit; changed to virtual
 	bool 			visualParamWeightsAreDefault();
 	virtual bool	getIsCloud() const;
 	BOOL			isFullyTextured() const;
 	BOOL			hasGray() const; 
 	S32				getRezzedStatus() const; // 0 = cloud, 1 = gray, 2 = textured, 3 = textured and fully downloaded.
-	void			updateRezzedStatusTimers(S32 status);
+	void			updateRezzedStatusTimers();
+	S32 			getNumBakes() const;//<FS:Beq/> BOM bake limits
+	// U8 				getNumTEs() const override;//<FS:Beq/> BOM bake limits
 
 	S32				mLastRezzedStatus;
 

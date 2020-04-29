@@ -90,7 +90,7 @@ typedef enum {
 
 // exported symbols
 extern bool gAgentMovementCompleted;
-extern S32  gMaxAgentGroups;
+extern S32  gMaxAgentGroups; // <FS:Ansariel> OpenSim legacy economy support
 extern LLPointer<LLViewerTexture> gStartTexture;
 
 class LLStartUp
@@ -125,6 +125,7 @@ public:
 	static void saveInitialOutfit();
 
 	static std::string& getInitialOutfitName();
+	static std::string getUserId();
 	
 	static bool dispatchURL();
 		// if we have a SLURL or sim string ("Ahern/123/45") that started

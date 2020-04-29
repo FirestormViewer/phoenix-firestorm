@@ -112,7 +112,8 @@ public:
 	/// get the release-notes URL, once it becomes available -- until then,
 	/// return empty string
 	std::string getReleaseNotes();
-
+	
+	static std::string getGitHash();
 private:
 	std::string version;
 	std::string short_version;

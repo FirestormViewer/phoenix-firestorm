@@ -44,6 +44,8 @@
 #include "llbbox.h"
 #include "llrigginginfo.h"
 
+#include "fsregioncross.h" // <FS:JN> Improved region crossing support
+
 class LLAgent;			// TODO: Get rid of this.
 class LLAudioSource;
 class LLAudioSourceVO;
@@ -921,6 +923,8 @@ private:
 	LLUUID mAttachmentItemID; // ItemID of the associated object is in user inventory.
 	EObjectUpdateType	mLastUpdateType;
 	BOOL	mLastUpdateCached;
+
+	RegionCrossExtrapolate mExtrap; // <FS:JN> improved extrapolator
 
 	// <FS:Techwolf Lupindo> export
 public:

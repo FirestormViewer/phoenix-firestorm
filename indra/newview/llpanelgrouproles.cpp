@@ -2136,7 +2136,9 @@ BOOL LLPanelGroupRolesSubTab::postBuildSubTab(LLView* root)
 	mRolesList->setCommitOnSelectionChange(TRUE);
 	mRolesList->setCommitCallback(onRoleSelect, this);
 
-	mAssignedMembersList->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+	// <FS:Ansariel> Special Firestorm menu also allowing multi-select action
+	//mAssignedMembersList->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+	mAssignedMembersList->setContextMenu(&gFSNameListAvatarMenu);
 
 	mMemberVisibleCheck->setCommitCallback(onMemberVisibilityChange, this);
 
@@ -2968,7 +2970,9 @@ BOOL LLPanelGroupActionsSubTab::postBuildSubTab(LLView* root)
 
 	mActionList->setCommitOnSelectionChange(TRUE);
 	mActionList->setCommitCallback(boost::bind(&LLPanelGroupActionsSubTab::handleActionSelect, this));
-	mActionList->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+	// <FS:Ansariel> Special Firestorm menu also allowing multi-select action
+	//mActionList->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+	mActionMembers->setContextMenu(&gFSNameListAvatarMenu);
 
 	update(GC_ALL);
 

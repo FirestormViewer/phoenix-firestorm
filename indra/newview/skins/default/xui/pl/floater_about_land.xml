@@ -374,11 +374,11 @@ teksturę:
 				Obiekty używające tej tekstury będą wyświetlały film lub stronę internetową po naciśnięciu przycisku odtwarzania. Wybierz miniaturę, jeśli chcesz zmienić teksturę.
 			</text>
 			<check_box label="Skaluj automatycznie" name="media_auto_scale" tool_tip="Wybranie tej opcji dobierze rozmiar zawartości mediów dla tej działki automatycznie. Może to mieć znaczący wpływ na jakość odtwarzanego materiału - może on być odtwarzany wolniej i w gorszej jakości, ale żadne dalsze działania nie będą potrzebne."/>
-			<text name="media_size" tool_tip="Rozmiar dla ładowania mediów internetowych. Zostaw 0 dla ustawień domyślnych.">
+			<text name="media_size" tool_tip="Rozmiar dla przesyłanych mediów internetowych. Zostaw 0 dla ustawień domyślnych.">
 				Rozmiar:
 			</text>
-			<spinner name="media_size_width" tool_tip="Rozmiar dla ładowania mediów internetowych. Zostaw 0 dla ustawień domyślnych."/>
-			<spinner name="media_size_height" tool_tip="Rozmiar dla ładowania mediów internetowych. Zostaw 0 dla ustawień domyślnych."/>
+			<spinner name="media_size_width" tool_tip="Rozmiar dla przesyłanych mediów internetowych. Zostaw 0 dla ustawień domyślnych."/>
+			<spinner name="media_size_height" tool_tip="Rozmiar dla przesyłanych mediów internetowych. Zostaw 0 dla ustawień domyślnych."/>
 			<text name="pixels">
 				pikseli
 			</text>

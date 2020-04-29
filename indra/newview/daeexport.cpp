@@ -640,7 +640,14 @@ void DAESaver::addPolygons(daeElement* mesh, const char* geomID, const char* mat
 		domInputLocalOffset* input = daeSafeCast<domInputLocalOffset>(polylist->add("input"));
 		input->setSemantic("TEXCOORD");
 		input->setOffset(0);
-		input->setSource(llformat("#%s-%s", geomID, "map0").c_str());
+		if(gSavedSettings.getBOOL("DAEExportSingleUVMap"))
+		{
+			input->setSource(llformat("#%s-%s", "unified", "map0").c_str());
+		}
+		else
+		{
+			input->setSource(llformat("#%s-%s", geomID, "map0").c_str());
+		}
 	}
 
 	// Save indices
@@ -778,7 +785,7 @@ bool DAESaver::saveDAE(std::string filename)
 	}
 
 	S32 prim_nr = 0;
-
+	
 	for (obj_info_t::iterator obj_iter = mObjects.begin(); obj_iter != mObjects.end(); ++obj_iter)
 	{
 		LLViewerObject* obj = obj_iter->first;
@@ -797,6 +804,7 @@ bool DAESaver::saveDAE(std::string filename)
 		std::vector<F32> normal_data;
 		std::vector<F32> uv_data;
 		bool applyTexCoord = gSavedSettings.getBOOL("DAEExportTextureParams");
+		bool consolidateUVMap = gSavedSettings.getBOOL("DAEExportSingleUVMap");
 
 		S32 num_faces = obj->getVolume()->getNumVolumeFaces();
 		for (S32 face_num = 0; face_num < num_faces; face_num++)
@@ -853,7 +861,15 @@ bool DAESaver::saveDAE(std::string filename)
 
 		addSource(mesh, llformat("%s-%s", geomID, "positions").c_str(), "XYZ", position_data);
 		addSource(mesh, llformat("%s-%s", geomID, "normals").c_str(), "XYZ", normal_data);
-		addSource(mesh, llformat("%s-%s", geomID, "map0").c_str(), "ST", uv_data);
+		if(consolidateUVMap)
+		{
+			addSource(mesh, llformat("%s-%s", "unified", "map0").c_str(), "ST", uv_data);
+		}
+		else
+		{
+			addSource(mesh, llformat("%s-%s", geomID, "map0").c_str(), "ST", uv_data);
+		}
+		
 
 		// Add the <vertices> element
 		{

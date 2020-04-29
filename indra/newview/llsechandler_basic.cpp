@@ -1274,8 +1274,9 @@ void LLSecAPIBasicHandler::init()
 															"bin_conf.dat");
 		mLegacyPasswordPath = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "password.dat");
 	
-		mProtectedDataFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,
-															"bin_conf.dat");	
+		// <FS:Testy> Duplicate line
+		//mProtectedDataFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,
+		//													"bin_conf.dat");
 		std::string store_file = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,
 														"CA.pem");
 		
@@ -1674,6 +1675,19 @@ bool LLSecAPIBasicHandler::hasCredentialMap(const std::string& storage, const st
     LLSD credential = getProtectedData(storage, grid);
 
     return credential.isMap();
+}
+
+// returns true if map is empty or does not exist
+bool LLSecAPIBasicHandler::emptyCredentialMap(const std::string& storage, const std::string& grid)
+{
+    if (storage == DEFAULT_CREDENTIAL_STORAGE)
+    {
+        LL_ERRS() << "Storing maps in default, single-items storage is not allowed" << LL_ENDL;
+    }
+
+    LLSD credential = getProtectedData(storage, grid);
+
+    return !credential.isMap() || credential.size() == 0;
 }
 
 // Load map of credentials from specified credential store, given the grid

@@ -197,46 +197,6 @@
           </map>
         </map>
       </map>
-      <key>slvoice_os</key>
-      <map>
-        <key>copyright</key>
-        <string>2010 Vivox, including audio coding using Polycom¨ Siren14TM (ITU-T Rec. G.722.1 Annex C)</string>
-        <key>description</key>
-        <string>Vivox SDK components compatible with OpenSim</string>
-        <key>license</key>
-        <string>Mixed</string>
-        <key>license_file</key>
-        <string>LICENSES/slvoice_os.txt</string>
-        <key>name</key>
-        <string>slvoice_os</string>
-        <key>platforms</key>
-        <map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>8d0a31f4653202cbd5ea1711be47e669</string>
-              <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/slvoice_os-4.6.0017.22050.302004-windows-302004.tar.bz2</uri>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-          <key>darwin64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>d5673fc7ad1ec9595a9b97537681e060</string>
-              <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/slvoice_os-4.6.0017.22050.302004-darwin-302004.tar.bz2</uri>
-            </map>
-            <key>name</key>
-            <string>darwin64</string>
-          </map>
-        </map>
-      </map>
       <key>discord-rpc</key>
       <map>
         <key>copyright</key>
@@ -1070,11 +1030,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d892f61440dd1888327d764b04158c88</string>
+              <string>b5b6897fb6f5413f3396b0666a6422ab</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.00.05-darwin-192862021.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.00.08-darwin-201031332.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1084,11 +1044,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4bf66af7313c2a859bde553a563698e3</string>
+              <string>aed9fbd15995e71f9b600eb2ed2b73b1</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.00.05-linux64-192862026.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.00.08-linux64-201031328.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1098,11 +1058,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c668bd6961489c9bd6f07f1203a9d6eb</string>
+              <string>670b2dc83403cc9024bc68728d851a4d</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.05-windows-192861134.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.08-windows-200921513.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1112,18 +1072,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2cf52c44f8943f69b91c950ae7ea356a</string>
+              <string>b97c88e262d37dd1514c0e580a8cc775</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.05-windows64-192861136.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.08-windows64-200921514.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.00.05</string>
+        <string>2.00.08</string>
       </map>
       <key>fmodex</key>
       <map>
@@ -3626,9 +3586,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>175b1f90cd3679a2a64ad948dae3f2fa</string>
+              <string>e5a4261599f47045428b520b20405022</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/44332/391669/vlc_bin-2.2.8.531366-darwin64-531366.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/vlc_bin-3.0.8.200601940-darwin64-200601940.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3871,9 +3831,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
     <key>package_description</key>
     <map>
       <key>canonical_repo</key>
-      <string>https://bitbucket.org/lindenlab/viewer-release</string>
+      <string>https://bitbucket.org/lindenlab/viewer</string>
       <key>copyright</key>
-      <string>Copyright (c) 2019, The Phoenix Firestorm Project, Inc.</string>
+      <string>Copyright (c) 2020, The Phoenix Firestorm Project, Inc.</string>
       <key>description</key>
       <string>Firestorm Viewer</string>
       <key>license</key>

@@ -82,9 +82,7 @@
 
 
 // <FS:Ansariel> [Legacy Bake]
-#ifdef OPENSIM
 #include "llviewernetwork.h"
-#endif
 // </FS:Ansariel> [Legacy Bake]
 
 #if LL_MSVC
@@ -1258,11 +1256,32 @@ void LLVOAvatarSelf::removeMissingBakedTextures()
 		// </FS:Ansariel> [Legacy Bake]
 	}
 }
+// <FS:Beq> Check whether the BOM capability is different to last time we changed region (even across login)
+void LLVOAvatarSelf::checkBOMRebakeRequired()
+{
+	if(!getRegion())
+	{
+		auto newBOMStatus = getRegion()->bakesOnMeshEnabled();
+		if(!gSavedSettings.getBOOL("CurrentlyUsingBakesOnMesh") != newBOMStatus)
+		{
+			// force a rebake when the last grid we were on (including previous login) had different BOM support
+			// This replicates forceAppearanceUpdate rather than pulling in the whole of llavatarself.
+			if(!LLGridManager::instance().isInSecondLife())
+			{
+				doAfterInterval(boost::bind(&LLVOAvatarSelf::forceBakeAllTextures,	gAgentAvatarp.get(), true), 5.0);
+			}
+			// update the setting even if we are in SL so that switch SL to OS and back 
+			gSavedSettings.setBOOL("CurrentlyUsingBakesOnMesh", newBOMStatus);
+		}
+	}
+}
+// </FS:Beq>
 
 void LLVOAvatarSelf::onSimulatorFeaturesReceived(const LLUUID& region_id)
 {
 	LL_INFOS("Avatar") << "simulator features received, setting hover based on region props" << LL_ENDL;
 	setHoverIfRegionEnabled();
+	checkBOMRebakeRequired();// <FS:Beq/> BOM we may have stale cache, rebake may be needed
 }
 
 //virtual
@@ -1289,6 +1308,7 @@ void LLVOAvatarSelf::updateRegion(LLViewerRegion *regionp)
 		if (regionp->simulatorFeaturesReceived())
 		{
 			setHoverIfRegionEnabled();
+			checkBOMRebakeRequired();// <FS:Beq/> BOM we may have stale cache, rebake may be needed
 		}
 		else
 		{
@@ -3186,7 +3206,7 @@ LLViewerTexLayerSet* LLVOAvatarSelf::getLayerSet(EBakedTextureIndex baked_index)
                        return mHeadLayerSet; */
 	// <FS:Beq> BOM fallback support for OpenSim legacy
     //    if (baked_index >= 0 && baked_index < BAKED_NUM_INDICES)
-       if (baked_index >= 0 && baked_index < LLVOAvatar::sMaxBakes)
+       if (baked_index >= 0 && baked_index < getNumBakes())
 	//</FS:Beq>
        {
 		   return  getTexLayerSet(baked_index);
@@ -3278,7 +3298,18 @@ bool LLVOAvatarSelf::sendAppearanceMessage(LLMessageSystem *mesgsys) const
 	{
 		const ETextureIndex index = iter->first;
 		const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = iter->second;
-		if (!texture_dict->mIsBakedTexture)
+		// <FS:Beq> hide the surplus bakes and universals from non-BOM
+		// if (!texture_dict->mIsBakedTexture)
+		if( (index == TEX_SKIRT || index == TEX_SKIRT_TATTOO) && !gAgentAvatarp->isWearingWearableType(LLWearableType::WT_SKIRT) )
+		{
+			// TODO(BEQ): combine this with clause below once proven it works.
+			LL_DEBUGS("Avatar") << "Ignoring skirt related texture at index=" << index << LL_ENDL;
+			LLTextureEntry &entry = getTEref((U8) index);
+			texture_id[index] = entry.getID();
+			entry.setID(IMG_DEFAULT_AVATAR);
+		}
+		if (!texture_dict->mIsBakedTexture || index >= getRegion()->getRegionMaxTEs())
+		// </FS:Beq>
 		{
 			LLTextureEntry &entry = getTEref((U8) index);
 			texture_id[index] = entry.getID();
@@ -3311,7 +3342,7 @@ bool LLVOAvatarSelf::sendAppearanceMessage(LLMessageSystem *mesgsys) const
 	//}
 	// </ClientTag>
 
-	
+
 	bool success = packTEMessage(mesgsys);
 
 	// unpack TEs to make sure we don't re-trigger a bake
@@ -3321,7 +3352,10 @@ bool LLVOAvatarSelf::sendAppearanceMessage(LLMessageSystem *mesgsys) const
 	{
 		const ETextureIndex index = iter->first;
 		const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = iter->second;
-		if (!texture_dict->mIsBakedTexture)
+		// <FS:Beq> hide the surplus bakes and universals from non-BOM
+		// if (!texture_dict->mIsBakedTexture)
+		if (!texture_dict->mIsBakedTexture || index >= getRegion()->getRegionMaxTEs())
+		// </FS:Beq>
 		{
 			LLTextureEntry &entry = getTEref((U8) index);
 			entry.setID(texture_id[index]);
@@ -3513,7 +3547,9 @@ void LLVOAvatarSelf::requestLayerSetUpload(LLAvatarAppearanceDefines::EBakedText
 // virtual
 bool LLVOAvatarSelf::hasPendingBakedUploads() const
 {
-	for (U32 i = 0; i < mBakedTextureDatas.size(); i++)
+	// <FS:Beq> BOMOS constrain uploads for non-BOM.
+	// for (U32 i = 0; i < mBakedTextureDatas.size(); i++)
+	for (U32 i = 0; i < getNumBakes(); i++)
 	{
 		LLViewerTexLayerSet* layerset = getTexLayerSet(i);
 		if (layerset && layerset->getViewerComposite() && layerset->getViewerComposite()->uploadPending())

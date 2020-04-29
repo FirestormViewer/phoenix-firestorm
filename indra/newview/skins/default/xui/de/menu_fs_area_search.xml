@@ -11,4 +11,7 @@
 	<menu_item_call label="Löschen" name="delete_object"/>
 	<menu_item_call label="Zur Blacklist hinzufügen" name="blacklist_object"/>
 	<menu_item_call label="Objekt kaufen" name="object_buy"/>
+	<menu_item_call label="Eigene Objekte filtern" name="filter_my_objects" />
+	<menu_item_call label="Alles auswählen" name="select_all" />
+	<menu_item_call label="Auswahl aufheben" name="clear_selection" />
 </context_menu>

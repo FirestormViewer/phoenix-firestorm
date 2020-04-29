@@ -2563,8 +2563,8 @@ URL: [MEDIAURL]
 	<notification name="AudioAlert">
 		Этот участок предоставляет музыку из:
 
-Домен: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Домен: [AUDIODOMAIN]
+URL: [AUDIOURL]
 		<form name="form">
 			<button name="Allow" text="Разрешить"/>
 			<button name="Deny" text="Запретить"/>
@@ -2573,8 +2573,8 @@ URL: [MEDIAURL]
 	<notification name="AudioAlert2">
 		Вы хотите запомнить ваш выбор и [LCONDITION] позволить музыку из этого источника?
 
-Домен: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Домен: [AUDIODOMAIN]
+URL: [AUDIOURL]
 		<form name="form">
 			<button name="Do Now" text="[ACTION] Сейчас"/>
 			<button name="RememberDomain" text="[CONDITION] Разрешить этому домену"/>
@@ -2584,8 +2584,8 @@ URL: [MEDIAURL]
 	<notification name="AudioAlertSingle">
 		Вы хотите запомнить ваш выбор и [LCONDITION] позволить музыку из этого источника?
 
-Домен: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Домен: [AUDIODOMAIN]
+URL: [AUDIOURL]
 		<form name="form">
 			<button name="Allow" text="Разрешить"/>
 			<button name="Deny" text="Запретить"/>
