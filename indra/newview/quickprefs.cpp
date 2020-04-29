@@ -61,9 +61,6 @@
 #include "rlvhandler.h"
 #include <boost/foreach.hpp>
 
-const S32 FLOATER_QUICKPREFS_UPDATE(-5);
-const S32 FLOATER_PHOTOTOOLS_UPDATE(-6);
-
 std::string unescape_name(const std::string& name);
 class FSSettingsCollector : public LLInventoryCollectFunctor
 {
