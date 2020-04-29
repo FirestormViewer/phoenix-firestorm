@@ -792,7 +792,6 @@ void FloaterQuickPrefs::onClickResetToRegionDefault()
 void FloaterQuickPrefs::setSelectedSky(const std::string& preset_name)
 {
 	mWLPresetsCombo->setValue(LLSD(preset_name));
-	mDayCyclePresetsCombo->setValue(LLSD(PRESET_NAME_NONE));
 }
 
 void FloaterQuickPrefs::setSelectedWater(const std::string& preset_name)
