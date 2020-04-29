@@ -3048,7 +3048,7 @@ Your current position: [AVATAR_POS]
   <string name="PS_Arms_upward_Legs_apart">Arms upward, Legs apart</string>
   <string name="PS_Arms_upward_Legs_together">Arms upward, Legs together</string>
   
-  <string name="QP_WL_Region_Default">Region default</string>
+  <string name="QP_WL_Region_Default">Shared Environment</string>
   <string name="QP_WL_Day_Cycle_Based">Day cycle based</string>
   <string name="QP_WL_None">None</string>
 

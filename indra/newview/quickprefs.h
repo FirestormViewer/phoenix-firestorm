@@ -30,8 +30,8 @@
 #ifndef QUICKPREFS_H
 #define QUICKPREFS_H
 
+#include "llenvironment.h"
 #include "lltransientdockablefloater.h"
-//#include "llwlparamset.h" // [EEPMERGE]
 #include "rlvdefines.h"
 
 const std::string PHOTOTOOLS_FLOATER = "phototools";
@@ -67,9 +67,6 @@ private:
 	FloaterQuickPrefs(const LLSD& key);
 	~FloaterQuickPrefs();
 
-    void onDayOffset();
-	void onSunMoved();
-
 	void selectSkyPreset(const LLSD& preset);
 	void selectWaterPreset(const LLSD& preset);
 	void selectDayCyclePreset(const LLSD& preset);
@@ -98,12 +95,8 @@ private:
 	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
 	void enableWindlightButtons(BOOL enable);
 
-    void updateSun();
-    void updateDayOffset();
-
 public:
 	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void draw();
 	virtual void onOpen(const LLSD& key);
 
 	void setSelectedSky(const std::string& preset_name);
@@ -119,9 +112,7 @@ public:
 
 private:
 
-    // Windlight controls
-	LLMultiSliderCtrl*	mWLDayOffset;
-    LLVirtualTrackball* mWLSunRot;
+	// Windlight controls
 	LLComboBox*			mWLPresetsCombo;
 	LLComboBox*			mWaterPresetsCombo;
 	LLComboBox*			mDayCyclePresetsCombo;
@@ -160,6 +151,11 @@ private:
 	
 	LLSliderCtrl*		mMaxComplexitySlider;
 	LLTextBox*			mMaxComplexityLabel;
+
+	LLSettingsSky::ptr_t		mLiveSky;
+	LLSettingsWater::ptr_t		mLiveWater;
+	LLSettingsDay::ptr_t		mLiveDay;
+	LLEnvironment::connection_t	mEnvChangedConnection;
 
 	// Vignette UI callbacks
 	void onChangeVignetteX();
