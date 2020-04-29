@@ -41,12 +41,10 @@ class LLComboBox;
 class LLLayoutPanel;
 class LLLayoutStack;
 class LLLineEditor;
-class LLMultiSliderCtrl;
 class LLSlider;
 class LLSliderCtrl;
 class LLSpinCtrl;
 class LLTextBox;
-class LLVirtualTrackball;
 
 #define PRESET_NAME_REGION_DEFAULT "__Regiondefault__"
 #define PRESET_NAME_DAY_CYCLE "__Day_Cycle__"

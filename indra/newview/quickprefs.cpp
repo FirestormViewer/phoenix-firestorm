@@ -47,9 +47,7 @@
 #include "llfloaterreg.h"
 #include "llinventoryfunctions.h"
 #include "lllayoutstack.h"
-#include "llmultisliderctrl.h"
 #include "llnotificationsutil.h"
-#include "llsettingsvo.h"
 #include "llsliderctrl.h"
 #include "llspinctrl.h"
 #include "lltoolbarview.h"
@@ -57,9 +55,7 @@
 #include "llviewerregion.h"
 #include "llvoavatar.h"
 #include "llvoavatarself.h"
-#include "llvirtualtrackball.h"
 #include "rlvhandler.h"
-#include <boost/foreach.hpp>
 
 std::string unescape_name(const std::string& name);
 class FSSettingsCollector : public LLInventoryCollectFunctor
@@ -582,7 +578,7 @@ void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_pa
 			bool save_settings = false;
 
 			// add the elements from the XML file to the internal list of controls
-			BOOST_FOREACH(const QuickPrefsXMLEntry& xml_entry, xml.entries)
+			for (const QuickPrefsXMLEntry& xml_entry : xml.entries)
 			{
 				// get the label
 				std::string label = xml_entry.label;
@@ -1924,14 +1920,13 @@ void FloaterQuickPrefs::onClickResetRenderSSAOEffectX()
 	gSavedSettings.setVector3("RenderSSAOEffect", renderSSAOEffect);
 }
 
-// <FS:CR> FIRE-9407 - Restore Quickprefs Defaults
 void FloaterQuickPrefs::callbackRestoreDefaults(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if ( option == 0 ) // YES
 	{
 		selectControl("");
-		BOOST_FOREACH(const std::string& control, mControlsOrder)
+		for (const auto& control : mControlsOrder)
 		{
 			removeControl(control);
 		}
@@ -1951,7 +1946,6 @@ void FloaterQuickPrefs::onClickRestoreDefaults()
 {
 	LLNotificationsUtil::add("ConfirmRestoreQuickPrefsDefaults", LLSD(), LLSD(), boost::bind(&FloaterQuickPrefs::callbackRestoreDefaults, this, _1, _2));
 }
-// </FS:CR>
 
 void FloaterQuickPrefs::dockToToolbarButton()
 {
