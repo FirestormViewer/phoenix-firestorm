@@ -13,6 +13,9 @@
     name="forgot_password_url">
     http://secondlife.com/account/request.php
   </panel.string>
+  <string name="ServerComboTooltip">
+    An existing grid or a grid URI
+  </string>
   <web_browser
     tab_stop="false"
     trusted_content="true"
@@ -273,7 +276,6 @@
       combo_editor.prevalidate_callback="ascii"
       layout="topleft"
       top_pad="-32"
-      tool_tip="An existing grid or a grid URI"
       name="server_combo"
       width="250"
       combo_button.scale_image="true" >    

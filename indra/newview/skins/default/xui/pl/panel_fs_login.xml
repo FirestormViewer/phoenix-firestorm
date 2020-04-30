@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
+	<panel.string name="ServerComboTooltip">
+		Istniejący świat lub URI świata
+	</panel.string>
 	<layout_stack name="login_widgets">
 		<layout_panel name="login">
 			<text name="log_in_text">
@@ -28,7 +31,6 @@
 			<text name="grid_login_text">
 				Loguj do świata:
 			</text>
-			<combo_box tool_tip="Istniejący świat lub URI świata" name="server_combo" />
 		</layout_panel>
 		<layout_panel name="links_login_panel">
 			<text name="create_new_account_text">
