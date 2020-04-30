@@ -5162,7 +5162,7 @@ Fehler im Regulären Ausdruck:
 	</notification>
 
 	<notification name="NoHavok">
-Einige Funktionen wie [FEATURE] sind nicht in [APP_NAME] für OpenSimulator enthalten. Falls Sie [FEATURE] nutzen möchten, laden Sie sich bitte [APP_NAME] für Second Life hier herunter:
+Einige Funktionen wie [FEATURE] sind nicht in dieser Version von [APP_NAME] enthalten. Falls Sie [FEATURE] nutzen möchten, laden Sie sich bitte eine Version von [APP_NAME] mit Havok-Unterstützung hier herunter:
 [DOWNLOAD_URL]
 		<form name="form">
 			<ignore name="ignore" text="Kein-Havok-Warnung"/>

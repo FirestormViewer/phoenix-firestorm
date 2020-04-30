@@ -34,6 +34,7 @@
 							<text name="grid_login_text">
 								Grid:
 							</text>
+							<combo_box name="server_combo" tool_tip="Ein bekanntes Grid oder eine Grid-URI"/>
 						</layout_panel>
 						<layout_panel name="mode_selection">
 							<text name="mode_selection_text">

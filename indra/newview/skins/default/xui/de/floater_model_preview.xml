@@ -71,7 +71,7 @@
 		Das Physik-Netz ist zu dicht - kleine dünne Dreiecke entfernen (siehe Vorschau)
 	</string>
 	<string name="phys_status_no_havok">
-		Die OpenSim-Version unterstützt kein Hochladen von Physik in Second Life. Unvorhersehbare Ergebnisse möglich!
+		Diese Version enthält keine Havok-Unterstützung und wird nicht für das Hochladen von Physik in Second Life empfohlen. Unvorhersehbare Ergebnisse sind möglich!
 	</string>
 	<string name="phys_status_unknown_error">
 		Ein unbekannter Fehler ist aufgetreten.

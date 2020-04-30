@@ -2138,7 +2138,7 @@ void LLModelPreview::updateStatusMessages()
     //        physStatusIcon->setImage(img);
     //    }
     //}
-#ifdef OPENSIM 
+#ifndef HAVOK_TPV
     has_physics_error |= PhysicsError::NOHAVOK;
 #endif 
 

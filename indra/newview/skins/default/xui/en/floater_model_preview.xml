@@ -36,7 +36,7 @@
   <string name="phys_status_vertex_limit_exceeded">Some physical hulls exceed the vertex limit (256); try an alternative 'Analyze Method'.</string>
   <string name="phys_status_hull_limit_exceeded">Some models exceed the hull limit (256); try 'simplify'.</string>
   <string name="phys_status_degenerate_triangles">Physics mesh too dense; remove the small, thin triangles (see preview).</string>
-  <string name="phys_status_no_havok">The OpenSim version is not recommended for physics upload in SL. Results may be unpredictable.</string>
+  <string name="phys_status_no_havok">This version contains no Havok support and is not recommended for physics upload in Second Life. Results may be unpredictable.</string>
   <string name="phys_status_unknown_error">An unrecognized error was detected.</string>
   <string name="layer_all">All</string> <!-- Text to display in physics layer combo box for "all layers" -->
   <string name="decomposing">Analyzing...</string>

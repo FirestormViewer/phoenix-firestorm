@@ -919,6 +919,7 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="InvFolder Meshes">Meshes</string>
 	<string name="InvFolder Received Items">Received Items</string>
 	<string name="InvFolder Merchant Outbox">Merchant Outbox</string>
+	<string name="InvFolder Settings">Settings</string>
 
   <!-- are used for Friends and Friends/All folders in Inventory "Calling cards" folder. See EXT-694-->
 	<string name="InvFolder Friends">Friends</string>	
@@ -3048,7 +3049,7 @@ Your current position: [AVATAR_POS]
   <string name="PS_Arms_upward_Legs_apart">Arms upward, Legs apart</string>
   <string name="PS_Arms_upward_Legs_together">Arms upward, Legs together</string>
   
-  <string name="QP_WL_Region_Default">Region default</string>
+  <string name="QP_WL_Region_Default">Shared Environment</string>
   <string name="QP_WL_Day_Cycle_Based">Day cycle based</string>
   <string name="QP_WL_None">None</string>
 

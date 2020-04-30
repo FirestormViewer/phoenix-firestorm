@@ -1988,6 +1988,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="InvFolder Merchant Outbox">
 		Händler-Outbox
 	</string>
+	<string name="InvFolder Settings">
+		Einstellungen
+	</string>
 	<string name="InvFolder Friends">
 		Freunde
 	</string>
