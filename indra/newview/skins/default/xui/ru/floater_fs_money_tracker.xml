@@ -5,6 +5,9 @@
 		<name_list.columns name="name" label="Имя" />
 		<name_list.columns name="amount" label="Сумма" />
 	</name_list>
+	<text name="summary">
+		Оплачено:L$ [PAID] - Получено:L$ [RECEIVED]
+	</text>
 	<check_box label="Отслеживать при закрытии" name="FSAlwaysTrackPayments" tool_tip="Отслеживание денежных переводов будет производиться при закрытом окне" />
 	<button name="Clear" label="Очистить"/>
 </floater>

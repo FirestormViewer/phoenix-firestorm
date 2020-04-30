@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="animation_explorer" title="Проводник анимаций">
 	<scroll_list name="animation_list">
-		<scroll_list.column label="Проиграть" name="played_by" />
-		<scroll_list.column label="Проиграть" name="played" />
+		<scroll_list.column label="Воспроизводит" name="played_by" />
+		<scroll_list.column label="Состояние" name="played" />
+		<scroll_list.column label="Приоритет" name="priority" />
 		<scroll_list.column label="Время" name="timestamp" />
 		<scroll_list.column label="ID анимации" name="animation_id" />
 		<scroll_list.column label="ID объекта" name="object_id" />
 	</scroll_list>
 	<panel name="buttons_panel">
-		<button label="Остановить" name="stop_btn" />
-		<button label="Остановить и убрать разрешение" name="stop_and_revoke_btn" />
-		<button label="Убрать разрешение" name="revoke_btn" />
+		<button label="Стоп" name="stop_btn" />
+		<button label="Стоп и Отменить" name="stop_and_revoke_btn" />
+		<button label="Отменить" name="revoke_btn" />
 		<check_box label="Нет моих анимаций" name="no_owned_animations_check" tool_tip="Будет отфильтровывать все анимации, которые принадлежат вашему аватару, такие как АО анимации или анимации системы по умолчанию" />
 	</panel>
 </floater>

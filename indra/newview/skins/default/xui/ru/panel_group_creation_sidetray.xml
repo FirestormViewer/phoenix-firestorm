@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Создание Группы" name="GroupCreation">
+  <panel.string name="current_membership">
+    (ваше членство)
+  </panel.string>
+  <panel name="group_info_top">
+    <text name="group_name_label">
+    Имя Группы:
+    </text>
+    <line_editor label="Введите название новой группы" name="group_name_editor" />
+  </panel>
+  <scroll_container name="content_scroll_container">
+    <panel name="content_panel">
+      <layout_stack name="layout">
+        <layout_panel name="group_info">
+          <panel name="group_info_top2">
+            <texture_picker name="insignia" tool_tip="Нажмите, чтобы выбрать картинку"/>
+            <text_editor name="charter">
+              Устав Группы
+            </text_editor>
+          </panel>
+          <panel name="preferences_container">
+            <check_box label="Любой может вступить" name="open_enrollement"
+              tool_tip="Устанавливает, разрешает ли эта группа новым членам присоединяться без приглашения."/>
+            <check_box label="Плата за вступление" name="check_enrollment_fee"
+              tool_tip="Устанавливает, требуется ли вступительный взнос для присоединения к группе"/>
+            <spinner name="spin_enrollment_fee" tool_tip="Новые участники должны оплатить этот взнос, чтобы присоединиться к группе при проверке регистрационного взноса."/>
+            <combo_box name="group_mature_check" tool_tip="Рейтинги зрелости определяют тип контента и поведение, разрешенное в группе.">
+              <combo_item name="select_mature" value="Select">
+               - Выберите рейтинг зрелости -
+              </combo_item>
+              <combo_box.item label="Умеренный" name="mature" />
+              <combo_box.item label="Общий" name="pg" />
+            </combo_box>
+          </panel>
+        </layout_panel>
+        <layout_panel name="create_info">
+          <text name="fee_information">
+            Плата за создание группы зависит от вашего уровня членства. [https://secondlife.com/my/account/membership.php Больше информации]
+          </text>
+        </layout_panel>
+        <layout_panel name="create_actions0" >
+        </layout_panel>
+        <layout_panel name="create_actions" >
+          <layout_stack name="button_row_ls" >
+            <layout_panel name="layout_crt">
+              <button label="Создать группу за L$ [COST]" name="btn_create" tool_tip="Создать новую группу"/>
+              <button name="back" label="Отмена"/>
+            </layout_panel>
+          </layout_stack>
+          <text name="info_deletion">
+           Примечание: через 7 дней группа без участников (кроме создателя) удаляется!
+          </text>
+        </layout_panel>
+      </layout_stack>
+    </panel>
+  </scroll_container>
+</panel>

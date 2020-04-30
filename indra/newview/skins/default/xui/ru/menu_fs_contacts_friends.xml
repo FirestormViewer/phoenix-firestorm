@@ -22,5 +22,7 @@
 		<menu_item_check label="Сортировать по: Отображаемому имени" name="sort_by_displayname" />
 		<menu_item_check label="Полное имя как: Имя пользователя (Отображаемое имя)" name="format_username_displayname" />
 		<menu_item_check label="Полное имя как: Отображаемое имя (Имя пользователя)" name="format_displayname_username" />
+		<menu_item_check label="Показать фильтр поиска" name="friend_filter" />
 	</menu>
+	<menu_item_check label="Статус онлайн для друзей" name="GlobalOnlineStatusToggle" />
 </context_menu>

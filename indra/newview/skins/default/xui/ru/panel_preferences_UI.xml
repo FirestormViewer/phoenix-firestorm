@@ -25,10 +25,15 @@
         <text name="ObjectInspectorTooltipDelay_text">
             секунд.
         </text>
+        <slider name="FSHudTextFadeDistance" label="Дальность исчезновения плавающего текста (в м):" tool_tip="Устанавливает расстояние, на котором плавающий текст начинает исчезать" label_width="285" width="529"/>
+        <slider name="FSHudTextFadeRange" label="Диапазон изменения плавающего текста (в м):" tool_tip="Устанавливает диапазон, необходимый для того, чтобы плавающий текст исчезал от полностью видимого до полностью невидимого" label_width="285" width="529"/>
     </panel>
     <panel label="2D наложение" name="ui-2d-overlay">
-        <text name="UI Size:">
-            Масштабирование интерфейса:
+        <text name="UI Size:" width="130">
+            Масштаб интерфейса:
+        </text>
+        <text name="HUD Size:" width="130">
+            Масштаб HUD:
         </text>
         <check_box label="Использовать круглое меню" name="UsePieMenu" tool_tip="Использовать стиль V1 для отображения круглого меню при нажатии правой кнопкой мыши на объекты, аватары и землю" />
         <text name="ScriptDialogsPerObjectLabel" width="185">
@@ -37,7 +42,10 @@
         <combo_box name="ScriptDialogPerObjectDropdown">
             <combo_box.item label="Один на объект" name="ScriptDialogOption_0" />
             <combo_box.item label="Один на объект и канал" name="ScriptDialogOption_1" />
-            <combo_box.item label="Без ограничений" name="ScriptDialogOption_2" />
+            <combo_box.item label="Один на Канал для Присоединений" name="ScriptDialogOption_2" />
+            <combo_box.item label="Один на Канал для Дисплея" name="ScriptDialogOption_3" />
+            <combo_box.item label="Неограниченно для Дисплея" name="ScriptDialogOption_4" />
+            <combo_box.item label="Неограниченно" name="ScriptDialogOption_5" />
         </combo_box>
         <check_box label="Убрать кнопку &quot;Блок&quot; " name="FSRemoveScriptBlockButton" />
         <text name="ScriptDialogsPositionLabel" width="185">
@@ -51,11 +59,28 @@
             <combo_box.item label="Снизу справа" name="ScriptDialogPositionOption_5" />
         </combo_box>
         <check_box label="Анимация диалогов" name="FSAnimatedScriptDialogs" tool_tip="Показывает анимацио диалогового окна при его открытии (Разворачивается сверху вниз)" />
-        <check_box label="Уведомления групп и ЛС справа наверху" width="250" name="ShowGroupNoticesTopRight" tool_tip="Отображение иконок ЛС и уведомлений групп справа наверху вашего экрана ." />
+        <slider label="Видимые строки диалога скрипта:" label_width="200" name="FSRowsPerScriptDialog" tool_tip="Максимальное количество строк в диалоговом окне скрипта, которое будет отображаться одновременно." />
+        <check_box label="Использовать круглое меню" name="UsePieMenu" tool_tip="Использовать стиль V1 для отображения круглого меню при нажатии правой кнопкой мыши на объекты, аватары и землю" />
+        <check_box label="Анимация текста" name="PieMenuPopupFontEffect" tool_tip="Включает текст круглого меню, являющийся частью анимации, когда открывается круглое меню." />
+        <check_box label="Включить внешний оттенок кольца" name="PieMenuOuterRingShade" tool_tip="Позволяет добавить дополнительный внешний оттенок кольца, который помогает визуализировать подменю." />
+        <text name="ShowGroupNoticesTopRightLabel" width="180">
+           Положение Уведомлений и ЛС:
+        </text>
+        <radio_group name="ShowGroupNoticesTopRight" width="210"
+         tool_tip="Выберите, где на экране будут отображаться групповые уведомления и значки ЛС." >
+           <radio_item label="Внизу Справа" name="radio" width="100" />
+           <radio_item label="Вверху Справа" name="radio1" width="100" />
+        </radio_group>
         <text name="GroupTopRightRequiresRestart" left_delta="270" width="150">
-            (Необходим перезапуск)
+           (Нужен перезапуск)
         </text>
         <check_box label="Скрыть иконки чатов групп и ЛС" name="FSDisableIMChiclets" tool_tip="Будут убраны иконки личных сообщений и чатов групп (Уведомления по прежнему будут отображаться)." />
+        <check_box label="Использовать старый список для окна Уведомления." name="FSLegacyNotificationWell" tool_tip="Если флажок установлен, Firestorm будет использовать устаревшее представление списка для отображения сохраненных уведомлений." width="320" />
+        <text name="FSLegacyNotificationWellRequiresRestart" width="150">(Необходим перезапуск)</text>
+        <check_box label="Переназначить уже используемые горячие клавиши (только в Linux, нужен перезапуск)" name="FSRemapLinuxShortcuts" tool_tip="Если включено, горячие клавиши, которые уже используются операционной системой Linux (например, CTRL-ALT-Fx), будут переназначены." />
+        <check_box label="Предотвращение фокуса окна статистики" name="FSStatisticsNoFocus"
+        tool_tip="Если включено, окно статистики никогда не будет получать фокус при закрытии другого окна (такие действия, как изменение макета графа для элементов, по-прежнему возможны, если они включены)."
+        width="256" />
         <slider label="Количество миганий вкладки ЛС:" name="ButtonsFlashCount" />
         <slider label="Частота мигания вкладок ЛС:" tool_tip="Частота мигания вкладок личных сообщений:" name="ButtonFlashRate" />
         <text name="ButtonFlashRateText">
@@ -76,7 +101,7 @@
 		<check_box label="Показать локацию в верхнем меню" name="ShowMenuBarLocation"/>
 		<check_box label="Показать поиск в меню" name="show_search_menu_check"/>
 		<check_box label="Показать текущий баланс L$" name="FSShowCurrencyBalanceInStatusbar"/>
-
+		<check_box label="Включить выпадающие окна меню мыши на значках верхнего меню" name="FSStatusBarMenuButtonPopupOnRollover" width="270" />
 		<text name="navfav_textbox">
 		Панель навигации и закладок:
 		</text>
@@ -91,13 +116,14 @@
         <check_box name="FSUseWebProfiles" label="Использовать web профили по умолчанию" tool_tip="Использовать web профили по умолчанию" />
         <check_box label="Отключить автоматическое открытие списка заблокированного" name="FSDisableBlockListAutoOpen" tool_tip="Отключить автоматическое открытие списка заблокированного, юкогда вы блокируете аватара или объект" />
         <check_box label="Открывать окна в стиле [SHORT_VIEWER_GENERATION] для 'Друзья' и 'Группы'" name="FSUseV2Friends" tool_tip="Когда вы включите эту опцию, друзья / группы будут открыты в окнах - в противном случае, это будет сделано в Контактах." />
+        <check_box label="Использовать устаревшие окно свойства объектов" name="FSUseLegacyObjectProperties" tool_tip="Если включено, при открытии свойств объекта будет использоваться старое окно свойств."/>
         <text name="standalone_textbox">
             Использовать отдельные окна для:
         </text>
         <check_box name="FSUseStandaloneGroupFloater" label="Профилей групп" tool_tip="Если включено, профили групп будут отображаться в отдельном окне" />
         <check_box name="FSUseStandaloneTeleportHistoryFloater" label="Истории телепортаций" tool_tip="Если включено, истории телепортаций будут отображаться в отдельном окне" />
         <check_box name="FSUseStandaloneBlocklistFloater" label="Списка заблокированных" tool_tip="Если включено, список заблокированных будут отображаться в отдельном окне" />
-        <check_box name="FSUseStandalonePlaceDetailsFloater" label="Закладок, деталей места и подробностей истории телепортаций" tool_tip="Если включено, закладки, детали места и подробности истории телепортаций будут отображаться в отдельном окне" />
+        <check_box name="FSUseStandalonePlaceDetailsFloater" label="Закладок, деталей места и истории телепортаций" tool_tip="Если включено, закладки, детали места и подробности истории телепортаций будут отображаться в отдельном окне" />
         <text name="ExtendedTeleportHistoryLabel">
             Добавить к истории телепортаций:
         </text>
@@ -127,6 +153,7 @@
             <radio_item label="Отображаемое (Имя)" name="displayname_username" />
         </radio_group>
         <check_box label="Показать столбец с правами" name="FSFriendListColumnShowPermissions" tool_tip="Список контактов отображает столбцы с разрешениями, которые вы дали этим аватарам, и наоборот." />
+        <check_box label="Показать фильтр поиска" name="FSContactListShowSearch" tool_tip="В списке контактов будет отображаться текстовое поле поиска для фильтрации списка."/>
         <text name="textInventoryOptions">
             Настройки инвентаря:
         </text>
@@ -136,7 +163,7 @@
         <check_box label="Разрешить отдельные условия поиска на каждой вкладки инвентаря" name="FSSplitInventorySearchOverTabs" tool_tip="Разрешить отдельные условия поиска на каждой вкладки инвентаря" />
     </panel>
     <panel label="Тоасты" name="UI-toasts-tab">
-        <text name="ToastSettings">
+        <text name="ToastSettings" width="450">
             Настройки отображения уведомлений (всплывающие окна, консоль, тоасты):
         </text>
         <slider label="Между нижним тоастом и низом интерфейса:" tool_tip="Между нижним тоастом и нижней частью интерфейса:" name="ToastSpace" />
@@ -188,7 +215,7 @@
         <text name="tooltip_textbox1">
            Схема шрифта:
         </text>
-        <text name="tooltip_textbox2">
+        <text name="tooltip_textbox2" width="150">
            (Необходим перезапуск)
         </text>
         <text name="tooltip_textbox5">

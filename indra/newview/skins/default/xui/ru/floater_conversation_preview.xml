@@ -3,7 +3,7 @@
 	<floater.string name="Title">
 		Разговор: [NAME]
 	</floater.string>
-	<text name="page_label" value="Str." />
+	<text name="page_label" value="Стр." />
 	<button tool_tip="Открыть историю сообщений в отдельном окне" name="open_external_btn" />
 	<button tool_tip="Поиск в истории чата" name="search_btn" />
 </floater>

@@ -4,4 +4,6 @@
 		<text name="title" value="Отправитель / Группа"/>
 	</panel>
 	<text name="attachment" value="Вложение"/>
+	<button label="OK" name="btn_ok"/>
+	<button label="Уведомления группы" name="btn_notices" width="130"/>
 </panel>

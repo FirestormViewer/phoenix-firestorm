@@ -22,7 +22,7 @@
 			<menu_item_call name="inventory_close_all_folders" label="Закрыть все папки" />
 			<menu_item_call name="inventory_empty_trash" label="Очистить корзину" />
 		</menu>
-		<menu label="Stwórz" name="inventory_create_menu">
+		<menu label="Создать" name="inventory_create_menu">
 			<menu_item_call name="inventory_new_folder" label="Новая папка" />
 			<menu_item_call name="inventory_new_script" label="Новый скрипт" />
 			<menu_item_call name="inventory_new_note" label="Новая заметка" />
