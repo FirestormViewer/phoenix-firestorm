@@ -31,6 +31,7 @@
 							<text name="grid_login_text" width="55">
 								Świat:
 							</text>
+							<combo_box tool_tip="Istniejący świat lub URI świata" name="server_combo" />
 						</layout_panel>
 						<layout_panel name="mode_selection">
 							<text name="mode_selection_text">

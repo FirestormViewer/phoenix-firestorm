@@ -84,6 +84,7 @@ FSPanelLogin *FSPanelLogin::sInstance = NULL;
 BOOL FSPanelLogin::sCapslockDidNotification = FALSE;
 BOOL FSPanelLogin::sCredentialSet = FALSE;
 std::string FSPanelLogin::sPassword = "";
+std::string FSPanelLogin::sPendingNewGridURI{};
 
 // Helper for converting a user name into the canonical "Firstname Lastname" form.
 // For new accounts without a last name "Resident" is added as a last name.
@@ -1091,7 +1092,18 @@ void FSPanelLogin::onSelectServer()
 
 	LLComboBox* server_combo = getChild<LLComboBox>("server_combo");
 	LLSD server_combo_val = server_combo->getSelectedValue();
-	LL_INFOS("AppInit") << "grid "<<server_combo_val.asString()<< LL_ENDL;
+	LL_INFOS("AppInit") << "grid "<<(!server_combo_val.isUndefined()?server_combo_val.asString():server_combo->getValue().asString())<< LL_ENDL;
+	if (server_combo_val.isUndefined() && sPendingNewGridURI.empty())
+	{
+		sPendingNewGridURI = server_combo->getValue().asString();
+		LLStringUtil::trim(sPendingNewGridURI);
+		LL_INFOS("AppInit") << "requesting unknown grid "<< sPendingNewGridURI << LL_ENDL;
+		// Previously unknown gridname was entered
+		LLGridManager::getInstance()->addGridListChangedCallback(boost::bind(&FSPanelLogin::gridListChanged, this, _1));
+		LLGridManager::getInstance()->addGrid(sPendingNewGridURI);
+
+	}
+	
 	LLGridManager::getInstance()->setGridChoice(server_combo_val.asString());
 	
 	/*
@@ -1361,6 +1373,14 @@ void FSPanelLogin::updateServerCombo()
 	LLComboBox* server_choice_combo = sInstance->getChild<LLComboBox>("server_combo");
 	server_choice_combo->removeall();
 
+	if(!sPendingNewGridURI.empty())
+	{
+		LLSD grid_name = LLGridManager::getInstance()->getGridByAttribute(GRID_LOGIN_URI_VALUE, sPendingNewGridURI, false);
+		LL_INFOS("AppInit") << "new grid for ["<<sPendingNewGridURI<<"]=["<< (grid_name.isUndefined()?"FAILED TO ADD":grid_name.asString())<< "]"<<LL_ENDL;
+		server_choice_combo->setSelectedByValue(grid_name, true);
+		LLGridManager::getInstance()->setGridChoice(grid_name.asString());
+	}
+
 	std::string current_grid = LLGridManager::getInstance()->getGrid();
 	std::map<std::string, std::string> known_grids = LLGridManager::getInstance()->getKnownGrids();
 	
@@ -1401,10 +1421,11 @@ std::string FSPanelLogin::credentialName()
 	return username + "@" + LLGridManager::getInstance()->getGrid();
 }
 
-// static
+
 void FSPanelLogin::gridListChanged(bool success)
 {
 	updateServer();
+	sPendingNewGridURI.clear(); // success or fail we clear the pending URI as we will not get another callback.
 }
 
 // static
