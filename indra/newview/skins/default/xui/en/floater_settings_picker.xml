@@ -9,7 +9,7 @@
         min_width="225"
         name="settings picker"
         help_topic="settings_picker"
-        title="PICK: SETTINGS"
+        title="Select Settings"
         width="225">
 
     <!--  top static -->
@@ -19,11 +19,11 @@
     </floater.string>
     <floater.string
             name="pick_track">
-        SELECT TRACK
+        Select Track
     </floater.string>
     <floater.string
             name="pick_settings">
-        SELECT SETTINGS
+        Select Settings
     </floater.string>
 
     <floater.string

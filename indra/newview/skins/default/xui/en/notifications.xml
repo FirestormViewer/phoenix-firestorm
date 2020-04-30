@@ -13472,7 +13472,7 @@ Unable to load the track from [TRACK1] into [TRACK2].
    type="alertmodal">
 No valid environment setting selected.
 
-Please note that "Region default" and "Day cycle based" cannot be selected!
+Please note that "Shared Environment" and "Day cycle based" cannot be selected!
   <tag>fail</tag>
   </notification>
   
