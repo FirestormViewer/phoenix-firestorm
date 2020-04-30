@@ -25,8 +25,8 @@
 	</text>
 	<combo_box name="maturity_desired_combobox">
 		<combo_box.item label="Общий, Умеренный, Для взрослых" name="Desired_Adult"/>
-		<combo_box.item label="Общий, Умеренный" name="Desired_Mature"/> 
-		<combo_box.item label="Общий" name="Desired_PG"/>        
+		<combo_box.item label="Общий, Умеренный" name="Desired_Mature"/>
+		<combo_box.item label="Общий" name="Desired_PG"/>
 	</combo_box>
 	<text name="start_location_textbox">
 		Место запуска:
@@ -58,7 +58,11 @@
 	<check_box label="Старый способ отображения имени" name="FSshow_legacyun" tool_tip="Отображение имени в старом формате (Имя Фамилия) вместо имени пользователя (имя.фамилия)"/>
 	<check_box label="Выделение друзей" name="show_friends" tool_tip="Выделение имени друзей другим цветом"/>
 	<check_box label="Убирать 'Resident' с имен старого типа" name="legacy_trim_check" tool_tip="Убирать 'Resident' с имен старого типа"/>
-	<check_box label="Старый способ позиционирования тегов имени" name="FSLegacyNametagPosition" tool_tip="Когда вы включите эту опцию, тег имени не будет на постоянной высоте над аватаром и не будет наплывать на его голову, если он движется. Например, в результате анимации."/>
+	<check_box label="Старый способ позиц. тегов" name="FSLegacyNametagPosition" tool_tip="Когда вы включите эту опцию, тег имени не будет на постоянной высоте над аватаром и не будет наплывать на его голову, если он движется. Например, в результате анимации."/>
+	<check_box label="Показать автоответ в теге" name="FSShowAutorespondInNameTag" tool_tip="Это покажет, включен ли автоответчик в вашем собственном теге имени."/>
+	<check_box label="Показать сложность аватара" name="FSTagShowARW" tool_tip="Если включено, в теге покажет текущую сложность аватара."/>
+	<check_box label="Только если очень сложный" name="FSTagShowTooComplexOnlyARW" tool_tip="Если включено, тег покажет текущую сложность аватара, только если аватар слишком сложный и показан как силуэт."/>
+	<check_box label="Показать собственную сложность" name="FSTagShowOwnARW" tool_tip="Если включено, ваш  тег покажет вашу текущую сложностью аватара."/>
 	<text name="title_afk_text">
 		Статус 'Отошел' по истечении:
 	</text>

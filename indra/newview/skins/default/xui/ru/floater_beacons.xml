@@ -4,8 +4,10 @@
 		<text name="label_show">
 			Показать:
 		</text>
+		<check_box label="Границы для освещения в сцене" name="lights_bounding_boxes"/>
 		<check_box label="Метки" name="beacons"/>
 		<check_box label="Подсветку" name="highlights"/>
+		<check_box label="Информацию Маяка на экране" name="FSRenderBeaconText"/>
 		<text name="beacon_width_label" tool_tip="Ширина меток">
 			Ширина:
 		</text>

@@ -16,6 +16,7 @@
 			<name_list name="member_list">
 				<name_list.columns label="Имя" name="name"/>
 				<name_list.columns label="Вклад" name="donated"/>
+				<name_list.columns label="Статус" name="online"/>
 				<name_list.columns label="Титул" name="title"/>
 			</name_list>
 			<button label="Пригласить" name="member_invite"/>
@@ -39,6 +40,7 @@
 				<scroll_list.columns label="Титул" name="title"/>
 			</scroll_list>
 			<button label="Новая роль" name="role_create"/>
+			<button label="Копировать роль" name="role_copy"/>
 			<button label="Удалить роль" name="role_delete"/>
 		</panel>
 		<panel label="Привилегии" name="actions_sub_tab" tool_tip="Можно просмотреть описание привилегии, а также какие участники и роли ею обладают.">

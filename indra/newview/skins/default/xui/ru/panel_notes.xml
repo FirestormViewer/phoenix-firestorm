@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="Заметки и Конфиденциальность" name="panel_notes">
-            <text name="status_message" value="Частные заметки этого аватара:"/>
-            <text_editor name="notes_edit" />
-            <text name="status_message2" value="Разрешить этому аватару:"/>
-            <check_box label="Видеть, когда я в сети" name="status_check" />
-            <check_box label="Найти меня на карте мира" name="map_check" />
-            <check_box label="Править, удалять или брать мои объекты" name="objects_check" />
-</panel>

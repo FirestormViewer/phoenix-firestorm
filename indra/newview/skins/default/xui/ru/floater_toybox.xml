@@ -8,4 +8,5 @@
 	</text>
 	<button label="Очистить все панели" label_selected="Очистить все панели" name="btn_clear_all"/>
 	<button label="Вернуть стандартные" label_selected="Вернуть стандартные" name="btn_restore_defaults"/>
+	<check_box name="check_toolbars_locked" label="Закрепить" tool_tip="Установите этот флажок, чтобы заблокировать панели инструментов, чтобы кнопки не могли быть вытащены или удалены случайно."/>
 </floater>

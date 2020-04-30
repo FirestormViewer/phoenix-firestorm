@@ -5,10 +5,10 @@
 	</text>
 	<text name="lockout_text" value="    Вы не можете менять отображаемое имя до: [TIME]." />
 	<text name="set_name_label">
-		Новое отображаемое имя:
+		Новое имя:
 	</text>
 	<text name="name_confirm_label">
-		Введите еще раз для подтверждения:
+		Еще раз:
 	</text>
 	<button label="Сохранить" name="save_btn" tool_tip="Сохранить ваше новое отображаемое имя"/>
 	<button label="Сброс" name="reset_btn" tool_tip="Сменить отображаемое имя на имя пользователя"/>

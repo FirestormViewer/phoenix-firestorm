@@ -21,10 +21,15 @@
 	<floater.string name="unknown_region">
 		Неизвестный регион
 	</floater.string>
+	<filter_editor label="Фильтр черного списка" name="filter_input"/>
 	<fs_scroll_list name="result_list">
 		<columns name="name" label="Имя" />
+		<columns name="region" label="Регион"/>
 		<columns name="type" label="Тип" />
 		<columns name="date" label="Дата" />
+		<columns name="permanent" label="Постоянно"/>
 	</fs_scroll_list>
-	<button name="remove_btn" label="Удалить из черного списка" />
+	<button name="remove_btn" label="Удалить из черного списка" width="190"/>
+	<button name="remove_temp_btn" label="Удалить не постоянные" width="190" />
+	<button name="close_btn" label="Закрыть"/>
 </floater>
