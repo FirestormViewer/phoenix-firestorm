@@ -197,7 +197,7 @@
         tool_tip="An existing grid or a grid URI"
         name="server_combo"
         width="135"
-        combo_button.scale_image="true" >    
+        combo_button.scale_image="true" >
       <combo_box.drop_down_button
         font="SansSerifLarge"/>
       </combo_box>
