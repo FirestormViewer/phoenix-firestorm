@@ -102,7 +102,9 @@ std::string LLSettingsType::getDefaultName(LLSettingsType::type_e type)
     const SettingsEntry *entry = LLSettingsDictionary::instance().lookup(type);
     if (!entry)
         return getDefaultName(ST_INVALID);
-    return entry->mDefaultNewName;
+    // <FS:Ansariel> Name of newly created setting is not translated
+    //return entry->mDefaultNewName;
+    return sTranslator->getString(entry->mDefaultNewName);
 }
 
 void LLSettingsType::initClass(LLTranslationBridge::ptr_t &trans)
