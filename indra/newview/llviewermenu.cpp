@@ -8979,8 +8979,8 @@ class LLWorldEnvSettings : public view_listener_t
 
 	bool handleEvent(const LLSD& userdata)
 	{
-// [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a) | Modified: RLVa-1.0.0g
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_SETENV))
+// [RLVa:KB] - @setenv
+		if (!RlvActions::canChangeEnvironment())
 			return true;
 // [/RLVa:KB]
 
@@ -9807,10 +9807,7 @@ void initialize_menus()
 
 // [RLVa:KB] - Checked: RLVa-2.0.0
 	enable.add("RLV.MainToggleVisible", boost::bind(&rlvMenuMainToggleVisible, _1));
-	if (RlvActions::isRlvEnabled())
-	{
-		enable.add("RLV.CanShowName", boost::bind(&rlvMenuCanShowName));
-		enable.add("RLV.EnableIfNot", boost::bind(&rlvMenuEnableIfNot, _2));
-	}
+	enable.add("RLV.CanShowName", boost::bind(&rlvMenuCanShowName));
+	enable.add("RLV.EnableIfNot", boost::bind(&rlvMenuEnableIfNot, _2));
 // [/RLVa:KB]
 }

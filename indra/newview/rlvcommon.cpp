@@ -728,8 +728,13 @@ void rlvMenuToggleVisible()
 
 bool rlvMenuCanShowName()
 {
-  const LLVOAvatar* pAvatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
-  return (pAvatar) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, pAvatar->getID()));
+	bool fEnable = true;
+	if (rlv_handler_t::isEnabled())
+	{
+		const LLVOAvatar* pAvatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+		fEnable = (pAvatar) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, pAvatar->getID()));
+	}
+	return fEnable;
 }
 
 // Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
