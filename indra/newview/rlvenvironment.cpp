@@ -488,14 +488,14 @@ bool RlvEnvironment::onHandleCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRe
 
 		// Legacy handling (blargh)
 		U32 idxComponent = rlvGetColorComponentFromCharacter(strEnvCommand.back());
-		if (idxComponent <= VBLUE)
+		if (idxComponent <= VALPHA)
 		{
 			strEnvCommand.pop_back();
 
 			legacy_handler_map_t::const_iterator itLegacyFnEntry = legacyFnLookup.find(strEnvCommand);
 			if (legacyFnLookup.end() != itLegacyFnEntry)
 			{
-				cmdRet = itLegacyFnEntry->second(rlvCmd.getParam(), idxComponent);
+				cmdRet = itLegacyFnEntry->second((RLV_TYPE_FORCE == rlvCmd.getParamType()) ? rlvCmd.getOption() : rlvCmd.getParam(), idxComponent);
 				return true;
 			}
 		}
@@ -568,9 +568,16 @@ std::string RlvEnvironment::handleLegacyGetFn<LLVector2>(const std::function<con
 template<>
 std::string RlvEnvironment::handleLegacyGetFn<LLColor3>(const std::function<const LLColor3& (LLSettingsSkyPtr_t)>& getFn, U32 idxComponent)
 {
-	if (idxComponent > 3)
-		return LLStringUtil::null;
-	return std::to_string(getFn(LLEnvironment::instance().getCurrentSky()).mV[idxComponent]);
+	if ( (idxComponent >= VRED) && (idxComponent <= VBLUE) )
+	{
+		return std::to_string(getFn(LLEnvironment::instance().getCurrentSky()).mV[idxComponent]);
+	}
+	else if (idxComponent == VALPHA)
+	{
+		const LLColor3& clr = getFn(LLEnvironment::instance().getCurrentSky());
+		return std::to_string(llmax(clr.mV[VRED], clr.mV[VGREEN], clr.mV[VBLUE]));
+	}
+	return LLStringUtil::null;
 }
 
 template<>
@@ -590,11 +597,31 @@ ERlvCmdRet RlvEnvironment::handleLegacySetFn<LLVector2>(float optionValue, LLVec
 template<>
 ERlvCmdRet RlvEnvironment::handleLegacySetFn<LLColor3>(float optionValue, LLColor3 curValue, const std::function<void(LLSettingsSkyPtr_t, const LLColor3&)>& setFn, U32 idxComponent)
 {
-	if (idxComponent > 3)
-		return RLV_RET_FAILED_UNKNOWN;
-
 	LLSettingsSky::ptr_t pSky = LLEnvironment::instance().getCurrentSky();
-	curValue.mV[idxComponent] = optionValue;
+	if ( (idxComponent >= VRED) && (idxComponent <= VBLUE) )
+	{
+		curValue.mV[idxComponent] = optionValue;
+	}
+	else if (idxComponent == VALPHA)
+	{
+		const F32 curMax = llmax(curValue.mV[VRED], curValue.mV[VGREEN], curValue.mV[VBLUE]);
+		if ( (0.0f == optionValue) || (0.0f == curMax) )
+		{
+			curValue.mV[VRED] = curValue.mV[VGREEN] = curValue.mV[VBLUE] = optionValue;
+		}
+		else
+		{
+			const F32 nDelta = (optionValue - curMax) / curMax;
+			curValue.mV[VRED] *= (1.0f + nDelta);
+			curValue.mV[VGREEN] *= (1.0f + nDelta);
+			curValue.mV[VBLUE] *= (1.0f + nDelta);
+		}
+	}
+	else
+	{
+		return RLV_RET_FAILED_UNKNOWN;
+	}
+
 	setFn(pSky, curValue);
 	pSky->update();
 
