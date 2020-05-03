@@ -1,13 +1,52 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Sonne und Mond" name="panel_settings_sky_hbodies">
-	<layout_stack>
+	<layout_stack name="main_ls">
 		<layout_panel name="sun_layout">
-			<check_box label="Beacon anzeigen" name="sunbeacon"/>
+			<text name="sun_stars_label">
+				Sonne &amp; Sterne
+			</text>
+			<text name="position_label">
+				Position:
+			</text>
+			<text name="image_label">
+				Bild:
+			</text>
+			<text name="scale_label">
+				Skalierung:
+			</text>
+			<text name="color_label">
+				Farbe:
+			</text>
+			<text name="glow_focus_label">
+				Leuchtfokus:
+			</text>
+			<text name="glow_size_label">
+				Leuchtgröße:
+			</text>
+			<text name="star_brightness_label">
+				Helligkeit Sterne:
+			</text>
+			<check_box label="Beacon anzeigen" name="sunbeacon" right="-80"/>
 		</layout_panel>
-		<layout_panel>
-			<layout_stack>
+		<layout_panel name="moon_layout_main">
+			<layout_stack name="moon_ls">
 				<layout_panel name="moon_layout">
-					<check_box label="Beacon anzeigen" name="moonbeacon"/>
+					<text name="moon_label">
+						Mond
+					</text>
+					<text name="position_label">
+						Position:
+					</text>
+					<text name="image_label">
+						Bild:
+					</text>
+					<text name="scale_label">
+						Skalierung:
+					</text>
+					<text name="brightness_label">
+						Helligkeit:
+					</text>
+					<check_box label="Beacon anzeigen" name="moonbeacon" right="-80"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
