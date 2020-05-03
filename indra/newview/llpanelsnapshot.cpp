@@ -61,7 +61,14 @@ LLPanelSnapshot::LLPanelSnapshot()
 // virtual
 BOOL LLPanelSnapshot::postBuild()
 {
-	getChild<LLUICtrl>("save_btn")->setLabelArg("[UPLOAD_COST]", std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost()));
+	// <FS:Ansariel> Fix XUI parser warning
+	//getChild<LLUICtrl>("save_btn")->setLabelArg("[UPLOAD_COST]", std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost()));
+	LLUICtrl* save_btn = findChild<LLUICtrl>("save_btn");
+	if (save_btn)
+	{
+		save_btn->setLabelArg("[UPLOAD_COST]", std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost()));
+	}
+	// </FS:Ansariel>
 	getChild<LLUICtrl>(getImageSizeComboName())->setCommitCallback(boost::bind(&LLPanelSnapshot::onResolutionComboCommit, this, _1));
     if (!getWidthSpinnerName().empty())
     {
