@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_experience_log">
+<panel name="panel_experience_log" label="События">
 	<string name="no_events" value="Нет событий."/>
 	<string name="loading" value="загрузка…"/>
 	<layout_stack name="ls1">
@@ -15,7 +15,7 @@
 			<button label="Пожаловаться" name="btn_report_xp"/>
 		</layout_panel>
 		<layout_panel name="button_panel">
-			<check_box label="Уведомлять обо всех событиях   дн." name="notify_all"/>
+			<check_box label="Уведомить о всех событиях  (Дни)" name="notify_all" width="210"/>
 			<button label="Очистить" name="btn_clear"/>
 			<button label="&lt;" name="btn_prev"/>
 			<button label="&gt;" name="btn_next"/>

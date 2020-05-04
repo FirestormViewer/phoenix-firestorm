@@ -1,47 +1,86 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="quickprefs" title="Быстрые настройки" width="280">
-<panel name="quickprefs" width="280">
-        <text name="Draw Distance" width="105" tool_tip="Устанавливает расстояние, в котором будут видны объекты.">
-            Расст. прогрузки:
-        </text>
-        <slider left_delta="101" name="DrawDistance"/>		
-        <text name="Maximum bandwidth" width="105" tool_tip="Устанавливает максимальную пропускную способность сети использования в Kbps (килобит в секунду).">
-            Max Bandwidth:
-        </text>
-        <slider left_delta="108" name="max_bandwidth"/>		
-        <text name="Particles" width="105" tool_tip="Максимальное число частиц, которое будет отображаться.">
-            Макс. частиц:
-        </text>
-        <slider left_delta="101" name="RenderMaxPartCount"/>
-		<text name="Avatar Physics LOD" width="105" tool_tip="Устанавливает уровень детализации физики  аватара.">
-            Физика-NOD
-        </text>
-        <slider left_delta="101" name="RenderAvatarPhysicsLOD"/>		
-        <text name="LOD Factor" width="105"  tool_tip="Устанавливает уровень детализации примитивов (множитель для текущей области экрана, для которого уровень детализации рассчитывается) [по умолчанию значение меняется в зависимости от системы]">
-            LOD Фактор:
-        </text>
-        <slider left_delta="90" name="RenderVolumeLODFactor"/>		
-        <text name="Max Avatars" width="105" tool_tip="Кол-во аватаров.Меньшее значение значительно повышает скорость на оживленных местах.[По умолчанию 12]">
-            Макс аватаров:
-        </text>
-        <slider left_delta="87" name="RenderAvatarMaxVisible"/>		
-        <text name="Height Offset" width="105" tool_tip="Позволяет изменять расстояние по вертикали от аватара, не меняя самой фигуры.">
-            Выс.вмещения:
-        </text>		
-		<text name="name_tags_textbox">
-            Имена аватаров:
-        </text>
-		<radio_group left="45" name="Name_Tag_Preference">
-			<radio_item label="Вкл." name="radio"/>
-			<radio_item label="Выкл." name="radio2"/>
-        </radio_group>
-        <text name="WL Sky" width="67" tool_tip="Настройки неба">
-            Небо:
-        </text>
-        <combo_box left_delta="77" name="WLPresetsCombo"/>
-        <text name="WL Water" width="67" tool_tip="Настройки воды.">
-            Вода:
-        </text>
-        <combo_box left_delta="77" name="WaterPresetsCombo"/>
+<floater name="quickprefs" title="Быстрые настройки" width="260">
+<panel name="quickprefs" width="260">
+  <layout_stack name="wl_options_stack" width="260">
+    <layout_panel name="wl_options_panel">
+      <text name="HoverHeightLabel" tool_tip="Позволяет изменять положение аватара по вертикали, не меняя самой фигуры." width="100">
+        Выс.смещения:
+      </text>
+
+<!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
+      <text name="Maximum bandwidth" tool_tip="Устанавливает максимальную пропускную способность сети использования в Kbps (килобит в секунду)." width="100">
+        Макс.Скор.Сети:
+      </text>
+
+      <text name="Maximum complexity" tool_tip="Контролирует, в какой момент визуально сложный аватар отрисуется как силуэт" width="100">
+        Макс.Сложность:
+      </text>
+      <slider text_width="40" name="IndirectMaxComplexity" right="-50" />
+      <text name="IndirectMaxComplexityText" width="50">
+        Неогр.
+      </text>
+ <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
+      <check_box label="Использовать Окружение Региона" name="UseRegionWindlight"/>
+      <text name="WL Sky" tool_tip="Предустановка окружения для неба">
+        Небо:
+      </text>
+
+      <text name="WL Water" tool_tip="Предустановка окружения для воды">
+        Вода:
+      </text>
+
+      <text name="Day Cycle" tool_tip="Предустановка окружения для дневного цикла">
+        Цикл дня:
+      </text>
+      <icon name="SkyDayCycle" tool_tip="Изменить время суток"/>
+      <button name="ResetToRegionDefault" tool_tip="Сброс настроек Окружения по умолчанию на регионе"/>
+
+      <!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->
+      <button  name="button_edit" tool_tip="Конфигурация Быстрых Настроек"/>
+      <!-- </FS:Zi> -->
+
+    </layout_panel>
+  </layout_stack>
 </panel>
+
+<!-- <FS:Zi> Dynamic quick prefs: edit overlay -->
+<panel  name="edit_overlay_panel">
+  <button name="move_up_button" tool_tip="Сдвинуть выбранную опцию на одну позицию вверх"/>
+  <button name="add_new_button" tool_tip="Добавить новую опцию быстрых настроек"/>
+  <line_editor name="label_edit" tool_tip="Введите ярлык для управления им" label="Ярлык Управления:"/>
+  <button name="move_down_button" tool_tip="Сдвинуть выбранную опцию на одну позицию вниз"/>
+
+  <combo_box name="control_name_combo" tool_tip="Выберите элемент управления из списка параметров отладки">
+    <combo_box.item label="=== Выбрать ===" name="control_name_list_header"/>
+  </combo_box>
+  <text name="control_type_label">
+    Тип:
+  </text>
+
+  <combo_box name="control_type_combo_box" tool_tip="Выберите тип управления пользовательским интерфейсом, который вы хотите использовать для этого параметра.">
+  <!-- do not use <combo_item>Foo</combo_item>, it doesn't work -->
+    <combo_box.item label="Флажок" name="Checkbox" />
+    <combo_box.item label="Текст" name="Text" />
+    <combo_box.item label="Счетчик" name="Spinner" />
+    <combo_box.item label="Движок" name="Slider" />
+    <combo_box.item label="Перекл." name="Radio" />
+    <combo_box.item label="Цвет 3" name="Color 3"/>
+    <combo_box.item label="Цвет 4" name="Color 4"/>
+  </combo_box>
+
+  <!-- enable/disable done in code depending on the type of control chosen -->
+  <check_box name="control_integer_checkbox"
+  tool_tip="Активируйте этот флажок, если ваш параметр является целым значением, т.е. имеет только целые числа"
+  label="Целое"/>
+
+  <!-- enable/disable additionally done in code depending on the type of control chosen -->
+  <spinner name="control_min_edit" tool_tip="Минимальное значение, которое вам будет разрешено выбрать" label=" Мин:"/>
+  <spinner name="control_max_edit" tool_tip="Максимальное значение, которое вам будет разрешено выбрать" label="Макс:"/>
+  <spinner name="control_increment_edit" tool_tip="Приращение для вашего значения, когда вы нажимаете стрелку вверх/вниз на счетчике или используете клавиши курсора на движке"
+  label=" Шаг:" label_width="32" width="81" />
+  <button name="Restore_Btn" tool_tip="Восстановить настройки по умолчанию" label="Сброс"/>
+  <!-- reverse the image names here beause we have a toggle ON button -->
+  <button name="button_close" tool_tip="Закрыть панель наложения редактирования"/>
+</panel>
+
 </floater>

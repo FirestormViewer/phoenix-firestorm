@@ -6,4 +6,10 @@
 	<menu_item_check label="Показать расположение в верхнем меню" name="ShowMenuBarLocation"/>
 	<menu_item_check label="Показать канал симулятора в строке состояния" name="FSStatusbarShowSimulatorVersion"/>
 	<menu_item_check label="Показать поиск разделов в меню" name="FSMenuSearch"/>
+	<menu_item_check label="Показать Денежки" name="FSShowCurrencyBalanceInStatusbar"/>
+	<menu_item_check label="Показать Управление Медиа" name="FSEnableVolumeControls"/>
+	<menu_item_check label="Показать FPS" name="FSStatusBarShowFPS"/>
+	<menu_item_check label="Показать Индикатор трафика" name="ShowNetStats"/>
+	<menu_item_check label="Показать Координаты" name="Coordinates"/>
+	<menu_item_check label="Показать Разрешения Участка" name="Parcel Properties"/>
 </menu>

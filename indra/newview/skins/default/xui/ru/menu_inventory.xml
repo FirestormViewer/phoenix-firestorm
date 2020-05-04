@@ -17,7 +17,7 @@
 	<menu_item_call label="Переименовать" name="Task Rename"/>
 	<menu_item_call label="Удалить" name="Task Remove"/>
 	<menu_item_call label="Очистить корзину" name="Empty Trash"/>
-	<menu_item_call label="Очистить 'Потерянное и найденное'" name="Empty Lost And Found"/>
+	<menu_item_call label="Очистить 'Найденные вещи'" name="Empty Lost And Found"/>
 	<menu_item_call label="Новая папка" name="New Folder"/>
 	<menu_item_call label="Новый скрипт" name="New Script"/>
 	<menu_item_call label="Новая заметка" name="New Note"/>
@@ -42,6 +42,12 @@
 		<menu_item_call label="Новые волосы" name="New Hair"/>
 		<menu_item_call label="Новые глаза" name="New Eyes"/>
 	</menu>
+		<menu label="Использовать для" name="upload_def">
+		<menu_item_call label="загрузок Изображений" name="Image uploads"/>
+		<menu_item_call label="загрузок Звуков" name="Sound uploads"/>
+		<menu_item_call label="загрузок Анимаций" name="Animation uploads"/>
+		<menu_item_call label="загрузок Моделей" name="Model uploads"/>
+	</menu>
 	<menu label="Изменить тип" name="Change Type">
 		<menu_item_call label="По умолчанию" name="Default"/>
 		<menu_item_call label="Перчатки" name="Gloves"/>
@@ -61,6 +67,7 @@
 	<menu_item_call label="Добавить в комплект одежды" name="Add To Outfit"/>
 	<menu_item_call label="Создать элементы" name="Wear Items"/>
 	<menu_item_call label="Удалить из комплекта одежды" name="Remove From Outfit"/>
+	<menu_item_call label="Копировать список в буфер" name="Copy outfit list to clipboard"/>
 	<menu_item_call label="Найти оригинал" name="Find Original"/>
 	<menu_item_call label="Удалить объект" name="Purge Item"/>
 	<menu_item_call label="Восстановить объект" name="Restore Item"/>
@@ -68,6 +75,8 @@
 	<menu_item_call label="Открыть оригинал" name="Open Original"/>
 	<menu_item_call label="Свойства" name="Properties"/>
 	<menu_item_call label="Переименовать" name="Rename"/>
+	<menu_item_call label="Защитить папку" name="ProtectFolder"/>
+	<menu_item_call label="Снять защиту папки" name="UnprotectFolder"/>
 	<menu_item_call label="Копировать идентификатор UUID" name="Copy Asset UUID"/>
 	<menu_item_call label="Возврат к последней позиции" name="Restore to Last Position"/>
 	<menu_item_call label="Копировать" name="Copy"/>
@@ -103,6 +112,7 @@
 	<menu label="Прикрепить к HUD" name="Attach To HUD"/>
 	<menu_item_call label="Редактировать" name="Wearable Edit"/>
 	<menu_item_call label="Коснуться" name="Touch Attachment"/>
+	<menu_item_call label="Обновить текстуру" name="Texture Refresh Attachment" />
 	<menu_item_call label="Снять" name="Take Off"/>
 	<menu_item_call label="Отделить от себя" name="Detach From Yourself"/>
 	<menu_item_call label="Отправить на Marketplace" name="Marketplace Send"/>

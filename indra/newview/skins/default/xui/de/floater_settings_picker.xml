@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="settings picker" title="AUSWÄHLEN: EINSTELLUNGEN">
+<floater name="settings picker" title="Einstellungen auswählen">
 	<floater.string name="pick title">
 		Auswahl:
 	</floater.string>
 	<floater.string name="pick_track">
-		PFAD AUSWÄHLEN
+		Pfad auswählen
 	</floater.string>
 	<floater.string name="pick_settings">
-		EINSTELLUNGEN AUSWÄHLEN
+		Einstellungen auswählen
 	</floater.string>
 	<floater.string name="track_water">
 		Wasser

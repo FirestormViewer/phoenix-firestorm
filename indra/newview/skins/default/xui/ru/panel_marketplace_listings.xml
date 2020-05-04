@@ -3,9 +3,14 @@
 	<panel name="tool_panel">
 		<menu_button name="sort_btn" tool_tip="Параметры просмотра/сортировки"/>
 		<button name="add_btn" tool_tip="Создать новую папку списка"/>
-		<button label="Проверка на ошибки" name="audit_btn" tool_tip="Проверьте свои списки товаров в торговом центре"/>
+		<button label="Проверка на ошибки" name="audit_btn" left_pad="110" width="130" tool_tip="Проверьте свои списки товаров в торговом центре"/>
 	</panel>
 	<panel name="tab_container_panel">
 		<filter_editor label="Фильтровать списки товаров в торговом центре" name="filter_editor"/>
+	</panel>
+	<panel name="marketplace_drop_zone">
+		<text name="drop_zone_label">
+			Тащи сюда папки для создания новых списков
+		</text>
 	</panel>
 </panel>

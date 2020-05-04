@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="block_list_panel">
+	<panel label="bottom_panel" name="blocked_buttons_panel">
+		<filter_editor label="Фильтр" name="blocked_filter_input"/>
+		<menu_button name="blocked_gear_btn" tool_tip="Действия с выбраным персоной или объектом"/>
+		<menu_button name="view_btn" tool_tip="Сортировка"/>
+		<menu_button name="plus_btn" tool_tip="Выбери Резидента или объект для блокировки"/>
+		<button name="unblock_btn" tool_tip="Удалить Резидента или объект из списка блокировки"/>
+	</panel>
+	<text name="block_limit">
+		Блокировано: [COUNT] ([LIMIT] макс.)
+	</text>
+	<fs_scroll_list name="block_list">
+		<fs_scroll_list.columns name="item_name" label="Имя"/>
+		<fs_scroll_list.columns name="item_type" label="Тип"/>
+	</fs_scroll_list>
+</panel>

@@ -31,10 +31,9 @@
 					Tageszyklus:
 				</text>
 				<combo_box left_delta="77" name="DCPresetsCombo"/>
-				<icon name="SkyDayCycle" tool_tip="Tageszeit ändern" width="220"/>
-				<multi_slider name="WLSunPos" width="220"/>
-				<button name="ResetToRegionDefault" tool_tip="Windlight-Voreinstellungen auf Regionsstandard zurücksetzen"/>
-				<button name="button_edit" tool_tip="Schnelleinstellungen konfigurieren"/>
+				<button name="btn_personal_lighting" label="Persönliche Beleuchtung..." width="227"/>
+				<button name="ResetToRegionDefault" tool_tip="Setzt die Umgebungseinstellungen auf die gemeinsame Umgebung zurück." left="234"/>
+				<button name="button_edit" tool_tip="Schnelleinstellungen konfigurieren" left="255"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>

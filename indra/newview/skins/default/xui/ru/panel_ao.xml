@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel name="animation_overrider_outer_panel">
+<!-- Main Panel -->
+	<panel name="animation_overrider_panel">
+		<combo_box name="ao_set_selection_combo" tool_tip="Выберите набор анимаций для редактирования." />
+		<button name="ao_activate" tool_tip="Активировать этот набор анимации сейчас." />
+		<check_box name="ao_default" label="По умолчанию" tool_tip="Сделать этот набор анимаций по запускающимся при входе в систему." width="20" />
+		<button name="ao_add" tool_tip="Создать новый набор анимаций." />
+		<button name="ao_remove" tool_tip="Удалить этот набор анимаций." />
+		<check_box name="ao_sit_override" label="Сидеть" tool_tip="Отметьте это, если вы хотите переопределить анимацию сидения." width="100" />
+		<check_box name="ao_smart" label="Умный" tool_tip="Интеллектуальный режим пытается определить, будет ли переопределение сидячего конфликтовать с собственной анимацией объекта, и временно отключит переопределение."
+			left_pad="4" right="-1" height="16" />
+		<check_box name="ao_disable_stands_in_mouselook" label="Откл. Позы в Mouselook" tool_tip="Если вам необходимо сохранить собственную анимацию позы в Mouselook, установите этот флажок." width="100" />
+		<combo_box name="ao_state_selection_combo" tool_tip="Выберите состояние анимации для редактирования." />
+		<panel name="ao_animation_move_trash_panel" >
+			<button name="ao_move_up" tool_tip="Переместить выбранную анимацию вверх в списке." />
+			<button name="ao_move_down" tool_tip="Переместить выбранную анимацию вниз в списке." />
+			<button name="ao_trash" tool_tip="Удалить выбранную анимацию из списка." />
+		</panel>
+		<check_box name="ao_cycle" label="Цикл" tool_tip="Воспроизводить другую анимацию из списка каждый раз, когда вызывается состояние анимации." width="55" />
+		<check_box name="ao_randomize" label="Случайный" tool_tip="Случайный порядок анимации в режиме цикла."
+			width="100" />
+		<text name="ao_cycle_time_seconds_label" value="Время (секунды):" width="120" />
+		<spinner name="ao_cycle_time" tool_tip="Время до перехода к следующей анимации в списке. Установите это значение в 0, чтобы отключить автоматическую анимацию."  />
+		<button name="ao_reload" label="Перезагрузить" tool_tip="Перезагрузить конфигурацию переопределения анимации." />
+		<layout_stack name="next_previous_buttons_stack" >
+			<layout_panel name="next_previous_buttons_stack_left">
+				<button name="ao_previous" tool_tip="Перейти к предыдущей анимации текущего состояния." />
+			</layout_panel>
+			<layout_panel name="next_previous_buttons_stack_right">
+				<button name="ao_next" tool_tip="Перейти к следующей анимации текущего состояния." />
+			</layout_panel>
+		</layout_stack>
+		<button name="ao_less" tool_tip="Показать небольшой интерфейс Аниматора." />
+	</panel>
+<!-- Reload Cover Panel -->
+	<panel name="ao_reload_cover">
+		<panel name="ao_reload_text_panel">
+			<text name="reload_label" >
+				Перезагрузка конфигурации
+			</text>
+			<text name="wait_label">
+				Пожалуйста, ждите
+			</text>
+		</panel>
+	</panel>
+<!-- Small Panel -->
+	<panel name="animation_overrider_panel_small">
+		<combo_box name="ao_set_selection_combo_small" tool_tip="Выберите набор анимаций для редактирования."/>
+		<button name="ao_more" tool_tip="Показать полный интерфейс для конфигурации." />
+		<button name="ao_previous_small" tool_tip="Перейти к предыдущей анимации текущего состояния." />
+		<button name="ao_next_small" tool_tip="Перейти к следующей анимации текущего состояния." />
+		<check_box name="ao_sit_override_small" label="Сидеть" tool_tip="Отметьте это, если вы хотите переопределить анимацию сидения." width="45" />
+	</panel>
+</panel>

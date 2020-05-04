@@ -110,7 +110,6 @@
                  value="Media" />
             </combo_box>
             <radio_group
-            control_name="ComboMaterialType"
             height="50"
             layout="topleft"
             left_pad="20"

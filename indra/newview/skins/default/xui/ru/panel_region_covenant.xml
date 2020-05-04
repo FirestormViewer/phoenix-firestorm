@@ -73,7 +73,7 @@
 	<text name="changeable_lbl">
 		Разделение:
 	</text>
-	<text name="changeable_clause">
+	<text name="changeable_clause" word_wrap="true" height="30">
 		Земля в этом регионе не может быть объединена или разделена.
 	</text>
 </panel>

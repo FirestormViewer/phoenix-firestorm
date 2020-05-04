@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_experiences" label="Experiences">
+<panel name="panel_experiences" label="Приключения">
 	<string name="loading_experiences" value="Загрузка приключений..."/>
 	<string name="no_experiences" value="Нет приключений."/>
 	<string name="acquire" value="Приобрести приключение"/>
