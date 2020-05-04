@@ -7,9 +7,11 @@
 	</radio_group>
 	<panel name="user_environment_settings">
 		<text name="note1">
-			ПРИМЕЧАНИЕ: Ваши персональные настройки НЕ видны другим пользователям.
+			ПРИМЕЧАНИЕ: Ваши настройки
 		</text>
-		<view_border name="border"/>  
+		<text name="note2" width="265">
+			НЕ видны другим пользователям.
+		</text>
 		<text name="water_settings_title">
 			Вода
 		</text>
@@ -21,15 +23,15 @@
 		</text>
 		<radio_group name="sky_dayc_settings_radio_group">
 			<radio_item label="Небо" name="my_sky_settings"/>
-			<radio_item label="Цикл дня" name="my_dayc_settings"/>  	
+			<radio_item label="Цикл дня" name="my_dayc_settings"/>
 		</radio_group>
 		<combo_box name="sky_settings_preset_combo">
 			<combo_box.item label="-Выбор настройки-" name="item0"/>
 		</combo_box>
 		<combo_box name="dayc_settings_preset_combo">
-			<combo_box.item label="-Выбор настройки-"/>
+			<combo_box.item label="-Выбор настройки-" name="item0"/>
 		</combo_box>
 	</panel>
 	<button label="OK" name="ok_btn"/>
-	<button label="Отмена" name="cancel_btn" />	
+	<button label="Отмена" name="cancel_btn" />
 </floater>

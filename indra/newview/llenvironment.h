@@ -262,11 +262,9 @@ public:
         LLSettingsWater::ptr_t          getWater() const        { return mWater; }
         LLSettingsDay::Seconds          getDayLength() const    { return mDayLength; }
         LLSettingsDay::Seconds          getDayOffset() const    { return mDayOffset; }
-        LLSettingsDay::Seconds          getDayOffsetOverride() const    { return mDayOffsetOverride; } //KC
         S32                             getSkyTrack() const     { return mSkyTrack; }
 
         void                            setDayOffset(LLSettingsBase::Seconds offset) { mDayOffset = offset; animate(); }
-        void                            setDayOffsetOverride(LLSettingsBase::Seconds offset) { mDayOffsetOverride = offset; animate(); } //KC
 
         virtual void                    animate();
 
@@ -293,7 +291,6 @@ public:
 
         LLSettingsDay::Seconds      mDayLength;
         LLSettingsDay::Seconds      mDayOffset;
-        LLSettingsDay::Seconds      mDayOffsetOverride;
         S32                         mLastTrackAltitude;
 
         LLSettingsBlender::ptr_t    mBlenderSky;
@@ -324,14 +321,6 @@ public:
 
     DayInstance::ptr_t          getSelectedEnvironmentInstance();
     DayInstance::ptr_t          getSharedEnvironmentInstance();
-
-//<KC: Environment hacks>
-public:
-    LLSettingsDay::Seconds getDayLength() const { return (mCurrentEnvironment) ? mCurrentEnvironment->getDayLength() : LLSettingsDay::MINIMUM_DAYOFFSET; }
-    LLSettingsDay::Seconds getDayOffset() const { return (mCurrentEnvironment) ? mCurrentEnvironment->getDayOffset() : LLSettingsDay::INVALID_DAYOFFSET; }
-    void setDayOffsetOverride(LLSettingsBase::Seconds offset) { if (mCurrentEnvironment) mCurrentEnvironment->setDayOffsetOverride(offset); }
-    LLSettingsDay::Seconds getDayOffsetOverride() const { return (mCurrentEnvironment) ? mCurrentEnvironment->getDayOffsetOverride() : LLSettingsDay::MINIMUM_DAYOFFSET; }
-//</KC: Environment hacks>
 
 protected:
     virtual void                initSingleton() override;

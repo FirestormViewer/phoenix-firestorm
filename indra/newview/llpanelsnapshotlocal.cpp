@@ -145,7 +145,14 @@ void LLPanelSnapshotLocal::updateControls(const LLSD& info)
 
 	const bool show_quality_ctrls = (fmt == LLSnapshotModel::SNAPSHOT_FORMAT_JPEG);
 	getChild<LLUICtrl>("image_quality_slider")->setVisible(show_quality_ctrls);
-	getChild<LLUICtrl>("image_quality_level")->setVisible(show_quality_ctrls);
+	// <FS:Ansariel> Fix XUI parser warning
+	//getChild<LLUICtrl>("image_quality_level")->setVisible(show_quality_ctrls);
+	LLUICtrl* image_quality_level = findChild<LLUICtrl>("image_quality_level");
+	if (image_quality_level)
+	{
+		image_quality_level->setVisible(show_quality_ctrls);
+	}
+	// </FS:Ansariel>
 
 	getChild<LLUICtrl>("image_quality_slider")->setValue(gSavedSettings.getS32("SnapshotQuality"));
 	updateImageQualityLevel();

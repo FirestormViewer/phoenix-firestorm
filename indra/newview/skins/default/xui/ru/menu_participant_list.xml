@@ -21,4 +21,5 @@
 		<menu_item_call label="Отключение всех" name="ModerateVoiceMute"/>
 		<menu_item_call label="Отменить отключение всех" name="ModerateVoiceUnmute"/>
 	</context_menu>
+	<menu_item_call label="Забанить" name="BanMember" />
 </context_menu>

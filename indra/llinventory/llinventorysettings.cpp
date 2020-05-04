@@ -54,7 +54,15 @@ struct SettingsEntry : public LLDictionaryEntry
         {
             mLabel = transdname;
         }
-    }
+
+        // <FS:Ansariel> Name of newly created setting is not translated
+        transdname = sTranslator->getString(mDefaultNewName);
+        if (!transdname.empty())
+        {
+            mDefaultNewName = transdname;
+        }
+        // </FS:Ansariel>
+}
 
     std::string mLabel;
     std::string mDefaultNewName; //keep mLabel for backward compatibility

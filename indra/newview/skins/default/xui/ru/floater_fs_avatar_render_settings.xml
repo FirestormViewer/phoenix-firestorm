@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatarrendersettings" title="Настройки отображения аватаров">
+	<floater.string name="av_render_never">Никогда</floater.string>
+	<floater.string name="av_render_always">Полностью</floater.string>
+	<filter_editor label="Фильтр аватаров" name="filter_input" />
+	<menu_button name="plus_btn" tool_tip="Добавить новую персону в список"/>
+	<name_list name="avatar_list">
+		<name_list.columns label="Имя" name="name" />
+		<name_list.columns label="Отображение" name="render_setting" />
+	</name_list>
+	<button name="close_btn" label="Закрыть"/>
+</floater>

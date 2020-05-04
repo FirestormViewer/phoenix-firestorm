@@ -5,7 +5,7 @@
     can_resize="false"
     can_dock="true"
     can_close="true"
-    height="328"
+    height="178"
     width="260"
     layout="topleft"
     name="quickprefs"
@@ -20,7 +20,7 @@
     left="0"
     top="16"
     width="260"
-    height="313"
+    height="152"
     follows="all"
     layout="topleft">
     <layout_stack
@@ -59,7 +59,7 @@
       left="0"
       top_pad="0"
       width="260"
-      height="302"
+      height="150"
       orientation="vertical">
 
      <layout_panel
@@ -67,7 +67,7 @@
       follows="all"
       name="wl_options_panel"
       invisibility_control="QuickPrefsEditMode"
-      height="302">
+      height="150">
         <text
             type="string"
             length="1"
@@ -309,32 +309,29 @@
             label_selected=""
             image_overlay="Arrow_Right_Off"
             scale_image="true" />
-                <text
-                 top_pad="7"
-                 left="10"
-                 height="10"
-                 width="90"
-                 follows="left|top"
-                 layout="topleft"
-                >
-                    Sun Position:
-                </text>
-                <sun_moon_trackball
-                 name="sun_rotation"
-                 top_pad="5"
-                 left_delta="0"
-                 height="150"
-                 width="150"
-                 follows="left|top"
-                 thumb_mode="sun"
-                />
+        <button
+            enabled="true"
+            name="btn_personal_lighting"
+            follows="left|top"
+            height="20"
+            width="208"
+            top_delta="25"
+            left="5"
+            label="Personal Lighting...">
+            <button.commit_callback
+             function="Floater.ToggleOrBringToFront"
+             parameter="env_adjust_snapshot" />
+            <button.on_enable
+             function="RLV.EnableIfNot"
+             parameter="setenv" />
+        </button>
                 <button
                  name="ResetToRegionDefault"
                  label=""
-                 tool_tip="Reset the WindLight options to region default"
+                 tool_tip="Reset the environment options to shared environment."
                  enabled="true"
-                 top_delta="-20"
-                 left="236"
+                 top_delta="0"
+                 left="215"
                  height="20"
                  width="20"
                  follows="left|top"
@@ -342,39 +339,12 @@
                  label_selected=""
                  scale_image="true"
                 />
-                <text
-                 top_delta="5"
-                 left="170"
-                 height="10"
-                 width="90"
-                 follows="left|top"
-                 layout="topleft"
-                >
-                    WL Time:
-                </text>
-                <multi_slider
-                 name="time_offset"
-                 top_delta="15"
-                 left_delta="15"
-                 height="150"
-                 width="15"
-                 follows="left|top"
-                 layout="topleft"
-                 can_edit_text="true"
-                 decimal_digits="0"
-                 increment="120"
-                 initial_value="0"
-                 max_sliders="1"
-                 max_val="86400"
-                 orientation="vertical"
-                 show_text="false"
-                />
                 <!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->
                 <button
                  name="button_edit"
                  label=""
                  tool_tip="Click here to configure your Quick Preferences controls"
-                 top_delta="130"
+                 top_delta="0"
                  left="236"
                  height="20"
                  width="20"

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="linkreplace" title="Замена Ссылок Инвентаря">
+	<string name="Ready">Готово...</string>
+	<string name="TargetNotFound">Целевой элемент не найден.</string>
+	<string name="ItemsIdentical">Источник и цель идентичны.</string>
+	<string name="ItemsFound">Найдено [NUM] ссылок на ресурсы.</string>
+	<string name="ItemsRemaining">Оставшиеся ссылки: [NUM]</string>
+	<string name="ReplaceFinished">Закончена замена ссылок инвентаря.</string>
+	<text name="source_label">Стар.:</text>
+	<inventory_link_replace_drop_target name="source_uuid_editor" tool_tip="Перетащите сюда текущий инвентарь, который нужно заменить."/>
+	<text left="10" right="-10" name="delete_text">
+		Ссылки на этот элемент будут удалены.
+	</text>
+	<text name="target_label">Нов.:</text>
+	<inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="Перетащите новый предмет инвентаря сюда."/>
+	<check_box label="Удалить только ссылки" name="delete_links_only"/>
+	<text name="status_text">Готово...</text>
+	<button name="btn_refresh" label="Обновить"/>
+	<button name="btn_start" label="Старт"/>
+</floater>

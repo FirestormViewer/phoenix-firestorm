@@ -27,6 +27,7 @@
 			<check_box label="Texturen konsolidieren" name="consolidate_check" />
 			<check_box label="Transparente Texturen überspringen" name="skip_transparent_check" />
 			<check_box label="Texturparameter anwenden" name="texture_params_check" />
+			<check_box label="Einzelne UV-Map" name="single_uv_map_check" />
 			<text name="TextureFormatText">
 				Textur-Format:
 			</text>

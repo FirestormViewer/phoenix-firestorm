@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floaterland" title="О земле">
 	<floater.string name="Hours">
-		\[HOURS] ч
+		[HOURS] ч
 	</floater.string>
 	<floater.string name="Hour">
 		ч
@@ -78,7 +78,7 @@
                 Тип:
             </text>
             <text name="LandTypeText">
-                Материк / Homestead
+                Материк / Усадьба
             </text>
             <text name="ContentRating">
                 Рейтинг:
@@ -96,7 +96,7 @@
                 Группа:
             </text>
             <text name="GroupText">
-				Загрузка...  
+				Загрузка...
 	    </text>
             <button label="Задать" name="Set..."/>
             <check_box label="Разрешить передачу земли группе" name="check deed" tool_tip="Должностное лицо группы может передать эту землю группе с учетом существующего взноса." />
@@ -174,6 +174,9 @@
             <text_editor name="covenant_editor">
                 Для данного острова нет договора.
             </text_editor>
+            <text name="covenant_timestamp_text">
+                Последнее изменение Wed Dec 31 16:00:00 1969
+            </text>
             <text name="region_section_lbl">
                 Регион:
             </text>
@@ -182,6 +185,9 @@
             </text>
             <text name="region_landtype_lbl">
                 Тип:
+            </text>
+            <text name="region_landtype_text">
+                Материк / Усадьба
             </text>
             <text name="region_maturity_lbl">
                 Рейтинг:
@@ -298,7 +304,7 @@
             <text name="allow_label">
                 Разрешить другим жителям:
             </text>
-          <text name="allow_label1">
+          <text name="allow_label1" width="150">
             Редактировать ландшафт:
           </text>
           <check_box label="Все" name="edit land check" tool_tip="Если галочка установлена, любой может изменить ландшафт вашей земли. Лучше всего оставить это без изменений."/>
@@ -410,7 +416,7 @@
             <text name="Sound:">
                 Звук:
             </text>
-            <check_box label="Ограничить жесты и звуки объектов границами участка" name="check sound local" width="292" 
+            <check_box label="Ограничить жесты и звуки объектов границами участка" name="check sound local" width="292"
 			 tool_tip="Если выбрана данная функция, то жесты и звуки от объектов будут слышны только на данном участке, но не будут слышны за его пределами."/>
           <text name="Avatar Sounds:">
                Звуки аватара:
@@ -445,6 +451,9 @@
             </combo_box>
             <spinner label="Стоимость в L$:" name="PriceSpin"/>
             <spinner label="Часов доступа:" name="HoursSpin" />
+            <text name="OwnerLimited">
+                (Владелец недвижимости, возможно, ограничил эти выборы)
+            </text>
 			<panel name="Allowed_layout_panel">
             <text name="AllowedText">
                 Разрешенные жители ([COUNT]/[MAX])
@@ -459,7 +468,7 @@
             </text>
 				<name_list name="BannedList" tool_tip="([LISTED] в списке, [MAX] максимум)">
 					<columns label="Имя" name="name"/>
-					<columns label="Продолжительность" name="duration"/>
+					<columns label="Время" name="duration"/>
 				</name_list>
             <button label="Добавить" name="add_banned"/>
             <button label="Удалить" label_selected="Удалить"  name="remove_banned" />

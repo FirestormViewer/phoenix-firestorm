@@ -12,7 +12,7 @@
 	<panel.string name="group_join_free">
 		Бесплатно
 	</panel.string>
-	
+
 	<layout_stack name="group_info_sidetray_main">
 		<layout_panel name="header_container">
 			<panel name="group_info_top">
@@ -28,6 +28,7 @@
 						<accordion_tab name="group_roles_tab" title="Роли"/>
 						<accordion_tab name="group_notices_tab" title="Объявления"/>
 						<accordion_tab name="group_land_tab" title="Земля/активы"/>
+						<accordion_tab name="group_experiences_tab" title="Приключения"/>
 					</accordion>
 				</layout_panel>
 			</layout_stack>

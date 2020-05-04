@@ -12,6 +12,7 @@
 	</panel>
 	<panel label="Люди" name="tab-people">
 		<check_box label="Мигание значка приложения при получении новых сообщение, если [APP_NAME] свернут" name="FSFlashOnMessage"/>
+		<check_box label="Также мигание значка приложения при получении сообщения от объекта" name="FSFlashOnObjectIM" />
 		<check_box label="Сообщать мне, если кто-то изменил свое отображаемое имя" name="FSShowDisplayNameUpdateNotification"/>
 		<check_box label="Сообщать мне, если я кого-то заблокировал или разблокировал" name="FSReportBlockToNearbyChat"/>
 		<text name="friends_logon_label">

@@ -467,6 +467,9 @@
 			<menu_item_check label="Sonnenlicht deaktivieren" name="Disable Sunlight"/>
 			<menu_item_check label="Lokale Lichtquellen deaktivieren" name="Disable Local Lights"/>
 			<menu_item_call label="Animesh nicht anzeigen" name="Derender Animesh"/>
+			<menu_item_check label="Umgebungsbeleuchtung deaktivieren" name="Disable Ambient"/>
+			<menu_item_check label="Sonnenlicht deaktivieren" name="Disable Sunlight"/>
+			<menu_item_check label="Lokale Lichtquellen deaktivieren" name="Disable Local Lights"/>
 			<menu_item_check label="Texturen in Vollauflösung (gefährlich)" name="Full Res Textures"/>
 			<menu_item_check label="Angehängte Lichter rendern" name="Render Attached Lights"/>
 			<menu_item_check label="Angehängte Partikel rendern" name="Render Attached Particles"/>
@@ -555,7 +558,7 @@
 			<menu_item_check label="Kamerafokus anzeigen" name="Show Look At"/>
 			<menu_item_check label="Klickpunkt anzeigen" name="Show Point At"/>
 			<menu_item_check label="Landaktualisierung debuggen" name="Debug Joint Updates"/>
-			<menu_item_check label="LOD deaktiveren" name="Disable LOD"/>
+			<menu_item_check label="LOD deaktivieren" name="Disable LOD"/>
 			<menu_item_check label="Sichtbare Agenten debuggen" name="Debug Character Vis"/>
 			<menu_item_check label="Gelenkpunkte anzeigen" name="Show Collision Skeleton"/>
 			<menu_item_check label="Knochen anzeigen" name="Show Bones"/>

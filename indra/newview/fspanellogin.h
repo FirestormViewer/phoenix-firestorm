@@ -89,6 +89,7 @@ public:
 
 	static void clearPassword() { sPassword.clear(); }
 
+	void gridListChanged(bool success);
 private:
 	void addFavoritesToStartLocation();
 	void addUsersToCombo(BOOL show_server);
@@ -109,7 +110,6 @@ private:
 	static void onClickRemove(void*);
 	static void onRemoveCallback(const LLSD& notification, const LLSD& response);
 	static void onClickGridMgrHelp(void*);
-	static void gridListChanged(bool success);
 	static std::string credentialName();
 
 private:
@@ -132,6 +132,7 @@ private:
 
 	std::string		mPreviousUsername;
 	static std::string	sPassword;
+	static std::string	sPendingNewGridURI;
 
 	bool			mInitialized;
 };
