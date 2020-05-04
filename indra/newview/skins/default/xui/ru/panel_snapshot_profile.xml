@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_snapshot_profile">
 	<text name="title">
-		Опубликовать в мой профиль
+		В мой профиль
 	</text>
 	<combo_box label="Разрешение" name="profile_size_combo">
 		<combo_box.item label="Данное окно" name="CurrentWindow"/>
@@ -12,8 +12,7 @@
 	</combo_box>
 <!--	<layout_stack name="profile_image_params_ls">
 		<layout_panel name="profile_image_size_lp">-->
-			<spinner label="Ширина" name="profile_snapshot_width"/>
-			<spinner label="Высота" name="profile_snapshot_height"/>
+			<spinner label="Ширина Высота" name="profile_snapshot_width"/>
 			<check_box label="Сохранять пропорции" name="profile_keep_aspect_check"/>
 <!--		</layout_panel>
 		<layout_panel name="profile_image_metadata_lp">-->
@@ -23,6 +22,6 @@
 			<check_box initial_value="true" label="Включать место" name="add_location_cb"/>
 <!--		</layout_panel>
 	</layout_stack>-->
-	<button label="Отмена" name="cancel_btn"/>
+	<button label="&#x25B6; Выбор" name="cancel_btn"/>
 	<button label="Добавить" name="post_btn"/>
 </panel>

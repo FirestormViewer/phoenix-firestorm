@@ -6,26 +6,32 @@
 	<floater.string name="Copy">
 		Копировать в инвентарь
 	</floater.string>
+	<floater.string name="UploaderDateTime">
+		Загрузил: [UPLOADER] в [DATE_TIME]
+	</floater.string>
 	<text name="desc txt">
 		Описание:
 	</text>
-	<text name="dimensions">
-		[WIDTH]пикселей x [HEIGHT]пикселей
-	</text>
-	<text name="aspect_ratio">
-		Просмотр изображения с соотношением сторон
-	</text>
-	<combo_box name="combo_aspect_ratio" tool_tip="Просмотр изображения с фиксированным соотношением сторон">
-		<combo_item name="Unconstrained">
-			Без ограничения
-		</combo_item>
-		<combo_item name="1:1" tool_tip="Символ группы или профиль в реальном мире"/>
-		<combo_item name="4:3" tool_tip="Профиль для [SECOND_LIFE]"/>
-		<combo_item name="10:7" tool_tip="Реклама, поиск и закладки"/>
-		<combo_item name="3:2" tool_tip="О земле"/>
-		<combo_item name="16:9" tool_tip="Места"/>
-	</combo_box>
-	<button label="OK" name="Keep"/>
-	<button label="Отменить" name="Discard"/>
-	<button label="Сохранить как" name="save_tex_btn"/>
+	<button label="Профиль" name="openprofile" width="65" />
+	<panel name="dimensions_panel" >
+		<text name="dimensions" width="110">
+			[WIDTH] x [HEIGHT] пикс.
+		</text>
+		<button label="UUID" name="copyuuid" tool_tip="Копировать UUID в буфер" width="60" />
+		<text right="-128" name="aspect_ratio" width="128">
+			Предпросмотр
+		</text>
+		<combo_box width="100" name="combo_aspect_ratio" tool_tip="Предварительный просмотр с фиксированным соотношением сторон">
+		</combo_box>
+	</panel>
+
+	<panel name="button_panel">
+		<button name="btn_refresh" width="22" />
+		<button label="OK" name="Keep" width="90" />
+		<button label="Отменить" name="Discard" width="110" />
+		<flyout_button label="Сохранить..." name="save_tex_btn" width="110">
+			<flyout_button.item label="Сохранить как TGA" name="save_item_tga" />
+			<flyout_button.item label="Сохранить как PNG" name="save_item_png" />
+		</flyout_button>
+	</panel>
 </floater>

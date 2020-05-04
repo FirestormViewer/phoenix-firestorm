@@ -23,7 +23,7 @@
   <string name="phys_status_vertex_limit_exceeded">Pewne fizyczne powłoki przekroczyły limit wierzchołków (256); Spróbuj 'analizy'.</string>
   <string name="phys_status_hull_limit_exceeded">Pewne modele przekroczyły limit powłok (256); Spróbuj 'upraszczania'.</string>
   <string name="phys_status_degenerate_triangles">Mesz fizyki zbyt gęsty; Usuń małe cienkie trójkąty (zobacz podgląd)</string>
-  <string name="phys_status_no_havok">Wersja OpenSim nie jest zalecana do przesyłania fizyki do SL. Wyniki mogą być nieprzewidywalne.</string>
+  <string name="phys_status_no_havok">Ta wersja nie zawiera wsparcia Havoka i nie jest zalecana dla przesyłania fizyki do Second Life. Wyniki mogą być nieprzewidywalne.</string>
   <string name="phys_status_unknown_error">Wykryto nierozpoznany błąd.</string>
   <string name="layer_all">Wszystko</string>
   <string name="decomposing">Analizowanie...</string>

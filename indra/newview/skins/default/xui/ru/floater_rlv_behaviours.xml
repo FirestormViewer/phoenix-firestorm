@@ -2,18 +2,27 @@
 <floater name="rlv_behaviours" title="Активные ограничения RLV">
   <tab_container name="behaviour_tab">
     <panel label="Ограничения" name="behaviour_panel">
-      <scroll_list name="behaviour_list">
-        <scroll_list.columns label="Ограничения" name="behaviour" />
+      <scroll_list name="behaviour_list" tool_tip="Список текущих ограничений RLVa.">
+        <scroll_list.columns label="Ограничения" name="behaviour" width="100"/>
         <scroll_list.columns label="Имя объекта" name="issuer"/>
       </scroll_list>
     </panel>
     <panel label="Исключения" name="exception_panel">
-      <scroll_list name="exception_list">
-        <scroll_list.columns label="Ограничения" name="behaviour" />
-        <scroll_list.columns label="Опции" name="option" />
+      <scroll_list name="exception_list" tool_tip="Список текущих исключений RLVa.">
+        <scroll_list.columns label="Исключение" name="behaviour" width="100"/>
+        <scroll_list.columns label="Источник" name="option" />
         <scroll_list.columns label="Имя объекта" name="issuer" />
       </scroll_list>
     </panel>
+    <panel label="Модификаторы" name="modifier_panel">
+      <scroll_list name="modifier_list" tool_tip="Список текущих модификторов RLVa." >
+        <scroll_list.columns label="Модификатор" name="modifier" width="150" />
+        <scroll_list.columns label="Значение" name="value" width="105" />
+        <scroll_list.columns label="Основной объект" name="primary" />
+      </scroll_list>
+    </panel>
   </tab_container>
-  <button label="Копировать в буфер обмена" name="copy_btn" />
+  <panel name="bottom_panel">
+    <button label="Копировать в буфер обмена" name="copy_btn" width="200" />
+  </panel>
 </floater>

@@ -23,7 +23,17 @@
             <pie_slice label="Звонок" name="Call"/>
             <pie_slice label="Приблизить" name="Zoom In"/>
             <pie_slice label="Обновить текстуру" name="Texture Refresh"/>
+            <pie_menu name="ResetMenu" label="Сброс &gt;">
+                <pie_slice label="Скел. &amp; Аним." name="Reset Skeleton And Animations"/>
+                <pie_slice label="Скелет" name="Reset Skeleton"/>
+                <pie_slice label="Mesh LOD" name="Reset Mesh LOD"/>
+            </pie_menu>
             <pie_slice label="Дамп XML" name="Dump XML"/>
+            <pie_menu name="RenderMenu" label="Отображать &gt;">
+                <pie_slice name="RenderNormally" label="Нормально"/>
+                <pie_slice name="DoNotRender" label="Никогда"/>
+                <pie_slice name="AlwaysRenderFully" label="Полностью"/>
+            </pie_menu>
         </pie_menu>
         <pie_menu name="DerenderMenu" label="Не отображать &gt;">
             <pie_slice label="Всегда" name="DerenderPermanent"/>

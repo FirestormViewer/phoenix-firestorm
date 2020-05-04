@@ -3,7 +3,7 @@
   <floater.string name="chatbox_label">В общий чат</floater.string>
   <layout_stack name="ls_control_panel">
     <layout_panel name="lp_translate_btn">
-      <button tool_tip="Use selected translation service" name="translate_btn"/>
+      <button tool_tip="Использовать выбранный сервис перевода" name="translate_btn"/>
     </layout_panel>
      <layout_panel name="lp_chat_history_btn">
       <button tool_tip="Открыть историю общего чата." name="chat_history_btn"/>
@@ -11,10 +11,12 @@
      <layout_panel name="lp_chat_history_muted_btn">
       <button tool_tip="Показать заблокированный чат в истории общего чата." name="chat_history_muted_btn"/>
     </layout_panel>
-    <layout_panel name="lp_bar">
-      <icon name="dummy_icon"/>
+    <layout_panel name="lp_options_btn">
+      <menu_button tool_tip="Опции чата" name="chat_options_btn"/>
     </layout_panel>
-
+    <layout_panel name="lp_chat_search_btn">
+      <button name="chat_search_btn" tool_tip="Поиск в чате"/>
+    </layout_panel>
   </layout_stack>
   <layout_stack name="ls_chat">
     <layout_panel name="panel_im_control_lp">

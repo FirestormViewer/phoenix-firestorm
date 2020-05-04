@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Настроить" name="Media settings for controls">
 	<text name="controls_label">
-		Элементы управления:
+		Управление:
 	</text>
 	<combo_box name="controls">
 		<combo_item name="Standard">
@@ -22,7 +22,7 @@
 	<check_box initial_value="false" label="Разрешить навигацию и взаимодействие" name="perms_group_interact"/>
 	<check_box initial_value="false" label="Панель управления видна" name="perms_group_control"/>
 	<text name="anyone_label">
-		всем
+		Всем
 	</text>
 	<check_box initial_value="false" label="Разрешить навигацию и взаимодействие" name="perms_anyone_interact"/>
 	<check_box initial_value="false" label="Панель управления видна" name="perms_anyone_control"/>

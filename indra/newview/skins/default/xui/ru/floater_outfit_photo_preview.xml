@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="outfit_photo_preview">
+    <floater.string name="Title">
+        Текстура: [NAME]
+    </floater.string>
+    <floater.string name="exceed_limits">
+        Максимальный размер фото [MAX_WIDTH]*[MAX_HEIGHT]. Пожалуйста, выберите другую текстуру.
+    </floater.string>
+    <floater.string name="photo_confirmation">
+        Установить это фото для костюма [OUTFIT]?
+    </floater.string>
+    <text name="dimensions">
+        [WIDTH]пикс. x [HEIGHT]пикс.
+    </text>
+    <button label="OK" name="ok_btn"/>
+    <button label="Отмена" name="cancel_btn"/>
+</floater>

@@ -39,9 +39,11 @@
 		</layout_panel>
 	</layout_stack>
 	<panel name="no_add_wearables_button_bar">
+		<text name="avatar_complexity_label">Сложность: [WEIGHT]</text>
 		<button name="shop_btn_1" tool_tip="Посетите магазин Second Life. Также можно выбрать предмет надетой одежды и щелкнуть здесь, чтобы найти что-то похожее"/>
 	</panel>
 	<panel name="add_wearables_button_bar">
+		<text name="avatar_complexity_adding_label">Сложность: [WEIGHT]</text>
 		<button name="shop_btn_2" tool_tip="Посетите магазин Second Life. Также можно выбрать предмет надетой одежды и щелкнуть здесь, чтобы найти что-то похожее"/>
 	</panel>
 	<panel name="save_revert_button_bar">

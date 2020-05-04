@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="particle_editor_floater" title="Редактор Частиц"
+  height="370" min_height="370" min_width="530" width="530">
+
+  <panel name="particle_editor_panel" height="343">
+    <panel name="top_left_panel">
+      <text name="Pattern_Label" width="100">Шаблон:</text>
+
+      <combo_box name="pattern_type_combo" width="140" >
+        <combo_box.item label="Взрыв" name="explode" />
+        <combo_box.item label="Угол" name="angle" />
+        <combo_box.item label="Угол Конус" name="angle_cone" />
+        <combo_box.item label="Угол Конус Пустой" name="angle_cone_empty"/>
+        <combo_box.item label="Капля" name="drop" />
+      </combo_box>
+
+      <text name="Texture_Label" width="60">Текстура:</text>
+      <text name="Burst_Rate_Label" width="120">Темп выброса:</text>
+      <text name="Burst_Count_Label" width="120">Кол-во выброса:</text>
+      <text name="Angle_Begin_Label" width="120">Угол Начало:</text>
+      <text name="Burst_Radius_Label" left_pad="21" width="100">Радиус Выброса:</text>
+      <text name="Burst_Speed_Min_Label" left_pad="21" width="100">Мин. Скорость:</text>
+      <text name="Angle_End_Label" width="120">Угол Конец:</text>
+      <text name="Burst_Speed_Max_Label" left_pad="21" width="100">Макс. Скорость:</text>
+      <text name="Source_Max_Age_Label" width="120">Макс.Время Источн.:</text>
+      <text name="Start_Alpha_Label" left_pad="21" width="100">Альфа Начало:</text>
+      <text name="Particles_Max_Age_Label" width="120">Макс.Время Частиц:</text>
+      <text name="End_Alpha_Label" left_pad="21" width="100">Альфа Конец:</text>
+      <text name="Start_Glow_Label" width="120">Свечение Начало:</text>
+
+      <combo_box name="blend_func_src_combo" left_pad="21" width="160">
+        <combo_box.item label="Blend One" name="blend_one" />
+        <combo_box.item label="Blend Zero" name="blend_zero" />
+        <combo_box.item label="Blend Dest Color" name="blend_dest_color" />
+        <combo_box.item label="Blend Src Color" name="blend_src_color" />
+        <combo_box.item label="Blend 1 - Dest Color" name="blend_one_minus_dest_color" />
+        <combo_box.item label="Blend 1 - Src Color" name="blend_one_minus_src_color" />
+        <combo_box.item label="Blend Src Alpha" name="blend_src_alpha" />
+        <combo_box.item label="Blend 1 - Src Alpha" name="blend_one_minus_src_alpha" />
+      </combo_box>
+
+      <text name="End_Glow_Label" width="120">Свечение Конец:</text>
+
+      <combo_box name="blend_func_dest_combo" left_pad="21" width="160">
+        <combo_box.item label="Blend One" name="blend_one" />
+        <combo_box.item label="Blend Zero" name="blend_zero" />
+        <combo_box.item label="Blend Dest Color" name="blend_dest_color" />
+        <combo_box.item label="Blend Src Color" name="blend_src_color" />
+        <combo_box.item label="Blend 1 - Dest Color" name="blend_one_minus_dest_color" />
+        <combo_box.item label="Blend 1 - Src Color" name="blend_one_minus_src_color" />
+        <combo_box.item label="Blend Src Alpha" name="blend_src_alpha" />
+        <combo_box.item label="Blend 1 - Src Alpha" name="blend_one_minus_src_alpha" />
+      </combo_box>
+
+      <text name="Scale_Start_Label" width="95">Размер Начало:</text>
+      <text name="End_Label" left_pad="20" width="40">Конец:</text>
+
+    </panel>
+
+    <panel height="258" left_pad="0" name="top_right_panel" width="120">
+      <check_box name="bounce_checkbox" label="Отскок" width="120" />
+      <check_box name="emissive_checkbox" label="Излучающий" width="120" />
+      <check_box name="follow_source_checkbox" label="Следовать Источник" width="120" />
+      <check_box name="follow_velocity_checkbox" label="Следовать Скорость" width="120" />
+      <check_box name="interpolate_color_checkbox" label="Изменять Цвет" width="120" />
+      <check_box name="interpolate_scale_checkbox" label="Изменять Размер" width="120" />
+      <check_box name="target_position_checkbox" label="Позиция Цели" width="120" />
+      <check_box name="target_linear_checkbox" label="Цель Линейная" width="120" />
+      <check_box name="wind_checkbox" label="Ветер" width="120" />
+      <check_box name="ribbon_checkbox" label="Лента" width="120" />
+      <button name="copy_button" label="Копия" tool_tip="Копирует параметры системы частиц как скрипт LSL в буфер обмена." width="58" />
+      <button name="inject_button" label="Внедрить" tool_tip="Внедряет эту систему частиц в выбранный объект." width="68" />
+    </panel>
+
+    <panel name="bottom_left_panel" top="270" width="320">
+      <text name="Target_Key_Label" left="0" width="76">Ключ Цели:</text>
+      <button left_pad="4" name="clear_target_button" tool_tip="Очистить целевой объект или аватар." width="20" />
+      <button left_pad="2" name="pick_target_button" tool_tip="Нажмите здесь, чтобы выбрать целью частиц объект или аватар." width="20" />
+      <text name="Acceleration_Label" left="0" width="76">Ускорение:</text>
+      <text name="Omega_Label" left="0" width="76">Омега:</text>
+    </panel>
+
+    <panel left="320" name="bottom_right_panel" width="170">
+      <color_swatch label="Цвет начало" left="16" name="start_color_selector" width="70" />
+      <color_swatch label="Цвет конец" left_pad="8" name="end_color_selector" width="70" />
+    </panel>
+
+  </panel>
+
+</floater>

@@ -5,6 +5,6 @@
 	</panel>
 	<panel name="control_panel">
 		<button label="Отправить" name="btn_submit"/>
-		<button label="Игнорировать" name="ignore_btn"/>
+		<button label="Игнорировать" name="ignore_btn" left="195" width="90"/>
 	</panel>
 </panel>
