@@ -2563,8 +2563,8 @@ URL: [MEDIAURL]
 	<notification name="AudioAlert">
 		Этот участок предоставляет музыку из:
 
-Домен: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Домен: [AUDIODOMAIN]
+URL: [AUDIOURL]
 		<form name="form">
 			<button name="Allow" text="Разрешить"/>
 			<button name="Deny" text="Запретить"/>
@@ -2573,8 +2573,8 @@ URL: [MEDIAURL]
 	<notification name="AudioAlert2">
 		Вы хотите запомнить ваш выбор и [LCONDITION] позволить музыку из этого источника?
 
-Домен: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Домен: [AUDIODOMAIN]
+URL: [AUDIOURL]
 		<form name="form">
 			<button name="Do Now" text="[ACTION] Сейчас"/>
 			<button name="RememberDomain" text="[CONDITION] Разрешить этому домену"/>
@@ -2584,8 +2584,8 @@ URL: [MEDIAURL]
 	<notification name="AudioAlertSingle">
 		Вы хотите запомнить ваш выбор и [LCONDITION] позволить музыку из этого источника?
 
-Домен: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Домен: [AUDIODOMAIN]
+URL: [AUDIOURL]
 		<form name="form">
 			<button name="Allow" text="Разрешить"/>
 			<button name="Deny" text="Запретить"/>
@@ -3860,17 +3860,6 @@ URL: [MEDIAURL]
 	<notification name="CanNotRemoveConnectedGrid">
 		Невозможно удалить [REMOVE_GRID] пока вы подключены к ней.
 		<usetemplate ignoretext="Невозможно удалить сетку, когда к ней подключен" name="okcancelignore" notext="Отмена" yestext="OK"/>
-	</notification>
-	<notification label="Применить настройки окружиющей среды" name="FSWL">
-		&apos;[PARCEL_NAME]&apos;, владельца [OWNER_NAME], хотел бы изменить настройки окружиющей среды.
-		<form name="form">
-			<button name="Allow" text="Разрешить"/>
-			<button name="Ignore" text="Игнор"/>
-		</form>
-	</notification>
-	<notification label="Сброс настроек окружиющей среды" name="FSWLClear">
-		Сбросить настройки окружающей среды в &apos;[PARCEL_NAME]&apos; к настройкам по умолчанию?
-		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="NewAOSet">
 		Укажите имя для нового набора АО:

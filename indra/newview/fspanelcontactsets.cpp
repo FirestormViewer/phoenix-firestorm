@@ -29,15 +29,16 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "llnotificationsutil.h"
-
 #include "fspanelcontactsets.h"
+
 #include "fsfloatercontacts.h"
+#include "fsfloatercontactsetconfiguration.h"
 #include "lggcontactsets.h"
 #include "llavataractions.h"
 #include "llcallingcard.h"
 #include "llfloateravatarpicker.h"
 #include "llfloaterreg.h"
+#include "llnotificationsutil.h"
 #include "llpanelpeoplemenus.h"
 #include "llslurl.h"
 
@@ -63,8 +64,8 @@ BOOL FSPanelContactSets::postBuild()
 {
 	childSetAction("add_set_btn",			boost::bind(&FSPanelContactSets::onClickAddSet,			this));
 	childSetAction("remove_set_btn",		boost::bind(&FSPanelContactSets::onClickRemoveSet,		this));
-	childSetAction("config_btn",			boost::bind(&FSPanelContactSets::onClickConfigureSet,	this));
-	childSetAction("add_btn",				boost::bind(&FSPanelContactSets::onClickAddAvatar,		this));
+	childSetAction("config_btn",			boost::bind(&FSPanelContactSets::onClickConfigureSet,	this, _1));
+	childSetAction("add_btn",				boost::bind(&FSPanelContactSets::onClickAddAvatar,		this, _1));
 	childSetAction("remove_btn",			boost::bind(&FSPanelContactSets::onClickRemoveAvatar,	this));
 	childSetAction("profile_btn",			boost::bind(&FSPanelContactSets::onClickOpenProfile,	this));
 	childSetAction("start_im_btn",			boost::bind(&FSPanelContactSets::onClickStartIM,		this));
@@ -222,11 +223,11 @@ void FSPanelContactSets::refreshSetList()
 	resetControls();
 }
 
-void FSPanelContactSets::onClickAddAvatar()
+void FSPanelContactSets::onClickAddAvatar(LLUICtrl* ctrl)
 {
 	LLFloater* root_floater = gFloaterView->getParentFloater(this);
 	LLFloater* avatar_picker = LLFloaterAvatarPicker::show(boost::bind(&FSPanelContactSets::handlePickerCallback, this, _1, mContactSetCombo->getValue().asString()),
-														   TRUE, TRUE, TRUE, root_floater->getName());
+														   TRUE, TRUE, TRUE, root_floater->getName(), ctrl);
 	if (root_floater && avatar_picker)
 	{
 		root_floater->addDependentFloater(avatar_picker);
@@ -277,12 +278,15 @@ void FSPanelContactSets::onClickRemoveSet()
 	LLNotificationsUtil::add("RemoveContactSet", args, payload, &LGGContactSets::handleRemoveContactSetCallback);
 }
 
-void FSPanelContactSets::onClickConfigureSet()
+void FSPanelContactSets::onClickConfigureSet(LLUICtrl* ctrl)
 {
 	LLFloater* root_floater = gFloaterView->getParentFloater(this);
-	LLFloater* config_floater = LLFloaterReg::showInstance("fs_contact_set_config", LLSD(mContactSetCombo->getValue().asString()));
+	FSFloaterContactSetConfiguration* config_floater = LLFloaterReg::showTypedInstance<FSFloaterContactSetConfiguration>("fs_contact_set_config", LLSD(mContactSetCombo->getValue().asString()));
+	config_floater->setFrustumOrigin(ctrl);
 	if (root_floater && config_floater)
+	{
 		root_floater->addDependentFloater(config_floater);
+	}
 }
 
 void FSPanelContactSets::onClickOpenProfile()

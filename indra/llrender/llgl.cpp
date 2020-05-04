@@ -36,6 +36,7 @@
 #include "llsys.h"
 
 #include "llgl.h"
+#include "llglstates.h"
 #include "llrender.h"
 
 #include "llerror.h"
@@ -1074,6 +1075,12 @@ void LLGLManager::initExtensions()
 	mHassRGBFramebuffer = ExtensionExists("GL_EXT_framebuffer_sRGB", gGLHExts.mSysExts);
 #endif
 	
+#ifdef GL_EXT_texture_sRGB_decode
+    mHasTexturesRGBDecode = ExtensionExists("GL_EXT_texture_sRGB_decode", gGLHExts.mSysExts);
+#else
+    mHasTexturesRGBDecode = ExtensionExists("GL_ARB_texture_sRGB_decode", gGLHExts.mSysExts);
+#endif
+
 	mHasMipMapGeneration = mHasFramebufferObject || mGLVersion >= 1.4f;
 
 	mHasDrawBuffers = ExtensionExists("GL_ARB_draw_buffers", gGLHExts.mSysExts);
@@ -1428,8 +1435,8 @@ void LLGLManager::initExtensions()
         // nSight doesn't support use of ARB funcs that have been normalized in the API
         if (!LLRender::sNsightDebugSupport)
         {
-		glGetAttribLocationARB = (PFNGLGETATTRIBLOCATIONARBPROC) GLH_EXT_GET_PROC_ADDRESS("glGetAttribLocationARB");
-		glBindAttribLocationARB = (PFNGLBINDATTRIBLOCATIONARBPROC) GLH_EXT_GET_PROC_ADDRESS("glBindAttribLocationARB");
+		    glGetAttribLocationARB = (PFNGLGETATTRIBLOCATIONARBPROC) GLH_EXT_GET_PROC_ADDRESS("glGetAttribLocationARB");
+		    glBindAttribLocationARB = (PFNGLBINDATTRIBLOCATIONARBPROC) GLH_EXT_GET_PROC_ADDRESS("glBindAttribLocationARB");
         }
         else
         {
@@ -2120,7 +2127,8 @@ LLGLState::LLGLState(LLGLenum state, S32 enabled) :
 	if (mState)
 	{
 		mWasEnabled = sStateMap[state];
-		llassert(mWasEnabled == glIsEnabled(state));
+        // we can't actually assert on this as queued changes to state are not reflected by glIsEnabled
+		//llassert(mWasEnabled == glIsEnabled(state));
 		setEnabled(enabled);
 		stop_glerror();
 	}
@@ -2343,6 +2351,17 @@ LLGLUserClipPlane::LLGLUserClipPlane(const LLPlane& p, const glh::matrix4f& mode
 	}
 }
 
+void LLGLUserClipPlane::disable()
+{
+    if (mApply)
+	{
+		gGL.matrixMode(LLRender::MM_PROJECTION);
+		gGL.popMatrix();
+		gGL.matrixMode(LLRender::MM_MODELVIEW);
+	}
+    mApply = false;
+}
+
 void LLGLUserClipPlane::setPlane(F32 a, F32 b, F32 c, F32 d)
 {
 	glh::matrix4f& P = mProjection;
@@ -2371,12 +2390,7 @@ void LLGLUserClipPlane::setPlane(F32 a, F32 b, F32 c, F32 d)
 
 LLGLUserClipPlane::~LLGLUserClipPlane()
 {
-	if (mApply)
-	{
-		gGL.matrixMode(LLRender::MM_PROJECTION);
-		gGL.popMatrix();
-		gGL.matrixMode(LLRender::MM_MODELVIEW);
-	}
+	disable();
 }
 
 LLGLNamePool::LLGLNamePool()
@@ -2554,27 +2568,45 @@ void LLGLDepthTest::checkState()
 	}
 }
 
-LLGLSquashToFarClip::LLGLSquashToFarClip(glh::matrix4f P, U32 layer)
+LLGLSquashToFarClip::LLGLSquashToFarClip()
+{
+    glh::matrix4f proj = get_current_projection();
+    setProjectionMatrix(proj, 0);
+}
+
+LLGLSquashToFarClip::LLGLSquashToFarClip(glh::matrix4f& P, U32 layer)
+{
+    setProjectionMatrix(P, layer);
+}
+
+
+void LLGLSquashToFarClip::setProjectionMatrix(glh::matrix4f& projection, U32 layer)
 {
 
 	F32 depth = 0.99999f - 0.0001f * layer;
 
 	for (U32 i = 0; i < 4; i++)
 	{
-		P.element(2, i) = P.element(3, i) * depth;
+		projection.element(2, i) = projection.element(3, i) * depth;
 	}
+
+    LLRender::eMatrixMode last_matrix_mode = gGL.getMatrixMode();
 
 	gGL.matrixMode(LLRender::MM_PROJECTION);
 	gGL.pushMatrix();
-	gGL.loadMatrix(P.m);
-	gGL.matrixMode(LLRender::MM_MODELVIEW);
+	gGL.loadMatrix(projection.m);
+
+	gGL.matrixMode(last_matrix_mode);
 }
 
 LLGLSquashToFarClip::~LLGLSquashToFarClip()
 {
+    LLRender::eMatrixMode last_matrix_mode = gGL.getMatrixMode();
+
 	gGL.matrixMode(LLRender::MM_PROJECTION);
 	gGL.popMatrix();
-	gGL.matrixMode(LLRender::MM_MODELVIEW);
+
+	gGL.matrixMode(last_matrix_mode);
 }
 
 
@@ -2637,6 +2669,43 @@ void LLGLSyncFence::wait()
 #endif
 }
 
+LLGLSPipelineSkyBox::LLGLSPipelineSkyBox()
+: mAlphaTest(GL_ALPHA_TEST)
+, mCullFace(GL_CULL_FACE)
+, mSquashClip()
+{ 
+    if (!LLGLSLShader::sNoFixedFunction)
+    {
+        glDisable(GL_LIGHTING);
+        glDisable(GL_FOG);
+        glDisable(GL_CLIP_PLANE0);
+    }
+}
+
+LLGLSPipelineSkyBox::~LLGLSPipelineSkyBox()
+{
+    if (!LLGLSLShader::sNoFixedFunction)
+    {
+        glEnable(GL_LIGHTING);
+        glEnable(GL_FOG);
+        glEnable(GL_CLIP_PLANE0);
+    }
+}
+
+LLGLSPipelineDepthTestSkyBox::LLGLSPipelineDepthTestSkyBox(bool depth_test, bool depth_write)
+: LLGLSPipelineSkyBox()
+, mDepth(depth_test ? GL_TRUE : GL_FALSE, depth_write ? GL_TRUE : GL_FALSE, GL_LEQUAL)
+{
+
+}
+
+LLGLSPipelineBlendSkyBox::LLGLSPipelineBlendSkyBox(bool depth_test, bool depth_write)
+: LLGLSPipelineDepthTestSkyBox(depth_test, depth_write)    
+, mBlend(GL_BLEND)
+{ 
+    gGL.setSceneBlendType(LLRender::BT_ALPHA);
+}
+
 #if LL_WINDOWS
 // Expose desired use of high-performance graphics processor to Optimus driver
 extern "C" 
@@ -2644,4 +2713,3 @@ extern "C"
     _declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001; 
 }
 #endif
-

@@ -141,14 +141,13 @@ U32 LLViewerJoint::render( F32 pixelArea, BOOL first_pass, BOOL is_dummy )
 	//----------------------------------------------------------------
 	// render children
 	//----------------------------------------------------------------
-	for (child_list_t::iterator iter = mChildren.begin();
-		 iter != mChildren.end(); ++iter)
+	for (LLJoint* j : mChildren)
 	{
-//		LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(*iter);
+//		LLAvatarJoint* joint = dynamic_cast<LLAvatarJoint*>(j);
 // [SL:KB] - Patch: Viewer-OptimizationAnimesh | Checked: Catznip-6.0
-		LLAvatarJoint* joint = static_cast<LLAvatarJoint*>(*iter);
+		LLAvatarJoint* joint = static_cast<LLAvatarJoint*>(j);
 // [/SL:KB]
-		F32 jointLOD = joint->getLOD();
+		F32 jointLOD = joint ? joint->getLOD() : 0;
 		if (pixelArea >= jointLOD || sDisableLOD)
 		{
 			triangle_count += joint->render( pixelArea, TRUE, is_dummy );

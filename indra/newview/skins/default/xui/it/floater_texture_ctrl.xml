@@ -12,6 +12,7 @@
 	<radio_group name="mode_selection">
 		<radio_item label="Inventario" name="inventory"/>
 		<radio_item label="Locale" name="local"/>
+		<radio_item label="Effettua il bake" name="bake" value="2"/>
 	</radio_group>
 	<text name="unknown">
 		Dimensioni:
@@ -31,6 +32,21 @@
 		<column label="Nome" name="unit_name"/>
 		<column label="ID" name="unit_id_HIDDEN"/>
 	</scroll_list>
+	<combo_box name="l_bake_use_texture_combo_box" tool_tip="Scegli la bake della texture">
+		<combo_box.item label="Nessuna" name="None"/>
+		<combo_box.item label="BAKED_HEAD" name="BAKED_HEAD"/>
+		<combo_box.item label="BAKED_UPPER" name="BAKED_UPPER"/>
+		<combo_box.item label="BAKED_LOWER" name="BAKED_LOWER"/>
+		<combo_box.item label="BAKED_EYES" name="BAKED_EYES"/>
+		<combo_box.item label="BAKED_SKIRT" name="BAKED_SKIRT"/>
+		<combo_box.item label="BAKED_HAIR" name="BAKED_HAIR"/>
+		<combo_box.item label="BAKED_LEFTARM" name="BAKED_LEFTARM"/>
+		<combo_box.item label="BAKED_LEFTLEG" name="BAKED_LEFTLEG"/>
+		<combo_box.item label="BAKED_AUX1" name="BAKED_AUX1"/>
+		<combo_box.item label="BAKED_AUX2" name="BAKED_AUX2"/>
+		<combo_box.item label="BAKED_AUX3" name="BAKED_AUX3"/>
+	</combo_box>
+	<check_box initial_value="false" label="Nascondi regione mesh base" name="hide_base_mesh_region"/>
 	<button label="Annulla" label_selected="Annulla" name="Cancel"/>
 	<check_box label="Applica" name="apply_immediate_check"/>	
 </floater>

@@ -551,7 +551,7 @@ void LLToolBarView::onToolBarButtonAdded(LLView* button)
 	else if (button->getName() == "quickprefs" && !FSCommon::isLegacySkin())
 	{
 		LLTransientFloaterMgr::getInstance()->addControlView(button);
-		FloaterQuickPrefs* quickprefs_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>("quickprefs");
+		FloaterQuickPrefs* quickprefs_floater = LLFloaterReg::findTypedInstance<FloaterQuickPrefs>("quickprefs");
 		if (quickprefs_floater && quickprefs_floater->isShown())
 		{
 			quickprefs_floater->dockToToolbarButton();
@@ -601,7 +601,7 @@ void LLToolBarView::onToolBarButtonRemoved(LLView* button)
 	else if (button->getName() == "quickprefs" && !FSCommon::isLegacySkin())
 	{
 		LLTransientFloaterMgr::getInstance()->removeControlView(button);
-		FloaterQuickPrefs* quickprefs_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>("quickprefs");
+		FloaterQuickPrefs* quickprefs_floater = LLFloaterReg::findTypedInstance<FloaterQuickPrefs>("quickprefs");
 		if (quickprefs_floater && quickprefs_floater->isShown())
 		{
 			quickprefs_floater->setUseTongue(false);

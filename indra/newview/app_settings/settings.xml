@@ -2786,6 +2786,17 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>BulkChangeIncludeSettings</key>
+    <map>
+      <key>Comment</key>
+      <string>Bulk permission changes affect environment settings</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>BulkChangeEveryoneCopy</key>
     <map>
       <key>Comment</key>
@@ -3525,18 +3536,18 @@
       <key>Value</key>
       <string/>
     </map>
-    <key>CmdLineLoginURI1</key>
+    <key>CmdLineSkipUpdater</key>
     <map>
       <key>Comment</key>
-      <string>Command line specified login server and CGI prefix to use.</string>
+      <string>Command line skip updater check.</string>
       <key>Persist</key>
       <integer>0</integer>
       <key>Type</key>
-      <string>String</string>
+      <string>Boolean</string>
       <key>Value</key>
-      <string />
+      <integer>0</integer>
     </map>
-    <key>ConnectAsGod</key>
+  <key>ConnectAsGod</key>
     <map>
       <key>Comment</key>
       <string>Log in as god if you have god access.</string>
@@ -9446,6 +9457,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>MouseMoon</key>
+    <map>
+      <key>Comment</key>
+      <string />
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
    <key>MuteAmbient</key>
     <map>
       <key>Comment</key>
@@ -11341,6 +11363,28 @@ Change of this parameter will affect the layout of buttons in notification toast
     <integer>0</integer>
   </map>
 
+    <key>RenderAlphaBatchFullbrights</key>
+    <map>
+      <key>Comment</key>
+      <string>Render fullbright alpha content more efficiently, but with possible visual differences from prev viewers.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>RenderAlphaBatchEmissives</key>
+    <map>
+      <key>Comment</key>
+      <string>Render emissive alpha content more efficiently, but with possible visual differences from prev viewers.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>RenderAnisotropic</key>
     <map>
       <key>Comment</key>
@@ -11849,6 +11893,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+  <key>RenderDebugSH</key>
+    <map>
+      <key>Comment</key>
+      <string>Enable SH indirect lighting visualization.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
   <key>RenderMaxTextureIndex</key>
   <map>
     <key>Comment</key>
@@ -12030,7 +12085,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>-0.008</real>
+    <real>-0.004</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
@@ -13243,6 +13298,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+  <key>RenderUseAdvancedAtmospherics</key>
+  <map>
+    <key>Comment</key>
+    <string>Use fancy precomputed atmospherics and stuff.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>RenderUseTriStrips</key>
   <map>
     <key>Comment</key>
@@ -14996,6 +15062,21 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>SkyMoonDefaultPosition</key>
+    <map>
+      <key>Comment</key>
+      <string>Default position of sun in sky (direction in world coordinates)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Vector3</string>
+      <key>Value</key>
+      <array>
+        <real>-1.0</real>
+        <real>0.0</real>
+        <real>-0.1</real>
+      </array>
+    </map>
     <key>SkyNightColorShift</key>
     <map>
       <key>Comment</key>
@@ -15372,6 +15453,39 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+  <key>AmbientDisable</key>
+  <map>
+    <key>Comment</key>
+    <string>If TRUE, ambient light has no effect</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>SunlightDisable</key>
+  <map>
+    <key>Comment</key>
+    <string>If TRUE, sunlight has no effect</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>LocalLightDisable</key>
+  <map>
+    <key>Comment</key>
+    <string>If TRUE, local lights have no effect</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
     <key>TextureDiscardLevel</key>
     <map>
       <key>Comment</key>
@@ -17277,17 +17391,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>UseEnvironmentFromRegion</key>
-    <map>
-      <key>Comment</key>
-      <string>Choose whether to use the region's environment settings, or override them with the local settings.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
     <key>EnvironmentPersistAcrossLogin</key>
     <map>
       <key>Comment</key>
@@ -17734,6 +17837,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <!-- SL-12594 removes fixed function rendering
     <key>VertexShaderEnable</key>
     <map>
       <key>Comment</key>
@@ -17745,6 +17849,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    -->
     <key>VivoxAutoPostCrashDumps</key>
     <map>
       <key>Comment</key>
@@ -18499,6 +18604,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>sunbeacon</key>
+    <map>
+      <key>Comment</key>
+      <string>Show direction to the Sun</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>moonbeacon</key>
+    <map>
+      <key>Comment</key>
+      <string>Show direction to the Moon</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>ShowDeviceSettings</key>
     <map>
       <key>Comment</key>
@@ -19066,50 +19193,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>bw</string>
     </map>
 <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->  
-		<key>FSWLParcelEnabled</key>
-		<map>
-			<key>Comment</key>
-			<string>Enables auto setting WL from parcel desc flags</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>1</integer>
-		</map>
-		<key>FSWLWhitelistFriends</key>
-		<map>
-			<key>Comment</key>
-			<string>Whitelist friend's land for Phoenix WL sharing</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>1</integer>
-		</map>
-		<key>FSWLWhitelistGroups</key>
-		<map>
-			<key>Comment</key>
-			<string>Whitelist group land on groups you are member of for Phoenix WL sharing</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>1</integer>
-		</map>
-		<key>FSWLWhitelistAll</key>
-		<map>
-			<key>Comment</key>
-			<string>Allow all land for Phoenix WL sharing</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>0</integer>
-		</map>
     <key>FSIgnoreClientsideMeshValidation</key>
     <map>
       <key>Comment</key>
@@ -20186,6 +20269,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>SettingsNextOwnerModify</key>
+    <map>
+      <key>Comment</key>
+      <string>Newly created Environment setting can be modified by next owner</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>SettingsNextOwnerTransfer</key>
+    <map>
+      <key>Comment</key>
+      <string>Newly created Environment setting can be resold or given away by next owner</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>DefaultUploadPermissionsConverted</key>
     <map>
       <key>Comment</key>
@@ -20685,50 +20790,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>U32</string>
     <key>Value</key>
     <integer>3</integer>
-    </map>
-    <key>UseEnvironmentFromRegionAlways</key>
-    <map>
-      <key>Comment</key>
-      <string>Choose whether to always use the region's environment settings when they are available or to allow the manual selections to remain unchanged.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>FSInterpolateSky</key>
-    <map>
-      <key>Comment</key>
-      <string>FSInterpolateSky</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>FSInterpolateWater</key>
-    <map>
-      <key>Comment</key>
-      <string>FSInterpolateWater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>FSWindlightInterpolateTime</key>
-    <map>
-      <key>Comment</key>
-      <string>Timespan for interpolating between Windlight settings</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>3.0</real>
     </map>
   <key>_NACL_MLFovValues</key>
   <map>
@@ -22655,17 +22716,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>FSOpenSimLightshare</key>
-    <map>
-        <key>Comment</key>
-        <string>Enables Lightshare WindLight on compatible OpenSim regions</string>
-        <key>Persist</key>
-        <integer>1</integer>
-        <key>Type</key>
-        <string>Boolean</string>
-        <key>Value</key>
-        <integer>1</integer>
-    </map>
     <key>FSEnableVolumeControls</key>
     <map>
         <key>Comment</key>
@@ -22774,17 +22824,6 @@ Change of this parameter will affect the layout of buttons in notification toast
         <integer>0</integer>
         <key>Backup</key>
         <integer>0</integer>
-    </map>
-    <key>FSCloudTexture</key>
-    <map>
-        <key>Comment</key>
-        <string>Windlight cloud texture (don't edit by hand)</string>
-        <key>Persist</key>
-        <integer>1</integer>
-        <key>Type</key>
-        <string>String</string>
-        <key>Value</key>
-        <string>Default.tga</string>
     </map>
     <key>FSLoginDontSavePassword</key>
     <map>
@@ -25325,7 +25364,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>FSRestrictMaxTextureSize</key>
     <map>

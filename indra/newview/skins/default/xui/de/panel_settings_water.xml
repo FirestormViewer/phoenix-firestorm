@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Wasser" name="panel_settings_water">
+	<layout_stack name="water_stack1">
+		<layout_panel name="lp_top">
+			<text name="water_fog_label">
+				Wasser-Nebel
+			</text>
+			<text name="color_label">
+				Farbe:
+			</text>
+			<text name="density_exponent_label">
+				Dichte-Exponent:
+			</text>
+			<text name="underwater_modifier_label">
+				Unterw.-Modifizierer:
+			</text>
+			<text name="FresnelScaleText">
+				Fresnel-Skalierung:
+			</text>
+			<text name="FresnelOffsetText">
+				Fresnel-Versatz:
+			</text>
+		</layout_panel>
+		<layout_panel name="lp_bottom">
+			<layout_stack name="water_stack2">
+				<layout_panel name="lp_left">
+					<text name="normal_map_label">
+						Normal-Map:
+					</text>
+					<text name="large_wave_speed_label">
+						Geschw. große Welle:
+					</text>
+					<text name="small_wave_speed_label">
+						Geschw. kleine Welle:
+					</text>
+					<text name="reflection_wavelet_scale_label">
+						Skalierung Wellen-Reflektion:
+					</text>
+					<slider label="X:" name="water_normal_scale_x"/>
+					<slider label="Y:" name="water_normal_scale_y"/>
+					<slider label="Z:" name="water_normal_scale_z"/>
+				</layout_panel>
+				<layout_panel name="lp_right">
+					<text name="refraction_and_blur_label">
+						Lichtbrechung und Unschärfe
+					</text>
+					<text name="refraction_scale_above_label">
+						Skalierung Lichtbrechung (obenrhalb):
+					</text>
+					<text name="refraction_scale_below_label">
+						Skalierung Lichtbrechung (unterhalb):
+					</text>
+					<text name="blur_multiplier_label">
+						Unschärfe-Multiplikator:
+					</text>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>
