@@ -277,8 +277,10 @@ void LLVOVolume::markDead()
 {
 	if (!mDead)
 	{
-		if( getVolume() ) // <FS:ND/> Check for corrupted volume.
-		LLSculptIDSize::instance().rem(getVolume()->getParams().getSculptID());
+        if (getVolume())
+        {
+            LLSculptIDSize::instance().rem(getVolume()->getParams().getSculptID());
+        }
 
 		if(getMDCImplCount() > 0)
 		{
