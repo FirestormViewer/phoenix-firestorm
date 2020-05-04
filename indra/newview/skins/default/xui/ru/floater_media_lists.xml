@@ -10,7 +10,7 @@
 	</scroll_list>
 	<layout_stack name="whitelist_buttons_layout_stack">
 	<layout_panel name="whitelist_buttons_panel_add">
-	<button label="Доб..." label_selected="Add..." name="add_whitelist" />
+	<button label="Добавить..." label_selected="Add..." name="add_whitelist" />
 	</layout_panel>
 	<layout_panel name="whitelist_buttons_panel_remove">
 	<button label="Убрать" name="remove_whitelist" />
@@ -26,7 +26,7 @@
 	</scroll_list>
 	<layout_stack name="blacklist_buttons_layout_stack">
 	<layout_panel name="blacklist_buttons_panel_add">
-	<button label="Доб..." label_selected="Add..." name="add_blacklist" />
+	<button label="Добавить..." label_selected="Add..." name="add_blacklist" />
 	</layout_panel>
 	<layout_panel name="blacklist_buttons_panel_remove">
 	<button label="Убрать" label_selected="Remove" name="remove_blacklist" />

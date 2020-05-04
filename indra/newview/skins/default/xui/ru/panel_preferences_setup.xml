@@ -36,10 +36,13 @@
 			<check_box label="Включить Javascript" name="browser_javascript_enabled"/>
 			<check_box label="Включить всплывающие окна медиа" name="media_popup_enabled"/>
 			<button label="Настройка параметров прокси" label_selected="Настройка параметров прокси" name="set_proxy"/>
+			<text name="home_page_label_l">
+				Домашняя страница браузера:
+			</text>
 		</panel>
 		<panel label="Каталоги" name="tab-dir">
 			<text name="cache_size_label_l">
-				Размер кэша:
+				Размер кэша ([http://wiki.firestormviewer.org/cache Нужны подсказки?] (На английском)):
 			</text>
 			<button label="Очистить кэш инвент." name="ClearInventoryCache"/>
 			<text name="Cache location">
@@ -48,14 +51,14 @@
 			<button label="Открыть" label_selected="Открыть" width="60" name="open_cache"/>
 			<button label="Задать" label_selected="Задать" width="50" name="set_cache"/>
 			<button label="Сброс" label_selected="Сброс" width="50" name="reset_cache"/>
-			<button label="Очистить" label_selected="Очистить" name="clear_cache"/>
+			<button label="Очистить" label_selected="Очистить" width="60" name="clear_cache"/>
 			<text name="Sound Cache location">
 				Расположение звукового кэша:
 			</text>
 			<button label="Открыть" label_selected="Открыть" width="60" name="open_sound_cache"/>
 			<button label="Задать" label_selected="Задать" width="50" name="set_sound_cache"/>
 			<button label="Сброс" label_selected="Сброс" width="50" name="reset_sound_cache"/>
-			<check_box label="Не удаляйте распакованные DSF (звук) файлы кэша при выходе" tool_tip="ВНИМАНИЕ: При включении данной функции звуковые файлы кэша удаляться не будут, что может привести к быстрому заполнению каталога кэша и уменьшению дискового пространства на вашем компьютере. По умолчанию данная функция отключена" name="keep_unpacked_cache"/>
+			<check_box label="Не удалять распакованные DSF (звук) файлы кэша при выходе" tool_tip="ВНИМАНИЕ: При включении данной функции звуковые файлы кэша удаляться не будут, что может привести к быстрому заполнению каталога кэша и уменьшению дискового пространства на вашем компьютере. По умолчанию данная функция отключена" name="keep_unpacked_cache"/>
 			<text name="log_path_desc">
 				Расположение журналов разговоров:
 			</text>

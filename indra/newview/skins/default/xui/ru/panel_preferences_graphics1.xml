@@ -2,6 +2,9 @@
 <panel label="Графика" name="Display panel">
 	<tab_container label="Настройки графики" name="tabs">
 		<panel label="Общее" name="General">
+			<text name="preset_label" width="90">
+				Предустановка:
+			</text>
 			<text name="QualitySpeed">
 				Качество и скорость:
 			</text>
@@ -22,7 +25,7 @@
 			</text>
 			<text name="ShadersPrefText4">
 				Ультра
-			</text>			
+			</text>
 			<check_box label="Полноэкранный режим" name="Fullscreen Mode" tool_tip="Запустить Firestorm в полноэкранном режиме. Для изменения этого параметра требуется перезапуск."/>
 			<text name="ShadersText">
 				Шейдеры:
@@ -61,7 +64,8 @@
 			</combo_box>
 			<slider label="Расстояние прорисовки" name="DrawDistance"/>
 			<slider label="Максимум частиц" name="MaxParticleCount"/>
-			<slider label="Максимум аватаров" name="MaxNumberAvatarDrawn"/>
+			<slider label="Максимальная сложность" name="IndirectMaxComplexity" tool_tip="Контролирует, в какой момент визуально сложный аватар отобразится как силуэт"/>
+			<slider label="Максимум 3D аватаров" name="IndirectMaxNonImpostors"/>
 			<slider label="Послеоперационне качество" name="RenderPostProcess"/>
 			<text name="PostProcessText">
 				Низкое
@@ -89,6 +93,10 @@
 				<radio_item label="Низкая" name="0"/>
 				<radio_item label="Высокая" name="2"/>
 			</radio_group>
+			<text name="Presets_Label" left="160">Предустановки:</text>
+			<button label="Сохранить" name="PrefSaveButton"/>
+			<button label="Загрузить" name="PrefLoadButton"/>
+			<button label="Удалить" name="PrefDeleteButton"/>
 			<button tool_tip="Восстановить настройки графики по умолчанию." name="Defaults"/>
 		</panel>
 		<panel label="Аппаратные установки" name="Hardware Settings">
@@ -96,12 +104,14 @@
 			<check_box label="Включить OpenGL Vertex Buffer Object (VBO)" name="vbo" tool_tip="Включение этого на современном оборудовании дает выигрыш в производительности. Тем не менее, старое оборудование часто имеет плохие реализаций VBO и вы можете вызвать сбой, если это разрешить."/>
 			<check_box label="Включить потоковое VBO" name="vbo_stream" tool_tip="Отключение этого может улучшить производительность при включеном VBO. Наблюдение показало, что отключение давало улучшения на различных графических картах AMD и Intel."/>
 			<check_box label="Включить сжатие текстур (требуется перезапуск)" name="texture compression" tool_tip="Сжатие текстур в видеопамяти, позволяет текстурам с высоким разрешение закгружаться за счет некоторого потери качества цвета."/>
+			<check_box label="Включить поддержку дисплеев HiDPI (только Mac OSX; требуется перезагрузка)" name="use HiDPI" tool_tip="Включить OpenGL для отображения в высоком разрешении."/>
 			<text name="Antialiasing:">
 				Сглаживание:
 			</text>
 			<combo_box label="Сглаживание" name="fsaa">
 				<combo_box.item label="Отключено" name="FSAADisabled"/>
 			</combo_box>
+			<spinner label="Гамма:" name="gamma"/>
 			<text name="brightness text">
 				(0/1.0 = яркость по уполчанию, ниже = ярче)
 			</text>
@@ -117,6 +127,9 @@
 				Прорисовка текстур:
 			</text>
 			<check_box label="Использовать HTTP для получения текстур" tool_tip="Установите для загрузки текстур, используя протокол HTTP - деактивируйте его, если у вас возникли проблемы с отображением текстур" name="TexturesHTTP"/>
+			<check_box label="Ограничить Макс.разрешение текстур до 512 пикс. (только 64 бит; нужна перезагрузка)"
+			tool_tip="Устанавливает ограничение максимального разрешение отображения для текстур до 512 пикселей. Это позволяет отображать больше текстур, прежде чем превысить доступную память текстур и наблюдать размытые текстуры."
+			name="FSRestrictMaxTextureSize" />
 			<text name="TextureDetailLabel">
 				Уровень качества текстур:
 			</text>
@@ -151,6 +164,7 @@
 		<panel label="Глубина резкости (DoF)" name="DOF panel">
 			<check_box label="Включить глубину резкости (Это размоет вид за исключением фокусировки камеры.)" name="UseDoF"/>
 			<check_box label="Включить в режиме редактирования" name="RenderDepthOfFieldInEditMode"/>
+			<check_box label="Разрешить когда под водой" name="FSRenderDoFUnderwater"/>
 			<slider label="F-камера:" name="CameraFNum" tool_tip="F номер камеры - значение для эффекта глубины резкости"/>
 			<slider label="Фокусное расстояние камеры (мм):" name="CameraFocal" tool_tip="Фокусное расстояние камеры для эффекта глубины резкости (в миллиметрах)"/>
 			<slider label="Угол наклона камеры (°):" name="Camera FOV" tool_tip="Вертикальный угол наклона камеры для эффекта глубины резкости (в градусах)"/>

@@ -23,24 +23,20 @@
 				<text name="Day Cycle" tool_tip="Windlight-Voreinstellungen für den Tageszyklus.">
 					Tageszykl.
 				</text>
-			</panel>
-			
-			<panel name="P_Sun">
-				<icon name="SkyDayCycle" tool_tip="Ändert die Tageszeit. HINWEIS: HIERDURCH WIRD ÜBLICHERWEISE DIE WINDLIGHT-VOREINSTELLUNG AUF STANDARD ZURÜCKGESETZT! Um die Position der Sonne für eine spezifische Voreinstellung zu ändern, „Neuer Himmel“ oder „Himmel bearbeiten“ unter „WL-Voreinstellungen“ auswählen."/>
-				<multi_slider name="WLSunPos" tool_tip="Diese Funktion funktioniert eventuell nicht korrekt. In diesem Fall „Neuer Himmel“ oder „Himmel bearbeiten“ unter „WL-Voreinstellungen“ verwenden."/>
-				<button name="ResetToRegionDefault" tool_tip="Windlight-Optionen auf Regionsstandard zurücksetzen."/>
+				<button name="btn_personal_lighting" label="Persönliche Beleuchtung..."/>
+				<button name="ResetToRegionDefault" tool_tip="Setzt die Umgebungseinstellungen auf die gemeinsame Umgebung zurück."/>
 			</panel>
 
 			<panel name="P_Q_Windlights">
 				<text name="T_Q_Windlights">
 					Standard-Windlights
 				</text>
-				<view_border name="horiz_separator1" width="110"/>
-				<button name="Sunrise" label="Sonnenaufgang" width="110"/>
-				<button name="Noon" label="Mittag" width="110"/>
-				<button name="Sunset" label="Sonnenuntergang" width="110"/>
-				<button name="Midnight" label="Mitternacht" width="110"/>
-				<button name="Revert to Region Default" label="Grundbesitzzeit" width="110"/>
+				<view_border name="horiz_separator1"/>
+				<button name="Sunrise" label="Sonnenaufgang"/>
+				<button name="Noon" label="Mittag"/>
+				<button name="Sunset" label="Sonnenuntergang"/>
+				<button name="Midnight" label="Mitternacht"/>
+				<button name="Revert to Region Default" label="Gemeinsame Umgebung"/>
 			</panel>
 			
 			<panel name="P_WL_Presets">

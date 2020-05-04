@@ -1,14 +1,37 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="inspect" title="Инспектирование объектов">
-	<floater.string name="timeStamp">
-		[wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
-	</floater.string>
-	<scroll_list name="object_list" tool_tip="Выбор объекта из этого списка приведет к его подсветке">
-		<scroll_list.columns label="Название объекта" name="object_name"/>
-		<scroll_list.columns label="Имя владельца" name="owner_name"/>
-		<scroll_list.columns label="Имя создателя" name="creator_name"/>
-		<scroll_list.columns label="Дата создания" name="creation_date"/>
-	</scroll_list>
-	<button label="Профиль владельца..." name="button owner" tool_tip="Показывает профиль владельца подсвеченного объекта"/>
-	<button label="Профиль создателя..." name="button creator" tool_tip="Показывает профиль создателя подсвеченного объекта"/>
+    <floater.string name="Group">
+        (Группа)
+    </floater.string>
+    <floater.string name="stats_list">
+        Общая статистика:
+
+[NUM_OBJECTS] объектов, [NUM_PRIMS] примов
+
+Граней: [NUM_FACES]
+Вершин: [NUM_VERTICES]
+Треуг.: [NUM_TRIANGLES]
+Сложн.: [COMPLEXITY]
+
+Текстур: [NUM_TEXTURES]
+TMem: [TEXTURE_MEMORY] KB
+VRAM: [VRAM_USAGE] KB
+    </floater.string>
+    <text_editor name="linksetstats_text" value="(загрузка...)"/>
+    <scroll_list name="object_list" tool_tip="Выбор объекта из этого списка приведет к его подсветке">
+        <scroll_list.columns label="Имя Объекта" name="object_name" />
+        <scroll_list.columns label="Описание" name="description" />
+        <scroll_list.columns label="Имя Владельца" name="owner_name" />
+        <scroll_list.columns label="Имя Создателя" name="creator_name" />
+        <scroll_list.columns label="Грани" name="facecount"/>
+        <scroll_list.columns label="Вершины" name="vertexcount" />
+        <scroll_list.columns label="Треугольники" name="trianglecount"/>
+        <scroll_list.columns label="TMem" name="tramcount"/>
+        <scroll_list.columns label="VRAM" name="vramcount"/>
+        <scroll_list.columns label="Дата Создания" name="creation_date"/>
+    </scroll_list>
+    <button label="Профиль владельца..." name="button owner"
+     tool_tip="Показывает профиль владельца подсвеченного объекта"/>
+    <button label="Профиль создателя..." name="button creator" tool_tip="Показывает профиль создателя подсвеченного объекта"/>
+    <menu_button name="options_btn" tool_tip="Опции"/>
 </floater>

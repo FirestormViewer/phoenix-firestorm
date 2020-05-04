@@ -36,7 +36,8 @@ public:
 		SNAPSHOT_TEXTURE,
 		SNAPSHOT_LOCAL,
 		SNAPSHOT_WEB,
-		SNAPSHOT_FLICKR
+		SNAPSHOT_FLICKR,
+		SNAPSHOT_NONE // <FS:Ansariel> Fix XUI parser warnings
 	};
 
 	typedef enum e_snapshot_format

@@ -21,6 +21,9 @@
       name="forgot_password_url">
     http://secondlife.com/account/request.php
   </panel.string>
+  <string name="ServerComboTooltip">
+    An existing grid or a grid URI
+  </string>
   <web_browser
       tab_stop="false"
       trusted_content="true"
@@ -187,17 +190,19 @@
         Log into Grid:
       </text>
       <combo_box
-          allow_text_entry="false"
-          font="SansSerifSmall"
-          follows="left|right|bottom"
-          height="23"
-          max_chars="256"
-          left="10"
-          top="51"
-          layout="topleft"
-          top_pad="2"
-          name="server_combo"
-          width="135" />
+        allow_text_entry="true"
+        follows="left|bottom"
+        height="22"
+        max_chars="256"
+        force_disable_fulltext_search="true"
+        combo_editor.commit_on_focus_lost="false"
+        combo_editor.prevalidate_callback="ascii"
+        name="server_combo"
+        width="135"
+        combo_button.scale_image="true" >
+      <combo_box.drop_down_button
+        font="SansSerifLarge"/>
+      </combo_box>
     </layout_panel>
     <layout_panel
         auto_resize="false"

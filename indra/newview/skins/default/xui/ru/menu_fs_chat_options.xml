@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Chat Options Menu">
+	<menu_item_check label="Показать Радар..." name="nearby_people"/>
+	<menu_item_check label="Показать Голоса..." name="nearby_voice"/>
+	<menu_item_check label="Показать Черный список..." name="block_list"/>
+	<menu_item_check label="Использовать стиль V1 для чата" name="plain_text_chat_history"/>
+	<context_menu label="Размер шрифта..." name="font_size">
+		<menu_item_check label="Мелкий" name="font_size_small"/>
+		<menu_item_check label="Средний" name="font_size_medium"/>
+		<menu_item_check label="Большой" name="font_size_large"/>
+		<menu_item_check label="Огромный" name="font_size_huge"/>
+	</context_menu>
+	<menu_item_check label="Добавлять (&gt;) как индикатор набора" name="typing_chevron"/>
+	<menu_item_check label="Показать оповещение новых сообщений" name="new_message_notification"/>
+	<menu_item_check label="Показать строку набора" name="show_chat_bar"/>
+	<menu_item_check label="Показать выбор канала" name="show_channel_selection"/>
+	<menu_item_check label="Показать кнопку Тип/Отправка" name="show_send_button"/>
+	<menu_item_check label="Показать кнопку Отправить в ЛС" name="show_im_send_button"/>
+</toggleable_menu>

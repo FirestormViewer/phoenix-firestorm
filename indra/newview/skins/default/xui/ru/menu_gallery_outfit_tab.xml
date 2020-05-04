@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Outfit">
+    <menu_item_call label="Надеть - Заменить текущий Костюм" name="wear_replace"/>
+    <menu_item_call label="Надеть - Добавить к текущему Костюму" name="wear_add"/>
+    <menu_item_call label="Снять - Удалить из текущего Костюма" name="take_off"/>
+    <menu_item_call label="Загрузить Фото (L$[UPLOAD_COST])" name="upload_photo"/>
+    <menu_item_call label="Выбрать Фото" name="select_photo"/>
+    <menu_item_call label="Сделать Снимок" name="take_snapshot"/>
+    <menu_item_call label="Удалить Фото" name="remove_photo"/>
+    <menu label="Новая одежда" name="New Clothes">
+        <menu_item_call label="Новая Рубашка" name="New Shirt"/>
+        <menu_item_call label="Новые Штаны" name="New Pants"/>
+        <menu_item_call label="Новые Ботинки" name="New Shoes"/>
+        <menu_item_call label="Новые Носки" name="New Socks"/>
+        <menu_item_call label="Новая Куртка" name="New Jacket"/>
+        <menu_item_call label="Новая Юбка" name="New Skirt"/>
+        <menu_item_call label="Новые Перчатки" name="New Gloves"/>
+        <menu_item_call label="Новые Майка" name="New Undershirt"/>
+        <menu_item_call label="Новые Трусы" name="New Underpants"/>
+        <menu_item_call label="Новая Альфа" name="New Alpha"/>
+        <menu_item_call label="Новая Физика" name="New Physics"/>
+        <menu_item_call label="Новое Тату" name="New Tattoo"/>
+    </menu>
+    <menu label="Новая Часть Тела" name="New Body Parts">
+        <menu_item_call label="Новая Фигура" name="New Shape"/>
+        <menu_item_call label="Новая Кожа" name="New Skin"/>
+        <menu_item_call label="Новые Волосы" name="New Hair"/>
+        <menu_item_call label="Новые Глаза" name="New Eyes"/>
+    </menu>
+    <menu_item_call label="Изменить Костюм" name="edit"/>
+    <menu_item_call label="Переименовать Костюм" name="rename"/>
+    <menu_item_call label="Удалить Костюм" name="delete"/>
+</context_menu>

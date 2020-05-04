@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="groups" title="ЗАПОМНЕННЫЕ ПОЛЬЗОВАТЕЛИ">
+    <button label="Забыть" label_selected="Забыть" name="forget"/>
+    <check_box label="Также удалять локальные данные" name="delete_data"
+     tool_tip="Удаляет локальные файлы: историю чата, скриншот последнего сеанса, файлы cookie браузера, историю телепортации, настройки панели инструментов и т.д. Некоторые из локальных файлов распределяются между сетками."/>
+</floater>

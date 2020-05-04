@@ -56,13 +56,13 @@
 						<multi_slider initial_value="0" name="WLTimeSlider"/>
 						<multi_slider initial_value="0" name="WLDayCycleFrames"/>
 						<text name="current_time" value="[PRCNT]%[DSC]"/>
-						<layout_stack>
-							<layout_panel>
+						<layout_stack name="track_options_ls">
+							<layout_panel name="track_options_lp">
 								<button label="Pfad klonen von" name="copy_track"/>
 								<button label="Pfad laden von" name="load_track"/>
 								<button label="Pfad löschen" name="clear_track"/>
 							</layout_panel>
-							<layout_panel>
+							<layout_panel name="track_progress_lp">
 								<layout_stack name="progress_control">
 									<layout_panel name="skip_back">
 										<button name="skip_back_btn" tool_tip="Schritt vor"/>
@@ -72,7 +72,7 @@
 									</layout_panel>
 								</layout_stack>
 							</layout_panel>
-							<layout_panel>
+							<layout_panel name="frames_lp">
 								<button label="[FRAME] hinzufügen" name="add_frame"/>
 								<button label="[FRAME] laden" name="btn_load_frame"/>
 								<button label="[FRAME] löschen" name="delete_frame"/>
@@ -91,8 +91,8 @@
 					</tab_container>
 				</layout_panel>
 				<layout_panel name="frame_settings_sky">
-					<tab_container name="sky_tabs">
-						<panel label="Atmosphäre und Beleuchtung" name="atmosphere_panel"/>
+					<tab_container name="sky_tabs" tab_width="165">
+						<panel label="Atmosphäre &amp; Beleuchtung" name="atmosphere_panel"/>
 						<panel label="Wolken" name="clouds_panel"/>
 						<panel label="Sonne und Mond" name="moon_panel"/>
 					</tab_container>

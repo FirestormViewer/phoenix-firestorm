@@ -202,6 +202,7 @@
          height="16"
          label="Moon"
          layout="topleft"
+         top_pad="2"
          name="moon" >
           <check_box.commit_callback
            function="Beacons.UICheck" />

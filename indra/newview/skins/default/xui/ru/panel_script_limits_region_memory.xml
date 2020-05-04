@@ -14,7 +14,7 @@
 		<scroll_list.columns label="Участок" name="parcel"/>
 		<scroll_list.columns label="Место" name="location"/>
 	</scroll_list>
-	<button label="Обновить список" name="refresh_list_btn"/>
+	<button label="Обновить список" name="refresh_list_btn" width="120"/>
 	<button label="Подсветить" name="highlight_btn"/>
 	<button label="Возврат" name="return_btn"/>
 </panel>
