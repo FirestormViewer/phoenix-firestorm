@@ -1688,6 +1688,9 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	<string name="InventoryNoMatchingRecentItems">
 		Sie haben nicht das Richtige gefunden? [secondlife:///app/inventory/filters Filter] anzeigen.
 	</string>
+	<string name="InventoryFavoritItemsNotSelected">
+		Wählen Sie „Als Favoriten-Ordner verwenden“ für einen Ordner Ihrer Wahl. Sie können jederzeit einen anderen Ordner auswählen. System-Ordner können nicht als Favorit ausgewählt werden.
+	</string>
 	<string name="PlacesNoMatchingItems">
 		Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/places/[SEARCH_TERM] Suche].
 	</string>
