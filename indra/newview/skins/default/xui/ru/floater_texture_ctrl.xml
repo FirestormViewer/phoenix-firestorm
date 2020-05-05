@@ -13,12 +13,12 @@
 	</text>
 
 	<!-- mode selector -->
-	<radio_group name="mode_selection" left="7">
-		<radio_item label="Инв." name="inventory"/>
-		<radio_item label="Лок." name="local"/>
-		<radio_item label="Зафиксировать" name="bake" value="2"/>
-	</radio_group>
-	<text name="unknown">
+	<combo_box name="mode_selection" >
+		<combo_box.item label="Инв." name="inventory"/>
+		<combo_box.item label="Лок." name="local"/>
+		<combo_box.item label="Зафиксировать" name="bake"/>
+	</combo_box>
+	<text name="size_lbl">
 Размер:
 [DIMENSIONS]
 	</text>

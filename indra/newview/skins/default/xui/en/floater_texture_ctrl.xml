@@ -79,7 +79,7 @@
      height="14"
      layout="topleft"
      left="8"
-     name="unknown"
+     name="size_lbl"
      top_pad="4">
         Size:
 [DIMENSIONS]
