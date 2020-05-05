@@ -1,10 +1,36 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Wolken" name="panel_settings_sky_clouds">
-	<layout_stack>
-		<layout_panel>
+	<layout_stack name="main_ls">
+		<layout_panel name="left_lp">
+			<text name="cloud_color_label">
+				Wolkenfarbe:
+			</text>
+			<text name="cloud_coverage_label">
+				Wolkenbedeckung:
+			</text>
+			<text name="cloud_scale_label">
+				Wolken-Skalierung:
+			</text>
+			<text name="cloud_variance_label">
+				Wolken-Varianz:
+			</text>
+			<text name="cloud_scroll_label">
+				Wolken-Bewegung:
+			</text>
+			<text name="cloud_image_label">
+				Wolken-Bild:
+			</text>
+		</layout_panel>
+		<layout_panel name="right_lp">
+			<text name="cloud_density_label">
+				Wolkendichte:
+			</text>
 			<slider label="X" name="cloud_density_x"/>
 			<slider label="Y" name="cloud_density_y"/>
 			<slider label="D" name="cloud_density_d"/>
+			<text name="cloud_detail_label">
+				Wolkendetail:
+			</text>
 			<slider label="X" name="cloud_detail_x"/>
 			<slider label="Y" name="cloud_detail_y"/>
 			<slider label="D" name="cloud_detail_d"/>

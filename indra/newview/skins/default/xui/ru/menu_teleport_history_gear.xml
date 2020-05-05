@@ -2,5 +2,14 @@
 <menu name="Teleport History Gear Context Menu">
 	<menu_item_call label="Открыть все папки" name="Expand all folders"/>
 	<menu_item_call label="Закрыть все папки" name="Collapse all folders"/>
+	<menu name="TPHistoryTimeZone" label="Выбрать время...">
+		<menu_item_check name="teleport_history_tz_utc" label="UTC" />
+		<menu_item_check name="teleport_history_tz_slt" label="SLT" />
+		<menu_item_check name="teleport_history_tz_local" label="Местное" />
+	</menu>
+	<menu name="Show Menu" label="Показать...">
+		<menu_item_check name="Show Position" label="Позицию" />
+		<menu_item_check name="Show Date" label="Дату" />
+	</menu>
 	<menu_item_call label="Очистить историю телепортаций" name="Clear Teleport History"/>
 </menu>

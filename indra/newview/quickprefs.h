@@ -30,8 +30,8 @@
 #ifndef QUICKPREFS_H
 #define QUICKPREFS_H
 
+#include "llenvironment.h"
 #include "lltransientdockablefloater.h"
-//#include "llwlparamset.h" // [EEPMERGE]
 #include "rlvdefines.h"
 
 const std::string PHOTOTOOLS_FLOATER = "phototools";
@@ -41,12 +41,10 @@ class LLComboBox;
 class LLLayoutPanel;
 class LLLayoutStack;
 class LLLineEditor;
-class LLMultiSliderCtrl;
 class LLSlider;
 class LLSliderCtrl;
 class LLSpinCtrl;
 class LLTextBox;
-class LLVirtualTrackball;
 
 #define PRESET_NAME_REGION_DEFAULT "__Regiondefault__"
 #define PRESET_NAME_DAY_CYCLE "__Day_Cycle__"
@@ -66,9 +64,6 @@ class FloaterQuickPrefs : public LLTransientDockableFloater
 private:
 	FloaterQuickPrefs(const LLSD& key);
 	~FloaterQuickPrefs();
-
-    void onDayOffset();
-	void onSunMoved();
 
 	void selectSkyPreset(const LLSD& preset);
 	void selectWaterPreset(const LLSD& preset);
@@ -98,12 +93,8 @@ private:
 	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
 	void enableWindlightButtons(BOOL enable);
 
-    void updateSun();
-    void updateDayOffset();
-
 public:
 	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void draw();
 	virtual void onOpen(const LLSD& key);
 
 	void setSelectedSky(const std::string& preset_name);
@@ -119,9 +110,7 @@ public:
 
 private:
 
-    // Windlight controls
-	LLMultiSliderCtrl*	mWLDayOffset;
-    LLVirtualTrackball* mWLSunRot;
+	// Windlight controls
 	LLComboBox*			mWLPresetsCombo;
 	LLComboBox*			mWaterPresetsCombo;
 	LLComboBox*			mDayCyclePresetsCombo;
@@ -132,7 +121,6 @@ private:
 	LLCheckBoxCtrl*		mCtrlUseSSAO;
 	LLCheckBoxCtrl*		mCtrlUseDoF;
 	LLComboBox*			mCtrlShadowDetail;
-	LLComboBox*			mCtrlAvatarShadowDetail;
 	LLComboBox*			mCtrlReflectionDetail;
 	
 	// Vignette UI controls
@@ -160,6 +148,11 @@ private:
 	
 	LLSliderCtrl*		mMaxComplexitySlider;
 	LLTextBox*			mMaxComplexityLabel;
+
+	LLSettingsSky::ptr_t		mLiveSky;
+	LLSettingsWater::ptr_t		mLiveWater;
+	LLSettingsDay::ptr_t		mLiveDay;
+	LLEnvironment::connection_t	mEnvChangedConnection;
 
 	// Vignette UI callbacks
 	void onChangeVignetteX();

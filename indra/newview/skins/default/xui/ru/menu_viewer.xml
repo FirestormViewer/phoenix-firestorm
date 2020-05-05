@@ -4,55 +4,61 @@
 		<menu_item_call label="Ваш аккаунт" name="Manage Account"/>
 		<menu_item_call label="Торговый списки..." name="MarketplaceListings"/>
 		<menu_item_call label="Купить L$" name="Buy and Sell L$"/>
-		<menu_item_call label="Настройки" name="Preferences"/>
-		<menu_item_call label="Кнопки панели инструментов" name="Toolbar Buttons"/>
-		<menu_item_call label="Профиль" name="Profile"/>
-		<menu_item_call label="Места" name="Picks"/>
-		<menu_item_check label="Внешность" name="ChangeOutfit"/>
-		<menu_item_call label="Мои скрипты..." name="MyScripts"/>
-		<menu_item_call label="Выберите аватар" name="Avatar Picker"/>
-		<menu_item_call label="Приключения" name="Experiences"/>
-		<menu_item_call label="Снимок" name="Take Snapshot"/>
+
 		<menu_item_check label="Инвентарь" name="Inventory"/>
 		<menu_item_check label="Инвентарь" name="ShowSidetrayInventory"/>
-		<menu_item_check label="Управление движением" name="Movement Controls"/>
+		<menu_item_check label="Защищенные папки" name="Protected Folders"/>
+		<menu_item_check label="Избранные Одежды" name="WearableFavorites"/>
+		<menu_item_call label="Места" name="Picks"/>
+		<menu_item_call label="Приключения" name="Experiences"/>
+
+		<menu_item_call label="Профиль" name="Profile"/>
+		<menu_item_check label="Внешность" name="ChangeOutfit"/>
+		<menu_item_call label="Выберите аватар" name="Avatar Picker"/>
+
 		<menu label="Движение" name="Movement">
+			<menu_item_call label="Встать" name="Stand up"/>
 			<menu_item_call label="Сесть" name="Sit Down Here"/>
 			<menu_item_check label="Летать" name="Fly"/>
 			<menu_item_call label="Прекратить летать" name="Stop flying"/>
 			<menu_item_check label="Всегда бежать" name="Always Run"/>
-			<menu_item_check label="Принудительно сесть на землю" name="Force Toggle Sitting" shortcut="control|alt|S"/>
+			<menu_item_check label="Принудительно сесть на землю" name="Force Toggle Sitting"/>
 			<menu_item_check label="Заблокировать перемещение" name="Move Lock"/>
 			<menu_item_check label="Быстрый прыжок" name="Avatar Ignore Prejump"/>
 		</menu>
+		<menu_item_check label="Управление движением" name="Movement Controls"/>
 		<menu_item_check label="Управление камерой" name="Camera Controls"/>
+
 		<menu label="Исправление аватара" name="avhealth">
 			<menu_item_call label="Остановить анимации аватара" name="Stop Animating My Avatar"/>
 			<menu_item_call label="Остановить анимации аватара и отменить разрешения" name="Stop Animating My Avatar With Revoke"/>
 			<menu_item_call label="Раздеформировать аватара" name="undeform_avatar"/>
 			<menu_item_call label="Принудительное обновление внешности (Rebake)" name="Rebake Texture"/>
+			<menu_item_call label="Обновить присоединения" name="Refresh Attachments"/>
 			<menu_item_call label="Сброс настроек мужского аватара  (Тест персонажа)" name="ResetDefaultAvM"/>
 			<menu_item_call label="Сброс настроек женского аватара (Тест персонажа)" name="ResetDefaultAvF"/>
-			<menu_item_check label="Показать объем текстур аватара (Замена для ARC)" name="Avatar Rendering Cost"/>
+			<menu_item_check label="Показать информацию сложности аватаров" name="Avatar Draw Info"/>
+			<menu_item_call label="Мои скрипты..." name="MyScripts"/>
 			<menu_item_call label="Измерение лагов" name="Lag Meter"/>
 			<menu_item_call label="Пересоздать LSL мост" name="Recreate LSL Bridge"/>
 		</menu>
+
+		<menu_item_call label="Снимок" name="Take Snapshot"/>
 		<menu_item_call label="Отслеживание денег" name="money_tracker"/>
 		<menu_item_call label="Поза редактирования..." name="pose_stand"/>
-		<menu label="Загрузить" name="Upload">
-			<menu_item_call label="Изображение ([COST])..." name="Upload Image"/>
-			<menu_item_call label="Звук ([COST])..." name="Upload Sound"/>
-			<menu_item_call label="Анимацию ([COST])..." name="Upload Animation"/>
-			<menu_item_call label="Меш модель..." name="Upload Model"/>
-			<menu_item_call label="Множественная (многофайловая) загрузка..." name="Bulk Upload"/>
-			<menu_item_call label="Установить разрешения по умолчанию..." name="perm prefs"/>
-			<menu_item_call label="Импортировать набор деталей ..." name="import linkset"/>
-		</menu>
+
+		<menu_item_call label="Настройки" name="Preferences"/>
+		<menu_item_call label="Кнопки панели инструментов" name="Toolbar Buttons"/>
+
+		<menu_item_check label="Показывать присоединенные HUD" name="Show HUD Attachments"/>
+		<menu_item_check label="Показывать Интерфейс Пользователя" name="Show User Interface"/>
 		<menu_item_call label="Запрос статуса 'Администратор'" name="Request Admin Options"/>
 		<menu_item_call label="Выход из статуса 'Администратор'" name="Leave Admin Options"/>
-		<menu_item_check label="Показывать присоединенные HUD" name="Show HUD Attachments"/>
 		<menu_item_call label="Выход из [APP_NAME]" name="Quit"/>
 	</menu>
+
+<!-- Comm Menu -->
+
 	<menu label="Общение" name="Communicate">
 		<menu label="Статус в сети" name="Status">
 			<menu_item_check label="Нет на месте" name="Away"/>
@@ -60,10 +66,12 @@
 			<menu_item_check label="Автоответчик" name="Set Autorespond"/>
 			<menu_item_check label="Автоответчик не друзьям" name="Set Autorespond to non-friends"/>
 			<menu_item_check label="Отклонять предложения телепортации и запросы" name="Automatically reject teleport offers"/>
+			<menu_item_check label="Отклонять все приглашения в группы" name="Reject all group invites"/>
+			<menu_item_check label="Отклонять все запросы дружбы" name="Reject all friendship requests"/>
 		</menu>
 		<menu_item_call label="Друзья" name="My Friends"/>
 		<menu_item_check label="Контакты" name="Contacts"/>
-		<menu_item_call label="Набор контактов" name="Contact Sets" shortcut="control|alt|shift|C"/>
+		<menu_item_call label="Набор контактов" name="Contact Sets"/>
 		<menu_item_call label="Группы" name="My Groups"/>
 		<menu_item_check label="Общий чат..." name="Nearby Chat"/>
 		<menu_item_check label="Люди" name="People"/>
@@ -73,11 +81,15 @@
 			<menu_item_check label="Нет изменений голоса" name="NoVoiceMorphing"/>
 			<menu_item_check label="Предварительный просмотр..." name="Preview"/>
 			<menu_item_call label="Подписаться..." name="Subscribe"/>
+			<menu_item_call label="Премиум привилегия..." name="PremiumPerk"/>
 		</menu>
 		<menu_item_check name="Conversation Log..." label="Журнал разговоров..."/>
 		<menu_item_check label="Ближайшие голоса" name="Nearby Voice"/>
 		<menu_item_call label="Список заблокированных" name="Block List"/>
 	</menu>
+
+	<!-- World Menu -->
+
 	<menu label="Мир" name="World">
 		<menu_item_call label="Синхронизация анимации" name="Resync Animations"/>
 		<menu_item_call label="Ближайшие аватары" name="Active Speakers"/>
@@ -85,6 +97,7 @@
 		<menu_item_call label="История телепортаций" name="Teleport History"/>
 		<menu_item_check label="Места" name="Places"/>
 		<menu_item_call label="Пункты" name="Destinations"/>
+		<menu_item_call label="События" name="Events"/>
 		<menu_item_check label="Мини карта" name="Mini-Map"/>
 		<menu_item_check label="Карта мира" name="World Map"/>
 		<menu_item_check label="Отслеживание региона" name="Region Tracker"/>
@@ -134,13 +147,24 @@
 			<menu_item_call label="Инструменты фото" name="phototools_item_call"/>
 			<menu_item_call label="Инструменты камеры" name="cameratools_item_call"/>
 		</menu>
-		<menu_item_call label="Поиск площади" name="area_search"/>
+		<menu_item_call label="Поиск вокруг" name="area_search"/>
 		<menu_item_call label="Проводник звуков" name="Sound Explorer"/>
 		<menu_item_call label="Проводник анимаций" name="Animation Explorer"/>
 		<menu_item_call label="Черный список активов" name="asset_blacklist"/>
+		<menu_item_call label="Настройки отображения аватаров" name="Avatar Render Settings"/>
+		<menu_item_check label="Всегда показывать друзей нормально" name="Always show Friends normally"/>
+		<menu_item_check label="Показывать только друзей" name="Render Friends Only"/>
 	</menu>
+
 	<menu label="Строить" name="BuildTools">
 		<menu_item_check label="Строить" name="Show Build Tools"/>
+		<menu label="Выбор инструмента строительства" name="Select Tool">
+			<menu_item_call label="Фокус" name="Focus"/>
+			<menu_item_call label="Двигать" name="Move"/>
+			<menu_item_call label="Редактировать" name="Edit"/>
+			<menu_item_call label="Создать" name="Create"/>
+			<menu_item_call label="Править землю" name="Land"/>
+		</menu>
 		<menu label="Выберите элементы" name="Select Elements">
 			<menu_item_call label="Выбрать следующую часть или лицо" name="Select Next Part or Face"/>
 			<menu_item_call label="Выбрать предыдущую часть или лицо" name="Select Previous Part or Face"/>
@@ -193,9 +217,11 @@
 			<menu_item_check label="Показать дополнительные разрешения" name="DebugPermissions"/>
 			<menu_item_check label="Выбирать только мои объекты" name="Select Only My Objects"/>
 			<menu_item_check label="Выбирать только подвижные объекты" name="Select Only Movable Objects"/>
+			<menu_item_check label="Выбирать только блокированные объекты" name="Select Only Locked Objects"/>
 			<menu_item_check label="Выбирать только копируемые объекты" name="Select Only Copyable Objects"/>
 			<menu_item_check label="Включать объекты собственности группы" name="Include Group-Owned Objects"/>
 			<menu_item_check label="Выбирать окружающее" name="Select By Surrounding"/>
+			<menu_item_check label="Показать физическую форму" name="Show Physics Shape"/>
 			<menu_item_check label="Показать контуры выбранного" name="Show Selection Outlines"/>
 			<menu_item_check label="Показать скрытый выбор" name="Show Hidden Selection"/>
 			<menu_item_check label="Показать радиус света для выбранных" name="Show Light Radius for Selection"/>
@@ -212,11 +238,12 @@
 			<menu_item_call label="Анимацию (L$[COST])..." name="Upload Animation"/>
 			<menu_item_call label="Меш модель..." name="Upload Model"/>
 			<menu_item_call label="Несколько..." name="Bulk Upload"/>
-			<menu_item_call label="Импортировать группу каналов..." name="import linkset"/>
+			<menu_item_call label="Импортировать ..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Отменить" name="Undo"/>
 		<menu_item_call label="Повторить" name="Redo"/>
 	</menu>
+	<!-- Content Menu -->
 	<menu label="Содержимое" name="Content">
 		<menu_item_check label="Поиск" name="Search"/>
 		<menu_item_call label="Торговая площадка SL (Marketplace)" name="SL Marketplace"/>
@@ -229,12 +256,14 @@
 		<menu_item_call label="Firestorm Plurk" name="Firestorm Plurk"/>
 		<menu_item_call label="Сообщение дня" name="Firestorm MoTD"/>
 	</menu>
+	<!-- Help Menu -->
 	<menu label="Помощь" name="Help">
 		<menu_item_check label="Включить подсказки интерфейса клиента" name="Enable Hints"/>
 		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki"/>
 		<menu_item_call label="Поиск Проблемы" name="Troubleshooting"/>
 		<menu_item_call label="Вступить в группу поддержки Firestorm" name="firestorm_support_group"/>
 		<menu_item_call label="Расписание обучений Firestorm" name="Firestorm Classes Schedule"/>
+		<menu_item_call label="Календарь Событий Firestorm" name="Firestorm Events Calendar"/>
 		<!-- <menu_item_call label="Second Life Help" name="Second Life Help"/> -->
 		<menu_item_call label="[CURRENT_GRID] помощь" name="current_grid_help"/>
 		<menu_item_call label="О [CURRENT_GRID]" name="current_grid_about"/>
@@ -268,13 +297,19 @@
 		<menu_item_check label="Разрешить OOC чат (Out Of Character)" name="Allow OOC Chat"/>
 		<menu_item_check label="Запретить получение в #RLV" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Показать фильтрованый чат" name="Show Filtered Chat"/>
+		<menu_item_check label="Разделять длинный Перенаправленный Чат" name="Split Long Redirected Chat"/>
+		<menu_item_check label="Разрешить временное присоединение" name="Allow Temporary Attachments"/>
 		<menu_item_check label="Показывать имена" name="Show Name Tags"/>
 		<menu_item_check label="Замена одежды разблокирована" name="Wear Replaces Unlocked"/>
+		<menu_item_check label="Консоль..." name="Console"/>
 		<menu_item_check label="Ограничения..." name="Restrictions"/>
 		<menu_item_check label="Строки..." name="Strings"/>
 	</menu>
+
+	<!-- Advanced Menu -->
 	<menu label="Расширенное" name="Advanced">
 		<menu_item_call label="Перегрузить текстуры (rebake)" name="Rebake Texture"/>
+		<menu_item_call label="Обновить присоединения" name="Refresh Attachments"/>
 		<menu_item_call label="Восстановить размер интерфейса по умолчанию" name="Set UI Size to Default"/>
 		<menu_item_call label="Установить размер окна..." name="Set Window Size..."/>
 		<menu_item_check label="Ограничить расстояние выбора" name="Limit Select Distance"/>
@@ -285,7 +320,7 @@
 			<menu_item_call label="Измерение лагов" name="Lag Meter"/>
 			<menu_item_check label="Окно статистики" name="Statistics Bar"/>
 			<menu_item_check label="Статистика загрузки сцены" name="Scene Load Statistics"/>
-			<menu_item_check label="Показать объем текстур аватара" name="Avatar Rendering Cost"/>
+			<menu_item_check label="Показать информацию сложности аватаров" name="Avatar Draw Info"/>
 		</menu>
 		<menu label="Подсветка и видимость" name="Highlighting and Visibility">
 			<menu_item_check label="Мигающие маяки" name="Cheesy Beacon"/>
@@ -421,7 +456,7 @@
 			<menu_item_check label="Площадь текстуры" name="Texture Area"/>
 			<menu_item_check label="Площадь грани" name="Face Area"/>
 			<menu_item_check label="Информация об уровнях детализации" name="LOD Info"/>
-			<menu_item_check label="Üçgen Sayısı" name="Triangle Count"/>
+			<menu_item_check label="Счетчик Треугольников" name="Triangle Count"/>
 			<menu_item_check label="Строительство очереди" name="Build Queue"/>
 			<menu_item_check label="Освещение" name="Lights"/>
 			<menu_item_check label="Частицы" name="Particles"/>
@@ -456,6 +491,7 @@
 			<menu_item_check label="Автоматические альфа-маски (не отложенные)" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="Текстуры анимаций" name="Animation Textures"/>
 			<menu_item_check label="Отключение текстур" name="Disable Textures"/>
+			<menu_item_call label="Не отрисовывать все анимеши" name="Derender Animesh"/>
 			<menu_item_check label="Текстуры в полном разрешении (ОПАСНО)" name="Full Res Textures"/>
 			<menu_item_check label="Прорисовка присоединенных источников света" name="Render Attached Lights"/>
 			<menu_item_check label="Прорисовка присоединенных частиц" name="Render Attached Particles"/>
@@ -487,7 +523,7 @@
 			<menu_item_call label="Дамп возможностей симулятора в общий чат" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="Интерфейс пользователя" name="UI">
-			<menu_item_call label="Браузер для просмотра медиа" name="Media Browser"/>
+			<menu_item_call label="Тест браузера для просмотра медиа" name="Web Browser Test"/>
 			<menu_item_check label="Тест перезапуска региона..." name="Region Restart Test"/>
 			<menu_item_call label="Браузер Web содержимого" name="Web Content Browser"/>
 			<menu_item_call label="Тест соединения с Facebook" name="FB Connect Test"/>
@@ -549,9 +585,9 @@
 			<menu_item_check label="Показать скелет" name="Show Collision Skeleton"/>
 			<menu_item_check label="Показать кости" name="Show Bones"/>
 			<menu_item_check label="Отобразить действие агента" name="Display Agent Target"/>
-			<menu_item_check label="Düşük Grafik Özellikli Avatar Kapsamını Göster" name="Show Impostor Extents"/>
+			<menu_item_check label="Показать степень упрощения" name="Show Impostor Extents"/>
 			<menu_item_call label="Дамп присоединений" name="Dump Attachments"/>
-			<menu_item_call label="Отладка текстур аватара" name="Debug Avatar Textures" shortcut="control|alt|shift|A"/>
+			<menu_item_call label="Отладка текстур аватара" name="Debug Avatar Textures"/>
 			<menu_item_call label="Дамп локальных текстур" name="Dump Local Textures"/>
 			<menu_item_call label="Перезагрузка частиц облака аватара" name="Reload Avatar Cloud Particle"/>
 		</menu>

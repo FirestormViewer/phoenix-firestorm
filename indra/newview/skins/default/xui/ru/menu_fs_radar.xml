@@ -34,4 +34,9 @@
 	<menu_item_call label="Остров: Забанить" name="estate_ban"/>
 	<menu_item_call label="Не отображать" name="derender"/>
 	<menu_item_call label="Не отображать всегда" name="derender_permanent"/>
+	<menu label="Настройки Отображения" name="render_settings">
+		<menu_item_check label="Отображать Нормально" name="av_render_normal"/>
+		<menu_item_check label="Не Отображать" name="av_render_never"/>
+		<menu_item_check label="Отображать Полностью" name="av_render_always"/>
+	</menu>
 </context_menu>

@@ -1988,6 +1988,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="InvFolder Merchant Outbox">
 		Händler-Outbox
 	</string>
+	<string name="InvFolder Settings">
+		Einstellungen
+	</string>
 	<string name="InvFolder Friends">
 		Freunde
 	</string>
@@ -5790,7 +5793,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Ziele
 	</string>
 	<string name="Command_Environments_Label">
-		Meine Umgebungen
+		Umgebungen
 	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
@@ -5992,7 +5995,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Ziele von Interesse
 	</string>
 	<string name="Command_Environments_Tooltip">
-		Meine Umgebungen
+		Umgebungen
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Auf Flickr hochladen
@@ -6796,7 +6799,7 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 
 	<string name="QP_WL_Region_Default">
-		Regionsstandard
+		Gemeinsame Umgebung
 	</string>
 	<string name="QP_WL_Day_Cycle_Based">
 		Tageszyklus-basiert

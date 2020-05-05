@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="top_objects" title="Лучшие объекты">
+<floater name="top_objects" title="Лучшие объекты" min_width="800">
 	<floater.string name="top_scripts_title">
 		Лучшие скрипты
 	</floater.string>
@@ -56,8 +56,11 @@
 		Участок:
 	</text>
 	<button label="Фильтр" name="filter_parcel_btn"/>
-	<button label="Вернуть выбранное" name="return_selected_btn"/>
-	<button label="Вернуть все" name="return_all_btn"/>
-	<button label="Отключить выбранное" name="disable_selected_btn"/>
-	<button label="Отключить все" name="disable_all_btn"/>
+	<button label="Обновить" name="refresh_btn" />
+	<button label="Вернуть выбранное" name="return_selected_btn" width="120" />
+	<button label="Вернуть все" name="return_all_btn" />
+	<button label="Телепорт к" name="teleport_to_btn" />
+	<button label="Профиль" name="profile_btn" />
+	<button label="О Скриптах" name="script_info_btn" />
+	<button label="Выбросить" name="estate_kick_btn" />
 </floater>

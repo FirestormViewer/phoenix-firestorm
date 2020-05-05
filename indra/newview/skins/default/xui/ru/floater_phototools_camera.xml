@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater width="285" title="Инструменты Камеры" name="phototools_camera_floater" >
+	<floater.string name="rotate_tooltip">
+		Поворот камеры вокруг фокуса
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		Масштабирование камеры к фокусу
+	</floater.string>
+	<floater.string name="move_tooltip">
+		Перемещение камеры вверх и вниз, влево и вправо
+	</floater.string>
+	<floater.string name="free_mode_title">
+		Просмотр объекта
+	</floater.string>
+	<tab_container name="tabs">
+		<panel name="P_Cam_Controls_1" label="Управление 1">
+			<panel name="cameracontrolspanel">
+				<panel name="controls1">
+					<panel name="preset_views_list">
+						<panel_camera_item name="front_view">
+							<panel_camera_item.text name="front_view_text">
+								Вид спереди
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="group_view">
+							<panel_camera_item.text name="side_view_text">
+								Вид сбоку
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="rear_view">
+							<panel_camera_item.text name="rear_view_text">
+								Вид сзади
+							</panel_camera_item.text>
+						</panel_camera_item>
+					</panel>
+					<panel name="camera_modes_list">
+						<panel_camera_item name="object_view">
+							<panel_camera_item.text name="object_view_text">
+								Просмотр объекта
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="mouselook_view">
+							<panel_camera_item.text name="mouselook_view_text">
+								Вид Mouselook
+							</panel_camera_item.text>
+						</panel_camera_item>
+					</panel>
+					<!--TODO: replace + - images -->
+					<panel name="zoom">
+						<joystick_rotate name="cam_rotate_stick" tool_tip="Орбита камеры вокруг фокуса"/>
+						<slider_bar name="zoom_slider" tool_tip="Это просто перемещает камеру. ПРИМЕЧАНИЕ. Это не масштаб камеры! Это не влияет на угол обзора. Используйте ползунок «Угол обзора» для реального масштабирования."/>
+						<joystick_track name="cam_track_stick" tool_tip="Двигает камеру вверх и вниз, влево и вправо."/>
+					</panel>
+				</panel>
+
+				<panel name="buttons">
+					<button name="presets_btn" tool_tip="Предустановленные Виды"/>
+					<button name="pan_btn" tool_tip="Орбита Масштаб Панорама"/>
+					<button name="avatarview_btn" tool_tip="Режимы Камеры"/>
+					<button name="store_camera_view_btn" tool_tip="Сохранить текущий вид камеры"/>
+					<button name="load_camera_view_btn" tool_tip="Загрузить сохраненный вид камеры" />
+				</panel>
+			</panel>
+
+			<panel name="P_Cam_Mov_Settings">
+				<text name="T_Cam_Mov_Settings">
+					Настройки движения камеры
+				</text>
+			</panel>
+
+			<panel name="P_Zoom">
+				<text name="T_Zoom" tool_tip="В реальных условиях это функция масштабирования. Это изменит поле зрения в окне просмотра. Это то же самое, что нажатие Ctrl+0 или Ctrl+8. ПРИМЕЧАНИЕ. Это не будет работать, если вы включили flycam (3D SpacenNavigator).">
+					Угол обзора
+				</text>
+				<button name="Reset_Camera_Angle" label="С" tool_tip="Сброс на значение по умолчанию."/>
+				<text name="T_Zoom_Speed" tool_tip="Controls how fast/slow the camera will zoom in and out. Higher values produce slower and smother zoom.">
+					Скор. масштаб.
+				</text>
+				<button name="Reset_Zoom_Time" label="С" tool_tip="Сброс на значение по умолчанию."/>
+				<text name="T_Camera_Lag" tool_tip="Значение отставания камеры от движения аватара (0 = нет, 30 = скорость аватара).">
+					Отставание
+				</text>
+				<button name="Reset_Camera_Lag" label="С" tool_tip="Сброс на значение по умолчанию."/>
+				<text name="T_Camera_Offset" tool_tip="Управляет тем, насколько камера смещена / удалена от точки зрения по умолчанию.">
+					Смещение
+				</text>
+				<button name="Reset_Camera_Offset" label="С" tool_tip="Сброс на значение по умолчанию."/>
+				<text name="T_Camera_Smoothing" tool_tip="Контролирует как плавно камера разгоняется и останавливается. Более высокие значения дают более плавное (и несколько более медленное) движение.">
+					Плавность
+				</text>
+				<button name="Reset_Camera_Smoothing" label="С" tool_tip="Сброс на значение по умолчанию."/>
+			</panel>
+		</panel>
+
+		<panel name="P_Cam_Controls_2" label="Управление 2" >
+			<panel name="P_Mouse_Movement">
+				<text name="T_Mouse_Movement">
+					Настройки перемещения мыши
+				</text>
+			</panel>
+
+			<panel name="P_Mouse_Movement_Settings">
+				<text name="T_Mouse_Sensitivity" left="5" width="110" tool_tip="Контролирует чувствительность мыши в режиме Mouselook.">Чувствительность
+				</text>
+				<button name="Reset_Mouse_Sensitivity" label="С" tool_tip="Сброс на значение по умолчанию."/>
+				<check_box name="first_person_avatar_visible" label="Показать аватар в Mouselook"
+				 tool_tip="Показывает аватар и надетое ниже шеи в режиме Mouselook (Вид от первого лица). Значение по умолчанию: OFF." />
+				<check_box name="MouseSmooth" label="Плавные движения в Mouselook" tool_tip="Сглаживает движение мыши в режиме Mouselook (Вид от первого лица)."/>
+			</panel>
+
+			<panel name="P_Additional_Camera_Options">
+				<text name="T_Additional_Camera_Options" width="240">
+					Дополнительные параметры камеры
+				</text>
+			</panel>
+
+			<panel name="P_Add_Cam_Opt_Settings">
+				<check_box name="clickonavatarkeepscamera" label="Сохранять положение камеры"
+				 tool_tip="Обычно нажатие на аватар сбрасывает положение камеры. Этот параметр устраняет это поведение."/>
+				<check_box name="FSResetCameraOnTP" label="Сброс положение камеры после телепорта"
+				 tool_tip="Как правило, положение камеры сбрасывается при телепортации (в пределах региона). Этот параметр предотвращает это поведение."/>
+				<check_box name="disableminzoomdist" label="Отключить минимальное расстояние"
+				 tool_tip="Отключает ограничение на ближайшем расстоянии камеры до объекта."/>
+				<check_box name="ignorecameraconstraints" label="Движение камеры без ограничений"
+				 tool_tip="Игнорирует «выталкивание» камеры из объектов. ТРЕБУЕТ РЕСТАРТА!"/>
+				<check_box name="resetcameraonmovement"
+				 label="Сброс положения камеры при движении"
+				 tool_tip="Сбрасывает камеру в положение по умолчанию при перемещении аватара"/>
+			</panel>
+		</panel>
+
+		<panel name="P_3D_Mouse" label="3Д Мышь">
+			<panel name="P_3D_Mouse_Settings1" >
+				<slider name="FlycamAxisScale1b" label="Лево/Право" tool_tip="Регулирует чувствительность движения Влево/Вправо. Если вам трудно двигаться с точностью, используйте более низкие значения шкалы."/>
+				<slider name="FlycamAxisScale2b" label="Верх/Низ" tool_tip="Регулирует чувствительность движения Вверх/Вниз. Если вам трудно двигаться с точностью, используйте более низкие значения шкалы."/>
+				<slider name="FlycamAxisScale0b" label="Перед/Зад" tool_tip="Регулирует чувствительность движения В/Из. Если вам трудно двигаться с точностью, используйте более низкие значения шкалы."/>
+				<slider name="FlycamAxisScale4" label="Высота" tool_tip="Регулирует чувствительность Высоты. Если вам трудно двигаться с точностью, используйте более низкие значения шкалы."/>
+				<slider name="FlycamAxisScale5" label="Рыскание" tool_tip="Регулирует чувствительность Рыскания. Если вам трудно двигаться с точностью, используйте более низкие значения шкалы."/>
+				<slider name="FlycamAxisScale3" label="Крен" tool_tip="Регулирует чувствительность Крена. Если вам трудно двигаться с точностью, используйте более низкие значения шкалы."/>
+				<slider name="FlycamAxisScale6" label="Масштаб" tool_tip="Регулирует чувствительность Скорости масштабирования. Если вам трудно двигаться с точностью, используйте более низкие значения шкалы."/>
+				<slider name="FlycamFeathering" label="Легкость" tool_tip="Установка ползунка полностью вправо сделает камеру очень подвижной, обеспечивая полный контроль джойстиком. Установка ползунка полностью влево сделает камеру очень инертной, словно камера тяжелая."/>
+			</panel>
+
+			<panel name="P_3D_Mouse_Settings2">
+				<spinner name="JoystickAxis6" label="Установка оси масштабирования"
+				 tool_tip="Управляет, на какую ось мыши отображается функция масштабирования (для работы с ней)."/>
+				<check_box name="enable_joystick" label="Включить 3Д Мышь" left="5"
+				 tool_tip="Это включает 3Д Мышь."/>
+				<check_box name="CB_Zoom_Control" label="Управление масштабом (см. Подсказку!)" left="5"
+				 tool_tip="Чтобы управление масштабированием работало, вы должны установить 'Установка оси масштабирования' выше '4'."/>
+				<check_box name="CB_Auto_Leveling" label="Автовыравнивание (предотвращает крен)" left="5"/>
+				<check_box name="CB_3D_Mouse_Avatar" label="Двигать аватар 3Д-мышью" left="5"/>
+				<check_box name="CB_3D_Mouse_Build" label="Двигать объекты 3Д-мышью (строить)"
+				 tool_tip="Использует 3D-мышь для перемещения объектов при создании и редактировании."
+				 left="5"/>
+			</panel>
+		</panel>
+	</tab_container>
+</floater>

@@ -21,7 +21,7 @@
 	</panel>
 	<panel name="balance_bg">
 		<text name="balance" tool_tip="Нажмите, для обновления баланса"/>
-		<button label="Купить L$" name="buyL" tool_tip="Нажмите, чтобы купить L$"/>
+		<button label="Купить" name="buyL" tool_tip="Нажмите, чтобы купить L$"/>
 	</panel>
 	<panel name="time_and_media_bg">
 		<icon name="dd_icon" tool_tip="Дальность прорисовки"/>

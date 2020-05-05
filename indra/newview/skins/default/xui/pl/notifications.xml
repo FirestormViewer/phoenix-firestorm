@@ -4748,7 +4748,7 @@ Poprzedni symulator: [OLDVERSION]
 [EWHAT]
 	</notification>
 	<notification name="NoHavok">
-		Niektóre funkcje, takie jak [FEATURE], nie są obsługiwane przez [APP_NAME] w wersji dla OpenSimulatora. Jeśli chcesz używać '[FEATURE]', to prosimy o pobranie [APP_NAME] w wersji dla Second Life z:
+		Niektóre funkcje, takie jak [FEATURE], nie są obsługiwane przez [APP_NAME] w obecnej wersji. Jeśli chcesz używać '[FEATURE]', to prosimy o pobranie [APP_NAME] w wersji ze wsparciem dla Havoka z:
 [DOWNLOAD_URL]
 		<form name="form">
 			<ignore name="ignore" text="Ostrzeżenie o braku Havoka"/>

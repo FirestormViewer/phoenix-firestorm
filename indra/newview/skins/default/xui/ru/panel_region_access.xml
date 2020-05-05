@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Доступ" name="Access">
 	<tab_container name="tabs">
-		<panel label="МЕНЕДЖЕРЫ ЗЕМЛЕВЛАДЕНИЯ" name="estate_managers_panel">
+		<panel label="Менеджеры Землевладения" name="estate_managers_panel">
 			<text name="estate_manager_label">
 				Менеджеры землевладения:
 			</text>
@@ -11,10 +11,10 @@
 			<button label="Добавить..." name="add_estate_manager_btn"/>
 			<button label="Удалить..." name="remove_estate_manager_btn"/>
 		</panel>
-		<panel label="РАЗРЕШЕННЫЕ" name="allowed_panel">
+		<panel label="Разрешенные" name="allowed_panel">
 			<panel label="top_panel" name="allowed_search_panel">
-				<filter_editor label="Поиск допущенных агентов" name="allowed_search_input"/>
-				<button label="Копировать" name="copy_allowed_list_btn"/>
+				<filter_editor label="Поиск допущенных агентов" name="allowed_search_input" width="385"/>
+				<button label="Копировать" name="copy_allowed_list_btn" width="80"/>
 			</panel>
 			<text name="allow_resident_label">
 				Разрешено всегда:
@@ -25,10 +25,10 @@
 			<button label="Добавить..." name="add_allowed_avatar_btn"/>
 			<button label="Удалить..." name="remove_allowed_avatar_btn"/>
 		</panel>
-		<panel label="ДОПУЩЕННЫЕ ГРУППЫ" name="allowed_groups_panel">
+		<panel label="Допущенные Группы" name="allowed_groups_panel">
 			<panel label="top_panel" name="allowed_group_search_panel">
-				<filter_editor label="Поиск допущенных групп" name="allowed_group_search_input"/>
-				<button label="Копировать" name="copy_allowed_group_list_btn"/>
+				<filter_editor label="Поиск допущенных групп" name="allowed_group_search_input" width="385"/>
+				<button label="Копировать" name="copy_allowed_group_list_btn" width="80"/>
 			</panel>
 			<text name="allow_group_label">
 				Допуск групп всегда разрешен:
@@ -39,10 +39,10 @@
 			<button label="Добавить..." name="add_allowed_group_btn"/>
 			<button label="Удалить..." name="remove_allowed_group_btn"/>
 		</panel>
-		<panel label="ЗАБЛОКИРОВАНЫ" name="banned_panel">
+		<panel label="Заблокированы" name="banned_panel">
 			<panel label="top_panel" name="banned_search_panel">
-				<filter_editor label="Поиск заблокированных агентов" name="banned_search_input"/>
-				<button label="Копировать" name="copy_banned_list_btn"/>
+				<filter_editor label="Поиск заблокированных агентов" name="banned_search_input" width="385"/>
+				<button label="Копировать" name="copy_banned_list_btn" width="80"/>
 			</panel>
 			<text name="ban_resident_label">
 				Всегда заблокированы:

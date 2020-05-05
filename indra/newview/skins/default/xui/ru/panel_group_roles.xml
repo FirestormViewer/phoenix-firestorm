@@ -24,7 +24,7 @@
 			<button label="Забанить" name="member_ban"/>
 			<button name="export_list" label="Экспорт списка"/>
 		</panel>
-		<panel label="Роли" name="roles_sub_tab" tool_tip="Роли">
+		<panel label="Роли" name="roles_sub_tab">
 			<panel.string name="help_text">
 				Ролям присваиваются название и привилегии
 которые выполняют определенную функцию. Любой человек может иметь
@@ -40,6 +40,7 @@
 				<scroll_list.columns label="Титул" name="title"/>
 			</scroll_list>
 			<button label="Новая роль" name="role_create"/>
+			<button label="Копировать роль" name="role_copy"/>
 			<button label="Удалить роль" name="role_delete"/>
 		</panel>
 		<panel label="Привилегии" name="actions_sub_tab" tool_tip="Можно просмотреть описание привилегии, а также какие участники и роли ею обладают.">

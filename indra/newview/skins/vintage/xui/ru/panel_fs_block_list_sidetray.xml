@@ -4,6 +4,9 @@
 		<fs_scroll_list.columns name="item_name" label="Имя" />
 		<fs_scroll_list.columns name="item_type" label="Тип" />
 	</fs_scroll_list>
+	<text name="block_limit">
+		Заблокированых: [COUNT] ([LIMIT] макс.)
+	</text>
 	<layout_stack name="block_list_sidetray_main">
 		<layout_panel name="back_button_container">
 			<button tool_tip="Вернуться к 'Люди'" name="back" />

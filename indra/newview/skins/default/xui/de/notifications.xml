@@ -4754,6 +4754,11 @@ Bitte kopieren Sie diese in Ihr Inventar und versuchen Sie es erneut.
 	<notification name="TrackLoadMismatch">
 		Der Pfad konnte nicht aus [TRACK1] in [TRACK2] geladen werden.
 	</notification>
+	<notification name="NoValidEnvSettingFound">
+		Keine gültige Einstellung für die Umgebung ausgewählt.
+		
+Bitte beachten Sie, dass „Gemeinsame Umgebung“ und „Tageszyklus-basiert“ nicht ausgewählt werden können!
+	</notification>
 
 <!-- ## Zi: Animation Overrider -->
   <notification name="NewAOSet">
@@ -4773,7 +4778,7 @@ Neues Animationsset
   </notification>
 
   <notification name="NewAOCantContainNonASCII">
-Ein neues Animationsset mit Namen "[AO_SET_NAME]" konnte nicht angelegt werden.
+Ein neues Animationsset mit Namen „[AO_SET_NAME]“ konnte nicht angelegt werden.
 Der Name darf ausschließlich ASCII-Zeichen ausgenommen „:“ und „|“ enhalten.
     <usetemplate
      name="okbutton"
@@ -4781,7 +4786,7 @@ Der Name darf ausschließlich ASCII-Zeichen ausgenommen „:“ und „|“ enha
   </notification>
 
   <notification name="RenameAOMustBeASCII">
-Das Animationsset konnte nicht zu "[AO_SET_NAME]" umbenannt werden.
+Das Animationsset konnte nicht zu „[AO_SET_NAME]“ umbenannt werden.
 Der Name darf ausschließlich ASCII-Zeichen ausgenommen „:“ und „|“ enhalten.
     <usetemplate
      name="okbutton"
@@ -4789,7 +4794,7 @@ Der Name darf ausschließlich ASCII-Zeichen ausgenommen „:“ und „|“ enha
   </notification>
 
 <notification name="RemoveAOSet">
-Animationsset "[AO_SET_NAME]" aus Liste löschen?
+Animationsset „[AO_SET_NAME]“ aus Liste löschen?
     <usetemplate
      name="okcancelbuttons"
      notext="Abbrechen"
@@ -5162,7 +5167,7 @@ Fehler im Regulären Ausdruck:
 	</notification>
 
 	<notification name="NoHavok">
-Einige Funktionen wie [FEATURE] sind nicht in [APP_NAME] für OpenSimulator enthalten. Falls Sie [FEATURE] nutzen möchten, laden Sie sich bitte [APP_NAME] für Second Life hier herunter:
+Einige Funktionen wie [FEATURE] sind nicht in dieser Version von [APP_NAME] enthalten. Falls Sie [FEATURE] nutzen möchten, laden Sie sich bitte eine Version von [APP_NAME] mit Havok-Unterstützung hier herunter:
 [DOWNLOAD_URL]
 		<form name="form">
 			<ignore name="ignore" text="Kein-Havok-Warnung"/>
