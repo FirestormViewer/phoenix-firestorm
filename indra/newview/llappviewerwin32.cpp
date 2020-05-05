@@ -165,6 +165,9 @@ namespace
                 {
                     // user name, when we have it
                     sBugSplatSender->setDefaultUserName(WCSTR(gAgentAvatarp->getFullname()));
+
+                    sBugSplatSender->sendAdditionalFile(
+                        WCSTR(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "settings_per_account.xml")));
                 }
             // <FS:ND> Only send avatar name if enabled via prefs
             }

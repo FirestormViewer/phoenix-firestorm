@@ -3514,7 +3514,7 @@ public:
 						U8 index = facep->getTextureIndex();
 						if (facep->mDrawInfo)
 						{
-							if (index < 255)
+							if (index < FACE_DO_NOT_BATCH_TEXTURES)
 							{
 								if (facep->mDrawInfo->mTextureList.size() <= index)
 								{

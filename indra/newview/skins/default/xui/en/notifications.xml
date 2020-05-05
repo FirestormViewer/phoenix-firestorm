@@ -1344,6 +1344,18 @@ You must agree to the Terms and Conditions, Privacy Policy, and Terms of Service
 
   <notification
    icon="alertmodal.tga"
+   name="CouldNotBuyCurrency"
+   type="alertmodal">
+[TITLE]
+[MESSAGE]
+   <tag>fail</tag>
+   <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+  
+  <notification
+   icon="alertmodal.tga"
    name="CouldNotPutOnOutfit"
    type="alertmodal">
 Could not put on outfit.

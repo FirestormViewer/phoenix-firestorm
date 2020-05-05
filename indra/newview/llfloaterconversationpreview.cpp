@@ -103,10 +103,7 @@ BOOL LLFloaterConversationPreview::postBuild()
 	}
 	// <FS:Ansariel> Remember used log file name
 	mChatHistoryFileName = file;
-	if (mIsGroup)
-	{
-		mChatHistoryFileName += GROUP_CHAT_SUFFIX;
-	}
+
 	LLStringUtil::format_map_t args;
 	args["[NAME]"] = name;
 	std::string title = getString("Title", args);

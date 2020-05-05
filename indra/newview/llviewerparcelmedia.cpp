@@ -82,6 +82,8 @@ mMediaParcelLocalID(0)
 	msg->setHandlerFunc("ParcelMediaCommandMessage", parcelMediaCommandMessageHandler );
 	msg->setHandlerFunc("ParcelMediaUpdate", parcelMediaUpdateHandler );
 	loadDomainFilterList();
+
+	LLViewerParcelMediaAutoPlay::instance();
 }
 
 LLViewerParcelMedia::~LLViewerParcelMedia()

@@ -594,8 +594,8 @@ class WindowsManifest(ViewerManifest):
                 else:
                     self.path("fmodex.dll")
 
-            # Get openal dll
-            if self.args.get('openal') == 'ON':
+            if self.args['openal'] == 'ON':
+                # Get openal dll
                 self.path("OpenAL32.dll")
                 self.path("alut.dll")
 

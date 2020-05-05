@@ -184,8 +184,6 @@ void LLFloaterPermsDefault::sendInitialPerms()
 	// </FS:Ansariel>
 	{
 		updateCap();
-		// <FS:Ansariel> Set cap sent = true only on success to allow re-transmit on region change
-		//setCapSent(true);
 	}
 }
 
@@ -247,7 +245,10 @@ void LLFloaterPermsDefault::updateCapCoro(std::string url)
         {
             const std::string& reason = status.toString();
             // Do not display the same error more than once in a row
-            if (reason != previousReason)
+            // <FS:Ansariel> Getter for CapSent
+            //if ((reason != previousReason) && mCapSent)
+            if ((reason != previousReason) && sCapSent)
+            // </FS:Ansariel>
             {
                 previousReason = reason;
                 LLSD args;

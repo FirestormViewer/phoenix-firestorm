@@ -674,7 +674,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
         || (dialog == IM_FROM_TASK && LLMuteList::getInstance()->isMuted(session_id));
     BOOL is_owned_by_me = FALSE;
     BOOL is_friend = (LLAvatarTracker::instance().getBuddyInfo(from_id) == NULL) ? false : true;
-    static LLCachedControl<bool> accept_im_from_only_friend(gSavedSettings, "VoiceCallsFriendsOnly");
+    static LLCachedControl<bool> accept_im_from_only_friend(gSavedPerAccountSettings, "VoiceCallsFriendsOnly");
     //BOOL is_linden = chat.mSourceType != CHAT_SOURCE_OBJECT &&
     //		LLMuteList::getInstance()->isLinden(name); <:FS:TM> Bear compie fix - is_linden not referenced
 
@@ -1746,7 +1746,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
             }
 
             // <FS:PP> FIRE-1245: Option to block/reject teleport offers
-            //else if (gSavedSettings.getBOOL("VoiceCallsFriendsOnly") && (LLAvatarTracker::instance().getBuddyInfo(from_id) == NULL))
+            //else if (gSavedPerAccountSettings.getBOOL("VoiceCallsFriendsOnly") && (LLAvatarTracker::instance().getBuddyInfo(from_id) == NULL))
             //{
             //	return;
             //}
