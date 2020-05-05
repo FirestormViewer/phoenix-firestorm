@@ -16,14 +16,14 @@
 	<text name="glow label">
 		Свечение
 	</text>
-	<check_box label="Собственная яркость" name="checkbox fullbright"/>
+	<check_box label="Собств. яркость" name="checkbox fullbright"/>
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="Материалы" name="Materials"/>
 		<combo_box.item label="Медиа" name="Media"/>
 	</combo_box>
 	<radio_group name="radio_material_type">
 		<radio_item label="Текстура (рассеянная)" name="Texture (diffuse)" value="0"/>
-		<radio_item label="Шероховатость (обычная)" name="Bumpiness (normal)" value="1"/>
+		<radio_item label="Шероховатость (обычн.)" name="Bumpiness (normal)" value="1"/>
 		<radio_item label="Блеск (зеркальный)" name="Shininess (specular)" value="2"/>
 	</radio_group>
 	<check_box initial_value="false" label="Повтор блокировки" name="checkbox_sync_settings" tool_tip="Одновременно сверить все повторы карт"/>
@@ -115,6 +115,7 @@
 	<spinner label="Смещение по вертикали" name="shinyOffsetV"/>
 	<check_box initial_value="false" label="Согласование" name="checkbox planar align" tool_tip="Согласование текстур на всех выбранных гранях по последней выбранной грани. Должно быть выбрано наложение по плоскостям."/>
 	<check_box label="Синхронизировать материалы" name="checkbox_sync_settings" tool_tip="Синхронизация параметров карты текстур" />
+	<button label="Выровнять" name="button align textures" tool_tip="Выровнять текущие слои текстуры" width="84" />
 	<button label="Копировать" name="copytextures" />
 	<button label="Вставить" name="pastetextures" />
 </panel>

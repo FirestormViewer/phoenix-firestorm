@@ -19,7 +19,7 @@
 		<button label="Выключить все" name="all_nearby_media_disable_btn" tool_tip="Выключить все ближайшее медиа"/>
 		<button label="Включить все" name="all_nearby_media_enable_btn" tool_tip="Включить все ближайшее медиа"/>
 		<button name="open_prefs_btn" tool_tip="Открыть настройки медиа"/>
-		<button label="Больше &gt;&gt;" label_selected="&lt;&lt; Меньше" name="more_btn" tool_tip="Дополнительное управление"/>
+		<button label="Больше&gt;&gt;" label_selected="&lt;&lt;Меньше" name="more_btn" tool_tip="Дополнительное управление" width="75"/>
 	</panel>
 	<panel name="nearby_media_panel">
 		<text name="nearby_media_title">

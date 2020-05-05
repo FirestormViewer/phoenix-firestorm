@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="Outfit Gallery">
+  <string name="outfit_photo_string">Фото "[OUTFIT_NAME]" комплекта</string>
+  <string name="no_outfits_msg">У вас пока нет комплектов. Попробуйте [secondlife:///app/search/all/ Поиск]</string>
+  <string name="no_matched_outfits_msg">Не нашли то, что искали? Попробуйте [secondlife:///app/search/all/[SEARCH_TERM] Поиск].</string>
+  <text name="no_outfits_txt">Поиск...</text>
+  <panel name="bottom_panel">
+    <menu_button tool_tip="Показать дополнительные опции" name="options_gear_btn"/>
+      <text name="OutfitcountText" width="130">
+        [COUNT] Комлектов
+      </text>
+      <text name="avatar_complexity_label" width="150">
+        Сложность: [WEIGHT]
+      </text>
+      <button name="trash_btn" tool_tip="Удалить выбранный комплект" />
+    </panel>
+</panel>

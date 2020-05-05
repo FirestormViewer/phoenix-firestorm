@@ -434,7 +434,6 @@ BOOL FloaterQuickPrefs::postBuild()
 		mCtrlUseSSAO = getChild<LLCheckBoxCtrl>("UseSSAO");
 		mCtrlUseDoF = getChild<LLCheckBoxCtrl>("UseDepthofField");
 		mCtrlShadowDetail = getChild<LLComboBox>("ShadowDetail");
-		mCtrlAvatarShadowDetail = getChild<LLComboBox>("AvatarShadowDetail");
 		mCtrlReflectionDetail = getChild<LLComboBox>("Reflections");
 
 		// Vignette UI controls
@@ -837,8 +836,6 @@ void FloaterQuickPrefs::refreshSettings()
 
 	mCtrlShadowDetail->setEnabled(enabled);
 
-	mCtrlAvatarShadowDetail->setEnabled(enabled && mCtrlShadowDetail->getValue().asInteger() > 0);
-
 	// disabled windlight
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
 	{
@@ -853,9 +850,6 @@ void FloaterQuickPrefs::refreshSettings()
 		//deferred needs windlight, disable deferred
 		mCtrlShadowDetail->setEnabled(FALSE);
 		mCtrlShadowDetail->setValue(0);
-		
-		mCtrlAvatarShadowDetail->setEnabled(FALSE);
-		mCtrlAvatarShadowDetail->setValue(0);
 
 		mCtrlUseSSAO->setEnabled(FALSE);
 		mCtrlUseSSAO->setValue(FALSE);
@@ -873,9 +867,6 @@ void FloaterQuickPrefs::refreshSettings()
 	{
 		mCtrlShadowDetail->setEnabled(FALSE);
 		mCtrlShadowDetail->setValue(0);
-
-		mCtrlAvatarShadowDetail->setEnabled(FALSE);
-		mCtrlAvatarShadowDetail->setValue(0);
 
 		mCtrlUseSSAO->setEnabled(FALSE);
 		mCtrlUseSSAO->setValue(FALSE);
@@ -899,9 +890,6 @@ void FloaterQuickPrefs::refreshSettings()
 	{
 		mCtrlShadowDetail->setEnabled(FALSE);
 		mCtrlShadowDetail->setValue(0);
-
-		mCtrlAvatarShadowDetail->setEnabled(FALSE);
-		mCtrlAvatarShadowDetail->setValue(0);
 	}
 
 	// disabled reflections
@@ -918,10 +906,6 @@ void FloaterQuickPrefs::refreshSettings()
 		mCtrlShadowDetail->setEnabled(FALSE);
 		mCtrlShadowDetail->setValue(0);
 
-		mCtrlAvatarShadowDetail->setEnabled(FALSE);
-		mCtrlAvatarShadowDetail->setValue(0);
-
-		
 		mCtrlUseSSAO->setEnabled(FALSE);
 		mCtrlUseSSAO->setValue(FALSE);
 

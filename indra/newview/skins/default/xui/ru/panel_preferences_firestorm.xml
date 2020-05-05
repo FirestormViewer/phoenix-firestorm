@@ -18,11 +18,11 @@
         <text name="textMiscRLVaRestart">
             (требуется перезапуск)
         </text>
-        <check_box label="Строить и выкладывать под группой земли(при возм.)" name="grouplandrez" tool_tip="" />
-        <check_box label="Создание эффектов частиц, при общении скриптов" name="EffectScriptChatParticles" tool_tip="Если вы включите эту опцию, то скриптовые объекты будут отображать вращающиеся световые частицы, когда скрипты будут обращаться" />
+        <check_box label="Строить и выкладывать под группой земли(при возм.)" name="grouplandrez" tool_tip="Пытаться выложить объекты под группой земели, если вы состоите в группе земли, независимо от того, какой тег текущей группы вы носите."/>
+        <check_box label="Создание эффектов частиц, при общении скриптов" name="EffectScriptChatParticles" tool_tip="Если вы включите эту опцию, то скриптовые объекты будут отображать вращающиеся световые частицы, когда скрипты будут общаться" />
         <check_box label="Выключение отслеживающего маяка, после достижения цели аватаром (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Когда вы включите эту опцию, отслеживающий маяк автоматически выключается, если расстояние до аватара меньше, чем 3 м (по умолчанию)." />
-        <check_box label="Отключение экрана входа" name="login_screen_toggle" tool_tip="Отключение экрана входа" />
-        <check_box label="Отключение экрана выхода" name="logout_screen_toggle" tool_tip="Отключение экрана выхода" />
+        <check_box label="Отключение экрана входа" name="login_screen_toggle" tool_tip="Отключение черного экрана входа" />
+        <check_box label="Отключение экрана выхода" name="logout_screen_toggle" tool_tip="Отключение черного экрана выхода" />
         <check_box label="Постепенное увеличение дальности прорисовки" name="FSRenderFarClipStepping" tool_tip="Если вы включите эту опцию, Firestorm будет постепенно увеличивать дальность прорисовки после телепортации." />
         <slider name="progressive_draw_distance_interval" tool_tip="Интервал в секундах между каждым последующим расширением" />
         <check_box name="UseLSLBridge" label="Активировать мост LSL" tool_tip="Активировать мост LSL" />
@@ -31,6 +31,7 @@
             <combo_box.item label="Помошь полета: Легкое ускорение" name="flight_mild" />
             <combo_box.item label="Помошь полета: Умеренное ускорение" name="flight_moderate" />
             <combo_box.item label="Помошь полета: Сильное ускорение" name="flight_strong" />
+            <combo_box.item label="Помошь полета: Экстремальное ускорение" name="flight_extreme" />
         </combo_box>
     </panel>
     <panel label="Защита" name="ProtectionTab">
@@ -47,9 +48,10 @@
         </radio_group>
         <text name="SurfaceAreaThreshholdLabel">
          Защита от лага текстур (может нарушить некоторые объекты):
-         </text>
-         <check_box label="Скрывать объекты с высокой площадью текстуры. Порог: " name="RenderVolumeSAProtection" tool_tip="Это защищает вас от объектов с очень большими текстурами что часто приводик к сбою клиента. По умолчанию составляет 5000 квадратных метров" />
-         <check_box label="Включить антиспам" name="UseAntiSpam" />
+        </text>
+        <check_box label="Скрывать объекты с высокой площадью текстуры. Порог: " name="RenderVolumeSAProtection" tool_tip="Это защищает вас от объектов с очень большими текстурами что часто приводик к сбою клиента. По умолчанию составляет 5000 квадратных метров" />
+        <check_box label="Включить антиспам" name="UseAntiSpam" />
+        <check_box label="Включить антиспам для ваших объектов" name="FSUseAntiSpamMine" tool_tip="Это позволит применить защиту от спама даже к вашим объектам."/>
         <text name="AntiSpamText1">
            Максимум строк за сообщение:
         </text>
@@ -67,7 +69,7 @@
         </text>
         <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Множитель запросов предзагрузки звуков [По умолчанию: 4]" />
         <button name="AntiSpamUnblock" label="Разблокировать все источники спама" />
-		<check_box label="Подтверждение перед оплатой:" name="FSConfirmPayments" tool_tip="Показывать диалоговое окно подтверждения платежа, прежде чем заплатить сумму, превышающую порог. Чтобы всегда показывать подтверждение, установить порог в 0."/>
+        <check_box label="Подтверждение перед оплатой:" name="FSConfirmPayments" tool_tip="Показывать диалоговое окно подтверждения платежа, прежде чем заплатить сумму, превышающую порог. Чтобы всегда показывать подтверждение, установить порог в 0."/>
         <spinner name="FSPaymentConfirmationThreshold" tool_tip="Показывать диалоговое окно подтверждения платежа, прежде чем заплатить сумму, превышающую порог. Чтобы всегда показывать подтверждение, установить порог в 0." width="100"/>
     </panel>
     <panel label="Аватар" name="firestorm_avatar">
@@ -85,6 +87,7 @@
         <text name="note_lookat">
              (Настройки фокуса камеры во вкладке Приватность → Фокус камеры)
         </text>
+        <check_box label="Запретить случайное движение глаз аватара" name="FSStaticEyes"/>
         <text name="BeamPrefs">
             Эффекты луча выбора
         </text>
@@ -158,18 +161,38 @@
         <spinner label="Поз. Z" name="Z pos" />
         <check_box label="В процентах" tool_tip="По умолчанию проценты установлены на каждую ось по 50" name="FSPivotPercToggle" />
         <button label="Разрешения создания по умолчанию" name="fs_default_creation_permissions" />
+        <text name="text_box_scripting_font">
+          Шрифт скриптов:
+        </text>
+        <combo_box name="FSScriptingFontName" tool_tip="Имя шрифта используемого в редакторе LSL-скриптов">
+          <combo_item name="Monospace" label="Моноширный"/>
+          <combo_item name="Scripting" label="Скриптовый"/>
+        </combo_box>
+        <combo_box name="FSScriptingFontSize" tool_tip="Размер шрифта используемого в редакторе LSL-скриптов">
+          <combo_item name="Monospace" label="Моноширный"/>
+          <combo_item name="Scripting" label="Скриптовый"/>
+          <combo_item name="Small" label="Мелкий"/>
+          <combo_item name="Medium" label="Средний"/>
+          <combo_item name="Large" label="Крупный"/>
+        </combo_box>
         <check_box label="Включить процессор предварительной обработки LSL" tool_tip="Включить процессор предварительной обработки LSL." name="preproc_checkbox" />
         <check_box label="Оптимизатор" tool_tip="Препроцессор LSL позволит оптимизировать пространство, используемое скриптами за счет чтения." name="preprocoptimizer_checkbox" />
-        <check_box label="Инструкция switch()" width="150" tool_tip="Препроцессор LSL позволит использовать switch() statement для контроля потока скриптов" name="preprocswitch_checkbox" />
-        <check_box label="Ленивые списки"  width="150" tool_tip="Препроцессор LSL позволит использовать расширений синтаксис для обработки списка." name="preproclazy_checkbox" />
-        <check_box label="#includes с диска" tool_tip="Препроцессор LSL разрешает использовать #include для ссылок на файлы на локальном диске." name="preprocinclude_checkbox" />
+        <check_box label="Инструкция switch()" left_delta="110" width="150" tool_tip="Препроцессор LSL позволит использовать switch() statement для контроля потока скриптов" name="preprocswitch_checkbox" />
+        <check_box label="Ленивые списки" left_delta="145" width="150" tool_tip="Препроцессор LSL позволит использовать расширений синтаксис для обработки списка." name="preproclazy_checkbox" />
+        <check_box label="#includes с диска" left_delta="125" tool_tip="Препроцессор LSL разрешает использовать #include для ссылок на файлы на локальном диске." name="preprocinclude_checkbox" />
         <text name="lslpreprocinclude_textbox">
           Путь для препроцессора:
         </text>
         <button label="Просмотреть" label_selected="Просмотреть" name="SetPreprocInclude" />
+        <text name="externaleditor_textbox">
+          Внешний Редактор:
+        </text>
+        <button label="Просмотреть" label_selected="Просмотреть" name="SetExternalEditor" />
     </panel>
     <panel label="Строить 2" name="BuildTab2">
         <check_box label="Включить подсветку выбранного объекта" tool_tip="Включить подсветку выбранного объекта" name="FSBuildPrefsRenderHighlight_toggle" />
+        <check_box label="Высветить границы выбранного участка" name="RenderParcelSelection"/>
+        <check_box label="Показать границу до максимальной высоты строительства" name="FSRenderParcelSelectionToMaxBuildHeight"/>
         <check_box label="Лимит расстояния выбора:" name="LimitSelectDistance" width="237" />
         <spinner name="MaxSelectDistance" tool_tip="Максимально допустимое расстояние для выбора (в метрах от аватара) [По умолчанию: 128.000]" />
         <check_box label="Лимит расстояния перетаскивания:" name="LimitDragDistance" width="237" />
@@ -181,12 +204,40 @@
         <text name="RotationStepText2">
           градус, если нет привязки к сетке
         </text>
+        <check_box label="Запрос подтверждения разъединения если минимум" name="FSUnlinkConfirmEnabled"/>
+        <text name="MinObjectsForUnlinkConfirmText2">
+          объектов
+        </text>
         <check_box label="Установить старое поведение для &quot;Установить объект на продажу&quot;" tool_tip="Установить старое поведение для &quot;Установить объект на продажу&quot;" name="FSCommitForSaleOnChange_toggle" />
         <check_box label="Сохранять скрипты редактируемые в инвенторе как Моно" tool_tip="Сохранять скрипты редактируемые в инвенторе как Моно" name="FSSaveInventoryScriptsAsMono_toggle" />
         <check_box label="Сохранить текстуры из инвентаря на диск в виде PNG вместо TGA" tool_tip="Сохранить текстуры из инвентаря на диск в виде PNG вместо TGA" name="FSTextureDefaultSaveAsFormat" />
         <check_box label="Используйте Ctrl + мышь, чтобы захватить и манипулировать объектами" tool_tip="Используйте Ctrl + мышь, чтобы захватить и манипулировать объектами" name="FSEnableGrab" />
         <check_box label="Разрешить масштабирование при нажатии (вместе с caps lock) для текстур при строительстве" tool_tip="При включении, позволяет тянуть при нажатии или масштаб при нажатии (вместе с caps lock) для текстур в режиме строительства. Эта функция эксперементальная и ее следует использовать с осторожностью." name="FSExperimentalDragTexture" />
         <check_box label="Предварительный просмотр анимации на собственном аватара во время загрузки" tool_tip="Предварительный просмотр анимации на собственном аватара во время загрузки" name="FSUploadAnimationOnOwnAvatar" />
-	</panel>
+        <check_box label="Включить расширенную информацию скрипта" name="FSScriptInfoExtended" tool_tip="Если включено, расширяет базовую функцию информации скрипта с различными деталями, полезными для строителей"/>
+    </panel>
+    <!--Uploads-->
+    <panel label="Загрузки" name="UploadsTab">
+      <text name="title">
+        Текущие папки назначения для загрузки:
+      </text>
+      <text name="title_images">
+        Изображения
+      </text>
+      <text name="title_sounds">
+        Звуки
+      </text>
+      <text name="title_animations">
+        Анимации
+      </text>
+      <text name="title_models">
+        Модели
+      </text>
+      <text name="upload_help">
+        Чтобы изменить папку назначения, щелкните ее правой кнопкой мыши в инвентаре и выберите
+      "Использовать по умолчанию для"
+      </text>
+        <button name="reset_default_folders" label="Сброс папок по умолчанию" width="200"/>
+    </panel>
 </tab_container>
 </panel>

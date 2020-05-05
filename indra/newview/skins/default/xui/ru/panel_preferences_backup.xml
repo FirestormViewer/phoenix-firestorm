@@ -37,6 +37,9 @@
 						<row name="restore_global_row_quickprefs">
 							<column name="restore_global_files_label">Быстрые настройки</column>
 						</row>
+						<row name="restore_global_row_favorites">
+							<column name="restore_global_files_label">Избранное</column>
+						</row>
 					</scroll_list>
 				</layout_panel>
 				<layout_panel name="lp_restore_per_account_files">
@@ -67,8 +70,14 @@
 						<row name="restore_per_account_row_tphistory">
 							<column name="restore_per_account_files_label">Истории телепорта</column>
 						</row>
+						<row name="restore_per_account_row_regiontracker">
+							<column name="restore_per_account_files_label">Отслеживание Регионов</column>
+						</row>
 						<row name="restore_per_account_row_groupmutes">
 							<column name="restore_per_account_files_label">Отключенные чаты групп</column>
+						</row>
+						<row name="restore_per_account_row_avatar_render_settings">
+							<column name="restore_per_account_files_label">Отображения Аватара</column>
 						</row>
 					</scroll_list>
 				</layout_panel>
@@ -96,6 +105,9 @@
 						</row>
 						<row name="restore_folders_row_waters">
 							<column name="restore_global_folders_label">Windlight: Вода</column>
+						</row>
+						<row name="restore_folders_row_presets" value="presets">
+							<column name="restore_global_folders_label">Предустановки</column>
 						</row>
 					</scroll_list>
 				</layout_panel>

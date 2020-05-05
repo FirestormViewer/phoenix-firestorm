@@ -782,7 +782,7 @@
              name="Events">
             <menu_item_call.on_click
              function="Advanced.ShowURL"
-             parameter="http://events.secondlife.com"/>
+             parameter="https://secondlife.com/my/community/events"/>
             <menu_item_call.on_visible
              function="GridCheck"
              parameter="secondlife"/>

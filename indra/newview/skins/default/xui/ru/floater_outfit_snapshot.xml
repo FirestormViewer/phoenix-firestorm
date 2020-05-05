@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="outfit_snapshot" title="Снимок Одежды">
+  <floater.string name="unknown">
+    неизвестный
+  </floater.string>
+  <string name="inventory_progress_str">
+    Сохранение в Инвентарь
+  </string>
+  <string name="inventory_succeeded_str">
+    Сохранено в Инвентарь!
+  </string>
+  <string name="inventory_failed_str">
+    Не удалось сохранить в инвентарь.
+  </string>
+  <view name="controls_container">
+    <button label="Обновить" name="new_snapshot_btn"/>
+    <panel name="advanced_options_panel">
+      <text name="layer_type_label">
+        Снимок:
+      </text>
+      <combo_box label="Слои изображеня" name="layer_types">
+        <combo_box.item label="Цвета" name="Colors" />
+        <combo_box.item label="Глубина" name="Depth" />
+        <combo_box.item label="Глубина (24 bit)" name="Depth24" />
+      </combo_box>
+      <check_box label="Интерфейс" name="ui_check" />
+      <check_box label="L$ Баланс" name="currency_check" />
+      <check_box label="Дисплей" name="hud_check" />
+      <check_box label="Стоп-кадр (полный экран)" name="freeze_frame_check" />
+      <check_box label="Автообновление" name="auto_snapshot_check" />
+      <text name="filter_list_label" width="60" >
+        Фильтр:
+      </text>
+      <combo_box name="filters_combobox" tool_tip="Фильтры Изображения" left="60" >
+        <combo_box.item label="Нет фильтра" name="NoFilter" />
+      </combo_box>
+    </panel>
+    <panel name="succeeded_panel">
+      <text name="succeeded_lbl">
+        Успешно
+      </text>
+    </panel>
+    <panel name="failed_panel">
+      <text name="failed_lbl">
+        Неудачно
+      </text>
+    </panel>
+    <text name="working_lbl">
+      Работа
+    </text>
+    <text name="refresh_lbl">
+      Обновить для сохранения.
+    </text>
+  </view>
+  <text name="image_res_text">
+     [WIDTH]пикс (ширина) x [HEIGHT]пикс (высота)
+  </text>
+  <text name="file_size_label">
+     [SIZE] KB
+  </text>
+</floater>

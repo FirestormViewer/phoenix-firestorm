@@ -77,25 +77,25 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 Контроль скриптами (RLVa): [RLV_VERSION]
 Версия libcurl: [LIBCURL_VERSION]
 Версия декодера J2C: [J2C_VERSION]
-Версия аудиодрайвера: [AUDIO_DRIVER_VERSION] 
+Версия аудиодрайвера: [AUDIO_DRIVER_VERSION]
 [LIBCEF_VERSION]
-Версия LibVLC: [LIBVLC_VERSION] 
+Версия LibVLC: [LIBVLC_VERSION]
 Версия речевого сервера: [VOICE_VERSION]
 	</string>
 	<string name="AboutSettings">
 		Режим настроек: [MODE]
 Графическое оформление: [SKIN] ([THEME])
-Window size: [WINDOW_WIDTH]x[WINDOW_HEIGHT] px
+Размер окна: [WINDOW_WIDTH]x[WINDOW_HEIGHT] px
 Используемый шрифт: [FONT] ([FONT_SCREEN_DPI])
 Размер шрифта: [FONT_SIZE] pt
-Масштаб UI: [UI_SCALE_FACTOR]
+Масштаб интерфейса: [UI_SCALE_FACTOR]
 Дистанция прорисовки: [DRAW_DISTANCE]
 Пропускная способность: [BANDWIDTH]
 Уровень детализации: [LOD]
 Качество графики: [RENDERQUALITY]
 Модель улучшенного освещения: [ALMSTATUS]
 Графическая память: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-Время создания VFS (кэш) (UTC): [VFS_DATE] 
+Время создания VFS (кэш) (UTC): [VFS_DATE]
 	</string>
 	<string name="AboutTraffic">
 		Потеряно пакетов: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
@@ -228,7 +228,7 @@ http://secondlife.com/viewer-access-faq
 		Необходимо обновить клиент: [VERSION]
 	</string>
 	<string name="LoginFailedAlreadyLoggedIn">
-		С этого клиента уже выполнен вход. 
+		С этого клиента уже выполнен вход.
 	</string>
 	<string name="LoginFailedAuthenticationFailed">
 		Извините! Мы не смогли вас подключить.
@@ -287,7 +287,7 @@ support@secondlife.com.
 		В ответ на запрос выхода, симулятор вернул сообщение о сбое.
 	</string>
 	<string name="LoginFailedPendingLogout">
-		В системе выполняется выход для вашего аккаунта. 
+		В системе выполняется выход для вашего аккаунта.
 Подождите минуту перед повторным входом в систему.
 	</string>
 	<string name="LoginFailedUnableToCreateSession">
@@ -557,7 +557,7 @@ support@secondlife.com.
 		Вы не можете надеть папку, содержащую более [AMOUNT] элементов.  Вы можете изменить это ограничение в Расширенное &gt; Показать настройки отладки &gt; WearFolderLimit.
 	</string>
 	<string name="TooltipTooManyWearables">
-		Нельзя носить папку, содержащую более [AMOUNT] вещей.  Это ограничение можно изменить в меню «Расширенное &gt; Показать настройки отладки &gt; WearFolderLimit. 
+		Нельзя носить папку, содержащую более [AMOUNT] вещей.  Это ограничение можно изменить в меню «Расширенное &gt; Показать настройки отладки &gt; WearFolderLimit.
 	</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]: "/>
 	<string name="TooltipFlagScript">
@@ -582,7 +582,7 @@ support@secondlife.com.
 		Временный
 	</string>
 	<string name="TooltipPrimCount">
-		Prims: [COUNT]
+		Примов: [COUNT]
 	</string>
 	<string name="TooltipPrimEquivalent">
 		, Влияние земли: [PEWEIGHT]
@@ -624,31 +624,31 @@ support@secondlife.com.
 		В папке верхнего уровня более 200 предметов
 	</string>
 	<string name="TooltipOutboxTooManyStockItems">
-		Количество предметов не может превышать [AMOUNT]. 
+		Количество предметов не может превышать [AMOUNT].
 	</string>
 	<string name="TooltipOutboxCannotDropOnRoot">
-		Можно перетаскивать предметы или папки только на вкладку «ВСЕ». Выберите эту вкладку и переместите предметы или папки снова. 
+		Можно перетаскивать предметы или папки только на вкладку «ВСЕ». Выберите эту вкладку и переместите предметы или папки снова.
 	</string>
 	<string name="TooltipOutboxNoTransfer">
-		Часть этих объектов нельзя продать или передать 
+		Часть этих объектов нельзя продать или передать
 	</string>
 	<string name="TooltipOutboxNotInInventory">
-		В торговый центр можно поместить только предметы из своего инвентаря 
+		В торговый центр можно поместить только предметы из своего инвентаря
 	</string>
 	<string name="TooltipOutboxLinked">
-		Привязанные предметы или папки нельзя поместить в торговый центр 
+		Привязанные предметы или папки нельзя поместить в торговый центр
 	</string>
 	<string name="TooltipOutboxCallingCard">
-		Нельзя поместить визитки в торговый центр 
+		Нельзя поместить визитки в торговый центр
 	</string>
 	<string name="TooltipOutboxDragActive">
-		Опубликованный список нельзя переместить 
+		Опубликованный список нельзя переместить
 	</string>
 	<string name="TooltipOutboxCannotMoveRoot">
-		Корневую папку списков товаров торгового центра нельзя перемещать 
+		Корневую папку списков товаров торгового центра нельзя перемещать
 	</string>
 	<string name="TooltipOutboxMixedStock">
-		У всех предметов в папке запасов должен быть один и тот же тип и разрешение 
+		У всех предметов в папке запасов должен быть один и тот же тип и разрешение
 	</string>
 	<string name="TooltipDragOntoOwnChild">
 		Вы не можете переместить папку в ее подпапку
@@ -1613,7 +1613,7 @@ support@secondlife.com.
 		Перетащите закладку сюда, чтобы добавить ее в список избранного.
 	</string>
 	<string name="MarketplaceNoMatchingItems">
-		Предметы не найдены. Проверьте правильность строки поиска и повторите попытку. 
+		Предметы не найдены. Проверьте правильность строки поиска и повторите попытку.
 	</string>
 	<string name="InventoryNoTexture">
 		Вы не имеете копию этой текстуры в инвентаре
@@ -1651,7 +1651,7 @@ support@secondlife.com.
 	<string name="InventoryOutboxNotMerchantTooltip">
 	</string>
 	<string name="InventoryOutboxNotMerchant">
-		Если вы хотите стать торговцем, вы должны будете создать магазин на [[MARKETPLACE_CREATE_STORE_URL] Торговому центру].
+		Если вы хотите стать торговцем, вы должны будете создать магазин на [[MARKETPLACE_CREATE_STORE_URL] Торговом центре].
 	</string>
 	<string name="InventoryOutboxNoItemsTitle">
 		Ваша папка 'Исходящие' пуста.
@@ -1667,7 +1667,7 @@ support@secondlife.com.
 	<string name="InventoryOutboxInitializingTooltip">
 	</string>
 	<string name="InventoryOutboxInitializing">
-		We are accessing your account on the [[MARKETPLACE_CREATE_STORE_URL] Marketplace store].
+		Мы обращаемся к вашей учетной записи магазина [[MARKETPLACE_CREATE_STORE_URL] Торгового центра].
 	</string>
 	<string name="InventoryOutboxErrorTitle">
 		Ошибки Торговой площадки.
@@ -1750,7 +1750,7 @@ support@secondlife.com.
 		Невозможно переместить предмет в эту папку.
 	</string>
 	<string name="Marketplace Error Empty Folder">
-		Ошибка: Эта папка не содержит контента.
+		Ошибка: Эта папка не имеет содержимого.
 	</string>
 	<string name="Marketplace Error Unassociated Products">
 		Ошибка: Этот элемент не удалось загрузить, потому что ваш торговый счет имеет слишком много элементов несвязанные с продуктами. Чтобы исправить эту ошибку, войдите на сайт Торговой площадки и снизьте количество несвязанных элементов.
@@ -1759,7 +1759,7 @@ support@secondlife.com.
 		Ошибка: Этот элемент содержит слишком много объектов. Исправить эту ошибку можно путем размещения объектов в коробки, чтобы уменьшить их общее количество до менее чем 200.
 	</string>
 	<string name="Marketplace Error Folder Depth">
-		Ошибка: Этот элемент содержит слишком много уровней вложенных папок.  Измените структуру так, чтобы уровней вложенных папок было не более 3.
+		Ошибка: Этот элемент содержит слишком много уровней вложенных папок. Измените структуру так, чтобы уровней вложенных папок было не более 3.
 	</string>
 	<string name="Marketplace Error Unsellable Item">
 		Ошибка: Этот элемент не может быть продано на Торговому центру.
@@ -1930,7 +1930,7 @@ support@secondlife.com.
 	</string>
 	<string name="InvFolder Friends">
 		Друзья
-	</string>	
+	</string>
 	<string name="InvFolder All">
 		Все
 	</string>
@@ -1944,10 +1944,10 @@ support@secondlife.com.
 		#RLV
 	</string>
 	<string name="no_attachments">
-		Нет надетых вложений
+		Нет надетых прикреплений
 	</string>
 	<string name="Attachments remain">
-		Вложения ([COUNT] осталось)
+		Прикреплений ([COUNT] осталось)
 	</string>
 	<string name="Buy">
 		Купить
@@ -2355,7 +2355,7 @@ support@secondlife.com.
 		нет
 	</string>
 	<string name="CompileNoExperiencePerm">
-		Пропуск скрипта [SCRIPT] с воздействием [EXPERIENCE]. 
+		Пропуск скрипта [SCRIPT] с воздействием [EXPERIENCE].
 	</string>
 	<string name="Group" value=" (группа)"/>
 	<string name="Unknown">
@@ -2417,13 +2417,13 @@ support@secondlife.com.
 		Менеджеры острова: ([ESTATEMANAGERS], максимум [MAXMANAGERS])
 	</string>
 	<string name="RegionInfoBannedResidents">
-		Заблокированные пользователи: ([BANNEDAGENTS], максимум [MAXBANNED])
+		Заблокированные жители: ([BANNEDAGENTS], максимум [MAXBANNED])
 	</string>
 	<string name="RegionInfoListTypeAllowedAgents">
 		Разрешенные жители
 	</string>
 	<string name="RegionInfoListTypeBannedAgents">
-		Заблокированные пользователи
+		Заблокированные жители
 	</string>
 	<string name="RegionInfoAllEstates">
 		все землевладения
@@ -2663,7 +2663,7 @@ support@secondlife.com.
 		У этого жителя включен режим 'Недоступен'. Он увидит ваше сообщение позже
 	</string>
 	<string name="AutoResponseModeDefault">
-		Пользователь, которому вы пишите включил решим 'Автоответчик'. Это означает, что они просит не беспокоить. Ваши сообщение будут по-прежнему проявляется в его панели Личных сообщений (ЛС) панели для последующего просмотра.
+		Пользователь, которому вы пишете включил решим 'Автоответчик'. Это означает, что они просит не беспокоить. Ваши сообщение будут по-прежнему проявляется в его панели Личных сообщений (ЛС) панели для последующего просмотра.
 	</string>
 	<string name="AutoResponseModeNonFriendsDefault">
 		Пользователь, которому вы пишите включил решим 'Автоответчик'. Это означает, что они просит не беспокоить. Ваши сообщение будут по-прежнему проявляется в его панели Личных сообщений (ЛС) панели для последующего просмотра.
@@ -2675,7 +2675,7 @@ support@secondlife.com.
 		Пользователь, которому вы пишите заблокировал вас для отправки ему каких-либо сообщений.
 	</string>
 	<string name="AwayAvatarResponseDefault">
-		Пользователь, которому вы пишите временно отошел.Ваши сообщение будут по-прежнему проявляется в его панели Личных сообщений (ЛС) панели для последующего просмотра.
+		Пользователь, которому вы пишите временно отошел. Ваши сообщение будут по-прежнему проявляется в его панели Личных сообщений (ЛС) панели для последующего просмотра.
 	</string>
 	<string name="MuteByName">
 		(По имени)
@@ -5211,7 +5211,7 @@ support@secondlife.com.
 		Несмотря на наши усилия, что-то неожиданно пошло не так.
 
 	Ознакомьтесь с описанием известных проблем в работе этой службы на сайте https://secondlife-status.statuspage.io.
-    Если проблемы продолжаются, то проверьте подключение к сети и настройки брандмауэра. 
+    Если проблемы продолжаются, то проверьте подключение к сети и настройки брандмауэра.
 	</string>
 	<string name="dateTimeWeekdaysNames">
 		Воскресенье:Понедельник:Вторник:Среда:Четверг:Пятница:Суббота
@@ -5690,10 +5690,10 @@ support@secondlife.com.
 		Карта
 	</string>
 	<string name="Command_Marketplace_Label">
-		Торговый центр 
+		Торговый центр
 	</string>
 	<string name="Command_MarketplaceListings_Label">
-		Торговый центр 
+		Торговый центр
 	</string>
 	<string name="Command_MiniMap_Label">
 		Мини-карта
@@ -6293,16 +6293,16 @@ support@secondlife.com.
 		Разрешение
 	</string>
 	<string name="logging_calls_disabled_log_empty">
-		Разговоры не сохраняются. Чтобы начать сохранять настройки выберите "Сохранить: Только журнал" или "Сохранить: Журнал и история" в Настройки>Приватность. 
+		Разговоры не сохраняются. Чтобы начать сохранять настройки выберите "Сохранить: Только журнал" или "Сохранить: Журнал и история" в Настройки>Приватность.
 	</string>
 	<string name="logging_calls_disabled_log_not_empty">
-		Нет сохраненных разговоров. Чтобы продолжить сохранять настройки выберите "Сохранить: Только журнал" или "Сохранить: Журнал и история" в Настройки>Приватность. 
+		Нет сохраненных разговоров. Чтобы продолжить сохранять настройки выберите "Сохранить: Только журнал" или "Сохранить: Журнал и история" в Настройки>Приватность.
 	</string>
 	<string name="logging_calls_enabled_log_empty">
-		Нет сохраненных разговоров. После того как вы напишите кому-то или напишут вам история разговора будет отображаться тут. 
+		Нет сохраненных разговоров. После того как вы напишите кому-то или напишут вам история разговора будет отображаться тут.
 	</string>
 	<string name="loading_chat_logs">
-		Загрузка... 
+		Загрузка...
 	</string>
 	<string name="LoadCameraPositionNoneSaved">
 		Положение камеры не было сохранено.
@@ -6455,10 +6455,10 @@ support@secondlife.com.
 		Информация скрипта: Поступил неправильный ответ от моста. Попробуйте еще раз.
 	</string>
 	<string name="fsbridge_error_injection">
-		ВНИМАНИЕ: один или несколько сценариев, которые были добавлены к вашему Firestorm мосту! Пересоздайте мост
+		ВНИМАНИЕ: Один или несколько сценариев были добавлены на ваш мост Firestorm! Если вы не ожидали этого сообщения, воспользуйтесь параметром меню Firestorm «Аватар / Исправление аватара / Пересоздать LSL мост», чтобы заново создать мост.
 	</string>
 	<string name="fsbridge_error_wrongvm">
-		ВНИМАНИЕ: Мост скрипт, используя старые LSO (16 Кб памяти предел) вместо нового Mono (64 Кб ограничение по памяти) виртуальной машины, который создает высокую вероятность стека кучи столкновения и разрушения моста, запустив из памяти.
+		ВНИМАНИЕ: В сценарии моста используется старая LSO (ограничение памяти 16 КБ) вместо новой виртуальной машины Mono (ограничение памяти 64 КБ), что создает высокую вероятность коллизии стека и сбоя моста из-за нехватки памяти. Пожалуйста, используйте пункт меню Firestorm «Аватар / Исправление аватара / Пересоздать LSL мост» для воссоздания моста. Если вы снова увидите это сообщение - попробуйте еще раз в другом регионе.
 	</string>
 	<string name="QP Draw Distance">
 		Дальность прорисовки
@@ -6710,23 +6710,23 @@ support@secondlife.com.
 		'[NAME]' был удален из черного списка.
 	</string>
 	<string name="couldnt_resolve_host">
-		DNS не удалось разрешить имя узла([HOSTNAME]). 
-Проверьте возможность подключения к веб-сайту www.secondlife.com. 
-Если вы продолжаете получать эту ошибку, перейдите в раздел 
+		DNS не удалось разрешить имя узла([HOSTNAME]).
+Проверьте возможность подключения к веб-сайту www.secondlife.com.
+Если вы продолжаете получать эту ошибку, перейдите в раздел
 поддержки и сообщите о проблеме.
 	</string>
 	<string name="ssl_peer_certificate">
-		Серверу входа в систему не удалось пройти аутентификацию с помощью 
-протокола SSL. Если вы продолжаете получать эту ошибку, 
-перейдите в раздел поддержки на веб-сайте SecondLife.com 
+		Серверу входа в систему не удалось пройти аутентификацию с помощью
+протокола SSL. Если вы продолжаете получать эту ошибку,
+перейдите в раздел поддержки на веб-сайте SecondLife.com
 и сообщите о проблеме.
 	</string>
 	<string name="ssl_connect_error">
-		Часто это означает, что часы компьютера установлены неправильно. 
-Перейдите, пожалуйста, на Панели управления и убедитесь в правильной 
-установке времени и даты. Также проверьте правильность настройки сети 
-и брандмауэра. Если вы продолжаете получать эту ошибку, перейдите в 
-раздел поддержки на веб-сайте SecondLife.com и сообщите о проблеме. 
+		Часто это означает, что часы компьютера установлены неправильно.
+Перейдите, пожалуйста, на Панели управления и убедитесь в правильной
+установке времени и даты. Также проверьте правильность настройки сети
+и брандмауэра. Если вы продолжаете получать эту ошибку, перейдите в
+раздел поддержки на веб-сайте SecondLife.com и сообщите о проблеме.
 
 [https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 База знаний]
 	</string>

@@ -20,10 +20,10 @@
 	</panel.string>
 	<panel name="layout_panel_landmoney">
 		<scroll_list name="group_parcel_list">
-			<scroll_list.columns label="Участок" name="name"/>
-			<scroll_list.columns label="Тип" name="type"/>
-			<scroll_list.columns label="Площадь" name="area"/>
-			<scroll_list.columns label="Скрыто" name="hidden"/>
+			<scroll_list.columns label="Участок" name="name" width="120"/>
+			<scroll_list.columns label="Регион" name="location" width="120"/>
+			<scroll_list.columns label="Тип" name="type" width="90"/>
+			<scroll_list.columns label="Площадь" name="area" width="70"/>
 		</scroll_list>
 		<text name="total_contributed_land_label">
 			Общий взнос:
