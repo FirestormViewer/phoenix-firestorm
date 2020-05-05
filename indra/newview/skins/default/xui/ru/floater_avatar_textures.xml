@@ -18,23 +18,27 @@
 				<texture_picker label="Волосы" name="hair-baked"/>
 				<texture_picker label="Волосы" name="hair_grain"/>
 				<texture_picker label="Альфа волос" name="hair_alpha"/>
+				<texture_picker label="Тату волос" name="hair_tattoo"/>
 				<texture_picker label="Голова" name="head-baked"/>
 				<texture_picker label="Макияж" name="head_bodypaint"/>
 				<texture_picker label="Альфа головы" name="head_alpha"/>
 				<texture_picker label="Тату головы" name="head_tattoo"/>
+				<texture_picker label="Универс.тату" name="head_universal_tattoo"/>
 				<texture_picker label="Глаза" name="eyes-baked"/>
 				<texture_picker label="Глаз" name="eyes_iris"/>
 				<texture_picker label="Альфа глаз" name="eyes_alpha"/>
-				<texture_picker label="Верхняя часть тела" name="upper-baked"/>
-				<texture_picker label="Раскраска верхней части тела" name="upper_bodypaint"/>
+				<texture_picker label="Тату глаз" name="eyes_tattoo"/>
+				<texture_picker label="Верх тела" name="upper-baked"/>
+				<texture_picker label="Раскраска верха" name="upper_bodypaint"/>
 				<texture_picker label="Майка" name="upper_undershirt"/>
 				<texture_picker label="Перчатки" name="upper_gloves"/>
 				<texture_picker label="Рубашка" name="upper_shirt"/>
 				<texture_picker label="Верх пиджака" name="upper_jacket"/>
 				<texture_picker label="Альфа верха" name="upper_alpha"/>
 				<texture_picker label="Тату верха" name="upper_tattoo"/>
-				<texture_picker label="Нижняя часть тела" name="lower-baked"/>
-				<texture_picker label="Раскраска нижней части тела" name="lower_bodypaint"/>
+				<texture_picker label="Универс.тату" name="upper_universal_tattoo"/>
+				<texture_picker label="Низ тела" name="lower-baked"/>
+				<texture_picker label="Раскраска низа" name="lower_bodypaint"/>
 				<texture_picker label="Трусы" name="lower_underpants"/>
 				<texture_picker label="Носки" name="lower_socks"/>
 				<texture_picker label="Обувь" name="lower_shoes"/>
@@ -42,8 +46,20 @@
 				<texture_picker label="Пиджак" name="lower_jacket"/>
 				<texture_picker label="Альфа низа" name="lower_alpha"/>
 				<texture_picker label="Тату низа" name="lower_tattoo"/>
+				<texture_picker label="Универс.тату" name="lower_universal_tattoo"/>
 				<texture_picker label="Юбка" name="skirt-baked"/>
 				<texture_picker label="Юбка" name="skirt"/>
+				<texture_picker label="Тату юбки" name="skirt_tattoo"/>
+				<texture_picker label="Левая рука" name="leftarm-baked"/>
+				<texture_picker label="Левая рука тату" name="leftarm_tattoo"/>
+				<texture_picker label="Левая нога" name="leftleg-baked"/>
+				<texture_picker label="Левая нога тату" name="leftleg_tattoo"/>
+				<texture_picker label="AUX 1" name="aux1-baked"/>
+				<texture_picker label="AUX 1 тату" name="aux1_tattoo"/>
+				<texture_picker label="AUX 2" name="aux2-baked"/>
+				<texture_picker label="AUX 2 тату" name="aux2_tattoo"/>
+				<texture_picker label="AUX 3" name="aux3-baked"/>
+				<texture_picker label="AUX 3 тату" name="aux3_tattoo"/>
 			</panel>
 		</panel>
 	</scroll_container>

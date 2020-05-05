@@ -2444,7 +2444,6 @@ LLEnvironment::DayInstance::DayInstance(EnvSelection_t env) :
     mWater(),
     mDayLength(LLSettingsDay::DEFAULT_DAYLENGTH),
     mDayOffset(LLSettingsDay::DEFAULT_DAYOFFSET),
-    mDayOffsetOverride(LLSettingsDay::MINIMUM_DAYOFFSET), // KC
     mBlenderSky(),
     mBlenderWater(),
     mInitialized(false),
@@ -2554,7 +2553,6 @@ void LLEnvironment::DayInstance::clear()
     mWater.reset();
     mDayLength = LLSettingsDay::DEFAULT_DAYLENGTH;
     mDayOffset = LLSettingsDay::DEFAULT_DAYOFFSET;
-    mDayOffsetOverride = LLSettingsDay::MINIMUM_DAYOFFSET; // KC
     mBlenderSky.reset();
     mBlenderWater.reset();
     mSkyTrack = 1;
@@ -2578,8 +2576,7 @@ void LLEnvironment::DayInstance::setBlenders(const LLSettingsBlender::ptr_t &sky
 LLSettingsBase::TrackPosition LLEnvironment::DayInstance::getProgress() const
 {
     LLSettingsBase::Seconds now(LLDate::now().secondsSinceEpoch());
-    // now += mDayOffset;
-    now += mDayOffset + mDayOffsetOverride; // KC
+    now += mDayOffset;
 
     if ((mDayLength <= 0) || !mDayCycle)
         return -1.0f;   // no actual day cycle.
@@ -2596,8 +2593,7 @@ void LLEnvironment::DayInstance::animate()
 {
     LLSettingsBase::Seconds now(LLDate::now().secondsSinceEpoch());
 
-    // now += mDayOffset;
-    now += mDayOffset + mDayOffsetOverride; // KC
+    now += mDayOffset;
 
     if (!mDayCycle)
         return;
@@ -2615,8 +2611,7 @@ void LLEnvironment::DayInstance::animate()
         {
             mWater = LLSettingsVOWater::buildDefaultWater();
             mBlenderWater = std::make_shared<LLTrackBlenderLoopingTime>(mWater, mDayCycle, 0,
-                // mDayLength, mDayOffset, DEFAULT_UPDATE_THRESHOLD);
-                mDayLength, mDayOffset + mDayOffsetOverride, DEFAULT_UPDATE_THRESHOLD); // KC
+                mDayLength, mDayOffset, DEFAULT_UPDATE_THRESHOLD);
         }
     }
 
@@ -2634,8 +2629,7 @@ void LLEnvironment::DayInstance::animate()
         {
             mSky = LLSettingsVOSky::buildDefaultSky();
             mBlenderSky = std::make_shared<LLTrackBlenderLoopingTime>(mSky, mDayCycle, 1,
-                // mDayLength, mDayOffset, DEFAULT_UPDATE_THRESHOLD);
-                mDayLength, mDayOffset + mDayOffsetOverride, DEFAULT_UPDATE_THRESHOLD); // KC
+                mDayLength, mDayOffset, DEFAULT_UPDATE_THRESHOLD);
             mBlenderSky->switchTrack(mSkyTrack, 0.0);
         }
     }
@@ -2806,7 +2800,7 @@ void LLEnvironment::loadSkyWaterFromSettings(const LLSD &env_data, bool &valid, 
     }
     else if (env_data.has("sky_llsd"))
     {
-        LLSettingsSky::ptr_t sky = std::make_shared<LLSettingsVOSky>(env_data["sky_llsd"]);
+        LLSettingsSky::ptr_t sky = LLSettingsVOSky::buildSky(env_data["sky_llsd"]);
         setEnvironment(ENV_LOCAL, sky);
         valid = true;
     }
@@ -2820,7 +2814,7 @@ void LLEnvironment::loadSkyWaterFromSettings(const LLSD &env_data, bool &valid, 
     }
     else if (env_data.has("water_llsd"))
     {
-        LLSettingsWater::ptr_t sky = std::make_shared<LLSettingsVOWater>(env_data["water_llsd"]);
+        LLSettingsWater::ptr_t sky = LLSettingsVOWater::buildWater(env_data["water_llsd"]);
         setEnvironment(ENV_LOCAL, sky);
         valid = true;
     }
@@ -2905,8 +2899,8 @@ bool LLEnvironment::loadFromSettings()
     {
         S32 length = env_data["day_length"].asInteger();
         S32 offset = env_data["day_offset"].asInteger();
-        LLSettingsDay::ptr_t day = std::make_shared<LLSettingsVODay>(env_data["day_llsd"]);
-        setEnvironment(ENV_LOCAL, day, LLSettingsDay::Seconds(length), LLSettingsDay::Seconds(offset));
+        LLSettingsDay::ptr_t pday = LLSettingsVODay::buildDay(env_data["day_llsd"]);
+        setEnvironment(ENV_LOCAL, pday, LLSettingsDay::Seconds(length), LLSettingsDay::Seconds(offset));
         valid = true;
     }
 

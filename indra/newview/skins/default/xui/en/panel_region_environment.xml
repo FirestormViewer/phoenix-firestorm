@@ -21,6 +21,7 @@
     <string name="str_region_env">(region environment)</string>
 
     <layout_stack 
+            name="ls_main"
             width="530"
             height="400"
             follows="all"
@@ -75,6 +76,7 @@
                 name="pnl_environment_config"
                 visible="true">
             <layout_stack 
+                    name="ls_environment_config"
                     follows="all"
                     layout="topleft"
                     animate="false"
@@ -86,6 +88,7 @@
                         name="pnl_environment_config"
                         visible="true">
                     <layout_stack
+                            name="ls_environment_config2"
                             follows="all"
                             layout="topleft"
                             animate="false"
@@ -97,6 +100,7 @@
                                 bevel_style="in"
                                 name="pnl_environment_current">
                             <text follows="top|left"
+                                    name="select_environment_label"
                                     font="SansSerif"
                                     halign="left"
                                     text_color="white"
@@ -145,6 +149,7 @@
                                 bevel_style="in"
                                 name="pnl_environment_length">
                             <text 
+                                    name="day_settings_label"
                                     font="SansSerif"
                                     follows="top|left|right"
                                     halign="left"
@@ -152,6 +157,7 @@
                                     left="5"
                                     top="2">Day Settings</text>
                             <text
+                                    name="day_length_label"
                                     type="string"
                                     length="1"
                                     follows="left|top"
@@ -178,6 +184,7 @@
                                     min_val="4"
                                     max_val="168" />
                             <text
+                                    name="day_offset_label"
                                     type="string"
                                     length="1"
                                     follows="left|top"
@@ -204,6 +211,7 @@
                                     min_val="-11.5"
                                     max_val="12" />
                             <text
+                                    name="apparent_time_of_day_label"
                                     type="string"
                                     length="1"
                                     follows="left|top"
@@ -383,6 +391,7 @@
                                 width="155" />
                     </panel>
                     <text follows="top|left"
+                                name="sky_altitudes_label"
                                 font="SansSerif"
                                 halign="left"
                                 text_color="white"

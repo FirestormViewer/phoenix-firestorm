@@ -50,13 +50,14 @@
 			<combo_box.item label="Глубина" name="Depth"/>
 		</combo_box>
 		<check_box label="Интерфейс" name="ui_check"/>
+		<check_box label="L$ Баланс" name="currency_check"/>
 		<check_box label="Данные в игре" name="hud_check"/>
 		<check_box label="Стоп-кадр (полноэкранный)" name="freeze_frame_check"/>
 		<check_box label="Автообновление" name="auto_snapshot_check"/>
 		<text name="filter_list_label" width="60">
             Фильтр:
         </text>
-		<combo_box name="filters_combobox">
+		<combo_box name="filters_combobox" left="60" >
             <combo_box.item label="Без фильтра" name="NoFilter"/>
         </combo_box>
 	</panel>

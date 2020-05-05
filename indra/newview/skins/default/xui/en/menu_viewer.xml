@@ -782,7 +782,7 @@
              name="Events">
             <menu_item_call.on_click
              function="Advanced.ShowURL"
-             parameter="http://events.secondlife.com"/>
+             parameter="https://secondlife.com/my/community/events"/>
             <menu_item_call.on_visible
              function="GridCheck"
              parameter="secondlife"/>
@@ -1091,6 +1091,9 @@
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="my_environs" />
+                <menu_item_check.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
             </menu_item_call>
             <menu_item_call
              label="Personal Lighting..."
@@ -1098,6 +1101,9 @@
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="adjust_tool" />
+                <menu_item_check.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
             </menu_item_call>
             <menu_item_separator/>
             <menu_item_check
@@ -1109,6 +1115,9 @@
                 <menu_item_check.on_check
                  function="World.EnableEnvSettings" 
                  parameter="pause_clouds" />
+                <menu_item_check.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
             </menu_item_check>
             
         </menu>

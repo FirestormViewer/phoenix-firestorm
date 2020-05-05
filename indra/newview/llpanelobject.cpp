@@ -2925,7 +2925,7 @@ void LLPanelObject::onCopyParams(const LLSD& data)
 		mParamsClipboard["Light Intensity"] = volobjp->getLightIntensity();
 		mParamsClipboard["Light Radius"] = volobjp->getLightRadius();
 		mParamsClipboard["Light Falloff"] = volobjp->getLightFalloff();
-		LLColor3 color = volobjp->getLightSRGBBaseColor();
+		LLColor3 color = volobjp->getLightSRGBColor();
 		mParamsClipboard["r"] = color.mV[0];
 		mParamsClipboard["g"] = color.mV[1];
 		mParamsClipboard["b"] = color.mV[2];

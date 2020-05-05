@@ -227,13 +227,18 @@ set(UNATTENDED OFF CACHE BOOL "Should be set to ON for building with VC Express 
 
 set(USE_PRECOMPILED_HEADERS ON CACHE BOOL "Enable use of precompiled header directives where supported.")
 # <FS:ND> When using Havok, we have to turn OpenSim support off
-if( HAVOK_TPV )
- if( OPENSIM )
-  message( "compiling with Havok libraries, disabling OpenSim support" )
- endif( OPENSIM )
-  
- set( OPENSIM OFF )
-endif( HAVOK_TPV )
+if (HAVOK_TPV)
+  if (OPENSIM)
+    message("compiling with Havok libraries, disabling OpenSim support")
+  endif (OPENSIM)
+
+  if (LINUX)
+    message("compiling with Havok libraries is not supported on Linux - switching to HACD")
+    set(HAVOK_TPV OFF)
+  endif (LINUX)
+
+  set(OPENSIM OFF)
+endif (HAVOK_TPV)
 # </FS:ND>
 
 source_group("CMake Rules" FILES CMakeLists.txt)

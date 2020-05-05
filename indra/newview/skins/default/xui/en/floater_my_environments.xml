@@ -9,9 +9,8 @@
         height="465"
         name="my_environments"
         help_topic="my_environments"
-        title="MY ENVIRONMENTS"
+        title="My Environments"
         background_visible="true"
-        label="Places"
         layout="topleft"
         min_height="350"
         min_width="265"
@@ -23,6 +22,7 @@
             top="20"
             right="-5"
             bottom="-5"
+            name="main_layout"
             orientation="vertical">
         <layout_panel
                 border="true"
@@ -126,6 +126,7 @@
                 auto_resize="false"
                 user_resize="false"
                 tab_group="1"
+                name="lp_showfolders"
                 height="15">
             <check_box
                     follows="left|bottom"

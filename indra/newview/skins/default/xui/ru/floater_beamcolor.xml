@@ -16,7 +16,7 @@
 	<text name="beamcolor_text2">
 		Просмотр
 	</text>
-	<slider name="BeamColor_Speed" label="Скорость вращения:" tool_tip="Она контролирует скорость цикла смены цвета" />
+	<slider name="BeamColor_Speed" label="Скорость цикла:" label_width="95" tool_tip="Она контролирует скорость цикла смены цвета" />
 	<button label="Сохранить" name="BeamColor_Save" />
 	<button label="Загрузить" name="BeamColor_Load" />
 	<button label="Отмена" name="BeamColor_Cancel" />

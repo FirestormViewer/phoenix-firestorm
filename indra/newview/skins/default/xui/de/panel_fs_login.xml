@@ -6,6 +6,9 @@
 	<panel.string name="forgot_password_url">
 		http://secondlife.com/account/request.php?lang=de
 	</panel.string>
+	<panel.string name="ServerComboTooltip">
+		Ein bekanntes Grid oder eine Grid-URI
+	</panel.string>
 	<layout_stack name="login_widgets">
 		<layout_panel name="login">
 			<text name="log_in_text">

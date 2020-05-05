@@ -10,14 +10,37 @@
 	<pie_slice label="Заплатить" name="Pay..."/>
 	<pie_menu label="Далее &gt;" name="Object Pie More 1">
 		<pie_slice label="Удалить" name="Delete"/>
-		<pie_slice label="Одеть" name="Wear"/>
-		<pie_slice label="Взять копию" name="Take Copy"/>
-		<pie_menu label="Добавить HUD &gt;" name="Pie Object Attach HUD"/>
-		<pie_menu label="Добавить &gt;" name="Pie Object Attach"/>
+		<pie_slice label="Надеть" name="Wear"/>
+		<pie_slice label="Взять Копию" name="Take Copy"/>
+		<pie_menu label="Добавить HUD &gt;" name="Pie Object Attach HUD" />
+		<pie_menu label="Прикрепить &gt;" name="Pie Object Attach">
+			<pie_menu label="Доп.Скелет &gt;" name="Enhanced Skeleton">
+				<pie_slice label="Правое Крыло" name="Right Wing"/>
+				<pie_slice label="Пах" name="Groin"/>
+				<pie_slice label="Основа Хвоста" name="Tail Base"/>
+				<pie_slice label="Конец Хвоста" name="Tail Tip"/>
+				<pie_slice label="Левое Крыло" name="Left Wing"/>
+				<pie_slice label="Лев.задн.Нога" name="Left Hind Foot"/>
+				<pie_menu label="Далее &gt;" name="Enhanced Skeleton More">
+					<pie_slice label="Доп.Прав.Ухо" name="Alt Right Ear"/>
+					<pie_slice label="Доп.Прав.Глаз" name="Alt Right Eye"/>
+					<pie_slice label="Язык" name="Tongue"/>
+					<pie_slice label="Доп.Лев.Глаз" name="Alt Left Eye"/>
+					<pie_slice label="Доп.Лев.Ухо" name="Alt Left Ear"/>
+					<pie_slice label="Лев.Безым.палец" name="Left Ring Finger"/>
+					<pie_slice label="Челюсть" name="Jaw"/>
+					<pie_slice label="Прав.Безым.палец" name="Right Ring Finger"/>
+				</pie_menu>
+				<pie_slice label="Прав.задн.нога" name="Right Hind Foot"/>
+			</pie_menu>
+		</pie_menu>
 		<pie_slice label="Вернуть" name="Return..."/>
 		<pie_menu label="Далее &gt;" name="Object Pie More 2">
-			<pie_slice label="Обновить текстуру" name="Texture Refresh"/>
-			<pie_menu name="DerenderMenu" label="Не отображать &gt;">
+			<pie_menu name="ResetMenu" label="Сбросить &gt;">
+				<pie_slice label="Обнов.Текстуру" name="Texture Refresh"/>
+				<pie_slice label="Скелет" name="Reset Skeleton"/>
+			</pie_menu>
+			<pie_menu name="DerenderMenu" label="Неотображать &gt;">
 				<pie_slice label="Постоянно" name="DerenderPermanent"/>
 				<pie_slice label="Временно" name="Derender"/>
 			</pie_menu>
@@ -25,6 +48,7 @@
 			<pie_menu name="ExportMenu" label="Сохранить как &gt;">
 				<pie_slice label="Backup" name="Backup"/>
 				<pie_slice label="Collada" name="Collada"/>
+				<pie_slice label="Dump XML" name="Dump XML"/>
 			</pie_menu>
 			<pie_menu label="Поиск пути &gt;" name="Pathfinding">
 				<pie_slice label="Показать в коллекции" name="show_in_linksets"/>

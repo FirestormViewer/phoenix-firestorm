@@ -4,7 +4,7 @@
 		<combo_box.item label="Текущее окно" name="CurrentWindow" />
 		<combo_box.item label="Другое" name="Custom" />
 	</combo_box>
-	<spinner label="Ширина x Высота" name="postcard_snapshot_width" />
+	<spinner label="Ширина Высота" name="postcard_snapshot_width" />
 	<check_box label="Сохранить пропорции" name="postcard_keep_aspect_check" />
-	<slider label="Качество:" name="image_quality_slider" />
+	<slider label="Качество:" name="image_quality_slider" label_width="55"/>
 </panel>

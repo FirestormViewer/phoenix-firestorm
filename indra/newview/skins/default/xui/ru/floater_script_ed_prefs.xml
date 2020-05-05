@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater height="680" name="floater_script_colors" title="Настройки Редактора Скриптов" width="330">
+	<text name="color_pickers_label" width="200">
+		Выберите желаемые цвета:
+	</text>
+	<text name="text_label" width="100">
+		Текст
+	</text>
+	<text name="cursor_label" width="100">
+		Курсор
+	</text>
+	<text name="background_label" width="100">
+		Фон
+	</text>
+	<text name="section_label" width="100">
+		Секции
+	</text>
+	<text name="datatype_label" width="100">
+		Типы Данных
+	</text>
+	<text name="event_label" width="100">
+		События
+	</text>
+	<text name="comment_label" width="100">
+		Комментарий
+	</text>
+	<text name="function_label" width="100">
+		Функция
+	</text>
+	<text name="string_literal_label" width="100">
+		Строка символов
+	</text>
+	<text name="constant_label" width="100">
+		Константа
+	</text>
+	<text name="i_constant_label" width="100">
+		Целое Константа
+	</text>
+	<text name="s_constant_label" width="100">
+		Строка Константа
+	</text>
+	<text name="f_constant_label" width="100">
+		Float Константа
+	</text>
+	<text name="c_constant_label" width="100">
+		Соединение
+	</text>
+	<text name="flow_control_label" width="100">
+		Управление потоком
+	</text>
+	<text name="preprocessor_label" width="100">
+		Препроцессор
+	</text>
+	<text name="prefs_label" width="250">
+		Параметры редактора скриптов:
+		</text>
+	<check_box name="convert_tabs_to_spaces_checkbox" width="200" label="Заменять табуляцию пробелами" />
+	<check_box label="Включить LSL Препроцессор" tool_tip="Если этот флажок установлен, препроцессор LSL включен." name="preproc_checkbox" />
+	<check_box label="Оптимизатор скриптов" tool_tip="Если этот флажок установлен, препроцессор LSL оптимизирует пространство, используемое скриптом." name="preprocoptimizer_checkbox" />
+	<check_box label="Оператор switch()" tool_tip="Если этот флажок установлен, препроцессор LSL разрешит использование оператора switch () для управления потоком сценариев." name="preprocswitch_checkbox" />
+	<check_box label="Ленивые списки" tool_tip="Если этот флажок установлен, препроцессор LSL позволит использовать синтаксические расширения для обработки списка." name="preproclazy_checkbox" />
+	<check_box label="#includes с локального диска" tool_tip="Если этот флажок установлен, препроцессор LSL позволит операторам #include ссылаться на файлы на вашем локальном диске." name="preprocinclude_checkbox" />
+	<text name="lslpreprocinclude_textbox" width="256">
+		Препроцессор включает путь:
+	</text>
+	<button label="..." label_selected="Просмотр" name="SetPreprocInclude" width="30" />
+	<text name="advanced_label" width="150">
+		Расширенные настройки:
+		</text>
+	<check_box name="FSllOwnerSayToScriptDebugWindow_checkbox" width="200" label="Направить llOwnerSay в окно отладки скрипта" />
+	<check_box name="FSScriptEditorRecompileButton_checkbox" width="200" label="Кнопка перекомпиляции (полезно для #include)" />
+
+	<button name="close_btn" width="100" label="OK" />
+</floater>

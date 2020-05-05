@@ -6,6 +6,9 @@
 	<panel.string name="wear_items_tooltip">
 		Надеть выбранные вещи
 	</panel.string>
+	<panel.string name="cof_tab_label">
+		Надето ([COUNT]/[MAX] Пр.)
+	</panel.string>
 	<tab_container name="appearance_tabs">
 		<panel label="ГАЛЕРЕЯ КОСТЮМОВ" name="outfit_gallery_tab"/>
 		<panel label="Мои комплекты" name="outfitslist_tab"/>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="sound_explorer" title="Звуки">
+	<floater.string name="Playing">Играет</floater.string>
+	<floater.string name="NotPlaying">[TIME] мин.назад</floater.string>
+	<floater.string name="Type_UI">UI</floater.string>
+	<floater.string name="Type_Avatar">Аватар</floater.string>
+	<floater.string name="Type_llTriggerSound">llTriggerSound</floater.string>
+	<floater.string name="Type_llLoopSound">llLoopSound</floater.string>
+	<floater.string name="Type_llPlaySound">llPlaySound</floater.string>
+	<check_box width="80" name="avatars_chk" label="Аватары" />
+	<check_box left_delta="80" width="80" name="objects_chk" label="Объекты"/>
+	<check_box left_delta="80" width="150" name="collision_chk" label="Звуки Столкновений" />
+	<check_box left_delta="150" width="120" name="repeated_asset_chk" label="Повторяющиеся" />
+	<check_box left_delta="120" width="80" name="pause_chk" label="Журнал пауз"/>
+	<scroll_list name="sound_list">
+		<columns label="Играет" name="playing" />
+		<columns label="Тип" name="type" />
+		<columns label="Владелец" name="owner" />
+		<columns width="200" label="Звук" name="sound" />
+	</scroll_list>
+	<button label="Играть локально" name="play_locally_btn" width="95"/>
+	<button label="Стоп локально" name="stop_locally_btn" width="95"/>
+	<button label="Посмотреть На" name="look_at_btn" left_delta="100" width="95"/>
+	<button label="Стоп" name="stop_btn" right="-10" width="95"/>
+	<button label="Черный список" name="bl_btn" right="-110" width="95"/>
+</floater>

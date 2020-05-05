@@ -15,7 +15,7 @@
 	<text name="version_channel_text">
 		неизвестно
 	</text>
-	<text name="grid_position_lbl">
+	<text name="grid_position_lbl" width="100">
         Позиция сетки:
 	</text>
 	<text name="region_type_lbl">
@@ -34,14 +34,14 @@
 	<check_box label="Не показывать землю в поиске" name="block_parcel_search_check" tool_tip="Отображать регион и его участки в результатах поиска"/>
 	<check_box label="Разрешить меши-объекты" name="mesh_rez_enabled_check" tool_tip="Разрешить жителям выкладывать меши в этом регионе"/>
 	<spinner label="Лимит агентов" name="agent_limit_spin"/>
-	<spinner label="Льгота для объекта" name="object_bonus_spin"/>
+	<spinner label="Бонус объекта" name="object_bonus_spin"/>
 	<text label="Дозволенность" name="access_text">
 		Категория:
 	</text>
-	<icons_combo_box label="Умеренный" name="access_combo">
-		<icons_combo_box.item label="Для взрослых" name="Adult" value="42"/>
-		<icons_combo_box.item label="Умеренный" name="Mature" value="21"/>
-		<icons_combo_box.item label="Общий" name="PG" value="13"/>
+	<icons_combo_box label="Умеренный" name="access_combo" width="125">
+		<icons_combo_box.item label="Для взрослых" name="Adult"/>
+		<icons_combo_box.item label="Умеренный" name="Mature"/>
+		<icons_combo_box.item label="Общий" name="PG"/>
 	</icons_combo_box>
 	<button label="Применить" name="apply_btn"/>
 	<button label="Телепортировать домой одного жителя..." name="kick_btn"/>
