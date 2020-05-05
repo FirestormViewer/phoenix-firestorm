@@ -36,7 +36,7 @@
 		Construído com [COMPILER] versão [COMPILER_VERSION]
 	</string>
 	<string name="AboutPosition">
-		Você está em [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] em [REGION] localizado em &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
+		Você está em [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] em [REGION] localizado em &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt;
 SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 (coordenadas globais [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
 [SERVER_VERSION]
