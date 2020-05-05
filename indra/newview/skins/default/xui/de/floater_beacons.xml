@@ -20,6 +20,9 @@
 		<check_box label="Soundquellen" name="sounds"/>
 		<check_box label="Partikelquellen" name="particles"/>
 		<check_box label="Medienquellen" name="moapbeacon"/>
+		<text name="label_objects">
+			Zeige Richtung zu:
+		</text>
 		<check_box label="Sonne" name="sun"/>
 		<check_box label="Mond" name="moon"/>
 	</panel>

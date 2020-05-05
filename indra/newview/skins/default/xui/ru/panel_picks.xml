@@ -19,7 +19,7 @@
 				<button label="Данные" name="info_btn" tool_tip="Показать данные о подборке"/>
 			</layout_panel>
 			<layout_panel name="teleport_btn_lp">
-				<button label="Телепортироваться" name="teleport_btn" tool_tip="Телепортация в соответствующую область"/>
+				<button label="Телепортация" name="teleport_btn" tool_tip="Телепортация в соответствующую область"/>
 			</layout_panel>
 			<layout_panel name="show_on_map_btn_lp">
 				<button label="Карта" name="show_on_map_btn" tool_tip="Показать соответствующую область на карте мира"/>

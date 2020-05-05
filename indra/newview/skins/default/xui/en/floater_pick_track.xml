@@ -10,7 +10,7 @@
         min_width="225"
         name="track picker"
         help_topic="track_picker"
-        title="PICK: TRACK"
+        title="Pick Track"
         width="225">
     <layout_stack name="adjuster"
             follows="all"

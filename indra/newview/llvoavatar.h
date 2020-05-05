@@ -364,7 +364,7 @@ public:
 	BOOL			isFullyTextured() const;
 	BOOL			hasGray() const; 
 	S32				getRezzedStatus() const; // 0 = cloud, 1 = gray, 2 = textured, 3 = textured and fully downloaded.
-	void			updateRezzedStatusTimers();
+	void			updateRezzedStatusTimers(S32 status);
 	S32 			getNumBakes() const;//<FS:Beq/> BOM bake limits
 	// U8 				getNumTEs() const override;//<FS:Beq/> BOM bake limits
 
@@ -659,6 +659,8 @@ protected:
 
 	LLLoadedCallbackEntry::source_callback_list_t mCallbackTextureList ; 
 	BOOL mLoadedCallbacksPaused;
+	S32 mLoadedCallbackTextures; // count of 'loaded' baked textures, filled from mCallbackTextureList
+	LLFrameTimer mLastTexCallbackAddedTime;
 	std::set<LLUUID>	mTextureIDs;
 	//--------------------------------------------------------------------
 	// Local Textures

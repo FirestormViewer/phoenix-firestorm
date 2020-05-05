@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Описание" name="description"/>
+	<menu_item_check label="Владелец" name="owner_name"/>
+	<menu_item_check label="Создатель" name="creator_name"/>
+	<menu_item_check label="Граней" name="facecount"/>
+	<menu_item_check label="Вершин" name="vertexcount"/>
+	<menu_item_check label="Треугольники" name="trianglecount" />
+	<menu_item_check label="TMem" name="tramcount"/>
+	<menu_item_check label="VRAM" name="vramcount"/>
+	<menu_item_check label="Дата создания" name="creation_date"/>
+</toggleable_menu>

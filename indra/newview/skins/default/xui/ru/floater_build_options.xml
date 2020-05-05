@@ -3,6 +3,7 @@
 	<spinner label="Еденицы сетки (метры)" name="GridResolution"/>
 	<spinner label="Размер сетки (метры)" name="GridDrawSize"/>
 	<spinner label="Десятичная точка" name="DecimalPrecision"/>
+	<spinner label="Угол (градус)" name="RotationStep"/>
 	<check_box label="Привязать к субъединицам" name="GridSubUnit"/>
 	<check_box label="Показать поперечное сечение" name="GridCrossSection"/>
 	<text name="grid_opacity_label" tool_tip="Непрозрачность сетки">

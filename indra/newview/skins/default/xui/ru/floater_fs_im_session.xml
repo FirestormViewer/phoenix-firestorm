@@ -37,9 +37,23 @@
 		<layout_panel name="send_sysinfo_btn_panel">
 			<button tool_tip="Отправить системную информацию" name="send_sysinfo_btn"/>
 		</layout_panel>
+
+		<layout_panel name="lp_options_btn">
+			<menu_button tool_tip="Опции Чата" name="chat_options_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_search_btn" >
+			<button name="chat_search_btn" tool_tip="Поиск в чате"/>
+		</layout_panel>
+
+		<!-- Checkbox for FS prefix on support groups -->
 		<layout_panel name="support_panel">
 			<check_box label="Добавить версию" name="FSSupportGroupChatPrefix_toggle" tool_tip="Добавляет текущую версию клиента и информацию о теме в сообщения, отправленные вами в этой группе. Данная информация поможет сотрудникам поддержки в правильной диагностике Ваших проблем и повышения точности ответов на ваши вопросы"/>
 		</layout_panel>
+		<layout_panel name="testing_panel">
+			<check_box label="Добавить сборку" name="FSSupportGroupChatPrefixTesting_toggle"
+			tool_tip="Добавляет текущую версию, тему, операционную систему и состояние RLVa в начало сообщений, отправленных вами этой группе, что поможет персоналу службы поддержки правильно диагностировать ваши проблемы и повысить точность ответов на ваши вопросы. (Это отдельно от групп поддержки)"/>
+		</layout_panel>
+		<!-- END: FS Prefix -->
 	</layout_stack>
 	<layout_stack name="chat_stack">
 		<layout_panel name="panel_im_control_lp">

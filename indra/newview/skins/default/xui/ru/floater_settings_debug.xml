@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="settings_debug" title="Настройки отладки">
-	<radio_group name="boolean_combo">
-		<radio_item label="Истина" name="TRUE" value="true"/>
-		<radio_item label="Ложь" name="FALSE" value=""/>
-	</radio_group>
-	<color_swatch label="Цвет" name="val_color_swatch"/>
-	<spinner label="x" name="val_spinner_1"/>
-	<spinner label="x" name="val_spinner_2"/>
-	<spinner label="x" name="val_spinner_3"/>
-	<spinner label="x" name="val_spinner_4"/>
-	<button label="Сброс в стандартное значение" name="default_btn"/>
+	<panel name="debug_settings_search_panel">
+		<search_editor label="Найти" name="search_settings_input" tool_tip="Введите поисковый запрос, который вас интересует. Результаты будут отображаться для частичных полнотекстовых совпадений в названии параметра или в комментарии."/>
+	</panel>
+	<panel name="debug_settings_values_panel">
+		<text_editor name="comment_text" tool_tip="Комментарий отладки настроек. Часто дает полезную информацию о настройках, которые вы выбрали."/>
+		<radio_group name="boolean_combo">
+			<radio_item label="Истина" name="TRUE"/>
+			<radio_item label="Ложь" name="FALSE"/>
+		</radio_group>
+		<color_swatch label="Цвет" name="val_color_swatch"/>
+		<button label="Копия" name="copy_btn" tool_tip="Копирует имя настройки в буфер обмена."/>
+		<button label="По умолчанию" name="default_btn" tool_tip="Сбросить этот параметр отладки на значение по умолчанию."/>
+	</panel>
 </floater>

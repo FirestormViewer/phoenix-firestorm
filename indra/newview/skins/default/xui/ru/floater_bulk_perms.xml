@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floaterbulkperms" title="Настройка прав на использование содержимого">
+<floater name="floaterbulkperms" title="Настройка прав для содержимого">
 	<floater.string name="nothing_to_modify_text">
-		В выбранной области нет содержимого, которое можно изменять.
+		В выбранном содержимом нечего изменять.
 	</floater.string>
 	<floater.string name="status_text">
-		Задание разрешений для [NAME]
+		Задание прав для [NAME]
 	</floater.string>
 	<floater.string name="start_text">
-		Создание запроса на изменение разрешений...
+		Создание запроса на изменение прав...
 	</floater.string>
 	<floater.string name="done_text">
-		Выполненные запросы на изменение разрешений.
+		Выполненные запросы на изменение прав.
 	</floater.string>
 	<icon name="icon_animation" tool_tip="Анимация"/>
 	<icon name="icon_bodypart" tool_tip="Части тела"/>
@@ -25,7 +25,7 @@
 	<button label="√ Все" name="check_all"/>
 	<button label="Очистить" label_selected="Нет" name="check_none"/>
 	<text name="newperms">
-		Настроить разрешения на использование содержимого:
+		Настроить права для содержимого:
 	</text>
 	<text name="GroupLabel">
 		Группа:
@@ -35,12 +35,13 @@
 		Все:
 	</text>
 	<check_box label="Копировать" name="everyone_copy" tool_tip="Копию объекта может взять любой желающий. Объект и все его содержимое должны копироваться и передаваться."/>
-	<text name="NextOwnerLabel">
+	<text left="200" name="NextOwnerLabel">
 		Следующий владелец:
 	</text>
-	<check_box label="Изменять" name="next_owner_modify" tool_tip="Следующий владелец может отредактировать свойства, такие как имя отдельного предмета или масштаб этого объекта."/>
+	<check_box top_pad="15" label="Изменять" name="next_owner_modify" tool_tip="Следующий владелец может отредактировать свойства, такие как имя отдельного предмета или масштаб этого объекта."/>
 	<check_box label="Копировать" name="next_owner_copy" tool_tip="Следующий владелец может сделать неограниченное количество копий этого объекта. Копии содержат информацию о создателе и никогда не могут быть более разрешительными, чем копируемый предмет."/>
 	<check_box initial_value="true" label="Передать" name="next_owner_transfer" tool_tip="Следующий владелец может отдать или перепродать этот объект."/>
+	<scroll_list height="75" name="queue output"/>
 	<button label="OK" name="ok"/>
 	<button label="Применить" name="apply"/>
 	<button label="Отмена" name="close"/>

@@ -10,21 +10,21 @@
         загрузка...
     </text>
 -->
- <string name="no_classifieds" value="Нет объявлений" />
-   <panel name="edit_panel">
-                  <button name="new_btn" tool_tip="Создать новое объявление в текущем местоположении" />
-      </panel>
-      <panel name="buttons_cucks">
-      <layout_stack name="buttons_cucks_ls">
-          <layout_panel name="info_btn_lp">
-               <button name="info_btn" tool_tip="Показать информацию о месте" />
-          </layout_panel>
-          <layout_panel name="teleport_btn_lp">
-                <button label="Телепорт" name="teleport_btn" tool_tip="Переместиться в соответствующий регион" />
-          </layout_panel>
-          <layout_panel name="show_on_map_btn_lp">
-                <button label="Карта" name="show_on_map_btn" tool_tip="Показать место на карте мира" />
-          </layout_panel>
+  <string name="no_classifieds" value="Нет объявлений" />
+  <panel name="edit_panel">
+    <button name="new_btn" tool_tip="Создать новое объявление в текущем местоположении" />
+  </panel>
+  <panel name="buttons_cucks">
+    <layout_stack name="buttons_cucks_ls">
+      <layout_panel name="info_btn_lp">
+        <button label="Информация" name="info_btn" tool_tip="Показать информацию о месте" />
+      </layout_panel>
+      <layout_panel name="teleport_btn_lp">
+        <button label="Телепорт" name="teleport_btn" tool_tip="Переместиться в соответствующий регион" />
+      </layout_panel>
+      <layout_panel name="show_on_map_btn_lp">
+        <button label="На Карте" name="show_on_map_btn" tool_tip="Показать место на карте мира" />
+      </layout_panel>
     </layout_stack>
-    </panel>
+  </panel>
 </panel>

@@ -12,5 +12,5 @@
 		<scroll_list.columns label="Название объекта" name="name"/>
 		<scroll_list.columns label="Место" name="location"/>
 	</scroll_list>
-	<button label="Обновить список" name="refresh_list_btn"/>
+	<button label="Обновить список" name="refresh_list_btn" width="120"/>
 </panel>

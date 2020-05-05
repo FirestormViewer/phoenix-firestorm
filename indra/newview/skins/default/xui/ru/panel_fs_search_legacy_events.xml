@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="События" name="panel_ls_events">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Введите условия поиска:
+		</text>
+		<radio_group name="events_search_mode">
+			<radio_item label="Текущие и предстоящие" name="current"/>
+			<radio_item label="По дате" name="date"/>
+		</radio_group>
+		<combo_box name="events_category">
+			<combo_box.item label="Любая категория" name="any"/>
+			<combo_box.item label="Обсуждение" name="discussion"/>
+			<combo_box.item label="Спорт" name="sports"/>
+			<combo_box.item label="Живая музыка" name="music"/>
+			<combo_box.item label="Коммерция" name="commercial"/>
+			<combo_box.item label="Ночная жизнь/Развлечения" name="nightlife"/>
+			<combo_box.item label="Игры/Конкурсы" name="games"/>
+			<combo_box.item label="Театральное" name="pageants"/>
+			<combo_box.item label="Образование" name="education"/>
+			<combo_box.item label="Искусство и культура" name="arts"/>
+			<combo_box.item label="Благотворительность/Группы поддержки" name="charity"/>
+			<combo_box.item label="Разное" name="misc"/>
+		</combo_box>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_events">
+			<columns label="Событие" name="name"/>
+			<columns label="Дата/Время" name="date"/>
+			<columns label="Время" name="time"/>
+		</scroll_list>
+		<button label="Вчера" name="events_yesterday"/>
+		<button label="Сегодня" name="events_today"/>
+		<button label="Завтра" name="events_tomorrow"/>
+		<button label="Назад" name="events_back"/>
+		<button label="Вперед" name="events_next"/>
+	</panel>
+</panel>
