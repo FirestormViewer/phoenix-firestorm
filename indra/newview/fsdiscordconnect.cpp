@@ -232,7 +232,7 @@ void FSDiscordConnect::updateRichPresence()
 	}
 	else
 	{
-		discordPresence.largeImageKey = "opensimulator_1";
+		discordPresence.largeImageKey = "opensimulator_512";
 	}
 #else
 	discordPresence.largeImageKey = "secondlife_512";
