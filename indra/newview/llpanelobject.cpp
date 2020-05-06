@@ -74,17 +74,6 @@
 #include "llvoavatarself.h"
 // [/RLVa:KB]
 
-#include "llwindow.h" // for clipboad operations -KC
-
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
-#include "rlvhandler.h"
-#include "llvoavatarself.h"
-// [/RLVa:KB]
-#include "llinventoryfunctions.h"
-#include "llinventorymodel.h"
-
-#include "lldrawpool.h"
-
 //
 // Constants
 //
