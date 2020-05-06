@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Conversation Gear Menu">
+	<menu_item_check label="Farbe" name="Color"/>
+	<menu_item_check label="Transparenz" name="Transparency"/>
+	<menu_item_check label="Leuchten" name="Glow"/>
+	<menu_item_check label="Textur" name="Diffuse"/>
+	<menu_item_check label="Holprigkeit" name="Normal"/>
+	<menu_item_check label="Glanz" name="Specular"/>
+	<menu_item_check label="Mapping" name="Mapping"/>
+	<menu_item_check label="Medien" name="Media"/>
+</toggleable_menu>
+

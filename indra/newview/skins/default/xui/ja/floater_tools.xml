@@ -293,8 +293,8 @@
 			<text name="edit_object">
 			  オブジェクトのパラメータ:
 			</text>
-			<button label="コピー" name="copyparams" tool_tip="パラメータをクリップボードにコピーします。" />
-			<button label="貼り付け" name="pasteparams" tool_tip="パラメータをクリップボードから貼り付けます。" />
+			<button label="コピー" name="copy_params_btn" tool_tip="パラメータをクリップボードにコピーします。" />
+			<button label="貼り付け" name="paste_params_btn" tool_tip="パラメータをクリップボードから貼り付けます。" />
 			<combo_box name="comboBaseType">
 				<combo_box.item label="ボックス" name="Box"/>
 				<combo_box.item label="シリンダー" name="Cylinder"/>

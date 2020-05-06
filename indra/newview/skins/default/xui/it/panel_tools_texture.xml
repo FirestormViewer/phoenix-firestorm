@@ -11,6 +11,8 @@
 		Bagliore
 	</text>
 	<check_box label="Luminosità max" name="checkbox fullbright"/>
+	<button tool_tip="Copia" name="copy_face_btn"/>
+	<button tool_tip="Incolla" name="paste_face_btn"/>
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="Materiali" name="Materials"/>
 		<combo_box.item label="Media" name="Media"/>
@@ -110,6 +112,4 @@
 	<spinner label="Spostamento verticale" name="shinyOffsetV"/>
 	<check_box label="Allinea facce planari" name="checkbox planar align" tool_tip="Allinea le texture su tutte le facce selezionate con l&apos;ultima faccia selezionata. È richiesta la mappatura planare delle texture."/>
 	<check_box label="Sincronizza materiali" name="checkbox_sync_settings" tool_tip="Sincronizza i parametri delle texture"/>
-	<button label="Copia" name="copytextures"/>
-	<button label="Incolla" name="pastetextures"/>
 </panel>

@@ -17,6 +17,8 @@
 		Свечение
 	</text>
 	<check_box label="Собств. яркость" name="checkbox fullbright"/>
+	<button tool_tip="Копировать" name="copy_face_btn" />
+	<button tool_tip="Вставить" name="paste_face_btn" />
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="Материалы" name="Materials"/>
 		<combo_box.item label="Медиа" name="Media"/>
@@ -116,6 +118,4 @@
 	<check_box initial_value="false" label="Согласование" name="checkbox planar align" tool_tip="Согласование текстур на всех выбранных гранях по последней выбранной грани. Должно быть выбрано наложение по плоскостям."/>
 	<check_box label="Синхронизировать материалы" name="checkbox_sync_settings" tool_tip="Синхронизация параметров карты текстур" />
 	<button label="Выровнять" name="button align textures" tool_tip="Выровнять текущие слои текстуры" width="84" />
-	<button label="Копировать" name="copytextures" />
-	<button label="Вставить" name="pastetextures" />
 </panel>

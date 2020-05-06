@@ -254,15 +254,15 @@
 			</panel>
 		</panel>
 		<panel label="Obiekt" name="Object">
-			<panel.string name="Paste Position">
+			<panel.string name="paste_position">
 				Wklej pozycję
 [VALUE]
 			</panel.string>
-			<panel.string name="Paste Size">
+			<panel.string name="paste_size">
 				Wklej rozmiar
 [VALUE]
 			</panel.string>
-			<panel.string name="Paste Rotation">
+			<panel.string name="paste_rotation">
 				Wklej obrót
 [VALUE]
 			</panel.string>
@@ -273,26 +273,23 @@
 			<text name="label position">
 				Pozycja (metry)
 			</text>
-			<button label="K" name="copypos" tool_tip="Kopiuj pozycję"/>
-			<button label="W" name="pastepos" tool_tip="Wklej pozycję"/>
-			<button label="w" name="pasteposclip" tool_tip="Wklej pozycję ze schowka"/>
+			<button name="copy_pos_btn" tool_tip="Kopiuj pozycję"/>
+			<button name="paste_pos_btn" tool_tip="Wklej pozycję"/>
+			<button name="paste_pos_clip_btn" tool_tip="Wklej pozycję ze schowka"/>
 			<text name="label size">
 				Rozmiar (metry)
 			</text>
-			<button label="K" name="copysize" tool_tip="Kopiuj rozmiar"/>
-			<button label="W" name="pastesize" tool_tip="Wklej rozmiar"/>
-			<button label="w" name="pastesizeclip" tool_tip="Wklej rozmiar ze schowka"/>
+			<button name="copy_size_btn" tool_tip="Kopiuj rozmiar"/>
+			<button name="paste_size_btn" tool_tip="Wklej rozmiar"/>
+			<button name="paste_size_clip_btn" tool_tip="Wklej rozmiar ze schowka"/>
 			<text name="label rotation">
 				Obrót (stopnie)
 			</text>
-			<button label="K" name="copyrot" tool_tip="Kopiuj obrót"/>
-			<button label="W" name="pasterot" tool_tip="Wklej obrót"/>
-			<button label="w" name="pasterotclip" tool_tip="Wklej obrót ze schowka"/>
-			<text name="edit_object">
-				Parametry obiektu:
-			</text>
-			<button label="Kopiuj" name="copyparams" tool_tip="Kopiuj parametry do schowka"/>
-			<button label="Wklej" name="pasteparams" tool_tip="Wklej parametry ze schowka"/>
+			<button name="copy_rot_btn" tool_tip="Kopiuj obrót"/>
+			<button name="paste_rot_btn" tool_tip="Wklej obrót"/>
+			<button name="paste_rot_clip_btn" tool_tip="Wklej obrót ze schowka"/>
+			<button label="Kopiuj" name="copy_params_btn" tool_tip="Kopiuj parametry do schowka"/>
+			<button label="Wklej" name="paste_params_btn" tool_tip="Wklej parametry ze schowka"/>
 			<combo_box name="comboBaseType">
 				<combo_box.item label="Klocek" name="Box"/>
 				<combo_box.item label="Walec" name="Cylinder"/>

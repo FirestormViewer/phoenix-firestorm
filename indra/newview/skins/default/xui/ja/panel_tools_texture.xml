@@ -106,6 +106,6 @@
 	<spinner label="回転度" name="shinyRot"/>
 	<spinner label="水平オフセット" name="shinyOffsetU"/>
 	<spinner label="垂直オフセット" name="shinyOffsetV"/>
-	<check_box initial_value="false" label="平面を揃える" name="checkbox planar align" tool_tip="選択面全てのテクスチャを、最後に選択された面に揃えます。平面テクスチャのマッピングが必要です。"/>
+	<check_box label="平面を揃える" name="checkbox planar align" tool_tip="選択面全てのテクスチャを、最後に選択された面に揃えます。平面テクスチャのマッピングが必要です。"/>
 	<button label="揃える" label_selected="現在のテクスチャレイヤーを揃える" name="button align textures" tool_tip="現在のテクスチャレイヤーを揃える"/>
 </panel>

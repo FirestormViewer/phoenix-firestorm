@@ -271,15 +271,15 @@
 			</panel>
 		</panel>
 		<panel label="Oggetto" name="Object">
-			<panel.string name="Paste Position">
+			<panel.string name="paste_position">
 				Posiz. incolla
 [VALUE]
 			</panel.string>
-			<panel.string name="Paste Size">
+			<panel.string name="paste_size">
 				Dimens. incolla
 [VALUE]
 			</panel.string>
-			<panel.string name="Paste Rotation">
+			<panel.string name="paste_rotation">
 				Rotaz. incolla
 [VALUE]
 			</panel.string>
@@ -290,23 +290,24 @@
 			<text name="label position">
 				Posizione (metri)
 			</text>
-			<button name="copypos" tool_tip="Copia posizione"/>
-			<button name="pastepos" tool_tip="Incolla posizione"/>
-			<button name="pasteposclip" tool_tip="Incolla pos da appunti"/>
+			<button name="copy_pos_btn" tool_tip="Copia posizione"/>
+			<button name="paste_pos_btn" tool_tip="Incolla posizione"/>
+			<button name="paste_pos_clip_btn" tool_tip="Incolla pos da appunti"/>
 			<text name="label size">
 				Dimensioni (metri)
 			</text>
-			<button name="copysize" tool_tip="Copia dimensioni"/>
-			<button name="pastesize" tool_tip="Incolla dimensioni"/>
-			<button name="pastesizeclip" tool_tip="Incolla dim da appunti"/>
+			<button name="copy_rot_btn" tool_tip="Copia dimensioni"/>
+			<button name="paste_rot_btn" tool_tip="Incolla dimensioni"/>
+			<button name="paste_rot_clip_btn" tool_tip="Incolla dim da appunti"/>
 			<text name="label rotation">
 				Rotazione (gradi)
 			</text>
-			<text name="edit_object">
-				Parametri oggetto:
-			</text>
-			<button label="Copia" name="copyparams" tool_tip="Copia i parametri dell'&apos;oggetto negli appunti"/>
-			<button label="Incolla" name="pasteparams" tool_tip="Incolla i parametri dagli appunti"/>
+			<button name="copy_size_btn" tool_tip="Copia rotazione"/>
+			<button name="paste_size_btn" tool_tip="Incolla rotazione"/>
+			<button name="paste_size_clip_btn" tool_tip="Incolla dim da appunti"/>
+			<text name="label rotation">
+			<button label="Copia" name="copy_params_btn" tool_tip="Copia i parametri dell'&apos;oggetto negli appunti"/>
+			<button label="Incolla" name="paste_params_btn" tool_tip="Incolla i parametri dagli appunti"/>
 			<combo_box name="comboBaseType">
 				<combo_box.item label="Cubo" name="Box"/>
 				<combo_box.item label="Cilindro" name="Cylinder"/>

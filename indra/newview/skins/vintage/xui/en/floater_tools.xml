@@ -1497,16 +1497,16 @@ even though the user gets a free copy.
          name="Object"
          top="16"
          width="295">
-            <panel.string name="Paste Position">
-                Paste Position
+            <panel.string name="paste_position">
+Paste Position
 [VALUE]
             </panel.string>
-            <panel.string name="Paste Size">
-                Paste Size
+            <panel.string name="paste_size">
+Paste Size
 [VALUE]
             </panel.string>
-            <panel.string name="Paste Rotation">
-                Paste Rotation
+            <panel.string name="paste_rotation">
+Paste Rotation
 [VALUE]
             </panel.string>
             <check_box
@@ -1602,38 +1602,45 @@ even though the user gets a free copy.
              top_pad="3"
              width="87" />
             <button
-             tab_stop="false"
              follows="top|right"
              height="19" 
-             label="C"
              top_delta="-43"
              left_pad="5"
-             mouse_opaque="true"
-             name="copypos"
-             enabled="true"
+             tab_stop="false"
+             image_bottom_pad="1"
+             image_overlay="Copy"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+             name="copy_pos_btn"
              tool_tip="Copy Position"
              width="20" />
             <button
-             tab_stop="false"
              follows="top|right"
              height="19"
-             label="P"
              top_pad="3"
-             mouse_opaque="true"
-             name="pastepos"
-             enabled="true"
+             tab_stop="false"
+             image_bottom_pad="1"
+             image_overlay="Paste"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+             name="paste_pos_btn"
              tool_tip="Paste Position"
              width="20" />
             <button
-             tab_stop="false"
              follows="top|right"
              height="19"
-             label="p"
              top_pad="3"
              mouse_opaque="true"
-             name="pasteposclip"
-             enabled="true"
-             tool_tip="Paste Position from Clipboard"
+             tab_stop="false"
+             image_bottom_pad="1"
+             image_overlay="Paste"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+             name="paste_pos_clip_btn"
+             tool_tip="Try pasting Position from Clipboard"
              width="20" />
             <text
              type="string"
@@ -1696,38 +1703,44 @@ even though the user gets a free copy.
              top_pad="3"
              width="87" />
             <button
-             tab_stop="false"
              follows="top|right"
              height="19" 
-             label="C"
              top_delta="-43"
              left_pad="5"
-             mouse_opaque="true"
-             name="copysize"
-             enabled="true"
+             tab_stop="false"
+             image_bottom_pad="1"
+             image_overlay="Copy"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+             name="copy_size_btn"
              tool_tip="Copy Size"
              width="20" />
             <button
-             tab_stop="false"
              follows="top|right"
              height="19"
-             label="P"
              top_pad="3"
-             mouse_opaque="true"
-             name="pastesize"
-             enabled="true"
+             tab_stop="false"
+             image_bottom_pad="1"
+             image_overlay="Paste"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+             name="paste_size_btn"
              tool_tip="Paste Size"
              width="20" />
             <button
-             tab_stop="false"
              follows="top|right"
              height="19"
-             label="p"
              top_pad="3"
-             mouse_opaque="true"
-             name="pastesizeclip"
-             enabled="true"
-             tool_tip="Paste Size from Clipboard"
+             tab_stop="false"
+             image_bottom_pad="1"
+             image_overlay="Paste"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+             name="paste_size_clip_btn"
+             tool_tip="Try pasting Size from Clipboard"
              width="20" />
             <text
              type="string"
@@ -1790,38 +1803,44 @@ even though the user gets a free copy.
              top_pad="3"
              width="87" />
             <button
-             tab_stop="false"
              follows="top|right"
              height="19"
-             label="C"
              top_delta="-43"
              left_pad="5"
-             mouse_opaque="true"
-             name="copyrot"
-             enabled="true"
+             tab_stop="false"
+             image_bottom_pad="1"
+             image_overlay="Copy"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+             name="copy_rot_btn"
              tool_tip="Copy Rotation"
              width="20" />
             <button
-             tab_stop="false"
              follows="top|right"
              height="19"
-             label="P"
              top_pad="3"
-             mouse_opaque="true"
-             name="pasterot"
-             enabled="true"
+             tab_stop="false"
+             image_bottom_pad="1"
+             image_overlay="Paste"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+             name="paste_rot_btn"
              tool_tip="Paste Rotation"
              width="20" />
             <button
-             tab_stop="false"
              follows="top|right"
              height="19"
-             label="p"
              top_pad="3"
-             mouse_opaque="true"
-             name="pasterotclip"
-             enabled="true"
-             tool_tip="Paste Rotation from Clipboard"
+             tab_stop="false"
+             image_bottom_pad="1"
+             image_overlay="Paste"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+             name="paste_rot_clip_btn"
+             tool_tip="Try pasting Rotation from Clipboard"
              width="20" />
 
  <!--           <text
@@ -1836,44 +1855,51 @@ even though the user gets a free copy.
              width="150">
                 Prim Type
             </text>-->
-			<text
-			 type="string"
-			 length="1"
-			 follows="left|top"
-			 height="10"
-			 bottom="-15"
-			 layout="topleft"
-			 left="10"
-			 name="edit_object"
-			 top_pad="8"
-			 width="121">
-			  Object Parameters:
-			</text>
-			<button
-			 follows="top|right"
-			 height="16"
-			 label="Copy"
-			 layout="topleft"
-			 left="5"
-			 name="copyparams"
-			 tool_tip="Copy Parameters to Clipboard"
-			 width="52">
-			</button>
-			<button
-			 follows="top|right"
-			 height="16"
-			 label="Paste"
-			 layout="topleft"
-			 left_pad="10"
-			 name="pasteparams"
-			 tool_tip="Paste Parameters from Clipboard"
-			 width="52">
-			</button>
+    		<button
+    		 follows="top|right"
+    		 height="23"
+    		 label="Copy"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+    		 layout="topleft"
+    		 left="125"
+    		 name="copy_params_btn"
+    		 tool_tip="Copy Parameters"
+             top="6"
+    		 width="53">
+    		</button>
+    		<button
+    		 follows="top|right"
+    		 height="23"
+    		 label="Paste"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+    		 layout="topleft"
+    		 left_pad="5"
+    		 name="paste_params_btn"
+    		 tool_tip="Paste Parameters"
+    		 width="53">
+    		</button>
+            <menu_button
+             menu_filename="menu_build_paste.xml"
+             follows="top|left"
+             height="23"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_overlay="OptionsMenu_Off"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+             layout="topleft"
+             left_pad="5"
+             name="paste_gear_btn"
+             tool_tip="Paste options"
+             width="31"/>
             <combo_box
              height="19"
              layout="topleft"
              name="comboBaseType"
-             top="6"
+             top_pad="5"
              left="125"
              width="150">
                 <combo_box.item
@@ -2465,10 +2491,10 @@ even though the user gets a free copy.
           layout="topleft"
           left="125"
           name="mesh_info_label"
-          top="6"
+          top="30"
           width="100"
           visible="false">
-          Mesh Information:
+                   Mesh Information:
         </text>
         <text
           follows="left|top"
@@ -2629,7 +2655,7 @@ Lowest:
           left="125"
           halign="left"
           name="LOD_swap_label"
-          top_pad="3"
+          top_pad="3"	
           value="LOD Swap"
           visible="false"
           width="60" />
@@ -2645,7 +2671,7 @@ Lowest:
           value="LL"
           visible="false"
           width="30" />
-        <string name="fs_lod_tooltip_msg">[APP_NAME] Viewer default ([FACTOR])</string>
+        <string name="fs_lod_tooltip_msg">[APPNAME] Viewer default ([FACTOR])</string>
         <text
           follows="left|top"
           height="16"
@@ -2655,7 +2681,7 @@ Lowest:
           name="LOD_swap_fs_default"
           top_delta="0"
           visible="false"
-          width="30">
+          width="30" >
             [APP_NAME_ABBR]
         </text>
         <string name="user_lod_label_string">[FACTOR]</string>
@@ -2683,7 +2709,7 @@ Lowest:
           width="65" >
 High ↔ Med
 Med ↔ Low
-Low ↔ Lwst
+Low ↔ Lwst         
         </text>
         <string
           name="LODSwapFormatString"
@@ -2724,21 +2750,20 @@ Low ↔ Lwst
           value="--"
           visible="false"
           width="30" />
-        <text
-         name="LODSwapTableDscriptionsText"
-         follows="top|left"
-         layout="topleft"
-         left="125"
-         right="-1"
-         word_wrap="true"
-         top_pad="15"
-         tool_tip="Best practice: Creators should ensure good LOD behaviour for Default settings across all viewers."
-         height="100">
+         <text
+          name="LODSwapTableDscriptionsText"
+          follows="top|left"
+          layout="topleft"
+          left="125"
+          right="-1"
+          word_wrap="true"
+          top_pad="15"
+          tool_tip="Best practice: Creators should ensure good LOD behaviour for Default settings across all viewers."
+          height="100">
           This table shows the LOD change boundaries in metres from the camera.
         </text>
         <!-- /FS:Beq end of Mesh info section-->
-
-      </panel>
+        </panel>
         <panel
          border="false"
          follows="all"
@@ -3016,7 +3041,7 @@ Low ↔ Lwst
                    mouse_opaque="true"
                    name="Light Ambiance"
                    width="120" />
-            <text
+          <text
              type="string"
              length="1"
              follows="left|top"
@@ -3036,20 +3061,20 @@ Low ↔ Lwst
 			       tool_tip="Choose the physics shape type"
 			       width="108"/>
           <button
-             follows="left|top"
-             height="19"
-             is_toggle="true"
-             control_name="ShowPhysicsShapeInEdit"
-             image_disabled="PhysicsView_Off"
-             image_disabled_selected="PhysicsView_Off"
-             image_selected="PhysicsView_On"
-             image_unselected="PhysicsView_Off"
-             layout="topleft"
-             left_delta="117"
-             name="PhysicsViewToggle"
-             tool_tip="Toggle the physics view on in edit mode"
-             width="19"/>
-          <combo_box
+              follows="left|top"
+              height="19"
+         		  is_toggle="true"
+              control_name="ShowPhysicsShapeInEdit"
+              image_disabled="PhysicsView_Off"
+              image_disabled_selected="PhysicsView_Off"
+              image_selected="PhysicsView_On"
+              image_unselected="PhysicsView_Off"
+              layout="topleft"
+              left_delta="117"
+              name="PhysicsViewToggle"
+              tool_tip="Toggle the physics view on in edit mode"
+              width="19"/>
+            <combo_box
              height="19"
              layout="topleft"
              name="material"

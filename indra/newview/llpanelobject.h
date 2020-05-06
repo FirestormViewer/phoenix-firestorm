@@ -37,6 +37,7 @@ class LLCheckBoxCtrl;
 class LLTextBox;
 class LLUICtrl;
 class LLButton;
+class LLMenuButton;
 class LLViewerObject;
 class LLComboBox;
 class LLColorSwatchCtrl;
@@ -70,17 +71,21 @@ public:
 	//<FS:Beq> FIRE-21445 - Display specific LOD
 	void			onCommitLOD();
 	//</FS:Beq>
-	void 	onCopyPos(				const LLSD& data);
-	void 	onPastePos(				const LLSD& data);
-	void 	onPastePosClip(			const LLSD& data);
-	void 	onCopySize(				const LLSD& data);
-	void 	onPasteSize(			const LLSD& data);
-	void 	onPasteSizeClip(		const LLSD& data);
-	void 	onCopyRot(				const LLSD& data);
-	void 	onPasteRot(				const LLSD& data);
-	void 	onPasteRotClip(			const LLSD& data);
-	void 	onCopyParams(			const LLSD& data);
-	void 	onPasteParams(			const LLSD& data);
+
+    void            onCopyPos();
+    void            onPastePos();
+    void            onCopySize();
+    void            onPasteSize();
+    void            onCopyRot();
+    void            onPasteRot();
+    void            onCopyParams();
+    void            onPasteParams();
+
+	// <FS> Extended copy & paste buttons
+	void 	onPastePosClip();
+	void 	onPasteSizeClip();
+	void 	onPasteRotClip();
+	// </FS>
 
 	static void 	onCommitParametric(LLUICtrl* ctrl, void* userdata);
 
@@ -90,6 +95,17 @@ public:
 	void     		onSelectSculpt(const LLSD& data);
 	BOOL     		onDropSculpt(LLInventoryItem* item);
 	static void     onCommitSculptType(    LLUICtrl *ctrl, void* userdata);
+
+    bool            pasteCheckMenuItem(const LLSD& userdata);
+    void            pasteDoMenuItem(const LLSD& userdata);
+    bool            pasteEnabletMenuItem(const LLSD& userdata);
+    static bool     isLibraryTexture(LLUUID image_id);
+
+    // Finds copy-enabled texture with specified asset from inventory
+    // This can be performance unfriendly and doesn't warranty that
+    // the texture is original source of asset
+    static LLUUID   getCopyPermInventoryTextureId(LLUUID image_id);
+    static bool     canCopyTexture(LLUUID image_id);
 
 protected:
 	void			getState();
@@ -111,22 +127,6 @@ protected:
 	void 			getVolumeParams(LLVolumeParams& volume_params);
 	
 protected:
-
-	LLVector3		mClipboardPos;
-	LLVector3		mClipboardSize;
-	LLVector3		mClipboardRot;
-
-	BOOL			mHasPosClipboard;
-	BOOL			mHasSizeClipboard;
-	BOOL			mHasRotClipboard;
-
-	LLSD			mParamsClipboard;
-	LLVolumeParams	mClipboardVolumeParams;
-	BOOL			mHasParamsClipboard;
-	BOOL			mHasFlexiParam;
-	BOOL			mHasSculptParam;
-	BOOL			mHasLightParam;
-
 	S32				mComboMaterialItemCount;
 
 	LLComboBox*		mComboMaterial;
@@ -197,20 +197,21 @@ protected:
 	LLSpinCtrl*		mCtrlRotY;
 	LLSpinCtrl*		mCtrlRotZ;
 
-	LLButton		*mBtnCopyPos;
-	LLButton		*mBtnPastePos;
-	LLButton		*mBtnPastePosClip;
-	
-	LLButton		*mBtnCopySize;
-	LLButton		*mBtnPasteSize;
-	LLButton		*mBtnPasteSizeClip;
-	
-	LLButton		*mBtnCopyRot;
-	LLButton		*mBtnPasteRot;
-	LLButton		*mBtnPasteRotClip;
+    LLButton        *mBtnCopyPos;
+    LLButton        *mBtnPastePos;
+    LLButton        *mBtnCopySize;
+    LLButton        *mBtnPasteSize;
+    LLButton        *mBtnCopyRot;
+    LLButton        *mBtnPasteRot;
+    LLButton        *mBtnCopyParams;
+    LLButton        *mBtnPasteParams;
+    LLMenuButton    *mBtnPasteMenu;
 
-	LLButton*		mBtnCopyParams;
-	LLButton*		mBtnPasteParams;
+	// <FS> Extended copy & paste buttons
+	LLButton		*mBtnPastePosClip;
+	LLButton		*mBtnPasteSizeClip;
+	LLButton		*mBtnPasteRotClip;
+	// </FS>
 
 	LLCheckBoxCtrl	*mCheckLock;
 	LLCheckBoxCtrl	*mCheckPhysics;
@@ -222,7 +223,7 @@ protected:
 	LLComboBox      *mCtrlSculptType;
 	LLCheckBoxCtrl  *mCtrlSculptMirror;
 	LLCheckBoxCtrl  *mCtrlSculptInvert;
-	
+
 	LLVector3		mCurEulerDegrees;		// to avoid sending rotation when not changed
 	BOOL			mIsPhysical;			// to avoid sending "physical" when not changed
 	BOOL			mIsTemporary;			// to avoid sending "temporary" when not changed
@@ -231,6 +232,23 @@ protected:
 
 	LLUUID          mSculptTextureRevert;   // so we can revert the sculpt texture on cancel
 	U8              mSculptTypeRevert;      // so we can revert the sculpt type on cancel
+
+    LLVector3       mClipboardPos;
+    LLVector3           mClipboardSize;
+    LLVector3       mClipboardRot;
+
+    BOOL            mHasPosClipboard;
+    BOOL            mHasSizeClipboard;
+    BOOL            mHasRotClipboard;
+
+    LLSD            mParamsClipboard;
+    LLVolumeParams  mClipboardVolumeParams;
+    BOOL            mHasParamsClipboard;
+    
+    BOOL            mPasteParametric;
+    BOOL            mPasteFlexible;
+    BOOL            mPastePhysics;
+    BOOL            mPasteLight;
 
 	LLPointer<LLViewerObject> mObject;
 	LLPointer<LLViewerObject> mRootObject;

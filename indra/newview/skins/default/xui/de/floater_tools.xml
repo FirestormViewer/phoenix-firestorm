@@ -284,15 +284,15 @@
 			</panel>
 		</panel>
 		<panel label="Objekt" name="Object">
-			<panel.string name="Paste Position">
+			<panel.string name="paste_position">
 				Position einfügen
 [VALUE]
 			</panel.string>
-			<panel.string name="Paste Size">
+			<panel.string name="paste_size">
 				Größe einfügen
 [VALUE]
 			</panel.string>
-			<panel.string name="Paste Rotation">
+			<panel.string name="paste_rotation">
 				Rotation einfügen
 [VALUE]
 			</panel.string>
@@ -304,34 +304,32 @@
 				Position (Meter)
 			</text>
 			<spinner label="X" name="Pos X"/>
-			<button label="K" name="copypos" tool_tip="Position kopieren"/>
+			<button name="copy_pos_btn" tool_tip="Position kopieren"/>
 			<spinner label="Y" name="Pos Y"/>
-			<button label="E" name="pastepos" tool_tip="Position einfügen"/>
+			<button name="paste_pos_btn" tool_tip="Position einfügen"/>
 			<spinner label="Z" name="Pos Z"/>
-			<button label="e" name="pasteposclip"  tool_tip="Position aus Zwischenablage einfügen"/>
+			<button name="paste_pos_clip_btn" tool_tip="Position versuchen aus Zwischenablage einzufügen"/>
 			<text name="label size">
 				Größe (Meter)
 			</text>
 			<spinner label="X" name="Scale X"/>
-			<button label="K" name="copysize" tool_tip="Größe kopieren"/>
+			<button name="copy_size_btn" tool_tip="Größe kopieren"/>
 			<spinner label="Y" name="Scale Y"/>
-			<button label="E" name="pastesize" tool_tip="Größe einfügen"/>
+			<button name="paste_size_btn" tool_tip="Größe einfügen"/>
 			<spinner label="Z" name="Scale Z"/>
-			<button label="e" name="pastesizeclip" tool_tip="Größe aus Zwischenablage einfügen"/>
+			<button name="paste_size_clip_btn" tool_tip="Größe versuchen aus Zwischenablage einzufügen"/>
 			<text name="label rotation">
 				Rotation (Grad)
 			</text>
 			<spinner label="X" name="Rot X"/>
-			<button label="K" name="copyrot" tool_tip="Rotation kopieren"/>
+			<button name="copy_rot_btn" tool_tip="Rotation kopieren"/>
 			<spinner label="Y" name="Rot Y"/>
-			<button label="E" name="pasterot" tool_tip="Rotation einfügen"/>
+			<button name="paste_rot_btn" tool_tip="Rotation einfügen"/>
 			<spinner label="Z" name="Rot Z"/>
-			<button label="e" name="pasterotclip" tool_tip="Rotation aus Zwischenablage einfügen"/>
-			<text name="edit_object">
-				Objekt-Parameter:
-			</text>
-			<button label="Kop." name="copyparams" tool_tip="Objekt-Parameter in Zwischenablage kopieren"/>
-			<button label="Einf." name="pasteparams" tool_tip="Objekt-Parameters aus Zwischenablage einfügen"/>
+			<button name="paste_rot_clip_btn" tool_tip="Rotation versuchen aus Zwischenablage einzufügen"/>
+			<button label="Kopier." name="copy_params_btn" tool_tip="Objekt-Parameter kopieren"/>
+			<button label="Einfüg." name="paste_params_btn" tool_tip="Objekt-Parameters einfügen"/>
+			<menu_button name="paste_gear_btn" tool_tip="Einfüge-Optionen"/>
 			<combo_box name="comboBaseType">
 				<combo_box.item label="Quader" name="Box"/>
 				<combo_box.item label="Zylinder" name="Cylinder"/>

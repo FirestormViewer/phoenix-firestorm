@@ -258,15 +258,15 @@
 			</panel>
 		</panel>
 		<panel label="Объект" name="Object">
-			<panel.string name="Paste Position">
+			<panel.string name="paste_position">
 				Вставить позицию
 [VALUE]
 			</panel.string>
-			<panel.string name="Paste Size">
+			<panel.string name="paste_size">
 				Вставить размер
 [VALUE]
 			</panel.string>
-			<panel.string name="Paste Rotation">
+			<panel.string name="paste_rotation">
 				Вставить поворот
 [VALUE]
 			</panel.string>
@@ -277,26 +277,23 @@
 			<text name="label position">
 				Позиция (метры)
 			</text>
-			<button label="К" name="copypos" tool_tip="Копировать позицию"/>
-			<button label="В" name="pastepos" tool_tip="Вставить позицию"/>
-			<button label="в" name="pasteposclip" tool_tip="Вставить позицию из буфера"/>
+			<button name="copy_pos_btn" tool_tip="Копировать позицию"/>
+			<button name="paste_pos_btn" tool_tip="Вставить позицию"/>
+			<button name="paste_pos_clip_btn" tool_tip="Вставить позицию из буфера"/>
 			<text name="label size">
 				Размер (метры)
 			</text>
-			<button label="К" name="copysize" tool_tip="Копировать размер"/>
-			<button label="В" name="pastesize" tool_tip="Вставить размер"/>
-			<button label="в" name="pastesizeclip" tool_tip="Вставить размер из буфера"/>
+			<button name="copy_size_btn" tool_tip="Копировать размер"/>
+			<button name="paste_size_btn" tool_tip="Вставить размер"/>
+			<button name="paste_size_clip_btn" tool_tip="Вставить размер из буфера"/>
 			<text name="label rotation">
 				Поворот (градусы)
 			</text>
-			<button label="К" name="copyrot" tool_tip="Копировать поворот"/>
-			<button label="В" name="pasterot" tool_tip="Вставить поворот"/>
-			<button label="в" name="pasterotclip" tool_tip="Вставить поворот из буфера"/>
-			<text name="edit_object" top_pad="20" bottom="-10" >
-				Параметры объекта:
-			</text>
-			<button label="Копировать" name="copyparams" tool_tip="Копировать параметры в буфер" width="80"/>
-			<button label="Вставить" name="pasteparams" tool_tip="Вставить параметры из буфера" width="70"/>
+			<button name="copy_rot_btn" tool_tip="Копировать поворот"/>
+			<button name="paste_rot_btn" tool_tip="Вставить поворот"/>
+			<button name="paste_rot_clip_btn" tool_tip="Вставить поворот из буфера"/>
+			<button label="Копировать" name="copy_params_btn" tool_tip="Копировать параметры в буфер"/>
+			<button label="Вставить" name="paste_params_btn" tool_tip="Вставить параметры из буфера"/>
 			<combo_box name="comboBaseType">
 				<combo_box.item label="Коробка" name="Box"/>
 				<combo_box.item label="Цилиндр" name="Cylinder"/>
