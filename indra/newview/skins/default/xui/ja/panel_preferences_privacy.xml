@@ -84,6 +84,7 @@
 			<check_box label="自分のカメラの焦点がどこにあるか他人には知らせない" name="privatelookat" tool_tip="他人があなたのカメラの焦点がどこにあるか知るのを防ぎます。" />
 			<check_box label="自分の画面上でもカメラの焦点がどこにあるかわからないようにする" name="privateLocalLookat" tool_tip="通常、カメラの焦点が当たっている方向にアバターの頭が向くように自分の画面では表示されています。この頭の動きは、このオプションのオン／オフに関わりなく、必ずしも他人に見えるものではありません。" />
 			<check_box label="自分が選択しているものを他人には知らせない" name="privatepointat" tool_tip="他人があなたが選択しているものが何かを知るのを防ぎます。" />
+			<check_box label="頭部からの距離を制限" name="LimitLookAt" tool_tip="視線の先を自分の頭部の周りだけに固定するようにします" />
 
 		</panel>
 
@@ -91,7 +92,10 @@
 		<!--Autoresponse1-->
 	
 		<panel label="自動応答 1" name="tab-autoresponse-1" >
-     
+		
+			<text name="autorespond_toggle_location_tip">
+				注意：自動応答メッセージを有効にするには、「コミュニケーション」メニューの「ログイン状態」で適切なログイン状態を選択して下さい。
+			</text>
 			<text name="text_box3">
 				取り込みモード時の自動応答メッセージ：
 			</text>

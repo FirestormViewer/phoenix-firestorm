@@ -3,6 +3,9 @@
 	<panel.string name="forgot_password_url">
 		http://secondlife.com/account/request.php?lang=ja
 	</panel.string>
+	<string name="ServerComboTooltip">
+		既存のグリッドまたは URI
+	</string>
 	<layout_stack name="ui_stack">
 		<layout_panel name="ui_elastic_pad_left" />
 		<layout_panel name="ui_container">
