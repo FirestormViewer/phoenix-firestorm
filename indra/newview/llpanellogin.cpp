@@ -686,7 +686,6 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
 		
 		if (LLPanelLogin::sInstance->mPasswordModified)
 		{
-			authenticator = LLSD::emptyMap();
 			// password is plaintext
 			authenticator["type"] = CRED_AUTHENTICATOR_TYPE_CLEAR;
 			authenticator["secret"] = password;
@@ -697,6 +696,15 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
             if (credential.notNull())
             {
                 authenticator = credential->getAuthenticator();
+                if (authenticator.emptyMap())
+                {
+                    // Likely caused by user trying to log in to non-system grid
+                    // with unsupported name format, just retry
+                    LL_WARNS() << "Authenticator failed to load for: " << username << LL_ENDL;
+                    // password is plaintext
+                    authenticator["type"] = CRED_AUTHENTICATOR_TYPE_CLEAR;
+                    authenticator["secret"] = password;
+                }
             }
         }
 	}

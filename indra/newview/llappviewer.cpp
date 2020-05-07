@@ -867,7 +867,7 @@ bool LLAppViewer::init()
 	LLWearableType::initParamSingleton(new LLUITranslationBridge());
 
     LLTranslationBridge::ptr_t trans = std::make_shared<LLUITranslationBridge>();
-    LLSettingsType::initClass(trans);
+    LLSettingsType::initParamSingleton(trans);
 
 	// initialize SSE options
 	LLVector4a::initClass();

@@ -135,7 +135,7 @@ LLSD LLCredential::getLoginParams()
 		else if (mIdentifier["type"].asString() == "account")
 		{
 			result["username"] = mIdentifier["account_name"];
-			result["passwd"] = mAuthenticator["secret"];
+			result["passwd"] = mAuthenticator["secret"].asString();
 			username = result["username"].asString();
 		}
 	}

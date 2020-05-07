@@ -349,7 +349,7 @@ public:
 	bool skinInfoReceived(const LLUUID& mesh_id, U8* data, S32 data_size);
 	bool decompositionReceived(const LLUUID& mesh_id, U8* data, S32 data_size);
 	bool physicsShapeReceived(const LLUUID& mesh_id, U8* data, S32 data_size);
-	LLSD& getMeshHeader(const LLUUID& mesh_id);
+	bool hasPhysicsShapeInHeader(const LLUUID& mesh_id);
 
 	void notifyLoadedMeshes();
 	S32 getActualMeshLOD(const LLVolumeParams& mesh_params, S32 lod);
@@ -389,6 +389,9 @@ public:
 	//void constructUrl(LLUUID mesh_id, std::string * url);
 	void constructUrl(LLUUID mesh_id, std::string * url, int * legacy_version);
 	// </FS:Ansariel> [UDP Assets]
+
+	// <FS:Ansariel> DAE export
+	LLUUID getCreatorFromHeader(const LLUUID& mesh_id);
 
 private:
 	// Issue a GET request to a URL with 'Range' header using
@@ -610,9 +613,6 @@ public:
 	
 	bool meshUploadEnabled();
 	bool meshRezEnabled();
-	
-
-	LLSD& getMeshHeader(const LLUUID& mesh_id);
 
 	void uploadModel(std::vector<LLModelInstance>& data, LLVector3& scale, bool upload_textures,
                      bool upload_skin, bool upload_joints, bool lock_scale_if_joint_position,
@@ -631,6 +631,9 @@ public:
 	typedef std::map<LLVolumeParams, std::set<LLUUID> > mesh_load_map;
 	mesh_load_map mLoadingMeshes[4];
 	
+	// <FS:Ansariel> DAE export
+	LLUUID getCreatorFromHeader(const LLUUID& mesh_id);
+
 	// <FS:Ansariel> Faster lookup
 	//typedef std::map<LLUUID, LLMeshSkinInfo> skin_map;
 	typedef boost::unordered_map<LLUUID, LLMeshSkinInfo, FSUUIDHash> skin_map;

@@ -4220,7 +4220,7 @@ Sie ist voll oder startet in Kürze neu.
 		Skript konnte nicht hinzugefügt werden.
 	</notification>
 	<notification name="AssetServerTimeoutObjReturn">
-		Asset-Server hat nicht rechtzeitig reagiert.  Objekt wurde zum Sim zurückübertragen.
+		Asset-Server hat nicht rechtzeitig reagiert. Objekt wurde zur Region zurückübertragen.
 	</notification>
 	<notification name="RegionDisablePhysicsShapes">
 		In dieser Region sind keine Physikformen aktiviert.

@@ -31,9 +31,13 @@
 		</layout_panel>
 		<layout_panel name="place_info_content">
 
-	<text name="region_title" value="unbekannt"/>
-	<text name="maturity_value" value="unbekannt"/>
 	<text name="parcel_title" value="unbekannt"/>
+	<text name="region_title">
+		Region: [REGIONAMEPOS]
+	</text>
+	<text name="maturity_value" value="unbekannt"/>
+	<text name="parcel_owner_label" value="Eigentümer:" width="70"/>
+	<text name="parcel_owner" value="unbekannt"/>
 	<panel name="description_panel">
 		<expandable_text name="description" value="unbekannt"/>
 	</panel>
