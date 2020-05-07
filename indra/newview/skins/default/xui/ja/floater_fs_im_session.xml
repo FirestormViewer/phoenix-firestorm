@@ -59,12 +59,20 @@
 	<layout_panel name="lp_options_btn">
 		<menu_button tool_tip="チャット・オプション" name="chat_options_btn" />
 	</layout_panel>
+	<layout_panel name="lp_chat_search_btn">
+		<button name="chat_search_btn" tool_tip="チャットを検索します" />
+	</layout_panel>
       
-       <layout_panel name="support_panel" width="130">             
+		<layout_panel name="support_panel" width="130">             
 			<icon name="dummy_icon_support_group" width="128"/>
 			<check_box label="ビューワタイプを特定" name="FSSupportGroupChatPrefix_toggle" width="125" tool_tip="あなたが現在使用しているビューワのバージョンとスキンの情報をこのグループ宛のメッセージの先頭に追加します。そうすることで、サポートスタッフがあなたに生じている問題を正確に診断し、あなたの質問に対してより正確な回答ができるようになります。" />
-        </layout_panel>
-      
+		</layout_panel>
+		<layout_panel name="testing_panel">
+			<check_box label="ビルドを指定" name="FSSupportGroupChatPrefixTesting_toggle" tool_tip="現在のビューワ・バージョン、ビューワ・スキン、OS、RLVa のステータスをあなたがこのグループに送るメッセージの先頭に追加し、サポートスタッフが事象を正確に診断し、お問い合わせに正確に回答できるよう支援します。（このメッセージはサポート・グループに直接送られるわけではありません。）" />
+		</layout_panel>
+		<layout_panel name="lp_bar">
+			<icon name="dummy_icon" />
+		</layout_panel>
 	</layout_stack>
 	<layout_stack orientation="horizontal" name="chat_stack">
 		<layout_panel name="im_control_panel_holder">
