@@ -131,19 +131,19 @@
 	</notification>
 	<notification name="StockPasteFailed">
 		Не удалось скопировать или переместить в папку запасов, ошибка:
-        
+
         &quot;[ERROR_CODE]&quot;
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="MerchantPasteFailed">
 		Не удалось скопировать или переместить в списки товаров торгового центра, ошибка:
-        
+
         &quot;[ERROR_CODE]&quot;
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="MerchantTransactionFailed">
 		Не удалось выполнить транзакцию с торговым центром, ошибка:
-        
+
         Причина: &quot;[ERROR_REASON]&quot;
         [ERROR_DESCRIPTION]
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -154,7 +154,7 @@
 	</notification>
 	<notification name="MerchantListingFailed">
 		Не удалось опубликовать в торговом центре, ошибка:
-        
+
         &quot;[ERROR_CODE]&quot;
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
@@ -314,7 +314,7 @@
 
  *ПРЕДУПРЕЖДЕНИЕ*
 При удалении этой способности НЕ БУДУТ удалены способности &quot;[ACTION_NAME_2]&quot; и &quot;[ACTION_NAME_3]&quot;.
- 
+
 Если вам больше не нужны эти способности для данной роли, немедленно отключите их!
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
@@ -684,8 +684,8 @@
 		Вам не разрешено изменять ландшафт участока [PARCEL].
 	</notification>
 	<notification name="CannotCopyWarning">
-		У вас нет разрешения на копирование следующих предметов: 
-&lt;nolink&gt;[ITEMS]&lt;/nolink&gt; 
+		У вас нет разрешения на копирование следующих предметов:
+&lt;nolink&gt;[ITEMS]&lt;/nolink&gt;
 и они пропадут из вашего инвентаря, если вы их отдадите. Вы действительно хотите предложить эти предметы?
 		<usetemplate name="okcancelbuttons" notext="Нет" yestext="Да"/>
 	</notification>
@@ -721,9 +721,9 @@
 	</notification>
 	<notification name="FreezeAvatarMultiple">
 		Заморозить следующие аватары?
- 
+
 [RESIDENTS]
- 
+
 У них временно исчезнет способность перемещаться, говорить и взаимодействовать с миром.
 		<usetemplate canceltext="Отмена" name="yesnocancelbuttons" notext="Разморозить" yestext="Заморозить"/>
 	</notification>
@@ -1608,22 +1608,22 @@
 [DOWNLOAD_PATH].
 	</notification>
 	<notification name="RequiredUpdate">
-		Для входа необходима версия \[VERSION]. 
+		Для входа необходима версия \[VERSION].
 Скачайте обновление с веб-сайта https://secondlife.com/support/downloads/
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PauseForUpdate">
-		Для входа необходима версия \[VERSION]. 
+		Для входа необходима версия \[VERSION].
 Нажмите OK для загрузки и установки.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OptionalUpdateReady">
-		Версия \[VERSION] загружена и готова к установке. 
+		Версия \[VERSION] загружена и готова к установке.
 Нажмите OK для установки.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PromptOptionalUpdate">
-		Версия \[VERSION] загружена и готова к установке. 
+		Версия \[VERSION] загружена и готова к установке.
 Продолжить?
 		<usetemplate canceltext="Не сейчас" name="yesnocancelbuttons" notext="Пропустить" yestext="Установить"/>
 	</notification>
@@ -1818,7 +1818,7 @@
 	</notification>
 	<notification name="AgentDisplayNameSetBlocked">
 		Нельзя задать указанное вами имя. Оно содержит запрещенное слово.
- 
+
  Попробуйте указать другое имя.
 	</notification>
 	<notification name="AgentDisplayNameSetInvalidUnicode">
@@ -2311,7 +2311,7 @@
 	</notification>
 	<notification name="ConfirmClearAllToybox">
 		Это действие возвращает все кнопки в инструментарий, а панели инструментов становятся пустыми.
-    
+
 Это действие нельзя отменить.
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
@@ -2325,7 +2325,7 @@
 Все нарушения, о которых поступили такие уведомления, расследуются и устраняются.
 	</notification>
 	<notification name="HelpReportAbuseConfirm">
-		Спасибо за информирование об этой проблеме. 
+		Спасибо за информирование об этой проблеме.
 Мы проверим возможные нарушения согласно вашему отчету и примем
 соответствующие меры.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -3245,7 +3245,7 @@ URL: [MEDIAURL]
 
 После получения разрешения это сообщение больше не будет отображаться для данного приключения, пока оно не будет отозвано из профиля приключения.
 
-Скрипты, связанные с данным приключением, смогут выполнять следующие действия в регионах, где активно приключение: 
+Скрипты, связанные с данным приключением, смогут выполнять следующие действия в регионах, где активно приключение:
 
 [QUESTIONS]Это правильно?
 		<form name="form">
@@ -3257,7 +3257,7 @@ URL: [MEDIAURL]
 	</notification>
 	<notification name="ScriptQuestionCaution">
 		Предупреждение. Объект &quot;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&quot; требует полного доступа к вашему аккаунту для Linden-долларов. Если разрешить такой доступ, объект сможет в любое время снимать средства с вашего аккаунта или полностью опустошать его неоднократно и без предупреждения.
-  
+
 Не разрешайте доступ к своему аккаунту, если только не полностью осознаете, зачем он нужен этому объекту.
 		<form name="form">
 			<button name="Grant" text="Разрешить доступ"/>
@@ -3368,20 +3368,20 @@ URL: [MEDIAURL]
 		Не удалось подключиться к [VOICE_CHANNEL_NAME], повторите попытку позже. Будет установлено подключение к общему голосовому чату.
 	</notification>
 	<notification name="VoiceEffectsExpired">
-		Истек срок действия подписки на один или несколько типов анимационного изменения голоса. 
-[[URL] Щелкните здесь], чтобы обновить подписку. 
+		Истек срок действия подписки на один или несколько типов анимационного изменения голоса.
+[[URL] Щелкните здесь], чтобы обновить подписку.
 
 Если вы - владелец премиум-аккаунта, [[PREMIUM_URL] щелкните здесь], чтобы получить право на анимационное изменение голоса.
 	</notification>
 	<notification name="VoiceEffectsExpiredInUse">
-		Истек срок действия анимационного изменения голоса, действуют настройки вашего обычного голоса. 
-[[URL] Щелкните здесь], чтобы обновить подписку. 
+		Истек срок действия анимационного изменения голоса, действуют настройки вашего обычного голоса.
+[[URL] Щелкните здесь], чтобы обновить подписку.
 
 Если вы - владелец премиум-аккаунта, [[PREMIUM_URL] щелкните здесь], чтобы получить право на анимационное изменение голоса.
 	</notification>
 	<notification name="VoiceEffectsWillExpire">
-		Срок действия одного или нескольких ваших типов анимационного изменения голоса истекает через [INTERVAL] дней или раньше. 
-[[URL] Щелкните здесь], чтобы обновить подписку. 
+		Срок действия одного или нескольких ваших типов анимационного изменения голоса истекает через [INTERVAL] дней или раньше.
+[[URL] Щелкните здесь], чтобы обновить подписку.
 
 Если вы - владелец премиум-аккаунта, [[PREMIUM_URL] щелкните здесь], чтобы получить право на анимационное изменение голоса.
 	</notification>
@@ -3476,7 +3476,7 @@ URL: [MEDIAURL]
 		Выберите жителей, чтобы поделиться с ними.
 	</notification>
 	<notification name="MeshUploadError">
-		Не удалось передать [LABEL]: [MESSAGE] [IDENTIFIER] 
+		Не удалось передать [LABEL]: [MESSAGE] [IDENTIFIER]
 
 Подробности смотрите в файле журнала.
 	</notification>
@@ -3566,7 +3566,7 @@ URL: [MEDIAURL]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect">
-		Нет связи с речевым сервером: порты 
+		Нет связи с речевым сервером: порты
 
 &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
@@ -3954,7 +3954,7 @@ URL: [MEDIAURL]
 	</notification>
 	<notification name="FireStormReqInfo">
 		[NAME] просит, чтобы вы отправили информацию о ваших настройках Firestorm.
-(Это та же информация, которую можно найти, перейдя в Помощь->О Firestorm)    
+(Это та же информация, которую можно найти, перейдя в Помощь->О Firestorm)
 [REASON]
 Хотите отправить данную информацию?
 		<form name="form">
@@ -4161,7 +4161,7 @@ URL: [MEDIAURL]
 		Невозможно дублировать объекты: не удалось найти их участок.
 	</notification>
 	<notification name="CantCreateCuzParcelFull">
-		Нельзя создать объект: 
+		Нельзя создать объект:
 участок уже заполнен.
 	</notification>
 	<notification name="RezAttemptFailed">
