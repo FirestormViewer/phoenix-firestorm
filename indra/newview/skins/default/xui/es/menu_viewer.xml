@@ -108,7 +108,7 @@
 			<menu_item_call label="Mediodía" name="Noon"/>
 			<menu_item_call label="Atardecer" name="Sunset"/>
 			<menu_item_call label="Medianoche" name="Midnight"/>
-			<menu_item_call label="Hora del estado" name="Revert to Region Default"/>
+			<menu_item_call label="Iluminación personal..." name="adjustment_tool"/>
 		</menu>
 		<menu label="Editor de entorno" name="Environment Editor">
 			<menu_item_call label="Configuración de entorno..." name="Environment Settings"/>
@@ -438,6 +438,9 @@
 			<menu_item_check label="Depurar conducto" name="Debug Pipeline"/>
 			<menu_item_check label="Capas alfa automáticas (diferidas)" name="Automatic Alpha Masks (deferred)"/>
 			<menu_item_check label="Capas alfa automáticas (no diferidas)" name="Automatic Alpha Masks (non-deferred)"/>
+			<menu_item_check label="Desactivar ambiente" name="Disable Ambient"/>
+			<menu_item_check label="Desactivar luz del sol" name="Disable Sunlight"/>
+			<menu_item_check label="Desactivar luces locales" name="Disable Local Lights"/>
 			<menu_item_check label="Texturas de animación" name="Animation Textures"/>
 			<menu_item_check label="Desactivar texturas" name="Disable Textures"/>
 			<menu_item_check label="Texturas a resolución completa (peligroso)" name="Full Res Textures"/>
@@ -581,6 +584,7 @@
 		<menu label="Anexar objeto" name="Attach Object"/>
 		<menu label="Despegar objeto" name="Detach Object"/>
 		<menu label="Take Off Clothing" name="Take Off Clothing">
+			<menu_item_call label="Universal" name="Universal"/>
 			<menu_item_call label="Camisa" name="Shirt"/>
 			<menu_item_call label="Pantalón" name="Pants"/>
 			<menu_item_call label="Zapatos" name="Shoes"/>

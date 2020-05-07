@@ -4,7 +4,6 @@
 		<layout_stack name="options_stack" width="280"/>
 		<layout_stack name="wl_options_stack" width="280">
 			<layout_panel name="wl_options_panel">
-				<check_box label="Regions-Windlight-Vorstellungen verwenden" name="UseRegionWindlight"/>
 				<text name="HoverHeightLabel" width="105" tool_tip="Legt die Schwebehöhe des eigenen Avatars fest.">
 					Schwebehöhe:
 				</text>
@@ -32,10 +31,9 @@
 					Tageszyklus:
 				</text>
 				<combo_box left_delta="77" name="DCPresetsCombo"/>
-				<icon name="SkyDayCycle" tool_tip="Tageszeit ändern" width="220"/>
-				<multi_slider name="WLSunPos" width="220"/>
-				<button name="ResetToRegionDefault" tool_tip="Windlight-Voreinstellungen auf Regionsstandard zurücksetzen"/>
-				<button name="button_edit" tool_tip="Schnelleinstellungen konfigurieren"/>
+				<button name="btn_personal_lighting" label="Persönliche Beleuchtung..." width="227"/>
+				<button name="ResetToRegionDefault" tool_tip="Setzt die Umgebungseinstellungen auf die gemeinsame Umgebung zurück." left="234"/>
+				<button name="button_edit" tool_tip="Schnelleinstellungen konfigurieren" left="255"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>

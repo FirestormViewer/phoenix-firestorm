@@ -120,7 +120,7 @@ public:
 	U32 getDepth(void) const { return mDepth; }
 	bool hasStencil() const { return mStencil; }
 
-	void bindTexture(U32 index, S32 channel);
+	void bindTexture(U32 index, S32 channel, LLTexUnit::eTextureFilterOptions filter_options = LLTexUnit::TFO_BILINEAR);
 
 	//flush rendering operations
 	//must be called when rendering is complete
@@ -160,10 +160,6 @@ protected:
 	LLTexUnit::eTextureType mUsage;
 	
 	static LLRenderTarget* sBoundTarget;
-	// <FS:ND> Copy the contents of this FBO into memory 
-public:
-	void copyContents(S32 x, S32 y, S32 w, S32 h, U32 format, U32 type, U8 *buffer);
-	// </FS:ND>
 };
 
 #endif

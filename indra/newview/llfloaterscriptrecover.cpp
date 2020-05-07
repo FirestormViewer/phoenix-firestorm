@@ -225,7 +225,7 @@ bool LLScriptRecoverQueue::recoverNext()
 
 	create_inventory_item(gAgent.getID(), gAgent.getSessionID(), idFNF, LLTransactionID::tnull, 
 	                      strScriptName, strItemDescr, LLAssetType::AT_LSL_TEXT, LLInventoryType::IT_LSL,
-	                      NOT_WEARABLE, PERM_MOVE | PERM_TRANSFER, new LLCreateRecoverScriptCallback(this));
+	                      NO_INV_SUBTYPE, PERM_MOVE | PERM_TRANSFER, new LLCreateRecoverScriptCallback(this));
 	return true;
 }
 

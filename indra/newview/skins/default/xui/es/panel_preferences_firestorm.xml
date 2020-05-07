@@ -85,26 +85,6 @@
 			<button left="277" name="PhoenixBeamPrev_Phoenix"/>
 			<slider name="FSBeamShapeScale" label="Escala:" tool_tip="Cambia la escala de la forma utilizada para el rayo con forma Phoenix" left_delta=""/>
 		</panel>
-		<panel label="Windlight" name="WindlightTab">
-			<check_box label="Cambiar automáticamente el entorno al configurado en la región/parcela." name="UseEnvironmentFromRegionAlways"/>
-			<check_box label="Transición entre configuraciones de cielo" name="FSInterpolateSky" tool_tip="Proporciona un efecto de fundido entre las configuraciones de cielo WL al cambiarlas. El efecto puede reducir los FPS durante unos segundos en equipos lentos. Desactivar estas dos opciones para evitar el efecto y aplicar los cambios instantáneamente." />
-			<check_box label="Transición entre configuraciones de agua" name="FSInterpolateWater" tool_tip="Igual que la opción anterior, pero para el agua." />
-			<text name="FSWLshare_txt">
-				Compartición WL de Firestorm:
-			</text>
-			<check_box label="Usar compartición de Windlight de parcela" name="FSWLParcelEnabled"/>
-			<check_box label="Autoaplicar las configuraciones WL de los terrenos de mis amigos" name="FSWLWhitelistFriends"/>
-			<check_box label="Autoaplicar las configuraciones WL de los terrenos de mis grupos" name="FSWLWhitelistGroups"/>
-			<check_box label="Autoaplicar las configuraciones WL de cualquier parcela" name="FSWLWhitelistAll"/>
-			<text name="wl_crossfade_label" width="230">
-				Duración de la transición (en segundos):
-			</text>
-			<spinner name="FSWindlightInterpolateTime" tool_tip="Duración en segundos de la transición de una configuración WL a otra (Por defecto: 3)"/>
-			<text name="could_texture_text" width="225">
-				Textura de nube (reinicio recomendado):
-			</text>
-			<combo_box name="cloud_combo" tool_tip="Selecciona la textura de nube que quieres usar."/>
-		</panel>
 		<panel label="Constr. 1" name="BuildTab">
 			<text name="text_box_objprams" left="17">
 				Tamaño por defecto
