@@ -833,26 +833,14 @@
             <key>name</key>
             <string>darwin64</string>
           </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>bd0f62a03d846332adf07997e307cde6</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1080_3.3325.1750.gaabe4c4-linux-180871715.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>48d316c0ceb898f7577015df75b6d303</string>
+              <string>9efa40655f23bc9875e96d04a63f37bf</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1320_3.3626.1895.g7001d56-linux64-191221910.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.6.4.202005061828_81.3.1_gb2b49f1_chromium-81.0.4044.113-linux64-201281557.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
