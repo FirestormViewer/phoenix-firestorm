@@ -138,6 +138,10 @@
 &apos;[ERROR_CODE]&apos;
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="MyOutfitsPasteFailed">
+		１つ以上のアイテムが「アウトフィット」として利用できません
+		<usetemplate name="okbutton" yestext="OK" />
+	</notification>
 	<notification name="MerchantPasteFailed">
 		マーケットプレイスのリストへのコピーまたは移動がエラーにより失敗しました:        
 
@@ -266,6 +270,10 @@
 	<notification name="RevokeModifyRightsMultiple">
 		選択した住人から変更権限を取り下げますか？
 		<usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい"/>
+	</notification>
+	<notification name="GroupNameLengthWarning">
+		グループ名の文字数は [MIN_LEN] 以上 [MAX_LEN] 以下でなければなりません。
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="UnableToCreateGroup">
 		グループを作成できません。
@@ -525,6 +533,9 @@ L$ が不足しているのでこのグループに参加することができ�
 	</notification>
 	<notification name="ErrorPhotoCannotAfford">
 		インベントリに写真を保存するには L$[COST] が必要です。L$ を購入するか、代わりに写真をっコンピュータに保存できます。
+	</notification>
+	<notification name="ErrorCannotAffordUpload">
+		このアイテムをアップロードするには L$[COST] 必要です。
 	</notification>
 	<notification name="ErrorTextureCannotAfford">
 		インベントリにテクスチャを保存するには L$[COST] が必要です。L$ を購入するか、代わりに写真をコンピュータに保存できます。
@@ -1333,6 +1344,13 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries を参照してく
 			<button name="Cancel" text="取り消し"/>
 		</form>
 	</notification>
+	<notification label="ジェスチャーの名前を変更する" name="RenameGesture">
+		新しいジェスチャーの名前：
+		<form name="form">
+			<button name="OK" text="OK" />
+			<button name="Cancel" text="取り消し" />
+		</form>
+	</notification>
 	<notification name="RemoveFromFriends">
 		フレンドリストから &lt;nolink&gt;[NAME]&lt;/nolink&gt; を削除しますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
@@ -1533,6 +1551,24 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries を参照してく
 			<button name="Teleport" text="テレポート"/>
 		</form>
 	</notification>
+	<notification name="LoginPacketNeverReceivedNoTP">
+		接続がなかなかできません。 お使いのインターネット接続か、[SECOND_LIFE_GRID] の問題と考えられます。
+
+インターネット接続を確認してから数分後に再接続するか、ヘルプをクリックして [SUPPORT_SITE] をご覧ください。
+		<url name="url">
+			http://secondlife.com/support/
+		</url>
+		<form name="form">
+			<button name="OK" text="OK" />
+			<button name="Help" text="ヘルプ" />
+		</form>
+	</notification>
+
+	<notification name="LoginRemoveMultiGridUserData">
+		削除しようとしているローカル・データは複数のグリッドで共有されています。本当に削除してよろしいですか？
+		<usetemplate name="okcancelbuttons" notext="取り消しl" yestext="確認" />
+	</notification>
+	
 	<notification name="WelcomeChooseSex">
 		まもなくあなたのアバターが表示されます。
 
@@ -1865,11 +1901,13 @@ https://secondlife.com/support/downloads/ からダウンロードしてくだ�
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GroupLimitInfo">
-参加できるグループの上限は、ベーシック・アカウントが [MAX_BASIC] で、[https://secondlife.com/premium/index.php?lang=ja-JP プレミアム]
-アカウントは [MAX_PREMIUM] です。
-アカウントをダウングレードすると、参加しているグループを [MAX_BASIC] 以下に下げないと他のグループには参加できなくなります。
-
-[https://secondlife.com/my/account/membership.php 今すぐアップグレート！]
+ベーシック会員の住人が参加できるグループの上限は最大 [MAX_BASIC] グループです。
+プレミアム会員は [MAX_PREMIUM] まで参加可能です。[次のページを参考にして、必要であればアップグレードして下さい。 https://secondlife.com/premium/index.php?lang=ja-JP]
+		<usetemplate name="okbutton" yestext="閉じる"/>
+	</notification>
+	<notification name="GroupLimitInfoPlus">
+ベーシック会員の住人が参加できるグループの上限は最大 [MAX_BASIC] グループです。
+プレミアム会員は [MAX_PREMIUM] まで、プレミアム・プラス会員の場合 [MAX_PREMIUM_PLUS] まで参加可能です。[次のページを参考にして、必要であればアップグレードして下さい。 https://secondlife.com/premium/index.php?lang=ja-JP]
 		<usetemplate name="okbutton" yestext="閉じる"/>
 	</notification>
 	<notification name="KickUser">
@@ -3694,6 +3732,22 @@ M キーを押して変更します。
 		モデレーターがあなたのボイスをミュートしました。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="FailedToGetBenefits">
+		申し訳ありませんが、このセッションで利益情報を取得することができませんでした。通常の本番環境では起こるはずのない事象ですので、サポートに連絡してみて下さい。このセッションは通常通りに機能していないと思われ、再起動することをお勧めします。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="BulkUploadCostConfirmation">
+		[COUNT] 個のアイテムをアップロードすることにより、合計 L$[COST] のコストがかかります。アップロードを続けますか？
+		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="アップロード"/>
+	</notification>
+	<notification name="BulkUploadNoCompatibleFiles">
+		選択されたファイルの一括アップロードはできません。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="BulkUploadIncompatibleFiles">
+		選択されたファイルの中に、一括アップロードできないものがあります。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="UploadCostConfirmation">
 		このアップロードは L$[PRICE] のコストがかかります。アップロードを続けますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="アップロード"/>
@@ -5134,6 +5188,12 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 	<notification name="BackupPathDoesNotExist">
 		バックアップ・パスが見つかりませんでした。
 	</notification>
+	<notification name="SettingsConfirmBackup">
+本当にこのディレクトリにバックアップを作成してよろしいですか？
+[DIRECTORY]
+この場所にあるバックアップは全て上書きされます！
+		<usetemplate name="okcancelbuttons" notext="取り消しl" yestext="バックアップを保存" />
+	</notification>
 	<notification name="SettingsRestoreNeedsLogout">
 		設定をリストアするにはビューワの再起動が必要です。設定をリストアして今すぐビューワを終了しますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="リストアして終了"/>
@@ -5332,5 +5392,26 @@ Flickrの認証に失敗しました。もう一度試してみて下さい。�
 	<notification name="GlobalOnlineStatusToggle">
 サーバ負荷のため、多数のオンラインステータス切替が有効になるまでにはしばらく時間がかかります。このままお待ち下さい。
 		<usetemplate ignoretext="オンラインステータスの切り替えに時間がかかる時は通知する" name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="RenderVolumeLODFactorWarning">
+		警告：詳細レベル（LOD）要素が高く設定されています。
+
+通常のご利用では、LOD 要素の値はは1〜3で十分です。
+こうした値で形が崩れて見えるオブジェクトを他のものに置き換えることをご検討下さい。
+
+LOD 要素 --> 3: タグに追加します。写真撮影の時のみご利用下さい。
+LOD 要素 --> 4: 特殊な状況にのみご利用下さい。リログすると基の値に戻ります。
+LOD 要素 --> 8: 具体的な効果は得られません。種々のエラーが発生する可能性があります。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="CurrencyURIOverrideReceived">
+この地域は、サードパーティーの通貨購入を指定することを選択しています。
+Firestorm ビューワを利用して行った通貨の購入は、ユーザーであるあなたと当該通貨のプロバイダーまたは販売者との間の取引であることをご認識下さい。
+即ち、Firestorm ビューワ、Phoenix Firestorm ビューワ・プロジェクト、及びそのチームは当該取引によって直接間接に生じる費用や損害に関し、一切責任を追うものではありません。
+もしこの利用規約に同意できない場合は、このビューワを利用していかなる金融取引もすべきではありません。
+		<usetemplate ignoretext="地域が新しい通貨ヘルパーを設定している場合" name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="EnableHiDPI">
+		HiDPI 表示機能を有効にすると、何らかの影響が生じたり、性能が損なわれる可能性があります。
 	</notification>
 </notifications>
