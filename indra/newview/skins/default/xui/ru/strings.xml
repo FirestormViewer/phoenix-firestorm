@@ -2357,7 +2357,7 @@ support@secondlife.com.
 	<string name="SummaryForTheWeek" value="Суммарно за эту неделю, начиная с "/>
 	<string name="NextStipendDay" value="Следующая стипендия "/>
 	<string name="GroupPlanningDate">
-		[day,datetime,utc]/[mthnum,datetime,utc]/[year,datetime,utc]
+		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
 	</string>
 	<string name="GroupIndividualShare" value="                      Группа       Долевое участие"/>
 	<string name="GroupColumn" value="                      Группа"/>
@@ -2647,7 +2647,7 @@ support@secondlife.com.
 		[hour,datetime,slt]:[min,datetime,slt]
 	</string>
 	<string name="PanelDirEventsDateText">
-		[day,datetime,slt]/[mthnum,datetime,slt]
+		[day,datetime,slt].[mthnum,datetime,slt]
 	</string>
 	<string name="PanelContentsTooltip">
 		Содержимое объекта
@@ -2800,7 +2800,7 @@ support@secondlife.com.
 		Дебеты
 	</string>
 	<string name="GroupMoneyDate">
-		[weekday,datetime,utc] [day,datetime,utc] [mth,datetime,utc], [year,datetime,utc]
+		[weekday,datetime,utc], [day,datetime,utc] [mth,datetime,utc] [year,datetime,utc]
 	</string>
 	<string name="AcquiredItems">
 		Приобретенные товары
@@ -5164,7 +5164,7 @@ support@secondlife.com.
 		танец8
 	</string>
 	<string name="AvatarBirthDateFormat">
-		[day,datetime,slt]/[mthnum,datetime,slt]/[year,datetime,slt]
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
 	</string>
 	<string name="DefaultMimeType">
 		нет/нет
@@ -6821,19 +6821,19 @@ ID объекта: [INSPECTING_KEY]
 		(в сети)
 	</string>
 	<string name="GroupNoticesPanelDateString">
-		[day,datetime,local]/[mthnum,datetime,local]/[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
 	</string>
 	<string name="GroupNoticesToastDateString">
 		[wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
 	</string>
 	<string name="NotificationItemDateStringLocal">
-		[day,datetime,local]/[mthnum,datetime,local]/[year,datetime,local] [hour,datetime,local]:[min,datetime,local]
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]
 	</string>
 	<string name="NotificationItemDateStringUTC">
-		[day,datetime,utc]/[mth,datetime,utc]/[year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
+		[day,datetime,utc] [mth,datetime,utc] [year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
 	</string>
 	<string name="NotificationItemDateStringSLT">
-		[day,datetime,slt]/[mthnum,datetime,slt]/[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt] [timezone,datetime,slt]
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt] [timezone,datetime,slt]
 	</string>
 	<string name="Pie_av_render_normally">
 		Обычно
