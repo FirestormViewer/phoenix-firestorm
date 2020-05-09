@@ -6,6 +6,9 @@
 	<floater.string name="Copy">
 		Копировать в инвентарь
 	</floater.string>
+	<floater.string name="DateTime">
+		[weekday,datetime,slt], [day,datetime,slt] [month,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+	</floater.string>
 	<floater.string name="UploaderDateTime">
 		Загрузил: [UPLOADER] в [DATE_TIME]
 	</floater.string>
