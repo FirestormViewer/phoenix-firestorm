@@ -6,7 +6,7 @@
 		<!--View-->
 		
 		<panel label="表示" name="tab-view">
-			<slider label="視界角" name="camera_fov"/>
+			<slider label="視界角" name="camera_fov" tool_tip="RLで言う「ズーム」をするのがこの機能です。これを使うとビューワの画角（FOV）が変わります。「Ctrl + 0」または「Ctrl + 8」を押しても同様の動きをします。※注意！　フライカム（3D Space Navigator）を有効にしているとこの機能は使えません。" />
 			<slider label="距離" name="camera_offset_scale"/>
 			<slider label="ズーム移動時間" name="camera_transition_time" />
 			<slider label="スムージング" name="camera_position_smoothing" />
@@ -130,7 +130,7 @@
             <combo_box.item label="世界地図を開く" name="1"/>
             <combo_box.item label="その場所にテレポート" name="2"/>
 			</combo_box>
-			<slider label="選択範囲:" name="FSMinimapPickScale" tool_tip="ミニマップ上で選択する範囲の半径を設定します" />
+			<slider label="選択範囲：" name="FSMinimapPickScale" tool_tip="ミニマップ上で選択する範囲の半径を設定します。選択する範囲の不透明度と色は、「選択する半径」の色と「不透明度」の設定で調整できます。" />
 			
 			<text name="world_map_options_label">
 				世界地図のオプション:

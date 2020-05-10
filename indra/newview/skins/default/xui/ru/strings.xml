@@ -20,7 +20,7 @@
 		Портал технической поддержки Second Life
 	</string>
 	<string name="StartupDetectingHardware">
-		Обнаружение аппаратных средств...
+		Обнаружение оборудования...
 	</string>
 	<string name="StartupLoading">
 		Загрузка [APP_NAME]...
@@ -44,16 +44,21 @@
 		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]bit)
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
-	<string name="BuildConfig">
-		Конфигурация построения [BUILD_CONFIG]
-	</string>
 	<string name="AboutCompiler">
 		Использован компилятор [COMPILER], версия [COMPILER_VERSION]
+	</string>
+	<string name="BuildConfig">
+		Конфигурация сборки [BUILD_CONFIG]
 	</string>
 	<string name="AboutPosition">
 		Вы в точке [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] в регионе [REGION], расположенном на &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt;
 SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 (глобальные координаты [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
+[SERVER_VERSION]
+[SERVER_RELEASE_NOTES_URL]
+	</string>
+	<string name="AboutPositionRLVShowLoc">
+Вы в регионе [REGION]
 [SERVER_VERSION]
 [SERVER_RELEASE_NOTES_URL]
 	</string>
@@ -70,6 +75,21 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	<string name="AboutOGL">
 		Версия OpenGL: [OPENGL_VERSION]
 	</string>
+	<string name="AboutSettings">
+		Режим настроек: [MODE]
+Графическое оформление: [SKIN] ([THEME])
+Размер окна: [WINDOW_WIDTH]x[WINDOW_HEIGHT] px
+Используемый шрифт: [FONT] ([FONT_SCREEN_DPI])
+Размер шрифта: [FONT_SIZE] pt
+Масштаб UI: [UI_SCALE_FACTOR]
+Дистанция прорисовки: [DRAW_DISTANCE]
+Пропускная способность: [BANDWIDTH]
+Уровень детализации: [LOD]
+Качество графики: [RENDERQUALITY]
+Модель улучшенного освещения: [ALMSTATUS]
+Графическая память: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+Время создания VFS (кэш) (UTC): [VFS_DATE]
+	</string>
 	<string name="AboutOSXHiDPI">
 		Режим отображения HiDPI: [HIDPI]
 	</string>
@@ -82,32 +102,17 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 Версия LibVLC: [LIBVLC_VERSION]
 Версия речевого сервера: [VOICE_VERSION]
 	</string>
-	<string name="AboutSettings">
-		Режим настроек: [MODE]
-Графическое оформление: [SKIN] ([THEME])
-Размер окна: [WINDOW_WIDTH]x[WINDOW_HEIGHT] px
-Используемый шрифт: [FONT] ([FONT_SCREEN_DPI])
-Размер шрифта: [FONT_SIZE] pt
-Масштаб интерфейса: [UI_SCALE_FACTOR]
-Дистанция прорисовки: [DRAW_DISTANCE]
-Пропускная способность: [BANDWIDTH]
-Уровень детализации: [LOD]
-Качество графики: [RENDERQUALITY]
-Модель улучшенного освещения: [ALMSTATUS]
-Графическая память: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-Время создания VFS (кэш) (UTC): [VFS_DATE]
-	</string>
 	<string name="AboutTraffic">
 		Потеряно пакетов: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
 	</string>
 	<string name="AboutTime">
-		[month, datetime, slt] [day, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt]
+		[day, datetime, slt] [month, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt] SLT
 	</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">
 		Ошибка при получении URL-адреса заметок о выпуске сервера.
 	</string>
 	<string name="BuildConfiguration">
-		Конфигурация построения
+		Конфигурация сборки
 	</string>
 	<string name="ProgressRestoring">
 		Восстановление...
@@ -211,6 +216,12 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	<string name="create_account_url">
 		http://join.secondlife.com/?sourceid=[sourceid]
 	</string>
+	<string name="AgniGridLabel">
+		Second Life Главная Сетка (Agni)
+	</string>
+	<string name="AditiGridLabel">
+		Second Life Бета-тест Сетка (Aditi)
+	</string>
 	<string name="ViewerDownloadURL">
 		http://www.firestormviewer.org/downloads/
 	</string>
@@ -271,7 +282,6 @@ support@secondlife.com.
 	<string name="LoginFailedAccountDisabled">
 		В данное время нам не удается выполнить ваш запрос.
 Обратитесь за помощью в службу поддержки Second Life по адресу http://secondlife.com/support.
-Если вам не удается изменить свой пароль, позвоните по телефону (866) 476-9763.
 	</string>
 	<string name="LoginFailedTransformError">
 		При входе обнаружена несогласованность данных.
@@ -370,21 +380,7 @@ support@secondlife.com.
 	<string name="SocialFacebookConnecting">
 		Соединение с Facebook...
 	</string>
-	<string name="SocialFacebookPosting">
-		Публикация...
-	</string>
-	<string name="SocialFacebookDisconnecting">
-		Отключение от Facebook...
-	</string>
-	<string name="SocialFacebookErrorConnecting">
-		Невозможно соедениться с Facebook
-	</string>
-	<string name="SocialFacebookErrorPosting">
-		Невозможно опубликовать в Facebook
-	</string>
-	<string name="SocialFacebookErrorDisconnecting">
-		Невозможно отключиться от Facebook
-	</string>
+
 	<string name="SocialFlickrConnecting">
 		Соединение с Flickr...
 	</string>
@@ -403,24 +399,7 @@ support@secondlife.com.
 	<string name="SocialFlickrErrorDisconnecting">
 		Невозможно отключиться от Flickr
 	</string>
-	<string name="SocialTwitterConnecting">
-		Соединение с Twitter...
-	</string>
-	<string name="SocialTwitterPosting">
-		Публикация...
-	</string>
-	<string name="SocialTwitterDisconnecting">
-		Отключение от Twitter...
-	</string>
-	<string name="SocialTwitterErrorConnecting">
-		Невозможно соедениться с Twitter
-	</string>
-	<string name="SocialTwitterErrorPosting">
-		Невозможно опубликовать в Twitter
-	</string>
-	<string name="SocialTwitterErrorDisconnecting">
-		Невозможно отключиться от Twitter
-	</string>
+
 	<string name="BlackAndWhite">
 		Черное и Белое
 	</string>
@@ -557,9 +536,12 @@ support@secondlife.com.
 		Вы не можете надеть папку, содержащую более [AMOUNT] элементов.  Вы можете изменить это ограничение в Расширенное &gt; Показать настройки отладки &gt; WearFolderLimit.
 	</string>
 	<string name="TooltipTooManyWearables">
-		Нельзя носить папку, содержащую более [AMOUNT] вещей.  Это ограничение можно изменить в меню «Расширенное &gt; Показать настройки отладки &gt; WearFolderLimit.
+		Нельзя надеть папку, содержащую более [AMOUNT] вещей.  Это ограничение можно изменить в меню Расширенное &gt; Показать настройки отладки &gt; WearFolderLimit.
 	</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]: "/>
+	<string name="TooltipSLIcon">
+		Это ссылка на страницу официального домена SecondLife.com или LindenLab.com.
+	</string>
 	<string name="TooltipFlagScript">
 		Скрипт
 	</string>
@@ -585,13 +567,13 @@ support@secondlife.com.
 		Примов: [COUNT]
 	</string>
 	<string name="TooltipPrimEquivalent">
-		, Влияние земли: [PEWEIGHT]
+		, Влияние на землю: [PEWEIGHT]
 	</string>
 	<string name="TooltipPrimEquivalentЗагрузка">
-		, Загрузка влияния земли...
+		, Загрузка влияния на землю...
 	</string>
 	<string name="TooltipPrimEquivalentUnavailable">
-		, влияние земли недоступно
+		, влияние на землю недоступно
 	</string>
 	<string name="TooltipDistance">
 		Расстояние: [DISTANCE] м
@@ -600,55 +582,52 @@ support@secondlife.com.
 		Позиция: [POSITION]
 	</string>
 	<string name="TooltipOutboxDragToWorld">
-		Вы не можете разворачивать объекты в исходящем продавца
+		Вы не можете выкладывать объекты из папки списков Торгового центра
+	</string>
+	<string name="TooltipOutboxWorn">
+		Вы не можете поместить надетые элементы в папку списков Торгового центра
+	</string>
+	<string name="TooltipOutboxFolderLevels">
+		Глубина вложенных папок превышает [AMOUNT]. Уменьшите глубину папок внутри папок; при необходимости поместите предметы в коробку.
+	</string>
+	<string name="TooltipOutboxTooManyFolders">
+		Количество подпапок превышает [СУММА]. Уменьшите количество папок в вашем списке; при необходимости поместите предметы в коробку.
+	</string>
+	<string name="TooltipOutboxTooManyObjects">
+		Количество предметов превышает [СУММА]. Чтобы продать больше, чем [СУММА] предметов в одном списке, вы должны поместите в коробку некоторые из них.
+	</string>
+	<string name="TooltipOutboxTooManyStockItems">
+		Количество на складе превышает [AMOUNT].
+	</string>
+	<string name="TooltipOutboxCannotDropOnRoot">
+		Вы можете перетаскивать предметы или папки только на вкладку ВСЕ или НЕ СВЯЗАННЫЕ. Выберите одну из этих вкладок и переместите предмет(ы) или папки снова.
 	</string>
 	<string name="TooltipOutboxNoTransfer">
 		Один или более из этих объектов не могут быть проданы или переданы.
 	</string>
 	<string name="TooltipOutboxNotInInventory">
-		Исходящие продавца может принимать только элементы непосредственно из вашего инвентаря
-	</string>
-	<string name="TooltipOutboxWorn">
-		Вы не можете поместить элементы, которые вы носите в свой Исходящие продавца
-	</string>
-	<string name="TooltipOutboxCallingCard">
-		Вы не можете поместить визитные карточеки в свой Исходящие продавца
-	</string>
-	<string name="TooltipOutboxFolderLevels">
-		Глубина вложения папок превышает 3
-	</string>
-	<string name="TooltipOutboxTooManyFolders">
-		В папке верхнего уровня более 20 подпапок
-	</string>
-	<string name="TooltipOutboxTooManyObjects">
-		В папке верхнего уровня более 200 предметов
-	</string>
-	<string name="TooltipOutboxTooManyStockItems">
-		Количество предметов не может превышать [AMOUNT].
-	</string>
-	<string name="TooltipOutboxCannotDropOnRoot">
-		Можно перетаскивать предметы или папки только на вкладку «ВСЕ». Выберите эту вкладку и переместите предметы или папки снова.
-	</string>
-	<string name="TooltipOutboxNoTransfer">
-		Часть этих объектов нельзя продать или передать
-	</string>
-	<string name="TooltipOutboxNotInInventory">
-		В торговый центр можно поместить только предметы из своего инвентаря
+		Вы можете размещать на продажу только предметы из своего инвентаря
 	</string>
 	<string name="TooltipOutboxLinked">
-		Привязанные предметы или папки нельзя поместить в торговый центр
+		Имеющие ссылки предметы или папки нельзя размещать на продажу
 	</string>
 	<string name="TooltipOutboxCallingCard">
-		Нельзя поместить визитки в торговый центр
+		Вы не можете размещать на продажу визитные карточки
 	</string>
 	<string name="TooltipOutboxDragActive">
 		Опубликованный список нельзя переместить
 	</string>
 	<string name="TooltipOutboxCannotMoveRoot">
-		Корневую папку списков товаров торгового центра нельзя перемещать
+		Нельзя перемещать корневую папку списков товаров торгового центра
 	</string>
 	<string name="TooltipOutboxMixedStock">
-		У всех предметов в папке запасов должен быть один и тот же тип и разрешение
+		Все предметы в папке магазина должны иметь одинаковые тип и разрешение
+	</string>
+	<string name="TooltipOutfitNotInInventory">
+		Вы можете помещать в "Комплекты" предметы или комплекты только из своего личного инвентаря.
+	</string>
+	<string name="TooltipCantCreateOutfit">
+		Один или несколько предметов нельзя использовать внутри "Комплектов"
 	</string>
 	<string name="TooltipDragOntoOwnChild">
 		Вы не можете переместить папку в ее подпапку
@@ -711,6 +690,9 @@ support@secondlife.com.
 		Нажмите, чтобы выполнить команду secondlife://
 	</string>
 	<string name="CurrentURL" value=" CurrentURL: [CurrentURL]"/>
+	<string name="TooltipEmail">
+		Нажмите, чтобы написать письмо
+	</string>
 	<string name="SLurlLabelTeleport">
 		Телепортироваться в
 	</string>
@@ -788,6 +770,9 @@ support@secondlife.com.
 	</string>
 	<string name="LoadingData">
 		Загрузка...
+	</string>
+	<string name="LockedFolder">
+		заблокировано
 	</string>
 	<string name="ProtectedFolder">
 		защищено
@@ -932,6 +917,12 @@ support@secondlife.com.
 	</string>
 	<string name="AvatarMuted">
 		Заблокирован
+	</string>
+	<string name="AvatarAutoResponse">
+		Авто-ответ
+	</string>
+	<string name="AvatarTyping">
+		Печатает
 	</string>
 	<string name="anim_express_afraid">
 		Страх
@@ -1180,7 +1171,7 @@ support@secondlife.com.
 		Преждевременный конец файла
 	</string>
 	<string name="ST_NO_JOINT">
-		Не удается найти объект ROOT или JOINT.
+		Не удается найти ROOT или JOINT.
 	</string>
 	<string name="no_name_object">
 		(без названия)
@@ -1257,11 +1248,14 @@ support@secondlife.com.
 	<string name="TeleportYourAgent">
 		Телепортировать вас
 	</string>
-	<string name="ForceSitAvatar">
-		Заставьте аватар сесть
+	<string name="ManageEstateSilently">
+		Тихо управлять вашими поместьями
 	</string>
 	<string name="ChangeYourDefaultAnimations">
 		Изменить ваши стандартные анимации
+	</string>
+	<string name="ForceSitAvatar">
+		Заставьте аватар сесть
 	</string>
 	<string name="SnapshotSavedToDisk">
 		Снимок сохранен: [FILENAME]
@@ -1380,6 +1374,12 @@ support@secondlife.com.
 	</string>
 	<string name="csv_files">
 		Значения разделяются запятыми
+	</string>
+	<string name="recompile_script_verb">
+		Перекомпиляция
+	</string>
+	<string name="LSLTipSleepTime">
+		Пауза скрипта на [SLEEP_TIME] секунд.
 	</string>
 	<string name="shape">
 		Фигура
@@ -1519,6 +1519,9 @@ support@secondlife.com.
 	<string name="create_new_tattoo">
 		Создать новую татуировку
 	</string>
+	<string name="create_new_universal">
+		Создать новый универсальный
+	</string>
 	<string name="create_new_physics">
 		Создать новую физику
 	</string>
@@ -1526,7 +1529,7 @@ support@secondlife.com.
 		недействительный
 	</string>
 	<string name="NewWearable">
-		Создать [WEARABLE_ITEM]
+		Новый [WEARABLE_ITEM]
 	</string>
 	<string name="next">
 		Далее
@@ -1604,7 +1607,7 @@ support@secondlife.com.
 		Не нашли того, что вам нужно? Попробуйте [secondlife:///app/search/all/[SEARCH_TERM] Поиск].
 	</string>
 	<string name="InventoryNoMatchingRecentItems">
-		Не нашли то, что искали? Попробуйте на [secondlife:///app/inventory/filters Show filters].
+		Не нашли то, что искали? [secondlife:///app/inventory/filters Показать фильтры].
 	</string>
 	<string name="PlacesNoMatchingItems">
 		Не нашли того, что вам нужно? Попробуйте [secondlife:///app/search/places/[SEARCH_TERM] Поиск].
@@ -1619,7 +1622,7 @@ support@secondlife.com.
 		Вы не имеете копию этой текстуры в инвентаре
 	</string>
 	<string name="InventoryInboxNoItems">
-		Здесь будут показаны ваши покупки из Торговой площадки. Их можно будет перетащить в ваш инвентарь для использования.
+		Здесь будут показаны ваши покупки из Торгового центра. Их можно будет перетащить в ваш инвентарь для использования.
 	</string>
 	<string name="MarketplaceURL">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
@@ -1637,21 +1640,21 @@ support@secondlife.com.
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
 	</string>
 	<string name="InventoryPlayAnimationTooltip">
-		Откройте окно с настройками игры.
+		Откройте окно с настройками Воспроизведения.
 	</string>
 	<string name="InventoryPlayGestureTooltip">
 		Выполните выбранный жест в игровом мире.
 	</string>
 	<string name="InventoryPlaySoundTooltip">
-		Откройте окно с настройками игры.
+		Откройте окно с настройками Воспроизведения.
 	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
-		Любой желающий может продавать товары на Торговому центру.
+		Любой желающий может продавать товары в Торговом центре.
 	</string>
 	<string name="InventoryOutboxNotMerchantTooltip">
 	</string>
 	<string name="InventoryOutboxNotMerchant">
-		Если вы хотите стать торговцем, вы должны будете создать магазин на [[MARKETPLACE_CREATE_STORE_URL] Торговом центре].
+		Если вы хотите стать продавцом, вам нужно будет создать магазин в [[MARKETPLACE_CREATE_STORE_URL] Торговом центре].
 	</string>
 	<string name="InventoryOutboxNoItemsTitle">
 		Ваша папка 'Исходящие' пуста.
@@ -1659,7 +1662,7 @@ support@secondlife.com.
 	<string name="InventoryOutboxNoItemsTooltip">
 	</string>
 	<string name="InventoryOutboxNoItems">
-		Перетащите папки в эту область и щелкните 'Отправить в Торговую площадку', чтобы выставить их на продажу в [[MARKETPLACE_DASHBOARD_URL] Торговому центру].
+		Перетащите папки в эту область и щелкните 'Отправить в Торговую площадку', чтобы выставить их на продажу в [[MARKETPLACE_DASHBOARD_URL] Торговом центре].
 	</string>
 	<string name="InventoryOutboxInitializingTitle">
 		Инициализация Торговой площадки
@@ -1678,7 +1681,8 @@ support@secondlife.com.
 		[[MARKETPLACE_CREATE_STORE_URL] Магазин Торговой площадки] вернул ошибки.
 	</string>
 	<string name="InventoryMarketplaceError">
-		Это бета-версия функции. Если вы хотите участвовать в ее тестировании, заполните эту [http://goo.gl/forms/FCQ7UXkakz форму Google].
+		Произошла ошибка при открытии списков Торговой площадки.
+Если вы продолжаете получать это сообщение, обратитесь за помощью в службу поддержки Second Life по адресу http://support.secondlife.com.
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Папка списков товаров торгового центра пуста.
@@ -1687,7 +1691,7 @@ support@secondlife.com.
 		Перетащите папки в эту область, чтобы выставить их на продажу в [[MARKETPLACE_DASHBOARD_URL] Торговом центре].
 	</string>
 	<string name="InventoryItemsCount">
-		( [ITEMS]/[CATEGORIES] предметов(а))
+		([ITEMS]/[CATEGORIES] предметов)
 	</string>
 	<string name="Marketplace Validation Warning Stock">
 		В папке версии должна быть папка запасов
@@ -1740,29 +1744,14 @@ support@secondlife.com.
 	<string name="Marketplace Error Prefix">
 		Ошибка:
 	</string>
-	<string name="Marketplace Error None">
-		Ошибок нет
-	</string>
 	<string name="Marketplace Error Not Merchant">
 		Ошибка: Перед отправкой товаров для Торговой площадки вам нужно будет настроить себя, как продавец (бесплатно).
 	</string>
 	<string name="Marketplace Error Not Accepted">
 		Невозможно переместить предмет в эту папку.
 	</string>
-	<string name="Marketplace Error Empty Folder">
-		Ошибка: Эта папка не имеет содержимого.
-	</string>
-	<string name="Marketplace Error Unassociated Products">
-		Ошибка: Этот элемент не удалось загрузить, потому что ваш торговый счет имеет слишком много элементов несвязанные с продуктами. Чтобы исправить эту ошибку, войдите на сайт Торговой площадки и снизьте количество несвязанных элементов.
-	</string>
-	<string name="Marketplace Error Object Limit">
-		Ошибка: Этот элемент содержит слишком много объектов. Исправить эту ошибку можно путем размещения объектов в коробки, чтобы уменьшить их общее количество до менее чем 200.
-	</string>
-	<string name="Marketplace Error Folder Depth">
-		Ошибка: Этот элемент содержит слишком много уровней вложенных папок. Измените структуру так, чтобы уровней вложенных папок было не более 3.
-	</string>
 	<string name="Marketplace Error Unsellable Item">
-		Ошибка: Этот элемент не может быть продано на Торговому центру.
+		Ошибка: Этот предмет не может быть продан в Торговом центре.
 	</string>
 	<string name="MarketplaceNoID">
 		нет ID торг. центра
@@ -1785,8 +1774,8 @@ support@secondlife.com.
 	<string name="MarketplaceUpdating">
 		обновление...
 	</string>
-	<string name="Marketplace Error Internal Import">
-		Ошибка: Возникла проблема с этим элементом. Повторите попытку позже.
+	<string name="UploadFeeInfo">
+		Плата зависит от вашего уровня подписки. С подписок более высокого уровня взимаются более низкие сборы. [https://secondlife.com/my/account/membership.php? Узнать больше]
 	</string>
 	<string name="Open landmarks">
 		Открыть закладки
@@ -1838,6 +1827,7 @@ support@secondlife.com.
 	<string name="Snapshots" value=" Снимки,"/>
 	<string name="No Filters" value="Нет "/>
 	<string name="Since Logoff" value=" - с выхода"/>
+	<string name="Transfer Only" value=" - только передающиеся"/>
 	<string name="InvFolder My Inventory">
 		Инвентарь
 	</string>
@@ -1944,10 +1934,10 @@ support@secondlife.com.
 		#RLV
 	</string>
 	<string name="no_attachments">
-		Нет надетых прикреплений
+		Нет надетых вложений
 	</string>
 	<string name="Attachments remain">
-		Прикреплений ([COUNT] осталось)
+		Вложения ([COUNT] осталось)
 	</string>
 	<string name="Buy">
 		Купить
@@ -2159,11 +2149,26 @@ support@secondlife.com.
 	<string name="TotalDaysOld">
 		; [AGEDAYSTOTAL]
 	</string>
+	<string name="av_render_everyone_now">
+		Теперь все могут видеть вас.
+	</string>
+	<string name="av_render_not_everyone">
+		Вы можете не отображаться у всех вокруг вас.
+	</string>
+	<string name="av_render_over_half">
+		Вы можете не отображаться у большей половины вокруг вас.
+	</string>
+	<string name="av_render_most_of">
+		Вы можете не отображаться у большинства вокруг вас.
+	</string>
+	<string name="av_render_anyone">
+		Вы можете не отображаться у любого вокруг вас.
+	</string>
 	<string name="hud_description_total">
 		Ваши данные в игре
 	</string>
 	<string name="hud_name_with_joint">
-		[OBJ_NAME] (носится на [JNT_NAME])
+		[OBJ_NAME] (надет на [JNT_NAME])
 	</string>
 	<string name="hud_render_memory_warning">
 		[HUD_DETAILS] использует большой объем памяти текстур
@@ -2297,32 +2302,35 @@ support@secondlife.com.
 	<string name="CompileQueueUnknownFailure">
 		Неизвестная ошибка при скачивании
 	</string>
+	<string name="CompileNoExperiencePerm">
+		Пропуск скрипта [SCRIPT] с приключением [EXPERIENCE].
+	</string>
 	<string name="CompileQueueTitle">
-		Процесс перекомпиляции
+		Прогресс перекомпиляции
 	</string>
 	<string name="CompileQueueStart">
 		перекомпиляция
 	</string>
 	<string name="ResetQueueTitle">
-		Сброс прогресса
+		Прогресс Сброса
 	</string>
 	<string name="ResetQueueStart">
 		сброс
 	</string>
 	<string name="RunQueueTitle">
-		Запустить прогресс
+		Прогресс Запуска
 	</string>
 	<string name="RunQueueStart">
 		запустить
 	</string>
 	<string name="NotRunQueueTitle">
-		Не запускаемый прогресс
+		Прогресс Остановки
 	</string>
 	<string name="NotRunQueueStart">
 		не запускаемый
 	</string>
 	<string name="DeleteQueueTitle">
-		Удалить прогресс
+		Прогресс удаления
 	</string>
 	<string name="DeleteQueueStart">
 		Удаление
@@ -2339,23 +2347,20 @@ support@secondlife.com.
 	<string name="SaveComplete">
 		Сохранено.
 	</string>
-	<string name="ObjectOutOfRange">
-		Скрипт (объект вне диапазона)
-	</string>
 	<string name="UploadFailed">
 		Ошибка загрузки файла: [REASON]
+	</string>
+	<string name="ObjectOutOfRange">
+		Скрипт (объект вне досягаемости)
 	</string>
 	<string name="ScriptWasDeleted">
 		Скрипт (удален из инвентаря)
 	</string>
 	<string name="GodToolsObjectOwnedBy">
-		Объект [OBJECT] владельца [OWNER]
+		Объект [OBJECT] принадлежит [OWNER]
 	</string>
 	<string name="GroupsNone">
 		нет
-	</string>
-	<string name="CompileNoExperiencePerm">
-		Пропуск скрипта [SCRIPT] с воздействием [EXPERIENCE].
 	</string>
 	<string name="Group" value=" (группа)"/>
 	<string name="Unknown">
@@ -2364,7 +2369,7 @@ support@secondlife.com.
 	<string name="SummaryForTheWeek" value="Суммарно за эту неделю, начиная с "/>
 	<string name="NextStipendDay" value="Следующая стипендия "/>
 	<string name="GroupPlanningDate">
-		[mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc]
+		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
 	</string>
 	<string name="GroupIndividualShare" value="                      Группа       Долевое участие"/>
 	<string name="GroupColumn" value="                      Группа"/>
@@ -2382,6 +2387,9 @@ support@secondlife.com.
 	</string>
 	<string name="NoGroupDataFound">
 		Данные для группы не найдены
+	</string>
+	<string name="AlreadyInGroup">
+		Вы уже в этой группе
 	</string>
 	<string name="IMParentEstate">
 		родительский остров
@@ -2435,10 +2443,10 @@ support@secondlife.com.
 		это землевладение
 	</string>
 	<string name="AndNMore">
-		и \[EXTRA_COUNT] более
+		и [EXTRA_COUNT] более
 	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
-		Память на участке для скриптов
+		Память скриптов на участке
 	</string>
 	<string name="ScriptLimitsParcelsOwned">
 		Участков в списке: [PARCELS]
@@ -2648,10 +2656,10 @@ support@secondlife.com.
 		[COUNT] найдено
 	</string>
 	<string name="PanelDirTimeStr">
-		[hour12,datetime,slt]:[min,datetime,slt] [ampm,datetime,slt]
+		[hour,datetime,slt]:[min,datetime,slt]
 	</string>
 	<string name="PanelDirEventsDateText">
-		[mthnum,datetime,slt]/[day,datetime,slt]
+		[day,datetime,slt].[mthnum,datetime,slt]
 	</string>
 	<string name="PanelContentsTooltip">
 		Содержимое объекта
@@ -2660,22 +2668,25 @@ support@secondlife.com.
 		Новый скрипт
 	</string>
 	<string name="DoNotDisturbModeResponseDefault">
-		У этого жителя включен режим 'Недоступен'. Он увидит ваше сообщение позже
+		Этот житель включил режим 'Недоступен'. Он увидит ваше сообщение позже
 	</string>
 	<string name="AutoResponseModeDefault">
-		Пользователь, которому вы пишете включил решим 'Автоответчик'. Это означает, что они просит не беспокоить. Ваши сообщение будут по-прежнему проявляется в его панели Личных сообщений (ЛС) панели для последующего просмотра.
+		Этот житель включил режим 'Автоответчик'. Он просит не беспокоить. Ваши сообщение будут по-прежнему проявляется в его панели ЛС.
 	</string>
 	<string name="AutoResponseModeNonFriendsDefault">
-		Пользователь, которому вы пишите включил решим 'Автоответчик'. Это означает, что они просит не беспокоить. Ваши сообщение будут по-прежнему проявляется в его панели Личных сообщений (ЛС) панели для последующего просмотра.
+		Этот житель включил режим 'Автоответчик'. Он просит не беспокоить. Ваши сообщение будут по-прежнему проявляется в его панели ЛС.
 	</string>
 	<string name="RejectTeleportOffersResponseDefault">
-		Пользователь, которому вы пишите включил решим 'Отмена всех предложений телепортации и запросов'. Это означает, что они просит не беспокоить его с предложениями телепортации и запросами. Вы можете отправить ему Личное сообщение.
+		Этот житель включил режим 'Отклонять все предложения и запросы телепортации'. Вы можете отправить ему Личное сообщение.
+	</string>
+	<string name="RejectFriendshipRequestsResponseDefault">
+		Этот житель включил режим 'Отклонять все запросы дружбы'. Вы можете отправить ему Личное сообщение.
 	</string>
 	<string name="MutedAvatarsResponseDefault">
-		Пользователь, которому вы пишите заблокировал вас для отправки ему каких-либо сообщений.
+		Этот житель заблокировал вас для отправки ему каких-либо сообщений.
 	</string>
 	<string name="AwayAvatarResponseDefault">
-		Пользователь, которому вы пишите временно отошел. Ваши сообщение будут по-прежнему проявляется в его панели Личных сообщений (ЛС) панели для последующего просмотра.
+		Этот житель временно отошел. Ваши сообщение будут по-прежнему проявляется в его панели Личных сообщений для последующего просмотра.
 	</string>
 	<string name="MuteByName">
 		(По имени)
@@ -2810,7 +2821,7 @@ support@secondlife.com.
 		Дебеты
 	</string>
 	<string name="GroupMoneyDate">
-		[weekday,datetime,utc] [mth,datetime,utc] [day,datetime,utc], [year,datetime,utc]
+		[weekday,datetime,utc], [day,datetime,utc] [mth,datetime,utc] [year,datetime,utc]
 	</string>
 	<string name="AcquiredItems">
 		Приобретенные товары
@@ -3024,19 +3035,19 @@ support@secondlife.com.
 		Несколько медиа
 	</string>
 	<string name="Play Media">
-		Воспроизведение / Пауза медиа
+		Воспроизведение/Пауза медиа
 	</string>
 	<string name="StreamtitleNowPlaying">
 		Сейчас играет:
 	</string>
 	<string name="IntelDriverPage">
-		http://www.intel.com/p/en_US/support/detect/graphics
+		http://www.intel.com/p/ru_RU/support/detect/graphics
 	</string>
 	<string name="NvidiaDriverPage">
-		http://www.nvidia.com/Download/index.aspx?lang=ru-ru
+		http://www.nvidia.com/Download/index.aspx?lang=ru
 	</string>
 	<string name="AMDDriverPage">
-		http://support.amd.com/us/Pages/AMDSupportHub.aspx
+		http://support.amd.com/ru/Pages/AMDSupportHub.aspx
 	</string>
 	<string name="MBCmdLineError">
 		При анализе командной строки была обнаружена ошибка.
@@ -3060,7 +3071,7 @@ support@secondlife.com.
 		Ошибка приложения - не паникуйте
 	</string>
 	<string name="MBApplicationErrorDetails">
-		Извините, но [APP_NAME] вышело из строя и должен быть закрыт. Если вы наблюдаете эту проблему неоднократно, пожалуйста, свяжитесь с нашей службой поддержки и отправьте следующее сообщение:
+		Извините, но [APP_NAME] вышел из строя и должен быть закрыт. Если вы наблюдаете эту проблему неоднократно, пожалуйста, свяжитесь с нашей службой поддержки и отправьте следующее сообщение:
 
 [ERROR_DETAILS]
 	</string>
@@ -3118,7 +3129,7 @@ support@secondlife.com.
 		Не удается получить описание формата пикселей
 	</string>
 	<string name="MBTrueColorWindow">
-		[APP_NAME] требуется True Color (32-бит) для запуска.
+		Приложению [APP_NAME] требуется True Color (32-бит) для запуска.
 Пожалуйста, зайдите в настройки монитора компьютера и установить цветной режим на 32-бит.
 	</string>
 	<string name="MBAlpha">
@@ -3729,7 +3740,7 @@ support@secondlife.com.
 		Ширина бедер
 	</string>
 	<string name="Hover">
-		Наведите
+		Поднять
 	</string>
 	<string name="In">
 		Внутрь
@@ -4745,14 +4756,8 @@ support@secondlife.com.
 	<string name="share_alert">
 		Перетащите элементы из инвентаря сюда
 	</string>
-	<string name="facebook_post_success">
-		Вы опубликовали в Facebook.
-	</string>
 	<string name="flickr_post_success">
 		Вы опубликовали в Flickr.
-	</string>
-	<string name="twitter_post_success">
-		Вы опубликовали в Twitter.
 	</string>
 	<string name="no_session_message">
 		(Сеанс ЛС не существует)
@@ -4788,7 +4793,7 @@ support@secondlife.com.
 		У вас нет этой способности.
 	</string>
 	<string name="not_a_mod_error">
-		Вы – не модератор сеанса.
+		Вы не модератор сеанса.
 	</string>
 	<string name="muted">
 		Модератор группы отключил для вас текстовый чат.
@@ -4829,44 +4834,42 @@ support@secondlife.com.
 	<string name="Home position set.">
 		Задано положение дома.
 	</string>
-	<string name="voice_morphing_url">
-		http://secondlife.com/landing/voicemorphing
-	</string>
+
 	<string name="paid_you_ldollars">
-		Житель [NAME] заплатил вам L$[AMOUNT] за [REASON].
+		[NAME] заплатил вам L$[AMOUNT] за [REASON].
 	</string>
 	<string name="paid_you_ldollars_gift">
-		Пользователь [NAME] заплатил вам L$[AMOUNT]: [REASON]
+		[NAME] заплатил вам L$[AMOUNT]: [REASON]
 	</string>
 	<string name="paid_you_ldollars_no_reason">
-		Житель [NAME] заплатил вам L$[AMOUNT].
+		[NAME] заплатил вам L$[AMOUNT].
 	</string>
 	<string name="you_paid_ldollars">
-		Вы заплатили жителю [NAME] L$[AMOUNT] за [REASON].
+		Вы заплатили [NAME] L$[AMOUNT] за [REASON].
 	</string>
 	<string name="you_paid_ldollars_gift">
-		Вы заплатили пользователю [NAME] L$[AMOUNT]: [REASON]
+		Вы заплатили [NAME] L$[AMOUNT]: [REASON]
 	</string>
 	<string name="you_paid_ldollars_no_info">
 		Вы заплатили L$[AMOUNT].
 	</string>
 	<string name="you_paid_ldollars_no_reason">
-		Вы заплатили жителю [NAME] L$[AMOUNT].
+		Вы заплатили [NAME] L$[AMOUNT].
 	</string>
 	<string name="you_paid_ldollars_no_name">
 		Вы заплатили L$[AMOUNT] за [REASON].
 	</string>
 	<string name="you_paid_failure_ldollars">
-		Вы не смогли заплатить пользователю [NAME] L$[AMOUNT]: [REASON].
+		Вы не смогли заплатить [NAME] L$[AMOUNT]: [REASON].
 	</string>
 	<string name="you_paid_failure_ldollars_gift">
-		Вы не смогли заплатить пользователю [NAME] L$[AMOUNT]: [REASON]
+		Вы не смогли заплатить [NAME] L$[AMOUNT]: [REASON]
 	</string>
 	<string name="you_paid_failure_ldollars_no_info">
 		Вы не смогли заплатить L$[AMOUNT]
 	</string>
 	<string name="you_paid_failure_ldollars_no_reason">
-		Вы не смогли заплатить пользователю [NAME] L$[AMOUNT]
+		Вы не смогли заплатить [NAME] L$[AMOUNT]
 	</string>
 	<string name="you_paid_failure_ldollars_no_name">
 		Вы не смогли заплатить L$[AMOUNT]: [REASON].
@@ -4890,16 +4893,16 @@ support@secondlife.com.
 		за вступление в группу
 	</string>
 	<string name="to upload">
-		за передачу по сети
+		за загрузку
 	</string>
 	<string name="to publish a classified ad">
 		за публикацию рекламы
 	</string>
 	<string name="giving">
-		Уплата L$[AMOUNT]
+		Дать L$[AMOUNT]
 	</string>
 	<string name="uploading_costs">
-		Передача стоит L$[AMOUNT]
+		Загрузка стоит L$[AMOUNT]
 	</string>
 	<string name="this_costs">
 		Это стоит L$[AMOUNT]
@@ -4970,6 +4973,9 @@ support@secondlife.com.
 	</string>
 	<string name="New Tattoo">
 		Новое тату
+	</string>
+	<string name="New Universal">
+		Новый универсал
 	</string>
 	<string name="New Physics">
 		Новая физика
@@ -5188,7 +5194,7 @@ support@secondlife.com.
 		танец8
 	</string>
 	<string name="AvatarBirthDateFormat">
-		[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
 	</string>
 	<string name="DefaultMimeType">
 		нет/нет
@@ -5229,10 +5235,10 @@ support@secondlife.com.
 		[MDAY]
 	</string>
 	<string name="dateTimeAM">
-		AM
+		ДП
 	</string>
 	<string name="dateTimePM">
-		PM
+		ПП
 	</string>
 	<string name="LocalEstimateUSD">
 		US$ [AMOUNT]
@@ -5630,7 +5636,7 @@ support@secondlife.com.
 		Z
 	</string>
 	<string name="BeaconParticle">
-		Просмотр меток участков (синие)
+		Просмотр меток частиц (синие)
 	</string>
 	<string name="BeaconPhysical">
 		Просмотр меток физических объектов (зеленые)
@@ -5645,10 +5651,10 @@ support@secondlife.com.
 		Просмотр звуковых меток (желтые)
 	</string>
 	<string name="BeaconMedia">
-		росмотр медийных меток (белые)
+		Просмотр медийных меток (белые)
 	</string>
 	<string name="ParticleHiding">
-		Частицы скрыты
+		Сокрытие частиц
 	</string>
 	<string name="Command_AboutLand_Label">
 		О земле
@@ -5680,6 +5686,9 @@ support@secondlife.com.
 	<string name="Command_Gestures_Label">
 		Жесты
 	</string>
+	<string name="Command_Grid_Status_Label">
+		Статус Сетки
+	</string>
 	<string name="Command_HowTo_Label">
 		Инструкция
 	</string>
@@ -5700,9 +5709,6 @@ support@secondlife.com.
 	</string>
 	<string name="Command_Move_Label">
 		Идти / Бежать / Лететь
-	</string>
-	<string name="Command_Outbox_Label">
-		Merchant outbox
 	</string>
 	<string name="Command_People_Label">
 		Люди
@@ -5753,7 +5759,7 @@ support@secondlife.com.
 		Чат
 	</string>
 	<string name="Command_Areasearch_Label">
-		Поиск площади
+		Поиск вокруг
 	</string>
 	<string name="Command_Settings_Debug_Label">
 		Отладка настроек
@@ -5818,23 +5824,38 @@ support@secondlife.com.
 	<string name="Command_RegionTracker_Label">
 		Трекер региона
 	</string>
+	<string name="Command_Group_Titles_Label">
+		Титулы Групп
+	</string>
+	<string name="Command_Wearable_Favorites_Label">
+		Избранные Одежды
+	</string>
+	<string name="Command_RFO_Label">
+		Показывать только друзей
+	</string>
+	<string name="Command_DAO_Label">
+		Скрыть Анимеши
+	</string>
+	<string name="Command_Beacons_Label">
+		Маяки
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Информация о посещаемой вами земле
 	</string>
 	<string name="Command_Appearance_Tooltip">
-		Изменить аватар
+		Изменить свой аватар
 	</string>
 	<string name="Command_Avatar_Tooltip">
-		Выбор аватара
+		Выберите полный аватар
 	</string>
 	<string name="Command_Build_Tooltip">
-		Построение объектов и формирование ландшафта
+		Построение объектов и формирование ландшафта (CTRL+4)
 	</string>
 	<string name="Command_Chat_Tooltip">
-		Обменивайтесь текстовыми репликами с людьми вокруг вас
+		Общайтесь с людьми поблизости, используя текст (CTRL+T)
 	</string>
 	<string name="Command_Conversations_Tooltip">
-		Поговорить со всеми
+		Общайтесь со всеми (CTRL+T)
 	</string>
 	<string name="Command_Compass_Tooltip">
 		Компас
@@ -5846,16 +5867,19 @@ support@secondlife.com.
 		Загрузить на Flickr
 	</string>
 	<string name="Command_Gestures_Tooltip">
-		Жесты для аватара
+		Жесты для вашего аватара (CTRL+G)
+	</string>
+	<string name="Command_Grid_Status_Tooltip">
+		Показать текущий статус сетки
 	</string>
 	<string name="Command_HowTo_Tooltip">
 		Выполнение типичных задач
 	</string>
 	<string name="Command_Inventory_Tooltip">
-		Просмотр и использование вашего имущества
+		Просмотр и использование вашего имущества (CTRL+I)
 	</string>
 	<string name="Command_Map_Tooltip">
-		Карта мира
+		Карта мира (CTRL+M)
 	</string>
 	<string name="Command_Marketplace_Tooltip">
 		Покупки
@@ -5864,25 +5888,22 @@ support@secondlife.com.
 		Продайте свои творения
 	</string>
 	<string name="Command_MiniMap_Tooltip">
-		Показать людей поблизости
+		Показать людей поблизости (CTRL+SHIFT+M)
 	</string>
 	<string name="Command_Move_Tooltip">
 		Перемещение аватара
 	</string>
-	<string name="Command_Outbox_Tooltip">
-		Перенести предметы в торговый центр для продажи
-	</string>
 	<string name="Command_People_Tooltip">
-		Друзья, группы и люди поблизости
+		Друзья, группы и люди поблизости (CTRL+SHIFT+A)
 	</string>
 	<string name="Command_Picks_Tooltip">
 		Места, которые будут показаны в вашем профиле как избранное
 	</string>
 	<string name="Command_Places_Tooltip">
-		Сохраненные вами места
+		Сохраненные вами места (ALT+H)
 	</string>
 	<string name="Command_Preferences_Tooltip">
-		Настройки
+		Настройки (CTRL+P)
 	</string>
 	<string name="Command_Profile_Tooltip">
 		Редактирование или просмотр вашего профиля
@@ -5891,22 +5912,19 @@ support@secondlife.com.
 		Жалоба
 	</string>
 	<string name="Command_Search_Tooltip">
-		Поиск мест, событий, людей
+		Поиск мест, событий, людей (CTRL+F)
 	</string>
 	<string name="Command_Snapshot_Tooltip">
-		Сделать снимок
+		Сделать снимок (CTRL+SHIFT+S)
 	</string>
 	<string name="Command_Speak_Tooltip">
 		Говорите с людьми вокруг вас с помощью микрофона
-	</string>
-	<string name="Command_Twitter_Tooltip">
-		Twitter
 	</string>
 	<string name="Command_View_Tooltip">
 		Изменение угла камеры
 	</string>
 	<string name="Command_Voice_Tooltip">
-		Регулировка громкости вызовов и разговоров с людьми около вас
+		Регулировка громкости вызовов и голосов людей около вас
 	</string>
 	<string name="Command_Quickprefs_Tooltip">
 		Быстрые настройки, для изменения частых настроек
@@ -5918,10 +5936,10 @@ support@secondlife.com.
 		Открыть встроеный web браузер (CTRL+SHIFT+Z)
 	</string>
 	<string name="Command_Default_Chat_Bar_Tooltip">
-		Показать / Скрыть подсказки чата
+		Показать или скрыть панель чата по умолчанию
 	</string>
 	<string name="Command_Areasearch_Tooltip">
-		Поиск объектов
+		Поиск объектов вокруг
 	</string>
 	<string name="Command_Settings_Debug_Tooltip">
 		Изменить настройки конфигурации клиента (CTRL+ALT+SHIFT+S)
@@ -5942,10 +5960,10 @@ support@secondlife.com.
 		Открыть черный список
 	</string>
 	<string name="Command_Phototools_Tooltip">
-		Сделать фотогрфию (ATL+P).
+		Инструменты для создания фотографий (ATL+P).
 	</string>
 	<string name="Command_Phototools_View_Tooltip">
-		Расширенные настройки камеры (CTRL+SHIFT+C)
+		Расширенные настройки фотокамеры (CTRL+SHIFT+C)
 	</string>
 	<string name="Command_Contact_Sets_Tooltip">
 		Открыть наборы контактов (CTRL+ALT+SHIFT+C)
@@ -5960,7 +5978,7 @@ support@secondlife.com.
 		Открыть историю телепортаций (ALT+H)
 	</string>
 	<string name="Command_Pose_Stand_Tooltip">
-		Поза редактирования внешности
+		Поза редактирования внешности аватара
 	</string>
 	<string name="Command_Snapshot_To_Disk_Tooltip">
 		Сделать быструю фотографию на диск
@@ -5978,10 +5996,25 @@ support@secondlife.com.
 		Открыть список заблокированных
 	</string>
 	<string name="Command_ResyncAnimations_Tooltip">
-		Синхронизация анимации
+		Синхронизация анимаций аватара
 	</string>
 	<string name="Command_RegionTracker_Tooltip">
-		Отслеживать регион
+		Отслеживать статус различных регионов
+	</string>
+	<string name="Command_Group_Titles_Tooltip">
+		Изменить активный тег группы
+	</string>
+	<string name="Command_Wearable_Favorites_Tooltip">
+		Открыть список избранных одежд
+	</string>
+	<string name="Command_RFO_Tooltip">
+		Показывает только своих друзей, все остальные аватары будут невидимы. После включения телепортация восстановит видимость других.
+	</string>
+	<string name="Command_DAO_Tooltip">
+		Скрыть Анимированные Объекты (также известные как Анимеш) - временно отменяет все видимые в настоящее время Анимеш (присоединенные и свободно гуляющие). Скрытые анимеши появится снова после телепорта
+	</string>
+	<string name="Command_Beacons_Tooltip">
+		Показать маяки
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		сейчас на нижней панели инструментов
@@ -5993,13 +6026,13 @@ support@secondlife.com.
 		сейчас на правой панели инструментов
 	</string>
 	<string name="Command_Fly_Tooltip">
-		Переключение режима полета Включено/Выключено (Дом)
+		Переключение режима полета Включено/Выключено (HOME)
 	</string>
 	<string name="Command_Stop_Animations_Label">
-		Остановить анимации аватара
+		Остановить анимации
 	</string>
 	<string name="Command_Stop_Animations_Tooltip">
-		Остановить анимации аватара
+		Остановить анимации моего аватара
 	</string>
 	<string name="Retain%">
 		Остаток%
@@ -6055,24 +6088,6 @@ support@secondlife.com.
 	<string name="snapshot_quality_very_high">
 		Очень высокое
 	</string>
-	<string name="TeleportMaturityExceeded">
-		Житель не может посетить этот регион.
-	</string>
-	<string name="UserDictionary">
-		[User]
-	</string>
-	<string name="logging_calls_disabled_log_empty">
-		Разговоры не записываются. Чтобы начать запись разговора, в меню «Настройки &gt; Чат» выберите «Сохранять: только журнал» или «Сохранять: журнал и записи».
-	</string>
-	<string name="logging_calls_disabled_log_not_empty">
-		Разговоры больше не будут записываться. Чтобы восстановить запись разговора, в меню «Настройки &gt; Чат» выберите «Сохранять: только журнал» или «Сохранять: журнал и записи».
-	</string>
-	<string name="logging_calls_enabled_log_empty">
-		Нет зарегистрированных разговоров. Если вы обратитесь к кому-то или наоборот, в журнале появится новая запись.
-	</string>
-	<string name="loading_chat_logs">
-		Загрузка...
-	</string>
 	<string name="IMPrefix">
 		ЛС:
 	</string>
@@ -6099,12 +6114,6 @@ support@secondlife.com.
 	</string>
 	<string name="SanityCheckNotBetween">
 		Настройки управления &quot;[CONTROL_NAME]&quot; не должны быть между [VALUE_1] и [VALUE_2].
-	</string>
-	<string name="RlvEnabled">
-		Поддержка контроля скриптами (RLVa) будет включена после перезапуска.
-	</string>
-	<string name="RlvDisabled">
-		Поддержка контроля скриптами (RLVa) будет выключена после перезапуска.
 	</string>
 	<string name="MediaFilterActionAllow">
 		Разрешить
@@ -6166,9 +6175,6 @@ support@secondlife.com.
 	<string name="UnknownPosition">
 		(неизвестная позиция)
 	</string>
-	<string name="FSCmdLineRSP">
-		Максимальная пропускная способность установлена [VALUE] KBPS.
-	</string>
 	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
 		[AGENT][REGION](Двойное нажатие для открытия карты, shift+тянуть для перемещения)
 	</string>
@@ -6208,9 +6214,37 @@ support@secondlife.com.
 	<string name="MovelockDisabling">
 		Выключение блокировки движения...
 	</string>
+	<string name="FlightAssistEnabled">
+		Помощь при полете включена
+	</string>
 	<string name="BusyResponse">
 		ответ занятости
 	</string>
+	<string name="TeleportMaturityExceeded">
+		Житель не может посетить этот регион.
+	</string>
+	<string name="UserDictionary">
+		[User]
+	</string>
+	<string name="RLVaPendingRestart">
+		(ожидает перезагрузку)
+	</string>
+	<string name="RLVaToggleMessageLogin">
+		RLVa был [STATE] (не требует перезагрузки)
+	</string>
+	<string name="RLVaToggleMessageRestart">
+		RLVa будет [STATE] после перезагрузки
+	</string>
+	<string name="RLVaToggleEnabled">
+		включен
+	</string>
+	<string name="RLVaToggleDisabled">
+		выключен
+	</string>
+	<string name="RLVaStatusDisabled">
+		(выключен)
+	</string>
+
 	<string name="experience_tools_experience">
 		Приключение
 	</string>
@@ -6272,7 +6306,7 @@ support@secondlife.com.
 		выполнил неизвестную операцию: [Permission]
 	</string>
 	<string name="ExperiencePermissionShort1">
-		Взять на себя
+		Взять управление
 	</string>
 	<string name="ExperiencePermissionShort3">
 		Запуск анимаций
@@ -6281,10 +6315,10 @@ support@secondlife.com.
 		Присоединить
 	</string>
 	<string name="ExperiencePermissionShort9">
-		Слежение за камерой
+		Следить за камерой
 	</string>
 	<string name="ExperiencePermissionShort10">
-		Управление камерой
+		Управлять камерой
 	</string>
 	<string name="ExperiencePermissionShort11">
 		Телепортация
@@ -6292,17 +6326,63 @@ support@secondlife.com.
 	<string name="ExperiencePermissionShort12">
 		Разрешение
 	</string>
+
 	<string name="logging_calls_disabled_log_empty">
-		Разговоры не сохраняются. Чтобы начать сохранять настройки выберите "Сохранить: Только журнал" или "Сохранить: Журнал и история" в Настройки>Приватность.
+		Разговоры не записываются. Чтобы начать запись, в меню "Настройки > Приватность > Истории разговоров" выберите "Сохранить:" "Только журнал" или "Журнал и история".
 	</string>
 	<string name="logging_calls_disabled_log_not_empty">
-		Нет сохраненных разговоров. Чтобы продолжить сохранять настройки выберите "Сохранить: Только журнал" или "Сохранить: Журнал и история" в Настройки>Приватность.
+		Разговоры больше не будут записываться. Чтобы восстановить запись, в меню "Настройки > Приватность > Истории разговоров" выберите "Сохранить:" "Только журнал" или "Журнал и история".
 	</string>
 	<string name="logging_calls_enabled_log_empty">
-		Нет сохраненных разговоров. После того как вы напишите кому-то или напишут вам история разговора будет отображаться тут.
+		Нет зарегистрированных разговоров. Если вы обратитесь к кому-то или наоборот, в журнале появится новая запись.
 	</string>
 	<string name="loading_chat_logs">
 		Загрузка...
+	</string>
+	<string name="na">
+		н/о
+	</string>
+	<string name="preset_combo_label">
+		-Пустой список-
+	</string>
+	<string name="Default">
+		По умолчанию
+	</string>
+	<string name="none_paren_cap">
+		(Нет)
+	</string>
+	<string name="no_limit">
+		Неогр.
+	</string>
+	<string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">
+		Физическая форма содержит слишком маленькие треугольники. Попробуйте упростить физическую модель.
+	</string>
+	<string name="Mav_Details_MAV_CONFIRMATION_DATA_MISMATCH">
+		Физическая форма содержит неверные данные подтверждения. Попробуйте исправить физическую модель.
+	</string>
+	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
+		Физическая форма не имеет правильной версии. Установите правильную версию для физической модели.
+	</string>
+	<string name="couldnt_resolve_host">
+		DNS не удалось разрешить имя узла ([HOSTNAME]).
+Проверьте возможность подключения к веб-сайту www.secondlife.com.
+Если вы продолжаете получать эту ошибку, перейдите в раздел
+поддержки и сообщите о проблеме.
+	</string>
+	<string name="ssl_peer_certificate">
+		Серверу входа в систему не удалось пройти аутентификацию с помощью
+протокола SSL. Если вы продолжаете получать эту ошибку,
+перейдите в раздел поддержки на веб-сайте SecondLife.com
+и сообщите о проблеме.
+	</string>
+	<string name="ssl_connect_error">
+		Часто это означает, что часы компьютера установлены неправильно.
+Перейдите, пожалуйста, на Панели управления и убедитесь в правильной
+установке времени и даты. Также проверьте правильность настройки сети
+и брандмауэра. Если вы продолжаете получать эту ошибку, перейдите в
+раздел поддержки на веб-сайте SecondLife.com и сообщите о проблеме.
+
+[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 База знаний]
 	</string>
 	<string name="LoadCameraPositionNoneSaved">
 		Положение камеры не было сохранено.
@@ -6313,11 +6393,11 @@ support@secondlife.com.
 	<string name="DrawDistanceSteppingGestureObsolete">
 		Из-за изменений в коде больше не нужно использовать этот жест. Прогрессивная пошаговая прорисовка была включен.
 	</string>
-	<string name="FSCmdLineDrawDistanceSet">
-		Расстояние прорисовки установлено на [DISTANCE]м.
-	</string>
 	<string name="FSCameraPositionCopied">
 		Положение камеры [POS] скопировано в буфер
+	</string>
+	<string name="FSCmdLineDrawDistanceSet">
+		Расстояние прорисовки установлено на [DISTANCE]м.
 	</string>
 	<string name="FSCmdLineRollDiceTotal">
 		Общий результат для [DICE]d[FACES][MODIFIER]: [RESULT].
@@ -6345,6 +6425,9 @@ support@secondlife.com.
 	</string>
 	<string name="FSCmdLineCalcRandError">
 		'[RAND]' не действительное выражение для RAND(min,max). MAX должен быть выше, чем MIN, как в диапазоне от -10000 до 10000.
+	</string>
+	<string name="FSCmdLineRSP">
+		Максимальная пропускная способность установлена [VALUE] КБ/С.
 	</string>
 	<string name="FSWithHavok">
 		с поддержкой Havok
@@ -6398,7 +6481,7 @@ support@secondlife.com.
 		Неизвестное, за пределами нормального диапазона, проверьте настройки отладки RenderQualityPerformance
 	</string>
 	<string name="fsbridge_cant_create_disabled">
-		Firestorm не может создать мост LSL если "Включить LSL-Клиент мост" отключено в настройках.
+		Firestorm не может создать мост LSL если "Активировать мост LSL" отключено в настройках.
 	</string>
 	<string name="fsbridge_no_library">
 		Firestorm не может создать мост LSL. Пожалуйста включите библиотеку и перезайдите.
@@ -6410,31 +6493,31 @@ support@secondlife.com.
 		Создание моста. Это может занять время, пожалуйста, подождите.
 	</string>
 	<string name="fsbridge_failure_creation_create_script">
-		Мост не создается. Сценарий моста не может быть создан.
+		Мост не создан. Скрипт моста не может быть создан.
 	</string>
 	<string name="fsbridge_failure_creation_bad_name">
-		Мост не создается.Мост назван неправильно. Используйте меню Firestorm 'Аватар/Исправление аватара/Пересоздать LSL мост', чтобы пересоздать мост.
+		Мост не создан. Мост назван неправильно. Используйте меню Firestorm 'Аватар/Исправление аватара/Пересоздать LSL мост', чтобы пересоздать мост.
 	</string>
 	<string name="fsbridge_failure_creation_null">
-		Мост не создается. Мост не найден в инвентаре. Используйте меню Firestorm 'Аватар/Исправление аватара/Пересоздать LSL мост' , чтобы пересоздать мост.
+		Мост не создается. Мост не найден в инвентаре. Используйте меню Firestorm 'Аватар/Исправление аватара/Пересоздать LSL мост', чтобы пересоздать мост.
 	</string>
 	<string name="fsbridge_failure_attach_wrong_object">
-		Мост не удалось присоединить. Это не текущая версия моста. Используйте меню Firestorm 'Аватар/Исправление аватара/Пересоздать LSL мост' , чтобы пересоздать мост.
+		Мост не удалось присоединить. Это не текущая версия моста. Используйте меню Firestorm 'Аватар/Исправление аватара/Пересоздать LSL мост', чтобы пересоздать мост.
 	</string>
 	<string name="fsbridge_failure_attach_wrong_location">
-		Мост не удалось присоединить.Мост не был найден в нужном месте инвентаря. Используйте меню Firestorm 'Аватар/Исправление аватара/Пересоздать LSL мост' , чтобы пересоздать мост.
+		Мост не удалось присоединить. Мост не был найден в нужном месте инвентаря. Используйте меню Firestorm 'Аватар/Исправление аватара/Пересоздать LSL мост', чтобы пересоздать мост.
 	</string>
 	<string name="fsbridge_failure_attach_point_in_use">
-		Мост не удалось присоединить. Что-то еще использует место крепления моста. Используйте меню Firestorm 'Аватар/Исправление аватара/Пересоздать LSL мост' , чтобы пересоздать мост.
+		Мост не удалось присоединить. Что-то еще использует место крепления моста. Используйте меню Firestorm 'Аватар/Исправление аватара/Пересоздать LSL мост', чтобы пересоздать мост.
 	</string>
 	<string name="fsbridge_failure_not_found">
-		Объект мост не найден. Невозможно приступить к его созданию.
+		Объект моста не найден. Невозможно приступить к его созданию.
 	</string>
 	<string name="fsbridge_warning_unexpected_items">
 		Инвентарь моста содержит непредвиденные предметы.
 	</string>
 	<string name="fsbridge_warning_not_finished">
-		Мост не закончил создание, используйте меню Firestorm 'Аватар/Исправление аватара/Пересоздать LSL мост' , чтобы пересоздать мост.
+		Мост не закончил создание, используйте меню Firestorm 'Аватар/Исправление аватара/Пересоздать LSL мост', чтобы пересоздать мост.
 	</string>
 	<string name="fsbridge_detached">
 		Мост отсоединен
@@ -6448,17 +6531,39 @@ support@secondlife.com.
 	<string name="fsbridge_script_info_pf">
 		Среднее время процессора используется для поиска пути навигации: [OBJECT_CHARACTER_TIME] ms.
 	</string>
+	<string name="fsbridge_script_info_ext">
+ID объекта: [INSPECTING_KEY]
+Описание: [OBJECT_DESC]
+Корневой прим: [OBJECT_ROOT]
+Кол-во примов: [OBJECT_PRIM_COUNT]
+Влияние на землю: [OBJECT_PRIM_EQUIVALENCE]
+В инвентаре: [OBJECT_TOTAL_INVENTORY_COUNT]
+Скорость: [OBJECT_VELOCITY]
+Позиция: [OBJECT_POS]
+Поворот: [OBJECT_ROT]
+Угловая скорость: [OBJECT_OMEGA] (радиан в секунду)
+Создатель: [OBJECT_CREATOR]
+Владелец: [OBJECT_OWNER]
+Предыдущий владелец: [OBJECT_LAST_OWNER_ID]
+Выложено: [OBJECT_REZZER_KEY]
+Группа: [OBJECT_GROUP]
+Время создания: [OBJECT_CREATION_TIME]
+Тип поиска пути: [OBJECT_PATHFINDING_TYPE]
+Присоединено к: [OBJECT_ATTACHED_POINT]
+Временно присоединено: [OBJECT_TEMP_ATTACHED]
+Ваша позиция: [AVATAR_POS]
+	</string>
 	<string name="fsbridge_error_scriptinfonotfound">
-		Информация скрипта: Объект является недействительным или вне диапазона.
+		Информация скрипта: Объект является недействительным или вне досягаемости.
 	</string>
 	<string name="fsbridge_error_scriptinfomalformed">
 		Информация скрипта: Поступил неправильный ответ от моста. Попробуйте еще раз.
 	</string>
 	<string name="fsbridge_error_injection">
-		ВНИМАНИЕ: Один или несколько сценариев были добавлены на ваш мост Firestorm! Если вы не ожидали этого сообщения, воспользуйтесь параметром меню Firestorm «Аватар / Исправление аватара / Пересоздать LSL мост», чтобы заново создать мост.
+		ВНИМАНИЕ: Один или несколько скриптов были добавлены в ваш мост Firestorm! Если вы не ожидали этого сообщения, воспользуйтесь параметром меню Firestorm «Аватар/ Исправление аватара/Пересоздать LSL мост», чтобы заново создать мост.
 	</string>
 	<string name="fsbridge_error_wrongvm">
-		ВНИМАНИЕ: В сценарии моста используется старая LSO (ограничение памяти 16 КБ) вместо новой виртуальной машины Mono (ограничение памяти 64 КБ), что создает высокую вероятность коллизии стека и сбоя моста из-за нехватки памяти. Пожалуйста, используйте пункт меню Firestorm «Аватар / Исправление аватара / Пересоздать LSL мост» для воссоздания моста. Если вы снова увидите это сообщение - попробуйте еще раз в другом регионе.
+		ВНИМАНИЕ: В скрипт моста использует старый LSO (ограничение памяти 16 КБ) вместо новой виртуальной машины Mono (ограничение памяти 64 КБ), что создает высокую вероятность коллизии стека и сбоя моста из-за нехватки памяти. Пожалуйста, используйте пункт меню Firestorm «Аватар/Исправление аватара/Пересоздать LSL мост» для воссоздания моста. Если вы снова увидите это сообщение - попробуйте еще раз в другом регионе.
 	</string>
 	<string name="QP Draw Distance">
 		Дальность прорисовки
@@ -6530,13 +6635,13 @@ support@secondlife.com.
 		Нет
 	</string>
 	<string name="GroupChatMuteNotice">
-		Отключение группового чата с [NAME].
+		Отключение группового чата от [NAME].
 	</string>
 	<string name="IgnoredAdHocSession">
-		Вы были приглашены на конференцию (ad-hoc) поболтать, но клиент автоматически отклонил это, потому что это задано вашими настройками.
+		[AVATAR_NAME] пригласил вас на конференцию, но клиент автоматически игнорировал это, потому что так задано вашими настройками.
 	</string>
 	<string name="camera_no_focus">
-		Камера не может сфокусироваться на пользователе [AVATARNAME], потому что они находятся за пределами вашего расстоянии прорисовки.
+		Камера не может сфокусироваться на пользователе [AVATARNAME], потому что он находятся за пределами вашего расстоянии прорисовки.
 	</string>
 	<string name="entering_draw_distance">
 		вошел в границу прорисовки ([DISTANCE] м).
@@ -6560,10 +6665,10 @@ support@secondlife.com.
 		покинул регион
 	</string>
 	<string name="avatar_age_alert">
-		сработано возрастное предупреждение. Возраст: [AGE] дней
+		сработало возрастное предупреждение. Возраст: [AGE] дней
 	</string>
 	<string name="TotalScriptCountChangeIncrease">
-		Количество скриптов в регионе возрасло с [OLD_VALUE] до [NEW_VALUE] ([DIFFERENCE]).
+		Количество скриптов в регионе возросло с [OLD_VALUE] до [NEW_VALUE] ([DIFFERENCE]).
 	</string>
 	<string name="TotalScriptCountChangeDecrease">
 		Количество скриптов в регионе понизилось с [OLD_VALUE] до [NEW_VALUE] ([DIFFERENCE]).
@@ -6578,7 +6683,7 @@ support@secondlife.com.
 		ВНИМАНИЕ: Препроцессор не поддерживается в этой сборке. ([WHERE])
 	</string>
 	<string name="fs_preprocessor_disabled_by_script_marker">
-		[APP_NAME] отключил препроцессор по диррективе в строке [LINENUMBER].
+		[APP_NAME] отключил препроцессор по директиве в строке [LINENUMBER].
 	</string>
 	<string name="fs_preprocessor_settings_list_prefix">
 		Настройки:
@@ -6593,7 +6698,7 @@ support@secondlife.com.
 		[ERR_NAME] ([LINENUMBER]): найдено непредвиденное исключение.
 	</string>
 	<string name="fs_preprocessor_optimizer_start">
-		Оптимизация из неиспользуемых функций, определяемых пользователем и глобальные переменные.
+		Оптимизация неиспользуемых функций, определяемых пользователем и глобальные переменные.
 	</string>
 	<string name="fs_preprocessor_optimizer_regex_err">
 		Не действительное регулярное выражение: '[WHAT]'; LSL оптимизация пропущена.
@@ -6700,8 +6805,14 @@ support@secondlife.com.
 	<string name="DoubleClickTeleportDisabled">
 		Телепортация двойным нажатием выключена
 	</string>
+	<string name="AlwaysRunEnabled">
+		Всегда Бег включен.
+	</string>
+	<string name="AlwaysRunDisabled">
+		Всегда Бег выключен.
+	</string>
 	<string name="FSRegionRestartInLocalChat">
-		Регион в котором вы находитесь в настоящее время скоро будет перезагружен. Если вы остаетесь в этом регионе вас выкинет из системы.
+		Регион в котором вы находитесь в настоящее время скоро будет перезагружен. Если вы остаетесь в этом регионе вас отключит от СЛ.
 	</string>
 	<string name="Mute_Add">
 		'[NAME]' был добавлен в черный список.
@@ -6709,25 +6820,86 @@ support@secondlife.com.
 	<string name="Mute_Remove">
 		'[NAME]' был удален из черного списка.
 	</string>
-	<string name="couldnt_resolve_host">
-		DNS не удалось разрешить имя узла([HOSTNAME]).
-Проверьте возможность подключения к веб-сайту www.secondlife.com.
-Если вы продолжаете получать эту ошибку, перейдите в раздел
-поддержки и сообщите о проблеме.
+	<string name="Reqsysinfo_Chat_NoReason">
+		Я запрашиваю информацию о настройке вашей системы.
 	</string>
-	<string name="ssl_peer_certificate">
-		Серверу входа в систему не удалось пройти аутентификацию с помощью
-протокола SSL. Если вы продолжаете получать эту ошибку,
-перейдите в раздел поддержки на веб-сайте SecondLife.com
-и сообщите о проблеме.
+	<string name="Reqsysinfo_Chat_Reason">
+		Я запрашиваю информацию о настройке вашей системы по этой причине: [REASON]
 	</string>
-	<string name="ssl_connect_error">
-		Часто это означает, что часы компьютера установлены неправильно.
-Перейдите, пожалуйста, на Панели управления и убедитесь в правильной
-установке времени и даты. Также проверьте правильность настройки сети
-и брандмауэра. Если вы продолжаете получать эту ошибку, перейдите в
-раздел поддержки на веб-сайте SecondLife.com и сообщите о проблеме.
-
-[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 База знаний]
+	<string name="Reqsysinfo_Chat_Information_sent">
+		Информация отправлена: [DATA]
+	</string>
+	<string name="Reqsysinfo_Chat_Request_Denied">
+		Запрос отклонен.
+	</string>
+	<string name="Reqsysinfo_Reason">
+		Причиной было: [REASON]
+	</string>
+	<string name="All Items">
+		Все предметы
+	</string>
+	<string name="Recent Items">
+		Недавние предметы
+	</string>
+	<string name="Worn Items">
+		Надетые предметы
+	</string>
+	<string name="InvOfferGroupNoticeName">
+		Член группы по имени [NAME]
+	</string>
+	<string name="CallingCardOnlineLabelSuffix">
+		(в сети)
+	</string>
+	<string name="GroupNoticesPanelDateString">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</string>
+	<string name="GroupNoticesToastDateString">
+		[wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+	</string>
+	<string name="NotificationItemDateStringLocal">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]
+	</string>
+	<string name="NotificationItemDateStringUTC">
+		[day,datetime,utc] [mth,datetime,utc] [year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
+	</string>
+	<string name="NotificationItemDateStringSLT">
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt] [timezone,datetime,slt]
+	</string>
+	<string name="Pie_av_render_normally">
+		Обычно
+	</string>
+	<string name="Pie_av_render_never">
+		Никогда
+	</string>
+	<string name="Pie_av_render_fully">
+		Полностью
+	</string>
+	<string name="Nametag_Complexity_Label">
+		Сложность: [COMPLEXITY]
+	</string>
+	<string name="Nametag_Texture_Area_Label">
+		Площадь текстуры: [TEXTURE_AREA] м²
+	</string>
+	<string name="font_unknown">
+		Неизвестный Шрифт
+	</string>
+	<string name="mode_unknown">
+		Неизвестный Режим
+	</string>
+	<string name="Asset_Uploading">
+		Загружается...
+[ASSET_NAME]
+	</string>
+	<string name="Yes">
+		Да
+	</string>
+	<string name="No">
+		Нет
+	</string>
+	<string name="FSUrlEntryWearLabel">
+		Надеть папку инвентаря
+	</string>
+	<string name="TexturePickerOutfitHeader">
+		Картинка для Комплекта
 	</string>
 </strings>

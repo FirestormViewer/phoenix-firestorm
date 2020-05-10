@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="inspect" title="Инспектирование объектов">
+    <floater.string name="timeStamp">
+        [wkday,datetime,local], [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+    </floater.string>
     <floater.string name="Group">
         (Группа)
     </floater.string>
@@ -17,6 +20,7 @@
 TMem: [TEXTURE_MEMORY] KB
 VRAM: [VRAM_USAGE] KB
     </floater.string>
+
     <text_editor name="linksetstats_text" value="(загрузка...)"/>
     <scroll_list name="object_list" tool_tip="Выбор объекта из этого списка приведет к его подсветке">
         <scroll_list.columns label="Имя Объекта" name="object_name" />

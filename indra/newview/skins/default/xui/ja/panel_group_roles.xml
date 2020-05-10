@@ -74,6 +74,7 @@ Ctrl キーを押しながらメンバー名をクリックすると
 				<scroll_list.columns label="#" name="members"/>
 			</scroll_list>
 			<button label="新しい役割" name="role_create"/>
+			<button label="役割をコピー" name="role_copy" />
 			<button label="役割を削除" name="role_delete"/>
 		</panel>
 		

@@ -630,6 +630,7 @@ http://www.firestormviewer.org/support for help fixing this problem.
 	<string name="Estate / Homestead">Estate / Homestead</string>
 	<string name="Mainland / Homestead">Mainland / Homestead</string>
 	<string name="Mainland / Full Region">Mainland / Full Region</string>
+	<string name="Linden Homes / Full Region">Linden Homes / Full Region</string>
 
 	<!-- File load/save dialogs -->
 	<string name="all_files">All Files</string>
