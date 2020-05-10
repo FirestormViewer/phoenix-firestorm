@@ -20,7 +20,7 @@
 	<panel label="bottom_panel" name="header_panel">
 		<panel label="bottom_panel" name="outfit_name_and_status">
 			<text name="status" value="編集しています..."/>
-			<text name="curr_outfit_name" value="[Current Outfit]"/>
+			<text name="curr_outfit_name" value="[現在のアウトフィット]"/>
 		</panel>
 	</panel>
 	<layout_stack name="im_panels">
@@ -39,9 +39,15 @@
 		</layout_panel>
 	</layout_stack>
 	<panel name="no_add_wearables_button_bar">
+		<text name="avatar_complexity_label">
+			複雑さ：[WEIGHT]
+		</text>
 		<button name="shop_btn_1" tool_tip="「SL マーケットプレイス」ページをご覧ください。また、いま着用しているアイテムを選択してここをクリックすると、それに似たアイテムが表示されます。"/>
 	</panel>
 	<panel name="add_wearables_button_bar">
+		<text name="avatar_complexity_adding_label">
+			複雑さ：[WEIGHT]
+		</text>
 		<button name="shop_btn_2" tool_tip="「SL マーケットプレイス」ページをご覧ください。また、いま着用しているアイテムを選択してここをクリックすると、それに似たアイテムが表示されます。"/>
 	</panel>
 	<panel name="save_revert_button_bar">
