@@ -4364,6 +4364,8 @@ AO セット "[AO_SET_NAME]" の名前を変更できません。
 
 現在の設定：[CURRENT_VALUE]
 		<form name="form">
+			<button name="OK" text="修正する"/>
+			<button name="Cancel" text="そのままにする"/>
 			<ignore name="ignore" text="設定の変更が整合性確認検査で不合格となった場合"/>
 		</form>
 	</notification>
