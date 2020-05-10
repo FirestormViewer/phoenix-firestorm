@@ -467,7 +467,6 @@ BOOL FloaterQuickPrefs::postBuild()
 	mDayCyclePresetsCombo = getChild<LLComboBox>("DCPresetsCombo");
 
 	initCallbacks();
-	loadPresets();
 
 	if (gRlvHandler.isEnabled())
 	{
